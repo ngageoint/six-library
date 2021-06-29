@@ -493,7 +493,7 @@ TEST_CASE(sicd_byte_provider)
     }
 }
 
-static void sicd_read_data(const fs::path& inputPathname,
+static std::vector<std::byte> sicd_read_data_(const fs::path& inputPathname,
     six::PixelType expectedPixelType, size_t expectedNumBytesPerPixel)
 {
     // create an XML registry
@@ -519,36 +519,58 @@ static void sicd_read_data(const fs::path& inputPathname,
     const auto& classification = data->getClassification();
     TEST_ASSERT_TRUE(classification.isUnclassified());
 
-    six::Region region;
-    const auto extent = getExtent(*data);
-    setDims(region, extent);
-
     const auto numBytesPerPixel = data->getNumBytesPerPixel();
     TEST_ASSERT_EQ(expectedNumBytesPerPixel, numBytesPerPixel);
 
+    const auto extent = getExtent(*data);
     const auto numPixels = extent.area();
     std::vector<std::byte> buffer_(numPixels * numBytesPerPixel);
     auto buffer = buffer_.data();
+
+    six::Region region;
+    setDims(region, extent);
     constexpr size_t offset = 0;
     region.setBuffer(buffer + offset);
     const auto pData = reader.interleaved(region, imageNumber);
     TEST_ASSERT_NOT_EQ(nullptr, pData);
+    return buffer_;
 }
+static void sicd_read_data(const fs::path& inputPathname,
+    const std::complex<float>& expectedFirstPixel, const std::complex<float>& expectedLastPixel)
+{
+    const auto buffer = sicd_read_data_(inputPathname, six::PixelType::RE32F_IM32F, sizeof(expectedFirstPixel));
 
+    const auto firstPixel = std::complex<float>(0);
+    TEST_ASSERT_EQ(expectedFirstPixel, firstPixel);
+
+    const auto lastPixel = std::complex<float>(0);
+    TEST_ASSERT_EQ(expectedLastPixel, lastPixel);
+}
+static void sicd_read_data(const fs::path& inputPathname,
+    int16_t expectedFirstPixel, int16_t expectedLastPixel)
+{
+    const auto buffer = sicd_read_data_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(expectedFirstPixel));
+
+    const int16_t firstPixel = 0;
+    TEST_ASSERT_EQ(expectedFirstPixel, firstPixel);
+
+    const int16_t lastPixel = 0;
+    TEST_ASSERT_EQ(expectedLastPixel, lastPixel);
+}
 TEST_CASE(sicd_read_data)
 {
     auto inputPathname = getNitfPath("sicd_50x50.nitf");
-    sicd_read_data(inputPathname, six::PixelType::RE32F_IM32F, 8 /*expectedNumBytesPerPixel*/);
+    sicd_read_data(inputPathname, std::complex<float>(0), std::complex<float>(0));
 
     fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    sicd_read_data(inputPathname, six::PixelType::AMP8I_PHS8I, 2/*expectedNumBytesPerPixel*/);
+    sicd_read_data(inputPathname, 0, 0);
 
     subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    sicd_read_data(inputPathname, six::PixelType::AMP8I_PHS8I, 2/*expectedNumBytesPerPixel*/);
+    sicd_read_data(inputPathname, 0, 0);
 }
 
 TEST_MAIN((void)argc;
