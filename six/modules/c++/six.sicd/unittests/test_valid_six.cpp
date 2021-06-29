@@ -493,10 +493,9 @@ TEST_CASE(sicd_byte_provider)
     }
 }
 
-TEST_CASE(sicd_read_data)
+static void sicd_read_data(const fs::path& inputPathname,
+    six::PixelType expectedPixelType, size_t expectedNumBytesPerPixel)
 {
-    const auto inputPathname = getNitfPath("sicd_50x50.nitf");
-
     // create an XML registry
     // The reason to do this is to avoid adding XMLControlCreators to the
     // XMLControlFactory singleton - this way has more fine-grained control
@@ -515,7 +514,7 @@ TEST_CASE(sicd_read_data)
     TEST_ASSERT_EQ(1, container->getNumData());
     constexpr size_t imageNumber = 0;
     auto data = getComplexData(*container, imageNumber);
-    TEST_ASSERT_EQ(six::PixelType::RE32F_IM32F, data->getPixelType());
+    TEST_ASSERT_EQ(expectedPixelType, data->getPixelType());
 
     const auto& classification = data->getClassification();
     TEST_ASSERT_TRUE(classification.isUnclassified());
@@ -523,17 +522,33 @@ TEST_CASE(sicd_read_data)
     six::Region region;
     const auto extent = getExtent(*data);
     setDims(region, extent);
-    const auto numPixels = extent.area();
 
     const auto numBytesPerPixel = data->getNumBytesPerPixel();
-    TEST_ASSERT_EQ(8, numBytesPerPixel);
+    TEST_ASSERT_EQ(expectedNumBytesPerPixel, numBytesPerPixel);
 
+    const auto numPixels = extent.area();
     std::vector<std::byte> buffer_(numPixels * numBytesPerPixel);
     auto buffer = buffer_.data();
     constexpr size_t offset = 0;
     region.setBuffer(buffer + offset);
     const auto pData = reader.interleaved(region, imageNumber);
     TEST_ASSERT_NOT_EQ(nullptr, pData);
+}
+
+TEST_CASE(sicd_read_data)
+{
+    auto inputPathname = getNitfPath("sicd_50x50.nitf");
+    sicd_read_data(inputPathname, six::PixelType::RE32F_IM32F, 8 /*expectedNumBytesPerPixel*/);
+
+    fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
+    fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
+    inputPathname = getNitfPath(filename);
+    sicd_read_data(inputPathname, six::PixelType::AMP8I_PHS8I, 2/*expectedNumBytesPerPixel*/);
+
+    subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
+    filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
+    inputPathname = getNitfPath(filename);
+    sicd_read_data(inputPathname, six::PixelType::AMP8I_PHS8I, 2/*expectedNumBytesPerPixel*/);
 }
 
 TEST_MAIN((void)argc;
