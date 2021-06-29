@@ -100,8 +100,7 @@ std::string doRoundTrip(const std::string& siddPathname)
 
             std::byte* buffer = buffers.add(numPixels * numBytesPerPixel);
 
-            region.setNumRows(extent.row);
-            region.setNumCols(extent.col);
+            setDims(region, extent);
             region.setBuffer(buffer);
             reader.interleaved(region, imageNum++);
         }

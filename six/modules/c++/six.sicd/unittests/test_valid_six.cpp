@@ -647,7 +647,7 @@ TEST_CASE(sicd_read_data)
     }
 
     auto buffer = buffers.add(numPixels * numBytesPerPixel);
-    region.setDims(extent);
+    setDims(region, extent);
     region.setBuffer(buffer + offset);
     reader.interleaved(region, 0);
 

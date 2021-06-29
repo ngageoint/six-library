@@ -54,8 +54,8 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
                         ValueType* buffer)
 {
     six::Region retv;
-    retv.setOffset(offset);
-    retv.setDims(extent);
+    setOffset(retv, offset);
+    setDims(retv, extent);
     retv.setBuffer(reinterpret_cast<std::byte*>(buffer));
     return retv;
 }

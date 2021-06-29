@@ -336,8 +336,7 @@ int main(int argc, char** argv)
                 std::byte* buffer =
                         buffers.add(numPixels * numBytesPerPixel);
 
-                region.setNumRows(extent.row);
-                region.setNumCols(extent.col);
+                setDims(region, extent);
                 region.setBuffer(buffer + offset);
                 reader->interleaved(region, imageNum++);
 

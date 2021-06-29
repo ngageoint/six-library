@@ -171,8 +171,8 @@ void cropSIDD(const std::string& inPathname,
             std::byte* const buffer = buffers.add(numBytes);
 
             six::Region region;
-            region.setOffset(aoiOffset);
-            region.setDims(aoiDims);
+            setOffset(region, aoiOffset);
+            setDims(region, aoiDims);
             region.setBuffer(buffer);
             reader.interleaved(region, imageNum++);
 

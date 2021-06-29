@@ -1008,8 +1008,7 @@ createData(const types::RowCol<size_t>& dims)
 {
     std::unique_ptr<six::sidd::DerivedData> data =
             six::sidd::Utilities::createFakeDerivedData();
-    data->setNumRows(dims.row);
-    data->setNumCols(dims.col);
+    setExtent(*data, dims);
     data->setPixelType(six::PixelType::MONO8I);
     return data;
 }
