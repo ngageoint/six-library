@@ -327,12 +327,12 @@ TEST_CASE(test_readSicd)
     fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    //widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
+    widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
 
     subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    //widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
+    widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
 }
 
 

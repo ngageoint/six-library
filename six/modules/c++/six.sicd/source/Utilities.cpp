@@ -19,6 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <math.h>
+
 #include <map>
 #include <string>
 
@@ -62,7 +65,7 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
 
 // Reads in ~32 MB of rows at a time, converts to complex<float>, and keeps
 // going until reads everything
-void readAndConvertSICD(six::NITFReadControl& reader,
+static void readAndConvert_RE16I_IM16I_SICD(six::NITFReadControl& reader,
                         size_t imageNumber,
                         const types::RowCol<size_t>& offset,
                         const types::RowCol<size_t>& extent,
@@ -105,6 +108,75 @@ void readAndConvertSICD(six::NITFReadControl& reader,
         {
             bufferPtr[index] = tempBuffer[index];
         }
+    }
+}
+
+
+static void convert(const std::vector<uint8_t>& tempVector,
+    const types::RowCol<size_t>& offset,
+    const types::RowCol<size_t>& extent,
+    size_t row, size_t rowsToRead,
+    const six::AmplitudeTable* pAmplitudeTable,
+        std::complex<float>* buffer)
+{
+    const size_t elementsPerRow = extent.col;
+
+    // Take each Int8 out of the temp buffer and put it into the real buffer as a Float32
+    auto bufferPtr = buffer + ((row - offset.row) * elementsPerRow);
+    for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
+    {
+        const auto input_amplitude = tempVector[index];
+        auto& input_value = input_amplitude;
+
+        uint8_t A = 0;
+        if (pAmplitudeTable != nullptr)
+        {
+            auto& AmpTable = *pAmplitudeTable;
+            A = * AmpTable[input_amplitude];;
+        }
+        else
+        {
+            A = input_amplitude;
+        }
+
+        const auto P = (1 / 256) * input_value;
+        const std::complex<double> S(A * cos(2 * M_PI * P), A * sin(2 * M_PI * P));
+        bufferPtr[index] = S;
+    }
+}
+
+static void readAndConvert_AMP8I_PHS8I_SICD(six::NITFReadControl& reader,
+    const six::sicd::ComplexData& complexData,
+    size_t imageNumber,
+    const types::RowCol<size_t>& offset,
+    const types::RowCol<size_t>& extent,
+    std::complex<float>* buffer)
+{
+    const auto pAmplitudeTable = complexData.imageData->amplitudeTable;
+
+    const size_t elementsPerRow = extent.col;
+
+    // Get at least 32MB per read
+    const size_t rowsAtATime = (32000000 / (elementsPerRow * sizeof(uint8_t))) + 1;
+
+    std::vector<uint8_t> tempVector(elementsPerRow * rowsAtATime);
+
+    const size_t endRow = offset.row + extent.row;
+    for (size_t row = offset.row, rowsToRead = rowsAtATime; row < endRow; row += rowsToRead)
+    {
+        // If we would read beyond the input buffer, don't
+        if (row + rowsToRead > endRow)
+        {
+            rowsToRead = endRow - row;
+        }
+
+        // Read into the temp buffer
+        const types::RowCol<size_t> swathOffset(row, offset.col);
+        const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
+        six::Region region = buildRegion(swathOffset, swathExtent, tempVector.data());
+        reader.interleaved(region, imageNumber);
+
+        convert(tempVector, offset, extent, row, rowsToRead, pAmplitudeTable.get(), buffer);
     }
 }
 
@@ -670,7 +742,11 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     }
     else if (pixelType == PixelType::RE16I_IM16I)
     {
-        readAndConvertSICD(reader, imageNumber, offset, extent, buffer);
+        readAndConvert_RE16I_IM16I_SICD(reader, imageNumber, offset, extent, buffer);
+    }
+    else if (pixelType == PixelType::AMP8I_PHS8I)
+    {
+        readAndConvert_AMP8I_PHS8I_SICD(reader, complexData, imageNumber, offset, extent, buffer);
     }
     else
     {
