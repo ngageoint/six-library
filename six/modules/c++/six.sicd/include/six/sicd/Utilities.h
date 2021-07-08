@@ -132,6 +132,9 @@ public:
                          const std::vector<std::string>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
                          std::vector<std::complex<float> >& widebandData);
+    static std::vector<std::complex<float>> readSicd(const std::filesystem::path& sicdPathname,
+                         const std::vector<std::string>& schemaPaths,
+                         ComplexData& complexData);
 
     /*
      * Given a SICD path name and a list of schema, this function reads

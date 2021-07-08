@@ -38,6 +38,7 @@
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/sicd/ComplexXMLControl.h>
+#include <six/sicd/Utilities.h>
 
 #include "../tests/TestUtilities.h"
 #include "TestCase.h"
@@ -113,241 +114,6 @@ static void setNitfPluginPath()
     const auto path = buildRootDir() / nitfPluginRelativelPath();
     //std::clog << "NITF_PLUGIN_PATH=" << path << "\n";
     sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
-}
-
-class NITFWriter final
-{
-    static constexpr auto dataType = six::DataType::COMPLEX;
-    mem::SharedPtr<six::Container> container{ new six::Container(dataType) };
-    six::XMLControlRegistry xmlRegistry;
-
-    std::unique_ptr<six::NITFWriteControl> pWriter;
-    std::unique_ptr<const six::sicd::SICDByteProvider> pSicdByteProvider;
-
-    const std::vector<std::string> mSchemaPaths;
-
-public:
-    NITFWriter(const six::sicd::ComplexData& data, const six::Options& options, const std::vector<std::string>& schemaPaths)
-        : mSchemaPaths(schemaPaths)
-    {
-        container->addData(data.clone());
-        xmlRegistry.addCreator(dataType, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
-        pWriter = std::make_unique<six::NITFWriteControl>(options, container, &xmlRegistry);
-    }
-    NITFWriter(const six::sicd::ComplexData& data, const std::vector<std::string>& schemaPaths, size_t maxProductSize = 0)
-        : pSicdByteProvider(std::make_unique<six::sicd::SICDByteProvider>(data, schemaPaths, maxProductSize))
-    {
-    }
-
-    void save(const six::buffer_list& buffers, const std::string& pathname) const
-    {
-        pWriter->save(buffers, pathname, mSchemaPaths);
-    }
-    template<typename DataTypeT>
-    void save(const std::vector<std::complex<DataTypeT>>& image, const std::string& pathname) const
-    {
-        six::buffer_list buffers;
-        buffers.push_back(reinterpret_cast<const std::byte*>(image.data()));
-        save(buffers, pathname);
-    }
-
-    bool write(io::FileOutputStream& outStream, const void* imageData, size_t startRow, size_t numRows) const
-    {
-        nitf::Off fileOffset;
-        nitf::NITFBufferList buffers;
-        pSicdByteProvider->getBytes(imageData, startRow, numRows, fileOffset, buffers);
-        const auto computedNumBytes = pSicdByteProvider->getNumBytes(startRow, numRows);
-
-        outStream.seek(fileOffset, io::Seekable::START);
-        nitf::Off numBytes(0);
-        for (const auto& buffer : buffers.mBuffers)
-        {
-            outStream.write(static_cast<const std::byte*>(buffer.mData), buffer.mNumBytes);
-            numBytes += buffer.mNumBytes;
-        }
-
-        return numBytes == computedNumBytes;
-    }
-    bool write(const std::string& path, const void* imageData, size_t startRow, size_t numRows) const
-    {
-        io::FileOutputStream outStream(path);
-        const auto retval = write(outStream, imageData, startRow, numRows);
-        outStream.close();
-        return retval;
-    }
-};
-
-template<typename DataTypeT>
-static std::vector<std::complex<DataTypeT>> createBigEndianImage(std::vector< std::complex<DataTypeT>>& image)
-{
-    for (size_t ii = 0; ii < image.size(); ++ii)
-    {
-        image[ii] = std::complex<DataTypeT>(static_cast<DataTypeT>(ii), static_cast<DataTypeT>(ii * 10));
-    }
-
-    auto retval = image;
-    auto endianness = std::endian::native; // "conditional expression is constant"
-    if (endianness == std::endian::little)
-    {
-        sys::byteSwap(retval.data(), sizeof(DataTypeT), retval.size() * 2);
-    }
-    return retval;
-}
-
-// Main test class
-template <typename DataTypeT>
-struct Tester final
-{
-    Tester(const std::vector<std::string>& schemaPaths, bool setMaxProductSize, size_t maxProductSize = 0) :
-        mNormalFileCleanup(mNormalPathname),
-        mData(createData<DataTypeT>(mDims).release()),
-        mImage(mDims.area()),
-        mSchemaPaths(schemaPaths),
-        mSetMaxProductSize(setMaxProductSize),
-        mMaxProductSize(maxProductSize)
-    {
-        mBigEndianImage = createBigEndianImage(mImage);
-        normalWrite();
-    }
-
-    // Write the file out with a SICDByteProvider in one shot
-    bool testSingleWrite()
-    {
-        const EnsureFileCleanup ensureFileCleanup(mTestPathname);
-
-        const NITFWriter nitfWriter(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
-
-        constexpr size_t startRow = 0;
-        const size_t numRows = mDims.row;
-        mSuccess = nitfWriter.write(mTestPathname, &mBigEndianImage[startRow * mDims.col], startRow, numRows);
-
-        compare("Single write");
-        return mSuccess;
-    }
-
-private:
-    void writeBytes(io::FileOutputStream& outStream, const NITFWriter& nitfWriter, size_t startRow, size_t numRows)
-    {
-        mSuccess = nitfWriter.write(outStream, &mBigEndianImage[startRow * mDims.col], startRow, numRows);
-    }
-
-public:
-    bool testMultipleWrites()
-    {
-        const EnsureFileCleanup ensureFileCleanup(mTestPathname);
-
-        const NITFWriter nitfWriter(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
-        io::FileOutputStream outStream(mTestPathname);
-
-        writeBytes(outStream, nitfWriter, 40, 20); // Rows [40, 60)
-        if (mSuccess)
-        {
-            writeBytes(outStream, nitfWriter, 5, 20);  // Rows [5, 25)
-            if (mSuccess)
-            {
-                writeBytes(outStream, nitfWriter, 0, 5);  // Rows [0, 5)
-                if (mSuccess)
-                {
-                    writeBytes(outStream, nitfWriter, 100, 23);  // Rows [100, 123)        
-                    if (mSuccess)
-                    {
-                        writeBytes(outStream, nitfWriter, 25, 15); // Rows [25, 40)       
-                        if (mSuccess)
-                        {
-                            writeBytes(outStream, nitfWriter, 60, 40);  // Rows [60, 100)
-                        }
-                    }
-                }
-            }
-        }
-        outStream.close();
-
-        compare("Multiple writes");
-        return mSuccess;
-    }
-
-    bool testOneWritePerRow()
-    {
-        const EnsureFileCleanup ensureFileCleanup(mTestPathname);
-
-        const NITFWriter nitfWriter(*mData, mSchemaPaths, mSetMaxProductSize ? mMaxProductSize : 0);
-
-        io::FileOutputStream outStream(mTestPathname);
-        for (size_t row = 0; row < mDims.row; ++row)
-        {
-            // Write it backwards
-            const size_t startRow = mDims.row - 1 - row;
-            constexpr size_t numRows = 1;
-            writeBytes(outStream, nitfWriter, startRow, numRows);
-            if (!mSuccess) break;
-        }
-        outStream.close();
-
-        compare("One write per row");
-        return mSuccess;
-    }
-
-private:
-    void normalWrite()
-    {
-        six::Options options;
-        if (mSetMaxProductSize)
-        {
-            options.setParameter(six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, mMaxProductSize);
-        }
-
-        NITFWriter writer(*mData, options, mSchemaPaths);
-        writer.save(mImage, mNormalPathname);
-
-        mCompareFiles.reset(new CompareFiles(mNormalPathname));
-    }
-
-    void compare(const std::string& prefix)
-    {
-        std::string fullPrefix = prefix;
-        if (mSetMaxProductSize)
-        {
-            fullPrefix += " (max product size " + std::to_string(mMaxProductSize) + ")";
-        }
-
-        mSuccess = (*mCompareFiles)(fullPrefix, mTestPathname);
-    }
-
-private:
-    const std::string mNormalPathname = "normal_write.nitf";
-    const EnsureFileCleanup mNormalFileCleanup;
-
-    const types::RowCol<size_t> mDims{ 123, 456 };
-    std::unique_ptr<six::sicd::ComplexData> mData;
-    std::vector<std::complex<DataTypeT> > mImage;
-    std::vector<std::complex<DataTypeT> > mBigEndianImage;
-
-    std::unique_ptr<const CompareFiles> mCompareFiles;
-    const std::string mTestPathname = "streaming_write.nitf";
-    const std::vector<std::string> mSchemaPaths;
-
-    bool mSetMaxProductSize;
-    size_t mMaxProductSize;
-
-    bool mSuccess = true;
-};
-
-template <typename DataTypeT>
-bool doTests(const std::vector<std::string>& schemaPaths, bool setMaxProductSize, size_t numRowsPerSeg)
-{
-    // TODO: This math isn't quite right
-    //       We also end up with a different number of segments for the complex float than the complex short case sometimes
-    //       It would be better to get the logic fixed that forces segmentation on the number of rows via OPT_MAX_ILOC_ROWS
-    constexpr size_t APPROX_HEADER_SIZE = 2 * 1024;
-    constexpr size_t numBytesPerRow = 456 * sizeof(std::complex<DataTypeT>);
-    const size_t maxProductSize = numRowsPerSeg * numBytesPerRow + APPROX_HEADER_SIZE;
-
-    Tester<DataTypeT> tester(schemaPaths, setMaxProductSize, maxProductSize);
-    auto result = tester.testSingleWrite();
-    if (!result) return result;
-    result = tester.testMultipleWrites();
-    if (!result) return result;
-    return tester.testOneWritePerRow();
 }
 
 class NITFReader final
@@ -469,30 +235,6 @@ TEST_CASE(read_8bit_ampphs_no_table)
     TEST_ASSERT_EQ(nullptr, pAmplitudeTable);
 }
 
-// Test program for SICDByteProvider
-// Demonstrates that the raw bytes provided by this class result in equivalent
-// SICDs to the normal writes via NITFWriteControl
-TEST_CASE(sicd_byte_provider)
-{
-    const std::vector<std::string> schemaPaths;
-
-    // Run tests with no funky segmentation
-    auto result = doTests<float>(schemaPaths, false /*setMaxProductSize*/, 0 /*numRowsPerSeg*/);
-    TEST_ASSERT_TRUE(result);
-    result = doTests<int16_t>(schemaPaths, false /*setMaxProductSize*/, 0 /*numRowsPerSeg*/);
-    TEST_ASSERT_TRUE(result);
-
-    // Run tests forcing various numbers of segments
-    const std::vector<size_t> numRows{ 80, 30, 15, 7, 3, 2, 1 };
-    for (auto row : numRows)
-    {
-        result = doTests<float>(schemaPaths, true /*setMaxProductSize*/, row);
-        TEST_ASSERT_TRUE(result);
-        result = doTests<int16_t>(schemaPaths, true /*setMaxProductSize*/, row);
-        TEST_ASSERT_TRUE(result);
-    }
-}
-
 static std::vector<std::byte> sicd_read_data_(const fs::path& inputPathname,
     six::PixelType expectedPixelType, size_t expectedNumBytesPerPixel)
 {
@@ -513,16 +255,17 @@ static std::vector<std::byte> sicd_read_data_(const fs::path& inputPathname,
     // For SICD, there's only one image (container->getNumData() == 1)
     TEST_ASSERT_EQ(1, container->getNumData());
     constexpr size_t imageNumber = 0;
-    auto data = getComplexData(*container, imageNumber);
-    TEST_ASSERT_EQ(expectedPixelType, data->getPixelType());
+    auto pComplexData = getComplexData(*container, imageNumber);
+    auto& complexData = *pComplexData;
+    TEST_ASSERT_EQ(expectedPixelType, complexData.getPixelType());
 
-    const auto& classification = data->getClassification();
+    const auto& classification = complexData.getClassification();
     TEST_ASSERT_TRUE(classification.isUnclassified());
 
-    const auto numBytesPerPixel = data->getNumBytesPerPixel();
+    const auto numBytesPerPixel = complexData.getNumBytesPerPixel();
     TEST_ASSERT_EQ(expectedNumBytesPerPixel, numBytesPerPixel);
 
-    const auto extent = getExtent(*data);
+    const auto extent = getExtent(complexData);
     const auto numPixels = extent.area();
     std::vector<std::byte> buffer_(numPixels * numBytesPerPixel);
     auto buffer = buffer_.data();
@@ -573,12 +316,32 @@ TEST_CASE(sicd_read_data)
     sicd_read_data(inputPathname, 0, 0);
 }
 
+TEST_CASE(test_readSicd)
+{
+    static const std::vector<std::string> schemaPaths;
+
+    auto inputPathname = getNitfPath("sicd_50x50.nitf");
+    six::sicd::ComplexData complexData;
+    auto widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
+
+    fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
+    fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
+    inputPathname = getNitfPath(filename);
+    //widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
+
+    subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
+    filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
+    inputPathname = getNitfPath(filename);
+    //widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
+}
+
+
 TEST_MAIN((void)argc;
     argv0 = fs::absolute(argv[0]);
     TEST_CHECK(valid_six_50x50);
     TEST_CHECK(read_8bit_ampphs_with_table);    
     TEST_CHECK(read_8bit_ampphs_no_table);
-    TEST_CHECK(sicd_byte_provider);    
     TEST_CHECK(sicd_read_data);
+    TEST_CHECK(test_readSicd);
     )
 

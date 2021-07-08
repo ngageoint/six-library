@@ -518,6 +518,16 @@ void Utilities::readSicd(const fs::path& sicdPathname,
 {
     readSicd(sicdPathname.string(), schemaPaths, complexData, widebandData);
 }
+std::vector<std::complex<float>> Utilities::readSicd(const fs::path& sicdPathname,
+                         const std::vector<std::string>& schemaPaths,
+                         ComplexData& complexData)
+{
+    std::vector<std::complex<float>> retval;
+    std::unique_ptr<ComplexData> pComplexData;
+    readSicd(sicdPathname, schemaPaths, pComplexData, retval);
+    complexData = *pComplexData;
+    return retval;
+}
 
 template<typename TComplexDataPtr, typename TNoiseMeshPtr, typename TScalarMeshPtr>
 static void readSicd_(const std::string& sicdPathname,
