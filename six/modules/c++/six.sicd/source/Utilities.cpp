@@ -71,19 +71,19 @@ static void readAndConvert_RE16I_IM16I_SICD(six::NITFReadControl& reader,
                         const types::RowCol<size_t>& extent,
                         std::complex<float>* buffer)
 {
-    // One for the real component, one for imaginary of each pixel
-    const size_t elementsPerRow = extent.col * 2;
+    // Each pixel is stored as a pair of numbers that represent the real and imaginary 
+    // components. Each component is stored in a 16-bit signed integer in 2's 
+    // complement format (2 bytes per component, 4 bytes per pixel). 
+    const size_t elementsPerRow = extent.col * (1 + 1); // "real and imaginary"
 
     // Get at least 32MB per read
-    const size_t rowsAtATime =
-            (32000000 / (elementsPerRow * sizeof(short))) + 1;
+    const size_t rowsAtATime = (32000000 / (elementsPerRow * sizeof(int16_t))) + 1;
 
     // Allocate temp buffer
-    std::vector<short> tempVector(elementsPerRow * rowsAtATime);
-    short* const tempBuffer = tempVector.data();
+    std::vector<int16_t> tempVector(elementsPerRow * rowsAtATime);
+    int16_t* const tempBuffer_ = tempVector.data();
 
     const size_t endRow = offset.row + extent.row;
-
     for (size_t row = offset.row, rowsToRead = rowsAtATime; row < endRow;
          row += rowsToRead)
     {
@@ -96,60 +96,15 @@ static void readAndConvert_RE16I_IM16I_SICD(six::NITFReadControl& reader,
         // Read into the temp buffer
         const types::RowCol<size_t> swathOffset(row, offset.col);
         const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
-        six::Region region = buildRegion(swathOffset, swathExtent, tempBuffer);
+        six::Region region = buildRegion(swathOffset, swathExtent, tempBuffer_);
         reader.interleaved(region, imageNumber);
 
-        // Take each Int16 out of the temp buffer and put it into the real
-        // buffer as a Float32
-        float* const bufferPtr = reinterpret_cast<float*>(buffer) +
-                ((row - offset.row) * elementsPerRow);
-
+        // Take each Int16 out of the temp buffer and put it into the real buffer as a Float32
+        float* const bufferPtr = reinterpret_cast<float*>(buffer) + ((row - offset.row) * elementsPerRow);
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
         {
-            bufferPtr[index] = tempBuffer[index];
+            bufferPtr[index] = tempVector[index];
         }
-    }
-}
-
-
-static void convert(const std::vector<uint8_t>& tempVector,
-    const types::RowCol<size_t>& offset,
-    const types::RowCol<size_t>& extent,
-    size_t row, size_t rowsToRead,
-    const six::AmplitudeTable* pAmplitudeTable,
-        std::complex<float>* buffer)
-{
-    const size_t elementsPerRow = extent.col;
-
-    // Take each Int8 out of the temp buffer and put it into the real buffer as a Float32
-    auto bufferPtr = buffer + ((row - offset.row) * elementsPerRow);
-    for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
-    {
-        const auto input_amplitude = tempVector[index];
-        auto& input_value = input_amplitude;
-
-        uint8_t A = 0;
-        if (pAmplitudeTable != nullptr)
-        {
-            // A = AmpTable( input_amplitude )
-            auto& AmpTable = *pAmplitudeTable;
-            A = * AmpTable[input_amplitude];;
-        }
-        else
-        {
-            // A = input_amplitude(i.e. 0 to 255)
-            A = input_amplitude;
-        }
-
-        // The phase values should be read in (values 0 to 255) and converted to float by doing:
-        // P = (1 / 256) * input_value
-        const double P = (1.0 / 256.0) * input_value;
-
-        // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
-        // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
-        const std::complex<double> S(A * cos(2 * M_PI * P), A * sin(2 * M_PI * P));
-
-        bufferPtr[index] = S;
     }
 }
 
@@ -160,14 +115,20 @@ static void readAndConvert_AMP8I_PHS8I_SICD(six::NITFReadControl& reader,
     const types::RowCol<size_t>& extent,
     std::complex<float>* buffer)
 {
-    const auto pAmplitudeTable = complexData.imageData->amplitudeTable;
+    const auto pAmplitudeTable_ = complexData.imageData->amplitudeTable;
+    const auto pAmplitudeTable = pAmplitudeTable_.get();
 
-    const size_t elementsPerRow = extent.col;
+    // Each pixel is stored as a pair of numbers that represent the amplitude and phase
+    // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
+    // component, 2 bytes per pixel). 
+    const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
 
     // Get at least 32MB per read
     const size_t rowsAtATime = (32000000 / (elementsPerRow * sizeof(uint8_t))) + 1;
 
+    // Allocate temp buffer
     std::vector<uint8_t> tempVector(elementsPerRow * rowsAtATime);
+    uint8_t* const tempBuffer_ = tempVector.data();
 
     const size_t endRow = offset.row + extent.row;
     for (size_t row = offset.row, rowsToRead = rowsAtATime; row < endRow; row += rowsToRead)
@@ -181,10 +142,42 @@ static void readAndConvert_AMP8I_PHS8I_SICD(six::NITFReadControl& reader,
         // Read into the temp buffer
         const types::RowCol<size_t> swathOffset(row, offset.col);
         const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
-        six::Region region = buildRegion(swathOffset, swathExtent, tempVector.data());
+        six::Region region = buildRegion(swathOffset, swathExtent, tempBuffer_);
         reader.interleaved(region, imageNumber);
 
-        convert(tempVector, offset, extent, row, rowsToRead, pAmplitudeTable.get(), buffer);
+        // Take each (uint8_t, uint8_t) out of the temp buffer and put it into the real buffer as a std::complex<float>
+        auto bufferPtr = buffer + ((row - offset.row) * elementsPerRow);
+        for (size_t index = 0; index < elementsPerRow * rowsToRead; index+=2)
+        {
+            const auto input_amplitude = tempVector[index];
+            const auto input_value = tempVector[index+1];
+
+            double A = 0.0;
+            if (pAmplitudeTable != nullptr)
+            {
+                // A = AmpTable( input_amplitude )
+                auto& AmpTable = *pAmplitudeTable;
+                A = AmpTable.index(input_amplitude);
+            }
+            else
+            {
+                // A = input_amplitude(i.e. 0 to 255)
+                A = input_amplitude;
+            }
+
+            // The phase values should be read in (values 0 to 255) and converted to float by doing:
+            // P = (1 / 256) * input_value
+            const double P = (1.0 / 256.0) * input_value;
+
+            // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
+            // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
+            const auto real = A * cos(2 * M_PI * P);
+            const auto imaginary = A * sin(2 * M_PI * P);
+            const std::complex<float> S(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
+
+            *bufferPtr = S;
+            bufferPtr++;
+        }
     }
 }
 
