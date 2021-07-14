@@ -173,10 +173,30 @@ struct Constants
         switch (type.value)
         {
         case PixelType::RE32F_IM32F:
+        {
+            // Each pixel is stored as a pair of numbers that represent the realand imaginary
+            // components. Each component is stored in a 32-bit IEEE floating point format (4
+            // bytes per component, 8 bytes per pixel).
+            static_assert(sizeof(std::complex<float>) == 8, "RE32F_IM32F should be two floats");
             return 8;
+        }
 
         case PixelType::RE16I_IM16I:
+        {
+            // Each pixel is stored as a pair of numbers that represent the real and imaginary 
+            // components. Each component is stored in a 16-bit signed integer in 2's 
+            // complement format (2 bytes per component, 4 bytes per pixel). 
+            static_assert(sizeof(std::complex<int16_t>) == 4, "RE16I_IM16I should be two 16-bit integers");
             return 4;
+        }
+
+        case PixelType::AMP8I_PHS8I:
+        {
+            // Each pixel is stored as a pair of numbers that represent the amplitude and phase
+            // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
+            // component, 2 bytes per pixel). 
+            return 2;
+        }
 
         case PixelType::MONO8I:
         case PixelType::MONO8LU:
@@ -188,8 +208,7 @@ struct Constants
             return 3;
 
         default:
-            throw except::Exception(Ctxt(FmtX("Unknown pixel type [%d]",
-                                              (int) type)));
+            throw except::Exception(Ctxt(FmtX("Unknown pixel type [%d]", (int) type)));
         }
     }
 
