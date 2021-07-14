@@ -114,6 +114,8 @@ static void readAndConvert_AMP8I_PHS8I_SICD(six::NITFReadControl& reader,
     const types::RowCol<size_t>& extent,
     std::complex<float>* buffer)
 {
+    size_t bufferIdx = 0;
+
     // Each pixel is stored as a pair of numbers that represent the amplitude and phase
     // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
     // component, 2 bytes per pixel). 
@@ -141,7 +143,6 @@ static void readAndConvert_AMP8I_PHS8I_SICD(six::NITFReadControl& reader,
         reader.interleaved(region, imageNumber);
 
         // Take each (uint8_t, uint8_t) out of the temp buffer and put it into the real buffer as a std::complex<float>
-        size_t bufferIdx = (row - offset.row) * elementsPerRow;
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index+=2)
         {
             const auto input_amplitude = tempVector[index];
