@@ -81,7 +81,6 @@ static void readAndConvert_RE16I_IM16I_SICD(six::NITFReadControl& reader,
 
     // Allocate temp buffer
     std::vector<int16_t> tempVector(elementsPerRow * rowsAtATime);
-    int16_t* const tempBuffer_ = tempVector.data();
 
     const size_t endRow = offset.row + extent.row;
     for (size_t row = offset.row, rowsToRead = rowsAtATime; row < endRow;
@@ -96,7 +95,7 @@ static void readAndConvert_RE16I_IM16I_SICD(six::NITFReadControl& reader,
         // Read into the temp buffer
         const types::RowCol<size_t> swathOffset(row, offset.col);
         const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
-        six::Region region = buildRegion(swathOffset, swathExtent, tempBuffer_);
+        six::Region region = buildRegion(swathOffset, swathExtent, tempVector.data());
         reader.interleaved(region, imageNumber);
 
         // Take each Int16 out of the temp buffer and put it into the real buffer as a Float32
@@ -109,15 +108,12 @@ static void readAndConvert_RE16I_IM16I_SICD(six::NITFReadControl& reader,
 }
 
 static void readAndConvert_AMP8I_PHS8I_SICD(six::NITFReadControl& reader,
-    const six::sicd::ComplexData& complexData,
+    const six::AmplitudeTable* pAmplitudeTable,
     size_t imageNumber,
     const types::RowCol<size_t>& offset,
     const types::RowCol<size_t>& extent,
     std::complex<float>* buffer)
 {
-    const auto pAmplitudeTable_ = complexData.imageData->amplitudeTable;
-    const auto pAmplitudeTable = pAmplitudeTable_.get();
-
     // Each pixel is stored as a pair of numbers that represent the amplitude and phase
     // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
     // component, 2 bytes per pixel). 
@@ -128,7 +124,6 @@ static void readAndConvert_AMP8I_PHS8I_SICD(six::NITFReadControl& reader,
 
     // Allocate temp buffer
     std::vector<uint8_t> tempVector(elementsPerRow * rowsAtATime);
-    uint8_t* const tempBuffer_ = tempVector.data();
 
     const size_t endRow = offset.row + extent.row;
     for (size_t row = offset.row, rowsToRead = rowsAtATime; row < endRow; row += rowsToRead)
@@ -142,11 +137,11 @@ static void readAndConvert_AMP8I_PHS8I_SICD(six::NITFReadControl& reader,
         // Read into the temp buffer
         const types::RowCol<size_t> swathOffset(row, offset.col);
         const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
-        six::Region region = buildRegion(swathOffset, swathExtent, tempBuffer_);
+        six::Region region = buildRegion(swathOffset, swathExtent, tempVector.data());
         reader.interleaved(region, imageNumber);
 
         // Take each (uint8_t, uint8_t) out of the temp buffer and put it into the real buffer as a std::complex<float>
-        auto bufferPtr = buffer + ((row - offset.row) * elementsPerRow);
+        size_t bufferIdx = (row - offset.row) * elementsPerRow;
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index+=2)
         {
             const auto input_amplitude = tempVector[index];
@@ -175,8 +170,7 @@ static void readAndConvert_AMP8I_PHS8I_SICD(six::NITFReadControl& reader,
             const auto imaginary = A * sin(2 * M_PI * P);
             const std::complex<float> S(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
 
-            *bufferPtr = S;
-            bufferPtr++;
+            buffer[bufferIdx++] = S;
         }
     }
 }
@@ -747,7 +741,8 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     }
     else if (pixelType == PixelType::AMP8I_PHS8I)
     {
-        readAndConvert_AMP8I_PHS8I_SICD(reader, complexData, imageNumber, offset, extent, buffer);
+        const auto pAmplitudeTable = complexData.imageData->amplitudeTable.get();
+        readAndConvert_AMP8I_PHS8I_SICD(reader, pAmplitudeTable, imageNumber, offset, extent, buffer);
     }
     else
     {
