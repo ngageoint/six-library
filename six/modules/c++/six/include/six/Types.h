@@ -398,14 +398,20 @@ struct AmplitudeTable final : public LUT
     {
         return !(*this == rhs);
     }
+
+    double index(size_t ii) const
+    {
+        const void* this_ii = (*this)[ii];
+        return *static_cast<const double*>(this_ii);
+    }
+
     AmplitudeTable* clone() const
     {
         auto ret = std::make_unique<AmplitudeTable>();
         for (size_t ii = 0; ii < numEntries; ++ii)
         {
-            const void* this_ii = (*this)[ii];
             void* ret_ii = (*ret)[ii];
-            *static_cast<double*>(ret_ii) = *static_cast<const double*>(this_ii);
+            *static_cast<double*>(ret_ii) = index(ii);
         }
         return ret.release();
     }

@@ -211,6 +211,13 @@ TEST_CASE(read_8bit_ampphs_with_table)
     const auto& imageData = *(data->imageData);
     const auto pAmplitudeTable = imageData.amplitudeTable.get();
     TEST_ASSERT(pAmplitudeTable != nullptr);
+
+    const auto& AmpTable = *pAmplitudeTable;
+    for (size_t i = 0; i <= UINT8_MAX; i++)
+    {
+        const auto v = AmpTable.index(i);
+        TEST_ASSERT_EQ(v, (v / 1.0) + 0.0); // be sure it's not something goofy like NaN, Inf, etc.
+    }
 }
 
 TEST_CASE(read_8bit_ampphs_no_table)
