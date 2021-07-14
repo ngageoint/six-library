@@ -131,16 +131,24 @@ static void convert(const std::vector<uint8_t>& tempVector,
         uint8_t A = 0;
         if (pAmplitudeTable != nullptr)
         {
+            // A = AmpTable( input_amplitude )
             auto& AmpTable = *pAmplitudeTable;
             A = * AmpTable[input_amplitude];;
         }
         else
         {
+            // A = input_amplitude(i.e. 0 to 255)
             A = input_amplitude;
         }
 
-        const auto P = (1 / 256) * input_value;
+        // The phase values should be read in (values 0 to 255) and converted to float by doing:
+        // P = (1 / 256) * input_value
+        const double P = (1.0 / 256.0) * input_value;
+
+        // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
+        // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
         const std::complex<double> S(A * cos(2 * M_PI * P), A * sin(2 * M_PI * P));
+
         bufferPtr[index] = S;
     }
 }
