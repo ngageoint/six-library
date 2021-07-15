@@ -69,8 +69,8 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
 template<typename T>
 class SICD_readerAndConverter final
 {
-    template<typename T>
-    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<T>& tempVector);
+    template<typename TElement>
+    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<TElement>& tempVector);
 
     template<>
     void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<int16_t>& tempVector)
