@@ -69,6 +69,9 @@
     <ClInclude Include="include\scene\sys_Conf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\scene\math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
