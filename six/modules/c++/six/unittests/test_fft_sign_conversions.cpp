@@ -20,11 +20,11 @@ TEST_CASE(testToType)
 TEST_CASE(test_degrees)
 {
     // These are part of "scene" not "six", but there aren't any unittests there
-    const scene::degrees<double> degrees_0{ 0 };
-    const scene::degrees<double> degrees_90{ 90 };
-    const scene::degrees<double> degrees_180{ 180 };
-    const scene::degrees<double> degrees_270{ 270 };
-    const scene::degrees<double> degrees_360{ 360 };
+    const auto degrees_0 = scene::as_degrees(0.0);
+    const auto degrees_90 = scene::as_degrees(90.0);
+    const auto degrees_180 = scene::as_degrees(180.0);
+    const auto degrees_270 = scene::as_degrees(270.0);
+    const auto degrees_360 = scene::as_degrees(360.0);
 
     TEST_ASSERT_ALMOST_EQ(0.0, sin(degrees_0));
     TEST_ASSERT_ALMOST_EQ(1.0, sin(degrees_90));

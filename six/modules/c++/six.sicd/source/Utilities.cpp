@@ -36,9 +36,11 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDMesh.h>
 #include <six/sicd/Utilities.h>
+#include <scene/math.h>
 #include <str/Manip.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
+
 
 namespace fs = std::filesystem;
 
@@ -86,8 +88,9 @@ std::complex<float> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitu
 
     // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
     // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
-    const auto real = A * cos(2 * M_PI * P);
-    const auto imaginary = A * sin(2 * M_PI * P);
+    const auto angle = 2 * M_PI * P;
+    const auto real = A * cos(angle);
+    const auto imaginary = A * sin(angle);
     std::complex<float> S(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
     return S;
 }
@@ -125,6 +128,7 @@ class SICD_readerAndConverter final
         // Take each (uint8_t, uint8_t) out of the temp buffer and put it into the real buffer as a std::complex<float>
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index += 2)
         {
+            // "For amplitude and phase components, the amplitude component is  stored first."
             const auto& input_amplitude = tempVector[index];
             const auto& input_value = tempVector[index + 1];
 

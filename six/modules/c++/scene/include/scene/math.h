@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * scene-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -25,7 +26,6 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-
 #include <cmath>
 
 namespace scene
@@ -38,6 +38,11 @@ namespace scene
 	{
 		T value;
 	};
+	template<typename T>
+	inline radians<T> as_radians(T a)
+	{
+		return radians<T> { a };
+	}
 	template<typename T, typename TReturn = T>
 	inline radians<TReturn> to_radians(radians<T> a)
 	{
@@ -49,6 +54,11 @@ namespace scene
 	{
 		T value;
 	};
+	template<typename T>
+	inline degrees<T> as_degrees(T a)
+	{
+		return degrees<T> { a };
+	}
 	template<typename T, typename TReturn = T>
 	inline degrees<TReturn> to_degrees(degrees<T> a)
 	{
@@ -58,12 +68,12 @@ namespace scene
 	template<typename T, typename TReturn = T>
 	inline radians<TReturn> to_radians(degrees<T> a)
 	{
-		return radians<TReturn> { a.value* M_PI / 180.0 };
+		return radians<TReturn> { a.value * M_PI / 180.0 };
 	}
 	template<typename T, typename TReturn = T>
-	inline radians<TReturn> to_degrees(radians<T> a)
+	inline degrees<TReturn> to_degrees(radians<T> a)
 	{
-		return radians<TReturn> { a.value * 180.0 / M_PI };
+		return degrees<TReturn> { a.value * 180.0 / M_PI };
 	}
 
 	template <template<typename> typename TAngle, typename T>
