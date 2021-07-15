@@ -81,10 +81,7 @@ struct SICD_readerAndConverter final
     SICD_readerAndConverter& operator=(const SICD_readerAndConverter&) = delete;
     SICD_readerAndConverter& operator=(SICD_readerAndConverter&&) = delete;
 
-    template<typename U>
-    using processor_t = std::function<void(U&, size_t, size_t, size_t, const std::vector<T>&)>;
-    template<typename U>
-    void operator()(size_t elementsPerRow, U& instance, processor_t<U> process)
+    void operator()(size_t elementsPerRow)
     {
         // Get at least 32MB per read
         const size_t rowsAtATime = (32000000 / (elementsPerRow * sizeof(T))) + 1;
@@ -108,16 +105,16 @@ struct SICD_readerAndConverter final
             six::Region region = buildRegion(swathOffset, swathExtent, tempVector.data());
             reader.interleaved(region, imageNumber);
 
-            process(instance, elementsPerRow, row, rowsToRead, tempVector);
-            //process_(elementsPerRow, row, rowsToRead, tempVector);
+            process(elementsPerRow, row, rowsToRead, tempVector);
         }
     }
 
+private:
     template<typename T>
-    void process_(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<T>& tempVector);
+    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<T>& tempVector);
 
     template<>
-    void process_(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<int16_t>& tempVector)
+    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<int16_t>& tempVector)
     {
         process_RE16I_IM16I(elementsPerRow, row, rowsToRead, tempVector);
     }
@@ -132,19 +129,20 @@ struct SICD_readerAndConverter final
     }
 
     template<>
-    void process_(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<uint8_t>& tempVector)
+    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<uint8_t>& tempVector)
     {
         process_AMP8I_PHS8I(elementsPerRow, row, rowsToRead, tempVector);
     }
-    void process_AMP8I_PHS8I(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<uint8_t>& tempVector)
+    void process_AMP8I_PHS8I(size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<uint8_t>& tempVector)
     {
-        float* const bufferPtr = reinterpret_cast<float*>(buffer) + ((row - offset.row) * elementsPerRow);
+        //auto bufferPtr = buffer + ((row - offset.row) * elementsPerRow);
+        auto bufferPtr = buffer;
 
         // Take each (uint8_t, uint8_t) out of the temp buffer and put it into the real buffer as a std::complex<float>
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index += 2)
         {
-            const auto input_amplitude = tempVector[index];
-            const auto input_value = tempVector[index + 1];
+            const auto& input_amplitude = tempVector[index];
+            const auto& input_value = tempVector[index + 1];
 
             double A = 0.0;
             if (pAmplitudeTable != nullptr)
@@ -169,54 +167,9 @@ struct SICD_readerAndConverter final
             const auto imaginary = A * sin(2 * M_PI * P);
             const std::complex<float> S(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
 
-            if (bufferPtr != nullptr)
-            {
-                //*buffer = S;
-            }
+            *bufferPtr = S;
+            bufferPtr++;
         }
-    }
-};
-
-struct SICD_RE16I_IM16I_readerAndConverter final
-{
-    SICD_readerAndConverter<int16_t> converter;
-    SICD_RE16I_IM16I_readerAndConverter() = delete;
-    SICD_RE16I_IM16I_readerAndConverter(const SICD_RE16I_IM16I_readerAndConverter&) = delete;
-    SICD_RE16I_IM16I_readerAndConverter& operator=(const SICD_RE16I_IM16I_readerAndConverter&) = delete;
-    SICD_RE16I_IM16I_readerAndConverter& operator=(SICD_RE16I_IM16I_readerAndConverter&&) = delete;
-
-    void operator()(size_t elementsPerRow)
-    {
-        using processor_t = SICD_readerAndConverter<int16_t>::processor_t<SICD_RE16I_IM16I_readerAndConverter>;
-        processor_t f = &SICD_RE16I_IM16I_readerAndConverter::process;
-        converter(elementsPerRow, *this, f);
-    }
-
-    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<int16_t>& tempVector) const
-    {
-        converter.process_RE16I_IM16I(elementsPerRow, row, rowsToRead, tempVector);
-    }
-};
-
-struct SICD_AMP8I_PHS8I_readerAndConverter final
-{
-    SICD_readerAndConverter<uint8_t> converter;
-
-    SICD_AMP8I_PHS8I_readerAndConverter() = delete;
-    SICD_AMP8I_PHS8I_readerAndConverter(const SICD_AMP8I_PHS8I_readerAndConverter&) = delete;
-    SICD_AMP8I_PHS8I_readerAndConverter& operator=(const SICD_AMP8I_PHS8I_readerAndConverter&) = delete;
-    SICD_AMP8I_PHS8I_readerAndConverter& operator=(SICD_AMP8I_PHS8I_readerAndConverter&&) = delete;
-
-    void operator()(size_t elementsPerRow)
-    {
-        using processor_t = SICD_readerAndConverter<uint8_t>::processor_t<SICD_AMP8I_PHS8I_readerAndConverter>;
-        processor_t f = &SICD_AMP8I_PHS8I_readerAndConverter::process;
-        converter(elementsPerRow, *this, f);
-    }
-
-    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<uint8_t>& tempVector)
-    {
-        converter.process_AMP8I_PHS8I(elementsPerRow, row, rowsToRead, tempVector);
     }
 };
 
@@ -782,7 +735,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     }
     else if (pixelType == PixelType::RE16I_IM16I)
     {
-        SICD_RE16I_IM16I_readerAndConverter readerAndConverter{ reader, imageNumber, offset, extent, buffer };
+        SICD_readerAndConverter<int16_t> readerAndConverter{ reader, imageNumber, offset, extent, buffer };
 
         // Each pixel is stored as a pair of numbers that represent the real and imaginary 
         // components. Each component is stored in a 16-bit signed integer in 2's 
@@ -793,13 +746,12 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     else if (pixelType == PixelType::AMP8I_PHS8I)
     {
         const auto pAmplitudeTable = complexData.imageData->amplitudeTable.get();
-        SICD_AMP8I_PHS8I_readerAndConverter readerAndConverter{ reader, imageNumber, offset, extent, buffer, pAmplitudeTable };
+        SICD_readerAndConverter<uint8_t> readerAndConverter{ reader, imageNumber, offset, extent, buffer, pAmplitudeTable };
 
         // Each pixel is stored as a pair of numbers that represent the amplitude and phase
         // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
         // component, 2 bytes per pixel). 
         const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
-
         readerAndConverter(elementsPerRow);
     }
     else
