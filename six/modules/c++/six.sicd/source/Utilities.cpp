@@ -63,7 +63,37 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
     retv.setBuffer(reinterpret_cast<std::byte*>(buffer));
     return retv;
 }
+}
 
+std::complex<float> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
+{
+    double A = 0.0;
+    if (pAmplitudeTable != nullptr)
+    {
+        // A = AmpTable( input_amplitude )
+        auto& AmpTable = *(pAmplitudeTable);
+        A = AmpTable.index(input_amplitude);
+    }
+    else
+    {
+        // A = input_amplitude(i.e. 0 to 255)
+        A = input_amplitude;
+    }
+
+    // The phase values should be read in (values 0 to 255) and converted to float by doing:
+    // P = (1 / 256) * input_value
+    const double P = (1.0 / 256.0) * input_value;
+
+    // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
+    // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
+    const auto real = A * cos(2 * M_PI * P);
+    const auto imaginary = A * sin(2 * M_PI * P);
+    std::complex<float> S(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
+    return S;
+}
+
+namespace
+{
 // Reads in ~32 MB of rows at a time, converts to complex<float>, and keeps
 // going until reads everything
 template<typename T>
@@ -103,30 +133,7 @@ class SICD_readerAndConverter final
             const auto& input_amplitude = tempVector[index];
             const auto& input_value = tempVector[index + 1];
 
-            double A = 0.0;
-            if (pAmplitudeTable != nullptr)
-            {
-                // A = AmpTable( input_amplitude )
-                auto& AmpTable = *(pAmplitudeTable);
-                A = AmpTable.index(input_amplitude);
-            }
-            else
-            {
-                // A = input_amplitude(i.e. 0 to 255)
-                A = input_amplitude;
-            }
-
-            // The phase values should be read in (values 0 to 255) and converted to float by doing:
-            // P = (1 / 256) * input_value
-            const double P = (1.0 / 256.0) * input_value;
-
-            // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
-            // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
-            const auto real = A * cos(2 * M_PI * P);
-            const auto imaginary = A * sin(2 * M_PI * P);
-            const std::complex<float> S(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
-
-            *bufferPtr = S;
+            *bufferPtr = six::sicd::Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, pAmplitudeTable);
             bufferPtr++;
         }
     }
