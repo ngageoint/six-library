@@ -81,6 +81,18 @@ namespace scene
 	{
 		return std::tan(to_radians(a).value);
 	}
+	inline double sin(double a)
+	{
+		return std::sin(a);
+	}
+	inline double cos(double a)
+	{
+		return std::cos(a);
+	}
+	inline double tan(double a)
+	{
+		return std::tan(a);
+	}
 }
 
 #endif // SIX_scene_math_h_INCLUDED_
