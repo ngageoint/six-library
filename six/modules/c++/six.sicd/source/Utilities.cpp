@@ -99,7 +99,7 @@ namespace
 template<typename T>
 class SICD_readerAndConverter final
 {
-    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<int16_t>& tempVector)
+    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<int16_t>& tempVector) const
     {
         process_RE16I_IM16I(elementsPerRow, row, rowsToRead, tempVector);
     }
@@ -113,11 +113,11 @@ class SICD_readerAndConverter final
         }
     }
 
-    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<uint8_t>& tempVector)
+    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<uint8_t>& tempVector) const
     {
         process_AMP8I_PHS8I(elementsPerRow, row, rowsToRead, tempVector);
     }
-    void process_AMP8I_PHS8I(size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<uint8_t>& tempVector)
+    void process_AMP8I_PHS8I(size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<uint8_t>& tempVector) const
     {
         //auto bufferPtr = buffer + ((row - offset.row) * elementsPerRow);
         auto bufferPtr = buffer;
@@ -132,25 +132,16 @@ class SICD_readerAndConverter final
             bufferPtr++;
         }
     }
-    six::NITFReadControl& reader;
-    const size_t imageNumber;
     const types::RowCol<size_t>& offset;
-    const types::RowCol<size_t>& extent;
     std::complex<float>* buffer;
     const six::AmplitudeTable* pAmplitudeTable = nullptr;
     
 public:
     SICD_readerAndConverter(six::NITFReadControl& reader, size_t imageNumber,
 			    const types::RowCol<size_t>& offset, const types::RowCol<size_t>& extent,
+                size_t elementsPerRow,
 			    std::complex<float>* buffer,  const six::AmplitudeTable* pAmplitudeTable = nullptr)
-      : reader(reader), imageNumber(imageNumber), offset(offset), extent(extent), buffer(buffer), pAmplitudeTable(pAmplitudeTable)
-    {}
-    SICD_readerAndConverter() = delete;
-    SICD_readerAndConverter(const SICD_readerAndConverter&) = delete;
-    SICD_readerAndConverter& operator=(const SICD_readerAndConverter&) = delete;
-    SICD_readerAndConverter& operator=(SICD_readerAndConverter&&) = delete;
-
-    void operator()(size_t elementsPerRow)
+      : offset(offset), buffer(buffer), pAmplitudeTable(pAmplitudeTable)
     {
         // Get at least 32MB per read
         const size_t rowsAtATime = (32000000 / (elementsPerRow * sizeof(T))) + 1;
@@ -177,6 +168,9 @@ public:
             process(elementsPerRow, row, rowsToRead, tempVector);
         }
     }
+    SICD_readerAndConverter(const SICD_readerAndConverter&) = delete;
+    SICD_readerAndConverter& operator=(const SICD_readerAndConverter&) = delete;
+    SICD_readerAndConverter& operator=(SICD_readerAndConverter&&) = delete;
 };
 
 six::Poly2D getXYtoRowColTransform(double center,
@@ -741,24 +735,22 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     }
     else if (pixelType == PixelType::RE16I_IM16I)
     {
-      SICD_readerAndConverter<int16_t> readerAndConverter(reader, imageNumber, offset, extent, buffer);
 
         // Each pixel is stored as a pair of numbers that represent the real and imaginary 
         // components. Each component is stored in a 16-bit signed integer in 2's 
         // complement format (2 bytes per component, 4 bytes per pixel). 
         const size_t elementsPerRow = extent.col * (1 + 1); // "real and imaginary"
-        readerAndConverter(elementsPerRow);
+        const SICD_readerAndConverter<int16_t> readerAndConverter(reader, imageNumber, offset, extent, elementsPerRow, buffer);
     }
     else if (pixelType == PixelType::AMP8I_PHS8I)
     {
         const auto pAmplitudeTable = complexData.imageData->amplitudeTable.get();
-        SICD_readerAndConverter<uint8_t> readerAndConverter(reader, imageNumber, offset, extent, buffer, pAmplitudeTable);
 
         // Each pixel is stored as a pair of numbers that represent the amplitude and phase
         // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
         // component, 2 bytes per pixel). 
         const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
-        readerAndConverter(elementsPerRow);
+        const SICD_readerAndConverter<uint8_t> readerAndConverter(reader, imageNumber, offset, extent, elementsPerRow, buffer, pAmplitudeTable);
     }
     else
     {
