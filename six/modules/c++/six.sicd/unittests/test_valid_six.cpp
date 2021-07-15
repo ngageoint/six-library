@@ -191,6 +191,36 @@ TEST_CASE(valid_six_50x50)
     //const auto& imageData = *(data->imageData);
 }
 
+static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value)
+{
+    // A = input_amplitude(i.e. 0 to 255)
+    double A = input_amplitude;
+
+    // The phase values should be read in (values 0 to 255) and converted to float by doing:
+    // P = (1 / 256) * input_value
+    const double P = (1.0 / 256.0) * input_value;
+
+    // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
+    // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
+    const auto real = A * cos(2 * M_PI * P);
+    const auto imaginary = A * sin(2 * M_PI * P);
+    std::complex<float> S(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
+    return S;
+}
+
+TEST_CASE(test_8bit_ampphs)
+{
+    for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
+    {
+        for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
+        {
+            const auto expected = from_AMP8I_PHS8I(input_amplitude, input_value);
+            const auto actual = six::sicd::Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, nullptr);
+            TEST_ASSERT_EQ(expected, actual);
+        }
+    }
+}
+
 TEST_CASE(read_8bit_ampphs_with_table)
 {
     const fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
@@ -346,7 +376,8 @@ TEST_CASE(test_readSicd)
 TEST_MAIN((void)argc;
     argv0 = fs::absolute(argv[0]);
     TEST_CHECK(valid_six_50x50);
-    TEST_CHECK(read_8bit_ampphs_with_table);    
+    TEST_CHECK(test_8bit_ampphs);
+    TEST_CHECK(read_8bit_ampphs_with_table);
     TEST_CHECK(read_8bit_ampphs_no_table);
     TEST_CHECK(sicd_read_data);
     TEST_CHECK(test_readSicd);
