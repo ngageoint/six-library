@@ -67,49 +67,8 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
 // Reads in ~32 MB of rows at a time, converts to complex<float>, and keeps
 // going until reads everything
 template<typename T>
-struct SICD_readerAndConverter final
+class SICD_readerAndConverter final
 {
-    six::NITFReadControl& reader;
-    const size_t imageNumber;
-    const types::RowCol<size_t>& offset;
-    const types::RowCol<size_t>& extent;
-    std::complex<float>* buffer;
-    const six::AmplitudeTable* pAmplitudeTable = nullptr;
-
-    SICD_readerAndConverter() = delete;
-    SICD_readerAndConverter(const SICD_readerAndConverter&) = delete;
-    SICD_readerAndConverter& operator=(const SICD_readerAndConverter&) = delete;
-    SICD_readerAndConverter& operator=(SICD_readerAndConverter&&) = delete;
-
-    void operator()(size_t elementsPerRow)
-    {
-        // Get at least 32MB per read
-        const size_t rowsAtATime = (32000000 / (elementsPerRow * sizeof(T))) + 1;
-
-        // Allocate temp buffer
-        std::vector<T> tempVector(elementsPerRow * rowsAtATime);
-
-        const size_t endRow = offset.row + extent.row;
-        for (size_t row = offset.row, rowsToRead = rowsAtATime; row < endRow;
-            row += rowsToRead)
-        {
-            // If we would read beyond the input buffer, don't
-            if (row + rowsToRead > endRow)
-            {
-                rowsToRead = endRow - row;
-            }
-
-            // Read into the temp buffer
-            const types::RowCol<size_t> swathOffset(row, offset.col);
-            const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
-            six::Region region = buildRegion(swathOffset, swathExtent, tempVector.data());
-            reader.interleaved(region, imageNumber);
-
-            process(elementsPerRow, row, rowsToRead, tempVector);
-        }
-    }
-
-private:
     template<typename T>
     void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<T>& tempVector);
 
@@ -169,6 +128,46 @@ private:
 
             *bufferPtr = S;
             bufferPtr++;
+        }
+    }
+public:
+    six::NITFReadControl& reader;
+    const size_t imageNumber;
+    const types::RowCol<size_t>& offset;
+    const types::RowCol<size_t>& extent;
+    std::complex<float>* buffer;
+    const six::AmplitudeTable* pAmplitudeTable = nullptr;
+
+    SICD_readerAndConverter() = delete;
+    SICD_readerAndConverter(const SICD_readerAndConverter&) = delete;
+    SICD_readerAndConverter& operator=(const SICD_readerAndConverter&) = delete;
+    SICD_readerAndConverter& operator=(SICD_readerAndConverter&&) = delete;
+
+    void operator()(size_t elementsPerRow)
+    {
+        // Get at least 32MB per read
+        const size_t rowsAtATime = (32000000 / (elementsPerRow * sizeof(T))) + 1;
+
+        // Allocate temp buffer
+        std::vector<T> tempVector(elementsPerRow * rowsAtATime);
+
+        const size_t endRow = offset.row + extent.row;
+        for (size_t row = offset.row, rowsToRead = rowsAtATime; row < endRow;
+            row += rowsToRead)
+        {
+            // If we would read beyond the input buffer, don't
+            if (row + rowsToRead > endRow)
+            {
+                rowsToRead = endRow - row;
+            }
+
+            // Read into the temp buffer
+            const types::RowCol<size_t> swathOffset(row, offset.col);
+            const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
+            six::Region region = buildRegion(swathOffset, swathExtent, tempVector.data());
+            reader.interleaved(region, imageNumber);
+
+            process(elementsPerRow, row, rowsToRead, tempVector);
         }
     }
 };
