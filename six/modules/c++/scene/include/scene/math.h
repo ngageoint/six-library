@@ -28,6 +28,8 @@
 #include <math.h>
 #include <cmath>
 
+#include <math/Constants.h>
+
 namespace scene
 {
 	//
@@ -68,12 +70,12 @@ namespace scene
 	template<typename T, typename TReturn = T>
 	inline radians<TReturn> to_radians(degrees<T> a)
 	{
-		return radians<TReturn> { a.value * M_PI / 180.0 };
+		return radians<TReturn> { a.value * math::Constants::DEGREES_TO_RADIANS };
 	}
 	template<typename T, typename TReturn = T>
 	inline degrees<TReturn> to_degrees(radians<T> a)
 	{
-		return degrees<TReturn> { a.value * 180.0 / M_PI };
+		return degrees<TReturn> { a.value * math::Constants::RADIANS_TO_DEGREES };
 	}
 
 	template <template<typename> typename TAngle, typename T>
