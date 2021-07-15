@@ -99,10 +99,6 @@ namespace
 template<typename T>
 class SICD_readerAndConverter final
 {
-    template<typename TElement>
-    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<TElement>& tempVector);
-
-    template<>
     void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<int16_t>& tempVector)
     {
         process_RE16I_IM16I(elementsPerRow, row, rowsToRead, tempVector);
@@ -117,7 +113,6 @@ class SICD_readerAndConverter final
         }
     }
 
-    template<>
     void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<uint8_t>& tempVector)
     {
         process_AMP8I_PHS8I(elementsPerRow, row, rowsToRead, tempVector);
@@ -137,14 +132,19 @@ class SICD_readerAndConverter final
             bufferPtr++;
         }
     }
-public:
     six::NITFReadControl& reader;
     const size_t imageNumber;
     const types::RowCol<size_t>& offset;
     const types::RowCol<size_t>& extent;
     std::complex<float>* buffer;
     const six::AmplitudeTable* pAmplitudeTable = nullptr;
-
+    
+public:
+    SICD_readerAndConverter(six::NITFReadControl& reader, size_t imageNumber,
+			    const types::RowCol<size_t>& offset, const types::RowCol<size_t>& extent,
+			    std::complex<float>* buffer,  const six::AmplitudeTable* pAmplitudeTable = nullptr)
+      : reader(reader), imageNumber(imageNumber), offset(offset), extent(extent), buffer(buffer), pAmplitudeTable(pAmplitudeTable)
+    {}
     SICD_readerAndConverter() = delete;
     SICD_readerAndConverter(const SICD_readerAndConverter&) = delete;
     SICD_readerAndConverter& operator=(const SICD_readerAndConverter&) = delete;
@@ -741,7 +741,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     }
     else if (pixelType == PixelType::RE16I_IM16I)
     {
-        SICD_readerAndConverter<int16_t> readerAndConverter{ reader, imageNumber, offset, extent, buffer };
+      SICD_readerAndConverter<int16_t> readerAndConverter(reader, imageNumber, offset, extent, buffer);
 
         // Each pixel is stored as a pair of numbers that represent the real and imaginary 
         // components. Each component is stored in a 16-bit signed integer in 2's 
@@ -752,7 +752,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     else if (pixelType == PixelType::AMP8I_PHS8I)
     {
         const auto pAmplitudeTable = complexData.imageData->amplitudeTable.get();
-        SICD_readerAndConverter<uint8_t> readerAndConverter{ reader, imageNumber, offset, extent, buffer, pAmplitudeTable };
+        SICD_readerAndConverter<uint8_t> readerAndConverter(reader, imageNumber, offset, extent, buffer, pAmplitudeTable);
 
         // Each pixel is stored as a pair of numbers that represent the amplitude and phase
         // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
