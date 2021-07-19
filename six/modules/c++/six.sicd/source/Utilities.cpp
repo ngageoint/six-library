@@ -36,7 +36,6 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDMesh.h>
 #include <six/sicd/Utilities.h>
-#include <scene/math.h>
 #include <str/Manip.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>

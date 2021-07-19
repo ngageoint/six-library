@@ -112,7 +112,6 @@
     <ClInclude Include="include\scene\GridGeometry.h" />
     <ClInclude Include="include\scene\LLAToECEFTransform.h" />
     <ClInclude Include="include\scene\LocalCoordinateTransform.h" />
-    <ClInclude Include="include\scene\math.h" />
     <ClInclude Include="include\scene\ProjectionModel.h" />
     <ClInclude Include="include\scene\ProjectionPolynomialFitter.h" />
     <ClInclude Include="include\scene\SceneGeometry.h" />
