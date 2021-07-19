@@ -194,7 +194,7 @@ TEST_CASE(valid_six_50x50)
 static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value)
 {
     // A = input_amplitude(i.e. 0 to 255)
-    double A = input_amplitude;
+    const double A = input_amplitude;
 
     // The phase values should be read in (values 0 to 255) and converted to float by doing:
     // P = (1 / 256) * input_value
@@ -202,10 +202,10 @@ static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t inp
 
     // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
     // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
-    const auto real = A * cos(2 * M_PI * P);
-    const auto imaginary = A * sin(2 * M_PI * P);
-    std::complex<float> S(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
-    return S;
+    const auto angle = 2 * M_PI * P;
+    const auto real = A * cos(angle);
+    const auto imaginary = A * sin(angle);
+    return std::complex<float>(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
 }
 
 TEST_CASE(test_8bit_ampphs)
