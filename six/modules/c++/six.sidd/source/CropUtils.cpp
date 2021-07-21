@@ -151,8 +151,7 @@ void cropSIDD(const std::string& inPathname,
                 dynamic_cast<six::sidd::DerivedData*>(dataPtr);
 
             // Make sure the AOI is in bounds
-            const types::RowCol<size_t> origDims(data->getNumRows(),
-                                                 data->getNumCols());
+            const auto origDims = getExtent(*data);
             if (aoiOffset.row + aoiDims.row > origDims.row ||
                 aoiOffset.col + aoiDims.col > origDims.col)
             {
@@ -172,8 +171,8 @@ void cropSIDD(const std::string& inPathname,
             std::byte* const buffer = buffers.add(numBytes);
 
             six::Region region;
-            region.setOffset(aoiOffset);
-            region.setDims(aoiDims);
+            setOffset(region, aoiOffset);
+            setDims(region, aoiDims);
             region.setBuffer(buffer);
             reader.interleaved(region, imageNum++);
 

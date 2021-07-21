@@ -667,13 +667,9 @@ void NITFHeaderCreator::initialize(mem::SharedPtr<Container> container)
             Data* const ith = container->getData(ii);
             if (ith->getDataType() == DataType::DERIVED)
             {
-                const uint32_t numRowsPerBlock =
-                        std::min(optNumRowsPerBlock,
-                                 static_cast<uint32_t>(ith->getNumRows()));
-
-                const uint32_t numColsPerBlock =
-                        std::min(optNumColsPerBlock,
-                                 static_cast<uint32_t>(ith->getNumCols()));
+                const types::RowCol<uint32_t> ithExtent(getExtent(*ith));
+                const auto numRowsPerBlock = std::min(optNumRowsPerBlock, ithExtent.row);
+                const auto numColsPerBlock = std::min(optNumColsPerBlock, ithExtent.col);
 
                 mem::SharedPtr<NITFImageInfo> info(
                         new NITFImageInfo(ith,

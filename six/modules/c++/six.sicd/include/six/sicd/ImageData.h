@@ -46,8 +46,7 @@ struct ImageData
 
     /*!
      *  Indicates the pixel type and binary format of the data.
-     *  \todo We currently do not support AMP8I_PHS8I
-     *
+\     *
      */
     PixelType pixelType = PixelType::NOT_SET;
 

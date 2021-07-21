@@ -40,6 +40,7 @@ struct MemoryWriteHandlerImpl final
 {
     const UByte* buffer;
     size_t firstRow;
+    types::RowCol<size_t> extent;
     size_t numCols;
     size_t numRows;
     size_t numChannels;

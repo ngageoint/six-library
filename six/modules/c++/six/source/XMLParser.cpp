@@ -371,6 +371,7 @@ bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std:
         parseDouble(element, value);
         return true;
     }
+    value = six::Init::undefined<double>();
     return false;
 }
 bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const

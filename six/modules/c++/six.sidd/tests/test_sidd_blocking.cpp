@@ -153,11 +153,10 @@ bool checkBlocking(const std::string& originalPathname,
     six::Region originalRegion;
     six::Region convertedRegion;
 
-    const size_t numRows = originalContainer->getData(0)->getNumRows();
-    const size_t numCols = originalContainer->getData(0)->getNumCols();
-    const size_t bytesPerPixel =
-            originalContainer->getData(0)->getNumBytesPerPixel();
-    const size_t bufferSize = numRows * numCols * bytesPerPixel;
+    const auto data0 = originalContainer->getData(0);
+    const auto extent = getExtent(*data0);
+    const size_t bytesPerPixel = data0->getNumBytesPerPixel();
+    const size_t bufferSize = extent.area() * bytesPerPixel;
 
     std::unique_ptr<six::UByte[]> originalBuffer(
             originalReader.interleaved(originalRegion, 0));

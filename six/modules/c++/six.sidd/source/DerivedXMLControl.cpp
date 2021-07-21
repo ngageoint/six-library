@@ -42,10 +42,14 @@ std::string normalizeVersion(const std::string& version)
             Ctxt("Unsupported SIDD Version: " + version));
     }
 
+    #if _MSC_VER
     #pragma warning(push)
     #pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed/unsigned mismatch
+    #endif
     return str::join(versionParts, "");
-   #pragma warning(pop)
+    #if _MSC_VER
+    #pragma warning(pop)
+    #endif
 }
 }
 

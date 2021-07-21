@@ -22,6 +22,8 @@
 #ifndef __SIX_DATA_H__
 #define __SIX_DATA_H__
 
+#include <assert.h>
+
 #include <vector>
 
 #include "six/Types.h"
@@ -198,6 +200,21 @@ struct Data
 private:
     virtual bool equalTo(const Data& rhs) const = 0;
 };
+
+inline types::RowCol<size_t> getExtent(const Data& data)
+{
+    return types::RowCol<size_t>(data.getNumRows(), data.getNumCols());
+}
+inline types::RowCol<size_t> getExtent(const Data* pData)
+{
+    assert(pData != nullptr);
+    return getExtent(*pData);
+}
+inline void setExtent(Data& data, const types::RowCol<size_t>& extent)
+{
+    data.setNumRows(extent.row);
+    data.setNumCols(extent.col);
+}
 
 }
 
