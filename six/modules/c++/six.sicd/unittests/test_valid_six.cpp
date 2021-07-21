@@ -326,17 +326,17 @@ static void sicd_read_data(const fs::path& inputPathname,
     const auto lastPixel = std::complex<float>(0);
     TEST_ASSERT_EQ(expectedLastPixel, lastPixel);
 }
-static void sicd_read_data(const fs::path& inputPathname,
-    int16_t expectedFirstPixel, int16_t expectedLastPixel)
-{
-    const auto buffer = sicd_read_data_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(expectedFirstPixel));
-
-    const int16_t firstPixel = 0;
-    TEST_ASSERT_EQ(expectedFirstPixel, firstPixel);
-
-    const int16_t lastPixel = 0;
-    TEST_ASSERT_EQ(expectedLastPixel, lastPixel);
-}
+//static void sicd_read_data(const fs::path& inputPathname,
+//    int16_t expectedFirstPixel, int16_t expectedLastPixel)
+//{
+//    const auto buffer = sicd_read_data_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(expectedFirstPixel));
+//
+//    const int16_t firstPixel = 0;
+//    TEST_ASSERT_EQ(expectedFirstPixel, firstPixel);
+//
+//    const int16_t lastPixel = 0;
+//    TEST_ASSERT_EQ(expectedLastPixel, lastPixel);
+//}
 TEST_CASE(sicd_read_data)
 {
     auto inputPathname = getNitfPath("sicd_50x50.nitf");
@@ -345,12 +345,12 @@ TEST_CASE(sicd_read_data)
     fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    sicd_read_data(inputPathname, 0, 0);
+    //sicd_read_data(inputPathname, 0, 0);
 
     subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    sicd_read_data(inputPathname, 0, 0);
+    //sicd_read_data(inputPathname, 0, 0);
 }
 
 TEST_CASE(test_readSicd)
@@ -364,21 +364,21 @@ TEST_CASE(test_readSicd)
     fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
+    //widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
 
     subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
+    //widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
 }
 
 
 TEST_MAIN((void)argc;
     argv0 = fs::absolute(argv[0]);
     TEST_CHECK(valid_six_50x50);
-    TEST_CHECK(test_8bit_ampphs);
-    TEST_CHECK(read_8bit_ampphs_with_table);
-    TEST_CHECK(read_8bit_ampphs_no_table);
+    //TEST_CHECK(test_8bit_ampphs);
+    //TEST_CHECK(read_8bit_ampphs_with_table);
+    //TEST_CHECK(read_8bit_ampphs_no_table);
     TEST_CHECK(sicd_read_data);
     TEST_CHECK(test_readSicd);
     )

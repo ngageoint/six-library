@@ -745,16 +745,16 @@ void Utilities::getWidebandData(NITFReadControl& reader,
         const size_t elementsPerRow = extent.col * (1 + 1); // "real and imaginary"
         const SICD_readerAndConverter<int16_t> readerAndConverter(reader, imageNumber, offset, extent, elementsPerRow, buffer);
     }
-    else if (pixelType == PixelType::AMP8I_PHS8I)
-    {
-        const auto pAmplitudeTable = complexData.imageData->amplitudeTable.get();
+    //else if (pixelType == PixelType::AMP8I_PHS8I)
+    //{
+    //    const auto pAmplitudeTable = complexData.imageData->amplitudeTable.get();
 
-        // Each pixel is stored as a pair of numbers that represent the amplitude and phase
-        // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
-        // component, 2 bytes per pixel). 
-        const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
-        const SICD_readerAndConverter<uint8_t> readerAndConverter(reader, imageNumber, offset, extent, elementsPerRow, buffer, pAmplitudeTable);
-    }
+    //    // Each pixel is stored as a pair of numbers that represent the amplitude and phase
+    //    // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
+    //    // component, 2 bytes per pixel). 
+    //    const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
+    //    const SICD_readerAndConverter<uint8_t> readerAndConverter(reader, imageNumber, offset, extent, elementsPerRow, buffer, pAmplitudeTable);
+    //}
     else
     {
         throw except::Exception(
