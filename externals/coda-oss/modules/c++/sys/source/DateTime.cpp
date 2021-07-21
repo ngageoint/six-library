@@ -598,17 +598,18 @@ std::string sys::DateTime::format(const std::string& formatStr) const
     return std::string(str);
 }
 
+#if !CODA_OSS_POSIX_SOURCE &&  !_WIN32
+// Wrap localtime() and gmtime() to make them almost thread-safe.
+// For OSes that don't have their own (not Windows and not Linux).
+
 // https://en.cppreference.com/w/c/chrono/localtime
 // "The structure may be shared between gmtime, localtime, and ctime ... ."
 static std::mutex g_dateTimeMutex;
 template<typename F>
-static inline int time_s(F f, tm* t, const time_t* numSecondsSinceEpoch)
+static inline int time_s_(F f, tm* t, const time_t* numSecondsSinceEpoch)
 {
-    tm* result = nullptr;
-    {
-        std::lock_guard<std::mutex> guard(g_dateTimeMutex);
-        result = f(numSecondsSinceEpoch);
-    }
+    std::lock_guard<std::mutex> guard(g_dateTimeMutex);
+    const tm* const result = f(numSecondsSinceEpoch);
     if (result == nullptr)
     {
         return errno;
@@ -617,24 +618,15 @@ static inline int time_s(F f, tm* t, const time_t* numSecondsSinceEpoch)
     *t = *result;
     return 0; // no error
 }
-int sys::details::localtime_s(tm* t, const time_t* numSecondsSinceEpoch)
+static inline int localtime_s_(tm* t, const time_t* numSecondsSinceEpoch)
 {
-    #if CODA_OSS_POSIX_SOURCE || _WIN32
-    (void)t; (void)numSecondsSinceEpoch;
-    throw std::logic_error("Should be calling OS-specific routine.");
-    #else
-    return time_s(localtime, t, numSecondsSinceEpoch);
-    #endif
+    return time_s_(localtime, t, numSecondsSinceEpoch);
 }
-int sys::details::gmtime_s(tm* t, const time_t* numSecondsSinceEpoch)
+static inline int gmtime_s_(tm* t, const time_t* numSecondsSinceEpoch)
 {
-    #if CODA_OSS_POSIX_SOURCE || _WIN32
-    (void)t; (void)numSecondsSinceEpoch;
-    throw std::logic_error("Should be calling OS-specific routine.");
-    #else
-    return time_s(gmtime, t, numSecondsSinceEpoch);
-    #endif
+    return time_s_(gmtime, t, numSecondsSinceEpoch);
 }
+#endif // !(CODA_OSS_POSIX_SOURCE || _WIN32)
 
 void sys::DateTime::localtime(time_t numSecondsSinceEpoch, tm& t)
 {
@@ -657,7 +649,7 @@ void sys::DateTime::localtime(time_t numSecondsSinceEpoch, tm& t)
         throw except::Exception(Ctxt("localtime_s() failed (" + std::string(buffer) + ")"));
     }
 #else
-    const auto errnum = sys::details::localtime_s(&t, &numSecondsSinceEpoch);
+    const auto errnum = localtime_s_(&t, &numSecondsSinceEpoch);
     if (errnum != 0)
     {
         throw except::Exception(Ctxt("localtime failed (" +
@@ -672,7 +664,7 @@ void sys::DateTime::gmtime(time_t numSecondsSinceEpoch, tm& t)
     // our fingers and hope the regular function actually is reentrant
     // (supposedly this is the case on Windows).
 #if CODA_OSS_POSIX_SOURCE
-        if (::gmtime_r(&numSecondsSinceEpoch, &t) == NULL)
+    if (::gmtime_r(&numSecondsSinceEpoch, &t) == NULL)
     {
         int const errnum = errno;
         throw except::Exception(Ctxt("gmtime_r() failed (" +
@@ -687,7 +679,7 @@ void sys::DateTime::gmtime(time_t numSecondsSinceEpoch, tm& t)
         throw except::Exception(Ctxt("gmtime_s() failed (" + std::string(buffer) + ")"));
     }
 #else
-    const auto errnum = sys::details::gmtime_s(&t, &numSecondsSinceEpoch);
+    const auto errnum = gmtime_s_(&t, &numSecondsSinceEpoch);
     if (errnum != 0)
     {
         throw except::Exception(Ctxt("gmtime failed (" +
