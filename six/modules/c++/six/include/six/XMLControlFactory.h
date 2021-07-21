@@ -84,12 +84,8 @@ template <typename T> struct XMLControlCreatorT : public XMLControlCreator
  *  identify which reader/writer to create, and one that uses a
  *  string (the same one that identifies the type in the container)
  */
-class XMLControlRegistry
+struct XMLControlRegistry
 {
-public:
-    //!  Constructor
-    XMLControlRegistry() = default;
-
     //!  Destructor
     virtual ~XMLControlRegistry();
 

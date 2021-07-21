@@ -98,8 +98,8 @@ public:
             for (size_t col = 0; col < mDims.col; ++col, ++idx)
             {
                 const std::complex<InT>& input(mInput[idx]);
-                mOutput[idx] = std::complex<float>(input.real() * scaleFactor,
-                                                   input.imag() * scaleFactor);
+                mOutput[idx] = std::complex<float>(static_cast<float>(input.real() * scaleFactor),
+                                                   static_cast<float>(input.imag() * scaleFactor));
             }
         }
     }

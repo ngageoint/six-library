@@ -23,6 +23,8 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
+
+#include <gsl/gsl.h>
 #include <math/Bessel.h>
 #include <six/sicd/Functor.h>
 
@@ -39,7 +41,7 @@ RaisedCos::RaisedCos(double coef) :
 std::vector<double> RaisedCos::operator()(size_t n) const
 {
     std::vector<double> ret(n);
-    const size_t halfSize = static_cast<size_t>(std::ceil(static_cast<double>(n) / 2.0));
+    const auto halfSize = gsl::narrow_cast<size_t>(std::ceil(static_cast<double>(n) / 2.0));
     for (size_t ii = 0; ii < halfSize; ++ii)
     {
         ret[ii] = mCoef - (1 - mCoef) * std::cos(2.0 * M_PI * static_cast<double>(ii) / static_cast<double>(n - 1));

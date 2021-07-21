@@ -20,6 +20,8 @@
  *
  */
 
+#include <gsl/gsl.h>
+
 #include <scene/ProjectionPolynomialFitter.h>
 #include <polygon/PolygonMask.h>
 
@@ -138,10 +140,10 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     maxCol = std::min(maxCol, static_cast<double>(fullExtent.col) - 1);
 
     // Get size_t extent of the set of points.
-    const auto minRowI = static_cast<size_t>(std::ceil(minRow));
-    const auto minColI = static_cast<size_t>(std::ceil(minCol));
-    const auto maxRowI = static_cast<size_t>(std::floor(maxRow));
-    const auto maxColI = static_cast<size_t>(std::floor(maxCol));
+    const auto minRowI = gsl::narrow_cast<size_t>(std::ceil(minRow));
+    const auto minColI = gsl::narrow_cast<size_t>(std::ceil(minCol));
+    const auto maxRowI = gsl::narrow_cast<size_t>(std::floor(maxRow));
+    const auto maxColI = gsl::narrow_cast<size_t>(std::floor(maxCol));
 
     if (minRowI > maxRowI || minColI > maxColI)
     {
@@ -171,9 +173,9 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     const double deltaToRemove = initialDeltaRow * shrinkFactor;
 
     // Get the new row start and end values.
-    const size_t newStartRow = static_cast<size_t>(
+    const size_t newStartRow = gsl::narrow_cast<size_t>(
         std::ceil(boundingOffset.row + deltaToRemove));
-    const size_t newEndRow = static_cast<size_t>(
+    const size_t newEndRow = gsl::narrow_cast<size_t>(
         std::floor(boundingOffset.row + static_cast<double>(boundingExtent.row) - 1 -
                    deltaToRemove));
 
@@ -196,7 +198,7 @@ ProjectionPolynomialFitter::ProjectionPolynomialFitter(
     for (size_t ii = 0; ii < numPoints1D; ++ii, currentOffsetRow += newDeltaRow)
     {
         const double currentRow = std::floor(currentOffsetRow);
-        const auto row = static_cast<size_t>(currentRow);
+        const auto row = gsl::narrow_cast<size_t>(currentRow);
 
         // Get the start column and number of columns inside the polygon row
         // the current row.
