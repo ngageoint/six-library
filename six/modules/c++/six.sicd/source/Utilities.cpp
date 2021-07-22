@@ -939,7 +939,7 @@ std::string Utilities::toXMLString(const ComplexData& data,
                                    &xmlRegistry);
 }
 
-mem::auto_ptr<ComplexData> Utilities::createFakeComplexData()
+mem::auto_ptr<ComplexData> Utilities::createFakeComplexData(const types::RowCol<size_t>* pDims)
 {
     mem::auto_ptr<ComplexData> data(new six::sicd::ComplexData());
     data->position->arpPoly = six::PolyXYZ(5);
@@ -1009,6 +1009,12 @@ mem::auto_ptr<ComplexData> Utilities::createFakeComplexData()
     data->imageData->validData[5] = six::RowColInt(11790, 6163);
     data->imageData->validData[6] = six::RowColInt(11790, 0);
     data->imageData->validData[7] = six::RowColInt(1028, 0);
+
+    if (pDims != nullptr)
+    {
+        data->setNumRows(pDims->row);
+        data->setNumCols(pDims->col);
+    }
 
     // The fields below here aren't really used,
     // just need to be filled with something so things are valid

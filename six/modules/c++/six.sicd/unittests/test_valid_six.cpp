@@ -372,6 +372,44 @@ TEST_CASE(test_readSicd)
     widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
 }
 
+TEST_CASE(test_create_sicd_from_mem)
+{
+    setNitfPluginPath();
+
+    const types::RowCol<size_t> dims(2, 2);
+    const std::string outputName = "test_create_sicd_from_mem.sicd";
+
+    six::XMLControlFactory::getInstance().addCreator(six::DataType::COMPLEX,
+        new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+
+    std::vector<std::complex<float>> image;
+    image.reserve(dims.area());
+    for (size_t r = 0; r < dims.row; r++)
+    {
+        for (size_t c = 0; c < dims.col; c++)
+        {
+            image.push_back(std::complex<float>(r, c*-1.0));
+        }
+    }
+
+    std::unique_ptr<six::Data> data(six::sicd::Utilities::createFakeComplexData(&dims).release());
+    data->setPixelType(six::PixelType::RE32F_IM32F);
+
+    mem::SharedPtr<six::Container> container(new six::Container(six::DataType::COMPLEX));
+    container->addData(std::move(data));
+
+    const auto pData = container->getData(0);
+    TEST_ASSERT_EQ(dims.row, pData->getNumRows());
+    TEST_ASSERT_EQ(dims.col, pData->getNumCols());
+
+    const six::Options writerOptions;
+    six::NITFWriteControl writer(writerOptions, container);
+
+    const std::vector<std::string> schemaPaths;
+    const void* pImageData = image.data();
+    six::buffer_list buffers{ static_cast<const std::byte*>(pImageData) };
+    writer.save(buffers, outputName, schemaPaths);
+}
 
 TEST_MAIN((void)argc;
     argv0 = fs::absolute(argv[0]);
@@ -381,5 +419,6 @@ TEST_MAIN((void)argc;
     TEST_CHECK(read_8bit_ampphs_no_table);
     TEST_CHECK(sicd_read_data);
     TEST_CHECK(test_readSicd);
+    TEST_CHECK(test_create_sicd_from_mem);
     )
 
