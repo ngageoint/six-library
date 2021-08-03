@@ -638,7 +638,7 @@
             return NULL;
         }
 
-      for (i = 0; i < window->numBands; i++) {
+      for (decltype(window->numBands) i = 0; i < window->numBands; i++) {
         PyObject *o = PySequence_GetItem(bandList,i);
         if (PyNumber_Check(o)) {
           window->bandList[i] = (int) PyInt_AsLong(o);
