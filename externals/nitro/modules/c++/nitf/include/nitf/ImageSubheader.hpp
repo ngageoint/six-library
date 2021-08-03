@@ -136,7 +136,8 @@ public:
 private:
     void getCornersAsLatLons_(double (*corners)[2]) const;
 public:
-    void getCornersAsLatLons(double (*corners)[2]) const
+    template<typename T>
+    void getCornersAsLatLons(T& corners) const
     {
         getCornersAsLatLons_(corners);
     }
