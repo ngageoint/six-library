@@ -137,6 +137,7 @@ macro(coda_initialize_build)
     if (CODA_BUILD_TESTS)
         enable_testing()
     endif()
+    option(CODA_INSTALL_TESTS "install tests" ON)
 
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -379,10 +380,12 @@ function(coda_add_tests)
                 add_test(NAME ${test_target} COMMAND ${test_target} ${ARG_ARGS})
             endif()
 
-            # Install [unit]tests to separate subtrees
-            install(TARGETS ${test_target}
-                    ${CODA_INSTALL_OPTION}
-                    RUNTIME DESTINATION "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
+            if (CODA_INSTALL_TESTS)
+                # Install [unit]tests to separate subtrees
+                install(TARGETS ${test_target}
+                        ${CODA_INSTALL_OPTION}
+                        RUNTIME DESTINATION "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
+            endif()
         endforeach()
     endif()
 endfunction()
@@ -521,78 +524,6 @@ function(coda_add_module MODULE_NAME)
     #    install(FILES ${PROJECT_BINARY_DIR}/${target_name}_export.h
     #            DESTINATION ${CODA_STD_PROJECT_INCLUDE_DIR})
     #endif()
-endfunction()
-
-
-# Add a plugin (dynamically loaded library) to the build
-#
-# Positional arguments:
-#   PLUGIN_NAME     - The name of this plugin
-#   MODULE_NAME     - The module associated with this plugin
-#
-# Single value arguments:
-#   VERSION         - Version number of this plugin
-#
-# Multi value arguments:
-#   DEPS            - List of dependencies for the plugin
-#   SOURCES         - Optional list of source files for compiling the plugin.
-#                     If not provided, the source files will be globbed.
-#
-function(coda_add_plugin PLUGIN_NAME MODULE_NAME)
-    cmake_parse_arguments(
-        ARG                         # prefix
-        ""                          # options
-        "VERSION"                   # single args
-        "DEPS;SOURCES"              # multi args
-        "${ARGN}"
-    )
-    if (ARG_UNPARSED_ARGUMENTS)
-        message(FATAL_ERROR "received unexpected argument(s): ${ARG_UNPARSED_ARGUMENTS}")
-    endif()
-
-    set(OUTPUT_NAME "${PLUGIN_NAME}-${TARGET_LANGUAGE}")
-    set(TARGET_NAME "${ARG_MODULE_NAME}_${OUTPUT_NAME}")
-
-    if (NOT ARG_SOURCES)
-        file(GLOB SOURCES "source/*.cpp" "source/*.c")
-    else()
-        set(SOURCES "${ARG_SOURCES}")
-    endif()
-
-    add_library(${TARGET_NAME} MODULE "${SOURCES}")
-    set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME ${OUTPUT_NAME})
-
-    if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include")
-        target_include_directories(${TARGET_NAME}
-            PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-                   "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
-    endif()
-
-    target_link_libraries(${TARGET_NAME} PUBLIC ${ARG_DEPS})
-
-    target_compile_definitions(${TARGET_NAME} PRIVATE PLUGIN_MODULE_EXPORTS)
-
-    install(TARGETS ${TARGET_NAME}
-            EXPORT ${CODA_EXPORT_SET_NAME}
-            ${CODA_INSTALL_OPTION}
-            LIBRARY DESTINATION "share/${ARG_MODULE_NAME}/plugins"
-            ARCHIVE DESTINATION "share/${ARG_MODULE_NAME}/plugins"
-            RUNTIME DESTINATION "share/${ARG_MODULE_NAME}/plugins")
-
-    # install headers
-    install(DIRECTORY "${CODA_STD_PROJECT_INCLUDE_DIR}/"
-            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/"
-            FILES_MATCHING
-                PATTERN "*.h"
-                PATTERN "*.hpp"
-            ${CODA_INSTALL_OPTION})
-
-    # install conf directory, if present
-    if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
-        install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/conf"
-                DESTINATION "share/${ARG_MODULE_NAME}"
-                ${CODA_INSTALL_OPTION})
-    endif()
 endfunction()
 
 

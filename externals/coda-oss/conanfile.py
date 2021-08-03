@@ -17,6 +17,11 @@ class CodaOssConan(ConanFile):
     name = "coda-oss"
     url = "https://github.com/mdaus/coda-oss"
     description = "Common Open Development Archive - OSS"
+    scm = {
+        "type": "git",
+        "url": url + ".git",
+        "revision": "auto",
+        }
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False],
                "BOOST_HOME": "ANY",
@@ -24,7 +29,13 @@ class CodaOssConan(ConanFile):
                "PYTHON_VERSION": "ANY",
                "ENABLE_BOOST": [True, False],
                "ENABLE_PYTHON": [True, False],
+               "ENABLE_SWIG": [True, False],
+               "ENABLE_JARS": [True, False],
+               "CMAKE_DISABLE_FIND_PACKAGE_OpenSSL": [True, False],
+               "CMAKE_DISABLE_FIND_PACKAGE_CURL": [True, False],
                "MT_DEFAULT_PINNING": [True, False],
+               "CODA_BUILD_TESTS": [True, False],
+               "CODA_INSTALL_TESTS": [True, False],
                }
     default_options = {"shared": False,
                        "BOOST_HOME": "",
@@ -32,15 +43,14 @@ class CodaOssConan(ConanFile):
                        "PYTHON_VERSION": "",
                        "ENABLE_BOOST": False,
                        "ENABLE_PYTHON": True,
+                       "ENABLE_SWIG": False,
+                       "ENABLE_JARS": True,
+                       "CMAKE_DISABLE_FIND_PACKAGE_OpenSSL": False,
+                       "CMAKE_DISABLE_FIND_PACKAGE_CURL": False,
                        "MT_DEFAULT_PINNING": False,
+                       "CODA_BUILD_TESTS": True,
+                       "CODA_INSTALL_TESTS": False,
                        }
-    exports_sources = ("CMakeLists.txt",
-                       "LICENSE",
-                       "README.md",
-                       "build/*",
-                       "cmake/*",
-                       "modules/*",
-                       )
     license = "GNU LESSER GENERAL PUBLIC LICENSE Version 3"
 
     # default to short_paths mode (Windows only)

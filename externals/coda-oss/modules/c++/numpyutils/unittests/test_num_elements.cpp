@@ -21,6 +21,7 @@
  */
 
 #include <TestCase.h>
+#include <config/compiler_extensions.h>
 #include <numpyutils/numpyutils.h>
 
 namespace
@@ -46,5 +47,7 @@ TEST_CASE(testGetNumElements)
 int main(int /*argc*/, char** /*argv*/)
 {
     TEST_CHECK(testGetNumElements);
+    // wreaks havoc from the bowels of <numpy/arrayobject.h>
+    CODA_OSS_mark_symbol_unused(_import_array);
     return 0;
 }
