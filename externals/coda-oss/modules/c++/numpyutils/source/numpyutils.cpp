@@ -118,6 +118,7 @@ const npy_intp* const getDimensions(PyObject* pyArrayObject)
     {
         throw except::Exception(Ctxt(
                     "Numpy array has dimensions different than 2"));
+        return 0;
     }
     return PyArray_DIMS(reinterpret_cast<PyArrayObject*>(pyArrayObject));
 }

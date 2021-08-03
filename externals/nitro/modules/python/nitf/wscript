@@ -29,8 +29,7 @@ def build(bld):
             target = '_nitropy',
             use='numpyutils-c++ nitf-c++',
             env=env.derive(),
-            # -py3 is needed for bindings with arg annotations
-            swig_flags='-c++ -python -py3',
+            swig_flags='-c++ -python',
             install_path='${PYTHONDIR}/nitf',
             name='nitf-python',
             targets_to_add='_nitropy_py',

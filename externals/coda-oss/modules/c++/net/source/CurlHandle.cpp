@@ -98,10 +98,10 @@ void CurlHandle::verify(CURLcode code, const std::string& prefix)
     }
 }
 
-size_t CurlHandle::writeBetterCallback(char* data,
-                                       size_t size,
-                                       size_t nmemb,
-                                       std::string* writeData)
+int CurlHandle::writeCallback(char* data,
+                              size_t size,
+                              size_t nmemb,
+                              std::string* writeData)
 {
     if (writeData == NULL)
     {
@@ -110,14 +110,6 @@ size_t CurlHandle::writeBetterCallback(char* data,
 
     writeData->append(data, size * nmemb);
     return size * nmemb;
-}
-
-int CurlHandle::writeCallback(char* data,
-                              size_t size,
-                              size_t nmemb,
-                              std::string* writeData)
-{
-    return (int) CurlHandle::writeBetterCallback(data, size, nmemb, writeData);
 }
 }
 

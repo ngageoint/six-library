@@ -22,7 +22,6 @@
 
 
 #if !(defined(WIN32) || defined(_WIN32))
-#include <config/compiler_extensions.h>
 #include "sys/ProcessUnix.h"
 #include <stdlib.h>
 
@@ -73,6 +72,5 @@ void sys::ProcessUnix::waitFor()
     }
     dbg_printf("Finished waiting on pid: %d\n", mChildProcessID);
     assert(whatExited == mChildProcessID);
-    CODA_OSS_mark_symbol_unused(whatExited);
 }
 #endif
