@@ -1,0 +1,9 @@
+NAME            = 'units'
+VERSION         = '1.0'
+MODULE_DEPS     = 'math'
+UNITTEST_DEPS   = 'sys'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())

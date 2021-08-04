@@ -37,6 +37,14 @@ Problems and Configurations
           cmake --build . --config Release -j
           cmake --build . --config Release --target install
       The CMake default build type `Debug` may not work with Python, unless the Python installation includes debug versions of the Python libraries.
+  - Regenerating python bindings
+      - Currently, cmake configuration for regenerating swig bindings is incomplete and use of `waf` is required.
+      - The `.regenerate_python_bindings.py` script is wrapper around `waf` can be run to quickly update these files.
+
+          python3 .regenerate_python_bindings.py
+          DEBUG_PY_BINDINGS=1 python3 .regenerate_python_bindings.py # see all details
+      - This is typically required when project dependencies (e.g. CODA-OSS) are updated.
+
   - If the CMake build system does not support a required feature that Waf does, create
     an issue or a pull request!
 
