@@ -33,7 +33,7 @@ namespace
 {
 void generateData(const six::Data& data, std::unique_ptr<std::byte[]>& buffer)
 {
-    const size_t size = data.getNumRows() * data.getNumCols();
+    const size_t size = getExtent(data).area();
     buffer.reset(new std::byte[size]);
     for (size_t ii = 0; ii < size; ++ii)
     {
@@ -142,7 +142,7 @@ void assignBuffer(std::unique_ptr<six::UByte[]>& buffer, size_t& bufferSize,
 {
     six::Region region;
     buffer.reset(reader.interleaved(region, index));
-    bufferSize = region.getNumRows() * region.getNumCols();
+    bufferSize = getExtent(region).area();
 }
 
 bool compare(const std::string& twoImageSidd,

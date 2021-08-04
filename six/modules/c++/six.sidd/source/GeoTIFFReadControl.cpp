@@ -24,6 +24,7 @@
 #include <vector>
 
 #include <str/Convert.h>
+#include <gsl/gsl.h>
 #include <mem/ScopedArray.h>
 #include "six/sidd/GeoTIFFReadControl.h"
 #include "six/XMLControlFactory.h"
@@ -245,7 +246,8 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
 
     if (buffer == nullptr)
     {
-        buffer = region.setBuffer(static_cast<size_t>(numRowsReq * numColsReq * elemSize)).release();
+        const types::RowCol<size_t> regionExtent(getExtent(region));
+        buffer = region.setBuffer(regionExtent.area() * elemSize).release();
     }
 
     if (numRowsReq == numRowsTotal && numColsReq == numColsTotal)
@@ -255,7 +257,7 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     }
     else
     {
-        std::vector<std::byte> scopedRowBuf(numColsTotal * elemSize);
+        std::vector<std::byte> scopedRowBuf(gsl::narrow<size_t>(numColsTotal) * elemSize);
         std::byte* const rowBuf(scopedRowBuf.data());
 
         //        // skip past rows

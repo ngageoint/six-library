@@ -54,11 +54,11 @@ struct LLAToECEFTransform : public CoordinateTransform
      * @param lla   The lla coordinate to transform
      * @return      A Vector3
      */
-    Vector3 transform(const LatLonAlt& lla);
+    Vector3 transform(const LatLonAlt& lla) const;
 private:
 
-    double computeRadius(const LatLonAlt& lla);
-    double computeLatitude(const double lat);
+    double computeRadius(const LatLonAlt& lla) const;
+    double computeLatitude(const double lat) const;
 
 
 };

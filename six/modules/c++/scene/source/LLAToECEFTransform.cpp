@@ -34,7 +34,7 @@ scene::LLAToECEFTransform* scene::LLAToECEFTransform::clone() const
     return newTransform;
 }
 
-scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla)
+scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla) const
 {
     Vector3 ecef{};
 
@@ -76,7 +76,7 @@ scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla)
     return ecef;
 }
 
-double scene::LLAToECEFTransform::computeRadius(const LatLonAlt& lla)
+double scene::LLAToECEFTransform::computeRadius(const LatLonAlt& lla) const
 {
     const double f = model->calculateFlattening();
 
@@ -94,7 +94,7 @@ double scene::LLAToECEFTransform::computeRadius(const LatLonAlt& lla)
     return flatRadius;
 }
 
-double scene::LLAToECEFTransform::computeLatitude(const double lat)
+double scene::LLAToECEFTransform::computeLatitude(const double lat) const
 {
     const double f = model->calculateFlattening();
 

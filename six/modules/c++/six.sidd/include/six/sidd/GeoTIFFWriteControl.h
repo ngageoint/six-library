@@ -25,6 +25,7 @@
 
 #if !defined(SIX_TIFF_DISABLED)
 
+#include <std/filesystem>
 
 #include "six/Types.h"
 #include "six/Container.h"
@@ -116,6 +117,10 @@ private:
                         size_t numCols,
                         tiff::IFD* ifd,
                         const std::string& tfwPathname);
+    void addGeoTIFFKeys(const GeographicProjection& projection,
+                    const types::RowCol<size_t>& extent,
+                    tiff::IFD* ifd,
+                    const std::filesystem::path& tfwPathname);
 };
 
 }

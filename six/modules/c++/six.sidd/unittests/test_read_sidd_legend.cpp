@@ -91,8 +91,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     six::sidd::DerivedData* siddData = siddBuilder.steal();
     mem::auto_ptr<six::Data> siddDataScoped(siddData);
 
-    siddData->setNumRows(dims.row);
-    siddData->setNumCols(dims.col);
+    setExtent(*siddData, dims);
     siddData->setImageCorners(makeUpCornersFromDMS());
 
     siddData->productCreation->productName = "ProductName";

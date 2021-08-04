@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <gsl/gsl.h>
 #include <six/Init.h>
 #include <six/Utilities.h>
 #include <cphd/Global.h>
@@ -56,7 +57,7 @@ TropoParameters::TropoParameters() :
 
 IonoParameters::IonoParameters() :
     tecv(0.0),
-    f2Height(six::Init::undefined<size_t>())
+    f2Height(gsl::narrow_cast<double>(six::Init::undefined<size_t>()))
 {
 }
 
