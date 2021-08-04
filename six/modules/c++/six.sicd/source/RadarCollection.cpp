@@ -130,7 +130,7 @@ void WaveformParameters::fillDerivedFields()
 bool WaveformParameters::validate(int refFrequencyIndex,
         logging::Logger& log) const
 {
-    bool valid = false;
+    bool valid = true;
     std::ostringstream messageBuilder;
 
     //2.8.3
@@ -203,7 +203,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
     }
 
     //2.8.9
-    if (txPulseLength > rcvWindowLength)
+    if (six::Init::isDefined(txPulseLength) && (txPulseLength > rcvWindowLength)) // TxPulseLength is optional
     {
         messageBuilder.str("");
         messageBuilder << WF_INCONSISTENT_STR << std::endl
@@ -216,7 +216,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
     }
 
     //2.8.10
-    if (rcvIFBandwidth > adcSampleRate)
+    if (six::Init::isDefined(rcvIFBandwidth) && (rcvIFBandwidth > adcSampleRate)) // RcvIFBandwidth is optional
     {
         messageBuilder.str("");
         messageBuilder << WF_INCONSISTENT_STR << std::endl
@@ -244,16 +244,19 @@ bool WaveformParameters::validate(int refFrequencyIndex,
     }
 
     //2.8.12
-    const auto freq_tol = (rcvWindowLength - txPulseLength) * txFMRate;
-    if (rcvFrequencyStart >= (txFrequencyStart + txRFBandwidth + freq_tol) ||
-        rcvFrequencyStart <= txFrequencyStart - freq_tol)
+    if (six::Init::isDefined(rcvFrequencyStart)) // RcvFreqStart is optional
     {
-        messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR << std::endl
-            << "SICD.RadarCollection.Waveform.WFParameters.RcvFreqStart: "
-            << rcvFrequencyStart << std::endl;
-        log.error(messageBuilder.str());
-        valid = false;
+        const auto freq_tol = (rcvWindowLength - txPulseLength) * txFMRate;
+        if (rcvFrequencyStart >= (txFrequencyStart + txRFBandwidth + freq_tol) ||
+            rcvFrequencyStart <= txFrequencyStart - freq_tol)
+        {
+            messageBuilder.str("");
+                messageBuilder << WF_INCONSISTENT_STR << std::endl
+                << "SICD.RadarCollection.Waveform.WFParameters.RcvFreqStart: "
+                << rcvFrequencyStart << std::endl;
+                log.error(messageBuilder.str());
+                valid = false;
+        }
     }
 
     return valid;

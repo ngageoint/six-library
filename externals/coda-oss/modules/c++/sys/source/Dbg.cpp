@@ -45,3 +45,7 @@ void sys::diePrintf(const char *format, ...)
     exit(EXIT_FAILURE);
 }
 
+bool sys::debug_build()
+{
+    return sys::debug;
+}

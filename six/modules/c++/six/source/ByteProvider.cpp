@@ -28,6 +28,9 @@
 #include <logging/NullLogger.h>
 #include <six/ByteProvider.h>
 
+#undef min
+#undef max
+
 namespace six
 {
 
@@ -75,20 +78,17 @@ void ByteProvider::populateOptions(
                 maxProductSize);
     }
 
+    const auto extent = getExtent(*data);
     if (numRowsPerBlock != 0)
     {
-        numRowsPerBlock = std::min(numRowsPerBlock, data->getNumRows());
-        options.setParameter(
-                six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK,
-                numRowsPerBlock);
+        numRowsPerBlock = std::min(numRowsPerBlock, extent.row);
+        options.setParameter(six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK, numRowsPerBlock);
     }
 
     if (numColsPerBlock != 0)
     {
-        numColsPerBlock = std::min(numColsPerBlock, data->getNumCols());
-        options.setParameter(
-                six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK,
-                numColsPerBlock);
+        numColsPerBlock = std::min(numColsPerBlock, extent.col);
+        options.setParameter(six::NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK, numColsPerBlock);
     }
 }
 

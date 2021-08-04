@@ -79,31 +79,27 @@ UByte* ConvertingReadControl::interleaved(Region& region, size_t imageNumber)
 {
     if (mConverter == nullptr)
     {
-        throw except::Exception(Ctxt("Please load ConvertingReadControl "
-                "before calling interleaved()"));
+        throw except::Exception(Ctxt("Please load ConvertingReadControl before calling interleaved()"));
     }
     const Data* data = mContainer->getData(imageNumber);
+    const types::RowCol<ptrdiff_t> imageExtent(getExtent(*data));
     if (region.getNumRows() == -1)
     {
-        region.setNumRows(static_cast<ptrdiff_t>(data->getNumRows()));
+        region.setNumRows(imageExtent.row);
     }
     if (region.getNumCols() == -1)
     {
-        region.setNumCols(static_cast<ptrdiff_t>(data->getNumCols()));
+        region.setNumCols(imageExtent.col);
     }
 
-    const types::RowCol<size_t> extent(
-            region.getStartRow() + static_cast<size_t>(region.getNumRows()),
-            region.getStartCol() + static_cast<size_t>(region.getNumCols()));
-
-    if (extent.row > data->getNumRows() ||
-            static_cast<size_t>(region.getStartRow()) > data->getNumRows())
+    const types::RowCol<size_t> regionExtent(getExtent(region));
+    const types::RowCol<size_t> extent(region.getStartRow() + regionExtent.row, region.getStartCol() + regionExtent.col);
+    if (extent.row > data->getNumRows() || regionExtent.row > data->getNumRows())
     {
         throw except::Exception(Ctxt("Too many rows requested [" +
                 std::to_string(region.getNumRows()) + "]"));
     }
-    if (extent.col > data->getNumCols() ||
-            static_cast<size_t>(region.getStartCol()) > data->getNumCols())
+    if (extent.col > data->getNumCols() || regionExtent.col > data->getNumCols())
     {
         throw except::Exception(Ctxt("Too many cols requested [" +
                 std::to_string(region.getNumCols()) + "]"));
@@ -112,15 +108,12 @@ UByte* ConvertingReadControl::interleaved(Region& region, size_t imageNumber)
     UByte* buffer = region.getBuffer();
     if (buffer == nullptr)
     {
-        buffer = region.setBuffer(region.getNumRows() * region.getNumCols() *
-                data->getNumBytesPerPixel()).release();
+        buffer = region.setBuffer(getExtent(region).area() * data->getNumBytesPerPixel()).release();
     }
 
     const types::RowCol<ptrdiff_t> startingLocation(region.getStartRow(),
             region.getStartCol());
-    const types::RowCol<ptrdiff_t> readLength(region.getNumRows(),
-            region.getNumCols());
-    mConverter->readData(startingLocation, readLength, buffer);
+    mConverter->readData(startingLocation, getExtent(region), buffer);
     return buffer;
 }
 }

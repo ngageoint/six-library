@@ -96,7 +96,7 @@ TEST_CASE(ignoreEmptyEnvVariable)
     }
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(loadCompiledSchemaPath);
     TEST_CHECK(respectGivenPaths);
     TEST_CHECK(loadFromEnvVariable);
