@@ -749,6 +749,7 @@ def options(opt):
     opt.add_option('--enable-debugging', action='store_true', dest='debugging',
                    help='Enable debugging')
     opt.add_option('--enable-cpp11', action='callback', callback=deprecated_callback)
+    opt.add_option('--enable-cpp17', action='store_true', dest='enablecpp17')
     #TODO - get rid of enable64 - it's useless now
     opt.add_option('--enable-64bit', action='store_true', dest='enable64',
                    help='Enable 64bit builds')
@@ -905,7 +906,10 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
 
-            gxxCompileFlags='-fPIC -std=c++11'
+            if not Options.options.enablecpp17:
+                gxxCompileFlags='-fPIC -std=c++11'
+            else:
+                gxxCompileFlags='-fPIC -std=c++17'
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
@@ -1048,6 +1052,10 @@ def configureCompilerOptions(self):
         defines = '_CRT_SECURE_NO_WARNINGS _SCL_SECURE_NO_WARNINGS _FILE_OFFSET_BITS=64 ' \
                   '_LARGEFILE_SOURCE WIN32 _USE_MATH_DEFINES NOMINMAX WIN32_LEAN_AND_MEAN'.split()
         flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
+
+        #If building with cpp17 add flags/defines to enable auto_ptr
+        if Options.options.enablecpp17:
+            flags.append('/std:c++17')
 
         self.env.append_value('DEFINES', defines)
         self.env.append_value('CXXFLAGS', flags)
