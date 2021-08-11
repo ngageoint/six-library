@@ -292,9 +292,9 @@ void NITFWriteControl::save_(const TBufferList& imageData,
         const NITFImageInfo& info = *pInfo;
         std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
         const size_t numIS = imageSegments.size();
-        const auto pixelSize = info.getData()->getNumBytesPerPixel();
-        const size_t numCols = info.getData()->getNumCols();
         const size_t numChannels = info.getData()->getNumChannels();
+        const auto pixelSize = info.getData()->getNumBytesPerPixel() / numChannels;
+        const size_t numCols = info.getData()->getNumCols();
 
         nitf::ImageSegment imageSegment =
                 getRecord().getImages()[info.getStartIndex()];
@@ -330,14 +330,16 @@ void NITFWriteControl::save_(const TBufferList& imageData,
 
                 for (size_t chan = 0; chan < numChannels; ++chan)
                 {
+                    // Assume that the bands are interleaved in memory.  This
+                    // makes sense for 24-bit 3-color data.
                     nitf::MemorySource ms(imageData[i] +
                                                   pixelSize *
                                                           segmentInfo.getFirstRow() *
                                                           numCols,
                                           bandSize,
-                                           gsl::narrow<int>(bandSize * chan),
+                                          chan,
                                           gsl::narrow<int>(pixelSize),
-                                          0);
+                                          numChannels - 1);
                     iSource.addBand(ms);
                 }
                 iWriter.attachSource(iSource);
@@ -357,7 +359,7 @@ void NITFWriteControl::save_(const TBufferList& imageData,
                                                segmentInfo.getFirstRow(),
                                                numCols,
                                                numChannels,
-                                               pixelSize,
+                                               pixelSize * numChannels,
                                                doByteSwap));
                 // Could set start index here
                 mWriter.setImageWriteHandler(static_cast<int>(
