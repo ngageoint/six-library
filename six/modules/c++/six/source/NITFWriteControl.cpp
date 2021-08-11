@@ -26,6 +26,7 @@
 #include <string>
 
 #include <std/bit>
+#include <std/memory>
 
 #include <io/ByteStream.h>
 #include <math/Round.h>
@@ -420,7 +421,7 @@ void NITFWriteControl::addDataAndWrite(
 
     // These must stick around until mWriter.write() is called since the
     // SegmentMemorySource's will be pointing to them
-    const std::unique_ptr<std::string[]> desStrs(new std::string[numDES]);
+    const auto desStrs = std::make_unique<std::string[]>(numDES);
 
     for (size_t ii = 0; ii < getContainer()->getNumData(); ++ii)
     {
