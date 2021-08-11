@@ -301,17 +301,17 @@ int64_t Wideband::getFileOffset(size_t channel,
 {
     if (channel >= mOffsets.size())
     {
-        throw(except::Exception(Ctxt("Invalid channel number")));
+        throw except::Exception(Ctxt("Invalid channel number"));
     }
 
     if (vector >= mMetadata.getNumVectors(channel))
     {
-        throw(except::Exception(Ctxt("Invalid vector")));
+        throw except::Exception(Ctxt("Invalid vector"));
     }
 
     if (sample >= mMetadata.getNumSamples(channel))
     {
-        throw(except::Exception(Ctxt("Invalid sample")));
+        throw except::Exception(Ctxt("Invalid sample"));
     }
 
     const int64_t bytesPerVectorFile =
@@ -326,7 +326,7 @@ int64_t Wideband::getFileOffset(size_t channel) const
 {
     if (channel >= mOffsets.size())
     {
-        throw(except::Exception(Ctxt("Invalid channel number")));
+        throw except::Exception(Ctxt("Invalid channel number"));
     }
 
     const int64_t offset = mOffsets[channel];
