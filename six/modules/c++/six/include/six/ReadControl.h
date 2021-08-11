@@ -90,16 +90,16 @@ struct ReadControl
     /*!
      *  Get a const shared pointer to the current container.
      */
-    mem::SharedPtr<const Container> getContainer() const
+    std::shared_ptr<const Container> getContainer() const
     {
-        mem::SharedPtr<const Container> retval = mContainer;
+        std::shared_ptr<const Container> retval = mContainer;
         return retval;
     }
 
     /*!
      *  Get a non-const pointer to the current container.
      */
-    mem::SharedPtr<Container> getContainer()
+    std::shared_ptr<Container> getContainer()
     {
         return mContainer;
     }
@@ -150,7 +150,7 @@ struct ReadControl
 #if !CODA_OSS_cpp17
     template<typename T>
     T* interleaved(Region& region, size_t imageNumber,
-           std::auto_ptr<T[]>& buffer)
+           mem::auto_ptr<T[]>& buffer)
     {
         buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
         return buffer.get();
@@ -215,7 +215,7 @@ struct ReadControl
     }
 
 protected:
-    mem::SharedPtr<Container> mContainer;
+    std::shared_ptr<Container> mContainer;
     Options mOptions;
     logging::Logger* mLog = nullptr;
     bool mOwnLog = false;

@@ -38,7 +38,7 @@ SICDWriteControl::SICDWriteControl(const std::string& outputPathname,
 
 void SICDWriteControl::initialize(const ComplexData& data)
 {
-    mem::SharedPtr<Container> container(new Container(DataType::COMPLEX));
+    std::shared_ptr<Container> container(new Container(DataType::COMPLEX));
 
     // The container wants to take ownership of the data
     // To avoid memory problems, we'll just clone it. After calling
