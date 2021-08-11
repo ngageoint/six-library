@@ -29,6 +29,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "logging/Filterer.h"
 #include "logging/LogRecord.h"
 #include "logging/Handler.h"
@@ -146,6 +147,6 @@ protected:
     Handlers_T mHandlers;
 
 };
-typedef mem::SharedPtr<Logger> LoggerPtr;
+typedef std::shared_ptr<Logger> LoggerPtr;
 }
 #endif

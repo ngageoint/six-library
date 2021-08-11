@@ -26,25 +26,17 @@
 
 #include "logging/LoggerFactory.h"
 
-mem::SharedPtr<logging::Logger>
+ std::shared_ptr<logging::Logger>
 logging::LoggerManager::getLoggerSharedPtr(const std::string& name)
 {
-    mt::CriticalSection<sys::Mutex> obtainLock(&mMutex);
+     std::lock_guard<std::mutex> guard(mMutex);
 
-    const std::map<std::string, mem::SharedPtr<Logger> >::const_iterator iter =
-            mLoggerMap.find(name);
-
+    const auto iter = mLoggerMap.find(name);
     if (iter == mLoggerMap.end())
     {
-        mem::SharedPtr<logging::Logger>
-                logger(new logging::DefaultLogger(name));
-        mLoggerMap[name] = logger;
-        return logger;
+        mLoggerMap[name] = std::make_shared<logging::DefaultLogger>(name);
     }
-    else
-    {
-        return iter->second;
-    }
+    return mLoggerMap[name];
 }
 
 void logging::debug(const std::string& msg)
@@ -89,7 +81,7 @@ logging::Logger* logging::getLogger(const std::string& name)
     return logging::LoggerFactory::getInstance().getLogger(name);
 }
 
-mem::SharedPtr<logging::Logger>
+ std::shared_ptr<logging::Logger>
 logging::getLoggerSharedPtr(const std::string& name)
 {
     return logging::LoggerFactory::getInstance().getLoggerSharedPtr(name);

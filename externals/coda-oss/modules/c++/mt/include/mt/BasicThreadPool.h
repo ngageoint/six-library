@@ -24,6 +24,8 @@
 #define __MT_BASIC_THREAD_POOL_H__
 
 #include <vector>
+#include <memory>
+
 #include "except/Exception.h"
 #include "sys/Mutex.h"
 #include "sys/Thread.h"
@@ -60,7 +62,7 @@ struct BasicThreadPool
     {
         if (mStarted)
         {
-            throw(ThreadPoolException("The thread pool is already started."));
+            throw ThreadPoolException("The thread pool is already started.");
         }
 
         mStarted = true;
@@ -147,14 +149,13 @@ protected:
 
     bool mStarted = false;
     size_t mNumThreads = 0;
-    std::vector<mem::SharedPtr<sys::Thread> > mPool;
+    std::vector<std::shared_ptr<sys::Thread>> mPool;
     mt::RunnableRequestQueue mHandlerQueue;
 
 private:
     void addThread()
     {
-        mem::SharedPtr<sys::Thread>
-                thread(new sys::Thread(newRequestHandler()));
+        auto thread(std::make_shared<sys::Thread>(newRequestHandler()));
         mPool.push_back(thread);
         thread->start();
     }

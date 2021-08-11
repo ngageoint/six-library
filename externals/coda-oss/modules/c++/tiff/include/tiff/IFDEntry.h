@@ -269,7 +269,7 @@ public:
         value.release();
     }
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    void addValue(std::auto_ptr<tiff::TypeInterface> value)
+    void addValue(mem::auto_ptr<tiff::TypeInterface> value)
     {
         addValue(std::unique_ptr<tiff::TypeInterface>(value.release()));
     }

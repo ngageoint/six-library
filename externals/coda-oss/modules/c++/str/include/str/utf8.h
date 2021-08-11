@@ -391,7 +391,7 @@ public:
     invalid_code_point(uint32_t cp) : cp(cp)
     {
     }
-    virtual const char* what() const throw()
+    virtual const char* what() const noexcept
     {
         return "Invalid code point";
     }
@@ -409,7 +409,7 @@ public:
     invalid_utf8(uint8_t u) : u8(u)
     {
     }
-    virtual const char* what() const throw()
+    virtual const char* what() const noexcept
     {
         return "Invalid UTF-8";
     }
@@ -427,7 +427,7 @@ public:
     invalid_utf16(uint16_t u) : u16(u)
     {
     }
-    virtual const char* what() const throw()
+    virtual const char* what() const noexcept
     {
         return "Invalid UTF-16";
     }
@@ -440,7 +440,7 @@ public:
 class not_enough_room final : public exception
 {
 public:
-    virtual const char* what() const throw()
+    virtual const char* what() const noexcept
     {
         return "Not enough space";
     }

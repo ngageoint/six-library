@@ -36,7 +36,7 @@ int main(int argc, char **argv)
     try
     {
         if (argc != 2)
-            throw(Exception(FmtX("Usage: %s <url>", argv[0])));
+            throw Exception(FmtX("Usage: %s <url>", argv[0]));
 
         URL url(argv[1]);
 

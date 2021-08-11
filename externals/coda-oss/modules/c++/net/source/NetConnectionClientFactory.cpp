@@ -67,7 +67,7 @@ net::NetConnection* net::NetConnectionClientFactory::newConnection(
 }
 #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
 net::NetConnection* net::NetConnectionClientFactory::newConnection(
-        std::auto_ptr<net::Socket> toServer)
+        mem::auto_ptr<net::Socket> toServer)
 {
     return new net::NetConnection(toServer);
 }

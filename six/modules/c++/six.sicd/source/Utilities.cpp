@@ -359,8 +359,8 @@ static void getModelComponents_(const ComplexData& complexData,
 }
 #if !CODA_OSS_cpp17
 void Utilities::getModelComponents(const ComplexData& complexData,
-        std::auto_ptr<scene::SceneGeometry>& geometry,
-        std::auto_ptr<scene::ProjectionModel>& projectionModel,
+        mem::auto_ptr<scene::SceneGeometry>& geometry,
+        mem::auto_ptr<scene::ProjectionModel>& projectionModel,
         AreaPlane& areaPlane)
 {
     getModelComponents_(complexData, geometry, projectionModel, areaPlane);
@@ -566,7 +566,7 @@ static void readSicd_(const std::string& sicdPathname,
 #if !CODA_OSS_cpp17
 void Utilities::readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
-                         std::auto_ptr<ComplexData>& complexData,
+                         mem::auto_ptr<ComplexData>& complexData,
                          std::vector<std::complex<float>>& widebandData)
 {
     readSicd_(sicdPathname, schemaPaths, complexData, widebandData);
@@ -636,12 +636,12 @@ void Utilities::readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          size_t orderX,
                          size_t orderY,
-                         std::auto_ptr<ComplexData>& complexData,
+                         mem::auto_ptr<ComplexData>& complexData,
                          std::vector<std::complex<float>>& widebandData,
                          six::Poly2D& outputRowColToSlantRow,
                          six::Poly2D& outputRowColToSlantCol,
-                         std::auto_ptr<NoiseMesh>& noiseMesh,
-                         std::auto_ptr<ScalarMesh>& scalarMesh)
+                         mem::auto_ptr<NoiseMesh>& noiseMesh,
+                         mem::auto_ptr<ScalarMesh>& scalarMesh)
 {
     readSicd_(sicdPathname, schemaPaths, orderX, orderY, complexData, widebandData,
         outputRowColToSlantRow, outputRowColToSlantCol, noiseMesh, scalarMesh);
@@ -1203,7 +1203,7 @@ static void getProjectionPolys_(const NITFReadControl& reader,
 void Utilities::getProjectionPolys(const NITFReadControl& reader,
                                    size_t orderX,
                                    size_t orderY,
-                                   std::auto_ptr<ComplexData>& complexData,
+                                   mem::auto_ptr<ComplexData>& complexData,
                                    six::Poly2D& outputRowColToSlantRow,
                                    six::Poly2D& outputRowColToSlantCol)
 {

@@ -65,8 +65,8 @@ public:
 #if !CODA_OSS_cpp17
     static void getModelComponents(
         const ComplexData& complexData,
-        std::auto_ptr<scene::SceneGeometry>& geometry,
-        std::auto_ptr<scene::ProjectionModel>& projectionModel,
+        mem::auto_ptr<scene::SceneGeometry>& geometry,
+        mem::auto_ptr<scene::ProjectionModel>& projectionModel,
         six::sicd::AreaPlane& areaPlane);
 #endif
     static void getModelComponents(
@@ -121,7 +121,7 @@ public:
 #if !CODA_OSS_cpp17
     static void readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
-                         std::auto_ptr<ComplexData>& complexData,
+                         mem::auto_ptr<ComplexData>& complexData,
                          std::vector<std::complex<float> >& widebandData);
 #endif
     static void readSicd(const std::string& sicdPathname,
@@ -170,12 +170,12 @@ public:
                          const std::vector<std::string>& schemaPaths,
                          size_t orderX,
                          size_t orderY,
-                         std::auto_ptr<ComplexData>& complexData,
+                         mem::auto_ptr<ComplexData>& complexData,
                          std::vector<std::complex<float> >& widebandData,
                          six::Poly2D& outputRowColToSlantRow,
                          six::Poly2D& outputRowColToSlantCol,
-                         std::auto_ptr<NoiseMesh>& noiseMesh,
-                         std::auto_ptr<ScalarMesh>& scalarMesh);
+                         mem::auto_ptr<NoiseMesh>& noiseMesh,
+                         mem::auto_ptr<ScalarMesh>& scalarMesh);
 #endif
     static void readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
@@ -495,7 +495,7 @@ public:
         const NITFReadControl& reader,
         size_t orderX,
         size_t orderY,
-        std::auto_ptr<ComplexData>& complexData,
+        mem::auto_ptr<ComplexData>& complexData,
         six::Poly2D& outputRowColToSlantRow,
         six::Poly2D& outputRowColToSlantCol);
 #endif

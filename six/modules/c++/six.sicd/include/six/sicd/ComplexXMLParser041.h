@@ -44,7 +44,7 @@ protected:
 #if !CODA_OSS_cpp17
     ComplexXMLParser041(const std::string& version,
                         bool addClassAttributes,
-                        std::auto_ptr<SICommonXMLParser> comParser,
+                        mem::auto_ptr<SICommonXMLParser> comParser,
                         logging::Logger* log = nullptr,
                         bool ownLog = false);
 #endif
