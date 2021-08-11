@@ -102,7 +102,7 @@ protected:
      */
     virtual NetConnection* newConnection(std::unique_ptr<net::Socket>&& toServer);
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    virtual NetConnection* newConnection(std::auto_ptr<net::Socket> toServer);
+    virtual NetConnection* newConnection(mem::auto_ptr<net::Socket> toServer);
     #endif
 
 private:

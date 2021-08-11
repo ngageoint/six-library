@@ -23,6 +23,8 @@
 #ifndef __XML_LITE_UTILITIES_XERCES_H__
 #define __XML_LITE_UTILITIES_XERCES_H__
 
+#include <mutex>
+
 #include "xml/lite/xml_lite_config.h"
 
 #if defined(USE_XERCES)
@@ -434,7 +436,7 @@ public:
     
 private:
 
-    static sys::Mutex mMutex;
+    static std::mutex mMutex;
     bool mIsDestroyed;
 };
 }
