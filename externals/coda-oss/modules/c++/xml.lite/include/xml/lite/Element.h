@@ -35,6 +35,7 @@
 #include "xml/lite/Attributes.h"
 #include "sys/Conf.h"
 #include "sys/Optional.h"
+#include "mem/SharedPtr.h"
 
 /*!
  * \file  Element.h
@@ -401,7 +402,7 @@ public:
      */
     virtual void addChild(std::unique_ptr<Element>&& node);
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    virtual void addChild(std::auto_ptr<Element> node);
+    virtual void addChild(mem::auto_ptr<Element> node);
     #endif
 
     /*!

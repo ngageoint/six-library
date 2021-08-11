@@ -23,6 +23,8 @@
 #ifndef __CLI_ARGUMENT_PARSER_H__
 #define __CLI_ARGUMENT_PARSER_H__
 
+#include <memory>
+
 #include "cli/Argument.h"
 #include "cli/Results.h"
 #include <import/str.h>
@@ -46,7 +48,7 @@ public:
     /**
      * Shortcut for adding an argument. Returns the newly created argument.
      */
-    mem::SharedPtr<Argument> addArgument(const std::string& nameOrFlags,
+    std::shared_ptr<Argument> addArgument(const std::string& nameOrFlags,
                                          const std::string& help = "",
                                          cli::Action action = cli::STORE,
                                          const std::string& destination = "",

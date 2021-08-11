@@ -91,7 +91,7 @@ cli::ArgumentParser::~ArgumentParser()
 /**
  * Shortcut for adding an argument
  */
-mem::SharedPtr<cli::Argument>
+std::shared_ptr<cli::Argument>
 cli::ArgumentParser::addArgument(const std::string& nameOrFlags,
                            const std::string& help,
                            cli::Action action,
@@ -100,7 +100,7 @@ cli::ArgumentParser::addArgument(const std::string& nameOrFlags,
                            int minArgs, int maxArgs,
                            bool required)
 {
-    mem::SharedPtr<cli::Argument> arg(new cli::Argument(nameOrFlags, this));
+    std::shared_ptr<cli::Argument> arg(new cli::Argument(nameOrFlags, this));
 
     if (arg->isPositional())
     {

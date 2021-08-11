@@ -45,7 +45,7 @@ public:
      *
      *  \param stream The stream to use for writing
      */
-    IOStreamWriter(mem::SharedPtr<io::SeekableOutputStream> stream);
+    IOStreamWriter(std::shared_ptr<io::SeekableOutputStream> stream);
 
 private:
     void readImpl(void* buffer, size_t size) override;
