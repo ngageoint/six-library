@@ -70,7 +70,7 @@ public:
                   bool serverAuth = false,
                   const std::string& host = "");
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    SSLConnection(std::auto_ptr<net::Socket> socket, 
+    SSLConnection(mem::auto_ptr<net::Socket> socket, 
                   SSL_CTX * ctx, 
                   bool serverAuth = false,
                   const std::string& host = "");

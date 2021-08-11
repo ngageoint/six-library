@@ -156,6 +156,11 @@ TEST_CASE(testCopying)
     TEST_ASSERT_EQ(ptr3->getCount(), 1);
 }
 
+static std::shared_ptr<int> getIntSP()
+{
+    return std::make_shared<int>(314);
+}
+
 TEST_CASE(testAssigning)
 {
     int * const rawPtr(new int(89));
@@ -195,6 +200,10 @@ TEST_CASE(testAssigning)
 
     TEST_ASSERT_EQ(ptr3.get(), rawPtr);
     TEST_ASSERT_EQ(ptr3.getCount(), 1);
+
+
+    mem::SharedPtr<int> result;
+    result = getIntSP();
 }
 
 TEST_CASE(testSyntax)
