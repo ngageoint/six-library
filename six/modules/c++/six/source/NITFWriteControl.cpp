@@ -333,14 +333,11 @@ void NITFWriteControl::save_(const TBufferList& imageData,
                 {
                     // Assume that the bands are interleaved in memory.  This
                     // makes sense for 24-bit 3-color data.
-                    nitf::MemorySource ms(imageData[i] +
-                                                  pixelSize *
-                                                          segmentInfo.getFirstRow() *
-                                                          numCols,
-                                          bandSize,
-                                          chan,
-                                          gsl::narrow<int>(pixelSize),
-                                          numChannels - 1);
+                    const auto data = imageData[i] + pixelSize *  segmentInfo.getFirstRow() * numCols;
+                    const auto start = gsl::narrow<nitf::Off>(chan);
+                    const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
+                    const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
+                    nitf::MemorySource ms(data, bandSize, start, numBytesPerPixel, pixelSkip);
                     iSource.addBand(ms);
                 }
                 iWriter.attachSource(iSource);
