@@ -48,7 +48,7 @@ ComplexXMLParser::ComplexXMLParser(const std::string& version,
 #if !CODA_OSS_cpp17
 ComplexXMLParser::ComplexXMLParser(const std::string& version,
                                    bool addClassAttributes,
-                                   std::auto_ptr<six::SICommonXMLParser> comParser,
+                                   mem::auto_ptr<six::SICommonXMLParser> comParser,
                                    logging::Logger* log,
                                    bool ownLog) :
     ComplexXMLParser(version, addClassAttributes, std::unique_ptr<six::SICommonXMLParser>(comParser.release()), log, ownLog)

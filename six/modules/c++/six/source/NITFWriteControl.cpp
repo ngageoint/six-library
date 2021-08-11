@@ -84,7 +84,7 @@ void NITFWriteControl::setNITFHeaderCreator(
 }
 #if !CODA_OSS_cpp17
 void NITFWriteControl::setNITFHeaderCreator(
-        std::auto_ptr<six::NITFHeaderCreator> headerCreator)
+        mem::auto_ptr<six::NITFHeaderCreator> headerCreator)
 {
     setNITFHeaderCreator(std::unique_ptr<six::NITFHeaderCreator>(headerCreator.release()));
 }
