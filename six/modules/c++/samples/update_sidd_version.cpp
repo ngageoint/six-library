@@ -51,12 +51,10 @@ void readSidd(const std::string& pathname,
     derivedData.reset(reinterpret_cast<six::sidd::DerivedData*>(
             container->getData(0)->clone()));
 
-    const types::RowCol<size_t> extent(derivedData->getNumRows(),
-                                       derivedData->getNumCols());
+    const auto extent = getExtent(*derivedData);
     widebandData.resize(extent.area() * derivedData->getNumBytesPerPixel());
     six::Region region;
-    region.setNumRows(extent.row);
-    region.setNumCols(extent.col);
+    setDims(region, extent);
     region.setBuffer(widebandData.data());
 
     reader.interleaved(region, 0);

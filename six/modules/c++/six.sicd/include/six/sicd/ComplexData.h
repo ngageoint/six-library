@@ -24,6 +24,8 @@
 
 #include <memory>
 
+#include <gsl/gsl.h>
+
 #include "six/CollectionInformation.h"
 #include "six/Data.h"
 #include "six/ErrorStatistics.h"
@@ -175,7 +177,7 @@ public:
     virtual void setNumRows(size_t numRows)
     {
         imageData->numRows = numRows;
-        imageData->fullImage.row = static_cast<ptrdiff_t>(numRows);
+        imageData->fullImage.row = gsl::narrow<ptrdiff_t>(numRows);
         imageData->scpPixel.row = imageData->fullImage.row / 2;
     }
 
@@ -195,7 +197,7 @@ public:
     virtual void setNumCols(size_t numCols)
     {
         imageData->numCols = numCols;
-        imageData->fullImage.col = static_cast<ptrdiff_t>(numCols);
+        imageData->fullImage.col = gsl::narrow<ptrdiff_t>(numCols);
         imageData->scpPixel.col = imageData->fullImage.col / 2;
     }
 

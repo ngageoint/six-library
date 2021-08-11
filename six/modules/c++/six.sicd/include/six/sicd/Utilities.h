@@ -132,6 +132,9 @@ public:
                          const std::vector<std::string>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
                          std::vector<std::complex<float> >& widebandData);
+    static std::vector<std::complex<float>> readSicd(const std::filesystem::path& sicdPathname,
+                         const std::vector<std::string>& schemaPaths,
+                         ComplexData& complexData);
 
     /*
      * Given a SICD path name and a list of schema, this function reads
@@ -637,6 +640,9 @@ public:
         const six::sicd::ComplexData& complexData,
         const std::vector<types::RowCol<double> >& opPixels,
         std::vector<types::RowCol<double> >& spPixels);
+
+    // for unit-testing
+    static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable*);
 };
 }
 }

@@ -19,8 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <math.h>
+
 #include <map>
 #include <string>
+#include <functional>
 
 #include <except/Exception.h>
 #include <io/StringStream.h>
@@ -35,6 +39,7 @@
 #include <str/Manip.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
+
 
 namespace fs = std::filesystem;
 
@@ -54,59 +59,122 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
                         ValueType* buffer)
 {
     six::Region retv;
-    retv.setOffset(offset);
-    retv.setDims(extent);
+    setOffset(retv, offset);
+    setDims(retv, extent);
     retv.setBuffer(reinterpret_cast<std::byte*>(buffer));
     return retv;
 }
+}
 
+std::complex<float> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
+{
+    double A = 0.0;
+    if (pAmplitudeTable != nullptr)
+    {
+        // A = AmpTable( input_amplitude )
+        auto& AmpTable = *(pAmplitudeTable);
+        A = AmpTable.index(input_amplitude);
+    }
+    else
+    {
+        // A = input_amplitude(i.e. 0 to 255)
+        A = input_amplitude;
+    }
+
+    // The phase values should be read in (values 0 to 255) and converted to float by doing:
+    // P = (1 / 256) * input_value
+    const double P = (1.0 / 256.0) * input_value;
+
+    // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
+    // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
+    const auto angle = 2 * M_PI * P;
+    const auto real = A * cos(angle);
+    const auto imaginary = A * sin(angle);
+    std::complex<float> S(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
+    return S;
+}
+
+namespace
+{
 // Reads in ~32 MB of rows at a time, converts to complex<float>, and keeps
 // going until reads everything
-void readAndConvertSICD(six::NITFReadControl& reader,
-                        size_t imageNumber,
-                        const types::RowCol<size_t>& offset,
-                        const types::RowCol<size_t>& extent,
-                        std::complex<float>* buffer)
+template<typename T>
+class SICD_readerAndConverter final
 {
-    // One for the real component, one for imaginary of each pixel
-    const size_t elementsPerRow = extent.col * 2;
-
-    // Get at least 32MB per read
-    const size_t rowsAtATime =
-            (32000000 / (elementsPerRow * sizeof(short))) + 1;
-
-    // Allocate temp buffer
-    std::vector<short> tempVector(elementsPerRow * rowsAtATime);
-    short* const tempBuffer = tempVector.data();
-
-    const size_t endRow = offset.row + extent.row;
-
-    for (size_t row = offset.row, rowsToRead = rowsAtATime; row < endRow;
-         row += rowsToRead)
+    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<int16_t>& tempVector) const
     {
-        // If we would read beyond the input buffer, don't
-        if (row + rowsToRead > endRow)
-        {
-            rowsToRead = endRow - row;
-        }
-        
-        // Read into the temp buffer
-        const types::RowCol<size_t> swathOffset(row, offset.col);
-        const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
-        six::Region region = buildRegion(swathOffset, swathExtent, tempBuffer);
-        reader.interleaved(region, imageNumber);
-
-        // Take each Int16 out of the temp buffer and put it into the real
-        // buffer as a Float32
-        float* const bufferPtr = reinterpret_cast<float*>(buffer) +
-                ((row - offset.row) * elementsPerRow);
-
+        process_RE16I_IM16I(elementsPerRow, row, rowsToRead, tempVector);
+    }
+    void process_RE16I_IM16I(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<int16_t>& tempVector) const
+    {
+        // Take each Int16 out of the temp buffer and put it into the real buffer as a Float32
+        float* const bufferPtr = reinterpret_cast<float*>(buffer) + ((row - offset.row) * elementsPerRow);
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
         {
-            bufferPtr[index] = tempBuffer[index];
+            bufferPtr[index] = tempVector[index];
         }
     }
-}
+
+    void process(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<uint8_t>& tempVector) const
+    {
+        process_AMP8I_PHS8I(elementsPerRow, row, rowsToRead, tempVector);
+    }
+    void process_AMP8I_PHS8I(size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<uint8_t>& tempVector) const
+    {
+        //auto bufferPtr = buffer + ((row - offset.row) * elementsPerRow);
+        auto bufferPtr = buffer;
+
+        // Take each (uint8_t, uint8_t) out of the temp buffer and put it into the real buffer as a std::complex<float>
+        for (size_t index = 0; index < elementsPerRow * rowsToRead; index += 2)
+        {
+            // "For amplitude and phase components, the amplitude component is  stored first."
+            const auto& input_amplitude = tempVector[index];
+            const auto& input_value = tempVector[index + 1];
+
+            *bufferPtr = six::sicd::Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, pAmplitudeTable);
+            bufferPtr++;
+        }
+    }
+    const types::RowCol<size_t>& offset;
+    std::complex<float>* buffer;
+    const six::AmplitudeTable* pAmplitudeTable = nullptr;
+    
+public:
+    SICD_readerAndConverter(six::NITFReadControl& reader, size_t imageNumber,
+			    const types::RowCol<size_t>& offset, const types::RowCol<size_t>& extent,
+                size_t elementsPerRow,
+			    std::complex<float>* buffer,  const six::AmplitudeTable* pAmplitudeTable = nullptr)
+      : offset(offset), buffer(buffer), pAmplitudeTable(pAmplitudeTable)
+    {
+        // Get at least 32MB per read
+        const size_t rowsAtATime = (32000000 / (elementsPerRow * sizeof(T))) + 1;
+
+        // Allocate temp buffer
+        std::vector<T> tempVector(elementsPerRow * rowsAtATime);
+
+        const size_t endRow = offset.row + extent.row;
+        for (size_t row = offset.row, rowsToRead = rowsAtATime; row < endRow;
+            row += rowsToRead)
+        {
+            // If we would read beyond the input buffer, don't
+            if (row + rowsToRead > endRow)
+            {
+                rowsToRead = endRow - row;
+            }
+
+            // Read into the temp buffer
+            const types::RowCol<size_t> swathOffset(row, offset.col);
+            const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
+            six::Region region = buildRegion(swathOffset, swathExtent, tempVector.data());
+            reader.interleaved(region, imageNumber);
+
+            process(elementsPerRow, row, rowsToRead, tempVector);
+        }
+    }
+    SICD_readerAndConverter(const SICD_readerAndConverter&) = delete;
+    SICD_readerAndConverter& operator=(const SICD_readerAndConverter&) = delete;
+    SICD_readerAndConverter& operator=(SICD_readerAndConverter&&) = delete;
+};
 
 six::Poly2D getXYtoRowColTransform(double center,
                                    double sampleSpacing,
@@ -518,6 +586,16 @@ void Utilities::readSicd(const fs::path& sicdPathname,
 {
     readSicd(sicdPathname.string(), schemaPaths, complexData, widebandData);
 }
+std::vector<std::complex<float>> Utilities::readSicd(const fs::path& sicdPathname,
+                         const std::vector<std::string>& schemaPaths,
+                         ComplexData& complexData)
+{
+    std::vector<std::complex<float>> retval;
+    std::unique_ptr<ComplexData> pComplexData;
+    readSicd(sicdPathname, schemaPaths, pComplexData, retval);
+    complexData = *pComplexData;
+    return retval;
+}
 
 template<typename TComplexDataPtr, typename TNoiseMeshPtr, typename TScalarMeshPtr>
 static void readSicd_(const std::string& sicdPathname,
@@ -660,8 +738,23 @@ void Utilities::getWidebandData(NITFReadControl& reader,
     }
     else if (pixelType == PixelType::RE16I_IM16I)
     {
-        readAndConvertSICD(reader, imageNumber, offset, extent, buffer);
+
+        // Each pixel is stored as a pair of numbers that represent the real and imaginary 
+        // components. Each component is stored in a 16-bit signed integer in 2's 
+        // complement format (2 bytes per component, 4 bytes per pixel). 
+        const size_t elementsPerRow = extent.col * (1 + 1); // "real and imaginary"
+        const SICD_readerAndConverter<int16_t> readerAndConverter(reader, imageNumber, offset, extent, elementsPerRow, buffer);
     }
+    //else if (pixelType == PixelType::AMP8I_PHS8I)
+    //{
+    //    const auto pAmplitudeTable = complexData.imageData->amplitudeTable.get();
+
+    //    // Each pixel is stored as a pair of numbers that represent the amplitude and phase
+    //    // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
+    //    // component, 2 bytes per pixel). 
+    //    const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
+    //    const SICD_readerAndConverter<uint8_t> readerAndConverter(reader, imageNumber, offset, extent, elementsPerRow, buffer, pAmplitudeTable);
+    //}
     else
     {
         throw except::Exception(
@@ -673,9 +766,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 std::complex<float>* buffer)
 {
     const types::RowCol<size_t> offset(0, 0);
-    const types::RowCol<size_t> extent(complexData.getNumRows(),
-                                 complexData.getNumCols());
-
+    const auto extent = getExtent(complexData);
     getWidebandData(reader, complexData, offset, extent, buffer);
 }
 
@@ -699,9 +790,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 std::vector<std::complex<float>>& buffer)
 {
     const types::RowCol<size_t> offset{};
-    const types::RowCol<size_t> extent(complexData.getNumRows(),
-                                 complexData.getNumCols());
-
+    const auto extent = getExtent(complexData);
     getWidebandData(reader, complexData, offset, extent, buffer);
 }
 
@@ -726,12 +815,9 @@ void Utilities::getWidebandData(const std::string& sicdPathname,
                                 const ComplexData& complexData,
                                 std::complex<float>* buffer)
 {
-    const types::RowCol<size_t> offset(0, 0);
-    const types::RowCol<size_t> extent(complexData.getNumRows(),
-                                 complexData.getNumCols());
-
-    getWidebandData(
-            sicdPathname, schemaPaths, complexData, offset, extent, buffer);
+    const types::RowCol<size_t> offset{};
+    const auto extent = getExtent(complexData);
+    getWidebandData(sicdPathname, schemaPaths, complexData, offset, extent, buffer);
 }
 
 Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
@@ -1274,10 +1360,9 @@ void Utilities::projectValidDataPolygonToOutputPlane(
     if (validData.size() == 0)
     {
         // Get dimensions of SICD.
-        const auto numRows =
-                static_cast<ptrdiff_t>(complexData.getNumRows());
-        const auto numCols =
-                static_cast<ptrdiff_t>(complexData.getNumCols());
+        const types::RowCol<ptrdiff_t> extent(getExtent(complexData));
+        const auto numRows = extent.row;
+        const auto numCols = extent.col;
 
         validData.push_back(six::RowColInt(0, 0));
         validData.push_back(six::RowColInt(0, numCols - 1));

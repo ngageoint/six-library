@@ -15,8 +15,9 @@ TEST_CASE(testToType)
             six::FFTSign(six::FFTSign::NEG));
 
 }
+
 }
 
 TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(testToType);
-)
+    )

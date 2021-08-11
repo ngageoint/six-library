@@ -369,16 +369,13 @@ void NITFReadControl::load(mem::SharedPtr<nitf::IOInterface> ioInterface,
     }
 
     nitf::List images = mRecord.getImages();
-    nitf::ListIterator imageIter = images.begin();
 
     // Now go through every image and figure out what clump it's attached
     // to and use that for the measurements
-    for (size_t nitfSegmentIdx = 0;
-         imageIter != images.end();
-         ++imageIter, ++nitfSegmentIdx)
+    for (size_t nitfSegmentIdx = 0; nitfSegmentIdx < images.getSize(); ++nitfSegmentIdx)
     {
         // Get a segment ref
-        nitf::ImageSegment segment = (nitf::ImageSegment) * imageIter;
+       auto segment = static_cast<nitf::ImageSegment>(images[nitfSegmentIdx]);
 
         // Get the subheader out
         nitf::ImageSubheader subheader = segment.getSubheader();
@@ -601,8 +598,9 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
 {
     const NITFImageInfo& thisImage = *(mInfos[imageNumber]);
 
-    const auto numRowsTotal = gsl::narrow<ptrdiff_t>(thisImage.getData()->getNumRows());
-    const auto numColsTotal = gsl::narrow<ptrdiff_t>(thisImage.getData()->getNumCols());
+    const types::RowCol<ptrdiff_t> imageExtent(getExtent(thisImage.getData()));
+    const auto numRowsTotal = imageExtent.row;
+    const auto numColsTotal = imageExtent.col;
 
     if (region.getNumRows() == -1)
     {
@@ -613,8 +611,9 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
         region.setNumCols(numColsTotal);
     }
 
-    const auto numRowsReq = region.getNumRows();
-    const auto numColsReq = region.getNumCols();
+    const auto regionExtent = getExtent(region);
+    const auto numRowsReq = regionExtent.row;
+    const auto numColsReq = regionExtent.col;
 
     const auto startRow = region.getStartRow();
     const auto startCol = region.getStartCol();
@@ -623,21 +622,17 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     const auto extentCols = startCol + numColsReq;
 
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
-        throw except::Exception(Ctxt(FmtX("Too many rows requested [%d]",
-                                          numRowsReq)));
+        throw except::Exception(Ctxt(FmtX("Too many rows requested [%d]", numRowsReq)));
 
     if (extentCols > numColsTotal || startCol > numColsTotal)
-        throw except::Exception(Ctxt(FmtX("Too many cols requested [%d]",
-                                          numColsReq)));
+        throw except::Exception(Ctxt(FmtX("Too many cols requested [%d]", numColsReq)));
 
     // Allocate one band
     uint32_t bandList(0);
 
+    const auto subWindowSize = regionExtent.area() * thisImage.getData()->getNumBytesPerPixel();
+
     auto buffer = region.getBuffer();
-
-    const auto subWindowSize = numRowsReq * numColsReq
-            * thisImage.getData()->getNumBytesPerPixel();
-
     if (buffer == nullptr)
     {
         buffer = region.setBuffer(subWindowSize).release();
@@ -650,8 +645,7 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     sw.setNumBands(1);
     sw.setBandList(&bandList);
 
-    std::vector < NITFSegmentInfo > imageSegments
-            = thisImage.getImageSegments();
+    std::vector < NITFSegmentInfo > imageSegments = thisImage.getImageSegments();
     const size_t numIS = imageSegments.size();
     size_t startOff = 0;
 

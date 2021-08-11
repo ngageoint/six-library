@@ -110,8 +110,7 @@ createData(const types::RowCol<size_t>& dims)
     six::sicd::ComplexData* data(new six::sicd::ComplexData());
     std::unique_ptr<six::Data> scopedData(data);
     data->setPixelType(GetPixelType<DataTypeT>::getPixelType());
-    data->setNumRows(dims.row);
-    data->setNumCols(dims.col);
+    setExtent(*data, dims);
     data->setName("corename");
     data->setSource("sensorname");
     data->collectionInformation->setClassificationLevel("UNCLASSIFIED");
