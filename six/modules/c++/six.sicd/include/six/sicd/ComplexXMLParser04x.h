@@ -38,7 +38,7 @@ struct ComplexXMLParser04x : public ComplexXMLParser
 #if !CODA_OSS_cpp17
     ComplexXMLParser04x(const std::string& version,
                         bool addClassAttributes,
-                        std::auto_ptr<SICommonXMLParser> comParser,
+                        mem::auto_ptr<SICommonXMLParser> comParser,
                         logging::Logger* log = nullptr,
                         bool ownLog = false);
 #endif

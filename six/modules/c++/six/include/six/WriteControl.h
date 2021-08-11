@@ -95,7 +95,7 @@ struct WriteControl
      *
      *  \param container Container to bind to
      */
-    virtual void initialize(mem::SharedPtr<Container> container) = 0;
+    virtual void initialize(std::shared_ptr<Container> container) = 0;
 
     /*!
      *  Save a list of InputStream sources.  This should always be
@@ -208,7 +208,7 @@ struct WriteControl
     /*!
      * shared pointer to Container
      */
-    mem::SharedPtr<Container> getContainer()
+    std::shared_ptr<Container> getContainer()
     {
         return mContainer;
     }
@@ -216,9 +216,9 @@ struct WriteControl
     /*!
      *  shared const pointer to Container.
      */
-    mem::SharedPtr<const Container> getContainer() const
+    std::shared_ptr<const Container> getContainer() const
     {
-        mem::SharedPtr<const Container> retval = mContainer;
+        std::shared_ptr<const Container> retval = mContainer;
         return mContainer;
     }
 
@@ -289,7 +289,7 @@ protected:
         if (!mXMLRegistry)
             mXMLRegistry = &XMLControlFactory::getInstance();
     }
-    mem::SharedPtr<Container> mContainer;
+    std::shared_ptr<Container> mContainer;
     Options mOptions;
     logging::Logger* mLog = nullptr;
     bool mOwnLog = false;
