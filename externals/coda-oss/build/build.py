@@ -878,6 +878,7 @@ def configureCompilerOptions(self):
 
         warningFlags = '-Wall'
         if ccCompiler == 'gcc':
+            #warningFlags += ' -Wno-deprecated-declarations -Wold-style-cast'
             warningFlags += ' -Wno-deprecated-declarations'
         else:
             warningFlags += ' -Wno-deprecated'
@@ -1138,12 +1139,12 @@ def writeConfig(conf, callback, guardTag, infile=None, outfile=None, path=None, 
         defs = tuple[0]
         undefs = tuple[1]
 
-        if feature is 'handleDefs':
+        if feature == 'handleDefs':
             handleDefsFile(input=infile, output=outfile, path=path, defs=defs, conf=conf)
-        elif feature is 'makeHeader':
+        elif feature == 'makeHeader':
             makeHeaderFile(bldpath, output=outfile, path=path, defs=defs, undefs=undefs, chmod=None,
                            guard='_%s_CONFIG_H_'%guardTag.upper().replace('.', '_'))
-        elif feature is 'm4subst':
+        elif feature == 'm4subst':
             m4substFile(input=infile, output=outfile, path=path,
                         dict=substDict, env=conf.env.derive(), chmod=None)
 

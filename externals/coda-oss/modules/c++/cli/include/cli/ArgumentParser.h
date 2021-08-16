@@ -119,7 +119,7 @@ public:
 protected:
     friend class Argument;
 
-    mem::VectorOfSharedPointers<Argument> mArgs;
+    std::vector<std::shared_ptr<Argument>> mArgs;
     std::string mDescription;
     std::string mProlog;
     std::string mEpilog;
