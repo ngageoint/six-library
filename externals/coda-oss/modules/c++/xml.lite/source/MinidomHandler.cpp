@@ -88,23 +88,24 @@ void xml::lite::MinidomHandler::characters(const char *value, int length)
     characters(value, length, pEncoding);
 }
 
-template<typename CharT>
-inline std::string toUtf8_(const CharT* value,  size_t length)
+template<typename CharT, typename ValueT>
+inline std::string toUtf8_(const ValueT* value_, size_t length)
 {
-    const std::basic_string<CharT> strValue(value, length);
-    std::string utf8Value;
-    str::toUtf8(strValue, utf8Value);
-    return utf8Value;
+    const void* const pValue = value_;
+    const auto value = reinterpret_cast<CharT>(pValue);
+    static_assert(sizeof(*value_) == sizeof(*value), "sizeof(*CharT) != sizeof(*ValueT)"); 
+
+    str::U8string utf8Value;
+    str::strto8(value, length, utf8Value);
+    return str::c_str<std::string::const_pointer>(utf8Value);
 }
-inline std::string toUtf8(const uint16_t* value_, size_t length)
+inline std::string toUtf8(const uint16_t* value, size_t length)
 {
-    const auto value = reinterpret_cast<std::u16string::const_pointer>(value_);
-    return toUtf8_(value, length);
+    return toUtf8_<std::u16string::const_pointer>(value, length);
 }
-inline std::string toUtf8(const uint32_t* value_, size_t length)
+inline std::string toUtf8(const uint32_t* value, size_t length)
 {
-    const auto value = reinterpret_cast<std::u32string::const_pointer>(value_);
-    return toUtf8_(value, length);
+    return toUtf8_<std::u32string::const_pointer>(value, length);
 }
 
 bool xml::lite::MinidomHandler::call_characters(const std::string& utf8Value)

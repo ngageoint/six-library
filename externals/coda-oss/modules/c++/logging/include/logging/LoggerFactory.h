@@ -54,6 +54,10 @@ private:
 
 public:
     LoggerManager() = default;
+    LoggerManager(const LoggerManager&) = delete;
+    LoggerManager(LoggerManager&&) = delete;
+    LoggerManager& operator=(const LoggerManager&) = delete;
+    LoggerManager& operator=(LoggerManager&&) = delete;
 
     /*!
      * Returns the Logger with the specified name. If a logger with the
