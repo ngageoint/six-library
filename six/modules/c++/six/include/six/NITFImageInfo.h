@@ -279,11 +279,7 @@ private:
      */
     std::vector<NITFSegmentInfo> mImageSegments;
 
-    static std::vector<nitf::BandInfo> getBandInfoImpl_REnF_IMnF();
-    static std::vector<nitf::BandInfo> getBandInfoImpl_RGB24I();
-    static std::vector<nitf::BandInfo> getBandInfoImpl_MONOnI();
-    static std::vector<nitf::BandInfo> getBandInfoImpl_MONO8LU(const LUT*);
-    static std::vector<nitf::BandInfo> getBandInfoImpl_RGB8LU(const LUT*);
+    static std::vector<nitf::BandInfo> getBandInfoImpl_(PixelType, const LUT* = nullptr);
 };
 
 //------------------------------------------------------------------------------
@@ -297,52 +293,13 @@ std::vector<nitf::BandInfo>
 NITFImageInfo::getBandInfoImpl(PixelType pixelType,
                                const GetDisplayLutT& getDisplayLUT)
 {
-    std::vector<nitf::BandInfo> bands;
-
-    switch (pixelType)
+    const LUT* lutPtr = nullptr;
+    if ((pixelType == PixelType::MONO8LU) || (pixelType == PixelType::RGB8LU))
     {
-    case PixelType::RE32F_IM32F:
-    case PixelType::RE16I_IM16I:
-    {
-        bands = getBandInfoImpl_REnF_IMnF();
-    }
-        break;
-    case PixelType::RGB24I:
-    {
-        bands = getBandInfoImpl_RGB24I();
-    }
-        break;
-
-    case PixelType::MONO8I:
-    case PixelType::MONO16I:
-    {
-        bands = getBandInfoImpl_MONOnI();
-    }
-        break;
-
-    case PixelType::MONO8LU:
-    {
-        const LUT* const lutPtr = getDisplayLUT();
-        bands = getBandInfoImpl_MONO8LU(lutPtr);
-    }
-    break;
-
-    case PixelType::RGB8LU:
-    {
-        const LUT* const lut = getDisplayLUT();
-        bands = getBandInfoImpl_RGB8LU(lut);
-    }
-    break;
-
-    default:
-        throw except::Exception(Ctxt("Unknown pixel type"));
+        lutPtr = getDisplayLUT();
     }
 
-    for (size_t i = 0; i < bands.size(); ++i)
-    {
-        bands[i].getImageFilterCondition().set("N");
-    }
-    return bands;
+    return getBandInfoImpl_(pixelType, lutPtr);
 }
 }
 

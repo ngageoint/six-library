@@ -200,7 +200,7 @@ std::string NITFImageInfo::generateFieldKey(const std::string& field,
 }
 }
 
-std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_REnF_IMnF()
+static std::vector<nitf::BandInfo> getBandInfoImpl_REnF_IMnF()
 {
     std::vector<nitf::BandInfo> bands;
 
@@ -215,7 +215,7 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_REnF_IMnF()
     return bands;
 }
 
-std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_RGB24I()
+static std::vector<nitf::BandInfo> getBandInfoImpl_RGB24I()
 {
     std::vector<nitf::BandInfo> bands;
 
@@ -235,7 +235,7 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_RGB24I()
     return bands;
 }
 
-std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_MONOnI()
+static std::vector<nitf::BandInfo> getBandInfoImpl_MONOnI()
 {
     std::vector<nitf::BandInfo> bands;
 
@@ -246,7 +246,7 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_MONOnI()
     return bands;
 }
 
-std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_MONO8LU(const LUT* lutPtr)
+static std::vector<nitf::BandInfo> getBandInfoImpl_MONO8LU(const six::LUT* lutPtr)
 {
     //If LUT is nullptr, we have a predefined LookupTable.
     //No LUT to write into NITF, so setting to MONO
@@ -258,7 +258,7 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_MONO8LU(const LU
     // TODO: Why do we need to byte swap here?  If it is required, could
     //       we avoid the clone and byte swap and instead index into
     //       the LUT in the opposite order?
-    std::unique_ptr<LUT> lut(lutPtr->clone());
+    std::unique_ptr<six::LUT> lut(lutPtr->clone());
     void* pTable = lut->getTable();
     sys::byteSwap(static_cast<std::byte*>(pTable), static_cast<unsigned short>(lut->elementSize), lut->numEntries);
 
@@ -290,7 +290,7 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_MONO8LU(const LU
     return bands;
 }
 
-std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_RGB8LU(const LUT* lut)
+static std::vector<nitf::BandInfo> getBandInfoImpl_RGB8LU(const six::LUT* lut)
 {
     if (lut == nullptr)
     {
@@ -324,5 +324,53 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_RGB8LU(const LUT
     std::vector<nitf::BandInfo> bands;
     bands.push_back(band1);
 
+    return bands;
+}
+
+std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixelType, const LUT* pLUT)
+{
+    std::vector<nitf::BandInfo> bands;
+
+    switch (pixelType)
+    {
+    case PixelType::RE32F_IM32F:
+    case PixelType::RE16I_IM16I:
+    {
+        bands = getBandInfoImpl_REnF_IMnF();
+    }
+    break;
+    case PixelType::RGB24I:
+    {
+        bands = getBandInfoImpl_RGB24I();
+    }
+    break;
+
+    case PixelType::MONO8I:
+    case PixelType::MONO16I:
+    {
+        bands = getBandInfoImpl_MONOnI();
+    }
+    break;
+
+    case PixelType::MONO8LU:
+    {
+        bands = getBandInfoImpl_MONO8LU(pLUT);
+    }
+    break;
+
+    case PixelType::RGB8LU:
+    {
+        bands = getBandInfoImpl_RGB8LU(pLUT);
+    }
+    break;
+
+    default:
+        throw except::Exception(Ctxt("Unknown pixel type"));
+    }
+
+    for (size_t i = 0; i < bands.size(); ++i)
+    {
+        bands[i].getImageFilterCondition().set("N");
+    }
     return bands;
 }
