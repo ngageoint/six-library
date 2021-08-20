@@ -372,12 +372,9 @@ TEST_CASE(test_readSicd)
     widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
 }
 
-TEST_CASE(test_create_sicd_from_mem)
+static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType)
 {
-    setNitfPluginPath();
-
     const types::RowCol<size_t> dims(2, 2);
-    const std::string outputName = "test_create_sicd_from_mem.sicd";
 
     six::XMLControlFactory::getInstance().addCreator(six::DataType::COMPLEX,
         new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
@@ -388,12 +385,12 @@ TEST_CASE(test_create_sicd_from_mem)
     {
         for (size_t c = 0; c < dims.col; c++)
         {
-            image.push_back(std::complex<float>(r, c*-1.0));
+            image.push_back(std::complex<float>(r, c * -1.0));
         }
     }
 
     std::unique_ptr<six::Data> data(six::sicd::Utilities::createFakeComplexData(&dims).release());
-    data->setPixelType(six::PixelType::RE32F_IM32F);
+    data->setPixelType(pixelType);
 
     mem::SharedPtr<six::Container> container(new six::Container(six::DataType::COMPLEX));
     container->addData(std::move(data));
@@ -408,7 +405,15 @@ TEST_CASE(test_create_sicd_from_mem)
     const std::vector<std::string> schemaPaths;
     const void* pImageData = image.data();
     six::buffer_list buffers{ static_cast<const std::byte*>(pImageData) };
-    writer.save(buffers, outputName, schemaPaths);
+    writer.save(buffers, outputName.string(), schemaPaths);
+}
+
+TEST_CASE(test_create_sicds_from_mem)
+{
+    setNitfPluginPath();
+
+    test_create_sicd_from_mem("test_create_sicd_from_mem_32f.sicd", six::PixelType::RE32F_IM32F);
+    //test_create_sicd_from_mem("test_create_sicd_from_mem_8i.sicd", six::PixelType::AMP8I_PHS8I);
 }
 
 TEST_MAIN((void)argc;
@@ -419,6 +424,6 @@ TEST_MAIN((void)argc;
     TEST_CHECK(read_8bit_ampphs_no_table);
     TEST_CHECK(sicd_read_data);
     TEST_CHECK(test_readSicd);
-    TEST_CHECK(test_create_sicd_from_mem);
+    TEST_CHECK(test_create_sicds_from_mem);
     )
 
