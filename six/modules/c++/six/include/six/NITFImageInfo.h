@@ -207,8 +207,7 @@ public:
     template <typename GetDisplayLutT>
     inline static const LUT* getDisplayLUT_(PixelType pixelType, const GetDisplayLutT& getDisplayLUT)
     {
-        if ((pixelType == PixelType::MONO8LU) || (pixelType == PixelType::RGB8LU)
-            || (pixelType == PixelType::AMP8I_PHS8I))
+        if ((pixelType == PixelType::MONO8LU) || (pixelType == PixelType::RGB8LU))
         {
             return getDisplayLUT();
         }

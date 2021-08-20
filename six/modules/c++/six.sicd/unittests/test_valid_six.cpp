@@ -376,8 +376,7 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
 {
     const types::RowCol<size_t> dims(2, 2);
 
-    constexpr auto dataType = six::DataType::COMPLEX;
-    six::XMLControlFactory::getInstance().addCreator(dataType,
+    six::XMLControlFactory::getInstance().addCreator(six::DataType::COMPLEX,
         new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
     std::vector<std::complex<float>> image;
@@ -393,7 +392,7 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
     std::unique_ptr<six::Data> data(six::sicd::Utilities::createFakeComplexData(&dims).release());
     data->setPixelType(pixelType);
 
-    mem::SharedPtr<six::Container> container(new six::Container(dataType));
+    mem::SharedPtr<six::Container> container(new six::Container(six::DataType::COMPLEX));
     container->addData(std::move(data));
 
     const auto pData = container->getData(0);
@@ -414,6 +413,7 @@ TEST_CASE(test_create_sicds_from_mem)
     setNitfPluginPath();
 
     test_create_sicd_from_mem("test_create_sicd_from_mem_32f.sicd", six::PixelType::RE32F_IM32F);
+    //test_create_sicd_from_mem("test_create_sicd_from_mem_8i.sicd", six::PixelType::AMP8I_PHS8I);
 }
 
 TEST_MAIN((void)argc;
