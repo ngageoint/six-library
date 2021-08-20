@@ -320,3 +320,27 @@ void ComplexData::fillDefaultFields()
 }
 }
 }
+
+// Okay, little bit of a hack for now
+mem::ScopedCopyablePtr<six::LUT>& six::sicd::ComplexData::getDisplayLUT()
+{
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        throw except::Exception(Ctxt("Display LUT operation not supported"));
+    }
+    throw except::Exception(Ctxt("Display LUT operation not supported")); // TODO ???
+}
+
+bool six::sicd::ComplexData::hasAmplitudeTable() const
+{
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        return false;
+    }
+
+    return getAmplitudeTable() != nullptr;
+}
+const six::AmplitudeTable* six::sicd::ComplexData::getAmplitudeTable() const
+{
+    return imageData->amplitudeTable.get();
+}

@@ -184,6 +184,9 @@ struct Data
 
     virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT() = 0;
 
+    virtual bool hasAmplitudeTable() const { return false; }
+    virtual const AmplitudeTable* getAmplitudeTable() const { return nullptr; }
+
     /*!
      * Returns an identifier of the Vendor supplying the implementation code.
      */

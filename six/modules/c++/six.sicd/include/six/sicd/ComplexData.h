@@ -287,11 +287,10 @@ public:
         return mClassification;
     }
 
-    // Okay, little bit of a hack for now
-    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT()
-    {
-        throw except::Exception(Ctxt("Display LUT operation not supported"));
-    }
+    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT() override;
+
+    virtual bool hasAmplitudeTable() const override;
+    virtual const AmplitudeTable* getAmplitudeTable() const override;
 
     virtual std::string getVendorID() const
     {
