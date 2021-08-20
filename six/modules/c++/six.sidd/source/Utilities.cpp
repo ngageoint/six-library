@@ -19,6 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <std/memory>
+
 #include "six/Utilities.h"
 #include "six/sidd/DerivedXMLControl.h"
 #include "six/sidd/Utilities.h"
@@ -633,3 +636,26 @@ mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
 }
 }
 }
+
+std::unique_ptr<six::sidd::DerivedData> six::sidd::Utilities::createFakeDerivedData(const types::RowCol<size_t>& dims)
+{
+    auto data = std::make_unique<six::sidd::DerivedData>();
+
+    data->geoData->imageCorners.getCorner(0).setLat(22.0493529164731);
+    data->geoData->imageCorners.getCorner(0).setLon(-159.744920871161);
+
+    data->geoData->imageCorners.getCorner(1).setLat(21.999989220946);
+    data->geoData->imageCorners.getCorner(1).setLon(-159.75130136289);
+
+    data->geoData->imageCorners.getCorner(2).setLat(22.0103386157109);
+    data->geoData->imageCorners.getCorner(2).setLon(-159.818163639552);
+
+    data->geoData->imageCorners.getCorner(3).setLat(22.0593288745824);
+    data->geoData->imageCorners.getCorner(3).setLon(-159.809407055003);
+
+    data->setNumRows(dims.row);
+    data->setNumCols(dims.col);
+
+    return data;
+}
+

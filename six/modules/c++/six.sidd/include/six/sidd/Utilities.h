@@ -138,6 +138,15 @@ public:
     static std::string toXMLString(const DerivedData& data,
             const std::vector<std::string>& schemaPaths,
             logging::Logger* logger);
+
+
+    /*!
+     * Create a fake SIDD that's populated enough for
+     * general testing code to run without throwing exceptions
+     *
+     * \return mock DerivedData object
+     */
+    static std::unique_ptr<DerivedData> createFakeDerivedData(const types::RowCol<size_t>&);
 };
 }
 }
