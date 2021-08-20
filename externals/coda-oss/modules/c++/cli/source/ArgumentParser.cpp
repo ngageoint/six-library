@@ -249,10 +249,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
     std::map<std::string, Argument*> longOptionsFlags;
     std::vector<Argument*> positionalArgs;
 
-    for (mem::VectorOfSharedPointers<cli::Argument>::const_iterator argIt =
-            mArgs.begin(); argIt != mArgs.end(); ++argIt)
+    for (auto& arg_ : mArgs)
     {
-        cli::Argument *arg = argIt->get();
+        cli::Argument* arg = arg_.get();
         std::string argVar = arg->getVariable();
 
         if (arg->isPositional())
@@ -575,10 +574,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
     }
 
     // add the defaults
-    for (mem::VectorOfSharedPointers<cli::Argument>::const_iterator it =
-            mArgs.begin(); it != mArgs.end(); ++it)
+    for (auto& arg_ : mArgs)
     {
-        cli::Argument *arg = it->get();
+        cli::Argument* arg = arg_.get();
         std::string argMeta = arg->getMetavar();
         std::string argVar = arg->getVariable();
         std::string argId = arg->isPositional() && !argMeta.empty() ? argMeta
@@ -705,10 +703,9 @@ void cli::ArgumentParser::processFlags(FlagInfo& info) const
         info.opHelps.push_back("show this help message and exit");
     }
 
-    for (mem::VectorOfSharedPointers<cli::Argument>::const_iterator it =
-            mArgs.begin(); it != mArgs.end(); ++it)
+    for (auto& arg_ : mArgs)
     {
-        cli::Argument *arg = it->get();
+        cli::Argument* arg = arg_.get();
         const std::string& argName = arg->getName();
         const cli::Action& argAction = arg->getAction();
         const std::vector<std::string>& argChoices = arg->getChoices();

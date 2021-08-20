@@ -36,47 +36,7 @@ namespace mem
      *         It is based on boost::scoped_array.
      */
     template <class T>
-    struct ScopedArray
-    { 
-        typedef T ElementType;
-
-        explicit ScopedArray() = default;
-        explicit ScopedArray(T* array)
-        {
-            reset(array);
-        }
-        explicit ScopedArray(std::unique_ptr<T[]>&& array) : mArray(std::move(array))
-        {
-        }
-
-        ~ScopedArray() = default;
-
-        void reset(T* array = nullptr)
-        {
-            mArray.reset(array);
-         }
-
-        T& operator[](std::ptrdiff_t idx) const
-        {
-            return mArray[idx];
-        }
-
-        T* get() const
-        {
-            return mArray.get();
-        }
-
-        T* release()
-        {
-            return mArray.release();
-        }
-
-        ScopedArray(const ScopedArray&) = delete;
-        ScopedArray& operator=(const ScopedArray&) = delete;
-
-    private:
-        std::unique_ptr<T[]> mArray;
-    };
+    using  ScopedArray = std::unique_ptr<T[]>;
 }
 
 #endif
