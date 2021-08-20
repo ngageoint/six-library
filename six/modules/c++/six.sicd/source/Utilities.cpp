@@ -1012,8 +1012,7 @@ mem::auto_ptr<ComplexData> Utilities::createFakeComplexData(const types::RowCol<
 
     if (pDims != nullptr)
     {
-        data->setNumRows(pDims->row);
-        data->setNumCols(pDims->col);
+        setExtent(*data, *pDims);
     }
 
     // The fields below here aren't really used,
