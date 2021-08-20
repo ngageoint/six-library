@@ -205,10 +205,20 @@ public:
     // always sending in the display LUT because that method will throw for
     // ComplexData
     template <typename GetDisplayLutT>
-    static
-    std::vector<nitf::BandInfo>
-    getBandInfoImpl(PixelType pixelType,
-                    const GetDisplayLutT& getDisplayLUT);
+    inline static const LUT* getDisplayLUT_(PixelType pixelType, const GetDisplayLutT& getDisplayLUT)
+    {
+        if ((pixelType == PixelType::MONO8LU) || (pixelType == PixelType::RGB8LU))
+        {
+            return getDisplayLUT();
+        }
+        return nullptr;
+    }
+    template <typename GetDisplayLutT>
+    static std::vector<nitf::BandInfo> getBandInfoImpl(PixelType pixelType, const GetDisplayLutT& getDisplayLUT)
+    {
+        const LUT* lutPtr = getDisplayLUT_(pixelType, getDisplayLUT);
+        return getBandInfoImpl_(pixelType, lutPtr);
+    }
 
     //!  File security classification system
     static const std::string CLSY;
@@ -282,25 +292,6 @@ private:
     static std::vector<nitf::BandInfo> getBandInfoImpl_(PixelType, const LUT* = nullptr);
 };
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-// WHAT FOLLOWS IS IMPLEMENTATION DETAIL
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-
-template <typename GetDisplayLutT>
-std::vector<nitf::BandInfo>
-NITFImageInfo::getBandInfoImpl(PixelType pixelType,
-                               const GetDisplayLutT& getDisplayLUT)
-{
-    const LUT* lutPtr = nullptr;
-    if ((pixelType == PixelType::MONO8LU) || (pixelType == PixelType::RGB8LU))
-    {
-        lutPtr = getDisplayLUT();
-    }
-
-    return getBandInfoImpl_(pixelType, lutPtr);
-}
 }
 
 #endif
