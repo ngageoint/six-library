@@ -278,6 +278,12 @@ private:
      *  Note that the number of segments has a hard limit of 999
      */
     std::vector<NITFSegmentInfo> mImageSegments;
+
+    static std::vector<nitf::BandInfo> getBandInfoImpl_REnF_IMnF();
+    static std::vector<nitf::BandInfo> getBandInfoImpl_RGB24I();
+    static std::vector<nitf::BandInfo> getBandInfoImpl_MONOnI();
+    static std::vector<nitf::BandInfo> getBandInfoImpl_MONO8LU(const LUT*);
+    static std::vector<nitf::BandInfo> getBandInfoImpl_RGB8LU(const LUT*);
 };
 
 //------------------------------------------------------------------------------
@@ -298,141 +304,33 @@ NITFImageInfo::getBandInfoImpl(PixelType pixelType,
     case PixelType::RE32F_IM32F:
     case PixelType::RE16I_IM16I:
     {
-        nitf::BandInfo band1;
-        band1.getSubcategory().set("I");
-        nitf::BandInfo band2;
-        band2.getSubcategory().set("Q");
-
-        bands.push_back(band1);
-        bands.push_back(band2);
+        bands = getBandInfoImpl_REnF_IMnF();
     }
         break;
     case PixelType::RGB24I:
     {
-        nitf::BandInfo band1;
-        band1.getRepresentation().set("R");
-
-        nitf::BandInfo band2;
-        band2.getRepresentation().set("G");
-
-        nitf::BandInfo band3;
-        band3.getRepresentation().set("B");
-
-        bands.push_back(band1);
-        bands.push_back(band2);
-        bands.push_back(band3);
+        bands = getBandInfoImpl_RGB24I();
     }
         break;
 
     case PixelType::MONO8I:
     case PixelType::MONO16I:
     {
-        nitf::BandInfo band1;
-        band1.getRepresentation().set("M");
-        bands.push_back(band1);
+        bands = getBandInfoImpl_MONOnI();
     }
         break;
 
     case PixelType::MONO8LU:
     {
-        const LUT* lutPtr = getDisplayLUT();
-        //If LUT is nullptr, we have a predefined LookupTable.
-        //No LUT to write into NITF, so setting to MONO
-        if (lutPtr == nullptr)
-        {
-            nitf::BandInfo band1;
-            band1.getRepresentation().set("M");
-            bands.push_back(band1);
-        }
-        else
-        {
-            // TODO: Why do we need to byte swap here?  If it is required, could
-            //       we avoid the clone and byte swap and instead index into
-            //       the LUT in the opposite order?
-            std::unique_ptr<LUT> lut(lutPtr->clone());
-            void* pTable = lut->getTable();
-            sys::byteSwap(static_cast<std::byte*>(pTable),
-                          static_cast<unsigned short>(lut->elementSize),
-                          lut->numEntries);
-
-            if (lut->elementSize != sizeof(short))
-            {
-                throw except::Exception(Ctxt(
-                    "Unexpected element size: " +
-                    std::to_string(lut->elementSize)));
-            }
-
-            nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
-            unsigned char* const table(lookupTable.getTable());
-
-            for (size_t i = 0; i < lut->numEntries; ++i)
-            {
-                // Need two LUTS in the nitf, with high order
-                // bits in the first and low order in the second
-                const unsigned char* const entry = (*lut)[i];
-                table[i] = entry[0];
-                table[lut->numEntries + i] = entry[1];
-
-            }
-            //I would like to set it this way but it does not seem to work.
-            //Using the init function instead.
-            //band1.getRepresentation().set("LU");
-            //band1.getLookupTable().setTable(table, 2, lut.numEntries);
-
-            nitf::BandInfo band1;
-            band1.init("LU", "", "", "",
-                static_cast<uint32_t>(lut->elementSize),
-                static_cast<uint32_t>(lut->numEntries),
-                lookupTable);
-            bands.push_back(band1);
-        }
+        const LUT* const lutPtr = getDisplayLUT();
+        bands = getBandInfoImpl_MONO8LU(lutPtr);
     }
     break;
 
     case PixelType::RGB8LU:
     {
         const LUT* const lut = getDisplayLUT();
-
-        if (lut == nullptr)
-        {
-            //If LUT is nullptr, we have a predefined LookupTable.
-            //No LUT to write into NITF, so setting to MONO
-            nitf::BandInfo band1;
-            band1.getRepresentation().set("M");
-            bands.push_back(band1);
-        }
-        else
-        {
-            if (lut->elementSize != 3)
-            {
-                throw except::Exception(Ctxt(
-                    "Unexpected element size: " +
-                    std::to_string(lut->elementSize)));
-            }
-
-            nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
-            unsigned char* const table(lookupTable.getTable());
-            for (size_t i = 0, k = 0; i < lut->numEntries; ++i)
-            {
-                for (size_t j = 0; j < lut->elementSize; ++j, ++k)
-                {
-                    // Need to transpose the lookup table entries
-                    table[j * lut->numEntries + i] = lut->getTable()[k];
-                }
-            }
-
-            //I would like to set it this way but it does not seem to work.
-            //Using the init function instead.
-            //band1.getRepresentation().set("LU");
-            //band1.getLookupTable().setTable(table, 3, lut->numEntries);
-            
-            nitf::BandInfo band1;
-            band1.init("LU", "", "", "",
-                static_cast<uint32_t>(lut->elementSize),
-                static_cast<uint32_t>(lut->numEntries),
-                lookupTable);
-            bands.push_back(band1);
-        }
+        bands = getBandInfoImpl_RGB8LU(lut);
     }
     break;
 
