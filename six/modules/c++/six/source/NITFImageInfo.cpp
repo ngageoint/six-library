@@ -220,13 +220,13 @@ static std::vector<nitf::BandInfo> getBandInfoImpl_RGB24I()
     std::vector<nitf::BandInfo> bands;
 
     nitf::BandInfo band1;
-    band1.getRepresentation().set("R");
+    band1.representation = nitf::Representation::R;
 
     nitf::BandInfo band2;
-    band2.getRepresentation().set("G");
+    band2.representation = nitf::Representation::G;
 
     nitf::BandInfo band3;
-    band3.getRepresentation().set("B");
+    band3.representation = nitf::Representation::B;
 
     bands.push_back(band1);
     bands.push_back(band2);
@@ -240,7 +240,7 @@ static std::vector<nitf::BandInfo> getBandInfoImpl_MONOnI()
     std::vector<nitf::BandInfo> bands;
 
     nitf::BandInfo band1;
-    band1.getRepresentation().set("M");
+    band1.representation = nitf::Representation::M;
     bands.push_back(band1);
 
     return bands;
@@ -253,7 +253,7 @@ static std::vector<nitf::BandInfo> getBandInfoFromLUT(const six::LUT& lut, nitf:
     //band1.getRepresentation().set("LU");
     //band1.getLookupTable().setTable(table, 2, lut.numEntries);
     nitf::BandInfo band1;
-    band1.init("LU", "", "", "", static_cast<uint32_t>(lut.elementSize), static_cast<uint32_t>(lut.numEntries), lookupTable);
+    band1.init(nitf::Representation::LU, "", "", "", static_cast<uint32_t>(lut.elementSize), static_cast<uint32_t>(lut.numEntries), lookupTable);
     std::vector<nitf::BandInfo> bands;
     bands.push_back(band1);
 
