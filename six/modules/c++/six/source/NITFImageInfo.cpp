@@ -45,7 +45,13 @@ struct GetDisplayLutFromData final
 
     const six::LUT* operator()() const
     {
-        return mData.getDisplayLUT().get();
+        const six::LUT* retval = mData.getDisplayLUT().get();
+
+        if ((retval == nullptr) && (mData.getPixelType() == six::PixelType::AMP8I_PHS8I))
+        {
+            retval = mData.getAmplitudeTable();
+        }
+        return retval;
     }
 
 private:
@@ -324,24 +330,24 @@ static std::vector<nitf::BandInfo> getBandInfoImpl_RGB8LU(const six::LUT* lut)
     return getBandInfoFromLUT(*lut, lookupTable);
 }
 
-//static std::vector<nitf::BandInfo> getBandInfoImpl_AMP8I_PHS8I(const six::LUT* lutPtr)
-//{
-//    std::vector<nitf::BandInfo> bands;
-//    if (lutPtr == nullptr)
-//    {
-//        //If LUT is nullptr, we have a predefined LookupTable.
-//        //No LUT to write into NITF, so setting to MONO
-//        return getBandInfoImpl_MONOnI();
-//    }
-//
-//    if (lutPtr->elementSize != sizeof(short))
-//    {
-//        throw except::Exception(Ctxt("Unexpected element size: " + std::to_string(lutPtr->elementSize)));
-//    }
-//
-//    // TODO
-//    return bands;
-//}
+static std::vector<nitf::BandInfo> getBandInfoImpl_AMP8I_PHS8I(const six::LUT* lutPtr)
+{
+    std::vector<nitf::BandInfo> bands;
+    if (lutPtr == nullptr)
+    {
+        //If LUT is nullptr, we have a predefined LookupTable.
+        //No LUT to write into NITF, so setting to MONO
+        return getBandInfoImpl_MONOnI();
+    }
+
+    if (lutPtr->elementSize != sizeof(short))
+    {
+        throw except::Exception(Ctxt("Unexpected element size: " + std::to_string(lutPtr->elementSize)));
+    }
+
+    // TODO
+    return bands;
+}
 
 std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixelType, const LUT* pLUT)
 {
@@ -380,11 +386,12 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixel
     }
     break;
 
-    //case PixelType::AMP8I_PHS8I:
-    //{
-    //    bands = getBandInfoImpl_AMP8I_PHS8I(pLUT);
-    //}
-    //break;
+    case PixelType::AMP8I_PHS8I:
+    {
+        bands = getBandInfoImpl_AMP8I_PHS8I(pLUT);
+        throw except::Exception(Ctxt("Unknown pixel type")); // TODO
+    }
+    break;
 
     default:
         throw except::Exception(Ctxt("Unknown pixel type"));
