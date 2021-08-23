@@ -340,7 +340,7 @@ static std::vector<nitf::BandInfo> getBandInfoImpl_AMP8I_PHS8I(const six::LUT* l
         return getBandInfoImpl_MONOnI();
     }
 
-    if (lutPtr->elementSize != sizeof(short))
+    if (lutPtr->elementSize != sizeof(double))
     {
         throw except::Exception(Ctxt("Unexpected element size: " + std::to_string(lutPtr->elementSize)));
     }

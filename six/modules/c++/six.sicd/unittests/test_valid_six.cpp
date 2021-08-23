@@ -421,8 +421,11 @@ struct image final
     }
 };
 
-static image make_image(const types::RowCol<size_t>& dims, six::PixelType pixelType, const six::AmplitudeTable* pAmpTable)
+static image make_image(const types::RowCol<size_t>& dims, const six::Data& data)
 {
+    const auto pixelType = data.getPixelType();
+    six::AmplitudeTable* pAmpTable = pixelType == six::PixelType::AMP8I_PHS8I ? data.getAmplitudeTable() : nullptr;
+
     image retval;
     if (pixelType == six::PixelType::RE32F_IM32F)
     {
@@ -448,7 +451,7 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
     six::XMLControlFactory::getInstance().addCreator(dataType, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
     std::unique_ptr<six::Data> data = six::sicd::Utilities::createFakeComplexData(pixelType, makeAmplitudeTable, &dims);
-    const auto image = make_image(dims, pixelType, data->getAmplitudeTable());
+    const auto image = make_image(dims, *data);
 
     mem::SharedPtr<six::Container> container(new six::Container(dataType));
     container->addData(std::move(data));
