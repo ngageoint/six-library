@@ -24,12 +24,14 @@
 #define __NITF_TEXTSUBHEADER_HPP__
 #pragma once
 
+#include <string>
+
 #include "nitf/TextSubheader.h"
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/FileSecurity.hpp"
 #include "nitf/Extensions.hpp"
-#include <string>
+#include "nitf/Property.hpp"
 
 /*!
  *  \file TextSubheader.hpp
@@ -66,6 +68,7 @@ public:
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;
+    //PropertyGet<std::string> filePartType{ [&]() -> std::string { return getFilePartType(); } };
 
     //! Get the textID
     nitf::Field getTextID() const;

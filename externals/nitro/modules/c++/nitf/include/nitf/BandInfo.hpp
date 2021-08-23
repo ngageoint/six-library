@@ -31,6 +31,7 @@
 #include "nitf/LookupTable.hpp"
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
+#include "nitf/Property.hpp"
 
 /*!
  *  \file BandInfo.hpp
@@ -39,6 +40,24 @@
 
 namespace nitf
 {
+
+    class Representation final
+    {
+        std::string representation_;
+        Representation(const std::string& r) : representation_(r) {}
+
+    public:
+        const std::string& string() const noexcept {
+            return representation_;
+        }
+        static const Representation R;
+        static const Representation G;
+        static const Representation B;
+        static const Representation M;
+        static const Representation LU;
+        static const Representation& get(const std::string&) noexcept(false);
+    };
+
 /*!
  *  \class BandInfo
  *  \brief  The C++ wrapper for the nitf_BandInfo
@@ -63,13 +82,14 @@ public:
 
     //! Get the representation
     nitf::Field getRepresentation() const;
+    nitf::Property<Representation> representation{
+        [&]() ->Representation { return Representation::get(getRepresentation()); },
+        [&](const Representation& v) -> void {  getRepresentation().set(v.string()); }
+    };
 
     //! Get the subcategory
     nitf::Field getSubcategory() const;
-    std::string subcategory() const
-    {
-        return getSubcategory(); // nitf::Field implicitly converts to std::string
-    }
+    nitf::PropertyGet<std::string> subcategory{ [&]() -> std::string { return getSubcategory(); } };
 
     //! Get the imageFilterCondition
     nitf::Field getImageFilterCondition() const;
@@ -104,6 +124,13 @@ public:
               uint32_t numLUTs,
               uint32_t bandEntriesPerLUT,
               nitf::LookupTable& lut);
+    void init(const Representation&,
+              const std::string& subcategory,
+              const std::string& imageFilterCondition,
+              const std::string& imageFilterCode,
+              uint32_t numLUTs,
+              uint32_t bandEntriesPerLUT,
+              nitf::LookupTable& lut);
 
     /*!
      * Initialize the BandInfo with the given data. This assumes there is no
@@ -115,6 +142,10 @@ public:
      * \param imageFilterCode       The band standard image filter code
      */
     void init(const std::string& representation,
+              const std::string& subcategory,
+              const std::string& imageFilterCondition,
+              const std::string& imageFilterCode);
+    void init(const Representation&,
               const std::string& subcategory,
               const std::string& imageFilterCondition,
               const std::string& imageFilterCode);

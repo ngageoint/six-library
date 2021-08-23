@@ -39,14 +39,21 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     //Check for optimization cases - RGB and IQ
     if ((nBands == 3 && imageMode[0] == 'P' && irep == "RGB" && bytesPerPixel
             == 1 && (ic == "NC" || ic == "NM")) || (nBands == 2 && imageMode[0]
-            == 'P' && bytesPerPixel == 4 && (ic == "NC" || ic == "NM")
-            && subheader.getBandInfo(0).subcategory()[0] == 'I'
-            && subheader.getBandInfo(1).subcategory()[0] == 'Q'))
+            == 'P' && bytesPerPixel == 4 && (ic == "NC" || ic == "NM") ))
+
     {
-        //using special interleaved shortcut
-        std::cout << "Using optimized pre pixel-interleaved image" << std::endl;
-        mRowSize *= nBands;
-        nBands = 1;
+        std::string subcategory = subheader.getBandInfo(0).subcategory;
+        if (subcategory[0] == 'I')
+        {
+            subcategory = subheader.getBandInfo(1).subcategory;
+            if (subcategory[0] == 'Q')
+            {
+                //using special interleaved shortcut
+                std::cout << "Using optimized pre pixel-interleaved image" << std::endl;
+                mRowSize *= nBands;
+                nBands = 1;
+            }
+        }
     }
 
     if (nBands > 1)

@@ -153,9 +153,7 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     for (uint32_t band = 0; band < nBands; band++)
         bandList[band] = band;
 
-    nitf::SubWindow subWindow;
-    subWindow.setNumRows(1);
-    subWindow.setNumCols(static_cast<uint32_t>(nColumns));
+    nitf::SubWindow subWindow(1, nColumns);
 
     // necessary ?
     nitf::DownSampler* pixelSkip = new nitf::PixelSkip(1, 1);

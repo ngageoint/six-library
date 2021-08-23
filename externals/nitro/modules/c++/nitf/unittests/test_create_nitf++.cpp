@@ -1069,7 +1069,7 @@ namespace test_create_nitf_with_byte_provider
         std::vector<nitf::BandInfo> bands(NUM_BANDS, nitf::BandInfo());
         for (size_t ii = 0; ii < bands.size(); ++ii)
         {
-            bands[ii].init("M",   /* The band representation, Nth band */
+            bands[ii].init(nitf::Representation::M,   /* The band representation, Nth band */
                 " ",       /* The band subcategory */
                 "N",       /* The band filter condition */
                 "   ");     /* The band standard image filter code */
@@ -1190,7 +1190,7 @@ TEST_CASE(test_create_nitf_with_byte_provider_test)
 
 namespace test_create_nitf
 {
-    static const char* RGB[] = { "R", "G", "B" };
+    static const nitf::Representation RGB[] = { nitf::Representation::R,  nitf::Representation::G,  nitf::Representation::B };
 
     void addImageSegment(nitf::Record& record, bool isMono = false,
         bool shouldCompress = false)
