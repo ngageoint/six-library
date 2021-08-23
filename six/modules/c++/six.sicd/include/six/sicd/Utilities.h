@@ -447,6 +447,7 @@ public:
      * \return mock ComplexData object
      */
     static mem::auto_ptr<ComplexData> createFakeComplexData(const types::RowCol<size_t>* pDims = nullptr);
+    static std::unique_ptr<ComplexData> createFakeComplexData(PixelType, bool makeAmplitudeTable, const types::RowCol<size_t>* pDims = nullptr);
 
     /*
      * Given a reference to a loaded NITFReadControl, this function

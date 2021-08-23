@@ -372,7 +372,7 @@ TEST_CASE(test_readSicd)
     widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
 }
 
-static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType)
+static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)
 {
     const types::RowCol<size_t> dims(2, 2);
 
@@ -389,8 +389,7 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
         }
     }
 
-    std::unique_ptr<six::Data> data(six::sicd::Utilities::createFakeComplexData(&dims).release());
-    data->setPixelType(pixelType);
+    std::unique_ptr<six::Data> data = six::sicd::Utilities::createFakeComplexData(pixelType, makeAmplitudeTable, &dims);
 
     mem::SharedPtr<six::Container> container(new six::Container(six::DataType::COMPLEX));
     container->addData(std::move(data));
@@ -413,7 +412,8 @@ TEST_CASE(test_create_sicds_from_mem)
     setNitfPluginPath();
 
     test_create_sicd_from_mem("test_create_sicd_from_mem_32f.sicd", six::PixelType::RE32F_IM32F);
-    //test_create_sicd_from_mem("test_create_sicd_from_mem_8i.sicd", six::PixelType::AMP8I_PHS8I);
+    //test_create_sicd_from_mem("test_create_sicd_from_mem_8i_amp.sicd", six::PixelType::AMP8I_PHS8I, true /*makeAmplitudeTable*/);
+    //test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
 
 TEST_MAIN((void)argc;

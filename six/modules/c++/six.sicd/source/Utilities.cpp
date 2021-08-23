@@ -19,12 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "six/sicd/Utilities.h"
 
 #include <math.h>
+#include <assert.h>
 
 #include <map>
 #include <string>
 #include <functional>
+#include <std/memory>
 
 #include <except/Exception.h>
 #include <io/StringStream.h>
@@ -35,7 +38,6 @@
 #include <six/Utilities.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDMesh.h>
-#include <six/sicd/Utilities.h>
 #include <str/Manip.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
@@ -61,7 +63,8 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
     six::Region retv;
     setOffset(retv, offset);
     setDims(retv, extent);
-    retv.setBuffer(reinterpret_cast<std::byte*>(buffer));
+    void* buffer_ = buffer;
+    retv.setBuffer(static_cast<std::byte*>(buffer_));
     return retv;
 }
 }
@@ -939,9 +942,15 @@ std::string Utilities::toXMLString(const ComplexData& data,
                                    &xmlRegistry);
 }
 
-mem::auto_ptr<ComplexData> Utilities::createFakeComplexData(const types::RowCol<size_t>* pDims)
+std::unique_ptr<ComplexData> Utilities::createFakeComplexData(PixelType pixelType, bool makeAmplitudeTable,
+    const types::RowCol<size_t>* pDims)
 {
-    mem::auto_ptr<ComplexData> data(new six::sicd::ComplexData());
+    if (pixelType != PixelType::AMP8I_PHS8I)
+    {
+        assert(makeAmplitudeTable == false);
+    }
+
+    std::unique_ptr<ComplexData> data(std::make_unique<six::sicd::ComplexData>());
     data->position->arpPoly = six::PolyXYZ(5);
     data->position->arpPoly[0][0] = 4.45303008e6;
     data->position->arpPoly[1][0] = 5.75153322e3;
@@ -999,7 +1008,7 @@ mem::auto_ptr<ComplexData> Utilities::createFakeComplexData(const types::RowCol<
 
     data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
 
-    data->setPixelType(six::PixelType::RE32F_IM32F);
+    data->setPixelType(pixelType);
     data->imageData->validData = std::vector<six::RowColInt>(8);
     data->imageData->validData[0] = six::RowColInt(0, 0);
     data->imageData->validData[1] = six::RowColInt(0, 6163);
@@ -1009,6 +1018,12 @@ mem::auto_ptr<ComplexData> Utilities::createFakeComplexData(const types::RowCol<
     data->imageData->validData[5] = six::RowColInt(11790, 6163);
     data->imageData->validData[6] = six::RowColInt(11790, 0);
     data->imageData->validData[7] = six::RowColInt(1028, 0);
+
+    if (makeAmplitudeTable)
+    {
+        data->imageData->amplitudeTable.reset(new AmplitudeTable());
+    }
+
 
     if (pDims != nullptr)
     {
@@ -1065,6 +1080,11 @@ mem::auto_ptr<ComplexData> Utilities::createFakeComplexData(const types::RowCol<
     data->pfa->kaz1 = 0;
     data->pfa->kaz2 = 0;
     return data;
+}
+mem::auto_ptr<ComplexData> Utilities::createFakeComplexData(const types::RowCol<size_t>* pDims)
+{
+    auto result = createFakeComplexData(PixelType::RE32F_IM32F, false /*makeAmplitudeTable*/, pDims);
+    return mem::auto_ptr<ComplexData>(result.release());
 }
 
 mem::auto_ptr<NoiseMesh> Utilities::getNoiseMesh(const NITFReadControl& reader)
