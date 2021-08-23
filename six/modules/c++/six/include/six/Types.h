@@ -299,6 +299,10 @@ struct LUT
 {
     std::vector<unsigned char> table;
     size_t numEntries;
+    size_t size() const
+    {
+        return numEntries;
+    }
     size_t elementSize;
 
     //!  Initialize with a number of entries and known output space
@@ -418,10 +422,15 @@ struct AmplitudeTable final : public LUT
         return !(*this == rhs);
     }
 
-    double index(size_t ii) const
+    const double& index(size_t ii) const
     {
         const void* this_ii = (*this)[ii];
         return *static_cast<const double*>(this_ii);
+    }
+    double& index(size_t ii)
+    {
+        void* this_ii = (*this)[ii];
+        return *static_cast<double*>(this_ii);
     }
 
     AmplitudeTable* clone() const

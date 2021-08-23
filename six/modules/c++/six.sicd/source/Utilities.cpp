@@ -945,11 +945,6 @@ std::string Utilities::toXMLString(const ComplexData& data,
 std::unique_ptr<ComplexData> Utilities::createFakeComplexData(PixelType pixelType, bool makeAmplitudeTable,
     const types::RowCol<size_t>* pDims)
 {
-    if (pixelType != PixelType::AMP8I_PHS8I)
-    {
-        assert(makeAmplitudeTable == false);
-    }
-
     std::unique_ptr<ComplexData> data(std::make_unique<six::sicd::ComplexData>());
     data->position->arpPoly = six::PolyXYZ(5);
     data->position->arpPoly[0][0] = 4.45303008e6;
@@ -1022,8 +1017,12 @@ std::unique_ptr<ComplexData> Utilities::createFakeComplexData(PixelType pixelTyp
     if (makeAmplitudeTable)
     {
         data->imageData->amplitudeTable.reset(new AmplitudeTable());
+        auto& amplitudeTable = *(data->imageData->amplitudeTable.get());
+        for (size_t i = 0; i < amplitudeTable.size(); i++)
+        {
+            amplitudeTable.index(i) = static_cast<double>(i);
+        }
     }
-
 
     if (pDims != nullptr)
     {

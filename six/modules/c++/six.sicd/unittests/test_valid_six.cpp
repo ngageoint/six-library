@@ -372,13 +372,8 @@ TEST_CASE(test_readSicd)
     widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
 }
 
-static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)
+static std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>& dims)
 {
-    const types::RowCol<size_t> dims(2, 2);
-
-    six::XMLControlFactory::getInstance().addCreator(six::DataType::COMPLEX,
-        new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
-
     std::vector<std::complex<float>> image;
     image.reserve(dims.area());
     for (size_t r = 0; r < dims.row; r++)
@@ -388,10 +383,18 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
             image.push_back(std::complex<float>(r, c * -1.0));
         }
     }
+    return image;
+}
+
+static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)
+{
+    const types::RowCol<size_t> dims(2, 2);
+
+    constexpr auto dataType = six::DataType::COMPLEX;
+    six::XMLControlFactory::getInstance().addCreator(dataType, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
     std::unique_ptr<six::Data> data = six::sicd::Utilities::createFakeComplexData(pixelType, makeAmplitudeTable, &dims);
-
-    mem::SharedPtr<six::Container> container(new six::Container(six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(new six::Container(dataType));
     container->addData(std::move(data));
 
     const auto pData = container->getData(0);
@@ -402,6 +405,7 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
     six::NITFWriteControl writer(writerOptions, container);
 
     const std::vector<std::string> schemaPaths;
+    const auto image = make_complex_image(dims);
     const void* pImageData = image.data();
     six::buffer_list buffers{ static_cast<const std::byte*>(pImageData) };
     writer.save(buffers, outputName.string(), schemaPaths);
