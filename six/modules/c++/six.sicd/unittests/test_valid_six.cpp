@@ -428,7 +428,7 @@ static image make_image(const types::RowCol<size_t>& dims, six::PixelType pixelT
     {
         retval.RE32F_IM32F = make_complex_image(dims);
     }
-    if (pixelType == six::PixelType::AMP8I_PHS8I)
+    else if (pixelType == six::PixelType::AMP8I_PHS8I)
     {
         retval.AMP8I_PHS8I = make_AMP8I_PHS8I_image(dims, pAmpTable);
     }

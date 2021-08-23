@@ -246,6 +246,20 @@ static std::vector<nitf::BandInfo> getBandInfoImpl_MONOnI()
     return bands;
 }
 
+static std::vector<nitf::BandInfo> getBandInfoFromLUT(const six::LUT& lut, nitf::LookupTable& lookupTable)
+{
+    //I would like to set it this way but it does not seem to work.
+    //Using the init function instead.
+    //band1.getRepresentation().set("LU");
+    //band1.getLookupTable().setTable(table, 2, lut.numEntries);
+    nitf::BandInfo band1;
+    band1.init("LU", "", "", "", static_cast<uint32_t>(lut.elementSize), static_cast<uint32_t>(lut.numEntries), lookupTable);
+    std::vector<nitf::BandInfo> bands;
+    bands.push_back(band1);
+
+    return bands;
+}
+
 static std::vector<nitf::BandInfo> getBandInfoImpl_MONO8LU(const six::LUT* lutPtr)
 {
     //If LUT is nullptr, we have a predefined LookupTable.
@@ -278,16 +292,8 @@ static std::vector<nitf::BandInfo> getBandInfoImpl_MONO8LU(const six::LUT* lutPt
         table[lut->numEntries + i] = entry[1];
 
     }
-    //I would like to set it this way but it does not seem to work.
-    //Using the init function instead.
-    //band1.getRepresentation().set("LU");
-    //band1.getLookupTable().setTable(table, 2, lut.numEntries);
-    nitf::BandInfo band1;
-    band1.init("LU", "", "", "", static_cast<uint32_t>(lut->elementSize), static_cast<uint32_t>(lut->numEntries), lookupTable);
-    std::vector<nitf::BandInfo> bands;
-    bands.push_back(band1);
 
-    return bands;
+    return getBandInfoFromLUT(*lut, lookupTable);
 }
 
 static std::vector<nitf::BandInfo> getBandInfoImpl_RGB8LU(const six::LUT* lut)
@@ -315,17 +321,27 @@ static std::vector<nitf::BandInfo> getBandInfoImpl_RGB8LU(const six::LUT* lut)
         }
     }
 
-    //I would like to set it this way but it does not seem to work.
-    //Using the init function instead.
-    //band1.getRepresentation().set("LU");
-    //band1.getLookupTable().setTable(table, 3, lut->numEntries);
-    nitf::BandInfo band1;
-    band1.init("LU", "", "", "", static_cast<uint32_t>(lut->elementSize), static_cast<uint32_t>(lut->numEntries), lookupTable);
-    std::vector<nitf::BandInfo> bands;
-    bands.push_back(band1);
-
-    return bands;
+    return getBandInfoFromLUT(*lut, lookupTable);
 }
+
+//static std::vector<nitf::BandInfo> getBandInfoImpl_AMP8I_PHS8I(const six::LUT* lutPtr)
+//{
+//    std::vector<nitf::BandInfo> bands;
+//    if (lutPtr == nullptr)
+//    {
+//        //If LUT is nullptr, we have a predefined LookupTable.
+//        //No LUT to write into NITF, so setting to MONO
+//        return getBandInfoImpl_MONOnI();
+//    }
+//
+//    if (lutPtr->elementSize != sizeof(short))
+//    {
+//        throw except::Exception(Ctxt("Unexpected element size: " + std::to_string(lutPtr->elementSize)));
+//    }
+//
+//    // TODO
+//    return bands;
+//}
 
 std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixelType, const LUT* pLUT)
 {
@@ -363,6 +379,12 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixel
         bands = getBandInfoImpl_RGB8LU(pLUT);
     }
     break;
+
+    //case PixelType::AMP8I_PHS8I:
+    //{
+    //    bands = getBandInfoImpl_AMP8I_PHS8I(pLUT);
+    //}
+    //break;
 
     default:
         throw except::Exception(Ctxt("Unknown pixel type"));
