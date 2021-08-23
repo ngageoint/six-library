@@ -183,8 +183,6 @@ struct Data
     virtual Classification& getClassification() = 0;
 
     virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT() = 0;
-
-    virtual bool hasAmplitudeTable() const { return false; }
     virtual const AmplitudeTable* getAmplitudeTable() const { return nullptr; }
 
     /*!

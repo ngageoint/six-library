@@ -288,8 +288,6 @@ public:
     }
 
     virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT() override;
-
-    virtual bool hasAmplitudeTable() const override;
     virtual const AmplitudeTable* getAmplitudeTable() const override;
 
     virtual std::string getVendorID() const

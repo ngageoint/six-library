@@ -21,6 +21,8 @@
  */
 #include "six/sicd/ComplexData.h"
 
+#include <assert.h>
+
 namespace six
 {
 namespace sicd
@@ -331,16 +333,12 @@ mem::ScopedCopyablePtr<six::LUT>& six::sicd::ComplexData::getDisplayLUT()
     throw except::Exception(Ctxt("Display LUT operation not supported")); // TODO ???
 }
 
-bool six::sicd::ComplexData::hasAmplitudeTable() const
-{
-    if (getPixelType() != PixelType::AMP8I_PHS8I)
-    {
-        return false;
-    }
-
-    return getAmplitudeTable() != nullptr;
-}
 const six::AmplitudeTable* six::sicd::ComplexData::getAmplitudeTable() const
 {
-    return imageData->amplitudeTable.get();
+    const auto retval = imageData->amplitudeTable.get();
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        assert(retval == nullptr);
+    }
+    return retval;
 }
