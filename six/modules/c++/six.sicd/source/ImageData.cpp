@@ -19,6 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <stdexcept>
+#include <array>
+
+#include <gsl/gsl.h>
+
 #include "six/sicd/GeoData.h"
 #include "six/sicd/ImageData.h"
 #include "six/sicd/Utilities.h"
@@ -116,4 +122,48 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     }
 
     return valid;
+}
+
+using input_values_t = std::array<std::complex<float>, UINT8_MAX>;
+using input_amplitudes_t = std::array<input_values_t, UINT8_MAX>;
+static input_amplitudes_t AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
+{
+    input_amplitudes_t retval;
+    for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
+    {
+        for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
+        {
+            auto cx_result = Utilities::from_AMP8I_PHS8I(gsl::narrow<uint8_t>(input_amplitude), gsl::narrow<uint8_t>(input_value), pAmplitudeTable);
+            retval[input_amplitude][input_value] = std::move(cx_result);
+        }
+    }
+    return retval;
+}
+
+void ImageData::create_AMP8I_PHS8I_to_RE32F_IM32F_values() const
+{
+    if (pixelType != PixelType::AMP8I_PHS8I)
+    {
+        return;
+    }
+
+    if (!p_RE32F_IM32F_values)
+    {
+        auto values = AMP8I_PHS8I_to_RE32F_IM32F_(amplitudeTable.get());
+        auto pValues = std::make_shared<input_amplitudes_t>(std::move(values));
+        std::swap(p_RE32F_IM32F_values, pValues);
+    }
+}
+
+std::complex<float> ImageData::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value) const
+{
+    if (pixelType != PixelType::AMP8I_PHS8I)
+    {
+        throw std::runtime_error("pxielType must be AMP8I_PHS8I");
+    }
+
+    //return Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, amplitudeTable.get());
+    create_AMP8I_PHS8I_to_RE32F_IM32F_values();
+    const auto& values = *p_RE32F_IM32F_values;
+    return values[input_amplitude][input_value];
 }

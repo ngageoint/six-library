@@ -22,6 +22,9 @@
 #ifndef __SIX_IMAGE_DATA_H__
 #define __SIX_IMAGE_DATA_H__
 
+#include <array>
+#include <memory>
+
 #include "logging/Logger.h"
 #include "six/Types.h"
 #include "six/Init.h"
@@ -88,6 +91,13 @@ struct ImageData
 
     bool validate(const GeoData& geoData, logging::Logger& log) const;
 
+
+    std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value) const;
+private:
+    void create_AMP8I_PHS8I_to_RE32F_IM32F_values() const;
+    using input_values_t = std::array<std::complex<float>, UINT8_MAX>;
+    using input_amplitudes_t = std::array<input_values_t, UINT8_MAX>;
+    mutable std::shared_ptr<input_amplitudes_t> p_RE32F_IM32F_values;
 };
 }
 }
