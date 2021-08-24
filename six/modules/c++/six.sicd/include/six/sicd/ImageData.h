@@ -24,6 +24,8 @@
 
 #include <array>
 #include <memory>
+#include <std/span>
+#include <utility>
 
 #include "logging/Logger.h"
 #include "six/Types.h"
@@ -91,13 +93,13 @@ struct ImageData
 
     bool validate(const GeoData& geoData, logging::Logger& log) const;
 
-
+    // It would be nice to cache the results, but amplitudeTable could change at any time.
+    using AMP8I_PHS8I_t = std::pair<uint8_t, uint8_t>;
     std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value) const;
-    using input_values_t = std::array<std::complex<float>, UINT8_MAX+1>;
-    using input_amplitudes_t = std::array<input_values_t, UINT8_MAX+1>;
-private:
-    const input_amplitudes_t* get_RE32F_IM32F_values() const;
-    mutable std::shared_ptr<const input_amplitudes_t> p_RE32F_IM32F_values_;
+    std::complex<float> from_AMP8I_PHS8I(const AMP8I_PHS8I_t&) const;
+    std::vector<std::complex<float>> from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>&) const;
+    std::vector<std::complex<float>> from_AMP8I_PHS8I(const std::span<const uint8_t>& input_amplitudes,
+        const std::span<const uint8_t>& input_values) const;
 };
 }
 }

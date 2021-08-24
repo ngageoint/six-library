@@ -125,10 +125,13 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
+using input_values_t = std::array<std::complex<float>, UINT8_MAX + 1>;
+using input_amplitudes_t = std::array<input_values_t, UINT8_MAX + 1>;
+
 // input_amplitudes_t is too big for the stack
-static std::unique_ptr<ImageData::input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
+static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
 {
-    auto retval = std::make_unique<ImageData::input_amplitudes_t>();
+    auto retval = std::make_unique<input_amplitudes_t>();
     auto& values = *retval;
     for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
     {
@@ -141,20 +144,21 @@ static std::unique_ptr<ImageData::input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F
     return retval;
 }
 
-const ImageData::input_amplitudes_t* ImageData::get_RE32F_IM32F_values() const
+static const input_amplitudes_t* get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable)
 {
-    const auto pAmplutideTable = amplitudeTable.get();
-    if (pAmplutideTable == nullptr)
+    if (pAmplitudeTable == nullptr)
     {
         static const auto RE32F_IM32F_values_no_amp = AMP8I_PHS8I_to_RE32F_IM32F_(nullptr);
         return RE32F_IM32F_values_no_amp.get();
     }
+    return nullptr;
+}
 
-    if (!p_RE32F_IM32F_values_)
-    {
-        p_RE32F_IM32F_values_ = AMP8I_PHS8I_to_RE32F_IM32F_(pAmplutideTable);
-    }
-    return p_RE32F_IM32F_values_.get();
+static inline std::complex<float> from_AMP8I_PHS8I_(uint8_t input_amplitude, uint8_t input_value,
+    const six::AmplitudeTable* pAmplitudeTable, const input_amplitudes_t* pValues)
+{
+    return pValues != nullptr ? (*pValues)[input_amplitude][input_value] :
+        Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, pAmplitudeTable);
 }
 
 std::complex<float> ImageData::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value) const
@@ -164,7 +168,51 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t
         throw std::runtime_error("pxielType must be AMP8I_PHS8I");
     }
 
-    //return Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, amplitudeTable.get());
-    const auto& values = *(get_RE32F_IM32F_values());
-    return values[input_amplitude][input_value];
+    auto const pAmplitudeTable = amplitudeTable.get();
+    auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
+    return from_AMP8I_PHS8I_(input_amplitude, input_value, pAmplitudeTable, pValues);
+}
+std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) const
+{
+    return from_AMP8I_PHS8I(input.first, input.second);
+}
+
+static inline std::complex<float> from_AMP8I_PHS8I_(const  ImageData::AMP8I_PHS8I_t& input,
+    const six::AmplitudeTable* pAmplitudeTable, const input_amplitudes_t* pValues)
+{
+    return from_AMP8I_PHS8I_(input.first, input.second, pAmplitudeTable, pValues);
+}
+std::vector<std::complex<float>> ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs) const
+{
+    // Can't cache the results because amplitudeTable could change at any time.
+    auto const pAmplitudeTable = amplitudeTable.get();
+    auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
+
+    std::vector<std::complex<float>> retval;
+    for (const auto& input : inputs)
+    {
+        retval.push_back(from_AMP8I_PHS8I_(input, pAmplitudeTable, pValues));
+    }
+    return retval;
+}
+
+std::vector<std::complex<float>> ImageData::from_AMP8I_PHS8I(const std::span<const uint8_t>& input_amplitudes,
+    const std::span<const uint8_t>& input_values) const
+{
+    if (input_amplitudes.size() != input_values.size())
+    {
+        throw std::invalid_argument("input_amplitudes.size() != input_values.size()");
+    }
+
+    // Can't cache the results because amplitudeTable could change at any time.
+    auto const pAmplitudeTable = amplitudeTable.get();
+    auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
+
+    std::vector<std::complex<float>> retval;
+    for (size_t i = 0; i < input_amplitudes.size(); i++)
+    {
+        auto result = from_AMP8I_PHS8I_(input_amplitudes[i], input_values[i], pAmplitudeTable, pValues);
+        retval.push_back(std::move(result));
+    }
+    return retval;
 }

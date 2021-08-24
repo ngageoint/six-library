@@ -214,20 +214,29 @@ TEST_CASE(test_8bit_ampphs)
     six::sicd::ImageData imageData;
     imageData.pixelType = six::PixelType::AMP8I_PHS8I;
 
+    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> inputs;
+    std::vector<std::complex<float>> expecteds;
     for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
     {
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
-            const auto expected = from_AMP8I_PHS8I(input_amplitude, input_value);
+            auto expected = from_AMP8I_PHS8I(input_amplitude, input_value);
 
-            const auto actual = imageData.from_AMP8I_PHS8I(input_amplitude, input_value);
+            six::sicd::ImageData::AMP8I_PHS8I_t input(input_amplitude, input_value);
+            const auto actual = imageData.from_AMP8I_PHS8I(input);
             TEST_ASSERT_EQ(expected, actual);
 
             const auto actual_utilities = six::sicd::Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, nullptr);
             TEST_ASSERT_EQ(expected, actual_utilities);
             TEST_ASSERT_EQ(actual_utilities, actual);
+
+            inputs.push_back(std::move(input));
+            expecteds.push_back(std::move(expected));
         }
     }
+
+    const auto actuals = imageData.from_AMP8I_PHS8I(inputs);
+    TEST_ASSERT(actuals == expecteds);
 }
 
 TEST_CASE(read_8bit_ampphs_with_table)
