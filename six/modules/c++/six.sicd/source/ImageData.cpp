@@ -184,6 +184,11 @@ static inline std::complex<float> from_AMP8I_PHS8I_(const  ImageData::AMP8I_PHS8
 }
 std::vector<std::complex<float>> ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs) const
 {
+    if (pixelType != PixelType::AMP8I_PHS8I)
+    {
+        throw std::runtime_error("pxielType must be AMP8I_PHS8I");
+    }
+
     // Can't cache the results because amplitudeTable could change at any time.
     auto const pAmplitudeTable = amplitudeTable.get();
     auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
@@ -199,6 +204,10 @@ std::vector<std::complex<float>> ImageData::from_AMP8I_PHS8I(const std::span<con
 std::vector<std::complex<float>> ImageData::from_AMP8I_PHS8I(const std::span<const uint8_t>& input_amplitudes,
     const std::span<const uint8_t>& input_values) const
 {
+    if (pixelType != PixelType::AMP8I_PHS8I)
+    {
+        throw std::runtime_error("pxielType must be AMP8I_PHS8I");
+    }
     if (input_amplitudes.size() != input_values.size())
     {
         throw std::invalid_argument("input_amplitudes.size() != input_values.size()");
