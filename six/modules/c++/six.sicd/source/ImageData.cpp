@@ -194,8 +194,9 @@ std::vector<std::complex<float>> ImageData::from_AMP8I_PHS8I(const std::span<con
     auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
 
     std::vector<std::complex<float>> retval;
-    for (const auto& input : inputs)
+    for (size_t i = 0; i < inputs.size(); i++) // (const auto& input : inputs)
     {
+        const auto& input = inputs[i]; // no iterators for std::span with old GCC
         retval.push_back(from_AMP8I_PHS8I_(input, pAmplitudeTable, pValues));
     }
     return retval;

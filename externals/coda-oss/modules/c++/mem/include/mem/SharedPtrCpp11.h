@@ -59,25 +59,19 @@ template <class T>
 class SharedPtr : public std::shared_ptr<T>
 {
 public:
-    SharedPtr() : std::shared_ptr<T>()
-    {
-    }
+    SharedPtr() = default;
+    ~SharedPtr() = default;
 
     using std::shared_ptr<T>::shared_ptr;
 
     using std::shared_ptr<T>::reset;
-
-    explicit SharedPtr(std::unique_ptr<T>&& ptr) :
-        std::shared_ptr<T>(ptr.release())
-    {
-    }
 
     SharedPtr(const SharedPtr&) = default;
     SharedPtr& operator=(const SharedPtr&) = default;
     SharedPtr(SharedPtr&&) = default;
     SharedPtr& operator=(SharedPtr&&) = default;
 
-    explicit SharedPtr(std::shared_ptr<T> ptr) : std::shared_ptr<T>(ptr) {}
+    SharedPtr(std::shared_ptr<T> ptr) : std::shared_ptr<T>(ptr) {}
     SharedPtr& operator=(const std::shared_ptr<T>& ptr)
     {
       std::shared_ptr<T>& base = *this;
