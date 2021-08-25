@@ -99,6 +99,9 @@
 
         #define CODA_OSS_disable_warning_system_header_push  __pragma(warning(push, 0))
 
+        // 4100 => 'unreferenced formal parameter'
+        #define CODA_OSS_UNREFERENCED_FORMAL_PARAMETER CODA_OSS_disable_warning(4100)
+
         // 4551 => 'function call missing argument list'
         #define CODA_OSS_FUNCTION_CALL_MISSING_ARG_LIST CODA_OSS_disable_warning(4551)
 
@@ -116,6 +119,7 @@
             CODA_OSS_disable_warning(-Wextra)
 
         // no such thing
+        #define CODA_OSS_UNREFERENCED_FORMAL_PARAMETER
         #define CODA_OSS_FUNCTION_CALL_MISSING_ARG_LIST
         #define CODA_OSS_DISABLE_UNREACHABLE_CODE
     #else

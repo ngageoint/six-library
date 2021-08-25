@@ -8,6 +8,14 @@ project(coda-oss)
 
 set(CMAKE_CXX_STANDARD 11)
 
+if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    # build and package with conan
+    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    conan_basic_setup()
+
+    include("${CMAKE_BINARY_DIR}/conan_paths.cmake")
+endif()
+
 if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     # this is the top level project
 

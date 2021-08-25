@@ -115,11 +115,11 @@ private:
 
     static
     int writeCallback(char* data,
-                      size_t size,
-                      size_t nmemb,
-                      std::string* writerData);
+                         size_t size,
+                         size_t nmemb,
+                         std::string* writerData);
 
-	static
+    static
     size_t writeBetterCallback(char* data,
                                size_t size,
                                size_t nmemb,

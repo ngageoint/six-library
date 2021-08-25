@@ -26,10 +26,21 @@
 #include "xml/lite/Element.h"
 #include <import/str.h>
 #include <import/mem.h>
+#include <sys/OS.h>
 
 xml::lite::Element::Element(const xml::lite::Element& node)
 {
     *this = node;
+}
+
+std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const std::string& qname, const std::string& uri, const std::string& characterData)
+{
+    constexpr auto encoding = sys::Platform == sys::PlatformType::Windows ? string_encoding::windows_1252 : string_encoding::utf_8;
+    return mem::make::unique<Element>(qname, uri, characterData, encoding);
+}
+std::unique_ptr<xml::lite::Element> xml::lite::Element::createU8(const std::string& qname, const std::string& uri, const std::string& characterData)
+{
+    return mem::make::unique<Element>(qname, uri,  str::to_u8string(characterData));
 }
 
 xml::lite::Element& xml::lite::Element::operator=(const xml::lite::Element& node)

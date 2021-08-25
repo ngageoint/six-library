@@ -1,3 +1,8 @@
+if (ENABLE_ZIP AND CONAN_PACKAGE_NAME)
+    # import targets from zlib conan package
+    find_package(coda-oss_zlib REQUIRED)
+endif()
+
 if (TARGET z AND TARGET minizip)
     set(MODULE_NAME zip)
 
@@ -9,4 +14,6 @@ if (TARGET z AND TARGET minizip)
     coda_add_tests(
         MODULE_NAME ${MODULE_NAME}
         DIRECTORY "tests")
+else()
+    message("zip will not be build since zlib + minizip were not enabled")
 endif()

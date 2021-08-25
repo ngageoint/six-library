@@ -7,6 +7,9 @@ __pycache__/
 install/
 install-*/
 target/
+
+# Conan
+modules/drivers/**/build
 test_package/build/
 
 # CMake
@@ -32,13 +35,14 @@ build/waf*/
 .cproject
 
 # Drivers
-modules/drivers/fftw/fftw-2.1.5/
+modules/drivers/fftw/fftw-2.1.*/
 modules/drivers/jpeg/jpeg-9/
+modules/drivers/jpeg/jpeg-9d/
 modules/drivers/j2k/openjpeg/openjpeg-2.3.*_mod/
-modules/drivers/pcre/pcre2-10.22/
-modules/drivers/uuid/e2fsprogs-1.40-uuid/
+modules/drivers/pcre/pcre2-10.*/
+modules/drivers/uuid/e2fsprogs-1.*-uuid/
 modules/drivers/xml/xerces/xerces-c-*/
-modules/drivers/zlib/zlib-1.2.7/
+modules/drivers/zlib/zlib-1.2.*/
 
 # VS
 .vs/
