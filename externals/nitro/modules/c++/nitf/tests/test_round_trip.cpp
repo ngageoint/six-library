@@ -40,15 +40,12 @@ class RowStreamer : public nitf::RowSourceCallback
 {
 public:
     RowStreamer(uint32_t band,
-                uint32_t numCols,
-                nitf::ImageReader reader) :
+        uint32_t numCols,
+        nitf::ImageReader reader) :
         mReader(reader),
-        mBand(band)
+        mBand(band),
+        mWindow(1, numCols, &mBand, 1)
     {
-        mWindow.setNumRows(1);
-        mWindow.setNumCols(numCols);
-        mWindow.setBandList(&mBand);
-        mWindow.setNumBands(1);
     }
 
     virtual void nextRow(uint32_t /*band*/, void* buffer)
@@ -60,8 +57,8 @@ public:
 
 private:
     nitf::ImageReader mReader;
-    nitf::SubWindow mWindow;
     uint32_t mBand;
+    nitf::SubWindow mWindow;
 };
 
 // RAII for managing a list of RowStreamer's

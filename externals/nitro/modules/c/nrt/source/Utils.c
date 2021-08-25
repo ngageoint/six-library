@@ -578,8 +578,18 @@ NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
         seconds = 99.0;
     }
 
-    NRT_SNPRINTF(buffer7, 8, "%02d%02d%02d%c", degrees, minutes,
-        (int)seconds, dir);
+    char degrees_buffer[11]; // "2147483647"
+    NRT_SNPRINTF(degrees_buffer, 11, "%02d", degrees);
+    char minutes_buffer[11];
+    NRT_SNPRINTF(minutes_buffer, 11, "%02d", minutes);
+    char seconds_buffer[11];
+    NRT_SNPRINTF(seconds_buffer, 11, "%02d", (int)seconds);
+
+    NRT_SNPRINTF(buffer7, 8, "%c%c%c%c%c%c%c",
+        degrees_buffer[0], degrees_buffer[1],
+        minutes_buffer[0], minutes_buffer[1],
+        seconds_buffer[0], seconds_buffer[1],
+        dir);
 }
 
 NRTAPI(NRT_BOOL) nrt_Utils_isGeographicLon(int degrees, int minutes, double seconds)
@@ -641,8 +651,18 @@ NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
         seconds = 99.0;
     }
 
-    NRT_SNPRINTF(buffer8, 9, "%03d%02d%02d%c", degrees, minutes,
-        (int)seconds, dir);
+    char degrees_buffer[11]; // "2147483647"
+    NRT_SNPRINTF(degrees_buffer, 11, "%03d", degrees);
+    char minutes_buffer[11];
+    NRT_SNPRINTF(minutes_buffer, 11, "%02d", minutes);
+    char seconds_buffer[11];
+    NRT_SNPRINTF(seconds_buffer, 11, "%02d", (int)seconds);
+
+    NRT_SNPRINTF(buffer8, 9, "%c%c%c%c%c%c%c%c",
+        degrees_buffer[0], degrees_buffer[1], degrees_buffer[2],
+        minutes_buffer[0], minutes_buffer[1],
+        seconds_buffer[0], seconds_buffer[1],
+        dir);
 }
 
 NRTPROT(void) nrt_Utils_decimalLatToCharArray(double decimal, char *buffer7)
