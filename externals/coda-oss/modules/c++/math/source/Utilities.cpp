@@ -21,9 +21,15 @@
  */
 #include "math/Utilities.h"
 
+#if !_WIN32 // TODO: what about Apple?
 // https://man7.org/linux/man-pages/man3/sincos.3.html
+#if !defined(_GNU_SOURCE)
 #define _GNU_SOURCE         /* See feature_test_macros(7) */
+#endif // _GNU_SOURCE
+#endif // _WIN32
+
 #include <math.h>
+#include <cmath>
 
 #include <except/Exception.h>
 #include <str/Convert.h>
