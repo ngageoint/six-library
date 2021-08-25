@@ -4171,7 +4171,9 @@ NITFPRIV(int) nitf_ImageIO_decodeBlockingMode(_nitf_ImageIO* nitf,
         }
         else if (nitf->numBands == 2
             && ((subhdr->bandInfo[0]->subcategory->raw[0] == 'I'
-                && subhdr->bandInfo[1]->subcategory->raw[0] == 'Q'))
+                && subhdr->bandInfo[1]->subcategory->raw[0] == 'Q') || 
+                (subhdr->bandInfo[0]->subcategory->raw[0] == 'M'
+                && subhdr->bandInfo[1]->subcategory->raw[0] == 'P'))
             && (nitf->compression
                 & (NITF_IMAGE_IO_COMPRESSION_NC
                     | NITF_IMAGE_IO_COMPRESSION_NM)))
@@ -5730,6 +5732,7 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
     cntl->bandSubset =
         (uint32_t *) NITF_MALLOC(subWindow->numBands *
                                     sizeof(uint32_t));
+
     if (cntl->bandSubset == NULL)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
