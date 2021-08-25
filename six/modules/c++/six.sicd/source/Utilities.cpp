@@ -40,6 +40,7 @@
 #include <six/sicd/SICDMesh.h>
 #include <str/Manip.h>
 #include <sys/Conf.h>
+#include <math/Utilities.h>
 #include <types/RowCol.h>
 
 
@@ -91,8 +92,11 @@ std::complex<float> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitu
     // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
     // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
     const auto angle = 2 * M_PI * P;
-    const auto real = A * cos(angle);
-    const auto imaginary = A * sin(angle);
+    double sin_angle, cos_angle;
+    math::SinCos(angle, sin_angle, cos_angle);
+
+    const auto real = A * cos_angle;
+    const auto imaginary = A * sin_angle;
     std::complex<float> S(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
     return S;
 }
