@@ -22,6 +22,11 @@
 #ifndef __SIX_IMAGE_DATA_H__
 #define __SIX_IMAGE_DATA_H__
 
+#include <array>
+#include <memory>
+#include <std/span>
+#include <utility>
+
 #include "logging/Logger.h"
 #include "six/Types.h"
 #include "six/Init.h"
@@ -88,6 +93,13 @@ struct ImageData
 
     bool validate(const GeoData& geoData, logging::Logger& log) const;
 
+    // It would be nice to cache the results, but amplitudeTable could change at any time.
+    using AMP8I_PHS8I_t = std::pair<uint8_t, uint8_t>;
+    std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value) const;
+    std::complex<float> from_AMP8I_PHS8I(const AMP8I_PHS8I_t&) const;
+    std::vector<std::complex<float>> from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>&) const;
+    std::vector<std::complex<float>> from_AMP8I_PHS8I(const std::span<const uint8_t>& input_amplitudes,
+        const std::span<const uint8_t>& input_values) const;
 };
 }
 }
