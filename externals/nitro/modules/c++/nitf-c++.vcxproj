@@ -124,6 +124,7 @@
     <ClInclude Include="nitf\include\nitf\Object.hpp" />
     <ClInclude Include="nitf\include\nitf\Pair.hpp" />
     <ClInclude Include="nitf\include\nitf\PluginRegistry.hpp" />
+    <ClInclude Include="nitf\include\nitf\Property.hpp" />
     <ClInclude Include="nitf\include\nitf\Reader.hpp" />
     <ClInclude Include="nitf\include\nitf\Record.hpp" />
     <ClInclude Include="nitf\include\nitf\RESegment.hpp" />

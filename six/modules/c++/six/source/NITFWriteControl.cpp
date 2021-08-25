@@ -26,6 +26,7 @@
 #include <string>
 
 #include <std/bit>
+#include <std/memory>
 
 #include <io/ByteStream.h>
 #include <math/Round.h>
@@ -292,9 +293,9 @@ void NITFWriteControl::save_(const TBufferList& imageData,
         const NITFImageInfo& info = *pInfo;
         std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
         const size_t numIS = imageSegments.size();
-        const auto pixelSize = info.getData()->getNumBytesPerPixel();
-        const size_t numCols = info.getData()->getNumCols();
         const size_t numChannels = info.getData()->getNumChannels();
+        const auto pixelSize = info.getData()->getNumBytesPerPixel() / numChannels;
+        const size_t numCols = info.getData()->getNumCols();
 
         nitf::ImageSegment imageSegment =
                 getRecord().getImages()[info.getStartIndex()];
@@ -330,14 +331,13 @@ void NITFWriteControl::save_(const TBufferList& imageData,
 
                 for (size_t chan = 0; chan < numChannels; ++chan)
                 {
-                    nitf::MemorySource ms(imageData[i] +
-                                                  pixelSize *
-                                                          segmentInfo.getFirstRow() *
-                                                          numCols,
-                                          bandSize,
-                                           gsl::narrow<int>(bandSize * chan),
-                                          gsl::narrow<int>(pixelSize),
-                                          0);
+                    // Assume that the bands are interleaved in memory.  This
+                    // makes sense for 24-bit 3-color data.
+                    const auto data = imageData[i] + pixelSize *  segmentInfo.getFirstRow() * numCols;
+                    const auto start = gsl::narrow<nitf::Off>(chan);
+                    const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
+                    const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
+                    nitf::MemorySource ms(data, bandSize, start, numBytesPerPixel, pixelSkip);
                     iSource.addBand(ms);
                 }
                 iWriter.attachSource(iSource);
@@ -357,7 +357,7 @@ void NITFWriteControl::save_(const TBufferList& imageData,
                                                segmentInfo.getFirstRow(),
                                                numCols,
                                                numChannels,
-                                               pixelSize,
+                                               pixelSize * numChannels,
                                                doByteSwap));
                 // Could set start index here
                 mWriter.setImageWriteHandler(static_cast<int>(
@@ -418,7 +418,7 @@ void NITFWriteControl::addDataAndWrite(
 
     // These must stick around until mWriter.write() is called since the
     // SegmentMemorySource's will be pointing to them
-    const std::unique_ptr<std::string[]> desStrs(new std::string[numDES]);
+    const auto desStrs = std::make_unique<std::string[]>(numDES);
 
     for (size_t ii = 0; ii < getContainer()->getNumData(); ++ii)
     {

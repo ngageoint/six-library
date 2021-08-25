@@ -25,6 +25,7 @@
 #include <string>
 #include <iostream>
 #include <string>
+#include <utility>
 
 #include <std/filesystem>
 
@@ -210,15 +211,32 @@ static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t inp
 
 TEST_CASE(test_8bit_ampphs)
 {
+    six::sicd::ImageData imageData;
+    imageData.pixelType = six::PixelType::AMP8I_PHS8I;
+
+    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> inputs;
+    std::vector<std::complex<float>> expecteds;
     for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
     {
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
-            const auto expected = from_AMP8I_PHS8I(input_amplitude, input_value);
-            const auto actual = six::sicd::Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, nullptr);
+            auto expected = from_AMP8I_PHS8I(input_amplitude, input_value);
+
+            six::sicd::ImageData::AMP8I_PHS8I_t input(input_amplitude, input_value);
+            const auto actual = imageData.from_AMP8I_PHS8I(input);
             TEST_ASSERT_EQ(expected, actual);
+
+            const auto actual_utilities = six::sicd::Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, nullptr);
+            TEST_ASSERT_EQ(expected, actual_utilities);
+            TEST_ASSERT_EQ(actual_utilities, actual);
+
+            inputs.push_back(std::move(input));
+            expecteds.push_back(std::move(expected));
         }
     }
+
+    const auto actuals = imageData.from_AMP8I_PHS8I(inputs);
+    TEST_ASSERT(actuals == expecteds);
 }
 
 TEST_CASE(read_8bit_ampphs_with_table)
@@ -326,17 +344,17 @@ static void sicd_read_data(const fs::path& inputPathname,
     const auto lastPixel = std::complex<float>(0);
     TEST_ASSERT_EQ(expectedLastPixel, lastPixel);
 }
-//static void sicd_read_data(const fs::path& inputPathname,
-//    int16_t expectedFirstPixel, int16_t expectedLastPixel)
-//{
-//    const auto buffer = sicd_read_data_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(expectedFirstPixel));
-//
-//    const int16_t firstPixel = 0;
-//    TEST_ASSERT_EQ(expectedFirstPixel, firstPixel);
-//
-//    const int16_t lastPixel = 0;
-//    TEST_ASSERT_EQ(expectedLastPixel, lastPixel);
-//}
+static void sicd_read_data(const fs::path& inputPathname,
+    int16_t expectedFirstPixel, int16_t expectedLastPixel)
+{
+    const auto buffer = sicd_read_data_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(expectedFirstPixel));
+
+    const int16_t firstPixel = 0;
+    TEST_ASSERT_EQ(expectedFirstPixel, firstPixel);
+
+    const int16_t lastPixel = 0;
+    TEST_ASSERT_EQ(expectedLastPixel, lastPixel);
+}
 TEST_CASE(sicd_read_data)
 {
     auto inputPathname = getNitfPath("sicd_50x50.nitf");
@@ -345,12 +363,12 @@ TEST_CASE(sicd_read_data)
     fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    //sicd_read_data(inputPathname, 0, 0);
+    sicd_read_data(inputPathname, 0, 0);
 
     subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    //sicd_read_data(inputPathname, 0, 0);
+    sicd_read_data(inputPathname, 0, 0);
 }
 
 TEST_CASE(test_readSicd)
@@ -364,22 +382,126 @@ TEST_CASE(test_readSicd)
     fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    //widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
+    widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
 
     subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    //widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
+    widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
 }
 
+static std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>& dims)
+{
+    std::vector<std::complex<float>> image;
+    image.reserve(dims.area());
+    for (size_t r = 0; r < dims.row; r++)
+    {
+        for (size_t c = 0; c < dims.col; c++)
+        {
+            image.push_back(std::complex<float>(r, c * -1.0));
+        }
+    }
+    return image;
+}
+static std::vector<std::pair<uint8_t, uint8_t>> make_AMP8I_PHS8I_image(const types::RowCol<size_t>& dims, const six::AmplitudeTable*)
+{
+    std::vector<std::pair<uint8_t, uint8_t>> image;
+    for (size_t r = 0; r < dims.row; r++)
+    {
+        for (size_t c = 0; c < dims.col; c++)
+        {
+            image.push_back(std::pair<uint8_t, uint8_t>(r, c));
+        }
+    }
+    return image;
+}
+
+struct image final
+{
+    std::vector<std::complex<float>> RE32F_IM32F;
+    std::vector<std::pair<uint8_t, uint8_t>> AMP8I_PHS8I;
+
+    const std::byte* data() const
+    {
+        const void* retval = nullptr;
+        if (!RE32F_IM32F.empty())
+        {
+            retval = RE32F_IM32F.data();
+            assert(AMP8I_PHS8I.empty());
+        }
+        else if (!AMP8I_PHS8I.empty())
+        {
+            retval = AMP8I_PHS8I.data();
+            assert(RE32F_IM32F.empty());
+        }
+        return static_cast<const std::byte*>(retval);
+    }
+};
+
+static image make_image(const types::RowCol<size_t>& dims, const six::Data& data)
+{
+    const auto pixelType = data.getPixelType();
+    six::AmplitudeTable* pAmpTable = pixelType == six::PixelType::AMP8I_PHS8I ? data.getAmplitudeTable() : nullptr;
+
+    image retval;
+    if (pixelType == six::PixelType::RE32F_IM32F)
+    {
+        retval.RE32F_IM32F = make_complex_image(dims);
+    }
+    else if (pixelType == six::PixelType::AMP8I_PHS8I)
+    {
+        retval.AMP8I_PHS8I = make_AMP8I_PHS8I_image(dims, pAmpTable);
+    }
+    else
+    {
+        throw std::invalid_argument("Unknown 'pixelType'.");
+    }
+
+    return retval;
+}
+
+static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)
+{
+    const types::RowCol<size_t> dims(2, 2);
+
+    constexpr auto dataType = six::DataType::COMPLEX;
+    six::XMLControlFactory::getInstance().addCreator(dataType, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+
+    std::unique_ptr<six::Data> data = six::sicd::Utilities::createFakeComplexData(pixelType, makeAmplitudeTable, &dims);
+    const auto image = make_image(dims, *data);
+
+    mem::SharedPtr<six::Container> container(new six::Container(dataType));
+    container->addData(std::move(data));
+
+    const auto pData = container->getData(0);
+    TEST_ASSERT_EQ(dims.row, pData->getNumRows());
+    TEST_ASSERT_EQ(dims.col, pData->getNumCols());
+
+    const six::Options writerOptions;
+    six::NITFWriteControl writer(writerOptions, container);
+
+    const std::vector<std::string> schemaPaths;
+    six::buffer_list buffers{ image.data() };
+    writer.save(buffers, outputName.string(), schemaPaths);
+}
+
+TEST_CASE(test_create_sicds_from_mem)
+{
+    setNitfPluginPath();
+
+    test_create_sicd_from_mem("test_create_sicd_from_mem_32f.sicd", six::PixelType::RE32F_IM32F);
+    //test_create_sicd_from_mem("test_create_sicd_from_mem_8i_amp.sicd", six::PixelType::AMP8I_PHS8I, true /*makeAmplitudeTable*/);
+    //test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
+}
 
 TEST_MAIN((void)argc;
     argv0 = fs::absolute(argv[0]);
     TEST_CHECK(valid_six_50x50);
-    //TEST_CHECK(test_8bit_ampphs);
-    //TEST_CHECK(read_8bit_ampphs_with_table);
-    //TEST_CHECK(read_8bit_ampphs_no_table);
+    TEST_CHECK(test_8bit_ampphs);
+    TEST_CHECK(read_8bit_ampphs_with_table);
+    TEST_CHECK(read_8bit_ampphs_no_table);
     TEST_CHECK(sicd_read_data);
     TEST_CHECK(test_readSicd);
+    TEST_CHECK(test_create_sicds_from_mem);
     )
 

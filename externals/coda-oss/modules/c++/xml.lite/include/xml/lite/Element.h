@@ -100,7 +100,7 @@ public:
      * \param characterData The character data (if any)
      */
     Element(const std::string& qname, const std::string& uri = "",
-            std::string characterData = "") :
+            const std::string& characterData = "") :
         Element(qname, uri, nullptr)
     {
         setCharacterData(characterData);
@@ -117,6 +117,11 @@ public:
     {
         setCharacterData(characterData);
     }
+
+    // string_encoding is assumed based on the platform: Windows-1252 or UTF-8.
+    static std::unique_ptr<Element> create(const std::string& qname, const std::string& uri = "", const std::string& characterData = "");
+    // Encoding of "characterData" is assumed based on the platform: Windows-1252 or UTF-8
+    static std::unique_ptr<Element> createU8(const std::string& qname, const std::string& uri = "", const std::string& characterData = "");
 
     //! Destructor
     virtual ~Element()

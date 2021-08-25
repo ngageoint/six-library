@@ -11,7 +11,6 @@
 #cmakedefine HAVE_SETENV @HAVE_SETENV@
 #cmakedefine HAVE_POSIX_MEMALIGN @HAVE_POSIX_MEMALIGN@
 #cmakedefine HAVE_MEMALIGN @HAVE_MEMALIGN@
-#cmakedefine BIGENDIAN @BIGENDIAN@
 #cmakedefine SIZEOF_SIZE_T @SIZEOF_SIZE_T@
 
 #endif /* _@tgt_munged_name@_CONFIG_H_ */

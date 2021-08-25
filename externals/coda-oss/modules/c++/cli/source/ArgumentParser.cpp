@@ -79,8 +79,12 @@ void writeArgumentHelp(std::ostream& out, const std::string& heading,
 }
 }
 
-cli::ArgumentParser::ArgumentParser() :
-    mHelpEnabled(true), mPrefixChar('-')
+cli::ArgumentParser::ArgumentParser(bool ignoreUnknownArguments,
+                                    std::ostream* iuOStream ) :
+    mHelpEnabled(true),
+    mPrefixChar('-'),
+    mIgnoreUnknownArguments(ignoreUnknownArguments),
+    mIgnoreUnknownOStream(iuOStream)
 {
 }
 
@@ -176,6 +180,19 @@ cli::ArgumentParser& cli::ArgumentParser::setProgram(const std::string& program)
     return *this;
 }
 
+cli::ArgumentParser& cli::ArgumentParser::setIgnoreUnknownArgumentsFlag(bool iuFlag)
+{
+    mIgnoreUnknownArguments = iuFlag;
+    return *this;
+}
+
+cli::ArgumentParser& cli::ArgumentParser::setIgnoreUnknownArgumentsOutputStream(
+         std::ostream* iuaOutstream)
+{
+    mIgnoreUnknownOStream = iuaOutstream;
+    return *this;
+}
+
 void cli::ArgumentParser::printHelp(std::ostream& out, bool andExit) const
 {
     FlagInfo flagInfo;
@@ -249,10 +266,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
     std::map<std::string, Argument*> longOptionsFlags;
     std::vector<Argument*> positionalArgs;
 
-    for (mem::VectorOfSharedPointers<cli::Argument>::const_iterator argIt =
-            mArgs.begin(); argIt != mArgs.end(); ++argIt)
+    for (auto& arg_ : mArgs)
     {
-        cli::Argument *arg = argIt->get();
+        cli::Argument* arg = arg_.get();
         std::string argVar = arg->getVariable();
 
         if (arg->isPositional())
@@ -404,8 +420,17 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 }
                 else
                 {
-                    throw except::Exception(Ctxt(FmtX("Invalid option: [%s]",
-                                                      argStr.c_str())));
+                    if (mIgnoreUnknownArguments)
+                    {
+                        *mIgnoreUnknownOStream << "Unknown arg: " << argStr
+                                               << std::endl;
+                        continue;
+                    }
+                    else
+                    {
+                        throw except::Exception(Ctxt(
+                                FmtX("Invalid option: [%s]", argStr.c_str())));
+                    }
                 }
             }
         }
@@ -437,11 +462,22 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 }
                 else
                 {
-                    throw except::Exception(Ctxt(FmtX("Invalid option: [%s]",
-                                                      argStr.c_str())));
+                    if (mIgnoreUnknownArguments)
+                    {
+                        *mIgnoreUnknownOStream << "Unknown arg: " << argStr
+                                               << std::endl;
+                        continue;
+                    }
+                    else
+                    {
+                        throw except::Exception(Ctxt(
+                                FmtX("Invalid option: [%s]", argStr.c_str())));
+                    }
+
                 }
             }
         }
+
 
         if (arg != NULL)
         {
@@ -450,11 +486,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
             {
             case cli::STORE:
             {
-                cli::Value
-                        *v =
-                                currentResults->hasValue(argVar) ? currentResults->getValue(
-                                                                                            argVar)
-                                                                 : new cli::Value;
+                cli::Value* v = currentResults->hasValue(argVar)
+                        ? currentResults->getValue(argVar)
+                        : new cli::Value;
                 int maxArgs = arg->getMaxArgs();
                 // risky, I know...
                 bool added = false;
@@ -509,11 +543,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
             {
                 if (optionsStr.empty())
                     parseError(FmtX("invalid sub option: [%s]", argVar.c_str()));
-                cli::Value
-                        *v =
-                                currentResults->hasValue(optionsStr) ? currentResults->getValue(
-                                                                                                optionsStr)
-                                                                     : new cli::Value;
+                cli::Value* v = currentResults->hasValue(optionsStr)
+                        ? currentResults->getValue(optionsStr)
+                        : new cli::Value;
                 if (i < s - 1)
                 {
                     std::string nextArg = explodedArgs[i + 1];
@@ -568,17 +600,23 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 }
             }
             if (lastPosVal)
+            {
                 lastPosVal->add(argStr);
+            }
             else
-                parseError("too many arguments");
+            {
+                if (!mIgnoreUnknownArguments)
+                {
+                    parseError("too many arguments");
+                }
+            }
         }
     }
 
     // add the defaults
-    for (mem::VectorOfSharedPointers<cli::Argument>::const_iterator it =
-            mArgs.begin(); it != mArgs.end(); ++it)
+    for (auto& arg_ : mArgs)
     {
-        cli::Argument *arg = it->get();
+        cli::Argument* arg = arg_.get();
         std::string argMeta = arg->getMetavar();
         std::string argVar = arg->getVariable();
         std::string argId = arg->isPositional() && !argMeta.empty() ? argMeta
@@ -705,10 +743,9 @@ void cli::ArgumentParser::processFlags(FlagInfo& info) const
         info.opHelps.push_back("show this help message and exit");
     }
 
-    for (mem::VectorOfSharedPointers<cli::Argument>::const_iterator it =
-            mArgs.begin(); it != mArgs.end(); ++it)
+    for (auto& arg_ : mArgs)
     {
-        cli::Argument *arg = it->get();
+        cli::Argument* arg = arg_.get();
         const std::string& argName = arg->getName();
         const cli::Action& argAction = arg->getAction();
         const std::vector<std::string>& argChoices = arg->getChoices();

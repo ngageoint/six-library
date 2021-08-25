@@ -1,0 +1,6 @@
+@PACKAGE_INIT@
+
+# import the openjpeg targets
+include("${CMAKE_CURRENT_LIST_DIR}/coda-oss_openjpegTargets.cmake")
+
+set(J2K_LIB @J2K_LIB@ CACHE INTERNAL "library providing J2K support")

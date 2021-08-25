@@ -24,6 +24,8 @@
 #define __SIO_LITE_READ_UTILS_H__
 
 #include <string>
+#include <memory>
+
 #include <sys/Conf.h>
 #include <except/Exception.h>
 #include <types/RowCol.h>
@@ -47,7 +49,7 @@ namespace lite
 template <typename InputT>
 void readSIO(const std::string& pathname,
              types::RowCol<size_t>& dims,
-             mem::ScopedArray<InputT>& image)
+             std::unique_ptr<InputT[]>& image)
 {
     sio::lite::FileReader reader(pathname);
     const sio::lite::FileHeader* const header(reader.getHeader());
@@ -76,7 +78,7 @@ void readSIO(const std::string& pathname,
 template <typename InputT>
 void readSIOVerifyDimensions(const std::string& pathname,
                              const types::RowCol<size_t>& dims,
-                             mem::ScopedArray<InputT>& image)
+                             std::unique_ptr<InputT[]>& image)
 {
     types::RowCol<size_t> theseDims;
     readSIO<InputT>(pathname, theseDims, image);

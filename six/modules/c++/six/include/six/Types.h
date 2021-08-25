@@ -23,6 +23,8 @@
 #define __SIX_TYPES_H__
 #pragma once
 
+#include <stdint.h>
+
 #include <vector>
 #include <limits>
 #include <string>
@@ -298,8 +300,8 @@ struct SCP
 struct LUT
 {
     std::vector<unsigned char> table;
-    size_t numEntries;
-    size_t elementSize;
+    size_t numEntries = 0;
+    size_t elementSize = 0;
 
     //!  Initialize with a number of entries and known output space
     LUT(size_t entries, size_t outputSpace) :
@@ -320,10 +322,7 @@ struct LUT
     }
 
     //! Initialize from nitf::LookupTable read from a NITF
-    LUT(const nitf::LookupTable& lookupTable) :
-        table(lookupTable.getEntries() * lookupTable.getTables()),
-        numEntries(lookupTable.getEntries()),
-        elementSize(lookupTable.getTables())
+    LUT(const nitf::LookupTable& lookupTable) : LUT(lookupTable.getEntries(), lookupTable.getTables())
     {
         // NITF stores the tables consecutively.
         // Need to interleave them for SIX
@@ -349,9 +348,7 @@ struct LUT
         }
     }
 
-    virtual ~LUT()
-    {
-    }
+    virtual ~LUT() = default;
 
     bool operator==(const LUT& rhs) const
     {
@@ -402,9 +399,14 @@ struct LUT
 struct AmplitudeTable final : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
-    AmplitudeTable() noexcept :
-        LUT(256, sizeof(double))
+    AmplitudeTable() noexcept : 
+        LUT(UINT8_MAX+1 /*i.e., 256*/, sizeof(double))
     {
+    }
+
+    size_t size() const
+    {
+        return numEntries;
     }
 
     bool operator==(const AmplitudeTable& rhs) const
@@ -418,10 +420,15 @@ struct AmplitudeTable final : public LUT
         return !(*this == rhs);
     }
 
-    double index(size_t ii) const
+    const double& index(size_t ii) const
     {
         const void* this_ii = (*this)[ii];
         return *static_cast<const double*>(this_ii);
+    }
+    double& index(size_t ii)
+    {
+        void* this_ii = (*this)[ii];
+        return *static_cast<double*>(this_ii);
     }
 
     AmplitudeTable* clone() const

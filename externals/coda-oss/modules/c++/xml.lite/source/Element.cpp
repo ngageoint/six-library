@@ -26,10 +26,21 @@
 #include "xml/lite/Element.h"
 #include <import/str.h>
 #include <import/mem.h>
+#include <sys/OS.h>
 
 xml::lite::Element::Element(const xml::lite::Element& node)
 {
     *this = node;
+}
+
+std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const std::string& qname, const std::string& uri, const std::string& characterData)
+{
+    constexpr auto encoding = sys::Platform == sys::PlatformType::Windows ? string_encoding::windows_1252 : string_encoding::utf_8;
+    return mem::make::unique<Element>(qname, uri, characterData, encoding);
+}
+std::unique_ptr<xml::lite::Element> xml::lite::Element::createU8(const std::string& qname, const std::string& uri, const std::string& characterData)
+{
+    return mem::make::unique<Element>(qname, uri,  str::to_u8string(characterData));
 }
 
 xml::lite::Element& xml::lite::Element::operator=(const xml::lite::Element& node)
@@ -261,27 +272,38 @@ void xml::lite::Element::getCharacterData(sys::U8string& result) const
     if (encoding == xml::lite::string_encoding::utf_8)
     {
         // already in UTF-8, no converstion necessary
-        result = str::castToU8string(mCharacterData);
+        result = str::c_str<sys::U8string::const_pointer>(mCharacterData); // copy
     }
     else if (encoding == xml::lite::string_encoding::windows_1252)
     {
-        str::fromWindows1252(mCharacterData, result);
+        result = str::fromWindows1252(mCharacterData);
+    }
+    else
+    {
+        throw std::logic_error("getCharacterData(): unknown encoding");
     }
 }
 
 static void writeCharacterData(io::OutputStream& stream,
-    const std::string& characterData, const sys::Optional<xml::lite::string_encoding>& encoding)
+    const std::string& characterData, const sys::Optional<xml::lite::string_encoding>& encoding_)
 {
-    if (getEncoding_(encoding) != xml::lite::string_encoding::utf_8)
+    const auto encoding = getEncoding_(encoding_);
+
+    if (encoding == xml::lite::string_encoding::windows_1252)
     {
-        std::string utf8; // need to convert before writing
-        str::fromWindows1252(characterData, utf8);
-        stream.write(utf8);
+        // need to convert before writing
+        const auto utf8 = str::fromWindows1252(characterData);
+        auto const pStr = str::c_str<std::string::const_pointer>(utf8);
+        stream.write(pStr);
     }
-    else
+    else if (encoding == xml::lite::string_encoding::utf_8)
     {
         // already UTF-8
         stream.write(characterData);    
+    }
+    else
+    {
+        throw std::logic_error("writeCharacterData(): unknown encoding");
     }
 }
 
@@ -503,5 +525,5 @@ void xml::lite::Element::setCharacterData(const std::string& characters, string_
 }
 void xml::lite::Element::setCharacterData(const sys::U8string& characters)
 {
-    setCharacterData(str::toString(characters), string_encoding::utf_8);
+    setCharacterData(str::c_str<std::string::const_pointer>(characters), string_encoding::utf_8);
 }

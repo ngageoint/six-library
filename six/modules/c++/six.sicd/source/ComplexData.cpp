@@ -21,6 +21,8 @@
  */
 #include "six/sicd/ComplexData.h"
 
+#include <assert.h>
+
 namespace six
 {
 namespace sicd
@@ -319,4 +321,30 @@ void ComplexData::fillDefaultFields()
     }
 }
 }
+}
+// Okay, little bit of a hack for now
+mem::ScopedCopyablePtr<six::LUT>& six::sicd::ComplexData::getDisplayLUT()
+{
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        throw except::Exception(Ctxt("Display LUT operation not supported"));
+    }
+    // throw except::Exception(Ctxt("Display LUT operation not supported"));
+
+    // imageData->amplitudeTable is a ScopedCloneablePtr which can't be returned by 
+    // reference as a ScopedCopyablePtr.  Instead, return something that is NULL
+    // calling code can then try getAmplitudeTable().
+    static mem::ScopedCopyablePtr<six::LUT> retval;
+    retval.reset(); // in case somebody changed it
+    return retval;
+}
+six::AmplitudeTable* six::sicd::ComplexData::getAmplitudeTable() const
+{
+    auto const retval = imageData->amplitudeTable.get();
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        assert(retval == nullptr);
+        throw except::Exception(Ctxt("Display LUT operation not supported"));
+    }
+    return retval;
 }
