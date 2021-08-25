@@ -102,13 +102,7 @@ XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, const std::string& characterData,
         XMLElem parent)
 {
-    constexpr auto encoding =
-#ifdef _WIN32
-    xml::lite::string_encoding::windows_1252;
-#else
-    xml::lite::string_encoding::utf_8;
-#endif
-    XMLElem elem = new xml::lite::Element(name, uri, characterData, encoding);
+    XMLElem elem = xml::lite::Element::create(name, uri, characterData).release();
     if (parent)
         parent->addChild(elem);
     return elem;
