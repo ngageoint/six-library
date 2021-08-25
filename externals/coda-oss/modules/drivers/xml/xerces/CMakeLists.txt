@@ -1,5 +1,16 @@
 set(TARGET_NAME xerces-c)
 
+if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    # use this CMakeLists.txt to build and package zlib with conan
+    project(coda-oss_xerces-c)
+    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    conan_basic_setup()
+    set(CODA_SKIP_SYSTEM_DEPENDENCIES ON)
+    include(CodaBuild.cmake)
+    coda_initialize_build()
+    coda_generate_package_config()
+endif()
+
 if (WIN32)
     set(EXTERNAL_DEPS ws2_32 advapi32)
 elseif (UNIX)
@@ -188,7 +199,7 @@ else()
             set(XERCES_SSIZE_T "int32_t")
         endif()
     endif()
-    set(XERCES_SIZE_MAX "SIZE_MAX") 
+    set(XERCES_SIZE_MAX "SIZE_MAX")
 
     set(LT_OBJDIR .libs/)
     set(PACKAGE xerces-c)
@@ -282,13 +293,9 @@ else()
         PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
                "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
                "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/config.h"
-            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
-            ${CODA_INSTALL_OPTION})
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xercesc/util/Xerces_autoconf_config.hpp"
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/util"
             ${CODA_INSTALL_OPTION})
-    configure_file("Xerces_autoconf_config.hpp.in" "")
     install(DIRECTORY "${SOURCE_DIR}/src/xercesc"
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
             ${CODA_INSTALL_OPTION}

@@ -3,7 +3,7 @@ import os
 
 class CodaOssTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    generators = "cmake_paths"
+    generators = ("cmake", "cmake_paths")
 
     def build(self):
         cmake = CMake(self)
