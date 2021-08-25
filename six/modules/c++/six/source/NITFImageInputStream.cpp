@@ -39,8 +39,7 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     //Check for optimization cases - RGB and IQ
     if ((nBands == 3 && imageMode[0] == 'P' && irep == "RGB" && bytesPerPixel
             == 1 && (ic == "NC" || ic == "NM")) || (nBands == 2 && imageMode[0]
-            == 'P' && bytesPerPixel == 4 && (ic == "NC" || ic == "NM") ))
-
+            == 'P' && bytesPerPixel == 4 && (ic == "NC" || ic == "NM")))
     {
         std::string subcategory = subheader.getBandInfo(0).subcategory;
         if (subcategory[0] == 'I')
