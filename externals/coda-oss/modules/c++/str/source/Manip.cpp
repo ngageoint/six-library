@@ -145,7 +145,7 @@ bool contains(const std::string& str, const std::string& match)
     return str.find(match) != std::string::npos;
 }
 
-inline bool isTest(const std::string& s, int (*is)(int))
+static inline bool isTest(const std::string& s, int (*is)(int))
 {
     for (const auto& ch : s)
     {
@@ -161,7 +161,7 @@ bool isAlpha(const std::string& s)
 }
 
 template<typename Pred>
-inline bool isTest(const std::string& s, int (*is1)(int), Pred is2)
+static inline bool isTest(const std::string& s, int (*is1)(int), Pred is2)
 {
     for (const auto& ch : s)
     {

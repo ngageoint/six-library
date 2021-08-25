@@ -1,5 +1,16 @@
 set(TARGET_NAME pcre2)
 
+if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    # use this CMakeLists.txt to build and package pcre2 with conan
+    project(coda-oss_pcre2)
+    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    conan_basic_setup()
+    set(CODA_SKIP_SYSTEM_DEPENDENCIES ON)
+    include(CodaBuild.cmake)
+    coda_initialize_build()
+    coda_generate_package_config()
+endif()
+
 if (PCRE_HOME)
     find_library(pcre2_PATH
                  pcre2-8

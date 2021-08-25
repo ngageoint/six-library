@@ -3,8 +3,8 @@ from waflib import Options, Utils
 from build import untarFile
 from os.path import join, exists
 
-sourcepath = 'jpeg-9'
-tarfile = 'jpegsrc.v9.tar'
+sourcepath = 'jpeg-9d'
+tarfile = 'jpegsrc.v9d.tar'
 
 # this fragment is needed because jpeglib.h doesn't include
 # the required headers on its own
