@@ -81,7 +81,7 @@ void ImageReader::setReadCaching()
     nitf_ImageReader_setReadCaching(getNativeOrThrow());
 }
 
-BufferList<std::byte> ImageReader::read(const nitf::SubWindow& window, size_t nbpp)
+BufferList<std::byte> ImageReader::read(const nitf::SubWindow& window, size_t /*nbpp*/)
 {
     // see py_ImageReader_read() and doRead() in test_buffered_read.cpp
 

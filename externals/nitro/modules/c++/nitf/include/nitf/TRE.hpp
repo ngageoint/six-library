@@ -20,11 +20,13 @@
  *
  */
 
-#ifndef __NITF_TRE_HPP__
-#define __NITF_TRE_HPP__
+#ifndef NITF_TRE_hpp_INCLUDED_
+#define NITF_TRE_hpp_INCLUDED_
+#pragma once
 
 #include <string>
 #include <cstddef>
+#include <type_traits>
 
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
@@ -169,9 +171,10 @@ struct NITRO_NITFCPP_API TREFieldIterator : public nitf::Object<nitf_TREEnumerat
  */
 DECLARE_CLASS(TRE)
 {
-    void setField(const std::string & key, const std::string & strValue, NITF_DATA * data, size_t dataLength, bool forceUpdate);
+    nitf_Field& nitf_TRE_getField(const std::string&) const;
+    void setFieldValue(const nitf_Field&, const std::string & tag, const std::string & data, bool forceUpdate);
 
-    public:
+public:
     typedef nitf::TREFieldIterator Iterator;
 
     //! Copy constructor
@@ -200,7 +203,11 @@ DECLARE_CLASS(TRE)
 
     // for unit-tests
     static nitf_TRE* create(const std::string & tag, const std::string & id, nitf_Error& error) noexcept;
-    static bool setField(nitf_TRE * tre, const std::string & tag, const std::string& data, nitf_Error& error) noexcept;
+    static bool setFieldValue(nitf_TRE*, const std::string & tag, const std::string& data, nitf_Error&) noexcept;
+    static bool setField(nitf_TRE* tre, const std::string & tag, const std::string & data, nitf_Error & error) noexcept
+    {
+        return setFieldValue(tre, tag, data, error);
+    }
 
     //! Clone
     nitf::TRE clone() const;
@@ -270,11 +277,68 @@ DECLARE_CLASS(TRE)
      * \param forceUpdate If true, recalculate the number and positions
      *                    of the TRE fields. See `updateFields()`
      */
+
+    // TRE fields use some of the "field" infrastructure, but have their own API.
+
+    void setFieldValue(const std::string& tag, const std::string& value, bool forceUpdate);
+    void setFieldValue(const std::string & tag, const char* value, bool forceUpdate);
+    void setFieldValue(const std::string& tag, const void* data, size_t dataLength, bool forceUpdate);
+
+    // This is wrong when T is "const char*" and the field is NITF_BINARY; sizeof(T) won't make sense.
+    // That's why there is a "const char*" overload above.
+    private:
+        template<typename T> struct can_call_setFieldValue : std::integral_constant<bool,
+            std::is_trivially_copyable<T>::value &&
+            !std::is_pointer<T>::value && !std::is_array<T>::value> {};
+    public:
+        template <typename T>
+        void setFieldValue(const std::string& tag, const T& value, bool forceUpdate)
+        {
+            const auto& field = nitf_TRE_getField(tag);
+            if (field.type == NITF_BINARY)
+            {
+                // In the C code, this is a call to memcpy(). be sure that is OK for T.
+                static_assert(can_call_setFieldValue<T>::value, "Can't use memcpy() with T.");
+                setFieldValue(tag, &value, sizeof(value), forceUpdate);
+            }
+            else
+            {
+                setFieldValue(field, tag, str::toString(value), forceUpdate);
+            }
+        }
+    // TODO: add overloads for e.g., std::vector<T> ???
+    //template <typename T>
+    //void setFieldValue(const std::string& tag, const std::vector<T>& value, bool forceUpdate)
+
     template <typename T>
-    void setField(std::string key, T value, bool forceUpdate = false)
+    void setField(const std::string& tag, const T& value, bool forceUpdate = false)
     {
-        setField(key, str::toString(value), &value, sizeof(value), forceUpdate);
+        setFieldValue(tag, value, forceUpdate);
     }
+    void setField(const std::string& tag, const void* data, size_t dataLength, bool forceUpdate = false)
+    {
+        setFieldValue(tag, data, dataLength, forceUpdate);
+    }
+
+    template<typename T>
+    const T& getFieldValue(const std::string& tag, T& value) const
+    {
+        value = static_cast<T>(getField(tag));
+        return value;
+    }
+    const std::string& getFieldValue(const std::string& tag, std::string& value, bool trim = false) const
+    {
+        value = getField(tag).toString(trim);
+        return value;
+    }
+    template<typename T>
+    const T getFieldValue(const std::string& tag) const
+    {
+        T retval;
+        getFieldValue(tag, retval);
+        return retval;
+    }
+
 
     /*!
      *  Does the field exist?
@@ -305,4 +369,4 @@ DECLARE_CLASS(TRE)
     mutable nitf_Error error{};
 };
 }
-#endif
+#endif // NITF_TRE_hpp_INCLUDED_
