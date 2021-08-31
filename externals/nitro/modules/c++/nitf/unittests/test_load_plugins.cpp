@@ -54,7 +54,7 @@ static const std::vector<std::string> all_plugins
 {
 #if _MSC_VER && NITRO_PCH
     // only build a handful in Visual Studio
-    "ACCHZB", "ACCPOB", "ACFTA", "AIMIDB", "CSCRNA", "HISTOA", "JITCID", "PTPRAA", "RPFHDR",
+    "ACCHZB", "ACCPOB", "ACFTA", "AIMIDB", "CSCRNA", "ENGRDA", "HISTOA", "JITCID", "PTPRAA", "RPFHDR",
 #else
     "ACCHZB", "BANDSB", "CSDIDA", "GEOLOB", "JITCID", "NBLOCA", "PIAPEB", "REGPTB", "RSMIDA", "STEROB",
     "ACCPOB", "BCKGDA", "CSEPHA", "GEOPSB", "MAPLOB", "OBJCTA", "PIAPRC", "RPC00B", "RSMPCA", "STREOB",
@@ -83,6 +83,10 @@ TEST_CASE(test_load_PTPRAA)
 {
     load_plugin("PTPRAA");
 }
+TEST_CASE(test_load_ENGRDA)
+{
+    load_plugin("ENGRDA");
+}
 
 TEST_CASE(test_load_all_plugins)
 {
@@ -102,6 +106,7 @@ TEST_MAIN(
     (void)argc;
     (void)argv;
     TEST_CHECK(test_load_PTPRAA);
+    TEST_CHECK(test_load_ENGRDA);
     TEST_CHECK(test_load_all_plugins_C);
     TEST_CHECK(test_load_all_plugins);
 )
