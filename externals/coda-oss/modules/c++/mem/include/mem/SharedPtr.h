@@ -20,11 +20,8 @@
  *
  */
 
-#ifndef CODA_OSS_mem_SharedPtr_h_INCLUDED_
-#define CODA_OSS_mem_SharedPtr_h_INCLUDED_
-#pragma once
-
-#include <memory>
+#ifndef __MEM_SHARED_PTR_H__
+#define __MEM_SHARED_PTR_H__
 
 #include <config/coda_oss_config.h>
 
@@ -37,15 +34,10 @@
 // as part of a SWIG interface will result in a missing template type error.
 namespace mem
 {
-#if !CODA_OSS_enable_mem_SharedPtr
-template <typename T>
-using SharedPtr = std::shared_ptr<T>;
-#else
 template<typename T>
 class SharedPtr;
-#endif
 }
 
 #include <mem/SharedPtrCpp11.h>
 
-#endif // CODA_OSS_mem_SharedPtr_h_INCLUDED_
+#endif
