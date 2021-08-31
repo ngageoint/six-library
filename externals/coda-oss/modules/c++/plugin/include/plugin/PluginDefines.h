@@ -24,6 +24,7 @@
 #ifndef __PLUGIN_DEFINES_H__
 #define __PLUGIN_DEFINES_H__
 
+#include <memory>
 #include <mem/SharedPtr.h>
 
 /* #define PLUGIN_CONSTRUCTOR_NAME "SpawnPlugin" */
@@ -72,14 +73,14 @@
  */
 #define PLUGIN_EXPOSE_IDENT(IDENT, BASE) \
     PLUGIN_HOOK const void* GetPluginIdentity() { \
-        static const mem::SharedPtr<BASE > ident(new IDENT()); \
+        static const std::shared_ptr<BASE > ident(new IDENT()); \
         return &ident;  \
     }
 
 
 #define PLUGIN_EXPOSE_IDENT_PRE(IDENT, PRE, BASE) \
     PLUGIN_HOOK const void* PRE##GetPluginIdentity() { \
-        static const mem::SharedPtr<BASE > ident(new IDENT()); \
+        static const std::shared_ptr<BASE > ident(new IDENT()); \
         return &ident;  \
     }
 

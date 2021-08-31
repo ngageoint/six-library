@@ -42,19 +42,20 @@ endfunction()
 
 # set the appropriate CRT link flags for MSVC builds
 macro(coda_setup_msvc_crt)
-    set(STATIC_CRT OFF CACHE BOOL "use static CRT library /MT, or /MTd for Debug (/MD or /MDd if off)")
-    if (CONAN_LINK_RUNTIME MATCHES "MT") # will also match MTd
-        set(STATIC_CRT ON CACHE BOOL "" FORCE)
-    endif()
-    if (STATIC_CRT)
-        set(CODA_MSVC_RUNTIME "/MT")
+    if (CONAN_PACKAGE_NAME)
+        # conan handles this
     else()
-        set(CODA_MSVC_RUNTIME "/MD")
+        set(STATIC_CRT OFF CACHE BOOL "use static CRT library /MT, or /MTd for Debug (/MD or /MDd if off)")
+        if (STATIC_CRT)
+            set(CODA_MSVC_RUNTIME "/MT")
+        else()
+            set(CODA_MSVC_RUNTIME "/MD")
+        endif()
+        foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
+            string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
+            string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
+        endforeach()
     endif()
-    foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
-        string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
-        string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
-    endforeach()
 endmacro()
 
 # Set up the global build configuration
@@ -108,8 +109,6 @@ macro(coda_initialize_build)
     if(NOT CODA_BUILD_BITSIZE)
         if (CMAKE_SIZEOF_VOID_P EQUAL 8)
             set(CODA_BUILD_BITSIZE "64" CACHE STRING "Select Architecture" FORCE)
-        elseif (CMAKE_SIZEOF_VOID_P EQUAL 4)
-            set(CODA_BUILD_BITSIZE "32" CACHE STRING "Select Architecture" FORCE)
         else()
             message(FATAL_ERROR "Unexpected Pointer Size: ${CMAKE_SIZEOF_VOID_P} Bytes")
         endif()
@@ -137,6 +136,7 @@ macro(coda_initialize_build)
     if (CODA_BUILD_TESTS)
         enable_testing()
     endif()
+    option(CODA_INSTALL_TESTS "install tests" ON)
 
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -178,8 +178,10 @@ macro(coda_initialize_build)
     # all targets should be installed using this export set
     set(CODA_EXPORT_SET_NAME "${CMAKE_PROJECT_NAME}Targets")
 
-    include(CodaFindSystemDependencies)
-    coda_find_system_dependencies()
+    if (NOT CODA_SKIP_SYSTEM_DEPENDENCIES)
+        include(CodaFindSystemDependencies)
+        coda_find_system_dependencies()
+    endif()
     coda_show_compile_options()
 endmacro()
 
@@ -379,10 +381,12 @@ function(coda_add_tests)
                 add_test(NAME ${test_target} COMMAND ${test_target} ${ARG_ARGS})
             endif()
 
-            # Install [unit]tests to separate subtrees
-            install(TARGETS ${test_target}
-                    ${CODA_INSTALL_OPTION}
-                    RUNTIME DESTINATION "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
+            if (CODA_INSTALL_TESTS)
+                # Install [unit]tests to separate subtrees
+                install(TARGETS ${test_target}
+                        ${CODA_INSTALL_OPTION}
+                        RUNTIME DESTINATION "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
+            endif()
         endforeach()
     endif()
 endfunction()
@@ -501,12 +505,14 @@ function(coda_add_module MODULE_NAME)
             RUNTIME DESTINATION "${CODA_STD_PROJECT_BIN_DIR}")
 
     # Set up install destination for headers
-    install(DIRECTORY "${CODA_STD_PROJECT_INCLUDE_DIR}/"
-            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/"
-            ${CODA_INSTALL_OPTION}
-            FILES_MATCHING
-                PATTERN "*.h"
-                PATTERN "*.hpp")
+    if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+        install(DIRECTORY "${CODA_STD_PROJECT_INCLUDE_DIR}/"
+                DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/"
+                ${CODA_INSTALL_OPTION}
+                FILES_MATCHING
+                    PATTERN "*.in" EXCLUDE
+                    PATTERN "*")
+    endif()
 
     # install conf directory, if present
     if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
@@ -521,78 +527,6 @@ function(coda_add_module MODULE_NAME)
     #    install(FILES ${PROJECT_BINARY_DIR}/${target_name}_export.h
     #            DESTINATION ${CODA_STD_PROJECT_INCLUDE_DIR})
     #endif()
-endfunction()
-
-
-# Add a plugin (dynamically loaded library) to the build
-#
-# Positional arguments:
-#   PLUGIN_NAME     - The name of this plugin
-#   MODULE_NAME     - The module associated with this plugin
-#
-# Single value arguments:
-#   VERSION         - Version number of this plugin
-#
-# Multi value arguments:
-#   DEPS            - List of dependencies for the plugin
-#   SOURCES         - Optional list of source files for compiling the plugin.
-#                     If not provided, the source files will be globbed.
-#
-function(coda_add_plugin PLUGIN_NAME MODULE_NAME)
-    cmake_parse_arguments(
-        ARG                         # prefix
-        ""                          # options
-        "VERSION"                   # single args
-        "DEPS;SOURCES"              # multi args
-        "${ARGN}"
-    )
-    if (ARG_UNPARSED_ARGUMENTS)
-        message(FATAL_ERROR "received unexpected argument(s): ${ARG_UNPARSED_ARGUMENTS}")
-    endif()
-
-    set(OUTPUT_NAME "${PLUGIN_NAME}-${TARGET_LANGUAGE}")
-    set(TARGET_NAME "${ARG_MODULE_NAME}_${OUTPUT_NAME}")
-
-    if (NOT ARG_SOURCES)
-        file(GLOB SOURCES "source/*.cpp" "source/*.c")
-    else()
-        set(SOURCES "${ARG_SOURCES}")
-    endif()
-
-    add_library(${TARGET_NAME} MODULE "${SOURCES}")
-    set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME ${OUTPUT_NAME})
-
-    if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include")
-        target_include_directories(${TARGET_NAME}
-            PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-                   "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
-    endif()
-
-    target_link_libraries(${TARGET_NAME} PUBLIC ${ARG_DEPS})
-
-    target_compile_definitions(${TARGET_NAME} PRIVATE PLUGIN_MODULE_EXPORTS)
-
-    install(TARGETS ${TARGET_NAME}
-            EXPORT ${CODA_EXPORT_SET_NAME}
-            ${CODA_INSTALL_OPTION}
-            LIBRARY DESTINATION "share/${ARG_MODULE_NAME}/plugins"
-            ARCHIVE DESTINATION "share/${ARG_MODULE_NAME}/plugins"
-            RUNTIME DESTINATION "share/${ARG_MODULE_NAME}/plugins")
-
-    # install headers
-    install(DIRECTORY "${CODA_STD_PROJECT_INCLUDE_DIR}/"
-            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/"
-            FILES_MATCHING
-                PATTERN "*.h"
-                PATTERN "*.hpp"
-            ${CODA_INSTALL_OPTION})
-
-    # install conf directory, if present
-    if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
-        install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/conf"
-                DESTINATION "share/${ARG_MODULE_NAME}"
-                ${CODA_INSTALL_OPTION})
-    endif()
 endfunction()
 
 

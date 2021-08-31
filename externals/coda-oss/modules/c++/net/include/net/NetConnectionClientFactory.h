@@ -85,7 +85,7 @@ public:
      */
     virtual NetConnection* newConnection(std::unique_ptr<Socket>&& toServer);
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    virtual NetConnection* newConnection(std::auto_ptr<Socket> toServer);
+    virtual NetConnection* newConnection(mem::auto_ptr<Socket> toServer);
     #endif
     /*!
      * Destroy a spawned connection.

@@ -23,6 +23,8 @@
 #ifndef __IO_PIPE_STREAM_H__
 #define __IO_PIPE_STREAM_H__
 
+#include <memory>
+
 #include <import/except.h>
 #include <str/Convert.h>
 #include <sys/Err.h>
@@ -101,7 +103,7 @@ protected:
 
 
     sys::ExecPipe mExecPipe;
-    mem::ScopedArray<char> mCharString;
+    std::unique_ptr<char[]> mCharString;
     size_t mBufferSize = DEFAULT_CHUNK_SIZE;
 };
 

@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <map>
+#include<memory>
 
 #include <import/sys.h>
 #include <import/str.h>
@@ -83,7 +84,7 @@ namespace plugin
 template<typename T> class BasicPluginManager
 {
 public:
-    typedef mem::SharedPtr<PluginIdentity<T> > SharedPluginIdentity;
+    typedef std::shared_ptr<PluginIdentity<T>> SharedPluginIdentity;
     typedef std::map<std::string,
                      std::pair<T*, SharedPluginIdentity> >
         HandlerRegistry;
@@ -253,7 +254,7 @@ public:
      *  \param identity The plugin identifier
      *  \param eh The error handler to be used if something bad happens
      */
-    virtual void addHandler(mem::SharedPtr<PluginIdentity<T> > identity,
+    virtual void addHandler(std::shared_ptr<PluginIdentity<T> > identity,
                             ErrorHandler* eh)
     {
         try

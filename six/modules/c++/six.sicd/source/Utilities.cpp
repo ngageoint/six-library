@@ -19,12 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "six/sicd/Utilities.h"
 
 #include <math.h>
+#include <assert.h>
 
 #include <map>
 #include <string>
 #include <functional>
+#include <std/memory>
 
 #include <except/Exception.h>
 #include <io/StringStream.h>
@@ -35,7 +38,6 @@
 #include <six/Utilities.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDMesh.h>
-#include <six/sicd/Utilities.h>
 #include <str/Manip.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
@@ -61,7 +63,8 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
     six::Region retv;
     setOffset(retv, offset);
     setDims(retv, extent);
-    retv.setBuffer(reinterpret_cast<std::byte*>(buffer));
+    void* buffer_ = buffer;
+    retv.setBuffer(static_cast<std::byte*>(buffer_));
     return retv;
 }
 }
@@ -745,16 +748,16 @@ void Utilities::getWidebandData(NITFReadControl& reader,
         const size_t elementsPerRow = extent.col * (1 + 1); // "real and imaginary"
         const SICD_readerAndConverter<int16_t> readerAndConverter(reader, imageNumber, offset, extent, elementsPerRow, buffer);
     }
-    //else if (pixelType == PixelType::AMP8I_PHS8I)
-    //{
-    //    const auto pAmplitudeTable = complexData.imageData->amplitudeTable.get();
+    else if (pixelType == PixelType::AMP8I_PHS8I)
+    {
+        const auto pAmplitudeTable = complexData.imageData->amplitudeTable.get();
 
-    //    // Each pixel is stored as a pair of numbers that represent the amplitude and phase
-    //    // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
-    //    // component, 2 bytes per pixel). 
-    //    const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
-    //    const SICD_readerAndConverter<uint8_t> readerAndConverter(reader, imageNumber, offset, extent, elementsPerRow, buffer, pAmplitudeTable);
-    //}
+        // Each pixel is stored as a pair of numbers that represent the amplitude and phase
+        // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
+        // component, 2 bytes per pixel). 
+        const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
+        const SICD_readerAndConverter<uint8_t> readerAndConverter(reader, imageNumber, offset, extent, elementsPerRow, buffer, pAmplitudeTable);
+    }
     else
     {
         throw except::Exception(
@@ -939,9 +942,10 @@ std::string Utilities::toXMLString(const ComplexData& data,
                                    &xmlRegistry);
 }
 
-mem::auto_ptr<ComplexData> Utilities::createFakeComplexData()
+std::unique_ptr<ComplexData> Utilities::createFakeComplexData(PixelType pixelType, bool makeAmplitudeTable,
+    const types::RowCol<size_t>* pDims)
 {
-    mem::auto_ptr<ComplexData> data(new six::sicd::ComplexData());
+    std::unique_ptr<ComplexData> data(std::make_unique<six::sicd::ComplexData>());
     data->position->arpPoly = six::PolyXYZ(5);
     data->position->arpPoly[0][0] = 4.45303008e6;
     data->position->arpPoly[1][0] = 5.75153322e3;
@@ -999,7 +1003,7 @@ mem::auto_ptr<ComplexData> Utilities::createFakeComplexData()
 
     data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
 
-    data->setPixelType(six::PixelType::RE32F_IM32F);
+    data->setPixelType(pixelType);
     data->imageData->validData = std::vector<six::RowColInt>(8);
     data->imageData->validData[0] = six::RowColInt(0, 0);
     data->imageData->validData[1] = six::RowColInt(0, 6163);
@@ -1009,6 +1013,21 @@ mem::auto_ptr<ComplexData> Utilities::createFakeComplexData()
     data->imageData->validData[5] = six::RowColInt(11790, 6163);
     data->imageData->validData[6] = six::RowColInt(11790, 0);
     data->imageData->validData[7] = six::RowColInt(1028, 0);
+
+    if (makeAmplitudeTable)
+    {
+        data->imageData->amplitudeTable.reset(new AmplitudeTable());
+        auto& amplitudeTable = *(data->imageData->amplitudeTable.get());
+        for (size_t i = 0; i < amplitudeTable.size(); i++)
+        {
+            amplitudeTable.index(i) = static_cast<double>(i);
+        }
+    }
+
+    if (pDims != nullptr)
+    {
+        setExtent(*data, *pDims);
+    }
 
     // The fields below here aren't really used,
     // just need to be filled with something so things are valid
@@ -1060,6 +1079,11 @@ mem::auto_ptr<ComplexData> Utilities::createFakeComplexData()
     data->pfa->kaz1 = 0;
     data->pfa->kaz2 = 0;
     return data;
+}
+mem::auto_ptr<ComplexData> Utilities::createFakeComplexData(const types::RowCol<size_t>* pDims)
+{
+    auto result = createFakeComplexData(PixelType::RE32F_IM32F, false /*makeAmplitudeTable*/, pDims);
+    return mem::auto_ptr<ComplexData>(result.release());
 }
 
 mem::auto_ptr<NoiseMesh> Utilities::getNoiseMesh(const NITFReadControl& reader)

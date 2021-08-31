@@ -204,7 +204,7 @@ TwoD<_T>::operator [] (size_t i)
         std::stringstream str;
         str << "index: " << i << " not within range [0..."
             << mCoef.size() << ")";
-        throw(except::IndexOutOfRangeException(Ctxt(str.str())));
+        throw except::IndexOutOfRangeException(Ctxt(str.str()));
     }
 }
 
