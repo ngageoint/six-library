@@ -40,7 +40,6 @@
 #include <six/sicd/SICDMesh.h>
 #include <str/Manip.h>
 #include <sys/Conf.h>
-#include <math/Utilities.h>
 #include <types/RowCol.h>
 
 

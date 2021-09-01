@@ -61,13 +61,12 @@ scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla) const
     double r = computeRadius(mylla);
     const double flatLat = computeLatitude(mylla.getLatRadians());
 
-    double coslat = cos(mylla.getLatRadians());
-    double coslon = cos(mylla.getLonRadians());
-    double cosflatlat = cos(flatLat);
-    double sinlat = sin(mylla.getLatRadians());
-    double sinlon = sin(mylla.getLonRadians());
-    double sinflatlat = sin(flatLat);
-
+    double sinlat, coslat;
+    math::SinCos(mylla.getLatRadians(), sinlat, coslat);
+    double sinlon, coslon;
+    math::SinCos(mylla.getLonRadians(), sinlon, coslon);
+    double sinflatlat, cosflatlat;
+    math::SinCos(flatLat, sinflatlat, cosflatlat);
 
     ecef[0] = (r * cosflatlat * coslon) + (mylla.getAlt() * coslat * coslon);
     ecef[1] = (r * cosflatlat * sinlon) + (mylla.getAlt() * coslat * sinlon);

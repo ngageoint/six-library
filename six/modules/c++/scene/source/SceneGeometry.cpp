@@ -106,10 +106,10 @@ void SceneGeometry::initialize()
     // Transform mRefPosition to LLA; compute 'up'
     const LatLonAlt lla = Utilities::ecefToLatLon(mPo);
 
-    double sinLat = sin(lla.getLatRadians());
-    double cosLat = cos(lla.getLatRadians());
-    double sinLon = sin(lla.getLonRadians());
-    double cosLon = cos(lla.getLonRadians());
+    double sinLat, cosLat;
+    math::SinCos(lla.getLatRadians(), sinLat, cosLat);
+    double sinLon, cosLon;
+    math::SinCos(lla.getLonRadians(), sinLon, cosLon);
 
     // mZg is also up
     mZg[0] = cosLat * cosLon;
@@ -399,8 +399,8 @@ SceneGeometry::getGroundResolution(const types::RgAz<double>& res) const
     const double rotAngleRad =
             getRotationAngle() * math::Constants::DEGREES_TO_RADIANS;
 
-    const double cosRot = cos(rotAngleRad);
-    const double sinRot = sin(rotAngleRad);
+    double sinRot, cosRot;
+    math::SinCos(rotAngleRad, sinRot, cosRot);
     const double sin2Rot = sin(2 * rotAngleRad);
     const double secGraz = 1.0 / cos(grazingAngleRad);
     const double tanGraz = tan(grazingAngleRad);
