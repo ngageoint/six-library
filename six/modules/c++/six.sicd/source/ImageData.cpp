@@ -125,22 +125,39 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
+static std::vector<ImageData::RE32F_IM32F_Value> RE32F_IM32F_Values(const six::AmplitudeTable* pAmplitudeTable)
+{
+    std::vector<ImageData::RE32F_IM32F_Value> retval;
+    for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
+    {
+        ImageData::RE32F_IM32F_Value v;
+        v.amplitude = gsl::narrow<uint8_t>(input_amplitude);
+
+        for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
+        {
+            v.value = gsl::narrow<uint8_t>(input_value);
+            v.result = Utilities::from_AMP8I_PHS8I(v.amplitude, v.value, pAmplitudeTable);
+            retval.push_back(v);
+        }
+    }
+    return retval;
+}
+
 using input_values_t = std::array<std::complex<float>, UINT8_MAX + 1>;
 using input_amplitudes_t = std::array<input_values_t, UINT8_MAX + 1>;
 
 // input_amplitudes_t is too big for the stack
 static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
 {
+    auto values = RE32F_IM32F_Values(pAmplitudeTable);
+
     auto retval = std::make_unique<input_amplitudes_t>();
-    auto& values = *retval;
-    for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
+    auto& array = *retval;
+    for (auto&& v : values)
     {
-        for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
-        {
-            auto cx_result = Utilities::from_AMP8I_PHS8I(gsl::narrow<uint8_t>(input_amplitude), gsl::narrow<uint8_t>(input_value), pAmplitudeTable);
-            values[input_amplitude][input_value] = std::move(cx_result);
-        }
+        array[v.amplitude][v.value] = std::move(v.result);
     }
+
     return retval;
 }
 
@@ -225,4 +242,17 @@ std::vector<std::complex<float>> ImageData::from_AMP8I_PHS8I(const std::span<con
         retval.push_back(std::move(result));
     }
     return retval;
+}
+
+std::vector< ImageData::AMP8I_PHS8I_t>  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& /*cx_floats*/) const
+{
+    return std::vector<ImageData::AMP8I_PHS8I_t>();
+}
+void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& result) const
+{
+    result = to_AMP8I_PHS8I(cx_floats);
+}
+void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& /*cx_floats*/, std::vector<uint8_t>& /*amplitudes*/, std::vector<uint8_t>& /*values*/) const
+{
+
 }

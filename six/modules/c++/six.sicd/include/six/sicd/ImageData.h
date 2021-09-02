@@ -93,13 +93,24 @@ struct ImageData
 
     bool validate(const GeoData& geoData, logging::Logger& log) const;
 
+    using cx_float = std::complex<float>;
+    struct RE32F_IM32F_Value final
+    {
+        cx_float result;
+        uint8_t amplitude;
+        uint8_t value;
+    };
+
     // It would be nice to cache the results, but amplitudeTable could change at any time.
     using AMP8I_PHS8I_t = std::pair<uint8_t, uint8_t>;
-    std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value) const;
-    std::complex<float> from_AMP8I_PHS8I(const AMP8I_PHS8I_t&) const;
-    std::vector<std::complex<float>> from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>&) const;
-    std::vector<std::complex<float>> from_AMP8I_PHS8I(const std::span<const uint8_t>& input_amplitudes,
-        const std::span<const uint8_t>& input_values) const;
+    cx_float from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value) const;
+    cx_float from_AMP8I_PHS8I(const AMP8I_PHS8I_t&) const;
+    std::vector<cx_float> from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>&) const;
+    std::vector<cx_float> from_AMP8I_PHS8I(const std::span<const uint8_t>& input_amplitudes, const std::span<const uint8_t>& input_values) const;
+
+    std::vector<AMP8I_PHS8I_t> to_AMP8I_PHS8I(const std::span<const cx_float>&) const;
+    void to_AMP8I_PHS8I(const std::span<const cx_float>&, std::vector<AMP8I_PHS8I_t>&) const;
+    void to_AMP8I_PHS8I(const std::span<const cx_float>&, std::vector<uint8_t>& amplitudes, std::vector<uint8_t>& values) const;
 };
 }
 }

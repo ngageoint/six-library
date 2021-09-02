@@ -37,8 +37,12 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <queue>
 #include <complex>
 
+#include <std/memory>
+
+#if _MSC_VER
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 
 namespace KDTree
 {
