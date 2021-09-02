@@ -25,9 +25,10 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "KDTree.h"
+#include "six/sicd/KDTree.h"
 
 #include <math.h>
+#include <assert.h>
 
 #include <algorithm>
 #include <limits>
@@ -39,7 +40,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 
-namespace Kdtree
+namespace KDTree
 {
     template<typename TNode>
     const typename TNode::value_type& index(const TNode& p, size_t i);
@@ -68,8 +69,24 @@ namespace Kdtree
     }
 }
 
-namespace Kdtree
+namespace KDTree
 {
+    // for passing points to the constructor of kdtree
+    struct Node final
+    {
+        using value_type = double;
+    private:
+        std::vector<value_type> value_;
+    public:
+        Node() = default;
+        Node(value_type x, value_type y) : value_({ x, y }) {}
+        //Node(value_type x, value_type y, value_type z) : value_({ x, y, z }) {}
+
+        value_type& index(size_t i) { return value_[i]; }
+        const value_type& index(size_t i) const { return value_[i]; }
+        size_t size() const { return value_.size(); }
+    };
+
     inline double& index(Node& p, size_t i)
     {
         return p.index(i);
@@ -84,7 +101,7 @@ namespace Kdtree
     }
 }
 
-namespace Kdtree
+namespace KDTree
 {
     using CxNode = std::complex<float>;
 
@@ -121,21 +138,21 @@ namespace Kdtree
     }
 }
 
-namespace Kdtree
+namespace KDTree
 {
     //--------------------------------------------------------------
     // internal node structure used by kdtree
     //--------------------------------------------------------------
     template<typename TNode>
-    struct Tkdtree_node final
+    struct Ttree_node final
     {
-        Tkdtree_node() = delete;
-        Tkdtree_node(const Tkdtree_node&) = delete;
-        Tkdtree_node& operator=(const Tkdtree_node&) = delete;
-        Tkdtree_node(Tkdtree_node&&) = default;
-        Tkdtree_node& operator=(Tkdtree_node&&) = default;
-        Tkdtree_node(const TNode& lo, const TNode& up, size_t cd) : cutdim(cd), lobound(lo), upbound(up) {}
-        ~Tkdtree_node() = default;
+        Ttree_node() = delete;
+        Ttree_node(const Ttree_node&) = delete;
+        Ttree_node& operator=(const Ttree_node&) = delete;
+        Ttree_node(Ttree_node&&) = default;
+        Ttree_node& operator=(Ttree_node&&) = default;
+        Ttree_node(const TNode& lo, const TNode& up, size_t cd) : cutdim(cd), lobound(lo), upbound(up) {}
+        ~Ttree_node() = default;
 
         // index of node data in kdtree array "allnodes"
         size_t dataindex = 0;
@@ -145,8 +162,8 @@ namespace Kdtree
         // double cutval; // == point[cutdim]
         TNode point;
         //  roots of the two subtrees
-        std::unique_ptr<Tkdtree_node> loson;
-        std::unique_ptr<Tkdtree_node> hison;
+        std::unique_ptr<Ttree_node> loson;
+        std::unique_ptr<Ttree_node> hison;
         // bounding rectangle of this node's subtree
         TNode lobound, upbound;
 
@@ -163,11 +180,11 @@ namespace Kdtree
     // from "allnodes" from which the subtree is to be built
     //--------------------------------------------------------------
     template<typename TNode>
-    static std::unique_ptr<Tkdtree_node<TNode>> build_tree_(size_t depth, size_t a, size_t b,
+    static std::unique_ptr<Ttree_node<TNode>> build_tree_(size_t depth, size_t a, size_t b,
         std::vector<TNode>& allnodes, size_t dimension, TNode& lobound, TNode& upbound)
     {
         const auto cutdim = depth % dimension;
-        auto pNode = std::make_unique<Tkdtree_node<TNode>>(lobound, upbound, cutdim);
+        auto pNode = std::make_unique<Ttree_node<TNode>>(lobound, upbound, cutdim);
         if (b - a <= 1)
         {
             pNode->set_point(allnodes, a);
@@ -203,7 +220,7 @@ namespace Kdtree
         return pNode;
     }
     template<typename TNode>
-    static std::unique_ptr<Tkdtree_node<TNode>> build_tree(std::vector<TNode>& allnodes, size_t dimension, TNode& lobound, TNode& upbound)
+    static std::unique_ptr<Ttree_node<TNode>> build_tree(std::vector<TNode>& allnodes, size_t dimension, TNode& lobound, TNode& upbound)
     {
         constexpr size_t depth = 0;
         constexpr size_t a = 0;
@@ -227,11 +244,11 @@ namespace Kdtree
     };
 
     template<typename TNode>
-    class KdTree final
+    class Tree final
     {
         using node_t = TNode;
         using value_type = typename TNode::value_type;
-        using kdtree_node = Tkdtree_node<node_t>;
+        using tree_node = Ttree_node<node_t>;
 
         // helper variable for keeping track of subtree bounding box
         node_t lobound, upbound;
@@ -246,7 +263,7 @@ namespace Kdtree
         // under *node*. Updates the heap (class member) *neighborheap*.
         // returns "true" when no nearer neighbor elsewhere possible
         //--------------------------------------------------------------
-        bool neighbor_search(const node_t& point, const kdtree_node& node, size_t k) const
+        bool neighbor_search(const node_t& point, const tree_node& node, size_t k) const
         {
             const auto curdist = distance(point, node.point);
             if (neighborheap->size() < k) {
@@ -267,7 +284,7 @@ namespace Kdtree
                     if (neighbor_search(point, *(node.hison), k)) return true;
             }
             // second search on farther side, if necessary
-            value_type dist;
+            value_type dist{ 0 };
             if (neighborheap->size() < k) {
                 dist = std::numeric_limits<value_type>::max();
             }
@@ -292,12 +309,12 @@ namespace Kdtree
 
         static value_type coordinate_distance(const node_t& p, const node_t& q, size_t i)
         {
-            return Kdtree::coordinate_distance(p, q, i);
+            return KDTree::coordinate_distance(p, q, i);
         }
 
         // returns true when the bounds of *node* overlap with the
         // ball with radius *dist* around *point*
-        bool bounds_overlap_ball(const node_t& point, value_type dist, const kdtree_node& node) const
+        bool bounds_overlap_ball(const node_t& point, value_type dist, const tree_node& node) const
         {
             value_type distsum = 0.0;
             for (size_t i = 0; i < dimension; i++)
@@ -316,7 +333,7 @@ namespace Kdtree
 
         // returns true when the bounds of *node* completely contain the
         // ball with radius *dist* around *point*
-        bool ball_within_bounds(const node_t& point, value_type dist, const kdtree_node& node) const
+        bool ball_within_bounds(const node_t& point, value_type dist, const tree_node& node) const
         {
             for (size_t i = 0; i < dimension; i++)
             {
@@ -329,18 +346,18 @@ namespace Kdtree
 
         const size_t dimension;
         std::vector<node_t> allnodes;
-        std::unique_ptr<const kdtree_node> root;
+        std::unique_ptr<const tree_node> root;
 
     public:
         //--------------------------------------------------------------
        // destructor and constructor of kdtree
        //--------------------------------------------------------------
-        ~KdTree() = default;
-        KdTree(const KdTree&) = delete;
-        KdTree& operator=(const KdTree&) = delete;
-        KdTree(KdTree&&) = delete;
-        KdTree& operator=(KdTree&&) = delete;
-        KdTree(std::vector<node_t>&& nodes)
+        ~Tree() = default;
+        Tree(const Tree&) = delete;
+        Tree& operator=(const Tree&) = delete;
+        Tree(Tree&&) = delete;
+        Tree& operator=(Tree&&) = delete;
+        Tree(std::vector<node_t>&& nodes)
             : dimension(size(nodes[0])), allnodes(std::move(nodes))
         {
             // compute global bounding box
@@ -357,7 +374,7 @@ namespace Kdtree
             }
 
             // build tree recursively
-            root = Kdtree::build_tree(allnodes, dimension, lobound, upbound);
+            root = KDTree::build_tree(allnodes, dimension, lobound, upbound);
         }
 
         //--------------------------------------------------------------
@@ -415,56 +432,66 @@ namespace Kdtree
     };
 }  // namespace Kdtree
 
-namespace Kdtree
+
+namespace six
 {
-    template<>
-    struct Tree<Node>::Impl final
+    namespace sicd
     {
-        KdTree<Node> tree;
-        Impl(std::vector<Node>&& nodes) : tree(std::move(nodes)) { }
-        Impl(const Impl&) = delete;
-        Impl& operator=(const Impl&) = delete;
-        Impl(Impl&&) = delete;
-        Impl& operator=(Impl&&) = delete;
-    };
+        using Node = ::KDTree::Node;
 
-    Tree<Node>::Tree(std::vector<Node>&& nodes)
-        : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
-    Tree<Node>::~Tree() = default;
 
-    void Tree<Node>::nearest_neighbor(const Node& point, Node& result)
-    {
-        std::vector<Node> r;
-        pImpl->tree.k_nearest_neighbors(point, 1, r);
-        assert(r.size() == 1);
-        result = r[0];
+        template<>
+        struct KDTree<Node>::Impl final
+        {
+            ::KDTree::Tree<Node> tree;
+            Impl(std::vector<Node>&& nodes) : tree(std::move(nodes)) { }
+            Impl(const Impl&) = delete;
+            Impl& operator=(const Impl&) = delete;
+            Impl(Impl&&) = delete;
+            Impl& operator=(Impl&&) = delete;
+        };
+
+        KDTree<Node>::KDTree(std::vector<Node>&& nodes)
+            : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
+        KDTree<Node>::~KDTree() = default;
+
+        void KDTree<Node>::nearest_neighbor(const Node& point, Node& result)
+        {
+            std::vector<Node> r;
+            pImpl->tree.k_nearest_neighbors(point, 1, r);
+            assert(r.size() == 1);
+            result = r[0];
+        }
     }
 }
 
-namespace Kdtree
+namespace six
 {
-    using CxNode = std::complex<float>;
-
-    template<>
-    struct Tree<CxNode>::Impl final
+    namespace sicd
     {
-        KdTree<CxNode> tree;
-        Impl(std::vector<CxNode>&& nodes) : tree(std::move(nodes)) { }
-        Impl(const Impl&) = delete;
-        Impl& operator=(const Impl&) = delete;
-        Impl(Impl&&) = delete;
-        Impl& operator=(Impl&&) = delete;
-    };
+        using CxNode = std::complex<float>;
 
-    Tree<CxNode>::Tree(std::vector<CxNode>&& nodes)
-        : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
-    Tree<CxNode>::~Tree() = default;
+        template<>
+        struct KDTree<CxNode>::Impl final
+        {
+            ::KDTree::Tree<CxNode> tree;
+            Impl(std::vector<CxNode>&& nodes) : tree(std::move(nodes)) { }
+            Impl(const Impl&) = delete;
+            Impl& operator=(const Impl&) = delete;
+            Impl(Impl&&) = delete;
+            Impl& operator=(Impl&&) = delete;
+        };
 
-    void Tree<CxNode>::nearest_neighbor(const CxNode& point, CxNode& result)
-    {
-        std::vector<CxNode> r;
-        pImpl->tree.k_nearest_neighbors(point, 1, r);
-        assert(r.size() == 1);
-        result = r[0];
+        KDTree<CxNode>::KDTree(std::vector<CxNode>&& nodes)
+            : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
+        KDTree<CxNode>::~KDTree() = default;
+
+        void KDTree<CxNode>::nearest_neighbor(const CxNode& point, CxNode& result)
+        {
+            std::vector<CxNode> r;
+            pImpl->tree.k_nearest_neighbors(point, 1, r);
+            assert(r.size() == 1);
+            result = r[0];
+        }
     }
 }
