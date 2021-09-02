@@ -259,7 +259,7 @@ static std::vector<ImageData::KDNode> get_KDNodes(const six::AmplitudeTable* pAm
     }
 }
 
-std::vector<ImageData::AMP8I_PHS8I_t>  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats) const
+std::vector<ImageData::AMP8I_PHS8I_t> ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats) const
 {
     // create all of of the possible KDNodes values
     auto const pAmplitudeTable = amplitudeTable.get();
@@ -281,8 +281,4 @@ std::vector<ImageData::AMP8I_PHS8I_t>  ImageData::to_AMP8I_PHS8I(const std::span
 void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& result) const
 {
     result = to_AMP8I_PHS8I(cx_floats);
-}
-void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& /*cx_floats*/, std::vector<uint8_t>& /*amplitudes*/, std::vector<uint8_t>& /*values*/) const
-{
-
 }

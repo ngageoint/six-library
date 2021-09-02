@@ -237,6 +237,18 @@ TEST_CASE(test_8bit_ampphs)
 
     const auto actuals = imageData.from_AMP8I_PHS8I(inputs);
     TEST_ASSERT(actuals == expecteds);
+
+
+    // we should now be able to convert the cx_floats back to amp/value
+    const auto amp8i_phs8i = imageData.to_AMP8I_PHS8I(actuals);
+    TEST_ASSERT_EQ(actuals.size(), amp8i_phs8i.size());
+    for (size_t i = 0; i < actuals.size(); i++)
+    {
+        const auto& v = amp8i_phs8i[i];
+        const auto result = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, nullptr);
+        const auto& expected = actuals[i];
+        TEST_ASSERT_EQ(expected, result);
+    }
 }
 
 TEST_CASE(read_8bit_ampphs_with_table)

@@ -110,7 +110,6 @@ struct ImageData
 
     std::vector<AMP8I_PHS8I_t> to_AMP8I_PHS8I(const std::span<const cx_float>&) const;
     void to_AMP8I_PHS8I(const std::span<const cx_float>&, std::vector<AMP8I_PHS8I_t>&) const;
-    void to_AMP8I_PHS8I(const std::span<const cx_float>&, std::vector<uint8_t>& amplitudes, std::vector<uint8_t>& values) const;
 };
 }
 }
