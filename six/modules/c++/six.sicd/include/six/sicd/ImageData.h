@@ -94,15 +94,15 @@ struct ImageData
     bool validate(const GeoData& geoData, logging::Logger& log) const;
 
     using cx_float = std::complex<float>;
-    struct RE32F_IM32F_Value final
+    using AMP8I_PHS8I_t = std::pair<uint8_t, uint8_t>;
+    struct KDNode final
     {
+        using value_type = typename cx_float::value_type;
         cx_float result;
-        uint8_t amplitude;
-        uint8_t value;
+        AMP8I_PHS8I_t amp_and_value;
     };
 
     // It would be nice to cache the results, but amplitudeTable could change at any time.
-    using AMP8I_PHS8I_t = std::pair<uint8_t, uint8_t>;
     cx_float from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value) const;
     cx_float from_AMP8I_PHS8I(const AMP8I_PHS8I_t&) const;
     std::vector<cx_float> from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>&) const;

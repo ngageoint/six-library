@@ -29,6 +29,7 @@
 #include "six/sicd/GeoData.h"
 #include "six/sicd/ImageData.h"
 #include "six/sicd/Utilities.h"
+#include "six/sicd/KDTree.h"
 
 using namespace six;
 using namespace six::sicd;
@@ -125,18 +126,18 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
-static std::vector<ImageData::RE32F_IM32F_Value> RE32F_IM32F_Values(const six::AmplitudeTable* pAmplitudeTable)
+static std::vector<ImageData::KDNode> make_KDNodes(const six::AmplitudeTable* pAmplitudeTable)
 {
-    std::vector<ImageData::RE32F_IM32F_Value> retval;
+    std::vector<ImageData::KDNode> retval;
     for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
     {
-        ImageData::RE32F_IM32F_Value v;
-        v.amplitude = gsl::narrow<uint8_t>(input_amplitude);
+        ImageData::KDNode v;
+        v.amp_and_value.first = gsl::narrow<uint8_t>(input_amplitude);
 
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
-            v.value = gsl::narrow<uint8_t>(input_value);
-            v.result = Utilities::from_AMP8I_PHS8I(v.amplitude, v.value, pAmplitudeTable);
+            v.amp_and_value.second = gsl::narrow<uint8_t>(input_value);
+            v.result = Utilities::from_AMP8I_PHS8I(v.amp_and_value.first, v.amp_and_value.second, pAmplitudeTable);
             retval.push_back(v);
         }
     }
@@ -149,13 +150,13 @@ using input_amplitudes_t = std::array<input_values_t, UINT8_MAX + 1>;
 // input_amplitudes_t is too big for the stack
 static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
 {
-    auto values = RE32F_IM32F_Values(pAmplitudeTable);
+    auto nodes = make_KDNodes(pAmplitudeTable);
 
     auto retval = std::make_unique<input_amplitudes_t>();
-    auto& array = *retval;
-    for (auto&& v : values)
+    auto& values = *retval;
+    for (auto&& n : nodes)
     {
-        array[v.amplitude][v.value] = std::move(v.result);
+        values[n.amp_and_value.first][n.amp_and_value.second] = std::move(n.result);
     }
 
     return retval;
@@ -244,9 +245,38 @@ std::vector<std::complex<float>> ImageData::from_AMP8I_PHS8I(const std::span<con
     return retval;
 }
 
-std::vector< ImageData::AMP8I_PHS8I_t>  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& /*cx_floats*/) const
+static std::vector<ImageData::KDNode> get_KDNodes(const six::AmplitudeTable* pAmplitudeTable)
 {
-    return std::vector<ImageData::AMP8I_PHS8I_t>();
+    if (pAmplitudeTable == nullptr)
+    {
+        static const auto nodes_no_amp = make_KDNodes(nullptr);
+        // KDTree needs a copy; make that here
+        return nodes_no_amp;
+    }
+    else
+    {
+        return make_KDNodes(pAmplitudeTable);
+    }
+}
+
+std::vector<ImageData::AMP8I_PHS8I_t>  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats) const
+{
+    // create all of of the possible KDNodes values
+    auto const pAmplitudeTable = amplitudeTable.get();
+    auto nodes = get_KDNodes(pAmplitudeTable);
+
+    // make the KDTree to quickly find the nearest neighbor
+    const KDTree<KDNode> tree(std::move(nodes));
+    
+    std::vector<ImageData::AMP8I_PHS8I_t> retval;
+    for (const auto& cx_float : cx_floats)
+    {
+        KDNode result;
+        tree.nearest_neighbor(KDNode{ cx_float }, result);
+        retval.push_back(std::move(result.amp_and_value));
+    }
+
+    return retval;
 }
 void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& result) const
 {

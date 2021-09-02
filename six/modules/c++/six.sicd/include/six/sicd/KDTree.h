@@ -9,7 +9,7 @@ namespace six
 {
     namespace sicd
     {
-        // currently only implemented for std::complex<float>
+        // currently only implemented for certain types; see KDTree.cpp
         template<typename TNode>
         class KDTree final
         {
@@ -24,7 +24,7 @@ namespace six
             KDTree& operator=(KDTree&&) = default;
 
             // https://en.wikipedia.org/wiki/K-d_tree
-            void nearest_neighbor(const TNode& point, TNode& result);
+            void nearest_neighbor(const TNode& point, TNode& result) const;
         };
     }
 }

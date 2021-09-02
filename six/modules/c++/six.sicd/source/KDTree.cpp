@@ -39,6 +39,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 #include <std/memory>
 
+#include "six/sicd/ImageData.h"
+
 #if _MSC_VER
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
@@ -139,6 +141,33 @@ namespace KDTree
         assert(size(p) == size(q));
         assert(size(p) == 2);
         return coordinate_distance(p, q, 0) + coordinate_distance(p, q, 1);
+    }
+}
+
+namespace KDTree
+{
+    using KDNode_t = six::sicd::ImageData::KDNode;
+    inline CxNode::value_type& index(KDNode_t& p, size_t i)
+    {
+        return index(p.result, i);
+    }
+    inline const CxNode::value_type& index(const KDNode_t& p, size_t i)
+    {
+        return index(p.result, i);
+    }
+    inline size_t size(const KDNode_t& p)
+    {
+        return size(p.result);
+    }
+
+    // Euklidean distance (L2 norm)
+    inline CxNode::value_type coordinate_distance(const KDNode_t& p, const KDNode_t& q, size_t i)
+    {
+        return coordinate_distance(p.result, q.result, i);
+    }
+    inline CxNode::value_type distance(const KDNode_t& p, const KDNode_t& q)
+    {
+        return distance(p.result, q.result);
     }
 }
 
@@ -259,7 +288,7 @@ namespace KDTree
         // helper variables and functions for k nearest neighbor search
         using nn4heap_t = nn4heap<value_type>;
         using priority_queue = std::priority_queue<nn4heap_t, std::vector<nn4heap_t>, typename nn4heap_t::compare>;
-        priority_queue* neighborheap;
+        mutable priority_queue* neighborheap;
         std::vector<size_t> range_result;
 
         //--------------------------------------------------------------
@@ -390,7 +419,7 @@ namespace KDTree
         // derived from KdNodePredicate. When Null (default, no search
         // predicate is applied).
         //--------------------------------------------------------------
-        void k_nearest_neighbors(const node_t& point, size_t k, std::vector<node_t>& result)
+        void k_nearest_neighbors(const node_t& point, size_t k, std::vector<node_t>& result) const
         {
             result.clear();
             if (k < 1) return;
@@ -459,7 +488,7 @@ namespace six
             : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
         KDTree<Node>::~KDTree() = default;
 
-        void KDTree<Node>::nearest_neighbor(const Node& point, Node& result)
+        void KDTree<Node>::nearest_neighbor(const Node& point, Node& result) const
         {
             std::vector<Node> r;
             pImpl->tree.k_nearest_neighbors(point, 1, r);
@@ -490,9 +519,40 @@ namespace six
             : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
         KDTree<CxNode>::~KDTree() = default;
 
-        void KDTree<CxNode>::nearest_neighbor(const CxNode& point, CxNode& result)
+        void KDTree<CxNode>::nearest_neighbor(const CxNode& point, CxNode& result) const 
         {
             std::vector<CxNode> r;
+            pImpl->tree.k_nearest_neighbors(point, 1, r);
+            assert(r.size() == 1);
+            result = r[0];
+        }
+    }
+}
+
+namespace six
+{
+    namespace sicd
+    {
+        using KDNode_t = six::sicd::ImageData::KDNode;
+
+        template<>
+        struct KDTree<KDNode_t>::Impl final
+        {
+            ::KDTree::Tree<KDNode_t> tree;
+            Impl(std::vector<KDNode_t>&& nodes) : tree(std::move(nodes)) { }
+            Impl(const Impl&) = delete;
+            Impl& operator=(const Impl&) = delete;
+            Impl(Impl&&) = delete;
+            Impl& operator=(Impl&&) = delete;
+        };
+
+        KDTree<KDNode_t>::KDTree(std::vector<KDNode_t>&& nodes)
+            : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
+        KDTree<KDNode_t>::~KDTree() = default;
+
+        void KDTree<KDNode_t>::nearest_neighbor(const KDNode_t& point, KDNode_t& result) const
+        {
+            std::vector<KDNode_t> r;
             pImpl->tree.k_nearest_neighbors(point, 1, r);
             assert(r.size() == 1);
             result = r[0];
