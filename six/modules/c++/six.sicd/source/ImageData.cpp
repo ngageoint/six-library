@@ -269,8 +269,10 @@ std::vector<ImageData::AMP8I_PHS8I_t> ImageData::to_AMP8I_PHS8I(const std::span<
     const KDTree<KDNode> tree(std::move(nodes));
     
     std::vector<ImageData::AMP8I_PHS8I_t> retval;
-    for (const auto& cx_float : cx_floats)
+    for (size_t i = 0; i < cx_floats.size(); i++) // for (const auto& cx_float : cx_floats)
     {
+        const auto& cx_float = cx_floats[i]; // no iterators for std::span with old GCC
+
         KDNode result;
         tree.nearest_neighbor(KDNode{ cx_float }, result);
         retval.push_back(std::move(result.amp_and_value));

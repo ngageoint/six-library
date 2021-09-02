@@ -484,10 +484,13 @@ namespace six
             Impl& operator=(Impl&&) = delete;
         };
 
+        template<>
         KDTree<Node>::KDTree(std::vector<Node>&& nodes)
             : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
+        template<>
         KDTree<Node>::~KDTree() = default;
 
+        template<>
         void KDTree<Node>::nearest_neighbor(const Node& point, Node& result) const
         {
             std::vector<Node> r;
@@ -515,10 +518,13 @@ namespace six
             Impl& operator=(Impl&&) = delete;
         };
 
+        template<>
         KDTree<CxNode>::KDTree(std::vector<CxNode>&& nodes)
             : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
+        template<>
         KDTree<CxNode>::~KDTree() = default;
 
+        template<>
         void KDTree<CxNode>::nearest_neighbor(const CxNode& point, CxNode& result) const 
         {
             std::vector<CxNode> r;
@@ -546,10 +552,13 @@ namespace six
             Impl& operator=(Impl&&) = delete;
         };
 
+        template<>
         KDTree<KDNode_t>::KDTree(std::vector<KDNode_t>&& nodes)
             : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
+        template<>
         KDTree<KDNode_t>::~KDTree() = default;
 
+        template<>
         void KDTree<KDNode_t>::nearest_neighbor(const KDNode_t& point, KDNode_t& result) const
         {
             std::vector<KDNode_t> r;
