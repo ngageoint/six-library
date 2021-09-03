@@ -5,18 +5,20 @@
 #include <vector>
 #include <memory>
 
+#include "six/sicd/ImageData.h" // can't forward declare nested KDNode
+
 namespace six
 {
     namespace sicd
     {
-        // currently only implemented for certain types; see KDTree.cpp
-        template<typename TNode>
         class KDTree final
         {
             struct Impl;
             std::unique_ptr<Impl> pImpl;
         public:
-            KDTree(std::vector<TNode>&&);
+            using node_t = ImageData::KDNode;
+
+            KDTree(std::vector<node_t>&&);
             ~KDTree();
             KDTree(const KDTree&) = delete;
             KDTree& operator=(const KDTree&) = delete;
@@ -24,7 +26,7 @@ namespace six
             KDTree& operator=(KDTree&&) = default;
 
             // https://en.wikipedia.org/wiki/K-d_tree
-            void nearest_neighbor(const TNode& point, TNode& result) const;
+            void nearest_neighbor(const node_t& point, node_t& result) const;
         };
     }
 }

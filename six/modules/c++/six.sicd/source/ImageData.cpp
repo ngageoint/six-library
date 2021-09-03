@@ -266,7 +266,7 @@ std::vector<ImageData::AMP8I_PHS8I_t> ImageData::to_AMP8I_PHS8I(const std::span<
     auto nodes = get_KDNodes(pAmplitudeTable);
 
     // make the KDTree to quickly find the nearest neighbor
-    const KDTree<KDNode> tree(std::move(nodes));
+    const KDTree tree(std::move(nodes));
     
     std::vector<ImageData::AMP8I_PHS8I_t> retval;
     for (size_t i = 0; i < cx_floats.size(); i++) // for (const auto& cx_float : cx_floats)

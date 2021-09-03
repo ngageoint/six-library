@@ -48,126 +48,28 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 namespace KDTree
 {
-    template<typename TNode>
-    const typename TNode::value_type& index(const TNode& p, size_t i);
-
-    template<typename TNode>
-    inline size_t size(const TNode& p);
-
-    // Euklidean distance (L2 norm)
-    template<typename TNode>
-    inline typename TNode::value_type coordinate_distance(const TNode& p, const TNode& q, size_t i)
-    {
-        const auto x = index(p, i);
-        const auto y = index(q, i);
-        return (x - y) * (x - y);
-    }
-    template<typename TNode>
-    static typename TNode::value_type distance(const TNode& p, const TNode& q)
-    {
-        assert(size(p) == size(q));
-        typename TNode::value_type dist{ 0 };
-        for (size_t i = 0; i < size(p); i++)
-        {
-            dist += coordinate_distance(p, q, i);
-        }
-        return dist;
-    }
-}
-
-namespace KDTree
-{
-    // for passing points to the constructor of kdtree
-    struct Node final
-    {
-        using value_type = double;
-    private:
-        std::vector<value_type> value_;
-    public:
-        Node() = default;
-        Node(value_type x, value_type y) : value_({ x, y }) {}
-        //Node(value_type x, value_type y, value_type z) : value_({ x, y, z }) {}
-
-        value_type& index(size_t i) { return value_[i]; }
-        const value_type& index(size_t i) const { return value_[i]; }
-        size_t size() const { return value_.size(); }
-    };
-
-    inline double& index(Node& p, size_t i)
+    using node_t = six::sicd::KDTree::node_t;
+    inline node_t::value_type& index(node_t& p, size_t i)
     {
         return p.index(i);
     }
-    inline const double& index(const Node& p, size_t i)
+    inline const node_t::value_type& index(const node_t& p, size_t i)
     {
         return p.index(i);
     }
-    inline size_t size(const Node& p)
+    inline size_t size(const node_t& p)
     {
         return p.size();
     }
-}
-
-namespace KDTree
-{
-    using CxNode = std::complex<float>;
-
-    CxNode::value_type& index(CxNode& p, size_t i)
-    {
-        using value_t = CxNode::value_type;
-        // https://en.cppreference.com/w/cpp/numeric/complex
-        return i == 0 ? reinterpret_cast<value_t(&)[2]>(p)[0] : reinterpret_cast<value_t(&)[2]>(p)[1];
-    }
-    inline const  CxNode::value_type& index(const CxNode& p, size_t i)
-    {
-        using value_t = const CxNode::value_type;
-        // https://en.cppreference.com/w/cpp/numeric/complex
-        return i == 0 ? reinterpret_cast<value_t(&)[2]>(p)[0] : reinterpret_cast<value_t(&)[2]>(p)[1];
-    }
-
-    constexpr size_t size(const CxNode&)
-    {
-        return 2;
-    }
 
     // Euklidean distance (L2 norm)
-    inline CxNode::value_type coordinate_distance(const CxNode& p, const CxNode& q, size_t i)
+    inline node_t::value_type coordinate_distance(const node_t& p, const node_t& q, size_t i)
     {
-        const auto x = index(p, i);
-        const auto y = index(q, i);
-        return (x - y) * (x - y);
+        return node_t::coordinate_distance(p, q, i);
     }
-    static CxNode::value_type distance(const CxNode& p, const CxNode& q)
+    inline node_t::value_type distance(const node_t& p, const node_t& q)
     {
-        assert(size(p) == size(q));
-        assert(size(p) == 2);
-        return coordinate_distance(p, q, 0) + coordinate_distance(p, q, 1);
-    }
-}
-
-namespace KDTree
-{
-    using KDNode_t = six::sicd::ImageData::KDNode;
-    inline CxNode::value_type& index(KDNode_t& p, size_t i)
-    {
-        return index(p.result, i);
-    }
-    inline const CxNode::value_type& index(const KDNode_t& p, size_t i)
-    {
-        return index(p.result, i);
-    }
-    inline size_t size(const KDNode_t& p)
-    {
-        return size(p.result);
-    }
-
-    // Euklidean distance (L2 norm)
-    inline CxNode::value_type coordinate_distance(const KDNode_t& p, const KDNode_t& q, size_t i)
-    {
-        return coordinate_distance(p.result, q.result, i);
-    }
-    inline CxNode::value_type distance(const KDNode_t& p, const KDNode_t& q)
-    {
-        return distance(p.result, q.result);
+        return node_t::distance(p, q);
     }
 }
 
@@ -470,98 +372,23 @@ namespace six
 {
     namespace sicd
     {
-        using Node = ::KDTree::Node;
-
-
-        template<>
-        struct KDTree<Node>::Impl final
+        struct KDTree::Impl final
         {
-            ::KDTree::Tree<Node> tree;
-            Impl(std::vector<Node>&& nodes) : tree(std::move(nodes)) { }
+            ::KDTree::Tree<node_t> tree;
+            Impl(std::vector<node_t>&& nodes) : tree(std::move(nodes)) { }
             Impl(const Impl&) = delete;
             Impl& operator=(const Impl&) = delete;
             Impl(Impl&&) = delete;
             Impl& operator=(Impl&&) = delete;
         };
 
-        template<>
-        KDTree<Node>::KDTree(std::vector<Node>&& nodes)
+        KDTree::KDTree(std::vector<node_t>&& nodes)
             : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
-        template<>
-        KDTree<Node>::~KDTree() = default;
+        KDTree::~KDTree() = default;
 
-        template<>
-        void KDTree<Node>::nearest_neighbor(const Node& point, Node& result) const
+        void KDTree::nearest_neighbor(const node_t& point, node_t& result) const
         {
-            std::vector<Node> r;
-            pImpl->tree.k_nearest_neighbors(point, 1, r);
-            assert(r.size() == 1);
-            result = r[0];
-        }
-    }
-}
-
-namespace six
-{
-    namespace sicd
-    {
-        using CxNode = std::complex<float>;
-
-        template<>
-        struct KDTree<CxNode>::Impl final
-        {
-            ::KDTree::Tree<CxNode> tree;
-            Impl(std::vector<CxNode>&& nodes) : tree(std::move(nodes)) { }
-            Impl(const Impl&) = delete;
-            Impl& operator=(const Impl&) = delete;
-            Impl(Impl&&) = delete;
-            Impl& operator=(Impl&&) = delete;
-        };
-
-        template<>
-        KDTree<CxNode>::KDTree(std::vector<CxNode>&& nodes)
-            : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
-        template<>
-        KDTree<CxNode>::~KDTree() = default;
-
-        template<>
-        void KDTree<CxNode>::nearest_neighbor(const CxNode& point, CxNode& result) const 
-        {
-            std::vector<CxNode> r;
-            pImpl->tree.k_nearest_neighbors(point, 1, r);
-            assert(r.size() == 1);
-            result = r[0];
-        }
-    }
-}
-
-namespace six
-{
-    namespace sicd
-    {
-        using KDNode_t = six::sicd::ImageData::KDNode;
-
-        template<>
-        struct KDTree<KDNode_t>::Impl final
-        {
-            ::KDTree::Tree<KDNode_t> tree;
-            Impl(std::vector<KDNode_t>&& nodes) : tree(std::move(nodes)) { }
-            Impl(const Impl&) = delete;
-            Impl& operator=(const Impl&) = delete;
-            Impl(Impl&&) = delete;
-            Impl& operator=(Impl&&) = delete;
-        };
-
-        template<>
-        KDTree<KDNode_t>::KDTree(std::vector<KDNode_t>&& nodes)
-            : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
-        template<>
-        KDTree<KDNode_t>::~KDTree() = default;
-
-        template<>
-        void KDTree<KDNode_t>::nearest_neighbor(const KDNode_t& point, KDNode_t& result) const
-        {
-            std::vector<KDNode_t> r;
+            std::vector<node_t> r;
             pImpl->tree.k_nearest_neighbors(point, 1, r);
             assert(r.size() == 1);
             result = r[0];

@@ -22,6 +22,8 @@
 #ifndef __SIX_IMAGE_DATA_H__
 #define __SIX_IMAGE_DATA_H__
 
+#include <assert.h>
+
 #include <array>
 #include <memory>
 #include <std/span>
@@ -100,6 +102,38 @@ struct ImageData
         using value_type = typename cx_float::value_type;
         cx_float result;
         AMP8I_PHS8I_t amp_and_value;
+
+        value_type& index(size_t i)
+        {
+            assert(i <= 1);
+            // https://en.cppreference.com/w/cpp/numeric/complex
+            return reinterpret_cast<value_type(&)[2]>(result)[i];
+        }
+        const value_type& index(size_t i) const
+        {
+            assert(i <= 1);
+            // https://en.cppreference.com/w/cpp/numeric/complex
+            return reinterpret_cast<const value_type(&)[2]>(result)[i];
+        }
+
+        constexpr size_t size() const
+        {
+            return 2;
+        }
+
+        // Euklidean distance (L2 norm)
+        static KDNode::value_type coordinate_distance(const KDNode& p, const KDNode& q, size_t i)
+        {
+            const auto x = p.index(i);
+            const auto y = q.index(i);
+            return (x - y) * (x - y);
+        }
+        static KDNode::value_type distance(const KDNode& p, const KDNode& q)
+        {
+            assert(p.size() == q.size());
+            assert(p.size() == 2);
+            return coordinate_distance(p, q, 0) + coordinate_distance(p, q, 1);
+        }
     };
 
     // It would be nice to cache the results, but amplitudeTable could change at any time.
