@@ -28,6 +28,7 @@
 #include <memory>
 #include <std/span>
 #include <utility>
+#include <future>
 
 #include "logging/Logger.h"
 #include "six/Types.h"
@@ -137,13 +138,12 @@ struct ImageData
     };
 
     // It would be nice to cache the results, but amplitudeTable could change at any time.
-    cx_float from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value) const;
-    cx_float from_AMP8I_PHS8I(const AMP8I_PHS8I_t&) const;
-    std::vector<cx_float> from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>&) const;
-    std::vector<cx_float> from_AMP8I_PHS8I(const std::span<const uint8_t>& input_amplitudes, const std::span<const uint8_t>& input_values) const;
+    cx_float from_AMP8I_PHS8I(const AMP8I_PHS8I_t&) const; // for unit-tests
 
-    std::vector<AMP8I_PHS8I_t> to_AMP8I_PHS8I(const std::span<const cx_float>&) const;
-    void to_AMP8I_PHS8I(const std::span<const cx_float>&, std::vector<AMP8I_PHS8I_t>&) const;
+    void from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>&, std::vector<cx_float>&,
+        std::launch launch_policy = std::launch::deferred, size_t cutoff = MAXSIZE_T) const;
+    void to_AMP8I_PHS8I(const std::span<const cx_float>&, std::vector<AMP8I_PHS8I_t>&,
+        std::launch launch_policy = std::launch::deferred, size_t cutoff = MAXSIZE_T) const;
 };
 }
 }

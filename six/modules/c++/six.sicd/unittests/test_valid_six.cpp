@@ -235,12 +235,14 @@ TEST_CASE(test_8bit_ampphs)
         }
     }
 
-    const auto actuals = imageData.from_AMP8I_PHS8I(inputs);
+    std::vector<std::complex<float>> actuals;
+    imageData.from_AMP8I_PHS8I(inputs, actuals);
     TEST_ASSERT(actuals == expecteds);
 
 
     // we should now be able to convert the cx_floats back to amp/value
-    const auto amp8i_phs8i = imageData.to_AMP8I_PHS8I(actuals);
+    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> amp8i_phs8i;
+    imageData.to_AMP8I_PHS8I(actuals, amp8i_phs8i);
     TEST_ASSERT_EQ(actuals.size(), amp8i_phs8i.size());
     for (size_t i = 0; i < actuals.size(); i++)
     {

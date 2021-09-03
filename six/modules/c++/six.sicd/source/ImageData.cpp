@@ -22,7 +22,6 @@
 
 #include <stdexcept>
 #include <array>
-#include <future>
 #include <std/memory>
 
 #include <gsl/gsl.h>
@@ -176,11 +175,12 @@ static const input_amplitudes_t* get_RE32F_IM32F_values(const six::AmplitudeTabl
 static inline std::complex<float> from_AMP8I_PHS8I_(uint8_t input_amplitude, uint8_t input_value,
     const six::AmplitudeTable* pAmplitudeTable, const input_amplitudes_t* pValues)
 {
+    // Do we have a cahced result to use (no amplitude table)?
+    // Or must it be recomputed (have an amplutude table)?
     return pValues != nullptr ? (*pValues)[input_amplitude][input_value] :
         Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, pAmplitudeTable);
 }
-
-std::complex<float> ImageData::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value) const
+std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
     {
@@ -189,11 +189,7 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t
 
     auto const pAmplitudeTable = amplitudeTable.get();
     auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
-    return from_AMP8I_PHS8I_(input_amplitude, input_value, pAmplitudeTable, pValues);
-}
-std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) const
-{
-    return from_AMP8I_PHS8I(input.first, input.second);
+    return from_AMP8I_PHS8I_(input.first, input.second, pAmplitudeTable, pValues);
 }
 
 static inline std::complex<float> from_AMP8I_PHS8I_(const  ImageData::AMP8I_PHS8I_t& input,
@@ -201,7 +197,8 @@ static inline std::complex<float> from_AMP8I_PHS8I_(const  ImageData::AMP8I_PHS8
 {
     return from_AMP8I_PHS8I_(input.first, input.second, pAmplitudeTable, pValues);
 }
-std::vector<std::complex<float>> ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs) const
+void ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& result,
+    std::launch launch_policy, size_t cutoff) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
     {
@@ -212,38 +209,20 @@ std::vector<std::complex<float>> ImageData::from_AMP8I_PHS8I(const std::span<con
     auto const pAmplitudeTable = amplitudeTable.get();
     auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
 
-    std::vector<std::complex<float>> retval;
-    for (size_t i = 0; i < inputs.size(); i++) // (const auto& input : inputs)
+    if ((launch_policy == std::launch::deferred) || (cutoff == 0))
     {
-        const auto& input = inputs[i]; // no iterators for std::span with old GCC
-        retval.push_back(from_AMP8I_PHS8I_(input, pAmplitudeTable, pValues));
+        for (size_t i = 0; i < inputs.size(); i++) // (const auto& input : inputs)
+        {
+            const auto& input = inputs[i]; // no iterators for std::span with old GCC
+            result.push_back(from_AMP8I_PHS8I_(input, pAmplitudeTable, pValues));
+        }
     }
-    return retval;
-}
-
-std::vector<std::complex<float>> ImageData::from_AMP8I_PHS8I(const std::span<const uint8_t>& input_amplitudes,
-    const std::span<const uint8_t>& input_values) const
-{
-    if (pixelType != PixelType::AMP8I_PHS8I)
+    else
     {
-        throw std::runtime_error("pxielType must be AMP8I_PHS8I");
+        assert(launch_policy == std::launch::async);
+        assert(cutoff != 0);
+        throw std::logic_error("not implemented.");
     }
-    if (input_amplitudes.size() != input_values.size())
-    {
-        throw std::invalid_argument("input_amplitudes.size() != input_values.size()");
-    }
-
-    // Can't cache the results because amplitudeTable could change at any time.
-    auto const pAmplitudeTable = amplitudeTable.get();
-    auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
-
-    std::vector<std::complex<float>> retval;
-    for (size_t i = 0; i < input_amplitudes.size(); i++)
-    {
-        auto result = from_AMP8I_PHS8I_(input_amplitudes[i], input_values[i], pAmplitudeTable, pValues);
-        retval.push_back(std::move(result));
-    }
-    return retval;
 }
 
 static std::vector<ImageData::KDNode> get_KDNodes(const six::AmplitudeTable* pAmplitudeTable)
@@ -251,8 +230,7 @@ static std::vector<ImageData::KDNode> get_KDNodes(const six::AmplitudeTable* pAm
     if (pAmplitudeTable == nullptr)
     {
         static const auto nodes_no_amp = make_KDNodes(nullptr);
-        // KDTree needs a copy; make that here
-        return nodes_no_amp;
+        return nodes_no_amp; // KDTree needs a copy; make that here
     }
     else
     {
@@ -276,13 +254,14 @@ static void to_AMP8I_PHS8I_(const six::sicd::KDTree& tree,
 }
 
 template<typename InRandomIt, typename OutRandomIt>
-static void to_AMP8I_PHS8I_parallel_(const six::sicd::KDTree& tree,
+static void to_AMP8I_PHS8I_parallel(size_t cutoff, const six::sicd::KDTree& tree,
     InRandomIt in_beg, InRandomIt in_end,
     OutRandomIt out_beg, OutRandomIt out_end)
 {
-    const auto in_len = in_end - in_beg;
-    constexpr auto cutoff = 128 * 8;
-    if (in_len < cutoff * cutoff)
+    const ptrdiff_t in_len = in_end - in_beg;
+    constexpr auto default_cutoff = 128 * 8;
+    const auto cutoff_ = cutoff == MAXSIZE_T ? default_cutoff : cutoff;
+    if (in_len < gsl::narrow<ptrdiff_t>(cutoff_ * cutoff_))
     {
         to_AMP8I_PHS8I_(tree, in_beg, in_end, out_beg, out_end);
         return;
@@ -293,19 +272,14 @@ static void to_AMP8I_PHS8I_parallel_(const six::sicd::KDTree& tree,
     const auto in_mid = in_beg + in_len / 2;
     const auto out_mid = out_beg + out_len / 2;
     auto handle = std::async(std::launch::async, [&]() {
-        to_AMP8I_PHS8I_parallel_(tree, in_mid, in_end, out_mid, out_end); });
+        to_AMP8I_PHS8I_parallel(cutoff, tree, in_mid, in_end, out_mid, out_end); });
 
-    to_AMP8I_PHS8I_parallel_(tree, in_beg, in_mid, out_beg, out_mid);
+    to_AMP8I_PHS8I_parallel(cutoff, tree, in_beg, in_mid, out_beg, out_mid);
     handle.get();
 }
 
-std::vector<ImageData::AMP8I_PHS8I_t> ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats) const
-{
-    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> retval;
-    to_AMP8I_PHS8I(cx_floats, retval);
-    return retval;
-}
-void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& result) const
+void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& result,
+    std::launch launch_policy, size_t cutoff) const
 {
     // create all of of the possible KDNodes values
     auto const pAmplitudeTable = amplitudeTable.get();
@@ -317,6 +291,15 @@ void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std:
     const auto begin = &(cx_floats[0]);
     const auto end = begin + cx_floats.size();
     result.resize(cx_floats.size());
-    //to_AMP8I_PHS8I_(tree, begin, end, result.begin(), result.end());
-    to_AMP8I_PHS8I_parallel_(tree, begin, end, result.begin(), result.end());
+
+    if ((launch_policy == std::launch::deferred) || (cutoff == 0))
+    {
+        to_AMP8I_PHS8I_(tree, begin, end, result.begin(), result.end());
+    }
+    else
+    {
+        assert(launch_policy == std::launch::async);
+        assert(cutoff != 0);
+        to_AMP8I_PHS8I_parallel(cutoff, tree, begin, end, result.begin(), result.end());
+    }
 }
