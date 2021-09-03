@@ -302,9 +302,9 @@ public:
         const auto pNative = getNativeOrThrow();
         return std::string(pNative->raw, pNative->length);
     }
-    std::string toString() const
+    std::string toString(bool trim=false) const
     {
-        return *this;
+        return trim ? toTrimString() : *this;
     }
     std::string toTrimString() const
     {
