@@ -192,11 +192,6 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
     return from_AMP8I_PHS8I_(input.first, input.second, pAmplitudeTable, pValues);
 }
 
-static inline std::complex<float> from_AMP8I_PHS8I_(const  ImageData::AMP8I_PHS8I_t& input,
-    const six::AmplitudeTable* pAmplitudeTable, const input_amplitudes_t* pValues)
-{
-    return from_AMP8I_PHS8I_(input.first, input.second, pAmplitudeTable, pValues);
-}
 void ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& result,
     std::launch launch_policy, size_t cutoff) const
 {
@@ -214,7 +209,7 @@ void ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs, s
         for (size_t i = 0; i < inputs.size(); i++) // (const auto& input : inputs)
         {
             const auto& input = inputs[i]; // no iterators for std::span with old GCC
-            result.push_back(from_AMP8I_PHS8I_(input, pAmplitudeTable, pValues));
+            result.push_back(from_AMP8I_PHS8I_(input.first, input.second, pAmplitudeTable, pValues));
         }
     }
     else
