@@ -259,6 +259,74 @@ static std::vector<ImageData::KDNode> get_KDNodes(const six::AmplitudeTable* pAm
     }
 }
 
+template<typename InRandomIt, typename OutRandomIt>
+static void to_AMP8I_PHS8I_(const six::sicd::KDTree& tree,
+    InRandomIt in_beg, InRandomIt in_end,
+    OutRandomIt out_beg, OutRandomIt out_end)
+{
+    assert((in_end - in_beg) == (out_end - out_beg));
+    std::for_each(in_beg, in_end, [&](const cx_float& v)
+        {
+            six::sicd::ImageData::KDNode result;
+            tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v }, result);
+            *out_beg = std::move(result.amp_and_value);
+            ++out_beg;
+        });
+    assert(out_beg == out_end);
+}
+
+template<typename InRandomIt, typename OutRandomIt>
+static void to_AMP8I_PHS8I_parallel_(const six::sicd::KDTree& tree,
+    InRandomIt in_beg, InRandomIt in_end,
+    OutRandomIt out_beg, OutRandomIt out_end)
+{
+    const auto in_len = in_end - in_beg;
+    constexpr auto cutoff = 128 * 8;
+    if (in_len < cutoff * cutoff)
+    {
+        to_AMP8I_PHS8I_(tree, in_beg, in_end, out_beg, out_end);
+        return;
+    }
+    const auto out_len = out_end - out_beg;
+    assert(out_len == in_len);
+
+    const auto in_mid = in_beg + in_len / 2;
+    const auto out_mid = out_beg + out_len / 2;
+    auto handle = std::async(std::launch::async, [&]() {
+        to_AMP8I_PHS8I_parallel_(tree, in_mid, in_end, out_mid, out_end); });
+
+    to_AMP8I_PHS8I_parallel_(tree, in_beg, in_mid, out_beg, out_mid);
+    handle.get();
+}
+
+static void to_AMP8I_PHS8I_parallel(const six::sicd::KDTree& tree,
+    const std::vector<cx_float>& cx_floats, std::vector<six::sicd::ImageData::AMP8I_PHS8I_t>& result)
+{
+    to_AMP8I_PHS8I_parallel_(tree, cx_floats.begin(), cx_floats.end(), result.begin(), result.end());
+}
+
+static void to_AMP8I_PHS8I_loop(const six::sicd::KDTree& tree,
+    const std::vector<cx_float>& cx_floats, std::vector<six::sicd::ImageData::AMP8I_PHS8I_t>& result)
+{
+    to_AMP8I_PHS8I_(tree, cx_floats.begin(), cx_floats.end(), result.begin(), result.end());
+}
+
+static std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> to_AMP8I_PHS8I(const std::vector<cx_float>& cx_floats)
+{
+    // create all of of the possible KDNodes values
+    auto nodes = make_KDNodes();
+
+    // make the KDTree to quickly find the nearest neighbor
+    const six::sicd::KDTree tree(std::move(nodes));
+
+    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> retval;
+    retval.resize(cx_floats.size());
+
+    //to_AMP8I_PHS8I_loop(tree, cx_floats, retval);
+    to_AMP8I_PHS8I_parallel(tree, cx_floats, retval);
+    return retval;
+}
+
 std::vector<ImageData::AMP8I_PHS8I_t> ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats) const
 {
     // create all of of the possible KDNodes values
