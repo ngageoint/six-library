@@ -22,6 +22,7 @@
 
 #include <stdexcept>
 #include <array>
+#include <future>
 #include <std/memory>
 
 #include <gsl/gsl.h>
@@ -265,10 +266,9 @@ static void to_AMP8I_PHS8I_(const six::sicd::KDTree& tree,
     OutRandomIt out_beg, OutRandomIt out_end)
 {
     assert((in_end - in_beg) == (out_end - out_beg));
-    std::for_each(in_beg, in_end, [&](const cx_float& v)
+    std::for_each(in_beg, in_end, [&](const std::complex<float>& v)
         {
-            six::sicd::ImageData::KDNode result;
-            tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v }, result);
+            auto result = tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v });
             *out_beg = std::move(result.amp_and_value);
             ++out_beg;
         });
@@ -299,35 +299,13 @@ static void to_AMP8I_PHS8I_parallel_(const six::sicd::KDTree& tree,
     handle.get();
 }
 
-static void to_AMP8I_PHS8I_parallel(const six::sicd::KDTree& tree,
-    const std::vector<cx_float>& cx_floats, std::vector<six::sicd::ImageData::AMP8I_PHS8I_t>& result)
+std::vector<ImageData::AMP8I_PHS8I_t> ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats) const
 {
-    to_AMP8I_PHS8I_parallel_(tree, cx_floats.begin(), cx_floats.end(), result.begin(), result.end());
-}
-
-static void to_AMP8I_PHS8I_loop(const six::sicd::KDTree& tree,
-    const std::vector<cx_float>& cx_floats, std::vector<six::sicd::ImageData::AMP8I_PHS8I_t>& result)
-{
-    to_AMP8I_PHS8I_(tree, cx_floats.begin(), cx_floats.end(), result.begin(), result.end());
-}
-
-static std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> to_AMP8I_PHS8I(const std::vector<cx_float>& cx_floats)
-{
-    // create all of of the possible KDNodes values
-    auto nodes = make_KDNodes();
-
-    // make the KDTree to quickly find the nearest neighbor
-    const six::sicd::KDTree tree(std::move(nodes));
-
     std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> retval;
-    retval.resize(cx_floats.size());
-
-    //to_AMP8I_PHS8I_loop(tree, cx_floats, retval);
-    to_AMP8I_PHS8I_parallel(tree, cx_floats, retval);
+    to_AMP8I_PHS8I(cx_floats, retval);
     return retval;
 }
-
-std::vector<ImageData::AMP8I_PHS8I_t> ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats) const
+void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& result) const
 {
     // create all of of the possible KDNodes values
     auto const pAmplitudeTable = amplitudeTable.get();
@@ -335,20 +313,10 @@ std::vector<ImageData::AMP8I_PHS8I_t> ImageData::to_AMP8I_PHS8I(const std::span<
 
     // make the KDTree to quickly find the nearest neighbor
     const KDTree tree(std::move(nodes));
-    
-    std::vector<ImageData::AMP8I_PHS8I_t> retval;
-    for (size_t i = 0; i < cx_floats.size(); i++) // for (const auto& cx_float : cx_floats)
-    {
-        const auto& cx_float = cx_floats[i]; // no iterators for std::span with old GCC
 
-        KDNode result;
-        tree.nearest_neighbor(KDNode{ cx_float }, result);
-        retval.push_back(std::move(result.amp_and_value));
-    }
-
-    return retval;
-}
-void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& result) const
-{
-    result = to_AMP8I_PHS8I(cx_floats);
+    const auto begin = &(cx_floats[0]);
+    const auto end = begin + cx_floats.size();
+    result.resize(cx_floats.size());
+    //to_AMP8I_PHS8I_(tree, begin, end, result.begin(), result.end());
+    to_AMP8I_PHS8I_parallel_(tree, begin, end, result.begin(), result.end());
 }

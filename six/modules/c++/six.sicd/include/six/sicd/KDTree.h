@@ -26,7 +26,7 @@ namespace six
             KDTree& operator=(KDTree&&) = default;
 
             // https://en.wikipedia.org/wiki/K-d_tree
-            void nearest_neighbor(const node_t& point, node_t& result) const;
+            node_t nearest_neighbor(const node_t& point) const;
         };
     }
 }

@@ -385,13 +385,13 @@ namespace six
         KDTree::KDTree(std::vector<node_t>&& nodes)
             : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
         KDTree::~KDTree() = default;
-
-        void KDTree::nearest_neighbor(const node_t& point, node_t& result) const
+        
+        KDTree::node_t KDTree::nearest_neighbor(const node_t& point) const
         {
-            std::vector<node_t> r;
-            pImpl->tree.k_nearest_neighbors(point, 1, r);
-            assert(r.size() == 1);
-            result = r[0];
+            std::vector<node_t> result;
+            pImpl->tree.k_nearest_neighbors(point, 1, result);
+            assert(result.size() == 1);
+            return result[0];
         }
     }
 }
