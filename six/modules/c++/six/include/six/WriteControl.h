@@ -22,13 +22,14 @@
 #ifndef __SIX_WRITE_CONTROL_H__
 #define __SIX_WRITE_CONTROL_H__
 
+#include <memory>
+
 #include "six/Types.h"
 #include "six/Region.h"
 #include "six/Container.h"
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
 #include <import/logging.h>
-#include <mem/SharedPtr.h>
 
 namespace six
 {
