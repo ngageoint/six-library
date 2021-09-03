@@ -36,10 +36,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <cstdlib>
 #include <queue>
 #include <complex>
-
 #include <std/memory>
-
-#include "six/sicd/ImageData.h"
 
 #if _MSC_VER
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
@@ -190,7 +187,6 @@ namespace KDTree
         // helper variables and functions for k nearest neighbor search
         using nn4heap_t = nn4heap<value_type>;
         using priority_queue = std::priority_queue<nn4heap_t, std::vector<nn4heap_t>, typename nn4heap_t::compare>;
-        mutable priority_queue* neighborheap;
         std::vector<size_t> range_result;
 
         //--------------------------------------------------------------
@@ -198,46 +194,46 @@ namespace KDTree
         // under *node*. Updates the heap (class member) *neighborheap*.
         // returns "true" when no nearer neighbor elsewhere possible
         //--------------------------------------------------------------
-        bool neighbor_search(const node_t& point, const tree_node& node, size_t k) const
+        bool neighbor_search(const node_t& point, const tree_node& node, size_t k, priority_queue& neighborheap) const
         {
             const auto curdist = distance(point, node.point);
-            if (neighborheap->size() < k) {
-                neighborheap->push(nn4heap_t{ node.dataindex, curdist });
+            if (neighborheap.size() < k) {
+                neighborheap.push(nn4heap_t{ node.dataindex, curdist });
             }
-            else if (curdist < neighborheap->top().distance) {
-                neighborheap->pop();
-                neighborheap->push(nn4heap_t{ node.dataindex, curdist });
+            else if (curdist < neighborheap.top().distance) {
+                neighborheap.pop();
+                neighborheap.push(nn4heap_t{ node.dataindex, curdist });
             }
 
             // first search on side closer to point
             if (index(point, node.cutdim) < index(node.point, node.cutdim)) {
                 if (node.loson)
-                    if (neighbor_search(point, *(node.loson), k)) return true;
+                    if (neighbor_search(point, *(node.loson), k, neighborheap)) return true;
             }
             else {
                 if (node.hison)
-                    if (neighbor_search(point, *(node.hison), k)) return true;
+                    if (neighbor_search(point, *(node.hison), k, neighborheap)) return true;
             }
             // second search on farther side, if necessary
             value_type dist{ 0 };
-            if (neighborheap->size() < k) {
+            if (neighborheap.size() < k) {
                 dist = std::numeric_limits<value_type>::max();
             }
             else {
-                dist = neighborheap->top().distance;
+                dist = neighborheap.top().distance;
             }
             if (index(point, node.cutdim) < index(node.point, node.cutdim)) {
                 if (node.hison && bounds_overlap_ball(point, dist, *(node.hison)))
-                    if (neighbor_search(point, *(node.hison), k)) return true;
+                    if (neighbor_search(point, *(node.hison), k, neighborheap)) return true;
             }
             else {
                 if (node.loson && bounds_overlap_ball(point, dist, *(node.loson)))
-                    if (neighbor_search(point, *(node.loson), k)) return true;
+                    if (neighbor_search(point, *(node.loson), k, neighborheap)) return true;
             }
 
-            if (neighborheap->size() == k)
+            if (neighborheap.size() == k)
             {
-                dist = neighborheap->top().distance;
+                dist = neighborheap.top().distance;
             }
             return ball_within_bounds(point, dist, node);
         }
@@ -321,7 +317,8 @@ namespace KDTree
         // derived from KdNodePredicate. When Null (default, no search
         // predicate is applied).
         //--------------------------------------------------------------
-        void k_nearest_neighbors(const node_t& point, size_t k, std::vector<node_t>& result) const
+        void k_nearest_neighbors_(const node_t& point, size_t k, std::vector<node_t>& result,
+            priority_queue& neighborheap) const
         {
             result.clear();
             if (k < 1) return;
@@ -332,27 +329,25 @@ namespace KDTree
             }
 
             // collect result of k values in neighborheap
-            priority_queue neighborheap_;
-            neighborheap = &neighborheap_;
             if (k > allnodes.size())
             {
                 // when more neighbors asked than nodes in tree, return everything
                 k = allnodes.size();
                 for (size_t i = 0; i < k; i++) {
-                    neighborheap->push(nn4heap_t{i, distance(allnodes[i], point)});
+                    neighborheap.push(nn4heap_t{ i, distance(allnodes[i], point) });
                 }
             }
             else
             {
-                neighbor_search(point, *root, k);
+                neighbor_search(point, *root, k, neighborheap);
             }
 
             // copy over result sorted by distance
             // (we must revert the vector for ascending order)
-            while (!neighborheap->empty())
+            while (!neighborheap.empty())
             {
-                const auto i = neighborheap->top().dataindex;
-                neighborheap->pop();
+                const auto i = neighborheap.top().dataindex;
+                neighborheap.pop();
                 result.push_back(allnodes[i]);
             }
             // beware that less than k results might have been returned
@@ -363,6 +358,11 @@ namespace KDTree
                 result[i] = result[k - 1 - i];
                 result[k - 1 - i] = temp;
             }
+        }
+        void k_nearest_neighbors(const node_t& point, size_t k, std::vector<node_t>& result) const
+        {
+            priority_queue neighborheap;
+            k_nearest_neighbors_(point, k, result, neighborheap);
         }
     };
 }  // namespace Kdtree
