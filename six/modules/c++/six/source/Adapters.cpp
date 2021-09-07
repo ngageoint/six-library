@@ -54,6 +54,7 @@ static void nitf_free(NITF_DATA* data)
 
 static inline void byteSwap(std::vector<std::byte>& buffer, size_t elemSize, size_t numElems)
 {
+    assert(buffer.size() == elemSize * numElems);
     sys::byteSwap(buffer.data(), gsl::narrow<unsigned short>(elemSize), numElems);
 }
 template<typename TImpl, typename TWriteFunc>
@@ -64,7 +65,7 @@ static NITF_BOOL write(const TImpl* impl, nitf_IOInterface* io, nitf_Error* erro
 
     for (unsigned int i = 0; i < impl->numRows; i++)
     {
-        write_f(rowCopy);
+        write_f(impl, rowCopy);
 
         if (impl->doByteSwap)
             byteSwap(rowCopy, impl->pixelSize
@@ -99,28 +100,29 @@ struct MemoryWriteHandlerImpl final
     int doByteSwap;
 };
 
-extern "C" void __six_MemoryWriteHandler_destruct(NITF_DATA * data)
+extern "C" static void six_MemoryWriteHandler_destruct(NITF_DATA * data)
 {
     nitf_free<MemoryWriteHandlerImpl>(data);
 }
 
-extern "C" NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
+extern "C" static NITF_BOOL six_MemoryWriteHandler_write(NITF_DATA * data,
         nitf_IOInterface* io, nitf_Error * error)
 {
     auto const impl = cast_data<const MemoryWriteHandlerImpl*>(data);
 
-    const size_t rowSize = impl->pixelSize * impl->numCols;
+    const auto rowSize = impl->pixelSize * impl->numCols;
     uint64_t off = impl->firstRow * rowSize;
 
-    return write(impl, io, error, [&](std::vector<std::byte>& rowCopy_)
+    const auto write_f = [&](const MemoryWriteHandlerImpl* impl, std::vector<std::byte>& rowCopy_)
     {
         assert(rowCopy_.size() == rowSize);
         auto rowCopy = rowCopy_.data();
 
-        memcpy(rowCopy, &impl->buffer[off], rowSize);
+        memcpy(rowCopy, &impl->buffer[off], rowCopy_.size());
 
         off += rowSize;
-    });
+    };
+    return write(impl, io, error, write_f);
 }
 
 MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
@@ -131,9 +133,7 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
     if (pixelSize / numChannels == 1)
         doByteSwap = false;
 
-    static nitf_IWriteHandler iWriteHandler =
-    { &__six_MemoryWriteHandler_write,
-      &__six_MemoryWriteHandler_destruct };
+    static nitf_IWriteHandler iWriteHandler = { &six_MemoryWriteHandler_write, &six_MemoryWriteHandler_destruct };
 
     auto impl = nitf_malloc<MemoryWriteHandlerImpl>();
     impl->buffer = buffer;
@@ -171,24 +171,20 @@ struct StreamWriteHandlerImpl final
     int doByteSwap;
 };
 
-extern "C" void __six_StreamWriteHandler_destruct(NITF_DATA * data)
+extern "C" static void six_StreamWriteHandler_destruct(NITF_DATA * data)
 {
     nitf_free<StreamWriteHandlerImpl>(data);
 }
 
-extern "C" NITF_BOOL __six_StreamWriteHandler_write(NITF_DATA * data,
+static void read(const StreamWriteHandlerImpl* impl, std::vector<std::byte>& rowCopy)
+{
+    (void) impl->inputStream->read(rowCopy.data(), rowCopy.size());
+}
+extern "C" static NITF_BOOL six_StreamWriteHandler_write(NITF_DATA * data,
         nitf_IOInterface* io, nitf_Error * error)
 {
     auto const impl = cast_data<const StreamWriteHandlerImpl*>(data);
-
-    const size_t rowSize = impl->pixelSize * impl->numCols;
-    return write(impl, io, error, [&](std::vector<std::byte>& rowCopy_)
-    {
-        assert(rowCopy_.size() == rowSize);
-        auto const rowCopy = rowCopy_.data();
-
-        impl->inputStream->read(rowCopy, rowSize);
-    });
+    return write(impl, io, error, read);
 }
 
 StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
@@ -199,9 +195,7 @@ StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
     if ((pixelSize / numChannels) == 1)
         doByteSwap = false;
 
-    static nitf_IWriteHandler iWriteHandler =
-    { &__six_StreamWriteHandler_write,
-      &__six_StreamWriteHandler_destruct };
+    static nitf_IWriteHandler iWriteHandler = { &six_StreamWriteHandler_write, &six_StreamWriteHandler_destruct };
 
     auto impl = nitf_malloc<StreamWriteHandlerImpl>();
     impl->inputStream = is;

@@ -444,62 +444,6 @@ static std::vector<std::complex<float>> make_complex_image(const types::RowCol<s
     }
     return image;
 }
-static std::vector<std::pair<uint8_t, uint8_t>> make_AMP8I_PHS8I_image(const types::RowCol<size_t>& dims, const six::AmplitudeTable*)
-{
-    std::vector<std::pair<uint8_t, uint8_t>> image;
-    for (size_t r = 0; r < dims.row; r++)
-    {
-        for (size_t c = 0; c < dims.col; c++)
-        {
-            image.push_back(std::pair<uint8_t, uint8_t>(r, c));
-        }
-    }
-    return image;
-}
-
-struct image final
-{
-    std::vector<std::complex<float>> RE32F_IM32F;
-    std::vector<std::pair<uint8_t, uint8_t>> AMP8I_PHS8I;
-
-    const std::byte* data() const
-    {
-        const void* retval = nullptr;
-        if (!RE32F_IM32F.empty())
-        {
-            retval = RE32F_IM32F.data();
-            assert(AMP8I_PHS8I.empty());
-        }
-        else if (!AMP8I_PHS8I.empty())
-        {
-            retval = AMP8I_PHS8I.data();
-            assert(RE32F_IM32F.empty());
-        }
-        return static_cast<const std::byte*>(retval);
-    }
-};
-
-static image make_image(const types::RowCol<size_t>& dims, const six::Data& data)
-{
-    const auto pixelType = data.getPixelType();
-    six::AmplitudeTable* pAmpTable = pixelType == six::PixelType::AMP8I_PHS8I ? data.getAmplitudeTable() : nullptr;
-
-    image retval;
-    if (pixelType == six::PixelType::RE32F_IM32F)
-    {
-        retval.RE32F_IM32F = make_complex_image(dims);
-    }
-    else if (pixelType == six::PixelType::AMP8I_PHS8I)
-    {
-        retval.AMP8I_PHS8I = make_AMP8I_PHS8I_image(dims, pAmpTable);
-    }
-    else
-    {
-        throw std::invalid_argument("Unknown 'pixelType'.");
-    }
-
-    return retval;
-}
 
 static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)
 {
@@ -508,10 +452,10 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
     constexpr auto dataType = six::DataType::COMPLEX;
     six::XMLControlFactory::getInstance().addCreator(dataType, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
 
-    std::unique_ptr<six::Data> data = six::sicd::Utilities::createFakeComplexData(pixelType, makeAmplitudeTable, &dims);
-    const auto image = make_image(dims, *data);
+    auto data = six::sicd::Utilities::createFakeComplexData(pixelType, makeAmplitudeTable, &dims);
+    const auto image = make_complex_image(dims);
 
-    mem::SharedPtr<six::Container> container(new six::Container(dataType));
+    auto container = std::make_shared<six::Container>(dataType);
     container->addData(std::move(data));
 
     const auto pData = container->getData(0);
@@ -522,7 +466,8 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
     six::NITFWriteControl writer(writerOptions, container);
 
     const std::vector<std::string> schemaPaths;
-    six::buffer_list buffers{ image.data() };
+    const void* data_ = image.data();
+    six::buffer_list buffers{ static_cast<const std::byte*>(data_) };
     writer.save(buffers, outputName.string(), schemaPaths);
 }
 
