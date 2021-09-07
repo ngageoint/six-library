@@ -142,11 +142,11 @@ struct ImageData
 
     void from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>&, std::vector<cx_float>&) const;
     void from_AMP8I_PHS8I(std::launch policy, const std::span<const AMP8I_PHS8I_t>&, std::vector<cx_float>&,
-         size_t cutoff = MAXSIZE_T) const;
+        ptrdiff_t cutoff = -1) const;
 
     void to_AMP8I_PHS8I(const std::span<const cx_float>&, std::vector<AMP8I_PHS8I_t>&) const;
     void to_AMP8I_PHS8I(std::launch policy, const std::span<const cx_float>&, std::vector<AMP8I_PHS8I_t>&,
-       size_t cutoff = MAXSIZE_T) const;
+        ptrdiff_t cutoff = -1) const;
 };
 }
 }

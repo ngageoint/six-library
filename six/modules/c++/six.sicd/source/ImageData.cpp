@@ -25,6 +25,7 @@
 #include <std/memory>
 
 #include <gsl/gsl.h>
+#include <mt/Algorithm.h>
 
 #include "six/sicd/GeoData.h"
 #include "six/sicd/ImageData.h"
@@ -210,7 +211,7 @@ void ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs, s
     }
 }
 void ImageData::from_AMP8I_PHS8I(std::launch, const std::span<const AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& result,
-    size_t) const
+    ptrdiff_t) const
 {
     from_AMP8I_PHS8I(inputs, result); // TODO: async
 }
@@ -236,32 +237,27 @@ template<typename InRandomIt, typename OutRandomIt>
 static void to_AMP8I_PHS8I_(const six::sicd::KDTree& tree,
     InRandomIt in_beg, InRandomIt in_end, OutRandomIt out_beg)
 {
-    std::transform(in_beg, in_end, out_beg, [&](const std::complex<float>& v)
+    const auto f = [&](const std::complex<float>& v)
         {
             auto result = tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v });
             return result.amp_and_value;
-        });
+        };
+    (void) std::transform(in_beg, in_end, out_beg, f);
 }
 
 template<typename InRandomIt, typename OutRandomIt>
-static void async_to_AMP8I_PHS8I(std::launch policy, size_t cutoff, const six::sicd::KDTree& tree,
+static void async_to_AMP8I_PHS8I(std::launch policy, ptrdiff_t cutoff, const six::sicd::KDTree& tree,
     InRandomIt in_beg, InRandomIt in_end, OutRandomIt out)
 {
-    const ptrdiff_t len = in_end - in_beg;
     constexpr auto default_cutoff = 128 * 8;
-    const auto cutoff_ = cutoff == MAXSIZE_T ? default_cutoff : cutoff;
-    if (len < gsl::narrow<ptrdiff_t>(cutoff_ * cutoff_))
-    {
-        to_AMP8I_PHS8I_(tree, in_beg, in_end, out);
-        return;
-    }
-    const auto in_mid = in_beg + len / 2;
-    const auto out_mid = out + len / 2;
-    auto handle = std::async(policy, [&]() {
-        async_to_AMP8I_PHS8I(policy, cutoff, tree, in_mid, in_end, out_mid); });
+    const auto cutoff_ = cutoff < 0 ? default_cutoff : cutoff;
 
-    async_to_AMP8I_PHS8I(policy, cutoff, tree, in_beg, in_mid, out);
-    handle.get();
+    const auto f = [&](const std::complex<float>& v)
+    {
+        auto result = tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v });
+        return result.amp_and_value;
+    };
+    (void) mt::transform_async(in_beg, in_end, out, f, cutoff_, policy);
 }
 
 void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& result) const
@@ -276,7 +272,7 @@ void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std:
     to_AMP8I_PHS8I_(tree, begin, end, result.begin());
 }
 void  ImageData::to_AMP8I_PHS8I(std::launch policy, const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& result,
-   size_t cutoff) const
+    ptrdiff_t cutoff) const
 {
     // make the KDTree to quickly find the nearest neighbor
     const KDTree tree = make_KDTree(amplitudeTable.get());
