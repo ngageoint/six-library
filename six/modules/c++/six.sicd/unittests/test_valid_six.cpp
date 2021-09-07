@@ -254,7 +254,8 @@ TEST_CASE(test_8bit_ampphs)
 
     // ... and again, async
     amp8i_phs8i.clear();
-    imageData.to_AMP8I_PHS8I(std::launch::async, actuals, amp8i_phs8i, actuals.size() / 10 /*be sure std::async is used*/);
+    const auto cutoff = actuals.size() / 10; // be sure std::async is called
+    imageData.to_AMP8I_PHS8I(std::launch::async, actuals, amp8i_phs8i, cutoff);
     TEST_ASSERT_EQ(actuals.size(), amp8i_phs8i.size());
     for (size_t i = 0; i < actuals.size(); i++)
     {
@@ -275,14 +276,15 @@ TEST_CASE(read_8bit_ampphs_with_table)
     auto container = reader.load(inputPathname);
     TEST_ASSERT_EQ(1, container->getNumData());
 
-    const auto data = getComplexData(*container, 0);
-    TEST_ASSERT_EQ(six::PixelType::AMP8I_PHS8I, data->getPixelType());
-    TEST_ASSERT_EQ(2, data->getNumBytesPerPixel());
+    const auto pComplexData = getComplexData(*container, 0);
+    auto& complexData = *pComplexData;
+    TEST_ASSERT_EQ(six::PixelType::AMP8I_PHS8I, complexData.getPixelType());
+    TEST_ASSERT_EQ(2, complexData.getNumBytesPerPixel());
 
-    const auto& classification = data->getClassification();
+    const auto& classification = complexData.getClassification();
     TEST_ASSERT_TRUE(classification.isUnclassified());
 
-    const auto& imageData = *(data->imageData);
+    const auto& imageData = *(complexData.imageData);
     const auto pAmplitudeTable = imageData.amplitudeTable.get();
     TEST_ASSERT(pAmplitudeTable != nullptr);
 
@@ -292,6 +294,19 @@ TEST_CASE(read_8bit_ampphs_with_table)
         const auto v = AmpTable.index(i);
         TEST_ASSERT_EQ(v, (v / 1.0) + 0.0); // be sure it's not something goofy like NaN, Inf, etc.
     }
+
+    const auto numBytesPerPixel = complexData.getNumBytesPerPixel();
+    TEST_ASSERT_EQ(2, numBytesPerPixel);
+
+    const auto extent = getExtent(complexData);
+    const auto numPixels = extent.area();
+    std::vector<std::byte> buffer_(numPixels * numBytesPerPixel);
+    auto buffer = buffer_.data();
+
+    six::Region region;
+    setDims(region, extent);
+    constexpr size_t offset = 0;
+    region.setBuffer(buffer + offset);
 }
 
 TEST_CASE(read_8bit_ampphs_no_table)
