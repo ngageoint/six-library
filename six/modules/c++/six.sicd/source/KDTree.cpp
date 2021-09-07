@@ -376,6 +376,7 @@ namespace six
         {
             ::KDTree::Tree<node_t> tree;
             Impl(std::vector<node_t>&& nodes) : tree(std::move(nodes)) { }
+            ~Impl() = default;
             Impl(const Impl&) = delete;
             Impl& operator=(const Impl&) = delete;
             Impl(Impl&&) = delete;

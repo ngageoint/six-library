@@ -193,27 +193,58 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
     return from_AMP8I_PHS8I_(input.first, input.second, pAmplitudeTable, pValues);
 }
 
-void ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& result) const
+using from_AMP8I_PHS8I_output_t = std::vector<std::complex<float>>::iterator;
+using from_AMP8I_PHS8I_transform_t = std::function<std::complex<float>(const ImageData::AMP8I_PHS8I_t&)>;
+template<typename TTransform>
+static void from_AMP8I_PHS8I_(const six::AmplitudeTable* pAmplitudeTable,
+    const std::span<const  ImageData::AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& results,
+    TTransform transform)
+{
+    auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
+
+    const auto begin = &(inputs[0]);
+    const auto end = begin + inputs.size();
+    results.resize(inputs.size());
+
+    const from_AMP8I_PHS8I_transform_t f = [&](const ImageData::AMP8I_PHS8I_t& v)
+    {
+        return from_AMP8I_PHS8I_(v.first, v.second, pAmplitudeTable, pValues);
+    };
+    (void)transform(begin, end, results.begin(), f);
+}
+
+void ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& results) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
     {
         throw std::runtime_error("pxielType must be AMP8I_PHS8I");
     }
 
-    // Can't cache the results because amplitudeTable could change at any time.
-    auto const pAmplitudeTable = amplitudeTable.get();
-    auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
-
-    for (size_t i = 0; i < inputs.size(); i++) // (const auto& input : inputs)
+    const auto std_transform = [&](const AMP8I_PHS8I_t* pBegin, const AMP8I_PHS8I_t* pEnd,
+        from_AMP8I_PHS8I_output_t out, from_AMP8I_PHS8I_transform_t f)
     {
-        const auto& input = inputs[i]; // no iterators for std::span with old GCC
-        result.push_back(from_AMP8I_PHS8I_(input.first, input.second, pAmplitudeTable, pValues));
-    }
+        return std::transform(pBegin, pEnd, out, f);
+    };
+    from_AMP8I_PHS8I_(amplitudeTable.get(), inputs, results, std_transform);
+
 }
-void ImageData::from_AMP8I_PHS8I(std::launch, const std::span<const AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& result,
-    ptrdiff_t) const
+void ImageData::from_AMP8I_PHS8I(std::launch policy, const std::span<const AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& results,
+    ptrdiff_t cutoff_) const
 {
-    from_AMP8I_PHS8I(inputs, result); // TODO: async
+    if (pixelType != PixelType::AMP8I_PHS8I)
+    {
+        throw std::runtime_error("pxielType must be AMP8I_PHS8I");
+    }
+
+    constexpr auto default_cutoff = 128 * 8;
+    const auto cutoff = cutoff_ < 0 ? default_cutoff : cutoff_;
+
+    const auto mt_transform_async = [&](const AMP8I_PHS8I_t* pBegin, const AMP8I_PHS8I_t* pEnd,
+        from_AMP8I_PHS8I_output_t out, from_AMP8I_PHS8I_transform_t f)
+    {
+        return mt::transform_async(pBegin, pEnd, out, f, cutoff, policy);
+    };
+    from_AMP8I_PHS8I_(amplitudeTable.get(), inputs, results, mt_transform_async);
 }
 
 static KDTree make_KDTree(const six::AmplitudeTable* pAmplitudeTable)
@@ -233,21 +264,21 @@ static KDTree make_KDTree(const six::AmplitudeTable* pAmplitudeTable)
     return KDTree(std::move(nodes));
 }
 
-using AMP8I_PHS8I_output_t = std::vector<ImageData::AMP8I_PHS8I_t>::iterator;
-using AMP8I_PHS8I_transform_t = std::function<ImageData::AMP8I_PHS8I_t(const std::complex<float>&)>;
+using to_AMP8I_PHS8I_output_t = std::vector<ImageData::AMP8I_PHS8I_t>::iterator;
+using to_AMP8I_PHS8I_transform_t = std::function<ImageData::AMP8I_PHS8I_t(const std::complex<float>&)>;
 template<typename TTransform>
 static void to_AMP8I_PHS8I_(const six::AmplitudeTable* pAmplitudeTable,
-    const std::span<const ImageData::cx_float>& cx_floats, std::vector<ImageData::AMP8I_PHS8I_t>& results,
+    const std::span<const ImageData::cx_float>& inputs, std::vector<ImageData::AMP8I_PHS8I_t>& results,
     TTransform transform)
 {
     // make the KDTree to quickly find the nearest neighbor
     const KDTree tree = make_KDTree(pAmplitudeTable);
 
-    const auto begin = &(cx_floats[0]);
-    const auto end = begin + cx_floats.size();
-    results.resize(cx_floats.size());
+    const auto begin = &(inputs[0]);
+    const auto end = begin + inputs.size();
+    results.resize(inputs.size());
 
-    const AMP8I_PHS8I_transform_t f = [&](const std::complex<float>& v)
+    const to_AMP8I_PHS8I_transform_t f = [&](const std::complex<float>& v)
     {
         auto result = tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v });
         return result.amp_and_value;
@@ -257,7 +288,7 @@ static void to_AMP8I_PHS8I_(const six::AmplitudeTable* pAmplitudeTable,
 void ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& results) const
 {
     const auto std_transform = [&](const ImageData::cx_float* pBegin, const ImageData::cx_float* pEnd,
-        AMP8I_PHS8I_output_t out, AMP8I_PHS8I_transform_t f)
+        to_AMP8I_PHS8I_output_t out, to_AMP8I_PHS8I_transform_t f)
     {
         return std::transform(pBegin, pEnd, out, f);
     };
@@ -270,7 +301,7 @@ void ImageData::to_AMP8I_PHS8I(std::launch policy, const std::span<const cx_floa
     const auto cutoff = cutoff_ < 0 ? default_cutoff : cutoff_;
 
     const auto mt_transform_async = [&](const ImageData::cx_float* pBegin, const ImageData::cx_float* pEnd,
-        AMP8I_PHS8I_output_t out, AMP8I_PHS8I_transform_t f)
+        to_AMP8I_PHS8I_output_t out, to_AMP8I_PHS8I_transform_t f)
     {
         return mt::transform_async(pBegin, pEnd, out, f, cutoff, policy);
     };
