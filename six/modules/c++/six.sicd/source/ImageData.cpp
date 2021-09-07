@@ -163,6 +163,7 @@ static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six
     return retval;
 }
 
+// This is a non-templatized function so that there is copy of the "static" data with a NULL AmplutdeTable.
 static const input_amplitudes_t* get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
@@ -173,14 +174,6 @@ static const input_amplitudes_t* get_RE32F_IM32F_values(const six::AmplitudeTabl
     return nullptr;
 }
 
-static inline std::complex<float> from_AMP8I_PHS8I_(uint8_t input_amplitude, uint8_t input_value,
-    const six::AmplitudeTable* pAmplitudeTable, const input_amplitudes_t* pValues)
-{
-    // Do we have a cahced result to use (no amplitude table)?
-    // Or must it be recomputed (have an amplutude table)?
-    return pValues != nullptr ? (*pValues)[input_amplitude][input_value] :
-        Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, pAmplitudeTable);
-}
 std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
@@ -190,7 +183,26 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
 
     auto const pAmplitudeTable = amplitudeTable.get();
     auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
-    return from_AMP8I_PHS8I_(input.first, input.second, pAmplitudeTable, pValues);
+
+    // Do we have a cahced result to use (no amplitude table)?
+    // Or must it be recomputed (have an amplutude table)?
+    return pValues != nullptr ? (*pValues)[input.first][input.second] :
+        Utilities::from_AMP8I_PHS8I(input.first, input.second, pAmplitudeTable);
+}
+
+static const input_amplitudes_t& get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
+    std::unique_ptr<input_amplitudes_t>& pValues_)
+
+{
+    const input_amplitudes_t* pValues = get_RE32F_IM32F_values(pAmplitudeTable);
+    if (pValues == nullptr)
+    {
+        assert(pAmplitudeTable != nullptr);
+        pValues_ = AMP8I_PHS8I_to_RE32F_IM32F_(pAmplitudeTable);
+        pValues = pValues_.get();
+    }
+    assert(pValues != nullptr);
+    return *pValues;
 }
 
 using from_AMP8I_PHS8I_output_t = std::vector<std::complex<float>>::iterator;
@@ -200,7 +212,8 @@ static void from_AMP8I_PHS8I_(const six::AmplitudeTable* pAmplitudeTable,
     const std::span<const  ImageData::AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& results,
     TTransform transform)
 {
-    auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
+    std::unique_ptr<input_amplitudes_t> pValues_;
+    const auto& values = get_RE32F_IM32F_values(pAmplitudeTable, pValues_);
 
     const auto begin = &(inputs[0]);
     const auto end = begin + inputs.size();
@@ -208,11 +221,10 @@ static void from_AMP8I_PHS8I_(const six::AmplitudeTable* pAmplitudeTable,
 
     const from_AMP8I_PHS8I_transform_t f = [&](const ImageData::AMP8I_PHS8I_t& v)
     {
-        return from_AMP8I_PHS8I_(v.first, v.second, pAmplitudeTable, pValues);
+        return values[v.first][v.second];
     };
     (void)transform(begin, end, results.begin(), f);
 }
-
 void ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& results) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
@@ -247,6 +259,7 @@ void ImageData::from_AMP8I_PHS8I(std::launch policy, const std::span<const AMP8I
     from_AMP8I_PHS8I_(amplitudeTable.get(), inputs, results, mt_transform_async);
 }
 
+// This is a non-templatized function so that there is copy of the "static" data with a NULL AmplutdeTable.
 static KDTree make_KDTree(const six::AmplitudeTable* pAmplitudeTable)
 {
     // create all of of the possible KDNodes values
