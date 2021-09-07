@@ -100,12 +100,12 @@ struct MemoryWriteHandlerImpl final
     int doByteSwap;
 };
 
-extern "C" static void six_MemoryWriteHandler_destruct(NITF_DATA * data)
+static void six_MemoryWriteHandler_destruct(NITF_DATA * data)
 {
     nitf_free<MemoryWriteHandlerImpl>(data);
 }
 
-extern "C" static NITF_BOOL six_MemoryWriteHandler_write(NITF_DATA * data,
+static NITF_BOOL six_MemoryWriteHandler_write(NITF_DATA * data,
         nitf_IOInterface* io, nitf_Error * error)
 {
     auto const impl = cast_data<const MemoryWriteHandlerImpl*>(data);
@@ -171,20 +171,20 @@ struct StreamWriteHandlerImpl final
     int doByteSwap;
 };
 
-extern "C" static void six_StreamWriteHandler_destruct(NITF_DATA * data)
+static void six_StreamWriteHandler_destruct(NITF_DATA * data)
 {
     nitf_free<StreamWriteHandlerImpl>(data);
 }
 
-static void read(const StreamWriteHandlerImpl* impl, std::vector<std::byte>& rowCopy)
-{
-    (void) impl->inputStream->read(rowCopy.data(), rowCopy.size());
-}
-extern "C" static NITF_BOOL six_StreamWriteHandler_write(NITF_DATA * data,
+static NITF_BOOL six_StreamWriteHandler_write(NITF_DATA * data,
         nitf_IOInterface* io, nitf_Error * error)
 {
     auto const impl = cast_data<const StreamWriteHandlerImpl*>(data);
-    return write(impl, io, error, read);
+    const auto write_f = [](const StreamWriteHandlerImpl* impl, std::vector<std::byte>& rowCopy)
+    {
+      (void) impl->inputStream->read(rowCopy.data(), rowCopy.size());
+    };
+    return write(impl, io, error, write_f);
 }
 
 StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
@@ -210,5 +210,3 @@ StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
 
     setManaged(false);
 }
-
-
