@@ -192,8 +192,7 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
     return from_AMP8I_PHS8I_(input.first, input.second, pAmplitudeTable, pValues);
 }
 
-void ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& result,
-    std::launch launch_policy, size_t cutoff) const
+void ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& result) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
     {
@@ -204,97 +203,87 @@ void ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs, s
     auto const pAmplitudeTable = amplitudeTable.get();
     auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
 
-    if ((launch_policy == std::launch::deferred) || (cutoff == 0))
+    for (size_t i = 0; i < inputs.size(); i++) // (const auto& input : inputs)
     {
-        for (size_t i = 0; i < inputs.size(); i++) // (const auto& input : inputs)
-        {
-            const auto& input = inputs[i]; // no iterators for std::span with old GCC
-            result.push_back(from_AMP8I_PHS8I_(input.first, input.second, pAmplitudeTable, pValues));
-        }
-    }
-    else
-    {
-        assert(launch_policy == std::launch::async);
-        assert(cutoff != 0);
-        throw std::logic_error("not implemented.");
+        const auto& input = inputs[i]; // no iterators for std::span with old GCC
+        result.push_back(from_AMP8I_PHS8I_(input.first, input.second, pAmplitudeTable, pValues));
     }
 }
-
-static std::vector<ImageData::KDNode> get_KDNodes(const six::AmplitudeTable* pAmplitudeTable)
+void ImageData::from_AMP8I_PHS8I(std::launch, const std::span<const AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& result,
+    size_t) const
 {
+    from_AMP8I_PHS8I(inputs, result); // TODO: async
+}
+
+static KDTree make_KDTree(const six::AmplitudeTable* pAmplitudeTable)
+{
+    // create all of of the possible KDNodes values
+    std::vector<ImageData::KDNode> nodes;
     if (pAmplitudeTable == nullptr)
     {
         static const auto nodes_no_amp = make_KDNodes(nullptr);
-        return nodes_no_amp; // KDTree needs a copy; make that here
+        nodes = nodes_no_amp; // KDTree needs a copy; make that here
     }
     else
     {
-        return make_KDNodes(pAmplitudeTable);
+        nodes = make_KDNodes(pAmplitudeTable);
     }
+
+    return KDTree(std::move(nodes));
 }
 
 template<typename InRandomIt, typename OutRandomIt>
 static void to_AMP8I_PHS8I_(const six::sicd::KDTree& tree,
-    InRandomIt in_beg, InRandomIt in_end,
-    OutRandomIt out_beg, OutRandomIt out_end)
+    InRandomIt in_beg, InRandomIt in_end, OutRandomIt out_beg)
 {
-    assert((in_end - in_beg) == (out_end - out_beg));
-    std::for_each(in_beg, in_end, [&](const std::complex<float>& v)
+    std::transform(in_beg, in_end, out_beg, [&](const std::complex<float>& v)
         {
             auto result = tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v });
-            *out_beg = std::move(result.amp_and_value);
-            ++out_beg;
+            return result.amp_and_value;
         });
-    assert(out_beg == out_end);
 }
 
 template<typename InRandomIt, typename OutRandomIt>
-static void to_AMP8I_PHS8I_parallel(size_t cutoff, const six::sicd::KDTree& tree,
-    InRandomIt in_beg, InRandomIt in_end,
-    OutRandomIt out_beg, OutRandomIt out_end)
+static void async_to_AMP8I_PHS8I(std::launch policy, size_t cutoff, const six::sicd::KDTree& tree,
+    InRandomIt in_beg, InRandomIt in_end, OutRandomIt out)
 {
-    const ptrdiff_t in_len = in_end - in_beg;
+    const ptrdiff_t len = in_end - in_beg;
     constexpr auto default_cutoff = 128 * 8;
     const auto cutoff_ = cutoff == MAXSIZE_T ? default_cutoff : cutoff;
-    if (in_len < gsl::narrow<ptrdiff_t>(cutoff_ * cutoff_))
+    if (len < gsl::narrow<ptrdiff_t>(cutoff_ * cutoff_))
     {
-        to_AMP8I_PHS8I_(tree, in_beg, in_end, out_beg, out_end);
+        to_AMP8I_PHS8I_(tree, in_beg, in_end, out);
         return;
     }
-    const auto out_len = out_end - out_beg;
-    assert(out_len == in_len);
+    const auto in_mid = in_beg + len / 2;
+    const auto out_mid = out + len / 2;
+    auto handle = std::async(policy, [&]() {
+        async_to_AMP8I_PHS8I(policy, cutoff, tree, in_mid, in_end, out_mid); });
 
-    const auto in_mid = in_beg + in_len / 2;
-    const auto out_mid = out_beg + out_len / 2;
-    auto handle = std::async(std::launch::async, [&]() {
-        to_AMP8I_PHS8I_parallel(cutoff, tree, in_mid, in_end, out_mid, out_end); });
-
-    to_AMP8I_PHS8I_parallel(cutoff, tree, in_beg, in_mid, out_beg, out_mid);
+    async_to_AMP8I_PHS8I(policy, cutoff, tree, in_beg, in_mid, out);
     handle.get();
 }
 
-void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& result,
-    std::launch launch_policy, size_t cutoff) const
+void  ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& result) const
 {
-    // create all of of the possible KDNodes values
-    auto const pAmplitudeTable = amplitudeTable.get();
-    auto nodes = get_KDNodes(pAmplitudeTable);
-
     // make the KDTree to quickly find the nearest neighbor
-    const KDTree tree(std::move(nodes));
+    const KDTree tree = make_KDTree(amplitudeTable.get());
 
     const auto begin = &(cx_floats[0]);
     const auto end = begin + cx_floats.size();
     result.resize(cx_floats.size());
 
-    if ((launch_policy == std::launch::deferred) || (cutoff == 0))
-    {
-        to_AMP8I_PHS8I_(tree, begin, end, result.begin(), result.end());
-    }
-    else
-    {
-        assert(launch_policy == std::launch::async);
-        assert(cutoff != 0);
-        to_AMP8I_PHS8I_parallel(cutoff, tree, begin, end, result.begin(), result.end());
-    }
+    to_AMP8I_PHS8I_(tree, begin, end, result.begin());
+}
+void  ImageData::to_AMP8I_PHS8I(std::launch policy, const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& result,
+   size_t cutoff) const
+{
+    // make the KDTree to quickly find the nearest neighbor
+    const KDTree tree = make_KDTree(amplitudeTable.get());
+
+    const auto begin = &(cx_floats[0]);
+    const auto end = begin + cx_floats.size();
+    result.resize(cx_floats.size());
+    
+    async_to_AMP8I_PHS8I(policy, cutoff, tree, begin, end, result.begin());
 }

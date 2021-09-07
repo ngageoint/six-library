@@ -251,6 +251,18 @@ TEST_CASE(test_8bit_ampphs)
         const auto& expected = actuals[i];
         TEST_ASSERT_EQ(expected, result);
     }
+
+    // ... and again, async
+    amp8i_phs8i.clear();
+    imageData.to_AMP8I_PHS8I(std::launch::async, actuals, amp8i_phs8i, actuals.size() / 10 /*be sure std::async is used*/);
+    TEST_ASSERT_EQ(actuals.size(), amp8i_phs8i.size());
+    for (size_t i = 0; i < actuals.size(); i++)
+    {
+        const auto& v = amp8i_phs8i[i];
+        const auto result = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, nullptr);
+        const auto& expected = actuals[i];
+        TEST_ASSERT_EQ(expected, result);
+    }
 }
 
 TEST_CASE(read_8bit_ampphs_with_table)
