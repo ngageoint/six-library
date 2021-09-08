@@ -26,8 +26,8 @@
 #include <iostream>
 #include <string>
 #include <utility>
-
 #include <std/filesystem>
+#include <std/optional>
 
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
@@ -266,14 +266,25 @@ TEST_CASE(test_8bit_ampphs)
     }
 }
 
-TEST_CASE(read_8bit_ampphs_with_table)
+static std::vector<std::byte> read_8bit_ampphs(const fs::path& inputPathname,
+    std::optional<six::AmplitudeTable>& amplitudeTable)
 {
-    const fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
-    const fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
-    const auto inputPathname = getNitfPath(filename);
+    {
+        NITFReader reader;
+        auto container = reader.load(inputPathname);
+        TEST_ASSERT_EQ(1, container->getNumData());
+    }
 
-    NITFReader reader;
-    auto container = reader.load(inputPathname);
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator(six::DataType::COMPLEX, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+
+    six::NITFReadControl reader;
+    reader.setXMLControlRegistry(&xmlRegistry);
+
+    static const std::vector<std::string> schemaPaths;
+    reader.load(inputPathname.string(), schemaPaths);
+    auto container = reader.getContainer();
+    TEST_ASSERT_EQ(six::DataType::COMPLEX, container->getDataType());
     TEST_ASSERT_EQ(1, container->getNumData());
 
     const auto pComplexData = getComplexData(*container, 0);
@@ -286,13 +297,9 @@ TEST_CASE(read_8bit_ampphs_with_table)
 
     const auto& imageData = *(complexData.imageData);
     const auto pAmplitudeTable = imageData.amplitudeTable.get();
-    TEST_ASSERT(pAmplitudeTable != nullptr);
-
-    const auto& AmpTable = *pAmplitudeTable;
-    for (size_t i = 0; i <= UINT8_MAX; i++)
+    if (pAmplitudeTable != nullptr)
     {
-        const auto v = AmpTable.index(i);
-        TEST_ASSERT_EQ(v, (v / 1.0) + 0.0); // be sure it's not something goofy like NaN, Inf, etc.
+        amplitudeTable = *pAmplitudeTable;
     }
 
     const auto numBytesPerPixel = complexData.getNumBytesPerPixel();
@@ -307,28 +314,38 @@ TEST_CASE(read_8bit_ampphs_with_table)
     setDims(region, extent);
     constexpr size_t offset = 0;
     region.setBuffer(buffer + offset);
+    const auto pData = reader.interleaved(region, 0);
+    TEST_ASSERT_NOT_EQ(nullptr, pData);
+
+    return buffer_;
 }
 
+TEST_CASE(read_8bit_ampphs_with_table)
+{
+    const fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
+    const fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
+    const auto inputPathname = getNitfPath(filename);
+
+    std::optional<six::AmplitudeTable> amplitudeTable;
+    const auto buffer = read_8bit_ampphs(inputPathname, amplitudeTable);
+
+    TEST_ASSERT_TRUE(amplitudeTable.has_value());
+    const auto& AmpTable = amplitudeTable.value();
+    for (size_t i = 0; i <= UINT8_MAX; i++)
+    {
+        const auto v = AmpTable.index(i);
+        TEST_ASSERT_EQ(v, (v / 1.0) + 0.0); // be sure it's not something goofy like NaN, Inf, etc.
+    }
+}
 TEST_CASE(read_8bit_ampphs_no_table)
 {
     const fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     const fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
     const auto inputPathname = getNitfPath(filename);
 
-    NITFReader reader;
-    auto container = reader.load(inputPathname);
-    TEST_ASSERT_EQ(1, container->getNumData());
-
-    const auto data = getComplexData(*container, 0);
-    TEST_ASSERT_EQ(six::PixelType::AMP8I_PHS8I, data->getPixelType());
-    TEST_ASSERT_EQ(2, data->getNumBytesPerPixel());
-
-    const auto& classification = data->getClassification();
-    TEST_ASSERT_TRUE(classification.isUnclassified());
-
-    const auto& imageData = *(data->imageData);
-    const auto pAmplitudeTable = imageData.amplitudeTable.get();
-    TEST_ASSERT_EQ(nullptr, pAmplitudeTable);
+    std::optional<six::AmplitudeTable> amplitudeTable;
+    const auto buffer = read_8bit_ampphs(inputPathname, amplitudeTable);
+    TEST_ASSERT_FALSE(amplitudeTable.has_value());
 }
 
 static std::vector<std::byte> sicd_read_data_(const fs::path& inputPathname,
