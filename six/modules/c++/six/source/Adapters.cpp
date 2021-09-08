@@ -30,7 +30,7 @@
 using namespace six;
 
 template<typename TPImpl>
-inline constexpr TPImpl cast_data(NITF_DATA* data)
+inline TPImpl cast_data(NITF_DATA* data)
 {
     void* data_ = data;
     return static_cast<TPImpl>(data_);
