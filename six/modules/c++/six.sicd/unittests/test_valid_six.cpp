@@ -28,6 +28,7 @@
 #include <utility>
 #include <std/filesystem>
 #include <std/optional>
+#include <cmath>
 
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
@@ -235,13 +236,13 @@ TEST_CASE(test_8bit_ampphs)
         }
     }
 
-    std::vector<std::complex<float>> actuals;
+    std::vector<std::complex<float>> actuals(inputs.size());
     imageData.from_AMP8I_PHS8I(inputs, actuals);
     TEST_ASSERT(actuals == expecteds);
 
 
     // we should now be able to convert the cx_floats back to amp/value
-    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> amp8i_phs8i;
+    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> amp8i_phs8i(actuals.size());
     imageData.to_AMP8I_PHS8I(actuals, amp8i_phs8i);
     TEST_ASSERT_EQ(actuals.size(), amp8i_phs8i.size());
     for (size_t i = 0; i < actuals.size(); i++)
@@ -253,7 +254,6 @@ TEST_CASE(test_8bit_ampphs)
     }
 
     // ... and again, async
-    amp8i_phs8i.clear();
     const auto cutoff = actuals.size() / 10; // be sure std::async is called
     imageData.to_AMP8I_PHS8I(actuals, amp8i_phs8i, cutoff);
     TEST_ASSERT_EQ(actuals.size(), amp8i_phs8i.size());
@@ -266,8 +266,8 @@ TEST_CASE(test_8bit_ampphs)
     }
 }
 
-static std::vector<std::byte> read_8bit_ampphs(const fs::path& inputPathname,
-    std::optional<six::AmplitudeTable>& amplitudeTable)
+static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputPathname,
+    std::optional<six::AmplitudeTable>& amplitudeTable, six::sicd::ComplexData& resultComplexData)
 {
     {
         NITFReader reader;
@@ -317,7 +317,7 @@ static std::vector<std::byte> read_8bit_ampphs(const fs::path& inputPathname,
     const auto pData = reader.interleaved(region, 0);
     TEST_ASSERT_NOT_EQ(nullptr, pData);
 
-    return buffer_;
+    return six::sicd::Utilities::readSicd(inputPathname, schemaPaths, resultComplexData);
 }
 
 TEST_CASE(read_8bit_ampphs_with_table)
@@ -327,15 +327,22 @@ TEST_CASE(read_8bit_ampphs_with_table)
     const auto inputPathname = getNitfPath(filename);
 
     std::optional<six::AmplitudeTable> amplitudeTable;
-    const auto buffer = read_8bit_ampphs(inputPathname, amplitudeTable);
+    six::sicd::ComplexData complexData;
+    const auto widebandData = read_8bit_ampphs(inputPathname, amplitudeTable, complexData);
 
     TEST_ASSERT_TRUE(amplitudeTable.has_value());
     const auto& AmpTable = amplitudeTable.value();
     for (size_t i = 0; i <= UINT8_MAX; i++)
     {
         const auto v = AmpTable.index(i);
-        TEST_ASSERT_EQ(v, (v / 1.0) + 0.0); // be sure it's not something goofy like NaN, Inf, etc.
+        TEST_ASSERT_TRUE(std::isfinite(v));
     }
+
+    six::sicd::ImageData imageData;
+    imageData.amplitudeTable.reset(std::make_unique< six::AmplitudeTable>(AmpTable));
+
+    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> results(widebandData.size());
+    //imageData.to_AMP8I_PHS8I(widebandData, results, 0);
 }
 TEST_CASE(read_8bit_ampphs_no_table)
 {
@@ -344,8 +351,13 @@ TEST_CASE(read_8bit_ampphs_no_table)
     const auto inputPathname = getNitfPath(filename);
 
     std::optional<six::AmplitudeTable> amplitudeTable;
-    const auto buffer = read_8bit_ampphs(inputPathname, amplitudeTable);
+    six::sicd::ComplexData complexData;
+    const auto widebandData = read_8bit_ampphs(inputPathname, amplitudeTable, complexData);
     TEST_ASSERT_FALSE(amplitudeTable.has_value());
+
+    six::sicd::ImageData imageData;
+    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> results(widebandData.size());
+    //imageData.to_AMP8I_PHS8I(widebandData, results, 0);
 }
 
 static std::vector<std::byte> sicd_read_data_(const fs::path& inputPathname,

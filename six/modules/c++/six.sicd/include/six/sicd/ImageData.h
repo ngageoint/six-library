@@ -140,8 +140,8 @@ struct ImageData
     // It would be nice to cache the results, but amplitudeTable could change at any time.
     cx_float from_AMP8I_PHS8I(const AMP8I_PHS8I_t&) const; // for unit-tests
 
-    void from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>&, std::vector<cx_float>&, ptrdiff_t cutoff = -1) const;
-    void to_AMP8I_PHS8I(const std::span<const cx_float>&, std::vector<AMP8I_PHS8I_t>&, ptrdiff_t cutoff = -1) const;
+    void from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t>, std::span<cx_float>, ptrdiff_t cutoff = -1) const;
+    void to_AMP8I_PHS8I(std::span<const cx_float>, std::span<AMP8I_PHS8I_t>, ptrdiff_t cutoff = -1) const;
 };
 }
 }

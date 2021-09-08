@@ -205,27 +205,27 @@ static const input_amplitudes_t& get_RE32F_IM32F_values(const six::AmplitudeTabl
     return *pValues;
 }
 
-using from_AMP8I_PHS8I_output_t = std::vector<std::complex<float>>::iterator;
+using from_AMP8I_PHS8I_output_t = std::complex<float>*;
 using from_AMP8I_PHS8I_transform_t = std::function<std::complex<float>(const ImageData::AMP8I_PHS8I_t&)>;
 template<typename TTransform>
 static void from_AMP8I_PHS8I_(const six::AmplitudeTable* pAmplitudeTable,
-    const std::span<const  ImageData::AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& results,
+    std::span<const  ImageData::AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results,
     TTransform transform)
 {
     std::unique_ptr<input_amplitudes_t> pValues_;
     const auto& values = get_RE32F_IM32F_values(pAmplitudeTable, pValues_);
 
-    const auto begin = &(inputs[0]); // no iterators with our homebrew span<>
+    const auto begin = inputs.data(); // no iterators with our homebrew span<>
     const auto end = begin + inputs.size();
-    results.resize(inputs.size());
+    const auto out = results.data(); // no iterators with our homebrew span<>
 
     const from_AMP8I_PHS8I_transform_t f = [&values](const ImageData::AMP8I_PHS8I_t& v)
     {
         return values[v.first][v.second];
     };
-    (void)transform(begin, end, results.begin(), f);
+    (void)transform(begin, end, out, f);
 }
-void ImageData::from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>& inputs, std::vector<std::complex<float>>& results,
+void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results,
     ptrdiff_t cutoff_) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
@@ -274,28 +274,28 @@ static KDTree make_KDTree(const six::AmplitudeTable* pAmplitudeTable)
     return KDTree(std::move(nodes));
 }
 
-using to_AMP8I_PHS8I_output_t = std::vector<ImageData::AMP8I_PHS8I_t>::iterator;
+using to_AMP8I_PHS8I_output_t = ImageData::AMP8I_PHS8I_t*;
 using to_AMP8I_PHS8I_transform_t = std::function<ImageData::AMP8I_PHS8I_t(const std::complex<float>&)>;
 template<typename TTransform>
 static void to_AMP8I_PHS8I_(const six::AmplitudeTable* pAmplitudeTable,
-    const std::span<const ImageData::cx_float>& inputs, std::vector<ImageData::AMP8I_PHS8I_t>& results,
+    std::span<const ImageData::cx_float> inputs, std::span<ImageData::AMP8I_PHS8I_t> results,
     TTransform transform)
 {
     // make the KDTree to quickly find the nearest neighbor
     const KDTree tree = make_KDTree(pAmplitudeTable);
 
-    const auto begin = &(inputs[0]); // no iterators with our homebrew span<>
+    const auto begin = inputs.data(); // no iterators with our homebrew span<>
     const auto end = begin + inputs.size();
-    results.resize(inputs.size());
+    const auto out = results.data(); // no iterators with our homebrew span<>
 
     const to_AMP8I_PHS8I_transform_t f = [&tree](const std::complex<float>& v)
     {
         auto result = tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v });
         return result.amp_and_value;
     };
-    (void)transform(begin, end, results.begin(), f);
+    (void)transform(begin, end, out, f);
 }
-void ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::vector<AMP8I_PHS8I_t>& results,
+void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
     ptrdiff_t cutoff_) const
 {
     if (cutoff_ < 0)
@@ -305,7 +305,7 @@ void ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::
         {
             return std::transform(pBegin, pEnd, out, f);
         };
-        to_AMP8I_PHS8I_(amplitudeTable.get(), cx_floats, results, std_transform);
+        to_AMP8I_PHS8I_(amplitudeTable.get(), inputs, results, std_transform);
     }
     else
     {
@@ -317,6 +317,6 @@ void ImageData::to_AMP8I_PHS8I(const std::span<const cx_float>& cx_floats, std::
         {
             return mt::transform_async(pBegin, pEnd, out, f, cutoff, std::launch::async);
         };
-        to_AMP8I_PHS8I_(amplitudeTable.get(), cx_floats, results, mt_transform_async);
+        to_AMP8I_PHS8I_(amplitudeTable.get(), inputs, results, mt_transform_async);
     }
 }
