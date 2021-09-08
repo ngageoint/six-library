@@ -255,7 +255,7 @@ TEST_CASE(test_8bit_ampphs)
     // ... and again, async
     amp8i_phs8i.clear();
     const auto cutoff = actuals.size() / 10; // be sure std::async is called
-    imageData.to_AMP8I_PHS8I(std::launch::async, actuals, amp8i_phs8i, cutoff);
+    imageData.to_AMP8I_PHS8I(actuals, amp8i_phs8i, cutoff);
     TEST_ASSERT_EQ(actuals.size(), amp8i_phs8i.size());
     for (size_t i = 0; i < actuals.size(); i++)
     {
