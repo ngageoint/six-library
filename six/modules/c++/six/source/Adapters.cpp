@@ -20,16 +20,17 @@
  *
  */
 
-#include <assert.h>
-
 #include "six/Adapters.h"
 
+#include <assert.h>
+
+#include <std/cstddef>
 #include <gsl/gsl.h>
 
 using namespace six;
 
 template<typename TPImpl>
-TPImpl cast_data(NITF_DATA* data)
+inline constexpr TPImpl cast_data(NITF_DATA* data)
 {
     void* data_ = data;
     return static_cast<TPImpl>(data_);
@@ -45,7 +46,7 @@ static TImpl* nitf_malloc()
 }
 
 template<typename TImpl>
-static void nitf_free(NITF_DATA* data)
+static inline void nitf_free(NITF_DATA* data)
 {
     auto impl = cast_data<TImpl*>(data);
     if (impl)
@@ -65,15 +66,14 @@ static NITF_BOOL write(const TImpl* impl, nitf_IOInterface* io, nitf_Error* erro
 
     for (unsigned int i = 0; i < impl->numRows; i++)
     {
-        write_f(impl, rowCopy);
+        write_f(rowCopy);
 
         if (impl->doByteSwap)
             byteSwap(rowCopy, impl->pixelSize
                 / impl->numChannels, impl->numCols * impl->numChannels);
 
         // And write it back
-        auto const rowCopy_ = rowCopy.data();
-        if (!nitf_IOInterface_write(io, rowCopy_, rowSize, error))
+        if (!nitf_IOInterface_write(io, rowCopy.data(), rowSize, error))
             return NITF_FAILURE;
     }
     return NITF_SUCCESS;
@@ -113,7 +113,7 @@ static NITF_BOOL six_MemoryWriteHandler_write(NITF_DATA * data,
     const auto rowSize = impl->pixelSize * impl->numCols;
     uint64_t off = impl->firstRow * rowSize;
 
-    const auto write_f = [&](const MemoryWriteHandlerImpl* impl, std::vector<std::byte>& rowCopy_)
+    const auto write_f = [&](std::vector<std::byte>& rowCopy_)
     {
         assert(rowCopy_.size() == rowSize);
         auto rowCopy = rowCopy_.data();
@@ -180,7 +180,7 @@ static NITF_BOOL six_StreamWriteHandler_write(NITF_DATA * data,
         nitf_IOInterface* io, nitf_Error * error)
 {
     auto const impl = cast_data<const StreamWriteHandlerImpl*>(data);
-    const auto write_f = [](const StreamWriteHandlerImpl* impl, std::vector<std::byte>& rowCopy)
+    const auto write_f = [&](std::vector<std::byte>& rowCopy)
     {
       (void) impl->inputStream->read(rowCopy.data(), rowCopy.size());
     };
