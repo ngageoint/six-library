@@ -230,7 +230,8 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
     }
     else
     {
-        constexpr auto default_cutoff = 128 * 8;
+        constexpr auto dimension = 128 * 8;
+        constexpr auto default_cutoff = dimension * dimension;
         const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
         (void) mt::transform_async(begin, end, out, get_RE32F_IM32F_value_f, cutoff, std::launch::async);
     }
@@ -273,7 +274,8 @@ void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I
     }
     else
     {
-        constexpr auto default_cutoff = 128 * 8;
+        constexpr auto dimension = 128 * 8;
+        constexpr auto default_cutoff = dimension * dimension;
         const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
         (void) mt::transform_async(begin, end, out, nearest_neighbor_f, cutoff, std::launch::async);
     }

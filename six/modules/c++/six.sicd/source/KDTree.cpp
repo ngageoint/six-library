@@ -354,9 +354,7 @@ namespace KDTree
             k = result.size();
             for (size_t i = 0; i < k / 2; i++)
             {
-                node_t temp = result[i];
-                result[i] = result[k - 1 - i];
-                result[k - 1 - i] = temp;
+                std::swap(result[i], result[k - 1 - i]);
             }
         }
         void k_nearest_neighbors(const node_t& point, size_t k, std::vector<node_t>& result) const
