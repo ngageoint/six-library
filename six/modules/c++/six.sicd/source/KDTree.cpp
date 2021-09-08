@@ -344,6 +344,7 @@ namespace KDTree
 
             // copy over result sorted by distance
             // (we must revert the vector for ascending order)
+            result.reserve(neighborheap.size());
             while (!neighborheap.empty())
             {
                 const auto i = neighborheap.top().dataindex;

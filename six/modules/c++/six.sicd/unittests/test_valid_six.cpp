@@ -341,8 +341,10 @@ TEST_CASE(read_8bit_ampphs_with_table)
     six::sicd::ImageData imageData;
     imageData.amplitudeTable.reset(std::make_unique< six::AmplitudeTable>(AmpTable));
 
-    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> results(widebandData.size());
-    //imageData.to_AMP8I_PHS8I(widebandData, results, 0);
+    // image is far too big to call to_AMP8I_PHS8I() with DEBUG code
+    std::span<const std::complex<float>> widebandData_(widebandData.data(), widebandData.size() / 200);
+    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> results(widebandData_.size());
+    imageData.to_AMP8I_PHS8I(widebandData_, results, 0);
 }
 TEST_CASE(read_8bit_ampphs_no_table)
 {
@@ -356,8 +358,10 @@ TEST_CASE(read_8bit_ampphs_no_table)
     TEST_ASSERT_FALSE(amplitudeTable.has_value());
 
     six::sicd::ImageData imageData;
-    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> results(widebandData.size());
-    //imageData.to_AMP8I_PHS8I(widebandData, results, 0);
+    // image is far too big to call to_AMP8I_PHS8I() with DEBUG code
+    std::span<const std::complex<float>> widebandData_(widebandData.data(), widebandData.size() / 200);
+    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> results(widebandData_.size());
+    imageData.to_AMP8I_PHS8I(widebandData_, results, 0);
 }
 
 static std::vector<std::byte> sicd_read_data_(const fs::path& inputPathname,
