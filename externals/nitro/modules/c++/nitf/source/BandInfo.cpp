@@ -49,11 +49,19 @@ BandInfo::BandInfo() noexcept(false) : BandInfo(nitf_BandInfo_construct(&error))
     setManaged(false);
 }
 
+BandInfo::BandInfo(const Representation& representation) : BandInfo()
+{
+    this->representation = representation;
+}
 nitf::Field BandInfo::getRepresentation() const
 {
     return nitf::Field(getNativeOrThrow()->representation);
 }
 
+BandInfo::BandInfo(const Subcategory& subcategory) : BandInfo()
+{
+    getSubcategory().set(subcategory.string());
+}
 nitf::Field BandInfo::getSubcategory() const
 {
     return nitf::Field(getNativeOrThrow()->subcategory);
@@ -200,4 +208,17 @@ const nitf::Representation& nitf::Representation::get(const std::string& s)
     NITF_Represenation_get_if(s, LU);
 
     throw std::invalid_argument("'s' is not a valid Representation.");
+}
+
+const nitf::Subcategory nitf::Subcategory::I("I");
+const nitf::Subcategory nitf::Subcategory::Q("Q");
+
+#define NITF_Subcategory_get_if(s, name) if (s == name.string()) return name;
+const nitf::Subcategory& nitf::Subcategory::get(const std::string& s)
+{
+    // Don't bother with checking lower-case; nobody should be passing
+    // an "r" directly to this routine, should always be the result of R.string()
+    NITF_Subcategory_get_if(s, I);
+    NITF_Subcategory_get_if(s, Q);
+    throw std::invalid_argument("'s' is not a valid Subcategory.");
 }
