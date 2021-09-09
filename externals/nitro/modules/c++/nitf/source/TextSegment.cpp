@@ -42,7 +42,7 @@ TextSegment::TextSegment(nitf_TextSegment * x)
     getNativeOrThrow();
 }
 
-TextSegment::TextSegment() : TextSegment(nitf_TextSegment_construct(&error))
+TextSegment::TextSegment() noexcept(false) : TextSegment(nitf_TextSegment_construct(&error))
 {
     setManaged(false);
 }

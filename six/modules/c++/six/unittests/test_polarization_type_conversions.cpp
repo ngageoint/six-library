@@ -44,7 +44,7 @@ TEST_CASE(SixToString)
     TEST_ASSERT_EQ("UNKNOWN", polarizationString);
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(EnumConstructor);
     TEST_CHECK(ToType);
     TEST_CHECK(SixToString);

@@ -37,11 +37,7 @@ struct Range
     /*!
      * Initializes to an empty range
      */
-    Range() :
-        mStartElement(std::numeric_limits<size_t>::max()),
-        mNumElements(0)
-    {
-    }
+    Range() = default;
 
     /*!
      * \param startElement Start of range
@@ -53,8 +49,8 @@ struct Range
     {
     }
 
-    size_t mStartElement;
-    size_t mNumElements;
+    size_t mStartElement = std::numeric_limits<size_t>::max();
+    size_t mNumElements = 0;
 
     /*!
      * \return The end element (exclusive)

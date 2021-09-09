@@ -22,6 +22,11 @@
 #ifndef __SIX_IMAGE_DATA_H__
 #define __SIX_IMAGE_DATA_H__
 
+#include <array>
+#include <memory>
+#include <std/span>
+#include <utility>
+
 #include "logging/Logger.h"
 #include "six/Types.h"
 #include "six/Init.h"
@@ -42,21 +47,13 @@ class GeoData;
 struct ImageData
 {
     //!  Everything is undefined at this time
-    ImageData() :
-        pixelType(PixelType::NOT_SET),
-        numRows(Init::undefined<size_t>()),
-        numCols(Init::undefined<size_t>()),
-        firstRow(0),
-        firstCol(0)
-    {
-    }
+    ImageData() = default;
 
     /*!
      *  Indicates the pixel type and binary format of the data.
-     *  \todo We currently do not support AMP8I_PHS8I
-     *
+\     *
      */
-    PixelType pixelType;
+    PixelType pixelType = PixelType::NOT_SET;
 
     /*!
      *  SICD AmpTable parameter.  If the data is AMP8I_PHS8I (see above)
@@ -67,16 +64,16 @@ struct ImageData
     mem::ScopedCloneablePtr<AmplitudeTable> amplitudeTable;
 
     //!  Number of rows in the product, including zero-filled pixels
-    size_t numRows;
+    size_t numRows = Init::undefined<size_t>();
 
     //!  Number of cols in the product, including zero-filled pixels
-    size_t numCols;
+    size_t numCols = Init::undefined<size_t>();
 
     //!  Global row index (assuming this is an ROI)
-    size_t firstRow;
+    size_t firstRow = 0;
 
     //!  Global col index (assuming this is an ROI)
-    size_t firstCol;
+    size_t firstCol = 0;
 
     //!  Global row/col size (assuming this is an ROI)
     RowColInt fullImage;
@@ -96,6 +93,13 @@ struct ImageData
 
     bool validate(const GeoData& geoData, logging::Logger& log) const;
 
+    // It would be nice to cache the results, but amplitudeTable could change at any time.
+    using AMP8I_PHS8I_t = std::pair<uint8_t, uint8_t>;
+    std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value) const;
+    std::complex<float> from_AMP8I_PHS8I(const AMP8I_PHS8I_t&) const;
+    std::vector<std::complex<float>> from_AMP8I_PHS8I(const std::span<const AMP8I_PHS8I_t>&) const;
+    std::vector<std::complex<float>> from_AMP8I_PHS8I(const std::span<const uint8_t>& input_amplitudes,
+        const std::span<const uint8_t>& input_values) const;
 };
 }
 }

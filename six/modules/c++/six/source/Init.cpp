@@ -19,6 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <cmath> // isnan()
+
 #include "six/Init.h"
 
 namespace six
@@ -46,7 +49,7 @@ template<> types::RgAz<double>Init::undefined<types::RgAz<double> >()
 
 template<> RowColInt Init::undefined<RowColInt>()
 {
-    return RowColInt(Init::undefined<size_t>(), Init::undefined<size_t>());
+    return RowColInt(Init::undefined<ptrdiff_t>(), Init::undefined<ptrdiff_t>());
 }
 
 template<> RowColDouble Init::undefined<RowColDouble>()
@@ -107,7 +110,7 @@ template<> LatLonAltCorners Init::undefined<LatLonAltCorners>()
 
 template<> ReferencePoint Init::undefined<ReferencePoint>()
 {
-    double ud = Init::undefined<double>();
+    const double ud = Init::undefined<double>();
     return ReferencePoint(ud, ud, ud, ud, ud);
 }
 
@@ -286,4 +289,21 @@ template<> XYZEnum Init::undefined<XYZEnum>()
 {
     return XYZEnum::NOT_SET;
 }
+
+template<typename T>
+static bool isUndefined_(T value)
+{
+    return (value == Init::undefined<T>()) || std::isnan(value);
+}
+template<>
+bool Init::isUndefined(float value)
+{
+    return isUndefined_(value);
+}
+template<>
+bool Init::isUndefined(double value)
+{
+    return isUndefined_(value);
+}
+
 }

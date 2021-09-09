@@ -53,7 +53,7 @@ DerivedXMLParser100::DerivedXMLParser100(logging::Logger* log,
 
 DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
 {
-    XMLElem root = doc->getRootElement();
+    const xml::lite::Element* const root = doc->getRootElement();
 
     XMLElem productCreationElem        = getFirstAndOnly(root, "ProductCreation");
     XMLElem displayElem                = getFirstAndOnly(root, "Display");
@@ -70,7 +70,7 @@ DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
     DerivedData *data = builder.steal(); //steal it
 
     // see if PixelType has MONO or RGB
-    PixelType pixelType = six::toType<PixelType>(
+    const auto pixelType = six::toType<PixelType>(
             getFirstAndOnly(displayElem, "PixelType")->getCharacterData());
     builder.addDisplay(pixelType);
 
@@ -101,7 +101,7 @@ DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
     std::vector<XMLElem> elements;
     exploitationFeaturesElem->getElementsByTagName("ExploitationFeatures",
                                                   elements);
-    builder.addExploitationFeatures(elements.size());
+    builder.addExploitationFeatures(static_cast<unsigned int>(elements.size()));
 
     parseProductCreationFromXML(productCreationElem, data->productCreation.get());
     parseDisplayFromXML(displayElem, data->display.get());
@@ -139,7 +139,7 @@ DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
         std::vector<XMLElem> annChildren;
         annotationsElem->getElementsByTagName("Annotation", annChildren);
         data->annotations.resize(annChildren.size());
-        for (unsigned int i = 0, size = annChildren.size(); i < size; ++i)
+        for (size_t i = 0; i < annChildren.size(); ++i)
         {
             data->annotations[i].reset(new Annotation());
             parseAnnotationFromXML(annChildren[i], data->annotations[i].get());
@@ -150,7 +150,7 @@ DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
 }
 
 void DerivedXMLParser100::parseDerivedClassificationFromXML(
-        const XMLElem classificationElem,
+        const xml::lite::Element* classificationElem,
         DerivedClassification& classification) const
 {
     DerivedXMLParser::parseDerivedClassificationFromXML(classificationElem, classification);
@@ -327,7 +327,7 @@ DerivedXMLParser100::toXML(const DerivedData* derived) const
     if (!derived->annotations.empty())
     {
         XMLElem annotationsElem = newElement("Annotations", root);
-        for (size_t i = 0, num = derived->annotations.size(); i < num; ++i)
+        for (size_t i = 0; i < derived->annotations.size(); ++i)
         {
             convertAnnotationToXML(derived->annotations[i].get(),
                                    annotationsElem);
@@ -416,7 +416,7 @@ XMLElem DerivedXMLParser100::convertGeographicTargetToXML(
             const_iterator it = geographicAndTarget.targetInformation.begin();
             it != geographicAndTarget.targetInformation.end(); ++it)
     {
-        TargetInformation* ti = (*it).get();
+        const TargetInformation* ti = (*it).get();
         XMLElem tiElem = newElement("TargetInformation", geographicAndTargetElem);
 
         // 1 to unbounded
@@ -437,7 +437,7 @@ XMLElem DerivedXMLParser100::convertGeographicTargetToXML(
 }
 
 void DerivedXMLParser100::parseGeographicTargetFromXML(
-        const XMLElem geographicAndTargetElem,
+        const xml::lite::Element* geographicAndTargetElem,
         GeographicAndTarget* geographicAndTarget) const
 {
     parseGeographicCoverageFromXML(
@@ -477,7 +477,7 @@ void DerivedXMLParser100::parseGeographicTargetFromXML(
 }
 
 void DerivedXMLParser100::parseGeographicCoverageFromXML(
-        const XMLElem geographicCoverageElem,
+        const xml::lite::Element* geographicCoverageElem,
         GeographicCoverage* geographicCoverage) const
 {
     // optional and unbounded
@@ -512,21 +512,14 @@ void DerivedXMLParser100::parseGeographicCoverageFromXML(
         // optional to unbounded
         std::vector<XMLElem> countryCodes;
         geographicInfoElem->getElementsByTagName("CountryCode", countryCodes);
-        for (std::vector<XMLElem>::const_iterator it = countryCodes.begin(); it
-                != countryCodes.end(); ++it)
+        for (const auto& countryCode : countryCodes)
         {
             geographicCoverage->geographicInformation->
-                    countryCodes.push_back((*it)->getCharacterData());
+                    countryCodes.push_back(countryCode->getCharacterData());
         }
 
-        // optional
-        XMLElem securityInformationElem = getOptional(geographicInfoElem,
-                                                     "SecurityInfo");
-        if (securityInformationElem)
-        {
-            parseString(securityInformationElem, geographicCoverage->
-                    geographicInformation->securityInformation);
-        }
+        parseOptionalString(geographicInfoElem, "SecurityInfo",
+            geographicCoverage->geographicInformation->securityInformation);
 
         // optional to unbounded
         common().parseParameters(geographicInfoElem, "GeographicInfoExtension",
@@ -549,7 +542,7 @@ XMLElem DerivedXMLParser100::convertMeasurementToXML(
 }
 
 void DerivedXMLParser100::parseMeasurementFromXML(
-    const XMLElem measurementElem,
+    const xml::lite::Element* measurementElem,
     Measurement* measurement) const
 {
     DerivedXMLParser::parseMeasurementFromXML(measurementElem, measurement);
@@ -565,7 +558,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
     XMLElem exploitationFeaturesElem =
         newElement("ExploitationFeatures", parent);
 
-    if (exploitationFeatures->collections.size() < 1)
+    if (exploitationFeatures->collections.empty())
     {
         throw except::Exception(Ctxt(FmtX(
             "ExploitationFeatures must have at least [1] Collection, " \
@@ -573,9 +566,9 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
     }
 
     // 1 to unbounded
-    for (size_t i = 0; i < exploitationFeatures->collections.size(); ++i)
+    for (auto& pCollections : exploitationFeatures->collections)
     {
-        Collection* collection = exploitationFeatures->collections[i].get();
+        Collection* collection = pCollections.get();
         XMLElem collectionElem = newElement("Collection",
             exploitationFeaturesElem);
         setAttribute(collectionElem, "identifier", collection->identifier);
@@ -631,10 +624,9 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
                 roiElem);
         }
         // optional to unbounded
-        for (size_t n = 0, nElems =
-            collection->information.polarization.size(); n < nElems; ++n)
+        for (const auto& pPolarization : collection->information.polarization)
         {
-            TxRcvPolarization *p = collection->information.polarization[n].get();
+            const TxRcvPolarization *p = pPolarization.get();
             XMLElem polElem = newElement("Polarization", informationElem);
 
             createString("TxPolarization",
@@ -658,7 +650,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
         }
 
         // create Geometry -- optional
-        Geometry* geom = collection->geometry.get();
+        const Geometry* geom = collection->geometry.get();
         if (geom != nullptr)
         {
             XMLElem geometryElem = newElement("Geometry", collectionElem);
@@ -684,7 +676,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
         }
 
         // create Phenomenology -- optional
-        Phenomenology* phenom = collection->phenomenology.get();
+        const Phenomenology* phenom = collection->phenomenology.get();
         if (phenom != nullptr)
         {
             XMLElem phenomenologyElem = newElement("Phenomenology",
@@ -745,7 +737,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
 }
 
 void DerivedXMLParser100::parseProductFromXML(
-    const XMLElem exploitationFeaturesElem,
+    const xml::lite::Element* exploitationFeaturesElem,
     ExploitationFeatures* exploitationFeatures) const
 {
     XMLElem productElem = getFirstAndOnly(exploitationFeaturesElem, "Product");
@@ -755,12 +747,7 @@ void DerivedXMLParser100::parseProductFromXML(
     common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"),
                                product.resolution);
 
-    // optional
-    XMLElem tmpElem = getOptional(productElem, "North");
-    if (tmpElem)
-    {
-        parseDouble(tmpElem, product.north);
-    }
+    parseOptionalDouble(productElem, "North", product.north);
 
     // optional to unbounded
     common().parseParameters(productElem, "Extension",

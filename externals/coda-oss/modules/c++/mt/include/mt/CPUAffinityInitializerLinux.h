@@ -76,8 +76,7 @@ public:
     }
 
 private:
-
-    virtual CPUAffinityThreadInitializerLinux* newThreadInitializerImpl()
+    CPUAffinityThreadInitializerLinux* newThreadInitializerImpl() override
     {
         return new CPUAffinityThreadInitializerLinux(mCPUProvider->nextCPU());
     }

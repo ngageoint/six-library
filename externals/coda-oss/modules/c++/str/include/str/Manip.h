@@ -24,6 +24,7 @@
 #define __STR_MANIP_H__
 
 #include <ctype.h>
+#include <wchar.h>
 
 #include <string>
 #include <vector>
@@ -140,9 +141,8 @@ std::vector<std::string> split(const std::string& s,
                                size_t maxSplit = std::string::npos);
 
 //! Uses std::transform to convert all chars to lower case
-void lower(std::string& s);
-
 //! Uses std::transform to convert all chars to upper case
+void lower(std::string& s);
 void upper(std::string& s);
 
 /*!
@@ -157,7 +157,7 @@ std::string join(std::vector<T> toks, std::string with)
     if (toks.empty())
         return "";
 
-    int len = (int)toks.size();
+    const auto len = static_cast<int>(toks.size());
     std::ostringstream oss;
     int i = 0;
     for (; i < len - 1; i++)

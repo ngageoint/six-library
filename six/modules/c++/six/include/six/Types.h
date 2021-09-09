@@ -23,9 +23,13 @@
 #define __SIX_TYPES_H__
 #pragma once
 
+#include <stdint.h>
+
 #include <vector>
 #include <limits>
 #include <string>
+
+#include <std/memory>
 
 #include <scene/sys_Conf.h>
 #include <import/except.h>
@@ -44,6 +48,9 @@
 namespace six
 {
 static const char SCHEMA_PATH[] = "SIX_SCHEMA_PATH";
+// Gets the value of SIX_SCHEMA_PATH, or the compiled default if not set.
+// If the resulting path doesn't exist, an exception is thrown.
+extern std::string getSchemaPath(std::vector<std::string>&);
 
 /*!
  * \class DESValidationException
@@ -94,7 +101,8 @@ typedef scene::FrameType FrameType;
  */
 struct DecorrType
 {
-    DecorrType(double ccz = 0.0, double dr = 0.0) :
+    DecorrType() = default;
+        DecorrType(double ccz, double dr = 0.0) :
         corrCoefZero(ccz), decorrRate(dr)
     {
     }
@@ -167,10 +175,30 @@ struct Constants
         switch (type.value)
         {
         case PixelType::RE32F_IM32F:
+        {
+            // Each pixel is stored as a pair of numbers that represent the realand imaginary
+            // components. Each component is stored in a 32-bit IEEE floating point format (4
+            // bytes per component, 8 bytes per pixel).
+            static_assert(sizeof(std::complex<float>) == 8, "RE32F_IM32F should be two floats");
             return 8;
+        }
 
         case PixelType::RE16I_IM16I:
+        {
+            // Each pixel is stored as a pair of numbers that represent the real and imaginary 
+            // components. Each component is stored in a 16-bit signed integer in 2's 
+            // complement format (2 bytes per component, 4 bytes per pixel). 
+            static_assert(sizeof(std::complex<int16_t>) == 4, "RE16I_IM16I should be two 16-bit integers");
             return 4;
+        }
+
+        case PixelType::AMP8I_PHS8I:
+        {
+            // Each pixel is stored as a pair of numbers that represent the amplitude and phase
+            // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
+            // component, 2 bytes per pixel). 
+            return 2;
+        }
 
         case PixelType::MONO8I:
         case PixelType::MONO8LU:
@@ -182,8 +210,7 @@ struct Constants
             return 3;
 
         default:
-            throw except::Exception(Ctxt(FmtX("Unknown pixel type [%d]",
-                                              (int) type)));
+            throw except::Exception(Ctxt(FmtX("Unknown pixel type [%d]", (int) type)));
         }
     }
 
@@ -197,20 +224,20 @@ struct Constants
  *  and row-column position for a point.
  *
  */
-struct ReferencePoint
+struct ReferencePoint final
 {
     //!  ECEF location of point
     Vector3 ecef;
 
     //!  Row col pixel location of point
-    RowColDouble rowCol;
+    RowColDouble rowCol{ 0.0, 0.0 };
 
     //!  (Optional) name.  Leave it blank if you don't need it
     std::string name;
 
     //!  Construct, init all fields at once (except optional name)
     ReferencePoint(double x = 0, double y = 0, double z = 0, double row = 0,
-                   double col = 0) :
+                   double col = 0) noexcept :
         rowCol(row, col)
     {
         ecef[0] = x;
@@ -273,8 +300,8 @@ struct SCP
 struct LUT
 {
     std::vector<unsigned char> table;
-    size_t numEntries;
-    size_t elementSize;
+    size_t numEntries = 0;
+    size_t elementSize = 0;
 
     //!  Initialize with a number of entries and known output space
     LUT(size_t entries, size_t outputSpace) :
@@ -295,10 +322,7 @@ struct LUT
     }
 
     //! Initialize from nitf::LookupTable read from a NITF
-    LUT(const nitf::LookupTable& lookupTable) :
-        table(lookupTable.getEntries() * lookupTable.getTables()),
-        numEntries(lookupTable.getEntries()),
-        elementSize(lookupTable.getTables())
+    LUT(const nitf::LookupTable& lookupTable) : LUT(lookupTable.getEntries(), lookupTable.getTables())
     {
         // NITF stores the tables consecutively.
         // Need to interleave them for SIX
@@ -324,9 +348,7 @@ struct LUT
         }
     }
 
-    virtual ~LUT()
-    {
-    }
+    virtual ~LUT() = default;
 
     bool operator==(const LUT& rhs) const
     {
@@ -360,7 +382,7 @@ struct LUT
 
     virtual LUT* clone() const
     {
-        return new LUT(getTable(), numEntries, elementSize);
+        return std::make_unique<LUT>(getTable(), numEntries, elementSize).release();
     }
 };
 
@@ -374,30 +396,50 @@ struct LUT
  *  interpreted as an index into the AmpTable, ultimately yielding the
  *  double precision amplitude value
  */
-struct AmplitudeTable : public LUT
+struct AmplitudeTable final : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
-    AmplitudeTable() :
-        LUT(256, sizeof(double))
+    AmplitudeTable() noexcept : 
+        LUT(UINT8_MAX+1 /*i.e., 256*/, sizeof(double))
     {
+    }
+
+    size_t size() const
+    {
+        return numEntries;
     }
 
     bool operator==(const AmplitudeTable& rhs) const
     {
-        return *(dynamic_cast<const LUT*>(this)) == *(dynamic_cast<const LUT*>(&rhs));
+        const LUT* pThis = this;
+        const LUT* pRHS = &rhs;
+        return *(pThis) == *(pRHS);
     }
     bool operator!=(const AmplitudeTable& rhs) const
     {
         return !(*this == rhs);
     }
+
+    const double& index(size_t ii) const
+    {
+        const void* this_ii = (*this)[ii];
+        return *static_cast<const double*>(this_ii);
+    }
+    double& index(size_t ii)
+    {
+        void* this_ii = (*this)[ii];
+        return *static_cast<double*>(this_ii);
+    }
+
     AmplitudeTable* clone() const
     {
-        AmplitudeTable* ret = new AmplitudeTable();
+        auto ret = std::make_unique<AmplitudeTable>();
         for (size_t ii = 0; ii < numEntries; ++ii)
         {
-            *(double*)(*ret)[ii] = *(double*)(*this)[ii];
+            void* ret_ii = (*ret)[ii];
+            *static_cast<double*>(ret_ii) = index(ii);
         }
-        return ret;
+        return ret.release();
     }
 };
 

@@ -22,13 +22,16 @@
 
 #include <sstream>
 
+#include <std/filesystem>
+#include <gsl/gsl.h>
+
 #include "io/FileOutputStream.h"
 #include "sys/Path.h"
+#include "gsl/gsl.h"
 #include "scene/GridECEFTransform.h"
 #include "scene/Utilities.h"
 #include "six/sidd/GeoTIFFWriteControl.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 #if !defined(SIX_TIFF_DISABLED)
@@ -42,7 +45,7 @@ GeoTIFFWriteControl::GeoTIFFWriteControl()
                                                     tiff::Const::Type::ASCII,
                                                     Constants::GT_XML_TAG);
 }
-void GeoTIFFWriteControl::initialize(mem::SharedPtr<Container> container)
+void GeoTIFFWriteControl::initialize(std::shared_ptr<Container> container)
 {
 
     if (container->getDataType() != DataType::DERIVED)
@@ -60,9 +63,9 @@ void GeoTIFFWriteControl::initialize(mem::SharedPtr<Container> container)
         else if (data->getDataType() == DataType::DERIVED)
         {
             //length = ??
-            length += (uint64_t) data->getNumBytesPerPixel()
-                    * (uint64_t) data->getNumRows()
-                    * (uint64_t) data->getNumCols();
+            length += gsl::narrow<uint64_t>(data->getNumBytesPerPixel())
+                    * gsl::narrow<uint64_t>(data->getNumRows())
+                    * gsl::narrow<uint64_t>(data->getNumCols());
 
             if (length > Constants::GT_SIZE_MAX)
                 throw except::Exception(Ctxt(
@@ -95,19 +98,17 @@ void GeoTIFFWriteControl::save(const SourceList& sources,
     for (size_t ii = 0; ii < sources.size(); ++ii)
     {
         tiff::ImageWriter* const imageWriter = tiffWriter.addImage();
-        const DerivedData* const data =
-            static_cast<DerivedData*>(mDerivedData[ii]);
-        const size_t oneRow =
-            data->getNumCols() * data->getNumBytesPerPixel();
+        const DerivedData* const data =  static_cast<DerivedData*>(mDerivedData[ii]);
+        const size_t oneRow = data->getNumCols() * data->getNumBytesPerPixel();
         tiff::IFD* ifd = imageWriter->getIFD();
         setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);
         buf.resize(oneRow);
-        const size_t numRows = data->getNumRows();
-        const size_t numCols = data->getNumCols();
 
-        for (size_t row = 0; row < numRows; ++row)
+        const auto extent = getExtent(*data);
+        const auto numCols = static_cast<uint32_t>(extent.col);
+        for (size_t row = 0; row < extent.row; ++row)
         {
-            sources[ii]->read((std::byte*)buf.data(), oneRow);
+            sources[ii]->read(buf.data(), oneRow);
             imageWriter->putData(buf.data(), numCols);
         }
         imageWriter->writeIFD();
@@ -122,9 +123,10 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
                                    const std::string& toFilePrefix,
                                    const std::vector<std::string>& schemaPaths)
 {
-    PixelType pixelType = data->getPixelType();
-    uint32_t numRows = (uint32_t) data->getNumRows();
-    uint32_t numCols = (uint32_t) data->getNumCols();
+    const PixelType pixelType = data->getPixelType();
+    const types::RowCol<uint32_t> extent(getExtent(*data));
+    const auto numRows = extent.row;
+    const auto numCols = extent.col;
 
     // Start by initializing the TIFF info
     ifd->addEntry(tiff::KnownTags::IMAGE_WIDTH, numCols);
@@ -134,8 +136,8 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
 
     tiff::IFDEntry* bitsPerSample = (*ifd)[tiff::KnownTags::BITS_PER_SAMPLE];
 
-    unsigned short numBands = data->getNumChannels();
-    unsigned short bitDepth = data->getNumBytesPerPixel() * 8 / numBands;
+    const auto numBands = data->getNumChannels();
+    const auto bitDepth = data->getNumBytesPerPixel() * 8 / numBands;
 
     for (unsigned int j = 0; j < numBands; ++j)
     {
@@ -156,7 +158,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
         {
             for (unsigned int i = 0; i < lut.numEntries; ++i)
             {
-                unsigned short lutij = lut[i][j];
+                const unsigned short lutij = lut[i][j];
                 lutEntry->addValue(tiff::TypeFactory::create(
                         (unsigned char*) &lutij,
                         tiff::Const::Type::SHORT));
@@ -167,7 +169,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     }
     else if (pixelType == PixelType::RGB24I)
     {
-        short spp(3);
+        constexpr short spp = 3;
         ifd->addEntry(tiff::KnownTags::SAMPLES_PER_PIXEL, spp);
         photoInterp = 2;
     }
@@ -177,9 +179,9 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
                    "ImageDescription",
                    FmtX("SIDD: %s", data->getName().c_str()));
 
-    unsigned short orientation(1);
+    constexpr unsigned short orientation = 1;
     ifd->addEntry("Orientation", orientation);
-    unsigned short planarConf(1);
+    constexpr unsigned short planarConf = 1;
     ifd->addEntry("PlanarConfiguration", planarConf);
 
     addStringArray(ifd,
@@ -214,7 +216,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
             data->measurement->projection->projectionType.toString()));
     }
     const GeographicProjection& projection =
-        *static_cast<GeographicProjection *>(
+        *dynamic_cast<GeographicProjection *>(
             data->measurement->projection.get());
 
     addGeoTIFFKeys(projection,
@@ -258,13 +260,12 @@ void GeoTIFFWriteControl::save(const BufferList& sources,
         tiff::ImageWriter* imageWriter = tiffWriter.addImage();
         tiff::IFD* ifd = imageWriter->getIFD();
 
-        DerivedData* data = (DerivedData*) mDerivedData[ii];
+        const DerivedData* const data = (DerivedData*) mDerivedData[ii];
         setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);
         // Now we hack to write
 
         const auto sources_ii = reinterpret_cast<const unsigned char*>(sources[ii]);
-        imageWriter->putData(sources_ii, data->getNumRows()
-                * data->getNumCols());
+        imageWriter->putData(sources_ii, static_cast<sys::Uint32_T>(getExtent(*data).area()));
 
         imageWriter->writeIFD();
     }
@@ -275,7 +276,7 @@ void GeoTIFFWriteControl::save(const BufferList& sources,
 void GeoTIFFWriteControl::addCharArray(tiff::IFD* ifd, const std::string &tag,
                                        const char* cstr, int tiffType)
 {
-    if (!ifd->exists(tag.c_str()))
+    if (!ifd->exists(tag))
     {
         ifd->addEntry(tag);
     }
@@ -288,7 +289,7 @@ void GeoTIFFWriteControl::addStringArray(tiff::IFD* ifd,
                                          const std::string &str,
                                          int tiffType)
 {
-    if (!ifd->exists(tag.c_str()))
+    if (!ifd->exists(tag))
     {
         ifd->addEntry(tag);
     }
@@ -339,8 +340,7 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(
     const LatLon upperLeft =
         scene::Utilities::ecefToLatLon(gridTransform.rowColToECEF(0, 0));
 
-    const LatLon lowerRight = scene::Utilities::ecefToLatLon(
-        gridTransform.rowColToECEF(numRows - 1, numCols - 1));
+    const LatLon lowerRight = scene::Utilities::ecefToLatLon(gridTransform, numRows - 1, numCols - 1);
 
     // ModelTiePointTag = (I, J, K, X, Y, Z) where
     // (I, J, K) is the point at location (I, J) in raster space with pixel
@@ -364,10 +364,10 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(
     ifd->addEntry("ModelPixelScaleTag");
     entry = (*ifd)["ModelPixelScaleTag"];
 
-    const double scaleX((lowerRight.getLon() - upperLeft.getLon()) / numCols);
+    const double scaleX((lowerRight.getLon() - upperLeft.getLon()) / static_cast<double>(numCols));
     entry->addValue(scaleX);
 
-    const double scaleY((upperLeft.getLat() - lowerRight.getLat()) / numRows);
+    const double scaleY((upperLeft.getLat() - lowerRight.getLat()) / static_cast<double>(numRows));
     entry->addValue(scaleY);
 
     entry->addValue(0.0);
@@ -399,10 +399,17 @@ void GeoTIFFWriteControl::addGeoTIFFKeys(
     const std::string tfwContents(ostr.str());
 
     io::FileOutputStream stream(tfwPathname);
-    stream.write(reinterpret_cast<const std::byte*>(tfwContents.c_str()),
-                 tfwContents.length());
+    stream.write(tfwContents);
     stream.flush();
     stream.close();
+}
+void GeoTIFFWriteControl::addGeoTIFFKeys(
+    const GeographicProjection& projection,
+    const types::RowCol<size_t>& extent,
+    tiff::IFD* ifd,
+    const std::filesystem::path& tfwPathname)
+{
+    addGeoTIFFKeys(projection, extent.row, extent.col, ifd, tfwPathname.string());
 }
 
 #endif

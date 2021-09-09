@@ -36,7 +36,7 @@
 namespace six
 {
 
-const int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
+constexpr int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
 namespace details
 {

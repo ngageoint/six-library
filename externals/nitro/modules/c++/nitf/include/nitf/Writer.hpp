@@ -25,6 +25,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include "nitf/Writer.h"
 #include "nitf/List.hpp"
@@ -35,7 +36,7 @@
 #include "nitf/ImageWriter.hpp"
 #include "nitf/SegmentWriter.hpp"
 #include "nitf/Object.hpp"
-#include <string>
+#include "nitf/exports.hpp"
 
 /*!
  *  \file Writer.hpp
@@ -45,7 +46,7 @@
 namespace nitf
 {
 
-struct WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
+struct NITRO_NITFCPP_API WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
 {
     void operator()(nitf_Writer *writer) override;
 };
@@ -54,9 +55,8 @@ struct WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
  *  \class Writer
  *  \brief  The C++ wrapper for the nitf_Writer
  */
-class Writer : public nitf::Object<nitf_Writer, WriterDestructor>
+struct NITRO_NITFCPP_API Writer : public nitf::Object<nitf_Writer, WriterDestructor>
 {
-public:
     //! Copy constructor
     Writer(const Writer & x);
 
@@ -67,9 +67,9 @@ public:
     Writer(nitf_Writer * x);
 
     //! Constructor
-    Writer();
+    Writer() noexcept(false);
 
-    ~Writer();
+    ~Writer() = default;
     Writer(Writer&&) = default;
     Writer& operator=(Writer&&) = default;
 
@@ -129,25 +129,25 @@ public:
      * Sets the WriteHandler for the Image at the given index.
      */
     void setImageWriteHandler(int index,
-                              mem::SharedPtr<WriteHandler> writeHandler);
+                              std::shared_ptr<WriteHandler> writeHandler);
 
     /*!
      * Sets the WriteHandler for the Graphic at the given index.
      */
     void setGraphicWriteHandler(int index,
-                                mem::SharedPtr<WriteHandler> writeHandler);
+                                std::shared_ptr<WriteHandler> writeHandler);
 
     /*!
      * Sets the WriteHandler for the Text at the given index.
      */
     void setTextWriteHandler(int index,
-                             mem::SharedPtr<WriteHandler> writeHandler);
+                             std::shared_ptr<WriteHandler> writeHandler);
 
     /*!
      * Sets the WriteHandler for the DE Segment at the given index.
      */
     void setDEWriteHandler(int index,
-                           mem::SharedPtr<WriteHandler> writeHandler);
+                           std::shared_ptr<WriteHandler> writeHandler);
 
     /**
      * Returns a NEW ImageWriter for the given index
@@ -251,7 +251,7 @@ private:
     nitf_Error  error{};
 
     //! c++ write handlers need to be kept in scope
-    std::vector<mem::SharedPtr<nitf::WriteHandler> > mWriteHandlers;
+    std::vector<std::shared_ptr<nitf::WriteHandler> > mWriteHandlers;
 };
 
 }

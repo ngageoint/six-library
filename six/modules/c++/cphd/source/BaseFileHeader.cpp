@@ -21,6 +21,8 @@
  */
 #include <cphd/BaseFileHeader.h>
 
+#include <vector>
+
 #include <mem/ScopedArray.h>
 #include <io/SeekableStreams.h>
 #include <str/Manip.h>
@@ -85,17 +87,17 @@ void BaseFileHeader::blockReadHeader(io::SeekableInputStream& inStream,
     static const char ERROR_MSG[] =
             "CPHD file malformed: Header must terminate with '\\f\\n'";
 
-    std::unique_ptr <std::byte[]> buf(new std::byte[blockSize + 1]);
-    std::fill_n(buf.get(), blockSize + 1, static_cast<std::byte>(0));
+    std::vector<std::byte> buf(blockSize + 1);
+    std::fill(buf.begin(), buf.end(), static_cast<std::byte>(0));
     headerBlock.clear();
 
     // read each block in succession
     size_t terminatorLoc = std::string::npos;
     size_t totalBytesRead = 0;
-    while (inStream.read(buf.get(), blockSize) != io::InputStream::IS_EOF &&
+    while (inStream.read(buf.data(), blockSize) != io::InputStream::IS_EOF &&
            terminatorLoc == std::string::npos)
     {
-        std::string thisBlock = reinterpret_cast<const char*>(buf.get());
+        std::string thisBlock = reinterpret_cast<const char*>(buf.data());
 
         // find the terminator in the block
         terminatorLoc = thisBlock.find('\f');

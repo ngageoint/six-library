@@ -22,8 +22,9 @@
 
 #include <cmath>
 
-#include <import/six.h>
+#include <std/filesystem>
 
+#include <import/six.h>
 #include <import/cli.h>
 #include <import/io.h>
 #include <import/mem.h>
@@ -32,7 +33,6 @@
 #include <import/six/sidd.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace
@@ -313,8 +313,7 @@ int main(int argc, char** argv)
             if (container->getDataType() == six::DataType::COMPLEX ||
                 data->getDataType() == six::DataType::DERIVED)
             {
-                const types::RowCol<size_t> extent(data->getNumRows(),
-                                                   data->getNumCols());
+                const auto extent = getExtent(*data);
                 const size_t numPixels(extent.row * extent.col);
                 const bool expandIt =
                         (expand &&
@@ -337,8 +336,7 @@ int main(int argc, char** argv)
                 std::byte* buffer =
                         buffers.add(numPixels * numBytesPerPixel);
 
-                region.setNumRows(extent.row);
-                region.setNumCols(extent.col);
+                setDims(region, extent);
                 region.setBuffer(buffer + offset);
                 reader->interleaved(region, imageNum++);
 

@@ -39,13 +39,16 @@ public:
         six::SICommonXMLParser01x(uri, false, uri, log, false)
     {
     }
+    SICommonXMLParser050(const SICommonXMLParser050&) = delete;
+    SICommonXMLParser050& operator=(const SICommonXMLParser050&) = delete;
+
 
     virtual XMLElem convertRadiometryToXML(
         const six::Radiometric *obj,
         XMLElem parent = nullptr) const;
 
     virtual void parseRadiometryFromXML(
-        const XMLElem radiometricXML,
+        const xml::lite::Element* radiometricXML,
         six::Radiometric *obj) const;
 };
 
@@ -110,7 +113,7 @@ XMLElem SICommonXMLParser050::convertRadiometryToXML(
 }
 
 void SICommonXMLParser050::parseRadiometryFromXML(
-    const XMLElem radiometricXML,
+    const xml::lite::Element* radiometricXML,
     six::Radiometric* radiometric) const
 {
     XMLElem tmpElem = nullptr;
@@ -234,10 +237,10 @@ XMLElem ComplexXMLParser050::convertImageFormationAlgoToXML(
 }
 
 void ComplexXMLParser050::parseWeightTypeFromXML(
-    const XMLElem gridRowColXML,
+    const xml::lite::Element* gridRowColXML,
     mem::ScopedCopyablePtr<WeightType>& obj) const
 {
-    const XMLElem weightType = getOptional(gridRowColXML, "WgtType");
+    const xml::lite::Element* weightType = getOptional(gridRowColXML, "WgtType");
     if (weightType)
     {
         obj.reset(new WeightType());

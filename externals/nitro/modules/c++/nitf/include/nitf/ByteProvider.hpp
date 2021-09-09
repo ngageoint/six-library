@@ -33,6 +33,7 @@
 #include <nitf/ImageBlocker.hpp>
 #include <nitf/NITFBufferList.hpp>
 #include <nitf/ImageSegmentComputer.h>
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
@@ -93,9 +94,8 @@ namespace nitf
  * desSubheaderAndData
  *
  */
-class ByteProvider
+struct NITRO_NITFCPP_API ByteProvider
 {
-public:
     typedef std::pair<const void*, size_t> PtrAndLength;
 
     /*!
@@ -131,7 +131,7 @@ public:
     {
         return mFileHeader;
     }
-    void getFileHeader(std::span<const std::byte>&) const;
+    void getFileHeader(std::span<const std::byte>&) const noexcept;
 
     /*!
      * \return The raw bytes for each image subheader.  Vector size matches the
@@ -151,7 +151,7 @@ public:
     {
         return mDesSubheaderAndData;
     }
-    void getDesSubheaderAndData(std::span<const std::byte>&) const;
+    void getDesSubheaderAndData(std::span<const std::byte>&) const noexcept;
 
     /*!
      * \return The file offset for each image subheader.  Vector size matches

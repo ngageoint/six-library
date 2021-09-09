@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include "six/XMLControlFactory.h"
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
@@ -28,11 +30,9 @@ using namespace six;
 
 XMLControlRegistry::~XMLControlRegistry()
 {
-    for (RegistryMap::const_iterator iter = mRegistry.begin();
-         iter != mRegistry.end();
-         ++iter)
+    for (auto& entry : mRegistry)
     {
-        delete iter->second;
+        delete entry.second;
     }
 }
 
@@ -58,7 +58,7 @@ void XMLControlRegistry::addCreator(const std::string& identifier,
 }
 #if !CODA_OSS_cpp17
 void XMLControlRegistry::addCreator(const std::string& identifier,
-                                    std::auto_ptr<XMLControlCreator> creator)
+                                    mem::auto_ptr<XMLControlCreator> creator)
 {
     addCreator(identifier, std::unique_ptr<XMLControlCreator>(creator.release()));
 }
@@ -80,9 +80,9 @@ XMLControlRegistry::newXMLControl(const std::string& identifier,
 std::string six::toXMLString(const Data* data,
                              const six::XMLControlRegistry *xmlRegistry)
 {
-    std::unique_ptr<logging::Logger> log (new logging::NullLogger());
+    logging::NullLogger log;
     return toValidXMLString(data, std::vector<std::string>(),
-                            log.get(), xmlRegistry);
+                            &log, xmlRegistry);
 }
 
 std::string six::toValidXMLString(const Data* data,
@@ -90,6 +90,8 @@ std::string six::toValidXMLString(const Data* data,
                                   logging::Logger* log,
                                   const six::XMLControlRegistry *xmlRegistry)
 {
+    assert(data != nullptr);
+
     if (!xmlRegistry)
     {
         xmlRegistry = &XMLControlFactory::getInstance();

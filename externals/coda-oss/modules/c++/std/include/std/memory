@@ -1,0 +1,67 @@
+/* =========================================================================
+ * This file is part of sys-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2021, Maxar Technologies, Inc.
+ *
+ * sys-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not, http://www.gnu.org/licenses/.
+ *
+ */
+#ifndef CODA_OSS_std_memory_INCLUDED_
+#define CODA_OSS_std_memory_INCLUDED_
+#pragma once
+
+#include <memory>
+
+// Make it (too?) easy for clients to get our various std:: implementations
+
+#include "mem/SharedPtrCpp11.h"
+static_assert(CODA_OSS_mem_make_unique >= 201304L, "missing mem::make::unique");
+
+#if defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique >= 201304L) // https://en.cppreference.com/w/cpp/utility/feature_test
+    #undef CODA_OSS_AUGMENT_std_make_unique
+    #define CODA_OSS_AUGMENT_std_make_unique 0 // already have it
+#endif
+#ifndef CODA_OSS_AUGMENT_std_make_unique
+    #define CODA_OSS_AUGMENT_std_make_unique 1
+#endif
+
+#if CODA_OSS_cpp14
+    #define CODA_OSS_DEFINE_std_make_unique_ -1  // OK to #include <>, below
+#else
+    #define CODA_OSS_DEFINE_std_make_unique_ CODA_OSS_AUGMENT_std_make_unique
+#endif  // CODA_OSS_cpp14
+
+#if CODA_OSS_DEFINE_std_make_unique_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+            template <typename T, typename... TArgs>
+            std::unique_ptr<T> make_unique(TArgs && ... args)
+            {
+                // let mem::make::unique to all the template magic
+                return mem::make::unique<T>(std::forward<TArgs>(args)...);
+            }
+    }
+    #define CODA_OSS_lib_make_unique CODA_OSS_mem_make_unique
+#elif CODA_OSS_DEFINE_std_make_unique_ == -1  // set above
+    #include <memory>
+    #ifndef __cpp_lib_make_unique
+        #define __cpp_lib_make_unique 201304L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #endif
+#endif  // CODA_OSS_DEFINE_std_make_unique_
+
+// The real one or our substitute?
+#define CODA_OSS__cpp_lib_make_unique (defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique >= 201304L)) && !defined(CODA_OSS_lib_make_unique)
+
+#endif  // CODA_OSS_std_memory_INCLUDED_

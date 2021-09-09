@@ -59,10 +59,8 @@ namespace sys
  *  This class provides the wrapper for a pthread_t.
  *
  */
-class ThreadPosix : public ThreadInterface
+struct ThreadPosix : public ThreadInterface
 {
-
-public:
     /*!
     *  Default constructor.  Allows ThreadInterface to bind this to target
     *  \param name  The name
@@ -91,6 +89,9 @@ public:
     //! Destructor
     virtual ~ThreadPosix()
     {}
+
+    ThreadPosix(const ThreadPosix&) = delete;
+    ThreadPosix& operator=(const ThreadPosix&) = delete;
 
     /*!
      *  The startpoint for thread processing
@@ -142,7 +143,7 @@ public:
     }
 
 private:
-    pthread_t mNative;
+    pthread_t mNative{};
 
 };
 

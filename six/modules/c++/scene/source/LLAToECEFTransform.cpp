@@ -22,11 +22,6 @@
 #include "scene/LLAToECEFTransform.h"
 #include <math/Utilities.h>
 
-scene::LLAToECEFTransform::LLAToECEFTransform()
- : CoordinateTransform()
-{
-}
-
 scene::LLAToECEFTransform::LLAToECEFTransform(const EllipsoidModel *initVals)
  : CoordinateTransform(initVals)
 {
@@ -39,11 +34,11 @@ scene::LLAToECEFTransform* scene::LLAToECEFTransform::clone() const
     return newTransform;
 }
 
-scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla)
+scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla) const
 {
-    Vector3 ecef;
+    Vector3 ecef{};
 
-    LatLonAlt mylla = lla;
+    const LatLonAlt mylla = lla;
 
     if (std::abs(mylla.getLatRadians()) > M_PI/2
 	|| std::abs(mylla.getLonRadians()) > M_PI)
@@ -64,7 +59,7 @@ scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla)
     //do conversion here; store result in ecef struct
 
     double r = computeRadius(mylla);
-    double flatLat = computeLatitude(mylla.getLatRadians());
+    const double flatLat = computeLatitude(mylla.getLatRadians());
 
     double coslat = cos(mylla.getLatRadians());
     double coslon = cos(mylla.getLonRadians());
@@ -81,11 +76,11 @@ scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla)
     return ecef;
 }
 
-double scene::LLAToECEFTransform::computeRadius(const LatLonAlt& lla)
+double scene::LLAToECEFTransform::computeRadius(const LatLonAlt& lla) const
 {
-    double f = model->calculateFlattening();
+    const double f = model->calculateFlattening();
 
-    double flatLat = computeLatitude(lla.getLatRadians());
+    const double flatLat = computeLatitude(lla.getLatRadians());
 
     double denominator = (1.0 / math::square(1.0 - f)) - 1.0;
     denominator *= math::square(sin(flatLat));
@@ -99,9 +94,9 @@ double scene::LLAToECEFTransform::computeRadius(const LatLonAlt& lla)
     return flatRadius;
 }
 
-double scene::LLAToECEFTransform::computeLatitude(const double lat)
+double scene::LLAToECEFTransform::computeLatitude(const double lat) const
 {
-    double f = model->calculateFlattening();
+    const double f = model->calculateFlattening();
 
     double flatLat = math::square((1.0 - f));
     flatLat *= tan(lat);

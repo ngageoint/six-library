@@ -1,0 +1,61 @@
+/* =========================================================================
+ * This file is part of sys-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2021, Maxar Technologies, Inc.
+ *
+ * sys-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not, http://www.gnu.org/licenses/.
+ *
+ */
+#ifndef CODA_OSS_std_span_INCLUDED_
+#define CODA_OSS_std_span_INCLUDED_
+#pragma once
+
+// Make it (too?) easy for clients to get our various std:: implementations
+
+#include "mem/Span.h"
+static_assert(CODA_OSS_mem_Span >= 202002L, "missing mem::Span");
+
+#if defined(__cpp_lib_span) && (__cpp_lib_span >= 202002L) // https://en.cppreference.com/w/cpp/utility/feature_test
+    #undef CODA_OSS_AUGMENT_std_span
+    #define CODA_OSS_AUGMENT_std_span 0 // already have it
+#endif
+#ifndef CODA_OSS_AUGMENT_std_span
+    #define CODA_OSS_AUGMENT_std_span 1
+#endif
+
+#if CODA_OSS_cpp20
+    #define CODA_OSS_DEFINE_std_span_ -1  // OK to #include <>, below
+#else
+    #define CODA_OSS_DEFINE_std_span_ CODA_OSS_AUGMENT_std_span
+#endif  // CODA_OSS_cpp20
+
+#if CODA_OSS_DEFINE_std_span_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+        template<typename T>
+        using span = gsl::span<T>;
+    }
+    #define CODA_OSS_lib_span CODA_OSS_mem_Span
+#elif CODA_OSS_DEFINE_std_span_ == -1  // set above
+    #include <span>
+    #ifndef __cpp_lib_span
+        #define __cpp_lib_span 202002L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #endif
+#endif  // CODA_OSS_DEFINE_std_span_
+
+// The real one or our substitute?
+#define CODA_OSS__cpp_lib_span (defined(__cpp_lib_span) && (__cpp_lib_span >= 202002L)) && !defined(CODA_OSS_lib_span)
+
+#endif  // CODA_OSS_std_span_INCLUDED_

@@ -19,10 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __POLYGON_POLYGON_MASK_H__
-#define __POLYGON_POLYGON_MASK_H__
+#ifndef CODA_OSS_polygon_PolygonMask_h_INCLUDED_
+#define CODA_OSS_polygon_PolygonMask_h_INCLUDED_
+#pragma once
 
 #include <vector>
+#include <memory>
 
 #include <sys/Conf.h>
 #include <mem/ScopedArray.h>
@@ -36,9 +38,8 @@ namespace polygon
  * \brief Acts as a mask for a convex polygon without actually allocating a
  * bool buffer to draw it.
  */
-class PolygonMask
+struct PolygonMask final
 {
-public:
     enum MarkModesEnum
     {
         MARK_ALL_TRUE = 0,
@@ -84,6 +85,12 @@ public:
                 const types::RowCol<size_t>& dims,
                 types::RowCol<sys::SSize_T> offset =
                         types::RowCol<sys::SSize_T>(0, 0));
+
+
+    PolygonMask(const PolygonMask&) = delete;
+    PolygonMask& operator=(const PolygonMask&) = delete;
+    PolygonMask(PolygonMask&&) = delete;
+    PolygonMask& operator=(PolygonMask&&) = delete;
 
     /*!
      * \param row Row to query
@@ -154,9 +161,9 @@ private:
 
 private:
     MarkModesEnum mMarkMode;
-    mem::ScopedArray<types::Range> mRanges;
+    std::unique_ptr<types::Range[]> mRanges;
     types::RowCol<size_t> mDims;
 };
 }
 
-#endif
+#endif // CODA_OSS_polygon_PolygonMask_h_INCLUDED_

@@ -76,7 +76,7 @@ void createNITF(const std::string& outputPathname,
         data->setPixelType(six::PixelType::MONO16I);
     }
 
-    const size_t elementsInImage = data->getNumRows() * data->getNumCols();
+    const size_t elementsInImage = getExtent(*data).area();
     const size_t imageSize = elementsInImage * data->getNumBytesPerPixel();
 
     mem::SharedPtr<six::Container> container(
@@ -136,9 +136,10 @@ bool checkNITF(const std::string& pathname)
     reader.interleaved(region, 0);
     auto buffer = region.getBuffer();
 
-    const size_t elementsPerRow = data->getNumCols();
+    const auto extent = getExtent(*data);
+    const auto elementsPerRow = extent.col;
     const size_t skipSize = ROWS_TO_SKIP * elementsPerRow;
-    const size_t imageSize = data->getNumRows() * elementsPerRow;
+    const size_t imageSize = extent.area();
 
     if (data->getDataType() == six::DataType::COMPLEX)
     {
@@ -188,7 +189,7 @@ bool runTest(const six::DataType& datatype)
 }
 }
 
-int main(int argc, char** argv)
+int main(int, char**)
 {
     try
     {
@@ -196,7 +197,7 @@ int main(int argc, char** argv)
         testPassed = runTest(six::DataType::DERIVED) && testPassed;
         return testPassed ? 0 : 1;
     }
-    catch (const std::bad_alloc& ex)
+    catch (const std::bad_alloc&)
     {
         std::cerr << "Not enough memory available to build test NITF. "
                 "Skipping test.\n";

@@ -47,10 +47,8 @@ ImageSubheader::ImageSubheader(nitf_ImageSubheader * x)
     getNativeOrThrow();
 }
 
-ImageSubheader::ImageSubheader()
+ImageSubheader::ImageSubheader() noexcept(false) : ImageSubheader(nitf_ImageSubheader_construct(&error))
 {
-    setNative(nitf_ImageSubheader_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
@@ -162,8 +160,8 @@ void ImageSubheader::createBands(uint32_t numBands)
 }
 
 
-void ImageSubheader::setCornersFromLatLons(nitf::CornersType type,
-                                           double corners[4][2])
+void ImageSubheader::setCornersFromLatLons_(nitf::CornersType type,
+                                           const double (*corners)[2])
 {
     const NITF_BOOL x = nitf_ImageSubheader_setCornersFromLatLons(getNativeOrThrow(),
                                                             type,
@@ -174,7 +172,7 @@ void ImageSubheader::setCornersFromLatLons(nitf::CornersType type,
 
 }
 
-void ImageSubheader::getCornersAsLatLons(double corners[4][2]) const
+void ImageSubheader::getCornersAsLatLons_(double (*corners)[2]) const
 {
     const NITF_BOOL x = nitf_ImageSubheader_getCornersAsLatLons(getNativeOrThrow(),
                                                           corners,
@@ -233,7 +231,11 @@ nitf::Field ImageSubheader::getImageTitle() const
     return nitf::Field(getNativeOrThrow()->imageTitle);
 }
 
-nitf::Field ImageSubheader::getImageSecurityClass() const
+nitf::Field ImageSubheader::getImageSecurityClass()
+{
+    return nitf::Field(getNativeOrThrow()->imageSecurityClass);
+}
+const nitf::Field ImageSubheader::getImageSecurityClass() const
 {
     return nitf::Field(getNativeOrThrow()->imageSecurityClass);
 }

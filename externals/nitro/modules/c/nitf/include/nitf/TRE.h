@@ -64,11 +64,7 @@ NITF_CXX_GUARD
 /* Control values that are put in the TREDescription data_type field */
 enum
 {
-    NITF_LOOP = 
-#ifdef __cplusplus
-    (int) nitf_FieldType::
-#endif
-    NITF_BINARY + 1,    /*!< data_type control loop */
+    NITF_LOOP = NITF_BINARY + 1,    /*!< data_type control loop */
     NITF_ENDLOOP,                   /*!< data_type control end loop */
     NITF_IF,                        /*!< data_type control if */
     NITF_ENDIF,                     /*!< data_type control endif */
@@ -187,7 +183,7 @@ typedef nitf_List* (*NITF_TRE_FIND)(nitf_TRE * tre,
  */
 typedef NITF_BOOL (*NITF_TRE_FIELD_SET)(nitf_TRE * tre,
                                         const char *tag,
-                                        NITF_DATA * data,
+                                        const NITF_DATA * data,
                                         size_t dataLength,
                                         nitf_Error * error);
 
@@ -376,7 +372,7 @@ NITFAPI(NITF_BOOL) nitf_TRE_exists(nitf_TRE * tre, const char *tag);
  */
 NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
                                      const char *tag,
-                                     NITF_DATA * data,
+                                     const NITF_DATA * data,
                                      size_t dataLength,
                                      nitf_Error * error);
 

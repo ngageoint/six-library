@@ -41,7 +41,7 @@ Geopositioning::Geopositioning() :
     verticalDatum("Mean Sea Level"),
     soundingDatum("Mean Sea Level"),
     falseOrigin(six::Init::undefined<size_t>()),
-    utmGridZoneNumber(six::Init::undefined<size_t>())
+    utmGridZoneNumber(six::Init::undefined<ptrdiff_t>())
 {
 }
 

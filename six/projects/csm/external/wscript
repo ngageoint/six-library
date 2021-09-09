@@ -1,5 +1,4 @@
 import sys, os, shutil, re
-from build import unzipper
 from waflib import Options, Logs
 
 def options(opt):
@@ -21,12 +20,10 @@ def configure(conf):
         else:
             # NOTE: This was downloaded from
             # https://github.com/sminster/csm/releases/tag/v3.0.3.3 2019.09.23.
-            if Options.options.csm_version == '3.0.3.3':
-                csmZipfile = 'csm-3.0.3.3_2019.09.23.zip'
-            else:
-                csmZipfile = 'csm-3.0.1_2013.07.03.zip'
-            unzipper(os.path.join(conf.path.abspath(), csmZipfile),
-                     conf.path.abspath())
+            #if Options.options.csm_version == '3.0.3.3':
+            #    csmZipfile = 'csm-3.0.3.3_2019.09.23.zip'
+            #else:
+            #    csmZipfile = 'csm-3.0.1_2013.07.03.zip'
 
             # NOTE: Originally checked in the VTS zip file that was received from
             #       Leonard Tomko that corresponded to CSM 3.0.1.  However, this
@@ -34,8 +31,6 @@ def configure(conf):
             #       needed to make a few local mods to vts.cpp.  Since I was
             #       re-zipping anyway, trimmed this down to just the header and
             #       source files that were needed
-            unzipper(os.path.join(conf.path.abspath(), 'vts_301_0.zip'),
-                     conf.path.abspath())
             conf.env['HAVE_CSM'] = True
 
             if Options.options.csm_version == '3.0.3.3':
@@ -61,17 +56,22 @@ def build(bld):
         #       dependency, we could recompile in the CSM source code that we
         #       need to use.
         vtsDir = 'vts_301_0'
+        six_root = '../../../../../..'
+        install = six_root + '/install'
+        coda_oss = six_root + '/externals/coda-oss/modules/c++'
         bld.program(target='vts', name='vts',
-                    includes='include',
+                    includes=['include',
+                        install + '/include',
+                        coda_oss + '/sys/include', coda_oss + '/str/include', coda_oss + '/except/include'],
                     source=bld.path.find_dir(os.path.join(vtsDir, 'source')).ant_glob('*.cpp'),
-                    use='CSMAPI THREAD DL',
+                    use='sys-c++ CSMAPI THREAD DL',
                     path=bld.path.find_dir(vtsDir),
                     install_path=bld.env['install_bindir'])
 
 def distclean(context):
     # remove the unzipped directory
     dirs = filter(lambda x: os.path.exists(os.path.join(context.path.abspath(), x)),
-                  ['csm-master', 'vts_301_0'])
+                  ['csm-master'])
     for d in dirs:
         try:
             shutil.rmtree(os.path.join(context.path.abspath(), d), ignore_errors=True)

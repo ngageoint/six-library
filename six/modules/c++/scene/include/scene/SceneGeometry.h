@@ -80,6 +80,10 @@ public:
                   const Vector3& opX,
                   const Vector3& opY);
 
+    SceneGeometry(const SceneGeometry&) = default;
+    SceneGeometry& operator=(const SceneGeometry&) = delete;
+    SceneGeometry& operator=(SceneGeometry&&) = delete;
+
     /*!
      *  Set the image (i.e. slant) vectors.  This must be done prior to any
      *  computations involving the image geometry if they were not provided at

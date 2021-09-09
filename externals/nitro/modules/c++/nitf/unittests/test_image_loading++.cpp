@@ -117,9 +117,7 @@ static void writeImage(nitf::ImageSegment &segment,
     nitf::BufferList<std::byte> buffer(nBands);
     std::vector<uint32_t> bandList(nBands);
 
-    nitf::SubWindow subWindow;
-    subWindow.setNumRows(nRows / rowSkipFactor);
-    subWindow.setNumCols(nCols / columnSkipFactor);
+    nitf::SubWindow subWindow(nRows / rowSkipFactor, nCols / columnSkipFactor);
 
     nitf::PixelSkip pixelSkip(rowSkipFactor, columnSkipFactor);
     subWindow.setDownSampler(pixelSkip);

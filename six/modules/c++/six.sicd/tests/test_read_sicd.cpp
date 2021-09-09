@@ -25,6 +25,8 @@
 #include <memory>
 #include <complex>
 
+#include <std/filesystem>
+
 #include <sys/Path.h>
 #include <except/Exception.h>
 #include <io/StandardStreams.h>
@@ -33,7 +35,6 @@
 #include <six/sicd/Utilities.h>
 #include <six/sicd/ComplexData.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 int main(int argc, char** argv)
@@ -70,19 +71,18 @@ int main(int argc, char** argv)
 
         // We're just going to take the average of some data
         // to show that we've loaded things...
-        size_t nl = complexData->getNumRows();
-        size_t ne = complexData->getNumCols();
+        const auto area = getExtent(*complexData).area();
 
         double sumMag   = 0.0;
         double sumPhase = 0.0;
-        for(size_t ii = 0; ii < nl*ne; ++ii)
+        for(size_t ii = 0; ii < area; ++ii)
         {
             sumMag   += std::abs(widebandData[ii]);
             sumPhase += std::arg(widebandData[ii]);
         }
 
-        std::cout << "Average pixel magnitude: " << sumMag / (nl*ne) << std::endl;
-        std::cout << "Average pixel phase: " << sumPhase / (nl*ne) << std::endl;
+        std::cout << "Average pixel magnitude: " << sumMag / (area) << std::endl;
+        std::cout << "Average pixel phase: " << sumPhase / (area) << std::endl;
 
         return 0;
     }

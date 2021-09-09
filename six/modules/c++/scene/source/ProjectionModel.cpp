@@ -21,6 +21,7 @@
  */
 #include "scene/ProjectionModel.h"
 
+#include <assert.h>
 #include <limits>
 #include <string>
 
@@ -33,9 +34,9 @@
 
 namespace
 {
-const double EARTH_ROTATION_RATE = 0.000072921150; // Radians / sec
+constexpr double EARTH_ROTATION_RATE = 0.000072921150; // Radians / sec
 
-const double DELTA_GP_MAX = 0.0000001;
+constexpr double DELTA_GP_MAX = 0.0000001;
 
 // TODO: Should this be a static method instead?
 scene::Vector3 computeUnitVector(const scene::LatLonAlt& latLon)
@@ -85,9 +86,7 @@ ProjectionModel(const Vector3& slantPlaneNormal,
     mSlantPlaneNormal.normalize();
 }
 
-ProjectionModel::~ProjectionModel()
-{
-}
+ProjectionModel::~ProjectionModel() = default;
 
 /*!
  *  Calculations for section 5.2 in SICD Image Projections:
@@ -102,7 +101,7 @@ ProjectionModel::contourToGroundPlane(double rCOA, double rDotCOA,
                                       const Vector3& groundRefPoint) const
 {
     // Compute the ARP distance from the plane (ARP Z)
-    Vector3 tmp(arpCOA - groundRefPoint);
+    const Vector3 tmp(arpCOA - groundRefPoint);
     const double arpZ = tmp.dot(groundPlaneNormal);
 
     // Compute the ARP ground plane nadir
@@ -166,7 +165,7 @@ ProjectionModel::sceneToImage(const Vector3& scenePoint,
 {
     // For scenePoint, we will compute the spherical earth
     // unit ground plane normal (uGPN)
-    Vector3 groundRefPoint(scenePoint);
+    const Vector3 groundRefPoint(scenePoint);
     Vector3 groundPlaneNormal(groundRefPoint);
     groundPlaneNormal.normalize();
 
@@ -183,7 +182,7 @@ ProjectionModel::sceneToImage(const Vector3& scenePoint,
         // Dist contains the projection difference
         double dist = diff.dot(mImagePlaneNormal) * mScaleFactor;
 
-        Vector3 imagePlanePoint =
+        const Vector3 imagePlanePoint =
             groundPlanePoint + mSlantPlaneNormal * dist;
 
         // Compute the imageCoordinates for the plane point
@@ -284,20 +283,19 @@ Vector3 ProjectionModel::imageToScene(
             mSCP + (height - scpLatLon.getAlt()) * groundPlaneNormal;
 
     // Compute contour just once
-    double r;
-    double rDot;
     const double timeCOA = mTimeCOAPoly(imageGridPoint.row,
                                         imageGridPoint.col);
     Vector3 arpCOA = mARPPoly(timeCOA);
     Vector3 velCOA = mARPVelPoly(timeCOA);
+    double r{}, rDot{};
     computeContour(arpCOA, velCOA, timeCOA, imageGridPoint, &r, &rDot);
 
     // Adjustable parameters are applied after computing R/Rdot contours
     // Adjustable parameters do not affect Rdot
     imageToSceneAdjustment(delta, timeCOA, r, arpCOA, velCOA);
 
-    Vector3 gppECEF;
-    Vector3 uUP;
+    Vector3 gppECEF{};
+    Vector3 uUP{};
     double deltaHeight(std::numeric_limits<double>::max());
     for (size_t iter = 0; iter < maxNumIters; ++iter)
     {
@@ -347,7 +345,7 @@ Vector3 ProjectionModel::imageToScene(
     //    plane normal to point SLP.  SLP is located very close to the precise
     //    R/Rdot contour intersection with the constant height surface.
     const Vector3 SF = uUP.dot(uSPN);
-    Vector3 subTerm;
+    Vector3 subTerm{};
     for (size_t ii = 0; ii < 3; ++ii)
     {
         subTerm[ii] = deltaHeight / SF[ii] * uSPN[ii];
@@ -370,7 +368,7 @@ void ProjectionModel::imageToSceneAdjustment(const AdjustableParams& delta,
     // Now Add adjustable parameters to ARP and ARP-Velocity
     // Adjustable parameters are in RIC, but ARP and ARP-Velocity are in ECEF
     // Therefore, we need to convert RIC to ECEF before proceeding
-    math::linear::MatrixMxN<3, 3> ricEcfToEcef =
+    const math::linear::MatrixMxN<3, 3> ricEcfToEcef =
             getRICtoECEFTransformMatrix(0.0, timeCOA);
     const Vector3 adjustedARP = mAdjustableParams.getARPVector();
     const Vector3 deltaARP = delta.getARPVector();
@@ -378,8 +376,8 @@ void ProjectionModel::imageToSceneAdjustment(const AdjustableParams& delta,
     const Vector3 deltaVel = delta.getARPVelocityVector();
 
     //Adjustable Parameters are assumed to be in RIC_ECF
-    Vector3 arpAddition;
-    Vector3 velAddition;
+    Vector3 arpAddition{};
+    Vector3 velAddition{};
     switch (mErrors.mFrameType.mValue)
     {
     case FrameType::RIC_ECF:
@@ -655,7 +653,7 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
 
     // Tropo Error
     // a should be semi-major axis of reference ellipsoid
-    static const double TROPOSPHERE_SCALE_HEIGHT_METERS = 7000.0;
+    constexpr double TROPOSPHERE_SCALE_HEIGHT_METERS = 7000.0;
     const double Htrop = 1 + TROPOSPHERE_SCALE_HEIGHT_METERS / a;
     const double htrop = sqrt((math::square(Htrop) - 1 + math::square(rv)));
     const double ftrop = Htrop / htrop;
@@ -665,13 +663,13 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
     math::linear::MatrixMxN<2, 1> bTrop;
     bTrop(0, 0) = -1.0 * ftrop;
     bTrop(1, 0) = av * math::square(cos(graze)) / math::square(htrop);
-    math::linear::MatrixMxN<2, 2> tropMat =
+    const math::linear::MatrixMxN<2, 2> tropMat =
             bTrop * mErrors.mTropoErrorCovar * bTrop.transpose();
     math::linear::MatrixMxN<3, 3> tropMat3D(0.0);
     tropMat3D.addInPlace(tropMat, 0, 0);
 
     // Iono Error
-    static const double IONOSPHERE_SCALE_HEIGHT_METERS = 350000.0;
+    constexpr double IONOSPHERE_SCALE_HEIGHT_METERS = 350000.0;
     const double Va = azimuth.dot(vARP);
     const Vector3 denominator = scenePoint - rARP;
     const double omegaA = Va / denominator.norm();
@@ -682,7 +680,7 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
     bIon(0, 0) = -1.0 * fion;
     bIon(1, 1) = fion / omegaA;
     bIon(1, 0) = av * math::square(cos(graze)) / math::square(hion);
-    math::linear::MatrixMxN<2, 2> ionMat =
+    const math::linear::MatrixMxN<2, 2> ionMat =
             bIon * mErrors.mIonoErrorCovar * bIon.transpose();
     math::linear::MatrixMxN<3, 3> ionMat3D(0.0);
     ionMat3D.addInPlace(ionMat, 0, 0);
@@ -691,12 +689,12 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
     raToEcef.col(0, range.matrix());
     raToEcef.col(1, azimuth.matrix());
     raToEcef.col(2, normal.matrix());
-    math::linear::MatrixMxN<3, 3> ricToEcef =
+    const math::linear::MatrixMxN<3, 3> ricToEcef =
             getRICtoECEFTransformMatrix(0.0, timeCOA);
-    math::linear::MatrixMxN<3, 3> raToRic =
+    const math::linear::MatrixMxN<3, 3> raToRic =
             ricToEcef.transpose() * raToEcef;
 
-    math::linear::MatrixMxN<3, 3> totalMat =
+    const math::linear::MatrixMxN<3, 3> totalMat =
             raToRic * tropMat3D * raToRic.transpose() +
             raToRic * ionMat3D * raToRic.transpose();
 
@@ -773,7 +771,7 @@ ProjectionModelWithImageVectors::computeImageCoordinates(
         const Vector3& imagePlanePoint) const
 {
     // Delta IPP = xrow * uRow + ycol * uCol
-    Vector3 delta(imagePlanePoint - mSCP);
+    const Vector3 delta(imagePlanePoint - mSCP);
 
     // What is the x contribution?
     return types::RowCol<double>(delta.dot(mImagePlaneRowVector),
@@ -823,29 +821,32 @@ computeContour(const Vector3& arpCOA,
                double* r,
                double* rDot) const
 {
-    double thetaCOA = mPolarAnglePoly(timeCOA);
-    double dThetaDt = mPolarAnglePolyPrime(timeCOA);
+    assert(r != nullptr);
+    assert(rDot != nullptr);
 
-    double ksf = mKSFPoly(thetaCOA);
-    double dKSFDTheta = mKSFPolyPrime(thetaCOA);
+    const double thetaCOA = mPolarAnglePoly(timeCOA);
+    const double dThetaDt = mPolarAnglePolyPrime(timeCOA);
 
-    double cosTheta = cos(thetaCOA);
-    double sinTheta = sin(thetaCOA);
+    const double ksf = mKSFPoly(thetaCOA);
+    const double dKSFDTheta = mKSFPolyPrime(thetaCOA);
 
-    double slopeRadial =
+    const double cosTheta = cos(thetaCOA);
+    const double sinTheta = sin(thetaCOA);
+
+    const double slopeRadial =
         imageGridPoint.row * cosTheta +
         imageGridPoint.col * sinTheta;
 
-    double slopeCrossRadial =
+    const double slopeCrossRadial =
         -imageGridPoint.row * sinTheta +
         imageGridPoint.col * cosTheta;
 
     double dR = ksf * slopeRadial;
 
-    double dDrDTheta = dKSFDTheta * slopeRadial + ksf * slopeCrossRadial;
+    const double dDrDTheta = dKSFDTheta * slopeRadial + ksf * slopeCrossRadial;
     double dRDot = dDrDTheta * dThetaDt;
 
-    Vector3 vec = arpCOA - mSCP;
+    const Vector3 vec = arpCOA - mSCP;
     *r = vec.norm();
 
     *rDot = velCOA.dot(vec) / *r;
@@ -890,12 +891,14 @@ computeContour(const Vector3& /*arpCOA*/,
                double* r,
                double* rDot) const
 {
+    assert(r != nullptr);
+    assert(rDot != nullptr);
 
     // Time of closest approach
-    double timeCA = mTimeCAPoly(imageGridPoint.col);
+    const double timeCA = mTimeCAPoly(imageGridPoint.col);
 
     // Time Difference
-    double deltaTimeCOA = timeCOA - timeCA;
+    const double deltaTimeCOA = timeCOA - timeCA;
 
     // Velocity at closest approach
     double velocityMagCA = mARPVelPoly(timeCA).norm();
@@ -904,7 +907,7 @@ computeContour(const Vector3& /*arpCOA*/,
 
     double dsrf = mDSRFPoly(imageGridPoint.row, imageGridPoint.col);
 
-    double rangeCA = mRangeCA + imageGridPoint.row;
+    const double rangeCA = mRangeCA + imageGridPoint.row;
 
     *r = sqrt(rangeCA * rangeCA + dsrf * (t * t));
     *rDot = dsrf / (*r) * t * velocityMagCA;
@@ -938,6 +941,9 @@ computeContour(const Vector3& arpCOA,
                double* r,
                double* rDot) const
 {
+    assert(r != nullptr);
+    assert(rDot != nullptr);
+
     const Vector3 vec = arpCOA - imageGridToECEF(imageGridPoint);
     *r = vec.norm();
 
@@ -982,6 +988,9 @@ computeContour(const Vector3& arpCOA,
                double* r,
                double* rDot) const
 {
+    assert(r != nullptr);
+    assert(rDot != nullptr);
+
     // TODO: This implementation is identical to PlaneProjectionModel but not
     //       sure how to avoid this
     const Vector3 vec = arpCOA - imageGridToECEF(imageGridPoint);

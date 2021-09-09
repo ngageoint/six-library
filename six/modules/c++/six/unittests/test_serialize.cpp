@@ -139,8 +139,8 @@ TEST_CASE(VectorSerialize)
     TEST_ASSERT_TRUE(testVector<double>(length, true));
 }
 
-TEST_MAIN(
-    srand(time(NULL));
+TEST_MAIN((void)argv; (void)argc;
+    srand(static_cast<unsigned int>(time(NULL)));
     TEST_CHECK(ScalarSerialize);
     TEST_CHECK(VectorSerialize);
     TEST_CHECK(StringSerialize);

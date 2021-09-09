@@ -25,10 +25,12 @@
 #include <sstream>
 #include <string>
 
+#include <std/bit>
+#include <std/memory>
+
 #include <io/ByteStream.h>
 #include <math/Round.h>
 #include <mem/ScopedArray.h>
-#include <sys/Bit.h>
 
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
@@ -41,13 +43,13 @@ NITFWriteControl::NITFWriteControl()
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator());
 }
 
-NITFWriteControl::NITFWriteControl(mem::SharedPtr<Container> container)
+NITFWriteControl::NITFWriteControl(std::shared_ptr<Container> container)
 {
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(container));
 }
 
 NITFWriteControl::NITFWriteControl(const six::Options& options,
-                                   mem::SharedPtr<Container> container,
+                                   std::shared_ptr<Container> container,
                                    const XMLControlRegistry* xmlRegistry)
 {
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(options, container));
@@ -66,12 +68,12 @@ void NITFWriteControl::setXMLControlRegistryImpl(
 }
 
 void NITFWriteControl::initialize(const six::Options& options,
-                                  mem::SharedPtr<Container> container)
+                                  std::shared_ptr<Container> container)
 {
     mNITFHeaderCreator->initialize(options, container);
 }
 
-void NITFWriteControl::initialize(mem::SharedPtr<Container> container)
+void NITFWriteControl::initialize(std::shared_ptr<Container> container)
 {
     mNITFHeaderCreator->initialize(container);
 }
@@ -83,7 +85,7 @@ void NITFWriteControl::setNITFHeaderCreator(
 }
 #if !CODA_OSS_cpp17
 void NITFWriteControl::setNITFHeaderCreator(
-        std::auto_ptr<six::NITFHeaderCreator> headerCreator)
+        mem::auto_ptr<six::NITFHeaderCreator> headerCreator)
 {
     setNITFHeaderCreator(std::unique_ptr<six::NITFHeaderCreator>(headerCreator.release()));
 }
@@ -164,25 +166,22 @@ void NITFWriteControl::save(const SourceList& imageData,
 
 bool NITFWriteControl::shouldByteSwap() const
 {
-    bool doByteSwap;
-
     const int byteSwapping = (int)getOptions().getParameter(
             six::WriteControl::OPT_BYTE_SWAP,
-            Parameter((int)ByteSwapping::SWAP_AUTO));
+            Parameter(static_cast<int>(ByteSwapping::SWAP_AUTO)));
 
     if (byteSwapping == ByteSwapping::SWAP_AUTO)
     {
         // Have to if it's not a BE machine
-        doByteSwap = (std::endian::native == std::endian::little);
+        static auto endianness = std::endian::native;
+        return endianness == std::endian::little;
     }
     else
     {
         // Do what they say.  You really shouldn't do this
         // unless you know what you're doing anyway!
-        doByteSwap = byteSwapping ? true : false;
+        return byteSwapping ? true : false;
     }
-
-    return doByteSwap;
 }
 
 void NITFWriteControl::save(const SourceList& imageData,
@@ -202,7 +201,7 @@ void NITFWriteControl::save(const SourceList& imageData,
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    size_t numImages = infos.size();
+    const size_t numImages = infos.size();
 
     //! TODO: This section of code (unlike the memory section below)
     //        does not account for blocked writing or J2K compression.
@@ -211,7 +210,7 @@ void NITFWriteControl::save(const SourceList& imageData,
     {
         const NITFImageInfo& info = *(infos[i]);
         std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
-        size_t numIS = imageSegments.size();
+        const size_t numIS = imageSegments.size();
         size_t pixelSize = info.getData()->getNumBytesPerPixel();
         size_t numCols = info.getData()->getNumCols();
         size_t numChannels = info.getData()->getNumChannels();
@@ -294,10 +293,9 @@ void NITFWriteControl::save_(const TBufferList& imageData,
         const NITFImageInfo& info = *pInfo;
         std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
         const size_t numIS = imageSegments.size();
-        const int pixelSize =
-                static_cast<int>(info.getData()->getNumBytesPerPixel());
-        const size_t numCols = info.getData()->getNumCols();
         const size_t numChannels = info.getData()->getNumChannels();
+        const auto pixelSize = info.getData()->getNumBytesPerPixel() / numChannels;
+        const size_t numCols = info.getData()->getNumCols();
 
         nitf::ImageSegment imageSegment =
                 getRecord().getImages()[info.getStartIndex()];
@@ -333,14 +331,13 @@ void NITFWriteControl::save_(const TBufferList& imageData,
 
                 for (size_t chan = 0; chan < numChannels; ++chan)
                 {
-                    nitf::MemorySource ms(imageData[i] +
-                                                  pixelSize *
-                                                          segmentInfo.getFirstRow() *
-                                                          numCols,
-                                          bandSize,
-                                          bandSize * chan,
-                                          pixelSize,
-                                          0);
+                    // Assume that the bands are interleaved in memory.  This
+                    // makes sense for 24-bit 3-color data.
+                    const auto data = imageData[i] + pixelSize *  segmentInfo.getFirstRow() * numCols;
+                    const auto start = gsl::narrow<nitf::Off>(chan);
+                    const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
+                    const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
+                    nitf::MemorySource ms(data, bandSize, start, numBytesPerPixel, pixelSkip);
                     iSource.addBand(ms);
                 }
                 iWriter.attachSource(iSource);
@@ -360,7 +357,7 @@ void NITFWriteControl::save_(const TBufferList& imageData,
                                                segmentInfo.getFirstRow(),
                                                numCols,
                                                numChannels,
-                                               pixelSize,
+                                               pixelSize * numChannels,
                                                doByteSwap));
                 // Could set start index here
                 mWriter.setImageWriteHandler(static_cast<int>(
@@ -421,7 +418,7 @@ void NITFWriteControl::addDataAndWrite(
 
     // These must stick around until mWriter.write() is called since the
     // SegmentMemorySource's will be pointing to them
-    const std::unique_ptr<std::string[]> desStrs(new std::string[numDES]);
+    const auto desStrs = std::make_unique<std::string[]>(numDES);
 
     for (size_t ii = 0; ii < getContainer()->getNumData(); ++ii)
     {
@@ -476,7 +473,7 @@ void NITFWriteControl::addUserDefinedSubheader(
 }
 
 void NITFWriteControl::addAdditionalDES(
-       mem::SharedPtr<nitf::SegmentWriter> segmentWriter)
+       std::shared_ptr<nitf::SegmentWriter> segmentWriter)
 {
     mNITFHeaderCreator->addAdditionalDES(segmentWriter);
 }

@@ -1,7 +1,0 @@
-configure = distclean = lambda x: None
-
-def options(opt):
-    opt.recurse('nitf')
-    
-def build(bld):
-    bld.recurse('nitf')

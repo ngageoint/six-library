@@ -18,13 +18,6 @@
 
 #include "TestCase.h"
 
-extern "C"{
-   NITF_BOOL nitf_ImageIO_getMaskInfo(nitf_ImageIO* nitf,
-                                      uint32_t* imageDataOffset, uint32_t* blockRecordLength,
-                                      uint32_t* padRecordLength, uint32_t* padPixelValueLength,
-                                      uint8_t** padValue, uint64_t** blockMask, uint64_t** padMask);
-                     
-}
 const int64_t BLOCK_LENGTH = 256;
 const int64_t ILOC_MAX = 99999;
 std::string generateILOC(const types::RowCol<int64_t>& offset)
@@ -258,11 +251,10 @@ TEST_CASE(testBlankSegmentsValid)
             nitf::ImageSubheader subhdr     = seg.getSubheader();
             nitf::ImageReader imageReader   = reader.newImageReader(imgCtr);
             nitf::BlockingInfo blockingInfo = imageReader.getBlockingInfo();
-            nitf_ImageReader *iReader       = static_cast<nitf_ImageReader *>(imageReader.getNativeOrThrow());
-            TEST_ASSERT_TRUE(nitf_ImageIO_getMaskInfo(iReader->imageDeblocker,
-                                                      &imageDataOffset, &blockRecordLength,
-                                                      &padRecordLength, &padPixelValueLength,
-                                                      &padValue, &blockMask, &padMask) != 0);
+            TEST_ASSERT_TRUE(imageReader.getMaskInfo(
+                                                      imageDataOffset, blockRecordLength,
+                                                      padRecordLength, padPixelValueLength,
+                                                      padValue, blockMask, padMask) != 0);
             TEST_ASSERT_GREATER(blockRecordLength, 0u);
 
             const int64_t totalBlocks = blockingInfo.getNumBlocksPerRow()*blockingInfo.getNumBlocksPerCol();

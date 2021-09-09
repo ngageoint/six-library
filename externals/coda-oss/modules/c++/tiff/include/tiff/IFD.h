@@ -146,14 +146,14 @@ public:
      *****************************************************************/
     template <typename T> void addEntry(const std::string& name, const T& value)
     {
-        tiff::IFDEntry *mapEntry = tiff::KnownTagsRegistry::getInstance()[name];
+        const tiff::IFDEntry *mapEntry = tiff::KnownTagsRegistry::getInstance()[name];
         //we can't add it if we don't know about it
         if (!mapEntry)
             throw except::Exception(Ctxt(FmtX(
                                     "Unable to add IFD Entry: unknown tag [%s]", name.c_str())));
 
-        unsigned short id = mapEntry->getTagID();
-        unsigned short type = mapEntry->getType();
+        const auto id = mapEntry->getTagID();
+        const auto type = mapEntry->getType();
 
         mIFD[id] = new tiff::IFDEntry;
         *(mIFD[id]) = *mapEntry;

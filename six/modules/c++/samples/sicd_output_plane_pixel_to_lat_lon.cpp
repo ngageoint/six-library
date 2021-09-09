@@ -28,6 +28,8 @@
 #include <exception>
 #include <iostream>
 
+#include <std/filesystem>
+
 #include <scene/sys_Conf.h>
 #include <cli/ArgumentParser.h>
 #include <cli/Results.h>
@@ -40,7 +42,6 @@
 #include <six/sicd/Utilities.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 int main(int argc, char** argv)

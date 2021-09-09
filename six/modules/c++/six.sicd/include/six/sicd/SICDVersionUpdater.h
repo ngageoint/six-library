@@ -55,6 +55,9 @@ public:
                        const std::string& targetVersion,
                        logging::Logger& log);
 
+    SICDVersionUpdater(const SICDVersionUpdater&) = delete;
+    SICDVersionUpdater& operator=(const SICDVersionUpdater&) = delete;
+
     /*!
      * Get a collection of valid version strings.
      * \return All the allowable version strings for this type of metadata

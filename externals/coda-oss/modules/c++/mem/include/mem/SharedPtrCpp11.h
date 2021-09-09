@@ -20,17 +20,37 @@
  *
  */
 
-#ifndef __MEM_SHARED_PTR_CPP_11_H__
-#define __MEM_SHARED_PTR_CPP_11_H__
+#ifndef CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_
+#define CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_
 #pragma once
 
 #include <memory>
 #include <type_traits>
 
-#include "sys/Conf.h"
+#include "sys/CPlusPlus.h"
 
 namespace mem
 {
+// This won't work everywhere since C++11's std::unique_ptr<> often requries
+// "&&" and std::move. But for member data and the like it can reduce some
+// boiler-plate code; note that it's often possible to just use std::unique_ptr
+// directly.  This is mostly needed to support existing interfaces.
+#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+template <typename T>
+using auto_ptr = std::auto_ptr<T>;
+#else
+template <typename T>
+using auto_ptr = std::unique_ptr<T>;
+#endif
+
+// Pretty much give-up on mem::SharedPtr as it's too hard to get something that will
+// compile with all the different compilers; let somebody else worry about that
+// via std::shared_ptr.  The only code change is use_count() instead of getCount(),
+// and that's mostly used in unit-tests.
+#if !CODA_OSS_enable_mem_SharedPtr
+template<typename T>
+using SharedPtr = std::shared_ptr<T>;
+#else
 /*!
  *  \class SharedPtr
  *  \brief This is a derived class of std::shared_ptr. The purpose of this
@@ -47,17 +67,29 @@ template <class T>
 class SharedPtr : public std::shared_ptr<T>
 {
 public:
-    SharedPtr() : std::shared_ptr<T>()
-    {
-    }
+    SharedPtr() = default;
+    ~SharedPtr() = default;
 
     using std::shared_ptr<T>::shared_ptr;
 
     using std::shared_ptr<T>::reset;
 
-    explicit SharedPtr(std::unique_ptr<T>&& ptr) :
-        std::shared_ptr<T>(ptr.release())
+    SharedPtr(const SharedPtr&) = default;
+    SharedPtr& operator=(const SharedPtr&) = default;
+    SharedPtr(SharedPtr&&) = default;
+    SharedPtr& operator=(SharedPtr&&) = default;
+
+    template<typename OtherT>
+    SharedPtr(const std::shared_ptr<OtherT>& ptr)
     {
+        *this = ptr;
+    } 
+    template<typename OtherT>
+    SharedPtr& operator=(const std::shared_ptr<OtherT>& ptr)
+    {
+      std::shared_ptr<T>& base = *this;
+      base = ptr;
+      return *this;
     }
 
     template <typename OtherT>
@@ -73,19 +105,19 @@ public:
 
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     // The base class only handles auto_ptr<T>&&
-    explicit SharedPtr(std::auto_ptr<T> ptr) :
+    explicit SharedPtr(mem::auto_ptr<T> ptr) :
         std::shared_ptr<T>(ptr.release())
     {
     }
 
     // The base class only handles auto_ptr<T>&&
     template <typename OtherT>
-    explicit SharedPtr(std::auto_ptr<OtherT> ptr) :
+    explicit SharedPtr(mem::auto_ptr<OtherT> ptr) :
         std::shared_ptr<T>(ptr.release())
     {
     }
 
-    void reset(std::auto_ptr<T> scopedPtr)
+    void reset(mem::auto_ptr<T> scopedPtr)
     {
         std::shared_ptr<T>::reset(scopedPtr.release());
     }
@@ -97,17 +129,7 @@ public:
         return std::shared_ptr<T>::use_count();
     }
 };
-
-// This won't work everywhere since C++11's std::unique_ptr<> often requries "&&" and std::move.
-// But for member data and the like it can reduce some boiler-plate code; note that it's often
-// possible to just use std::unique_ptr directly.  This is mostly needed to support existing interfaces.
-#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-template<typename T>
-using auto_ptr = std::auto_ptr<T>;
-#else
-template <typename T>
-using auto_ptr = std::unique_ptr<T>;
-#endif
+#endif // CODA_OSS_enable_mem_SharedPtr
 
 // C++11 inadvertently ommitted make_unique; provide it here. (Swiped from <memory>.)
 namespace make
@@ -118,61 +140,48 @@ namespace make
 template <typename T, typename... TArgs, typename std::enable_if<!std::is_array<T>::value, int>::type = 0>
 std::unique_ptr<T> unique(TArgs&&... args)
 {
+    #if _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
+    #endif
+
     return std::unique_ptr<T>(new T(std::forward<TArgs>(args)...));
+
+    #if _MSC_VER
+    #pragma warning(pop)
+    #endif
 }
 
 template <typename T, typename std::enable_if<std::is_array<T>::value &&  std::extent<T>::value == 0, int>::type = 0>
 std::unique_ptr<T> unique(size_t size)
 {
     using element_t = typename std::remove_extent<T>::type;
+
+    #if _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
+    #endif
+    
     return std::unique_ptr<T>(new element_t[size]());
+
+    #if _MSC_VER
+    #pragma warning(pop)
+    #endif
 }
 
 template <typename T, typename... TArgs, typename std::enable_if<std::extent<T>::value != 0, int>::type = 0>
 void unique(TArgs&&...) = delete;
+
+#define CODA_OSS_mem_make_unique 201304L  // c.f., __cpp_lib_make_unique
+
 }  // namespace make
 } // namespace mem
 
-
-#ifndef CODA_OSS_DEFINE_std_make_unique_
-    #if CODA_OSS_cpp14
-        #if defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique < 201304)
-            #error "Wrong value for __cpp_lib_make_unique."
-        #endif
-        #define CODA_OSS_DEFINE_std_make_unique_ 0  // part of C++14
-        #define CODA_OSS_lib_make_unique 1
-    #else
-        #define CODA_OSS_DEFINE_std_make_unique_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
-    #endif  // CODA_OSS_cpp14
-#endif  // CODA_OSS_DEFINE_std_make_unique_
-
-#if CODA_OSS_DEFINE_std_make_unique_ == 1
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-            template <typename T, typename... TArgs>
-            std::unique_ptr<T> make_unique(TArgs && ... args)
-            {
-                // let mem::make::unique to all the template magic
-                return mem::make::unique<T>(std::forward<TArgs>(args)...);
-            }
-    }
-    #define CODA_OSS_lib_make_unique 1
-#endif  // CODA_OSS_DEFINE_std_make_unique_
-
-namespace coda_oss
+// try to make code changes a tiny bit easier?
+template<typename T>
+inline long getCount(const std::shared_ptr<T>& p) noexcept // be sure const& so that calling doesn't increment!
 {
-    template <typename T, typename... TArgs>
-    std::unique_ptr<T> make_unique(TArgs && ... args)
-    #if CODA_OSS_lib_make_unique
-    {
-        return std::make_unique<T>(std::forward<TArgs>(args)...);
-    }
-    #else
-    {
-        return mem::make::unique<T>(std::forward<TArgs>(args)...);
-    }
-    #endif
+    return p.use_count();
 }
 
-
-#endif
+#endif // CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_

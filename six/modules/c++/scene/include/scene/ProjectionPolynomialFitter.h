@@ -90,6 +90,11 @@ public:
             const std::vector<types::RowCol<double> >& polygon,
             size_t numPoints1D = DEFAULTS_POINTS_1D);
 
+
+    ProjectionPolynomialFitter(const ProjectionPolynomialFitter&) = delete;
+    ProjectionPolynomialFitter& operator=(const ProjectionPolynomialFitter&) = delete;
+    ProjectionPolynomialFitter& operator=(ProjectionPolynomialFitter&&) = delete;
+
     // Returns the output plane rows used during sampling in case you want to
     // do your own polynomial fitting
     const math::linear::Matrix2D<double>& getOutputPlaneRows() const
@@ -313,7 +318,7 @@ public:
                 }
             }
 
-            *meanResidualError = errorSum / (mNumPoints1D * mNumPoints1D);
+            *meanResidualError = errorSum / static_cast<double>(mNumPoints1D * mNumPoints1D);
         }
     }
 

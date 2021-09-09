@@ -23,8 +23,9 @@
 
 #include <thread>
 
+#include <std/bit>
+
 #include <except/Exception.h>
-#include <sys/Bit.h>
 
 #include <cphd/ByteSwap.h>
 #include <cphd/CPHDXMLControl.h>
@@ -111,7 +112,8 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 {
     // Get the correct dataWriter.
     // The CPHD file needs to be big endian.
-    if (std::endian::native == std::endian::big)
+    auto endianness = std::endian::native; // "conditional expression is constant"
+    if (endianness == std::endian::big)
     {
         mDataWriter.reset(new DataWriterBigEndian(mStream, mNumThreads));
     }
@@ -139,7 +141,8 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 
     // Get the correct dataWriter.
     // The CPHD file needs to be big endian.
-    if (std::endian::native == std::endian::big)
+    auto endianness = std::endian::native; // "conditional expression is constant"
+    if (endianness == std::endian::big)
     {
         mDataWriter.reset(new DataWriterBigEndian(mStream, mNumThreads));
     }
@@ -177,10 +180,10 @@ void CPHDWriter::writeMetadata(size_t supportSize,
     }
     // set header size, final step before write
     mHeader.set(xmlMetadata.size(), supportSize, pvpSize, cphdSize);
-    mStream->write(mHeader.toString().c_str(), mHeader.size());
-    mStream->write("\f\n", 2);
-    mStream->write(xmlMetadata.c_str(), xmlMetadata.size());
-    mStream->write("\f\n", 2);
+    mStream->write(mHeader.toString());
+    mStream->write("\f\n");
+    mStream->write(xmlMetadata);
+    mStream->write("\f\n");
 }
 
 void CPHDWriter::writePVPData(const std::byte* pvpBlock, size_t channel)

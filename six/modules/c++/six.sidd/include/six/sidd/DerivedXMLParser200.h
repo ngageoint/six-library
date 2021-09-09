@@ -36,13 +36,17 @@ public:
     DerivedXMLParser200(logging::Logger* log = nullptr,
                         bool ownLog = false);
 
+
+    DerivedXMLParser200(const DerivedXMLParser200&) = delete;
+    DerivedXMLParser200& operator=(const DerivedXMLParser200&) = delete;
+
     virtual xml::lite::Document* toXML(const DerivedData* data) const;
 
     virtual DerivedData* fromXML(const xml::lite::Document* doc) const;
 
 protected:
     virtual void parseDerivedClassificationFromXML(
-            const XMLElem classificationElem,
+            const xml::lite::Element* classificationElem,
             DerivedClassification& classification) const;
 
     virtual XMLElem convertDerivedClassificationToXML(
@@ -50,10 +54,10 @@ protected:
             XMLElem parent = nullptr) const;
 
     virtual void parseProductFromXML(
-        const XMLElem exploitationFeaturesElem,
+        const xml::lite::Element* exploitationFeaturesElem,
         ExploitationFeatures* exploitationFeatures) const;
 
-    virtual void parseCompressionFromXML(const XMLElem compressionElem,
+    virtual void parseCompressionFromXML(const xml::lite::Element* compressionElem,
                                          Compression& compression) const;
 
     virtual XMLElem convertCompressionToXML(const Compression& compression,
@@ -62,7 +66,7 @@ protected:
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = nullptr) const;
 
-    virtual void parseDisplayFromXML(const XMLElem displayElem,
+    virtual void parseDisplayFromXML(const xml::lite::Element* displayElem,
                                      Display& display) const;
 
     virtual XMLElem convertMeasurementToXML(
@@ -70,11 +74,11 @@ protected:
             XMLElem parent = nullptr) const;
 
     virtual void parseMeasurementFromXML(
-            const XMLElem measurementElem,
+            const xml::lite::Element* measurementElem,
             Measurement* measurement) const;
 
     virtual void parseExploitationFeaturesFromXML(
-        const XMLElem exploitationFeaturesElem,
+        const xml::lite::Element* exploitationFeaturesElem,
         ExploitationFeatures* exploitationFeatures) const;
 
     virtual XMLElem convertExploitationFeaturesToXML(
@@ -128,55 +132,55 @@ private:
     XMLElem convertDigitalElevationDataToXML(const DigitalElevationData& ded,
                                              XMLElem parent = nullptr) const;
 
-    void parseJ2KCompression(const XMLElem j2kElem,
+    void parseJ2KCompression(const xml::lite::Element* j2kElem,
                              J2KCompression& j2k) const;
 
     void parseGeoDataFromXML(
-            const XMLElem elem, GeoDataBase* geoData) const;
+            const xml::lite::Element* elem, GeoDataBase* geoData) const;
 
-    void parseDigitalElevationDataFromXML(const XMLElem elem,
+    void parseDigitalElevationDataFromXML(const xml::lite::Element* elem,
                                           DigitalElevationData& ded) const;
 
-    void parseNonInteractiveProcessingFromXML(const XMLElem procElem,
+    void parseNonInteractiveProcessingFromXML(const xml::lite::Element* procElem,
          NonInteractiveProcessing& nonInteractiveProcessing) const;
 
-    void parseProductGenerationOptionsFromXML(const XMLElem optionsElem,
+    void parseProductGenerationOptionsFromXML(const xml::lite::Element* optionsElem,
          ProductGenerationOptions& options) const;
 
-    void parseBandEqualizationFromXML(const XMLElem bandElem,
+    void parseBandEqualizationFromXML(const xml::lite::Element* bandElem,
          BandEqualization& band) const;
 
-    void parseRRDSFromXML(const XMLElem rrdsElem, RRDS& rrds) const;
+    void parseRRDSFromXML(const xml::lite::Element* rrdsElem, RRDS& rrds) const;
 
-    void parsePredefinedFilterFromXML(const XMLElem predefinedElem,
+    void parsePredefinedFilterFromXML(const xml::lite::Element* predefinedElem,
          Filter::Predefined& predefined) const;
 
-    void parseKernelFromXML(const XMLElem kernelElem,
+    void parseKernelFromXML(const xml::lite::Element* kernelElem,
          Filter::Kernel& kernel) const;
 
-    void parseBankFromXML(const XMLElem bankElem, Filter::Bank& bank) const;
+    void parseBankFromXML(const xml::lite::Element* bankElem, Filter::Bank& bank) const;
 
-    void parseFilterFromXML(const XMLElem filterELem, Filter& filter) const;
+    void parseFilterFromXML(const xml::lite::Element* filterELem, Filter& filter) const;
 
-    void parseInteractiveProcessingFromXML(const XMLElem interactiveElem,
+    void parseInteractiveProcessingFromXML(const xml::lite::Element* interactiveElem,
          InteractiveProcessing& interactive) const;
 
-    void parseGeometricTransformFromXML(const XMLElem geomElem,
+    void parseGeometricTransformFromXML(const xml::lite::Element* geomElem,
          GeometricTransform& transform) const;
 
-    void parseSharpnessEnhancementFromXML(const XMLElem sharpElem,
+    void parseSharpnessEnhancementFromXML(const xml::lite::Element* sharpElem,
          SharpnessEnhancement& sharpness) const;
 
-    void parseColorSpaceTransformFromXML(const XMLElem colorElem,
+    void parseColorSpaceTransformFromXML(const xml::lite::Element* colorElem,
          ColorSpaceTransform& transform) const;
 
-    void parseDynamicRangeAdjustmentFromXML(const XMLElem rangeElem,
+    void parseDynamicRangeAdjustmentFromXML(const xml::lite::Element* rangeElem,
          DynamicRangeAdjustment& rangeAdjustment) const;
 
-    void parseLookupTableFromXML(const XMLElem lookupElem,
+    void parseLookupTableFromXML(const xml::lite::Element* lookupElem,
           LookupTable& lookupTable) const;
 
-    mem::auto_ptr<LUT> parseSingleLUT(const XMLElem elem,
+    mem::auto_ptr<LUT> parseSingleLUT(const xml::lite::Element* elem,
             size_t size) const;
 };
 }

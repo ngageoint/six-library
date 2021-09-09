@@ -20,7 +20,12 @@
  *
  */
 
+#include <gsl/gsl.h>
+
 #include "nitf/ImageReader.hpp"
+
+#undef min
+#undef max
 
 using namespace nitf;
 
@@ -55,7 +60,8 @@ nitf::BlockingInfo ImageReader::getBlockingInfo() const
 
 void ImageReader::read(const nitf::SubWindow & subWindow, uint8_t** user, int * padded)
 {
-    auto user_ = reinterpret_cast<uint8_t**>(user);
+    void* pUser = user;
+    auto user_ = static_cast<uint8_t**>(pUser);
     const NITF_BOOL x = nitf_ImageReader_read(getNativeOrThrow(), subWindow.getNative(), user_, padded, &error);
     if (!x)
         throw nitf::NITFException(&error);
@@ -63,7 +69,7 @@ void ImageReader::read(const nitf::SubWindow & subWindow, uint8_t** user, int * 
 
 const uint8_t* ImageReader::readBlock(uint32_t blockNumber, uint64_t* blockSize)
 {
-    const auto x = nitf_ImageReader_readBlock(
+    const uint8_t* const x = nitf_ImageReader_readBlock(
         getNativeOrThrow(), blockNumber, blockSize, &error);
     if (!x)
         throw nitf::NITFException(&error);
@@ -73,4 +79,46 @@ const uint8_t* ImageReader::readBlock(uint32_t blockNumber, uint64_t* blockSize)
 void ImageReader::setReadCaching()
 {
     nitf_ImageReader_setReadCaching(getNativeOrThrow());
+}
+
+BufferList<std::byte> ImageReader::read(const nitf::SubWindow& window, size_t /*nbpp*/)
+{
+    // see py_ImageReader_read() and doRead() in test_buffered_read.cpp
+
+    //const auto numBitsPerPixel = nbpp;
+    //const auto numBytesPerPixel = gsl::narrow<size_t>(NITF_NBPP_TO_BYTES(numBitsPerPixel));
+    //const auto numBytesPerBand = static_cast<size_t>(window.getNumRows()) * static_cast<size_t>(window.getNumCols()) *  numBytesPerPixel;
+ 
+    auto downsampler = window.getDownSampler();
+    const uint32_t rowSkip = downsampler ? downsampler->getRowSkip() : 1;
+    const uint32_t colSkip = downsampler ? downsampler->getColSkip() : 1;
+
+    auto imageDeblocker = getNativeOrThrow()->imageDeblocker;
+    const auto subimageSize = static_cast<size_t>(window.getNumRows() / rowSkip) *
+        (window.getNumCols() / colSkip) * nitf_ImageIO_pixelSize(imageDeblocker);
+
+    BufferList<std::byte> retval(window.getNumBands());
+    retval.initialize(subimageSize);
+    read(window, retval.data(), &retval.padded);
+
+    return retval;
+}
+
+extern "C" {
+    NITF_BOOL nitf_ImageIO_getMaskInfo(nitf_ImageIO* nitf,
+        uint32_t* imageDataOffset, uint32_t* blockRecordLength,
+        uint32_t* padRecordLength, uint32_t* padPixelValueLength,
+        uint8_t** padValue, uint64_t** blockMask, uint64_t** padMask);
+
+}
+
+bool ImageReader::getMaskInfo(uint32_t& imageDataOffset, uint32_t& blockRecordLength,
+    uint32_t& padRecordLength, uint32_t& padPixelValueLength,
+    uint8_t* &padValue, uint64_t* &blockMask, uint64_t* &padMask) const
+{
+    auto iReader = getNativeOrThrow();
+    return nitf_ImageIO_getMaskInfo(iReader->imageDeblocker,
+        &imageDataOffset, &blockRecordLength,
+        &padRecordLength, &padPixelValueLength,
+        &padValue, &blockMask, &padMask);
 }

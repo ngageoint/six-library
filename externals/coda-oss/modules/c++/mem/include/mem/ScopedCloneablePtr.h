@@ -54,7 +54,7 @@ template <class T>
 class ScopedCloneablePtr
 {
 public:
-    explicit ScopedCloneablePtr(T* ptr = NULL) :
+    explicit ScopedCloneablePtr(T* ptr = nullptr) :
         mPtr(ptr)
     {
     }
@@ -64,7 +64,7 @@ public:
     {
     }
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    explicit ScopedCloneablePtr(std::auto_ptr<T> ptr)
+    explicit ScopedCloneablePtr(mem::auto_ptr<T> ptr)
     {
         reset(ptr);
     }
@@ -98,12 +98,12 @@ public:
 
     bool operator==(const ScopedCloneablePtr<T>& rhs) const
     {
-        if (get() == NULL && rhs.get() == NULL)
+        if (get() == nullptr && rhs.get() == nullptr)
         {
             return true;
         }
 
-        if (get() == NULL || rhs.get() == NULL)
+        if (get() == nullptr || rhs.get() == nullptr)
         {
             return false;
         }
@@ -131,7 +131,7 @@ public:
         return mPtr.get();
     }
 
-    void reset(T* ptr = NULL)
+    void reset(T* ptr = nullptr)
     {
         mPtr.reset(ptr);
     }
@@ -141,7 +141,7 @@ public:
         mPtr = std::move(ptr);
     }
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    void reset(std::auto_ptr<T> ptr)
+    void reset(mem::auto_ptr<T> ptr)
     {
         reset(std::unique_ptr<T>(ptr.release()));
     }

@@ -76,9 +76,10 @@ inline void remove(const std::string& path)
 /**
  * Static file manipulation utilities.
  */
-class FileUtils
+struct FileUtils final
 {
-public:
+    FileUtils() = delete;
+
     /**
      * Creates a file in the given directory. It will try to use the filename
      * given. If overwrite is false, it will create a filename based on the
@@ -90,14 +91,7 @@ public:
     static void touchFile(std::string filename);
 
     static void forceMkdir(std::string dirname);
-
-private:
-    //private constructor
-    FileUtils()
-    {
-    }
 };
-
 }
 
 #endif

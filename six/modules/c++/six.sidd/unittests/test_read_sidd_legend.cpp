@@ -24,6 +24,8 @@
 #include <iostream>
 #include <memory>
 
+#include <std/filesystem>
+
 #include "TestCase.h"
 
 #include <except/Exception.h>
@@ -36,7 +38,6 @@
 #include <six/NITFWriteControl.h>
 #include <six/NITFHeaderCreator.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace
@@ -90,8 +91,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     six::sidd::DerivedData* siddData = siddBuilder.steal();
     mem::auto_ptr<six::Data> siddDataScoped(siddData);
 
-    siddData->setNumRows(dims.row);
-    siddData->setNumCols(dims.col);
+    setExtent(*siddData, dims);
     siddData->setImageCorners(makeUpCornersFromDMS());
 
     siddData->productCreation->productName = "ProductName";
@@ -321,6 +321,6 @@ TEST_CASE(testRead)
 }
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(testRead);
 )

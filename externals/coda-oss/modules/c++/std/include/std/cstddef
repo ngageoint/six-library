@@ -1,0 +1,62 @@
+/* =========================================================================
+ * This file is part of sys-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2021, Maxar Technologies, Inc.
+ *
+ * sys-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not, http://www.gnu.org/licenses/.
+ *
+ */
+#ifndef CODA_OSS_std_cstddef_INCLUDED_
+#define CODA_OSS_std_cstddef_INCLUDED_
+#pragma once
+
+#include <cstddef>
+
+// Make it (too?) easy for clients to get our various std:: implementations
+
+#include "sys/CStdDef.h"
+static_assert(CODA_OSS_sys_Byte >= 201603L, "missing sys::Byte");
+
+#if defined(__cpp_lib_byte) && (__cpp_lib_byte >= 201603L) // https://en.cppreference.com/w/cpp/utility/feature_test
+    #undef CODA_OSS_AUGMENT_std_byte
+    #define CODA_OSS_AUGMENT_std_byte 0 // already have it
+#endif
+#ifndef CODA_OSS_AUGMENT_std_byte
+    #define CODA_OSS_AUGMENT_std_byte 1
+#endif
+
+#if CODA_OSS_cpp17
+    #define CODA_OSS_DEFINE_std_byte_ -1  // OK to #include <>, below
+#else
+    #define CODA_OSS_DEFINE_std_byte_ CODA_OSS_AUGMENT_std_byte 
+#endif  // CODA_OSS_cpp17
+
+#if CODA_OSS_DEFINE_std_byte_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+        using byte = sys::Byte;
+    }
+    #define CODA_OSS_lib_byte CODA_OSS_sys_Byte
+#elif CODA_OSS_DEFINE_std_byte_ == -1  // set above
+    #include <cstddef>
+    #ifndef __cpp_lib_byte
+        #define __cpp_lib_byte 201603L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #endif
+#endif  // CODA_OSS_DEFINE_std_byte_
+
+// The real one or our substitute?
+#define CODA_OSS__cpp_lib_byte (defined(__cpp_lib_byte) && (__cpp_lib_byte >= 201603L)) && !defined(CODA_OSS_lib_byte)
+
+#endif  // CODA_OSS_std_cstddef_INCLUDED_

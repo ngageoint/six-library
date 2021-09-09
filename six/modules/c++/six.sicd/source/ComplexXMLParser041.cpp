@@ -57,7 +57,7 @@ ComplexXMLParser041::ComplexXMLParser041(
 ComplexXMLParser041::ComplexXMLParser041(
     const std::string& version,
     bool addClassAttributes,
-    std::auto_ptr<SICommonXMLParser> comParser,
+    mem::auto_ptr<SICommonXMLParser> comParser,
     logging::Logger* log,
     bool ownLog) :
     ComplexXMLParser041(version, addClassAttributes, std::unique_ptr<SICommonXMLParser>(comParser.release()), log, ownLog)
@@ -86,7 +86,7 @@ XMLElem ComplexXMLParser041::convertRMATToXML(
     return rmatXML;
 }
 
-void ComplexXMLParser041::parseRMATFromXML(const XMLElem rmatElem, 
+void ComplexXMLParser041::parseRMATFromXML(const xml::lite::Element* rmatElem, 
                                            RMAT* rmat) const
 {
     parseDouble(getFirstAndOnly(rmatElem, "RefTime"), rmat->refTime);

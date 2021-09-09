@@ -45,14 +45,14 @@ public:
      *
      *  \param stream The stream to use for writing
      */
-    IOStreamWriter(mem::SharedPtr<io::SeekableOutputStream> stream);
+    IOStreamWriter(std::shared_ptr<io::SeekableOutputStream> stream);
 
 private:
     void readImpl(void* buffer, size_t size) override;
 
     void writeImpl(const void* buffer, size_t size) override;
 
-    bool canSeekImpl() const override;
+    bool canSeekImpl() const noexcept override;
 
     nitf::Off seekImpl(nitf::Off offset, int whence) override;
 
@@ -60,9 +60,9 @@ private:
 
     nitf::Off getSizeImpl() const override;
 
-    int getModeImpl() const override;
+    int getModeImpl() const noexcept override;
 
-    void closeImpl() override;
+    void closeImpl() noexcept override;
 
     std::shared_ptr<io::SeekableOutputStream> mStream;
 };

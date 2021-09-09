@@ -29,6 +29,7 @@
 #include <config/coda_oss_config.h>
 
 #include "sys/Conf.h"
+#include "mem/SharedPtr.h"
 
 namespace mem
 {
@@ -55,7 +56,7 @@ template <class T>
 class ScopedCopyablePtr
 {
 public:
-    explicit ScopedCopyablePtr(T* ptr = NULL) :
+    explicit ScopedCopyablePtr(T* ptr = nullptr) :
         mPtr(ptr)
     {
     }
@@ -65,7 +66,7 @@ public:
     {
     }
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    explicit ScopedCopyablePtr(std::auto_ptr<T> ptr)
+    explicit ScopedCopyablePtr(mem::auto_ptr<T> ptr)
     {
         reset(ptr);
     }
@@ -73,10 +74,7 @@ public:
 
     ScopedCopyablePtr(const ScopedCopyablePtr& rhs)
     {
-        if (rhs.mPtr.get())
-        {
-            mPtr.reset(new T(*rhs.mPtr));
-        }
+        *this = rhs;
     }
 
     const ScopedCopyablePtr&
@@ -86,7 +84,7 @@ public:
         {
             if (rhs.mPtr.get())
             {
-                mPtr.reset(new T(*rhs.mPtr));
+                mPtr = make::unique<T>(*rhs.mPtr);
             }
             else
             {
@@ -99,12 +97,12 @@ public:
 
     bool operator==(const ScopedCopyablePtr<T>& rhs) const
     {
-        if (get() == NULL && rhs.get() == NULL)
+        if (get() == nullptr && rhs.get() == nullptr)
         {
             return true;
         }
 
-        if (get() == NULL || rhs.get() == NULL)
+        if (get() == nullptr || rhs.get() == nullptr)
         {
             return false;
         }
@@ -120,7 +118,7 @@ public:
     // explicit operators not supported until C++11
     explicit operator bool() const
     {
-        return get() == NULL ? false : true;
+        return get() == nullptr ? false : true;
     }
 
     T* get() const
@@ -138,7 +136,7 @@ public:
         return mPtr.get();
     }
 
-    void reset(T* ptr = NULL)
+    void reset(T* ptr = nullptr)
     {
         mPtr.reset(ptr);
     }
@@ -148,7 +146,7 @@ public:
         mPtr = std::move(ptr);
     }
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    void reset(std::auto_ptr<T> ptr)
+    void reset(mem::auto_ptr<T> ptr)
     {
         reset(std::unique_ptr<T>(ptr.release()));
     }

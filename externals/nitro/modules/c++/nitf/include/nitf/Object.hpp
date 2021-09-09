@@ -24,8 +24,11 @@
 #define __NITF_OBJECT_HPP__
 #pragma once
 
+#include <assert.h>
+
 #include "nitf/coda-oss.hpp"
 #include "nitf/Handle.hpp"
+#include "nitf/exports.hpp"
 #include "nitf/HandleManager.hpp"
 #include "nitf/NITFException.hpp"
 
@@ -42,7 +45,7 @@ class HashTable;
  * C core.
  */
 template <typename T, typename DestructFunctor_T = MemoryDestructor<T> >
-class Object
+class NITRO_NITFCPP_API Object
 {
 protected:
     //make the nitf containers friends
@@ -51,11 +54,16 @@ protected:
 
     //! The handle to the underlying memory
     BoundHandle<T, DestructFunctor_T>* mHandle = nullptr;
-
+private:
+    bool isValidHandle() const noexcept
+    {
+        return mHandle && mHandle->get();
+    }
+protected:
     //! Release this object's hold on the handle
     void releaseHandle()
     {
-        if (mHandle && mHandle->get())
+        if (isValidHandle())
             HandleRegistry::getInstance().releaseHandle(mHandle->get());
         mHandle = nullptr;
     }
@@ -88,14 +96,13 @@ protected:
     {
         if (nativeObj == nullptr)
         {
+            assert(error != nullptr);
             throw nitf::NITFException(error);
         }
         setNative(nativeObj);
     }
 
 public:
-
-    //! Destructor
     virtual ~Object() { releaseHandle(); }
 
     //! Is the object valid (native object not null)?
@@ -203,9 +210,10 @@ void operator()(Package_##_##Name_ * nativeObject) override \
       { Package_##_##Name_##_destruct(&nativeObject); }
  
 #ifdef _MSC_VER
+// https://stackoverflow.com/questions/599035/force-visual-studio-to-link-all-symbols-in-a-lib-file
 #define DECLARE_CLASS_IN_operator_function(Name_, Package_) \
-    __pragma(warning(push)) \
-    __pragma(warning(disable: 26440)) /* Function '...' can be declared '...' (f.6). */ \
+    __pragma(comment(linker,"/export:" #Package_ "_" #Name_ "_destruct")); \
+    __pragma(warning(push)) __pragma(warning(disable: 26440)) /* Function '...' can be declared '...' (f.6). */ \
     DECLARE_CLASS_IN_operator_function_(Name_, Package_) \
     __pragma(warning(pop))
 #else
@@ -215,10 +223,12 @@ void operator()(Package_##_##Name_ * nativeObject) override \
 
 // SWIG doesn't like "final"
 #define DECLARE_CLASS_IN(_Name, _Package) \
-    struct _Name##Destructor /*final*/ : public nitf::MemoryDestructor<_Package##_##_Name> \
+    struct NITRO_NITFCPP_API _Name##Destructor /*final*/ : public nitf::MemoryDestructor<_Package##_##_Name> \
     { DECLARE_CLASS_IN_operator_function(_Name, _Package) }; \
-    class _Name : public nitf::Object<_Package##_##_Name, _Name##Destructor>
+    class NITRO_NITFCPP_API _Name : public nitf::Object<_Package##_##_Name, _Name##Destructor>
 
-#define DECLARE_CLASS(_Name) DECLARE_CLASS_IN(_Name, nitf)
+#define NITRO_DECLARE_CLASS_NRT(_Name) DECLARE_CLASS_IN(_Name, nrt)
+#define NITRO_DECLARE_CLASS_NITF(_Name) DECLARE_CLASS_IN(_Name, nitf)
+#define DECLARE_CLASS(_Name) NITRO_DECLARE_CLASS_NITF(_Name)
 
 #endif

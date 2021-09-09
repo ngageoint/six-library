@@ -35,23 +35,27 @@ static void load_plugin(const char* tre)
 {
     nitf_Error error;
 
-    auto reg = nitf_PluginRegistry_getInstance(&error);
+    auto reg = nitf::PluginRegistry::getInstance(error);
     TEST_ASSERT(reg != nullptr);
 
-    nitf_HashTable_print(reg->treHandlers);
+    nitf::HashTable::print(*(reg->treHandlers));
 
     int bad = 0;
     auto test_main_ =
-        nitf_PluginRegistry_retrieveTREHandler(reg,
+        nitf::PluginRegistry::retrieveTREHandler(*reg,
             tre,
-            &bad,
-            &error);
+            bad,
+            error);
     TEST_ASSERT_EQ(0, bad);
     TEST_ASSERT(test_main_ != nullptr);
 }
 
 static const std::vector<std::string> all_plugins
 {
+#if _MSC_VER && NITRO_PCH
+    // only build a handful in Visual Studio
+    "ACCHZB", "ACCPOB", "ACFTA", "AIMIDB", "CSCRNA", "ENGRDA", "HISTOA", "JITCID", "PTPRAA", "RPFHDR",
+#else
     "ACCHZB", "BANDSB", "CSDIDA", "GEOLOB", "JITCID", "NBLOCA", "PIAPEB", "REGPTB", "RSMIDA", "STEROB",
     "ACCPOB", "BCKGDA", "CSEPHA", "GEOPSB", "MAPLOB", "OBJCTA", "PIAPRC", "RPC00B", "RSMPCA", "STREOB",
     "ACCVTB", "BLOCKA", "CSEXRA", "GRDPSB", "MATESA", "OFFSET", "PIAPRD", "RPFDES", "RSMPIA", "TEST_DES",
@@ -62,6 +66,7 @@ static const std::vector<std::string> all_plugins
     "AIPBCA", "CMETAA", "EXOPTA", "IMRFCA", "MSTGTA", "PIAIMB", "PRADAA", "RSMECA", "SNSRA",
     "ASTORA", "CSCCGA", "EXPLTA", "IOMAPA", "MTIRPA", "PIAIMC", "PRJPSB", "RSMGGA", "SOURCB",
     "BANDSA", "CSCRNA", "EXPLTB", "J2KLRA", "MTIRPB", "PIAPEA", "PTPRAA", "RSMGIA", "STDIDC",
+#endif
 };
 
 TEST_CASE(test_load_all_plugins_C)
@@ -77,6 +82,10 @@ TEST_CASE(test_load_all_plugins_C)
 TEST_CASE(test_load_PTPRAA)
 {
     load_plugin("PTPRAA");
+}
+TEST_CASE(test_load_ENGRDA)
+{
+    load_plugin("ENGRDA");
 }
 
 TEST_CASE(test_load_all_plugins)
@@ -97,6 +106,7 @@ TEST_MAIN(
     (void)argc;
     (void)argv;
     TEST_CHECK(test_load_PTPRAA);
+    TEST_CHECK(test_load_ENGRDA);
     TEST_CHECK(test_load_all_plugins_C);
     TEST_CHECK(test_load_all_plugins);
 )

@@ -56,7 +56,7 @@ public:
             const sys::Uint32_T ifdOffset = 8) :
         mId(id), mIFDOffset(ifdOffset)
     {
-        bool isBigEndian = sys::isBigEndianSystem();
+        const bool isBigEndian = sys::isBigEndianSystem();
         // The code below previously used strncpy(), but compilers are now
         // quite aggressive about checking for potential problems.  We're only
         // dealing with two characters, so it's easy enough to do something else.

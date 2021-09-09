@@ -40,10 +40,13 @@ public:
                      bool ownLog = false);
 #if !CODA_OSS_cpp17
     DerivedXMLParser(const std::string& version,
-                     std::auto_ptr<six::SICommonXMLParser> comParser,
+                     mem::auto_ptr<six::SICommonXMLParser> comParser,
                      logging::Logger* log = nullptr,
                      bool ownLog = false);
 #endif
+
+    DerivedXMLParser(const DerivedXMLParser&) = delete;
+    DerivedXMLParser& operator=(const DerivedXMLParser&) = delete;
 
     virtual xml::lite::Document* toXML(const DerivedData* data) const = 0;
 
@@ -51,7 +54,7 @@ public:
 
 protected:
     virtual void parseDerivedClassificationFromXML(
-            const XMLElem classificationElem,
+            const xml::lite::Element* classificationElem,
             DerivedClassification& classification) const;
 
     virtual XMLElem convertDerivedClassificationToXML(
@@ -59,7 +62,7 @@ protected:
             XMLElem parent = nullptr) const = 0;
 
     virtual void parseProductFromXML(
-            const XMLElem exploitationFeaturesElem,
+            const xml::lite::Element* exploitationFeaturesElem,
             ExploitationFeatures* exploitationFeatures) const = 0;
 
     virtual XMLElem convertDisplayToXML(const Display& display,
@@ -187,35 +190,35 @@ protected:
     XMLElem convertGeographicCoordinateSystemToXML(
             const SFAGeographicCoordinateSystem* geographicCoordinateSystem,
             XMLElem parent) const;
-    void parseProductCreationFromXML(const XMLElem productCreationElem,
+    void parseProductCreationFromXML(const xml::lite::Element* productCreationElem,
                                      ProductCreation* productCreation) const;
-    void parseProductCreationFromXML(const XMLElem informationElem,
+    void parseProductCreationFromXML(const xml::lite::Element* informationElem,
                                      ProcessorInformation* processorInformation) const;
-    void parseProductProcessingFromXML(const XMLElem elem,
+    void parseProductProcessingFromXML(const xml::lite::Element* elem,
                                        ProductProcessing* productProcessing) const;
-    void parseProcessingModuleFromXML(const XMLElem elem,
+    void parseProcessingModuleFromXML(const xml::lite::Element* elem,
                                       ProcessingModule* procMod) const;
-    void parseDownstreamReprocessingFromXML(const XMLElem elem,
+    void parseDownstreamReprocessingFromXML(const xml::lite::Element* elem,
                                             DownstreamReprocessing* downstreamReproc) const;
-    Remap* parseRemapChoiceFromXML(const XMLElem remapInformationElem) const;
-    mem::auto_ptr<LUT> parseSingleLUT(const XMLElem elem) const;
-    void parseDisplayFromXML(const XMLElem displayElem, Display* display) const;
-    virtual void parseMeasurementFromXML(const XMLElem measurementElem,
+    Remap* parseRemapChoiceFromXML(const xml::lite::Element* remapInformationElem) const;
+    mem::auto_ptr<LUT> parseSingleLUT(const xml::lite::Element* elem) const;
+    void parseDisplayFromXML(const xml::lite::Element* displayElem, Display* display) const;
+    virtual void parseMeasurementFromXML(const xml::lite::Element* measurementElem,
                                  Measurement* measurement) const;
-    virtual void parseExploitationFeaturesFromXML(const XMLElem elem,
+    virtual void parseExploitationFeaturesFromXML(const xml::lite::Element* elem,
                                           ExploitationFeatures* exploitationFeatures) const;
-    void parseAnnotationFromXML(const XMLElem annotationElem,
+    void parseAnnotationFromXML(const xml::lite::Element* annotationElem,
                                 Annotation* a) const;
-    void parseSFAGeometryFromXML(const XMLElem elem,
+    void parseSFAGeometryFromXML(const xml::lite::Element* elem,
                                  SFAGeometry* g) const;
     void parseGeographicCoordinateSystemFromXML(
-            const XMLElem coorSysElem,
+            const xml::lite::Element* coorSysElem,
             SFAGeographicCoordinateSystem* coordSys) const;
-    void parseDatum(const XMLElem datumElem, SFADatum& datum) const;
-    XMLElem parsePolynomialProjection(XMLElem projElem, Measurement& measurement) const;
-    XMLElem parseGeographicProjection(XMLElem projElem, Measurement& measurement) const;
-    XMLElem parsePlaneProjection(XMLElem projElem, Measurement& measurement) const;
-    XMLElem parseCylindricalProjection(XMLElem projElem, Measurement& measurement) const;
+    void parseDatum(const xml::lite::Element* datumElem, SFADatum& datum) const;
+    XMLElem parsePolynomialProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
+    XMLElem parseGeographicProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
+    XMLElem parsePlaneProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
+    XMLElem parseCylindricalProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
 
     static
     std::string versionToURI(const std::string& version)

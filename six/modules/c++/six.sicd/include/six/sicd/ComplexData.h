@@ -24,6 +24,8 @@
 
 #include <memory>
 
+#include <gsl/gsl.h>
+
 #include "six/CollectionInformation.h"
 #include "six/Data.h"
 #include "six/ErrorStatistics.h"
@@ -175,8 +177,8 @@ public:
     virtual void setNumRows(size_t numRows)
     {
         imageData->numRows = numRows;
-        imageData->fullImage.row = numRows;
-        imageData->scpPixel.row = numRows / 2;
+        imageData->fullImage.row = gsl::narrow<ptrdiff_t>(numRows);
+        imageData->scpPixel.row = imageData->fullImage.row / 2;
     }
 
     /*!
@@ -195,8 +197,8 @@ public:
     virtual void setNumCols(size_t numCols)
     {
         imageData->numCols = numCols;
-        imageData->fullImage.col = numCols;
-        imageData->scpPixel.col = numCols / 2;
+        imageData->fullImage.col = gsl::narrow<ptrdiff_t>(numCols);
+        imageData->scpPixel.col = imageData->fullImage.col / 2;
     }
 
     /*!
@@ -285,11 +287,8 @@ public:
         return mClassification;
     }
 
-    // Okay, little bit of a hack for now
-    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT()
-    {
-        throw except::Exception(Ctxt("Display LUT operation not supported"));
-    }
+    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT() override;
+    virtual AmplitudeTable* getAmplitudeTable() const override;
 
     virtual std::string getVendorID() const
     {

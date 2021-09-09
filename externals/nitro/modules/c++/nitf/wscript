@@ -1,7 +1,7 @@
 from os.path import join, split, basename, splitext
 
 NAME            = 'nitf'
-MODULE_DEPS     = 'math mt sys mem io gsl'
+MODULE_DEPS     = 'math mt sys mem io gsl std'
 TEST_DEPS       = 'cli'
 USELIB          = 'THREAD DL'
 USELIB_LOCAL    = 'nitf-c'

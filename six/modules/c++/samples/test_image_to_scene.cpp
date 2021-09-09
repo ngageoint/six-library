@@ -24,6 +24,8 @@
 #include <stdexcept>
 #include <memory>
 
+#include <std/filesystem>
+
 #include <sys/Path.h>
 #include <str/Convert.h>
 #include <except/Exception.h>
@@ -36,7 +38,6 @@
 #include <six/sidd/Utilities.h>
 #include <scene/ECEFToLLATransform.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace
@@ -76,7 +77,7 @@ int main(int argc, char** argv)
         xmlRegistry->addCreator(six::DataType::DERIVED,
                             new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 
-        std::unique_ptr<logging::Logger> logger(logging::setupLogger(progname));
+        std::unique_ptr<logging::Logger> logger(logging::setupLogger(progname.string()));
         six::NITFReadControl reader;
         reader.setLogger(logger.get());
         reader.setXMLControlRegistry(xmlRegistry);

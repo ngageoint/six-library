@@ -31,9 +31,9 @@
 #include "logging/Setup.h"
 
 mem::auto_ptr<logging::Logger>
-logging::setupLogger(const coda_oss::filesystem::path& program_, 
+logging::setupLogger(const path& program_, 
                      const std::string& logLevel, 
-                     const coda_oss::filesystem::path& logFile,
+                     const path& logFile_,
                      const std::string& logFormat,
                      size_t logCount,
                      size_t logBytes)
@@ -50,7 +50,8 @@ logging::setupLogger(const coda_oss::filesystem::path& program_,
 
     // setup logging formatter
     std::unique_ptr <logging::Formatter> formatter;
-    auto file = logFile.string();
+    const auto logFile = logFile_.string();
+    auto file = logFile;
     str::lower(file);
     if (str::endsWith(file, ".xml"))
     {
@@ -90,4 +91,3 @@ logging::setupLogger(const coda_oss::filesystem::path& program_,
 
     return log;
 }
-

@@ -1,5 +1,16 @@
 set(TARGET_NAME openjpeg)
 
+if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    # use this CMakeLists.txt to build and package openjpeg with conan
+    project(coda-oss_openjpeg)
+    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    conan_basic_setup()
+    set(CODA_SKIP_SYSTEM_DEPENDENCIES ON)
+    include(CodaBuild.cmake)
+    coda_initialize_build()
+    coda_generate_package_config()
+endif()
+
 if (J2K_HOME)
     find_library(${TARGET_NAME}_PATH
                  ${TARGET_NAME}

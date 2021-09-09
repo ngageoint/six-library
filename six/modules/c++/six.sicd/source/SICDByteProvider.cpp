@@ -33,10 +33,9 @@ SICDByteProvider::SICDByteProvider(
         size_t maxProductSize)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX,
-                           new six::XMLControlCreatorT<ComplexXMLControl>());
+    xmlRegistry.addCreator<ComplexXMLControl>();
 
-    mem::SharedPtr<Container> container(new Container(
+    std::shared_ptr<Container> container(new Container(
             DataType::COMPLEX));
 
     // The container wants to take ownership of the data

@@ -25,6 +25,8 @@
 #include <iostream>
 #include <stdexcept>
 
+#include <std/filesystem>
+
 #include <six/sicd/CropUtils.h>
 
 #include <cli/ArgumentParser.h>
@@ -35,7 +37,6 @@
 #include <six/XMLControlFactory.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace
@@ -154,9 +155,7 @@ int main(int argc, char** argv)
         }
 
         // Crop it
-        six::XMLControlFactory::getInstance().addCreator(
-                six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
         if (options->hasValue("ecef"))
         {

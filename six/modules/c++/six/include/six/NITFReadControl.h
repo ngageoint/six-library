@@ -79,7 +79,7 @@ struct NITFReadControl : public ReadControl
     *  \return datatype of Record contents
     */
     static
-    DataType getDataType(nitf::Record& record);
+    DataType getDataType(const nitf::Record& record);
 
     /*!
     *  Read whether a DESegment has COMPLEX or DERIVED data
@@ -87,7 +87,7 @@ struct NITFReadControl : public ReadControl
     *  \return datatype of DESegment contents
     */
     static
-    DataType getDataType(nitf::DESegment& segment);
+    DataType getDataType(const nitf::DESegment& segment);
 
     /*!
     *  Determine whether specific attribute outline COMPLEX or DERIVED contents
@@ -136,8 +136,8 @@ struct NITFReadControl : public ReadControl
     void load(io::SeekableInputStream& ioStream,
               const std::vector<std::string>& schemaPaths);
 
-    void load(mem::SharedPtr<nitf::IOInterface> ioInterface);
-    void load(mem::SharedPtr<nitf::IOInterface> ioInterface,
+    void load(std::shared_ptr<nitf::IOInterface> ioInterface);
+    void load(std::shared_ptr<nitf::IOInterface> ioInterface,
               const std::vector<std::string>& schemaPaths);
 
 
@@ -212,10 +212,10 @@ protected:
     };
     void getIndices(const nitf::ImageSubheader& subheader, ImageAndSegment&) const;
 
-    void addImageClassOptions(nitf::ImageSubheader& s,
+    void addImageClassOptions(const nitf::ImageSubheader& s,
             six::Classification& c) const;
 
-    void addDEClassOptions(nitf::DESubheader& s,
+    void addDEClassOptions(const nitf::DESubheader& s,
                            six::Classification& c) const;
 
     void addSecurityOptions(nitf::FileSecurity security,
@@ -257,7 +257,7 @@ private:
     // to prevent data from being deleted prematurely
     // The issue occurs from the explicit destructor of
     // IOControl
-    mem::SharedPtr<nitf::IOInterface> mInterface;
+    std::shared_ptr<nitf::IOInterface> mInterface;
 };
 
 

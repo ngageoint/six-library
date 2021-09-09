@@ -102,13 +102,7 @@ XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, const std::string& characterData,
         XMLElem parent)
 {
-    constexpr auto encoding =
-#ifdef _WIN32
-    xml::lite::string_encoding::windows_1252;
-#else
-    xml::lite::string_encoding::utf_8;
-#endif
-    XMLElem elem = new xml::lite::Element(name, uri, characterData, encoding);
+    XMLElem elem = xml::lite::Element::create(name, uri, characterData).release();
     if (parent)
         parent->addChild(elem);
     return elem;
@@ -152,8 +146,9 @@ XMLElem XMLParser::createString_(const std::string& name,
 }
 
 template<typename T>
-static std::string toString(const std::string& name, T p, XMLElem parent)
+static std::string toString(const std::string& name, T p, const xml::lite::Element* parent)
 {
+    assert(parent != nullptr);
     try
     {
         return str::toString(p);
@@ -166,14 +161,14 @@ static std::string toString(const std::string& name, T p, XMLElem parent)
     }
 }
 
-XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
+XMLElem XMLParser::createInt_(const std::string& name, const std::string& uri,
         int p, XMLElem parent) const
 {
     const auto elementValue = toString(name, p, parent);
     return createInt(name, uri, elementValue, parent);
 }
 
-XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
+XMLElem XMLParser::createInt_(const std::string& name, const std::string& uri,
         const std::string& p, XMLElem parent) const
 {
     XMLElem const elem = newElement(name, uri, p, parent);
@@ -181,7 +176,7 @@ XMLElem XMLParser::createInt(const std::string& name, const std::string& uri,
     return elem;
 }
 
-XMLElem XMLParser::createInt(const std::string& name, int p, XMLElem parent) const
+XMLElem XMLParser::createInt_(const std::string& name, int p, XMLElem parent) const
 {
     return createInt(name, mDefaultURI, p, parent);
 }
@@ -231,7 +226,7 @@ XMLElem XMLParser::createOptionalDouble(const std::string& name, const double& p
 XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::optional<double>& p,
     XMLElem parent) const
 {
-    return p.has_value() ? createDouble(name, *p, parent) : nullptr;
+    return p.has_value() ? createOptionalDouble(name, *p, parent) : nullptr;
 }
 
 XMLElem XMLParser::createBooleanType(const std::string& name,
@@ -296,13 +291,15 @@ XMLElem XMLParser::createDate(const std::string& name, const DateTime& p,
     return createDate(name, mDefaultURI, p, parent);
 }
 
-XMLElem XMLParser::getFirstAndOnly(XMLElem parent, const std::string& tag)
+XMLElem XMLParser::getFirstAndOnly(const xml::lite::Element* parent, const std::string& tag)
 {
+    assert(parent != nullptr);
     auto& element = parent->getElementByTagName(tag);
     return &element; // OK, element is a reference
 }
-XMLElem XMLParser::getOptional(XMLElem parent, const std::string& tag)
+XMLElem XMLParser::getOptional(const xml::lite::Element* parent, const std::string& tag)
 {
+    assert(parent != nullptr);
     return parent->getElementByTagName(std::nothrow, tag);
 }
 
@@ -319,6 +316,7 @@ XMLElem XMLParser::require(XMLElem element, const std::string& name)
 void XMLParser::setAttribute_(XMLElem e, const std::string& name,
                              const std::string& v, const std::string& uri)
 {
+    assert(e != nullptr);
     xml::lite::AttributeNode node;
     node.setUri(uri);
     node.setQName(name);
@@ -341,7 +339,7 @@ static bool parseValue(logging::Logger& log, TGetValue getValue)
     return false;
 }
 
-bool XMLParser::parseDouble(XMLElem element, double& value) const
+bool XMLParser::parseDouble(const xml::lite::Element* element, double& value) const
 {
     value = Init::undefined<double>();
     return parseValue(*mLog, [&]() {
@@ -349,7 +347,7 @@ bool XMLParser::parseDouble(XMLElem element, double& value) const
         assert(Init::isDefined(value));
         });
 }
-void XMLParser::parseDouble(XMLElem element, std::optional<double>& value) const
+void XMLParser::parseDouble(const xml::lite::Element* element, std::optional<double>& value) const
 {
     value.reset(); // be sure callers can determine success/failure
 
@@ -360,25 +358,28 @@ void XMLParser::parseDouble(XMLElem element, std::optional<double>& value) const
     }
 }
 
-void XMLParser::parseOptionalDouble(XMLElem parent, const std::string& tag, double& value) const
+bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, double& value) const
 {
-    auto element = getOptional(parent, tag);
-    if (element)
+    if (const xml::lite::Element* const element = getOptional(parent, tag))
     {
         parseDouble(element, value);
+        return true;
     }
+    value = six::Init::undefined<double>();
+    return false;
 }
-void XMLParser::parseOptionalDouble(XMLElem parent, const std::string& tag, std::optional<double>& value) const
+bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const
 {
-    auto element = getOptional(parent, tag);
-    if (element)
+    if (const xml::lite::Element* const element = getOptional(parent, tag))
     {
         parseDouble(element, value);
+        return true;
     }
+    return false;
 }
 
 
-void XMLParser::parseComplex(XMLElem element, std::complex<double>& value) const
+void XMLParser::parseComplex(const xml::lite::Element* element, std::complex<double>& value) const
 {
     double r, i;
 
@@ -388,20 +389,33 @@ void XMLParser::parseComplex(XMLElem element, std::complex<double>& value) const
     value = std::complex<double>(r, i);
 }
 
-void XMLParser::parseString(XMLElem element, std::string& value) const
+void XMLParser::parseString(const xml::lite::Element* element, std::string& value) const
 {
+    assert(element != nullptr);
     value = element->getCharacterData();
 }
 
-void XMLParser::parseBooleanType(XMLElem element, BooleanType& value) const
+bool  XMLParser::parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const
 {
+    if (const xml::lite::Element* const element = getOptional(parent, tag))
+    {
+        parseString(element, value);
+        return true;
+    }
+    return false;
+}
+
+void XMLParser::parseBooleanType(const xml::lite::Element* element, BooleanType& value) const
+{
+    assert(element != nullptr);
     parseValue(*mLog, [&]() {
         value = castValue(*element, six::toType<BooleanType>);
         });
 }
 
-void XMLParser::parseDateTime(XMLElem element, DateTime& value) const
+void XMLParser::parseDateTime(const xml::lite::Element* element, DateTime& value) const
 {
+    assert(element != nullptr);
     value = castValue(*element, six::toType<DateTime>);
 }
 }

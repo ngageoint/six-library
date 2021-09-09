@@ -75,6 +75,7 @@ inline void show(const std::string& x_, const T& x)
     std::cout << "\n";
 }
 #define SHOW(X) show(#X, X.toString())
+#define SHOWS(X) show(#X, static_cast<std::string>(X))
 
 #define SHOWI(X) show(#X, static_cast<int>(X))
 #define SHOWRGB(X) printf("%s(R,G,B)=[%02x,%02x,%02x]\n", #X, \
@@ -635,6 +636,8 @@ void showLabels(const nitf::Record& record)
 void showTextSubheader(const nitf::TextSubheader& sub)
 {
     std::cout << "text subheader" << std::endl;
+
+    //SHOWS(sub.filePartType);
     SHOW(sub.getFilePartType());
     SHOW(sub.getTextID());
     SHOW(sub.getAttachmentLevel());

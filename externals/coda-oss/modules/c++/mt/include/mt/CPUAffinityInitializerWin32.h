@@ -51,9 +51,9 @@ public:
     }
 
 private:
-    virtual CPUAffinityThreadInitializerWin32* newThreadInitializerImpl() override
+    CPUAffinityThreadInitializerWin32* newThreadInitializerImpl() override
     {
-        return NULL;
+        return nullptr;
     }
 };
 }

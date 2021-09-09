@@ -291,10 +291,10 @@ XMLElem ComplexXMLParser10x::convertAntennaParamArrayToXML(
 
 
 void ComplexXMLParser10x::parseWeightTypeFromXML(
-    const XMLElem gridRowColXML,
+    const xml::lite::Element* gridRowColXML,
     mem::ScopedCopyablePtr<WeightType>& obj) const
 {
-    const XMLElem weightType = getOptional(gridRowColXML, "WgtType");
+    const xml::lite::Element* weightType = getOptional(gridRowColXML, "WgtType");
     if (weightType)
     {
         obj.reset(new WeightType());
@@ -309,7 +309,7 @@ void ComplexXMLParser10x::parseWeightTypeFromXML(
 }
 
 void ComplexXMLParser10x::parsePolarizationCalibrationFromXML(
-    const XMLElem polCalXML,
+    const xml::lite::Element* polCalXML,
     six::sicd::PolarizationCalibration* obj) const
 {
     // HVAngleCompApplied no longer exists in 1.0.0
@@ -318,7 +318,7 @@ void ComplexXMLParser10x::parsePolarizationCalibrationFromXML(
 }
 
 void ComplexXMLParser10x::parseTxRcvPolFromXML(
-    const XMLElem parent,
+    const xml::lite::Element* parent,
     six::DualPolarizationType& txRcvPol) const
 {
     //! Required field
@@ -329,7 +329,7 @@ void ComplexXMLParser10x::parseTxRcvPolFromXML(
 }
 
 void ComplexXMLParser10x::parseSCPCOAFromXML(
-        const XMLElem scpcoaXML, SCPCOA* scpcoa) const
+        const xml::lite::Element* scpcoaXML, SCPCOA* scpcoa) const
 {
     ComplexXMLParser::parseSCPCOAFromXML(scpcoaXML, scpcoa);
 
@@ -338,7 +338,7 @@ void ComplexXMLParser10x::parseSCPCOAFromXML(
     parseDouble(getFirstAndOnly(scpcoaXML, "LayoverAng"), scpcoa->layoverAngle);
 }
 
-void ComplexXMLParser10x::parseRMATFromXML(const XMLElem rmatElem,
+void ComplexXMLParser10x::parseRMATFromXML(const xml::lite::Element* rmatElem,
                                            RMAT* rmat) const
 {
     common().parseVector3D(getFirstAndOnly(rmatElem, "PosRef"), rmat->refPos);
@@ -347,7 +347,7 @@ void ComplexXMLParser10x::parseRMATFromXML(const XMLElem rmatElem,
 }
 
 
-void ComplexXMLParser10x::parseRMCRFromXML(const XMLElem rmcrElem,
+void ComplexXMLParser10x::parseRMCRFromXML(const xml::lite::Element* rmcrElem,
                                            RMCR* rmcr) const
 {
     common().parseVector3D(getFirstAndOnly(rmcrElem, "PosRef"), rmcr->refPos);
@@ -357,7 +357,7 @@ void ComplexXMLParser10x::parseRMCRFromXML(const XMLElem rmcrElem,
 
 
 void ComplexXMLParser10x::parseAntennaParamArrayFromXML(
-    const XMLElem antennaParamsXML,
+    const xml::lite::Element* antennaParamsXML,
     six::sicd::AntennaParameters* params) const
 {
     //! this field is mandatory in 1.0.0
@@ -397,21 +397,19 @@ XMLElem ComplexXMLParser10x::createRcvChannels(const RadarCollection* radar,
 }
 
 void ComplexXMLParser10x::parseRadarCollectionFromXML(
-        const XMLElem radarCollectionXML,
+        const xml::lite::Element* radarCollectionXML,
         RadarCollection* radarCollection) const
 {
     XMLElem tmpElem = getFirstAndOnly(radarCollectionXML, "TxFrequency");
-    parseDouble(getFirstAndOnly(tmpElem, "Min"),
-                radarCollection->txFrequencyMin);
-    parseDouble(getFirstAndOnly(tmpElem, "Max"),
-                radarCollection->txFrequencyMax);
-
-    tmpElem = getOptional(radarCollectionXML, "RefFreqIndex");
-    if (tmpElem)
+    if (tmpElem != nullptr)
     {
-        //optional
-        parseInt(tmpElem, radarCollection->refFrequencyIndex);
+        parseDouble(getFirstAndOnly(tmpElem, "Min"),
+            radarCollection->txFrequencyMin);
+        parseDouble(getFirstAndOnly(tmpElem, "Max"),
+            radarCollection->txFrequencyMax);
     }
+
+    parseOptionalInt(radarCollectionXML, "RefFreqIndex", radarCollection->refFrequencyIndex);
 
     tmpElem = getOptional(radarCollectionXML, "Waveform");
     if (tmpElem)
@@ -452,14 +450,13 @@ void ComplexXMLParser10x::parseRadarCollectionFromXML(
         chanParams.reset(new ChannelParameters());
 
         XMLElem childXML = getFirstAndOnly(*it, "TxRcvPolarization");
-        chanParams->txRcvPolarization = six::toType<DualPolarizationType>(
-                childXML->getCharacterData());
-
-        childXML = getOptional(*it, "RcvAPCIndex");
-        if (childXML)
+        if (childXML != nullptr)
         {
-            parseInt(childXML, chanParams->rcvAPCIndex);
+            chanParams->txRcvPolarization = six::toType<DualPolarizationType>(
+                childXML->getCharacterData());
         }
+
+        parseOptionalInt(*it, "RcvAPCIndex", chanParams->rcvAPCIndex);
     }
 
     XMLElem areaXML = getOptional(radarCollectionXML, "Area");

@@ -21,6 +21,8 @@
  */
 #include "six/Adapters.h"
 
+#include <gsl/gsl.h>
+
 using namespace six;
 
 extern "C"
@@ -38,6 +40,7 @@ struct MemoryWriteHandlerImpl final
 {
     const UByte* buffer;
     size_t firstRow;
+    types::RowCol<size_t> extent;
     size_t numCols;
     size_t numRows;
     size_t numChannels;
@@ -50,6 +53,11 @@ extern "C" void __six_MemoryWriteHandler_destruct(NITF_DATA * data)
     MemoryWriteHandlerImpl *impl = (MemoryWriteHandlerImpl *) data;
     if (impl)
         NITF_FREE(impl);
+}
+
+static void byteSwap(std::byte* buffer, size_t elemSize, size_t numElems)
+{
+    sys::byteSwap(buffer, gsl::narrow<unsigned short>(elemSize), numElems);
 }
 
 extern "C" NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
@@ -67,7 +75,7 @@ extern "C" NITF_BOOL __six_MemoryWriteHandler_write(NITF_DATA * data,
         memcpy(rowCopy, &impl->buffer[off], rowSize);
 
         if (impl->doByteSwap)
-            sys::byteSwap(rowCopy, impl->pixelSize
+            byteSwap(rowCopy, impl->pixelSize
                     / impl->numChannels, impl->numCols * impl->numChannels);
         // And write it back
         if (!nitf_IOInterface_write(io, rowCopy, rowSize, error))
@@ -89,9 +97,7 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
             { &__six_MemoryWriteHandler_write,
               &__six_MemoryWriteHandler_destruct };
 
-    MemoryWriteHandlerImpl *impl =
-            (MemoryWriteHandlerImpl *) NITF_MALLOC(
-                    sizeof(MemoryWriteHandlerImpl));
+    auto impl = static_cast<MemoryWriteHandlerImpl *>(NITF_MALLOC(sizeof(MemoryWriteHandlerImpl)));
     if (!impl)
         throw nitf::NITFException(Ctxt("Out of memory"));
     impl->buffer = buffer;
@@ -102,8 +108,7 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
     impl->pixelSize = pixelSize;
     impl->doByteSwap = doByteSwap;
 
-    nitf_SegmentWriter *segmentWriter =
-            (nitf_SegmentWriter *) NITF_MALLOC(sizeof(nitf_SegmentWriter));
+    auto segmentWriter = static_cast<nitf_SegmentWriter *>(NITF_MALLOC(sizeof(nitf_SegmentWriter)));
     if (!segmentWriter)
         throw nitf::NITFException(Ctxt("Out of memory"));
     segmentWriter->data = impl;
@@ -115,7 +120,7 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
 MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
     const std::byte* buffer, size_t firstRow, size_t numCols,
     size_t numChannels, size_t pixelSize, bool doByteSwap)
-    : MemoryWriteHandler(info, reinterpret_cast<const UByte*>(buffer), firstRow, numCols,
+    : MemoryWriteHandler(info, static_cast<const UByte*>(static_cast<const void*>(buffer)), firstRow, numCols,
         numChannels, pixelSize, doByteSwap)
 {
 }
@@ -156,7 +161,7 @@ extern "C" NITF_BOOL __six_StreamWriteHandler_write(NITF_DATA * data,
         impl->inputStream->read(rowCopy, rowSize);
 
         if (impl->doByteSwap)
-            sys::byteSwap(rowCopy, impl->pixelSize
+            byteSwap(rowCopy, impl->pixelSize
                     / impl->numChannels, impl->numCols * impl->numChannels);
 
         // And write it back
@@ -179,10 +184,7 @@ StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
             { &__six_StreamWriteHandler_write,
               &__six_StreamWriteHandler_destruct };
 
-    StreamWriteHandlerImpl
-            *impl =
-                    (StreamWriteHandlerImpl *) NITF_MALLOC(
-                                                           sizeof(StreamWriteHandlerImpl));
+    auto impl = static_cast<StreamWriteHandlerImpl*>(NITF_MALLOC(sizeof(StreamWriteHandlerImpl)));
     if (!impl)
         throw nitf::NITFException(Ctxt("Out of memory"));
 
@@ -193,8 +195,7 @@ StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
     impl->pixelSize = pixelSize;
     impl->doByteSwap = doByteSwap;
 
-    nitf_SegmentWriter *segmentWriter =
-            (nitf_SegmentWriter *) NITF_MALLOC(sizeof(nitf_SegmentWriter));
+    auto segmentWriter = static_cast<nitf_SegmentWriter*>(NITF_MALLOC(sizeof(nitf_SegmentWriter)));
     if (!segmentWriter)
         throw nitf::NITFException(Ctxt("Out of memory"));
 

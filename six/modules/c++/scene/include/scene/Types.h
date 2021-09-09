@@ -63,12 +63,13 @@ namespace scene
 
     struct AngleMagnitude
     {
-        AngleMagnitude(double _angle = 0, double _magnitude = 0) :
+        AngleMagnitude() = default;
+        AngleMagnitude(double _angle, double _magnitude = 0) :
             angle(_angle), magnitude(_magnitude)
         {
         }
-        double angle;
-        double magnitude;
+        double angle = 0.0;
+        double magnitude = 0.0;
 
         bool operator==(AngleMagnitude am) const
         {
@@ -81,10 +82,11 @@ namespace scene
         }
     };
 
-    class LatLon
+    struct LatLonAlt;
+    struct LatLon
     {
-    public:
-        LatLon(double scalar = 0.0) :
+        LatLon() = default;
+        LatLon(double scalar) :
             mLat(scalar), mLon(scalar)
         {
         }
@@ -137,6 +139,23 @@ namespace scene
         {
             mLon = lon;
         }
+        void setLatLon(const LatLonAlt&);
+        void setLatLon(const LatLon& ll)
+        {
+            setLat(ll.getLat());
+            setLon(ll.getLon());
+        }
+        template<typename TArray2>
+        void setLatLon(const TArray2& ll)
+        {
+            setLat(ll[0]);
+            setLon(ll[1]);
+        }
+        void clearLatLon()
+        {
+            setLat(0.0);
+            setLon(0.0);
+        }        
 
         void setLatRadians(double lat)
         {
@@ -159,14 +178,14 @@ namespace scene
         }
 
     protected:
-        double mLat;
-        double mLon;
+        double mLat = 0.0;
+        double mLon = 0.0;
     };
 
-    class LatLonAlt : public LatLon
+    struct LatLonAlt : public LatLon
     {
-    public:
-        LatLonAlt(double scalar = 0.0) : LatLon(scalar), mAlt(scalar)
+        LatLonAlt() = default;
+        LatLonAlt(double scalar) : LatLon(scalar), mAlt(scalar)
         {
         }
 
@@ -218,9 +237,14 @@ namespace scene
         }
 
     protected:
-        double mAlt;
+        double mAlt = 0.0;
     };
 
+    inline void LatLon::setLatLon(const LatLonAlt& lla)
+    {
+        setLat(lla.getLat());
+        setLon(lla.getLon());
+    }
 }
 
 namespace str

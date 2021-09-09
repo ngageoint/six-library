@@ -43,8 +43,7 @@ namespace six
  */
 struct XMLControlCreator
 {
-    //!  Constructor
-    XMLControlCreator() {}
+    XMLControlCreator() = default;
 
     //!  Destructor
     virtual ~XMLControlCreator() {}
@@ -85,14 +84,8 @@ template <typename T> struct XMLControlCreatorT : public XMLControlCreator
  *  identify which reader/writer to create, and one that uses a
  *  string (the same one that identifies the type in the container)
  */
-class XMLControlRegistry
+struct XMLControlRegistry
 {
-public:
-    //!  Constructor
-    XMLControlRegistry()
-    {
-    }
-
     //!  Destructor
     virtual ~XMLControlRegistry();
 
@@ -100,7 +93,7 @@ public:
                     std::unique_ptr<XMLControlCreator>&& creator);
 #if !CODA_OSS_cpp17
     void addCreator(const std::string& identifier,
-                    std::auto_ptr<XMLControlCreator> creator);
+                    mem::auto_ptr<XMLControlCreator> creator);
 #endif
 
     /*!
@@ -120,7 +113,7 @@ public:
     }
 #if !CODA_OSS_cpp17
     void addCreator(DataType dataType,
-                    std::auto_ptr<XMLControlCreator> creator)
+                    mem::auto_ptr<XMLControlCreator> creator)
     {
         addCreator(dataType.toString(), creator);
     }
@@ -133,6 +126,13 @@ public:
     {
         std::unique_ptr<XMLControlCreator> scopedCreator(creator);
         addCreator(dataType, std::move(scopedCreator));
+    }
+
+    template<typename TXMLControlCreator>
+    void addCreator()
+    {
+        auto scopedCreator = std::make_unique<XMLControlCreatorT<TXMLControlCreator>>();
+        addCreator(TXMLControlCreator::dataType, std::move(scopedCreator));
     }
 
     /*!

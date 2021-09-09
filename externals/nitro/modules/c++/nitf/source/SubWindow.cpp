@@ -22,6 +22,10 @@
 
 #include "nitf/SubWindow.hpp"
 
+#include <gsl/gsl.h>
+
+#include "nitf/ImageSubheader.hpp"
+
 using namespace nitf;
 
 SubWindow::SubWindow(const SubWindow & x)
@@ -29,10 +33,25 @@ SubWindow::SubWindow(const SubWindow & x)
     *this = x;
 }
 
+void SubWindow::updateBandList()
+{
+    assert(bandList.has_value());
+    setBandList(bandList->data());
+    setNumBands(gsl::narrow<uint32_t>(bandList->size()));
+}
+
 SubWindow & SubWindow::operator=(const SubWindow & x)
 {
     if (&x != this)
+    {
         setNative(x.getNative());
+
+        bandList = x.bandList;
+        if (bandList.has_value())
+        {
+            updateBandList();
+        }
+    }
     return *this;
 }
 
@@ -42,14 +61,32 @@ SubWindow::SubWindow(nitf_SubWindow * x)
     getNativeOrThrow();
 }
 
-SubWindow::SubWindow() : mDownSampler(nullptr)
+SubWindow::SubWindow() : SubWindow(nitf_SubWindow_construct(&error))
 {
-    setNative(nitf_SubWindow_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 
     setStartCol(0);
     setStartRow(0);
+}
+
+SubWindow::SubWindow(uint32_t rows, uint32_t cols, uint32_t* bands, uint32_t numBands) : SubWindow()
+{
+    setNumRows(rows);
+    setNumCols(cols);
+    setBandList(bands);
+    setNumBands(numBands);
+}
+
+static inline std::vector<uint32_t> iota(size_t count, uint32_t value = 0)
+{
+    std::vector<uint32_t> retval(count);
+    std::iota(retval.begin(), retval.end(), value);
+    return retval;
+}
+SubWindow::SubWindow(const ImageSubheader& subheader) :
+    SubWindow(gsl::narrow<uint32_t>(subheader.numRows()), gsl::narrow<uint32_t>(subheader.numCols()))
+{
+    setBandList(iota(subheader.getBandCount()));
 }
 
 SubWindow::~SubWindow()
@@ -111,6 +148,11 @@ void SubWindow::setBandList(uint32_t * value)
 {
     getNativeOrThrow()->bandList = value;
 }
+void SubWindow::setBandList(std::vector<uint32_t>&& value)
+{
+    bandList = std::move(value);
+    updateBandList();
+}
 
 uint32_t SubWindow::getNumBands() const
 {
@@ -142,6 +184,10 @@ void SubWindow::setDownSampler(nitf::DownSampler* downSampler)
 
 
 nitf::DownSampler* SubWindow::getDownSampler() noexcept
+{
+    return mDownSampler;
+}
+const nitf::DownSampler* SubWindow::getDownSampler() const noexcept
 {
     return mDownSampler;
 }

@@ -28,6 +28,7 @@
 #include <map>
 #include <mutex>
 
+#include <std/memory>
 #include "nitf/coda-oss.hpp"
 #include "nitf/Handle.hpp"
 
@@ -48,14 +49,14 @@ class HandleManager
         std::lock_guard<std::mutex> obtainLock(mMutex);
         if (mHandleMap.find(object) == mHandleMap.end())
         {
-            mHandleMap[object] = new retval_t(object);
+            mHandleMap[object] = std::make_unique<retval_t>(object).release();
         }
         return static_cast<retval_t*>(mHandleMap[object]);
     }
 
 public:
-    HandleManager() {};
-    virtual ~HandleManager() {}
+    HandleManager() noexcept(false) {}
+    virtual ~HandleManager() = default;
 
     HandleManager(const HandleManager&) = delete;
     HandleManager(HandleManager&&) = delete;
@@ -88,7 +89,7 @@ public:
         Handle* handle = nullptr;
         {
             std::lock_guard<std::mutex> obtainLock(mMutex);
-            std::map<CAddress, Handle*>::iterator it = mHandleMap.find(object);
+            auto it = mHandleMap.find(object);
             if (it != mHandleMap.end())
             {
                 handle = it->second;

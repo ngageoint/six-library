@@ -27,6 +27,9 @@
 
 #include <memory>
 
+#include <std/memory>
+#include <gsl/gsl.h>
+
 #include <scene/sys_Conf.h>
 
 #include "six/Types.h"
@@ -71,7 +74,7 @@ public:
      *  this until read time.
      *
      */
-    void setStartRow(ptrdiff_t row)
+    void setStartRow(ptrdiff_t row) noexcept
     {
         startRow = row;
     }
@@ -82,8 +85,8 @@ public:
      *
      */
 
-    void setStartCol(ptrdiff_t col)
-    {
+    void setStartCol(ptrdiff_t col) noexcept
+    { 
         startCol = col;
     }
 
@@ -92,7 +95,7 @@ public:
      *  numRows, or -1 to request numRows without querying the
      *  actual rows
      */
-    void setNumRows(ptrdiff_t rows)
+    void setNumRows(ptrdiff_t rows) noexcept
     {
         numRows = rows;
     }
@@ -102,7 +105,7 @@ public:
      *  numRows, or -1 to request numRows without querying the
      *  actual rows
      */
-    void setNumCols(ptrdiff_t cols)
+    void setNumCols(ptrdiff_t cols) noexcept
     {
         numCols = cols;
     }
@@ -110,7 +113,7 @@ public:
     /*!
      *  Get the start row
      */
-    ptrdiff_t getStartRow() const
+    ptrdiff_t getStartRow() const noexcept
     {
         return startRow;
     }
@@ -118,7 +121,7 @@ public:
     /*!
      *  Get the start col
      */
-    ptrdiff_t getStartCol() const
+    ptrdiff_t getStartCol() const noexcept
     {
         return startCol;
     }
@@ -129,7 +132,7 @@ public:
      *  should not be used before a read has been done, except to verify
      *  the number of requested rows.
      */
-    ptrdiff_t getNumRows() const
+    ptrdiff_t getNumRows() const noexcept
     {
         return numRows;
     }
@@ -140,7 +143,7 @@ public:
      *  should not be used before a read has been done, except to verify
      *  the number of requested cols.
      */
-    ptrdiff_t getNumCols() const
+    ptrdiff_t getNumCols() const noexcept
     {
         return numCols;
     }
@@ -152,7 +155,7 @@ public:
      *  should be non-nullptr.  The work buffer must be deallocated by the
      *  program, since the Region does not currently do so.
      */
-    UByte* getBuffer()
+    UByte* getBuffer() noexcept
     {
         return mBuffer;
     }
@@ -163,15 +166,16 @@ public:
      *  makes use of this optional function, it is assumed that they have
      *  already sized this buffer correctly.
      */
-    void setBuffer(UByte* buffer)
+    void setBuffer(UByte* buffer) noexcept
     {
         assert(buffer != nullptr);
         mBuffer = buffer;
     }
-    void setBuffer(std::byte* buffer)
+    void setBuffer(std::byte* buffer) noexcept
     {
         assert(buffer != nullptr);
-        mBuffer = reinterpret_cast<UByte*>(buffer);
+        void* buffer_ = buffer;
+        mBuffer = static_cast<UByte*>(buffer_);
     }
 
     /*!
@@ -181,11 +185,29 @@ public:
     {
         assert(getBuffer() == nullptr);
 
-        std::unique_ptr<UByte[]> retval(new UByte[size]);
+        auto retval = std::make_unique<UByte[]>(size);
         setBuffer(retval.get());
         return retval;
     }
 };
+
+inline types::RowCol<ptrdiff_t> getExtent(const Region& r) noexcept
+{
+    return types::RowCol<ptrdiff_t>(r.getNumRows(), r.getNumCols());
+}
+
+inline void setDims(Region& r, const types::RowCol<size_t>& aoiDims) noexcept
+{
+    r.setNumRows(gsl::narrow<ptrdiff_t>(aoiDims.row));
+    r.setNumCols(gsl::narrow<ptrdiff_t>(aoiDims.col));
+}
+
+inline void setOffset(Region& r, const types::RowCol<size_t>& aoiOffset) noexcept
+{
+    r.setStartRow(gsl::narrow<ptrdiff_t>(aoiOffset.row));
+    r.setStartCol(gsl::narrow<ptrdiff_t>(aoiOffset.col));
+}
+
 }
 
 #endif

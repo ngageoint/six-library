@@ -22,13 +22,14 @@
 #ifndef __SIX_WRITE_CONTROL_H__
 #define __SIX_WRITE_CONTROL_H__
 
+#include <memory>
+
 #include "six/Types.h"
 #include "six/Region.h"
 #include "six/Container.h"
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
 #include <import/logging.h>
-#include <mem/SharedPtr.h>
 
 namespace six
 {
@@ -61,10 +62,8 @@ using buffer_list_mutable = std::vector<std::byte*>;
  *  allows that data model to be transmitted to the container file format.
  *
  */
-class WriteControl
+struct WriteControl
 {
-public:
-
     //!  Global byte swap option.  Normally, you should leave this up to us
     static const char OPT_BYTE_SWAP[];
 
@@ -75,7 +74,7 @@ public:
     static const char OPT_BUFFER_SIZE[];
 
     //!  Constructor.  Null-sets the Container
-    WriteControl() :
+    WriteControl() noexcept :
         mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
     {
         setLogger(nullptr);
@@ -97,7 +96,7 @@ public:
      *
      *  \param container Container to bind to
      */
-    virtual void initialize(mem::SharedPtr<Container> container) = 0;
+    virtual void initialize(std::shared_ptr<Container> container) = 0;
 
     /*!
      *  Save a list of InputStream sources.  This should always be
@@ -190,7 +189,8 @@ public:
     }
     void save(const std::byte* buffer, const std::string& toFile)
     {
-        save(reinterpret_cast<const UByte*>(buffer), toFile);
+        const void* buffer_ = buffer;
+        save(static_cast<const UByte*>(buffer_), toFile);
     }
     void save(const UByte* buffer, const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
@@ -202,13 +202,14 @@ public:
     void save(const std::byte* buffer, const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
     {
-        save(reinterpret_cast<const UByte*>(buffer), toFile, schemaPaths);
+        const void* buffer_ = buffer;
+        save(static_cast<const UByte*>(buffer_), toFile, schemaPaths);
     }
 
     /*!
      * shared pointer to Container
      */
-    mem::SharedPtr<Container> getContainer()
+    std::shared_ptr<Container> getContainer()
     {
         return mContainer;
     }
@@ -216,8 +217,9 @@ public:
     /*!
      *  shared const pointer to Container.
      */
-    mem::SharedPtr<const Container> getContainer() const
+    std::shared_ptr<const Container> getContainer() const
     {
+        std::shared_ptr<const Container> retval = mContainer;
         return mContainer;
     }
 
@@ -275,7 +277,8 @@ public:
         BufferList retval;
         for (const auto& buffer : buffers)
         {
-            retval.push_back(reinterpret_cast<BufferList::value_type>(buffer));
+            const void* buffer_ = buffer;
+            retval.push_back(static_cast<BufferList::value_type>(buffer_));
         }
         return retval;
     }
@@ -287,11 +290,11 @@ protected:
         if (!mXMLRegistry)
             mXMLRegistry = &XMLControlFactory::getInstance();
     }
-    mem::SharedPtr<Container> mContainer;
+    std::shared_ptr<Container> mContainer;
     Options mOptions;
-    logging::Logger *mLog;
-    bool mOwnLog;
-    const XMLControlRegistry *mXMLRegistry;
+    logging::Logger* mLog = nullptr;
+    bool mOwnLog = false;
+    const XMLControlRegistry* mXMLRegistry = nullptr;
 
 };
 

@@ -24,6 +24,8 @@
 #include <iostream>
 #include <string>
 
+#include <std/filesystem>
+
 #include <import/nitf.hpp>
 
 #include <sys/Path.h>
@@ -31,7 +33,6 @@
 #include <import/xml/lite.h>
 #include <import/io.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 /*!

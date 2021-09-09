@@ -28,19 +28,11 @@
 #include <string>
 #include <vector>
 
-// We know at compile-time whether sys::getBacktrace() is supported.
-#if defined(__GNUC__)
-// https://man7.org/linux/man-pages/man3/backtrace.3.html
-// "These functions are GNU extensions."
-#define CODA_OSS_sys_Backtrace 20210216L
-#elif _WIN32
-#define CODA_OSS_sys_Backtrace 20210216L
-#else
-#define CODA_OSS_sys_Backtrace 0
-#endif 
+#include "except/Backtrace.h"
 
+#define CODA_OSS_sys_Backtrace CODA_OSS_except_Backtrace
 namespace version { namespace sys {
-constexpr auto backtrace = CODA_OSS_sys_Backtrace;
+constexpr auto backtrace = version::except::backtrace;
 } }
 
 namespace sys

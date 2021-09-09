@@ -111,7 +111,7 @@ DerivedXMLParser200::DerivedXMLParser200(logging::Logger* log,
 DerivedData* DerivedXMLParser200::fromXML(
         const xml::lite::Document* doc) const
 {
-    XMLElem root = doc->getRootElement();
+    const xml::lite::Element* const root = doc->getRootElement();
 
     XMLElem productCreationElem        = getFirstAndOnly(root, "ProductCreation");
     XMLElem displayElem                = getFirstAndOnly(root, "Display");
@@ -132,7 +132,7 @@ DerivedData* DerivedXMLParser200::fromXML(
     DerivedData *data = builder.steal(); //steal it
 
     // see if PixelType has MONO or RGB
-    PixelType pixelType = six::toType<PixelType>(
+    const PixelType pixelType = six::toType<PixelType>(
             getFirstAndOnly(displayElem, "PixelType")->getCharacterData());
     builder.addDisplay(pixelType);
 
@@ -155,7 +155,7 @@ DerivedData* DerivedXMLParser200::fromXML(
     std::vector<XMLElem> elements;
     exploitationFeaturesElem->getElementsByTagName("ExploitationFeatures",
                                                   elements);
-    builder.addExploitationFeatures(elements.size());
+    builder.addExploitationFeatures(static_cast<unsigned int>(elements.size()));
 
     parseProductCreationFromXML(productCreationElem, data->productCreation.get());
     parseDisplayFromXML(displayElem, *data->display);
@@ -208,7 +208,7 @@ DerivedData* DerivedXMLParser200::fromXML(
         std::vector<XMLElem> annChildren;
         annotationsElem->getElementsByTagName("Annotation", annChildren);
         data->annotations.resize(annChildren.size());
-        for (unsigned int i = 0, size = annChildren.size(); i < size; ++i)
+        for (size_t i = 0; i < annChildren.size(); ++i)
         {
             data->annotations[i].reset(new Annotation());
             parseAnnotationFromXML(annChildren[i], data->annotations[i].get());
@@ -273,10 +273,9 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
     if (!derived->annotations.empty())
     {
         XMLElem annotationsElem = newElement("Annotations", root);
-        for (size_t i = 0, num = derived->annotations.size(); i < num; ++i)
+        for (const auto& pAnnotation : derived->annotations)
         {
-            convertAnnotationToXML(derived->annotations[i].get(),
-                                   annotationsElem);
+            convertAnnotationToXML(pAnnotation.get(), annotationsElem);
         }
     }
 
@@ -290,7 +289,7 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
 }
 
 void DerivedXMLParser200::parseDerivedClassificationFromXML(
-        const XMLElem classificationElem,
+        const xml::lite::Element* classificationElem,
         DerivedClassification& classification) const
 {
     DerivedXMLParser::parseDerivedClassificationFromXML(classificationElem, classification);
@@ -338,7 +337,7 @@ void DerivedXMLParser200::parseDerivedClassificationFromXML(
         classification.externalNotice);
 }
 
-void DerivedXMLParser200::parseCompressionFromXML(const XMLElem compressionElem,
+void DerivedXMLParser200::parseCompressionFromXML(const xml::lite::Element* compressionElem,
                                                  Compression& compression) const
 {
     XMLElem j2kElem = getFirstAndOnly(compressionElem, "J2K");
@@ -353,7 +352,7 @@ void DerivedXMLParser200::parseCompressionFromXML(const XMLElem compressionElem,
     }
 }
 
-void DerivedXMLParser200::parseJ2KCompression(const XMLElem j2kElem,
+void DerivedXMLParser200::parseJ2KCompression(const xml::lite::Element* j2kElem,
                                               J2KCompression& j2k) const
 {
     parseInt(getFirstAndOnly(j2kElem, "NumWaveletLevels"),
@@ -365,7 +364,7 @@ void DerivedXMLParser200::parseJ2KCompression(const XMLElem j2kElem,
     std::vector<XMLElem> layerElems;
     layerInfoElems->getElementsByTagName("Layer", layerElems);
 
-    size_t numLayers = layerElems.size();
+    const auto numLayers = layerElems.size();
     j2k.layerInfo.resize(numLayers);
 
     for (size_t ii = 0; ii < layerElems.size(); ++ii)
@@ -375,7 +374,7 @@ void DerivedXMLParser200::parseJ2KCompression(const XMLElem j2kElem,
     }
 }
 
-void DerivedXMLParser200::parseDisplayFromXML(const XMLElem displayElem,
+void DerivedXMLParser200::parseDisplayFromXML(const xml::lite::Element* displayElem,
                                               Display& display) const
 {
     //pixelType previously set
@@ -426,7 +425,7 @@ void DerivedXMLParser200::parseDisplayFromXML(const XMLElem displayElem,
 }
 
 void DerivedXMLParser200::parseNonInteractiveProcessingFromXML(
-            const XMLElem procElem,
+            const xml::lite::Element* procElem,
             NonInteractiveProcessing& nonInteractiveProcessing) const
 {
     XMLElem productGenerationOptions = getFirstAndOnly(procElem,
@@ -439,7 +438,7 @@ void DerivedXMLParser200::parseNonInteractiveProcessingFromXML(
 }
 
 void DerivedXMLParser200::parseProductGenerationOptionsFromXML(
-            const XMLElem optionsElem,
+            const xml::lite::Element* optionsElem,
             ProductGenerationOptions& options) const
 {
     XMLElem bandElem = getOptional(optionsElem, "BandEqualization");
@@ -476,7 +475,7 @@ void DerivedXMLParser200::parseProductGenerationOptionsFromXML(
 }
 
 void DerivedXMLParser200::parseLookupTableFromXML(
-            const XMLElem lookupElem,
+            const xml::lite::Element* lookupElem,
             LookupTable& lookupTable) const
 {
     parseString(getFirstAndOnly(lookupElem, "LUTName"), lookupTable.lutName);
@@ -540,7 +539,7 @@ void DerivedXMLParser200::parseLookupTableFromXML(
     }
 }
 
-void DerivedXMLParser200::parseBandEqualizationFromXML(const XMLElem bandElem,
+void DerivedXMLParser200::parseBandEqualizationFromXML(const xml::lite::Element* bandElem,
                                                        BandEqualization& band) const
 {
     std::string bandAlgo;
@@ -565,7 +564,7 @@ void DerivedXMLParser200::parseBandEqualizationFromXML(const XMLElem bandElem,
     }
 }
 
-void DerivedXMLParser200::parseRRDSFromXML(const XMLElem rrdsElem,
+void DerivedXMLParser200::parseRRDSFromXML(const xml::lite::Element* rrdsElem,
             RRDS& rrds) const
 {
     parseEnum(getFirstAndOnly(rrdsElem, "DownsamplingMethod"), rrds.downsamplingMethod);
@@ -585,7 +584,7 @@ void DerivedXMLParser200::parseRRDSFromXML(const XMLElem rrdsElem,
     }
 }
 
-void DerivedXMLParser200::parseFilterFromXML(const XMLElem filterElem,
+void DerivedXMLParser200::parseFilterFromXML(const xml::lite::Element* filterElem,
     Filter& filter) const
 {
     parseString(getFirstAndOnly(filterElem, "FilterName"), filter.filterName);
@@ -615,7 +614,7 @@ void DerivedXMLParser200::parseFilterFromXML(const XMLElem filterElem,
     parseEnum(getFirstAndOnly(filterElem, "Operation"), filter.operation);
 }
 
-void DerivedXMLParser200::parsePredefinedFilterFromXML(const XMLElem predefinedElem,
+void DerivedXMLParser200::parsePredefinedFilterFromXML(const xml::lite::Element* predefinedElem,
      Filter::Predefined& predefined) const
 {
     bool ok = false;
@@ -646,7 +645,7 @@ void DerivedXMLParser200::parsePredefinedFilterFromXML(const XMLElem predefinedE
     }
 }
 
-void DerivedXMLParser200::parseKernelFromXML(const XMLElem kernelElem,
+void DerivedXMLParser200::parseKernelFromXML(const xml::lite::Element* kernelElem,
      Filter::Kernel& kernel) const
 {
     XMLElem predefinedElem = getOptional(kernelElem, "Predefined");
@@ -678,7 +677,7 @@ void DerivedXMLParser200::parseKernelFromXML(const XMLElem kernelElem,
 
         std::vector<XMLElem> coefficients;
         filterCoef->getElementsByTagName("Coef", coefficients);
-        size_t numCoefs = coefficients.size();
+        const auto numCoefs = coefficients.size();
         kernel.custom->filterCoef.resize(numCoefs);
         for (size_t ii = 0; ii < numCoefs; ++ii)
         {
@@ -690,7 +689,7 @@ void DerivedXMLParser200::parseKernelFromXML(const XMLElem kernelElem,
         throw except::Exception(Ctxt("Exactly one of Custom or Predefined must be set for FilterKernel"));
     }
 }
-void DerivedXMLParser200::parseBankFromXML(const XMLElem bankElem,
+void DerivedXMLParser200::parseBankFromXML(const xml::lite::Element* bankElem,
      Filter::Bank& bank) const
 {
     XMLElem predefinedElem = getOptional(bankElem, "Predefined");
@@ -718,7 +717,7 @@ void DerivedXMLParser200::parseBankFromXML(const XMLElem bankElem,
 
         std::vector<XMLElem> coefficients;
         filterCoef->getElementsByTagName("Coef", coefficients);
-        size_t numCoefs = coefficients.size();
+        const auto numCoefs = coefficients.size();
         bank.custom->filterCoef.resize(numCoefs);
         for (size_t ii = 0; ii < numCoefs; ++ii)
         {
@@ -732,7 +731,7 @@ void DerivedXMLParser200::parseBankFromXML(const XMLElem bankElem,
 }
 
 void DerivedXMLParser200::parseInteractiveProcessingFromXML(
-            const XMLElem interactiveElem,
+            const xml::lite::Element* interactiveElem,
             InteractiveProcessing& interactive) const
 {
     XMLElem geomElem = getFirstAndOnly(interactiveElem, "GeometricTransform");
@@ -764,7 +763,7 @@ void DerivedXMLParser200::parseInteractiveProcessingFromXML(
     }
 }
 
-void DerivedXMLParser200::parseGeometricTransformFromXML(const XMLElem geomElem,
+void DerivedXMLParser200::parseGeometricTransformFromXML(const xml::lite::Element* geomElem,
              GeometricTransform& transform) const
 {
     XMLElem scalingElem = getFirstAndOnly(geomElem, "Scaling");
@@ -778,7 +777,7 @@ void DerivedXMLParser200::parseGeometricTransformFromXML(const XMLElem geomElem,
 }
 
 void DerivedXMLParser200::parseSharpnessEnhancementFromXML(
-             const XMLElem sharpElem,
+             const xml::lite::Element* sharpElem,
              SharpnessEnhancement& sharpness) const
 {
     bool ok = false;
@@ -812,7 +811,7 @@ void DerivedXMLParser200::parseSharpnessEnhancementFromXML(
 }
 
 void DerivedXMLParser200::parseColorSpaceTransformFromXML(
-            const XMLElem colorElem, ColorSpaceTransform& transform) const
+            const xml::lite::Element* colorElem, ColorSpaceTransform& transform) const
 {
     XMLElem manageElem = getFirstAndOnly(colorElem, "ColorManagementModule");
 
@@ -832,20 +831,12 @@ void DerivedXMLParser200::parseColorSpaceTransformFromXML(
     }
     parseString(getFirstAndOnly(manageElem, "SourceProfile"),
                 transform.colorManagementModule.sourceProfile);
-    XMLElem profXML = getOptional(manageElem, "DisplayProfile");
-    if (profXML)
-    {
-        parseString(profXML, transform.colorManagementModule.displayProfile);
-    }
-    profXML = getOptional(manageElem, "ICCProfileSignature");
-    if (profXML)
-    {
-        parseString(profXML, transform.colorManagementModule.iccProfile);
-    }
+    parseOptionalString(manageElem, "DisplayProfile", transform.colorManagementModule.displayProfile);
+    parseOptionalString(manageElem, "ICCProfileSignature", transform.colorManagementModule.iccProfile);
 }
 
 void DerivedXMLParser200::parseDynamicRangeAdjustmentFromXML(
-            const XMLElem rangeElem,
+            const xml::lite::Element* rangeElem,
             DynamicRangeAdjustment& rangeAdjustment) const
 {
     parseEnum(getFirstAndOnly(rangeElem, "AlgorithmType"), rangeAdjustment.algorithmType);
@@ -1367,17 +1358,17 @@ XMLElem DerivedXMLParser200::convertKernelToXML(
         }
 
         XMLElem filterCoef = newElement("FilterCoefficients", customElem);
-        setAttribute(filterCoef, "numRows", kernel.custom->size.row);
-        setAttribute(filterCoef, "numCols", kernel.custom->size.col);
+        setAttribute(filterCoef, "numRows", static_cast<size_t>(kernel.custom->size.row));
+        setAttribute(filterCoef, "numCols", static_cast<size_t>(kernel.custom->size.col));
 
         for (ptrdiff_t row = 0, idx = 0; row < kernel.custom->size.row; ++row)
         {
             for (ptrdiff_t col = 0; col < kernel.custom->size.col; ++col, ++idx)
             {
-                XMLElem coefElem = createDouble("Coef", kernel.custom->filterCoef[idx],
+                XMLElem coefElem = createDouble("Coef", kernel.custom->filterCoef[static_cast<size_t>(idx)],
                     filterCoef);
-                setAttribute(coefElem, "row", row);
-                setAttribute(coefElem, "col", col);
+                setAttribute(coefElem, "row", static_cast<size_t>(row));
+                setAttribute(coefElem, "col", static_cast<size_t>(col));
             }
         }
     }
@@ -1500,7 +1491,7 @@ void DerivedXMLParser200::convertJ2KToXML(const J2KCompression& j2k,
     createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
     createInt("NumBands", j2k.numBands, parent);
 
-    size_t numLayers = j2k.layerInfo.size();
+    const auto numLayers = j2k.layerInfo.size();
     XMLElem layerInfoElem = newElement("LayerInfo", parent);
     setAttribute(layerInfoElem, "numLayers", numLayers);
 
@@ -1555,7 +1546,7 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
     XMLElem exploitationFeaturesElem =
         newElement("ExploitationFeatures", parent);
 
-    if (exploitationFeatures->collections.size() < 1)
+    if (exploitationFeatures->collections.empty())
     {
         throw except::Exception(Ctxt(FmtX(
             "ExploitationFeatures must have at least [1] Collection, " \
@@ -1563,9 +1554,9 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
     }
 
     // 1 to unbounded
-    for (size_t i = 0; i < exploitationFeatures->collections.size(); ++i)
+    for (auto& pCollections : exploitationFeatures->collections)
     {
-        Collection* collection = exploitationFeatures->collections[i].get();
+        Collection* collection = pCollections.get();
         XMLElem collectionElem = newElement("Collection",
             exploitationFeaturesElem);
         setAttribute(collectionElem, "identifier", collection->identifier);
@@ -1621,10 +1612,9 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
                 roiElem);
         }
         // optional to unbounded
-        for (size_t n = 0, nElems =
-            collection->information.polarization.size(); n < nElems; ++n)
+        for (const auto& pPolarization : collection->information.polarization)
         {
-            TxRcvPolarization *p = collection->information.polarization[n].get();
+            const TxRcvPolarization *p = pPolarization.get();
             XMLElem polElem = newElement("Polarization", informationElem);
 
             createString("TxPolarization",
@@ -1649,7 +1639,7 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
         }
 
         // create Geometry -- optional
-        Geometry* geom = collection->geometry.get();
+        const Geometry* geom = collection->geometry.get();
         if (geom != nullptr)
         {
             XMLElem geometryElem = newElement("Geometry", collectionElem);
@@ -1678,7 +1668,7 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
         }
 
         // create Phenomenology -- optional
-        Phenomenology* phenom = collection->phenomenology.get();
+        const Phenomenology* phenom = collection->phenomenology.get();
         if (phenom != nullptr)
         {
             XMLElem phenomenologyElem = newElement("Phenomenology",
@@ -1876,9 +1866,7 @@ XMLElem DerivedXMLParser200::convertDigitalElevationDataToXML(
     createInt("FalseOrigin", ded.geopositioning.falseOrigin, geoposElem);
     if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
     {
-        createInt("UTMGridZoneNumber",
-                  ded.geopositioning.utmGridZoneNumber,
-                  geoposElem);
+        createInt("UTMGridZoneNumber", ded.geopositioning.utmGridZoneNumber, geoposElem);
     }
 
     // PositionalAccuracy
@@ -1910,7 +1898,7 @@ XMLElem DerivedXMLParser200::convertDigitalElevationDataToXML(
 }
 
 void DerivedXMLParser200::parseGeoDataFromXML(
-    const XMLElem geoDataXML, GeoDataBase* geoData) const
+    const xml::lite::Element* geoDataXML, GeoDataBase* geoData) const
 {
     common().parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
             geoData->earthModel);
@@ -1941,7 +1929,7 @@ void DerivedXMLParser200::parseGeoDataFromXML(
 
 
 void DerivedXMLParser200::parseMeasurementFromXML(
-        const XMLElem measurementElem,
+        const xml::lite::Element* measurementElem,
         Measurement* measurement) const
 {
     DerivedXMLParser::parseMeasurementFromXML(measurementElem, measurement);
@@ -1961,7 +1949,7 @@ void DerivedXMLParser200::parseMeasurementFromXML(
 }
 
 void DerivedXMLParser200::parseExploitationFeaturesFromXML(
-    const XMLElem exploitationFeaturesElem,
+    const xml::lite::Element* exploitationFeaturesElem,
     ExploitationFeatures* exploitationFeatures) const
 {
     // There is a difference between 1.0 and 2.0 in that the processing field
@@ -1973,22 +1961,19 @@ void DerivedXMLParser200::parseExploitationFeaturesFromXML(
     exploitationFeaturesElem->getElementsByTagName("Collection", collectionsElem);
     for (size_t i = 0; i < collectionsElem.size(); ++i)
     {
-        XMLElem collectionElem = collectionsElem[i];
+        const xml::lite::Element* const collectionElem = collectionsElem[i];
         XMLElem geometryElem = getOptional(collectionElem, "Geometry");
-        Collection& coll = *exploitationFeatures->collections[i];
+        const Collection& coll = *exploitationFeatures->collections[i];
 
         // optional
         if (geometryElem) {
-            XMLElem dopplerElem = getOptional(geometryElem, "DopplerConeAngle");
-            if (dopplerElem) {
-                parseDouble(dopplerElem, coll.geometry->dopplerConeAngle);
-            }
+            parseOptionalDouble(geometryElem, "DopplerConeAngle", coll.geometry->dopplerConeAngle);
         }
     }
 }
 
 void DerivedXMLParser200::parseProductFromXML(
-    const XMLElem exploitationFeaturesElem,
+    const xml::lite::Element* exploitationFeaturesElem,
     ExploitationFeatures* exploitationFeatures) const
 {
     std::vector<XMLElem> productElems;
@@ -2003,7 +1988,7 @@ void DerivedXMLParser200::parseProductFromXML(
     exploitationFeatures->product.resize(productElems.size());
     for (size_t ii = 0; ii < productElems.size(); ++ii)
     {
-        XMLElem productElem = productElems[ii];
+        const xml::lite::Element* const productElem = productElems[ii];
         Product& product = exploitationFeatures->product[ii];
 
         common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"),
@@ -2022,7 +2007,7 @@ void DerivedXMLParser200::parseProductFromXML(
         product.polarization.resize(polarizationElems.size());
         for (size_t jj = 0; jj < product.polarization.size(); ++jj)
         {
-            XMLElem polarizationElem = polarizationElems[jj];
+            const xml::lite::Element* const polarizationElem = polarizationElems[jj];
             ProcTxRcvPolarization& polarization = product.polarization[jj];
 
             parseEnum(getFirstAndOnly(polarizationElem, "TxPolarizationProc"),
@@ -2031,12 +2016,7 @@ void DerivedXMLParser200::parseProductFromXML(
                       polarization.rcvPolarizationProc);
         }
 
-        // optional
-        XMLElem tmpElem = getOptional(productElem, "North");
-        if (tmpElem)
-        {
-            parseDouble(tmpElem, product.north);
-        }
+        parseOptionalDouble(productElem, "North", product.north);
 
         // optional to unbounded
         common().parseParameters(productElem, "Extension",
@@ -2045,7 +2025,7 @@ void DerivedXMLParser200::parseProductFromXML(
 }
 
 void DerivedXMLParser200::parseDigitalElevationDataFromXML(
-        const XMLElem elem,
+        const xml::lite::Element* elem,
         DigitalElevationData& ded) const
 {
     XMLElem coordElem = getFirstAndOnly(elem, "GeographicCoordinates");
@@ -2072,7 +2052,7 @@ void DerivedXMLParser200::parseDigitalElevationDataFromXML(
     parseDouble(getFirstAndOnly(pointElem, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
 }
 
-mem::auto_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const XMLElem elem,
+mem::auto_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const xml::lite::Element* elem,
         size_t size) const
 {
     std::string lutStr = "";

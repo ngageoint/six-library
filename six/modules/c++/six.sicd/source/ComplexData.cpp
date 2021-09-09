@@ -21,6 +21,8 @@
  */
 #include "six/sicd/ComplexData.h"
 
+#include <assert.h>
+
 namespace six
 {
 namespace sicd
@@ -84,10 +86,8 @@ void ComplexData::getOutputPlaneOffsetAndExtent(
             //       incorrectly - they're setting the
             //       FirstLine/FirstSample values to 1 but then setting
             //       startLine and startSample to 0.
-            offset.row = segment.startLine;
-            offset.col = segment.startSample;
-            extent.row = segment.getNumLines();
-            extent.col = segment.getNumSamples();
+            offset = segment.getOffset();
+            extent = segment.getExtent();
         }
     }
 }
@@ -164,7 +164,7 @@ bool ComplexData::validate(logging::Logger& log) const
     valid = geoData->validate(log) && valid;
     valid = radarCollection->validate(log) && valid;
 
-    double fc = computeFc();
+    const auto fc = computeFc();
 
     std::ostringstream messageBuilder;
     switch (imageFormation->imageFormationAlgorithm)
@@ -255,7 +255,7 @@ void ComplexData::fillDerivedFields(bool includeDefault)
 
     geoData->fillDerivedFields(*imageData, model);
 
-    double fc = computeFc();
+    const auto fc = computeFc();
 
     switch (imageFormation->imageFormationAlgorithm)
     {
@@ -279,6 +279,10 @@ void ComplexData::fillDerivedFields(bool includeDefault)
             grid->fillDerivedFields(*rma, geoData->scp.ecf, position->arpPoly);
         }
         break;
+    case ImageFormationType::NOT_SET:
+    case ImageFormationType::OTHER:
+    default:
+        break; // nothing to do
     }
 
     if (includeDefault)
@@ -290,7 +294,7 @@ void ComplexData::fillDerivedFields(bool includeDefault)
 void ComplexData::fillDefaultFields()
 {
     imageFormation->fillDefaultFields(*radarCollection);
-    double fc = computeFc();
+    const auto fc = computeFc();
 
     switch (imageFormation->imageFormationAlgorithm)
     {
@@ -308,7 +312,39 @@ void ComplexData::fillDefaultFields()
             grid->fillDefaultFields(*rma, fc);
         }
         break;
+
+    case ImageFormationType::RGAZCOMP:        
+    case ImageFormationType::NOT_SET:
+    case ImageFormationType::OTHER:
+    default:
+        break; // nothing to do
     }
 }
 }
+}
+// Okay, little bit of a hack for now
+mem::ScopedCopyablePtr<six::LUT>& six::sicd::ComplexData::getDisplayLUT()
+{
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        throw except::Exception(Ctxt("Display LUT operation not supported"));
+    }
+    // throw except::Exception(Ctxt("Display LUT operation not supported"));
+
+    // imageData->amplitudeTable is a ScopedCloneablePtr which can't be returned by 
+    // reference as a ScopedCopyablePtr.  Instead, return something that is NULL
+    // calling code can then try getAmplitudeTable().
+    static mem::ScopedCopyablePtr<six::LUT> retval;
+    retval.reset(); // in case somebody changed it
+    return retval;
+}
+six::AmplitudeTable* six::sicd::ComplexData::getAmplitudeTable() const
+{
+    auto const retval = imageData->amplitudeTable.get();
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        assert(retval == nullptr);
+        throw except::Exception(Ctxt("Display LUT operation not supported"));
+    }
+    return retval;
 }

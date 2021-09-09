@@ -1,0 +1,66 @@
+/* =========================================================================
+ * This file is part of sys-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2021, Maxar Technologies, Inc.
+ *
+ * sys-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not, http://www.gnu.org/licenses/.
+ *
+ */
+#ifndef CODA_OSS_std_optional_INCLUDED_
+#define CODA_OSS_std_optional_INCLUDED_
+#pragma once
+
+// Make it (too?) easy for clients to get our various std:: implementations
+
+#include "sys/Optional.h"
+static_assert(CODA_OSS_sys_Optional >= 201606L, "missing sys::Optional");
+
+#if defined(__cpp_lib_optional) && (__cpp_lib_optional >= 201606L) // https://en.cppreference.com/w/cpp/utility/feature_test
+    #undef CODA_OSS_AUGMENT_std_optional
+    #define CODA_OSS_AUGMENT_std_optional 0 // already have it
+#endif
+#ifndef CODA_OSS_AUGMENT_std_optional
+    #define CODA_OSS_AUGMENT_std_optional 1
+#endif
+
+#if CODA_OSS_cpp17
+    #define CODA_OSS_DEFINE_std_optional_ -1  // OK to #include <>, below
+#else
+    #define CODA_OSS_DEFINE_std_optional_ CODA_OSS_AUGMENT_std_optional
+#endif  // CODA_OSS_cpp17
+
+#if CODA_OSS_DEFINE_std_optional_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+        template<typename T>
+        using optional = sys::Optional<T>;
+        template <typename T, typename... TArgs>
+        inline optional<T> make_optional(TArgs && ... args)
+        {
+            return sys::make_Optional<T>(std::forward<TArgs>(args)...);
+        }
+    }
+    #define CODA_OSS_lib_optional CODA_OSS_sys_Optional
+#elif CODA_OSS_DEFINE_std_optional_ == -1  // set above
+    #include <optional>
+    #ifndef __cpp_lib_optional
+        #define __cpp_lib_optional 201606L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #endif
+#endif  // CODA_OSS_DEFINE_std_optional_
+
+// The real one or our substitute?
+#define CODA_OSS__cpp_lib_optional (defined(__cpp_lib_optional) && (__cpp_lib_optional >= 201606L)) && !defined(CODA_OSS_lib_optional)
+
+#endif  // CODA_OSS_std_optional_INCLUDED_

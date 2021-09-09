@@ -64,9 +64,8 @@ namespace sys
  *  This class behaves like its parent, except that it
  *  appends the system or DLL API error that caused the exception
  */
-class DLLException : public except::Exception
+struct DLLException : public except::Exception
 {
-public:
     /*!
      *  Constructor.  
      */
@@ -98,8 +97,7 @@ public:
     }
 
     //!  Destructor
-    virtual ~DLLException()
-    {}
+    virtual ~DLLException() = default;
 
     /*!
      *  This tacks on the system or API error message
@@ -126,10 +124,8 @@ public:
  */
 
 
-class DLL
+struct DLL
 {
-public:
-
     /*!
      *  Construct a library object, but dont populate or load it
      *  If you use this method, you must call load() separately

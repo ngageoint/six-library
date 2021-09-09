@@ -21,8 +21,10 @@
  */
 
 #include <string>
+#include <vector>
 
 #include <str/Convert.h>
+#include <gsl/gsl.h>
 #include <mem/ScopedArray.h>
 #include "six/sidd/GeoTIFFReadControl.h"
 #include "six/XMLControlFactory.h"
@@ -158,7 +160,7 @@ void six::sidd::GeoTIFFReadControl::load(
 
         // Get the associated XML control
         const std::string rootName(doc->getRootElement()->getQName());
-        six::XMLControl *xmlControl;
+        six::XMLControl* xmlControl = nullptr;
         if (rootName == "SIDD")
         {
             if (siddXMLControl.get() == nullptr)
@@ -207,26 +209,26 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
                 "Invalid index: " + std::to_string(imIndex)));
     }
 
-    tiff::ImageReader *imReader = mReader[imIndex];
+    tiff::ImageReader *imReader = mReader[static_cast<sys::Uint32_T>(imIndex)];
     tiff::IFD *ifd = imReader->getIFD();
 
-    size_t numRowsTotal = ifd->getImageLength();
-    size_t numColsTotal = ifd->getImageWidth();
-    size_t elemSize = ifd->getElementSize();
+    const auto numRowsTotal = ifd->getImageLength();
+    const auto numColsTotal = ifd->getImageWidth();
+    const auto elemSize = ifd->getElementSize();
 
     if (region.getNumRows() == -1)
         region.setNumRows(numRowsTotal);
     if (region.getNumCols() == -1)
         region.setNumCols(numColsTotal);
 
-    size_t numRowsReq = region.getNumRows();
-    size_t numColsReq = region.getNumCols();
+    const auto numRowsReq = region.getNumRows();
+    const auto numColsReq = region.getNumCols();
 
-    size_t startRow = region.getStartRow();
-    size_t startCol = region.getStartCol();
+    const auto startRow = region.getStartRow();
+    const auto startCol = region.getStartCol();
 
-    size_t extentRows = startRow + numRowsReq;
-    size_t extentCols = startCol + numColsReq;
+    const auto extentRows = startRow + numRowsReq;
+    const auto extentCols = startCol + numColsReq;
 
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
     {
@@ -244,19 +246,19 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
 
     if (buffer == nullptr)
     {
-        buffer = region.setBuffer(numRowsReq * numColsReq * elemSize).release();
+        const types::RowCol<size_t> regionExtent(getExtent(region));
+        buffer = region.setBuffer(regionExtent.area() * elemSize).release();
     }
 
     if (numRowsReq == numRowsTotal && numColsReq == numColsTotal)
     {
         // one read
-        imReader->getData(reinterpret_cast<unsigned char*>(buffer), numRowsReq * numColsReq);
+        imReader->getData(reinterpret_cast<unsigned char*>(buffer), static_cast<sys::Uint32_T>(numRowsReq * numColsReq));
     }
     else
     {
-        const std::unique_ptr<std::byte[]>
-            scopedRowBuf(new std::byte[numColsTotal * elemSize]);
-        std::byte* const rowBuf(scopedRowBuf.get());
+        std::vector<std::byte> scopedRowBuf(gsl::narrow<size_t>(numColsTotal) * elemSize);
+        std::byte* const rowBuf(scopedRowBuf.data());
 
         //        // skip past rows
         //        for (size_t i = 0; i < startRow; ++i)
@@ -264,18 +266,18 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
 
         size_t offset = 0;
         // this is not the most efficient, but it works
-        for (size_t i = 0; i < numRowsReq; ++i)
+        for (size_t i = 0; i < static_cast<size_t>(numRowsReq); ++i)
         {
             auto rowBuf_ = reinterpret_cast<unsigned char*>(rowBuf);
             // possibly skip past some cols
             if (startCol > 0)
-                imReader->getData(rowBuf_, startCol);
-            imReader->getData(rowBuf_, numColsReq);
-            memcpy(buffer + offset, rowBuf, numColsReq * elemSize);
+                imReader->getData(rowBuf_, static_cast<uint32_t>(startCol));
+            imReader->getData(rowBuf_, static_cast<uint32_t>(numColsReq));
+            memcpy(buffer + offset, rowBuf, static_cast<size_t>(numColsReq * elemSize));
             offset += numColsReq * elemSize;
             // more skipping..
             if (extentCols < numColsTotal)
-                imReader->getData(rowBuf_, numColsTotal - extentCols);
+                imReader->getData(rowBuf_, static_cast<uint32_t>(numColsTotal - extentCols));
         }
     }
     return buffer;

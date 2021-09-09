@@ -56,6 +56,46 @@ NITFPRIV(void) ImageWriter_destruct(NITF_DATA * data)
     }
 }
 
+static void free_user_bands(uint8_t** user, size_t numImageBands)
+{
+    if (user != NULL)
+    {
+        size_t band = 0;
+        for (; band < numImageBands; band++)
+        {
+            uint8_t* userBand = user[band];
+            if (userBand != NULL)
+                NITF_FREE(userBand);
+        }
+        NITF_FREE(user);
+    }
+}
+
+static uint8_t** malloc_user_bands(size_t numImageBands, size_t rowSize)
+{
+    uint8_t** user = (uint8_t**)NITF_MALLOC(sizeof(uint8_t*) * numImageBands);
+    if (!user)
+    {
+        return NULL;
+    }
+
+    size_t band;
+    for (band = 0; band < numImageBands; band++)
+    {
+        user[band] = NULL; // initialize all to NULL for CLEANUP
+    }
+    for (band = 0; band < numImageBands; band++)
+    {
+        user[band] = (uint8_t*)NITF_MALLOC(rowSize);
+        if (!user[band])
+        {
+            free_user_bands(user, numImageBands);
+            return NULL;
+        }
+    }
+    return user;
+}
+
 
 NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
                                       nitf_IOInterface* output,
@@ -64,7 +104,6 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
     uint8_t **user = NULL;
     uint8_t *userContig = NULL;
     uint32_t row, band, block;
-    size_t blockSize, numBlocks;
     nitf_BandSource *bandSrc = NULL;
     nitf_BlockingInfo* blockInfo = NULL;
     nitf_ImageIO* imageIO = NULL;
@@ -95,8 +134,8 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
         if (blockInfo == NULL)
             return NITF_FAILURE;
 
-        numBlocks = blockInfo->numBlocksPerRow * blockInfo->numBlocksPerCol;
-        blockSize = blockInfo->length;
+        const size_t numBlocks = ((size_t)blockInfo->numBlocksPerRow) * blockInfo->numBlocksPerCol;
+        const size_t blockSize = blockInfo->length;
 
         nitf_BlockingInfo_destruct(&blockInfo);
 
@@ -142,22 +181,12 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
     }
     if (writeComplete == 0)
     {
-        user = (uint8_t **) NITF_MALLOC(sizeof(uint8_t*) * numImageBands);
+        user = malloc_user_bands(numImageBands, rowSize);
         if (!user)
         {
             nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
                             NITF_ERR_MEMORY);
             goto CATCH_ERROR;
-        }
-        for (band = 0; band < numImageBands; band++)
-        {
-            user[band] = (uint8_t *) NITF_MALLOC(rowSize);
-            if (!user[band])
-            {
-                nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
-                                NITF_ERR_MEMORY);
-                goto CATCH_ERROR;
-            }
         }
 
         for (row = 0; row < impl->numRows; ++row)
@@ -190,13 +219,7 @@ CATCH_ERROR:
     rc = NITF_FAILURE;
 
 CLEANUP:
-    for (band = 0; band < numImageBands; band++)
-    {
-        if (user != NULL && user[band] != NULL)
-            NITF_FREE(user[band]);
-    }
-    if (user != NULL)
-        NITF_FREE(user);
+    free_user_bands(user, numImageBands);
     if(userContig != NULL)
         NITF_FREE(userContig);
     return rc;

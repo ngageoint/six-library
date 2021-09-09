@@ -53,7 +53,7 @@ namespace six
 struct ReadControl
 {
     //!  Constructor.  Null-set the current container reference
-    ReadControl() :
+    ReadControl() noexcept :
         mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
     {
         setLogger(nullptr);
@@ -90,15 +90,16 @@ struct ReadControl
     /*!
      *  Get a const shared pointer to the current container.
      */
-    mem::SharedPtr<const Container> getContainer() const
+    std::shared_ptr<const Container> getContainer() const
     {
-        return mContainer;
+        std::shared_ptr<const Container> retval = mContainer;
+        return retval;
     }
 
     /*!
      *  Get a non-const pointer to the current container.
      */
-    mem::SharedPtr<Container> getContainer()
+    std::shared_ptr<Container> getContainer()
     {
         return mContainer;
     }
@@ -118,7 +119,8 @@ struct ReadControl
     virtual UByte* interleaved(Region& region, size_t imageNumber) = 0;
     virtual void  interleaved(Region& region, size_t imageNumber, std::byte*& result)
     {
-        result = reinterpret_cast<std::byte*>(interleaved(region, imageNumber));
+        void* result_ = interleaved(region, imageNumber);
+        result = static_cast<std::byte*>(result_);
     }
 
     /*!
@@ -148,19 +150,13 @@ struct ReadControl
 #if !CODA_OSS_cpp17
     template<typename T>
     T* interleaved(Region& region, size_t imageNumber,
-           std::auto_ptr<T[]>& buffer)
+           mem::auto_ptr<T[]>& buffer)
     {
         buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
         return buffer.get();
     }
 #endif
-    template<typename T>
-    T* interleaved(Region& region, size_t imageNumber,
-        mem::ScopedArray<T>& buffer)
-    {
-        buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
-        return buffer.get();
-    }
+
     template<typename T>
     T* interleaved(Region& region, size_t imageNumber,
         std::unique_ptr<T[]>& buffer)
@@ -213,11 +209,11 @@ struct ReadControl
     }
 
 protected:
-    mem::SharedPtr<Container> mContainer;
+    std::shared_ptr<Container> mContainer;
     Options mOptions;
-    logging::Logger *mLog;
-    bool mOwnLog;
-    const XMLControlRegistry *mXMLRegistry;
+    logging::Logger* mLog = nullptr;
+    bool mOwnLog = false;
+    const XMLControlRegistry* mXMLRegistry = nullptr;
 
 };
 

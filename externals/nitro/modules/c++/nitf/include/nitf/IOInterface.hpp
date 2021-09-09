@@ -29,6 +29,7 @@
 #include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file IOInterface.hpp
@@ -36,17 +37,17 @@
 namespace nitf
 {
 
-struct IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
+struct NITRO_NITFCPP_API IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
 {
     ~IOInterfaceDestructor() = default;
-    void operator()(nitf_IOInterface *io) override;
+    void operator()(nitf_IOInterface *io) noexcept override;
 };
 
 /*!
  *  \class IOInterface
  *  \brief  The C++ wrapper for the nitf_IOInterface
  */
-class IOInterface : public nitf::Object<nitf_IOInterface, IOInterfaceDestructor>
+class NITRO_NITFCPP_API IOInterface : public nitf::Object<nitf_IOInterface, IOInterfaceDestructor>
 {
 protected:
     IOInterface() = default;
@@ -63,21 +64,11 @@ public:
         set_native_object(x);
     }
 
-    //! Copy constructor
-    IOInterface(const IOInterface& lhs)
-    {
-        setNative(lhs.getNative());
-    }
+    IOInterface(const IOInterface& lhs);
 
     ~IOInterface() = default;
 
-    //! Assignment Operator
-    IOInterface & operator=(const IOInterface & x)
-    {
-        if (&x != this)
-            setNative(x.getNative());
-        return *this;
-    }
+    IOInterface & operator=(const IOInterface & x);
 
     void read(void* buf, size_t size);
 

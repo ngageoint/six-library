@@ -127,7 +127,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
                                      const std::vector<std::string>& schemaPaths)
 {
     io::StringStream stringStream;
-    stringStream.write(xmlString.c_str(), xmlString.size());
+    stringStream.write(xmlString);
     xml::lite::MinidomParser parser;
     parser.parse(stringStream);
     return fromXML(parser.getDocument(), schemaPaths);

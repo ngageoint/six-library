@@ -33,13 +33,10 @@
 
 namespace sys
 {
-class OSUnix : public AbstractOS
+struct OSUnix final : public AbstractOS
 {
-public:
-    OSUnix()
-    {}
-    virtual ~OSUnix()
-    {}
+    OSUnix() = default;
+    virtual ~OSUnix() = default;
 
     virtual std::string getPlatformName() const;
 
@@ -239,21 +236,17 @@ protected:
     virtual void removeDirectory(const std::string& pathname) const;
 };
 
-
-class DirectoryUnix : public AbstractDirectory
+struct DirectoryUnix final : public AbstractDirectory
 {
-public:
-    DirectoryUnix() : mDir(NULL)
-    {}
+    DirectoryUnix() = default;
     virtual ~DirectoryUnix()
     {
         close();
     }
-    virtual void close();
-    virtual std::string findFirstFile(const std::string& dir);
-    virtual std::string findNextFile();
-    DIR* mDir;
-
+    void close() override;
+    std::string findFirstFile(const std::string& dir) override;
+    std::string findNextFile() override;
+    DIR* mDir = nullptr;
 };
 
 }

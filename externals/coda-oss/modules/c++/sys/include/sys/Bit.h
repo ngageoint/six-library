@@ -22,7 +22,7 @@
 #define CODA_OSS_sys_Bit_h_INCLUDED_
 #pragma once
 
-#include "Conf.h"
+#include "CPlusPlus.h"
 
 namespace sys
 {
@@ -39,40 +39,7 @@ namespace sys
         native = __BYTE_ORDER__
     #endif
     };
-}
-
-#ifndef CODA_OSS_DEFINE_std_endian_
-    #if CODA_OSS_cpp20
-        #if !__has_include(<bit>)
-            #error "Missing <bit>."
-        #endif
-        #if defined(__cpp_lib_endian) && (__cpp_lib_endian < 201703)
-            #error "Wrong value for __cpp_lib_endian."
-        #endif
-        #define CODA_OSS_DEFINE_std_endian_ -1  // OK to #include <>, below
-    #else
-        #define CODA_OSS_DEFINE_std_endian_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
-    #endif  // CODA_OSS_cpp20
-#endif  // CODA_OSS_DEFINE_std_endian_
-
-#if CODA_OSS_DEFINE_std_endian_ == 1
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-        using endian = ::sys::Endian;
-    }
-    #define CODA_OSS_lib_endian 1
-#elif CODA_OSS_DEFINE_std_endian_ == -1  // set above
-    #include <bit>
-    #define CODA_OSS_lib_endian 1
-#endif  // CODA_OSS_DEFINE_std_endian_
-
-namespace coda_oss
-{
-    #if CODA_OSS_lib_endian
-    using endian = std::endian;
-    #else
-    using endian = ::sys::Endian;
-    #endif
+    #define CODA_OSS_sys_Endian 201907L // __cpp_lib_endian
 }
 
 #endif  // CODA_OSS_sys_Bit_h_INCLUDED_

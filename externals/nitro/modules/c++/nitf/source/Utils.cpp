@@ -20,6 +20,7 @@
  *
  */
 
+#include <assert.h>
 
 #include "nitf/Utils.hpp"
 
@@ -32,7 +33,7 @@ bool Utils::isNumeric(const std::string& str) noexcept
 
 bool Utils::isAlpha(const std::string& str) noexcept
 {
-    return nitf_Utils_isNumeric(str.c_str()) ? true : false;
+    return nitf_Utils_isAlpha(str.c_str()) ? true : false;
 }
 
 void Utils::decimalToGeographic(double decimal, int* degrees, int* minutes,
@@ -51,3 +52,20 @@ char Utils::cornersTypeAsCoordRep(nitf::CornersType type) noexcept
     return nitf_Utils_cornersTypeAsCoordRep(type);
 }
 
+void Utils::error_init(nrt_Error& error, const std::string& message,
+    const char* file, int line, const char* func, int level) noexcept
+{
+    nrt_Error_init(&error, message.c_str(), file, line, func, level);
+}
+void Utils::error_init(nrt_Error* error, const std::string& message,
+    const char* file, int line, const char* func, int level) noexcept
+{
+    assert(error != nullptr);
+    error_init(*error, message, file, line, func, level);
+}
+void Utils::error_init(nrt_Error* error, const std::exception& ex,
+    const char* file, int line, const char* func, int level)
+{
+    assert(error != nullptr);
+    nrt_Error_init(error, ex.what(), file, line, func, level);
+}

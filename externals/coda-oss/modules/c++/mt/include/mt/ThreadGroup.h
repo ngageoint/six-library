@@ -50,10 +50,8 @@ namespace mt
  * sys::Runnable objects and wait for all threads to complete.
  *
  */
-class ThreadGroup
+struct ThreadGroup
 {
-public:
-
     /*!
      * Constructor.
      * \param pinToCPU Optional flag specifying whether CPU pinning
@@ -69,6 +67,9 @@ public:
     */
     ~ThreadGroup();
 
+    ThreadGroup(const ThreadGroup&) = delete;
+    ThreadGroup& operator=(const ThreadGroup&) = delete;
+
     /*!
     *  Creates and starts a thread from a sys::Runnable.
     *  \param runnable pointer to sys::Runnable
@@ -81,7 +82,7 @@ public:
     */
     void createThread(std::unique_ptr<sys::Runnable>&& runnable);
     #if !CODA_OSS_cpp17
-    void createThread(std::auto_ptr<sys::Runnable> runnable);
+    void createThread(mem::auto_ptr<sys::Runnable> runnable);
     #endif
 
     /*!
@@ -113,7 +114,7 @@ public:
 private:
     std::unique_ptr<CPUAffinityInitializer> mAffinityInit;
     size_t mLastJoined;
-    std::vector<mem::SharedPtr<sys::Thread> > mThreads;
+    std::vector<std::shared_ptr<sys::Thread> > mThreads;
     std::vector<except::Exception> mExceptions;
     sys::Mutex mMutex;
 
@@ -142,11 +143,9 @@ private:
      * \brief Internal runnable class to safeguard against running
      * threads who throw exceptions
      */
-    class ThreadGroupRunnable : public sys::Runnable
+    struct ThreadGroupRunnable : public sys::Runnable
     {
-    public:
-
-        /*!
+           /*!
          * Constructor.
          * \param runnable sys::Runnable object that will be executed by
          *                 the current thread
@@ -164,11 +163,14 @@ private:
                         std::unique_ptr<CPUAffinityThreadInitializer>(nullptr));
         #if !CODA_OSS_cpp17
         ThreadGroupRunnable(
-                std::auto_ptr<sys::Runnable> runnable,
+                mem::auto_ptr<sys::Runnable> runnable,
                 mt::ThreadGroup& parentThreadGroup,
-                std::auto_ptr<CPUAffinityThreadInitializer> threadInit =
-                        std::auto_ptr<CPUAffinityThreadInitializer>(NULL));
+                mem::auto_ptr<CPUAffinityThreadInitializer> threadInit =
+                        mem::auto_ptr<CPUAffinityThreadInitializer>(nullptr));
         #endif
+
+        ThreadGroupRunnable(const ThreadGroupRunnable&) = delete;
+        ThreadGroupRunnable& operator=(const ThreadGroupRunnable&) = delete;
 
         /*!
          *  Call run() on the Runnable passed to createThread

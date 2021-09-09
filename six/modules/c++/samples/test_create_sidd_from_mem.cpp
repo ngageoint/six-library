@@ -41,6 +41,8 @@
  *
  */
 
+#include <std/filesystem>
+
 #include <import/six/sidd.h>
 
 #include <import/cli.h>
@@ -50,7 +52,6 @@
 #include <import/six/sicd.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 using namespace six;

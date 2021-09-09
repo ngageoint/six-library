@@ -566,7 +566,7 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     }
 
     nBytes = (j2k_Container_getPrecision(impl->container, error) - 1) / 8 + 1;
-    uncompressedSize = width * height * nComponents * nBytes;
+    uncompressedSize = ((size_t)width) * height * nComponents * nBytes;
 
     /* this is not ideal, but there is really no other way */
     if (!(impl->compressedBuf = (char*)J2K_MALLOC(uncompressedSize)))
@@ -762,7 +762,7 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
                     j2k_Container_getPrecision(impl->container, error);
                 numBytesPerPixel =
                     (numBitsPerPixel / 8) + (numBitsPerPixel % 8 != 0);
-                fullBufSize = tileWidth * thisTileHeight * numBytesPerPixel;
+                fullBufSize = ((uint64_t)tileWidth) * thisTileHeight * numBytesPerPixel;
             }
             else
             {
@@ -780,7 +780,7 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
                 }
             }
 
-            if (!opj_decode_tile_data(codec, tileIndex, *buf, bufSize, stream))
+            if ((buf != NULL) && !opj_decode_tile_data(codec, tileIndex, *buf, bufSize, stream))
             {
                 /*nrt_Error_init(error, "Error decoding tile", NRT_CTXT,
                   NRT_ERR_UNK);*/
@@ -800,7 +800,7 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
                 size_t srcOffset = lastRow * srcStride;
                 size_t destOffset = lastRow * destStride;
                 OPJ_UINT32 ii;
-                uint8_t* bufPtr = *buf;
+                uint8_t* bufPtr = buf != NULL ? *buf : NULL;
 
                 for (ii = 0;
                      ii < thisTileHeight;
@@ -898,7 +898,7 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, uint32_t x0, uint32_t y0,
 
             if (keepGoing)
             {
-                if (!opj_decode_tile_data(codec, tileIndex, (*buf + offset),
+                if ((buf != NULL) && !opj_decode_tile_data(codec, tileIndex, (*buf + offset),
                                           reqSize, stream))
                 {
                     /*nrt_Error_init(error, "Error decoding tile", NRT_CTXT,
@@ -1024,8 +1024,8 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
             OPJ_UINT32 ii;
             size_t srcOffset = 0;
             size_t destOffset = 0;
-            const size_t srcStride = tileWidth * nBytes;
-            const size_t destStride = thisTileWidth * nBytes;
+            const size_t srcStride = ((size_t)tileWidth) * nBytes;
+            const size_t destStride = ((size_t)thisTileWidth) * nBytes;
 
             newTileBuf = (uint8_t*) J2K_MALLOC(thisTileSize);
             if(!newTileBuf)

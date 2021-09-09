@@ -22,7 +22,7 @@
 #ifndef __SCENE_ELLIPSOID_MODEL_H__
 #define __SCENE_ELLIPSOID_MODEL_H__
 
-#include <sys/Optional.h>
+#include <std/optional>
 
 #include "scene/Types.h"
 
@@ -146,8 +146,8 @@ struct EllipsoidModel
 protected:
     Units units = INVALID_UNITS;
     AngularUnits angularUnits = INVALID_ANGULAR_UNITS;
-    double equatorialRadius;
-    double polarRadius;
+    double equatorialRadius = 0.0;
+    double polarRadius = 0.0;
 };
 
 class WGS84EllipsoidModel : public EllipsoidModel
@@ -162,7 +162,7 @@ public:
      * values are those specified by the WGS84 model and cannot be set by the
      * user.
      */
-    WGS84EllipsoidModel();
+    WGS84EllipsoidModel() noexcept(false);
 
     /**
      * This constructor initializes the object with the specified values

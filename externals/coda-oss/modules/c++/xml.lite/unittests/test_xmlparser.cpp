@@ -128,7 +128,7 @@ TEST_CASE(testXmlUtf8_u8string)
 
     sys::U8string actual_;
     a.getCharacterData(actual_);
-    const std::string actual = str::toString(actual_);
+    const std::string actual = str::c_str<std::string::const_pointer>(actual_);
     TEST_ASSERT_EQ(actual, utf8Text);
 }
 
@@ -168,7 +168,7 @@ TEST_CASE(testXml_setCharacterData)
     xml::lite::MinidomParser xmlParser;
     auto& a = testXmlUtf8_(xmlParser);
 
-    const sys::U8string characters = str::castToU8string(utf8Text);
+    const sys::U8string characters = str::c_str<sys::U8string::const_pointer>(utf8Text); // copy
     a.setCharacterData(characters);
     auto encoding = a.getEncoding();
     TEST_ASSERT_TRUE(encoding.has_value());

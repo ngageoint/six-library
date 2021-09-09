@@ -22,7 +22,8 @@
 #ifndef __SCENE_PROJECTION_MODEL_H__
 #define __SCENE_PROJECTION_MODEL_H__
 
-#include <sys/Optional.h>
+#include <std/optional>
+
 #include <math/poly/OneD.h>
 #include <math/poly/TwoD.h>
 
@@ -354,14 +355,14 @@ protected:
                                 Vector3& velCOA) const;
 
 protected:
-    Vector3 mSlantPlaneNormal;
-    Vector3 mImagePlaneNormal;
-    Vector3 mSCP;
-    double mScaleFactor;
+    Vector3 mSlantPlaneNormal{};
+    Vector3 mImagePlaneNormal{};
+    Vector3 mSCP{};
+    double mScaleFactor = 0.0;
     math::poly::OneD<Vector3> mARPPoly;
     math::poly::OneD<Vector3> mARPVelPoly;
     math::poly::TwoD<double> mTimeCOAPoly;
-    int mLookDir;
+    int mLookDir = 0;
 
     AdjustableParams mAdjustableParams;
     Errors mErrors;

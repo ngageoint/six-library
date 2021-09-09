@@ -40,21 +40,13 @@ namespace except
  * \class Trace
  * \brief Holds stack of context information
  */
-class Trace
+struct Trace final
 {
-public:
-    /*!
-     * Default Constructor
-     */
-    Trace()
-    {
-    }
-
     /*!
      * Gets size of stack
      * \return the size
      */
-    size_t getSize() const
+    size_t getSize() const noexcept
     {
         return mStack.size();
     }
@@ -71,7 +63,7 @@ public:
     /*!
      * Pops Context off the stack
      */
-    void popContext()
+    void popContext() noexcept
     {
         mStack.pop_front();
     }
@@ -79,7 +71,7 @@ public:
     /*!
      * Gets first Context on stack
      */
-    const Context& getContext() const
+    const Context& getContext() const noexcept
     {
         return mStack.front();
     }
@@ -88,7 +80,7 @@ public:
      * Get the stack
      * \return The stack (const)
      */
-    const std::list<Context>& getStack() const
+    const std::list<Context>& getStack() const noexcept
     {
         return mStack;
     }
@@ -97,7 +89,7 @@ public:
      * Get the stack
      * \return The stack (non-const)
      */
-    std::list<Context>& getStack()
+    std::list<Context>& getStack() noexcept
     {
         return mStack;
     }

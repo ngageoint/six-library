@@ -22,7 +22,8 @@
 #ifndef __SIX_DISPLAY_H__
 #define __SIX_DISPLAY_H__
 
-#include <sys/Optional.h>
+#include <std/optional>
+
 #include <mem/ScopedCopyablePtr.h>
 #include <mem/ScopedCloneablePtr.h>
 
@@ -380,7 +381,7 @@ struct DynamicRangeAdjustment
     };
 
     DRAType algorithmType; //! Algorithm used for dynamic range adjustment
-    size_t bandStatsSource; //! Indicates which band to use for DRA stats
+    size_t bandStatsSource = 0; //! Indicates which band to use for DRA stats
 
     // In SIDD 1.0, must include exactly one of draParameters or draOverrides
     // In SIDD 2.0, include draParameters if algorithmType == AUTO,
@@ -462,7 +463,7 @@ struct Display
     // Beginning of SIDD 2.0-only section
 
     //Required
-    size_t numBands;
+    size_t numBands = 0;
     //Optional
     size_t defaultBandDisplay = six::Init::undefined<size_t>();
 

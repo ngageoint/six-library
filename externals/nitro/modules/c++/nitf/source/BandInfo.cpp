@@ -22,6 +22,8 @@
 
 #include "nitf/BandInfo.hpp"
 
+#include <stdexcept>
+
 using namespace nitf;
 
 BandInfo::BandInfo(const BandInfo & x)
@@ -42,12 +44,10 @@ BandInfo::BandInfo(nitf_BandInfo * x)
     getNativeOrThrow();
 }
 
-BandInfo::BandInfo() : BandInfo(nitf_BandInfo_construct(&error))
+BandInfo::BandInfo() noexcept(false) : BandInfo(nitf_BandInfo_construct(&error))
 {
     setManaged(false);
 }
-
-BandInfo::~BandInfo() {}
 
 nitf::Field BandInfo::getRepresentation() const
 {
@@ -91,8 +91,29 @@ nitf::LookupTable BandInfo::getLookupTable() const
     return nitf::LookupTable(getNativeOrThrow()->lut);
 }
 
-void BandInfo::init(const std::string& representation,
-                    const std::string& subcategory,
+static NITF_BOOL BandInfo_init(nitf_BandInfo* bandInfo,
+    const std::string& representation,
+    const std::string& subcategory,
+    const std::string& imageFilterCondition,
+    const std::string& imageFilterCode,
+    uint32_t numLUTs,
+    uint32_t bandEntriesPerLUT,
+    nitf_LookupTable* lut,
+    nitf_Error& error) noexcept
+{
+    return nitf_BandInfo_init(bandInfo,
+        representation.c_str(),
+        subcategory.c_str(),
+        imageFilterCondition.c_str(),
+        imageFilterCode.c_str(),
+        numLUTs,
+        bandEntriesPerLUT,
+        lut,
+        &error);
+}
+
+void BandInfo::init(const std::string& representation_,
+                    const std::string& subcategory_,
                     const std::string& imageFilterCondition,
                     const std::string& imageFilterCode,
                     uint32_t numLUTs,
@@ -106,24 +127,34 @@ void BandInfo::init(const std::string& representation,
         oldLut.setManaged(false);
     }
 
-    if (!nitf_BandInfo_init(getNativeOrThrow(),
-                            representation.c_str(),
-                            subcategory.c_str(),
-                            imageFilterCondition.c_str(),
-                            imageFilterCode.c_str(),
+    if (!BandInfo_init(getNativeOrThrow(),
+                            representation_,
+                            subcategory_,
+                            imageFilterCondition,
+                            imageFilterCode,
                             numLUTs,
                             bandEntriesPerLUT,
                             lut.getNative() ? lut.getNative() : nullptr,
-                            &error))
+                            error))
         throw nitf::NITFException(&error);
 
 
     //have the library manage the new lut
     lut.setManaged(true);
 }
+void BandInfo::init(const Representation& representation_,
+                    const std::string& subcategory_,
+                    const std::string& imageFilterCondition,
+                    const std::string& imageFilterCode,
+                    uint32_t numLUTs,
+                    uint32_t bandEntriesPerLUT,
+                    nitf::LookupTable& lut)
+{
+    init(representation_.string(), subcategory_, imageFilterCondition, imageFilterCode, numLUTs, bandEntriesPerLUT, lut);
+}
 
-void BandInfo::init(const std::string& representation,
-                    const std::string& subcategory,
+void BandInfo::init(const std::string& representation_,
+                    const std::string& subcategory_,
                     const std::string& imageFilterCondition,
                     const std::string& imageFilterCode)
 {
@@ -134,12 +165,39 @@ void BandInfo::init(const std::string& representation,
         oldLut.setManaged(false);
     }
 
-    if (!nitf_BandInfo_init(getNativeOrThrow(),
-                            representation.c_str(),
-                            subcategory.c_str(),
-                            imageFilterCondition.c_str(),
-                            imageFilterCode.c_str(),
-                            0, 0, nullptr, &error))
+    if (!BandInfo_init(getNativeOrThrow(),
+                            representation_,
+                            subcategory_,
+                            imageFilterCondition,
+                            imageFilterCode,
+                            0, 0, nullptr, error))
         throw nitf::NITFException(&error);
 }
+void BandInfo::init(const Representation& representation_,
+                    const std::string& subcategory_,
+                    const std::string& imageFilterCondition,
+                    const std::string& imageFilterCode)
+{
+    init(representation_.string(), subcategory_, imageFilterCondition, imageFilterCode);
+}
 
+
+const nitf::Representation nitf::Representation::R("R");
+const nitf::Representation nitf::Representation::G("G");
+const nitf::Representation nitf::Representation::B("B");
+const nitf::Representation nitf::Representation::M("M");
+const nitf::Representation nitf::Representation::LU("LU");
+
+#define NITF_Represenation_get_if(s, name) if (s == name.string()) return name;
+const nitf::Representation& nitf::Representation::get(const std::string& s)
+{
+    // Don't bother with checking lower-case; nobody should be passing
+    // an "r" directly to this routine, should always be the result of R.string()
+    NITF_Represenation_get_if(s, R);
+    NITF_Represenation_get_if(s, G);
+    NITF_Represenation_get_if(s, B);
+    NITF_Represenation_get_if(s, M);
+    NITF_Represenation_get_if(s, LU);
+
+    throw std::invalid_argument("'s' is not a valid Representation.");
+}

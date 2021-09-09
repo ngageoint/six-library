@@ -28,7 +28,7 @@ namespace xml
 {
 namespace lite
 {
-sys::Mutex XercesContext::mMutex;
+std::mutex XercesContext::mMutex;
 
 XercesLocalString::XercesLocalString(XMLCh* xmlStr) :
     mLocal(xmlStr)
@@ -92,7 +92,7 @@ void XercesContentHandler::characters(const XMLCh* const chars,
 {
     if (mLiteHandler->use_wchar_t())
     {
-        if (mLiteHandler->characters(chars, length))
+        if (mLiteHandler->wcharacters(chars, length))
         {
             return; // processed as wide_char
         }    
@@ -173,9 +173,9 @@ void XercesErrorHandler::
 error(const SAXParseException &exception)
 {
     XercesLocalString m(exception.getMessage());
-    throw(XMLParseException(m.str(),
+    throw XMLParseException(m.str(),
                                        static_cast<int>(exception.getLineNumber()),
-                                       static_cast<int>(exception.getColumnNumber())));
+                                       static_cast<int>(exception.getColumnNumber()));
 }
 
 void XercesErrorHandler::
@@ -195,14 +195,14 @@ XercesContext::XercesContext() :
     //! XMLPlatformUtils::Initialize is not thread safe!
     try
     {
-        mt::CriticalSection<sys::Mutex> cs(&mMutex);
+        std::lock_guard<std::mutex> cs(mMutex);
         XMLPlatformUtils::Initialize();
     }
     catch (const ::XMLException& toCatch)
     {
         XercesLocalString local(toCatch.getMessage());
         except::Error e(Ctxt(local.str() + " (Initialization error)"));
-        throw (e);
+        throw e;
     }
 }
 
@@ -225,7 +225,7 @@ void XercesContext::destroy()
         //! XMLPlatformUtils::Terminate is not thread safe!
         try
         {
-            mt::CriticalSection<sys::Mutex> cs(&mMutex);
+            std::lock_guard<std::mutex> cs(mMutex);
             XMLPlatformUtils::Terminate();
             mIsDestroyed = true;
         }
@@ -234,7 +234,7 @@ void XercesContext::destroy()
             mIsDestroyed = false;
             XercesLocalString local(toCatch.getMessage());
             except::Error e(Ctxt(local.str() + " (Termination error)"));
-            throw (e);
+            throw e;
         }
     }
 }

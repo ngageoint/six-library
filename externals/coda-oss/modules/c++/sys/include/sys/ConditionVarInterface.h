@@ -36,10 +36,8 @@ namespace sys
  *  Provide the API for condition variables in this thread wrapper
  */
 
-class ConditionVarInterface
+struct ConditionVarInterface
 {
-public:
-
     /*!
      *  This constructor means that you are creating the lock
      *  that you will use inside of the condition variable.
@@ -49,8 +47,7 @@ public:
      *  option is only necessary for CASPR condition variables.  It
      *  is not the recommended behavior but it may be useful.
      */
-    ConditionVarInterface()
-    {}
+    ConditionVarInterface() = default;
 
     /*!
      *  This constructor is the preferred method for creating a new
@@ -70,9 +67,7 @@ public:
     ConditionVarInterface(Mutex *, bool = false)
     {}
 
-    //!  Destructor
-    virtual ~ConditionVarInterface()
-    {}
+    virtual ~ConditionVarInterface() = default;
 
     /*!
      *  Acquire the lock

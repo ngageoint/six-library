@@ -22,7 +22,18 @@
 
 #include "nitf/IOInterface.hpp"
 
-void nitf::IOInterfaceDestructor::operator()(nitf_IOInterface *io)
+nitf::IOInterface& nitf::IOInterface::operator=(const IOInterface& x)
+{
+    if (&x != this)
+        setNative(x.getNative());
+    return *this;
+}
+nitf::IOInterface::IOInterface(const IOInterface& lhs)
+{
+    *this = lhs;
+}
+
+void nitf::IOInterfaceDestructor::operator()(nitf_IOInterface *io) noexcept
 {
     if (io)
     {

@@ -24,6 +24,8 @@
 #include <stdexcept>
 #include <memory>
 
+#include <std/filesystem>
+
 #include <sys/Conf.h>
 #include <sys/Path.h>
 #include <except/Exception.h>
@@ -36,7 +38,6 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sidd/DerivedXMLControl.h>
 
-#include <sys/Filesystem.h>
 namespace fs = sys::Filesystem;
 
 namespace

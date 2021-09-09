@@ -2,13 +2,14 @@
 #include <string>
 #include <vector>
 
+#include <std/filesystem>
+
 #include "TestCase.h"
 #include "scene/ProjectionPolynomialFitter.h"
 #include "scene/ProjectionModel.h"
 #include "six/sicd/ComplexData.h"
 #include "six/sicd/Utilities.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 std::string argv0;
@@ -149,7 +150,7 @@ TEST_CASE(testProjectSlantToOutput)
 }
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argc;
      argv0 = argv[0];
 
     TEST_CHECK(testProjectOutputToSlant);

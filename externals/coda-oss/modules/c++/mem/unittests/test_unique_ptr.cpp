@@ -20,6 +20,8 @@
  *
  */
 
+#include <std/memory>
+
 #include <config/coda_oss_config.h>
 #include <mem/SharedPtr.h>
 
@@ -64,12 +66,12 @@ TEST_CASE(testStdUniquePtr)
 TEST_CASE(test_make_unique)
 {
     {
-        auto fooCtor = coda_oss::make_unique<Foo>(123);
+        auto fooCtor = mem::make::unique<Foo>(123);
         TEST_ASSERT_NOT_EQ(nullptr, fooCtor.get());
         TEST_ASSERT_EQ(123, fooCtor->mVal);
     }
     {
-        auto pFoos = coda_oss::make_unique<Foo[]>(123);  // 123 instances of Foo
+        auto pFoos = mem::make::unique<Foo[]>(123);  // 123 instances of Foo
         TEST_ASSERT_NOT_EQ(nullptr, pFoos.get());
         TEST_ASSERT_EQ(0, pFoos[0].mVal);
         TEST_ASSERT_EQ(0, pFoos[122].mVal);

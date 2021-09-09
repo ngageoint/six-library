@@ -20,14 +20,19 @@
  *
  */
 
-#ifndef __SYS_PATH_H__
-#define __SYS_PATH_H__
+#ifndef CODA_OSS_sys_Path_h_INCLUDED_
+#define CODA_OSS_sys_Path_h_INCLUDED_
+#pragma once
 
-#include "sys/OS.h"
-#include <import/str.h>
 #include <string>
 #include <deque>
 #include <utility>
+
+#include <import/str.h>
+
+#include "sys/OS.h"
+#include "sys/Filesystem.h"
+
 
 /*!
  *  \file
@@ -68,6 +73,14 @@ public:
     }
 
     /*!
+    * Expands the environment variables in a string
+    * c.f., https://docs.microsoft.com/en-us/dotnet/api/system.environment.expandenvironmentvariables?view=net-5.0
+    */
+    static std::string expandEnvironmentVariables(const std::string& path, bool checkIfExists = true);
+    static std::string expandEnvironmentVariables(const std::string& path, Filesystem::FileType);
+    static std::vector<std::string> expandedEnvironmentVariables(const std::string& path); // mostly for unit-testing
+
+    /*!
      * Joins two paths together, using the OS-specific delimiter.
      */
     static std::string joinPaths(const std::string& path1,
@@ -79,7 +92,7 @@ public:
     }
 
     /*!
-     * Return a normalized absolutized verion of the pathname supplied.
+     * Return a normalized absolutized version of the pathname supplied.
      */
     static std::string absolutePath(const std::string& path);
 
@@ -109,11 +122,17 @@ public:
      *  them. This splits on both '/' and '\\'.
      */
     static std::vector<std::string> separate(const std::string& path);
+    static std::vector<std::string> separate(const std::string& path, bool& isAbsolute);
 
     inline std::vector<std::string> separate() const
     {
         return separate(mPathName);
     }
+
+    /*!
+     *  Reverses separate()
+     */
+    static std::string merge(const std::vector<std::string>&, bool isAbsolute);
 
     /*!
      * Splits the path into two components: head & tail.
@@ -276,4 +295,4 @@ std::ostream& operator<<(std::ostream& os, const sys::Path& path);
 std::istream& operator>>(std::istream& os, sys::Path& path);
 }
 
-#endif
+#endif // CODA_OSS_sys_Path_h_INCLUDED_
