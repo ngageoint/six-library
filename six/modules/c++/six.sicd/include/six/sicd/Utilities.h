@@ -303,6 +303,12 @@ public:
                                 const types::RowCol<size_t>& offset,
                                 const types::RowCol<size_t>& extent,
                                 std::vector<std::complex<float> >& buffer);
+     template<typename T> 
+     static void getRawData(NITFReadControl& reader,
+                                const ComplexData& complexData,
+                                const types::RowCol<size_t>& offset,
+                                const types::RowCol<size_t>& extent,
+                                std::vector<T>& buffer);
 
      /*
      * Given a SICD pathname and list of schemas, provides a representation

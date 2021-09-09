@@ -826,6 +826,72 @@ void Utilities::getWidebandData(const std::string& sicdPathname,
     getWidebandData(sicdPathname, schemaPaths, complexData, offset, extent, buffer);
 }
 
+template<>
+void Utilities::getRawData(NITFReadControl& reader,
+    const ComplexData& complexData,
+    const types::RowCol<size_t>& offset,
+    const types::RowCol<size_t>& extent,
+    std::vector<std::complex<float>>& buffer)
+{
+    const auto pixelType = complexData.getPixelType();
+    if (pixelType != PixelType::RE32F_IM32F)
+    {
+        throw except::Exception(Ctxt(complexData.getName() + " has an unexpected pixel type"));
+    }
+
+    getWidebandData(reader, complexData, offset, extent, buffer);
+}
+
+template<>
+void Utilities::getRawData(NITFReadControl& reader,
+    const ComplexData& complexData,
+    const types::RowCol<size_t>& offset,
+    const types::RowCol<size_t>& extent,
+    std::vector<int16_t>& buffer)
+{
+    const auto pixelType = complexData.getPixelType();
+    if (pixelType != PixelType::RE16I_IM16I)
+    {
+        throw except::Exception(Ctxt(complexData.getName() + " has an unexpected pixel type"));
+    }
+
+    constexpr size_t imageNumber = 0;
+
+    // Each pixel is stored as a pair of numbers that represent the real and imaginary 
+    // components. Each component is stored in a 16-bit signed integer in 2's 
+    // complement format (2 bytes per component, 4 bytes per pixel). 
+    //const size_t elementsPerRow = extent.col * (1 + 1); // "real and imaginary"
+
+    six::Region region = buildRegion(offset, extent, buffer.data());
+    reader.interleaved(region, imageNumber);
+}
+
+template<>
+void Utilities::getRawData(NITFReadControl& reader,
+    const ComplexData& complexData,
+    const types::RowCol<size_t>& offset,
+    const types::RowCol<size_t>& extent,
+    std::vector<uint8_t>& buffer)
+{
+    const auto pixelType = complexData.getPixelType();
+    if (pixelType != PixelType::AMP8I_PHS8I)
+    {
+        throw except::Exception(Ctxt(complexData.getName() + " has an unexpected pixel type"));
+    }
+
+    constexpr size_t imageNumber = 0;
+
+    //const auto pAmplitudeTable = complexData.imageData->amplitudeTable.get();
+
+    // Each pixel is stored as a pair of numbers that represent the amplitude and phase
+    // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
+    // component, 2 bytes per pixel). 
+    //const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
+
+    six::Region region = buildRegion(offset, extent, buffer.data());
+    reader.interleaved(region, imageNumber);
+}
+
 Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
 {
     Vector3 groundPlaneNormal{};
