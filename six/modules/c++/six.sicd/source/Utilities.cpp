@@ -104,6 +104,39 @@ namespace
 {
 // Reads in ~32 MB of rows at a time, converts to complex<float>, and keeps
 // going until reads everything
+template<typename T, typename TProcess>
+static void SICDreader(six::NITFReadControl& reader, size_t imageNumber,
+    const types::RowCol<size_t>& offset, const types::RowCol<size_t>& extent, size_t elementsPerRow,
+    TProcess process)
+{
+    // Get at least 32MB per read
+    const size_t rowsAtATime = (32000000 / (elementsPerRow * sizeof(T))) + 1;
+
+    // Allocate temp buffer
+    std::vector<T> tempVector(elementsPerRow * rowsAtATime);
+
+    const size_t endRow = offset.row + extent.row;
+    for (size_t row = offset.row, rowsToRead = rowsAtATime; row < endRow;
+        row += rowsToRead)
+    {
+        // If we would read beyond the input buffer, don't
+        if (row + rowsToRead > endRow)
+        {
+            rowsToRead = endRow - row;
+        }
+
+        // Read into the temp buffer
+        const types::RowCol<size_t> swathOffset(row, offset.col);
+        const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
+        six::Region region = buildRegion(swathOffset, swathExtent, tempVector.data());
+        reader.interleaved(region, imageNumber);
+
+        process(elementsPerRow, row, rowsToRead, tempVector);
+    }
+}
+
+// Reads in ~32 MB of rows at a time, converts to complex<float>, and keeps
+// going until reads everything
 template<typename T>
 class SICD_readerAndConverter final
 {
@@ -152,30 +185,11 @@ public:
 			    std::complex<float>* buffer,  const six::AmplitudeTable* pAmplitudeTable = nullptr)
       : offset(offset), buffer(buffer), pAmplitudeTable(pAmplitudeTable)
     {
-        // Get at least 32MB per read
-        const size_t rowsAtATime = (32000000 / (elementsPerRow * sizeof(T))) + 1;
-
-        // Allocate temp buffer
-        std::vector<T> tempVector(elementsPerRow * rowsAtATime);
-
-        const size_t endRow = offset.row + extent.row;
-        for (size_t row = offset.row, rowsToRead = rowsAtATime; row < endRow;
-            row += rowsToRead)
-        {
-            // If we would read beyond the input buffer, don't
-            if (row + rowsToRead > endRow)
+        SICDreader<T>(reader, imageNumber, offset, extent, elementsPerRow,
+            [&](size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<T>& tempVector)
             {
-                rowsToRead = endRow - row;
-            }
-
-            // Read into the temp buffer
-            const types::RowCol<size_t> swathOffset(row, offset.col);
-            const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
-            six::Region region = buildRegion(swathOffset, swathExtent, tempVector.data());
-            reader.interleaved(region, imageNumber);
-
-            process(elementsPerRow, row, rowsToRead, tempVector);
-        }
+                process(elementsPerRow, row, rowsToRead, tempVector);
+            });
     }
     SICD_readerAndConverter(const SICD_readerAndConverter&) = delete;
     SICD_readerAndConverter& operator=(const SICD_readerAndConverter&) = delete;
@@ -860,10 +874,12 @@ void Utilities::getRawData(NITFReadControl& reader,
     // Each pixel is stored as a pair of numbers that represent the real and imaginary 
     // components. Each component is stored in a 16-bit signed integer in 2's 
     // complement format (2 bytes per component, 4 bytes per pixel). 
-    //const size_t elementsPerRow = extent.col * (1 + 1); // "real and imaginary"
-
-    six::Region region = buildRegion(offset, extent, buffer.data());
-    reader.interleaved(region, imageNumber);
+    const size_t elementsPerRow = extent.col * (1 + 1); // "real and imaginary"
+    SICDreader<int16_t>(reader, imageNumber, offset, extent, elementsPerRow,
+        [&](size_t /*elementsPerRow*/, size_t /*row*/, size_t /*rowsToRead*/, const std::vector<int16_t>& tempVector)
+        {
+            buffer.insert(buffer.end(), tempVector.begin(), tempVector.end());
+        });
 }
 
 template<>
@@ -887,31 +903,11 @@ void Utilities::getRawData(NITFReadControl& reader,
     // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
     // component, 2 bytes per pixel). 
     const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
-
-    // Get at least 32MB per read
-    const size_t rowsAtATime = (32000000 / (elementsPerRow * sizeof(uint8_t))) + 1;
-
-    // Allocate temp buffer
-    std::vector<uint8_t> tempVector(elementsPerRow * rowsAtATime);
-
-    const size_t endRow = offset.row + extent.row;
-    for (size_t row = offset.row, rowsToRead = rowsAtATime; row < endRow;
-        row += rowsToRead)
-    {
-        // If we would read beyond the input buffer, don't
-        if (row + rowsToRead > endRow)
+    SICDreader<uint8_t>(reader, imageNumber, offset, extent, elementsPerRow,
+        [&](size_t /*elementsPerRow*/, size_t /*row*/, size_t /*rowsToRead*/, const std::vector<uint8_t>& tempVector)
         {
-            rowsToRead = endRow - row;
-        }
-
-        // Read into the temp buffer
-        const types::RowCol<size_t> swathOffset(row, offset.col);
-        const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
-        six::Region region = buildRegion(swathOffset, swathExtent, tempVector.data());
-        reader.interleaved(region, imageNumber);
-
-        buffer.insert(buffer.end(), tempVector.begin(), tempVector.end());
-    }
+            buffer.insert(buffer.end(), tempVector.begin(), tempVector.end());
+        });
 }
 
 Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
