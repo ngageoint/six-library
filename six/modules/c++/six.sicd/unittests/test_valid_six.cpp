@@ -317,6 +317,12 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputP
     const auto pData = reader.interleaved(region, 0);
     TEST_ASSERT_NOT_EQ(nullptr, pData);
 
+    {
+        const types::RowCol<size_t> offset_{ 0, 0 };
+        std::vector<uint8_t> rawData;
+        six::sicd::Utilities::getRawData(reader, complexData, offset_, extent, rawData);
+    }
+
     return six::sicd::Utilities::readSicd(inputPathname, schemaPaths, resultComplexData);
 }
 

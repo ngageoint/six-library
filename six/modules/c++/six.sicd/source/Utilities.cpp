@@ -886,10 +886,32 @@ void Utilities::getRawData(NITFReadControl& reader,
     // Each pixel is stored as a pair of numbers that represent the amplitude and phase
     // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
     // component, 2 bytes per pixel). 
-    //const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
+    const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
 
-    six::Region region = buildRegion(offset, extent, buffer.data());
-    reader.interleaved(region, imageNumber);
+    // Get at least 32MB per read
+    const size_t rowsAtATime = (32000000 / (elementsPerRow * sizeof(uint8_t))) + 1;
+
+    // Allocate temp buffer
+    std::vector<uint8_t> tempVector(elementsPerRow * rowsAtATime);
+
+    const size_t endRow = offset.row + extent.row;
+    for (size_t row = offset.row, rowsToRead = rowsAtATime; row < endRow;
+        row += rowsToRead)
+    {
+        // If we would read beyond the input buffer, don't
+        if (row + rowsToRead > endRow)
+        {
+            rowsToRead = endRow - row;
+        }
+
+        // Read into the temp buffer
+        const types::RowCol<size_t> swathOffset(row, offset.col);
+        const types::RowCol<size_t> swathExtent(rowsToRead, extent.col);
+        six::Region region = buildRegion(swathOffset, swathExtent, tempVector.data());
+        reader.interleaved(region, imageNumber);
+
+        buffer.insert(buffer.end(), tempVector.begin(), tempVector.end());
+    }
 }
 
 Vector3 Utilities::getGroundPlaneNormal(const ComplexData& data)
