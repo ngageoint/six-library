@@ -19,8 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sicd/GeoData.h"
 #include "six/sicd/Grid.h"
+
+#include <std/memory>
+
+#include "six/sicd/GeoData.h"
 #include "six/sicd/ImageData.h"
 #include "six/sicd/PFA.h"
 #include "six/sicd/SCPCOA.h"
@@ -125,45 +128,45 @@ std::pair<double, double> DirectionParameters::calculateDeltaKs(
 std::unique_ptr<Functor>
 DirectionParameters::calculateWeightFunction() const
 {
-    std::unique_ptr<Functor> weightFunction;
-
-    if (weightType.get() != nullptr)
+    if (weightType.get() == nullptr)
     {
-        std::string windowName(weightType->windowName);
-        str::upper(windowName);
-
-        if (windowName == "UNIFORM")
-        {
-            weightFunction.reset(new Identity());
-        }
-        else if (windowName == "HAMMING")
-        {
-            double coef = 0.0;
-            if (weightType->parameters.empty() || weightType->parameters[0].str().empty())
-            {
-                //A Hamming window is defined in many places as a raised cosine of weight .54,
-                //so this is the default. However, some data use a generalized raised cosine and
-                //call it HAMMING, so we allow for both uses.
-                coef = .54;
-            }
-            else
-            {
-                coef = weightType->parameters[0];
-            }
-
-            weightFunction.reset(new RaisedCos(coef));
-        }
-        else if (windowName == "HANNING")
-        {
-            weightFunction.reset(new RaisedCos(0.50));
-        }
-        else if (windowName == "KAISER")
-        {
-            weightFunction.reset(new Kaiser(double(weightType->parameters[0])));
-        }
+        return nullptr;
     }
 
-    return weightFunction;
+    std::string windowName(weightType->windowName);
+    str::upper(windowName);
+
+    if (windowName == "UNIFORM")
+    {
+        return std::make_unique<Identity>();
+    }
+    if (windowName == "HAMMING")
+    {
+        double coef = 0.0;
+        if (weightType->parameters.empty() || weightType->parameters[0].str().empty())
+        {
+            //A Hamming window is defined in many places as a raised cosine of weight .54,
+            //so this is the default. However, some data use a generalized raised cosine and
+            //call it HAMMING, so we allow for both uses.
+            coef = .54;
+        }
+        else
+        {
+            coef = weightType->parameters[0];
+        }
+
+        return std::make_unique<RaisedCos>(coef);
+    }
+    if (windowName == "HANNING")
+    {
+        return std::make_unique<RaisedCos>(0.50);
+    }
+    if (windowName == "KAISER")
+    {
+        return std::make_unique<Kaiser>(double(weightType->parameters[0]));
+    }
+
+    return nullptr;
 }
 
 std::vector<RowColInt>
