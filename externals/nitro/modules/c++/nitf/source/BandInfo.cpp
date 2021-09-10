@@ -150,19 +150,19 @@ void BandInfo::init(const std::string& representation_,
     //have the library manage the new lut
     lut.setManaged(true);
 }
-void BandInfo::init(const Representation& representation,
-                    const std::string& subcategory,
+void BandInfo::init(const Representation& representation_, // C4458: declaration of '...' hides class member
+                    const std::string& subcategory_, // C4458: declaration of '...' hides class member
                     const std::string& imageFilterCondition,
                     const std::string& imageFilterCode,
                     uint32_t numLUTs,
                     uint32_t bandEntriesPerLUT,
                     nitf::LookupTable& lut)
 {
-    init(representation.to_string(), subcategory, imageFilterCondition, imageFilterCode, numLUTs, bandEntriesPerLUT, lut);
+    init(to_string(representation_), subcategory_, imageFilterCondition, imageFilterCode, numLUTs, bandEntriesPerLUT, lut);
 }
 
-void BandInfo::init(const std::string& representation,
-                    const std::string& subcategory,
+void BandInfo::init(const std::string& representation_, // C4458: declaration of '...' hides class member
+                    const std::string& subcategory_, // C4458: declaration of '...' hides class member
                     const std::string& imageFilterCondition,
                     const std::string& imageFilterCode)
 {
@@ -174,30 +174,36 @@ void BandInfo::init(const std::string& representation,
     }
 
     if (!BandInfo_init(getNativeOrThrow(),
-                            representation,
-                            subcategory,
+                            representation_,
+                            subcategory_,
                             imageFilterCondition,
                             imageFilterCode,
                             0, 0, nullptr, error))
         throw nitf::NITFException(&error);
 }
-void BandInfo::init(const Representation& representation,
-                    const std::string& subcategory,
+void BandInfo::init(const Representation& representation_, // C4458: declaration of '...' hides class member
+                    const std::string& subcategory_, // C4458: declaration of '...' hides class member
                     const std::string& imageFilterCondition,
                     const std::string& imageFilterCode)
 {
-    init(representation.to_string(), subcategory, imageFilterCondition, imageFilterCode);
+    init(to_string(representation_), subcategory_, imageFilterCondition, imageFilterCode);
 }
 
 
-const nitf::Representation nitf::Representation::R("R");
-const nitf::Representation nitf::Representation::G("G");
-const nitf::Representation nitf::Representation::B("B");
-const nitf::Representation nitf::Representation::M("M");
-const nitf::Representation nitf::Representation::LU("LU");
+#define NITF_Represenation_to_string_if(v, name) if (v == Representation::name) return #name
+std::string nitf::to_string(Representation v)
+{
+    NITF_Represenation_to_string_if(v, R);
+    NITF_Represenation_to_string_if(v, G);
+    NITF_Represenation_to_string_if(v, B);
+    NITF_Represenation_to_string_if(v, M);
+    NITF_Represenation_to_string_if(v, LU);
+
+    throw std::invalid_argument("'argument is not a valid Representation.");
+}
 
 #define NITF_Represenation_from_string_if(s, name) if (s == #name) return Representation::name
-const nitf::Representation& nitf::Representation::from_string(const std::string& s)
+template<> nitf::Representation nitf::from_string(const std::string& s)
 {
     // Don't bother with checking lower-case; nobody should be passing
     // an "r" directly to this routine, should always be the result of R.to_string()
