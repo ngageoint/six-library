@@ -168,9 +168,7 @@ void Tester<DataTypeT>::normalWrite()
     container->addData(mData->clone());
 
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX,
-                           new six::XMLControlCreatorT<
-                                   six::sicd::ComplexXMLControl>());
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
     six::Options options;
     setMaxProductSize(options);

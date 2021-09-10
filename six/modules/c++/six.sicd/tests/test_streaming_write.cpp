@@ -495,9 +495,7 @@ int main(int /*argc*/, char** /*argv*/)
         const std::vector<std::string> schemaPaths;
 
         // create an XML registry
-        six::XMLControlFactory::getInstance().addCreator(
-                six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
         // Run tests with no funky segmentation
         bool success = true;

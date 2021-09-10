@@ -52,12 +52,8 @@ void createNITF(const std::string& outputPathname,
         const six::DataType& datatype)
 {
     six::XMLControlRegistry registry;
-    registry.addCreator(six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<
-                    six::sicd::ComplexXMLControl>());
-    registry.addCreator(six::DataType::DERIVED,
-            new six::XMLControlCreatorT<
-                    six::sidd::DerivedXMLControl>());
+    registry.addCreator<six::sicd::ComplexXMLControl>();
+    registry.addCreator<six::sidd::DerivedXMLControl>();
     const std::vector<std::string> schemaPaths;
 
     std::unique_ptr<six::Data> data;
@@ -115,12 +111,8 @@ void createNITF(const std::string& outputPathname,
 bool checkNITF(const std::string& pathname)
 {
     six::XMLControlRegistry registry;
-    registry.addCreator(six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<
-                    six::sicd::ComplexXMLControl>());
-    registry.addCreator(six::DataType::DERIVED,
-            new six::XMLControlCreatorT<
-                    six::sidd::DerivedXMLControl>());
+    registry.addCreator<six::sicd::ComplexXMLControl>();
+    registry.addCreator<six::sidd::DerivedXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&registry);

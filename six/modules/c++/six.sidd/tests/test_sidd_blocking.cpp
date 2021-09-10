@@ -184,10 +184,7 @@ int main(int argc, char** argv)
     }
     try
     {
-        six::XMLControlFactory::getInstance().addCreator(
-            six::DataType::DERIVED,
-            new six::XMLControlCreatorT<
-            six::sidd::DerivedXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
 
         const std::string installPathname(argv[1]);
         TempFileWithExtension multiImageSidd(".nitf");

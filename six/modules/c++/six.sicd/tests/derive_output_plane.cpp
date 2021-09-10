@@ -96,8 +96,7 @@ int main(int argc, char** argv)
         const std::vector<std::string> schemaPaths;
 
         six::XMLControlRegistry registry;
-        registry.addCreator(six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        registry.addCreator<six::sicd::ComplexXMLControl>();
 
         if (str::endsWith(sicdPathname, ".nitf") ||
                 str::endsWith(sicdPathname, ".ntf"))

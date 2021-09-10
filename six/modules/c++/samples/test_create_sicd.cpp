@@ -121,12 +121,9 @@ int main(int argc, char** argv)
         // The reason to do this is to avoid adding XMLControlCreators to the
         // XMLControlFactory singleton - this way has more fine-grained control
         //        XMLControlRegistry xmlRegistry;
-        //        xmlRegistry.addCreator(DataType::COMPLEX, new XMLControlCreatorT<
-        //                six::sicd::ComplexXMLControl> ());
+        //        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
-        six::XMLControlFactory::getInstance().addCreator(
-                six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
         // Open a file with inputName
         io::FileInputStream inputFile(inputName);

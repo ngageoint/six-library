@@ -133,8 +133,7 @@ public:
     {
         setNitfPluginPath();
 
-        xmlRegistry.addCreator(six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
         // this validates the DES of the input against the best available schema
         reader.setXMLControlRegistry(&xmlRegistry);
@@ -276,7 +275,7 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputP
     }
 
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
@@ -379,7 +378,7 @@ static std::vector<std::byte> sicd_read_data_(const fs::path& inputPathname,
     // The reason to do this is to avoid adding XMLControlCreators to the
     // XMLControlFactory singleton - this way has more fine-grained control
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
@@ -489,7 +488,7 @@ static std::vector<std::complex<float>> make_complex_image(const types::RowCol<s
 static void read_raw_data(const fs::path& path, six::PixelType pixelType)
 {
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
@@ -526,12 +525,12 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
 {
     const types::RowCol<size_t> dims(2, 2);
 
-    constexpr auto dataType = six::DataType::COMPLEX;
-    six::XMLControlFactory::getInstance().addCreator(dataType, new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
     auto pComplexData = six::sicd::Utilities::createFakeComplexData(pixelType, makeAmplitudeTable, &dims);
     auto image = make_complex_image(dims);
 
+    constexpr auto dataType = six::DataType::COMPLEX;
     auto container = std::make_shared<six::Container>(dataType);
     container->addData(std::move(pComplexData));
 

@@ -65,12 +65,8 @@ XMLVerifier::XMLVerifier()
     // Verify schema path is set
     six::XMLControl::loadSchemaPaths(mSchemaPaths);
 
-    mXmlRegistry.addCreator(six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<
-                    six::sicd::ComplexXMLControl>());
-    mXmlRegistry.addCreator(six::DataType::DERIVED,
-            new six::XMLControlCreatorT<
-                    six::sidd::DerivedXMLControl>());
+    mXmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+    mXmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
     mLog.addHandler(new logging::StreamHandler(logging::LogLevel::LOG_INFO),
                     true);

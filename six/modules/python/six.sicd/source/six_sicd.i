@@ -70,9 +70,7 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
     const std::complex<float>* image = reinterpret_cast<
             std::complex<float>* >(imageAdr);
 
-    six::XMLControlFactory::getInstance().addCreator(
-            six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
     mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
@@ -97,9 +95,7 @@ Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths)
 {
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX,
-                           new six::XMLControlCreatorT<
-                                   six::sicd::ComplexXMLControl>());
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
     logging::Logger log;
     six::NITFReadControl reader;
     reader.setLogger(&log);
@@ -151,9 +147,7 @@ void cropSICDWrap(const std::string& inPathname,
               const std::string& outPathname)
 {
 
-    six::XMLControlFactory::getInstance().addCreator(
-          six::DataType::COMPLEX,
-	      new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
     cropSICD(inPathname, schemaPaths, aoiOffset,
 	         aoiDims, outPathname);
@@ -443,9 +437,7 @@ def readFromNITF(pathname, schemaPaths=VectorString()):
 
     void initXMLControlRegistry(six::XMLControlRegistry& xmlRegistry)
     {
-        xmlRegistry.addCreator(six::DataType::COMPLEX,
-                               new six::XMLControlCreatorT<
-                                       six::sicd::ComplexXMLControl>());
+        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
         $self->setXMLControlRegistry(&xmlRegistry);
     }
 }

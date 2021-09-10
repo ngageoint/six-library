@@ -68,16 +68,8 @@ void preview(const fs::path& outputFile)
 void registerHandlers()
 {
 
-    six::XMLControlFactory::getInstance(). addCreator(
-                                                      six::DataType::COMPLEX,
-                                                      new six::XMLControlCreatorT<
-                                                              six::sicd::ComplexXMLControl>());
-
-    six::XMLControlFactory::getInstance(). addCreator(
-                                                      six::DataType::DERIVED,
-                                                      new six::XMLControlCreatorT<
-                                                              six::sidd::DerivedXMLControl>());
-
+    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+    six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
 }
 /*
  * Dump all files out to the local directory

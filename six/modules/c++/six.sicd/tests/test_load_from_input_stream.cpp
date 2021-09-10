@@ -73,9 +73,7 @@ int main(int argc, char** argv)
         io::FileInputStream stream(sicdPathname);
 
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<
-            six::sicd::ComplexXMLControl>());
+        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
         six::NITFReadControl reader;
         reader.setXMLControlRegistry(&xmlRegistry);
