@@ -23,6 +23,7 @@
 #include "nitf/BandInfo.hpp"
 
 #include <stdexcept>
+#include <map>
 
 using namespace nitf;
 
@@ -189,31 +190,48 @@ void BandInfo::init(const Representation& representation_, // C4458: declaration
     init(to_string(representation_), subcategory_, imageFilterCondition, imageFilterCode);
 }
 
-
-#define NITF_Represenation_to_string_if(v, name) if (v == Representation::name) return #name
-std::string nitf::to_string(Representation v)
+// operator[] doesn't work with a "const" map as it can also insert
+template<typename TKey, typename TValue>
+static TValue index(const std::map<TKey, TValue>& map, TKey k)
 {
-    NITF_Represenation_to_string_if(v, R);
-    NITF_Represenation_to_string_if(v, G);
-    NITF_Represenation_to_string_if(v, B);
-    NITF_Represenation_to_string_if(v, M);
-    NITF_Represenation_to_string_if(v, LU);
-
-    throw std::invalid_argument("'argument is not a valid Representation.");
+    const auto it = map.find(k);
+    if (it == map.end())
+    {
+        throw std::invalid_argument("key not found in map.");
+    }
+    return it->second;
 }
 
-#define NITF_Represenation_from_string_if(s, name) if (s == #name) return Representation::name
-template<> nitf::Representation nitf::from_string(const std::string& s)
+template<typename TKey, typename TValue>
+static std::map<TValue, TKey> swap_key_value(const std::map<TKey, TValue>& map)
 {
-    // Don't bother with checking lower-case; nobody should be passing
-    // an "r" directly to this routine, should always be the result of R.to_string()
-    NITF_Represenation_from_string_if(s, R);
-    NITF_Represenation_from_string_if(s, G);
-    NITF_Represenation_from_string_if(s, B);
-    NITF_Represenation_from_string_if(s, M);
-    NITF_Represenation_from_string_if(s, LU);
+    std::map<TValue, TKey> retval;
+    for (const auto& p : map)
+    {
+        retval[p.second] = p.first;
+    }
+    return retval;
+}
 
-    throw std::invalid_argument("'argument is not a valid Representation.");
+// Don't bother with checking lower-case; nobody should be passing
+// an "r" directly to this routine, should always be the result of R.to_string()
+#define NITF_string_to_Represenation_map_entry(name) { #name, Representation::name }
+static const std::map<std::string, Representation> string_to_Represenation
+{
+   NITF_string_to_Represenation_map_entry(R),
+   NITF_string_to_Represenation_map_entry(G),
+   NITF_string_to_Represenation_map_entry(B),
+   NITF_string_to_Represenation_map_entry(M),
+   NITF_string_to_Represenation_map_entry(LU),
+};
+std::string nitf::to_string(Representation v)
+{
+    static const auto Represenation_to_string = swap_key_value(string_to_Represenation);
+    return index(Represenation_to_string, v);
+}
+template<> nitf::Representation nitf::from_string(const std::string& v)
+{
+    return index(string_to_Represenation, v);
 }
 
 
