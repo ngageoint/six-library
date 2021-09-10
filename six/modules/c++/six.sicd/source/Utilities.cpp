@@ -1165,6 +1165,11 @@ std::unique_ptr<ComplexData> Utilities::createFakeComplexData(PixelType pixelTyp
     data->pfa->krg2 = 0;
     data->pfa->kaz1 = 0;
     data->pfa->kaz2 = 0;
+
+    data->collectionInformation.reset(new CollectionInformation());
+    data->collectionInformation->setClassificationLevel("UNCLASSIFIED");
+    data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
+
     return data;
 }
 mem::auto_ptr<ComplexData> Utilities::createFakeComplexData(const types::RowCol<size_t>* pDims)
