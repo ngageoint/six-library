@@ -61,7 +61,7 @@ nitf::Field BandInfo::getRepresentation() const
 
 BandInfo::BandInfo(const Subcategory& subcategory) : BandInfo()
 {
-    getSubcategory().set(subcategory.string());
+    getSubcategory().set(to_string(subcategory));
 }
 nitf::Field BandInfo::getSubcategory() const
 {
@@ -226,24 +226,26 @@ static const std::map<std::string, Representation> string_to_Represenation
 };
 std::string nitf::to_string(Representation v)
 {
-    static const auto Represenation_to_string = swap_key_value(string_to_Represenation);
-    return index(Represenation_to_string, v);
+    static const auto to_string_map = swap_key_value(string_to_Represenation);
+    return index(to_string_map, v);
 }
 template<> nitf::Representation nitf::from_string(const std::string& v)
 {
     return index(string_to_Represenation, v);
 }
 
-
-const nitf::Subcategory nitf::Subcategory::I("I");
-const nitf::Subcategory nitf::Subcategory::Q("Q");
-
-#define NITF_Subcategory_get_if(s, name) if (s == name.string()) return name;
-const nitf::Subcategory& nitf::Subcategory::get(const std::string& s)
+#define NITF_string_to_Subcategory_map_entry(name) { #name, Subcategory::name }
+static const std::map<std::string, Subcategory> string_to_Subcategory
 {
-    // Don't bother with checking lower-case; nobody should be passing
-    // an "r" directly to this routine, should always be the result of R.string()
-    NITF_Subcategory_get_if(s, I);
-    NITF_Subcategory_get_if(s, Q);
-    throw std::invalid_argument("'s' is not a valid Subcategory.");
+   NITF_string_to_Subcategory_map_entry(I),
+   NITF_string_to_Subcategory_map_entry(Q),
+};
+std::string nitf::to_string(Subcategory v)
+{
+    static const auto to_string_map = swap_key_value(string_to_Subcategory);
+    return index(to_string_map, v);
+}
+template<> nitf::Subcategory nitf::from_string(const std::string& v)
+{
+    return index(string_to_Subcategory, v);
 }

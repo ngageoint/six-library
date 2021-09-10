@@ -47,26 +47,15 @@ namespace nitf
     {
         R, G, B, M, LU
     };
-    std::string to_string(Representation);
+    std::string to_string(Representation) noexcept(false);
     template<> Representation from_string(const std::string&) noexcept(false);
 
-    class Subcategory final
+    enum class Subcategory
     {
-        std::string value_;
-        Subcategory(const std::string& v) : value_(v) {}
-
-    public:
-        const std::string& string() const noexcept {
-            return value_;
-        }
-        static const Subcategory I;
-        static const Subcategory Q;
-        static const Subcategory& get(const std::string&) noexcept(false);
+        I, Q
     };
-    inline bool operator==(const Subcategory& lhs, const Subcategory& rhs) noexcept
-    {
-        return lhs.string() == rhs.string();
-    }
+    std::string to_string(Subcategory) noexcept(false);
+    template<> Subcategory from_string(const std::string&) noexcept(false);
 
 /*!
  *  \class BandInfo
@@ -102,7 +91,7 @@ public:
 
     //! Get the subcategory
     nitf::Field getSubcategory() const;
-    nitf::PropertyGet<Subcategory> subcategory{ [&]() ->Subcategory { return Subcategory::get(getSubcategory()); } };
+    nitf::PropertyGet<Subcategory> subcategory{ [&]() ->Subcategory { return from_string<Subcategory>(getSubcategory()); } };
 
     //! Get the imageFilterCondition
     nitf::Field getImageFilterCondition() const;
