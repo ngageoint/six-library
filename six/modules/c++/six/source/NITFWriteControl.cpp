@@ -31,6 +31,7 @@
 #include <io/ByteStream.h>
 #include <math/Round.h>
 #include <mem/ScopedArray.h>
+#include <gsl/gsl.h>
 
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
@@ -411,8 +412,7 @@ void NITFWriteControl::save(const buffer_list& imageData,
     save_(imageData, outputFile, schemaPaths);
 }
 
-void NITFWriteControl::addDataAndWrite(
-        const std::vector<std::string>& schemaPaths)
+void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPaths)
 {
     const size_t numDES = getContainer()->getNumData();
 
@@ -420,22 +420,20 @@ void NITFWriteControl::addDataAndWrite(
     // SegmentMemorySource's will be pointing to them
     const auto desStrs = std::make_unique<std::string[]>(numDES);
 
-    for (size_t ii = 0; ii < getContainer()->getNumData(); ++ii)
+    for (size_t ii = 0; ii < numDES; ++ii)
     {
         const Data* data = getContainer()->getData(ii);
-        std::string& desStr(desStrs[ii]);
 
-        desStr = six::toValidXMLString(data, schemaPaths, mLog, mXMLRegistry);
-        nitf::SegmentWriter deWriter =
-                mWriter.newDEWriter(static_cast<int>(ii));
-        nitf::SegmentMemorySource segSource(desStr, 0, 0, false);
+        desStrs[ii] = six::toValidXMLString(data, schemaPaths, mLog, mXMLRegistry);
+        nitf::SegmentWriter deWriter = mWriter.newDEWriter(gsl::narrow<int>(ii));
+        nitf::SegmentMemorySource segSource(desStrs[ii], 0, 0, false);
         deWriter.attachSource(segSource);
     }
 
-    int deWriterIndex = static_cast<int>(getContainer()->getNumData());
-    for (size_t ii = 0; ii < getSegmentWriters().size(); ++ii)
+    auto deWriterIndex = gsl::narrow<int>(numDES);
+    for (auto segmentWriter : getSegmentWriters())
     {
-        mWriter.setDEWriteHandler(deWriterIndex++, getSegmentWriters()[ii]);
+        mWriter.setDEWriteHandler(deWriterIndex++, segmentWriter);
     }
     mWriter.write();
 }

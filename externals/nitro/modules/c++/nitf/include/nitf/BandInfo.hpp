@@ -40,23 +40,22 @@
 
 namespace nitf
 {
+    template<typename T>
+    T from_string(const std::string&) noexcept(false);
 
-    class Representation final
+    enum class Representation
     {
-        std::string representation_;
-        Representation(const std::string& r) : representation_(r) {}
-
-    public:
-        const std::string& string() const noexcept {
-            return representation_;
-        }
-        static const Representation R;
-        static const Representation G;
-        static const Representation B;
-        static const Representation M;
-        static const Representation LU;
-        static const Representation& get(const std::string&) noexcept(false);
+        R, G, B, M, LU
     };
+    std::string to_string(Representation) noexcept(false);
+    template<> Representation from_string(const std::string&) noexcept(false);
+
+    enum class Subcategory
+    {
+        I, Q
+    };
+    std::string to_string(Subcategory) noexcept(false);
+    template<> Subcategory from_string(const std::string&) noexcept(false);
 
 /*!
  *  \class BandInfo
@@ -77,19 +76,22 @@ public:
 
     //! Constructor
     BandInfo() noexcept(false);
-
     ~BandInfo() = default;
+
+    explicit BandInfo(const Representation&);
 
     //! Get the representation
     nitf::Field getRepresentation() const;
     nitf::Property<Representation> representation{
-        [&]() ->Representation { return Representation::get(getRepresentation()); },
-        [&](const Representation& v) -> void {  getRepresentation().set(v.string()); }
+        [&]() ->Representation { return from_string<Representation>(getRepresentation()); },
+        [&](const Representation& v) -> void {  getRepresentation().set(to_string(v)); }
     };
+
+    explicit BandInfo(const Subcategory&);
 
     //! Get the subcategory
     nitf::Field getSubcategory() const;
-    nitf::PropertyGet<std::string> subcategory{ [&]() -> std::string { return getSubcategory(); } };
+    nitf::PropertyGet<Subcategory> subcategory{ [&]() ->Subcategory { return from_string<Subcategory>(getSubcategory()); } };
 
     //! Get the imageFilterCondition
     nitf::Field getImageFilterCondition() const;

@@ -208,48 +208,22 @@ std::string NITFImageInfo::generateFieldKey(const std::string& field,
 
 static std::vector<nitf::BandInfo> getBandInfoImpl_REnF_IMnF()
 {
-    std::vector<nitf::BandInfo> bands;
-
-    nitf::BandInfo band1;
-    band1.getSubcategory().set("I");
-    nitf::BandInfo band2;
-    band2.getSubcategory().set("Q");
-
-    bands.push_back(band1);
-    bands.push_back(band2);
-
-    return bands;
+    nitf::BandInfo band1(nitf::Subcategory::I);
+    nitf::BandInfo band2(nitf::Subcategory::Q);
+    return { band1, band2};
 }
 
 static std::vector<nitf::BandInfo> getBandInfoImpl_RGB24I()
 {
-    std::vector<nitf::BandInfo> bands;
-
-    nitf::BandInfo band1;
-    band1.representation = nitf::Representation::R;
-
-    nitf::BandInfo band2;
-    band2.representation = nitf::Representation::G;
-
-    nitf::BandInfo band3;
-    band3.representation = nitf::Representation::B;
-
-    bands.push_back(band1);
-    bands.push_back(band2);
-    bands.push_back(band3);
-
-    return bands;
+    nitf::BandInfo band1(nitf::Representation::R);
+    nitf::BandInfo band2(nitf::Representation::G);
+    nitf::BandInfo band3(nitf::Representation::B);
+    return { band1, band2, band3 };
 }
 
 static std::vector<nitf::BandInfo> getBandInfoImpl_MONOnI()
 {
-    std::vector<nitf::BandInfo> bands;
-
-    nitf::BandInfo band1;
-    band1.representation = nitf::Representation::M;
-    bands.push_back(band1);
-
-    return bands;
+    return { nitf::BandInfo(nitf::Representation::M) };
 }
 
 static std::vector<nitf::BandInfo> getBandInfoFromLUT(const six::LUT& lut, nitf::LookupTable& lookupTable)
@@ -260,10 +234,7 @@ static std::vector<nitf::BandInfo> getBandInfoFromLUT(const six::LUT& lut, nitf:
     //band1.getLookupTable().setTable(table, 2, lut.numEntries);
     nitf::BandInfo band1;
     band1.init(nitf::Representation::LU, "", "", "", static_cast<uint32_t>(lut.elementSize), static_cast<uint32_t>(lut.numEntries), lookupTable);
-    std::vector<nitf::BandInfo> bands;
-    bands.push_back(band1);
-
-    return bands;
+    return { band1 };
 }
 
 static std::vector<nitf::BandInfo> getBandInfoImpl_MONO8LU(const six::LUT* lutPtr)
