@@ -150,19 +150,19 @@ void BandInfo::init(const std::string& representation_,
     //have the library manage the new lut
     lut.setManaged(true);
 }
-void BandInfo::init(const Representation& representation_,
-                    const std::string& subcategory_,
+void BandInfo::init(const Representation& representation,
+                    const std::string& subcategory,
                     const std::string& imageFilterCondition,
                     const std::string& imageFilterCode,
                     uint32_t numLUTs,
                     uint32_t bandEntriesPerLUT,
                     nitf::LookupTable& lut)
 {
-    init(representation_.string(), subcategory_, imageFilterCondition, imageFilterCode, numLUTs, bandEntriesPerLUT, lut);
+    init(representation.to_string(), subcategory, imageFilterCondition, imageFilterCode, numLUTs, bandEntriesPerLUT, lut);
 }
 
-void BandInfo::init(const std::string& representation_,
-                    const std::string& subcategory_,
+void BandInfo::init(const std::string& representation,
+                    const std::string& subcategory,
                     const std::string& imageFilterCondition,
                     const std::string& imageFilterCode)
 {
@@ -174,19 +174,19 @@ void BandInfo::init(const std::string& representation_,
     }
 
     if (!BandInfo_init(getNativeOrThrow(),
-                            representation_,
-                            subcategory_,
+                            representation,
+                            subcategory,
                             imageFilterCondition,
                             imageFilterCode,
                             0, 0, nullptr, error))
         throw nitf::NITFException(&error);
 }
-void BandInfo::init(const Representation& representation_,
-                    const std::string& subcategory_,
+void BandInfo::init(const Representation& representation,
+                    const std::string& subcategory,
                     const std::string& imageFilterCondition,
                     const std::string& imageFilterCode)
 {
-    init(representation_.string(), subcategory_, imageFilterCondition, imageFilterCode);
+    init(representation.to_string(), subcategory, imageFilterCondition, imageFilterCode);
 }
 
 
@@ -196,19 +196,20 @@ const nitf::Representation nitf::Representation::B("B");
 const nitf::Representation nitf::Representation::M("M");
 const nitf::Representation nitf::Representation::LU("LU");
 
-#define NITF_Represenation_get_if(s, name) if (s == name.string()) return name;
-const nitf::Representation& nitf::Representation::get(const std::string& s)
+#define NITF_Represenation_from_string_if(s, name) if (s == #name) return Representation::name
+const nitf::Representation& nitf::Representation::from_string(const std::string& s)
 {
     // Don't bother with checking lower-case; nobody should be passing
-    // an "r" directly to this routine, should always be the result of R.string()
-    NITF_Represenation_get_if(s, R);
-    NITF_Represenation_get_if(s, G);
-    NITF_Represenation_get_if(s, B);
-    NITF_Represenation_get_if(s, M);
-    NITF_Represenation_get_if(s, LU);
+    // an "r" directly to this routine, should always be the result of R.to_string()
+    NITF_Represenation_from_string_if(s, R);
+    NITF_Represenation_from_string_if(s, G);
+    NITF_Represenation_from_string_if(s, B);
+    NITF_Represenation_from_string_if(s, M);
+    NITF_Represenation_from_string_if(s, LU);
 
-    throw std::invalid_argument("'s' is not a valid Representation.");
+    throw std::invalid_argument("'argument is not a valid Representation.");
 }
+
 
 const nitf::Subcategory nitf::Subcategory::I("I");
 const nitf::Subcategory nitf::Subcategory::Q("Q");

@@ -40,14 +40,13 @@
 
 namespace nitf
 {
-
     class Representation final
     {
         std::string value_;
         Representation(const std::string& v) : value_(v) {}
 
     public:
-        const std::string& string() const noexcept {
+        const std::string& to_string() const noexcept {
             return value_;
         }
         static const Representation R;
@@ -55,11 +54,12 @@ namespace nitf
         static const Representation B;
         static const Representation M;
         static const Representation LU;
-        static const Representation& get(const std::string&) noexcept(false);
+
+        static const Representation& from_string(const std::string&) noexcept(false);
     };
     inline bool operator==(const Representation& lhs, const Representation& rhs) noexcept
     {
-        return lhs.string() == rhs.string();
+        return lhs.to_string() == rhs.to_string();
     }
 
     class Subcategory final
@@ -106,8 +106,8 @@ public:
     //! Get the representation
     nitf::Field getRepresentation() const;
     nitf::Property<Representation> representation{
-        [&]() ->Representation { return Representation::get(getRepresentation()); },
-        [&](const Representation& v) -> void {  getRepresentation().set(v.string()); }
+        [&]() ->Representation { return Representation::from_string(getRepresentation()); },
+        [&](const Representation& v) -> void {  getRepresentation().set(v.to_string()); }
     };
 
     explicit BandInfo(const Subcategory&);
