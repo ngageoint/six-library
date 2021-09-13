@@ -29,6 +29,7 @@
 #include <std/cstddef>
 
 #include <logging/Logger.h>
+#include <io/FileInputStream.h>
 
 #include "six/XMLControlFactory.h"
 #include "six/NITFReadControl.h"
@@ -54,6 +55,13 @@ namespace six
 			NITFReadComplexXMLControl(NITFReadComplexXMLControl&&) = delete;
 			NITFReadComplexXMLControl& operator=(NITFReadComplexXMLControl&&) = delete;
 
+			template<typename TXMLControlCreator>
+			void addCreator()
+			{
+				xmlRegistry.addCreator<TXMLControlCreator>();
+				reader.setXMLControlRegistry(&xmlRegistry);
+			}
+
 			const six::NITFReadControl& NITFReadControl() const { return reader; }
 			six::NITFReadControl& NITFReadControl() { return reader; }
 
@@ -66,6 +74,7 @@ namespace six
 				static const std::vector<std::filesystem::path> schemaPaths;
 				load(fromFile, schemaPaths);
 			}
+			void load(io::FileInputStream&, const std::vector<std::string>& schemaPaths);
 
 			std::shared_ptr<const six::Container> getContainer() const;
 			std::shared_ptr<six::Container> getContainer();

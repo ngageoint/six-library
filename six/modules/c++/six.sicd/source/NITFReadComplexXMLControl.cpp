@@ -35,8 +35,7 @@ six::sicd::NITFReadComplexXMLControl::NITFReadComplexXMLControl()
     // create an XML registry
     // The reason to do this is to avoid adding XMLControlCreators to the
     // XMLControlFactory singleton - this way has more fine-grained control
-    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
-    reader.setXMLControlRegistry(&xmlRegistry);
+    addCreator<six::sicd::ComplexXMLControl>();
 }
 
 void six::sicd::NITFReadComplexXMLControl::load(const std::string& fromFile,
@@ -50,6 +49,10 @@ void six::sicd::NITFReadComplexXMLControl::load(const std::filesystem::path& fro
     std::vector<std::string> schemaPaths_;
     std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
     load(fromFile.string(), schemaPaths_);
+}
+void six::sicd::NITFReadComplexXMLControl::load(io::FileInputStream& stream, const std::vector<std::string>& schemaPaths)
+{
+    reader.load(stream, schemaPaths);
 }
 
 std::shared_ptr<const six::Container> six::sicd::NITFReadComplexXMLControl::getContainer() const

@@ -29,6 +29,7 @@
 #include <six/NITFReadControl.h>
 #include <six/NITFWriteControl.h>
 #include <six/sicd/ComplexXMLControl.h>
+#include <six/sicd/NITFReadComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/Utilities.h>
@@ -110,12 +111,9 @@ void createNITF(const std::string& outputPathname,
 
 bool checkNITF(const std::string& pathname)
 {
-    six::XMLControlRegistry registry;
-    registry.addCreator<six::sicd::ComplexXMLControl>();
-    registry.addCreator<six::sidd::DerivedXMLControl>();
+    six::sicd::NITFReadComplexXMLControl reader;
+    reader.addCreator<six::sidd::DerivedXMLControl>();
 
-    six::NITFReadControl reader;
-    reader.setXMLControlRegistry(&registry);
     const std::vector<std::string> schemaPaths;
     reader.load(pathname, schemaPaths);
     std::unique_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
@@ -125,7 +123,7 @@ bool checkNITF(const std::string& pathname)
     six::Region region;
     region.setStartRow(ROWS_TO_SKIP);
     region.setNumRows(data->getNumRows() - ROWS_TO_SKIP);
-    reader.interleaved(region, 0);
+    reader.interleaved(region);
     auto buffer = region.getBuffer();
 
     const auto extent = getExtent(*data);

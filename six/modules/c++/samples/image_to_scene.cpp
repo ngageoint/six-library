@@ -36,6 +36,7 @@
 #include <six/XMLControlFactory.h>
 #include <six/sicd/Utilities.h>
 #include <six/sicd/ComplexXMLControl.h>
+#include <six/sicd/NITFReadComplexXMLControl.h>
 #include <six/sidd/DerivedXMLControl.h>
 
 namespace fs = sys::Filesystem;
@@ -79,13 +80,8 @@ private:
 Converter::Converter(const std::string& pathname)
 {
     // Read in the SICD
-    six::NITFReadControl reader;
-
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
-    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
-
-    reader.setXMLControlRegistry(&xmlRegistry);
+    six::sicd::NITFReadComplexXMLControl reader;
+    reader.addCreator<six::sidd::DerivedXMLControl>();
     reader.load(pathname);
 
     // Verify it's a SICD

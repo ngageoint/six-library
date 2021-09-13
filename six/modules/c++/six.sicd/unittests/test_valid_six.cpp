@@ -419,7 +419,9 @@ static void test_assert_eq(const std::vector<std::byte>& bytes, const std::vecto
     TEST_ASSERT_EQ(bytes.size(), rawDataBytes.size());
     for (size_t i = 0; i < bytes.size(); i++)
     {
-        TEST_ASSERT_EQ(bytes[i], rawDataBytes[i]);
+        const auto bytes_i = static_cast<unsigned char>(bytes[i]);
+        const auto rawDataBytes_i = static_cast<unsigned char>(rawDataBytes[i]);
+        TEST_ASSERT_EQ(bytes_i, rawDataBytes_i);
     }
 }
 
