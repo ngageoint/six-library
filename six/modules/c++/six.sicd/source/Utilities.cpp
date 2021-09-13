@@ -30,6 +30,8 @@
 #include <std/memory>
 #include <algorithm>
 #include <iterator>
+#include <utility>
+#include <stdexcept>
 
 #include <except/Exception.h>
 #include <io/StringStream.h>
@@ -46,6 +48,7 @@
 #include <types/RowCol.h>
 #include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/GeoLocator.h>
+#include <six/sicd/ImageData.h>
 
 namespace fs = std::filesystem;
 
@@ -883,7 +886,7 @@ void Utilities::getRawData(NITFReadControl& reader,
     const ComplexData& complexData,
     const types::RowCol<size_t>& offset,
     const types::RowCol<size_t>& extent,
-    std::vector<uint8_t>& buffer)
+    std::vector<ImageData::AMP8I_PHS8I_t>& buffer)
 {
     const auto pixelType = complexData.getPixelType();
     if (pixelType != PixelType::AMP8I_PHS8I)
@@ -899,8 +902,8 @@ void Utilities::getRawData(NITFReadControl& reader,
     // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
     // component, 2 bytes per pixel). 
     const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
-    SICDreader<uint8_t>(reader, imageNumber, offset, extent, elementsPerRow,
-        [&](size_t /*elementsPerRow*/, size_t /*row*/, size_t /*rowsToRead*/, const std::vector<uint8_t>& tempVector)
+    SICDreader<ImageData::AMP8I_PHS8I_t>(reader, imageNumber, offset, extent, elementsPerRow,
+        [&](size_t /*elementsPerRow*/, size_t /*row*/, size_t /*rowsToRead*/, const std::vector<ImageData::AMP8I_PHS8I_t>& tempVector)
         {
             buffer.insert(buffer.end(), tempVector.begin(), tempVector.end());
         });
@@ -1559,6 +1562,10 @@ six::Data* six::sicd::readFromNITF(const fs::path& pathname, const std::vector<s
     auto container = reader.getContainer();
 
     // For SICD, there's only one image (container->getNumData() == 1)
+    if (container->getNumData() != 1)
+    {
+        throw std::invalid_argument(pathname.string() + " is not a SICD; it contains more than one image.");
+    }
     constexpr size_t imageNumber = 0;
     const six::Data* const data = container->getData(imageNumber);
     const auto extent = getExtent(*data);

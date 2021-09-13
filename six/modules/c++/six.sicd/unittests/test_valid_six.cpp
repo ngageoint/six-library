@@ -118,34 +118,13 @@ static void setNitfPluginPath()
     sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }
 
-class NITFReader final
+static std::shared_ptr<six::Container> getContainer(six::NITFReadControl& reader)
 {
-    // create an XML registry
-    // The reason to do this is to avoid adding XMLControlCreators to the
-    // XMLControlFactory singleton - this way has more fine-grained control
-    six::XMLControlRegistry xmlRegistry;
-
-    // this validates the DES of the input against the best available schema
-    six::NITFReadControl reader;
-
-public:
-    NITFReader()
-    {
-        setNitfPluginPath();
-
-        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
-
-        // this validates the DES of the input against the best available schema
-        reader.setXMLControlRegistry(&xmlRegistry);
-    }
-
-    mem::SharedPtr<const six::Container> load(const fs::path& fromFile)
-    {
-        std::vector<std::string> schemaPaths;
-        reader.load(fromFile.string(), schemaPaths);
-        return reader.getContainer();
-    }
-};
+    auto container = reader.getContainer();
+    TEST_ASSERT_EQ(six::DataType::COMPLEX, container->getDataType());
+    TEST_ASSERT_EQ(1, container->getNumData());
+    return container;
+}
 
 static std::unique_ptr<six::sicd::ComplexData> getComplexData(const six::Container& container, size_t jj)
 {
@@ -162,23 +141,19 @@ static std::unique_ptr<six::sicd::ComplexData> getComplexData(const six::Contain
     const auto& imageData = *(retval->imageData);
     TEST_ASSERT_TRUE(imageData.validate(geoData, nullLogger));
 
+    const auto& classification = retval->getClassification();
+    TEST_ASSERT_TRUE(classification.isUnclassified());
+
     return retval;
 }
 
 TEST_CASE(valid_six_50x50)
 {
     const auto inputPathname = getNitfPath("sicd_50x50.nitf");
+    const auto pData = six::sicd::readFromNITF(inputPathname);
 
-    NITFReader reader;
-    auto container = reader.load(inputPathname);
-    TEST_ASSERT_EQ(1, container->getNumData());
-
-    const auto data = getComplexData(*container, 0);
-    TEST_ASSERT_EQ(six::PixelType::RE32F_IM32F, data->getPixelType());
-    TEST_ASSERT_EQ(8, data->getNumBytesPerPixel());
-
-    const auto& classification = data->getClassification();
-    TEST_ASSERT_TRUE(classification.isUnclassified());
+    TEST_ASSERT_EQ(six::PixelType::RE32F_IM32F, pData->getPixelType());
+    TEST_ASSERT_EQ(8, pData->getNumBytesPerPixel());
 
     // UTF-8 characters in 50x50.nitf
     #ifdef _WIN32
@@ -186,6 +161,7 @@ TEST_CASE(valid_six_50x50)
     #else
     const std::string classificationText("NON CLASSIFI\xc3\x89 / UNCLASSIFIED"); // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
     #endif
+    const auto& classification = pData->getClassification();
     const auto actual = classification.getLevel();
     TEST_ASSERT_EQ(actual, classificationText);
 
@@ -450,16 +426,11 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType)
 
     static const std::vector<std::string> schemaPaths;
     reader.load(path.string(), schemaPaths);
-    auto container = reader.getContainer();
-    TEST_ASSERT_EQ(six::DataType::COMPLEX, container->getDataType());
-    TEST_ASSERT_EQ(1, container->getNumData());
+    auto container = getContainer(reader);
 
     const auto pComplexData = getComplexData(*container, 0);
     auto& complexData = *pComplexData;
     TEST_ASSERT_EQ(pixelType, complexData.getPixelType());
-
-    const auto& classification = complexData.getClassification();
-    TEST_ASSERT_TRUE(classification.isUnclassified());
 
     const auto extent = getExtent(complexData);
     const types::RowCol<size_t> offset{ 0, 0 };
@@ -471,7 +442,7 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType)
     }
     else if (pixelType == six::PixelType::AMP8I_PHS8I)
     {
-        std::vector<uint8_t> rawData;
+        std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> rawData;
         six::sicd::Utilities::getRawData(reader, complexData, offset, extent, rawData);
     }
 }
