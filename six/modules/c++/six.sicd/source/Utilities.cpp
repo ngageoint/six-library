@@ -1594,6 +1594,17 @@ six::Data* six::sicd::readFromNITF(const fs::path& pathname)
     return readFromNITF(pathname, schemaPaths);
 }
 
+std::tuple<std::vector<std::complex<float>>, std::unique_ptr<six::sicd::ComplexData>>
+six::sicd::read(const fs::path& inputPathname, const std::vector<fs::path>& schemaPaths)
+{
+    std::unique_ptr<six::sicd::ComplexData> pComplexData;
+    std::vector <std::complex<float>> widebandBuffer;
+    std::vector<std::string> schemaPaths_;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
+    Utilities::readSicd(inputPathname, schemaPaths_, pComplexData, widebandBuffer);
+    return std::make_tuple(std::move(widebandBuffer), std::move(pComplexData));
+}
+
 void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths, const ComplexData& data, const std::complex<float>* image)
 {
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();

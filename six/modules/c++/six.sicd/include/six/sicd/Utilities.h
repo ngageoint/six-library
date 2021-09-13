@@ -658,6 +658,11 @@ extern six::Data* readFromNITF(const std::filesystem::path&);
 extern six::Data* readFromNITF(const std::filesystem::path&, const std::vector<std::string>& schemaPaths);
 extern six::Data* readFromNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths);
 
+// c.f. six_sicd.i
+std::tuple<std::vector<std::complex<float>>, std::unique_ptr<ComplexData>>
+read(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths);
+
+// c.f. six_sicd.i
 extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::string>& schemaPaths, const ComplexData&, const std::complex<float>* image);
 extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexData&, const std::complex<float>* image);
 extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexImage&);

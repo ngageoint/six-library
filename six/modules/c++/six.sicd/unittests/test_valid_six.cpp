@@ -266,28 +266,15 @@ TEST_CASE(test_8bit_ampphs)
 }
 
 static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputPathname,
-    std::optional<six::AmplitudeTable>& amplitudeTable, six::sicd::ComplexData& resultComplexData)
+    std::optional<six::AmplitudeTable>& amplitudeTable, std::unique_ptr<six::sicd::ComplexData>& pResultComplexData)
 {
-    {
-        NITFReader reader;
-        auto container = reader.load(inputPathname);
-        TEST_ASSERT_EQ(1, container->getNumData());
-    }
+    static const std::vector<fs::path> schemaPaths;
+    auto result = six::sicd::read(inputPathname, schemaPaths);
 
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+    auto retval = std::move(std::get<0>(result));
+    pResultComplexData = std::move(std::get<1>(result));
 
-    six::NITFReadControl reader;
-    reader.setXMLControlRegistry(&xmlRegistry);
-
-    static const std::vector<std::string> schemaPaths;
-    reader.load(inputPathname.string(), schemaPaths);
-    auto container = reader.getContainer();
-    TEST_ASSERT_EQ(six::DataType::COMPLEX, container->getDataType());
-    TEST_ASSERT_EQ(1, container->getNumData());
-
-    const auto pComplexData = getComplexData(*container, 0);
-    auto& complexData = *pComplexData;
+    auto& complexData = *pResultComplexData;
     TEST_ASSERT_EQ(six::PixelType::AMP8I_PHS8I, complexData.getPixelType());
     TEST_ASSERT_EQ(2, complexData.getNumBytesPerPixel());
 
@@ -304,25 +291,7 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputP
     const auto numBytesPerPixel = complexData.getNumBytesPerPixel();
     TEST_ASSERT_EQ(2, numBytesPerPixel);
 
-    const auto extent = getExtent(complexData);
-    const auto numPixels = extent.area();
-    std::vector<std::byte> buffer_(numPixels * numBytesPerPixel);
-    auto buffer = buffer_.data();
-
-    six::Region region;
-    setDims(region, extent);
-    constexpr size_t offset = 0;
-    region.setBuffer(buffer + offset);
-    const auto pData = reader.interleaved(region, 0);
-    TEST_ASSERT_NOT_EQ(nullptr, pData);
-
-    {
-        const types::RowCol<size_t> offset_{ 0, 0 };
-        std::vector<uint8_t> rawData;
-        six::sicd::Utilities::getRawData(reader, complexData, offset_, extent, rawData);
-    }
-
-    return six::sicd::Utilities::readSicd(inputPathname, schemaPaths, resultComplexData);
+    return retval;
 }
 
 TEST_CASE(read_8bit_ampphs_with_table)
@@ -332,8 +301,8 @@ TEST_CASE(read_8bit_ampphs_with_table)
     const auto inputPathname = getNitfPath(filename);
 
     std::optional<six::AmplitudeTable> amplitudeTable;
-    six::sicd::ComplexData complexData;
-    const auto widebandData = read_8bit_ampphs(inputPathname, amplitudeTable, complexData);
+    std::unique_ptr<six::sicd::ComplexData> pComplexData;
+    const auto widebandData = read_8bit_ampphs(inputPathname, amplitudeTable, pComplexData);
 
     TEST_ASSERT_TRUE(amplitudeTable.has_value());
     const auto& AmpTable = amplitudeTable.value();
@@ -359,8 +328,8 @@ TEST_CASE(read_8bit_ampphs_no_table)
     const auto inputPathname = getNitfPath(filename);
 
     std::optional<six::AmplitudeTable> amplitudeTable;
-    six::sicd::ComplexData complexData;
-    const auto widebandData = read_8bit_ampphs(inputPathname, amplitudeTable, complexData);
+    std::unique_ptr<six::sicd::ComplexData> pComplexData;
+    const auto widebandData = read_8bit_ampphs(inputPathname, amplitudeTable, pComplexData);
     TEST_ASSERT_FALSE(amplitudeTable.has_value());
 
     six::sicd::ImageData imageData;
@@ -525,23 +494,13 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
 {
     const types::RowCol<size_t> dims(2, 2);
 
-    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
-
     auto pComplexData = six::sicd::Utilities::createFakeComplexData(pixelType, makeAmplitudeTable, &dims);
     auto image = make_complex_image(dims);
 
-    constexpr auto dataType = six::DataType::COMPLEX;
-    auto container = std::make_shared<six::Container>(dataType);
-    container->addData(std::move(pComplexData));
-
-    const auto pData = container->getData(0);
+    const six::Data* pData = pComplexData.get();
     TEST_ASSERT_EQ(dims.row, pData->getNumRows());
     TEST_ASSERT_EQ(dims.col, pData->getNumCols());
 
-    const six::Options writerOptions;
-    six::NITFWriteControl writer(writerOptions, container);
-
-    const std::vector<std::string> schemaPaths;
     void* image_data = image.data();
     std::span<std::byte> pImage(static_cast<std::byte*>(image_data), image.size() * sizeof(image[0]));
     uint8_t b = 0;
@@ -550,8 +509,8 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
         pImage[i] = static_cast<std::byte>(b);
         b++;
     }
-    six::buffer_list buffers{ static_cast<std::byte*>(image_data) };
-    writer.save(buffers, outputName.string(), schemaPaths);
+    static const std::vector<fs::path> schemaPaths;
+    six::sicd::writeAsNITF(outputName, schemaPaths, *pComplexData, image.data());
 
     read_raw_data(outputName, pixelType);
 }
