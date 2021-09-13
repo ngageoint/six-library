@@ -343,25 +343,13 @@ TEST_CASE(read_8bit_ampphs_no_table)
 static std::vector<std::byte> sicd_read_data_(const fs::path& inputPathname,
     six::PixelType expectedPixelType, size_t expectedNumBytesPerPixel)
 {
-    // create an XML registry
-    // The reason to do this is to avoid adding XMLControlCreators to the
-    // XMLControlFactory singleton - this way has more fine-grained control
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+    static const std::vector<fs::path> schemaPaths;
+    auto result = six::sicd::read(inputPathname, schemaPaths);
 
-    six::NITFReadControl reader;
-    reader.setXMLControlRegistry(&xmlRegistry);
+    auto image = std::move(std::get<0>(result));
+    auto pComplexData = std::move(std::get<1>(result));
 
-    static const std::vector<std::string> schemaPaths;
-    reader.load(inputPathname.string(), schemaPaths);
-    auto container = reader.getContainer();
-    TEST_ASSERT_EQ(six::DataType::COMPLEX, container->getDataType());
-
-    // For SICD, there's only one image (container->getNumData() == 1)
-    TEST_ASSERT_EQ(1, container->getNumData());
-    constexpr size_t imageNumber = 0;
-    auto pComplexData = getComplexData(*container, imageNumber);
-    auto& complexData = *pComplexData;
+    const auto& complexData = *pComplexData;
     TEST_ASSERT_EQ(expectedPixelType, complexData.getPixelType());
 
     const auto& classification = complexData.getClassification();
@@ -370,18 +358,10 @@ static std::vector<std::byte> sicd_read_data_(const fs::path& inputPathname,
     const auto numBytesPerPixel = complexData.getNumBytesPerPixel();
     TEST_ASSERT_EQ(expectedNumBytesPerPixel, numBytesPerPixel);
 
-    const auto extent = getExtent(complexData);
-    const auto numPixels = extent.area();
-    std::vector<std::byte> buffer_(numPixels * numBytesPerPixel);
-    auto buffer = buffer_.data();
-
-    six::Region region;
-    setDims(region, extent);
-    constexpr size_t offset = 0;
-    region.setBuffer(buffer + offset);
-    const auto pData = reader.interleaved(region, imageNumber);
-    TEST_ASSERT_NOT_EQ(nullptr, pData);
-    return buffer_;
+    const void* image_begin_ = &(image[0]);
+    auto image_begin = static_cast<const std::byte*>(image_begin_);
+    auto image_end = image_begin + (image.size() * sizeof(decltype(image[0])));
+    return std::vector<std::byte>(image_begin, image_end);
 }
 static void sicd_read_data(const fs::path& inputPathname,
     const std::complex<float>& expectedFirstPixel, const std::complex<float>& expectedLastPixel)
