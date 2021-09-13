@@ -23,8 +23,8 @@ namespace six
             KDTree() = delete;
             KDTree(const KDTree&) = delete;
             KDTree& operator=(const KDTree&) = delete;
-            KDTree(KDTree&&);
-            KDTree& operator=(KDTree&&);
+            KDTree(KDTree&&) noexcept;
+            KDTree& operator=(KDTree&&) noexcept;
 
             // https://en.wikipedia.org/wiki/K-d_tree
             node_t nearest_neighbor(const node_t& point) const;
