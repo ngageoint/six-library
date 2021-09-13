@@ -583,8 +583,14 @@ static void readSicd_(const std::string& sicdPathname,
     reader.setXMLControlRegistry(&xmlRegistry);
     reader.load(sicdPathname, schemaPaths);
 
-    complexData = Utilities::getComplexData(reader);
-    Utilities::getWidebandData(reader, *(complexData.get()), widebandData);
+    // For SICD, there's only one image (container->getNumData() == 1)
+    if (reader.getContainer()->getNumData() != 1)
+    {
+        throw std::invalid_argument(sicdPathname + " is not a SICD; it contains more than one image.");
+    }
+
+    const auto pComplexData = Utilities::getComplexData(reader);
+    Utilities::getWidebandData(reader, *(pComplexData.get()), widebandData);
 
     // This tells the reader that it doesn't
     // own an XMLControlRegistry

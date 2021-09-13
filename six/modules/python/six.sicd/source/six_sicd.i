@@ -69,7 +69,22 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 {
     const std::complex<float>* image = reinterpret_cast<
             std::complex<float>* >(imageAdr);
-    six::sicd::writeAsNITF(pathname, schemaPaths, data, image);
+   six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+
+    mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::COMPLEX));
+    mem::auto_ptr<logging::Logger> logger(logging::setupLogger("out"));
+
+    container->addData(data.clone());
+
+    six::NITFWriteControl writer;
+    writer.initialize(container);
+    writer.setLogger(logger.get());
+
+    six::BufferList buffers;
+    buffers.push_back(reinterpret_cast<const six::UByte*>(image));
+
+    writer.save(buffers, pathname, schemaPaths);
 }
 
 Data* readNITF(const std::string& pathname,
@@ -78,7 +93,33 @@ Data* readNITF(const std::string& pathname,
 Data* readNITF(const std::string& pathname,
         const std::vector<std::string>& schemaPaths)
 {
-    return six::sicd::readFromNITF(pathname, schemaPaths);
+       six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+    logging::Logger log;
+    six::NITFReadControl reader;
+    reader.setLogger(&log);
+    reader.setXMLControlRegistry(&xmlRegistry);
+    reader.load(pathname, schemaPaths);
+    mem::SharedPtr<six::Container> container = reader.getContainer();
+
+    six::Region region;
+    region.setStartRow(0);
+    region.setStartCol(0);
+
+    six::Data* const data = container->getData(0);
+    const types::RowCol<size_t> extent(data->getNumRows(),
+                                       data->getNumCols());
+    const size_t numPixels(extent.row * extent.col);
+    size_t numBytesPerPixel = data->getNumBytesPerPixel();
+    size_t offset = 0;
+
+    mem::ScopedArray<sys::ubyte> buffer(
+            new sys::ubyte[numPixels * numBytesPerPixel]);
+
+    region.setNumRows(extent.row);
+    region.setNumCols(extent.col);
+    region.setBuffer(buffer.get() + offset);
+    return reinterpret_cast<Data*>(reader.interleaved(region, 0));
 }
 
 %}
