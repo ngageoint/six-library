@@ -589,8 +589,8 @@ static void readSicd_(const std::string& sicdPathname,
         throw std::invalid_argument(sicdPathname + " is not a SICD; it contains more than one image.");
     }
 
-    const auto pComplexData = Utilities::getComplexData(reader);
-    Utilities::getWidebandData(reader, *(pComplexData.get()), widebandData);
+    complexData = Utilities::getComplexData(reader);
+    Utilities::getWidebandData(reader, *(complexData.get()), widebandData);
 
     // This tells the reader that it doesn't
     // own an XMLControlRegistry
@@ -620,6 +620,12 @@ void Utilities::readSicd(const fs::path& sicdPathname,
     std::vector<std::string> schemaPaths_;
     std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
     readSicd(sicdPathname.string(), schemaPaths_, complexData, widebandData);
+}
+ComplexImageResult Utilities::readSicd(const fs::path& sicdPathname, const std::vector<fs::path>& schemaPaths)
+{
+    ComplexImageResult retval;
+    readSicd(sicdPathname, schemaPaths, retval.pComplexData, retval.widebandData);
+    return retval;
 }
 
 template<typename TComplexDataPtr, typename TNoiseMeshPtr, typename TScalarMeshPtr>
@@ -1553,7 +1559,8 @@ void Utilities::projectPixelsToSlantPlane(
 }
 }
 
-six::Data* six::sicd::readFromNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths)
+std::vector<std::byte> six::sicd::readFromNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths,
+    std::unique_ptr<ComplexData>& pComplexData)
 {
     // create an XML registry
     // The reason to do this is to avoid adding XMLControlCreators to the
@@ -1564,7 +1571,11 @@ six::Data* six::sicd::readFromNITF(const fs::path& pathname, const std::vector<s
     six::NITFReadControl reader;
     reader.setLogger(log);
     reader.setXMLControlRegistry(&xmlRegistry);
-    reader.load(pathname.string(), schemaPaths);
+
+    std::vector<std::string> schemaPaths_;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
+    reader.load(pathname.string(), schemaPaths_);
+    
     auto container = reader.getContainer();
 
     // For SICD, there's only one image (container->getNumData() == 1)
@@ -1573,10 +1584,10 @@ six::Data* six::sicd::readFromNITF(const fs::path& pathname, const std::vector<s
         throw std::invalid_argument(pathname.string() + " is not a SICD; it contains more than one image.");
     }
     constexpr size_t imageNumber = 0;
-    const six::Data* const data = container->getData(imageNumber);
-    const auto extent = getExtent(*data);
+    pComplexData = Utilities::getComplexData(reader);
+    const auto extent = getExtent(*pComplexData);
     const auto numPixels = extent.area();
-    const auto numBytesPerPixel = data->getNumBytesPerPixel();
+    const auto numBytesPerPixel = pComplexData->getNumBytesPerPixel();
     size_t offset = 0;
 
     std::vector<std::byte> buffer(numPixels * numBytesPerPixel);
@@ -1584,28 +1595,9 @@ six::Data* six::sicd::readFromNITF(const fs::path& pathname, const std::vector<s
     six::Region region;
     setDims(region, extent);
     region.setBuffer(buffer.data() + offset);
-    void* retval = reader.interleaved(region, imageNumber);
-    return static_cast<Data*>(retval);
-}
-six::Data* six::sicd::readFromNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths)
-{
-    std::vector<std::string> schemaPaths_;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
-    return readFromNITF(pathname, schemaPaths_);
-}
-six::Data* six::sicd::readFromNITF(const fs::path& pathname)
-{
-    static const std::vector<std::string> schemaPaths;
-    return readFromNITF(pathname, schemaPaths);
-}
+    (void) reader.interleaved(region, imageNumber);
 
-std::tuple<std::vector<std::complex<float>>, std::unique_ptr<six::sicd::ComplexData>>
-six::sicd::read(const fs::path& inputPathname, const std::vector<fs::path>& schemaPaths)
-{
-    std::unique_ptr<six::sicd::ComplexData> pComplexData;
-    std::vector <std::complex<float>> widebandBuffer;
-    Utilities::readSicd(inputPathname, schemaPaths, pComplexData, widebandBuffer);
-    return std::make_tuple(std::move(widebandBuffer), std::move(pComplexData));
+    return buffer;
 }
 
 void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths, const ComplexData& data, const std::complex<float>* image)

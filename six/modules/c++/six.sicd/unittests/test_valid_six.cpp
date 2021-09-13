@@ -150,7 +150,9 @@ static std::unique_ptr<six::sicd::ComplexData> getComplexData(const six::Contain
 TEST_CASE(valid_six_50x50)
 {
     const auto inputPathname = getNitfPath("sicd_50x50.nitf");
-    const auto pData = six::sicd::readFromNITF(inputPathname);
+    std::unique_ptr<six::sicd::ComplexData> pComplexData;
+    const auto image = six::sicd::readFromNITF(inputPathname, pComplexData);
+    const six::Data* pData = pComplexData.get();
 
     TEST_ASSERT_EQ(six::PixelType::RE32F_IM32F, pData->getPixelType());
     TEST_ASSERT_EQ(8, pData->getNumBytesPerPixel());
@@ -244,11 +246,9 @@ TEST_CASE(test_8bit_ampphs)
 static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputPathname,
     std::optional<six::AmplitudeTable>& amplitudeTable, std::unique_ptr<six::sicd::ComplexData>& pResultComplexData)
 {
-    static const std::vector<fs::path> schemaPaths;
-    auto result = six::sicd::read(inputPathname, schemaPaths);
-
-    auto retval = std::move(std::get<0>(result));
-    pResultComplexData = std::move(std::get<1>(result));
+    auto result_ = six::sicd::Utilities::readSicd(inputPathname);
+    auto retval = std::move(result_.widebandData);
+    pResultComplexData = std::move(result_.pComplexData);
 
     auto& complexData = *pResultComplexData;
     TEST_ASSERT_EQ(six::PixelType::AMP8I_PHS8I, complexData.getPixelType());
@@ -319,12 +319,8 @@ TEST_CASE(read_8bit_ampphs_no_table)
 static std::vector<std::byte> sicd_read_data_(const fs::path& inputPathname,
     six::PixelType expectedPixelType, size_t expectedNumBytesPerPixel)
 {
-    static const std::vector<fs::path> schemaPaths;
-    auto result = six::sicd::read(inputPathname, schemaPaths);
-
-    auto image = std::move(std::get<0>(result));
-    auto pComplexData = std::move(std::get<1>(result));
-
+    std::unique_ptr<six::sicd::ComplexData> pComplexData;
+    auto image = six::sicd::readFromNITF(inputPathname, pComplexData);
     const auto& complexData = *pComplexData;
     TEST_ASSERT_EQ(expectedPixelType, complexData.getPixelType());
 
@@ -334,10 +330,7 @@ static std::vector<std::byte> sicd_read_data_(const fs::path& inputPathname,
     const auto numBytesPerPixel = complexData.getNumBytesPerPixel();
     TEST_ASSERT_EQ(expectedNumBytesPerPixel, numBytesPerPixel);
 
-    const void* image_begin_ = &(image[0]);
-    auto image_begin = static_cast<const std::byte*>(image_begin_);
-    auto image_end = image_begin + (image.size() * sizeof(decltype(image[0])));
-    return std::vector<std::byte>(image_begin, image_end);
+    return image;
 }
 static void sicd_read_data(const fs::path& inputPathname,
     const std::complex<float>& expectedFirstPixel, const std::complex<float>& expectedLastPixel)
@@ -379,12 +372,8 @@ TEST_CASE(sicd_read_data)
 
 static std::vector<std::complex<float>> readSicd(const std::filesystem::path& sicdPathname)
 {
-    static const std::vector<fs::path> schemaPaths;
-
-    std::unique_ptr<six::sicd::ComplexData> pComplexData;
-    std::vector<std::complex<float>> retval;
-    six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, pComplexData, retval);
-    return retval;
+    auto result = six::sicd::Utilities::readSicd(sicdPathname);
+    return result.widebandData;
 }
 TEST_CASE(test_readSicd)
 {

@@ -132,6 +132,13 @@ public:
                          const std::vector<std::filesystem::path>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
                          std::vector<std::complex<float>>& widebandData);
+    static ComplexImageResult readSicd(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths);
+    static ComplexImageResult readSicd(const std::filesystem::path& path)
+    {
+        static const std::vector<std::filesystem::path> schemaPaths;
+        return readSicd(path, schemaPaths);
+    }
+
 
     /*
      * Given a SICD path name and a list of schema, this function reads
@@ -651,13 +658,13 @@ public:
 
 
 // c.f. six_sicd.i
-extern six::Data* readFromNITF(const std::filesystem::path&);
-extern six::Data* readFromNITF(const std::filesystem::path&, const std::vector<std::string>& schemaPaths);
-extern six::Data* readFromNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths);
-
-// c.f. six_sicd.i
-std::tuple<std::vector<std::complex<float>>, std::unique_ptr<ComplexData>>
-read(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths);
+extern std::vector<std::byte> readFromNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths,
+    std::unique_ptr<ComplexData>& pComplexData);
+inline std::vector<std::byte> readFromNITF(const std::filesystem::path& pathname, std::unique_ptr<ComplexData>& pComplexData)
+{
+    static const std::vector<std::filesystem::path> schemaPaths;
+    return readFromNITF(pathname, schemaPaths, pComplexData);
+}
 
 // c.f. six_sicd.i
 extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::string>& schemaPaths, const ComplexData&, const std::complex<float>* image);
