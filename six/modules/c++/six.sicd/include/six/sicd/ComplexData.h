@@ -389,6 +389,13 @@ private:
 
     std::string mVersion;
 };
+
+struct ComplexImage final
+{
+    ComplexData data;
+    const std::complex<float>* image;
+};
+
 }
 }
 

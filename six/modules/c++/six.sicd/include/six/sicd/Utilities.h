@@ -651,6 +651,17 @@ public:
     // for unit-testing
     static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable*);
 };
+
+
+// c.f. six_sicd.i
+extern six::Data* readFromNITF(const std::filesystem::path&);
+extern six::Data* readFromNITF(const std::filesystem::path&, const std::vector<std::string>& schemaPaths);
+extern six::Data* readFromNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths);
+
+extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::string>& schemaPaths, const ComplexData&, const std::complex<float>* image);
+extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexData&, const std::complex<float>* image);
+extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexImage&);
+
 }
 }
 #endif

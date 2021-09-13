@@ -28,6 +28,8 @@
 #include <string>
 #include <functional>
 #include <std/memory>
+#include <algorithm>
+#include <iterator>
 
 #include <except/Exception.h>
 #include <io/StringStream.h>
@@ -35,13 +37,15 @@
 #include <math/poly/Fit.h>
 #include <mem/ScopedAlignedArray.h>
 #include <six/NITFReadControl.h>
+#include <six/sicd/SICDWriteControl.h>
 #include <six/Utilities.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDMesh.h>
 #include <str/Manip.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
-
+#include <six/sicd/AreaPlaneUtility.h>
+#include <six/sicd/GeoLocator.h>
 
 namespace fs = std::filesystem;
 
@@ -1546,4 +1550,75 @@ void Utilities::projectPixelsToSlantPlane(
     }
 }
 }
+}
+
+six::Data* six::sicd::readFromNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths)
+{
+    // create an XML registry
+    // The reason to do this is to avoid adding XMLControlCreators to the
+    // XMLControlFactory singleton - this way has more fine-grained control
+    six::XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+    logging::Logger log;
+    six::NITFReadControl reader;
+    reader.setLogger(&log);
+    reader.setXMLControlRegistry(&xmlRegistry);
+    reader.load(pathname.string(), schemaPaths);
+    auto container = reader.getContainer();
+
+    // For SICD, there's only one image (container->getNumData() == 1)
+    constexpr size_t imageNumber = 0;
+    const six::Data* const data = container->getData(imageNumber);
+    const auto extent = getExtent(*data);
+    const auto numPixels = extent.area();
+    const auto numBytesPerPixel = data->getNumBytesPerPixel();
+    size_t offset = 0;
+
+    std::vector<std::byte> buffer(numPixels * numBytesPerPixel);
+
+    six::Region region;
+    setDims(region, extent);
+    region.setBuffer(buffer.data() + offset);
+    void* retval = reader.interleaved(region, imageNumber);
+    return static_cast<Data*>(retval);
+}
+six::Data* six::sicd::readFromNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths)
+{
+    std::vector<std::string> schemaPaths_;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
+    return readFromNITF(pathname, schemaPaths_);
+}
+six::Data* six::sicd::readFromNITF(const fs::path& pathname)
+{
+    static const std::vector<std::string> schemaPaths;
+    return readFromNITF(pathname, schemaPaths);
+}
+
+void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths, const ComplexData& data, const std::complex<float>* image)
+{
+    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+
+    auto container = std::make_shared<six::Container>(six::DataType::COMPLEX);
+    std::unique_ptr<logging::Logger> logger(logging::setupLogger("out").release());
+
+    container->addData(data.clone());
+
+    six::NITFWriteControl writer;
+    writer.initialize(container);
+    writer.setLogger(*logger);
+
+    const void* image_data = image;
+    six::buffer_list buffers{ static_cast<const std::byte*>(image_data) };
+
+    writer.save(buffers, pathname.string(), schemaPaths);
+}
+void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths, const ComplexData& data, const std::complex<float>* image)
+{
+    std::vector<std::string> schemaPaths_;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
+    writeAsNITF(pathname, schemaPaths_, data, image);
+}
+void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths, const ComplexImage& image)
+{
+    writeAsNITF(pathname, schemaPaths, image.data, image.image);
 }
