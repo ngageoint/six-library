@@ -49,6 +49,7 @@
 #include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/GeoLocator.h>
 #include <six/sicd/ImageData.h>
+#include <six/sicd/NITFReadComplexXMLControl.h>
 
 namespace fs = std::filesystem;
 
@@ -576,25 +577,22 @@ static void readSicd_(const std::string& sicdPathname,
                          TComplexDataPtr& complexData,
                          std::vector<std::complex<float>>& widebandData)
 {
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
-
-    six::NITFReadControl reader;
-    reader.setXMLControlRegistry(&xmlRegistry);
+    six::sicd::NITFReadComplexXMLControl reader;
     reader.load(sicdPathname, schemaPaths);
 
     // For SICD, there's only one image (container->getNumData() == 1)
-    if (reader.getContainer()->getNumData() != 1)
+    if (reader.getContainer().getNumData() != 1)
     {
         throw std::invalid_argument(sicdPathname + " is not a SICD; it contains more than one image.");
     }
 
-    complexData = Utilities::getComplexData(reader);
-    Utilities::getWidebandData(reader, *(complexData.get()), widebandData);
+    auto complexData_ = reader.getComplexData();
+    complexData.reset(complexData_.release());
+    widebandData = reader.getWidebandData(*(complexData.get()));
 
     // This tells the reader that it doesn't
     // own an XMLControlRegistry
-    reader.setXMLControlRegistry(nullptr);
+    reader.setXMLControlRegistry();
 }
 #if !CODA_OSS_cpp17
 void Utilities::readSicd(const std::string& sicdPathname,
