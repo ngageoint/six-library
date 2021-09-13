@@ -407,6 +407,10 @@ static std::vector<std::complex<float>> make_complex_image(const types::RowCol<s
 
 static void read_raw_data(const fs::path& path, six::PixelType pixelType)
 {
+    std::unique_ptr<six::sicd::ComplexData> pComplexData_;
+    const auto bytes = six::sicd::readFromNITF(path, pComplexData_);
+
+
     six::XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
@@ -424,16 +428,20 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType)
     const auto extent = getExtent(complexData);
     const types::RowCol<size_t> offset{ 0, 0 };
 
+    size_t rawDataSizeInBytes = 0;
     if (pixelType == six::PixelType::RE32F_IM32F)
     {
         std::vector<std::complex<float>> rawData;
         six::sicd::Utilities::getRawData(reader, complexData, offset, extent, rawData);
+        rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
     }
     else if (pixelType == six::PixelType::AMP8I_PHS8I)
     {
         std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> rawData;
         six::sicd::Utilities::getRawData(reader, complexData, offset, extent, rawData);
+        rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
     }
+    TEST_ASSERT_EQ(bytes.size(), rawDataSizeInBytes);
 }
 
 static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)
