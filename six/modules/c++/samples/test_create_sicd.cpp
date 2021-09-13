@@ -279,7 +279,7 @@ int main(int argc, char** argv)
                 six::Parameter((uint16_t) needsByteSwap));
 
         six::NITFWriteControl writer(writerOptions, container);
-        writer.setLogger(logger.get());
+        writer.setLogger(*logger);
         std::vector<io::InputStream*> sources;
         sources.push_back(&sioReader);
 

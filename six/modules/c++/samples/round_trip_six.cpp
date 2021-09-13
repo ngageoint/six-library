@@ -279,7 +279,7 @@ int main(int argc, char** argv)
             reader.reset(new six::convert::ConvertingReadControl(plugin));
         }
 
-        reader->setLogger(&log);
+        reader->setLogger(log);
         reader->setXMLControlRegistry(&xmlRegistry);
 
         reader->load(inputFile, schemaPaths);
@@ -382,7 +382,7 @@ int main(int argc, char** argv)
         }
 
         six::NITFWriteControl writer(writerOptions, container, &xmlRegistry);
-        writer.setLogger(&log);
+        writer.setLogger(log);
         writer.save(buffers.get(), outputFile, schemaPaths);
     }
     catch (const std::exception& ex)

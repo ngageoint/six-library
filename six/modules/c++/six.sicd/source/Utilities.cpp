@@ -1561,7 +1561,7 @@ six::Data* six::sicd::readFromNITF(const fs::path& pathname, const std::vector<s
     xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
     logging::Logger log;
     six::NITFReadControl reader;
-    reader.setLogger(&log);
+    reader.setLogger(log);
     reader.setXMLControlRegistry(&xmlRegistry);
     reader.load(pathname.string(), schemaPaths);
     auto container = reader.getContainer();

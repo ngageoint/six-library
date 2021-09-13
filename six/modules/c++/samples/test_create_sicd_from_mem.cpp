@@ -117,7 +117,7 @@ int main(int argc, char** argv)
 
 
         six::NITFWriteControl writer(writerOptions, container);
-        writer.setLogger(logger.get());
+        writer.setLogger(*logger);
 
         six::buffer_list buffers;
         buffers.push_back(reinterpret_cast<std::byte*>(image.data()));

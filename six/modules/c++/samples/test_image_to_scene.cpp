@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 
         std::unique_ptr<logging::Logger> logger(logging::setupLogger(progname.string()));
         six::NITFReadControl reader;
-        reader.setLogger(logger.get());
+        reader.setLogger(*logger);
         reader.setXMLControlRegistry(xmlRegistry);
         reader.load(sixPathname);
         // Check to see if it's a SICD
