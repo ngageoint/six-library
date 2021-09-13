@@ -638,27 +638,26 @@ static void readSicd_(const std::string& sicdPathname,
                          TNoiseMeshPtr& noiseMesh,
                          TScalarMeshPtr& scalarMesh)
 {
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
-
-    six::NITFReadControl reader;
-    reader.setXMLControlRegistry(&xmlRegistry);
+    six::sicd::NITFReadComplexXMLControl reader;
     reader.load(sicdPathname, schemaPaths);
 
-    complexData = Utilities::getComplexData(reader);
-    Utilities::getWidebandData(reader, *complexData, widebandData);
-    Utilities::getProjectionPolys(reader,
+    auto complexData_ = reader.getComplexData();
+    complexData.reset(complexData_.release());
+    widebandData = reader.getWidebandData(*complexData);
+    Utilities::getProjectionPolys(reader.NITFReadControl(),
                        orderX,
                        orderY,
                        complexData,
                        outputRowColToSlantRow,
                        outputRowColToSlantCol);
-    noiseMesh = Utilities::getNoiseMesh(reader);
-    scalarMesh = Utilities::getScalarMesh(reader);
 
-    // This tells the reader that it doesn't
-    // own an XMLControlRegistry
-    reader.setXMLControlRegistry(nullptr);
+    std::unique_ptr<NoiseMesh> noiseMesh_;
+    std::unique_ptr<ScalarMesh> scalarMesh_;
+    reader.getMeshes(noiseMesh_, scalarMesh_);
+    noiseMesh.reset(noiseMesh_.release());
+    scalarMesh.reset(scalarMesh_.release());
+
+    reader.setXMLControlRegistry();
 }
 #if !CODA_OSS_cpp17
 void Utilities::readSicd(const std::string& sicdPathname,
@@ -727,14 +726,11 @@ mem::auto_ptr<ComplexData> Utilities::getComplexData(
 
     else
     {
-        six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
-
-        six::NITFReadControl reader;
-        reader.setXMLControlRegistry(&xmlRegistry);
+        six::sicd::NITFReadComplexXMLControl reader;
         reader.load(pathname, schemaPaths);
 
-        return getComplexData(reader);
+        auto pComplexData = reader.getComplexData();
+        return mem::auto_ptr<ComplexData>(pComplexData.release());
     }
 }
 
@@ -830,13 +826,9 @@ void Utilities::getWidebandData(const std::string& sicdPathname,
                                 const types::RowCol<size_t>& extent,
                                 std::complex<float>* buffer)
 {
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
-    six::NITFReadControl reader;
-    reader.setXMLControlRegistry(&xmlRegistry);
+    six::sicd::NITFReadComplexXMLControl reader;
     reader.load(sicdPathname);
-
-    getWidebandData(reader, complexData, offset, extent, buffer);
+    reader.getWidebandData(complexData, offset, extent, buffer);
 }
 
 void Utilities::getWidebandData(const std::string& sicdPathname,
@@ -1562,13 +1554,10 @@ std::vector<std::byte> six::sicd::readFromNITF(const fs::path& pathname, const s
 {
     six::sicd::NITFReadComplexXMLControl reader;
     reader.setLogger();
-
     reader.load(pathname, schemaPaths);
     
-    auto container = reader.getContainer();
-
     // For SICD, there's only one image (container->getNumData() == 1)
-    if (container->getNumData() != 1)
+    if (reader.getContainer()->getNumData() != 1)
     {
         throw std::invalid_argument(pathname.string() + " is not a SICD; it contains more than one image.");
     }

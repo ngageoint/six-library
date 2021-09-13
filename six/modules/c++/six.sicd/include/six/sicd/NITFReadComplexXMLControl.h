@@ -34,6 +34,7 @@
 #include "six/NITFReadControl.h"
 #include "six/Region.h"
 #include "six/sicd/ComplexData.h"
+#include "six/sicd/SICDMesh.h"
 
 namespace six
 {
@@ -53,6 +54,9 @@ namespace six
 			NITFReadComplexXMLControl(NITFReadComplexXMLControl&&) = delete;
 			NITFReadComplexXMLControl& operator=(NITFReadComplexXMLControl&&) = delete;
 
+			const six::NITFReadControl& NITFReadControl() const { return reader; }
+			six::NITFReadControl& NITFReadControl() { return reader; }
+
 			void load(const std::string& fromFile,
 				const std::vector<std::string>& schemaPaths);
 			void load(const std::filesystem::path& fromFile,
@@ -67,7 +71,12 @@ namespace six
 			std::shared_ptr<six::Container> getContainer();
 
 			std::unique_ptr<ComplexData> getComplexData();
+
 			std::vector<std::complex<float>> getWidebandData(const ComplexData&);
+			void getWidebandData(const ComplexData&, const types::RowCol<size_t>& offset, const types::RowCol<size_t>& extent,
+				std::complex<float>* buffer);
+
+			void getMeshes(std::unique_ptr<NoiseMesh>&, std::unique_ptr<ScalarMesh>&) const;
 
 			void setXMLControlRegistry();
 			void setLogger();

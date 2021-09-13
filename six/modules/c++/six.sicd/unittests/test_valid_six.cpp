@@ -29,6 +29,7 @@
 #include <std/filesystem>
 #include <std/optional>
 #include <cmath>
+#include <std/span>
 
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
@@ -40,6 +41,7 @@
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
 #include <six/sicd/ComplexXMLControl.h>
+#include <six/sicd/NITFReadComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
 #include "../tests/TestUtilities.h"
@@ -118,7 +120,7 @@ static void setNitfPluginPath()
     sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }
 
-static std::shared_ptr<six::Container> getContainer(six::NITFReadControl& reader)
+static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXMLControl& reader)
 {
     auto container = reader.getContainer();
     TEST_ASSERT_EQ(six::DataType::COMPLEX, container->getDataType());
@@ -405,20 +407,29 @@ static std::vector<std::complex<float>> make_complex_image(const types::RowCol<s
     return image;
 }
 
+template<typename T>
+static void test_assert_eq(const std::vector<std::byte>& bytes, const std::vector<T>& rawData)
+{
+    const auto rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
+    TEST_ASSERT_EQ(bytes.size(), rawDataSizeInBytes);
+
+    const void* pRawData_ = rawData.data();
+    auto pRawData = static_cast<const std::byte*>(pRawData_);
+    std::span<const std::byte> rawDataBytes(pRawData, rawDataSizeInBytes);
+    TEST_ASSERT_EQ(bytes.size(), rawDataBytes.size());
+    for (size_t i = 0; i < bytes.size(); i++)
+    {
+        TEST_ASSERT_EQ(bytes[i], rawDataBytes[i]);
+    }
+}
+
 static void read_raw_data(const fs::path& path, six::PixelType pixelType)
 {
     std::unique_ptr<six::sicd::ComplexData> pComplexData_;
     const auto bytes = six::sicd::readFromNITF(path, pComplexData_);
 
-
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
-
-    six::NITFReadControl reader;
-    reader.setXMLControlRegistry(&xmlRegistry);
-
-    static const std::vector<std::string> schemaPaths;
-    reader.load(path.string(), schemaPaths);
+    six::sicd::NITFReadComplexXMLControl reader;
+    reader.load(path);
     auto container = getContainer(reader);
 
     const auto pComplexData = getComplexData(*container, 0);
@@ -428,20 +439,18 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType)
     const auto extent = getExtent(complexData);
     const types::RowCol<size_t> offset{ 0, 0 };
 
-    size_t rawDataSizeInBytes = 0;
     if (pixelType == six::PixelType::RE32F_IM32F)
     {
         std::vector<std::complex<float>> rawData;
-        six::sicd::Utilities::getRawData(reader, complexData, offset, extent, rawData);
-        rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
+        six::sicd::Utilities::getRawData(reader.NITFReadControl(), complexData, offset, extent, rawData);
+        test_assert_eq(bytes, rawData);
     }
     else if (pixelType == six::PixelType::AMP8I_PHS8I)
     {
         std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> rawData;
-        six::sicd::Utilities::getRawData(reader, complexData, offset, extent, rawData);
-        rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
+        six::sicd::Utilities::getRawData(reader.NITFReadControl(), complexData, offset, extent, rawData);
+        test_assert_eq(bytes, rawData);
     }
-    TEST_ASSERT_EQ(bytes.size(), rawDataSizeInBytes);
 }
 
 static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)

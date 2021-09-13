@@ -55,7 +55,6 @@ void six::sicd::NITFReadComplexXMLControl::load(const std::filesystem::path& fro
 std::shared_ptr<const six::Container> six::sicd::NITFReadComplexXMLControl::getContainer() const
 {
     return reader.getContainer();
-
 }
 std::shared_ptr<six::Container> six::sicd::NITFReadComplexXMLControl::getContainer()
 {
@@ -79,6 +78,12 @@ std::vector<std::complex<float>> six::sicd::NITFReadComplexXMLControl::getWideba
     std::vector<std::complex<float>> retval;
     Utilities::getWidebandData(reader, complexData, retval);
     return retval;
+}
+void  six::sicd::NITFReadComplexXMLControl::getWidebandData(const ComplexData& complexData,
+    const types::RowCol<size_t>& offset, const types::RowCol<size_t>& extent,
+    std::complex<float>* buffer)
+{
+    Utilities::getWidebandData(reader, complexData, offset, extent, buffer);
 }
 
 void six::sicd::NITFReadComplexXMLControl::setLogger()
@@ -109,4 +114,11 @@ std::vector<std::byte>  six::sicd::NITFReadComplexXMLControl::interleaved()
     interleaved(region);
 
     return buffer;
+}
+
+void  six::sicd::NITFReadComplexXMLControl::getMeshes(std::unique_ptr<NoiseMesh>& noiseMesh,
+    std::unique_ptr<ScalarMesh>& scalarMesh) const
+{
+    noiseMesh = Utilities::getNoiseMesh(reader);
+    scalarMesh = Utilities::getScalarMesh(reader);
 }
