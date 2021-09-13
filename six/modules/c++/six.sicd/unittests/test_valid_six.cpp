@@ -401,23 +401,29 @@ TEST_CASE(sicd_read_data)
     sicd_read_data(inputPathname, 0, 0);
 }
 
+static std::vector<std::complex<float>> readSicd(const std::filesystem::path& sicdPathname)
+{
+    static const std::vector<fs::path> schemaPaths;
+
+    std::unique_ptr<six::sicd::ComplexData> pComplexData;
+    std::vector<std::complex<float>> retval;
+    six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, pComplexData, retval);
+    return retval;
+}
 TEST_CASE(test_readSicd)
 {
-    static const std::vector<std::string> schemaPaths;
-
     auto inputPathname = getNitfPath("sicd_50x50.nitf");
-    six::sicd::ComplexData complexData;
-    auto widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
+    auto widebandData = readSicd(inputPathname);
 
     fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
+    widebandData = readSicd(inputPathname);
 
     subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    widebandData = six::sicd::Utilities::readSicd(inputPathname, schemaPaths, complexData);
+    widebandData = readSicd(inputPathname);
 }
 
 static std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>& dims)

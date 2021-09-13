@@ -604,21 +604,13 @@ void Utilities::readSicd(const std::string& sicdPathname,
     readSicd_(sicdPathname, schemaPaths, complexData, widebandData);
 }
 void Utilities::readSicd(const fs::path& sicdPathname,
-                         const std::vector<std::string>& schemaPaths,
+                         const std::vector<fs::path>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
-                         std::vector<std::complex<float>>& widebandData)
+                        std::vector<std::complex<float>>& widebandData)
 {
-    readSicd(sicdPathname.string(), schemaPaths, complexData, widebandData);
-}
-std::vector<std::complex<float>> Utilities::readSicd(const fs::path& sicdPathname,
-                         const std::vector<std::string>& schemaPaths,
-                         ComplexData& complexData)
-{
-    std::vector<std::complex<float>> retval;
-    std::unique_ptr<ComplexData> pComplexData;
-    readSicd(sicdPathname, schemaPaths, pComplexData, retval);
-    complexData = *pComplexData;
-    return retval;
+    std::vector<std::string> schemaPaths_;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
+    readSicd(sicdPathname.string(), schemaPaths_, complexData, widebandData);
 }
 
 template<typename TComplexDataPtr, typename TNoiseMeshPtr, typename TScalarMeshPtr>
@@ -1599,9 +1591,7 @@ six::sicd::read(const fs::path& inputPathname, const std::vector<fs::path>& sche
 {
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
     std::vector <std::complex<float>> widebandBuffer;
-    std::vector<std::string> schemaPaths_;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
-    Utilities::readSicd(inputPathname, schemaPaths_, pComplexData, widebandBuffer);
+    Utilities::readSicd(inputPathname, schemaPaths, pComplexData, widebandBuffer);
     return std::make_tuple(std::move(widebandBuffer), std::move(pComplexData));
 }
 
