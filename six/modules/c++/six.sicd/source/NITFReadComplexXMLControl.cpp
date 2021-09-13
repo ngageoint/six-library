@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <std/memory>
 
 #include "six/sicd/ComplexXMLControl.h"
 #include "six/sicd/Utilities.h"
@@ -31,6 +32,9 @@ namespace fs = std::filesystem;
 
 six::sicd::NITFReadComplexXMLControl::NITFReadComplexXMLControl()
 {
+    // create an XML registry
+    // The reason to do this is to avoid adding XMLControlCreators to the
+    // XMLControlFactory singleton - this way has more fine-grained control
     xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
     reader.setXMLControlRegistry(&xmlRegistry);
 }
@@ -48,14 +52,14 @@ void six::sicd::NITFReadComplexXMLControl::load(const std::filesystem::path& fro
     load(fromFile.string(), schemaPaths_);
 }
 
-const six::Container& six::sicd::NITFReadComplexXMLControl::getContainer() const
+std::shared_ptr<const six::Container> six::sicd::NITFReadComplexXMLControl::getContainer() const
 {
-    return *(reader.getContainer());
+    return reader.getContainer();
 
 }
-six::Container& six::sicd::NITFReadComplexXMLControl::getContainer()
+std::shared_ptr<six::Container> six::sicd::NITFReadComplexXMLControl::getContainer()
 {
-    return *(reader.getContainer());
+    return reader.getContainer();
 }
 
 void six::sicd::NITFReadComplexXMLControl::setXMLControlRegistry()
@@ -70,9 +74,39 @@ std::unique_ptr<six::sicd::ComplexData> six::sicd::NITFReadComplexXMLControl::ge
     return std::unique_ptr< six::sicd::ComplexData>(result.release());
 }
 
-std::vector<std::complex<float>>  six::sicd::NITFReadComplexXMLControl::getWidebandData(const ComplexData& complexData)
+std::vector<std::complex<float>> six::sicd::NITFReadComplexXMLControl::getWidebandData(const ComplexData& complexData)
 {
     std::vector<std::complex<float>> retval;
     Utilities::getWidebandData(reader, complexData, retval);
     return retval;
+}
+
+void six::sicd::NITFReadComplexXMLControl::setLogger()
+{
+    pLog = std::make_unique<logging::Logger>();
+    reader.setLogger(*pLog);
+}
+
+void six::sicd::NITFReadComplexXMLControl::interleaved(Region& region)
+{
+    constexpr size_t imageNumber = 0;
+    (void)reader.interleaved(region, imageNumber);
+}
+
+std::vector<std::byte>  six::sicd::NITFReadComplexXMLControl::interleaved()
+{
+    auto pComplexData = getComplexData();
+    const auto extent = getExtent(*pComplexData);
+    const auto numPixels = extent.area();
+    const auto numBytesPerPixel = pComplexData->getNumBytesPerPixel();
+    size_t offset = 0;
+
+    std::vector<std::byte> buffer(numPixels * numBytesPerPixel);
+
+    six::Region region;
+    setDims(region, extent);
+    region.setBuffer(buffer.data() + offset);
+    interleaved(region);
+
+    return buffer;
 }

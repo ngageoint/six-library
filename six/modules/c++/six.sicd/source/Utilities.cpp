@@ -581,7 +581,7 @@ static void readSicd_(const std::string& sicdPathname,
     reader.load(sicdPathname, schemaPaths);
 
     // For SICD, there's only one image (container->getNumData() == 1)
-    if (reader.getContainer().getNumData() != 1)
+    if (reader.getContainer()->getNumData() != 1)
     {
         throw std::invalid_argument(sicdPathname + " is not a SICD; it contains more than one image.");
     }
@@ -1560,19 +1560,10 @@ void Utilities::projectPixelsToSlantPlane(
 std::vector<std::byte> six::sicd::readFromNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths,
     std::unique_ptr<ComplexData>& pComplexData)
 {
-    // create an XML registry
-    // The reason to do this is to avoid adding XMLControlCreators to the
-    // XMLControlFactory singleton - this way has more fine-grained control
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
-    logging::Logger log;
-    six::NITFReadControl reader;
-    reader.setLogger(log);
-    reader.setXMLControlRegistry(&xmlRegistry);
+    six::sicd::NITFReadComplexXMLControl reader;
+    reader.setLogger();
 
-    std::vector<std::string> schemaPaths_;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
-    reader.load(pathname.string(), schemaPaths_);
+    reader.load(pathname, schemaPaths);
     
     auto container = reader.getContainer();
 
@@ -1581,21 +1572,9 @@ std::vector<std::byte> six::sicd::readFromNITF(const fs::path& pathname, const s
     {
         throw std::invalid_argument(pathname.string() + " is not a SICD; it contains more than one image.");
     }
-    constexpr size_t imageNumber = 0;
-    pComplexData = Utilities::getComplexData(reader);
-    const auto extent = getExtent(*pComplexData);
-    const auto numPixels = extent.area();
-    const auto numBytesPerPixel = pComplexData->getNumBytesPerPixel();
-    size_t offset = 0;
 
-    std::vector<std::byte> buffer(numPixels * numBytesPerPixel);
-
-    six::Region region;
-    setDims(region, extent);
-    region.setBuffer(buffer.data() + offset);
-    (void) reader.interleaved(region, imageNumber);
-
-    return buffer;
+    pComplexData = reader.getComplexData();
+    return reader.interleaved();
 }
 
 void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths, const ComplexData& data, const std::complex<float>* image)

@@ -26,10 +26,14 @@
 #include <vector>
 #include <std/filesystem>
 #include <memory>
+#include <std/cstddef>
 
-#include <six/XMLControlFactory.h>
-#include <six/NITFReadControl.h>
-#include <six/sicd/ComplexData.h>
+#include <logging/Logger.h>
+
+#include "six/XMLControlFactory.h"
+#include "six/NITFReadControl.h"
+#include "six/Region.h"
+#include "six/sicd/ComplexData.h"
 
 namespace six
 {
@@ -39,9 +43,11 @@ namespace six
 		{
 			six::XMLControlRegistry xmlRegistry;
 			six::NITFReadControl reader;
+			std::unique_ptr<logging::Logger> pLog;
 
 		public:
 			NITFReadComplexXMLControl();
+			~NITFReadComplexXMLControl() = default;
 			NITFReadComplexXMLControl(const NITFReadComplexXMLControl&) = delete;
 			NITFReadComplexXMLControl& operator=(const NITFReadComplexXMLControl&) = delete;
 			NITFReadComplexXMLControl(NITFReadComplexXMLControl&&) = delete;
@@ -57,13 +63,17 @@ namespace six
 				load(fromFile, schemaPaths);
 			}
 
-			const Container& getContainer() const;
-			Container& getContainer();
+			std::shared_ptr<const six::Container> getContainer() const;
+			std::shared_ptr<six::Container> getContainer();
 
 			std::unique_ptr<ComplexData> getComplexData();
 			std::vector<std::complex<float>> getWidebandData(const ComplexData&);
 
 			void setXMLControlRegistry();
+			void setLogger();
+
+			void interleaved(Region& region);
+			std::vector<std::byte> interleaved();
 		};
 	}
 }
