@@ -48,6 +48,7 @@
 #include "TestCase.h"
 
 namespace fs = std::filesystem;
+using AMP8I_PHS8I_t = six::sicd::ImageData::AMP8I_PHS8I_t;
 
 static fs::path argv0;
 static const fs::path file = __FILE__;
@@ -189,12 +190,24 @@ static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t inp
     return std::complex<float>(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
 }
 
+static void test_assert_eq(const std::vector<std::complex<float>>& actuals, const std::vector<AMP8I_PHS8I_t>& amp8i_phs8i)
+{
+    TEST_ASSERT_EQ(actuals.size(), amp8i_phs8i.size());
+    for (size_t i = 0; i < actuals.size(); i++)
+    {
+        const auto& v = amp8i_phs8i[i];
+        const auto result = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, nullptr);
+        const auto& expected = actuals[i];
+        TEST_ASSERT_EQ(expected, result);
+    }
+}
+
 TEST_CASE(test_8bit_ampphs)
 {
     six::sicd::ImageData imageData;
     imageData.pixelType = six::PixelType::AMP8I_PHS8I;
 
-    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> inputs;
+    std::vector<AMP8I_PHS8I_t> inputs;
     std::vector<std::complex<float>> expecteds;
     for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
     {
@@ -202,7 +215,7 @@ TEST_CASE(test_8bit_ampphs)
         {
             auto expected = from_AMP8I_PHS8I(input_amplitude, input_value);
 
-            six::sicd::ImageData::AMP8I_PHS8I_t input(input_amplitude, input_value);
+            AMP8I_PHS8I_t input(input_amplitude, input_value);
             const auto actual = imageData.from_AMP8I_PHS8I(input);
             TEST_ASSERT_EQ(expected, actual);
 
@@ -221,28 +234,14 @@ TEST_CASE(test_8bit_ampphs)
 
 
     // we should now be able to convert the cx_floats back to amp/value
-    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> amp8i_phs8i(actuals.size());
+    std::vector<AMP8I_PHS8I_t> amp8i_phs8i(actuals.size());
     imageData.to_AMP8I_PHS8I(actuals, amp8i_phs8i);
-    TEST_ASSERT_EQ(actuals.size(), amp8i_phs8i.size());
-    for (size_t i = 0; i < actuals.size(); i++)
-    {
-        const auto& v = amp8i_phs8i[i];
-        const auto result = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, nullptr);
-        const auto& expected = actuals[i];
-        TEST_ASSERT_EQ(expected, result);
-    }
+    test_assert_eq(actuals, amp8i_phs8i);
 
     // ... and again, async
     const auto cutoff = actuals.size() / 10; // be sure std::async is called
     imageData.to_AMP8I_PHS8I(actuals, amp8i_phs8i, cutoff);
-    TEST_ASSERT_EQ(actuals.size(), amp8i_phs8i.size());
-    for (size_t i = 0; i < actuals.size(); i++)
-    {
-        const auto& v = amp8i_phs8i[i];
-        const auto result = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, nullptr);
-        const auto& expected = actuals[i];
-        TEST_ASSERT_EQ(expected, result);
-    }
+    test_assert_eq(actuals, amp8i_phs8i);
 }
 
 static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputPathname,
@@ -272,6 +271,14 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputP
     return retval;
 }
 
+static void to_AMP8I_PHS8I(const six::sicd::ImageData& imageData, const std::vector<std::complex<float>>& widebandData)
+{
+    // image is far too big to call to_AMP8I_PHS8I() with DEBUG code
+    const auto size = sys::debug ? widebandData.size() / 200 : widebandData.size();
+    std::span<const std::complex<float>> widebandData_(widebandData.data(), size);
+    std::vector<AMP8I_PHS8I_t> results(widebandData_.size());
+    imageData.to_AMP8I_PHS8I(widebandData_, results, 0);
+}
 TEST_CASE(read_8bit_ampphs_with_table)
 {
     const fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
@@ -292,12 +299,7 @@ TEST_CASE(read_8bit_ampphs_with_table)
 
     six::sicd::ImageData imageData;
     imageData.amplitudeTable.reset(std::make_unique< six::AmplitudeTable>(AmpTable));
-
-    // image is far too big to call to_AMP8I_PHS8I() with DEBUG code
-    const auto size = sys::debug ? widebandData.size() / 200 : widebandData.size();
-    std::span<const std::complex<float>> widebandData_(widebandData.data(), size);
-    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> results(widebandData_.size());
-    imageData.to_AMP8I_PHS8I(widebandData_, results, 0);
+    to_AMP8I_PHS8I(imageData, widebandData);
 }
 TEST_CASE(read_8bit_ampphs_no_table)
 {
@@ -311,11 +313,7 @@ TEST_CASE(read_8bit_ampphs_no_table)
     TEST_ASSERT_FALSE(amplitudeTable.has_value());
 
     six::sicd::ImageData imageData;
-    // image is far too big to call to_AMP8I_PHS8I() with DEBUG code
-    const auto size = sys::debug ? widebandData.size() / 200 : widebandData.size();
-    std::span<const std::complex<float>> widebandData_(widebandData.data(), size);
-    std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> results(widebandData_.size());
-    imageData.to_AMP8I_PHS8I(widebandData_, results, 0);
+    to_AMP8I_PHS8I(imageData, widebandData);
 }
 
 static std::vector<std::byte> sicd_read_data_(const fs::path& inputPathname,
@@ -334,42 +332,32 @@ static std::vector<std::byte> sicd_read_data_(const fs::path& inputPathname,
 
     return image;
 }
-static void sicd_read_data(const fs::path& inputPathname,
-    const std::complex<float>& expectedFirstPixel, const std::complex<float>& expectedLastPixel)
+template<typename T>
+void sicd_read_data(const fs::path& inputPathname);
+template<>
+void sicd_read_data<std::complex<float>>(const fs::path& inputPathname)
 {
-    const auto buffer = sicd_read_data_(inputPathname, six::PixelType::RE32F_IM32F, sizeof(expectedFirstPixel));
-
-    const auto firstPixel = std::complex<float>(0);
-    TEST_ASSERT_EQ(expectedFirstPixel, firstPixel);
-
-    const auto lastPixel = std::complex<float>(0);
-    TEST_ASSERT_EQ(expectedLastPixel, lastPixel);
+    const auto buffer = sicd_read_data_(inputPathname, six::PixelType::RE32F_IM32F, sizeof(std::complex<float>));
 }
-static void sicd_read_data(const fs::path& inputPathname,
-    int16_t expectedFirstPixel, int16_t expectedLastPixel)
+template<>
+void sicd_read_data<AMP8I_PHS8I_t>(const fs::path& inputPathname)
 {
-    const auto buffer = sicd_read_data_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(expectedFirstPixel));
-
-    const int16_t firstPixel = 0;
-    TEST_ASSERT_EQ(expectedFirstPixel, firstPixel);
-
-    const int16_t lastPixel = 0;
-    TEST_ASSERT_EQ(expectedLastPixel, lastPixel);
+    const auto buffer = sicd_read_data_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(AMP8I_PHS8I_t));
 }
 TEST_CASE(sicd_read_data)
 {
     auto inputPathname = getNitfPath("sicd_50x50.nitf");
-    sicd_read_data(inputPathname, std::complex<float>(0), std::complex<float>(0));
+    sicd_read_data<std::complex<float>>(inputPathname);
 
     fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    sicd_read_data(inputPathname, 0, 0);
+    sicd_read_data<AMP8I_PHS8I_t>(inputPathname);
 
     subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
     inputPathname = getNitfPath(filename);
-    sicd_read_data(inputPathname, 0, 0);
+    sicd_read_data<AMP8I_PHS8I_t>(inputPathname);
 }
 
 static std::vector<std::complex<float>> readSicd(const std::filesystem::path& sicdPathname)
@@ -419,8 +407,8 @@ static void test_assert_eq(const std::vector<std::byte>& bytes, const std::vecto
     TEST_ASSERT_EQ(bytes.size(), rawDataBytes.size());
     for (size_t i = 0; i < bytes.size(); i++)
     {
-        const auto bytes_i = static_cast<unsigned char>(bytes[i]);
-        const auto rawDataBytes_i = static_cast<unsigned char>(rawDataBytes[i]);
+        const auto bytes_i = static_cast<uint8_t>(bytes[i]);
+        const auto rawDataBytes_i = static_cast<uint8_t>(rawDataBytes[i]);
         TEST_ASSERT_EQ(bytes_i, rawDataBytes_i);
     }
 }
@@ -449,7 +437,7 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType)
     }
     else if (pixelType == six::PixelType::AMP8I_PHS8I)
     {
-        std::vector<six::sicd::ImageData::AMP8I_PHS8I_t> rawData;
+        std::vector<AMP8I_PHS8I_t> rawData;
         six::sicd::Utilities::getRawData(reader.NITFReadControl(), complexData, offset, extent, rawData);
         test_assert_eq(bytes, rawData);
     }

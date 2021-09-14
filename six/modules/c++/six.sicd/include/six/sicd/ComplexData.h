@@ -392,14 +392,6 @@ private:
     std::string mVersion;
 };
 
-struct ComplexImage final
-{
-    const ComplexData& data;
-    const std::complex<float>* image;
-    ComplexImage(const ComplexData& d, const std::complex<float>* i) : data(d), image(i) {}
-    ComplexImage(const ComplexImage&) = delete;
-    ComplexImage& operator=(const ComplexImage&) = delete;
-};
 struct ComplexImageResult final
 {
     std::unique_ptr<ComplexData> pComplexData;
@@ -410,7 +402,15 @@ struct ComplexImageResult final
     ComplexImageResult(ComplexImageResult&&) = default;
     ComplexImageResult& operator=(ComplexImageResult&&) = default;
 };
-
+struct ComplexImage final
+{
+    const ComplexData& data;
+    const std::complex<float>* image;
+    ComplexImage(const ComplexData& d, const std::complex<float>* i) : data(d), image(i) {}
+    ComplexImage(const ComplexImageResult& r)  : ComplexImage(*(r.pComplexData), r.widebandData.data()) {}
+    ComplexImage(const ComplexImage&) = delete;
+    ComplexImage& operator=(const ComplexImage&) = delete;
+};
 }
 }
 
