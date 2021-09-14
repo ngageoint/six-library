@@ -509,8 +509,19 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
     TEST_ASSERT_EQ(dims.col, pComplexData->getNumCols());
 
     const auto image = make_complex_image(dims, pixelType);
-    static const std::vector<fs::path> schemaPaths;
-    six::sicd::writeAsNITF(outputName, schemaPaths, *pComplexData, image.data());
+
+    //static const std::vector<fs::path> schemaPaths;
+    //six::sicd::writeAsNITF(outputName, schemaPaths, *pComplexData, image.data());
+    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+    constexpr auto dataType = six::DataType::COMPLEX;
+    auto container = std::make_shared<six::Container>(dataType);
+    container->addData(std::move(pComplexData));
+    const six::Options writerOptions;
+    six::NITFWriteControl writer(writerOptions, container);
+    const void* image_data = image.data();
+    six::buffer_list buffers{ static_cast<const std::byte*>(image_data) };
+    static const std::vector<std::string> schemaPaths;
+    writer.save(buffers, outputName.string(), schemaPaths);
 
     read_nitf(outputName, pixelType, image);
 }

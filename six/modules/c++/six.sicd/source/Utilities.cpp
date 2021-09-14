@@ -904,14 +904,14 @@ void Utilities::getRawData(NITFReadControl& reader,
     // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
     // component, 2 bytes per pixel). 
     const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
-    SICDreader<uint8_t>(reader, imageNumber, offset, extent, elementsPerRow,
-        [&](size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<uint8_t>& tempVector)
+    SICDreader<ImageData::AMP8I_PHS8I_t>(reader, imageNumber, offset, extent, elementsPerRow,
+        [&](size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<ImageData::AMP8I_PHS8I_t>& tempVector)
         {
             // Take each (uint8_t, uint8_t) out of the temp buffer and put it into the real buffer as a std::complex<float>
-            for (size_t index = 0; index < elementsPerRow * rowsToRead; index += 2)
+            for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
             {
                 // "For amplitude and phase components, the amplitude component is  stored first."                
-                buffer.push_back(ImageData::AMP8I_PHS8I_t { tempVector[index], tempVector[index + 1] });
+                buffer.push_back(tempVector[index]);
             }
         });
 }
