@@ -412,6 +412,7 @@ static std::vector<std::complex<float>> make_complex_image_(const types::RowCol<
 static std::vector<std::complex<float>> make_complex_image_(std::vector<std::complex<float>>&& image)
 {
     void* image_data = image.data();
+    // Make it easier to know what we're looking at when examining a binary dump of the SICD
     std::span<std::byte> pImage(static_cast<std::byte*>(image_data), image.size() * sizeof(image[0]));
     uint8_t b = 0;
     for (size_t i = 0; i < pImage.size(); i++)
@@ -435,7 +436,7 @@ static std::vector<std::complex<float>> make_complex_image(const types::RowCol<s
 }
 
 template<typename T>
-static void test_assert_eq(const std::vector<std::byte>& bytes, const std::vector<T>& rawData)
+static void test_assert_eq(std::span<const std::byte> bytes, const std::vector<T>& rawData)
 {
     const auto rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
     TEST_ASSERT_EQ(bytes.size(), rawDataSizeInBytes);
@@ -452,13 +453,12 @@ static void test_assert_eq(const std::vector<std::byte>& bytes, const std::vecto
     }
 }
 
-static void read_raw_data(const fs::path& path, six::PixelType pixelType)
+static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::span<const std::byte> expectedBytes)
 {
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
 
-    std::unique_ptr<six::sicd::ComplexData> pComplexData_;
-    const auto bytes = six::sicd::readFromNITF(path, pComplexData_);
-    test_assert(*pComplexData_, pixelType, expectedNumBytesPerPixel);
+    const auto bytes = readFromNITF_(path, pixelType, expectedNumBytesPerPixel);
+    test_assert_eq(expectedBytes, bytes);
 
     six::sicd::NITFReadComplexXMLControl reader;
     reader.load(path);
@@ -476,13 +476,25 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType)
         std::vector<std::complex<float>> rawData;
         six::sicd::Utilities::getRawData(reader.NITFReadControl(), complexData, offset, extent, rawData);
         test_assert_eq(bytes, rawData);
+        test_assert_eq(expectedBytes, rawData);
     }
     else if (pixelType == six::PixelType::AMP8I_PHS8I)
     {
         std::vector<AMP8I_PHS8I_t> rawData;
         six::sicd::Utilities::getRawData(reader.NITFReadControl(), complexData, offset, extent, rawData);
         test_assert_eq(bytes, rawData);
+        test_assert_eq(expectedBytes, rawData);
     }
+}
+static void read_nitf(const fs::path& path, six::PixelType pixelType, const std::vector<std::complex<float>>& image)
+{
+    const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
+    const auto widebandData = readSicd_(path, pixelType, expectedNumBytesPerPixel);
+    TEST_ASSERT(widebandData == image);
+
+    const void* pImage = image.data();
+    std::span<const std::byte> bytes(static_cast<const std::byte*>(pImage), image.size() * sizeof(image[0]));
+    read_raw_data(path, pixelType, bytes);
 }
 
 static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)
@@ -494,7 +506,7 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
     test_assert(*pComplexData, pixelType, expectedNumBytesPerPixel);
 
-    auto image = make_complex_image(dims, pixelType);
+    const auto image = make_complex_image(dims, pixelType);
 
     const six::Data* pData = pComplexData.get();
     TEST_ASSERT_EQ(dims.row, pData->getNumRows());
@@ -503,7 +515,7 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
     static const std::vector<fs::path> schemaPaths;
     six::sicd::writeAsNITF(outputName, schemaPaths, *pComplexData, image.data());
 
-    read_raw_data(outputName, pixelType);
+    read_nitf(outputName, pixelType, image);
 }
 
 TEST_CASE(test_create_sicds_from_mem)
