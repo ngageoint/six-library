@@ -414,12 +414,14 @@ static std::vector<std::complex<float>> make_complex_image_(std::vector<std::com
     void* image_data = image.data();
     // Make it easier to know what we're looking at when examining a binary dump of the SICD
     std::span<std::byte> pImage(static_cast<std::byte*>(image_data), image.size() * sizeof(image[0]));
+    TEST_ASSERT_EQ(32, pImage.size());
     uint8_t b = 0;
     for (size_t i = 0; i < pImage.size(); i++)
     {
         pImage[i] = static_cast<std::byte>(b);
         b++;
     }
+    TEST_ASSERT_EQ(32, b);
     return image;
 }
 static std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>& dims, six::PixelType pixelType)
@@ -496,7 +498,6 @@ static void read_nitf(const fs::path& path, six::PixelType pixelType, const std:
     std::span<const std::byte> bytes(static_cast<const std::byte*>(pImage), image.size() * sizeof(image[0]));
     read_raw_data(path, pixelType, bytes);
 }
-
 static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)
 {
     const types::RowCol<size_t> dims(2, 2);
