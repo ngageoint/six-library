@@ -505,13 +505,10 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
 
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
     test_assert(*pComplexData, pixelType, expectedNumBytesPerPixel);
+    TEST_ASSERT_EQ(dims.row, pComplexData->getNumRows());
+    TEST_ASSERT_EQ(dims.col, pComplexData->getNumCols());
 
     const auto image = make_complex_image(dims, pixelType);
-
-    const six::Data* pData = pComplexData.get();
-    TEST_ASSERT_EQ(dims.row, pData->getNumRows());
-    TEST_ASSERT_EQ(dims.col, pData->getNumCols());
-
     static const std::vector<fs::path> schemaPaths;
     six::sicd::writeAsNITF(outputName, schemaPaths, *pComplexData, image.data());
 
