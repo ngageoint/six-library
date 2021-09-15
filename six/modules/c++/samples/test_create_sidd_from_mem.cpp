@@ -2525,13 +2525,9 @@ int main(int argc, char** argv)
         const bool smallImage = options->get<bool>("smallImage");
         const std::string version = options->get<std::string>("version");
 
-        six::XMLControlFactory::getInstance().addCreator(
-                DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
-        six::XMLControlFactory::getInstance().addCreator(
-                DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
 
         // Output file name
         std::string outputName(options->get<std::string>("output"));

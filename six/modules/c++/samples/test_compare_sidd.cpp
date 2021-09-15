@@ -64,12 +64,8 @@ bool siddsMatch(const std::string& sidd1Path,
         bool ignoreDate)
 {
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<
-            six::sicd::ComplexXMLControl>());
-    xmlRegistry.addCreator(six::DataType::DERIVED,
-            new six::XMLControlCreatorT<
-            six::sidd::DerivedXMLControl>());
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);

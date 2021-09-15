@@ -385,8 +385,8 @@ namespace six
         KDTree::KDTree(std::vector<node_t>&& nodes)
             : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
         KDTree::~KDTree() = default;
-        KDTree::KDTree(KDTree&&) = default;
-        KDTree& KDTree::operator=(KDTree&&) = default;
+        KDTree::KDTree(KDTree&&) noexcept = default;
+        KDTree& KDTree::operator=(KDTree&&) noexcept = default;
         
         KDTree::node_t KDTree::nearest_neighbor(const node_t& point) const
         {

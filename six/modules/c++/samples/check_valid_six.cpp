@@ -208,7 +208,7 @@ static int main_(int argc, char** argv)
     // this validates the DES of the input against the
     // best available schema
     six::NITFReadControl reader;
-    reader.setLogger(log.get());
+    reader.setLogger(*log);
     reader.setXMLControlRegistry(&xmlRegistry);
     bool allValid = true;
     for (size_t ii = 0; ii < inputPathnames.size(); ++ii)

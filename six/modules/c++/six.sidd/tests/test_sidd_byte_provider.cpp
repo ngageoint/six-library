@@ -374,9 +374,7 @@ void Tester<DataTypeT>::normalWrite()
     container->addData(mData->clone());
 
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::DERIVED,
-                           new six::XMLControlCreatorT<
-                                   six::sidd::DerivedXMLControl>());
+    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
     six::Options options;
     setWriterOptions(options);

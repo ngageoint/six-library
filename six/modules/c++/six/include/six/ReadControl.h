@@ -22,6 +22,8 @@
 #ifndef __SIX_READ_CONTROL_H__
 #define __SIX_READ_CONTROL_H__
 
+#include <memory>
+
 #include "six/Types.h"
 #include "six/Region.h"
 #include "six/Container.h"
@@ -199,6 +201,14 @@ struct ReadControl
             delete mLog;
         mLog = log ? log : new logging::NullLogger;
         mOwnLog = log ? ownLog : true;
+    }
+    void setLogger(std::unique_ptr<logging::Logger>&& logger)
+    {
+        setLogger(logger.release(), true /*ownLog*/);
+    }
+    void setLogger(logging::Logger& logger)
+    {
+        setLogger(&logger, false /*ownLog*/);
     }
 
     void setXMLControlRegistry(const XMLControlRegistry *xmlRegistry)
