@@ -26,6 +26,7 @@
 
 #include <string>
 #include <map>
+#include <stdexcept>
 
 namespace nitf
 {
@@ -74,31 +75,20 @@ namespace nitf
         }
     }
 
-#define NITF_Enum_DEFINE_enum_(name, ...) enum class name { __VA_ARGS__ }
+#define NITF_ENUM_define_enum_(name, ...) enum class name { __VA_ARGS__ }
 
-#define NITF_Enum_map_entry_(name, n) { #n, name::n }
-#define NITF_Enum_DEFINE_string_to_enum_(name, ...) namespace details { \
+#define NITF_ENUM_map_entry_(name, n) { #n, name::n }
+#define NITF_ENUM_map_entry_2_(name, n1, n2) NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_(name, n2)
+#define NITF_ENUM_map_entry_3_(name, n1, n2, n3) NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_2_(name, n2, n3)
+#define NITF_ENUM_map_entry_4_(name, n1, n2, n3, n4)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_3_(name, n2, n3, n4)
+#define NITF_ENUM_map_entry_5_(name, n1, n2, n3, n4, n5)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_4_(name, n2, n3, n4, n5),
+
+#define NITF_ENUM_define_string_to_enum_(name, ...) namespace details { \
     template<> inline const std::map<std::string, name>& string_to_enum() { \
     static const std::map<std::string, name> retval { __VA_ARGS__ }; return retval; } }
 
-#define NITF_Enum_DEFINE_string_to_enum_2_(name, n1, n2) \
-        NITF_Enum_DEFINE_string_to_enum_(name, \
-            NITF_Enum_map_entry_(name, n1), \
-            NITF_Enum_map_entry_(name, n2))
-#define NITF_Enum_ENUM_2(name, n1, n2) \
-        NITF_Enum_DEFINE_enum_(name, n1, n2); \
-        NITF_Enum_DEFINE_string_to_enum_2_(name, n1, n2)
-
-#define NITF_Enum_DEFINE_string_to_enum_5_(name, n1, n2, n3, n4, n5) \
-        NITF_Enum_DEFINE_string_to_enum_(name, \
-            NITF_Enum_map_entry_(name, n1), \
-            NITF_Enum_map_entry_(name, n2), \
-            NITF_Enum_map_entry_(name, n3), \
-            NITF_Enum_map_entry_(name, n4), \
-            NITF_Enum_map_entry_(name, n5) )
-#define NITF_Enum_ENUM_5(name, n1, n2, n3, n4, n5) \
-        NITF_Enum_DEFINE_enum_(name, n1, n2, n3, n4, n5); \
-        NITF_Enum_DEFINE_string_to_enum_5_(name, n1, n2, n3, n4, n5)
+#define NITF_ENUM(n, name, ...) NITF_ENUM_define_enum_(name, __VA_ARGS__); \
+        NITF_ENUM_define_string_to_enum_(name, NITF_ENUM_map_entry_##n##_(name, __VA_ARGS__))
 
     template<typename T>
     inline std::string to_string(T v) noexcept(false)

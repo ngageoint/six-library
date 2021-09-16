@@ -42,8 +42,10 @@
 
 namespace nitf
 {
-    NITF_Enum_ENUM_5(Representation, R, G, B, M, LU);
-    NITF_Enum_ENUM_2(Subcategory, I, Q);
+    NITF_ENUM(5, Representation, R, G, B, M, LU);
+    NITF_ENUM(2, Subcategory, I, Q);
+
+    NITF_ENUM(3, TestTestTest, A, B, C);
 
 
 /*!
