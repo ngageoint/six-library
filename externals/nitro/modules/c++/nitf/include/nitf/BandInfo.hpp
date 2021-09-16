@@ -20,11 +20,12 @@
  *
  */
 
-#ifndef __NITF_BANDINFO_HPP__
-#define __NITF_BANDINFO_HPP__
+#ifndef NITF_BandInfo_hpp_INCLUDED_
+#define NITF_BandInfo_hpp_INCLUDED_
 #pragma once
 
 #include <string>
+#include <map>
 
 #include "nitf/BandInfo.h"
 #include "nitf/System.hpp"
@@ -32,6 +33,7 @@
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/Property.hpp"
+#include "nitf/Enum.hpp"
 
 /*!
  *  \file BandInfo.hpp
@@ -40,22 +42,11 @@
 
 namespace nitf
 {
-    template<typename T>
-    T from_string(const std::string&) noexcept(false);
+    NITF_ENUM(5, Representation, R, G, B, M, LU);
+    NITF_ENUM(2, Subcategory, I, Q);
 
-    enum class Representation
-    {
-        R, G, B, M, LU
-    };
-    std::string to_string(Representation) noexcept(false);
-    template<> Representation from_string(const std::string&) noexcept(false);
+    NITF_ENUM(3, TestTestTest, A, B, C);
 
-    enum class Subcategory
-    {
-        I, Q
-    };
-    std::string to_string(Subcategory) noexcept(false);
-    template<> Subcategory from_string(const std::string&) noexcept(false);
 
 /*!
  *  \class BandInfo
@@ -78,7 +69,7 @@ public:
     BandInfo() noexcept(false);
     ~BandInfo() = default;
 
-    explicit BandInfo(const Representation&);
+    explicit BandInfo(Representation);
 
     //! Get the representation
     nitf::Field getRepresentation() const;
@@ -87,7 +78,7 @@ public:
         [&](const Representation& v) -> void {  getRepresentation().set(to_string(v)); }
     };
 
-    explicit BandInfo(const Subcategory&);
+    explicit BandInfo(Subcategory);
 
     //! Get the subcategory
     nitf::Field getSubcategory() const;
@@ -157,4 +148,4 @@ private:
 };
 
 }
-#endif
+#endif // NITF_BandInfo_hpp_INCLUDED_
