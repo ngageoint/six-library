@@ -50,7 +50,7 @@ BandInfo::BandInfo() noexcept(false) : BandInfo(nitf_BandInfo_construct(&error))
     setManaged(false);
 }
 
-BandInfo::BandInfo(const Representation& representation) : BandInfo()
+BandInfo::BandInfo(Representation representation) : BandInfo()
 {
     this->representation = representation;
 }
@@ -59,7 +59,7 @@ nitf::Field BandInfo::getRepresentation() const
     return nitf::Field(getNativeOrThrow()->representation);
 }
 
-BandInfo::BandInfo(const Subcategory& subcategory) : BandInfo()
+BandInfo::BandInfo(Subcategory subcategory) : BandInfo()
 {
     getSubcategory().set(to_string(subcategory));
 }
@@ -190,62 +190,3 @@ void BandInfo::init(const Representation& representation_, // C4458: declaration
     init(to_string(representation_), subcategory_, imageFilterCondition, imageFilterCode);
 }
 
-// operator[] doesn't work with a "const" map as it can also insert
-template<typename TKey, typename TValue>
-static TValue index(const std::map<TKey, TValue>& map, TKey k)
-{
-    const auto it = map.find(k);
-    if (it == map.end())
-    {
-        throw std::invalid_argument("key not found in map.");
-    }
-    return it->second;
-}
-
-template<typename TKey, typename TValue>
-static std::map<TValue, TKey> swap_key_value(const std::map<TKey, TValue>& map)
-{
-    std::map<TValue, TKey> retval;
-    for (const auto& p : map)
-    {
-        retval[p.second] = p.first;
-    }
-    return retval;
-}
-
-// Don't bother with checking lower-case; nobody should be passing
-// an "r" directly to this routine, should always be the result of R.to_string()
-#define NITF_string_to_Represenation_map_entry(name) { #name, Representation::name }
-static const std::map<std::string, Representation> string_to_Represenation
-{
-   NITF_string_to_Represenation_map_entry(R),
-   NITF_string_to_Represenation_map_entry(G),
-   NITF_string_to_Represenation_map_entry(B),
-   NITF_string_to_Represenation_map_entry(M),
-   NITF_string_to_Represenation_map_entry(LU),
-};
-std::string nitf::to_string(Representation v)
-{
-    static const auto to_string_map = swap_key_value(string_to_Represenation);
-    return index(to_string_map, v);
-}
-template<> nitf::Representation nitf::from_string(const std::string& v)
-{
-    return index(string_to_Represenation, v);
-}
-
-#define NITF_string_to_Subcategory_map_entry(name) { #name, Subcategory::name }
-static const std::map<std::string, Subcategory> string_to_Subcategory
-{
-   NITF_string_to_Subcategory_map_entry(I),
-   NITF_string_to_Subcategory_map_entry(Q),
-};
-std::string nitf::to_string(Subcategory v)
-{
-    static const auto to_string_map = swap_key_value(string_to_Subcategory);
-    return index(to_string_map, v);
-}
-template<> nitf::Subcategory nitf::from_string(const std::string& v)
-{
-    return index(string_to_Subcategory, v);
-}

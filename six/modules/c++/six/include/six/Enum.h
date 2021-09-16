@@ -32,6 +32,7 @@
 #include <import/str.h>
 #include <import/sys.h>
 #include <import/scene.h>
+#include <nitf/Enum.hpp>
 
 namespace six
 {
@@ -44,53 +45,51 @@ namespace details
     template<typename T>
     class Enum
     {
-    protected:
-        using map_t = std::map<std::string, int>;
-    private:
-        using reverse_map_t = std::map<int, std::string>;
-        static reverse_map_t to_int_to_string(const map_t& string_to_int)
-        {
-            reverse_map_t retval;
-            for (const auto& p : string_to_int)
-            {
-                retval[p.second] = p.first;
-            }
-            return retval;
-        }
-        static const map_t& string_to_int()
+        static const std::map<std::string, int>& string_to_int()
         {
             return T::string_to_int_();
         }
-        static const reverse_map_t& int_to_string()
+        static const std::map<int, std::string>& int_to_string()
         {
-            static reverse_map_t retval = to_int_to_string(string_to_int());
+            static const auto retval = nitf::details::swap_key_value(string_to_int());
             return retval;
         }
+
+        template<typename TKey, typename TValue>
+        static TValue index(const std::map<TKey, TValue>& map, const TKey& k, const except::Exception& ex)
+        {
+            const auto it = map.find(k);
+            if (it == map.end())
+            {
+                throw ex;
+            }
+            return it->second;
+        }
+        static int index(const std::string& v)
+        {
+            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
+            return index(string_to_int(), v, ex);
+        }
+        static std::string index(int v)
+        {
+            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
+            return index(int_to_string(), v, ex);
+        }
+
     protected:
         Enum() = default;
 
         //! string constructor
         Enum(const std::string& s)
         {
-            const auto it = string_to_int().find(s);
-            if (it != string_to_int().end())
-            {
-                value = it->second;
-            }
-            else
-                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
+            value = index(s);
         }
 
         //! int constructor
         Enum(int i)
         {
-            const auto it = int_to_string().find(i);
-            if (it != int_to_string().end())
-            {
-                value = it->first;
-            }
-            else
-                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
+            (void) index(i);
+            value = i;
         }
 
     public:
@@ -101,26 +100,15 @@ namespace details
             {
                 throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
             }
-
-            const auto it = int_to_string().find(value);
-            if (it != int_to_string().end())
-            {
-                return it->second;
-            }
-
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+            return index(value);
         }
 
-        static T toType(const std::string& s)
+        static T toType(const std::string& v)
         {
-            std::string type(s);
+            std::string type(v);
             str::trim(type);
-            const auto it = string_to_int().find(type);
-            if (it != string_to_int().end())
-            {
-                return it->second;
-            }
-            throw except::Exception(Ctxt("Unknown type '" + s + "'"));
+            const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
+            return index(string_to_int(), type, ex);
         }
 
         operator int() const { return value; }
@@ -159,11 +147,11 @@ namespace details
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
     #define SIX_Enum_constructors_(name) name() = default; name(const std::string& s) : Enum(s) {} name(int i) : Enum(i) {} \
-            name& operator=(const int& o) { value = o; return *this; }
+            name& operator=(int v) {  *this = name(v); return *this; }
     #define SIX_Enum_BEGIN_enum enum {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
-    #define SIX_Enum_BEGIN_string_to_int static const map_t& string_to_int_() { static const map_t retval {
+    #define SIX_Enum_BEGIN_string_to_int static const std::map<std::string, int>& string_to_int_() { static const std::map<std::string, int> retval {
     #define SIX_Enum_END_enum NOT_SET = six::NOT_SET_VALUE };
     #define SIX_Enum_END_string_to_int SIX_Enum_map_entry_NOT_SET }; return retval; }
 
