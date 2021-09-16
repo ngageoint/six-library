@@ -45,9 +45,6 @@ namespace nitf
     NITF_ENUM(5, Representation, R, G, B, M, LU);
     NITF_ENUM(2, Subcategory, I, Q);
 
-    NITF_ENUM(3, TestTestTest, A, B, C);
-
-
 /*!
  *  \class BandInfo
  *  \brief  The C++ wrapper for the nitf_BandInfo
