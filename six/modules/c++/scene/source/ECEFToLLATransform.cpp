@@ -98,14 +98,17 @@ double scene::ECEFToLLATransform::computeAltitude(const Vector3& ecef,
     double s = math::square(ecef[0]) + math::square(ecef[1]);
     s = sqrt(s);
 
+    double sin_latitude, cos_latitude;
+    math::SinCos(latitude, sin_latitude, cos_latitude);
+
     const double radius_curvature = model->getEquatorialRadius()
                               / (sqrt(1 - (e_squared *
-                              math::square(sin(latitude)))));
+                              math::square(sin_latitude))));
 
-    double altitude = e_squared * radius_curvature * sin(latitude);
+    double altitude = e_squared * radius_curvature * sin_latitude;
     altitude += ecef[2];
-    altitude *= sin(latitude);
-    altitude += s * cos(latitude);
+    altitude *= sin_latitude;
+    altitude += s * cos_latitude;
     altitude -= radius_curvature;
 
     return altitude;
@@ -132,8 +135,10 @@ double
 scene::ECEFToLLATransform::computeReducedLatitude(double latitude) const
 {
     const double f = model->calculateFlattening();
-    const double denominator = cos(latitude);
-    double reducedLatitude = ((1.0 - f) * sin(latitude)) / denominator;
+    double sin_latitude, cos_latitude;
+    math::SinCos(latitude, sin_latitude, cos_latitude);
+    const double denominator = cos_latitude;
+    double reducedLatitude = ((1.0 - f) * sin_latitude) / denominator;
     reducedLatitude = atan(reducedLatitude);
 
     return reducedLatitude;
@@ -149,14 +154,16 @@ scene::ECEFToLLATransform::computeLatitude(const Vector3& ecef,
     double s = math::square(ecef[0]) + math::square(ecef[1]);
     s = sqrt(s);
 
+    double sin_reducedLatitude, cos_reducedLatitude;
+    math::SinCos(reducedLatitude, sin_reducedLatitude, cos_reducedLatitude);
+
     double numerator;
     numerator = e_squared * (1.0 - f);
     numerator /= 1.0 - e_squared;
-    numerator *= r * pow(sin(reducedLatitude), 3);
+    numerator *= r * pow(sin_reducedLatitude, 3);
     numerator += ecef[2];
 
-    double denominator;
-    denominator = s - (e_squared * r * pow(cos(reducedLatitude), 3));
+    const double denominator = s - (e_squared * r * pow(cos_reducedLatitude, 3));
 
     double latitude = 0;
     if (denominator != 0)

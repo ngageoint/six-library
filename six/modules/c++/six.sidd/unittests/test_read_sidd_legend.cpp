@@ -157,10 +157,7 @@ struct TestHelper
     TestHelper() :
         mPathname("test_read_sidd_legend.nitf")
     {
-        mXmlRegistry.addCreator(
-                six::DataType::DERIVED,
-                new six::XMLControlCreatorT<
-                        six::sidd::DerivedXMLControl>());
+        mXmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
         mMonoLegend.setDims(types::RowCol<size_t>(12, 34));
         mMonoLegend.mType = six::PixelType::MONO8I;

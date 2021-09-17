@@ -74,9 +74,7 @@ int main(int argc, char** argv)
         std::unique_ptr<logging::Logger> logger(
                 logging::setupLogger(fs::path(argv[0]).filename().string()));
 
-        six::XMLControlFactory::getInstance().addCreator(
-                six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
         std::vector<std::complex<float> > image(dims.row * dims.col);
 
@@ -119,7 +117,7 @@ int main(int argc, char** argv)
 
 
         six::NITFWriteControl writer(writerOptions, container);
-        writer.setLogger(logger.get());
+        writer.setLogger(*logger);
 
         six::buffer_list buffers;
         buffers.push_back(reinterpret_cast<std::byte*>(image.data()));

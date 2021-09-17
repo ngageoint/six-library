@@ -19,10 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_COMPLEX_DATA_H__
-#define __SIX_COMPLEX_DATA_H__
+#ifndef SIX_sicd_ComplexData_h_INCLUDED_
+#define SIX_sicd_ComplexData_h_INCLUDED_
+#pragma once
 
 #include <memory>
+#include <vector>
 
 #include <gsl/gsl.h>
 
@@ -389,7 +391,27 @@ private:
 
     std::string mVersion;
 };
+
+struct ComplexImageResult final
+{
+    std::unique_ptr<ComplexData> pComplexData;
+    std::vector<std::complex<float>> widebandData;
+    ComplexImageResult() = default;
+    ComplexImageResult(const ComplexImageResult&) = delete;
+    ComplexImageResult& operator=(const ComplexImageResult&) = delete;
+    ComplexImageResult(ComplexImageResult&&) = default;
+    ComplexImageResult& operator=(ComplexImageResult&&) = default;
+};
+struct ComplexImage final
+{
+    const ComplexData& data;
+    const std::complex<float>* image;
+    ComplexImage(const ComplexData& d, const std::complex<float>* i) : data(d), image(i) {}
+    ComplexImage(const ComplexImageResult& r)  : ComplexImage(*(r.pComplexData), r.widebandData.data()) {}
+    ComplexImage(const ComplexImage&) = delete;
+    ComplexImage& operator=(const ComplexImage&) = delete;
+};
 }
 }
 
-#endif
+#endif // SIX_sicd_ComplexData_h_INCLUDED_

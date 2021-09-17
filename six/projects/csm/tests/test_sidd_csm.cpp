@@ -54,8 +54,7 @@ public:
         mPlugin(plugin)
     {
         // Read in the SIDD XML
-        mXmlRegistry.addCreator(six::DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+        mXmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
         mReader.setXMLControlRegistry(&mXmlRegistry);
 

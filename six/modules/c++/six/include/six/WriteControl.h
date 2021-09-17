@@ -22,13 +22,14 @@
 #ifndef __SIX_WRITE_CONTROL_H__
 #define __SIX_WRITE_CONTROL_H__
 
+#include <memory>
+
 #include "six/Types.h"
 #include "six/Region.h"
 #include "six/Container.h"
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
 #include <import/logging.h>
-#include <mem/SharedPtr.h>
 
 namespace six
 {
@@ -256,6 +257,14 @@ struct WriteControl
             delete mLog;
         mLog = log ? log : new logging::NullLogger;
         mOwnLog = log ? ownLog : true;
+    }
+    void setLogger(std::unique_ptr<logging::Logger>&& logger)
+    {
+        setLogger(logger.release(), true /*ownLog*/);
+    }
+    void setLogger(logging::Logger& logger)
+    {
+        setLogger(&logger, false /*ownLog*/);
     }
 
     virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)

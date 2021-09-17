@@ -24,6 +24,7 @@
 #define __SIX_NITF_WRITE_CONTROL_H__
 
 #include <map>
+#include <memory>
 
 #include "six/Types.h"
 #include "six/Container.h"
@@ -31,8 +32,6 @@
 #include "six/NITFImageInfo.h"
 #include "six/Adapters.h"
 #include "six/NITFHeaderCreator.h"
-
-#include <mem/SharedPtr.h>
 
 namespace six
 {
@@ -165,6 +164,14 @@ public:
     void setLogger(logging::Logger* logger, bool ownLog = false)
     {
         mNITFHeaderCreator->setLogger(logger, ownLog);
+    }
+    void setLogger(std::unique_ptr<logging::Logger>&& logger)
+    {
+        setLogger(logger.release(), true /*ownLog*/);
+    }
+    void setLogger(logging::Logger& logger)
+    {
+        setLogger(&logger, false /*ownLog*/);
     }
 
     /*

@@ -23,10 +23,10 @@
 #define __SIX_NITF_HEADER_CREATOR_H__
 
 #include <map>
+#include <memory>
 
 #include "six/Container.h"
 
-#include <mem/SharedPtr.h>
 #include "six/Types.h"
 #include "six/NITFImageInfo.h"
 #include "six/Adapters.h"
@@ -245,6 +245,14 @@ public:
             mLog = new logging::NullLogger;
             mOwnLog = true;
         }
+    }
+    void setLogger(std::unique_ptr<logging::Logger>&& logger)
+    {
+        setLogger(logger.release(), true /*ownLog*/);
+    }
+    void setLogger(logging::Logger& logger)
+    {
+        setLogger(&logger, false /*ownLog*/);
     }
 
     /*!
