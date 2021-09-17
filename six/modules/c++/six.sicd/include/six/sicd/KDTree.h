@@ -1,8 +1,29 @@
-﻿#ifndef SIX_KDTree_h_INCLUDED_
-#define SIX_KDTree_h_INCLUDED_
+﻿/* =========================================================================
+* This file is part of six.sicd-c++
+* =========================================================================
+*
+* (C) Copyright 2021, Maxar Technologies, Inc.
+*
+* six.sicd-c++ is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this program; If not,
+* see <http://www.gnu.org/licenses/>.
+*
+*/
+
+#ifndef SIX_sicd_KDTree_h_INCLUDED_
+#define SIX_sicd_KDTree_h_INCLUDED_
 #pragma once
 
-#include <vector>
 #include <memory>
 
 #include "six/sicd/ImageData.h" // can't forward declare nested KDNode
@@ -32,4 +53,4 @@ namespace six
     }
 }
 
-#endif // SIX_KDTree_h_INCLUDED_
+#endif // SIX_sicd_KDTree_h_INCLUDED_
