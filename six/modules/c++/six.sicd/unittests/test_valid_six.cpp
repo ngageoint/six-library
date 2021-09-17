@@ -268,6 +268,9 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputP
     const auto numBytesPerPixel = complexData.getNumBytesPerPixel();
     TEST_ASSERT_EQ(2, numBytesPerPixel);
 
+    const auto numChannels = complexData.getNumChannels();
+    TEST_ASSERT_EQ(2, numChannels);
+
     return retval;
 }
 
@@ -415,13 +418,14 @@ static std::vector<std::complex<float>> make_complex_image_(std::vector<std::com
     // Make it easier to know what we're looking at when examining a binary dump of the SICD
     std::span<std::byte> pImage(static_cast<std::byte*>(image_data), image.size() * sizeof(image[0]));
     TEST_ASSERT_EQ(32, pImage.size());
-    uint8_t b = 0;
-    for (size_t i = 0; i < pImage.size(); i++)
+
+    pImage[0] = static_cast<std::byte>('[');
+    for (size_t i = 1; i < pImage.size() - 1; i++)
     {
-        pImage[i] = static_cast<std::byte>(b);
-        b++;
+        pImage[i] = static_cast<std::byte>('*');
     }
-    TEST_ASSERT_EQ(32, b);
+    pImage[pImage.size() - 1] = static_cast<std::byte>(']');
+
     return image;
 }
 static std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>& dims, six::PixelType pixelType)
@@ -429,6 +433,7 @@ static std::vector<std::complex<float>> make_complex_image(const types::RowCol<s
     if (pixelType == six::PixelType::RE32F_IM32F)
     {
         return make_complex_image_(dims);
+        //return make_complex_image_(make_complex_image_(dims));
     }
     if (pixelType == six::PixelType::AMP8I_PHS8I)
     {
@@ -514,8 +519,7 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
     //static const std::vector<fs::path> schemaPaths;
     //six::sicd::writeAsNITF(outputName, schemaPaths, *pComplexData, image.data());
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
-    constexpr auto dataType = six::DataType::COMPLEX;
-    auto container = std::make_shared<six::Container>(dataType);
+    auto container = std::make_shared<six::Container>(six::DataType::COMPLEX);
     container->addData(std::move(pComplexData));
     const six::Options writerOptions;
     six::NITFWriteControl writer(writerOptions, container);

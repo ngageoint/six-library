@@ -1,5 +1,7 @@
 %module(package="coda") sio_lite
 
+%include "config.i"
+
 %feature("autodoc", "1");
 %import "sys.i"
 %import "io.i"

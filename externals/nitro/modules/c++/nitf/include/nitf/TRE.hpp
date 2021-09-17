@@ -27,6 +27,8 @@
 #include <string>
 #include <cstddef>
 #include <type_traits>
+#include <stdexcept>
+#include <utility>
 
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
@@ -283,10 +285,13 @@ public:
     void setFieldValue(const std::string& tag, const std::string& value, bool forceUpdate);
     void setFieldValue(const std::string & tag, const char* value, bool forceUpdate);
     void setFieldValue(const std::string& tag, const void* data, size_t dataLength, bool forceUpdate);
+    // Can't do anything with just a pointer, need the size too.
+    template<typename T> void setFieldValue(const std::string&, const T*, bool forceUpdate) = delete;
 
     // This is wrong when T is "const char*" and the field is NITF_BINARY; sizeof(T) won't make sense.
     // That's why there is a "const char*" overload above.
     private:
+        // This is far from a 100% solid check; it will catch many simple mistakes.
         template<typename T> struct can_call_setFieldValue : std::integral_constant<bool,
             std::is_trivially_copyable<T>::value &&
             !std::is_pointer<T>::value && !std::is_array<T>::value> {};
@@ -298,7 +303,7 @@ public:
             if (field.type == NITF_BINARY)
             {
                 // In the C code, this is a call to memcpy(). be sure that is OK for T.
-                static_assert(can_call_setFieldValue<T>::value, "Can't use memcpy() with T.");
+                static_assert(can_call_setFieldValue<T>::value, "Can't call setFieldValue() with T.");
                 setFieldValue(tag, &value, sizeof(value), forceUpdate);
             }
             else
@@ -306,15 +311,13 @@ public:
                 setFieldValue(field, tag, str::toString(value), forceUpdate);
             }
         }
-    // TODO: add overloads for e.g., std::vector<T> ???
-    //template <typename T>
-    //void setFieldValue(const std::string& tag, const std::vector<T>& value, bool forceUpdate)
 
     template <typename T>
-    void setField(const std::string& tag, const T& value, bool forceUpdate = false)
+    void setField(const std::string& tag, T&& value, bool forceUpdate = false)
     {
-        setFieldValue(tag, value, forceUpdate);
+        setFieldValue(tag, std::forward<T>(value), forceUpdate);
     }
+
     void setField(const std::string& tag, const void* data, size_t dataLength, bool forceUpdate = false)
     {
         setFieldValue(tag, data, dataLength, forceUpdate);
