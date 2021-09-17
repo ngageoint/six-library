@@ -565,6 +565,17 @@ function(coda_add_swig_python_module)
         list(APPEND swig_include_dirs ${dep_swig_include_dirs})
     endforeach()
 
+    if (WIN32)
+        set(swig_compile_defs WIN32=1 _WIN32=1)
+        if (CMAKE_GENERATOR_PLATFORM STREQUAL x64)
+            list(APPEND swig_compile_defs _WIN64=1)
+        endif()
+    elseif (UNIX)
+        set(swig_compile_defs _POSIX_C_SOURCE=200809L)
+    endif()
+
+    set_property(SOURCE ${ARG_INPUT}
+                 PROPERTY GENERATED_COMPILE_DEFINITIONS ${swig_compile_defs})
     set_property(SOURCE ${ARG_INPUT} PROPERTY USE_TARGET_INCLUDE_DIRECTORIES ON)
     set_property(SOURCE ${ARG_INPUT} PROPERTY CPLUSPLUS ON)
     set_property(SOURCE ${ARG_INPUT} PROPERTY SWIG_MODULE_NAME ${ARG_MODULE_NAME})
@@ -579,6 +590,8 @@ function(coda_add_swig_python_module)
             SWIG_INCLUDE_DIRECTORIES ${swig_include_dirs})
         set_property(TARGET ${ARG_TARGET} PROPERTY
             SWIG_GENERATED_INCLUDE_DIRECTORIES ${Python_INCLUDE_DIRS})
+        set_property(TARGET ${ARG_TARGET} PROPERTY
+            SWIG_COMPILE_DEFINITIONS ${swig_compile_defs})
     else()
         # use saved SWIG outputs in repo
 

@@ -10,9 +10,9 @@ if _swig_python_version_info < (2, 7, 0):
 
 # Import the low-level C/C++ module
 if __package__ or "." in __name__:
-    from . import _mem
+    from . import _coda_config
 else:
-    import _mem
+    import _coda_config
 
 try:
     import builtins as __builtin__
