@@ -53,6 +53,15 @@ def configure(conf):
 
             untarFile(path=conf.path, fname=ZLIB_VERSION + '.tar')
 
+            # remove minizip's crypt.h and define NOCRYPT and NOUNCRYPT macros
+            # minizip crypt.h clashes with glibc crypt.h
+            crypt_h_path = os.path.join(
+                conf.path.abspath(),
+                ZLIB_VERSION,
+                'contrib', 'minizip', 'crypt.h')
+            if os.path.exists(crypt_h_path):
+                os.remove(crypt_h_path)
+
         else:
             if conf.check(lib='z', uselib_store='ZIP',
                        header_name='zlib.h', function_name='inflate',
@@ -65,6 +74,8 @@ def configure(conf):
                        header_name='zip.h', function_name='zipOpen',
                        msg='Checking for library minizip',
                        mandatory=False)
+        conf.define('NOCRYPT', 1)
+        conf.define('NOUNCRYPT', 1)
 
 
 def writeDefsFile(pathname, *exports):
