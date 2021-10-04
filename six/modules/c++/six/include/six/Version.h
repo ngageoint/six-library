@@ -20,38 +20,27 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef SIX_import_six_h_INCLUDED_
-#define SIX_import_six_h_INCLUDED_
+#ifndef SIX_Version_h_INCLUDED_
+#define SIX_Version_h_INCLUDED_
 #pragma once
 
-#include "six/Adapters.h"
-#include "six/CollectionInformation.h"
-#include "six/Container.h"
-#include "six/Data.h"
-#include "six/Enums.h"
-#include "six/ErrorStatistics.h"
-#include "six/MatchInformation.h"
-#include "six/GeoDataBase.h"
-#include "six/GeoInfo.h"
-#include "six/Mesh.h"
-#include "six/NITFImageInfo.h"
-#include "six/NITFImageInputStream.h"
-#include "six/NITFSegmentInfo.h"
-#include "six/NITFReadControl.h"
-#include "six/NITFWriteControl.h"
-#include "six/Options.h"
-#include "six/Init.h"
-#include "six/Types.h"
-#include "six/Utilities.h"
-#include "six/Parameter.h"
-#include "six/Radiometric.h"
-#include "six/Region.h"
-#include "six/ReadControl.h"
-#include "six/ReadControlFactory.h"
-#include "six/Serialize.h"
-#include "six/WriteControl.h"
-#include "six/XMLControl.h"
-#include "six/XMLControlFactory.h"
-#include "six/Version.h"
+#include "config/Version.h"
+#include "nitf/Version.hpp"
 
-#endif // SIX_import_six_h_INCLUDED_
+#define SIX_VERSION_MAJOR	3
+#define SIX_VERSION_MINOR	1
+#define SIX_VERSION_PATCH	6
+//#define SIX_VERSION_BUILD	0
+//#define SIX_VERSION CODA_OSS_MAKE_VERSION_MMPB(SIX_VERSION_MAJOR, SIX_VERSION_MINOR, SIX_VERSION_PATCH, SIX_VERSION_BUILD)
+#define SIX_VERSION CODA_OSS_MAKE_VERSION_MMP(SIX_VERSION_MAJOR, SIX_VERSION_MINOR, SIX_VERSION_PATCH)
+
+namespace six
+{
+	constexpr auto version = SIX_VERSION;
+	constexpr auto version_major = CODA_OSS_GET_VERSION_MAJOR(SIX_VERSION);
+	constexpr auto version_minor = CODA_OSS_GET_VERSION_MINOR(SIX_VERSION);
+	constexpr auto version_patch = CODA_OSS_GET_VERSION_PATCH(SIX_VERSION);
+	//constexpr auto version_build = CODA_OSS_GET_VERSION_BUILD(SIX_VERSION);
+}
+
+#endif // SIX_Version_h_INCLUDED_

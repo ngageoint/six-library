@@ -85,6 +85,8 @@ elseif(ENABLE_ZIP)
     endif()
 
     set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
+    # remove crypt.h due to name clash with glibc
+    file(REMOVE "${SOURCE_DIR}/contrib/minizip/crypt.h")
     foreach(src "adler32.c" "crc32.c" "deflate.c" "infback.c" "inffast.c"
                 "inflate.c" "inftrees.c" "trees.c" "zutil.c" "compress.c"
                 "uncompr.c" "gzclose.c" "gzlib.c" "gzread.c" "gzwrite.c")
@@ -112,6 +114,9 @@ elseif(ENABLE_ZIP)
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
             ${CODA_INSTALL_OPTION})
 endif()
+
+# disable include of crypt.h in minizip to fix name clash issue with glibc
+target_compile_definitions(minizip PUBLIC -DNOCRYPT -DNOUNCRYPT)
 
 install(TARGETS z minizip
         EXPORT ${CODA_EXPORT_SET_NAME}

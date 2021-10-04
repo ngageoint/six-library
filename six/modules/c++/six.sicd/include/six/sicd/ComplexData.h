@@ -302,9 +302,9 @@ public:
         return mVersion;
     }
 
-    virtual void setVersion(const std::string& version)
+    virtual void setVersion(const std::string& strVersion)
     {
-        mVersion = version;
+        mVersion = strVersion;
     }
 
     /*
