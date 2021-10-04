@@ -91,5 +91,6 @@
 #include "nitf/WriteHandler.hpp"
 #include "nitf/Writer.hpp"
 #include "nitf/WriterOptions.hpp"
+#include "nitf/Version.hpp"
 
 #endif
