@@ -100,8 +100,7 @@ int main(int argc, char** argv)
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         six::XMLControlRegistry registry;
-        registry.addCreator(six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        registry.addCreator<six::sicd::ComplexXMLControl>();
 
         std::unique_ptr<six::sicd::ComplexData> complexData;
         std::vector<std::complex<float> > buffer;

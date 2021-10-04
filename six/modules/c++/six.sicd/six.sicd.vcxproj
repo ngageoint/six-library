@@ -123,6 +123,8 @@
     <ClInclude Include="include\six\sicd\ImageCreation.h" />
     <ClInclude Include="include\six\sicd\ImageData.h" />
     <ClInclude Include="include\six\sicd\ImageFormation.h" />
+    <ClInclude Include="include\six\sicd\KDTree.h" />
+    <ClInclude Include="include\six\sicd\NITFReadComplexXMLControl.h" />
     <ClInclude Include="include\six\sicd\PFA.h" />
     <ClInclude Include="include\six\sicd\Position.h" />
     <ClInclude Include="include\six\sicd\RadarCollection.h" />
@@ -163,6 +165,8 @@
     <ClCompile Include="source\Grid.cpp" />
     <ClCompile Include="source\ImageData.cpp" />
     <ClCompile Include="source\ImageFormation.cpp" />
+    <ClCompile Include="source\KDTree.cpp" />
+    <ClCompile Include="source\NITFReadComplexXMLControl.cpp" />
     <ClCompile Include="source\PFA.cpp" />
     <ClCompile Include="source\Position.cpp" />
     <ClCompile Include="source\RadarCollection.cpp" />

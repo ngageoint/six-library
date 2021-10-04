@@ -1,8 +1,8 @@
 /*
  * =========================================================================
- * This file is part of coda_logging-python 
+ * This file is part of coda_logging-python
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
  *
  * coda_logging-python is free software; you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  */
 
@@ -24,12 +24,14 @@
 
 %feature("autodoc", "1");
 
+%include "config.i"
+
 %{
   #include "import/logging.h"
   using namespace logging;
 %}
 
-%import "std_string.i"
+%include <std_string.i>
 
 %include "logging/Formatter.h"
 %include "logging/StandardFormatter.h"
@@ -48,12 +50,12 @@
 %extend logging::Handler {
 
     // Handlers are assumed to take ownership of Formatter objects passed to
-    // setFormatter(), and delete those objects when needed.  If a SWIG object 
+    // setFormatter(), and delete those objects when needed.  If a SWIG object
     // Python object wrapping a C++ object) is passed this way, the following
     // directive stops SWIG from garbage collecting the C++ part of the object
     // and causing a segfault on the second deletion.
     %apply SWIGTYPE *DISOWN { logging::Formatter* formatter };
-    
+
     void logging::Handler::setFormatter(logging::Formatter* formatter)
     {
         self->setFormatter(formatter);

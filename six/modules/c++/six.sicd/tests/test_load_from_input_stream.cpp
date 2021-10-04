@@ -32,6 +32,7 @@
 #include <io/StandardStreams.h>
 #include <six/Utilities.h>
 #include <six/sicd/ComplexXMLControl.h>
+#include <six/sicd/NITFReadComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 #include <six/sicd/ComplexData.h>
 #include <nitf/IOStreamReader.hpp>
@@ -68,22 +69,12 @@ int main(int argc, char** argv)
         six::sicd::Utilities::readSicd(sicdPathname, schemaPaths,
             fileComplexData, fileWidebandData);
 
-        std::unique_ptr<six::sicd::ComplexData> streamComplexData;
-        std::vector<std::complex<float> > streamWidebandData;
         io::FileInputStream stream(sicdPathname);
-
-        six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<
-            six::sicd::ComplexXMLControl>());
-
-        six::NITFReadControl reader;
-        reader.setXMLControlRegistry(&xmlRegistry);
+        six::sicd::NITFReadComplexXMLControl reader;
         reader.load(stream, schemaPaths);
 
-        streamComplexData = six::sicd::Utilities::getComplexData(reader);
-        six::sicd::Utilities::getWidebandData(reader, *streamComplexData,
-                streamWidebandData);
+        auto streamComplexData = reader.getComplexData();
+        auto streamWidebandData = reader.getWidebandData(*streamComplexData);
 
         if (*streamComplexData != *fileComplexData)
         {

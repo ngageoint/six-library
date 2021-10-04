@@ -51,8 +51,7 @@ public:
         mPlugin(plugin)
     {
         // Read in the SICD XML
-        mXmlRegistry.addCreator(six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        mXmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
         mReader.setXMLControlRegistry(&mXmlRegistry);
 

@@ -155,10 +155,7 @@ int main(int argc, char** argv)
         const size_t maxSize = numCols * 50;
 
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(
-                six::DataType::DERIVED,
-                new six::XMLControlCreatorT<
-                        six::sidd::DerivedXMLControl>());
+        xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
         mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::DERIVED));

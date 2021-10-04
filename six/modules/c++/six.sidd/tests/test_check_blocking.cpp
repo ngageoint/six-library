@@ -209,10 +209,7 @@ int main(int argc, char** argv)
 
         const std::string siddPathname(options->get<std::string>("sidd"));
 
-        six::XMLControlFactory::getInstance().addCreator(
-                six::DataType::DERIVED,
-                new six::XMLControlCreatorT<
-                six::sidd::DerivedXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
 
         std::unique_ptr<six::Data> sidd = read(siddPathname);
 

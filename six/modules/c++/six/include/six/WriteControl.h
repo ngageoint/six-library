@@ -258,6 +258,14 @@ struct WriteControl
         mLog = log ? log : new logging::NullLogger;
         mOwnLog = log ? ownLog : true;
     }
+    void setLogger(std::unique_ptr<logging::Logger>&& logger)
+    {
+        setLogger(logger.release(), true /*ownLog*/);
+    }
+    void setLogger(logging::Logger& logger)
+    {
+        setLogger(&logger, false /*ownLog*/);
+    }
 
     virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
     {

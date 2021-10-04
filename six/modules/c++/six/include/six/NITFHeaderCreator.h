@@ -246,6 +246,14 @@ public:
             mOwnLog = true;
         }
     }
+    void setLogger(std::unique_ptr<logging::Logger>&& logger)
+    {
+        setLogger(logger.release(), true /*ownLog*/);
+    }
+    void setLogger(logging::Logger& logger)
+    {
+        setLogger(&logger, false /*ownLog*/);
+    }
 
     /*!
      * Load a mesh segment's information.

@@ -44,12 +44,15 @@ scene::Vector3 computeUnitVector(const scene::LatLonAlt& latLon)
     const double latRad = latLon.getLatRadians();
     const double lonRad = latLon.getLonRadians();
 
-    const double cosLat = std::cos(latRad);
+    double sinLat, cosLat;
+    math::SinCos(latRad, sinLat, cosLat);
+    double sinLon, cosLon;
+    math::SinCos(lonRad, sinLon, cosLon);
 
     scene::Vector3 unitVector;
-    unitVector[0] = cosLat * std::cos(lonRad);
-    unitVector[1] = cosLat * std::sin(lonRad);
-    unitVector[2] = std::sin(latRad);
+    unitVector[0] = cosLat * cosLon;
+    unitVector[1] = cosLat * sinLon;
+    unitVector[2] = sinLat;
 
     return unitVector;
 }
@@ -830,8 +833,8 @@ computeContour(const Vector3& arpCOA,
     const double ksf = mKSFPoly(thetaCOA);
     const double dKSFDTheta = mKSFPolyPrime(thetaCOA);
 
-    const double cosTheta = cos(thetaCOA);
-    const double sinTheta = sin(thetaCOA);
+    double sinTheta, cosTheta;
+    math::SinCos(thetaCOA, sinTheta, cosTheta);
 
     const double slopeRadial =
         imageGridPoint.row * cosTheta +

@@ -1042,9 +1042,7 @@ void writeSIDD(const std::string& filename, bool /*shouldCompress*/)
     // make bad assumptions about the metadata for this test, so we need
     // to initialize and pass the WriteControl ourselves.
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::DERIVED,
-                           new six::XMLControlCreatorT<
-                                   six::sidd::DerivedXMLControl>());
+    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
     six::NITFWriteControl writer;
     writer.setXMLControlRegistry(&xmlRegistry);
