@@ -166,9 +166,9 @@ protected:
             std::vector<mem::ScopedCloneablePtr<TxStep> >& steps) const;
 
     static
-    std::string versionToURI(const std::string& version)
+    std::string versionToURI(const std::string& strVersion)
     {
-        return ("urn:SICD:" + version);
+        return ("urn:SICD:" + strVersion);
     }
 
 private:

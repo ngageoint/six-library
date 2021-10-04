@@ -33,34 +33,34 @@ namespace six
 namespace sicd
 {
 
-ComplexXMLParser041::ComplexXMLParser041(const std::string& version,
+ComplexXMLParser041::ComplexXMLParser041(const std::string& strVersion,
                                          logging::Logger* log,
                                          bool ownLog) :
-    ComplexXMLParser04x(version, true, std::unique_ptr<six::SICommonXMLParser>(
+    ComplexXMLParser04x(strVersion, true, std::unique_ptr<six::SICommonXMLParser>(
                            new six::SICommonXMLParser01x(
-                               versionToURI(version), true,
-                               versionToURI(version), log)),
+                               versionToURI(strVersion), true,
+                               versionToURI(strVersion), log)),
                         log, ownLog)
 {
 }
 
 ComplexXMLParser041::ComplexXMLParser041(
-    const std::string& version,
+    const std::string& strVersion,
     bool addClassAttributes,
     std::unique_ptr<SICommonXMLParser>&& comParser,
     logging::Logger* log,
     bool ownLog) :
-    ComplexXMLParser04x(version, addClassAttributes, std::move(comParser), log, ownLog)
+    ComplexXMLParser04x(strVersion, addClassAttributes, std::move(comParser), log, ownLog)
 {
 }
 #if !CODA_OSS_cpp17
 ComplexXMLParser041::ComplexXMLParser041(
-    const std::string& version,
+    const std::string& strVersion,
     bool addClassAttributes,
     mem::auto_ptr<SICommonXMLParser> comParser,
     logging::Logger* log,
     bool ownLog) :
-    ComplexXMLParser041(version, addClassAttributes, std::unique_ptr<SICommonXMLParser>(comParser.release()), log, ownLog)
+    ComplexXMLParser041(strVersion, addClassAttributes, std::unique_ptr<SICommonXMLParser>(comParser.release()), log, ownLog)
 {
 }
 #endif
