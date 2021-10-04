@@ -139,7 +139,7 @@ ComplexXMLControl::getParser(const std::string& strVersion) const
     if (parser.get() == nullptr)
     {
         throw except::Exception(
-            Ctxt("Unsupported SICD Version: " + version));
+            Ctxt("Unsupported SICD Version: " + strVersion));
     }
 
     return parser;
