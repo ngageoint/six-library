@@ -81,9 +81,9 @@ xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
 }
 
 std::unique_ptr<DerivedXMLParser>
-DerivedXMLControl::getParser(const std::string& version) const
+DerivedXMLControl::getParser(const std::string& strVersion) const
 {
-    const std::string normalizedVersion = normalizeVersion(version);
+    const std::string normalizedVersion = normalizeVersion(strVersion);
 
     // six.sidd only currently supports --
     //   SIDD 1.0.0

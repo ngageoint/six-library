@@ -221,9 +221,9 @@ protected:
     XMLElem parseCylindricalProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
 
     static
-    std::string versionToURI(const std::string& version)
+    std::string versionToURI(const std::string& strVersion)
     {
-        return ("urn:SIDD:" + version);
+        return ("urn:SIDD:" + strVersion);
     }
 
 private:
