@@ -55,25 +55,15 @@ namespace details
             return retval;
         }
 
-        template<typename TKey, typename TValue>
-        static TValue index(const std::map<TKey, TValue>& map, const TKey& k, const except::Exception& ex)
-        {
-            const auto it = map.find(k);
-            if (it == map.end())
-            {
-                throw ex;
-            }
-            return it->second;
-        }
         static int index(const std::string& v)
         {
             const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
-            return index(string_to_int(), v, ex);
+            return nitf::details::index(string_to_int(), v, ex);
         }
         static std::string index(int v)
         {
             const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
-            return index(int_to_string(), v, ex);
+            return nitf::details::index(int_to_string(), v, ex);
         }
 
     protected:
@@ -108,7 +98,7 @@ namespace details
             std::string type(v);
             str::trim(type);
             const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-            return index(string_to_int(), type, ex);
+            return nitf::details::index(string_to_int(), type, ex);
         }
 
         operator int() const { return value; }

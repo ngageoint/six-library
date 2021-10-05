@@ -43,15 +43,20 @@ namespace nitf
             return retval;
         }
 
-        template<typename TKey, typename TValue>
-        inline TValue index(const std::map<TKey, TValue>& map, const TKey& k) noexcept(false)
+        template<typename TKey, typename TValue, typename TException>
+        inline TValue index(const std::map<TKey, TValue>& map, const TKey& key, const TException& ex) noexcept(false)
         {
-            const auto it = map.find(k);
+            const auto it = map.find(key);
             if (it == map.end())
             {
-                throw std::invalid_argument("key not found in map.");
+                throw ex;
             }
             return it->second;
+        }
+        template<typename TKey, typename TValue>
+        inline TValue index(const std::map<TKey, TValue>& map, const TKey& key)
+        {
+            return index(map, key, std::invalid_argument("key not found in map."));
         }
 
         // You need to specialize string_to_enum() for each "enum class"
