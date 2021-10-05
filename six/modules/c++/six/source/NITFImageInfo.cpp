@@ -368,9 +368,9 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixel
         throw except::Exception(Ctxt("Unknown pixel type"));
     }
 
-    for (size_t i = 0; i < bands.size(); ++i)
+    for (auto& band : bands)
     {
-        bands[i].getImageFilterCondition().set("N");
+        band.getImageFilterCondition().set("N");
     }
     return bands;
 }

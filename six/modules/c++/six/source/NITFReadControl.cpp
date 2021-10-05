@@ -207,17 +207,15 @@ DataType NITFReadControl::getDataType(const std::string& fromFile) const
     }
 }
 
-void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
-                                      const NITFImageInfo* info)
+void NITFReadControl::validateSegment(const nitf::ImageSubheader& subheader,
+                                      const NITFImageInfo* info) const
 {
     assert(info != nullptr);
     validateSegment(subheader, *info);
 }
-void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
-                                      const NITFImageInfo& info)
+void NITFReadControl::validateSegment(const nitf::ImageSubheader& subheader,
+                                      const NITFImageInfo& info) const
 {
-    const size_t numBandsSeg = subheader.numImageBands();
-
     const std::string pjust = subheader.pixelJustification();
     // TODO: More validation in here!
     if (pjust != "R")
@@ -228,27 +226,26 @@ void NITFReadControl::validateSegment(nitf::ImageSubheader subheader,
     // The number of bytes per pixel, which we count to be 3 in the
     // case of 24-bit true color and 8 in the case of complex float
     // and 1 in the case of most SIDD data
-    const size_t numBitsPerPixel = subheader.numBitsPerPixel();
-    const size_t numBytesPerPixel = (numBitsPerPixel + 7) / 8;
-    const size_t numBytesSeg = numBytesPerPixel * numBandsSeg;
+    const auto numBandsSeg = subheader.numImageBands();
 
-    const size_t nbpp = info.getData()->getNumBytesPerPixel();
+    const auto numBitsPerPixel = subheader.numBitsPerPixel();
+    const auto numBytesPerPixel = (numBitsPerPixel + 7) / 8;
+    const auto numBytesSeg = numBytesPerPixel * numBandsSeg;
+
+    const auto nbpp = info.getData()->getNumBytesPerPixel();
     if (numBytesSeg != nbpp)
     {
         std::ostringstream ostr;
-        ostr << "Expected [" << nbpp << "] bytes per pixel, found ["
-             << numBytesSeg << "]";
+        ostr << "Expected [" << nbpp << "] bytes per pixel, found [" << numBytesSeg << "]";
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    const size_t numCols = info.getData()->getNumCols();
-    const size_t numColsSubheader = subheader.numCols();
-
+    const auto numCols = info.getData()->getNumCols();
+    const auto numColsSubheader = subheader.numCols();
     if (numColsSubheader != numCols)
     {
         std::ostringstream ostr;
-        ostr << "Invalid column width: was expecting [" << numCols
-             << "], got [" << numColsSubheader << "]";
+        ostr << "Invalid column width: was expecting [" << numCols << "], got [" << numColsSubheader << "]";
         throw except::Exception(Ctxt(ostr.str()));
     }
 }
