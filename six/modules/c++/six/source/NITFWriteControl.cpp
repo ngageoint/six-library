@@ -264,18 +264,21 @@ void NITFWriteControl::save(const buffer_list& imageData,
 }
 
 template<typename TBufferList>
-void NITFWriteControl::save_(const TBufferList& imageData,
+void NITFWriteControl::save_(const TBufferList& imageData_,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
+    const auto imageDataData = imageData_.data();
+    const auto imageDataSize = imageData_.size();
+
     nitf::Record& record = getRecord();
     mWriter.prepareIO(outputFile, record);
     const bool doByteSwap = shouldByteSwap();
 
-    if (getInfos().size() != imageData.size())
+    if (getInfos().size() != imageDataSize)
         throw except::Exception(
                 Ctxt("Require " + std::to_string(getInfos().size()) +
-                     " images, received " + std::to_string(imageData.size())));
+                     " images, received " + std::to_string(imageDataSize)));
 
     // check to see if J2K compression is enabled
     double j2kCompression = (double)getOptions().getParameter(
@@ -334,7 +337,7 @@ void NITFWriteControl::save_(const TBufferList& imageData,
                 {
                     // Assume that the bands are interleaved in memory.  This
                     // makes sense for 24-bit 3-color data.
-                    const auto data = imageData[i] + pixelSize *  segmentInfo.getFirstRow() * numCols;
+                    const auto data = imageDataData[i] + pixelSize *  segmentInfo.getFirstRow() * numCols;
                     const auto start = gsl::narrow<nitf::Off>(chan);
                     const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
                     const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
@@ -354,7 +357,7 @@ void NITFWriteControl::save_(const TBufferList& imageData,
 
                 auto writeHandler(
                         std::make_shared<MemoryWriteHandler>(segmentInfo,
-                                               imageData[i],
+                                               imageDataData[i],
                                                segmentInfo.getFirstRow(),
                                                numCols,
                                                numChannels,

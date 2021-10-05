@@ -48,6 +48,15 @@ namespace six
  */
 class NITFWriteControl : public WriteControl
 {
+    template<typename TBufferList>
+    void save_(const TBufferList&,
+        nitf::IOInterface& outputFile,
+        const std::vector<std::string>& schemaPaths);
+    template<typename TBufferList>
+    void save_(const TBufferList&,
+        const std::string& outputFile,
+        const std::vector<std::string>& schemaPaths);
+
 public:
 
     //! Constructor. Must call initialize to use.
@@ -208,10 +217,6 @@ public:
      *  \param outputFile  Output path to write
      *  \param schemaPaths Directories or files of schema locations
      */
-    template<typename TBufferList>
-    void save_(const TBufferList& list,
-                      const std::string& outputFile,
-                      const std::vector<std::string>& schemaPaths);
     virtual void save(const BufferList& imageData,
                       const std::string& outputFile,
                       const std::vector<std::string>& schemaPaths) override;
@@ -261,10 +266,6 @@ public:
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */
-    template<typename TBufferList>
-    void save_(const TBufferList& list,
-                      nitf::IOInterface& outputFile,
-                      const std::vector<std::string>& schemaPaths);
     virtual void save(const BufferList& list,
                       nitf::IOInterface& outputFile,
                       const std::vector<std::string>& schemaPaths);
