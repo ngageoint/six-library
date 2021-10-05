@@ -26,6 +26,9 @@
 #include <map>
 #include <memory>
 
+#include <std/span>
+#include <std/cstddef>
+
 #include "six/Types.h"
 #include "six/Container.h"
 #include "six/WriteControl.h"
@@ -48,8 +51,8 @@ namespace six
  */
 class NITFWriteControl : public WriteControl
 {
-    template<typename TBufferList>
-    void save_(const TBufferList&,
+    // "using NITFWriteControl::save;" in SICDWriteControl.h
+    void save_(std::span<const std::byte *const>,
         nitf::IOInterface& outputFile,
         const std::vector<std::string>& schemaPaths);
     template<typename TBufferList>

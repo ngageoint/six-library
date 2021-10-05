@@ -263,13 +263,12 @@ void NITFWriteControl::save(const buffer_list& imageData,
     save_(imageData, outputFile, schemaPaths);
 }
 
-template<typename TBufferList>
-void NITFWriteControl::save_(const TBufferList& imageData_,
+void NITFWriteControl::save_(std::span<const std::byte* const> imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    const auto imageDataData = imageData_.data();
-    const auto imageDataSize = imageData_.size();
+    const auto imageDataData = imageData.data();
+    const auto imageDataSize = imageData.size();
 
     nitf::Record& record = getRecord();
     mWriter.prepareIO(outputFile, record);
@@ -406,13 +405,16 @@ void NITFWriteControl::save(const BufferList& imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    save_(imageData, outputFile, schemaPaths);
+    const void* pImageData_ = imageData.data();
+    const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), imageData.size());
+    save_(imageData_, outputFile, schemaPaths);
 }
 void NITFWriteControl::save(const buffer_list& imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::string>& schemaPaths)
 {
-    save_(imageData, outputFile, schemaPaths);
+    const std::span<const std::byte* const> imageData_(imageData.data(), imageData.size());
+    save_(imageData_, outputFile, schemaPaths);
 }
 
 void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPaths)
