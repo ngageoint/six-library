@@ -25,7 +25,8 @@
 
 #include <map>
 #include <memory>
-
+#include <vector>
+#include <complex>
 #include <std/span>
 #include <std/cstddef>
 
@@ -65,6 +66,10 @@ class NITFWriteControl : public WriteControl
     void save_(const TBufferList&,
         const std::string& outputFile,
         const std::vector<std::string>& schemaPaths);
+
+    template<typename TOutputFile>
+    void save_(std::span<const std::complex<float>> imageData,
+        TOutputFile&& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
 
 public:
 
@@ -233,6 +238,9 @@ public:
                       const std::string& outputFile,
                       const std::vector<std::string>& schemaPaths) override;
 
+    void save(std::span<const std::complex<float>> imageData,
+        const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
+
     void save(const NonConstBufferList& imageData,
               const std::string& outputFile,
               const std::vector<std::string>& schemaPaths)
@@ -281,6 +289,8 @@ public:
     virtual void save(const buffer_list& list,
                       nitf::IOInterface& outputFile,
                       const std::vector<std::string>& schemaPaths);
+    void save(std::span<const std::complex<float>> imageData,
+        nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
 
     void save(const NonConstBufferList& list,
               nitf::IOInterface& outputFile,

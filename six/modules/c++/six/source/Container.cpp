@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <six/Container.h>
+
+#include <stdexcept>
 
 namespace six
 {
@@ -28,9 +29,19 @@ Container::Container(DataType dataType) :
     mDataType(dataType)
 {
 }
-
-Container::~Container()
+Container::Container(std::unique_ptr<Data>&& data)
+    : Container(data->getDataType())
 {
+    addData(std::move(data));
+}
+Container::Container(std::unique_ptr<Data>&& data, std::unique_ptr<Legend>&& legend)
+    : Container(six::DataType::DERIVED)
+{
+    if (data->getDataType() != this->getDataType())
+    {
+        throw new std::invalid_argument("'data' must be six::DataType::DERIVED");
+    }
+    addData(std::move(data), std::move(legend));
 }
 
 void Container::addData(Data* data)

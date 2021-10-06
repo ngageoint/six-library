@@ -57,7 +57,7 @@ public:
      *  be DERIVED.
      *
      */
-    DataType getDataType() const
+    DataType getDataType() const noexcept
     {
         return mDataType;
     }
@@ -68,9 +68,11 @@ public:
      *
      */
     Container(DataType dataType);
+    Container(std::unique_ptr<Data>&& data);
+    Container(std::unique_ptr<Data>&& data, std::unique_ptr<Legend>&& legend) noexcept(false); // Only valid for derived data.
 
     //! Destructor
-    virtual ~Container();
+    virtual ~Container() = default;
 
     /*!
      *  Add a new Data object to the back of this container.

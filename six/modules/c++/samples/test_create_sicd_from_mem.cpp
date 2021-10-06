@@ -22,8 +22,8 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
-
 #include <std/filesystem>
+#include <algorithm>
 
 #include <six/NITFHeaderCreator.h>
 #include <sys/Path.h>
@@ -68,8 +68,8 @@ int main(int argc, char** argv)
                                          options->get<size_t>("numCols"));
         const std::string outputName(options->get<std::string>("output"));
         const std::string classLevel(options->get<std::string>("classLevel"));
-        std::vector<std::string> schemaPaths;
-        getSchemaPaths(*options, "--schema", "schema", schemaPaths);
+        std::vector<std::string> schemaPaths_;
+        getSchemaPaths(*options, "--schema", "schema", schemaPaths_);
 
         std::unique_ptr<logging::Logger> logger(
                 logging::setupLogger(fs::path(argv[0]).filename().string()));
@@ -119,9 +119,10 @@ int main(int argc, char** argv)
         six::NITFWriteControl writer(writerOptions, container);
         writer.setLogger(*logger);
 
-        six::buffer_list buffers;
-        buffers.push_back(reinterpret_cast<std::byte*>(image.data()));
-        writer.save(buffers, outputName, schemaPaths);
+        std::vector<std::filesystem::path> schemaPaths;
+        std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+
+        writer.save(image, outputName, schemaPaths);
 
         return 0;
     }

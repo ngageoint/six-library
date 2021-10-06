@@ -24,9 +24,9 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
-
 #include <std/bit>
 #include <std/memory>
+#include <algorithm>
 
 #include <io/ByteStream.h>
 #include <math/Round.h>
@@ -495,4 +495,27 @@ void NITFWriteControl::addAdditionalDES(
 {
     mNITFHeaderCreator->addAdditionalDES(segmentWriter);
 }
+}
+
+template<typename TOutputFile>
+void six::NITFWriteControl::save_(std::span<const std::complex<float>> imageData,
+    TOutputFile&& outputFile, const std::vector<std::filesystem::path>& schemaPaths_)
+{
+    const void* image_data = imageData.data();
+    six::buffer_list buffers{ static_cast<const std::byte*>(image_data) };
+
+    std::vector<std::string> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::filesystem::path& p) { return p.string(); });
+
+    save(buffers, outputFile, schemaPaths);
+}
+void six::NITFWriteControl::save(std::span<const std::complex<float>> imageData,
+    nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
+{
+    save_(imageData, outputFile, schemaPaths);
+}
+void six::NITFWriteControl::save(std::span<const std::complex<float>> imageData,
+    const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
+{
+    save_(imageData, outputFile.string(), schemaPaths);
 }
