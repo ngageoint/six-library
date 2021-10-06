@@ -399,7 +399,7 @@ struct LUT
 struct AmplitudeTable final : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
-    AmplitudeTable() noexcept : 
+    AmplitudeTable() noexcept(false) : 
         LUT(UINT8_MAX+1 /*i.e., 256*/, sizeof(double))
     {
     }

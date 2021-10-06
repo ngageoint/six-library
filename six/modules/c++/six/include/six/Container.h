@@ -67,7 +67,8 @@ public:
      *  or DERIVED (for SIDD products).
      *
      */
-    Container(DataType dataType);
+    Container(DataType dataType);    
+    Container(Data*); // Note that the container takes ownership of the data, so the caller should not delete it.
     Container(std::unique_ptr<Data>&& data);
     Container(std::unique_ptr<Data>&& data, std::unique_ptr<Legend>&& legend) noexcept(false); // Only valid for derived data.
 
