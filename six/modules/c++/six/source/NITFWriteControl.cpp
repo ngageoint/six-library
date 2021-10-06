@@ -213,12 +213,12 @@ static std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segm
 }
 
 template<typename TImageData>
-void NITFWriteControl::writeWithoutNitro(TImageData&& imageData_i,
+void NITFWriteControl::writeWithoutNitro(TImageData& imageData_i,
     const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap)
 {
     for (size_t j = 0; j < imageSegments.size(); ++j)
     {
-        auto writeHandler = makeWriteHandler(imageSegments[j], std::forward<TImageData>(imageData_i), data, doByteSwap);
+        auto writeHandler = makeWriteHandler(imageSegments[j], imageData_i, data, doByteSwap);
         mWriter.setImageWriteHandler(static_cast<int>(startIndex + j), writeHandler);
     }
 }
@@ -261,8 +261,7 @@ void NITFWriteControl::save(const SourceList& imageData,
     addDataAndWrite(schemaPaths);
 }
 
-template<typename TBufferList>
-void NITFWriteControl::save_(const TBufferList& imageData,
+void NITFWriteControl::save_(std::span<const std::byte* const> imageData,
                             const std::string& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
@@ -271,14 +270,16 @@ void NITFWriteControl::save_(const TBufferList& imageData,
             Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
     nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
 
-    save(imageData, bufferedIO, schemaPaths);
+    save_(imageData, bufferedIO, schemaPaths);
     bufferedIO.close();
 }
 void NITFWriteControl::save(const BufferList& imageData,
                             const std::string& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    save_(imageData, outputFile, schemaPaths);
+    const void* pImageData_ = imageData.data();
+    const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), imageData.size());
+    save_(imageData_, outputFile, schemaPaths);
 }
 void NITFWriteControl::save(const buffer_list& imageData,
                             const std::string& outputFile,
@@ -385,7 +386,7 @@ void NITFWriteControl::save_(std::span<const std::byte* const> imageData,
         // The SIDD spec requires that a J2K compressed SIDDs be only a
         // single image segment. However this functionality remains untested.
         const auto numIS = imageSegments.size();
-        const auto imageData_i = imageData[i];
+        const auto& imageData_i = imageData[i];
         if (isBlocking || (enableJ2K && numIS == 1) || !mCompressionOptions.empty())
         {
             if ((isBlocking || (enableJ2K && numIS == 1)) && (pData->getDataType() == six::DataType::COMPLEX))
@@ -421,8 +422,7 @@ void NITFWriteControl::save(const buffer_list& imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::string>& schemaPaths)
 {
-    const std::span<const std::byte* const> imageData_(imageData.data(), imageData.size());
-    save_(imageData_, outputFile, schemaPaths);
+    save_(imageData, outputFile, schemaPaths);
 }
 
 void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPaths)
@@ -490,9 +490,8 @@ void NITFWriteControl::addAdditionalDES(
 }
 }
 
-template<typename TOutputFile>
-void six::NITFWriteControl::save_(std::span<const std::complex<float>> imageData,
-    TOutputFile&& outputFile, const std::vector<std::filesystem::path>& schemaPaths_)
+void six::NITFWriteControl::save(std::span<const std::complex<float>> imageData,
+    nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths_)
 {
     const void* image_data = imageData.data();
     six::buffer_list buffers{ static_cast<const std::byte*>(image_data) };
@@ -503,12 +502,12 @@ void six::NITFWriteControl::save_(std::span<const std::complex<float>> imageData
     save(buffers, outputFile, schemaPaths);
 }
 void six::NITFWriteControl::save(std::span<const std::complex<float>> imageData,
-    nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
-{
-    save_(imageData, outputFile, schemaPaths);
-}
-void six::NITFWriteControl::save(std::span<const std::complex<float>> imageData,
     const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
 {
-    save_(imageData, outputFile.string(), schemaPaths);
+    const size_t bufferSize = getOptions().getParameter(
+        WriteControl::OPT_BUFFER_SIZE,
+        Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
+    nitf::BufferedWriter bufferedIO(outputFile.string(), bufferSize);
+
+    save(imageData, bufferedIO, schemaPaths);
 }
