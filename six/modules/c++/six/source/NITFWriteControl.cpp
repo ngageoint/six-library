@@ -263,17 +263,99 @@ void NITFWriteControl::save(const buffer_list& imageData,
     save_(imageData, outputFile, schemaPaths);
 }
 
+void NITFWriteControl::writeWithNitro(const std::byte* const imageData_i,
+    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data)
+{
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    const auto numCols = data.getNumCols();
+    for (size_t jj = 0; jj < imageSegments.size(); ++jj)
+    {
+        // We will use the ImageWriter provided by NITRO so that we can
+        // take advantage of the built-in compression capabilities
+        nitf::ImageWriter iWriter = mWriter.newImageWriter(static_cast<int>(startIndex + jj), mCompressionOptions);
+        iWriter.setWriteCaching(1);
+
+        nitf::ImageSource iSource;
+        const NITFSegmentInfo segmentInfo = imageSegments[jj];
+        const size_t bandSize = pixelSize * numCols * segmentInfo.getNumRows();
+
+        for (size_t chan = 0; chan < numChannels; ++chan)
+        {
+            // Assume that the bands are interleaved in memory.  This
+            // makes sense for 24-bit 3-color data.
+            const auto pData = imageData_i + pixelSize * segmentInfo.getFirstRow() * numCols;
+            const auto start = gsl::narrow<nitf::Off>(chan);
+            const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
+            const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
+            nitf::MemorySource ms(pData, bandSize, start, numBytesPerPixel, pixelSkip);
+            iSource.addBand(ms);
+        }
+        iWriter.attachSource(iSource);
+    }
+}
+
+void NITFWriteControl::writeWithoutNitro(const std::byte* const imageData_i,
+    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap)
+{
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    const auto numCols = data.getNumCols();
+    for (size_t jj = 0; jj < imageSegments.size(); ++jj)
+    {
+        // this bypasses the normal NITF ImageWriter and streams directly to the output
+        const NITFSegmentInfo segmentInfo = imageSegments[jj];
+
+        auto writeHandler(
+            std::make_shared<MemoryWriteHandler>(segmentInfo,
+                imageData_i,
+                segmentInfo.getFirstRow(),
+                numCols,
+                numChannels,
+                pixelSize * numChannels,
+                doByteSwap));
+        // Could set start index here
+        mWriter.setImageWriteHandler(static_cast<int>(startIndex + jj), writeHandler);
+    }
+}
+
+static const Legend* getLegend(const six::Container* container, size_t i)
+{
+    const auto legend = container->getLegend(i);
+    if (legend)
+    {
+        if (legend->mDims.row * legend->mDims.col != legend->mImage.size())
+        {
+            throw except::Exception(Ctxt("Legend dimensions don't match"));
+        }
+
+        if (legend->mImage.empty())
+        {
+            throw except::Exception(Ctxt("Empty legend"));
+        }
+    }
+    return legend;
+}
+void NITFWriteControl::addLegend(const Legend& legend, int imageNumber)
+{
+    nitf::ImageSource iSource;
+    nitf::MemorySource memSource(legend.mImage, 0 /*start*/, 0 /*pixelSkip*/);
+    iSource.addBand(memSource);
+
+    nitf::ImageWriter iWriter = mWriter.newImageWriter(imageNumber);
+    iWriter.setWriteCaching(1);
+    iWriter.attachSource(iSource);
+}
+
 void NITFWriteControl::save_(std::span<const std::byte* const> imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    const auto imageDataData = imageData.data();
-    const auto imageDataSize = imageData.size();
-
     nitf::Record& record = getRecord();
     mWriter.prepareIO(outputFile, record);
     const bool doByteSwap = shouldByteSwap();
 
+    const auto imageDataSize = imageData.size();
     if (getInfos().size() != imageDataSize)
         throw except::Exception(
                 Ctxt("Require " + std::to_string(getInfos().size()) +
@@ -288,114 +370,42 @@ void NITFWriteControl::save_(std::span<const std::byte* const> imageData,
 
     // TODO maybe we need to see if the compression plug-in is even available
 
-    size_t numImages = getInfos().size();
     createCompressionOptions(mCompressionOptions);
+    size_t numImages = getInfos().size();
     for (size_t i = 0; i < numImages; ++i)
     {
         const auto pInfo = getInfo(i);
-        const NITFImageInfo& info = *pInfo;
-        std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
-        const size_t numIS = imageSegments.size();
-        const size_t numChannels = info.getData()->getNumChannels();
-        const auto pixelSize = info.getData()->getNumBytesPerPixel() / numChannels;
-        const size_t numCols = info.getData()->getNumCols();
+        const std::vector<NITFSegmentInfo> imageSegments = pInfo->getImageSegments();
+        const six::Data* const pData = pInfo->getData();
 
-        nitf::ImageSegment imageSegment =
-                getRecord().getImages()[info.getStartIndex()];
+        const auto startIndex = pInfo->getStartIndex();
+        nitf::ImageSegment imageSegment = getRecord().getImages()[startIndex];
         nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
         const bool isBlocking = subheader.numBlocksPerRow() > 1 || subheader.numBlocksPerCol() > 1;
 
         // The SIDD spec requires that a J2K compressed SIDDs be only a
         // single image segment. However this functionality remains untested.
-        if (isBlocking || (enableJ2K && numIS == 1) ||
-            !mCompressionOptions.empty())
+        const auto numIS = imageSegments.size();
+        const auto imageData_i = imageData[i];
+        if (isBlocking || (enableJ2K && numIS == 1) || !mCompressionOptions.empty())
         {
-            if ((isBlocking || (enableJ2K && numIS == 1)) &&
-                info.getData()->getDataType() == six::DataType::COMPLEX)
+            if ((isBlocking || (enableJ2K && numIS == 1)) && (pData->getDataType() == six::DataType::COMPLEX))
             {
-                throw except::Exception(Ctxt("SICD does not support blocked or "
-                                             "J2K compressed output"));
+                throw except::Exception(Ctxt("SICD does not support blocked or J2K compressed output"));
             }
 
-            for (size_t jj = 0; jj < numIS; ++jj)
-            {
-                // We will use the ImageWriter provided by NITRO so that we can
-                // take advantage of the built-in compression capabilities
-                nitf::ImageWriter iWriter = mWriter.newImageWriter(
-                        static_cast<int>(info.getStartIndex() + jj),
-                        mCompressionOptions);
-                iWriter.setWriteCaching(1);
-
-                nitf::ImageSource iSource;
-                const NITFSegmentInfo segmentInfo = imageSegments[jj];
-                const size_t bandSize =
-                        pixelSize * numCols * segmentInfo.getNumRows();
-
-                for (size_t chan = 0; chan < numChannels; ++chan)
-                {
-                    // Assume that the bands are interleaved in memory.  This
-                    // makes sense for 24-bit 3-color data.
-                    const auto data = imageDataData[i] + pixelSize *  segmentInfo.getFirstRow() * numCols;
-                    const auto start = gsl::narrow<nitf::Off>(chan);
-                    const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
-                    const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
-                    nitf::MemorySource ms(data, bandSize, start, numBytesPerPixel, pixelSkip);
-                    iSource.addBand(ms);
-                }
-                iWriter.attachSource(iSource);
-            }
+            writeWithNitro(imageData_i, imageSegments, startIndex, *pData);
         }
         else
         {
-            // this bypasses the normal NITF ImageWriter and streams directly
-            // to the output
-            for (size_t jj = 0; jj < numIS; ++jj)
-            {
-                const NITFSegmentInfo segmentInfo = imageSegments[jj];
-
-                auto writeHandler(
-                        std::make_shared<MemoryWriteHandler>(segmentInfo,
-                                               imageDataData[i],
-                                               segmentInfo.getFirstRow(),
-                                               numCols,
-                                               numChannels,
-                                               pixelSize * numChannels,
-                                               doByteSwap));
-                // Could set start index here
-                mWriter.setImageWriteHandler(static_cast<int>(
-                                                     info.getStartIndex() + jj),
-                                             writeHandler);
-            }
+            writeWithoutNitro(imageData_i, imageSegments, startIndex, *pData, doByteSwap);
         }
 
-        const Legend* const legend = getContainer()->getLegend(i);
+        const Legend* const legend = getLegend(getContainer().get(), i);
         if (legend)
         {
-            if (legend->mDims.row * legend->mDims.col != legend->mImage.size())
-            {
-                throw except::Exception(Ctxt("Legend dimensions don't match"));
-            }
-
-            if (legend->mImage.empty())
-            {
-                throw except::Exception(Ctxt("Empty legend"));
-            }
-
-            nitf::ImageSource iSource;
-
-            nitf::MemorySource memSource(legend->mImage.data(),
-                                         legend->mImage.size(),
-                                         0,
-                                         sizeof(std::byte),
-                                         0);
-
-            iSource.addBand(memSource);
-
-            nitf::ImageWriter iWriter = mWriter.newImageWriter(
-                    static_cast<int>(info.getStartIndex() + numIS));
-            iWriter.setWriteCaching(1);
-            iWriter.attachSource(iSource);
+            addLegend(*legend, static_cast<int>(startIndex + numIS));
         }
     }
 

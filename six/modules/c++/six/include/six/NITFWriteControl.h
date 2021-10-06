@@ -51,6 +51,12 @@ namespace six
  */
 class NITFWriteControl : public WriteControl
 {
+    void writeWithNitro(const std::byte* const imageData_i,
+        const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&);
+    void writeWithoutNitro(const std::byte* const imageData_i,
+        const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&, bool doByteSwap);
+    void addLegend(const Legend&, int imageNumber);
+
     // "using NITFWriteControl::save;" in SICDWriteControl.h
     void save_(std::span<const std::byte *const>,
         nitf::IOInterface& outputFile,
