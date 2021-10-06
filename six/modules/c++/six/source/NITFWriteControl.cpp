@@ -263,35 +263,42 @@ void NITFWriteControl::save(const buffer_list& imageData,
     save_(imageData, outputFile, schemaPaths);
 }
 
-void NITFWriteControl::writeWithNitro(const std::byte* const imageData_i,
-    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data)
+static void writeWithNitro_(const std::byte* const imageData_i, const NITFSegmentInfo& segmentInfo, const Data& data, nitf::ImageWriter& iWriter)
 {
     const auto numChannels = data.getNumChannels();
     const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
     const auto numCols = data.getNumCols();
+
+    // We will use the ImageWriter provided by NITRO so that we can
+    // take advantage of the built-in compression capabilities
+    iWriter.setWriteCaching(1);
+
+    nitf::ImageSource iSource;
+    const size_t bandSize = pixelSize * numCols * segmentInfo.getNumRows();
+
+    for (size_t chan = 0; chan < numChannels; ++chan)
+    {
+        // Assume that the bands are interleaved in memory.  This
+        // makes sense for 24-bit 3-color data.
+        const auto pData = imageData_i + pixelSize * segmentInfo.getFirstRow() * numCols;
+        const auto start = gsl::narrow<nitf::Off>(chan);
+        const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
+        const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
+        nitf::MemorySource ms(pData, bandSize, start, numBytesPerPixel, pixelSkip);
+        iSource.addBand(ms);
+    }
+    iWriter.attachSource(iSource);
+}
+void NITFWriteControl::writeWithNitro(const std::byte* const imageData_i,
+    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data)
+{
     for (size_t jj = 0; jj < imageSegments.size(); ++jj)
     {
         // We will use the ImageWriter provided by NITRO so that we can
         // take advantage of the built-in compression capabilities
         nitf::ImageWriter iWriter = mWriter.newImageWriter(static_cast<int>(startIndex + jj), mCompressionOptions);
-        iWriter.setWriteCaching(1);
-
-        nitf::ImageSource iSource;
         const NITFSegmentInfo segmentInfo = imageSegments[jj];
-        const size_t bandSize = pixelSize * numCols * segmentInfo.getNumRows();
-
-        for (size_t chan = 0; chan < numChannels; ++chan)
-        {
-            // Assume that the bands are interleaved in memory.  This
-            // makes sense for 24-bit 3-color data.
-            const auto pData = imageData_i + pixelSize * segmentInfo.getFirstRow() * numCols;
-            const auto start = gsl::narrow<nitf::Off>(chan);
-            const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
-            const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
-            nitf::MemorySource ms(pData, bandSize, start, numBytesPerPixel, pixelSkip);
-            iSource.addBand(ms);
-        }
-        iWriter.attachSource(iSource);
+        writeWithNitro_(imageData_i, segmentInfo, data, iWriter);
     }
 }
 
@@ -308,11 +315,8 @@ void NITFWriteControl::writeWithoutNitro(const std::byte* const imageData_i,
 
         auto writeHandler(
             std::make_shared<MemoryWriteHandler>(segmentInfo,
-                imageData_i,
-                segmentInfo.getFirstRow(),
-                numCols,
-                numChannels,
-                pixelSize * numChannels,
+                imageData_i, segmentInfo.getFirstRow(),
+                numCols, numChannels, pixelSize * numChannels,
                 doByteSwap));
         // Could set start index here
         mWriter.setImageWriteHandler(static_cast<int>(startIndex + jj), writeHandler);
@@ -351,15 +355,16 @@ void NITFWriteControl::save_(std::span<const std::byte* const> imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    nitf::Record& record = getRecord();
-    mWriter.prepareIO(outputFile, record);
-    const bool doByteSwap = shouldByteSwap();
-
     const auto imageDataSize = imageData.size();
     if (getInfos().size() != imageDataSize)
         throw except::Exception(
                 Ctxt("Require " + std::to_string(getInfos().size()) +
                      " images, received " + std::to_string(imageDataSize)));
+
+    nitf::Record& record = getRecord();
+    mWriter.prepareIO(outputFile, record);
+    const bool doByteSwap = shouldByteSwap();
+
 
     // check to see if J2K compression is enabled
     double j2kCompression = (double)getOptions().getParameter(
