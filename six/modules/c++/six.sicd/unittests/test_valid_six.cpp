@@ -171,6 +171,17 @@ TEST_CASE(valid_six_50x50)
     TEST_ASSERT_EQ(actual, classificationText);
 
     //const auto& imageData = *(data->imageData);
+
+    const six::NITFImageInfo nitfImageInfo(pComplexData.get());
+
+    const auto pixelType = nitfImageInfo.getPixelType();
+    TEST_ASSERT_EQ(nitf::PixelType::Complex, pixelType);
+
+    const auto blockingMode = nitfImageInfo.getBlockingMode();
+    TEST_ASSERT_EQ(nitf::BlockingMode::Pixel, blockingMode);
+
+    const auto imageRepresentation = nitfImageInfo.getImageRepresentation();
+    TEST_ASSERT_EQ(nitf::ImageRepresentation::NODISPLY, imageRepresentation);
 }
 
 static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value)
@@ -270,6 +281,17 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputP
 
     const auto numChannels = complexData.getNumChannels();
     TEST_ASSERT_EQ(2, numChannels);
+
+    const six::NITFImageInfo nitfImageInfo(&complexData);
+
+    const auto pixelType = nitfImageInfo.getPixelType();
+    TEST_ASSERT_EQ(nitf::PixelType::BiValued, pixelType);
+
+    const auto blockingMode = nitfImageInfo.getBlockingMode();
+    TEST_ASSERT_EQ(nitf::BlockingMode::Pixel, blockingMode);
+
+    const auto imageRepresentation = nitfImageInfo.getImageRepresentation();
+    TEST_ASSERT_EQ(nitf::ImageRepresentation::NODISPLY, imageRepresentation);
 
     return retval;
 }

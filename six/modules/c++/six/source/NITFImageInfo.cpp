@@ -380,11 +380,13 @@ nitf::PixelType six::NITFImageInfo::getPixelType(PixelType pixelType)
     switch (pixelType)
     {
     case PixelType::RE32F_IM32F:
-        return nitf::PixelType::Floating; // "R"
+        return nitf::PixelType::Complex; // "R"
     case PixelType::RE16I_IM16I:
         return nitf::PixelType::Signed; // "SI"
+    case PixelType::AMP8I_PHS8I:
+        return nitf::PixelType::BiValued; // "B"
 
-    // TODO: BiValued, Complex, Pseudo12 ?
+    // TODO: Complex, Pseudo12 ?
 
     default:
         return nitf::PixelType::Integer; // "INT"
@@ -392,7 +394,14 @@ nitf::PixelType six::NITFImageInfo::getPixelType(PixelType pixelType)
 }
 std::string six::NITFImageInfo::getPixelValueType(PixelType pixelType)
 {
-    return to_string(getPixelType(pixelType));
+    // return to_string(getPixelType(pixelType));
+    switch (pixelType)
+    {
+    case PixelType::RE32F_IM32F:
+        return "R"; // TODO: should this be "C"?, see above
+    default:
+        return to_string(getPixelType(pixelType));
+    }
 }
 
 nitf::ImageRepresentation  six::NITFImageInfo::getImageRepresentation(PixelType pixelType)
