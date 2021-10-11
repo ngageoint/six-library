@@ -28,6 +28,8 @@
 #include <map>
 #include <stdexcept>
 
+#include "str/Manip.h"
+
 namespace nitf
 {
     namespace details
@@ -106,8 +108,9 @@ namespace nitf
         return details::to_string(v);
     }
     template<typename T>
-    inline T from_string(const std::string& v) noexcept(false)
+    inline T from_string(std::string v) noexcept(false)
     {
+        str::trim(v);
         return details::from_string<T>(v);
     }
 }

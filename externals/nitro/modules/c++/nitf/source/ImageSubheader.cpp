@@ -108,7 +108,7 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
     if (!x)
         throw nitf::NITFException(&error);
 }
-void ImageSubheader::setPixelInformation(PixelType pvtype,
+void ImageSubheader::setPixelInformation(PixelValueType pvtype,
                          uint32_t nbpp,
                          uint32_t abpp,
                          std::string justification,

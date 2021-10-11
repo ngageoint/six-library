@@ -38,6 +38,7 @@
 #include "System.hpp"
 #include "Enum.hpp"
 
+
 /*!
  *  \file ImageSubheader.hpp
  *  \brief  Contains wrapper implementation for ImageSubheader
@@ -45,7 +46,7 @@
 
 namespace nitf
 {
-    enum class PixelType
+    enum class PixelValueType
     {
         Integer = NITF_IMAGE_IO_PIXEL_TYPE_INT,
         BiValued = NITF_IMAGE_IO_PIXEL_TYPE_B,
@@ -54,10 +55,10 @@ namespace nitf
         Complex = NITF_IMAGE_IO_PIXEL_TYPE_C,
         Pseudo12 = NITF_IMAGE_IO_PIXEL_TYPE_12
     };
-    NITF_ENUM_define_string_to_enum_begin(PixelType)
-    { "INT", PixelType::Integer }, { "B", PixelType::BiValued }, { "SI", PixelType::Signed },
-    { "R", PixelType::Floating }, { "C", PixelType::Complex },      
-    { "12", PixelType::Pseudo12 }  // ImageIO.c doesn't look at pixelType in this case, rather (nBits == 12) && (nBitsActual == 12)
+    NITF_ENUM_define_string_to_enum_begin(PixelValueType)
+    { "INT", PixelValueType::Integer }, { "B", PixelValueType::BiValued }, { "SI", PixelValueType::Signed },
+    { "R", PixelValueType::Floating }, { "C", PixelValueType::Complex },
+    { "12", PixelValueType::Pseudo12 }  // ImageIO.c doesn't look at pixelType in this case, rather (nBits == 12) && (nBitsActual == 12)
     NITF_ENUM_define_string_to_end
 
     // see ComplexityLevel.c
@@ -65,7 +66,7 @@ namespace nitf
     enum class ImageRepresentation { MONO, RGB, RGB_LUT, MULTI, NODISPLY };
     NITF_ENUM_define_string_to_enum_begin(ImageRepresentation) // need to do this manually because of "RGB/LUT"
     { "MONO", ImageRepresentation::MONO }, { "RGB", ImageRepresentation::RGB }, { "RGB/LUT", ImageRepresentation::RGB_LUT }, { "MULTI", ImageRepresentation::MULTI },
-    { "NODISPLY", ImageRepresentation::NODISPLY } // used in SIX code, TODO: should this be MULTI?
+    { "NODISPLY", ImageRepresentation::NODISPLY }
     NITF_ENUM_define_string_to_end
 
     // see nitf_ImageIO_setup_SBR() in ImageIO.c
@@ -118,7 +119,7 @@ public:
                              std::string justification,
                              std::string irep, std::string icat,
                              std::vector<nitf::BandInfo>& bands);
-    void setPixelInformation(PixelType pvtype,
+    void setPixelInformation(PixelValueType pvtype,
                              uint32_t nbpp,
                              uint32_t abpp,
                              std::string justification,
@@ -326,12 +327,16 @@ public:
 
     //! Get the pixelValueType
     nitf::Field getPixelValueType() const;
+    PixelValueType pixelValueType() const { return from_string<PixelValueType>(getPixelValueType()); }
 
     //! Get the imageRepresentation
     nitf::Field getImageRepresentation() const;
-    std::string imageRepresentation() const
+    ImageRepresentation imageRepresentation() const { return from_string<ImageRepresentation>(getImageRepresentation()); }
+    std::string strImageRepresentation() const
     {
-        return getImageRepresentation().toTrimString();
+        auto retval = to_string(imageRepresentation());
+        str::trim(retval);
+        return retval;
     }
 
     //! Get the imageCategory
@@ -395,9 +400,10 @@ public:
 
     //! Get the imageMode
     nitf::Field getImageMode() const;
+    BlockingMode imageBlockingMode() const { return from_string<BlockingMode>(getImageMode()); }
     std::string imageMode() const
     {
-        return getImageMode(); // nitf::Field implicitly converts to std::string
+        return to_string(imageBlockingMode());
     }
 
     //! Get the numBlocksPerRow

@@ -79,17 +79,18 @@ static void writeImage(nitf::ImageSegment &segment,
     if (optz)
     {
         const auto irep = segment.getSubheader().imageRepresentation();
+        const auto irepStartsWithRGB = (irep == nitf::ImageRepresentation::RGB) || (irep == nitf::ImageRepresentation::RGB_LUT);
         const auto ic = segment.getSubheader().imageCompression();
 
-        const auto imageMode = segment.getSubheader().getImageMode().toString();
-        if ((nBands == 3) && (imageMode == "P") && str::startsWith(irep, "RGB")
+        const auto imageMode = segment.getSubheader().imageBlockingMode();
+        if ((nBands == 3) && (imageMode == nitf::BlockingMode::Pixel) && irepStartsWithRGB
                 && (NITF_NBPP_TO_BYTES(nBits) == 1) && str::startsWith(ic, "N"))
         {
             subWindowSize *= nBands;
             nBands = 1;
             //std::cout << "Using accelerated 3-band RGB mode pix-interleaved image" << std::endl;
         }
-        if ((nBands == 2) && (imageMode == "P") && str::startsWith(ic, "N"))
+        if ((nBands == 2) && (imageMode == nitf::BlockingMode::Pixel) && str::startsWith(ic, "N"))
         {
 
             subWindowSize *= nBands;
@@ -102,11 +103,11 @@ static void writeImage(nitf::ImageSegment &segment,
     TEST_ASSERT_EQ(0, xBands);
     TEST_ASSERT_EQ(50, nRows);
     TEST_ASSERT_EQ(50, nCols);
-    TEST_ASSERT_EQ("R  ", subheader.getPixelValueType().toString());
+    TEST_ASSERT_EQ(nitf::PixelValueType::Floating, subheader.pixelValueType()); // "R"
     TEST_ASSERT_EQ(32, subheader.numBitsPerPixel());
     TEST_ASSERT_EQ("32", subheader.getActualBitsPerPixel().toString());
     TEST_ASSERT_EQ("R", subheader.getPixelJustification().toString());
-    TEST_ASSERT_EQ("P", subheader.getImageMode().toString());
+    TEST_ASSERT_EQ(nitf::BlockingMode::Pixel, subheader.imageBlockingMode()); // "P"
     TEST_ASSERT_EQ(1, subheader.numBlocksPerRow());
     TEST_ASSERT_EQ(1, subheader.numBlocksPerCol());
     TEST_ASSERT_EQ(50, subheader.numPixelsPerHorizBlock());
