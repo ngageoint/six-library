@@ -375,21 +375,21 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixel
     return bands;
 }
 
-nitf::PixelType six::NITFImageInfo::getPixelType(PixelType pixelType)
+nitf::PixelValueType six::NITFImageInfo::getPixelType(PixelType pixelType)
 {
     switch (pixelType)
     {
     case PixelType::RE32F_IM32F:
-        return nitf::PixelType::Complex; // "R"
+        return nitf::PixelValueType::Complex; // "R"
     case PixelType::RE16I_IM16I:
-        return nitf::PixelType::Signed; // "SI"
+        return nitf::PixelValueType::Signed; // "SI"
     case PixelType::AMP8I_PHS8I:
-        return nitf::PixelType::BiValued; // "B"
+        return nitf::PixelValueType::BiValued; // "B"
 
     // TODO: Complex, Pseudo12 ?
 
     default:
-        return nitf::PixelType::Integer; // "INT"
+        return nitf::PixelValueType::Integer; // "INT"
     }
 }
 std::string six::NITFImageInfo::getPixelValueType(PixelType pixelType)

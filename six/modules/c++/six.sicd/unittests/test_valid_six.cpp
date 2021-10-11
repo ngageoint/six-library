@@ -175,7 +175,7 @@ TEST_CASE(valid_six_50x50)
     const six::NITFImageInfo nitfImageInfo(pComplexData.get());
 
     const auto pixelType = nitfImageInfo.getPixelType();
-    TEST_ASSERT_EQ(nitf::PixelType::Complex, pixelType);
+    TEST_ASSERT_EQ(nitf::PixelValueType::Complex, pixelType);
 
     const auto blockingMode = nitfImageInfo.getBlockingMode();
     TEST_ASSERT_EQ(nitf::BlockingMode::Pixel, blockingMode);
@@ -285,7 +285,7 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputP
     const six::NITFImageInfo nitfImageInfo(&complexData);
 
     const auto pixelType = nitfImageInfo.getPixelType();
-    TEST_ASSERT_EQ(nitf::PixelType::BiValued, pixelType);
+    TEST_ASSERT_EQ(nitf::PixelValueType::BiValued, pixelType);
 
     const auto blockingMode = nitfImageInfo.getBlockingMode();
     TEST_ASSERT_EQ(nitf::BlockingMode::Pixel, blockingMode);

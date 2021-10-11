@@ -93,8 +93,8 @@ public:
     {
         return getPixelValueType(mData->getPixelType());
     }
-    static nitf::PixelType getPixelType(PixelType pixelType);
-    nitf::PixelType getPixelType() const
+    static nitf::PixelValueType getPixelType(PixelType pixelType);
+    nitf::PixelValueType getPixelType() const
     {
         return getPixelType(mData->getPixelType());
     }
