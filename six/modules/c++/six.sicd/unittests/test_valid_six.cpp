@@ -150,6 +150,36 @@ static std::unique_ptr<six::sicd::ComplexData> getComplexData(const six::Contain
     return retval;
 }
 
+static void test_nitf_image_info(six::sicd::ComplexData& complexData, const fs::path& inputPathname)
+{
+    const auto expectedPixelValueType = nitf::PixelValueType::Floating;
+    const auto expectedBlockingMode = nitf::BlockingMode::Pixel;
+    const auto expectedImageRepresentation = nitf::ImageRepresentation::NODISPLY;
+
+    const six::NITFImageInfo nitfImageInfo(&complexData);
+
+    const auto pixelValueType = nitfImageInfo.getPixelType();
+    TEST_ASSERT_EQ(expectedPixelValueType, pixelValueType);
+
+    const auto blockingMode = nitfImageInfo.getBlockingMode();
+    TEST_ASSERT_EQ(expectedBlockingMode, blockingMode);
+
+    const auto imageRepresentation = nitfImageInfo.getImageRepresentation();
+    TEST_ASSERT_EQ(expectedImageRepresentation, imageRepresentation);
+
+    nitf::IOHandle io(inputPathname.string());
+    nitf::Reader reader;
+    nitf::Record record = reader.read(io);
+    for (const auto& recordImage : record.getImages())
+    {
+        const nitf::ImageSegment imageSegment(recordImage);
+        const auto subheader = imageSegment.getSubheader();
+        TEST_ASSERT_EQ(expectedPixelValueType, subheader.pixelValueType());
+        TEST_ASSERT_EQ(expectedBlockingMode, subheader.imageBlockingMode());
+        TEST_ASSERT_EQ(expectedImageRepresentation, subheader.imageRepresentation());
+    }
+}
+
 TEST_CASE(valid_six_50x50)
 {
     const auto inputPathname = getNitfPath("sicd_50x50.nitf");
@@ -172,16 +202,7 @@ TEST_CASE(valid_six_50x50)
 
     //const auto& imageData = *(data->imageData);
 
-    const six::NITFImageInfo nitfImageInfo(pComplexData.get());
-
-    const auto pixelType = nitfImageInfo.getPixelType();
-    TEST_ASSERT_EQ(nitf::PixelValueType::Complex, pixelType);
-
-    const auto blockingMode = nitfImageInfo.getBlockingMode();
-    TEST_ASSERT_EQ(nitf::BlockingMode::Pixel, blockingMode);
-
-    const auto imageRepresentation = nitfImageInfo.getImageRepresentation();
-    TEST_ASSERT_EQ(nitf::ImageRepresentation::NODISPLY, imageRepresentation);
+    test_nitf_image_info(*pComplexData, inputPathname);
 }
 
 static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value)
