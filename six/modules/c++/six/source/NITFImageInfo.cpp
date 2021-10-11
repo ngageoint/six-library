@@ -374,3 +374,67 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixel
     }
     return bands;
 }
+
+nitf::PixelType six::NITFImageInfo::getPixelType(PixelType pixelType)
+{
+    switch (pixelType)
+    {
+    case PixelType::RE32F_IM32F:
+        return nitf::PixelType::Floating; // "R"
+    case PixelType::RE16I_IM16I:
+        return nitf::PixelType::Signed; // "SI"
+
+    // TODO: BiValued, Complex, Pseudo12 ?
+
+    default:
+        return nitf::PixelType::Integer; // "INT"
+    }
+}
+std::string six::NITFImageInfo::getPixelValueType(PixelType pixelType)
+{
+    return to_string(getPixelType(pixelType));
+}
+
+nitf::ImageRepresentation  six::NITFImageInfo::getImageRepresentation(PixelType pixelType)
+{
+    switch (pixelType)
+    {
+    case PixelType::MONO8LU:
+    case PixelType::MONO8I:
+    case PixelType::MONO16I:
+        return nitf::ImageRepresentation::MONO;
+    case PixelType::RGB8LU:
+        return nitf::ImageRepresentation::RGB_LUT;
+    case PixelType::RGB24I:
+        return nitf::ImageRepresentation::RGB;
+    // TODO: nitf::ImageRepresentation::MULTI ?
+    default:
+        return nitf::ImageRepresentation::NODISPLY;
+    }
+}
+std::string six::NITFImageInfo::getRepresentation(PixelType pixelType)
+{
+    return to_string(getImageRepresentation(pixelType));
+}
+
+nitf::BlockingMode six::NITFImageInfo::getBlockingMode(PixelType pixelType)
+{
+
+    switch (pixelType)
+    {
+    case PixelType::RGB8LU:
+    case PixelType::MONO8LU:
+    case PixelType::MONO8I:
+    case PixelType::MONO16I:
+        return nitf::BlockingMode::Block; // "B"
+
+    // TODO: Row, Sequential ?
+
+    default:
+        return nitf::BlockingMode::Pixel; // "P";
+    }
+}
+std::string six::NITFImageInfo::getMode(PixelType pixelType)
+{
+    return to_string(getBlockingMode(pixelType));
+}

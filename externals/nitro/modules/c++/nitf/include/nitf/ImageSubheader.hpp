@@ -62,9 +62,10 @@ namespace nitf
 
     // see ComplexityLevel.c
     //NITF_ENUM(4, ImageRepresentation, MONO, RGB, RGB_LUT, MULTI);
-    enum class ImageRepresentation { MONO, RGB, RGB_LUT, MULTI };
+    enum class ImageRepresentation { MONO, RGB, RGB_LUT, MULTI, NODISPLY };
     NITF_ENUM_define_string_to_enum_begin(ImageRepresentation) // need to do this manually because of "RGB/LUT"
-    { "MONO", ImageRepresentation::MONO }, { "RGB", ImageRepresentation::RGB }, { "RGB/LUT", ImageRepresentation::RGB_LUT }, { "MULTI", ImageRepresentation::MULTI }
+    { "MONO", ImageRepresentation::MONO }, { "RGB", ImageRepresentation::RGB }, { "RGB/LUT", ImageRepresentation::RGB_LUT }, { "MULTI", ImageRepresentation::MULTI },
+    { "NODISPLY", ImageRepresentation::NODISPLY } // used in SIX code, TODO: should this be MULTI?
     NITF_ENUM_define_string_to_end
 
     // see nitf_ImageIO_setup_SBR() in ImageIO.c
