@@ -69,7 +69,7 @@ public:
                   SSL_CTX* ctx,
                   bool serverAuth = false,
                   const std::string& host = "");
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
     SSLConnection(mem::auto_ptr<net::Socket> socket, 
                   SSL_CTX * ctx, 
                   bool serverAuth = false,

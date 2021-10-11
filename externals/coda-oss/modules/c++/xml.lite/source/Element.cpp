@@ -396,7 +396,7 @@ void xml::lite::Element::addChild(std::unique_ptr<xml::lite::Element>&& node)
 {
     addChild(node.release());
 }
-#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+#if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
 void xml::lite::Element::addChild(mem::auto_ptr<xml::lite::Element> node)
 {
     addChild(std::unique_ptr<xml::lite::Element>(node.release()));

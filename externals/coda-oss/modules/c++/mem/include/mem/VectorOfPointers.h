@@ -90,7 +90,7 @@ struct VectorOfPointers
         mValues.resize(mValues.size() + 1);
         mValues.back() = value.release();
     }
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
     template <typename OtherT>
         void push_back(mem::auto_ptr<OtherT> value)
     {
@@ -199,7 +199,7 @@ template <typename T>
         mValues.resize(mValues.size() + 1);
         mValues.back().reset(value.release());
     }
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+   #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
     template <typename OtherT>
         void push_back(mem::auto_ptr<OtherT> value)
     {

@@ -65,7 +65,7 @@ public:
         mPtr(std::move(ptr))
     {
     }
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
     explicit ScopedCopyablePtr(mem::auto_ptr<T> ptr)
     {
         reset(ptr);
@@ -145,7 +145,7 @@ public:
     {
         mPtr = std::move(ptr);
     }
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
     void reset(mem::auto_ptr<T> ptr)
     {
         reset(std::unique_ptr<T>(ptr.release()));
