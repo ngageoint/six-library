@@ -101,7 +101,7 @@ protected:
      * \return A new SSLConnection
      */
     virtual NetConnection* newConnection(std::unique_ptr<net::Socket>&& toServer);
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
     virtual NetConnection* newConnection(mem::auto_ptr<net::Socket> toServer);
     #endif
 
