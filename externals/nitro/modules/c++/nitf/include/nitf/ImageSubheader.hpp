@@ -29,12 +29,14 @@
 #include <import/sys.h>
 
 #include "nitf/ImageSubheader.h"
+#include "nitf/ImageIO.h"
 
 #include "BandInfo.hpp"
 #include "List.hpp"
 #include "FileSecurity.hpp"
 #include "Extensions.hpp"
 #include "System.hpp"
+#include "Enum.hpp"
 
 /*!
  *  \file ImageSubheader.hpp
@@ -43,6 +45,34 @@
 
 namespace nitf
 {
+    enum class PixelType
+    {
+        Integer = NITF_IMAGE_IO_PIXEL_TYPE_INT,
+        BiValued = NITF_IMAGE_IO_PIXEL_TYPE_B,
+        Signed = NITF_IMAGE_IO_PIXEL_TYPE_SI,
+        Floating = NITF_IMAGE_IO_PIXEL_TYPE_R,
+        Complex = NITF_IMAGE_IO_PIXEL_TYPE_C,
+        Pseudo12 = NITF_IMAGE_IO_PIXEL_TYPE_12
+    };
+    NITF_ENUM_define_string_to_enum_begin(PixelType)
+    { "INT", PixelType::Integer }, { "B", PixelType::BiValued }, { "SI", PixelType::Signed },
+    { "R", PixelType::Floating }, { "C", PixelType::Complex },      
+    { "12", PixelType::Pseudo12 }  // ImageIO.c doesn't look at pixelType in this case, rather (nBits == 12) && (nBitsActual == 12)
+    NITF_ENUM_define_string_to_end
+
+    // see ComplexityLevel.c
+    //NITF_ENUM(4, ImageRepresentation, MONO, RGB, RGB_LUT, MULTI);
+    enum class ImageRepresentation { MONO, RGB, RGB_LUT, MULTI };
+    NITF_ENUM_define_string_to_enum_begin(ImageRepresentation) // need to do this manually because of "RGB/LUT"
+    { "MONO", ImageRepresentation::MONO }, { "RGB", ImageRepresentation::RGB }, { "RGB/LUT", ImageRepresentation::RGB_LUT }, { "MULTI", ImageRepresentation::MULTI }
+    NITF_ENUM_define_string_to_end
+
+    // see nitf_ImageIO_setup_SBR() in ImageIO.c
+    //NITF_ENUM(4, BlockingMode, B /*band interleaved by block*/, P /*band interleaved by pixel*/, R /*band interleaved by row*/, S /*band sequential*/);
+    enum class BlockingMode { Block, Pixel, Row, Sequential };
+    NITF_ENUM_define_string_to_enum_begin(BlockingMode)
+    { "B", BlockingMode::Block }, { "P", BlockingMode::Pixel }, { "R", BlockingMode::Row }, { "S", BlockingMode::Sequential }
+    NITF_ENUM_define_string_to_end
 
 /*!
  *  \class ImageSubheader
@@ -86,6 +116,12 @@ public:
                              uint32_t abpp,
                              std::string justification,
                              std::string irep, std::string icat,
+                             std::vector<nitf::BandInfo>& bands);
+    void setPixelInformation(PixelType pvtype,
+                             uint32_t nbpp,
+                             uint32_t abpp,
+                             std::string justification,
+                             ImageRepresentation irep, std::string icat,
                              std::vector<nitf::BandInfo>& bands);
 
     /*!
@@ -168,6 +204,11 @@ public:
                      uint32_t numRowsPerBlock,
                      uint32_t numColsPerBlock,
                      const std::string& imode);
+    void setBlocking(uint32_t numRows,
+                     uint32_t numCols,
+                     uint32_t numRowsPerBlock,
+                     uint32_t numColsPerBlock,
+                     BlockingMode imode);
 
     /*!
      * Compute blocking parameters
