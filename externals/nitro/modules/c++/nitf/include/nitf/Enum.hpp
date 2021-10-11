@@ -27,6 +27,7 @@
 #include <string>
 #include <map>
 #include <stdexcept>
+#include <ostream>
 
 #include "str/Manip.h"
 
@@ -92,8 +93,8 @@ namespace nitf
 #define NITF_ENUM_map_entry_6_(name, n1, n2, n3, n4, n5, n6)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_5_(name, n2, n3, n4, n5, n6)
 
 
-#define NITF_ENUM_define_string_to_enum_begin(name) namespace details { \
-    template<> inline const std::map<std::string, name>& string_to_enum() { \
+#define NITF_ENUM_define_string_to_enum_begin(name)  inline std::ostream& operator<<(std::ostream& os, name e) { os << to_string(e); return os; } \
+    namespace details { template<> inline const std::map<std::string, name>& string_to_enum() { \
     static const std::map<std::string, name> retval {
 #define NITF_ENUM_define_string_to_end }; return retval; } }
 #define NITF_ENUM_define_string_to_enum_(name, ...) NITF_ENUM_define_string_to_enum_begin(name) __VA_ARGS__  \
