@@ -270,6 +270,42 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface)
     load(ioInterface, std::vector<std::string>());
 }
 
+static std::vector<six::NITFImageInfo*> getImageInfos(six::Container& container)
+{
+    std::vector<six::NITFImageInfo*> retval;
+    // For SICD, we'll have exactly one DES
+    // For SIDD, we'll have one SIDD DES per image product
+    // We may also have some SICD DES's (this occurs if the SIDD was generated
+    // from SICD input(s) - these serve as a reference), so we want to skip
+    // over these when saving off NITFImageInfo's
+    if (container.getDataType() == DataType::COMPLEX)
+    {
+        if (container.getNumData() != 1)
+        {
+            throw except::Exception(Ctxt(
+                "SICD file must have exactly 1 SICD DES but got " +
+                std::to_string(container.getNumData())));
+        }
+
+        retval.push_back(new NITFImageInfo(container.getData(0)));
+    }
+    else
+    {
+        // We will validate that we got a SIDD DES per image product in the
+        // for loop below
+        for (size_t ii = 0; ii < container.getNumData(); ++ii)
+        {
+            Data* const data = container.getData(ii);
+            if (data->getDataType() == DataType::DERIVED)
+            {
+                retval.push_back(new NITFImageInfo(data));
+            }
+        }
+    }
+    return retval;
+}
+
+
 void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
                            const std::vector<std::string>& schemaPaths)
 {
@@ -328,44 +364,12 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         }
     }
 
-    // Get the total number of images in the NITF
-    const uint32_t numImages = mRecord.getNumImages();
-    if (numImages == 0)
+    if (mRecord.getNumImages() == 0) // Get the total number of images in the NITF
     {
-        throw except::Exception(Ctxt(
-                "SICD/SIDD files must have at least one image"));
+        throw except::Exception(Ctxt("SICD/SIDD files must have at least one image"));
     }
 
-    // For SICD, we'll have exactly one DES
-    // For SIDD, we'll have one SIDD DES per image product
-    // We may also have some SICD DES's (this occurs if the SIDD was generated
-    // from SICD input(s) - these serve as a reference), so we want to skip
-    // over these when saving off NITFImageInfo's
-    if (mContainer->getDataType() == DataType::COMPLEX)
-    {
-        if (mContainer->getNumData() != 1)
-        {
-            throw except::Exception(Ctxt(
-                    "SICD file must have exactly 1 SICD DES but got " +
-                    std::to_string(mContainer->getNumData())));
-        }
-
-        mInfos.push_back(new NITFImageInfo(mContainer->getData(0)));
-    }
-    else
-    {
-        // We will validate that we got a SIDD DES per image product in the
-        // for loop below
-        for (size_t ii = 0; ii < mContainer->getNumData(); ++ii)
-        {
-            Data* const data = mContainer->getData(ii);
-            if (data->getDataType() == DataType::DERIVED)
-            {
-                mInfos.push_back(new NITFImageInfo(data));
-            }
-        }
-    }
-
+    mInfos = getImageInfos(*mContainer);
     nitf::List images = mRecord.getImages();
 
     // Now go through every image and figure out what clump it's attached
