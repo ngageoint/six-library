@@ -70,6 +70,10 @@ static fs::path nitfRelativelPath(const fs::path& filename)
 {
     return fs::path("six") / "modules" / "c++" / "six" / "tests" / "nitf" / filename;
 }
+static fs::path externals_nitro_RelativelPath(const fs::path& filename)
+{
+    return fs::path("externals") / "nitro" / "modules"/ "c++" / "nitf" / "unittests" / filename;
+}
 
 static fs::path buildRootDir()
 {
@@ -99,6 +103,12 @@ static fs::path getNitfPath(const fs::path& filename)
 {
     const auto root_dir = buildRootDir();
     return root_dir / nitfRelativelPath(filename);
+}
+
+static fs::path getNitfExternalsPath(const fs::path& filename)
+{
+    const auto root_dir = buildRootDir();
+    return root_dir / externals_nitro_RelativelPath(filename);
 }
 
 static fs::path nitfPluginRelativelPath()
@@ -326,7 +336,7 @@ TEST_CASE(read_8bit_ampphs_with_table)
 {
     const fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     const fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
-    const auto inputPathname = getNitfPath(filename);
+    const auto inputPathname = getNitfExternalsPath(filename);
 
     std::optional<six::AmplitudeTable> amplitudeTable;
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
@@ -349,7 +359,7 @@ TEST_CASE(read_8bit_ampphs_no_table)
 {
     const fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     const fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
-    const auto inputPathname = getNitfPath(filename);
+    const auto inputPathname = getNitfExternalsPath(filename);
 
     std::optional<six::AmplitudeTable> amplitudeTable;
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
@@ -398,12 +408,12 @@ TEST_CASE(sicd_readFromNITF)
 
     fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
-    inputPathname = getNitfPath(filename);
+    inputPathname = getNitfExternalsPath(filename);
     buffer = readFromNITF<AMP8I_PHS8I_t>(inputPathname);
 
     subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
-    inputPathname = getNitfPath(filename);
+    inputPathname = getNitfExternalsPath(filename);
     buffer = readFromNITF<AMP8I_PHS8I_t>(inputPathname);
 }
 
@@ -430,12 +440,12 @@ TEST_CASE(test_readSicd)
 
     fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
-    inputPathname = getNitfPath(filename);
+    inputPathname = getNitfExternalsPath(filename);
     widebandData = readSicd<AMP8I_PHS8I_t>(inputPathname);
 
     subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
-    inputPathname = getNitfPath(filename);
+    inputPathname = getNitfExternalsPath(filename);
     widebandData = readSicd<AMP8I_PHS8I_t>(inputPathname);
 }
 
