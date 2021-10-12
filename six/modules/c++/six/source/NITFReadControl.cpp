@@ -80,18 +80,17 @@ void assignLUT(const nitf::ImageSubheader& subheader, six::Legend& legend)
 six::PixelType getPixelType(const nitf::ImageSubheader& subheader)
 {
     const auto iRep = subheader.imageRepresentation();
-    if (iRep == "MONO")
+    if (iRep == nitf::ImageRepresentation::MONO)
     {
         return six::PixelType::MONO8I;
     }
-    else if (iRep == "RGB/LUT")
+    else if (iRep == nitf::ImageRepresentation::RGB_LUT)
     {
         return six::PixelType::RGB8LU;
     }
     else
     {
-        throw except::Exception(Ctxt(
-                "Unexpected image representation '" + iRep + "'"));
+        throw except::Exception(Ctxt("Unexpected image representation '" + to_string(iRep) + "'"));
     }
 }
 }

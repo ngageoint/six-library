@@ -406,7 +406,7 @@ public:
      *  \param node the child element to add
      */
     virtual void addChild(std::unique_ptr<Element>&& node);
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
     virtual void addChild(mem::auto_ptr<Element> node);
     #endif
 

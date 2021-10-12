@@ -39,7 +39,7 @@ logging::setupLogger(const path& program_,
                      size_t logBytes)
 {
     const auto program = program_.string();
-    mem::auto_ptr<logging::Logger> log(new logging::Logger(program));
+    std::unique_ptr<logging::Logger> log(new logging::Logger(program));
 
     // setup logging level
     std::string lev = logLevel;
@@ -89,5 +89,5 @@ logging::setupLogger(const path& program_,
     logHandler->setFormatter(formatter.release());
     log->addHandler(logHandler.release(), true);
 
-    return log;
+    return mem::auto_ptr<logging::Logger>(log.release());
 }

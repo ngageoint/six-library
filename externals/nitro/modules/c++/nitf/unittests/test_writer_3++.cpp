@@ -135,11 +135,11 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     TEST_ASSERT_EQ(0, xBands);
     TEST_ASSERT_EQ(50, nRows);
     TEST_ASSERT_EQ(50, nColumns);
-    TEST_ASSERT_EQ("R  ", subheader.getPixelValueType().toString());
+    TEST_ASSERT_EQ(nitf::PixelValueType::Floating , subheader.pixelValueType());
     TEST_ASSERT_EQ(32, subheader.numBitsPerPixel());
     TEST_ASSERT_EQ("32", subheader.getActualBitsPerPixel().toString());
     TEST_ASSERT_EQ("R", subheader.getPixelJustification().toString());
-    TEST_ASSERT_EQ("P", subheader.getImageMode().toString());
+    TEST_ASSERT_EQ(nitf::BlockingMode::Pixel, subheader.imageBlockingMode());
     TEST_ASSERT_EQ(1, subheader.numBlocksPerRow());
     TEST_ASSERT_EQ(1, subheader.numBlocksPerCol());
     TEST_ASSERT_EQ(50, subheader.numPixelsPerHorizBlock());

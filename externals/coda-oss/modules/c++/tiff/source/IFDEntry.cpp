@@ -201,7 +201,7 @@ void tiff::IFDEntry::addValues(const char* str, int tiffType)
 
     for (size_t ii = 0, len = ::strlen(str) + 1; ii < len; ++ii)
     {
-        mem::auto_ptr<tiff::TypeInterface>
+        std::unique_ptr<tiff::TypeInterface>
             value(tiff::TypeFactory::create(strPtr + ii, static_cast<unsigned short>(tiffType)));
         addValue(value.release());
     }

@@ -51,10 +51,10 @@ int main(int argc, char** argv)
         const size_t bufferSize = str::toType<size_t>(argv[2]) * 1024 * 1024;
 
         net::SocketAddress address(port);
-        mem::auto_ptr<net::Socket> listener =
+        std::unique_ptr<net::Socket> listener =
                 net::TCPServerSocketFactory().create(address);
         net::SocketAddress clientAddress;
-        mem::auto_ptr<net::Socket> client = listener->accept(clientAddress);
+        std::unique_ptr<net::Socket> client = listener->accept(clientAddress);
 
         // First the client sends the # of bytes they'll be sending
         sys::Uint64_T numBytes;

@@ -37,7 +37,7 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     const auto ic = subheader.imageCompression();
 
     //Check for optimization cases - RGB and IQ
-    if ((nBands == 3 && imageMode[0] == 'P' && irep == "RGB" && bytesPerPixel
+    if ((nBands == 3 && imageMode[0] == 'P' && irep ==nitf::ImageRepresentation::RGB && bytesPerPixel
             == 1 && (ic == "NC" || ic == "NM")) || (nBands == 2 && imageMode[0]
             == 'P' && bytesPerPixel == 4 && (ic == "NC" || ic == "NM")))
     {
