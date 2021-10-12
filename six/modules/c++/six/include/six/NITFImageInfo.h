@@ -79,7 +79,6 @@ public:
                   bool computeSegments = false,
                   size_t rowsPerBlock = 0,
                   size_t colsPerBlock = 0);
-
     NITFImageInfo(const NITFImageInfo&) = delete;
     NITFImageInfo& operator=(const NITFImageInfo&) = delete;
 
@@ -121,9 +120,13 @@ public:
         return getBlockingMode(mData->getPixelType());
     }
 
-    Data* getData() const
+    const Data* getData() const
     {
         return mData;
+    }
+    Data* getData_()
+    {
+        return mData_;
     }
 
     std::vector<NITFSegmentInfo> getImageSegments() const
@@ -248,7 +251,8 @@ private:
     void computeSegmentCorners();
 
 private:
-    Data* const mData;
+    const Data* const mData;
+    Data* const mData_;
 
     const nitf::ImageSegmentComputer mSegmentComputer;
 

@@ -411,7 +411,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         // security markings through.  This should be okay, since, if you
         // segment, you have the same security markings
         addImageClassOptions(subheader,
-                             currentInfo->getData()->getClassification());
+                             currentInfo->getData_()->getClassification());
 
         NITFSegmentInfo si;
         si.numRows = numRowsSeg;
@@ -451,7 +451,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
             nitf::LookupTable nitfLut =
                     subheader.getBandInfo(0).getLookupTable();
 
-            currentInfo->getData()->setDisplayLUT(std::make_unique<AmplitudeTable>(nitfLut));
+            currentInfo->getData_()->setDisplayLUT(std::make_unique<AmplitudeTable>(nitfLut));
         }
         currentInfo->addSegment(si);
     }

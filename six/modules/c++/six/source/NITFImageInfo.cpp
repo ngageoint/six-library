@@ -35,18 +35,13 @@ namespace
 {
 struct GetDisplayLutFromData final
 {
-    GetDisplayLutFromData(six::Data& data) :
-        mData(data)
-    {
-    }
-
+    GetDisplayLutFromData(const six::Data& data) : mData(data) { }
     GetDisplayLutFromData(const GetDisplayLutFromData&) = delete;
     GetDisplayLutFromData& operator=(const GetDisplayLutFromData&) = delete;
 
     const six::LUT* operator()() const
     {
         const six::LUT* retval = mData.getDisplayLUT().get();
-
         if ((retval == nullptr) && (mData.getPixelType() == six::PixelType::AMP8I_PHS8I))
         {
             retval = mData.getAmplitudeTable();
@@ -55,7 +50,7 @@ struct GetDisplayLutFromData final
     }
 
 private:
-    six::Data& mData;
+    const six::Data& mData;
 };
 }
 
@@ -99,7 +94,7 @@ NITFImageInfo::NITFImageInfo(Data* data,
                              bool computeSegments,
                              size_t rowsPerBlock,
                              size_t colsPerBlock) :
-    mData(data),
+    mData(data), mData_(data),
     mSegmentComputer(data->getNumRows(),
                      data->getNumCols(),
                      data->getNumBytesPerPixel(),
