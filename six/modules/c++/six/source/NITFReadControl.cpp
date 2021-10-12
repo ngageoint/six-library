@@ -91,8 +91,7 @@ six::PixelType getPixelType(const nitf::ImageSubheader& subheader)
     }
     else
     {
-        throw except::Exception(Ctxt(
-                "Unexpected image representation '" + to_string(iRep) + "'"));
+        throw except::Exception(Ctxt("Unexpected image representation '" + to_string(iRep) + "'"));
     }
 }
 }
@@ -272,7 +271,6 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface)
 
 static std::vector<six::NITFImageInfo*> getImageInfos(six::Container& container)
 {
-    std::vector<six::NITFImageInfo*> retval;
     // For SICD, we'll have exactly one DES
     // For SIDD, we'll have one SIDD DES per image product
     // We may also have some SICD DES's (this occurs if the SIDD was generated
@@ -287,24 +285,23 @@ static std::vector<six::NITFImageInfo*> getImageInfos(six::Container& container)
                 std::to_string(container.getNumData())));
         }
 
-        retval.push_back(new NITFImageInfo(container.getData(0)));
+        return std::vector<six::NITFImageInfo*> { new NITFImageInfo(container.getData(0)) };
     }
-    else
+
+    // We will validate that we got a SIDD DES per image product in the
+    // for loop below
+    assert(container.getDataType() == DataType::DERIVED);
+    std::vector<six::NITFImageInfo*> retval;
+    for (size_t ii = 0; ii < container.getNumData(); ++ii)
     {
-        // We will validate that we got a SIDD DES per image product in the
-        // for loop below
-        for (size_t ii = 0; ii < container.getNumData(); ++ii)
+        Data* const data = container.getData(ii);
+        if (data->getDataType() == DataType::DERIVED)
         {
-            Data* const data = container.getData(ii);
-            if (data->getDataType() == DataType::DERIVED)
-            {
-                retval.push_back(new NITFImageInfo(data));
-            }
+            retval.push_back(new NITFImageInfo(data));
         }
     }
     return retval;
 }
-
 
 void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
                            const std::vector<std::string>& schemaPaths)
@@ -380,7 +377,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
        auto segment = static_cast<nitf::ImageSegment>(images[nitfSegmentIdx]);
 
         // Get the subheader out
-        nitf::ImageSubheader subheader = segment.getSubheader();
+        const auto subheader = segment.getSubheader();
 
         // The number of rows in the segment (actual)
         const size_t numRowsSeg = subheader.numRows();
@@ -390,9 +387,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         getIndices(subheader, imageAndSegment);
         if (imageAndSegment.image >= mInfos.size())
         {
-            throw except::Exception(Ctxt(
-                    "Image " + std::to_string(imageAndSegment.image) +
-                    " is out of bounds"));
+            throw except::Exception(Ctxt("Image " + std::to_string(imageAndSegment.image) + " is out of bounds"));
         }
 
         const auto& currentInfo = mInfos[imageAndSegment.image];
@@ -404,7 +399,6 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         // do with the size of the pixel data
         const bool segIsLegend = isLegend(subheader);
         const bool segIsDed = isDed(subheader);
-
         const auto do_validateSegment = six::enable_ded ? !segIsLegend && !segIsDed : !segIsLegend;
         if (do_validateSegment)
         {
@@ -414,14 +408,10 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         // We are propagating the last segment's
         // security markings through.  This should be okay, since, if you
         // segment, you have the same security markings
-        addImageClassOptions(subheader,
-                             currentInfo->getData_()->getClassification());
+        addImageClassOptions(subheader, currentInfo->getData_()->getClassification());
 
         NITFSegmentInfo si;
         si.numRows = numRowsSeg;
-
-        std::vector < NITFSegmentInfo > imageSegments
-                = currentInfo->getImageSegments();
 
         if (productSegmentIdx == 0)
         {
@@ -431,6 +421,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         }
         else
         {
+            const auto imageSegments = currentInfo->getImageSegments();
             si.rowOffset = imageSegments[productSegmentIdx - 1].getNumRows();
             si.firstRow = imageSegments[productSegmentIdx - 1].getFirstRow() +
                     si.getRowOffset();
@@ -449,12 +440,10 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         }
 
         // SIDD 2.0 needs to read LUT directly from NITF
-        if (currentInfo->getData()->getDataType() == DataType::DERIVED &&
-            currentInfo->getData()->getVersion() == "2.0.0")
+        const auto pData = currentInfo->getData();
+        if (pData->getDataType() == DataType::DERIVED && pData->getVersion() == "2.0.0")
         {
-            nitf::LookupTable nitfLut =
-                    subheader.getBandInfo(0).getLookupTable();
-
+            nitf::LookupTable nitfLut = subheader.getBandInfo(0).getLookupTable();
             currentInfo->getData_()->setDisplayLUT(std::make_unique<AmplitudeTable>(nitfLut));
         }
         currentInfo->addSegment(si);
