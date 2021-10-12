@@ -61,11 +61,11 @@ static nitf::ImageSubheader setImageSubHeader(
    bandI.getImageFilterCode().set("   ");
    bandI.getNumLUTs().set(0);
    bands.push_back(bandI);
-   const std::string pixelValueType = "INT";
+   const auto pixelValueType = nitf::PixelValueType::Integer;
    const int64_t numBitsPerPixel = 8;
    const int64_t actualBitsPerPixel = 8;
    const std::string pixelJustification = "R";
-   const std::string imageRepresentation = "MONO";
+   const auto imageRepresentation = nitf::ImageRepresentation::MONO;
    const std::string imageCategory = "SOS";
 
    imgSubHdr.setPixelInformation(

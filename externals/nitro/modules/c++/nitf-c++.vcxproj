@@ -92,6 +92,7 @@
     <ClInclude Include="nitf\include\nitf\DESegment.hpp" />
     <ClInclude Include="nitf\include\nitf\DESubheader.hpp" />
     <ClInclude Include="nitf\include\nitf\DownSampler.hpp" />
+    <ClInclude Include="nitf\include\nitf\Enum.hpp" />
     <ClInclude Include="nitf\include\nitf\exports.hpp" />
     <ClInclude Include="nitf\include\nitf\Extensions.hpp" />
     <ClInclude Include="nitf\include\nitf\Field.hpp" />

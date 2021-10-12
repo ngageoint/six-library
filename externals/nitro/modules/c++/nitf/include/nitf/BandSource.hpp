@@ -69,6 +69,10 @@ struct NITRO_NITFCPP_API MemorySource : public BandSource
      */
     MemorySource(const void* data, size_t size, nitf::Off start,
             int numBytesPerPixel, int pixelSkip);
+
+    template<typename TSpanLike>
+    MemorySource(const TSpanLike& span, nitf::Off start, int pixelSkip)
+        : MemorySource(span.data(), span.size(), start, sizeof(span[0]), pixelSkip) {}
 };
 
 /*!

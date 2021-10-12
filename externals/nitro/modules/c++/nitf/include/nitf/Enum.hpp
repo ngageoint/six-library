@@ -27,6 +27,9 @@
 #include <string>
 #include <map>
 #include <stdexcept>
+#include <ostream>
+
+#include "str/Manip.h"
 
 namespace nitf
 {
@@ -43,15 +46,20 @@ namespace nitf
             return retval;
         }
 
-        template<typename TKey, typename TValue>
-        inline TValue index(const std::map<TKey, TValue>& map, const TKey& k) noexcept(false)
+        template<typename TKey, typename TValue, typename TException>
+        inline TValue index(const std::map<TKey, TValue>& map, const TKey& key, const TException& ex) noexcept(false)
         {
-            const auto it = map.find(k);
+            const auto it = map.find(key);
             if (it == map.end())
             {
-                throw std::invalid_argument("key not found in map.");
+                throw ex;
             }
             return it->second;
+        }
+        template<typename TKey, typename TValue>
+        inline TValue index(const std::map<TKey, TValue>& map, const TKey& key)
+        {
+            return index(map, key, std::invalid_argument("key not found in map."));
         }
 
         // You need to specialize string_to_enum() for each "enum class"
@@ -81,11 +89,16 @@ namespace nitf
 #define NITF_ENUM_map_entry_2_(name, n1, n2) NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_(name, n2)
 #define NITF_ENUM_map_entry_3_(name, n1, n2, n3) NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_2_(name, n2, n3)
 #define NITF_ENUM_map_entry_4_(name, n1, n2, n3, n4)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_3_(name, n2, n3, n4)
-#define NITF_ENUM_map_entry_5_(name, n1, n2, n3, n4, n5)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_4_(name, n2, n3, n4, n5),
+#define NITF_ENUM_map_entry_5_(name, n1, n2, n3, n4, n5)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_4_(name, n2, n3, n4, n5)
+#define NITF_ENUM_map_entry_6_(name, n1, n2, n3, n4, n5, n6)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_5_(name, n2, n3, n4, n5, n6)
 
-#define NITF_ENUM_define_string_to_enum_(name, ...) namespace details { \
-    template<> inline const std::map<std::string, name>& string_to_enum() { \
-    static const std::map<std::string, name> retval { __VA_ARGS__ }; return retval; } }
+
+#define NITF_ENUM_define_string_to_enum_begin(name)  inline std::ostream& operator<<(std::ostream& os, name e) { os << to_string(e); return os; } \
+    namespace details { template<> inline const std::map<std::string, name>& string_to_enum() { \
+    static const std::map<std::string, name> retval {
+#define NITF_ENUM_define_string_to_end }; return retval; } }
+#define NITF_ENUM_define_string_to_enum_(name, ...) NITF_ENUM_define_string_to_enum_begin(name) __VA_ARGS__  \
+    NITF_ENUM_define_string_to_end
 
 #define NITF_ENUM(n, name, ...) NITF_ENUM_define_enum_(name, __VA_ARGS__); \
         NITF_ENUM_define_string_to_enum_(name, NITF_ENUM_map_entry_##n##_(name, __VA_ARGS__))
@@ -96,8 +109,9 @@ namespace nitf
         return details::to_string(v);
     }
     template<typename T>
-    inline T from_string(const std::string& v) noexcept(false)
+    inline T from_string(std::string v) noexcept(false)
     {
+        str::trim(v);
         return details::from_string<T>(v);
     }
 }
