@@ -1873,7 +1873,7 @@ std::unique_ptr<six::sidd::DerivedData> initData(const std::string& lutType)
 }
 
 void initProductCreation(six::sidd::ProductCreation& productCreation,
-                         const std::string& version)
+                         const std::string& strVersion)
 {
     productCreation.productName = "ProductName";
     productCreation.productClass = "Unclassified";
@@ -1886,7 +1886,7 @@ void initProductCreation(six::sidd::ProductCreation& productCreation,
     productCreation.classification.createDate = six::DateTime();
     productCreation.classification.classification = "U";
 
-    if (version == "1.0.0")
+    if (strVersion == "1.0.0")
     {
         productCreation.classification.compliesWith.push_back("ICD-710");
     }
@@ -2348,16 +2348,16 @@ void initProductProcessing(six::sidd::ProductProcessing& processing)
 void populateData(six::sidd::DerivedData& siddData,
                   const std::string& lutType,
                   bool smallImage,
-                  const std::string& version)
+                  const std::string& strVersion)
 {
-    siddData.setVersion(version);
+    siddData.setVersion(strVersion);
     size_t elementSize = lutType == "Mono" ? 2 : 3;
 
-    if (version == "2.0.0")
+    if (strVersion == "2.0.0")
     {
         // This will naturally get constructed in the course of 1.0.0
         // Separate field in 2.0.0
-        siddData.getDisplayLUT().reset(new six::LUT(256, elementSize));
+        siddData.setDisplayLUT(std::make_unique<six::AmplitudeTable>(elementSize));
 
         for (size_t ii = 0; ii < siddData.getDisplayLUT()->table.size(); ++ii)
         {
@@ -2383,7 +2383,7 @@ void populateData(six::sidd::DerivedData& siddData,
     siddData.setImageCorners(makeUpCornersFromDMS());
 
     // Can certainly be init'ed in a function
-    initProductCreation(*siddData.productCreation, version);
+    initProductCreation(*siddData.productCreation, strVersion);
 
     // Or directly if preferred
     siddData.display->decimationMethod = DecimationMethod::BRIGHTEST_PIXEL;
@@ -2442,7 +2442,7 @@ void populateData(six::sidd::DerivedData& siddData,
     planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
     planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
 
-    initExploitationFeatures(*siddData.exploitationFeatures, version);
+    initExploitationFeatures(*siddData.exploitationFeatures, strVersion);
     initDED(siddData.digitalElevationData);
     initProductProcessing(*siddData.productProcessing);
     initDownstreamReprocessing(*siddData.downstreamReprocessing);

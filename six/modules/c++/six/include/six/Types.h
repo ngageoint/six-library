@@ -399,8 +399,11 @@ struct LUT
 struct AmplitudeTable final : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
-    AmplitudeTable() noexcept(false) : 
-        LUT(UINT8_MAX+1 /*i.e., 256*/, sizeof(double))
+    AmplitudeTable(size_t elementSize) noexcept(false) :
+        LUT(UINT8_MAX + 1 /*i.e., 256*/, elementSize)
+    {
+    }
+    AmplitudeTable() noexcept(false) :  AmplitudeTable(sizeof(double)) 
     {
     }
     AmplitudeTable(const nitf::LookupTable& lookupTable) noexcept(false) : LUT(lookupTable)
