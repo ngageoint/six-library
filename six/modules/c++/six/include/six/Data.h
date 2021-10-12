@@ -25,6 +25,7 @@
 #include <assert.h>
 
 #include <vector>
+#include <memory>
 
 #include "six/Types.h"
 #include "six/Classification.h"
@@ -182,7 +183,8 @@ struct Data
 
     virtual Classification& getClassification() = 0;
 
-    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT() = 0;
+    virtual const mem::ScopedCopyablePtr<LUT>& getDisplayLUT() const = 0;
+    virtual void setDisplayLUT(std::unique_ptr<AmplitudeTable>&&) = 0;
     virtual AmplitudeTable* getAmplitudeTable() const { return nullptr; }
 
     /*!

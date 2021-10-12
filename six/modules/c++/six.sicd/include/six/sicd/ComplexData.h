@@ -289,7 +289,8 @@ public:
         return mClassification;
     }
 
-    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT() override;
+    virtual const mem::ScopedCopyablePtr<LUT>& getDisplayLUT() const override;
+    virtual void setDisplayLUT(std::unique_ptr<AmplitudeTable>&&) override;
     virtual AmplitudeTable* getAmplitudeTable() const override;
 
     virtual std::string getVendorID() const

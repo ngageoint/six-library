@@ -28,7 +28,7 @@
 #include <vector>
 #include <limits>
 #include <string>
-
+#include <stdexcept>
 #include <std/memory>
 
 #include <scene/sys_Conf.h>
@@ -402,6 +402,13 @@ struct AmplitudeTable final : public LUT
     AmplitudeTable() noexcept(false) : 
         LUT(UINT8_MAX+1 /*i.e., 256*/, sizeof(double))
     {
+    }
+    AmplitudeTable(const nitf::LookupTable& lookupTable) noexcept(false) : LUT(lookupTable)
+    {
+        if (size() != 256)
+        {
+            throw std::invalid_argument("lookupTable should have 256 elements.");
+        }
     }
 
     size_t size() const

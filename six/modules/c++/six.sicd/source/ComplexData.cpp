@@ -323,7 +323,7 @@ void ComplexData::fillDefaultFields()
 }
 }
 // Okay, little bit of a hack for now
-mem::ScopedCopyablePtr<six::LUT>& six::sicd::ComplexData::getDisplayLUT()
+const mem::ScopedCopyablePtr<six::LUT>& six::sicd::ComplexData::getDisplayLUT() const
 {
     if (getPixelType() != PixelType::AMP8I_PHS8I)
     {
@@ -338,6 +338,11 @@ mem::ScopedCopyablePtr<six::LUT>& six::sicd::ComplexData::getDisplayLUT()
     retval.reset(); // in case somebody changed it
     return retval;
 }
+void six::sicd::ComplexData::setDisplayLUT(std::unique_ptr<AmplitudeTable>&& pLUT)
+{
+    imageData->amplitudeTable.reset(pLUT.release());
+}
+
 six::AmplitudeTable* six::sicd::ComplexData::getAmplitudeTable() const
 {
     auto const retval = imageData->amplitudeTable.get();

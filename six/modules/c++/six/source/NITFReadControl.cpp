@@ -25,6 +25,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <std/memory>
 
 #include <gsl/gsl.h>
 
@@ -450,7 +451,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
             nitf::LookupTable nitfLut =
                     subheader.getBandInfo(0).getLookupTable();
 
-            currentInfo->getData()->getDisplayLUT().reset(new LUT(nitfLut));
+            currentInfo->getData()->setDisplayLUT(std::make_unique<AmplitudeTable>(nitfLut));
         }
         currentInfo->addSegment(si);
     }
