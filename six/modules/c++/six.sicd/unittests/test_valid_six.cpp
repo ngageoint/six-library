@@ -50,20 +50,26 @@
 namespace fs = std::filesystem;
 using AMP8I_PHS8I_t = six::sicd::ImageData::AMP8I_PHS8I_t;
 
-static fs::path argv0;
-static const fs::path file = __FILE__;
 static std::string testName;
+
+static fs::path argv0()
+{
+    static const sys::OS os;
+    static const fs::path retval = os.getSpecialEnv("0");
+    return retval;
+}
 
 static bool is_linux()
 {
+    static const fs::path file = __FILE__;
     const auto cpp = file.filename().stem(); // i.e., "test_valid_six"
-    const auto exe = argv0.filename(); // e.g., "test_valid_six.exe"
+    const auto exe = argv0().filename(); // e.g., "test_valid_six.exe"
     return cpp == exe; // no ".exe", must be Linux
 }
 
 static bool is_vs_gtest()
 {
-    return argv0.empty(); // no argv[0] in VS w/GTest
+    return argv0().filename() == "Test.exe";
 }
 
 static fs::path nitfRelativelPath(const fs::path& filename)
@@ -77,11 +83,9 @@ static fs::path externals_nitro_RelativelPath(const fs::path& filename)
 
 static fs::path buildRootDir()
 {
-    const auto cpp = file.filename().stem(); // i.e., "test_valid_six"
-    const auto exe = argv0.filename(); // e.g., "test_valid_six.exe"
     if (is_linux())
     {
-        const auto root_dir = argv0.parent_path().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path();
+        const auto root_dir = argv0().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path();
         return root_dir;
     }
 
@@ -95,7 +99,7 @@ static fs::path buildRootDir()
     else
     {
         // stand-alone
-        const auto root_dir = argv0.parent_path().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path();
+        const auto root_dir = argv0().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path();
         return root_dir;
     }
 }
@@ -587,7 +591,6 @@ TEST_CASE(test_create_sicds_from_mem)
 }
 
 TEST_MAIN((void)argc;
-    argv0 = fs::absolute(argv[0]);
     TEST_CHECK(valid_six_50x50);
     TEST_CHECK(test_8bit_ampphs);
     TEST_CHECK(read_8bit_ampphs_with_table);
