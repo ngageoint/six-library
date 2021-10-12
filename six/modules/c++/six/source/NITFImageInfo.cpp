@@ -384,7 +384,7 @@ nitf::PixelValueType six::NITFImageInfo::getPixelType(PixelType pixelType)
     case PixelType::RE16I_IM16I:
         return nitf::PixelValueType::Signed; // "SI"
     case PixelType::AMP8I_PHS8I:
-        return nitf::PixelValueType::BiValued; // "B"
+        return nitf::PixelValueType::Integer; // "INT"
 
     // TODO: Complex, Pseudo12 ?
 

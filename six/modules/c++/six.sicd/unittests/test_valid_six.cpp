@@ -150,21 +150,21 @@ static std::unique_ptr<six::sicd::ComplexData> getComplexData(const six::Contain
     return retval;
 }
 
-static void test_nitf_image_info(six::sicd::ComplexData& complexData, const fs::path& inputPathname)
+static void test_nitf_image_info(six::sicd::ComplexData& complexData, const fs::path& inputPathname,
+    nitf::PixelValueType expectedPixelValueType)
 {
-    const auto expectedPixelValueType = nitf::PixelValueType::Floating;
     const auto expectedBlockingMode = nitf::BlockingMode::Pixel;
     const auto expectedImageRepresentation = nitf::ImageRepresentation::NODISPLY;
 
     const six::NITFImageInfo nitfImageInfo(&complexData);
 
-    const auto pixelValueType = nitfImageInfo.getPixelType();
+    auto pixelValueType = nitfImageInfo.getPixelType();
     TEST_ASSERT_EQ(expectedPixelValueType, pixelValueType);
 
-    const auto blockingMode = nitfImageInfo.getBlockingMode();
+    auto blockingMode = nitfImageInfo.getBlockingMode();
     TEST_ASSERT_EQ(expectedBlockingMode, blockingMode);
 
-    const auto imageRepresentation = nitfImageInfo.getImageRepresentation();
+    auto imageRepresentation = nitfImageInfo.getImageRepresentation();
     TEST_ASSERT_EQ(expectedImageRepresentation, imageRepresentation);
 
     nitf::IOHandle io(inputPathname.string());
@@ -174,9 +174,15 @@ static void test_nitf_image_info(six::sicd::ComplexData& complexData, const fs::
     {
         const nitf::ImageSegment imageSegment(recordImage);
         const auto subheader = imageSegment.getSubheader();
-        TEST_ASSERT_EQ(expectedPixelValueType, subheader.pixelValueType());
-        TEST_ASSERT_EQ(expectedBlockingMode, subheader.imageBlockingMode());
-        TEST_ASSERT_EQ(expectedImageRepresentation, subheader.imageRepresentation());
+
+        pixelValueType = subheader.pixelValueType();
+        TEST_ASSERT_EQ(expectedPixelValueType, pixelValueType);
+
+        blockingMode = subheader.imageBlockingMode();
+        TEST_ASSERT_EQ(expectedBlockingMode, blockingMode);
+
+        imageRepresentation = subheader.imageRepresentation();
+        TEST_ASSERT_EQ(expectedImageRepresentation, imageRepresentation);
     }
 }
 
@@ -202,7 +208,7 @@ TEST_CASE(valid_six_50x50)
 
     //const auto& imageData = *(data->imageData);
 
-    test_nitf_image_info(*pComplexData, inputPathname);
+    test_nitf_image_info(*pComplexData, inputPathname, nitf::PixelValueType::Floating);
 }
 
 static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value)
@@ -303,16 +309,7 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputP
     const auto numChannels = complexData.getNumChannels();
     TEST_ASSERT_EQ(2, numChannels);
 
-    const six::NITFImageInfo nitfImageInfo(&complexData);
-
-    const auto pixelType = nitfImageInfo.getPixelType();
-    TEST_ASSERT_EQ(nitf::PixelValueType::BiValued, pixelType);
-
-    const auto blockingMode = nitfImageInfo.getBlockingMode();
-    TEST_ASSERT_EQ(nitf::BlockingMode::Pixel, blockingMode);
-
-    const auto imageRepresentation = nitfImageInfo.getImageRepresentation();
-    TEST_ASSERT_EQ(nitf::ImageRepresentation::NODISPLY, imageRepresentation);
+    test_nitf_image_info(complexData, inputPathname, nitf::PixelValueType::Integer);
 
     return retval;
 }
