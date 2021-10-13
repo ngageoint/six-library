@@ -53,7 +53,7 @@ namespace six
 class NITFWriteControl : public WriteControl
 {
     void writeWithNitro(const std::byte* const imageData_i,
-        const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&);
+        const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&, bool unused_ = false);
     template<typename TImageData>
     void writeWithoutNitro(TImageData& imageData_i,
         const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&, bool doByteSwap);

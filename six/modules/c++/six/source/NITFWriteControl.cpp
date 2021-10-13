@@ -185,7 +185,8 @@ bool NITFWriteControl::shouldByteSwap() const
     }
 }
 
-static std::shared_ptr<MemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo, 
+template<typename TNITFSegmentInfo> // avoid "C4505: '...': unreferenced function with internal linkage has been removed"
+static std::shared_ptr<MemoryWriteHandler> makeWriteHandler(TNITFSegmentInfo segmentInfo,
     const std::byte* const imageData_i, const Data& data, bool doByteSwap)
 {
     const auto numChannels = data.getNumChannels();
@@ -315,7 +316,7 @@ static void writeWithNitro_(const std::byte* const imageData_i, const NITFSegmen
     iWriter.attachSource(iSource);
 }
 void NITFWriteControl::writeWithNitro(const std::byte* const imageData_i,
-    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data)
+    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool /*unused_*/)
 {
     for (size_t jj = 0; jj < imageSegments.size(); ++jj)
     {
