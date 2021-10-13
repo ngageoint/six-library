@@ -222,12 +222,14 @@ void NITFReadControl::validateSegment(const nitf::ImageSubheader& subheader,
     const auto numBitsPerPixel = subheader.numBitsPerPixel();
     const auto numBytesPerPixel = (numBitsPerPixel + 7) / 8;
     const auto numBytesSeg = numBytesPerPixel * numBandsSeg;
+    //const auto numChannels = info.getData()->getNumChannels();
+    const auto foundBytesPerPixel = numBytesSeg;
 
-    const auto nbpp = info.getData()->getNumBytesPerPixel();
-    if (numBytesSeg != nbpp)
+    const auto expectedBytesPerPixel = info.getData()->getNumBytesPerPixel();
+    if (foundBytesPerPixel != expectedBytesPerPixel)
     {
         std::ostringstream ostr;
-        ostr << "Expected [" << nbpp << "] bytes per pixel, found [" << numBytesSeg << "]";
+        ostr << "Expected [" << expectedBytesPerPixel << "] bytes per pixel, found [" << foundBytesPerPixel << "]";
         throw except::Exception(Ctxt(ostr.str()));
     }
 
