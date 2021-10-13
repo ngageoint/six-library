@@ -67,8 +67,8 @@ class NITFWriteControl : public WriteControl
     template<typename TImageData>
     void Tsave(TImageData&&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
     void save_(std::span<const std::byte* const>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
-    void save_(std::span<const std::complex<float>>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
-    void save_(std::span<const std::pair<uint8_t, uint8_t>>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    void cxsave_(std::span<const std::complex<float>>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    void psave_(std::span<const std::pair<uint8_t, uint8_t>>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
     void save_(std::span<const std::byte* const>, const std::string& outputFile, const std::vector<std::string>& schemaPaths);
 
     bool prepareIO(size_t, nitf::IOInterface&);
@@ -245,7 +245,7 @@ public:
 
     void save(std::span<const std::complex<float>> imageData,
         const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
-    void save(std::span<const std::pair<uint8_t, uint8_t>> imageData,
+    void psave(std::span<const std::pair<uint8_t, uint8_t>> imageData,
         const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
 
     void save(const NonConstBufferList& imageData,
@@ -298,7 +298,7 @@ public:
                       const std::vector<std::string>& schemaPaths);
     void save(std::span<const std::complex<float>> imageData,
         nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
-    void save(std::span<const std::pair<uint8_t, uint8_t>> imageData,
+    void psave(std::span<const std::pair<uint8_t, uint8_t>> imageData,
         nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
 
 

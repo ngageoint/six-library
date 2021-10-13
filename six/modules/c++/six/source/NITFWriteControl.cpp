@@ -443,13 +443,13 @@ void NITFWriteControl::save_(std::span<const std::byte* const> imageData,
 {
     Tsave(imageData, outputFile, schemaPaths);
 }
-void NITFWriteControl::save_(std::span<const std::complex<float>> imageData,
+void NITFWriteControl::cxsave_(std::span<const std::complex<float>> imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
     Tsave(imageData, outputFile, schemaPaths);
 }
-void NITFWriteControl::save_(std::span<const std::pair<uint8_t, uint8_t>> imageData,
+void NITFWriteControl::psave_(std::span<const std::pair<uint8_t, uint8_t>> imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
@@ -542,7 +542,7 @@ void six::NITFWriteControl::save(std::span<const std::complex<float>> imageData,
     std::vector<std::string> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::filesystem::path& p) { return p.string(); });
 
-    save_(imageData, outputFile, schemaPaths);
+    cxsave_(imageData, outputFile, schemaPaths);
 }
 void six::NITFWriteControl::save(std::span<const std::complex<float>> imageData,
     const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
@@ -555,15 +555,15 @@ void six::NITFWriteControl::save(std::span<const std::complex<float>> imageData,
     save(imageData, bufferedIO, schemaPaths);
 }
 
-void six::NITFWriteControl::save(std::span<const std::pair<uint8_t, uint8_t>> imageData,
+void six::NITFWriteControl::psave(std::span<const std::pair<uint8_t, uint8_t>> imageData,
     nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths_)
 {
     std::vector<std::string> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::filesystem::path& p) { return p.string(); });
 
-    save_(imageData, outputFile, schemaPaths);
+    psave_(imageData, outputFile, schemaPaths);
 }
-void six::NITFWriteControl::save(std::span<const std::pair<uint8_t, uint8_t>> imageData,
+void six::NITFWriteControl::psave(std::span<const std::pair<uint8_t, uint8_t>> imageData,
     const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
 {
     const size_t bufferSize = getOptions().getParameter(
@@ -571,5 +571,5 @@ void six::NITFWriteControl::save(std::span<const std::pair<uint8_t, uint8_t>> im
         Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
     nitf::BufferedWriter bufferedIO(outputFile.string(), bufferSize);
 
-    save(imageData, bufferedIO, schemaPaths);
+    psave(imageData, bufferedIO, schemaPaths);
 }
