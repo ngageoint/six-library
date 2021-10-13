@@ -62,8 +62,8 @@ class NITFWriteControl : public WriteControl
 
     // "using NITFWriteControl::save;" in SICDWriteControl.h
     void save_(std::span<const std::byte *const>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
-    void save_(std::span<const std::complex<float>>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
     void save_(std::span<const std::byte* const>, const std::string& outputFile, const std::vector<std::string>& schemaPaths);
+    void cx_save(std::span<const std::complex<float>>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
 
     bool prepareIO(size_t, nitf::IOInterface&);
 

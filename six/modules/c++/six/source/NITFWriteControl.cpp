@@ -406,7 +406,7 @@ void NITFWriteControl::save_(std::span<const std::byte* const> imageData,
 
     addDataAndWrite(schemaPaths);
 }
-void NITFWriteControl::save_(std::span<const std::complex<float>> imageData,
+void NITFWriteControl::cx_save(std::span<const std::complex<float>> imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::string>& schemaPaths)
 {
@@ -553,7 +553,7 @@ void six::NITFWriteControl::save(std::span<const std::complex<float>> imageData,
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::filesystem::path& p) { return p.string(); });
 
     //save(buffers, outputFile, schemaPaths);
-    save_(imageData, outputFile, schemaPaths);
+    cx_save(imageData, outputFile, schemaPaths);
 }
 void six::NITFWriteControl::save(std::span<const std::complex<float>> imageData,
     const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
