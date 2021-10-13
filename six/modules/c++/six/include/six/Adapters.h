@@ -22,7 +22,10 @@
 #ifndef __SIX_ADAPTERS_H__
 #define __SIX_ADAPTERS_H__
 
+#include <stdint.h>
+
 #include <complex>
+#include <utility>
 #include <std/span>
 #include <std/cstddef>
 
@@ -137,6 +140,10 @@ struct MemoryWriteHandler: public nitf::WriteHandler
     MemoryWriteHandler(const NITFSegmentInfo& info, 
                       std::span<const std::complex<float>> buffer,
                        size_t firstRow, const Data& data, bool doByteSwap);
+    MemoryWriteHandler(const NITFSegmentInfo& info, 
+                      std::span<const std::pair<uint8_t, uint8_t>> buffer,
+                       size_t firstRow, const Data& data, bool doByteSwap);
+
 };
 
 /*!

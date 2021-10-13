@@ -172,6 +172,14 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
         data.getNumCols(), data.getNumChannels(), data.getNumBytesPerPixel(),
         doByteSwap)
 {
+    const auto pixelType = data.getPixelType();
+    if (pixelType == six::PixelType::AMP8I_PHS8I)
+    {
+        const void* pData = mHandle->get()->data;
+        const auto pImpl = static_cast<const MemoryWriteHandlerImpl*>(pData);
+        assert(pImpl->doByteSwap == false);
+    }
+
     const auto numChannels = data.getNumChannels();
     const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
     if (sizeof(buffer[0]) != pixelSize * numChannels)
@@ -180,6 +188,27 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
     }
 }
 
+MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const  std::pair<uint8_t, uint8_t>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : MemoryWriteHandler(info, cast(buffer.data()), firstRow,
+        data.getNumCols(), data.getNumChannels(), data.getNumBytesPerPixel(),
+        doByteSwap)
+{
+    const auto pixelType = data.getPixelType();
+    if (pixelType == six::PixelType::AMP8I_PHS8I)
+    {
+        const void* pData = mHandle->get()->data;
+        const auto pImpl = static_cast<const MemoryWriteHandlerImpl*>(pData);
+        assert(pImpl->doByteSwap == false);
+    }
+
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    if (sizeof(buffer[0]) != pixelSize * numChannels)
+    {
+        throw std::invalid_argument("pixelSize is wrong.");
+    }
+}
 
 //
 // StreamWriteHandler

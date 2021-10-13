@@ -23,12 +23,15 @@
 #ifndef __SIX_NITF_WRITE_CONTROL_H__
 #define __SIX_NITF_WRITE_CONTROL_H__
 
+#include <stdint.h>
+
 #include <map>
 #include <memory>
 #include <vector>
 #include <complex>
 #include <std/span>
 #include <std/cstddef>
+#include <utility>
 
 #include "six/Types.h"
 #include "six/Container.h"
@@ -65,11 +68,13 @@ class NITFWriteControl : public WriteControl
     void Tsave(TImageData&&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
     void save_(std::span<const std::byte* const>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
     void save_(std::span<const std::complex<float>>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    void save_(std::span<const std::pair<uint8_t, uint8_t>>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
     void save_(std::span<const std::byte* const>, const std::string& outputFile, const std::vector<std::string>& schemaPaths);
 
     bool prepareIO(size_t, nitf::IOInterface&);
     bool prepareIO(std::span<const std::byte* const>, nitf::IOInterface&);
     bool prepareIO(std::span<const std::complex<float>>, nitf::IOInterface&);
+    bool prepareIO(std::span<const std::pair<uint8_t, uint8_t>>, nitf::IOInterface&);
 
 public:
 
@@ -240,6 +245,8 @@ public:
 
     void save(std::span<const std::complex<float>> imageData,
         const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
+    void save(std::span<const std::pair<uint8_t, uint8_t>> imageData,
+        const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
 
     void save(const NonConstBufferList& imageData,
               const std::string& outputFile,
@@ -291,6 +298,9 @@ public:
                       const std::vector<std::string>& schemaPaths);
     void save(std::span<const std::complex<float>> imageData,
         nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
+    void save(std::span<const std::pair<uint8_t, uint8_t>> imageData,
+        nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
+
 
     void save(const NonConstBufferList& list,
               nitf::IOInterface& outputFile,
