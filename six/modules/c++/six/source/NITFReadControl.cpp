@@ -85,14 +85,11 @@ six::PixelType getPixelType(const nitf::ImageSubheader& subheader)
     {
         return six::PixelType::MONO8I;
     }
-    else if (iRep == nitf::ImageRepresentation::RGB_LUT)
+    if (iRep == nitf::ImageRepresentation::RGB_LUT)
     {
         return six::PixelType::RGB8LU;
     }
-    else
-    {
-        throw except::Exception(Ctxt("Unexpected image representation '" + to_string(iRep) + "'"));
-    }
+    throw except::Exception(Ctxt("Unexpected image representation '" + to_string(iRep) + "'"));
 }
 }
 
@@ -131,15 +128,14 @@ DataType NITFReadControl::getDataType(const std::string& desid,
     {
         return DataType::COMPLEX;
     }
-    else if (desid == "SIDD_XML")
+    if (desid == "SIDD_XML")
     {
         return DataType::DERIVED;
     }
-    else if (desid == Constants::DES_USER_DEFINED_SUBHEADER_TAG)
+    if (desid == Constants::DES_USER_DEFINED_SUBHEADER_TAG)
     {
         // Check whether DES is SICD/SIDD, or something of a different sort.
-        if (subheaderLength !=
-            Constants::DES_USER_DEFINED_SUBHEADER_LENGTH)
+        if (subheaderLength != Constants::DES_USER_DEFINED_SUBHEADER_LENGTH)
         {
             return DataType::NOT_SET;
         }
@@ -151,7 +147,7 @@ DataType NITFReadControl::getDataType(const std::string& desid,
         {
             return DataType::COMPLEX;
         }
-        else if (desshsiField == Constants::SIDD_DESSHSI)
+        if (desshsiField == Constants::SIDD_DESSHSI)
         {
             return DataType::DERIVED;
         }
@@ -179,9 +175,8 @@ DataType NITFReadControl::getDataType(const nitf::DESegment& segment)
     std::string desshsiField;
     if (subheaderLength != 0)
     {
-        nitf::TRE tre = subheader.getSubheaderFields();
+        const auto tre = subheader.getSubheaderFields();
         treTag = tre.getTag();
-
         if (tre.exists("DESSHSI"))
         {
             desshsiField = tre.getField("DESSHSI").toTrimString();
@@ -197,14 +192,10 @@ DataType NITFReadControl::getDataType(const std::string& fromFile) const
     if (mReader.getNITFVersion(fromFile) != NITF_VER_UNKNOWN)
     {
         nitf::IOHandle inFile(fromFile);
-        nitf::Record record = mReader.read(inFile);
-
+        const auto record = mReader.read(inFile);
         return getDataType(record);
     }
-    else
-    {
-        return DataType::NOT_SET;
-    }
+    return DataType::NOT_SET;
 }
 
 void NITFReadControl::validateSegment(const nitf::ImageSubheader& subheader,
@@ -216,7 +207,7 @@ void NITFReadControl::validateSegment(const nitf::ImageSubheader& subheader,
 void NITFReadControl::validateSegment(const nitf::ImageSubheader& subheader,
                                       const NITFImageInfo& info) const
 {
-    const std::string pjust = subheader.pixelJustification();
+    const auto pjust = subheader.pixelJustification();
     // TODO: More validation in here!
     if (pjust != "R")
     {
@@ -280,9 +271,7 @@ static std::vector<six::NITFImageInfo*> getImageInfos(six::Container& container)
     {
         if (container.getNumData() != 1)
         {
-            throw except::Exception(Ctxt(
-                "SICD file must have exactly 1 SICD DES but got " +
-                std::to_string(container.getNumData())));
+            throw except::Exception(Ctxt("SICD file must have exactly 1 SICD DES but got " + std::to_string(container.getNumData())));
         }
 
         return std::vector<six::NITFImageInfo*> { new NITFImageInfo(container.getData(0)) };
@@ -367,20 +356,22 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
     }
 
     mInfos = getImageInfos(*mContainer);
-    nitf::List images = mRecord.getImages();
+    auto images_ = mRecord.getImages();
+    const auto& images = images_;
 
     // Now go through every image and figure out what clump it's attached
     // to and use that for the measurements
     for (size_t nitfSegmentIdx = 0; nitfSegmentIdx < images.getSize(); ++nitfSegmentIdx)
     {
         // Get a segment ref
-       auto segment = static_cast<nitf::ImageSegment>(images[nitfSegmentIdx]);
+       auto segment_ = static_cast<nitf::ImageSegment>(images_[nitfSegmentIdx]);
+       const auto& segment = segment_;
 
         // Get the subheader out
         const auto subheader = segment.getSubheader();
 
         // The number of rows in the segment (actual)
-        const size_t numRowsSeg = subheader.numRows();
+        const auto numRowsSeg = subheader.numRows();
 
         // This function should throw if the data does not exist
         ImageAndSegment imageAndSegment;
@@ -391,7 +382,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         }
 
         const auto& currentInfo = mInfos[imageAndSegment.image];
-        const size_t productSegmentIdx = imageAndSegment.segment;
+        const auto productSegmentIdx = imageAndSegment.segment;
 
         // We have to enforce a number of rules, namely that the #
         // columns match, and the pixel type, etc.
@@ -412,7 +403,6 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
 
         NITFSegmentInfo si;
         si.numRows = numRowsSeg;
-
         if (productSegmentIdx == 0)
         {
             si.rowOffset = 0;
@@ -423,8 +413,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         {
             const auto imageSegments = currentInfo->getImageSegments();
             si.rowOffset = imageSegments[productSegmentIdx - 1].getNumRows();
-            si.firstRow = imageSegments[productSegmentIdx - 1].getFirstRow() +
-                    si.getRowOffset();
+            si.firstRow = imageSegments[productSegmentIdx - 1].getFirstRow() + si.getRowOffset();
         }
 
         // Legends don't set lat/lons
@@ -443,7 +432,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         const auto pData = currentInfo->getData();
         if (pData->getDataType() == DataType::DERIVED && pData->getVersion() == "2.0.0")
         {
-            nitf::LookupTable nitfLut = subheader.getBandInfo(0).getLookupTable();
+            const auto nitfLut = subheader.getBandInfo(0).getLookupTable();
             currentInfo->getData_()->setDisplayLUT(std::make_unique<AmplitudeTable>(nitfLut));
         }
         currentInfo->addSegment(si);
