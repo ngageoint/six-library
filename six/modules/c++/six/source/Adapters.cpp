@@ -125,6 +125,7 @@ static NITF_BOOL six_MemoryWriteHandler_write(NITF_DATA * data,
     return write(impl, io, error, write_f);
 }
 
+template<>
 MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
         const UByte* buffer, size_t firstRow, size_t numCols,
         size_t numChannels, size_t pixelSize, bool doByteSwap)
@@ -149,14 +150,27 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
 
     setManaged(false);
 }
+
+template<typename T>
+inline const UByte* cast(const T* buffer)
+{
+    return static_cast<const UByte*>(static_cast<const void*>(buffer));
+}
+template<>
 MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
     const std::byte* buffer, size_t firstRow, size_t numCols,
     size_t numChannels, size_t pixelSize, bool doByteSwap)
-    : MemoryWriteHandler(info, static_cast<const UByte*>(static_cast<const void*>(buffer)), firstRow, numCols,
+    : MemoryWriteHandler(info, cast(buffer), firstRow, numCols,
         numChannels, pixelSize, doByteSwap)
 {
 }
-
+MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
+        std::span<const std::complex<float>> buffer, size_t firstRow, size_t numCols,
+        size_t numChannels, size_t pixelSize, bool doByteSwap)
+    : MemoryWriteHandler(info, cast(buffer.data()), firstRow, numCols,
+        numChannels, pixelSize, doByteSwap)
+{
+}
 
 //
 // StreamWriteHandler

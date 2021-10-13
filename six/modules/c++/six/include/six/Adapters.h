@@ -22,6 +22,9 @@
 #ifndef __SIX_ADAPTERS_H__
 #define __SIX_ADAPTERS_H__
 
+#include <complex>
+#include <std/span>
+
 #include <scene/sys_Conf.h>
 #include <import/io.h>
 #include <import/nitf.hpp>
@@ -117,18 +120,18 @@ protected:
  *  beforehand
  *
  */
-class MemoryWriteHandler: public nitf::WriteHandler
+struct MemoryWriteHandler: public nitf::WriteHandler
 {
-public:
+    template<typename TBuffer>
     MemoryWriteHandler(const NITFSegmentInfo& info, 
-                       const UByte* buffer,
+                       const TBuffer* buffer,
                        size_t firstRow,
                        size_t numCols,
                        size_t numChannels,
                        size_t pixelSize,
                        bool doByteSwap);
     MemoryWriteHandler(const NITFSegmentInfo& info, 
-                       const std::byte* buffer,
+                      std::span<const std::complex<float>> buffer,
                        size_t firstRow,
                        size_t numCols,
                        size_t numChannels,
