@@ -61,11 +61,15 @@ class NITFWriteControl : public WriteControl
     void addLegend(const Legend&, int imageNumber);
 
     // "using NITFWriteControl::save;" in SICDWriteControl.h
-    void save_(std::span<const std::byte *const>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    template<typename TImageData>
+    void Tsave(TImageData&&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    void save_(std::span<const std::byte* const>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    void save_(std::span<const std::complex<float>>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
     void save_(std::span<const std::byte* const>, const std::string& outputFile, const std::vector<std::string>& schemaPaths);
-    void cx_save(std::span<const std::complex<float>>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
 
     bool prepareIO(size_t, nitf::IOInterface&);
+    bool prepareIO(std::span<const std::byte* const>, nitf::IOInterface&);
+    bool prepareIO(std::span<const std::complex<float>>, nitf::IOInterface&);
 
 public:
 
