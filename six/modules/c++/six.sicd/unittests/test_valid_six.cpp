@@ -61,12 +61,10 @@ static fs::path argv0()
 
 static bool is_linux()
 {
-    static const fs::path file = __FILE__;
-    const auto cpp = file.filename().stem(); // i.e., "test_valid_six"
-    const auto exe = argv0().filename(); // e.g., "test_valid_six.exe"
-    return cpp == exe; // no ".exe", must be Linux
+    return sys::Platform == sys::PlatformType::Linux; // TODO: MacOS?
 }
 
+// Google Test in Visual Studio
 static bool is_vs_gtest()
 {
     return argv0().filename() == "Test.exe";
@@ -96,19 +94,17 @@ static fs::path buildRootDir()
         const auto root_dir = cwd.parent_path().parent_path();
         return root_dir;
     }
-    else
-    {
-        // stand-alone
-        const auto root_dir = argv0().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path();
-        return root_dir;
-    }
+
+    // stand-alone
+    const auto root_dir = argv0().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path();
+    return root_dir;
 }
+
 static fs::path getNitfPath(const fs::path& filename)
 {
     const auto root_dir = buildRootDir();
     return root_dir / nitfRelativelPath(filename);
 }
-
 static fs::path getNitfExternalsPath(const fs::path& filename)
 {
     const auto root_dir = buildRootDir();
@@ -135,6 +131,7 @@ static void setNitfPluginPath()
     sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }
 
+
 static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXMLControl& reader)
 {
     auto container = reader.getContainer();
@@ -154,7 +151,7 @@ static std::unique_ptr<six::sicd::ComplexData> getComplexData(const six::Contain
     logging::NullLogger nullLogger;
     //TEST_ASSERT_TRUE(retval->validate(nullLogger));
     const auto& geoData = *(retval->geoData);
-    //TEST_ASSERT_TRUE(geoData.validate(nullLogger));
+    TEST_ASSERT_TRUE(geoData.validate(nullLogger));
     const auto& imageData = *(retval->imageData);
     TEST_ASSERT_TRUE(imageData.validate(geoData, nullLogger));
 
@@ -167,8 +164,8 @@ static std::unique_ptr<six::sicd::ComplexData> getComplexData(const six::Contain
 static void test_nitf_image_info(six::sicd::ComplexData& complexData, const fs::path& inputPathname,
     nitf::PixelValueType expectedPixelValueType)
 {
-    const auto expectedBlockingMode = nitf::BlockingMode::Pixel;
-    const auto expectedImageRepresentation = nitf::ImageRepresentation::NODISPLY;
+    constexpr auto expectedBlockingMode = nitf::BlockingMode::Pixel;
+    constexpr auto expectedImageRepresentation = nitf::ImageRepresentation::NODISPLY;
 
     const six::NITFImageInfo nitfImageInfo(&complexData);
 
@@ -183,7 +180,7 @@ static void test_nitf_image_info(six::sicd::ComplexData& complexData, const fs::
 
     nitf::IOHandle io(inputPathname.string());
     nitf::Reader reader;
-    nitf::Record record = reader.read(io);
+    const auto record = reader.read(io);
     for (const auto& recordImage : record.getImages())
     {
         const nitf::ImageSegment imageSegment(recordImage);
@@ -219,8 +216,6 @@ TEST_CASE(valid_six_50x50)
     const auto& classification = pData->getClassification();
     const auto actual = classification.getLevel();
     TEST_ASSERT_EQ(actual, classificationText);
-
-    //const auto& imageData = *(data->imageData);
 
     test_nitf_image_info(*pComplexData, inputPathname, nitf::PixelValueType::Floating);
 }
