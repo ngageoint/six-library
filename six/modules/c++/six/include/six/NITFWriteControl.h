@@ -53,10 +53,10 @@ namespace six
 class NITFWriteControl : public WriteControl
 {
     template<typename TImageData>
-    void writeWithNitro(TImageData&& imageData_i,
+    void writeWithNitro(TImageData&& imageData,
         const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&, bool unused_ = false);
     template<typename TImageData>
-    void writeWithoutNitro(TImageData&& imageData_i,
+    void writeWithoutNitro(TImageData&& imageData,
         const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&, bool doByteSwap);
     void addLegend(const Legend&, int imageNumber);
 

@@ -185,65 +185,30 @@ bool NITFWriteControl::shouldByteSwap() const
     }
 }
 
-template<typename TImageData> // avoid "C4505: '...': unreferenced function with internal linkage has been removed"
-static std::shared_ptr<MemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+template<typename TImageData>
+static inline std::shared_ptr<MemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
     TImageData& imageData_i, const Data& data, bool doByteSwap)
 {
-    const auto numChannels = data.getNumChannels();
-    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-    const auto numCols = data.getNumCols();
-
     // this bypasses the normal NITF ImageWriter and streams directly to the output
     return std::make_shared<MemoryWriteHandler>(segmentInfo,
-            imageData_i, segmentInfo.getFirstRow(),
-            numCols, numChannels, pixelSize * numChannels,
-            doByteSwap);
+            imageData_i, segmentInfo.getFirstRow(), data, doByteSwap);
 }
-template <>
-std::shared_ptr<MemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-    std::span<const std::complex<float>>& imageData, const Data& data, bool doByteSwap)
-{
-    const auto numChannels = data.getNumChannels();
-    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-    const auto numCols = data.getNumCols();
-
-    // this bypasses the normal NITF ImageWriter and streams directly to the output
-    return std::make_shared<MemoryWriteHandler>(segmentInfo,
-        imageData, segmentInfo.getFirstRow(),
-        numCols, numChannels, pixelSize * numChannels,
-        doByteSwap);
-}
-
 static std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
     io::InputStream* imageData_i, const Data& data, bool doByteSwap)
 {
     //! TODO: This section of code (unlike the memory section above)
     //        does not account for blocked writing or J2K compression.
     //        CODA ticket #443 will update support for this.
-    const auto numChannels = data.getNumChannels();
-    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-    const auto numCols = data.getNumCols();
-    return std::make_shared<StreamWriteHandler>(segmentInfo,
-            imageData_i, numCols, numChannels, pixelSize, doByteSwap);
+    return std::make_shared<StreamWriteHandler>(segmentInfo, imageData_i, data, doByteSwap);
 }
 
 template<typename TImageData>
-void NITFWriteControl::writeWithoutNitro(TImageData&& imageData_i,
+void NITFWriteControl::writeWithoutNitro(TImageData&& imageData,
     const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap)
 {
     for (size_t j = 0; j < imageSegments.size(); ++j)
     {
-        auto writeHandler = makeWriteHandler(imageSegments[j], std::forward<TImageData>(imageData_i), data, doByteSwap);
-        mWriter.setImageWriteHandler(static_cast<int>(startIndex + j), writeHandler);
-    }
-}
-template<>
-void NITFWriteControl::writeWithoutNitro(std::span<const std::complex<float>>& imageData,
-    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap)
-{
-    for (size_t j = 0; j < imageSegments.size(); ++j)
-    {
-        auto writeHandler = makeWriteHandler(imageSegments[j], imageData, data, doByteSwap);
+        auto writeHandler = makeWriteHandler(imageSegments[j], std::forward<TImageData>(imageData), data, doByteSwap);
         mWriter.setImageWriteHandler(static_cast<int>(startIndex + j), writeHandler);
     }
 }
@@ -345,7 +310,7 @@ static void writeWithNitro_(std::span<const std::complex<float>> imageData, cons
     writeWithNitro_(static_cast<const std::byte*>(pImageData), segmentInfo, data, iWriter);
 }
 template<typename TImageData>
-void NITFWriteControl::writeWithNitro(TImageData&& imageData_i,
+void NITFWriteControl::writeWithNitro(TImageData&& imageData,
     const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool /*unused_*/)
 {
     for (size_t jj = 0; jj < imageSegments.size(); ++jj)
@@ -353,19 +318,7 @@ void NITFWriteControl::writeWithNitro(TImageData&& imageData_i,
         // We will use the ImageWriter provided by NITRO so that we can
         // take advantage of the built-in compression capabilities
         nitf::ImageWriter iWriter = mWriter.newImageWriter(static_cast<int>(startIndex + jj), mCompressionOptions);
-        writeWithNitro_(std::forward<TImageData>(imageData_i), imageSegments[jj], data, iWriter);
-    }
-}
-template<>
-void NITFWriteControl::writeWithNitro(std::span<const std::complex<float>>& imageData,
-    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool /*unused_*/)
-{
-    for (size_t jj = 0; jj < imageSegments.size(); ++jj)
-    {
-        // We will use the ImageWriter provided by NITRO so that we can
-        // take advantage of the built-in compression capabilities
-        nitf::ImageWriter iWriter = mWriter.newImageWriter(static_cast<int>(startIndex + jj), mCompressionOptions);
-        writeWithNitro_(imageData, imageSegments[jj], data, iWriter);
+        writeWithNitro_(std::forward<TImageData>(imageData), imageSegments[jj], data, iWriter);
     }
 }
 

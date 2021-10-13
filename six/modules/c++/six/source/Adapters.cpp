@@ -25,6 +25,7 @@
 #include <assert.h>
 
 #include <std/cstddef>
+#include <stdexcept>
 #include <gsl/gsl.h>
 
 using namespace six;
@@ -125,7 +126,6 @@ static NITF_BOOL six_MemoryWriteHandler_write(NITF_DATA * data,
     return write(impl, io, error, write_f);
 }
 
-template<>
 MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
         const UByte* buffer, size_t firstRow, size_t numCols,
         size_t numChannels, size_t pixelSize, bool doByteSwap)
@@ -154,23 +154,32 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
 template<typename T>
 inline const UByte* cast(const T* buffer)
 {
-    return static_cast<const UByte*>(static_cast<const void*>(buffer));
+    const void* pBuffer = buffer;
+    return static_cast<const UByte*>(pBuffer);
 }
-template<>
+
 MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
-    const std::byte* buffer, size_t firstRow, size_t numCols,
-    size_t numChannels, size_t pixelSize, bool doByteSwap)
-    : MemoryWriteHandler(info, cast(buffer), firstRow, numCols,
-        numChannels, pixelSize, doByteSwap)
+        const std::byte* buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : MemoryWriteHandler(info, cast(buffer), firstRow,
+        data.getNumCols(), data.getNumChannels(), data.getNumBytesPerPixel(),
+        doByteSwap)
 {
 }
+
 MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
-        std::span<const std::complex<float>> buffer, size_t firstRow, size_t numCols,
-        size_t numChannels, size_t pixelSize, bool doByteSwap)
-    : MemoryWriteHandler(info, cast(buffer.data()), firstRow, numCols,
-        numChannels, pixelSize, doByteSwap)
+        std::span<const std::complex<float>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : MemoryWriteHandler(info, cast(buffer.data()), firstRow,
+        data.getNumCols(), data.getNumChannels(), data.getNumBytesPerPixel(),
+        doByteSwap)
 {
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    if (sizeof(buffer[0]) != pixelSize * numChannels)
+    {
+        throw std::invalid_argument("pixelSize is wrong.");
+    }
 }
+
 
 //
 // StreamWriteHandler
@@ -223,4 +232,15 @@ StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
     setNative(segmentWriter);
 
     setManaged(false);
+}
+
+//! TODO: This section of code (unlike the memory section above)
+//        does not account for blocked writing or J2K compression.
+//        CODA ticket #443 will update support for this.
+StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
+        io::InputStream* is, const Data& data, bool doByteSwap)
+    : StreamWriteHandler(info, is,
+        data.getNumCols(), data.getNumChannels(), data.getNumBytesPerPixel() / data.getNumChannels(),
+        doByteSwap)
+{
 }

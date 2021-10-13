@@ -24,6 +24,7 @@
 
 #include <complex>
 #include <std/span>
+#include <std/cstddef>
 
 #include <scene/sys_Conf.h>
 #include <import/io.h>
@@ -32,6 +33,7 @@
 #include "six/Types.h"
 #include "six/NITFSegmentInfo.h"
 #include "six/Utilities.h"
+#include "six/Data.h"
 
 /*!
  *  This file contains adapters that are necessary to get six objects
@@ -122,21 +124,19 @@ protected:
  */
 struct MemoryWriteHandler: public nitf::WriteHandler
 {
-    template<typename TBuffer>
     MemoryWriteHandler(const NITFSegmentInfo& info, 
-                       const TBuffer* buffer,
+                       const UByte* buffer,
                        size_t firstRow,
                        size_t numCols,
                        size_t numChannels,
                        size_t pixelSize,
                        bool doByteSwap);
+    MemoryWriteHandler(const NITFSegmentInfo& info, 
+                       const std::byte* buffer,
+                       size_t firstRow, const Data& data, bool doByteSwap);
     MemoryWriteHandler(const NITFSegmentInfo& info, 
                       std::span<const std::complex<float>> buffer,
-                       size_t firstRow,
-                       size_t numCols,
-                       size_t numChannels,
-                       size_t pixelSize,
-                       bool doByteSwap);
+                       size_t firstRow, const Data& data, bool doByteSwap);
 };
 
 /*!
@@ -155,15 +155,16 @@ struct MemoryWriteHandler: public nitf::WriteHandler
  *  Additionally the channel size is 4 or 2.
  *
  */
-class StreamWriteHandler: public nitf::WriteHandler
+struct StreamWriteHandler: public nitf::WriteHandler
 {
-public:
     StreamWriteHandler(const NITFSegmentInfo& info,
                        io::InputStream* is,
                        size_t numCols,
                        size_t numChannels,
                        size_t pixelSize,
                        bool doByteSwap);
+    StreamWriteHandler(const NITFSegmentInfo& info,
+                       io::InputStream* is, const Data&, bool doByteSwap);
 };
 
 }
