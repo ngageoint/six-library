@@ -461,21 +461,51 @@ static std::vector<std::complex<float>> make_complex_image_(const types::RowCol<
     }
     return image;
 }
-static std::vector<std::complex<float>> make_complex_image_(std::vector<std::complex<float>>&& image)
+static std::vector<std::complex<float>> make_complex_image_(const six::sicd::ComplexData& complexData,
+    std::vector<std::complex<float>>&& image)
 {
     void* image_data = image.data();
+
     // Make it easier to know what we're looking at when examining a binary dump of the SICD
-    std::span<std::byte> pImage(static_cast<std::byte*>(image_data), image.size() * sizeof(image[0]));
-    TEST_ASSERT_EQ(32, pImage.size());
+    const auto expected_size_in_bytes = sizeof(image[0]) * getExtent(complexData).area();
+    TEST_ASSERT_EQ(32, expected_size_in_bytes);
+    const auto image_size_in_bytes = image.size() * sizeof(image[0]);
+    std::span<std::byte> pImageBytes(static_cast<std::byte*>(image_data), image_size_in_bytes);
+    TEST_ASSERT_EQ(expected_size_in_bytes, pImageBytes.size());
 
-    pImage[0] = static_cast<std::byte>('[');
-    for (size_t i = 1; i < pImage.size() - 1; i++)
+    pImageBytes[0] = static_cast<std::byte>('[');
+    for (size_t i = 1; i < pImageBytes.size() - 1; i++)
     {
-        pImage[i] = static_cast<std::byte>('*');
+        pImageBytes[i] = static_cast<std::byte>('*');
     }
-    pImage[pImage.size() - 1] = static_cast<std::byte>(']');
+    pImageBytes[pImageBytes.size() - 1] = static_cast<std::byte>(']');
 
-    return image;
+    if (complexData.getPixelType() != six::PixelType::AMP8I_PHS8I)
+    {
+        return image;
+    }
+
+    // Convert from AMP8I_PHS8I to that when we convert to AMP8I_PHS8I for writing
+    // we'll end up with the "[***...***]" in the file
+    std::span<const AMP8I_PHS8I_t> from(static_cast<AMP8I_PHS8I_t*>(image_data), image_size_in_bytes / sizeof(AMP8I_PHS8I_t));
+    TEST_ASSERT_EQ(expected_size_in_bytes, from.size() * sizeof(from[0]));
+    const auto& imageData = *(complexData.imageData);
+    std::vector<std::complex<float>> retval(from.size());
+    imageData.from_AMP8I_PHS8I(from, retval);
+    return retval;
+}
+static std::vector<std::complex<float>> make_complex_image(const six::sicd::ComplexData& complexData, const types::RowCol<size_t>& dims)
+{
+    if (complexData.getPixelType() == six::PixelType::RE32F_IM32F)
+    {
+        return make_complex_image_(dims);
+        //return make_complex_image_(make_complex_image_(dims));
+    }
+    if (complexData.getPixelType() == six::PixelType::AMP8I_PHS8I)
+    {
+        return make_complex_image_(complexData, make_complex_image_(dims));
+    }
+    throw std::invalid_argument("Unknown pixelType");
 }
 
 template<typename T>
@@ -563,23 +593,9 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
     TEST_ASSERT_EQ(dims.row, pComplexData->getNumRows());
     TEST_ASSERT_EQ(dims.col, pComplexData->getNumCols());
 
-    if (pixelType == six::PixelType::RE32F_IM32F)
-    {
-        const auto image = make_complex_image_(dims);
-        //return make_complex_image_(make_complex_image_(dims));
-        save(outputName, image, std::move(pComplexData));
-        read_nitf(outputName, pixelType, image);
-    }
-    else if (pixelType == six::PixelType::AMP8I_PHS8I)
-    {
-        const auto image = make_complex_image_(make_complex_image_(dims));
-        save(outputName, image, std::move(pComplexData));
-        read_nitf(outputName, pixelType, image);
-    }
-    else
-    {
-        throw std::invalid_argument("Unknown pixelType");
-    }
+    const auto image = make_complex_image(*pComplexData, dims);
+    save(outputName, image, std::move(pComplexData));
+    read_nitf(outputName, pixelType, image);
 }
 
 TEST_CASE(test_create_sicds_from_mem)
