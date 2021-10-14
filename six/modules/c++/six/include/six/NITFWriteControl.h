@@ -32,6 +32,9 @@
 #include <std/span>
 #include <std/cstddef>
 #include <utility>
+#include <algorithm>
+
+#include <nitf/BufferedWriter.hpp>
 
 #include "six/Types.h"
 #include "six/Container.h"
@@ -64,12 +67,13 @@ class NITFWriteControl : public WriteControl
     void addLegend(const Legend&, int imageNumber);
 
     // "using NITFWriteControl::save;" in SICDWriteControl.h
+    void do_save(std::span<const std::byte* const>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    void do_save(std::span<const std::byte* const>, const std::string& outputFile, const std::vector<std::string>& schemaPaths);
+
     template<typename TImageData>
     void Tsave(TImageData&&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
-    void save_(std::span<const std::byte* const>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
-    void cxsave_(std::span<const std::complex<float>>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
-    void psave_(std::span<const std::pair<uint8_t, uint8_t>>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
-    void save_(std::span<const std::byte* const>, const std::string& outputFile, const std::vector<std::string>& schemaPaths);
+    template<typename T>
+    void save_(std::span<const T>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
 
     bool prepareIO(size_t, nitf::IOInterface&);
     bool prepareIO(std::span<const std::byte* const>, nitf::IOInterface&);
@@ -243,10 +247,23 @@ public:
                       const std::string& outputFile,
                       const std::vector<std::string>& schemaPaths) override;
 
-    void save(std::span<const std::complex<float>> imageData,
-        const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
-    void psave(std::span<const std::pair<uint8_t, uint8_t>> imageData,
-        const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
+    template<typename T>
+    void save(std::span<const T> imageData,
+        const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
+    {
+        const size_t bufferSize = getOptions().getParameter(
+            WriteControl::OPT_BUFFER_SIZE,
+            Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
+        nitf::BufferedWriter bufferedIO(outputFile.string(), bufferSize);
+        save(imageData, bufferedIO, schemaPaths);
+    }
+    template<typename T>
+    void save(const std::vector<T>& imageData_,
+        const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
+    {
+        std::span<const T> imageData(imageData_.data(), imageData_.size());
+        save(imageData, outputFile, schemaPaths);
+    }
 
     void save(const NonConstBufferList& imageData,
               const std::string& outputFile,
@@ -296,11 +313,23 @@ public:
     virtual void save(const buffer_list& list,
                       nitf::IOInterface& outputFile,
                       const std::vector<std::string>& schemaPaths);
-    void save(std::span<const std::complex<float>> imageData,
-        nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
-    void psave(std::span<const std::pair<uint8_t, uint8_t>> imageData,
-        nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
 
+    template<typename T>
+    void save(std::span<const T> imageData,
+        nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths_)
+    {
+        std::vector<std::string> schemaPaths;
+        std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+            [](const std::filesystem::path& p) { return p.string(); });
+        save_(imageData, outputFile, schemaPaths);
+    }
+    template<typename T>
+    void save(const std::vector<T>& imageData_,
+        nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
+    {
+        std::span<const T> imageData(imageData_.data(), imageData_.size());
+        save(imageData, outputFile, schemaPaths);
+    }
 
     void save(const NonConstBufferList& list,
               nitf::IOInterface& outputFile,

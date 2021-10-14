@@ -477,19 +477,6 @@ static std::vector<std::complex<float>> make_complex_image_(std::vector<std::com
 
     return image;
 }
-static std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>& dims, six::PixelType pixelType)
-{
-    if (pixelType == six::PixelType::RE32F_IM32F)
-    {
-        return make_complex_image_(dims);
-        //return make_complex_image_(make_complex_image_(dims));
-    }
-    if (pixelType == six::PixelType::AMP8I_PHS8I)
-    {
-        return make_complex_image_(make_complex_image_(dims));
-    }
-    throw std::invalid_argument("Unknown pixelType");
-}
 
 template<typename T>
 static void test_assert_eq(std::span<const std::byte> bytes, const std::vector<T>& rawData)
@@ -552,6 +539,35 @@ static void read_nitf(const fs::path& path, six::PixelType pixelType, const std:
     std::span<const std::byte> bytes(static_cast<const std::byte*>(pImage), image.size() * sizeof(image[0]));
     read_raw_data(path, pixelType, bytes);
 }
+
+template<typename T>
+void save_(const fs::path& outputName, const std::vector<T>& image, std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
+{
+    static const std::vector<fs::path> schemaPaths;
+    //six::sicd::writeAsNITF(outputName, schemaPaths, *pComplexData, image.data());
+    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+    auto container = std::make_shared<six::Container>(std::move(pComplexData));
+    const six::Options writerOptions;
+    six::NITFWriteControl writer(writerOptions, container);
+    writer.save(image, outputName, schemaPaths);
+}
+void save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
+    std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
+{
+    if (pComplexData->getPixelType() == six::PixelType::AMP8I_PHS8I)
+    {
+        const auto& imageData = *(pComplexData->imageData);
+
+        std::vector<AMP8I_PHS8I_t> image_ampi8i_phs8i(image.size());
+        imageData.to_AMP8I_PHS8I(image, image_ampi8i_phs8i);
+        save_(outputName, image_ampi8i_phs8i, std::move(pComplexData));
+    }
+    else
+    {
+        save_(outputName, image, std::move(pComplexData));
+    }
+}
+
 static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)
 {
     const types::RowCol<size_t> dims(2, 2);
@@ -563,17 +579,23 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
     TEST_ASSERT_EQ(dims.row, pComplexData->getNumRows());
     TEST_ASSERT_EQ(dims.col, pComplexData->getNumCols());
 
-    const auto image = make_complex_image(dims, pixelType);
-
-    static const std::vector<fs::path> schemaPaths;
-    //six::sicd::writeAsNITF(outputName, schemaPaths, *pComplexData, image.data());
-    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
-    auto container = std::make_shared<six::Container>(std::move(pComplexData));
-    const six::Options writerOptions;
-    six::NITFWriteControl writer(writerOptions, container);
-    writer.save(image, outputName, schemaPaths);
-
-    read_nitf(outputName, pixelType, image);
+    if (pixelType == six::PixelType::RE32F_IM32F)
+    {
+        const auto image = make_complex_image_(dims);
+        //return make_complex_image_(make_complex_image_(dims));
+        save(outputName, image, std::move(pComplexData));
+        read_nitf(outputName, pixelType, image);
+    }
+    else if (pixelType == six::PixelType::AMP8I_PHS8I)
+    {
+        const auto image = make_complex_image_(make_complex_image_(dims));
+        save(outputName, image, std::move(pComplexData));
+        read_nitf(outputName, pixelType, image);
+    }
+    else
+    {
+        throw std::invalid_argument("Unknown pixelType");
+    }
 }
 
 TEST_CASE(test_create_sicds_from_mem)
