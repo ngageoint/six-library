@@ -67,13 +67,21 @@ class NITFWriteControl : public WriteControl
     void addLegend(const Legend&, int imageNumber);
 
     // "using NITFWriteControl::save;" in SICDWriteControl.h
-    void do_save(std::span<const std::byte* const>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
-    void do_save(std::span<const std::byte* const>, const std::string& outputFile, const std::vector<std::string>& schemaPaths);
-
     template<typename TImageData>
     void Tsave(TImageData&&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
     template<typename T>
     void save_(std::span<const T>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+
+    void save_buffer_list(std::span<const std::byte* const>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+
+    template<typename TBufferList>
+    void save_buffer_list_to_file(const TBufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
+    {
+        const size_t bufferSize = getOptions().getParameter(WriteControl::OPT_BUFFER_SIZE, Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
+        nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
+        save(list, bufferedIO, schemaPaths);
+        bufferedIO.close();
+    }
 
     bool prepareIO(size_t, nitf::IOInterface&);
     bool prepareIO(std::span<const std::byte* const>, nitf::IOInterface&);
@@ -240,22 +248,23 @@ public:
      *  \param outputFile  Output path to write
      *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void save(const BufferList& imageData,
-                      const std::string& outputFile,
-                      const std::vector<std::string>& schemaPaths) override;
-    virtual void save(const buffer_list& imageData,
-                      const std::string& outputFile,
-                      const std::vector<std::string>& schemaPaths) override;
+    virtual void save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths) override
+    {
+        save_buffer_list_to_file(list, outputFile, schemaPaths);
+    }
+    virtual void save(const buffer_list& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths) override
+    {
+        save_buffer_list_to_file(list, outputFile, schemaPaths);
+    }
 
     template<typename T>
     void save(std::span<const T> imageData,
         const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
     {
-        const size_t bufferSize = getOptions().getParameter(
-            WriteControl::OPT_BUFFER_SIZE,
-            Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
+        const size_t bufferSize = getOptions().getParameter(WriteControl::OPT_BUFFER_SIZE, Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
         nitf::BufferedWriter bufferedIO(outputFile.string(), bufferSize);
         save(imageData, bufferedIO, schemaPaths);
+        bufferedIO.close();
     }
     template<typename T>
     void save(const std::vector<T>& imageData_,
@@ -307,12 +316,16 @@ public:
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */
-    virtual void save(const BufferList& list,
-                      nitf::IOInterface& outputFile,
-                      const std::vector<std::string>& schemaPaths);
-    virtual void save(const buffer_list& list,
-                      nitf::IOInterface& outputFile,
-                      const std::vector<std::string>& schemaPaths);
+    virtual void save(const BufferList& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
+    {
+        const void* pImageData_ = list.data();
+        const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), list.size());
+        save_buffer_list(imageData_, outputFile, schemaPaths);
+    }
+    virtual void save(const buffer_list& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
+    {
+        save_buffer_list(list, outputFile, schemaPaths);
+    }
 
     template<typename T>
     void save(std::span<const T> imageData,

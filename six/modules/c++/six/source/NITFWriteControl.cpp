@@ -263,33 +263,6 @@ void NITFWriteControl::save(const SourceList& imageData,
     addDataAndWrite(schemaPaths);
 }
 
-void NITFWriteControl::do_save(std::span<const std::byte* const> imageData,
-                            const std::string& outputFile,
-                            const std::vector<std::string>& schemaPaths)
-{
-    const size_t bufferSize = getOptions().getParameter(
-            WriteControl::OPT_BUFFER_SIZE,
-            Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
-    nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
-
-    do_save(imageData, bufferedIO, schemaPaths);
-    bufferedIO.close();
-}
-void NITFWriteControl::save(const BufferList& imageData,
-                            const std::string& outputFile,
-                            const std::vector<std::string>& schemaPaths)
-{
-    const void* pImageData_ = imageData.data();
-    const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), imageData.size());
-    do_save(imageData_, outputFile, schemaPaths);
-}
-void NITFWriteControl::save(const buffer_list& imageData,
-                            const std::string& outputFile,
-                            const std::vector<std::string>& schemaPaths)
-{
-    do_save(imageData, outputFile, schemaPaths);
-}
-
 static void writeWithNitro_(const std::byte* const pImageData, const NITFSegmentInfo& segmentInfo, const Data& data, nitf::ImageWriter& iWriter)
 {
     const auto numChannels = data.getNumChannels();
@@ -437,7 +410,7 @@ void NITFWriteControl::Tsave(TImageData&& imageData,
 
     addDataAndWrite(schemaPaths);
 }
-void NITFWriteControl::do_save(std::span<const std::byte* const> imageData,
+void NITFWriteControl::save_buffer_list(std::span<const std::byte* const> imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
@@ -456,21 +429,6 @@ void NITFWriteControl::save_(std::span<const std::pair<uint8_t, uint8_t>> imageD
                             const std::vector<std::string>& schemaPaths)
 {
     Tsave(imageData, outputFile, schemaPaths);
-}
-
-void NITFWriteControl::save(const BufferList& imageData,
-                            nitf::IOInterface& outputFile,
-                            const std::vector<std::string>& schemaPaths)
-{
-    const void* pImageData_ = imageData.data();
-    const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), imageData.size());
-    do_save(imageData_, outputFile, schemaPaths);
-}
-void NITFWriteControl::save(const buffer_list& imageData,
-    nitf::IOInterface& outputFile,
-    const std::vector<std::string>& schemaPaths)
-{
-    do_save(imageData, outputFile, schemaPaths);
 }
 
 void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPaths)

@@ -138,6 +138,9 @@ public:
                        size_t numChannels,
                        size_t pixelSize,
                        bool doByteSwap);
+    MemoryWriteHandler(const NITFSegmentInfo& info,
+        const std::byte* buffer,
+        size_t firstRow, const Data& data, bool doByteSwap);
     template<typename T>
     MemoryWriteHandler(const NITFSegmentInfo& info, 
                       std::span<const T> buffer,

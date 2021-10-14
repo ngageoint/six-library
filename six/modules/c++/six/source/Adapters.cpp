@@ -165,6 +165,13 @@ inline const UByte* cast(const T* buffer)
     return static_cast<const UByte*>(pBuffer);
 }
 
+MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
+    const std::byte* buffer,
+    size_t firstRow, const Data& data, bool doByteSwap)
+    : MemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
+{
+}
+
 template<typename T>
 inline void validate_buffer(std::span<const T> buffer, const Data& data)
 {

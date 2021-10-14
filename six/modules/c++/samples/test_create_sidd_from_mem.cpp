@@ -2523,7 +2523,7 @@ int main(int argc, char** argv)
         }
 
         const bool smallImage = options->get<bool>("smallImage");
-        const std::string version = options->get<std::string>("version");
+        const std::string strVersion = options->get<std::string>("version");
 
         six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
@@ -2597,7 +2597,7 @@ int main(int argc, char** argv)
 
             std::unique_ptr<six::sidd::DerivedData> siddData = initData(lutType);
 
-            populateData(*siddData, lutType, smallImage, version);
+            populateData(*siddData, lutType, smallImage, strVersion);
             container->addData(siddData->clone());
             if (!smallImage)
             {
