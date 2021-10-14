@@ -125,8 +125,12 @@ protected:
  *  beforehand
  *
  */
-struct MemoryWriteHandler: public nitf::WriteHandler
+class MemoryWriteHandler: public nitf::WriteHandler
 {
+    MemoryWriteHandler(const NITFSegmentInfo& info,
+        const UByte* buffer,
+        size_t firstRow, const Data& data, bool doByteSwap);
+public:
     MemoryWriteHandler(const NITFSegmentInfo& info, 
                        const UByte* buffer,
                        size_t firstRow,
@@ -134,16 +138,10 @@ struct MemoryWriteHandler: public nitf::WriteHandler
                        size_t numChannels,
                        size_t pixelSize,
                        bool doByteSwap);
+    template<typename T>
     MemoryWriteHandler(const NITFSegmentInfo& info, 
-                       const std::byte* buffer,
+                      std::span<const T> buffer,
                        size_t firstRow, const Data& data, bool doByteSwap);
-    MemoryWriteHandler(const NITFSegmentInfo& info, 
-                      std::span<const std::complex<float>> buffer,
-                       size_t firstRow, const Data& data, bool doByteSwap);
-    MemoryWriteHandler(const NITFSegmentInfo& info, 
-                      std::span<const std::pair<uint8_t, uint8_t>> buffer,
-                       size_t firstRow, const Data& data, bool doByteSwap);
-
 };
 
 /*!

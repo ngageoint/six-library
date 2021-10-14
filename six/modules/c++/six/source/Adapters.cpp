@@ -150,6 +150,13 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
 
     setManaged(false);
 }
+MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
+        const UByte* buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : MemoryWriteHandler(info, buffer, firstRow,
+        data.getNumCols(), data.getNumChannels(), data.getNumBytesPerPixel(),
+        doByteSwap)
+{
+}
 
 template<typename T>
 inline const UByte* cast(const T* buffer)
@@ -158,56 +165,45 @@ inline const UByte* cast(const T* buffer)
     return static_cast<const UByte*>(pBuffer);
 }
 
-MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
-        const std::byte* buffer, size_t firstRow, const Data& data, bool doByteSwap)
-    : MemoryWriteHandler(info, cast(buffer), firstRow,
-        data.getNumCols(), data.getNumChannels(), data.getNumBytesPerPixel(),
-        doByteSwap)
+template<typename T>
+inline void validate_buffer(std::span<const T> buffer, const Data& data)
 {
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    if (sizeof(buffer[0]) != pixelSize * numChannels)
+    {
+        throw std::invalid_argument("pixelSize is wrong.");
+    }
 }
 
+template<>
 MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
         std::span<const std::complex<float>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
-    : MemoryWriteHandler(info, cast(buffer.data()), firstRow,
-        data.getNumCols(), data.getNumChannels(), data.getNumBytesPerPixel(),
-        doByteSwap)
+    : MemoryWriteHandler(info, cast(buffer.data()), firstRow, data, doByteSwap)
 {
-    const auto pixelType = data.getPixelType();
-    if (pixelType == six::PixelType::AMP8I_PHS8I)
+    if (data.getPixelType() != six::PixelType::RE32F_IM32F)
     {
-        const void* pData = mHandle->get()->data;
-        const auto pImpl = static_cast<const MemoryWriteHandlerImpl*>(pData);
-        assert(pImpl->doByteSwap == false);
+        throw std::invalid_argument("pixelType is wrong.");
     }
-
-    const auto numChannels = data.getNumChannels();
-    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-    if (sizeof(buffer[0]) != pixelSize * numChannels)
-    {
-        throw std::invalid_argument("pixelSize is wrong.");
-    }
+    validate_buffer(buffer, data);
 }
 
+template<>
 MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const  std::pair<uint8_t, uint8_t>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
-    : MemoryWriteHandler(info, cast(buffer.data()), firstRow,
-        data.getNumCols(), data.getNumChannels(), data.getNumBytesPerPixel(),
-        doByteSwap)
+    : MemoryWriteHandler(info, cast(buffer.data()), firstRow, data, doByteSwap)
 {
-    const auto pixelType = data.getPixelType();
-    if (pixelType == six::PixelType::AMP8I_PHS8I)
+    if (data.getPixelType() != six::PixelType::AMP8I_PHS8I)
     {
-        const void* pData = mHandle->get()->data;
-        const auto pImpl = static_cast<const MemoryWriteHandlerImpl*>(pData);
-        assert(pImpl->doByteSwap == false);
+        throw std::invalid_argument("pixelType is wrong.");
     }
 
-    const auto numChannels = data.getNumChannels();
-    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-    if (sizeof(buffer[0]) != pixelSize * numChannels)
-    {
-        throw std::invalid_argument("pixelSize is wrong.");
-    }
+    // be sure doByteSwap got set properly
+    const void* pData = mHandle->get()->data;
+    const auto pImpl = static_cast<const MemoryWriteHandlerImpl*>(pData);
+    assert(pImpl->doByteSwap == false);
+
+    validate_buffer(buffer, data);
 }
 
 //
