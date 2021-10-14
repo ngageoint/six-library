@@ -27,6 +27,7 @@
 #include <std/cstddef>
 #include <stdexcept>
 #include <gsl/gsl.h>
+#include <std/memory>
 
 using namespace six;
 
@@ -151,14 +152,16 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
     setManaged(false);
 }
 
-struct NewMemoryWriteHandler::Impl
+struct NewMemoryWriteHandler::Impl final
 {
-
+    // This needs to persist beyhond the constructor
+    std::vector<std::pair<uint8_t, uint8_t>> ampi8i_phs8i;
 };
 
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     const UByte* buffer, size_t firstRow, size_t numCols,
     size_t numChannels, size_t pixelSize, bool doByteSwap)
+    : m_pImpl(std::make_unique<Impl>())
 {
     // Dont do it if we only have a byte!
     if (pixelSize / numChannels == 1)
@@ -219,16 +222,21 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::complex<float>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer.data()), firstRow, data, doByteSwap)
 {
-
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
-        std::vector<std::pair<uint8_t, uint8_t>> ampi8i_phs8i_(buffer.size());
-        std::span<std::pair<uint8_t, uint8_t>> ampi8i_phs8i(ampi8i_phs8i_.data(), ampi8i_phs8i_.size());
-        if (!data.convertPixels(buffer, ampi8i_phs8i))
+        auto& ampi8i_phs8i = m_pImpl->ampi8i_phs8i;
+        ampi8i_phs8i.resize(buffer.size());
+        const std::span<std::pair<uint8_t, uint8_t>> ampi8i_phs8i_(ampi8i_phs8i.data(), ampi8i_phs8i.size());
+        if (!data.convertPixels(buffer, ampi8i_phs8i_))
         {
             throw std::runtime_error("Unable to convert pixels.");
         }
-        validate_pixelSize(ampi8i_phs8i, data);
+        validate_pixelSize(ampi8i_phs8i_, data);
+
+        // Everything is kosher, point to the converted data
+        void* pData = this->mHandle->get()->data;
+        auto pImpl = static_cast<MemoryWriteHandlerImpl*>(pData);
+        pImpl->buffer = cast(ampi8i_phs8i.data());
     }
     else if (data.getPixelType() != six::PixelType::RE32F_IM32F)
     {
@@ -249,12 +257,6 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     {
         throw std::invalid_argument("pixelType is wrong.");
     }
-
-    // be sure doByteSwap got set properly
-    const void* pData = mHandle->get()->data;
-    const auto pImpl = static_cast<const MemoryWriteHandlerImpl*>(pData);
-    assert(pImpl->doByteSwap == false);
-
     validate_pixelSize(buffer, data);
 }
 
