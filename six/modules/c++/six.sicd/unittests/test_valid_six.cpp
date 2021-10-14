@@ -571,16 +571,30 @@ static void read_nitf(const fs::path& path, six::PixelType pixelType, const std:
     read_raw_data(path, pixelType, bytes);
 }
 
+void buffer_list_save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
+    std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
+{
+    static const std::vector<std::string> schemaPaths;
+
+    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+    auto container = std::make_shared<six::Container>(std::move(pComplexData));
+    six::NITFWriteControl writer(container);
+
+    const void* image_data = image.data();
+    six::buffer_list buffers{ static_cast<const std::byte*>(image_data) };
+    writer.save(buffers, outputName.string(), schemaPaths);
+}
+
 void save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
     static const std::vector<fs::path> schemaPaths;
-    //six::sicd::writeAsNITF(outputName, schemaPaths, *pComplexData, image.data());
-    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
-    auto container = std::make_shared<six::Container>(std::move(pComplexData));
-    const six::Options writerOptions;
-    six::NITFWriteControl writer(writerOptions, container);
-    writer.save(image, outputName, schemaPaths);
+    six::sicd::writeAsNITF(outputName, schemaPaths, *pComplexData, image.data());
+
+    //six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+    //auto container = std::make_shared<six::Container>(std::move(pComplexData));
+    //six::NITFWriteControl writer(container);
+    //writer.save(image, outputName, schemaPaths);
 }
 
 static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)

@@ -1571,7 +1571,7 @@ std::vector<std::byte> six::sicd::readFromNITF(const fs::path& pathname, const s
     return reader.interleaved();
 }
 
-void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths, const ComplexData& data, const std::complex<float>* image)
+void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths_, const ComplexData& data, const std::complex<float>* image_)
 {
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
@@ -1582,10 +1582,10 @@ void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::str
     writer.initialize(container);
     writer.setLogger(*logger);
 
-    const void* image_data = image;
-    six::buffer_list buffers{ static_cast<const std::byte*>(image_data) };
-
-    writer.save(buffers, pathname.string(), schemaPaths);
+    const std::span<const std::complex<float>> image(image_, getExtent(data).area());
+    std::vector<fs::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+    writer.save(image, pathname, schemaPaths);
 }
 void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths, const ComplexData& data, const std::complex<float>* image)
 {
