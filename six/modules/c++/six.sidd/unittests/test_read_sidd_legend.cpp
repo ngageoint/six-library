@@ -22,8 +22,7 @@
 
 #include <stdexcept>
 #include <iostream>
-#include <memory>
-
+#include <std/memory>
 #include <std/filesystem>
 
 #include "TestCase.h"
@@ -209,7 +208,7 @@ struct TestHelper
 
         // First a single segment without a legend
         types::RowCol<size_t> dims1(40, numCols);
-        mem::auto_ptr<six::Data> data1(mockupDerivedData(dims1));
+        std::unique_ptr<six::Data> data1(mockupDerivedData(dims1));
 
         const mem::ScopedArray<sys::ubyte> buffer1(new sys::ubyte[dims1.area()]);
         std::fill_n(buffer1.get(), dims1.area(), static_cast<sys::ubyte>(20));
@@ -219,18 +218,18 @@ struct TestHelper
 
         // Now a single segment with a mono legend
         types::RowCol<size_t> dims2(40, numCols);
-        mem::auto_ptr<six::Data> data2(mockupDerivedData(dims2));
+        std::unique_ptr<six::Data> data2(mockupDerivedData(dims2));
 
         const mem::ScopedArray<sys::ubyte> buffer2(new sys::ubyte[dims2.area()]);
         std::fill_n(buffer2.get(), dims2.area(), static_cast<sys::ubyte>(100));
 
-        mem::auto_ptr<six::Legend> monoLegend(new six::Legend(mMonoLegend));
+        auto monoLegend(std::make_unique<six::Legend>(mMonoLegend));
         container->addData(std::move(data2), std::move(monoLegend));
         buffers.push_back(buffer2.get());
 
         // Now a multi-segment without a legend
         types::RowCol<size_t> dims3(150, numCols);
-        mem::auto_ptr<six::Data> data3(mockupDerivedData(dims3));
+        std::unique_ptr<six::Data> data3(mockupDerivedData(dims3));
 
         const mem::ScopedArray<sys::ubyte> buffer3(new sys::ubyte[dims3.area()]);
         std::fill_n(buffer3.get(), dims3.area(), static_cast<sys::ubyte>(60));
@@ -240,9 +239,9 @@ struct TestHelper
 
         // Now a multi-segment with an RGB legend
         types::RowCol<size_t> dims4(155, numCols);
-        mem::auto_ptr<six::Data> data4(mockupDerivedData(dims4));
+        std::unique_ptr<six::Data> data4(mockupDerivedData(dims4));
 
-        mem::auto_ptr<six::Legend> rgbLegend(new six::Legend(mRgbLegend));
+        auto rgbLegend(std::make_unique<six::Legend>(mRgbLegend));
 
         const mem::ScopedArray<sys::ubyte> buffer4(new sys::ubyte[dims4.area()]);
         std::fill_n(buffer4.get(), dims4.area(), static_cast<sys::ubyte>(200));

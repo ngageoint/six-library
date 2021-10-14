@@ -87,7 +87,7 @@ DateTime DerivedData::getCollectionStartDateTime() const
     return exploitationFeatures->collections[0]->information.collectionDateTime;
 }
 
-mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT()
+const mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT() const
 {
     if (mVersion == "1.0.0")
     {
@@ -105,6 +105,10 @@ mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT()
     {
         throw except::Exception(Ctxt("Unknown version. Expected 2.0.0 or 1.0.0"));
     }
+}
+void DerivedData::setDisplayLUT(std::unique_ptr<AmplitudeTable>&& pLUT)
+{
+    nitfLUT.reset(pLUT.release());
 }
 
 types::RowCol<double>

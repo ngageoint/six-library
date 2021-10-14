@@ -1575,10 +1575,8 @@ void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::str
 {
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
-    auto container = std::make_shared<six::Container>(six::DataType::COMPLEX);
+    auto container = std::make_shared<six::Container>(data.clone());
     std::unique_ptr<logging::Logger> logger(logging::setupLogger("out").release());
-
-    container->addData(data.clone());
 
     six::NITFWriteControl writer;
     writer.initialize(container);

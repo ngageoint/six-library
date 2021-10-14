@@ -111,9 +111,8 @@ struct NITFReadControl : public ReadControl
      *  segment in question at least follows some of the rules
      *  that its supposed to.
      */
-    void validateSegment(nitf::ImageSubheader subheader,
-                         const NITFImageInfo* info);
-    void validateSegment(nitf::ImageSubheader subheader, const NITFImageInfo&);
+    void validateSegment(const nitf::ImageSubheader&, const NITFImageInfo*) const;
+    void validateSegment(const nitf::ImageSubheader&, const NITFImageInfo&) const;
 
     using ReadControl::load;
 
