@@ -72,9 +72,8 @@ namespace sicd
  *
  *
  */
-class ComplexData: public Data
+struct ComplexData: public Data
 {
-public:
     //!  CollectionInfo block.  Contains the general collection information
     mem::ScopedCloneablePtr<CollectionInformation> collectionInformation;
 
@@ -162,6 +161,7 @@ public:
     {
         imageData->pixelType = pixelType;
     }
+    bool convertPixels_(std::span<const std::byte>, std::span<std::byte>) const override;
 
     /*!
      *  Maps to: /SICD/ImageData/NumRows,

@@ -540,8 +540,8 @@ static void read_nitf(const fs::path& path, six::PixelType pixelType, const std:
     read_raw_data(path, pixelType, bytes);
 }
 
-template<typename T>
-void save_(const fs::path& outputName, const std::vector<T>& image, std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
+void save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
+    std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
     static const std::vector<fs::path> schemaPaths;
     //six::sicd::writeAsNITF(outputName, schemaPaths, *pComplexData, image.data());
@@ -550,22 +550,6 @@ void save_(const fs::path& outputName, const std::vector<T>& image, std::unique_
     const six::Options writerOptions;
     six::NITFWriteControl writer(writerOptions, container);
     writer.save(image, outputName, schemaPaths);
-}
-void save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
-    std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
-{
-    if (pComplexData->getPixelType() == six::PixelType::AMP8I_PHS8I)
-    {
-        const auto& imageData = *(pComplexData->imageData);
-
-        std::vector<AMP8I_PHS8I_t> image_ampi8i_phs8i(image.size());
-        imageData.to_AMP8I_PHS8I(image, image_ampi8i_phs8i);
-        save_(outputName, image_ampi8i_phs8i, std::move(pComplexData));
-    }
-    else
-    {
-        save_(outputName, image, std::move(pComplexData));
-    }
 }
 
 static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)
@@ -602,9 +586,9 @@ TEST_CASE(test_create_sicds_from_mem)
 {
     setNitfPluginPath();
 
-    test_create_sicd_from_mem("test_create_sicd_from_mem_32f.sicd", six::PixelType::RE32F_IM32F);
+    //test_create_sicd_from_mem("test_create_sicd_from_mem_32f.sicd", six::PixelType::RE32F_IM32F);
     //test_create_sicd_from_mem("test_create_sicd_from_mem_8i_amp.sicd", six::PixelType::AMP8I_PHS8I, true /*makeAmplitudeTable*/);
-    //test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
+    test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
 
 TEST_MAIN((void)argc;

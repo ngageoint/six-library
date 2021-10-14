@@ -353,3 +353,18 @@ six::AmplitudeTable* six::sicd::ComplexData::getAmplitudeTable() const
     }
     return retval;
 }
+
+bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, std::span<std::byte> to_) const
+{
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        return false; // no conversion done as there is nothing to convert
+    }
+
+    const void* const pFrom = from_.data();
+    const std::span<const six::sicd::ImageData::cx_float> from(static_cast<const six::sicd::ImageData::cx_float*>(pFrom), from_.size());
+    void* const pTo = to_.data();
+    const std::span<six::sicd::ImageData::AMP8I_PHS8I_t> to(static_cast<six::sicd::ImageData::AMP8I_PHS8I_t*>(pTo), to_.size());
+    imageData->to_AMP8I_PHS8I(from, to);
+    return true; // converted
+}

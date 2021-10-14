@@ -26,6 +26,8 @@
 
 #include <vector>
 #include <memory>
+#include <std/span>
+#include <std/cstddef>
 
 #include "six/Types.h"
 #include "six/Classification.h"
@@ -83,6 +85,16 @@ struct Data
      */
     virtual PixelType getPixelType() const = 0;
     virtual void setPixelType(PixelType pixelType) = 0;
+    virtual bool convertPixels_(std::span<const std::byte>, std::span<std::byte>) const { return false; }
+    template<typename T, typename U>
+    bool convertPixels(std::span<const T> from_, std::span<U> to_) const
+    {
+        const void* const pFrom = from_.data();
+        const std::span<const std::byte> from(static_cast<const std::byte*>(pFrom), from_.size());
+        void* const pTo = to_.data();
+        const std::span<std::byte> to(static_cast<std::byte*>(pTo), to_.size());
+        return convertPixels_(from, to);
+    }
 
     /*!
      *  Maps to: /SICD/ImageData/NumRows,/SICD/ImageData/FullImage/Row
