@@ -28,6 +28,7 @@
 #include <utility>
 #include <std/span>
 #include <std/cstddef>
+#include <memory>
 
 #include <scene/sys_Conf.h>
 #include <import/io.h>
@@ -125,12 +126,8 @@ protected:
  *  beforehand
  *
  */
-class MemoryWriteHandler: public nitf::WriteHandler
+struct MemoryWriteHandler: public nitf::WriteHandler
 {
-    MemoryWriteHandler(const NITFSegmentInfo& info,
-        const UByte* buffer,
-        size_t firstRow, const Data& data, bool doByteSwap);
-public:
     MemoryWriteHandler(const NITFSegmentInfo& info, 
                        const UByte* buffer,
                        size_t firstRow,
@@ -138,14 +135,40 @@ public:
                        size_t numChannels,
                        size_t pixelSize,
                        bool doByteSwap);
-    MemoryWriteHandler(const NITFSegmentInfo& info,
+};
+
+class NewMemoryWriteHandler final : public nitf::WriteHandler
+{
+    struct Impl;
+    std::unique_ptr<Impl> m_pImpl;
+
+    NewMemoryWriteHandler(const NITFSegmentInfo& info,
+        const UByte* buffer,
+        size_t firstRow, const Data& data, bool doByteSwap);
+public:
+    NewMemoryWriteHandler() = delete;
+    ~NewMemoryWriteHandler();
+    NewMemoryWriteHandler(const NewMemoryWriteHandler&) = delete;
+    NewMemoryWriteHandler& operator=(const NewMemoryWriteHandler&) = delete;
+    NewMemoryWriteHandler(NewMemoryWriteHandler&&) = default;
+    NewMemoryWriteHandler& operator=(NewMemoryWriteHandler&&) = default;
+
+    NewMemoryWriteHandler(const NITFSegmentInfo& info,
+        const UByte* buffer,
+        size_t firstRow,
+        size_t numCols,
+        size_t numChannels,
+        size_t pixelSize,
+        bool doByteSwap);
+    NewMemoryWriteHandler(const NITFSegmentInfo& info,
         const std::byte* buffer,
         size_t firstRow, const Data& data, bool doByteSwap);
     template<typename T>
-    MemoryWriteHandler(const NITFSegmentInfo& info, 
-                      std::span<const T> buffer,
-                       size_t firstRow, const Data& data, bool doByteSwap);
+    NewMemoryWriteHandler(const NITFSegmentInfo& info,
+        std::span<const T> buffer,
+        size_t firstRow, const Data& data, bool doByteSwap);
 };
+
 
 /*!
  *  \class StreamWriteHandler

@@ -186,11 +186,11 @@ bool NITFWriteControl::shouldByteSwap() const
 }
 
 template<typename TImageData>
-static inline std::shared_ptr<MemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+static inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
     TImageData& imageData, const Data& data, bool doByteSwap)
 {
     // this bypasses the normal NITF ImageWriter and streams directly to the output
-    return std::make_shared<MemoryWriteHandler>(segmentInfo,
+    return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
             imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
 static std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
