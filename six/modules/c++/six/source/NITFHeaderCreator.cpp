@@ -640,6 +640,25 @@ static uint32_t  get_legendNbpp(const Legend& legend)
     return legendNbpp;
 }
 
+static void getBlockingParameters(const six::Options& mOptions, uint32_t& optNumRowsPerBlock, uint32_t& optNumColsPerBlock)
+{
+    // get row blocking parameters
+    optNumRowsPerBlock = 0;
+    if (mOptions.hasParameter(NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK))
+    {
+        optNumRowsPerBlock = static_cast<uint32_t>(
+            mOptions.getParameter(NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK));
+    }
+
+    // get column blocking parameters
+    optNumColsPerBlock = 0;
+    if (mOptions.hasParameter(NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK))
+    {
+        optNumColsPerBlock = static_cast<uint32_t>(
+            mOptions.getParameter(NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK));
+    }
+}
+
 void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 {
     mContainer = container;
@@ -680,21 +699,10 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
                                               Parameter(0));
         enableJ2K = (j2kCompression <= 1.0) && j2kCompression > 0.0001;
 
-        // get row blocking parameters
+        // get row blocking parameters, get column blocking parameters
         uint32_t optNumRowsPerBlock = 0;
-        if (mOptions.hasParameter(OPT_NUM_ROWS_PER_BLOCK))
-        {
-            optNumRowsPerBlock = static_cast<uint32_t>(
-                    mOptions.getParameter(OPT_NUM_ROWS_PER_BLOCK));
-        }
-
-        // get column blocking parameters
         uint32_t optNumColsPerBlock = 0;
-        if (mOptions.hasParameter(OPT_NUM_COLS_PER_BLOCK))
-        {
-            optNumColsPerBlock = static_cast<uint32_t>(
-                    mOptions.getParameter(OPT_NUM_COLS_PER_BLOCK));
-        }
+        getBlockingParameters(mOptions, optNumRowsPerBlock, optNumColsPerBlock);
 
         for (size_t ii = 0; ii < container->getNumData(); ++ii)
         {
@@ -777,8 +785,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
             nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
             subheader.getImageTitle().set(fileTitle);
-            const DateTime collectionDT =
-                    info.getData()->getCollectionStartDateTime();
+            const DateTime collectionDT = info.getData()->getCollectionStartDateTime();
             subheader.getImageDateAndTime().set(collectionDT);
             subheader.getImageId().set(getIID(dataType, jj, numIS, ii));
             subheader.getImageSource().set(imageSource);
@@ -790,23 +797,18 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
                 ostr << "Row offset cannot exceed " << maxRows
                      << ", but for image segment " << jj << " it is "
                      << segmentInfo.getFirstRow();
-
                 throw except::Exception(Ctxt(ostr.str()));
             }
 
-            subheader.getImageLocation().set(
-                    generateILOC(segmentInfo.getRowOffset(), 0));
+            subheader.getImageLocation().set(generateILOC(segmentInfo.getRowOffset(), 0));
 
             subheader.getTargetId().set(targetId);
 
-            std::vector<nitf::BandInfo> bandInfo = info.getBandInfo();
+            auto bandInfo = info.getBandInfo();
+            subheader.setPixelInformation(pvtype, nbpp, nbpp, "R", irep, "SAR", bandInfo);
 
-            subheader.setPixelInformation(
-                    pvtype, nbpp, nbpp, "R", irep, "SAR", bandInfo);
-
-            setBlocking(imode,
-                        types::RowCol<size_t>(segmentInfo.getNumRows(), numCols),
-                        subheader);
+            const types::RowCol<size_t> segmentDims(segmentInfo.getNumRows(), numCols);
+            setBlocking(imode, segmentDims, subheader);
 
             subheader.getImageSyncCode().set(0);
             if (jj == 0)
@@ -893,8 +895,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
             // We want to set the legend's IALVL to the IDLVL we want to attach
             // to (which is the first image segment for this product which is
             // conveniently at info.getStartIndex()... but IDLVL is 1-based).
-            subheader.getImageAttachmentLevel().set(
-                    static_cast<nitf::Uint16>(info.getStartIndex() + 1));
+            subheader.getImageAttachmentLevel().set(static_cast<nitf::Uint16>(info.getStartIndex() + 1));
 
             setImageSecurity(info.getData()->getClassification(), subheader);
 
