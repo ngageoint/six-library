@@ -119,15 +119,12 @@ void cropSICD(six::NITFReadControl& reader,
     const auto buffer = region.setBuffer(numBytes);
     reader.interleaved(region, 0);
 
-    six::sicd::ComplexData* const aoiData = updateMetadata(
+    std::unique_ptr<six::Data> aoiData(updateMetadata(
             data, geom,  projection,
-            aoiOffset, aoiDims);
-    std::unique_ptr<six::Data> scopedData(aoiData);
+            aoiOffset, aoiDims));
 
     // Write the AOI SICD out
-    std::shared_ptr<six::Container> container(new six::Container(
-            six::DataType::COMPLEX));
-    container->addData(std::move(scopedData));
+    std::shared_ptr<six::Container> container(new six::Container(std::move(aoiData)));
     six::NITFWriteControl writer(container);
     six::BufferList images(1, buffer.get());
     writer.save(images, outPathname, schemaPaths);

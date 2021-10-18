@@ -25,6 +25,8 @@
 
 #include <string>
 
+#include <nitf/ImageSubheader.hpp>
+
 #include <six/Types.h>
 #include <six/Data.h>
 #include <six/Utilities.h>
@@ -77,7 +79,6 @@ public:
                   bool computeSegments = false,
                   size_t rowsPerBlock = 0,
                   size_t colsPerBlock = 0);
-
     NITFImageInfo(const NITFImageInfo&) = delete;
     NITFImageInfo& operator=(const NITFImageInfo&) = delete;
 
@@ -86,71 +87,46 @@ public:
         return mData->getNumBytesPerPixel() / mData->getNumChannels() * 8;
     }
 
-    static
-    std::string getPixelValueType(PixelType pixelType)
-    {
-        switch (pixelType)
-        {
-        case PixelType::RE32F_IM32F:
-            return "R";
-        case PixelType::RE16I_IM16I:
-            return "SI";
-        default:
-            return "INT";
-        }
-    }
-
+    static std::string getPixelValueType(PixelType pixelType);
     std::string getPixelValueType() const
     {
         return getPixelValueType(mData->getPixelType());
     }
-
-    static
-    std::string getRepresentation(PixelType pixelType)
+    static nitf::PixelValueType getPixelType(PixelType pixelType);
+    nitf::PixelValueType getPixelType() const
     {
-        switch (pixelType)
-        {
-        case PixelType::MONO8LU:
-        case PixelType::MONO8I:
-        case PixelType::MONO16I:
-            return "MONO";
-        case PixelType::RGB8LU:
-            return "RGB/LUT";
-        case PixelType::RGB24I:
-            return "RGB";
-        default:
-            return "NODISPLY";
-        }
+        return getPixelType(mData->getPixelType());
     }
 
+    static std::string getRepresentation(PixelType pixelType);
     std::string getRepresentation() const
     {
         return getRepresentation(mData->getPixelType());
     }
-
-    static
-    std::string getMode(PixelType pixelType)
+    static nitf::ImageRepresentation getImageRepresentation(PixelType pixelType);
+    nitf::ImageRepresentation getImageRepresentation() const
     {
-        switch (pixelType)
-        {
-        case PixelType::RGB8LU:
-        case PixelType::MONO8LU:
-        case PixelType::MONO8I:
-        case PixelType::MONO16I:
-            return "B";
-        default:
-            return "P";
-        }
+        return getImageRepresentation(mData->getPixelType());
     }
 
+    static std::string getMode(PixelType pixelType);
     std::string getMode() const
     {
         return getMode(mData->getPixelType());
     }
+    static nitf::BlockingMode getBlockingMode(PixelType pixelType);
+    nitf::BlockingMode getBlockingMode() const
+    {
+        return getBlockingMode(mData->getPixelType());
+    }
 
-    Data* getData() const
+    const Data* getData() const
     {
         return mData;
+    }
+    Data* getData_()
+    {
+        return mData_;
     }
 
     std::vector<NITFSegmentInfo> getImageSegments() const
@@ -275,7 +251,8 @@ private:
     void computeSegmentCorners();
 
 private:
-    Data* const mData;
+    const Data* const mData;
+    Data* const mData_;
 
     const nitf::ImageSegmentComputer mSegmentComputer;
 

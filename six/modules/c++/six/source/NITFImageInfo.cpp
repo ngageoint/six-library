@@ -35,18 +35,13 @@ namespace
 {
 struct GetDisplayLutFromData final
 {
-    GetDisplayLutFromData(six::Data& data) :
-        mData(data)
-    {
-    }
-
+    GetDisplayLutFromData(const six::Data& data) : mData(data) { }
     GetDisplayLutFromData(const GetDisplayLutFromData&) = delete;
     GetDisplayLutFromData& operator=(const GetDisplayLutFromData&) = delete;
 
     const six::LUT* operator()() const
     {
         const six::LUT* retval = mData.getDisplayLUT().get();
-
         if ((retval == nullptr) && (mData.getPixelType() == six::PixelType::AMP8I_PHS8I))
         {
             retval = mData.getAmplitudeTable();
@@ -55,7 +50,7 @@ struct GetDisplayLutFromData final
     }
 
 private:
-    six::Data& mData;
+    const six::Data& mData;
 };
 }
 
@@ -99,7 +94,7 @@ NITFImageInfo::NITFImageInfo(Data* data,
                              bool computeSegments,
                              size_t rowsPerBlock,
                              size_t colsPerBlock) :
-    mData(data),
+    mData(data), mData_(data),
     mSegmentComputer(data->getNumRows(),
                      data->getNumCols(),
                      data->getNumBytesPerPixel(),
@@ -368,9 +363,75 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixel
         throw except::Exception(Ctxt("Unknown pixel type"));
     }
 
-    for (size_t i = 0; i < bands.size(); ++i)
+    for (auto& band : bands)
     {
-        bands[i].getImageFilterCondition().set("N");
+        band.getImageFilterCondition().set("N");
     }
     return bands;
+}
+
+nitf::PixelValueType six::NITFImageInfo::getPixelType(PixelType pixelType)
+{
+    switch (pixelType)
+    {
+    case PixelType::RE32F_IM32F:
+        return nitf::PixelValueType::Floating; // "R"
+    case PixelType::RE16I_IM16I:
+        return nitf::PixelValueType::Signed; // "SI"
+    case PixelType::AMP8I_PHS8I:
+        return nitf::PixelValueType::Integer; // "INT"
+
+    // TODO: Complex, Pseudo12 ?
+
+    default:
+        return nitf::PixelValueType::Integer; // "INT"
+    }
+}
+std::string six::NITFImageInfo::getPixelValueType(PixelType pixelType)
+{
+    return to_string(getPixelType(pixelType));
+}
+
+nitf::ImageRepresentation  six::NITFImageInfo::getImageRepresentation(PixelType pixelType)
+{
+    switch (pixelType)
+    {
+    case PixelType::MONO8LU:
+    case PixelType::MONO8I:
+    case PixelType::MONO16I:
+        return nitf::ImageRepresentation::MONO;
+    case PixelType::RGB8LU:
+        return nitf::ImageRepresentation::RGB_LUT;
+    case PixelType::RGB24I:
+        return nitf::ImageRepresentation::RGB;
+    // TODO: nitf::ImageRepresentation::MULTI ?
+    default:
+        return nitf::ImageRepresentation::NODISPLY;
+    }
+}
+std::string six::NITFImageInfo::getRepresentation(PixelType pixelType)
+{
+    return to_string(getImageRepresentation(pixelType));
+}
+
+nitf::BlockingMode six::NITFImageInfo::getBlockingMode(PixelType pixelType)
+{
+
+    switch (pixelType)
+    {
+    case PixelType::RGB8LU:
+    case PixelType::MONO8LU:
+    case PixelType::MONO8I:
+    case PixelType::MONO16I:
+        return nitf::BlockingMode::Block; // "B"
+
+    // TODO: Row, Sequential ?
+
+    default:
+        return nitf::BlockingMode::Pixel; // "P";
+    }
+}
+std::string six::NITFImageInfo::getMode(PixelType pixelType)
+{
+    return to_string(getBlockingMode(pixelType));
 }

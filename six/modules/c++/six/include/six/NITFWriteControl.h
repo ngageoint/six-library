@@ -23,8 +23,18 @@
 #ifndef __SIX_NITF_WRITE_CONTROL_H__
 #define __SIX_NITF_WRITE_CONTROL_H__
 
+#include <stdint.h>
+
 #include <map>
 #include <memory>
+#include <vector>
+#include <complex>
+#include <std/span>
+#include <std/cstddef>
+#include <utility>
+#include <algorithm>
+
+#include <nitf/BufferedWriter.hpp>
 
 #include "six/Types.h"
 #include "six/Container.h"
@@ -48,6 +58,36 @@ namespace six
  */
 class NITFWriteControl : public WriteControl
 {
+    template<typename TImageData>
+    void writeWithNitro(TImageData&& imageData,
+        const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&, bool unused_ = false);
+    template<typename TImageData>
+    void writeWithoutNitro(TImageData&& imageData,
+        const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&, bool doByteSwap);
+    void addLegend(const Legend&, int imageNumber);
+
+    // "using NITFWriteControl::save;" in SICDWriteControl.h
+    template<typename TImageData>
+    void Tsave(TImageData&&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    template<typename T>
+    void save_(std::span<const T>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+
+    void save_buffer_list(std::span<const std::byte* const>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+
+    template<typename TBufferList>
+    void save_buffer_list_to_file(const TBufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
+    {
+        const size_t bufferSize = getOptions().getParameter(WriteControl::OPT_BUFFER_SIZE, Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
+        nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
+        save(list, bufferedIO, schemaPaths);
+        bufferedIO.close();
+    }
+
+    bool prepareIO(size_t, nitf::IOInterface&);
+    bool prepareIO(std::span<const std::byte* const>, nitf::IOInterface&);
+    bool prepareIO(std::span<const std::complex<float>>, nitf::IOInterface&);
+    bool prepareIO(std::span<const std::pair<uint8_t, uint8_t>>, nitf::IOInterface&);
+
 public:
 
     //! Constructor. Must call initialize to use.
@@ -208,16 +248,31 @@ public:
      *  \param outputFile  Output path to write
      *  \param schemaPaths Directories or files of schema locations
      */
-    template<typename TBufferList>
-    void save_(const TBufferList& list,
-                      const std::string& outputFile,
-                      const std::vector<std::string>& schemaPaths);
-    virtual void save(const BufferList& imageData,
-                      const std::string& outputFile,
-                      const std::vector<std::string>& schemaPaths) override;
-    virtual void save(const buffer_list& imageData,
-                      const std::string& outputFile,
-                      const std::vector<std::string>& schemaPaths) override;
+    virtual void save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths) override
+    {
+        save_buffer_list_to_file(list, outputFile, schemaPaths);
+    }
+    virtual void save(const buffer_list& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths) override
+    {
+        save_buffer_list_to_file(list, outputFile, schemaPaths);
+    }
+
+    template<typename T>
+    void save(std::span<const T> imageData,
+        const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
+    {
+        const size_t bufferSize = getOptions().getParameter(WriteControl::OPT_BUFFER_SIZE, Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
+        nitf::BufferedWriter bufferedIO(outputFile.string(), bufferSize);
+        save(imageData, bufferedIO, schemaPaths);
+        bufferedIO.close();
+    }
+    template<typename T>
+    void save(const std::vector<T>& imageData_,
+        const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
+    {
+        std::span<const T> imageData(imageData_.data(), imageData_.size());
+        save(imageData, outputFile, schemaPaths);
+    }
 
     void save(const NonConstBufferList& imageData,
               const std::string& outputFile,
@@ -261,16 +316,33 @@ public:
      *  endian file as the supply stream, you should set BYTE_SWAP to
      *  on.
      */
-    template<typename TBufferList>
-    void save_(const TBufferList& list,
-                      nitf::IOInterface& outputFile,
-                      const std::vector<std::string>& schemaPaths);
-    virtual void save(const BufferList& list,
-                      nitf::IOInterface& outputFile,
-                      const std::vector<std::string>& schemaPaths);
-    virtual void save(const buffer_list& list,
-                      nitf::IOInterface& outputFile,
-                      const std::vector<std::string>& schemaPaths);
+    virtual void save(const BufferList& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
+    {
+        const void* pImageData_ = list.data();
+        const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), list.size());
+        save_buffer_list(imageData_, outputFile, schemaPaths);
+    }
+    virtual void save(const buffer_list& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
+    {
+        save_buffer_list(list, outputFile, schemaPaths);
+    }
+
+    template<typename T>
+    void save(std::span<const T> imageData,
+        nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths_)
+    {
+        std::vector<std::string> schemaPaths;
+        std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+            [](const std::filesystem::path& p) { return p.string(); });
+        save_(imageData, outputFile, schemaPaths);
+    }
+    template<typename T>
+    void save(const std::vector<T>& imageData_,
+        nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
+    {
+        std::span<const T> imageData(imageData_.data(), imageData_.size());
+        save(imageData, outputFile, schemaPaths);
+    }
 
     void save(const NonConstBufferList& list,
               nitf::IOInterface& outputFile,

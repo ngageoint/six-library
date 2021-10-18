@@ -74,7 +74,7 @@ struct WriteControl
     static const char OPT_BUFFER_SIZE[];
 
     //!  Constructor.  Null-sets the Container
-    WriteControl() noexcept :
+    WriteControl() noexcept(false) :
         mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
     {
         setLogger(nullptr);

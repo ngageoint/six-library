@@ -31,7 +31,8 @@ using namespace six;
  */
 size_t Data::getNumBytesPerPixel() const
 {
-    switch (getPixelType())
+    const auto pixelType = getPixelType();
+    switch (pixelType)
     {
     case PixelType::RE32F_IM32F:
     case PixelType::RE16I_IM16I:
@@ -41,7 +42,7 @@ size_t Data::getNumBytesPerPixel() const
     case PixelType::MONO16I:
     case PixelType::RGB8LU:
     case PixelType::RGB24I:
-        return gsl::narrow<size_t>(six::Constants::getNumBytesPerPixel(getPixelType()));
+        return gsl::narrow<size_t>(six::Constants::getNumBytesPerPixel(pixelType));
 
     default:
         throw except::Exception(Ctxt("Cannot determine number of bytes per pixel - invalid or unsupported pixel type"));

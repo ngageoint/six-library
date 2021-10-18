@@ -22,6 +22,8 @@
 #include <six/sicd/SICDVersionUpdater.h>
 
 #include <iostream>
+#include <std/filesystem>
+#include <algorithm>
 
 #include <cli/ArgumentParser.h>
 #include <except/Exception.h>
@@ -36,7 +38,7 @@ namespace
 {
 void writeSicd(std::unique_ptr<six::Data>&& complexData,
                const std::vector<std::complex<float>>& widebandData,
-               const std::vector<std::string>& schemaPaths,
+               const std::vector<std::string>& schemaPaths_,
                const std::string& pathname)
 {
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
@@ -47,9 +49,10 @@ void writeSicd(std::unique_ptr<six::Data>&& complexData,
 
     six::NITFWriteControl writer(container);
 
-    six::buffer_list buffers;
-    buffers.push_back(reinterpret_cast<const std::byte*>(widebandData.data()));
-    writer.save(buffers, pathname, schemaPaths);
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+
+    writer.save(widebandData, pathname, schemaPaths);
 }
 }
 

@@ -305,7 +305,8 @@ struct DerivedData: public Data
         return productCreation->classification;
     }
 
-    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT();
+    virtual const mem::ScopedCopyablePtr<LUT>& getDisplayLUT() const override;
+    void setDisplayLUT(std::unique_ptr<AmplitudeTable>&&) override;
 
     virtual std::string getVendorID() const
     {
