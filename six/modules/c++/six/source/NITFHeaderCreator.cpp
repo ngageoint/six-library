@@ -609,11 +609,41 @@ void NITFHeaderCreator::addAdditionalDES(
     mSegmentWriters.push_back(segmentWriter);
 }
 
+static uint32_t  get_legendNbpp(const Legend& legend)
+{
+    // Set NBPP and sanity check if LUT is set appropriately
+    uint32_t legendNbpp = 0;
+    switch (legend.mType)
+    {
+    case PixelType::MONO8I:
+        // We shouldn't have a LUT
+        if (legend.mLUT.get())
+        {
+            throw except::Exception(Ctxt("LUT shouldn't be present for mono legend"));
+        }
+        legendNbpp = 8;
+        break;
+
+    case PixelType::RGB8LU:
+        // We should have a legend
+        if (legend.mLUT.get() == nullptr)
+        {
+            throw except::Exception(Ctxt("LUT should be present for indexed RGB legend"));
+        }
+        legendNbpp = 8;
+        break;
+
+    default:
+        throw except::Exception(Ctxt("Unsupported legend pixel type"));
+    }
+
+    return legendNbpp;
+}
+
 void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 {
     mContainer = container;
-
-    if (container->getNumData() == 0)
+    if (mContainer->getNumData() == 0)
     {
         return;
     }
@@ -639,9 +669,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
      */
     if (container->getDataType() == DataType::COMPLEX)
     {
-        std::shared_ptr<NITFImageInfo> info(new NITFImageInfo(
-                container->getData(0), maxRows, maxSize, true, 0, 0));
-
+        std::shared_ptr< NITFImageInfo> info(new NITFImageInfo(container->getData(0), maxRows, maxSize, true, 0, 0));
         mInfos.push_back(info);
     }
     else
@@ -677,14 +705,12 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
                 const auto numRowsPerBlock = std::min(optNumRowsPerBlock, ithExtent.row);
                 const auto numColsPerBlock = std::min(optNumColsPerBlock, ithExtent.col);
 
-                std::shared_ptr<NITFImageInfo> info(
-                        new NITFImageInfo(ith,
+                auto info = std::make_shared<NITFImageInfo>(ith,
                                           maxRows,
                                           maxSize,
                                           true,
                                           numRowsPerBlock,
-                                          numColsPerBlock));
-
+                                          numColsPerBlock);
                 mInfos.push_back(info);
             }
         }
@@ -834,8 +860,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
             nitf::ImageSubheader subheader = imageSegment.getSubheader();
 
             subheader.getImageTitle().set(fileTitle);
-            const DateTime collectionDT =
-                    info.getData()->getCollectionStartDateTime();
+            const DateTime collectionDT = info.getData()->getCollectionStartDateTime();
             subheader.getImageDateAndTime().set(collectionDT);
             subheader.getImageId().set(getDerivedIID(numIS, ii));
             subheader.getImageSource().set(imageSource);
@@ -843,34 +868,10 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
             subheader.getImageLocation().set(generateILOC(legend->mLocation));
 
             // Set NBPP and sanity check if LUT is set appropriately
-            uint32_t legendNbpp = 0;
-            switch (legend->mType)
-            {
-            case PixelType::MONO8I:
-                // We shouldn't have a LUT
-                if (legend->mLUT.get())
-                {
-                    throw except::Exception(Ctxt("LUT shouldn't be present for mono legend"));
-                }
-                legendNbpp = 8;
-                break;
-
-            case PixelType::RGB8LU:
-                // We should have a legend
-                if (legend->mLUT.get() == nullptr)
-                {
-                    throw except::Exception(Ctxt("LUT should be present for indexed RGB legend"));
-                }
-                legendNbpp = 8;
-                break;
-
-            default:
-                throw except::Exception(Ctxt("Unsupported legend pixel type"));
-            }
+            const auto legendNbpp = get_legendNbpp(*legend);
 
             const GetDisplayLutFromLegend getLUT(*legend);
-            std::vector<nitf::BandInfo> bandInfo =
-                    NITFImageInfo::getBandInfoImpl(legend->mType, getLUT);
+            std::vector<nitf::BandInfo> bandInfo = NITFImageInfo::getBandInfoImpl(legend->mType, getLUT);
 
             subheader.setPixelInformation(
                     NITFImageInfo::getPixelType(legend->mType),
@@ -921,8 +922,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 
     for (auto desSource : container->getDESSources())
     {
-        std::shared_ptr<nitf::SegmentWriter> desWriter(
-                new nitf::SegmentWriter(desSource));
+        auto desWriter = std::make_shared<nitf::SegmentWriter>(desSource);
         mSegmentWriters.push_back(desWriter);
     }
 
