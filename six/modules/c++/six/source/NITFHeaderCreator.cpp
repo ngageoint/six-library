@@ -175,9 +175,9 @@ std::string NITFHeaderCreator::getIID(DataType dataType,
     }
 }
 
-void NITFHeaderCreator::setBlocking(const std::string& imode,
-                                    const types::RowCol<size_t>& segmentDims,
-                                    nitf::ImageSubheader& subheader)
+void  NITFHeaderCreator::setBlocking(nitf::BlockingMode imode,
+    const types::RowCol<size_t>& segmentDims,
+    nitf::ImageSubheader& subheader)
 {
     const bool isSICD = (mContainer->getDataType() == DataType::COMPLEX);
 
@@ -230,6 +230,12 @@ void NITFHeaderCreator::setBlocking(const std::string& imode,
                           numRowsPerBlock,
                           numColsPerBlock,
                           imode);
+}
+void NITFHeaderCreator::setBlocking(const std::string& imode,
+                                    const types::RowCol<size_t>& segmentDims,
+                                    nitf::ImageSubheader& subheader)
+{
+    setBlocking(nitf::from_string<nitf::BlockingMode>(imode), segmentDims, subheader);
 }
 
 void NITFHeaderCreator::setImageSecurity(
@@ -708,9 +714,9 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
         const size_t numIS = imageSegments.size();
         const auto nbpp = static_cast<uint32_t>(info.getNumBitsPerPixel());
         const size_t numCols = info.getData()->getNumCols();
-        std::string irep = info.getRepresentation();
-        std::string imode = info.getMode();
-        std::string pvtype = info.getPixelValueType();
+        const auto irep = info.getImageRepresentation();
+        const auto imode = info.getBlockingMode();
+        const auto pvtype = info.getPixelType();
 
         std::string targetId;
 
@@ -844,8 +850,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
                 // We shouldn't have a LUT
                 if (legend->mLUT.get())
                 {
-                    throw except::Exception(
-                            Ctxt("LUT shouldn't be present for mono legend"));
+                    throw except::Exception(Ctxt("LUT shouldn't be present for mono legend"));
                 }
                 legendNbpp = 8;
                 break;
@@ -854,8 +859,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
                 // We should have a legend
                 if (legend->mLUT.get() == nullptr)
                 {
-                    throw except::Exception(Ctxt(
-                            "LUT should be present for indexed RGB legend"));
+                    throw except::Exception(Ctxt("LUT should be present for indexed RGB legend"));
                 }
                 legendNbpp = 8;
                 break;
@@ -869,11 +873,11 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
                     NITFImageInfo::getBandInfoImpl(legend->mType, getLUT);
 
             subheader.setPixelInformation(
-                    NITFImageInfo::getPixelValueType(legend->mType),
+                    NITFImageInfo::getPixelType(legend->mType),
                     legendNbpp,
                     legendNbpp,
                     "R",
-                    NITFImageInfo::getRepresentation(legend->mType),
+                    NITFImageInfo::getImageRepresentation(legend->mType),
                     "LEG",
                     bandInfo);
 
@@ -881,7 +885,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
                                   static_cast<uint32_t>(legend->mDims.col),
                                   0,
                                   0,
-                                  NITFImageInfo::getMode(legend->mType));
+                                  NITFImageInfo::getBlockingMode(legend->mType));
 
             // While we never set IDLVL explicitly in here, NITRO will
             // kindly do that for us (incrementing it once for each segment).
