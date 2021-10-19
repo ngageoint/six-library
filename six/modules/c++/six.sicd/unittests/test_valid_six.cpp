@@ -400,6 +400,19 @@ template<> std::vector<std::byte> readFromNITF<AMP8I_PHS8I_t>(const fs::path& in
 {
     return readFromNITF_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(AMP8I_PHS8I_t));
 }
+static std::vector<std::byte> readFromNITF(const fs::path& inputPathname, six::PixelType pixelType)
+{
+    if (pixelType == six::PixelType::RE32F_IM32F)
+    {
+        return readFromNITF<std::complex<float>>(inputPathname);
+    }
+    if (pixelType == six::PixelType::AMP8I_PHS8I)
+    {
+        return readFromNITF<AMP8I_PHS8I_t>(inputPathname);
+    }
+    throw std::invalid_argument("Unknown pixelType");
+}
+
 TEST_CASE(sicd_readFromNITF)
 {
     auto inputPathname = getNitfPath("sicd_50x50.nitf");
@@ -416,21 +429,21 @@ TEST_CASE(sicd_readFromNITF)
     buffer = readFromNITF<AMP8I_PHS8I_t>(inputPathname);
 }
 
-static std::vector<std::complex<float>> readSicd_(const fs::path& sicdPathname,
+static six::sicd::ComplexImageResult readSicd_(const fs::path& sicdPathname,
     six::PixelType expectedPixelType, size_t expectedNumBytesPerPixel)
 {
     auto result = six::sicd::Utilities::readSicd(sicdPathname);
     test_assert(*(result.pComplexData), expectedPixelType, expectedNumBytesPerPixel);
-    return result.widebandData;
+    return result;
 }
 template<typename T> std::vector<std::complex<float>> readSicd(const fs::path& inputPathname);
 template<> std::vector<std::complex<float>> readSicd<std::complex<float>>(const fs::path& inputPathname)
 {
-    return readSicd_(inputPathname, six::PixelType::RE32F_IM32F, sizeof(std::complex<float>));
+    return readSicd_(inputPathname, six::PixelType::RE32F_IM32F, sizeof(std::complex<float>)).widebandData;
 }
 template<> std::vector<std::complex<float>> readSicd<AMP8I_PHS8I_t>(const fs::path& inputPathname)
 {
-    return readSicd_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(AMP8I_PHS8I_t));
+    return readSicd_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(AMP8I_PHS8I_t)).widebandData;
 }
 TEST_CASE(test_readSicd)
 {
@@ -531,7 +544,7 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::s
 {
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
 
-    const auto bytes = readFromNITF_(path, pixelType, expectedNumBytesPerPixel);
+    const auto bytes = readFromNITF(path, pixelType);
     test_assert_eq(expectedBytes, bytes);
 
     six::sicd::NITFReadComplexXMLControl reader;
@@ -560,14 +573,38 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::s
         test_assert_eq(expectedBytes, rawData);
     }
 }
+
+static std::vector<std::byte> to_bytes(const six::sicd::ComplexImageResult& result)
+{
+    const auto& image = result.widebandData;
+    const void* pImage = image.data();
+    auto pBytes = static_cast<const std::byte*>(pImage);
+    const auto image_size_in_bytes = image.size() * sizeof(image[0]);
+
+    std::vector<std::byte> retval;
+    const auto& data = *(result.pComplexData);
+    if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
+    {
+        std::span<const std::byte> bytes(pBytes, image_size_in_bytes);
+        retval.resize(image.size() * data.getNumBytesPerPixel());
+        std::span<std::byte> pRetval(retval.data(), retval.size());
+        data.convertPixels(bytes, pRetval);
+    }
+    else
+    {
+        retval.insert(retval.begin(), pBytes, pBytes + image_size_in_bytes);
+    }
+
+    return retval;
+}
+
 static void read_nitf(const fs::path& path, six::PixelType pixelType, const std::vector<std::complex<float>>& image)
 {
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
-    const auto widebandData = readSicd_(path, pixelType, expectedNumBytesPerPixel);
-    TEST_ASSERT(widebandData == image);
+    const auto result = readSicd_(path, pixelType, expectedNumBytesPerPixel);
+    TEST_ASSERT(result.widebandData == image);
 
-    const void* pImage = image.data();
-    std::span<const std::byte> bytes(static_cast<const std::byte*>(pImage), image.size() * sizeof(image[0]));
+    const auto bytes = to_bytes(result);
     read_raw_data(path, pixelType, bytes);
 }
 
