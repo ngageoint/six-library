@@ -37,9 +37,17 @@
 #include <array>
 #include <memory>
 
+#include <config/compiler_extensions.h>
+
 #include <import/nitf.hpp>
 #include <nitf/CompressedByteProvider.hpp>
+
+CODA_OSS_disable_warning_push
+#if _MSC_VER
+#pragma warning(disable: 4464) // relative include path contains '..'
+#endif
 #include <nitf/../../unittests/nitro_image_.c_>
+CODA_OSS_disable_warning_pop
 
 #include "TestCase.h"
 
@@ -118,7 +126,7 @@ namespace test_create_nitf_with_byte_provider
         for (size_t ii = 0; ii < bands.size(); ++ii)
         {
             bands[ii].init(nitf::Representation::M,   /* The band representation, Nth band */
-                " ",       /* The band subcategory */
+                nitf::Subcategory::None,       /* The band subcategory */
                 "N",       /* The band filter condition */
                 "   ");     /* The band standard image filter code */
 
@@ -154,7 +162,7 @@ namespace test_create_nitf_with_byte_provider
 
     void writeNITF(nitf::Record& record, const std::string& filename)
     {
-        const size_t NUM_BANDS = 1;
+        constexpr size_t NUM_BANDS = 1;
         /*
          * COMPRESSION:
          * Right now, this is writing a single-segment single-block uncompressed
@@ -198,7 +206,7 @@ namespace test_create_nitf_with_byte_provider
 
     bool testRead(const std::string& pathname)
     {
-        const size_t NUM_BANDS = 1;
+        constexpr size_t NUM_BANDS = 1;
         nitf::IOHandle handle(pathname, NITF_ACCESS_READONLY, NITF_OPEN_EXISTING);
         nitf::Reader reader;
         nitf::Record record = reader.read(handle);
@@ -262,14 +270,14 @@ namespace test_create_nitf
         for (size_t ii = 0; ii < bands.size(); ++ii)
         {
             bands[ii].init(RGB[ii],   /* The band representation, Nth band */
-                " ",       /* The band subcategory */
+                nitf::Subcategory::None,       /* The band subcategory */
                 "N",       /* The band filter condition */
                 "   ");     /* The band standard image filter code */
 
         }
 
-        const std::string iRep = isMono ? "MONO" : "RGB";
-        header.setPixelInformation("INT",     /* Pixel value type */
+        const auto iRep = isMono ? nitf::ImageRepresentation::MONO : nitf::ImageRepresentation::RGB;
+        header.setPixelInformation(nitf::PixelValueType::Integer /*INT*/,     /* Pixel value type */
             8,         /* Number of bits/pixel */
             8,         /* Actual number of bits/pixel */
             "R",       /* Pixel justification */
@@ -292,7 +300,7 @@ namespace test_create_nitf
             NITRO_IMAGE.width,  /*!< The number of columns */
             NITRO_IMAGE.height, /*!< The number of rows/block */
             NITRO_IMAGE.width,  /*!< The number of columns/block */
-            "P");               /*!< Image mode */
+            nitf::BlockingMode::Pixel /* "P" */);               /*!< Image mode */
     }
 
 
