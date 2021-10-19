@@ -59,7 +59,7 @@ nitf::Field BandInfo::getRepresentation() const
     return nitf::Field(getNativeOrThrow()->representation);
 }
 
-BandInfo::BandInfo(Subcategory subcategory) : BandInfo()
+BandInfo::BandInfo(Subcategory subcategory) : BandInfo(Representation::None)
 {
     getSubcategory().set(to_string(subcategory));
 }
@@ -152,14 +152,14 @@ void BandInfo::init(const std::string& representation_,
     lut.setManaged(true);
 }
 void BandInfo::init(const Representation& representation_, // C4458: declaration of '...' hides class member
-                    const std::string& subcategory_, // C4458: declaration of '...' hides class member
+                    const Subcategory& subcategory_, // C4458: declaration of '...' hides class member
                     const std::string& imageFilterCondition,
                     const std::string& imageFilterCode,
                     uint32_t numLUTs,
                     uint32_t bandEntriesPerLUT,
                     nitf::LookupTable& lut)
 {
-    init(to_string(representation_), subcategory_, imageFilterCondition, imageFilterCode, numLUTs, bandEntriesPerLUT, lut);
+    init(to_string(representation_), to_string(subcategory_), imageFilterCondition, imageFilterCode, numLUTs, bandEntriesPerLUT, lut);
 }
 
 void BandInfo::init(const std::string& representation_, // C4458: declaration of '...' hides class member
@@ -183,10 +183,10 @@ void BandInfo::init(const std::string& representation_, // C4458: declaration of
         throw nitf::NITFException(&error);
 }
 void BandInfo::init(const Representation& representation_, // C4458: declaration of '...' hides class member
-                    const std::string& subcategory_, // C4458: declaration of '...' hides class member
+                    const Subcategory& subcategory_, // C4458: declaration of '...' hides class member
                     const std::string& imageFilterCondition,
                     const std::string& imageFilterCode)
 {
-    init(to_string(representation_), subcategory_, imageFilterCondition, imageFilterCode);
+    init(to_string(representation_), to_string(subcategory_), imageFilterCondition, imageFilterCode);
 }
 
