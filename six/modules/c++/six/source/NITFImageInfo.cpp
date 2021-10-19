@@ -301,21 +301,23 @@ static std::vector<nitf::BandInfo> getBandInfoImpl_RGB8LU(const six::LUT* lut)
 
 static std::vector<nitf::BandInfo> getBandInfoImpl_AMP8I_PHS8I(const six::LUT* lutPtr)
 {
-    std::vector<nitf::BandInfo> bands;
+    std::vector<nitf::BandInfo> bands{ nitf::BandInfo(nitf::Subcategory::M),  nitf::BandInfo(nitf::Subcategory::P) };
+
     if (lutPtr == nullptr)
     {
         //If LUT is nullptr, we have a predefined LookupTable.
         //No LUT to write into NITF, so setting to MONO
-        return getBandInfoImpl_MONOnI();
+        //return getBandInfoImpl_MONOnI();
     }
-
-    if (lutPtr->elementSize != sizeof(double))
+    else
     {
-        throw except::Exception(Ctxt("Unexpected element size: " + std::to_string(lutPtr->elementSize)));
+        if (lutPtr->elementSize != sizeof(double))
+        {
+            throw except::Exception(Ctxt("Unexpected element size: " + std::to_string(lutPtr->elementSize)));
+        }
     }
 
-    // TODO
-    return bands;
+    return bands; // TODO
 }
 
 std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixelType, const LUT* pLUT)
