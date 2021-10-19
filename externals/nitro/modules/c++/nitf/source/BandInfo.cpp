@@ -59,7 +59,7 @@ nitf::Field BandInfo::getRepresentation() const
     return nitf::Field(getNativeOrThrow()->representation);
 }
 
-BandInfo::BandInfo(Subcategory subcategory) : BandInfo()
+BandInfo::BandInfo(Subcategory subcategory) : BandInfo(Representation::None)
 {
     getSubcategory().set(to_string(subcategory));
 }
