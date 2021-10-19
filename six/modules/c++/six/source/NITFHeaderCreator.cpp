@@ -662,7 +662,7 @@ static void getBlockingParameters(const six::Options& mOptions, uint32_t& optNum
 void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
 {
     mContainer = container;
-    if (mContainer->getNumData() == 0)
+    if (mContainer->empty())
     {
         return;
     }
@@ -704,7 +704,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
         uint32_t optNumColsPerBlock = 0;
         getBlockingParameters(mOptions, optNumRowsPerBlock, optNumColsPerBlock);
 
-        for (size_t ii = 0; ii < container->getNumData(); ++ii)
+        for (size_t ii = 0; ii < container->size(); ++ii)
         {
             Data* const ith = container->getData(ii);
             if (ith->getDataType() == DataType::DERIVED)
@@ -903,7 +903,7 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
         }
     }
 
-    for (size_t ii = 0; ii < container->getNumData(); ++ii)
+    for (size_t ii = 0; ii < container->size(); ++ii)
     {
         const six::Data& data(*container->getData(ii));
 

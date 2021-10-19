@@ -580,8 +580,8 @@ static void readSicd_(const std::string& sicdPathname,
     six::sicd::NITFReadComplexXMLControl reader;
     reader.load(sicdPathname, schemaPaths);
 
-    // For SICD, there's only one image (container->getNumData() == 1)
-    if (reader.getContainer()->getNumData() != 1)
+    // For SICD, there's only one image (container->size() == 1)
+    if (reader.getContainer()->size() != 1)
     {
         throw std::invalid_argument(sicdPathname + " is not a SICD; it contains more than one image.");
     }
@@ -1561,8 +1561,8 @@ std::vector<std::byte> six::sicd::readFromNITF(const fs::path& pathname, const s
     reader.setLogger();
     reader.load(pathname, schemaPaths);
     
-    // For SICD, there's only one image (container->getNumData() == 1)
-    if (reader.getContainer()->getNumData() != 1)
+    // For SICD, there's only one image (container->size() == 1)
+    if (reader.getContainer()->size() != 1)
     {
         throw std::invalid_argument(pathname.string() + " is not a SICD; it contains more than one image.");
     }

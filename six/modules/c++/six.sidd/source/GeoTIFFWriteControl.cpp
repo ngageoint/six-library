@@ -55,7 +55,7 @@ void GeoTIFFWriteControl::initialize(std::shared_ptr<Container> container)
     // will keep those around for later
 
     uint64_t length = 0;
-    for (size_t ii = 0; ii < container->getNumData(); ++ii)
+    for (size_t ii = 0; ii < container->size(); ++ii)
     {
         Data* data = container->getData(ii);
         if (data->getDataType() == DataType::COMPLEX)

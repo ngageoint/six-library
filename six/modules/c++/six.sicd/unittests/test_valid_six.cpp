@@ -136,7 +136,7 @@ static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXM
 {
     auto container = reader.getContainer();
     TEST_ASSERT_EQ(six::DataType::COMPLEX, container->getDataType());
-    TEST_ASSERT_EQ(1, container->getNumData());
+    TEST_ASSERT_EQ(1, container->size());
     return container;
 }
 

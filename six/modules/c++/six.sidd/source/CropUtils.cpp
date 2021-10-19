@@ -142,7 +142,7 @@ void cropSIDD(const std::string& inPathname,
     }
 
     Buffers buffers;
-    for (size_t ii = 0, imageNum = 0; ii < container->getNumData(); ++ii)
+    for (size_t ii = 0, imageNum = 0; ii < container->size(); ++ii)
     {
         six::Data* const dataPtr = container->getData(ii);
         if (dataPtr->getDataType() == six::DataType::DERIVED)

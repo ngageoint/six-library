@@ -289,20 +289,20 @@ int main(int argc, char** argv)
         if (!retainDateTime)
         {
             const six::DateTime now;
-            for (size_t ii = 0; ii < container->getNumData(); ++ii)
+            for (size_t ii = 0; ii < container->size(); ++ii)
             {
                 container->getData(ii)->setCreationTime(now);
             }
         }
 
-        // For SICD, there's only one image (container->getNumData() == 1)
+        // For SICD, there's only one image (container->size() == 1)
         // For SIDD, there may be more than one image, but there may also be
         // DES's with SICD XML in them.  So here we want to read every image
         // that's present.
         six::Region region;
 
         Buffers buffers;
-        for (size_t ii = 0, imageNum = 0; ii < container->getNumData(); ++ii)
+        for (size_t ii = 0, imageNum = 0; ii < container->size(); ++ii)
         {
             six::Data* const data = container->getData(ii);
 

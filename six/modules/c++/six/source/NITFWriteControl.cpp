@@ -433,7 +433,7 @@ void NITFWriteControl::save_image(std::span<const std::pair<uint8_t, uint8_t>> i
 
 void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPaths)
 {
-    const size_t numDES = getContainer()->getNumData();
+    const auto numDES = getContainer()->size();
 
     // These must stick around until mWriter.write() is called since the
     // SegmentMemorySource's will be pointing to them
