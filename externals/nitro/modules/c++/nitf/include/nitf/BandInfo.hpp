@@ -42,8 +42,18 @@
 
 namespace nitf
 {
-    NITF_ENUM(5, Representation, R, G, B, M, LU);
-    NITF_ENUM(2, Subcategory, I, Q);
+    //NITF_ENUM(5, Representation, R, G, B, M, LU);
+    enum class Representation { R, G, B, M, LU, None };
+    NITF_ENUM_define_string_to_enum_begin(Representation)
+        NITF_ENUM_map_entry_5(Representation, R, G, B, M, LU), { "", Representation::None },
+    NITF_ENUM_define_string_to_end
+
+    // see nitf_ImageIO_decodeBlockingMode() in ImageIO.c
+    //NITF_ENUM(4, Subcategory, I, Q, M, P);
+    enum class Subcategory { I, Q, M, P, None };
+    NITF_ENUM_define_string_to_enum_begin(Subcategory)
+        NITF_ENUM_map_entry_4(Subcategory, I, Q, M, P), { "", Subcategory::None },
+    NITF_ENUM_define_string_to_end
 
 /*!
  *  \class BandInfo
@@ -115,7 +125,7 @@ public:
               uint32_t bandEntriesPerLUT,
               nitf::LookupTable& lut);
     void init(const Representation&,
-              const std::string& subcategory,
+              const Subcategory&,
               const std::string& imageFilterCondition,
               const std::string& imageFilterCode,
               uint32_t numLUTs,
@@ -136,7 +146,7 @@ public:
               const std::string& imageFilterCondition,
               const std::string& imageFilterCode);
     void init(const Representation&,
-              const std::string& subcategory,
+              const Subcategory&,
               const std::string& imageFilterCondition,
               const std::string& imageFilterCode);
 

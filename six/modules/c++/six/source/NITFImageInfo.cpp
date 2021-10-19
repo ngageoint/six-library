@@ -227,8 +227,11 @@ static std::vector<nitf::BandInfo> getBandInfoFromLUT(const six::LUT& lut, nitf:
     //Using the init function instead.
     //band1.getRepresentation().set("LU");
     //band1.getLookupTable().setTable(table, 2, lut.numEntries);
+    static const std::string imageFilterCondition;
+    static const std::string imageFilterCode;
     nitf::BandInfo band1;
-    band1.init(nitf::Representation::LU, "", "", "", static_cast<uint32_t>(lut.elementSize), static_cast<uint32_t>(lut.numEntries), lookupTable);
+    band1.init(nitf::Representation::LU, nitf::Subcategory::None, imageFilterCondition, imageFilterCode,
+        static_cast<uint32_t>(lut.elementSize), static_cast<uint32_t>(lut.numEntries), lookupTable);
     return { band1 };
 }
 
