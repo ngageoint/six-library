@@ -360,7 +360,7 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixel
     case PixelType::AMP8I_PHS8I:
     {
         bands = getBandInfoImpl_AMP8I_PHS8I(pLUT);  
-        throw except::Exception(Ctxt("Unknown pixel type")); // TODO
+        //throw except::Exception(Ctxt("Unknown pixel type")); // TODO
     }
     break;
 
