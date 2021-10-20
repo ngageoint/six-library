@@ -203,9 +203,7 @@ std::string NITFImageInfo::generateFieldKey(const std::string& field,
 
 static std::vector<nitf::BandInfo> getBandInfoImpl_REnF_IMnF()
 {
-    nitf::BandInfo band1(nitf::Subcategory::I);
-    nitf::BandInfo band2(nitf::Subcategory::Q);
-    return { band1, band2};
+    return { nitf::BandInfo(nitf::Subcategory::I), nitf::BandInfo(nitf::Subcategory::Q) };
 }
 
 static std::vector<nitf::BandInfo> getBandInfoImpl_RGB24I()
@@ -247,14 +245,14 @@ static std::vector<nitf::BandInfo> getBandInfoImpl_MONO8LU(const six::LUT* lutPt
     // TODO: Why do we need to byte swap here?  If it is required, could
     //       we avoid the clone and byte swap and instead index into
     //       the LUT in the opposite order?
+    if (lutPtr->elementSize != sizeof(short))
+    {
+        throw except::Exception(Ctxt("Unexpected element size: " + std::to_string(lutPtr->elementSize)));
+    }
+
     std::unique_ptr<six::LUT> lut(lutPtr->clone());
     void* pTable = lut->getTable();
     sys::byteSwap(static_cast<std::byte*>(pTable), static_cast<unsigned short>(lut->elementSize), lut->numEntries);
-
-    if (lut->elementSize != sizeof(short))
-    {
-        throw except::Exception(Ctxt("Unexpected element size: " + std::to_string(lut->elementSize)));
-    }
 
     nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
     unsigned char* const table(lookupTable.getTable());
@@ -301,23 +299,19 @@ static std::vector<nitf::BandInfo> getBandInfoImpl_RGB8LU(const six::LUT* lut)
 
 static std::vector<nitf::BandInfo> getBandInfoImpl_AMP8I_PHS8I(const six::LUT* lutPtr)
 {
-    std::vector<nitf::BandInfo> bands{ nitf::BandInfo(nitf::Subcategory::M),  nitf::BandInfo(nitf::Subcategory::P) };
+    static const std::vector<nitf::BandInfo> retval{ nitf::BandInfo(nitf::Subcategory::M),  nitf::BandInfo(nitf::Subcategory::P) };
 
     if (lutPtr == nullptr)
     {
         //If LUT is nullptr, we have a predefined LookupTable.
-        //No LUT to write into NITF, so setting to MONO
-        //return getBandInfoImpl_MONOnI();
-    }
-    else
-    {
-        if (lutPtr->elementSize != sizeof(double))
-        {
-            throw except::Exception(Ctxt("Unexpected element size: " + std::to_string(lutPtr->elementSize)));
-        }
+        return retval;
     }
 
-    return bands; // TODO
+    if (lutPtr->elementSize != sizeof(double))
+    {
+        throw except::Exception(Ctxt("Unexpected element size: " + std::to_string(lutPtr->elementSize)));
+    }
+    return retval;
 }
 
 std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixelType, const LUT* pLUT)
@@ -360,7 +354,6 @@ std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixel
     case PixelType::AMP8I_PHS8I:
     {
         bands = getBandInfoImpl_AMP8I_PHS8I(pLUT);  
-        //throw except::Exception(Ctxt("Unknown pixel type")); // TODO
     }
     break;
 
@@ -397,7 +390,7 @@ std::string six::NITFImageInfo::getPixelValueType(PixelType pixelType)
     return to_string(getPixelType(pixelType));
 }
 
-nitf::ImageRepresentation  six::NITFImageInfo::getImageRepresentation(PixelType pixelType)
+nitf::ImageRepresentation six::NITFImageInfo::getImageRepresentation(PixelType pixelType)
 {
     switch (pixelType)
     {
@@ -421,7 +414,6 @@ std::string six::NITFImageInfo::getRepresentation(PixelType pixelType)
 
 nitf::BlockingMode six::NITFImageInfo::getBlockingMode(PixelType pixelType)
 {
-
     switch (pixelType)
     {
     case PixelType::RGB8LU:
