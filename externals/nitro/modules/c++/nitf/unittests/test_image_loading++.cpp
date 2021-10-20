@@ -81,6 +81,7 @@ struct expected_values final
     std::string actualBitsPerPixel = "32";
     uint32_t pixelsPerHorizBlock = 50;
     uint32_t pixelsPerVertBlock = 50;
+    int luts = 0;
 };
 
 static void writeImage(nitf::ImageSegment &segment,
@@ -125,7 +126,6 @@ static void writeImage(nitf::ImageSegment &segment,
         }
         if ((nBands == 2) && (imageMode == nitf::BlockingMode::Pixel) && str::startsWith(ic, "N"))
         {
-
             subWindowSize *= nBands;
             nBands = 1;
             //std::cout << "Using accelerated 2-band IQ mode pix-interleaved image" << std::endl;
@@ -160,6 +160,10 @@ static void writeImage(nitf::ImageSegment &segment,
     for (uint32_t band = 0; band < nBands; band++)
     {
         bandList[band] = band;
+
+        const auto bandInfo = subheader.getBandInfo(band);
+        const int luts = bandInfo.getNumLUTs();
+        TEST_ASSERT_EQ(expected.luts, luts);
     }
     setBands(subWindow, bandList);
 
