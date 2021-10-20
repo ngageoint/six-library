@@ -660,15 +660,43 @@ TEST_CASE(test_create_sicds_from_mem)
     //test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
 
+template<typename TNearestNeighbor>
+static void test_near_point(const std::complex<float>& p, const six::sicd::ImageData::AMP8I_PHS8I_t& expected,
+    TNearestNeighbor nearest_neighbor_f)
+{
+    auto actual = nearest_neighbor_f(p);
+    TEST_ASSERT_EQ(expected, actual);
+
+    actual = nearest_neighbor_f(p + std::complex<float>(0.0f, 0.0f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p + std::complex<float>(0.1f, 0.0f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p + std::complex<float>(0.0f, 0.1f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p + std::complex<float>(0.1f, 0.1f));
+    TEST_ASSERT_EQ(expected, actual);
+
+    actual = nearest_neighbor_f(p - std::complex<float>(0.0f, 0.0f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p - std::complex<float>(0.1f, 0.0f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p - std::complex<float>(0.0f, 0.1f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p - std::complex<float>(0.1f, 0.1f));
+    TEST_ASSERT_EQ(expected, actual);
+}
+
 TEST_CASE(test_KDTree)
 {
     using KDNode = six::sicd::ImageData::KDNode;
 
-    const KDNode node_0_0{ {0.0, 0.0}, {0, 0} };
-    const KDNode node_1_1{ {1.0, 1.0}, {1, 1} };
-    const KDNode node_100_100{ {100.0, 100.0}, {100, 100} };
+    const KDNode node0{ {0.0, 0.0}, {0, 0} };
+    const KDNode node1{ {1.0, 1.0}, {1, 1} };
+    const KDNode node2{ {1.0, -1.0}, {2, 2} };
+    const KDNode node3{ {-1.0, 1.0}, {3, 3} };
+    const KDNode node4{ {-1.0, -1.0}, {4, 4} };
 
-    std::vector<KDNode> nodes{ node_0_0, node_1_1, node_100_100 };
+    std::vector<KDNode> nodes{ node0, node1, node2, node3, node4 };
     const six::sicd::KDTree tree(std::move(nodes));
     const auto nearest_neighbor_f = [&tree](const std::complex<float>& v)
     {
@@ -676,42 +704,16 @@ TEST_CASE(test_KDTree)
         return result.amp_and_value;
     };
 
-    auto actual = nearest_neighbor_f(node_0_0.result);
-    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
-    actual = nearest_neighbor_f(node_1_1.result);
-    TEST_ASSERT_EQ(node_1_1.amp_and_value, actual);
-    actual = nearest_neighbor_f(node_100_100.result);
-    TEST_ASSERT_EQ(node_100_100.amp_and_value, actual);
-    
-    actual = nearest_neighbor_f({ 0.1f, 0.1f }); // close to {0.0, 0.0}
-    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
-    actual = nearest_neighbor_f({ -0.1f, -0.1f }); // close to {0.0, 0.0}
-    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
+    test_near_point(node0.result, node0.amp_and_value, nearest_neighbor_f);
+    test_near_point(node1.result, node1.amp_and_value, nearest_neighbor_f);
+    test_near_point(node2.result, node2.amp_and_value, nearest_neighbor_f);
+    test_near_point(node3.result, node3.amp_and_value, nearest_neighbor_f);
+    test_near_point(node4.result, node4.amp_and_value, nearest_neighbor_f);
 
-
-    actual = nearest_neighbor_f({ 0.9f, 0.9f }); // close to {1.0, 1.0}
-    TEST_ASSERT_EQ(node_1_1.amp_and_value, actual);
-    actual = nearest_neighbor_f({ 1.1f, 1.1f }); // close to {1.0, 1.0}
-    TEST_ASSERT_EQ(node_1_1.amp_and_value, actual);
-
-    actual = nearest_neighbor_f({ -1.1f, 1.1f }); // closer to {0.0, 0.0} than {1.0, 1.0}
-    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
-    actual = nearest_neighbor_f({ 1.1f, -1.1f });// closer to {0.0, 0.0} than {1.0, 1.0}
-    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
-    actual = nearest_neighbor_f({ -1.1f, -1.1f }); // closer to {0.0, 0.0} than {1.0, 1.0}
-    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
-
-    actual = nearest_neighbor_f({ 60.0f, 60.0f }); // close to {100.0, 100.0}
-    TEST_ASSERT_EQ(node_100_100.amp_and_value, actual);
-    actual = nearest_neighbor_f({ 120.0f, 120.0f }); // close to {100.0, 100.0}
-    TEST_ASSERT_EQ(node_100_100.amp_and_value, actual);
-
-    actual = nearest_neighbor_f({ 150.0f, -1.0f }); // closer to {100.0, 100.0}
-    TEST_ASSERT_EQ(node_100_100.amp_and_value, actual);
-    actual = nearest_neighbor_f({ -1.0f, 150.0f }); // closer to {100.0, 100.0}
-    TEST_ASSERT_EQ(node_100_100.amp_and_value, actual);
-    actual = nearest_neighbor_f({ -1.0f, -150.0f }); // closer to {0.0, 0.0}
-    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
+    test_near_point({ 100.0f, 100.0f }, node1.amp_and_value, nearest_neighbor_f); // closest to {1.0, 1.0}
+    test_near_point({ 100.0f, -100.0f }, node2.amp_and_value, nearest_neighbor_f); // closest to {1.0, -1.0}
+    test_near_point({ -100.0f, 100.0f }, node3.amp_and_value, nearest_neighbor_f); // closest to {-1.0, 1.0}
+    test_near_point({ -100.0f, -100.0f }, node4.amp_and_value, nearest_neighbor_f); // closest to {-1.0, -1.0}
 }
 
 TEST_MAIN((void)argc;
