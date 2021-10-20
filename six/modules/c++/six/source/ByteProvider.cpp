@@ -60,11 +60,9 @@ void ByteProvider::populateOptions(
         size_t numColsPerBlock,
         Options& options)
 {
-    if (container->getNumData() != 1)
+    if (container->size() != 1)
     {
-        throw except::Exception(Ctxt(
-                "Expected data of size 1 in container but got " +
-                std::to_string(container->getNumData())));
+        throw except::Exception(Ctxt("Expected data of size 1 in container but got " + std::to_string(container->size())));
     }
 
     const six::Data* const data = container->getData(0);
@@ -128,10 +126,9 @@ void ByteProvider::populateInitArgs(
     // Sanity check the container
    auto container = headerCreator.getContainer();
 
-    if (container->getNumData() == 0)
+    if (container->empty())
     {
-        throw except::Exception(Ctxt(
-                "Write control must be initialized first"));
+        throw except::Exception(Ctxt("Write control must be initialized first"));
     }
 
     // We currently do not support the case where there are 2+ unrelated SIDDs
@@ -140,7 +137,7 @@ void ByteProvider::populateInitArgs(
     // nitf::ByteProvider computes row offsets.  So, ensure this constraint is
     // met.
     bool haveDerived(false);
-    for (size_t ii = 0; ii < container->getNumData(); ++ii)
+    for (size_t ii = 0; ii < container->size(); ++ii)
     {
         if (container->getData(ii)->getDataType() == DataType::DERIVED)
         {
@@ -160,7 +157,7 @@ void ByteProvider::populateInitArgs(
     // This memory must stay around until the call to the
     // base class's initialize() method
     logging::NullLogger logger;
-    xmlStrings.resize(container->getNumData());
+    xmlStrings.resize(container->size());
     desData.resize(xmlStrings.size());
     for (size_t ii = 0; ii < xmlStrings.size(); ++ii)
     {

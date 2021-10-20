@@ -342,7 +342,7 @@ void NITFWriteControl::addLegend(const Legend& legend, int imageNumber)
 
 inline const std::byte* const imageData_i(std::span<const std::byte* const> imageData, size_t i)
 {
-    return imageData[i];
+    return i < imageData.size() ? imageData[i] : nullptr;
 }
 inline std::span<const std::complex<float>> imageData_i(std::span<const std::complex<float>> imageData, size_t)
 {
@@ -353,12 +353,12 @@ inline std::span<const std::pair<uint8_t, uint8_t>> imageData_i(std::span<const 
     return imageData;
 }
 
-template<typename TImageData>
-void NITFWriteControl::Tsave(TImageData&& imageData,
+template<typename T>
+void NITFWriteControl::save_T(T&& imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::string>& schemaPaths)
 {
-    const bool doByteSwap = prepareIO(std::forward<TImageData>(imageData), outputFile);
+    const bool doByteSwap = prepareIO(std::forward<T>(imageData), outputFile);
 
     // check to see if J2K compression is enabled
     double j2kCompression = (double)getOptions().getParameter(
@@ -386,7 +386,7 @@ void NITFWriteControl::Tsave(TImageData&& imageData,
         // The SIDD spec requires that a J2K compressed SIDDs be only a
         // single image segment. However this functionality remains untested.
         const auto numIS = imageSegments.size();
-        const auto imageData_ = imageData_i(std::forward<TImageData>(imageData), i);
+        const auto imageData_ = imageData_i(std::forward<T>(imageData), i);
         if (isBlocking || (enableJ2K && numIS == 1) || !mCompressionOptions.empty())
         {
             if ((isBlocking || (enableJ2K && numIS == 1)) && (pData->getDataType() == six::DataType::COMPLEX))
@@ -414,26 +414,26 @@ void NITFWriteControl::save_buffer_list(std::span<const std::byte* const> imageD
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    Tsave(imageData, outputFile, schemaPaths);
+    save_T(imageData, outputFile, schemaPaths);
 }
 template<>
-void NITFWriteControl::save_(std::span<const std::complex<float>> imageData,
+void NITFWriteControl::save_image(std::span<const std::complex<float>> imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    Tsave(imageData, outputFile, schemaPaths);
+    save_T(imageData, outputFile, schemaPaths);
 }
 template<>
-void NITFWriteControl::save_(std::span<const std::pair<uint8_t, uint8_t>> imageData,
+void NITFWriteControl::save_image(std::span<const std::pair<uint8_t, uint8_t>> imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    Tsave(imageData, outputFile, schemaPaths);
+    save_T(imageData, outputFile, schemaPaths);
 }
 
 void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPaths)
 {
-    const size_t numDES = getContainer()->getNumData();
+    const auto numDES = getContainer()->size();
 
     // These must stick around until mWriter.write() is called since the
     // SegmentMemorySource's will be pointing to them

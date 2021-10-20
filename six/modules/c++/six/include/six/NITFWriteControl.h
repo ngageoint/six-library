@@ -66,11 +66,10 @@ class NITFWriteControl : public WriteControl
         const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&, bool doByteSwap);
     void addLegend(const Legend&, int imageNumber);
 
-    // "using NITFWriteControl::save;" in SICDWriteControl.h
-    template<typename TImageData>
-    void Tsave(TImageData&&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
     template<typename T>
-    void save_(std::span<const T>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    void save_T(T&&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    template<typename T>
+    void save_image(std::span<const T>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
 
     void save_buffer_list(std::span<const std::byte* const>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
 
@@ -334,7 +333,7 @@ public:
         std::vector<std::string> schemaPaths;
         std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
             [](const std::filesystem::path& p) { return p.string(); });
-        save_(imageData, outputFile, schemaPaths);
+        save_image(imageData, outputFile, schemaPaths);
     }
     template<typename T>
     void save(const std::vector<T>& imageData_,

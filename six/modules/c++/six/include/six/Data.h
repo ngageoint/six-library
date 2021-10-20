@@ -90,9 +90,9 @@ struct Data
     bool convertPixels(std::span<const T> from_, std::span<U> to_) const
     {
         const void* const pFrom = from_.data();
-        const std::span<const std::byte> from(static_cast<const std::byte*>(pFrom), from_.size());
+        const std::span<const std::byte> from(static_cast<const std::byte*>(pFrom), from_.size() * sizeof(from_[0]));
         void* const pTo = to_.data();
-        const std::span<std::byte> to(static_cast<std::byte*>(pTo), to_.size());
+        const std::span<std::byte> to(static_cast<std::byte*>(pTo), to_.size() * sizeof(to_[0]));
         return convertPixels_(from, to);
     }
 

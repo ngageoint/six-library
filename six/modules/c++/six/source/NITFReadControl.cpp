@@ -271,9 +271,9 @@ static std::vector<six::NITFImageInfo*> getImageInfos(six::Container& container)
     // over these when saving off NITFImageInfo's
     if (container.getDataType() == DataType::COMPLEX)
     {
-        if (container.getNumData() != 1)
+        if (container.size() != 1)
         {
-            throw except::Exception(Ctxt("SICD file must have exactly 1 SICD DES but got " + std::to_string(container.getNumData())));
+            throw except::Exception(Ctxt("SICD file must have exactly 1 SICD DES but got " + std::to_string(container.size())));
         }
 
         return std::vector<six::NITFImageInfo*> { new NITFImageInfo(container.getData(0)) };
@@ -283,7 +283,7 @@ static std::vector<six::NITFImageInfo*> getImageInfos(six::Container& container)
     // for loop below
     assert(container.getDataType() == DataType::DERIVED);
     std::vector<six::NITFImageInfo*> retval;
-    for (size_t ii = 0; ii < container.getNumData(); ++ii)
+    for (size_t ii = 0; ii < container.size(); ++ii)
     {
         Data* const data = container.getData(ii);
         if (data->getDataType() == DataType::DERIVED)

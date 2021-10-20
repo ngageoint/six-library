@@ -148,10 +148,12 @@ public:
      */
     Data* getData(const std::string& iid, size_t numImages);
 
+    size_t size() const { return mData.size(); }
     size_t getNumData() const
     {
-        return mData.size();
+        return size();
     }
+    bool empty() const { return mData.empty(); }
 
     /*!
      * Removes data from the container that matches this pointer

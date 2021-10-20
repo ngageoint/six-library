@@ -155,7 +155,8 @@ class SICD_readerAndConverter final
     void process_RE16I_IM16I(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<int16_t>& tempVector) const
     {
         // Take each Int16 out of the temp buffer and put it into the real buffer as a Float32
-        float* const bufferPtr = reinterpret_cast<float*>(buffer) + ((row - offset.row) * elementsPerRow);
+        void* const pBuffer = buffer;
+        float* const bufferPtr = reinterpret_cast<float*>(pBuffer) + ((row - offset.row) * elementsPerRow);
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
         {
             bufferPtr[index] = tempVector[index];
@@ -580,8 +581,8 @@ static void readSicd_(const std::string& sicdPathname,
     six::sicd::NITFReadComplexXMLControl reader;
     reader.load(sicdPathname, schemaPaths);
 
-    // For SICD, there's only one image (container->getNumData() == 1)
-    if (reader.getContainer()->getNumData() != 1)
+    // For SICD, there's only one image (container->size() == 1)
+    if (reader.getContainer()->size() != 1)
     {
         throw std::invalid_argument(sicdPathname + " is not a SICD; it contains more than one image.");
     }
@@ -903,11 +904,9 @@ void Utilities::getRawData(NITFReadControl& reader,
     // Each pixel is stored as a pair of numbers that represent the amplitude and phase
     // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
     // component, 2 bytes per pixel). 
-    const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
-    SICDreader<ImageData::AMP8I_PHS8I_t>(reader, imageNumber, offset, extent, elementsPerRow,
+    SICDreader<ImageData::AMP8I_PHS8I_t>(reader, imageNumber, offset, extent, extent.col,
         [&](size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<ImageData::AMP8I_PHS8I_t>& tempVector)
         {
-            // Take each (uint8_t, uint8_t) out of the temp buffer and put it into the real buffer as a std::complex<float>
             for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
             {
                 // "For amplitude and phase components, the amplitude component is  stored first."                
@@ -1561,8 +1560,8 @@ std::vector<std::byte> six::sicd::readFromNITF(const fs::path& pathname, const s
     reader.setLogger();
     reader.load(pathname, schemaPaths);
     
-    // For SICD, there's only one image (container->getNumData() == 1)
-    if (reader.getContainer()->getNumData() != 1)
+    // For SICD, there's only one image (container->size() == 1)
+    if (reader.getContainer()->size() != 1)
     {
         throw std::invalid_argument(pathname.string() + " is not a SICD; it contains more than one image.");
     }
@@ -1571,7 +1570,7 @@ std::vector<std::byte> six::sicd::readFromNITF(const fs::path& pathname, const s
     return reader.interleaved();
 }
 
-void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths, const ComplexData& data, const std::complex<float>* image)
+void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths_, const ComplexData& data, const std::complex<float>* image_)
 {
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
@@ -1582,10 +1581,10 @@ void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::str
     writer.initialize(container);
     writer.setLogger(*logger);
 
-    const void* image_data = image;
-    six::buffer_list buffers{ static_cast<const std::byte*>(image_data) };
-
-    writer.save(buffers, pathname.string(), schemaPaths);
+    const std::span<const std::complex<float>> image(image_, getExtent(data).area());
+    std::vector<fs::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+    writer.save(image, pathname, schemaPaths);
 }
 void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths, const ComplexData& data, const std::complex<float>* image)
 {

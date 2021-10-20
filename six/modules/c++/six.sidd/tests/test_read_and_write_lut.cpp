@@ -84,7 +84,7 @@ std::string doRoundTrip(const std::string& siddPathname)
     six::Region region;
 
     Buffers buffers;
-    for (size_t ii = 0, imageNum = 0; ii < container->getNumData(); ++ii)
+    for (size_t ii = 0, imageNum = 0; ii < container->size(); ++ii)
     {
         six::Data* const data = container->getData(ii);
 
