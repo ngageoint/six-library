@@ -155,7 +155,8 @@ class SICD_readerAndConverter final
     void process_RE16I_IM16I(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<int16_t>& tempVector) const
     {
         // Take each Int16 out of the temp buffer and put it into the real buffer as a Float32
-        float* const bufferPtr = reinterpret_cast<float*>(buffer) + ((row - offset.row) * elementsPerRow);
+        void* const pBuffer = buffer;
+        float* const bufferPtr = reinterpret_cast<float*>(pBuffer) + ((row - offset.row) * elementsPerRow);
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
         {
             bufferPtr[index] = tempVector[index];
@@ -903,11 +904,9 @@ void Utilities::getRawData(NITFReadControl& reader,
     // Each pixel is stored as a pair of numbers that represent the amplitude and phase
     // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
     // component, 2 bytes per pixel). 
-    const size_t elementsPerRow = extent.col * (1 + 1); // "amplitude and phase components."
-    SICDreader<ImageData::AMP8I_PHS8I_t>(reader, imageNumber, offset, extent, elementsPerRow,
+    SICDreader<ImageData::AMP8I_PHS8I_t>(reader, imageNumber, offset, extent, extent.col,
         [&](size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<ImageData::AMP8I_PHS8I_t>& tempVector)
         {
-            // Take each (uint8_t, uint8_t) out of the temp buffer and put it into the real buffer as a std::complex<float>
             for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
             {
                 // "For amplitude and phase components, the amplitude component is  stored first."                
