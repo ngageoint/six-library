@@ -412,6 +412,12 @@ std::string AbstractOS::getSpecialEnv(const std::string& envVar) const
     {
         return std::to_string(sys::DateTime::getEpochSeconds());
     }
+
+    if (envVar == "OSTYPE")
+    {
+        // TODO: Mac
+        return sys::Platform == sys::PlatformType::Linux ? " linux-gnu" : "Windows";
+    }
     
     // should explicitly handle all env. vars in some way    
     throw sys::SystemException(Ctxt("Unable to determine value for special environment variable: " + envVar));

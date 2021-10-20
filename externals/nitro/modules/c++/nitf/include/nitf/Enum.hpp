@@ -85,12 +85,12 @@ namespace nitf
 
 #define NITF_ENUM_define_enum_(name, ...) enum class name { __VA_ARGS__ }
 
-#define NITF_ENUM_map_entry_(name, n) { #n, name::n }
-#define NITF_ENUM_map_entry_2_(name, n1, n2) NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_(name, n2)
-#define NITF_ENUM_map_entry_3_(name, n1, n2, n3) NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_2_(name, n2, n3)
-#define NITF_ENUM_map_entry_4_(name, n1, n2, n3, n4)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_3_(name, n2, n3, n4)
-#define NITF_ENUM_map_entry_5_(name, n1, n2, n3, n4, n5)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_4_(name, n2, n3, n4, n5)
-#define NITF_ENUM_map_entry_6_(name, n1, n2, n3, n4, n5, n6)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_5_(name, n2, n3, n4, n5, n6)
+#define NITF_ENUM_map_entry(name, n) { #n, name::n }
+#define NITF_ENUM_map_entry_2(name, n1, n2) NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry(name, n2)
+#define NITF_ENUM_map_entry_3(name, n1, n2, n3) NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_2(name, n2, n3)
+#define NITF_ENUM_map_entry_4(name, n1, n2, n3, n4)  NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_3(name, n2, n3, n4)
+#define NITF_ENUM_map_entry_5(name, n1, n2, n3, n4, n5)  NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_4(name, n2, n3, n4, n5)
+#define NITF_ENUM_map_entry_6(name, n1, n2, n3, n4, n5, n6)  NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_5(name, n2, n3, n4, n5, n6)
 
 
 #define NITF_ENUM_define_string_to_enum_begin(name)  inline std::ostream& operator<<(std::ostream& os, name e) { os << to_string(e); return os; } \
@@ -101,7 +101,7 @@ namespace nitf
     NITF_ENUM_define_string_to_end
 
 #define NITF_ENUM(n, name, ...) NITF_ENUM_define_enum_(name, __VA_ARGS__); \
-        NITF_ENUM_define_string_to_enum_(name, NITF_ENUM_map_entry_##n##_(name, __VA_ARGS__))
+        NITF_ENUM_define_string_to_enum_(name, NITF_ENUM_map_entry_##n(name, __VA_ARGS__))
 
     template<typename T>
     inline std::string to_string(T v) noexcept(false)

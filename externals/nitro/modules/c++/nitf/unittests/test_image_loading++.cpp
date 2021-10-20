@@ -81,6 +81,7 @@ struct expected_values final
     std::string actualBitsPerPixel = "32";
     uint32_t pixelsPerHorizBlock = 50;
     uint32_t pixelsPerVertBlock = 50;
+    int luts = 0;
 };
 
 static void writeImage(nitf::ImageSegment &segment,
@@ -125,7 +126,6 @@ static void writeImage(nitf::ImageSegment &segment,
         }
         if ((nBands == 2) && (imageMode == nitf::BlockingMode::Pixel) && str::startsWith(ic, "N"))
         {
-
             subWindowSize *= nBands;
             nBands = 1;
             //std::cout << "Using accelerated 2-band IQ mode pix-interleaved image" << std::endl;
@@ -160,6 +160,10 @@ static void writeImage(nitf::ImageSegment &segment,
     for (uint32_t band = 0; band < nBands; band++)
     {
         bandList[band] = band;
+
+        const auto bandInfo = subheader.getBandInfo(band);
+        const int luts = bandInfo.getNumLUTs();
+        TEST_ASSERT_EQ(expected.luts, luts);
     }
     setBands(subWindow, bandList);
 
@@ -222,7 +226,14 @@ TEST_CASE(test_image_loading)
 
     /*  If you didnt give us a nitf file, we're croaking  */
     const auto input_file = findInputFile().string();
-    const expected_values expected;
+    expected_values expected; // braced-initialization cause CodeQL to fail?
+    expected.nRows = expected.nCols = 50;
+    expected.pixelValueType = nitf::PixelValueType::Floating; // "R"
+    expected.bitsPerPixel = 32;
+    expected.actualBitsPerPixel = "32";
+    expected.pixelsPerHorizBlock = expected.nCols;
+    expected.pixelsPerVertBlock = expected.nRows;
+
     test_image_loading_(input_file, false /*optz*/, expected);
     test_image_loading_(input_file, true /*optz*/, expected);
 }
@@ -232,7 +243,14 @@ TEST_CASE(test_8bit_image_loading)
     ::testName = testName;
 
     auto input_file = findInputFile(true /*withAmpTable*/).string();
-    const expected_values expected{ 3975, 6724, nitf::PixelValueType::Integer, 8, "08", 6724, 3975 };
+    expected_values expected; // braced-initialization cause CodeQL to fail?
+    expected.nRows = 3975;
+    expected.nCols = 6724;
+    expected.pixelValueType = nitf::PixelValueType::Integer; // "R"
+    expected.bitsPerPixel = 8;
+    expected.actualBitsPerPixel = "08";
+    expected.pixelsPerHorizBlock = expected.nCols;
+    expected.pixelsPerVertBlock = expected.nRows;
 
     test_image_loading_(input_file, false /*optz*/, expected);
     test_image_loading_(input_file, true /*optz*/, expected);
