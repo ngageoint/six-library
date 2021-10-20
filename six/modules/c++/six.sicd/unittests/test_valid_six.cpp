@@ -42,6 +42,7 @@
 #include <six/XMLControlFactory.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/NITFReadComplexXMLControl.h>
+#include <six/sicd/KDTree.h>
 #include <six/sicd/Utilities.h>
 
 #include "../tests/TestUtilities.h"
@@ -659,6 +660,60 @@ TEST_CASE(test_create_sicds_from_mem)
     //test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
 
+TEST_CASE(test_KDTree)
+{
+    using KDNode = six::sicd::ImageData::KDNode;
+
+    const KDNode node_0_0{ {0.0, 0.0}, {0, 0} };
+    const KDNode node_1_1{ {1.0, 1.0}, {1, 1} };
+    const KDNode node_100_100{ {100.0, 100.0}, {100, 100} };
+
+    std::vector<KDNode> nodes{ node_0_0, node_1_1, node_100_100 };
+    const six::sicd::KDTree tree(std::move(nodes));
+    const auto nearest_neighbor_f = [&tree](const std::complex<float>& v)
+    {
+        auto result = tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v });
+        return result.amp_and_value;
+    };
+
+    auto actual = nearest_neighbor_f(node_0_0.result);
+    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
+    actual = nearest_neighbor_f(node_1_1.result);
+    TEST_ASSERT_EQ(node_1_1.amp_and_value, actual);
+    actual = nearest_neighbor_f(node_100_100.result);
+    TEST_ASSERT_EQ(node_100_100.amp_and_value, actual);
+    
+    actual = nearest_neighbor_f({ 0.1f, 0.1f }); // close to {0.0, 0.0}
+    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
+    actual = nearest_neighbor_f({ -0.1f, -0.1f }); // close to {0.0, 0.0}
+    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
+
+
+    actual = nearest_neighbor_f({ 0.9f, 0.9f }); // close to {1.0, 1.0}
+    TEST_ASSERT_EQ(node_1_1.amp_and_value, actual);
+    actual = nearest_neighbor_f({ 1.1f, 1.1f }); // close to {1.0, 1.0}
+    TEST_ASSERT_EQ(node_1_1.amp_and_value, actual);
+
+    actual = nearest_neighbor_f({ -1.1f, 1.1f }); // closer to {0.0, 0.0} than {1.0, 1.0}
+    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
+    actual = nearest_neighbor_f({ 1.1f, -1.1f });// closer to {0.0, 0.0} than {1.0, 1.0}
+    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
+    actual = nearest_neighbor_f({ -1.1f, -1.1f }); // closer to {0.0, 0.0} than {1.0, 1.0}
+    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
+
+    actual = nearest_neighbor_f({ 60.0f, 60.0f }); // close to {100.0, 100.0}
+    TEST_ASSERT_EQ(node_100_100.amp_and_value, actual);
+    actual = nearest_neighbor_f({ 120.0f, 120.0f }); // close to {100.0, 100.0}
+    TEST_ASSERT_EQ(node_100_100.amp_and_value, actual);
+
+    actual = nearest_neighbor_f({ 150.0f, -1.0f }); // closer to {100.0, 100.0}
+    TEST_ASSERT_EQ(node_100_100.amp_and_value, actual);
+    actual = nearest_neighbor_f({ -1.0f, 150.0f }); // closer to {100.0, 100.0}
+    TEST_ASSERT_EQ(node_100_100.amp_and_value, actual);
+    actual = nearest_neighbor_f({ -1.0f, -150.0f }); // closer to {0.0, 0.0}
+    TEST_ASSERT_EQ(node_0_0.amp_and_value, actual);
+}
+
 TEST_MAIN((void)argc;
     TEST_CHECK(valid_six_50x50);
     TEST_CHECK(test_8bit_ampphs);
@@ -667,5 +722,6 @@ TEST_MAIN((void)argc;
     TEST_CHECK(sicd_readFromNITF);
     TEST_CHECK(test_readSicd);
     TEST_CHECK(test_create_sicds_from_mem);
+    TEST_CHECK(test_KDTree);
     )
 

@@ -129,6 +129,10 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
 
 static std::vector<ImageData::KDNode> make_KDNodes(const six::AmplitudeTable* pAmplitudeTable)
 {
+    // For all possible amp/phase values (there are "only" 256*256), get and save the
+    // complex<float> value.
+    //
+    // Be careful with indexing so that we don't wrap-around in the loops.
     std::vector<ImageData::KDNode> retval;
     for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
     {
