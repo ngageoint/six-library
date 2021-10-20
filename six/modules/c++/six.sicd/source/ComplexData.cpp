@@ -365,7 +365,7 @@ inline void* cast_to_pvoid(std::span<std::byte> bytes)
 template<typename T, typename U>
 inline std::span<T> make_span(std::span<U> bytes)
 {
-    const auto size = bytes.size() / sizeof(std::span<T>::element_type);
+    const auto size = bytes.size() / sizeof(T);
     return std::span<T>(static_cast<T*>(cast_to_pvoid(bytes)), size);
 }
 
