@@ -124,8 +124,7 @@ void cropSICD(six::NITFReadControl& reader,
             aoiOffset, aoiDims));
 
     // Write the AOI SICD out
-    std::shared_ptr<six::Container> container(new six::Container(std::move(aoiData)));
-    six::NITFWriteControl writer(container);
+    six::NITFWriteControl writer(std::move(aoiData));
     six::BufferList images(1, buffer.get());
     writer.save(images, outPathname, schemaPaths);
 }

@@ -59,6 +59,10 @@ struct Data
      *  their inner data-structures
      */
     virtual Data* clone() const = 0;
+    virtual std::unique_ptr<Data> unique_clone() const
+    {
+        return std::unique_ptr<Data>(clone());
+    }
 
     friend bool operator==(const Data& lhs, const Data& rhs)
     {

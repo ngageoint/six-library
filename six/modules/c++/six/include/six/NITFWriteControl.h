@@ -96,7 +96,9 @@ public:
      * Constructor. Calls initialize.
      * \param container The data container
      */
-    NITFWriteControl(std::shared_ptr<Container> container);
+    NITFWriteControl(std::shared_ptr<Container>);
+    NITFWriteControl(std::unique_ptr<Data>&&);
+
 
     /*!
      * Constructor. Calls initialize.

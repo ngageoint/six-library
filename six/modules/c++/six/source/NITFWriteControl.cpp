@@ -48,6 +48,11 @@ NITFWriteControl::NITFWriteControl(std::shared_ptr<Container> container)
 {
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(container));
 }
+NITFWriteControl::NITFWriteControl(std::unique_ptr<Data>&& pData)
+    : NITFWriteControl(std::make_shared<six::Container>(std::move(pData)))
+{
+}
+
 
 NITFWriteControl::NITFWriteControl(const six::Options& options,
                                    std::shared_ptr<Container> container,
