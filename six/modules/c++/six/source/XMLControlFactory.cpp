@@ -25,6 +25,7 @@
 #include "six/XMLControlFactory.h"
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
+#include "six/Data.h"
 
 using namespace six;
 

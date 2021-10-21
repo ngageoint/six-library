@@ -31,6 +31,7 @@
 
 #include "six/Types.h"
 #include "six/Classification.h"
+#include "six/Utilities.h"
 
 namespace six
 {
@@ -91,13 +92,9 @@ struct Data
     virtual void setPixelType(PixelType pixelType) = 0;
     virtual bool convertPixels_(std::span<const std::byte>, std::span<std::byte>) const { return false; }
     template<typename T, typename U>
-    bool convertPixels(std::span<const T> from_, std::span<U> to_) const
+    bool convertPixels(std::span<const T> from, std::span<U> to) const
     {
-        const void* const pFrom = from_.data();
-        const std::span<const std::byte> from(static_cast<const std::byte*>(pFrom), from_.size() * sizeof(from_[0]));
-        void* const pTo = to_.data();
-        const std::span<std::byte> to(static_cast<std::byte*>(pTo), to_.size() * sizeof(to_[0]));
-        return convertPixels_(from, to);
+        return convertPixels_(as_bytes(from), as_bytes(to));
     }
 
     /*!

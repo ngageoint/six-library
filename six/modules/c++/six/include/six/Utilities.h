@@ -22,28 +22,30 @@
 #ifndef __SIX_UTILITIES_H__
 #define __SIX_UTILITIES_H__
 
+#include <vector>
+#include <memory>
 #include <std/span>
 #include <std/cstddef>
 
-#include <scene/sys_Conf.h>
+#include <import/io.h>
+#include <import/xml/lite.h>
+#include <import/str.h>
 #include <except/Exception.h>
+#include "logging/Logger.h"
+
+#include <scene/sys_Conf.h>
 #include "six/Types.h"
-#include "six/Data.h"
 #include "six/Enums.h"
 #include "six/XMLControlFactory.h"
-#include "logging/Logger.h"
 #include "scene/SceneGeometry.h"
 #include "six/ErrorStatistics.h"
 #include "six/Init.h"
 #include <scene/Utilities.h>
-#include <import/io.h>
-#include <import/xml/lite.h>
-#include <import/str.h>
-#include <vector>
-#include <memory>
+
 
 namespace six
 {
+    struct Data; // forward
 
 /*!
  *  Remaps angles into [0:360]
@@ -210,14 +212,10 @@ mem::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of 'xmlStream'
  */
-inline
 mem::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               ::io::InputStream& xmlStream,
                               const std::vector<std::string>& schemaPaths,
-                              logging::Logger& log)
-{
-    return parseData(xmlReg, xmlStream, DataType::NOT_SET, schemaPaths, log);
-}
+                              logging::Logger& log);
 
 /*
  * Parses the XML in 'pathname' and converts it into a Data object.
@@ -248,15 +246,10 @@ mem::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of the contents of 'pathname'
  */
-inline
 mem::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
     const std::string& pathname,
     const std::vector<std::string>& schemaPaths,
-    logging::Logger& log)
-{
-    return parseDataFromFile(xmlReg, pathname, DataType::NOT_SET, schemaPaths,
-                             log);
-}
+    logging::Logger& log);
 
 /*
  * Parses the XML in 'xmlStr' and converts it into a Data object.
@@ -287,15 +280,10 @@ mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of 'xmlStr'
  */
-inline
 mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
     const std::vector<std::string>& schemaPaths,
-    logging::Logger& log)
-{
-    return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, schemaPaths,
-                               log);
-}
+    logging::Logger& log);
 
 void getErrors(const ErrorStatistics* errorStats,
                const types::RgAz<double>& sampleSpacing,
