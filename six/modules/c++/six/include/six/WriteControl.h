@@ -279,8 +279,7 @@ struct WriteControl
     }
 
     template<typename TBufferList>
-    static inline
-    BufferList convertBufferList(const TBufferList& buffers)
+    static BufferList convertBufferList_(const TBufferList& buffers)
     {
         BufferList retval;
         for (const auto& buffer : buffers)
@@ -289,6 +288,18 @@ struct WriteControl
             retval.push_back(static_cast<BufferList::value_type>(buffer_));
         }
         return retval;
+    }
+    BufferList convertBufferList(const buffer_list& buffers)
+    {
+        return convertBufferList_(buffers);
+    }
+    BufferList convertBufferList(const buffer_list_mutable& buffers)
+    {
+        return convertBufferList_(buffers);
+    }
+    BufferList convertBufferList(const NonConstBufferList& buffers)
+    {
+        return convertBufferList_(buffers);
     }
 
 protected:
