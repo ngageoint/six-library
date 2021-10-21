@@ -664,60 +664,65 @@ TEST_CASE(test_create_sicds_from_mem)
     test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
 
+inline std::ostream& operator<<(std::ostream& os, const six::sicd::ImageData::AMP8I_PHS8I_t& p)
+{
+    os << p.first << p.second;
+    return os;
+}
 template<typename TNearestNeighbor>
 static void test_near_point(const std::complex<float>& p, const six::sicd::ImageData::AMP8I_PHS8I_t& expected,
     TNearestNeighbor nearest_neighbor_f)
 {
-    //auto actual = nearest_neighbor_f(p);
-    //TEST_ASSERT_EQ(expected, actual);
+    auto actual = nearest_neighbor_f(p);
+    TEST_ASSERT_EQ(expected, actual);
 
-    //actual = nearest_neighbor_f(p + std::complex<float>(0.0f, 0.0f));
-    //TEST_ASSERT_EQ(expected, actual);
-    //actual = nearest_neighbor_f(p + std::complex<float>(0.1f, 0.0f));
-    //TEST_ASSERT_EQ(expected, actual);
-    //actual = nearest_neighbor_f(p + std::complex<float>(0.0f, 0.1f));
-    //TEST_ASSERT_EQ(expected, actual);
-    //actual = nearest_neighbor_f(p + std::complex<float>(0.1f, 0.1f));
-    //TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p + std::complex<float>(0.0f, 0.0f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p + std::complex<float>(0.1f, 0.0f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p + std::complex<float>(0.0f, 0.1f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p + std::complex<float>(0.1f, 0.1f));
+    TEST_ASSERT_EQ(expected, actual);
 
-    //actual = nearest_neighbor_f(p - std::complex<float>(0.0f, 0.0f));
-    //TEST_ASSERT_EQ(expected, actual);
-    //actual = nearest_neighbor_f(p - std::complex<float>(0.1f, 0.0f));
-    //TEST_ASSERT_EQ(expected, actual);
-    //actual = nearest_neighbor_f(p - std::complex<float>(0.0f, 0.1f));
-    //TEST_ASSERT_EQ(expected, actual);
-    //actual = nearest_neighbor_f(p - std::complex<float>(0.1f, 0.1f));
-    //TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p - std::complex<float>(0.0f, 0.0f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p - std::complex<float>(0.1f, 0.0f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p - std::complex<float>(0.0f, 0.1f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p - std::complex<float>(0.1f, 0.1f));
+    TEST_ASSERT_EQ(expected, actual);
 }
 
 TEST_CASE(test_KDTree)
 {
-    //using KDNode = six::sicd::ImageData::KDNode;
+    using KDNode = six::sicd::ImageData::KDNode;
 
-    //const KDNode node0{ {0.0, 0.0}, {0, 0} };
-    //const KDNode node1{ {1.0, 1.0}, {1, 1} };
-    //const KDNode node2{ {1.0, -1.0}, {2, 2} };
-    //const KDNode node3{ {-1.0, 1.0}, {3, 3} };
-    //const KDNode node4{ {-1.0, -1.0}, {4, 4} };
+    const KDNode node0{ {0.0, 0.0}, {static_cast<uint8_t>(0), static_cast<uint8_t>(0)} };
+    const KDNode node1{ {1.0, 1.0},  {static_cast<uint8_t>(1), static_cast<uint8_t>(1)} };
+    const KDNode node2{ {1.0, -1.0},  {static_cast<uint8_t>(2), static_cast<uint8_t>(2)} };
+    const KDNode node3{ {-1.0, 1.0},  {static_cast<uint8_t>(3), static_cast<uint8_t>(3)} };
+    const KDNode node4{ {-1.0, -1.0},  {static_cast<uint8_t>(4), static_cast<uint8_t>(4)} };
 
-    //std::vector<KDNode> nodes{ node0, node1, node2, node3, node4 };
-    //const six::sicd::KDTree tree(std::move(nodes));
-    //const auto nearest_neighbor_f = [&tree](const std::complex<float>& v)
-    //{
-    //    auto result = tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v });
-    //    return result.amp_and_value;
-    //};
+    std::vector<KDNode> nodes{ node0, node1, node2, node3, node4 };
+    const six::sicd::KDTree tree(std::move(nodes));
+    const auto nearest_neighbor_f = [&tree](const std::complex<float>& v)
+    {
+        auto result = tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v });
+        return result.amp_and_value;
+    };
 
-    //test_near_point(node0.result, node0.amp_and_value, nearest_neighbor_f);
-    //test_near_point(node1.result, node1.amp_and_value, nearest_neighbor_f);
-    //test_near_point(node2.result, node2.amp_and_value, nearest_neighbor_f);
-    //test_near_point(node3.result, node3.amp_and_value, nearest_neighbor_f);
-    //test_near_point(node4.result, node4.amp_and_value, nearest_neighbor_f);
+    test_near_point(node0.result, node0.amp_and_value, nearest_neighbor_f);
+    test_near_point(node1.result, node1.amp_and_value, nearest_neighbor_f);
+    test_near_point(node2.result, node2.amp_and_value, nearest_neighbor_f);
+    test_near_point(node3.result, node3.amp_and_value, nearest_neighbor_f);
+    test_near_point(node4.result, node4.amp_and_value, nearest_neighbor_f);
 
-    //test_near_point({ 100.0f, 100.0f }, node1.amp_and_value, nearest_neighbor_f); // closest to {1.0, 1.0}
-    //test_near_point({ 100.0f, -100.0f }, node2.amp_and_value, nearest_neighbor_f); // closest to {1.0, -1.0}
-    //test_near_point({ -100.0f, 100.0f }, node3.amp_and_value, nearest_neighbor_f); // closest to {-1.0, 1.0}
-    //test_near_point({ -100.0f, -100.0f }, node4.amp_and_value, nearest_neighbor_f); // closest to {-1.0, -1.0}
+    test_near_point({ 100.0f, 100.0f }, node1.amp_and_value, nearest_neighbor_f); // closest to {1.0, 1.0}
+    test_near_point({ 100.0f, -100.0f }, node2.amp_and_value, nearest_neighbor_f); // closest to {1.0, -1.0}
+    test_near_point({ -100.0f, 100.0f }, node3.amp_and_value, nearest_neighbor_f); // closest to {-1.0, 1.0}
+    test_near_point({ -100.0f, -100.0f }, node4.amp_and_value, nearest_neighbor_f); // closest to {-1.0, -1.0}
 }
 
 TEST_MAIN((void)argc; (void)argv;
