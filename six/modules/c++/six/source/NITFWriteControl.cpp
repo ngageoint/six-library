@@ -198,6 +198,19 @@ static inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmen
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
             imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
+
+// Send std::pair<uint8_t, uint8_t> (i.e., AMP8I_PHS8I) straight-on through; this is for the uncommon case
+// where the data is already in this format. Normally, it is std::complex<float> and NewMemoryWriteHandler
+// converts it for AMP8I_PHS8I.
+template<>
+inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+    std::span<const std::pair<uint8_t, uint8_t>>& imageData, const Data& data, bool doByteSwap)
+{
+    // this bypasses the normal NITF ImageWriter and streams directly to the output
+    return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
+        imageData, segmentInfo.getFirstRow(), data, doByteSwap);
+}
+
 static std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
     io::InputStream* imageData, const Data& data, bool doByteSwap)
 {
