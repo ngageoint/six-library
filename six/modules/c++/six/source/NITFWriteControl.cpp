@@ -190,28 +190,30 @@ bool NITFWriteControl::shouldByteSwap() const
     }
 }
 
-template<typename TImageData>
-static inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-    TImageData& imageData, const Data& data, bool doByteSwap)
+// this bypasses the normal NITF ImageWriter and streams directly to the output
+inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+    const std::byte* imageData, const Data& data, bool doByteSwap)
 {
-    // this bypasses the normal NITF ImageWriter and streams directly to the output
+    return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
+        imageData, segmentInfo.getFirstRow(), data, doByteSwap);
+}
+inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+    std::span<const std::complex<float>> imageData, const Data& data, bool doByteSwap)
+{
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
             imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
-
-// Send std::pair<uint8_t, uint8_t> (i.e., AMP8I_PHS8I) straight-on through; this is for the uncommon case
-// where the data is already in this format. Normally, it is std::complex<float> and NewMemoryWriteHandler
-// converts it for AMP8I_PHS8I.
-template<>
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-    std::span<const std::pair<uint8_t, uint8_t>>& imageData, const Data& data, bool doByteSwap)
+    std::span<const std::pair<uint8_t, uint8_t>> imageData, const Data& data, bool doByteSwap)
 {
-    // this bypasses the normal NITF ImageWriter and streams directly to the output
+    // Send std::pair<uint8_t, uint8_t> (i.e., AMP8I_PHS8I) straight-on through; this is for the uncommon case
+    // where the data is already in this format. Normally, it is std::complex<float> and NewMemoryWriteHandler
+    // converts it for AMP8I_PHS8I.
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
         imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
 
-static std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+inline std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
     io::InputStream* imageData, const Data& data, bool doByteSwap)
 {
     //! TODO: This section of code (unlike the memory section above)
