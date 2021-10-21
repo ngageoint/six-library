@@ -23,6 +23,7 @@
 #define __SIX_WRITE_CONTROL_H__
 
 #include <memory>
+#include <std/span>
 
 #include "six/Types.h"
 #include "six/Region.h"
@@ -39,12 +40,12 @@ typedef std::vector<io::InputStream*> SourceList;
 
 //!  A vector of Buffer objects (one per SICD, N per SIDD)
 typedef std::vector<const UByte*> BufferList;
-using buffer_list = std::vector<const std::byte*>;
+using buffer_list = std::vector<std::span<const std::byte>>;
 
 //!  Same as above but used in overloadings to help the compiler out when
 //   it's convenient for the caller to put non-const pointers in the vector
 typedef std::vector<UByte*> NonConstBufferList;
-using buffer_list_mutable = std::vector<std::byte*>;
+using buffer_list_mutable = std::vector<std::span<std::byte>>;
 
 /*!
  *  \class WriteControl
@@ -291,11 +292,23 @@ struct WriteControl
     }
     BufferList convertBufferList(const buffer_list& buffers)
     {
-        return convertBufferList_(buffers);
+        BufferList retval;
+        for (const auto& buffer : buffers)
+        {
+            const void* buffer_ = buffer.data();
+            retval.push_back(static_cast<BufferList::value_type>(buffer_));
+        }
+        return retval;
     }
     BufferList convertBufferList(const buffer_list_mutable& buffers)
     {
-        return convertBufferList_(buffers);
+        BufferList retval;
+        for (const auto& buffer : buffers)
+        {
+            const void* buffer_ = buffer.data();
+            retval.push_back(static_cast<BufferList::value_type>(buffer_));
+        }
+        return retval;
     }
     BufferList convertBufferList(const NonConstBufferList& buffers)
     {

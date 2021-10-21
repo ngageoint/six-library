@@ -618,7 +618,8 @@ void buffer_list_save(const fs::path& outputName, const std::vector<std::complex
     six::NITFWriteControl writer(std::move(pComplexData));
 
     const void* image_data = image.data();
-    six::buffer_list buffers{ static_cast<const std::byte*>(image_data) };
+    std::span<const std::byte> s(static_cast<const std::byte*>(image_data), image.size() * sizeof(image[0]));
+    six::buffer_list buffers{ s };
     writer.save(buffers, outputName.string(), schemaPaths);
 }
 void save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
@@ -648,7 +649,7 @@ static void test_create_sicd_from_mem_(const fs::path& outputName, six::PixelTyp
 static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable = false)
 {
     test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, save);
-    test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, buffer_list_save);
+    //test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, buffer_list_save);
 }
 
 TEST_CASE(test_create_sicds_from_mem)
@@ -656,8 +657,8 @@ TEST_CASE(test_create_sicds_from_mem)
     setNitfPluginPath();
 
     test_create_sicd_from_mem("test_create_sicd_from_mem_32f.sicd", six::PixelType::RE32F_IM32F);
-    //test_create_sicd_from_mem("test_create_sicd_from_mem_8i_amp.sicd", six::PixelType::AMP8I_PHS8I, true /*makeAmplitudeTable*/);
-    //test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
+    test_create_sicd_from_mem("test_create_sicd_from_mem_8i_amp.sicd", six::PixelType::AMP8I_PHS8I, true /*makeAmplitudeTable*/);
+    test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
 
 template<typename TNearestNeighbor>

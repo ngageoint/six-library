@@ -325,7 +325,10 @@ public:
     }
     virtual void save(const buffer_list& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
     {
-        save_buffer_list(list, outputFile, schemaPaths);
+        //save_buffer_list(list, outputFile, schemaPaths);
+        const void* pImageData_ = list.data();
+        const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), list.size());
+        save_buffer_list(imageData_, outputFile, schemaPaths);
     }
 
     template<typename T>
