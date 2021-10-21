@@ -484,8 +484,7 @@ template<typename TImage>
 static void adjust_image(TImage& image)
 {
     // Make it easier to know what we're looking at when examining a binary dump of the SICD
-    void* image_data = image.data();
-    std::span<std::byte> pImageBytes(static_cast<std::byte*>(image_data), image.size() * sizeof(image[0]));
+    const auto pImageBytes = six::as_bytes(image);
 
     pImageBytes[0] = static_cast<std::byte>('[');
     for (size_t i = 1; i < pImageBytes.size() - 1; i++)
@@ -533,9 +532,7 @@ static void test_assert_eq(std::span<const std::byte> bytes, const std::vector<T
     const auto rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
     TEST_ASSERT_EQ(bytes.size(), rawDataSizeInBytes);
 
-    const void* pRawData_ = rawData.data();
-    auto pRawData = static_cast<const std::byte*>(pRawData_);
-    std::span<const std::byte> rawDataBytes(pRawData, rawDataSizeInBytes);
+    const auto rawDataBytes = six::as_bytes(rawData);
     TEST_ASSERT_EQ(bytes.size(), rawDataBytes.size());
     for (size_t i = 0; i < bytes.size(); i++)
     {
@@ -582,22 +579,20 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::s
 static std::vector<std::byte> to_bytes(const six::sicd::ComplexImageResult& result)
 {
     const auto& image = result.widebandData;
-    const void* pImage = image.data();
-    auto pBytes = static_cast<const std::byte*>(pImage);
-    const auto image_size_in_bytes = image.size() * sizeof(image[0]);
+    const auto bytes = six::as_bytes(image);
 
     std::vector<std::byte> retval;
     const auto& data = *(result.pComplexData);
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
-        std::span<const std::byte> bytes(pBytes, image_size_in_bytes);
         retval.resize(image.size() * data.getNumBytesPerPixel());
         std::span<std::byte> pRetval(retval.data(), retval.size());
         data.convertPixels(bytes, pRetval);
     }
     else
     {
-        retval.insert(retval.begin(), pBytes, pBytes + image_size_in_bytes);
+        auto pBytes = bytes.data();
+        retval.insert(retval.begin(), pBytes, pBytes + bytes.size());
     }
 
     return retval;

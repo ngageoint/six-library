@@ -309,13 +309,13 @@ static void writeWithNitro_(const std::byte* const pImageData, const NITFSegment
 }
 static void writeWithNitro_(std::span<const std::complex<float>> imageData, const NITFSegmentInfo& segmentInfo, const Data& data, nitf::ImageWriter& iWriter)
 {
-    const void* pImageData = imageData.data();
-    writeWithNitro_(static_cast<const std::byte*>(pImageData), segmentInfo, data, iWriter);
+    const auto pImageData = six::as_bytes(imageData);
+    writeWithNitro_(pImageData.data(), segmentInfo, data, iWriter);
 }
 static void writeWithNitro_(std::span<const  std::pair<uint8_t, uint8_t>> imageData, const NITFSegmentInfo& segmentInfo, const Data& data, nitf::ImageWriter& iWriter)
 {
-    const void* pImageData = imageData.data();
-    writeWithNitro_(static_cast<const std::byte*>(pImageData), segmentInfo, data, iWriter);
+    const auto pImageData = six::as_bytes(imageData);
+    writeWithNitro_(pImageData.data(), segmentInfo, data, iWriter);
 }
 template<typename TImageData>
 void NITFWriteControl::writeWithNitro(TImageData&& imageData,
