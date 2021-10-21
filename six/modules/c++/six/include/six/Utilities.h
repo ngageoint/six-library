@@ -22,6 +22,9 @@
 #ifndef __SIX_UTILITIES_H__
 #define __SIX_UTILITIES_H__
 
+#include <std/span>
+#include <std/cstddef>
+
 #include <scene/sys_Conf.h>
 #include <except/Exception.h>
 #include "six/Types.h"
@@ -306,6 +309,69 @@ void getErrors(const ErrorStatistics* errorStats,
  * \return path to schema directory, or empty string
  */
 std::string findSchemaPath(const std::string& progname);
+
+namespace details
+{
+    template<typename T>
+    inline std::span<const std::byte> as_bytes(std::span<const T> buffer)
+    {
+        const void* pBuffer = buffer.data();
+        const auto size = buffer.size() * sizeof(buffer[0]);
+        return std::span<const std::byte>(static_cast<const std::byte*>(pBuffer), size);
+    }
+    template<typename T>
+    inline std::span<const std::byte> as_cbytes(std::span<const T> buffer)
+    {
+        return as_bytes(buffer);
+    }
+
+    template<typename T>
+    inline std::span<std::byte> as_bytes(std::span<T> buffer_)
+    {
+        std::span<const T> buffer(buffer_.data(), buffer_.size());
+        const auto result = as_bytes(buffer);
+        return std::span<std::byte>(const_cast<std::byte*>(result.data()), result.size());
+    }
+    template<typename T>
+    inline std::span<const std::byte> as_cbytes(std::span<T> buffer)
+    {
+        return as_bytes(std::span<const T>(buffer.data(), buffer.size()));
+    }
+}
+
+template<typename T>
+inline std::span<const std::byte> as_bytes(std::span<const T> buffer)
+{
+    return details::as_bytes(buffer);
+}
+template<typename T>
+inline std::span<const std::byte> as_bytes(const std::vector<T>& buffer)
+{
+    return as_bytes(std::span<const T>(buffer.data(), buffer.size()));
+}
+template<typename T>
+inline std::span<const std::byte> as_cbytes(std::span<T> buffer)
+{
+    return details::as_cbytes(buffer);
+}
+template<typename T>
+inline std::span<const std::byte> as_cbytes(std::vector<T>& buffer_)
+{
+    const std::vector<T>& buffer = buffer_;
+    return as_bytes(buffer);
+}
+
+template<typename T>
+inline std::span<std::byte> as_bytes(std::span<T> buffer)
+{
+    return details::as_bytes(buffer);
+}
+template<typename T>
+inline std::span<std::byte> as_bytes(std::vector<T>& buffer)
+{
+    return as_bytes(std::span<T>(buffer.data(), buffer.size()));
+}
+
 }
 
 #endif

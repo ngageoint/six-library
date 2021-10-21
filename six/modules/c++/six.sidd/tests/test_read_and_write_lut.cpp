@@ -20,7 +20,10 @@
 *
 */
 
+#include <vector>
 #include <std/filesystem>
+#include <std/span>
+#include <std/cstddef>
 
 #include <import/six.h>
 #include <import/six/sidd.h>
@@ -51,22 +54,22 @@ struct Buffers final
 {
     std::byte* add(size_t numBytes)
     {
-        mBuffers.push_back(std::unique_ptr<std::byte[]>(new std::byte[numBytes]));
-        return mBuffers.back().get();
+        mBuffers.push_back(std::vector<std::byte>(numBytes));
+        return mBuffers.back().data();
     }
 
-    std::vector<std::byte*> get() const
+    std::vector<std::span<std::byte>> get()
     {
-        std::vector<std::byte*> retval;
+        std::vector<std::span<std::byte>> retval;
         for (auto& buffer : mBuffers)
         {
-            retval.push_back(buffer.get());
+            retval.push_back(buffer);
         }
         return retval;
     }
 
 private:
-    std::vector<std::unique_ptr<std::byte[]>> mBuffers;
+    std::vector<std::vector<std::byte>> mBuffers;
 };
 
 std::string doRoundTrip(const std::string& siddPathname)

@@ -156,7 +156,7 @@ TEST_CASE(testProjectSlantToOutput)
 }
 }
 
-TEST_MAIN((void)argc;
+TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(testProjectOutputToSlant);
     TEST_CHECK(testProjectSlantToOutput);
     )

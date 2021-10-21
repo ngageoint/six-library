@@ -40,11 +40,41 @@ typedef std::vector<io::InputStream*> SourceList;
 
 //!  A vector of Buffer objects (one per SICD, N per SIDD)
 typedef std::vector<const UByte*> BufferList;
+//template<typename T>
+//class BufferListT final
+//{
+//    std::vector<T> list_;
+//public:
+//    using value_type = typename decltype(list_)::value_type;
+//
+//    BufferListT() = default;
+//    BufferListT(size_t c, T d) : list_(c, d) {}
+//
+//    T data() const { return (T)list_.data(); }
+//    size_t size() const { return list_.size(); }
+//    void push_back(const T& t)
+//    {
+//        list_.push_back(t);
+//    }
+//
+//    T& operator[](size_t i) { return list_[i]; }
+//    const T& operator[](size_t i) const { return list_[i]; }
+//
+//    using iterator = typename decltype(list_)::iterator;
+//    iterator begin() { return list_.begin(); }
+//    iterator end() { return list_.end(); }
+//    using const_iterator = typename decltype(list_)::const_iterator;
+//    const_iterator begin() const { return list_.begin(); }
+//    const_iterator end() const { return list_.end(); }
+//};
+//using BufferList = BufferListT<const UByte*>;
+
 using buffer_list = std::vector<std::span<const std::byte>>;
 
 //!  Same as above but used in overloadings to help the compiler out when
 //   it's convenient for the caller to put non-const pointers in the vector
 typedef std::vector<UByte*> NonConstBufferList;
+//using NonConstBufferList = BufferListT<UByte*>;
 using buffer_list_mutable = std::vector<std::span<std::byte>>;
 
 /*!
