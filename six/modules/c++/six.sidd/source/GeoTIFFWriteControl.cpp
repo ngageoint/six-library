@@ -264,7 +264,39 @@ void GeoTIFFWriteControl::save(const BufferList& sources,
         setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);
         // Now we hack to write
 
-        const auto sources_ii = reinterpret_cast<const unsigned char*>(sources[ii]);
+        const void* pSource = sources[ii];
+        const auto sources_ii = static_cast<const unsigned char*>(pSource);
+        imageWriter->putData(sources_ii, static_cast<sys::Uint32_T>(getExtent(*data).area()));
+
+        imageWriter->writeIFD();
+    }
+
+    tiffWriter.close();
+}
+void GeoTIFFWriteControl::save(const buffer_list& sources,
+    const std::string& toFile,
+    const std::vector<std::string>& schemaPaths)
+{
+    tiff::FileWriter tiffWriter(toFile);
+
+    tiffWriter.writeHeader();
+    if (sources.size() != mDerivedData.size())
+        throw except::Exception(Ctxt(FmtX(
+            "Meta-data count [%d] does not match source list [%d]",
+            mDerivedData.size(), sources.size())));
+
+    for (size_t ii = 0; ii < sources.size(); ++ii)
+    {
+
+        tiff::ImageWriter* imageWriter = tiffWriter.addImage();
+        tiff::IFD* ifd = imageWriter->getIFD();
+
+        const DerivedData* const data = (DerivedData*)mDerivedData[ii];
+        setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);
+        // Now we hack to write
+
+        const void* pSource = sources[ii].data(); // TODO
+        const auto sources_ii = static_cast<const unsigned char*>(pSource);
         imageWriter->putData(sources_ii, static_cast<sys::Uint32_T>(getExtent(*data).area()));
 
         imageWriter->writeIFD();

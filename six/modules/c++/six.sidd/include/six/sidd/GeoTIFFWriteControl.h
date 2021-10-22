@@ -88,6 +88,9 @@ public:
      */
     void save(const BufferList& sources, const std::string& outputFile,
               const std::vector<std::string>& schemaPaths) override;
+    void save(const buffer_list& sources, const std::string& outputFile,
+        const std::vector<std::string>& schemaPaths) override;
+
 
     /*!
      *  We are a GeoTIFF handler
