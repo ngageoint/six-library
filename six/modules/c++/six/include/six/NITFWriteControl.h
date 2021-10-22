@@ -83,11 +83,9 @@ class NITFWriteControl : public WriteControl
         bufferedIO.close();
     }
 
-    bool prepareIO(size_t, nitf::IOInterface&);
-    bool prepareIO(std::span<const std::byte* const>, nitf::IOInterface&);
-    bool prepareIO(std::span<const std::span<const std::byte>>, nitf::IOInterface&);
-    bool prepareIO(std::span<const std::complex<float>>, nitf::IOInterface&);
-    bool prepareIO(std::span<const std::pair<uint8_t, uint8_t>>, nitf::IOInterface&);
+    bool do_prepareIO(size_t, nitf::IOInterface&);
+    template<typename T>
+    bool prepareIO(const T& imageData, nitf::IOInterface& outputFile);
 
 public:
 

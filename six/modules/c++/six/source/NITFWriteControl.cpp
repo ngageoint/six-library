@@ -239,7 +239,7 @@ void NITFWriteControl::writeWithoutNitro(const TImageData& imageData,
     }
 }
 
-bool NITFWriteControl::prepareIO(size_t imageDataSize, nitf::IOInterface& outputFile)
+bool NITFWriteControl::do_prepareIO(size_t imageDataSize, nitf::IOInterface& outputFile)
 {
     const auto& infos = getInfos();
     if (infos.size() != imageDataSize)
@@ -253,28 +253,12 @@ bool NITFWriteControl::prepareIO(size_t imageDataSize, nitf::IOInterface& output
     mWriter.prepareIO(outputFile, record);
     return shouldByteSwap();
 }
-bool NITFWriteControl::prepareIO(std::span<const std::byte* const> imageData, nitf::IOInterface& outputFile)
-{
-    return prepareIO(imageData.size(), outputFile);
-}
-bool NITFWriteControl::prepareIO(std::span<const std::span<const std::byte>> imageData, nitf::IOInterface& outputFile)
-{
-    return prepareIO(imageData.size(), outputFile);
-}
-bool NITFWriteControl::prepareIO(std::span<const std::complex<float>>, nitf::IOInterface& outputFile)
-{
-    return prepareIO(1 /*imageDataSize*/, outputFile);
-}
-bool NITFWriteControl::prepareIO(std::span<const std::pair<uint8_t, uint8_t>>, nitf::IOInterface& outputFile)
-{
-    return prepareIO(1 /*imageDataSize*/, outputFile);
-}
 
 void NITFWriteControl::save(const SourceList& imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    const bool doByteSwap = prepareIO(imageData.size(), outputFile);
+    const bool doByteSwap = do_prepareIO(imageData.size(), outputFile);
     const auto& infos = getInfos();
 
     //! TODO: This section of code (unlike the memory section below)
@@ -387,6 +371,27 @@ inline std::span<const std::complex<float>> imageData_i(std::span<const std::com
 inline std::span<const std::pair<uint8_t, uint8_t>> imageData_i(std::span<const std::pair<uint8_t, uint8_t>> imageData, size_t)
 {
     return imageData;
+}
+
+template<typename T>
+inline size_t get_imageDataSize(const T&) 
+{
+    return 1;
+}
+template<>
+inline size_t get_imageDataSize(const std::span<const std::byte* const>& imageData)
+{
+    return imageData.size();
+}
+template<>
+inline size_t get_imageDataSize(const std::span<const std::span<const std::byte>>& imageData)
+{
+    return imageData.size();
+}
+template<typename T>
+bool NITFWriteControl::prepareIO(const T& imageData, nitf::IOInterface& outputFile)
+{
+    return do_prepareIO(get_imageDataSize(imageData), outputFile);
 }
 
 template<typename T>
