@@ -24,6 +24,7 @@
 
 #include <std/filesystem>
 #include <gsl/gsl.h>
+#include <stdexcept>
 
 #include "io/FileOutputStream.h"
 #include "sys/Path.h"
@@ -242,7 +243,24 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     }
 }
 
-void GeoTIFFWriteControl::save(const BufferList& sources,
+inline void putData(tiff::ImageWriter& imageWriter,
+    const six::UByte* const sources_ii, const DerivedData& data)
+{
+    imageWriter.putData(sources_ii, static_cast<sys::Uint32_T>(getExtent(data).area()));
+}
+inline void putData(tiff::ImageWriter& imageWriter,
+    std::span<const std::byte> sources_ii, const DerivedData& data)
+{
+    if (sources_ii.size() != getExtent(data).area())
+    {
+        throw std::logic_error("sizes don't match!");
+    }
+
+    const void* pSource = sources_ii.data();
+    imageWriter.putData(static_cast<const unsigned char*>(pSource), static_cast<sys::Uint32_T>(sources_ii.size()));
+}
+template<typename TBufferList>
+void GeoTIFFWriteControl::save(const TBufferList& sources,
                                const std::string& toFile,
                                const std::vector<std::string>& schemaPaths)
 {
@@ -261,48 +279,27 @@ void GeoTIFFWriteControl::save(const BufferList& sources,
         tiff::IFD* ifd = imageWriter->getIFD();
 
         const DerivedData* const data = (DerivedData*) mDerivedData[ii];
-        setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);
-        // Now we hack to write
+        setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);        
 
-        const void* pSource = sources[ii];
-        const auto sources_ii = static_cast<const unsigned char*>(pSource);
-        imageWriter->putData(sources_ii, static_cast<sys::Uint32_T>(getExtent(*data).area()));
+        // Now we hack to write
+        putData(*imageWriter, sources[ii], *data);
 
         imageWriter->writeIFD();
     }
 
     tiffWriter.close();
 }
+void GeoTIFFWriteControl::save(const BufferList& sources,
+    const std::string& toFile,
+    const std::vector<std::string>& schemaPaths)
+{
+    save(sources, toFile, schemaPaths);
+}
 void GeoTIFFWriteControl::save(const buffer_list& sources,
     const std::string& toFile,
     const std::vector<std::string>& schemaPaths)
 {
-    tiff::FileWriter tiffWriter(toFile);
-
-    tiffWriter.writeHeader();
-    if (sources.size() != mDerivedData.size())
-        throw except::Exception(Ctxt(FmtX(
-            "Meta-data count [%d] does not match source list [%d]",
-            mDerivedData.size(), sources.size())));
-
-    for (size_t ii = 0; ii < sources.size(); ++ii)
-    {
-
-        tiff::ImageWriter* imageWriter = tiffWriter.addImage();
-        tiff::IFD* ifd = imageWriter->getIFD();
-
-        const DerivedData* const data = (DerivedData*)mDerivedData[ii];
-        setupIFD(data, ifd, sys::Path::splitExt(toFile).first, schemaPaths);
-        // Now we hack to write
-
-        const void* pSource = sources[ii].data(); // TODO
-        const auto sources_ii = static_cast<const unsigned char*>(pSource);
-        imageWriter->putData(sources_ii, static_cast<sys::Uint32_T>(getExtent(*data).area()));
-
-        imageWriter->writeIFD();
-    }
-
-    tiffWriter.close();
+    save(sources, toFile, schemaPaths);
 }
 
 void GeoTIFFWriteControl::addCharArray(tiff::IFD* ifd, const std::string &tag,
