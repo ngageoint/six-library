@@ -71,7 +71,8 @@ class NITFWriteControl : public WriteControl
     template<typename T>
     void save_image(std::span<const T>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
 
-    void save_buffer_list(std::span<const std::byte* const>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    void save_buffer_list(const BufferList&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    void save_buffer_list(const buffer_list&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
 
     template<typename TBufferList>
     void save_buffer_list_to_file(const TBufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
@@ -319,16 +320,11 @@ public:
      */
     virtual void save(const BufferList& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
     {
-        const void* pImageData_ = list.data();
-        const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), list.size());
-        save_buffer_list(imageData_, outputFile, schemaPaths);
+        save_buffer_list(list, outputFile, schemaPaths);
     }
     virtual void save(const buffer_list& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
     {
-        //save_buffer_list(list, outputFile, schemaPaths);
-        const void* pImageData_ = list.data();
-        const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), list.size());
-        save_buffer_list(imageData_, outputFile, schemaPaths);
+        save_buffer_list(list, outputFile, schemaPaths);
     }
 
     template<typename T>

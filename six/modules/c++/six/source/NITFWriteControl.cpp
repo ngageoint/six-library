@@ -432,12 +432,20 @@ void NITFWriteControl::save_T(T&& imageData,
 
     addDataAndWrite(schemaPaths);
 }
-void NITFWriteControl::save_buffer_list(std::span<const std::byte* const> imageData,
-                            nitf::IOInterface& outputFile,
-                            const std::vector<std::string>& schemaPaths)
+
+void NITFWriteControl::save_buffer_list(const BufferList& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
 {
-    save_T(imageData, outputFile, schemaPaths);
+    const void* pImageData_ = list.data();
+    const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), list.size());
+    save_T(imageData_, outputFile, schemaPaths);
 }
+void NITFWriteControl::save_buffer_list(const buffer_list& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
+{
+    const void* pImageData_ = list.data();
+    const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), list.size());
+    save_T(imageData_, outputFile, schemaPaths);
+}
+
 template<>
 void NITFWriteControl::save_image(std::span<const std::complex<float>> imageData,
                             nitf::IOInterface& outputFile,
