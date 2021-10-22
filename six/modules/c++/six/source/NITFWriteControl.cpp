@@ -356,6 +356,22 @@ void NITFWriteControl::addLegend(const Legend& legend, int imageNumber)
     iWriter.attachSource(iSource);
 }
 
+template<typename T>
+constexpr bool is_nested_span(const T&)
+{
+    return false;
+}
+template<>
+constexpr bool is_nested_span(const std::span<const std::byte* const>&)
+{
+    return true;
+}
+template<>
+constexpr bool is_nested_span(const std::span<const std::span<const std::byte>>&)
+{
+    return true;
+}
+
 inline const std::byte* const imageData_i(std::span<const std::byte* const> imageData, size_t i)
 {
     return i < imageData.size() ? imageData[i] : nullptr;
