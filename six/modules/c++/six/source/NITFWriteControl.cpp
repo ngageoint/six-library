@@ -198,6 +198,12 @@ inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo s
         imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+    std::span<const std::byte> imageData, const Data& data, bool doByteSwap)
+{
+    return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
+        imageData, segmentInfo.getFirstRow(), data, doByteSwap);
+}
+inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
     std::span<const std::complex<float>> imageData, const Data& data, bool doByteSwap)
 {
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
@@ -248,6 +254,10 @@ bool NITFWriteControl::prepareIO(size_t imageDataSize, nitf::IOInterface& output
     return shouldByteSwap();
 }
 bool NITFWriteControl::prepareIO(std::span<const std::byte* const> imageData, nitf::IOInterface& outputFile)
+{
+    return prepareIO(imageData.size(), outputFile);
+}
+bool NITFWriteControl::prepareIO(std::span<const std::span<const std::byte>> imageData, nitf::IOInterface& outputFile)
 {
     return prepareIO(imageData.size(), outputFile);
 }
@@ -366,6 +376,10 @@ inline const std::byte* const imageData_i(std::span<const std::byte* const> imag
 {
     return i < imageData.size() ? imageData[i] : nullptr;
 }
+inline std::span<const std::byte> imageData_i(std::span<const std::span<const std::byte>> imageData, size_t i)
+{
+    return i < imageData.size() ? imageData[i] : std::span<const std::byte>();
+}
 inline std::span<const std::complex<float>> imageData_i(std::span<const std::complex<float>> imageData, size_t)
 {
     return imageData;
@@ -441,9 +455,7 @@ void NITFWriteControl::save_buffer_list(const BufferList& list, nitf::IOInterfac
 }
 void NITFWriteControl::save_buffer_list(const buffer_list& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
 {
-    const void* pImageData_ = list.data();
-    const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), list.size());
-    save_T(imageData_, outputFile, schemaPaths);
+    save_T(list, outputFile, schemaPaths);
 }
 
 template<>

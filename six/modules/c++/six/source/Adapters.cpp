@@ -219,6 +219,13 @@ inline void validate_pixelSize(std::span<T> buffer, const Data& data)
 
 template<>
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const std::byte> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : NewMemoryWriteHandler(info, buffer.data(), firstRow, data, doByteSwap)
+{
+}
+
+template<>
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::complex<float>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer.data()), firstRow, data, doByteSwap)
 {
