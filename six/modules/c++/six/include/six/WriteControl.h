@@ -40,41 +40,11 @@ typedef std::vector<io::InputStream*> SourceList;
 
 //!  A vector of Buffer objects (one per SICD, N per SIDD)
 typedef std::vector<const UByte*> BufferList;
-//template<typename T>
-//class BufferListT final
-//{
-//    std::vector<T> list_;
-//public:
-//    using value_type = typename decltype(list_)::value_type;
-//
-//    BufferListT() = default;
-//    BufferListT(size_t c, T d) : list_(c, d) {}
-//
-//    T data() const { return (T)list_.data(); }
-//    size_t size() const { return list_.size(); }
-//    void push_back(const T& t)
-//    {
-//        list_.push_back(t);
-//    }
-//
-//    T& operator[](size_t i) { return list_[i]; }
-//    const T& operator[](size_t i) const { return list_[i]; }
-//
-//    using iterator = typename decltype(list_)::iterator;
-//    iterator begin() { return list_.begin(); }
-//    iterator end() { return list_.end(); }
-//    using const_iterator = typename decltype(list_)::const_iterator;
-//    const_iterator begin() const { return list_.begin(); }
-//    const_iterator end() const { return list_.end(); }
-//};
-//using BufferList = BufferListT<const UByte*>;
-
 using buffer_list = std::vector<std::span<const std::byte>>;
 
 //!  Same as above but used in overloadings to help the compiler out when
 //   it's convenient for the caller to put non-const pointers in the vector
 typedef std::vector<UByte*> NonConstBufferList;
-//using NonConstBufferList = BufferListT<UByte*>;
 using buffer_list_mutable = std::vector<std::span<std::byte>>;
 
 /*!
@@ -155,22 +125,16 @@ struct WriteControl
      *  \param toFile file name to write out
      *  \param schemaPaths Directories or files of schema locations
      */
-    void save(const BufferList& sources, const std::string& toFile)
+    template<typename TBufferList>
+    void save(const TBufferList& sources, const std::string& toFile)
     {
         save(sources, toFile, std::vector<std::string>());
-    }
-    void save(const buffer_list& sources, const std::string& toFile)
-    {
-        save(convertBufferList(sources), toFile);
     }
 
     virtual void save(const BufferList& sources, const std::string& toFile,
                       const std::vector<std::string>& schemaPaths) = 0;
     virtual void save(const buffer_list& sources, const std::string& toFile,
-                      const std::vector<std::string>& schemaPaths)
-    {
-        save(convertBufferList(sources), toFile, schemaPaths);
-    }
+        const std::vector<std::string>& schemaPaths); // = 0; but that would break existing code
 
     // For convenience since the compiler can't implicitly convert
     // std::vector<T*> to std::vector<const T*>
@@ -309,8 +273,16 @@ struct WriteControl
         return mXMLRegistry;
     }
 
-    template<typename TBufferList>
-    static BufferList convertBufferList_(const TBufferList& buffers)
+    buffer_list convertBufferList(const buffer_list_mutable& buffers)
+    {
+        buffer_list retval;
+        for (const auto& buffer : buffers)
+        {
+            retval.push_back(six::as_bytes(buffer));
+        }
+        return retval;
+    }
+    BufferList convertBufferList(const NonConstBufferList& buffers)
     {
         BufferList retval;
         for (const auto& buffer : buffers)
@@ -319,30 +291,6 @@ struct WriteControl
             retval.push_back(static_cast<BufferList::value_type>(buffer_));
         }
         return retval;
-    }
-    BufferList convertBufferList(const buffer_list& buffers)
-    {
-        BufferList retval;
-        for (const auto& buffer : buffers)
-        {
-            const void* buffer_ = buffer.data();
-            retval.push_back(static_cast<BufferList::value_type>(buffer_));
-        }
-        return retval;
-    }
-    BufferList convertBufferList(const buffer_list_mutable& buffers)
-    {
-        BufferList retval;
-        for (const auto& buffer : buffers)
-        {
-            const void* buffer_ = buffer.data();
-            retval.push_back(static_cast<BufferList::value_type>(buffer_));
-        }
-        return retval;
-    }
-    BufferList convertBufferList(const NonConstBufferList& buffers)
-    {
-        return convertBufferList_(buffers);
     }
 
 protected:

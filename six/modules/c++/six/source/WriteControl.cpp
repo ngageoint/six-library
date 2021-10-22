@@ -24,3 +24,21 @@
 const char six::WriteControl::OPT_BYTE_SWAP[] = "ByteSwap";
 const char six::WriteControl::OPT_BUFFER_SIZE[] = "BufferSize";
 
+six::BufferList convertBufferList(const six::buffer_list& buffers)
+{
+    six::BufferList retval;
+    for (const auto& buffer : buffers)
+    {
+        const void* buffer_ = buffer.data();
+        retval.push_back(static_cast<six::BufferList::value_type>(buffer_));
+    }
+    return retval;
+}
+
+void six::WriteControl::save(const buffer_list& sources, const std::string& toFile,
+    const std::vector<std::string>& schemaPaths)
+{
+    // This is only for backwards compatibility, to avoid breaking existing code.
+    //  Derived classes SHOULD override save() and use the std::span<>s in buffer_list.
+    save(::convertBufferList(sources), toFile, schemaPaths);
+}
