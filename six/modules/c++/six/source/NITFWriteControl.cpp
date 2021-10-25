@@ -357,6 +357,62 @@ void NITFWriteControl::addLegend(const Legend& legend, int imageNumber)
 }
 
 template<typename T>
+inline size_t get_imageDataSize(const T&) 
+{
+    return 1;
+}
+inline size_t get_imageDataSize(const std::span<const std::byte* const>& imageData)
+{
+    return imageData.size();
+}
+inline size_t get_imageDataSize(const std::span<const std::span<const std::byte>>& imageData)
+{
+    return imageData.size();
+}
+template<typename T>
+bool NITFWriteControl::prepareIO(const T& imageData, nitf::IOInterface& outputFile)
+{
+    return do_prepareIO(get_imageDataSize(imageData), outputFile);
+}
+
+template<typename T>
+void NITFWriteControl::write_flattened_imageData(const T& imageData, const NITFImageInfo& info, const Legend* const legend,
+    bool doByteSwap, bool enableJ2K)
+{
+    const std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
+    const six::Data* const pData = info.getData();
+
+    const auto startIndex = info.getStartIndex();
+    nitf::ImageSegment imageSegment = getRecord().getImages()[startIndex];
+    nitf::ImageSubheader subheader = imageSegment.getSubheader();
+
+    const bool isBlocking = subheader.numBlocksPerRow() > 1 || subheader.numBlocksPerCol() > 1;
+
+    // The SIDD spec requires that a J2K compressed SIDDs be only a
+    // single image segment. However this functionality remains untested.
+    const auto numIS = imageSegments.size();
+    if (isBlocking || (enableJ2K && numIS == 1) || !mCompressionOptions.empty())
+    {
+        if ((isBlocking || (enableJ2K && numIS == 1)) && (pData->getDataType() == six::DataType::COMPLEX))
+        {
+            throw except::Exception(Ctxt("SICD does not support blocked or J2K compressed output"));
+        }
+
+        writeWithNitro(imageData, imageSegments, startIndex, *pData);
+    }
+    else
+    {
+        writeWithoutNitro(imageData, imageSegments, startIndex, *pData, doByteSwap);
+    }
+
+    if (legend)
+    {
+        addLegend(*legend, static_cast<int>(startIndex + numIS));
+    }
+}
+
+
+template<typename T>
 constexpr bool is_nested_span(const T&)
 {
     return false;
@@ -387,28 +443,7 @@ inline std::span<const std::byte> imageData_i(std::span<const std::span<const st
 }
 
 template<typename T>
-inline size_t get_imageDataSize(const T&) 
-{
-    return 1;
-}
-inline size_t get_imageDataSize(const std::span<const std::byte* const>& imageData)
-{
-    return imageData.size();
-}
-inline size_t get_imageDataSize(const std::span<const std::span<const std::byte>>& imageData)
-{
-    return imageData.size();
-}
-template<typename T>
-bool NITFWriteControl::prepareIO(const T& imageData, nitf::IOInterface& outputFile)
-{
-    return do_prepareIO(get_imageDataSize(imageData), outputFile);
-}
-
-template<typename T>
-void NITFWriteControl::save_T(const T& imageData,
-    nitf::IOInterface& outputFile,
-    const std::vector<std::string>& schemaPaths)
+void NITFWriteControl::save_T(const T& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
 {
     const bool doByteSwap = prepareIO(imageData, outputFile);
 
@@ -420,44 +455,16 @@ void NITFWriteControl::save_T(const T& imageData,
         (j2kCompression <= 1.0) && j2kCompression > 0.0001;
 
     // TODO maybe we need to see if the compression plug-in is even available
-
     createCompressionOptions(mCompressionOptions);
+
     size_t numImages = getInfos().size();
     for (size_t i = 0; i < numImages; ++i)
     {
+        const auto flattened_imageData = imageData_i(imageData, i);
         const auto pInfo = getInfo(i);
-        const std::vector<NITFSegmentInfo> imageSegments = pInfo->getImageSegments();
-        const six::Data* const pData = pInfo->getData();
-
-        const auto startIndex = pInfo->getStartIndex();
-        nitf::ImageSegment imageSegment = getRecord().getImages()[startIndex];
-        nitf::ImageSubheader subheader = imageSegment.getSubheader();
-
-        const bool isBlocking = subheader.numBlocksPerRow() > 1 || subheader.numBlocksPerCol() > 1;
-
-        // The SIDD spec requires that a J2K compressed SIDDs be only a
-        // single image segment. However this functionality remains untested.
-        const auto numIS = imageSegments.size();
-        const auto imageData_ = imageData_i(imageData, i);
-        if (isBlocking || (enableJ2K && numIS == 1) || !mCompressionOptions.empty())
-        {
-            if ((isBlocking || (enableJ2K && numIS == 1)) && (pData->getDataType() == six::DataType::COMPLEX))
-            {
-                throw except::Exception(Ctxt("SICD does not support blocked or J2K compressed output"));
-            }
-
-            writeWithNitro(imageData_, imageSegments, startIndex, *pData);
-        }
-        else
-        {
-            writeWithoutNitro(imageData_, imageSegments, startIndex, *pData, doByteSwap);
-        }
-
         const Legend* const legend = getLegend(getContainer().get(), i);
-        if (legend)
-        {
-            addLegend(*legend, static_cast<int>(startIndex + numIS));
-        }
+
+        write_flattened_imageData(flattened_imageData, *pInfo, legend, doByteSwap, enableJ2K);
     }
 
     addDataAndWrite(schemaPaths);
