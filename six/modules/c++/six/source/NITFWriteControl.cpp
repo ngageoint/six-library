@@ -278,54 +278,66 @@ void NITFWriteControl::save(const SourceList& imageData,
     addDataAndWrite(schemaPaths);
 }
 
-static void writeWithNitro_(const std::byte* const pImageData, const NITFSegmentInfo& segmentInfo, const Data& data, nitf::ImageWriter& iWriter)
+static nitf::ImageSource make_ImageSource(const std::byte* const pImageData, size_t bandSize, int numBytesPerPixel,
+    const NITFSegmentInfo& segmentInfo, const Data& data)
 {
     const auto numChannels = data.getNumChannels();
     const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
     const auto numCols = data.getNumCols();
 
-    // We will use the ImageWriter provided by NITRO so that we can
-    // take advantage of the built-in compression capabilities
-    iWriter.setWriteCaching(1);
-
-    nitf::ImageSource iSource;
-    const size_t bandSize = pixelSize * numCols * segmentInfo.getNumRows();
-
+    nitf::ImageSource retval;
     for (size_t chan = 0; chan < numChannels; ++chan)
     {
         // Assume that the bands are interleaved in memory.  This
         // makes sense for 24-bit 3-color data.
         const auto pData = pImageData + pixelSize * segmentInfo.getFirstRow() * numCols;
         const auto start = gsl::narrow<nitf::Off>(chan);
-        const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
         const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
         nitf::MemorySource ms(pData, bandSize, start, numBytesPerPixel, pixelSkip);
-        iSource.addBand(ms);
+        retval.addBand(ms);
     }
-    iWriter.attachSource(iSource);
+    return retval;
 }
-inline void writeWithNitro_(std::span<const std::byte> pImageData, const NITFSegmentInfo& segmentInfo, const Data& data, nitf::ImageWriter& iWriter)
+inline nitf::ImageSource make_ImageSource(std::span<const std::byte> pImageData, size_t bandSize, int numBytesPerPixel,
+    const NITFSegmentInfo& segmentInfo, const Data& data)
 {
-    writeWithNitro_(pImageData.data(), segmentInfo, data, iWriter);
+    return make_ImageSource(pImageData.data(), bandSize, numBytesPerPixel, segmentInfo, data);
 }
-inline void writeWithNitro_(std::span<const std::complex<float>> imageData, const NITFSegmentInfo& segmentInfo, const Data& data, nitf::ImageWriter& iWriter)
+inline nitf::ImageSource make_ImageSource(std::span<const std::complex<float>> imageData, size_t bandSize, int numBytesPerPixel,
+    const NITFSegmentInfo& segmentInfo, const Data& data)
 {
-    writeWithNitro_(six::as_bytes(imageData), segmentInfo, data, iWriter);
+    return make_ImageSource(six::as_bytes(imageData), bandSize, numBytesPerPixel, segmentInfo, data);
 }
-inline void writeWithNitro_(std::span<const  std::pair<uint8_t, uint8_t>> imageData, const NITFSegmentInfo& segmentInfo, const Data& data, nitf::ImageWriter& iWriter)
+inline nitf::ImageSource make_ImageSource(std::span<const  std::pair<uint8_t, uint8_t>> imageData, size_t bandSize, int numBytesPerPixel,
+    const NITFSegmentInfo& segmentInfo, const Data& data)
 {
-    writeWithNitro_(six::as_bytes(imageData), segmentInfo, data, iWriter);
+    return make_ImageSource(six::as_bytes(imageData), bandSize, numBytesPerPixel, segmentInfo, data);
 }
+
 template<typename TImageData>
 void NITFWriteControl::writeWithNitro(const TImageData& imageData,
     const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool /*unused_*/)
 {
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
+    const auto numCols = data.getNumCols();
+
     for (size_t jj = 0; jj < imageSegments.size(); ++jj)
     {
         // We will use the ImageWriter provided by NITRO so that we can
         // take advantage of the built-in compression capabilities
         nitf::ImageWriter iWriter = mWriter.newImageWriter(static_cast<int>(startIndex + jj), mCompressionOptions);
-        writeWithNitro_(imageData, imageSegments[jj], data, iWriter);
+
+        // We will use the ImageWriter provided by NITRO so that we can
+        // take advantage of the built-in compression capabilities
+        iWriter.setWriteCaching(1);
+
+        const NITFSegmentInfo segmentInfo = imageSegments[jj];
+        const size_t bandSize = pixelSize * numCols * segmentInfo.getNumRows();
+
+        auto iSource = make_ImageSource(imageData, bandSize, numBytesPerPixel, segmentInfo, data);
+        iWriter.attachSource(iSource);
     }
 }
 
