@@ -257,9 +257,12 @@ public:
     {
         save_buffer_list_to_file(list, outputFile, schemaPaths);
     }
-    virtual void save(const buffer_list& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths) override
+    virtual void save(const buffer_list& list, const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths) override
     {
-        save_buffer_list_to_file(list, outputFile, schemaPaths);
+        std::vector<std::string> schemaPaths_;
+        std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
+            [](const std::filesystem::path& p) { return p.string(); });
+        save_buffer_list_to_file(list, outputFile.string(), schemaPaths_);
     }
 
     template<typename T>

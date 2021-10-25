@@ -24,6 +24,8 @@
 
 #include <memory>
 #include <std/span>
+#include <vector>
+#include <std/filesystem>
 
 #include "six/Types.h"
 #include "six/Region.h"
@@ -133,8 +135,16 @@ struct WriteControl
 
     virtual void save(const BufferList& sources, const std::string& toFile,
                       const std::vector<std::string>& schemaPaths) = 0;
-    virtual void save(const buffer_list& sources, const std::string& toFile,
-        const std::vector<std::string>& schemaPaths); // = 0; but that would break existing code
+    virtual void save(const buffer_list& sources, const std::filesystem::path& toFile,
+        const std::vector<std::filesystem::path>& schemaPaths); // = 0; but that would break existing code
+    void save(const buffer_list& sources, const std::string& toFile,
+        const std::vector<std::string>& schemaPaths_)
+    {
+        std::vector<std::filesystem::path> schemaPaths;
+        std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+            [](const std::string & s) { return s; });
+        save(sources, toFile, schemaPaths);
+    }
 
     // For convenience since the compiler can't implicitly convert
     // std::vector<T*> to std::vector<const T*>
