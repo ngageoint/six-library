@@ -498,6 +498,13 @@ void NITFWriteControl::save_buffer_list(const buffer_list& list, nitf::IOInterfa
 {
     save_T(list, outputFile, schemaPaths);
 }
+void NITFWriteControl::save_buffer_list(const cxbuffer_list&, nitf::IOInterface&, const std::vector<std::filesystem::path>& schemaPaths)
+{
+    std::vector<std::string> schemaPaths_;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
+        [](const std::filesystem::path& p) { return p.string(); });
+    //save_T(list, outputFile, schemaPaths_);
+}
 
 template<>
 void NITFWriteControl::save_image(std::span<const std::complex<float>> imageData,
@@ -512,6 +519,23 @@ void NITFWriteControl::save_image(std::span<const std::pair<uint8_t, uint8_t>> i
                             const std::vector<std::string>& schemaPaths)
 {
     save_T(imageData, outputFile, schemaPaths);
+}
+
+
+void NITFWriteControl::save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
+{
+    save_buffer_list_to_file(list, outputFile, schemaPaths);
+}
+void NITFWriteControl::save(const buffer_list& list, const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
+{
+    std::vector<std::string> schemaPaths_;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
+        [](const std::filesystem::path& p) { return p.string(); });
+    save_buffer_list_to_file(list, outputFile.string(), schemaPaths_);
+}
+void NITFWriteControl::save(const cxbuffer_list& list, const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
+{
+    save_buffer_list_to_file(list, outputFile, schemaPaths);
 }
 
 void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPaths)

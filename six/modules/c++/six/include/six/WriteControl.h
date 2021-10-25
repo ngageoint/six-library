@@ -26,6 +26,7 @@
 #include <std/span>
 #include <vector>
 #include <std/filesystem>
+#include <complex>
 
 #include "six/Types.h"
 #include "six/Region.h"
@@ -43,6 +44,7 @@ typedef std::vector<io::InputStream*> SourceList;
 //!  A vector of Buffer objects (one per SICD, N per SIDD)
 typedef std::vector<const UByte*> BufferList;
 using buffer_list = std::vector<std::span<const std::byte>>;
+using cxbuffer_list = std::vector<std::span<const std::complex<float>>>;
 
 //!  Same as above but used in overloadings to help the compiler out when
 //   it's convenient for the caller to put non-const pointers in the vector
@@ -145,6 +147,8 @@ struct WriteControl
             [](const std::string & s) { return s; });
         save(sources, toFile, schemaPaths);
     }
+    virtual void save(const cxbuffer_list& sources, const std::filesystem::path& toFile,
+        const std::vector<std::filesystem::path>& schemaPaths); // = 0; but that would break existing code
 
     // For convenience since the compiler can't implicitly convert
     // std::vector<T*> to std::vector<const T*>

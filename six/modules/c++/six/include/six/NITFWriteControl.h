@@ -77,12 +77,21 @@ class NITFWriteControl : public WriteControl
 
     void save_buffer_list(const BufferList&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
     void save_buffer_list(const buffer_list&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    void save_buffer_list(const cxbuffer_list&, nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
 
-    template<typename TBufferList>
-    void save_buffer_list_to_file(const TBufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
+    template<typename TBufferList, typename TSchemaPaths>
+    void save_buffer_list_to_file(const TBufferList& list, const std::string& outputFile, const TSchemaPaths& schemaPaths)
     {
         const size_t bufferSize = getOptions().getParameter(WriteControl::OPT_BUFFER_SIZE, Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
         nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
+        save(list, bufferedIO, schemaPaths);
+        bufferedIO.close();
+    }
+    template<typename TBufferList, typename TSchemaPaths>
+    void save_buffer_list_to_file(const TBufferList& list, const std::filesystem::path& outputFile, const TSchemaPaths& schemaPaths)
+    {
+        const size_t bufferSize = getOptions().getParameter(WriteControl::OPT_BUFFER_SIZE, Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
+        nitf::BufferedWriter bufferedIO(outputFile.string(), bufferSize);
         save(list, bufferedIO, schemaPaths);
         bufferedIO.close();
     }
@@ -253,17 +262,9 @@ public:
      *  \param outputFile  Output path to write
      *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths) override
-    {
-        save_buffer_list_to_file(list, outputFile, schemaPaths);
-    }
-    virtual void save(const buffer_list& list, const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths) override
-    {
-        std::vector<std::string> schemaPaths_;
-        std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
-            [](const std::filesystem::path& p) { return p.string(); });
-        save_buffer_list_to_file(list, outputFile.string(), schemaPaths_);
-    }
+    virtual void save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths) override;
+    virtual void save(const buffer_list& list, const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths) override;
+    virtual void save(const cxbuffer_list& list, const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths) override;
 
     template<typename T>
     void save(std::span<const T> imageData,
@@ -329,6 +330,10 @@ public:
         save_buffer_list(list, outputFile, schemaPaths);
     }
     virtual void save(const buffer_list& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
+    {
+        save_buffer_list(list, outputFile, schemaPaths);
+    }
+    virtual void save(const cxbuffer_list& list, nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
     {
         save_buffer_list(list, outputFile, schemaPaths);
     }
