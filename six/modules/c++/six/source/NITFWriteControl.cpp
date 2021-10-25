@@ -443,7 +443,7 @@ void NITFWriteControl::write_flattened_imageData(const T& imageData, const NITFI
     }
 }
 
-
+// This is a bit convoluted ... it's what seems to work with all compilers.
 template<typename T, typename U>
 inline std::span<const T> get_imageData(std::span<const T> imageData, U)
 {
@@ -476,6 +476,8 @@ void NITFWriteControl::save_T(const T& imageData, nitf::IOInterface& outputFile,
     size_t numImages = getInfos().size();
     for (size_t i = 0; i < numImages; ++i)
     {
+        // This is a bit convoluted ... it's what seems to work with all compilers.
+        // And even then imageData[i] generates a warning.
         const auto flattened_imageData = get_imageData(imageData, imageData[i]);
         const auto pInfo = getInfo(i);
         const Legend* const legend = getLegend(getContainer().get(), i);

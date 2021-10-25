@@ -647,7 +647,7 @@ static void test_create_sicd_from_mem_(const fs::path& outputName, six::PixelTyp
 static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable = false)
 {
     test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, save);
-    //test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, buffer_list_save);
+    test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, buffer_list_save);
 }
 
 TEST_CASE(test_create_sicds_from_mem)
