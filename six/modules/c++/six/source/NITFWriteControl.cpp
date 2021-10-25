@@ -414,15 +414,15 @@ void NITFWriteControl::write_flattened_imageData(const T& imageData, const NITFI
 
 
 template<typename T, typename U>
-constexpr std::span<const T> imageData_i(std::span<const T> imageData, U)
+inline std::span<const T> get_imageData(std::span<const T> imageData, U)
 {
     return imageData;
 }
-constexpr const std::byte* const imageData_i(std::span<const std::byte* const>, const std::byte* const retval)
+inline const std::byte* const get_imageData(std::span<const std::byte* const>, const std::byte* const retval)
 {
     return retval;
 }
-constexpr std::span<const std::byte> imageData_i(std::span<const std::span<const std::byte>>, std::span<const std::byte> retval)
+inline std::span<const std::byte> get_imageData(std::span<const std::span<const std::byte>>, std::span<const std::byte> retval)
 {
     return retval;
 }
@@ -445,7 +445,7 @@ void NITFWriteControl::save_T(const T& imageData, nitf::IOInterface& outputFile,
     size_t numImages = getInfos().size();
     for (size_t i = 0; i < numImages; ++i)
     {
-        const auto flattened_imageData = imageData_i(imageData, imageData[i]);
+        const auto flattened_imageData = get_imageData(imageData, imageData[i]);
         const auto pInfo = getInfo(i);
         const Legend* const legend = getLegend(getContainer().get(), i);
 
