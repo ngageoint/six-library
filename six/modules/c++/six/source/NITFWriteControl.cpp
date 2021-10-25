@@ -372,6 +372,11 @@ constexpr bool is_nested_span(const std::span<const std::span<const std::byte>>&
     return true;
 }
 
+template<typename T>
+inline std::span<const T> imageData_i(std::span<const T> imageData, size_t)
+{
+    return imageData;
+}
 inline const std::byte* const imageData_i(std::span<const std::byte* const> imageData, size_t i)
 {
     return i < imageData.size() ? imageData[i] : nullptr;
@@ -380,26 +385,16 @@ inline std::span<const std::byte> imageData_i(std::span<const std::span<const st
 {
     return i < imageData.size() ? imageData[i] : std::span<const std::byte>();
 }
-inline std::span<const std::complex<float>> imageData_i(std::span<const std::complex<float>> imageData, size_t)
-{
-    return imageData;
-}
-inline std::span<const std::pair<uint8_t, uint8_t>> imageData_i(std::span<const std::pair<uint8_t, uint8_t>> imageData, size_t)
-{
-    return imageData;
-}
 
 template<typename T>
 inline size_t get_imageDataSize(const T&) 
 {
     return 1;
 }
-template<>
 inline size_t get_imageDataSize(const std::span<const std::byte* const>& imageData)
 {
     return imageData.size();
 }
-template<>
 inline size_t get_imageDataSize(const std::span<const std::span<const std::byte>>& imageData)
 {
     return imageData.size();
