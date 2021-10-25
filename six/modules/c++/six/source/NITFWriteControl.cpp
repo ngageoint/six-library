@@ -27,6 +27,7 @@
 #include <std/bit>
 #include <std/memory>
 #include <algorithm>
+#include <type_traits>
 
 #include <io/ByteStream.h>
 #include <math/Round.h>
@@ -412,34 +413,18 @@ void NITFWriteControl::write_flattened_imageData(const T& imageData, const NITFI
 }
 
 
-template<typename T>
-constexpr bool is_nested_span(const T&)
-{
-    return false;
-}
-template<>
-constexpr bool is_nested_span(const std::span<const std::byte* const>&)
-{
-    return true;
-}
-template<>
-constexpr bool is_nested_span(const std::span<const std::span<const std::byte>>&)
-{
-    return true;
-}
-
-template<typename T>
-inline std::span<const T> imageData_i(std::span<const T> imageData, size_t)
+template<typename T, typename U>
+constexpr std::span<const T> imageData_i(std::span<const T> imageData, U)
 {
     return imageData;
 }
-inline const std::byte* const imageData_i(std::span<const std::byte* const> imageData, size_t i)
+constexpr const std::byte* const imageData_i(std::span<const std::byte* const>, const std::byte* const retval)
 {
-    return i < imageData.size() ? imageData[i] : nullptr;
+    return retval;
 }
-inline std::span<const std::byte> imageData_i(std::span<const std::span<const std::byte>> imageData, size_t i)
+constexpr std::span<const std::byte> imageData_i(std::span<const std::span<const std::byte>>, std::span<const std::byte> retval)
 {
-    return i < imageData.size() ? imageData[i] : std::span<const std::byte>();
+    return retval;
 }
 
 template<typename T>
@@ -460,7 +445,7 @@ void NITFWriteControl::save_T(const T& imageData, nitf::IOInterface& outputFile,
     size_t numImages = getInfos().size();
     for (size_t i = 0; i < numImages; ++i)
     {
-        const auto flattened_imageData = imageData_i(imageData, i);
+        const auto flattened_imageData = imageData_i(imageData, imageData[i]);
         const auto pInfo = getInfo(i);
         const Legend* const legend = getLegend(getContainer().get(), i);
 
