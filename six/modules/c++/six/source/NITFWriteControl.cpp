@@ -28,6 +28,7 @@
 #include <std/memory>
 #include <algorithm>
 #include <type_traits>
+#include <stdexcept>
 
 #include <io/ByteStream.h>
 #include <math/Round.h>
@@ -278,12 +279,14 @@ void NITFWriteControl::save(const SourceList& imageData,
     addDataAndWrite(schemaPaths);
 }
 
-static nitf::ImageSource make_ImageSource(const std::byte* const pImageData, size_t bandSize, int numBytesPerPixel,
-    const NITFSegmentInfo& segmentInfo, const Data& data)
+// Existing code that uses BufferList needs raw "std::byte*" instead of std::span<std::byte>
+static nitf::ImageSource make_ImageSource(const std::byte* const pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
 {
     const auto numChannels = data.getNumChannels();
     const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
     const auto numCols = data.getNumCols();
+    const auto bandSize = pixelSize * numCols * segmentInfo.getNumRows();
 
     nitf::ImageSource retval;
     for (size_t chan = 0; chan < numChannels; ++chan)
@@ -298,20 +301,39 @@ static nitf::ImageSource make_ImageSource(const std::byte* const pImageData, siz
     }
     return retval;
 }
-inline nitf::ImageSource make_ImageSource(std::span<const std::byte> pImageData, size_t bandSize, int numBytesPerPixel,
-    const NITFSegmentInfo& segmentInfo, const Data& data)
+
+template<typename T>
+static nitf::ImageSource make_ImageSource(std::span<const T> pImageData_, const NITFSegmentInfo& segmentInfo, const Data& data)
 {
-    return make_ImageSource(pImageData.data(), bandSize, numBytesPerPixel, segmentInfo, data);
-}
-inline nitf::ImageSource make_ImageSource(std::span<const std::complex<float>> imageData, size_t bandSize, int numBytesPerPixel,
-    const NITFSegmentInfo& segmentInfo, const Data& data)
-{
-    return make_ImageSource(six::as_bytes(imageData), bandSize, numBytesPerPixel, segmentInfo, data);
-}
-inline nitf::ImageSource make_ImageSource(std::span<const  std::pair<uint8_t, uint8_t>> imageData, size_t bandSize, int numBytesPerPixel,
-    const NITFSegmentInfo& segmentInfo, const Data& data)
-{
-    return make_ImageSource(six::as_bytes(imageData), bandSize, numBytesPerPixel, segmentInfo, data);
+    const auto pImageData = six::as_bytes(pImageData_);
+    constexpr auto numBytesPerPixel = sizeof(pImageData_[0]);
+
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    if (pixelSize != numBytesPerPixel)
+    {
+        throw std::invalid_argument("numBytesPerPixel mis-match!");
+    }
+
+    const auto numCols = data.getNumCols();
+    const auto bandSize = pixelSize * numCols * segmentInfo.getNumRows();
+    if (pImageData.size() != bandSize)
+    {
+        throw std::invalid_argument("bandSize mis-match!");
+    }
+
+    nitf::ImageSource retval;
+    for (size_t chan = 0; chan < numChannels; ++chan)
+    {
+        // Assume that the bands are interleaved in memory.  This
+        // makes sense for 24-bit 3-color data.
+        const std::span<const std::byte> pData(pImageData.data() + pixelSize * segmentInfo.getFirstRow() * numCols, bandSize);
+        const auto start = gsl::narrow<nitf::Off>(chan);
+        const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
+        nitf::MemorySource ms(pData, start, pixelSkip);
+        retval.addBand(ms);
+    }
+    return retval;
 }
 
 template<typename TImageData>
@@ -320,7 +342,6 @@ void NITFWriteControl::writeWithNitro(const TImageData& imageData,
 {
     const auto numChannels = data.getNumChannels();
     const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-    const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
     const auto numCols = data.getNumCols();
 
     for (size_t jj = 0; jj < imageSegments.size(); ++jj)
@@ -334,9 +355,7 @@ void NITFWriteControl::writeWithNitro(const TImageData& imageData,
         iWriter.setWriteCaching(1);
 
         const NITFSegmentInfo segmentInfo = imageSegments[jj];
-        const size_t bandSize = pixelSize * numCols * segmentInfo.getNumRows();
-
-        auto iSource = make_ImageSource(imageData, bandSize, numBytesPerPixel, segmentInfo, data);
+        auto iSource = make_ImageSource(imageData, segmentInfo, data);
         iWriter.attachSource(iSource);
     }
 }
