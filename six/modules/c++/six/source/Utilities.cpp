@@ -29,6 +29,7 @@
 #include "six/Init.h"
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
+#include "six/Data.h"
 
 namespace
 {
@@ -1139,6 +1140,14 @@ void six::loadXmlDataContentHandler()
 }
 
 mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    return parseData(xmlReg, xmlStream, DataType::NOT_SET, schemaPaths, log);
+}
+
+mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
                                    ::io::InputStream& xmlStream,
                                    DataType dataType,
                                    const std::vector<std::string>& schemaPaths,
@@ -1180,6 +1189,15 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     return mem::auto_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
 }
 
+mem::auto_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,
+    const std::string& pathname,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    return parseDataFromFile(xmlReg, pathname, DataType::NOT_SET, schemaPaths,
+        log);
+}
+
 mem::auto_ptr<Data> six::parseDataFromFile(
         const XMLControlRegistry& xmlReg,
         const std::string& pathname,
@@ -1189,6 +1207,15 @@ mem::auto_ptr<Data> six::parseDataFromFile(
 {
     io::FileInputStream inStream(pathname);
     return parseData(xmlReg, inStream, dataType, schemaPaths, log);
+}
+
+mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::string& xmlStr,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, schemaPaths,
+        log);
 }
 
 mem::auto_ptr<Data> six::parseDataFromString(

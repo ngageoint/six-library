@@ -175,7 +175,7 @@ void Tester<DataTypeT>::normalWrite()
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
     six::buffer_list buffers;
-    buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
+    buffers.push_back(six::as_bytes(mImage));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));

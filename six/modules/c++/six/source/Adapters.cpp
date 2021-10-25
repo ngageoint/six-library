@@ -248,6 +248,19 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     }
 }
 
+using cx_float = std::complex<float>;
+inline std::span<const cx_float> as_cxfloat(std::span<const std::byte> buffer)
+{
+    const void* pBuffer = buffer.data();
+    return std::span<const cx_float>(static_cast<const cx_float*>(pBuffer), buffer.size() / sizeof(cx_float));
+}
+template<>
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const std::byte> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : NewMemoryWriteHandler(info, as_cxfloat(buffer), firstRow, data, doByteSwap)
+{
+}
+
 template<>
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::pair<uint8_t, uint8_t>> buffer, size_t firstRow, const Data& data, bool doByteSwap)

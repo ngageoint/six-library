@@ -27,6 +27,8 @@
 #include <std/bit>
 #include <std/memory>
 #include <algorithm>
+#include <type_traits>
+#include <stdexcept>
 
 #include <io/ByteStream.h>
 #include <math/Round.h>
@@ -48,6 +50,11 @@ NITFWriteControl::NITFWriteControl(std::shared_ptr<Container> container)
 {
     mNITFHeaderCreator.reset(new six::NITFHeaderCreator(container));
 }
+NITFWriteControl::NITFWriteControl(std::unique_ptr<Data>&& pData)
+    : NITFWriteControl(std::make_shared<six::Container>(std::move(pData)))
+{
+}
+
 
 NITFWriteControl::NITFWriteControl(const six::Options& options,
                                    std::shared_ptr<Container> container,
@@ -185,15 +192,36 @@ bool NITFWriteControl::shouldByteSwap() const
     }
 }
 
-template<typename TImageData>
-static inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-    TImageData& imageData, const Data& data, bool doByteSwap)
+// this bypasses the normal NITF ImageWriter and streams directly to the output
+inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+    const std::byte* imageData, const Data& data, bool doByteSwap)
 {
-    // this bypasses the normal NITF ImageWriter and streams directly to the output
+    return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
+        imageData, segmentInfo.getFirstRow(), data, doByteSwap);
+}
+inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+    std::span<const std::byte> imageData, const Data& data, bool doByteSwap)
+{
+    return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
+        imageData, segmentInfo.getFirstRow(), data, doByteSwap);
+}
+inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+    std::span<const std::complex<float>> imageData, const Data& data, bool doByteSwap)
+{
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
             imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
-static std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+    std::span<const std::pair<uint8_t, uint8_t>> imageData, const Data& data, bool doByteSwap)
+{
+    // Send std::pair<uint8_t, uint8_t> (i.e., AMP8I_PHS8I) straight-on through; this is for the uncommon case
+    // where the data is already in this format. Normally, it is std::complex<float> and NewMemoryWriteHandler
+    // converts it for AMP8I_PHS8I.
+    return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
+        imageData, segmentInfo.getFirstRow(), data, doByteSwap);
+}
+
+inline std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
     io::InputStream* imageData, const Data& data, bool doByteSwap)
 {
     //! TODO: This section of code (unlike the memory section above)
@@ -203,17 +231,17 @@ static std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segm
 }
 
 template<typename TImageData>
-void NITFWriteControl::writeWithoutNitro(TImageData&& imageData,
+void NITFWriteControl::writeWithoutNitro(const TImageData& imageData,
     const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap)
 {
     for (size_t j = 0; j < imageSegments.size(); ++j)
     {
-        auto writeHandler = makeWriteHandler(imageSegments[j], std::forward<TImageData>(imageData), data, doByteSwap);
+        auto writeHandler = makeWriteHandler(imageSegments[j], imageData, data, doByteSwap);
         mWriter.setImageWriteHandler(static_cast<int>(startIndex + j), writeHandler);
     }
 }
 
-bool NITFWriteControl::prepareIO(size_t imageDataSize, nitf::IOInterface& outputFile)
+bool NITFWriteControl::do_prepareIO(size_t imageDataSize, nitf::IOInterface& outputFile)
 {
     const auto& infos = getInfos();
     if (infos.size() != imageDataSize)
@@ -227,24 +255,12 @@ bool NITFWriteControl::prepareIO(size_t imageDataSize, nitf::IOInterface& output
     mWriter.prepareIO(outputFile, record);
     return shouldByteSwap();
 }
-bool NITFWriteControl::prepareIO(std::span<const std::byte* const> imageData, nitf::IOInterface& outputFile)
-{
-    return prepareIO(imageData.size(), outputFile);
-}
-bool NITFWriteControl::prepareIO(std::span<const std::complex<float>>, nitf::IOInterface& outputFile)
-{
-    return prepareIO(1 /*imageDataSize*/, outputFile);
-}
-bool NITFWriteControl::prepareIO(std::span<const std::pair<uint8_t, uint8_t>>, nitf::IOInterface& outputFile)
-{
-    return prepareIO(1 /*imageDataSize*/, outputFile);
-}
 
 void NITFWriteControl::save(const SourceList& imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    const bool doByteSwap = prepareIO(imageData.size(), outputFile);
+    const bool doByteSwap = do_prepareIO(imageData.size(), outputFile);
     const auto& infos = getInfos();
 
     //! TODO: This section of code (unlike the memory section below)
@@ -263,52 +279,84 @@ void NITFWriteControl::save(const SourceList& imageData,
     addDataAndWrite(schemaPaths);
 }
 
-static void writeWithNitro_(const std::byte* const pImageData, const NITFSegmentInfo& segmentInfo, const Data& data, nitf::ImageWriter& iWriter)
+// Existing code that uses BufferList needs raw "std::byte*" instead of std::span<std::byte>
+static nitf::ImageSource make_ImageSource(const std::byte* const pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
 {
     const auto numChannels = data.getNumChannels();
     const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
     const auto numCols = data.getNumCols();
+    const auto bandSize = pixelSize * numCols * segmentInfo.getNumRows();
 
-    // We will use the ImageWriter provided by NITRO so that we can
-    // take advantage of the built-in compression capabilities
-    iWriter.setWriteCaching(1);
-
-    nitf::ImageSource iSource;
-    const size_t bandSize = pixelSize * numCols * segmentInfo.getNumRows();
-
+    nitf::ImageSource retval;
     for (size_t chan = 0; chan < numChannels; ++chan)
     {
         // Assume that the bands are interleaved in memory.  This
         // makes sense for 24-bit 3-color data.
         const auto pData = pImageData + pixelSize * segmentInfo.getFirstRow() * numCols;
         const auto start = gsl::narrow<nitf::Off>(chan);
-        const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
         const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
         nitf::MemorySource ms(pData, bandSize, start, numBytesPerPixel, pixelSkip);
-        iSource.addBand(ms);
+        retval.addBand(ms);
     }
-    iWriter.attachSource(iSource);
+    return retval;
 }
-static void writeWithNitro_(std::span<const std::complex<float>> imageData, const NITFSegmentInfo& segmentInfo, const Data& data, nitf::ImageWriter& iWriter)
+
+template<typename T>
+static nitf::ImageSource make_ImageSource(std::span<const T> pImageData_, const NITFSegmentInfo& segmentInfo, const Data& data)
 {
-    const void* pImageData = imageData.data();
-    writeWithNitro_(static_cast<const std::byte*>(pImageData), segmentInfo, data, iWriter);
+    const auto pImageData = six::as_bytes(pImageData_);
+    constexpr auto numBytesPerPixel = sizeof(pImageData_[0]);
+
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    if (pixelSize != numBytesPerPixel)
+    {
+        throw std::invalid_argument("numBytesPerPixel mis-match!");
+    }
+
+    const auto numCols = data.getNumCols();
+    const auto bandSize = pixelSize * numCols * segmentInfo.getNumRows();
+    if (pImageData.size() != bandSize)
+    {
+        throw std::invalid_argument("bandSize mis-match!");
+    }
+
+    nitf::ImageSource retval;
+    for (size_t chan = 0; chan < numChannels; ++chan)
+    {
+        // Assume that the bands are interleaved in memory.  This
+        // makes sense for 24-bit 3-color data.
+        const std::span<const std::byte> pData(pImageData.data() + pixelSize * segmentInfo.getFirstRow() * numCols, bandSize);
+        const auto start = gsl::narrow<nitf::Off>(chan);
+        const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
+        nitf::MemorySource ms(pData, start, pixelSkip);
+        retval.addBand(ms);
+    }
+    return retval;
 }
-static void writeWithNitro_(std::span<const  std::pair<uint8_t, uint8_t>> imageData, const NITFSegmentInfo& segmentInfo, const Data& data, nitf::ImageWriter& iWriter)
-{
-    const void* pImageData = imageData.data();
-    writeWithNitro_(static_cast<const std::byte*>(pImageData), segmentInfo, data, iWriter);
-}
+
 template<typename TImageData>
-void NITFWriteControl::writeWithNitro(TImageData&& imageData,
+void NITFWriteControl::writeWithNitro(const TImageData& imageData,
     const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool /*unused_*/)
 {
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    const auto numCols = data.getNumCols();
+
     for (size_t jj = 0; jj < imageSegments.size(); ++jj)
     {
         // We will use the ImageWriter provided by NITRO so that we can
         // take advantage of the built-in compression capabilities
         nitf::ImageWriter iWriter = mWriter.newImageWriter(static_cast<int>(startIndex + jj), mCompressionOptions);
-        writeWithNitro_(std::forward<TImageData>(imageData), imageSegments[jj], data, iWriter);
+
+        // We will use the ImageWriter provided by NITRO so that we can
+        // take advantage of the built-in compression capabilities
+        iWriter.setWriteCaching(1);
+
+        const NITFSegmentInfo segmentInfo = imageSegments[jj];
+        auto iSource = make_ImageSource(imageData, segmentInfo, data);
+        iWriter.attachSource(iSource);
     }
 }
 
@@ -340,25 +388,80 @@ void NITFWriteControl::addLegend(const Legend& legend, int imageNumber)
     iWriter.attachSource(iSource);
 }
 
-inline const std::byte* const imageData_i(std::span<const std::byte* const> imageData, size_t i)
+template<typename T>
+inline size_t get_imageDataSize(const T&) 
 {
-    return i < imageData.size() ? imageData[i] : nullptr;
+    return 1;
 }
-inline std::span<const std::complex<float>> imageData_i(std::span<const std::complex<float>> imageData, size_t)
+inline size_t get_imageDataSize(const std::span<const std::byte* const>& imageData)
 {
-    return imageData;
+    return imageData.size();
 }
-inline std::span<const std::pair<uint8_t, uint8_t>> imageData_i(std::span<const std::pair<uint8_t, uint8_t>> imageData, size_t)
+inline size_t get_imageDataSize(const std::span<const std::span<const std::byte>>& imageData)
 {
-    return imageData;
+    return imageData.size();
+}
+template<typename T>
+bool NITFWriteControl::prepareIO(const T& imageData, nitf::IOInterface& outputFile)
+{
+    return do_prepareIO(get_imageDataSize(imageData), outputFile);
 }
 
 template<typename T>
-void NITFWriteControl::save_T(T&& imageData,
-    nitf::IOInterface& outputFile,
-    const std::vector<std::string>& schemaPaths)
+void NITFWriteControl::write_flattened_imageData(const T& imageData, const NITFImageInfo& info, const Legend* const legend,
+    bool doByteSwap, bool enableJ2K)
 {
-    const bool doByteSwap = prepareIO(std::forward<T>(imageData), outputFile);
+    const std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
+    const six::Data* const pData = info.getData();
+
+    const auto startIndex = info.getStartIndex();
+    nitf::ImageSegment imageSegment = getRecord().getImages()[startIndex];
+    nitf::ImageSubheader subheader = imageSegment.getSubheader();
+
+    const bool isBlocking = subheader.numBlocksPerRow() > 1 || subheader.numBlocksPerCol() > 1;
+
+    // The SIDD spec requires that a J2K compressed SIDDs be only a
+    // single image segment. However this functionality remains untested.
+    const auto numIS = imageSegments.size();
+    if (isBlocking || (enableJ2K && numIS == 1) || !mCompressionOptions.empty())
+    {
+        if ((isBlocking || (enableJ2K && numIS == 1)) && (pData->getDataType() == six::DataType::COMPLEX))
+        {
+            throw except::Exception(Ctxt("SICD does not support blocked or J2K compressed output"));
+        }
+
+        writeWithNitro(imageData, imageSegments, startIndex, *pData);
+    }
+    else
+    {
+        writeWithoutNitro(imageData, imageSegments, startIndex, *pData, doByteSwap);
+    }
+
+    if (legend)
+    {
+        addLegend(*legend, static_cast<int>(startIndex + numIS));
+    }
+}
+
+// This is a bit convoluted ... it's what seems to work with all compilers.
+template<typename T, typename U>
+inline std::span<const T> get_imageData(std::span<const T> imageData, U)
+{
+    return imageData;
+}
+inline const std::byte* const get_imageData(std::span<const std::byte* const>, const std::byte* const retval)
+{
+    return retval;
+}
+inline std::span<const std::byte> get_imageData(std::span<const std::span<const std::byte>>, std::span<const std::byte> retval)
+{
+    return retval;
+}
+
+template<typename T>
+void NITFWriteControl::save_T(const T& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
+{
+    const bool doByteSwap = prepareIO(imageData, outputFile);
 
     // check to see if J2K compression is enabled
     double j2kCompression = (double)getOptions().getParameter(
@@ -368,54 +471,34 @@ void NITFWriteControl::save_T(T&& imageData,
         (j2kCompression <= 1.0) && j2kCompression > 0.0001;
 
     // TODO maybe we need to see if the compression plug-in is even available
-
     createCompressionOptions(mCompressionOptions);
+
     size_t numImages = getInfos().size();
     for (size_t i = 0; i < numImages; ++i)
     {
+        // This is a bit convoluted ... it's what seems to work with all compilers.
+        // And even then imageData[i] generates a warning.
+        const auto flattened_imageData = get_imageData(imageData, imageData[i]);
         const auto pInfo = getInfo(i);
-        const std::vector<NITFSegmentInfo> imageSegments = pInfo->getImageSegments();
-        const six::Data* const pData = pInfo->getData();
-
-        const auto startIndex = pInfo->getStartIndex();
-        nitf::ImageSegment imageSegment = getRecord().getImages()[startIndex];
-        nitf::ImageSubheader subheader = imageSegment.getSubheader();
-
-        const bool isBlocking = subheader.numBlocksPerRow() > 1 || subheader.numBlocksPerCol() > 1;
-
-        // The SIDD spec requires that a J2K compressed SIDDs be only a
-        // single image segment. However this functionality remains untested.
-        const auto numIS = imageSegments.size();
-        const auto imageData_ = imageData_i(std::forward<T>(imageData), i);
-        if (isBlocking || (enableJ2K && numIS == 1) || !mCompressionOptions.empty())
-        {
-            if ((isBlocking || (enableJ2K && numIS == 1)) && (pData->getDataType() == six::DataType::COMPLEX))
-            {
-                throw except::Exception(Ctxt("SICD does not support blocked or J2K compressed output"));
-            }
-
-            writeWithNitro(imageData_, imageSegments, startIndex, *pData);
-        }
-        else
-        {
-            writeWithoutNitro(imageData_, imageSegments, startIndex, *pData, doByteSwap);
-        }
-
         const Legend* const legend = getLegend(getContainer().get(), i);
-        if (legend)
-        {
-            addLegend(*legend, static_cast<int>(startIndex + numIS));
-        }
+
+        write_flattened_imageData(flattened_imageData, *pInfo, legend, doByteSwap, enableJ2K);
     }
 
     addDataAndWrite(schemaPaths);
 }
-void NITFWriteControl::save_buffer_list(std::span<const std::byte* const> imageData,
-                            nitf::IOInterface& outputFile,
-                            const std::vector<std::string>& schemaPaths)
+
+void NITFWriteControl::save_buffer_list(const BufferList& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
 {
-    save_T(imageData, outputFile, schemaPaths);
+    const void* pImageData_ = list.data();
+    const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), list.size());
+    save_T(imageData_, outputFile, schemaPaths);
 }
+void NITFWriteControl::save_buffer_list(const buffer_list& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
+{
+    save_T(list, outputFile, schemaPaths);
+}
+
 template<>
 void NITFWriteControl::save_image(std::span<const std::complex<float>> imageData,
                             nitf::IOInterface& outputFile,

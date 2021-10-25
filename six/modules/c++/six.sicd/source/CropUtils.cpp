@@ -24,6 +24,8 @@
 #include <memory>
 #include <algorithm>
 #include <string>
+#include <std/span>
+#include <std/cstddef>
 
 #include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
@@ -124,9 +126,9 @@ void cropSICD(six::NITFReadControl& reader,
             aoiOffset, aoiDims));
 
     // Write the AOI SICD out
-    std::shared_ptr<six::Container> container(new six::Container(std::move(aoiData)));
-    six::NITFWriteControl writer(container);
-    six::BufferList images(1, buffer.get());
+    six::NITFWriteControl writer(std::move(aoiData));
+    const void* pBuffer = buffer.get();
+    six::buffer_list images{ {static_cast<const std::byte*>(pBuffer), numBytes } };
     writer.save(images, outPathname, schemaPaths);
 }
 

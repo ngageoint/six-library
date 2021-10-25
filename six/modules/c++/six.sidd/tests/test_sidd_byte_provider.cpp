@@ -207,7 +207,8 @@ public:
         }
 
         mBigEndianImage = mImage;
-        if (std::endian::native == std::endian::little)
+        auto endianness = std::endian::native; // "conditional expression is constant"
+        if (endianness == std::endian::little)
         {
             sys::byteSwap(mBigEndianImage.data(),
                           sizeof(DataTypeT),
@@ -381,7 +382,7 @@ void Tester<DataTypeT>::normalWrite()
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
     six::buffer_list buffers;
-    buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
+    buffers.push_back(six::as_bytes(mImage));
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));

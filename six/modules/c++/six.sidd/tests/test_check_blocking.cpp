@@ -21,6 +21,8 @@
 */
 
 #include <iostream>
+#include <vector>
+
 #include <import/six/sidd.h>
 #include <cli/ArgumentParser.h>
 #include <io/TempFile.h>
@@ -31,11 +33,10 @@
 
 namespace
 {
-void generateData(const six::Data& data, std::unique_ptr<std::byte[]>& buffer)
+void generateData(const six::Data& data, std::vector<std::byte>& buffer)
 {
-    const size_t size = getExtent(data).area();
-    buffer.reset(new std::byte[size]);
-    for (size_t ii = 0; ii < size; ++ii)
+    buffer.resize(getExtent(data).area());
+    for (size_t ii = 0; ii < buffer.size(); ++ii)
     {
         buffer[ii] = static_cast<std::byte>(ii % 100);
     }
@@ -72,15 +73,15 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
     workingData->setNumRows(imageSideSize);
     workingData->setNumCols(imageSideSize);
 
-    std::unique_ptr<std::byte[]> buffer;
+    std::vector<std::byte> buffer;
     generateData(*workingData, buffer);
 
     mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
     container->addData(std::move(workingData));
 
-    six::buffer_list buffers(1);
-    buffers[0] = buffer.get();
+    six::buffer_list buffers;
+    buffers.push_back(six::as_bytes(buffer));
 
     six::Options options;
     options.setParameter(
@@ -111,8 +112,8 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     const std::string productSize = computeProductSize(blockSize,
             largeImageSize, data.getNumBytesPerPixel());
 
-    std::unique_ptr<std::byte[]> firstBuffer;
-    std::unique_ptr<std::byte[]> secondBuffer;
+    std::vector<std::byte> firstBuffer;
+    std::vector<std::byte> secondBuffer;
     generateData(*firstData, firstBuffer);
     generateData(*secondData, secondBuffer);
 
@@ -121,9 +122,9 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     container->addData(std::move(firstData));
     container->addData(std::move(secondData));
 
-    six::buffer_list buffers(2);
-    buffers[0] = firstBuffer.get();
-    buffers[1] = secondBuffer.get();
+    six::buffer_list buffers;
+    buffers.push_back(six::as_bytes(firstBuffer));
+    buffers.push_back(six::as_bytes(secondBuffer));
 
     six::Options options;
     options.setParameter(

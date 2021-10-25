@@ -1574,11 +1574,8 @@ void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::str
 {
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
-    auto container = std::make_shared<six::Container>(data.clone());
+    six::NITFWriteControl writer(data.unique_clone());
     std::unique_ptr<logging::Logger> logger(logging::setupLogger("out").release());
-
-    six::NITFWriteControl writer;
-    writer.initialize(container);
     writer.setLogger(*logger);
 
     const std::span<const std::complex<float>> image(image_, getExtent(data).area());

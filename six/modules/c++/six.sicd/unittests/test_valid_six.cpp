@@ -48,6 +48,10 @@
 #include "../tests/TestUtilities.h"
 #include "TestCase.h"
 
+#if _MSC_VER
+#pragma warning(disable: 4459) //  declaration of '...' hides global declaration
+#endif
+
 namespace fs = std::filesystem;
 using AMP8I_PHS8I_t = six::sicd::ImageData::AMP8I_PHS8I_t;
 
@@ -261,13 +265,13 @@ TEST_CASE(test_8bit_ampphs)
     {
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
-            auto expected = from_AMP8I_PHS8I(input_amplitude, input_value);
+            auto expected = from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value));
 
-            AMP8I_PHS8I_t input(input_amplitude, input_value);
+            AMP8I_PHS8I_t input(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value));
             const auto actual = imageData.from_AMP8I_PHS8I(input);
             TEST_ASSERT_EQ(expected, actual);
 
-            const auto actual_utilities = six::sicd::Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, nullptr);
+            const auto actual_utilities = six::sicd::Utilities::from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value), nullptr);
             TEST_ASSERT_EQ(expected, actual_utilities);
             TEST_ASSERT_EQ(actual_utilities, actual);
 
@@ -470,7 +474,7 @@ static std::vector<std::complex<float>> make_complex_image(const types::RowCol<s
     {
         for (size_t c = 0; c < dims.col; c++)
         {
-            image.push_back(std::complex<float>(r, c * -1.0));
+            image.push_back(std::complex<float>(r * 1.0f, c * -1.0f));
         }
     }
     return image;
@@ -480,8 +484,7 @@ template<typename TImage>
 static void adjust_image(TImage& image)
 {
     // Make it easier to know what we're looking at when examining a binary dump of the SICD
-    void* image_data = image.data();
-    std::span<std::byte> pImageBytes(static_cast<std::byte*>(image_data), image.size() * sizeof(image[0]));
+    const auto pImageBytes = six::as_bytes(image);
 
     pImageBytes[0] = static_cast<std::byte>('[');
     for (size_t i = 1; i < pImageBytes.size() - 1; i++)
@@ -529,9 +532,7 @@ static void test_assert_eq(std::span<const std::byte> bytes, const std::vector<T
     const auto rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
     TEST_ASSERT_EQ(bytes.size(), rawDataSizeInBytes);
 
-    const void* pRawData_ = rawData.data();
-    auto pRawData = static_cast<const std::byte*>(pRawData_);
-    std::span<const std::byte> rawDataBytes(pRawData, rawDataSizeInBytes);
+    const auto rawDataBytes = six::as_bytes(rawData);
     TEST_ASSERT_EQ(bytes.size(), rawDataBytes.size());
     for (size_t i = 0; i < bytes.size(); i++)
     {
@@ -578,22 +579,20 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::s
 static std::vector<std::byte> to_bytes(const six::sicd::ComplexImageResult& result)
 {
     const auto& image = result.widebandData;
-    const void* pImage = image.data();
-    auto pBytes = static_cast<const std::byte*>(pImage);
-    const auto image_size_in_bytes = image.size() * sizeof(image[0]);
+    const auto bytes = six::as_bytes(image);
 
     std::vector<std::byte> retval;
     const auto& data = *(result.pComplexData);
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
-        std::span<const std::byte> bytes(pBytes, image_size_in_bytes);
         retval.resize(image.size() * data.getNumBytesPerPixel());
         std::span<std::byte> pRetval(retval.data(), retval.size());
         data.convertPixels(bytes, pRetval);
     }
     else
     {
-        retval.insert(retval.begin(), pBytes, pBytes + image_size_in_bytes);
+        auto pBytes = bytes.data();
+        retval.insert(retval.begin(), pBytes, pBytes + bytes.size());
     }
 
     return retval;
@@ -615,27 +614,22 @@ void buffer_list_save(const fs::path& outputName, const std::vector<std::complex
     static const std::vector<std::string> schemaPaths;
 
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
-    auto container = std::make_shared<six::Container>(std::move(pComplexData));
-    six::NITFWriteControl writer(container);
+    six::NITFWriteControl writer(std::move(pComplexData));
 
-    const void* image_data = image.data();
-    six::buffer_list buffers{ static_cast<const std::byte*>(image_data) };
+    six::buffer_list buffers;
+    buffers.push_back(six::as_bytes(image));
     writer.save(buffers, outputName.string(), schemaPaths);
 }
-
 void save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
     static const std::vector<fs::path> schemaPaths;
     six::sicd::writeAsNITF(outputName, schemaPaths, *pComplexData, image.data());
-
-    //six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
-    //auto container = std::make_shared<six::Container>(std::move(pComplexData));
-    //six::NITFWriteControl writer(container);
-    //writer.save(image, outputName, schemaPaths);
 }
 
-static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)
+template<typename TSave>
+static void test_create_sicd_from_mem_(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable,
+    TSave save)
 {
     const types::RowCol<size_t> dims(2, 2);
 
@@ -650,6 +644,11 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
     save(outputName, image, std::move(pComplexData));
     read_nitf(outputName, pixelType, image);
 }
+static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable = false)
+{
+    test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, save);
+    test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, buffer_list_save);
+}
 
 TEST_CASE(test_create_sicds_from_mem)
 {
@@ -660,6 +659,11 @@ TEST_CASE(test_create_sicds_from_mem)
     test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
 
+inline std::ostream& operator<<(std::ostream& os, const six::sicd::ImageData::AMP8I_PHS8I_t& p)
+{
+    os << p.first << p.second;
+    return os;
+}
 template<typename TNearestNeighbor>
 static void test_near_point(const std::complex<float>& p, const six::sicd::ImageData::AMP8I_PHS8I_t& expected,
     TNearestNeighbor nearest_neighbor_f)
@@ -690,11 +694,11 @@ TEST_CASE(test_KDTree)
 {
     using KDNode = six::sicd::ImageData::KDNode;
 
-    const KDNode node0{ {0.0, 0.0}, {0, 0} };
-    const KDNode node1{ {1.0, 1.0}, {1, 1} };
-    const KDNode node2{ {1.0, -1.0}, {2, 2} };
-    const KDNode node3{ {-1.0, 1.0}, {3, 3} };
-    const KDNode node4{ {-1.0, -1.0}, {4, 4} };
+    const KDNode node0{ {0.0, 0.0}, {static_cast<uint8_t>(0), static_cast<uint8_t>(0)} };
+    const KDNode node1{ {1.0, 1.0},  {static_cast<uint8_t>(1), static_cast<uint8_t>(1)} };
+    const KDNode node2{ {1.0, -1.0},  {static_cast<uint8_t>(2), static_cast<uint8_t>(2)} };
+    const KDNode node3{ {-1.0, 1.0},  {static_cast<uint8_t>(3), static_cast<uint8_t>(3)} };
+    const KDNode node4{ {-1.0, -1.0},  {static_cast<uint8_t>(4), static_cast<uint8_t>(4)} };
 
     std::vector<KDNode> nodes{ node0, node1, node2, node3, node4 };
     const six::sicd::KDTree tree(std::move(nodes));
@@ -716,7 +720,7 @@ TEST_CASE(test_KDTree)
     test_near_point({ -100.0f, -100.0f }, node4.amp_and_value, nearest_neighbor_f); // closest to {-1.0, -1.0}
 }
 
-TEST_MAIN((void)argc;
+TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(valid_six_50x50);
     TEST_CHECK(test_8bit_ampphs);
     TEST_CHECK(read_8bit_ampphs_with_table);

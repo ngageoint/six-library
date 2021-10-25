@@ -44,8 +44,8 @@ void roundTripNITF(const std::string& sicdPathname,
         six::sicd::AreaPlaneUtility::setAreaPlane(*complexData);
     }
 
-    std::vector<std::byte*> bufferList(1);
-    bufferList[0] = reinterpret_cast<std::byte*>(buffer.data());
+    six::buffer_list bufferList;
+    bufferList.push_back(six::as_bytes(buffer));
 
     six::NITFWriteControl writer;
     mem::SharedPtr<six::Container> container(

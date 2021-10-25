@@ -204,7 +204,7 @@ struct TestHelper
         mem::SharedPtr<six::Container> container(new six::Container(
                 six::DataType::DERIVED));
 
-        std::vector<six::UByte*> buffers;
+        six::NonConstBufferList buffers;
 
         // First a single segment without a legend
         types::RowCol<size_t> dims1(40, numCols);

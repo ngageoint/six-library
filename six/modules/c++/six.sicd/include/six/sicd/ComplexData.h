@@ -144,7 +144,7 @@ struct ComplexData: public Data
      *  Deep copy of this, including all initialized sub-params
      *
      */
-    Data* clone() const;
+    Data* clone() const override;
 
     /*!
      *  Utility function for getting the pixel type.
