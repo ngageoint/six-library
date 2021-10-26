@@ -20,6 +20,8 @@
  *
  */
 
+#include <algorithm>
+
 #include <six/Container.h>
 #include <six/NITFWriteControl.h>
 #include <six/sicd/AreaPlaneUtility.h>
@@ -32,11 +34,11 @@ namespace
 void roundTripNITF(const std::string& sicdPathname,
         const std::string& outputPathname,
         const six::XMLControlRegistry& registry,
-        const std::vector<std::string>& schemaPaths)
+        const std::vector<std::string>& schemaPaths_)
 {
     std::unique_ptr<six::sicd::ComplexData> complexData;
     std::vector<std::complex<float> > buffer;
-    six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, complexData,
+    six::sicd::Utilities::readSicd(sicdPathname, schemaPaths_, complexData,
             buffer);
 
     if (!six::sicd::AreaPlaneUtility::hasAreaPlane(*complexData))
@@ -44,8 +46,7 @@ void roundTripNITF(const std::string& sicdPathname,
         six::sicd::AreaPlaneUtility::setAreaPlane(*complexData);
     }
 
-    six::buffer_list bufferList;
-    bufferList.push_back(six::as_bytes(buffer));
+    const six::cxbuffer_list bufferList{ buffer };
 
     six::NITFWriteControl writer;
     mem::SharedPtr<six::Container> container(
@@ -54,6 +55,8 @@ void roundTripNITF(const std::string& sicdPathname,
 
     writer.initialize(container);
     writer.setXMLControlRegistry(&registry);
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
     writer.save(bufferList, outputPathname, schemaPaths);
 }
 

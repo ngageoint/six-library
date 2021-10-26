@@ -80,8 +80,7 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
             six::DataType::DERIVED));
     container->addData(std::move(workingData));
 
-    six::buffer_list buffers;
-    buffers.push_back(six::as_bytes(buffer));
+    const six::buffer_list buffers{ buffer };
 
     six::Options options;
     options.setParameter(
@@ -122,9 +121,7 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     container->addData(std::move(firstData));
     container->addData(std::move(secondData));
 
-    six::buffer_list buffers;
-    buffers.push_back(six::as_bytes(firstBuffer));
-    buffers.push_back(six::as_bytes(secondBuffer));
+    const six::buffer_list buffers{ firstBuffer, secondBuffer };
 
     six::Options options;
     options.setParameter(

@@ -340,12 +340,12 @@ public:
 
     template<typename T>
     void save(std::span<const T> imageData,
-        nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths_)
+        nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
     {
-        std::vector<std::string> schemaPaths;
-        std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        std::vector<std::string> schemaPaths_;
+        std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
             [](const std::filesystem::path& p) { return p.string(); });
-        save_image(imageData, outputFile, schemaPaths);
+        save_image(imageData, outputFile, schemaPaths_);
     }
     template<typename T>
     void save(const std::vector<T>& imageData_,
