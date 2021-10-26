@@ -22,6 +22,7 @@
 #include <six/sidd/SIDDVersionUpdater.h>
 
 #include <iostream>
+#include <algorithm>
 
 #include <cli/ArgumentParser.h>
 #include <except/Exception.h>
@@ -61,14 +62,20 @@ void readSidd(const std::string& pathname,
 }
 
 void writeSidd(std::unique_ptr<six::Data>&& derivedData,
-               const std::vector<std::byte>& widebandData,
-               const std::vector<std::string>& schemaPaths,
+               const std::vector<std::byte>& widebandData_,
+               const std::vector<std::string>& schemaPaths_,
                const std::string& pathname)
 {
     mem::SharedPtr<six::Container> container(new six::Container(std::move(derivedData)));
     six::NITFWriteControl writer(container);
 
-    const six::buffer_list buffers{ widebandData };
+    const void* pWidebandData_ = widebandData_.data();
+    auto pWidebandData = static_cast<const std::complex<float>*>(pWidebandData_);
+    auto size = widebandData_.size() / sizeof(std::complex<float>);
+    const std::span<const std::complex<float>> widebandData(pWidebandData, size);
+    const six::cxbuffer_list buffers{ widebandData };
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
     writer.save(buffers, pathname, schemaPaths);
 }
 }
