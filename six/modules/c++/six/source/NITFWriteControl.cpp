@@ -498,12 +498,19 @@ void NITFWriteControl::save_buffer_list(const buffer_list& list, nitf::IOInterfa
 {
     save_T(list, outputFile, schemaPaths);
 }
-void NITFWriteControl::save_buffer_list(const cxbuffer_list&, nitf::IOInterface&, const std::vector<std::filesystem::path>& schemaPaths)
+void NITFWriteControl::save_buffer_list(const cxbuffer_list& list, nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
 {
+    buffer_list sources_;
+    for (auto source : list)
+    {
+        sources_.push_back(six::as_bytes(source));
+    }
+
     std::vector<std::string> schemaPaths_;
     std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
         [](const std::filesystem::path& p) { return p.string(); });
-    //save_T(list, outputFile, schemaPaths_);
+
+    save_T(sources_, outputFile, schemaPaths_); // TODO: use cxbuffer_list directly
 }
 
 template<>
