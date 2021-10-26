@@ -43,12 +43,6 @@ typedef std::vector<io::InputStream*> SourceList;
 
 //!  A vector of Buffer objects (one per SICD, N per SIDD)
 typedef std::vector<const UByte*> BufferList;
-template<typename T>
-inline void push_back(BufferList& list, const std::vector<T>& image)
-{
-    const void* pImage = image.data();
-    list.push_back(static_cast<const UByte*>(pImage));
-}
 using buffer_list = std::vector<std::span<const std::byte>>;
 using cxbuffer_list = std::vector<std::span<const std::complex<float>>>;
 

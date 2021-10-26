@@ -313,9 +313,10 @@ void Tester<DataTypeT>::normalWrite()
     setMaxProductSize(options);
     six::NITFWriteControl writer(options, mContainer);
 
-    six::BufferList buffers;
-    six::push_back(buffers, mImage);
-    writer.save(buffers, mNormalPathname, mSchemaPaths);
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(mSchemaPaths.begin(), mSchemaPaths.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+
+    writer.save(mImage, mNormalPathname, schemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
 }
