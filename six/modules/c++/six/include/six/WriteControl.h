@@ -55,7 +55,6 @@ using cxbuffer_list = std::vector<std::span<const std::complex<float>>>;
 //!  Same as above but used in overloadings to help the compiler out when
 //   it's convenient for the caller to put non-const pointers in the vector
 typedef std::vector<UByte*> NonConstBufferList;
-using buffer_list_mutable = std::vector<std::span<std::byte>>;
 
 /*!
  *  \class WriteControl
@@ -162,18 +161,8 @@ struct WriteControl
     {
         save(convertBufferList(sources), toFile);
     }
-    void save(const buffer_list_mutable& sources, const std::string& toFile)
-    {
-        save(convertBufferList(sources), toFile);
-    }
 
     void save(const NonConstBufferList& sources,
-              const std::string& toFile,
-              const std::vector<std::string>& schemaPaths)
-    {
-        save(convertBufferList(sources), toFile, schemaPaths);
-    }
-    void save(const buffer_list_mutable& sources,
               const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
     {
@@ -293,15 +282,6 @@ struct WriteControl
         return mXMLRegistry;
     }
 
-    buffer_list convertBufferList(const buffer_list_mutable& buffers)
-    {
-        buffer_list retval;
-        for (const auto& buffer : buffers)
-        {
-            retval.push_back(six::as_bytes(buffer));
-        }
-        return retval;
-    }
     BufferList convertBufferList(const NonConstBufferList& buffers)
     {
         BufferList retval;

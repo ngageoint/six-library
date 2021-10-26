@@ -160,7 +160,7 @@ int main(int argc, char** argv)
         mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
 
-        six::buffer_list_mutable buffers;
+        six::buffer_list buffers;
 
         // First a single segment without a legend
         types::RowCol<size_t> dims1(40, numCols);

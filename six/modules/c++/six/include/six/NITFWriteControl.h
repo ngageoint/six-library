@@ -289,12 +289,7 @@ public:
     {
         save(convertBufferList(imageData), outputFile, schemaPaths);
     }
-    void save(const buffer_list_mutable& imageData,
-              const std::string& outputFile,
-              const std::vector<std::string>& schemaPaths)
-    {
-        save(convertBufferList(imageData), outputFile, schemaPaths);
-    }
+
     /*!
      *  Bind an interleaved (IQIQIQIQ) input stream
      *  to this record and write out a SICD/SIDD.  We do
@@ -356,12 +351,6 @@ public:
     }
 
     void save(const NonConstBufferList& list,
-              nitf::IOInterface& outputFile,
-              const std::vector<std::string>& schemaPaths)
-    {
-        save(convertBufferList(list), outputFile, schemaPaths);
-    }
-    void save(const buffer_list_mutable& list,
               nitf::IOInterface& outputFile,
               const std::vector<std::string>& schemaPaths)
     {

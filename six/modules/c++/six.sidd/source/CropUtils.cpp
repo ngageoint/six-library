@@ -43,9 +43,9 @@ struct Buffers final
         return mBuffers.back().data();
     }
 
-    std::vector<std::span<std::byte>> get()
+    std::vector<std::span<const std::byte>> get()
     {
-        std::vector<std::span<std::byte>> retval;
+        std::vector<std::span<const std::byte>> retval;
         for (auto& buffer : mBuffers)
         {
             retval.push_back(buffer);
