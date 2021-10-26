@@ -68,7 +68,7 @@ void writeSidd(std::unique_ptr<six::Data>&& derivedData,
     mem::SharedPtr<six::Container> container(new six::Container(std::move(derivedData)));
     six::NITFWriteControl writer(container);
 
-    six::buffer_list buffers{ widebandData };
+    const six::buffer_list buffers{ widebandData };
     writer.save(buffers, pathname, schemaPaths);
 }
 }

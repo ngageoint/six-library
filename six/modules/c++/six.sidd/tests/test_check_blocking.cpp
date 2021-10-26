@@ -33,12 +33,12 @@
 
 namespace
 {
-void generateData(const six::Data& data, std::vector<std::byte>& buffer)
+void generateData(const six::Data& data, std::vector<std::complex<float>>& buffer)
 {
     buffer.resize(getExtent(data).area());
     for (size_t ii = 0; ii < buffer.size(); ++ii)
     {
-        buffer[ii] = static_cast<std::byte>(ii % 100);
+        buffer[ii] = std::complex<float>(ii % 100);
     }
 }
 
@@ -73,14 +73,14 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
     workingData->setNumRows(imageSideSize);
     workingData->setNumCols(imageSideSize);
 
-    std::vector<std::byte> buffer;
+    std::vector<std::complex<float>> buffer;
     generateData(*workingData, buffer);
 
     mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
     container->addData(std::move(workingData));
 
-    const six::buffer_list buffers{ buffer };
+    const six::cxbuffer_list buffers{ buffer };
 
     six::Options options;
     options.setParameter(
@@ -91,7 +91,7 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
             six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, productSize);
 
     six::NITFWriteControl writer(options, container);
-    writer.save(buffers, pathname, std::vector<std::string>());
+    writer.save(buffers, pathname, std::vector<std::filesystem::path>());
 
 }
 
@@ -111,8 +111,8 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     const std::string productSize = computeProductSize(blockSize,
             largeImageSize, data.getNumBytesPerPixel());
 
-    std::vector<std::byte> firstBuffer;
-    std::vector<std::byte> secondBuffer;
+    std::vector<std::complex<float>> firstBuffer;
+    std::vector<std::complex<float>> secondBuffer;
     generateData(*firstData, firstBuffer);
     generateData(*secondData, secondBuffer);
 
@@ -121,7 +121,7 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     container->addData(std::move(firstData));
     container->addData(std::move(secondData));
 
-    const six::buffer_list buffers{ firstBuffer, secondBuffer };
+    const six::cxbuffer_list buffers{ firstBuffer, secondBuffer };
 
     six::Options options;
     options.setParameter(
@@ -132,7 +132,7 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
             six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, productSize);
 
     six::NITFWriteControl writer(options, container);
-    writer.save(buffers, pathname, std::vector<std::string>());
+    writer.save(buffers, pathname, std::vector<std::filesystem::path>());
 }
 
 void assignBuffer(std::unique_ptr<six::UByte[]>& buffer, size_t& bufferSize,
