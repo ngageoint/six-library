@@ -313,7 +313,8 @@ void Tester<DataTypeT>::normalWrite()
     setMaxProductSize(options);
     six::NITFWriteControl writer(options, mContainer);
 
-    const six::buffer_list buffers{ six::as_bytes(mImage) };
+    six::BufferList buffers;
+    six::push_back(buffers, mImage);
     writer.save(buffers, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
