@@ -93,9 +93,15 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
 
 }
 
+inline const six::UByte* cast(const std::vector<std::complex<float>>& buffer)
+{
+    const void* pBuffer = buffer.data();
+    return static_cast<const six::UByte*>(pBuffer);
+}
+
 void writeTwoImages(const six::Data& data, const std::string& pathname,
-        const std::string& blockSize, size_t largeImageSize,
-        size_t smallImageSize)
+    const std::string& blockSize, size_t largeImageSize,
+    size_t smallImageSize)
 {
     std::unique_ptr<six::Data> firstData(data.clone());
     std::unique_ptr<six::Data> secondData(data.clone());
@@ -107,19 +113,20 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     secondData->setNumCols(smallImageSize);
 
     const std::string productSize = computeProductSize(blockSize,
-            largeImageSize, data.getNumBytesPerPixel());
+        largeImageSize, data.getNumBytesPerPixel());
 
     std::vector<std::complex<float>> firstBuffer;
     std::vector<std::complex<float>> secondBuffer;
     generateData(*firstData, firstBuffer);
     generateData(*secondData, secondBuffer);
 
-    mem::SharedPtr<six::Container> container(new six::Container(
-        six::DataType::DERIVED));
+    mem::SharedPtr<six::Container> container(new six::Container(six::DataType::DERIVED));
     container->addData(std::move(firstData));
     container->addData(std::move(secondData));
 
-    const six::cxbuffer_list buffers{ firstBuffer, secondBuffer };
+    six::BufferList buffers;
+    buffers.push_back(cast(firstBuffer));
+    buffers.push_back(cast(secondBuffer));
 
     six::Options options;
     options.setParameter(
@@ -130,7 +137,7 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
             six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, productSize);
 
     six::NITFWriteControl writer(options, container);
-    writer.save(buffers, pathname, std::vector<std::filesystem::path>());
+    writer.save(buffers, pathname, std::vector<std::string>());
 }
 
 void assignBuffer(std::unique_ptr<six::UByte[]>& buffer, size_t& bufferSize,
