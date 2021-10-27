@@ -43,7 +43,6 @@ typedef std::vector<io::InputStream*> SourceList;
 
 //!  A vector of Buffer objects (one per SICD, N per SIDD)
 typedef std::vector<const UByte*> BufferList;
-using buffer_list = std::vector<std::span<const std::byte>>;
 
 //!  Same as above but used in overloadings to help the compiler out when
 //   it's convenient for the caller to put non-const pointers in the vector
@@ -135,16 +134,6 @@ struct WriteControl
 
     virtual void save(const BufferList& sources, const std::string& toFile,
                       const std::vector<std::string>& schemaPaths) = 0;
-    virtual void save(const buffer_list& sources, const std::filesystem::path& toFile,
-        const std::vector<std::filesystem::path>& schemaPaths); // = 0; but that would break existing code
-    void save(const buffer_list& sources, const std::string& toFile,
-        const std::vector<std::string>& schemaPaths_)
-    {
-        std::vector<std::filesystem::path> schemaPaths;
-        std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-            [](const std::string & s) { return s; });
-        save(sources, toFile, schemaPaths);
-    }
 
     // For convenience since the compiler can't implicitly convert
     // std::vector<T*> to std::vector<const T*>
