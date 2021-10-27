@@ -76,20 +76,10 @@ class NITFWriteControl : public WriteControl
     void save_image(std::span<const T>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
 
     void save_buffer_list(const BufferList&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
-
-    template<typename TBufferList, typename TSchemaPaths>
-    void save_buffer_list_to_file(const TBufferList& list, const std::string& outputFile, const TSchemaPaths& schemaPaths)
+    void save_buffer_list_to_file(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
     {
         const size_t bufferSize = getOptions().getParameter(WriteControl::OPT_BUFFER_SIZE, Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
         nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
-        save(list, bufferedIO, schemaPaths);
-        bufferedIO.close();
-    }
-    template<typename TBufferList, typename TSchemaPaths>
-    void save_buffer_list_to_file(const TBufferList& list, const std::filesystem::path& outputFile, const TSchemaPaths& schemaPaths)
-    {
-        const size_t bufferSize = getOptions().getParameter(WriteControl::OPT_BUFFER_SIZE, Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
-        nitf::BufferedWriter bufferedIO(outputFile.string(), bufferSize);
         save(list, bufferedIO, schemaPaths);
         bufferedIO.close();
     }
@@ -261,7 +251,8 @@ public:
      *  \param schemaPaths Directories or files of schema locations
      */
     virtual void save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths) override;
-
+    
+    void save(const std::complex<float>*, const std::string& outputFile, const std::vector<std::string>& schemaPaths);
     template<typename T>
     void save(std::span<const T> imageData,
         const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)

@@ -547,6 +547,12 @@ void NITFWriteControl::save(const BufferList& list, const std::string& outputFil
 {
     save_buffer_list_to_file(list, outputFile, schemaPaths);
 }
+void NITFWriteControl::save(const std::complex<float>* image, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
+{
+    const void* pImage = image;
+    const BufferList list{ static_cast<const UByte*>(pImage) };
+    save(list, outputFile, schemaPaths);
+}
 
 void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPaths)
 {
