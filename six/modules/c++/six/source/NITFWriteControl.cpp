@@ -397,7 +397,7 @@ inline size_t get_imageDataSize(const T&)
 {
     return 1;
 }
-inline size_t get_imageDataSize(const std::span<const std::byte* const>& imageData)
+inline size_t get_imageDataSize(const BufferList& imageData)
 {
     return imageData.size();
 }
@@ -447,23 +447,9 @@ void NITFWriteControl::write_flattened_imageData(const T& imageData, const NITFI
     }
 }
 
-// This is a bit convoluted ... it's what seems to work with all compilers.
-template<typename T, typename U>
-inline std::span<const T> get_imageData(std::span<const T> imageData, U)
-{
-    return imageData;
-}
-inline const std::byte* const get_imageData(std::span<const std::byte* const>, const std::byte* const retval)
-{
-    return retval;
-}
-inline byte_span get_imageData(std::span<const byte_span>, byte_span retval)
-{
-    return retval;
-}
-
-template<typename T>
-void NITFWriteControl::save_T(const T& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
+template<typename T, typename TDoSaveImages>
+void NITFWriteControl::do_save(const T& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths,
+    TDoSaveImages do_save_images)
 {
     const bool doByteSwap = prepareIO(imageData, outputFile);
 
@@ -477,26 +463,46 @@ void NITFWriteControl::save_T(const T& imageData, nitf::IOInterface& outputFile,
     // TODO maybe we need to see if the compression plug-in is even available
     createCompressionOptions(mCompressionOptions);
 
-    size_t numImages = getInfos().size();
-    for (size_t i = 0; i < numImages; ++i)
-    {
-        // This is a bit convoluted ... it's what seems to work with all compilers.
-        // And even then imageData[i] generates a warning.
-        const auto flattened_imageData = get_imageData(imageData, imageData[i]);
-        const auto pInfo = getInfo(i);
-        const Legend* const legend = getLegend(getContainer().get(), i);
-
-        write_flattened_imageData(flattened_imageData, *pInfo, legend, doByteSwap, enableJ2K);
-    }
+    do_save_images(doByteSwap, enableJ2K);
 
     addDataAndWrite(schemaPaths);
 }
 
-void NITFWriteControl::save_buffer_list(const BufferList& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
+template<typename T>
+void NITFWriteControl::save_image_(std::span<const T> imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
 {
-    const void* pImageData_ = list.data();
-    const std::span<const std::byte* const> imageData_(static_cast<const std::byte* const* const>(pImageData_), list.size());
-    save_T(imageData_, outputFile, schemaPaths);
+    const auto do_save_images = [&](bool doByteSwap, bool enableJ2K) {
+        size_t numImages = getInfos().size();
+        if (numImages > 1)
+        {
+            throw std::invalid_argument("Should only have one image!"); // we would be in save_buffer_list()
+        }
+        if (numImages == 1) // can we really have 0 images?
+        {
+            constexpr size_t i = 0; // keep code consistent with save_buffer_list()
+            const auto pInfo = getInfo(i);
+            const Legend* const legend = getLegend(getContainer().get(), i);
+            write_flattened_imageData(imageData, *pInfo, legend, doByteSwap, enableJ2K);
+        }
+    };
+    do_save(imageData, outputFile, schemaPaths, do_save_images);
+}
+
+void NITFWriteControl::save_buffer_list(const BufferList& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
+{
+    const auto do_save_images = [&](bool doByteSwap, bool enableJ2K) {
+        size_t numImages = getInfos().size();
+        for (size_t i = 0; i < numImages; ++i)
+        {
+            const auto pInfo = getInfo(i);
+            const Legend* const legend = getLegend(getContainer().get(), i);
+
+            const void* pImageData_ = imageData[i];
+            auto pImageData = static_cast<const std::byte*>(pImageData_);
+            write_flattened_imageData(pImageData, *pInfo, legend, doByteSwap, enableJ2K);
+        }
+    };
+    do_save(imageData, outputFile, schemaPaths, do_save_images);
 }
 
 template<typename T>
@@ -506,13 +512,12 @@ inline const UByte* as_UBytes(std::span<const T> image)
     return static_cast<const UByte*>(pImage);
 }
 
-
 template<>
 void NITFWriteControl::save_image(cxfloat_span imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    save_T(imageData, outputFile, schemaPaths);
+    save_image_(imageData, outputFile, schemaPaths);
 }
 template<>
 void NITFWriteControl::save_image(std::span<const std::complex<short>> imageData,
@@ -528,7 +533,7 @@ void NITFWriteControl::save_image(pair_span imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    save_T(imageData, outputFile, schemaPaths);
+    save_image_(imageData, outputFile, schemaPaths);
 }
 template<>
 void NITFWriteControl::save_image(std::span<const uint8_t> imageData,

@@ -70,8 +70,12 @@ class NITFWriteControl : public WriteControl
     void write_flattened_imageData(const T& imageData, const NITFImageInfo&, const Legend* const legend,
         bool doByteSwap, bool enableJ2K);
 
+    template<typename T, typename TDoSaveImages>
+    void do_save(const T& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths,
+        TDoSaveImages do_save_images);
+
     template<typename T>
-    void save_T(const T&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    void save_image_(std::span<const T>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
     template<typename T>
     void save_image(std::span<const T>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
 
