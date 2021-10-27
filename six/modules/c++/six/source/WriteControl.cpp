@@ -42,13 +42,3 @@ void six::WriteControl::save(const buffer_list& sources, const std::filesystem::
     save(sources_, toFile.string(), schemaPaths_);
 }
 
-void six::WriteControl::save(const cxbuffer_list& sources, const std::filesystem::path& toFile,
-    const std::vector<std::filesystem::path>& schemaPaths)
-{
-    buffer_list sources_;
-    for (auto source : sources)
-    {
-        sources_.push_back(six::as_bytes(source));
-    }
-    save(sources_, toFile, schemaPaths);
-}

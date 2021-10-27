@@ -77,7 +77,6 @@ class NITFWriteControl : public WriteControl
 
     void save_buffer_list(const BufferList&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
     void save_buffer_list(const buffer_list&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
-    void save_buffer_list(const cxbuffer_list&, nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths);
 
     template<typename TBufferList, typename TSchemaPaths>
     void save_buffer_list_to_file(const TBufferList& list, const std::string& outputFile, const TSchemaPaths& schemaPaths)
@@ -264,7 +263,6 @@ public:
      */
     virtual void save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths) override;
     virtual void save(const buffer_list& list, const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths) override;
-    virtual void save(const cxbuffer_list& list, const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths) override;
 
     template<typename T>
     void save(std::span<const T> imageData,
@@ -325,10 +323,6 @@ public:
         save_buffer_list(list, outputFile, schemaPaths);
     }
     virtual void save(const buffer_list& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
-    {
-        save_buffer_list(list, outputFile, schemaPaths);
-    }
-    virtual void save(const cxbuffer_list& list, nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
     {
         save_buffer_list(list, outputFile, schemaPaths);
     }
