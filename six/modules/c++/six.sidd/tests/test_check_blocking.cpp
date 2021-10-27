@@ -80,8 +80,6 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
             six::DataType::DERIVED));
     container->addData(std::move(workingData));
 
-    const six::cxbuffer_list buffers{ buffer };
-
     six::Options options;
     options.setParameter(
             six::NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK, blockSize);
@@ -91,7 +89,7 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
             six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, productSize);
 
     six::NITFWriteControl writer(options, container);
-    writer.save(buffers, pathname, std::vector<std::filesystem::path>());
+    writer.save(buffer, pathname, std::vector<std::filesystem::path>());
 
 }
 

@@ -73,10 +73,9 @@ void writeSidd(std::unique_ptr<six::Data>&& derivedData,
     auto pWidebandData = static_cast<const std::complex<float>*>(pWidebandData_);
     auto size = widebandData_.size() / sizeof(std::complex<float>);
     const std::span<const std::complex<float>> widebandData(pWidebandData, size);
-    const six::cxbuffer_list buffers{ widebandData };
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
-    writer.save(buffers, pathname, schemaPaths);
+    writer.save(widebandData, pathname, schemaPaths);
 }
 }
 

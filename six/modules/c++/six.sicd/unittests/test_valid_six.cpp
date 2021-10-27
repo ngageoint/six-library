@@ -616,8 +616,9 @@ void buffer_list_save(const fs::path& outputName, const std::vector<std::complex
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
     six::NITFWriteControl writer(std::move(pComplexData));
 
-    const six::cxbuffer_list buffers{ image };
-    writer.save(buffers, outputName, fs_schemaPaths);
+    //const six::cxbuffer_list buffers{ image };
+    //writer.save(buffers, outputName, fs_schemaPaths);
+    writer.save(image, outputName, fs_schemaPaths);
 }
 
 void save(const fs::path& outputName, const std::vector<std::complex<float>>& image,

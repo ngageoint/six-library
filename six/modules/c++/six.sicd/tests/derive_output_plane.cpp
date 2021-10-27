@@ -46,18 +46,15 @@ void roundTripNITF(const std::string& sicdPathname,
         six::sicd::AreaPlaneUtility::setAreaPlane(*complexData);
     }
 
-    const six::cxbuffer_list bufferList{ buffer };
-
     six::NITFWriteControl writer;
-    mem::SharedPtr<six::Container> container(
-            new six::Container(six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(new six::Container(six::DataType::COMPLEX));
     container->addData(complexData->clone());
 
     writer.initialize(container);
     writer.setXMLControlRegistry(&registry);
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
-    writer.save(bufferList, outputPathname, schemaPaths);
+    writer.save(buffer, outputPathname, schemaPaths);
 }
 
 void roundTripXML(const std::string& sicdPathname,
