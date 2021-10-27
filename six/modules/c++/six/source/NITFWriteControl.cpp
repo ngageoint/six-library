@@ -192,6 +192,10 @@ bool NITFWriteControl::shouldByteSwap() const
     }
 }
 
+using byte_span = std::span<const std::byte>;
+using cxfloat_span = std::span<const std::complex<float>>;
+using pair_span = std::span<const std::pair<uint8_t, uint8_t>>;
+
 // this bypasses the normal NITF ImageWriter and streams directly to the output
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
     const std::byte* imageData, const Data& data, bool doByteSwap)
@@ -200,19 +204,19 @@ inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo s
         imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-    std::span<const std::byte> imageData, const Data& data, bool doByteSwap)
+    byte_span imageData, const Data& data, bool doByteSwap)
 {
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
         imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-    std::span<const std::complex<float>> imageData, const Data& data, bool doByteSwap)
+    cxfloat_span imageData, const Data& data, bool doByteSwap)
 {
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
             imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-    std::span<const std::pair<uint8_t, uint8_t>> imageData, const Data& data, bool doByteSwap)
+    pair_span imageData, const Data& data, bool doByteSwap)
 {
     // Send std::pair<uint8_t, uint8_t> (i.e., AMP8I_PHS8I) straight-on through; this is for the uncommon case
     // where the data is already in this format. Normally, it is std::complex<float> and NewMemoryWriteHandler
@@ -327,7 +331,7 @@ static nitf::ImageSource make_ImageSource(std::span<const T> pImageData_, const 
     {
         // Assume that the bands are interleaved in memory.  This
         // makes sense for 24-bit 3-color data.
-        const std::span<const std::byte> pData(pImageData.data() + pixelSize * segmentInfo.getFirstRow() * numCols, bandSize);
+        const byte_span pData(pImageData.data() + pixelSize * segmentInfo.getFirstRow() * numCols, bandSize);
         const auto start = gsl::narrow<nitf::Off>(chan);
         const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
         nitf::MemorySource ms(pData, start, pixelSkip);
@@ -397,7 +401,7 @@ inline size_t get_imageDataSize(const std::span<const std::byte* const>& imageDa
 {
     return imageData.size();
 }
-inline size_t get_imageDataSize(const std::span<const std::span<const std::byte>>& imageData)
+inline size_t get_imageDataSize(const std::span<const byte_span>& imageData)
 {
     return imageData.size();
 }
@@ -453,7 +457,7 @@ inline const std::byte* const get_imageData(std::span<const std::byte* const>, c
 {
     return retval;
 }
-inline std::span<const std::byte> get_imageData(std::span<const std::span<const std::byte>>, std::span<const std::byte> retval)
+inline byte_span get_imageData(std::span<const byte_span>, byte_span retval)
 {
     return retval;
 }
@@ -504,7 +508,7 @@ inline const UByte* as_UBytes(std::span<const T> image)
 
 
 template<>
-void NITFWriteControl::save_image(std::span<const std::complex<float>> imageData,
+void NITFWriteControl::save_image(cxfloat_span imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
@@ -520,7 +524,7 @@ void NITFWriteControl::save_image(std::span<const std::complex<short>> imageData
 }
 
 template<>
-void NITFWriteControl::save_image(std::span<const std::pair<uint8_t, uint8_t>> imageData,
+void NITFWriteControl::save_image(pair_span imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
