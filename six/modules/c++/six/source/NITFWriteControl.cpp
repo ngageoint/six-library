@@ -264,24 +264,18 @@ void NITFWriteControl::save(const SourceList& imageData,
     addDataAndWrite(schemaPaths);
 }
 
-// Existing code that uses BufferList needs raw "std::byte*" instead of std::span<std::byte>
-static nitf::ImageSource make_ImageSource(const std::byte* const pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
+static nitf::ImageSource make_ImageSource_(std::span<const std::byte> pData, size_t numChannels, size_t pixelSize)
 {
-    const auto numChannels = data.getNumChannels();
-    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
     const auto numBytesPerPixel = gsl::narrow<int>(pixelSize);
-    const auto numCols = data.getNumCols();
-    const auto bandSize = pixelSize * numCols * segmentInfo.getNumRows();
 
     nitf::ImageSource retval;
     for (size_t chan = 0; chan < numChannels; ++chan)
     {
         // Assume that the bands are interleaved in memory.  This
         // makes sense for 24-bit 3-color data.
-        const auto pData = pImageData + pixelSize * segmentInfo.getFirstRow() * numCols;
         const auto start = gsl::narrow<nitf::Off>(chan);
         const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
-        nitf::MemorySource ms(pData, bandSize, start, numBytesPerPixel, pixelSkip);
+        nitf::MemorySource ms(pData, start, numBytesPerPixel, pixelSkip);
         retval.addBand(ms);
     }
     return retval;
@@ -290,7 +284,6 @@ static nitf::ImageSource make_ImageSource(const std::byte* const pImageData, con
 template<typename T>
 static nitf::ImageSource make_ImageSource(std::span<const T> pImageData_, const NITFSegmentInfo& segmentInfo, const Data& data)
 {
-    const auto pImageData = six::as_bytes(pImageData_);
     constexpr auto numBytesPerPixel = sizeof(pImageData_[0]);
 
     const auto numChannels = data.getNumChannels();
@@ -302,23 +295,26 @@ static nitf::ImageSource make_ImageSource(std::span<const T> pImageData_, const 
 
     const auto numCols = data.getNumCols();
     const auto bandSize = pixelSize * numCols * segmentInfo.getNumRows();
+    const auto pImageData = six::as_bytes(pImageData_);
     if (pImageData.size() != bandSize)
     {
         throw std::invalid_argument("bandSize mis-match!");
     }
 
-    nitf::ImageSource retval;
-    for (size_t chan = 0; chan < numChannels; ++chan)
-    {
-        // Assume that the bands are interleaved in memory.  This
-        // makes sense for 24-bit 3-color data.
-        const  std::span<const std::byte> pData(pImageData.data() + pixelSize * segmentInfo.getFirstRow() * numCols, bandSize);
-        const auto start = gsl::narrow<nitf::Off>(chan);
-        const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
-        nitf::MemorySource ms(pData, start, pixelSkip); // using the std::span<> overload
-        retval.addBand(ms);
-    }
-    return retval;
+    const auto pData_ = pImageData.data() + pixelSize * segmentInfo.getFirstRow() * numCols;
+    const  std::span<const std::byte> pData(pData_, bandSize);
+    return make_ImageSource_(pData, numChannels, pixelSize);
+}
+// Existing code that uses BufferList needs raw "std::byte*" instead of std::span<std::byte>
+static nitf::ImageSource make_ImageSource(const std::byte* const pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
+{
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    const auto numCols = data.getNumCols();
+    const auto bandSize = pixelSize * numCols * segmentInfo.getNumRows();
+
+    const  std::span<const std::byte> pData(pImageData, bandSize);
+    return make_ImageSource(pData, segmentInfo, data);
 }
 
 template<typename TImageData>
