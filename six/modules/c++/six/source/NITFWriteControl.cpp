@@ -502,8 +502,7 @@ void NITFWriteControl::save_image(std::span<const std::complex<short>> imageData
     nitf::IOInterface& outputFile,
     const std::vector<std::string>& schemaPaths)
 {
-    const BufferList buffers{ as_UBytes(imageData) }; // TODO: use imageData directly
-    save(buffers, outputFile, schemaPaths);
+    do_save(imageData, outputFile, schemaPaths);
 }
 
 template<>

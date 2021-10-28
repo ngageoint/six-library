@@ -193,7 +193,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
 NewMemoryWriteHandler::~NewMemoryWriteHandler() = default;
 
 template<typename T>
-inline const UByte* cast(const T* buffer)
+inline const UByte* as_UByte(const T* buffer)
 {
     const void* pBuffer = buffer;
     return static_cast<const UByte*>(pBuffer);
@@ -202,8 +202,15 @@ inline const UByte* cast(const T* buffer)
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     const std::byte* buffer,
     size_t firstRow, const Data& data, bool doByteSwap)
-    : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
+    : NewMemoryWriteHandler(info, as_UByte(buffer), firstRow, data, doByteSwap)
 {
+}
+template<>
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const std::byte> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : NewMemoryWriteHandler(info, buffer.data(), firstRow, data, doByteSwap)
+{
+    // TODO: validate std::span<>.size() against computed size
 }
 
 template<typename T>
@@ -220,7 +227,7 @@ inline void validate_pixelSize(std::span<T> buffer, const Data& data)
 template<>
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::complex<float>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
-    : NewMemoryWriteHandler(info, cast(buffer.data()), firstRow, data, doByteSwap)
+    : NewMemoryWriteHandler(info, as_bytes(buffer), firstRow, data, doByteSwap)
 {
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
@@ -236,7 +243,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
         // Everything is kosher, point to the converted data
         void* pData = this->mHandle->get()->data;
         auto pImpl = static_cast<MemoryWriteHandlerImpl*>(pData);
-        pImpl->buffer = cast(ampi8i_phs8i.data());
+        pImpl->buffer = as_UByte(ampi8i_phs8i.data());
     }
     else if (data.getPixelType() != six::PixelType::RE32F_IM32F)
     {
@@ -248,29 +255,24 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     }
 }
 
-using cx_float = std::complex<float>;
-inline std::span<const cx_float> as_cxfloat(std::span<const std::byte> buffer)
-{
-    const void* pBuffer = buffer.data();
-    return std::span<const cx_float>(static_cast<const cx_float*>(pBuffer), buffer.size() / sizeof(cx_float));
-}
-template<>
-NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    std::span<const std::byte> buffer, size_t firstRow, const Data& data, bool doByteSwap)
-    : NewMemoryWriteHandler(info, as_cxfloat(buffer), firstRow, data, doByteSwap)
-{
-}
-
 template<>
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::pair<uint8_t, uint8_t>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
-    : NewMemoryWriteHandler(info, cast(buffer.data()), firstRow, data, doByteSwap)
+    : NewMemoryWriteHandler(info, as_bytes(buffer), firstRow, data, doByteSwap)
 {
     // This is for the uncommon case where the data is already in this format; normally, it is std::complex<float>.
     if (data.getPixelType() != six::PixelType::AMP8I_PHS8I)
     {
         throw std::invalid_argument("pixelType is wrong.");
     }
+    validate_pixelSize(buffer, data);
+}
+
+template<>
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const std::complex<short>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : NewMemoryWriteHandler(info, as_bytes(buffer), firstRow, data, doByteSwap)
+{
     validate_pixelSize(buffer, data);
 }
 
