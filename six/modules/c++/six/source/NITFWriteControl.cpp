@@ -327,7 +327,6 @@ void writeWithNitro(nitf::Writer& mWriter, const std::map<std::string, void*>& m
 {
     const auto numChannels = data.getNumChannels();
     const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-    const auto numCols = data.getNumCols();
 
     for (size_t jj = 0; jj < imageSegments.size(); ++jj)
     {
@@ -522,30 +521,13 @@ void NITFWriteControl::save(const BufferList& list, const std::string& outputFil
 {
     save_buffer_list_to_file(list, outputFile, schemaPaths);
 }
-void NITFWriteControl::save(const std::complex<float>* image, const std::string& outputFile, const std::vector<std::string>& schemaPaths_)
+void NITFWriteControl::save(const std::complex<float>* image, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
 {
-    // Compute the size of the image so what we can use std::span<> instead of raw pointer.
-    // This is for one specific situation (Python); most code should use std::span<> routines directly.
-
-    constexpr size_t i = 0; // keep code consistent with do_save_(BufferList)
-
-    const auto pInfo = getInfo(i);
-    const auto& data = *(pInfo->getData());
-
-    const std::vector<NITFSegmentInfo> imageSegments = pInfo->getImageSegments();
-    const NITFSegmentInfo segmentInfo = imageSegments[i];
-
-    const auto numChannels = data.getNumChannels();
-    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-    const auto numCols = data.getNumCols();
-    const auto bandSize = pixelSize * numCols * segmentInfo.getNumRows();
-    const std::span<const std::complex<float>> pImage(image, bandSize / pixelSize);
-
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
-    
-    save(pImage, outputFile, schemaPaths);
+    // TODO: Compute the size of the image so what we can use std::span<> instead of raw pointer.
+    // TODO: This is for one specific situation (Python); most code should use std::span<> routines directly.
+    const void* pImage = image;
+    const BufferList list{ static_cast<const UByte*>(pImage) };
+    save(list, outputFile, schemaPaths);
 }
 
 void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPaths)
