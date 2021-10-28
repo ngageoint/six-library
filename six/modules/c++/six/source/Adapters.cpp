@@ -127,16 +127,10 @@ static NITF_BOOL six_MemoryWriteHandler_write(NITF_DATA * data,
     return write(impl, io, error, write_f);
 }
 
-MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
-        const UByte* buffer, size_t firstRow, size_t numCols,
-        size_t numChannels, size_t pixelSize, bool doByteSwap)
+static nitf_SegmentWriter* create_SegmentWriter(const NITFSegmentInfo& info,
+    const UByte* buffer, size_t firstRow, size_t numCols, size_t numChannels, size_t pixelSize, bool doByteSwap,
+    nitf_IWriteHandler& iWriteHandler)
 {
-    // Dont do it if we only have a byte!
-    if (pixelSize / numChannels == 1)
-        doByteSwap = false;
-
-    static nitf_IWriteHandler iWriteHandler = { &six_MemoryWriteHandler_write, &six_MemoryWriteHandler_destruct };
-
     auto impl = nitf_malloc<MemoryWriteHandlerImpl>();
     impl->buffer = buffer;
     impl->firstRow = firstRow;
@@ -146,7 +140,19 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
     impl->pixelSize = pixelSize;
     impl->doByteSwap = doByteSwap;
 
-    auto segmentWriter = create_SegmentWriter(impl, iWriteHandler);
+    return create_SegmentWriter(impl, iWriteHandler);
+}
+
+MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
+        const UByte* buffer, size_t firstRow, size_t numCols,
+        size_t numChannels, size_t pixelSize, bool doByteSwap)
+{
+    // Dont do it if we only have a byte!
+    if (pixelSize / numChannels == 1)
+        doByteSwap = false;
+
+    static nitf_IWriteHandler iWriteHandler = { &six_MemoryWriteHandler_write, &six_MemoryWriteHandler_destruct };
+    auto segmentWriter = create_SegmentWriter(info, buffer, firstRow, numCols, numChannels, pixelSize, doByteSwap, iWriteHandler);
     setNative(segmentWriter);
 
     setManaged(false);
@@ -168,17 +174,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
         doByteSwap = false;
 
     static nitf_IWriteHandler iWriteHandler = { &six_MemoryWriteHandler_write, &six_MemoryWriteHandler_destruct };
-
-    auto impl = nitf_malloc<MemoryWriteHandlerImpl>();
-    impl->buffer = buffer;
-    impl->firstRow = firstRow;
-    impl->numCols = numCols;
-    impl->numRows = info.getNumRows();
-    impl->numChannels = numChannels;
-    impl->pixelSize = pixelSize;
-    impl->doByteSwap = doByteSwap;
-
-    auto segmentWriter = create_SegmentWriter(impl, iWriteHandler);
+    auto segmentWriter = create_SegmentWriter(info, buffer, firstRow, numCols, numChannels, pixelSize, doByteSwap, iWriteHandler);
     setNative(segmentWriter);
 
     setManaged(false);
@@ -198,19 +194,15 @@ inline const UByte* as_UByte(const T* buffer)
     const void* pBuffer = buffer;
     return static_cast<const UByte*>(pBuffer);
 }
-
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     const std::byte* buffer,
     size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, as_UByte(buffer), firstRow, data, doByteSwap)
 {
-}
-template<>
-NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    std::span<const std::byte> buffer, size_t firstRow, const Data& data, bool doByteSwap)
-    : NewMemoryWriteHandler(info, buffer.data(), firstRow, data, doByteSwap)
-{
-    // TODO: validate std::span<>.size() against computed size
+    if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
+    {
+        throw std::invalid_argument("AMP8I_PHS8I data not yet supported."); // TODO
+    }
 }
 
 template<typename T>
@@ -222,6 +214,14 @@ inline void validate_pixelSize(std::span<T> buffer, const Data& data)
     {
         throw std::invalid_argument("pixelSize is wrong.");
     }
+}
+
+template<>
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const std::byte> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : NewMemoryWriteHandler(info, buffer.data(), firstRow, data, doByteSwap)
+{
+    // TODO: validate std::span<>.size() against computed size
 }
 
 template<>
