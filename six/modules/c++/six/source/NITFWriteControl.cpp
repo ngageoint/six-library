@@ -447,9 +447,39 @@ void NITFWriteControl::write_flattened_imageData(const T& imageData, const NITFI
     }
 }
 
-template<typename T, typename TDoSaveImages>
-void NITFWriteControl::do_save(const T& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths,
-    TDoSaveImages do_save_images)
+template<typename T>
+void NITFWriteControl::do_save_(const T& imageData, bool doByteSwap, bool enableJ2K)
+{
+    size_t numImages = getInfos().size();
+    if (numImages > 1)
+    {
+        throw std::invalid_argument("Should only have one image!"); // we would be in save_buffer_list()
+    }
+    if (numImages == 1) // can we really have 0 images?
+    {
+        constexpr size_t i = 0; // keep code consistent with save_buffer_list()
+        const auto pInfo = getInfo(i);
+        const Legend* const legend = getLegend(getContainer().get(), i);
+        write_flattened_imageData(imageData, *pInfo, legend, doByteSwap, enableJ2K);
+    }
+}
+template<>
+void NITFWriteControl::do_save_(const BufferList& imageData, bool doByteSwap, bool enableJ2K)
+{
+    size_t numImages = getInfos().size();
+    for (size_t i = 0; i < numImages; ++i)
+    {
+        const auto pInfo = getInfo(i);
+        const Legend* const legend = getLegend(getContainer().get(), i);
+
+        const void* pImageData_ = imageData[i];
+        auto pImageData = static_cast<const std::byte*>(pImageData_);
+        write_flattened_imageData(pImageData, *pInfo, legend, doByteSwap, enableJ2K);
+    }
+}
+
+template<typename T>
+void NITFWriteControl::do_save(const T& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
 {
     const bool doByteSwap = prepareIO(imageData, outputFile);
 
@@ -463,46 +493,14 @@ void NITFWriteControl::do_save(const T& imageData, nitf::IOInterface& outputFile
     // TODO maybe we need to see if the compression plug-in is even available
     createCompressionOptions(mCompressionOptions);
 
-    do_save_images(doByteSwap, enableJ2K);
+    do_save_(imageData, doByteSwap, enableJ2K);
 
     addDataAndWrite(schemaPaths);
 }
 
-template<typename T>
-void NITFWriteControl::save_image_(std::span<const T> imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
-{
-    const auto do_save_images = [&](bool doByteSwap, bool enableJ2K) {
-        size_t numImages = getInfos().size();
-        if (numImages > 1)
-        {
-            throw std::invalid_argument("Should only have one image!"); // we would be in save_buffer_list()
-        }
-        if (numImages == 1) // can we really have 0 images?
-        {
-            constexpr size_t i = 0; // keep code consistent with save_buffer_list()
-            const auto pInfo = getInfo(i);
-            const Legend* const legend = getLegend(getContainer().get(), i);
-            write_flattened_imageData(imageData, *pInfo, legend, doByteSwap, enableJ2K);
-        }
-    };
-    do_save(imageData, outputFile, schemaPaths, do_save_images);
-}
-
 void NITFWriteControl::save_buffer_list(const BufferList& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
 {
-    const auto do_save_images = [&](bool doByteSwap, bool enableJ2K) {
-        size_t numImages = getInfos().size();
-        for (size_t i = 0; i < numImages; ++i)
-        {
-            const auto pInfo = getInfo(i);
-            const Legend* const legend = getLegend(getContainer().get(), i);
-
-            const void* pImageData_ = imageData[i];
-            auto pImageData = static_cast<const std::byte*>(pImageData_);
-            write_flattened_imageData(pImageData, *pInfo, legend, doByteSwap, enableJ2K);
-        }
-    };
-    do_save(imageData, outputFile, schemaPaths, do_save_images);
+    do_save(imageData, outputFile, schemaPaths);
 }
 
 template<typename T>
@@ -517,7 +515,7 @@ void NITFWriteControl::save_image(cxfloat_span imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    save_image_(imageData, outputFile, schemaPaths);
+    do_save(imageData, outputFile, schemaPaths);
 }
 template<>
 void NITFWriteControl::save_image(std::span<const std::complex<short>> imageData,
@@ -533,7 +531,7 @@ void NITFWriteControl::save_image(pair_span imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
-    save_image_(imageData, outputFile, schemaPaths);
+    do_save(imageData, outputFile, schemaPaths);
 }
 template<>
 void NITFWriteControl::save_image(std::span<const uint8_t> imageData,
