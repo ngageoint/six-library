@@ -618,7 +618,11 @@ void buffer_list_save(const fs::path& outputName, const std::vector<std::complex
 
     //const six::cxbuffer_list buffers{ image };
     //writer.save(buffers, outputName, fs_schemaPaths);
+    
     writer.save(image, outputName, fs_schemaPaths);
+  
+    //static const std::vector<std::string> schemaPaths;
+    //writer.save(image.data(), outputName.string(), schemaPaths);
 }
 
 void save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
