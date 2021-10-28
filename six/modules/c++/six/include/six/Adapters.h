@@ -126,7 +126,7 @@ protected:
  *  beforehand
  *
  */
-struct MemoryWriteHandler: public nitf::WriteHandler
+struct MemoryWriteHandler: public nitf::WriteHandler // leaving this for any existing code that might use it
 {
     MemoryWriteHandler(const NITFSegmentInfo& info, 
                        const UByte* buffer,
@@ -137,14 +137,11 @@ struct MemoryWriteHandler: public nitf::WriteHandler
                        bool doByteSwap);
 };
 
-class NewMemoryWriteHandler final : public nitf::WriteHandler
+class NewMemoryWriteHandler final : public nitf::WriteHandler // all of our code now uses this
 {
     struct Impl;
     std::unique_ptr<Impl> m_pImpl;
 
-    NewMemoryWriteHandler(const NITFSegmentInfo& info,
-        const UByte* buffer,
-        size_t firstRow, const Data& data, bool doByteSwap);
 public:
     NewMemoryWriteHandler() = delete;
     ~NewMemoryWriteHandler();
@@ -154,15 +151,9 @@ public:
     NewMemoryWriteHandler& operator=(NewMemoryWriteHandler&&) = default;
 
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
-        const UByte* buffer,
-        size_t firstRow,
-        size_t numCols,
-        size_t numChannels,
-        size_t pixelSize,
-        bool doByteSwap);
-    NewMemoryWriteHandler(const NITFSegmentInfo& info,
         const std::byte* buffer,
         size_t firstRow, const Data& data, bool doByteSwap);
+
     template<typename T>
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
         std::span<const T> buffer,

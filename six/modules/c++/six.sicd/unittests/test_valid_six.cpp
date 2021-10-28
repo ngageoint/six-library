@@ -609,6 +609,7 @@ static void read_nitf(const fs::path& path, six::PixelType pixelType, const std:
 }
 
 static const std::vector<fs::path> fs_schemaPaths;
+static const std::vector<std::string> schemaPaths;
 
 void buffer_list_save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
@@ -618,11 +619,10 @@ void buffer_list_save(const fs::path& outputName, const std::vector<std::complex
 
     //const void* pImage = image.data();
     //const six::BufferList buffers{ static_cast<const six::UByte*>(pImage) };
-    //writer.save(buffers, outputName, fs_schemaPaths);
+    //writer.save(buffers, outputName.string(), schemaPaths);
     
     writer.save(image, outputName, fs_schemaPaths);
   
-    //static const std::vector<std::string> schemaPaths;
     //writer.save(image.data(), outputName.string(), schemaPaths);
 }
 

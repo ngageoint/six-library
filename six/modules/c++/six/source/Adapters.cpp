@@ -163,47 +163,27 @@ struct NewMemoryWriteHandler::Impl final
     // This needs to persist beyhond the constructor
     std::vector<std::pair<uint8_t, uint8_t>> ampi8i_phs8i;
 };
-
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    const UByte* buffer, size_t firstRow, size_t numCols,
-    size_t numChannels, size_t pixelSize, bool doByteSwap)
+    const std::byte* buffer_, size_t firstRow, const Data& data, bool doByteSwap)
     : m_pImpl(std::make_unique<Impl>())
 {
+    const auto numCols = data.getNumCols();
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel();
+
     // Dont do it if we only have a byte!
     if (pixelSize / numChannels == 1)
         doByteSwap = false;
 
     static nitf_IWriteHandler iWriteHandler = { &six_MemoryWriteHandler_write, &six_MemoryWriteHandler_destruct };
+    const void* pBuffer = buffer_;
+    const auto buffer = static_cast<const UByte*>(pBuffer);
     auto segmentWriter = create_SegmentWriter(info, buffer, firstRow, numCols, numChannels, pixelSize, doByteSwap, iWriteHandler);
     setNative(segmentWriter);
 
     setManaged(false);
 }
-NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    const UByte* buffer, size_t firstRow, const Data& data, bool doByteSwap)
-    : NewMemoryWriteHandler(info, buffer, firstRow,
-        data.getNumCols(), data.getNumChannels(), data.getNumBytesPerPixel(),
-        doByteSwap)
-{
-}
 NewMemoryWriteHandler::~NewMemoryWriteHandler() = default;
-
-template<typename T>
-inline const UByte* as_UByte(const T* buffer)
-{
-    const void* pBuffer = buffer;
-    return static_cast<const UByte*>(pBuffer);
-}
-NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    const std::byte* buffer,
-    size_t firstRow, const Data& data, bool doByteSwap)
-    : NewMemoryWriteHandler(info, as_UByte(buffer), firstRow, data, doByteSwap)
-{
-    if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
-    {
-        throw std::invalid_argument("AMP8I_PHS8I data not yet supported."); // TODO
-    }
-}
 
 template<typename T>
 inline void validate_pixelSize(std::span<T> buffer, const Data& data)
@@ -241,9 +221,10 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
         validate_pixelSize(ampi8i_phs8i_, data);
 
         // Everything is kosher, point to the converted data
-        void* pData = this->mHandle->get()->data;
-        auto pImpl = static_cast<MemoryWriteHandlerImpl*>(pData);
-        pImpl->buffer = as_UByte(ampi8i_phs8i.data());
+        void* pHandleData = this->mHandle->get()->data;
+        auto pImpl = static_cast<MemoryWriteHandlerImpl*>(pHandleData);
+        const void* pData = ampi8i_phs8i.data();
+        pImpl->buffer = static_cast<const UByte*>(pData);
     }
     else if (data.getPixelType() != six::PixelType::RE32F_IM32F)
     {
