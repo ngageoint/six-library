@@ -266,6 +266,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::pair<uint8_t, uint8_t>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer.data()), firstRow, data, doByteSwap)
 {
+    // This is for the uncommon case where the data is already in this format; normally, it is std::complex<float>.
     if (data.getPixelType() != six::PixelType::AMP8I_PHS8I)
     {
         throw std::invalid_argument("pixelType is wrong.");

@@ -192,10 +192,6 @@ bool NITFWriteControl::shouldByteSwap() const
     }
 }
 
-using byte_span = std::span<const std::byte>;
-using cxfloat_span = std::span<const std::complex<float>>;
-using pair_span = std::span<const std::pair<uint8_t, uint8_t>>;
-
 // this bypasses the normal NITF ImageWriter and streams directly to the output
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
     const std::byte* imageData, const Data& data, bool doByteSwap)
@@ -203,28 +199,13 @@ inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo s
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
         imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
+template<typename T>
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-    byte_span imageData, const Data& data, bool doByteSwap)
+    std::span<const T> imageData, const Data& data, bool doByteSwap)
 {
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
         imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
-inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-    cxfloat_span imageData, const Data& data, bool doByteSwap)
-{
-    return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
-            imageData, segmentInfo.getFirstRow(), data, doByteSwap);
-}
-inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-    pair_span imageData, const Data& data, bool doByteSwap)
-{
-    // Send std::pair<uint8_t, uint8_t> (i.e., AMP8I_PHS8I) straight-on through; this is for the uncommon case
-    // where the data is already in this format. Normally, it is std::complex<float> and NewMemoryWriteHandler
-    // converts it for AMP8I_PHS8I.
-    return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
-        imageData, segmentInfo.getFirstRow(), data, doByteSwap);
-}
-
 inline std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
     io::InputStream* imageData, const Data& data, bool doByteSwap)
 {
@@ -331,10 +312,10 @@ static nitf::ImageSource make_ImageSource(std::span<const T> pImageData_, const 
     {
         // Assume that the bands are interleaved in memory.  This
         // makes sense for 24-bit 3-color data.
-        const byte_span pData(pImageData.data() + pixelSize * segmentInfo.getFirstRow() * numCols, bandSize);
+        const  std::span<const std::byte> pData(pImageData.data() + pixelSize * segmentInfo.getFirstRow() * numCols, bandSize);
         const auto start = gsl::narrow<nitf::Off>(chan);
         const auto pixelSkip = gsl::narrow<int>(numChannels - 1);
-        nitf::MemorySource ms(pData, start, pixelSkip);
+        nitf::MemorySource ms(pData, start, pixelSkip); // using the std::span<> overload
         retval.addBand(ms);
     }
     return retval;
@@ -401,10 +382,6 @@ inline size_t get_imageDataSize(const BufferList& imageData)
 {
     return imageData.size();
 }
-inline size_t get_imageDataSize(const std::span<const byte_span>& imageData)
-{
-    return imageData.size();
-}
 template<typename T>
 bool NITFWriteControl::prepareIO(const T& imageData, nitf::IOInterface& outputFile)
 {
@@ -448,40 +425,6 @@ void NITFWriteControl::write_imageData(const T& imageData, const NITFImageInfo& 
 }
 
 template<typename T>
-void NITFWriteControl::do_save_(const T& imageData, bool doByteSwap, bool enableJ2K)
-{
-    size_t numImages = getInfos().size();
-    if (numImages > 1)
-    {
-        throw std::invalid_argument("Should only have one image!"); // we would be in do_save_(BufferList)
-    }
-    if (numImages == 1) // can we really have 0 images?
-    {
-        constexpr size_t i = 0; // keep code consistent with do_save_(BufferList)
-
-        const auto pInfo = getInfo(i);
-        const Legend* const legend = getLegend(getContainer().get(), i);
-
-        write_imageData(imageData, *pInfo, legend, doByteSwap, enableJ2K);
-    }
-}
-template<>
-void NITFWriteControl::do_save_(const BufferList& list, bool doByteSwap, bool enableJ2K)
-{
-    size_t numImages = getInfos().size();
-    for (size_t i = 0; i < numImages; ++i)
-    {
-        const auto pInfo = getInfo(i);
-        const Legend* const legend = getLegend(getContainer().get(), i);
-
-        const void* pImageData = list[i];
-        auto imageData = static_cast<const std::byte*>(pImageData);
-
-        write_imageData(imageData, *pInfo, legend, doByteSwap, enableJ2K);
-    }
-}
-
-template<typename T>
 void NITFWriteControl::do_save(const T& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
 {
     const bool doByteSwap = prepareIO(imageData, outputFile);
@@ -501,7 +444,48 @@ void NITFWriteControl::do_save(const T& imageData, nitf::IOInterface& outputFile
     addDataAndWrite(schemaPaths);
 }
 
+template<>
+void NITFWriteControl::do_save_(const BufferList& list, bool doByteSwap, bool enableJ2K)
+{
+    size_t numImages = getInfos().size();
+    for (size_t i = 0; i < numImages; ++i)
+    {
+        const auto pInfo = getInfo(i);
+        const Legend* const legend = getLegend(getContainer().get(), i);
+
+        const void* pImageData = list[i];
+        auto imageData = static_cast<const std::byte*>(pImageData);
+
+        write_imageData(imageData, *pInfo, legend, doByteSwap, enableJ2K);
+    }
+}
 void NITFWriteControl::save_buffer_list(const BufferList& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
+{
+    do_save(imageData, outputFile, schemaPaths);
+}
+
+template<typename T>
+void NITFWriteControl::do_save_(const T& imageData, bool doByteSwap, bool enableJ2K)
+{
+    size_t numImages = getInfos().size();
+    if (numImages > 1)
+    {
+        throw std::invalid_argument("Should only have one image!"); // we would be in do_save_(BufferList)
+    }
+    if (numImages == 1) // can we really have 0 images?
+    {
+        constexpr size_t i = 0; // keep code consistent with do_save_(BufferList)
+
+        const auto pInfo = getInfo(i);
+        const Legend* const legend = getLegend(getContainer().get(), i);
+
+        write_imageData(imageData, *pInfo, legend, doByteSwap, enableJ2K);
+    }
+}
+template<>
+void NITFWriteControl::save_image(std::span<const std::complex<float>> imageData,
+                            nitf::IOInterface& outputFile,
+                            const std::vector<std::string>& schemaPaths)
 {
     do_save(imageData, outputFile, schemaPaths);
 }
@@ -514,13 +498,6 @@ inline const UByte* as_UBytes(std::span<const T> image)
 }
 
 template<>
-void NITFWriteControl::save_image(cxfloat_span imageData,
-                            nitf::IOInterface& outputFile,
-                            const std::vector<std::string>& schemaPaths)
-{
-    do_save(imageData, outputFile, schemaPaths);
-}
-template<>
 void NITFWriteControl::save_image(std::span<const std::complex<short>> imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::string>& schemaPaths)
@@ -530,7 +507,7 @@ void NITFWriteControl::save_image(std::span<const std::complex<short>> imageData
 }
 
 template<>
-void NITFWriteControl::save_image(pair_span imageData,
+void NITFWriteControl::save_image(std::span<const std::pair<uint8_t, uint8_t>> imageData,
                             nitf::IOInterface& outputFile,
                             const std::vector<std::string>& schemaPaths)
 {
