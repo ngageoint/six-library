@@ -275,7 +275,20 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
 {
     validate_pixelSize(buffer, data);
 }
-
+template<>
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const uint8_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : NewMemoryWriteHandler(info, as_bytes(buffer), firstRow, data, doByteSwap)
+{
+    validate_pixelSize(buffer, data);
+}
+template<>
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const uint16_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : NewMemoryWriteHandler(info, as_bytes(buffer), firstRow, data, doByteSwap)
+{
+    validate_pixelSize(buffer, data);
+}
 
 //
 // StreamWriteHandler

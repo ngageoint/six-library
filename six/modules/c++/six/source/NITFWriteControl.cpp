@@ -489,14 +489,6 @@ void NITFWriteControl::save_image(std::span<const std::complex<float>> imageData
 {
     do_save(imageData, outputFile, schemaPaths);
 }
-
-template<typename T>
-inline const UByte* as_UBytes(std::span<const T> image)
-{
-    const void* pImage = image.data();
-    return static_cast<const UByte*>(pImage);
-}
-
 template<>
 void NITFWriteControl::save_image(std::span<const std::complex<short>> imageData,
     nitf::IOInterface& outputFile,
@@ -504,7 +496,6 @@ void NITFWriteControl::save_image(std::span<const std::complex<short>> imageData
 {
     do_save(imageData, outputFile, schemaPaths);
 }
-
 template<>
 void NITFWriteControl::save_image(std::span<const std::pair<uint8_t, uint8_t>> imageData,
                             nitf::IOInterface& outputFile,
@@ -517,16 +508,14 @@ void NITFWriteControl::save_image(std::span<const uint8_t> imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::string>& schemaPaths)
 {
-    const BufferList buffers{ as_UBytes(imageData) }; // TODO: use imageData directly
-    save(buffers, outputFile, schemaPaths);
+    do_save(imageData, outputFile, schemaPaths);
 }
 template<>
 void NITFWriteControl::save_image(std::span<const uint16_t> imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::string>& schemaPaths)
 {
-    const BufferList buffers{ as_UBytes(imageData) }; // TODO: use imageData directly
-    save(buffers, outputFile, schemaPaths);
+    do_save(imageData, outputFile, schemaPaths);
 }
 
 void NITFWriteControl::save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
