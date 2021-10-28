@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef SIX_six_NITFWriteControl_h_INCLUDED_
+#define SIX_six_NITFWriteControl_h_INCLUDED_
 #pragma once
-#ifndef __SIX_NITF_WRITE_CONTROL_H__
-#define __SIX_NITF_WRITE_CONTROL_H__
 
 #include <stdint.h>
 
@@ -259,11 +259,27 @@ public:
         bufferedIO.close();
     }
     template<typename T>
-    void save(const std::vector<T>& imageData_,
-        const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
+    void save(std::span<const T> imageData,
+        const std::string& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
     {
-        std::span<const T> imageData(imageData_.data(), imageData_.size());
-        save(imageData, outputFile, schemaPaths);
+      save(imageData, std::filesystem::path(outputFile), schemaPaths);
+    }
+    template<typename T>
+    void save(std::span<const T> imageData,
+        const std::string& outputFile, const std::vector<std::string>& schemaPaths_)
+    {
+      std::vector<std::filesystem::path> schemaPaths;
+      std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+		     [](const std::string& s) { return s; });
+      save(imageData, outputFile, schemaPaths);
+    }
+
+    template<typename T, typename TSchemaPath>
+    void save(const std::vector<T>& imageData, // G++ won't convert our home-brew std::span to std::vector
+	      const std::string& outputFile, const std::vector<TSchemaPath>& schemaPaths)
+    {
+      std::span<const T> imageData_(imageData.data(), imageData.size());
+      save(imageData_, outputFile, schemaPaths);
     }
 
     void save(const NonConstBufferList& imageData,
@@ -316,13 +332,6 @@ public:
         std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
             [](const std::filesystem::path& p) { return p.string(); });
         save_image(imageData, outputFile, schemaPaths_);
-    }
-    template<typename T>
-    void save(const std::vector<T>& imageData_,
-        nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
-    {
-        std::span<const T> imageData(imageData_.data(), imageData_.size());
-        save(imageData, outputFile, schemaPaths);
     }
 
     void save(const NonConstBufferList& list,
@@ -579,5 +588,4 @@ private:
                        size_t productNum);
 };
 }
-#endif
-
+#endif // SIX_six_NITFWriteControl_h_INCLUDED_

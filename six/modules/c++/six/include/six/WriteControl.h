@@ -126,12 +126,10 @@ struct WriteControl
      *  \param toFile file name to write out
      *  \param schemaPaths Directories or files of schema locations
      */
-    template<typename TBufferList>
-    void save(const TBufferList& sources, const std::string& toFile)
+    void save(const BufferList& sources, const std::string& toFile)
     {
         save(sources, toFile, std::vector<std::string>());
     }
-
     virtual void save(const BufferList& sources, const std::string& toFile,
                       const std::vector<std::string>& schemaPaths) = 0;
 
