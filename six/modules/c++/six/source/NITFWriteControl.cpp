@@ -235,7 +235,7 @@ inline std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segm
 }
 
 template<typename TImageData>
-void NITFWriteControl::writeWithoutNitro(const TImageData& imageData,
+void writeWithoutNitro(nitf::Writer& mWriter, const TImageData& imageData,
     const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap)
 {
     for (size_t j = 0; j < imageSegments.size(); ++j)
@@ -277,7 +277,7 @@ void NITFWriteControl::save(const SourceList& imageData,
         const auto startIndex = info.getStartIndex();
         const six::Data* const pData = info.getData();
 
-        writeWithoutNitro(imageData[i], imageSegments, startIndex, *pData, doByteSwap);
+        writeWithoutNitro(mWriter, imageData[i], imageSegments, startIndex, *pData, doByteSwap);
     }
 
     addDataAndWrite(schemaPaths);
@@ -341,8 +341,8 @@ static nitf::ImageSource make_ImageSource(std::span<const T> pImageData_, const 
 }
 
 template<typename TImageData>
-void NITFWriteControl::writeWithNitro(const TImageData& imageData,
-    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool /*unused_*/)
+void writeWithNitro(nitf::Writer& mWriter, const std::map<std::string, void*>& mCompressionOptions,
+    const TImageData& imageData, const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data)
 {
     const auto numChannels = data.getNumChannels();
     const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
@@ -412,7 +412,7 @@ bool NITFWriteControl::prepareIO(const T& imageData, nitf::IOInterface& outputFi
 }
 
 template<typename T>
-void NITFWriteControl::write_flattened_imageData(const T& imageData, const NITFImageInfo& info, const Legend* const legend,
+void NITFWriteControl::write_imageData(const T& imageData, const NITFImageInfo& info, const Legend* const legend,
     bool doByteSwap, bool enableJ2K)
 {
     const std::vector<NITFSegmentInfo> imageSegments = info.getImageSegments();
@@ -434,11 +434,11 @@ void NITFWriteControl::write_flattened_imageData(const T& imageData, const NITFI
             throw except::Exception(Ctxt("SICD does not support blocked or J2K compressed output"));
         }
 
-        writeWithNitro(imageData, imageSegments, startIndex, *pData);
+        writeWithNitro(mWriter, mCompressionOptions, imageData, imageSegments, startIndex, *pData);
     }
     else
     {
-        writeWithoutNitro(imageData, imageSegments, startIndex, *pData, doByteSwap);
+        writeWithoutNitro(mWriter, imageData, imageSegments, startIndex, *pData, doByteSwap);
     }
 
     if (legend)
@@ -453,18 +453,20 @@ void NITFWriteControl::do_save_(const T& imageData, bool doByteSwap, bool enable
     size_t numImages = getInfos().size();
     if (numImages > 1)
     {
-        throw std::invalid_argument("Should only have one image!"); // we would be in save_buffer_list()
+        throw std::invalid_argument("Should only have one image!"); // we would be in do_save_(BufferList)
     }
     if (numImages == 1) // can we really have 0 images?
     {
-        constexpr size_t i = 0; // keep code consistent with save_buffer_list()
+        constexpr size_t i = 0; // keep code consistent with do_save_(BufferList)
+
         const auto pInfo = getInfo(i);
         const Legend* const legend = getLegend(getContainer().get(), i);
-        write_flattened_imageData(imageData, *pInfo, legend, doByteSwap, enableJ2K);
+
+        write_imageData(imageData, *pInfo, legend, doByteSwap, enableJ2K);
     }
 }
 template<>
-void NITFWriteControl::do_save_(const BufferList& imageData, bool doByteSwap, bool enableJ2K)
+void NITFWriteControl::do_save_(const BufferList& list, bool doByteSwap, bool enableJ2K)
 {
     size_t numImages = getInfos().size();
     for (size_t i = 0; i < numImages; ++i)
@@ -472,9 +474,10 @@ void NITFWriteControl::do_save_(const BufferList& imageData, bool doByteSwap, bo
         const auto pInfo = getInfo(i);
         const Legend* const legend = getLegend(getContainer().get(), i);
 
-        const void* pImageData_ = imageData[i];
-        auto pImageData = static_cast<const std::byte*>(pImageData_);
-        write_flattened_imageData(pImageData, *pInfo, legend, doByteSwap, enableJ2K);
+        const void* pImageData = list[i];
+        auto imageData = static_cast<const std::byte*>(pImageData);
+
+        write_imageData(imageData, *pInfo, legend, doByteSwap, enableJ2K);
     }
 }
 

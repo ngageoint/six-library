@@ -58,18 +58,11 @@ namespace six
  */
 class NITFWriteControl : public WriteControl
 {
-    template<typename TImageData>
-    void writeWithNitro(const TImageData& imageData,
-        const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&, bool unused_ = false);
-    template<typename TImageData>
-    void writeWithoutNitro(const TImageData& imageData,
-        const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&, bool doByteSwap);
     void addLegend(const Legend&, int imageNumber);
 
     template<typename T>
-    void write_flattened_imageData(const T& imageData, const NITFImageInfo&, const Legend* const legend,
+    void write_imageData(const T& imageData, const NITFImageInfo&, const Legend* const legend,
         bool doByteSwap, bool enableJ2K);
-
     template<typename T>
     void do_save_(const T&, bool doByteSwap, bool enableJ2K);
     template<typename T>
