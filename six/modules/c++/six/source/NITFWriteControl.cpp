@@ -192,27 +192,45 @@ bool NITFWriteControl::shouldByteSwap() const
     }
 }
 
-// this bypasses the normal NITF ImageWriter and streams directly to the output
-inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-    const std::byte* imageData, const Data& data, bool doByteSwap)
+inline size_t getBandSize(const NITFSegmentInfo& segmentInfo, const Data& data)
 {
-    return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
-        imageData, segmentInfo.getFirstRow(), data, doByteSwap);
+    const auto pixelSize = data.getNumBytesPerPixel() / data.getNumChannels();
+    const auto numCols = data.getNumCols();
+    const auto bandSize = pixelSize * numCols * segmentInfo.getNumRows();
+    return bandSize;
 }
+
+inline std::span<const std::byte> as_bytes(BufferList::value_type pImageData,
+    const NITFSegmentInfo& segmentInfo, const Data& data)
+{
+    const auto bandSize = getBandSize(segmentInfo, data);
+    const void* pImageData_ = pImageData;
+    const auto size_in_bytes = bandSize * data.getNumChannels();
+    return std::span<const std::byte>(static_cast<const std::byte*>(pImageData_), size_in_bytes);
+}
+
+// this bypasses the normal NITF ImageWriter and streams directly to the output
 template<typename T>
-inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(const NITFSegmentInfo& segmentInfo,
     std::span<const T> imageData, const Data& data, bool doByteSwap)
 {
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
         imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
-inline std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-    io::InputStream* imageData, const Data& data, bool doByteSwap)
+inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(const NITFSegmentInfo& segmentInfo,
+    BufferList::value_type pImageData, const Data& data, bool doByteSwap)
 {
-    //! TODO: This section of code (unlike the memory section above)
-    //        does not account for blocked writing or J2K compression.
-    //        CODA ticket #443 will update support for this.
-    return std::make_shared<StreamWriteHandler>(segmentInfo, imageData, data, doByteSwap);
+    const auto pImageData_ = as_bytes(pImageData, segmentInfo, data);
+    return makeWriteHandler(segmentInfo, pImageData_, data, doByteSwap);
+}
+
+inline std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
+io::InputStream* imageData, const Data& data, bool doByteSwap)
+{
+//! TODO: This section of code (unlike the memory section above)
+//        does not account for blocked writing or J2K compression.
+//        CODA ticket #443 will update support for this.
+return std::make_shared<StreamWriteHandler>(segmentInfo, imageData, data, doByteSwap);
 }
 
 template<typename TImageData>
@@ -242,8 +260,8 @@ bool NITFWriteControl::do_prepareIO(size_t imageDataSize, nitf::IOInterface& out
 }
 
 void NITFWriteControl::save(const SourceList& imageData,
-                            nitf::IOInterface& outputFile,
-                            const std::vector<std::string>& schemaPaths)
+    nitf::IOInterface& outputFile,
+    const std::vector<std::string>& schemaPaths)
 {
     const bool doByteSwap = do_prepareIO(imageData.size(), outputFile);
     const auto& infos = getInfos();
@@ -293,28 +311,24 @@ static nitf::ImageSource make_ImageSource(std::span<const T> pImageData_, const 
         throw std::invalid_argument("numBytesPerPixel mis-match!");
     }
 
-    const auto numCols = data.getNumCols();
-    const auto bandSize = pixelSize * numCols * segmentInfo.getNumRows();
+    const auto bandSize = getBandSize(segmentInfo, data);
     const auto pImageData = six::as_bytes(pImageData_);
     if (pImageData.size() != bandSize)
     {
         throw std::invalid_argument("bandSize mis-match!");
     }
 
+    const auto numCols = data.getNumCols();
     const auto pData_ = pImageData.data() + pixelSize * segmentInfo.getFirstRow() * numCols;
     const  std::span<const std::byte> pData(pData_, bandSize);
     return make_ImageSource_(pData, numChannels, pixelSize);
 }
-// Existing code that uses BufferList needs raw "std::byte*" instead of std::span<std::byte>
-static nitf::ImageSource make_ImageSource(const std::byte* const pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
-{
-    const auto numChannels = data.getNumChannels();
-    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-    const auto numCols = data.getNumCols();
-    const auto bandSize = pixelSize * numCols * segmentInfo.getNumRows();
 
-    const  std::span<const std::byte> pData(pImageData, bandSize);
-    return make_ImageSource(pData, segmentInfo, data);
+// Existing code that uses BufferList needs raw "std::byte*" instead of std::span<std::byte>
+static nitf::ImageSource make_ImageSource(const BufferList::value_type pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
+{
+    const auto pImageData_ = as_bytes(pImageData, segmentInfo, data);
+    return make_ImageSource(pImageData_, segmentInfo, data);
 }
 
 template<typename TImageData>
@@ -448,10 +462,7 @@ void NITFWriteControl::do_save_(const BufferList& list, bool doByteSwap, bool en
         const auto pInfo = getInfo(i);
         const Legend* const legend = getLegend(getContainer().get(), i);
 
-        const void* pImageData = list[i];
-        auto imageData = static_cast<const std::byte*>(pImageData);
-
-        write_imageData(imageData, *pInfo, legend, doByteSwap, enableJ2K);
+        write_imageData(list[i], *pInfo, legend, doByteSwap, enableJ2K);
     }
 }
 void NITFWriteControl::save_buffer_list(const BufferList& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)

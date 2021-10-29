@@ -185,14 +185,25 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
 }
 NewMemoryWriteHandler::~NewMemoryWriteHandler() = default;
 
-template<typename T>
-inline void validate_pixelSize(std::span<T> buffer, const Data& data)
+inline size_t getBandSize(const NITFSegmentInfo& segmentInfo, const Data& data)
 {
-    const auto numChannels = data.getNumChannels();
-    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-    if (sizeof(buffer[0]) != pixelSize * numChannels)
+    const auto pixelSize = data.getNumBytesPerPixel() / data.getNumChannels();
+    const auto numCols = data.getNumCols();
+    const auto bandSize = pixelSize * numCols * segmentInfo.getNumRows();
+    return bandSize;
+}
+
+template<typename T>
+inline void validate_bandSize(std::span<T> buffer, const NITFSegmentInfo& info, const Data& data)
+{
+    const auto bandSize = getBandSize(info, data);
+    const auto size_in_bytes = bandSize * data.getNumChannels();
+    if (buffer.size() * sizeof(buffer[0]) != size_in_bytes)
     {
-        throw std::invalid_argument("pixelSize is wrong.");
+        // This is not always correct: the sizes are computed using the values in NITFSegmentInfo/Data
+        // but we may be working with other data.  This is the case when we have std::complex<float>
+        // data that will be converted to AMP8I_PHS8I when written to disk.
+        //throw std::invalid_argument("buffer.size()!");    }
     }
 }
 
@@ -201,7 +212,19 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::byte> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, buffer.data(), firstRow, data, doByteSwap)
 {
-    // TODO: validate std::span<>.size() against computed size
+    validate_bandSize(buffer, info, data);
+}
+
+template<typename T>
+inline void validate_buffer(std::span<T> buffer, const NITFSegmentInfo& info, const Data& data)
+{
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    if (sizeof(buffer[0]) != pixelSize * numChannels)
+    {
+        throw std::invalid_argument("pixelSize is wrong.");
+    }
+    validate_bandSize(buffer, info, data);
 }
 
 template<>
@@ -218,7 +241,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
         {
             throw std::runtime_error("Unable to convert pixels.");
         }
-        validate_pixelSize(ampi8i_phs8i_, data);
+        validate_buffer(ampi8i_phs8i_, info, data);
 
         // Everything is kosher, point to the converted data
         void* pHandleData = this->mHandle->get()->data;
@@ -232,7 +255,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     }
     else
     {
-        validate_pixelSize(buffer, data);
+        validate_buffer(buffer, info, data);
     }
 }
 
@@ -246,7 +269,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     {
         throw std::invalid_argument("pixelType is wrong.");
     }
-    validate_pixelSize(buffer, data);
+    validate_buffer(buffer, info, data);
 }
 
 template<>
@@ -254,21 +277,21 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::complex<short>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, as_bytes(buffer), firstRow, data, doByteSwap)
 {
-    validate_pixelSize(buffer, data);
+    validate_buffer(buffer, info, data);
 }
 template<>
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const uint8_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, as_bytes(buffer), firstRow, data, doByteSwap)
 {
-    validate_pixelSize(buffer, data);
+    validate_buffer(buffer, info, data);
 }
 template<>
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const uint16_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, as_bytes(buffer), firstRow, data, doByteSwap)
 {
-    validate_pixelSize(buffer, data);
+    validate_buffer(buffer, info, data);
 }
 
 //
