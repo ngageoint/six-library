@@ -250,6 +250,18 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
     validate_bandSize(buffer, info, data);
+
+    if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
+    {
+        // Assume that buffer is really std::complex<float>.  If it is something else
+        // (e.g., std::pair<uint8_t, uint8_t> -- already converted) a different
+        // overload should be used.  Since we've lost the actual buffer type,
+        // there not much else to do except hope for the best.
+        const void* pBuffer_ = buffer.data();
+        const auto pBuffer = static_cast<const std::complex<float>*>(pBuffer_);
+        const std::span<const std::complex<float>> buffer_(pBuffer, buffer.size() / sizeof(std::complex<float>));
+        m_pImpl->convertPixels(*this, info, buffer_, data);
+    }
 }
 
 template<>
