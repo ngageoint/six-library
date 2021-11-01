@@ -205,7 +205,16 @@ inline std::span<const std::byte> as_bytes(BufferList::value_type pImageData,
 {
     const auto bandSize = getBandSize(segmentInfo, data);
     const void* pImageData_ = pImageData;
-    const auto size_in_bytes = bandSize * data.getNumChannels();
+    auto size_in_bytes = bandSize * data.getNumChannels();
+
+    // At this point, we've lost information about the ACTUAL size of the buffer. Normally, the computation above will be correct.
+    // But in the case of AMP8I_PHS8I (now supported), the buffer is actually RE32F_IM32F as the data is converted to
+    // std::complex<float> when read-in, and converted to std::pair<uint8_t, uint8_t> when written-out.
+    if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
+    {
+        size_in_bytes *= sizeof(float);
+    }
+
     return std::span<const std::byte>(static_cast<const std::byte*>(pImageData_), size_in_bytes);
 }
 
@@ -530,8 +539,7 @@ void NITFWriteControl::save(const BufferList& list, const std::string& outputFil
 }
 void NITFWriteControl::save(const std::complex<float>* image, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
 {
-    // TODO: Compute the size of the image so what we can use std::span<> instead of raw pointer.
-    // TODO: This is for one specific situation (Python); most code should use std::span<> routines directly.
+    // Keeping this code-path in place as it's an easy way to test legacy BufferList functionality.
     const void* pImage = image;
     const BufferList list{ static_cast<const UByte*>(pImage) };
     save(list, outputFile, schemaPaths);

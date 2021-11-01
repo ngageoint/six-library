@@ -608,22 +608,20 @@ static void read_nitf(const fs::path& path, six::PixelType pixelType, const std:
     read_raw_data(path, pixelType, bytes);
 }
 
-static const std::vector<fs::path> fs_schemaPaths;
-static const std::vector<std::string> schemaPaths;
-
 void buffer_list_save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
     six::NITFWriteControl writer(std::move(pComplexData));
 
-    writer.save(image, outputName.string(), schemaPaths);  
-    //writer.save(image.data(), outputName.string(), schemaPaths); // API for Python; it uses six::BufferList
+    static const std::vector<std::string> schemaPaths;
+    writer.save(image.data(), outputName.string(), schemaPaths); // API for Python; it uses six::BufferList
 }
 
 void save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
+    static const std::vector<fs::path> fs_schemaPaths;
     six::sicd::writeAsNITF(outputName, fs_schemaPaths, *pComplexData, image);
 }
 
