@@ -33,10 +33,11 @@
  *
  */
 
+#include <stdint.h>
+
 #include <stdexcept>
 #include <iostream>
 #include <memory>
-
 #include <std/filesystem>
 
 #include <nitf/coda-oss.hpp>
@@ -157,20 +158,19 @@ int main(int argc, char** argv)
         six::XMLControlRegistry xmlRegistry;
         xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
-        mem::SharedPtr<six::Container> container(new six::Container(
-            six::DataType::DERIVED));
+        mem::SharedPtr<six::Container> container(new six::Container(six::DataType::DERIVED));
 
-        six::buffer_list_mutable buffers;
+        six::BufferList buffers;
 
         // First a single segment without a legend
         types::RowCol<size_t> dims1(40, numCols);
         std::unique_ptr<six::Data> data1(mockupDerivedData(dims1));
 
-        std::vector<std::byte> buffer1(dims1.area());
-        std::fill_n(buffer1.data(), dims1.area(), static_cast<std::byte>(20));
+        std::vector<uint8_t> buffer1(dims1.area());
+        std::fill_n(buffer1.data(), dims1.area(), static_cast<uint8_t>(20));
 
         container->addData(std::move(data1));
-        buffers.push_back(buffer1);
+        buffers.push_back(buffer1.data());
 
         // Now a single segment with a mono legend
         types::RowCol<size_t> dims2(40, numCols);
@@ -183,21 +183,21 @@ int main(int argc, char** argv)
         monoLegend->mLocation.col = 10;
         monoLegend->setDims(legendDims);
 
-        std::vector<std::byte> buffer2(dims2.area());
-        std::fill_n(buffer2.data(), dims2.area(), static_cast<std::byte>(100));
+        std::vector<uint8_t> buffer2(dims2.area());
+        std::fill_n(buffer2.data(), dims2.area(), static_cast<uint8_t>(100));
 
         container->addData(std::move(data2), std::move(monoLegend));
-        buffers.push_back(buffer2);
+        buffers.push_back(buffer2.data());
 
         // Now a multi-segment without a legend
         types::RowCol<size_t> dims3(150, numCols);
         std::unique_ptr<six::Data> data3(mockupDerivedData(dims3));
 
-        std::vector<std::byte> buffer3(dims3.area());
-        std::fill_n(buffer3.data(), dims3.area(), static_cast<std::byte>(60));
+        std::vector<uint8_t> buffer3(dims3.area());
+        std::fill_n(buffer3.data(), dims3.area(), static_cast<uint8_t>(60));
 
         container->addData(std::move(data3));
-        buffers.push_back(buffer3);
+        buffers.push_back(buffer3.data());
 
         // Now a multi-segment with an RGB legend
         types::RowCol<size_t> dims4(155, numCols);
@@ -219,11 +219,11 @@ int main(int argc, char** argv)
             rgbLegend->mLUT->getTable()[idx + 2] = lutValue;
         }
 
-        std::vector<std::byte> buffer4(dims4.area());
-        std::fill_n(buffer4.data(), dims4.area(), static_cast<std::byte>(200));
+        std::vector<uint8_t> buffer4(dims4.area());
+        std::fill_n(buffer4.data(), dims4.area(), static_cast<uint8_t>(200));
 
         container->addData(std::move(data4), std::move(rgbLegend));
-        buffers.push_back(buffer4);
+        buffers.push_back(buffer4.data());
 
         // Write it out
         {

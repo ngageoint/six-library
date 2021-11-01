@@ -25,6 +25,7 @@
 
 #include <memory>
 #include <vector>
+#include <std/span>
 
 #include <gsl/gsl.h>
 
@@ -406,9 +407,9 @@ struct ComplexImageResult final
 struct ComplexImage final
 {
     const ComplexData& data;
-    const std::complex<float>* image;
-    ComplexImage(const ComplexData& d, const std::complex<float>* i) : data(d), image(i) {}
-    ComplexImage(const ComplexImageResult& r)  : ComplexImage(*(r.pComplexData), r.widebandData.data()) {}
+    std::span<const std::complex<float>> image;
+    ComplexImage(const ComplexData& d, std::span<const std::complex<float>> i) : data(d), image(i) {}
+    ComplexImage(const ComplexImageResult& r)  : ComplexImage(*(r.pComplexData), r.widebandData) {}
     ComplexImage(const ComplexImage&) = delete;
     ComplexImage& operator=(const ComplexImage&) = delete;
 };

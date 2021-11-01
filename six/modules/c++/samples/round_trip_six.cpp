@@ -20,6 +20,8 @@
  *
  */
 
+#include <stdint.h>
+
 #include <cmath>
 #include <std/filesystem>
 #include <vector>
@@ -74,12 +76,13 @@ struct Buffers final
         return mBuffers.back().data();
     }
 
-    std::vector<std::span<std::byte>> get()
+    six::BufferList get()
     {
-        std::vector<std::span<std::byte>> retval;
+        six::BufferList retval;
         for (auto& buffer : mBuffers)
         {
-            retval.push_back(buffer);
+            const void* pBuffer = buffer.data();
+            retval.push_back(static_cast<const six::UByte*>(pBuffer));
         }
         return retval;
     }
@@ -330,8 +333,7 @@ int main(int argc, char** argv)
                     numBytesPerPixel *= 2;
                 }
 
-                std::byte* buffer =
-                        buffers.add(numPixels * numBytesPerPixel);
+                auto buffer = buffers.add(numPixels * numBytesPerPixel);
 
                 setDims(region, extent);
                 region.setBuffer(buffer + offset);

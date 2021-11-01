@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef SIX_six_NITFWriteControl_h_INCLUDED_
+#define SIX_six_NITFWriteControl_h_INCLUDED_
 #pragma once
-#ifndef __SIX_NITF_WRITE_CONTROL_H__
-#define __SIX_NITF_WRITE_CONTROL_H__
 
 #include <stdint.h>
 
@@ -58,28 +58,21 @@ namespace six
  */
 class NITFWriteControl : public WriteControl
 {
-    template<typename TImageData>
-    void writeWithNitro(const TImageData& imageData,
-        const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&, bool unused_ = false);
-    template<typename TImageData>
-    void writeWithoutNitro(const TImageData& imageData,
-        const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data&, bool doByteSwap);
     void addLegend(const Legend&, int imageNumber);
 
     template<typename T>
-    void write_flattened_imageData(const T& imageData, const NITFImageInfo&, const Legend* const legend,
+    void write_imageData(const T& imageData, const NITFImageInfo&, const Legend* const legend,
         bool doByteSwap, bool enableJ2K);
-
     template<typename T>
-    void save_T(const T&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+    void do_save_(const T&, bool doByteSwap, bool enableJ2K);
+    template<typename T>
+    void do_save(const T& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
+
     template<typename T>
     void save_image(std::span<const T>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
 
     void save_buffer_list(const BufferList&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
-    void save_buffer_list(const buffer_list&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
-
-    template<typename TBufferList>
-    void save_buffer_list_to_file(const TBufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
+    void save_buffer_list_to_file(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
     {
         const size_t bufferSize = getOptions().getParameter(WriteControl::OPT_BUFFER_SIZE, Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
         nitf::BufferedWriter bufferedIO(outputFile, bufferSize);
@@ -253,18 +246,9 @@ public:
      *  \param outputFile  Output path to write
      *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths) override
-    {
-        save_buffer_list_to_file(list, outputFile, schemaPaths);
-    }
-    virtual void save(const buffer_list& list, const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths) override
-    {
-        std::vector<std::string> schemaPaths_;
-        std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
-            [](const std::filesystem::path& p) { return p.string(); });
-        save_buffer_list_to_file(list, outputFile.string(), schemaPaths_);
-    }
-
+    virtual void save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths) override;
+    
+    void save(const std::complex<float>*, const std::string& outputFile, const std::vector<std::string>& schemaPaths);
     template<typename T>
     void save(std::span<const T> imageData,
         const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
@@ -275,11 +259,27 @@ public:
         bufferedIO.close();
     }
     template<typename T>
-    void save(const std::vector<T>& imageData_,
-        const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
+    void save(std::span<const T> imageData,
+        const std::string& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
     {
-        std::span<const T> imageData(imageData_.data(), imageData_.size());
-        save(imageData, outputFile, schemaPaths);
+      save(imageData, std::filesystem::path(outputFile), schemaPaths);
+    }
+    template<typename T>
+    void save(std::span<const T> imageData,
+        const std::string& outputFile, const std::vector<std::string>& schemaPaths_)
+    {
+      std::vector<std::filesystem::path> schemaPaths;
+      std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+		     [](const std::string& s) { return s; });
+      save(imageData, outputFile, schemaPaths);
+    }
+
+    template<typename T, typename TSchemaPath>
+    void save(const std::vector<T>& imageData, // G++ won't convert our home-brew std::span to std::vector
+	      const std::string& outputFile, const std::vector<TSchemaPath>& schemaPaths)
+    {
+      std::span<const T> imageData_(imageData.data(), imageData.size());
+      save(imageData_, outputFile, schemaPaths);
     }
 
     void save(const NonConstBufferList& imageData,
@@ -288,12 +288,7 @@ public:
     {
         save(convertBufferList(imageData), outputFile, schemaPaths);
     }
-    void save(const buffer_list_mutable& imageData,
-              const std::string& outputFile,
-              const std::vector<std::string>& schemaPaths)
-    {
-        save(convertBufferList(imageData), outputFile, schemaPaths);
-    }
+
     /*!
      *  Bind an interleaved (IQIQIQIQ) input stream
      *  to this record and write out a SICD/SIDD.  We do
@@ -328,35 +323,18 @@ public:
     {
         save_buffer_list(list, outputFile, schemaPaths);
     }
-    virtual void save(const buffer_list& list, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths)
-    {
-        save_buffer_list(list, outputFile, schemaPaths);
-    }
 
     template<typename T>
     void save(std::span<const T> imageData,
-        nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths_)
-    {
-        std::vector<std::string> schemaPaths;
-        std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-            [](const std::filesystem::path& p) { return p.string(); });
-        save_image(imageData, outputFile, schemaPaths);
-    }
-    template<typename T>
-    void save(const std::vector<T>& imageData_,
         nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
     {
-        std::span<const T> imageData(imageData_.data(), imageData_.size());
-        save(imageData, outputFile, schemaPaths);
+        std::vector<std::string> schemaPaths_;
+        std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
+            [](const std::filesystem::path& p) { return p.string(); });
+        save_image(imageData, outputFile, schemaPaths_);
     }
 
     void save(const NonConstBufferList& list,
-              nitf::IOInterface& outputFile,
-              const std::vector<std::string>& schemaPaths)
-    {
-        save(convertBufferList(list), outputFile, schemaPaths);
-    }
-    void save(const buffer_list_mutable& list,
               nitf::IOInterface& outputFile,
               const std::vector<std::string>& schemaPaths)
     {
@@ -610,5 +588,4 @@ private:
                        size_t productNum);
 };
 }
-#endif
-
+#endif // SIX_six_NITFWriteControl_h_INCLUDED_

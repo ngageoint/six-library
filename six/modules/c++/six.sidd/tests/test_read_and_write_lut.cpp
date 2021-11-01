@@ -58,12 +58,13 @@ struct Buffers final
         return mBuffers.back().data();
     }
 
-    std::vector<std::span<std::byte>> get()
+    six::BufferList get()
     {
-        std::vector<std::span<std::byte>> retval;
+        six::BufferList retval;
         for (auto& buffer : mBuffers)
         {
-            retval.push_back(buffer);
+            const void* pBuffer = buffer.data();
+            retval.push_back(static_cast<const six::UByte*>(pBuffer));
         }
         return retval;
     }
@@ -99,7 +100,7 @@ std::string doRoundTrip(const std::string& siddPathname)
 
             size_t numBytesPerPixel = data->getNumBytesPerPixel();
 
-            std::byte* buffer = buffers.add(numPixels * numBytesPerPixel);
+            auto buffer = buffers.add(numPixels * numBytesPerPixel);
 
             setDims(region, extent);
             region.setBuffer(buffer);

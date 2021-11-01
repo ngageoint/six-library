@@ -89,7 +89,7 @@ six::sicd::ComplexData* const updateMetadata(
 }
 
 void cropSICD(six::NITFReadControl& reader,
-              const std::vector<std::string>& schemaPaths,
+              const std::vector<std::string>& schemaPaths_,
               const six::sicd::ComplexData& data,
               const scene::SceneGeometry& geom,
               const scene::ProjectionModel& projection,
@@ -113,12 +113,11 @@ void cropSICD(six::NITFReadControl& reader,
 
     // Read in the AOI
     const size_t numBytesPerPixel(data.getNumBytesPerPixel());
-    const size_t numBytes(origDims.area() * numBytesPerPixel);
 
     six::Region region;
     setOffset(region, aoiOffset);
     setDims(region, aoiDims);
-    const auto buffer = region.setBuffer(numBytes);
+    const auto buffer = region.setComplexBuffer(origDims.area());
     reader.interleaved(region, 0);
 
     std::unique_ptr<six::Data> aoiData(updateMetadata(
@@ -127,9 +126,10 @@ void cropSICD(six::NITFReadControl& reader,
 
     // Write the AOI SICD out
     six::NITFWriteControl writer(std::move(aoiData));
-    const void* pBuffer = buffer.get();
-    six::buffer_list images{ {static_cast<const std::byte*>(pBuffer), numBytes } };
-    writer.save(images, outPathname, schemaPaths);
+    const std::span<const std::complex<float>> image(buffer.get(), origDims.area());
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+    writer.save(image, outPathname, schemaPaths);
 }
 
 }

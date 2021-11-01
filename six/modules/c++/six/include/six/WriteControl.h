@@ -26,6 +26,7 @@
 #include <std/span>
 #include <vector>
 #include <std/filesystem>
+#include <complex>
 
 #include "six/Types.h"
 #include "six/Region.h"
@@ -42,12 +43,10 @@ typedef std::vector<io::InputStream*> SourceList;
 
 //!  A vector of Buffer objects (one per SICD, N per SIDD)
 typedef std::vector<const UByte*> BufferList;
-using buffer_list = std::vector<std::span<const std::byte>>;
 
 //!  Same as above but used in overloadings to help the compiler out when
 //   it's convenient for the caller to put non-const pointers in the vector
 typedef std::vector<UByte*> NonConstBufferList;
-using buffer_list_mutable = std::vector<std::span<std::byte>>;
 
 /*!
  *  \class WriteControl
@@ -127,24 +126,12 @@ struct WriteControl
      *  \param toFile file name to write out
      *  \param schemaPaths Directories or files of schema locations
      */
-    template<typename TBufferList>
-    void save(const TBufferList& sources, const std::string& toFile)
+    void save(const BufferList& sources, const std::string& toFile)
     {
         save(sources, toFile, std::vector<std::string>());
     }
-
     virtual void save(const BufferList& sources, const std::string& toFile,
                       const std::vector<std::string>& schemaPaths) = 0;
-    virtual void save(const buffer_list& sources, const std::filesystem::path& toFile,
-        const std::vector<std::filesystem::path>& schemaPaths); // = 0; but that would break existing code
-    void save(const buffer_list& sources, const std::string& toFile,
-        const std::vector<std::string>& schemaPaths_)
-    {
-        std::vector<std::filesystem::path> schemaPaths;
-        std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-            [](const std::string & s) { return s; });
-        save(sources, toFile, schemaPaths);
-    }
 
     // For convenience since the compiler can't implicitly convert
     // std::vector<T*> to std::vector<const T*>
@@ -152,18 +139,8 @@ struct WriteControl
     {
         save(convertBufferList(sources), toFile);
     }
-    void save(const buffer_list_mutable& sources, const std::string& toFile)
-    {
-        save(convertBufferList(sources), toFile);
-    }
 
     void save(const NonConstBufferList& sources,
-              const std::string& toFile,
-              const std::vector<std::string>& schemaPaths)
-    {
-        save(convertBufferList(sources), toFile, schemaPaths);
-    }
-    void save(const buffer_list_mutable& sources,
               const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
     {
@@ -283,15 +260,6 @@ struct WriteControl
         return mXMLRegistry;
     }
 
-    buffer_list convertBufferList(const buffer_list_mutable& buffers)
-    {
-        buffer_list retval;
-        for (const auto& buffer : buffers)
-        {
-            retval.push_back(six::as_bytes(buffer));
-        }
-        return retval;
-    }
     BufferList convertBufferList(const NonConstBufferList& buffers)
     {
         BufferList retval;
