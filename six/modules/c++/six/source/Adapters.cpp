@@ -301,6 +301,13 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::complex<short>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
+    // Each pixel is stored as a pair of numbers that represent the real and imaginary 
+    // components. Each component is stored in a 16-bit signed integer in 2’s 
+    // complement format (2 bytes per component, 4 bytes per pixel). 
+    if (data.getPixelType() != six::PixelType::RE16I_IM16I)
+    {
+        throw std::invalid_argument("pixelType is wrong.");
+    }   
     validate_buffer(buffer, info, data);
 }
 template<>
@@ -308,6 +315,17 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const uint8_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
+    const auto pixelType = data.getPixelType();
+    switch (data.getPixelType())
+    {
+    case six::PixelType::MONO8I:
+    case six::PixelType::MONO8LU:
+    case six::PixelType::RGB8LU:
+    case six::PixelType::RGB24I: // three 8-bit pixels = 24
+        break;
+    default:
+        throw std::invalid_argument("pixelType is wrong.");
+    }
     validate_buffer(buffer, info, data);
 }
 template<>
@@ -315,6 +333,10 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const uint16_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
+    if (data.getPixelType() != six::PixelType::MONO16I)
+    {
+        throw std::invalid_argument("pixelType is wrong.");
+    }
     validate_buffer(buffer, info, data);
 }
 
