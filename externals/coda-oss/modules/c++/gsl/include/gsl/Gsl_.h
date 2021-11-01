@@ -34,6 +34,12 @@
 #include "gsl/use_gsl.h" // Can't compile all of GSL with older versions of GCC/MSVC
 #include "gsl/gsl_span_.h"
 
+#if defined(__INTEL_COMPILER) // ICC, high-side
+// Don't have access to Intel compiler on the low-side so just turn this off
+// completely ... far too much hassle trying to get push/pop/etc. right
+#pragma warning(disable: 3377) // "constexpr function return is non-constant"
+#endif
+
 namespace Gsl
 {
     // narrow_cast(): a searchable way to do narrowing casts of values
