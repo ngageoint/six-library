@@ -231,7 +231,7 @@ static int main_(int argc, char** argv)
             {
                 reader.load(inputPathname, schemaPaths);
                 auto container = reader.getContainer();
-                for (size_t jj = 0; jj < container->getNumData(); ++jj)
+                for (size_t jj = 0; jj < container->size(); ++jj)
                 {
                     data.reset(container->getData(jj)->clone());
                     allValid = allValid && runValidation(data, log);

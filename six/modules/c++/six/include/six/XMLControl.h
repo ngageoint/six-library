@@ -28,10 +28,12 @@
 #include <xml/lite/Document.h>
 #include <xml/lite/Validator.h>
 
-#include <six/Data.h>
+#include "six/Types.h"
 
 namespace six
 {
+    struct Data; // forward
+
 /*!
  *  \class XMLControl
  *  \brief Base class for reading and writing a Data object

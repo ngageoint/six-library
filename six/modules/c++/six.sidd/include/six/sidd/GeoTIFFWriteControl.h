@@ -95,6 +95,11 @@ public:
     std::string getFileType() const override { return "GeoTIFF"; }
 
 private:
+    template<typename TBufferList>
+    void save(const TBufferList& sources,
+        const std::string& toFile,
+        const std::vector<std::string>& schemaPaths);
+
     static
     void addCharArray(tiff::IFD* ifd,
                       const std::string &tag,

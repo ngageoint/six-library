@@ -42,10 +42,15 @@
 #include <six/XMLControlFactory.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/NITFReadComplexXMLControl.h>
+#include <six/sicd/KDTree.h>
 #include <six/sicd/Utilities.h>
 
 #include "../tests/TestUtilities.h"
 #include "TestCase.h"
+
+#if _MSC_VER
+#pragma warning(disable: 4459) //  declaration of '...' hides global declaration
+#endif
 
 namespace fs = std::filesystem;
 using AMP8I_PHS8I_t = six::sicd::ImageData::AMP8I_PHS8I_t;
@@ -136,7 +141,7 @@ static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXM
 {
     auto container = reader.getContainer();
     TEST_ASSERT_EQ(six::DataType::COMPLEX, container->getDataType());
-    TEST_ASSERT_EQ(1, container->getNumData());
+    TEST_ASSERT_EQ(1, container->size());
     return container;
 }
 
@@ -260,13 +265,13 @@ TEST_CASE(test_8bit_ampphs)
     {
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
-            auto expected = from_AMP8I_PHS8I(input_amplitude, input_value);
+            auto expected = from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value));
 
-            AMP8I_PHS8I_t input(input_amplitude, input_value);
+            AMP8I_PHS8I_t input(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value));
             const auto actual = imageData.from_AMP8I_PHS8I(input);
             TEST_ASSERT_EQ(expected, actual);
 
-            const auto actual_utilities = six::sicd::Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, nullptr);
+            const auto actual_utilities = six::sicd::Utilities::from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value), nullptr);
             TEST_ASSERT_EQ(expected, actual_utilities);
             TEST_ASSERT_EQ(actual_utilities, actual);
 
@@ -400,6 +405,19 @@ template<> std::vector<std::byte> readFromNITF<AMP8I_PHS8I_t>(const fs::path& in
 {
     return readFromNITF_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(AMP8I_PHS8I_t));
 }
+static std::vector<std::byte> readFromNITF(const fs::path& inputPathname, six::PixelType pixelType)
+{
+    if (pixelType == six::PixelType::RE32F_IM32F)
+    {
+        return readFromNITF<std::complex<float>>(inputPathname);
+    }
+    if (pixelType == six::PixelType::AMP8I_PHS8I)
+    {
+        return readFromNITF<AMP8I_PHS8I_t>(inputPathname);
+    }
+    throw std::invalid_argument("Unknown pixelType");
+}
+
 TEST_CASE(sicd_readFromNITF)
 {
     auto inputPathname = getNitfPath("sicd_50x50.nitf");
@@ -416,21 +434,21 @@ TEST_CASE(sicd_readFromNITF)
     buffer = readFromNITF<AMP8I_PHS8I_t>(inputPathname);
 }
 
-static std::vector<std::complex<float>> readSicd_(const fs::path& sicdPathname,
+static six::sicd::ComplexImageResult readSicd_(const fs::path& sicdPathname,
     six::PixelType expectedPixelType, size_t expectedNumBytesPerPixel)
 {
     auto result = six::sicd::Utilities::readSicd(sicdPathname);
     test_assert(*(result.pComplexData), expectedPixelType, expectedNumBytesPerPixel);
-    return result.widebandData;
+    return result;
 }
 template<typename T> std::vector<std::complex<float>> readSicd(const fs::path& inputPathname);
 template<> std::vector<std::complex<float>> readSicd<std::complex<float>>(const fs::path& inputPathname)
 {
-    return readSicd_(inputPathname, six::PixelType::RE32F_IM32F, sizeof(std::complex<float>));
+    return readSicd_(inputPathname, six::PixelType::RE32F_IM32F, sizeof(std::complex<float>)).widebandData;
 }
 template<> std::vector<std::complex<float>> readSicd<AMP8I_PHS8I_t>(const fs::path& inputPathname)
 {
-    return readSicd_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(AMP8I_PHS8I_t));
+    return readSicd_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(AMP8I_PHS8I_t)).widebandData;
 }
 TEST_CASE(test_readSicd)
 {
@@ -456,7 +474,7 @@ static std::vector<std::complex<float>> make_complex_image(const types::RowCol<s
     {
         for (size_t c = 0; c < dims.col; c++)
         {
-            image.push_back(std::complex<float>(r, c * -1.0));
+            image.push_back(std::complex<float>(r * 1.0f, c * -1.0f));
         }
     }
     return image;
@@ -466,8 +484,7 @@ template<typename TImage>
 static void adjust_image(TImage& image)
 {
     // Make it easier to know what we're looking at when examining a binary dump of the SICD
-    void* image_data = image.data();
-    std::span<std::byte> pImageBytes(static_cast<std::byte*>(image_data), image.size() * sizeof(image[0]));
+    const auto pImageBytes = six::as_bytes(image);
 
     pImageBytes[0] = static_cast<std::byte>('[');
     for (size_t i = 1; i < pImageBytes.size() - 1; i++)
@@ -515,9 +532,7 @@ static void test_assert_eq(std::span<const std::byte> bytes, const std::vector<T
     const auto rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
     TEST_ASSERT_EQ(bytes.size(), rawDataSizeInBytes);
 
-    const void* pRawData_ = rawData.data();
-    auto pRawData = static_cast<const std::byte*>(pRawData_);
-    std::span<const std::byte> rawDataBytes(pRawData, rawDataSizeInBytes);
+    const auto rawDataBytes = six::as_bytes(rawData);
     TEST_ASSERT_EQ(bytes.size(), rawDataBytes.size());
     for (size_t i = 0; i < bytes.size(); i++)
     {
@@ -531,7 +546,7 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::s
 {
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
 
-    const auto bytes = readFromNITF_(path, pixelType, expectedNumBytesPerPixel);
+    const auto bytes = readFromNITF(path, pixelType);
     test_assert_eq(expectedBytes, bytes);
 
     six::sicd::NITFReadComplexXMLControl reader;
@@ -560,30 +575,59 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::s
         test_assert_eq(expectedBytes, rawData);
     }
 }
+
+static std::vector<std::byte> to_bytes(const six::sicd::ComplexImageResult& result)
+{
+    const auto& image = result.widebandData;
+    const auto bytes = six::as_bytes(image);
+
+    std::vector<std::byte> retval;
+    const auto& data = *(result.pComplexData);
+    if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
+    {
+        retval.resize(image.size() * data.getNumBytesPerPixel());
+        std::span<std::byte> pRetval(retval.data(), retval.size());
+        data.convertPixels(bytes, pRetval);
+    }
+    else
+    {
+        auto pBytes = bytes.data();
+        retval.insert(retval.begin(), pBytes, pBytes + bytes.size());
+    }
+
+    return retval;
+}
+
 static void read_nitf(const fs::path& path, six::PixelType pixelType, const std::vector<std::complex<float>>& image)
 {
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
-    const auto widebandData = readSicd_(path, pixelType, expectedNumBytesPerPixel);
-    TEST_ASSERT(widebandData == image);
+    const auto result = readSicd_(path, pixelType, expectedNumBytesPerPixel);
+    TEST_ASSERT(result.widebandData == image);
 
-    const void* pImage = image.data();
-    std::span<const std::byte> bytes(static_cast<const std::byte*>(pImage), image.size() * sizeof(image[0]));
+    const auto bytes = to_bytes(result);
     read_raw_data(path, pixelType, bytes);
+}
+
+void buffer_list_save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
+    std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
+{
+    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+    six::NITFWriteControl writer(std::move(pComplexData));
+
+    static const std::vector<std::string> schemaPaths;
+    writer.save(image.data(), outputName.string(), schemaPaths); // API for Python; it uses six::BufferList
 }
 
 void save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
-    static const std::vector<fs::path> schemaPaths;
-    //six::sicd::writeAsNITF(outputName, schemaPaths, *pComplexData, image.data());
-    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
-    auto container = std::make_shared<six::Container>(std::move(pComplexData));
-    const six::Options writerOptions;
-    six::NITFWriteControl writer(writerOptions, container);
-    writer.save(image, outputName, schemaPaths);
+    static const std::vector<fs::path> fs_schemaPaths;
+    six::sicd::writeAsNITF(outputName, fs_schemaPaths, *pComplexData, image);
 }
 
-static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable=false)
+template<typename TSave>
+static void test_create_sicd_from_mem_(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable,
+    TSave save)
 {
     const types::RowCol<size_t> dims(2, 2);
 
@@ -598,17 +642,83 @@ static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType
     save(outputName, image, std::move(pComplexData));
     read_nitf(outputName, pixelType, image);
 }
+static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable = false)
+{
+    test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, save);
+    test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, buffer_list_save);
+}
 
 TEST_CASE(test_create_sicds_from_mem)
 {
     setNitfPluginPath();
 
     test_create_sicd_from_mem("test_create_sicd_from_mem_32f.sicd", six::PixelType::RE32F_IM32F);
-    //test_create_sicd_from_mem("test_create_sicd_from_mem_8i_amp.sicd", six::PixelType::AMP8I_PHS8I, true /*makeAmplitudeTable*/);
-    //test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
+    test_create_sicd_from_mem("test_create_sicd_from_mem_8i_amp.sicd", six::PixelType::AMP8I_PHS8I, true /*makeAmplitudeTable*/);
+    test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
 
-TEST_MAIN((void)argc;
+inline std::ostream& operator<<(std::ostream& os, const six::sicd::ImageData::AMP8I_PHS8I_t& p)
+{
+    os << p.first << p.second;
+    return os;
+}
+template<typename TNearestNeighbor>
+static void test_near_point(const std::complex<float>& p, const six::sicd::ImageData::AMP8I_PHS8I_t& expected,
+    TNearestNeighbor nearest_neighbor_f)
+{
+    auto actual = nearest_neighbor_f(p);
+    TEST_ASSERT_EQ(expected, actual);
+
+    actual = nearest_neighbor_f(p + std::complex<float>(0.0f, 0.0f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p + std::complex<float>(0.1f, 0.0f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p + std::complex<float>(0.0f, 0.1f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p + std::complex<float>(0.1f, 0.1f));
+    TEST_ASSERT_EQ(expected, actual);
+
+    actual = nearest_neighbor_f(p - std::complex<float>(0.0f, 0.0f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p - std::complex<float>(0.1f, 0.0f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p - std::complex<float>(0.0f, 0.1f));
+    TEST_ASSERT_EQ(expected, actual);
+    actual = nearest_neighbor_f(p - std::complex<float>(0.1f, 0.1f));
+    TEST_ASSERT_EQ(expected, actual);
+}
+
+TEST_CASE(test_KDTree)
+{
+    using KDNode = six::sicd::ImageData::KDNode;
+
+    const KDNode node0{ {0.0, 0.0}, {static_cast<uint8_t>(0), static_cast<uint8_t>(0)} };
+    const KDNode node1{ {1.0, 1.0},  {static_cast<uint8_t>(1), static_cast<uint8_t>(1)} };
+    const KDNode node2{ {1.0, -1.0},  {static_cast<uint8_t>(2), static_cast<uint8_t>(2)} };
+    const KDNode node3{ {-1.0, 1.0},  {static_cast<uint8_t>(3), static_cast<uint8_t>(3)} };
+    const KDNode node4{ {-1.0, -1.0},  {static_cast<uint8_t>(4), static_cast<uint8_t>(4)} };
+
+    std::vector<KDNode> nodes{ node0, node1, node2, node3, node4 };
+    const six::sicd::KDTree tree(std::move(nodes));
+    const auto nearest_neighbor_f = [&tree](const std::complex<float>& v)
+    {
+        auto result = tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v });
+        return result.amp_and_value;
+    };
+
+    test_near_point(node0.result, node0.amp_and_value, nearest_neighbor_f);
+    test_near_point(node1.result, node1.amp_and_value, nearest_neighbor_f);
+    test_near_point(node2.result, node2.amp_and_value, nearest_neighbor_f);
+    test_near_point(node3.result, node3.amp_and_value, nearest_neighbor_f);
+    test_near_point(node4.result, node4.amp_and_value, nearest_neighbor_f);
+
+    test_near_point({ 100.0f, 100.0f }, node1.amp_and_value, nearest_neighbor_f); // closest to {1.0, 1.0}
+    test_near_point({ 100.0f, -100.0f }, node2.amp_and_value, nearest_neighbor_f); // closest to {1.0, -1.0}
+    test_near_point({ -100.0f, 100.0f }, node3.amp_and_value, nearest_neighbor_f); // closest to {-1.0, 1.0}
+    test_near_point({ -100.0f, -100.0f }, node4.amp_and_value, nearest_neighbor_f); // closest to {-1.0, -1.0}
+}
+
+TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(valid_six_50x50);
     TEST_CHECK(test_8bit_ampphs);
     TEST_CHECK(read_8bit_ampphs_with_table);
@@ -616,5 +726,6 @@ TEST_MAIN((void)argc;
     TEST_CHECK(sicd_readFromNITF);
     TEST_CHECK(test_readSicd);
     TEST_CHECK(test_create_sicds_from_mem);
+    TEST_CHECK(test_KDTree);
     )
 

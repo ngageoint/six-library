@@ -354,6 +354,21 @@ six::AmplitudeTable* six::sicd::ComplexData::getAmplitudeTable() const
     return retval;
 }
 
+inline const void* cast_to_pvoid(std::span<const std::byte> bytes)
+{
+    return bytes.data();
+}
+inline void* cast_to_pvoid(std::span<std::byte> bytes)
+{
+    return bytes.data();
+}
+template<typename T, typename U>
+inline std::span<T> make_span(std::span<U> bytes)
+{
+    const auto size = bytes.size() / sizeof(T);
+    return std::span<T>(static_cast<T*>(cast_to_pvoid(bytes)), size);
+}
+
 bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, std::span<std::byte> to_) const
 {
     if (getPixelType() != PixelType::AMP8I_PHS8I)
@@ -361,10 +376,8 @@ bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, st
         return false; // no conversion done as there is nothing to convert
     }
 
-    const void* const pFrom = from_.data();
-    const std::span<const six::sicd::ImageData::cx_float> from(static_cast<const six::sicd::ImageData::cx_float*>(pFrom), from_.size());
-    void* const pTo = to_.data();
-    const std::span<six::sicd::ImageData::AMP8I_PHS8I_t> to(static_cast<six::sicd::ImageData::AMP8I_PHS8I_t*>(pTo), to_.size());
+    const auto from = make_span<const six::sicd::ImageData::cx_float>(from_);
+    const auto to = make_span<six::sicd::ImageData::AMP8I_PHS8I_t>(to_);
     imageData->to_AMP8I_PHS8I(from, to);
     return true; // converted
 }

@@ -20,9 +20,12 @@
  *
  */
 
-#include <cmath>
+#include <stdint.h>
 
+#include <cmath>
 #include <std/filesystem>
+#include <vector>
+#include <std/span>
 
 #include <import/six.h>
 #include <import/cli.h>
@@ -69,22 +72,23 @@ struct Buffers final
 {
     std::byte* add(size_t numBytes)
     {
-        mBuffers.push_back(std::unique_ptr<std::byte[]>(new std::byte[numBytes]));
-        return mBuffers.back().get();
+        mBuffers.push_back(std::vector<std::byte>(numBytes));
+        return mBuffers.back().data();
     }
 
-    std::vector<std::byte*> get() const
+    six::BufferList get()
     {
-        std::vector<std::byte*> retval;
+        six::BufferList retval;
         for (auto& buffer : mBuffers)
         {
-            retval.push_back(buffer.get());
+            const void* pBuffer = buffer.data();
+            retval.push_back(static_cast<const six::UByte*>(pBuffer));
         }
         return retval;
     }
 
 private:
-    std::vector<std::unique_ptr<std::byte[]>> mBuffers;
+    std::vector<std::vector<std::byte>> mBuffers;
 };
 
 // We've stored the complex<short> in the second half of the buffer
@@ -289,20 +293,20 @@ int main(int argc, char** argv)
         if (!retainDateTime)
         {
             const six::DateTime now;
-            for (size_t ii = 0; ii < container->getNumData(); ++ii)
+            for (size_t ii = 0; ii < container->size(); ++ii)
             {
                 container->getData(ii)->setCreationTime(now);
             }
         }
 
-        // For SICD, there's only one image (container->getNumData() == 1)
+        // For SICD, there's only one image (container->size() == 1)
         // For SIDD, there may be more than one image, but there may also be
         // DES's with SICD XML in them.  So here we want to read every image
         // that's present.
         six::Region region;
 
         Buffers buffers;
-        for (size_t ii = 0, imageNum = 0; ii < container->getNumData(); ++ii)
+        for (size_t ii = 0, imageNum = 0; ii < container->size(); ++ii)
         {
             six::Data* const data = container->getData(ii);
 
@@ -329,8 +333,7 @@ int main(int argc, char** argv)
                     numBytesPerPixel *= 2;
                 }
 
-                std::byte* buffer =
-                        buffers.add(numPixels * numBytesPerPixel);
+                auto buffer = buffers.add(numPixels * numBytesPerPixel);
 
                 setDims(region, extent);
                 region.setBuffer(buffer + offset);

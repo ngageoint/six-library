@@ -25,6 +25,8 @@
 
 #include <string.h>
 #include <string>
+#include <std/span>
+#include <std/cstddef>
 
 #include "nitf/BandSource.h"
 #include "nitf/RowSource.h"
@@ -70,9 +72,12 @@ struct NITRO_NITFCPP_API MemorySource : public BandSource
     MemorySource(const void* data, size_t size, nitf::Off start,
             int numBytesPerPixel, int pixelSkip);
 
+    MemorySource(std::span<const std::byte> span, nitf::Off start, int numBytesPerPixel, int pixelSkip)
+        : MemorySource(span.data(), span.size(), start, numBytesPerPixel, pixelSkip) {}
+
     template<typename TSpanLike>
     MemorySource(const TSpanLike& span, nitf::Off start, int pixelSkip)
-        : MemorySource(span.data(), span.size(), start, sizeof(span[0]), pixelSkip) {}
+        : MemorySource(span.data(), span.size() * sizeof(span[0]), start, sizeof(span[0]), pixelSkip) {}
 };
 
 /*!

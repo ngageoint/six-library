@@ -177,6 +177,12 @@ public:
         void* buffer_ = buffer;
         mBuffer = static_cast<UByte*>(buffer_);
     }
+    void setComplexBuffer(std::complex<float>* buffer) noexcept
+    {
+        assert(buffer != nullptr);
+        void* buffer_ = buffer;
+        mBuffer = static_cast<UByte*>(buffer_);
+    }
 
     /*!
      *  Create a buffer of the given size, call setBuffer() and return the buffer.
@@ -187,6 +193,14 @@ public:
 
         auto retval = std::make_unique<UByte[]>(size);
         setBuffer(retval.get());
+        return retval;
+    }
+    std::unique_ptr<std::complex<float>[]> setComplexBuffer(size_t size)
+    {
+        assert(getBuffer() == nullptr);
+
+        auto retval = std::make_unique<std::complex<float>[]>(size);
+        setComplexBuffer(retval.get());
         return retval;
     }
 };

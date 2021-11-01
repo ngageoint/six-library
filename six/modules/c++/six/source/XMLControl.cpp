@@ -26,6 +26,7 @@
 #include <six/XMLControl.h>
 #include <six/Utilities.h>
 #include <six/Types.h>
+#include <six/Data.h>
 
 namespace fs = std::filesystem;
 

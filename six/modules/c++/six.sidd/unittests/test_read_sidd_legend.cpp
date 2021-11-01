@@ -204,7 +204,7 @@ struct TestHelper
         mem::SharedPtr<six::Container> container(new six::Container(
                 six::DataType::DERIVED));
 
-        std::vector<six::UByte*> buffers;
+        six::NonConstBufferList buffers;
 
         // First a single segment without a legend
         types::RowCol<size_t> dims1(40, numCols);
@@ -276,8 +276,8 @@ TEST_CASE(testRead)
     reader.load(testHelper.mPathname);
     const auto container = reader.getContainer();
 
-    TEST_ASSERT_EQ(container->getNumData(), 4);
-    for (size_t ii = 0; ii < container->getNumData(); ++ii)
+    TEST_ASSERT_EQ(container->size(), 4);
+    for (size_t ii = 0; ii < container->size(); ++ii)
     {
         TEST_ASSERT_NOT_EQ(container->getData(ii), nullptr);
     }
