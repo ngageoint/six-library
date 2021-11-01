@@ -28,10 +28,13 @@
 static_assert(CODA_OSS_sys_Endian >= 201907L, "missing sys::Endian");
 
 #include "sys/CPlusPlus.h"
-#if CODA_OSS_cpp20
-    #include <bit>
-    #undef CODA_OSS_NO_std_endian
-    #define CODA_OSS_NO_std_endian 1  // don't need our own
+#if CODA_OSS_cpp17
+    // Some C++17 implementations have <bit>
+    #if __has_include(<bit>) // __has_include is C++17
+        #include <bit>
+        #undef CODA_OSS_NO_std_endian
+        #define CODA_OSS_NO_std_endian 1  // don't need our own
+    #endif
 #endif
 
 #ifndef CODA_OSS_NO_std_endian
