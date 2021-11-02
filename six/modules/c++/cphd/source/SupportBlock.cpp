@@ -33,6 +33,7 @@
 #include <six/Init.h>
 
 #include <cphd/ByteSwap.h>
+#include <cphd/FileHeader.h>
 
 namespace cphd
 {
@@ -56,6 +57,13 @@ SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
     mData(data),
     mSupportOffset(startSupport),
     mSupportSize(sizeSupport)
+{
+    initialize();
+}
+SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
+    const cphd::Data& data, const cphd::FileHeader& fileHeader):
+    SupportBlock(inStream, data,
+        fileHeader.getSupportBlockByteOffset(), fileHeader.getSupportBlockSize())
 {
     initialize();
 }

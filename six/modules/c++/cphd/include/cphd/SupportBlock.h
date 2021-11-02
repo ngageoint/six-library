@@ -41,6 +41,8 @@
 
 namespace cphd
 {
+    class FileHeader;
+
 
 /*
  *  \struct SupportBlock
@@ -48,9 +50,8 @@ namespace cphd
  *  \brief This class contains information about the SupportBlock CPHD data.
  */
 //  Provides methods to read support block data from CPHD file/stream
-class SupportBlock
+struct SupportBlock final
 {
-public:
     /*
      *  \func SupportBlock
      *
@@ -80,6 +81,8 @@ public:
                  const cphd::Data& data,
                  int64_t startSupport,
                  int64_t sizeSupport);
+    SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
+        const cphd::Data& data, const FileHeader&);
 
     // Noncopyable
     SupportBlock(const SupportBlock&) = delete;

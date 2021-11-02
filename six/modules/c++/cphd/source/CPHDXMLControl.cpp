@@ -23,6 +23,8 @@
 
 #include <set>
 #include <unordered_map>
+#include <algorithm>
+
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <xml/lite/MinidomParser.h>
@@ -143,6 +145,14 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc
     std::unique_ptr<Metadata> metadata = fromXMLImpl(doc);
     metadata->setVersion(uriToVersion(doc->getRootElement()->getUri()));
     return metadata;
+}
+Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc, const std::vector<std::filesystem::path>& schemaPaths)
+{
+    std::vector<std::string> schemaPaths_;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
+        [](const std::filesystem::path& p) { return p.string(); });
+    auto result = fromXML(&doc, schemaPaths_);
+    return *(result.release());
 }
 
 std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document* doc)

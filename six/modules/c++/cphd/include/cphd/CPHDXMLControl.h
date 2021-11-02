@@ -22,9 +22,12 @@
 
 #ifndef __CPHD_CPHD_XML_CONTROL_H__
 #define __CPHD_CPHD_XML_CONTROL_H__
+#pragma once
 
 #include <memory>
 #include <unordered_map>
+#include <std/filesystem>
+#include <vector>
 
 #include <scene/sys_Conf.h>
 #include <logging/Logger.h>
@@ -117,6 +120,9 @@ public:
     virtual std::unique_ptr<Metadata> fromXML(
             const xml::lite::Document* doc,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
+    virtual Metadata fromXML(const xml::lite::Document& doc,
+        const std::vector<std::filesystem::path>& schemaPaths = std::vector<std::filesystem::path>());
+
 
 protected:
     logging::Logger *mLog;

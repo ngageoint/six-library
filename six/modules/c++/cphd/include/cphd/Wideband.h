@@ -40,15 +40,16 @@
 
 namespace cphd
 {
+    class FileHeader;
+
 /*
  * \class Wideband
  * \brief Information about the wideband CPHD data
  */
 //  It contains the cphd::Data structure (for channel and vector sizes).
 //  Provides methods read wideband data from CPHD file/stream
-class Wideband
+struct Wideband final
 {
-public:
     static const size_t ALL;
 
     /*!
@@ -80,6 +81,9 @@ public:
              const cphd::MetadataBase& metadata,
              int64_t startWB,
              int64_t sizeWB);
+    Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
+        const cphd::MetadataBase& metadata,
+        const cphd::FileHeader&);
 
     /*!
      *  \func getFileOffset

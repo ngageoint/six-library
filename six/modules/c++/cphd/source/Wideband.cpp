@@ -34,6 +34,7 @@
 #include <six/Init.h>
 #include <cphd/ByteSwap.h>
 #include <cphd/Wideband.h>
+#include <cphd/FileHeader.h>
 
 #undef min
 #undef max
@@ -267,6 +268,12 @@ Wideband::Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
     mOffsets(mMetadata.getNumChannels())
 {
     initialize();
+}
+Wideband::Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
+    const cphd::MetadataBase& metadata, const cphd::FileHeader& fileHeader) :
+    Wideband(inStream, metadata, fileHeader.getSignalBlockByteOffset(),
+        fileHeader.getSignalBlockSize())
+{
 }
 
 void Wideband::initialize()
