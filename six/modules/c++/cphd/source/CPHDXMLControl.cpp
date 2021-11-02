@@ -24,6 +24,7 @@
 #include <set>
 #include <unordered_map>
 #include <algorithm>
+#include <std/memory>
 
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
@@ -163,9 +164,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document*
 std::unique_ptr<CPHDXMLParser>
 CPHDXMLControl::getParser(const std::string& uri) const
 {
-    std::unique_ptr<CPHDXMLParser> parser;
-    parser.reset(new CPHDXMLParser(uri, false, mLog));
-    return parser;
+    return std::make_unique<CPHDXMLParser>(uri, false, mLog);
 }
 
 std::string CPHDXMLControl::uriToVersion(const std::string& uri) const
