@@ -32,14 +32,14 @@
 
 namespace
 {
-std::string normalizeVersion(const std::string& version)
+std::string normalizeVersion(const std::string& strVersion)
 {
     std::vector<std::string> versionParts;
-    six::XMLControl::splitVersion(version, versionParts);
+    six::XMLControl::splitVersion(strVersion, versionParts);
     if (versionParts.size() != 3)
     {
         throw except::Exception(
-            Ctxt("Unsupported SIDD Version: " + version));
+            Ctxt("Unsupported SIDD Version: " + strVersion));
     }
 
     #if _MSC_VER
