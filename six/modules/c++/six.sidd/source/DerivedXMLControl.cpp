@@ -110,7 +110,14 @@ DerivedXMLControl::getParser(const std::string& strVersion) const
         ));
     }
 
-    throw except::Exception(Ctxt("Unsupported SIDD Version: " + version));
+    throw except::Exception(Ctxt("Unsupported SIDD Version: " + strVersion));
 }
+
+std::unique_ptr<DerivedXMLParser> DerivedXMLControl::getParser_(const std::string& strVersion)
+{
+    return DerivedXMLControl().getParser(strVersion);
+}
+
+
 }
 }

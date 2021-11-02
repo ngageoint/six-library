@@ -315,8 +315,34 @@ TEST_CASE(testRead)
     TEST_ASSERT_NOT_EQ(legend->mLUT.get(), nullptr);
     TEST_ASSERT(*legend->mLUT == *testHelper.mRgbLegend.mLUT);
 }
+
+TEST_CASE(test_getParser)
+{
+    auto pParser = six::sidd::DerivedXMLControl::getParser_("1.0.0");
+    TEST_ASSERT(pParser.get() != nullptr);
+
+    pParser = six::sidd::DerivedXMLControl::getParser_("2.0.0");
+    TEST_ASSERT(pParser.get() != nullptr);
+
+    pParser = six::sidd::DerivedXMLControl::getParser_("3.0.0");
+    TEST_ASSERT(pParser.get() != nullptr);
+    
+    TEST_EXCEPTION(six::sidd::DerivedXMLControl::getParser_("1.1.0"));
+
+    try
+    {
+        pParser = six::sidd::DerivedXMLControl::getParser_("1.2.3");
+        TEST_ASSERT_FALSE(true); // should never get here
+    }
+    catch (const except::Exception& ex)
+    {
+        TEST_ASSERT_EQ(ex.getMessage(), "Unsupported SIDD Version: 1.2.3");
+    }
+}
+
 }
 
 TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(testRead);
-)
+    TEST_CHECK(test_getParser);
+    )

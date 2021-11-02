@@ -46,6 +46,8 @@ struct DerivedXMLControl : public XMLControl
 
     static const six::DataType dataType;
 
+    static std::unique_ptr<DerivedXMLParser> getParser_(const std::string& strVersion); // for unit-testing
+
 protected:
     /*!
      *  Returns a new allocated DOM document, created from the DerivedData*
@@ -59,7 +61,7 @@ protected:
 
 private:
     std::unique_ptr<DerivedXMLParser>
-    getParser(const std::string& version) const;
+    getParser(const std::string& strVersion) const;
 };
 }
 }
