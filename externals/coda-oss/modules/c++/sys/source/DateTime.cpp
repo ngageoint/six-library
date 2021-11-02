@@ -19,20 +19,24 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "sys/DateTime.h"
+
+#include <ctype.h>
+#include <errno.h>
+
+#include <vector>
+#include <mutex>
+#include <stdexcept>
 
 #include <config/coda_oss_config.h>
-
 #include "except/Exception.h"
-#include "sys/DateTime.h"
 #include "sys/Conf.h"
 #include "str/Convert.h"
 #include "str/Manip.h"
-#include <vector>
-#include <ctype.h>
 
-#if defined(HAVE_SYS_TIME_H)
+#if CODA_OSS_POSIX_SOURCE
 #include <sys/time.h>
-#elif defined(_WIN32)
+#elif _WIN32
 #include <windows.h>
 #endif
 
@@ -379,17 +383,20 @@ double sys::DateTime::toMillis(tm t) const
     return (timeInSeconds + timediff) * 1000;
 }
 
-void sys::DateTime::setNow()
+static double getNowInMillis()
 {
-#ifdef HAVE_CLOCK_GETTIME
+    // https://linux.die.net/man/2/gettimeofday
+    // "SVr4, 4.3BSD. POSIX.1-2001 describes gettimeofday() ... POSIX.1-2008 marks
+    // gettimeofday() as obsolete, recommending the use of clock_gettime(2) instead."
+#if CODA_OSS_POSIX2008_SOURCE
     struct timespec now;
     clock_gettime(CLOCK_REALTIME,&now);
-    mTimeInMillis = (now.tv_sec + 1.0e-9 * now.tv_nsec) * 1000;
-#elif defined(HAVE_SYS_TIME_H)
+    return (now.tv_sec + 1.0e-9 * now.tv_nsec) * 1000;
+#elif CODA_OSS_POSIX_SOURCE
     struct timeval now;
     gettimeofday(&now,NULL);
-    mTimeInMillis = (now.tv_sec + 1.0e-6 * now.tv_usec) * 1000;
-#elif defined(_WIN32)
+    return (now.tv_sec + 1.0e-6 * now.tv_usec) * 1000;
+#elif _WIN32
     // Getting time twice may be inefficient but is quicker
     // than converting the SYSTEMTIME structure into
     // milliseconds
@@ -397,10 +404,14 @@ void sys::DateTime::setNow()
     // does not need millisecond accuracy
     SYSTEMTIME now;
     GetLocalTime(&now);
-    mTimeInMillis = (double)time(NULL) * 1000 + now.wMilliseconds;
+    return (double)time(NULL) * 1000 + now.wMilliseconds;
 #else
-    mTimeInMillis = (double)time(NULL) * 1000;
+    return (double)time(NULL) * 1000;
 #endif
+}
+void sys::DateTime::setNow()
+{
+    mTimeInMillis = getNowInMillis();
     fromMillis();
 }
 
@@ -408,21 +419,6 @@ void sys::DateTime::getTime(tm& t) const
 {
     getTime(static_cast<time_t>(mTimeInMillis / 1000), t);
 }
-
-sys::DateTime::DateTime() :
-    mYear(0),
-    mMonth(0),
-    mDayOfMonth(0),
-    mDayOfWeek(0),
-    mDayOfYear(0),
-    mHour(0),
-    mMinute(0),
-    mSecond(0.0),
-    mTimeInMillis(0.0)
-{ }
-
-sys::DateTime::~DateTime()
-{}
 
 std::string sys::DateTime::monthToString(int month)
 {
@@ -600,4 +596,114 @@ std::string sys::DateTime::format(const std::string& formatStr) const
             "The format string was unable to be expanded");
 
     return std::string(str);
+}
+
+#if !CODA_OSS_POSIX_SOURCE &&  !_WIN32
+// Wrap localtime() and gmtime() to make them almost thread-safe.
+// For OSes that don't have their own (not Windows and not Linux).
+
+// https://en.cppreference.com/w/c/chrono/localtime
+// "The structure may be shared between gmtime, localtime, and ctime ... ."
+static std::mutex g_dateTimeMutex;
+template<typename F>
+static inline int time_s_(F f, tm* t, const time_t* numSecondsSinceEpoch)
+{
+    std::lock_guard<std::mutex> guard(g_dateTimeMutex);
+    const tm* const result = f(numSecondsSinceEpoch);
+    if (result == nullptr)
+    {
+        return errno;
+    }
+
+    *t = *result;
+    return 0; // no error
+}
+static inline int localtime_s_(tm* t, const time_t* numSecondsSinceEpoch)
+{
+    return time_s_(localtime, t, numSecondsSinceEpoch);
+}
+static inline int gmtime_s_(tm* t, const time_t* numSecondsSinceEpoch)
+{
+    return time_s_(gmtime, t, numSecondsSinceEpoch);
+}
+#endif // !(CODA_OSS_POSIX_SOURCE || _WIN32)
+
+void sys::DateTime::localtime(time_t numSecondsSinceEpoch, tm& t)
+{
+    // Would like to use the reentrant version.  If we don't have one, cross
+    // our fingers and hope the regular function actually is reentrant
+    // (supposedly this is the case on Windows).
+#if CODA_OSS_POSIX_SOURCE
+    if (::localtime_r(&numSecondsSinceEpoch, &t) == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("localtime_r() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+#elif _WIN32
+    const auto errnum = ::localtime_s(&t, &numSecondsSinceEpoch);
+    if (errnum != 0)
+    {
+        char buffer[1024];
+        strerror_s(buffer, errnum);
+        throw except::Exception(Ctxt("localtime_s() failed (" + std::string(buffer) + ")"));
+    }
+#else
+    const auto errnum = localtime_s_(&t, &numSecondsSinceEpoch);
+    if (errnum != 0)
+    {
+        throw except::Exception(Ctxt("localtime failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+#endif
+}
+
+void sys::DateTime::gmtime(time_t numSecondsSinceEpoch, tm& t)
+{
+    // Would like to use the reentrant version.  If we don't have one, cross
+    // our fingers and hope the regular function actually is reentrant
+    // (supposedly this is the case on Windows).
+#if CODA_OSS_POSIX_SOURCE
+    if (::gmtime_r(&numSecondsSinceEpoch, &t) == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("gmtime_r() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+#elif _WIN32
+    const auto errnum = ::gmtime_s(&t, &numSecondsSinceEpoch);
+    if (errnum != 0)
+    {
+        char buffer[1024];
+        strerror_s(buffer, errnum);
+        throw except::Exception(Ctxt("gmtime_s() failed (" + std::string(buffer) + ")"));
+    }
+#else
+    const auto errnum = gmtime_s_(&t, &numSecondsSinceEpoch);
+    if (errnum != 0)
+    {
+        throw except::Exception(Ctxt("gmtime failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+#endif
+}
+
+int64_t sys::DateTime::getEpochSeconds() noexcept
+{
+    // https://en.cppreference.com/w/cpp/chrono/c/time_t
+    // Although not defined, this is almost always an integral value holding the number of seconds (not counting leap seconds)
+    // since 00:00, Jan 1 1970 UTC, corresponding to POSIX time.
+    // https://en.cppreference.com/w/cpp/chrono/c/time
+    const time_t result = std::time(nullptr);
+    size_t sizeof_time_t = sizeof(time_t); // "conditional expression is constant"
+    if (sizeof_time_t == sizeof(int64_t))
+    {
+        return static_cast<int64_t>(result);
+    }
+    if (sizeof_time_t == sizeof(int32_t))
+    {
+        return static_cast<int32_t>(result);
+    }
+    static_assert(sizeof(time_t) >= sizeof(int32_t), "should have at least a 32-bit time_t");
+    return -1;
 }

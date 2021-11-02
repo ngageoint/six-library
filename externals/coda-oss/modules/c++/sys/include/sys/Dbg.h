@@ -3,6 +3,7 @@
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,8 +22,72 @@
  */
 
 
-#ifndef __DBG_H__
-#define __DBG_H__
+#ifndef CODA_OSS_sys_Dbg_h_INCLUDED_
+#define CODA_OSS_sys_Dbg_h_INCLUDED_
+#pragma once
+
+// A "debug" build has debugging symbols, detailed call stacks, minimal optimization, STL validation, etc.
+// A "release" build is likely to "run fast" and be "shipped;" it might lack much of what is in a "debug" build.
+#ifndef CODA_OSS_DEBUG
+    #if defined(_MSC_VER)
+        // https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160
+        #if defined(_DEBUG) && _DEBUG // "Defined as 1 ... . Otherwise, undefined."
+            #ifdef NDEBUG
+                #error "NDEBUG #define'd with _DEBUG"
+            #endif
+            #define CODA_OSS_DEBUG 1
+        #else
+            #define CODA_OSS_DEBUG 0
+        #endif
+    #endif // _MSC_VER
+
+    // GCC has a "neither" mode with no flags; no -O (optimization) and no -g (debugging);
+    // that doesn't seem very useful, so try to figure out something that makes sense.
+    #if defined(__GNUC__)
+        // https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html#Common-Predefined-Macros
+        // https://gcc.gnu.org/onlinedocs/libstdc++/manual/debug_mode_using.html#debug_mode.using.mode
+        #if __OPTIMIZE__ && __NO_INLINE__
+            #error "Both __OPTIMIZE__ and __NO_INLINE__"
+        #endif
+        #if __OPTIMIZE__ && defined(_GLIBCXX_DEBUG)
+            #error "Both __OPTIMIZE__ and _GLIBCXX_DEBUG"
+        #endif
+
+        #if defined(_GLIBCXX_DEBUG)
+            #ifdef NDEBUG
+                #error "NDEBUG #define''d with _GLIBCXX_DEBUG."
+            #endif
+            #define CODA_OSS_DEBUG 1
+        #elif __NO_INLINE__
+            #ifdef NDEBUG
+                #define CODA_OSS_DEBUG 0
+            #else
+                #define CODA_OSS_DEBUG 1
+           #endif
+        #elif __OPTIMIZE__
+            #ifndef NDEBUG
+                //#error "NDEBUG should be #define'd with __OPTIMIZE__"
+            #endif
+            #define CODA_OSS_DEBUG 0
+        #else
+            #error "Can't #define CODA_OSS_DEBUG for __GNUC__."
+        #endif
+    #endif // __GNUC__
+
+    // TODO: ... other compilers ...
+
+    #ifndef CODA_OSS_DEBUG
+        //#error "Can't #define CODA_OSS_DEBUG for this compiler."
+        #ifdef NDEBUG  // https://en.cppreference.com/w/c/error/assert
+            #define CODA_OSS_DEBUG 0  // NDEBUG = "No DEBUG"
+        #else
+            #define CODA_OSS_DEBUG 1
+        #endif  // NDEBUG
+    #endif  // CODA_OSS_DEBUG
+#endif // CODA_OSS_DEBUG
+#ifndef CODA_OSS_DEBUG
+    #error CODA_OSS_DEBUG is not set.
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,6 +99,23 @@
 #else
 #   include <cstdarg>
 #endif
+
+namespace sys
+{
+
+    // compile-time for Dbg.h
+    constexpr auto debug = CODA_OSS_DEBUG ? true : false;
+    constexpr auto release = !debug;
+
+    // build-time for Dbg.cpp; may (although shouldn't) be different than above.
+    // C++ says little about debug/release/optimize/etc. (there's NDEBUG inherited from C);
+    // but mixing is likely to cause all kinds of problems.
+    extern bool debug_build();
+    inline bool release_build()
+    {
+        return !debug_build();
+    }
+}
 
 #ifndef DEBUG_STREAM
 #define DEBUG_STREAM stderr
@@ -79,6 +161,23 @@
  *  open emacs, for instance, with the file in question at the line number
  *  in question.
  */
+// Keep __DEBUG for existing code/scripts; but shouldn't be used.
+#ifndef CODA_OSS_debugging
+    #ifdef __DEBUG
+        #define CODA_OSS_debugging 1
+        // or ... use the value of CODA_OSS_DEBUG ?
+        //#define CODA_OSS_debugging CODA_OSS_DEBUG
+    #else
+        // or here ... ?
+        //#define CODA_OSS_debugging CODA_OSS_DEBUG
+        #define CODA_OSS_debugging 0
+    #endif
+#endif // CODA_OSS_debugging
+
+namespace sys
+{
+constexpr bool debugging = CODA_OSS_debugging ? true : false;
+}
 
 namespace sys
 {
@@ -101,7 +200,7 @@ void diePrintf(const char *format, ...);
 #define die_printf sys::diePrintf
 #define dbg_ln(STR) dbg_printf("[%s, %d]: '%s'\n", __FILE__, __LINE__, STR)
 
-#ifdef __DEBUG
+#if CODA_OSS_debugging
 
 #ifndef __DEBUG_SHORTEN_EVAL
  #define EVAL(X) std::cout << '(' << __FILE__ << ',' <<__LINE__ << ") <EVAL> "#X"=" << X << std::endl
@@ -121,4 +220,4 @@ void diePrintf(const char *format, ...);
  #define ASSERT_OR(A, E) 1
 #endif
 
-#endif // __DBG_H__
+#endif // CODA_OSS_sys_Dbg_h_INCLUDED_

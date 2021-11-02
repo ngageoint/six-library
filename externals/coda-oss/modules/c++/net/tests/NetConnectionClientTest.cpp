@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     try
     {
         if (argc != 3)
-            throw(Exception(FmtX("Usage: %s <host> <port>", argv[0])));
+            throw Exception(FmtX("Usage: %s <host> <port>", argv[0]));
 
         std::string host(argv[1]);
         int port(atoi(argv[2]));

@@ -28,10 +28,12 @@
 #include <xml/lite/Document.h>
 #include <xml/lite/Validator.h>
 
-#include <six/Data.h>
+#include "six/Types.h"
 
 namespace six
 {
+    struct Data; // forward
+
 /*!
  *  \class XMLControl
  *  \brief Base class for reading and writing a Data object
@@ -58,7 +60,8 @@ class XMLControl
 {
     public:
     //!  Constructor
-    XMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+        XMLControl() = default;
+        XMLControl(logging::Logger* log, bool ownLog = false);
 
     //!  Destructor
     virtual ~XMLControl();
@@ -127,8 +130,8 @@ class XMLControl
                              std::vector<std::string>& version);
 
     protected:
-    logging::Logger* mLog;
-    bool mOwnLog;
+    logging::Logger* mLog = nullptr;
+    bool mOwnLog = false;
 
     /*!
      *  Convert a document from a DOM into a Data model

@@ -47,20 +47,21 @@ namespace logging
  * renamed to 'error.log.1', and all future logs will be logged to error.log.
  * This is useful if you would like to keep backups of logs.
  */
-class RotatingFileHandler : public StreamHandler
+struct RotatingFileHandler : public StreamHandler
 {
-
-public:
     /*!
      * \param fname         The file to log to
      * \param maxBytes      The max file size
      * \param backupCount   The max number of backups
      * \param level         The minimum LogLevel
      */
-    RotatingFileHandler(const coda_oss::filesystem::path& fname, long maxBytes = 0,
+    RotatingFileHandler(const sys::Filesystem::path& fname, long maxBytes = 0,
                         int backupCount = 0, LogLevel level = LogLevel::LOG_NOTSET);
 
     virtual ~RotatingFileHandler();
+
+    RotatingFileHandler(const RotatingFileHandler&) = delete;
+    RotatingFileHandler& operator=(const RotatingFileHandler&) = delete;
 };
 }
 #endif

@@ -22,21 +22,16 @@
 #ifndef __SCENE_ELLIPSOID_MODEL_H__
 #define __SCENE_ELLIPSOID_MODEL_H__
 
+#include <std/optional>
+
 #include "scene/Types.h"
 
 namespace scene
 {
 
-class EllipsoidModel
+struct EllipsoidModel
 {
-public:
-
-    /**
-     * Default constructor
-     */
-    EllipsoidModel() :
-        units(INVALID_UNITS),
-        angularUnits(INVALID_ANGULAR_UNITS) {}
+    EllipsoidModel() = default;
 
     /**
      * This constructor initializes the EllipsoidModel object with
@@ -149,11 +144,10 @@ public:
     virtual EllipsoidModel & operator=(const EllipsoidModel & m);
 
 protected:
-    Units units;
-    AngularUnits angularUnits;
-    double equatorialRadius;
-    double polarRadius;
-
+    Units units = INVALID_UNITS;
+    AngularUnits angularUnits = INVALID_ANGULAR_UNITS;
+    double equatorialRadius = 0.0;
+    double polarRadius = 0.0;
 };
 
 class WGS84EllipsoidModel : public EllipsoidModel
@@ -168,7 +162,7 @@ public:
      * values are those specified by the WGS84 model and cannot be set by the
      * user.
      */
-    WGS84EllipsoidModel();
+    WGS84EllipsoidModel() noexcept(false);
 
     /**
      * This constructor initializes the object with the specified values

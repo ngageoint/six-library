@@ -57,6 +57,20 @@ TEST_CASE(testVecOfRawPointers)
     TEST_ASSERT_TRUE(myVec.empty());
 }
 
+static mem::VectorOfSharedPointers<int> mem_VectorOfSharedPointers_int()
+{
+    mem::VectorOfSharedPointers<int> retval;
+    retval.push_back(new int(1));
+    return retval;
+}
+
+static std::vector<std::shared_ptr<int>> std_vector_shared_ptr_int()
+{
+    std::vector<std::shared_ptr<int>> retval;
+    retval.push_back(std::make_shared<int>(1));
+    return retval;
+}
+
 TEST_CASE(testVecOfSharedPointers)
 {
     mem::VectorOfSharedPointers<int> myVec;
@@ -85,6 +99,23 @@ TEST_CASE(testVecOfSharedPointers)
 
     myVec.erase(myVec.begin());
     TEST_ASSERT_TRUE(myVec.empty());
+
+    {
+        mem::VectorOfSharedPointers<int> myVec2 = mem_VectorOfSharedPointers_int();  // copy
+        myVec = mem_VectorOfSharedPointers_int();  // assignment
+    }
+    {
+        mem::VectorOfSharedPointers<int> myVec2 = std_vector_shared_ptr_int();  // copy
+        myVec = std_vector_shared_ptr_int();  // assignment
+    }
+
+    {
+       std::vector<std::shared_ptr<int>> myVec2 = mem_VectorOfSharedPointers_int();  // copy
+    }
+    {
+       std::vector<std::shared_ptr<int>> myVec2 = std_vector_shared_ptr_int();  // copy
+    }
+
 }
 }
 

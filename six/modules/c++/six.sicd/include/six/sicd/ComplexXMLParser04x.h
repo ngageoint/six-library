@@ -38,16 +38,19 @@ struct ComplexXMLParser04x : public ComplexXMLParser
 #if !CODA_OSS_cpp17
     ComplexXMLParser04x(const std::string& version,
                         bool addClassAttributes,
-                        std::auto_ptr<SICommonXMLParser> comParser,
+                        mem::auto_ptr<SICommonXMLParser> comParser,
                         logging::Logger* log = nullptr,
                         bool ownLog = false);
 #endif
+
+    ComplexXMLParser04x(const ComplexXMLParser04x&) = delete;
+    ComplexXMLParser04x& operator=(const ComplexXMLParser04x&) = delete;
 
 protected:
 
     virtual XMLElem convertRMATToXML(const RMAT* obj, 
                                      XMLElem parent = nullptr) const = 0;
-    virtual void parseRMATFromXML(const XMLElem rmatElem, RMAT* obj) const = 0;
+    virtual void parseRMATFromXML(const xml::lite::Element* rmatElem, RMAT* obj) const = 0;
 
 protected:
 
@@ -73,18 +76,18 @@ protected:
         const GainAndPhasePolys* obj, 
         XMLElem parent = nullptr) const;
 
-    virtual void parseWeightTypeFromXML(const XMLElem gridRowColXML,
+    virtual void parseWeightTypeFromXML(const xml::lite::Element* gridRowColXML,
         mem::ScopedCopyablePtr<WeightType>& obj) const;
     virtual void parsePolarizationCalibrationFromXML(
-        const XMLElem polCalXML,
+        const xml::lite::Element* polCalXML,
         six::sicd::PolarizationCalibration* obj) const;
-    virtual void parseTxRcvPolFromXML(const XMLElem parent,
+    virtual void parseTxRcvPolFromXML(const xml::lite::Element* parent,
                          six::DualPolarizationType& obj) const;
-    virtual void parseRMCRFromXML(const XMLElem rmcrElem, RMCR* obj) const;
+    virtual void parseRMCRFromXML(const xml::lite::Element* rmcrElem, RMCR* obj) const;
     virtual void parseAntennaParamArrayFromXML(
-        const XMLElem antennaParamsXML, 
+        const xml::lite::Element* antennaParamsXML, 
         six::sicd::AntennaParameters* obj) const;
-    virtual void parseRadarCollectionFromXML(const XMLElem radarCollectionXML,
+    virtual void parseRadarCollectionFromXML(const xml::lite::Element* radarCollectionXML,
                                              RadarCollection *obj) const;
 
 private:

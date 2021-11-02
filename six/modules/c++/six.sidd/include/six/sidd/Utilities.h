@@ -64,7 +64,7 @@ public:
             Vector3 refPos, const Vector3* row, const Vector3* col,
             Collection* collection);
 
-    static std::pair<six::PolarizationType, six::PolarizationType>
+    static std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType>
             convertDualPolarization(six::DualPolarizationType pol);
 
     static mem::auto_ptr<scene::ProjectionModel>

@@ -31,7 +31,7 @@ namespace nitf
 {
 BufferedWriter::BufferedWriter(const std::string& file, size_t bufferSize) :
     mBufferSize(bufferSize),
-    mScopedBuffer(new char[bufferSize]),
+    mScopedBuffer(std::make_unique<char[]>(bufferSize)),
     mBuffer(mScopedBuffer.get()),
     mPosition(0),
     mTotalWritten(0),
@@ -167,7 +167,7 @@ void BufferedWriter::writeImpl(const void* buf, size_t size)
     }
 }
 
-bool BufferedWriter::canSeekImpl() const
+bool BufferedWriter::canSeekImpl() const noexcept
 {
     return true;
 }
@@ -190,7 +190,7 @@ nitf::Off BufferedWriter::getSizeImpl() const
     return (mFile.length() + mPosition);
 }
 
-int BufferedWriter::getModeImpl() const
+int BufferedWriter::getModeImpl() const noexcept
 {
     return NITF_ACCESS_WRITEONLY;
 }

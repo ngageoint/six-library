@@ -60,6 +60,9 @@ public:
                                const scene::SceneGeometry& geom,
                                const scene::ProjectionModel& projection);
 
+    SlantPlanePixelTransformer(const SlantPlanePixelTransformer&) = delete;
+    SlantPlanePixelTransformer& operator=(const SlantPlanePixelTransformer&) = delete;
+
     /*!
      *  \fn toECEF
      *  \param pixel - Slant Plane pixel with (row,col) index

@@ -29,16 +29,10 @@
 
 namespace sys
 {
-class SemaphoreInterface
+struct SemaphoreInterface
 {
-
-public:
-
-    SemaphoreInterface()
-    {}
-
-    virtual ~SemaphoreInterface()
-    {}
+    SemaphoreInterface() = default;
+    virtual ~SemaphoreInterface() = default;
 
     virtual void signal() = 0;
 

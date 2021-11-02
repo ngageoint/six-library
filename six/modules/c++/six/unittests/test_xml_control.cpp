@@ -20,19 +20,26 @@
  *
  */
 
+#include <std/filesystem>
+
 #include <six/XMLControl.h>
 #include <string>
 #include <vector>
 #include "TestCase.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
-#ifndef DEFAULT_SCHEMA_PATH
+// prefer SIX_DEFAULT_SCHEMA_PATH, existing scripts use DEFAULT_SCHEMA_PATH
+#if defined(DEFAULT_SCHEMA_PATH) && !defined(SIX_DEFAULT_SCHEMA_PATH)
+#define SIX_DEFAULT_SCHEMA_PATH DEFAULT_SCHEMA_PATH 
+#endif
+#ifndef SIX_DEFAULT_SCHEMA_PATH
+// Don't want to set a dummy schema path to a directory that exists as that causes
+// the code to check for valid schemas and validate.
 #if defined(_WIN32)
-#define DEFAULT_SCHEMA_PATH "C:\\some\\path" // just to compile ...
+#define SIX_DEFAULT_SCHEMA_PATH R"(C:\some\path)" // just to compile ...
 #else
-#define DEFAULT_SCHEMA_PATH "/some/path" // just to compile ...
+#define SIX_DEFAULT_SCHEMA_PATH R"(/some/path)" // just to compile ...
 #endif
 #endif
 
@@ -43,21 +50,21 @@ TEST_CASE(loadCompiledSchemaPath)
     six::XMLControl::loadSchemaPaths(schemaPaths);
 
     size_t schemaPathsSize = 0;
-    if (fs::exists(DEFAULT_SCHEMA_PATH))
+    if (fs::exists(SIX_DEFAULT_SCHEMA_PATH))
     {
         schemaPathsSize++;
     }
     TEST_ASSERT_EQ(schemaPaths.size(), schemaPathsSize);
     if (!schemaPaths.empty())
     {
-        TEST_ASSERT_EQ(schemaPaths[0], DEFAULT_SCHEMA_PATH);
+        TEST_ASSERT_EQ(schemaPaths[0], SIX_DEFAULT_SCHEMA_PATH);
     }
 }
 
 TEST_CASE(respectGivenPaths)
 {
     std::vector<std::string> schemaPaths = {"some/path"};
-    sys::OS().setEnv("SIX_SCHEMA_PATH", "another/path", 1);
+    sys::OS().setEnv("SIX_SCHEMA_PATH", "another/path", true /*overwrite*/);
     six::XMLControl::loadSchemaPaths(schemaPaths);
     TEST_ASSERT_EQ(schemaPaths.size(), 1);
 }
@@ -65,7 +72,7 @@ TEST_CASE(respectGivenPaths)
 TEST_CASE(loadFromEnvVariable)
 {
     std::vector<std::string> schemaPaths;
-    sys::OS().setEnv("SIX_SCHEMA_PATH", "another/path", 1);
+    sys::OS().setEnv("SIX_SCHEMA_PATH", "another/path", true /*overwrite*/);
     six::XMLControl::loadSchemaPaths(schemaPaths);
     TEST_ASSERT_EQ(schemaPaths.size(), 1);
     TEST_ASSERT_EQ(schemaPaths[0], "another/path");
@@ -74,22 +81,22 @@ TEST_CASE(loadFromEnvVariable)
 TEST_CASE(ignoreEmptyEnvVariable)
 {
     std::vector<std::string> schemaPaths;
-    sys::OS().setEnv("SIX_SCHEMA_PATH", "   ", 1);
+    sys::OS().setEnv("SIX_SCHEMA_PATH", "   ", true /*overwrite*/);
     six::XMLControl::loadSchemaPaths(schemaPaths);
 
     size_t schemaPathsSize = 0;
-    if (fs::exists(DEFAULT_SCHEMA_PATH))
+    if (fs::exists(SIX_DEFAULT_SCHEMA_PATH))
     {
         schemaPathsSize++;
     }
     TEST_ASSERT_EQ(schemaPaths.size(), schemaPathsSize);
     if (!schemaPaths.empty())
     {
-        TEST_ASSERT_EQ(schemaPaths[0], DEFAULT_SCHEMA_PATH);
+        TEST_ASSERT_EQ(schemaPaths[0], SIX_DEFAULT_SCHEMA_PATH);
     }
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(loadCompiledSchemaPath);
     TEST_CHECK(respectGivenPaths);
     TEST_CHECK(loadFromEnvVariable);

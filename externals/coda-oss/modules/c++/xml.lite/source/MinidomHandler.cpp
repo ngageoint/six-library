@@ -87,22 +87,44 @@ void xml::lite::MinidomHandler::characters(const char *value, int length)
     #endif
     characters(value, length, pEncoding);
 }
-bool xml::lite::MinidomHandler::characters(const wchar_t* const value_, const size_t length_)
+
+template<typename CharT, typename ValueT>
+inline std::string toUtf8_(const ValueT* value_, size_t length)
+{
+    const void* const pValue = value_;
+    const auto value = reinterpret_cast<CharT>(pValue);
+    static_assert(sizeof(*value_) == sizeof(*value), "sizeof(*CharT) != sizeof(*ValueT)"); 
+
+    str::U8string utf8Value;
+    str::strto8(value, length, utf8Value);
+    return str::c_str<std::string::const_pointer>(utf8Value);
+}
+inline std::string toUtf8(const uint16_t* value, size_t length)
+{
+    return toUtf8_<std::u16string::const_pointer>(value, length);
+}
+inline std::string toUtf8(const uint32_t* value, size_t length)
+{
+    return toUtf8_<std::u32string::const_pointer>(value, length);
+}
+
+bool xml::lite::MinidomHandler::call_characters(const std::string& utf8Value)
+{
+    const auto length = static_cast<int>(utf8Value.length());
+    static const auto encoding = xml::lite::string_encoding::utf_8;
+    characters(utf8Value.c_str(), length, &encoding);
+    return true;  // all done, characters(char*) already called, above
+}
+
+template <typename T>
+bool xml::lite::MinidomHandler::characters_(const T* value, size_t length)
 {
     #ifndef _WIN32
-    // As on Windows, this comes to us already encoded ... but UTF-32
-    const auto value = reinterpret_cast<std::u32string::const_pointer>(value_);
-    const std::u32string strValue(value, length_);
-    std::string utf8Value;
-    str::toUtf8(strValue, utf8Value);
-
-    const auto length = static_cast<int>(utf8Value.length());
-    static const auto encoding = string_encoding::utf_8;
-    characters(utf8Value.c_str(), length, &encoding);
-    return true; // all done, characters(char*) already called, above
+    const auto utf8Value = toUtf8(value, length);
+    return call_characters(utf8Value);  // all done, characters(char*) already called, above
     #else
-    UNREFERENCED_PARAMETER(value_);
-    UNREFERENCED_PARAMETER(length_);
+    UNREFERENCED_PARAMETER(value);
+    UNREFERENCED_PARAMETER(length);
     // On Windows, we want std::string encoded as Windows-1252 (ISO8859-1)
     // so that western European characters will be displayed.  We can't convert
     // to UTF-8 (as above on Linux), because Windows doesn't have good support
@@ -110,6 +132,14 @@ bool xml::lite::MinidomHandler::characters(const wchar_t* const value_, const si
     // all existing code uses std::string instead of std::wstring.
     return false; // call characters(char*) to get a Windows-1252 string
     #endif
+}
+bool xml::lite::MinidomHandler::wcharacters_(const uint32_t* value, size_t length)
+{
+    return characters_(value, length);
+}
+bool xml::lite::MinidomHandler::wcharacters_(const uint16_t* value, size_t length)
+{
+    return characters_(value, length);
 }
 
 bool xml::lite::MinidomHandler::use_wchar_t() const

@@ -159,7 +159,7 @@ struct DerivedData: public Data
      */
     virtual size_t getNumRows() const
     {
-        return measurement->pixelFootprint.row;
+        return static_cast<size_t>(measurement->pixelFootprint.row);
     }
 
     /*!
@@ -168,7 +168,7 @@ struct DerivedData: public Data
      */
     virtual void setNumRows(size_t numRows)
     {
-        measurement->pixelFootprint.row = numRows;
+        measurement->pixelFootprint.row = static_cast<ptrdiff_t>(numRows);
     }
 
     /*!
@@ -177,7 +177,7 @@ struct DerivedData: public Data
      */
     virtual size_t getNumCols() const
     {
-        return measurement->pixelFootprint.col;
+        return static_cast<size_t>(measurement->pixelFootprint.col);
     }
 
     /*!
@@ -186,7 +186,7 @@ struct DerivedData: public Data
      */
     virtual void setNumCols(size_t numCols)
     {
-        measurement->pixelFootprint.col = numCols;
+        measurement->pixelFootprint.col = static_cast<ptrdiff_t>(numCols);
     }
 
     /*!
@@ -305,7 +305,8 @@ struct DerivedData: public Data
         return productCreation->classification;
     }
 
-    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT();
+    virtual const mem::ScopedCopyablePtr<LUT>& getDisplayLUT() const override;
+    void setDisplayLUT(std::unique_ptr<AmplitudeTable>&&) override;
 
     virtual std::string getVendorID() const
     {
@@ -317,9 +318,9 @@ struct DerivedData: public Data
         return mVersion;
     }
 
-    virtual void setVersion(const std::string& version)
+    virtual void setVersion(const std::string& strVersion)
     {
-        mVersion = version;
+        mVersion = strVersion;
     }
 
     /*

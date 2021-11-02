@@ -147,7 +147,6 @@ NITFAPI(nitf_BandSource *) nitf_DirectBlockSource_construct(void * algorithm,
     DirectBlockSourceImpl *impl;
     nitf_BandSource *bandSource;
     nitf_BlockingInfo* blockInfo;
-    size_t numBlocks;
 
     impl = (DirectBlockSourceImpl *) NITF_MALLOC(sizeof(DirectBlockSourceImpl));
     if (!impl)
@@ -167,7 +166,7 @@ NITFAPI(nitf_BandSource *) nitf_DirectBlockSource_construct(void * algorithm,
     if (blockInfo == NULL)
         return NITF_FAILURE;
 
-    numBlocks = blockInfo->numBlocksPerRow * blockInfo->numBlocksPerCol;
+    const size_t numBlocks = ((size_t)blockInfo->numBlocksPerRow) * blockInfo->numBlocksPerCol;
 
     nitf_BlockingInfo_destruct(&blockInfo);
 

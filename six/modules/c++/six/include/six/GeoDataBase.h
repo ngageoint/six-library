@@ -42,21 +42,16 @@ namespace six
  *
  *  Compiler-generated copy constructor and assignment operator are sufficient
  */
-class GeoDataBase
+struct GeoDataBase
 {
-public:
-    //!  Constructor, force WGS84, since spec does.
-    GeoDataBase() :
-        earthModel(EarthModelType::WGS84)
-    {
-    }
+    GeoDataBase() = default;
 
     /*!
      *  Identifies the earth model used for
      *  latitude, longitude and height parameters.  All
      *  height values are Height Above Ellipsoid (HAE)
      */
-    EarthModelType earthModel;
+    EarthModelType earthModel = EarthModelType::WGS84; // force WGS84, since spec does.
 
     /*!
      *  Parameters apply to image corners of the

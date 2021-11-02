@@ -22,8 +22,11 @@
 #ifndef __SIX_DISPLAY_H__
 #define __SIX_DISPLAY_H__
 
+#include <std/optional>
+
 #include <mem/ScopedCopyablePtr.h>
 #include <mem/ScopedCloneablePtr.h>
+
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/Parameter.h>
@@ -378,7 +381,7 @@ struct DynamicRangeAdjustment
     };
 
     DRAType algorithmType; //! Algorithm used for dynamic range adjustment
-    size_t bandStatsSource; //! Indicates which band to use for DRA stats
+    size_t bandStatsSource = 0; //! Indicates which band to use for DRA stats
 
     // In SIDD 1.0, must include exactly one of draParameters or draOverrides
     // In SIDD 2.0, include draParameters if algorithmType == AUTO,
@@ -418,13 +421,13 @@ struct InteractiveProcessing
  */
 struct Display
 {
-    Display();
+    Display() = default;
 
     /*!
      *  Defines the pixel type, based on enumeration and definition in
      *  D&E
      */
-    PixelType pixelType;
+    PixelType pixelType = PixelType::NOT_SET;
 
     // Beginning of SIDD 1.0-only section
 
@@ -437,12 +440,12 @@ struct Display
     /*!
      *  (Optional) Recommended ELT magnification method for this data.
      */
-    MagnificationMethod magnificationMethod;
+    MagnificationMethod magnificationMethod = MagnificationMethod::NOT_SET;
 
     /*!
      *  (Optional) Recommended ELT decimation method for this data.
      */
-    DecimationMethod decimationMethod;
+    DecimationMethod decimationMethod = DecimationMethod::NOT_SET;
 
     /*!
      * (Optional) Recommended ELT DRA overrides.
@@ -460,9 +463,9 @@ struct Display
     // Beginning of SIDD 2.0-only section
 
     //Required
-    size_t numBands;
+    size_t numBands = 0;
     //Optional
-    size_t defaultBandDisplay;
+    size_t defaultBandDisplay = six::Init::undefined<size_t>();
 
     //Required
     std::vector<mem::ScopedCopyablePtr<NonInteractiveProcessing> >

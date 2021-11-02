@@ -19,8 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <six/Container.h>
+
+#include <stdexcept>
+#include <std/memory>
 
 namespace six
 {
@@ -28,9 +30,20 @@ Container::Container(DataType dataType) :
     mDataType(dataType)
 {
 }
-
-Container::~Container()
+Container::Container(std::unique_ptr<Data>&& data)
+    : Container(data->getDataType())
 {
+    addData(std::move(data));
+}
+Container::Container(Data* data)
+    : Container(data->getDataType())
+{
+    addData(data);
+}
+Container::Container(std::unique_ptr<Data>&& data, std::unique_ptr<Legend>&& legend)
+    : Container(six::DataType::DERIVED)
+{
+    addData(std::move(data), std::move(legend));
 }
 
 void Container::addData(Data* data)
@@ -41,11 +54,15 @@ void Container::addData(Data* data)
 void Container::addData(std::unique_ptr<Data>&& data,
                         mem::ScopedCopyablePtr<Legend> legend)
 {
+    if (data->getDataType() != this->getDataType())
+    {
+        throw std::invalid_argument("'data' is the wrong type.");
+    }
     mem::ScopedCloneablePtr<Data> cloneableData(data.release());
     mData.push_back(DataPair(cloneableData, legend));
 }
 #if !CODA_OSS_cpp17
-void Container::addData(std::auto_ptr<Data> data,
+void Container::addData(mem::auto_ptr<Data> data,
                         mem::ScopedCopyablePtr<Legend> legend)
 {
     addData(std::unique_ptr<Data>(data.release()), legend);
@@ -57,7 +74,7 @@ void Container::addData(std::unique_ptr<Data>&& data)
     addData(std::move(data), nullLegend());
 }
 #if !CODA_OSS_cpp17
-void Container::addData(std::auto_ptr<Data> data)
+void Container::addData(mem::auto_ptr<Data> data)
 {
     addData(std::unique_ptr<Data>(data.release()));
 }
@@ -75,7 +92,7 @@ void Container::addData(std::unique_ptr<Data>&& data, std::unique_ptr<Legend>&& 
     addData(std::move(data), copyableLegend);
 }
 #if !CODA_OSS_cpp17
-void Container::addData(std::auto_ptr<Data> data, std::auto_ptr<Legend> legend)
+void Container::addData(mem::auto_ptr<Data> data, mem::auto_ptr<Legend> legend)
 {
     addData(std::unique_ptr<Data>(data.release()), std::unique_ptr<Legend>(legend.release()));
 }

@@ -22,9 +22,13 @@
 #ifndef __SIX_DERIVED_CLASSIFICATION_H__
 #define __SIX_DERIVED_CLASSIFICATION_H__
 
-#include "mem/ScopedCopyablePtr.h"
+#include <std/optional>
+
+#include <mem/ScopedCopyablePtr.h>
+
 #include "six/Classification.h"
 #include "six/ParameterCollection.h"
+
 namespace six
 {
 namespace sidd
@@ -59,7 +63,7 @@ public:
     //! The version number of the DES. Should there be multiple specified in
     //  an instance document the one at the root node is the one that will
     //  apply to the entire document.
-    int32_t                     desVersion;
+    int32_t                     desVersion = 0;
 
     //! Used to designate what date the document was produced on. This is the
     //  date that will be used by various constraint rules to determine if the

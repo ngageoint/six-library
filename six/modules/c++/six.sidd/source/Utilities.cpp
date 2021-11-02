@@ -27,24 +27,21 @@ namespace
 {
 double getCenterTime(const six::sidd::DerivedData& derived)
 {
-    double centerTime;
     if (derived.measurement->projection->isMeasurable())
     {
         const six::sidd::MeasurableProjection* const projection =
-            static_cast<const six::sidd::MeasurableProjection*>(
+            dynamic_cast<const six::sidd::MeasurableProjection*>(
                         derived.measurement->projection.get());
 
-        centerTime = projection->timeCOAPoly(0, 0);
+        return projection->timeCOAPoly(0, 0);
     }
     else
     {
         // we estimate...
-        centerTime = derived.exploitationFeatures->collections[0]
+        return derived.exploitationFeatures->collections[0]
                              ->information.collectionDuration /
                 2;
     }
-
-    return centerTime;
 }
 
 namespace
@@ -57,7 +54,7 @@ void getErrors(const six::sidd::DerivedData& data, scene::Errors& errors)
     }
 
     const six::sidd::MeasurableProjection* const projection =
-        static_cast<const six::sidd::MeasurableProjection*>(
+        dynamic_cast<const six::sidd::MeasurableProjection*>(
                     data.measurement->projection.get());
 
     six::getErrors(data.errorStatistics.get(),
@@ -86,44 +83,42 @@ scene::SideOfTrack Utilities::getSideOfTrack(const DerivedData* derived)
     return scene::SceneGeometry(arpVel, arpPos, refPt).getSideOfTrack();
 }
 
+static six::Vector3 latLonToECEF(const six::sidd::PolynomialProjection& projection,
+    double atX, double atY)
+{
+    scene::LatLonAlt lla;
+    lla.setLat(projection.rowColToLat(atX, atY));
+    lla.setLon(projection.rowColToLon(atX, atY));
+   return scene::Utilities::latLonToECEF(lla);
+}
+
 mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
         const DerivedData* derived)
 {
     const double centerTime = getCenterTime(*derived);
 
     // compute arpPos and arpVel
-    six::Vector3 arpPos = derived->measurement->arpPoly(centerTime);
-    six::Vector3 arpVel =
+    const six::Vector3 arpPos = derived->measurement->arpPoly(centerTime);
+    const six::Vector3 arpVel =
             derived->measurement->arpPoly.derivative()(centerTime);
-    six::Vector3 refPt = derived->measurement->projection->referencePoint.ecef;
+    const six::Vector3 refPt = derived->measurement->projection->referencePoint.ecef;
 
-    six::Vector3 rowVec;
-    six::Vector3 colVec;
+    six::Vector3 rowVec{};
+    six::Vector3 colVec{};
 
     if (derived->measurement->projection->projectionType ==
         six::ProjectionType::POLYNOMIAL)
     {
         const six::sidd::PolynomialProjection* projection =
-            static_cast<const six::sidd::PolynomialProjection*>(
+            dynamic_cast<const six::sidd::PolynomialProjection*>(
                         derived->measurement->projection.get());
 
-        double cR = projection->referencePoint.rowCol.row;
-        double cC = projection->referencePoint.rowCol.col;
+        const auto cR = projection->referencePoint.rowCol.row;
+        const auto cC = projection->referencePoint.rowCol.col;
 
-        scene::LatLonAlt centerLLA;
-        centerLLA.setLat(projection->rowColToLat(cR, cC));
-        centerLLA.setLon(projection->rowColToLon(cR, cC));
-        six::Vector3 centerEcef = scene::Utilities::latLonToECEF(centerLLA);
-
-        scene::LatLonAlt downLLA;
-        downLLA.setLat(projection->rowColToLat(cR + 1, cC));
-        downLLA.setLon(projection->rowColToLon(cR + 1, cC));
-        six::Vector3 downEcef = scene::Utilities::latLonToECEF(downLLA);
-
-        scene::LatLonAlt rightLLA;
-        rightLLA.setLat(projection->rowColToLat(cR, cC + 1));
-        rightLLA.setLon(projection->rowColToLon(cR, cC + 1));
-        six::Vector3 rightEcef = scene::Utilities::latLonToECEF(rightLLA);
+        const six::Vector3 centerEcef = latLonToECEF(*projection, cR, cC);
+        const six::Vector3 downEcef = latLonToECEF(*projection, cR + 1, cC);
+        const six::Vector3 rightEcef = latLonToECEF(*projection, cR, cC + 1);
 
         rowVec = downEcef - centerEcef;
         rowVec.normalize();
@@ -134,7 +129,7 @@ mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
              six::ProjectionType::PLANE)
     {
         const six::sidd::PlaneProjection* projection =
-            static_cast<const six::sidd::PlaneProjection*>(
+            dynamic_cast<const six::sidd::PlaneProjection*>(
                         derived->measurement->projection.get());
 
         rowVec = projection->productPlane.rowUnitVector;
@@ -171,7 +166,7 @@ mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
     }
 
     const six::sidd::MeasurableProjection* p =
-        static_cast<const six::sidd::MeasurableProjection*>(
+        dynamic_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
     mem::auto_ptr<scene::GridECEFTransform> transform;
@@ -181,7 +176,7 @@ mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
     case six::ProjectionType::PLANE:
     {
         const six::sidd::PlaneProjection* const planeP =
-            static_cast<const six::sidd::PlaneProjection*>(p);
+            dynamic_cast<const six::sidd::PlaneProjection*>(p);
 
         transform.reset(new scene::PlanarGridECEFTransform(
                 p->sampleSpacing,
@@ -261,7 +256,7 @@ mem::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
     }
 
     const six::sidd::MeasurableProjection* p =
-        static_cast<const six::sidd::MeasurableProjection*>(
+        dynamic_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
     mem::auto_ptr<scene::GridGeometry> geom;
@@ -272,7 +267,7 @@ mem::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
     case six::ProjectionType::PLANE:
     {
         const six::sidd::PlaneProjection* const planeP =
-            static_cast<const six::sidd::PlaneProjection*>(p);
+            dynamic_cast<const six::sidd::PlaneProjection*>(p);
 
         geom.reset(new scene::PlanarGridGeometry(
                 planeP->productPlane.rowUnitVector,
@@ -301,9 +296,9 @@ void Utilities::setProductValues(Poly2D timeCOAPoly,
 {
     const double scpTime = timeCOAPoly(0, 0);
 
-    Vector3 arpPos = arpPoly(scpTime);
+    const Vector3 arpPos = arpPoly(scpTime);
     PolyXYZ arpVelPoly = arpPoly.derivative();
-    Vector3 arpVel = arpVelPoly(scpTime);
+    const Vector3 arpVel = arpVelPoly(scpTime);
 
     setProductValues(arpVel, arpPos, ref.ecef, row, col, res, product);
 }
@@ -340,9 +335,9 @@ void Utilities::setCollectionValues(Poly2D timeCOAPoly,
 {
     const double scpTime = timeCOAPoly(0, 0);
 
-    Vector3 arpPos = arpPoly(scpTime);
+    const Vector3 arpPos = arpPoly(scpTime);
     PolyXYZ arpVelPoly = arpPoly.derivative();
-    Vector3 arpVel = arpVelPoly(scpTime);
+    const Vector3 arpVel = arpVelPoly(scpTime);
 
     setCollectionValues(arpVel, arpPos, ref.ecef, row, col, collection);
 }
@@ -406,59 +401,59 @@ void Utilities::setCollectionValues(Vector3 arpVel,
     }
 }
 
-six::PolarizationType _convertDualPolarization(six::DualPolarizationType pol,
+six::PolarizationSequenceType _convertDualPolarization(six::DualPolarizationType pol,
                                                bool useFirst)
 {
     switch (pol)
     {
     case six::DualPolarizationType::OTHER:
-        return six::PolarizationType::OTHER;
+        return six::PolarizationSequenceType::OTHER;
     case six::DualPolarizationType::V_V:
-        return six::PolarizationType::V;
+        return six::PolarizationSequenceType::V;
     case six::DualPolarizationType::V_H:
-        return useFirst ? six::PolarizationType::V : six::PolarizationType::H;
+        return useFirst ? six::PolarizationSequenceType::V : six::PolarizationSequenceType::H;
     case six::DualPolarizationType::V_RHC:
-        return useFirst ? six::PolarizationType::V : six::PolarizationType::RHC;
+        return useFirst ? six::PolarizationSequenceType::V : six::PolarizationSequenceType::RHC;
     case six::DualPolarizationType::V_LHC:
-        return useFirst ? six::PolarizationType::V : six::PolarizationType::LHC;
+        return useFirst ? six::PolarizationSequenceType::V : six::PolarizationSequenceType::LHC;
     case six::DualPolarizationType::H_V:
-        return useFirst ? six::PolarizationType::H : six::PolarizationType::V;
+        return useFirst ? six::PolarizationSequenceType::H : six::PolarizationSequenceType::V;
     case six::DualPolarizationType::H_H:
-        return six::PolarizationType::H;
+        return six::PolarizationSequenceType::H;
     case six::DualPolarizationType::H_RHC:
-        return useFirst ? six::PolarizationType::H : six::PolarizationType::RHC;
+        return useFirst ? six::PolarizationSequenceType::H : six::PolarizationSequenceType::RHC;
     case six::DualPolarizationType::H_LHC:
-        return useFirst ? six::PolarizationType::H : six::PolarizationType::LHC;
+        return useFirst ? six::PolarizationSequenceType::H : six::PolarizationSequenceType::LHC;
     case six::DualPolarizationType::RHC_RHC:
-        return six::PolarizationType::RHC;
+        return six::PolarizationSequenceType::RHC;
     case six::DualPolarizationType::RHC_LHC:
-        return useFirst ? six::PolarizationType::RHC
-                        : six::PolarizationType::LHC;
+        return useFirst ? six::PolarizationSequenceType::RHC
+                        : six::PolarizationSequenceType::LHC;
     case six::DualPolarizationType::RHC_V:
-        return useFirst ? six::PolarizationType::RHC : six::PolarizationType::V;
+        return useFirst ? six::PolarizationSequenceType::RHC : six::PolarizationSequenceType::V;
     case six::DualPolarizationType::RHC_H:
-        return useFirst ? six::PolarizationType::RHC : six::PolarizationType::H;
+        return useFirst ? six::PolarizationSequenceType::RHC : six::PolarizationSequenceType::H;
     case six::DualPolarizationType::LHC_RHC:
-        return useFirst ? six::PolarizationType::LHC
-                        : six::PolarizationType::RHC;
+        return useFirst ? six::PolarizationSequenceType::LHC
+                        : six::PolarizationSequenceType::RHC;
     case six::DualPolarizationType::LHC_LHC:
-        return six::PolarizationType::LHC;
+        return six::PolarizationSequenceType::LHC;
     case six::DualPolarizationType::LHC_V:
-        return useFirst ? six::PolarizationType::LHC : six::PolarizationType::V;
+        return useFirst ? six::PolarizationSequenceType::LHC : six::PolarizationSequenceType::V;
     case six::DualPolarizationType::LHC_H:
-        return useFirst ? six::PolarizationType::LHC : six::PolarizationType::H;
+        return useFirst ? six::PolarizationSequenceType::LHC : six::PolarizationSequenceType::H;
     case six::DualPolarizationType::UNKNOWN:
         throw except::Exception(Ctxt("DualPolarizationType::UNKNOWN has no "
                                      "corresponding PolarizationType"));
     default:
-        return six::PolarizationType::NOT_SET;
+        return six::PolarizationSequenceType::NOT_SET;
     }
 }
 
-std::pair<six::PolarizationType, six::PolarizationType>
-Utilities::convertDualPolarization(six::DualPolarizationType pol)
+std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType>
+    Utilities::convertDualPolarization(six::DualPolarizationType pol)
 {
-    std::pair<six::PolarizationType, six::PolarizationType> pols;
+    std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType> pols;
     pols.first = _convertDualPolarization(pol, true);
     pols.second = _convertDualPolarization(pol, false);
     return pols;
@@ -482,7 +477,7 @@ mem::auto_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
     case six::ProjectionType::PLANE:
     {
         const six::sidd::PlaneProjection* const plane =
-            static_cast<six::sidd::PlaneProjection*>(
+            dynamic_cast<six::sidd::PlaneProjection*>(
                         data->measurement->projection.get());
 
         projModel.reset(new scene::PlaneProjectionModel(
@@ -499,7 +494,7 @@ mem::auto_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
     case six::ProjectionType::GEOGRAPHIC:
     {
         const six::sidd::MeasurableProjection* const geo =
-            static_cast<six::sidd::MeasurableProjection*>(
+            dynamic_cast<six::sidd::MeasurableProjection*>(
                         data->measurement->projection.get());
 
         projModel.reset(
@@ -530,8 +525,7 @@ mem::auto_ptr<DerivedData> Utilities::parseData(
         logging::Logger& log)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(DataType::DERIVED,
-                           new XMLControlCreatorT<DerivedXMLControl>());
+    xmlRegistry.addCreator<DerivedXMLControl>();
 
     mem::auto_ptr<Data> data(
 			       six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
@@ -566,8 +560,7 @@ std::string Utilities::toXMLString(const DerivedData& data,
                                    logging::Logger* logger)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(DataType::DERIVED,
-                           new XMLControlCreatorT<DerivedXMLControl>());
+    xmlRegistry.addCreator<DerivedXMLControl>();
 
     logging::NullLogger nullLogger;
     return ::six::toValidXMLString(&data,

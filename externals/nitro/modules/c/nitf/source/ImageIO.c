@@ -3338,11 +3338,15 @@ NITFPROT(void) nitf_ImageIO_destruct(nitf_ImageIO ** nitf)
                                                  &error);
     }
 
-    if (nitfp->decompressionControl != NULL)
-        (*(nitfp->decompressor->destroyControl))(&(nitfp->decompressionControl));
+    /* Have a plugin with "destructor" */
+    if ((nitfp->decompressor != NULL) && (nitfp->decompressor->destroyControl != NULL))
+    {
+        if (nitfp->decompressionControl != NULL)
+            (*(nitfp->decompressor->destroyControl))(&(nitfp->decompressionControl));
 
-    if (nitfp->compressionControl != NULL)
-        (*(nitfp->compressor->destroyControl))(&(nitfp->compressionControl));
+        if (nitfp->compressionControl != NULL)
+            (*(nitfp->compressor->destroyControl))(&(nitfp->compressionControl));
+    }
 
     NITF_FREE(nitfp);
     *nitf = NULL;
@@ -3654,7 +3658,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,
     if (cntl->nextRow + numRows > nitf->numRows)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
-                         "Row write request of %ld rows at row %ld exceeds row limit %ld",
+                         "Row write request of %u rows at row %u exceeds row limit %u",
                          numRows, cntl->nextRow, nitf->numRows);
         return NITF_FAILURE;
     }
@@ -3791,7 +3795,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_setPadPixel(nitf_ImageIO * object,
         /* The 16 byte complex pixel is not actually possible */
     default:
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                         "Invalid format size [%s]", length);
+                         "Invalid format size [%u]", length);
         return NITF_FAILURE;
     }
 
@@ -4167,7 +4171,9 @@ NITFPRIV(int) nitf_ImageIO_decodeBlockingMode(_nitf_ImageIO* nitf,
         }
         else if (nitf->numBands == 2
             && ((subhdr->bandInfo[0]->subcategory->raw[0] == 'I'
-                && subhdr->bandInfo[1]->subcategory->raw[0] == 'Q'))
+                && subhdr->bandInfo[1]->subcategory->raw[0] == 'Q') || 
+                (subhdr->bandInfo[0]->subcategory->raw[0] == 'M'
+                && subhdr->bandInfo[1]->subcategory->raw[0] == 'P'))
             && (nitf->compression
                 & (NITF_IMAGE_IO_COMPRESSION_NC
                     | NITF_IMAGE_IO_COMPRESSION_NM)))
@@ -4628,7 +4634,7 @@ NITFPRIV(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
     if (!found)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid pixel options: Type %s bits %ld justification %1s",
+                         "Invalid pixel options: Type %s bits %u justification %1s",
                          pixelType, nBits, justify);
         return NITF_FAILURE;
     }
@@ -5061,18 +5067,13 @@ NITFPRIV(int)
 nitf_ImageIO_setup_common(_nitf_ImageIOControl *cntl, uint32_t nBlockCols,
         nitf_Error *error)
 {
-    _nitf_ImageIO *nitf;
-    _nitf_ImageIOBlock **blockIOs;  /* The block I/O control structures */
-    uint32_t bytes;              /* Number of bytes per pixel */
-    uint32_t bandCount;          /* Number of bands */
-
-    nitf = cntl->nitf;
-    bytes = nitf->pixel.bytes;
+    _nitf_ImageIO* nitf = cntl->nitf;
+    const uint32_t bytes = nitf->pixel.bytes; /* Number of bytes per pixel */
 
     cntl->numberInc = nitf->nBlocksPerRow;
     cntl->userInc = cntl->numColumns * bytes;
 
-    cntl->blockOffsetInc = nitf->numColumnsPerBlock * bytes;
+    cntl->blockOffsetInc = nitf->numColumnsPerBlock * ((uint64_t)bytes);
     if (nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_R ||
         nitf->blockingMode == NITF_IMAGE_IO_BLOCKING_MODE_P)
     {
@@ -5081,8 +5082,8 @@ nitf_ImageIO_setup_common(_nitf_ImageIOControl *cntl, uint32_t nBlockCols,
     }
 
     /* Create the block I/O structures */
-    bandCount = cntl->numBandSubset;
-    blockIOs = nitf_ImageIO_allocBlockArray(nBlockCols, bandCount, error);
+    const uint32_t bandCount = cntl->numBandSubset; /* Number of bands */
+    _nitf_ImageIOBlock** blockIOs = nitf_ImageIO_allocBlockArray(nBlockCols, bandCount, error); /* The block I/O control structures */
     if (blockIOs == NULL)
     {
         return NITF_FAILURE;
@@ -5209,10 +5210,11 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
              * number of rows must be accumulated before
              * you can reuse the buffer.
              */
-            readBuffer = (uint8_t *) NITF_MALLOC((cntl->rowSkip) *
-                                                    (nitf->numColumnsPerBlock +
+            const size_t size = ((size_t)cntl->rowSkip) *
+                                                    (((size_t)nitf->numColumnsPerBlock) +
                                                      cntl->columnSkip) *
-                                                    bytes * bandCnt);
+                                                    bytes * bandCnt;
+            readBuffer = (uint8_t *) NITF_MALLOC(size);
             if (readBuffer == NULL)
             {
                 nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -5225,7 +5227,7 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
     else
     {
         writeBuffer =
-            (uint8_t *) NITF_MALLOC(nitf->numColumnsPerBlock * bytes);
+            (uint8_t *) NITF_MALLOC(nitf->numColumnsPerBlock * ((size_t)bytes));
         if (writeBuffer == NULL)
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -5314,10 +5316,9 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
                 {
                     /* There is a different buffer for each band */
                     blockIO->rwBuffer.buffer = readBuffer +
-                        (cntl->rowSkip) * (nitf->numColumnsPerBlock +
-                                           cntl->columnSkip) * bytes * bandIdx;
-                    blockIO->rwBuffer.offset.mark = blockIO->residual * bytes;
-                    blockIO->rwBuffer.offset.orig = blockIO->residual * bytes;
+                        ((size_t)cntl->rowSkip) * (nitf->numColumnsPerBlock +
+                                           ((size_t)cntl->columnSkip)) * ((size_t)bytes) * bandIdx;
+                    blockIO->rwBuffer.offset.mark = blockIO->rwBuffer.offset.orig = ((uint64_t)blockIO->residual) * bytes;
                     blockIO->userEqBuffer = 0;
                 }
                 else
@@ -5475,10 +5476,11 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     /* Allocate I/O and unpacked buffer */
     if (cntl->downSampling)
     {
-        unpackedBuffer = (uint8_t *) NITF_MALLOC((cntl->rowSkip) *
-                                                    (nitf->numColumnsPerBlock +
+        const size_t size = ((size_t)cntl->rowSkip) *
+                                                    (((size_t)nitf->numColumnsPerBlock) +
                                                     cntl->columnSkip) *
-                                                    bytes * (nitf->numBands));
+                                                    bytes * (nitf->numBands);
+        unpackedBuffer = (uint8_t *) NITF_MALLOC(size);
         if (unpackedBuffer == NULL)
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -5490,9 +5492,9 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     else
         unpackedBuffer = NULL;
 
-
-    ioBuffer = (uint8_t *) NITF_MALLOC(nitf->numColumnsPerBlock *
-                                          nitf->numBands * bytes);
+    const size_t size = ((size_t)nitf->numColumnsPerBlock) *
+                                          nitf->numBands * bytes;
+    ioBuffer = (uint8_t *) NITF_MALLOC(size);
     if (ioBuffer == NULL)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -5590,8 +5592,7 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
                  * If we're only requesting e.g. bands 2..n, need to adjust
                  * the starting point so that band 2 maps to position 0.
                  */
-                blockIO->rwBuffer.offset.mark = bytes * (band - cntl->bandSubset[0]);
-                blockIO->rwBuffer.offset.orig = bytes * (band - cntl->bandSubset[0]);
+                blockIO->rwBuffer.offset.mark = blockIO->rwBuffer.offset.orig = ((uint64_t)bytes) * (band - cntl->bandSubset[0]);
             }
             else
             {
@@ -5607,10 +5608,9 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
             {
                 /* There is a different buffer for each band */
                 blockIO->unpacked.buffer = unpackedBuffer +
-                    (cntl->rowSkip) * (nitf->numColumnsPerBlock +
-                                       cntl->columnSkip) * bytes * band;
-                blockIO->unpacked.offset.mark = blockIO->residual * bytes;
-                blockIO->unpacked.offset.orig = blockIO->residual * bytes;
+                    ((size_t)cntl->rowSkip) * (nitf->numColumnsPerBlock +
+                                       ((size_t)cntl->columnSkip)) * ((size_t)bytes) * band;
+                blockIO->unpacked.offset.mark = blockIO->unpacked.offset.orig = ((uint64_t)blockIO->residual) * bytes;
                 blockIO->unpackedNoFree = 0;
             }
             else
@@ -5732,6 +5732,7 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
     cntl->bandSubset =
         (uint32_t *) NITF_MALLOC(subWindow->numBands *
                                     sizeof(uint32_t));
+
     if (cntl->bandSubset == NULL)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -5793,11 +5794,11 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
     if (cntl->downSampling)
     {
         /* Full resolution */
-        cntl->columnSave =
-            (uint8_t *) NITF_MALLOC((cntl->numRows) * (cntl->rowSkip) *
+        const size_t size = ((size_t)cntl->numRows) * (cntl->rowSkip) *
                                        (cntl->columnSkip) *
                                        (cntl->numBandSubset) *
-                                       (nitf->pixel.bytes));
+                                       (nitf->pixel.bytes);
+        cntl->columnSave = (uint8_t *) NITF_MALLOC(size);
         if (cntl->columnSave == NULL)
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -6011,7 +6012,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
         || (colSkip > nitf->blockInfo.numColsPerBlock))
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid pixel skips %ld %ld (limits are %ld %ld)",
+                         "Invalid pixel skips %u %u (limits are %u %u)",
                          rowSkip, colSkip,
                          nitf->blockInfo.numRowsPerBlock,
                          nitf->blockInfo.numColsPerBlock);
@@ -6026,7 +6027,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (numRowsFR > (nitf->numRows + rowSkip - 1) || numRowsFR == 0)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid number of rows %"PRIu32" (Full resolution) (limit is %ld)",
+                         "Invalid number of rows %u (Full resolution) (limit is %u)",
                          numRowsFR, nitf->numRows);
         return NITF_FAILURE;
     }
@@ -6034,7 +6035,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (numColsFR > (nitf->numColumns + colSkip - 1) || numColsFR == 0)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid number of columns %"PRIu32" (Full resolution) (limit is %ld)",
+                         "Invalid number of columns %u (Full resolution) (limit is %u)",
                          numColsFR, nitf->numColumns);
         return NITF_FAILURE;
     }
@@ -6044,8 +6045,8 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (subWindow->startRow + numRowsFR > (nitf->numRows + rowSkip - 1))
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid start row %ld for sub-window height %ld rows,"
-                         "full resolution (limit is %ld)",
+                         "Invalid start row %u for sub-window height %u rows,"
+                         "full resolution (limit is %u)",
                          subWindow->startRow, numRowsFR, nitf->numRows - 1);
         return NITF_FAILURE;
     }
@@ -6053,8 +6054,8 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (subWindow->startCol + numColsFR > (nitf->numColumns + colSkip - 1))
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid start column %ld for sub-window width %ld columns,"
-                         "full resolution (limit is %ld)",
+                         "Invalid start column %u for sub-window width %u columns,"
+                         "full resolution (limit is %u)",
                          subWindow->startCol, numColsFR,
                          nitf->numColumns - 1);
         return NITF_FAILURE;
@@ -6065,7 +6066,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (subWindow->numBands > nitf->numBands)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Too many bands %ld (limit is %ld)\n",
+                         "Too many bands %u (limit is %u)\n",
                          subWindow->numBands, nitf->numBands);
         return NITF_FAILURE;
     }
@@ -6073,8 +6074,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (subWindow->numBands <= 0)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid bands count %ld\n", subWindow->numBands,
-                         nitf->numBands);
+                         "Invalid bands count %u\n", subWindow->numBands);
         return NITF_FAILURE;
     }
 
@@ -6083,7 +6083,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
         if (subWindow->bandList[bandIdx] >= nitf->numBands)
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                             "Invalid band %ld (limit is %ld)\n",
+                             "Invalid band %u (limit is %u)\n",
                              subWindow->bandList[bandIdx],
                              nitf->numBands - 1);
             return NITF_FAILURE;
@@ -6096,7 +6096,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
         if (subWindow->bandList[bandIdx] < subWindow->bandList[0])
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                             "Band <%ld> at index 0 is not the lowest band\n",
+                             "Band <%u> at index 0 is not the lowest band\n",
                              subWindow->bandList[0]);
             return NITF_FAILURE;
         }
@@ -6841,21 +6841,20 @@ NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
                                                  nitf_IOInterface* io,
                                                  nitf_Error * error)
 {
-    _nitf_ImageIO *nitf; /* Parent _nitf_ImageIO object */
     uint32_t nBlockCols;   /* Number of block columns */
     uint32_t numRowsFull; /* Number of rows to read in full res sub-window */
     uint32_t numBands;     /* Number of bands */
     uint32_t col;          /* Block column index */
     uint32_t row;          /* Current row in sub-window */
     uint32_t band;         /* Current band in sub-window */
-    _nitf_ImageIOBlock *blockIO; /* The current  block IO structure */
+    _nitf_ImageIOBlock *blockIO = NULL; /* The current  block IO structure */
     uint8_t *columnSave;   /* Column save buffer ptr,current block column */
     NITF_BOOL noUserInc;      /* Do not increment user buffer pointer if TRUE */
     uint32_t bytes;        /* Pixel size in bytes */
     uint32_t rowSkipCount; /* Number of rows since the last row skip */
-    uint32_t numColsDR;    /* Number of columns, down-sample resolution */
+    uint32_t numColsDR = 0;    /* Number of columns, down-sample resolution */
 
-    nitf = cntl->nitf;
+    _nitf_ImageIO* nitf = cntl->nitf; /* Parent _nitf_ImageIO object */
 
     /*
      * Calculate the number of rows to read (full resolution). Check for the
@@ -6874,8 +6873,6 @@ NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
     noUserInc = 1; /* Only increment after calling down-sample plugin */
     rowSkipCount = 0;
 
-    blockIO = NULL; /* Avoid spurious uninitialized warning */
-    numColsDR = 0;  /* Avoid spurious uninitialized warning */
     for (col = 0; col < nBlockCols; col++)
     {
         columnSave = cntl->columnSave;
@@ -6901,10 +6898,10 @@ NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
                  */
 
                 if (blockIO->residual != 0)
-                    memmove(blockIO->unpacked.buffer
-                            + blockIO->unpacked.offset.mark -
-                            (blockIO->residual) * bytes, columnSave,
-                            (blockIO->residual) * bytes);
+                {
+                    const size_t size = (blockIO->residual) * ((size_t)bytes);
+                    memmove(blockIO->unpacked.buffer + blockIO->unpacked.offset.mark - size, columnSave, size);
+                }
 
                 if (blockIO->myResidual != 0)
                 {
@@ -6916,7 +6913,7 @@ NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
                                 + blockIO->unpacked.offset.mark +
                                 (blockIO->pixelCountFR -
                                  blockIO->myResidual) * bytes,
-                                (blockIO->myResidual) * bytes);
+                                (blockIO->myResidual) * ((size_t)bytes));
                     }
                     else        /* Off the side of the image, supply pad */
                     {
@@ -6928,19 +6925,19 @@ NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
                                 + blockIO->unpacked.offset.mark
                                 + blockIO->pixelCountFR * bytes,
                                 cntl->padBuffer,
-                                (blockIO->myResidual) * bytes);
+                                (blockIO->myResidual) * ((size_t)bytes));
                     }
                 }
 
                 /* Update columnSave, array is organized like [row][band] */
 
-                columnSave += (cntl->columnSkip) * bytes;
+                columnSave += (cntl->columnSkip) * ((size_t)bytes);
 
                 if (nitf->vtbl.unformat != NULL)
                     (*(nitf->vtbl.unformat)) (blockIO->unpacked.buffer +
-                                              (rowSkipCount) *
+                                              ((size_t)rowSkipCount) *
                                               (nitf->numColumnsPerBlock +
-                                               cntl->columnSkip) * bytes,
+                                               ((size_t)cntl->columnSkip)) * ((size_t)bytes),
                                               blockIO->formatCount,
                                               nitf->pixel.shift);
 
@@ -6993,7 +6990,7 @@ NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
                 uint32_t colsInLastWindow;
 
                 /* Partial neighborhoods happen in last block */
-                if (col == (nBlockCols - 1))
+                if ((col == (nBlockCols - 1)) && (blockIO != NULL))
                     colsInLastWindow =
                         cntl->columnSkip - blockIO->myResidual;
                 else
@@ -7044,7 +7041,7 @@ NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
                 for (i = 0; i < padRows; i++)
                 {
                     memmove(blockIO->unpacked.buffer +
-                            (cntl->unpackedInc) * (rowSkipCount + i),
+                            (cntl->unpackedInc) * (((size_t)rowSkipCount) + i),
                             cntl->padBuffer, cntl->unpackedInc);
                 }
                 /* Partial neighborhoods happen in last block */
@@ -7300,7 +7297,7 @@ NITFPRIV(int) nitf_ImageIO_writeToBlock(_nitf_ImageIOBlock * blockIO,
 #endif
                 memmove(&(blockIO->blockMask[blockIO->number+1]),
                         &(blockIO->blockMask[blockIO->number]),
-                        (nitf->nBlocksPerRow * nitf->nBlocksPerColumn -
+                        (((size_t)nitf->nBlocksPerRow) * nitf->nBlocksPerColumn -
                          blockIO->number) * sizeof(uint64_t));
 
                 blockIO->blockMask[blockIO->number] = NITF_IMAGE_IO_NO_BLOCK;
@@ -9369,7 +9366,7 @@ nitf_ImageIO_12PixelStart(nitf_DecompressionControl* control,
     the pixel count is odd or even
 */
 
-    icntl->blockSizeCompressed = 3*(icntl->blockPixelCount/2) + 2*(icntl->odd);
+    icntl->blockSizeCompressed = 3*(icntl->blockPixelCount/2) + 2*((size_t)icntl->odd);
 
     icntl->buffer = (uint8_t *) NITF_MALLOC(icntl->blockSizeCompressed);
     if (icntl->buffer == NULL)
@@ -9502,7 +9499,7 @@ nitf_CompressionControl  *nitf_ImageIO_12PixelComOpen
 /* Does not work for S mode which is not supported */
   icntl->blockPixelCount = (size_t)numRowsPerBlock*numColumnsPerBlock*numBands;
   icntl->odd = icntl->blockPixelCount & 1;
-  icntl->blockSizeCompressed = 3*(icntl->blockPixelCount/2) + 2*(icntl->odd);
+  icntl->blockSizeCompressed = 3*(icntl->blockPixelCount/2) + 2*((size_t)icntl->odd);
   icntl->blockSizeUncompressed = icntl->blockPixelCount*2;
   icntl->buffer = NULL;
 

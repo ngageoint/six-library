@@ -51,12 +51,9 @@ void readWideband(six::NITFReadControl& reader,
         const six::Data& data,
         mem::ScopedAlignedArray<std::byte>& buffer)
 {
-    buffer.reset(data.getNumRows() *
-                 data.getNumCols() *
-                 data.getNumBytesPerPixel());
+    buffer.reset(getExtent(data).area() * data.getNumBytesPerPixel());
     six::Region region;
-    region.setNumRows(data.getNumRows());
-    region.setNumCols(data.getNumCols());
+    setDims(region, getExtent(data));
     region.setBuffer(buffer.get());
     reader.interleaved(region, 0);
 }
@@ -67,12 +64,8 @@ bool siddsMatch(const std::string& sidd1Path,
         bool ignoreDate)
 {
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<
-            six::sicd::ComplexXMLControl>());
-    xmlRegistry.addCreator(six::DataType::DERIVED,
-            new six::XMLControlCreatorT<
-            six::sidd::DerivedXMLControl>());
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
@@ -167,8 +160,7 @@ bool siddsMatch(const std::string& sidd1Path,
     {
         // If we're ignoring metadata we need to explicitly check image data
         // dimensions to prevent memcmp() from going out of bounds
-        if (sidd1Metadata->getNumRows() != sidd2Metadata->getNumRows() ||
-            sidd1Metadata->getNumCols() != sidd2Metadata->getNumCols() ||
+        if (getExtent(*sidd1Metadata) != getExtent(*sidd2Metadata) ||
             sidd1Metadata->getNumBytesPerPixel() !=
                 sidd2Metadata->getNumBytesPerPixel())
         {
@@ -178,8 +170,7 @@ bool siddsMatch(const std::string& sidd1Path,
 
     int result =
         std::memcmp(sidd1Buffer.get(), sidd2Buffer.get(),
-                sidd1Metadata->getNumRows() *
-                sidd1Metadata->getNumCols() *
+                getExtent(*sidd1Metadata).area() *
                 sidd1Metadata->getNumBytesPerPixel());
 
     return !result;

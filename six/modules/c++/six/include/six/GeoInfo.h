@@ -41,21 +41,15 @@ namespace six
  *
  *  Compiler-generated copy constructor and assignment operator are sufficient
  */
-class GeoInfo
+struct GeoInfo
 {
-public:
-    //!  Constructor
-    GeoInfo()
-    {
-    }
+    GeoInfo() = default;
 
     /*!  Destructor (this may be required by some old compilers that otherwise
      *   can't handle a ScopedCopyablePtr of the same object being a member
      *   variable)
      */
-    ~GeoInfo()
-    {
-    }
+    ~GeoInfo() = default;
 
     //!  Name of a geographic feature
     std::string name;

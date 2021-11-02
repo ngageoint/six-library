@@ -24,6 +24,8 @@
 #include <memory>
 #include <algorithm>
 #include <string>
+#include <std/span>
+#include <std/cstddef>
 
 #include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
@@ -59,7 +61,7 @@ six::sicd::ComplexData* const updateMetadata(
         const types::RowCol<size_t>& aoiDims)
 {
     six::sicd::ComplexData* const aoiData(
-               static_cast<six::sicd::ComplexData*>(data.clone()));
+               dynamic_cast<six::sicd::ComplexData*>(data.clone()));
 
     aoiData->imageData->firstRow += aoiOffset.row;
     aoiData->imageData->firstCol += aoiOffset.col;
@@ -87,7 +89,7 @@ six::sicd::ComplexData* const updateMetadata(
 }
 
 void cropSICD(six::NITFReadControl& reader,
-              const std::vector<std::string>& schemaPaths,
+              const std::vector<std::string>& schemaPaths_,
               const six::sicd::ComplexData& data,
               const scene::SceneGeometry& geom,
               const scene::ProjectionModel& projection,
@@ -96,8 +98,7 @@ void cropSICD(six::NITFReadControl& reader,
               const std::string& outPathname)
 {
     // Make sure the AOI is in bounds
-    const types::RowCol<size_t> origDims(data.getNumRows(),
-                                         data.getNumCols());
+    const auto origDims = getExtent(data);
 
     if (aoiOffset.row + aoiDims.row > origDims.row ||
         aoiOffset.col + aoiDims.col > origDims.col)
@@ -112,28 +113,23 @@ void cropSICD(six::NITFReadControl& reader,
 
     // Read in the AOI
     const size_t numBytesPerPixel(data.getNumBytesPerPixel());
-    const size_t numBytes(origDims.row * origDims.col * numBytesPerPixel);
 
     six::Region region;
-    region.setStartRow(aoiOffset.row);
-    region.setStartCol(aoiOffset.col);
-    region.setNumRows(aoiDims.row);
-    region.setNumCols(aoiDims.col);
-    const auto buffer = region.setBuffer(numBytes);
+    setOffset(region, aoiOffset);
+    setDims(region, aoiDims);
+    const auto buffer = region.setComplexBuffer(origDims.area());
     reader.interleaved(region, 0);
 
-    six::sicd::ComplexData* const aoiData = updateMetadata(
+    std::unique_ptr<six::Data> aoiData(updateMetadata(
             data, geom,  projection,
-            aoiOffset, aoiDims);
-    std::unique_ptr<six::Data> scopedData(aoiData);
+            aoiOffset, aoiDims));
 
     // Write the AOI SICD out
-    mem::SharedPtr<six::Container> container(new six::Container(
-            six::DataType::COMPLEX));
-    container->addData(std::move(scopedData));
-    six::NITFWriteControl writer(container);
-    six::BufferList images(1, buffer.get());
-    writer.save(images, outPathname, schemaPaths);
+    six::NITFWriteControl writer(std::move(aoiData));
+    const std::span<const std::complex<float>> image(buffer.get(), origDims.area());
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+    writer.save(image, outPathname, schemaPaths);
 }
 
 }
@@ -193,7 +189,7 @@ void cropSICD(six::NITFReadControl& reader,
     }
 
     const ComplexData* const data =
-        static_cast<const ComplexData*>(dataPtr);
+        dynamic_cast<const ComplexData*>(dataPtr);
 
     // Build up the geometry info
     std::unique_ptr<const scene::SceneGeometry> geom(
@@ -241,7 +237,7 @@ void cropSICD(six::NITFReadControl& reader,
     }
 
     const six::sicd::ComplexData* const data =
-        static_cast<const six::sicd::ComplexData*>(dataPtr);
+        dynamic_cast<const six::sicd::ComplexData*>(dataPtr);
 
     // Convert ECEF corners to slant pixel pixels
     const ImageData& imageData(*data->imageData);
@@ -249,8 +245,8 @@ void cropSICD(six::NITFReadControl& reader,
                                           static_cast<double>(imageData.firstCol));
 
     const types::RowCol<double> offset(
-            imageData.scpPixel.row - aoiOffset.row,
-            imageData.scpPixel.col - aoiOffset.col);
+            static_cast<double>(imageData.scpPixel.row) - aoiOffset.row,
+            static_cast<double>(imageData.scpPixel.col) - aoiOffset.col);
 
     std::unique_ptr<const scene::SceneGeometry> geom(
             six::sicd::Utilities::getSceneGeometry(data));
@@ -258,8 +254,7 @@ void cropSICD(six::NITFReadControl& reader,
     std::unique_ptr<const scene::ProjectionModel> projection(
             six::sicd::Utilities::getProjectionModel(data, geom.get()));
 
-    types::RowCol<double> minPixel(static_cast<double>(data->getNumRows()),
-                                   static_cast<double>(data->getNumCols()));
+    types::RowCol<double> minPixel(getExtent(*data));
     types::RowCol<double> maxPixel(0.0, 0.0);
     for (size_t ii = 0; ii < corners.size(); ++ii)
     {
@@ -280,8 +275,8 @@ void cropSICD(six::NITFReadControl& reader,
     maxPixel.row = std::ceil(maxPixel.row);
     maxPixel.col = std::ceil(maxPixel.col);
 
-    const types::RowCol<double> lastDim(data->getNumRows() - 1.0,
-                                        data->getNumCols() - 1.0);
+    const types::RowCol<double> lastDim(static_cast<double>(data->getNumRows()) - 1.0,
+                                        static_cast<double>(data->getNumCols()) - 1.0);
 
     if (!trimCornersIfNeeded &&
         (minPixel.row < 0 ||
@@ -293,13 +288,8 @@ void cropSICD(six::NITFReadControl& reader,
                 "One or more corners are outside of the image bounds"));
     }
 
-    const types::RowCol<size_t> upperLeft(
-            static_cast<size_t>(std::max(minPixel.row, 0.0)),
-            static_cast<size_t>(std::max(minPixel.col, 0.0)));
-
-    const types::RowCol<size_t> lowerRight(
-            static_cast<size_t>(std::min(maxPixel.row, lastDim.row)),
-            static_cast<size_t>(std::min(maxPixel.col, lastDim.col)));
+    const types::RowCol<size_t> upperLeft(RowColDouble(std::max(minPixel.row, 0.0), std::max(minPixel.col, 0.0)));
+    const types::RowCol<size_t> lowerRight(RowColDouble(std::min(maxPixel.row, lastDim.row), std::min(maxPixel.col, lastDim.col)));
 
     // This would only happen if the "upper left" corner was actually below or
     // to the right of the footprint (the lower right corner would have been

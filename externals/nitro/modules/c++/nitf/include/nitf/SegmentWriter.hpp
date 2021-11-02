@@ -23,11 +23,13 @@
 #ifndef __NITF_SEGMENT_WRITER_HPP__
 #define __NITF_SEGMENT_WRITER_HPP__
 
+#include <string>
+
 #include "nitf/SegmentWriter.h"
 #include "nitf/Object.hpp"
 #include "nitf/WriteHandler.hpp"
 #include "nitf/SegmentSource.hpp"
-#include <string>
+#include "nitf/exports.hpp"
 
 /*!
  *  \file SegmentWriter.hpp
@@ -40,10 +42,10 @@ namespace nitf
  *  \class SegmentWriter
  *  \brief  The C++ wrapper for the nitf_SegmentWriter
  */
-class SegmentWriter : public WriteHandler
+class NITRO_NITFCPP_API SegmentWriter : public WriteHandler
 {
 public:
-    SegmentWriter();
+    SegmentWriter() noexcept(false);
 
     SegmentWriter(nitf::SegmentSource segmentSource);
 
@@ -52,7 +54,7 @@ public:
     {
     }
 
-    ~SegmentWriter();
+    ~SegmentWriter() = default;
 
     /*!
      *  Attach a segment source from which to write.

@@ -22,6 +22,7 @@
 #include <six/sidd/SIDDVersionUpdater.h>
 
 #include <iostream>
+#include <algorithm>
 
 #include <cli/ArgumentParser.h>
 #include <except/Exception.h>
@@ -51,31 +52,30 @@ void readSidd(const std::string& pathname,
     derivedData.reset(reinterpret_cast<six::sidd::DerivedData*>(
             container->getData(0)->clone()));
 
-    const types::RowCol<size_t> extent(derivedData->getNumRows(),
-                                       derivedData->getNumCols());
+    const auto extent = getExtent(*derivedData);
     widebandData.resize(extent.area() * derivedData->getNumBytesPerPixel());
     six::Region region;
-    region.setNumRows(extent.row);
-    region.setNumCols(extent.col);
+    setDims(region, extent);
     region.setBuffer(widebandData.data());
 
     reader.interleaved(region, 0);
 }
 
 void writeSidd(std::unique_ptr<six::Data>&& derivedData,
-               const std::vector<std::byte>& widebandData,
-               const std::vector<std::string>& schemaPaths,
+               const std::vector<std::byte>& widebandData_,
+               const std::vector<std::string>& schemaPaths_,
                const std::string& pathname)
 {
-    mem::SharedPtr<six::Container> container(new six::Container(
-        six::DataType::DERIVED));
-    container->addData(std::move(derivedData));
-
+    mem::SharedPtr<six::Container> container(new six::Container(std::move(derivedData)));
     six::NITFWriteControl writer(container);
 
-    six::buffer_list buffers;
-    buffers.push_back(reinterpret_cast<const std::byte*>(widebandData.data()));
-    writer.save(buffers, pathname, schemaPaths);
+    const void* pWidebandData_ = widebandData_.data();
+    auto pWidebandData = static_cast<const std::complex<float>*>(pWidebandData_);
+    auto size = widebandData_.size() / sizeof(std::complex<float>);
+    const std::span<const std::complex<float>> widebandData(pWidebandData, size);
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+    writer.save(widebandData, pathname, schemaPaths);
 }
 }
 
@@ -125,9 +125,7 @@ int main(int argc, char** argv)
             schemaPaths.push_back(options->get<std::string>("schema"));
         }
 
-        six::XMLControlFactory::getInstance().addCreator(
-                six::DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
 
         std::unique_ptr<six::sidd::DerivedData> derivedData;
         std::vector<std::byte> widebandData;

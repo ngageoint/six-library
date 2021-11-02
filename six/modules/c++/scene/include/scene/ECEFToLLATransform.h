@@ -27,13 +27,12 @@
 namespace scene
 {
 
-class ECEFToLLATransform : public CoordinateTransform
+struct ECEFToLLATransform : public CoordinateTransform
 {
-public:
     /**
      * This constructor just calls the base class constructor
      */
-    ECEFToLLATransform();
+    ECEFToLLATransform() = default;
 
     /**
      * This constructor just calls the base class constructor

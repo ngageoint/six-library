@@ -1,4 +1,5 @@
 #include <algorithm>
+
 #include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/Utilities.h>
 #include <math/ConvexHull.h>
@@ -46,11 +47,11 @@ std::vector<RowColDouble > AreaPlaneUtility::computeCornersPix(
         // Use the grid corners
         cornersPix.push_back(RowColDouble(0.0, 0.0));
         cornersPix.push_back(RowColDouble(
-                0.0, data.getNumCols() - 1.0));
+                0.0, static_cast<double>(data.getNumCols()) - 1.0));
         cornersPix.push_back(RowColDouble(
-                data.getNumRows() - 1.0, data.getNumCols() - 1.0));
+                 static_cast<double>(data.getNumRows()) - 1.0, static_cast<double>(data.getNumCols()) - 1.0));
         cornersPix.push_back(RowColDouble(
-                data.getNumRows() - 1.0, 0.0));
+                 static_cast<double>(data.getNumRows()) - 1.0, 0.0));
     }
 
     return cornersPix;
@@ -118,8 +119,8 @@ std::vector<Vector3> AreaPlaneUtility::computeInPlaneCorners(
     for (size_t ii = 0; ii < cornersPix.size(); ++ii)
     {
         // Offset the pixel corners relative to start chip
-        cornersPix[ii].row += data.imageData->firstRow;
-        cornersPix[ii].col += data.imageData->firstCol;
+        const types::RowCol<size_t> cornersPix_ii(data.imageData->firstRow, data.imageData->firstCol);
+        cornersPix[ii] += cornersPix_ii;
 
         const RowColDouble sampleSpacing(
                 data.grid->row->sampleSpacing,
@@ -173,12 +174,10 @@ types::RowCol<size_t> AreaPlaneUtility::derivePlaneDimensions(
             sortedMetersFromCenter.az[lastIndex.col] -
             sortedMetersFromCenter.az[0]);
 
-    types::RowCol<size_t> dimensions;
-    dimensions.row = static_cast<size_t>(
-            std::ceil(std::max<double>(1.0, rowDistance / spacing.row)));
-    dimensions.col = static_cast<size_t>(
-            std::ceil(std::max<double>(1.0, colDistance / spacing.col)));
-    return dimensions;
+    types::RowCol<double> dimensions;
+    dimensions.row = std::ceil(std::max<double>(1.0, rowDistance / spacing.row));
+    dimensions.col = std::ceil(std::max<double>(1.0, colDistance / spacing.col));
+    return types::RowCol<size_t>(dimensions);
 }
 
 RowColDouble AreaPlaneUtility::deriveReferencePoint(
@@ -222,10 +221,10 @@ void AreaPlaneUtility::setAreaPlane(ComplexData& data,
 
         std::vector<RowColDouble> imageCorners(4);
         imageCorners[0] = RowColDouble(0.0, 0.0);
-        imageCorners[1] = RowColDouble(0.0, data.getNumCols() - 1.0);
-        imageCorners[2] = RowColDouble(data.getNumRows() - 1.0,
-                data.getNumCols() - 1.0);
-        imageCorners[3] = RowColDouble(data.getNumRows() - 1.0, 0.0);
+        imageCorners[1] = RowColDouble(0.0, static_cast<double>(data.getNumCols()) - 1.0);
+        imageCorners[2] = RowColDouble(static_cast<double>(data.getNumRows()) - 1.0,
+                 static_cast<double>(data.getNumCols()) - 1.0);
+        imageCorners[3] = RowColDouble(static_cast<double>(data.getNumRows()) - 1.0, 0.0);
         LatLonAltCorners& acpCorners =
                 data.radarCollection->area->acpCorners;
 

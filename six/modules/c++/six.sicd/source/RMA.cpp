@@ -130,7 +130,7 @@ Vector3 RMAT::uLOS(const Vector3& scp) const
 
 int RMAT::look(const Vector3& scp) const
 {
-    Vector3 left = cross(refPos.unit(), refVel.unit());
+    const Vector3 left = cross(refPos.unit(), refVel.unit());
     return math::sign(left.dot(uLOS(scp)));
 }
 
@@ -210,7 +210,7 @@ Vector3 RMCR::spn(const Vector3& scp) const
 
 int RMCR::look(const Vector3& scp) const
 {
-    Vector3 left = cross(refPos.unit(), refVel.unit());
+    const Vector3 left = cross(refPos.unit(), refVel.unit());
     return math::sign(left.dot(uXRG(scp)));
 }
 

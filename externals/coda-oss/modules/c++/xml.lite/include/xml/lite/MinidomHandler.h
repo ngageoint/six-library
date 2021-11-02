@@ -71,7 +71,7 @@ class MinidomHandler : public ContentHandler
 public:
     //! Constructor.  Uses default document
     MinidomHandler() :
-        mDocument(NULL), mOwnDocument(true), mPreserveCharData(false)
+        mDocument(nullptr), mOwnDocument(true), mPreserveCharData(false)
     {
         setDocument(new Document());
     }
@@ -79,7 +79,7 @@ public:
     //! Destructor
     virtual ~ MinidomHandler()
     {
-        setDocument(NULL, true);
+        setDocument(nullptr, true);
     }
 
     virtual void setDocument(Document *newDocument, bool own = true);
@@ -108,7 +108,9 @@ public:
      * \param length The length of the char data
      */
     virtual void characters(const char* value, int length) override;
-    bool characters(const wchar_t* const value, const size_t length) override;
+
+    bool wcharacters_(const uint16_t* /*data*/, size_t /*length*/) override;
+    bool wcharacters_(const uint32_t* /*data*/, size_t /*length*/) override;
 
     // Which characters() routine should be called?
     bool use_wchar_t() const override;
@@ -188,6 +190,11 @@ protected:
     bool mOwnDocument;
     bool mPreserveCharData;
     bool mStoreEncoding = false;
+
+ private:
+    template <typename T>
+    bool characters_(const T* value, size_t length);
+    bool call_characters(const std::string& utf8Value);
 };
 }
 }

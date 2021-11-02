@@ -20,6 +20,8 @@
  *
  */
 
+#include <vector>
+
 #include "xml/lite/XMLReader.h"
 #include <mem/ScopedArray.h>
 
@@ -40,11 +42,11 @@ void xml::lite::XMLReaderXerces::parse(io::InputStream & is, int size)
     {
         throw xml::lite::XMLParseException(Ctxt("No stream available"));
     }
-    mem::ScopedArray<sys::byte> buffer(new sys::byte[available]);
-    oss.read(buffer.get(), available);
+    std::vector<sys::byte> buffer(available);
+    oss.read(buffer.data(), available);
 
     // Does not take ownership
-    MemBufInputSource memBuffer((const unsigned char *)buffer.get(),
+    MemBufInputSource memBuffer((const unsigned char *)buffer.data(),
                                 available,
                                 XMLReaderXerces::MEM_BUFFER_ID(),
                                 false);

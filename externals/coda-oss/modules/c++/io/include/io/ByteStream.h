@@ -56,18 +56,12 @@ namespace io
  *  0's can be anywhere (Null-bytes) making it impossible to use
  *  strings as containers.  
  */
-class ByteStream : public SeekableInputStream, public SeekableOutputStream
+struct ByteStream : public SeekableInputStream, public SeekableOutputStream
 {
-public:
-
-    //! Default constructor
-    ByteStream(sys::Size_T len = 0) :
-        mData(len), mPosition(0)
-    {
-    }
-
-    //! Destructor
-    virtual ~ByteStream()
+    ByteStream() = default;
+    virtual ~ByteStream() = default;
+    ByteStream(sys::Size_T len) :
+        mData(len)
     {
     }
 
@@ -118,7 +112,7 @@ public:
     sys::ubyte *
     get()
     {
-        return mData.empty() ? NULL : &mData[0];
+        return mData.empty() ? nullptr : &mData[0];
     }
 
     sys::Size_T
@@ -140,7 +134,7 @@ protected:
 
 private:
     std::vector<sys::ubyte> mData;
-    sys::Off_T mPosition;
+    sys::Off_T mPosition = 0;
 };
 }
 

@@ -107,8 +107,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         // The reason to do this is to avoid adding XMLControlCreators to the
         // XMLControlFactory singleton - this way has more fine-grained control
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+        xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
         // create a reader and load the file
         six::NITFReadControl reader;
@@ -120,7 +119,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         // the Nth Data object
         const auto container = reader.getContainer();
         if (container->getDataType() != six::DataType::DERIVED ||
-            container->getNumData() < imageIndex + 1)
+            container->size() < imageIndex + 1)
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                                "Not a SIDD",
@@ -164,22 +163,22 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
 
         size_t numSIDD = 0;
         const std::vector< csm::Des>& desList(isd.fileDess());
-        for (size_t ii = 0; ii < desList.size(); ++ii)
+        for (const auto& desListItem : desList)
         {
-            DataType dataType = getDataType(desList[ii]);
+            DataType dataType = getDataType(desListItem);
             if (dataType != DataType::DERIVED)
             {
                 continue;
             }
 
-            const std::string& desData(desList[ii].data());
+            const std::string& desData(desListItem.data());
 
             if (!desData.empty())
             {
                 try
                 {
                     io::StringStream stream;
-                    stream.write(desData.c_str(), desData.length());
+                    stream.write(desData);
 
                     domParser.clear();
                     domParser.parse(stream);
@@ -220,8 +219,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
         mSensorModelState = NAME + std::string(" ") + stringStream.stream().str();
 
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+        xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
         logging::NullLogger logger;
         std::unique_ptr<six::XMLControl> control(
@@ -244,16 +242,16 @@ bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd)
     xml::lite::MinidomParser domParser;
 
     const std::vector< csm::Des>& desList(isd.fileDess());
-    for (size_t ii = 0; ii < desList.size(); ++ii)
+    for (const auto& desListItem : desList)
     {
-        const std::string& desData(desList[ii].data());
+        const std::string& desData(desListItem.data());
 
         if (!desData.empty())
         {
             try
             {
                 io::StringStream stream;
-                stream.write(desData.c_str(), desData.length());
+                stream.write(desData);
 
                 domParser.clear();
                 domParser.parse(stream);
@@ -411,14 +409,13 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
     try
     {
         io::StringStream stream;
-        stream.write(sensorModelXML.c_str(), sensorModelXML.length());
+        stream.write(sensorModelXML);
 
         xml::lite::MinidomParser domParser;
         domParser.parse(stream);
 
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+        xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
         logging::NullLogger logger;
         std::unique_ptr<six::XMLControl> control(xmlRegistry.newXMLControl(

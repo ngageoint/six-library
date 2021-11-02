@@ -157,12 +157,56 @@ TEST_CASE(testParameterizedConstructor)
     TEST_ASSERT_EQ(u5.getSecond(), u4.getSecond());
 }
 
+static void testDateTimeDetails_(const std::string& testName, const tm& result, const sys::DateTime& dt)
+{
+    const auto ad = result.tm_year + 1900;  // "years since 1900"
+    // this might break in 2038: https://en.wikipedia.org/wiki/Year_2038_problem
+    TEST_ASSERT_GREATER_EQ(ad, 1900);
+    TEST_ASSERT_GREATER_EQ(ad, 1970);
+    TEST_ASSERT_GREATER_EQ(ad, 2021);
+    TEST_ASSERT_LESSER_EQ(result.tm_yday, 365);  // "days since January 1"
+
+    TEST_ASSERT_EQ(ad, dt.getYear());
+    TEST_ASSERT_EQ(result.tm_yday + 1, dt.getDayOfYear());
+}
+TEST_CASE(testDateTimeDetails)
+{
+    const time_t now = time(nullptr);
+    {
+        tm local;
+        sys::DateTime::localtime(now, local);
+        testDateTimeDetails_(testName, local, sys::LocalDateTime());
+    }
+    {
+        tm global;
+        sys::DateTime::gmtime(now, global);
+        testDateTimeDetails_(testName, global, sys::UTCDateTime());
+    }
+}
+
+TEST_CASE(testGetTimeInMillis)
+{
+    const sys::LocalDateTime lt;
+    const auto result = lt.getTimeInMillis();
+    TEST_ASSERT_GREATER_EQ(result, 0.0);
+    constexpr auto February_02_2021 = 1612928129.0 * 1000.0;  // in milliseconds
+    TEST_ASSERT_GREATER_EQ(result, February_02_2021);
+
+    constexpr auto recent_past = February_02_2021 * 0.999;
+    TEST_ASSERT_GREATER_EQ(result, recent_past);
+
+    constexpr auto far_into_the_future = February_02_2021 * 100.0;
+    TEST_ASSERT_LESSER_EQ(result, far_into_the_future);
+}
+
 }
 
 int main(int, char**)
 {
     TEST_CHECK(testDefaultConstructor);
     TEST_CHECK(testParameterizedConstructor);
+    TEST_CHECK(testDateTimeDetails);
+    TEST_CHECK(testGetTimeInMillis);
 
     return 0;
 }

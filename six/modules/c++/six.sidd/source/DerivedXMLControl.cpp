@@ -20,10 +20,15 @@
  *
  */
 
+#include <std/memory>
+
+#include <six/Enums.h>
+
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLParser100.h>
 #include <six/sidd/DerivedXMLParser200.h>
+#include <six/sidd/DerivedXMLParser300.h>
 
 namespace
 {
@@ -36,7 +41,15 @@ std::string normalizeVersion(const std::string& version)
         throw except::Exception(
             Ctxt("Unsupported SIDD Version: " + version));
     }
+
+    #if _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed/unsigned mismatch
+    #endif
     return str::join(versionParts, "");
+    #if _MSC_VER
+    #pragma warning(pop)
+    #endif
 }
 }
 
@@ -44,6 +57,8 @@ namespace six
 {
 namespace sidd
 {
+    const six::DataType DerivedXMLControl::dataType = six::DataType::DERIVED;
+
 DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) :
     XMLControl(log, ownLog)
 {
@@ -61,42 +76,41 @@ xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
         throw except::Exception(Ctxt("Data must be SIDD"));
     }
 
-    const DerivedData* const sidd(static_cast<const DerivedData*>(data));
+    const DerivedData* const sidd(dynamic_cast<const DerivedData*>(data));
     return getParser(data->getVersion())->toXML(sidd);
 }
 
 std::unique_ptr<DerivedXMLParser>
-DerivedXMLControl::getParser(const std::string& version) const
+DerivedXMLControl::getParser(const std::string& strVersion) const
 {
-    std::unique_ptr<DerivedXMLParser> parser;
-
-    const std::string normalizedVersion = normalizeVersion(version);
+    const std::string normalizedVersion = normalizeVersion(strVersion);
 
     // six.sidd only currently supports --
     //   SIDD 1.0.0
     //   SIDD 2.0.0
+    //   SIDD 3.0.0
     if (normalizedVersion == "100")
     {
-        parser.reset(new DerivedXMLParser100(mLog));
+        return std::make_unique<DerivedXMLParser100>(mLog);
     }
-    else if (normalizedVersion == "200")
+    if (normalizedVersion == "200")
     {
-        parser.reset(new DerivedXMLParser200(mLog));
+        return std::make_unique<DerivedXMLParser200>(mLog);
     }
-    else if (normalizedVersion == "110")
+    if (normalizedVersion == "300")
+    {
+        return std::make_unique<DerivedXMLParser300>(mLog);
+    }
+
+    if (normalizedVersion == "110")
     {
         throw except::Exception(Ctxt(
             "SIDD Version 1.1.0 does not exist. "
             "Did you mean 2.0.0 instead?"
         ));
     }
-    else
-    {
-        throw except::Exception(
-            Ctxt("Unsupported SIDD Version: " + version));
-    }
 
-    return parser;
+    throw except::Exception(Ctxt("Unsupported SIDD Version: " + version));
 }
 }
 }

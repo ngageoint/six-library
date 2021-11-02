@@ -41,6 +41,8 @@
  *
  */
 
+#include <std/filesystem>
+
 #include <import/six/sidd.h>
 
 #include <import/cli.h>
@@ -50,7 +52,6 @@
 #include <import/six/sicd.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 using namespace six;
@@ -65,6 +66,10 @@ static const struct
     unsigned char data[128 * 128 * 3 + 1];
 }
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4125) // decimal digit terminates octal escape sequence
+#endif // _MSC_VER
 // clang-format off
         IMAGE = {
                   128,
@@ -1713,6 +1718,9 @@ static const struct
                       "3Lz2P\212>Y\216@X\2069Q\216=R\246Ve\261ju\251hu\221Obs,Fb\35>]\23" "5c\31"
                       ":t+I\230@S\261EP", };
 // clang-format on
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif // _MSC_VER
 
 /*
  *  Data will be RBG24I
@@ -1865,7 +1873,7 @@ std::unique_ptr<six::sidd::DerivedData> initData(const std::string& lutType)
 }
 
 void initProductCreation(six::sidd::ProductCreation& productCreation,
-                         const std::string& version)
+                         const std::string& strVersion)
 {
     productCreation.productName = "ProductName";
     productCreation.productClass = "Unclassified";
@@ -1878,7 +1886,7 @@ void initProductCreation(six::sidd::ProductCreation& productCreation,
     productCreation.classification.createDate = six::DateTime();
     productCreation.classification.classification = "U";
 
-    if (version == "1.0.0")
+    if (strVersion == "1.0.0")
     {
         productCreation.classification.compliesWith.push_back("ICD-710");
     }
@@ -2252,29 +2260,24 @@ void initErrorStatistics(six::ErrorStatistics& err)
     err.components->posVelError->corrCoefs->v1v2 = 6.2;
     err.components->posVelError->corrCoefs->v1v3 = 6.2;
     err.components->posVelError->corrCoefs->v2v3 = 6.2;
-
-    err.components->posVelError->positionDecorr.corrCoefZero = 48.17;
-    err.components->posVelError->positionDecorr.decorrRate = 113.965;
+    err.components->posVelError->positionDecorr = six::DecorrType(48.17, 113.965);
 
     err.components->radarSensor.reset(new six::RadarSensor());
     err.components->radarSensor->rangeBias = 43.5;
     err.components->radarSensor->clockFreqSF = 1111.1;
-    err.components->radarSensor->transmitFreqSF = 85;
-    err.components->radarSensor->rangeBiasDecorr.corrCoefZero = 123;
-    err.components->radarSensor->rangeBiasDecorr.decorrRate = .03;
+    err.components->radarSensor->transmitFreqSF= 85;
+    err.components->radarSensor->rangeBiasDecorr = six::DecorrType(123, .03);
 
     err.components->tropoError.reset(new six::TropoError());
     err.components->tropoError->tropoRangeVertical = .00289;
     err.components->tropoError->tropoRangeSlant = 777;
-    err.components->tropoError->tropoRangeDecorr.corrCoefZero = 0;
-    err.components->tropoError->tropoRangeDecorr.decorrRate = 98.7;
+    err.components->tropoError->tropoRangeDecorr = six::DecorrType(0, 98.7);
 
     err.components->ionoError.reset(new six::IonoError());
     err.components->ionoError->ionoRangeVertical = 1.2;
     err.components->ionoError->ionoRangeRateVertical = 77632;
     err.components->ionoError->ionoRgRgRateCC = .072;
-    err.components->ionoError->ionoRangeVertDecorr.corrCoefZero = 48.16;
-    err.components->ionoError->ionoRangeVertDecorr.decorrRate = 113.964;
+    err.components->ionoError->ionoRangeVertDecorr = six::DecorrType(48.16, 113.964);
 
     six::Parameter param;
     param.setName("ErrorStatisticsParameterName");
@@ -2345,16 +2348,16 @@ void initProductProcessing(six::sidd::ProductProcessing& processing)
 void populateData(six::sidd::DerivedData& siddData,
                   const std::string& lutType,
                   bool smallImage,
-                  const std::string& version)
+                  const std::string& strVersion)
 {
-    siddData.setVersion(version);
+    siddData.setVersion(strVersion);
     size_t elementSize = lutType == "Mono" ? 2 : 3;
 
-    if (version == "2.0.0")
+    if (strVersion == "2.0.0")
     {
         // This will naturally get constructed in the course of 1.0.0
         // Separate field in 2.0.0
-        siddData.getDisplayLUT().reset(new six::LUT(256, elementSize));
+        siddData.setDisplayLUT(std::make_unique<six::AmplitudeTable>(elementSize));
 
         for (size_t ii = 0; ii < siddData.getDisplayLUT()->table.size(); ++ii)
         {
@@ -2380,7 +2383,7 @@ void populateData(six::sidd::DerivedData& siddData,
     siddData.setImageCorners(makeUpCornersFromDMS());
 
     // Can certainly be init'ed in a function
-    initProductCreation(*siddData.productCreation, version);
+    initProductCreation(*siddData.productCreation, strVersion);
 
     // Or directly if preferred
     siddData.display->decimationMethod = DecimationMethod::BRIGHTEST_PIXEL;
@@ -2439,7 +2442,7 @@ void populateData(six::sidd::DerivedData& siddData,
     planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
     planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
 
-    initExploitationFeatures(*siddData.exploitationFeatures, version);
+    initExploitationFeatures(*siddData.exploitationFeatures, strVersion);
     initDED(siddData.digitalElevationData);
     initProductProcessing(*siddData.productProcessing);
     initDownstreamReprocessing(*siddData.downstreamReprocessing);
@@ -2520,15 +2523,11 @@ int main(int argc, char** argv)
         }
 
         const bool smallImage = options->get<bool>("smallImage");
-        const std::string version = options->get<std::string>("version");
+        const std::string strVersion = options->get<std::string>("version");
 
-        six::XMLControlFactory::getInstance().addCreator(
-                DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
-        six::XMLControlFactory::getInstance().addCreator(
-                DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
 
         // Output file name
         std::string outputName(options->get<std::string>("output"));
@@ -2598,7 +2597,7 @@ int main(int argc, char** argv)
 
             std::unique_ptr<six::sidd::DerivedData> siddData = initData(lutType);
 
-            populateData(*siddData, lutType, smallImage, version);
+            populateData(*siddData, lutType, smallImage, strVersion);
             container->addData(siddData->clone());
             if (!smallImage)
             {

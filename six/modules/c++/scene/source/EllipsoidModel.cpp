@@ -78,14 +78,14 @@ double EllipsoidModel::getPolarRadius() const
 
 double EllipsoidModel::calculateFlattening() const
 {
-    double flattening = equatorialRadius - polarRadius;
-    flattening /= equatorialRadius;
+    double flattening = getEquatorialRadius() - getPolarRadius();
+    flattening /= getEquatorialRadius();
     return flattening;
 }
 
 double EllipsoidModel::calculateEccentricity() const
 {
-    double ecc = 1.0 - math::square(polarRadius)/math::square(equatorialRadius);
+    double ecc = 1.0 - math::square(getPolarRadius())/math::square(getEquatorialRadius());
     ecc = sqrt(ecc);
     return ecc;
 }
@@ -96,24 +96,23 @@ void EllipsoidModel::setUnits(Units val)
     //update the radius values so they are in the new units.
     if(units == INVALID_UNITS || units != val)
     {
-        if( val == METERS)
+        if ((val != METERS) && (val != FEET))
+        {
+            throw except::Exception(Ctxt("Invalid value"));
+        }
+        units = val;
+
+        if (val == METERS)
         {
             //do feet to meters
             equatorialRadius *= math::Constants::FEET_TO_METERS;
             polarRadius *= math::Constants::FEET_TO_METERS;
-            units = val;
         }
-        else if(val == FEET)
+        else if (val == FEET)
         {
             //do meters to feet
             equatorialRadius *= math::Constants::METERS_TO_FEET;
             polarRadius *= math::Constants::METERS_TO_FEET;
-            units = val;
-        }
-        else
-        {
-
-            throw except::Exception(Ctxt("Invalid value"));
         }
     }
 }
@@ -157,13 +156,7 @@ void EllipsoidModel::setPolarRadius(double val)
     }
 }
 
-WGS84EllipsoidModel::WGS84EllipsoidModel()
-{
-    setUnits(METERS);
-    setAngularUnits(RADIANS);
-    initRadiusValues();
-}
-
+WGS84EllipsoidModel::WGS84EllipsoidModel() noexcept(false) : WGS84EllipsoidModel(METERS, RADIANS) {}
 WGS84EllipsoidModel::WGS84EllipsoidModel(Units unitsVal,
         AngularUnits angularUnitsVal)
 {
@@ -181,8 +174,8 @@ WGS84EllipsoidModel::WGS84EllipsoidModel(
 
 void WGS84EllipsoidModel::initRadiusValues()
 {
-    equatorialRadius = EQUATORIAL_RADIUS_METERS;
-    polarRadius = POLAR_RADIUS_METERS;
+    EllipsoidModel::setEquatorialRadius(EQUATORIAL_RADIUS_METERS);
+    EllipsoidModel::setPolarRadius(POLAR_RADIUS_METERS);
 
     // If units are feet, update the values
     if (getUnits() == FEET)
@@ -217,9 +210,9 @@ WGS84EllipsoidModel::operator=(const EllipsoidModel & m)
 Vector3 WGS84EllipsoidModel::getNormalVector(const Vector3& point) const
 {
     Vector3 normalVector;
-    normalVector[0] = point[0] / math::square(equatorialRadius);
-    normalVector[1] = point[1] / math::square(equatorialRadius);
-    normalVector[2] = point[2] / math::square(polarRadius);
+    normalVector[0] = point[0] / math::square(getEquatorialRadius());
+    normalVector[1] = point[1] / math::square(getEquatorialRadius());
+    normalVector[2] = point[2] / math::square(getPolarRadius());
 
     return normalVector.unit();
 }

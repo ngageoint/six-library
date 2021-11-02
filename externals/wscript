@@ -1,6 +1,9 @@
 import os
 
-DIRS = [os.path.join('coda-oss', 'modules'), os.path.join('nitro', 'modules')]
+coda_oss = 'coda-oss'
+nitro = 'nitro'
+
+DIRS = [os.path.join(coda_oss, 'modules'), os.path.join(nitro, 'modules')]
 
 def options(opt):
     opt.recurse(DIRS)

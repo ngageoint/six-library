@@ -1,8 +1,8 @@
 /*
  * =========================================================================
- * This file is part of mem-python 
+ * This file is part of mem-python
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
  *
  * mem-python is free software; you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  */
 
@@ -30,7 +30,9 @@
 
 %feature("autodoc", "1");
 
-%include "std_auto_ptr.i"
+%include "config.i"
+
+%include <std_auto_ptr.i>
 
 %{
 #include "import/mem.h"
@@ -67,7 +69,7 @@ using namespace mem;
 mem::SharedPtr< namespace##::##CppType > makeShared##PyType()
 {
     return mem::SharedPtr< namespace##::##CppType >(new namespace##::##CppType ());
-} 
+}
 %}
 
 mem::SharedPtr< namespace##::##CppType > makeShared##PyType();
@@ -85,7 +87,7 @@ mem::SharedPtr< namespace##::##CppType > makeShared##PyType();
 mem::ScopedCopyablePtr< namespace##::##CppType > makeScopedCopyable##PyType()
 {
     return mem::ScopedCopyablePtr< namespace##::##CppType >(new namespace##::##CppType ());
-} 
+}
 %}
 
 mem::ScopedCopyablePtr< namespace##::##CppType > makeScopedCopyable##PyType();
@@ -103,7 +105,7 @@ mem::ScopedCopyablePtr< namespace##::##CppType > makeScopedCopyable##PyType();
 mem::ScopedCloneablePtr< namespace##::##CppType > makeScopedCloneable##PyType()
 {
     return mem::ScopedCloneablePtr< namespace##::##CppType >(new namespace##::##CppType ());
-} 
+}
 %}
 
 mem::ScopedCloneablePtr< namespace##::##CppType > makeScopedCloneable##PyType();

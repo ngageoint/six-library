@@ -20,6 +20,8 @@
  *
  */
 
+#include <std/filesystem>
+
 #include <import/six.h>
 
 #include <import/cli.h>
@@ -29,7 +31,6 @@
 #include <import/six/sidd.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace
@@ -120,9 +121,6 @@ bool runValidation(const std::unique_ptr<six::Data>& data,
 
 // make it a little easier to use from MSVC
 #if defined(_DEBUG) && defined(_MSC_VER)
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
-
 static fs::path getNitfPath()
 {
     const auto cwd = fs::current_path();
@@ -199,12 +197,8 @@ static int main_(int argc, char** argv)
     // The reason to do this is to avoid adding XMLControlCreators to the
     // XMLControlFactory singleton - this way has more fine-grained control
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX,
-                            new six::XMLControlCreatorT<
-                                    six::sicd::ComplexXMLControl>());
-    xmlRegistry.addCreator(six::DataType::DERIVED,
-                            new six::XMLControlCreatorT<
-                                    six::sidd::DerivedXMLControl>());
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
     str::upper(level);
     str::trim(level);
@@ -214,7 +208,7 @@ static int main_(int argc, char** argv)
     // this validates the DES of the input against the
     // best available schema
     six::NITFReadControl reader;
-    reader.setLogger(log.get());
+    reader.setLogger(*log);
     reader.setXMLControlRegistry(&xmlRegistry);
     bool allValid = true;
     for (size_t ii = 0; ii < inputPathnames.size(); ++ii)
@@ -237,7 +231,7 @@ static int main_(int argc, char** argv)
             {
                 reader.load(inputPathname, schemaPaths);
                 auto container = reader.getContainer();
-                for (size_t jj = 0; jj < container->getNumData(); ++jj)
+                for (size_t jj = 0; jj < container->size(); ++jj)
                 {
                     data.reset(container->getData(jj)->clone());
                     allValid = allValid && runValidation(data, log);

@@ -21,6 +21,8 @@
 */
 
 #include <iostream>
+#include <vector>
+
 #include <import/six/sidd.h>
 #include <cli/ArgumentParser.h>
 #include <io/TempFile.h>
@@ -31,13 +33,12 @@
 
 namespace
 {
-void generateData(const six::Data& data, std::unique_ptr<std::byte[]>& buffer)
+void generateData(const six::Data& data, std::vector<std::complex<float>>& buffer)
 {
-    const size_t size = data.getNumRows() * data.getNumCols();
-    buffer.reset(new std::byte[size]);
-    for (size_t ii = 0; ii < size; ++ii)
+    buffer.resize(getExtent(data).area());
+    for (size_t ii = 0; ii < buffer.size(); ++ii)
     {
-        buffer[ii] = static_cast<std::byte>(ii % 100);
+        buffer[ii] = std::complex<float>(ii % 100);
     }
 }
 
@@ -72,15 +73,12 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
     workingData->setNumRows(imageSideSize);
     workingData->setNumCols(imageSideSize);
 
-    std::unique_ptr<std::byte[]> buffer;
+    std::vector<std::complex<float>> buffer;
     generateData(*workingData, buffer);
 
     mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::DERIVED));
     container->addData(std::move(workingData));
-
-    six::buffer_list buffers(1);
-    buffers[0] = buffer.get();
 
     six::Options options;
     options.setParameter(
@@ -91,13 +89,19 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
             six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, productSize);
 
     six::NITFWriteControl writer(options, container);
-    writer.save(buffers, pathname, std::vector<std::string>());
+    writer.save(buffer, pathname, std::vector<std::filesystem::path>());
 
 }
 
+inline const six::UByte* cast(const std::vector<std::complex<float>>& buffer)
+{
+    const void* pBuffer = buffer.data();
+    return static_cast<const six::UByte*>(pBuffer);
+}
+
 void writeTwoImages(const six::Data& data, const std::string& pathname,
-        const std::string& blockSize, size_t largeImageSize,
-        size_t smallImageSize)
+    const std::string& blockSize, size_t largeImageSize,
+    size_t smallImageSize)
 {
     std::unique_ptr<six::Data> firstData(data.clone());
     std::unique_ptr<six::Data> secondData(data.clone());
@@ -109,21 +113,20 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     secondData->setNumCols(smallImageSize);
 
     const std::string productSize = computeProductSize(blockSize,
-            largeImageSize, data.getNumBytesPerPixel());
+        largeImageSize, data.getNumBytesPerPixel());
 
-    std::unique_ptr<std::byte[]> firstBuffer;
-    std::unique_ptr<std::byte[]> secondBuffer;
+    std::vector<std::complex<float>> firstBuffer;
+    std::vector<std::complex<float>> secondBuffer;
     generateData(*firstData, firstBuffer);
     generateData(*secondData, secondBuffer);
 
-    mem::SharedPtr<six::Container> container(new six::Container(
-        six::DataType::DERIVED));
+    mem::SharedPtr<six::Container> container(new six::Container(six::DataType::DERIVED));
     container->addData(std::move(firstData));
     container->addData(std::move(secondData));
 
-    six::buffer_list buffers(2);
-    buffers[0] = firstBuffer.get();
-    buffers[1] = secondBuffer.get();
+    six::BufferList buffers;
+    buffers.push_back(cast(firstBuffer));
+    buffers.push_back(cast(secondBuffer));
 
     six::Options options;
     options.setParameter(
@@ -142,7 +145,7 @@ void assignBuffer(std::unique_ptr<six::UByte[]>& buffer, size_t& bufferSize,
 {
     six::Region region;
     buffer.reset(reader.interleaved(region, index));
-    bufferSize = region.getNumRows() * region.getNumCols();
+    bufferSize = getExtent(region).area();
 }
 
 bool compare(const std::string& twoImageSidd,
@@ -209,10 +212,7 @@ int main(int argc, char** argv)
 
         const std::string siddPathname(options->get<std::string>("sidd"));
 
-        six::XMLControlFactory::getInstance().addCreator(
-                six::DataType::DERIVED,
-                new six::XMLControlCreatorT<
-                six::sidd::DerivedXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
 
         std::unique_ptr<six::Data> sidd = read(siddPathname);
 

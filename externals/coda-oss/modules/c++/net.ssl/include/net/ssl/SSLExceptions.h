@@ -48,7 +48,7 @@ namespace ssl
 	 */
 	SSLException(const char *message) : sys::SocketException(message)
 	{
-	    if (message != NULL)
+	    if (message != nullptr)
 	    {
 		mMessage = "SSL: ";
 		mMessage += message;

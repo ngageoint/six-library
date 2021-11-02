@@ -41,10 +41,8 @@ namespace tiff
  * to the same file.  Contains function for manipulating each 
  * sub-image and for writing data.
  *********************************************************************/
-class FileWriter
+struct FileWriter
 {
-public:
-
     //! Constructor
     FileWriter() :
         mIFDOffset(0)
@@ -116,11 +114,8 @@ public:
      *****************************************************************/
     void writeHeader();
 
-
-private:
-    // Noncopyable
-    FileWriter(const FileWriter& );
-    const FileWriter& operator=(const FileWriter& );
+    FileWriter(const FileWriter&) = delete;
+    FileWriter& operator=(const FileWriter&) = delete;
 
 private:
     //! The position to write the offset to the first IFD to

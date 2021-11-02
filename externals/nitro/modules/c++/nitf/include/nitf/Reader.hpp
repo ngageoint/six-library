@@ -23,6 +23,8 @@
 #ifndef __NITF_READER_HPP__
 #define __NITF_READER_HPP__
 
+#include <string>
+
 #include "nitf/Reader.h"
 #include "nitf/IOHandle.hpp"
 #include "nitf/IOInterface.hpp"
@@ -30,7 +32,7 @@
 #include "nitf/ImageReader.hpp"
 #include "nitf/SegmentReader.hpp"
 #include "nitf/Object.hpp"
-#include <string>
+#include "nitf/exports.hpp"
 
 /*!
  *  \file Reader.hpp
@@ -40,7 +42,7 @@
 namespace nitf
 {
 
-struct ReaderDestructor : public nitf::MemoryDestructor<nitf_Reader>
+struct NITRO_NITFCPP_API ReaderDestructor : public nitf::MemoryDestructor<nitf_Reader>
 {
     ~ReaderDestructor() = default;
     void operator()(nitf_Reader *reader) override;
@@ -50,9 +52,8 @@ struct ReaderDestructor : public nitf::MemoryDestructor<nitf_Reader>
  *  \class Reader
  *  \brief  The C++ wrapper for the nitf_Reader
  */
-class Reader : public nitf::Object<nitf_Reader, ReaderDestructor>
+struct NITRO_NITFCPP_API Reader : public nitf::Object<nitf_Reader, ReaderDestructor>
 {
-public:
     //! Copy constructor
     Reader(const Reader & x);
 
@@ -63,7 +64,7 @@ public:
     Reader(nitf_Reader * x);
 
     //! Default Constructor
-    Reader();
+    Reader() noexcept(false);
 
     ~Reader() = default;
 

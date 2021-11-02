@@ -42,7 +42,7 @@ static inline std::string make_what(const char* curfile, const int lineNum, cons
 }
 // A macro for conveniently throwing errors.
 // Need "throw" to be visible, not hidden inside of a function, so that code-analysis tools can see it.
-#define CODA_OSS_Filesystem_THROW_ERR(MSG) throw std::runtime_error(make_what(__FILE__, __LINE__, MSG))
+#define CODA_OSS_Filesystem_THROW_ERR(MSG) throw std::runtime_error(make_what(__FILE__, __LINE__, MSG)) // TODO: std::filesystem_error
 
 fs::path::string_type fs::path::to_native(const std::string& s_)
 {
@@ -53,6 +53,8 @@ fs::path::string_type fs::path::to_native(const std::string& s_)
     return s_;
 #endif
 }
+
+static const fs::path empty_path;
 
 fs::path::path() noexcept
 {
@@ -111,6 +113,11 @@ std::string fs::path::string() const
 #endif
 }
 
+fs::path fs::path::root_path() const
+{
+  return parent_path() / stem();
+}
+
 fs::path fs::path::parent_path() const
 {
     return sys::Path::splitPath(string()).first;
@@ -134,7 +141,7 @@ fs::path fs::path::extension() const
     const auto pathname = string();
     if ((pathname == ".") || (pathname == ".."))
     {
-        return "";
+        return empty_path;
     }
 
     auto fn = filename().string();
@@ -143,7 +150,7 @@ fs::path fs::path::extension() const
     // "If ... filename() does not contain the . character, then empty path is returned."
     if (dot == std::string::npos)
     {
-        return "";
+        return empty_path;
     }
 
     // "If the first character in the filename is a period, that period is ignored
@@ -198,7 +205,7 @@ fs::path fs::temp_directory_path()
     const auto result = GetTempPathA(static_cast<DWORD>(buf.size()), buf.data());
     if (result == 0)  // "If the function fails, the return value is zero"
     {
-        throw std::runtime_error("GetTempPathA() failed.");  // TODO: std::filesystem_error
+        CODA_OSS_Filesystem_THROW_ERR("GetTempPathA() failed.");
     }
 
     return buf.data();

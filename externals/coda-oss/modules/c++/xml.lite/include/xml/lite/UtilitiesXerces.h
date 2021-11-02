@@ -23,6 +23,8 @@
 #ifndef __XML_LITE_UTILITIES_XERCES_H__
 #define __XML_LITE_UTILITIES_XERCES_H__
 
+#include <mutex>
+
 #include "xml/lite/xml_lite_config.h"
 
 #if defined(USE_XERCES)
@@ -214,12 +216,12 @@ public:
 
     static void destroyXMLCh(XMLCh** a)
     {
-        if (a != NULL && *a != NULL)
+        if (a != nullptr && *a != nullptr)
         {
             try 
             {
                 XMLString::release(a);
-                *a = NULL;
+                *a = nullptr;
             }
             catch (...)
             {
@@ -231,12 +233,12 @@ public:
 
     static void destroyChArray(char** a)
     {
-        if (a != NULL && *a != NULL)
+        if (a != nullptr && *a != nullptr)
         {
             try 
             {
                 XMLString::release(a);
-                *a = NULL;
+                *a = nullptr;
             }
             catch (...)
             {
@@ -275,21 +277,23 @@ private:
  *  Xerces use as well as Expat (and ultimately MSXML as well)
  *
  */
-class XercesContentHandler : public XercesContentHandlerInterface_T
+struct XercesContentHandler : public XercesContentHandlerInterface_T
 {
-public:
     /*!
      *  Our constructor will use an underlying LiteContentHandler
      *  We will only bind to this, not free it.
      *  \param ch  The handler to bind
      */
-    XercesContentHandler(xml::lite::ContentHandler* ch = NULL)
+    XercesContentHandler(xml::lite::ContentHandler* ch = nullptr)
     {
         mLiteHandler = ch;
     }
 
     ~XercesContentHandler()
     {}
+
+    XercesContentHandler(const XercesContentHandler&) = delete;
+    XercesContentHandler& operator=(const XercesContentHandler&) = delete;
 
     virtual void ignorableWhitespace(const XMLCh* const /*chars*/,
                                      const XercesSize_T /*length*/)
@@ -391,9 +395,14 @@ protected:
 *  Our error handler implementation, then, simply calls the raise,
 *  and warning macros in the factory.
 */
-class XercesErrorHandler : public XercesErrorHandlerInterface_T
+struct XercesErrorHandler : public XercesErrorHandlerInterface_T
 {
-public:
+    XercesErrorHandler() = default;
+    XercesErrorHandler(const XercesErrorHandler&) = delete;
+    XercesErrorHandler& operator=(const XercesErrorHandler&) = delete;
+    XercesErrorHandler(XercesErrorHandler&&) = delete;
+    XercesErrorHandler& operator=(XercesErrorHandler&&) = delete;
+
     /*!
      *  Receive notification of a warning. We want to call
      *  __warning__(message);
@@ -427,7 +436,7 @@ public:
     
 private:
 
-    static sys::Mutex mMutex;
+    static std::mutex mMutex;
     bool mIsDestroyed;
 };
 }

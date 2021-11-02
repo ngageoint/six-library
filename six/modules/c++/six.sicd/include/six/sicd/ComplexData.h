@@ -19,10 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_COMPLEX_DATA_H__
-#define __SIX_COMPLEX_DATA_H__
+#ifndef SIX_sicd_ComplexData_h_INCLUDED_
+#define SIX_sicd_ComplexData_h_INCLUDED_
+#pragma once
 
 #include <memory>
+#include <vector>
+#include <std/span>
+
+#include <gsl/gsl.h>
 
 #include "six/CollectionInformation.h"
 #include "six/Data.h"
@@ -68,9 +73,8 @@ namespace sicd
  *
  *
  */
-class ComplexData: public Data
+struct ComplexData: public Data
 {
-public:
     //!  CollectionInfo block.  Contains the general collection information
     mem::ScopedCloneablePtr<CollectionInformation> collectionInformation;
 
@@ -141,7 +145,7 @@ public:
      *  Deep copy of this, including all initialized sub-params
      *
      */
-    Data* clone() const;
+    Data* clone() const override;
 
     /*!
      *  Utility function for getting the pixel type.
@@ -158,6 +162,7 @@ public:
     {
         imageData->pixelType = pixelType;
     }
+    bool convertPixels_(std::span<const std::byte>, std::span<std::byte>) const override;
 
     /*!
      *  Maps to: /SICD/ImageData/NumRows,
@@ -175,8 +180,8 @@ public:
     virtual void setNumRows(size_t numRows)
     {
         imageData->numRows = numRows;
-        imageData->fullImage.row = numRows;
-        imageData->scpPixel.row = numRows / 2;
+        imageData->fullImage.row = gsl::narrow<ptrdiff_t>(numRows);
+        imageData->scpPixel.row = imageData->fullImage.row / 2;
     }
 
     /*!
@@ -195,8 +200,8 @@ public:
     virtual void setNumCols(size_t numCols)
     {
         imageData->numCols = numCols;
-        imageData->fullImage.col = numCols;
-        imageData->scpPixel.col = numCols / 2;
+        imageData->fullImage.col = gsl::narrow<ptrdiff_t>(numCols);
+        imageData->scpPixel.col = imageData->fullImage.col / 2;
     }
 
     /*!
@@ -285,11 +290,9 @@ public:
         return mClassification;
     }
 
-    // Okay, little bit of a hack for now
-    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT()
-    {
-        throw except::Exception(Ctxt("Display LUT operation not supported"));
-    }
+    virtual const mem::ScopedCopyablePtr<LUT>& getDisplayLUT() const override;
+    virtual void setDisplayLUT(std::unique_ptr<AmplitudeTable>&&) override;
+    virtual AmplitudeTable* getAmplitudeTable() const override;
 
     virtual std::string getVendorID() const
     {
@@ -301,9 +304,9 @@ public:
         return mVersion;
     }
 
-    virtual void setVersion(const std::string& version)
+    virtual void setVersion(const std::string& strVersion)
     {
-        mVersion = version;
+        mVersion = strVersion;
     }
 
     /*
@@ -390,7 +393,27 @@ private:
 
     std::string mVersion;
 };
+
+struct ComplexImageResult final
+{
+    std::unique_ptr<ComplexData> pComplexData;
+    std::vector<std::complex<float>> widebandData;
+    ComplexImageResult() = default;
+    ComplexImageResult(const ComplexImageResult&) = delete;
+    ComplexImageResult& operator=(const ComplexImageResult&) = delete;
+    ComplexImageResult(ComplexImageResult&&) = default;
+    ComplexImageResult& operator=(ComplexImageResult&&) = default;
+};
+struct ComplexImage final
+{
+    const ComplexData& data;
+    std::span<const std::complex<float>> image;
+    ComplexImage(const ComplexData& d, std::span<const std::complex<float>> i) : data(d), image(i) {}
+    ComplexImage(const ComplexImageResult& r)  : ComplexImage(*(r.pComplexData), r.widebandData) {}
+    ComplexImage(const ComplexImage&) = delete;
+    ComplexImage& operator=(const ComplexImage&) = delete;
+};
 }
 }
 
-#endif
+#endif // SIX_sicd_ComplexData_h_INCLUDED_

@@ -22,6 +22,8 @@
 #ifndef __SIX_SIDD_SFA_H__
 #define __SIX_SIDD_SFA_H__
 
+#include <std/optional>
+
 #include <import/six.h>
 
 namespace six
@@ -516,7 +518,7 @@ protected:
 struct SFAPrimeMeridian
 {
     std::string name;
-    double longitude;
+    double longitude = 0.0;
 
     bool operator==(const SFAPrimeMeridian& rhs) const
     {
@@ -531,8 +533,8 @@ struct SFAPrimeMeridian
 struct SFASpheroid
 {
     std::string name;
-    double semiMajorAxis;
-    double inverseFlattening;
+    double semiMajorAxis = 0.0;
+    double inverseFlattening = 0.0;
 
     bool operator==(const SFASpheroid& rhs) const
     {
@@ -549,7 +551,7 @@ struct SFASpheroid
 struct SFAParameter
 {
     std::string name;
-    double value;
+    double value = 0.0;
 
     bool operator==(const SFAParameter& rhs) const
     {

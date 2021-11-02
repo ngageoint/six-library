@@ -45,13 +45,11 @@ namespace mem
 template <typename T>
 struct BufferView
 {
-    explicit BufferView(T* buffer = NULL, size_t bufferSize = 0) :
-        data(buffer), size(bufferSize)
-    {
-    }
+    BufferView() = default;
+    explicit BufferView(T* buffer, size_t bufferSize) : data(buffer), size(bufferSize) { }
 
-    T* data;
-    size_t size;
+    T* data = nullptr;
+    size_t size = 0;
 
     /**
       Returns a new bufferView that "takes" sectionSize T from the bufferView
@@ -64,7 +62,7 @@ struct BufferView
       @throws except::Exception if there is not enough space 
 
      */
-    mem::BufferView<T> section(size_t sectionSize)
+    BufferView<T> section(size_t sectionSize)
     {
         if(size < sectionSize)
         {   
@@ -76,7 +74,7 @@ struct BufferView
             throw except::Exception(Ctxt(oss.str()));
         } 
 
-        mem::BufferView<T> newSection(data, sectionSize);
+        BufferView<T> newSection(data, sectionSize);
 
         size -= sectionSize;
         data += sectionSize;

@@ -71,7 +71,7 @@ TEST_CASE(testHandlesNullPointers)
 }
 }
 
-TEST_MAIN(
+TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(testCanFindSegment);
     TEST_CHECK(testThrowIfMissingSegment);
     TEST_CHECK(testHandlesNullPointers);

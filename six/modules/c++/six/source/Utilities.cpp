@@ -26,8 +26,10 @@
 #include <logging/NullLogger.h>
 #include <math/Utilities.h>
 #include <nitf/PluginRegistry.hpp>
+#include "six/Init.h"
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
+#include "six/Data.h"
 
 namespace
 {
@@ -107,13 +109,13 @@ std::string six::toString<float>(const float& value)
     }
 
     std::ostringstream os;
-    size_t precision = std::numeric_limits<float>::max_digits10;
+    constexpr size_t precision = std::numeric_limits<float>::max_digits10;
     os << std::uppercase << std::scientific << std::setprecision(precision)
        << value;
     std::string strValue = os.str();
 
     // remove any + in scientific notation to meet SICD XML standard
-    size_t plusPos = strValue.find("+");
+    const size_t plusPos = strValue.find("+");
     if (plusPos != std::string::npos)
     {
         strValue.erase(plusPos, 1);
@@ -131,13 +133,13 @@ std::string six::toString<double>(const double& value)
     }
 
     std::ostringstream os;
-    size_t precision = std::numeric_limits<double>::max_digits10;
+    constexpr size_t precision = std::numeric_limits<double>::max_digits10;
     os << std::uppercase << std::scientific << std::setprecision(precision)
        << value;
     std::string strValue = os.str();
 
     // remove any + in scientific notation to meet SICD XML standard
-    size_t plusPos = strValue.find("+");
+    const size_t plusPos = strValue.find("+");
     if (plusPos != std::string::npos)
     {
         strValue.erase(plusPos, 1);
@@ -1099,8 +1101,8 @@ std::string six::toString(const six::LatLonCorners& corners)
 
     // BASE_WIDTH = sign + at least 2 leading digits + decimal point +
     // decimal digits
-    static const size_t NUM_TRAILING_DIGITS = 8;
-    static const size_t BASE_WIDTH = 1 + 2 + 1 + NUM_TRAILING_DIGITS;
+    constexpr size_t NUM_TRAILING_DIGITS = 8;
+    constexpr size_t BASE_WIDTH = 1 + 2 + 1 + NUM_TRAILING_DIGITS;
 
     std::ostringstream ostr;
     ostr.fill('0');
@@ -1138,6 +1140,14 @@ void six::loadXmlDataContentHandler()
 }
 
 mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    return parseData(xmlReg, xmlStream, DataType::NOT_SET, schemaPaths, log);
+}
+
+mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
                                    ::io::InputStream& xmlStream,
                                    DataType dataType,
                                    const std::vector<std::string>& schemaPaths,
@@ -1154,6 +1164,7 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
         throw except::Exception(ex, Ctxt("Invalid XML data"));
     }
     xml::lite::Document* doc = xmlParser.getDocument();
+    assert(doc != nullptr);
 
     //! Check the root localName for the XML type
     std::string xmlType = doc->getRootElement()->getLocalName();
@@ -1178,6 +1189,15 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     return mem::auto_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
 }
 
+mem::auto_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,
+    const std::string& pathname,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    return parseDataFromFile(xmlReg, pathname, DataType::NOT_SET, schemaPaths,
+        log);
+}
+
 mem::auto_ptr<Data> six::parseDataFromFile(
         const XMLControlRegistry& xmlReg,
         const std::string& pathname,
@@ -1187,6 +1207,15 @@ mem::auto_ptr<Data> six::parseDataFromFile(
 {
     io::FileInputStream inStream(pathname);
     return parseData(xmlReg, inStream, dataType, schemaPaths, log);
+}
+
+mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::string& xmlStr,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, schemaPaths,
+        log);
 }
 
 mem::auto_ptr<Data> six::parseDataFromString(
@@ -1208,7 +1237,7 @@ std::string six::findSchemaPath(const std::string& progname)
 
     // Arbitrary depth to prevent infinite loop in case
     // of weird project structure
-    const static size_t MAX_DEPTH = 5;
+    constexpr size_t MAX_DEPTH = 5;
     size_t levelsTraversed = 0;
 
     std::string schemaPath;
@@ -1241,27 +1270,22 @@ void six::getErrors(const ErrorStatistics* errorStats,
 
         if (components)
         {
-            double rangeBias;
-            if (components->radarSensor.get())
+            double rangeBias = 0.0;
+            if (components->radarSensor)
             {
                 const RadarSensor& radarSensor(*components->radarSensor);
 
-                if (!six::Init::isUndefined(radarSensor.rangeBiasDecorr))
+                if (has_value(radarSensor.rangeBiasDecorr))
                 {
-                    errors.mRangeCorrCoefZero =
-                            radarSensor.rangeBiasDecorr.corrCoefZero;
-                    errors.mRangeDecorrRate =
-                            radarSensor.rangeBiasDecorr.decorrRate;
+                    const auto& rangeBiasDecorr = value(radarSensor.rangeBiasDecorr);
+                    errors.mRangeCorrCoefZero = rangeBiasDecorr.corrCoefZero;
+                    errors.mRangeDecorrRate = rangeBiasDecorr.decorrRate;
                 }
 
-                rangeBias = radarSensor.rangeBias;
-            }
-            else
-            {
-                rangeBias = 0.0;
+                rangeBias = value(radarSensor.rangeBias);
             }
 
-            if (components->posVelError.get())
+            if (components->posVelError)
             {
                 const PosVelError& posVelError(*components->posVelError);
                 errors.mFrameType = posVelError.frame;
@@ -1270,36 +1294,35 @@ void six::getErrors(const ErrorStatistics* errorStats,
                                     rangeBias,
                                     errors.mSensorErrorCovar);
 
-                if (!six::Init::isUndefined(posVelError.positionDecorr))
+                if (has_value(posVelError.positionDecorr))
                 {
-                    errors.mPositionCorrCoefZero =
-                            posVelError.positionDecorr.corrCoefZero;
-                    errors.mPositionDecorrRate =
-                            posVelError.positionDecorr.decorrRate;
+                    const auto& positionDecorr = value(posVelError.positionDecorr);
+                    errors.mPositionCorrCoefZero = positionDecorr.corrCoefZero;
+                    errors.mPositionDecorrRate = positionDecorr.decorrRate;
                 }
             }
 
-            if (components->ionoError.get())
+            if (components->ionoError)
             {
                 const six::IonoError& ionoError(*components->ionoError);
                 errors.mIonoErrorCovar(0, 0) =
-                        math::square(ionoError.ionoRangeVertical);
+                        math::square(value(ionoError.ionoRangeVertical));
                 errors.mIonoErrorCovar(1, 1) =
-                        math::square(ionoError.ionoRangeRateVertical);
+                        math::square(value(ionoError.ionoRangeRateVertical));
                 errors.mIonoErrorCovar(0, 1) = errors.mIonoErrorCovar(1, 0) =
-                        ionoError.ionoRangeVertical *
-                        ionoError.ionoRangeRateVertical *
-                        ionoError.ionoRgRgRateCC;
+                        value(ionoError.ionoRangeVertical) *
+                        value(ionoError.ionoRangeRateVertical) *
+                        value(ionoError.ionoRgRgRateCC);
             }
 
-            if (components->tropoError.get())
+            if (components->tropoError)
             {
                 errors.mTropoErrorCovar(0, 0) = math::square(
-                        components->tropoError->tropoRangeVertical);
+                        value(components->tropoError->tropoRangeVertical));
             }
         }
 
-        if (errorStats->compositeSCP.get() &&
+        if (errorStats->compositeSCP &&
             errorStats->compositeSCP->scpType == CompositeSCP::RG_AZ)
         {
             const types::RgAz<double> composite(errorStats->compositeSCP->xErr,

@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,11 +21,21 @@
  *
  */
 
-#ifndef __SYS_CONF_H__
-#define __SYS_CONF_H__
+#ifndef CODA_OSS_sys_Conf_h_INCLUDED_
+#define CODA_OSS_sys_Conf_h_INCLUDED_
 #pragma once
 
+// POSIX is more-or-less "Unix"
+// https://linux.die.net/man/7/feature_test_macros
+// "If no feature test macros are explicitly defined, then the following feature test macros
+// are defined by default: ... _POSIX_SOURCE, and _POSIX_C_SOURCE=200809L. [...] 
+// _POSIX_SOURCE Defining this obsolete macro ... is equivalent to defining _POSIX_C_SOURCE ..."
+#define CODA_OSS_POSIX_SOURCE (defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE >= 1))
+#define CODA_OSS_POSIX2001_SOURCE CODA_OSS_POSIX_SOURCE && (_POSIX_C_SOURCE >= 200112L)
+#define CODA_OSS_POSIX2008_SOURCE CODA_OSS_POSIX2001_SOURCE && (_POSIX_C_SOURCE >= 200809L)
+
 #include <config/coda_oss_config.h>
+#include <config/Version.h>
 #include <sys/CPlusPlus.h>
 #include <str/Convert.h>
 
@@ -106,13 +117,14 @@ namespace sys
     typedef HANDLE            Handle_T;
     typedef Int64_T           Off_T;
     typedef DWORD             Pid_T;
-#   if SIZEOF_SIZE_T == 8
+#   if _WIN64 // SIZEOF_SIZE_T == 8
+        static_assert(sizeof(size_t) == 8, "wrong sizeof(size_t)");
         typedef Int64_T   SSize_T;
-#   elif SIZEOF_SIZE_T == 4
+#   else // SIZEOF_SIZE_T == 4
+        static_assert(sizeof(size_t) == 4, "wrong sizeof(size_t)");
         typedef Int32_T   SSize_T;
-#   else
-        #error SIZEOF_SIZE_T must be set at configure time
 #   endif
+        static_assert(sizeof(size_t) == sizeof(SSize_T), "size_t and SSize_T should be the same size");
 }
 #else // !windows
 #   include <sys/types.h>
@@ -314,19 +326,23 @@ namespace sys
     inline void* alignedAlloc(size_t size,
                               size_t alignment = SSE_INSTRUCTION_ALIGNMENT)
     {
-#if defined(WIN32) || defined(_WIN32)
-        void* p = _aligned_malloc(size, alignment);
-#elif defined(HAVE_POSIX_MEMALIGN)
         void* p = nullptr;
+#if defined(WIN32) || defined(_WIN32)
+        p = _aligned_malloc(size, alignment);
+#elif CODA_OSS_POSIX2001_SOURCE
+        // https://linux.die.net/man/3/posix_memalign
         if (posix_memalign(&p, alignment, size) != 0)
         {
             p = nullptr;
         }
-#elif defined(HAVE_MEMALIGN)
-        void* const p = memalign(alignment, size);
+#elif CODA_OSS_POSIX_SOURCE
+        // https://linux.die.net/man/3/posix_memalign
+        // "The functions memalign(), ... have been available in all Linux libc libraries."
+        p = memalign(alignment, size);
 #else
         //! this is a basic unaligned allocation
-        void* p = malloc(size);
+        p = malloc(size);
+        #error "Don't know how to implement alignedAlloc()."
 #endif
         if (!p)
             throw except::Exception(Ctxt(
@@ -353,4 +369,4 @@ namespace sys
 
 }
 
-#endif // __SYS_CONF_H__
+#endif // CODA_OSS_sys_Conf_h_INCLUDED_

@@ -37,16 +37,20 @@ namespace six
 struct NITFSegmentInfo
 {
     //! First row in the image segment in real space
-    size_t firstRow;
+    size_t firstRow = 0;
+    size_t getFirstRow() const { return firstRow; }
 
     //! Row offset in the CCS (ILOC R)
     //  When you are attached to another segment, ILOC is with respect to that
     //  segment.  Per the spec, we will always attach to the previous segment,
     //  so this will simply be the number of rows in that previous segment.
-    size_t rowOffset;
+    size_t rowOffset = 0;
+    size_t getRowOffset() const { return rowOffset; }
+
 
     //! Number of rows in this segment
-    size_t numRows;
+    size_t numRows = 0;
+    size_t getNumRows() const { return numRows; }
 
     //! The image segment corner points
     LatLonCorners corners;
@@ -54,9 +58,13 @@ struct NITFSegmentInfo
     /*!
      * \return The end row (exclusive) of the image segment
      */
+    size_t getEndRow() const
+    {
+        return getFirstRow() + getNumRows();
+    }
     size_t endRow() const
     {
-        return firstRow + numRows;
+        return getEndRow();
     }
 
     /*!

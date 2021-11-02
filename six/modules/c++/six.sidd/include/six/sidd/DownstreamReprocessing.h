@@ -41,6 +41,11 @@ struct GeometricChip
 {
     //!  Size of the chipped product in pixels
     RowColInt chipSize;
+    void setChipSize(const  types::RowCol<size_t>& aoiDims)
+    {
+        chipSize.row = static_cast<ptrdiff_t>(aoiDims.row);
+        chipSize.col = static_cast<ptrdiff_t>(aoiDims.col);
+    }
 
     //!  Upper-left corner with respect to the original product
     RowColDouble originalUpperLeftCoordinate;

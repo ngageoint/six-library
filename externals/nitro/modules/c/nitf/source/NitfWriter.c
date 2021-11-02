@@ -181,7 +181,8 @@ NITFPRIV(NITF_BOOL) writeStringField(nitf_Writer * writer,
                                      const uint32_t fillDir,
                                      nitf_Error * error)
 {
-    char *buf = (char *) NITF_MALLOC(length + 1);
+    const size_t length_ = ((size_t)length) + 1;
+    char *buf = (char *) NITF_MALLOC(length_);
     if (!buf)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -189,7 +190,7 @@ NITFPRIV(NITF_BOOL) writeStringField(nitf_Writer * writer,
         goto CATCH_ERROR;
     }
 
-    memset(buf, '\0', length + 1);
+    memset(buf, '\0', length_);
     memcpy(buf, field, length);
 
     if (!padString(buf, length, fill, fillDir, error))
@@ -214,7 +215,8 @@ NITFPRIV(NITF_BOOL) writeValue(nitf_Writer * writer,
                                const uint32_t fillDir,
                                nitf_Error * error)
 {
-    char *buf = (char *) NITF_MALLOC(length + 1);
+    const size_t length_ = ((size_t)length) + 1;
+    char *buf = (char *) NITF_MALLOC(length_);
     if (!buf)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -222,7 +224,7 @@ NITFPRIV(NITF_BOOL) writeValue(nitf_Writer * writer,
         goto CATCH_ERROR;
     }
 
-    memset(buf, '\0', length + 1);
+    memset(buf, '\0', length_);
 
     /* first, check to see if we need to swap bytes */
     if (field->type == NITF_BINARY)
@@ -834,6 +836,13 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepareIO(nitf_Writer* writer,
                             NITF_ERR_MEMORY);
             return NITF_FAILURE;
         }
+
+        /* first, set the writer to NULL */
+        for (i = 0; i < numImages; i++)
+        {
+            writer->imageWriters[i] = NULL;
+        }
+
         writer->numImageWriters = numImages;
         for (i = 0; i < numImages; i++)
         {
@@ -841,9 +850,6 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepareIO(nitf_Writer* writer,
             nitf_ImageSubheader *subheader = NULL;
             uint32_t nbpp, nbands, xbands, nrows, ncols;
             uint64_t length;
-
-            /* first, set the writer to NULL */
-            writer->imageWriters[i] = NULL;
 
             /* guard against an overflowing data length */
             iter = nitf_List_at(record->images, i);
@@ -857,8 +863,9 @@ NITFAPI(NITF_BOOL) nitf_Writer_prepareIO(nitf_Writer* writer,
             NITF_TRY_GET_UINT32(subheader->numRows, &nrows, error);
             NITF_TRY_GET_UINT32(subheader->numCols, &ncols, error);
 
+            const uint64_t bands_ = ((uint64_t)nbands) + xbands;
             length = (uint64_t)ncols * (uint64_t)nrows *
-                    NITF_NBPP_TO_BYTES(nbpp) * (nbands + xbands);
+                    NITF_NBPP_TO_BYTES(nbpp) * bands_;
 
             if (length > NITF_MAX_IMAGE_LENGTH)
             {
@@ -2131,7 +2138,9 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     if (numTexts != 0)
     {
         NITF_FREE(textSubLens);
+        textSubLens = NULL;
         NITF_FREE(textDataLens);
+        textDataLens = NULL;
     }
 
     /*    Fix the data extension subheader and data lengths */
@@ -2155,7 +2164,9 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     if (numDEs != 0)
     {
         NITF_FREE(deSubLens);
+        deSubLens = NULL;
         NITF_FREE(deDataLens);
+        deDataLens = NULL;
     }
 
     /* Now its time to check if we should be measuring the CLEVEL */

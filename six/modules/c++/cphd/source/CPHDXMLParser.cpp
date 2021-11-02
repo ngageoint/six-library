@@ -91,9 +91,9 @@ std::unique_ptr<xml::lite::Document> CPHDXMLParser::toXML(
     {
         toXML(*(metadata.productInfo), root);
     }
-    for (size_t ii = 0; ii < metadata.geoInfo.size(); ++ii)
+    for (const auto& geoInfo : metadata.geoInfo)
     {
-        toXML(metadata.geoInfo[ii], root);
+        toXML(geoInfo, root);
     }
     if (metadata.matchInfo.get())
     {
@@ -169,10 +169,7 @@ XMLElem CPHDXMLParser::toXML(const Global& global, XMLElem parent)
     {
         XMLElem ionoXML = newElement("IonoParameters", globalXML);
         createDouble("TECV", global.ionoParameters->tecv, ionoXML);
-        if (!six::Init::isUndefined(global.ionoParameters->f2Height))
-        {
-            createDouble("F2Height", global.ionoParameters->f2Height, ionoXML);
-        }
+        createOptionalDouble("F2Height", global.ionoParameters->f2Height, ionoXML);
     }
     return globalXML;
 }
@@ -319,14 +316,14 @@ XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
         }
     }
     createInt("NumSupportArrays", data.supportArrayMap.size(), dataXML);
-    for (auto it = data.supportArrayMap.begin(); it != data.supportArrayMap.end(); ++it)
+    for (const auto& entry : data.supportArrayMap)
     {
         XMLElem supportArrayXML = newElement("SupportArray", dataXML);
-        createString("Identifier", it->second.identifier, supportArrayXML);
-        createInt("NumRows", it->second.numRows, supportArrayXML);
-        createInt("NumCols", it->second.numCols, supportArrayXML);
-        createInt("BytesPerElement", it->second.bytesPerElement, supportArrayXML);
-        createInt("ArrayByteOffset", it->second.arrayByteOffset, supportArrayXML);
+        createString("Identifier", entry.second.identifier, supportArrayXML);
+        createInt("NumRows", entry.second.numRows, supportArrayXML);
+        createInt("NumCols", entry.second.numCols, supportArrayXML);
+        createInt("BytesPerElement", entry.second.bytesPerElement, supportArrayXML);
+        createInt("ArrayByteOffset", entry.second.arrayByteOffset, supportArrayXML);
     }
     return dataXML;
 }
@@ -356,10 +353,7 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
         createString("RcvPol", channel.parameters[ii].polarization.rcvPol, polXML);
         createDouble("FxC", channel.parameters[ii].fxC, parametersXML);
         createDouble("FxBW", channel.parameters[ii].fxBW, parametersXML);
-        if(!six::Init::isUndefined(channel.parameters[ii].fxBWNoise))
-        {
-            createDouble("FxBWNoise", channel.parameters[ii].fxBWNoise, parametersXML);
-        }
+        createOptionalDouble("FxBWNoise", channel.parameters[ii].fxBWNoise, parametersXML);
         createDouble("TOASaved", channel.parameters[ii].toaSaved, parametersXML);
 
         if(channel.parameters[ii].toaExtended.get())
@@ -668,10 +662,7 @@ XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
         XMLElem antPatternXML = newElement("AntPattern", antennaXML);
         createString("Identifier", antenna.antPattern[ii].identifier, antPatternXML);
         createDouble("FreqZero", antenna.antPattern[ii].freqZero, antPatternXML);
-        if (!six::Init::isUndefined(antenna.antPattern[ii].gainZero))
-        {
-            createDouble("GainZero", antenna.antPattern[ii].gainZero, antPatternXML);
-        }
+        createOptionalDouble("GainZero", antenna.antPattern[ii].gainZero, antPatternXML);
         if (!six::Init::isUndefined(antenna.antPattern[ii].ebFreqShift))
         {
             createBooleanType("EBFreqShift", antenna.antPattern[ii].ebFreqShift, antPatternXML);
@@ -718,15 +709,9 @@ XMLElem CPHDXMLParser::toXML(const TxRcv& txRcv, XMLElem parent)
         createDouble("PulseLength", txRcv.txWFParameters[ii].pulseLength, txWFParamsXML);
         createDouble("RFBandwidth", txRcv.txWFParameters[ii].rfBandwidth, txWFParamsXML);
         createDouble("FreqCenter", txRcv.txWFParameters[ii].freqCenter, txWFParamsXML);
-        if (!six::Init::isUndefined(txRcv.txWFParameters[ii].lfmRate))
-        {
-            createDouble("LFMRate", txRcv.txWFParameters[ii].lfmRate, txWFParamsXML);
-        }
+        createOptionalDouble("LFMRate", txRcv.txWFParameters[ii].lfmRate, txWFParamsXML);
         createString("Polarization", txRcv.txWFParameters[ii].polarization, txWFParamsXML);
-        if (!six::Init::isUndefined(txRcv.txWFParameters[ii].power))
-        {
-            createDouble("Power", txRcv.txWFParameters[ii].power, txWFParamsXML);
-        }
+        createOptionalDouble("Power", txRcv.txWFParameters[ii].power, txWFParamsXML);
     }
     createInt("NumRcvs", txRcv.rcvParameters.size(), txRcvXML);
     for (size_t ii = 0; ii < txRcv.rcvParameters.size(); ++ii)
@@ -737,15 +722,9 @@ XMLElem CPHDXMLParser::toXML(const TxRcv& txRcv, XMLElem parent)
         createDouble("SampleRate", txRcv.rcvParameters[ii].sampleRate, rcvParamsXML);
         createDouble("IFFilterBW", txRcv.rcvParameters[ii].ifFilterBW, rcvParamsXML);
         createDouble("FreqCenter", txRcv.rcvParameters[ii].freqCenter, rcvParamsXML);
-        if (!six::Init::isUndefined(txRcv.rcvParameters[ii].lfmRate))
-        {
-            createDouble("LFMRate", txRcv.rcvParameters[ii].lfmRate, rcvParamsXML);
-        }
+        createOptionalDouble("LFMRate", txRcv.rcvParameters[ii].lfmRate, rcvParamsXML);
         createString("Polarization", txRcv.rcvParameters[ii].polarization, rcvParamsXML);
-        if (!six::Init::isUndefined(txRcv.rcvParameters[ii].pathGain))
-        {
-            createDouble("PathGain", txRcv.rcvParameters[ii].pathGain, rcvParamsXML);
-        }
+        createOptionalDouble("PathGain", txRcv.rcvParameters[ii].pathGain, rcvParamsXML);
     }
     return txRcvXML;
 }
@@ -783,23 +762,13 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
             createDouble("V1V3", errParams.monostatic->posVelErr.corrCoefs->v1v3, corrCoefsXML);
             createDouble("V2V3", errParams.monostatic->posVelErr.corrCoefs->v2v3, corrCoefsXML);
         }
-        if(!six::Init::isUndefined(errParams.monostatic->posVelErr.positionDecorr))
-        {
-            XMLElem positionDecorrXML = newElement("PositionDecorr", posVelErrXML);
-            createDouble("CorrCoefZero", errParams.monostatic->posVelErr.positionDecorr.corrCoefZero, positionDecorrXML);
-            createDouble("DecorrRate", errParams.monostatic->posVelErr.positionDecorr.decorrRate, positionDecorrXML);
-        }
+        createDecorrType("PositionDecorr", errParams.monostatic->posVelErr.positionDecorr, posVelErrXML);
+
         // RadarSensor
         XMLElem radarXML = newElement("RadarSensor", monoXML);
         createDouble("RangeBias", errParams.monostatic->radarSensor.rangeBias, radarXML);
-        if (!six::Init::isUndefined(errParams.monostatic->radarSensor.clockFreqSF))
-        {
-            createDouble("ClockFreqSF", errParams.monostatic->radarSensor.clockFreqSF, radarXML);
-        }
-        if (!six::Init::isUndefined(errParams.monostatic->radarSensor.collectionStartTime))
-        {
-            createDouble("CollectionStartTime", errParams.monostatic->radarSensor.collectionStartTime, radarXML);
-        }
+        createOptionalDouble("ClockFreqSF", errParams.monostatic->radarSensor.clockFreqSF, radarXML);
+        createOptionalDouble("CollectionStartTime", errParams.monostatic->radarSensor.collectionStartTime, radarXML);
         if (errParams.monostatic->radarSensor.rangeBiasDecorr.get())
         {
             XMLElem rangeBiasDecorrXML = newElement("RangeBiasDecorr", radarXML);
@@ -810,41 +779,19 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
         if (errParams.monostatic->tropoError.get())
         {
             XMLElem tropoXML = newElement("TropoError", monoXML);
-            if (!six::Init::isUndefined(errParams.monostatic->tropoError->tropoRangeVertical))
-            {
-                createDouble("TropoRangeVertical", errParams.monostatic->tropoError->tropoRangeVertical, tropoXML);
-            }
-            if (!six::Init::isUndefined(errParams.monostatic->tropoError->tropoRangeSlant))
-            {
-                createDouble("TropoRangeSlant", errParams.monostatic->tropoError->tropoRangeSlant, tropoXML);
-            }
-            if (!six::Init::isUndefined(errParams.monostatic->tropoError->tropoRangeDecorr))
-            {
-                XMLElem tropoDecorrXML = newElement("TropoRangeDecorr", tropoXML);
-                createDouble("CorrCoefZero", errParams.monostatic->tropoError->tropoRangeDecorr.corrCoefZero, tropoDecorrXML);
-                createDouble("DecorrRate", errParams.monostatic->tropoError->tropoRangeDecorr.decorrRate, tropoDecorrXML);
-            }
+            createOptionalDouble("TropoRangeVertical", errParams.monostatic->tropoError->tropoRangeVertical, tropoXML);
+            createOptionalDouble("TropoRangeSlant", errParams.monostatic->tropoError->tropoRangeSlant, tropoXML);
+            createDecorrType("TropoRangeDecorr", errParams.monostatic->tropoError->tropoRangeDecorr, tropoXML);
         }
         if (errParams.monostatic->ionoError.get())
         {
             XMLElem ionoXML = newElement("IonoError", monoXML);
             createDouble("IonoRangeVertical", errParams.monostatic->ionoError->ionoRangeVertical, ionoXML);
-            if (!six::Init::isUndefined(errParams.monostatic->ionoError->ionoRangeRateVertical))
-            {
-                createDouble("IonoRangeRateVertical", errParams.monostatic->ionoError->ionoRangeRateVertical, ionoXML);
-            }
-            if (!six::Init::isUndefined(errParams.monostatic->ionoError->ionoRgRgRateCC))
-            {
-                createDouble("IonoRgRgRateCC", errParams.monostatic->ionoError->ionoRgRgRateCC, ionoXML);
-            }
-            if (!six::Init::isUndefined(errParams.monostatic->ionoError->ionoRangeVertDecorr))
-            {
-                XMLElem ionoDecorrXML = newElement("IonoRangeVertDecorr", ionoXML);
-                createDouble("CorrCoefZero", errParams.monostatic->ionoError->ionoRangeVertDecorr.corrCoefZero, ionoDecorrXML);
-                createDouble("DecorrRate", errParams.monostatic->ionoError->ionoRangeVertDecorr.decorrRate, ionoDecorrXML);
-            }
+            createOptionalDouble("IonoRangeRateVertical", errParams.monostatic->ionoError->ionoRangeRateVertical, ionoXML);
+            createOptionalDouble("IonoRgRgRateCC", errParams.monostatic->ionoError->ionoRgRgRateCC, ionoXML);
+            createDecorrType("IonoRangeVertDecorr", errParams.monostatic->tropoError->tropoRangeDecorr, ionoXML);
         }
-        if (errParams.monostatic->parameter.size() > 0)
+        if (!errParams.monostatic->parameter.empty())
         {
             XMLElem addedParamsXML = newElement("AddedParameters", monoXML);
             mCommon.addParameters("Parameter", getDefaultURI(), errParams.monostatic->parameter, addedParamsXML);
@@ -856,22 +803,16 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
         XMLElem txPlatXML = newElement("TxPlatform", biXML);
         createErrorParamPlatform("TxPlatform", errParams.bistatic->txPlatform, txPlatXML);
         XMLElem radarTxXML = newElement("RadarSensor", txPlatXML);
-        if(!six::Init::isUndefined(errParams.bistatic->txPlatform.radarSensor.clockFreqSF))
-        {
-            createDouble("ClockFreqSF", errParams.bistatic->txPlatform.radarSensor.clockFreqSF, radarTxXML);
-        }
+        createOptionalDouble("ClockFreqSF", errParams.bistatic->txPlatform.radarSensor.clockFreqSF, radarTxXML);
         createDouble("CollectionStartTime", errParams.bistatic->txPlatform.radarSensor.collectionStartTime, radarTxXML);
 
         XMLElem rcvPlatXML = newElement("RcvPlatform", biXML);
         createErrorParamPlatform("RcvPlatform", errParams.bistatic->rcvPlatform, rcvPlatXML);
         XMLElem radarRcvXML = newElement("RadarSensor", rcvPlatXML);
-        if(!six::Init::isUndefined(errParams.bistatic->rcvPlatform.radarSensor.clockFreqSF))
-        {
-            createDouble("ClockFreqSF", errParams.bistatic->rcvPlatform.radarSensor.clockFreqSF, radarRcvXML);
-        }
+        createOptionalDouble("ClockFreqSF", errParams.bistatic->rcvPlatform.radarSensor.clockFreqSF, radarRcvXML);
         createDouble("CollectionStartTime", errParams.bistatic->rcvPlatform.radarSensor.collectionStartTime, radarRcvXML);
 
-        if (errParams.bistatic->parameter.size() > 0)
+        if (!errParams.bistatic->parameter.empty())
         {
             XMLElem addedParamsXML = newElement("AddedParameters", biXML);
             mCommon.addParameters("Parameter",  getDefaultURI(), errParams.bistatic->parameter, addedParamsXML);
@@ -1024,7 +965,7 @@ std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
     return cphd;
 }
 
-void CPHDXMLParser::fromXML(const XMLElem collectionIDXML, CollectionInformation& collectionID)
+void CPHDXMLParser::fromXML(const xml::lite::Element* collectionIDXML, CollectionInformation& collectionID)
 {
     parseString(getFirstAndOnly(collectionIDXML, "CollectorName"),
                 collectionID.collectorName);
@@ -1086,7 +1027,7 @@ void CPHDXMLParser::fromXML(const XMLElem collectionIDXML, CollectionInformation
     mCommon.parseParameters(collectionIDXML, "Parameter", collectionID.parameters);
 }
 
-void CPHDXMLParser::fromXML(const XMLElem globalXML, Global& global)
+void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
 {
     global.domainType = DomainType(
             getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
@@ -1094,13 +1035,13 @@ void CPHDXMLParser::fromXML(const XMLElem globalXML, Global& global)
             getFirstAndOnly(globalXML, "SGN")->getCharacterData());
 
     // Timeline
-    const XMLElem timelineXML = getFirstAndOnly(globalXML, "Timeline");
+    const xml::lite::Element* timelineXML = getFirstAndOnly(globalXML, "Timeline");
     parseDateTime(
             getFirstAndOnly(timelineXML, "CollectionStart"),
             global.timeline.collectionStart);
 
     // Optional
-    const XMLElem rcvCollectionXML = getOptional(timelineXML,
+    const xml::lite::Element* rcvCollectionXML = getOptional(timelineXML,
                                                  "RcvCollectionStart");
     if (rcvCollectionXML)
     {
@@ -1114,17 +1055,17 @@ void CPHDXMLParser::fromXML(const XMLElem globalXML, Global& global)
             getFirstAndOnly(timelineXML, "TxTime2"), global.timeline.txTime2);
 
     // FxBand
-    const XMLElem fxBandXML = getFirstAndOnly(globalXML, "FxBand");
+    const xml::lite::Element* fxBandXML = getFirstAndOnly(globalXML, "FxBand");
     parseDouble(getFirstAndOnly(fxBandXML, "FxMin"), global.fxBand.fxMin);
     parseDouble(getFirstAndOnly(fxBandXML, "FxMax"), global.fxBand.fxMax);
 
     // TOASwath
-    const XMLElem toaSwathXML = getFirstAndOnly(globalXML, "TOASwath");
+    const xml::lite::Element* toaSwathXML = getFirstAndOnly(globalXML, "TOASwath");
     parseDouble(getFirstAndOnly(toaSwathXML, "TOAMin"), global.toaSwath.toaMin);
     parseDouble(getFirstAndOnly(toaSwathXML, "TOAMax"), global.toaSwath.toaMax);
 
     // TropoParameters
-    const XMLElem tropoXML = getOptional(globalXML, "TropoParameters");
+    const xml::lite::Element* tropoXML = getOptional(globalXML, "TropoParameters");
     if (tropoXML)
     {
         // Optional
@@ -1135,7 +1076,7 @@ void CPHDXMLParser::fromXML(const XMLElem globalXML, Global& global)
     }
 
     // IonoParameters
-    const XMLElem ionoXML = getOptional(globalXML, "IonoParameters");
+    const xml::lite::Element* ionoXML = getOptional(globalXML, "IonoParameters");
     if (ionoXML)
     {
         // Optional
@@ -1145,21 +1086,21 @@ void CPHDXMLParser::fromXML(const XMLElem globalXML, Global& global)
     }
 }
 
-void CPHDXMLParser::fromXML(const XMLElem sceneCoordsXML,
+void CPHDXMLParser::fromXML(const xml::lite::Element* sceneCoordsXML,
                              SceneCoordinates& scene)
 {
     scene.earthModel = EarthModelType(
             getFirstAndOnly(sceneCoordsXML, "EarthModel")->getCharacterData());
 
     // IARP
-    const XMLElem iarpXML = getFirstAndOnly(sceneCoordsXML, "IARP");
+    const xml::lite::Element* iarpXML = getFirstAndOnly(sceneCoordsXML, "IARP");
     mCommon.parseVector3D(getFirstAndOnly(iarpXML, "ECF"), scene.iarp.ecf);
     mCommon.parseLatLonAlt(getFirstAndOnly(iarpXML, "LLH"), scene.iarp.llh);
 
     // ReferenceSurface
-    const XMLElem surfaceXML = getFirstAndOnly(sceneCoordsXML, "ReferenceSurface");
-    const XMLElem planarXML = getOptional(surfaceXML, "Planar");
-    const XMLElem haeXML = getOptional(surfaceXML, "HAE");
+    const xml::lite::Element* surfaceXML = getFirstAndOnly(sceneCoordsXML, "ReferenceSurface");
+    const xml::lite::Element* planarXML = getOptional(surfaceXML, "Planar");
+    const xml::lite::Element* haeXML = getOptional(surfaceXML, "HAE");
     if (planarXML && !haeXML)
     {
         // Choice type
@@ -1185,16 +1126,16 @@ void CPHDXMLParser::fromXML(const XMLElem sceneCoordsXML,
     }
 
     // ImageArea
-    const XMLElem imageAreaXML = getFirstAndOnly(sceneCoordsXML, "ImageArea");
+    const xml::lite::Element* imageAreaXML = getFirstAndOnly(sceneCoordsXML, "ImageArea");
     parseAreaType(imageAreaXML, scene.imageArea);
 
     // ImageAreaCorners
-    const XMLElem cornersXML = getFirstAndOnly(sceneCoordsXML,
+    const xml::lite::Element* cornersXML = getFirstAndOnly(sceneCoordsXML,
                                                "ImageAreaCornerPoints");
     mCommon.parseFootprint(cornersXML, "IACP", scene.imageAreaCorners);
 
     // Extended Area
-    const XMLElem extendedAreaXML = getOptional(sceneCoordsXML, "ExtendedArea");
+    const xml::lite::Element* extendedAreaXML = getOptional(sceneCoordsXML, "ExtendedArea");
     if (extendedAreaXML)
     {
         scene.extendedArea.reset(new AreaType());
@@ -1202,12 +1143,12 @@ void CPHDXMLParser::fromXML(const XMLElem sceneCoordsXML,
     }
 
     // Image Grid
-    const XMLElem gridXML = getOptional(sceneCoordsXML, "ImageGrid");
+    const xml::lite::Element* gridXML = getOptional(sceneCoordsXML, "ImageGrid");
     if (gridXML)
     {
         // Optional
         scene.imageGrid.reset(new ImageGrid());
-        const XMLElem identifierXML = getOptional(gridXML, "Identifier");
+        const xml::lite::Element* identifierXML = getOptional(gridXML, "Identifier");
         if (identifierXML)
         {
             parseString(identifierXML, scene.imageGrid->identifier);
@@ -1220,7 +1161,7 @@ void CPHDXMLParser::fromXML(const XMLElem sceneCoordsXML,
                       scene.imageGrid->yExtent);
 
         // Segment List
-        const XMLElem segListXML = getOptional(gridXML, "SegmentList");
+        const xml::lite::Element* segListXML = getOptional(gridXML, "SegmentList");
         if (segListXML)
         {
             // Optional
@@ -1233,7 +1174,7 @@ void CPHDXMLParser::fromXML(const XMLElem sceneCoordsXML,
 
             for (size_t ii = 0; ii < segmentsXML.size(); ++ii)
             {
-                const XMLElem segmentXML = segmentsXML[ii];
+                const xml::lite::Element* segmentXML = segmentsXML[ii];
                 parseString(getFirstAndOnly(segmentXML, "Identifier"),
                          scene.imageGrid->segments[ii].identifier);
                 parseInt(getFirstAndOnly(segmentXML, "StartLine"),
@@ -1245,13 +1186,13 @@ void CPHDXMLParser::fromXML(const XMLElem sceneCoordsXML,
                 parseInt(getFirstAndOnly(segmentXML, "EndSample"),
                          scene.imageGrid->segments[ii].endSample);
 
-                const XMLElem polygonXML = getOptional(segmentXML,
+                const xml::lite::Element* polygonXML = getOptional(segmentXML,
                                                        "SegmentPolygon");
                 if (polygonXML)
                 {
                     // Optional
                     size_t polygonSize = 0;
-                    sscanf(polygonXML->attribute("size").c_str(), "%zu", &polygonSize);
+                    sscanf(const_cast<XMLElem>(polygonXML)->attribute("size").c_str(), "%zu", &polygonSize);
                     scene.imageGrid->segments[ii].polygon.resize(polygonSize);
                     std::vector<XMLElem> polyVerticesXMLVec;
                     polygonXML->getElementsByTagName("SV", polyVerticesXMLVec);
@@ -1281,9 +1222,9 @@ void CPHDXMLParser::fromXML(const XMLElem sceneCoordsXML,
     }
 }
 
-void CPHDXMLParser::fromXML(const XMLElem dataXML, Data& data)
+void CPHDXMLParser::fromXML(const xml::lite::Element* dataXML, Data& data)
 {
-    const XMLElem signalXML = getFirstAndOnly(dataXML, "SignalArrayFormat");
+    const xml::lite::Element* signalXML = getFirstAndOnly(dataXML, "SignalArrayFormat");
     data.signalArrayFormat = SignalArrayFormat(signalXML->getCharacterData());
 
     size_t numBytesPVP_temp = 0;
@@ -1344,7 +1285,7 @@ void CPHDXMLParser::fromXML(const XMLElem dataXML, Data& data)
     }
 }
 
-void CPHDXMLParser::fromXML(const XMLElem channelXML, Channel& channel)
+void CPHDXMLParser::fromXML(const xml::lite::Element* channelXML, Channel& channel)
 {
     parseString(getFirstAndOnly(channelXML, "RefChId"), channel.refChId);
     parseBooleanType(getFirstAndOnly(channelXML, "FXFixedCPHD"),
@@ -1369,7 +1310,7 @@ void CPHDXMLParser::fromXML(const XMLElem channelXML, Channel& channel)
     }
 }
 
-void CPHDXMLParser::fromXML(const XMLElem pvpXML, Pvp& pvp)
+void CPHDXMLParser::fromXML(const xml::lite::Element* pvpXML, Pvp& pvp)
 {
     parsePVPType(pvp, getFirstAndOnly(pvpXML, "TxTime"), pvp.txTime);
     parsePVPType(pvp, getFirstAndOnly(pvpXML, "TxPos"), pvp.txPos);
@@ -1389,47 +1330,13 @@ void CPHDXMLParser::fromXML(const XMLElem pvpXML, Pvp& pvp)
     parsePVPType(pvp, getFirstAndOnly(pvpXML, "SC0"), pvp.sc0);
     parsePVPType(pvp, getFirstAndOnly(pvpXML, "SCSS"), pvp.scss);
 
-    const XMLElem AmpSFXML = getOptional(pvpXML, "AmpSF");
-    if (AmpSFXML)
-    {
-        parsePVPType(pvp, AmpSFXML, pvp.ampSF);
-    }
-
-    const XMLElem FXN1XML = getOptional(pvpXML, "FXN1");
-    if (FXN1XML)
-    {
-        parsePVPType(pvp, FXN1XML, pvp.fxN1);
-    }
-
-    const XMLElem FXN2XML = getOptional(pvpXML, "FXN2");
-    if (FXN2XML)
-    {
-        parsePVPType(pvp, FXN2XML, pvp.fxN2);
-    }
-
-    const XMLElem TOAE1XML = getOptional(pvpXML, "TOAE1");
-    if (TOAE1XML)
-    {
-        parsePVPType(pvp, TOAE1XML, pvp.toaE1);
-    }
-
-    const XMLElem TOAE2XML = getOptional(pvpXML, "TOAE2");
-    if (TOAE2XML)
-    {
-        parsePVPType(pvp, TOAE2XML, pvp.toaE2);
-    }
-
-    const XMLElem TDIonoSRPXML = getOptional(pvpXML, "TDIonoSRP");
-    if (TDIonoSRPXML)
-    {
-        parsePVPType(pvp, TDIonoSRPXML, pvp.tdIonoSRP);
-    }
-
-    const XMLElem SIGNALXML = getOptional(pvpXML, "SIGNAL");
-    if (SIGNALXML)
-    {
-        parsePVPType(pvp, SIGNALXML, pvp.signal);
-    }
+    parseOptionalPVPType(pvpXML, "AmpSF", pvp, pvp.ampSF);
+    parseOptionalPVPType(pvpXML, "FXN1", pvp, pvp.fxN1);
+    parseOptionalPVPType(pvpXML, "FXN2", pvp, pvp.fxN2);
+    parseOptionalPVPType(pvpXML, "TOAE1", pvp, pvp.toaE1);
+    parseOptionalPVPType(pvpXML, "TOAE2", pvp, pvp.toaE2);
+    parseOptionalPVPType(pvpXML, "TDIonoSRP", pvp, pvp.tdIonoSRP);
+    parseOptionalPVPType(pvpXML, "SIGNAL", pvp, pvp.signal);
 
     std::vector<XMLElem> addedParamsXML;
     const std::string str = "AddedPVP";
@@ -1444,7 +1351,7 @@ void CPHDXMLParser::fromXML(const XMLElem pvpXML, Pvp& pvp)
     }
 }
 
-void CPHDXMLParser::fromXML(const XMLElem DwellXML,
+void CPHDXMLParser::fromXML(const xml::lite::Element* DwellXML,
                              Dwell& dwell)
 {
     // CODTime
@@ -1474,7 +1381,7 @@ void CPHDXMLParser::fromXML(const XMLElem DwellXML,
     }
 }
 
-void CPHDXMLParser::fromXML(const XMLElem refGeoXML, ReferenceGeometry& refGeo)
+void CPHDXMLParser::fromXML(const xml::lite::Element* refGeoXML, ReferenceGeometry& refGeo)
 {
     XMLElem srpXML = getFirstAndOnly(refGeoXML, "SRP");
     mCommon.parseVector3D(getFirstAndOnly(srpXML, "ECF"), refGeo.srp.ecf);
@@ -1483,8 +1390,8 @@ void CPHDXMLParser::fromXML(const XMLElem refGeoXML, ReferenceGeometry& refGeo)
     parseDouble(getFirstAndOnly(refGeoXML, "SRPCODTime"), refGeo.srpCODTime);
     parseDouble(getFirstAndOnly(refGeoXML, "SRPDwellTime"), refGeo.srpDwellTime);
 
-    const XMLElem monoXML = getOptional(refGeoXML, "Monostatic");
-    const XMLElem biXML = getOptional(refGeoXML, "Bistatic");
+    const xml::lite::Element* monoXML = getOptional(refGeoXML, "Monostatic");
+    const xml::lite::Element* biXML = getOptional(refGeoXML, "Bistatic");
     if (monoXML && !biXML)
     {
         refGeo.monostatic.reset(new Monostatic());
@@ -1518,7 +1425,7 @@ void CPHDXMLParser::fromXML(const XMLElem refGeoXML, ReferenceGeometry& refGeo)
     }
 }
 
-void CPHDXMLParser::fromXML(const XMLElem supportArrayXML, SupportArray& supportArray)
+void CPHDXMLParser::fromXML(const xml::lite::Element* supportArrayXML, SupportArray& supportArray)
 {
     std::vector<XMLElem> iazArrayXMLVec;
     supportArrayXML->getElementsByTagName("IAZArray", iazArrayXMLVec);
@@ -1559,7 +1466,7 @@ void CPHDXMLParser::fromXML(const XMLElem supportArrayXML, SupportArray& support
 }
 
 
-void CPHDXMLParser::fromXML(const XMLElem antennaXML, Antenna& antenna)
+void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& antenna)
 {
     size_t numACFs = 0;
     size_t numAPCs = 0;
@@ -1612,11 +1519,7 @@ void CPHDXMLParser::fromXML(const XMLElem antennaXML, Antenna& antenna)
     {
         parseString(getFirstAndOnly(antPatternXMLVec[ii], "Identifier"), antenna.antPattern[ii].identifier);
         parseDouble(getFirstAndOnly(antPatternXMLVec[ii], "FreqZero"), antenna.antPattern[ii].freqZero);
-        XMLElem gainZeroXML = getOptional(antPatternXMLVec[ii], "GainZero");
-        if(gainZeroXML)
-        {
-            parseDouble(gainZeroXML, antenna.antPattern[ii].gainZero);
-        }
+        parseOptionalDouble(antPatternXMLVec[ii], "GainZero", antenna.antPattern[ii].gainZero);
         XMLElem ebFreqShiftXML = getOptional(antPatternXMLVec[ii], "EBFreqShift");
         if(ebFreqShiftXML)
         {
@@ -1666,7 +1569,7 @@ void CPHDXMLParser::fromXML(const XMLElem antennaXML, Antenna& antenna)
     }
 }
 
-void CPHDXMLParser::fromXML(const XMLElem txRcvXML, TxRcv& txRcv)
+void CPHDXMLParser::fromXML(const xml::lite::Element* txRcvXML, TxRcv& txRcv)
 {
     size_t numTxWFs = 0;
     size_t numRcvs = 0;
@@ -1687,11 +1590,7 @@ void CPHDXMLParser::fromXML(const XMLElem txRcvXML, TxRcv& txRcv)
         parseTxRcvParameter(txWFXMLVec[ii], txRcv.txWFParameters[ii]);
         parseDouble(getFirstAndOnly(txWFXMLVec[ii], "PulseLength"), txRcv.txWFParameters[ii].pulseLength);
         parseDouble(getFirstAndOnly(txWFXMLVec[ii], "RFBandwidth"), txRcv.txWFParameters[ii].rfBandwidth);
-        XMLElem powerXML = getOptional(txWFXMLVec[ii], "Power");
-        if(powerXML)
-        {
-            parseDouble(powerXML, txRcv.txWFParameters[ii].power);
-        }
+        parseOptionalDouble(txWFXMLVec[ii], "Power", txRcv.txWFParameters[ii].power);
     }
 
     std::vector<XMLElem> rcvXMLVec;
@@ -1707,16 +1606,12 @@ void CPHDXMLParser::fromXML(const XMLElem txRcvXML, TxRcv& txRcv)
         parseDouble(getFirstAndOnly(rcvXMLVec[ii], "WindowLength"), txRcv.rcvParameters[ii].windowLength);
         parseDouble(getFirstAndOnly(rcvXMLVec[ii], "SampleRate"), txRcv.rcvParameters[ii].sampleRate);
         parseDouble(getFirstAndOnly(rcvXMLVec[ii], "IFFilterBW"), txRcv.rcvParameters[ii].ifFilterBW);
-        XMLElem pathGainXML = getOptional(rcvXMLVec[ii], "PathGain");
-        if(pathGainXML)
-        {
-            parseDouble(pathGainXML, txRcv.rcvParameters[ii].pathGain);
-        }
+        parseOptionalDouble(rcvXMLVec[ii], "PathGain", txRcv.rcvParameters[ii].pathGain);
     }
 
 }
 
-void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam)
+void CPHDXMLParser::fromXML(const xml::lite::Element* errParamXML, ErrorParameters& errParam)
 {
     XMLElem monostaticXML = getOptional(errParamXML, "Monostatic");
     XMLElem bistaticXML = getOptional(errParamXML, "Bistatic");
@@ -1729,17 +1624,8 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
         XMLElem radarSensorXML = getFirstAndOnly(monostaticXML, "RadarSensor");
         parseDouble(getFirstAndOnly(radarSensorXML, "RangeBias"), errParam.monostatic->radarSensor.rangeBias);
 
-        XMLElem clockFreqSFXML = getOptional(radarSensorXML, "ClockFreqSF");
-        if(clockFreqSFXML)
-        {
-            parseDouble(clockFreqSFXML, errParam.monostatic->radarSensor.clockFreqSF);
-        }
-
-        XMLElem collectionStartTimeXML = getOptional(radarSensorXML, "CollectionStartTime");
-        if(collectionStartTimeXML)
-        {
-            parseDouble(collectionStartTimeXML, errParam.monostatic->radarSensor.collectionStartTime);
-        }
+        parseOptionalDouble(radarSensorXML, "ClockFreqSF", errParam.monostatic->radarSensor.clockFreqSF);
+        parseOptionalDouble(radarSensorXML, "CollectionStartTime", errParam.monostatic->radarSensor.collectionStartTime);
 
         XMLElem rangeBiasDecorrXML = getOptional(radarSensorXML, "RangeBiasDecorr");
         if(rangeBiasDecorrXML)
@@ -1752,21 +1638,9 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
         if(tropoErrorXML)
         {
             errParam.monostatic->tropoError.reset(new six::TropoError());
-            XMLElem verticalXML = getOptional(tropoErrorXML, "TropoRangeVertical");
-            if(verticalXML)
-            {
-                parseDouble(verticalXML, errParam.monostatic->tropoError->tropoRangeVertical);
-            }
-            XMLElem slantXML = getOptional(tropoErrorXML, "TropoRangeSlant");
-            if(slantXML)
-            {
-                parseDouble(slantXML, errParam.monostatic->tropoError->tropoRangeSlant);
-            }
-            XMLElem decorrXML = getOptional(tropoErrorXML, "TropoRangeDecorr");
-            if(decorrXML)
-            {
-                mCommon.parseDecorrType(decorrXML, errParam.monostatic->tropoError->tropoRangeDecorr);
-            }
+            parseOptionalDouble(tropoErrorXML, "TropoRangeVertical", errParam.monostatic->tropoError->tropoRangeVertical);
+            parseOptionalDouble(tropoErrorXML, "TropoRangeSlant", errParam.monostatic->tropoError->tropoRangeSlant);
+            mCommon.parseOptionalDecorrType(tropoErrorXML, "TropoRangeDecorr", errParam.monostatic->tropoError->tropoRangeDecorr);
         }
 
         XMLElem ionoErrorXML = getFirstAndOnly(monostaticXML, "IonoError");
@@ -1775,21 +1649,9 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
             errParam.monostatic->ionoError.reset(new six::IonoError());
             parseDouble(getFirstAndOnly(ionoErrorXML, "IonoRangeVertical"), errParam.monostatic->ionoError->ionoRangeVertical);
 
-            XMLElem rateVerticalXML = getOptional(ionoErrorXML, "IonoRangeRateVertical");
-            if(rateVerticalXML)
-            {
-                parseDouble(rateVerticalXML, errParam.monostatic->ionoError->ionoRangeRateVertical);
-            }
-            XMLElem rgrgRateCCXML = getOptional(ionoErrorXML, "IonoRgRgRateCC");
-            if(rgrgRateCCXML)
-            {
-                parseDouble(rgrgRateCCXML, errParam.monostatic->ionoError->ionoRgRgRateCC);
-            }
-            XMLElem decorrXML = getOptional(ionoErrorXML, "IonoRangeVertDecorr");
-            if(decorrXML)
-            {
-                mCommon.parseDecorrType(decorrXML, errParam.monostatic->ionoError->ionoRangeVertDecorr);
-            }
+            parseOptionalDouble(ionoErrorXML, "IonoRangeRateVertical", errParam.monostatic->ionoError->ionoRangeRateVertical);
+            parseOptionalDouble(ionoErrorXML, "IonoRgRgRateCC", errParam.monostatic->ionoError->ionoRgRgRateCC);
+            mCommon.parseOptionalDecorrType(ionoErrorXML, "IonoRangeVertDecorr", errParam.monostatic->ionoError->ionoRangeVertDecorr);
         }
         mCommon.parseParameters(monostaticXML, "Parameter", errParam.monostatic->parameter);
     }
@@ -1808,7 +1670,7 @@ void CPHDXMLParser::fromXML(const XMLElem errParamXML, ErrorParameters& errParam
 }
 
 
-void CPHDXMLParser::fromXML(const XMLElem productInfoXML, ProductInfo& productInfo)
+void CPHDXMLParser::fromXML(const xml::lite::Element* productInfoXML, ProductInfo& productInfo)
 {
     XMLElem profileXML = getOptional(productInfoXML, "Profile");
     if(profileXML)
@@ -1841,7 +1703,7 @@ void CPHDXMLParser::fromXML(const XMLElem productInfoXML, ProductInfo& productIn
 
 }
 
-void CPHDXMLParser::fromXML(const XMLElem geoInfoXML, GeoInfo& geoInfo)
+void CPHDXMLParser::fromXML(const xml::lite::Element* geoInfoXML, GeoInfo& geoInfo)
 {
     std::vector < XMLElem > geoInfosXML;
     geoInfoXML->getElementsByTagName("GeoInfo", geoInfosXML);
@@ -1884,7 +1746,7 @@ void CPHDXMLParser::fromXML(const XMLElem geoInfoXML, GeoInfo& geoInfo)
     }
 }
 
-void CPHDXMLParser::fromXML(const XMLElem matchInfoXML, MatchInformation& matchInfo)
+void CPHDXMLParser::fromXML(const xml::lite::Element* matchInfoXML, MatchInformation& matchInfo)
 {
     mCommon.parseMatchInformationFromXML(matchInfoXML, &matchInfo);
 }
@@ -1969,23 +1831,40 @@ XMLElem CPHDXMLParser::createErrorParamPlatform(
         createDouble("V1V3", p.posVelErr.corrCoefs->v1v3, corrCoefsXML);
         createDouble("V2V3", p.posVelErr.corrCoefs->v2v3, corrCoefsXML);
     }
-    if(!six::Init::isUndefined(p.posVelErr.positionDecorr))
-    {
-        XMLElem positionDecorrXML = newElement("PositionDecorr", posVelErrXML);
-        createDouble("CorrCoefZero", p.posVelErr.positionDecorr.corrCoefZero, positionDecorrXML);
-        createDouble("DecorrRate", p.posVelErr.positionDecorr.decorrRate, positionDecorrXML);
-    }
+    createDecorrType("PositionDecorr", p.posVelErr.positionDecorr, posVelErrXML);
     return posVelErrXML;
+}
+
+XMLElem CPHDXMLParser::createDecorrType(const std::string& name, const six::DecorrType& dt,
+    XMLElem parent) const
+{
+    if (six::Init::isDefined(dt))
+    {
+        XMLElem element = newElement(name, parent);
+        createDouble("CorrCoefZero", dt.corrCoefZero, element);
+        createDouble("DecorrRate", dt.decorrRate, element);
+        return element;
+    }
+    return nullptr;
+}
+XMLElem CPHDXMLParser::createDecorrType(const std::string& name, const std::optional<six::DecorrType>& dt,
+    XMLElem parent) const
+{
+    if (dt.has_value())
+    {
+        return createDecorrType(name, *dt, parent);
+    }
+    return nullptr;
 }
 
 /*
  * Parser helper functions
  */
-void CPHDXMLParser::parseAreaType(const XMLElem areaXML, AreaType& area) const
+void CPHDXMLParser::parseAreaType(const xml::lite::Element* areaXML, AreaType& area) const
 {
     mCommon.parseVector2D(getFirstAndOnly(areaXML, "X1Y1"), area.x1y1);
     mCommon.parseVector2D(getFirstAndOnly(areaXML, "X2Y2"), area.x2y2);
-    const XMLElem polygonXML = getOptional(areaXML, "Polygon");
+    const xml::lite::Element* polygonXML = getOptional(areaXML, "Polygon");
     if (polygonXML)
     {
         std::vector<XMLElem> verticesXML;
@@ -1999,19 +1878,19 @@ void CPHDXMLParser::parseAreaType(const XMLElem areaXML, AreaType& area) const
         for (size_t ii = 0; ii < area.polygon.size(); ++ii)
         {
             Vector2& vertex = area.polygon[ii];
-            const XMLElem vertexXML = verticesXML[ii];
+            const xml::lite::Element* vertexXML = verticesXML[ii];
             mCommon.parseVector2D(vertexXML, vertex);
         }
     }
 }
 
-void CPHDXMLParser::parseLineSample(const XMLElem lsXML, LineSample& ls) const
+void CPHDXMLParser::parseLineSample(const xml::lite::Element* lsXML, LineSample& ls) const
 {
     parseDouble(getFirstAndOnly(lsXML, "Line"), ls.line);
     parseDouble(getFirstAndOnly(lsXML, "Sample"), ls.sample);
 }
 
-void CPHDXMLParser::parseIAExtent(const XMLElem extentXML,
+void CPHDXMLParser::parseIAExtent(const xml::lite::Element* extentXML,
                                    ImageAreaXExtent& extent) const
 {
     parseDouble(getFirstAndOnly(extentXML, "LineSpacing"),
@@ -2022,7 +1901,7 @@ void CPHDXMLParser::parseIAExtent(const XMLElem extentXML,
               extent.numLines);
 }
 
-void CPHDXMLParser::parseIAExtent(const XMLElem extentXML,
+void CPHDXMLParser::parseIAExtent(const xml::lite::Element* extentXML,
                                    ImageAreaYExtent& extent) const
 {
     parseDouble(getFirstAndOnly(extentXML, "SampleSpacing"),
@@ -2034,7 +1913,7 @@ void CPHDXMLParser::parseIAExtent(const XMLElem extentXML,
 }
 
 void CPHDXMLParser::parseChannelParameters(
-        const XMLElem paramXML, ChannelParameter& param) const
+        const xml::lite::Element* paramXML, ChannelParameter& param) const
 {
     parseString(getFirstAndOnly(paramXML, "Identifier"), param.identifier);
     parseUInt(getFirstAndOnly(paramXML, "RefVectorIndex"), param.refVectorIndex);
@@ -2050,11 +1929,7 @@ void CPHDXMLParser::parseChannelParameters(
 
     parseDouble(getFirstAndOnly(paramXML, "FxC"), param.fxC);
     parseDouble(getFirstAndOnly(paramXML, "FxBW"), param.fxBW);
-    XMLElem FxBWNoiseXML = getOptional(paramXML, "FxBWNoise");
-    if (FxBWNoiseXML)
-    {
-        parseDouble(FxBWNoiseXML, param.fxBWNoise);
-    }
+    parseOptionalDouble(paramXML, "FxBWNoise", param.fxBWNoise);
     parseDouble(getFirstAndOnly(paramXML, "TOASaved"), param.toaSaved);
 
     XMLElem toaExtendedXML = getOptional(paramXML, "TOAExtended");
@@ -2168,16 +2043,16 @@ void CPHDXMLParser::parseChannelParameters(
     paramXML->getElementsByTagName("Polarization", PolarizationXML);
     for (size_t ii = 0; ii < PolarizationXML.size(); ++ii)
     {
-        const XMLElem TxPolXML = getFirstAndOnly(PolarizationXML[ii], "TxPol");
+        const xml::lite::Element* TxPolXML = getFirstAndOnly(PolarizationXML[ii], "TxPol");
         param.polarization.txPol = PolarizationType(TxPolXML->getCharacterData());
 
-        const XMLElem RcvPolXML = getFirstAndOnly(PolarizationXML[ii], "RcvPol");
+        const xml::lite::Element* RcvPolXML = getFirstAndOnly(PolarizationXML[ii], "RcvPol");
         param.polarization.rcvPol = PolarizationType(RcvPolXML->getCharacterData());
     }
 
 }
 
-void CPHDXMLParser::parsePVPType(Pvp& pvp, const XMLElem paramXML, PVPType& param) const
+void CPHDXMLParser::parsePVPType(Pvp& pvp, const xml::lite::Element* paramXML, PVPType& param) const
 {
     size_t size;
     size_t offset;
@@ -2204,7 +2079,7 @@ void CPHDXMLParser::parsePVPType(Pvp& pvp, const XMLElem paramXML, PVPType& para
     pvp.setOffset(offset, param);
 }
 
-void CPHDXMLParser::parsePVPType(Pvp& pvp, const XMLElem paramXML) const
+void CPHDXMLParser::parsePVPType(Pvp& pvp, const xml::lite::Element* paramXML) const
 {
     std::string name;
     size_t size;
@@ -2217,7 +2092,18 @@ void CPHDXMLParser::parsePVPType(Pvp& pvp, const XMLElem paramXML) const
     pvp.setCustomParameter(size, offset, format, name);
 }
 
-void CPHDXMLParser::parsePlatformParams(const XMLElem platXML, Bistatic::PlatformParams& plat) const
+bool CPHDXMLParser::parseOptionalPVPType(const xml::lite::Element* parent, const std::string& tag, Pvp& pvp, PVPType& param) const
+{    
+    if (const xml::lite::Element* const element = getOptional(parent, tag))
+    {
+        parsePVPType(pvp, element, param);
+        return true;
+    }
+    return false;
+}
+
+
+void CPHDXMLParser::parsePlatformParams(const xml::lite::Element* platXML, Bistatic::PlatformParams& plat) const
 {
     parseDouble(getFirstAndOnly(platXML, "Time"), plat.time);
     parseDouble(getFirstAndOnly(platXML, "SlantRange"), plat.slantRange);
@@ -2234,7 +2120,7 @@ void CPHDXMLParser::parsePlatformParams(const XMLElem platXML, Bistatic::Platfor
 
 }
 
-void CPHDXMLParser::parseCommon(const XMLElem imgTypeXML, ImagingType* imgType) const
+void CPHDXMLParser::parseCommon(const xml::lite::Element* imgTypeXML, ImagingType* imgType) const
 {
     parseDouble(getFirstAndOnly(imgTypeXML, "TwistAngle"), imgType->twistAngle);
     parseDouble(getFirstAndOnly(imgTypeXML, "SlopeAngle"), imgType->slopeAngle);
@@ -2243,7 +2129,7 @@ void CPHDXMLParser::parseCommon(const XMLElem imgTypeXML, ImagingType* imgType) 
     parseDouble(getFirstAndOnly(imgTypeXML, "GrazeAngle"), imgType->grazeAngle);
 }
 
-void CPHDXMLParser::parsePosVelErr(const XMLElem posVelErrXML, six::PosVelError& posVelErr) const
+void CPHDXMLParser::parsePosVelErr(const xml::lite::Element* posVelErrXML, six::PosVelError& posVelErr) const
 {
     std::string frameStr;
     parseString(getFirstAndOnly(posVelErrXML, "Frame"), frameStr);
@@ -2277,28 +2163,19 @@ void CPHDXMLParser::parsePosVelErr(const XMLElem posVelErrXML, six::PosVelError&
         parseDouble(getFirstAndOnly(corrCoefsXML, "V2V3"), posVelErr.corrCoefs->v2v3);
     }
 
-    XMLElem posDecorrXML = getOptional(posVelErrXML, "PositionDecorr");
-
-    if(posDecorrXML)
-    {
-        // posVelErr.positionDecorr.reset(new six::DecorrType());
-        mCommon.parseDecorrType(posDecorrXML, posVelErr.positionDecorr);
-    }
+    // posVelErr.positionDecorr.reset(new six::DecorrType());
+    mCommon.parseOptionalDecorrType(posVelErrXML, "PositionDecorr", posVelErr.positionDecorr);
 }
 
-void CPHDXMLParser::parsePlatform(XMLElem platXML, ErrorParameters::Bistatic::Platform& plat) const
+void CPHDXMLParser::parsePlatform(const xml::lite::Element* platXML, ErrorParameters::Bistatic::Platform& plat) const
 {
     parsePosVelErr(getFirstAndOnly(platXML, "PosVelErr"), plat.posVelErr);
     XMLElem radarSensorXML = getFirstAndOnly(platXML, "RadarSensor");
-    XMLElem clockFreqSFXML = getOptional(radarSensorXML, "ClockFreqSF");
-    if(clockFreqSFXML)
-    {
-        parseDouble(clockFreqSFXML, plat.radarSensor.clockFreqSF);
-    }
+    parseOptionalDouble(radarSensorXML, "ClockFreqSF", plat.radarSensor.clockFreqSF);
     parseDouble(getFirstAndOnly(radarSensorXML, "CollectionStartTime"), plat.radarSensor.collectionStartTime);
 }
 
-void CPHDXMLParser::parseSupportArrayParameter(const XMLElem paramXML, SupportArrayParameter& param, bool additionalFlag) const
+void CPHDXMLParser::parseSupportArrayParameter(const xml::lite::Element* paramXML, SupportArrayParameter& param, bool additionalFlag) const
 {
     if(!additionalFlag)
     {
@@ -2313,15 +2190,11 @@ void CPHDXMLParser::parseSupportArrayParameter(const XMLElem paramXML, SupportAr
     parseDouble(getFirstAndOnly(paramXML, "YSS"), param.ySS);
 }
 
-void CPHDXMLParser::parseTxRcvParameter(const XMLElem paramXML, ParameterType& param) const
+void CPHDXMLParser::parseTxRcvParameter(const xml::lite::Element* paramXML, ParameterType& param) const
 {
     parseString(getFirstAndOnly(paramXML, "Identifier"), param.identifier);
     parseDouble(getFirstAndOnly(paramXML, "FreqCenter"), param.freqCenter);
-    XMLElem lfmRateXML = getOptional(paramXML, "LFMRate");
-    if(lfmRateXML)
-    {
-        parseDouble(lfmRateXML, param.lfmRate);
-    }
+    parseOptionalDouble(paramXML, "LFMRate", param.lfmRate);
     param.polarization = PolarizationType(getFirstAndOnly(paramXML, "Polarization")->getCharacterData());
 }
 }

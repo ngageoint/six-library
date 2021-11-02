@@ -24,6 +24,9 @@
 #define __MEM_SCOPED_ARRAY_H__
 
 #include <cstddef>
+#include <memory>
+
+#include "mem/SharedPtr.h" // mem::make::unique
 
 namespace mem
 {
@@ -33,52 +36,7 @@ namespace mem
      *         It is based on boost::scoped_array.
      */
     template <class T>
-    class ScopedArray
-    {
-    public:
-        typedef T ElementType;
-
-        explicit ScopedArray(T* array = NULL) :
-            mArray(array)
-        {
-        }
-
-        ~ScopedArray()
-        {
-            delete[] mArray;
-        }
-
-        void reset(T* array = NULL)
-        {
-            delete[] mArray;
-            mArray = array;
-        }
-
-        T& operator[](std::ptrdiff_t idx) const
-        {
-            return mArray[idx];
-        }
-
-        T* get() const
-        {
-            return mArray;
-        }
-
-        T* release()
-        {
-            T* const array = mArray;
-            mArray = NULL;
-            return array;
-        }
-
-    private:
-        // Noncopyable
-        ScopedArray(const ScopedArray& );
-        const ScopedArray& operator=(const ScopedArray& );
-
-    private:
-        T* mArray;
-    };
+    using  ScopedArray = std::unique_ptr<T[]>;
 }
 
 #endif

@@ -24,6 +24,8 @@
 #include <stdexcept>
 #include <memory>
 
+#include <std/filesystem>
+
 #include <sys/Path.h>
 #include <str/Convert.h>
 #include <except/Exception.h>
@@ -36,7 +38,6 @@
 #include <six/sidd/Utilities.h>
 #include <scene/ECEFToLLATransform.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace
@@ -70,15 +71,12 @@ int main(int argc, char** argv)
 
         // First, try to read in the file as a SICD, then try read as SIDD
         six::XMLControlRegistry* xmlRegistry = new six::XMLControlRegistry;
-        xmlRegistry->addCreator(six::DataType::COMPLEX,
-                               new six::XMLControlCreatorT<
-                                       six::sicd::ComplexXMLControl>());
-        xmlRegistry->addCreator(six::DataType::DERIVED,
-                            new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+        xmlRegistry->addCreator<six::sicd::ComplexXMLControl>();
+        xmlRegistry->addCreator<six::sidd::DerivedXMLControl>();
 
-        std::unique_ptr<logging::Logger> logger(logging::setupLogger(progname));
+        std::unique_ptr<logging::Logger> logger(logging::setupLogger(progname.string()));
         six::NITFReadControl reader;
-        reader.setLogger(logger.get());
+        reader.setLogger(*logger);
         reader.setXMLControlRegistry(xmlRegistry);
         reader.load(sixPathname);
         // Check to see if it's a SICD

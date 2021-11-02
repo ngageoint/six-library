@@ -25,6 +25,8 @@
 
 #include <string.h>
 #include <string>
+#include <std/span>
+#include <std/cstddef>
 
 #include "nitf/BandSource.h"
 #include "nitf/RowSource.h"
@@ -33,6 +35,7 @@
 #include "nitf/IOHandle.hpp"
 #include "nitf/System.hpp"
 #include "nitf/ImageReader.hpp"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file BandSource.hpp
@@ -56,9 +59,8 @@ typedef DataSource BandSource;
  *  times during the case of memory mapping, although it may be used
  *  to sample down or cut the image into pieces).
  */
-class MemorySource : public BandSource
+struct NITRO_NITFCPP_API MemorySource : public BandSource
 {
-public:
     /*!
      *  Constructor
      *  \param data  The memory buffer
@@ -69,6 +71,13 @@ public:
      */
     MemorySource(const void* data, size_t size, nitf::Off start,
             int numBytesPerPixel, int pixelSkip);
+
+    MemorySource(std::span<const std::byte> span, nitf::Off start, int numBytesPerPixel, int pixelSkip)
+        : MemorySource(span.data(), span.size(), start, numBytesPerPixel, pixelSkip) {}
+
+    template<typename TSpanLike>
+    MemorySource(const TSpanLike& span, nitf::Off start, int pixelSkip)
+        : MemorySource(span.data(), span.size() * sizeof(span[0]), start, sizeof(span[0]), pixelSkip) {}
 };
 
 /*!
@@ -81,9 +90,8 @@ public:
  *  we allow the creator to specify a start point, and a pixel skip
  *  (this would help you create a thumbnail as well).
  */
-class FileSource : public BandSource
+struct NITRO_NITFCPP_API FileSource : public BandSource
 {
-public:
     FileSource(const std::string& fname,
                nitf::Off start,
                int numBytesPerPixel,
@@ -102,18 +110,17 @@ public:
                int pixelSkip);
 };
 
-struct RowSourceCallback
+struct NITRO_NITFCPP_API RowSourceCallback
 {
-    virtual ~RowSourceCallback()
+    virtual ~RowSourceCallback() // can't be "noexcpet" as that breaks derived classes
     {
     }
 
     virtual void nextRow(uint32_t band, void* buf) = 0;
 };
 
-class RowSource : public BandSource
+struct NITRO_NITFCPP_API RowSource : public BandSource
 {
-public:
     RowSource(uint32_t band, uint32_t numRows, uint32_t numCols,
             uint32_t pixelSize, RowSourceCallback *callback);
 
@@ -128,9 +135,8 @@ private:
     uint32_t mBand, mNumRows, mNumCols, mPixelSize;
 };
 
-class DirectBlockSource : public BandSource
+struct NITRO_NITFCPP_API DirectBlockSource : public BandSource
 {
-public:
     DirectBlockSource(nitf::ImageReader& imageReader,
                       uint32_t numBands);
 
@@ -149,9 +155,8 @@ private:
                         nitf_Error * error);
 };
 
-class CopyBlockSource: public ::nitf::DirectBlockSource
+struct NITRO_NITFCPP_API CopyBlockSource: public ::nitf::DirectBlockSource
 {
-public:
     CopyBlockSource(nitf::ImageReader& imageReader, uint32_t numBands) :
         nitf::DirectBlockSource(imageReader, numBands)
     {}
@@ -162,7 +167,7 @@ protected:
     void nextBlock(void* buf,
                            const void* block,
                            uint32_t /*blockNumber*/,
-                           uint64_t blockSize) override
+                           uint64_t blockSize) noexcept override
     {
         memcpy(buf, block, blockSize);
     }

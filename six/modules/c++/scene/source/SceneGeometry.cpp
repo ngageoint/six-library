@@ -104,12 +104,12 @@ void SceneGeometry::initialize()
 
 
     // Transform mRefPosition to LLA; compute 'up'
-    LatLonAlt lla = Utilities::ecefToLatLon(mPo);
+    const LatLonAlt lla = Utilities::ecefToLatLon(mPo);
 
-    double sinLat = sin(lla.getLatRadians());
-    double cosLat = cos(lla.getLatRadians());
-    double sinLon = sin(lla.getLonRadians());
-    double cosLon = cos(lla.getLonRadians());
+    double sinLat, cosLat;
+    math::SinCos(lla.getLatRadians(), sinLat, cosLat);
+    double sinLon, cosLon;
+    math::SinCos(lla.getLonRadians(), sinLon, cosLon);
 
     // mZg is also up
     mZg[0] = cosLat * cosLon;
@@ -218,7 +218,7 @@ double SceneGeometry::getTiltAngle(const Vector3& normalVec) const
 
 double SceneGeometry::getDopplerConeAngle() const
 {
-    Vector3 normVa = mVa / mVa.norm();
+    const Vector3 normVa = mVa / mVa.norm();
     return acos((-1.0 * mXs).dot(normVa)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
@@ -252,7 +252,7 @@ double SceneGeometry::getSlopeAngle(const Vector3& normalVec) const
 
 double SceneGeometry::getAzimuthAngle() const
 {
-    Vector3 east = math::linear::cross(mNorth, mZg);
+    const Vector3 east = math::linear::cross(mNorth, mZg);
     return Utilities::remapZeroTo360(
             atan2(east.dot(mXs), mNorth.dot(mXs)) *
             math::Constants::RADIANS_TO_DEGREES);
@@ -260,7 +260,7 @@ double SceneGeometry::getAzimuthAngle() const
 
 double SceneGeometry::getHeadingAngle() const
 {
-    Vector3 east = math::linear::cross(mNorth, mZg);
+    const Vector3 east = math::linear::cross(mNorth, mZg);
     return atan2(east.dot(mVa), mNorth.dot(mVa)) * math::Constants::RADIANS_TO_DEGREES;
 }
 
@@ -349,7 +349,7 @@ Vector3 SceneGeometry::getLayoverVector() const
 
 AngleMagnitude SceneGeometry::getLayover() const
 {
-    Vector3 layoverVec = getLayoverVector();
+    const Vector3 layoverVec = getLayoverVector();
 
     AngleMagnitude layover;
     layover.angle = getImageAngle(layoverVec);
@@ -382,7 +382,7 @@ Vector3 SceneGeometry::getShadowVector() const
 
 AngleMagnitude SceneGeometry::getShadow() const
 {
-    Vector3 shadowVec = getShadowVector();
+    const Vector3 shadowVec = getShadowVector();
 
     AngleMagnitude shadow;
     shadow.angle = getImageAngle(shadowVec);
@@ -399,8 +399,8 @@ SceneGeometry::getGroundResolution(const types::RgAz<double>& res) const
     const double rotAngleRad =
             getRotationAngle() * math::Constants::DEGREES_TO_RADIANS;
 
-    const double cosRot = cos(rotAngleRad);
-    const double sinRot = sin(rotAngleRad);
+    double sinRot, cosRot;
+    math::SinCos(rotAngleRad, sinRot, cosRot);
     const double sin2Rot = sin(2 * rotAngleRad);
     const double secGraz = 1.0 / cos(grazingAngleRad);
     const double tanGraz = tan(grazingAngleRad);

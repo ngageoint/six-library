@@ -52,9 +52,9 @@ public:
      */
     CPUAffinityThreadInitializerLinux(
             std::unique_ptr<const sys::ScopedCPUMaskUnix>&& cpu);
-#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+#if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
     CPUAffinityThreadInitializerLinux(
-            std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu);
+            mem::auto_ptr<const sys::ScopedCPUMaskUnix> cpu);
 #endif
 
     /*!

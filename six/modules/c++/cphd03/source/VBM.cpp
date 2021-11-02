@@ -26,16 +26,11 @@
 #include <sstream>
 #include <string>
 
+#include <std/bit>
+
 #include <six/Init.h>
-#include <sys/Bit.h>
 
 #include <cphd/ByteSwap.h>
-
-#include <sys/Bit.h>
-namespace std
-{
-    using endian = sys::Endian;
-}
 
 namespace
 {

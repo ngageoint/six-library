@@ -37,16 +37,11 @@ CompressedSIDDByteProvider::CompressedSIDDByteProvider(
         size_t maxProductSize)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::DERIVED,
-                           new six::XMLControlCreatorT<DerivedXMLControl>());
-
-    mem::SharedPtr<Container> container(new Container(
-            DataType::DERIVED));
+    xmlRegistry.addCreator<DerivedXMLControl>();
 
     // The container wants to take ownership of the data
     // To avoid memory problems, we'll just clone it
-    container->addData(data.clone());
-
+    auto container = std::make_shared<Container>(data.clone());
     initialize(container, xmlRegistry, schemaPaths, bytesPerBlock,
                isNumericallyLossless, maxProductSize,
                numRowsPerBlock, numColsPerBlock);

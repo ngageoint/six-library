@@ -2,6 +2,13 @@ set(MODULE_NAME nitf)
 
 coda_generate_module_config_header(${MODULE_NAME})
 
+if (BUILD_SHARED)
+    set(BUILD_SHARED_LIBS ON)
+    add_definitions(
+        -DNITF_MODULE_EXPORTS
+    )
+endif()
+
 coda_add_module(
     ${MODULE_NAME}
     DEPS nrt-c
@@ -72,7 +79,8 @@ coda_add_tests(
         test_image_io.c
         test_mem_source.c
         test_tre_mods.c
-        test_zero_field.c)
+        test_zero_field.c
+        test_moveTREs.c)
 
 
 # Build all the TRE
@@ -100,6 +108,7 @@ set(tre_srcs  ACCHZB
               CSDIDA
               CSEPHA
               CSEXRA
+              CSEXRB
               CSPROA
               CSSFAA
               CSSHPA
@@ -142,6 +151,7 @@ set(tre_srcs  ACCHZB
               PIAPRD
               PIATGA
               PIATGB
+              PIXMTA
               PIXQLA
               PLTFMA
               PRADAA

@@ -77,7 +77,10 @@ nitf::HashTableIterator nitf::HashTableIterator::operator+(int x) noexcept
     return it;
 }
 
-
+nitf::Pair nitf::HashTableIterator::get() const
+{
+    return nitf_HashTableIterator_get(&handle);
+}
 
 
 nitf::HashTable::HashTable(const HashTable & x)
@@ -99,10 +102,8 @@ nitf::HashTable::HashTable(nitf_HashTable * x)
     getNativeOrThrow();
 }
 
-nitf::HashTable::HashTable(int nbuckets)
+nitf::HashTable::HashTable(int nbuckets) noexcept(false) : HashTable(nitf_HashTable_construct(nbuckets, &error))
 {
-    setNative(nitf_HashTable_construct(nbuckets, &error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
@@ -136,9 +137,13 @@ bool nitf::HashTable::exists(const std::string& key) const noexcept
     return nitf_HashTable_exists(getNative(), key.c_str());
 }
 
+void nitf::HashTable::print(const nitf_HashTable& ht) noexcept
+{
+    nitf_HashTable_print(&ht);
+}
 void nitf::HashTable::print() const noexcept
 {
-    nitf_HashTable_print(getNative());
+    print(*getNative());
 }
 
 void nitf::HashTable::forEach(HashIterator& fun, NITF_DATA* userData)
@@ -211,7 +216,7 @@ nitf::HashTableIterator nitf::HashTable::end() const noexcept
     return nitf::HashTableIterator(x);
 }
 
-void nitf::HashTable::clearBuckets()
+void nitf::HashTable::clearBuckets() noexcept
 {
     std::vector<nitf::List *>::iterator i;
     i = mBuckets.begin();

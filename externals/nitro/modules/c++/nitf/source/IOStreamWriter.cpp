@@ -25,7 +25,7 @@
 
 namespace nitf
 {
-IOStreamWriter::IOStreamWriter(mem::SharedPtr<io::SeekableOutputStream> stream) :
+IOStreamWriter::IOStreamWriter(std::shared_ptr<io::SeekableOutputStream> stream) :
     mStream(stream)
 {
 }
@@ -42,7 +42,7 @@ void IOStreamWriter::writeImpl(const void* buffer, size_t size)
     mStream->write(static_cast<const std::byte*>(buffer), size);
 }
 
-bool IOStreamWriter::canSeekImpl() const
+bool IOStreamWriter::canSeekImpl() const noexcept
 {
     return true;
 }
@@ -86,12 +86,12 @@ nitf::Off IOStreamWriter::getSizeImpl() const
     return size;
 }
 
-int IOStreamWriter::getModeImpl() const
+int IOStreamWriter::getModeImpl() const noexcept
 {
     return NITF_ACCESS_WRITEONLY;
 }
 
-void IOStreamWriter::closeImpl()
+void IOStreamWriter::closeImpl() noexcept
 {
 }
 }

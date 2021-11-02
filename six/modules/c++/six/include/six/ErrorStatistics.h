@@ -19,14 +19,20 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_ERROR_STATISTICS_H__
-#define __SIX_ERROR_STATISTICS_H__
+#ifndef SIX_six_ErrorStatistics_h_INCLUDED_
+#define SIX_six_ErrorStatistics_h_INCLUDED_
+#pragma once
+
+#include <assert.h>
+
+#include <std/optional>
+
+#include <mem/ScopedCopyablePtr.h>
 
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
-#include <mem/ScopedCopyablePtr.h>
 
 namespace six
 {
@@ -40,25 +46,24 @@ namespace six
  */
 struct CorrCoefs
 {
-    CorrCoefs()
-    {
-    }
+    CorrCoefs() = default;
 
-    double p1p2;
-    double p1p3;
-    double p1v1;
-    double p1v2;
-    double p1v3;
-    double p2p3;
-    double p2v1;
-    double p2v2;
-    double p2v3;
-    double p3v1;
-    double p3v2;
-    double p3v3;
-    double v1v2;
-    double v1v3;
-    double v2v3;
+    // From Bill: "Volume 3: States if correlation coefficients omitted then set to 0."
+    double p1p2 = 0.0;
+    double p1p3 = 0.0;
+    double p1v1 = 0.0;
+    double p1v2 = 0.0;
+    double p1v3 = 0.0;
+    double p2p3 = 0.0;
+    double p2v1 = 0.0;
+    double p2v2 = 0.0;
+    double p2v3 = 0.0;
+    double p3v1 = 0.0;
+    double p3v2 = 0.0;
+    double p3v3 = 0.0;
+    double v1v2 = 0.0;
+    double v1v3 = 0.0;
+    double v2v3 = 0.0;
 
     //! Equality operators
     bool operator==(const CorrCoefs& rhs) const;
@@ -79,26 +84,23 @@ struct CorrCoefs
 struct PosVelError
 {
     //!  CorrCoefs are nullptr, since optional
-    PosVelError() :
-        positionDecorr(Init::undefined<DecorrType>())
-    {
-    }
+    PosVelError() = default;
 
     //! Coordinate frame used for expressing P,V error statistics
     FrameType frame;
 
-    double p1;
-    double p2;
-    double p3;
-    double v1;
-    double v2;
-    double v3;
+    double p1 = 0.0;
+    double p2 = 0.0;
+    double p3 = 0.0;
+    double v1 = 0.0;
+    double v2 = 0.0;
+    double v3 = 0.0;
 
     //! Optional
     mem::ScopedCopyablePtr<CorrCoefs> corrCoefs;
 
     //! Can be none, make sure to set this undefined()
-    DecorrType positionDecorr;
+    DecorrType positionDecorr = Init::undefined<DecorrType>();
 
     //! Equality operators
     bool operator==(const PosVelError& rhs) const;
@@ -121,26 +123,27 @@ struct RadarSensor
      *  Range bias error standard deviation. 
      *  Range bias at zero range
      */
-    double rangeBias;
+    double rangeBias = 0.0; // From Bill: "... all of those values can be safely set to 0."
 
     /*!
      *  (Optional) Payload clock frequency scale factor
      *  standard deviation.
      */
-    double clockFreqSF;
+    double clockFreqSF = 0.0; // From Bill: "Volume 3: States if ClockFreqSF is omitted then set to 0."
+
     /*!
      * (Optional) Transmit frequency scale factor
      *  standard deviation.
      */
-    double transmitFreqSF;
+    double transmitFreqSF = 0.0; // From Bill: "No mention of the TransmitFreqSF in volume 3 ... would still recommend setting to 0."
+
     /*!
      *  (Optional) Range bias decorrelated rate
      *
      */
-    DecorrType rangeBiasDecorr;
+    DecorrType rangeBiasDecorr = Init::undefined<DecorrType>();
 
-    //!  Constructor
-    RadarSensor();
+    RadarSensor() = default;
 
     //! Equality operator
     bool operator==(const RadarSensor& rhs) const
@@ -148,7 +151,6 @@ struct RadarSensor
         return (rangeBias == rhs.rangeBias && clockFreqSF == rhs.clockFreqSF &&
             transmitFreqSF == rhs.transmitFreqSF && rangeBiasDecorr == rhs.rangeBiasDecorr);
     }
-
     bool operator!=(const RadarSensor& rhs) const
     {
         return !(*this == rhs);
@@ -168,23 +170,22 @@ struct TropoError
      *  incidence standard deviation.  Expressed as a
      *  two-range error
      */
-    double tropoRangeVertical;
+    double tropoRangeVertical = 0.0; // From Bill: "... all of those values can be safely set to 0."
 
     /*!
      *  (Optional) Troposphere two-way delay error for SCP COA
      *  incidence angle standard deviation.  Expressed
      *  as a two-way range error
      */
-    double tropoRangeSlant;
+    double tropoRangeSlant = 0.0; // From Bill: "... all of those values can be safely set to 0."
 
     /*!
      *  (Optional)
      *
      */
-    DecorrType tropoRangeDecorr;
+    DecorrType tropoRangeDecorr = Init::undefined<DecorrType>();
 
-    //!  Constructor
-    TropoError();
+    TropoError() = default;
 
     bool operator==(const TropoError& rhs) const
     {
@@ -211,29 +212,28 @@ struct IonoError
      *  incidence standard deviation.  Expressed as a
      *  two-way range error
      */
-    double ionoRangeVertical;
+    double ionoRangeVertical = 0.0; // From Bill: "... all of those values can be safely set to 0."
 
     /*!
      *  (Optional) Ionosphere two-way delay rate of change
      *  error for normal incidence standard deviation.
      *  Expressed as a two-way range error
      */
-    double ionoRangeRateVertical;
+    double ionoRangeRateVertical = 0.0; // From Bill: "... all of those values can be safely set to 0."
 
     /*!
      *  Ionosphere range error and range rate error correlation
      *  coefficient.
      *
      */
-    double ionoRgRgRateCC;
+    double ionoRgRgRateCC = 0.0; // From Bill: "... all of those values can be safely set to 0."
     
     /*!
      *  Ionosphere range error decorrelation ratio
      */
-    DecorrType ionoRangeVertDecorr;
+    DecorrType ionoRangeVertDecorr = Init::undefined<DecorrType>();
 
-    //!  Constructor
-    IonoError();
+    IonoError() = default;
 
     //! Equality operator
     bool operator==(const IonoError& rhs) const
@@ -257,10 +257,7 @@ struct IonoError
  */
 struct Components
 {
-    //!  Constructor
-    Components()
-    {
-    }
+    Components() = default;
 
     mem::ScopedCopyablePtr<PosVelError> posVelError;
     mem::ScopedCopyablePtr<RadarSensor> radarSensor;
@@ -273,7 +270,6 @@ struct Components
         return (posVelError == rhs.posVelError && radarSensor == rhs.radarSensor &&
             tropoError == rhs.tropoError && ionoError == rhs.ionoError);
     }
-
     bool operator!=(const Components& rhs) const
     {
         return !(*this == rhs);
@@ -306,21 +302,22 @@ struct CompositeSCP
     };
 
     //!  Constructor
-    CompositeSCP(SCPType scpTypeIn = RG_AZ) :
+    CompositeSCP() = default;
+    CompositeSCP(SCPType scpTypeIn) :
         scpType(scpTypeIn)
     {
     }
 
-    SCPType scpType;
+    SCPType scpType = RG_AZ;
 
     //!  SICD/SIDD Rg or Row, depending on scpType
-    double xErr;
+    double xErr = 0.0;
 
     //!  SICD/SIDD Az or Col, depending on scpType
-    double yErr;
+    double yErr = 0.0;
 
     //!  SICD/SIDD RowCol or RgAz depending on scpType
-    double xyErr;
+    double xyErr = 0.0;
 
     //! Equality operators
     bool operator==(const CompositeSCP& rhs) const
@@ -328,7 +325,6 @@ struct CompositeSCP
         return (xErr == rhs.xErr && yErr == rhs.yErr &&
             xyErr == rhs.xyErr && scpType == rhs.scpType);
     }
-
     bool operator!=(const CompositeSCP& rhs) const
     {
         return !(*this == rhs);
@@ -362,17 +358,12 @@ struct ErrorStatistics
      */
     ParameterCollection additionalParameters;
 
-    ErrorStatistics()
-    {
-    }
-
     //! Equality operators
     bool operator==(const ErrorStatistics& rhs) const
     {
         return (compositeSCP == rhs.compositeSCP && components == rhs.components &&
             additionalParameters == rhs.additionalParameters);
     }
-
     bool operator!=(const ErrorStatistics& rhs) const
     {
         return !(*this == rhs);
@@ -380,5 +371,4 @@ struct ErrorStatistics
 };
 }
 
-#endif
-
+#endif // SIX_six_ErrorStatistics_h_INCLUDED_

@@ -1,7 +1,9 @@
 set(TARGET_LANGUAGE c++)
+
 # turn on warnings as errors
 if (MSVC)
     add_compile_options(/WX)
+    add_compile_options(/W4)
 elseif (UNIX)
     add_compile_options(-Werror)
 endif()
@@ -46,6 +48,7 @@ check_cxx_source_compiles(
     HAVE_ATTRIBUTE_ALIGNED)
 
 add_subdirectory("config")
+add_subdirectory("avx")
 add_subdirectory("serialize")
 add_subdirectory("except")
 add_subdirectory("sys")
@@ -59,6 +62,7 @@ add_subdirectory("cli")
 add_subdirectory("dbi")
 add_subdirectory("types")
 add_subdirectory("unique")
+add_subdirectory("units")
 add_subdirectory("math")
 add_subdirectory("mt")
 add_subdirectory("logging")
@@ -72,4 +76,4 @@ add_subdirectory("math.linear")
 add_subdirectory("math.poly")
 add_subdirectory("numpyutils")
 add_subdirectory("gsl")
-
+add_subdirectory("std")

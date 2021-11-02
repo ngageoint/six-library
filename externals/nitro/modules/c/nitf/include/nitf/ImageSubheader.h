@@ -460,7 +460,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setDimensions
 NITFAPI(NITF_BOOL)
 nitf_ImageSubheader_setCornersFromLatLons(nitf_ImageSubheader* subheader,
                                           nitf_CornersType type,
-                                          double corners[4][2],
+                                          const double corners[4][2],
                                           nitf_Error* error);
 
 /*!

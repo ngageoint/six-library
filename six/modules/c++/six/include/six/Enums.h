@@ -272,9 +272,21 @@ SIX_Enum_ENUM_5(OrientationType,
 SIX_Enum_BEGIN_DEFINE(PixelType)
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
+        // Each pixel is stored as a pair of numbers that represent the realand imaginary
+        // components. Each component is stored in a 32-bit IEEE floating point format (4
+        // bytes per component, 8 bytes per pixel).
         RE32F_IM32F = 1,
+
+        // Each pixel is stored as a pair of numbers that represent the real and imaginary 
+        // components. Each component is stored in a 16-bit signed integer in 2’s 
+        // complement format (2 bytes per component, 4 bytes per pixel). 
         RE16I_IM16I = 2,
+
+        // Each pixel is stored as a pair of numbers that represent the amplitude and phase
+        // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
+        // component, 2 bytes per pixel). 
         AMP8I_PHS8I = 3,
+
         MONO8I = 4,
         MONO8LU = 5,
         MONO16I = 6,

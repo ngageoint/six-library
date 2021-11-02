@@ -20,19 +20,21 @@
  *
  */
 
-#include "config/coda_oss_config.h"
-
-#if !(defined(WIN32) || defined(_WIN32))
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <sstream>
 #include <limits.h>
+#include <errno.h>
+
+#include <sstream>
 #include <vector>
 #include <set>
 #include <fstream>
-#include <errno.h>
+
+#include "sys/Conf.h"
+
+#if !(defined(WIN32) || defined(_WIN32))
+
+#include <unistd.h>
 
 #if defined(__APPLE__)
 
@@ -314,7 +316,8 @@ void sys::OSUnix::setEnv(const std::string& var,
 {
     int ret;
 
-#ifdef HAVE_SETENV
+#if CODA_OSS_POSIX2001_SOURCE
+    // https://man7.org/linux/man-pages/man3/setenv.3.html
     ret = setenv(var.c_str(), val.c_str(), overwrite);
 #else
     // putenv() will overwrite the value if it already exists, so if we don't
@@ -496,7 +499,7 @@ void sys::OSUnix::getMemInfo(size_t &totalPhysMem, size_t &freePhysMem) const
 }
 
 std::string sys::OSUnix::getCurrentExecutable(
-        const std::string& argvPathname) const
+        const std::string& argvPathname_) const
 {
     std::vector<std::string> possibleSymlinks;
 
@@ -526,6 +529,7 @@ std::string sys::OSUnix::getCurrentExecutable(
         }
     }
 
+    const auto argvPathname = AbstractOS::getArgvPathname(argvPathname_);
     return AbstractOS::getCurrentExecutable(argvPathname);
 }
 

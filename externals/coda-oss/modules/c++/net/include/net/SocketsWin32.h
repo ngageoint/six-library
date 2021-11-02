@@ -24,6 +24,8 @@
 #define __NET_SOCKETS_WIN32_H__
 #pragma once
 
+#include <mutex>
+
 #undef BIGENDIAN // #define'd in <winsock2.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -84,12 +86,12 @@ inline void Win32SocketDestroy()
  */
 inline void Win32SocketInit()
 {
-    static sys::Mutex mutex;
+    static std::mutex mutex;
     static bool inited = false;
 
     if (!inited)
     {
-        mutex.lock();
+        std::lock_guard<std::mutex> guard(mutex);
         if (!inited)
         {
             inited = true;
@@ -98,7 +100,6 @@ inline void Win32SocketInit()
             WSAStartup(versionRequested, &wsaData);
             atexit( net::Win32SocketDestroy );
         }
-        mutex.unlock();
     }
 
     /*  WORD versionRequested = MAKEWORD(1, 1); */

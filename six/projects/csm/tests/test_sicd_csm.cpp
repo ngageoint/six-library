@@ -22,6 +22,8 @@
 #include <iostream>
 #include <sstream>
 
+#include <std/filesystem>
+
 #include <nitf/coda-oss.hpp>
 #include <sys/DLL.h>
 #include <except/Exception.h>
@@ -30,14 +32,12 @@
 #include <six/sicd/Utilities.h>
 #include "utilities.h"
 
-#include <sys/Filesystem.h>
-namespace fs = std::filesystem;
-
 // CSM includes
 #include <RasterGM.h>
 #include <Plugin.h>
 #include <NitfIsd.h>
 
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -51,8 +51,7 @@ public:
         mPlugin(plugin)
     {
         // Read in the SICD XML
-        mXmlRegistry.addCreator(six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        mXmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
         mReader.setXMLControlRegistry(&mXmlRegistry);
 

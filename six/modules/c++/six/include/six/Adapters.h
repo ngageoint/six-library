@@ -22,6 +22,14 @@
 #ifndef __SIX_ADAPTERS_H__
 #define __SIX_ADAPTERS_H__
 
+#include <stdint.h>
+
+#include <complex>
+#include <utility>
+#include <std/span>
+#include <std/cstddef>
+#include <memory>
+
 #include <scene/sys_Conf.h>
 #include <import/io.h>
 #include <import/nitf.hpp>
@@ -29,6 +37,7 @@
 #include "six/Types.h"
 #include "six/NITFSegmentInfo.h"
 #include "six/Utilities.h"
+#include "six/Data.h"
 
 /*!
  *  This file contains adapters that are necessary to get six objects
@@ -68,6 +77,8 @@ public:
     {
     }
 
+    SegmentInputStreamAdapter& operator=(const SegmentInputStreamAdapter&) = delete;
+
     /*!
      *  Fulfills the C++ IO API function returning how many bytes
      *  are left in the stream
@@ -75,7 +86,7 @@ public:
      */
     virtual int64_t available()
     {
-        return (int64_t) mReader.getSize();
+        return static_cast<int64_t>(mReader.getSize());
     }
 
 protected:
@@ -87,7 +98,7 @@ protected:
     virtual ptrdiff_t readImpl(void* buffer, size_t len)
     {
         mReader.read(buffer, len);
-        return len;
+        return static_cast<ptrdiff_t>(len);
     }
 };
 
@@ -115,9 +126,8 @@ protected:
  *  beforehand
  *
  */
-class MemoryWriteHandler: public nitf::WriteHandler
+struct MemoryWriteHandler: public nitf::WriteHandler // leaving this for any existing code that might use it
 {
-public:
     MemoryWriteHandler(const NITFSegmentInfo& info, 
                        const UByte* buffer,
                        size_t firstRow,
@@ -125,14 +135,31 @@ public:
                        size_t numChannels,
                        size_t pixelSize,
                        bool doByteSwap);
-    MemoryWriteHandler(const NITFSegmentInfo& info, 
-                       const std::byte* buffer,
-                       size_t firstRow,
-                       size_t numCols,
-                       size_t numChannels,
-                       size_t pixelSize,
-                       bool doByteSwap);
 };
+
+class NewMemoryWriteHandler final : public nitf::WriteHandler // all of our code now uses this
+{
+    struct Impl;
+    std::unique_ptr<Impl> m_pImpl;
+
+    NewMemoryWriteHandler(const NITFSegmentInfo& info,
+        const std::byte* buffer,
+        size_t firstRow, const Data& data, bool doByteSwap);
+
+public:
+    NewMemoryWriteHandler() = delete;
+    ~NewMemoryWriteHandler();
+    NewMemoryWriteHandler(const NewMemoryWriteHandler&) = delete;
+    NewMemoryWriteHandler& operator=(const NewMemoryWriteHandler&) = delete;
+    NewMemoryWriteHandler(NewMemoryWriteHandler&&) = default;
+    NewMemoryWriteHandler& operator=(NewMemoryWriteHandler&&) = default;
+
+    template<typename T>
+    NewMemoryWriteHandler(const NITFSegmentInfo& info,
+        std::span<const T> buffer,
+        size_t firstRow, const Data& data, bool doByteSwap);
+};
+
 
 /*!
  *  \class StreamWriteHandler
@@ -150,15 +177,16 @@ public:
  *  Additionally the channel size is 4 or 2.
  *
  */
-class StreamWriteHandler: public nitf::WriteHandler
+struct StreamWriteHandler: public nitf::WriteHandler
 {
-public:
     StreamWriteHandler(const NITFSegmentInfo& info,
                        io::InputStream* is,
                        size_t numCols,
                        size_t numChannels,
                        size_t pixelSize,
                        bool doByteSwap);
+    StreamWriteHandler(const NITFSegmentInfo& info,
+                       io::InputStream* is, const Data&, bool doByteSwap);
 };
 
 }

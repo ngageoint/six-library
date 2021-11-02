@@ -23,11 +23,12 @@
 #include <cmath>
 #include <limits>
 
+#include <std/filesystem>
+
 #include "Error.h"
 #include <six/NITFReadControl.h>
 #include <six/csm/SIXSensorModel.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 
@@ -952,7 +953,7 @@ void SIXSensorModel::setSchemaDir(const std::string& dataDir)
         std::string schemaPath;
         try
         {
-            schemaPath = os.getEnv(six::SCHEMA_PATH);
+            schemaPath = six::getSchemaPath(mSchemaDirs);
         }
         catch(const except::Exception& )
         {

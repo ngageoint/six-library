@@ -35,7 +35,7 @@
 
 namespace mt
 {
-typedef std::vector<mem::SharedPtr<sys::AtomicCounter> > SharedAtomicCounterVec;
+typedef std::vector<std::shared_ptr<sys::AtomicCounter> > SharedAtomicCounterVec;
 
 /*!
  *  \class WorkSharingBalancedRunnable1D
@@ -169,7 +169,7 @@ void runWorkSharingBalanced1D(size_t numElements,
         threadPoolEndElements.push_back(numElements);
 
         threadPoolCounters.push_back(
-                mem::SharedPtr<sys::AtomicCounter>(
+                std::shared_ptr<sys::AtomicCounter>(
                         new sys::AtomicCounter(0)));
 
         const types::Range range(0, numElements);
@@ -193,7 +193,7 @@ void runWorkSharingBalanced1D(size_t numElements,
             threadPoolRange.push_back(range);
 
             threadPoolCounters.push_back(
-                    mem::SharedPtr<sys::AtomicCounter>(
+                    std::shared_ptr<sys::AtomicCounter>(
                             new sys::AtomicCounter(static_cast<sys::AtomicCounter::ValueType>(startElement))));
 
             threadPoolEndElements.push_back(
@@ -245,7 +245,7 @@ void runWorkSharingBalanced1D(size_t numElements,
         threadPoolEndElements.push_back(numElements);
 
         threadPoolCounters.push_back(
-                mem::SharedPtr<sys::AtomicCounter>(
+                std::shared_ptr<sys::AtomicCounter>(
                         new sys::AtomicCounter(0)));
 
         const types::Range range(0, numElements);
@@ -269,7 +269,7 @@ void runWorkSharingBalanced1D(size_t numElements,
               threadPoolRange.push_back(range);
 
               threadPoolCounters.push_back(
-                      mem::SharedPtr<sys::AtomicCounter>(
+                      std::shared_ptr<sys::AtomicCounter>(
                               new sys::AtomicCounter(startElement)));
 
               threadPoolEndElements.push_back(

@@ -2,11 +2,12 @@
 #include <iostream>
 #include <vector>
 
+#include <std/filesystem>
+
 #include <math/poly/Fit.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 int main(int argc, char** argv)

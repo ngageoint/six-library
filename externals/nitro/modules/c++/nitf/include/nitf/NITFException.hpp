@@ -24,6 +24,10 @@
 #define __NITF_EXCEPTION_HPP__
 #pragma once
 
+#include <assert.h>
+
+#include <cstddef> // std::nullptr_t
+
 #include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 
@@ -33,26 +37,64 @@
  */
 namespace nitf
 {
+    class Error final
+    {
+        const nitf_Error* pError = nullptr;
+        template<size_t sz>
+        static std::string to_string(const char(&s)[sz])
+        {
+            // avoid array -> pointer decay; code-analysis diagnostic
+            return std::string(s, sz);
+        }
+    public:
+        Error(const nitf_Error* error) noexcept : pError(error) { assert(pError != nullptr);  }
+        Error(const Error&) = delete;
+        Error& operator=(const Error&) = delete;
+
+        std::string message() const
+        {
+            return to_string(pError->message);
+        }
+        std::string file() const
+        {
+            return to_string(pError->file);
+        }
+        int line() const noexcept
+        {
+            return pError->line;
+        }
+        std::string func() const
+        {
+            return to_string(pError->func);
+        }
+        int level() const noexcept
+        {
+            return pError->level;
+        }
+    };
+
 /*!
  *  \class NITFException
  *  \brief  The C++ wrapper for the nitf_Error
  */
-class NITFException final : public except::Exception
+class NITFException  /*final*/ : public except::Exception // no "final", SWIG doesn't like it
 {
-    static except::Context make_Context_(const nitf_Error* error, const std::string& message)
+    static except::Context make_Context_(const Error& error, const std::string& message)
     {
-        return except::Context(error->file, error->line, error->func, "", message);
+        return except::Context(error.file(), error.line(), error.func(), "", message);
     }
-    static except::Context make_Context(const nitf_Error* error)
+    static except::Context make_Context(const nitf_Error* pError)
     {
-        return make_Context_(error, error->message);
+        const Error error(pError);
+        return make_Context_(error, error.message());
     }
-    static except::Context make_Context(const nitf_Error* error, const std::string& message)
+    static except::Context make_Context(const nitf_Error* pError, const std::string& message)
     {
-        return make_Context_(error, message + " (" + std::string(error->message) + ")");
+        const Error error(pError);
+        return make_Context_(error, message + " (" + error.message() + ")");
     }
 
-    NITFException(const except::Context& context, nullptr_t)
+    NITFException(const except::Context& context, std::nullptr_t)
     {
         mMessage = context.getMessage();
         mTrace.pushContext(context);

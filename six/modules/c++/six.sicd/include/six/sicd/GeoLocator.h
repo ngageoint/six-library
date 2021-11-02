@@ -45,6 +45,9 @@ public:
      */
     GeoLocator(const ComplexData& complexData, bool shadowsDown=true);
 
+    GeoLocator(const GeoLocator&) = delete;
+    GeoLocator& operator=(const GeoLocator&) = delete;
+
     /*!
      * Find the location of a SICD pixel in the output plane
      * \param rowCol Pixel location in SICD

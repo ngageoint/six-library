@@ -47,7 +47,6 @@ Writer::Writer(const Writer & x)
 {
     *this = x;
 }
-
 Writer & Writer::operator=(const Writer & x)
 {
     if (&x != this)
@@ -61,20 +60,9 @@ Writer::Writer(nitf_Writer * x)
     getNativeOrThrow();
 }
 
-Writer::Writer()
+Writer::Writer() noexcept(false) : Writer(nitf_Writer_construct(&error))
 {
-    setNative(nitf_Writer_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
-}
-
-Writer::~Writer()
-{
-//    for (std::vector<nitf::WriteHandler*>::iterator it = mWriteHandlers.begin(); it
-//            != mWriteHandlers.end(); ++it)
-//    {
-//        delete *it;
-//    }
 }
 
 void Writer::write()
@@ -129,10 +117,9 @@ void Writer::setImageWriteHandlers(nitf::IOHandle& io, const nitf::Record& recor
     {
         nitf::ImageSegment segment = images[ii];
         const auto offset = segment.getImageOffset();
-        mem::SharedPtr<nitf::WriteHandler> handler(
-                new nitf::StreamIOWriteHandler(
-                    io, offset, segment.getImageEnd() - offset));
-        setImageWriteHandler(gsl::narrow<int>(ii), handler);
+        auto handler = std::make_unique<nitf::StreamIOWriteHandler>(
+                    io, offset, segment.getImageEnd() - offset);
+        setImageWriteHandler(gsl::narrow<int>(ii), std::move(handler));
     }
 }
 
@@ -144,10 +131,9 @@ void Writer::setGraphicWriteHandlers(nitf::IOHandle& io, const nitf::Record& rec
     {
        nitf::GraphicSegment segment = graphics[ii];
        const auto offset = segment.getOffset();
-       mem::SharedPtr< ::nitf::WriteHandler> handler(
-           new nitf::StreamIOWriteHandler (
-               io, offset, segment.getEnd() - offset));
-       setGraphicWriteHandler(gsl::narrow<int>(ii), handler);
+       auto handler = std::make_unique<nitf::StreamIOWriteHandler>(
+               io, offset, segment.getEnd() - offset);
+       setGraphicWriteHandler(gsl::narrow<int>(ii), std::move(handler));
     }
 }
 
@@ -159,10 +145,9 @@ void Writer::setTextWriteHandlers(nitf::IOHandle& io, const nitf::Record& record
     {
        nitf::TextSegment segment = texts[ii];
        const auto offset = segment.getOffset();
-       mem::SharedPtr< ::nitf::WriteHandler> handler(
-           new nitf::StreamIOWriteHandler (
-               io, offset, segment.getEnd() - offset));
-       setTextWriteHandler(gsl::narrow<int>(ii), handler);
+       auto handler = std::make_unique<nitf::StreamIOWriteHandler>(
+               io, offset, segment.getEnd() - offset);
+       setTextWriteHandler(gsl::narrow<int>(ii), std::move(handler));
     }
 }
 
@@ -174,15 +159,14 @@ void Writer::setDEWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
     {
        nitf::DESegment segment = dataExtensions[ii];
        const auto offset = segment.getOffset();
-       mem::SharedPtr< ::nitf::WriteHandler> handler(
-           new nitf::StreamIOWriteHandler (
-               io, offset, segment.getEnd() - offset));
-       setDEWriteHandler(gsl::narrow<int>(ii), handler);
+       auto handler = std::make_unique<nitf::StreamIOWriteHandler>(
+               io, offset, segment.getEnd() - offset);
+       setDEWriteHandler(gsl::narrow<int>(ii), std::move(handler));
     }
 }
 
 void Writer::setImageWriteHandler(int index,
-                                  mem::SharedPtr<WriteHandler> writeHandler)
+                                  std::shared_ptr<WriteHandler> writeHandler)
 {
     if (!nitf_Writer_setImageWriteHandler(getNativeOrThrow(), index,
                                           writeHandler->getNative(), &error))
@@ -192,7 +176,7 @@ void Writer::setImageWriteHandler(int index,
 }
 
 void Writer::setGraphicWriteHandler(int index,
-                                    mem::SharedPtr<WriteHandler> writeHandler)
+                                    std::shared_ptr<WriteHandler> writeHandler)
 {
     if (!nitf_Writer_setGraphicWriteHandler(getNativeOrThrow(), index,
                                             writeHandler->getNative(), &error))
@@ -202,7 +186,7 @@ void Writer::setGraphicWriteHandler(int index,
 }
 
 void Writer::setTextWriteHandler(int index,
-                                 mem::SharedPtr<WriteHandler> writeHandler)
+                                 std::shared_ptr<WriteHandler> writeHandler)
 {
     if (!nitf_Writer_setTextWriteHandler(getNativeOrThrow(), index,
                                          writeHandler->getNative(), &error))
@@ -212,7 +196,7 @@ void Writer::setTextWriteHandler(int index,
 }
 
 void Writer::setDEWriteHandler(int index,
-                               mem::SharedPtr<WriteHandler> writeHandler)
+                               std::shared_ptr<WriteHandler> writeHandler)
 {
     if (!nitf_Writer_setDEWriteHandler(getNativeOrThrow(), index,
                                        writeHandler->getNative(), &error))

@@ -26,13 +26,18 @@
 
 #include <string>
 
+#include <import/sys.h>
+
 #include "nitf/ImageSubheader.h"
+#include "nitf/ImageIO.h"
 
 #include "BandInfo.hpp"
 #include "List.hpp"
 #include "FileSecurity.hpp"
 #include "Extensions.hpp"
 #include "System.hpp"
+#include "Enum.hpp"
+
 
 /*!
  *  \file ImageSubheader.hpp
@@ -41,6 +46,35 @@
 
 namespace nitf
 {
+    enum class PixelValueType
+    {
+        Integer = NITF_IMAGE_IO_PIXEL_TYPE_INT,
+        BiValued = NITF_IMAGE_IO_PIXEL_TYPE_B,
+        Signed = NITF_IMAGE_IO_PIXEL_TYPE_SI,
+        Floating = NITF_IMAGE_IO_PIXEL_TYPE_R,
+        Complex = NITF_IMAGE_IO_PIXEL_TYPE_C,
+        Pseudo12 = NITF_IMAGE_IO_PIXEL_TYPE_12
+    };
+    NITF_ENUM_define_string_to_enum_begin(PixelValueType)
+    { "INT", PixelValueType::Integer }, { "B", PixelValueType::BiValued }, { "SI", PixelValueType::Signed },
+    { "R", PixelValueType::Floating }, { "C", PixelValueType::Complex },
+    { "12", PixelValueType::Pseudo12 }  // ImageIO.c doesn't look at pixelType in this case, rather (nBits == 12) && (nBitsActual == 12)
+    NITF_ENUM_define_string_to_end
+
+    // see ComplexityLevel.c
+    //NITF_ENUM(4, ImageRepresentation, MONO, RGB, RGB_LUT, MULTI);
+    enum class ImageRepresentation { MONO, RGB, RGB_LUT, MULTI, NODISPLY };
+    NITF_ENUM_define_string_to_enum_begin(ImageRepresentation) // need to do this manually because of "RGB/LUT"
+    { "MONO", ImageRepresentation::MONO }, { "RGB", ImageRepresentation::RGB }, { "RGB/LUT", ImageRepresentation::RGB_LUT }, { "MULTI", ImageRepresentation::MULTI },
+    { "NODISPLY", ImageRepresentation::NODISPLY }
+    NITF_ENUM_define_string_to_end
+
+    // see nitf_ImageIO_setup_SBR() in ImageIO.c
+    //NITF_ENUM(4, BlockingMode, B /*band interleaved by block*/, P /*band interleaved by pixel*/, R /*band interleaved by row*/, S /*band sequential*/);
+    enum class BlockingMode { Block, Pixel, Row, Sequential };
+    NITF_ENUM_define_string_to_enum_begin(BlockingMode)
+    { "B", BlockingMode::Block }, { "P", BlockingMode::Pixel }, { "R", BlockingMode::Row }, { "S", BlockingMode::Sequential }
+    NITF_ENUM_define_string_to_end
 
 /*!
  *  \class ImageSubheader
@@ -60,7 +94,7 @@ public:
     ImageSubheader(nitf_ImageSubheader * x);
 
     //! Constructor
-    ImageSubheader();
+    ImageSubheader() noexcept(false);
 
 
     //! Clone
@@ -85,6 +119,12 @@ public:
                              std::string justification,
                              std::string irep, std::string icat,
                              std::vector<nitf::BandInfo>& bands);
+    void setPixelInformation(PixelValueType pvtype,
+                             uint32_t nbpp,
+                             uint32_t abpp,
+                             std::string justification,
+                             ImageRepresentation irep, std::string icat,
+                             std::vector<nitf::BandInfo>& bands);
 
     /*!
      *  This function allows the user to set the corner coordinates from a
@@ -105,9 +145,16 @@ public:
      *
      *  following in line with 2500C.
      */
+private:
+    void setCornersFromLatLons_(nitf::CornersType type,
+        const double (*corners)[2]);
+public:
+    template<typename T>
     void setCornersFromLatLons(nitf::CornersType type,
-                               double corners[4][2]);
-
+                               const T& corners)
+    {
+        setCornersFromLatLons_(type, corners);
+    }
 
     /*!
      *  This function allows the user to extract corner coordinates as a
@@ -124,7 +171,14 @@ public:
      *
      *  following in line with 2500C.
      */
-    void getCornersAsLatLons(double corners[4][2]) const;
+private:
+    void getCornersAsLatLons_(double (*corners)[2]) const;
+public:
+    template<typename T>
+    void getCornersAsLatLons(T& corners) const
+    {
+        getCornersAsLatLons_(corners);
+    }
 
     /*!
      *  Get the type of corners.  This will return NITF_CORNERS_UNKNOWN
@@ -152,6 +206,11 @@ public:
                      uint32_t numRowsPerBlock,
                      uint32_t numColsPerBlock,
                      const std::string& imode);
+    void setBlocking(uint32_t numRows,
+                     uint32_t numCols,
+                     uint32_t numRowsPerBlock,
+                     uint32_t numColsPerBlock,
+                     BlockingMode imode);
 
     /*!
      * Compute blocking parameters
@@ -228,7 +287,8 @@ public:
     nitf::Field getImageTitle() const;
 
     //! Get the imageSecurityClass
-    nitf::Field getImageSecurityClass() const;
+    nitf::Field getImageSecurityClass();
+    const nitf::Field getImageSecurityClass() const;
     std::string imageSecurityClass() const
     {
         return getImageSecurityClass(); // nitf::Field implicitly converts to std::string
@@ -260,14 +320,23 @@ public:
         return getNumCols();
     }
 
+    types::RowCol<size_t> dims() const
+    {
+        return types::RowCol<size_t>(numRows(), numCols());
+    }
+
     //! Get the pixelValueType
     nitf::Field getPixelValueType() const;
+    PixelValueType pixelValueType() const { return from_string<PixelValueType>(getPixelValueType()); }
 
     //! Get the imageRepresentation
     nitf::Field getImageRepresentation() const;
-    std::string imageRepresentation() const
+    ImageRepresentation imageRepresentation() const { return from_string<ImageRepresentation>(getImageRepresentation()); }
+    std::string strImageRepresentation() const
     {
-        return getImageRepresentation().toTrimString();
+        auto retval = to_string(imageRepresentation());
+        str::trim(retval);
+        return retval;
     }
 
     //! Get the imageCategory
@@ -279,6 +348,10 @@ public:
 
     //! Get the actualBitsPerPixel
     nitf::Field getActualBitsPerPixel() const;
+    size_t actualBitsPerPixel() const
+    {
+        return getActualBitsPerPixel();
+    }
 
     //! Get the pixelJustification
     nitf::Field getPixelJustification() const;
@@ -327,9 +400,10 @@ public:
 
     //! Get the imageMode
     nitf::Field getImageMode() const;
+    BlockingMode imageBlockingMode() const { return from_string<BlockingMode>(getImageMode()); }
     std::string imageMode() const
     {
-        return getImageMode(); // nitf::Field implicitly converts to std::string
+        return to_string(imageBlockingMode());
     }
 
     //! Get the numBlocksPerRow

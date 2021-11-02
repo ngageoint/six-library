@@ -21,6 +21,8 @@
  */
 #include <iostream>
 
+#include <std/filesystem>
+
 #include <scene/sys_Conf.h>
 #include <import/cli.h>
 #include <import/six.h>
@@ -32,9 +34,7 @@
 #include <scene/Utilities.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
-
 
 
 // For SICD implementation
@@ -115,18 +115,15 @@ int main(int argc, char** argv)
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         std::unique_ptr<logging::Logger> logger(
-            logging::setupLogger(fs::path(argv[0]).filename()));
+            logging::setupLogger(fs::path(argv[0]).filename().string()));
 
         // create an XML registry
         // The reason to do this is to avoid adding XMLControlCreators to the
         // XMLControlFactory singleton - this way has more fine-grained control
         //        XMLControlRegistry xmlRegistry;
-        //        xmlRegistry.addCreator(DataType::COMPLEX, new XMLControlCreatorT<
-        //                six::sicd::ComplexXMLControl> ());
+        //        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
-        six::XMLControlFactory::getInstance().addCreator(
-                six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
         // Open a file with inputName
         io::FileInputStream inputFile(inputName);
@@ -282,7 +279,7 @@ int main(int argc, char** argv)
                 six::Parameter((uint16_t) needsByteSwap));
 
         six::NITFWriteControl writer(writerOptions, container);
-        writer.setLogger(logger.get());
+        writer.setLogger(*logger);
         std::vector<io::InputStream*> sources;
         sources.push_back(&sioReader);
 

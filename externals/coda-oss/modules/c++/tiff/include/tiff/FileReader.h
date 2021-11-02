@@ -42,14 +42,9 @@ namespace tiff
  * to access a specific image within the file, and to read data from
  * a specific image in the file.
  *********************************************************************/
-class FileReader
+struct FileReader
 {
-public:
-
-    //! Constructor
-    FileReader()
-    {
-    }
+    FileReader() = default;
 
     /**
      *****************************************************************
@@ -144,7 +139,7 @@ private:
     std::vector<tiff::ImageReader *> mImages;
 
     //! Whether to reverse bytes while reading.
-    bool mReverseBytes;
+    bool mReverseBytes = false;
     
 };
 

@@ -64,7 +64,7 @@ public:
                                const std::string& password = "password",
                                const std::string& caList = "root.pem",
                                bool serverAuth = true, 
-                               char * ciphers = NULL) : 
+                               char* ciphers = nullptr) : 
         mClientAuthentication(clientAuth),
         mKeyfile(keyfile), mPass(password),
         mCAList(caList), 
@@ -80,7 +80,7 @@ public:
     virtual ~SSLConnectionClientFactory() 
     {
 # if defined(USE_OPENSSL)	
-        if(mCtx != NULL)
+        if (mCtx != nullptr)
         {
             SSL_CTX_free(mCtx);
         }
@@ -101,8 +101,8 @@ protected:
      * \return A new SSLConnection
      */
     virtual NetConnection* newConnection(std::unique_ptr<net::Socket>&& toServer);
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    virtual NetConnection* newConnection(std::auto_ptr<net::Socket> toServer);
+    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
+    virtual NetConnection* newConnection(mem::auto_ptr<net::Socket> toServer);
     #endif
 
 private:

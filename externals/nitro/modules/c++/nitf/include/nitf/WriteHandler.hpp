@@ -45,27 +45,11 @@ namespace nitf
 DECLARE_CLASS(WriteHandler)
 {
 public:
-
-    //! Copy constructor
-    WriteHandler(const WriteHandler & x)
-    {
-        *this = x;
-    }
-
-    //! Assignment Operator
-    WriteHandler & operator=(const WriteHandler & x)
-    {
-        if (&x != this)
-            setNative(x.getNative());
-        return *this;
-    }
+    WriteHandler(const WriteHandler & x);
+    WriteHandler & operator=(const WriteHandler & x);
 
     // Set native object
-    WriteHandler(nitf_WriteHandler *x)
-    {
-        setNative(x);
-        getNativeOrThrow();
-    }
+    WriteHandler(nitf_WriteHandler* x);
 
     ~WriteHandler() = default;
 

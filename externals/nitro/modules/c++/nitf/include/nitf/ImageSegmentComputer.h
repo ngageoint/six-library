@@ -27,6 +27,7 @@
 #include <string>
 
 #include <nitf/System.hpp>
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
@@ -42,7 +43,7 @@ namespace nitf
  *
  * Currently only supports segmenting in the row direction.
  */
-struct ImageSegmentComputer final
+struct NITRO_NITFCPP_API ImageSegmentComputer /*final*/   // no "final", SWIG doesn't like it
 {
     ImageSegmentComputer(const ImageSegmentComputer&) = delete;
     ImageSegmentComputer& operator=(const ImageSegmentComputer&) = delete;
@@ -51,13 +52,13 @@ struct ImageSegmentComputer final
      * Max number of rows that can fit in an image segment and still be
      * representable in the following image segment via the ILOC field
      */
-    static const size_t ILOC_MAX;
+    static constexpr size_t ILOC_MAX = 99999;
 
     /*!
      * Max number of bytes for an image segment's data (per the NITF spec -
      * this is due to the length field only being 10 digits)
      */
-    static const uint64_t NUM_BYTES_MAX;
+    static constexpr uint64_t NUM_BYTES_MAX = 9999999998LL;
 
     /*!
      * \class Segment
@@ -65,7 +66,7 @@ struct ImageSegmentComputer final
      * \brief Represents information about a segment in terms of its size and
      * position with respect to the global image
      */
-    struct Segment
+    struct NITRO_NITFCPP_API Segment
     {
         //! First row in the image segment in real space
         size_t firstRow;

@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <std/filesystem>
+
+#include <import/sys.h>
 
 #include "TestCase.h"
 #include "scene/ProjectionPolynomialFitter.h"
@@ -8,10 +11,7 @@
 #include "six/sicd/ComplexData.h"
 #include "six/sicd/Utilities.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
-
-std::string argv0;
 
 namespace
 {
@@ -86,11 +86,18 @@ static const double OUTPUT_PLANE_POINTS[NUM_POINTS][2] =
     {60, 60},
 };
 
+static fs::path argv0()
+{
+    static const sys::OS os;
+    static const fs::path retval = os.getSpecialEnv("0");
+    return retval;
+}
+
 TEST_CASE(testProjectOutputToSlant)
 {
     if (globalFitter == nullptr)
     {
-        globalFitter = loadPolynomialFitter(argv0);
+        globalFitter = loadPolynomialFitter(argv0());
     }
 
     math::poly::TwoD<double> outputToSlantRow;
@@ -121,7 +128,7 @@ TEST_CASE(testProjectSlantToOutput)
 {
     if (globalFitter == nullptr)
     {
-        globalFitter = loadPolynomialFitter(argv0);
+        globalFitter = loadPolynomialFitter(argv0());
     }
 
     math::poly::TwoD<double> slantToOutputRow;
@@ -149,9 +156,7 @@ TEST_CASE(testProjectSlantToOutput)
 }
 }
 
-TEST_MAIN(
-     argv0 = argv[0];
-
+TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(testProjectOutputToSlant);
     TEST_CHECK(testProjectSlantToOutput);
     )

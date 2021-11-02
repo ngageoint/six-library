@@ -49,6 +49,11 @@ NITFAPI(nitf_LookupTable *) nitf_LookupTable_construct(uint32_t tables,
     return lt;
 }
 
+static size_t nitf_LookupTable_size(uint32_t numTables, uint32_t numEntries)
+{
+    const size_t sz = ((size_t)numTables) * numEntries;
+    return sz;
+}
 
 NITFAPI(nitf_LookupTable *) nitf_LookupTable_clone(nitf_LookupTable *
         donor,
@@ -83,7 +88,7 @@ NITFAPI(nitf_LookupTable *) nitf_LookupTable_clone(nitf_LookupTable *
     lt = nitf_LookupTable_construct(donor->tables, donor->entries, error);
     if (lt)
     {
-        memcpy(lt->table, donor->table, (donor->tables * donor->entries));
+        memcpy(lt->table, donor->table, nitf_LookupTable_size(donor->tables, donor->entries));
     }
     return lt;
 }
@@ -101,7 +106,6 @@ NITFAPI(void) nitf_LookupTable_destruct(nitf_LookupTable ** lt)
         *lt = NULL;
     }
 }
-
 
 NITFAPI(NITF_BOOL) nitf_LookupTable_init(nitf_LookupTable * lut,
         uint32_t numTables,
@@ -125,7 +129,7 @@ NITFAPI(NITF_BOOL) nitf_LookupTable_init(nitf_LookupTable * lut,
     {
         if (!lut->table)
         {
-            lut->table = (uint8_t *) NITF_MALLOC(numTables * numEntries);
+            lut->table = (uint8_t *) NITF_MALLOC(nitf_LookupTable_size(numTables, numEntries));
             if (!lut->table)
             {
                 nitf_Error_initf(error, NITF_CTXT,
@@ -138,7 +142,7 @@ NITFAPI(NITF_BOOL) nitf_LookupTable_init(nitf_LookupTable * lut,
         /* only copy if one existed */
         if (tables)
         {
-            memcpy(lut->table, tables, numTables * numEntries);
+            memcpy(lut->table, tables, nitf_LookupTable_size(numTables, numEntries));
         }
     }
     else

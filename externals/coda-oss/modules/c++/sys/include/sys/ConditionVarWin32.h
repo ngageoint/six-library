@@ -74,11 +74,9 @@ private:
     bool mWasBroadcast;
 };
 
-class ConditionVarWin32 : public ConditionVarInterface
+struct ConditionVarWin32 final : public ConditionVarInterface
 
 {
-public:
-
     ConditionVarWin32();
     
     ConditionVarWin32(MutexWin32 *theLock, bool isOwner = false);
@@ -86,6 +84,9 @@ public:
     virtual ~ConditionVarWin32()
     {}
     
+    ConditionVarWin32(const ConditionVarWin32&) = delete;
+    ConditionVarWin32& operator=(const ConditionVarWin32&) = delete;
+
     /*!
      *  Acquire the lock
      */

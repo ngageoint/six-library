@@ -39,22 +39,14 @@ void doRead(const std::string& inFile,
 
     /*  Set this to the end, so we'll know when we're done!  */
     nitf::List imageList(record.getImages());
-    size_t idx(0);
+    uint32_t idx(0);
     for (nitf::ImageSegment imageSegment : imageList)
     {
         ++idx;
         std::cout << "Reading image " << idx << "..." << std::endl;
         nitf::ImageSubheader subheader(imageSegment.getSubheader());
 
-        nitf::SubWindow subWindow;
-        subWindow.setNumRows(subheader.getNumRows());
-        subWindow.setNumCols(subheader.getNumCols());
-        std::vector<uint32_t> bandList;
-        for (size_t ii = 0; ii < subWindow.getNumBands(); ++ii)
-        {
-            bandList.push_back(ii);
-        }
-        setBands(subWindow, bandList);
+        nitf::SubWindow subWindow(subheader);
 
         // Read in the image
         const size_t numBitsPerPixel(static_cast<uint64_t>(subheader.getActualBitsPerPixel()));
