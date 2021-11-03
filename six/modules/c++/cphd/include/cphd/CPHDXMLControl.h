@@ -30,11 +30,11 @@
 #include <vector>
 
 #include <scene/sys_Conf.h>
-#include <logging/Logger.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/Document.h>
 #include <cphd/CPHDXMLParser.h>
 #include <cphd/Types.h>
+#include <six/Logger.h>
 
 namespace cphd
 {
@@ -57,7 +57,7 @@ public:
     CPHDXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
 
     //! Destructor
-    virtual ~CPHDXMLControl();
+    virtual ~CPHDXMLControl() = default;
 
     /*
      *  \func setLogger
@@ -66,7 +66,15 @@ public:
      *  \param log provide logger object
      *  \param ownLog flag indicates if log should be deleted
      */
-    void setLogger(logging::Logger* log, bool ownLog = false);
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
+    {
+        mLogger.setLogger(std::forward<TLogger>(logger));
+    }
+    void setLogger(logging::Logger* logger, bool ownLog)
+    {
+        mLogger.setLogger(logger, ownLog);
+    }
 
     /*!
      *  \func toXMLString
@@ -125,8 +133,9 @@ public:
 
 
 protected:
-    logging::Logger *mLog;
-    bool mOwnLog;
+    logging::Logger *mLog = nullptr;
+    bool mOwnLog = false;
+    six::Logger mLogger;
 
 private:
     //! \return Hardcoded version to uri mapping

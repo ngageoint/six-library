@@ -43,38 +43,9 @@ namespace cphd
 {
 
 CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog) :
-    mLog(nullptr),
-    mOwnLog(false)
+    mLogger(mLog, mOwnLog, nullptr)
 {
     setLogger(log, ownLog);
-}
-
-CPHDXMLControl::~CPHDXMLControl()
-{
-    if (mLog && mOwnLog)
-    {
-        delete mLog;
-    }
-}
-
-void CPHDXMLControl::setLogger(logging::Logger* log, bool own)
-{
-    if (mLog && mOwnLog && log != mLog)
-    {
-        delete mLog;
-        mLog = nullptr;
-    }
-
-    if (log)
-    {
-        mLog = log;
-        mOwnLog = own;
-    }
-    else
-    {
-        mLog = new logging::NullLogger;
-        mOwnLog = true;
-    }
 }
 
 /* TO XML */
