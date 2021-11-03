@@ -41,19 +41,16 @@ namespace six
 		bool &mOwnLog;
 		std::unique_ptr<logging::Logger> mLogger;
 
-		void deleteLogger(const logging::Logger* logger = nullptr);
-
 	public:
 		Logger();
 		Logger(std::unique_ptr<logging::Logger>&&);
 		Logger(logging::Logger&);
+		~Logger() = default; // for mOwnLog=true, mLog is managed by std::unique_ptr
 
 		// Legacy class that can't be changed, mLog and mOwnLog are "protected"
 		// Don't want to inadvertantly pass non-member data as that will create
 		// danging references.
 		Logger(logging::Logger*& log, bool& ownLog, std::nullptr_t);
-
-		~Logger();
 
 		Logger(const Logger&) = delete;
 		Logger& operator=(const Logger&) = delete;
@@ -69,8 +66,7 @@ namespace six
 		 * \param ownLog Flag for whether the class takes ownership of the
 		 *  logger. Default is false.
 		 */
-        void setLogger(logging::Logger* logger, bool ownLog);
-		void setLogger(logging::Logger* logger /* bool ownLog = false*/);
+        void setLogger(logging::Logger* logger, bool ownLog = false);
 		void setLogger(std::unique_ptr<logging::Logger>&&);
         void setLogger(logging::Logger&);
 	};

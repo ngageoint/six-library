@@ -1,5 +1,7 @@
 #include "six/Logger.h"
 
+#include <std/memory>
+
 six::Logger::Logger(logging::Logger*& log, bool& ownLog, std::nullptr_t)
     : mLog(log), mOwnLog(ownLog)
 {
@@ -16,14 +18,6 @@ six::Logger::Logger(logging::Logger& logger) : Logger()
     setLogger(logger);
 }
 
-six::Logger::~Logger()
-{
-    if (mLog && mOwnLog)
-    {
-        delete mLog;
-    }
-}
-
 six::Logger& six::Logger::operator=(Logger&&) noexcept = default;
 
 logging::Logger* six::Logger::get(std::nothrow_t) const
@@ -35,20 +29,8 @@ logging::Logger& six::Logger::get() const
     return *mLog;
 }
 
-void six::Logger::deleteLogger(const logging::Logger* logger)
-{
-    // Delete the current logger if it exists and is owned
-    if (mLog && mOwnLog && (logger != mLog))
-    {
-        delete mLog;
-    }
-    mLogger.reset();
-}
-
 void six::Logger::setLogger(logging::Logger* logger, bool ownLog)
 {
-    deleteLogger(logger);
-
     if (logger)
     {
         // Logger is passed in: set it and determine ownership
@@ -58,6 +40,7 @@ void six::Logger::setLogger(logging::Logger* logger, bool ownLog)
         }
         else
         {
+            mLogger.reset(); // for mOwnLog = true, mLog is turned over to a std::unique_ptr
             mLog = logger;
             mOwnLog = false;
         }
@@ -68,25 +51,16 @@ void six::Logger::setLogger(logging::Logger* logger, bool ownLog)
         setLogger(std::make_unique<logging::NullLogger>());
     }
 }
-void six::Logger::setLogger(logging::Logger* logger)
-{
-    setLogger(logger, false /*ownLog*/);
-}
 
 void six::Logger::setLogger(std::unique_ptr<logging::Logger>&& logger)
 {
-    deleteLogger();
-
-    // If no logger passed in, create a null logger
-    mLogger = logger.get() != nullptr ? std::move(logger) : std::make_unique<logging::NullLogger>();
+    mLogger = std::move(logger);
     mLog = mLogger.get();
     mOwnLog = false; // managed by mLogger which is a std::unique_ptr
 }
 
 void six::Logger::setLogger(logging::Logger& logger)
 {
-    deleteLogger();
-    mLog = &logger;
-    mOwnLog = false;
+    setLogger(&logger, false /*ownLog*/);
 }
 

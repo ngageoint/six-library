@@ -45,7 +45,6 @@ namespace six
 		{
 			six::XMLControlRegistry xmlRegistry;
 			six::NITFReadControl reader;
-			std::unique_ptr<logging::Logger> pLog;
 
 		public:
 			NITFReadComplexXMLControl();
