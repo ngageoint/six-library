@@ -1,7 +1,5 @@
 #include "six/Logger.h"
 
-#include <assert.h>
-
 six::Logger::Logger(logging::Logger*& log, bool& ownLog)
     : mLog(log), mOwnLog(ownLog)
 {
@@ -30,8 +28,6 @@ six::Logger& six::Logger::operator=(Logger&&) noexcept = default;
 
 logging::Logger* six::Logger::get()
 {
-    // clients should always call setLogger() first.
-    assert(mLog != nullptr);
     return mLog;
 }
 

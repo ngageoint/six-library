@@ -30,6 +30,7 @@
 #include "six/Types.h"
 #include "six/NITFImageInfo.h"
 #include "six/Adapters.h"
+#include "six/Logger.h"
 #include <import/logging.h>
 
 namespace six
@@ -65,13 +66,7 @@ struct NITFHeaderCreator
                       std::shared_ptr<Container> container);
 
     //!  Destructor.
-    virtual ~NITFHeaderCreator()
-    {
-        if (mLog && mOwnLog)
-        {
-            delete mLog;
-        }
-    }
+    virtual ~NITFHeaderCreator() {}
 
     //!  Keys that allow us to override the ILOC rules for tests
     static const char OPT_MAX_PRODUCT_SIZE[];
@@ -226,9 +221,15 @@ struct NITFHeaderCreator
      * \param ownLog Flag for whether the class takes ownership of the
      *  logger. Default is false.
      */
-    void setLogger(logging::Logger* logger, bool ownLog = false);
-    void setLogger(std::unique_ptr<logging::Logger>&&);
-    void setLogger(logging::Logger&);
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
+    {
+        mLogger.setLogger(std::forward<TLogger>(logger));
+    }
+    void setLogger(logging::Logger* logger, bool ownLog)
+    {
+        mLogger.setLogger(logger, ownLog);
+    }
 
     /*!
      * Load a mesh segment's information.
@@ -376,12 +377,12 @@ struct NITFHeaderCreator
                     std::shared_ptr<Container> container);
 
 protected:
-    nitf::Record mRecord;
+    nitf::Record mRecord = NITF_VER_21;
     std::vector<std::shared_ptr<NITFImageInfo> > mInfos;
     std::vector<std::shared_ptr<nitf::SegmentWriter> > mSegmentWriters;
     std::shared_ptr<six::Container> mContainer;
     six::Options mOptions;
-    const XMLControlRegistry* mXMLRegistry;
+    const XMLControlRegistry* mXMLRegistry = nullptr;
 
     //! All pointers populated within the options need
     //  to be cleaned up elsewhere. There is no access
@@ -397,10 +398,7 @@ private:
     std::string mLocationIdNamespace;
     std::string mAbstract;
 
-    void deleteLogger(logging::Logger* logger = nullptr);
-    logging::Logger* mLog;
-    bool mOwnLog;
-    std::unique_ptr<logging::Logger> mLogger;
+    Logger mLogger;
 };
 }
 #endif

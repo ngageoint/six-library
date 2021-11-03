@@ -44,7 +44,7 @@ namespace six
 
 	public:
 		Logger();
-		Logger(logging::Logger*& log, bool& ownLog);
+		Logger(logging::Logger*& log, bool& ownLog); // legacy class that can't be changed
 		Logger(std::unique_ptr<logging::Logger>&&);
 		Logger(logging::Logger&);
 
