@@ -69,7 +69,7 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
 
     if (logger.get() == nullptr)
     {
-        logger.reset(new logging::NullLogger());
+        logger = std::make_shared<logging::NullLogger>();
     }
 
     std::vector<std::filesystem::path> schemaPaths;

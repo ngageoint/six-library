@@ -22,6 +22,7 @@
 #include <cphd/ByteSwap.h>
 
 #include <string>
+#include <std/memory>
 
 #include <sys/Conf.h>
 #include <mt/ThreadPlanner.h>
@@ -195,13 +196,12 @@ void byteSwapAndPromote(const void* input,
                                      startRow,
                                      numRowsThisThread))
         {
-            std::unique_ptr<sys::Runnable> scaler(
-                new ByteSwapAndPromoteRunnable<InT>(
+            auto scaler = std::make_unique<ByteSwapAndPromoteRunnable<InT>>(
                     input,
                     startRow,
                     numRowsThisThread,
                     dims.col,
-                    output));
+                    output);
             threads.createThread(std::move(scaler));
         }
 
@@ -233,13 +233,13 @@ void byteSwapAndScale(const void* input,
                                      startRow,
                                      numRowsThisThread))
         {
-            std::unique_ptr<sys::Runnable> scaler(new ByteSwapAndScaleRunnable<InT>(
+            auto scaler = std::make_unique<ByteSwapAndScaleRunnable<InT>>(
                     input,
                     startRow,
                     numRowsThisThread,
                     dims.col,
                     scaleFactors,
-                    output));
+                    output);
             threads.createThread(std::move(scaler));
         }
 
@@ -273,12 +273,11 @@ void byteSwap(void* buffer,
                                      startElement,
                                      numElementsThisThread))
         {
-            std::unique_ptr<sys::Runnable> thread(new ByteSwapRunnable(
+            auto thread = std::make_unique<ByteSwapRunnable>(
                     buffer,
                     elemSize,
                     startElement,
-                    numElementsThisThread));
-
+                    numElementsThisThread);
             threads.createThread(std::move(thread));
         }
         threads.joinAll();
