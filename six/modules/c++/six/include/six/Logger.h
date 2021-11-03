@@ -25,6 +25,7 @@
 #pragma once
 
 #include <memory>
+#include <new> // std::nothrow_t
 
 #include <import/logging.h>
 
@@ -44,9 +45,13 @@ namespace six
 
 	public:
 		Logger();
-		Logger(logging::Logger*& log, bool& ownLog); // legacy class that can't be changed
 		Logger(std::unique_ptr<logging::Logger>&&);
 		Logger(logging::Logger&);
+
+		// Legacy class that can't be changed, mLog and mOwnLog are "protected"
+		// Don't want to inadvertantly pass non-member data as that will create
+		// danging references.
+		Logger(logging::Logger*& log, bool& ownLog, std::nullptr_t);
 
 		~Logger();
 
@@ -55,7 +60,8 @@ namespace six
 		Logger(Logger&&) = default;
 		Logger& operator=(Logger&&) noexcept;
 
-		logging::Logger* get();
+		logging::Logger* get(std::nothrow_t) const;
+		logging::Logger& get() const;
 
         /*!
 		 * Set the logger.

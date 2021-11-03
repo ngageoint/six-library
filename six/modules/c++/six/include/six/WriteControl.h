@@ -78,7 +78,7 @@ struct WriteControl
 
     //!  Constructor.  Null-sets the Container
     WriteControl() noexcept(false) :
-        mLogger(mLog, mOwnLog)
+        mLogger(mLog, mOwnLog, nullptr)
     {
         setLogger(nullptr);
         setXMLControlRegistry(nullptr);

@@ -346,7 +346,7 @@ void NITFHeaderCreator::setSecurity(const six::Classification& classification,
         security.getClassificationSystem().set("US");
     }
 
-    auto pLog = mLogger.get();
+    auto pLog = mLogger.get(std::nothrow);
     if (pLog != nullptr)
     {
         classification.setSecurity(prefix, *pLog, security);

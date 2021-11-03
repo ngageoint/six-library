@@ -43,6 +43,8 @@ namespace sidd
 struct DerivedXMLControl : public XMLControl
 {
     DerivedXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+    DerivedXMLControl(const DerivedXMLControl&) = delete;
+    DerivedXMLControl& operator=(const DerivedXMLControl&) = delete;
 
     static const six::DataType dataType;
 

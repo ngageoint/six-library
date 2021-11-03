@@ -56,8 +56,7 @@ namespace six
 struct ReadControl
 {
     //!  Constructor.  Null-set the current container reference
-    ReadControl() noexcept(false) :
-        mLogger(mLog, mOwnLog)
+    ReadControl() noexcept(false) : mLogger(mLog, mOwnLog, nullptr)
     {
         setLogger(nullptr);
         setXMLControlRegistry(nullptr);

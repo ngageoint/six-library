@@ -1,10 +1,10 @@
 #include "six/Logger.h"
 
-six::Logger::Logger(logging::Logger*& log, bool& ownLog)
+six::Logger::Logger(logging::Logger*& log, bool& ownLog, std::nullptr_t)
     : mLog(log), mOwnLog(ownLog)
 {
 }
-six::Logger::Logger() : Logger(pLog_, ownLog_)
+six::Logger::Logger() : Logger(pLog_, ownLog_, nullptr)
 {
 }
 six::Logger::Logger(std::unique_ptr<logging::Logger>&& pLogger) : Logger()
@@ -26,9 +26,13 @@ six::Logger::~Logger()
 
 six::Logger& six::Logger::operator=(Logger&&) noexcept = default;
 
-logging::Logger* six::Logger::get()
+logging::Logger* six::Logger::get(std::nothrow_t) const
 {
     return mLog;
+}
+logging::Logger& six::Logger::get() const
+{
+    return *mLog;
 }
 
 void six::Logger::deleteLogger(const logging::Logger* logger)
