@@ -29,6 +29,7 @@
 #include "six/Container.h"
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
+#include "six/Logger.h"
 #include <mem/ScopedArray.h>
 #include <import/logging.h>
 
@@ -56,18 +57,17 @@ struct ReadControl
 {
     //!  Constructor.  Null-set the current container reference
     ReadControl() noexcept(false) :
-        mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
+        mLogger(mLog, mOwnLog)
     {
         setLogger(nullptr);
         setXMLControlRegistry(nullptr);
     }
 
     //!  Destructor doesnt release anything
-    virtual ~ReadControl()
-    {
-        if (mLog && mOwnLog)
-            delete mLog;
-    }
+    virtual ~ReadControl() = default;
+
+    ReadControl(const ReadControl&) = delete;
+    ReadControl& operator=(const ReadControl&) = delete;
 
     /*!
      *  This function takes in a file and tells you what kind of
@@ -195,20 +195,14 @@ struct ReadControl
     /*!
      * Sets the logger to use internally
      */
-    void setLogger(logging::Logger* log, bool ownLog = false)
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
     {
-        if (mLog && mOwnLog && log != mLog)
-            delete mLog;
-        mLog = log ? log : new logging::NullLogger;
-        mOwnLog = log ? ownLog : true;
+        mLogger.setLogger(std::forward<TLogger>(logger));
     }
-    void setLogger(std::unique_ptr<logging::Logger>&& logger)
+    void setLogger(logging::Logger* logger, bool ownLog)
     {
-        setLogger(logger.release(), true /*ownLog*/);
-    }
-    void setLogger(logging::Logger& logger)
-    {
-        setLogger(&logger, false /*ownLog*/);
+        mLogger.setLogger(logger, ownLog);
     }
 
     void setXMLControlRegistry(const XMLControlRegistry *xmlRegistry)
@@ -225,6 +219,8 @@ protected:
     bool mOwnLog = false;
     const XMLControlRegistry* mXMLRegistry = nullptr;
 
+private:
+    Logger mLogger;
 };
 
 }
