@@ -42,12 +42,13 @@ namespace six
  *  This class helps in populating NITF header fields
  *  prior to writing.
  */
-class NITFHeaderCreator
+struct NITFHeaderCreator
 {
-public:
-
     //! Constructor. Must call initialize to use.
     NITFHeaderCreator();
+
+    NITFHeaderCreator(const NITFHeaderCreator&) = delete;
+    NITFHeaderCreator& operator=(const NITFHeaderCreator&) = delete;
 
     /*!
      * Constructor. Calls initialize.
@@ -225,35 +226,9 @@ public:
      * \param ownLog Flag for whether the class takes ownership of the
      *  logger. Default is false.
      */
-    void setLogger(logging::Logger* logger, bool ownLog = false)
-    {
-        // Delete the current logger if it exists and is owned
-        if (mLog && mOwnLog && logger != mLog)
-        {
-            delete mLog;
-        }
-
-        if (logger)
-        {
-            // Logger is passed in: set it and determine ownership
-            mLog = logger;
-            mOwnLog = ownLog;
-        }
-        else
-        {
-            // No logger passed in: create a null logger
-            mLog = new logging::NullLogger;
-            mOwnLog = true;
-        }
-    }
-    void setLogger(std::unique_ptr<logging::Logger>&& logger)
-    {
-        setLogger(logger.release(), true /*ownLog*/);
-    }
-    void setLogger(logging::Logger& logger)
-    {
-        setLogger(&logger, false /*ownLog*/);
-    }
+    void setLogger(logging::Logger* logger, bool ownLog = false);
+    void setLogger(std::unique_ptr<logging::Logger>&&);
+    void setLogger(logging::Logger&);
 
     /*!
      * Load a mesh segment's information.
@@ -421,8 +396,11 @@ private:
     std::string mLocationId;
     std::string mLocationIdNamespace;
     std::string mAbstract;
+
+    void deleteLogger(logging::Logger* logger = nullptr);
     logging::Logger* mLog;
     bool mOwnLog;
+    std::unique_ptr<logging::Logger> mLogger;
 };
 }
 #endif

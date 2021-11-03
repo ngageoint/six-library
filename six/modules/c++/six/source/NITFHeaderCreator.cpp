@@ -979,4 +979,53 @@ void NITFHeaderCreator::loadMeshSegment(
 {
     loadMeshSegment_(meshName, meshBuffer, classification);
 }
+
+void NITFHeaderCreator::deleteLogger(logging::Logger* logger)
+{
+    // Delete the current logger if it exists and is owned
+    if (mLog && mOwnLog && (logger != mLog))
+    {
+        delete mLog;
+    }
+    mLogger.reset();
+}
+void NITFHeaderCreator::setLogger(logging::Logger* logger, bool ownLog)
+{
+    deleteLogger(logger);
+
+    if (logger)
+    {
+        // Logger is passed in: set it and determine ownership
+        if (ownLog)
+        {
+            setLogger(std::unique_ptr<logging::Logger>(logger)); // implicitly owns
+        }
+        else
+        {
+            mLog = logger;
+            mOwnLog = false;
+        }
+    }
+    else
+    {
+        // No logger passed in: create a null logger
+        setLogger(std::make_unique<logging::NullLogger>());
+    }
+}
+void NITFHeaderCreator::setLogger(std::unique_ptr<logging::Logger>&& logger)
+{
+    deleteLogger();
+
+    // If no logger passed in, create a null logger
+    mLogger = logger.get() != nullptr ? std::move(logger) : std::make_unique<logging::NullLogger>();
+    mLog = mLogger.get();
+    mOwnLog = false; // managed by mLogger which is a std::unique_ptr
+}
+void NITFHeaderCreator::setLogger(logging::Logger& logger)
+{
+    deleteLogger();
+    mLog = &logger;
+    mOwnLog = false;
+}
+
 }
