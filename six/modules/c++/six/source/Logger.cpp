@@ -18,8 +18,6 @@ six::Logger::Logger(logging::Logger& logger) : Logger()
     setLogger(logger);
 }
 
-six::Logger& six::Logger::operator=(Logger&&) noexcept = default;
-
 logging::Logger* six::Logger::get(std::nothrow_t) const
 {
     return mLog;

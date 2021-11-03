@@ -55,7 +55,7 @@ namespace six
 		Logger(const Logger&) = delete;
 		Logger& operator=(const Logger&) = delete;
 		Logger(Logger&&) = default;
-		Logger& operator=(Logger&&) noexcept;
+		Logger& operator=(Logger&&) = delete;
 
 		logging::Logger* get(std::nothrow_t) const;
 		logging::Logger& get() const;
