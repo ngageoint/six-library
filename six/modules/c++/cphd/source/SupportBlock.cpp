@@ -119,7 +119,7 @@ void SupportBlock::read(const std::string& id,
 }
 
 void SupportBlock::readAll(size_t numThreads,
-                           mem::ScopedArray<sys::ubyte>& data) const
+                           std::unique_ptr<sys::ubyte[]>& data) const
 {
     data = std::make_unique<sys::ubyte[]>(mSupportSize);
     for (auto& supportArrayMapPair : mData.supportArrayMap)
@@ -131,7 +131,7 @@ void SupportBlock::readAll(size_t numThreads,
 
 void SupportBlock::read(const std::string& id,
                         size_t numThreads,
-                        mem::ScopedArray<sys::ubyte>& data) const
+                       std::unique_ptr<sys::ubyte[]>& data) const
 {
     const size_t bufSize = mData.getSupportArrayById(id).getSize();
     data = std::make_unique<sys::ubyte[]>(bufSize);

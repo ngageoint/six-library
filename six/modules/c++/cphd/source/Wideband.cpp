@@ -556,7 +556,7 @@ void Wideband::read(size_t channel,
                     size_t firstSample,
                     size_t lastSample,
                     size_t numThreads,
-                    mem::ScopedArray<sys::ubyte>& data) const
+                    std::unique_ptr<sys::ubyte[]>& data) const
 {
     types::RowCol<size_t> dims;
     checkReadInputs(
@@ -574,7 +574,7 @@ void Wideband::read(size_t channel,
          mem::BufferView<sys::ubyte>(data.get(), bufSize));
 }
 
-void Wideband::read(size_t channel, mem::ScopedArray<sys::ubyte>& data) const
+void Wideband::read(size_t channel, std::unique_ptr<sys::ubyte[]>& data) const
 {
     const size_t bufSize = getBytesRequiredForRead(channel);
     data = std::make_unique<sys::ubyte[]>(bufSize);

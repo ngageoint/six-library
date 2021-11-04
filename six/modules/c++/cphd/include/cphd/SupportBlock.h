@@ -141,12 +141,12 @@ struct SupportBlock final
     // Same as above but allocates the memory
     void read(const std::string& id,
               size_t numThreads,
-              mem::ScopedArray<sys::ubyte>& data) const;
+              std::unique_ptr<sys::ubyte[]>& data) const;
     void read(const std::string& id,
               size_t numThreads,
               std::unique_ptr<std::byte[]>& data) const
     {
-        mem::ScopedArray<sys::ubyte> data_;
+        std::unique_ptr<sys::ubyte[]> data_;
         read(id, numThreads, data_);
         data.reset(reinterpret_cast<std::byte*>(data_.release()));
     }
@@ -164,11 +164,11 @@ struct SupportBlock final
      *
      */
     void readAll(size_t numThreads,
-                 mem::ScopedArray<sys::ubyte>& data) const;
+                std::unique_ptr<sys::ubyte[]>& data) const;
     void readAll(size_t numThreads,
                  std::unique_ptr<std::byte[]>& data) const
     {
-        mem::ScopedArray<sys::ubyte> data_;
+        std::unique_ptr<sys::ubyte[]> data_;
         readAll(numThreads, data_);
         data.reset(reinterpret_cast<std::byte*>(data_.release()));
     }
