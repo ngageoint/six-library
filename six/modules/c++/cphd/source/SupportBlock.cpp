@@ -23,6 +23,7 @@
 
 #include <limits>
 #include <sstream>
+#include <std/memory>
 
 #include <nitf/coda-oss.hpp>
 #include <mt/ThreadGroup.h>
@@ -41,7 +42,7 @@ SupportBlock::SupportBlock(const std::string& pathname,
                            const cphd::Data& data,
                            int64_t startSupport,
                            int64_t sizeSupport) :
-    mInStream(new io::FileInputStream(pathname)),
+    mInStream(std::make_shared<io::FileInputStream>(pathname)),
     mData(data),
     mSupportOffset(startSupport),
     mSupportSize(sizeSupport)
@@ -120,7 +121,7 @@ void SupportBlock::read(const std::string& id,
 void SupportBlock::readAll(size_t numThreads,
                            mem::ScopedArray<sys::ubyte>& data) const
 {
-    data.reset(new sys::ubyte[mSupportSize]);
+    data = std::make_unique<sys::ubyte[]>(mSupportSize);
     for (auto& supportArrayMapPair : mData.supportArrayMap)
     {
         const size_t bufSize = supportArrayMapPair.second.getSize();
@@ -133,7 +134,7 @@ void SupportBlock::read(const std::string& id,
                         mem::ScopedArray<sys::ubyte>& data) const
 {
     const size_t bufSize = mData.getSupportArrayById(id).getSize();
-    data.reset(new sys::ubyte[bufSize]);
+    data = std::make_unique<sys::ubyte[]>(bufSize);
     read(id, numThreads, mem::BufferView<sys::ubyte>(data.get(), bufSize));
 }
 

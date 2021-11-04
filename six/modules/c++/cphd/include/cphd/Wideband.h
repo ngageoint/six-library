@@ -81,9 +81,6 @@ struct Wideband final
              const cphd::MetadataBase& metadata,
              int64_t startWB,
              int64_t sizeWB);
-    Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
-        const cphd::MetadataBase& metadata,
-        const cphd::FileHeader&);
 
     /*!
      *  \func getFileOffset

@@ -24,6 +24,7 @@
 #include <sstream>
 #include <thread>
 #include <string>
+#include <std/memory>
 
 #include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
@@ -137,12 +138,12 @@ void promote(const void* input,
         size_t numRowsThisThread(0);
         while (planner.getThreadInfo(threadNum++, startRow, numRowsThisThread))
         {
-            std::unique_ptr<sys::Runnable> scaler(new PromoteRunnable<InT>(
+           auto scaler = std::make_unique<PromoteRunnable<InT>>(
                     static_cast<const std::complex<InT>*>(input),
                     startRow,
                     numRowsThisThread,
                     dims.col,
-                    output));
+                    output);
             threads.createThread(std::move(scaler));
         }
 
@@ -199,13 +200,13 @@ void scale(const void* input,
         size_t numRowsThisThread(0);
         while (planner.getThreadInfo(threadNum++, startRow, numRowsThisThread))
         {
-            std::unique_ptr<sys::Runnable> scaler(new ScaleRunnable<InT>(
+           auto scaler = std::make_unique<ScaleRunnable<InT>>(
                     static_cast<const std::complex<InT>*>(input),
                     startRow,
                     numRowsThisThread,
                     dims.col,
                     scaleFactors,
-                    output));
+                    output);
             threads.createThread(std::move(scaler));
         }
 
@@ -246,7 +247,7 @@ Wideband::Wideband(const std::string& pathname,
                    const cphd::MetadataBase& metadata,
                    int64_t startWB,
                    int64_t sizeWB) :
-    mInStream(new io::FileInputStream(pathname)),
+    mInStream(std::make_shared<io::FileInputStream>(pathname)),
     mMetadata(metadata),
     mWBOffset(startWB),
     mWBSize(sizeWB),
@@ -268,12 +269,6 @@ Wideband::Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
     mOffsets(mMetadata.getNumChannels())
 {
     initialize();
-}
-Wideband::Wideband(std::shared_ptr<io::SeekableInputStream> inStream,
-    const cphd::MetadataBase& metadata, const cphd::FileHeader& fileHeader) :
-    Wideband(inStream, metadata, fileHeader.getSignalBlockByteOffset(),
-        fileHeader.getSignalBlockSize())
-{
 }
 
 void Wideband::initialize()
@@ -568,7 +563,7 @@ void Wideband::read(size_t channel,
             channel, firstVector, lastVector, firstSample, lastSample, dims);
 
     const size_t bufSize = dims.row * dims.col * mElementSize;
-    data.reset(new sys::ubyte[bufSize]);
+    data = std::make_unique<sys::ubyte[]>(bufSize);
 
     read(channel,
          firstVector,
@@ -582,7 +577,7 @@ void Wideband::read(size_t channel,
 void Wideband::read(size_t channel, mem::ScopedArray<sys::ubyte>& data) const
 {
     const size_t bufSize = getBytesRequiredForRead(channel);
-    data.reset(new sys::ubyte[bufSize]);
+    data = std::make_unique<sys::ubyte[]>(bufSize);
 
     read(channel, mem::BufferView<sys::ubyte>(data.get(), bufSize));
 }
