@@ -178,7 +178,7 @@ void  NITFHeaderCreator::setBlocking(nitf::BlockingMode imode,
         const auto optNumRowsPerBlock = static_cast<size_t>(
                 mOptions.getParameter(OPT_NUM_ROWS_PER_BLOCK));
 
-        numRowsPerBlock = static_cast<sys::Uint32_T>(
+        numRowsPerBlock = static_cast<uint32_t>(
                 std::min(optNumRowsPerBlock, segmentDims.row));
     }
     else
@@ -200,7 +200,7 @@ void  NITFHeaderCreator::setBlocking(nitf::BlockingMode imode,
         const auto optNumColsPerBlock = static_cast<size_t>(
                 mOptions.getParameter(OPT_NUM_COLS_PER_BLOCK));
 
-        numColsPerBlock = static_cast<sys::Uint32_T>(
+        numColsPerBlock = static_cast<uint32_t>(
                 std::min(optNumColsPerBlock, segmentDims.col));
     }
     else
