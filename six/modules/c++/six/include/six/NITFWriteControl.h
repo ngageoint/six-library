@@ -246,28 +246,13 @@ public:
     virtual void save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths) override;
     
     template<typename T>
-    void save(std::span<const T> imageData,
+    void save_image(std::span<const T> imageData,
         const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
     {
         const size_t bufferSize = getOptions().getParameter(WriteControl::OPT_BUFFER_SIZE, Parameter(NITFHeaderCreator::DEFAULT_BUFFER_SIZE));
         nitf::BufferedWriter bufferedIO(outputFile.string(), bufferSize);
-        save(imageData, bufferedIO, schemaPaths);
+        save_image(imageData, bufferedIO, schemaPaths);
         bufferedIO.close();
-    }
-    template<typename T>
-    void save(std::span<const T> imageData,
-        const std::string& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
-    {
-      save(imageData, std::filesystem::path(outputFile), schemaPaths);
-    }
-    template<typename T>
-    void save(std::span<const T> imageData,
-        const std::string& outputFile, const std::vector<std::string>& schemaPaths_)
-    {
-      std::vector<std::filesystem::path> schemaPaths;
-      std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-		     [](const std::string& s) { return s; });
-      save(imageData, outputFile, schemaPaths);
     }
 
     void save(const NonConstBufferList& imageData,
@@ -313,7 +298,7 @@ public:
     }
 
     template<typename T>
-    void save(std::span<const T> imageData,
+    void save_image(std::span<const T> imageData,
         nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
     {
         std::vector<std::string> schemaPaths_;
@@ -579,13 +564,29 @@ private:
 // Help out the compiler with overloads, and keep the class smaller.
 extern void save(NITFWriteControl&, const std::complex<float>*, const std::string&, const std::vector<std::string>&);
 
+template<typename T>
+inline void save(NITFWriteControl& writeControl, 
+    std::span<const T> imageData, const std::string& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
+{
+    writeControl.save_image(imageData, std::filesystem::path(outputFile), schemaPaths);
+}
+template<typename T>
+inline void save(NITFWriteControl& writeControl, 
+    std::span<const T> imageData, const std::string& outputFile, const std::vector<std::string>& schemaPaths_)
+{
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+    save(writeControl, imageData, outputFile, schemaPaths);
+}
+
 template<typename T, typename TSchemaPath>
 inline void save(NITFWriteControl& writeControl,
     const std::vector<T>& imageData, // G++ won't convert our home-brew std::span to std::vector
     const std::string& outputFile, const std::vector<TSchemaPath>& schemaPaths)
 {
     std::span<const T> imageData_(imageData.data(), imageData.size());
-    writeControl.save(imageData_, outputFile, schemaPaths);
+    save(writeControl, imageData_, outputFile, schemaPaths);
 }
 
 }

@@ -1580,7 +1580,7 @@ static void writeAsNITF(const fs::path& pathname, const std::vector<std::string>
     const std::span<const std::complex<float>> image(image_, getExtent(data).area());
     std::vector<fs::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
-    writer.save(image, pathname, schemaPaths);
+    writer.save_image(image, pathname, schemaPaths);
 }
 void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths, const ComplexData& data, std::span<const std::complex<float>> image)
 {

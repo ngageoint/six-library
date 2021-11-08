@@ -75,7 +75,7 @@ void writeSidd(std::unique_ptr<six::Data>&& derivedData,
     const std::span<const std::complex<float>> widebandData(pWidebandData, size);
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
-    writer.save(widebandData, pathname, schemaPaths);
+    writer.save_image(widebandData, pathname, schemaPaths);
 }
 }
 
