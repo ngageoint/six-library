@@ -29,6 +29,7 @@
 #include <xml/lite/Validator.h>
 
 #include "six/Types.h"
+#include "six/Logger.h"
 
 namespace six
 {
@@ -66,7 +67,18 @@ class XMLControl
     //!  Destructor
     virtual ~XMLControl();
 
-    void setLogger(logging::Logger* log, bool ownLog = false);
+    XMLControl(const XMLControl&) = delete;
+    XMLControl& operator=(const XMLControl&) = delete;
+
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
+    {
+        mLogger.setLogger(std::forward<TLogger>(logger));
+    }
+    void setLogger(logging::Logger* logger, bool ownLog)
+    {
+        mLogger.setLogger(logger, ownLog);
+    }
 
     /*
      *  \func validate
@@ -153,6 +165,9 @@ class XMLControl
 
     static void getVersionFromURI(const xml::lite::Document* doc,
                                   std::vector<std::string>& version);
+
+private:
+    Logger mLogger;
 };
 }
 

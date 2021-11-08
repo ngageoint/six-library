@@ -23,6 +23,7 @@
 
 #include <limits>
 #include <sstream>
+#include <std/memory>
 
 #include <nitf/coda-oss.hpp>
 #include <mt/ThreadGroup.h>
@@ -33,6 +34,7 @@
 #include <six/Init.h>
 
 #include <cphd/ByteSwap.h>
+#include <cphd/FileHeader.h>
 
 namespace cphd
 {
@@ -40,7 +42,7 @@ SupportBlock::SupportBlock(const std::string& pathname,
                            const cphd::Data& data,
                            int64_t startSupport,
                            int64_t sizeSupport) :
-    mInStream(new io::FileInputStream(pathname)),
+    mInStream(std::make_shared<io::FileInputStream>(pathname)),
     mData(data),
     mSupportOffset(startSupport),
     mSupportSize(sizeSupport)
@@ -56,6 +58,13 @@ SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
     mData(data),
     mSupportOffset(startSupport),
     mSupportSize(sizeSupport)
+{
+    initialize();
+}
+SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
+    const cphd::Data& data, const cphd::FileHeader& fileHeader):
+    SupportBlock(inStream, data,
+        fileHeader.getSupportBlockByteOffset(), fileHeader.getSupportBlockSize())
 {
     initialize();
 }
@@ -110,9 +119,9 @@ void SupportBlock::read(const std::string& id,
 }
 
 void SupportBlock::readAll(size_t numThreads,
-                           mem::ScopedArray<sys::ubyte>& data) const
+                           std::unique_ptr<sys::ubyte[]>& data) const
 {
-    data.reset(new sys::ubyte[mSupportSize]);
+    data = std::make_unique<sys::ubyte[]>(mSupportSize);
     for (auto& supportArrayMapPair : mData.supportArrayMap)
     {
         const size_t bufSize = supportArrayMapPair.second.getSize();
@@ -122,10 +131,10 @@ void SupportBlock::readAll(size_t numThreads,
 
 void SupportBlock::read(const std::string& id,
                         size_t numThreads,
-                        mem::ScopedArray<sys::ubyte>& data) const
+                       std::unique_ptr<sys::ubyte[]>& data) const
 {
     const size_t bufSize = mData.getSupportArrayById(id).getSize();
-    data.reset(new sys::ubyte[bufSize]);
+    data = std::make_unique<sys::ubyte[]>(bufSize);
     read(id, numThreads, mem::BufferView<sys::ubyte>(data.get(), bufSize));
 }
 

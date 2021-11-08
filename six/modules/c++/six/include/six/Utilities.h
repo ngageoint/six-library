@@ -316,7 +316,7 @@ namespace details
     template<typename T>
     inline std::span<std::byte> as_bytes(std::span<T> buffer_)
     {
-        std::span<const T> buffer(buffer_.data(), buffer_.size());
+        const std::span<const T> buffer(buffer_.data(), buffer_.size());
         const auto result = as_bytes(buffer);
         return std::span<std::byte>(const_cast<std::byte*>(result.data()), result.size());
     }

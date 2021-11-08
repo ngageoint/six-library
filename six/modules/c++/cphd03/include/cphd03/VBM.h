@@ -34,14 +34,16 @@
 
 namespace cphd03
 {
+    struct Metadata;
+    class FileHeader;
+
 //  This class contains the Vector Based Metadata.
 //  It contains the cphd03::Data structure (for channel and vector sizes),
 //  the cphd03::VectorParameters info (for the map of available VBM entries)
 //  and the VBP data itself
 
-class VBM
+struct VBM
 {
-public:
     /*
      *  \func Constructor
      *  \brief Creates a default VBM. While this will create a valid VBM,
@@ -61,6 +63,7 @@ public:
      *         used to populate the correct optional parameters.
     */
     VBM(const Data& data, const VectorParameters &vp);
+    VBM(const Metadata&);
 
     /*
      *  \func Constructor
@@ -184,6 +187,9 @@ public:
                     int64_t startVBM,
                     int64_t sizeVBM,
                     size_t numThreads);
+    int64_t load(io::SeekableInputStream& inStream,
+        const FileHeader&,
+        size_t numThreads);
 
     /*
      *  \func getVBMdata

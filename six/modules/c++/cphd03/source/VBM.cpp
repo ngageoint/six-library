@@ -31,6 +31,8 @@
 #include <six/Init.h>
 
 #include <cphd/ByteSwap.h>
+#include <cphd03/Metadata.h>
+#include <cphd03/FileHeader.h>
 
 namespace
 {
@@ -304,6 +306,11 @@ VBM::VBM(const Data& data, const VectorParameters &vp) :
         }
     }
 }
+VBM::VBM(const Metadata& metadata) :
+    VBM(metadata.data, metadata.vectorParameters)
+{
+}
+
 
 VBM::VBM(size_t numChannels,
          const std::vector<size_t>& numVectors,
@@ -790,6 +797,12 @@ int64_t VBM::load(io::SeekableInputStream& inStream,
     }
 
     return totalBytesRead;
+}
+int64_t VBM::load(io::SeekableInputStream& inStream,
+    const FileHeader& fileHeader,
+    size_t numThreads)
+{
+    return load(inStream, fileHeader.getVBMoffset(), fileHeader.getVBMsize(), numThreads);
 }
 
 std::ostream& operator<< (std::ostream& os, const VBM& d)

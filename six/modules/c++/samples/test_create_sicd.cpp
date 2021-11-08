@@ -114,9 +114,6 @@ int main(int argc, char** argv)
         std::vector<std::string> schemaPaths;
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
-        std::unique_ptr<logging::Logger> logger(
-            logging::setupLogger(fs::path(argv[0]).filename().string()));
-
         // create an XML registry
         // The reason to do this is to avoid adding XMLControlCreators to the
         // XMLControlFactory singleton - this way has more fine-grained control
@@ -279,7 +276,7 @@ int main(int argc, char** argv)
                 six::Parameter((uint16_t) needsByteSwap));
 
         six::NITFWriteControl writer(writerOptions, container);
-        writer.setLogger(*logger);
+        writer.setLogger(logging::setupLogger(fs::path(argv[0]).filename().string()));
         std::vector<io::InputStream*> sources;
         sources.push_back(&sioReader);
 

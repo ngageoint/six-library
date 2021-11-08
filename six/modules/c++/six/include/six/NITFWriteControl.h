@@ -199,17 +199,14 @@ public:
      * Set the logger.
      * \param logger The logger.
      */
-    void setLogger(logging::Logger* logger, bool ownLog = false)
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
+    {
+        mNITFHeaderCreator->setLogger(std::forward<TLogger>(logger));
+    }
+    void setLogger(logging::Logger* logger, bool ownLog)
     {
         mNITFHeaderCreator->setLogger(logger, ownLog);
-    }
-    void setLogger(std::unique_ptr<logging::Logger>&& logger)
-    {
-        setLogger(logger.release(), true /*ownLog*/);
-    }
-    void setLogger(logging::Logger& logger)
-    {
-        setLogger(&logger, false /*ownLog*/);
     }
 
     /*

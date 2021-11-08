@@ -40,15 +40,16 @@
 
 namespace cphd
 {
+    class FileHeader;
+
 /*
  * \class Wideband
  * \brief Information about the wideband CPHD data
  */
 //  It contains the cphd::Data structure (for channel and vector sizes).
 //  Provides methods read wideband data from CPHD file/stream
-class Wideband
+struct Wideband final
 {
-public:
     static const size_t ALL;
 
     /*!
@@ -211,7 +212,7 @@ public:
               size_t firstSample,
               size_t lastSample,
               size_t numThreads,
-              mem::ScopedArray<sys::ubyte>& data) const;
+              std::unique_ptr<sys::ubyte[]>& data) const;
     std::unique_ptr<std::byte[]>read(size_t channel,
               size_t firstVector,
               size_t lastVector,
@@ -219,7 +220,7 @@ public:
               size_t lastSample,
               size_t numThreads) const
     {
-        mem::ScopedArray<sys::ubyte> data;
+        std::unique_ptr<sys::ubyte[]> data;
         read(channel, firstVector, lastVector, firstSample, lastSample, numThreads, data);
 
         return std::unique_ptr<std::byte[]>(reinterpret_cast<std::byte*>(data.release()));
@@ -238,10 +239,10 @@ public:
      *  \throw except::Exception If BufferView memory allocated is insufficient
      */
     // Same as above for compressed Signal Array
-    void read(size_t channel, mem::ScopedArray<sys::ubyte>& data) const;
+    void read(size_t channel, std::unique_ptr<sys::ubyte[]>& data) const;
     void read(size_t channel, std::unique_ptr<std::byte[]>& data) const
     {
-        mem::ScopedArray<sys::ubyte> data_;
+        std::unique_ptr<sys::ubyte[]> data_;
         read(channel, data_);
         data.reset(reinterpret_cast<std::byte*>(data_.release()));
     }

@@ -246,7 +246,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
 inline void putData(tiff::ImageWriter& imageWriter,
     const six::UByte* const sources_ii, const DerivedData& data)
 {
-    imageWriter.putData(sources_ii, static_cast<sys::Uint32_T>(getExtent(data).area()));
+    imageWriter.putData(sources_ii, static_cast<uint32_t>(getExtent(data).area()));
 }
 inline void putData(tiff::ImageWriter& imageWriter,
     std::span<const std::byte> sources_ii, const DerivedData& data)
@@ -257,7 +257,7 @@ inline void putData(tiff::ImageWriter& imageWriter,
     }
 
     const void* pSource = sources_ii.data();
-    imageWriter.putData(static_cast<const unsigned char*>(pSource), static_cast<sys::Uint32_T>(sources_ii.size()));
+    imageWriter.putData(static_cast<const unsigned char*>(pSource), static_cast<uint32_t>(sources_ii.size()));
 }
 template<typename TBufferList>
 void GeoTIFFWriteControl::save(const TBufferList& sources,
