@@ -245,7 +245,6 @@ public:
      */
     virtual void save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths) override;
     
-    void save(const std::complex<float>*, const std::string& outputFile, const std::vector<std::string>& schemaPaths);
     template<typename T>
     void save(std::span<const T> imageData,
         const std::filesystem::path& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
@@ -269,14 +268,6 @@ public:
       std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
 		     [](const std::string& s) { return s; });
       save(imageData, outputFile, schemaPaths);
-    }
-
-    template<typename T, typename TSchemaPath>
-    void save(const std::vector<T>& imageData, // G++ won't convert our home-brew std::span to std::vector
-	      const std::string& outputFile, const std::vector<TSchemaPath>& schemaPaths)
-    {
-      std::span<const T> imageData_(imageData.data(), imageData.size());
-      save(imageData_, outputFile, schemaPaths);
     }
 
     void save(const NonConstBufferList& imageData,
@@ -584,5 +575,18 @@ private:
                        size_t numImageSegments,
                        size_t productNum);
 };
+
+// Help out the compiler with overloads, and keep the class smaller.
+extern void save(NITFWriteControl&, const std::complex<float>*, const std::string&, const std::vector<std::string>&);
+
+template<typename T, typename TSchemaPath>
+inline void save(NITFWriteControl& writeControl,
+    const std::vector<T>& imageData, // G++ won't convert our home-brew std::span to std::vector
+    const std::string& outputFile, const std::vector<TSchemaPath>& schemaPaths)
+{
+    std::span<const T> imageData_(imageData.data(), imageData.size());
+    writeControl.save(imageData_, outputFile, schemaPaths);
+}
+
 }
 #endif // SIX_six_NITFWriteControl_h_INCLUDED_

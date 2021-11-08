@@ -54,7 +54,7 @@ void roundTripNITF(const std::string& sicdPathname,
     writer.setXMLControlRegistry(&registry);
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
-    writer.save(buffer, outputPathname, schemaPaths);
+    save(writer, buffer, outputPathname, schemaPaths);
 }
 
 void roundTripXML(const std::string& sicdPathname,
