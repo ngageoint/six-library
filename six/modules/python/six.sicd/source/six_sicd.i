@@ -80,7 +80,7 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
     six::NITFWriteControl writer;
     writer.initialize(container);
     writer.setLogger(logger.get());
-    writer.save(image, pathname, schemaPaths);
+    save(writer, image, pathname, schemaPaths);
 }
 
 Data* readNITF(const std::string& pathname,
