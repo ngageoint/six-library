@@ -63,7 +63,7 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
         if (!envPath.empty())
         {
             // SIX_SCHEMA_PATH might be a search path
-            if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, sys::Filesystem::FileType::Directory))
+            if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, sys::Filesystem::file_type::directory))
             {
                 // Nope; assume the caller can figure things out (existing behavior).
                 schemaPaths.push_back(envPath);
