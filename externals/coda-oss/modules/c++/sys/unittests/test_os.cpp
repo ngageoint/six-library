@@ -376,6 +376,9 @@ TEST_CASE(testSpecialEnvVars)
     const auto resultEpochSeconds = std::stoll(result);
     TEST_ASSERT_GREATER_EQ(resultEpochSeconds, epochSeconds);
 
+    result = os.getSpecialEnv("OSTYPE");
+    TEST_ASSERT_FALSE(result.empty());
+
     result = os.getSpecialEnv("Configuration");
     TEST_ASSERT_FALSE(result.empty());
     result = os.getSpecialEnv("Platform");

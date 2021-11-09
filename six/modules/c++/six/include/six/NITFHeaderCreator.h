@@ -319,6 +319,9 @@ public:
     void setBlocking(const std::string& imode,
                      const types::RowCol<size_t>& segmentDims,
                      nitf::ImageSubheader& subheader);
+    void setBlocking(nitf::BlockingMode imode,
+        const types::RowCol<size_t>& segmentDims,
+        nitf::ImageSubheader& subheader);
 
     /*!
      *  This function sets the image security fields in the

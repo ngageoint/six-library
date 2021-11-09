@@ -24,6 +24,8 @@
 #include <memory>
 #include <algorithm>
 #include <string>
+#include <std/span>
+#include <std/cstddef>
 
 #include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
@@ -87,7 +89,7 @@ six::sicd::ComplexData* const updateMetadata(
 }
 
 void cropSICD(six::NITFReadControl& reader,
-              const std::vector<std::string>& schemaPaths,
+              const std::vector<std::string>& schemaPaths_,
               const six::sicd::ComplexData& data,
               const scene::SceneGeometry& geom,
               const scene::ProjectionModel& projection,
@@ -111,26 +113,23 @@ void cropSICD(six::NITFReadControl& reader,
 
     // Read in the AOI
     const size_t numBytesPerPixel(data.getNumBytesPerPixel());
-    const size_t numBytes(origDims.row * origDims.col * numBytesPerPixel);
 
     six::Region region;
     setOffset(region, aoiOffset);
     setDims(region, aoiDims);
-    const auto buffer = region.setBuffer(numBytes);
+    const auto buffer = region.setComplexBuffer(origDims.area());
     reader.interleaved(region, 0);
 
-    six::sicd::ComplexData* const aoiData = updateMetadata(
+    std::unique_ptr<six::Data> aoiData(updateMetadata(
             data, geom,  projection,
-            aoiOffset, aoiDims);
-    std::unique_ptr<six::Data> scopedData(aoiData);
+            aoiOffset, aoiDims));
 
     // Write the AOI SICD out
-    std::shared_ptr<six::Container> container(new six::Container(
-            six::DataType::COMPLEX));
-    container->addData(std::move(scopedData));
-    six::NITFWriteControl writer(container);
-    six::BufferList images(1, buffer.get());
-    writer.save(images, outPathname, schemaPaths);
+    six::NITFWriteControl writer(std::move(aoiData));
+    const std::span<const std::complex<float>> image(buffer.get(), origDims.area());
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+    writer.save(image, outPathname, schemaPaths);
 }
 
 }

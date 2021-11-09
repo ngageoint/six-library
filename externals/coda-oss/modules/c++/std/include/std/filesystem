@@ -27,42 +27,24 @@
 #include "sys/Filesystem.h"
 static_assert(CODA_OSS_sys_Filesystem >= 201703L, "missing sys::Filesystem");
  
-#if defined(__cpp_lib_filesystem) && (__cpp_lib_filesystem >= 201703L) // https://en.cppreference.com/w/cpp/utility/feature_test
-    #undef CODA_OSS_AUGMENT_std_filesystem
-    #define CODA_OSS_AUGMENT_std_filesystem 0 // already have it
-#endif
-#ifndef CODA_OSS_AUGMENT_std_filesystem
-    #define CODA_OSS_AUGMENT_std_filesystem 1
-#endif
-
 #if CODA_OSS_cpp17
     // Some versions of G++ say they're C++17 but don't have <filesystem>
-    #if __has_include(<filesystem>)
-        #if defined(__cpp_lib_filesystem) && (__cpp_lib_filesystem < 201703L)
-            #error "Wrong value for __cpp_lib_filesystem."
-        #endif
-        #define CODA_OSS_DEFINE_std_filesystem_ -1  // OK to #include <>, below
-    #else
-        #define CODA_OSS_DEFINE_std_filesystem_ 1 // "must" have std::filesystem w/C++17
-    #endif // __has_include
-#else
-    #define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_filesystem
+    #if __has_include(<filesystem>)  // __has_include is C++17
+        #include <filesystem>
+        #undef CODA_OSS_NO_std_filesystem
+        #define CODA_OSS_NO_std_filesystem 1  // don't need our own
+    #endif
 #endif
 
-#if CODA_OSS_DEFINE_std_filesystem_ == 1
+#ifndef CODA_OSS_NO_std_filesystem
+    #define CODA_OSS_NO_std_filesystem 0 // enabled, unless explicitly disabled
+#endif
+
+#if !CODA_OSS_NO_std_filesystem
     namespace std // This is slightly uncouth: we're not supposed to augment "std".
     {
         namespace filesystem = ::sys::Filesystem;
     }
-    #define CODA_OSS_lib_filesystem CODA_OSS_sys_Filesystem
-#elif CODA_OSS_DEFINE_std_filesystem_ == -1 // set above
-    #include <filesystem>
-    #ifndef __cpp_lib_filesystem
-        #define __cpp_lib_filesystem 201703L  // https://en.cppreference.com/w/cpp/utility/feature_test
-    #endif
-#endif  // CODA_OSS_DEFINE_std_filesystem_
-
-// The real one or our substitute?
-#define CODA_OSS__cpp_lib_filesystem (defined(__cpp_lib_filesystem) && (__cpp_lib_filesystem >= 201703L)) && !defined(CODA_OSS_lib_filesystem)
+#endif  // !CODA_OSS_NO_std_filesystem
 
 #endif  // CODA_OSS_std_filesystem_INCLUDED_

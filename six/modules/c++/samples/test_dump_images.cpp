@@ -139,13 +139,13 @@ int main(int argc, char** argv)
         size_t numImages = 0;
 
         if (container->getDataType() == six::DataType::COMPLEX
-                && container->getNumData() > 0)
+                && (!container->empty()))
         {
             numImages = 1;
         }
         else if (container->getDataType() == six::DataType::DERIVED)
         {
-            for (; numImages < container->getNumData()
+            for (; numImages < container->size()
                     && container->getData(numImages)->getDataType()
                             == six::DataType::DERIVED; ++numImages)
                 ;
@@ -157,7 +157,7 @@ int main(int argc, char** argv)
             fs::create_directory(outputDir);
 
         // first, write out the XMLs
-        for (size_t i = 0, total = container->getNumData(); i < total; ++i)
+        for (size_t i = 0, total = container->size(); i < total; ++i)
         {
             const six::Data* data = container->getData(i);
             std::string filename = FmtX("%s_DES_%d.xml", base.c_str(), i);

@@ -193,6 +193,7 @@ namespace KDTree
     {
         size_t dataindex;  // index of actual kdnode in *allnodes*
         T distance;   // distance of this neighbor from *point*
+        nn4heap(size_t di, const T& d) : dataindex(di), distance(d) {}
 
         struct compare final
         {
@@ -209,8 +210,6 @@ namespace KDTree
         using value_type = typename TNode::value_type;
         using tree_node = Ttree_node<node_t>;
 
-        // helper variable for keeping track of subtree bounding box
-        node_t lobound, upbound;
         // helper variables and functions for k nearest neighbor search
         using nn4heap_t = nn4heap<value_type>;
         using priority_queue = std::priority_queue<nn4heap_t, std::vector<nn4heap_t>, typename nn4heap_t::compare>;
@@ -225,11 +224,11 @@ namespace KDTree
         {
             const auto curdist = distance(point, node.point);
             if (neighborheap.size() < k) {
-                neighborheap.push(nn4heap_t{ node.dataindex, curdist });
+                neighborheap.emplace(node.dataindex, curdist);
             }
             else if (curdist < neighborheap.top().distance) {
                 neighborheap.pop();
-                neighborheap.push(nn4heap_t{ node.dataindex, curdist });
+                neighborheap.emplace(node.dataindex, curdist);
             }
 
             // first search on side closer to point
@@ -319,8 +318,8 @@ namespace KDTree
             : dimension(size(nodes[0])), allnodes(std::move(nodes))
         {
             // compute global bounding box
-            lobound = allnodes[0];
-            upbound = allnodes[0];
+            auto lobound = allnodes[0];
+            auto upbound = allnodes[0];
             for (size_t i = 1; i < allnodes.size(); i++)
             {
                 for (size_t j = 0; j < dimension; j++)
@@ -361,7 +360,7 @@ namespace KDTree
                 // when more neighbors asked than nodes in tree, return everything
                 k = allnodes.size();
                 for (size_t i = 0; i < k; i++) {
-                    neighborheap.push(nn4heap_t{ i, distance(allnodes[i], point) });
+                    neighborheap.emplace(i, distance(allnodes[i], point));
                 }
             }
             else

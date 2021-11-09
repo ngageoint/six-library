@@ -61,7 +61,7 @@ public:
     std::vector<OneD<_T> >& coeffs(){ return mCoef; }
 
     //! The polynomial is invalid (i.e. orderX() and orderY() will throw)
-    TwoD() = default;
+    TwoD() {}  // = default; // error w/ICC and "const" member data
 
     TwoD(size_t orderX, size_t orderY) : mCoef(orderX+1,OneD<_T>(orderY)) {}
 

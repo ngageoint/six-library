@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 #include <utility>
-
+#include <std/span>
 #include <std/filesystem>
 
 #include <scene/SceneGeometry.h>
@@ -667,8 +667,8 @@ inline std::vector<std::byte> readFromNITF(const std::filesystem::path& pathname
 }
 
 // c.f. six_sicd.i
-extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::string>& schemaPaths, const ComplexData&, const std::complex<float>* image);
-extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexData&, const std::complex<float>* image);
+extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::string>& schemaPaths, const ComplexData&, std::span<const std::complex<float>> image);
+extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexData&, std::span<const std::complex<float>> image);
 extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexImage&);
 
 }

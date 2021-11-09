@@ -22,25 +22,30 @@
 #ifndef __SIX_UTILITIES_H__
 #define __SIX_UTILITIES_H__
 
-#include <scene/sys_Conf.h>
+#include <vector>
+#include <memory>
+#include <std/span>
+#include <std/cstddef>
+
+#include <import/io.h>
+#include <import/xml/lite.h>
+#include <import/str.h>
 #include <except/Exception.h>
+#include "logging/Logger.h"
+
+#include <scene/sys_Conf.h>
 #include "six/Types.h"
-#include "six/Data.h"
 #include "six/Enums.h"
 #include "six/XMLControlFactory.h"
-#include "logging/Logger.h"
 #include "scene/SceneGeometry.h"
 #include "six/ErrorStatistics.h"
 #include "six/Init.h"
 #include <scene/Utilities.h>
-#include <import/io.h>
-#include <import/xml/lite.h>
-#include <import/str.h>
-#include <vector>
-#include <memory>
+
 
 namespace six
 {
+    struct Data; // forward
 
 /*!
  *  Remaps angles into [0:360]
@@ -207,14 +212,10 @@ mem::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of 'xmlStream'
  */
-inline
 mem::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               ::io::InputStream& xmlStream,
                               const std::vector<std::string>& schemaPaths,
-                              logging::Logger& log)
-{
-    return parseData(xmlReg, xmlStream, DataType::NOT_SET, schemaPaths, log);
-}
+                              logging::Logger& log);
 
 /*
  * Parses the XML in 'pathname' and converts it into a Data object.
@@ -245,15 +246,10 @@ mem::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of the contents of 'pathname'
  */
-inline
 mem::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
     const std::string& pathname,
     const std::vector<std::string>& schemaPaths,
-    logging::Logger& log)
-{
-    return parseDataFromFile(xmlReg, pathname, DataType::NOT_SET, schemaPaths,
-                             log);
-}
+    logging::Logger& log);
 
 /*
  * Parses the XML in 'xmlStr' and converts it into a Data object.
@@ -284,15 +280,10 @@ mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of 'xmlStr'
  */
-inline
 mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
     const std::vector<std::string>& schemaPaths,
-    logging::Logger& log)
-{
-    return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, schemaPaths,
-                               log);
-}
+    logging::Logger& log);
 
 void getErrors(const ErrorStatistics* errorStats,
                const types::RgAz<double>& sampleSpacing,
@@ -306,6 +297,69 @@ void getErrors(const ErrorStatistics* errorStats,
  * \return path to schema directory, or empty string
  */
 std::string findSchemaPath(const std::string& progname);
+
+namespace details
+{
+    template<typename T>
+    inline std::span<const std::byte> as_bytes(std::span<const T> buffer)
+    {
+        const void* pBuffer = buffer.data();
+        const auto size = buffer.size() * sizeof(buffer[0]);
+        return std::span<const std::byte>(static_cast<const std::byte*>(pBuffer), size);
+    }
+    template<typename T>
+    inline std::span<const std::byte> as_cbytes(std::span<const T> buffer)
+    {
+        return as_bytes(buffer);
+    }
+
+    template<typename T>
+    inline std::span<std::byte> as_bytes(std::span<T> buffer_)
+    {
+        std::span<const T> buffer(buffer_.data(), buffer_.size());
+        const auto result = as_bytes(buffer);
+        return std::span<std::byte>(const_cast<std::byte*>(result.data()), result.size());
+    }
+    template<typename T>
+    inline std::span<const std::byte> as_cbytes(std::span<T> buffer)
+    {
+        return as_bytes(std::span<const T>(buffer.data(), buffer.size()));
+    }
+}
+
+template<typename T>
+inline std::span<const std::byte> as_bytes(std::span<const T> buffer)
+{
+    return details::as_bytes(buffer);
+}
+template<typename T>
+inline std::span<const std::byte> as_bytes(const std::vector<T>& buffer)
+{
+    return as_bytes(std::span<const T>(buffer.data(), buffer.size()));
+}
+template<typename T>
+inline std::span<const std::byte> as_cbytes(std::span<T> buffer)
+{
+    return details::as_cbytes(buffer);
+}
+template<typename T>
+inline std::span<const std::byte> as_cbytes(std::vector<T>& buffer_)
+{
+    const std::vector<T>& buffer = buffer_;
+    return as_bytes(buffer);
+}
+
+template<typename T>
+inline std::span<std::byte> as_bytes(std::span<T> buffer)
+{
+    return details::as_bytes(buffer);
+}
+template<typename T>
+inline std::span<std::byte> as_bytes(std::vector<T>& buffer)
+{
+    return as_bytes(std::span<T>(buffer.data(), buffer.size()));
+}
+
 }
 
 #endif

@@ -25,7 +25,9 @@
 #include <assert.h>
 
 #include <std/cstddef>
+#include <stdexcept>
 #include <gsl/gsl.h>
+#include <std/memory>
 
 using namespace six;
 
@@ -125,16 +127,10 @@ static NITF_BOOL six_MemoryWriteHandler_write(NITF_DATA * data,
     return write(impl, io, error, write_f);
 }
 
-MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
-        const UByte* buffer, size_t firstRow, size_t numCols,
-        size_t numChannels, size_t pixelSize, bool doByteSwap)
+static nitf_SegmentWriter* create_SegmentWriter(const NITFSegmentInfo& info,
+    const UByte* buffer, size_t firstRow, size_t numCols, size_t numChannels, size_t pixelSize, bool doByteSwap,
+    nitf_IWriteHandler& iWriteHandler)
 {
-    // Dont do it if we only have a byte!
-    if (pixelSize / numChannels == 1)
-        doByteSwap = false;
-
-    static nitf_IWriteHandler iWriteHandler = { &six_MemoryWriteHandler_write, &six_MemoryWriteHandler_destruct };
-
     auto impl = nitf_malloc<MemoryWriteHandlerImpl>();
     impl->buffer = buffer;
     impl->firstRow = firstRow;
@@ -144,19 +140,205 @@ MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
     impl->pixelSize = pixelSize;
     impl->doByteSwap = doByteSwap;
 
-    auto segmentWriter = create_SegmentWriter(impl, iWriteHandler);
+    return create_SegmentWriter(impl, iWriteHandler);
+}
+
+MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
+        const UByte* buffer, size_t firstRow, size_t numCols,
+        size_t numChannels, size_t pixelSize, bool doByteSwap)
+{
+    // Dont do it if we only have a byte!
+    if (pixelSize / numChannels == 1)
+        doByteSwap = false;
+
+    static nitf_IWriteHandler iWriteHandler = { &six_MemoryWriteHandler_write, &six_MemoryWriteHandler_destruct };
+    auto segmentWriter = create_SegmentWriter(info, buffer, firstRow, numCols, numChannels, pixelSize, doByteSwap, iWriteHandler);
     setNative(segmentWriter);
 
     setManaged(false);
 }
-MemoryWriteHandler::MemoryWriteHandler(const NITFSegmentInfo& info,
-    const std::byte* buffer, size_t firstRow, size_t numCols,
-    size_t numChannels, size_t pixelSize, bool doByteSwap)
-    : MemoryWriteHandler(info, static_cast<const UByte*>(static_cast<const void*>(buffer)), firstRow, numCols,
-        numChannels, pixelSize, doByteSwap)
+
+inline size_t getBandSize(const NITFSegmentInfo& segmentInfo, const Data& data)
 {
+    const auto pixelSize = data.getNumBytesPerPixel() / data.getNumChannels();
+    const auto numCols = data.getNumCols();
+    const auto bandSize = pixelSize * numCols * segmentInfo.getNumRows();
+    return bandSize;
 }
 
+template<typename T>
+inline void validate_bandSize(std::span<T> buffer, const NITFSegmentInfo& info, const Data& data)
+{
+    const auto bandSize = getBandSize(info, data);
+    const auto size_in_bytes = bandSize * data.getNumChannels();
+    if (buffer.size() * sizeof(buffer[0]) != size_in_bytes)
+    {
+        // This is not always correct: the sizes are computed using the values in NITFSegmentInfo/Data
+        // but we may be working with other data.  This is the case when we have std::complex<float>
+        // data that will be converted to AMP8I_PHS8I when written to disk.
+        //throw std::invalid_argument("buffer.size()!");    }
+    }
+}
+
+template<typename T>
+inline void validate_buffer(std::span<T> buffer, const NITFSegmentInfo& info, const Data& data)
+{
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    if (sizeof(buffer[0]) != pixelSize * numChannels)
+    {
+        throw std::invalid_argument("pixelSize is wrong.");
+    }
+    validate_bandSize(buffer, info, data);
+}
+
+struct NewMemoryWriteHandler::Impl final
+{
+    // This needs to persist beyhond the constructor
+    std::vector<std::pair<uint8_t, uint8_t>> ampi8i_phs8i;
+
+    void convertPixels(NewMemoryWriteHandler& instance, const NITFSegmentInfo& info, std::span<const std::complex<float>> buffer, const Data& data)
+    {
+        ampi8i_phs8i.resize(buffer.size());
+        const std::span<std::pair<uint8_t, uint8_t>> ampi8i_phs8i_(ampi8i_phs8i.data(), ampi8i_phs8i.size());
+        if (!data.convertPixels(buffer, ampi8i_phs8i_))
+        {
+            throw std::runtime_error("Unable to convert pixels.");
+        }
+        validate_buffer(ampi8i_phs8i_, info, data);
+
+        // Everything is kosher, point to the converted data
+        void* pHandleData = instance.mHandle->get()->data;
+        auto pImpl = static_cast<MemoryWriteHandlerImpl*>(pHandleData);
+        const void* pData = ampi8i_phs8i.data();
+        pImpl->buffer = static_cast<const UByte*>(pData);
+    }
+};
+
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    const std::byte* buffer_, size_t firstRow, const Data& data, bool doByteSwap)
+    : m_pImpl(std::make_unique<Impl>())
+{
+    const auto numCols = data.getNumCols();
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel();
+
+    // Dont do it if we only have a byte!
+    if (pixelSize / numChannels == 1)
+        doByteSwap = false;
+
+    static nitf_IWriteHandler iWriteHandler = { &six_MemoryWriteHandler_write, &six_MemoryWriteHandler_destruct };
+    const void* pBuffer = buffer_;
+    const auto buffer = static_cast<const UByte*>(pBuffer);
+    auto segmentWriter = create_SegmentWriter(info, buffer, firstRow, numCols, numChannels, pixelSize, doByteSwap, iWriteHandler);
+    setNative(segmentWriter);
+
+    setManaged(false);
+}
+NewMemoryWriteHandler::~NewMemoryWriteHandler() = default;
+
+template<typename T>
+inline const std::byte* cast(std::span<const T> buffer)
+{
+    const void* pBuffer = buffer.data();
+    return static_cast<const std::byte*>(pBuffer);
+}
+
+template<>
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const std::byte> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
+{
+    validate_bandSize(buffer, info, data);
+
+    if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
+    {
+        // Assume that buffer is really std::complex<float>.  If it is something else
+        // (e.g., std::pair<uint8_t, uint8_t> -- already converted) a different
+        // overload should be used.  Since we've lost the actual buffer type,
+        // there not much else to do except hope for the best.
+        const void* pBuffer_ = buffer.data();
+        const auto pBuffer = static_cast<const std::complex<float>*>(pBuffer_);
+        const std::span<const std::complex<float>> buffer_(pBuffer, buffer.size() / sizeof(std::complex<float>));
+        m_pImpl->convertPixels(*this, info, buffer_, data);
+    }
+}
+
+template<>
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const std::complex<float>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
+{
+    if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
+    {
+        m_pImpl->convertPixels(*this, info, buffer, data);
+    }
+    else if (data.getPixelType() != six::PixelType::RE32F_IM32F)
+    {
+        throw std::invalid_argument("pixelType is wrong.");
+    }
+    else
+    {
+        validate_buffer(buffer, info, data);
+    }
+}
+
+template<>
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const std::pair<uint8_t, uint8_t>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
+{
+    // This is for the uncommon case where the data is already in this format; normally, it is std::complex<float>.
+    if (data.getPixelType() != six::PixelType::AMP8I_PHS8I)
+    {
+        throw std::invalid_argument("pixelType is wrong.");
+    }
+    validate_buffer(buffer, info, data);
+}
+
+template<>
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const std::complex<short>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
+{
+    // Each pixel is stored as a pair of numbers that represent the real and imaginary 
+    // components. Each component is stored in a 16-bit signed integer in 2’s 
+    // complement format (2 bytes per component, 4 bytes per pixel). 
+    if (data.getPixelType() != six::PixelType::RE16I_IM16I)
+    {
+        throw std::invalid_argument("pixelType is wrong.");
+    }   
+    validate_buffer(buffer, info, data);
+}
+template<>
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const uint8_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
+{
+    const auto pixelType = data.getPixelType();
+    switch (data.getPixelType())
+    {
+    case six::PixelType::MONO8I:
+    case six::PixelType::MONO8LU:
+    case six::PixelType::RGB8LU:
+    case six::PixelType::RGB24I: // three 8-bit pixels = 24
+        break;
+    default:
+        throw std::invalid_argument("pixelType is wrong.");
+    }
+    validate_buffer(buffer, info, data);
+}
+template<>
+NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
+    std::span<const uint16_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
+{
+    if (data.getPixelType() != six::PixelType::MONO16I)
+    {
+        throw std::invalid_argument("pixelType is wrong.");
+    }
+    validate_buffer(buffer, info, data);
+}
 
 //
 // StreamWriteHandler
@@ -209,4 +391,15 @@ StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
     setNative(segmentWriter);
 
     setManaged(false);
+}
+
+//! TODO: This section of code (unlike the memory section above)
+//        does not account for blocked writing or J2K compression.
+//        CODA ticket #443 will update support for this.
+StreamWriteHandler::StreamWriteHandler(const NITFSegmentInfo& info,
+        io::InputStream* is, const Data& data, bool doByteSwap)
+    : StreamWriteHandler(info, is,
+        data.getNumCols(), data.getNumChannels(), data.getNumBytesPerPixel() / data.getNumChannels(),
+        doByteSwap)
+{
 }
