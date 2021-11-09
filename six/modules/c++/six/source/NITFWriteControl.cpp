@@ -344,9 +344,6 @@ template<typename TImageData>
 void writeWithNitro(nitf::Writer& mWriter, const std::map<std::string, void*>& mCompressionOptions,
     const TImageData& imageData, const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data)
 {
-    const auto numChannels = data.getNumChannels();
-    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-
     for (size_t jj = 0; jj < imageSegments.size(); ++jj)
     {
         // We will use the ImageWriter provided by NITRO so that we can
