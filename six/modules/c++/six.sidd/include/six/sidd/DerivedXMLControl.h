@@ -43,8 +43,12 @@ namespace sidd
 struct DerivedXMLControl : public XMLControl
 {
     DerivedXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+    DerivedXMLControl(const DerivedXMLControl&) = delete;
+    DerivedXMLControl& operator=(const DerivedXMLControl&) = delete;
 
     static const six::DataType dataType;
+
+    static std::unique_ptr<DerivedXMLParser> getParser_(const std::string& strVersion); // for unit-testing
 
 protected:
     /*!
@@ -59,7 +63,7 @@ protected:
 
 private:
     std::unique_ptr<DerivedXMLParser>
-    getParser(const std::string& version) const;
+    getParser(const std::string& strVersion) const;
 };
 }
 }

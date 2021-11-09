@@ -118,6 +118,7 @@
     <ClInclude Include="include\six\GeoInfo.h" />
     <ClInclude Include="include\six\Init.h" />
     <ClInclude Include="include\six\Legend.h" />
+    <ClInclude Include="include\six\Logger.h" />
     <ClInclude Include="include\six\MatchInformation.h" />
     <ClInclude Include="include\six\Mesh.h" />
     <ClInclude Include="include\six\NITFHeaderCreator.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="source\GeoDataBase.cpp" />
     <ClCompile Include="source\GeoInfo.cpp" />
     <ClCompile Include="source\Init.cpp" />
+    <ClCompile Include="source\Logger.cpp" />
     <ClCompile Include="source\MatchInformation.cpp" />
     <ClCompile Include="source\Mesh.cpp" />
     <ClCompile Include="source\NITFHeaderCreator.cpp" />

@@ -537,12 +537,13 @@ void NITFWriteControl::save(const BufferList& list, const std::string& outputFil
 {
     save_buffer_list_to_file(list, outputFile, schemaPaths);
 }
-void NITFWriteControl::save(const std::complex<float>* image, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
+
+void save(NITFWriteControl& writeControl, const std::complex<float>* image, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
 {
     // Keeping this code-path in place as it's an easy way to test legacy BufferList functionality.
     const void* pImage = image;
     const BufferList list{ static_cast<const UByte*>(pImage) };
-    save(list, outputFile, schemaPaths);
+    writeControl.save(list, outputFile, schemaPaths);
 }
 
 void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPaths)

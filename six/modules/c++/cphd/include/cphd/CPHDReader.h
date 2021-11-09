@@ -41,9 +41,8 @@ namespace cphd
  *  Requires a valid CPHD file,and optional schemas
  *  for XML format verification
  */
-class CPHDReader
+struct CPHDReader final
 {
-public:
     /*
      *  \func CPHDReader constructor
      *  \brief Construct CPHDReader from an input stream
@@ -81,22 +80,22 @@ public:
     //! Get parameter functions
     size_t getNumChannels() const
     {
-        return mMetadata->data.getNumChannels();
+        return mMetadata.data.getNumChannels();
     }
     //! 0-based channel number
     size_t getNumVectors(size_t channel) const
     {
-        return mMetadata->data.getNumVectors(channel);
+        return mMetadata.data.getNumVectors(channel);
     }
     //! 0-based channel number
     size_t getNumSamples(size_t channel) const
     {
-        return mMetadata->data.getNumSamples(channel);
+        return mMetadata.data.getNumSamples(channel);
     }
     //! returns total per complex sample (2, 4, or 8)
     size_t getNumBytesPerSample() const
     {
-        return mMetadata->data.getNumBytesPerSample();
+        return mMetadata.data.getNumBytesPerSample();
     }
 
     /*
@@ -122,12 +121,12 @@ public:
     //! Get metadata object
     const Metadata& getMetadata() const
     {
-        return *mMetadata;
+        return mMetadata;
     }
     //! Get per vector parameters
     const PVPBlock& getPVPBlock() const
     {
-        return *mPVPBlock;
+        return mPVPBlock;
     }
     //! Get signal data
     const Wideband& getWideband() const
@@ -145,11 +144,11 @@ private:
     //! New cphd file header
     FileHeader mFileHeader;
     //! Metadata read in from CPHD file
-    std::unique_ptr<Metadata> mMetadata;
+    Metadata mMetadata;
     //! Support Block book-keeping info read in from CPHD file
     std::unique_ptr<SupportBlock> mSupportBlock;
     //! Per Vector Parameter info read in from CPHD file
-    std::unique_ptr<PVPBlock> mPVPBlock;
+    PVPBlock mPVPBlock;
     //! Signal block book-keeping info read in from CPHD file
     std::unique_ptr<Wideband> mWideband;
 

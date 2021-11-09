@@ -22,6 +22,7 @@
 #include <cphd03/CPHDXMLControl.h>
 
 #include <string>
+#include <std/memory>
 
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
@@ -77,7 +78,7 @@ size_t CPHDXMLControl::getXMLsize(const Metadata& metadata)
 
 mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
 {
-    mem::auto_ptr<xml::lite::Document> doc(new xml::lite::Document());
+    auto doc = std::make_unique<xml::lite::Document>();
 
     XMLElem root = newElement("CPHD");
     doc->setRootElement(root);
@@ -98,7 +99,7 @@ mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadat
     //set the XMLNS
     root->setNamespacePrefix("", getDefaultURI());
 
-    return doc;
+    return mem::auto_ptr<xml::lite::Document>(doc.release());
 }
 
 XMLElem CPHDXMLControl::createLatLonAltFootprint(const std::string& name,
@@ -495,7 +496,7 @@ mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
 
 mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 {
-    mem::auto_ptr<Metadata> cphd03(new Metadata());
+    auto cphd03 = std::make_unique<Metadata>();
 
     XMLElem root = doc->getRootElement();
 
@@ -523,8 +524,13 @@ mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 
     fromXML(vectorParametersXML, cphd03->vectorParameters);
 
-    return cphd03;
+    return mem::auto_ptr<Metadata>(cphd03.release());
 }
+Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc)
+{
+    return *(fromXML(&doc));
+}
+
 
 void CPHDXMLControl::fromXML(const xml::lite::Element* dataXML, Data& data)
 {

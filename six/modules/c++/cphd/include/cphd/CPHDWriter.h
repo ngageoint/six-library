@@ -127,10 +127,8 @@ struct DataWriterLittleEndian final : public DataWriter
 
 
 private:
-    // Size of scratch space
-    const size_t mScratchSize;
     // Scratch space buffer
-    const std::unique_ptr<std::byte[]> mScratch;
+    std::vector<std::byte> mScratch;
 };
 
 /*
@@ -389,6 +387,7 @@ private:
 
     //! DataWriter object
     std::unique_ptr<DataWriter> mDataWriter;
+    void initializeDataWriter();
 
     // Book-keeping element
     //! metadata information
