@@ -380,7 +380,7 @@ static FILE * fillBuff_expand_(std::string& fname,
 {
     // If we're here, the orignal call to fillBuff_() failed; assume that's because
     // the path needs to be expanded.
-    auto path = sys::Path::expandEnvironmentVariables(fname, sys::Filesystem::FileType::Regular);
+    auto path = sys::Path::expandEnvironmentVariables(fname, sys::Filesystem::file_type::regular);
     try
     {
         FILE* retval = fillBuff_(path, statbuf, buff);
