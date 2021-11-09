@@ -70,7 +70,7 @@ TEST_CASE(testPushPop)
     TEST_ASSERT_NULL(l);
 }
 
-char *cloneString(char *data, nrt_Error * error)
+char *cloneString(const char *data, nrt_Error * error)
 {
     (void)error;
 

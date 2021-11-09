@@ -20,6 +20,11 @@
  *
  */
 
+#if _MSC_VER
+#pragma warning(disable: 4820) // '...' : '...' bytes padding added after data member '...'
+#pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
+#pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
+#endif
 
 #include <import/nitf.h>
 

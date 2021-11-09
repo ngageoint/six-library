@@ -32,7 +32,6 @@
   * This file is part of NITRO
   * =========================================================================
   *
-  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
   * (C) Copyright 2021, Maxar Technologies, Inc.
   *
   * NITRO is free software; you can redistribute it and/or modify
@@ -50,11 +49,7 @@
   * see <http://www.gnu.org/licenses/>.
   *
   */
-
-#pragma once
-
 #include <stdint.h>
-
 #include <string>
 
 #include "nitf/TRE.hpp"

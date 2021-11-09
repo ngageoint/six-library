@@ -24,6 +24,8 @@
 #include <iostream>
 #include <string>
 
+#include <gsl/gsl.h>
+
 #include <import/nitf.hpp>
 
 #include "TestCase.h"
@@ -126,7 +128,7 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     nBands += xBands;
 
     const auto nRows = subheader.numRows();
-    const auto nColumns = subheader.numCols();
+    const auto nColumns = gsl::narrow<uint32_t>(subheader.numCols());
 
     //one row at a time
     const auto subWindowSize = static_cast<size_t>(nColumns * NITF_NBPP_TO_BYTES(nBits));

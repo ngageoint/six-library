@@ -1,14 +1,15 @@
 cmake_minimum_required(VERSION 3.14)
 project(nitro)
 
-set(CMAKE_C_STANDARD 90)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 20)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
     # we are the top-level project and are responsible for configuration
 
     # set up warnings
     if (MSVC)
+        add_compile_options(/std:c++20)
         # set warning level to /W4
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
@@ -20,6 +21,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
             add_compile_options(/fsanitize=address)
         endif()
     elseif (UNIX)
+        add_compile_options(-std=c++20)
         add_compile_options(
             -Wall
             -Wno-deprecated
