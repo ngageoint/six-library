@@ -91,8 +91,7 @@ void  six::sicd::NITFReadComplexXMLControl::getWidebandData(const ComplexData& c
 
 void six::sicd::NITFReadComplexXMLControl::setLogger()
 {
-    pLog = std::make_unique<logging::Logger>();
-    reader.setLogger(*pLog);
+    reader.setLogger(std::make_unique<logging::Logger>());
 }
 
 void six::sicd::NITFReadComplexXMLControl::interleaved(Region& region)

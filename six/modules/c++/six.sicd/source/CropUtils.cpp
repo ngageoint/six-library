@@ -112,8 +112,7 @@ void cropSICD(six::NITFReadControl& reader,
     }
 
     // Read in the AOI
-    const size_t numBytesPerPixel(data.getNumBytesPerPixel());
-
+    //const size_t numBytesPerPixel(data.getNumBytesPerPixel());
     six::Region region;
     setOffset(region, aoiOffset);
     setDims(region, aoiDims);
@@ -129,7 +128,7 @@ void cropSICD(six::NITFReadControl& reader,
     const std::span<const std::complex<float>> image(buffer.get(), origDims.area());
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
-    writer.save(image, outPathname, schemaPaths);
+    writer.save_image(image, outPathname, schemaPaths);
 }
 
 }

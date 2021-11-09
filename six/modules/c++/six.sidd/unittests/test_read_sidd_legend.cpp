@@ -210,7 +210,7 @@ struct TestHelper
         types::RowCol<size_t> dims1(40, numCols);
         std::unique_ptr<six::Data> data1(mockupDerivedData(dims1));
 
-        const mem::ScopedArray<sys::ubyte> buffer1(new sys::ubyte[dims1.area()]);
+        const auto buffer1 = std::make_unique<sys::ubyte[]>(dims1.area());
         std::fill_n(buffer1.get(), dims1.area(), static_cast<sys::ubyte>(20));
 
         container->addData(std::move(data1));
@@ -220,7 +220,7 @@ struct TestHelper
         types::RowCol<size_t> dims2(40, numCols);
         std::unique_ptr<six::Data> data2(mockupDerivedData(dims2));
 
-        const mem::ScopedArray<sys::ubyte> buffer2(new sys::ubyte[dims2.area()]);
+        const auto buffer2 = std::make_unique<sys::ubyte[]>(dims2.area());
         std::fill_n(buffer2.get(), dims2.area(), static_cast<sys::ubyte>(100));
 
         auto monoLegend(std::make_unique<six::Legend>(mMonoLegend));
@@ -231,7 +231,7 @@ struct TestHelper
         types::RowCol<size_t> dims3(150, numCols);
         std::unique_ptr<six::Data> data3(mockupDerivedData(dims3));
 
-        const mem::ScopedArray<sys::ubyte> buffer3(new sys::ubyte[dims3.area()]);
+        const auto buffer3 = std::make_unique<sys::ubyte[]>(dims3.area());
         std::fill_n(buffer3.get(), dims3.area(), static_cast<sys::ubyte>(60));
 
         container->addData(std::move(data3));
@@ -243,7 +243,7 @@ struct TestHelper
 
         auto rgbLegend(std::make_unique<six::Legend>(mRgbLegend));
 
-        const mem::ScopedArray<sys::ubyte> buffer4(new sys::ubyte[dims4.area()]);
+        const auto buffer4 = std::make_unique<sys::ubyte[]>(dims4.area());
         std::fill_n(buffer4.get(), dims4.area(), static_cast<sys::ubyte>(200));
 
         container->addData(std::move(data4), std::move(rgbLegend));
@@ -315,8 +315,34 @@ TEST_CASE(testRead)
     TEST_ASSERT_NOT_EQ(legend->mLUT.get(), nullptr);
     TEST_ASSERT(*legend->mLUT == *testHelper.mRgbLegend.mLUT);
 }
+
+TEST_CASE(test_getParser)
+{
+    auto pParser = six::sidd::DerivedXMLControl::getParser_("1.0.0");
+    TEST_ASSERT(pParser.get() != nullptr);
+
+    pParser = six::sidd::DerivedXMLControl::getParser_("2.0.0");
+    TEST_ASSERT(pParser.get() != nullptr);
+
+    pParser = six::sidd::DerivedXMLControl::getParser_("3.0.0");
+    TEST_ASSERT(pParser.get() != nullptr);
+    
+    TEST_EXCEPTION(six::sidd::DerivedXMLControl::getParser_("1.1.0"));
+
+    try
+    {
+        pParser = six::sidd::DerivedXMLControl::getParser_("1.2.3");
+        TEST_ASSERT_FALSE(true); // should never get here
+    }
+    catch (const except::Exception& ex)
+    {
+        TEST_ASSERT_EQ(ex.getMessage(), "Unsupported SIDD Version: 1.2.3");
+    }
+}
+
 }
 
 TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(testRead);
-)
+    TEST_CHECK(test_getParser);
+    )

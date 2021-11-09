@@ -32,14 +32,12 @@ namespace six
 namespace sidd
 {
 
-class GeoTIFFReadControl : public ReadControl
+struct GeoTIFFReadControl : public ReadControl
 {
-public:
+    GeoTIFFReadControl() = default;
 
-    //!  Constructor
-    GeoTIFFReadControl()
-    {
-    }
+    GeoTIFFReadControl(const GeoTIFFReadControl&) = delete;
+    GeoTIFFReadControl operator=(const GeoTIFFReadControl&) = delete;
 
     virtual DataType getDataType(const std::string& fromFile) const;
 
