@@ -1575,8 +1575,7 @@ static void writeAsNITF(const fs::path& pathname, const std::vector<std::string>
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
     six::NITFWriteControl writer(data.unique_clone());
-    std::unique_ptr<logging::Logger> logger(logging::setupLogger("out").release());
-    writer.setLogger(*logger);
+    writer.setLogger(logging::setupLogger("out"));
 
     const std::span<const std::complex<float>> image(image_, getExtent(data).area());
     std::vector<fs::path> schemaPaths;

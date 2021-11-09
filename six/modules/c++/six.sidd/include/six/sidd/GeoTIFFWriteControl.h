@@ -61,6 +61,8 @@ class GeoTIFFWriteControl : public WriteControl
 public:
     GeoTIFFWriteControl();
 
+    GeoTIFFWriteControl(const GeoTIFFWriteControl&) = delete;
+    GeoTIFFWriteControl operator=(const GeoTIFFWriteControl&) = delete;
 
     /*!
      *  Init the GeoTIFF writer.  Throws if we are a SICD container

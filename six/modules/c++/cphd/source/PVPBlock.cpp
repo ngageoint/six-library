@@ -37,6 +37,7 @@
 #include <cphd/PVPBlock.h>
 #include <cphd/Metadata.h>
 #include <cphd/Utilities.h>
+#include <cphd/FileHeader.h>
 
 namespace
 {
@@ -332,6 +333,11 @@ PVPBlock::PVPBlock(const Pvp& p, const Data& d) :
         throw except::Exception(oss.str());
     }
 }
+PVPBlock::PVPBlock(const Metadata& metadata)
+    : PVPBlock(metadata.pvp, metadata.data)
+{
+}
+
 
 /*
  * Initialize PVP Array with custom parameters
@@ -509,6 +515,11 @@ int64_t PVPBlock::load(io::SeekableInputStream& inStream,
     }
     return totalBytesRead;
 }
+int64_t PVPBlock::load(io::SeekableInputStream& inStream, const FileHeader& fileHeader, size_t numThreads)
+{
+    return load(inStream, fileHeader.getPvpBlockByteOffset(), fileHeader.getPvpBlockSize(), numThreads);
+}
+
 
 double PVPBlock::getTxTime(size_t channel, size_t set) const
 {

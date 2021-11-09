@@ -22,6 +22,7 @@
 #include <cphd03/CPHDWriter.h>
 
 #include <std/bit>
+#include <std/memory>
 
 #include <scene/sys_Conf.h>
 #include <except/Exception.h>
@@ -33,6 +34,22 @@
 
 namespace cphd03
 {
+void CPHDWriter::initializeDataWriter()
+{
+    //! Get the correct dataWriter.
+    //  The CPHD file needs to be big endian.
+    auto endianness = std::endian::native; // "conditional expression is constant"
+    if (endianness == std::endian::big)
+    {
+        mDataWriter = std::make_unique<cphd::DataWriterBigEndian>(mStream, mNumThreads);
+    }
+    else
+    {
+        mDataWriter = std::make_unique<cphd::DataWriterLittleEndian>(mStream, mNumThreads, mScratchSpaceSize);
+    }
+}
+
+
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        std::shared_ptr<io::SeekableOutputStream> stream,
                        size_t numThreads,
@@ -45,18 +62,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mCPHDSize(0),
     mVBMSize(0)
 {
-    //! Get the correct dataWriter.
-    //  The CPHD file needs to be big endian.
-    auto endianness = std::endian::native; // "conditional expression is constant"
-    if (endianness == std::endian::big)
-    {
-        mDataWriter.reset(new cphd::DataWriterBigEndian(mStream, mNumThreads));
-    }
-    else
-    {
-        mDataWriter.reset(new cphd::DataWriterLittleEndian(
-                mStream, mNumThreads, mScratchSpaceSize));
-    }
+    initializeDataWriter();
 }
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
@@ -71,20 +77,9 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mVBMSize(0)
 {
     // Create file stream to write
-    mStream.reset(new io::FileOutputStream(pathname));
+    mStream = std::make_shared<io::FileOutputStream>(pathname);
 
-    //! Get the correct dataWriter.
-    //  The CPHD file needs to be big endian.
-    auto endianness = std::endian::native; // "conditional expression is constant"
-    if (endianness == std::endian::big)
-    {
-        mDataWriter.reset(new cphd::DataWriterBigEndian(mStream, mNumThreads));
-    }
-    else
-    {
-        mDataWriter.reset(new cphd::DataWriterLittleEndian(
-                mStream, mNumThreads, mScratchSpaceSize));
-    }
+    initializeDataWriter();
 }
 
 template <typename T>

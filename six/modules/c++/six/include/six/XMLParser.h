@@ -31,7 +31,7 @@
 #include <six/Init.h>
 #include <six/Utilities.h>
 #include <xml/lite/Element.h>
-#include <logging/Logger.h>
+#include <six/Logger.h>
 
 namespace six
 {
@@ -44,19 +44,28 @@ public:
               logging::Logger* log = nullptr,
               bool ownLog = false);
 
+    XMLParser(const XMLParser&) = delete;
     XMLParser& operator=(const XMLParser&) = delete;
 
     //!  Destructor
-    virtual ~XMLParser();
+    virtual ~XMLParser() = default;
 
-    void setLogger(logging::Logger* log, bool ownLog = false);
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
+    {
+        mLogger.setLogger(std::forward<TLogger>(logger));
+    }
+    void setLogger(logging::Logger* logger, bool ownLog)
+    {
+        mLogger.setLogger(logger, ownLog);
+    }
 
     typedef xml::lite::Element* XMLElem;
 
 protected:
     logging::Logger* log() const
     {
-        return mLog;
+        return mLogger.get(std::nothrow);
     }
 
     //! Returns the default URI
@@ -198,7 +207,7 @@ protected:
         }
         catch (const except::BadCastException& ex)
         {
-            mLog->warn(Ctxt("Unable to parse: " + ex.toString()));
+            log()->warn(Ctxt("Unable to parse: " + ex.toString()));
         }
     }
 
@@ -270,8 +279,7 @@ private:
     const std::string mDefaultURI;
     const bool mAddClassAttributes;
 
-    logging::Logger* mLog;
-    bool mOwnLog;
+    Logger mLogger;
 };
 
  template<> inline XMLParser::XMLElem XMLParser::createString(const std::string& name,

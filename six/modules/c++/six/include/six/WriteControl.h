@@ -33,6 +33,7 @@
 #include "six/Container.h"
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
+#include "six/Logger.h"
 #include <import/logging.h>
 
 namespace six
@@ -77,18 +78,17 @@ struct WriteControl
 
     //!  Constructor.  Null-sets the Container
     WriteControl() noexcept(false) :
-        mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
+        mLogger(mLog, mOwnLog, nullptr)
     {
         setLogger(nullptr);
         setXMLControlRegistry(nullptr);
     }
 
     //!  Destructor.  Does not release any memory
-    virtual ~WriteControl()
-    {
-        if (mLog && mOwnLog)
-            delete mLog;
-    }
+    virtual ~WriteControl() = default;
+
+    WriteControl(const WriteControl&) = delete;
+    WriteControl& operator=(const WriteControl&) = delete;
 
     /*!
      *  Initialize sets the underlying Container pointer to the
@@ -233,20 +233,14 @@ struct WriteControl
     /*!
      * Sets the logger to use internally
      */
-    void setLogger(logging::Logger* log, bool ownLog = false)
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
     {
-        if (mLog && mOwnLog && log != mLog)
-            delete mLog;
-        mLog = log ? log : new logging::NullLogger;
-        mOwnLog = log ? ownLog : true;
+        mLogger.setLogger(std::forward<TLogger>(logger));
     }
-    void setLogger(std::unique_ptr<logging::Logger>&& logger)
+    void setLogger(logging::Logger* logger, bool ownLog)
     {
-        setLogger(logger.release(), true /*ownLog*/);
-    }
-    void setLogger(logging::Logger& logger)
-    {
-        setLogger(&logger, false /*ownLog*/);
+        mLogger.setLogger(logger, ownLog);
     }
 
     virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
@@ -284,6 +278,8 @@ protected:
     bool mOwnLog = false;
     const XMLControlRegistry* mXMLRegistry = nullptr;
 
+private:
+    Logger mLogger;
 };
 
 }

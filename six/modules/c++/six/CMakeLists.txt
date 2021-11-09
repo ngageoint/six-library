@@ -15,6 +15,7 @@ coda_add_module(
         source/GeoDataBase.cpp
         source/GeoInfo.cpp
         source/Init.cpp
+        source/Logger.cpp
         source/MatchInformation.cpp
         source/Mesh.cpp
         source/NITFHeaderCreator.cpp
