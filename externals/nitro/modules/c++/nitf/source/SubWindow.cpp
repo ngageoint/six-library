@@ -61,7 +61,7 @@ SubWindow::SubWindow(nitf_SubWindow * x)
     getNativeOrThrow();
 }
 
-SubWindow::SubWindow() : SubWindow(nitf_SubWindow_construct(&error))
+SubWindow::SubWindow() noexcept(false) : SubWindow(nitf_SubWindow_construct(&error))
 {
     setManaged(false);
 

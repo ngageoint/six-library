@@ -65,7 +65,8 @@ coda_add_module(
         source/TextSubheader.cpp
         source/Utils.cpp
         source/WriteHandler.cpp
-        source/Writer.cpp)
+        source/Writer.cpp
+        )
 
 target_compile_features(nitf-c++ PUBLIC cxx_inheriting_constructors)
 
@@ -89,5 +90,8 @@ coda_add_tests(
         test_image_blocker.cpp
         test_image_segment_blank_nm_compression.cpp
         test_image_segment_computer.cpp
+        test_image_writer.cpp
         test_nitf_buffer_list.cpp
-        test_tre_mods++.cpp)
+        test_tre_mods++.cpp
+        test_tre_create++.cpp
+        test_tre_read.cpp)

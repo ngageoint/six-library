@@ -77,7 +77,7 @@ public:
     * c.f., https://docs.microsoft.com/en-us/dotnet/api/system.environment.expandenvironmentvariables?view=net-5.0
     */
     static std::string expandEnvironmentVariables(const std::string& path, bool checkIfExists = true);
-    static std::string expandEnvironmentVariables(const std::string& path, Filesystem::FileType);
+    static std::string expandEnvironmentVariables(const std::string& path, Filesystem::file_type);
     static std::vector<std::string> expandedEnvironmentVariables(const std::string& path); // mostly for unit-testing
 
     /*!

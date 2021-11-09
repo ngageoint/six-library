@@ -5,6 +5,22 @@ macro(coda_find_system_dependencies)
     set(THREADS_PREFER_PTHREAD_FLAG TRUE)
     find_package(Threads)
 
+    # creates imported target CURL::libcurl, if found
+    # see https://cmake.org/cmake/help/latest/module/FindCURL.html
+    find_package(CURL)
+    if (${CMAKE_VERSION} VERSION_LESS "3.12.0")
+        #FindCurl didn't create a target until CMake 3.12
+        if(CURL_FOUND)
+            if(NOT TARGET CURL::libcurl)
+                add_library(CURL::libcurl UNKNOWN IMPORTED)
+                set_target_properties(CURL::libcurl
+                    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${CURL_INCLUDE_DIRS}")
+                set_property(TARGET CURL::libcurl
+                    APPEND PROPERTY IMPORTED_LOCATION "${CURL_LIBRARY}")
+            endif()
+        endif()
+    endif()
+
     # creates imported target Boost::serialization, if found
     # see https://cmake.org/cmake/help/latest/module/FindBoost.html
     set(ENABLE_BOOST OFF CACHE BOOL "Enable building modules dependent on Boost")

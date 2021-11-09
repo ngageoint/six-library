@@ -47,13 +47,14 @@ namespace Filesystem
   }
 
   // https://en.cppreference.com/w/cpp/filesystem/file_type
-  enum class FileType
+  // match C++17 spelling for easier transition from our C++11 work-around to C++17
+  enum class file_type
   {
-      None = 0,
-      NotFound = 1,
-      Regular,
-      Directory,
-      Unknown
+      none = 0,
+      not_found = 1,
+      regular,
+      directory,
+      unknown 
   };
 
 // http://en.cppreference.com/w/cpp/filesystem/path

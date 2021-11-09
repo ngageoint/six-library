@@ -51,7 +51,7 @@ class Optional  // no "final" as SWIG doesn't like it
     T value_;
     bool has_value_ = false;
 
-    inline void check_has_value() const
+    void check_has_value() const
     {
         if (!has_value())
         {

@@ -272,7 +272,7 @@ TEST_CASE_ARGS(testCreate)
 {
     nitf_Record *record = NULL;
     nitf_Error error;
-    char* outname = argc > 1 ? argv[1] : "test_create.ntf";
+    const char* outname = argc > 1 ? argv[1] : "test_create.ntf";
 
     record = nitf_Record_construct(NITF_VER_21, &error);
     TEST_ASSERT(record);
@@ -288,7 +288,7 @@ TEST_CASE_ARGS(testRead)
     nitf_Record *record = NULL;
     nitf_Error error;
     nitf_IOHandle io;
-    char* outname = argc > 1 ? argv[1] : "test_create.ntf";
+    const char* outname = argc > 1 ? argv[1] : "test_create.ntf";
 
     io = nitf_IOHandle_create(outname, NITF_ACCESS_READONLY, NITF_OPEN_EXISTING, &error);
     reader = nitf_Reader_construct(&error);
