@@ -30,6 +30,7 @@
 #include "six/Types.h"
 #include "six/NITFImageInfo.h"
 #include "six/Adapters.h"
+#include "six/Logger.h"
 #include <import/logging.h>
 
 namespace six
@@ -42,12 +43,13 @@ namespace six
  *  This class helps in populating NITF header fields
  *  prior to writing.
  */
-class NITFHeaderCreator
+struct NITFHeaderCreator
 {
-public:
-
     //! Constructor. Must call initialize to use.
     NITFHeaderCreator();
+
+    NITFHeaderCreator(const NITFHeaderCreator&) = delete;
+    NITFHeaderCreator& operator=(const NITFHeaderCreator&) = delete;
 
     /*!
      * Constructor. Calls initialize.
@@ -64,13 +66,7 @@ public:
                       std::shared_ptr<Container> container);
 
     //!  Destructor.
-    virtual ~NITFHeaderCreator()
-    {
-        if (mLog && mOwnLog)
-        {
-            delete mLog;
-        }
-    }
+    virtual ~NITFHeaderCreator() {}
 
     //!  Keys that allow us to override the ILOC rules for tests
     static const char OPT_MAX_PRODUCT_SIZE[];
@@ -225,34 +221,14 @@ public:
      * \param ownLog Flag for whether the class takes ownership of the
      *  logger. Default is false.
      */
-    void setLogger(logging::Logger* logger, bool ownLog = false)
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
     {
-        // Delete the current logger if it exists and is owned
-        if (mLog && mOwnLog && logger != mLog)
-        {
-            delete mLog;
-        }
-
-        if (logger)
-        {
-            // Logger is passed in: set it and determine ownership
-            mLog = logger;
-            mOwnLog = ownLog;
-        }
-        else
-        {
-            // No logger passed in: create a null logger
-            mLog = new logging::NullLogger;
-            mOwnLog = true;
-        }
+        mLogger.setLogger(std::forward<TLogger>(logger));
     }
-    void setLogger(std::unique_ptr<logging::Logger>&& logger)
+    void setLogger(logging::Logger* logger, bool ownLog)
     {
-        setLogger(logger.release(), true /*ownLog*/);
-    }
-    void setLogger(logging::Logger& logger)
-    {
-        setLogger(&logger, false /*ownLog*/);
+        mLogger.setLogger(logger, ownLog);
     }
 
     /*!
@@ -401,12 +377,12 @@ public:
                     std::shared_ptr<Container> container);
 
 protected:
-    nitf::Record mRecord;
+    nitf::Record mRecord = NITF_VER_21;
     std::vector<std::shared_ptr<NITFImageInfo> > mInfos;
     std::vector<std::shared_ptr<nitf::SegmentWriter> > mSegmentWriters;
     std::shared_ptr<six::Container> mContainer;
     six::Options mOptions;
-    const XMLControlRegistry* mXMLRegistry;
+    const XMLControlRegistry* mXMLRegistry = nullptr;
 
     //! All pointers populated within the options need
     //  to be cleaned up elsewhere. There is no access
@@ -421,8 +397,8 @@ private:
     std::string mLocationId;
     std::string mLocationIdNamespace;
     std::string mAbstract;
-    logging::Logger* mLog;
-    bool mOwnLog;
+
+    Logger mLogger;
 };
 }
 #endif

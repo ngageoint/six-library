@@ -58,6 +58,7 @@ public:
      *  CPHDData* populated by the DOM.
      */
     mem::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
+   Metadata fromXML(const xml::lite::Document& doc);
 
     mem::auto_ptr<Metadata> fromXML(const std::string& xmlString);
 

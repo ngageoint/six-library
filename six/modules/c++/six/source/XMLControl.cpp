@@ -32,20 +32,12 @@ namespace fs = std::filesystem;
 
 namespace six
 {
-XMLControl::XMLControl(logging::Logger* log, bool ownLog) :
-    mLog(nullptr),
-    mOwnLog(false)
+XMLControl::XMLControl(logging::Logger* log, bool ownLog) : mLogger(mLog, mOwnLog, nullptr)
 {
     setLogger(log, ownLog);
 }
 
-XMLControl::~XMLControl()
-{
-    if (mLog && mOwnLog)
-    {
-        delete mLog;
-    }
-}
+XMLControl::~XMLControl() = default;
 
 static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
 {
@@ -186,26 +178,6 @@ void XMLControl::validate(const xml::lite::Document* doc,
                     Ctxt("INVALID XML: Check both the XML being "
                          "produced and the schemas available"));
         }
-    }
-}
-
-void XMLControl::setLogger(logging::Logger* log, bool own)
-{
-    if (mLog && mOwnLog && log != mLog)
-    {
-        delete mLog;
-        mLog = nullptr;
-    }
-
-    if (log)
-    {
-        mLog = log;
-        mOwnLog = own;
-    }
-    else
-    {
-        mLog = new logging::NullLogger;
-        mOwnLog = true;
     }
 }
 

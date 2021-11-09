@@ -74,9 +74,8 @@ int main(int argc, char** argv)
         xmlRegistry->addCreator<six::sicd::ComplexXMLControl>();
         xmlRegistry->addCreator<six::sidd::DerivedXMLControl>();
 
-        std::unique_ptr<logging::Logger> logger(logging::setupLogger(progname.string()));
         six::NITFReadControl reader;
-        reader.setLogger(*logger);
+        reader.setLogger(logging::setupLogger(progname.string()));
         reader.setXMLControlRegistry(xmlRegistry);
         reader.load(sixPathname);
         // Check to see if it's a SICD

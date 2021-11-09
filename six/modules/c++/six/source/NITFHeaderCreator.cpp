@@ -104,35 +104,21 @@ const char NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK[] = "NumRowsPerBlock";
 const char NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK[] = "NumColsPerBlock";
 const size_t NITFHeaderCreator::DEFAULT_BUFFER_SIZE = 8 * 1024 * 1024;
 
-NITFHeaderCreator::NITFHeaderCreator() :
-    mRecord(NITF_VER_21),
-    mXMLRegistry(nullptr),
-    mLog(nullptr),
-    mOwnLog(false)
+NITFHeaderCreator::NITFHeaderCreator()
 {
     // Make sure that if we use XML_DATA_CONTENT that we've loaded it into the
     // singleton PluginRegistry
     loadXmlDataContentHandler();
 }
 
-NITFHeaderCreator::NITFHeaderCreator(std::shared_ptr<Container> container) :
-    mRecord(NITF_VER_21),
-    mXMLRegistry(nullptr),
-    mLog(nullptr),
-    mOwnLog(false)
+NITFHeaderCreator::NITFHeaderCreator(std::shared_ptr<Container> container) : NITFHeaderCreator()
 {
-    loadXmlDataContentHandler();
     initialize(container);
 }
 
 NITFHeaderCreator::NITFHeaderCreator(const six::Options& options,
-                                     std::shared_ptr<Container> container) :
-    mRecord(NITF_VER_21),
-    mXMLRegistry(nullptr),
-    mLog(nullptr),
-    mOwnLog(false)
+                                     std::shared_ptr<Container> container) : NITFHeaderCreator()
 {
-    loadXmlDataContentHandler();
     initialize(options, container);
 }
 
@@ -192,7 +178,7 @@ void  NITFHeaderCreator::setBlocking(nitf::BlockingMode imode,
         const auto optNumRowsPerBlock = static_cast<size_t>(
                 mOptions.getParameter(OPT_NUM_ROWS_PER_BLOCK));
 
-        numRowsPerBlock = static_cast<sys::Uint32_T>(
+        numRowsPerBlock = static_cast<uint32_t>(
                 std::min(optNumRowsPerBlock, segmentDims.row));
     }
     else
@@ -214,7 +200,7 @@ void  NITFHeaderCreator::setBlocking(nitf::BlockingMode imode,
         const auto optNumColsPerBlock = static_cast<size_t>(
                 mOptions.getParameter(OPT_NUM_COLS_PER_BLOCK));
 
-        numColsPerBlock = static_cast<sys::Uint32_T>(
+        numColsPerBlock = static_cast<uint32_t>(
                 std::min(optNumColsPerBlock, segmentDims.col));
     }
     else
@@ -360,9 +346,10 @@ void NITFHeaderCreator::setSecurity(const six::Classification& classification,
         security.getClassificationSystem().set("US");
     }
 
-    if (mLog != nullptr)
+    auto pLog = mLogger.get(std::nothrow);
+    if (pLog != nullptr)
     {
-        classification.setSecurity(prefix, *mLog, security);
+        classification.setSecurity(prefix, *pLog, security);
     }
 }
 
@@ -446,10 +433,10 @@ std::string NITFHeaderCreator::getDesTypeID(const six::Data& data)
     // TODO: This requires some knowledge of the SICD/SIDD versions, but not
     //       sure where else this logic should live.
 
-    const std::string version(data.getVersion());
+    const std::string strVersion(data.getVersion());
 
     std::vector<std::string> versionParts;
-    XMLControl::splitVersion(version, versionParts);
+    XMLControl::splitVersion(strVersion, versionParts);
 
     // Name of DES changed for version 1.0+
     const std::string& majorVersion = versionParts[0];
@@ -468,10 +455,10 @@ bool NITFHeaderCreator::needUserDefinedSubheader(const six::Data& data)
     // TODO: This requires some knowledge of the SICD/SIDD versions, but not
     //       sure where else this logic should live.
 
-    const std::string version(data.getVersion());
+    const std::string strVersion(data.getVersion());
 
     std::vector<std::string> versionParts;
-    XMLControl::splitVersion(version, versionParts);
+    XMLControl::splitVersion(strVersion, versionParts);
 
     // Starting with 1.0, the user-defined subheader is required
     const std::string& majorVersion = versionParts[0];
@@ -522,27 +509,27 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     // Design and Implementation Description Document
     // for the specification -- Add to this list as more
     // versions are published
-    const std::string version(data.getVersion());
+    const std::string strVersion(data.getVersion());
     std::string specVers;
     std::string specDT;
     if (dataType == "SICD")
     {
-        if (version == "1.0.0" || version == "1.0.1")
+        if (strVersion == "1.0.0" || strVersion == "1.0.1")
         {
             specVers = "1.0";
             specDT = "2011-09-28T00:00:00Z";
         }
-        else if (version == "1.1.0")
+        else if (strVersion == "1.1.0")
         {
             specVers = "1.1";
             specDT = "2014-07-08T00:00:00Z";
         }
-        else if (version == "1.2.0")
+        else if (strVersion == "1.2.0")
         {
             specVers = "1.2";
             specDT = "2016-06-30T00:00:00Z";
         }
-        else if (version == "1.2.1")
+        else if (strVersion == "1.2.1")
         {
             specVers = "1.2.1";
             specDT = "2018-12-13T00:00:00Z";
@@ -550,19 +537,19 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     }
     else if (dataType == "SIDD")
     {
-        if (version == "1.0.0")
+        if (strVersion == "1.0.0")
         {
             specVers = "1.0";
             specDT = "2011-08-01T00:00:00Z";
         }
-        else if (version == "1.1.0")
+        else if (strVersion == "1.1.0")
         {
             throw except::Exception(Ctxt(
-                "SIDD Version 1.1.0 does not exist. "
+                "SIDD strVersion 1.1.0 does not exist. "
                 "Did you mean 2.0.0?"
             ));
         }
-        else if (version == "2.0.0")
+        else if (strVersion == "2.0.0")
         {
             specVers = "2.0";
             specDT = "2019-05-31T00:00:00Z";
@@ -573,7 +560,7 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     if (specVers.empty())
     {
         throw except::Exception(Ctxt("DESSHSV Failure - Unsupported in " +
-                                     dataType + " version: " + version));
+                                     dataType + " version: " + strVersion));
     }
     tre["DESSHSV"] = specVers;
 
@@ -581,11 +568,11 @@ void NITFHeaderCreator::addUserDefinedSubheader(
     if (specDT.empty())
     {
         throw except::Exception(Ctxt("DESSHSD Failure - Unsupported in " +
-                                     dataType + " version: " + version));
+                                     dataType + " version: " + strVersion));
     }
     tre["DESSHSD"] = specDT;
 
-    tre["DESSHTN"] = "urn:" + dataType + ":" + version;
+    tre["DESSHTN"] = "urn:" + dataType + ":" + strVersion;
     tre["DESSHLPG"] = toString(data.getImageCorners());
 
     // Spec specifies leaving this blank
@@ -979,4 +966,5 @@ void NITFHeaderCreator::loadMeshSegment(
 {
     loadMeshSegment_(meshName, meshBuffer, classification);
 }
+
 }
