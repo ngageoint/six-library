@@ -22,30 +22,8 @@
 #define CODA_OSS_std_bit_INCLUDED_
 #pragma once
 
-// Make it (too?) easy for clients to get our various std:: implementations
+#include <bit>
 
 #include "sys/Bit.h"
-static_assert(CODA_OSS_sys_Endian >= 201907L, "missing sys::Endian");
-
-#include "sys/CPlusPlus.h"
-#if CODA_OSS_cpp17
-    // Some C++17 implementations have <bit>
-    #if __has_include(<bit>) // __has_include is C++17
-        #include <bit>
-        #undef CODA_OSS_NO_std_endian
-        #define CODA_OSS_NO_std_endian 1  // don't need our own
-    #endif
-#endif
-
-#ifndef CODA_OSS_NO_std_endian
-    #define CODA_OSS_NO_std_endian 0  // enabled, unless explicitly disabled
-#endif
-
-#if !CODA_OSS_NO_std_endian
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-        using endian = ::sys::Endian;
-    }
-#endif  // CODA_OSS_NO_std_endian
 
 #endif  // CODA_OSS_std_bit_INCLUDED_

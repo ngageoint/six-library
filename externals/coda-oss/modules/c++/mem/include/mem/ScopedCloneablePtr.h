@@ -53,15 +53,17 @@ namespace mem
 template <class T>
 class ScopedCloneablePtr
 {
+    std::unique_ptr<T> mPtr;
+
 public:
-    explicit ScopedCloneablePtr(T* ptr = nullptr) :
-        mPtr(ptr)
+    explicit ScopedCloneablePtr(T* ptr = nullptr)
     {
+        reset(ptr);
     }
 
-    explicit ScopedCloneablePtr(std::unique_ptr<T>&& ptr) :
-        mPtr(std::move(ptr))
+    explicit ScopedCloneablePtr(std::unique_ptr<T>&& ptr)
     {
+        reset(std::move(ptr));
     }
     #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
     explicit ScopedCloneablePtr(mem::auto_ptr<T> ptr)
@@ -95,6 +97,9 @@ public:
 
         return *this;
     }
+
+    ScopedCloneablePtr(ScopedCloneablePtr&&) = default;
+    ScopedCloneablePtr& operator=(ScopedCloneablePtr&&) = default;
 
     bool operator==(const ScopedCloneablePtr<T>& rhs) const
     {
@@ -146,9 +151,6 @@ public:
         reset(std::unique_ptr<T>(ptr.release()));
     }
     #endif
-
-private:
-    std::unique_ptr<T> mPtr;
 };
 }
 

@@ -22,32 +22,8 @@
 #define CODA_OSS_std_optional_INCLUDED_
 #pragma once
 
-// Make it (too?) easy for clients to get our various std:: implementations
+#include <optional>
 
 #include "sys/Optional.h"
-static_assert(CODA_OSS_sys_Optional >= 201606L, "missing sys::Optional");
-
-#if CODA_OSS_cpp17
-    #include <optional>
-    #undef CODA_OSS_NO_std_optional
-    #define CODA_OSS_NO_std_optional 1  // don't need our own
-#endif
-
-#ifndef CODA_OSS_NO_std_optional
-    #define CODA_OSS_NO_std_optional 0  // enabled, unless explicitly disabled
-#endif
-
-#if !CODA_OSS_NO_std_optional
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-        template<typename T>
-        using optional = sys::Optional<T>;
-        template <typename T, typename... TArgs>
-        inline optional<T> make_optional(TArgs && ... args)
-        {
-            return sys::make_Optional<T>(std::forward<TArgs>(args)...);
-        }
-    }
-#endif // !CODA_OSS_NO_std_optional
 
 #endif  // CODA_OSS_std_optional_INCLUDED_

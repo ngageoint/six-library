@@ -24,14 +24,9 @@
 
 #include <cstddef>
 
-#include "CPlusPlus.h"
-
 namespace sys
 {
-    // https://en.cppreference.com/w/cpp/types/byte
-    enum class Byte : unsigned char {};
-
-    #define CODA_OSS_sys_Byte 201603L  // __cpp_lib_byte
+    using Byte = std::byte;
 }
 
 #endif  // CODA_OSS_sys_CStdDef_h_INCLUDED_

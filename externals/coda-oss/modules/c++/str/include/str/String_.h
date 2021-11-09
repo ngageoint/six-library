@@ -30,16 +30,15 @@
 namespace str
 {
     // Char8_T for UTF-8 characters
-    enum class Char8_T : unsigned char { }; // https://en.cppreference.com/w/cpp/language/types
-    using U8string = std::basic_string<Char8_T>; // https://en.cppreference.com/w/cpp/string
+    using Char8_T = char8_t;
+    using U8string = std::u8string;
 }
 #if !defined(CODA_OSS_sys_U8string_DEFINED_)
 #define CODA_OSS_sys_U8string_DEFINED_ 1
 namespace sys
 {
-    using Char8_T = str::Char8_T;
-    using U8string = str::U8string;
-   #define CODA_OSS_sys_Char8_T 201907L // c.f., __cpp_lib_char8_t
+    using Char8_T = char8_t;
+    using U8string = std::u8string;
 }
 #endif  // CODA_OSS_sys_U8string_DEFINED_
 

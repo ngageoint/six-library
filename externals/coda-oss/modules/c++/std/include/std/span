@@ -22,27 +22,8 @@
 #define CODA_OSS_std_span_INCLUDED_
 #pragma once
 
-// Make it (too?) easy for clients to get our various std:: implementations
+#include <span>
 
 #include "mem/Span.h"
-static_assert(CODA_OSS_mem_Span >= 202002L, "missing mem::Span");
-
-#if CODA_OSS_cpp20
-    #include <span>
-    #undef CODA_OSS_NO_std_span
-    #define CODA_OSS_NO_std_span 1  // don't need our own
-#endif
-
-#ifndef CODA_OSS_NO_std_span
-    #define CODA_OSS_NO_std_span 0  // enabled, unless explicitly disabled
-#endif
-
-#if !CODA_OSS_NO_std_span
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-        template<typename T>
-        using span = gsl::span<T>;
-    }
-#endif  // CODA_OSS_DEFINE_std_span_
 
 #endif  // CODA_OSS_std_span_INCLUDED_

@@ -749,7 +749,7 @@ def options(opt):
     opt.add_option('--enable-debugging', action='store_true', dest='debugging',
                    help='Enable debugging')
     opt.add_option('--enable-cpp11', action='callback', callback=deprecated_callback)
-    opt.add_option('--enable-cpp17', action='store_true', dest='enablecpp17')
+    opt.add_option('--enable-cpp17', action='callback', callback=deprecated_callback)
     opt.add_option('--enable-64bit', action='callback', callback=deprecated_callback)
     opt.add_option('--enable-32bit', action='callback', callback=deprecated_callback)
     opt.add_option('--with-cflags', action='store', nargs=1, dest='cflags',
@@ -793,22 +793,6 @@ def options(opt):
 
 
 def ensureCpp11Support(self):
-    # Visual Studio 2013 has nullptr but not constexpr.  Need to check for
-    # both in here to make sure we have full C++11 support... otherwise,
-    # long-term we may need multiple separate configure checks and
-    # corresponding defines
-
-    cpp11_str = '''
-            int main()
-            {
-                constexpr void* FOO = nullptr;
-            }
-            '''
-    self.check_cxx(fragment=cpp11_str,
-                   execute=0,
-                   msg='Checking for C++11 support',
-                   mandatory=True)
-
     # DEPRECATED.
     # Keeping for now in case downstream code is still looking for it
     self.env['cpp11support'] = True
@@ -827,6 +811,14 @@ def configureCompilerOptions(self):
 
     if ccCompiler == 'msvc':
         cxxCompiler = ccCompiler
+    else:
+        if ccCompiler == 'gcc':
+            self.env['COMPILER_CC'] = 'gcc-10'
+            ccCompiler = self.env['COMPILER_CC']
+
+        if cxxCompiler == 'g++':
+            self.env['COMPILER_CXX'] = 'g++-10'
+            cxxCompiler = self.env['COMPILER_CXX']
 
     if not cxxCompiler or not ccCompiler:
         self.fatal('Unable to find C/C++ compiler')
@@ -864,7 +856,7 @@ def configureCompilerOptions(self):
         self.env.append_value('CFLAGS', '-fPIC -dynamiclib'.split())
 
     # GCC / ICC (for Linux or Solaris)
-    elif ccCompiler == 'gcc' or ccCompiler == 'icc':
+    elif ccCompiler == 'gcc' or ccCompiler == 'gcc-10' or ccCompiler == 'icc':
         if not re.match(winRegex, sys_platform):
             self.env.append_value('LIB_DL', 'dl')
             if not re.match(osxRegex, sys_platform):
@@ -877,7 +869,7 @@ def configureCompilerOptions(self):
             self.env.append_value('LIB_SOCKET', 'socket')
 
         warningFlags = '-Wall'
-        if ccCompiler == 'gcc':
+        if ccCompiler == 'gcc' or ccCompiler == 'gcc-10':
             #warningFlags += ' -Wno-deprecated-declarations -Wold-style-cast'
             warningFlags += ' -Wno-deprecated-declarations'
         else:
@@ -891,7 +883,7 @@ def configureCompilerOptions(self):
         #       If you want the plugins to not depend on Intel libraries,
         #       configure with:
         #       --with-cflags=-static-intel --with-cxxflags=-static-intel --with-linkflags=-static-intel
-        if cxxCompiler == 'g++' or cxxCompiler == 'icpc':
+        if cxxCompiler == 'g++' or cxxCompiler == 'g++-10' or cxxCompiler == 'icpc':
             config['cxx']['debug']          = '-g'
             config['cxx']['warn']           = warningFlags.split()
             config['cxx']['verbose']        = '-v'
@@ -901,10 +893,7 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
 
-            if not Options.options.enablecpp17:
-                gxxCompileFlags='-fPIC -std=c++11'
-            else:
-                gxxCompileFlags='-fPIC -std=c++17'
+            gxxCompileFlags='-fPIC -std=c++20'
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
@@ -919,7 +908,7 @@ def configureCompilerOptions(self):
 
             self.env.append_value('LINKFLAGS', linkFlags.split())
 
-        if ccCompiler == 'gcc' or ccCompiler == 'icc':
+        if ccCompiler == 'gcc' or ccCompiler == 'gcc-10' or ccCompiler == 'icc':
             config['cc']['debug']          = '-g'
             config['cc']['warn']           = warningFlags.split()
             config['cc']['verbose']        = '-v'
@@ -1039,8 +1028,7 @@ def configureCompilerOptions(self):
         flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
 
         #If building with cpp17 add flags/defines to enable auto_ptr
-        if Options.options.enablecpp17:
-            flags.append('/std:c++17')
+        flags.append('/std:c++20')
 
         self.env.append_value('DEFINES', defines)
         self.env.append_value('CXXFLAGS', flags)

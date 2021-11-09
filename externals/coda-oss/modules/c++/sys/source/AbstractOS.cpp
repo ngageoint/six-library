@@ -182,7 +182,7 @@ std::string AbstractOS::getCurrentExecutable(
 }
 
 // A variable like PATH is often several directories, return each one that exists.
-static bool splitEnv_(const AbstractOS& os, const std::string& envVar, std::vector<std::string>& result, Filesystem::FileType* pType = nullptr)
+static bool splitEnv_(const AbstractOS& os, const std::string& envVar, std::vector<std::string>& result, Filesystem::file_type* pType = nullptr)
 {
     std::string value;
     if (!os.getEnvIfSet(envVar, value))
@@ -195,8 +195,8 @@ static bool splitEnv_(const AbstractOS& os, const std::string& envVar, std::vect
         bool matches = true;
         if (pType != nullptr)
         {
-            const auto isFile = (*pType == Filesystem::FileType::Regular) && Filesystem::is_regular_file(val);
-            const auto isDirectory = (*pType == Filesystem::FileType::Directory) && Filesystem::is_directory(val);
+            const auto isFile = (*pType == Filesystem::file_type::regular) && Filesystem::is_regular_file(val);
+            const auto isDirectory = (*pType == Filesystem::file_type::directory) && Filesystem::is_directory(val);
             matches = isFile || isDirectory;
         }
         if (Filesystem::exists(val) && matches)
@@ -206,7 +206,7 @@ static bool splitEnv_(const AbstractOS& os, const std::string& envVar, std::vect
     }
     return !result.empty(); // false for no matches
 }
-bool AbstractOS::splitEnv(const std::string& envVar, std::vector<std::string>& result, Filesystem::FileType type) const
+bool AbstractOS::splitEnv(const std::string& envVar, std::vector<std::string>& result, Filesystem::file_type type) const
 {
     return splitEnv_(*this, envVar, result, &type);
 }
@@ -291,7 +291,7 @@ static std::string getSpecialEnv_HOME(const AbstractOS& os, const std::string& e
     #endif
 
     std::vector<std::string> paths;
-    if (!os.splitEnv(home, paths, sys::Filesystem::FileType::Directory))
+    if (!os.splitEnv(home, paths, sys::Filesystem::file_type::directory))
     {
         // something is horribly wrong
         throw except::FileNotFoundException(Ctxt(home));

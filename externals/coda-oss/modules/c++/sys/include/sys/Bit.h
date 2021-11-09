@@ -22,24 +22,11 @@
 #define CODA_OSS_sys_Bit_h_INCLUDED_
 #pragma once
 
-#include "CPlusPlus.h"
+#include <bit>
 
 namespace sys
 {
-    // https://en.cppreference.com/w/cpp/types/endian
-    enum class Endian
-    {
-    #ifdef _WIN32
-        little = 0,
-        big = 1,
-        native = little
-    #else
-        little = __ORDER_LITTLE_ENDIAN__,
-        big = __ORDER_BIG_ENDIAN__,
-        native = __BYTE_ORDER__
-    #endif
-    };
-    #define CODA_OSS_sys_Endian 201907L // __cpp_lib_endian
+    using Endian = std::endian;
 }
 
 #endif  // CODA_OSS_sys_Bit_h_INCLUDED_
