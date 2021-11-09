@@ -80,10 +80,10 @@ TEST_CASE(testExpandEnvTilde)
     auto path = sys::Path::expandEnvironmentVariables("~");
     TEST_ASSERT_TRUE(fs::is_directory(path));
 
-    path = sys::Path::expandEnvironmentVariables("~", sys::Filesystem::FileType::Directory);
+    path = sys::Path::expandEnvironmentVariables("~", sys::Filesystem::file_type::directory);
     TEST_ASSERT_TRUE(fs::is_directory(path));
 
-    path = sys::Path::expandEnvironmentVariables("~", sys::Filesystem::FileType::Regular);
+    path = sys::Path::expandEnvironmentVariables("~", sys::Filesystem::file_type::regular);
     TEST_ASSERT_TRUE(path.empty());
 }
 
@@ -93,7 +93,7 @@ TEST_CASE(testExpandEnvTildePath)
     const std::vector<std::string> exts{"NTUSER.DAT", ".login", ".cshrc", ".bashrc"};
     os.prependEnv("exts", exts, true /*overwrite*/);
 
-    const auto path = sys::Path::expandEnvironmentVariables("~/$(exts)", sys::Filesystem::FileType::Regular);
+    const auto path = sys::Path::expandEnvironmentVariables("~/$(exts)", sys::Filesystem::file_type::regular);
     TEST_ASSERT_TRUE(sys::Filesystem::is_regular_file(path));
 }
 
