@@ -33,22 +33,22 @@ namespace six
 namespace sicd
 {
 ComplexXMLParser04x::ComplexXMLParser04x(
-    const std::string& version,
+    const std::string& strVersion,
     bool addClassAttributes,
     std::unique_ptr<SICommonXMLParser>&& comParser,
     logging::Logger* log,
     bool ownLog) :
-    ComplexXMLParser(version, addClassAttributes, std::move(comParser), log, ownLog)
+    ComplexXMLParser(strVersion, addClassAttributes, std::move(comParser), log, ownLog)
 {
 }
 #if !CODA_OSS_cpp17
 ComplexXMLParser04x::ComplexXMLParser04x(
-    const std::string& version,
+    const std::string& strVersion,
     bool addClassAttributes,
     mem::auto_ptr<SICommonXMLParser> comParser,
     logging::Logger* log,
     bool ownLog) :
-    ComplexXMLParser04x(version, addClassAttributes, std::unique_ptr<SICommonXMLParser>(comParser.release()), log, ownLog)
+    ComplexXMLParser04x(strVersion, addClassAttributes, std::unique_ptr<SICommonXMLParser>(comParser.release()), log, ownLog)
 {
 }
 #endif

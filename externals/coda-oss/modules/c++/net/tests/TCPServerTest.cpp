@@ -58,9 +58,9 @@ int main(int argc, char** argv)
         int port = atoi(argv[1]);
 
         SocketAddress address(port);
-        mem::auto_ptr<Socket> listener = TCPServerSocketFactory().create(address);
+        std::unique_ptr<Socket> listener = TCPServerSocketFactory().create(address);
         SocketAddress clientAddress;
-        mem::auto_ptr<Socket> client = listener->accept(clientAddress);
+        std::unique_ptr<Socket> client = listener->accept(clientAddress);
         // Print client address here!!
         my_packet_t packet;
         client->recv(&packet, sizeof(my_packet_t));

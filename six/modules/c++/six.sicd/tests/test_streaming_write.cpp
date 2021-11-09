@@ -313,9 +313,10 @@ void Tester<DataTypeT>::normalWrite()
     setMaxProductSize(options);
     six::NITFWriteControl writer(options, mContainer);
 
-    six::buffer_list buffers;
-    buffers.push_back(reinterpret_cast<std::byte*>(mImagePtr));
-    writer.save(buffers, mNormalPathname, mSchemaPaths);
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(mSchemaPaths.begin(), mSchemaPaths.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+
+    writer.save(mImage, mNormalPathname, schemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
 }
@@ -495,9 +496,7 @@ int main(int /*argc*/, char** /*argv*/)
         const std::vector<std::string> schemaPaths;
 
         // create an XML registry
-        six::XMLControlFactory::getInstance().addCreator(
-                six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
         // Run tests with no funky segmentation
         bool success = true;

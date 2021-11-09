@@ -23,9 +23,10 @@
 #ifndef __SIX_BYTE_PROVIDER_H__
 #define __SIX_BYTE_PROVIDER_H__
 
+#include <memory>
+
 #include <scene/sys_Conf.h>
 #include <nitf/ByteProvider.hpp>
-#include <mem/SharedPtr.h>
 #include <six/Container.h>
 #include <six/NITFWriteControl.h>
 #include <six/NITFHeaderCreator.h>

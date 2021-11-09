@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +20,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __IMPORT_SIX_H__
-#define __IMPORT_SIX_H__
+#ifndef SIX_import_six_h_INCLUDED_
+#define SIX_import_six_h_INCLUDED_
+#pragma once
 
 #include "six/Adapters.h"
 #include "six/CollectionInformation.h"
@@ -50,6 +52,6 @@
 #include "six/WriteControl.h"
 #include "six/XMLControl.h"
 #include "six/XMLControlFactory.h"
+#include "six/Version.h"
 
-#endif
-
+#endif // SIX_import_six_h_INCLUDED_

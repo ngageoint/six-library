@@ -23,7 +23,10 @@
 %module(package="coda") coda_io
 
 %feature("autodoc","1");
-%include "std_string.i"
+
+%include "config.i"
+
+%include <std_string.i>
 
 %{
   #include <sstream>

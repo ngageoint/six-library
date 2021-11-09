@@ -111,7 +111,7 @@ net::NetConnection* net::ssl::SSLConnectionClientFactory::newConnection(
     return (new net::NetConnection(std::move(toServer)));
 #endif
 }
-#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+#if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
 net::NetConnection * net::ssl::SSLConnectionClientFactory::newConnection(mem::auto_ptr<net::Socket> toServer) 
 {
   return newConnection(std::unique_ptr<net::Socket>(toServer.release()));

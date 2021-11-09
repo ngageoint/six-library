@@ -20,6 +20,8 @@
  *
  */
 
+#include <algorithm>
+
 #include <six/Container.h>
 #include <six/NITFWriteControl.h>
 #include <six/sicd/AreaPlaneUtility.h>
@@ -32,11 +34,11 @@ namespace
 void roundTripNITF(const std::string& sicdPathname,
         const std::string& outputPathname,
         const six::XMLControlRegistry& registry,
-        const std::vector<std::string>& schemaPaths)
+        const std::vector<std::string>& schemaPaths_)
 {
     std::unique_ptr<six::sicd::ComplexData> complexData;
     std::vector<std::complex<float> > buffer;
-    six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, complexData,
+    six::sicd::Utilities::readSicd(sicdPathname, schemaPaths_, complexData,
             buffer);
 
     if (!six::sicd::AreaPlaneUtility::hasAreaPlane(*complexData))
@@ -44,17 +46,15 @@ void roundTripNITF(const std::string& sicdPathname,
         six::sicd::AreaPlaneUtility::setAreaPlane(*complexData);
     }
 
-    std::vector<std::byte*> bufferList(1);
-    bufferList[0] = reinterpret_cast<std::byte*>(buffer.data());
-
     six::NITFWriteControl writer;
-    mem::SharedPtr<six::Container> container(
-            new six::Container(six::DataType::COMPLEX));
+    mem::SharedPtr<six::Container> container(new six::Container(six::DataType::COMPLEX));
     container->addData(complexData->clone());
 
     writer.initialize(container);
     writer.setXMLControlRegistry(&registry);
-    writer.save(bufferList, outputPathname, schemaPaths);
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+    writer.save(buffer, outputPathname, schemaPaths);
 }
 
 void roundTripXML(const std::string& sicdPathname,
@@ -96,8 +96,7 @@ int main(int argc, char** argv)
         const std::vector<std::string> schemaPaths;
 
         six::XMLControlRegistry registry;
-        registry.addCreator(six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        registry.addCreator<six::sicd::ComplexXMLControl>();
 
         if (str::endsWith(sicdPathname, ".nitf") ||
                 str::endsWith(sicdPathname, ".ntf"))

@@ -23,6 +23,10 @@
 #include <sstream>
 #include <stdio.h>
 
+#include <vector>
+#include <iterator>
+#include <numeric>
+
 #include "import/sys.h"
 #include "import/mt.h"
 #include "TestCase.h"
@@ -54,8 +58,7 @@ public:
 class LocalStorage
 {
 public:
-    LocalStorage() :
-        mValue(0)
+    LocalStorage() : mValue(0)
     {
     }
 
@@ -90,12 +93,36 @@ TEST_CASE(Runnable1DWithCopiesTest)
     std::cout << "Calling run1D" << std::endl;
     run1DWithCopies(47, 16, op);
 }
+
+TEST_CASE(transform_async_test)
+{
+    const auto f = [&](const int& i) { return i * i; };
+
+    std::vector<int> ints_(10000);
+    std::iota(ints_.begin(), ints_.end(), 1);
+    const auto& ints = ints_;
+
+    std::vector<int> results(ints.size());
+
+    results.back() = results.front();
+    std::transform(ints.begin(), ints.end(), results.begin(), f);
+    TEST_ASSERT_EQ(results.back(), f(ints.back()));
+
+    results.back() = results.front();
+    mt::transform_async(ints.begin(), ints.end(), results.begin(), f, 1000);
+    TEST_ASSERT_EQ(results.back(), f(ints.back()));
+
+    results.back() = results.front();
+    mt::transform_async(ints.begin(), ints.end(), results.begin(), f, 1000, std::launch::async);
+    TEST_ASSERT_EQ(results.back(), f(ints.back()));
+}
 }
 
 int main(int, char**)
 {
     TEST_CHECK(Runnable1DTest);
     TEST_CHECK(Runnable1DWithCopiesTest);
+    TEST_CHECK(transform_async_test);
 
     return 0;
 }

@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 #include <utility>
-
+#include <std/span>
 #include <std/filesystem>
 
 #include <scene/SceneGeometry.h>
@@ -127,14 +127,18 @@ public:
     static void readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
-                         std::vector<std::complex<float> >& widebandData);
+                         std::vector<std::complex<float>>& widebandData);
     static void readSicd(const std::filesystem::path& sicdPathname,
-                         const std::vector<std::string>& schemaPaths,
+                         const std::vector<std::filesystem::path>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
-                         std::vector<std::complex<float> >& widebandData);
-    static std::vector<std::complex<float>> readSicd(const std::filesystem::path& sicdPathname,
-                         const std::vector<std::string>& schemaPaths,
-                         ComplexData& complexData);
+                         std::vector<std::complex<float>>& widebandData);
+    static ComplexImageResult readSicd(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths);
+    static ComplexImageResult readSicd(const std::filesystem::path& path)
+    {
+        static const std::vector<std::filesystem::path> schemaPaths;
+        return readSicd(path, schemaPaths);
+    }
+
 
     /*
      * Given a SICD path name and a list of schema, this function reads
@@ -303,6 +307,12 @@ public:
                                 const types::RowCol<size_t>& offset,
                                 const types::RowCol<size_t>& extent,
                                 std::vector<std::complex<float> >& buffer);
+     template<typename T> 
+     static void getRawData(NITFReadControl& reader,
+                                const ComplexData& complexData,
+                                const types::RowCol<size_t>& offset,
+                                const types::RowCol<size_t>& extent,
+                                std::vector<T>& buffer);
 
      /*
      * Given a SICD pathname and list of schemas, provides a representation
@@ -645,6 +655,22 @@ public:
     // for unit-testing
     static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable*);
 };
+
+
+// c.f. six_sicd.i
+extern std::vector<std::byte> readFromNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths,
+    std::unique_ptr<ComplexData>& pComplexData);
+inline std::vector<std::byte> readFromNITF(const std::filesystem::path& pathname, std::unique_ptr<ComplexData>& pComplexData)
+{
+    static const std::vector<std::filesystem::path> schemaPaths;
+    return readFromNITF(pathname, schemaPaths, pComplexData);
+}
+
+// c.f. six_sicd.i
+extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::string>& schemaPaths, const ComplexData&, std::span<const std::complex<float>> image);
+extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexData&, std::span<const std::complex<float>> image);
+extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexImage&);
+
 }
 }
 #endif

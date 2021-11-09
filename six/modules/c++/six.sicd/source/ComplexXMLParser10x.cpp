@@ -33,13 +33,13 @@ namespace six
 {
 namespace sicd
 {
-ComplexXMLParser10x::ComplexXMLParser10x(const std::string& version,
+ComplexXMLParser10x::ComplexXMLParser10x(const std::string& strVersion,
                                          logging::Logger* log,
                                          bool ownLog) :
-    ComplexXMLParser(version, false, std::unique_ptr<six::SICommonXMLParser>(
+    ComplexXMLParser(strVersion, false, std::unique_ptr<six::SICommonXMLParser>(
                      new six::SICommonXMLParser10x(
-                        versionToURI(version), false,
-                        versionToURI(version), log)),
+                        versionToURI(strVersion), false,
+                        versionToURI(strVersion), log)),
                      log, ownLog)
 {
 }

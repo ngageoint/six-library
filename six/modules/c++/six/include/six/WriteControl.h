@@ -22,13 +22,18 @@
 #ifndef __SIX_WRITE_CONTROL_H__
 #define __SIX_WRITE_CONTROL_H__
 
+#include <memory>
+#include <std/span>
+#include <vector>
+#include <std/filesystem>
+#include <complex>
+
 #include "six/Types.h"
 #include "six/Region.h"
 #include "six/Container.h"
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
 #include <import/logging.h>
-#include <mem/SharedPtr.h>
 
 namespace six
 {
@@ -38,12 +43,10 @@ typedef std::vector<io::InputStream*> SourceList;
 
 //!  A vector of Buffer objects (one per SICD, N per SIDD)
 typedef std::vector<const UByte*> BufferList;
-using buffer_list = std::vector<const std::byte*>;
 
 //!  Same as above but used in overloadings to help the compiler out when
 //   it's convenient for the caller to put non-const pointers in the vector
 typedef std::vector<UByte*> NonConstBufferList;
-using buffer_list_mutable = std::vector<std::byte*>;
 
 /*!
  *  \class WriteControl
@@ -73,7 +76,7 @@ struct WriteControl
     static const char OPT_BUFFER_SIZE[];
 
     //!  Constructor.  Null-sets the Container
-    WriteControl() noexcept :
+    WriteControl() noexcept(false) :
         mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
     {
         setLogger(nullptr);
@@ -127,18 +130,8 @@ struct WriteControl
     {
         save(sources, toFile, std::vector<std::string>());
     }
-    void save(const buffer_list& sources, const std::string& toFile)
-    {
-        save(convertBufferList(sources), toFile);
-    }
-
     virtual void save(const BufferList& sources, const std::string& toFile,
                       const std::vector<std::string>& schemaPaths) = 0;
-    virtual void save(const buffer_list& sources, const std::string& toFile,
-                      const std::vector<std::string>& schemaPaths)
-    {
-        save(convertBufferList(sources), toFile, schemaPaths);
-    }
 
     // For convenience since the compiler can't implicitly convert
     // std::vector<T*> to std::vector<const T*>
@@ -146,18 +139,8 @@ struct WriteControl
     {
         save(convertBufferList(sources), toFile);
     }
-    void save(const buffer_list_mutable& sources, const std::string& toFile)
-    {
-        save(convertBufferList(sources), toFile);
-    }
 
     void save(const NonConstBufferList& sources,
-              const std::string& toFile,
-              const std::vector<std::string>& schemaPaths)
-    {
-        save(convertBufferList(sources), toFile, schemaPaths);
-    }
-    void save(const buffer_list_mutable& sources,
               const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
     {
@@ -257,6 +240,14 @@ struct WriteControl
         mLog = log ? log : new logging::NullLogger;
         mOwnLog = log ? ownLog : true;
     }
+    void setLogger(std::unique_ptr<logging::Logger>&& logger)
+    {
+        setLogger(logger.release(), true /*ownLog*/);
+    }
+    void setLogger(logging::Logger& logger)
+    {
+        setLogger(&logger, false /*ownLog*/);
+    }
 
     virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
     {
@@ -269,9 +260,7 @@ struct WriteControl
         return mXMLRegistry;
     }
 
-    template<typename TBufferList>
-    static inline
-    BufferList convertBufferList(const TBufferList& buffers)
+    BufferList convertBufferList(const NonConstBufferList& buffers)
     {
         BufferList retval;
         for (const auto& buffer : buffers)

@@ -35,13 +35,9 @@ SICDByteProvider::SICDByteProvider(
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<ComplexXMLControl>();
 
-    std::shared_ptr<Container> container(new Container(
-            DataType::COMPLEX));
-
     // The container wants to take ownership of the data
     // To avoid memory problems, we'll just clone it
-    container->addData(data.clone());
-
+    auto container = std::make_shared<Container>(data.clone());
     initialize(container, xmlRegistry, schemaPaths, maxProductSize);
 }
 

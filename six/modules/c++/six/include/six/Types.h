@@ -28,7 +28,7 @@
 #include <vector>
 #include <limits>
 #include <string>
-
+#include <stdexcept>
 #include <std/memory>
 
 #include <scene/sys_Conf.h>
@@ -197,6 +197,7 @@ struct Constants
             // Each pixel is stored as a pair of numbers that represent the amplitude and phase
             // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
             // component, 2 bytes per pixel). 
+            static_assert(sizeof(std::pair<uint8_t, uint8_t>) == 2, "AMP8I_PHS8I should be two 8-bit integers");
             return 2;
         }
 
@@ -399,9 +400,19 @@ struct LUT
 struct AmplitudeTable final : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
-    AmplitudeTable() noexcept : 
-        LUT(UINT8_MAX+1 /*i.e., 256*/, sizeof(double))
+    AmplitudeTable(size_t elementSize) noexcept(false) :
+        LUT(UINT8_MAX + 1 /*i.e., 256*/, elementSize)
     {
+    }
+    AmplitudeTable() noexcept(false) :  AmplitudeTable(sizeof(double)) 
+    {
+    }
+    AmplitudeTable(const nitf::LookupTable& lookupTable) noexcept(false) : LUT(lookupTable)
+    {
+        if (size() != 256)
+        {
+            throw std::invalid_argument("lookupTable should have 256 elements.");
+        }
     }
 
     size_t size() const

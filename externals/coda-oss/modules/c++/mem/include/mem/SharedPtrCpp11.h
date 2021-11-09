@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __MEM_SHARED_PTR_CPP_11_H__
-#define __MEM_SHARED_PTR_CPP_11_H__
+#ifndef CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_
+#define CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_
 #pragma once
 
 #include <memory>
@@ -35,14 +35,33 @@ namespace mem
 // "&&" and std::move. But for member data and the like it can reduce some
 // boiler-plate code; note that it's often possible to just use std::unique_ptr
 // directly.  This is mostly needed to support existing interfaces.
-#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-template <typename T>
-using auto_ptr = std::auto_ptr<T>;
+#if CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    #if defined(CODA_OSS_no_autoptr) && (!CODA_OSS_no_autoptr)
+        #error "std::auto_ptr was removed in C++17."
+    #endif
+    #define CODA_OSS_autoptr_is_std 0  // mem::auto_ptr != std::auto_ptr
+#else // C++11 or C++14 still have std::auto_ptr, but it's depricated
+    #ifdef CODA_OSS_no_autoptr  // don't use std::auto_ptr even if it's available
+        #define CODA_OSS_autoptr_is_std 0  // mem::auto_ptr != std::auto_ptr
+    #else
+        #define CODA_OSS_autoptr_is_std 1  // mem::auto_ptr == std::auto_ptr
+    #endif
+#endif
+ template <typename T> using auto_ptr =
+#if CODA_OSS_autoptr_is_std
+   std::auto_ptr<T>;
 #else
-template <typename T>
-using auto_ptr = std::unique_ptr<T>;
+    std::unique_ptr<T>;
 #endif
 
+// Pretty much give-up on mem::SharedPtr as it's too hard to get something that will
+// compile with all the different compilers; let somebody else worry about that
+// via std::shared_ptr.  The only code change is use_count() instead of getCount(),
+// and that's mostly used in unit-tests.
+#if !CODA_OSS_enable_mem_SharedPtr
+template<typename T>
+using SharedPtr = std::shared_ptr<T>;
+#else
 /*!
  *  \class SharedPtr
  *  \brief This is a derived class of std::shared_ptr. The purpose of this
@@ -71,8 +90,13 @@ public:
     SharedPtr(SharedPtr&&) = default;
     SharedPtr& operator=(SharedPtr&&) = default;
 
-    SharedPtr(std::shared_ptr<T> ptr) : std::shared_ptr<T>(ptr) {}
-    SharedPtr& operator=(const std::shared_ptr<T>& ptr)
+    template<typename OtherT>
+    SharedPtr(const std::shared_ptr<OtherT>& ptr)
+    {
+        *this = ptr;
+    } 
+    template<typename OtherT>
+    SharedPtr& operator=(const std::shared_ptr<OtherT>& ptr)
     {
       std::shared_ptr<T>& base = *this;
       base = ptr;
@@ -90,7 +114,7 @@ public:
         std::shared_ptr<T>::reset(scopedPtr.release());
     }
 
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
     // The base class only handles auto_ptr<T>&&
     explicit SharedPtr(mem::auto_ptr<T> ptr) :
         std::shared_ptr<T>(ptr.release())
@@ -116,6 +140,7 @@ public:
         return std::shared_ptr<T>::use_count();
     }
 };
+#endif // CODA_OSS_enable_mem_SharedPtr
 
 // C++11 inadvertently ommitted make_unique; provide it here. (Swiped from <memory>.)
 namespace make
@@ -163,4 +188,11 @@ void unique(TArgs&&...) = delete;
 }  // namespace make
 } // namespace mem
 
-#endif
+// try to make code changes a tiny bit easier?
+template<typename T>
+inline long getCount(const std::shared_ptr<T>& p) noexcept // be sure const& so that calling doesn't increment!
+{
+    return p.use_count();
+}
+
+#endif // CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_

@@ -37,7 +37,7 @@ def configure(conf):
             boostVer = Options.options.boost_version
             libName = ['libboost_serialization', msvcVer[1], 'mt',
                        linkType + libType, boostVer]
-            libName = '-'.join(filter(lambda x: x is not '', libName))
+            libName = '-'.join(filter(lambda x: x != '', libName))
             incPath = boostHome
             libPath = join(boostHome, arch + msvcVer[0])
         else :

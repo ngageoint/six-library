@@ -26,7 +26,6 @@
 
 #include <memory>
 
-#include <mem/SharedPtr.h>
 #include <logging/Logger.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/Document.h>

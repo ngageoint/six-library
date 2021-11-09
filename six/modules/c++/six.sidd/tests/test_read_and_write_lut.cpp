@@ -20,7 +20,10 @@
 *
 */
 
+#include <vector>
 #include <std/filesystem>
+#include <std/span>
+#include <std/cstddef>
 
 #include <import/six.h>
 #include <import/six/sidd.h>
@@ -51,31 +54,30 @@ struct Buffers final
 {
     std::byte* add(size_t numBytes)
     {
-        mBuffers.push_back(std::unique_ptr<std::byte[]>(new std::byte[numBytes]));
-        return mBuffers.back().get();
+        mBuffers.push_back(std::vector<std::byte>(numBytes));
+        return mBuffers.back().data();
     }
 
-    std::vector<std::byte*> get() const
+    six::BufferList get()
     {
-        std::vector<std::byte*> retval;
+        six::BufferList retval;
         for (auto& buffer : mBuffers)
         {
-            retval.push_back(buffer.get());
+            const void* pBuffer = buffer.data();
+            retval.push_back(static_cast<const six::UByte*>(pBuffer));
         }
         return retval;
     }
 
 private:
-    std::vector<std::unique_ptr<std::byte[]>> mBuffers;
+    std::vector<std::vector<std::byte>> mBuffers;
 };
 
 std::string doRoundTrip(const std::string& siddPathname)
 {
     six::XMLControlRegistry xmlRegistry;
 
-    xmlRegistry.addCreator(six::DataType::DERIVED,
-        new six::XMLControlCreatorT<
-        six::sidd::DerivedXMLControl>());
+    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
@@ -86,7 +88,7 @@ std::string doRoundTrip(const std::string& siddPathname)
     six::Region region;
 
     Buffers buffers;
-    for (size_t ii = 0, imageNum = 0; ii < container->getNumData(); ++ii)
+    for (size_t ii = 0, imageNum = 0; ii < container->size(); ++ii)
     {
         six::Data* const data = container->getData(ii);
 
@@ -98,7 +100,7 @@ std::string doRoundTrip(const std::string& siddPathname)
 
             size_t numBytesPerPixel = data->getNumBytesPerPixel();
 
-            std::byte* buffer = buffers.add(numPixels * numBytesPerPixel);
+            auto buffer = buffers.add(numPixels * numBytesPerPixel);
 
             setDims(region, extent);
             region.setBuffer(buffer);
@@ -117,9 +119,7 @@ nitf::LookupTable readLookupTable(const std::string& pathname)
 {
     six::XMLControlRegistry xmlRegistry;
 
-    xmlRegistry.addCreator(six::DataType::DERIVED,
-        new six::XMLControlCreatorT<
-        six::sidd::DerivedXMLControl>());
+    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
@@ -172,9 +172,7 @@ mem::ScopedCopyablePtr<six::LUT> readLUT(const std::string& pathname)
 {
     six::XMLControlRegistry xmlRegistry;
 
-    xmlRegistry.addCreator(six::DataType::DERIVED,
-        new six::XMLControlCreatorT<
-        six::sidd::DerivedXMLControl>());
+    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);

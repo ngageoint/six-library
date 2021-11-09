@@ -182,12 +182,12 @@ namespace six
 {
 namespace sicd
 {
-ComplexXMLParser050::ComplexXMLParser050(const std::string& version,
+ComplexXMLParser050::ComplexXMLParser050(const std::string& strVersion,
                                          logging::Logger* log,
                                          bool ownLog) :
-    ComplexXMLParser041(version, false, std::unique_ptr<six::SICommonXMLParser>(
+    ComplexXMLParser041(strVersion, false, std::unique_ptr<six::SICommonXMLParser>(
                            new ::SICommonXMLParser050(
-                               versionToURI(version), log)),
+                               versionToURI(strVersion), log)),
                         log, ownLog)
 {
 }

@@ -32,10 +32,8 @@ namespace fs = std::filesystem;
 static std::string testName;
 
 static std::string argv0;
-static fs::path findInputFile()
+static fs::path findInputFile(const fs::path& inputFile)
 {
-    const fs::path inputFile = fs::path("modules") / "c++" / "nitf" / "unittests" / "sicd_50x50.nitf";
-
     fs::path root;
     if (argv0.empty())
     {
@@ -50,13 +48,49 @@ static fs::path findInputFile()
 
     return root / inputFile;
 }
+static fs::path findInputFile()
+{
+    const auto inputPath = fs::path("modules") / "c++" / "nitf" / "unittests" / "sicd_50x50.nitf";
+    return findInputFile(inputPath);
+}
+static fs::path findInputFile(bool withAmpTable)
+{
+    fs::path inputPath;
+    if (withAmpTable)
+    {
+        inputPath = fs::path("modules") / "c++" / "nitf" / "unittests" / "8_bit_Amp_Phs_Examples" / 
+            "With_amplitude_table" /
+            "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
+    }
+    else
+    {
+        inputPath = fs::path("modules") / "c++" / "nitf" / "unittests" / "8_bit_Amp_Phs_Examples" / 
+            "No_amplitude_table" /
+            "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
+
+    }
+    return findInputFile(inputPath);
+}
+
+struct expected_values final
+{
+    uint32_t nRows = 50;
+    uint32_t nCols = 50;
+    nitf::PixelValueType pixelValueType = nitf::PixelValueType::Floating; // "R"
+    uint32_t bitsPerPixel = 32;
+    std::string actualBitsPerPixel = "32";
+    uint32_t pixelsPerHorizBlock = 50;
+    uint32_t pixelsPerVertBlock = 50;
+    int luts = 0;
+};
 
 static void writeImage(nitf::ImageSegment &segment,
                 nitf::Reader &reader,
                 const int imageNumber,
                 const std::string& imageName,
                 uint32_t rowSkipFactor,
-                uint32_t columnSkipFactor, bool optz)
+                uint32_t columnSkipFactor, bool optz,
+    const expected_values& expected)
 {
     nitf::ImageReader deserializer = reader.newImageReader(imageNumber);
 
@@ -79,19 +113,19 @@ static void writeImage(nitf::ImageSegment &segment,
     if (optz)
     {
         const auto irep = segment.getSubheader().imageRepresentation();
+        const auto irepStartsWithRGB = (irep == nitf::ImageRepresentation::RGB) || (irep == nitf::ImageRepresentation::RGB_LUT);
         const auto ic = segment.getSubheader().imageCompression();
 
-        const auto imageMode = segment.getSubheader().getImageMode().toString();
-        if ((nBands == 3) && (imageMode == "P") && str::startsWith(irep, "RGB")
+        const auto imageMode = segment.getSubheader().imageBlockingMode();
+        if ((nBands == 3) && (imageMode == nitf::BlockingMode::Pixel) && irepStartsWithRGB
                 && (NITF_NBPP_TO_BYTES(nBits) == 1) && str::startsWith(ic, "N"))
         {
             subWindowSize *= nBands;
             nBands = 1;
             //std::cout << "Using accelerated 3-band RGB mode pix-interleaved image" << std::endl;
         }
-        if ((nBands == 2) && (imageMode == "P") && str::startsWith(ic, "N"))
+        if ((nBands == 2) && (imageMode == nitf::BlockingMode::Pixel) && str::startsWith(ic, "N"))
         {
-
             subWindowSize *= nBands;
             nBands = 1;
             //std::cout << "Using accelerated 2-band IQ mode pix-interleaved image" << std::endl;
@@ -100,17 +134,17 @@ static void writeImage(nitf::ImageSegment &segment,
 
     TEST_ASSERT_EQ(optz ? 1 : 2, nBands);
     TEST_ASSERT_EQ(0, xBands);
-    TEST_ASSERT_EQ(50, nRows);
-    TEST_ASSERT_EQ(50, nCols);
-    TEST_ASSERT_EQ("R  ", subheader.getPixelValueType().toString());
-    TEST_ASSERT_EQ(32, subheader.numBitsPerPixel());
-    TEST_ASSERT_EQ("32", subheader.getActualBitsPerPixel().toString());
+    TEST_ASSERT_EQ(expected.nRows, nRows);
+    TEST_ASSERT_EQ(expected.nCols, nCols);
+    TEST_ASSERT_EQ(expected.pixelValueType, subheader.pixelValueType()); 
+    TEST_ASSERT_EQ(expected.bitsPerPixel, subheader.numBitsPerPixel());
+    TEST_ASSERT_EQ(expected.actualBitsPerPixel, subheader.getActualBitsPerPixel().toString());
     TEST_ASSERT_EQ("R", subheader.getPixelJustification().toString());
-    TEST_ASSERT_EQ("P", subheader.getImageMode().toString());
+    TEST_ASSERT_EQ(nitf::BlockingMode::Pixel, subheader.imageBlockingMode()); // "P"
     TEST_ASSERT_EQ(1, subheader.numBlocksPerRow());
     TEST_ASSERT_EQ(1, subheader.numBlocksPerCol());
-    TEST_ASSERT_EQ(50, subheader.numPixelsPerHorizBlock());
-    TEST_ASSERT_EQ(50, subheader.numPixelsPerVertBlock());
+    TEST_ASSERT_EQ(expected.pixelsPerHorizBlock, subheader.numPixelsPerHorizBlock());
+    TEST_ASSERT_EQ(expected.pixelsPerVertBlock, subheader.numPixelsPerVertBlock());
     TEST_ASSERT_EQ("NC", subheader.imageCompression());
     TEST_ASSERT_EQ("    ", subheader.getCompressionRate().toString());
 
@@ -126,6 +160,10 @@ static void writeImage(nitf::ImageSegment &segment,
     for (uint32_t band = 0; band < nBands; band++)
     {
         bandList[band] = band;
+
+        const auto bandInfo = subheader.getBandInfo(band);
+        const int luts = bandInfo.getNumLUTs();
+        TEST_ASSERT_EQ(expected.luts, luts);
     }
     setBands(subWindow, bandList);
 
@@ -152,7 +190,7 @@ static void writeImage(nitf::ImageSegment &segment,
     }
 }
 
-static void test_image_loading_(const std::string& input_file, bool optz)
+static void test_image_loading_(const std::string& input_file, bool optz, const expected_values& expected)
 {
     /* Skip factors */
     uint32_t rowSkipFactor = 1;
@@ -178,7 +216,7 @@ static void test_image_loading_(const std::string& input_file, bool optz)
 
         /*  Write the thing out  */
         writeImage(imageSegment, reader, count, input_file,
-            rowSkipFactor, columnSkipFactor, optz);
+            rowSkipFactor, columnSkipFactor, optz, expected);
     }
 }
 
@@ -188,13 +226,43 @@ TEST_CASE(test_image_loading)
 
     /*  If you didnt give us a nitf file, we're croaking  */
     const auto input_file = findInputFile().string();
+    expected_values expected; // braced-initialization cause CodeQL to fail?
+    expected.nRows = expected.nCols = 50;
+    expected.pixelValueType = nitf::PixelValueType::Floating; // "R"
+    expected.bitsPerPixel = 32;
+    expected.actualBitsPerPixel = "32";
+    expected.pixelsPerHorizBlock = expected.nCols;
+    expected.pixelsPerVertBlock = expected.nRows;
 
-    test_image_loading_(input_file, false /*optz*/);
-    test_image_loading_(input_file, true /*optz*/);
+    test_image_loading_(input_file, false /*optz*/, expected);
+    test_image_loading_(input_file, true /*optz*/, expected);
+}
+
+TEST_CASE(test_8bit_image_loading)
+{
+    ::testName = testName;
+
+    auto input_file = findInputFile(true /*withAmpTable*/).string();
+    expected_values expected; // braced-initialization cause CodeQL to fail?
+    expected.nRows = 3975;
+    expected.nCols = 6724;
+    expected.pixelValueType = nitf::PixelValueType::Integer; // "R"
+    expected.bitsPerPixel = 8;
+    expected.actualBitsPerPixel = "08";
+    expected.pixelsPerHorizBlock = expected.nCols;
+    expected.pixelsPerVertBlock = expected.nRows;
+
+    test_image_loading_(input_file, false /*optz*/, expected);
+    test_image_loading_(input_file, true /*optz*/, expected);
+
+    input_file = findInputFile(false /*withAmpTable*/).string();
+    test_image_loading_(input_file, false /*optz*/, expected);
+    test_image_loading_(input_file, true /*optz*/, expected);
 }
 
 TEST_MAIN(
     (void)argc;
     argv0 = argv[0];
     TEST_CHECK(test_image_loading);
+    TEST_CHECK(test_8bit_image_loading);
 )

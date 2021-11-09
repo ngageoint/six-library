@@ -43,7 +43,7 @@ void stripImages(nitf::Record& record)
         nitf::ImageSegment image = *iter;
         nitf::ImageSubheader subheader = image.getSubheader();
         const auto irep = subheader.imageRepresentation();
-        if (irep == "NODISPLY")
+        if (irep == nitf::ImageRepresentation::NODISPLY)
         {
             invisibleImages.push_back(ii);
         }
