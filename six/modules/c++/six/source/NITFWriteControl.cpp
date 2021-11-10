@@ -344,9 +344,6 @@ template<typename TImageData>
 void writeWithNitro(nitf::Writer& mWriter, const std::map<std::string, void*>& mCompressionOptions,
     const TImageData& imageData, const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data)
 {
-    const auto numChannels = data.getNumChannels();
-    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-
     for (size_t jj = 0; jj < imageSegments.size(); ++jj)
     {
         // We will use the ImageWriter provided by NITRO so that we can
@@ -537,12 +534,13 @@ void NITFWriteControl::save(const BufferList& list, const std::string& outputFil
 {
     save_buffer_list_to_file(list, outputFile, schemaPaths);
 }
-void NITFWriteControl::save(const std::complex<float>* image, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
+
+void save(NITFWriteControl& writeControl, const std::complex<float>* image, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
 {
     // Keeping this code-path in place as it's an easy way to test legacy BufferList functionality.
     const void* pImage = image;
     const BufferList list{ static_cast<const UByte*>(pImage) };
-    save(list, outputFile, schemaPaths);
+    writeControl.save(list, outputFile, schemaPaths);
 }
 
 void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPaths)

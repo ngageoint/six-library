@@ -615,7 +615,7 @@ void buffer_list_save(const fs::path& outputName, const std::vector<std::complex
     six::NITFWriteControl writer(std::move(pComplexData));
 
     static const std::vector<std::string> schemaPaths;
-    writer.save(image.data(), outputName.string(), schemaPaths); // API for Python; it uses six::BufferList
+    save(writer, image.data(), outputName.string(), schemaPaths); // API for Python; it uses six::BufferList
 }
 
 void save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
