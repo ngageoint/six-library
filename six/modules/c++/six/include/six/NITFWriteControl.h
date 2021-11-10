@@ -88,7 +88,7 @@ public:
 
     //! Constructor. Must call initialize to use.
     NITFWriteControl();
-    virtual ~NITFWriteControl() noexcept = default;
+    ~NITFWriteControl() noexcept {}
 
     /*!
      * Constructor. Calls initialize.
