@@ -328,19 +328,14 @@ static void test_assert(const six::sicd::ComplexData& complexData,
     TEST_ASSERT_EQ(expectedNumBytesPerPixel, numBytesPerPixel);
 }
 
-static std::vector<std::byte> readFromNITF_(const fs::path& inputPathname,
-    six::PixelType expectedPixelType, size_t expectedNumBytesPerPixel)
+static std::vector<std::byte> readFromNITF(const fs::path& inputPathname)
 {
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
     auto image = six::sicd::readFromNITF(inputPathname, pComplexData);
 
-    test_assert(*pComplexData, expectedPixelType, expectedNumBytesPerPixel);
+    test_assert(*pComplexData, six::PixelType::AMP8I_PHS8I, sizeof(AMP8I_PHS8I_t));
 
     return image;
-}
-static std::vector<std::byte> readFromNITF(const fs::path& inputPathname)
-{
-    return readFromNITF_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(AMP8I_PHS8I_t));
 }
 static std::vector<std::byte> readFromNITF(const fs::path& inputPathname, six::PixelType pixelType)
 {
@@ -388,20 +383,6 @@ TEST_CASE(test_read_sicd_8_bit_Amp_Phs_Examples)
     widebandData = readSicd(inputPathname);
 }
 
-static std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>& dims)
-{
-    std::vector<std::complex<float>> image;
-    image.reserve(dims.area());
-    for (size_t r = 0; r < dims.row; r++)
-    {
-        for (size_t c = 0; c < dims.col; c++)
-        {
-            image.push_back(std::complex<float>(r * 1.0f, c * -1.0f));
-        }
-    }
-    return image;
-}
-
 template<typename TImage>
 static void adjust_image(TImage& image)
 {
@@ -438,7 +419,7 @@ static std::vector<std::complex<float>> make_complex_image(const six::sicd::Comp
 {
     if (complexData.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
-        return adjust_image(complexData, make_complex_image(dims));
+        return adjust_image(complexData, six::sicd::testing::make_complex_image(dims));
     }
     throw std::invalid_argument("Unknown pixelType");
 }
@@ -486,35 +467,13 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::s
     }
 }
 
-static std::vector<std::byte> to_bytes(const six::sicd::ComplexImageResult& result)
-{
-    const auto& image = result.widebandData;
-    const auto bytes = six::as_bytes(image);
-
-    std::vector<std::byte> retval;
-    const auto& data = *(result.pComplexData);
-    if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
-    {
-        retval.resize(image.size() * data.getNumBytesPerPixel());
-        std::span<std::byte> pRetval(retval.data(), retval.size());
-        data.convertPixels(bytes, pRetval);
-    }
-    else
-    {
-        auto pBytes = bytes.data();
-        retval.insert(retval.begin(), pBytes, pBytes + bytes.size());
-    }
-
-    return retval;
-}
-
 static void read_nitf(const fs::path& path, six::PixelType pixelType, const std::vector<std::complex<float>>& image)
 {
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
     const auto result = readSicd_(path, pixelType, expectedNumBytesPerPixel);
     TEST_ASSERT(result.widebandData == image);
 
-    const auto bytes = to_bytes(result);
+    const auto bytes = six::sicd::testing::to_bytes(result);
     read_raw_data(path, pixelType, bytes);
 }
 
