@@ -64,41 +64,40 @@ static fs::path argv0()
     return retval;
 }
 
-static bool is_linux()
-{
-    return sys::Platform == sys::PlatformType::Linux; // TODO: MacOS?
-}
-
-// Google Test in Visual Studio
-static bool is_vs_gtest()
-{
-    return argv0().filename() == "Test.exe";
-}
-
 static fs::path externals_nitro_RelativelPath(const fs::path& filename)
 {
     return fs::path("externals") / "nitro" / "modules"/ "c++" / "nitf" / "unittests" / filename;
 }
 
+static fs::path findRootDir(const fs::path& dir)
+{
+    const auto six = dir / "six";
+    const auto externals = dir / "externals";
+    const auto six_sln = dir / "six.sln";
+    if (fs::is_directory(six) && fs::is_directory(externals) && fs::is_regular_file(six_sln))
+    {
+        return dir;
+    }
+    const auto parent = dir.parent_path();
+    return findRootDir(parent);
+}
+
 static fs::path buildRootDir()
 {
-    if (is_linux())
+    auto platform = sys::Platform; // "conditional expression is constant"
+    if (platform == sys::PlatformType::Windows)
     {
-        const auto root_dir = argv0().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path();
-        return root_dir;
+        // On Windows ... in Visual Studio or stand-alone?
+        if (argv0().filename() == "Test.exe") // Google Test in Visual Studio
+        {
+            const auto cwd = fs::current_path();
+            const auto root_dir = cwd.parent_path().parent_path();
+            return root_dir;
+        }
     }
 
-    // On Windows ... in Visual Studio or stand-alone?
-    if (is_vs_gtest())
-    {
-        const auto cwd = fs::current_path();
-        const auto root_dir = cwd.parent_path().parent_path();
-        return root_dir;
-    }
-
-    // stand-alone
-    const auto root_dir = argv0().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path();
-    return root_dir;
+    // Linux or stand-alone
+    return findRootDir(argv0());
 }
 
 static fs::path getNitfExternalsPath(const fs::path& filename)
@@ -109,7 +108,7 @@ static fs::path getNitfExternalsPath(const fs::path& filename)
 
 static fs::path nitfPluginRelativelPath()
 {
-    if (is_vs_gtest())
+    if (argv0().filename() == "Test.exe") // Google Test in Visual Studio
     {
         static const sys::OS os;
         static const std::string configuration = os.getSpecialEnv("Configuration");
@@ -126,7 +125,6 @@ static void setNitfPluginPath()
     //std::clog << "NITF_PLUGIN_PATH=" << path << "\n";
     sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }
-
 
 static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXMLControl& reader)
 {
