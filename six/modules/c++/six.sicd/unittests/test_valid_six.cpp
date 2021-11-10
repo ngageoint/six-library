@@ -53,7 +53,6 @@
 #endif
 
 namespace fs = std::filesystem;
-using AMP8I_PHS8I_t = six::sicd::ImageData::AMP8I_PHS8I_t;
 
 static std::string testName;
 
@@ -238,8 +237,7 @@ static std::vector<std::byte> readFromNITF_(const fs::path& inputPathname,
 
     return image;
 }
-template<typename T> std::vector<std::byte> readFromNITF(const fs::path& inputPathname);
-template<> std::vector<std::byte> readFromNITF<std::complex<float>>(const fs::path& inputPathname)
+static std::vector<std::byte> readFromNITF(const fs::path& inputPathname)
 {
     return readFromNITF_(inputPathname, six::PixelType::RE32F_IM32F, sizeof(std::complex<float>));
 }
@@ -247,7 +245,7 @@ static std::vector<std::byte> readFromNITF(const fs::path& inputPathname, six::P
 {
     if (pixelType == six::PixelType::RE32F_IM32F)
     {
-        return readFromNITF<std::complex<float>>(inputPathname);
+        return readFromNITF(inputPathname);
     }
     throw std::invalid_argument("Unknown pixelType");
 }
@@ -255,7 +253,7 @@ static std::vector<std::byte> readFromNITF(const fs::path& inputPathname, six::P
 TEST_CASE(test_readFromNITF_sicd_50x50)
 {
     auto inputPathname = getNitfPath("sicd_50x50.nitf");
-    auto buffer = readFromNITF<std::complex<float>>(inputPathname);
+    auto buffer = readFromNITF(inputPathname);
 }
 
 static six::sicd::ComplexImageResult readSicd_(const fs::path& sicdPathname,
@@ -265,15 +263,14 @@ static six::sicd::ComplexImageResult readSicd_(const fs::path& sicdPathname,
     test_assert(*(result.pComplexData), expectedPixelType, expectedNumBytesPerPixel);
     return result;
 }
-template<typename T> std::vector<std::complex<float>> readSicd(const fs::path& inputPathname);
-template<> std::vector<std::complex<float>> readSicd<std::complex<float>>(const fs::path& inputPathname)
+static std::vector<std::complex<float>> readSicd(const fs::path& inputPathname)
 {
     return readSicd_(inputPathname, six::PixelType::RE32F_IM32F, sizeof(std::complex<float>)).widebandData;
 }
 TEST_CASE(test_read_sicd_50x50)
 {
     auto inputPathname = getNitfPath("sicd_50x50.nitf");
-    auto widebandData = readSicd<std::complex<float>>(inputPathname);
+    auto widebandData = readSicd(inputPathname);
 }
 
 static std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>& dims)
@@ -303,35 +300,13 @@ static void adjust_image(TImage& image)
     }
     pImageBytes[pImageBytes.size() - 1] = static_cast<std::byte>(']');
 }
-static std::vector<std::complex<float>> adjust_image(const six::sicd::ComplexData& complexData,
-    std::vector<std::complex<float>>&& image)
-{
-    if (complexData.getPixelType() != six::PixelType::AMP8I_PHS8I)
-    {
-        adjust_image(image);
-        return image;
-    }
 
-    // Convert from AMP8I_PHS8I to that when we convert to AMP8I_PHS8I for writing
-    // we'll end up with the "[***...***]" in the file
-    void* image_data = image.data();
-    std::span<AMP8I_PHS8I_t> from(static_cast<AMP8I_PHS8I_t*>(image_data), getExtent(complexData).area());
-    adjust_image(from);
-
-    std::vector<std::complex<float>> retval(from.size());
-    complexData.imageData->from_AMP8I_PHS8I(from, retval);
-    return retval;
-}
 static std::vector<std::complex<float>> make_complex_image(const six::sicd::ComplexData& complexData, const types::RowCol<size_t>& dims)
 {
     if (complexData.getPixelType() == six::PixelType::RE32F_IM32F)
     {
         return make_complex_image(dims);
         //return adjust_image(complexData, make_complex_image(dims));
-    }
-    if (complexData.getPixelType() == six::PixelType::AMP8I_PHS8I)
-    {
-        return adjust_image(complexData, make_complex_image(dims));
     }
     throw std::invalid_argument("Unknown pixelType");
 }
@@ -373,13 +348,6 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::s
     if (pixelType == six::PixelType::RE32F_IM32F)
     {
         std::vector<std::complex<float>> rawData;
-        six::sicd::Utilities::getRawData(reader.NITFReadControl(), complexData, offset, extent, rawData);
-        test_assert_eq(bytes, rawData);
-        test_assert_eq(expectedBytes, rawData);
-    }
-    else if (pixelType == six::PixelType::AMP8I_PHS8I)
-    {
-        std::vector<AMP8I_PHS8I_t> rawData;
         six::sicd::Utilities::getRawData(reader.NITFReadControl(), complexData, offset, extent, rawData);
         test_assert_eq(bytes, rawData);
         test_assert_eq(expectedBytes, rawData);
