@@ -57,7 +57,7 @@ struct NITFReadControl : public ReadControl
     NITFReadControl();
 
     //!  Destructor
-    virtual ~NITFReadControl() noexcept
+    virtual ~NITFReadControl() noexcept(true)
     {
         reset();
     }
