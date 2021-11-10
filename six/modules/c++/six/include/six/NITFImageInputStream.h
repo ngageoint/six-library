@@ -56,7 +56,7 @@ public:
             nitf::ImageReader imageReader);
 
     //!  Destructor
-    virtual ~NITFImageInputStream() noexcept(true) = default;
+    virtual ~NITFImageInputStream() noexcept {}
 
 
     NITFImageInputStream(const NITFImageInputStream&) = delete;
