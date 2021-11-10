@@ -385,7 +385,7 @@ NRTAPI(nrt_IOInterface *) nrt_IOHandleAdapter_open(const char *fname,
     return nrt_IOHandleAdapter_construct(handle, accessFlags, error);
 }
 
-NRTAPI(nrt_IOInterface *) nrt_BufferAdapter_construct(char *buf, size_t size,
+NRTAPI(nrt_IOInterface *) nrt_BufferAdapter_construct(const char *buf, size_t size,
                                                       NRT_BOOL ownBuf,
                                                       nrt_Error * error)
 {
@@ -420,7 +420,7 @@ NRTAPI(nrt_IOInterface *) nrt_BufferAdapter_construct(char *buf, size_t size,
         goto CATCH_ERROR;
     }
     memset(control, 0, sizeof(BufferIOControl));
-    control->buf = buf;
+    control->buf = (char*) buf;
     control->size = size;
     control->ownBuf = ownBuf;
 
