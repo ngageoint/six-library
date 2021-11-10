@@ -47,7 +47,6 @@ public:
         mWindow(1, numCols, &mBand, 1)
     {
     }
-    ~RowStreamer() noexcept {}
 
     virtual void nextRow(uint32_t /*band*/, void* buffer)
     {
