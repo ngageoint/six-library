@@ -122,7 +122,7 @@ int main(int argc, char** argv)
         std::vector<std::filesystem::path> schemaPaths;
         std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
 
-        writer.save(image, outputName, schemaPaths);
+        save(writer, image, outputName, schemaPaths);
 
         return 0;
     }

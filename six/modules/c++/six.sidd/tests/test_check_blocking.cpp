@@ -89,7 +89,7 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
             six::NITFHeaderCreator::OPT_MAX_PRODUCT_SIZE, productSize);
 
     six::NITFWriteControl writer(options, container);
-    writer.save(buffer, pathname, std::vector<std::filesystem::path>());
+    save(writer, buffer, pathname, std::vector<std::filesystem::path>());
 
 }
 
