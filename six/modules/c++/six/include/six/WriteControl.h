@@ -85,7 +85,7 @@ struct WriteControl
     }
 
     //!  Destructor.  Does not release any memory
-    virtual ~WriteControl() = default;
+    virtual ~WriteControl() noexcept = default;
 
     WriteControl(const WriteControl&) = delete;
     WriteControl& operator=(const WriteControl&) = delete;
