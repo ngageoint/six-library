@@ -481,7 +481,7 @@ static void buffer_list_save(const fs::path& outputName, const std::vector<std::
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
-    six::NITFWriteControl writer(std::move(pComplexData));
+    six::NITFWriteControl writer(std::unique_ptr<six::Data>(std::move(pComplexData)));
 
     static const std::vector<std::string> schemaPaths;
     save(writer, image.data(), outputName.string(), schemaPaths); // API for Python; it uses six::BufferList
