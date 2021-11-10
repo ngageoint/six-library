@@ -63,7 +63,7 @@ struct ReadControl
     }
 
     //!  Destructor doesnt release anything
-    virtual ~ReadControl() noexcept = default;
+    virtual ~ReadControl() = default;
 
     ReadControl(const ReadControl&) = delete;
     ReadControl& operator=(const ReadControl&) = delete;
