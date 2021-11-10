@@ -111,7 +111,7 @@ NITFAPI(nitf_Field *) nitf_Field_construct(size_t length,
  *  \return Success or failure
  */
 NITFAPI(NITF_BOOL) nitf_Field_setRawData(nitf_Field * field,
-        NITF_DATA * data,
+        const NITF_DATA * data,
         size_t dataLength,
         nitf_Error * error);
 
