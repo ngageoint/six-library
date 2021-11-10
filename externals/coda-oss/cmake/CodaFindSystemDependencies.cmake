@@ -5,6 +5,10 @@ macro(coda_find_system_dependencies)
     set(THREADS_PREFER_PTHREAD_FLAG TRUE)
     find_package(Threads)
 
+    # creates imported target CURL::libcurl, if found
+    # see https://cmake.org/cmake/help/latest/module/FindCURL.html
+    find_package(CURL)
+
     # creates imported target Boost::serialization, if found
     # see https://cmake.org/cmake/help/latest/module/FindBoost.html
     set(ENABLE_BOOST OFF CACHE BOOL "Enable building modules dependent on Boost")
