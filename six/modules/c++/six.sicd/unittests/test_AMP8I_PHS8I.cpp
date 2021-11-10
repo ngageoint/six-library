@@ -193,23 +193,6 @@ static void test_nitf_image_info(six::sicd::ComplexData& complexData, const fs::
     }
 }
 
-static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value)
-{
-    // A = input_amplitude(i.e. 0 to 255)
-    const double A = input_amplitude;
-
-    // The phase values should be read in (values 0 to 255) and converted to float by doing:
-    // P = (1 / 256) * input_value
-    const double P = (1.0 / 256.0) * input_value;
-
-    // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
-    // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
-    const auto angle = 2 * M_PI * P;
-    const auto real = A * cos(angle);
-    const auto imaginary = A * sin(angle);
-    return std::complex<float>(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
-}
-
 static void test_assert_eq(const std::vector<std::complex<float>>& actuals, const std::vector<AMP8I_PHS8I_t>& amp8i_phs8i)
 {
     TEST_ASSERT_EQ(actuals.size(), amp8i_phs8i.size());
@@ -233,18 +216,11 @@ TEST_CASE(test_8bit_ampphs)
     {
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
-            auto expected = from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value));
-
             AMP8I_PHS8I_t input(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value));
-            const auto actual = imageData.from_AMP8I_PHS8I(input);
-            TEST_ASSERT_EQ(expected, actual);
-
-            const auto actual_utilities = six::sicd::Utilities::from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value), nullptr);
-            TEST_ASSERT_EQ(expected, actual_utilities);
-            TEST_ASSERT_EQ(actual_utilities, actual);
+            auto actual = six::sicd::Utilities::from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value), nullptr);
 
             inputs.push_back(std::move(input));
-            expecteds.push_back(std::move(expected));
+            expecteds.push_back(std::move(actual));
         }
     }
 

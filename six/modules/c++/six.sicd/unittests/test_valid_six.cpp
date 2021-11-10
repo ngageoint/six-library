@@ -287,26 +287,11 @@ static std::vector<std::complex<float>> make_complex_image(const types::RowCol<s
     return image;
 }
 
-template<typename TImage>
-static void adjust_image(TImage& image)
-{
-    // Make it easier to know what we're looking at when examining a binary dump of the SICD
-    const auto pImageBytes = six::as_bytes(image);
-
-    pImageBytes[0] = static_cast<std::byte>('[');
-    for (size_t i = 1; i < pImageBytes.size() - 1; i++)
-    {
-        pImageBytes[i] = static_cast<std::byte>('*');
-    }
-    pImageBytes[pImageBytes.size() - 1] = static_cast<std::byte>(']');
-}
-
 static std::vector<std::complex<float>> make_complex_image(const six::sicd::ComplexData& complexData, const types::RowCol<size_t>& dims)
 {
     if (complexData.getPixelType() == six::PixelType::RE32F_IM32F)
     {
         return make_complex_image(dims);
-        //return adjust_image(complexData, make_complex_image(dims));
     }
     throw std::invalid_argument("Unknown pixelType");
 }
@@ -360,19 +345,8 @@ static std::vector<std::byte> to_bytes(const six::sicd::ComplexImageResult& resu
     const auto bytes = six::as_bytes(image);
 
     std::vector<std::byte> retval;
-    const auto& data = *(result.pComplexData);
-    if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
-    {
-        retval.resize(image.size() * data.getNumBytesPerPixel());
-        std::span<std::byte> pRetval(retval.data(), retval.size());
-        data.convertPixels(bytes, pRetval);
-    }
-    else
-    {
-        auto pBytes = bytes.data();
-        retval.insert(retval.begin(), pBytes, pBytes + bytes.size());
-    }
-
+    auto pBytes = bytes.data();
+    retval.insert(retval.begin(), pBytes, pBytes + bytes.size());
     return retval;
 }
 
