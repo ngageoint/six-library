@@ -154,10 +154,24 @@ public:
     NewMemoryWriteHandler(NewMemoryWriteHandler&&) = default;
     NewMemoryWriteHandler& operator=(NewMemoryWriteHandler&&) = default;
 
-    template<typename T>
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
-        std::span<const T> buffer,
-        size_t firstRow, const Data& data, bool doByteSwap);
+			  std::span<const std::byte> buffer,
+			  size_t firstRow, const Data& data, bool doByteSwap);
+    NewMemoryWriteHandler(const NITFSegmentInfo& info,
+			  std::span<const uint8_t> buffer,
+			  size_t firstRow, const Data& data, bool doByteSwap);
+    NewMemoryWriteHandler(const NITFSegmentInfo& info,
+			  std::span<const uint16_t> buffer,
+			  size_t firstRow, const Data& data, bool doByteSwap);
+    NewMemoryWriteHandler(const NITFSegmentInfo& info,
+			  std::span<const std::complex<float>> buffer,
+			  size_t firstRow, const Data& data, bool doByteSwap);
+    NewMemoryWriteHandler(const NITFSegmentInfo& info,
+			  std::span<const std::complex<short>> buffer,
+			  size_t firstRow, const Data& data, bool doByteSwap);
+    NewMemoryWriteHandler(const NITFSegmentInfo& info,
+			  std::span<const std::pair<uint8_t, uint8_t>> buffer,
+			  size_t firstRow, const Data& data, bool doByteSwap);
 };
 
 

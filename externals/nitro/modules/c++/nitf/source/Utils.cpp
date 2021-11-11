@@ -22,6 +22,8 @@
 
 #include <assert.h>
 
+#include <stdexcept>
+
 #include "nitf/Utils.hpp"
 
 using namespace nitf;
@@ -58,9 +60,12 @@ void Utils::error_init(nrt_Error& error, const std::string& message,
     nrt_Error_init(&error, message.c_str(), file, line, func, level);
 }
 void Utils::error_init(nrt_Error* error, const std::string& message,
-    const char* file, int line, const char* func, int level) noexcept
+    const char* file, int line, const char* func, int level)
 {
-    assert(error != nullptr);
+    if (error == nullptr)
+    {
+        throw std::invalid_argument("'error' is NULL.");
+    }
     error_init(*error, message, file, line, func, level);
 }
 void Utils::error_init(nrt_Error* error, const std::exception& ex,

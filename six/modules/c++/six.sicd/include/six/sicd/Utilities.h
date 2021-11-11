@@ -671,6 +671,13 @@ extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::str
 extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexData&, std::span<const std::complex<float>> image);
 extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexImage&);
 
+
+namespace testing
+{
+    extern std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>&);
+    extern std::vector<std::byte> to_bytes(const ComplexImageResult&);
+}
+
 }
 }
 #endif
