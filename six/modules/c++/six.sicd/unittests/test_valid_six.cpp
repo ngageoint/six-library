@@ -385,6 +385,6 @@ TEST_MAIN((void)argc; (void)argv;
     //TEST_CHECK(valid_six_50x50);
     //TEST_CHECK(test_readFromNITF_sicd_50x50);
     //TEST_CHECK(test_read_sicd_50x50);
-    //TEST_CHECK(test_create_sicd_from_mem_32f);
+    TEST_CHECK(test_create_sicd_from_mem_32f);
     )
 
