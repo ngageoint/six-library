@@ -64,41 +64,40 @@ static fs::path argv0()
     return retval;
 }
 
-static bool is_linux()
-{
-    return sys::Platform == sys::PlatformType::Linux; // TODO: MacOS?
-}
-
-// Google Test in Visual Studio
-static bool is_vs_gtest()
-{
-    return argv0().filename() == "Test.exe";
-}
-
 static fs::path externals_nitro_RelativelPath(const fs::path& filename)
 {
     return fs::path("externals") / "nitro" / "modules"/ "c++" / "nitf" / "unittests" / filename;
 }
 
+static fs::path findRootDir(const fs::path& dir)
+{
+    const auto six = dir / "six";
+    const auto externals = dir / "externals";
+    const auto six_sln = dir / "six.sln";
+    if (fs::is_directory(six) && fs::is_directory(externals) && fs::is_regular_file(six_sln))
+    {
+        return dir;
+    }
+    const auto parent = dir.parent_path();
+    return findRootDir(parent);
+}
+
 static fs::path buildRootDir()
 {
-    if (is_linux())
+    auto platform = sys::Platform; // "conditional expression is constant"
+    if (platform == sys::PlatformType::Windows)
     {
-        const auto root_dir = argv0().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path();
-        return root_dir;
+        // On Windows ... in Visual Studio or stand-alone?
+        if (argv0().filename() == "Test.exe") // Google Test in Visual Studio
+        {
+            const auto cwd = fs::current_path();
+            const auto root_dir = cwd.parent_path().parent_path();
+            return root_dir;
+        }
     }
 
-    // On Windows ... in Visual Studio or stand-alone?
-    if (is_vs_gtest())
-    {
-        const auto cwd = fs::current_path();
-        const auto root_dir = cwd.parent_path().parent_path();
-        return root_dir;
-    }
-
-    // stand-alone
-    const auto root_dir = argv0().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path().parent_path();
-    return root_dir;
+    // Linux or stand-alone
+    return findRootDir(argv0());
 }
 
 static fs::path getNitfExternalsPath(const fs::path& filename)
@@ -109,7 +108,7 @@ static fs::path getNitfExternalsPath(const fs::path& filename)
 
 static fs::path nitfPluginRelativelPath()
 {
-    if (is_vs_gtest())
+    if (argv0().filename() == "Test.exe") // Google Test in Visual Studio
     {
         static const sys::OS os;
         static const std::string configuration = os.getSpecialEnv("Configuration");
@@ -126,7 +125,6 @@ static void setNitfPluginPath()
     //std::clog << "NITF_PLUGIN_PATH=" << path << "\n";
     sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }
-
 
 static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXMLControl& reader)
 {
@@ -193,23 +191,6 @@ static void test_nitf_image_info(six::sicd::ComplexData& complexData, const fs::
     }
 }
 
-static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value)
-{
-    // A = input_amplitude(i.e. 0 to 255)
-    const double A = input_amplitude;
-
-    // The phase values should be read in (values 0 to 255) and converted to float by doing:
-    // P = (1 / 256) * input_value
-    const double P = (1.0 / 256.0) * input_value;
-
-    // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
-    // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
-    const auto angle = 2 * M_PI * P;
-    const auto real = A * cos(angle);
-    const auto imaginary = A * sin(angle);
-    return std::complex<float>(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
-}
-
 static void test_assert_eq(const std::vector<std::complex<float>>& actuals, const std::vector<AMP8I_PHS8I_t>& amp8i_phs8i)
 {
     TEST_ASSERT_EQ(actuals.size(), amp8i_phs8i.size());
@@ -233,18 +214,11 @@ TEST_CASE(test_8bit_ampphs)
     {
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
-            auto expected = from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value));
-
             AMP8I_PHS8I_t input(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value));
-            const auto actual = imageData.from_AMP8I_PHS8I(input);
-            TEST_ASSERT_EQ(expected, actual);
-
-            const auto actual_utilities = six::sicd::Utilities::from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value), nullptr);
-            TEST_ASSERT_EQ(expected, actual_utilities);
-            TEST_ASSERT_EQ(actual_utilities, actual);
+            auto actual = six::sicd::Utilities::from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value), nullptr);
 
             inputs.push_back(std::move(input));
-            expecteds.push_back(std::move(expected));
+            expecteds.push_back(std::move(actual));
         }
     }
 
@@ -354,26 +328,20 @@ static void test_assert(const six::sicd::ComplexData& complexData,
     TEST_ASSERT_EQ(expectedNumBytesPerPixel, numBytesPerPixel);
 }
 
-static std::vector<std::byte> readFromNITF_(const fs::path& inputPathname,
-    six::PixelType expectedPixelType, size_t expectedNumBytesPerPixel)
+static std::vector<std::byte> readFromNITF(const fs::path& inputPathname)
 {
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
     auto image = six::sicd::readFromNITF(inputPathname, pComplexData);
 
-    test_assert(*pComplexData, expectedPixelType, expectedNumBytesPerPixel);
+    test_assert(*pComplexData, six::PixelType::AMP8I_PHS8I, sizeof(AMP8I_PHS8I_t));
 
     return image;
-}
-template<typename T> std::vector<std::byte> readFromNITF(const fs::path& inputPathname);
-template<> std::vector<std::byte> readFromNITF<AMP8I_PHS8I_t>(const fs::path& inputPathname)
-{
-    return readFromNITF_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(AMP8I_PHS8I_t));
 }
 static std::vector<std::byte> readFromNITF(const fs::path& inputPathname, six::PixelType pixelType)
 {
     if (pixelType == six::PixelType::AMP8I_PHS8I)
     {
-        return readFromNITF<AMP8I_PHS8I_t>(inputPathname);
+        return readFromNITF(inputPathname);
     }
     throw std::invalid_argument("Unknown pixelType");
 }
@@ -383,12 +351,12 @@ TEST_CASE(test_readFromNITF_8_bit_Amp_Phs_Examples)
     fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
     auto inputPathname = getNitfExternalsPath(filename);
-    auto buffer = readFromNITF<AMP8I_PHS8I_t>(inputPathname);
+    auto buffer = readFromNITF(inputPathname);
 
     subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
     inputPathname = getNitfExternalsPath(filename);
-    buffer = readFromNITF<AMP8I_PHS8I_t>(inputPathname);
+    buffer = readFromNITF(inputPathname);
 }
 
 static six::sicd::ComplexImageResult readSicd_(const fs::path& sicdPathname,
@@ -398,8 +366,7 @@ static six::sicd::ComplexImageResult readSicd_(const fs::path& sicdPathname,
     test_assert(*(result.pComplexData), expectedPixelType, expectedNumBytesPerPixel);
     return result;
 }
-template<typename T> std::vector<std::complex<float>> readSicd(const fs::path& inputPathname);
-template<> std::vector<std::complex<float>> readSicd<AMP8I_PHS8I_t>(const fs::path& inputPathname)
+static std::vector<std::complex<float>> readSicd(const fs::path& inputPathname)
 {
     return readSicd_(inputPathname, six::PixelType::AMP8I_PHS8I, sizeof(AMP8I_PHS8I_t)).widebandData;
 }
@@ -408,26 +375,12 @@ TEST_CASE(test_read_sicd_8_bit_Amp_Phs_Examples)
     fs::path subdir = fs::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     fs::path filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
     auto inputPathname = getNitfExternalsPath(filename);
-    auto widebandData = readSicd<AMP8I_PHS8I_t>(inputPathname);
+    auto widebandData = readSicd(inputPathname);
 
     subdir = fs::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
     inputPathname = getNitfExternalsPath(filename);
-    widebandData = readSicd<AMP8I_PHS8I_t>(inputPathname);
-}
-
-static std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>& dims)
-{
-    std::vector<std::complex<float>> image;
-    image.reserve(dims.area());
-    for (size_t r = 0; r < dims.row; r++)
-    {
-        for (size_t c = 0; c < dims.col; c++)
-        {
-            image.push_back(std::complex<float>(r * 1.0f, c * -1.0f));
-        }
-    }
-    return image;
+    widebandData = readSicd(inputPathname);
 }
 
 template<typename TImage>
@@ -464,14 +417,9 @@ static std::vector<std::complex<float>> adjust_image(const six::sicd::ComplexDat
 }
 static std::vector<std::complex<float>> make_complex_image(const six::sicd::ComplexData& complexData, const types::RowCol<size_t>& dims)
 {
-    if (complexData.getPixelType() == six::PixelType::RE32F_IM32F)
-    {
-        return make_complex_image(dims);
-        //return adjust_image(complexData, make_complex_image(dims));
-    }
     if (complexData.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
-        return adjust_image(complexData, make_complex_image(dims));
+        return adjust_image(complexData, six::sicd::testing::make_complex_image(dims));
     }
     throw std::invalid_argument("Unknown pixelType");
 }
@@ -510,14 +458,7 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::s
     const auto extent = getExtent(complexData);
     const types::RowCol<size_t> offset{ 0, 0 };
 
-    if (pixelType == six::PixelType::RE32F_IM32F)
-    {
-        std::vector<std::complex<float>> rawData;
-        six::sicd::Utilities::getRawData(reader.NITFReadControl(), complexData, offset, extent, rawData);
-        test_assert_eq(bytes, rawData);
-        test_assert_eq(expectedBytes, rawData);
-    }
-    else if (pixelType == six::PixelType::AMP8I_PHS8I)
+    if (pixelType == six::PixelType::AMP8I_PHS8I)
     {
         std::vector<AMP8I_PHS8I_t> rawData;
         six::sicd::Utilities::getRawData(reader.NITFReadControl(), complexData, offset, extent, rawData);
@@ -526,35 +467,13 @@ static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::s
     }
 }
 
-static std::vector<std::byte> to_bytes(const six::sicd::ComplexImageResult& result)
-{
-    const auto& image = result.widebandData;
-    const auto bytes = six::as_bytes(image);
-
-    std::vector<std::byte> retval;
-    const auto& data = *(result.pComplexData);
-    if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
-    {
-        retval.resize(image.size() * data.getNumBytesPerPixel());
-        std::span<std::byte> pRetval(retval.data(), retval.size());
-        data.convertPixels(bytes, pRetval);
-    }
-    else
-    {
-        auto pBytes = bytes.data();
-        retval.insert(retval.begin(), pBytes, pBytes + bytes.size());
-    }
-
-    return retval;
-}
-
 static void read_nitf(const fs::path& path, six::PixelType pixelType, const std::vector<std::complex<float>>& image)
 {
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
     const auto result = readSicd_(path, pixelType, expectedNumBytesPerPixel);
     TEST_ASSERT(result.widebandData == image);
 
-    const auto bytes = to_bytes(result);
+    const auto bytes = six::sicd::testing::to_bytes(result);
     read_raw_data(path, pixelType, bytes);
 }
 
@@ -562,7 +481,7 @@ static void buffer_list_save(const fs::path& outputName, const std::vector<std::
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
-    six::NITFWriteControl writer(std::move(pComplexData));
+    six::NITFWriteControl writer(std::unique_ptr<six::Data>(std::move(pComplexData)));
 
     static const std::vector<std::string> schemaPaths;
     save(writer, image.data(), outputName.string(), schemaPaths); // API for Python; it uses six::BufferList
