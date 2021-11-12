@@ -127,7 +127,7 @@ NRTAPI(nrt_IOInterface *) nrt_IOHandleAdapter_open(const char *fname,
 /**
  * Creats an IOInterface that wraps a buffer
  */
-NRTAPI(nrt_IOInterface *) nrt_BufferAdapter_construct(char *buf, size_t size,
+NRTAPI(nrt_IOInterface *) nrt_BufferAdapter_construct(const char *buf, size_t size,
                                                       NRT_BOOL ownBuf,
                                                       nrt_Error * error);
 

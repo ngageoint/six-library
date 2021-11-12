@@ -20,6 +20,11 @@
  *
  */
 
+#if _MSC_VER
+#pragma warning(disable: 4820) // '...' : '...' bytes padding added after data member '...'
+#pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
+#endif
+
 #include <nitf/TREUtils.h>
 #include <nitf/Record.h>
 

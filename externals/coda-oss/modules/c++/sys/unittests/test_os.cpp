@@ -188,11 +188,11 @@ TEST_CASE(testSplitEnv)
 
     // PATHs are directories, not files
     paths.clear();
-    result = os.splitEnv(pathEnvVar, paths, sys::Filesystem::FileType::Directory);
+    result = os.splitEnv(pathEnvVar, paths, sys::Filesystem::file_type::directory);
     TEST_ASSERT_TRUE(result);
     TEST_ASSERT_GREATER(paths.size(), 0);
     paths.clear();
-    result = os.splitEnv(pathEnvVar, paths, sys::Filesystem::FileType::Regular);
+    result = os.splitEnv(pathEnvVar, paths, sys::Filesystem::file_type::regular);
     TEST_ASSERT_FALSE(result);
     TEST_ASSERT_TRUE(paths.empty());
 

@@ -64,7 +64,7 @@ public:
     // unintendet case where row gets set and col doesnt, especially
     // when doing scalar operations that might otherwise create
     // ambiguities
-    RowCol() = default;
+    RowCol() {}  // = default; // error w/ICC and "const" member data
 
     RowCol(T r, T c) noexcept :
         row(r), col(c) {}
