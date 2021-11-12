@@ -334,7 +334,7 @@ struct DerivedData: public Data
 
 private:
     static const char VENDOR_ID[];
-    virtual bool equalTo(const Data& rhs) const;
+    virtual bool equalTo(const Data& rhs) const override;
     std::string mVersion;
 };
 }

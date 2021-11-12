@@ -238,7 +238,7 @@ public:
 
 
 private:
-    virtual bool equalTo(const Classification& rhs) const;
+    virtual bool equalTo(const Classification& rhs) const override;
     static
     void putImpl(const std::string& name,
                  const std::vector<std::string>& strs,

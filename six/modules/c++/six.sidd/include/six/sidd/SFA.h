@@ -50,15 +50,13 @@ public:
     {
         return lhs.equalTo(rhs) && rhs.equalTo(lhs);
     }
-    template<typename T, typename U>
-    friend bool operator==(const T& lhs, const U& rhs)
+    friend bool operator==(const SFATyped& lhs, const SFATyped& rhs)
     {
-        return equals_(lhs, rhs) && equals_(rhs, lhs);
+        return equals_(lhs, rhs);
     }
-    template<typename T, typename U>
-    friend bool operator!=(const T& lhs, const U& rhs)
+    friend bool operator!=(const SFATyped& lhs, const SFATyped& rhs)
     {
-        return !(lhs == rhs) && !(rhs == lhs);
+        return !(lhs == rhs);
     }
 
 protected:
@@ -129,7 +127,7 @@ struct SFAPoint : public SFAGeometry
     static const char TYPE_NAME[];
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFAPoint* point = dynamic_cast<const SFAPoint*>(&rhs);
         if (point != nullptr)
@@ -172,7 +170,7 @@ public:
     }
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFALineString* lineString = dynamic_cast<const SFALineString*>(&rhs);
         if (lineString != nullptr)
@@ -202,7 +200,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFALine* line = dynamic_cast<const SFALine*>(&rhs);
         if (line != nullptr)
@@ -232,7 +230,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFALinearRing* linearRing = dynamic_cast<const SFALinearRing*>(&rhs);
         if (linearRing != nullptr)
@@ -274,7 +272,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFAPolygon* polygon = dynamic_cast<const SFAPolygon*>(&rhs);
         if (polygon != nullptr)
@@ -306,7 +304,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFATriangle* triangle = dynamic_cast<const SFATriangle*>(&rhs);
         if (triangle != nullptr)
@@ -338,7 +336,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFAPolyhedralSurface* surface = dynamic_cast<const SFAPolyhedralSurface*>(&rhs);
         if (surface != nullptr)
@@ -372,7 +370,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFATriangulatedIrregularNetwork* network = dynamic_cast<const SFATriangulatedIrregularNetwork*>(&rhs);
         if (network != nullptr)
@@ -412,7 +410,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFAMultiPoint* multiPoint = dynamic_cast<const SFAMultiPoint*>(&rhs);
         if (multiPoint != nullptr)
@@ -455,7 +453,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFAMultiLineString* string = dynamic_cast<const SFAMultiLineString*>(&rhs);
         if (string != nullptr)
@@ -497,7 +495,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFAMultiPolygon* polygon = dynamic_cast<const SFAMultiPolygon*>(&rhs);
         if (polygon != nullptr)
@@ -626,7 +624,7 @@ struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
     static const char TYPE_NAME[];
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFAGeocentricCoordinateSystem* system = dynamic_cast<const SFAGeocentricCoordinateSystem*>(&rhs);
         if (system != nullptr)
@@ -665,7 +663,7 @@ struct SFAGeographicCoordinateSystem : public SFACoordinateSystem
     static const char TYPE_NAME[];
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFAGeographicCoordinateSystem* system = dynamic_cast<const SFAGeographicCoordinateSystem*>(&rhs);
         if (system != nullptr)
@@ -703,7 +701,7 @@ struct SFAProjectedCoordinateSystem : public SFACoordinateSystem
     static const char TYPE_NAME[];
 
 private:
-    virtual bool equalTo(const SFATyped& rhs) const
+    virtual bool equalTo(const SFATyped& rhs) const override
     {
         const SFAProjectedCoordinateSystem* system = dynamic_cast<const SFAProjectedCoordinateSystem*>(&rhs);
         if (system != nullptr)
