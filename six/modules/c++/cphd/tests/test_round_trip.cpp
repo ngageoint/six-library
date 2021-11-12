@@ -24,12 +24,14 @@
 #include <fstream>
 #include <memory>
 #include <thread>
+#include <std/span>
 
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDWriter.h>
 
 #include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
+#include <mem/Span.h>
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
 #include <cli/Value.h>
@@ -85,7 +87,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
         for (size_t channel = 0, idx = 0; channel < metadata.data.getNumChannels(); ++channel)
         {
             const size_t bufSize = metadata.data.getCompressedSignalSize(channel);
-            wideband.read(channel, gsl::make_span(&data[idx], bufSize));
+            wideband.read(channel, mem::make_Span(&data[idx], bufSize));
             idx += bufSize;
         }
         writer.write(
@@ -101,7 +103,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
             const size_t bufSize = metadata.data.getSignalSize(channel);
             wideband.read(channel, 0, cphd::Wideband::ALL,
                  0, cphd::Wideband::ALL, numThreads,
-                gsl::make_span(&data[idx], bufSize));
+                mem::make_Span(&data[idx], bufSize));
             idx += bufSize;
         }
 
