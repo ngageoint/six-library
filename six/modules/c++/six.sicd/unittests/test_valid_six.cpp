@@ -220,7 +220,7 @@ static void test_assert(const six::sicd::ComplexData& complexData,
 {
     TEST_ASSERT_EQ(expectedPixelType, complexData.getPixelType());
 
-    const auto& classification = complexData.getClassification();
+    //const auto& classification = complexData.getClassification();
     //TEST_ASSERT_TRUE(classification.isUnclassified());
 
     const auto numBytesPerPixel = complexData.getNumBytesPerPixel();
