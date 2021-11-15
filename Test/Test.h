@@ -18,7 +18,7 @@ inline void test_assert_str_eq_(const T& t, const U& u)
 {
 	EXPECT_STREQ(t, u);
 }
-#define TEST_ASSERT_EQ_STR(X1, X2) { test_assert_str_eq_(X1, X2); test_assert_str_eq_(X2, X1; }
+#define TEST_ASSERT_EQ_STR(X1, X2) { test_assert_str_eq_(X1, X2); test_assert_str_eq_(X2, X1); }
 #define TEST_ASSERT_EQ_FLOAT(X1, X2) EXPECT_FLOAT_EQ(static_cast<float>(X1), static_cast<float>(X2))
 
 #define TEST_ASSERT_NULL(X) TEST_ASSERT_EQ((X), nullptr)

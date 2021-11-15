@@ -64,7 +64,8 @@ TEST_CASE(test1DPolyfit)
     // Polys better match
     TEST_ASSERT_EQ(polyFromRaw, polyFromVec);
     TEST_ASSERT_EQ(polyFromRaw, truth);
-    TEST_ASSERT_EQ(polyFromRaw, fixed);
+    //TEST_ASSERT_EQ(polyFromRaw, fixed);
+    TEST_ASSERT(polyFromRaw == fixed);
     assert(polyFromRaw == truthSTLVec);
     TEST_ASSERT_EQ(polyFromSTL, truth);
 }
@@ -255,9 +256,12 @@ TEST_CASE(testVectorValuedOrderChange)
     const OneD<double> poly1 = fit(indep, comp1, 2);
     const OneD<double> poly2 = fit(indep, comp2, 2);
 
-    TEST_ASSERT_EQ(polyZeroed.order(), 0);
-    TEST_ASSERT_EQ(poly1.order(), 2);
-    TEST_ASSERT_EQ(poly2.order(), 2);
+    auto order = polyZeroed.order();
+    TEST_ASSERT_EQ(order, 0);
+    order = poly1.order();
+    TEST_ASSERT_EQ(order, 2);
+    order = poly2.order();
+    TEST_ASSERT_EQ(order, 2);
 
     // Now, attempt to fit the vector-vector version.
     // We'll check reshuffle the zero component to make sure we caught all
