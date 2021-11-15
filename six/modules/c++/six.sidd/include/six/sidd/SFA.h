@@ -50,16 +50,6 @@ public:
     {
         return this->equalTo(rhs) && rhs.equalTo(*this);
     }
-    template<typename T>
-    friend bool operator==(const SFATyped& lhs, const T& rhs)
-    {
-        return lhs.equals_(rhs);
-    }
-    template<typename T>
-    friend bool operator!=(const SFATyped& lhs, const T& rhs)
-    {
-        return !(lhs == rhs);
-    }
 
 protected:
     std::string mType;
@@ -71,6 +61,16 @@ protected:
 private:
     virtual bool equalTo(const SFATyped& rhs) const = 0;
 };
+template<typename T>
+inline bool operator==(const SFATyped& lhs, const T& rhs)
+{
+    return lhs.equals_(rhs);
+}
+template<typename T>
+inline bool operator!=(const SFATyped& lhs, const T& rhs)
+{
+    return !(lhs == rhs);
+}
 
 //! Abstract type
 struct SFAGeometry : public SFATyped
