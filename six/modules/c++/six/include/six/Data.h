@@ -65,12 +65,17 @@ struct Data
         return std::unique_ptr<Data>(clone());
     }
 
-    friend bool operator==(const Data& lhs, const Data& rhs)
+    bool equals_(const Data& rhs) const
     {
-        return lhs.equalTo(rhs);
+        return this->equalTo(rhs) && rhs.equalTo(*this);
     }
-
-    friend bool operator!=(const Data& lhs, const Data& rhs)
+    template<typename T>
+    friend bool operator==(const Data& lhs, const T& rhs)
+    {
+        return lhs.equals_(rhs);
+    }
+    template<typename T>
+    friend bool operator!=(const Data& lhs, const T& rhs)
     {
         return !(lhs == rhs);
     }

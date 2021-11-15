@@ -1009,7 +1009,8 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].rfBandwidth, 2.3);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].freqCenter, 1.8);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].lfmRate, 1.0);
-    TEST_ASSERT_EQ(txRcv.txWFParameters[0].polarization, "LHC");
+    TEST_ASSERT(txRcv.txWFParameters[0].polarization == "LHC");
+    TEST_ASSERT_EQ(txRcv.txWFParameters[0].polarization, cphd::PolarizationType::LHC);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].power, 5.0);
 
     TEST_ASSERT_EQ(txRcv.rcvParameters.size(), 2);
@@ -1019,7 +1020,8 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].ifFilterBW, 2.3);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].freqCenter, 1.8);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].lfmRate, 1.0);
-    TEST_ASSERT_EQ(txRcv.rcvParameters[0].polarization, "LHC");
+    TEST_ASSERT(txRcv.rcvParameters[0].polarization == "LHC");
+    TEST_ASSERT_EQ(txRcv.rcvParameters[0].polarization, cphd::PolarizationType::LHC);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].pathGain, 5.0);
 
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].identifier, "RcvParam2");
@@ -1028,11 +1030,13 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].ifFilterBW, 2.3);
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].freqCenter, 1.8);
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].lfmRate, 1.0);
-    TEST_ASSERT_EQ(txRcv.rcvParameters[1].polarization, "LHC");
+    TEST_ASSERT(txRcv.rcvParameters[1].polarization == "LHC");
+    TEST_ASSERT_EQ(txRcv.rcvParameters[1].polarization, cphd::PolarizationType::LHC);
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].pathGain, 5.0);
 
     const cphd::ErrorParameters& errorParams = *(metadata->errorParameters);
-    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.frame, "ECF");
+    TEST_ASSERT(errorParams.monostatic->posVelErr.frame == "ECF");
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.frame, six::FrameType::ECF);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p1, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p2, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.corrCoefs->p1p2, 0.8);
