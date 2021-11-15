@@ -69,16 +69,6 @@ struct Data
     {
         return this->equalTo(rhs) && rhs.equalTo(*this);
     }
-    template<typename T>
-    friend bool operator==(const Data& lhs, const T& rhs)
-    {
-        return lhs.equals_(rhs);
-    }
-    template<typename T>
-    friend bool operator!=(const Data& lhs, const T& rhs)
-    {
-        return !(lhs == rhs);
-    }
 
     /*!
      *  Data type/class is DERIVED for DerivedData and
@@ -221,6 +211,16 @@ struct Data
 private:
     virtual bool equalTo(const Data& rhs) const = 0;
 };
+template<typename T>
+inline bool operator==(const Data& lhs, const T& rhs)
+{
+    return lhs.equals_(rhs);
+}
+template<typename T>
+inline bool operator!=(const Data& lhs, const T& rhs)
+{
+    return !(lhs == rhs);
+}
 
 inline types::RowCol<size_t> getExtent(const Data& data)
 {

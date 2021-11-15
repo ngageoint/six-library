@@ -75,20 +75,21 @@ public:
     {
         return this->equalTo(rhs) && rhs.equalTo(*this);
     }
-    template<typename T>
-    friend bool operator==(const Classification& lhs, const T& rhs)
-    {
-        return equals_(lhs, rhs);
-    }
-    template<typename T>
-    friend bool operator!=(const Classification& lhs, const T& rhs)
-    {
-        return !(lhs == rhs);
-    }
 
 private:
     virtual bool equalTo(const Classification& rhs) const = 0;
 };
+template<typename T>
+inline bool operator==(const Classification& lhs, const T& rhs)
+{
+    return equals_(lhs, rhs);
+}
+template<typename T>
+inline bool operator!=(const Classification& lhs, const T& rhs)
+{
+    return !(lhs == rhs);
+}
+
 }
 
 //! Print operator (utility only).
