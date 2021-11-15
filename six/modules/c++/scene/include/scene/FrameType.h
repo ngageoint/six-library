@@ -55,6 +55,15 @@ struct FrameType final
     static
     FrameTypesEnum fromString(const std::string& str);
 
+    bool operator==(const FrameType& rhs) const
+    {
+        return value() == rhs.value();
+    }
+    bool operator!=(const FrameType& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
     FrameTypesEnum value() const { return mValue; }
     FrameTypesEnum mValue = NOT_SET;
 };
@@ -64,15 +73,6 @@ inline bool operator==(const FrameType& lhs, FrameType::FrameTypesEnum rhs)
     return (lhs.value() == rhs);
 }
 inline bool operator!=(const FrameType& lhs, FrameType::FrameTypesEnum rhs)
-{
-    return !(lhs == rhs);
-}
-
-inline bool operator==(const FrameType& lhs, const FrameType& rhs)
-{
-    return (lhs == rhs.value());
-}
-inline bool operator!=(const FrameType& lhs, const FrameType& rhs)
 {
     return !(lhs == rhs);
 }
