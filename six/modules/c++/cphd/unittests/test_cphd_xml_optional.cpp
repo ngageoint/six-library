@@ -1036,7 +1036,7 @@ TEST_CASE(testOptional)
 
     const cphd::ErrorParameters& errorParams = *(metadata->errorParameters);
     TEST_ASSERT(errorParams.monostatic->posVelErr.frame == "ECF");
-    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.frame, six::FrameType::ECF);
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.frame, six::FrameType(six::FrameType::ECF));
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p1, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p2, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.corrCoefs->p1p2, 0.8);
