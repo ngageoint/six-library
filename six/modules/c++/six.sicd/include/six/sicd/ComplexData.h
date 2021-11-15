@@ -371,7 +371,7 @@ struct ComplexData: public Data
     void fillDefaultFields();
 
 private:
-    virtual bool equalTo(const Data& rhs) const;
+    virtual bool equalTo(const Data& rhs) const override;
 
     /*
      * Classification contains the classification level (stored in

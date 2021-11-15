@@ -143,7 +143,7 @@ struct PolynomialProjection : public Projection
     bool operator==(const PolynomialProjection& rhs) const;
 
 private:
-    virtual bool equalTo(const Projection& rhs) const;
+    virtual bool equalTo(const Projection& rhs) const override;
 };
 
 /*!
@@ -164,8 +164,7 @@ struct MeasurableProjection : public Projection
     bool operator==(const MeasurableProjection& rhs) const;
 
 private:
-    virtual bool equalTo(const Projection& rhs) const;
-
+    virtual bool equalTo(const Projection& rhs) const override;
 };
 
 /*!
@@ -193,8 +192,7 @@ struct GeographicProjection : public MeasurableProjection
     virtual ~GeographicProjection() {}
 
 private:
-    virtual bool equalTo(const Projection& rhs) const;
-
+    virtual bool equalTo(const Projection& rhs) const override;
 };
 
 /*!
@@ -239,8 +237,7 @@ struct CylindricalProjection : public MeasurableProjection
     bool operator==(const CylindricalProjection& rhs) const;
 
 private:
-    virtual bool equalTo(const Projection& rhs) const;
-
+    virtual bool equalTo(const Projection& rhs) const override;
 };
 
 /*!
@@ -272,8 +269,7 @@ struct PlaneProjection : public MeasurableProjection
     bool operator==(const PlaneProjection& rhs) const;
 
 private:
-    virtual bool equalTo(const Projection& rhs) const;
-
+    virtual bool equalTo(const Projection& rhs) const override;
 };
 
 /*!
