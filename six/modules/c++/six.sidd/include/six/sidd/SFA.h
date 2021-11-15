@@ -45,16 +45,18 @@ public:
         return mType;
     }
 
-    // overloading == and != has changed in C++20 ("spaceship" operator), try to account for that.
-    friend bool equals_(const SFATyped& lhs, const SFATyped& rhs)
+    // C++20 will write various comparisions automatically, this can change behavior; try to account for that.
+    bool equals_(const SFATyped& rhs) const
     {
-        return lhs.equalTo(rhs) && rhs.equalTo(lhs);
+        return this->equalTo(rhs) && rhs.equalTo(*this);
     }
-    friend bool operator==(const SFATyped& lhs, const SFATyped& rhs)
+    template<typename T>
+    friend bool operator==(const SFATyped& lhs, const T& rhs)
     {
-        return equals_(lhs, rhs);
+        return lhs.equals_(rhs);
     }
-    friend bool operator!=(const SFATyped& lhs, const SFATyped& rhs)
+    template<typename T>
+    friend bool operator!=(const SFATyped& lhs, const T& rhs)
     {
         return !(lhs == rhs);
     }
