@@ -9,14 +9,14 @@ using namespace std;
 TEST_CASE(testDefaultConstructor)
 {
     Vector<double> v;
-    TEST_ASSERT_EQ(v.size(), 0);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(0));
 }
 
 
 TEST_CASE(testScalarConstructor)
 {
     Vector<double> v(3, 42);
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], 42);
     TEST_ASSERT_EQ(v[1], 42);
     TEST_ASSERT_EQ(v[2], 42);
@@ -28,7 +28,7 @@ TEST_CASE(testRawConstructor)
 {
     double raw[] = {1,2,3};
     Vector<double> v(3, raw);
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], 1);
     TEST_ASSERT_EQ(v[1], 2);
     TEST_ASSERT_EQ(v[2], 3);
@@ -42,7 +42,7 @@ TEST_CASE(testCopyConstructor)
     vsrc[1] = 2;
     vsrc[2] = 3;
     Vector<double> v(vsrc);
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], vsrc[0]);
     TEST_ASSERT_EQ(v[1], vsrc[1]);
     TEST_ASSERT_EQ(v[2], vsrc[2]);
@@ -61,7 +61,7 @@ TEST_CASE(testStdVectorConstructor)
     stdvec.push_back(12);
 
     Vector<double> v(stdvec);
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], stdvec[0]);
     TEST_ASSERT_EQ(v[1], stdvec[1]);
     TEST_ASSERT_EQ(v[2], stdvec[2]);
@@ -83,7 +83,7 @@ TEST_CASE(testAssignmentOperator)
     vsrc[1] = 99;
     Vector<double> v;
     v = vsrc;
-    TEST_ASSERT_EQ(v.size(), 2);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(v[0], 42);
     TEST_ASSERT_EQ(v[1], 99);
     // TODO: What if I change the length of v5?  Does v7 remain unchanged (length & content)?
@@ -93,12 +93,12 @@ TEST_CASE(testAssignmentOperator)
 TEST_CASE(testScalarAssignment)
 {
     Vector<double> v(5, 123.456);
-    TEST_ASSERT_EQ(v.size(), 5);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(5));
     for (int i = 0; i < 5; i++)
         TEST_ASSERT_EQ(v[i], 123.456);
 
     v = 99;
-    TEST_ASSERT_EQ(v.size(), 1);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(v[0], 99);
 }
 
@@ -112,7 +112,7 @@ TEST_CASE(testStdVectorAssignment)
 
     Vector<double> v(20, -1);
     v = stdvec;
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], 10);
     TEST_ASSERT_EQ(v[1], 11);
     TEST_ASSERT_EQ(v[2], 12);
@@ -190,8 +190,8 @@ TEST_CASE(testOperatorPlusEquals)
 
     v2 += v1;
 
-    TEST_ASSERT_EQ(v1.size(), 3);
-    TEST_ASSERT_EQ(v2.size(), 3);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(v2[0], 0);
     TEST_ASSERT_EQ(v2[1], 0);
@@ -211,9 +211,9 @@ TEST_CASE(testOperatorPlus)
 
     v3 = v1 + v2;
 
-    TEST_ASSERT_EQ(v1.size(), 3);
-    TEST_ASSERT_EQ(v2.size(), 3);
-    TEST_ASSERT_EQ(v3.size(), 3);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v3.size(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(v1[0], 42);
     TEST_ASSERT_EQ(v1[1], 42);
@@ -236,8 +236,8 @@ TEST_CASE(testOperatorMinusEquals)
     Vector<double> v2(5, -5);
 
     v2 -= v1;
-    TEST_ASSERT_EQ(v1.size(), 5);
-    TEST_ASSERT_EQ(v2.size(), 5);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(5));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(5));
     for (int i = 0; i < 5; i++)
         TEST_ASSERT_EQ(v2[i], -18);
     for (int i = 0; i < 5; i++)
@@ -264,9 +264,9 @@ TEST_CASE(testAdd)
     // TODO: Test what happens if v1 & v2 are of different lengths.
     Vector<double> v3(v2.add(v1));
 
-    TEST_ASSERT_EQ(v1.size(), 3);
-    TEST_ASSERT_EQ(v2.size(), 3);
-    TEST_ASSERT_EQ(v3.size(), 3);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v3.size(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(v1[0], 2.4);
     TEST_ASSERT_EQ(v1[1], 2.4);
@@ -290,9 +290,9 @@ TEST_CASE(testSubtract)
     // TODO: Test what happens if v1 & v2 are of different lengths.
     Vector<double> v3(v2.subtract(v1));
 
-    TEST_ASSERT_EQ(v1.size(), 3);
-    TEST_ASSERT_EQ(v2.size(), 3);
-    TEST_ASSERT_EQ(v3.size(), 3);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v3.size(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(v1[0], 2.4);
     TEST_ASSERT_EQ(v1[1], 2.4);
@@ -319,9 +319,9 @@ TEST_CASE(testOperatorMinus)
     Vector<double> v3(v2 - v1);
     // TODO: Test what happens if v1 & v2 are of different lengths.
 
-    TEST_ASSERT_EQ(v1.size(), 4);
-    TEST_ASSERT_EQ(v2.size(), 4);
-    TEST_ASSERT_EQ(v3.size(), 4);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(4));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(4));
+    TEST_ASSERT_EQ(v3.size(), static_cast<size_t>(4));
 
     for (int i = 0; i < 4; i++)
     {
