@@ -25,7 +25,7 @@
 
 TEST_CASE(testCoreValues)
 {
-    int expected = 1; 
+    size_t expected = 1; 
     TEST_ASSERT_EQ_INT(sizeof(uint8_t), expected);
     TEST_ASSERT_EQ_INT(sizeof(int8_t), expected);
 

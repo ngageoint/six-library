@@ -184,11 +184,11 @@ TEST_CASE(testBlankSegmentsValid)
    const std::vector<nitf::ImageSegmentComputer::Segment> &segments = imageSegmentComputer.getSegments();
 
    auto numberOfTests = numSegments;
-   TEST_ASSERT_EQ(numSegments, 3);
+   TEST_ASSERT_EQ(numSegments, static_cast<size_t>(3));
    for (size_t testSegmentIdx = 0; testSegmentIdx < numSegments; ++testSegmentIdx)
    {
       const types::RowCol<size_t> dims(segments[testSegmentIdx].numRows, numberElements);
-      TEST_ASSERT_EQ(dims.area(), bytesPerSegment);
+      TEST_ASSERT_EQ(dims.area(), static_cast<size_t>(bytesPerSegment));
    }
    createBuffers(buffers, imageSegmentComputer, fullDims);
    for (size_t testIdx = 0; testIdx < numberOfTests; ++testIdx)
