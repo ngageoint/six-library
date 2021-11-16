@@ -41,10 +41,24 @@
 #  define TEST_ASSERT_FALSE(X) if ((X)) { die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to false\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_TRUE(X) if (!(X)) { die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to true\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 
+namespace coda_oss
+{
+template <typename T, typename U>
+inline bool test_eq_(const T& t, const U& u)
+{
+    return (t == u) && (u == t);
+}
+template <typename T, typename U>
+inline bool test_not_eq_(const T& t, const U& u)
+{
+    return (t != u) && (u != t);
+}
+}
+
 template <typename T, typename U>
 inline bool test_assert_eq_(const T& t, const U& u)
 {
-    return (t == u) && (u == t);
+    return coda_oss::test_eq_(t, u) && !coda_oss::test_not_eq_(t, u);
 }
 #  define TEST_ASSERT_EQ(X1, X2) if (!test_assert_eq_((X1) , (X2))) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
 #  define TEST_ASSERT_EQ_MSG(msg, X1, X2) if (!test_assert_eq_((X1), (X2))) die_printf("%s (%s,%d): FAILED (%s): Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, __LINE__, (msg).c_str(), str::toString((X1)).c_str(), str::toString((X2)).c_str());
@@ -52,7 +66,7 @@ inline bool test_assert_eq_(const T& t, const U& u)
 template <typename T, typename U>
 inline bool test_assert_not_eq_(const T& t, const U& u)
 {
-    return (t != u) && (u != t);
+    return coda_oss::test_not_eq_(t, u) && !coda_oss::test_eq_(t, u);
 }
 #  define TEST_ASSERT_NOT_EQ(X1, X2) if (!test_assert_not_eq_((X1), (X2))) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s should not equal %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
 #  define TEST_ASSERT_NOT_EQ_MSG(msg, X1, X2) if (!test_assert_not_eq_((X1), (X2))) die_printf("%s (%s,%d): FAILED (%s): Recv'd %s should not equal %s\n", testName.c_str(), __FILE__, __LINE__, (msg).c_str(), str::toString((X1)).c_str(), str::toString((X2)).c_str());
