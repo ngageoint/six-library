@@ -36,11 +36,11 @@ TEST_CASE(GetThreadInfoTest)
         planner.getThreadInfo(ii, startElement, numElements);
         if (ii == numThreads - 1)
         {
-            TEST_ASSERT_EQ(numElements, 20)
+	  TEST_ASSERT_EQ(numElements, static_cast<size_t>(20));
         }
         else
         {
-            TEST_ASSERT_EQ(numElements, 32)
+	  TEST_ASSERT_EQ(numElements, static_cast<size_t>(32));
         }
     }
 }
@@ -51,33 +51,33 @@ TEST_CASE(GetNumThreadsThatWillBeUsedTest)
 
     // This divides evenly
     const mt::ThreadPlanner planner1(NUM_ELEMENTS, 10);
-    TEST_ASSERT_EQ(planner1.getNumThreadsThatWillBeUsed(), 10);
+    TEST_ASSERT_EQ(planner1.getNumThreadsThatWillBeUsed(), static_cast<size_t>(10));
 
     // This doesn't divide evenly but we still need all the threads
     const mt::ThreadPlanner planner2(NUM_ELEMENTS, 9);
-    TEST_ASSERT_EQ(planner2.getNumThreadsThatWillBeUsed(), 9);
+    TEST_ASSERT_EQ(planner2.getNumThreadsThatWillBeUsed(), static_cast<size_t>(9));
 
     // This doesn't divide evenly - we only need 10 threads
     const mt::ThreadPlanner planner3(NUM_ELEMENTS, 11);
-    TEST_ASSERT_EQ(planner3.getNumThreadsThatWillBeUsed(), 10);
+    TEST_ASSERT_EQ(planner3.getNumThreadsThatWillBeUsed(), static_cast<size_t>(10));
 
     // Have one less thread than the number of elements - at least one thread
     // is going to need two elements, so we might as well just use 50 threads
     // and give them all two elements
     const mt::ThreadPlanner planner4(NUM_ELEMENTS, 99);
-    TEST_ASSERT_EQ(planner4.getNumThreadsThatWillBeUsed(), 50);
+    TEST_ASSERT_EQ(planner4.getNumThreadsThatWillBeUsed(), static_cast<size_t>(50));
 
     // Have as many elements as threads - one element per thread
     const mt::ThreadPlanner planner5(NUM_ELEMENTS, 100);
-    TEST_ASSERT_EQ(planner5.getNumThreadsThatWillBeUsed(), 100);
+    TEST_ASSERT_EQ(planner5.getNumThreadsThatWillBeUsed(), static_cast<size_t>(100));
 
     // Have more elements than threads - only the first NUM_ELEMENTS threads
     // are needed
     const mt::ThreadPlanner planner6(NUM_ELEMENTS, 101);
-    TEST_ASSERT_EQ(planner6.getNumThreadsThatWillBeUsed(), 100);
+    TEST_ASSERT_EQ(planner6.getNumThreadsThatWillBeUsed(), static_cast<size_t>(100));
 
     const mt::ThreadPlanner planner7(NUM_ELEMENTS, 9999);
-    TEST_ASSERT_EQ(planner7.getNumThreadsThatWillBeUsed(), 100);
+    TEST_ASSERT_EQ(planner7.getNumThreadsThatWillBeUsed(), static_cast<size_t>(100));
 }
 }
 
