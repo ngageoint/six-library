@@ -100,7 +100,8 @@ TEST_CASE(testClone)
     {
         char *p = (char *) nrt_List_popFront(dolly);
         TEST_ASSERT(p);
-        TEST_ASSERT_EQ_INT(NRT_ATO32(p), ++i);
+        const int32_t value = ++i;
+        TEST_ASSERT_EQ_INT(NRT_ATO32(p), value);
     }
 
     TEST_ASSERT_EQ_INT(0, nrt_List_size(dolly));
@@ -112,7 +113,6 @@ TEST_CASE(testClone)
 
 TEST_CASE(testIterate)
 {
-    int32_t i;
     nrt_Error e;
     nrt_List *l = nrt_List_construct(&e);
     nrt_ListIterator it, end;
@@ -128,12 +128,13 @@ TEST_CASE(testIterate)
     it = nrt_List_begin(l);
     end = nrt_List_end(l);
 
-    i = 0;
+    int32_t i = 0;
     while (nrt_ListIterator_notEqualTo(&it, &end))
     {
         char *p = (char *) nrt_ListIterator_get(&it);
         TEST_ASSERT(p);
-        TEST_ASSERT_EQ_INT(NRT_ATO32(p), ++i);
+        const int32_t value = ++i;
+        TEST_ASSERT_EQ_INT(NRT_ATO32(p), value);
         nrt_ListIterator_increment(&it);
     }
 

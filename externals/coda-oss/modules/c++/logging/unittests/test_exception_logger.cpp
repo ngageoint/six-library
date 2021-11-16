@@ -99,7 +99,7 @@ TEST_CASE(testExceptionWithBacktrace)
     }
     catch (const except::Throwable& t)
     {
-        TEST_ASSERT_EQ(t.getBacktrace().size(), 0);
+        TEST_ASSERT_EQ(t.getBacktrace().size(), static_cast<size_t>(0));
         s = t.toString();
         what = t.what();
     }

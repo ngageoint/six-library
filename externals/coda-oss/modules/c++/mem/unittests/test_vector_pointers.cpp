@@ -37,20 +37,20 @@ TEST_CASE(testVecOfRawPointers)
     myVec.push_back(new int(4));
     myVec.push_back(new int(5));
 
-    TEST_ASSERT_EQ(myVec.size(), 5);
+    TEST_ASSERT_EQ(myVec.size(), static_cast<size_t>(5));
 
     myVec.erase(myVec.begin() + 2);
 
-    TEST_ASSERT_EQ(myVec.size(), 4);
+    TEST_ASSERT_EQ(myVec.size(), static_cast<size_t>(4));
     TEST_ASSERT_EQ(*myVec[2], 4);
 
     myVec.push_back(new int(6));
 
-    TEST_ASSERT_EQ(myVec.size(), 5);
+    TEST_ASSERT_EQ(myVec.size(), static_cast<size_t>(5));
 
     myVec.erase(myVec.begin(), myVec.begin() + 4);
 
-    TEST_ASSERT_EQ(myVec.size(), 1);
+    TEST_ASSERT_EQ(myVec.size(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(*myVec[0], 6);
 
     myVec.erase(myVec.begin());
@@ -81,20 +81,20 @@ TEST_CASE(testVecOfSharedPointers)
     myVec.push_back(new int(4));
     myVec.push_back(new int(5));
 
-    TEST_ASSERT_EQ(myVec.size(), 5);
+    TEST_ASSERT_EQ(myVec.size(), static_cast<size_t>(5));
 
     myVec.erase(myVec.begin() + 2);
 
-    TEST_ASSERT_EQ(myVec.size(), 4);
+    TEST_ASSERT_EQ(myVec.size(), static_cast<size_t>(4));
     TEST_ASSERT_EQ(*myVec[2], 4);
 
     myVec.push_back(new int(6));
 
-    TEST_ASSERT_EQ(myVec.size(), 5);
+    TEST_ASSERT_EQ(myVec.size(), static_cast<size_t>(5));
 
     myVec.erase(myVec.begin(), myVec.begin() + 4);
 
-    TEST_ASSERT_EQ(myVec.size(), 1);
+    TEST_ASSERT_EQ(myVec.size(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(*myVec[0], 6);
 
     myVec.erase(myVec.begin());

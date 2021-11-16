@@ -45,17 +45,17 @@ TEST_CASE(testDefaultConstructor)
     //TEST_ASSERT_EQ(v0.size(), 0);
 
     VectorN<1,double> v1;
-    TEST_ASSERT_EQ(v1.size(), 1);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(1));
 
     VectorN<2,double> v2;
-    TEST_ASSERT_EQ(v2.size(), 2);
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(2));
 }
 
 
 TEST_CASE(testScalarConstructor)
 {
     VectorN<3,double> v(42);
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], 42);
     TEST_ASSERT_EQ(v[1], 42);
     TEST_ASSERT_EQ(v[2], 42);
@@ -66,7 +66,7 @@ TEST_CASE(testRawConstructor)
 {
     double raw[] = {1,2,3};
     VectorN<3,double> v(raw);
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], 1);
     TEST_ASSERT_EQ(v[1], 2);
     TEST_ASSERT_EQ(v[2], 3);
@@ -80,7 +80,7 @@ TEST_CASE(testCopyConstructor)
     vsrc[1] = 2;
     vsrc[2] = 3;
     VectorN<3,double> v(vsrc);
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], vsrc[0]);
     TEST_ASSERT_EQ(v[1], vsrc[1]);
     TEST_ASSERT_EQ(v[2], vsrc[2]);
@@ -99,7 +99,7 @@ TEST_CASE(testStdVectorConstructor)
     stdvec.push_back(12);
 
     VectorN<3,double> v(stdvec);
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], stdvec[0]);
     TEST_ASSERT_EQ(v[1], stdvec[1]);
     TEST_ASSERT_EQ(v[2], stdvec[2]);
@@ -121,7 +121,7 @@ TEST_CASE(testAssignmentOperator)
     vsrc[1] = 99;
     VectorN<2,double> v;
     v = vsrc;
-    TEST_ASSERT_EQ(v.size(), 2);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(v[0], 42);
     TEST_ASSERT_EQ(v[1], 99);
 }
@@ -130,7 +130,7 @@ TEST_CASE(testAssignmentOperator)
 TEST_CASE(testScalarAssignment)
 {
     VectorN<5,double> v(123.456);
-    TEST_ASSERT_EQ(v.size(), 5);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(5));
     for (int i = 0; i < 5; i++)
         TEST_ASSERT_EQ(v[i], 123.456);
 
@@ -138,7 +138,7 @@ TEST_CASE(testScalarAssignment)
     // vector - that's fixed.  Instead, it sets every entry in the vector
     // to the given value.
     v = 99;
-    TEST_ASSERT_EQ(v.size(), 5);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(5));
     for (int i = 0; i < 5; i++)
         TEST_ASSERT_EQ(v[i], 99);
 }
@@ -153,7 +153,7 @@ TEST_CASE(testStdVectorAssignment)
 
     VectorN<3,double> v(-1);
     v = stdvec;
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], 10);
     TEST_ASSERT_EQ(v[1], 11);
     TEST_ASSERT_EQ(v[2], 12);
@@ -223,8 +223,8 @@ TEST_CASE(testOperatorPlusEquals)
 
     v2 += v1;
 
-    TEST_ASSERT_EQ(v1.size(), 3);
-    TEST_ASSERT_EQ(v2.size(), 3);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(v2[0], 0);
     TEST_ASSERT_EQ(v2[1], 0);
@@ -244,9 +244,9 @@ TEST_CASE(testOperatorPlus)
 
     v3 = v1 + v2;
 
-    TEST_ASSERT_EQ(v1.size(), 3);
-    TEST_ASSERT_EQ(v2.size(), 3);
-    TEST_ASSERT_EQ(v3.size(), 3);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v3.size(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(v1[0], 42);
     TEST_ASSERT_EQ(v1[1], 42);
@@ -268,8 +268,8 @@ TEST_CASE(testOperatorMinusEquals)
     VectorN<5,double> v2(-5);
 
     v2 -= v1;
-    TEST_ASSERT_EQ(v1.size(), 5);
-    TEST_ASSERT_EQ(v2.size(), 5);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(5));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(5));
     for (int i = 0; i < 5; i++)
         TEST_ASSERT_EQ(v2[i], -18);
     for (int i = 0; i < 5; i++)
@@ -295,9 +295,9 @@ TEST_CASE(testAdd)
 
     VectorN<3,double> v3(v2.add(v1));
 
-    TEST_ASSERT_EQ(v1.size(), 3);
-    TEST_ASSERT_EQ(v2.size(), 3);
-    TEST_ASSERT_EQ(v3.size(), 3);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v3.size(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(v1[0], 2.4);
     TEST_ASSERT_EQ(v1[1], 2.4);
@@ -320,9 +320,9 @@ TEST_CASE(testSubtract)
 
     VectorN<3,double> v3(v2.subtract(v1));
 
-    TEST_ASSERT_EQ(v1.size(), 3);
-    TEST_ASSERT_EQ(v2.size(), 3);
-    TEST_ASSERT_EQ(v3.size(), 3);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v3.size(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(v1[0], 2.4);
     TEST_ASSERT_EQ(v1[1], 2.4);
@@ -349,9 +349,9 @@ TEST_CASE(testOperatorMinus)
     }
     VectorN<4,double> v3(v2 - v1);
 
-    TEST_ASSERT_EQ(v1.size(), 4);
-    TEST_ASSERT_EQ(v2.size(), 4);
-    TEST_ASSERT_EQ(v3.size(), 4);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(4));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(4));
+    TEST_ASSERT_EQ(v3.size(), static_cast<size_t>(4));
 
     for (int i = 0; i < 4; i++)
     {

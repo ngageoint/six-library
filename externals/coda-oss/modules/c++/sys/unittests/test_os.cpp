@@ -184,13 +184,13 @@ TEST_CASE(testSplitEnv)
     os.setEnv(bogusEnvVar, bogusValue, false /*overwrite*/);
     result = os.splitEnv(bogusEnvVar, paths);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_EQ(paths.size(), 1);
+    TEST_ASSERT_EQ(paths.size(), static_cast<size_t>(1));
 
     // PATHs are directories, not files
     paths.clear();
     result = os.splitEnv(pathEnvVar, paths, sys::Filesystem::file_type::directory);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_GREATER(paths.size(), 0);
+    TEST_ASSERT_GREATER(paths.size(), static_cast<size_t>(0));
     paths.clear();
     result = os.splitEnv(pathEnvVar, paths, sys::Filesystem::file_type::regular);
     TEST_ASSERT_FALSE(result);

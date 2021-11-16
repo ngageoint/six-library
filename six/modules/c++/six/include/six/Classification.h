@@ -71,18 +71,25 @@ public:
     //! Use this to fit in anything you might need for the file container
     Options fileOptions;
 
-    friend bool operator==(const Classification& lhs, const Classification& rhs)
+    bool equals_(const Classification& rhs) const
     {
-        return lhs.equalTo(rhs);
-    }
-    friend bool operator!=(const Classification& lhs, const Classification& rhs)
-    {
-        return !(lhs == rhs);
+        return this->equalTo(rhs) && rhs.equalTo(*this);
     }
 
 private:
     virtual bool equalTo(const Classification& rhs) const = 0;
 };
+template<typename T>
+inline bool operator==(const Classification& lhs, const T& rhs)
+{
+    return equals_(lhs, rhs);
+}
+template<typename T>
+inline bool operator!=(const Classification& lhs, const T& rhs)
+{
+    return !(lhs == rhs);
+}
+
 }
 
 //! Print operator (utility only).

@@ -32,12 +32,12 @@ namespace
 struct Foo final
 {
     Foo() = default;
-    Foo(size_t val) :
+    Foo(int val) :
         mVal(val)
     {
     }
 
-    size_t mVal = 0;
+    int mVal = 0;
 };
 
 TEST_CASE(testStdUniquePtr)
