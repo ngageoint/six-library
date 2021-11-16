@@ -89,9 +89,9 @@ TEST_CASE(test_hash_table_1)
 
                 /*  Its there in the hash!!  */
                 const std::string data = static_cast<const char*>(where.getData());
-                TEST_ASSERT_EQ(2, data.length());
+                TEST_ASSERT_EQ(static_cast<size_t>(2), data.length());
                 TEST_ASSERT_EQ('v', data[0]);
-                TEST_ASSERT_EQ(2, keyBuf.length());
+                TEST_ASSERT_EQ(static_cast<size_t>(2), keyBuf.length());
                 TEST_ASSERT_EQ(keyBuf[1], data[1]);
             }
             catch (const except::NoSuchKeyException& t)
@@ -138,12 +138,12 @@ TEST_CASE(test_hash_table_iterator)
     for (const auto& where : hashTable)
     {
         const std::string key = where.getKey();
-        TEST_ASSERT_EQ(2, key.length());
+        TEST_ASSERT_EQ(static_cast<size_t>(2), key.length());
         TEST_ASSERT_EQ('k', key[0]);
         TEST_ASSERT(isdigit(key[1]));
 
         const std::string data = static_cast<const char*>(where.getData());
-        TEST_ASSERT_EQ(2, data.length());
+        TEST_ASSERT_EQ(static_cast<size_t>(2), data.length());
         TEST_ASSERT_EQ('v', data[0]);
         TEST_ASSERT(isdigit(data[1]));
         TEST_ASSERT_EQ(key[1], data[1]);

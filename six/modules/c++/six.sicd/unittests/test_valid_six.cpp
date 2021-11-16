@@ -129,7 +129,7 @@ static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXM
 {
     auto container = reader.getContainer();
     TEST_ASSERT_EQ(six::DataType::COMPLEX, container->getDataType());
-    TEST_ASSERT_EQ(1, container->size());
+    TEST_ASSERT_EQ(static_cast<size_t>(1), container->size());
     return container;
 }
 
@@ -200,7 +200,7 @@ TEST_CASE(valid_six_50x50)
     const six::Data* pData = pComplexData.get();
 
     TEST_ASSERT_EQ(six::PixelType::RE32F_IM32F, pData->getPixelType());
-    TEST_ASSERT_EQ(8, pData->getNumBytesPerPixel());
+    TEST_ASSERT_EQ(static_cast<size_t>(8), pData->getNumBytesPerPixel());
 
     // UTF-8 characters in 50x50.nitf
     #ifdef _WIN32

@@ -76,8 +76,8 @@ TEST_CASE(TxRcvMultIds)
     channel.parameters[0].txRcv->rcvId.push_back("ReceiverWaveformParam1");
     channel.parameters[0].txRcv->rcvId.push_back("ReceiverWaveformParam2");
 
-    TEST_ASSERT_EQ(channel.parameters[0].txRcv->txWFId.size(), 3);
-    TEST_ASSERT_EQ(channel.parameters[0].txRcv->rcvId.size(), 2);
+    TEST_ASSERT_EQ(channel.parameters[0].txRcv->txWFId.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(channel.parameters[0].txRcv->rcvId.size(), static_cast<size_t>(2));
 }
 }
 

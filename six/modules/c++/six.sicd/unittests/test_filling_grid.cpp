@@ -85,7 +85,7 @@ TEST_CASE(HammingWindow)
     six::sicd::ImageData imageData;
     row.fillDerivedFields(imageData);
 
-    TEST_ASSERT_EQ(row.weights.size(), 512);
+    TEST_ASSERT_EQ(row.weights.size(), static_cast<size_t>(512));
     TEST_ASSERT_ALMOST_EQ(row.weights[163], .733193239);
     TEST_ASSERT_ALMOST_EQ(row.weights[300], .9328411378);
     TEST_ASSERT_ALMOST_EQ(row.weights[0], row.weights[511]);

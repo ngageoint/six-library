@@ -164,7 +164,7 @@ TEST_CASE(testTruncateToNonZeros)
     }
 
     truncatedPoly = poly.truncateToNonZeros(0.0);
-    TEST_ASSERT_EQ(truncatedPoly.orderX(), 3);
+    TEST_ASSERT_EQ(truncatedPoly.orderX(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(truncatedPoly.orderY(), poly.orderY());
     for (size_t ii = 0; ii <= truncatedPoly.orderX(); ++ii)
     {
@@ -184,8 +184,8 @@ TEST_CASE(testTruncateToNonZeros)
     }
 
     truncatedPoly = poly.truncateToNonZeros(0.0);
-    TEST_ASSERT_EQ(truncatedPoly.orderX(), 3);
-    TEST_ASSERT_EQ(truncatedPoly.orderY(), 2);
+    TEST_ASSERT_EQ(truncatedPoly.orderX(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(truncatedPoly.orderY(), static_cast<size_t>(2));
     for (size_t ii = 0; ii <= truncatedPoly.orderX(); ++ii)
     {
         for (size_t jj = 0; jj <= truncatedPoly.orderY(); ++jj)
@@ -205,8 +205,8 @@ TEST_CASE(testTruncateToNonZeros)
     }
 
     truncatedPoly = poly.truncateToNonZeros(0.0);
-    TEST_ASSERT_EQ(truncatedPoly.orderX(), 0);
-    TEST_ASSERT_EQ(truncatedPoly.orderY(), 0);
+    TEST_ASSERT_EQ(truncatedPoly.orderX(), static_cast<size_t>(0));
+    TEST_ASSERT_EQ(truncatedPoly.orderY(), static_cast<size_t>(0));
     TEST_ASSERT_EQ(truncatedPoly[0][0], 0.0);
 }
 
@@ -281,10 +281,10 @@ TEST_CASE(testOperators)
     math::poly::TwoD<double> opEquals(p1);
     opEquals += p2;
 
-    TEST_ASSERT_EQ(op.orderX(), 2);
-    TEST_ASSERT_EQ(op.orderY(), 3);
-    TEST_ASSERT_EQ(opEquals.orderX(), 2);
-    TEST_ASSERT_EQ(opEquals.orderY(), 3);
+    TEST_ASSERT_EQ(op.orderX(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(op.orderY(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(opEquals.orderX(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(opEquals.orderY(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(op[0][0], 0.0);
     TEST_ASSERT_EQ(op[0][1], 2.0);
@@ -314,10 +314,10 @@ TEST_CASE(testOperators)
     opEquals = p1;
     opEquals -= p2;
 
-    TEST_ASSERT_EQ(op.orderX(), 2);
-    TEST_ASSERT_EQ(op.orderY(), 3);
-    TEST_ASSERT_EQ(opEquals.orderX(), 2);
-    TEST_ASSERT_EQ(opEquals.orderY(), 3);
+    TEST_ASSERT_EQ(op.orderX(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(op.orderY(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(opEquals.orderX(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(opEquals.orderY(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(op[0][0], 0.0);
     TEST_ASSERT_EQ(op[0][1], 0.0);
@@ -348,10 +348,10 @@ TEST_CASE(testOperators)
     opEquals = p1;
     opEquals *= p2;
 
-    TEST_ASSERT_EQ(op.orderX(), 3);
-    TEST_ASSERT_EQ(op.orderY(), 5);
-    TEST_ASSERT_EQ(opEquals.orderX(), 3);
-    TEST_ASSERT_EQ(opEquals.orderY(), 5);
+    TEST_ASSERT_EQ(op.orderX(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(op.orderY(), static_cast<size_t>(5));
+    TEST_ASSERT_EQ(opEquals.orderX(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(opEquals.orderY(), static_cast<size_t>(5));
 
     TEST_ASSERT_EQ(op[0][0], 0.0);
     TEST_ASSERT_EQ(op[0][1], 0.0);
@@ -393,10 +393,10 @@ TEST_CASE(testOperators)
     opEquals = p1;
     opEquals /= 2.0;
 
-    TEST_ASSERT_EQ(op.orderX(), 2);
-    TEST_ASSERT_EQ(op.orderY(), 2);
-    TEST_ASSERT_EQ(opEquals.orderX(), 2);
-    TEST_ASSERT_EQ(opEquals.orderY(), 2);
+    TEST_ASSERT_EQ(op.orderX(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(op.orderY(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(opEquals.orderX(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(opEquals.orderY(), static_cast<size_t>(2));
 
     TEST_ASSERT_EQ(op[0][0], 0.0);
     TEST_ASSERT_EQ(op[0][1], 0.5);
