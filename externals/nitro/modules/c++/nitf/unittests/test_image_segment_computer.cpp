@@ -77,13 +77,13 @@ TEST_CASE(testBlockSizedBoundaries)
                         computer.getSegments();
                 for (size_t ii = 0; ii < segments.size(); ++ii)
                 {
-                    TEST_ASSERT_EQ(segments[ii].firstRow % blockSizes[rowIdx], 0);
+                    TEST_ASSERT_EQ(segments[ii].firstRow % blockSizes[rowIdx], static_cast<size_t>(0));
 
                     // Only test this if we are not the last segment. The final
                     // segment is not guaranteed to be a multiple of block size.
                     if (ii != segments.size() - 1)
                     {
-                        TEST_ASSERT_EQ(segments[ii].numRows % blockSizes[rowIdx], 0);
+                        TEST_ASSERT_EQ(segments[ii].numRows % blockSizes[rowIdx], static_cast<size_t>(0));
                     }
 
                     totalRows += segments[ii].numRows;
@@ -118,8 +118,8 @@ TEST_CASE(testPerfectSplitting)
 
     const std::vector<nitf::ImageSegmentComputer::Segment> segments =
             computer.getSegments();
-    TEST_ASSERT_EQ(segments.size(), 2);
-    TEST_ASSERT_EQ(segments[0].firstRow, 0);
+    TEST_ASSERT_EQ(segments.size(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(segments[0].firstRow, static_cast<size_t>(0));
     TEST_ASSERT_EQ(segments[0].numRows, ilocBlockSizeMultiple);
     TEST_ASSERT_EQ(segments[1].firstRow, ilocBlockSizeMultiple);
     TEST_ASSERT_EQ(segments[1].numRows, ilocBlockSizeMultiple);
@@ -145,11 +145,11 @@ TEST_CASE(testOneRowOver)
 
     const std::vector<nitf::ImageSegmentComputer::Segment> segments =
             computer.getSegments();
-    TEST_ASSERT_EQ(segments.size(), 2);
-    TEST_ASSERT_EQ(segments[0].firstRow, 0);
+    TEST_ASSERT_EQ(segments.size(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(segments[0].firstRow, static_cast<size_t>(0));
     TEST_ASSERT_EQ(segments[0].numRows, ilocBlockSizeMultiple);
     TEST_ASSERT_EQ(segments[1].firstRow, ilocBlockSizeMultiple);
-    TEST_ASSERT_EQ(segments[1].numRows, 1);
+    TEST_ASSERT_EQ(segments[1].numRows, static_cast<size_t>(1));
 }
 
 static size_t ceilingDivide(size_t numerator, size_t denominator)
@@ -179,8 +179,8 @@ TEST_CASE(testKnownCase)
     const size_t expectedNumRows = 99328;
     const std::vector<nitf::ImageSegmentComputer::Segment> segments =
             computer.getSegments();
-    TEST_ASSERT_EQ(segments.size(), 4);
-    TEST_ASSERT_EQ(segments[0].firstRow, 0);
+    TEST_ASSERT_EQ(segments.size(), static_cast<size_t>(4));
+    TEST_ASSERT_EQ(segments[0].firstRow, static_cast<size_t>(0));
     TEST_ASSERT_EQ(segments[0].numRows, expectedNumRows);
     TEST_ASSERT_EQ(segments[1].firstRow, expectedNumRows);
     TEST_ASSERT_EQ(segments[1].numRows, expectedNumRows);
