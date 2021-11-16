@@ -130,7 +130,7 @@ static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXM
 {
     auto container = reader.getContainer();
     TEST_ASSERT_EQ(six::DataType::COMPLEX, container->getDataType());
-    TEST_ASSERT_EQ(1, container->size());
+    TEST_ASSERT_EQ(static_cast<size_t>(1), container->size());
     return container;
 }
 
@@ -247,7 +247,7 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputP
 
     auto& complexData = *pResultComplexData;
     TEST_ASSERT_EQ(six::PixelType::AMP8I_PHS8I, complexData.getPixelType());
-    TEST_ASSERT_EQ(2, complexData.getNumBytesPerPixel());
+    TEST_ASSERT_EQ(static_cast<size_t>(2), complexData.getNumBytesPerPixel());
 
     const auto& classification = complexData.getClassification();
     TEST_ASSERT_TRUE(classification.isUnclassified());
@@ -260,10 +260,10 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputP
     }
 
     const auto numBytesPerPixel = complexData.getNumBytesPerPixel();
-    TEST_ASSERT_EQ(2, numBytesPerPixel);
+    TEST_ASSERT_EQ(static_cast<size_t>(2), numBytesPerPixel);
 
     const auto numChannels = complexData.getNumChannels();
-    TEST_ASSERT_EQ(2, numChannels);
+    TEST_ASSERT_EQ(static_cast<size_t>(2), numChannels);
 
     test_nitf_image_info(complexData, inputPathname, nitf::PixelValueType::Integer);
 

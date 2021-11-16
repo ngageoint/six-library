@@ -23,8 +23,8 @@ TEST_CASE(testAreaPlane)
     six::sicd::AreaPlaneUtility::setAreaPlane(*data);
     const six::sicd::AreaPlane& areaPlane = *data->radarCollection->area->plane;
 
-    TEST_ASSERT_EQ(areaPlane.segmentList[0]->getNumLines(), 1);
-    TEST_ASSERT_EQ(areaPlane.segmentList[0]->getNumSamples(), 1);
+    TEST_ASSERT_EQ(areaPlane.segmentList[0]->getNumLines(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(areaPlane.segmentList[0]->getNumSamples(), static_cast<size_t>(1));
 
     TEST_ASSERT(math::isNaN(areaPlane.xDirection->spacing));
     TEST_ASSERT(math::isNaN(areaPlane.yDirection->spacing));
@@ -168,8 +168,8 @@ TEST_CASE(testRotatePlane)
     TEST_ASSERT_EQ(plane.xDirection->unitVector[1], -1);
     TEST_ASSERT_EQ(plane.xDirection->unitVector[2], 0);
 
-    TEST_ASSERT_EQ(plane.xDirection->elements, 10);
-    TEST_ASSERT_EQ(plane.yDirection->elements, 20);
+    TEST_ASSERT_EQ(plane.xDirection->elements, static_cast<size_t>(10));
+    TEST_ASSERT_EQ(plane.yDirection->elements, static_cast<size_t>(20));
 
     TEST_ASSERT_EQ(plane.xDirection->spacing, 5);
     TEST_ASSERT_EQ(plane.yDirection->spacing, 7);
