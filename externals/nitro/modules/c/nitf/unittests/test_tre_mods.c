@@ -165,7 +165,7 @@ TEST_CASE(iterateUnfilled)
         ++numFields;
     }
 
-    TEST_ASSERT_EQ_INT(numFields, 1);
+    TEST_ASSERT_EQ_INT(numFields, (uint32_t)1);
 
     nitf_TRECursor_cleanup(&cursor);
     nitf_TRE_destruct(&tre);
@@ -191,7 +191,7 @@ TEST_CASE(populateThenIterate)
         ++numFields;
     }
 
-    TEST_ASSERT_EQ_INT(numFields, 29);
+    TEST_ASSERT_EQ_INT(numFields, (uint32_t)29);
 
     nitf_TRECursor_cleanup(&cursor);
     nitf_TRE_destruct(&tre);
@@ -223,7 +223,7 @@ TEST_CASE(populateWhileIterating)
             nitf_TRE_setField(cursor.tre, cursor.tag_str, "2", 1, &error);
         }
     }
-    TEST_ASSERT_EQ_INT(numFields, 29);
+    TEST_ASSERT_EQ_INT(numFields, (uint32_t)29);
 
     nitf_TRECursor_cleanup(&cursor);
     nitf_TRE_destruct(&tre);
