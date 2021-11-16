@@ -50,7 +50,7 @@ TEST_CASE(testXmlParseSimple)
     
     {
         const auto aElements = root->getElementsByTagName("a", true /*recurse*/);
-        TEST_ASSERT_EQ(aElements.size(), 1);
+        TEST_ASSERT_EQ(aElements.size(), static_cast<size_t>(1));
         const auto& a = *(aElements[0]);
 
         const auto characterData = a.getCharacterData();
@@ -61,10 +61,10 @@ TEST_CASE(testXmlParseSimple)
     
     const auto docElements = root->getElementsByTagName("doc");
     TEST_ASSERT_FALSE(docElements.empty());
-    TEST_ASSERT_EQ(docElements.size(), 1);
+    TEST_ASSERT_EQ(docElements.size(), static_cast<size_t>(1));
     {
         const auto aElements = docElements[0]->getElementsByTagName("a");
-        TEST_ASSERT_EQ(aElements.size(), 1);
+        TEST_ASSERT_EQ(aElements.size(), static_cast<size_t>(1));
         const auto& a = *(aElements[0]);
 
         const auto characterData = a.getCharacterData();
@@ -114,7 +114,7 @@ TEST_CASE(testXmlUtf8Legacy)
     #ifdef _WIN32
     TEST_ASSERT_EQ(actual, iso88591Text);
     #else
-    TEST_ASSERT_EQ(actual.length(), 4);
+    TEST_ASSERT_EQ(actual.length(), static_cast<size_t>(4));
     #endif
 
     const auto encoding = a.getEncoding();

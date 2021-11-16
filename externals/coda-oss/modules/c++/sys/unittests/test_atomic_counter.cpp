@@ -37,8 +37,8 @@ static void testConstructor_(const std::string& testName)
 {
     using ValueType = typename TAtomicCounter::ValueType;
 
-    TEST_ASSERT_EQ(TAtomicCounter().get(), 0);
-    TEST_ASSERT_EQ(TAtomicCounter(12345).get(), 12345);
+    TEST_ASSERT_EQ(TAtomicCounter().get(), static_cast<ValueType>(0));
+    TEST_ASSERT_EQ(TAtomicCounter(12345).get(), static_cast<ValueType>(12345));
 
     TEST_ASSERT_EQ(
         TAtomicCounter(std::numeric_limits<ValueType>::max()).get(),
@@ -58,22 +58,22 @@ static void testIncrement_(const std::string& testName)
 
     TAtomicCounter ctr(100);
 
-    TEST_ASSERT_EQ(ctr.getThenIncrement(), 100);
-    TEST_ASSERT_EQ(ctr.get(), 101);
+    TEST_ASSERT(ctr.getThenIncrement() == 100);
+    TEST_ASSERT_EQ(ctr.get(), static_cast<ValueType>(101));
 
-    TEST_ASSERT_EQ(ctr.getThenIncrement(), 101);
-    TEST_ASSERT_EQ(ctr.get(), 102);
+    TEST_ASSERT(ctr.getThenIncrement() == 101);
+    TEST_ASSERT_EQ(ctr.get(), static_cast<ValueType>(102));
 
     ValueType value(ctr++);
-    TEST_ASSERT_EQ(value, 102);
-    TEST_ASSERT_EQ(ctr.get(), 103);
+    TEST_ASSERT_EQ(value, static_cast<ValueType>(102));
+    TEST_ASSERT_EQ(ctr.get(), static_cast<ValueType>(103));
 
-    TEST_ASSERT_EQ(ctr.incrementThenGet(), 104);
-    TEST_ASSERT_EQ(ctr.get(), 104);
+    TEST_ASSERT(ctr.incrementThenGet() == 104);
+    TEST_ASSERT_EQ(ctr.get(), static_cast<ValueType>(104));
 
     value = ++ctr;
-    TEST_ASSERT_EQ(value, 105);
-    TEST_ASSERT_EQ(ctr.get(), 105);
+    TEST_ASSERT_EQ(value, static_cast<ValueType>(105));
+    TEST_ASSERT_EQ(ctr.get(), static_cast<ValueType>(105));
 }
 TEST_CASE(testIncrement)
 {
@@ -89,22 +89,22 @@ static void testDecrement_(const std::string& testName)
 
     TAtomicCounter ctr(100);
 
-    TEST_ASSERT_EQ(ctr.getThenDecrement(), 100);
-    TEST_ASSERT_EQ(ctr.get(), 99);
+    TEST_ASSERT(ctr.getThenDecrement() == 100);
+    TEST_ASSERT_EQ(ctr.get(), static_cast<ValueType>(99));
 
-    TEST_ASSERT_EQ(ctr.getThenDecrement(), 99);
-    TEST_ASSERT_EQ(ctr.get(), 98);
+    TEST_ASSERT(ctr.getThenDecrement() == 99);
+    TEST_ASSERT_EQ(ctr.get(), static_cast<ValueType>(98));
 
     ValueType value(ctr--);
-    TEST_ASSERT_EQ(value, 98);
-    TEST_ASSERT_EQ(ctr.get(), 97);
+    TEST_ASSERT_EQ(value, static_cast<ValueType>(98));
+    TEST_ASSERT_EQ(ctr.get(), static_cast<ValueType>(97));
 
-    TEST_ASSERT_EQ(ctr.decrementThenGet(), 96);
-    TEST_ASSERT_EQ(ctr.get(), 96);
+    TEST_ASSERT(ctr.decrementThenGet() == 96);
+    TEST_ASSERT_EQ(ctr.get(), static_cast<ValueType>(96));
 
     value = --ctr;
-    TEST_ASSERT_EQ(value, 95);
-    TEST_ASSERT_EQ(ctr.get(), 95);
+    TEST_ASSERT_EQ(value, static_cast<ValueType>(95));
+    TEST_ASSERT_EQ(ctr.get(), static_cast<ValueType>(95));
 }
 TEST_CASE(testDecrement)
 {

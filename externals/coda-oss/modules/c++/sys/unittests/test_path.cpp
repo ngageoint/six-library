@@ -70,7 +70,7 @@ TEST_CASE(testPathMerge)
     path = R"(/dir1/dir2/file.txt)";
     #endif
     components = sys::Path::separate(path, isAbsolute);
-    TEST_ASSERT_EQ(components.size(), 3);
+    TEST_ASSERT_EQ(components.size(), static_cast<size_t>(3));
     result = sys::Path::merge(components, isAbsolute);
     TEST_ASSERT_EQ(result, path);
 }
@@ -188,7 +188,7 @@ TEST_CASE(testExpandEnvPathMultiple)
     }
     TEST_ASSERT_EQ(expanded_path, home);
     auto expanded_paths = sys::Path::expandedEnvironmentVariables("$(paths)");
-    TEST_ASSERT_EQ(expanded_paths.size(), 3);
+    TEST_ASSERT_EQ(expanded_paths.size(), static_cast<size_t>(3));
 
     const std::vector<std::string> apps{"apps"};
     os.prependEnv("apps", apps, true /*overwrite*/);

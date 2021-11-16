@@ -77,10 +77,10 @@ TEST_CASE(testByteStream)
 
     stream.seek(2, io::Seekable::END);
     TEST_ASSERT_EQ(stream.tell(), 18);
-    TEST_ASSERT_EQ(stream.getSize(), 20);
+    TEST_ASSERT_EQ(stream.getSize(), static_cast<size_t>(20));
 
     stream.write("abcdef");
-    TEST_ASSERT_EQ(stream.getSize(), 24);
+    TEST_ASSERT_EQ(stream.getSize(), static_cast<size_t>(24));
 
     stream.clear();
     TEST_ASSERT_EQ(stream.available(), 0);
@@ -115,11 +115,11 @@ TEST_CASE(testCountingOutputStream)
 TEST_CASE(testBufferViewStream)
 {
     {
-        mem::BufferView<sys::ubyte> bufferView(NULL, 0);
+        mem::BufferView<sys::ubyte> bufferView(nullptr, 0);
         io::BufferViewStream<sys::ubyte> stream(bufferView);
         TEST_ASSERT_EQ(stream.tell(), 0);
         TEST_ASSERT_EQ(stream.available(), 0);
-        TEST_ASSERT_EQ(stream.get(), NULL);
+        TEST_ASSERT_NULL(stream.get());
     }
     {
         std::vector<sys::ubyte> data(4);
@@ -171,8 +171,8 @@ TEST_CASE(testBufferViewIntStream)
     std::vector<int> output(3);
 
     TEST_ASSERT_EQ(stream.read(&output[0], 2), 2);
-    TEST_ASSERT_EQ(stream.tell(), 2 * sizeof(int));
-    TEST_ASSERT_EQ(stream.available(), 2 * sizeof(int));
+    TEST_ASSERT_EQ(stream.tell(), static_cast<sys::Off_T>(2 * sizeof(int)));
+    TEST_ASSERT_EQ(stream.available(), static_cast<sys::Off_T>(2 * sizeof(int)));
     stream.seek(1 * sizeof(int), io::Seekable::CURRENT);
     TEST_ASSERT_EQ(stream.read(&output[2], 1), 1);
     TEST_ASSERT_EQ(output[0], 2);
@@ -191,7 +191,7 @@ TEST_CASE(testBufferViewIntStream)
     ::memset(&output[0], 0, output.size() * sizeof(output[0]));
     stream.seek(3 * sizeof(int), io::Seekable::START);
     TEST_ASSERT_EQ(stream.read(&output[0], 2), 1);
-    TEST_ASSERT_EQ(stream.tell(), 4 * sizeof(int));
+    TEST_ASSERT_EQ(stream.tell(), static_cast<sys::Off_T>(4 * sizeof(int)));
     TEST_ASSERT_EQ(output[0], 9);
     TEST_ASSERT_EQ(output[1], 0);
 }
