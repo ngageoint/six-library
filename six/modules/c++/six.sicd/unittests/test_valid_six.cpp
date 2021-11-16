@@ -220,7 +220,7 @@ static void test_assert(const six::sicd::ComplexData& complexData,
 {
     TEST_ASSERT_EQ(expectedPixelType, complexData.getPixelType());
 
-    const auto& classification = complexData.getClassification();
+    //const auto& classification = complexData.getClassification();
     //TEST_ASSERT_TRUE(classification.isUnclassified());
 
     const auto numBytesPerPixel = complexData.getNumBytesPerPixel();
@@ -385,6 +385,6 @@ TEST_MAIN((void)argc; (void)argv;
     //TEST_CHECK(valid_six_50x50);
     //TEST_CHECK(test_readFromNITF_sicd_50x50);
     //TEST_CHECK(test_read_sicd_50x50);
-    //TEST_CHECK(test_create_sicd_from_mem_32f);
+    TEST_CHECK(test_create_sicd_from_mem_32f);
     )
 

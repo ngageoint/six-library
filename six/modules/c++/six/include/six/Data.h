@@ -65,14 +65,9 @@ struct Data
         return std::unique_ptr<Data>(clone());
     }
 
-    friend bool operator==(const Data& lhs, const Data& rhs)
+    bool equals_(const Data& rhs) const
     {
-        return lhs.equalTo(rhs);
-    }
-
-    friend bool operator!=(const Data& lhs, const Data& rhs)
-    {
-        return !(lhs == rhs);
+        return this->equalTo(rhs) && rhs.equalTo(*this);
     }
 
     /*!
@@ -216,6 +211,16 @@ struct Data
 private:
     virtual bool equalTo(const Data& rhs) const = 0;
 };
+template<typename T>
+inline bool operator==(const Data& lhs, const T& rhs)
+{
+    return lhs.equals_(rhs);
+}
+template<typename T>
+inline bool operator!=(const Data& lhs, const T& rhs)
+{
+    return !(lhs == rhs);
+}
 
 inline types::RowCol<size_t> getExtent(const Data& data)
 {
