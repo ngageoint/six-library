@@ -116,6 +116,9 @@
     <ClCompile Include="six.sicd_test_valid_six.cpp">
       <Filter>six.sicd</Filter>
     </ClCompile>
+    <ClCompile Include="six.sicd_test_AMP8I_PHS8I.cpp">
+      <Filter>six.sicd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

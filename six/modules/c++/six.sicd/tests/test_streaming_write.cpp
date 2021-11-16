@@ -316,7 +316,7 @@ void Tester<DataTypeT>::normalWrite()
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(mSchemaPaths.begin(), mSchemaPaths.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
 
-    writer.save(mImage, mNormalPathname, schemaPaths);
+    save(writer, mImage, mNormalPathname, schemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
 }

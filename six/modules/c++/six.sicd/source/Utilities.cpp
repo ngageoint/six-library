@@ -1580,7 +1580,7 @@ static void writeAsNITF(const fs::path& pathname, const std::vector<std::string>
     const std::span<const std::complex<float>> image(image_, getExtent(data).area());
     std::vector<fs::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
-    writer.save(image, pathname, schemaPaths);
+    writer.save_image(image, pathname, schemaPaths);
 }
 void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths, const ComplexData& data, std::span<const std::complex<float>> image)
 {
@@ -1599,4 +1599,40 @@ void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<fs::path
 void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths, const ComplexImage& image)
 {
     writeAsNITF(pathname, schemaPaths, image.data, image.image);
+}
+
+std::vector<std::complex<float>> six::sicd::testing::make_complex_image(const types::RowCol<size_t>& dims)
+{
+    std::vector<std::complex<float>> image;
+    image.reserve(dims.area());
+    for (size_t r = 0; r < dims.row; r++)
+    {
+        for (size_t c = 0; c < dims.col; c++)
+        {
+            image.emplace_back(gsl::narrow_cast<float>(r), gsl::narrow_cast<float>(c) * -1.0f);
+        }
+    }
+    return image;
+}
+
+std::vector<std::byte> six::sicd::testing::to_bytes(const ComplexImageResult& result)
+{
+    const auto& image = result.widebandData;
+    const auto bytes = six::as_bytes(image);
+
+    std::vector<std::byte> retval;
+    const auto& data = *(result.pComplexData);
+    if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
+    {
+        retval.resize(image.size() * data.getNumBytesPerPixel());
+        const std::span<std::byte> pRetval(retval.data(), retval.size());
+        data.convertPixels(bytes, pRetval);
+    }
+    else
+    {
+        auto pBytes = bytes.data();
+        retval.insert(retval.begin(), pBytes, pBytes + bytes.size());
+    }
+
+    return retval;
 }

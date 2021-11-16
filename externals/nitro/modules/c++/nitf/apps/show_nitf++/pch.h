@@ -38,6 +38,9 @@
 #pragma warning(disable: 6385) // Reading invalid data from '...':  the readable size is '...' bytes, but '...' bytes may be read.
 #pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
+#pragma warning(disable: 5204) // '...': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
+#pragma warning(disable: 5220) // '...': a non-static data member with a volatile qualified type no longer implies
+#pragma warning(disable: 4355) // '...': used in base member initializer list
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #include <windows.h>

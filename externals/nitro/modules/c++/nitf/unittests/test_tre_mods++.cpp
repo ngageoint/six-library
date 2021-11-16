@@ -32,7 +32,6 @@
   * This file is part of NITRO
   * =========================================================================
   *
-  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
   * (C) Copyright 2021, Maxar Technologies, Inc.
   *
   * NITRO is free software; you can redistribute it and/or modify
@@ -50,11 +49,7 @@
   * see <http://www.gnu.org/licenses/>.
   *
   */
-
-#pragma once
-
 #include <stdint.h>
-
 #include <string>
 
 #include "nitf/TRE.hpp"
@@ -219,7 +214,7 @@ TEST_CASE(basicIteration)
         (void)unused;
         ++numFields;
     }
-    TEST_ASSERT_EQ(numFields, 1);
+    TEST_ASSERT_EQ(numFields, static_cast<size_t>(1));
 
     numFields = 0;
     tre.setField("NUMACPO", 2, true);
@@ -230,7 +225,7 @@ TEST_CASE(basicIteration)
         (void)unused;
         ++numFields;
     }
-    TEST_ASSERT_EQ(numFields, 29);
+    TEST_ASSERT_EQ(numFields, static_cast<size_t>(29));
 }
 
 TEST_CASE(use_ENGRDA)
@@ -316,7 +311,7 @@ TEST_CASE(populateWhileIterating)
             tre.setField("NUMPTS[1]", 2);
         }
     }
-    TEST_ASSERT_EQ(numFields, 29);
+    TEST_ASSERT_EQ(numFields, static_cast<size_t>(29));
 }
 
 TEST_CASE(overflowingNumericFields)

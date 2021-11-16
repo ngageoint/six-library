@@ -771,13 +771,13 @@ std::vector<std::string> Path::expandedEnvironmentVariables(const std::string& p
     return expandedEnvironmentVariables_(path, unused_specialPath);
 }
 
-static bool path_matches_type(const std::string &path, sys::Filesystem::FileType type)
+static bool path_matches_type(const std::string &path, sys::Filesystem::file_type type)
 {
-    if ((type == Filesystem::FileType::Regular) && Filesystem::is_regular_file(path))
+    if ((type == Filesystem::file_type::regular) && Filesystem::is_regular_file(path))
     {
         return true;
     }
-    if ((type== Filesystem::FileType::Directory) && Filesystem::is_directory(path))
+    if ((type== Filesystem::file_type::directory) && Filesystem::is_directory(path))
     {
         return true;
     }
@@ -785,7 +785,7 @@ static bool path_matches_type(const std::string &path, sys::Filesystem::FileType
 }
 
 static std::string expandEnvironmentVariables_(const std::string& path,
-                                               bool checkIfExists, sys::Filesystem::FileType* pType = nullptr)
+                                               bool checkIfExists, sys::Filesystem::file_type* pType = nullptr)
 {
     bool specialPath;
     const auto expanded_paths = expandedEnvironmentVariables_(path, specialPath);
@@ -796,7 +796,7 @@ static std::string expandEnvironmentVariables_(const std::string& path,
         // more handling for "~"; it's a directory, not a file
         if (path == "~")
         {
-            if ((pType != nullptr) && (*pType == Filesystem::FileType::Regular))
+            if ((pType != nullptr) && (*pType == Filesystem::file_type::regular))
             {
                 return ""; // looking for files, "~" can't be it
             }
@@ -834,7 +834,7 @@ std::string Path::expandEnvironmentVariables(const std::string& path, bool check
 {
     return expandEnvironmentVariables_(path, checkIfExists);
 }
-std::string Path::expandEnvironmentVariables(const std::string& path, sys::Filesystem::FileType type)
+std::string Path::expandEnvironmentVariables(const std::string& path, sys::Filesystem::file_type type)
 {
     bool unused_checkIfExists = true;
     return expandEnvironmentVariables_(path, unused_checkIfExists, &type);

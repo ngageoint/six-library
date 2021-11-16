@@ -56,7 +56,7 @@ public:
     std::string level;
 
 private:
-    virtual bool equalTo(const Classification& rhs) const
+    virtual bool equalTo(const Classification& rhs) const override
     {
         const ComplexClassification* classification = dynamic_cast<const ComplexClassification*>(&rhs);
         if (classification != nullptr)

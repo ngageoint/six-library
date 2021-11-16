@@ -52,7 +52,7 @@ void writeSicd(std::unique_ptr<six::Data>&& complexData,
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
 
-    writer.save(widebandData, pathname, schemaPaths);
+    save(writer, widebandData, pathname, schemaPaths);
 }
 }
 

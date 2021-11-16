@@ -50,7 +50,7 @@ TEST_CASE(testValue)
     {
         TEST_ASSERT_ALMOST_EQ(v.at<float>(i), 10.0f * i);
     }
-    TEST_ASSERT_EQ(v.size(), 10);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(10));
 
     // strings
     v.setContainer(strings);
@@ -58,7 +58,7 @@ TEST_CASE(testValue)
     {
         TEST_ASSERT_EQ(v.at<std::string>(i), str::toString(i));
     }
-    TEST_ASSERT_EQ(v.size(), 10);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(10));
 }
 
 TEST_CASE(testChoices)
@@ -158,7 +158,7 @@ TEST_CASE(testIterate)
     std::vector<std::string> keys;
     for(cli::Results::const_iterator it = results->begin(); it != results->end(); ++it)
         keys.push_back(it->first);
-    TEST_ASSERT_EQ(keys.size(), 2);
+    TEST_ASSERT_EQ(keys.size(), static_cast<size_t>(2));
     // std::map returns keys in alphabetical order...
     TEST_ASSERT_EQ(keys[0], "config");
     TEST_ASSERT_EQ(keys[1], "verbose");

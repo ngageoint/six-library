@@ -347,7 +347,7 @@ TEST_CASE(testStdSharedPtr)
     std::shared_ptr<Foo> fooAssign = fooLegacy;
     TEST_ASSERT_EQ(fooLegacy.get(), fooAssign.get());
 
-    TEST_ASSERT_EQ(cpp11Function(fooLegacy), 123);
+    TEST_ASSERT_EQ(cpp11Function(fooLegacy), static_cast<size_t>(123));
 }
 }
 

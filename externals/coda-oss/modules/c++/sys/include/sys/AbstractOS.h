@@ -211,7 +211,7 @@ struct AbstractOS
 
     // A variable like PATH is often several directories, return each one that exists.
     bool splitEnv(const std::string& envVar, std::vector<std::string>&) const;
-    bool splitEnv(const std::string& envVar, std::vector<std::string>&, Filesystem::FileType) const;
+    bool splitEnv(const std::string& envVar, std::vector<std::string>&, Filesystem::file_type) const;
 
     // Modify the specified env-var as indicated.
     void prependEnv(const std::string& envVar, const std::vector<std::string>&, bool overwrite);
