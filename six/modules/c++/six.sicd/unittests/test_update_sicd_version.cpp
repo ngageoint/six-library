@@ -66,7 +66,7 @@ TEST_CASE(testTransitiveUpdate)
     // We should still have a new processing block for this "empty"
     // version update
     TEST_ASSERT(complexData.imageFormation.get());
-    TEST_ASSERT_EQ(complexData.imageFormation->processing.size(), 1);
+    TEST_ASSERT_EQ(complexData.imageFormation->processing.size(), static_cast<size_t>(1));
     const auto& processing = complexData.imageFormation->processing[0];
     TEST_ASSERT_FALSE(processing.type.empty());
     TEST_ASSERT_EQ(processing.applied, six::AppliedType::IS_TRUE);
@@ -108,7 +108,7 @@ TEST_CASE(testWarningParameters)
     six::sicd::SICDVersionUpdater(complexData, "1.0.0", log).update();
 
     // Make sure original Processing is still there
-    TEST_ASSERT_EQ(complexData.imageFormation->processing.size(), 2);
+    TEST_ASSERT_EQ(complexData.imageFormation->processing.size(), static_cast<size_t>(2));
     TEST_ASSERT(complexData.imageFormation->processing[0].parameters.empty());
 
     // We should have a new processing block with parameters for
