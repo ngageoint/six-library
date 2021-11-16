@@ -244,7 +244,6 @@ inline const std::byte* cast(std::span<const T> buffer)
     return static_cast<const std::byte*>(pBuffer);
 }
 
-template<>
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::byte> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
@@ -264,7 +263,6 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     }
 }
 
-template<>
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::complex<float>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
@@ -283,7 +281,6 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     }
 }
 
-template<>
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::pair<uint8_t, uint8_t>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
@@ -296,7 +293,6 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     validate_buffer(buffer, info, data);
 }
 
-template<>
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::complex<short>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
@@ -310,7 +306,6 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     }   
     validate_buffer(buffer, info, data);
 }
-template<>
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const uint8_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
@@ -328,7 +323,6 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     }
     validate_buffer(buffer, info, data);
 }
-template<>
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const uint16_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
