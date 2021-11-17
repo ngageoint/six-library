@@ -494,40 +494,43 @@ void NITFWriteControl::do_save_(const T& imageData, bool doByteSwap, bool enable
         write_imageData(imageData, *pInfo, legend, doByteSwap, enableJ2K);
     }
 }
-template<>
-void NITFWriteControl::save_image(std::span<const std::complex<float>> imageData,
-                            nitf::IOInterface& outputFile,
-                            const std::vector<std::string>& schemaPaths)
+
+static std::vector<std::string> convert_paths( const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, schemaPaths);
+    std::vector<std::string> retval;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
+        [](const std::filesystem::path& p) { return p.string(); });
+    return retval;
 }
-template<>
+void NITFWriteControl::save_image(std::span<const std::complex<float>> imageData,
+    nitf::IOInterface& outputFile,
+    const std::vector<std::filesystem::path>& schemaPaths)
+{
+    do_save(imageData, outputFile, convert_paths(schemaPaths));
+}
 void NITFWriteControl::save_image(std::span<const std::complex<short>> imageData,
     nitf::IOInterface& outputFile,
-    const std::vector<std::string>& schemaPaths)
+    const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, schemaPaths);
+    do_save(imageData, outputFile, convert_paths(schemaPaths));
 }
-template<>
 void NITFWriteControl::save_image(std::span<const std::pair<uint8_t, uint8_t>> imageData,
-                            nitf::IOInterface& outputFile,
-                            const std::vector<std::string>& schemaPaths)
+    nitf::IOInterface& outputFile,
+    const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, schemaPaths);
+    do_save(imageData, outputFile, convert_paths(schemaPaths));
 }
-template<>
 void NITFWriteControl::save_image(std::span<const uint8_t> imageData,
     nitf::IOInterface& outputFile,
-    const std::vector<std::string>& schemaPaths)
+    const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, schemaPaths);
+    do_save(imageData, outputFile, convert_paths(schemaPaths));
 }
-template<>
 void NITFWriteControl::save_image(std::span<const uint16_t> imageData,
     nitf::IOInterface& outputFile,
-    const std::vector<std::string>& schemaPaths)
+    const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, schemaPaths);
+    do_save(imageData, outputFile, convert_paths(schemaPaths));
 }
 
 void NITFWriteControl::save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
