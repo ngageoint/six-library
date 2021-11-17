@@ -117,7 +117,6 @@ TEST_CASE(test_sys_Optional)
 
 TEST_CASE(test_std_optional)
 {
-    #if CODA_OSS_lib_optional
     const std::optional<int> null;
     TEST_ASSERT_FALSE(null.has_value());
 
@@ -136,7 +135,6 @@ TEST_CASE(test_std_optional)
         auto opt = std::make_optional<int>(314);
         testOptional_(testName, opt);
     }
-    #endif
 }
 }
 

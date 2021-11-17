@@ -305,7 +305,8 @@ struct DerivedData: public Data
         return productCreation->classification;
     }
 
-    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT();
+    virtual const mem::ScopedCopyablePtr<LUT>& getDisplayLUT() const override;
+    void setDisplayLUT(std::unique_ptr<AmplitudeTable>&&) override;
 
     virtual std::string getVendorID() const
     {
@@ -317,9 +318,9 @@ struct DerivedData: public Data
         return mVersion;
     }
 
-    virtual void setVersion(const std::string& version)
+    virtual void setVersion(const std::string& strVersion)
     {
-        mVersion = version;
+        mVersion = strVersion;
     }
 
     /*
@@ -333,7 +334,7 @@ struct DerivedData: public Data
 
 private:
     static const char VENDOR_ID[];
-    virtual bool equalTo(const Data& rhs) const;
+    virtual bool equalTo(const Data& rhs) const override;
     std::string mVersion;
 };
 }

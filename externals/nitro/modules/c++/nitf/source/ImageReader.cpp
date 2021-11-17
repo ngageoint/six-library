@@ -81,14 +81,14 @@ void ImageReader::setReadCaching()
     nitf_ImageReader_setReadCaching(getNativeOrThrow());
 }
 
-BufferList<std::byte> ImageReader::read(const nitf::SubWindow& window, size_t nbpp)
+BufferList<std::byte> ImageReader::read(const nitf::SubWindow& window, size_t /*nbpp*/)
 {
     // see py_ImageReader_read() and doRead() in test_buffered_read.cpp
 
-    const auto numBitsPerPixel = nbpp;
-    const auto numBytesPerPixel = gsl::narrow<size_t>(NITF_NBPP_TO_BYTES(numBitsPerPixel));
-    const auto numBytesPerBand = static_cast<size_t>(window.getNumRows()) * static_cast<size_t>(window.getNumCols()) *  numBytesPerPixel;
-
+    //const auto numBitsPerPixel = nbpp;
+    //const auto numBytesPerPixel = gsl::narrow<size_t>(NITF_NBPP_TO_BYTES(numBitsPerPixel));
+    //const auto numBytesPerBand = static_cast<size_t>(window.getNumRows()) * static_cast<size_t>(window.getNumCols()) *  numBytesPerPixel;
+ 
     auto downsampler = window.getDownSampler();
     const uint32_t rowSkip = downsampler ? downsampler->getRowSkip() : 1;
     const uint32_t colSkip = downsampler ? downsampler->getColSkip() : 1;

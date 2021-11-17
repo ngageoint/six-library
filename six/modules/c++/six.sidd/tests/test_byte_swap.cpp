@@ -174,10 +174,7 @@ int main(int /*argc*/, char** /*argv*/)
 {
     try
     {
-        six::XMLControlFactory::getInstance().addCreator(
-            six::DataType::DERIVED,
-            new six::XMLControlCreatorT<
-            six::sidd::DerivedXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
 
         bool success = run(false, false) && run(true, false) &&
             run(false, true) && run(true, true);

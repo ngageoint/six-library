@@ -382,6 +382,8 @@ NITF_MAX_READ_ATTEMPTS = _nitropy.NITF_MAX_READ_ATTEMPTS
 NITF_DATE_FORMAT_20 = _nitropy.NITF_DATE_FORMAT_20
 NITF_DATE_FORMAT_21 = _nitropy.NITF_DATE_FORMAT_21
 NITF_TRE_HASH_SIZE = _nitropy.NITF_TRE_HASH_SIZE
+HAVE_CLOCK_GETTIME = _nitropy.HAVE_CLOCK_GETTIME
+HAVE_SYS_TIME_H = _nitropy.HAVE_SYS_TIME_H
 NRT_LIB_VERSION = _nitropy.NRT_LIB_VERSION
 NITF_LIB_VERSION = _nitropy.NITF_LIB_VERSION
 NITF_COMPRESSION_HASH_SIZE = _nitropy.NITF_COMPRESSION_HASH_SIZE
@@ -1016,7 +1018,7 @@ def nitf_TRE_exists(tre: 'nitf_TRE', tag: 'char const *') -> "bool":
     return _nitropy.nitf_TRE_exists(tre, tag)
 nitf_TRE_exists = _nitropy.nitf_TRE_exists
 
-def nitf_TRE_setField(tre: 'nitf_TRE', tag: 'char const *', data: 'NITF_DATA *', dataLength: 'size_t', error: 'nrt_Error') -> "bool":
+def nitf_TRE_setField(tre: 'nitf_TRE', tag: 'char const *', data: 'NITF_DATA const *', dataLength: 'size_t', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_TRE_setField(tre, tag, data, dataLength, error)
 nitf_TRE_setField = _nitropy.nitf_TRE_setField
 
@@ -1944,7 +1946,7 @@ def nitf_ImageSubheader_setDimensions(subhdr: 'nitf_ImageSubheader', numRows: 'u
     return _nitropy.nitf_ImageSubheader_setDimensions(subhdr, numRows, numCols, error)
 nitf_ImageSubheader_setDimensions = _nitropy.nitf_ImageSubheader_setDimensions
 
-def nitf_ImageSubheader_setCornersFromLatLons(subheader: 'nitf_ImageSubheader', type: 'nitf_CornersType', corners: 'double [4][2]', error: 'nrt_Error') -> "bool":
+def nitf_ImageSubheader_setCornersFromLatLons(subheader: 'nitf_ImageSubheader', type: 'nitf_CornersType', corners: 'double const [4][2]', error: 'nrt_Error') -> "bool":
     return _nitropy.nitf_ImageSubheader_setCornersFromLatLons(subheader, type, corners, error)
 nitf_ImageSubheader_setCornersFromLatLons = _nitropy.nitf_ImageSubheader_setCornersFromLatLons
 

@@ -75,7 +75,7 @@ TEST_CASE(Classification)
 
     const auto classificationElements = root->getElementsByTagName("Classification", true /*recurse*/);
     TEST_ASSERT_FALSE(classificationElements.empty());
-    TEST_ASSERT_EQ(classificationElements.size(), 1);
+    TEST_ASSERT_EQ(classificationElements.size(), static_cast<size_t>(1));
     const auto& classification = *(classificationElements[0]);
     const auto characterData = classification.getCharacterData();
     TEST_ASSERT_EQ(characterData, classificationText);
@@ -117,7 +117,7 @@ TEST_CASE(ClassificationCanada)
 
     const auto classificationElements = root->getElementsByTagName("Classification", true /*recurse*/);
     TEST_ASSERT_FALSE(classificationElements.empty());
-    TEST_ASSERT_EQ(classificationElements.size(), 1);
+    TEST_ASSERT_EQ(classificationElements.size(), static_cast<size_t>(1));
     const auto& classification = *(classificationElements[0]);
     const auto characterData = classification.getCharacterData();
     TEST_ASSERT_EQ(characterData, classificationText);

@@ -40,7 +40,7 @@ TEST_CASE(testCastOperator)
 
     field.set(1234567890);
     const uint32_t valUint32 = field;
-    TEST_ASSERT_EQ(valUint32, 1234567890);
+    TEST_ASSERT_EQ(valUint32, static_cast<uint32_t>(1234567890));
 #if SIZEOF_SIZE_T == 4
     const size_t valSizeT = field;
     TEST_ASSERT_EQ(valSizeT, 1234567890);
@@ -48,11 +48,11 @@ TEST_CASE(testCastOperator)
 
     field.set(uint64_t(1234567890987));
     const uint64_t valUint64 = field;
-    TEST_ASSERT_EQ(valUint64, 1234567890987);
+    TEST_ASSERT_EQ(valUint64, static_cast<uint64_t>(1234567890987));
 
 #if SIZEOF_SIZE_T == 8
     const size_t valSizeT = field;
-    TEST_ASSERT_EQ(valSizeT, 1234567890987);
+    TEST_ASSERT_EQ(valSizeT, static_cast<size_t>(1234567890987));
 #endif
 
     // Test signed values

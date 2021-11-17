@@ -22,6 +22,8 @@ coda_add_module(
         source/Grid.cpp
         source/ImageData.cpp
         source/ImageFormation.cpp
+        source/KDTree.cpp
+        source/NITFReadComplexXMLControl.cpp
         source/PFA.cpp
         source/Position.cpp
         source/RMA.cpp
@@ -74,6 +76,8 @@ coda_add_tests(
         test_projection_polynomial_fitter.cpp
         test_radar_collection.cpp
         test_update_sicd_version.cpp
+        test_valid_six.cpp
+        test_AMP8I_PHS8I.cpp
         test_utilities.cpp)
 
 # Install the schemas

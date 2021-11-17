@@ -892,24 +892,24 @@ TEST_CASE(testOptional)
             cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
 
     const cphd::SupportArray& supportArray = *(metadata->supportArray);
-    TEST_ASSERT_EQ(supportArray.iazArray.size(), 1);
-    TEST_ASSERT_EQ(supportArray.iazArray[0].getIdentifier(), 1);
+    TEST_ASSERT_EQ(supportArray.iazArray.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(supportArray.iazArray[0].getIdentifier(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(supportArray.iazArray[0].elementFormat, "IAZ=F4;");
     TEST_ASSERT_EQ(supportArray.iazArray[0].x0, 0.0);
     TEST_ASSERT_EQ(supportArray.iazArray[0].y0, 0.0);
     TEST_ASSERT_EQ(supportArray.iazArray[0].xSS, 5.0);
     TEST_ASSERT_EQ(supportArray.iazArray[0].ySS, 5.0);
 
-    TEST_ASSERT_EQ(supportArray.antGainPhase.size(), 1);
-    TEST_ASSERT_EQ(supportArray.antGainPhase[0].getIdentifier(), 2);
+    TEST_ASSERT_EQ(supportArray.antGainPhase.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(supportArray.antGainPhase[0].getIdentifier(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(supportArray.antGainPhase[0].elementFormat, "Gain=F4;Phase=F4;");
     TEST_ASSERT_EQ(supportArray.antGainPhase[0].x0, 0.0);
     TEST_ASSERT_EQ(supportArray.antGainPhase[0].y0, 0.0);
     TEST_ASSERT_EQ(supportArray.antGainPhase[0].xSS, 5.0);
     TEST_ASSERT_EQ(supportArray.antGainPhase[0].ySS, 5.0);
 
-    TEST_ASSERT_EQ(supportArray.addedSupportArray.size(), 1);
-    TEST_ASSERT_EQ(supportArray.addedSupportArray.count("AddedSupportArray"), 1);
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.count("AddedSupportArray"), static_cast<size_t>(1));
     TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.elementFormat, "F4");
     TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.x0, 0.0);
     TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.y0, 0.0);
@@ -918,16 +918,16 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.xUnits, "XUnits");
     TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.yUnits, "YUnits");
     TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.zUnits, "ZUnits");
-    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.parameter.size(), 2);
+    TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.parameter.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.parameter[0].getName(), "Parameter1");
     TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.parameter[1].getName(), "Parameter2");
     TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.parameter[0].str(), "Additional parameter");
     TEST_ASSERT_EQ(supportArray.addedSupportArray.find("AddedSupportArray")->second.parameter[1].str(), "Additional parameter");
 
     const cphd::Antenna& antenna = *(metadata->antenna);
-    TEST_ASSERT_EQ(antenna.antCoordFrame.size(), 2);
+    TEST_ASSERT_EQ(antenna.antCoordFrame.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].identifier, "ACF1");
-    TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.order(), 3);
+    TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.order(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.coeffs()[0][0], 1);
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.coeffs()[1][0], 2);
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.coeffs()[2][0], 3);
@@ -941,26 +941,26 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.coeffs()[2][2], 3);
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].xAxisPoly.coeffs()[3][2], 0);
 
-    TEST_ASSERT_EQ(antenna.antCoordFrame[0].yAxisPoly.order(), 1);
+    TEST_ASSERT_EQ(antenna.antCoordFrame[0].yAxisPoly.order(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].yAxisPoly.coeffs()[0][0], 1);
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].yAxisPoly.coeffs()[1][0], 2);
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].yAxisPoly.coeffs()[0][1], 1);
     TEST_ASSERT_EQ(antenna.antCoordFrame[0].yAxisPoly.coeffs()[1][1], 2);
 
     TEST_ASSERT_EQ(antenna.antCoordFrame[1].identifier, "ACF2");
-    TEST_ASSERT_EQ(antenna.antCoordFrame[1].xAxisPoly.order(), 1);
+    TEST_ASSERT_EQ(antenna.antCoordFrame[1].xAxisPoly.order(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(antenna.antCoordFrame[1].xAxisPoly.coeffs()[0][0], 1);
     TEST_ASSERT_EQ(antenna.antCoordFrame[1].xAxisPoly.coeffs()[1][0], 2);
     TEST_ASSERT_EQ(antenna.antCoordFrame[1].xAxisPoly.coeffs()[0][1], 1);
     TEST_ASSERT_EQ(antenna.antCoordFrame[1].xAxisPoly.coeffs()[1][1], 2);
 
-    TEST_ASSERT_EQ(antenna.antCoordFrame[1].yAxisPoly.order(), 1);
+    TEST_ASSERT_EQ(antenna.antCoordFrame[1].yAxisPoly.order(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(antenna.antCoordFrame[1].yAxisPoly.coeffs()[0][0], 1);
     TEST_ASSERT_EQ(antenna.antCoordFrame[1].yAxisPoly.coeffs()[1][0], 2);
     TEST_ASSERT_EQ(antenna.antCoordFrame[1].yAxisPoly.coeffs()[0][1], 1);
     TEST_ASSERT_EQ(antenna.antCoordFrame[1].yAxisPoly.coeffs()[1][1], 2);
 
-    TEST_ASSERT_EQ(antenna.antPhaseCenter.size(), 1);
+    TEST_ASSERT_EQ(antenna.antPhaseCenter.size(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(antenna.antPhaseCenter[0].identifier, "APC");
     TEST_ASSERT_EQ(antenna.antPhaseCenter[0].acfId, "ACF1");
     TEST_ASSERT_EQ(antenna.antPhaseCenter[0].apcXYZ[0], 5.0);
@@ -973,28 +973,28 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(antenna.antPhaseCenter[0].apcXYZ[1], 5.0);
     TEST_ASSERT_EQ(antenna.antPhaseCenter[0].apcXYZ[2], 5.0);
 
-    TEST_ASSERT_EQ(antenna.antPattern.size(), 1);
+    TEST_ASSERT_EQ(antenna.antPattern.size(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(antenna.antPattern[0].identifier, "APAT");
     TEST_ASSERT_EQ(antenna.antPattern[0].freqZero, 2.3);
     TEST_ASSERT_EQ(antenna.antPattern[0].gainZero, 2.3);
     TEST_ASSERT_EQ(antenna.antPattern[0].ebFreqShift, 1);
     TEST_ASSERT_EQ(antenna.antPattern[0].mlFreqDilation, 0);
-    TEST_ASSERT_EQ(antenna.antPattern[0].gainBSPoly.order(), 1);
+    TEST_ASSERT_EQ(antenna.antPattern[0].gainBSPoly.order(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(antenna.antPattern[0].gainBSPoly.coeffs()[0], 1.0);
     TEST_ASSERT_EQ(antenna.antPattern[0].gainBSPoly.coeffs()[1], 2.0);
-    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcxPoly.order(), 1);
+    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcxPoly.order(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcxPoly.coeffs()[0], 5.0);
-    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcyPoly.order(), 1);
+    TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcyPoly.order(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcyPoly.coeffs()[0], 0.0);
     TEST_ASSERT_EQ(antenna.antPattern[0].eb.dcyPoly.coeffs()[1], 5.0);
-    TEST_ASSERT_EQ(antenna.antPattern[0].array.gainPoly.orderX(), 1);
-    TEST_ASSERT_EQ(antenna.antPattern[0].array.gainPoly.orderY(), 1);
-    TEST_ASSERT_EQ(antenna.antPattern[0].array.phasePoly.orderX(), 1);
-    TEST_ASSERT_EQ(antenna.antPattern[0].array.phasePoly.orderY(), 1);
-    TEST_ASSERT_EQ(antenna.antPattern[0].element.gainPoly.orderX(), 1);
-    TEST_ASSERT_EQ(antenna.antPattern[0].element.gainPoly.orderY(), 1);
-    TEST_ASSERT_EQ(antenna.antPattern[0].element.phasePoly.orderX(), 1);
-    TEST_ASSERT_EQ(antenna.antPattern[0].element.phasePoly.orderY(), 1);
+    TEST_ASSERT_EQ(antenna.antPattern[0].array.gainPoly.orderX(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(antenna.antPattern[0].array.gainPoly.orderY(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(antenna.antPattern[0].array.phasePoly.orderX(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(antenna.antPattern[0].array.phasePoly.orderY(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(antenna.antPattern[0].element.gainPoly.orderX(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(antenna.antPattern[0].element.gainPoly.orderY(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(antenna.antPattern[0].element.phasePoly.orderX(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(antenna.antPattern[0].element.phasePoly.orderY(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(antenna.antPattern[0].gainPhaseArray[0].freq, 2.3);
     TEST_ASSERT_EQ(antenna.antPattern[0].gainPhaseArray[0].arrayId, "Parameter1");
     TEST_ASSERT_EQ(antenna.antPattern[0].gainPhaseArray[0].elementId, "Parameter2");
@@ -1003,23 +1003,25 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(antenna.antPattern[0].gainPhaseArray[1].elementId, "Parameter2");
 
     const cphd::TxRcv& txRcv = *(metadata->txRcv);
-    TEST_ASSERT_EQ(txRcv.txWFParameters.size(), 1);
+    TEST_ASSERT_EQ(txRcv.txWFParameters.size(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].identifier, "TxWFParam");
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].pulseLength, 3.0);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].rfBandwidth, 2.3);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].freqCenter, 1.8);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].lfmRate, 1.0);
-    TEST_ASSERT_EQ(txRcv.txWFParameters[0].polarization, "LHC");
+    TEST_ASSERT(txRcv.txWFParameters[0].polarization == "LHC");
+    TEST_ASSERT_EQ(txRcv.txWFParameters[0].polarization, cphd::PolarizationType::LHC);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].power, 5.0);
 
-    TEST_ASSERT_EQ(txRcv.rcvParameters.size(), 2);
+    TEST_ASSERT_EQ(txRcv.rcvParameters.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].identifier, "RcvParam1");
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].windowLength, 3.0);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].sampleRate, 2.3);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].ifFilterBW, 2.3);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].freqCenter, 1.8);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].lfmRate, 1.0);
-    TEST_ASSERT_EQ(txRcv.rcvParameters[0].polarization, "LHC");
+    TEST_ASSERT(txRcv.rcvParameters[0].polarization == "LHC");
+    TEST_ASSERT_EQ(txRcv.rcvParameters[0].polarization, cphd::PolarizationType::LHC);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].pathGain, 5.0);
 
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].identifier, "RcvParam2");
@@ -1028,11 +1030,13 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].ifFilterBW, 2.3);
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].freqCenter, 1.8);
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].lfmRate, 1.0);
-    TEST_ASSERT_EQ(txRcv.rcvParameters[1].polarization, "LHC");
+    TEST_ASSERT(txRcv.rcvParameters[1].polarization == "LHC");
+    TEST_ASSERT_EQ(txRcv.rcvParameters[1].polarization, cphd::PolarizationType::LHC);
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].pathGain, 5.0);
 
     const cphd::ErrorParameters& errorParams = *(metadata->errorParameters);
-    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.frame, "ECF");
+    TEST_ASSERT(errorParams.monostatic->posVelErr.frame == "ECF");
+    TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.frame, six::FrameType(six::FrameType::ECF));
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p1, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.p2, 1.0);
     TEST_ASSERT_EQ(errorParams.monostatic->posVelErr.corrCoefs->p1p2, 0.8);
@@ -1070,7 +1074,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(geoInfo[0].desc[0].getName(), "Airport ID");
     TEST_ASSERT_EQ(geoInfo[0].desc[0].str(), "51");
     TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->name, "Perimeter");
-    TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon.size(), 4);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon.size(), static_cast<size_t>(4));
     TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon[0].getLat(), 0.0);
     TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon[0].getLon(), 0.0);
     TEST_ASSERT_EQ(geoInfo[0].geoInfos[0]->geometryLatLon[1].getLat(), 0.1);
@@ -1083,7 +1087,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->name, "Runway");
     TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->desc[0].getName(), "ID");
     TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->desc[0].str(), "04/22");
-    TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->geometryLatLon.size(), 2);
+    TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->geometryLatLon.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->geometryLatLon[0].getLat(), 0.02);
     TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->geometryLatLon[0].getLon(), 0.03);
     TEST_ASSERT_EQ(geoInfo[0].geoInfos[1]->geometryLatLon[1].getLat(), 0.08);
@@ -1096,7 +1100,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(geoInfo[0].geoInfos[3]->geometryLatLon[0].getLon(), 0.4);
 
     TEST_ASSERT_EQ(geoInfo[1].name, "Farm");
-    TEST_ASSERT_EQ(geoInfo[1].geometryLatLon.size(), 5);
+    TEST_ASSERT_EQ(geoInfo[1].geometryLatLon.size(), static_cast<size_t>(5));
     TEST_ASSERT_EQ(geoInfo[1].geometryLatLon[0].getLat(), 1.0);
     TEST_ASSERT_EQ(geoInfo[1].geometryLatLon[0].getLon(), 1.0);
     TEST_ASSERT_EQ(geoInfo[1].geometryLatLon[1].getLat(), 1.1);
@@ -1105,16 +1109,16 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(geoInfo[1].geometryLatLon[4].getLon(), 1.0);
 
     const cphd::MatchInformation& matchInfo = *(metadata->matchInfo);
-    TEST_ASSERT_EQ(matchInfo.types.size(), 2);
+    TEST_ASSERT_EQ(matchInfo.types.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(matchInfo.types[0].typeID, "STEREO");
     TEST_ASSERT_EQ(matchInfo.types[0].currentIndex, 1);
-    TEST_ASSERT_EQ(matchInfo.types[0].matchCollects.size(), 1);
+    TEST_ASSERT_EQ(matchInfo.types[0].matchCollects.size(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(matchInfo.types[0].matchCollects[0].coreName, "CollectionName");
     TEST_ASSERT_EQ(matchInfo.types[0].matchCollects[0].matchIndex, 1);
     TEST_ASSERT_EQ(matchInfo.types[0].matchCollects[0].parameters[0].getName(), "param1");
     TEST_ASSERT_EQ(matchInfo.types[1].typeID, "COHERENT");
     TEST_ASSERT_EQ(matchInfo.types[1].currentIndex, 1);
-    TEST_ASSERT_EQ(matchInfo.types[1].matchCollects.size(), 1);
+    TEST_ASSERT_EQ(matchInfo.types[1].matchCollects.size(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(matchInfo.types[1].matchCollects[0].coreName, "CollectionName");
     TEST_ASSERT_EQ(matchInfo.types[1].matchCollects[0].matchIndex, 1);
     TEST_ASSERT_EQ(matchInfo.types[1].matchCollects[0].parameters[0].getName(), "param1");

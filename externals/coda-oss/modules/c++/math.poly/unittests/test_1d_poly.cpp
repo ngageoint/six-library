@@ -85,7 +85,7 @@ TEST_CASE(testTruncateTo)
     }
 
     const math::poly::OneD<double> truncatedPoly = poly.truncateTo(2);
-    TEST_ASSERT_EQ(truncatedPoly.order(), 2);
+    TEST_ASSERT_EQ(truncatedPoly.order(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(truncatedPoly[0], 10.0);
     TEST_ASSERT_EQ(truncatedPoly[1], 20.0);
     TEST_ASSERT_EQ(truncatedPoly[2], 30.0);
@@ -114,7 +114,7 @@ TEST_CASE(testTruncateToNonZeros)
     {
         poly[ord] = 0.0;
         math::poly::OneD<double> truncatedPoly = poly.truncateToNonZeros(0.0);
-        TEST_ASSERT_EQ(truncatedPoly.order(), ord - 1);
+        TEST_ASSERT_EQ(truncatedPoly.order(), static_cast<size_t>(ord - 1));
         for (size_t jj = 0; jj < ord; ++jj)
         {
             TEST_ASSERT_EQ(truncatedPoly[jj], poly[jj]);

@@ -57,7 +57,7 @@ struct NITFReadControl : public ReadControl
     NITFReadControl();
 
     //!  Destructor
-    virtual ~NITFReadControl()
+    virtual ~NITFReadControl() noexcept(true)
     {
         reset();
     }
@@ -111,9 +111,8 @@ struct NITFReadControl : public ReadControl
      *  segment in question at least follows some of the rules
      *  that its supposed to.
      */
-    void validateSegment(nitf::ImageSubheader subheader,
-                         const NITFImageInfo* info);
-    void validateSegment(nitf::ImageSubheader subheader, const NITFImageInfo&);
+    void validateSegment(const nitf::ImageSubheader&, const NITFImageInfo*) const;
+    void validateSegment(const nitf::ImageSubheader&, const NITFImageInfo&) const;
 
     using ReadControl::load;
 
@@ -136,8 +135,8 @@ struct NITFReadControl : public ReadControl
     void load(io::SeekableInputStream& ioStream,
               const std::vector<std::string>& schemaPaths);
 
-    void load(mem::SharedPtr<nitf::IOInterface> ioInterface);
-    void load(mem::SharedPtr<nitf::IOInterface> ioInterface,
+    void load(std::shared_ptr<nitf::IOInterface> ioInterface);
+    void load(std::shared_ptr<nitf::IOInterface> ioInterface,
               const std::vector<std::string>& schemaPaths);
 
 
@@ -257,7 +256,7 @@ private:
     // to prevent data from being deleted prematurely
     // The issue occurs from the explicit destructor of
     // IOControl
-    mem::SharedPtr<nitf::IOInterface> mInterface;
+    std::shared_ptr<nitf::IOInterface> mInterface;
 };
 
 

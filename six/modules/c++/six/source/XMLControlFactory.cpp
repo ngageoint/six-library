@@ -25,6 +25,7 @@
 #include "six/XMLControlFactory.h"
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
+#include "six/Data.h"
 
 using namespace six;
 
@@ -58,7 +59,7 @@ void XMLControlRegistry::addCreator(const std::string& identifier,
 }
 #if !CODA_OSS_cpp17
 void XMLControlRegistry::addCreator(const std::string& identifier,
-                                    std::auto_ptr<XMLControlCreator> creator)
+                                    mem::auto_ptr<XMLControlCreator> creator)
 {
     addCreator(identifier, std::unique_ptr<XMLControlCreator>(creator.release()));
 }

@@ -12,7 +12,17 @@
 #cmakedefine HAVE_LOCALTIME_R @HAVE_LOCALTIME_R@
 #cmakedefine HAVE_GMTIME_R @HAVE_GMTIME_R@
 #cmakedefine HAVE_SETENV @HAVE_SETENV@
+#ifndef BIGENDIAN
 #cmakedefine01 BIGENDIAN
+#else
+// some external libraries define the BIGENDIAN macro (e.g. winsock2.h)
+// verify preexisting BIGENDIAN matches the value detected by CMake
+#cmakedefine CODA_OSS_CHECK_BIGENDIAN @BIGENDIAN@
+#if BIGENDIAN != CODA_OSS_CHECK_BIGENDIAN
+#error "BIGENDIAN macro inconsistent with value determined by build system"
+#endif
+#undef CODA_OSS_CHECK_BIGENDIAN
+#endif
 #cmakedefine SIZEOF_SIZE_T @SIZEOF_SIZE_T@
 #cmakedefine HAVE_POSIX_MEMALIGN @HAVE_POSIX_MEMALIGN@
 #cmakedefine HAVE_MEMALIGN @HAVE_MEMALIGN@

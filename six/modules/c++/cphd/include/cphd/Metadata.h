@@ -55,7 +55,7 @@ namespace cphd
  *  This object contains all of the sub-blocks for CPHD.
  *
  */
-struct Metadata : MetadataBase
+struct Metadata final : MetadataBase
 {
     //! Default constructor
     //! Initializes CPHD version to default version specified in FileHeader

@@ -451,7 +451,7 @@ six::PolarizationSequenceType _convertDualPolarization(six::DualPolarizationType
 }
 
 std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType>
-    convertDualPolarization(six::DualPolarizationType pol)
+    Utilities::convertDualPolarization(six::DualPolarizationType pol)
 {
     std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType> pols;
     pols.first = _convertDualPolarization(pol, true);

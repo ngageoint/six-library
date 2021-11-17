@@ -210,16 +210,10 @@ int main(int argc, char** argv)
     try
     {
         six::XMLControlFactory::getInstance().
-            addCreator(
-                six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>()
-                );
+            addCreator<six::sicd::ComplexXMLControl>();
 
         six::XMLControlFactory::getInstance().
-            addCreator(
-                six::DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>()
-                );
+            addCreator<six::sidd::DerivedXMLControl>();
 
         // Get a Complex Data structure from an XML file
         six::Options options;

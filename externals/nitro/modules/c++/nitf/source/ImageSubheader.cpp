@@ -108,6 +108,15 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
     if (!x)
         throw nitf::NITFException(&error);
 }
+void ImageSubheader::setPixelInformation(PixelValueType pvtype,
+                         uint32_t nbpp,
+                         uint32_t abpp,
+                         std::string justification,
+                         ImageRepresentation irep, std::string icat,
+                         std::vector<nitf::BandInfo>& bands)
+{
+    setPixelInformation(to_string(pvtype), nbpp, abpp, justification, to_string(irep), icat, bands);
+}
 
 void ImageSubheader::setBlocking(uint32_t numRows,
                      uint32_t numCols,
@@ -120,6 +129,14 @@ void ImageSubheader::setBlocking(uint32_t numRows,
         &error);
     if (!x)
         throw nitf::NITFException(&error);
+}
+void ImageSubheader::setBlocking(uint32_t numRows,
+                     uint32_t numCols,
+                     uint32_t numRowsPerBlock,
+                     uint32_t numColsPerBlock,
+                     BlockingMode imode)
+{
+    setBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, to_string(imode));
 }
 
 void ImageSubheader::computeBlocking(uint32_t numRows,

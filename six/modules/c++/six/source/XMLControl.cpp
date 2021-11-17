@@ -26,25 +26,18 @@
 #include <six/XMLControl.h>
 #include <six/Utilities.h>
 #include <six/Types.h>
+#include <six/Data.h>
 
 namespace fs = std::filesystem;
 
 namespace six
 {
-XMLControl::XMLControl(logging::Logger* log, bool ownLog) :
-    mLog(nullptr),
-    mOwnLog(false)
+XMLControl::XMLControl(logging::Logger* log, bool ownLog) : mLogger(mLog, mOwnLog, nullptr)
 {
     setLogger(log, ownLog);
 }
 
-XMLControl::~XMLControl()
-{
-    if (mLog && mOwnLog)
-    {
-        delete mLog;
-    }
-}
+XMLControl::~XMLControl() = default;
 
 static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
 {
@@ -58,9 +51,9 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
 // Don't want to set a dummy schema path to a directory that exists as that causes
 // the code to check for valid schemas and validate.
 #if defined(_WIN32)
-#define SIX_DEFAULT_SCHEMA_PATH R"(C:\some\path)" // just to compile ...
+#define SIX_DEFAULT_SCHEMA_PATH R"(C:\s 0 m e\p at h)" // just to compile ...
 #else
-#define SIX_DEFAULT_SCHEMA_PATH R"(/some/path)" // just to compile ...
+#define SIX_DEFAULT_SCHEMA_PATH R"(/s 0 m e/p at h)" // just to compile ...
 #endif
 #endif
 
@@ -70,7 +63,7 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
         if (!envPath.empty())
         {
             // SIX_SCHEMA_PATH might be a search path
-            if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, sys::Filesystem::FileType::Directory))
+	  if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, std::filesystem::file_type::directory))
             {
                 // Nope; assume the caller can figure things out (existing behavior).
                 schemaPaths.push_back(envPath);
@@ -185,26 +178,6 @@ void XMLControl::validate(const xml::lite::Document* doc,
                     Ctxt("INVALID XML: Check both the XML being "
                          "produced and the schemas available"));
         }
-    }
-}
-
-void XMLControl::setLogger(logging::Logger* log, bool own)
-{
-    if (mLog && mOwnLog && log != mLog)
-    {
-        delete mLog;
-        mLog = nullptr;
-    }
-
-    if (log)
-    {
-        mLog = log;
-        mOwnLog = own;
-    }
-    else
-    {
-        mLog = new logging::NullLogger;
-        mOwnLog = true;
     }
 }
 

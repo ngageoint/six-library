@@ -25,6 +25,7 @@
 
 #if !defined(SIX_TIFF_DISABLED)
 
+#include <std/filesystem>
 
 #include "six/Types.h"
 #include "six/Container.h"
@@ -60,11 +61,13 @@ class GeoTIFFWriteControl : public WriteControl
 public:
     GeoTIFFWriteControl();
 
+    GeoTIFFWriteControl(const GeoTIFFWriteControl&) = delete;
+    GeoTIFFWriteControl operator=(const GeoTIFFWriteControl&) = delete;
 
     /*!
      *  Init the GeoTIFF writer.  Throws if we are a SICD container
      */
-    virtual void initialize(mem::SharedPtr<Container> container) override;
+    virtual void initialize(std::shared_ptr<Container> container) override;
 
     using WriteControl::save;
 
@@ -94,6 +97,11 @@ public:
     std::string getFileType() const override { return "GeoTIFF"; }
 
 private:
+    template<typename TBufferList>
+    void save(const TBufferList& sources,
+        const std::string& toFile,
+        const std::vector<std::string>& schemaPaths);
+
     static
     void addCharArray(tiff::IFD* ifd,
                       const std::string &tag,
@@ -116,6 +124,10 @@ private:
                         size_t numCols,
                         tiff::IFD* ifd,
                         const std::string& tfwPathname);
+    void addGeoTIFFKeys(const GeographicProjection& projection,
+                    const types::RowCol<size_t>& extent,
+                    tiff::IFD* ifd,
+                    const std::filesystem::path& tfwPathname);
 };
 
 }

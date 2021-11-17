@@ -70,9 +70,7 @@ int main(int argc, char** argv)
         getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
         // Crop it
-        six::XMLControlFactory::getInstance().addCreator(
-                six::DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
 
 
         six::sidd::cropSIDD(inPathname,

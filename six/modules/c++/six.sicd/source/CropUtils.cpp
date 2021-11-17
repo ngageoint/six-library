@@ -24,6 +24,8 @@
 #include <memory>
 #include <algorithm>
 #include <string>
+#include <std/span>
+#include <std/cstddef>
 
 #include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
@@ -87,7 +89,7 @@ six::sicd::ComplexData* const updateMetadata(
 }
 
 void cropSICD(six::NITFReadControl& reader,
-              const std::vector<std::string>& schemaPaths,
+              const std::vector<std::string>& schemaPaths_,
               const six::sicd::ComplexData& data,
               const scene::SceneGeometry& geom,
               const scene::ProjectionModel& projection,
@@ -96,8 +98,7 @@ void cropSICD(six::NITFReadControl& reader,
               const std::string& outPathname)
 {
     // Make sure the AOI is in bounds
-    const types::RowCol<size_t> origDims(data.getNumRows(),
-                                         data.getNumCols());
+    const auto origDims = getExtent(data);
 
     if (aoiOffset.row + aoiDims.row > origDims.row ||
         aoiOffset.col + aoiDims.col > origDims.col)
@@ -111,27 +112,23 @@ void cropSICD(six::NITFReadControl& reader,
     }
 
     // Read in the AOI
-    const size_t numBytesPerPixel(data.getNumBytesPerPixel());
-    const size_t numBytes(origDims.row * origDims.col * numBytesPerPixel);
-
+    //const size_t numBytesPerPixel(data.getNumBytesPerPixel());
     six::Region region;
-    region.setOffset(aoiOffset);
-    region.setDims(aoiDims);
-    const auto buffer = region.setBuffer(numBytes);
+    setOffset(region, aoiOffset);
+    setDims(region, aoiDims);
+    const auto buffer = region.setComplexBuffer(origDims.area());
     reader.interleaved(region, 0);
 
-    six::sicd::ComplexData* const aoiData = updateMetadata(
+    std::unique_ptr<six::Data> aoiData(updateMetadata(
             data, geom,  projection,
-            aoiOffset, aoiDims);
-    std::unique_ptr<six::Data> scopedData(aoiData);
+            aoiOffset, aoiDims));
 
     // Write the AOI SICD out
-    mem::SharedPtr<six::Container> container(new six::Container(
-            six::DataType::COMPLEX));
-    container->addData(std::move(scopedData));
-    six::NITFWriteControl writer(container);
-    six::BufferList images(1, buffer.get());
-    writer.save(images, outPathname, schemaPaths);
+    six::NITFWriteControl writer(std::move(aoiData));
+    const std::span<const std::complex<float>> image(buffer.get(), origDims.area());
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+    writer.save_image(image, outPathname, schemaPaths);
 }
 
 }
@@ -256,8 +253,7 @@ void cropSICD(six::NITFReadControl& reader,
     std::unique_ptr<const scene::ProjectionModel> projection(
             six::sicd::Utilities::getProjectionModel(data, geom.get()));
 
-    types::RowCol<double> minPixel(static_cast<double>(data->getNumRows()),
-                                   static_cast<double>(data->getNumCols()));
+    types::RowCol<double> minPixel(getExtent(*data));
     types::RowCol<double> maxPixel(0.0, 0.0);
     for (size_t ii = 0; ii < corners.size(); ++ii)
     {

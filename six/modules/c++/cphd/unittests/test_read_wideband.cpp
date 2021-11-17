@@ -83,11 +83,11 @@ TEST_CASE(testReadCompressedChannel)
     std::unique_ptr<std::byte[]> readData;
     wideband.read(0, readData);
 
-    TEST_ASSERT_EQ(wideband.getBytesRequiredForRead(0), 4);
-    TEST_ASSERT_EQ(readData[0], '1');
-    TEST_ASSERT_EQ(readData[1], '2');
-    TEST_ASSERT_EQ(readData[2], '3');
-    TEST_ASSERT_EQ(readData[3], '4');
+    TEST_ASSERT_EQ(wideband.getBytesRequiredForRead(0), static_cast<size_t>(4));
+    TEST_ASSERT_EQ(readData[0], static_cast<std::byte>('1'));
+    TEST_ASSERT_EQ(readData[1], static_cast<std::byte>('2'));
+    TEST_ASSERT_EQ(readData[2], static_cast<std::byte>('3'));
+    TEST_ASSERT_EQ(readData[3], static_cast<std::byte>('4'));
 }
 
 TEST_CASE(testReadUncompressedChannel)
@@ -109,11 +109,11 @@ TEST_CASE(testReadUncompressedChannel)
     std::unique_ptr<std::byte[]> readData;
     wideband.read(0, readData);
 
-    TEST_ASSERT_EQ(wideband.getBytesRequiredForRead(0), 8);
-    TEST_ASSERT_EQ(readData[0], '1');
-    TEST_ASSERT_EQ(readData[1], '2');
-    TEST_ASSERT_EQ(readData[2], '3');
-    TEST_ASSERT_EQ(readData[3], '4');
+    TEST_ASSERT_EQ(wideband.getBytesRequiredForRead(0), static_cast<size_t>(8));
+    TEST_ASSERT_EQ(readData[0], static_cast<std::byte>('1'));
+    TEST_ASSERT_EQ(readData[1], static_cast<std::byte>('2'));
+    TEST_ASSERT_EQ(readData[2], static_cast<std::byte>('3'));
+    TEST_ASSERT_EQ(readData[3], static_cast<std::byte>('4'));
 }
 
 TEST_CASE(testReadChannelSubset)
@@ -135,49 +135,49 @@ TEST_CASE(testReadChannelSubset)
 
     // Single pixel reads
     auto readData = wideband.read(0, 0, 0, 0, 0, 1);
-    TEST_ASSERT_EQ(readData[0], '0');
-    TEST_ASSERT_EQ(readData[1], 'A');
+    TEST_ASSERT_EQ(readData[0], static_cast<std::byte>('0'));
+    TEST_ASSERT_EQ(readData[1], static_cast<std::byte>('A'));
 
     readData = wideband.read(0, 1, 1, 0, 0, 1);
-    TEST_ASSERT_EQ(readData[0], '2');
-    TEST_ASSERT_EQ(readData[1], 'C');
+    TEST_ASSERT_EQ(readData[0], static_cast<std::byte>('2'));
+    TEST_ASSERT_EQ(readData[1], static_cast<std::byte>('C'));
 
     readData = wideband.read(0, 3, 3, 1, 1, 1);
-    TEST_ASSERT_EQ(wideband.getBytesRequiredForRead(0, 3, 3, 1, 1), 2);
+    TEST_ASSERT_EQ(wideband.getBytesRequiredForRead(0, 3, 3, 1, 1), static_cast<size_t>(2));
 
-    TEST_ASSERT_EQ(readData[0], '7');
-    TEST_ASSERT_EQ(readData[1], 'H');
+    TEST_ASSERT_EQ(readData[0], static_cast<std::byte>('7'));
+    TEST_ASSERT_EQ(readData[1], static_cast<std::byte>('H'));
 
     // Full vector reads
     readData = wideband.read(0, 0, 0, 0, cphd::Wideband::ALL, 1);
-    TEST_ASSERT_EQ(readData[0], '0');
-    TEST_ASSERT_EQ(readData[1], 'A');
-    TEST_ASSERT_EQ(readData[2], '1');
-    TEST_ASSERT_EQ(readData[3], 'B');
+    TEST_ASSERT_EQ(readData[0], static_cast<std::byte>('0'));
+    TEST_ASSERT_EQ(readData[1], static_cast<std::byte>('A'));
+    TEST_ASSERT_EQ(readData[2], static_cast<std::byte>('1'));
+    TEST_ASSERT_EQ(readData[3], static_cast<std::byte>('B'));
 
     readData = wideband.read(0, 3, 3, 0, cphd::Wideband::ALL, 1);
     TEST_ASSERT_EQ(
             wideband.getBytesRequiredForRead(0, 3, 3, 0, cphd::Wideband::ALL),
-            4);
+        static_cast<size_t>(4));
 
-    TEST_ASSERT_EQ(readData[0], '6');
-    TEST_ASSERT_EQ(readData[1], 'G');
-    TEST_ASSERT_EQ(readData[2], '7');
-    TEST_ASSERT_EQ(readData[3], 'H');
+    TEST_ASSERT_EQ(readData[0], static_cast<std::byte>('6'));
+    TEST_ASSERT_EQ(readData[1], static_cast<std::byte>('G'));
+    TEST_ASSERT_EQ(readData[2], static_cast<std::byte>('7'));
+    TEST_ASSERT_EQ(readData[3], static_cast<std::byte>('H'));
 
     // Full sample reads
     TEST_ASSERT_EQ(
             wideband.getBytesRequiredForRead(0, 0, cphd::Wideband::ALL, 0, 0),
-            8);
+        static_cast<size_t>(8));
     readData = wideband.read(0, 0, cphd::Wideband::ALL, 0, 0, 1);
-    TEST_ASSERT_EQ(readData[0], '0');
-    TEST_ASSERT_EQ(readData[1], 'A');
-    TEST_ASSERT_EQ(readData[2], '2');
-    TEST_ASSERT_EQ(readData[3], 'C');
-    TEST_ASSERT_EQ(readData[4], '4');
-    TEST_ASSERT_EQ(readData[5], 'E');
-    TEST_ASSERT_EQ(readData[6], '6');
-    TEST_ASSERT_EQ(readData[7], 'G');
+    TEST_ASSERT_EQ(readData[0], static_cast<std::byte>('0'));
+    TEST_ASSERT_EQ(readData[1], static_cast<std::byte>('A'));
+    TEST_ASSERT_EQ(readData[2], static_cast<std::byte>('2'));
+    TEST_ASSERT_EQ(readData[3], static_cast<std::byte>('C'));
+    TEST_ASSERT_EQ(readData[4], static_cast<std::byte>('4'));
+    TEST_ASSERT_EQ(readData[5], static_cast<std::byte>('E'));
+    TEST_ASSERT_EQ(readData[6], static_cast<std::byte>('6'));
+    TEST_ASSERT_EQ(readData[7], static_cast<std::byte>('G'));
 }
 
 TEST_CASE(testCannotDoPartialReadOfCompressedChannel)

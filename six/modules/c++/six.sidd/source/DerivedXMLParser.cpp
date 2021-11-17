@@ -44,21 +44,21 @@ namespace sidd
 const char DerivedXMLParser::SFA_URI[] = "urn:SFA:1.2.0";
 
 DerivedXMLParser::DerivedXMLParser(
-        const std::string& version,
+        const std::string& strVersion,
         std::unique_ptr<six::SICommonXMLParser>&& comParser,
         logging::Logger* log,
         bool ownLog) :
-    XMLParser(versionToURI(version), false, log, ownLog),
+    XMLParser(versionToURI(strVersion), false, log, ownLog),
     mCommon(std::move(comParser))
 {
 }
 #if !CODA_OSS_cpp17
 DerivedXMLParser::DerivedXMLParser(
-        const std::string& version,
-        std::auto_ptr<six::SICommonXMLParser> comParser,
+        const std::string& strVersion,
+        mem::auto_ptr<six::SICommonXMLParser> comParser,
         logging::Logger* log,
         bool ownLog) :
-    DerivedXMLParser(version, std::unique_ptr<six::SICommonXMLParser>(comParser.release()), log, ownLog)
+    DerivedXMLParser(strVersion, std::unique_ptr<six::SICommonXMLParser>(comParser.release()), log, ownLog)
 {
 }
 #endif

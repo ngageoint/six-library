@@ -22,13 +22,19 @@
 #ifndef __SIX_WRITE_CONTROL_H__
 #define __SIX_WRITE_CONTROL_H__
 
+#include <memory>
+#include <std/span>
+#include <vector>
+#include <std/filesystem>
+#include <complex>
+
 #include "six/Types.h"
 #include "six/Region.h"
 #include "six/Container.h"
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
+#include "six/Logger.h"
 #include <import/logging.h>
-#include <mem/SharedPtr.h>
 
 namespace six
 {
@@ -38,12 +44,10 @@ typedef std::vector<io::InputStream*> SourceList;
 
 //!  A vector of Buffer objects (one per SICD, N per SIDD)
 typedef std::vector<const UByte*> BufferList;
-using buffer_list = std::vector<const std::byte*>;
 
 //!  Same as above but used in overloadings to help the compiler out when
 //   it's convenient for the caller to put non-const pointers in the vector
 typedef std::vector<UByte*> NonConstBufferList;
-using buffer_list_mutable = std::vector<std::byte*>;
 
 /*!
  *  \class WriteControl
@@ -73,19 +77,18 @@ struct WriteControl
     static const char OPT_BUFFER_SIZE[];
 
     //!  Constructor.  Null-sets the Container
-    WriteControl() noexcept :
-        mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
+    WriteControl() noexcept(false) :
+        mLogger(mLog, mOwnLog, nullptr)
     {
         setLogger(nullptr);
         setXMLControlRegistry(nullptr);
     }
 
     //!  Destructor.  Does not release any memory
-    virtual ~WriteControl()
-    {
-        if (mLog && mOwnLog)
-            delete mLog;
-    }
+    virtual ~WriteControl() noexcept {}
+
+    WriteControl(const WriteControl&) = delete;
+    WriteControl& operator=(const WriteControl&) = delete;
 
     /*!
      *  Initialize sets the underlying Container pointer to the
@@ -95,7 +98,7 @@ struct WriteControl
      *
      *  \param container Container to bind to
      */
-    virtual void initialize(mem::SharedPtr<Container> container) = 0;
+    virtual void initialize(std::shared_ptr<Container> container) = 0;
 
     /*!
      *  Save a list of InputStream sources.  This should always be
@@ -127,18 +130,8 @@ struct WriteControl
     {
         save(sources, toFile, std::vector<std::string>());
     }
-    void save(const buffer_list& sources, const std::string& toFile)
-    {
-        save(convertBufferList(sources), toFile);
-    }
-
     virtual void save(const BufferList& sources, const std::string& toFile,
                       const std::vector<std::string>& schemaPaths) = 0;
-    virtual void save(const buffer_list& sources, const std::string& toFile,
-                      const std::vector<std::string>& schemaPaths)
-    {
-        save(convertBufferList(sources), toFile, schemaPaths);
-    }
 
     // For convenience since the compiler can't implicitly convert
     // std::vector<T*> to std::vector<const T*>
@@ -146,18 +139,8 @@ struct WriteControl
     {
         save(convertBufferList(sources), toFile);
     }
-    void save(const buffer_list_mutable& sources, const std::string& toFile)
-    {
-        save(convertBufferList(sources), toFile);
-    }
 
     void save(const NonConstBufferList& sources,
-              const std::string& toFile,
-              const std::vector<std::string>& schemaPaths)
-    {
-        save(convertBufferList(sources), toFile, schemaPaths);
-    }
-    void save(const buffer_list_mutable& sources,
               const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
     {
@@ -208,7 +191,7 @@ struct WriteControl
     /*!
      * shared pointer to Container
      */
-    mem::SharedPtr<Container> getContainer()
+    std::shared_ptr<Container> getContainer()
     {
         return mContainer;
     }
@@ -216,9 +199,9 @@ struct WriteControl
     /*!
      *  shared const pointer to Container.
      */
-    mem::SharedPtr<const Container> getContainer() const
+    std::shared_ptr<const Container> getContainer() const
     {
-        mem::SharedPtr<const Container> retval = mContainer;
+        std::shared_ptr<const Container> retval = mContainer;
         return mContainer;
     }
 
@@ -250,12 +233,14 @@ struct WriteControl
     /*!
      * Sets the logger to use internally
      */
-    void setLogger(logging::Logger* log, bool ownLog = false)
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
     {
-        if (mLog && mOwnLog && log != mLog)
-            delete mLog;
-        mLog = log ? log : new logging::NullLogger;
-        mOwnLog = log ? ownLog : true;
+        mLogger.setLogger(std::forward<TLogger>(logger));
+    }
+    void setLogger(logging::Logger* logger, bool ownLog)
+    {
+        mLogger.setLogger(logger, ownLog);
     }
 
     virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
@@ -269,9 +254,7 @@ struct WriteControl
         return mXMLRegistry;
     }
 
-    template<typename TBufferList>
-    static inline
-    BufferList convertBufferList(const TBufferList& buffers)
+    BufferList convertBufferList(const NonConstBufferList& buffers)
     {
         BufferList retval;
         for (const auto& buffer : buffers)
@@ -289,12 +272,14 @@ protected:
         if (!mXMLRegistry)
             mXMLRegistry = &XMLControlFactory::getInstance();
     }
-    mem::SharedPtr<Container> mContainer;
+    std::shared_ptr<Container> mContainer;
     Options mOptions;
     logging::Logger* mLog = nullptr;
     bool mOwnLog = false;
     const XMLControlRegistry* mXMLRegistry = nullptr;
 
+private:
+    Logger mLogger;
 };
 
 }

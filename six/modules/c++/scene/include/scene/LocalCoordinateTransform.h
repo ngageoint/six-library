@@ -22,6 +22,8 @@
 #ifndef __SCENE_LOCAL_COORDINATE_TRANSFORM_H__
 #define __SCENE_LOCAL_COORDINATE_TRANSFORM_H__
 
+#include <math/Utilities.h>
+
 #include "scene/Types.h"
 
 namespace scene
@@ -62,10 +64,10 @@ public:
     {
         const double lon = refPt.getLonRadians();
         const double lat = refPt.getLatRadians();
-        double sinLon = sin(lon);
-        double sinLat = sin(lat);
-        double cosLon = cos(lon);
-        double cosLat = cos(lat);
+        double sinLon, cosLon;
+        math::SinCos(lon, sinLon, cosLon);
+        double sinLat, cosLat;
+        math::SinCos(lat, sinLat, cosLat);
 
         // East
         mBasis(XYZ_X, 0) = -sinLon;
@@ -93,10 +95,10 @@ public:
     {
         const double lon = refPt.getLonRadians();
         const double lat = refPt.getLatRadians();
-        double sinLon = sin(lon);
-        double sinLat = sin(lat);
-        double cosLon = cos(lon);
-        double cosLat = cos(lat);
+        double sinLon, cosLon;
+        math::SinCos(lon, sinLon, cosLon);
+        double sinLat, cosLat;
+        math::SinCos(lat, sinLat, cosLat);
 
         // North
         mBasis(XYZ_X, 0) = -sinLat * cosLon;

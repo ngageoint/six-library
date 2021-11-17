@@ -70,7 +70,7 @@ TEST_CASE(testPathMerge)
     path = R"(/dir1/dir2/file.txt)";
     #endif
     components = sys::Path::separate(path, isAbsolute);
-    TEST_ASSERT_EQ(components.size(), 3);
+    TEST_ASSERT_EQ(components.size(), static_cast<size_t>(3));
     result = sys::Path::merge(components, isAbsolute);
     TEST_ASSERT_EQ(result, path);
 }
@@ -80,10 +80,10 @@ TEST_CASE(testExpandEnvTilde)
     auto path = sys::Path::expandEnvironmentVariables("~");
     TEST_ASSERT_TRUE(fs::is_directory(path));
 
-    path = sys::Path::expandEnvironmentVariables("~", sys::Filesystem::FileType::Directory);
+    path = sys::Path::expandEnvironmentVariables("~", sys::Filesystem::file_type::directory);
     TEST_ASSERT_TRUE(fs::is_directory(path));
 
-    path = sys::Path::expandEnvironmentVariables("~", sys::Filesystem::FileType::Regular);
+    path = sys::Path::expandEnvironmentVariables("~", sys::Filesystem::file_type::regular);
     TEST_ASSERT_TRUE(path.empty());
 }
 
@@ -93,7 +93,7 @@ TEST_CASE(testExpandEnvTildePath)
     const std::vector<std::string> exts{"NTUSER.DAT", ".login", ".cshrc", ".bashrc"};
     os.prependEnv("exts", exts, true /*overwrite*/);
 
-    const auto path = sys::Path::expandEnvironmentVariables("~/$(exts)", sys::Filesystem::FileType::Regular);
+    const auto path = sys::Path::expandEnvironmentVariables("~/$(exts)", sys::Filesystem::file_type::regular);
     TEST_ASSERT_TRUE(sys::Filesystem::is_regular_file(path));
 }
 
@@ -188,7 +188,7 @@ TEST_CASE(testExpandEnvPathMultiple)
     }
     TEST_ASSERT_EQ(expanded_path, home);
     auto expanded_paths = sys::Path::expandedEnvironmentVariables("$(paths)");
-    TEST_ASSERT_EQ(expanded_paths.size(), 3);
+    TEST_ASSERT_EQ(expanded_paths.size(), static_cast<size_t>(3));
 
     const std::vector<std::string> apps{"apps"};
     os.prependEnv("apps", apps, true /*overwrite*/);

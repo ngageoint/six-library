@@ -32,21 +32,27 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
     mRowSize = subheader.numCols() * bytesPerPixel;
 
     uint32_t nBands = subheader.getBandCount();
-    const auto imageMode = subheader.imageMode();
+    const auto imageMode = subheader.imageBlockingMode();
     const auto irep = subheader.imageRepresentation();
     const auto ic = subheader.imageCompression();
 
     //Check for optimization cases - RGB and IQ
-    if ((nBands == 3 && imageMode[0] == 'P' && irep == "RGB" && bytesPerPixel
-            == 1 && (ic == "NC" || ic == "NM")) || (nBands == 2 && imageMode[0]
-            == 'P' && bytesPerPixel == 4 && (ic == "NC" || ic == "NM")
-            && subheader.getBandInfo(0).subcategory()[0] == 'I'
-            && subheader.getBandInfo(1).subcategory()[0] == 'Q'))
+    if ((nBands == 3 && imageMode == nitf::BlockingMode::Pixel && irep == nitf::ImageRepresentation::RGB && bytesPerPixel
+            == 1 && (ic == "NC" || ic == "NM")) || (nBands == 2 && imageMode == nitf::BlockingMode::Pixel &&
+                bytesPerPixel == 4 && (ic == "NC" || ic == "NM")))
     {
-        //using special interleaved shortcut
-        std::cout << "Using optimized pre pixel-interleaved image" << std::endl;
-        mRowSize *= nBands;
-        nBands = 1;
+        auto subcategory = subheader.getBandInfo(0).subcategory;
+        if (subcategory == nitf::Subcategory::I)
+        {
+            subcategory = subheader.getBandInfo(1).subcategory;
+            if (subcategory == nitf::Subcategory::Q)
+            {
+                //using special interleaved shortcut
+                std::cout << "Using optimized pre pixel-interleaved image" << std::endl;
+                mRowSize *= nBands;
+                nBands = 1;
+            }
+        }
     }
 
     if (nBands > 1)

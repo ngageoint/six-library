@@ -44,39 +44,9 @@ XMLParser::XMLParser(const std::string& defaultURI,
                      logging::Logger* log,
                      bool ownLog) :
     mDefaultURI(defaultURI),
-    mAddClassAttributes(addClassAttributes),
-    mLog(nullptr),
-    mOwnLog(false)
+    mAddClassAttributes(addClassAttributes)
 {
     setLogger(log, ownLog);
-}
-
-XMLParser::~XMLParser()
-{
-    if (mOwnLog)
-    {
-        delete mLog;
-    }
-}
-
-void XMLParser::setLogger(logging::Logger* log, bool own)
-{
-    if (mLog && mOwnLog && log != mLog)
-    {
-        delete mLog;
-        mLog = nullptr;
-    }
-
-    if (log)
-    {
-        mLog = log;
-        mOwnLog = own;
-    }
-    else
-    {
-        mLog = new logging::NullLogger;
-        mOwnLog = true;
-    }
 }
 
 XMLElem XMLParser::newElement(const std::string& name, XMLElem parent) const
@@ -102,13 +72,7 @@ XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, const std::string& characterData,
         XMLElem parent)
 {
-    constexpr auto encoding =
-#ifdef _WIN32
-    xml::lite::string_encoding::windows_1252;
-#else
-    xml::lite::string_encoding::utf_8;
-#endif
-    XMLElem elem = new xml::lite::Element(name, uri, characterData, encoding);
+    XMLElem elem = xml::lite::Element::create(name, uri, characterData).release();
     if (parent)
         parent->addChild(elem);
     return elem;
@@ -348,7 +312,7 @@ static bool parseValue(logging::Logger& log, TGetValue getValue)
 bool XMLParser::parseDouble(const xml::lite::Element* element, double& value) const
 {
     value = Init::undefined<double>();
-    return parseValue(*mLog, [&]() {
+    return parseValue(mLogger.get(), [&]() {
         value = xml::lite::getValue<double>(*element);
         assert(Init::isDefined(value));
         });
@@ -371,6 +335,7 @@ bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std:
         parseDouble(element, value);
         return true;
     }
+    value = six::Init::undefined<double>();
     return false;
 }
 bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const
@@ -413,7 +378,7 @@ bool  XMLParser::parseOptionalString(const xml::lite::Element* parent, const std
 void XMLParser::parseBooleanType(const xml::lite::Element* element, BooleanType& value) const
 {
     assert(element != nullptr);
-    parseValue(*mLog, [&]() {
+    parseValue(mLogger.get(), [&]() {
         value = castValue(*element, six::toType<BooleanType>);
         });
 }

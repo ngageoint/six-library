@@ -90,7 +90,7 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
 
         const auto container = reader.getContainer();
         if (container->getDataType() != six::DataType::COMPLEX ||
-            container->getNumData() != 1 ||
+            container->size() != 1 ||
             container->getData(0)->getDataType() != six::DataType::COMPLEX)
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,

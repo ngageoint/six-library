@@ -33,21 +33,10 @@
 
 #include <import/nitf.hpp>
 
-template<typename T>
-inline std::vector<T> iota(size_t count, T value)
-{
-    std::vector<T> retval(count);
-    std::iota(retval.begin(), retval.end(), value);
-    return retval;
-}
-
 static  std::vector<std::string> extract_image(const nitf::ImageSubheader& subheader, uint32_t index, nitf::ImageReader& imageReader,
     const std::string& outDir="", const std::string& baseName="")
 {
-    nitf::SubWindow window;
-    window.setNumRows(subheader.numRows());
-    window.setNumCols(subheader.numCols());
-    window.setBandList(iota(subheader.getBandCount(), static_cast<uint32_t>(0))); // window.bandList = list(range(subheader.getBandCount()))
+    nitf::SubWindow window(subheader);
     const auto nbpp = subheader.actualBitsPerPixel(); //const auto nbpp = subheader.numBitsPerPixel();
     const auto bandData = imageReader.read(window, nbpp);
 

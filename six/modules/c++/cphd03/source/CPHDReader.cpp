@@ -63,21 +63,17 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
 
     if (logger.get() == nullptr)
     {
-        logger.reset(new logging::NullLogger());
+        logger = std::make_shared<logging::NullLogger>();
     }
 
-    mMetadata = CPHDXMLControl(logger.get()).fromXML(xmlParser.getDocument());
+    mMetadata = CPHDXMLControl(logger.get()).fromXML(*xmlParser.getDocument());
 
     // Load the VBP into memory
-    mVBM.reset(new VBM(mMetadata->data, mMetadata->vectorParameters));
-    mVBM->load(*inStream,
-               mFileHeader.getVBMoffset(),
-               mFileHeader.getVBMsize(),
-               numThreads);
+    mVBM = VBM(mMetadata);
+    mVBM.load(*inStream, mFileHeader, numThreads);
 
     // Setup for wideband reading
-    mWideband.reset(new cphd::Wideband(inStream, *mMetadata,
-                                 mFileHeader.getCPHDoffset(),
-                                 mFileHeader.getCPHDsize()));
+    mWideband = std::make_unique<cphd::Wideband>(inStream, mMetadata,
+                                 mFileHeader.getCPHDoffset(), mFileHeader.getCPHDsize());
 }
 }

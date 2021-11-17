@@ -64,7 +64,7 @@ public:
     // unintendet case where row gets set and col doesnt, especially
     // when doing scalar operations that might otherwise create
     // ambiguities
-    RowCol() = default;
+    RowCol() {}  // = default; // error w/ICC and "const" member data
 
     RowCol(T r, T c) noexcept :
         row(r), col(c) {}
@@ -82,7 +82,8 @@ public:
 
     template<typename Other_T> RowCol& operator=(const RowCol<Other_T>& p) noexcept
     {
-        if (this != reinterpret_cast<const RowCol*>(&p))
+        const void* pOther = &p;
+        if (this != static_cast<const RowCol*>(pOther))
         {
             row = cast<T>(p.row);
             col = cast<T>(p.col);

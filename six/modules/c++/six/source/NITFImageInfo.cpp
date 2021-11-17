@@ -35,21 +35,22 @@ namespace
 {
 struct GetDisplayLutFromData final
 {
-    GetDisplayLutFromData(six::Data& data) :
-        mData(data)
-    {
-    }
-
+    GetDisplayLutFromData(const six::Data& data) : mData(data) { }
     GetDisplayLutFromData(const GetDisplayLutFromData&) = delete;
     GetDisplayLutFromData& operator=(const GetDisplayLutFromData&) = delete;
 
     const six::LUT* operator()() const
     {
-        return mData.getDisplayLUT().get();
+        const six::LUT* retval = mData.getDisplayLUT().get();
+        if ((retval == nullptr) && (mData.getPixelType() == six::PixelType::AMP8I_PHS8I))
+        {
+            retval = mData.getAmplitudeTable();
+        }
+        return retval;
     }
 
 private:
-    six::Data& mData;
+    const six::Data& mData;
 };
 }
 
@@ -93,7 +94,7 @@ NITFImageInfo::NITFImageInfo(Data* data,
                              bool computeSegments,
                              size_t rowsPerBlock,
                              size_t colsPerBlock) :
-    mData(data),
+    mData(data), mData_(data),
     mSegmentComputer(data->getNumRows(),
                      data->getNumCols(),
                      data->getNumBytesPerPixel(),
@@ -198,4 +199,236 @@ std::string NITFImageInfo::generateFieldKey(const std::string& field,
         s << "[" << std::to_string(index) << "]";
     return s.str();
 }
+}
+
+static std::vector<nitf::BandInfo> getBandInfoImpl_REnF_IMnF()
+{
+    return { nitf::BandInfo(nitf::Subcategory::I), nitf::BandInfo(nitf::Subcategory::Q) };
+}
+
+static std::vector<nitf::BandInfo> getBandInfoImpl_RGB24I()
+{
+    nitf::BandInfo band1(nitf::Representation::R);
+    nitf::BandInfo band2(nitf::Representation::G);
+    nitf::BandInfo band3(nitf::Representation::B);
+    return { band1, band2, band3 };
+}
+
+static std::vector<nitf::BandInfo> getBandInfoImpl_MONOnI()
+{
+    return { nitf::BandInfo(nitf::Representation::M) };
+}
+
+static std::vector<nitf::BandInfo> getBandInfoFromLUT(const six::LUT& lut, nitf::LookupTable& lookupTable)
+{
+    //I would like to set it this way but it does not seem to work.
+    //Using the init function instead.
+    //band1.getRepresentation().set("LU");
+    //band1.getLookupTable().setTable(table, 2, lut.numEntries);
+    static const std::string imageFilterCondition;
+    static const std::string imageFilterCode;
+    nitf::BandInfo band1;
+    band1.init(nitf::Representation::LU, nitf::Subcategory::None, imageFilterCondition, imageFilterCode,
+        static_cast<uint32_t>(lut.elementSize), static_cast<uint32_t>(lut.numEntries), lookupTable);
+    return { band1 };
+}
+
+static std::vector<nitf::BandInfo> getBandInfoImpl_MONO8LU(const six::LUT* lutPtr)
+{
+    //If LUT is nullptr, we have a predefined LookupTable.
+    //No LUT to write into NITF, so setting to MONO
+    if (lutPtr == nullptr)
+    {
+        return getBandInfoImpl_MONOnI();
+    }
+
+    // TODO: Why do we need to byte swap here?  If it is required, could
+    //       we avoid the clone and byte swap and instead index into
+    //       the LUT in the opposite order?
+    if (lutPtr->elementSize != sizeof(short))
+    {
+        throw except::Exception(Ctxt("Unexpected element size: " + std::to_string(lutPtr->elementSize)));
+    }
+
+    std::unique_ptr<six::LUT> lut(lutPtr->clone());
+    void* pTable = lut->getTable();
+    sys::byteSwap(static_cast<std::byte*>(pTable), static_cast<unsigned short>(lut->elementSize), lut->numEntries);
+
+    nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
+    unsigned char* const table(lookupTable.getTable());
+    for (size_t i = 0; i < lut->numEntries; ++i)
+    {
+        // Need two LUTS in the nitf, with high order
+        // bits in the first and low order in the second
+        const unsigned char* const entry = (*lut)[i];
+        table[i] = entry[0];
+        table[lut->numEntries + i] = entry[1];
+
+    }
+
+    return getBandInfoFromLUT(*lut, lookupTable);
+}
+
+static std::vector<nitf::BandInfo> getBandInfoImpl_RGB8LU(const six::LUT* lut)
+{
+    if (lut == nullptr)
+    {
+        //If LUT is nullptr, we have a predefined LookupTable.
+        //No LUT to write into NITF, so setting to MONO
+        return getBandInfoImpl_MONOnI();
+    }
+
+    if (lut->elementSize != 3)
+    {
+        throw except::Exception(Ctxt("Unexpected element size: " + std::to_string(lut->elementSize)));
+    }
+
+    nitf::LookupTable lookupTable(lut->elementSize, lut->numEntries);
+    unsigned char* const table(lookupTable.getTable());
+    for (size_t i = 0, k = 0; i < lut->numEntries; ++i)
+    {
+        for (size_t j = 0; j < lut->elementSize; ++j, ++k)
+        {
+            // Need to transpose the lookup table entries
+            table[j * lut->numEntries + i] = lut->getTable()[k];
+        }
+    }
+
+    return getBandInfoFromLUT(*lut, lookupTable);
+}
+
+static std::vector<nitf::BandInfo> getBandInfoImpl_AMP8I_PHS8I(const six::LUT* lutPtr)
+{
+    static const std::vector<nitf::BandInfo> retval{ nitf::BandInfo(nitf::Subcategory::M),  nitf::BandInfo(nitf::Subcategory::P) };
+
+    if (lutPtr == nullptr)
+    {
+        //If LUT is nullptr, we have a predefined LookupTable.
+        return retval;
+    }
+
+    if (lutPtr->elementSize != sizeof(double))
+    {
+        throw except::Exception(Ctxt("Unexpected element size: " + std::to_string(lutPtr->elementSize)));
+    }
+    return retval;
+}
+
+std::vector<nitf::BandInfo> six::NITFImageInfo::getBandInfoImpl_(PixelType pixelType, const LUT* pLUT)
+{
+    std::vector<nitf::BandInfo> bands;
+
+    switch (pixelType)
+    {
+    case PixelType::RE32F_IM32F:
+    case PixelType::RE16I_IM16I:
+    {
+        bands = getBandInfoImpl_REnF_IMnF();
+    }
+    break;
+    case PixelType::RGB24I:
+    {
+        bands = getBandInfoImpl_RGB24I();
+    }
+    break;
+
+    case PixelType::MONO8I:
+    case PixelType::MONO16I:
+    {
+        bands = getBandInfoImpl_MONOnI();
+    }
+    break;
+
+    case PixelType::MONO8LU:
+    {
+        bands = getBandInfoImpl_MONO8LU(pLUT);
+    }
+    break;
+
+    case PixelType::RGB8LU:
+    {
+        bands = getBandInfoImpl_RGB8LU(pLUT);
+    }
+    break;
+
+    case PixelType::AMP8I_PHS8I:
+    {
+        bands = getBandInfoImpl_AMP8I_PHS8I(pLUT);  
+    }
+    break;
+
+    default:
+        throw except::Exception(Ctxt("Unknown pixel type"));
+    }
+
+    for (auto& band : bands)
+    {
+        band.getImageFilterCondition().set("N");
+    }
+    return bands;
+}
+
+nitf::PixelValueType six::NITFImageInfo::getPixelType(PixelType pixelType)
+{
+    switch (pixelType)
+    {
+    case PixelType::RE32F_IM32F:
+        return nitf::PixelValueType::Floating; // "R"
+    case PixelType::RE16I_IM16I:
+        return nitf::PixelValueType::Signed; // "SI"
+    case PixelType::AMP8I_PHS8I:
+        return nitf::PixelValueType::Integer; // "INT"
+
+    // TODO: Complex, Pseudo12 ?
+
+    default:
+        return nitf::PixelValueType::Integer; // "INT"
+    }
+}
+std::string six::NITFImageInfo::getPixelValueType(PixelType pixelType)
+{
+    return to_string(getPixelType(pixelType));
+}
+
+nitf::ImageRepresentation six::NITFImageInfo::getImageRepresentation(PixelType pixelType)
+{
+    switch (pixelType)
+    {
+    case PixelType::MONO8LU:
+    case PixelType::MONO8I:
+    case PixelType::MONO16I:
+        return nitf::ImageRepresentation::MONO;
+    case PixelType::RGB8LU:
+        return nitf::ImageRepresentation::RGB_LUT;
+    case PixelType::RGB24I:
+        return nitf::ImageRepresentation::RGB;
+    // TODO: nitf::ImageRepresentation::MULTI ?
+    default:
+        return nitf::ImageRepresentation::NODISPLY;
+    }
+}
+std::string six::NITFImageInfo::getRepresentation(PixelType pixelType)
+{
+    return to_string(getImageRepresentation(pixelType));
+}
+
+nitf::BlockingMode six::NITFImageInfo::getBlockingMode(PixelType pixelType)
+{
+    switch (pixelType)
+    {
+    case PixelType::RGB8LU:
+    case PixelType::MONO8LU:
+    case PixelType::MONO8I:
+    case PixelType::MONO16I:
+        return nitf::BlockingMode::Block; // "B"
+
+    // TODO: Row, Sequential ?
+
+    default:
+        return nitf::BlockingMode::Pixel; // "P";
+    }
+}
+std::string six::NITFImageInfo::getMode(PixelType pixelType)
+{
+    return to_string(getBlockingMode(pixelType));
 }

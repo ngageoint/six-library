@@ -43,14 +43,14 @@ size_t countCompressedBytes(
 }
 size_t countUncompressedPixels(const six::Data& data)
 {
-    return data.getNumRows() * data.getNumCols();
+    return getExtent(data).area();
 }
 }
 
 namespace six
 {
 void CompressedByteProvider::initialize(
-        mem::SharedPtr<Container> container,
+        std::shared_ptr<Container> container,
         const XMLControlRegistry& xmlRegistry,
         const std::vector<std::string>& schemaPaths,
         const std::vector<std::vector<size_t> >& bytesPerBlock,

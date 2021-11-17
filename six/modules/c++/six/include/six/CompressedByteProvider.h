@@ -23,14 +23,14 @@
 #ifndef __SIX_COMPRESSED_BYTE_PROVIDER_H__
 #define __SIX_COMPRESSED_BYTE_PROVIDER_H__
 
+#include <memory>
+
 #include <nitf/CompressedByteProvider.hpp>
 
 #include <six/Container.h>
 #include <six/NITFWriteControl.h>
 #include <six/NITFSegmentInfo.h>
 #include <six/XMLControlFactory.h>
-
-#include <mem/SharedPtr.h>
 
 namespace six
 {
@@ -70,7 +70,7 @@ protected:
      * \param numColsPerBlock The number of columns per block.  Only applies
      * for SIDD.  Defaults to no blocking.
      */
-    void initialize(mem::SharedPtr<Container> container,
+    void initialize(std::shared_ptr<Container> container,
                     const XMLControlRegistry& xmlRegistry,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<std::vector<size_t> >& bytesPerBlock,

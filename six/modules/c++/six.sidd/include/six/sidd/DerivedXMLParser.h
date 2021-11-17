@@ -40,7 +40,7 @@ public:
                      bool ownLog = false);
 #if !CODA_OSS_cpp17
     DerivedXMLParser(const std::string& version,
-                     std::auto_ptr<six::SICommonXMLParser> comParser,
+                     mem::auto_ptr<six::SICommonXMLParser> comParser,
                      logging::Logger* log = nullptr,
                      bool ownLog = false);
 #endif
@@ -221,9 +221,9 @@ protected:
     XMLElem parseCylindricalProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
 
     static
-    std::string versionToURI(const std::string& version)
+    std::string versionToURI(const std::string& strVersion)
     {
-        return ("urn:SIDD:" + version);
+        return ("urn:SIDD:" + strVersion);
     }
 
 private:

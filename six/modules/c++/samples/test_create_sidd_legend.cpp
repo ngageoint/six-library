@@ -33,10 +33,11 @@
  *
  */
 
+#include <stdint.h>
+
 #include <stdexcept>
 #include <iostream>
 #include <memory>
-
 #include <std/filesystem>
 
 #include <nitf/coda-oss.hpp>
@@ -68,8 +69,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     six::sidd::DerivedData* siddData = siddBuilder.steal();
     std::unique_ptr<six::Data> siddDataScoped(siddData);
 
-    siddData->setNumRows(dims.row);
-    siddData->setNumCols(dims.col);
+    setExtent(*siddData, dims);
     siddData->setImageCorners(makeUpCornersFromDMS());
 
     siddData->productCreation->productName = "ProductName";
@@ -156,25 +156,21 @@ int main(int argc, char** argv)
         const size_t maxSize = numCols * 50;
 
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(
-                six::DataType::DERIVED,
-                new six::XMLControlCreatorT<
-                        six::sidd::DerivedXMLControl>());
+        xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
-        mem::SharedPtr<six::Container> container(new six::Container(
-            six::DataType::DERIVED));
+        mem::SharedPtr<six::Container> container(new six::Container(six::DataType::DERIVED));
 
-        std::vector<std::byte*> buffers;
+        six::BufferList buffers;
 
         // First a single segment without a legend
         types::RowCol<size_t> dims1(40, numCols);
         std::unique_ptr<six::Data> data1(mockupDerivedData(dims1));
 
-        const std::unique_ptr<std::byte[]> buffer1(new std::byte[dims1.area()]);
-        std::fill_n(buffer1.get(), dims1.area(), static_cast<std::byte>(20));
+        std::vector<uint8_t> buffer1(dims1.area());
+        std::fill_n(buffer1.data(), dims1.area(), static_cast<uint8_t>(20));
 
         container->addData(std::move(data1));
-        buffers.push_back(buffer1.get());
+        buffers.push_back(buffer1.data());
 
         // Now a single segment with a mono legend
         types::RowCol<size_t> dims2(40, numCols);
@@ -187,21 +183,21 @@ int main(int argc, char** argv)
         monoLegend->mLocation.col = 10;
         monoLegend->setDims(legendDims);
 
-        const std::unique_ptr<std::byte[]> buffer2(new std::byte[dims2.area()]);
-        std::fill_n(buffer2.get(), dims2.area(), static_cast<std::byte>(100));
+        std::vector<uint8_t> buffer2(dims2.area());
+        std::fill_n(buffer2.data(), dims2.area(), static_cast<uint8_t>(100));
 
         container->addData(std::move(data2), std::move(monoLegend));
-        buffers.push_back(buffer2.get());
+        buffers.push_back(buffer2.data());
 
         // Now a multi-segment without a legend
         types::RowCol<size_t> dims3(150, numCols);
         std::unique_ptr<six::Data> data3(mockupDerivedData(dims3));
 
-        const std::unique_ptr<std::byte[]> buffer3(new std::byte[dims3.area()]);
-        std::fill_n(buffer3.get(), dims3.area(), static_cast<std::byte>(60));
+        std::vector<uint8_t> buffer3(dims3.area());
+        std::fill_n(buffer3.data(), dims3.area(), static_cast<uint8_t>(60));
 
         container->addData(std::move(data3));
-        buffers.push_back(buffer3.get());
+        buffers.push_back(buffer3.data());
 
         // Now a multi-segment with an RGB legend
         types::RowCol<size_t> dims4(155, numCols);
@@ -223,11 +219,11 @@ int main(int argc, char** argv)
             rgbLegend->mLUT->getTable()[idx + 2] = lutValue;
         }
 
-        const std::unique_ptr<std::byte[]> buffer4(new std::byte[dims4.area()]);
-        std::fill_n(buffer4.get(), dims4.area(), static_cast<std::byte>(200));
+        std::vector<uint8_t> buffer4(dims4.area());
+        std::fill_n(buffer4.data(), dims4.area(), static_cast<uint8_t>(200));
 
         container->addData(std::move(data4), std::move(rgbLegend));
-        buffers.push_back(buffer4.get());
+        buffers.push_back(buffer4.data());
 
         // Write it out
         {

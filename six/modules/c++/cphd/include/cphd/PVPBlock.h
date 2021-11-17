@@ -41,6 +41,7 @@
 
 namespace cphd
 {
+    class FileHeader;
 /*
  *  \struct AddedPVP
  *  \brief Template Specialization to get additional pvp
@@ -98,6 +99,7 @@ struct PVPBlock
      *  if provided number of bytes is not sufficient
     */
     PVPBlock(const Pvp& pvp, const Data& data);
+    PVPBlock(const Metadata&);
 
     /*!
      *  \func PVPBlock
@@ -323,6 +325,7 @@ struct PVPBlock
                     int64_t startPVP,
                     int64_t sizePVP,
                     size_t numThreads);
+    int64_t load(io::SeekableInputStream& inStream, const FileHeader&, size_t numThreads);
 
     //! Equality operators
     bool operator==(const PVPBlock& other) const

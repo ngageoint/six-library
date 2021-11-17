@@ -36,22 +36,22 @@ namespace six
 {
 namespace sicd
 {
-ComplexXMLParser::ComplexXMLParser(const std::string& version,
+ComplexXMLParser::ComplexXMLParser(const std::string& strVersion,
                                    bool addClassAttributes,
                                    std::unique_ptr<six::SICommonXMLParser>&& comParser,
                                    logging::Logger* log,
                                    bool ownLog) :
-    XMLParser(versionToURI(version), addClassAttributes, log, ownLog),
+    XMLParser(versionToURI(strVersion), addClassAttributes, log, ownLog),
     mCommon(comParser.release())
 {
 }
 #if !CODA_OSS_cpp17
-ComplexXMLParser::ComplexXMLParser(const std::string& version,
+ComplexXMLParser::ComplexXMLParser(const std::string& strVersion,
                                    bool addClassAttributes,
-                                   std::auto_ptr<six::SICommonXMLParser> comParser,
+                                   mem::auto_ptr<six::SICommonXMLParser> comParser,
                                    logging::Logger* log,
                                    bool ownLog) :
-    ComplexXMLParser(version, addClassAttributes, std::unique_ptr<six::SICommonXMLParser>(comParser.release()), log, ownLog)
+    ComplexXMLParser(strVersion, addClassAttributes, std::unique_ptr<six::SICommonXMLParser>(comParser.release()), log, ownLog)
 {
 }
 #endif
@@ -809,7 +809,7 @@ XMLElem ComplexXMLParser::convertINCAToXML(
 }
 
 XMLElem ComplexXMLParser::convertRcvChanProcToXML(
-    const std::string& version,
+    const std::string& strVersion,
     const RcvChannelProcessed* rcvChanProc,
     XMLElem imageFormationXML) const
 {
@@ -836,12 +836,12 @@ XMLElem ComplexXMLParser::convertRcvChanProcToXML(
     {
         throw except::Exception(Ctxt(FmtX(
             "[RcvChanProc] is a manditory field in ImageFormation in %s",
-            version.c_str())));
+            strVersion.c_str())));
     }
 }
 
 XMLElem ComplexXMLParser::convertDistortionToXML(
-    const std::string& version,
+    const std::string& strVersion,
     const Distortion* distortion,
     XMLElem pcXML) const
 {
@@ -882,7 +882,7 @@ XMLElem ComplexXMLParser::convertDistortionToXML(
     {
         throw except::Exception(Ctxt(FmtX(
             "[Distortion] is a maditory field of ImageFormation in %s",
-            version.c_str())));
+            strVersion.c_str())));
     }
 }
 

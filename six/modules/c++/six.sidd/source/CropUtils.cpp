@@ -22,6 +22,8 @@
 #include <six/sidd/CropUtils.h>
 
 #include <memory>
+#include <vector>
+#include <std/cstddef>
 
 #include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
@@ -37,22 +39,23 @@ struct Buffers final
 {
     std::byte* add(size_t numBytes)
     {        
-        mBuffers.push_back(std::unique_ptr<std::byte[]>(new std::byte[numBytes]));
-        return mBuffers.back().get();
+        mBuffers.push_back(std::vector<std::byte>(numBytes));
+        return mBuffers.back().data();
     }
 
-    std::vector<std::byte*> get() const
+    six::BufferList get()
     {
-        std::vector<std::byte*> retval;
+        six::BufferList retval;
         for (auto& buffer : mBuffers)
         {
-            retval.push_back(buffer.get());
+            const void* pBuffer = buffer.data();
+            retval.push_back(static_cast<const six::UByte*>(pBuffer));
         }
         return retval;
     }
 
 private:
-    std::vector<std::unique_ptr<std::byte[]>> mBuffers;
+    std::vector<std::vector<std::byte>> mBuffers;
 };
 
 struct ChipCoordinateToFullImageCoordinate final
@@ -142,7 +145,7 @@ void cropSIDD(const std::string& inPathname,
     }
 
     Buffers buffers;
-    for (size_t ii = 0, imageNum = 0; ii < container->getNumData(); ++ii)
+    for (size_t ii = 0, imageNum = 0; ii < container->size(); ++ii)
     {
         six::Data* const dataPtr = container->getData(ii);
         if (dataPtr->getDataType() == six::DataType::DERIVED)
@@ -151,8 +154,7 @@ void cropSIDD(const std::string& inPathname,
                 dynamic_cast<six::sidd::DerivedData*>(dataPtr);
 
             // Make sure the AOI is in bounds
-            const types::RowCol<size_t> origDims(data->getNumRows(),
-                                                 data->getNumCols());
+            const auto origDims = getExtent(*data);
             if (aoiOffset.row + aoiDims.row > origDims.row ||
                 aoiOffset.col + aoiDims.col > origDims.col)
             {
@@ -167,13 +169,12 @@ void cropSIDD(const std::string& inPathname,
 
             // Read in the AOI
             const size_t numBytesPerPixel(data->getNumBytesPerPixel());
-            const size_t numBytes =
-                    origDims.row * origDims.col * numBytesPerPixel;
-            std::byte* const buffer = buffers.add(numBytes);
+            const size_t numBytes = origDims.row * origDims.col * numBytesPerPixel;
+            auto const buffer = buffers.add(numBytes);
 
             six::Region region;
-            region.setOffset(aoiOffset);
-            region.setDims(aoiDims);
+            setOffset(region, aoiOffset);
+            setDims(region, aoiDims);
             region.setBuffer(buffer);
             reader.interleaved(region, imageNum++);
 

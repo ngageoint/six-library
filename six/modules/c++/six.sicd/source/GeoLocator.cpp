@@ -28,7 +28,7 @@ namespace six
 namespace sicd
 {
 GeoLocator::GeoLocator(const ComplexData& complexData, bool shadowsDown):
-    mRowColToEcef(buildTransformer(complexData, shadowsDown))
+    mEcefToLla(/*needed by ICC*/), mRowColToEcef(buildTransformer(complexData, shadowsDown))
 {
 }
 

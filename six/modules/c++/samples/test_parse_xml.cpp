@@ -68,16 +68,8 @@ void preview(const fs::path& outputFile)
 void registerHandlers()
 {
 
-    six::XMLControlFactory::getInstance(). addCreator(
-                                                      six::DataType::COMPLEX,
-                                                      new six::XMLControlCreatorT<
-                                                              six::sicd::ComplexXMLControl>());
-
-    six::XMLControlFactory::getInstance(). addCreator(
-                                                      six::DataType::DERIVED,
-                                                      new six::XMLControlCreatorT<
-                                                              six::sidd::DerivedXMLControl>());
-
+    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+    six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
 }
 /*
  * Dump all files out to the local directory
@@ -170,12 +162,13 @@ void run(const fs::path& inputFile_, std::string dataType)
 
         six::Data *data = control->fromXML(treeBuilder.getDocument(),
                                            std::vector<std::string>());
+        const auto extent = getExtent(*data);
 
         // Dump some core info
         std::cout << "Data Class: " << data->getDataType() << "\n";
         std::cout << "Pixel Type: " << data->getPixelType() << "\n";
-        std::cout << "Num Rows  : " << data->getNumRows() << "\n";
-        std::cout << "Num Cols  : " << data->getNumCols() << "\n";
+        std::cout << "Num Rows  : " << extent.row << "\n";
+        std::cout << "Num Cols  : " << extent.col << "\n";
 
         // Generate a KML in this directory
         preview(generateKML(data, outputDir));

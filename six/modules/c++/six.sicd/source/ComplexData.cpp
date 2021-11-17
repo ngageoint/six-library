@@ -21,6 +21,8 @@
  */
 #include "six/sicd/ComplexData.h"
 
+#include <assert.h>
+
 namespace six
 {
 namespace sicd
@@ -319,4 +321,63 @@ void ComplexData::fillDefaultFields()
     }
 }
 }
+}
+// Okay, little bit of a hack for now
+const mem::ScopedCopyablePtr<six::LUT>& six::sicd::ComplexData::getDisplayLUT() const
+{
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        throw except::Exception(Ctxt("Display LUT operation not supported"));
+    }
+    // throw except::Exception(Ctxt("Display LUT operation not supported"));
+
+    // imageData->amplitudeTable is a ScopedCloneablePtr which can't be returned by 
+    // reference as a ScopedCopyablePtr.  Instead, return something that is NULL
+    // calling code can then try getAmplitudeTable().
+    static mem::ScopedCopyablePtr<six::LUT> retval;
+    retval.reset(); // in case somebody changed it
+    return retval;
+}
+void six::sicd::ComplexData::setDisplayLUT(std::unique_ptr<AmplitudeTable>&& pLUT)
+{
+    imageData->amplitudeTable.reset(pLUT.release());
+}
+
+six::AmplitudeTable* six::sicd::ComplexData::getAmplitudeTable() const
+{
+    auto const retval = imageData->amplitudeTable.get();
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        assert(retval == nullptr);
+        throw except::Exception(Ctxt("Display LUT operation not supported"));
+    }
+    return retval;
+}
+
+inline const void* cast_to_pvoid(std::span<const std::byte> bytes)
+{
+    return bytes.data();
+}
+inline void* cast_to_pvoid(std::span<std::byte> bytes)
+{
+    return bytes.data();
+}
+template<typename T, typename U>
+inline std::span<T> make_span(std::span<U> bytes)
+{
+    const auto size = bytes.size() / sizeof(T);
+    return std::span<T>(static_cast<T*>(cast_to_pvoid(bytes)), size);
+}
+
+bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, std::span<std::byte> to_) const
+{
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        return false; // no conversion done as there is nothing to convert
+    }
+
+    const auto from = make_span<const six::sicd::ImageData::cx_float>(from_);
+    const auto to = make_span<six::sicd::ImageData::AMP8I_PHS8I_t>(to_);
+    imageData->to_AMP8I_PHS8I(from, to);
+    return true; // converted
 }

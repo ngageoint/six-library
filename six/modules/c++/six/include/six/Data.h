@@ -22,10 +22,16 @@
 #ifndef __SIX_DATA_H__
 #define __SIX_DATA_H__
 
+#include <assert.h>
+
 #include <vector>
+#include <memory>
+#include <std/span>
+#include <std/cstddef>
 
 #include "six/Types.h"
 #include "six/Classification.h"
+#include "six/Utilities.h"
 
 namespace six
 {
@@ -54,15 +60,14 @@ struct Data
      *  their inner data-structures
      */
     virtual Data* clone() const = 0;
-
-    friend bool operator==(const Data& lhs, const Data& rhs)
+    virtual std::unique_ptr<Data> unique_clone() const
     {
-        return lhs.equalTo(rhs);
+        return std::unique_ptr<Data>(clone());
     }
 
-    friend bool operator!=(const Data& lhs, const Data& rhs)
+    bool equals_(const Data& rhs) const
     {
-        return !(lhs == rhs);
+        return this->equalTo(rhs) && rhs.equalTo(*this);
     }
 
     /*!
@@ -80,6 +85,12 @@ struct Data
      */
     virtual PixelType getPixelType() const = 0;
     virtual void setPixelType(PixelType pixelType) = 0;
+    virtual bool convertPixels_(std::span<const std::byte>, std::span<std::byte>) const { return false; }
+    template<typename T, typename U>
+    bool convertPixels(std::span<const T> from, std::span<U> to) const
+    {
+        return convertPixels_(as_bytes(from), as_bytes(to));
+    }
 
     /*!
      *  Maps to: /SICD/ImageData/NumRows,/SICD/ImageData/FullImage/Row
@@ -180,7 +191,9 @@ struct Data
 
     virtual Classification& getClassification() = 0;
 
-    virtual mem::ScopedCopyablePtr<LUT>& getDisplayLUT() = 0;
+    virtual const mem::ScopedCopyablePtr<LUT>& getDisplayLUT() const = 0;
+    virtual void setDisplayLUT(std::unique_ptr<AmplitudeTable>&&) = 0;
+    virtual AmplitudeTable* getAmplitudeTable() const { return nullptr; }
 
     /*!
      * Returns an identifier of the Vendor supplying the implementation code.
@@ -198,6 +211,31 @@ struct Data
 private:
     virtual bool equalTo(const Data& rhs) const = 0;
 };
+template<typename T>
+inline bool operator==(const Data& lhs, const T& rhs)
+{
+    return lhs.equals_(rhs);
+}
+template<typename T>
+inline bool operator!=(const Data& lhs, const T& rhs)
+{
+    return !(lhs == rhs);
+}
+
+inline types::RowCol<size_t> getExtent(const Data& data)
+{
+    return types::RowCol<size_t>(data.getNumRows(), data.getNumCols());
+}
+inline types::RowCol<size_t> getExtent(const Data* pData)
+{
+    assert(pData != nullptr);
+    return getExtent(*pData);
+}
+inline void setExtent(Data& data, const types::RowCol<size_t>& extent)
+{
+    data.setNumRows(extent.row);
+    data.setNumCols(extent.col);
+}
 
 }
 

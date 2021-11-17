@@ -32,20 +32,24 @@
 
 namespace
 {
-std::string normalizeVersion(const std::string& version)
+std::string normalizeVersion(const std::string& strVersion)
 {
     std::vector<std::string> versionParts;
-    six::XMLControl::splitVersion(version, versionParts);
+    six::XMLControl::splitVersion(strVersion, versionParts);
     if (versionParts.size() != 3)
     {
         throw except::Exception(
-            Ctxt("Unsupported SIDD Version: " + version));
+            Ctxt("Unsupported SIDD Version: " + strVersion));
     }
 
+    #if _MSC_VER
     #pragma warning(push)
     #pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed/unsigned mismatch
+    #endif
     return str::join(versionParts, "");
-   #pragma warning(pop)
+    #if _MSC_VER
+    #pragma warning(pop)
+    #endif
 }
 }
 
@@ -77,9 +81,9 @@ xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
 }
 
 std::unique_ptr<DerivedXMLParser>
-DerivedXMLControl::getParser(const std::string& version) const
+DerivedXMLControl::getParser(const std::string& strVersion) const
 {
-    const std::string normalizedVersion = normalizeVersion(version);
+    const std::string normalizedVersion = normalizeVersion(strVersion);
 
     // six.sidd only currently supports --
     //   SIDD 1.0.0
@@ -106,7 +110,14 @@ DerivedXMLControl::getParser(const std::string& version) const
         ));
     }
 
-    throw except::Exception(Ctxt("Unsupported SIDD Version: " + version));
+    throw except::Exception(Ctxt("Unsupported SIDD Version: " + strVersion));
 }
+
+std::unique_ptr<DerivedXMLParser> DerivedXMLControl::getParser_(const std::string& strVersion)
+{
+    return DerivedXMLControl().getParser(strVersion);
+}
+
+
 }
 }

@@ -35,6 +35,7 @@
 #include "xml/lite/Attributes.h"
 #include "sys/Conf.h"
 #include "sys/Optional.h"
+#include "mem/SharedPtr.h"
 
 /*!
  * \file  Element.h
@@ -99,7 +100,7 @@ public:
      * \param characterData The character data (if any)
      */
     Element(const std::string& qname, const std::string& uri = "",
-            std::string characterData = "") :
+            const std::string& characterData = "") :
         Element(qname, uri, nullptr)
     {
         setCharacterData(characterData);
@@ -116,6 +117,11 @@ public:
     {
         setCharacterData(characterData);
     }
+
+    // string_encoding is assumed based on the platform: Windows-1252 or UTF-8.
+    static std::unique_ptr<Element> create(const std::string& qname, const std::string& uri = "", const std::string& characterData = "");
+    // Encoding of "characterData" is assumed based on the platform: Windows-1252 or UTF-8
+    static std::unique_ptr<Element> createU8(const std::string& qname, const std::string& uri = "", const std::string& characterData = "");
 
     //! Destructor
     virtual ~Element()
@@ -400,8 +406,8 @@ public:
      *  \param node the child element to add
      */
     virtual void addChild(std::unique_ptr<Element>&& node);
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    virtual void addChild(std::auto_ptr<Element> node);
+    #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
+    virtual void addChild(mem::auto_ptr<Element> node);
     #endif
 
     /*!

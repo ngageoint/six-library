@@ -110,8 +110,7 @@ createData(const types::RowCol<size_t>& dims)
     six::sicd::ComplexData* data(new six::sicd::ComplexData());
     std::unique_ptr<six::Data> scopedData(data);
     data->setPixelType(GetPixelType<DataTypeT>::getPixelType());
-    data->setNumRows(dims.row);
-    data->setNumCols(dims.col);
+    setExtent(*data, dims);
     data->setName("corename");
     data->setSource("sensorname");
     data->collectionInformation->setClassificationLevel("UNCLASSIFIED");
@@ -314,9 +313,10 @@ void Tester<DataTypeT>::normalWrite()
     setMaxProductSize(options);
     six::NITFWriteControl writer(options, mContainer);
 
-    six::buffer_list buffers;
-    buffers.push_back(reinterpret_cast<std::byte*>(mImagePtr));
-    writer.save(buffers, mNormalPathname, mSchemaPaths);
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(mSchemaPaths.begin(), mSchemaPaths.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+
+    save(writer, mImage, mNormalPathname, schemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
 }
@@ -496,9 +496,7 @@ int main(int /*argc*/, char** /*argv*/)
         const std::vector<std::string> schemaPaths;
 
         // create an XML registry
-        six::XMLControlFactory::getInstance().addCreator(
-                six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
         // Run tests with no funky segmentation
         bool success = true;

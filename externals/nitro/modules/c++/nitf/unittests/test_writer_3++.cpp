@@ -24,6 +24,8 @@
 #include <iostream>
 #include <string>
 
+#include <gsl/gsl.h>
+
 #include <import/nitf.hpp>
 
 #include "TestCase.h"
@@ -126,24 +128,24 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     nBands += xBands;
 
     const auto nRows = subheader.numRows();
-    const auto nColumns = subheader.numCols();
+    const auto nColumns = gsl::narrow<uint32_t>(subheader.numCols());
 
     //one row at a time
     const auto subWindowSize = static_cast<size_t>(nColumns * NITF_NBPP_TO_BYTES(nBits));
 
-    TEST_ASSERT_EQ(2, nBands);
-    TEST_ASSERT_EQ(0, xBands);
-    TEST_ASSERT_EQ(50, nRows);
-    TEST_ASSERT_EQ(50, nColumns);
-    TEST_ASSERT_EQ("R  ", subheader.getPixelValueType().toString());
-    TEST_ASSERT_EQ(32, subheader.numBitsPerPixel());
+    TEST_ASSERT_EQ(2, static_cast<int>(nBands));
+    TEST_ASSERT_EQ(0, static_cast<int>(xBands));
+    TEST_ASSERT_EQ(static_cast<size_t>(50), nRows);
+    TEST_ASSERT_EQ(static_cast<size_t>(50), nColumns);
+    TEST_ASSERT_EQ(nitf::PixelValueType::Floating , subheader.pixelValueType());
+    TEST_ASSERT_EQ(static_cast<size_t>(32), subheader.numBitsPerPixel());
     TEST_ASSERT_EQ("32", subheader.getActualBitsPerPixel().toString());
     TEST_ASSERT_EQ("R", subheader.getPixelJustification().toString());
-    TEST_ASSERT_EQ("P", subheader.getImageMode().toString());
-    TEST_ASSERT_EQ(1, subheader.numBlocksPerRow());
-    TEST_ASSERT_EQ(1, subheader.numBlocksPerCol());
-    TEST_ASSERT_EQ(50, subheader.numPixelsPerHorizBlock());
-    TEST_ASSERT_EQ(50, subheader.numPixelsPerVertBlock());
+    TEST_ASSERT_EQ(nitf::BlockingMode::Pixel, subheader.imageBlockingMode());
+    TEST_ASSERT_EQ(static_cast<size_t>(1), subheader.numBlocksPerRow());
+    TEST_ASSERT_EQ(static_cast<size_t>(1), subheader.numBlocksPerCol());
+    TEST_ASSERT_EQ(static_cast<size_t>(50), subheader.numPixelsPerHorizBlock());
+    TEST_ASSERT_EQ(static_cast<size_t>(50), subheader.numPixelsPerVertBlock());
     TEST_ASSERT_EQ("NC", subheader.imageCompression());
     TEST_ASSERT_EQ("    ", subheader.getCompressionRate().toString());
 
@@ -153,9 +155,7 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     for (uint32_t band = 0; band < nBands; band++)
         bandList[band] = band;
 
-    nitf::SubWindow subWindow;
-    subWindow.setNumRows(1);
-    subWindow.setNumCols(static_cast<uint32_t>(nColumns));
+    nitf::SubWindow subWindow(1, nColumns);
 
     // necessary ?
     nitf::DownSampler* pixelSkip = new nitf::PixelSkip(1, 1);
@@ -271,8 +271,8 @@ namespace test_buffered_write
         const auto blocksWritten = output.getNumBlocksWritten();
         const auto partialBlocksWritten = output.getNumPartialBlocksWritten();
         output.close();
-        TEST_ASSERT_EQ(60, blocksWritten);
-        TEST_ASSERT_EQ(53, partialBlocksWritten);
+        TEST_ASSERT_EQ(static_cast<uint64_t>(60), blocksWritten);
+        TEST_ASSERT_EQ(static_cast<uint64_t>(53), partialBlocksWritten);
     }
 }
 TEST_CASE(test_buffered_write_)

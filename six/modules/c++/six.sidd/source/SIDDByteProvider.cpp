@@ -37,12 +37,9 @@ SIDDByteProvider::SIDDByteProvider(
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<DerivedXMLControl>();
 
-    mem::SharedPtr<Container> container(new Container(
-        DataType::DERIVED));
-
     // The container wants to take ownership of the data
     // To avoid memory problems, we'll just clone it
-    container->addData(data.clone());
+    auto container = std::make_shared<Container>(data.clone());
 
     initialize(container, xmlRegistry, schemaPaths,
                maxProductSize, numRowsPerBlock, numColsPerBlock);

@@ -23,13 +23,14 @@
 #define __SIX_NITF_HEADER_CREATOR_H__
 
 #include <map>
+#include <memory>
 
 #include "six/Container.h"
 
-#include <mem/SharedPtr.h>
 #include "six/Types.h"
 #include "six/NITFImageInfo.h"
 #include "six/Adapters.h"
+#include "six/Logger.h"
 #include <import/logging.h>
 
 namespace six
@@ -42,18 +43,19 @@ namespace six
  *  This class helps in populating NITF header fields
  *  prior to writing.
  */
-class NITFHeaderCreator
+struct NITFHeaderCreator
 {
-public:
-
     //! Constructor. Must call initialize to use.
     NITFHeaderCreator();
+
+    NITFHeaderCreator(const NITFHeaderCreator&) = delete;
+    NITFHeaderCreator& operator=(const NITFHeaderCreator&) = delete;
 
     /*!
      * Constructor. Calls initialize.
      * \param container The data container
      */
-    NITFHeaderCreator(mem::SharedPtr<Container> container);
+    NITFHeaderCreator(std::shared_ptr<Container> container);
 
     /*!
      * Constructor. Calls initialize.
@@ -61,16 +63,10 @@ public:
      * \param container The data container
      */
     NITFHeaderCreator(const six::Options& options,
-                      mem::SharedPtr<Container> container);
+                      std::shared_ptr<Container> container);
 
     //!  Destructor.
-    virtual ~NITFHeaderCreator()
-    {
-        if (mLog && mOwnLog)
-        {
-            delete mLog;
-        }
-    }
+    virtual ~NITFHeaderCreator() {}
 
     //!  Keys that allow us to override the ILOC rules for tests
     static const char OPT_MAX_PRODUCT_SIZE[];
@@ -142,7 +138,7 @@ public:
      *
      * \param writer A SegmentWriter with loaded, attached SegmentSource
      */
-    void addAdditionalDES(mem::SharedPtr<nitf::SegmentWriter> writer);
+    void addAdditionalDES(std::shared_ptr<nitf::SegmentWriter> writer);
 
     /*!
      * Convert classification level to NITF classification
@@ -165,19 +161,19 @@ public:
     }
 
     //! Get the infos.
-    std::vector<mem::SharedPtr<NITFImageInfo> > getInfos() const
+    std::vector<std::shared_ptr<NITFImageInfo> > getInfos() const
     {
         return mInfos;
     }
 
     //! Get the container.
-    mem::SharedPtr<six::Container> getContainer()
+    std::shared_ptr<six::Container> getContainer()
     {
         return mContainer;
     }
 
     //! Get the container.
-    mem::SharedPtr<const six::Container> getContainer() const
+    std::shared_ptr<const six::Container> getContainer() const
     {
         return mContainer;
     }
@@ -195,7 +191,7 @@ public:
     }
 
     // Get the record that was generated during initialization
-    std::vector<mem::SharedPtr<nitf::SegmentWriter> > getSegmentWriters() const
+    std::vector<std::shared_ptr<nitf::SegmentWriter> > getSegmentWriters() const
     {
         return mSegmentWriters;
     }
@@ -225,26 +221,14 @@ public:
      * \param ownLog Flag for whether the class takes ownership of the
      *  logger. Default is false.
      */
-    void setLogger(logging::Logger* logger, bool ownLog = false)
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
     {
-        // Delete the current logger if it exists and is owned
-        if (mLog && mOwnLog && logger != mLog)
-        {
-            delete mLog;
-        }
-
-        if (logger)
-        {
-            // Logger is passed in: set it and determine ownership
-            mLog = logger;
-            mOwnLog = ownLog;
-        }
-        else
-        {
-            // No logger passed in: create a null logger
-            mLog = new logging::NullLogger;
-            mOwnLog = true;
-        }
+        mLogger.setLogger(std::forward<TLogger>(logger));
+    }
+    void setLogger(logging::Logger* logger, bool ownLog)
+    {
+        mLogger.setLogger(logger, ownLog);
     }
 
     /*!
@@ -311,6 +295,9 @@ public:
     void setBlocking(const std::string& imode,
                      const types::RowCol<size_t>& segmentDims,
                      nitf::ImageSubheader& subheader);
+    void setBlocking(nitf::BlockingMode imode,
+        const types::RowCol<size_t>& segmentDims,
+        nitf::ImageSubheader& subheader);
 
     /*!
      *  This function sets the image security fields in the
@@ -379,7 +366,7 @@ public:
      * Initialize the NITFHeaderCreator object.
      * \param The container.
      */
-    void initialize(mem::SharedPtr<Container> container);
+    void initialize(std::shared_ptr<Container> container);
 
     /*!
      * Initialize the NITFHeaderCreator object.
@@ -387,15 +374,15 @@ public:
      * \param The container.
      */
     void initialize(const six::Options& options,
-                    mem::SharedPtr<Container> container);
+                    std::shared_ptr<Container> container);
 
 protected:
-    nitf::Record mRecord;
-    std::vector<mem::SharedPtr<NITFImageInfo> > mInfos;
-    std::vector<mem::SharedPtr<nitf::SegmentWriter> > mSegmentWriters;
-    mem::SharedPtr<six::Container> mContainer;
+    nitf::Record mRecord = NITF_VER_21;
+    std::vector<std::shared_ptr<NITFImageInfo> > mInfos;
+    std::vector<std::shared_ptr<nitf::SegmentWriter> > mSegmentWriters;
+    std::shared_ptr<six::Container> mContainer;
     six::Options mOptions;
-    const XMLControlRegistry* mXMLRegistry;
+    const XMLControlRegistry* mXMLRegistry = nullptr;
 
     //! All pointers populated within the options need
     //  to be cleaned up elsewhere. There is no access
@@ -410,8 +397,8 @@ private:
     std::string mLocationId;
     std::string mLocationIdNamespace;
     std::string mAbstract;
-    logging::Logger* mLog;
-    bool mOwnLog;
+
+    Logger mLogger;
 };
 }
 #endif

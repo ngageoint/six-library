@@ -209,7 +209,7 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
                 "Invalid index: " + std::to_string(imIndex)));
     }
 
-    tiff::ImageReader *imReader = mReader[static_cast<sys::Uint32_T>(imIndex)];
+    tiff::ImageReader *imReader = mReader[static_cast<uint32_t>(imIndex)];
     tiff::IFD *ifd = imReader->getIFD();
 
     const auto numRowsTotal = ifd->getImageLength();
@@ -246,13 +246,14 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
 
     if (buffer == nullptr)
     {
-        buffer = region.setBuffer(static_cast<size_t>(numRowsReq * numColsReq * elemSize)).release();
+        const types::RowCol<size_t> regionExtent(getExtent(region));
+        buffer = region.setBuffer(regionExtent.area() * elemSize).release();
     }
 
     if (numRowsReq == numRowsTotal && numColsReq == numColsTotal)
     {
         // one read
-        imReader->getData(reinterpret_cast<unsigned char*>(buffer), static_cast<sys::Uint32_T>(numRowsReq * numColsReq));
+        imReader->getData(reinterpret_cast<unsigned char*>(buffer), static_cast<uint32_t>(numRowsReq * numColsReq));
     }
     else
     {

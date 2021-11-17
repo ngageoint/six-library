@@ -34,7 +34,7 @@ scene::LLAToECEFTransform* scene::LLAToECEFTransform::clone() const
     return newTransform;
 }
 
-scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla)
+scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla) const
 {
     Vector3 ecef{};
 
@@ -61,13 +61,12 @@ scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla)
     double r = computeRadius(mylla);
     const double flatLat = computeLatitude(mylla.getLatRadians());
 
-    double coslat = cos(mylla.getLatRadians());
-    double coslon = cos(mylla.getLonRadians());
-    double cosflatlat = cos(flatLat);
-    double sinlat = sin(mylla.getLatRadians());
-    double sinlon = sin(mylla.getLonRadians());
-    double sinflatlat = sin(flatLat);
-
+    double sinlat, coslat;
+    math::SinCos(mylla.getLatRadians(), sinlat, coslat);
+    double sinlon, coslon;
+    math::SinCos(mylla.getLonRadians(), sinlon, coslon);
+    double sinflatlat, cosflatlat;
+    math::SinCos(flatLat, sinflatlat, cosflatlat);
 
     ecef[0] = (r * cosflatlat * coslon) + (mylla.getAlt() * coslat * coslon);
     ecef[1] = (r * cosflatlat * sinlon) + (mylla.getAlt() * coslat * sinlon);
@@ -76,7 +75,7 @@ scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla)
     return ecef;
 }
 
-double scene::LLAToECEFTransform::computeRadius(const LatLonAlt& lla)
+double scene::LLAToECEFTransform::computeRadius(const LatLonAlt& lla) const
 {
     const double f = model->calculateFlattening();
 
@@ -94,7 +93,7 @@ double scene::LLAToECEFTransform::computeRadius(const LatLonAlt& lla)
     return flatRadius;
 }
 
-double scene::LLAToECEFTransform::computeLatitude(const double lat)
+double scene::LLAToECEFTransform::computeLatitude(const double lat) const
 {
     const double f = model->calculateFlattening();
 

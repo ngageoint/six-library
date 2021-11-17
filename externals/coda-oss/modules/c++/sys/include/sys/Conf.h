@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,8 +21,8 @@
  *
  */
 
-#ifndef __SYS_CONF_H__
-#define __SYS_CONF_H__
+#ifndef CODA_OSS_sys_Conf_h_INCLUDED_
+#define CODA_OSS_sys_Conf_h_INCLUDED_
 #pragma once
 
 // POSIX is more-or-less "Unix"
@@ -34,6 +35,7 @@
 #define CODA_OSS_POSIX2008_SOURCE CODA_OSS_POSIX2001_SOURCE && (_POSIX_C_SOURCE >= 200809L)
 
 #include <config/coda_oss_config.h>
+#include <config/Version.h>
 #include <sys/CPlusPlus.h>
 #include <str/Convert.h>
 
@@ -367,4 +369,4 @@ namespace sys
 
 }
 
-#endif // __SYS_CONF_H__
+#endif // CODA_OSS_sys_Conf_h_INCLUDED_

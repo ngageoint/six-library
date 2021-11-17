@@ -2573,8 +2573,7 @@ int main(int argc, char** argv)
         params.push_back(options->get<std::string> ("xmlPath"));
         params.push_back(options->get<std::string> ("verbose"));
 
-        six::XMLControlFactory::getInstance().addCreator(six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
         // Validate that the resultant XML data from SICD Complex Data
         //   matches before and after round-trip for each format and algorithm

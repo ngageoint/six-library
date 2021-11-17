@@ -27,7 +27,8 @@
 TEST_CASE(EnumConstructor)
 {
     six::DualPolarizationType pType("UNKNOWN");
-    TEST_ASSERT_EQ(pType, "UNKNOWN");
+    TEST_ASSERT(pType == "UNKNOWN");
+    TEST_ASSERT_EQ(pType, six::DualPolarizationType::UNKNOWN);
 }
 
 TEST_CASE(ToType)
@@ -44,8 +45,32 @@ TEST_CASE(SixToString)
     TEST_ASSERT_EQ("UNKNOWN", polarizationString);
 }
 
+TEST_CASE(NotSet)
+{
+    six::DualPolarizationType pType;
+    std::string polarizationString = pType;
+    TEST_EXCEPTION(polarizationString = pType.toString(true /*throw_if_not_set*/));
+}
+
+TEST_CASE(EqInt)
+{
+    const six::DualPolarizationType fromStrCtor("UNKNOWN");
+    TEST_ASSERT_EQ(18, fromStrCtor);
+    const int value = fromStrCtor;
+    TEST_ASSERT_EQ(18, value);
+
+    const six::DualPolarizationType fromIntCtor(value);
+    TEST_ASSERT_EQ(18, fromIntCtor);
+    TEST_ASSERT(fromIntCtor == "UNKNOWN");
+    TEST_ASSERT_EQ(fromIntCtor, six::DualPolarizationType::UNKNOWN);
+
+    TEST_ASSERT_EQ(fromStrCtor, fromIntCtor);
+}
+
 TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(EnumConstructor);
     TEST_CHECK(ToType);
     TEST_CHECK(SixToString);
-)
+    TEST_CHECK(NotSet);
+    TEST_CHECK(EqInt);
+    )

@@ -56,7 +56,8 @@ public:
             nitf::ImageReader imageReader);
 
     //!  Destructor
-    virtual ~NITFImageInputStream() {}
+    virtual ~NITFImageInputStream() noexcept {}
+
 
     NITFImageInputStream(const NITFImageInputStream&) = delete;
     NITFImageInputStream& operator=(const NITFImageInputStream&) = delete;
@@ -77,9 +78,9 @@ protected:
     nitf::ImageReader mReader;
     int64_t mAvailable;
     size_t mRowBufferRemaining, mRowSize, mRowOffset;
-    mem::ScopedArray<sys::ubyte> mRowBuffer;
+    std::unique_ptr<sys::ubyte[]> mRowBuffer;
     nitf::SubWindow mWindow;
-    mem::ScopedArray<uint32_t> mBandList;
+    std::unique_ptr<uint32_t[]> mBandList;
 };
 
 }

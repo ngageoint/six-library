@@ -30,10 +30,10 @@ typedef xml::lite::Element* XMLElem;
 
 using namespace six::sicd;
 
-ComplexXMLParser100::ComplexXMLParser100(const std::string& version,
+ComplexXMLParser100::ComplexXMLParser100(const std::string& strVersion,
                                          logging::Logger* log,
                                          bool ownLog) :
-    ComplexXMLParser10x(version, log, ownLog)
+    ComplexXMLParser10x(strVersion, log, ownLog)
 {
 }
 

@@ -22,11 +22,14 @@
 #ifndef __SIX_READ_CONTROL_H__
 #define __SIX_READ_CONTROL_H__
 
+#include <memory>
+
 #include "six/Types.h"
 #include "six/Region.h"
 #include "six/Container.h"
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
+#include "six/Logger.h"
 #include <mem/ScopedArray.h>
 #include <import/logging.h>
 
@@ -53,19 +56,17 @@ namespace six
 struct ReadControl
 {
     //!  Constructor.  Null-set the current container reference
-    ReadControl() noexcept :
-        mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
+    ReadControl() noexcept(false) : mLogger(mLog, mOwnLog, nullptr)
     {
         setLogger(nullptr);
         setXMLControlRegistry(nullptr);
     }
 
     //!  Destructor doesnt release anything
-    virtual ~ReadControl()
-    {
-        if (mLog && mOwnLog)
-            delete mLog;
-    }
+    virtual ~ReadControl() noexcept = default;
+
+    ReadControl(const ReadControl&) = delete;
+    ReadControl& operator=(const ReadControl&) = delete;
 
     /*!
      *  This function takes in a file and tells you what kind of
@@ -90,16 +91,16 @@ struct ReadControl
     /*!
      *  Get a const shared pointer to the current container.
      */
-    mem::SharedPtr<const Container> getContainer() const
+    std::shared_ptr<const Container> getContainer() const
     {
-        mem::SharedPtr<const Container> retval = mContainer;
+        std::shared_ptr<const Container> retval = mContainer;
         return retval;
     }
 
     /*!
      *  Get a non-const pointer to the current container.
      */
-    mem::SharedPtr<Container> getContainer()
+    std::shared_ptr<Container> getContainer()
     {
         return mContainer;
     }
@@ -150,19 +151,13 @@ struct ReadControl
 #if !CODA_OSS_cpp17
     template<typename T>
     T* interleaved(Region& region, size_t imageNumber,
-           std::auto_ptr<T[]>& buffer)
+           mem::auto_ptr<T[]>& buffer)
     {
         buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
         return buffer.get();
     }
 #endif
-    template<typename T>
-    T* interleaved(Region& region, size_t imageNumber,
-        mem::ScopedArray<T>& buffer)
-    {
-        buffer.reset(reinterpret_cast<T*>(interleaved(region, imageNumber)));
-        return buffer.get();
-    }
+
     template<typename T>
     T* interleaved(Region& region, size_t imageNumber,
         std::unique_ptr<T[]>& buffer)
@@ -199,12 +194,14 @@ struct ReadControl
     /*!
      * Sets the logger to use internally
      */
-    void setLogger(logging::Logger* log, bool ownLog = false)
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
     {
-        if (mLog && mOwnLog && log != mLog)
-            delete mLog;
-        mLog = log ? log : new logging::NullLogger;
-        mOwnLog = log ? ownLog : true;
+        mLogger.setLogger(std::forward<TLogger>(logger));
+    }
+    void setLogger(logging::Logger* logger, bool ownLog)
+    {
+        mLogger.setLogger(logger, ownLog);
     }
 
     void setXMLControlRegistry(const XMLControlRegistry *xmlRegistry)
@@ -215,12 +212,14 @@ struct ReadControl
     }
 
 protected:
-    mem::SharedPtr<Container> mContainer;
+    std::shared_ptr<Container> mContainer;
     Options mOptions;
     logging::Logger* mLog = nullptr;
     bool mOwnLog = false;
     const XMLControlRegistry* mXMLRegistry = nullptr;
 
+private:
+    Logger mLogger;
 };
 
 }

@@ -54,6 +54,12 @@ typedef nitf_Off Off;
 typedef nitf_AccessFlags AccessFlags;
 typedef nitf_CreationFlags CreationFlags;
 
+#if CODA_OSS_cpp17
+using byte = std::byte;
+#else
+using byte = sys::byte;
+#endif
+
 using Version = nitf_Version;
 using FieldType = nitf_FieldType;
 using ConvType = nitf_ConvType;

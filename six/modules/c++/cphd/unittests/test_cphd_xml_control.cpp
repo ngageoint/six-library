@@ -950,7 +950,7 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(scene.imageArea.x1y1[1], 5.3);
     TEST_ASSERT_EQ(scene.imageArea.x2y2[0], 5.3);
     TEST_ASSERT_EQ(scene.imageArea.x2y2[1], 3.5);
-    TEST_ASSERT_EQ(scene.imageArea.polygon.size(), 3);
+    TEST_ASSERT_EQ(scene.imageArea.polygon.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(scene.imageArea.polygon[0][0], .1);
     TEST_ASSERT_EQ(scene.imageArea.polygon[0][1], .3);
     TEST_ASSERT_EQ(scene.imageArea.polygon[1][0], .4);
@@ -976,16 +976,16 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(scene.imageGrid->iarpLocation.sample, 3.21);
     TEST_ASSERT_EQ(scene.imageGrid->xExtent.lineSpacing, 3.14);
     TEST_ASSERT_EQ(scene.imageGrid->xExtent.firstLine, 4);
-    TEST_ASSERT_EQ(scene.imageGrid->xExtent.numLines, 50);
+    TEST_ASSERT_EQ(scene.imageGrid->xExtent.numLines, static_cast<size_t>(50));
     TEST_ASSERT_EQ(scene.imageGrid->yExtent.sampleSpacing, 6.28);
     TEST_ASSERT_EQ(scene.imageGrid->yExtent.firstSample, 8);
-    TEST_ASSERT_EQ(scene.imageGrid->yExtent.numSamples, 100);
-    TEST_ASSERT_EQ(scene.imageGrid->segments.size(), 2);
+    TEST_ASSERT_EQ(scene.imageGrid->yExtent.numSamples, static_cast<size_t>(100));
+    TEST_ASSERT_EQ(scene.imageGrid->segments.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(scene.imageGrid->segments[0].startLine, 0);
     TEST_ASSERT_EQ(scene.imageGrid->segments[0].startSample, 1);
     TEST_ASSERT_EQ(scene.imageGrid->segments[0].endLine, 2);
     TEST_ASSERT_EQ(scene.imageGrid->segments[0].endSample, 3);
-    TEST_ASSERT_EQ(scene.imageGrid->segments[0].polygon.size(), 3);
+    TEST_ASSERT_EQ(scene.imageGrid->segments[0].polygon.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(scene.imageGrid->segments[0].polygon[0].line, 0.4);
     TEST_ASSERT_EQ(scene.imageGrid->segments[0].polygon[0].sample, 0.6);
     TEST_ASSERT_EQ(scene.imageGrid->segments[0].polygon[1].line, 0.8);
@@ -996,22 +996,22 @@ TEST_CASE(testReadXML)
     // Data
     const cphd::Data& data = metadata->data;
     TEST_ASSERT_EQ(data.signalArrayFormat, cphd::SignalArrayFormat::CI4);
-    TEST_ASSERT_EQ(data.numBytesPVP, 24);
-    TEST_ASSERT_EQ(data.channels.size(), 2);
+    TEST_ASSERT_EQ(data.numBytesPVP, static_cast<size_t>(24));
+    TEST_ASSERT_EQ(data.channels.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(data.channels[0].identifier, "Channel");
-    TEST_ASSERT_EQ(data.channels[0].numVectors, 2);
-    TEST_ASSERT_EQ(data.channels[0].numSamples, 3);
-    TEST_ASSERT_EQ(data.channels[0].signalArrayByteOffset, 0);
-    TEST_ASSERT_EQ(data.channels[0].pvpArrayByteOffset, 1);
-    TEST_ASSERT_EQ(data.channels[0].compressedSignalSize, 3);
+    TEST_ASSERT_EQ(data.channels[0].numVectors, static_cast<size_t>(2));
+    TEST_ASSERT_EQ(data.channels[0].numSamples, static_cast<size_t>(3));
+    TEST_ASSERT_EQ(data.channels[0].signalArrayByteOffset, static_cast<size_t>(0));
+    TEST_ASSERT_EQ(data.channels[0].pvpArrayByteOffset, static_cast<size_t>(1));
+    TEST_ASSERT_EQ(data.channels[0].compressedSignalSize, static_cast<size_t>(3));
     TEST_ASSERT_EQ(data.signalCompressionID, "Compress");
-    TEST_ASSERT_EQ(data.supportArrayMap.size(), 3);
+    TEST_ASSERT_EQ(data.supportArrayMap.size(), static_cast<size_t>(3));
     const std::string identifier = "1.0";
-    TEST_ASSERT_EQ(data.supportArrayMap.count(identifier), 1);
-    TEST_ASSERT_EQ(data.supportArrayMap.find(identifier)->second.numRows, 3);
-    TEST_ASSERT_EQ(data.supportArrayMap.find(identifier)->second.numCols, 4);
-    TEST_ASSERT_EQ(data.supportArrayMap.find(identifier)->second.bytesPerElement, 8);
-    TEST_ASSERT_EQ(data.supportArrayMap.find(identifier)->second.arrayByteOffset, 0);
+    TEST_ASSERT_EQ(data.supportArrayMap.count(identifier), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(data.supportArrayMap.find(identifier)->second.numRows, static_cast<size_t>(3));
+    TEST_ASSERT_EQ(data.supportArrayMap.find(identifier)->second.numCols, static_cast<size_t>(4));
+    TEST_ASSERT_EQ(data.supportArrayMap.find(identifier)->second.bytesPerElement, static_cast<size_t>(8));
+    TEST_ASSERT_EQ(data.supportArrayMap.find(identifier)->second.arrayByteOffset, static_cast<size_t>(0));
 
     // Channel
     const cphd::Channel& channel = metadata->channel;
@@ -1019,9 +1019,9 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(channel.fxFixedCphd, six::BooleanType::IS_TRUE);
     TEST_ASSERT_EQ(channel.toaFixedCphd, six::BooleanType::IS_FALSE);
     TEST_ASSERT_EQ(channel.srpFixedCphd, six::BooleanType::IS_TRUE);
-    TEST_ASSERT_EQ(channel.parameters.size(), 1);
+    TEST_ASSERT_EQ(channel.parameters.size(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(channel.parameters[0].identifier, "CPI");
-    TEST_ASSERT_EQ(channel.parameters[0].refVectorIndex, 1);
+    TEST_ASSERT_EQ(channel.parameters[0].refVectorIndex, static_cast<size_t>(1));
     TEST_ASSERT_EQ(channel.parameters[0].fxFixed,
                    six::BooleanType::IS_FALSE);
     TEST_ASSERT_EQ(channel.parameters[0].toaFixed,
@@ -1073,7 +1073,7 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->pnRef, 0.5);
     TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->bnRef, 0.8);
 
-    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->fxNoiseProfile->point.size(), 2);
+    TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->fxNoiseProfile->point.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->fxNoiseProfile->point[0].fx, 0.3);
     TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->fxNoiseProfile->point[0].pn, 2.7);
     TEST_ASSERT_EQ(channel.parameters[0].noiseLevel->fxNoiseProfile->point[1].fx, 0.5);
@@ -1087,31 +1087,31 @@ TEST_CASE(testReadXML)
 
     //PVP
     const cphd::Pvp& pvp = metadata->pvp;
-    TEST_ASSERT_EQ(pvp.txTime.getOffset(), 0);
-    TEST_ASSERT_EQ(pvp.txTime.getSize(), 1);
+    TEST_ASSERT_EQ(pvp.txTime.getOffset(), static_cast<size_t>(0));
+    TEST_ASSERT_EQ(pvp.txTime.getSize(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(pvp.txTime.getFormat(), "F8");
-    TEST_ASSERT_EQ(pvp.txPos.getOffset(), 1);
-    TEST_ASSERT_EQ(pvp.txPos.getSize(), 3);
+    TEST_ASSERT_EQ(pvp.txPos.getOffset(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(pvp.txPos.getSize(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(pvp.txPos.getFormat(), "X=F8;Y=F8;Z=F8;");
-    TEST_ASSERT_EQ(pvp.rcvVel.getOffset(), 11);
-    TEST_ASSERT_EQ(pvp.rcvVel.getSize(), 3);
+    TEST_ASSERT_EQ(pvp.rcvVel.getOffset(), static_cast<size_t>(11));
+    TEST_ASSERT_EQ(pvp.rcvVel.getSize(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(pvp.rcvVel.getFormat(), "X=F8;Y=F8;Z=F8;");
-    TEST_ASSERT_EQ(pvp.addedPVP.size(), 2);
+    TEST_ASSERT_EQ(pvp.addedPVP.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(pvp.addedPVP.find("newParam1")->second.getName(), "newParam1");
-    TEST_ASSERT_EQ(pvp.addedPVP.find("newParam1")->second.getOffset(), 27);
+    TEST_ASSERT_EQ(pvp.addedPVP.find("newParam1")->second.getOffset(), static_cast<size_t>(27));
     TEST_ASSERT_EQ(pvp.addedPVP.find("newParam2")->second.getName(), "newParam2");
-    TEST_ASSERT_EQ(pvp.addedPVP.find("newParam2")->second.getOffset(), 28);
+    TEST_ASSERT_EQ(pvp.addedPVP.find("newParam2")->second.getOffset(), static_cast<size_t>(28));
 
     //Dwell
     const cphd::Dwell& dwell = metadata->dwell;
-    TEST_ASSERT_EQ(dwell.cod.size(), 1);
-    TEST_ASSERT_EQ(dwell.dtime.size(), 1);
+    TEST_ASSERT_EQ(dwell.cod.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(dwell.dtime.size(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(dwell.cod[0].identifier, "codPolynomial1");
     TEST_ASSERT_EQ(dwell.dtime[0].identifier, "dwellPolynomial1");
-    TEST_ASSERT_EQ(dwell.cod[0].codTimePoly.orderX(), 1);
-    TEST_ASSERT_EQ(dwell.cod[0].codTimePoly.orderY(), 1);
-    TEST_ASSERT_EQ(dwell.dtime[0].dwellTimePoly.orderX(), 1);
-    TEST_ASSERT_EQ(dwell.dtime[0].dwellTimePoly.orderY(), 1);
+    TEST_ASSERT_EQ(dwell.cod[0].codTimePoly.orderX(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(dwell.cod[0].codTimePoly.orderY(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(dwell.dtime[0].dwellTimePoly.orderX(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(dwell.dtime[0].dwellTimePoly.orderY(), static_cast<size_t>(1));
 
     // ReferenceGeometry
     const cphd::ReferenceGeometry& ref = metadata->referenceGeometry;
@@ -1130,7 +1130,8 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(ref.monostatic->arpVel[0], 10);
     TEST_ASSERT_EQ(ref.monostatic->arpVel[1], 10);
     TEST_ASSERT_EQ(ref.monostatic->arpVel[2], 10);
-    TEST_ASSERT_EQ(ref.monostatic->sideOfTrack, "LEFT");
+    TEST_ASSERT(ref.monostatic->sideOfTrack == "LEFT");
+    TEST_ASSERT_EQ(ref.monostatic->sideOfTrack, six::SideOfTrackType::LEFT);
     TEST_ASSERT_EQ(ref.monostatic->azimuthAngle, 30.0);
     TEST_ASSERT_EQ(ref.monostatic->grazeAngle, 30.0);
     TEST_ASSERT_EQ(ref.monostatic->twistAngle, 30.0);

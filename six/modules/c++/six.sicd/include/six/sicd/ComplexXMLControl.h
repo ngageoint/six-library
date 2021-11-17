@@ -52,6 +52,8 @@ struct ComplexXMLControl : public XMLControl
 {
     //!  Constructor
     ComplexXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+    ComplexXMLControl(const ComplexXMLControl&) = delete;
+    ComplexXMLControl& operator=(const ComplexXMLControl&) = delete;
 
     static const six::DataType dataType;
 

@@ -168,17 +168,16 @@ void Tester<DataTypeT>::normalWrite()
     container->addData(mData->clone());
 
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX,
-                           new six::XMLControlCreatorT<
-                                   six::sicd::ComplexXMLControl>());
+    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
     six::Options options;
     setMaxProductSize(options);
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
-    six::buffer_list buffers;
-    buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
-    writer.save(buffers, mNormalPathname, mSchemaPaths);
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(mSchemaPaths.begin(), mSchemaPaths.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+
+    save(writer, mImage, mNormalPathname, schemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
 }
