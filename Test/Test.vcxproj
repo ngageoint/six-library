@@ -31,7 +31,7 @@
     <ClInclude Include="sicd_Test.h" />
     <ClInclude Include="sidd_Test.h" />
     <ClInclude Include="six_Test.h" />
-    <ClInclude Include="Test.h" />
+    <ClInclude Include="GTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cphd03_test_cphd_read_unscaled_int.cpp" />

@@ -125,7 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Test.h" />
+    <ClInclude Include="GTest.h" />
     <ClInclude Include="six_Test.h">
       <Filter>six</Filter>
     </ClInclude>
