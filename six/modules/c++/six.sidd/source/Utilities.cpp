@@ -615,7 +615,6 @@ mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& s
     projection->productPlane.colUnitVector[1] = 0;
     projection->productPlane.colUnitVector[2] = 0;
 
-    data->measurement->pixelFootprint.row = data->measurement->pixelFootprint.col = 0;
     data->measurement->arpPoly = PolyXYZ(1);
     data->measurement->arpPoly[0][0] = 0;
     data->measurement->arpPoly[0][1] = 0;
@@ -636,13 +635,26 @@ mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& s
     data->exploitationFeatures->product[0].resolution.row = 0;
     data->exploitationFeatures->product[0].resolution.col = 0;
 
-    if (strVersion == "3.0.0") // TODO: better check for version
+    if (strVersion == "3.0.0") // TODO: better check for version; this avoid changing any existing test code
     {
+        data->display->pixelType = six::PixelType::RGB24I; // TODO: this was added before SIDD 3.0.0
+
+        data->measurement->pixelFootprint.row = data->measurement->pixelFootprint.col = 0; // TODO: this was added before SIDD 3.0.0
+        data->measurement->validData.emplace_back(1, 2); // TODO: this was added before SIDD 3.0.0
+        data->measurement->validData.emplace_back(3, 4);
+        data->measurement->validData.emplace_back(5, 6);
+
         data->geoData.reset(new six::GeoDataBase()); // TODO: this was added before SIDD 3.0.0
         data->geoData->imageCorners.lowerLeft.clearLatLon();
         data->geoData->imageCorners.upperLeft.clearLatLon();
         data->geoData->imageCorners.lowerRight.clearLatLon();
         data->geoData->imageCorners.upperRight.clearLatLon();
+
+        data->exploitationFeatures->product[0].ellipticity = 0.0; // TODO: this was added before SIDD 3.0.0
+        ProcTxRcvPolarization polarization{ PolarizationSequenceType::UNKNOWN, PolarizationSequenceType::UNKNOWN };
+        data->exploitationFeatures->product[0].polarization.push_back(polarization); // TODO: this was added before SIDD 3.0.0
+
+        data->productCreation->classification.compliesWith.emplace_back("USGov"); // TODO: this was added before SIDD 3.0.0
     }
 
     return data;

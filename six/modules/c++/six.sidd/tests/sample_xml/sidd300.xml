@@ -1,43 +1,39 @@
-<SIDD xmlns="urn:SIDD:3.0.0" xmlns:si="urn:SICommon:0.1" xmlns:sfa="urn:SFA:1.2.0" xmlns:ism="urn:us:gov:ic:ism">
+<SIDD xmlns="urn:SIDD:3.0.0" xmlns:si="urn:SICommon:1.0" xmlns:sfa="urn:SFA:1.2.0" xmlns:ism="urn:us:gov:ic:ism:13">
 	<ProductCreation>
 		<ProcessorInformation>
 			<Application/>
-			<ProcessingDateTime>2021-11-18T20:16:17.834000Z</ProcessingDateTime>
+			<ProcessingDateTime>2021-11-18T22:11:13.078000Z</ProcessingDateTime>
 			<Site/>
 		</ProcessorInformation>
-		<Classification ism:DESVersion="4" ism:resourceElement="true" ism:createDate="2021-11-18" ism:classification="U" ism:ownerProducer=""/>
+		<Classification ism:DESVersion="13" ism:ISMCATCESVersion="1" ism:resourceElement="true" ism:createDate="2021-11-18" ism:compliesWith="USGov" ism:classification="U" ism:ownerProducer=""/>
 		<ProductName/>
 		<ProductClass/>
 	</ProductCreation>
 	<Display>
-		<PixelType>RE32F_IM32F</PixelType>
+		<PixelType>RGB24I</PixelType>
+		<NumBands>0</NumBands>
 	</Display>
 	<GeoData>
-		
+		<EarthModel>WGS_84</EarthModel>
+		<ImageCorners>
+			<ICP index="1:FRFC">
+				<si:Lat>0</si:Lat>
+				<si:Lon>0</si:Lon>
+			</ICP>
+			<ICP index="2:FRLC">
+				<si:Lat>0</si:Lat>
+				<si:Lon>0</si:Lon>
+			</ICP>
+			<ICP index="3:LRLC">
+				<si:Lat>0</si:Lat>
+				<si:Lon>0</si:Lon>
+			</ICP>
+			<ICP index="4:LRFC">
+				<si:Lat>0</si:Lat>
+				<si:Lon>0</si:Lon>
+			</ICP>
+		</ImageCorners>
 	</GeoData>
-	<GeographicAndTarget>
-		<GeographicCoverage>
-			<Footprint size="4">
-				<Vertex index="1">
-					<si:Lat>30.0159627132971</si:Lat>
-					<si:Lon>-93.315631009172137</si:Lon>
-				</Vertex>
-				<Vertex index="2">
-					<si:Lat>30.519023950212471</si:Lat>
-					<si:Lon>-93.413499153728154</si:Lon>
-				</Vertex>
-				<Vertex index="3">
-					<si:Lat>30.543755445281001</si:Lat>
-					<si:Lon>-93.243992992303987</si:Lon>
-				</Vertex>
-				<Vertex index="4">
-					<si:Lat>30.04057030343078</si:Lat>
-					<si:Lon>-93.146963141529511</si:Lon>
-				</Vertex>
-			</Footprint>
-			<GeographicInfo/>
-		</GeographicCoverage>
-	</GeographicAndTarget>
 	<Measurement>
 		<PlaneProjection>
 			<ReferencePoint>
@@ -92,6 +88,20 @@
 				<si:Coef exponent1="1">0</si:Coef>
 			</si:Z>
 		</ARPPoly>
+		<ValidData size="3">
+			<Vertex index="1">
+				<si:Row>1</si:Row>
+				<si:Col>2</si:Col>
+			</Vertex>
+			<Vertex index="2">
+				<si:Row>3</si:Row>
+				<si:Col>4</si:Col>
+			</Vertex>
+			<Vertex index="3">
+				<si:Row>5</si:Row>
+				<si:Col>6</si:Col>
+			</Vertex>
+		</ValidData>
 	</Measurement>
 	<ExploitationFeatures>
 		<Collection identifier="">
@@ -100,7 +110,7 @@
 				<RadarMode>
 					<si:ModeType>SPOTLIGHT</si:ModeType>
 				</RadarMode>
-				<CollectionDateTime>2021-11-18T20:16:17.835000Z</CollectionDateTime>
+				<CollectionDateTime>2021-11-18T22:11:13.079000Z</CollectionDateTime>
 				<CollectionDuration>0</CollectionDuration>
 				<Resolution>
 					<si:Range>0</si:Range>
@@ -113,8 +123,11 @@
 				<si:Row>0</si:Row>
 				<si:Col>0</si:Col>
 			</Resolution>
+			<Ellipticity>0</Ellipticity>
+			<Polarization>
+				<TxPolarizationProc>UNKNOWN</TxPolarizationProc>
+				<RcvPolarizationProc>UNKNOWN</RcvPolarizationProc>
+			</Polarization>
 		</Product>
 	</ExploitationFeatures>
 </SIDD>
-
-
