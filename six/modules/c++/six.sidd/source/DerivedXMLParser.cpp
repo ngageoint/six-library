@@ -1108,7 +1108,7 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     }
 
     common().createRowCol("PixelFootprint",
-                          measurement->pixelFootprint,
+                          measurement->getPixelFootprint(),
                           measurementElem);
 
     return measurementElem;

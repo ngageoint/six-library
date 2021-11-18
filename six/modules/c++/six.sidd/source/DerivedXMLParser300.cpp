@@ -289,8 +289,7 @@ void DerivedXMLParser300::parseDerivedClassificationFromXML(
         DerivedClassification& classification) const
 {
     DerivedXMLParser::parseDerivedClassificationFromXML(classificationElem, classification);
-    const XMLAttributes& classificationAttributes
-        = classificationElem->getAttributes();
+    const XMLAttributes& classificationAttributes = classificationElem->getAttributes();
 
     getAttributeList(classificationAttributes,
         "ism:compliesWith",

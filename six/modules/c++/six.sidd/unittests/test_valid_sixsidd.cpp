@@ -41,13 +41,83 @@
 
 namespace fs = std::filesystem;
 
+static fs::path argv0()
+{
+    static const sys::OS os;
+    static const fs::path retval = os.getSpecialEnv("0");
+    return retval;
+}
+
+inline fs::path six_sidd_relative_path()
+{
+    return fs::path("six") / "modules" / "c++" / "six.sidd";
+}
+static fs::path sample_xml_relative_path(const fs::path& filename)
+{
+    return six_sidd_relative_path() / "tests" / "sample_xml" / filename;
+}
+static fs::path schema_relative_path()
+{
+    return six_sidd_relative_path() / "conf" / "schema";
+}
+static fs::path findRootDir(const fs::path& dir)
+{
+    const auto six = dir / "six";
+    const auto externals = dir / "externals";
+    const auto six_sln = dir / "six.sln";
+    if (fs::is_directory(six) && fs::is_directory(externals) && fs::is_regular_file(six_sln))
+    {
+        return dir;
+    }
+    const auto parent = dir.parent_path();
+    return findRootDir(parent);
+}
+
+static fs::path buildRootDir()
+{
+    auto platform = sys::Platform; // "conditional expression is constant"
+    if (platform == sys::PlatformType::Windows)
+    {
+        // On Windows ... in Visual Studio or stand-alone?
+        if (argv0().filename() == "Test.exe") // Google Test in Visual Studio
+        {
+            const auto cwd = fs::current_path();
+            const auto root_dir = cwd.parent_path().parent_path();
+            return root_dir;
+        }
+    }
+
+    // Linux or stand-alone
+    return findRootDir(argv0());
+}
+
+inline fs::path get_sample_xml_path(const fs::path& filename)
+{
+    const auto root_dir = buildRootDir();
+    return root_dir / sample_xml_relative_path(filename);
+}
+
+inline std::vector<std::string> getSchemaPaths()
+{
+    const auto root_dir = buildRootDir();
+    return std::vector<std::string> { (root_dir / schema_relative_path()).string() };
+}
+
 static std::string testName;
 
 TEST_CASE(test_read_sidd300_xml)
 {
+    //const auto pathname = get_sample_xml_path("sidd300.xml");
+    //const auto schemaPaths = getSchemaPaths();
+    const std::vector<std::string> schemaPaths;
+    logging::NullLogger log;
+    //auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname.string(), schemaPaths, log);
+
+    const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData("3.0.0");
+    //const auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, schemaPaths, &log);
+    //auto pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, schemaPaths, log);
 }
 
 TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(test_read_sidd300_xml);
     )
-

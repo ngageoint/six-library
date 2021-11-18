@@ -569,9 +569,13 @@ std::string Utilities::toXMLString(const DerivedData& data,
                                    &xmlRegistry);
 }
 
-mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
+mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& strVersion)
 {
     mem::auto_ptr<DerivedData> data(new DerivedData());
+    if (!strVersion.empty())
+    {
+        data->setVersion(strVersion);
+    }
     data->productCreation.reset(new ProductCreation());
     data->productCreation->classification.classification = "U";
     data->display.reset(new Display());
@@ -595,6 +599,7 @@ mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
     imageCorners.getCorner(3).setLon(-9.314696314152951E01);
 
     data->measurement.reset(new Measurement(ProjectionType::PLANE));
+
     PlaneProjection* projection =
             dynamic_cast<PlaneProjection*>(data->measurement->projection.get());
     projection->timeCOAPoly = Poly2D(1, 1);
@@ -610,6 +615,7 @@ mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
     projection->productPlane.colUnitVector[1] = 0;
     projection->productPlane.colUnitVector[2] = 0;
 
+    data->measurement->pixelFootprint.row = data->measurement->pixelFootprint.col = 0;
     data->measurement->arpPoly = PolyXYZ(1);
     data->measurement->arpPoly[0][0] = 0;
     data->measurement->arpPoly[0][1] = 0;
@@ -629,6 +635,16 @@ mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
     data->exploitationFeatures->product.resize(1);
     data->exploitationFeatures->product[0].resolution.row = 0;
     data->exploitationFeatures->product[0].resolution.col = 0;
+
+    if (strVersion == "3.0.0") // TODO: better check for version
+    {
+        data->geoData.reset(new six::GeoDataBase()); // TODO: this was added before SIDD 3.0.0
+        data->geoData->imageCorners.lowerLeft.clearLatLon();
+        data->geoData->imageCorners.upperLeft.clearLatLon();
+        data->geoData->imageCorners.lowerRight.clearLatLon();
+        data->geoData->imageCorners.upperRight.clearLatLon();
+    }
+
     return data;
 }
 }
