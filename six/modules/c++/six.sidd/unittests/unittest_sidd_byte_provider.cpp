@@ -763,11 +763,7 @@ TEST_CASE(forcing_various_numbers_of_segments)
 
     // Run tests forcing various numbers of segments
     // Blocking is set at 7 rows / block so can't go less than this
-    std::vector<size_t> numRows;
-    numRows.push_back(80);
-    numRows.push_back(30);
-    numRows.push_back(15);
-    numRows.push_back(7);
+    const std::vector<size_t> numRows{ 80, 30, 15, 7 };
     for (const auto& row : numRows)
     {
         const auto success = doTestsBothDataTypes(schemaPaths, true, row);
