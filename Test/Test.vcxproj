@@ -69,6 +69,7 @@
     <ClCompile Include="six.sidd_test_annotations_equality.cpp" />
     <ClCompile Include="six.sidd_test_geometric_chip.cpp" />
     <ClCompile Include="six.sidd_test_read_sidd_legend.cpp" />
+    <ClCompile Include="six.sidd_test_sidd_byte_provider.cpp" />
     <ClCompile Include="six_test_fft_sign_conversions.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
