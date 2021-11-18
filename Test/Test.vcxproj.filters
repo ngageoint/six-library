@@ -123,6 +123,9 @@
       <Filter>six.sidd</Filter>
     </ClCompile>
     <ClCompile Include="Test.cpp" />
+    <ClCompile Include="six.sidd_test_valid_six.cpp">
+      <Filter>six.sidd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
