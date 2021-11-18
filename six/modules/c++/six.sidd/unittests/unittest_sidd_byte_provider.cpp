@@ -381,10 +381,12 @@ void Tester<DataTypeT>::normalWrite()
     setWriterOptions(options);
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(mSchemaPaths.begin(), mSchemaPaths.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
-
-    save(writer, mImage, mNormalPathname, schemaPaths);
+    // For these tests, "mImage" is just some "random" size we know will be large enough.
+    // However, passing that as an "image" to save(), the code expects that it will
+    // be the correct size, which it isn't.  The work-around is to pass a raw pointer.
+    const void* pImage = mImage.data();
+    const six::BufferList image{ static_cast<const six::UByte*>(pImage) };
+    writer.save(image, mNormalPathname, mSchemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
 }
@@ -762,10 +764,10 @@ TEST_CASE(forcing_various_numbers_of_segments)
     // Run tests forcing various numbers of segments
     // Blocking is set at 7 rows / block so can't go less than this
     std::vector<size_t> numRows;
-    //numRows.push_back(80);
-    //numRows.push_back(30);
-    //numRows.push_back(15);
-    //numRows.push_back(7);
+    numRows.push_back(80);
+    numRows.push_back(30);
+    numRows.push_back(15);
+    numRows.push_back(7);
     for (const auto& row : numRows)
     {
         const auto success = doTestsBothDataTypes(schemaPaths, true, row);

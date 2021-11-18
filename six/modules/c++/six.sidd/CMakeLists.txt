@@ -49,7 +49,7 @@ coda_add_tests(
         test_annotations_equality.cpp
         test_geometric_chip.cpp
         test_read_sidd_legend.cpp
-        test_sidd_byte_provider.cpp)
+        unittest_sidd_byte_provider.cpp)
 
 # Install the schemas
 install(DIRECTORY "conf/schema/"

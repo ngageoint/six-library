@@ -30,4 +30,4 @@ struct sidd_test_byte_provider : public ::testing::Test {
 };
 
 #define TEST_CASE(X) TEST_F(sidd_test_byte_provider, X)
-#include "six/modules/c++/six.sidd/unittests/test_sidd_byte_provider.cpp"
+#include "six/modules/c++/six.sidd/unittests/unittest_sidd_byte_provider.cpp"
