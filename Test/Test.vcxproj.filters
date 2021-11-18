@@ -122,6 +122,7 @@
     <ClCompile Include="six.sidd_test_sidd_byte_provider.cpp">
       <Filter>six.sidd</Filter>
     </ClCompile>
+    <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -141,6 +142,7 @@
     <ClInclude Include="cphd_Test.h">
       <Filter>cphd</Filter>
     </ClInclude>
+    <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

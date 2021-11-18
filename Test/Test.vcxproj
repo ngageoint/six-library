@@ -32,6 +32,7 @@
     <ClInclude Include="sidd_Test.h" />
     <ClInclude Include="six_Test.h" />
     <ClInclude Include="GTest.h" />
+    <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cphd03_test_cphd_read_unscaled_int.cpp" />
@@ -78,6 +79,7 @@
     <ClCompile Include="six_test_polarization_type_conversions.cpp" />
     <ClCompile Include="six_test_serialize.cpp" />
     <ClCompile Include="six_test_xml_control.cpp" />
+    <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\six\modules\c++\cphd03\cphd03.vcxproj">
