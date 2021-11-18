@@ -423,7 +423,38 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            <xsd:element name="AdditionalParms" minOccurs="0">
+			<xsd:element name="UnmodeledError" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Xrow" type="xsd:double"/>
+						<xsd:element name="Ycol" type="xsd:double"/>
+						<xsd:element name="XrowYcol" type="xsd:double"/>
+						<xsd:element name="UnmodeledErrorDecorr" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Xrow">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="CorrCoefZero" type="xsd:double"/>
+												<xsd:element name="DecorrRate" type="xsd:double"/>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="Ycol">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="CorrCoefZero" type="xsd:double"/>
+												<xsd:element name="DecorrRate" type="xsd:double"/>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="AdditionalParms" minOccurs="0">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:element name="Parameter" type="ParameterType" maxOccurs="unbounded"/>

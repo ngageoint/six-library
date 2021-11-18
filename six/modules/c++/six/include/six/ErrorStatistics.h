@@ -249,6 +249,57 @@ struct IonoError
 };
 
 /*!
+ *  \struct UnmodeledError
+ *  \brief (Optional) Unmodeled Error statistics 
+ *
+ *  Contains unmodeled Error statistics 
+ */
+struct UnmodeledError final
+{
+    // By making member names match XML element names, macros can
+    // help generate boilerplate code.
+    double Xrow = 0.0;
+    double Ycol = 0.0;
+    double XrowYcol = 0.0;
+
+    struct Decorr final
+    {
+        struct Xrow_Ycol final
+        {
+            double CorrCoefZero = 0.0;
+            double DecorrRate = 0.0;
+        };
+        Xrow_Ycol Xrow;
+        Xrow_Ycol Ycol;
+    };
+    mem::ScopedCopyablePtr<Decorr> UnmodeledErrorDecorr;
+};
+inline bool operator==(const UnmodeledError::Decorr& lhs, const UnmodeledError::Decorr& rhs)
+{
+    return (lhs.Xrow.CorrCoefZero == rhs.Xrow.CorrCoefZero)
+        && (lhs.Xrow.DecorrRate == rhs.Xrow.DecorrRate)
+        && (lhs.Ycol.CorrCoefZero == rhs.Ycol.CorrCoefZero)
+        && (lhs.Ycol.DecorrRate == rhs.Ycol.DecorrRate)
+        ;
+}
+inline bool operator!=(const UnmodeledError::Decorr& lhs, const UnmodeledError::Decorr& rhs)
+{
+    return !(lhs == rhs);
+}
+inline bool operator==(const UnmodeledError& lhs, const UnmodeledError& rhs)
+{
+    return (lhs.Xrow == rhs.Xrow)
+        && (lhs.Ycol == rhs.Ycol)
+        && (lhs.XrowYcol == rhs.XrowYcol)
+        && (lhs.UnmodeledErrorDecorr == rhs.UnmodeledErrorDecorr)
+        ;
+}
+inline bool operator!=(const UnmodeledError& lhs, const UnmodeledError& rhs)
+{
+    return !(lhs == rhs);
+}
+
+/*!
  *  \struct Components
  *  \brief (Optional) SICD/SIDD error components
  *
@@ -353,6 +404,12 @@ struct ErrorStatistics
     mem::ScopedCopyablePtr<Components> components;
 
     /*!
+     *  (Optional) UnmodeledError
+     *
+     */
+    mem::ScopedCopyablePtr<UnmodeledError> unmodeledError;
+
+    /*!
      *  Additional parameters
      *  Note, this is Parms in SICD, but we want a consistent API
      */
@@ -361,8 +418,11 @@ struct ErrorStatistics
     //! Equality operators
     bool operator==(const ErrorStatistics& rhs) const
     {
-        return (compositeSCP == rhs.compositeSCP && components == rhs.components &&
-            additionalParameters == rhs.additionalParameters);
+        return (compositeSCP == rhs.compositeSCP)
+            && (components == rhs.components)
+            && (additionalParameters == rhs.additionalParameters)
+            && (unmodeledError == rhs.unmodeledError)
+            ;
     }
     bool operator!=(const ErrorStatistics& rhs) const
     {

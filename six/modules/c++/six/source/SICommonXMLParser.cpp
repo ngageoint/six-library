@@ -926,6 +926,31 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
         }
     }
 
+    const auto unmodeledError = errorStatistics->unmodeledError.get();
+    if (unmodeledError != nullptr)
+    {
+        auto unmodeledErrorXML = newElement("UnmodeledError", getSICommonURI(), errorStatsXML);
+
+        #define xmlCreateDouble(name, value, elem) createDouble(#name, getSICommonURI(), (value).name, elem)
+        xmlCreateDouble(Xrow, *unmodeledError, unmodeledErrorXML);
+        xmlCreateDouble(Ycol, *unmodeledError, unmodeledErrorXML);
+        xmlCreateDouble(XrowYcol, *unmodeledError, unmodeledErrorXML);
+
+        const auto unmodeledErrorDecorr = unmodeledError->UnmodeledErrorDecorr.get();
+        if (unmodeledErrorDecorr != nullptr)
+        {
+            auto unmodeledErrorDecorrXML = newElement("UnmodeledErrorDecorr", getSICommonURI(), unmodeledErrorXML);
+
+            auto xrowXML = newElement("Xrow", getSICommonURI(), unmodeledErrorDecorrXML);
+            xmlCreateDouble(CorrCoefZero, unmodeledErrorDecorr->Xrow, xrowXML);
+            xmlCreateDouble(DecorrRate, unmodeledErrorDecorr->Xrow, xrowXML);
+
+            auto ycolXML = newElement("Ycol", getSICommonURI(), unmodeledErrorDecorrXML);
+            xmlCreateDouble(CorrCoefZero, unmodeledErrorDecorr->Ycol, ycolXML);
+            xmlCreateDouble(DecorrRate, unmodeledErrorDecorr->Ycol, ycolXML);
+        }
+    }
+
     if (!errorStatistics->additionalParameters.empty())
     {
         XMLElem paramsXML = newElement("AdditionalParms",
@@ -985,6 +1010,37 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         {
             //optional
             errorStatistics->components->ionoError.reset(new IonoError());
+        }
+    }
+
+    tmpElem = getOptional(errorStatsXML, "UnmodeledError"); // SIDD 3.0
+    if (tmpElem != nullptr)
+    {
+        //optional
+        errorStatistics->unmodeledError.reset(std::make_unique<UnmodeledError>());
+        auto& unmodeledError = *(errorStatistics->unmodeledError);
+
+        // macro to avoid copy/paste errors
+        #define parseDouble_getFirstAndOnly(elem, name, storage) parseDouble(getFirstAndOnly(elem, #name), (storage).name)
+
+        parseDouble_getFirstAndOnly(tmpElem, Xrow, unmodeledError);
+        parseDouble_getFirstAndOnly(tmpElem, Ycol, unmodeledError);
+        parseDouble_getFirstAndOnly(tmpElem, XrowYcol, unmodeledError);
+
+        auto unmodeledErrorDecorr = getOptional(tmpElem, "UnmodeledErrorDecorr");
+        if (unmodeledErrorDecorr)
+        {
+            //optional
+            errorStatistics->unmodeledError->UnmodeledErrorDecorr.reset(std::make_unique<UnmodeledError::Decorr>());
+            auto& UnmodeledErrorDecorr = *(errorStatistics->unmodeledError->UnmodeledErrorDecorr);
+
+            auto xrow = getFirstAndOnly(unmodeledErrorDecorr, "Xrow");
+            parseDouble_getFirstAndOnly(xrow, CorrCoefZero, UnmodeledErrorDecorr.Xrow);
+            parseDouble_getFirstAndOnly(xrow, DecorrRate, UnmodeledErrorDecorr.Xrow);
+
+            auto ycol = getFirstAndOnly(unmodeledErrorDecorr, "Ycol");
+            parseDouble_getFirstAndOnly(ycol, CorrCoefZero, UnmodeledErrorDecorr.Ycol);
+            parseDouble_getFirstAndOnly(ycol, DecorrRate, UnmodeledErrorDecorr.Ycol);
         }
     }
 
