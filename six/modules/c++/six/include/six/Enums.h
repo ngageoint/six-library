@@ -321,12 +321,20 @@ SIX_Enum_BEGIN_DEFINE(PolarizationSequenceType)
         LHC = 5,
         UNKNOWN = 6,
         SEQUENCE = 7,
+        X = 8, // SIDD 3.0
+        Y = 9, // SIDD 3.0
+        S = 10, // SIDD 3.0
+        E = 11, // SIDD 3.0
     SIX_Enum_END_enum
 
     SIX_Enum_BEGIN_string_to_int
             SIX_Enum_map_entry_(OTHER),
             SIX_Enum_map_entry_(V),
             SIX_Enum_map_entry_(H),
+            SIX_Enum_map_entry_(X),
+            SIX_Enum_map_entry_(Y),
+            SIX_Enum_map_entry_(S),
+            SIX_Enum_map_entry_(E),
             SIX_Enum_map_entry_(RHC),
             SIX_Enum_map_entry_(LHC),
             SIX_Enum_map_entry_(UNKNOWN),

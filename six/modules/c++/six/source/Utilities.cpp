@@ -31,6 +31,9 @@
 #include "six/XMLControl.h"
 #include "six/Data.h"
 
+#define string_to_Enum(strValue, enum, type) if (strValue == #type) return enum::type
+#define Enum_to_string(value, enum, type) if (value == enum::type) return #type
+
 namespace
 {
 NITF_TRE_STATIC_HANDLER_REF(XML_DATA_CONTENT);
@@ -443,64 +446,38 @@ PolarizationSequenceType six::toType<PolarizationSequenceType>(
 {
     std::string type(s);
     str::trim(type);
-    if (type == "OTHER")
-    {
-        return PolarizationSequenceType::OTHER;
-    }
-    else if (type == "V")
-    {
-        return PolarizationSequenceType::V;
-    }
-    else if (type == "H")
-    {
-        return PolarizationSequenceType::H;
-    }
-    else if (type == "RHC")
-    {
-        return PolarizationSequenceType::RHC;
-    }
-    else if (type == "LHC")
-    {
-        return PolarizationSequenceType::LHC;
-    }
-    else if (type == "UNKNOWN")
-    {
-        return PolarizationSequenceType::UNKNOWN;
-    }
-    else if (type == "SEQUENCE")
-    {
-        return PolarizationSequenceType::SEQUENCE;
-    }
-    else
-    {
-        throw except::Exception(
-                Ctxt("Unsupported polarization type '" + s + "'"));
-    }
+    
+    string_to_Enum(type, PolarizationSequenceType, OTHER);
+    string_to_Enum(type, PolarizationSequenceType, V);
+    string_to_Enum(type, PolarizationSequenceType, H);
+    string_to_Enum(type, PolarizationSequenceType, X);
+    string_to_Enum(type, PolarizationSequenceType, Y);
+    string_to_Enum(type, PolarizationSequenceType, S);
+    string_to_Enum(type, PolarizationSequenceType, E);
+    string_to_Enum(type, PolarizationSequenceType, RHC);
+    string_to_Enum(type, PolarizationSequenceType, LHC);
+    string_to_Enum(type, PolarizationSequenceType, UNKNOWN);
+    string_to_Enum(type, PolarizationSequenceType, SEQUENCE);
+    
+    throw except::Exception(Ctxt("Unsupported polarization type '" + s + "'"));
 }
 
 template <>
 std::string six::toString(const PolarizationSequenceType& t)
 {
-    switch (t)
-    {
-    case PolarizationSequenceType::OTHER:
-        return "OTHER";
-    case PolarizationSequenceType::V:
-        return "V";
-    case PolarizationSequenceType::H:
-        return "H";
-    case PolarizationSequenceType::RHC:
-        return "RHC";
-    case PolarizationSequenceType::LHC:
-        return "LHC";
-    case PolarizationSequenceType::UNKNOWN:
-        return "UNKNOWN";
-    case PolarizationSequenceType::SEQUENCE:
-        return "SEQUENCE";
-    default:
-        throw except::Exception(
-                Ctxt("Unsupported conversion from polarization type"));
-    }
+    Enum_to_string(t, PolarizationSequenceType, OTHER);
+    Enum_to_string(t, PolarizationSequenceType, V);
+    Enum_to_string(t, PolarizationSequenceType, H);
+    Enum_to_string(t, PolarizationSequenceType, X);
+    Enum_to_string(t, PolarizationSequenceType, Y);
+    Enum_to_string(t, PolarizationSequenceType, S);
+    Enum_to_string(t, PolarizationSequenceType, E);
+    Enum_to_string(t, PolarizationSequenceType, RHC);
+    Enum_to_string(t, PolarizationSequenceType, LHC);
+    Enum_to_string(t, PolarizationSequenceType, UNKNOWN);
+    Enum_to_string(t, PolarizationSequenceType, SEQUENCE);
+    
+    throw except::Exception(Ctxt("Unsupported conversion from polarization type"));
 }
 
 template <>

@@ -208,7 +208,11 @@
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="V"/>
             <xsd:enumeration value="H"/>
-            <xsd:enumeration value="RHC"/>
+			<xsd:enumeration value="X"/>
+			<xsd:enumeration value="Y"/>
+			<xsd:enumeration value="S"/>
+			<xsd:enumeration value="E"/>
+			<xsd:enumeration value="RHC"/>
             <xsd:enumeration value="LHC"/>
             <xsd:enumeration value="OTHER"/>
             <xsd:enumeration value="UNKNOWN"/>
