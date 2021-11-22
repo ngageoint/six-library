@@ -116,8 +116,8 @@ TEST_CASE(test_createFakeDerivedData)
 {
     const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData("3.0.0");
     const auto schemaPaths = getSchemaPaths();
-    //const auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, &schemaPaths);
-    //auto pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, &schemaPaths);
+    const auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, &schemaPaths);
+    auto pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, &schemaPaths);
 }
 
 TEST_CASE(test_read_sidd300_xml_noschema)
@@ -130,7 +130,7 @@ TEST_CASE(test_read_sidd300_xml)
 {
     const auto pathname = get_sample_xml_path("sidd300.xml");
     const auto schemaPaths = getSchemaPaths();
-    //auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
+    auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
 }
 
 TEST_MAIN((void)argc; (void)argv;
