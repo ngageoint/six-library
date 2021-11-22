@@ -249,12 +249,12 @@ struct IonoError
 };
 
 /*!
- *  \struct UnmodeledError
- *  \brief (Optional) Unmodeled Error statistics 
+ *  \struct Unmodeled
+ *  \brief (Optional) Unmodeled error statistics 
  *
- *  Contains unmodeled Error statistics 
+ *  Contains Unmodeled error statistics 
  */
-struct UnmodeledError final
+struct Unmodeled final
 {
     // By making member names match XML element names, macros can
     // help generate boilerplate code.
@@ -272,9 +272,9 @@ struct UnmodeledError final
         Xrow_Ycol Xrow;
         Xrow_Ycol Ycol;
     };
-    mem::ScopedCopyablePtr<Decorr> UnmodeledErrorDecorr;
+    mem::ScopedCopyablePtr<Decorr> UnmodeledDecorr;
 };
-inline bool operator==(const UnmodeledError::Decorr& lhs, const UnmodeledError::Decorr& rhs)
+inline bool operator==(const Unmodeled::Decorr& lhs, const Unmodeled::Decorr& rhs)
 {
     return (lhs.Xrow.CorrCoefZero == rhs.Xrow.CorrCoefZero)
         && (lhs.Xrow.DecorrRate == rhs.Xrow.DecorrRate)
@@ -282,19 +282,19 @@ inline bool operator==(const UnmodeledError::Decorr& lhs, const UnmodeledError::
         && (lhs.Ycol.DecorrRate == rhs.Ycol.DecorrRate)
         ;
 }
-inline bool operator!=(const UnmodeledError::Decorr& lhs, const UnmodeledError::Decorr& rhs)
+inline bool operator!=(const Unmodeled::Decorr& lhs, const Unmodeled::Decorr& rhs)
 {
     return !(lhs == rhs);
 }
-inline bool operator==(const UnmodeledError& lhs, const UnmodeledError& rhs)
+inline bool operator==(const Unmodeled& lhs, const Unmodeled& rhs)
 {
     return (lhs.Xrow == rhs.Xrow)
         && (lhs.Ycol == rhs.Ycol)
         && (lhs.XrowYcol == rhs.XrowYcol)
-        && (lhs.UnmodeledErrorDecorr == rhs.UnmodeledErrorDecorr)
+        && (lhs.UnmodeledDecorr == rhs.UnmodeledDecorr)
         ;
 }
-inline bool operator!=(const UnmodeledError& lhs, const UnmodeledError& rhs)
+inline bool operator!=(const Unmodeled& lhs, const Unmodeled& rhs)
 {
     return !(lhs == rhs);
 }
@@ -407,7 +407,7 @@ struct ErrorStatistics
      *  (Optional) UnmodeledError
      *
      */
-    mem::ScopedCopyablePtr<UnmodeledError> unmodeledError;
+    mem::ScopedCopyablePtr<Unmodeled> unmodeled;
 
     /*!
      *  Additional parameters
@@ -421,7 +421,7 @@ struct ErrorStatistics
         return (compositeSCP == rhs.compositeSCP)
             && (components == rhs.components)
             && (additionalParameters == rhs.additionalParameters)
-            && (unmodeledError == rhs.unmodeledError)
+            && (unmodeled == rhs.unmodeled)
             ;
     }
     bool operator!=(const ErrorStatistics& rhs) const
