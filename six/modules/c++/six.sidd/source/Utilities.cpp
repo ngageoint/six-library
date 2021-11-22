@@ -559,7 +559,7 @@ mem::auto_ptr<DerivedData> Utilities::parseDataFromFile(
 std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem::path& pathname,
     const std::vector<std::filesystem::path>* schemaPaths, logging::Logger& log)
 {
-    io::FileInputStream inStream(pathname);
+    io::FileInputStream inStream(pathname.string());
     return parseData(inStream, schemaPaths, log);
 }
 

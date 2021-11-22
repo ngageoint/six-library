@@ -128,7 +128,7 @@ TEST_CASE(test_read_sidd300_xml_noschema)
     const auto pathname = get_sample_xml_path("sidd300.xml");
     const std::vector<std::filesystem::path> schemaPaths;
     logging::NullLogger log;
-    //auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths, log);
+    auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths, log);
 }
 TEST_CASE(test_read_sidd300_xml)
 {
