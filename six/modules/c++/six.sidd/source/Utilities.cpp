@@ -615,6 +615,103 @@ std::string Utilities::toXMLString(const DerivedData& data,
     return ::six::toValidXMLString(data, pSchemaPaths, *logger, xmlRegistry);
 }
 
+static void createPredefinedFilter(six::sidd::Filter& filter)
+{
+    filter.filterName = "Some predefined Filter";
+    filter.filterKernel.reset(new six::sidd::Filter::Kernel());
+    filter.filterKernel->predefined.reset(new six::sidd::Filter::Predefined());
+    filter.filterKernel->predefined->databaseName = six::sidd::FilterDatabaseName::LAGRANGE;
+    filter.operation = six::sidd::FilterOperation::CONVOLUTION;
+}
+inline std::unique_ptr<six::sidd::Filter> createPredefinedFilter()
+{
+    auto filter = std::make_unique<six::sidd::Filter>();
+    createPredefinedFilter(*filter);
+    return filter;
+}
+
+static void createCustomFilter(six::sidd::Filter& filter)
+{
+    filter.filterName = "Some custom Filter";
+    filter.filterKernel.reset(new six::sidd::Filter::Kernel());
+    filter.filterKernel->custom.reset(new six::sidd::Filter::Kernel::Custom());
+    auto& custom = *(filter.filterKernel->custom);
+    custom.size.row = 2;
+    custom.size.col = 3;
+    custom.filterCoef.resize(static_cast<size_t>(custom.size.area()));
+    for (size_t ii = 0, end = custom.filterCoef.size(); ii < end; ++ii)
+    {
+        custom.filterCoef[ii] = static_cast<double>(ii) * 1.5;
+    }
+    filter.operation = six::sidd::FilterOperation::CORRELATION;
+}
+inline std::unique_ptr<six::sidd::Filter> createCustomFilter()
+{
+    auto filter = std::make_unique<six::sidd::Filter>();
+    createCustomFilter(*filter);
+    return filter;
+}
+
+static void update_for_SIDD_300(DerivedData& data) // n.b., much of this was added before SIDD 3.0
+{
+    auto& display = *(data.display);
+    data.display->pixelType = six::PixelType::RGB24I; // TODO: this was added before SIDD 3.0.0
+    data.display->numBands = 3;
+
+    data.display->nonInteractiveProcessing.resize(1); // TODO: this was added before SIDD 3.0.0
+    data.display->nonInteractiveProcessing[0].reset(new NonInteractiveProcessing());
+    data.display->nonInteractiveProcessing[0]->rrds.downsamplingMethod = DownsamplingMethod::MAX_PIXEL;
+
+    data.display->interactiveProcessing.resize(1); // TODO: this was added before SIDD 3.0.0
+    data.display->interactiveProcessing[0].reset(new InteractiveProcessing());
+
+    data.display->interactiveProcessing[0]->sharpnessEnhancement.modularTransferFunctionCompensation.reset(createCustomFilter());
+
+    auto& geoTransform = data.display->interactiveProcessing[0]->geometricTransform;
+    createPredefinedFilter(geoTransform.scaling.antiAlias);
+    createCustomFilter(geoTransform.scaling.interpolation);
+    geoTransform.orientation.shadowDirection = ShadowDirection::ARBITRARY;
+
+    display.interactiveProcessing[0]->colorSpaceTransform.reset(new ColorSpaceTransform());
+    auto& cmm = display.interactiveProcessing[0]->colorSpaceTransform->colorManagementModule;
+    cmm.renderingIntent = six::sidd::RenderingIntent::ABSOLUTE_INTENT;
+    cmm.sourceProfile = "Some source profile";
+    cmm.displayProfile = "Some display profile";
+    cmm.iccProfile = "Some ICC profile";
+
+    auto& dra = display.interactiveProcessing[0]->dynamicRangeAdjustment;
+    dra.algorithmType = six::sidd::DRAType::AUTO;
+    dra.bandStatsSource = 1;
+    dra.draParameters.reset(new DynamicRangeAdjustment::DRAParameters());
+    dra.draParameters->pMin = 0.2;
+    dra.draParameters->pMax = 0.8;
+    dra.draParameters->eMinModifier = 0.1;
+    dra.draParameters->eMaxModifier = 0.9;
+
+    display.interactiveProcessing[0]->tonalTransferCurve.reset(new six::sidd::LookupTable());
+    display.interactiveProcessing[0]->tonalTransferCurve->lutName = "TTC Name";
+    display.interactiveProcessing[0]->tonalTransferCurve->predefined.reset(new LookupTable::Predefined());
+    display.interactiveProcessing[0]->tonalTransferCurve->predefined->databaseName = "TTC DB";
+
+
+    data.measurement->pixelFootprint.row = data.measurement->pixelFootprint.col = 0; // TODO: this was added before SIDD 3.0.0
+    data.measurement->validData.emplace_back(1, 2); // TODO: this was added before SIDD 3.0.0
+    data.measurement->validData.emplace_back(3, 4);
+    data.measurement->validData.emplace_back(5, 6);
+
+    data.geoData.reset(new six::GeoDataBase()); // TODO: this was added before SIDD 3.0.0
+    data.geoData->imageCorners.lowerLeft.clearLatLon();
+    data.geoData->imageCorners.upperLeft.clearLatLon();
+    data.geoData->imageCorners.lowerRight.clearLatLon();
+    data.geoData->imageCorners.upperRight.clearLatLon();
+
+    data.exploitationFeatures->product[0].ellipticity = 0.0; // TODO: this was added before SIDD 3.0.0
+    ProcTxRcvPolarization polarization{ PolarizationSequenceType::UNKNOWN, PolarizationSequenceType::UNKNOWN };
+    data.exploitationFeatures->product[0].polarization.push_back(polarization); // TODO: this was added before SIDD 3.0.0
+
+    data.productCreation->classification.compliesWith.emplace_back("USGov"); // TODO: this was added before SIDD 3.0.0
+}
+
 mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& strVersion)
 {
     mem::auto_ptr<DerivedData> data(new DerivedData());
@@ -646,8 +743,7 @@ mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& s
 
     data->measurement.reset(new Measurement(ProjectionType::PLANE));
 
-    PlaneProjection* projection =
-            dynamic_cast<PlaneProjection*>(data->measurement->projection.get());
+    auto projection = dynamic_cast<PlaneProjection*>(data->measurement->projection.get());
     projection->timeCOAPoly = Poly2D(1, 1);
     projection->timeCOAPoly[0][0] = 0;
     projection->timeCOAPoly[1][0] = 0;
@@ -667,11 +763,9 @@ mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& s
     data->measurement->arpPoly[0][2] = 0;
 
     data->exploitationFeatures.reset(new ExploitationFeatures());
-    data->exploitationFeatures->collections.push_back(
-            mem::ScopedCopyablePtr<Collection>());
+    data->exploitationFeatures->collections.push_back(mem::ScopedCopyablePtr<Collection>());
     data->exploitationFeatures->collections[0].reset(new Collection());
-    Information& information =
-            data->exploitationFeatures->collections[0]->information;
+    auto& information = data->exploitationFeatures->collections[0]->information;
     information.radarMode = RadarModeType::SPOTLIGHT;
     information.collectionDuration = 0;
     information.resolution.rg = 0;
@@ -683,24 +777,7 @@ mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& s
 
     if (strVersion == "3.0.0") // TODO: better check for version; this avoid changing any existing test code
     {
-        data->display->pixelType = six::PixelType::RGB24I; // TODO: this was added before SIDD 3.0.0
-
-        data->measurement->pixelFootprint.row = data->measurement->pixelFootprint.col = 0; // TODO: this was added before SIDD 3.0.0
-        data->measurement->validData.emplace_back(1, 2); // TODO: this was added before SIDD 3.0.0
-        data->measurement->validData.emplace_back(3, 4);
-        data->measurement->validData.emplace_back(5, 6);
-
-        data->geoData.reset(new six::GeoDataBase()); // TODO: this was added before SIDD 3.0.0
-        data->geoData->imageCorners.lowerLeft.clearLatLon();
-        data->geoData->imageCorners.upperLeft.clearLatLon();
-        data->geoData->imageCorners.lowerRight.clearLatLon();
-        data->geoData->imageCorners.upperRight.clearLatLon();
-
-        data->exploitationFeatures->product[0].ellipticity = 0.0; // TODO: this was added before SIDD 3.0.0
-        ProcTxRcvPolarization polarization{ PolarizationSequenceType::UNKNOWN, PolarizationSequenceType::UNKNOWN };
-        data->exploitationFeatures->product[0].polarization.push_back(polarization); // TODO: this was added before SIDD 3.0.0
-
-        data->productCreation->classification.compliesWith.emplace_back("USGov"); // TODO: this was added before SIDD 3.0.0
+        update_for_SIDD_300(*data);
     }
 
     return data;
