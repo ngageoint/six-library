@@ -407,7 +407,7 @@ struct ErrorStatistics
      *  (Optional) UnmodeledError
      *
      */
-    mem::ScopedCopyablePtr<Unmodeled> unmodeled;
+    mem::ScopedCopyablePtr<Unmodeled> Unmodeled;
 
     /*!
      *  Additional parameters
@@ -421,7 +421,7 @@ struct ErrorStatistics
         return (compositeSCP == rhs.compositeSCP)
             && (components == rhs.components)
             && (additionalParameters == rhs.additionalParameters)
-            && (unmodeled == rhs.unmodeled)
+            && (Unmodeled == rhs.Unmodeled)
             ;
     }
     bool operator!=(const ErrorStatistics& rhs) const

@@ -926,28 +926,27 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
         }
     }
 
-    const auto unmodeled = errorStatistics->unmodeled.get();
-    if (unmodeled != nullptr)
+    #define xmlNewElement(name, uri, xml) newElement(name, #name, uri, xml)
+    const auto Unmodeled = errorStatistics->Unmodeled.get();
+    auto unmodeledXML = xmlNewElement(Unmodeled, getSICommonURI(), errorStatsXML);
+    if (unmodeledXML != nullptr)
     {
-        auto unmodeledXML = newElement("Unmodeled", getSICommonURI(), errorStatsXML);
-
         #define xmlCreateDouble(name, value, elem) createDouble(#name, getSICommonURI(), (value).name, elem)
-        xmlCreateDouble(Xrow, *unmodeled, unmodeledXML);
-        xmlCreateDouble(Ycol, *unmodeled, unmodeledXML);
-        xmlCreateDouble(XrowYcol, *unmodeled, unmodeledXML);
+        xmlCreateDouble(Xrow, *Unmodeled, unmodeledXML);
+        xmlCreateDouble(Ycol, *Unmodeled, unmodeledXML);
+        xmlCreateDouble(XrowYcol, *Unmodeled, unmodeledXML);
 
-        const auto unmodeledDecorr = unmodeled->UnmodeledDecorr.get();
-        if (unmodeledDecorr != nullptr)
+        const auto UnmodeledDecorr = Unmodeled->UnmodeledDecorr.get();
+        auto unmodeledDecorrXML = xmlNewElement(UnmodeledDecorr, getSICommonURI(), errorStatsXML);
+        if (unmodeledDecorrXML != nullptr)
         {
-            auto unmodeledDecorrXML = newElement("UnmodeledErrorDecorr", getSICommonURI(), unmodeledXML);
-
             auto xrowXML = newElement("Xrow", getSICommonURI(), unmodeledDecorrXML);
-            xmlCreateDouble(CorrCoefZero, unmodeledDecorr->Xrow, xrowXML);
-            xmlCreateDouble(DecorrRate, unmodeledDecorr->Xrow, xrowXML);
+            xmlCreateDouble(CorrCoefZero, UnmodeledDecorr->Xrow, xrowXML);
+            xmlCreateDouble(DecorrRate, UnmodeledDecorr->Xrow, xrowXML);
 
             auto ycolXML = newElement("Ycol", getSICommonURI(), unmodeledDecorrXML);
-            xmlCreateDouble(CorrCoefZero, unmodeledDecorr->Ycol, ycolXML);
-            xmlCreateDouble(DecorrRate, unmodeledDecorr->Ycol, ycolXML);
+            xmlCreateDouble(CorrCoefZero, UnmodeledDecorr->Ycol, ycolXML);
+            xmlCreateDouble(DecorrRate, UnmodeledDecorr->Ycol, ycolXML);
         }
     }
 
@@ -1013,34 +1012,31 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         }
     }
 
-    tmpElem = getOptional(errorStatsXML, "Unmodeled"); // SIDD 3.0
+    #define xml_getOptional_reset(xml, pRoot, name) getOptional_reset(xml, #name, (pRoot)->name);
+    tmpElem = xml_getOptional_reset(errorStatsXML, errorStatistics, Unmodeled); // SIDD 3.0
     if (tmpElem != nullptr)
     {
-        //optional
-        errorStatistics->unmodeled.reset(std::make_unique<Unmodeled>());
-        auto& unmodeled = *(errorStatistics->unmodeled);
+        auto& Unmodeled = *(errorStatistics->Unmodeled);
 
         // macro to avoid copy/paste errors
         #define parseDouble_getFirstAndOnly(elem, name, storage) parseDouble(getFirstAndOnly(elem, #name), (storage).name)
 
-        parseDouble_getFirstAndOnly(tmpElem, Xrow, unmodeled);
-        parseDouble_getFirstAndOnly(tmpElem, Ycol, unmodeled);
-        parseDouble_getFirstAndOnly(tmpElem, XrowYcol, unmodeled);
+        parseDouble_getFirstAndOnly(tmpElem, Xrow, Unmodeled);
+        parseDouble_getFirstAndOnly(tmpElem, Ycol, Unmodeled);
+        parseDouble_getFirstAndOnly(tmpElem, XrowYcol, Unmodeled);
 
-        auto unmodeledDecorr = getOptional(tmpElem, "UnmodeledDecorr");
-        if (unmodeledDecorr)
+        auto unmodeledDecorrXML = xml_getOptional_reset(tmpElem, errorStatistics->Unmodeled, UnmodeledDecorr);
+        if (unmodeledDecorrXML != nullptr)
         {
-            //optional
-            errorStatistics->unmodeled->UnmodeledDecorr.reset(std::make_unique<Unmodeled::Decorr>());
-            auto& UnmodeledDecorr = *(errorStatistics->unmodeled->UnmodeledDecorr);
+            auto& UnmodeledDecorr = *(errorStatistics->Unmodeled->UnmodeledDecorr);
 
-            auto xrow = getFirstAndOnly(unmodeledDecorr, "Xrow");
-            parseDouble_getFirstAndOnly(xrow, CorrCoefZero, UnmodeledDecorr.Xrow);
-            parseDouble_getFirstAndOnly(xrow, DecorrRate, UnmodeledDecorr.Xrow);
+            auto xrowXML = getFirstAndOnly(unmodeledDecorrXML, "Xrow");
+            parseDouble_getFirstAndOnly(xrowXML, CorrCoefZero, UnmodeledDecorr.Xrow);
+            parseDouble_getFirstAndOnly(xrowXML, DecorrRate, UnmodeledDecorr.Xrow);
 
-            auto ycol = getFirstAndOnly(unmodeledDecorr, "Ycol");
-            parseDouble_getFirstAndOnly(ycol, CorrCoefZero, UnmodeledDecorr.Ycol);
-            parseDouble_getFirstAndOnly(ycol, DecorrRate, UnmodeledDecorr.Ycol);
+            auto ycolXML = getFirstAndOnly(unmodeledDecorrXML, "Ycol");
+            parseDouble_getFirstAndOnly(ycolXML, CorrCoefZero, UnmodeledDecorr.Ycol);
+            parseDouble_getFirstAndOnly(ycolXML, DecorrRate, UnmodeledDecorr.Ycol);
         }
     }
 
