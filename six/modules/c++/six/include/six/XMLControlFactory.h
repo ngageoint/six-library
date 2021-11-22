@@ -23,6 +23,8 @@
 #define __SIX_XML_CONTROL_FACTORY_H__
 
 #include <memory>
+#include <vector>
+#include <std/filesystem>
 
 #include <scene/sys_Conf.h>
 
@@ -177,7 +179,10 @@ std::string toValidXMLString(
         const std::vector<std::string>& schemaPaths,
         logging::Logger* log,
         const XMLControlRegistry *xmlRegistry = nullptr);
-
+std::string toValidXMLString(const Data&,
+    const std::vector<std::filesystem::path>*,
+    logging::Logger& log,
+    const XMLControlRegistry&);
 
 //!  Singleton declaration of our XMLControlRegistry
 typedef mt::Singleton<XMLControlRegistry, true> XMLControlFactory;

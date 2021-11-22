@@ -23,6 +23,8 @@
 #define __SIX_SIDD_UTILITIES_H__
 
 #include <memory>
+#include <vector>
+#include <std/filesystem>
 
 #include <import/scene.h>
 #include <types/RgAz.h>
@@ -94,6 +96,8 @@ public:
         ::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
+    static std::unique_ptr<DerivedData> parseData(::io::InputStream& xmlStream,
+        const std::vector<std::filesystem::path>*, logging::Logger&);
 
     /*
     * Parses the XML in 'pathname' and converts it into a DerivedData object.
@@ -109,6 +113,8 @@ public:
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
+    static std::unique_ptr<DerivedData> parseDataFromFile(const std::filesystem::path&,
+        const std::vector<std::filesystem::path>*, logging::Logger&);
 
     /*
     * Parses the XML in 'xmlStr' and converts it into a DerivedData object.
@@ -138,6 +144,8 @@ public:
     static std::string toXMLString(const DerivedData& data,
             const std::vector<std::string>& schemaPaths,
             logging::Logger* logger);
+    static std::string toXMLString(const DerivedData&,
+        const std::vector<std::filesystem::path>*, logging::Logger*);
 };
 }
 }

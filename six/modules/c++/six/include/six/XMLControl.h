@@ -22,6 +22,10 @@
 #ifndef __SIX_XML_CONTROL_H__
 #define __SIX_XML_CONTROL_H__
 
+#include <vector>
+#include <std/filesystem>
+#include <memory>
+
 #include <scene/sys_Conf.h>
 
 #include <logging/Logger.h>
@@ -91,6 +95,9 @@ class XMLControl
     static void validate(const xml::lite::Document* doc,
                          const std::vector<std::string>& schemaPaths,
                          logging::Logger* log);
+    static void validate(const xml::lite::Document&,
+        const std::vector<std::filesystem::path>* pSchemaPaths,
+        logging::Logger* log);
 
     /*!
      * Retrieve the proper schema paths for validation.
@@ -107,6 +114,7 @@ class XMLControl
      *                Otherwise, we can just use what's already there.
      */
     static void loadSchemaPaths(std::vector<std::string>& schemaPaths);
+    static std::vector<std::string> loadSchemaPaths(const std::vector<std::filesystem::path>*);
 
     /*!
      *  Convert the Data model into an XML DOM.
@@ -116,6 +124,7 @@ class XMLControl
      */
     xml::lite::Document* toXML(const Data* data,
                                const std::vector<std::string>& schemaPaths);
+    std::unique_ptr<xml::lite::Document> toXML(const Data&, const std::vector<std::filesystem::path>*);
 
     /*!
      *  Convert a document from a DOM into a Data model
@@ -125,6 +134,8 @@ class XMLControl
      */
     Data* fromXML(const xml::lite::Document* doc,
                   const std::vector<std::string>& schemaPaths);
+    std::unique_ptr<Data> fromXML(const xml::lite::Document&,
+        const std::vector<std::filesystem::path>*);
 
     /*!
      *  Provides a mapping from COMPLEX --> SICD and DERIVED --> SIDD

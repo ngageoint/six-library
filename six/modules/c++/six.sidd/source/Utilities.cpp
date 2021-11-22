@@ -535,11 +535,29 @@ mem::auto_ptr<DerivedData> Utilities::parseData(
 
     return derivedData;
 }
+std::unique_ptr<DerivedData> Utilities::parseData(
+    ::io::InputStream& xmlStream,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger& log)
+{
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator<DerivedXMLControl>();
+
+    auto data = six::parseData(xmlRegistry, xmlStream, pSchemaPaths, log);
+    std::unique_ptr<DerivedData> derivedData(static_cast<DerivedData*>(data.release()));
+    return derivedData;
+}
 
 mem::auto_ptr<DerivedData> Utilities::parseDataFromFile(
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
+{
+    io::FileInputStream inStream(pathname);
+    return parseData(inStream, schemaPaths, log);
+}
+std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem::path& pathname,
+    const std::vector<std::filesystem::path>* schemaPaths, logging::Logger& log)
 {
     io::FileInputStream inStream(pathname);
     return parseData(inStream, schemaPaths, log);
@@ -567,6 +585,19 @@ std::string Utilities::toXMLString(const DerivedData& data,
                                    schemaPaths,
                                    (logger == nullptr) ? &nullLogger : logger,
                                    &xmlRegistry);
+}
+
+std::string Utilities::toXMLString(const DerivedData& data,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger* pLogger)
+{
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator<DerivedXMLControl>();
+
+    logging::NullLogger nullLogger;
+    logging::Logger* logger = (pLogger == nullptr) ? &nullLogger : pLogger;
+    
+    return ::six::toValidXMLString(data, pSchemaPaths, *logger, xmlRegistry);
 }
 
 mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& strVersion)

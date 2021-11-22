@@ -21,6 +21,8 @@
  */
 
 #include <std/filesystem>
+#include <algorithm>
+#include <iterator>
 
 #include <logging/NullLogger.h>
 #include <six/XMLControl.h>
@@ -81,6 +83,22 @@ void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
     {
         loadDefaultSchemaPath(schemaPaths);
     }
+}
+std::vector<std::string> XMLControl::loadSchemaPaths(const std::vector<std::filesystem::path>* pSchemaPaths)
+{
+    std::vector<std::string> retval;
+    if (pSchemaPaths == nullptr)
+    {
+        // a NULL pointer indicates that we should try loading a default value
+        loadDefaultSchemaPath(retval);
+    }
+    else
+    {
+        // If we're given schema paths (even if empty), no need for a default value.
+        std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(retval),
+            [&](const std::filesystem::path& p) { return p.string();  });
+    }
+    return retval;
 }
 
 static std::vector<std::string> check_whether_paths_exist(const std::vector<std::string>& paths)
@@ -180,6 +198,64 @@ void XMLControl::validate(const xml::lite::Document* doc,
         }
     }
 }
+void XMLControl::validate(const xml::lite::Document& doc,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger* log)
+{
+    // attempt to get the schema location from the
+    // environment if nothing is specified
+    std::vector<std::string> paths = loadSchemaPaths(pSchemaPaths);
+
+    if (paths.empty() && log)
+    {
+        std::ostringstream oss;
+        oss << "Coudn't validate XML - no schemas paths provided "
+            << " and " << six::SCHEMA_PATH << " not set.";
+
+        log->warn(oss.str());
+    }
+
+    // If the paths we have don't exist, throw
+    paths = check_whether_paths_exist(paths);
+
+    // validate against any specified schemas
+    if (!paths.empty())
+    {
+        xml::lite::Validator validator(paths, log, true);
+
+        const auto& rootElement = doc.getRootElement();
+        if (rootElement->getUri().empty())
+        {
+            throw six::DESValidationException(Ctxt("INVALID XML: URI is empty so document version cannot be determined to use for validation"));
+        }
+
+        // Pretty-print so that lines numbers are useful
+        io::StringStream xmlStream;
+        rootElement->prettyPrint(xmlStream, xml::lite::string_encoding::utf_8);
+
+        std::vector<xml::lite::ValidationInfo> errors;
+        validator.validate(xmlStream, rootElement->getUri(), errors);
+
+        // log any error found and throw
+        if (!errors.empty())
+        {
+            if (log)
+            {
+                for (size_t i = 0; i < errors.size(); ++i)
+                {
+                    log->critical(errors[i].toString());
+                }
+            }
+
+            //! this is a unique error thrown only in this location --
+            //  if the user wants a file written regardless of the consequences
+            //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
+            //  and attempt to rewrite the file. Continuing in this manner is
+            //  highly discouraged
+            throw six::DESValidationException(Ctxt("INVALID XML: Check both the XML being produced and the schemas available"));
+        }
+    }
+}
 
 std::string XMLControl::getDefaultURI(const Data& data)
 {
@@ -227,6 +303,13 @@ xml::lite::Document* XMLControl::toXML(
     validate(doc, schemaPaths, mLog);
     return doc;
 }
+std::unique_ptr<xml::lite::Document> XMLControl::toXML(
+    const Data& data, const std::vector<std::filesystem::path>* pSchemaPaths)
+{
+    std::unique_ptr<xml::lite::Document> doc(toXMLImpl(&data));
+    validate(*doc, pSchemaPaths, mLog);
+    return doc;
+}
 
 Data* XMLControl::fromXML(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths)
@@ -237,6 +320,15 @@ Data* XMLControl::fromXML(const xml::lite::Document* doc,
     data->setVersion(getVersionFromURI(doc));
     return data;
 }
+std::unique_ptr<Data> XMLControl::fromXML(const xml::lite::Document& doc,
+    const std::vector<std::filesystem::path>* pSchemaPaths)
+{
+    validate(doc, pSchemaPaths, mLog);
+    std::unique_ptr<Data> data(fromXMLImpl(&doc));
+    data->setVersion(getVersionFromURI(&doc));
+    return data;
+}
+
 
 std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
 {

@@ -107,16 +107,16 @@ static std::string testName;
 
 TEST_CASE(test_createFakeDerivedData_noschema)
 {
-    const std::vector<std::string> schemaPaths;
-    logging::NullLogger log;
+    const std::vector<std::filesystem::path> schemaPaths;
     const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData("3.0.0");
-    //const auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, schemaPaths, &log);
+    const auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, &schemaPaths, nullptr);
+
+    //logging::NullLogger log;
     //auto pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, schemaPaths, log);
 }
 TEST_CASE(test_createFakeDerivedData)
 {
-    const std::vector<std::string> schemaPaths;
-    //const auto schemaPaths = getSchemaPaths();
+    const auto schemaPaths = getSchemaPaths();
     logging::NullLogger log;
     const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData("3.0.0");
     //const auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, schemaPaths, &log);
@@ -126,15 +126,14 @@ TEST_CASE(test_createFakeDerivedData)
 TEST_CASE(test_read_sidd300_xml_noschema)
 {
     const auto pathname = get_sample_xml_path("sidd300.xml");
-    const std::vector<std::string> schemaPaths;
+    const std::vector<std::filesystem::path> schemaPaths;
     logging::NullLogger log;
-    //auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname.string(), schemaPaths, log);
+    //auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths, log);
 }
 TEST_CASE(test_read_sidd300_xml)
 {
     const auto pathname = get_sample_xml_path("sidd300.xml");
-    //const auto schemaPaths = getSchemaPaths();
-    const std::vector<std::string> schemaPaths;
+    const auto schemaPaths = getSchemaPaths();
     logging::NullLogger log;
     //auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname.string(), schemaPaths, log);
 }

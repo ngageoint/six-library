@@ -1123,6 +1123,14 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
 {
     return parseData(xmlReg, xmlStream, DataType::NOT_SET, schemaPaths, log);
 }
+std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger& log)
+{
+    return parseData(xmlReg, xmlStream, DataType::NOT_SET, pSchemaPaths, log);
+}
+
 
 mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
                                    ::io::InputStream& xmlStream,
@@ -1164,6 +1172,48 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
             xmlReg.newXMLControl(xmlDataType, &log));
 
     return mem::auto_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
+}
+
+std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    DataType dataType,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger& log)
+{
+    xml::lite::MinidomParser xmlParser;
+    xmlParser.preserveCharacterData(true);
+    try
+    {
+        xmlParser.parse(xmlStream);
+    }
+    catch (const except::Throwable& ex)
+    {
+        throw except::Exception(ex, Ctxt("Invalid XML data"));
+    }
+    xml::lite::Document* doc = xmlParser.getDocument();
+    assert(doc != nullptr);
+
+    //! Check the root localName for the XML type
+    std::string xmlType = doc->getRootElement()->getLocalName();
+    DataType xmlDataType;
+    if (str::startsWith(xmlType, "SICD"))
+        xmlDataType = DataType::COMPLEX;
+    else if (str::startsWith(xmlType, "SIDD"))
+        xmlDataType = DataType::DERIVED;
+    else
+        throw except::Exception(Ctxt("Unexpected XML type"));
+
+    //! Only SIDDs can have mismatched types
+    if (dataType == DataType::COMPLEX && dataType != xmlDataType)
+    {
+        throw except::Exception(Ctxt("Unexpected SIDD DES in SICD"));
+    }
+
+    //! Create the correct type of XMLControl
+    const mem::auto_ptr<XMLControl> xmlControl(
+        xmlReg.newXMLControl(xmlDataType, &log));
+
+    return xmlControl->fromXML(*doc, pSchemaPaths);
 }
 
 mem::auto_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,

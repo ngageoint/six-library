@@ -110,4 +110,20 @@ std::string six::toValidXMLString(const Data* data,
 
     return oss.stream().str();
 }
+std::string six::toValidXMLString(const Data& data,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger& log,
+    const six::XMLControlRegistry& xmlRegistry)
+{
+    const std::unique_ptr<XMLControl>
+        xmlControl(xmlRegistry.newXMLControl(data.getDataType(), &log));
 
+    // this will validate if SIX_SCHEMA_PATH EnvVar is set
+    const auto doc = xmlControl->toXML(data, pSchemaPaths);
+
+    io::StringStream oss;
+    doc->getRootElement()->print(oss, xml::lite::string_encoding::utf_8);
+
+    return oss.stream().str();
+
+}
