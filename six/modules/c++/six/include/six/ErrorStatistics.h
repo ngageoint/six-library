@@ -254,7 +254,7 @@ struct IonoError
  *
  *  Contains Unmodeled error statistics 
  */
-struct Unmodeled final
+struct UnmodeledS final
 {
     // By making member names match XML element names, macros can
     // help generate boilerplate code.
@@ -274,7 +274,7 @@ struct Unmodeled final
     };
     mem::ScopedCopyablePtr<Decorr> UnmodeledDecorr;
 };
-inline bool operator==(const Unmodeled::Decorr& lhs, const Unmodeled::Decorr& rhs)
+inline bool operator==(const UnmodeledS::Decorr& lhs, const UnmodeledS::Decorr& rhs)
 {
     return (lhs.Xrow.CorrCoefZero == rhs.Xrow.CorrCoefZero)
         && (lhs.Xrow.DecorrRate == rhs.Xrow.DecorrRate)
@@ -282,11 +282,11 @@ inline bool operator==(const Unmodeled::Decorr& lhs, const Unmodeled::Decorr& rh
         && (lhs.Ycol.DecorrRate == rhs.Ycol.DecorrRate)
         ;
 }
-inline bool operator!=(const Unmodeled::Decorr& lhs, const Unmodeled::Decorr& rhs)
+inline bool operator!=(const UnmodeledS::Decorr& lhs, const UnmodeledS::Decorr& rhs)
 {
     return !(lhs == rhs);
 }
-inline bool operator==(const Unmodeled& lhs, const Unmodeled& rhs)
+inline bool operator==(const UnmodeledS& lhs, const UnmodeledS& rhs)
 {
     return (lhs.Xrow == rhs.Xrow)
         && (lhs.Ycol == rhs.Ycol)
@@ -294,7 +294,7 @@ inline bool operator==(const Unmodeled& lhs, const Unmodeled& rhs)
         && (lhs.UnmodeledDecorr == rhs.UnmodeledDecorr)
         ;
 }
-inline bool operator!=(const Unmodeled& lhs, const Unmodeled& rhs)
+inline bool operator!=(const UnmodeledS& lhs, const UnmodeledS& rhs)
 {
     return !(lhs == rhs);
 }
@@ -407,7 +407,7 @@ struct ErrorStatistics
      *  (Optional) UnmodeledError
      *
      */
-    mem::ScopedCopyablePtr<Unmodeled> Unmodeled;
+    mem::ScopedCopyablePtr<UnmodeledS> Unmodeled;
 
     /*!
      *  Additional parameters
