@@ -557,10 +557,13 @@ mem::auto_ptr<DerivedData> Utilities::parseDataFromFile(
     return parseData(inStream, schemaPaths, log);
 }
 std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem::path& pathname,
-    const std::vector<std::filesystem::path>* schemaPaths, logging::Logger& log)
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
+    logging::NullLogger nullLogger;
+    logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
+
     io::FileInputStream inStream(pathname.string());
-    return parseData(inStream, schemaPaths, log);
+    return parseData(inStream, pSchemaPaths, *log);
 }
 
 mem::auto_ptr<DerivedData> Utilities::parseDataFromString(
@@ -571,6 +574,18 @@ mem::auto_ptr<DerivedData> Utilities::parseDataFromString(
     io::StringStream inStream;
     inStream.write(xmlStr);
     return parseData(inStream, schemaPaths, log);
+}
+std::unique_ptr<DerivedData> Utilities::parseDataFromString(
+    const std::string& xmlStr,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger* pLogger)
+{
+    logging::NullLogger nullLogger;
+    logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
+
+    io::StringStream inStream;
+    inStream.write(xmlStr);
+    return parseData(inStream, pSchemaPaths, *log);
 }
 
 std::string Utilities::toXMLString(const DerivedData& data,

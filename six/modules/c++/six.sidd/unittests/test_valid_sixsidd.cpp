@@ -97,10 +97,10 @@ inline fs::path get_sample_xml_path(const fs::path& filename)
     return root_dir / sample_xml_relative_path(filename);
 }
 
-inline std::vector<std::string> getSchemaPaths()
+inline std::vector<std::filesystem::path> getSchemaPaths()
 {
     const auto root_dir = buildRootDir();
-    return std::vector<std::string> { (root_dir / schema_relative_path()).string() };
+    return std::vector<std::filesystem::path> { (root_dir / schema_relative_path()) };
 }
 
 static std::string testName;
@@ -109,33 +109,28 @@ TEST_CASE(test_createFakeDerivedData_noschema)
 {
     const std::vector<std::filesystem::path> schemaPaths;
     const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData("3.0.0");
-    const auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, &schemaPaths, nullptr);
-
-    //logging::NullLogger log;
-    //auto pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, schemaPaths, log);
+    const auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, &schemaPaths);
+    auto pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, &schemaPaths);
 }
 TEST_CASE(test_createFakeDerivedData)
 {
-    const auto schemaPaths = getSchemaPaths();
-    logging::NullLogger log;
     const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData("3.0.0");
-    //const auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, schemaPaths, &log);
-    //auto pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, schemaPaths, log);
+    const auto schemaPaths = getSchemaPaths();
+    //const auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, &schemaPaths);
+    //auto pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, &schemaPaths);
 }
 
 TEST_CASE(test_read_sidd300_xml_noschema)
 {
     const auto pathname = get_sample_xml_path("sidd300.xml");
     const std::vector<std::filesystem::path> schemaPaths;
-    logging::NullLogger log;
-    auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths, log);
+    auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
 }
 TEST_CASE(test_read_sidd300_xml)
 {
     const auto pathname = get_sample_xml_path("sidd300.xml");
     const auto schemaPaths = getSchemaPaths();
-    logging::NullLogger log;
-    //auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname.string(), schemaPaths, log);
+    //auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
 }
 
 TEST_MAIN((void)argc; (void)argv;
