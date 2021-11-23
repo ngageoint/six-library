@@ -404,7 +404,7 @@ struct ErrorStatistics
     mem::ScopedCopyablePtr<Components> components;
 
     /*!
-     *  (Optional) UnmodeledError
+     *  (Optional) Unmodeled
      *
      */
     mem::ScopedCopyablePtr<UnmodeledS> Unmodeled;

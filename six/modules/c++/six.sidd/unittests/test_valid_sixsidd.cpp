@@ -127,10 +127,29 @@ TEST_CASE(test_read_sidd300_xml)
 
     // NULL schemaPaths, no validation
     auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, nullptr /*pSchemaPaths*/);
+    //auto strXML = six::sidd::Utilities::toXMLString(*pDerivedData, nullptr /*pSchemaPaths*/);
+    //TEST_ASSERT_FALSE(strXML.empty());
+    //pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, nullptr /*pSchemaPaths*/);
 
     // validate XML against schema
     const auto schemaPaths = getSchemaPaths();
     pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
+    //strXML = six::sidd::Utilities::toXMLString(*pDerivedData, nullptr /*pSchemaPaths*/);
+    //TEST_ASSERT_FALSE(strXML.empty());
+    //pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, nullptr /*pSchemaPaths*/);
+
+    const auto& Unmodeled = pDerivedData->errorStatistics->Unmodeled;
+    TEST_ASSERT(Unmodeled.get() != nullptr);
+    TEST_ASSERT_EQ(1.23, Unmodeled->Xrow);
+    TEST_ASSERT_EQ(4.56, Unmodeled->Ycol);
+    TEST_ASSERT_EQ(7.89, Unmodeled->XrowYcol);
+
+    const auto& UnmodeledDecor = Unmodeled->UnmodeledDecorr;
+    TEST_ASSERT(UnmodeledDecor.get() != nullptr);
+    TEST_ASSERT_EQ(12.34, UnmodeledDecor->Xrow.CorrCoefZero);
+    TEST_ASSERT_EQ(56.78, UnmodeledDecor->Xrow.DecorrRate);
+    TEST_ASSERT_EQ(123.4, UnmodeledDecor->Ycol.CorrCoefZero);
+    TEST_ASSERT_EQ(567.8, UnmodeledDecor->Ycol.DecorrRate);
 }
 
 TEST_MAIN((void)argc; (void)argv;

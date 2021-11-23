@@ -449,6 +449,21 @@
 				</si:IonoRangeVertDecorr>
 			</si:IonoError>
 		</si:Components>
+		<si:Unmodeled>
+			<si:Xrow>1.23</si:Xrow>
+			<si:Ycol>4.56</si:Ycol>
+			<si:XrowYcol>7.89</si:XrowYcol>
+			<si:UnmodeledDecorr>
+				<si:Xrow>
+					<si:CorrCoefZero>12.34</si:CorrCoefZero>
+					<si:DecorrRate>56.78</si:DecorrRate>
+				</si:Xrow>
+				<si:Ycol>
+					<si:CorrCoefZero>123.4</si:CorrCoefZero>
+					<si:DecorrRate>567.8</si:DecorrRate>
+				</si:Ycol>
+			</si:UnmodeledDecorr>
+		</si:Unmodeled>		
 		<si:AdditionalParms>
 			<si:Parameter name="ErrorStatisticsParameterName">Error StatisticsParameterValue</si:Parameter>
 		</si:AdditionalParms>
