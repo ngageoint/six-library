@@ -87,16 +87,16 @@ void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
 std::vector<std::string> XMLControl::loadSchemaPaths(const std::vector<std::filesystem::path>* pSchemaPaths)
 {
     std::vector<std::string> retval;
-    if (pSchemaPaths == nullptr)
+
+    // a NULL pointer indicates that we don't want to validate against a schema
+    if (pSchemaPaths != nullptr)
     {
-        // a NULL pointer indicates that we should try loading a default value
-        loadDefaultSchemaPath(retval);
-    }
-    else
-    {
-        // If we're given schema paths (even if empty), no need for a default value.
         std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(retval),
             [&](const std::filesystem::path& p) { return p.string();  });
+
+        // If *pSchemaPaths is empty, this will use a default value.  To avoid all validation against a schema,
+        // pass NULL for pSchemaPaths.
+        loadSchemaPaths(retval);
     }
     return retval;
 }
@@ -133,7 +133,7 @@ static std::vector<std::string> check_whether_paths_exist(const std::vector<std:
 
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
-static void validate_(const xml::lite::Document& doc,
+static void do_validate_(const xml::lite::Document& doc,
     const std::vector<std::string>& paths, logging::Logger* log)
 {
     // validate against any specified schemas
@@ -171,7 +171,18 @@ static void validate_(const xml::lite::Document& doc,
         throw six::DESValidationException(Ctxt("INVALID XML: Check both the XML being produced and the schemas available"));
     }
 }
+static void validate_(const xml::lite::Document& doc,
+    std::vector<std::string> paths, logging::Logger* log)
+{
+    // If the paths we have don't exist, throw
+    paths = check_whether_paths_exist(paths);
 
+    // validate against any specified schemas
+    if (!paths.empty())
+    {
+        do_validate_(doc, paths, log);
+    }
+}
 void XMLControl::validate(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths,
                           logging::Logger* log)
@@ -183,7 +194,7 @@ void XMLControl::validate(const xml::lite::Document* doc,
     std::vector<std::string> paths(schemaPaths);
     loadSchemaPaths(paths);
 
-    if (schemaPaths.empty() && log)
+    if ((log != nullptr) && schemaPaths.empty())
     {
         std::ostringstream oss;
         oss << "Coudn't validate XML - no schemas paths provided "
@@ -192,24 +203,16 @@ void XMLControl::validate(const xml::lite::Document* doc,
         log->warn(oss.str());
     }
 
-    // If the paths we have don't exist, throw
-    paths = check_whether_paths_exist(paths);
-
     // validate against any specified schemas
-    if (!paths.empty())
-    {
-        validate_(*doc, paths, log);
-    }
+    validate_(*doc, paths, log);
 }
 void XMLControl::validate(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger* log)
 {
-    // attempt to get the schema location from the
-    // environment if nothing is specified
-    std::vector<std::string> paths = loadSchemaPaths(pSchemaPaths);
-
-    if (paths.empty() && log)
+    // attempt to get the schema location from the environment if nothing is specified
+    auto paths = loadSchemaPaths(pSchemaPaths);
+    if ((log != nullptr) && (pSchemaPaths != nullptr) && paths.empty())
     {
         std::ostringstream oss;
         oss << "Coudn't validate XML - no schemas paths provided "
@@ -218,14 +221,8 @@ void XMLControl::validate(const xml::lite::Document& doc,
         log->warn(oss.str());
     }
 
-    // If the paths we have don't exist, throw
-    paths = check_whether_paths_exist(paths);
-
     // validate against any specified schemas
-    if (!paths.empty())
-    {
-        validate_(doc, paths, log);
-    }
+    validate_(doc, paths, log);
 }
 
 std::string XMLControl::getDefaultURI(const Data& data)

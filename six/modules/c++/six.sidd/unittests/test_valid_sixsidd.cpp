@@ -109,14 +109,13 @@ TEST_CASE(test_createFakeDerivedData)
 {
     const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData("3.0.0");
 
-    // empty schemaPaths, no validation
-    std::vector<std::filesystem::path> schemaPaths;
-    auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, &schemaPaths);
+    // NULL schemaPaths, no validation
+    auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, nullptr /*pSchemaPaths*/);
     TEST_ASSERT_FALSE(strXML.empty());
-    auto pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, &schemaPaths);
+    auto pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, nullptr /*pSchemaPaths*/);
 
     // validate XML against schema
-    schemaPaths = getSchemaPaths();
+    const auto schemaPaths = getSchemaPaths();
     strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, &schemaPaths);
     TEST_ASSERT_FALSE(strXML.empty());
     pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, &schemaPaths);
@@ -126,12 +125,11 @@ TEST_CASE(test_read_sidd300_xml)
 {
     const auto pathname = get_sample_xml_path("sidd300.xml");
 
-    // empty schemaPaths, no validation
-    std::vector<std::filesystem::path> schemaPaths;
-    auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
+    // NULL schemaPaths, no validation
+    auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, nullptr /*pSchemaPaths*/);
 
     // validate XML against schema
-    schemaPaths = getSchemaPaths();
+    const auto schemaPaths = getSchemaPaths();
     pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
 }
 
