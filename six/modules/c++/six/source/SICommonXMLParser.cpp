@@ -926,27 +926,30 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
         }
     }
 
-    #define xmlNewElement(name, uri, xml) newElement(name, #name, uri, xml)
+   #define xmlNewElement(name, uri, xml) auto name##XML = newElement(name, #name, uri, xml)
     const auto Unmodeled = errorStatistics->Unmodeled.get();
-    auto unmodeledXML = xmlNewElement(Unmodeled, getSICommonURI(), errorStatsXML);
-    if (unmodeledXML != nullptr)
+    xmlNewElement(Unmodeled, getSICommonURI(), errorStatsXML);
+    if (UnmodeledXML != nullptr)
     {
-        #define xmlCreateDouble(name, value, elem) createDouble(#name, getSICommonURI(), (value).name, elem)
-        xmlCreateDouble(Xrow, *Unmodeled, unmodeledXML);
-        xmlCreateDouble(Ycol, *Unmodeled, unmodeledXML);
-        xmlCreateDouble(XrowYcol, *Unmodeled, unmodeledXML);
+        #define xmlCreateDouble_(name, value, elem) createDouble(#name, getSICommonURI(), (value).name, elem)
+        #define xmlCreateDouble(name, elem) xmlCreateDouble_(name, *elem, elem ## XML)
+        xmlCreateDouble(Xrow, Unmodeled);
+        xmlCreateDouble(Ycol, Unmodeled);
+        xmlCreateDouble(XrowYcol, Unmodeled);
 
         const auto UnmodeledDecorr = Unmodeled->UnmodeledDecorr.get();
-        auto unmodeledDecorrXML = xmlNewElement(UnmodeledDecorr, getSICommonURI(), errorStatsXML);
-        if (unmodeledDecorrXML != nullptr)
+        xmlNewElement(UnmodeledDecorr, getSICommonURI(), UnmodeledXML);
+        if (UnmodeledDecorrXML != nullptr)
         {
-            auto xrowXML = newElement("Xrow", getSICommonURI(), unmodeledDecorrXML);
-            xmlCreateDouble(CorrCoefZero, UnmodeledDecorr->Xrow, xrowXML);
-            xmlCreateDouble(DecorrRate, UnmodeledDecorr->Xrow, xrowXML);
+            const auto& Xrow = &(UnmodeledDecorr->Xrow);
+            xmlNewElement(Xrow, getSICommonURI(), UnmodeledDecorrXML);
+            xmlCreateDouble(CorrCoefZero, Xrow);
+            xmlCreateDouble(DecorrRate, Xrow);
 
-            auto ycolXML = newElement("Ycol", getSICommonURI(), unmodeledDecorrXML);
-            xmlCreateDouble(CorrCoefZero, UnmodeledDecorr->Ycol, ycolXML);
-            xmlCreateDouble(DecorrRate, UnmodeledDecorr->Ycol, ycolXML);
+            const auto& Ycol = &(UnmodeledDecorr->Ycol);
+            xmlNewElement(Ycol, getSICommonURI(), UnmodeledDecorrXML);
+            xmlCreateDouble(CorrCoefZero, Ycol);
+            xmlCreateDouble(DecorrRate, Ycol);
         }
     }
 

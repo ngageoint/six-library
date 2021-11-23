@@ -127,19 +127,21 @@ TEST_CASE(test_read_sidd300_xml)
 
     // NULL schemaPaths, no validation
     auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, nullptr /*pSchemaPaths*/);
-    //auto strXML = six::sidd::Utilities::toXMLString(*pDerivedData, nullptr /*pSchemaPaths*/);
-    //TEST_ASSERT_FALSE(strXML.empty());
-    //pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, nullptr /*pSchemaPaths*/);
+    auto strXML = six::sidd::Utilities::toXMLString(*pDerivedData, nullptr /*pSchemaPaths*/);
+    TEST_ASSERT_FALSE(strXML.empty());
+    pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, nullptr /*pSchemaPaths*/);
+    auto Unmodeled = pDerivedData->errorStatistics->Unmodeled;
+    TEST_ASSERT(Unmodeled.get() != nullptr);
 
     // validate XML against schema
     const auto schemaPaths = getSchemaPaths();
     pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
-    //strXML = six::sidd::Utilities::toXMLString(*pDerivedData, nullptr /*pSchemaPaths*/);
-    //TEST_ASSERT_FALSE(strXML.empty());
-    //pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, nullptr /*pSchemaPaths*/);
-
-    const auto& Unmodeled = pDerivedData->errorStatistics->Unmodeled;
+    strXML = six::sidd::Utilities::toXMLString(*pDerivedData, &schemaPaths);
+    TEST_ASSERT_FALSE(strXML.empty());
+    pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, &schemaPaths);
+    Unmodeled = pDerivedData->errorStatistics->Unmodeled;
     TEST_ASSERT(Unmodeled.get() != nullptr);
+
     TEST_ASSERT_EQ(1.23, Unmodeled->Xrow);
     TEST_ASSERT_EQ(4.56, Unmodeled->Ycol);
     TEST_ASSERT_EQ(7.89, Unmodeled->XrowYcol);
