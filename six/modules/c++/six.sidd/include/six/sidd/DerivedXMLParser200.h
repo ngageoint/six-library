@@ -40,11 +40,11 @@ public:
     DerivedXMLParser200(const DerivedXMLParser200&) = delete;
     DerivedXMLParser200& operator=(const DerivedXMLParser200&) = delete;
 
-    virtual xml::lite::Document* toXML(const DerivedData* data) const;
-    virtual std::unique_ptr<xml::lite::Document> toXML(const DerivedData&) const override;
+    virtual xml::lite::Document* toXML(const DerivedData* data) const override;
+    std::unique_ptr<xml::lite::Document> toXML(const DerivedData&) const override;
 
-    virtual DerivedData* fromXML(const xml::lite::Document* doc) const;
-    virtual std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const override;
+    virtual DerivedData* fromXML(const xml::lite::Document* doc) const override;
+    std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const override;
 
 protected:
     virtual void parseDerivedClassificationFromXML(
