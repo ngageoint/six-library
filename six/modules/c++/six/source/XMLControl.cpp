@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include <std/filesystem>
 #include <algorithm>
 #include <iterator>
@@ -264,6 +266,14 @@ void XMLControl::splitVersion(const std::string& versionStr,
     }
 }
 
+std::unique_ptr<xml::lite::Document> XMLControl::toXMLImpl(const Data& data) const
+{
+    auto pThis = const_cast<XMLControl*>(this);
+    std::unique_ptr<xml::lite::Document> retval(pThis->toXMLImpl(&data)); // store raw pointer right away
+    assert(retval.get() != nullptr);
+    return retval;
+}
+
 xml::lite::Document* XMLControl::toXML(
         const Data* data, const std::vector<std::string>& schemaPaths)
 {
@@ -279,9 +289,17 @@ std::unique_ptr<xml::lite::Document> XMLControl::toXML(
 std::unique_ptr<xml::lite::Document> XMLControl::toXML(
     const Data& data, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
-    std::unique_ptr<xml::lite::Document> doc(toXMLImpl(&data));
+    auto doc = toXMLImpl(data);
     validate(*doc, pSchemaPaths, mLog);
     return doc;
+}
+
+std::unique_ptr<Data> XMLControl::fromXMLImpl(const xml::lite::Document& doc) const
+{
+    auto pThis = const_cast<XMLControl*>(this);
+    std::unique_ptr<Data> retval(pThis->fromXMLImpl(&doc)); // store raw pointer right away
+    assert(retval.get() != nullptr);
+    return retval;
 }
 
 Data* XMLControl::fromXML(const xml::lite::Document* doc,
@@ -297,11 +315,10 @@ std::unique_ptr<Data> XMLControl::fromXML(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>* pSchemaPaths)
 {
     validate(doc, pSchemaPaths, mLog);
-    std::unique_ptr<Data> data(fromXMLImpl(&doc));
+    auto data = fromXMLImpl(doc);
     data->setVersion(getVersionFromURI(&doc));
     return data;
 }
-
 
 std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
 {

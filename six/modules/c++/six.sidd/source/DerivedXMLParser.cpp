@@ -1924,5 +1924,15 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
 
     return geoElem;
 }
+
+std::unique_ptr<xml::lite::Document> DerivedXMLParser::toXML(const DerivedData& data) const
+{
+    return std::unique_ptr<xml::lite::Document>(toXML(&data));
+}
+std::unique_ptr<DerivedData> DerivedXMLParser::fromXML(const xml::lite::Document& doc) const
+{
+    return std::unique_ptr<DerivedData>(fromXML(&doc));
+}
+
 }
 }

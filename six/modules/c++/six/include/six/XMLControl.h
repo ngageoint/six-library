@@ -163,6 +163,7 @@ class XMLControl
      *  \return a Data model
      */
     virtual Data* fromXMLImpl(const xml::lite::Document* doc) = 0;
+    virtual std::unique_ptr<Data> fromXMLImpl(const xml::lite::Document&) const; // = 0;, would break existing code
 
     /*!
      *  Convert the Data model into an XML DOM.
@@ -170,6 +171,7 @@ class XMLControl
      *  \return An XML DOM
      */
     virtual xml::lite::Document* toXMLImpl(const Data* data) = 0;
+    virtual std::unique_ptr<xml::lite::Document> toXMLImpl(const Data&) const; // = 0;, would break existing code
 
     static std::string getDefaultURI(const Data& data);
 

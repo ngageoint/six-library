@@ -216,6 +216,10 @@ DerivedData* DerivedXMLParser200::fromXML(
     }
     return data;
 }
+std::unique_ptr<DerivedData> DerivedXMLParser200::fromXML(const xml::lite::Document& doc) const
+{
+    return std::unique_ptr<DerivedData>(fromXML(&doc));
+}
 
 xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) const
 {
@@ -286,6 +290,10 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
     root->setNamespacePrefix("ism", ISM_URI);
 
     return doc;
+}
+std::unique_ptr<xml::lite::Document> DerivedXMLParser200::toXML(const DerivedData& data) const
+{
+    return std::unique_ptr<xml::lite::Document>(toXML(&data));
 }
 
 void DerivedXMLParser200::parseDerivedClassificationFromXML(

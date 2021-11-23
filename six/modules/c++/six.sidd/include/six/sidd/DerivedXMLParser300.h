@@ -40,9 +40,11 @@ struct DerivedXMLParser300 : public DerivedXMLParser
     DerivedXMLParser300(const DerivedXMLParser300&) = delete;
     DerivedXMLParser300& operator=(const DerivedXMLParser300&) = delete;
 
-    xml::lite::Document* toXML(const DerivedData* data) const override;
+    virtual xml::lite::Document* toXML(const DerivedData* data) const override;
+    virtual std::unique_ptr<xml::lite::Document> toXML(const DerivedData&) const override;
 
-    DerivedData* fromXML(const xml::lite::Document* doc) const override;
+    virtual DerivedData* fromXML(const xml::lite::Document* doc) const override;
+    virtual std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const override;
 
 protected:
     void parseDerivedClassificationFromXML(

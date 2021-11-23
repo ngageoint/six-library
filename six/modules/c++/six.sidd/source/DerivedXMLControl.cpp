@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include <std/memory>
 
 #include <six/Enums.h>
@@ -66,18 +68,28 @@ DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) :
 
 Data* DerivedXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
-    return getParser(getVersionFromURI(doc))->fromXML(doc);
+    assert(doc != nullptr);
+    return fromXMLImpl(*doc).release();
+}
+std::unique_ptr<Data> DerivedXMLControl::fromXMLImpl(const xml::lite::Document& doc) const
+{
+    return getParser(getVersionFromURI(&doc))->fromXML(doc);
 }
 
 xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
 {
-    if (data->getDataType() != DataType::DERIVED)
+    assert(data != nullptr);
+    return toXMLImpl(*data).release();
+}
+std::unique_ptr<xml::lite::Document> DerivedXMLControl::toXMLImpl(const Data& data) const
+{
+    if (data.getDataType() != DataType::DERIVED)
     {
         throw except::Exception(Ctxt("Data must be SIDD"));
     }
 
-    const DerivedData* const sidd(dynamic_cast<const DerivedData*>(data));
-    return getParser(data->getVersion())->toXML(sidd);
+    auto parser = getParser(data.getVersion());
+    return parser->toXML(dynamic_cast<const DerivedData&>(data));
 }
 
 std::unique_ptr<DerivedXMLParser>

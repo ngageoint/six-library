@@ -66,6 +66,7 @@ protected:
      *  \return An XML DOM
      */
     virtual xml::lite::Document* toXMLImpl(const Data* data);
+    virtual std::unique_ptr<xml::lite::Document> toXMLImpl(const Data&) const override;
 
     /*!
      *  Function takes a DOM Document* node and creates a new-allocated
@@ -74,7 +75,8 @@ protected:
      *  
      */
     virtual Data* fromXMLImpl(const xml::lite::Document* doc);
-
+    virtual std::unique_ptr<Data> fromXMLImpl(const xml::lite::Document&) const override;
+\
 private:
     std::unique_ptr<ComplexXMLParser>
     getParser(const std::string& version) const;
