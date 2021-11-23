@@ -212,6 +212,10 @@ DerivedData* DerivedXMLParser300::fromXML(
     }
     return data;
 }
+std::unique_ptr<DerivedData> DerivedXMLParser300::fromXML(const xml::lite::Document& doc) const
+{
+    return std::unique_ptr<DerivedData>(fromXML(&doc));
+}
 
 xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) const
 {
@@ -283,14 +287,17 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
 
     return doc;
 }
+std::unique_ptr<xml::lite::Document> DerivedXMLParser300::toXML(const DerivedData& data) const
+{
+    return std::unique_ptr<xml::lite::Document>(toXML(&data));
+}
 
 void DerivedXMLParser300::parseDerivedClassificationFromXML(
         const xml::lite::Element* classificationElem,
         DerivedClassification& classification) const
 {
     DerivedXMLParser::parseDerivedClassificationFromXML(classificationElem, classification);
-    const XMLAttributes& classificationAttributes
-        = classificationElem->getAttributes();
+    const XMLAttributes& classificationAttributes = classificationElem->getAttributes();
 
     getAttributeList(classificationAttributes,
         "ism:compliesWith",

@@ -119,10 +119,17 @@
     <ClCompile Include="six.sicd_test_AMP8I_PHS8I.cpp">
       <Filter>six.sicd</Filter>
     </ClCompile>
+    <ClCompile Include="six.sidd_test_sidd_byte_provider.cpp">
+      <Filter>six.sidd</Filter>
+    </ClCompile>
+    <ClCompile Include="Test.cpp" />
+    <ClCompile Include="six.sidd_test_valid_six.cpp">
+      <Filter>six.sidd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Test.h" />
+    <ClInclude Include="GTest.h" />
     <ClInclude Include="six_Test.h">
       <Filter>six</Filter>
     </ClInclude>
@@ -138,6 +145,7 @@
     <ClInclude Include="cphd_Test.h">
       <Filter>cphd</Filter>
     </ClInclude>
+    <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

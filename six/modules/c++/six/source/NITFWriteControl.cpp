@@ -309,16 +309,10 @@ static nitf::ImageSource make_ImageSource_(std::span<const std::byte> pData, siz
 }
 
 template<typename T>
-static nitf::ImageSource make_ImageSource(std::span<const T> pImageData_, const NITFSegmentInfo& segmentInfo, const Data& data)
+static nitf::ImageSource do_make_ImageSource(std::span<const T> pImageData_, const NITFSegmentInfo& segmentInfo, const Data& data)
 {
-    constexpr auto numBytesPerPixel = sizeof(pImageData_[0]);
-
     const auto numChannels = data.getNumChannels();
     const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-    if (pixelSize != numBytesPerPixel)
-    {
-        throw std::invalid_argument("numBytesPerPixel mis-match!");
-    }
 
     const auto bandSize = getBandSize(segmentInfo, data);
     const auto pImageData = six::as_bytes(pImageData_);
@@ -332,12 +326,31 @@ static nitf::ImageSource make_ImageSource(std::span<const T> pImageData_, const 
     const  std::span<const std::byte> pData(pData_, bandSize);
     return make_ImageSource_(pData, numChannels, pixelSize);
 }
+template<typename T>
+static nitf::ImageSource make_ImageSource(std::span<const T> pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
+{
+    constexpr auto numBytesPerPixel = sizeof(pImageData[0]);
+
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    if (pixelSize != numBytesPerPixel)
+    {
+        throw std::invalid_argument("numBytesPerPixel mis-match!");
+    }
+
+    return do_make_ImageSource(pImageData, segmentInfo, data);
+}
 
 // Existing code that uses BufferList needs raw "std::byte*" instead of std::span<std::byte>
+inline nitf::ImageSource make_ImageSource_from_BufferList(std::span<const std::byte> pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
+{
+    // The pixelSize calculation value probably won't match sizof(BufferList::value_type) which is "unsigned char"
+    return do_make_ImageSource(pImageData, segmentInfo, data);
+}
 static nitf::ImageSource make_ImageSource(const BufferList::value_type pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
 {
     const auto pImageData_ = as_bytes(pImageData, segmentInfo, data);
-    return make_ImageSource(pImageData_, segmentInfo, data);
+    return make_ImageSource_from_BufferList(pImageData_, segmentInfo, data);
 }
 
 template<typename TImageData>

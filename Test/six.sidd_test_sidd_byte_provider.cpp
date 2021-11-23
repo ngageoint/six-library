@@ -5,8 +5,8 @@
 #include "sidd_Test.h"
 #include "Test.h"
 
-struct sidd_test_read_sidd_legend : public ::testing::Test {
-    sidd_test_read_sidd_legend() {
+struct sidd_test_byte_provider : public ::testing::Test {
+	sidd_test_byte_provider() {
         // initialization code here
         //const std::string SIX_SCHEMA_PATH = R"(C:\Users\jdsmith\source\repos\six\six\modules\c++\six.sidd\conf\schema)";
 		const auto SIX_SCHEMA_PATH = six::Test::buildSchemaDir();
@@ -22,12 +22,12 @@ struct sidd_test_read_sidd_legend : public ::testing::Test {
         // ok to through exceptions from here if need be
     }
 
-    ~sidd_test_read_sidd_legend() {
+    ~sidd_test_byte_provider() {
         // cleanup any pending stuff, but no exceptions allowed
     }
 
     // put in any custom data members that you need 
 };
 
-#define TEST_CASE(X) TEST_F(sidd_test_read_sidd_legend, X)
-#include "six/modules/c++/six.sidd/unittests/test_read_sidd_legend.cpp"
+#define TEST_CASE(X) TEST_F(sidd_test_byte_provider, X)
+#include "six/modules/c++/six.sidd/unittests/unittest_sidd_byte_provider.cpp"

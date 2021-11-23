@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/ComplexXMLParser040.h>
@@ -41,18 +43,28 @@ ComplexXMLControl::ComplexXMLControl(logging::Logger* log, bool ownLog) :
 
 Data* ComplexXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
-    return getParser(getVersionFromURI(doc))->fromXML(doc);
+    assert(doc != nullptr);
+    return fromXMLImpl(*doc).release();
+}
+std::unique_ptr<Data> ComplexXMLControl::fromXMLImpl(const xml::lite::Document& doc) const
+{
+    return getParser(getVersionFromURI(&doc))->fromXML(doc);
 }
 
 xml::lite::Document* ComplexXMLControl::toXMLImpl(const Data* data)
 {
-    if (data->getDataType() != DataType::COMPLEX)
+    assert(data != nullptr);
+    return toXMLImpl(*data).release();
+}
+std::unique_ptr<xml::lite::Document> ComplexXMLControl::toXMLImpl(const Data& data) const
+{
+    if (data.getDataType() != DataType::COMPLEX)
     {
         throw except::Exception(Ctxt("Data must be SICD"));
     }
 
-    const ComplexData* const sicd(dynamic_cast<const ComplexData*>(data));
-    return getParser(data->getVersion())->toXML(sicd);
+    auto parser = getParser(data.getVersion());
+    return parser->toXML(dynamic_cast<const ComplexData&>(data));
 }
 
 std::unique_ptr<ComplexXMLParser>

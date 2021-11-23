@@ -22,6 +22,8 @@
 #ifndef __SIX_SIDD_MEASUREMENT_H__
 #define __SIX_SIDD_MEASUREMENT_H__
 
+#include <gsl/gsl.h>
+
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/sidd/Enums.h>
@@ -285,10 +287,14 @@ struct Measurement
 
     //!  Number of rows/cols in the SIDD product
     RowColInt pixelFootprint;
+    const RowColInt& getPixelFootprint() const
+    {
+        return value(pixelFootprint); // be sure pixelFootprint is initialized
+    }
     void setPixelFootprint(const types::RowCol<size_t>& aoiDims)
     {
-        pixelFootprint.row = static_cast<ptrdiff_t>(aoiDims.row);
-        pixelFootprint.col = static_cast<ptrdiff_t>(aoiDims.col);
+        pixelFootprint.row = gsl::narrow<ptrdiff_t>(aoiDims.row);
+        pixelFootprint.col = gsl::narrow<ptrdiff_t>(aoiDims.col);
     }
 
     /*!

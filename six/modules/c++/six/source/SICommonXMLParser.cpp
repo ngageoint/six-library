@@ -926,6 +926,33 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
         }
     }
 
+   #define xmlNewElement(name, uri, xml) auto name##XML = newElement(name, #name, uri, xml)
+    const auto Unmodeled = errorStatistics->Unmodeled.get();
+    xmlNewElement(Unmodeled, getSICommonURI(), errorStatsXML);
+    if (UnmodeledXML != nullptr)
+    {
+        #define xmlCreateDouble_(name, value, elem) createDouble(#name, getSICommonURI(), (value).name, elem)
+        #define xmlCreateDouble(name, elem) xmlCreateDouble_(name, *elem, elem ## XML)
+        xmlCreateDouble(Xrow, Unmodeled);
+        xmlCreateDouble(Ycol, Unmodeled);
+        xmlCreateDouble(XrowYcol, Unmodeled);
+
+        const auto UnmodeledDecorr = Unmodeled->UnmodeledDecorr.get();
+        xmlNewElement(UnmodeledDecorr, getSICommonURI(), UnmodeledXML);
+        if (UnmodeledDecorrXML != nullptr)
+        {
+            const auto& Xrow = &(UnmodeledDecorr->Xrow);
+            xmlNewElement(Xrow, getSICommonURI(), UnmodeledDecorrXML);
+            xmlCreateDouble(CorrCoefZero, Xrow);
+            xmlCreateDouble(DecorrRate, Xrow);
+
+            const auto& Ycol = &(UnmodeledDecorr->Ycol);
+            xmlNewElement(Ycol, getSICommonURI(), UnmodeledDecorrXML);
+            xmlCreateDouble(CorrCoefZero, Ycol);
+            xmlCreateDouble(DecorrRate, Ycol);
+        }
+    }
+
     if (!errorStatistics->additionalParameters.empty())
     {
         XMLElem paramsXML = newElement("AdditionalParms",
@@ -985,6 +1012,34 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         {
             //optional
             errorStatistics->components->ionoError.reset(new IonoError());
+        }
+    }
+
+    #define xml_getOptional_reset(xml, pRoot, name) getOptional_reset(xml, #name, (pRoot)->name);
+    tmpElem = xml_getOptional_reset(errorStatsXML, errorStatistics, Unmodeled); // SIDD 3.0
+    if (tmpElem != nullptr)
+    {
+        auto& Unmodeled = *(errorStatistics->Unmodeled);
+
+        // macro to avoid copy/paste errors
+        #define parseDouble_getFirstAndOnly(elem, name, storage) parseDouble(getFirstAndOnly(elem, #name), (storage).name)
+
+        parseDouble_getFirstAndOnly(tmpElem, Xrow, Unmodeled);
+        parseDouble_getFirstAndOnly(tmpElem, Ycol, Unmodeled);
+        parseDouble_getFirstAndOnly(tmpElem, XrowYcol, Unmodeled);
+
+        auto unmodeledDecorrXML = xml_getOptional_reset(tmpElem, errorStatistics->Unmodeled, UnmodeledDecorr);
+        if (unmodeledDecorrXML != nullptr)
+        {
+            auto& UnmodeledDecorr = *(errorStatistics->Unmodeled->UnmodeledDecorr);
+
+            auto xrowXML = getFirstAndOnly(unmodeledDecorrXML, "Xrow");
+            parseDouble_getFirstAndOnly(xrowXML, CorrCoefZero, UnmodeledDecorr.Xrow);
+            parseDouble_getFirstAndOnly(xrowXML, DecorrRate, UnmodeledDecorr.Xrow);
+
+            auto ycolXML = getFirstAndOnly(unmodeledDecorrXML, "Ycol");
+            parseDouble_getFirstAndOnly(ycolXML, CorrCoefZero, UnmodeledDecorr.Ycol);
+            parseDouble_getFirstAndOnly(ycolXML, DecorrRate, UnmodeledDecorr.Ycol);
         }
     }
 

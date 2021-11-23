@@ -49,8 +49,10 @@ public:
     DerivedXMLParser& operator=(const DerivedXMLParser&) = delete;
 
     virtual xml::lite::Document* toXML(const DerivedData* data) const = 0;
+    virtual std::unique_ptr<xml::lite::Document> toXML(const DerivedData&) const; // = 0;, breaks existing code
 
     virtual DerivedData* fromXML(const xml::lite::Document* doc) const = 0;
+    virtual std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const; // = 0;, breaks existing code
 
 protected:
     virtual void parseDerivedClassificationFromXML(
