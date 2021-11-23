@@ -124,6 +124,7 @@ class XMLControl
      */
     xml::lite::Document* toXML(const Data* data,
                                const std::vector<std::string>& schemaPaths);
+    std::unique_ptr<xml::lite::Document> toXML(const Data&, const std::vector<std::string>&);
     std::unique_ptr<xml::lite::Document> toXML(const Data&, const std::vector<std::filesystem::path>*);
 
     /*!

@@ -520,39 +520,28 @@ mem::auto_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
     return projModel;
 }
 
-mem::auto_ptr<DerivedData> Utilities::parseData(
-        ::io::InputStream& xmlStream,
-        const std::vector<std::string>& schemaPaths,
-        logging::Logger& log)
+template<typename TReturn, typename TSchemaPaths>
+TReturn Utilities_parseData(::io::InputStream& xmlStream, const TSchemaPaths& schemaPaths, logging::Logger& log)
 {
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<DerivedXMLControl>();
 
-    mem::auto_ptr<Data> data(
-			       six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
-
-    mem::auto_ptr<DerivedData> derivedData(
-        static_cast<DerivedData*>(data.release()));
-
-    return derivedData;
+    auto data(six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
+    return TReturn(static_cast<DerivedData*>(data.release()));
 }
-std::unique_ptr<DerivedData> Utilities::parseData(
-    ::io::InputStream& xmlStream,
-    const std::vector<std::filesystem::path>* pSchemaPaths,
-    logging::Logger& log)
+mem::auto_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
+        const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
-    XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<DerivedXMLControl>();
-
-    auto data = six::parseData(xmlRegistry, xmlStream, pSchemaPaths, log);
-    std::unique_ptr<DerivedData> derivedData(static_cast<DerivedData*>(data.release()));
-    return derivedData;
+    return Utilities_parseData<mem::auto_ptr<DerivedData>>(xmlStream, schemaPaths, log);
+}
+std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
+{
+    return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, pSchemaPaths, log);
 }
 
-mem::auto_ptr<DerivedData> Utilities::parseDataFromFile(
-        const std::string& pathname,
-        const std::vector<std::string>& schemaPaths,
-        logging::Logger& log)
+mem::auto_ptr<DerivedData> Utilities::parseDataFromFile(const std::string& pathname,
+        const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
     io::FileInputStream inStream(pathname);
     return parseData(inStream, schemaPaths, log);
@@ -561,25 +550,21 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem:
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
     logging::NullLogger nullLogger;
-    logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
+    logging::Logger* const logger = (pLogger == nullptr) ? &nullLogger : pLogger;
 
     io::FileInputStream inStream(pathname.string());
-    return parseData(inStream, pSchemaPaths, *log);
+    return parseData(inStream, pSchemaPaths, *logger);
 }
 
-mem::auto_ptr<DerivedData> Utilities::parseDataFromString(
-        const std::string& xmlStr,
-        const std::vector<std::string>& schemaPaths,
-        logging::Logger& log)
+mem::auto_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr,
+        const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
     io::StringStream inStream;
     inStream.write(xmlStr);
     return parseData(inStream, schemaPaths, log);
 }
-std::unique_ptr<DerivedData> Utilities::parseDataFromString(
-    const std::string& xmlStr,
-    const std::vector<std::filesystem::path>* pSchemaPaths,
-    logging::Logger* pLogger)
+std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr,
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
     logging::NullLogger nullLogger;
     logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
@@ -589,31 +574,27 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromString(
     return parseData(inStream, pSchemaPaths, *log);
 }
 
-std::string Utilities::toXMLString(const DerivedData& data,
-                                   const std::vector<std::string>& schemaPaths,
-                                   logging::Logger* logger)
+template<typename TSchemaPaths>
+std::string Utilities_toXMLString(const DerivedData& data,
+    const TSchemaPaths& schemaPaths, logging::Logger* pLogger)
 {
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<DerivedXMLControl>();
 
     logging::NullLogger nullLogger;
-    return ::six::toValidXMLString(&data,
-                                   schemaPaths,
-                                   (logger == nullptr) ? &nullLogger : logger,
-                                   &xmlRegistry);
+    logging::Logger* const logger = (pLogger == nullptr) ? &nullLogger : pLogger;
+
+    return ::six::toValidXMLString(data, schemaPaths, logger, &xmlRegistry);
 }
-
 std::string Utilities::toXMLString(const DerivedData& data,
-    const std::vector<std::filesystem::path>* pSchemaPaths,
-    logging::Logger* pLogger)
+                                   const std::vector<std::string>& schemaPaths, logging::Logger* logger)
 {
-    XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<DerivedXMLControl>();
-
-    logging::NullLogger nullLogger;
-    logging::Logger* logger = (pLogger == nullptr) ? &nullLogger : pLogger;
-    
-    return ::six::toValidXMLString(data, pSchemaPaths, *logger, xmlRegistry);
+    return Utilities_toXMLString(data, schemaPaths, logger);
+}
+std::string Utilities::toXMLString(const DerivedData& data,
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* logger)
+{
+    return Utilities_toXMLString(data, pSchemaPaths, logger);
 }
 
 static void createPredefinedFilter(six::sidd::Filter& filter)
@@ -1267,9 +1248,9 @@ static void update_for_SIDD_300(DerivedData& data) // n.b., much of this was add
     populateData(data, "3.0.0");
 }
 
-mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& strVersion)
+static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& strVersion)
 {
-    mem::auto_ptr<DerivedData> data; 
+    std::unique_ptr<DerivedData> data;
     if (strVersion == "3.0.0") // preserve behavior of existing code
     {
         //-----------------------------------------------------------
@@ -1303,7 +1284,7 @@ mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& s
     }
     else
     {
-        data.reset(new DerivedData());
+        data = std::make_unique<DerivedData>();
     }
 
     if (!strVersion.empty())
@@ -1373,5 +1354,14 @@ mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& s
 
     return data;
 }
+std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& strVersion)
+{
+    return createFakeDerivedData_(strVersion);
+}
+mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
+{
+    return mem::auto_ptr<DerivedData>(createFakeDerivedData("").release());
+}
+
 }
 }

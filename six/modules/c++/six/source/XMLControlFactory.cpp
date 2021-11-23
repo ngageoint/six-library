@@ -86,20 +86,18 @@ std::string six::toXMLString(const Data* data,
                             &log, xmlRegistry);
 }
 
-std::string six::toValidXMLString(const Data* data,
-                                  const std::vector<std::string>& schemaPaths,
-                                  logging::Logger* log,
-                                  const six::XMLControlRegistry *xmlRegistry)
+template<typename TSchemaPaths>
+std::string six_toValidXMLString(const Data& data,
+    const TSchemaPaths& schemaPaths,
+    logging::Logger* log, const six::XMLControlRegistry* xmlRegistry)
 {
-    assert(data != nullptr);
-
     if (!xmlRegistry)
     {
         xmlRegistry = &XMLControlFactory::getInstance();
     }
 
     const std::unique_ptr<XMLControl>
-        xmlControl(xmlRegistry->newXMLControl(data->getDataType(), log));
+        xmlControl(xmlRegistry->newXMLControl(data.getDataType(), log));
 
     // this will validate if SIX_SCHEMA_PATH EnvVar is set
     const std::unique_ptr<xml::lite::Document> doc(
@@ -110,20 +108,23 @@ std::string six::toValidXMLString(const Data* data,
 
     return oss.stream().str();
 }
+std::string six::toValidXMLString(const Data* data,
+                                  const std::vector<std::string>& schemaPaths,
+                                  logging::Logger* log,
+                                  const six::XMLControlRegistry *xmlRegistry)
+{
+    assert(data != nullptr);
+    return toValidXMLString(*data, schemaPaths, log, xmlRegistry);
+}
+std::string six::toValidXMLString(const Data& data,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger* log, const six::XMLControlRegistry* xmlRegistry)
+{
+    return six_toValidXMLString(data, schemaPaths, log, xmlRegistry);
+}
 std::string six::toValidXMLString(const Data& data,
     const std::vector<std::filesystem::path>* pSchemaPaths,
-    logging::Logger& log,
-    const six::XMLControlRegistry& xmlRegistry)
+    logging::Logger* log, const six::XMLControlRegistry* xmlRegistry)
 {
-    const std::unique_ptr<XMLControl>
-        xmlControl(xmlRegistry.newXMLControl(data.getDataType(), &log));
-
-    // this will validate if SIX_SCHEMA_PATH EnvVar is set
-    const auto doc = xmlControl->toXML(data, pSchemaPaths);
-
-    io::StringStream oss;
-    doc->getRootElement()->print(oss, xml::lite::string_encoding::utf_8);
-
-    return oss.stream().str();
-
+    return six_toValidXMLString(data, pSchemaPaths, log, xmlRegistry);
 }

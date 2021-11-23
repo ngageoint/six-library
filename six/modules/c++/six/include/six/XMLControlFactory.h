@@ -180,9 +180,9 @@ std::string toValidXMLString(
         logging::Logger* log,
         const XMLControlRegistry *xmlRegistry = nullptr);
 std::string toValidXMLString(const Data&,
-    const std::vector<std::filesystem::path>*,
-    logging::Logger& log,
-    const XMLControlRegistry&);
+    const std::vector<std::string>& schemaPaths, logging::Logger*, const XMLControlRegistry* xmlRegistry = nullptr);
+std::string toValidXMLString(const Data&,
+    const std::vector<std::filesystem::path>*, logging::Logger*, const XMLControlRegistry* xmlRegistry = nullptr);
 
 //!  Singleton declaration of our XMLControlRegistry
 typedef mt::Singleton<XMLControlRegistry, true> XMLControlFactory;

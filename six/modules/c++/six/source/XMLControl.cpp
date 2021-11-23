@@ -133,6 +133,45 @@ static std::vector<std::string> check_whether_paths_exist(const std::vector<std:
 
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
+static void validate_(const xml::lite::Document& doc,
+    const std::vector<std::string>& paths, logging::Logger* log)
+{
+    // validate against any specified schemas
+    xml::lite::Validator validator(paths, log, true);
+
+    const auto& rootElement = doc.getRootElement();
+    if (rootElement->getUri().empty())
+    {
+        throw six::DESValidationException(Ctxt("INVALID XML: URI is empty so document version cannot be determined to use for validation"));
+    }
+
+    // Pretty-print so that lines numbers are useful
+    io::StringStream xmlStream;
+    rootElement->prettyPrint(xmlStream, xml::lite::string_encoding::utf_8);
+
+    std::vector<xml::lite::ValidationInfo> errors;
+    validator.validate(xmlStream, rootElement->getUri(), errors);
+
+    // log any error found and throw
+    if (!errors.empty())
+    {
+        if (log)
+        {
+            for (size_t i = 0; i < errors.size(); ++i)
+            {
+                log->critical(errors[i].toString());
+            }
+        }
+
+        //! this is a unique error thrown only in this location --
+        //  if the user wants a file written regardless of the consequences
+        //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
+        //  and attempt to rewrite the file. Continuing in this manner is
+        //  highly discouraged
+        throw six::DESValidationException(Ctxt("INVALID XML: Check both the XML being produced and the schemas available"));
+    }
+}
+
 void XMLControl::validate(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths,
                           logging::Logger* log)
@@ -159,43 +198,7 @@ void XMLControl::validate(const xml::lite::Document* doc,
     // validate against any specified schemas
     if (!paths.empty())
     {
-        xml::lite::Validator validator(paths, log, true);
-
-        std::vector<xml::lite::ValidationInfo> errors;
-
-        if (doc->getRootElement()->getUri().empty())
-        {
-            throw six::DESValidationException(Ctxt(
-                    "INVALID XML: URI is empty so document version cannot be "
-                    "determined to use for validation"));
-        }
-
-        // Pretty-print so that lines numbers are useful
-        io::StringStream xmlStream;
-        doc->getRootElement()->prettyPrint(xmlStream, xml::lite::string_encoding::utf_8);
-
-        validator.validate(xmlStream, doc->getRootElement()->getUri(), errors);
-
-        // log any error found and throw
-        if (!errors.empty())
-        {
-            if (log)
-            {
-                for (size_t i = 0; i < errors.size(); ++i)
-                {
-                    log->critical(errors[i].toString());
-                }
-            }
-
-            //! this is a unique error thrown only in this location --
-            //  if the user wants a file written regardless of the consequences
-            //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
-            //  and attempt to rewrite the file. Continuing in this manner is
-            //  highly discouraged
-            throw six::DESValidationException(
-                    Ctxt("INVALID XML: Check both the XML being "
-                         "produced and the schemas available"));
-        }
+        validate_(*doc, paths, log);
     }
 }
 void XMLControl::validate(const xml::lite::Document& doc,
@@ -221,39 +224,7 @@ void XMLControl::validate(const xml::lite::Document& doc,
     // validate against any specified schemas
     if (!paths.empty())
     {
-        xml::lite::Validator validator(paths, log, true);
-
-        const auto& rootElement = doc.getRootElement();
-        if (rootElement->getUri().empty())
-        {
-            throw six::DESValidationException(Ctxt("INVALID XML: URI is empty so document version cannot be determined to use for validation"));
-        }
-
-        // Pretty-print so that lines numbers are useful
-        io::StringStream xmlStream;
-        rootElement->prettyPrint(xmlStream, xml::lite::string_encoding::utf_8);
-
-        std::vector<xml::lite::ValidationInfo> errors;
-        validator.validate(xmlStream, rootElement->getUri(), errors);
-
-        // log any error found and throw
-        if (!errors.empty())
-        {
-            if (log)
-            {
-                for (size_t i = 0; i < errors.size(); ++i)
-                {
-                    log->critical(errors[i].toString());
-                }
-            }
-
-            //! this is a unique error thrown only in this location --
-            //  if the user wants a file written regardless of the consequences
-            //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
-            //  and attempt to rewrite the file. Continuing in this manner is
-            //  highly discouraged
-            throw six::DESValidationException(Ctxt("INVALID XML: Check both the XML being produced and the schemas available"));
-        }
+        validate_(doc, paths, log);
     }
 }
 
@@ -302,6 +273,11 @@ xml::lite::Document* XMLControl::toXML(
     xml::lite::Document* doc = toXMLImpl(data);
     validate(doc, schemaPaths, mLog);
     return doc;
+}
+std::unique_ptr<xml::lite::Document> XMLControl::toXML(
+    const Data& data, const std::vector<std::string>& schemaPaths)
+{
+    return std::unique_ptr<xml::lite::Document>(toXML(&data, schemaPaths));
 }
 std::unique_ptr<xml::lite::Document> XMLControl::toXML(
     const Data& data, const std::vector<std::filesystem::path>* pSchemaPaths)

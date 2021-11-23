@@ -105,37 +105,37 @@ inline std::vector<std::filesystem::path> getSchemaPaths()
 
 static std::string testName;
 
-TEST_CASE(test_createFakeDerivedData_noschema)
-{
-    const std::vector<std::filesystem::path> schemaPaths;
-    const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData("3.0.0");
-    const auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, &schemaPaths);
-    auto pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, &schemaPaths);
-}
 TEST_CASE(test_createFakeDerivedData)
 {
     const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData("3.0.0");
-    const auto schemaPaths = getSchemaPaths();
-    const auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, &schemaPaths);
+
+    // empty schemaPaths, no validation
+    std::vector<std::filesystem::path> schemaPaths;
+    auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, &schemaPaths);
+    TEST_ASSERT_FALSE(strXML.empty());
     auto pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, &schemaPaths);
+
+    // validate XML against schema
+    schemaPaths = getSchemaPaths();
+    strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, &schemaPaths);
+    TEST_ASSERT_FALSE(strXML.empty());
+    pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, &schemaPaths);
 }
 
-TEST_CASE(test_read_sidd300_xml_noschema)
-{
-    const auto pathname = get_sample_xml_path("sidd300.xml");
-    const std::vector<std::filesystem::path> schemaPaths;
-    auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
-}
 TEST_CASE(test_read_sidd300_xml)
 {
     const auto pathname = get_sample_xml_path("sidd300.xml");
-    const auto schemaPaths = getSchemaPaths();
+
+    // empty schemaPaths, no validation
+    std::vector<std::filesystem::path> schemaPaths;
     auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
+
+    // validate XML against schema
+    schemaPaths = getSchemaPaths();
+    pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
 }
 
 TEST_MAIN((void)argc; (void)argv;
-    TEST_CHECK(test_createFakeDerivedData_noschema);
     TEST_CHECK(test_createFakeDerivedData);
-    TEST_CHECK(test_read_sidd300_xml_noschema);
     TEST_CHECK(test_read_sidd300_xml);
     )

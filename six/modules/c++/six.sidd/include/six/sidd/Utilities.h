@@ -79,7 +79,8 @@ public:
      *
      * \return mock DerivedData object
      */
-    static mem::auto_ptr<DerivedData> createFakeDerivedData(const std::string& strVersion = "");
+    static mem::auto_ptr<DerivedData> createFakeDerivedData();
+    static std::unique_ptr<DerivedData> createFakeDerivedData(const std::string& strVersion);
 
 
     /*
