@@ -88,6 +88,13 @@ protected:
             const std::u8string& characterData, XMLElem parent = nullptr);
     #endif
 
+    template<typename T>
+    static XMLElem newElement(const T* pElement, const std::string& name, const std::string& uri,
+        XMLElem parent = nullptr)
+    {
+        return pElement == nullptr ? nullptr : newElement(name, uri, parent);
+    }
+
     // generic element creation methods, w/URI
     XMLElem createString(const std::string& name,
             const std::string& uri, const std::string& p = "",
@@ -259,6 +266,17 @@ protected:
     }
 
     static XMLElem getOptional(const xml::lite::Element* parent, const std::string& tag);
+    template<typename T>
+    static XMLElem getOptional_reset(const xml::lite::Element* parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)
+    {
+        auto retval = getOptional(parent, tag);
+        if (retval != nullptr)
+        {
+            //optional
+            obj.reset(std::make_unique<T>());
+        }
+        return retval;
+    }
     static XMLElem getFirstAndOnly(const xml::lite::Element* parent, const std::string& tag);
 
     /*!

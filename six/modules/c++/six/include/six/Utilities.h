@@ -26,6 +26,7 @@
 #include <memory>
 #include <std/span>
 #include <std/cstddef>
+#include <std/filesystem>
 
 #include <import/io.h>
 #include <import/xml/lite.h>
@@ -200,6 +201,9 @@ mem::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               DataType dataType,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger& log);
+std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream, DataType dataType,
+    const std::vector<std::filesystem::path>*, logging::Logger&);
 
 /*
  * Parses the XML in 'xmlStream' and converts it into a Data object.  Same as
@@ -216,6 +220,9 @@ mem::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               ::io::InputStream& xmlStream,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger& log);
+std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    const std::vector<std::filesystem::path>*, logging::Logger&);
 
 /*
  * Parses the XML in 'pathname' and converts it into a Data object.
