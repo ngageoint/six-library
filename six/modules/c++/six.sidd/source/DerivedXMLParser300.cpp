@@ -21,6 +21,8 @@
  *
  */
 
+#include <assert.h>
+
 #include <sstream>
 
 #include <six/SICommonXMLParser10x.h>
@@ -107,13 +109,19 @@ DerivedXMLParser300::DerivedXMLParser300(logging::Logger* log,
 DerivedData* DerivedXMLParser300::fromXML(
         const xml::lite::Document* doc) const
 {
-    const xml::lite::Element* const root = doc->getRootElement();
+    assert(doc != nullptr);
+    return fromXML(*doc).release();
+}
+std::unique_ptr<DerivedData> DerivedXMLParser300::fromXML(const xml::lite::Document& doc) const
+{
+    const xml::lite::Element* const pRoot = doc.getRootElement();
+    const auto& root = *pRoot;
 
-    XMLElem productCreationElem        = getFirstAndOnly(root, "ProductCreation");
-    XMLElem displayElem                = getFirstAndOnly(root, "Display");
-    XMLElem geoDataElem                = getFirstAndOnly(root, "GeoData");
-    XMLElem measurementElem            = getFirstAndOnly(root, "Measurement");
-    XMLElem exploitationFeaturesElem   = getFirstAndOnly(root, "ExploitationFeatures");
+    auto& productCreationElem        = getFirstAndOnly(root, "ProductCreation");
+    auto& displayElem                = getFirstAndOnly(root, "Display");
+    auto& geoDataElem                = getFirstAndOnly(root, "GeoData");
+    auto& measurementElem            = getFirstAndOnly(root, "Measurement");
+    auto& exploitationFeaturesElem   = getFirstAndOnly(root, "ExploitationFeatures");
     XMLElem productProcessingElem      = getOptional(root, "ProductProcessing");
     XMLElem downstreamReprocessingElem = getOptional(root, "DownstreamReprocessing");
     XMLElem errorStatisticsElem        = getOptional(root, "ErrorStatistics");
@@ -125,11 +133,11 @@ DerivedData* DerivedXMLParser300::fromXML(
 
 
     DerivedDataBuilder builder;
-    DerivedData *data = builder.steal(); //steal it
+    std::unique_ptr<DerivedData> data(builder.steal()); //steal it
 
     // see if PixelType has MONO or RGB
     const PixelType pixelType = six::toType<PixelType>(
-            getFirstAndOnly(displayElem, "PixelType")->getCharacterData());
+            getFirstAndOnly(displayElem, "PixelType").getCharacterData());
     builder.addDisplay(pixelType);
 
     // create GeoData
@@ -149,15 +157,15 @@ DerivedData* DerivedXMLParser300::fromXML(
 
     // create ExploitationFeatures
     std::vector<XMLElem> elements;
-    exploitationFeaturesElem->getElementsByTagName("ExploitationFeatures",
+    exploitationFeaturesElem.getElementsByTagName("ExploitationFeatures",
                                                   elements);
     builder.addExploitationFeatures(static_cast<unsigned int>(elements.size()));
 
-    parseProductCreationFromXML(productCreationElem, data->productCreation.get());
-    parseDisplayFromXML(displayElem, *data->display);
-    parseGeoDataFromXML(geoDataElem, data->geoData.get());
-    parseMeasurementFromXML(measurementElem, data->measurement.get());
-    parseExploitationFeaturesFromXML(exploitationFeaturesElem, data->exploitationFeatures.get());
+    parseProductCreationFromXML(&productCreationElem, data->productCreation.get());
+    parseDisplayFromXML(&displayElem, *data->display);
+    parseGeoDataFromXML(&geoDataElem, data->geoData.get());
+    parseMeasurementFromXML(&measurementElem, data->measurement.get());
+    parseExploitationFeaturesFromXML(&exploitationFeaturesElem, data->exploitationFeatures.get());
 
     if (productProcessingElem)
     {
@@ -211,10 +219,6 @@ DerivedData* DerivedXMLParser300::fromXML(
         }
     }
     return data;
-}
-std::unique_ptr<DerivedData> DerivedXMLParser300::fromXML(const xml::lite::Document& doc) const
-{
-    return std::unique_ptr<DerivedData>(fromXML(&doc));
 }
 
 xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) const

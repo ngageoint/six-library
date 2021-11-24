@@ -261,16 +261,25 @@ XMLElem XMLParser::createDate(const std::string& name, const DateTime& p,
     return createDate(name, mDefaultURI, p, parent);
 }
 
+xml::lite::Element& XMLParser::getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag)
+{
+    return parent.getElementByTagName(tag);
+}
 XMLElem XMLParser::getFirstAndOnly(const xml::lite::Element* parent, const std::string& tag)
 {
     assert(parent != nullptr);
-    auto& element = parent->getElementByTagName(tag);
+    auto& element = getFirstAndOnly(*parent, tag);
     return &element; // OK, element is a reference
+}
+
+xml::lite::Element* XMLParser::getOptional(const xml::lite::Element& parent, const std::string& tag)
+{
+    return parent.getElementByTagName(std::nothrow, tag);
 }
 XMLElem XMLParser::getOptional(const xml::lite::Element* parent, const std::string& tag)
 {
     assert(parent != nullptr);
-    return parent->getElementByTagName(std::nothrow, tag);
+    return getOptional(*parent, tag);
 }
 
 XMLElem XMLParser::require(XMLElem element, const std::string& name)

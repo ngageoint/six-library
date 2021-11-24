@@ -266,6 +266,8 @@ protected:
     }
 
     static XMLElem getOptional(const xml::lite::Element* parent, const std::string& tag);
+    static xml::lite::Element* getOptional(const xml::lite::Element& parent, const std::string& tag);
+
     template<typename T>
     static XMLElem getOptional_reset(const xml::lite::Element* parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)
     {
@@ -278,6 +280,7 @@ protected:
         return retval;
     }
     static XMLElem getFirstAndOnly(const xml::lite::Element* parent, const std::string& tag);
+    static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag);
 
     /*!
      * Require an element to be not nullptr

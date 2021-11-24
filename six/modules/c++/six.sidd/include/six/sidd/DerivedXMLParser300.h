@@ -31,22 +31,21 @@ namespace six
 {
 namespace sidd
 {
-struct DerivedXMLParser300 : public DerivedXMLParser
+struct DerivedXMLParser300 final : public DerivedXMLParser
 {
-    DerivedXMLParser300(logging::Logger* log = nullptr,
-                        bool ownLog = false);
-
-
+    DerivedXMLParser300(logging::Logger* log = nullptr, bool ownLog = false);
     DerivedXMLParser300(const DerivedXMLParser300&) = delete;
     DerivedXMLParser300& operator=(const DerivedXMLParser300&) = delete;
+    DerivedXMLParser300(DerivedXMLParser300&&) = delete;
+    DerivedXMLParser300& operator=(DerivedXMLParser300&&) = delete;
 
     xml::lite::Document* toXML(const DerivedData* data) const override;
-    virtual std::unique_ptr<xml::lite::Document> toXML(const DerivedData&) const override;
+    std::unique_ptr<xml::lite::Document> toXML(const DerivedData&) const override;
 
     DerivedData* fromXML(const xml::lite::Document* doc) const override;
-    virtual std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const override;
+    std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const override;
 
-protected:
+private:
     void parseDerivedClassificationFromXML(
             const xml::lite::Element* classificationElem,
             DerivedClassification& classification) const override;
@@ -90,8 +89,6 @@ protected:
     XMLElem createLUT(const std::string& name, const LUT *l,
         XMLElem parent = nullptr) const override;
 
-
-private:
     XMLElem convertLookupTableToXML(
             const std::string& name,
             const LookupTable& table,
