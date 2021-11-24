@@ -181,7 +181,7 @@ std::unique_ptr<DerivedData> DerivedXMLParser300::fromXML(const xml::lite::Docum
     if (dedElem)
     {
         builder.addDigitalElevationData();
-        parseDigitalElevationDataFromXML(dedElem, *data->digitalElevationData);
+        parseDigitalElevationDataFromXML(*dedElem, *data->digitalElevationData);
     }
     if (annotationsElem)
     {
@@ -2002,16 +2002,14 @@ void DerivedXMLParser300::parseProductFromXML(
     }
 }
 
-void DerivedXMLParser300::parseDigitalElevationDataFromXML(
-        const xml::lite::Element* elem,
-        DigitalElevationData& ded) const
+void DerivedXMLParser300::parseDigitalElevationDataFromXML(const xml::lite::Element& elem, DigitalElevationData& ded) const
 {
-    XMLElem coordElem = getFirstAndOnly(elem, "GeographicCoordinates");
+    auto& coordElem = getFirstAndOnly(elem, "GeographicCoordinates");
     parseDouble(getFirstAndOnly(coordElem, "LongitudeDensity"), ded.geographicCoordinates.longitudeDensity);
     parseDouble(getFirstAndOnly(coordElem, "LatitudeDensity"), ded.geographicCoordinates.latitudeDensity);
     common().parseLatLon(getFirstAndOnly(coordElem, "ReferenceOrigin"), ded.geographicCoordinates.referenceOrigin);
 
-    XMLElem posElem = getFirstAndOnly(elem, "Geopositioning");
+    auto& posElem = getFirstAndOnly(elem, "Geopositioning");
     std::string coordSystemType;
     parseString(getFirstAndOnly(posElem, "CoordinateSystemType"), coordSystemType);
     ded.geopositioning.coordinateSystemType = CoordinateSystemType(coordSystemType);
@@ -2020,12 +2018,12 @@ void DerivedXMLParser300::parseDigitalElevationDataFromXML(
     {
         parseInt(getFirstAndOnly(posElem, "UTMGridZoneNumber"), ded.geopositioning.utmGridZoneNumber);
     }
-    XMLElem posAccuracyElem = getFirstAndOnly(elem, "PositionalAccuracy");
+    auto& posAccuracyElem = getFirstAndOnly(elem, "PositionalAccuracy");
     parseUInt(getFirstAndOnly(posAccuracyElem, "NumRegions"), ded.positionalAccuracy.numRegions);
-    XMLElem absoluteElem = getFirstAndOnly(posAccuracyElem, "AbsoluteAccuracy");
+    auto& absoluteElem = getFirstAndOnly(posAccuracyElem, "AbsoluteAccuracy");
     parseDouble(getFirstAndOnly(absoluteElem, "Horizontal"), ded.positionalAccuracy.absoluteAccuracyHorizontal);
     parseDouble(getFirstAndOnly(absoluteElem, "Vertical"), ded.positionalAccuracy.absoluteAccuracyVertical);
-    XMLElem pointElem = getFirstAndOnly(posAccuracyElem, "PointToPointAccuracy");
+    auto& pointElem = getFirstAndOnly(posAccuracyElem, "PointToPointAccuracy");
     parseDouble(getFirstAndOnly(pointElem, "Horizontal"), ded.positionalAccuracy.pointToPointAccuracyHorizontal);
     parseDouble(getFirstAndOnly(pointElem, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
 }

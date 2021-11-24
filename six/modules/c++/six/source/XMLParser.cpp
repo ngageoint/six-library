@@ -321,13 +321,17 @@ static bool parseValue(logging::Logger& log, TGetValue getValue)
     return false;
 }
 
-bool XMLParser::parseDouble(const xml::lite::Element* element, double& value) const
+bool XMLParser::parseDouble(const xml::lite::Element& element, double& value) const
 {
     value = Init::undefined<double>();
-    return parseValue(mLogger.get(), [&]() {
-        value = xml::lite::getValue<double>(*element);
-        assert(Init::isDefined(value));
-        });
+    const auto getValue = [&]() {
+        value = xml::lite::getValue<double>(element);
+        assert(Init::isDefined(value)); };
+    return parseValue(mLogger.get(), getValue);
+}
+bool XMLParser::parseDouble(const xml::lite::Element* element, double& value) const
+{
+    return parseDouble(*element, value);
 }
 void XMLParser::parseDouble(const xml::lite::Element* element, std::optional<double>& value) const
 {
@@ -371,10 +375,14 @@ void XMLParser::parseComplex(const xml::lite::Element* element, std::complex<dou
     value = std::complex<double>(r, i);
 }
 
+void XMLParser::parseString(const xml::lite::Element& element, std::string& value) const
+{
+    value = element.getCharacterData();
+}
 void XMLParser::parseString(const xml::lite::Element* element, std::string& value) const
 {
     assert(element != nullptr);
-    value = element->getCharacterData();
+    parseString(*element, value);
 }
 
 bool  XMLParser::parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const

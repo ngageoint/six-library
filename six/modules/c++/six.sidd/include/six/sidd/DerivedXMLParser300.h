@@ -94,7 +94,7 @@ private:
     void parseGeoDataFromXML(const xml::lite::Element* elem, GeoDataBase*) const;
 
     XMLElem convertDigitalElevationDataToXML(const DigitalElevationData& ded, XMLElem parent = nullptr) const;
-    void parseDigitalElevationDataFromXML(const xml::lite::Element* elem, DigitalElevationData&) const;
+    void parseDigitalElevationDataFromXML(const xml::lite::Element& elem, DigitalElevationData&) const;
 
     void parseProductGenerationOptionsFromXML(const xml::lite::Element* optionsElem, ProductGenerationOptions&) const;
     void parseBandEqualizationFromXML(const xml::lite::Element* bandElem, BandEqualization&) const;

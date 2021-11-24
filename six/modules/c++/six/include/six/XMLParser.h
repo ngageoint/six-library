@@ -223,8 +223,8 @@ protected:
         parseInt(&element, value);
     }
 
-    template <typename T>
-    void parseUInt(const xml::lite::Element* element, T& value) const
+    template <typename T, typename TElement>
+    void parseUInt(const TElement& element, T& value) const
     {
         parseInt<T>(element, value);
     }
@@ -238,11 +238,13 @@ protected:
     }
 
     bool parseDouble(const xml::lite::Element* element, double& value) const;
+    bool parseDouble(const xml::lite::Element&, double&) const;
     void parseDouble(const xml::lite::Element* element, std::optional<double>& value) const;
     bool parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, double& value) const;
     bool parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const;
     void parseComplex(const xml::lite::Element* element, std::complex<double>& value) const;
     void parseString(const xml::lite::Element* element, std::string& value) const;
+    void parseString(const xml::lite::Element&, std::string&) const;
     void parseBooleanType(const xml::lite::Element* element, BooleanType& value) const;
 
     bool parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const;

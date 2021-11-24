@@ -145,6 +145,7 @@ struct SICommonXMLParser : public XMLParser
     void parseVector3D(const xml::lite::Element* vecXML, Vector3& vec) const;
     void parseLatLonAlt(const xml::lite::Element* llaXML, LatLonAlt& lla) const;
     void parseLatLon(const xml::lite::Element* parent, LatLon& ll) const;
+    void parseLatLon(const xml::lite::Element& parent, LatLon& ll) const;
     void parseLatLons(const xml::lite::Element* pointsXML, const std::string& pointName,
             std::vector<LatLon>& llVec) const;
     void parseRangeAzimuth(const xml::lite::Element* parent, types::RgAz<double>& value) const;

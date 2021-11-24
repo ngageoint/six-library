@@ -640,7 +640,7 @@ void SICommonXMLParser::parseOptionalDecorrType(const xml::lite::Element* parent
     }
 }
 
-void SICommonXMLParser::parseLatLon(const xml::lite::Element* parent, LatLon& ll) const
+void SICommonXMLParser::parseLatLon(const xml::lite::Element& parent, LatLon& ll) const
 {
     double lat, lon;
 
@@ -649,6 +649,10 @@ void SICommonXMLParser::parseLatLon(const xml::lite::Element* parent, LatLon& ll
 
     ll.setLat(lat);
     ll.setLon(lon);
+}
+void SICommonXMLParser::parseLatLon(const xml::lite::Element* parent, LatLon& ll) const
+{
+    parseLatLon(*parent, ll);
 }
 
 void SICommonXMLParser::parseLatLons(const xml::lite::Element* pointsXML,
