@@ -61,10 +61,9 @@ namespace sidd
 {
     const six::DataType DerivedXMLControl::dataType = six::DataType::DERIVED;
 
-DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) :
-    XMLControl(log, ownLog)
-{
-}
+DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) : XMLControl(log, ownLog) { }
+DerivedXMLControl::DerivedXMLControl(std::unique_ptr<logging::Logger>&& log) : XMLControl(std::move(log)) { }
+DerivedXMLControl::DerivedXMLControl(logging::Logger& log) : XMLControl(log) { }
 
 Data* DerivedXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
