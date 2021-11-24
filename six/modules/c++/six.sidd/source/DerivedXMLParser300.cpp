@@ -2008,21 +2008,11 @@ void DerivedXMLParser300::parseDigitalElevationDataFromXML(const xml::lite::Elem
     parseDouble(getFirstAndOnly(pointElem, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
 }
 
-std::unique_ptr<LUT> DerivedXMLParser300::parseSingleLUT(const xml::lite::Element& elem,
-        size_t size) const
+std::unique_ptr<LUT> DerivedXMLParser300::parseSingleLUT(const xml::lite::Element& elem, size_t size) const
 {
     std::string lutStr;
     parseString(&elem, lutStr);
-    std::vector<std::string> lutVals = str::split(lutStr, " ");
-    auto lut = std::make_unique<LUT>(size, sizeof(short));
-
-    for (size_t ii = 0; ii < lutVals.size(); ++ii)
-    {
-        const short lutVal = str::toType<short>(lutVals[ii]);
-        ::memcpy(&(lut->table[ii * lut->elementSize]),
-            &lutVal, sizeof(short));
-    }
-    return lut;
+    return DerivedXMLParser200::parseSingleLUT(lutStr, size);
 }
 
 XMLElem DerivedXMLParser300::createLUT(const std::string& name, const LUT *lut,
