@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __SIX_SI_COMMON_XML_PARSER_H__
-#define __SIX_SI_COMMON_XML_PARSER_H__
+#ifndef SIX_six_SICommonXMLParser_h_INCLUDED_
+#define SIX_six_SICommonXMLParser_h_INCLUDED_
+#pragma once
 
 #include <six/CollectionInformation.h>
 #include <six/MatchInformation.h>
@@ -35,18 +36,19 @@
 
 namespace six
 {
-class SICommonXMLParser : public XMLParser
+struct SICommonXMLParser : public XMLParser
 {
-public:
-    SICommonXMLParser(const std::string& defaultURI,
-                      bool addClassAttributes,
-                      const std::string& siCommonURI,
-                      logging::Logger* log = nullptr,
-                      bool ownLog = false);
-
+    SICommonXMLParser(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        logging::Logger* log = nullptr, bool ownLog = false);
+    SICommonXMLParser(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        std::unique_ptr<logging::Logger>&&);
+    SICommonXMLParser(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        logging::Logger&);
     SICommonXMLParser(const SICommonXMLParser&) = delete;
+    SICommonXMLParser(SICommonXMLParser&&) = delete;
     SICommonXMLParser& operator=(const SICommonXMLParser&) = delete;
     SICommonXMLParser& operator=(SICommonXMLParser&&) = delete;
+    virtual ~SICommonXMLParser() = default;
 
     std::string getSICommonURI() const
     {
@@ -223,4 +225,4 @@ private:
 };
 }
 
-#endif
+#endif // SIX_six_SICommonXMLParser_h_INCLUDED_

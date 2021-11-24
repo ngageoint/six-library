@@ -39,15 +39,15 @@ typedef xml::lite::Element* XMLElem;
 
 namespace six
 {
-SICommonXMLParser::SICommonXMLParser(const std::string& defaultURI,
-                                     bool addClassAttributes,
-                                     const std::string& siCommonURI,
-                                     logging::Logger* log,
-                                     bool ownLog) :
-    XMLParser(defaultURI, addClassAttributes, log, ownLog),
-    mSICommonURI(siCommonURI)
-{
-}
+    SICommonXMLParser::SICommonXMLParser(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        logging::Logger* log, bool ownLog) : XMLParser(defaultURI, addClassAttributes, log, ownLog),
+        mSICommonURI(siCommonURI) { }
+    SICommonXMLParser::SICommonXMLParser(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        std::unique_ptr<logging::Logger>&& log) : XMLParser(defaultURI, addClassAttributes, std::move(log)),
+        mSICommonURI(siCommonURI) { }
+    SICommonXMLParser::SICommonXMLParser(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        logging::Logger& log) : XMLParser(defaultURI, addClassAttributes, log),
+        mSICommonURI(siCommonURI) { }
 
 void SICommonXMLParser::parseVector2D(const xml::lite::Element* vecXML, Vector2& vec) const
 {

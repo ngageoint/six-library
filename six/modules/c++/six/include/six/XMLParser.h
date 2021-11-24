@@ -19,12 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef SIX_six_XMLParser_h_INCLUDED_
+#define SIX_six_XMLParser_h_INCLUDED_
 #pragma once
 
 #include <string>
 #include <type_traits>
-
 #include <std/optional>
+#include <memory>
+
 #include <import/gsl.h>
 
 #include <six/Types.h>
@@ -35,19 +38,16 @@
 
 namespace six
 {
-class XMLParser
+struct XMLParser
 {
-public:
-    //!  Constructor
-    XMLParser(const std::string& defaultURI,
-              bool addClassAttributes,
-              logging::Logger* log = nullptr,
-              bool ownLog = false);
-
+    XMLParser(const std::string& defaultURI, bool addClassAttributes,
+        logging::Logger* log = nullptr, bool ownLog = false);
+    XMLParser(const std::string& defaultURI, bool addClassAttributes, std::unique_ptr<logging::Logger>&&);
+    XMLParser(const std::string& defaultURI, bool addClassAttributes, logging::Logger&);
     XMLParser(const XMLParser&) = delete;
     XMLParser& operator=(const XMLParser&) = delete;
-
-    //!  Destructor
+    XMLParser(XMLParser&&) = delete;
+    XMLParser& operator=(XMLParser&&) = delete;
     virtual ~XMLParser() = default;
 
     template<typename TLogger>
@@ -310,4 +310,4 @@ private:
   }
 }
 
-
+#endif // SIX_six_XMLParser_h_INCLUDED_
