@@ -54,7 +54,7 @@ private:
     void parseCompressionFromXML(const xml::lite::Element& compressionElem, Compression&) const;
 
     XMLElem convertDisplayToXML(const Display&, XMLElem parent = nullptr) const override;
-    void parseDisplayFromXML(const xml::lite::Element* displayElem, Display&) const;
+    void parseDisplayFromXML(const xml::lite::Element& displayElem, Display&) const;
 
     XMLElem convertMeasurementToXML(const Measurement*, XMLElem parent = nullptr) const override;
     void parseMeasurementFromXML(const xml::lite::Element*, Measurement* measurement) const override;
@@ -91,7 +91,7 @@ private:
     void convertJ2KToXML(const J2KCompression& j2k, XMLElem& parent) const;
 
     XMLElem convertGeoDataToXML(const GeoDataBase*, XMLElem parent = nullptr) const;
-    void parseGeoDataFromXML(const xml::lite::Element* elem, GeoDataBase*) const;
+    void parseGeoDataFromXML(const xml::lite::Element& elem, GeoDataBase*) const;
 
     XMLElem convertDigitalElevationDataToXML(const DigitalElevationData& ded, XMLElem parent = nullptr) const;
     void parseDigitalElevationDataFromXML(const xml::lite::Element& elem, DigitalElevationData&) const;

@@ -126,6 +126,7 @@ struct SICommonXMLParser : public XMLParser
     void parseGeoInfoFromXML(const xml::lite::Element* geoInfoXML, GeoInfo* geoInfo) const;
 
     void parseEarthModelType(const xml::lite::Element* element, EarthModelType& value) const;
+    void parseEarthModelType(const xml::lite::Element& element, EarthModelType& value) const;
 
     XMLElem createEarthModelType(const std::string& name,
             const EarthModelType& value,
@@ -172,6 +173,7 @@ struct SICommonXMLParser : public XMLParser
 
     void parseFootprint(const xml::lite::Element* footprint,
             const std::string& cornerName, LatLonCorners& corners) const;
+    void parseFootprint(const xml::lite::Element&, const std::string& cornerName, LatLonCorners&) const;
 
     void parseFootprint(const xml::lite::Element* footprint,
             const std::string& cornerName, LatLonAltCorners& corners) const;

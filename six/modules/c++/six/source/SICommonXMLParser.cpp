@@ -315,10 +315,15 @@ XMLElem SICommonXMLParser::createEarthModelType(const std::string& name,
 {
     return createSixString(name, value, parent);
 }
+void SICommonXMLParser::parseEarthModelType(const xml::lite::Element& element,
+    EarthModelType& value) const
+{
+    value = six::toType<EarthModelType>(element.getCharacterData());
+}
 void SICommonXMLParser::parseEarthModelType(const xml::lite::Element* element,
     EarthModelType& value) const
 {
-    value = six::toType<EarthModelType>(element->getCharacterData());
+    parseEarthModelType(*element, value);
 }
 
 XMLElem SICommonXMLParser::createLatLonFootprint(const std::string& name,
@@ -1156,12 +1161,12 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
     }
 }
 
-void SICommonXMLParser::parseFootprint(const xml::lite::Element* footprint,
+void SICommonXMLParser::parseFootprint(const xml::lite::Element& footprint,
                                        const std::string& cornerName,
                                        LatLonCorners &corners) const
 {
     std::vector<XMLElem> vertices;
-    footprint->getElementsByTagName(cornerName, vertices);
+    footprint.getElementsByTagName(cornerName, vertices);
 
     std::set<size_t> indices;
     for (size_t ii = 0; ii < vertices.size(); ++ii)
@@ -1182,6 +1187,12 @@ void SICommonXMLParser::parseFootprint(const xml::lite::Element* footprint,
     {
         throw except::Exception(Ctxt("Didn't get all expected corners"));
     }
+}
+void SICommonXMLParser::parseFootprint(const xml::lite::Element* footprint,
+    const std::string& cornerName,
+    LatLonCorners& corners) const
+{
+    parseFootprint(*footprint, cornerName, corners);
 }
 
 void SICommonXMLParser::parseFootprint(const xml::lite::Element* footprint,

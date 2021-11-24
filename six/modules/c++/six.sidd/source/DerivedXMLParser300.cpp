@@ -139,34 +139,30 @@ std::unique_ptr<DerivedData> DerivedXMLParser300::fromXML(const xml::lite::Docum
     builder.addExploitationFeatures(static_cast<unsigned int>(elements.size()));
 
     parseProductCreationFromXML(&productCreationElem, data->productCreation.get());
-    parseDisplayFromXML(&displayElem, *data->display);
-    parseGeoDataFromXML(&geoDataElem, data->geoData.get());
+    parseDisplayFromXML(displayElem, *data->display);
+    parseGeoDataFromXML(geoDataElem, data->geoData.get());
     parseMeasurementFromXML(&measurementElem, data->measurement.get());
     parseExploitationFeaturesFromXML(&exploitationFeaturesElem, data->exploitationFeatures.get());
 
     if (productProcessingElem)
     {
         builder.addProductProcessing();
-        parseProductProcessingFromXML(productProcessingElem,
-                                      data->productProcessing.get());
+        parseProductProcessingFromXML(productProcessingElem, data->productProcessing.get());
     }
     if (downstreamReprocessingElem)
     {
         builder.addDownstreamReprocessing();
-        parseDownstreamReprocessingFromXML(downstreamReprocessingElem,
-                                           data->downstreamReprocessing.get());
+        parseDownstreamReprocessingFromXML(downstreamReprocessingElem, data->downstreamReprocessing.get());
     }
     if (errorStatisticsElem)
     {
         builder.addErrorStatistics();
-        common().parseErrorStatisticsFromXML(errorStatisticsElem,
-                                             data->errorStatistics.get());
+        common().parseErrorStatisticsFromXML(errorStatisticsElem, data->errorStatistics.get());
     }
     if (radiometricElem)
     {
         builder.addRadiometric();
-        common().parseRadiometryFromXML(radiometricElem,
-                                        data->radiometric.get());
+        common().parseRadiometryFromXML(radiometricElem, data->radiometric.get());
     }
     if (matchInfoElem)
     {
@@ -356,7 +352,7 @@ void DerivedXMLParser300::parseJ2KCompression(const xml::lite::Element& j2kElem,
     }
 }
 
-void DerivedXMLParser300::parseDisplayFromXML(const xml::lite::Element* displayElem,
+void DerivedXMLParser300::parseDisplayFromXML(const xml::lite::Element& displayElem,
                                               Display& display) const
 {
     //pixelType previously set
@@ -369,9 +365,7 @@ void DerivedXMLParser300::parseDisplayFromXML(const xml::lite::Element* displayE
     }
 
     std::vector<XMLElem> nonInteractiveProcessingElems;
-    displayElem->getElementsByTagName("NonInteractiveProcessing",
-            nonInteractiveProcessingElems);
-
+    displayElem.getElementsByTagName("NonInteractiveProcessing", nonInteractiveProcessingElems);
     display.nonInteractiveProcessing.resize(nonInteractiveProcessingElems.size());
     for (size_t ii = 0; ii < nonInteractiveProcessingElems.size(); ++ii)
     {
@@ -381,9 +375,7 @@ void DerivedXMLParser300::parseDisplayFromXML(const xml::lite::Element* displayE
     }
 
     std::vector<XMLElem> interactiveProcessingElems;
-    displayElem->getElementsByTagName("InteractiveProcessing",
-            interactiveProcessingElems);
-
+    displayElem.getElementsByTagName("InteractiveProcessing", interactiveProcessingElems);
     display.interactiveProcessing.resize(interactiveProcessingElems.size());
     for (size_t ii = 0; ii < interactiveProcessingElems.size(); ++ii)
     {
@@ -393,7 +385,7 @@ void DerivedXMLParser300::parseDisplayFromXML(const xml::lite::Element* displayE
     }
 
     std::vector<XMLElem> extensions;
-    displayElem->getElementsByTagName("DisplayExtention", extensions);
+    displayElem.getElementsByTagName("DisplayExtention", extensions);
     for (size_t ii = 0; ii < extensions.size(); ++ii)
     {
         std::string name;
@@ -1876,7 +1868,7 @@ XMLElem DerivedXMLParser300::convertDigitalElevationDataToXML(
 }
 
 void DerivedXMLParser300::parseGeoDataFromXML(
-    const xml::lite::Element* geoDataXML, GeoDataBase* geoData) const
+    const xml::lite::Element& geoDataXML, GeoDataBase* geoData) const
 {
     common().parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
             geoData->earthModel);
@@ -1891,7 +1883,7 @@ void DerivedXMLParser300::parseGeoDataFromXML(
     }
 
     std::vector <XMLElem> geoInfosXML;
-    geoDataXML->getElementsByTagName("GeoInfo", geoInfosXML);
+    geoDataXML.getElementsByTagName("GeoInfo", geoInfosXML);
 
     //optional
     size_t idx(geoData->geoInfos.size());
