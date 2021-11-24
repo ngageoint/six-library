@@ -28,6 +28,7 @@
 #include <six/SICommonXMLParser10x.h>
 #include <six/sidd/DerivedDataBuilder.h>
 #include <six/sidd/DerivedXMLParser300.h>
+#include <six/sidd/DerivedXMLParser200.h>
 
 namespace
 {
@@ -63,31 +64,6 @@ void confirmNonNull(const SmartPtrT& ptr,
     }
 }
 
-void validateDRAFields(const six::sidd::DRAType& algorithmType,
-                       bool hasDraParameters,
-                       bool hasDraOverrides)
-{
-    if (algorithmType == six::sidd::DRAType::AUTO &&
-        !hasDraParameters)
-    {
-        throw except::Exception(Ctxt(
-            "DRAParameters required for algorithmType AUTO"));
-    }
-
-    if (algorithmType != six::sidd::DRAType::AUTO && hasDraParameters)
-    {
-        throw except::Exception(Ctxt(
-            "DRAParameters invalid for algorithmType " +
-            algorithmType.toString()));
-    }
-
-    if (algorithmType == six::sidd::DRAType::NONE && hasDraOverrides)
-    {
-        throw except::Exception(Ctxt(
-            "DRAOverrides invalid for algorithmType " +
-            algorithmType.toString()));
-    }
-}
 }
 
 namespace six
@@ -853,7 +829,7 @@ void DerivedXMLParser300::parseDynamicRangeAdjustmentFromXML(
     XMLElem parameterElem = getOptional(rangeElem, "DRAParameters");
     XMLElem overrideElem = getOptional(rangeElem, "DRAOverrides");
 
-    validateDRAFields(rangeAdjustment.algorithmType,
+    DerivedXMLParser200::validateDRAFields(rangeAdjustment.algorithmType,
                       parameterElem ? true : false, overrideElem ? true : false);
 
     if (parameterElem)
@@ -1261,9 +1237,7 @@ XMLElem DerivedXMLParser300::convertInteractiveProcessingToXML(
     }
 
     // DynamicRangeAdjustment
-
-    const DynamicRangeAdjustment& adjust =
-            processing.dynamicRangeAdjustment;
+    const auto& adjust = processing.dynamicRangeAdjustment;
 
     XMLElem adjustElem =
         newElement("DynamicRangeAdjustment", processingElem);
@@ -1272,9 +1246,7 @@ XMLElem DerivedXMLParser300::convertInteractiveProcessingToXML(
         adjustElem);
     createInt("BandStatsSource", adjust.bandStatsSource, adjustElem);
 
-    validateDRAFields(adjust.algorithmType,
-                      adjust.draParameters.get() ? true : false,
-                      adjust.draOverrides.get() ? true : false);
+    DerivedXMLParser200::validateDRAFields(adjust);
     if (adjust.draParameters.get())
     {
         XMLElem paramElem = newElement("DRAParameters", adjustElem);

@@ -59,6 +59,12 @@ void confirmNonNull(const SmartPtrT& ptr,
         throw except::Exception(Ctxt(msg));
     }
 }
+}
+
+namespace six
+{
+namespace sidd
+{
 
 void validateDRAFields(const six::sidd::DRAType& algorithmType,
                        bool hasDraParameters,
@@ -85,12 +91,13 @@ void validateDRAFields(const six::sidd::DRAType& algorithmType,
             algorithmType.toString()));
     }
 }
+void validateDRAFields(const six::sidd::DynamicRangeAdjustment& adjust)
+{
+    validateDRAFields(adjust.algorithmType,
+        adjust.draParameters.get() ? true : false,
+        adjust.draOverrides.get() ? true : false);
 }
 
-namespace six
-{
-namespace sidd
-{
 const char DerivedXMLParser200::VERSION[] = "2.0.0";
 const char DerivedXMLParser200::SI_COMMON_URI[] = "urn:SICommon:1.0";
 const char DerivedXMLParser200::ISM_URI[] = "urn:us:gov:ic:ism:13";
@@ -1272,9 +1279,7 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
         adjustElem);
     createInt("BandStatsSource", adjust.bandStatsSource, adjustElem);
 
-    validateDRAFields(adjust.algorithmType,
-                      adjust.draParameters.get() ? true : false,
-                      adjust.draOverrides.get() ? true : false);
+    validateDRAFields(adjust);
     if (adjust.draParameters.get())
     {
         XMLElem paramElem = newElement("DRAParameters", adjustElem);
