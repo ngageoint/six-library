@@ -48,6 +48,8 @@ struct DerivedXMLParser200 : public DerivedXMLParser
     static void validateDRAFields(const six::sidd::DRAType&, bool hasDraParameters, bool hasDraOverrides);
     static void validateDRAFields(const six::sidd::DynamicRangeAdjustment&);
 
+    static ProjectionType getProjectionType(const xml::lite::Element& measurementElem);
+
 protected:
     virtual void parseDerivedClassificationFromXML(
             const xml::lite::Element* classificationElem,

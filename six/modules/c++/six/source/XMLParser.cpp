@@ -56,11 +56,19 @@ XMLElem XMLParser::newElement(const std::string& name, XMLElem parent) const
 {
     return newElement(name, mDefaultURI, parent);
 }
+xml::lite::Element& XMLParser::newElement(const std::string& name, xml::lite::Element& parent) const
+{
+    return *newElement(name, mDefaultURI, &parent);
+}
 
 XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, XMLElem parent)
 {
     return newElement(name, uri, "", parent);
+}
+xml::lite::Element& XMLParser::newElement(const std::string& name, const std::string& uri, xml::lite::Element& parent)
+{
+    return *newElement(name, uri, "", &parent);
 }
 
 void XMLParser::addClassAttributes(xml::lite::Element& elem, const std::string& type) const

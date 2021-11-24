@@ -123,15 +123,7 @@ std::unique_ptr<DerivedData> DerivedXMLParser300::fromXML(const xml::lite::Docum
     builder.addGeoData();
 
     // create Measurement
-    six::ProjectionType projType = ProjectionType::NOT_SET;
-    if (getOptional(measurementElem, "GeographicProjection"))
-        projType = ProjectionType::GEOGRAPHIC;
-    else if (getOptional(measurementElem, "CylindricalProjection"))
-            projType = ProjectionType::CYLINDRICAL;
-    else if (getOptional(measurementElem, "PlaneProjection"))
-        projType = ProjectionType::PLANE;
-    else if (getOptional(measurementElem, "PolynomialProjection"))
-        projType = ProjectionType::POLYNOMIAL;
+    const auto projType = DerivedXMLParser200::getProjectionType(measurementElem);
     builder.addMeasurement(projType);
 
     // create ExploitationFeatures
@@ -203,10 +195,9 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
 
     convertProductCreationToXML(derived->productCreation.get(), root);
     convertDisplayToXML(*derived->display, root);
-    convertGeoDataToXML(derived->geoData.get(), root);
+    convertGeoDataToXML(*derived->geoData, *root);
     convertMeasurementToXML(derived->measurement.get(), root);
-    convertExploitationFeaturesToXML(derived->exploitationFeatures.get(),
-                                     root);
+    convertExploitationFeaturesToXML(derived->exploitationFeatures.get(), root);
 
     // optional
     if (derived->downstreamReprocessing.get())
@@ -1769,34 +1760,32 @@ XMLElem DerivedXMLParser300::convertDisplayToXML(
     return displayElem;
 }
 
-XMLElem DerivedXMLParser300::convertGeoDataToXML(
-        const GeoDataBase* geoData,
-        XMLElem parent) const
+xml::lite::Element& DerivedXMLParser300::convertGeoDataToXML(
+    const GeoDataBase& geoData,
+    xml::lite::Element& parent) const
 {
-    XMLElem geoDataXML = newElement("GeoData", parent);
+    auto& geoDataXML = newElement("GeoData", parent);
 
-    common().createEarthModelType("EarthModel", geoData->earthModel, geoDataXML);
-
-    common().createLatLonFootprint("ImageCorners", "ICP", geoData->imageCorners, geoDataXML);
+    common().createEarthModelType("EarthModel", geoData.earthModel, &geoDataXML);
+    common().createLatLonFootprint("ImageCorners", "ICP", geoData.imageCorners, &geoDataXML);
 
     //only if 3+ vertices
-    const size_t numVertices = geoData->validData.size();
+    const size_t numVertices = geoData.validData.size();
     if (numVertices >= 3)
     {
-        XMLElem vXML = newElement("ValidData", geoDataXML);
-        setAttribute(vXML, "size", numVertices);
+        auto& vXML = newElement("ValidData", geoDataXML);
+        setAttribute(&vXML, "size", numVertices);
 
         for (size_t ii = 0; ii < numVertices; ++ii)
         {
-            XMLElem vertexXML = common().createLatLon("Vertex", geoData->validData[ii],
-                                                      vXML);
+            XMLElem vertexXML = common().createLatLon("Vertex", geoData.validData[ii], &vXML);
             setAttribute(vertexXML, "index", ii + 1);
         }
     }
 
-    for (size_t ii = 0; ii < geoData->geoInfos.size(); ++ii)
+    for (const auto& geoInfo : geoData.geoInfos)
     {
-        common().convertGeoInfoToXML(*geoData->geoInfos[ii].get(), true, geoDataXML);
+        common().convertGeoInfoToXML(*geoInfo, true, &geoDataXML);
     }
 
     return geoDataXML;

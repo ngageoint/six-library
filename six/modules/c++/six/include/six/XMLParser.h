@@ -75,10 +75,12 @@ protected:
     }
 
     XMLElem newElement(const std::string& name, XMLElem prnt = nullptr) const;
+    xml::lite::Element& newElement(const std::string& name, xml::lite::Element& prnt) const;
 
     static
     XMLElem newElement(const std::string& name, const std::string& uri,
             XMLElem prnt = nullptr);
+    static xml::lite::Element& newElement(const std::string& name, const std::string& uri, xml::lite::Element& prnt);
 
     static
     XMLElem newElement(const std::string& name, const std::string& uri,

@@ -98,6 +98,21 @@ void DerivedXMLParser200::validateDRAFields(const six::sidd::DynamicRangeAdjustm
         adjust.draOverrides.get() ? true : false);
 }
 
+ProjectionType DerivedXMLParser200::getProjectionType(const xml::lite::Element& measurementElem)
+{
+    six::ProjectionType projType = ProjectionType::NOT_SET;
+    if (getOptional(measurementElem, "GeographicProjection"))
+        projType = ProjectionType::GEOGRAPHIC;
+    else if (getOptional(measurementElem, "CylindricalProjection"))
+        projType = ProjectionType::CYLINDRICAL;
+    else if (getOptional(measurementElem, "PlaneProjection"))
+        projType = ProjectionType::PLANE;
+    else if (getOptional(measurementElem, "PolynomialProjection"))
+        projType = ProjectionType::POLYNOMIAL;
+    return projType;
+}
+
+
 const char DerivedXMLParser200::VERSION[] = "2.0.0";
 const char DerivedXMLParser200::SI_COMMON_URI[] = "urn:SICommon:1.0";
 const char DerivedXMLParser200::ISM_URI[] = "urn:us:gov:ic:ism:13";
@@ -147,15 +162,7 @@ DerivedData* DerivedXMLParser200::fromXML(
     builder.addGeoData();
 
     // create Measurement
-    six::ProjectionType projType = ProjectionType::NOT_SET;
-    if (getOptional(measurementElem, "GeographicProjection"))
-        projType = ProjectionType::GEOGRAPHIC;
-    else if (getOptional(measurementElem, "CylindricalProjection"))
-            projType = ProjectionType::CYLINDRICAL;
-    else if (getOptional(measurementElem, "PlaneProjection"))
-        projType = ProjectionType::PLANE;
-    else if (getOptional(measurementElem, "PolynomialProjection"))
-        projType = ProjectionType::POLYNOMIAL;
+    const auto projType = getProjectionType(*measurementElem);
     builder.addMeasurement(projType);
 
     // create ExploitationFeatures
