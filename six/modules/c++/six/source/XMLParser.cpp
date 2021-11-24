@@ -393,7 +393,7 @@ void XMLParser::parseString(const xml::lite::Element* element, std::string& valu
     parseString(*element, value);
 }
 
-bool  XMLParser::parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const
+bool  XMLParser::parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const
 {
     if (const xml::lite::Element* const element = getOptional(parent, tag))
     {

@@ -208,14 +208,12 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     // optional
     if (derived->errorStatistics.get())
     {
-        common().convertErrorStatisticsToXML(derived->errorStatistics.get(),
-                                             root);
+        common().convertErrorStatisticsToXML(derived->errorStatistics.get(), root);
     }
     // optional
     if (derived->matchInformation.get())
     {
-        common().convertMatchInformationToXML(*derived->matchInformation,
-                                              root);
+        common().convertMatchInformationToXML(*derived->matchInformation, root);
     }
     // optional
     if (derived->radiometric.get())
@@ -230,8 +228,7 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     // optional
     if (derived->digitalElevationData.get())
     {
-        convertDigitalElevationDataToXML(*derived->digitalElevationData,
-                                         root);
+        convertDigitalElevationDataToXML(*derived->digitalElevationData, root);
     }
     // optional
     if (derived->productProcessing.get())
@@ -339,8 +336,7 @@ void DerivedXMLParser300::parseJ2KCompression(const xml::lite::Element& j2kElem,
 
     for (size_t ii = 0; ii < layerElems.size(); ++ii)
     {
-        parseDouble(getFirstAndOnly(layerElems[ii], "Bitrate"),
-                    j2k.layerInfo[ii].bitRate);
+        parseDouble(getFirstAndOnly(layerElems[ii], "Bitrate"), j2k.layerInfo[ii].bitRate);
     }
 }
 
@@ -348,12 +344,11 @@ void DerivedXMLParser300::parseDisplayFromXML(const xml::lite::Element& displayE
                                               Display& display) const
 {
     //pixelType previously set
-    parseUInt(getFirstAndOnly(displayElem, "NumBands"),
-              display.numBands);
+    parseUInt(getFirstAndOnly(displayElem, "NumBands"), display.numBands);
     XMLElem bandDisplayElem = getOptional(displayElem, "DefaultBandDisplay");
     if (bandDisplayElem)
     {
-        parseUInt(bandDisplayElem, display.defaultBandDisplay);
+        parseUInt(*bandDisplayElem, display.defaultBandDisplay);
     }
 
     std::vector<XMLElem> nonInteractiveProcessingElems;
@@ -362,7 +357,7 @@ void DerivedXMLParser300::parseDisplayFromXML(const xml::lite::Element& displayE
     for (size_t ii = 0; ii < nonInteractiveProcessingElems.size(); ++ii)
     {
         display.nonInteractiveProcessing[ii].reset(new NonInteractiveProcessing());
-        parseNonInteractiveProcessingFromXML(nonInteractiveProcessingElems[ii],
+        parseNonInteractiveProcessingFromXML(*nonInteractiveProcessingElems[ii],
                 *display.nonInteractiveProcessing[ii]);
     }
 
@@ -372,18 +367,18 @@ void DerivedXMLParser300::parseDisplayFromXML(const xml::lite::Element& displayE
     for (size_t ii = 0; ii < interactiveProcessingElems.size(); ++ii)
     {
         display.interactiveProcessing[ii].reset(new InteractiveProcessing());
-        parseInteractiveProcessingFromXML(interactiveProcessingElems[ii],
+        parseInteractiveProcessingFromXML(*interactiveProcessingElems[ii],
                 *display.interactiveProcessing[ii]);
     }
 
     std::vector<XMLElem> extensions;
     displayElem.getElementsByTagName("DisplayExtention", extensions);
-    for (size_t ii = 0; ii < extensions.size(); ++ii)
+    for (const auto& extension : extensions)
     {
         std::string name;
-        getAttributeIfExists(extensions[ii]->getAttributes(), "name", name);
+        getAttributeIfExists(extension->getAttributes(), "name", name);
         std::string value;
-        parseString(extensions[ii], value);
+        parseString(*extension, value);
         Parameter parameter(value);
         parameter.setName(name);
         display.displayExtensions.push_back(parameter);
@@ -391,57 +386,52 @@ void DerivedXMLParser300::parseDisplayFromXML(const xml::lite::Element& displayE
 }
 
 void DerivedXMLParser300::parseNonInteractiveProcessingFromXML(
-            const xml::lite::Element* procElem,
+            const xml::lite::Element& procElem,
             NonInteractiveProcessing& nonInteractiveProcessing) const
 {
-    XMLElem productGenerationOptions = getFirstAndOnly(procElem,
-            "ProductGenerationOptions");
-    XMLElem rrdsElem = getFirstAndOnly(procElem, "RRDS");
+    auto& productGenerationOptions = getFirstAndOnly(procElem, "ProductGenerationOptions");
+    auto& rrdsElem = getFirstAndOnly(procElem, "RRDS");
 
-    parseProductGenerationOptionsFromXML(productGenerationOptions,
-        nonInteractiveProcessing.productGenerationOptions);
+    parseProductGenerationOptionsFromXML(productGenerationOptions, nonInteractiveProcessing.productGenerationOptions);
     parseRRDSFromXML(rrdsElem, nonInteractiveProcessing.rrds);
 }
 
 void DerivedXMLParser300::parseProductGenerationOptionsFromXML(
-            const xml::lite::Element* optionsElem,
+            const xml::lite::Element& optionsElem,
             ProductGenerationOptions& options) const
 {
     XMLElem bandElem = getOptional(optionsElem, "BandEqualization");
-    XMLElem restoration = getOptional(optionsElem,
-            "ModularTransferFunctionRestoration");
+    XMLElem restoration = getOptional(optionsElem, "ModularTransferFunctionRestoration");
     XMLElem remapElem = getOptional(optionsElem, "DataRemapping");
-    XMLElem correctionElem = getOptional(optionsElem,
-            "AsymmetricPixelCorrection");
+    XMLElem correctionElem = getOptional(optionsElem, "AsymmetricPixelCorrection");
 
     if (bandElem)
     {
         options.bandEqualization.reset(new BandEqualization());
-        parseBandEqualizationFromXML(bandElem, *options.bandEqualization);
+        parseBandEqualizationFromXML(*bandElem, *options.bandEqualization);
     }
 
     if (restoration)
     {
         options.modularTransferFunctionRestoration.reset(new Filter());
-        parseFilterFromXML(restoration,
-                           *options.modularTransferFunctionRestoration);
+        parseFilterFromXML(*restoration, *options.modularTransferFunctionRestoration);
     }
 
     if (remapElem)
     {
         options.dataRemapping.reset(new LookupTable());
-        parseLookupTableFromXML(remapElem, *options.dataRemapping);
+        parseLookupTableFromXML(*remapElem, *options.dataRemapping);
     }
 
     if (correctionElem)
     {
         options.asymmetricPixelCorrection.reset(new Filter());
-        parseFilterFromXML(correctionElem, *options.asymmetricPixelCorrection);
+        parseFilterFromXML(*correctionElem, *options.asymmetricPixelCorrection);
     }
 }
 
 void DerivedXMLParser300::parseLookupTableFromXML(
-            const xml::lite::Element* lookupElem,
+            const xml::lite::Element& lookupElem,
             LookupTable& lookupTable) const
 {
     parseString(getFirstAndOnly(lookupElem, "LUTName"), lookupTable.lutName);
@@ -505,7 +495,7 @@ void DerivedXMLParser300::parseLookupTableFromXML(
     }
 }
 
-void DerivedXMLParser300::parseBandEqualizationFromXML(const xml::lite::Element* bandElem,
+void DerivedXMLParser300::parseBandEqualizationFromXML(const xml::lite::Element& bandElem,
                                                        BandEqualization& band) const
 {
     std::string bandAlgo;
@@ -521,16 +511,16 @@ void DerivedXMLParser300::parseBandEqualizationFromXML(const xml::lite::Element*
     }
 
     std::vector<XMLElem> lutElems;
-    bandElem->getElementsByTagName("BandLUT", lutElems);
+    bandElem.getElementsByTagName("BandLUT", lutElems);
     band.bandLUTs.resize(lutElems.size());
     for (size_t ii = 0; ii < lutElems.size(); ++ii)
     {
         band.bandLUTs[ii].reset(new LookupTable());
-        parseLookupTableFromXML(lutElems[ii], *band.bandLUTs[ii]);
+        parseLookupTableFromXML(*lutElems[ii], *band.bandLUTs[ii]);
     }
 }
 
-void DerivedXMLParser300::parseRRDSFromXML(const xml::lite::Element* rrdsElem,
+void DerivedXMLParser300::parseRRDSFromXML(const xml::lite::Element& rrdsElem,
             RRDS& rrds) const
 {
     parseEnum(getFirstAndOnly(rrdsElem, "DownsamplingMethod"), rrds.downsamplingMethod);
@@ -539,18 +529,18 @@ void DerivedXMLParser300::parseRRDSFromXML(const xml::lite::Element* rrdsElem,
     if (antiAliasElem)
     {
         rrds.antiAlias.reset(new Filter());
-        parseFilterFromXML(antiAliasElem, *rrds.antiAlias);
+        parseFilterFromXML(*antiAliasElem, *rrds.antiAlias);
     }
 
     XMLElem interpolationElem = getOptional(rrdsElem, "Interpolation");
     if (interpolationElem)
     {
         rrds.interpolation.reset(new Filter());
-        parseFilterFromXML(interpolationElem, *rrds.interpolation);
+        parseFilterFromXML(*interpolationElem, *rrds.interpolation);
     }
 }
 
-void DerivedXMLParser300::parseFilterFromXML(const xml::lite::Element* filterElem,
+void DerivedXMLParser300::parseFilterFromXML(const xml::lite::Element& filterElem,
     Filter& filter) const
 {
     parseString(getFirstAndOnly(filterElem, "FilterName"), filter.filterName);
@@ -697,14 +687,14 @@ void DerivedXMLParser300::parseBankFromXML(const xml::lite::Element* bankElem,
 }
 
 void DerivedXMLParser300::parseInteractiveProcessingFromXML(
-            const xml::lite::Element* interactiveElem,
+            const xml::lite::Element& interactiveElem,
             InteractiveProcessing& interactive) const
 {
-    XMLElem geomElem = getFirstAndOnly(interactiveElem, "GeometricTransform");
-    XMLElem sharpnessElem = getFirstAndOnly(interactiveElem,
+    auto& geomElem = getFirstAndOnly(interactiveElem, "GeometricTransform");
+    auto& sharpnessElem = getFirstAndOnly(interactiveElem,
             "SharpnessEnhancement");
     XMLElem colorElem = getOptional(interactiveElem, "ColorSpaceTransform");
-    XMLElem dynamicElem = getFirstAndOnly(interactiveElem, "DynamicRangeAdjustment");
+    auto& dynamicElem = getFirstAndOnly(interactiveElem, "DynamicRangeAdjustment");
     XMLElem ttcElem = getOptional(interactiveElem, "TonalTransferCurve");
 
     interactive.geometricTransform = GeometricTransform();
@@ -715,35 +705,33 @@ void DerivedXMLParser300::parseInteractiveProcessingFromXML(
     if (colorElem)
     {
         interactive.colorSpaceTransform.reset(new ColorSpaceTransform());
-        parseColorSpaceTransformFromXML(colorElem,
-                                        *interactive.colorSpaceTransform);
+        parseColorSpaceTransformFromXML(*colorElem, *interactive.colorSpaceTransform);
     }
 
-    parseDynamicRangeAdjustmentFromXML(dynamicElem,
-                                       interactive.dynamicRangeAdjustment);
+    parseDynamicRangeAdjustmentFromXML(dynamicElem, interactive.dynamicRangeAdjustment);
 
     if (ttcElem)
     {
         interactive.tonalTransferCurve.reset(new LookupTable());
-        parseLookupTableFromXML(ttcElem, *interactive.tonalTransferCurve);
+        parseLookupTableFromXML(*ttcElem, *interactive.tonalTransferCurve);
     }
 }
 
-void DerivedXMLParser300::parseGeometricTransformFromXML(const xml::lite::Element* geomElem,
+void DerivedXMLParser300::parseGeometricTransformFromXML(const xml::lite::Element& geomElem,
              GeometricTransform& transform) const
 {
-    XMLElem scalingElem = getFirstAndOnly(geomElem, "Scaling");
+    auto& scalingElem = getFirstAndOnly(geomElem, "Scaling");
     parseFilterFromXML(getFirstAndOnly(scalingElem, "AntiAlias"),
         transform.scaling.antiAlias);
     parseFilterFromXML(getFirstAndOnly(scalingElem, "Interpolation"),
         transform.scaling.interpolation);
 
-    XMLElem orientationElem = getFirstAndOnly(geomElem, "Orientation");
+    auto& orientationElem = getFirstAndOnly(geomElem, "Orientation");
     parseEnum(getFirstAndOnly(orientationElem, "ShadowDirection"), transform.orientation.shadowDirection);
 }
 
 void DerivedXMLParser300::parseSharpnessEnhancementFromXML(
-             const xml::lite::Element* sharpElem,
+             const xml::lite::Element& sharpElem,
              SharpnessEnhancement& sharpness) const
 {
     bool ok = false;
@@ -757,7 +745,7 @@ void DerivedXMLParser300::parseSharpnessEnhancementFromXML(
         {
             ok = true;
             sharpness.modularTransferFunctionCompensation.reset(new Filter());
-            parseFilterFromXML(mTFCElem,
+            parseFilterFromXML(*mTFCElem,
                                *sharpness.modularTransferFunctionCompensation);
         }
     }
@@ -765,7 +753,7 @@ void DerivedXMLParser300::parseSharpnessEnhancementFromXML(
     {
         ok = true;
         sharpness.modularTransferFunctionEnhancement.reset(new Filter());
-        parseFilterFromXML(mTFRElem,
+        parseFilterFromXML(*mTFRElem,
                            *sharpness.modularTransferFunctionEnhancement);
     }
     if (!ok)
@@ -777,9 +765,9 @@ void DerivedXMLParser300::parseSharpnessEnhancementFromXML(
 }
 
 void DerivedXMLParser300::parseColorSpaceTransformFromXML(
-            const xml::lite::Element* colorElem, ColorSpaceTransform& transform) const
+            const xml::lite::Element& colorElem, ColorSpaceTransform& transform) const
 {
-    XMLElem manageElem = getFirstAndOnly(colorElem, "ColorManagementModule");
+    auto& manageElem = getFirstAndOnly(colorElem, "ColorManagementModule");
 
     std::string renderIntentStr;
     parseString(getFirstAndOnly(manageElem, "RenderingIntent"), renderIntentStr);
@@ -802,7 +790,7 @@ void DerivedXMLParser300::parseColorSpaceTransformFromXML(
 }
 
 void DerivedXMLParser300::parseDynamicRangeAdjustmentFromXML(
-            const xml::lite::Element* rangeElem,
+            const xml::lite::Element& rangeElem,
             DynamicRangeAdjustment& rangeAdjustment) const
 {
     parseEnum(getFirstAndOnly(rangeElem, "AlgorithmType"), rangeAdjustment.algorithmType);
@@ -1895,11 +1883,10 @@ void DerivedXMLParser300::parseMeasurementFromXML(
     XMLElem arpFlagElem = getOptional(measurementElem, "ARPFlag");
     if (arpFlagElem)
     {
-        parseEnum(arpFlagElem, measurement->arpFlag);
+        parseEnum(*arpFlagElem, measurement->arpFlag);
     }
 
-    common().parsePolyXYZ(getFirstAndOnly(measurementElem, "ARPPoly"),
-        measurement->arpPoly);
+    common().parsePolyXYZ(getFirstAndOnly(measurementElem, "ARPPoly"), measurement->arpPoly);
 
     common().parseRowColInts(getFirstAndOnly(measurementElem, "ValidData"),
                              "Vertex",
@@ -1936,11 +1923,9 @@ void DerivedXMLParser300::parseProductFromXML(
 {
     std::vector<XMLElem> productElems;
     exploitationFeaturesElem->getElementsByTagName("Product", productElems);
-
     if (productElems.empty())
     {
-        throw except::Exception(Ctxt(
-            "ExploitationFeatures requires at least one Product"));
+        throw except::Exception(Ctxt("ExploitationFeatures requires at least one Product"));
     }
 
     exploitationFeatures->product.resize(productElems.size());
@@ -1949,18 +1934,14 @@ void DerivedXMLParser300::parseProductFromXML(
         const xml::lite::Element* const productElem = productElems[ii];
         Product& product = exploitationFeatures->product[ii];
 
-        common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"),
-                                   product.resolution);
-
-        parseDouble(getFirstAndOnly(productElem, "Ellipticity"),
-                    product.ellipticity);
+        common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"), product.resolution);
+        parseDouble(getFirstAndOnly(productElem, "Ellipticity"), product.ellipticity);
 
         std::vector<XMLElem> polarizationElems;
         productElem->getElementsByTagName("Polarization", polarizationElems);
         if (polarizationElems.empty())
         {
-            throw except::Exception(Ctxt(
-                "Product requires at least one polarization"));
+            throw except::Exception(Ctxt("Product requires at least one polarization"));
         }
         product.polarization.resize(polarizationElems.size());
         for (size_t jj = 0; jj < product.polarization.size(); ++jj)

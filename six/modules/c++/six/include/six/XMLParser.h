@@ -232,11 +232,16 @@ protected:
     }
 
     template <typename T>
-    void parseEnum(const xml::lite::Element* element, T& enumVal) const
+    void parseEnum(const xml::lite::Element& element, T& enumVal) const
     {
         std::string name;
         parseString(element, name);
         enumVal = T(name);
+    }
+    template <typename T>
+    void parseEnum(const xml::lite::Element* element, T& enumVal) const
+    {
+        parseEnum(*element, enumVal);
     }
 
     bool parseDouble(const xml::lite::Element* element, double& value) const;
@@ -249,7 +254,11 @@ protected:
     void parseString(const xml::lite::Element&, std::string&) const;
     void parseBooleanType(const xml::lite::Element* element, BooleanType& value) const;
 
-    bool parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const;
+    bool parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const;
+    bool parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const
+    {
+        return parseOptionalString(*parent, tag, value);
+    }
     template <typename T>
     bool parseOptionalInt(const xml::lite::Element* parent, const std::string& tag, T& value) const
     {
