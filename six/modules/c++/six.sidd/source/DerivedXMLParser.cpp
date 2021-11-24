@@ -244,51 +244,60 @@ void DerivedXMLParser::setAttributeIfNonNull(XMLElem element,
 }
 
 void DerivedXMLParser::parseProductCreationFromXML(
-        const xml::lite::Element* informationElem,
-        ProcessorInformation* processorInformation) const
+        const xml::lite::Element& informationElem,
+        ProcessorInformation& processorInformation) const
 {
-    parseString(getFirstAndOnly(informationElem, "Application"),
-                processorInformation->application);
-    parseDateTime(getFirstAndOnly(informationElem, "ProcessingDateTime"),
-                  processorInformation->processingDateTime);
-    parseString(getFirstAndOnly(informationElem, "Site"),
-                processorInformation->site);
+    parseString(getFirstAndOnly(informationElem, "Application"), processorInformation.application);
+    parseDateTime(getFirstAndOnly(&informationElem, "ProcessingDateTime"), processorInformation.processingDateTime);
+    parseString(getFirstAndOnly(informationElem, "Site"), processorInformation.site);
 
     // optional
     XMLElem profileElem = getOptional(informationElem, "Profile");
     if (profileElem)
     {
-        parseString(profileElem, processorInformation->profile);
+        parseString(profileElem, processorInformation.profile);
     }
+}
+void DerivedXMLParser::parseProductCreationFromXML(
+    const xml::lite::Element* informationElem,
+    ProcessorInformation* processorInformation) const
+{
+    parseProductCreationFromXML(*informationElem, *processorInformation);
 }
 
 void DerivedXMLParser::parseProductCreationFromXML(
-        const xml::lite::Element* productCreationElem,
-        ProductCreation* productCreation) const
+        const xml::lite::Element& productCreationElem,
+        ProductCreation& productCreation) const
 {
     parseProductCreationFromXML(
-            getFirstAndOnly(productCreationElem, "ProcessorInformation"),
-            &productCreation->processorInformation);
+            getFirstAndOnly(&productCreationElem, "ProcessorInformation"),
+            &(productCreation.processorInformation));
 
     parseDerivedClassificationFromXML(
-            getFirstAndOnly(productCreationElem, "Classification"),
-            productCreation->classification);
+            getFirstAndOnly(&productCreationElem, "Classification"),
+            productCreation.classification);
 
     parseString(getFirstAndOnly(productCreationElem, "ProductName"),
-                productCreation->productName);
+                productCreation.productName);
     parseString(getFirstAndOnly(productCreationElem, "ProductClass"),
-                productCreation->productClass);
+                productCreation.productClass);
 
     // optional
     XMLElem productTypeElem = getOptional(productCreationElem, "ProductType");
     if (productTypeElem)
     {
-        parseString(productTypeElem, productCreation->productType);
+        parseString(productTypeElem, productCreation.productType);
     }
 
     // optional
-    common().parseParameters(productCreationElem, "ProductCreationExtension",
-                             productCreation->productCreationExtensions);
+    common().parseParameters(&productCreationElem, "ProductCreationExtension",
+                             productCreation.productCreationExtensions);
+}
+void DerivedXMLParser::parseProductCreationFromXML(
+    const xml::lite::Element* productCreationElem,
+    ProductCreation* productCreation) const
+{
+    parseProductCreationFromXML(*productCreationElem, *productCreation);
 }
 
 void DerivedXMLParser::parseDerivedClassificationFromXML(
@@ -1324,19 +1333,25 @@ void DerivedXMLParser::parseProcessingModuleFromXML(
 }
 
 void DerivedXMLParser::parseProductProcessingFromXML(
-        const xml::lite::Element* elem,
-        ProductProcessing* productProcessing) const
+        const xml::lite::Element& elem,
+        ProductProcessing& productProcessing) const
 {
     std::vector<XMLElem> procModuleElem;
-    elem->getElementsByTagName("ProcessingModule", procModuleElem);
-    productProcessing->processingModules.resize(procModuleElem.size());
+    elem.getElementsByTagName("ProcessingModule", procModuleElem);
+    productProcessing.processingModules.resize(procModuleElem.size());
     for (size_t i = 0; i < procModuleElem.size(); ++i)
     {
-        productProcessing->processingModules[i].reset(new ProcessingModule());
+        productProcessing.processingModules[i].reset(new ProcessingModule());
         parseProcessingModuleFromXML(
                 procModuleElem[i],
-                productProcessing->processingModules[i].get());
+                productProcessing.processingModules[i].get());
     }
+}
+void DerivedXMLParser::parseProductProcessingFromXML(
+    const xml::lite::Element* elem,
+    ProductProcessing* productProcessing) const
+{
+    parseProductProcessingFromXML(*elem, *productProcessing);
 }
 
 void DerivedXMLParser::parseDownstreamReprocessingFromXML(

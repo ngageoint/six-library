@@ -200,10 +200,13 @@ protected:
             XMLElem parent) const;
     void parseProductCreationFromXML(const xml::lite::Element* productCreationElem,
                                      ProductCreation* productCreation) const;
+    void parseProductCreationFromXML(const xml::lite::Element& productCreationElem, ProductCreation&) const;
     void parseProductCreationFromXML(const xml::lite::Element* informationElem,
                                      ProcessorInformation* processorInformation) const;
+    void parseProductCreationFromXML(const xml::lite::Element&, ProcessorInformation&) const;
     void parseProductProcessingFromXML(const xml::lite::Element* elem,
                                        ProductProcessing* productProcessing) const;
+    void parseProductProcessingFromXML(const xml::lite::Element&, ProductProcessing&) const;
     void parseProcessingModuleFromXML(const xml::lite::Element* elem,
                                       ProcessingModule* procMod) const;
     void parseDownstreamReprocessingFromXML(const xml::lite::Element* elem,

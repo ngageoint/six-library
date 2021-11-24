@@ -25,6 +25,8 @@
 
 #include <sstream>
 
+#include <gsl/gsl.h>
+
 #include <six/SICommonXMLParser10x.h>
 #include <six/sidd/DerivedDataBuilder.h>
 #include <six/sidd/DerivedXMLParser300.h>
@@ -134,20 +136,19 @@ std::unique_ptr<DerivedData> DerivedXMLParser300::fromXML(const xml::lite::Docum
 
     // create ExploitationFeatures
     std::vector<XMLElem> elements;
-    exploitationFeaturesElem.getElementsByTagName("ExploitationFeatures",
-                                                  elements);
-    builder.addExploitationFeatures(static_cast<unsigned int>(elements.size()));
+    exploitationFeaturesElem.getElementsByTagName("ExploitationFeatures", elements);
+    builder.addExploitationFeatures(gsl::narrow<unsigned int>(elements.size()));
 
-    parseProductCreationFromXML(&productCreationElem, data->productCreation.get());
+    parseProductCreationFromXML(productCreationElem, *data->productCreation);
     parseDisplayFromXML(displayElem, *data->display);
-    parseGeoDataFromXML(geoDataElem, data->geoData.get());
+    parseGeoDataFromXML(geoDataElem, *data->geoData);
     parseMeasurementFromXML(&measurementElem, data->measurement.get());
     parseExploitationFeaturesFromXML(&exploitationFeaturesElem, data->exploitationFeatures.get());
 
     if (productProcessingElem)
     {
         builder.addProductProcessing();
-        parseProductProcessingFromXML(productProcessingElem, data->productProcessing.get());
+        parseProductProcessingFromXML(*productProcessingElem, *data->productProcessing);
     }
     if (downstreamReprocessingElem)
     {
@@ -1318,7 +1319,7 @@ XMLElem DerivedXMLParser300::convertKernelToXML(
         XMLElem customElem = newElement("Custom", kernelElem);
 
         if (kernel.custom->filterCoef.size() !=
-            static_cast<size_t>(kernel.custom->size.row) * kernel.custom->size.col)
+            gsl::narrow<size_t>(kernel.custom->size.row) * kernel.custom->size.col)
         {
             std::ostringstream ostr;
             ostr << "Filter size is " << kernel.custom->size.row << " rows x "
@@ -1328,17 +1329,17 @@ XMLElem DerivedXMLParser300::convertKernelToXML(
         }
 
         XMLElem filterCoef = newElement("FilterCoefficients", customElem);
-        setAttribute(filterCoef, "numRows", static_cast<size_t>(kernel.custom->size.row));
-        setAttribute(filterCoef, "numCols", static_cast<size_t>(kernel.custom->size.col));
+        setAttribute(filterCoef, "numRows", gsl::narrow<size_t>(kernel.custom->size.row));
+        setAttribute(filterCoef, "numCols", gsl::narrow<size_t>(kernel.custom->size.col));
 
         for (ptrdiff_t row = 0, idx = 0; row < kernel.custom->size.row; ++row)
         {
             for (ptrdiff_t col = 0; col < kernel.custom->size.col; ++col, ++idx)
             {
-                XMLElem coefElem = createDouble("Coef", kernel.custom->filterCoef[static_cast<size_t>(idx)],
+                XMLElem coefElem = createDouble("Coef", kernel.custom->filterCoef[gsl::narrow<size_t>(idx)],
                     filterCoef);
-                setAttribute(coefElem, "row", static_cast<size_t>(row));
-                setAttribute(coefElem, "col", static_cast<size_t>(col));
+                setAttribute(coefElem, "row", gsl::narrow<size_t>(row));
+                setAttribute(coefElem, "col", gsl::narrow<size_t>(col));
             }
         }
     }
@@ -1371,7 +1372,7 @@ XMLElem DerivedXMLParser300::convertBankToXML(const Filter::Bank& bank,
         XMLElem customElem = newElement("Custom", bankElem);
 
         if (bank.custom->filterCoef.size() !=
-            static_cast<size_t>(bank.custom->numPhasings) * bank.custom->numPoints)
+            gsl::narrow<size_t>(bank.custom->numPhasings) * bank.custom->numPoints)
         {
             std::ostringstream ostr;
             ostr << "Filter size is " << bank.custom->numPhasings << " x "
@@ -1868,32 +1869,30 @@ XMLElem DerivedXMLParser300::convertDigitalElevationDataToXML(
 }
 
 void DerivedXMLParser300::parseGeoDataFromXML(
-    const xml::lite::Element& geoDataXML, GeoDataBase* geoData) const
+    const xml::lite::Element& geoDataXML, GeoDataBase& geoData) const
 {
-    common().parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
-            geoData->earthModel);
+    common().parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"), geoData.earthModel);
 
-    common().parseFootprint(getFirstAndOnly(geoDataXML, "ImageCorners"), "ICP",
-            geoData->imageCorners);
+    common().parseFootprint(getFirstAndOnly(geoDataXML, "ImageCorners"), "ICP", geoData.imageCorners);
 
     XMLElem tmpElem = getOptional(geoDataXML, "ValidData");
     if (tmpElem != nullptr)
     {
-        common().parseLatLons(tmpElem, "Vertex", geoData->validData);
+        common().parseLatLons(tmpElem, "Vertex", geoData.validData);
     }
 
     std::vector <XMLElem> geoInfosXML;
     geoDataXML.getElementsByTagName("GeoInfo", geoInfosXML);
 
     //optional
-    size_t idx(geoData->geoInfos.size());
-    geoData->geoInfos.resize(idx + geoInfosXML.size());
+    size_t idx(geoData.geoInfos.size());
+    geoData.geoInfos.resize(idx + geoInfosXML.size());
 
     for (std::vector<XMLElem>::const_iterator it = geoInfosXML.begin(); it
             != geoInfosXML.end(); ++it, ++idx)
     {
-        geoData->geoInfos[idx].reset(new GeoInfo());
-        common().parseGeoInfoFromXML(*it, geoData->geoInfos[idx].get());
+        geoData.geoInfos[idx].reset(new GeoInfo());
+        common().parseGeoInfoFromXML(*it, geoData.geoInfos[idx].get());
     }
 }
 

@@ -91,7 +91,7 @@ private:
     void convertJ2KToXML(const J2KCompression& j2k, XMLElem& parent) const;
 
     XMLElem convertGeoDataToXML(const GeoDataBase*, XMLElem parent = nullptr) const;
-    void parseGeoDataFromXML(const xml::lite::Element& elem, GeoDataBase*) const;
+    void parseGeoDataFromXML(const xml::lite::Element& elem, GeoDataBase&) const;
 
     XMLElem convertDigitalElevationDataToXML(const DigitalElevationData& ded, XMLElem parent = nullptr) const;
     void parseDigitalElevationDataFromXML(const xml::lite::Element& elem, DigitalElevationData&) const;
