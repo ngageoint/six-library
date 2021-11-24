@@ -153,12 +153,12 @@ std::unique_ptr<DerivedData> DerivedXMLParser300::fromXML(const xml::lite::Docum
     if (downstreamReprocessingElem)
     {
         builder.addDownstreamReprocessing();
-        parseDownstreamReprocessingFromXML(downstreamReprocessingElem, data->downstreamReprocessing.get());
+        parseDownstreamReprocessingFromXML(*downstreamReprocessingElem, *data->downstreamReprocessing);
     }
     if (errorStatisticsElem)
     {
         builder.addErrorStatistics();
-        common().parseErrorStatisticsFromXML(errorStatisticsElem, data->errorStatistics.get());
+        common().parseErrorStatisticsFromXML(*errorStatisticsElem, *data->errorStatistics);
     }
     if (radiometricElem)
     {

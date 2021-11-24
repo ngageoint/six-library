@@ -276,7 +276,7 @@ protected:
     static xml::lite::Element* getOptional(const xml::lite::Element& parent, const std::string& tag);
 
     template<typename T>
-    static XMLElem getOptional_reset(const xml::lite::Element* parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)
+    static XMLElem getOptional_reset(const xml::lite::Element& parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)
     {
         auto retval = getOptional(parent, tag);
         if (retval != nullptr)
@@ -286,6 +286,12 @@ protected:
         }
         return retval;
     }
+    template<typename T>
+    static XMLElem getOptional_reset(const xml::lite::Element* parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)
+    {
+        return getOptional_reset(*parent, tag, obj);
+    }
+
     static XMLElem getFirstAndOnly(const xml::lite::Element* parent, const std::string& tag);
     static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag);
 

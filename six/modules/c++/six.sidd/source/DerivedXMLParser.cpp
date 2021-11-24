@@ -1355,14 +1355,14 @@ void DerivedXMLParser::parseProductProcessingFromXML(
 }
 
 void DerivedXMLParser::parseDownstreamReprocessingFromXML(
-        const xml::lite::Element* elem,
-        DownstreamReprocessing* downstreamReproc) const
+        const xml::lite::Element& elem,
+        DownstreamReprocessing& downstreamReproc) const
 {
     XMLElem geometricChipElem = getOptional(elem, "GeometricChip");
     if (geometricChipElem)
     {
-        downstreamReproc->geometricChip.reset(new GeometricChip());
-        GeometricChip *chip = downstreamReproc->geometricChip.get();
+        downstreamReproc.geometricChip.reset(new GeometricChip());
+        GeometricChip *chip = downstreamReproc.geometricChip.get();
 
         common().parseRowColInt(getFirstAndOnly(geometricChipElem, "ChipSize"),
                                 chip->chipSize);
@@ -1381,13 +1381,13 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
     }
 
     std::vector<XMLElem> procEventElem;
-    elem->getElementsByTagName("ProcessingEvent", procEventElem);
-    downstreamReproc->processingEvents.resize(procEventElem.size());
+    elem.getElementsByTagName("ProcessingEvent", procEventElem);
+    downstreamReproc.processingEvents.resize(procEventElem.size());
     for (size_t i = 0; i < procEventElem.size(); ++i)
     {
-        downstreamReproc->processingEvents[i].reset(new ProcessingEvent());
+        downstreamReproc.processingEvents[i].reset(new ProcessingEvent());
         ProcessingEvent* procEvent
-                = downstreamReproc->processingEvents[i].get();
+                = downstreamReproc.processingEvents[i].get();
 
         const xml::lite::Element* const peElem = procEventElem[i];
         parseString(getFirstAndOnly(peElem, "ApplicationName"),
@@ -1400,6 +1400,12 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
         // optional to unbounded
         common().parseParameters(peElem, "Descriptor", procEvent->descriptor);
     }
+}
+void DerivedXMLParser::parseDownstreamReprocessingFromXML(
+    const xml::lite::Element* elem,
+    DownstreamReprocessing* downstreamReproc) const
+{
+    parseDownstreamReprocessingFromXML(*elem, *downstreamReproc);
 }
 
 void DerivedXMLParser::parseGeographicCoordinateSystemFromXML(

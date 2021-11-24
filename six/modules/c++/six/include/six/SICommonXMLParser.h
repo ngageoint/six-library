@@ -185,6 +185,7 @@ struct SICommonXMLParser : public XMLParser
     void parseErrorStatisticsFromXML(
         const xml::lite::Element* errorStatsXML,
         ErrorStatistics* errorStatistics) const;
+    void parseErrorStatisticsFromXML(const xml::lite::Element& errorStatsXML, ErrorStatistics&) const;
 
     XMLElem convertCollectionInformationToXML(
         const CollectionInformation *obj,

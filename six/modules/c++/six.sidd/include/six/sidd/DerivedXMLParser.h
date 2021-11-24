@@ -211,6 +211,7 @@ protected:
                                       ProcessingModule* procMod) const;
     void parseDownstreamReprocessingFromXML(const xml::lite::Element* elem,
                                             DownstreamReprocessing* downstreamReproc) const;
+    void parseDownstreamReprocessingFromXML(const xml::lite::Element&, DownstreamReprocessing&) const;
     Remap* parseRemapChoiceFromXML(const xml::lite::Element* remapInformationElem) const;
     mem::auto_ptr<LUT> parseSingleLUT(const xml::lite::Element* elem) const;
     void parseDisplayFromXML(const xml::lite::Element* displayElem, Display* display) const;
