@@ -110,7 +110,7 @@ DerivedXMLControl::getParser(const std::string& strVersion) const
     }
     if (normalizedVersion == "300")
     {
-        return std::make_unique<DerivedXMLParser300>(mLog);
+        return std::make_unique<DerivedXMLParser300>(getLogger());
     }
 
     if (normalizedVersion == "110")

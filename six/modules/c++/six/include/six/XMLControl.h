@@ -86,6 +86,10 @@ class XMLControl
     {
         mLogger.setLogger(logger, ownLog);
     }
+    logging::Logger& getLogger() const
+    {
+        return mLogger.get();
+    }
 
     /*
      *  \func validate

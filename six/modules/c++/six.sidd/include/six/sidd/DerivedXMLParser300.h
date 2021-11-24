@@ -33,8 +33,7 @@ namespace sidd
 {
 struct DerivedXMLParser300 final : public DerivedXMLParser
 {
-    DerivedXMLParser300(logging::Logger* log = nullptr, bool ownLog = false);
-    DerivedXMLParser300(std::unique_ptr<logging::Logger>&&);
+    //DerivedXMLParser300(std::unique_ptr<logging::Logger>&&);
     DerivedXMLParser300(logging::Logger&);
     DerivedXMLParser300(const DerivedXMLParser300&) = delete;
     DerivedXMLParser300& operator=(const DerivedXMLParser300&) = delete;
