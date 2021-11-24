@@ -66,7 +66,7 @@ namespace six
 namespace sidd
 {
 
-void validateDRAFields(const six::sidd::DRAType& algorithmType,
+void DerivedXMLParser200::validateDRAFields(const six::sidd::DRAType& algorithmType,
                        bool hasDraParameters,
                        bool hasDraOverrides)
 {
@@ -91,7 +91,7 @@ void validateDRAFields(const six::sidd::DRAType& algorithmType,
             algorithmType.toString()));
     }
 }
-void validateDRAFields(const six::sidd::DynamicRangeAdjustment& adjust)
+void DerivedXMLParser200::validateDRAFields(const six::sidd::DynamicRangeAdjustment& adjust)
 {
     validateDRAFields(adjust.algorithmType,
         adjust.draParameters.get() ? true : false,

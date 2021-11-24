@@ -176,7 +176,7 @@ std::unique_ptr<DerivedData> DerivedXMLParser300::fromXML(const xml::lite::Docum
     if (compressionElem)
     {
         builder.addCompression();
-        parseCompressionFromXML(compressionElem, *data->compression);
+        parseCompressionFromXML(*compressionElem, *data->compression);
     }
     if (dedElem)
     {
@@ -321,32 +321,30 @@ void DerivedXMLParser300::parseDerivedClassificationFromXML(
         classification.externalNotice);
 }
 
-void DerivedXMLParser300::parseCompressionFromXML(const xml::lite::Element* compressionElem,
+void DerivedXMLParser300::parseCompressionFromXML(const xml::lite::Element& compressionElem,
                                                  Compression& compression) const
 {
-    XMLElem j2kElem = getFirstAndOnly(compressionElem, "J2K");
-    XMLElem originalElem = getFirstAndOnly(j2kElem, "Original");
-    XMLElem parsedElem   = getOptional(j2kElem, "Parsed");
+    auto& j2kElem = getFirstAndOnly(compressionElem, "J2K");
+    auto& originalElem = getFirstAndOnly(j2kElem, "Original");
+    auto parsedElem   = getOptional(j2kElem, "Parsed");
 
     parseJ2KCompression(originalElem, compression.original);
     if (parsedElem)
     {
         compression.parsed.reset(new J2KCompression());
-        parseJ2KCompression(parsedElem, *compression.parsed);
+        parseJ2KCompression(*parsedElem, *compression.parsed);
     }
 }
 
-void DerivedXMLParser300::parseJ2KCompression(const xml::lite::Element* j2kElem,
+void DerivedXMLParser300::parseJ2KCompression(const xml::lite::Element& j2kElem,
                                               J2KCompression& j2k) const
 {
-    parseInt(getFirstAndOnly(j2kElem, "NumWaveletLevels"),
-            j2k.numWaveletLevels);
-    parseInt(getFirstAndOnly(j2kElem, "NumBands"),
-            j2k.numBands);
+    parseInt(getFirstAndOnly(j2kElem, "NumWaveletLevels"), j2k.numWaveletLevels);
+    parseInt(getFirstAndOnly(j2kElem, "NumBands"), j2k.numBands);
 
-    XMLElem layerInfoElems = getFirstAndOnly(j2kElem, "LayerInfo");
+    auto& layerInfoElems = getFirstAndOnly(j2kElem, "LayerInfo");
     std::vector<XMLElem> layerElems;
-    layerInfoElems->getElementsByTagName("Layer", layerElems);
+    layerInfoElems.getElementsByTagName("Layer", layerElems);
 
     const auto numLayers = layerElems.size();
     j2k.layerInfo.resize(numLayers);

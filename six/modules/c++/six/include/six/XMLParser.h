@@ -217,6 +217,11 @@ protected:
             log()->warn(Ctxt("Unable to parse: " + ex.toString()));
         }
     }
+    template <typename T>
+    void parseInt(const xml::lite::Element& element, T& value) const
+    {
+        parseInt(&element, value);
+    }
 
     template <typename T>
     void parseUInt(const xml::lite::Element* element, T& value) const
