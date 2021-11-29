@@ -35,6 +35,7 @@ coda_add_module(
         source/Utilities.cpp
         source/VersionUpdater.cpp
         source/WriteControl.cpp
+        source/XmlLite.cpp
         source/XMLControl.cpp
         source/XMLControlFactory.cpp
         source/XMLParser.cpp)

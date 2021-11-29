@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __SIX_SI_COMMON_XML_PARSER_H__
-#define __SIX_SI_COMMON_XML_PARSER_H__
+#ifndef SIX_six_SICommonXMLParser_h_INCLUDED_
+#define SIX_six_SICommonXMLParser_h_INCLUDED_
+#pragma once
 
 #include <six/CollectionInformation.h>
 #include <six/MatchInformation.h>
@@ -35,18 +36,19 @@
 
 namespace six
 {
-class SICommonXMLParser : public XMLParser
+struct SICommonXMLParser : public XMLParser
 {
-public:
-    SICommonXMLParser(const std::string& defaultURI,
-                      bool addClassAttributes,
-                      const std::string& siCommonURI,
-                      logging::Logger* log = nullptr,
-                      bool ownLog = false);
-
+    SICommonXMLParser(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        logging::Logger* log = nullptr, bool ownLog = false);
+    SICommonXMLParser(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        std::unique_ptr<logging::Logger>&&);
+    SICommonXMLParser(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        logging::Logger&);
     SICommonXMLParser(const SICommonXMLParser&) = delete;
+    SICommonXMLParser(SICommonXMLParser&&) = delete;
     SICommonXMLParser& operator=(const SICommonXMLParser&) = delete;
     SICommonXMLParser& operator=(SICommonXMLParser&&) = delete;
+    virtual ~SICommonXMLParser() = default;
 
     std::string getSICommonURI() const
     {
@@ -124,6 +126,7 @@ public:
     void parseGeoInfoFromXML(const xml::lite::Element* geoInfoXML, GeoInfo* geoInfo) const;
 
     void parseEarthModelType(const xml::lite::Element* element, EarthModelType& value) const;
+    void parseEarthModelType(const xml::lite::Element& element, EarthModelType& value) const;
 
     XMLElem createEarthModelType(const std::string& name,
             const EarthModelType& value,
@@ -143,6 +146,7 @@ public:
     void parseVector3D(const xml::lite::Element* vecXML, Vector3& vec) const;
     void parseLatLonAlt(const xml::lite::Element* llaXML, LatLonAlt& lla) const;
     void parseLatLon(const xml::lite::Element* parent, LatLon& ll) const;
+    void parseLatLon(const xml::lite::Element& parent, LatLon& ll) const;
     void parseLatLons(const xml::lite::Element* pointsXML, const std::string& pointName,
             std::vector<LatLon>& llVec) const;
     void parseRangeAzimuth(const xml::lite::Element* parent, types::RgAz<double>& value) const;
@@ -169,6 +173,7 @@ public:
 
     void parseFootprint(const xml::lite::Element* footprint,
             const std::string& cornerName, LatLonCorners& corners) const;
+    void parseFootprint(const xml::lite::Element&, const std::string& cornerName, LatLonCorners&) const;
 
     void parseFootprint(const xml::lite::Element* footprint,
             const std::string& cornerName, LatLonAltCorners& corners) const;
@@ -180,6 +185,7 @@ public:
     void parseErrorStatisticsFromXML(
         const xml::lite::Element* errorStatsXML,
         ErrorStatistics* errorStatistics) const;
+    void parseErrorStatisticsFromXML(const xml::lite::Element& errorStatsXML, ErrorStatistics&) const;
 
     XMLElem convertCollectionInformationToXML(
         const CollectionInformation *obj,
@@ -223,4 +229,4 @@ private:
 };
 }
 
-#endif
+#endif // SIX_six_SICommonXMLParser_h_INCLUDED_

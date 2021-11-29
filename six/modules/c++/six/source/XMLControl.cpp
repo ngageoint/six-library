@@ -36,12 +36,18 @@ namespace fs = std::filesystem;
 
 namespace six
 {
-XMLControl::XMLControl(logging::Logger* log, bool ownLog) : mLogger(mLog, mOwnLog, nullptr)
-{
-    setLogger(log, ownLog);
-}
+    // Have mLogger manage mLog and mOwnLog
+    XMLControl::XMLControl(logging::Logger* log, bool ownLog) : mLogger(mLog, mOwnLog, nullptr)
+    {
+        setLogger(log, ownLog);
+    }
+    XMLControl::XMLControl(std::unique_ptr<logging::Logger>&& log) : XMLControl()
+    {
+        setLogger(std::move(log));
+    }
+    XMLControl::XMLControl(logging::Logger& log) : XMLControl(&log, false /*ownLog*/) { }
 
-XMLControl::~XMLControl() = default;
+    XMLControl::~XMLControl() = default;
 
 static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
 {

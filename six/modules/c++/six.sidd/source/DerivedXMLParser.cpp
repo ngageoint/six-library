@@ -43,15 +43,19 @@ namespace sidd
 {
 const char DerivedXMLParser::SFA_URI[] = "urn:SFA:1.2.0";
 
-DerivedXMLParser::DerivedXMLParser(
-        const std::string& strVersion,
-        std::unique_ptr<six::SICommonXMLParser>&& comParser,
-        logging::Logger* log,
-        bool ownLog) :
-    XMLParser(versionToURI(strVersion), false, log, ownLog),
-    mCommon(std::move(comParser))
-{
-}
+DerivedXMLParser::DerivedXMLParser(const std::string& strVersion,
+    std::unique_ptr<six::SICommonXMLParser>&& comParser,
+    logging::Logger* log, bool ownLog) : XMLParser(versionToURI(strVersion), false, log, ownLog),
+    mCommon(std::move(comParser)) { }
+DerivedXMLParser::DerivedXMLParser(const std::string& strVersion,
+    std::unique_ptr<six::SICommonXMLParser>&& comParser,
+    std::unique_ptr<logging::Logger>&& log) : XMLParser(versionToURI(strVersion), false, std::move(log)),
+    mCommon(std::move(comParser)) { }
+DerivedXMLParser::DerivedXMLParser(const std::string& strVersion,
+    std::unique_ptr<six::SICommonXMLParser>&& comParser,
+    logging::Logger& log) : XMLParser(versionToURI(strVersion), false, log),
+    mCommon(std::move(comParser)) { }
+
 #if !CODA_OSS_cpp17
 DerivedXMLParser::DerivedXMLParser(
         const std::string& strVersion,
@@ -240,51 +244,60 @@ void DerivedXMLParser::setAttributeIfNonNull(XMLElem element,
 }
 
 void DerivedXMLParser::parseProductCreationFromXML(
-        const xml::lite::Element* informationElem,
-        ProcessorInformation* processorInformation) const
+        const xml::lite::Element& informationElem,
+        ProcessorInformation& processorInformation) const
 {
-    parseString(getFirstAndOnly(informationElem, "Application"),
-                processorInformation->application);
-    parseDateTime(getFirstAndOnly(informationElem, "ProcessingDateTime"),
-                  processorInformation->processingDateTime);
-    parseString(getFirstAndOnly(informationElem, "Site"),
-                processorInformation->site);
+    parseString(getFirstAndOnly(informationElem, "Application"), processorInformation.application);
+    parseDateTime(getFirstAndOnly(&informationElem, "ProcessingDateTime"), processorInformation.processingDateTime);
+    parseString(getFirstAndOnly(informationElem, "Site"), processorInformation.site);
 
     // optional
     XMLElem profileElem = getOptional(informationElem, "Profile");
     if (profileElem)
     {
-        parseString(profileElem, processorInformation->profile);
+        parseString(profileElem, processorInformation.profile);
     }
+}
+void DerivedXMLParser::parseProductCreationFromXML(
+    const xml::lite::Element* informationElem,
+    ProcessorInformation* processorInformation) const
+{
+    parseProductCreationFromXML(*informationElem, *processorInformation);
 }
 
 void DerivedXMLParser::parseProductCreationFromXML(
-        const xml::lite::Element* productCreationElem,
-        ProductCreation* productCreation) const
+        const xml::lite::Element& productCreationElem,
+        ProductCreation& productCreation) const
 {
     parseProductCreationFromXML(
-            getFirstAndOnly(productCreationElem, "ProcessorInformation"),
-            &productCreation->processorInformation);
+            getFirstAndOnly(&productCreationElem, "ProcessorInformation"),
+            &(productCreation.processorInformation));
 
     parseDerivedClassificationFromXML(
-            getFirstAndOnly(productCreationElem, "Classification"),
-            productCreation->classification);
+            getFirstAndOnly(&productCreationElem, "Classification"),
+            productCreation.classification);
 
     parseString(getFirstAndOnly(productCreationElem, "ProductName"),
-                productCreation->productName);
+                productCreation.productName);
     parseString(getFirstAndOnly(productCreationElem, "ProductClass"),
-                productCreation->productClass);
+                productCreation.productClass);
 
     // optional
     XMLElem productTypeElem = getOptional(productCreationElem, "ProductType");
     if (productTypeElem)
     {
-        parseString(productTypeElem, productCreation->productType);
+        parseString(productTypeElem, productCreation.productType);
     }
 
     // optional
-    common().parseParameters(productCreationElem, "ProductCreationExtension",
-                             productCreation->productCreationExtensions);
+    common().parseParameters(&productCreationElem, "ProductCreationExtension",
+                             productCreation.productCreationExtensions);
+}
+void DerivedXMLParser::parseProductCreationFromXML(
+    const xml::lite::Element* productCreationElem,
+    ProductCreation* productCreation) const
+{
+    parseProductCreationFromXML(*productCreationElem, *productCreation);
 }
 
 void DerivedXMLParser::parseDerivedClassificationFromXML(
@@ -1320,30 +1333,36 @@ void DerivedXMLParser::parseProcessingModuleFromXML(
 }
 
 void DerivedXMLParser::parseProductProcessingFromXML(
-        const xml::lite::Element* elem,
-        ProductProcessing* productProcessing) const
+        const xml::lite::Element& elem,
+        ProductProcessing& productProcessing) const
 {
     std::vector<XMLElem> procModuleElem;
-    elem->getElementsByTagName("ProcessingModule", procModuleElem);
-    productProcessing->processingModules.resize(procModuleElem.size());
+    elem.getElementsByTagName("ProcessingModule", procModuleElem);
+    productProcessing.processingModules.resize(procModuleElem.size());
     for (size_t i = 0; i < procModuleElem.size(); ++i)
     {
-        productProcessing->processingModules[i].reset(new ProcessingModule());
+        productProcessing.processingModules[i].reset(new ProcessingModule());
         parseProcessingModuleFromXML(
                 procModuleElem[i],
-                productProcessing->processingModules[i].get());
+                productProcessing.processingModules[i].get());
     }
+}
+void DerivedXMLParser::parseProductProcessingFromXML(
+    const xml::lite::Element* elem,
+    ProductProcessing* productProcessing) const
+{
+    parseProductProcessingFromXML(*elem, *productProcessing);
 }
 
 void DerivedXMLParser::parseDownstreamReprocessingFromXML(
-        const xml::lite::Element* elem,
-        DownstreamReprocessing* downstreamReproc) const
+        const xml::lite::Element& elem,
+        DownstreamReprocessing& downstreamReproc) const
 {
     XMLElem geometricChipElem = getOptional(elem, "GeometricChip");
     if (geometricChipElem)
     {
-        downstreamReproc->geometricChip.reset(new GeometricChip());
-        GeometricChip *chip = downstreamReproc->geometricChip.get();
+        downstreamReproc.geometricChip.reset(new GeometricChip());
+        GeometricChip *chip = downstreamReproc.geometricChip.get();
 
         common().parseRowColInt(getFirstAndOnly(geometricChipElem, "ChipSize"),
                                 chip->chipSize);
@@ -1362,13 +1381,13 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
     }
 
     std::vector<XMLElem> procEventElem;
-    elem->getElementsByTagName("ProcessingEvent", procEventElem);
-    downstreamReproc->processingEvents.resize(procEventElem.size());
+    elem.getElementsByTagName("ProcessingEvent", procEventElem);
+    downstreamReproc.processingEvents.resize(procEventElem.size());
     for (size_t i = 0; i < procEventElem.size(); ++i)
     {
-        downstreamReproc->processingEvents[i].reset(new ProcessingEvent());
+        downstreamReproc.processingEvents[i].reset(new ProcessingEvent());
         ProcessingEvent* procEvent
-                = downstreamReproc->processingEvents[i].get();
+                = downstreamReproc.processingEvents[i].get();
 
         const xml::lite::Element* const peElem = procEventElem[i];
         parseString(getFirstAndOnly(peElem, "ApplicationName"),
@@ -1381,6 +1400,12 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
         // optional to unbounded
         common().parseParameters(peElem, "Descriptor", procEvent->descriptor);
     }
+}
+void DerivedXMLParser::parseDownstreamReprocessingFromXML(
+    const xml::lite::Element* elem,
+    DownstreamReprocessing* downstreamReproc) const
+{
+    parseDownstreamReprocessingFromXML(*elem, *downstreamReproc);
 }
 
 void DerivedXMLParser::parseGeographicCoordinateSystemFromXML(

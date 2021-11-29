@@ -65,14 +65,17 @@ class XMLControl
 {
     public:
     //!  Constructor
-        XMLControl() = default;
-        XMLControl(logging::Logger* log, bool ownLog = false);
+        XMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+        XMLControl(std::unique_ptr<logging::Logger>&&);
+        XMLControl(logging::Logger&);
 
     //!  Destructor
     virtual ~XMLControl();
 
     XMLControl(const XMLControl&) = delete;
     XMLControl& operator=(const XMLControl&) = delete;
+    XMLControl(XMLControl&&) = delete;
+    XMLControl& operator=(XMLControl&&) = delete;
 
     template<typename TLogger>
     void setLogger(TLogger&& logger)
@@ -82,6 +85,10 @@ class XMLControl
     void setLogger(logging::Logger* logger, bool ownLog)
     {
         mLogger.setLogger(logger, ownLog);
+    }
+    logging::Logger& getLogger() const
+    {
+        return mLogger.get();
     }
 
     /*
