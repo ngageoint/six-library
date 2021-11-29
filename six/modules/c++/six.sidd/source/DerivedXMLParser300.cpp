@@ -186,10 +186,6 @@ std::unique_ptr<DerivedData> DerivedXMLParser300::fromXML(const xml::lite::Docum
     }
     return data;
 }
-std::unique_ptr<DerivedData> DerivedXMLParser300::fromXML(const xml::lite::Document& doc) const
-{
-    return std::unique_ptr<DerivedData>(fromXML(&doc));
-}
 
 xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) const
 {

@@ -1052,11 +1052,10 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         }
     }
 
-    #define xml_getOptional_reset(xml, pRoot, name) getOptional_reset(xml, #name, (pRoot)->name);
     tmpElem = xml_getOptional_reset(errorStatsXML, errorStatistics, Unmodeled); // SIDD 3.0
     if (tmpElem != nullptr)
     {
-        auto& Unmodeled = *(errorStatistics->Unmodeled);
+        auto& Unmodeled = *(errorStatistics.Unmodeled);
 
         // macro to avoid copy/paste errors
         #define parseDouble_getFirstAndOnly(elem, name, storage) parseDouble(getFirstAndOnly(elem, #name), (storage).name)
@@ -1065,10 +1064,10 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         parseDouble_getFirstAndOnly(tmpElem, Ycol, Unmodeled);
         parseDouble_getFirstAndOnly(tmpElem, XrowYcol, Unmodeled);
 
-        auto unmodeledDecorrXML = xml_getOptional_reset(tmpElem, errorStatistics->Unmodeled, UnmodeledDecorr);
+        auto unmodeledDecorrXML = xml_getOptional_reset(tmpElem, Unmodeled, UnmodeledDecorr);
         if (unmodeledDecorrXML != nullptr)
         {
-            auto& UnmodeledDecorr = *(errorStatistics->Unmodeled->UnmodeledDecorr);
+            auto& UnmodeledDecorr = *(errorStatistics.Unmodeled->UnmodeledDecorr);
 
             auto xrowXML = getFirstAndOnly(unmodeledDecorrXML, "Xrow");
             parseDouble_getFirstAndOnly(xrowXML, CorrCoefZero, UnmodeledDecorr.Xrow);
