@@ -225,7 +225,7 @@ struct XmlLite final
     void parseComplex(const xml::lite::Element* element, std::complex<double>& value) const;
     void parseString(const xml::lite::Element* element, std::string& value) const;
     void parseString(const xml::lite::Element&, std::string&) const;
-    void parseBooleanType(const xml::lite::Element* element, BooleanType& value) const;
+    void parseBooleanType(const xml::lite::Element& element, BooleanType& value) const;
 
     bool parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const;
 

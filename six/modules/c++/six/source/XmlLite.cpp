@@ -383,11 +383,10 @@ bool  XmlLite::parseOptionalString(const xml::lite::Element& parent, const std::
     return false;
 }
 
-void XmlLite::parseBooleanType(const xml::lite::Element* element, BooleanType& value) const
+void XmlLite::parseBooleanType(const xml::lite::Element& element, BooleanType& value) const
 {
-    assert(element != nullptr);
     parseValue(mLogger.get(), [&]() {
-        value = castValue(*element, six::toType<BooleanType>);
+        value = castValue(element, six::toType<BooleanType>);
         });
 }
 

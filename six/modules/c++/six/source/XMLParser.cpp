@@ -250,10 +250,4 @@ bool XMLParser::parseOptionalString(const xml::lite::Element& parent, const std:
 {
     return mXmlLite.parseOptionalString(parent, tag, value);
 }
-
-void XMLParser::parseBooleanType(const xml::lite::Element* element, BooleanType& value) const
-{
-    mXmlLite.parseBooleanType(element, value);
-}
-
 }
