@@ -240,7 +240,7 @@ struct XmlLite final
         return false;
     }
 
-    void parseDateTime(const xml::lite::Element* element, DateTime& value) const;
+    void parseDateTime(const xml::lite::Element& element, DateTime& value) const;
 
     static void setAttribute(xml::lite::Element* e, const std::string& name,
         const std::string& s, const std::string& uri = "")

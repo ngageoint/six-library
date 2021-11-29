@@ -256,8 +256,4 @@ void XMLParser::parseBooleanType(const xml::lite::Element* element, BooleanType&
     mXmlLite.parseBooleanType(element, value);
 }
 
-void XMLParser::parseDateTime(const xml::lite::Element* element, DateTime& value) const
-{
-    mXmlLite.parseDateTime(element, value);
-}
 }

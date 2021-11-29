@@ -391,9 +391,8 @@ void XmlLite::parseBooleanType(const xml::lite::Element* element, BooleanType& v
         });
 }
 
-void XmlLite::parseDateTime(const xml::lite::Element* element, DateTime& value) const
+void XmlLite::parseDateTime(const xml::lite::Element& element, DateTime& value) const
 {
-    assert(element != nullptr);
-    value = castValue(*element, six::toType<DateTime>);
+    value = castValue(element, six::toType<DateTime>);
 }
 }

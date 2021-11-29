@@ -252,7 +252,11 @@ protected:
         return mXmlLite.parseOptionalInt(parent, tag, value);
     }
 
-    void parseDateTime(const xml::lite::Element* element, DateTime& value) const;
+    void parseDateTime(const xml::lite::Element* element, DateTime& value) const
+    {
+        assert(element != nullptr);
+        mXmlLite.parseDateTime(*element, value);
+    }
 
     static void setAttribute(XMLElem e, const std::string& name,
         const std::string& s, const std::string& uri = "")
