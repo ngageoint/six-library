@@ -34,6 +34,7 @@
 #include <six/Init.h>
 #include <six/Utilities.h>
 #include <xml/lite/Element.h>
+#include <six/XmlLite.h>
 #include <six/Logger.h>
 
 namespace six
@@ -53,11 +54,11 @@ struct XMLParser
     template<typename TLogger>
     void setLogger(TLogger&& logger)
     {
-        mLogger.setLogger(std::forward<TLogger>(logger));
+        mXmlLite.setLogger(std::forward<TLogger>(logger));
     }
     void setLogger(logging::Logger* logger, bool ownLog)
     {
-        mLogger.setLogger(logger, ownLog);
+        mXmlLite.setLogger(logger, ownLog);
     }
 
     typedef xml::lite::Element* XMLElem;
@@ -65,13 +66,13 @@ struct XMLParser
 protected:
     logging::Logger* log() const
     {
-        return mLogger.get(std::nothrow);
+        return mXmlLite.log();
     }
 
     //! Returns the default URI
     std::string getDefaultURI() const
     {
-        return mDefaultURI;
+        return mXmlLite.getDefaultURI();
     }
 
     XMLElem newElement(const std::string& name, XMLElem prnt = nullptr) const;
@@ -132,11 +133,11 @@ protected:
 
     XMLElem createInt(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent = nullptr) const
     {
-        return createInt_(name, uri, p, parent);
+        return mXmlLite.createInt(name, uri, p, parent);
     }
     XMLElem createInt(const std::string& name, const std::string& uri, int p = 0, XMLElem parent = nullptr) const
     {
-        return createInt_(name, uri, p, parent);
+        return mXmlLite.createInt(name, uri, p, parent);
     }
     XMLElem createInt(const std::string& name, const std::string& uri, size_t p = 0, XMLElem parent = nullptr) const
     {
@@ -173,22 +174,22 @@ protected:
     template<typename T>
     XMLElem createString(const std::string& name, const T& t,
             XMLElem parent = nullptr) const {
-        return createString_(name, t.toString(), parent);
+        return mXmlLite.createString(name, t, parent);
     }
     template<typename T>
     XMLElem createSixString(const std::string& name, const T& t, // six::toString(t) isntead of t.toString()
         XMLElem parent = nullptr) const {
-        return createString_(name, toString(t), parent);
+        return mXmlLite.createSixString(name, t, parent);
     }
     XMLElem createString(const std::string& name, const char* p="",
         XMLElem parent = nullptr) const {
-        return createString_(name, p, parent);
+        return mXmlLite.createString(name, p, parent);
     }
     template<typename T>
     XMLElem createInt(const std::string& name, T p = 0,
             XMLElem parent = nullptr) const
     {
-        return createInt_(name, gsl::narrow_cast<int>(p), parent);
+        return mXmlLite.createInt(name, p, parent);
     }
     XMLElem createDouble(const std::string& name, double p = 0,
             XMLElem parent = nullptr) const;
@@ -275,12 +276,12 @@ protected:
     static void setAttribute(XMLElem e, const std::string& name,
         const std::string& s, const std::string& uri = "")
     {
-        setAttribute_(e, name,s, uri);
+        return XmlLite::setAttribute(e, name, s, uri);
     }
     static void setAttribute(XMLElem e, const std::string& name,
         size_t i, const std::string& uri = "")
     {
-        setAttribute_(e, name, std::to_string(i), uri);
+        return XmlLite::setAttribute(e, name, i, uri);
     }
 
     static XMLElem getOptional(const xml::lite::Element* parent, const std::string& tag);
@@ -314,24 +315,8 @@ protected:
     static XMLElem require(XMLElem element, const std::string& name);
 
 private:
-    XMLElem createInt_(const std::string& name, const std::string& uri, int p, XMLElem parent) const;
-    XMLElem createInt_(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent) const;
-    XMLElem createInt_(const std::string& name, int p, XMLElem parent) const;
-    XMLElem createString_(const std::string& name, const std::string& p, XMLElem parent) const;
-    static void setAttribute_(XMLElem e, const std::string& name, const std::string& v, const std::string& uri);
-    void addClassAttributes(xml::lite::Element& elem, const std::string& type) const;
-
-    const std::string mDefaultURI;
-    const bool mAddClassAttributes;
-
-    Logger mLogger;
+    XmlLite mXmlLite;
 };
-
- template<> inline XMLParser::XMLElem XMLParser::createString(const std::string& name,
-						      const std::string& p, XMLElem parent) const
-  {
-    return createString_(name, p, parent);
-  }
 }
 
 #endif // SIX_six_XMLParser_h_INCLUDED_
