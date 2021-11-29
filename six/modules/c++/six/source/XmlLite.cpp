@@ -258,27 +258,17 @@ xml::lite::Element& XmlLite::getFirstAndOnly(const xml::lite::Element& parent, c
 {
     return parent.getElementByTagName(tag);
 }
-xml::lite::Element* XmlLite::getFirstAndOnly(const xml::lite::Element* parent, const std::string& tag)
-{
-    return &getFirstAndOnly(*parent, tag);
-}
 
 xml::lite::Element* XmlLite::getOptional(const xml::lite::Element& parent, const std::string& tag)
 {
     return parent.getElementByTagName(std::nothrow, tag);
 }
-xml::lite::Element* XmlLite::getOptional(const xml::lite::Element* parent, const std::string& tag)
-{
-    assert(parent != nullptr);
-    return getOptional(*parent, tag);
-}
 
 xml::lite::Element& XmlLite::require(xml::lite::Element* element, const std::string& name)
 {
-    if (!element)
+    if (element == nullptr)
     {
-        throw except::Exception(Ctxt(
-            "Required field [" + name + "] is undefined or null"));
+        throw except::Exception(Ctxt("Required field [" + name + "] is undefined or null"));
     }
     return *element;
 }
@@ -317,11 +307,7 @@ bool XmlLite::parseDouble(const xml::lite::Element& element, double& value) cons
         assert(Init::isDefined(value)); };
     return parseValue(mLogger.get(), getValue);
 }
-bool XmlLite::parseDouble(const xml::lite::Element* element, double& value) const
-{
-    return parseDouble(*element, value);
-}
-void XmlLite::parseDouble(const xml::lite::Element* element, std::optional<double>& value) const
+void XmlLite::parseDouble(const xml::lite::Element& element, std::optional<double>& value) const
 {
     value.reset(); // be sure callers can determine success/failure
 
@@ -332,28 +318,27 @@ void XmlLite::parseDouble(const xml::lite::Element* element, std::optional<doubl
     }
 }
 
-bool XmlLite::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, double& value) const
+bool XmlLite::parseOptionalDouble(const xml::lite::Element& parent, const std::string& tag, double& value) const
 {
     if (const xml::lite::Element* const element = getOptional(parent, tag))
     {
-        parseDouble(element, value);
+        parseDouble(*element, value);
         return true;
     }
     value = six::Init::undefined<double>();
     return false;
 }
-bool XmlLite::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const
+bool XmlLite::parseOptionalDouble(const xml::lite::Element& parent, const std::string& tag, std::optional<double>& value) const
 {
     if (const xml::lite::Element* const element = getOptional(parent, tag))
     {
-        parseDouble(element, value);
+        parseDouble(*element, value);
         return true;
     }
     return false;
 }
 
-
-void XmlLite::parseComplex(const xml::lite::Element* element, std::complex<double>& value) const
+void XmlLite::parseComplex(const xml::lite::Element& element, std::complex<double>& value) const
 {
     double r, i;
 

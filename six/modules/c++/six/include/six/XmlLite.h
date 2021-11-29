@@ -217,12 +217,11 @@ struct XmlLite final
         enumVal = T(name);
     }
 
-    bool parseDouble(const xml::lite::Element* element, double& value) const;
     bool parseDouble(const xml::lite::Element&, double&) const;
-    void parseDouble(const xml::lite::Element* element, std::optional<double>& value) const;
-    bool parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, double& value) const;
-    bool parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const;
-    void parseComplex(const xml::lite::Element* element, std::complex<double>& value) const;
+    void parseDouble(const xml::lite::Element& element, std::optional<double>& value) const;
+    bool parseOptionalDouble(const xml::lite::Element& parent, const std::string& tag, double& value) const;
+    bool parseOptionalDouble(const xml::lite::Element& parent, const std::string& tag, std::optional<double>& value) const;
+    void parseComplex(const xml::lite::Element& element, std::complex<double>& value) const;
     void parseString(const xml::lite::Element* element, std::string& value) const;
     void parseString(const xml::lite::Element&, std::string&) const;
     void parseBooleanType(const xml::lite::Element& element, BooleanType& value) const;
@@ -230,7 +229,7 @@ struct XmlLite final
     bool parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const;
 
     template <typename T>
-    bool parseOptionalInt(const xml::lite::Element* parent, const std::string& tag, T& value) const
+    bool parseOptionalInt(const xml::lite::Element& parent, const std::string& tag, T& value) const
     {
         if (const xml::lite::Element* const element = getOptional(parent, tag))
         {
@@ -253,7 +252,6 @@ struct XmlLite final
         setAttribute_(e, name, std::to_string(i), uri);
     }
 
-    static xml::lite::Element* getOptional(const xml::lite::Element* parent, const std::string& tag);
     static xml::lite::Element* getOptional(const xml::lite::Element& parent, const std::string& tag);
 
     template<typename T>
@@ -268,7 +266,6 @@ struct XmlLite final
         return retval;
     }
 
-    static xml::lite::Element* getFirstAndOnly(const xml::lite::Element* parent, const std::string& tag);
     static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag);
 
     /*!

@@ -215,25 +215,30 @@ bool XMLParser::parseDouble(const xml::lite::Element& element, double& value) co
 }
 bool XMLParser::parseDouble(const xml::lite::Element* element, double& value) const
 {
-    return mXmlLite.parseDouble(element, value);
+    assert(element != nullptr);
+    return mXmlLite.parseDouble(*element, value);
 }
 void XMLParser::parseDouble(const xml::lite::Element* element, std::optional<double>& value) const
 {
-    mXmlLite.parseDouble(element, value);
+    assert(element != nullptr);
+    mXmlLite.parseDouble(*element, value);
 }
 
 bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, double& value) const
 {
-    return mXmlLite.parseOptionalDouble(parent, tag, value);
+    assert(parent != nullptr);
+    return mXmlLite.parseOptionalDouble(*parent, tag, value);
 }
 bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const
 {
-    return mXmlLite.parseOptionalDouble(parent, tag, value);
+    assert(parent != nullptr);
+    return mXmlLite.parseOptionalDouble(*parent, tag, value);
 }
 
 void XMLParser::parseComplex(const xml::lite::Element* element, std::complex<double>& value) const
 {
-    mXmlLite.parseComplex(element, value);
+    assert(element != nullptr);
+    mXmlLite.parseComplex(*element, value);
 }
 
 void XMLParser::parseString(const xml::lite::Element& element, std::string& value) const

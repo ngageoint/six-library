@@ -228,6 +228,7 @@ protected:
     template <typename T>
     void parseEnum(const xml::lite::Element* element, T& enumVal) const
     {
+        assert(element != nullptr);
         parseEnum(*element, enumVal);
     }
 
@@ -247,12 +248,14 @@ protected:
     bool parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const;
     bool parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const
     {
+        assert(parent != nullptr);
         return parseOptionalString(*parent, tag, value);
     }
     template <typename T>
     bool parseOptionalInt(const xml::lite::Element* parent, const std::string& tag, T& value) const
     {
-        return mXmlLite.parseOptionalInt(parent, tag, value);
+        assert(parent != nullptr);
+        return mXmlLite.parseOptionalInt(*parent, tag, value);
     }
 
     void parseDateTime(const xml::lite::Element* element, DateTime& value) const
