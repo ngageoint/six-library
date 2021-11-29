@@ -805,19 +805,17 @@ void DerivedXMLParser300::parseDynamicRangeAdjustmentFromXML(
     if (parameterElem)
     {
         rangeAdjustment.draParameters.reset(new DynamicRangeAdjustment::DRAParameters());
-        parseDouble(getFirstAndOnly(parameterElem, "Pmin"), rangeAdjustment.draParameters->pMin);
-        parseDouble(getFirstAndOnly(parameterElem, "Pmax"), rangeAdjustment.draParameters->pMax);
-        parseDouble(getFirstAndOnly(parameterElem, "EminModifier"), rangeAdjustment.draParameters->eMinModifier);
-        parseDouble(getFirstAndOnly(parameterElem, "EmaxModifier"), rangeAdjustment.draParameters->eMaxModifier);
+        parseDouble(getFirstAndOnly(*parameterElem, "Pmin"), rangeAdjustment.draParameters->pMin);
+        parseDouble(getFirstAndOnly(*parameterElem, "Pmax"), rangeAdjustment.draParameters->pMax);
+        parseDouble(getFirstAndOnly(*parameterElem, "EminModifier"), rangeAdjustment.draParameters->eMinModifier);
+        parseDouble(getFirstAndOnly(*parameterElem, "EmaxModifier"), rangeAdjustment.draParameters->eMaxModifier);
     }
 
     if (overrideElem)
     {
         rangeAdjustment.draOverrides.reset(new DynamicRangeAdjustment::DRAOverrides());
-        parseDouble(getFirstAndOnly(overrideElem, "Subtractor"),
-            rangeAdjustment.draOverrides->subtractor);
-        parseDouble(getFirstAndOnly(overrideElem, "Multiplier"),
-            rangeAdjustment.draOverrides->multiplier);
+        parseDouble(getFirstAndOnly(*overrideElem, "Subtractor"), rangeAdjustment.draOverrides->subtractor);
+        parseDouble(getFirstAndOnly(*overrideElem, "Multiplier"), rangeAdjustment.draOverrides->multiplier);
     }
 }
 
@@ -827,9 +825,7 @@ XMLElem DerivedXMLParser300::convertDerivedClassificationToXML(
 {
     XMLElem classElem = newElement("Classification", parent);
 
-    common().addParameters("SecurityExtension",
-                    classification.securityExtensions,
-                           classElem);
+    common().addParameters("SecurityExtension", classification.securityExtensions, classElem);
 
     //! from ism:ISMRootNodeAttributeGroup
     // SIDD 2.0 is tied to IC-ISM v13
