@@ -67,7 +67,7 @@ struct XmlLite final
     }
 
     //! Returns the default URI
-    std::string getDefaultURI() const
+    const std::string& getDefaultURI() const
     {
         return mDefaultURI;
     }
@@ -135,14 +135,6 @@ struct XmlLite final
     {
         return createInt_(name, uri, p, parent);
     }
-    xml::lite::Element* createInt(const std::string& name, const std::string& uri, size_t p = 0, xml::lite::Element* parent = nullptr) const
-    {
-        return createInt(name, uri, gsl::narrow<int>(p), parent);
-    }
-    xml::lite::Element* createInt(const std::string& name, const std::string& uri, ptrdiff_t p = 0, xml::lite::Element* parent = nullptr) const
-    {
-        return createInt(name, uri, gsl::narrow<int>(p), parent);
-    }
 
     xml::lite::Element* createDouble(const std::string& name,
             const std::string& uri, double p = 0, xml::lite::Element* parent = nullptr) const;
@@ -205,27 +197,16 @@ struct XmlLite final
             xml::lite::Element* parent = nullptr) const;
 
     template <typename T>
-    void parseInt(const xml::lite::Element* element, T& value) const
+    void parseInt(const xml::lite::Element& element, T& value) const
     {
         try
         {
-            value = str::toType<T>(element->getCharacterData());
+            value = str::toType<T>(element.getCharacterData());
         }
         catch (const except::BadCastException& ex)
         {
             log()->warn(Ctxt("Unable to parse: " + ex.toString()));
         }
-    }
-    template <typename T>
-    void parseInt(const xml::lite::Element& element, T& value) const
-    {
-        parseInt(&element, value);
-    }
-
-    template <typename T, typename TElement>
-    void parseUInt(const TElement& element, T& value) const
-    {
-        parseInt<T>(element, value);
     }
 
     template <typename T>
@@ -234,11 +215,6 @@ struct XmlLite final
         std::string name;
         parseString(element, name);
         enumVal = T(name);
-    }
-    template <typename T>
-    void parseEnum(const xml::lite::Element* element, T& enumVal) const
-    {
-        parseEnum(*element, enumVal);
     }
 
     bool parseDouble(const xml::lite::Element* element, double& value) const;
@@ -252,16 +228,13 @@ struct XmlLite final
     void parseBooleanType(const xml::lite::Element* element, BooleanType& value) const;
 
     bool parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const;
-    bool parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const
-    {
-        return parseOptionalString(*parent, tag, value);
-    }
+
     template <typename T>
     bool parseOptionalInt(const xml::lite::Element* parent, const std::string& tag, T& value) const
     {
         if (const xml::lite::Element* const element = getOptional(parent, tag))
         {
-            parseInt(element, value);
+            parseInt(*element, value);
             return true;
         }
         return false;
@@ -294,11 +267,6 @@ struct XmlLite final
         }
         return retval;
     }
-    template<typename T>
-    static xml::lite::Element* getOptional_reset(const xml::lite::Element* parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)
-    {
-        return getOptional_reset(*parent, tag, obj);
-    }
 
     static xml::lite::Element* getFirstAndOnly(const xml::lite::Element* parent, const std::string& tag);
     static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag);
@@ -308,7 +276,7 @@ struct XmlLite final
      * @throw throws an Exception if the element is nullptr
      * @return returns the input Element
      */
-    static xml::lite::Element* require(xml::lite::Element* element, const std::string& name);
+    static xml::lite::Element& require(xml::lite::Element* element, const std::string& name);
 
 private:
     xml::lite::Element* createInt_(const std::string& name, const std::string& uri, int p, xml::lite::Element* parent) const;

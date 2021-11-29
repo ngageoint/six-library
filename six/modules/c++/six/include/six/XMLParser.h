@@ -23,6 +23,8 @@
 #define SIX_six_XMLParser_h_INCLUDED_
 #pragma once
 
+#include <assert.h>
+
 #include <string>
 #include <type_traits>
 #include <std/optional>
@@ -95,7 +97,7 @@ protected:
     static XMLElem newElement(const T* pElement, const std::string& name, const std::string& uri,
         XMLElem parent = nullptr)
     {
-        return pElement == nullptr ? nullptr : newElement(name, uri, parent);
+        return XmlLite::newElement(pElement, name, uri, parent);
     }
 
     // generic element creation methods, w/URI
@@ -112,7 +114,7 @@ protected:
         const std::string& uri, const T& t,
         XMLElem parent = nullptr) const
     {
-        return createString(name, uri, toString(t), parent);
+        return mXmlLite.createSixString(name, uri, t, parent);
     }
 
     template <typename T>
@@ -120,15 +122,7 @@ protected:
                                  const T& enumVal,
                                  XMLElem parent) const
     {
-        if (six::Init::isUndefined(enumVal.value))
-        {
-            throw six::UninitializedValueException(
-                Ctxt("Attempted use of uninitialized value"));
-        }
-
-        return createString(name,
-                            enumVal.toString(),
-                            parent);
+        return mXmlLite.createStringFromEnum(name, enumVal, parent);
     }
 
     XMLElem createInt(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent = nullptr) const
@@ -209,21 +203,15 @@ protected:
             XMLElem parent = nullptr) const;
 
     template <typename T>
-    void parseInt(const xml::lite::Element* element, T& value) const
-    {
-        try
-        {
-            value = str::toType<T>(element->getCharacterData());
-        }
-        catch (const except::BadCastException& ex)
-        {
-            log()->warn(Ctxt("Unable to parse: " + ex.toString()));
-        }
-    }
-    template <typename T>
     void parseInt(const xml::lite::Element& element, T& value) const
     {
-        parseInt(&element, value);
+        mXmlLite.parseInt(element, value);
+    }
+    template <typename T>
+    void parseInt(const xml::lite::Element* element, T& value) const
+    {
+        assert(element != nullptr);
+        parseInt(*element, value);
     }
 
     template <typename T, typename TElement>
@@ -235,9 +223,7 @@ protected:
     template <typename T>
     void parseEnum(const xml::lite::Element& element, T& enumVal) const
     {
-        std::string name;
-        parseString(element, name);
-        enumVal = T(name);
+        mXmlLite.parseEnum(element, enumVal);
     }
     template <typename T>
     void parseEnum(const xml::lite::Element* element, T& enumVal) const
@@ -263,12 +249,7 @@ protected:
     template <typename T>
     bool parseOptionalInt(const xml::lite::Element* parent, const std::string& tag, T& value) const
     {
-        if (const xml::lite::Element* const element = getOptional(parent, tag))
-        {
-            parseInt(element, value);
-            return true;
-        }
-        return false;
+        return mXmlLite.parseOptionalInt(parent, tag, value);
     }
 
     void parseDateTime(const xml::lite::Element* element, DateTime& value) const;
@@ -290,13 +271,7 @@ protected:
     template<typename T>
     static XMLElem getOptional_reset(const xml::lite::Element& parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)
     {
-        auto retval = getOptional(parent, tag);
-        if (retval != nullptr)
-        {
-            //optional
-            obj.reset(std::make_unique<T>());
-        }
-        return retval;
+        return XmlLite::getOptional_reset(parent, tag, obj);
     }
     template<typename T>
     static XMLElem getOptional_reset(const xml::lite::Element* parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)

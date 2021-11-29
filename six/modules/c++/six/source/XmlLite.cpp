@@ -273,14 +273,14 @@ xml::lite::Element* XmlLite::getOptional(const xml::lite::Element* parent, const
     return getOptional(*parent, tag);
 }
 
-xml::lite::Element* XmlLite::require(xml::lite::Element* element, const std::string& name)
+xml::lite::Element& XmlLite::require(xml::lite::Element* element, const std::string& name)
 {
     if (!element)
     {
         throw except::Exception(Ctxt(
             "Required field [" + name + "] is undefined or null"));
     }
-    return element;
+    return *element;
 }
 
 void XmlLite::setAttribute_(xml::lite::Element* e, const std::string& name,
