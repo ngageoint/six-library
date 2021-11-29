@@ -30,16 +30,12 @@ typedef xml::lite::Element* XMLElem;
 
 namespace six
 {
-SICommonXMLParser10x::SICommonXMLParser10x(
-    const std::string& defaultURI,
-    bool addClassAttributes,
-    const std::string& siCommonURI,
-    logging::Logger* log,
-    bool ownLog) :
-    SICommonXMLParser(defaultURI, addClassAttributes,
-                      siCommonURI, log, ownLog)
-{
-}
+    SICommonXMLParser10x::SICommonXMLParser10x(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        logging::Logger* log, bool ownLog) : SICommonXMLParser(defaultURI, addClassAttributes, siCommonURI, log, ownLog) {  }
+    SICommonXMLParser10x::SICommonXMLParser10x(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        std::unique_ptr<logging::Logger>&& log) : SICommonXMLParser(defaultURI, addClassAttributes, siCommonURI, std::move(log)) {  }
+    SICommonXMLParser10x::SICommonXMLParser10x(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        logging::Logger& log) : SICommonXMLParser(defaultURI, addClassAttributes, siCommonURI, log) {  }
 
 XMLElem SICommonXMLParser10x::convertCompositeSCPToXML(
     const ErrorStatistics* errorStatistics,

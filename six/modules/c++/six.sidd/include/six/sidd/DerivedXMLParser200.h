@@ -30,9 +30,8 @@ namespace six
 {
 namespace sidd
 {
-class DerivedXMLParser200 : public DerivedXMLParser
+struct DerivedXMLParser200 : public DerivedXMLParser
 {
-public:
     DerivedXMLParser200(logging::Logger* log = nullptr,
                         bool ownLog = false);
 
@@ -45,6 +44,12 @@ public:
 
     virtual DerivedData* fromXML(const xml::lite::Document* doc) const override;
     std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const override;
+
+    static void validateDRAFields(const six::sidd::DRAType&, bool hasDraParameters, bool hasDraOverrides);
+    static void validateDRAFields(const six::sidd::DynamicRangeAdjustment&);
+
+    static ProjectionType getProjectionType(const xml::lite::Element& measurementElem);
+    static std::unique_ptr<LUT> parseSingleLUT(const std::string& lutStr, size_t size);
 
 protected:
     virtual void parseDerivedClassificationFromXML(
