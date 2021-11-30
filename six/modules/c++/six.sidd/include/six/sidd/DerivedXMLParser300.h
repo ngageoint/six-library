@@ -75,13 +75,8 @@ private:
     XMLElem convertInteractiveProcessingToXML(const InteractiveProcessing&, XMLElem parent = nullptr) const;
     void parseInteractiveProcessingFromXML(const xml::lite::Element& interactiveElem, InteractiveProcessing&) const;
 
-    XMLElem convertPredefinedFilterToXML(const Filter::Predefined&, XMLElem parent = nullptr) const;
     void parsePredefinedFilterFromXML(const xml::lite::Element* predefinedElem, Filter::Predefined&) const;
-
-    XMLElem convertKernelToXML(const Filter::Kernel&, XMLElem parent = nullptr) const;
     void parseKernelFromXML(const xml::lite::Element* kernelElem, Filter::Kernel&) const;
-
-    XMLElem convertBankToXML(const Filter::Bank&, XMLElem parent = nullptr) const;
     void parseBankFromXML(const xml::lite::Element* bankElem, Filter::Bank&) const;
 
     XMLElem convertFilterToXML(const std::string& name, const Filter& Filter, XMLElem parent = nullptr) const;

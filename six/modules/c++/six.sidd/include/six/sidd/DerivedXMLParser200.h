@@ -51,12 +51,6 @@ struct DerivedXMLParser200 : public DerivedXMLParser
     static ProjectionType getProjectionType(const xml::lite::Element& measurementElem);
     static std::unique_ptr<LUT> parseSingleLUT(const std::string& lutStr, size_t size);
 
-    static xml::lite::Element& convertPredefinedFilterToXML(const DerivedXMLParser&,
-        const Filter::Predefined&, xml::lite::Element& parent);
-    static xml::lite::Element& convertKernelToXML(const DerivedXMLParser&,
-        const Filter::Kernel&, xml::lite::Element& parent);
-    static xml::lite::Element& convertBankToXML(const DerivedXMLParser&,
-        const Filter::Bank&, xml::lite::Element& parent);
     static xml::lite::Element& convertFilterToXML(const DerivedXMLParser&,
         const std::string& name, const Filter&, xml::lite::Element& parent);
 
@@ -122,17 +116,12 @@ private:
             const InteractiveProcessing& processing,
             XMLElem parent = nullptr) const;
 
-    XMLElem convertPredefinedFilterToXML(
-            const Filter::Predefined& predefined,
-            XMLElem parent = nullptr) const;
-
-    XMLElem convertKernelToXML(
-            const Filter::Kernel& kernel,
-            XMLElem parent = nullptr) const;
-
-    XMLElem convertBankToXML(
-            const Filter::Bank& bank,
-            XMLElem parent = nullptr) const;
+    static xml::lite::Element& convertPredefinedFilterToXML(const DerivedXMLParser&,
+        const Filter::Predefined&, xml::lite::Element& parent);
+    static xml::lite::Element& convertKernelToXML(const DerivedXMLParser&,
+        const Filter::Kernel&, xml::lite::Element& parent);
+    static xml::lite::Element& convertBankToXML(const DerivedXMLParser&,
+        const Filter::Bank&, xml::lite::Element& parent);
 
     XMLElem convertFilterToXML(const std::string& name,
                                const Filter& Filter,

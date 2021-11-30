@@ -1235,29 +1235,6 @@ XMLElem DerivedXMLParser300::convertInteractiveProcessingToXML(
     return processingElem;
 }
 
-XMLElem DerivedXMLParser300::convertPredefinedFilterToXML(
-        const Filter::Predefined& predefined,
-        XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return & DerivedXMLParser200::convertPredefinedFilterToXML(*this, predefined, *parent);
-}
-
-XMLElem DerivedXMLParser300::convertKernelToXML(
-        const Filter::Kernel& kernel,
-        XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return &DerivedXMLParser200::convertKernelToXML(*this, kernel, *parent);
-}
-
-XMLElem DerivedXMLParser300::convertBankToXML(const Filter::Bank& bank,
-    XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return &DerivedXMLParser200::convertBankToXML(*this, bank, *parent);
-}
-
 XMLElem DerivedXMLParser300::convertFilterToXML(const std::string& name,
                                                 const Filter& filter,
                                                 XMLElem parent) const

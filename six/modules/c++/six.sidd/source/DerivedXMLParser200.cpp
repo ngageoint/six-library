@@ -1344,21 +1344,7 @@ xml::lite::Element& DerivedXMLParser200::convertPredefinedFilterToXML(const Deri
 
     return predefinedElem;
 }
-XMLElem DerivedXMLParser200::convertPredefinedFilterToXML(
-        const Filter::Predefined& predefined,
-        XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return &convertPredefinedFilterToXML(*this, predefined, *parent);
-}
 
-XMLElem DerivedXMLParser200::convertKernelToXML(
-        const Filter::Kernel& kernel,
-        XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return &convertKernelToXML(*this, kernel, *parent);
-}
 xml::lite::Element& DerivedXMLParser200::convertKernelToXML(const DerivedXMLParser& parser,
     const Filter::Kernel& kernel, xml::lite::Element& parent)
 {
@@ -1412,12 +1398,6 @@ xml::lite::Element& DerivedXMLParser200::convertKernelToXML(const DerivedXMLPars
     return kernelElem;
 }
 
-XMLElem DerivedXMLParser200::convertBankToXML(const Filter::Bank& bank,
-    XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return &convertBankToXML(*this, bank, *parent);
-}
 xml::lite::Element& DerivedXMLParser200::convertBankToXML(const DerivedXMLParser& parser,
     const Filter::Bank& bank, xml::lite::Element& parent)
 {
