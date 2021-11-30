@@ -1,8 +1,9 @@
 /* =========================================================================
-* This file is part of six.sicd-c++
+* This file is part of six.sidd-c++
 * =========================================================================
 *
 * (C) Copyright 2004 - 2016, MDA Information Systems LLC
+* (C) Copyright 2021, Maxar Technologies, Inc.
 *
 * six.sicd-c++ is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Lesser General Public License as published by
@@ -105,20 +106,43 @@ inline std::vector<std::filesystem::path> getSchemaPaths()
 
 static std::string testName;
 
+static std::unique_ptr<six::sidd::DerivedData> test_assert_round_trip(const six::sidd::DerivedData& derivedData, const std::vector<fs::path>* pSchemaPaths)
+{
+    auto strXML = six::sidd::Utilities::toXMLString(derivedData, pSchemaPaths);
+    TEST_ASSERT_FALSE(strXML.empty());
+    return six::sidd::Utilities::parseDataFromString(strXML, pSchemaPaths);
+}
+
 TEST_CASE(test_createFakeDerivedData)
 {
     const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData("3.0.0");
+    auto Unmodeled = pFakeDerivedData->errorStatistics->Unmodeled;
+    TEST_ASSERT_NULL(Unmodeled.get());
 
     // NULL schemaPaths, no validation
-    auto strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, nullptr /*pSchemaPaths*/);
-    TEST_ASSERT_FALSE(strXML.empty());
-    auto pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, nullptr /*pSchemaPaths*/);
+    auto pDerivedData = test_assert_round_trip(*pFakeDerivedData, nullptr /*pSchemaPaths*/);
+    Unmodeled = pDerivedData->errorStatistics->Unmodeled;
+    TEST_ASSERT_NULL(Unmodeled.get());
 
     // validate XML against schema
     const auto schemaPaths = getSchemaPaths();
-    strXML = six::sidd::Utilities::toXMLString(*pFakeDerivedData, &schemaPaths);
-    TEST_ASSERT_FALSE(strXML.empty());
-    pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, &schemaPaths);
+    pDerivedData = test_assert_round_trip(*pFakeDerivedData, &schemaPaths);
+    Unmodeled = pDerivedData->errorStatistics->Unmodeled;
+    TEST_ASSERT_NULL(Unmodeled.get());
+}
+
+static void test_assert_unmodeled(const six::UnmodeledS& Unmodeled)
+{
+    TEST_ASSERT_EQ(1.23, Unmodeled.Xrow);
+    TEST_ASSERT_EQ(4.56, Unmodeled.Ycol);
+    TEST_ASSERT_EQ(7.89, Unmodeled.XrowYcol);
+
+    const auto& UnmodeledDecor = Unmodeled.UnmodeledDecorr;
+    TEST_ASSERT(UnmodeledDecor.get() != nullptr);
+    TEST_ASSERT_EQ(12.34, UnmodeledDecor->Xrow.CorrCoefZero);
+    TEST_ASSERT_EQ(56.78, UnmodeledDecor->Xrow.DecorrRate);
+    TEST_ASSERT_EQ(123.4, UnmodeledDecor->Ycol.CorrCoefZero);
+    TEST_ASSERT_EQ(567.8, UnmodeledDecor->Ycol.DecorrRate);
 }
 
 TEST_CASE(test_read_sidd300_xml)
@@ -127,31 +151,26 @@ TEST_CASE(test_read_sidd300_xml)
 
     // NULL schemaPaths, no validation
     auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, nullptr /*pSchemaPaths*/);
-    auto strXML = six::sidd::Utilities::toXMLString(*pDerivedData, nullptr /*pSchemaPaths*/);
-    TEST_ASSERT_FALSE(strXML.empty());
-    pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, nullptr /*pSchemaPaths*/);
     auto Unmodeled = pDerivedData->errorStatistics->Unmodeled;
     TEST_ASSERT(Unmodeled.get() != nullptr);
+    test_assert_unmodeled(*Unmodeled);
+
+    pDerivedData = test_assert_round_trip(*pDerivedData, nullptr /*pSchemaPaths*/);
+    Unmodeled = pDerivedData->errorStatistics->Unmodeled;
+    TEST_ASSERT(Unmodeled.get() != nullptr);
+    test_assert_unmodeled(*Unmodeled);
 
     // validate XML against schema
     const auto schemaPaths = getSchemaPaths();
     pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
-    strXML = six::sidd::Utilities::toXMLString(*pDerivedData, &schemaPaths);
-    TEST_ASSERT_FALSE(strXML.empty());
-    pDerivedData = six::sidd::Utilities::parseDataFromString(strXML, &schemaPaths);
     Unmodeled = pDerivedData->errorStatistics->Unmodeled;
     TEST_ASSERT(Unmodeled.get() != nullptr);
+    test_assert_unmodeled(*Unmodeled);
 
-    TEST_ASSERT_EQ(1.23, Unmodeled->Xrow);
-    TEST_ASSERT_EQ(4.56, Unmodeled->Ycol);
-    TEST_ASSERT_EQ(7.89, Unmodeled->XrowYcol);
-
-    const auto& UnmodeledDecor = Unmodeled->UnmodeledDecorr;
-    TEST_ASSERT(UnmodeledDecor.get() != nullptr);
-    TEST_ASSERT_EQ(12.34, UnmodeledDecor->Xrow.CorrCoefZero);
-    TEST_ASSERT_EQ(56.78, UnmodeledDecor->Xrow.DecorrRate);
-    TEST_ASSERT_EQ(123.4, UnmodeledDecor->Ycol.CorrCoefZero);
-    TEST_ASSERT_EQ(567.8, UnmodeledDecor->Ycol.DecorrRate);
+    pDerivedData = test_assert_round_trip(*pDerivedData, &schemaPaths);
+    Unmodeled = pDerivedData->errorStatistics->Unmodeled;
+    TEST_ASSERT(Unmodeled.get() != nullptr);
+    test_assert_unmodeled(*Unmodeled);
 }
 
 TEST_MAIN((void)argc; (void)argv;
