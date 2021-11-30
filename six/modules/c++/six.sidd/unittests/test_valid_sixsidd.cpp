@@ -63,33 +63,15 @@ static fs::path schema_relative_path()
     return six_sidd_relative_path() / "conf" / "schema";
 }
 
-static fs::path buildRootDir()
-{
-    auto platform = sys::Platform; // "conditional expression is constant"
-    if (platform == sys::PlatformType::Windows)
-    {
-        // On Windows ... in Visual Studio or stand-alone?
-        if (argv0().filename() == "Test.exe") // Google Test in Visual Studio
-        {
-            const auto cwd = fs::current_path();
-            const auto root_dir = cwd.parent_path().parent_path();
-            return root_dir;
-        }
-    }
-
-    // Linux or stand-alone
-    return six::testing::findRootDir(argv0());
-}
-
 inline fs::path get_sample_xml_path(const fs::path& filename)
 {
-    const auto root_dir = buildRootDir();
+    const auto root_dir = six::testing::buildRootDir(argv0());
     return root_dir / sample_xml_relative_path(filename);
 }
 
 inline std::vector<std::filesystem::path> getSchemaPaths()
 {
-    const auto root_dir = buildRootDir();
+    const auto root_dir = six::testing::buildRootDir(argv0());
     return std::vector<std::filesystem::path> { (root_dir / schema_relative_path()) };
 }
 
