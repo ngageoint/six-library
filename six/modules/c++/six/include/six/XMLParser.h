@@ -79,6 +79,8 @@ struct XMLParser
         return mXmlLite.createInt(name, p, parent);
     }
 
+    xml::lite::Element& createDouble(const std::string& name, double p, xml::lite::Element& parent) const;
+
 protected:
     logging::Logger* log() const
     {
@@ -280,12 +282,19 @@ protected:
     static void setAttribute(XMLElem e, const std::string& name,
         const std::string& s, const std::string& uri = "")
     {
-        return XmlLite::setAttribute(e, name, s, uri);
+        assert(e != nullptr);
+        return XmlLite::setAttribute(*e, name, s, uri);
+    }
+    static void setAttribute(xml::lite::Element& e, const std::string& name,
+        size_t i, const std::string& uri = "")
+    {
+        return XmlLite::setAttribute(e, name, i, uri);
     }
     static void setAttribute(XMLElem e, const std::string& name,
         size_t i, const std::string& uri = "")
     {
-        return XmlLite::setAttribute(e, name, i, uri);
+        assert(e != nullptr);
+        return setAttribute(*e, name, i, uri);
     }
 
     static XMLElem getOptional(const xml::lite::Element* parent, const std::string& tag);

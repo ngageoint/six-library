@@ -187,8 +187,7 @@ struct XmlLite final
     {
         return * createInt_(name, gsl::narrow_cast<int>(p), &parent);
     }
-    xml::lite::Element* createDouble(const std::string& name, double p = 0,
-            xml::lite::Element* parent = nullptr) const;
+    xml::lite::Element& createDouble(const std::string& name, double p, xml::lite::Element& parent ) const;
     xml::lite::Element* createDouble(const std::string& name, const std::optional<double>& p,
         xml::lite::Element* parent = nullptr) const;
     xml::lite::Element* createOptionalDouble(const std::string& name, const double& p,
@@ -249,15 +248,15 @@ struct XmlLite final
 
     void parseDateTime(const xml::lite::Element& element, DateTime& value) const;
 
-    static void setAttribute(xml::lite::Element* e, const std::string& name,
+    static void setAttribute(xml::lite::Element& e, const std::string& name,
         const std::string& s, const std::string& uri = "")
     {
-        setAttribute_(e, name,s, uri);
+        setAttribute_(&e, name,s, uri);
     }
-    static void setAttribute(xml::lite::Element* e, const std::string& name,
+    static void setAttribute(xml::lite::Element& e, const std::string& name,
         size_t i, const std::string& uri = "")
     {
-        setAttribute_(e, name, std::to_string(i), uri);
+        setAttribute_(&e, name, std::to_string(i), uri);
     }
 
     static xml::lite::Element* getOptional(const xml::lite::Element& parent, const std::string& tag);

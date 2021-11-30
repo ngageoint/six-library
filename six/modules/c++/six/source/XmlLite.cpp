@@ -175,10 +175,15 @@ xml::lite::Element* XmlLite::createDouble(const std::string& name,
 
     return elem;
 }
-xml::lite::Element* XmlLite::createDouble(const std::string& name, double p,
-        xml::lite::Element* parent) const
+xml::lite::Element& XmlLite::createDouble(const std::string& name, double p,
+        xml::lite::Element& parent) const
 {
-    return createDouble(name, mDefaultURI, p, parent);
+    return * createDouble(name, mDefaultURI, p, &parent);
+}
+xml::lite::Element* XmlLite::createDouble(const std::string& name, const std::optional<double>& p,
+    xml::lite::Element* parent) const
+{
+    return & createDouble(name, p.value(), *parent);
 }
 
 xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name,

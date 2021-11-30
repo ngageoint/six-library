@@ -107,10 +107,15 @@ XMLElem XMLParser::createDouble(const std::string& name,
 {
     return createDouble(name, uri, p.value(), parent);
 }
+xml::lite::Element& XMLParser::createDouble(const std::string& name, double p, xml::lite::Element& parent) const
+{
+    return mXmlLite.createDouble(name, p, parent);
+}
 XMLElem XMLParser::createDouble(const std::string& name, double p,
         XMLElem parent) const
 {
-    return mXmlLite.createDouble(name, p, parent);
+    assert(parent != nullptr);
+    return &createDouble(name, p, *parent);
 }
 XMLElem XMLParser::createDouble(const std::string& name, const std::optional<double>& p,
     XMLElem parent) const

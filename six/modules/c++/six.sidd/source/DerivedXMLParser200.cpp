@@ -1356,7 +1356,13 @@ XMLElem DerivedXMLParser200::convertKernelToXML(
         const Filter::Kernel& kernel,
         XMLElem parent) const
 {
-    XMLElem kernelElem = newElement("FilterKernel", parent);
+    assert(parent != nullptr);
+    return &convertKernelToXML(*this, kernel, *parent);
+}
+xml::lite::Element& DerivedXMLParser200::convertKernelToXML(const DerivedXMLParser& parser,
+    const Filter::Kernel& kernel, xml::lite::Element& parent)
+{
+    auto& kernelElem = parser.newElement("FilterKernel", parent);
 
     bool ok = false;
     if (kernel.predefined.get())
@@ -1364,14 +1370,14 @@ XMLElem DerivedXMLParser200::convertKernelToXML(
         if (kernel.custom.get() == nullptr)
         {
             ok = true;
-            convertPredefinedFilterToXML(*kernel.predefined, kernelElem);
+            convertPredefinedFilterToXML(parser, *kernel.predefined, kernelElem);
         }
     }
     else if (kernel.custom.get())
     {
         ok = true;
 
-        XMLElem customElem = newElement("Custom", kernelElem);
+        auto& customElem = parser.newElement("Custom", kernelElem);
 
         if (kernel.custom->filterCoef.size() !=
             static_cast<size_t>(kernel.custom->size.row) * kernel.custom->size.col)
@@ -1383,7 +1389,7 @@ XMLElem DerivedXMLParser200::convertKernelToXML(
             throw except::Exception(Ctxt(ostr.str()));
         }
 
-        XMLElem filterCoef = newElement("FilterCoefficients", customElem);
+        auto& filterCoef = parser.newElement("FilterCoefficients", customElem);
         setAttribute(filterCoef, "numRows", static_cast<size_t>(kernel.custom->size.row));
         setAttribute(filterCoef, "numCols", static_cast<size_t>(kernel.custom->size.col));
 
@@ -1391,7 +1397,7 @@ XMLElem DerivedXMLParser200::convertKernelToXML(
         {
             for (ptrdiff_t col = 0; col < kernel.custom->size.col; ++col, ++idx)
             {
-                XMLElem coefElem = createDouble("Coef", kernel.custom->filterCoef[static_cast<size_t>(idx)],
+                auto& coefElem = parser.createDouble("Coef", kernel.custom->filterCoef[static_cast<size_t>(idx)],
                     filterCoef);
                 setAttribute(coefElem, "row", static_cast<size_t>(row));
                 setAttribute(coefElem, "col", static_cast<size_t>(col));

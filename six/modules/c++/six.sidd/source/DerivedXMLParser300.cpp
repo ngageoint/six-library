@@ -1247,54 +1247,7 @@ XMLElem DerivedXMLParser300::convertKernelToXML(
         const Filter::Kernel& kernel,
         XMLElem parent) const
 {
-    XMLElem kernelElem = newElement("FilterKernel", parent);
-
-    bool ok = false;
-    if (kernel.predefined.get())
-    {
-        if (kernel.custom.get() == nullptr)
-        {
-            ok = true;
-            convertPredefinedFilterToXML(*kernel.predefined, kernelElem);
-        }
-    }
-    else if (kernel.custom.get())
-    {
-        ok = true;
-
-        XMLElem customElem = newElement("Custom", kernelElem);
-
-        if (kernel.custom->filterCoef.size() !=
-            gsl::narrow<size_t>(kernel.custom->size.row) * kernel.custom->size.col)
-        {
-            std::ostringstream ostr;
-            ostr << "Filter size is " << kernel.custom->size.row << " rows x "
-                << kernel.custom->size.col << " cols but have "
-                << kernel.custom->filterCoef.size() << " coefficients";
-            throw except::Exception(Ctxt(ostr.str()));
-        }
-
-        XMLElem filterCoef = newElement("FilterCoefficients", customElem);
-        setAttribute(filterCoef, "numRows", gsl::narrow<size_t>(kernel.custom->size.row));
-        setAttribute(filterCoef, "numCols", gsl::narrow<size_t>(kernel.custom->size.col));
-
-        for (ptrdiff_t row = 0, idx = 0; row < kernel.custom->size.row; ++row)
-        {
-            for (ptrdiff_t col = 0; col < kernel.custom->size.col; ++col, ++idx)
-            {
-                XMLElem coefElem = createDouble("Coef", kernel.custom->filterCoef[gsl::narrow<size_t>(idx)],
-                    filterCoef);
-                setAttribute(coefElem, "row", gsl::narrow<size_t>(row));
-                setAttribute(coefElem, "col", gsl::narrow<size_t>(col));
-            }
-        }
-    }
-    if (!ok)
-    {
-        throw except::Exception(Ctxt("Exactly one of Custom or Predefined must be set"));
-    }
-
-    return kernelElem;
+    return &DerivedXMLParser200::convertKernelToXML(*this, kernel, *parent);
 }
 
 XMLElem DerivedXMLParser300::convertBankToXML(const Filter::Bank& bank,
