@@ -55,6 +55,8 @@ struct DerivedXMLParser200 : public DerivedXMLParser
         const Filter::Predefined&, xml::lite::Element& parent);
     static xml::lite::Element& convertKernelToXML(const DerivedXMLParser&,
         const Filter::Kernel& kernel, xml::lite::Element& parent);
+    static xml::lite::Element& convertBankToXML(const DerivedXMLParser&,
+        const Filter::Bank& bank, xml::lite::Element& parent);
 
 protected:
     virtual void parseDerivedClassificationFromXML(

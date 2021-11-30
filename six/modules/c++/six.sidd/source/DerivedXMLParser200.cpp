@@ -1415,7 +1415,13 @@ xml::lite::Element& DerivedXMLParser200::convertKernelToXML(const DerivedXMLPars
 XMLElem DerivedXMLParser200::convertBankToXML(const Filter::Bank& bank,
     XMLElem parent) const
 {
-    XMLElem bankElem = newElement("FilterBank", parent);
+    assert(parent != nullptr);
+    return &convertBankToXML(*this, bank, *parent);
+}
+xml::lite::Element& DerivedXMLParser200::convertBankToXML(const DerivedXMLParser& parser,
+    const Filter::Bank& bank, xml::lite::Element& parent)
+{
+    auto& bankElem = parser.newElement("FilterBank", parent);
 
     bool ok = false;
     if (bank.predefined.get())
@@ -1423,14 +1429,14 @@ XMLElem DerivedXMLParser200::convertBankToXML(const Filter::Bank& bank,
         if (bank.custom.get() == nullptr)
         {
             ok = true;
-            convertPredefinedFilterToXML(*bank.predefined, bankElem);
+            convertPredefinedFilterToXML(parser, *bank.predefined, bankElem);
         }
     }
     else if (bank.custom.get())
     {
         ok = true;
 
-        XMLElem customElem = newElement("Custom", bankElem);
+        auto& customElem = parser.newElement("Custom", bankElem);
 
         if (bank.custom->filterCoef.size() !=
             static_cast<size_t>(bank.custom->numPhasings) * bank.custom->numPoints)
@@ -1442,15 +1448,15 @@ XMLElem DerivedXMLParser200::convertBankToXML(const Filter::Bank& bank,
             throw except::Exception(Ctxt(ostr.str()));
         }
 
-        XMLElem filterCoef = newElement("FilterCoefficients", customElem);
-        setAttribute(filterCoef, "numPhasings", bank.custom->numPhasings);
-        setAttribute(filterCoef, "numPoints", bank.custom->numPoints);
+        auto& filterCoef = parser.newElement("FilterCoefficients", customElem);
+        parser.setAttribute(filterCoef, "numPhasings", bank.custom->numPhasings);
+        parser.setAttribute(filterCoef, "numPoints", bank.custom->numPoints);
 
         for (size_t row = 0, idx = 0; row < bank.custom->numPhasings; ++row)
         {
             for (size_t col = 0; col < bank.custom->numPoints; ++col, ++idx)
             {
-                XMLElem coefElem = createDouble("Coef", bank.custom->filterCoef[idx],
+                auto& coefElem = parser.createDouble("Coef", bank.custom->filterCoef[idx],
                     filterCoef);
                 setAttribute(coefElem, "phasing", row);
                 setAttribute(coefElem, "point", col);

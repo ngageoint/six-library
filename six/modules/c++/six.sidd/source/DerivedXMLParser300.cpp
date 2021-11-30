@@ -1247,60 +1247,15 @@ XMLElem DerivedXMLParser300::convertKernelToXML(
         const Filter::Kernel& kernel,
         XMLElem parent) const
 {
+    assert(parent != nullptr);
     return &DerivedXMLParser200::convertKernelToXML(*this, kernel, *parent);
 }
 
 XMLElem DerivedXMLParser300::convertBankToXML(const Filter::Bank& bank,
     XMLElem parent) const
 {
-    XMLElem bankElem = newElement("FilterBank", parent);
-
-    bool ok = false;
-    if (bank.predefined.get())
-    {
-        if (bank.custom.get() == nullptr)
-        {
-            ok = true;
-            convertPredefinedFilterToXML(*bank.predefined, bankElem);
-        }
-    }
-    else if (bank.custom.get())
-    {
-        ok = true;
-
-        XMLElem customElem = newElement("Custom", bankElem);
-
-        if (bank.custom->filterCoef.size() !=
-            gsl::narrow<size_t>(bank.custom->numPhasings) * bank.custom->numPoints)
-        {
-            std::ostringstream ostr;
-            ostr << "Filter size is " << bank.custom->numPhasings << " x "
-                << bank.custom->numPoints << " but have "
-                << bank.custom->filterCoef.size() << " coefficients";
-            throw except::Exception(Ctxt(ostr.str()));
-        }
-
-        XMLElem filterCoef = newElement("FilterCoefficients", customElem);
-        setAttribute(filterCoef, "numPhasings", bank.custom->numPhasings);
-        setAttribute(filterCoef, "numPoints", bank.custom->numPoints);
-
-        for (size_t row = 0, idx = 0; row < bank.custom->numPhasings; ++row)
-        {
-            for (size_t col = 0; col < bank.custom->numPoints; ++col, ++idx)
-            {
-                XMLElem coefElem = createDouble("Coef", bank.custom->filterCoef[idx],
-                    filterCoef);
-                setAttribute(coefElem, "phasing", row);
-                setAttribute(coefElem, "point", col);
-            }
-        }
-    }
-    if (!ok)
-    {
-        throw except::Exception(Ctxt("Exactly one of Custom or Predefined must be set"));
-    }
-
-    return bankElem;
+    assert(parent != nullptr);
+    return &DerivedXMLParser200::convertBankToXML(*this, bank, *parent);
 }
 
 XMLElem DerivedXMLParser300::convertFilterToXML(const std::string& name,
