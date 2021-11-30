@@ -69,19 +69,6 @@ static fs::path externals_nitro_RelativelPath(const fs::path& filename)
     return fs::path("externals") / "nitro" / "modules"/ "c++" / "nitf" / "unittests" / filename;
 }
 
-static fs::path findRootDir(const fs::path& dir)
-{
-    const auto six = dir / "six";
-    const auto externals = dir / "externals";
-    const auto six_sln = dir / "six.sln";
-    if (fs::is_directory(six) && fs::is_directory(externals) && fs::is_regular_file(six_sln))
-    {
-        return dir;
-    }
-    const auto parent = dir.parent_path();
-    return findRootDir(parent);
-}
-
 static fs::path buildRootDir()
 {
     auto platform = sys::Platform; // "conditional expression is constant"
@@ -97,7 +84,7 @@ static fs::path buildRootDir()
     }
 
     // Linux or stand-alone
-    return findRootDir(argv0());
+    return six::testing::findRootDir(argv0());
 }
 
 static fs::path getNitfExternalsPath(const fs::path& filename)

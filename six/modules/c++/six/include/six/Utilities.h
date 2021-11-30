@@ -367,6 +367,11 @@ inline std::span<std::byte> as_bytes(std::vector<T>& buffer)
     return as_bytes(std::span<T>(buffer.data(), buffer.size()));
 }
 
+namespace testing
+{
+    extern std::filesystem::path findRootDir(const std::filesystem::path& dir);
+}
+
 }
 
 #endif

@@ -32,6 +32,7 @@
 #include <logging/NullLogger.h>
 #include <import/sys.h>
 
+#include <six/Utilities.h>
 #include <import/six/sidd.h>
 
 #include "TestCase.h"
@@ -61,18 +62,6 @@ static fs::path schema_relative_path()
 {
     return six_sidd_relative_path() / "conf" / "schema";
 }
-static fs::path findRootDir(const fs::path& dir)
-{
-    const auto six = dir / "six";
-    const auto externals = dir / "externals";
-    const auto six_sln = dir / "six.sln";
-    if (fs::is_directory(six) && fs::is_directory(externals) && fs::is_regular_file(six_sln))
-    {
-        return dir;
-    }
-    const auto parent = dir.parent_path();
-    return findRootDir(parent);
-}
 
 static fs::path buildRootDir()
 {
@@ -89,7 +78,7 @@ static fs::path buildRootDir()
     }
 
     // Linux or stand-alone
-    return findRootDir(argv0());
+    return six::testing::findRootDir(argv0());
 }
 
 inline fs::path get_sample_xml_path(const fs::path& filename)

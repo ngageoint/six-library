@@ -67,18 +67,6 @@ static fs::path nitfRelativelPath(const fs::path& filename)
 {
     return fs::path("six") / "modules" / "c++" / "six" / "tests" / "nitf" / filename;
 }
-static fs::path findRootDir(const fs::path& dir)
-{
-    const auto six = dir / "six";
-    const auto externals = dir / "externals";
-    const auto six_sln = dir / "six.sln";
-    if (fs::is_directory(six) && fs::is_directory(externals) && fs::is_regular_file(six_sln))
-    {
-        return dir;
-    }
-    const auto parent = dir.parent_path();
-    return findRootDir(parent);
-}
 
 static fs::path buildRootDir()
 {
@@ -95,7 +83,7 @@ static fs::path buildRootDir()
     }
 
     // Linux or stand-alone
-    return findRootDir(argv0());
+    return six::testing::findRootDir(argv0());
 }
 
 static fs::path getNitfPath(const fs::path& filename)

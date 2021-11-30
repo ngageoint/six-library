@@ -1343,3 +1343,17 @@ void six::getErrors(const ErrorStatistics* errorStats,
         }
     }
 }
+
+std::filesystem::path six::testing::findRootDir(const std::filesystem::path& dir)
+{
+    using namespace std::filesystem;
+    const auto six = dir / "six";
+    const auto externals = dir / "externals";
+    const auto six_sln = dir / "six.sln";
+    if (is_directory(six) && is_directory(externals) && is_regular_file(six_sln))
+    {
+        return dir;
+    }
+    const auto parent = dir.parent_path();
+    return findRootDir(parent);
+}
