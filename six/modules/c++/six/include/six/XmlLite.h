@@ -95,14 +95,22 @@ struct XmlLite final
     }
 
     // generic element creation methods, w/URI
+    xml::lite::Element& createString(const std::string& name,
+        const std::string& uri, const std::string& p,
+        xml::lite::Element&) const;
     xml::lite::Element* createString(const std::string& name,
-            const std::string& uri, const std::string& p = "",
-            xml::lite::Element* parent = nullptr) const;
+        const std::string& uri, const std::string& p = "",
+        xml::lite::Element* parent = nullptr) const
+    {
+        return &createString(name, uri, p, *parent);
+    }
     #if CODA_OSS_lib_char8_t
     xml::lite::Element* createString(const std::string& name,
         const std::string& uri, const std::u8string& p,
         xml::lite::Element* parent = nullptr) const;
     #endif
+    xml::lite::Element& createString(const std::string& name, const std::string&, xml::lite::Element& parent) const;
+
     template<typename T>
     xml::lite::Element* createSixString(const std::string& name,
         const std::string& uri, const T& t,
@@ -112,9 +120,9 @@ struct XmlLite final
     }
 
     template <typename T>
-    xml::lite::Element* createStringFromEnum(const std::string& name,
+    xml::lite::Element& createStringFromEnum(const std::string& name,
                                  const T& enumVal,
-                                 xml::lite::Element* parent) const
+                                 xml::lite::Element& parent) const
     {
         if (six::Init::isUndefined(enumVal.value))
         {
@@ -174,10 +182,10 @@ struct XmlLite final
         return createString_(name, p, parent);
     }
     template<typename T>
-    xml::lite::Element* createInt(const std::string& name, T p = 0,
-            xml::lite::Element* parent = nullptr) const
+    xml::lite::Element& createInt(const std::string& name, T p,
+            xml::lite::Element& parent) const
     {
-        return createInt_(name, gsl::narrow_cast<int>(p), parent);
+        return * createInt_(name, gsl::narrow_cast<int>(p), &parent);
     }
     xml::lite::Element* createDouble(const std::string& name, double p = 0,
             xml::lite::Element* parent = nullptr) const;

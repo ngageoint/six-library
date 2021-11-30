@@ -65,6 +65,20 @@ struct XMLParser
 
     typedef xml::lite::Element* XMLElem;
 
+    xml::lite::Element& newElement(const std::string& name, xml::lite::Element& prnt) const;
+
+    template <typename T>
+    xml::lite::Element& createStringFromEnum(const std::string& name, const T& enumVal, xml::lite::Element& parent) const
+    {
+        return mXmlLite.createStringFromEnum(name, enumVal, parent);
+    }
+
+    template<typename T>
+    xml::lite::Element& createInt(const std::string& name, T p, xml::lite::Element& parent) const
+    {
+        return mXmlLite.createInt(name, p, parent);
+    }
+
 protected:
     logging::Logger* log() const
     {
@@ -78,7 +92,6 @@ protected:
     }
 
     XMLElem newElement(const std::string& name, XMLElem prnt = nullptr) const;
-    xml::lite::Element& newElement(const std::string& name, xml::lite::Element& prnt) const;
 
     static
     XMLElem newElement(const std::string& name, const std::string& uri,
@@ -122,7 +135,7 @@ protected:
                                  const T& enumVal,
                                  XMLElem parent) const
     {
-        return mXmlLite.createStringFromEnum(name, enumVal, parent);
+        return & createStringFromEnum(name, enumVal, *parent);
     }
 
     XMLElem createInt(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent = nullptr) const
@@ -183,7 +196,7 @@ protected:
     XMLElem createInt(const std::string& name, T p = 0,
             XMLElem parent = nullptr) const
     {
-        return mXmlLite.createInt(name, p, parent);
+        return & createInt(name, p, *parent);
     }
     XMLElem createDouble(const std::string& name, double p = 0,
             XMLElem parent = nullptr) const;

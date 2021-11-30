@@ -1309,11 +1309,10 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
     return processingElem;
 }
 
-XMLElem DerivedXMLParser200::convertPredefinedFilterToXML(
-        const Filter::Predefined& predefined,
-        XMLElem parent) const
+xml::lite::Element& DerivedXMLParser200::convertPredefinedFilterToXML(const DerivedXMLParser& parser,
+    const Filter::Predefined& predefined, xml::lite::Element& parent)
 {
-    XMLElem predefinedElem = newElement("Predefined", parent);
+    auto& predefinedElem = parser.newElement("Predefined", parent);
 
     // Make sure either DBName or FilterFamily+FilterMember are defined
     bool ok = false;
@@ -1324,7 +1323,7 @@ XMLElem DerivedXMLParser200::convertPredefinedFilterToXML(
         {
             ok = true;
 
-            createStringFromEnum("DatabaseName", predefined.databaseName, predefinedElem);
+            parser.createStringFromEnum("DatabaseName", predefined.databaseName, predefinedElem);
         }
     }
     else if (six::Init::isDefined(predefined.filterFamily) &&
@@ -1332,8 +1331,8 @@ XMLElem DerivedXMLParser200::convertPredefinedFilterToXML(
     {
         ok = true;
 
-        createInt("FilterFamily", predefined.filterFamily, predefinedElem);
-        createInt("FilterMember", predefined.filterMember, predefinedElem);
+        parser.createInt("FilterFamily", predefined.filterFamily, predefinedElem);
+        parser.createInt("FilterMember", predefined.filterMember, predefinedElem);
     }
 
     if (!ok)
@@ -1344,6 +1343,13 @@ XMLElem DerivedXMLParser200::convertPredefinedFilterToXML(
     }
 
     return predefinedElem;
+}
+XMLElem DerivedXMLParser200::convertPredefinedFilterToXML(
+        const Filter::Predefined& predefined,
+        XMLElem parent) const
+{
+    assert(parent != nullptr);
+    return &convertPredefinedFilterToXML(*this, predefined, *parent);
 }
 
 XMLElem DerivedXMLParser200::convertKernelToXML(

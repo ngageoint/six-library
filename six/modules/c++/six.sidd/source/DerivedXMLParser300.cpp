@@ -1239,37 +1239,8 @@ XMLElem DerivedXMLParser300::convertPredefinedFilterToXML(
         const Filter::Predefined& predefined,
         XMLElem parent) const
 {
-    XMLElem predefinedElem = newElement("Predefined", parent);
-
-    // Make sure either DBName or FilterFamily+FilterMember are defined
-    bool ok = false;
-    if (isDefined(predefined.databaseName))
-    {
-        if (six::Init::isUndefined(predefined.filterFamily) &&
-            six::Init::isUndefined(predefined.filterMember))
-        {
-            ok = true;
-
-            createStringFromEnum("DatabaseName", predefined.databaseName, predefinedElem);
-        }
-    }
-    else if (six::Init::isDefined(predefined.filterFamily) &&
-             six::Init::isDefined(predefined.filterMember))
-    {
-        ok = true;
-
-        createInt("FilterFamily", predefined.filterFamily, predefinedElem);
-        createInt("FilterMember", predefined.filterMember, predefinedElem);
-    }
-
-    if (!ok)
-    {
-        throw except::Exception(Ctxt(
-                "Exactly one of either dbName or FilterFamily and "
-                "FilterMember must be defined"));
-    }
-
-    return predefinedElem;
+    assert(parent != nullptr);
+    return & DerivedXMLParser200::convertPredefinedFilterToXML(*this, predefined, *parent);
 }
 
 XMLElem DerivedXMLParser300::convertKernelToXML(

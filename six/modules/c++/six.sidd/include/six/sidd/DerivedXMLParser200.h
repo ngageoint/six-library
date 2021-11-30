@@ -51,6 +51,9 @@ struct DerivedXMLParser200 : public DerivedXMLParser
     static ProjectionType getProjectionType(const xml::lite::Element& measurementElem);
     static std::unique_ptr<LUT> parseSingleLUT(const std::string& lutStr, size_t size);
 
+    static xml::lite::Element& convertPredefinedFilterToXML(const DerivedXMLParser&,
+        const Filter::Predefined&, xml::lite::Element& parent);
+
 protected:
     virtual void parseDerivedClassificationFromXML(
             const xml::lite::Element* classificationElem,
@@ -94,7 +97,6 @@ protected:
 
     virtual XMLElem createLUT(const std::string& name, const LUT *l,
         XMLElem parent = nullptr) const;
-
 
 private:
     static const char VERSION[];
