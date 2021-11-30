@@ -168,9 +168,9 @@ struct XmlLite final
 
     // generic element creation methods, using default URI
     template<typename T>
-    xml::lite::Element* createString(const std::string& name, const T& t,
-            xml::lite::Element* parent = nullptr) const {
-        return createString_(name, t.toString(), parent);
+    xml::lite::Element& createString(const std::string& name, const T& t,
+            xml::lite::Element& parent) const {
+        return * createString_(name, t.toString(), &parent);
     }
     template<typename T>
     xml::lite::Element* createSixString(const std::string& name, const T& t, // six::toString(t) isntead of t.toString()
@@ -296,10 +296,10 @@ private:
     Logger mLogger;
 };
 
- template<> inline xml::lite::Element* XmlLite::createString(const std::string& name,
-						      const std::string& p, xml::lite::Element* parent) const
+ template<> inline xml::lite::Element& XmlLite::createString(const std::string& name,
+						      const std::string& p, xml::lite::Element& parent) const
   {
-    return createString_(name, p, parent);
+    return *createString_(name, p, &parent);
   }
 }
 

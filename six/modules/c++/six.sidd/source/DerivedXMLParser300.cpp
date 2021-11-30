@@ -1262,35 +1262,8 @@ XMLElem DerivedXMLParser300::convertFilterToXML(const std::string& name,
                                                 const Filter& filter,
                                                 XMLElem parent) const
 {
-    XMLElem filterElem = newElement(name, parent);
-
-    createString("FilterName", filter.filterName, filterElem);
-
-    // Exactly one of Kernel or Bank should be set
-    bool ok = false;
-    if (filter.filterKernel.get())
-    {
-        if (filter.filterBank.get() == nullptr)
-        {
-            ok = true;
-            convertKernelToXML(*filter.filterKernel, filterElem);
-        }
-    }
-    else if (filter.filterBank.get())
-    {
-        ok = true;
-        convertBankToXML(*filter.filterBank, filterElem);
-    }
-
-    if (!ok)
-    {
-        throw except::Exception(Ctxt(
-                "Exactly one of kernel or bank must be set"));
-    }
-
-    createStringFromEnum("Operation", filter.operation, filterElem);
-
-    return filterElem;
+    assert(parent != nullptr);
+    return &DerivedXMLParser200::convertFilterToXML(*this, name, filter, *parent);
 }
 
 XMLElem DerivedXMLParser300::convertCompressionToXML(

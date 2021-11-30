@@ -1475,9 +1475,15 @@ XMLElem DerivedXMLParser200::convertFilterToXML(const std::string& name,
                                                 const Filter& filter,
                                                 XMLElem parent) const
 {
-    XMLElem filterElem = newElement(name, parent);
+    assert(parent != nullptr);
+    return &convertFilterToXML(*this, name, filter, *parent);
+}
+xml::lite::Element& DerivedXMLParser200::convertFilterToXML(const DerivedXMLParser& parser,
+    const std::string& name, const Filter& filter, xml::lite::Element& parent)
+{
+    auto& filterElem = parser.newElement(name, parent);
 
-    createString("FilterName", filter.filterName, filterElem);
+    parser.createString("FilterName", filter.filterName, filterElem);
 
     // Exactly one of Kernel or Bank should be set
     bool ok = false;
@@ -1486,13 +1492,13 @@ XMLElem DerivedXMLParser200::convertFilterToXML(const std::string& name,
         if (filter.filterBank.get() == nullptr)
         {
             ok = true;
-            convertKernelToXML(*filter.filterKernel, filterElem);
+            convertKernelToXML(parser, *filter.filterKernel, filterElem);
         }
     }
     else if (filter.filterBank.get())
     {
         ok = true;
-        convertBankToXML(*filter.filterBank, filterElem);
+        convertBankToXML(parser, *filter.filterBank, filterElem);
     }
 
     if (!ok)
@@ -1501,7 +1507,7 @@ XMLElem DerivedXMLParser200::convertFilterToXML(const std::string& name,
                 "Exactly one of kernel or bank must be set"));
     }
 
-    createStringFromEnum("Operation", filter.operation, filterElem);
+    parser.createStringFromEnum("Operation", filter.operation, filterElem);
 
     return filterElem;
 }

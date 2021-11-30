@@ -67,6 +67,12 @@ struct XMLParser
 
     xml::lite::Element& newElement(const std::string& name, xml::lite::Element& prnt) const;
 
+    template<typename T>
+    xml::lite::Element& createString(const std::string& name, const T& t, xml::lite::Element& parent) const
+    {
+        return mXmlLite.createString(name, t, parent);
+    }
+
     template <typename T>
     xml::lite::Element& createStringFromEnum(const std::string& name, const T& enumVal, xml::lite::Element& parent) const
     {
@@ -182,8 +188,9 @@ protected:
     // generic element creation methods, using default URI
     template<typename T>
     XMLElem createString(const std::string& name, const T& t,
-            XMLElem parent = nullptr) const {
-        return mXmlLite.createString(name, t, parent);
+        XMLElem parent = nullptr) const {
+        assert(parent != nullptr);
+        return & createString(name, t, *parent);
     }
     template<typename T>
     XMLElem createSixString(const std::string& name, const T& t, // six::toString(t) isntead of t.toString()
