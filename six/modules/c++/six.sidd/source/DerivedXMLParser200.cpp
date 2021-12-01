@@ -893,156 +893,163 @@ XMLElem DerivedXMLParser200::convertDerivedClassificationToXML(
         const DerivedClassification& classification,
         XMLElem parent) const
 {
-    XMLElem classElem = newElement("Classification", parent);
+    assert(parent != nullptr);
+    return &convertDerivedClassificationToXML(*this, classification, *parent);
+}
+xml::lite::Element& DerivedXMLParser200::convertDerivedClassificationToXML(const DerivedXMLParser& parser,
+    const DerivedClassification& classification, xml::lite::Element& parent)
+{
+    auto& classElem_ = parser.newElement("Classification", parent);
+    auto classElem = &classElem_;
 
-    common().addParameters("SecurityExtension",
+    parser.common().addParameters("SecurityExtension",
                     classification.securityExtensions,
                            classElem);
 
     //! from ism:ISMRootNodeAttributeGroup
     // SIDD 2.0 is tied to IC-ISM v13
-    setAttribute(classElem, "DESVersion", "13", ISM_URI);
+    parser.setAttribute(classElem, "DESVersion", "13", ISM_URI);
 
     // So far as I can tell this should just be 1
-    setAttribute(classElem, "ISMCATCESVersion", "1", ISM_URI);
+    parser.setAttribute(classElem, "ISMCATCESVersion", "1", ISM_URI);
 
     //! from ism:ResourceNodeAttributeGroup
-    setAttribute(classElem, "resourceElement", "true", ISM_URI);
-    setAttribute(classElem, "createDate",
+    parser.setAttribute(classElem, "resourceElement", "true", ISM_URI);
+    parser.setAttribute(classElem, "createDate",
                  classification.createDate.format("%Y-%m-%d"), ISM_URI);
     // required (was optional in SIDD 1.0)
-    setAttributeList(classElem, "compliesWith", classification.compliesWith,
+    parser.setAttributeList(classElem, "compliesWith", classification.compliesWith,
                      ISM_URI);
 
     // optional
-    setAttributeIfNonEmpty(classElem,
+    parser.setAttributeIfNonEmpty(classElem,
                            "exemptFrom",
                            classification.exemptFrom,
                            ISM_URI);
 
     //! from ism:SecurityAttributesGroup
     //  -- referenced in ism::ResourceNodeAttributeGroup
-    setAttribute(classElem, "classification", classification.classification,
+    parser.setAttribute(classElem, "classification", classification.classification,
                  ISM_URI);
-    setAttributeList(classElem, "ownerProducer", classification.ownerProducer,
+    parser.setAttributeList(classElem, "ownerProducer", classification.ownerProducer,
                      ISM_URI, true);
 
     // optional
-    setAttributeIfNonEmpty(classElem, "joint", classification.joint, ISM_URI);
+    parser.setAttributeIfNonEmpty(classElem, "joint", classification.joint, ISM_URI);
 
     // optional
-    setAttributeList(classElem, "SCIcontrols", classification.sciControls,
+    parser.setAttributeList(classElem, "SCIcontrols", classification.sciControls,
                      ISM_URI);
     // optional
-    setAttributeList(classElem, "SARIdentifier", classification.sarIdentifier,
+    parser.setAttributeList(classElem, "SARIdentifier", classification.sarIdentifier,
                      ISM_URI);
     // optional
-    setAttributeList(classElem,
+    parser.setAttributeList(classElem,
                      "atomicEnergyMarkings",
                      classification.atomicEnergyMarkings,
                      ISM_URI);
     // optional
-    setAttributeList(classElem,
+    parser.setAttributeList(classElem,
                      "disseminationControls",
                      classification.disseminationControls,
                      ISM_URI);
     // optional
-    setAttributeList(classElem,
+    parser.setAttributeList(classElem,
                      "displayOnlyTo",
                      classification.displayOnlyTo,
                      ISM_URI);
     // optional
-    setAttributeList(classElem, "FGIsourceOpen", classification.fgiSourceOpen,
+    parser.setAttributeList(classElem, "FGIsourceOpen", classification.fgiSourceOpen,
                      ISM_URI);
     // optional
-    setAttributeList(classElem,
+    parser.setAttributeList(classElem,
                      "FGIsourceProtected",
                      classification.fgiSourceProtected,
                      ISM_URI);
     // optional
-    setAttributeList(classElem, "releasableTo", classification.releasableTo,
+    parser.setAttributeList(classElem, "releasableTo", classification.releasableTo,
                      ISM_URI);
     // optional
-    setAttributeList(classElem, "nonICmarkings", classification.nonICMarkings,
+    parser.setAttributeList(classElem, "nonICmarkings", classification.nonICMarkings,
                      ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classElem,
+    parser.setAttributeIfNonEmpty(classElem,
                            "classifiedBy",
                            classification.classifiedBy,
                            ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classElem,
+    parser.setAttributeIfNonEmpty(classElem,
                            "compilationReason",
                            classification.compilationReason,
                            ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classElem,
+    parser.setAttributeIfNonEmpty(classElem,
                            "derivativelyClassifiedBy",
                            classification.derivativelyClassifiedBy,
                            ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classElem,
+    parser.setAttributeIfNonEmpty(classElem,
                            "classificationReason",
                            classification.classificationReason,
                            ISM_URI);
     // optional
-    setAttributeList(classElem, "nonUSControls", classification.nonUSControls,
+    parser.setAttributeList(classElem, "nonUSControls", classification.nonUSControls,
                      ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classElem,
+    parser.setAttributeIfNonEmpty(classElem,
                            "derivedFrom",
                            classification.derivedFrom,
                            ISM_URI);
     // optional
     if (classification.declassDate.get())
     {
-        setAttributeIfNonEmpty(
+        parser.setAttributeIfNonEmpty(
                 classElem, "declassDate",
                 classification.declassDate->format("%Y-%m-%d"),
                 ISM_URI);
     }
     // optional
-    setAttributeIfNonEmpty(classElem,
+    parser.setAttributeIfNonEmpty(classElem,
                            "declassEvent",
                            classification.declassEvent,
                            ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classElem,
+    parser.setAttributeIfNonEmpty(classElem,
                            "declassException",
                            classification.declassException,
                            ISM_URI);
 
     //! from ism:NoticeAttributesGroup
     // optional
-    setAttributeIfNonEmpty(classElem,
+    parser.setAttributeIfNonEmpty(classElem,
                            "noticeType",
                            classification.noticeType,
                            ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classElem,
+    parser.setAttributeIfNonEmpty(classElem,
                            "noticeReason",
                            classification.noticeReason,
                            ISM_URI);
     // optional
     if (classification.noticeDate.get())
     {
-        setAttributeIfNonEmpty(
+        parser.setAttributeIfNonEmpty(
                 classElem, "noticeDate",
                 classification.noticeDate->format("%Y-%m-%d"),
                 ISM_URI);
     }
     // optional
-    setAttributeIfNonEmpty(classElem,
+    parser.setAttributeIfNonEmpty(classElem,
                            "unregisteredNoticeType",
                            classification.unregisteredNoticeType,
                            ISM_URI);
     // optional
-    setAttributeIfNonEmpty(classElem,
+    parser.setAttributeIfNonEmpty(classElem,
                            "externalNotice",
                            classification.externalNotice,
                            ISM_URI);
 
-    return classElem;
+    return classElem_;
 }
 
 XMLElem DerivedXMLParser200::convertLookupTableToXML(
