@@ -1872,62 +1872,68 @@ XMLElem DerivedXMLParser200::convertDigitalElevationDataToXML(
         const DigitalElevationData& ded,
         XMLElem parent) const
 {
-    XMLElem dedElem = newElement("DigitalElevationData", parent);
+    assert(parent != nullptr);
+    return &convertDigitalElevationDataToXML(*this, ded, *parent);
+}
+xml::lite::Element& DerivedXMLParser200::convertDigitalElevationDataToXML(const DerivedXMLParser& parser,
+    const DigitalElevationData& ded, xml::lite::Element& parent)
+{
+    auto& dedElem = parser.newElement("DigitalElevationData", parent);
 
     // GeographicCoordinates
-    XMLElem geoCoordElem = newElement("GeographicCoordinates", dedElem);
-    createDouble("LongitudeDensity",
+    auto& geoCoordElem = parser.newElement("GeographicCoordinates", dedElem);
+    parser.createDouble("LongitudeDensity",
                  ded.geographicCoordinates.longitudeDensity,
                  geoCoordElem);
-    createDouble("LatitudeDensity",
+    parser.createDouble("LatitudeDensity",
                  ded.geographicCoordinates.latitudeDensity,
                  geoCoordElem);
-    common().createLatLon("ReferenceOrigin",
+    parser.common().createLatLon("ReferenceOrigin",
                           ded.geographicCoordinates.referenceOrigin,
-                          geoCoordElem);
+                          &geoCoordElem);
 
     // Geopositioning
-    XMLElem geoposElem = newElement("Geopositioning", dedElem);
-    createStringFromEnum("CoordinateSystemType",
+    auto& geoposElem = parser.newElement("Geopositioning", dedElem);
+    parser.createStringFromEnum("CoordinateSystemType",
                          ded.geopositioning.coordinateSystemType,
                          geoposElem);
-    createString("GeodeticDatum", ded.geopositioning.geodeticDatum,
+    parser.createString("GeodeticDatum", ded.geopositioning.geodeticDatum,
                  geoposElem);
-    createString("ReferenceEllipsoid", ded.geopositioning.referenceEllipsoid,
+    parser.createString("ReferenceEllipsoid", ded.geopositioning.referenceEllipsoid,
                  geoposElem);
-    createString("VerticalDatum", ded.geopositioning.verticalDatum,
+    parser.createString("VerticalDatum", ded.geopositioning.verticalDatum,
                  geoposElem);
-    createString("SoundingDatum", ded.geopositioning.soundingDatum,
+    parser.createString("SoundingDatum", ded.geopositioning.soundingDatum,
                  geoposElem);
-    createInt("FalseOrigin", ded.geopositioning.falseOrigin, geoposElem);
+    parser.createInt("FalseOrigin", ded.geopositioning.falseOrigin, geoposElem);
     if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
     {
-        createInt("UTMGridZoneNumber", ded.geopositioning.utmGridZoneNumber, geoposElem);
+        parser.createInt("UTMGridZoneNumber", ded.geopositioning.utmGridZoneNumber, geoposElem);
     }
 
     // PositionalAccuracy
-    XMLElem posAccElem = newElement("PositionalAccuracy", dedElem);
-    createInt("NumRegions", ded.positionalAccuracy.numRegions, posAccElem);
+    auto& posAccElem = parser.newElement("PositionalAccuracy", dedElem);
+    parser.createInt("NumRegions", ded.positionalAccuracy.numRegions, posAccElem);
 
-    XMLElem absAccElem = newElement("AbsoluteAccuracy", posAccElem);
-    createDouble("Horizontal",
+    auto& absAccElem = parser.newElement("AbsoluteAccuracy", posAccElem);
+    parser.createDouble("Horizontal",
                  ded.positionalAccuracy.absoluteAccuracyHorizontal,
                  absAccElem);
-    createDouble("Vertical",
+    parser.createDouble("Vertical",
                  ded.positionalAccuracy.absoluteAccuracyVertical,
                  absAccElem);
 
-    XMLElem p2pAccElem = newElement("PointToPointAccuracy", posAccElem);
-    createDouble("Horizontal",
+    auto& p2pAccElem = parser.newElement("PointToPointAccuracy", posAccElem);
+    parser.createDouble("Horizontal",
                  ded.positionalAccuracy.pointToPointAccuracyHorizontal,
                  p2pAccElem);
-    createDouble("Vertical",
+    parser.createDouble("Vertical",
                  ded.positionalAccuracy.pointToPointAccuracyVertical,
                  p2pAccElem);
 
     if (six::Init::isDefined(ded.nullValue))
     {
-        createInt("NullValue", ded.nullValue, dedElem);
+        parser.createInt("NullValue", ded.nullValue, dedElem);
     }
 
     return dedElem;

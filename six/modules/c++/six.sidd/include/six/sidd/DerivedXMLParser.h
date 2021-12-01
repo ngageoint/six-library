@@ -45,6 +45,11 @@ struct DerivedXMLParser : public six::XMLParser
     DerivedXMLParser& operator=(DerivedXMLParser&&) = delete;
     virtual ~DerivedXMLParser() = default;
 
+    const six::SICommonXMLParser& common() const
+    {
+        return *(mCommon.get());
+    }
+
 protected:
     DerivedXMLParser(const std::string& version,
         std::unique_ptr<six::SICommonXMLParser>&& comParser,
@@ -77,11 +82,6 @@ protected:
                                         XMLElem parent = nullptr) const = 0;
 
     static const char SFA_URI[];
-
-    const six::SICommonXMLParser& common() const
-    {
-        return *(mCommon.get());
-    }
 
     static
     void getAttributeList(const xml::lite::Attributes& attributes,

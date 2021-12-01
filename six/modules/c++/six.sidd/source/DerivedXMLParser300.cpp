@@ -228,7 +228,7 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     // optional
     if (derived->digitalElevationData.get())
     {
-        convertDigitalElevationDataToXML(*derived->digitalElevationData, root);
+        DerivedXMLParser200::convertDigitalElevationDataToXML(*this, *derived->digitalElevationData, *root);
     }
     // optional
     if (derived->productProcessing.get())
@@ -1567,72 +1567,6 @@ xml::lite::Element& DerivedXMLParser300::convertGeoDataToXML(
     }
 
     return geoDataXML;
-}
-
-
-XMLElem DerivedXMLParser300::convertDigitalElevationDataToXML(
-        const DigitalElevationData& ded,
-        XMLElem parent) const
-{
-    XMLElem dedElem = newElement("DigitalElevationData", parent);
-
-    // GeographicCoordinates
-    XMLElem geoCoordElem = newElement("GeographicCoordinates", dedElem);
-    createDouble("LongitudeDensity",
-                 ded.geographicCoordinates.longitudeDensity,
-                 geoCoordElem);
-    createDouble("LatitudeDensity",
-                 ded.geographicCoordinates.latitudeDensity,
-                 geoCoordElem);
-    common().createLatLon("ReferenceOrigin",
-                          ded.geographicCoordinates.referenceOrigin,
-                          geoCoordElem);
-
-    // Geopositioning
-    XMLElem geoposElem = newElement("Geopositioning", dedElem);
-    createStringFromEnum("CoordinateSystemType",
-                         ded.geopositioning.coordinateSystemType,
-                         geoposElem);
-    createString("GeodeticDatum", ded.geopositioning.geodeticDatum,
-                 geoposElem);
-    createString("ReferenceEllipsoid", ded.geopositioning.referenceEllipsoid,
-                 geoposElem);
-    createString("VerticalDatum", ded.geopositioning.verticalDatum,
-                 geoposElem);
-    createString("SoundingDatum", ded.geopositioning.soundingDatum,
-                 geoposElem);
-    createInt("FalseOrigin", ded.geopositioning.falseOrigin, geoposElem);
-    if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
-    {
-        createInt("UTMGridZoneNumber", ded.geopositioning.utmGridZoneNumber, geoposElem);
-    }
-
-    // PositionalAccuracy
-    XMLElem posAccElem = newElement("PositionalAccuracy", dedElem);
-    createInt("NumRegions", ded.positionalAccuracy.numRegions, posAccElem);
-
-    XMLElem absAccElem = newElement("AbsoluteAccuracy", posAccElem);
-    createDouble("Horizontal",
-                 ded.positionalAccuracy.absoluteAccuracyHorizontal,
-                 absAccElem);
-    createDouble("Vertical",
-                 ded.positionalAccuracy.absoluteAccuracyVertical,
-                 absAccElem);
-
-    XMLElem p2pAccElem = newElement("PointToPointAccuracy", posAccElem);
-    createDouble("Horizontal",
-                 ded.positionalAccuracy.pointToPointAccuracyHorizontal,
-                 p2pAccElem);
-    createDouble("Vertical",
-                 ded.positionalAccuracy.pointToPointAccuracyVertical,
-                 p2pAccElem);
-
-    if (six::Init::isDefined(ded.nullValue))
-    {
-        createInt("NullValue", ded.nullValue, dedElem);
-    }
-
-    return dedElem;
 }
 
 void DerivedXMLParser300::parseGeoDataFromXML(

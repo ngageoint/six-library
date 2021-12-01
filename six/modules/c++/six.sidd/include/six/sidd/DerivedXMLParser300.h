@@ -86,7 +86,6 @@ private:
     xml::lite::Element& convertGeoDataToXML(const GeoDataBase&, xml::lite::Element& parent) const;
     void parseGeoDataFromXML(const xml::lite::Element& elem, GeoDataBase&) const;
 
-    XMLElem convertDigitalElevationDataToXML(const DigitalElevationData& ded, XMLElem parent = nullptr) const;
     void parseDigitalElevationDataFromXML(const xml::lite::Element& elem, DigitalElevationData&) const;
 
     void parseProductGenerationOptionsFromXML(const xml::lite::Element& optionsElem, ProductGenerationOptions&) const;
