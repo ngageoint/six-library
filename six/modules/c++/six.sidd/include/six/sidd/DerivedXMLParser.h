@@ -31,28 +31,36 @@ namespace six
 {
 namespace sidd
 {
-class DerivedXMLParser : public six::XMLParser
+struct DerivedXMLParser : public six::XMLParser
 {
-public:
-    DerivedXMLParser(const std::string& version,
-                     std::unique_ptr<six::SICommonXMLParser>&& comParser,
-                     logging::Logger* log = nullptr,
-                     bool ownLog = false);
-#if !CODA_OSS_cpp17
-    DerivedXMLParser(const std::string& version,
-                     mem::auto_ptr<six::SICommonXMLParser> comParser,
-                     logging::Logger* log = nullptr,
-                     bool ownLog = false);
-#endif
+    virtual xml::lite::Document* toXML(const DerivedData* data) const = 0;
+    virtual std::unique_ptr<xml::lite::Document> toXML(const DerivedData&) const; // = 0;, breaks existing code
+
+    virtual DerivedData* fromXML(const xml::lite::Document* doc) const = 0;
+    virtual std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const; // = 0;, breaks existing code
 
     DerivedXMLParser(const DerivedXMLParser&) = delete;
     DerivedXMLParser& operator=(const DerivedXMLParser&) = delete;
-
-    virtual xml::lite::Document* toXML(const DerivedData* data) const = 0;
-
-    virtual DerivedData* fromXML(const xml::lite::Document* doc) const = 0;
+    DerivedXMLParser(DerivedXMLParser&&) = delete;
+    DerivedXMLParser& operator=(DerivedXMLParser&&) = delete;
+    virtual ~DerivedXMLParser() = default;
 
 protected:
+    DerivedXMLParser(const std::string& version,
+        std::unique_ptr<six::SICommonXMLParser>&& comParser,
+        logging::Logger* log = nullptr, bool ownLog = false);
+    DerivedXMLParser(const std::string& version,
+        std::unique_ptr<six::SICommonXMLParser>&&,
+        std::unique_ptr<logging::Logger>&&);
+    DerivedXMLParser(const std::string& version,
+        std::unique_ptr<six::SICommonXMLParser>&&,
+        logging::Logger&);
+#if !CODA_OSS_cpp17
+    DerivedXMLParser(const std::string& version,
+        mem::auto_ptr<six::SICommonXMLParser> comParser,
+        logging::Logger* log = nullptr, bool ownLog = false);
+#endif
+
     virtual void parseDerivedClassificationFromXML(
             const xml::lite::Element* classificationElem,
             DerivedClassification& classification) const;
@@ -192,14 +200,18 @@ protected:
             XMLElem parent) const;
     void parseProductCreationFromXML(const xml::lite::Element* productCreationElem,
                                      ProductCreation* productCreation) const;
+    void parseProductCreationFromXML(const xml::lite::Element& productCreationElem, ProductCreation&) const;
     void parseProductCreationFromXML(const xml::lite::Element* informationElem,
                                      ProcessorInformation* processorInformation) const;
+    void parseProductCreationFromXML(const xml::lite::Element&, ProcessorInformation&) const;
     void parseProductProcessingFromXML(const xml::lite::Element* elem,
                                        ProductProcessing* productProcessing) const;
+    void parseProductProcessingFromXML(const xml::lite::Element&, ProductProcessing&) const;
     void parseProcessingModuleFromXML(const xml::lite::Element* elem,
                                       ProcessingModule* procMod) const;
     void parseDownstreamReprocessingFromXML(const xml::lite::Element* elem,
                                             DownstreamReprocessing* downstreamReproc) const;
+    void parseDownstreamReprocessingFromXML(const xml::lite::Element&, DownstreamReprocessing&) const;
     Remap* parseRemapChoiceFromXML(const xml::lite::Element* remapInformationElem) const;
     mem::auto_ptr<LUT> parseSingleLUT(const xml::lite::Element* elem) const;
     void parseDisplayFromXML(const xml::lite::Element* displayElem, Display* display) const;

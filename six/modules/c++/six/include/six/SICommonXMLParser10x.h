@@ -20,26 +20,28 @@
  *
  */
 
-#ifndef __SIX_SI_COMPLEX_COMMON_XML_PARSER_10X_H__
-#define __SIX_SI_COMPLEX_COMMON_XML_PARSER_10X_H__
+#ifndef SIX_six_SICommonXMLParser10x_h_INCLUDED_
+#define SIX_six_SICommonXMLParser10x_h_INCLUDED_
+#pragma once
 
 #include <six/SICommonXMLParser.h>
 
 namespace six
 {
 
-class SICommonXMLParser10x : public SICommonXMLParser
+struct SICommonXMLParser10x : public SICommonXMLParser
 {
-public:
-    SICommonXMLParser10x(const std::string& defaultURI,
-                         bool addClassAttributes,
-                         const std::string& siCommonURI,
-                         logging::Logger* log = nullptr,
-                         bool ownLog = false);
-
+    SICommonXMLParser10x(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        logging::Logger* log = nullptr, bool ownLog = false);
+    SICommonXMLParser10x(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        std::unique_ptr<logging::Logger>&&);
+    SICommonXMLParser10x(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
+        logging::Logger&);
     SICommonXMLParser10x(const SICommonXMLParser10x&) = delete;
+    SICommonXMLParser10x(SICommonXMLParser10x&&) = delete;
     SICommonXMLParser10x& operator=(const SICommonXMLParser10x&) = delete;
     SICommonXMLParser10x& operator=(SICommonXMLParser10x&&) = delete;
+    virtual ~SICommonXMLParser10x() = default;
 
     XMLElem convertRadiometryToXML(
         const Radiometric *obj,
@@ -70,5 +72,4 @@ protected:
 };
 }
 
-#endif
-
+#endif // SIX_six_SICommonXMLParser10x_h_INCLUDED_

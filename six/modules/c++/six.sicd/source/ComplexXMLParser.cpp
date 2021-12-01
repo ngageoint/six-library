@@ -151,6 +151,10 @@ ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
     }
     return sicd;
 }
+std::unique_ptr<ComplexData> ComplexXMLParser::fromXML(const xml::lite::Document& doc) const
+{
+    return std::unique_ptr<ComplexData>(fromXML(&doc));
+}
 
 xml::lite::Document* ComplexXMLParser::toXML(const ComplexData* sicd) const
 {
@@ -198,6 +202,10 @@ xml::lite::Document* ComplexXMLParser::toXML(const ComplexData* sicd) const
     //        root->setNamespacePrefix("si", common().getSICommonURI());
 
     return doc;
+}
+std::unique_ptr<xml::lite::Document> ComplexXMLParser::toXML(const ComplexData& data) const
+{
+    return std::unique_ptr<xml::lite::Document>(toXML(&data));
 }
 
 XMLElem ComplexXMLParser::createFFTSign(const std::string& name, six::FFTSign sign,
