@@ -1496,15 +1496,21 @@ XMLElem DerivedXMLParser200::convertCompressionToXML(
         const Compression& compression,
         XMLElem parent) const
 {
-    XMLElem compressionElem = newElement("Compression", parent);
-    XMLElem j2kElem = newElement("J2K", compressionElem);
-    XMLElem originalElem = newElement("Original", j2kElem);
-    convertJ2KToXML(compression.original, originalElem);
+    assert(parent != nullptr);
+    return &convertCompressionToXML(*this, compression, *parent);
+}
+xml::lite::Element& DerivedXMLParser200::convertCompressionToXML(const DerivedXMLParser& parser,
+    const Compression& compression, xml::lite::Element& parent)
+{
+    auto& compressionElem = parser.newElement("Compression", parent);
+    auto& j2kElem = parser.newElement("J2K", compressionElem);
+    auto& originalElem = parser.newElement("Original", j2kElem);
+    convertJ2KToXML(parser, compression.original, originalElem);
 
     if (compression.parsed.get())
     {
-        XMLElem parsedElem = newElement("Parsed", j2kElem);
-        convertJ2KToXML(*compression.parsed, parsedElem);
+        auto& parsedElem = parser.newElement("Parsed", j2kElem);
+        convertJ2KToXML(parser, *compression.parsed, parsedElem);
     }
     return compressionElem;
 }
@@ -1512,18 +1518,24 @@ XMLElem DerivedXMLParser200::convertCompressionToXML(
 void DerivedXMLParser200::convertJ2KToXML(const J2KCompression& j2k,
                                           XMLElem& parent) const
 {
-    createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
-    createInt("NumBands", j2k.numBands, parent);
+    assert(parent != nullptr);
+    convertJ2KToXML(*this, j2k, *parent);
+}
+void DerivedXMLParser200::convertJ2KToXML(const DerivedXMLParser& parser,
+    const J2KCompression& j2k, xml::lite::Element& parent)
+{
+    parser.createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
+    parser.createInt("NumBands", j2k.numBands, parent);
 
     const auto numLayers = j2k.layerInfo.size();
-    XMLElem layerInfoElem = newElement("LayerInfo", parent);
-    setAttribute(layerInfoElem, "numLayers", numLayers);
+    auto& layerInfoElem = parser.newElement("LayerInfo", parent);
+    parser.setAttribute(layerInfoElem, "numLayers", numLayers);
 
     for (size_t ii = 0; ii < numLayers; ++ii)
     {
-        XMLElem layerElem = newElement("Layer", layerInfoElem);
-        setAttribute(layerElem, "index", ii + 1);
-        createDouble("Bitrate", j2k.layerInfo[ii].bitRate, layerElem);
+        auto& layerElem = parser.newElement("Layer", layerInfoElem);
+        parser.setAttribute(layerElem, "index", ii + 1);
+        parser.createDouble("Bitrate", j2k.layerInfo[ii].bitRate, layerElem);
     }
 }
 

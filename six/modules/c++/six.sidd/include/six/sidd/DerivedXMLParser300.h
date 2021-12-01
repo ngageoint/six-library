@@ -50,7 +50,6 @@ private:
     XMLElem convertDerivedClassificationToXML(const DerivedClassification&, XMLElem parent = nullptr) const override;
     void parseDerivedClassificationFromXML(const xml::lite::Element* classificationElem, DerivedClassification&) const override;
 
-    XMLElem convertCompressionToXML(const Compression&, XMLElem parent = nullptr) const;
     void parseCompressionFromXML(const xml::lite::Element& compressionElem, Compression&) const;
 
     XMLElem convertDisplayToXML(const Display&, XMLElem parent = nullptr) const override;
@@ -83,7 +82,6 @@ private:
     void parseFilterFromXML(const xml::lite::Element& filterELem, Filter& filter) const;
 
     void parseJ2KCompression(const xml::lite::Element& j2kElem, J2KCompression& j2k) const;
-    void convertJ2KToXML(const J2KCompression& j2k, XMLElem& parent) const;
 
     xml::lite::Element& convertGeoDataToXML(const GeoDataBase&, xml::lite::Element& parent) const;
     void parseGeoDataFromXML(const xml::lite::Element& elem, GeoDataBase&) const;

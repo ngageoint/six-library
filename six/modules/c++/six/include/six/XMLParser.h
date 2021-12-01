@@ -87,6 +87,12 @@ struct XMLParser
 
     xml::lite::Element& createDouble(const std::string& name, double p, xml::lite::Element& parent) const;
 
+    static void setAttribute(xml::lite::Element& e, const std::string& name,
+        size_t i, const std::string& uri = "")
+    {
+        return XmlLite::setAttribute(e, name, i, uri);
+    }
+
 protected:
     logging::Logger* log() const
     {
@@ -291,11 +297,6 @@ protected:
     {
         assert(e != nullptr);
         return XmlLite::setAttribute(*e, name, s, uri);
-    }
-    static void setAttribute(xml::lite::Element& e, const std::string& name,
-        size_t i, const std::string& uri = "")
-    {
-        return XmlLite::setAttribute(e, name, i, uri);
     }
     static void setAttribute(XMLElem e, const std::string& name,
         size_t i, const std::string& uri = "")

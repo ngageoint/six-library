@@ -223,7 +223,7 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     // optional
     if (derived->compression.get())
     {
-       convertCompressionToXML(*derived->compression, root);
+        DerivedXMLParser200::convertCompressionToXML(*this, *derived->compression, *root);
     }
     // optional
     if (derived->digitalElevationData.get())
@@ -1241,41 +1241,6 @@ XMLElem DerivedXMLParser300::convertFilterToXML(const std::string& name,
 {
     assert(parent != nullptr);
     return &DerivedXMLParser200::convertFilterToXML(*this, name, filter, *parent);
-}
-
-XMLElem DerivedXMLParser300::convertCompressionToXML(
-        const Compression& compression,
-        XMLElem parent) const
-{
-    XMLElem compressionElem = newElement("Compression", parent);
-    XMLElem j2kElem = newElement("J2K", compressionElem);
-    XMLElem originalElem = newElement("Original", j2kElem);
-    convertJ2KToXML(compression.original, originalElem);
-
-    if (compression.parsed.get())
-    {
-        XMLElem parsedElem = newElement("Parsed", j2kElem);
-        convertJ2KToXML(*compression.parsed, parsedElem);
-    }
-    return compressionElem;
-}
-
-void DerivedXMLParser300::convertJ2KToXML(const J2KCompression& j2k,
-                                          XMLElem& parent) const
-{
-    createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
-    createInt("NumBands", j2k.numBands, parent);
-
-    const auto numLayers = j2k.layerInfo.size();
-    XMLElem layerInfoElem = newElement("LayerInfo", parent);
-    setAttribute(layerInfoElem, "numLayers", numLayers);
-
-    for (size_t ii = 0; ii < numLayers; ++ii)
-    {
-        XMLElem layerElem = newElement("Layer", layerInfoElem);
-        setAttribute(layerElem, "index", ii + 1);
-        createDouble("Bitrate", j2k.layerInfo[ii].bitRate, layerElem);
-    }
 }
 
 XMLElem DerivedXMLParser300::convertMeasurementToXML(const Measurement* measurement,

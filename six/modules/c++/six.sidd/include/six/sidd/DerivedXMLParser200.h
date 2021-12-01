@@ -54,6 +54,9 @@ struct DerivedXMLParser200 : public DerivedXMLParser
     static xml::lite::Element& convertFilterToXML(const DerivedXMLParser&,
         const std::string& name, const Filter&, xml::lite::Element& parent);
 
+    static xml::lite::Element& convertCompressionToXML(const DerivedXMLParser&,
+        const Compression& compression, xml::lite::Element& parent);
+
 protected:
     virtual void parseDerivedClassificationFromXML(
             const xml::lite::Element* classificationElem,
@@ -127,6 +130,8 @@ private:
                                const Filter& Filter,
                                XMLElem parent = nullptr) const;
 
+    static void convertJ2KToXML(const DerivedXMLParser&,
+        const J2KCompression&, xml::lite::Element& parent);
     void convertJ2KToXML(const J2KCompression& j2k,
                          XMLElem& parent) const;
 
