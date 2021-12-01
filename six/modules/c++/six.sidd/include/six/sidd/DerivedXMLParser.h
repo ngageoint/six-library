@@ -50,6 +50,9 @@ struct DerivedXMLParser : public six::XMLParser
         return *(mCommon.get());
     }
 
+    static xml::lite::Element& convertMeasurementToXML(const DerivedXMLParser&,
+        const Measurement&, xml::lite::Element& parent);
+
 protected:
     DerivedXMLParser(const std::string& version,
         std::unique_ptr<six::SICommonXMLParser>&& comParser,

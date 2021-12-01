@@ -1100,37 +1100,9 @@ XMLElem DerivedXMLParser300::convertFilterToXML(const std::string& name,
 XMLElem DerivedXMLParser300::convertMeasurementToXML(const Measurement* measurement,
     XMLElem parent) const
 {
-    XMLElem measurementElem = DerivedXMLParser::convertMeasurementToXML(measurement, parent);
-
-    if (measurement->arpFlag != AppliedType::NOT_SET)
-    {
-        createStringFromEnum("ARPFlag", measurement->arpFlag, measurementElem);
-    }
-
-    common().createPolyXYZ("ARPPoly",
-        measurement->arpPoly,
-        measurementElem);
-
-    //only if 3+ vertices
-    const size_t numVertices = measurement->validData.size();
-    if (numVertices >= 3)
-    {
-        XMLElem vElem = newElement("ValidData", measurementElem);
-        setAttribute(vElem, "size", numVertices);
-
-        for (size_t ii = 0; ii < numVertices; ++ii)
-        {
-            XMLElem vertexElem = common().createRowCol(
-                "Vertex", measurement->validData[ii], vElem);
-            setAttribute(vertexElem, "index", ii + 1);
-        }
-    }
-    else
-    {
-        throw except::Exception(Ctxt(
-            "ValidData must have at least 3 vertices"));
-    }
-    return measurementElem;
+    assert(parent != nullptr);
+    assert(measurement != nullptr);
+    return &DerivedXMLParser200::convertMeasurementToXML(*this, *measurement, *parent);
 }
 
 XMLElem DerivedXMLParser300::convertExploitationFeaturesToXML(

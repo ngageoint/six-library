@@ -1549,28 +1549,35 @@ void DerivedXMLParser200::convertJ2KToXML(const DerivedXMLParser& parser,
 XMLElem DerivedXMLParser200::convertMeasurementToXML(const Measurement* measurement,
     XMLElem parent) const
 {
-    XMLElem measurementElem = DerivedXMLParser::convertMeasurementToXML(measurement, parent);
+    assert(parent != nullptr);
+    assert(measurement != nullptr);
+    return &convertMeasurementToXML(*this, *measurement, *parent);
+}
+xml::lite::Element& DerivedXMLParser200::convertMeasurementToXML(const DerivedXMLParser& parser,
+    const Measurement& measurement, xml::lite::Element& parent)
+{
+    auto& measurementElem = DerivedXMLParser::convertMeasurementToXML(parser, measurement, parent);
 
-    if (measurement->arpFlag != AppliedType::NOT_SET)
+    if (measurement.arpFlag != AppliedType::NOT_SET)
     {
-        createStringFromEnum("ARPFlag", measurement->arpFlag, measurementElem);
+        parser.createStringFromEnum("ARPFlag", measurement.arpFlag, measurementElem);
     }
 
-    common().createPolyXYZ("ARPPoly",
-        measurement->arpPoly,
-        measurementElem);
+    parser.common().createPolyXYZ("ARPPoly",
+        measurement.arpPoly,
+        &measurementElem);
 
     //only if 3+ vertices
-    const size_t numVertices = measurement->validData.size();
+    const size_t numVertices = measurement.validData.size();
     if (numVertices >= 3)
     {
-        XMLElem vElem = newElement("ValidData", measurementElem);
+        auto& vElem = parser.newElement("ValidData", measurementElem);
         setAttribute(vElem, "size", numVertices);
 
         for (size_t ii = 0; ii < numVertices; ++ii)
         {
-            XMLElem vertexElem = common().createRowCol(
-                "Vertex", measurement->validData[ii], vElem);
+            auto vertexElem = parser.common().createRowCol(
+                "Vertex", measurement.validData[ii], &vElem);
             setAttribute(vertexElem, "index", ii + 1);
         }
     }
