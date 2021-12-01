@@ -1838,30 +1838,36 @@ XMLElem DerivedXMLParser200::convertGeoDataToXML(
         const GeoDataBase* geoData,
         XMLElem parent) const
 {
-    XMLElem geoDataXML = newElement("GeoData", parent);
+    assert(geoData != nullptr);
+    assert(parent != nullptr);
+    return &convertGeoDataToXML(*this, *geoData, *parent);
+       
+}
+xml::lite::Element& DerivedXMLParser200::convertGeoDataToXML(const DerivedXMLParser& parser,
+    const GeoDataBase& geoData, xml::lite::Element& parent)
+{
+    auto& geoDataXML = parser.newElement("GeoData", parent);
 
-    common().createEarthModelType("EarthModel", geoData->earthModel, geoDataXML);
-
-    common().createLatLonFootprint("ImageCorners", "ICP", geoData->imageCorners, geoDataXML);
+    parser.common().createEarthModelType("EarthModel", geoData.earthModel, &geoDataXML);
+    parser.common().createLatLonFootprint("ImageCorners", "ICP", geoData.imageCorners, &geoDataXML);
 
     //only if 3+ vertices
-    const size_t numVertices = geoData->validData.size();
+    const size_t numVertices = geoData.validData.size();
     if (numVertices >= 3)
     {
-        XMLElem vXML = newElement("ValidData", geoDataXML);
+        auto& vXML = parser.newElement("ValidData", geoDataXML);
         setAttribute(vXML, "size", numVertices);
 
         for (size_t ii = 0; ii < numVertices; ++ii)
         {
-            XMLElem vertexXML = common().createLatLon("Vertex", geoData->validData[ii],
-                                                      vXML);
-            setAttribute(vertexXML, "index", ii + 1);
+            auto vertexXML = parser.common().createLatLon("Vertex", geoData.validData[ii], &vXML);
+            parser.setAttribute(vertexXML, "index", ii + 1);
         }
     }
 
-    for (size_t ii = 0; ii < geoData->geoInfos.size(); ++ii)
+    for (size_t ii = 0; ii < geoData.geoInfos.size(); ++ii)
     {
-        common().convertGeoInfoToXML(*geoData->geoInfos[ii].get(), true, geoDataXML);
+        parser.common().convertGeoInfoToXML(*geoData.geoInfos[ii].get(), true, &geoDataXML);
     }
 
     return geoDataXML;

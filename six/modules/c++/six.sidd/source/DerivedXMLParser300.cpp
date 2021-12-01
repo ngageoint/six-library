@@ -195,7 +195,7 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
 
     convertProductCreationToXML(derived->productCreation.get(), root);
     convertDisplayToXML(*derived->display, root);
-    convertGeoDataToXML(*derived->geoData, *root);
+    DerivedXMLParser200::convertGeoDataToXML(*this, *derived->geoData, *root);
     convertMeasurementToXML(derived->measurement.get(), root);
     convertExploitationFeaturesToXML(derived->exploitationFeatures.get(), root);
 
@@ -1536,37 +1536,6 @@ XMLElem DerivedXMLParser300::convertDisplayToXML(
     common().addParameters("DisplayExtension", display.displayExtensions,
                            displayElem);
     return displayElem;
-}
-
-xml::lite::Element& DerivedXMLParser300::convertGeoDataToXML(
-    const GeoDataBase& geoData,
-    xml::lite::Element& parent) const
-{
-    auto& geoDataXML = newElement("GeoData", parent);
-
-    common().createEarthModelType("EarthModel", geoData.earthModel, &geoDataXML);
-    common().createLatLonFootprint("ImageCorners", "ICP", geoData.imageCorners, &geoDataXML);
-
-    //only if 3+ vertices
-    const size_t numVertices = geoData.validData.size();
-    if (numVertices >= 3)
-    {
-        auto& vXML = newElement("ValidData", geoDataXML);
-        setAttribute(&vXML, "size", numVertices);
-
-        for (size_t ii = 0; ii < numVertices; ++ii)
-        {
-            XMLElem vertexXML = common().createLatLon("Vertex", geoData.validData[ii], &vXML);
-            setAttribute(vertexXML, "index", ii + 1);
-        }
-    }
-
-    for (const auto& geoInfo : geoData.geoInfos)
-    {
-        common().convertGeoInfoToXML(*geoInfo, true, &geoDataXML);
-    }
-
-    return geoDataXML;
 }
 
 void DerivedXMLParser300::parseGeoDataFromXML(
