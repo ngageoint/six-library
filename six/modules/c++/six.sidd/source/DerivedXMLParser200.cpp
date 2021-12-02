@@ -1832,17 +1832,23 @@ XMLElem DerivedXMLParser200::convertDisplayToXML(
         const Display& display,
         XMLElem parent) const
 {
+    assert(parent != nullptr);
+    return &convertDisplayToXML(*this, display, *parent);
+}
+xml::lite::Element& DerivedXMLParser200::convertDisplayToXML(const DerivedXMLParser& parser,
+    const Display& display, xml::lite::Element& parent)
+{
     // NOTE: In several spots here, there are fields which are required in
     //       SIDD 2.0 but a pointer in the Display class since it didn't exist
     //       in SIDD 1.0, so need to confirm it's allocated
-    XMLElem displayElem = newElement("Display", parent);
+    auto& displayElem = parser.newElement("Display", parent);
 
-    createString("PixelType", display.pixelType, displayElem);
+    parser.createString("PixelType", display.pixelType, displayElem);
 
-    createInt("NumBands", display.numBands, displayElem);
+    parser.createInt("NumBands", display.numBands, displayElem);
     if (six::Init::isDefined(display.defaultBandDisplay))
     {
-        createInt("DefaultBandDisplay", display.defaultBandDisplay, displayElem);
+        parser.createInt("DefaultBandDisplay", display.defaultBandDisplay, displayElem);
     }
 
     // NonInteractiveProcessing
@@ -1850,7 +1856,7 @@ XMLElem DerivedXMLParser200::convertDisplayToXML(
     {
         confirmNonNull(display.nonInteractiveProcessing[ii],
                 "nonInteractiveProcessing");
-        XMLElem temp = convertNonInteractiveProcessingToXML(
+        auto& temp = convertNonInteractiveProcessingToXML(parser,
                 *display.nonInteractiveProcessing[ii],
                 displayElem);
         setAttribute(temp, "band", ii + 1);
@@ -1861,15 +1867,15 @@ XMLElem DerivedXMLParser200::convertDisplayToXML(
         // InteractiveProcessing
         confirmNonNull(display.interactiveProcessing[ii],
                 "interactiveProcessing");
-        XMLElem temp = convertInteractiveProcessingToXML(
+        auto& temp = convertInteractiveProcessingToXML(parser,
                 *display.interactiveProcessing[ii],
                 displayElem);
         setAttribute(temp, "band", ii + 1);
     }
 
     // optional to unbounded
-    common().addParameters("DisplayExtension", display.displayExtensions,
-                           displayElem);
+    parser.common().addParameters("DisplayExtension", display.displayExtensions,
+                           &displayElem);
     return displayElem;
 }
 

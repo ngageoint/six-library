@@ -72,11 +72,8 @@ struct DerivedXMLParser200 : public DerivedXMLParser
     static xml::lite::Element& createLUT(const DerivedXMLParser&,
         const std::string& name, const LUT&, xml::lite::Element& parent);
 
-    static xml::lite::Element& convertNonInteractiveProcessingToXML(const DerivedXMLParser&,
-        const NonInteractiveProcessing&, xml::lite::Element& parent);
-    static xml::lite::Element& convertInteractiveProcessingToXML(const DerivedXMLParser&, 
-        const InteractiveProcessing&, xml::lite::Element& parent);
-
+    static xml::lite::Element& convertDisplayToXML(const DerivedXMLParser&,
+        const Display&, xml::lite::Element& parent);
 
 protected:
     virtual void parseDerivedClassificationFromXML(
@@ -137,10 +134,14 @@ private:
     XMLElem convertNonInteractiveProcessingToXML(
             const NonInteractiveProcessing& processing,
             XMLElem parent = nullptr) const;
+    static xml::lite::Element& convertNonInteractiveProcessingToXML(const DerivedXMLParser&,
+        const NonInteractiveProcessing&, xml::lite::Element& parent);
 
     XMLElem convertInteractiveProcessingToXML(
             const InteractiveProcessing& processing,
             XMLElem parent = nullptr) const;
+    static xml::lite::Element& convertInteractiveProcessingToXML(const DerivedXMLParser&,
+        const InteractiveProcessing&, xml::lite::Element& parent);
 
     static xml::lite::Element& convertPredefinedFilterToXML(const DerivedXMLParser&,
         const Filter::Predefined&, xml::lite::Element& parent);

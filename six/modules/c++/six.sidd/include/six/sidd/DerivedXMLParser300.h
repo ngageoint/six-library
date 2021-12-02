@@ -50,8 +50,6 @@ private:
     XMLElem convertDerivedClassificationToXML(const DerivedClassification&, XMLElem parent = nullptr) const override;
     void parseDerivedClassificationFromXML(const xml::lite::Element* classificationElem, DerivedClassification&) const override;
 
-    void parseCompressionFromXML(const xml::lite::Element& compressionElem, Compression&) const;
-
     XMLElem convertDisplayToXML(const Display&, XMLElem parent = nullptr) const override;
     void parseDisplayFromXML(const xml::lite::Element& displayElem, Display&) const;
 
@@ -65,6 +63,7 @@ private:
     XMLElem createLUT(const std::string& name, const LUT* l, XMLElem parent = nullptr) const override;
     std::unique_ptr<LUT> parseSingleLUT(const xml::lite::Element& elem, size_t size) const;
 
+    void parseCompressionFromXML(const xml::lite::Element& compressionElem, Compression&) const;
     void parseInteractiveProcessingFromXML(const xml::lite::Element& interactiveElem, InteractiveProcessing&) const;
     void parseLookupTableFromXML(const xml::lite::Element& lookupElem, LookupTable&) const;
     void parseNonInteractiveProcessingFromXML(const xml::lite::Element& procElem, NonInteractiveProcessing&) const;

@@ -848,45 +848,8 @@ XMLElem DerivedXMLParser300::convertDisplayToXML(
         const Display& display,
         XMLElem parent) const
 {
-    // NOTE: In several spots here, there are fields which are required in
-    //       SIDD 2.0 but a pointer in the Display class since it didn't exist
-    //       in SIDD 1.0, so need to confirm it's allocated
-    XMLElem displayElem = newElement("Display", parent);
-
-    createString("PixelType", display.pixelType, displayElem);
-
-    createInt("NumBands", display.numBands, displayElem);
-    if (six::Init::isDefined(display.defaultBandDisplay))
-    {
-        createInt("DefaultBandDisplay", display.defaultBandDisplay, displayElem);
-    }
-
-    // NonInteractiveProcessing
-    for (size_t ii = 0; ii < display.nonInteractiveProcessing.size(); ++ii)
-    {
-        confirmNonNull(display.nonInteractiveProcessing[ii],
-                "nonInteractiveProcessing");
-        auto& temp = DerivedXMLParser200::convertNonInteractiveProcessingToXML(*this,
-                *display.nonInteractiveProcessing[ii],
-                *displayElem);
-        setAttribute(temp, "band", ii + 1);
-    }
-
-    for (size_t ii = 0; ii < display.interactiveProcessing.size(); ++ii)
-    {
-        // InteractiveProcessing
-        confirmNonNull(display.interactiveProcessing[ii],
-                "interactiveProcessing");
-        auto& temp = DerivedXMLParser200::convertInteractiveProcessingToXML(*this,
-                *display.interactiveProcessing[ii],
-                *displayElem);
-        setAttribute(temp, "band", ii + 1);
-    }
-
-    // optional to unbounded
-    common().addParameters("DisplayExtension", display.displayExtensions,
-                           displayElem);
-    return displayElem;
+    assert(parent != nullptr);
+    return &DerivedXMLParser200::convertDisplayToXML(*this, display, *parent);
 }
 
 void DerivedXMLParser300::parseGeoDataFromXML(
