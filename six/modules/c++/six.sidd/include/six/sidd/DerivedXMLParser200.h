@@ -51,9 +51,6 @@ struct DerivedXMLParser200 : public DerivedXMLParser
     static ProjectionType getProjectionType(const xml::lite::Element& measurementElem);
     static std::unique_ptr<LUT> parseSingleLUT(const std::string& lutStr, size_t size);
 
-    static xml::lite::Element& convertFilterToXML(const DerivedXMLParser&,
-        const std::string& name, const Filter&, xml::lite::Element& parent);
-
     static xml::lite::Element& convertCompressionToXML(const DerivedXMLParser&,
         const Compression& compression, xml::lite::Element& parent);
 
@@ -74,8 +71,6 @@ struct DerivedXMLParser200 : public DerivedXMLParser
 
     static xml::lite::Element& createLUT(const DerivedXMLParser&,
         const std::string& name, const LUT&, xml::lite::Element& parent);
-    static xml::lite::Element& convertLookupTableToXML(const DerivedXMLParser&,
-        const std::string& name, const LookupTable&, xml::lite::Element& parent);
 
     static xml::lite::Element& convertNonInteractiveProcessingToXML(const DerivedXMLParser&,
         const NonInteractiveProcessing&, xml::lite::Element& parent);
@@ -136,6 +131,8 @@ private:
             const std::string& name,
             const LookupTable& table,
             XMLElem parent = nullptr) const;
+    static xml::lite::Element& convertLookupTableToXML(const DerivedXMLParser&,
+        const std::string& name, const LookupTable&, xml::lite::Element& parent);
 
     XMLElem convertNonInteractiveProcessingToXML(
             const NonInteractiveProcessing& processing,
@@ -155,6 +152,8 @@ private:
     XMLElem convertFilterToXML(const std::string& name,
                                const Filter& Filter,
                                XMLElem parent = nullptr) const;
+    static xml::lite::Element& convertFilterToXML(const DerivedXMLParser&,
+        const std::string& name, const Filter&, xml::lite::Element& parent);
 
     static void convertJ2KToXML(const DerivedXMLParser&,
         const J2KCompression&, xml::lite::Element& parent);
