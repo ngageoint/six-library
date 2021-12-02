@@ -69,6 +69,9 @@ struct DerivedXMLParser200 : public DerivedXMLParser
     static xml::lite::Element& convertMeasurementToXML(const DerivedXMLParser&,
         const Measurement&, xml::lite::Element& parent);
 
+    static xml::lite::Element& convertExploitationFeaturesToXML(const DerivedXMLParser&,
+        const ExploitationFeatures&, xml::lite::Element& parent);
+
 protected:
     virtual void parseDerivedClassificationFromXML(
             const xml::lite::Element* classificationElem,

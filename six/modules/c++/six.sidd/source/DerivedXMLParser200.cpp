@@ -1593,90 +1593,97 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
     const ExploitationFeatures* exploitationFeatures,
     XMLElem parent) const
 {
-    XMLElem exploitationFeaturesElem =
-        newElement("ExploitationFeatures", parent);
+    assert(exploitationFeatures != nullptr);
+    assert(parent != nullptr);
+    return &convertExploitationFeaturesToXML(*this, *exploitationFeatures, *parent);
+}
+xml::lite::Element& DerivedXMLParser200::convertExploitationFeaturesToXML(const DerivedXMLParser& parser,
+    const ExploitationFeatures& exploitationFeatures, xml::lite::Element& parent)
+{
+    auto& exploitationFeaturesElem =
+        parser.newElement("ExploitationFeatures", parent);
 
-    if (exploitationFeatures->collections.empty())
+    if (exploitationFeatures.collections.empty())
     {
         throw except::Exception(Ctxt(FmtX(
             "ExploitationFeatures must have at least [1] Collection, " \
-            "only [%d] found", exploitationFeatures->collections.size())));
+            "only [%d] found", exploitationFeatures.collections.size())));
     }
 
     // 1 to unbounded
-    for (auto& pCollections : exploitationFeatures->collections)
+    for (auto& pCollections : exploitationFeatures.collections)
     {
         Collection* collection = pCollections.get();
-        XMLElem collectionElem = newElement("Collection",
+        auto& collectionElem = parser.newElement("Collection",
             exploitationFeaturesElem);
-        setAttribute(collectionElem, "identifier", collection->identifier);
+        setAttribute(&collectionElem, "identifier", collection->identifier);
 
         // create Information
-        XMLElem informationElem = newElement("Information", collectionElem);
+        auto& informationElem = parser.newElement("Information", collectionElem);
 
-        createString("SensorName",
+        parser.createString("SensorName",
             collection->information.sensorName,
             informationElem);
-        XMLElem radarModeElem = newElement("RadarMode", informationElem);
-        createSixString("ModeType",
-            common().getSICommonURI(),
+        auto& radarModeElem = parser.newElement("RadarMode", informationElem);
+        parser.createSixString("ModeType",
+            parser.common().getSICommonURI(),
             collection->information.radarMode,
-            radarModeElem);
+            &radarModeElem);
         // optional
         if (collection->information.radarModeID
             != Init::undefined<std::string>())
-            createString("ModeID",
-                common().getSICommonURI(),
+            parser.createString("ModeID",
+                parser.common().getSICommonURI(),
                 collection->information.radarModeID,
-                radarModeElem);
-        createDateTime("CollectionDateTime",
+                &radarModeElem);
+        parser.createDateTime("CollectionDateTime",
             collection->information.collectionDateTime,
-            informationElem);
+            &informationElem);
         // optional
         if (collection->information.localDateTime != Init::undefined<
             six::DateTime>())
         {
-            createDateTime("LocalDateTime",
+            parser.createDateTime("LocalDateTime",
                 collection->information.localDateTime,
-                informationElem);
+                &informationElem);
         }
-        createDouble("CollectionDuration",
+        parser.createDouble("CollectionDuration",
             collection->information.collectionDuration,
             informationElem);
         // optional
         if (!Init::isUndefined(collection->information.resolution))
         {
-            common().createRangeAzimuth("Resolution",
+            parser.common().createRangeAzimuth("Resolution",
                 collection->information.resolution,
-                informationElem);
+                &informationElem);
         }
         // optional
         if (collection->information.inputROI.get())
         {
-            XMLElem roiElem = newElement("InputROI", informationElem);
-            common().createRowCol("Size",
+            auto& roiElem = parser.newElement("InputROI", informationElem);
+            parser.common().createRowCol("Size",
                 collection->information.inputROI->size,
-                roiElem);
-            common().createRowCol("UpperLeft",
+                &roiElem);
+            parser.common().createRowCol("UpperLeft",
                 collection->information.inputROI->upperLeft,
-                roiElem);
+                &roiElem);
         }
         // optional to unbounded
         for (const auto& pPolarization : collection->information.polarization)
         {
             const TxRcvPolarization *p = pPolarization.get();
-            XMLElem polElem = newElement("Polarization", informationElem);
+            auto& polElem = parser.newElement("Polarization", informationElem);
 
-            createString("TxPolarization",
+            parser.createString("TxPolarization",
                 p->txPolarization,
                 polElem);
-            createString("RcvPolarization",
+            parser.createString("RcvPolarization",
                 p->rcvPolarization,
                 polElem);
             // optional
             if (!Init::isUndefined(p->rcvPolarizationOffset))
             {
-                createDouble("RcvPolarizationOffset",
+                parser.createDouble("RcvPolarizationOffset",
                     p->rcvPolarizationOffset,
                     polElem);
             }
@@ -1692,86 +1699,86 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
         const Geometry* geom = collection->geometry.get();
         if (geom != nullptr)
         {
-            XMLElem geometryElem = newElement("Geometry", collectionElem);
+            auto& geometryElem = parser.newElement("Geometry", collectionElem);
 
             // optional
             if (geom->azimuth != Init::undefined<double>())
-                createDouble("Azimuth", geom->azimuth, geometryElem);
+                parser.createDouble("Azimuth", geom->azimuth, geometryElem);
             // optional
             if (geom->slope != Init::undefined<double>())
-                createDouble("Slope", geom->slope, geometryElem);
+                parser.createDouble("Slope", geom->slope, geometryElem);
             // optional
             if (geom->squint != Init::undefined<double>())
-                createDouble("Squint", geom->squint, geometryElem);
+                parser.createDouble("Squint", geom->squint, geometryElem);
             // optional
             if (geom->graze != Init::undefined<double>())
-                createDouble("Graze", geom->graze, geometryElem);
+                parser.createDouble("Graze", geom->graze, geometryElem);
             // optional
             if (geom->tilt != Init::undefined<double>())
-                createDouble("Tilt", geom->tilt, geometryElem);
+                parser.createDouble("Tilt", geom->tilt, geometryElem);
             // optional
             if (geom->dopplerConeAngle != Init::undefined<double>())
-                createDouble("DopplerConeAngle", geom->dopplerConeAngle, geometryElem);
+                parser.createDouble("DopplerConeAngle", geom->dopplerConeAngle, geometryElem);
             // optional to unbounded
-            common().addParameters("Extension", geom->extensions,
-                geometryElem);
+            parser.common().addParameters("Extension", geom->extensions,
+                &geometryElem);
         }
 
         // create Phenomenology -- optional
         const Phenomenology* phenom = collection->phenomenology.get();
         if (phenom != nullptr)
         {
-            XMLElem phenomenologyElem = newElement("Phenomenology",
+            auto& phenomenologyElem = parser.newElement("Phenomenology",
                 collectionElem);
 
             // optional
             if (phenom->shadow != Init::undefined<AngleMagnitude>())
             {
-                XMLElem shadow = newElement("Shadow", phenomenologyElem);
-                createDouble("Angle", common().getSICommonURI(),
-                    phenom->shadow.angle, shadow);
-                createDouble("Magnitude", common().getSICommonURI(),
-                    phenom->shadow.magnitude, shadow);
+                auto& shadow = parser.newElement("Shadow", phenomenologyElem);
+                parser.createDouble("Angle", parser.common().getSICommonURI(),
+                    phenom->shadow.angle, &shadow);
+                parser.createDouble("Magnitude", parser.common().getSICommonURI(),
+                    phenom->shadow.magnitude, &shadow);
             }
             // optional
             if (phenom->layover != Init::undefined<AngleMagnitude>())
             {
-                XMLElem layover = newElement("Layover", phenomenologyElem);
-                createDouble("Angle", common().getSICommonURI(),
-                    phenom->layover.angle, layover);
-                createDouble("Magnitude", common().getSICommonURI(),
-                    phenom->layover.magnitude, layover);
+                auto& layover = parser.newElement("Layover", phenomenologyElem);
+                parser.createDouble("Angle", parser.common().getSICommonURI(),
+                    phenom->layover.angle, &layover);
+                parser.createDouble("Magnitude", parser.common().getSICommonURI(),
+                    phenom->layover.magnitude, &layover);
             }
             // optional
             if (phenom->multiPath != Init::undefined<double>())
-                createDouble("MultiPath", phenom->multiPath, phenomenologyElem);
+                parser.createDouble("MultiPath", phenom->multiPath, phenomenologyElem);
             // optional
             if (phenom->groundTrack != Init::undefined<double>())
-                createDouble("GroundTrack", phenom->groundTrack,
+                parser.createDouble("GroundTrack", phenom->groundTrack,
                     phenomenologyElem);
             // optional to unbounded
-            common().addParameters("Extension", phenom->extensions,
-                phenomenologyElem);
+            parser.common().addParameters("Extension", phenom->extensions,
+                &phenomenologyElem);
         }
     }
 
     // create Product
-    if (exploitationFeatures->product.empty())
+    if (exploitationFeatures.product.empty())
     {
         throw except::Exception(Ctxt(
             "ExploitationFeatures must have at least one Product"));
     }
 
-    for (size_t ii = 0; ii < exploitationFeatures->product.size(); ++ii)
+    for (size_t ii = 0; ii < exploitationFeatures.product.size(); ++ii)
     {
-        XMLElem productElem = newElement("Product", exploitationFeaturesElem);
-        const Product& product = exploitationFeatures->product[ii];
+        auto& productElem = parser.newElement("Product", exploitationFeaturesElem);
+        const Product& product = exploitationFeatures.product[ii];
 
-        common().createRowCol("Resolution",
+        parser.common().createRowCol("Resolution",
                               product.resolution,
-                              productElem);
+                              &productElem);
 
-        createDouble("Ellipticity", product.ellipticity, productElem);
+        parser.createDouble("Ellipticity", product.ellipticity, productElem);
 
         if (product.polarization.empty())
         {
@@ -1781,23 +1788,23 @@ XMLElem DerivedXMLParser200::convertExploitationFeaturesToXML(
 
         for (size_t jj = 0; jj < product.polarization.size(); ++jj)
         {
-            XMLElem polarizationElem = newElement("Polarization", productElem);
-            createStringFromEnum("TxPolarizationProc",
+            auto& polarizationElem = parser.newElement("Polarization", productElem);
+            parser.createStringFromEnum("TxPolarizationProc",
                                  product.polarization[jj].txPolarizationProc,
                                  polarizationElem);
-            createStringFromEnum("RcvPolarizationProc",
+            parser.createStringFromEnum("RcvPolarizationProc",
                                  product.polarization[jj].rcvPolarizationProc,
                                  polarizationElem);
         }
 
         // optional
         if (product.north != Init::undefined<double>())
-            createDouble("North", product.north, productElem);
+            parser.createDouble("North", product.north, productElem);
 
         // optional to unbounded
-        common().addParameters("Extension",
+        parser.common().addParameters("Extension",
                                product.extensions,
-                               productElem);
+                               &productElem);
     }
 
     return exploitationFeaturesElem;
