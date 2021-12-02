@@ -243,7 +243,7 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
 
     convertProductCreationToXML(derived->productCreation.get(), root);
     convertDisplayToXML(*derived->display, root);
-    convertGeoDataToXML(derived->geoData.get(), root);
+    convertGeoDataToXML(*this, *derived->geoData, *root);
     convertMeasurementToXML(derived->measurement.get(), root);
     convertExploitationFeaturesToXML(derived->exploitationFeatures.get(),
                                      root);
@@ -279,8 +279,8 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
     // optional
     if (derived->digitalElevationData.get())
     {
-        convertDigitalElevationDataToXML(*derived->digitalElevationData,
-                                         root);
+        convertDigitalElevationDataToXML(*this, *derived->digitalElevationData,
+                                         *root);
     }
     // optional
     if (derived->productProcessing.get())
@@ -1052,14 +1052,6 @@ xml::lite::Element& DerivedXMLParser200::convertDerivedClassificationToXML(const
     return classElem_;
 }
 
-XMLElem DerivedXMLParser200::convertLookupTableToXML(
-        const std::string& name,
-        const LookupTable& table,
-        XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return &convertLookupTableToXML(*this, name, table, *parent);
-}
 xml::lite::Element& DerivedXMLParser200::convertLookupTableToXML(const DerivedXMLParser& parser,
     const std::string& name, const LookupTable& table, xml::lite::Element& parent)
 {
@@ -1121,13 +1113,6 @@ xml::lite::Element& DerivedXMLParser200::convertLookupTableToXML(const DerivedXM
     return lookupElem;
 }
 
-XMLElem DerivedXMLParser200::convertNonInteractiveProcessingToXML(
-        const NonInteractiveProcessing& processing,
-        XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return &convertNonInteractiveProcessingToXML(*this, processing, *parent);
-}
 xml::lite::Element& DerivedXMLParser200::convertNonInteractiveProcessingToXML(const DerivedXMLParser& parser,
     const NonInteractiveProcessing& processing, xml::lite::Element& parent)
 {
@@ -1205,13 +1190,6 @@ xml::lite::Element& DerivedXMLParser200::convertNonInteractiveProcessingToXML(co
     return processingElem;
 }
 
-XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
-        const InteractiveProcessing& processing,
-        XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return &convertInteractiveProcessingToXML(*this, processing, *parent);
-}
 xml::lite::Element& DerivedXMLParser200::convertInteractiveProcessingToXML(const DerivedXMLParser& parser,
     const InteractiveProcessing& processing, xml::lite::Element& parent)
 {
@@ -1476,13 +1454,6 @@ xml::lite::Element& DerivedXMLParser200::convertBankToXML(const DerivedXMLParser
     return bankElem;
 }
 
-XMLElem DerivedXMLParser200::convertFilterToXML(const std::string& name,
-                                                const Filter& filter,
-                                                XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return &convertFilterToXML(*this, name, filter, *parent);
-}
 xml::lite::Element& DerivedXMLParser200::convertFilterToXML(const DerivedXMLParser& parser,
     const std::string& name, const Filter& filter, xml::lite::Element& parent)
 {
@@ -1540,12 +1511,6 @@ xml::lite::Element& DerivedXMLParser200::convertCompressionToXML(const DerivedXM
     return compressionElem;
 }
 
-void DerivedXMLParser200::convertJ2KToXML(const J2KCompression& j2k,
-                                          XMLElem& parent) const
-{
-    assert(parent != nullptr);
-    convertJ2KToXML(*this, j2k, *parent);
-}
 void DerivedXMLParser200::convertJ2KToXML(const DerivedXMLParser& parser,
     const J2KCompression& j2k, xml::lite::Element& parent)
 {
@@ -1879,15 +1844,6 @@ xml::lite::Element& DerivedXMLParser200::convertDisplayToXML(const DerivedXMLPar
     return displayElem;
 }
 
-XMLElem DerivedXMLParser200::convertGeoDataToXML(
-        const GeoDataBase* geoData,
-        XMLElem parent) const
-{
-    assert(geoData != nullptr);
-    assert(parent != nullptr);
-    return &convertGeoDataToXML(*this, *geoData, *parent);
-       
-}
 xml::lite::Element& DerivedXMLParser200::convertGeoDataToXML(const DerivedXMLParser& parser,
     const GeoDataBase& geoData, xml::lite::Element& parent)
 {
@@ -1919,13 +1875,6 @@ xml::lite::Element& DerivedXMLParser200::convertGeoDataToXML(const DerivedXMLPar
 }
 
 
-XMLElem DerivedXMLParser200::convertDigitalElevationDataToXML(
-        const DigitalElevationData& ded,
-        XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return &convertDigitalElevationDataToXML(*this, ded, *parent);
-}
 xml::lite::Element& DerivedXMLParser200::convertDigitalElevationDataToXML(const DerivedXMLParser& parser,
     const DigitalElevationData& ded, xml::lite::Element& parent)
 {
