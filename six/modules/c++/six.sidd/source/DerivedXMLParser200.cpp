@@ -1209,26 +1209,32 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
         const InteractiveProcessing& processing,
         XMLElem parent) const
 {
-    XMLElem processingElem = newElement("InteractiveProcessing", parent);
+    assert(parent != nullptr);
+    return &convertInteractiveProcessingToXML(*this, processing, *parent);
+}
+xml::lite::Element& DerivedXMLParser200::convertInteractiveProcessingToXML(const DerivedXMLParser& parser,
+    const InteractiveProcessing& processing, xml::lite::Element& parent)
+{
+    auto& processingElem = parser.newElement("InteractiveProcessing", parent);
 
     // GeometricTransform
     const GeometricTransform& geoTransform(processing.geometricTransform);
-    XMLElem geoTransformElem = newElement("GeometricTransform", processingElem);
+    auto& geoTransformElem = parser.newElement("GeometricTransform", processingElem);
 
-    XMLElem scalingElem = newElement("Scaling", geoTransformElem);
-    convertFilterToXML("AntiAlias", geoTransform.scaling.antiAlias,
+    auto& scalingElem = parser.newElement("Scaling", geoTransformElem);
+    convertFilterToXML(parser, "AntiAlias", geoTransform.scaling.antiAlias,
                        scalingElem);
-    convertFilterToXML("Interpolation", geoTransform.scaling.interpolation,
+    convertFilterToXML(parser, "Interpolation", geoTransform.scaling.interpolation,
                        scalingElem);
 
-    XMLElem orientationElem = newElement("Orientation", geoTransformElem);
-    createStringFromEnum("ShadowDirection",
+    auto& orientationElem = parser.newElement("Orientation", geoTransformElem);
+    parser.createStringFromEnum("ShadowDirection",
         geoTransform.orientation.shadowDirection,
         orientationElem);
 
     // SharpnessEnhancement
     const SharpnessEnhancement& sharpness(processing.sharpnessEnhancement);
-    XMLElem sharpElem = newElement("SharpnessEnhancement", processingElem);
+    auto& sharpElem = parser.newElement("SharpnessEnhancement", processingElem);
 
     bool ok = false;
     if (sharpness.modularTransferFunctionCompensation.get())
@@ -1236,7 +1242,7 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
         if (sharpness.modularTransferFunctionEnhancement.get() == nullptr)
         {
             ok = true;
-            convertFilterToXML("ModularTransferFunctionCompensation",
+            convertFilterToXML(parser, "ModularTransferFunctionCompensation",
                                *sharpness.modularTransferFunctionCompensation,
                                sharpElem);
         }
@@ -1244,7 +1250,7 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
     else if (sharpness.modularTransferFunctionEnhancement.get())
     {
         ok = true;
-        convertFilterToXML("ModularTransferFunctionEnhancement",
+        convertFilterToXML(parser, "ModularTransferFunctionEnhancement",
                            *sharpness.modularTransferFunctionEnhancement,
                            sharpElem);
     }
@@ -1262,34 +1268,34 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
         const ColorManagementModule& cmm =
                 processing.colorSpaceTransform->colorManagementModule;
 
-        XMLElem colorSpaceTransformElem =
-                newElement("ColorSpaceTransform", processingElem);
-        XMLElem cmmElem =
-                newElement("ColorManagementModule", colorSpaceTransformElem);
+        auto& colorSpaceTransformElem =
+            parser.newElement("ColorSpaceTransform", processingElem);
+        auto& cmmElem =
+            parser.newElement("ColorManagementModule", colorSpaceTransformElem);
 
         if (int(cmm.renderingIntent) == 2)
         {
-            createString("RenderingIntent", "RELATIVE", cmmElem);
+            parser.createString("RenderingIntent", "RELATIVE", &cmmElem);
         }
         else if (int(cmm.renderingIntent) == 3)
         {
-            createString("RenderingIntent", "ABSOLUTE", cmmElem);
+            parser.createString("RenderingIntent", "ABSOLUTE", &cmmElem);
         }
         else
         {
-            createStringFromEnum("RenderingIntent", cmm.renderingIntent, cmmElem);
+            parser.createStringFromEnum("RenderingIntent", cmm.renderingIntent, cmmElem);
         }
 
         // TODO: Not sure what this'll actually look like
-        createString("SourceProfile", cmm.sourceProfile, cmmElem);
+        parser.createString("SourceProfile", cmm.sourceProfile, cmmElem);
         if (!cmm.displayProfile.empty())
         {
-            createString("DisplayProfile", cmm.displayProfile, cmmElem);
+            parser.createString("DisplayProfile", cmm.displayProfile, cmmElem);
         }
 
         if (!cmm.iccProfile.empty())
         {
-            createString("ICCProfileSignature", cmm.iccProfile, cmmElem);
+            parser.createString("ICCProfileSignature", cmm.iccProfile, cmmElem);
         }
     }
 
@@ -1298,32 +1304,32 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
     const DynamicRangeAdjustment& adjust =
             processing.dynamicRangeAdjustment;
 
-    XMLElem adjustElem =
-        newElement("DynamicRangeAdjustment", processingElem);
+    auto& adjustElem =
+        parser.newElement("DynamicRangeAdjustment", processingElem);
 
-    createStringFromEnum("AlgorithmType", adjust.algorithmType,
+    parser.createStringFromEnum("AlgorithmType", adjust.algorithmType,
         adjustElem);
-    createInt("BandStatsSource", adjust.bandStatsSource, adjustElem);
+    parser.createInt("BandStatsSource", adjust.bandStatsSource, adjustElem);
 
     validateDRAFields(adjust);
     if (adjust.draParameters.get())
     {
-        XMLElem paramElem = newElement("DRAParameters", adjustElem);
-        createDouble("Pmin", adjust.draParameters->pMin, paramElem);
-        createDouble("Pmax", adjust.draParameters->pMax, paramElem);
-        createDouble("EminModifier", adjust.draParameters->eMinModifier, paramElem);
-        createDouble("EmaxModifier", adjust.draParameters->eMinModifier, paramElem);
+        auto& paramElem = parser.newElement("DRAParameters", adjustElem);
+        parser.createDouble("Pmin", adjust.draParameters->pMin, paramElem);
+        parser.createDouble("Pmax", adjust.draParameters->pMax, paramElem);
+        parser.createDouble("EminModifier", adjust.draParameters->eMinModifier, paramElem);
+        parser.createDouble("EmaxModifier", adjust.draParameters->eMinModifier, paramElem);
     }
     if (adjust.draOverrides.get())
     {
-        XMLElem overrideElem = newElement("DRAOverrides", adjustElem);
-        createDouble("Subtractor", adjust.draOverrides->subtractor, overrideElem);
-        createDouble("Multiplier", adjust.draOverrides->multiplier, overrideElem);
+        auto& overrideElem = parser.newElement("DRAOverrides", adjustElem);
+        parser.createDouble("Subtractor", adjust.draOverrides->subtractor, overrideElem);
+        parser.createDouble("Multiplier", adjust.draOverrides->multiplier, overrideElem);
     }
 
     if (processing.tonalTransferCurve.get())
     {
-        convertLookupTableToXML("TonalTransferCurve", *processing.tonalTransferCurve, processingElem);
+        convertLookupTableToXML(parser, "TonalTransferCurve", *processing.tonalTransferCurve, processingElem);
     }
     return processingElem;
 }
