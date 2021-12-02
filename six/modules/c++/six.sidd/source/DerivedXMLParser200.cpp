@@ -1057,8 +1057,14 @@ XMLElem DerivedXMLParser200::convertLookupTableToXML(
         const LookupTable& table,
         XMLElem parent) const
 {
-    XMLElem lookupElem = newElement(name, parent);
-    createString("LUTName", table.lutName, lookupElem);
+    assert(parent != nullptr);
+    return &convertLookupTableToXML(*this, name, table, *parent);
+}
+xml::lite::Element& DerivedXMLParser200::convertLookupTableToXML(const DerivedXMLParser& parser,
+    const std::string& name, const LookupTable& table, xml::lite::Element& parent)
+{
+    auto& lookupElem = parser.newElement(name, parent);
+    parser.createString("LUTName", table.lutName, lookupElem);
 
     bool ok = false;
     if (table.predefined.get())
@@ -1066,7 +1072,7 @@ XMLElem DerivedXMLParser200::convertLookupTableToXML(
         if (table.custom.get() == nullptr)
         {
             ok = true;
-            XMLElem predefElem = newElement("Predefined", lookupElem);
+            auto& predefElem = parser.newElement("Predefined", lookupElem);
 
             //exactly one of databaseName or (remapFamily and remapMember) can be set
             bool innerOk = false;
@@ -1076,15 +1082,15 @@ XMLElem DerivedXMLParser200::convertLookupTableToXML(
                     six::Init::isDefined(table.predefined->remapMember))
                 {
                     innerOk = true;
-                    createInt("RemapFamily", table.predefined->remapFamily, predefElem);
-                    createInt("RemapMember", table.predefined->remapMember, predefElem);
+                    parser.createInt("RemapFamily", table.predefined->remapFamily, predefElem);
+                    parser.createInt("RemapMember", table.predefined->remapMember, predefElem);
                 }
             }
             else if (six::Init::isUndefined(table.predefined->remapFamily) &&
                      six::Init::isUndefined(table.predefined->remapMember))
             {
                 innerOk = true;
-                createString("DatabaseName", table.predefined->databaseName, predefElem);
+                parser.createString("DatabaseName", table.predefined->databaseName, predefElem);
             }
             if (innerOk == false)
             {
@@ -1097,15 +1103,15 @@ XMLElem DerivedXMLParser200::convertLookupTableToXML(
         ok = true;
         std::vector<LUT>& lutValues = table.custom->lutValues;
 
-        XMLElem customElem = newElement("Custom", lookupElem);
-        XMLElem lutInfoElem = newElement("LUTInfo", customElem);
-        setAttribute(lutInfoElem, "numLuts", lutValues.size());
-        setAttribute(lutInfoElem, "size", lutValues[0].table.size());
+        auto& customElem = parser.newElement("Custom", lookupElem);
+        auto& lutInfoElem = parser.newElement("LUTInfo", customElem);
+        parser.setAttribute(lutInfoElem, "numLuts", lutValues.size());
+        parser.setAttribute(lutInfoElem, "size", lutValues[0].table.size());
 
         for (size_t ii = 0; ii < lutValues.size(); ++ii)
         {
-            XMLElem lutElem = createLUT("LUTValues", &lutValues[ii], lutInfoElem);
-            setAttribute(lutElem, "lut", ii + 1);
+            auto lutElem = parser.createLUT("LUTValues", &lutValues[ii], &lutInfoElem);
+            parser.setAttribute(lutElem, "lut", ii + 1);
         }
     }
     if (!ok)
@@ -2146,8 +2152,15 @@ mem::auto_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const xml::lite::Element*
 XMLElem DerivedXMLParser200::createLUT(const std::string& name, const LUT *lut,
         XMLElem parent) const
 {
-    XMLElem lutElement = newElement(name, parent);
-    return createLUTImpl(lut, lutElement);
+    assert(lut != nullptr);
+    assert(parent != nullptr);
+    return &createLUT(*this, name, *lut, *parent);
+}
+xml::lite::Element& DerivedXMLParser200::createLUT(const DerivedXMLParser& parser,
+    const std::string& name, const LUT& lut, xml::lite::Element& parent)
+{
+    auto& lutElement = parser.newElement(name, parent);
+    return * parser.createLUTImpl(&lut, &lutElement);
 }
 }
 }

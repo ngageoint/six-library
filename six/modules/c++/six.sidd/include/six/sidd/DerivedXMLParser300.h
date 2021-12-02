@@ -65,7 +65,6 @@ private:
     XMLElem createLUT(const std::string& name, const LUT* l, XMLElem parent = nullptr) const override;
     std::unique_ptr<LUT> parseSingleLUT(const xml::lite::Element& elem, size_t size) const;
 
-    XMLElem convertLookupTableToXML(const std::string& name, const LookupTable&, XMLElem parent = nullptr) const;
     void parseLookupTableFromXML(const xml::lite::Element& lookupElem, LookupTable&) const;
 
     XMLElem convertNonInteractiveProcessingToXML(const NonInteractiveProcessing&, XMLElem parent = nullptr) const;

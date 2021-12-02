@@ -827,69 +827,6 @@ XMLElem DerivedXMLParser300::convertDerivedClassificationToXML(
     return & DerivedXMLParser200::convertDerivedClassificationToXML(*this, classification, *parent);
 }
 
-XMLElem DerivedXMLParser300::convertLookupTableToXML(
-        const std::string& name,
-        const LookupTable& table,
-        XMLElem parent) const
-{
-    XMLElem lookupElem = newElement(name, parent);
-    createString("LUTName", table.lutName, lookupElem);
-
-    bool ok = false;
-    if (table.predefined.get())
-    {
-        if (table.custom.get() == nullptr)
-        {
-            ok = true;
-            XMLElem predefElem = newElement("Predefined", lookupElem);
-
-            //exactly one of databaseName or (remapFamily and remapMember) can be set
-            bool innerOk = false;
-            if (table.predefined->databaseName.empty())
-            {
-                if (six::Init::isDefined(table.predefined->remapFamily) &&
-                    six::Init::isDefined(table.predefined->remapMember))
-                {
-                    innerOk = true;
-                    createInt("RemapFamily", table.predefined->remapFamily, predefElem);
-                    createInt("RemapMember", table.predefined->remapMember, predefElem);
-                }
-            }
-            else if (six::Init::isUndefined(table.predefined->remapFamily) &&
-                     six::Init::isUndefined(table.predefined->remapMember))
-            {
-                innerOk = true;
-                createString("DatabaseName", table.predefined->databaseName, predefElem);
-            }
-            if (innerOk == false)
-            {
-                throw except::Exception(Ctxt("Exactly one of databaseName or remapFamiy+remapMember must be set"));
-            }
-        }
-    }
-    else if (table.custom.get())
-    {
-        ok = true;
-        std::vector<LUT>& lutValues = table.custom->lutValues;
-
-        XMLElem customElem = newElement("Custom", lookupElem);
-        XMLElem lutInfoElem = newElement("LUTInfo", customElem);
-        setAttribute(lutInfoElem, "numLuts", lutValues.size());
-        setAttribute(lutInfoElem, "size", lutValues[0].table.size());
-
-        for (size_t ii = 0; ii < lutValues.size(); ++ii)
-        {
-            XMLElem lutElem = createLUT("LUTValues", &lutValues[ii], lutInfoElem);
-            setAttribute(lutElem, "lut", ii + 1);
-        }
-    }
-    if (!ok)
-    {
-        throw except::Exception(Ctxt("Exactly one of Predefined or Custom must be defined"));
-    }
-    return lookupElem;
-}
-
 XMLElem DerivedXMLParser300::convertNonInteractiveProcessingToXML(
         const NonInteractiveProcessing& processing,
         XMLElem parent) const
@@ -917,7 +854,7 @@ XMLElem DerivedXMLParser300::convertNonInteractiveProcessingToXML(
         }
         for (size_t ii = 0; ii < bandEq.bandLUTs.size(); ++ii)
         {
-            convertLookupTableToXML("BandLUT", *bandEq.bandLUTs[ii], &bandEqElem);
+            DerivedXMLParser200::convertLookupTableToXML(*this, "BandLUT", *bandEq.bandLUTs[ii], bandEqElem);
         }
 
         //add the attribute to each of the LUTs
@@ -938,8 +875,8 @@ XMLElem DerivedXMLParser300::convertNonInteractiveProcessingToXML(
 
     if (prodGen.dataRemapping.get())
     {
-        convertLookupTableToXML("DataRemapping", *prodGen.dataRemapping,
-                                &prodGenElem);
+        DerivedXMLParser200::convertLookupTableToXML(*this, "DataRemapping", *prodGen.dataRemapping,
+                                prodGenElem);
     }
 
     if (prodGen.asymmetricPixelCorrection.get())
@@ -1084,7 +1021,7 @@ XMLElem DerivedXMLParser300::convertInteractiveProcessingToXML(
 
     if (processing.tonalTransferCurve.get())
     {
-        convertLookupTableToXML("TonalTransferCurve", *processing.tonalTransferCurve, processingElem);
+        DerivedXMLParser200::convertLookupTableToXML(*this, "TonalTransferCurve", *processing.tonalTransferCurve, *processingElem);
     }
     return processingElem;
 }
@@ -1305,8 +1242,9 @@ std::unique_ptr<LUT> DerivedXMLParser300::parseSingleLUT(const xml::lite::Elemen
 XMLElem DerivedXMLParser300::createLUT(const std::string& name, const LUT *lut,
         XMLElem parent) const
 {
-    XMLElem lutElement = newElement(name, parent);
-    return createLUTImpl(lut, lutElement);
+    assert(lut != nullptr);
+    assert(parent != nullptr);
+    return &DerivedXMLParser200::createLUT(*this, name, *lut, *parent);
 }
 }
 }

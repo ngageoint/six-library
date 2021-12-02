@@ -72,6 +72,11 @@ struct DerivedXMLParser200 : public DerivedXMLParser
     static xml::lite::Element& convertExploitationFeaturesToXML(const DerivedXMLParser&,
         const ExploitationFeatures&, xml::lite::Element& parent);
 
+    static xml::lite::Element& createLUT(const DerivedXMLParser&,
+        const std::string& name, const LUT&, xml::lite::Element& parent);
+    static xml::lite::Element& convertLookupTableToXML(const DerivedXMLParser&,
+        const std::string& name, const LookupTable&, xml::lite::Element& parent);
+
 protected:
     virtual void parseDerivedClassificationFromXML(
             const xml::lite::Element* classificationElem,
