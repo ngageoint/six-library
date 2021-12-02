@@ -78,7 +78,6 @@ private:
     void parseKernelFromXML(const xml::lite::Element* kernelElem, Filter::Kernel&) const;
     void parseBankFromXML(const xml::lite::Element* bankElem, Filter::Bank&) const;
 
-    XMLElem convertFilterToXML(const std::string& name, const Filter& Filter, XMLElem parent = nullptr) const;
     void parseFilterFromXML(const xml::lite::Element& filterELem, Filter& filter) const;
 
     void parseJ2KCompression(const xml::lite::Element& j2kElem, J2KCompression& j2k) const;

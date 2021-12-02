@@ -897,8 +897,8 @@ XMLElem DerivedXMLParser300::convertNonInteractiveProcessingToXML(
     XMLElem processingElem = newElement("NonInteractiveProcessing", parent);
 
     // ProductGenerationOptions
-    XMLElem prodGenElem = newElement("ProductGenerationOptions",
-                                    processingElem);
+    auto& prodGenElem = newElement("ProductGenerationOptions",
+                                    *processingElem);
 
     const ProductGenerationOptions& prodGen =
             processing.productGenerationOptions;
@@ -906,10 +906,10 @@ XMLElem DerivedXMLParser300::convertNonInteractiveProcessingToXML(
     if (prodGen.bandEqualization.get())
     {
         const BandEqualization& bandEq = *prodGen.bandEqualization;
-        XMLElem bandEqElem = newElement("BandEqualization", prodGenElem);
+        auto& bandEqElem = newElement("BandEqualization", prodGenElem);
         if (int(bandEq.algorithm) == 0)
         {
-            createString("Algorithm", "1DLUT", bandEqElem);
+            createString("Algorithm", "1DLUT", &bandEqElem);
         }
         else
         {
@@ -917,12 +917,12 @@ XMLElem DerivedXMLParser300::convertNonInteractiveProcessingToXML(
         }
         for (size_t ii = 0; ii < bandEq.bandLUTs.size(); ++ii)
         {
-            convertLookupTableToXML("BandLUT", *bandEq.bandLUTs[ii], bandEqElem);
+            convertLookupTableToXML("BandLUT", *bandEq.bandLUTs[ii], &bandEqElem);
         }
 
         //add the attribute to each of the LUTs
         std::vector<XMLElem> LUTElems;
-        bandEqElem->getElementsByTagName("BandLUT", LUTElems);
+        bandEqElem.getElementsByTagName("BandLUT", LUTElems);
         for (size_t ii = 0; ii < LUTElems.size(); ++ii)
         {
             setAttribute(LUTElems[ii], "k", ii+1);
@@ -931,7 +931,7 @@ XMLElem DerivedXMLParser300::convertNonInteractiveProcessingToXML(
 
     if (prodGen.modularTransferFunctionRestoration.get())
     {
-        convertFilterToXML("ModularTransferFunctionRestoration",
+        DerivedXMLParser200::convertFilterToXML(*this, "ModularTransferFunctionRestoration",
                            *prodGen.modularTransferFunctionRestoration,
                            prodGenElem);
     }
@@ -939,17 +939,17 @@ XMLElem DerivedXMLParser300::convertNonInteractiveProcessingToXML(
     if (prodGen.dataRemapping.get())
     {
         convertLookupTableToXML("DataRemapping", *prodGen.dataRemapping,
-                                prodGenElem);
+                                &prodGenElem);
     }
 
     if (prodGen.asymmetricPixelCorrection.get())
     {
-        convertFilterToXML("AsymmetricPixelCorrection",
+        DerivedXMLParser200::convertFilterToXML(*this, "AsymmetricPixelCorrection",
                            *prodGen.asymmetricPixelCorrection, prodGenElem);
     }
 
     // RRDS
-    XMLElem rrdsElem = newElement("RRDS", processingElem);
+    auto& rrdsElem = newElement("RRDS", *processingElem);
 
     const RRDS& rrds = processing.rrds;
     createStringFromEnum("DownsamplingMethod", rrds.downsamplingMethod,
@@ -959,11 +959,11 @@ XMLElem DerivedXMLParser300::convertNonInteractiveProcessingToXML(
     {
         confirmNonNull(rrds.antiAlias, "antiAlias",
                        "for DECIMATE downsampling");
-        convertFilterToXML("AntiAlias", *rrds.antiAlias, rrdsElem);
+        DerivedXMLParser200::convertFilterToXML(*this, "AntiAlias", *rrds.antiAlias, rrdsElem);
 
         confirmNonNull(rrds.interpolation, "interpolation",
                        "for DECIMATE downsampling");
-        convertFilterToXML("Interpolation", *rrds.interpolation, rrdsElem);
+        DerivedXMLParser200::convertFilterToXML(*this, "Interpolation", *rrds.interpolation, rrdsElem);
     }
     return processingElem;
 }
@@ -979,10 +979,10 @@ XMLElem DerivedXMLParser300::convertInteractiveProcessingToXML(
     XMLElem geoTransformElem = newElement("GeometricTransform", processingElem);
 
     XMLElem scalingElem = newElement("Scaling", geoTransformElem);
-    convertFilterToXML("AntiAlias", geoTransform.scaling.antiAlias,
-                       scalingElem);
-    convertFilterToXML("Interpolation", geoTransform.scaling.interpolation,
-                       scalingElem);
+    DerivedXMLParser200::convertFilterToXML(*this, "AntiAlias", geoTransform.scaling.antiAlias,
+                       *scalingElem);
+    DerivedXMLParser200::convertFilterToXML(*this, "Interpolation", geoTransform.scaling.interpolation,
+                       *scalingElem);
 
     XMLElem orientationElem = newElement("Orientation", geoTransformElem);
     createStringFromEnum("ShadowDirection",
@@ -999,17 +999,17 @@ XMLElem DerivedXMLParser300::convertInteractiveProcessingToXML(
         if (sharpness.modularTransferFunctionEnhancement.get() == nullptr)
         {
             ok = true;
-            convertFilterToXML("ModularTransferFunctionCompensation",
+            DerivedXMLParser200::convertFilterToXML(*this, "ModularTransferFunctionCompensation",
                                *sharpness.modularTransferFunctionCompensation,
-                               sharpElem);
+                               *sharpElem);
         }
     }
     else if (sharpness.modularTransferFunctionEnhancement.get())
     {
         ok = true;
-        convertFilterToXML("ModularTransferFunctionEnhancement",
+        DerivedXMLParser200::convertFilterToXML(*this, "ModularTransferFunctionEnhancement",
                            *sharpness.modularTransferFunctionEnhancement,
-                           sharpElem);
+                           *sharpElem);
     }
 
     if (!ok)
@@ -1087,14 +1087,6 @@ XMLElem DerivedXMLParser300::convertInteractiveProcessingToXML(
         convertLookupTableToXML("TonalTransferCurve", *processing.tonalTransferCurve, processingElem);
     }
     return processingElem;
-}
-
-XMLElem DerivedXMLParser300::convertFilterToXML(const std::string& name,
-                                                const Filter& filter,
-                                                XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return &DerivedXMLParser200::convertFilterToXML(*this, name, filter, *parent);
 }
 
 XMLElem DerivedXMLParser300::convertMeasurementToXML(const Measurement* measurement,
