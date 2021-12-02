@@ -827,84 +827,6 @@ XMLElem DerivedXMLParser300::convertDerivedClassificationToXML(
     return & DerivedXMLParser200::convertDerivedClassificationToXML(*this, classification, *parent);
 }
 
-XMLElem DerivedXMLParser300::convertNonInteractiveProcessingToXML(
-        const NonInteractiveProcessing& processing,
-        XMLElem parent) const
-{
-    XMLElem processingElem = newElement("NonInteractiveProcessing", parent);
-
-    // ProductGenerationOptions
-    auto& prodGenElem = newElement("ProductGenerationOptions",
-                                    *processingElem);
-
-    const ProductGenerationOptions& prodGen =
-            processing.productGenerationOptions;
-
-    if (prodGen.bandEqualization.get())
-    {
-        const BandEqualization& bandEq = *prodGen.bandEqualization;
-        auto& bandEqElem = newElement("BandEqualization", prodGenElem);
-        if (int(bandEq.algorithm) == 0)
-        {
-            createString("Algorithm", "1DLUT", &bandEqElem);
-        }
-        else
-        {
-            createStringFromEnum("Algorithm", bandEq.algorithm, bandEqElem);
-        }
-        for (size_t ii = 0; ii < bandEq.bandLUTs.size(); ++ii)
-        {
-            DerivedXMLParser200::convertLookupTableToXML(*this, "BandLUT", *bandEq.bandLUTs[ii], bandEqElem);
-        }
-
-        //add the attribute to each of the LUTs
-        std::vector<XMLElem> LUTElems;
-        bandEqElem.getElementsByTagName("BandLUT", LUTElems);
-        for (size_t ii = 0; ii < LUTElems.size(); ++ii)
-        {
-            setAttribute(LUTElems[ii], "k", ii+1);
-        }
-    }
-
-    if (prodGen.modularTransferFunctionRestoration.get())
-    {
-        DerivedXMLParser200::convertFilterToXML(*this, "ModularTransferFunctionRestoration",
-                           *prodGen.modularTransferFunctionRestoration,
-                           prodGenElem);
-    }
-
-    if (prodGen.dataRemapping.get())
-    {
-        DerivedXMLParser200::convertLookupTableToXML(*this, "DataRemapping", *prodGen.dataRemapping,
-                                prodGenElem);
-    }
-
-    if (prodGen.asymmetricPixelCorrection.get())
-    {
-        DerivedXMLParser200::convertFilterToXML(*this, "AsymmetricPixelCorrection",
-                           *prodGen.asymmetricPixelCorrection, prodGenElem);
-    }
-
-    // RRDS
-    auto& rrdsElem = newElement("RRDS", *processingElem);
-
-    const RRDS& rrds = processing.rrds;
-    createStringFromEnum("DownsamplingMethod", rrds.downsamplingMethod,
-                         rrdsElem);
-
-    if (rrds.downsamplingMethod != DownsamplingMethod::DECIMATE && rrds.downsamplingMethod != DownsamplingMethod::MAX_PIXEL)
-    {
-        confirmNonNull(rrds.antiAlias, "antiAlias",
-                       "for DECIMATE downsampling");
-        DerivedXMLParser200::convertFilterToXML(*this, "AntiAlias", *rrds.antiAlias, rrdsElem);
-
-        confirmNonNull(rrds.interpolation, "interpolation",
-                       "for DECIMATE downsampling");
-        DerivedXMLParser200::convertFilterToXML(*this, "Interpolation", *rrds.interpolation, rrdsElem);
-    }
-    return processingElem;
-}
-
 XMLElem DerivedXMLParser300::convertInteractiveProcessingToXML(
         const InteractiveProcessing& processing,
         XMLElem parent) const
@@ -1065,9 +987,9 @@ XMLElem DerivedXMLParser300::convertDisplayToXML(
     {
         confirmNonNull(display.nonInteractiveProcessing[ii],
                 "nonInteractiveProcessing");
-        XMLElem temp = convertNonInteractiveProcessingToXML(
+        auto& temp = DerivedXMLParser200::convertNonInteractiveProcessingToXML(*this,
                 *display.nonInteractiveProcessing[ii],
-                displayElem);
+                *displayElem);
         setAttribute(temp, "band", ii + 1);
     }
 

@@ -104,6 +104,10 @@ struct XMLParser
         const std::string& uri, const std::u8string& p,
         XMLElem parent = nullptr) const;
 #endif
+    XMLElem createString(const std::string& name, const char* p = "",
+        XMLElem parent = nullptr) const {
+        return mXmlLite.createString(name, p, parent);
+    }
     template<typename T>
     XMLElem createSixString(const std::string& name,
         const std::string& uri, const T& t,
@@ -205,10 +209,6 @@ protected:
     XMLElem createSixString(const std::string& name, const T& t, // six::toString(t) isntead of t.toString()
         XMLElem parent = nullptr) const {
         return mXmlLite.createSixString(name, t, parent);
-    }
-    XMLElem createString(const std::string& name, const char* p="",
-        XMLElem parent = nullptr) const {
-        return mXmlLite.createString(name, p, parent);
     }
     template<typename T>
     XMLElem createInt(const std::string& name, T p = 0,

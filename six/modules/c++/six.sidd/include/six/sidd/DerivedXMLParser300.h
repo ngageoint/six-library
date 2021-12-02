@@ -65,26 +65,18 @@ private:
     XMLElem createLUT(const std::string& name, const LUT* l, XMLElem parent = nullptr) const override;
     std::unique_ptr<LUT> parseSingleLUT(const xml::lite::Element& elem, size_t size) const;
 
-    void parseLookupTableFromXML(const xml::lite::Element& lookupElem, LookupTable&) const;
-
-    XMLElem convertNonInteractiveProcessingToXML(const NonInteractiveProcessing&, XMLElem parent = nullptr) const;
-    void parseNonInteractiveProcessingFromXML(const xml::lite::Element& procElem, NonInteractiveProcessing&) const;
-
     XMLElem convertInteractiveProcessingToXML(const InteractiveProcessing&, XMLElem parent = nullptr) const;
-    void parseInteractiveProcessingFromXML(const xml::lite::Element& interactiveElem, InteractiveProcessing&) const;
 
+    void parseInteractiveProcessingFromXML(const xml::lite::Element& interactiveElem, InteractiveProcessing&) const;
+    void parseLookupTableFromXML(const xml::lite::Element& lookupElem, LookupTable&) const;
+    void parseNonInteractiveProcessingFromXML(const xml::lite::Element& procElem, NonInteractiveProcessing&) const;
     void parsePredefinedFilterFromXML(const xml::lite::Element* predefinedElem, Filter::Predefined&) const;
     void parseKernelFromXML(const xml::lite::Element* kernelElem, Filter::Kernel&) const;
     void parseBankFromXML(const xml::lite::Element* bankElem, Filter::Bank&) const;
-
     void parseFilterFromXML(const xml::lite::Element& filterELem, Filter& filter) const;
-
     void parseJ2KCompression(const xml::lite::Element& j2kElem, J2KCompression& j2k) const;
-
     void parseGeoDataFromXML(const xml::lite::Element& elem, GeoDataBase&) const;
-
     void parseDigitalElevationDataFromXML(const xml::lite::Element& elem, DigitalElevationData&) const;
-
     void parseProductGenerationOptionsFromXML(const xml::lite::Element& optionsElem, ProductGenerationOptions&) const;
     void parseBandEqualizationFromXML(const xml::lite::Element& bandElem, BandEqualization&) const;
     void parseRRDSFromXML(const xml::lite::Element& rrdsElem, RRDS& rrds) const;

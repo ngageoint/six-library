@@ -1125,10 +1125,16 @@ XMLElem DerivedXMLParser200::convertNonInteractiveProcessingToXML(
         const NonInteractiveProcessing& processing,
         XMLElem parent) const
 {
-    XMLElem processingElem = newElement("NonInteractiveProcessing", parent);
+    assert(parent != nullptr);
+    return &convertNonInteractiveProcessingToXML(*this, processing, *parent);
+}
+xml::lite::Element& DerivedXMLParser200::convertNonInteractiveProcessingToXML(const DerivedXMLParser& parser,
+    const NonInteractiveProcessing& processing, xml::lite::Element& parent)
+{
+    auto& processingElem = parser.newElement("NonInteractiveProcessing", parent);
 
     // ProductGenerationOptions
-    XMLElem prodGenElem = newElement("ProductGenerationOptions",
+    auto& prodGenElem = parser.newElement("ProductGenerationOptions",
                                     processingElem);
 
     const ProductGenerationOptions& prodGen =
@@ -1137,23 +1143,23 @@ XMLElem DerivedXMLParser200::convertNonInteractiveProcessingToXML(
     if (prodGen.bandEqualization.get())
     {
         const BandEqualization& bandEq = *prodGen.bandEqualization;
-        XMLElem bandEqElem = newElement("BandEqualization", prodGenElem);
+        auto& bandEqElem = parser.newElement("BandEqualization", prodGenElem);
         if (int(bandEq.algorithm) == 0)
         {
-            createString("Algorithm", "1DLUT", bandEqElem);
+            parser.createString("Algorithm", "1DLUT", &bandEqElem);
         }
         else
         {
-            createStringFromEnum("Algorithm", bandEq.algorithm, bandEqElem);
+            parser.createStringFromEnum("Algorithm", bandEq.algorithm, bandEqElem);
         }
         for (size_t ii = 0; ii < bandEq.bandLUTs.size(); ++ii)
         {
-            convertLookupTableToXML("BandLUT", *bandEq.bandLUTs[ii], bandEqElem);
+            convertLookupTableToXML(parser, "BandLUT", *bandEq.bandLUTs[ii], bandEqElem);
         }
 
         //add the attribute to each of the LUTs
         std::vector<XMLElem> LUTElems;
-        bandEqElem->getElementsByTagName("BandLUT", LUTElems);
+        bandEqElem.getElementsByTagName("BandLUT", LUTElems);
         for (size_t ii = 0; ii < LUTElems.size(); ++ii)
         {
             setAttribute(LUTElems[ii], "k", ii+1);
@@ -1162,39 +1168,39 @@ XMLElem DerivedXMLParser200::convertNonInteractiveProcessingToXML(
 
     if (prodGen.modularTransferFunctionRestoration.get())
     {
-        convertFilterToXML("ModularTransferFunctionRestoration",
+        convertFilterToXML(parser, "ModularTransferFunctionRestoration",
                            *prodGen.modularTransferFunctionRestoration,
                            prodGenElem);
     }
 
     if (prodGen.dataRemapping.get())
     {
-        convertLookupTableToXML("DataRemapping", *prodGen.dataRemapping,
+        convertLookupTableToXML(parser, "DataRemapping", *prodGen.dataRemapping,
                                 prodGenElem);
     }
 
     if (prodGen.asymmetricPixelCorrection.get())
     {
-        convertFilterToXML("AsymmetricPixelCorrection",
+        convertFilterToXML(parser, "AsymmetricPixelCorrection",
                            *prodGen.asymmetricPixelCorrection, prodGenElem);
     }
 
     // RRDS
-    XMLElem rrdsElem = newElement("RRDS", processingElem);
+    auto& rrdsElem = parser.newElement("RRDS", processingElem);
 
     const RRDS& rrds = processing.rrds;
-    createStringFromEnum("DownsamplingMethod", rrds.downsamplingMethod,
+    parser.createStringFromEnum("DownsamplingMethod", rrds.downsamplingMethod,
                          rrdsElem);
 
     if (rrds.downsamplingMethod != DownsamplingMethod::DECIMATE && rrds.downsamplingMethod != DownsamplingMethod::MAX_PIXEL)
     {
         confirmNonNull(rrds.antiAlias, "antiAlias",
                        "for DECIMATE downsampling");
-        convertFilterToXML("AntiAlias", *rrds.antiAlias, rrdsElem);
+        convertFilterToXML(parser, "AntiAlias", *rrds.antiAlias, rrdsElem);
 
         confirmNonNull(rrds.interpolation, "interpolation",
                        "for DECIMATE downsampling");
-        convertFilterToXML("Interpolation", *rrds.interpolation, rrdsElem);
+        convertFilterToXML(parser, "Interpolation", *rrds.interpolation, rrdsElem);
     }
     return processingElem;
 }
