@@ -32,41 +32,7 @@
 #include <six/sidd/DerivedXMLParser300.h>
 #include <six/sidd/DerivedXMLParser200.h>
 
-namespace
-{
-typedef xml::lite::Element* XMLElem;
-typedef xml::lite::Attributes XMLAttributes;
-
-template <typename T>
-bool isDefined(const T& enumVal)
-{
-    return six::Init::isDefined(enumVal.value);
-}
-
-template <typename T>
-bool isUndefined(const T& enumVal)
-{
-    return six::Init::isUndefined(enumVal.value);
-}
-
-template <typename SmartPtrT>
-void confirmNonNull(const SmartPtrT& ptr,
-                    const std::string& name,
-                    const std::string& suffix = "")
-{
-    if (ptr.get() == nullptr)
-    {
-        std::string msg = name + " is required";
-        if (!suffix.empty())
-        {
-            msg += " " + suffix;
-        }
-
-        throw except::Exception(Ctxt(msg));
-    }
-}
-
-}
+using XMLElem = xml::lite::Element*;
 
 namespace six
 {
@@ -263,7 +229,7 @@ void DerivedXMLParser300::parseDerivedClassificationFromXML(
         DerivedClassification& classification) const
 {
     DerivedXMLParser::parseDerivedClassificationFromXML(classificationElem, classification);
-    const XMLAttributes& classificationAttributes = classificationElem->getAttributes();
+    const auto& classificationAttributes = classificationElem->getAttributes();
 
     getAttributeList(classificationAttributes,
         "ism:compliesWith",
@@ -445,7 +411,7 @@ void DerivedXMLParser300::parseLookupTableFromXML(
         {
             ok = true;
             XMLElem lutInfoElem = getFirstAndOnly(customElem, "LUTInfo");
-            const XMLAttributes& attributes = lutInfoElem->getAttributes();
+            const auto& attributes = lutInfoElem->getAttributes();
             size_t numBands;
             size_t size;
             getAttributeIfExists(attributes, "numLuts", numBands);
@@ -622,7 +588,7 @@ void DerivedXMLParser300::parseKernelFromXML(const xml::lite::Element* kernelEle
         ok = true;
         kernel.custom.reset(new Filter::Kernel::Custom());
         XMLElem filterCoef = getFirstAndOnly(customElem, "FilterCoefficients");
-        const XMLAttributes& attributes = filterCoef->getAttributes();
+        const auto& attributes = filterCoef->getAttributes();
         getAttributeIfExists(attributes, "numRows", kernel.custom->size.row);
         getAttributeIfExists(attributes, "numCols", kernel.custom->size.col);
 
@@ -667,7 +633,7 @@ void DerivedXMLParser300::parseBankFromXML(const xml::lite::Element* bankElem,
         ok = true;
 
         XMLElem filterCoef = getFirstAndOnly(customElem, "FilterCoefficients");
-        const XMLAttributes& attributes = filterCoef->getAttributes();
+        const auto& attributes = filterCoef->getAttributes();
         getAttributeIfExists(attributes, "numPhasings", bank.custom->numPhasings);
         getAttributeIfExists(attributes, "numPoints", bank.custom->numPoints);
 
