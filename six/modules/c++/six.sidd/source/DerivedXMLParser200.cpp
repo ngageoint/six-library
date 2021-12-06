@@ -59,8 +59,14 @@ void confirmNonNull(const SmartPtrT& ptr,
         throw except::Exception(Ctxt(msg));
     }
 }
+}
 
-void validateDRAFields(const six::sidd::DRAType& algorithmType,
+namespace six
+{
+namespace sidd
+{
+
+void DerivedXMLParser200::validateDRAFields(const six::sidd::DRAType& algorithmType,
                        bool hasDraParameters,
                        bool hasDraOverrides)
 {
@@ -85,12 +91,28 @@ void validateDRAFields(const six::sidd::DRAType& algorithmType,
             algorithmType.toString()));
     }
 }
+void DerivedXMLParser200::validateDRAFields(const six::sidd::DynamicRangeAdjustment& adjust)
+{
+    validateDRAFields(adjust.algorithmType,
+        adjust.draParameters.get() ? true : false,
+        adjust.draOverrides.get() ? true : false);
 }
 
-namespace six
+ProjectionType DerivedXMLParser200::getProjectionType(const xml::lite::Element& measurementElem)
 {
-namespace sidd
-{
+    six::ProjectionType projType = ProjectionType::NOT_SET;
+    if (getOptional(measurementElem, "GeographicProjection"))
+        projType = ProjectionType::GEOGRAPHIC;
+    else if (getOptional(measurementElem, "CylindricalProjection"))
+        projType = ProjectionType::CYLINDRICAL;
+    else if (getOptional(measurementElem, "PlaneProjection"))
+        projType = ProjectionType::PLANE;
+    else if (getOptional(measurementElem, "PolynomialProjection"))
+        projType = ProjectionType::POLYNOMIAL;
+    return projType;
+}
+
+
 const char DerivedXMLParser200::VERSION[] = "2.0.0";
 const char DerivedXMLParser200::SI_COMMON_URI[] = "urn:SICommon:1.0";
 const char DerivedXMLParser200::ISM_URI[] = "urn:us:gov:ic:ism:13";
@@ -140,15 +162,7 @@ DerivedData* DerivedXMLParser200::fromXML(
     builder.addGeoData();
 
     // create Measurement
-    six::ProjectionType projType = ProjectionType::NOT_SET;
-    if (getOptional(measurementElem, "GeographicProjection"))
-        projType = ProjectionType::GEOGRAPHIC;
-    else if (getOptional(measurementElem, "CylindricalProjection"))
-            projType = ProjectionType::CYLINDRICAL;
-    else if (getOptional(measurementElem, "PlaneProjection"))
-        projType = ProjectionType::PLANE;
-    else if (getOptional(measurementElem, "PolynomialProjection"))
-        projType = ProjectionType::POLYNOMIAL;
+    const auto projType = getProjectionType(*measurementElem);
     builder.addMeasurement(projType);
 
     // create ExploitationFeatures
@@ -215,6 +229,10 @@ DerivedData* DerivedXMLParser200::fromXML(
         }
     }
     return data;
+}
+std::unique_ptr<DerivedData> DerivedXMLParser200::fromXML(const xml::lite::Document& doc) const
+{
+    return std::unique_ptr<DerivedData>(fromXML(&doc));
 }
 
 xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) const
@@ -286,6 +304,10 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
     root->setNamespacePrefix("ism", ISM_URI);
 
     return doc;
+}
+std::unique_ptr<xml::lite::Document> DerivedXMLParser200::toXML(const DerivedData& data) const
+{
+    return std::unique_ptr<xml::lite::Document>(toXML(&data));
 }
 
 void DerivedXMLParser200::parseDerivedClassificationFromXML(
@@ -1264,9 +1286,7 @@ XMLElem DerivedXMLParser200::convertInteractiveProcessingToXML(
         adjustElem);
     createInt("BandStatsSource", adjust.bandStatsSource, adjustElem);
 
-    validateDRAFields(adjust.algorithmType,
-                      adjust.draParameters.get() ? true : false,
-                      adjust.draOverrides.get() ? true : false);
+    validateDRAFields(adjust);
     if (adjust.draParameters.get())
     {
         XMLElem paramElem = newElement("DRAParameters", adjustElem);
@@ -2052,13 +2072,10 @@ void DerivedXMLParser200::parseDigitalElevationDataFromXML(
     parseDouble(getFirstAndOnly(pointElem, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
 }
 
-mem::auto_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const xml::lite::Element* elem,
-        size_t size) const
+std::unique_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const std::string& lutStr, size_t size)
 {
-    std::string lutStr = "";
-    parseString(elem, lutStr);
-    std::vector<std::string> lutVals = str::split(lutStr, " ");
-    mem::auto_ptr<LUT> lut(new LUT(size, sizeof(short)));
+    const auto lutVals = str::split(lutStr, " ");
+    auto lut = std::make_unique<LUT>(size, sizeof(short));
 
     for (size_t ii = 0; ii < lutVals.size(); ++ii)
     {
@@ -2067,6 +2084,14 @@ mem::auto_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const xml::lite::Element*
             &lutVal, sizeof(short));
     }
     return lut;
+}
+mem::auto_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const xml::lite::Element* elem,
+        size_t size) const
+{
+    std::string lutStr = "";
+    parseString(elem, lutStr);
+    auto result = parseSingleLUT(lutStr, size);
+    return mem::auto_ptr<LUT>(result.release());
 }
 
 XMLElem DerivedXMLParser200::createLUT(const std::string& name, const LUT *lut,

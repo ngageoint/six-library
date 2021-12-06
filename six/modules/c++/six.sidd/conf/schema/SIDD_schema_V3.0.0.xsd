@@ -1135,7 +1135,7 @@
                     <xs:documentation>Describes the processed transmit and receive polarizations for the product.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="North" type="sicommon:Neg180To180Type" minOccurs="0">
+            <xs:element name="North" type="sicommon:ZeroToExclusive360Type" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>Counter-clockwise angle from increasing row direction to north at the center of the image.</xs:documentation>
                 </xs:annotation>
@@ -1325,12 +1325,12 @@
                     <xs:documentation>The phenomenon where vertical objects appear as ground objects with the same range/range rate.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="MultiPath" type="sicommon:Neg180To180Type" minOccurs="0">
+            <xs:element name="MultiPath" type="sicommon:ZeroToExclusive360Type" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>This is a range dependent phenomenon which describes the energy from a single scatter returned to the radar via more than one path and results in a nominally constant direction in the ETP.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="GroundTrack" type="sicommon:Neg180To180Type" minOccurs="0">
+            <xs:element name="GroundTrack" type="sicommon:ZeroToExclusive360Type" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>Counter-clockwise angle from increasing row direction to ground track at the center of the image.</xs:documentation>
                 </xs:annotation>
