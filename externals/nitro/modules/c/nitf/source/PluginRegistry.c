@@ -22,7 +22,7 @@
 
 #include "nitf/PluginRegistry.h"
 
-NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error);
+NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error, FILE* log);
 NITFPRIV(void) implicitDestruct(nitf_PluginRegistry** reg);
 NITFPRIV(void) exitListener(void);
 NITFPRIV(NITF_BOOL)
@@ -83,7 +83,7 @@ static NITF_BOOL isDelimiter(char ch)
  *
  */
 NITFPROT(nitf_PluginRegistry*)
-nitf_PluginRegistry_getInstance(nitf_Error* error)
+nitf_PluginRegistry_getInstanceLog(nitf_Error* error, FILE* log)
 {
     static nitf_PluginRegistry* theInstance = NULL;
 
@@ -98,7 +98,7 @@ nitf_PluginRegistry_getInstance(nitf_Error* error)
         /*  constructed                                         */
         if (theInstance == NULL)
         {
-            theInstance = implicitConstruct(error);
+            theInstance = implicitConstruct(error, log);
             /*  If this succeeded...  */
             if (theInstance)
             {
@@ -120,6 +120,11 @@ nitf_PluginRegistry_getInstance(nitf_Error* error)
     }
 
     return theInstance;
+}
+NITFPROT(nitf_PluginRegistry*)
+nitf_PluginRegistry_getInstance(nitf_Error* error)
+{
+    return nitf_PluginRegistry_getInstanceLog(error, stderr);
 }
 
 NITFPRIV(NITF_BOOL)
@@ -194,7 +199,7 @@ static char* nitf_PluginRegistry_getenv(char const* varName)
 }
 #define getenv(varName) nitf_PluginRegistry_getenv(varName)
 
-NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
+NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error, FILE* log)
 {
     size_t pathLen;
     const char* pluginEnvVar;
@@ -284,11 +289,14 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
         }
         else
         {
-            fprintf(stderr,
+            if (log != NULL)
+            {
+                fprintf(log,
                     "Warning: Unable to find plugin path.\n"
                     "Specify plugin location by setting environment variable "
                     "%s, or by building the library from source\n",
                     NITF_PLUGIN_PATH);
+            }
             return reg;
         }
     }
@@ -760,13 +768,14 @@ nitf_PluginRegistry_internalDecompressionHandlerExists(nitf_PluginRegistry* reg,
 NITFPROT(NITF_BOOL)
 nitf_PluginRegistry_internalHandlerExists(
         const char* ident,
-        NITF_BOOL handlerCheck(nitf_PluginRegistry*, const char*))
+        NITF_BOOL handlerCheck(nitf_PluginRegistry*, const char*),
+        FILE* log)
 {
     NITF_BOOL exists;
     nitf_Error error;
 
     /* first, get the registry */
-    nitf_PluginRegistry* const reg = nitf_PluginRegistry_getInstance(&error);
+    nitf_PluginRegistry* const reg = nitf_PluginRegistry_getInstanceLog(&error, log);
     if (reg == NULL)
     {
         return NITF_FAILURE;
@@ -808,24 +817,29 @@ nitf_PluginRegistry_loadDir(const char* dirName, nitf_Error* error)
 }
 
 NITFAPI(NITF_BOOL)
-nitf_PluginRegistry_TREHandlerExists(const char* ident)
+nitf_PluginRegistry_TREHandlerExistsLog(const char* ident, FILE* log)
 {
     return nitf_PluginRegistry_internalHandlerExists(
-            ident, nitf_PluginRegistry_internalTREHandlerExists);
+        ident, nitf_PluginRegistry_internalTREHandlerExists, log);
+}
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_TREHandlerExists(const char* ident)
+{
+    return nitf_PluginRegistry_TREHandlerExistsLog(ident, stderr);
 }
 
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_compressionHandlerExists(const char* ident)
 {
     return nitf_PluginRegistry_internalHandlerExists(
-            ident, nitf_PluginRegistry_internalCompressionHandlerExists);
+            ident, nitf_PluginRegistry_internalCompressionHandlerExists, stderr);
 }
 
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_decompressionHandlerExists(const char* ident)
 {
     return nitf_PluginRegistry_internalHandlerExists(
-            ident, nitf_PluginRegistry_internalDecompressionHandlerExists);
+            ident, nitf_PluginRegistry_internalDecompressionHandlerExists, stderr);
 }
 
 NITFPROT(NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION)
