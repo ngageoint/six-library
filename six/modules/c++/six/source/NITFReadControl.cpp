@@ -95,11 +95,18 @@ six::PixelType getPixelType(const nitf::ImageSubheader& subheader)
 
 namespace six
 {
-NITFReadControl::NITFReadControl()
+NITFReadControl::NITFReadControl(FILE* log)
 {
     // Make sure that if we use XML_DATA_CONTENT that we've loaded it into the
     // singleton PluginRegistry
-    loadXmlDataContentHandler();
+    loadXmlDataContentHandler(log);
+}
+// This can generate output from implicitConstruct() complaining about NITF_PLUGIN_PATH
+// not being set; often the warning is benign and is just confusing.  Provide a way to turn
+// it off (FILE* log = NULL) without upsetting existing code.
+NITFReadControl::NITFReadControl()
+    : NITFReadControl(stderr) // existing/legacy behavior
+{
 }
 
 DataType NITFReadControl::getDataType(const nitf::Record& record)

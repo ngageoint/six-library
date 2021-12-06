@@ -54,6 +54,7 @@ namespace six
 struct NITFReadControl : public ReadControl
 {
     //!  Constructor
+    NITFReadControl(FILE* log);
     NITFReadControl();
 
     //!  Destructor

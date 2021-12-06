@@ -183,6 +183,8 @@ void loadPluginDir(const std::string& pluginDir);
  * and should not need to be called directly.
  */
 void loadXmlDataContentHandler();
+void loadXmlDataContentHandler(FILE* log);
+
 
 /*
  * Parses the XML in 'xmlStream' and converts it into a Data object

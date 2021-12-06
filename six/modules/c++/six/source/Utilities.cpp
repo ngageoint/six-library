@@ -1107,13 +1107,20 @@ void six::loadPluginDir(const std::string& pluginDir)
     nitf::PluginRegistry::loadDir(pluginDir);
 }
 
-void six::loadXmlDataContentHandler()
+void six::loadXmlDataContentHandler(FILE* log)
 {
-    if (!nitf::PluginRegistry::treHandlerExists("XML_DATA_CONTENT"))
+    // This can generate output from implicitConstruct() complaining about NITF_PLUGIN_PATH
+    // not being set; often the warning is benign and is just confusing.  Provide a way to turn
+    // it off (FILE* log = NULL) without upsetting existing code.
+    if (!nitf::PluginRegistry::treHandlerExists("XML_DATA_CONTENT", log))
     {
         nitf::PluginRegistry::registerTREHandler(XML_DATA_CONTENT_init,
                                                  XML_DATA_CONTENT_handler);
     }
+}
+void six::loadXmlDataContentHandler()
+{
+    loadXmlDataContentHandler(stderr); // existing/legacy behavior
 }
 
 mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
