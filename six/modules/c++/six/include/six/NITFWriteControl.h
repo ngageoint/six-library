@@ -84,14 +84,14 @@ class NITFWriteControl : public WriteControl
 public:
 
     //! Constructor. Must call initialize to use.
-    NITFWriteControl();
+    NITFWriteControl(FILE* log = stderr);
     ~NITFWriteControl() noexcept {}
 
     /*!
      * Constructor. Calls initialize.
      * \param container The data container
      */
-    NITFWriteControl(std::shared_ptr<Container>);
+    NITFWriteControl(std::shared_ptr<Container>, FILE* log = stderr);
     NITFWriteControl(std::unique_ptr<Data>&&);
 
 
@@ -103,7 +103,11 @@ public:
      */
     NITFWriteControl(const six::Options& options,
                      std::shared_ptr<Container> container,
-                     const XMLControlRegistry* xmlRegistry = nullptr);
+                     const XMLControlRegistry* xmlRegistry = nullptr, FILE* log=stderr);
+    NITFWriteControl(const six::Options& options, std::shared_ptr<Container> container,
+        const XMLControlRegistry&, FILE* log=stderr);
+    NITFWriteControl(const six::Options& options, std::shared_ptr<Container> container,
+        FILE* log);
 
     //! Noncopyable
     NITFWriteControl(const NITFWriteControl&) = delete;

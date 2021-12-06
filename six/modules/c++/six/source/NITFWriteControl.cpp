@@ -41,31 +41,37 @@
 
 namespace six
 {
-NITFWriteControl::NITFWriteControl()
+NITFWriteControl::NITFWriteControl(FILE* log/* = stderr*/)
 {
-    mNITFHeaderCreator.reset(new six::NITFHeaderCreator());
+    mNITFHeaderCreator.reset(new six::NITFHeaderCreator(log));
 }
 
-NITFWriteControl::NITFWriteControl(std::shared_ptr<Container> container)
+NITFWriteControl::NITFWriteControl(std::shared_ptr<Container> container, FILE* log/* = stderr*/)
 {
-    mNITFHeaderCreator.reset(new six::NITFHeaderCreator(container));
+    mNITFHeaderCreator.reset(new six::NITFHeaderCreator(container, log));
 }
 NITFWriteControl::NITFWriteControl(std::unique_ptr<Data>&& pData)
     : NITFWriteControl(std::make_shared<six::Container>(std::move(pData)))
 {
 }
-
-
-NITFWriteControl::NITFWriteControl(const six::Options& options,
-                                   std::shared_ptr<Container> container,
-                                   const XMLControlRegistry* xmlRegistry)
+NITFWriteControl::NITFWriteControl(const six::Options& options, std::shared_ptr<Container> container,
+    const XMLControlRegistry* xmlRegistry /*=nullptr*/, FILE* log /*= stderr*/)
 {
-    mNITFHeaderCreator.reset(new six::NITFHeaderCreator(options, container));
+    mNITFHeaderCreator.reset(new six::NITFHeaderCreator(options, container, log));
     if (xmlRegistry)
     {
         // Indirecting through *Impl to avoid virtual function call in ctor
         setXMLControlRegistryImpl(xmlRegistry);
     }
+}
+NITFWriteControl::NITFWriteControl(const six::Options& options, std::shared_ptr<Container> container,
+    FILE* log) : NITFWriteControl(options, container, nullptr /*xmlRegistry*/, log)
+{
+}
+NITFWriteControl::NITFWriteControl(const six::Options& options, std::shared_ptr<Container> container,
+    const XMLControlRegistry& xmlRegistry, FILE* log/*= stderr*/) :
+    NITFWriteControl(options, container, &xmlRegistry, log)
+{
 }
 
 void NITFWriteControl::setXMLControlRegistryImpl(
