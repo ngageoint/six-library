@@ -74,10 +74,7 @@ public:
 
     ScopedCloneablePtr(const ScopedCloneablePtr& rhs)
     {
-        if (rhs.mPtr.get())
-        {
-            mPtr.reset(rhs.mPtr->clone());
-        }
+        *this = rhs;
     }
 
     const ScopedCloneablePtr&
@@ -85,13 +82,14 @@ public:
     {
         if (this != &rhs)
         {
-            if (rhs.mPtr.get())
+            auto rhs_ptr = rhs.get();
+            if (rhs_ptr != nullptr)
             {
-                mPtr.reset(rhs.mPtr->clone());
+                reset(rhs_ptr->clone());
             }
             else
             {
-                mPtr.reset();
+                reset();
             }
         }
 
@@ -103,17 +101,19 @@ public:
 
     bool operator==(const ScopedCloneablePtr<T>& rhs) const
     {
-        if (get() == nullptr && rhs.get() == nullptr)
+        auto ptr = get();
+        auto rhs_ptr = rhs.get();
+        if (ptr == nullptr && rhs_ptr == nullptr)
         {
             return true;
         }
 
-        if (get() == nullptr || rhs.get() == nullptr)
+        if (ptr == nullptr || rhs_ptr == nullptr)
         {
             return false;
         }
 
-        return (*(this->mPtr) == *rhs);
+        return *ptr == *rhs_ptr;
     }
 
     bool operator!=(const ScopedCloneablePtr<T>& rhs) const
@@ -128,12 +128,12 @@ public:
 
     T& operator*() const
     {
-        return *mPtr;
+        return *get();
     }
 
     T* operator->() const
     {
-        return mPtr.get();
+        return get();
     }
 
     void reset(T* ptr = nullptr)

@@ -206,7 +206,7 @@ public:
  */
 
 #define DECLARE_CLASS_IN_operator_function_(Name_, Package_) \
-void operator()(Package_##_##Name_ * nativeObject) override \
+void operator()(Package_##_##Name_ * nativeObject) noexcept(false) override \
       { Package_##_##Name_##_destruct(&nativeObject); }
  
 #ifdef _MSC_VER
