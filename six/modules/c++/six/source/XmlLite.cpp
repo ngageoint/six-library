@@ -96,13 +96,19 @@ xml::lite::Element* XmlLite::newElement(const std::string& name,
 }
 #endif
 
-xml::lite::Element* XmlLite::createString(const std::string& name,
-        const std::string& uri, const std::string& p, xml::lite::Element* parent) const
+xml::lite::Element& XmlLite::createString(const std::string& name,
+        const std::string& uri, const std::string& p, xml::lite::Element& parent) const
 {
-    xml::lite::Element* const elem = newElement(name, uri, p, parent);
-    addClassAttributes(*elem, "xs:string");
+    auto pElem = newElement(name, uri, p, &parent);
+    auto& elem = *pElem;
+    addClassAttributes(elem, "xs:string");
 
     return elem;
+}
+xml::lite::Element& XmlLite::createString(const std::string& name,
+    const std::string& p, xml::lite::Element& parent) const
+{
+    return createString(name, mDefaultURI, p, parent);
 }
 
 #if CODA_OSS_lib_char8_t
@@ -169,10 +175,15 @@ xml::lite::Element* XmlLite::createDouble(const std::string& name,
 
     return elem;
 }
-xml::lite::Element* XmlLite::createDouble(const std::string& name, double p,
-        xml::lite::Element* parent) const
+xml::lite::Element& XmlLite::createDouble(const std::string& name, double p,
+        xml::lite::Element& parent) const
 {
-    return createDouble(name, mDefaultURI, p, parent);
+    return * createDouble(name, mDefaultURI, p, &parent);
+}
+xml::lite::Element* XmlLite::createDouble(const std::string& name, const std::optional<double>& p,
+    xml::lite::Element* parent) const
+{
+    return & createDouble(name, p.value(), *parent);
 }
 
 xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name,
