@@ -24,7 +24,7 @@ TEST_FILTER     = 'test_1band_rw_line.c ' \
                   'test_ImageIO_read_data.c ' \
                   'test_ImageIO_writePattern.c'
 
-SUBDIRS = 'shared apps'
+SUBDIRS = 'shared apps tests unittests'
 
 distclean = lambda p: None
 

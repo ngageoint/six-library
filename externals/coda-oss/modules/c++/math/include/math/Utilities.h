@@ -66,7 +66,7 @@ template <typename T> inline bool isNaN(T value) noexcept
 // https://man7.org/linux/man-pages/man3/sincos.3.html
 void SinCos(float angle, float& sin, float& cos);
 void SinCos(double angle, double& sin, double& cos);
-//void SinCos(long double angle, long double& sin, long double& cos);
+void SinCos(long double angle, long double& sin, long double& cos);
 
 /*
  * Calculate the binomial coefficient
