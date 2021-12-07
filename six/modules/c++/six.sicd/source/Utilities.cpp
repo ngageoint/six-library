@@ -79,7 +79,7 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
 
 std::complex<float> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
 {
-    double A = 0.0;
+    long double A = 0.0;
     if (pAmplitudeTable != nullptr)
     {
         // A = AmpTable( input_amplitude )
@@ -94,12 +94,12 @@ std::complex<float> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitu
 
     // The phase values should be read in (values 0 to 255) and converted to float by doing:
     // P = (1 / 256) * input_value
-    const double P = (1.0 / 256.0) * input_value;
+    const long double P = (1.0 / 256.0) * input_value;
 
     // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
     // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
     const auto angle = 2 * M_PI * P;
-    double sin_angle, cos_angle;
+    long double sin_angle, cos_angle;
     math::SinCos(angle, sin_angle, cos_angle);
 
     const auto real = A * cos_angle;
