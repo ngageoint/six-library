@@ -1011,45 +1011,53 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
         const Measurement* measurement,
         XMLElem parent) const
 {
-    XMLElem measurementElem = newElement("Measurement", parent);
+    assert(measurement != nullptr);
+    assert(parent != nullptr);
+    return &convertMeasurementToXML(*this, *measurement, *parent);
+}
+xml::lite::Element& DerivedXMLParser::convertMeasurementToXML(const DerivedXMLParser& parser,
+    const Measurement& measurement, xml::lite::Element& parent)
+{
+    auto& measurementElem = parser.newElement("Measurement", parent);
 
-    XMLElem projectionElem = newElement("", measurementElem);
+    auto& projectionElem_ = parser.newElement("", measurementElem);
+    auto projectionElem = &projectionElem_;
 
     // NOTE: ReferencePoint is present in all of the ProjectionTypes
     //       so its added here for ease
-    XMLElem referencePointElem = newElement("ReferencePoint", projectionElem);
-    if (measurement->projection->referencePoint.name
+    auto& referencePointElem = parser.newElement("ReferencePoint", projectionElem_);
+    if (measurement.projection->referencePoint.name
             != Init::undefined<std::string>())
     {
-        setAttribute(referencePointElem, "name",
-                    measurement->projection->referencePoint.name);
+        parser.setAttribute(&referencePointElem, "name",
+                    measurement.projection->referencePoint.name);
     }
-    common().createVector3D("ECEF", common().getSICommonURI(),
-                            measurement->projection->referencePoint.ecef,
-                            referencePointElem);
-    common().createRowCol("Point", common().getSICommonURI(),
-                          measurement->projection->referencePoint.rowCol,
-                          referencePointElem);
+    parser.common().createVector3D("ECEF", parser.common().getSICommonURI(),
+                            measurement.projection->referencePoint.ecef,
+                            &referencePointElem);
+    parser.common().createRowCol("Point", parser.common().getSICommonURI(),
+                          measurement.projection->referencePoint.rowCol,
+                          &referencePointElem);
 
-    switch (measurement->projection->projectionType)
+    switch (measurement.projection->projectionType)
     {
     case ProjectionType::POLYNOMIAL:
     {
         projectionElem->setLocalName("PolynomialProjection");
 
-        const PolynomialProjection* const polyProj = dynamic_cast<PolynomialProjection*>(measurement->projection.get());
+        const PolynomialProjection* const polyProj = dynamic_cast<PolynomialProjection*>(measurement.projection.get());
 
-        common().createPoly2D("RowColToLat", polyProj->rowColToLat, projectionElem);
-        common().createPoly2D("RowColToLon", polyProj->rowColToLon, projectionElem);
+        parser.common().createPoly2D("RowColToLat", polyProj->rowColToLat, projectionElem);
+        parser.common().createPoly2D("RowColToLon", polyProj->rowColToLon, projectionElem);
 
         // optional
         if (polyProj->rowColToAlt != Init::undefined<Poly2D>())
         {
-            common().createPoly2D("RowColToAlt", polyProj->rowColToAlt, projectionElem);
+            parser.common().createPoly2D("RowColToAlt", polyProj->rowColToAlt, projectionElem);
         }
 
-        common().createPoly2D("LatLonToRow", polyProj->latLonToRow, projectionElem);
-        common().createPoly2D("LatLonToCol", polyProj->latLonToCol, projectionElem);
+        parser.common().createPoly2D("LatLonToRow", polyProj->latLonToRow, projectionElem);
+        parser.common().createPoly2D("LatLonToCol", polyProj->latLonToCol, projectionElem);
     }
         break;
 
@@ -1057,12 +1065,12 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("GeographicProjection");
 
-        const GeographicProjection* const geographicProj = dynamic_cast<GeographicProjection*>(measurement->projection.get());
+        const GeographicProjection* const geographicProj = dynamic_cast<GeographicProjection*>(measurement.projection.get());
 
-        common().createRowCol("SampleSpacing",
+        parser.common().createRowCol("SampleSpacing",
                               geographicProj->sampleSpacing,
                               projectionElem);
-        common().createPoly2D("TimeCOAPoly",
+        parser.common().createPoly2D("TimeCOAPoly",
                               geographicProj->timeCOAPoly,
                               projectionElem);
     }
@@ -1072,20 +1080,20 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("PlaneProjection");
 
-        const PlaneProjection* const planeProj = dynamic_cast<PlaneProjection*>(measurement->projection.get());
+        const PlaneProjection* const planeProj = dynamic_cast<PlaneProjection*>(measurement.projection.get());
 
-        common().createRowCol("SampleSpacing",
+        parser.common().createRowCol("SampleSpacing",
                               planeProj->sampleSpacing,
                               projectionElem);
-        common().createPoly2D("TimeCOAPoly",
+        parser.common().createPoly2D("TimeCOAPoly",
                               planeProj->timeCOAPoly,
                               projectionElem);
 
-        XMLElem productPlaneElem = newElement("ProductPlane", projectionElem);
-        common().createVector3D("RowUnitVector",
+        auto productPlaneElem = parser.newElement("ProductPlane", projectionElem);
+        parser.common().createVector3D("RowUnitVector",
                                 planeProj->productPlane.rowUnitVector,
                                 productPlaneElem);
-        common().createVector3D("ColUnitVector",
+        parser.common().createVector3D("ColUnitVector",
                                 planeProj->productPlane.colUnitVector,
                                 productPlaneElem);
     }
@@ -1095,21 +1103,21 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("CylindricalProjection");
 
-        const CylindricalProjection* const cylindricalProj = dynamic_cast<CylindricalProjection*>(measurement->projection.get());
+        const CylindricalProjection* const cylindricalProj = dynamic_cast<CylindricalProjection*>(measurement.projection.get());
 
-        common().createRowCol("SampleSpacing",
+        parser.common().createRowCol("SampleSpacing",
                               cylindricalProj->sampleSpacing,
                               projectionElem);
-        common().createPoly2D("TimeCOAPoly",
+        parser.common().createPoly2D("TimeCOAPoly",
                               cylindricalProj->timeCOAPoly,
                               projectionElem);
-        common().createVector3D("StripmapDirection",
+        parser.common().createVector3D("StripmapDirection",
                                 cylindricalProj->stripmapDirection,
                                 projectionElem);
         // optional
         if (cylindricalProj->curvatureRadius != Init::undefined<double>())
         {
-            createDouble("CurvatureRadius",
+            parser.createDouble("CurvatureRadius",
                          cylindricalProj->curvatureRadius,
                          projectionElem);
         }
@@ -1120,9 +1128,9 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
         throw except::Exception(Ctxt("Unknown projection type!"));
     }
 
-    common().createRowCol("PixelFootprint",
-                          measurement->getPixelFootprint(),
-                          measurementElem);
+    parser.common().createRowCol("PixelFootprint",
+                          measurement.getPixelFootprint(),
+                          &measurementElem);
 
     return measurementElem;
 }

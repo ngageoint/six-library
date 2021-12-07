@@ -1343,3 +1343,35 @@ void six::getErrors(const ErrorStatistics* errorStats,
         }
     }
 }
+
+std::filesystem::path six::testing::findRootDir(const std::filesystem::path& dir)
+{
+    using namespace std::filesystem;
+    const auto six = dir / "six";
+    const auto externals = dir / "externals";
+    const auto six_sln = dir / "six.sln";
+    if (is_directory(six) && is_directory(externals) && is_regular_file(six_sln))
+    {
+        return dir;
+    }
+    const auto parent = dir.parent_path();
+    return findRootDir(parent);
+}
+
+std::filesystem::path six::testing::buildRootDir(const std::filesystem::path& argv0)
+{
+    auto platform = sys::Platform; // "conditional expression is constant"
+    if (platform == sys::PlatformType::Windows)
+    {
+        // On Windows ... in Visual Studio or stand-alone?
+        if (argv0.filename() == "Test.exe") // Google Test in Visual Studio
+        {
+            const auto cwd = std::filesystem::current_path();
+            const auto root_dir = cwd.parent_path().parent_path();
+            return root_dir;
+        }
+    }
+
+    // Linux or stand-alone
+    return six::testing::findRootDir(argv0);
+}

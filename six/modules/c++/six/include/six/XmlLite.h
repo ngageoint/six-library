@@ -95,14 +95,22 @@ struct XmlLite final
     }
 
     // generic element creation methods, w/URI
+    xml::lite::Element& createString(const std::string& name,
+        const std::string& uri, const std::string& p,
+        xml::lite::Element&) const;
     xml::lite::Element* createString(const std::string& name,
-            const std::string& uri, const std::string& p = "",
-            xml::lite::Element* parent = nullptr) const;
+        const std::string& uri, const std::string& p = "",
+        xml::lite::Element* parent = nullptr) const
+    {
+        return &createString(name, uri, p, *parent);
+    }
     #if CODA_OSS_lib_char8_t
     xml::lite::Element* createString(const std::string& name,
         const std::string& uri, const std::u8string& p,
         xml::lite::Element* parent = nullptr) const;
     #endif
+    xml::lite::Element& createString(const std::string& name, const std::string&, xml::lite::Element& parent) const;
+
     template<typename T>
     xml::lite::Element* createSixString(const std::string& name,
         const std::string& uri, const T& t,
@@ -112,9 +120,9 @@ struct XmlLite final
     }
 
     template <typename T>
-    xml::lite::Element* createStringFromEnum(const std::string& name,
+    xml::lite::Element& createStringFromEnum(const std::string& name,
                                  const T& enumVal,
-                                 xml::lite::Element* parent) const
+                                 xml::lite::Element& parent) const
     {
         if (six::Init::isUndefined(enumVal.value))
         {
@@ -160,9 +168,9 @@ struct XmlLite final
 
     // generic element creation methods, using default URI
     template<typename T>
-    xml::lite::Element* createString(const std::string& name, const T& t,
-            xml::lite::Element* parent = nullptr) const {
-        return createString_(name, t.toString(), parent);
+    xml::lite::Element& createString(const std::string& name, const T& t,
+            xml::lite::Element& parent) const {
+        return * createString_(name, t.toString(), &parent);
     }
     template<typename T>
     xml::lite::Element* createSixString(const std::string& name, const T& t, // six::toString(t) isntead of t.toString()
@@ -174,13 +182,12 @@ struct XmlLite final
         return createString_(name, p, parent);
     }
     template<typename T>
-    xml::lite::Element* createInt(const std::string& name, T p = 0,
-            xml::lite::Element* parent = nullptr) const
+    xml::lite::Element& createInt(const std::string& name, T p,
+            xml::lite::Element& parent) const
     {
-        return createInt_(name, gsl::narrow_cast<int>(p), parent);
+        return * createInt_(name, gsl::narrow_cast<int>(p), &parent);
     }
-    xml::lite::Element* createDouble(const std::string& name, double p = 0,
-            xml::lite::Element* parent = nullptr) const;
+    xml::lite::Element& createDouble(const std::string& name, double p, xml::lite::Element& parent ) const;
     xml::lite::Element* createDouble(const std::string& name, const std::optional<double>& p,
         xml::lite::Element* parent = nullptr) const;
     xml::lite::Element* createOptionalDouble(const std::string& name, const double& p,
@@ -241,15 +248,15 @@ struct XmlLite final
 
     void parseDateTime(const xml::lite::Element& element, DateTime& value) const;
 
-    static void setAttribute(xml::lite::Element* e, const std::string& name,
+    static void setAttribute(xml::lite::Element& e, const std::string& name,
         const std::string& s, const std::string& uri = "")
     {
-        setAttribute_(e, name,s, uri);
+        setAttribute_(&e, name,s, uri);
     }
-    static void setAttribute(xml::lite::Element* e, const std::string& name,
+    static void setAttribute(xml::lite::Element& e, const std::string& name,
         size_t i, const std::string& uri = "")
     {
-        setAttribute_(e, name, std::to_string(i), uri);
+        setAttribute_(&e, name, std::to_string(i), uri);
     }
 
     static xml::lite::Element* getOptional(const xml::lite::Element& parent, const std::string& tag);
@@ -289,10 +296,10 @@ private:
     Logger mLogger;
 };
 
- template<> inline xml::lite::Element* XmlLite::createString(const std::string& name,
-						      const std::string& p, xml::lite::Element* parent) const
+ template<> inline xml::lite::Element& XmlLite::createString(const std::string& name,
+						      const std::string& p, xml::lite::Element& parent) const
   {
-    return createString_(name, p, parent);
+    return *createString_(name, p, &parent);
   }
 }
 

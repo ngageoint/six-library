@@ -45,6 +45,18 @@ struct DerivedXMLParser : public six::XMLParser
     DerivedXMLParser& operator=(DerivedXMLParser&&) = delete;
     virtual ~DerivedXMLParser() = default;
 
+    const six::SICommonXMLParser& common() const
+    {
+        return *(mCommon.get());
+    }
+
+    static xml::lite::Element& convertMeasurementToXML(const DerivedXMLParser&,
+        const Measurement&, xml::lite::Element& parent);
+
+    XMLElem createLUTImpl(const LUT* l, XMLElem lutElem) const;
+    virtual XMLElem createLUT(const std::string& name, const LUT* l,
+        XMLElem parent = nullptr) const;
+
 protected:
     DerivedXMLParser(const std::string& version,
         std::unique_ptr<six::SICommonXMLParser>&& comParser,
@@ -77,11 +89,6 @@ protected:
                                         XMLElem parent = nullptr) const = 0;
 
     static const char SFA_URI[];
-
-    const six::SICommonXMLParser& common() const
-    {
-        return *(mCommon.get());
-    }
 
     static
     void getAttributeList(const xml::lite::Attributes& attributes,
@@ -142,9 +149,6 @@ protected:
                                const DateTime* value,
                                const std::string& uri = "");
 
-    virtual XMLElem createLUT(const std::string& name, const LUT *l,
-            XMLElem parent = nullptr) const;
-    XMLElem createLUTImpl(const LUT *l, XMLElem lutElem) const;
     XMLElem createFootprint(const std::string& name,
                             const std::string& cornerName,
                             const LatLonCorners& corners,
