@@ -83,13 +83,14 @@ public:
     {
         if (this != &rhs)
         {
-            if (rhs.mPtr.get())
+            auto rhs_ptr = rhs.get();
+            if (rhs_ptr != nullptr)
             {
-                mPtr = make::unique<T>(*rhs.mPtr);
+                reset(make::unique<T>(*rhs_ptr));
             }
             else
             {
-                mPtr.reset();
+                reset();
             }
         }
 
@@ -101,17 +102,19 @@ public:
 
     bool operator==(const ScopedCopyablePtr<T>& rhs) const
     {
-        if (get() == nullptr && rhs.get() == nullptr)
+        auto ptr = get();
+        auto rhs_ptr = rhs.get();
+        if (ptr == nullptr && rhs_ptr == nullptr)
         {
             return true;
         }
 
-        if (get() == nullptr || rhs.get() == nullptr)
+        if (ptr == nullptr || rhs_ptr == nullptr)
         {
             return false;
         }
 
-        return (*(this->mPtr) == *rhs);
+        return *ptr == *rhs_ptr;
     }
 
     bool operator!=(const ScopedCopyablePtr<T>& rhs) const
@@ -132,12 +135,12 @@ public:
 
     T& operator*() const
     {
-        return *mPtr;
+        return *get();
     }
 
     T* operator->() const
     {
-        return mPtr.get();
+        return get();
     }
 
     void reset(T* ptr = nullptr)

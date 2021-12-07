@@ -51,20 +51,27 @@
     #endif
 #endif
 
-#define DECLARE_EXTENDED_EXCEPTION(_Name, _Base) \
-  struct _Name##Exception : public _Base \
+#define DECLARE_EXTENDED_EXCEPTION_(_Name, Exception_, _Base, getType_specifiers) \
+  struct _Name##Exception_ : public _Base \
   { \
-      _Name##Exception() = default; virtual ~_Name##Exception() = default; \
-      _Name##Exception(const _Name##Exception&) = default;  _Name##Exception& operator=(const _Name##Exception&) = default; \
-      _Name##Exception(_Name##Exception&&) = default;  _Name##Exception& operator=(_Name##Exception&&) = default; \
-      _Name##Exception(const except::Context& c) : _Base(c){} \
-      _Name##Exception(const std::string& msg) : _Base(msg){} \
-      _Name##Exception(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
+      _Name##Exception_() = default; virtual ~_Name##Exception_() = default; \
+      _Name##Exception_(const _Name##Exception_&) = default;  _Name##Exception_& operator=(const _Name##Exception_&) = default; \
+      _Name##Exception_(_Name##Exception_&&) = default;  _Name##Exception_& operator=(_Name##Exception_&&) = default; \
+      _Name##Exception_(const except::Context& c) : _Base(c){} \
+      _Name##Exception_(const std::string& msg) : _Base(msg){} \
+      _Name##Exception_(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
+      _Name##Exception_(const except::Throwable11& t, const except::Context& c) : _Base(t, c){} \
       CODA_OSS_except_Exception_suppress_26447_BEGIN_ \
-      std::string getType() const override { return #_Name"Exception"; } \
+      std::string getType() getType_specifiers { return #_Name #Exception_; } \
      CODA_OSS_except_Exception_suppress_26447_END_ };
+#define DECLARE_EXTENDED_EXCEPTION(_Name, _Base) \
+    DECLARE_EXTENDED_EXCEPTION_(_Name, Exception, _Base, const override)
+#define DECLARE_EXTENDED_EXCEPTION11(_Name, _Base) \
+    DECLARE_EXTENDED_EXCEPTION_(_Name, Exception11, _Base, const noexcept override)
 
-#define DECLARE_EXCEPTION(_Name) DECLARE_EXTENDED_EXCEPTION(_Name, except::Exception)
+#define DECLARE_EXCEPTION(_Name) \
+    DECLARE_EXTENDED_EXCEPTION(_Name, except::Exception) \
+    DECLARE_EXTENDED_EXCEPTION11(_Name, except::Exception11)
 
 namespace except
 {
@@ -98,6 +105,9 @@ struct Exception : public Throwable
         Throwable(t, c)
     {
     }
+    Exception(const Throwable11& t, const Context& c) : Throwable(t, c)
+    {
+    }
 
     /*!
      * Constructor.  Takes a message
@@ -111,6 +121,45 @@ struct Exception : public Throwable
     std::string getType() const override
     {
         return "Exception";
+    }
+};
+
+struct Exception11 : public Throwable11
+{
+    Exception11() = default;
+    virtual ~Exception11() = default;
+
+    /*!
+     * Constructor. Takes a Context
+     * \param c The Context
+     */
+    Exception11(const Context& c) : Throwable11(c)
+    {
+    }
+
+    /*!
+     * Constructor. Takes an Throwable and a Context
+     * \param t The Throwable
+     * \param c The Context
+     */
+    Exception11(const Throwable11& t, const Context& c) : Throwable11(t, c)
+    {
+    }
+    Exception11(const Throwable& t, const Context& c) : Throwable11(t, c)
+    {
+    }
+
+    /*!
+     * Constructor.  Takes a message
+     * \param message The message
+     */
+    Exception11(const std::string& message) : Throwable11(message)
+    {
+    }
+
+    std::string getType() const noexcept override
+    {
+        return "Exception11";
     }
 };
 

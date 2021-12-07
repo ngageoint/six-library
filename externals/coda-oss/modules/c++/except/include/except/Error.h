@@ -37,17 +37,24 @@
 /*!
  * Useful macro for defining Exception classes
  */
-#define DECLARE_EXTENDED_ERROR(_Name, _Base) \
-  struct _Name##Error : public _Base \
+#define DECLARE_EXTENDED_ERROR_(_Name, Error_, _Base, getType_specifiers) \
+  struct _Name##Error_ : public _Base \
   { \
-      _Name##Error() = default; virtual ~_Name##Error() = default; \
-      _Name##Error(const except::Context& c) : _Base(c){} \
-      _Name##Error(const std::string& msg) : _Base(msg){} \
-      _Name##Error(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
-      std::string getType() const override { return #_Name; } \
+      _Name##Error_() = default; virtual ~_Name##Error_() = default; \
+      _Name##Error_(const except::Context& c) : _Base(c){} \
+      _Name##Error_(const std::string& msg) : _Base(msg){} \
+      _Name##Error_(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
+      _Name##Error_(const except::Throwable11& t, const except::Context& c) : _Base(t, c){} \
+      std::string getType() getType_specifiers { return #_Name; } \
   };
+#define DECLARE_EXTENDED_ERROR(_Name, _Base) \
+    DECLARE_EXTENDED_ERROR_(_Name, Error, _Base, const override)
+#define DECLARE_EXTENDED_ERROR11(_Name, _Base) \
+    DECLARE_EXTENDED_ERROR_(_Name, Error11, _Base,  const noexcept override)
 
-#define DECLARE_ERROR(_Name) DECLARE_EXTENDED_ERROR(_Name, except::Error)
+#define DECLARE_ERROR(_Name) \
+    DECLARE_EXTENDED_ERROR(_Name, except::Error); \
+    DECLARE_EXTENDED_ERROR11(_Name, except::Error11)
 
 namespace except
 {
@@ -92,10 +99,52 @@ struct Error : public Throwable
         Throwable(t, c)
     {
     }
+    Error(const Throwable11& t, const Context& c) : Throwable(t, c)
+    {
+    }
 
     std::string getType() const override 
     {
         return "Error";
+    }
+};
+
+struct Error11 : public Throwable11
+{
+    Error11() = default;
+    virtual ~Error11() = default;
+
+    /*!
+     * Constructor. Takes a Context
+     * \param c The Context
+     */
+    Error11(const Context& c) : Throwable11(c)
+    {
+    }
+
+    /*!
+     * Constructor.  Takes a message
+     * \param message The message
+     */
+    Error11(const std::string& message) : Throwable11(message)
+    {
+    }
+
+    /*!
+     * Constructor. Takes an Throwable and a Context
+     * \param t The Throwable
+     * \param c The Context
+     */
+    Error11(const Throwable11& t, const Context& c) : Throwable11(t, c)
+    {
+    }
+    Error11(const Throwable& t, const Context& c) : Throwable11(t, c)
+    {
+    }
+
+    std::string getType() const noexcept override
+    {
+        return "Error11";
     }
 };
 
