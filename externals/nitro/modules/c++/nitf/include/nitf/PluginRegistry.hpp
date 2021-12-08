@@ -82,6 +82,7 @@ namespace PluginRegistry
      *
      * \return true if a TRE handler exists, false otherwise
      */
+    extern NITRO_NITFCPP_API bool treHandlerExists(const std::string& ident, FILE* log) noexcept; // legacy/default: log=stderr
     extern NITRO_NITFCPP_API bool treHandlerExists(const std::string& ident) noexcept;
 
     /*!

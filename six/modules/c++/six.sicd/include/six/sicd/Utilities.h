@@ -446,9 +446,8 @@ public:
      */
     static std::string toXMLString(
             const ComplexData& data,
-            const std::vector<std::string>& schemaPaths =
-                    std::vector<std::string>(),
-            logging::Logger* logger = NULL);
+            const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
+            logging::Logger* logger = nullptr);
 
     /*!
      * Create a fake SICD that's populated enough for

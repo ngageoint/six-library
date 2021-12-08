@@ -68,9 +68,6 @@ class NITFWriteControl : public WriteControl
     template<typename T>
     void do_save(const T& imageData, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
 
-    template<typename T>
-    void save_image(std::span<const T>, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
-
     void save_buffer_list(const BufferList&, nitf::IOInterface& outputFile, const std::vector<std::string>& schemaPaths);
     void save_buffer_list_to_file(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
     {
@@ -87,14 +84,14 @@ class NITFWriteControl : public WriteControl
 public:
 
     //! Constructor. Must call initialize to use.
-    NITFWriteControl();
+    NITFWriteControl(FILE* log = stderr);
     ~NITFWriteControl() noexcept {}
 
     /*!
      * Constructor. Calls initialize.
      * \param container The data container
      */
-    NITFWriteControl(std::shared_ptr<Container>);
+    NITFWriteControl(std::shared_ptr<Container>, FILE* log = stderr);
     NITFWriteControl(std::unique_ptr<Data>&&);
 
 
@@ -106,7 +103,11 @@ public:
      */
     NITFWriteControl(const six::Options& options,
                      std::shared_ptr<Container> container,
-                     const XMLControlRegistry* xmlRegistry = nullptr);
+                     const XMLControlRegistry* xmlRegistry = nullptr, FILE* log=stderr);
+    NITFWriteControl(const six::Options& options, std::shared_ptr<Container> container,
+        const XMLControlRegistry&, FILE* log=stderr);
+    NITFWriteControl(const six::Options& options, std::shared_ptr<Container> container,
+        FILE* log);
 
     //! Noncopyable
     NITFWriteControl(const NITFWriteControl&) = delete;
@@ -298,15 +299,12 @@ public:
         save_buffer_list(list, outputFile, schemaPaths);
     }
 
-    template<typename T>
-    void save_image(std::span<const T> imageData,
-        nitf::IOInterface& outputFile, const std::vector<std::filesystem::path>& schemaPaths)
-    {
-        std::vector<std::string> schemaPaths_;
-        std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
-            [](const std::filesystem::path& p) { return p.string(); });
-        save_image(imageData, outputFile, schemaPaths_);
-    }
+    // Be explicit about the types of images that can be saved; templates are provided below.
+    void save_image(std::span<const std::complex<float>>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
+    void save_image(std::span<const std::complex<short>>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
+    void save_image(std::span<const std::pair<uint8_t, uint8_t>>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
+    void save_image(std::span<const uint8_t>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
+    void save_image(std::span<const uint16_t>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
 
     void save(const NonConstBufferList& list,
               nitf::IOInterface& outputFile,

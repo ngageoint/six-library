@@ -46,7 +46,7 @@ namespace six
 struct NITFHeaderCreator
 {
     //! Constructor. Must call initialize to use.
-    NITFHeaderCreator();
+    NITFHeaderCreator(FILE* log = stderr);
 
     NITFHeaderCreator(const NITFHeaderCreator&) = delete;
     NITFHeaderCreator& operator=(const NITFHeaderCreator&) = delete;
@@ -55,15 +55,15 @@ struct NITFHeaderCreator
      * Constructor. Calls initialize.
      * \param container The data container
      */
-    NITFHeaderCreator(std::shared_ptr<Container> container);
+    NITFHeaderCreator(std::shared_ptr<Container> container, FILE* log = stderr);
 
     /*!
      * Constructor. Calls initialize.
      * \param options Initialization options
      * \param container The data container
      */
-    NITFHeaderCreator(const six::Options& options,
-                      std::shared_ptr<Container> container);
+    NITFHeaderCreator(const six::Options& options, std::shared_ptr<Container> container,
+        FILE* log = stderr);
 
     //!  Destructor.
     virtual ~NITFHeaderCreator() {}

@@ -36,6 +36,9 @@ struct Annotation
     mem::ScopedCopyablePtr<SFAReferenceSystem> spatialReferenceSystem;
     std::vector<mem::ScopedCloneablePtr<SFAGeometry> > objects;
 
+    Annotation() = default;
+    Annotation(const std::string& id) : identifier(id) {}
+
     bool operator==(const Annotation& rhs) const
     {
         return (identifier == rhs.identifier &&

@@ -67,40 +67,10 @@ static fs::path nitfRelativelPath(const fs::path& filename)
 {
     return fs::path("six") / "modules" / "c++" / "six" / "tests" / "nitf" / filename;
 }
-static fs::path findRootDir(const fs::path& dir)
-{
-    const auto six = dir / "six";
-    const auto externals = dir / "externals";
-    const auto six_sln = dir / "six.sln";
-    if (fs::is_directory(six) && fs::is_directory(externals) && fs::is_regular_file(six_sln))
-    {
-        return dir;
-    }
-    const auto parent = dir.parent_path();
-    return findRootDir(parent);
-}
-
-static fs::path buildRootDir()
-{
-    auto platform = sys::Platform; // "conditional expression is constant"
-    if (platform == sys::PlatformType::Windows)
-    {
-        // On Windows ... in Visual Studio or stand-alone?
-        if (argv0().filename() == "Test.exe") // Google Test in Visual Studio
-        {
-            const auto cwd = fs::current_path();
-            const auto root_dir = cwd.parent_path().parent_path();
-            return root_dir;
-        }
-    }
-
-    // Linux or stand-alone
-    return findRootDir(argv0());
-}
 
 static fs::path getNitfPath(const fs::path& filename)
 {
-    const auto root_dir = buildRootDir();
+    const auto root_dir = six::testing::buildRootDir(argv0());
     return root_dir / nitfRelativelPath(filename);
 }
 
@@ -119,7 +89,7 @@ static fs::path nitfPluginRelativelPath()
 }
 static void setNitfPluginPath()
 {
-    const auto path = buildRootDir() / nitfPluginRelativelPath();
+    const auto path = six::testing::buildRootDir(argv0()) / nitfPluginRelativelPath();
     //std::clog << "NITF_PLUGIN_PATH=" << path << "\n";
     sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }

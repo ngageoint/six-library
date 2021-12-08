@@ -21,72 +21,18 @@
  *
  */
 
+#include <assert.h>
+
 #include <sstream>
+
+#include <gsl/gsl.h>
 
 #include <six/SICommonXMLParser10x.h>
 #include <six/sidd/DerivedDataBuilder.h>
 #include <six/sidd/DerivedXMLParser300.h>
+#include <six/sidd/DerivedXMLParser200.h>
 
-namespace
-{
-typedef xml::lite::Element* XMLElem;
-typedef xml::lite::Attributes XMLAttributes;
-
-template <typename T>
-bool isDefined(const T& enumVal)
-{
-    return six::Init::isDefined(enumVal.value);
-}
-
-template <typename T>
-bool isUndefined(const T& enumVal)
-{
-    return six::Init::isUndefined(enumVal.value);
-}
-
-template <typename SmartPtrT>
-void confirmNonNull(const SmartPtrT& ptr,
-                    const std::string& name,
-                    const std::string& suffix = "")
-{
-    if (ptr.get() == nullptr)
-    {
-        std::string msg = name + " is required";
-        if (!suffix.empty())
-        {
-            msg += " " + suffix;
-        }
-
-        throw except::Exception(Ctxt(msg));
-    }
-}
-
-void validateDRAFields(const six::sidd::DRAType& algorithmType,
-                       bool hasDraParameters,
-                       bool hasDraOverrides)
-{
-    if (algorithmType == six::sidd::DRAType::AUTO &&
-        !hasDraParameters)
-    {
-        throw except::Exception(Ctxt(
-            "DRAParameters required for algorithmType AUTO"));
-    }
-
-    if (algorithmType != six::sidd::DRAType::AUTO && hasDraParameters)
-    {
-        throw except::Exception(Ctxt(
-            "DRAParameters invalid for algorithmType " +
-            algorithmType.toString()));
-    }
-
-    if (algorithmType == six::sidd::DRAType::NONE && hasDraOverrides)
-    {
-        throw except::Exception(Ctxt(
-            "DRAOverrides invalid for algorithmType " +
-            algorithmType.toString()));
-    }
-}
-}
+using XMLElem = xml::lite::Element*;
 
 namespace six
 {
@@ -96,24 +42,31 @@ static const char VERSION[] = "3.0.0";
 static const char SI_COMMON_URI[] = "urn:SICommon:1.0";
 static const char ISM_URI[] = "urn:us:gov:ic:ism:13";
 
-DerivedXMLParser300::DerivedXMLParser300(logging::Logger* log,
-                                         bool ownLog) :
+//DerivedXMLParser300::DerivedXMLParser300(std::unique_ptr<logging::Logger>&& log) :
+//    DerivedXMLParser(VERSION,
+//        std::make_unique<six::SICommonXMLParser10x>(versionToURI(VERSION), false, SI_COMMON_URI, *log),
+//        std::move(log)) {  }
+DerivedXMLParser300::DerivedXMLParser300(logging::Logger& log) :
     DerivedXMLParser(VERSION,
-                     std::make_unique<six::SICommonXMLParser10x>(versionToURI(VERSION), false, SI_COMMON_URI, log),
-                     log, ownLog)
-{
-}
+        std::make_unique<six::SICommonXMLParser10x>(versionToURI(VERSION), false, SI_COMMON_URI, log),
+        log) {  }
 
 DerivedData* DerivedXMLParser300::fromXML(
         const xml::lite::Document* doc) const
 {
-    const xml::lite::Element* const root = doc->getRootElement();
+    assert(doc != nullptr);
+    return fromXML(*doc).release();
+}
+std::unique_ptr<DerivedData> DerivedXMLParser300::fromXML(const xml::lite::Document& doc) const
+{
+    const xml::lite::Element* const pRoot = doc.getRootElement();
+    const auto& root = *pRoot;
 
-    XMLElem productCreationElem        = getFirstAndOnly(root, "ProductCreation");
-    XMLElem displayElem                = getFirstAndOnly(root, "Display");
-    XMLElem geoDataElem                = getFirstAndOnly(root, "GeoData");
-    XMLElem measurementElem            = getFirstAndOnly(root, "Measurement");
-    XMLElem exploitationFeaturesElem   = getFirstAndOnly(root, "ExploitationFeatures");
+    auto& productCreationElem        = getFirstAndOnly(root, "ProductCreation");
+    auto& displayElem                = getFirstAndOnly(root, "Display");
+    auto& geoDataElem                = getFirstAndOnly(root, "GeoData");
+    auto& measurementElem            = getFirstAndOnly(root, "Measurement");
+    auto& exploitationFeaturesElem   = getFirstAndOnly(root, "ExploitationFeatures");
     XMLElem productProcessingElem      = getOptional(root, "ProductProcessing");
     XMLElem downstreamReprocessingElem = getOptional(root, "DownstreamReprocessing");
     XMLElem errorStatisticsElem        = getOptional(root, "ErrorStatistics");
@@ -125,63 +78,50 @@ DerivedData* DerivedXMLParser300::fromXML(
 
 
     DerivedDataBuilder builder;
-    DerivedData *data = builder.steal(); //steal it
+    std::unique_ptr<DerivedData> data(builder.steal()); //steal it
 
     // see if PixelType has MONO or RGB
     const PixelType pixelType = six::toType<PixelType>(
-            getFirstAndOnly(displayElem, "PixelType")->getCharacterData());
+            getFirstAndOnly(displayElem, "PixelType").getCharacterData());
     builder.addDisplay(pixelType);
 
     // create GeoData
     builder.addGeoData();
 
     // create Measurement
-    six::ProjectionType projType = ProjectionType::NOT_SET;
-    if (getOptional(measurementElem, "GeographicProjection"))
-        projType = ProjectionType::GEOGRAPHIC;
-    else if (getOptional(measurementElem, "CylindricalProjection"))
-            projType = ProjectionType::CYLINDRICAL;
-    else if (getOptional(measurementElem, "PlaneProjection"))
-        projType = ProjectionType::PLANE;
-    else if (getOptional(measurementElem, "PolynomialProjection"))
-        projType = ProjectionType::POLYNOMIAL;
+    const auto projType = DerivedXMLParser200::getProjectionType(measurementElem);
     builder.addMeasurement(projType);
 
     // create ExploitationFeatures
     std::vector<XMLElem> elements;
-    exploitationFeaturesElem->getElementsByTagName("ExploitationFeatures",
-                                                  elements);
-    builder.addExploitationFeatures(static_cast<unsigned int>(elements.size()));
+    exploitationFeaturesElem.getElementsByTagName("ExploitationFeatures", elements);
+    builder.addExploitationFeatures(gsl::narrow<unsigned int>(elements.size()));
 
-    parseProductCreationFromXML(productCreationElem, data->productCreation.get());
+    parseProductCreationFromXML(productCreationElem, *data->productCreation);
     parseDisplayFromXML(displayElem, *data->display);
-    parseGeoDataFromXML(geoDataElem, data->geoData.get());
-    parseMeasurementFromXML(measurementElem, data->measurement.get());
-    parseExploitationFeaturesFromXML(exploitationFeaturesElem, data->exploitationFeatures.get());
+    parseGeoDataFromXML(geoDataElem, *data->geoData);
+    parseMeasurementFromXML(&measurementElem, data->measurement.get());
+    parseExploitationFeaturesFromXML(&exploitationFeaturesElem, data->exploitationFeatures.get());
 
     if (productProcessingElem)
     {
         builder.addProductProcessing();
-        parseProductProcessingFromXML(productProcessingElem,
-                                      data->productProcessing.get());
+        parseProductProcessingFromXML(*productProcessingElem, *data->productProcessing);
     }
     if (downstreamReprocessingElem)
     {
         builder.addDownstreamReprocessing();
-        parseDownstreamReprocessingFromXML(downstreamReprocessingElem,
-                                           data->downstreamReprocessing.get());
+        parseDownstreamReprocessingFromXML(*downstreamReprocessingElem, *data->downstreamReprocessing);
     }
     if (errorStatisticsElem)
     {
         builder.addErrorStatistics();
-        common().parseErrorStatisticsFromXML(errorStatisticsElem,
-                                             data->errorStatistics.get());
+        common().parseErrorStatisticsFromXML(*errorStatisticsElem, *data->errorStatistics);
     }
     if (radiometricElem)
     {
         builder.addRadiometric();
-        common().parseRadiometryFromXML(radiometricElem,
-                                        data->radiometric.get());
+        common().parseRadiometryFromXML(radiometricElem, data->radiometric.get());
     }
     if (matchInfoElem)
     {
@@ -191,12 +131,12 @@ DerivedData* DerivedXMLParser300::fromXML(
     if (compressionElem)
     {
         builder.addCompression();
-        parseCompressionFromXML(compressionElem, *data->compression);
+        parseCompressionFromXML(*compressionElem, *data->compression);
     }
     if (dedElem)
     {
         builder.addDigitalElevationData();
-        parseDigitalElevationDataFromXML(dedElem, *data->digitalElevationData);
+        parseDigitalElevationDataFromXML(*dedElem, *data->digitalElevationData);
     }
     if (annotationsElem)
     {
@@ -221,10 +161,9 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
 
     convertProductCreationToXML(derived->productCreation.get(), root);
     convertDisplayToXML(*derived->display, root);
-    convertGeoDataToXML(derived->geoData.get(), root);
+    DerivedXMLParser200::convertGeoDataToXML(*this, *derived->geoData, *root);
     convertMeasurementToXML(derived->measurement.get(), root);
-    convertExploitationFeaturesToXML(derived->exploitationFeatures.get(),
-                                     root);
+    convertExploitationFeaturesToXML(derived->exploitationFeatures.get(), root);
 
     // optional
     if (derived->downstreamReprocessing.get())
@@ -235,14 +174,12 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     // optional
     if (derived->errorStatistics.get())
     {
-        common().convertErrorStatisticsToXML(derived->errorStatistics.get(),
-                                             root);
+        common().convertErrorStatisticsToXML(derived->errorStatistics.get(), root);
     }
     // optional
     if (derived->matchInformation.get())
     {
-        common().convertMatchInformationToXML(*derived->matchInformation,
-                                              root);
+        common().convertMatchInformationToXML(*derived->matchInformation, root);
     }
     // optional
     if (derived->radiometric.get())
@@ -252,13 +189,12 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     // optional
     if (derived->compression.get())
     {
-       convertCompressionToXML(*derived->compression, root);
+        DerivedXMLParser200::convertCompressionToXML(*this, *derived->compression, *root);
     }
     // optional
     if (derived->digitalElevationData.get())
     {
-        convertDigitalElevationDataToXML(*derived->digitalElevationData,
-                                         root);
+        DerivedXMLParser200::convertDigitalElevationDataToXML(*this, *derived->digitalElevationData, *root);
     }
     // optional
     if (derived->productProcessing.get())
@@ -283,14 +219,17 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
 
     return doc;
 }
+std::unique_ptr<xml::lite::Document> DerivedXMLParser300::toXML(const DerivedData& data) const
+{
+    return std::unique_ptr<xml::lite::Document>(toXML(&data));
+}
 
 void DerivedXMLParser300::parseDerivedClassificationFromXML(
         const xml::lite::Element* classificationElem,
         DerivedClassification& classification) const
 {
     DerivedXMLParser::parseDerivedClassificationFromXML(classificationElem, classification);
-    const XMLAttributes& classificationAttributes
-        = classificationElem->getAttributes();
+    const auto& classificationAttributes = classificationElem->getAttributes();
 
     getAttributeList(classificationAttributes,
         "ism:compliesWith",
@@ -333,87 +272,79 @@ void DerivedXMLParser300::parseDerivedClassificationFromXML(
         classification.externalNotice);
 }
 
-void DerivedXMLParser300::parseCompressionFromXML(const xml::lite::Element* compressionElem,
+void DerivedXMLParser300::parseCompressionFromXML(const xml::lite::Element& compressionElem,
                                                  Compression& compression) const
 {
-    XMLElem j2kElem = getFirstAndOnly(compressionElem, "J2K");
-    XMLElem originalElem = getFirstAndOnly(j2kElem, "Original");
-    XMLElem parsedElem   = getOptional(j2kElem, "Parsed");
+    auto& j2kElem = getFirstAndOnly(compressionElem, "J2K");
+    auto& originalElem = getFirstAndOnly(j2kElem, "Original");
+    auto parsedElem   = getOptional(j2kElem, "Parsed");
 
     parseJ2KCompression(originalElem, compression.original);
     if (parsedElem)
     {
         compression.parsed.reset(new J2KCompression());
-        parseJ2KCompression(parsedElem, *compression.parsed);
+        parseJ2KCompression(*parsedElem, *compression.parsed);
     }
 }
 
-void DerivedXMLParser300::parseJ2KCompression(const xml::lite::Element* j2kElem,
+void DerivedXMLParser300::parseJ2KCompression(const xml::lite::Element& j2kElem,
                                               J2KCompression& j2k) const
 {
-    parseInt(getFirstAndOnly(j2kElem, "NumWaveletLevels"),
-            j2k.numWaveletLevels);
-    parseInt(getFirstAndOnly(j2kElem, "NumBands"),
-            j2k.numBands);
+    parseInt(getFirstAndOnly(j2kElem, "NumWaveletLevels"), j2k.numWaveletLevels);
+    parseInt(getFirstAndOnly(j2kElem, "NumBands"), j2k.numBands);
 
-    XMLElem layerInfoElems = getFirstAndOnly(j2kElem, "LayerInfo");
+    auto& layerInfoElems = getFirstAndOnly(j2kElem, "LayerInfo");
     std::vector<XMLElem> layerElems;
-    layerInfoElems->getElementsByTagName("Layer", layerElems);
+    layerInfoElems.getElementsByTagName("Layer", layerElems);
 
     const auto numLayers = layerElems.size();
     j2k.layerInfo.resize(numLayers);
 
     for (size_t ii = 0; ii < layerElems.size(); ++ii)
     {
-        parseDouble(getFirstAndOnly(layerElems[ii], "Bitrate"),
-                    j2k.layerInfo[ii].bitRate);
+        parseDouble(getFirstAndOnly(layerElems[ii], "Bitrate"), j2k.layerInfo[ii].bitRate);
     }
 }
 
-void DerivedXMLParser300::parseDisplayFromXML(const xml::lite::Element* displayElem,
+void DerivedXMLParser300::parseDisplayFromXML(const xml::lite::Element& displayElem,
                                               Display& display) const
 {
     //pixelType previously set
-    parseUInt(getFirstAndOnly(displayElem, "NumBands"),
-              display.numBands);
+    parseUInt(getFirstAndOnly(displayElem, "NumBands"), display.numBands);
     XMLElem bandDisplayElem = getOptional(displayElem, "DefaultBandDisplay");
     if (bandDisplayElem)
     {
-        parseUInt(bandDisplayElem, display.defaultBandDisplay);
+        parseUInt(*bandDisplayElem, display.defaultBandDisplay);
     }
 
     std::vector<XMLElem> nonInteractiveProcessingElems;
-    displayElem->getElementsByTagName("NonInteractiveProcessing",
-            nonInteractiveProcessingElems);
-
+    displayElem.getElementsByTagName("NonInteractiveProcessing", nonInteractiveProcessingElems);
     display.nonInteractiveProcessing.resize(nonInteractiveProcessingElems.size());
     for (size_t ii = 0; ii < nonInteractiveProcessingElems.size(); ++ii)
     {
         display.nonInteractiveProcessing[ii].reset(new NonInteractiveProcessing());
-        parseNonInteractiveProcessingFromXML(nonInteractiveProcessingElems[ii],
+        parseNonInteractiveProcessingFromXML(*nonInteractiveProcessingElems[ii],
                 *display.nonInteractiveProcessing[ii]);
     }
 
     std::vector<XMLElem> interactiveProcessingElems;
-    displayElem->getElementsByTagName("InteractiveProcessing",
-            interactiveProcessingElems);
-
+    displayElem.getElementsByTagName("InteractiveProcessing", interactiveProcessingElems);
     display.interactiveProcessing.resize(interactiveProcessingElems.size());
     for (size_t ii = 0; ii < interactiveProcessingElems.size(); ++ii)
     {
         display.interactiveProcessing[ii].reset(new InteractiveProcessing());
-        parseInteractiveProcessingFromXML(interactiveProcessingElems[ii],
+        parseInteractiveProcessingFromXML(*interactiveProcessingElems[ii],
                 *display.interactiveProcessing[ii]);
     }
 
     std::vector<XMLElem> extensions;
-    displayElem->getElementsByTagName("DisplayExtention", extensions);
-    for (size_t ii = 0; ii < extensions.size(); ++ii)
+    displayElem.getElementsByTagName("DisplayExtention", extensions);
+    for (const auto& extension : extensions)
     {
         std::string name;
-        getAttributeIfExists(extensions[ii]->getAttributes(), "name", name);
+        getAttributeIfExists(extension->getAttributes(), "name", name);
         std::string value;
-        parseString(extensions[ii], value);
+        parseString(*extension, value);
         Parameter parameter(value);
         parameter.setName(name);
         display.displayExtensions.push_back(parameter);
@@ -421,57 +352,52 @@ void DerivedXMLParser300::parseDisplayFromXML(const xml::lite::Element* displayE
 }
 
 void DerivedXMLParser300::parseNonInteractiveProcessingFromXML(
-            const xml::lite::Element* procElem,
+            const xml::lite::Element& procElem,
             NonInteractiveProcessing& nonInteractiveProcessing) const
 {
-    XMLElem productGenerationOptions = getFirstAndOnly(procElem,
-            "ProductGenerationOptions");
-    XMLElem rrdsElem = getFirstAndOnly(procElem, "RRDS");
+    auto& productGenerationOptions = getFirstAndOnly(procElem, "ProductGenerationOptions");
+    auto& rrdsElem = getFirstAndOnly(procElem, "RRDS");
 
-    parseProductGenerationOptionsFromXML(productGenerationOptions,
-        nonInteractiveProcessing.productGenerationOptions);
+    parseProductGenerationOptionsFromXML(productGenerationOptions, nonInteractiveProcessing.productGenerationOptions);
     parseRRDSFromXML(rrdsElem, nonInteractiveProcessing.rrds);
 }
 
 void DerivedXMLParser300::parseProductGenerationOptionsFromXML(
-            const xml::lite::Element* optionsElem,
+            const xml::lite::Element& optionsElem,
             ProductGenerationOptions& options) const
 {
     XMLElem bandElem = getOptional(optionsElem, "BandEqualization");
-    XMLElem restoration = getOptional(optionsElem,
-            "ModularTransferFunctionRestoration");
+    XMLElem restoration = getOptional(optionsElem, "ModularTransferFunctionRestoration");
     XMLElem remapElem = getOptional(optionsElem, "DataRemapping");
-    XMLElem correctionElem = getOptional(optionsElem,
-            "AsymmetricPixelCorrection");
+    XMLElem correctionElem = getOptional(optionsElem, "AsymmetricPixelCorrection");
 
     if (bandElem)
     {
         options.bandEqualization.reset(new BandEqualization());
-        parseBandEqualizationFromXML(bandElem, *options.bandEqualization);
+        parseBandEqualizationFromXML(*bandElem, *options.bandEqualization);
     }
 
     if (restoration)
     {
         options.modularTransferFunctionRestoration.reset(new Filter());
-        parseFilterFromXML(restoration,
-                           *options.modularTransferFunctionRestoration);
+        parseFilterFromXML(*restoration, *options.modularTransferFunctionRestoration);
     }
 
     if (remapElem)
     {
         options.dataRemapping.reset(new LookupTable());
-        parseLookupTableFromXML(remapElem, *options.dataRemapping);
+        parseLookupTableFromXML(*remapElem, *options.dataRemapping);
     }
 
     if (correctionElem)
     {
         options.asymmetricPixelCorrection.reset(new Filter());
-        parseFilterFromXML(correctionElem, *options.asymmetricPixelCorrection);
+        parseFilterFromXML(*correctionElem, *options.asymmetricPixelCorrection);
     }
 }
 
 void DerivedXMLParser300::parseLookupTableFromXML(
-            const xml::lite::Element* lookupElem,
+            const xml::lite::Element& lookupElem,
             LookupTable& lookupTable) const
 {
     parseString(getFirstAndOnly(lookupElem, "LUTName"), lookupTable.lutName);
@@ -485,7 +411,7 @@ void DerivedXMLParser300::parseLookupTableFromXML(
         {
             ok = true;
             XMLElem lutInfoElem = getFirstAndOnly(customElem, "LUTInfo");
-            const XMLAttributes& attributes = lutInfoElem->getAttributes();
+            const auto& attributes = lutInfoElem->getAttributes();
             size_t numBands;
             size_t size;
             getAttributeIfExists(attributes, "numLuts", numBands);
@@ -535,7 +461,7 @@ void DerivedXMLParser300::parseLookupTableFromXML(
     }
 }
 
-void DerivedXMLParser300::parseBandEqualizationFromXML(const xml::lite::Element* bandElem,
+void DerivedXMLParser300::parseBandEqualizationFromXML(const xml::lite::Element& bandElem,
                                                        BandEqualization& band) const
 {
     std::string bandAlgo;
@@ -551,16 +477,16 @@ void DerivedXMLParser300::parseBandEqualizationFromXML(const xml::lite::Element*
     }
 
     std::vector<XMLElem> lutElems;
-    bandElem->getElementsByTagName("BandLUT", lutElems);
+    bandElem.getElementsByTagName("BandLUT", lutElems);
     band.bandLUTs.resize(lutElems.size());
     for (size_t ii = 0; ii < lutElems.size(); ++ii)
     {
         band.bandLUTs[ii].reset(new LookupTable());
-        parseLookupTableFromXML(lutElems[ii], *band.bandLUTs[ii]);
+        parseLookupTableFromXML(*lutElems[ii], *band.bandLUTs[ii]);
     }
 }
 
-void DerivedXMLParser300::parseRRDSFromXML(const xml::lite::Element* rrdsElem,
+void DerivedXMLParser300::parseRRDSFromXML(const xml::lite::Element& rrdsElem,
             RRDS& rrds) const
 {
     parseEnum(getFirstAndOnly(rrdsElem, "DownsamplingMethod"), rrds.downsamplingMethod);
@@ -569,18 +495,18 @@ void DerivedXMLParser300::parseRRDSFromXML(const xml::lite::Element* rrdsElem,
     if (antiAliasElem)
     {
         rrds.antiAlias.reset(new Filter());
-        parseFilterFromXML(antiAliasElem, *rrds.antiAlias);
+        parseFilterFromXML(*antiAliasElem, *rrds.antiAlias);
     }
 
     XMLElem interpolationElem = getOptional(rrdsElem, "Interpolation");
     if (interpolationElem)
     {
         rrds.interpolation.reset(new Filter());
-        parseFilterFromXML(interpolationElem, *rrds.interpolation);
+        parseFilterFromXML(*interpolationElem, *rrds.interpolation);
     }
 }
 
-void DerivedXMLParser300::parseFilterFromXML(const xml::lite::Element* filterElem,
+void DerivedXMLParser300::parseFilterFromXML(const xml::lite::Element& filterElem,
     Filter& filter) const
 {
     parseString(getFirstAndOnly(filterElem, "FilterName"), filter.filterName);
@@ -662,7 +588,7 @@ void DerivedXMLParser300::parseKernelFromXML(const xml::lite::Element* kernelEle
         ok = true;
         kernel.custom.reset(new Filter::Kernel::Custom());
         XMLElem filterCoef = getFirstAndOnly(customElem, "FilterCoefficients");
-        const XMLAttributes& attributes = filterCoef->getAttributes();
+        const auto& attributes = filterCoef->getAttributes();
         getAttributeIfExists(attributes, "numRows", kernel.custom->size.row);
         getAttributeIfExists(attributes, "numCols", kernel.custom->size.col);
 
@@ -707,7 +633,7 @@ void DerivedXMLParser300::parseBankFromXML(const xml::lite::Element* bankElem,
         ok = true;
 
         XMLElem filterCoef = getFirstAndOnly(customElem, "FilterCoefficients");
-        const XMLAttributes& attributes = filterCoef->getAttributes();
+        const auto& attributes = filterCoef->getAttributes();
         getAttributeIfExists(attributes, "numPhasings", bank.custom->numPhasings);
         getAttributeIfExists(attributes, "numPoints", bank.custom->numPoints);
 
@@ -727,14 +653,14 @@ void DerivedXMLParser300::parseBankFromXML(const xml::lite::Element* bankElem,
 }
 
 void DerivedXMLParser300::parseInteractiveProcessingFromXML(
-            const xml::lite::Element* interactiveElem,
+            const xml::lite::Element& interactiveElem,
             InteractiveProcessing& interactive) const
 {
-    XMLElem geomElem = getFirstAndOnly(interactiveElem, "GeometricTransform");
-    XMLElem sharpnessElem = getFirstAndOnly(interactiveElem,
+    auto& geomElem = getFirstAndOnly(interactiveElem, "GeometricTransform");
+    auto& sharpnessElem = getFirstAndOnly(interactiveElem,
             "SharpnessEnhancement");
     XMLElem colorElem = getOptional(interactiveElem, "ColorSpaceTransform");
-    XMLElem dynamicElem = getFirstAndOnly(interactiveElem, "DynamicRangeAdjustment");
+    auto& dynamicElem = getFirstAndOnly(interactiveElem, "DynamicRangeAdjustment");
     XMLElem ttcElem = getOptional(interactiveElem, "TonalTransferCurve");
 
     interactive.geometricTransform = GeometricTransform();
@@ -745,35 +671,33 @@ void DerivedXMLParser300::parseInteractiveProcessingFromXML(
     if (colorElem)
     {
         interactive.colorSpaceTransform.reset(new ColorSpaceTransform());
-        parseColorSpaceTransformFromXML(colorElem,
-                                        *interactive.colorSpaceTransform);
+        parseColorSpaceTransformFromXML(*colorElem, *interactive.colorSpaceTransform);
     }
 
-    parseDynamicRangeAdjustmentFromXML(dynamicElem,
-                                       interactive.dynamicRangeAdjustment);
+    parseDynamicRangeAdjustmentFromXML(dynamicElem, interactive.dynamicRangeAdjustment);
 
     if (ttcElem)
     {
         interactive.tonalTransferCurve.reset(new LookupTable());
-        parseLookupTableFromXML(ttcElem, *interactive.tonalTransferCurve);
+        parseLookupTableFromXML(*ttcElem, *interactive.tonalTransferCurve);
     }
 }
 
-void DerivedXMLParser300::parseGeometricTransformFromXML(const xml::lite::Element* geomElem,
+void DerivedXMLParser300::parseGeometricTransformFromXML(const xml::lite::Element& geomElem,
              GeometricTransform& transform) const
 {
-    XMLElem scalingElem = getFirstAndOnly(geomElem, "Scaling");
+    auto& scalingElem = getFirstAndOnly(geomElem, "Scaling");
     parseFilterFromXML(getFirstAndOnly(scalingElem, "AntiAlias"),
         transform.scaling.antiAlias);
     parseFilterFromXML(getFirstAndOnly(scalingElem, "Interpolation"),
         transform.scaling.interpolation);
 
-    XMLElem orientationElem = getFirstAndOnly(geomElem, "Orientation");
+    auto& orientationElem = getFirstAndOnly(geomElem, "Orientation");
     parseEnum(getFirstAndOnly(orientationElem, "ShadowDirection"), transform.orientation.shadowDirection);
 }
 
 void DerivedXMLParser300::parseSharpnessEnhancementFromXML(
-             const xml::lite::Element* sharpElem,
+             const xml::lite::Element& sharpElem,
              SharpnessEnhancement& sharpness) const
 {
     bool ok = false;
@@ -787,7 +711,7 @@ void DerivedXMLParser300::parseSharpnessEnhancementFromXML(
         {
             ok = true;
             sharpness.modularTransferFunctionCompensation.reset(new Filter());
-            parseFilterFromXML(mTFCElem,
+            parseFilterFromXML(*mTFCElem,
                                *sharpness.modularTransferFunctionCompensation);
         }
     }
@@ -795,7 +719,7 @@ void DerivedXMLParser300::parseSharpnessEnhancementFromXML(
     {
         ok = true;
         sharpness.modularTransferFunctionEnhancement.reset(new Filter());
-        parseFilterFromXML(mTFRElem,
+        parseFilterFromXML(*mTFRElem,
                            *sharpness.modularTransferFunctionEnhancement);
     }
     if (!ok)
@@ -807,9 +731,9 @@ void DerivedXMLParser300::parseSharpnessEnhancementFromXML(
 }
 
 void DerivedXMLParser300::parseColorSpaceTransformFromXML(
-            const xml::lite::Element* colorElem, ColorSpaceTransform& transform) const
+            const xml::lite::Element& colorElem, ColorSpaceTransform& transform) const
 {
-    XMLElem manageElem = getFirstAndOnly(colorElem, "ColorManagementModule");
+    auto& manageElem = getFirstAndOnly(colorElem, "ColorManagementModule");
 
     std::string renderIntentStr;
     parseString(getFirstAndOnly(manageElem, "RenderingIntent"), renderIntentStr);
@@ -832,7 +756,7 @@ void DerivedXMLParser300::parseColorSpaceTransformFromXML(
 }
 
 void DerivedXMLParser300::parseDynamicRangeAdjustmentFromXML(
-            const xml::lite::Element* rangeElem,
+            const xml::lite::Element& rangeElem,
             DynamicRangeAdjustment& rangeAdjustment) const
 {
     parseEnum(getFirstAndOnly(rangeElem, "AlgorithmType"), rangeAdjustment.algorithmType);
@@ -841,25 +765,23 @@ void DerivedXMLParser300::parseDynamicRangeAdjustmentFromXML(
     XMLElem parameterElem = getOptional(rangeElem, "DRAParameters");
     XMLElem overrideElem = getOptional(rangeElem, "DRAOverrides");
 
-    validateDRAFields(rangeAdjustment.algorithmType,
+    DerivedXMLParser200::validateDRAFields(rangeAdjustment.algorithmType,
                       parameterElem ? true : false, overrideElem ? true : false);
 
     if (parameterElem)
     {
         rangeAdjustment.draParameters.reset(new DynamicRangeAdjustment::DRAParameters());
-        parseDouble(getFirstAndOnly(parameterElem, "Pmin"), rangeAdjustment.draParameters->pMin);
-        parseDouble(getFirstAndOnly(parameterElem, "Pmax"), rangeAdjustment.draParameters->pMax);
-        parseDouble(getFirstAndOnly(parameterElem, "EminModifier"), rangeAdjustment.draParameters->eMinModifier);
-        parseDouble(getFirstAndOnly(parameterElem, "EmaxModifier"), rangeAdjustment.draParameters->eMaxModifier);
+        parseDouble(getFirstAndOnly(*parameterElem, "Pmin"), rangeAdjustment.draParameters->pMin);
+        parseDouble(getFirstAndOnly(*parameterElem, "Pmax"), rangeAdjustment.draParameters->pMax);
+        parseDouble(getFirstAndOnly(*parameterElem, "EminModifier"), rangeAdjustment.draParameters->eMinModifier);
+        parseDouble(getFirstAndOnly(*parameterElem, "EmaxModifier"), rangeAdjustment.draParameters->eMaxModifier);
     }
 
     if (overrideElem)
     {
         rangeAdjustment.draOverrides.reset(new DynamicRangeAdjustment::DRAOverrides());
-        parseDouble(getFirstAndOnly(overrideElem, "Subtractor"),
-            rangeAdjustment.draOverrides->subtractor);
-        parseDouble(getFirstAndOnly(overrideElem, "Multiplier"),
-            rangeAdjustment.draOverrides->multiplier);
+        parseDouble(getFirstAndOnly(*overrideElem, "Subtractor"), rangeAdjustment.draOverrides->subtractor);
+        parseDouble(getFirstAndOnly(*overrideElem, "Multiplier"), rangeAdjustment.draOverrides->multiplier);
     }
 }
 
@@ -867,1059 +789,60 @@ XMLElem DerivedXMLParser300::convertDerivedClassificationToXML(
         const DerivedClassification& classification,
         XMLElem parent) const
 {
-    XMLElem classElem = newElement("Classification", parent);
-
-    common().addParameters("SecurityExtension",
-                    classification.securityExtensions,
-                           classElem);
-
-    //! from ism:ISMRootNodeAttributeGroup
-    // SIDD 2.0 is tied to IC-ISM v13
-    setAttribute(classElem, "DESVersion", "13", ISM_URI);
-
-    // So far as I can tell this should just be 1
-    setAttribute(classElem, "ISMCATCESVersion", "1", ISM_URI);
-
-    //! from ism:ResourceNodeAttributeGroup
-    setAttribute(classElem, "resourceElement", "true", ISM_URI);
-    setAttribute(classElem, "createDate",
-                 classification.createDate.format("%Y-%m-%d"), ISM_URI);
-    // required (was optional in SIDD 1.0)
-    setAttributeList(classElem, "compliesWith", classification.compliesWith,
-                     ISM_URI);
-
-    // optional
-    setAttributeIfNonEmpty(classElem,
-                           "exemptFrom",
-                           classification.exemptFrom,
-                           ISM_URI);
-
-    //! from ism:SecurityAttributesGroup
-    //  -- referenced in ism::ResourceNodeAttributeGroup
-    setAttribute(classElem, "classification", classification.classification,
-                 ISM_URI);
-    setAttributeList(classElem, "ownerProducer", classification.ownerProducer,
-                     ISM_URI, true);
-
-    // optional
-    setAttributeIfNonEmpty(classElem, "joint", classification.joint, ISM_URI);
-
-    // optional
-    setAttributeList(classElem, "SCIcontrols", classification.sciControls,
-                     ISM_URI);
-    // optional
-    setAttributeList(classElem, "SARIdentifier", classification.sarIdentifier,
-                     ISM_URI);
-    // optional
-    setAttributeList(classElem,
-                     "atomicEnergyMarkings",
-                     classification.atomicEnergyMarkings,
-                     ISM_URI);
-    // optional
-    setAttributeList(classElem,
-                     "disseminationControls",
-                     classification.disseminationControls,
-                     ISM_URI);
-    // optional
-    setAttributeList(classElem,
-                     "displayOnlyTo",
-                     classification.displayOnlyTo,
-                     ISM_URI);
-    // optional
-    setAttributeList(classElem, "FGIsourceOpen", classification.fgiSourceOpen,
-                     ISM_URI);
-    // optional
-    setAttributeList(classElem,
-                     "FGIsourceProtected",
-                     classification.fgiSourceProtected,
-                     ISM_URI);
-    // optional
-    setAttributeList(classElem, "releasableTo", classification.releasableTo,
-                     ISM_URI);
-    // optional
-    setAttributeList(classElem, "nonICmarkings", classification.nonICMarkings,
-                     ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classElem,
-                           "classifiedBy",
-                           classification.classifiedBy,
-                           ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classElem,
-                           "compilationReason",
-                           classification.compilationReason,
-                           ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classElem,
-                           "derivativelyClassifiedBy",
-                           classification.derivativelyClassifiedBy,
-                           ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classElem,
-                           "classificationReason",
-                           classification.classificationReason,
-                           ISM_URI);
-    // optional
-    setAttributeList(classElem, "nonUSControls", classification.nonUSControls,
-                     ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classElem,
-                           "derivedFrom",
-                           classification.derivedFrom,
-                           ISM_URI);
-    // optional
-    if (classification.declassDate.get())
-    {
-        setAttributeIfNonEmpty(
-                classElem, "declassDate",
-                classification.declassDate->format("%Y-%m-%d"),
-                ISM_URI);
-    }
-    // optional
-    setAttributeIfNonEmpty(classElem,
-                           "declassEvent",
-                           classification.declassEvent,
-                           ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classElem,
-                           "declassException",
-                           classification.declassException,
-                           ISM_URI);
-
-    //! from ism:NoticeAttributesGroup
-    // optional
-    setAttributeIfNonEmpty(classElem,
-                           "noticeType",
-                           classification.noticeType,
-                           ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classElem,
-                           "noticeReason",
-                           classification.noticeReason,
-                           ISM_URI);
-    // optional
-    if (classification.noticeDate.get())
-    {
-        setAttributeIfNonEmpty(
-                classElem, "noticeDate",
-                classification.noticeDate->format("%Y-%m-%d"),
-                ISM_URI);
-    }
-    // optional
-    setAttributeIfNonEmpty(classElem,
-                           "unregisteredNoticeType",
-                           classification.unregisteredNoticeType,
-                           ISM_URI);
-    // optional
-    setAttributeIfNonEmpty(classElem,
-                           "externalNotice",
-                           classification.externalNotice,
-                           ISM_URI);
-
-    return classElem;
-}
-
-XMLElem DerivedXMLParser300::convertLookupTableToXML(
-        const std::string& name,
-        const LookupTable& table,
-        XMLElem parent) const
-{
-    XMLElem lookupElem = newElement(name, parent);
-    createString("LUTName", table.lutName, lookupElem);
-
-    bool ok = false;
-    if (table.predefined.get())
-    {
-        if (table.custom.get() == nullptr)
-        {
-            ok = true;
-            XMLElem predefElem = newElement("Predefined", lookupElem);
-
-            //exactly one of databaseName or (remapFamily and remapMember) can be set
-            bool innerOk = false;
-            if (table.predefined->databaseName.empty())
-            {
-                if (six::Init::isDefined(table.predefined->remapFamily) &&
-                    six::Init::isDefined(table.predefined->remapMember))
-                {
-                    innerOk = true;
-                    createInt("RemapFamily", table.predefined->remapFamily, predefElem);
-                    createInt("RemapMember", table.predefined->remapMember, predefElem);
-                }
-            }
-            else if (six::Init::isUndefined(table.predefined->remapFamily) &&
-                     six::Init::isUndefined(table.predefined->remapMember))
-            {
-                innerOk = true;
-                createString("DatabaseName", table.predefined->databaseName, predefElem);
-            }
-            if (innerOk == false)
-            {
-                throw except::Exception(Ctxt("Exactly one of databaseName or remapFamiy+remapMember must be set"));
-            }
-        }
-    }
-    else if (table.custom.get())
-    {
-        ok = true;
-        std::vector<LUT>& lutValues = table.custom->lutValues;
-
-        XMLElem customElem = newElement("Custom", lookupElem);
-        XMLElem lutInfoElem = newElement("LUTInfo", customElem);
-        setAttribute(lutInfoElem, "numLuts", lutValues.size());
-        setAttribute(lutInfoElem, "size", lutValues[0].table.size());
-
-        for (size_t ii = 0; ii < lutValues.size(); ++ii)
-        {
-            XMLElem lutElem = createLUT("LUTValues", &lutValues[ii], lutInfoElem);
-            setAttribute(lutElem, "lut", ii + 1);
-        }
-    }
-    if (!ok)
-    {
-        throw except::Exception(Ctxt("Exactly one of Predefined or Custom must be defined"));
-    }
-    return lookupElem;
-}
-
-XMLElem DerivedXMLParser300::convertNonInteractiveProcessingToXML(
-        const NonInteractiveProcessing& processing,
-        XMLElem parent) const
-{
-    XMLElem processingElem = newElement("NonInteractiveProcessing", parent);
-
-    // ProductGenerationOptions
-    XMLElem prodGenElem = newElement("ProductGenerationOptions",
-                                    processingElem);
-
-    const ProductGenerationOptions& prodGen =
-            processing.productGenerationOptions;
-
-    if (prodGen.bandEqualization.get())
-    {
-        const BandEqualization& bandEq = *prodGen.bandEqualization;
-        XMLElem bandEqElem = newElement("BandEqualization", prodGenElem);
-        if (int(bandEq.algorithm) == 0)
-        {
-            createString("Algorithm", "1DLUT", bandEqElem);
-        }
-        else
-        {
-            createStringFromEnum("Algorithm", bandEq.algorithm, bandEqElem);
-        }
-        for (size_t ii = 0; ii < bandEq.bandLUTs.size(); ++ii)
-        {
-            convertLookupTableToXML("BandLUT", *bandEq.bandLUTs[ii], bandEqElem);
-        }
-
-        //add the attribute to each of the LUTs
-        std::vector<XMLElem> LUTElems;
-        bandEqElem->getElementsByTagName("BandLUT", LUTElems);
-        for (size_t ii = 0; ii < LUTElems.size(); ++ii)
-        {
-            setAttribute(LUTElems[ii], "k", ii+1);
-        }
-    }
-
-    if (prodGen.modularTransferFunctionRestoration.get())
-    {
-        convertFilterToXML("ModularTransferFunctionRestoration",
-                           *prodGen.modularTransferFunctionRestoration,
-                           prodGenElem);
-    }
-
-    if (prodGen.dataRemapping.get())
-    {
-        convertLookupTableToXML("DataRemapping", *prodGen.dataRemapping,
-                                prodGenElem);
-    }
-
-    if (prodGen.asymmetricPixelCorrection.get())
-    {
-        convertFilterToXML("AsymmetricPixelCorrection",
-                           *prodGen.asymmetricPixelCorrection, prodGenElem);
-    }
-
-    // RRDS
-    XMLElem rrdsElem = newElement("RRDS", processingElem);
-
-    const RRDS& rrds = processing.rrds;
-    createStringFromEnum("DownsamplingMethod", rrds.downsamplingMethod,
-                         rrdsElem);
-
-    if (rrds.downsamplingMethod != DownsamplingMethod::DECIMATE && rrds.downsamplingMethod != DownsamplingMethod::MAX_PIXEL)
-    {
-        confirmNonNull(rrds.antiAlias, "antiAlias",
-                       "for DECIMATE downsampling");
-        convertFilterToXML("AntiAlias", *rrds.antiAlias, rrdsElem);
-
-        confirmNonNull(rrds.interpolation, "interpolation",
-                       "for DECIMATE downsampling");
-        convertFilterToXML("Interpolation", *rrds.interpolation, rrdsElem);
-    }
-    return processingElem;
-}
-
-XMLElem DerivedXMLParser300::convertInteractiveProcessingToXML(
-        const InteractiveProcessing& processing,
-        XMLElem parent) const
-{
-    XMLElem processingElem = newElement("InteractiveProcessing", parent);
-
-    // GeometricTransform
-    const GeometricTransform& geoTransform(processing.geometricTransform);
-    XMLElem geoTransformElem = newElement("GeometricTransform", processingElem);
-
-    XMLElem scalingElem = newElement("Scaling", geoTransformElem);
-    convertFilterToXML("AntiAlias", geoTransform.scaling.antiAlias,
-                       scalingElem);
-    convertFilterToXML("Interpolation", geoTransform.scaling.interpolation,
-                       scalingElem);
-
-    XMLElem orientationElem = newElement("Orientation", geoTransformElem);
-    createStringFromEnum("ShadowDirection",
-        geoTransform.orientation.shadowDirection,
-        orientationElem);
-
-    // SharpnessEnhancement
-    const SharpnessEnhancement& sharpness(processing.sharpnessEnhancement);
-    XMLElem sharpElem = newElement("SharpnessEnhancement", processingElem);
-
-    bool ok = false;
-    if (sharpness.modularTransferFunctionCompensation.get())
-    {
-        if (sharpness.modularTransferFunctionEnhancement.get() == nullptr)
-        {
-            ok = true;
-            convertFilterToXML("ModularTransferFunctionCompensation",
-                               *sharpness.modularTransferFunctionCompensation,
-                               sharpElem);
-        }
-    }
-    else if (sharpness.modularTransferFunctionEnhancement.get())
-    {
-        ok = true;
-        convertFilterToXML("ModularTransferFunctionEnhancement",
-                           *sharpness.modularTransferFunctionEnhancement,
-                           sharpElem);
-    }
-
-    if (!ok)
-    {
-        throw except::Exception(Ctxt(
-                "Exactly one of modularTransferFunctionCompensation or "
-                "modularTransferFunctionEnhancement must be set"));
-    }
-
-    // ColorSpaceTransform
-    if (processing.colorSpaceTransform.get())
-    {
-        const ColorManagementModule& cmm =
-                processing.colorSpaceTransform->colorManagementModule;
-
-        XMLElem colorSpaceTransformElem =
-                newElement("ColorSpaceTransform", processingElem);
-        XMLElem cmmElem =
-                newElement("ColorManagementModule", colorSpaceTransformElem);
-
-        if (int(cmm.renderingIntent) == 2)
-        {
-            createString("RenderingIntent", "RELATIVE", cmmElem);
-        }
-        else if (int(cmm.renderingIntent) == 3)
-        {
-            createString("RenderingIntent", "ABSOLUTE", cmmElem);
-        }
-        else
-        {
-            createStringFromEnum("RenderingIntent", cmm.renderingIntent, cmmElem);
-        }
-
-        // TODO: Not sure what this'll actually look like
-        createString("SourceProfile", cmm.sourceProfile, cmmElem);
-        if (!cmm.displayProfile.empty())
-        {
-            createString("DisplayProfile", cmm.displayProfile, cmmElem);
-        }
-
-        if (!cmm.iccProfile.empty())
-        {
-            createString("ICCProfileSignature", cmm.iccProfile, cmmElem);
-        }
-    }
-
-    // DynamicRangeAdjustment
-
-    const DynamicRangeAdjustment& adjust =
-            processing.dynamicRangeAdjustment;
-
-    XMLElem adjustElem =
-        newElement("DynamicRangeAdjustment", processingElem);
-
-    createStringFromEnum("AlgorithmType", adjust.algorithmType,
-        adjustElem);
-    createInt("BandStatsSource", adjust.bandStatsSource, adjustElem);
-
-    validateDRAFields(adjust.algorithmType,
-                      adjust.draParameters.get() ? true : false,
-                      adjust.draOverrides.get() ? true : false);
-    if (adjust.draParameters.get())
-    {
-        XMLElem paramElem = newElement("DRAParameters", adjustElem);
-        createDouble("Pmin", adjust.draParameters->pMin, paramElem);
-        createDouble("Pmax", adjust.draParameters->pMax, paramElem);
-        createDouble("EminModifier", adjust.draParameters->eMinModifier, paramElem);
-        createDouble("EmaxModifier", adjust.draParameters->eMinModifier, paramElem);
-    }
-    if (adjust.draOverrides.get())
-    {
-        XMLElem overrideElem = newElement("DRAOverrides", adjustElem);
-        createDouble("Subtractor", adjust.draOverrides->subtractor, overrideElem);
-        createDouble("Multiplier", adjust.draOverrides->multiplier, overrideElem);
-    }
-
-    if (processing.tonalTransferCurve.get())
-    {
-        convertLookupTableToXML("TonalTransferCurve", *processing.tonalTransferCurve, processingElem);
-    }
-    return processingElem;
-}
-
-XMLElem DerivedXMLParser300::convertPredefinedFilterToXML(
-        const Filter::Predefined& predefined,
-        XMLElem parent) const
-{
-    XMLElem predefinedElem = newElement("Predefined", parent);
-
-    // Make sure either DBName or FilterFamily+FilterMember are defined
-    bool ok = false;
-    if (isDefined(predefined.databaseName))
-    {
-        if (six::Init::isUndefined(predefined.filterFamily) &&
-            six::Init::isUndefined(predefined.filterMember))
-        {
-            ok = true;
-
-            createStringFromEnum("DatabaseName", predefined.databaseName, predefinedElem);
-        }
-    }
-    else if (six::Init::isDefined(predefined.filterFamily) &&
-             six::Init::isDefined(predefined.filterMember))
-    {
-        ok = true;
-
-        createInt("FilterFamily", predefined.filterFamily, predefinedElem);
-        createInt("FilterMember", predefined.filterMember, predefinedElem);
-    }
-
-    if (!ok)
-    {
-        throw except::Exception(Ctxt(
-                "Exactly one of either dbName or FilterFamily and "
-                "FilterMember must be defined"));
-    }
-
-    return predefinedElem;
-}
-
-XMLElem DerivedXMLParser300::convertKernelToXML(
-        const Filter::Kernel& kernel,
-        XMLElem parent) const
-{
-    XMLElem kernelElem = newElement("FilterKernel", parent);
-
-    bool ok = false;
-    if (kernel.predefined.get())
-    {
-        if (kernel.custom.get() == nullptr)
-        {
-            ok = true;
-            convertPredefinedFilterToXML(*kernel.predefined, kernelElem);
-        }
-    }
-    else if (kernel.custom.get())
-    {
-        ok = true;
-
-        XMLElem customElem = newElement("Custom", kernelElem);
-
-        if (kernel.custom->filterCoef.size() !=
-            static_cast<size_t>(kernel.custom->size.row) * kernel.custom->size.col)
-        {
-            std::ostringstream ostr;
-            ostr << "Filter size is " << kernel.custom->size.row << " rows x "
-                << kernel.custom->size.col << " cols but have "
-                << kernel.custom->filterCoef.size() << " coefficients";
-            throw except::Exception(Ctxt(ostr.str()));
-        }
-
-        XMLElem filterCoef = newElement("FilterCoefficients", customElem);
-        setAttribute(filterCoef, "numRows", static_cast<size_t>(kernel.custom->size.row));
-        setAttribute(filterCoef, "numCols", static_cast<size_t>(kernel.custom->size.col));
-
-        for (ptrdiff_t row = 0, idx = 0; row < kernel.custom->size.row; ++row)
-        {
-            for (ptrdiff_t col = 0; col < kernel.custom->size.col; ++col, ++idx)
-            {
-                XMLElem coefElem = createDouble("Coef", kernel.custom->filterCoef[static_cast<size_t>(idx)],
-                    filterCoef);
-                setAttribute(coefElem, "row", static_cast<size_t>(row));
-                setAttribute(coefElem, "col", static_cast<size_t>(col));
-            }
-        }
-    }
-    if (!ok)
-    {
-        throw except::Exception(Ctxt("Exactly one of Custom or Predefined must be set"));
-    }
-
-    return kernelElem;
-}
-
-XMLElem DerivedXMLParser300::convertBankToXML(const Filter::Bank& bank,
-    XMLElem parent) const
-{
-    XMLElem bankElem = newElement("FilterBank", parent);
-
-    bool ok = false;
-    if (bank.predefined.get())
-    {
-        if (bank.custom.get() == nullptr)
-        {
-            ok = true;
-            convertPredefinedFilterToXML(*bank.predefined, bankElem);
-        }
-    }
-    else if (bank.custom.get())
-    {
-        ok = true;
-
-        XMLElem customElem = newElement("Custom", bankElem);
-
-        if (bank.custom->filterCoef.size() !=
-            static_cast<size_t>(bank.custom->numPhasings) * bank.custom->numPoints)
-        {
-            std::ostringstream ostr;
-            ostr << "Filter size is " << bank.custom->numPhasings << " x "
-                << bank.custom->numPoints << " but have "
-                << bank.custom->filterCoef.size() << " coefficients";
-            throw except::Exception(Ctxt(ostr.str()));
-        }
-
-        XMLElem filterCoef = newElement("FilterCoefficients", customElem);
-        setAttribute(filterCoef, "numPhasings", bank.custom->numPhasings);
-        setAttribute(filterCoef, "numPoints", bank.custom->numPoints);
-
-        for (size_t row = 0, idx = 0; row < bank.custom->numPhasings; ++row)
-        {
-            for (size_t col = 0; col < bank.custom->numPoints; ++col, ++idx)
-            {
-                XMLElem coefElem = createDouble("Coef", bank.custom->filterCoef[idx],
-                    filterCoef);
-                setAttribute(coefElem, "phasing", row);
-                setAttribute(coefElem, "point", col);
-            }
-        }
-    }
-    if (!ok)
-    {
-        throw except::Exception(Ctxt("Exactly one of Custom or Predefined must be set"));
-    }
-
-    return bankElem;
-}
-
-XMLElem DerivedXMLParser300::convertFilterToXML(const std::string& name,
-                                                const Filter& filter,
-                                                XMLElem parent) const
-{
-    XMLElem filterElem = newElement(name, parent);
-
-    createString("FilterName", filter.filterName, filterElem);
-
-    // Exactly one of Kernel or Bank should be set
-    bool ok = false;
-    if (filter.filterKernel.get())
-    {
-        if (filter.filterBank.get() == nullptr)
-        {
-            ok = true;
-            convertKernelToXML(*filter.filterKernel, filterElem);
-        }
-    }
-    else if (filter.filterBank.get())
-    {
-        ok = true;
-        convertBankToXML(*filter.filterBank, filterElem);
-    }
-
-    if (!ok)
-    {
-        throw except::Exception(Ctxt(
-                "Exactly one of kernel or bank must be set"));
-    }
-
-    createStringFromEnum("Operation", filter.operation, filterElem);
-
-    return filterElem;
-}
-
-XMLElem DerivedXMLParser300::convertCompressionToXML(
-        const Compression& compression,
-        XMLElem parent) const
-{
-    XMLElem compressionElem = newElement("Compression", parent);
-    XMLElem j2kElem = newElement("J2K", compressionElem);
-    XMLElem originalElem = newElement("Original", j2kElem);
-    convertJ2KToXML(compression.original, originalElem);
-
-    if (compression.parsed.get())
-    {
-        XMLElem parsedElem = newElement("Parsed", j2kElem);
-        convertJ2KToXML(*compression.parsed, parsedElem);
-    }
-    return compressionElem;
-}
-
-void DerivedXMLParser300::convertJ2KToXML(const J2KCompression& j2k,
-                                          XMLElem& parent) const
-{
-    createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
-    createInt("NumBands", j2k.numBands, parent);
-
-    const auto numLayers = j2k.layerInfo.size();
-    XMLElem layerInfoElem = newElement("LayerInfo", parent);
-    setAttribute(layerInfoElem, "numLayers", numLayers);
-
-    for (size_t ii = 0; ii < numLayers; ++ii)
-    {
-        XMLElem layerElem = newElement("Layer", layerInfoElem);
-        setAttribute(layerElem, "index", ii + 1);
-        createDouble("Bitrate", j2k.layerInfo[ii].bitRate, layerElem);
-    }
+    assert(parent != nullptr);
+    return & DerivedXMLParser200::convertDerivedClassificationToXML(*this, classification, *parent);
 }
 
 XMLElem DerivedXMLParser300::convertMeasurementToXML(const Measurement* measurement,
     XMLElem parent) const
 {
-    XMLElem measurementElem = DerivedXMLParser::convertMeasurementToXML(measurement, parent);
-
-    if (measurement->arpFlag != AppliedType::NOT_SET)
-    {
-        createStringFromEnum("ARPFlag", measurement->arpFlag, measurementElem);
-    }
-
-    common().createPolyXYZ("ARPPoly",
-        measurement->arpPoly,
-        measurementElem);
-
-    //only if 3+ vertices
-    const size_t numVertices = measurement->validData.size();
-    if (numVertices >= 3)
-    {
-        XMLElem vElem = newElement("ValidData", measurementElem);
-        setAttribute(vElem, "size", numVertices);
-
-        for (size_t ii = 0; ii < numVertices; ++ii)
-        {
-            XMLElem vertexElem = common().createRowCol(
-                "Vertex", measurement->validData[ii], vElem);
-            setAttribute(vertexElem, "index", ii + 1);
-        }
-    }
-    else
-    {
-        throw except::Exception(Ctxt(
-            "ValidData must have at least 3 vertices"));
-    }
-    return measurementElem;
+    assert(parent != nullptr);
+    assert(measurement != nullptr);
+    return &DerivedXMLParser200::convertMeasurementToXML(*this, *measurement, *parent);
 }
 
 XMLElem DerivedXMLParser300::convertExploitationFeaturesToXML(
     const ExploitationFeatures* exploitationFeatures,
     XMLElem parent) const
 {
-    XMLElem exploitationFeaturesElem =
-        newElement("ExploitationFeatures", parent);
-
-    if (exploitationFeatures->collections.empty())
-    {
-        throw except::Exception(Ctxt(FmtX(
-            "ExploitationFeatures must have at least [1] Collection, " \
-            "only [%d] found", exploitationFeatures->collections.size())));
-    }
-
-    // 1 to unbounded
-    for (auto& pCollections : exploitationFeatures->collections)
-    {
-        Collection* collection = pCollections.get();
-        XMLElem collectionElem = newElement("Collection",
-            exploitationFeaturesElem);
-        setAttribute(collectionElem, "identifier", collection->identifier);
-
-        // create Information
-        XMLElem informationElem = newElement("Information", collectionElem);
-
-        createString("SensorName",
-            collection->information.sensorName,
-            informationElem);
-        XMLElem radarModeElem = newElement("RadarMode", informationElem);
-        createSixString("ModeType",
-            common().getSICommonURI(),
-            collection->information.radarMode,
-            radarModeElem);
-        // optional
-        if (collection->information.radarModeID
-            != Init::undefined<std::string>())
-            createString("ModeID",
-                common().getSICommonURI(),
-                collection->information.radarModeID,
-                radarModeElem);
-        createDateTime("CollectionDateTime",
-            collection->information.collectionDateTime,
-            informationElem);
-        // optional
-        if (collection->information.localDateTime != Init::undefined<
-            six::DateTime>())
-        {
-            createDateTime("LocalDateTime",
-                collection->information.localDateTime,
-                informationElem);
-        }
-        createDouble("CollectionDuration",
-            collection->information.collectionDuration,
-            informationElem);
-        // optional
-        if (!Init::isUndefined(collection->information.resolution))
-        {
-            common().createRangeAzimuth("Resolution",
-                collection->information.resolution,
-                informationElem);
-        }
-        // optional
-        if (collection->information.inputROI.get())
-        {
-            XMLElem roiElem = newElement("InputROI", informationElem);
-            common().createRowCol("Size",
-                collection->information.inputROI->size,
-                roiElem);
-            common().createRowCol("UpperLeft",
-                collection->information.inputROI->upperLeft,
-                roiElem);
-        }
-        // optional to unbounded
-        for (const auto& pPolarization : collection->information.polarization)
-        {
-            const TxRcvPolarization *p = pPolarization.get();
-            XMLElem polElem = newElement("Polarization", informationElem);
-
-            createString("TxPolarization",
-                p->txPolarization,
-                polElem);
-            createString("RcvPolarization",
-                p->rcvPolarization,
-                polElem);
-            // optional
-            if (!Init::isUndefined(p->rcvPolarizationOffset))
-            {
-                createDouble("RcvPolarizationOffset",
-                    p->rcvPolarizationOffset,
-                    polElem);
-            }
-            // removed in 2.0
-            if (!Init::isUndefined(p->processed))
-            {
-                throw except::Exception(Ctxt(
-                    "Polarization.Processed is not a valid field for SIDD 2.0"));
-            }
-        }
-
-        // create Geometry -- optional
-        const Geometry* geom = collection->geometry.get();
-        if (geom != nullptr)
-        {
-            XMLElem geometryElem = newElement("Geometry", collectionElem);
-
-            // optional
-            if (geom->azimuth != Init::undefined<double>())
-                createDouble("Azimuth", geom->azimuth, geometryElem);
-            // optional
-            if (geom->slope != Init::undefined<double>())
-                createDouble("Slope", geom->slope, geometryElem);
-            // optional
-            if (geom->squint != Init::undefined<double>())
-                createDouble("Squint", geom->squint, geometryElem);
-            // optional
-            if (geom->graze != Init::undefined<double>())
-                createDouble("Graze", geom->graze, geometryElem);
-            // optional
-            if (geom->tilt != Init::undefined<double>())
-                createDouble("Tilt", geom->tilt, geometryElem);
-            // optional
-            if (geom->dopplerConeAngle != Init::undefined<double>())
-                createDouble("DopplerConeAngle", geom->dopplerConeAngle, geometryElem);
-            // optional to unbounded
-            common().addParameters("Extension", geom->extensions,
-                geometryElem);
-        }
-
-        // create Phenomenology -- optional
-        const Phenomenology* phenom = collection->phenomenology.get();
-        if (phenom != nullptr)
-        {
-            XMLElem phenomenologyElem = newElement("Phenomenology",
-                collectionElem);
-
-            // optional
-            if (phenom->shadow != Init::undefined<AngleMagnitude>())
-            {
-                XMLElem shadow = newElement("Shadow", phenomenologyElem);
-                createDouble("Angle", common().getSICommonURI(),
-                    phenom->shadow.angle, shadow);
-                createDouble("Magnitude", common().getSICommonURI(),
-                    phenom->shadow.magnitude, shadow);
-            }
-            // optional
-            if (phenom->layover != Init::undefined<AngleMagnitude>())
-            {
-                XMLElem layover = newElement("Layover", phenomenologyElem);
-                createDouble("Angle", common().getSICommonURI(),
-                    phenom->layover.angle, layover);
-                createDouble("Magnitude", common().getSICommonURI(),
-                    phenom->layover.magnitude, layover);
-            }
-            // optional
-            if (phenom->multiPath != Init::undefined<double>())
-                createDouble("MultiPath", phenom->multiPath, phenomenologyElem);
-            // optional
-            if (phenom->groundTrack != Init::undefined<double>())
-                createDouble("GroundTrack", phenom->groundTrack,
-                    phenomenologyElem);
-            // optional to unbounded
-            common().addParameters("Extension", phenom->extensions,
-                phenomenologyElem);
-        }
-    }
-
-    // create Product
-    if (exploitationFeatures->product.empty())
-    {
-        throw except::Exception(Ctxt(
-            "ExploitationFeatures must have at least one Product"));
-    }
-
-    for (size_t ii = 0; ii < exploitationFeatures->product.size(); ++ii)
-    {
-        XMLElem productElem = newElement("Product", exploitationFeaturesElem);
-        const Product& product = exploitationFeatures->product[ii];
-
-        common().createRowCol("Resolution",
-                              product.resolution,
-                              productElem);
-
-        createDouble("Ellipticity", product.ellipticity, productElem);
-
-        if (product.polarization.empty())
-        {
-            throw except::Exception(Ctxt(
-                "Product must have at least one Polarization"));
-        }
-
-        for (size_t jj = 0; jj < product.polarization.size(); ++jj)
-        {
-            XMLElem polarizationElem = newElement("Polarization", productElem);
-            createStringFromEnum("TxPolarizationProc",
-                                 product.polarization[jj].txPolarizationProc,
-                                 polarizationElem);
-            createStringFromEnum("RcvPolarizationProc",
-                                 product.polarization[jj].rcvPolarizationProc,
-                                 polarizationElem);
-        }
-
-        // optional
-        if (product.north != Init::undefined<double>())
-            createDouble("North", product.north, productElem);
-
-        // optional to unbounded
-        common().addParameters("Extension",
-                               product.extensions,
-                               productElem);
-    }
-
-    return exploitationFeaturesElem;
+    assert(exploitationFeatures != nullptr);
+    assert(parent != nullptr);
+    return &DerivedXMLParser200::convertExploitationFeaturesToXML(*this, *exploitationFeatures, *parent);
 }
 
 XMLElem DerivedXMLParser300::convertDisplayToXML(
         const Display& display,
         XMLElem parent) const
 {
-    // NOTE: In several spots here, there are fields which are required in
-    //       SIDD 2.0 but a pointer in the Display class since it didn't exist
-    //       in SIDD 1.0, so need to confirm it's allocated
-    XMLElem displayElem = newElement("Display", parent);
-
-    createString("PixelType", display.pixelType, displayElem);
-
-    createInt("NumBands", display.numBands, displayElem);
-    if (six::Init::isDefined(display.defaultBandDisplay))
-    {
-        createInt("DefaultBandDisplay", display.defaultBandDisplay, displayElem);
-    }
-
-    // NonInteractiveProcessing
-    for (size_t ii = 0; ii < display.nonInteractiveProcessing.size(); ++ii)
-    {
-        confirmNonNull(display.nonInteractiveProcessing[ii],
-                "nonInteractiveProcessing");
-        XMLElem temp = convertNonInteractiveProcessingToXML(
-                *display.nonInteractiveProcessing[ii],
-                displayElem);
-        setAttribute(temp, "band", ii + 1);
-    }
-
-    for (size_t ii = 0; ii < display.interactiveProcessing.size(); ++ii)
-    {
-        // InteractiveProcessing
-        confirmNonNull(display.interactiveProcessing[ii],
-                "interactiveProcessing");
-        XMLElem temp = convertInteractiveProcessingToXML(
-                *display.interactiveProcessing[ii],
-                displayElem);
-        setAttribute(temp, "band", ii + 1);
-    }
-
-    // optional to unbounded
-    common().addParameters("DisplayExtension", display.displayExtensions,
-                           displayElem);
-    return displayElem;
-}
-
-XMLElem DerivedXMLParser300::convertGeoDataToXML(
-        const GeoDataBase* geoData,
-        XMLElem parent) const
-{
-    XMLElem geoDataXML = newElement("GeoData", parent);
-
-    common().createEarthModelType("EarthModel", geoData->earthModel, geoDataXML);
-
-    common().createLatLonFootprint("ImageCorners", "ICP", geoData->imageCorners, geoDataXML);
-
-    //only if 3+ vertices
-    const size_t numVertices = geoData->validData.size();
-    if (numVertices >= 3)
-    {
-        XMLElem vXML = newElement("ValidData", geoDataXML);
-        setAttribute(vXML, "size", numVertices);
-
-        for (size_t ii = 0; ii < numVertices; ++ii)
-        {
-            XMLElem vertexXML = common().createLatLon("Vertex", geoData->validData[ii],
-                                                      vXML);
-            setAttribute(vertexXML, "index", ii + 1);
-        }
-    }
-
-    for (size_t ii = 0; ii < geoData->geoInfos.size(); ++ii)
-    {
-        common().convertGeoInfoToXML(*geoData->geoInfos[ii].get(), true, geoDataXML);
-    }
-
-    return geoDataXML;
-}
-
-
-XMLElem DerivedXMLParser300::convertDigitalElevationDataToXML(
-        const DigitalElevationData& ded,
-        XMLElem parent) const
-{
-    XMLElem dedElem = newElement("DigitalElevationData", parent);
-
-    // GeographicCoordinates
-    XMLElem geoCoordElem = newElement("GeographicCoordinates", dedElem);
-    createDouble("LongitudeDensity",
-                 ded.geographicCoordinates.longitudeDensity,
-                 geoCoordElem);
-    createDouble("LatitudeDensity",
-                 ded.geographicCoordinates.latitudeDensity,
-                 geoCoordElem);
-    common().createLatLon("ReferenceOrigin",
-                          ded.geographicCoordinates.referenceOrigin,
-                          geoCoordElem);
-
-    // Geopositioning
-    XMLElem geoposElem = newElement("Geopositioning", dedElem);
-    createStringFromEnum("CoordinateSystemType",
-                         ded.geopositioning.coordinateSystemType,
-                         geoposElem);
-    createString("GeodeticDatum", ded.geopositioning.geodeticDatum,
-                 geoposElem);
-    createString("ReferenceEllipsoid", ded.geopositioning.referenceEllipsoid,
-                 geoposElem);
-    createString("VerticalDatum", ded.geopositioning.verticalDatum,
-                 geoposElem);
-    createString("SoundingDatum", ded.geopositioning.soundingDatum,
-                 geoposElem);
-    createInt("FalseOrigin", ded.geopositioning.falseOrigin, geoposElem);
-    if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
-    {
-        createInt("UTMGridZoneNumber", ded.geopositioning.utmGridZoneNumber, geoposElem);
-    }
-
-    // PositionalAccuracy
-    XMLElem posAccElem = newElement("PositionalAccuracy", dedElem);
-    createInt("NumRegions", ded.positionalAccuracy.numRegions, posAccElem);
-
-    XMLElem absAccElem = newElement("AbsoluteAccuracy", posAccElem);
-    createDouble("Horizontal",
-                 ded.positionalAccuracy.absoluteAccuracyHorizontal,
-                 absAccElem);
-    createDouble("Vertical",
-                 ded.positionalAccuracy.absoluteAccuracyVertical,
-                 absAccElem);
-
-    XMLElem p2pAccElem = newElement("PointToPointAccuracy", posAccElem);
-    createDouble("Horizontal",
-                 ded.positionalAccuracy.pointToPointAccuracyHorizontal,
-                 p2pAccElem);
-    createDouble("Vertical",
-                 ded.positionalAccuracy.pointToPointAccuracyVertical,
-                 p2pAccElem);
-
-    if (six::Init::isDefined(ded.nullValue))
-    {
-        createInt("NullValue", ded.nullValue, dedElem);
-    }
-
-    return dedElem;
+    assert(parent != nullptr);
+    return &DerivedXMLParser200::convertDisplayToXML(*this, display, *parent);
 }
 
 void DerivedXMLParser300::parseGeoDataFromXML(
-    const xml::lite::Element* geoDataXML, GeoDataBase* geoData) const
+    const xml::lite::Element& geoDataXML, GeoDataBase& geoData) const
 {
-    common().parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"),
-            geoData->earthModel);
+    common().parseEarthModelType(getFirstAndOnly(geoDataXML, "EarthModel"), geoData.earthModel);
 
-    common().parseFootprint(getFirstAndOnly(geoDataXML, "ImageCorners"), "ICP",
-            geoData->imageCorners);
+    common().parseFootprint(getFirstAndOnly(geoDataXML, "ImageCorners"), "ICP", geoData.imageCorners);
 
     XMLElem tmpElem = getOptional(geoDataXML, "ValidData");
     if (tmpElem != nullptr)
     {
-        common().parseLatLons(tmpElem, "Vertex", geoData->validData);
+        common().parseLatLons(tmpElem, "Vertex", geoData.validData);
     }
 
     std::vector <XMLElem> geoInfosXML;
-    geoDataXML->getElementsByTagName("GeoInfo", geoInfosXML);
+    geoDataXML.getElementsByTagName("GeoInfo", geoInfosXML);
 
     //optional
-    size_t idx(geoData->geoInfos.size());
-    geoData->geoInfos.resize(idx + geoInfosXML.size());
+    size_t idx(geoData.geoInfos.size());
+    geoData.geoInfos.resize(idx + geoInfosXML.size());
 
     for (std::vector<XMLElem>::const_iterator it = geoInfosXML.begin(); it
             != geoInfosXML.end(); ++it, ++idx)
     {
-        geoData->geoInfos[idx].reset(new GeoInfo());
-        common().parseGeoInfoFromXML(*it, geoData->geoInfos[idx].get());
+        geoData.geoInfos[idx].reset(new GeoInfo());
+        common().parseGeoInfoFromXML(*it, geoData.geoInfos[idx].get());
     }
 }
 
@@ -1933,11 +856,10 @@ void DerivedXMLParser300::parseMeasurementFromXML(
     XMLElem arpFlagElem = getOptional(measurementElem, "ARPFlag");
     if (arpFlagElem)
     {
-        parseEnum(arpFlagElem, measurement->arpFlag);
+        parseEnum(*arpFlagElem, measurement->arpFlag);
     }
 
-    common().parsePolyXYZ(getFirstAndOnly(measurementElem, "ARPPoly"),
-        measurement->arpPoly);
+    common().parsePolyXYZ(getFirstAndOnly(measurementElem, "ARPPoly"), measurement->arpPoly);
 
     common().parseRowColInts(getFirstAndOnly(measurementElem, "ValidData"),
                              "Vertex",
@@ -1974,11 +896,9 @@ void DerivedXMLParser300::parseProductFromXML(
 {
     std::vector<XMLElem> productElems;
     exploitationFeaturesElem->getElementsByTagName("Product", productElems);
-
     if (productElems.empty())
     {
-        throw except::Exception(Ctxt(
-            "ExploitationFeatures requires at least one Product"));
+        throw except::Exception(Ctxt("ExploitationFeatures requires at least one Product"));
     }
 
     exploitationFeatures->product.resize(productElems.size());
@@ -1987,18 +907,14 @@ void DerivedXMLParser300::parseProductFromXML(
         const xml::lite::Element* const productElem = productElems[ii];
         Product& product = exploitationFeatures->product[ii];
 
-        common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"),
-                                   product.resolution);
-
-        parseDouble(getFirstAndOnly(productElem, "Ellipticity"),
-                    product.ellipticity);
+        common().parseRowColDouble(getFirstAndOnly(productElem, "Resolution"), product.resolution);
+        parseDouble(getFirstAndOnly(productElem, "Ellipticity"), product.ellipticity);
 
         std::vector<XMLElem> polarizationElems;
         productElem->getElementsByTagName("Polarization", polarizationElems);
         if (polarizationElems.empty())
         {
-            throw except::Exception(Ctxt(
-                "Product requires at least one polarization"));
+            throw except::Exception(Ctxt("Product requires at least one polarization"));
         }
         product.polarization.resize(polarizationElems.size());
         for (size_t jj = 0; jj < product.polarization.size(); ++jj)
@@ -2020,16 +936,14 @@ void DerivedXMLParser300::parseProductFromXML(
     }
 }
 
-void DerivedXMLParser300::parseDigitalElevationDataFromXML(
-        const xml::lite::Element* elem,
-        DigitalElevationData& ded) const
+void DerivedXMLParser300::parseDigitalElevationDataFromXML(const xml::lite::Element& elem, DigitalElevationData& ded) const
 {
-    XMLElem coordElem = getFirstAndOnly(elem, "GeographicCoordinates");
+    auto& coordElem = getFirstAndOnly(elem, "GeographicCoordinates");
     parseDouble(getFirstAndOnly(coordElem, "LongitudeDensity"), ded.geographicCoordinates.longitudeDensity);
     parseDouble(getFirstAndOnly(coordElem, "LatitudeDensity"), ded.geographicCoordinates.latitudeDensity);
     common().parseLatLon(getFirstAndOnly(coordElem, "ReferenceOrigin"), ded.geographicCoordinates.referenceOrigin);
 
-    XMLElem posElem = getFirstAndOnly(elem, "Geopositioning");
+    auto& posElem = getFirstAndOnly(elem, "Geopositioning");
     std::string coordSystemType;
     parseString(getFirstAndOnly(posElem, "CoordinateSystemType"), coordSystemType);
     ded.geopositioning.coordinateSystemType = CoordinateSystemType(coordSystemType);
@@ -2038,38 +952,29 @@ void DerivedXMLParser300::parseDigitalElevationDataFromXML(
     {
         parseInt(getFirstAndOnly(posElem, "UTMGridZoneNumber"), ded.geopositioning.utmGridZoneNumber);
     }
-    XMLElem posAccuracyElem = getFirstAndOnly(elem, "PositionalAccuracy");
+    auto& posAccuracyElem = getFirstAndOnly(elem, "PositionalAccuracy");
     parseUInt(getFirstAndOnly(posAccuracyElem, "NumRegions"), ded.positionalAccuracy.numRegions);
-    XMLElem absoluteElem = getFirstAndOnly(posAccuracyElem, "AbsoluteAccuracy");
+    auto& absoluteElem = getFirstAndOnly(posAccuracyElem, "AbsoluteAccuracy");
     parseDouble(getFirstAndOnly(absoluteElem, "Horizontal"), ded.positionalAccuracy.absoluteAccuracyHorizontal);
     parseDouble(getFirstAndOnly(absoluteElem, "Vertical"), ded.positionalAccuracy.absoluteAccuracyVertical);
-    XMLElem pointElem = getFirstAndOnly(posAccuracyElem, "PointToPointAccuracy");
+    auto& pointElem = getFirstAndOnly(posAccuracyElem, "PointToPointAccuracy");
     parseDouble(getFirstAndOnly(pointElem, "Horizontal"), ded.positionalAccuracy.pointToPointAccuracyHorizontal);
     parseDouble(getFirstAndOnly(pointElem, "Vertical"), ded.positionalAccuracy.pointToPointAccuracyVertical);
 }
 
-std::unique_ptr<LUT> DerivedXMLParser300::parseSingleLUT(const xml::lite::Element& elem,
-        size_t size) const
+std::unique_ptr<LUT> DerivedXMLParser300::parseSingleLUT(const xml::lite::Element& elem, size_t size) const
 {
     std::string lutStr;
     parseString(&elem, lutStr);
-    std::vector<std::string> lutVals = str::split(lutStr, " ");
-    auto lut = std::make_unique<LUT>(size, sizeof(short));
-
-    for (size_t ii = 0; ii < lutVals.size(); ++ii)
-    {
-        const short lutVal = str::toType<short>(lutVals[ii]);
-        ::memcpy(&(lut->table[ii * lut->elementSize]),
-            &lutVal, sizeof(short));
-    }
-    return lut;
+    return DerivedXMLParser200::parseSingleLUT(lutStr, size);
 }
 
 XMLElem DerivedXMLParser300::createLUT(const std::string& name, const LUT *lut,
         XMLElem parent) const
 {
-    XMLElem lutElement = newElement(name, parent);
-    return createLUTImpl(lut, lutElement);
+    assert(lut != nullptr);
+    assert(parent != nullptr);
+    return &DerivedXMLParser200::createLUT(*this, name, *lut, *parent);
 }
 }
 }
