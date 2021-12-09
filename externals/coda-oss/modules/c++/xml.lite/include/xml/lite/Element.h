@@ -133,8 +133,8 @@ public:
     void destroyChildren();
 
     // use clone() to duplicate an Element
-#if !(defined(SWIG) || defined(SWIGPYTHON) || defined(HAVE_PYTHON_H))
-private: // SWIG needs these
+#if !(defined(SWIG) || defined(SWIGPYTHON) || defined(HAVE_PYTHON_H))  // SWIG needs these
+//private: // encoded as part of the C++ name mangling by some compilers
 #endif
     Element(const Element&);
     Element& operator=(const Element&);
