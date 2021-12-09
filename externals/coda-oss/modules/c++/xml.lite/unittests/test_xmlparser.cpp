@@ -27,6 +27,7 @@
 #include "io/StringStream.h"
 #include "io/FileInputStream.h"
 #include "str/Convert.h"
+#include "str/Encoding.h"
 #include <TestCase.h>
 
 #include "xml/lite/MinidomParser.h"
@@ -282,8 +283,7 @@ static void testReadEncodedXmlFile(const std::string& testName, const std::strin
 
     std::u8string u8_characterData;
     a.getCharacterData(u8_characterData);
-    const void* pu8_characterData = u8_characterData.c_str();
-    const std::string u8_characterData_(static_cast<std::string::const_pointer>(pu8_characterData));
+    const std::string u8_characterData_(str::c_str<std::string::const_pointer>(u8_characterData));
     TEST_ASSERT_EQ(utf8Text, u8_characterData_);     
 
 }
@@ -294,13 +294,12 @@ TEST_CASE(testReadEncodedXmlFiles)
     testReadEncodedXmlFile(testName, "encoding_windows-1252.xml");
 }
 
-TEST_CASE(testReadUtf8XmlFile)
+static void testReadXmlFile(const std::string& testName, const std::string& xmlFile)
 {
     const auto coda_oss = findRoot();
     const auto unittests = coda_oss / "modules" / "c++" / "xml.lite" / "unittests";
 
-    // Does NOT have "<?xml version="1.0" encoding="..." ?>"
-    io::FileInputStream input((unittests / "utf-8.xml").string());
+    io::FileInputStream input((unittests / xmlFile).string());
 
     xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
     xmlParser.preserveCharacterData(true);
@@ -320,41 +319,14 @@ TEST_CASE(testReadUtf8XmlFile)
 
     std::u8string u8_characterData;
     a.getCharacterData(u8_characterData);
-    const void* pu8_characterData = u8_characterData.c_str();
-    const std::string u8_characterData_(static_cast<std::string::const_pointer>(pu8_characterData));
-    TEST_ASSERT_EQ(utf8Text, u8_characterData_);     
+    const std::string u8_characterData_(str::c_str<std::string::const_pointer>(u8_characterData));
+    TEST_ASSERT_EQ(utf8Text, u8_characterData_);
 }
-
-TEST_CASE(testReadWindows1252XmlFile)
+TEST_CASE(testReadXmlFiles)
 {
-    const auto coda_oss = findRoot();
-    const auto unittests = coda_oss / "modules" / "c++" / "xml.lite" / "unittests";
-
-    // Does NOT have "<?xml version="1.0" encoding="..." ?>"
-    io::FileInputStream input((unittests / "windows-1252.xml").string());
-
-    //xml::lite::MinidomParser xmlParser;
-    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
-    xmlParser.preserveCharacterData(true);
-    xmlParser.parse(input);
-    const auto& root = getRootElement(*xmlParser.getDocument());
-
-    const auto aElements = root.getElementsByTagName("a", true /*recurse*/);
-    TEST_ASSERT_EQ(aElements.size(), static_cast<size_t>(1));
-    const auto& a = *(aElements[0]);
-
-    const auto characterData = a.getCharacterData();
-    TEST_ASSERT_EQ(characterData, sys::Platform == sys::PlatformType::Linux ? utf8Text : iso88591Text);
-    const auto encoding = a.getEncoding();
-    TEST_ASSERT_TRUE(encoding.has_value());
-    const auto expected_encoding = sys::Platform == sys::PlatformType::Linux ? xml::lite::StringEncoding::Utf8 : xml::lite::StringEncoding::Windows1252;
-    TEST_ASSERT(encoding.value() == expected_encoding);
-
-    std::u8string u8_characterData;
-    a.getCharacterData(u8_characterData);
-    const void* pu8_characterData = u8_characterData.c_str();
-    const std::string u8_characterData_(static_cast<std::string::const_pointer>(pu8_characterData));
-    TEST_ASSERT_EQ(utf8Text, u8_characterData_);     
+    // These do NOT have "<?xml version="1.0" encoding="..." ?>"
+    testReadXmlFile(testName, "utf-8.xml");
+    testReadXmlFile(testName, "windows-1252.xml");
 }
 
 int main(int, char**)
@@ -372,6 +344,5 @@ int main(int, char**)
     TEST_CHECK(testXmlPrintUtf8);
     
     TEST_CHECK(testReadEncodedXmlFiles);
-    TEST_CHECK(testReadUtf8XmlFile);    
-    TEST_CHECK(testReadWindows1252XmlFile);    
+    TEST_CHECK(testReadXmlFiles);    
 }
