@@ -125,6 +125,8 @@ struct NITFReadControl : public ReadControl
      */
     void load(const std::string& fromFile,
               const std::vector<std::string>& schemaPaths) override;
+    void load(const std::string& fromFile,
+        const std::vector<std::string>* pSchemaPaths);
 
     /*
      *  \func load
@@ -139,7 +141,8 @@ struct NITFReadControl : public ReadControl
     void load(std::shared_ptr<nitf::IOInterface> ioInterface);
     void load(std::shared_ptr<nitf::IOInterface> ioInterface,
               const std::vector<std::string>& schemaPaths);
-
+    void load(std::shared_ptr<nitf::IOInterface> ioInterface,
+        const std::vector<std::string>* pSchemaPaths);
 
     using ReadControl::interleaved;
     /*!

@@ -256,6 +256,12 @@ void NITFReadControl::load(const std::string& fromFile,
     auto handle(std::make_shared<nitf::IOHandle>(fromFile));
     load(handle, schemaPaths);
 }
+void NITFReadControl::load(const std::string& fromFile,
+    const std::vector<std::string>* pSchemaPaths)
+{
+    auto handle(std::make_shared<nitf::IOHandle>(fromFile));
+    load(handle, pSchemaPaths);
+}
 
 void NITFReadControl::load(io::SeekableInputStream& stream,
                            const std::vector<std::string>& schemaPaths)
@@ -302,8 +308,21 @@ static std::vector<six::NITFImageInfo*> getImageInfos(six::Container& container)
 }
 
 void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
-                           const std::vector<std::string>& schemaPaths)
+    const std::vector<std::string>& schemaPaths)
 {
+    load(ioInterface, &schemaPaths);
+}
+void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
+                           const std::vector<std::string>* pSchemaPaths_)
+{
+    const std::vector<std::filesystem::path>* pSchemaPaths = nullptr;
+    std::vector<std::filesystem::path> schemaPaths;
+    if (pSchemaPaths_ != nullptr)
+    {
+        std::transform(pSchemaPaths_->begin(), pSchemaPaths_->end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+        pSchemaPaths = &schemaPaths;
+    }
+
     reset();
     mInterface = ioInterface;
 
@@ -331,7 +350,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
             std::unique_ptr<Data> data(parseData(*mXMLRegistry,
                                                ioAdapter,
                                                dataType,
-                                               schemaPaths,
+                                               pSchemaPaths,
                                                *mLog));
             if (data.get() == nullptr)
             {

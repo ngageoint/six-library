@@ -164,25 +164,15 @@ TEST_CASE(valid_six_50x50)
 {
     setNitfPluginPath();
 
+    static const std::vector<std::filesystem::path> schemaPaths;
     const auto inputPathname = getNitfPath("sicd_50x50.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
-    const auto image = six::sicd::readFromNITF(inputPathname, pComplexData);
+    const auto image = six::sicd::readFromNITF(inputPathname, schemaPaths, pComplexData); // validate XML
     const six::Data* pData = pComplexData.get();
 
     TEST_ASSERT_EQ(six::PixelType::RE32F_IM32F, pData->getPixelType());
     TEST_ASSERT_EQ(static_cast<size_t>(8), pData->getNumBytesPerPixel());
 
-    /*
-    // UTF-8 characters in 50x50.nitf
-    #ifdef _WIN32
-    const std::string classificationText("NON CLASSIFI\xc9 / UNCLASSIFIED"); // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
-    #else
-    const std::string classificationText("NON CLASSIFI\xc3\x89 / UNCLASSIFIED"); // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
-    #endif
-    const auto& classification = pData->getClassification();
-    const auto actual = classification.getLevel();
-    //TEST_ASSERT_EQ(actual, classificationText);
-    */
     const std::string classificationText("NON CLASSIFIE' / UNCLASSIFIED");
     const auto& classification = pData->getClassification();
     const auto actual = classification.getLevel();
@@ -197,11 +187,8 @@ TEST_CASE(sicd_French_xml)
 
     const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
-    const auto image = six::sicd::readFromNITF(inputPathname, pComplexData);
+    const auto image = six::sicd::readFromNITF(inputPathname, pComplexData); // no validation
     const six::Data* pData = pComplexData.get();
-
-    TEST_ASSERT_EQ(six::PixelType::RE32F_IM32F, pData->getPixelType());
-    TEST_ASSERT_EQ(static_cast<size_t>(8), pData->getNumBytesPerPixel());
 
     // UTF-8 characters in 50x50.nitf
     #ifdef _WIN32
