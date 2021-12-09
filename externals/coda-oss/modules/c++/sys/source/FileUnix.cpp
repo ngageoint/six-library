@@ -28,11 +28,9 @@
 #include <string.h>
 #include <errno.h>
 
-void sys::File::create(const sys::Filesystem::path& str_, int accessFlags,
+void sys::File::create(const std::string& str, int accessFlags,
         int creationFlags)
 {
-    const auto str = str_.string();
-
     if (accessFlags & sys::File::WRITE_ONLY)
         creationFlags |= sys::File::TRUNCATE;
     mHandle = open(str.c_str(), accessFlags | creationFlags, _SYS_DEFAULT_PERM);
