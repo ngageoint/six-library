@@ -133,12 +133,12 @@ public:
     void destroyChildren();
 
     // use clone() to duplicate an Element
-#if !(defined(SWIG) || defined(SWIG_PYTHON_SILENT_MEMLEAK))
+#if !(defined(SWIG) || defined(SWIGPYTHON) || defined(HAVE_PYTHON_H))
 private: // SWIG needs these
 #endif
     Element(const Element&);
     Element& operator=(const Element&);
-#if !(defined(SWIG) || defined(SWIG_PYTHON_SILENT_MEMLEAK))
+#if !(defined(SWIG) || defined(SWIGPYTHON) || defined(HAVE_PYTHON_H))
 public:
 #endif
 
