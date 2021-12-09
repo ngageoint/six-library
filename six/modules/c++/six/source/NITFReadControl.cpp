@@ -264,10 +264,10 @@ void NITFReadControl::load(const std::string& fromFile,
 }
 
 void NITFReadControl::load(io::SeekableInputStream& stream,
-                           const std::vector<std::string>& schemaPaths)
+                           const std::vector<std::string>* pSchemaPaths)
 {
     auto handle(std::make_shared<nitf::IOStreamReader>(stream));
-    load(handle, schemaPaths);
+    load(handle, pSchemaPaths);
 }
 
 void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface)

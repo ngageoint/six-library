@@ -136,7 +136,12 @@ struct NITFReadControl : public ReadControl
      *  \param schemaPaths Directories or files of schema locations.
      */
     void load(io::SeekableInputStream& ioStream,
-              const std::vector<std::string>& schemaPaths);
+        const std::vector<std::string>* pSchemaPaths);
+    void load(io::SeekableInputStream& ioStream,
+        const std::vector<std::string>& schemaPaths)
+    {
+        load(ioStream, &schemaPaths);
+    }
 
     void load(std::shared_ptr<nitf::IOInterface> ioInterface);
     void load(std::shared_ptr<nitf::IOInterface> ioInterface,

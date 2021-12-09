@@ -55,6 +55,11 @@ void six::sicd::NITFReadComplexXMLControl::load(const std::filesystem::path& fro
     }
     load(fromFile.string(), pSchemaPaths_);
 }
+void six::sicd::NITFReadComplexXMLControl::load(io::FileInputStream& fis, const std::vector<std::string>* pSchemaPaths)
+{
+    reader.load(fis, pSchemaPaths);
+}
+
 
 std::shared_ptr<const six::Container> six::sicd::NITFReadComplexXMLControl::getContainer() const
 {
