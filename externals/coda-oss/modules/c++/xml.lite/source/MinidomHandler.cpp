@@ -46,7 +46,7 @@ void xml::lite::MinidomHandler::clear()
     assert(nodeStack.empty());
 }
 
-void xml::lite::MinidomHandler::characters(const char* value, int length, const string_encoding* pEncoding)
+void xml::lite::MinidomHandler::characters(const char* value, int length, const StringEncoding* pEncoding)
 {
     if (pEncoding != nullptr)
     {
@@ -60,7 +60,7 @@ void xml::lite::MinidomHandler::characters(const char* value, int length, const 
         }
         else if (storeEncoding())
         {
-            mpEncoding = std::make_shared<const string_encoding>(*pEncoding);
+            mpEncoding = std::make_shared<const StringEncoding>(*pEncoding);
         }
     }
 
@@ -74,14 +74,14 @@ void xml::lite::MinidomHandler::characters(const char* value, int length, const 
 }
 void xml::lite::MinidomHandler::characters(const char *value, int length)
 {
-    const string_encoding* pEncoding = nullptr;
+    const StringEncoding* pEncoding = nullptr;
     #ifdef _WIN32
     if (use_wchar_t())
     {
         // If we're still here despite use_char() being "false" then the wide-character
         // routine "failed."  On Windows, that means the char* value is encoded
         // as Windows-1252 (more-or-less ISO8859-1).
-        static const auto encoding = string_encoding::windows_1252;
+        static const auto encoding = StringEncoding::Windows1252;
         pEncoding = &encoding;
     }
     #endif
@@ -111,7 +111,7 @@ inline std::string toUtf8(const uint32_t* value, size_t length)
 bool xml::lite::MinidomHandler::call_characters(const std::string& utf8Value)
 {
     const auto length = static_cast<int>(utf8Value.length());
-    static const auto encoding = xml::lite::string_encoding::utf_8;
+    static const auto encoding = xml::lite::StringEncoding::Utf8;
     characters(utf8Value.c_str(), length, &encoding);
     return true;  // all done, characters(char*) already called, above
 }
