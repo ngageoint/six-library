@@ -42,6 +42,10 @@ namespace fs = std::filesystem;
 
 static fs::path findRoot(const fs::path& p)
 {
+    if (p.empty())
+    {
+        return p;
+    }
     const fs::path LICENSE("LICENSE");
     const fs::path README_md("README.md");
     const fs::path CMakeLists_txt("CMakeLists.txt");
@@ -262,8 +266,13 @@ static void testReadEncodedXmlFile(const std::string& testName, const std::strin
 {
     const auto coda_oss = findRoot();
     const auto unittests = coda_oss / "modules" / "c++" / "xml.lite" / "unittests";
-
-    io::FileInputStream input((unittests / xmlFile).string());
+    
+    const auto path = unittests / xmlFile;
+    if (!exists(path)) // running in "externals" of a different project
+    {
+        return;
+    }
+    io::FileInputStream input(path.string());
 
     xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
     xmlParser.preserveCharacterData(true);
@@ -299,7 +308,12 @@ static void testReadXmlFile(const std::string& testName, const std::string& xmlF
     const auto coda_oss = findRoot();
     const auto unittests = coda_oss / "modules" / "c++" / "xml.lite" / "unittests";
 
-    io::FileInputStream input((unittests / xmlFile).string());
+    const auto path = unittests / xmlFile;
+    if (!exists(path))  // running in "externals" of a different project
+    {
+        return;
+    }
+    io::FileInputStream input(path.string());
 
     xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
     xmlParser.preserveCharacterData(true);
