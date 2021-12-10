@@ -153,12 +153,12 @@ inline std::string toString_(const std::string& name, const T& v, const xml::lit
     return toString(name, v, &parent);
 }
 
-template<typename T>
+template<typename T, typename ToString>
 static xml::lite::Element& createValue(const std::string& name, const std::string& uri,
     const T& v, xml::lite::Element& parent,
-    bool addClassAttributes, const std::string& type, const std::string& attributeUri)
+    bool addClassAttributes, const std::string& type, const std::string& attributeUri,
+    ToString toString)
 {
-    const auto toString = [&](const T& v) { return toString_(name, v, parent); };
     auto& elem = xml::lite::createElement(name, uri, v, parent, toString);
     if (addClassAttributes)
     {
@@ -166,6 +166,14 @@ static xml::lite::Element& createValue(const std::string& name, const std::strin
     }
 
     return elem;
+}
+template<typename T>
+inline xml::lite::Element& createValue(const std::string& name, const std::string& uri,
+    const T& v, xml::lite::Element& parent,
+    bool addClassAttributes, const std::string& type, const std::string& attributeUri)
+{
+    const auto toString = [&](const T& v) { return toString_(name, v, parent); };
+    return createValue(name, uri, v, parent, addClassAttributes, type, attributeUri, toString);
 }
 
 template<typename T>
@@ -249,11 +257,11 @@ xml::lite::Element* XmlLite::createBooleanType(const std::string& name,
         return nullptr;
     }
 
-    xml::lite::Element* const elem =
-            newElement(name, uri, six::toString(p), parent);
-    addClassAttributes(*elem, "xs:boolean");
-
-    return elem;
+    assert(parent != nullptr);
+    const auto toString = [&](const BooleanType& v) { return six::toString(v); };
+    return &createValue(name, uri, p, *parent,
+        mAddClassAttributes, "xs:boolean", getDefaultURI(),
+        toString);
 }
 xml::lite::Element* XmlLite::createBooleanType(const std::string& name, BooleanType p,
         xml::lite::Element* parent) const
@@ -264,21 +272,24 @@ xml::lite::Element* XmlLite::createBooleanType(const std::string& name, BooleanT
 xml::lite::Element* XmlLite::createDateTime(const std::string& name,
         const std::string& uri, const std::string& s, xml::lite::Element* parent) const
 {
-    xml::lite::Element* elem = newElement(name, uri, s, parent);
-    addClassAttributes(*elem, "xs:dateTime");
-
-    return elem;
+    assert(parent != nullptr);
+    return &createValue(name, uri, s, *parent,
+        mAddClassAttributes, "xs:dateTime", getDefaultURI());
 }
 xml::lite::Element* XmlLite::createDateTime(const std::string& name,
         const std::string& s, xml::lite::Element* parent) const
 {
     return createDateTime(name, mDefaultURI, s, parent);
 }
-
 xml::lite::Element* XmlLite::createDateTime(const std::string& name,
         const std::string& uri, const DateTime& p, xml::lite::Element* parent) const
 {
-    return createDateTime(name, uri, six::toString(p), parent);
+    assert(parent != nullptr);
+
+    const auto toString = [&](const DateTime& v) { return six::toString(v); };
+    return &createValue(name, uri, p, *parent,
+        mAddClassAttributes, "xs:dateTime", getDefaultURI(),
+        toString);
 }
 xml::lite::Element* XmlLite::createDateTime(const std::string& name, const DateTime& p,
         xml::lite::Element* parent) const
@@ -289,9 +300,12 @@ xml::lite::Element* XmlLite::createDateTime(const std::string& name, const DateT
 xml::lite::Element* XmlLite::createDate(const std::string& name,
         const std::string& uri, const DateTime& p, xml::lite::Element* parent) const
 {
-    xml::lite::Element* const elem = newElement(name, uri, p.format("%Y-%m-%d"), parent);
-    addClassAttributes(*elem, "xs:date");
-    return elem;
+    assert(parent != nullptr);
+
+    const auto toString = [&](const DateTime& p) { return p.format("%Y-%m-%d"); };
+    return &createValue(name, uri, p, *parent,
+        mAddClassAttributes, "xs:date", getDefaultURI(),
+        toString);
 }
 xml::lite::Element* XmlLite::createDate(const std::string& name, const DateTime& p,
         xml::lite::Element* parent) const
