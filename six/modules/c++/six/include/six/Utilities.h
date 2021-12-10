@@ -222,8 +222,7 @@ mem::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               ::io::InputStream& xmlStream,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger& log);
-std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
-    ::io::InputStream& xmlStream,
+std::unique_ptr<Data> parseData(const XMLControlRegistry&, ::io::InputStream&,
     const std::vector<std::filesystem::path>*, logging::Logger&);
 
 /*

@@ -160,30 +160,48 @@ static void test_nitf_image_info(six::sicd::ComplexData& complexData, const fs::
     }
 }
 
-TEST_CASE(valid_six_50x50)
+static void valid_six_50x50_(const std::vector<std::filesystem::path>* pSchemaPaths)
 {
-    setNitfPluginPath();
-
-    const auto inputPathname = getNitfPath("sicd_50x50.nitf");
+    static const auto inputPathname = getNitfPath("sicd_50x50.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
-    const auto image = six::sicd::readFromNITF(inputPathname, pComplexData);
+    const auto image = six::sicd::readFromNITF(inputPathname, pSchemaPaths, pComplexData);
     const six::Data* pData = pComplexData.get();
 
     TEST_ASSERT_EQ(six::PixelType::RE32F_IM32F, pData->getPixelType());
     TEST_ASSERT_EQ(static_cast<size_t>(8), pData->getNumBytesPerPixel());
 
-    /*
+    const std::string classificationText("NON CLASSIFIE' / UNCLASSIFIED");
+    const auto& classification = pData->getClassification();
+    const auto actual = classification.getLevel();
+    TEST_ASSERT_EQ(actual, classificationText);
+
+    test_nitf_image_info(*pComplexData, inputPathname, nitf::PixelValueType::Floating);
+}
+TEST_CASE(valid_six_50x50)
+{
+    setNitfPluginPath();
+
+    valid_six_50x50_(nullptr /*pSchemaPaths*/); // no XML validiaton
+  
+    const std::vector<std::filesystem::path> schemaPaths;
+    valid_six_50x50_(&schemaPaths); // validate against schema
+}
+
+TEST_CASE(sicd_French_xml)
+{
+    setNitfPluginPath();
+
+    const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
+    std::unique_ptr<six::sicd::ComplexData> pComplexData;
+    const auto image = six::sicd::readFromNITF(inputPathname, pComplexData); // no validation
+    const six::Data* pData = pComplexData.get();
+
     // UTF-8 characters in 50x50.nitf
     #ifdef _WIN32
     const std::string classificationText("NON CLASSIFI\xc9 / UNCLASSIFIED"); // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
     #else
     const std::string classificationText("NON CLASSIFI\xc3\x89 / UNCLASSIFIED"); // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
     #endif
-    const auto& classification = pData->getClassification();
-    const auto actual = classification.getLevel();
-    //TEST_ASSERT_EQ(actual, classificationText);
-    */
-    const std::string classificationText("NON CLASSIFIE' / UNCLASSIFIED");
     const auto& classification = pData->getClassification();
     const auto actual = classification.getLevel();
     TEST_ASSERT_EQ(actual, classificationText);
@@ -359,8 +377,8 @@ TEST_CASE(test_create_sicd_from_mem_32f)
 
 TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(valid_six_50x50);
+    //TEST_CHECK(sicd_French_xml);
     TEST_CHECK(test_readFromNITF_sicd_50x50);
     TEST_CHECK(test_read_sicd_50x50);
     TEST_CHECK(test_create_sicd_from_mem_32f);
     )
-

@@ -78,7 +78,7 @@ struct MinidomParser
      *  \param size  This is the size of the stream to feed the parser
      */
     virtual void parse(io::InputStream& is, int size = io::InputStream::IS_END);
-    
+    virtual void parse(io::InputStream& is, StringEncoding, int size = io::InputStream::IS_END);
 
     /*!
      *  This clears the MinidomHandler, killing its underlying Document
