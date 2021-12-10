@@ -393,14 +393,16 @@ void xml::lite::Element::addChild(xml::lite::Element * node)
     node->setParent(this);
 }
 
-void xml::lite::Element::addChild(std::unique_ptr<xml::lite::Element>&& node)
+xml::lite::Element& xml::lite::Element::addChild(std::unique_ptr<xml::lite::Element>&& node)
 {
+    auto retval = node.get();
     addChild(node.release());
+    return *retval;
 }
 #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-void xml::lite::Element::addChild(mem::auto_ptr<xml::lite::Element> node)
+xml::lite::Element& xml::lite::Element::addChild(mem::auto_ptr<xml::lite::Element> node)
 {
-    addChild(std::unique_ptr<xml::lite::Element>(node.release()));
+    return addChild(std::unique_ptr<xml::lite::Element>(node.release()));
 }
 #endif
 
@@ -527,4 +529,11 @@ void xml::lite::Element::setCharacterData(const std::string& characters, StringE
 void xml::lite::Element::setCharacterData(const sys::U8string& characters)
 {
     setCharacterData(str::c_str<std::string::const_pointer>(characters), StringEncoding::Utf8);
+}
+
+void xml::lite::create(const std::string& name, const std::string& uri,
+                       const std::string& value, Element& parent, Element* &result)
+{
+    auto elem = Element::create(name, uri, value);
+    result = & parent.addChild(std::move(elem));
 }
