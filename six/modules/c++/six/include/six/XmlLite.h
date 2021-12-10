@@ -282,6 +282,8 @@ struct XmlLite final
      */
     static xml::lite::Element& require(xml::lite::Element* element, const std::string& name);
 
+    static void setAttribute_(xml::lite::Element& e, const std::string& name, const std::string& v, const std::string& uri);
+
 private:
     xml::lite::Element* createInt_(const std::string& name, const std::string& uri, int p, xml::lite::Element* parent) const;
     xml::lite::Element* createInt_(const std::string& name, const std::string& uri, const std::string& p, xml::lite::Element* parent) const;
