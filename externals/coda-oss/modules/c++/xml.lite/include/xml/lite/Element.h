@@ -405,9 +405,9 @@ public:
      *  Adds a child element to this element
      *  \param node the child element to add
      */
-    virtual void addChild(std::unique_ptr<Element>&& node);
+    virtual Element& addChild(std::unique_ptr<Element>&& node);
     #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-    virtual void addChild(mem::auto_ptr<Element> node);
+    virtual Element& addChild(mem::auto_ptr<Element> node);
     #endif
 
     /*!
@@ -477,6 +477,8 @@ protected:
                 const std::string& formatter) const;
 };
 
+extern Element& create(const std::string& name, const std::string& uri, const std::string& value, Element& parent);
+
 #ifndef SWIG
 // The (old) version of SWIG we're using doesn't like certain C++11 features.
 
@@ -535,6 +537,42 @@ inline void setValue(Element& element, const T& value)
 {
     setValue(element, value, details::toString<T>);
 }
+
+template <typename T, typename ToString>
+inline Element& create(const std::string& name, const std::string& uri, const T& value, Element& parent,
+    ToString toString)
+{
+    return create(name, uri, toString(value), parent);
+}
+template<typename T>
+inline Element& create(const std::string& name, const std::string& uri, const T& value, Element& parent)
+{
+    return create(name, uri, value, parent, details::toString<T>);
+}
+
+template <typename T, typename ToString>
+inline Element& create(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent,
+    ToString toString)
+{
+    return create(name, uri, v.value(), parent, toString);
+}
+template<typename T>
+inline Element& create(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent)
+{
+    return create(name, uri, v.value(), parent);
+}
+template <typename T, typename ToString>
+inline Element* optionalCreate(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent,
+        ToString toString)
+{
+    return v.has_value() ? &create(name, uri, v, parent, toString) : nullptr;
+}
+template<typename T>
+inline Element* optionalCreate(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent)
+{
+    return v.has_value() ? &create(name, uri, v, parent) : nullptr;
+}
+
 #endif // SWIG
 
 }
