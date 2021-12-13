@@ -24,8 +24,6 @@
 #define __XML_LITE_ELEMENT_H__
 #pragma once
 
-#include <assert.h>
-
 #include <memory>
 #include <string>
 #include <new> // std::nothrow_t
@@ -479,8 +477,7 @@ protected:
                 const std::string& formatter) const;
 };
 
-extern void create(const std::string& name, const std::string& uri, const std::string& value, Element& parent,
-    Element*& result);
+extern Element& create(const std::string& name, const std::string& uri, const std::string& value, Element& parent);
 
 #ifndef SWIG
 // The (old) version of SWIG we're using doesn't like certain C++11 features.
@@ -542,41 +539,38 @@ inline void setValue(Element& element, const T& value)
 }
 
 template <typename T, typename ToString>
-inline Element& createElement(const std::string& name, const std::string& uri, const T& value, Element& parent,
+inline Element& create(const std::string& name, const std::string& uri, const T& value, Element& parent,
     ToString toString)
 {
-    Element* retval;
-    xml::lite::create(name, uri, toString(value), parent, retval);
-    assert(retval != nullptr);
-    return *retval;
+    return create(name, uri, toString(value), parent);
 }
 template<typename T>
-inline Element& createElement(const std::string& name, const std::string& uri, const T& value, Element& parent)
+inline Element& create(const std::string& name, const std::string& uri, const T& value, Element& parent)
 {
-    return createElement(name, uri, value, parent, details::toString<T>);
+    return create(name, uri, value, parent, details::toString<T>);
 }
 
 template <typename T, typename ToString>
-inline Element& createElement(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent,
+inline Element& create(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent,
     ToString toString)
 {
-    return createElement(name, uri, v.value(), parent, toString);
+    return create(name, uri, v.value(), parent, toString);
 }
 template<typename T>
-inline Element& createElement(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent)
+inline Element& create(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent)
 {
-    return createElement(name, uri, v.value(), parent);
+    return create(name, uri, v.value(), parent);
 }
 template <typename T, typename ToString>
-inline Element* createOptonalElement(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent,
+inline Element* optionalCreate(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent,
         ToString toString)
 {
-    return v.has_value() ? &createElement(name, uri, v, parent, toString) : nullptr;
+    return v.has_value() ? &create(name, uri, v, parent, toString) : nullptr;
 }
 template<typename T>
-inline Element* createOptonalElement(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent)
+inline Element* optionalCreate(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent)
 {
-    return v.has_value() ? &createElement(name, uri, v, parent) : nullptr;
+    return v.has_value() ? &create(name, uri, v, parent) : nullptr;
 }
 
 #endif // SWIG
