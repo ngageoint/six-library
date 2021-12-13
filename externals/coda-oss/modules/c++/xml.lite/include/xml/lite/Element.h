@@ -52,7 +52,7 @@ namespace xml
 namespace lite
 {
  /*!
- * \class string_encoding
+ * \class StringEncoding
  * \brief Specifies how std::string is encoded by MinidomParser.
  *
  * This is needed because our use of Xerces generates different
@@ -64,10 +64,10 @@ namespace lite
  * this allows Western European languages to be displayed.  On *ix,
  * UTF-8 is the norm ...
  */
-enum class string_encoding
+enum class StringEncoding
 {
-    windows_1252  // more-or-less ISO5589-1, https://en.wikipedia.org/wiki/Windows-1252
-    , utf_8
+    Windows1252  // more-or-less ISO5589-1, https://en.wikipedia.org/wiki/Windows-1252
+    , Utf8
 };
 // Could do the same for std::wstring, but there isn't any code needing it right now.
 
@@ -106,7 +106,7 @@ public:
         setCharacterData(characterData);
     }
     Element(const std::string& qname, const std::string& uri,
-            const std::string& characterData, string_encoding encoding) :
+            const std::string& characterData, StringEncoding encoding) :
         Element(qname, uri, nullptr)
     {
         setCharacterData(characterData, encoding);
@@ -118,7 +118,7 @@ public:
         setCharacterData(characterData);
     }
 
-    // string_encoding is assumed based on the platform: Windows-1252 or UTF-8.
+    // StringEncoding is assumed based on the platform: Windows-1252 or UTF-8.
     static std::unique_ptr<Element> create(const std::string& qname, const std::string& uri = "", const std::string& characterData = "");
     // Encoding of "characterData" is assumed based on the platform: Windows-1252 or UTF-8
     static std::unique_ptr<Element> createU8(const std::string& qname, const std::string& uri = "", const std::string& characterData = "");
@@ -132,18 +132,18 @@ public:
     //! Destroys any child elements.
     void destroyChildren();
 
-    /*!
-     * Copy constructor
-     * \param element  Takes an element
-     */
-    Element(const Element& element);
+    // use clone() to duplicate an Element
+#if !(defined(SWIG) || defined(SWIGPYTHON) || defined(HAVE_PYTHON_H))  // SWIG needs these
+//private: // encoded as part of the C++ name mangling by some compilers
+#endif
+    Element(const Element&);
+    Element& operator=(const Element&);
+#if !(defined(SWIG) || defined(SWIGPYTHON) || defined(HAVE_PYTHON_H))
+public:
+#endif
 
-    /*!
-     *  Assignment operator
-     *  \param element  Takes an element
-     *  \return a reference to *this
-     */
-    Element& operator=(const Element& element);
+    Element(Element&&) = default;
+    Element& operator=(Element&&) = default;
 
     /*!
      *  Clone function performs deep copy
@@ -289,13 +289,13 @@ public:
     // print() routine (above) can write documents with a Windows-1252 encoding
     // as the string is just copied to the output.
     //
-    // The only valid setting for string_encoding is utf_8; but defaulting that
+    // The only valid setting for StringEncoding is Utf8; but defaulting that
     // could change behavior on Windows.
-    void print(io::OutputStream& stream, string_encoding /*=utf_8*/) const;
+    void print(io::OutputStream& stream, StringEncoding /*=Utf8*/) const;
 
     void prettyPrint(io::OutputStream& stream,
                      const std::string& formatter = "    ") const;
-    void prettyPrint(io::OutputStream& stream, string_encoding /*=utf_8*/,
+    void prettyPrint(io::OutputStream& stream, StringEncoding /*=Utf8*/,
                      const std::string& formatter = "    ") const;
 
     /*!
@@ -321,11 +321,11 @@ public:
     {
         return mCharacterData;
     }
-    const sys::Optional<string_encoding>& getEncoding() const
+    const sys::Optional<StringEncoding>& getEncoding() const
     {
         return mEncoding;
     }
-   const sys::Optional<string_encoding>& getCharacterData(std::string& result) const
+   const sys::Optional<StringEncoding>& getCharacterData(std::string& result) const
     {
         result = getCharacterData();
         return getEncoding();
@@ -336,9 +336,9 @@ public:
      *  Sets the character data for this element.
      *  \param characters The data to add to this element
      */
-    void setCharacterData_(const std::string& characters, const string_encoding*);
+    void setCharacterData_(const std::string& characters, const StringEncoding*);
     void setCharacterData(const std::string& characters);
-    void setCharacterData(const std::string& characters, string_encoding);
+    void setCharacterData(const std::string& characters, StringEncoding);
     void setCharacterData(const sys::U8string& characters);
 
     /*!
@@ -405,9 +405,9 @@ public:
      *  Adds a child element to this element
      *  \param node the child element to add
      */
-    virtual void addChild(std::unique_ptr<Element>&& node);
+    virtual Element& addChild(std::unique_ptr<Element>&& node);
     #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-    virtual void addChild(mem::auto_ptr<Element> node);
+    virtual Element& addChild(mem::auto_ptr<Element> node);
     #endif
 
     /*!
@@ -458,7 +458,7 @@ protected:
 
     void depthPrint(io::OutputStream& stream, int depth,
                     const std::string& formatter) const;
-    void depthPrint(io::OutputStream& stream, string_encoding, int depth,
+    void depthPrint(io::OutputStream& stream, StringEncoding, int depth,
                     const std::string& formatter) const;
 
     Element* mParent;
@@ -472,10 +472,12 @@ protected:
 
     private:
         // ... and how that data is encoded
-        sys::Optional<string_encoding> mEncoding;
+        sys::Optional<StringEncoding> mEncoding;
         void depthPrint(io::OutputStream& stream, bool utf8, int depth,
                 const std::string& formatter) const;
 };
+
+extern Element& create(const std::string& name, const std::string& uri, const std::string& value, Element& parent);
 
 #ifndef SWIG
 // The (old) version of SWIG we're using doesn't like certain C++11 features.
@@ -535,6 +537,42 @@ inline void setValue(Element& element, const T& value)
 {
     setValue(element, value, details::toString<T>);
 }
+
+template <typename T, typename ToString>
+inline Element& create(const std::string& name, const std::string& uri, const T& value, Element& parent,
+    ToString toString)
+{
+    return create(name, uri, toString(value), parent);
+}
+template<typename T>
+inline Element& create(const std::string& name, const std::string& uri, const T& value, Element& parent)
+{
+    return create(name, uri, value, parent, details::toString<T>);
+}
+
+template <typename T, typename ToString>
+inline Element& create(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent,
+    ToString toString)
+{
+    return create(name, uri, v.value(), parent, toString);
+}
+template<typename T>
+inline Element& create(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent)
+{
+    return create(name, uri, v.value(), parent);
+}
+template <typename T, typename ToString>
+inline Element* optionalCreate(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent,
+        ToString toString)
+{
+    return v.has_value() ? &create(name, uri, v, parent, toString) : nullptr;
+}
+template<typename T>
+inline Element* optionalCreate(const std::string& name, const std::string& uri, const sys::Optional<T>& v, Element& parent)
+{
+    return v.has_value() ? &create(name, uri, v, parent) : nullptr;
+}
+
 #endif // SWIG
 
 }

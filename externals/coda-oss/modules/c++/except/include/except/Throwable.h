@@ -28,6 +28,7 @@
 #include <vector>
 #include <sstream>
 #include <exception>
+#include <stdexcept>
 #include <numeric> // std::accumulate
 #include <memory>
 

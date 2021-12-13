@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include <vector>
 
 #include "xml/lite/XMLReader.h"
@@ -32,7 +34,8 @@ xml::lite::XMLReaderXerces::XMLReaderXerces()
     create();
 }
 
-void xml::lite::XMLReaderXerces::parse(io::InputStream & is, int size)
+void xml::lite::XMLReaderXerces::parse(bool storeEncoding,
+    io::InputStream& is, const StringEncoding* pEncoding, int size)
 {
     io::StringStream oss;
     is.streamTo(oss, size);
@@ -43,16 +46,70 @@ void xml::lite::XMLReaderXerces::parse(io::InputStream & is, int size)
         throw xml::lite::XMLParseException(Ctxt("No stream available"));
     }
     std::vector<sys::byte> buffer(available);
-    oss.read(buffer.data(), available);
-
+    oss.read(buffer.data(), buffer.size());
+    parse(storeEncoding, buffer, pEncoding);
+}
+void xml::lite::XMLReaderXerces::parse(bool storeEncoding,
+    const std::vector<sys::byte>& buffer, const StringEncoding* pEncoding)
+{
     // Does not take ownership
     MemBufInputSource memBuffer((const unsigned char *)buffer.data(),
-                                available,
+                                buffer.size(),
                                 XMLReaderXerces::MEM_BUFFER_ID(),
                                 false);
 
-    mNative->parse(memBuffer);
+    if ((pEncoding != nullptr) && (*pEncoding == StringEncoding::Windows1252))
+    {
+        // The only other value is StringEncoding::Utf8 which is the default
+        memBuffer.setEncoding(XMLUni::fgWin1252EncodingString);
+    }
+
+    try
+    {
+        mNative->parse(memBuffer);
+        return; // successful parse
+    }
+    catch (const except::Error& e)
+    {
+        const auto msg = e.getMessage();
+        if (msg != " (1,1): invalid byte 'X' at position 2 of a 2-byte sequence")
+        {
+            throw;
+        }
+        // Caller specified an encoding; don't try calling parse() again
+        if (pEncoding != nullptr)
+        {
+            throw;
+        }
+        // legacy code, didn't pass storeEncoding=true to MinidomParser
+        if (!storeEncoding)
+        {
+            throw;
+        }
+    }
+
+    // If we're here, the initial parse failed and the caller did NOT specify an encoding
+    // (pEncoding == NULL).  Since the default is UTF-8 and that failed, try again
+    // with Windows-1252.
+    assert(pEncoding == nullptr);
+    assert(storeEncoding);
+    const auto windows1252 = StringEncoding::Windows1252;
+    parse(true /*storeEncoding*/, buffer, &windows1252);
 }
+void xml::lite::XMLReaderXerces::parse(io::InputStream& is, int size)
+{
+    parse(false /*storeEncoding*/, is, size);
+}
+void xml::lite::XMLReaderXerces::parse(bool storeEncoding, io::InputStream& is, int size)
+{
+    parse(storeEncoding, is, nullptr /*pEncoding*/, size);
+}
+void xml::lite::XMLReaderXerces::parse(bool storeEncoding, 
+    io::InputStream& is, StringEncoding encoding, int size)
+{
+    parse(storeEncoding, is, &encoding, size);
+}
+
 
 // This function creates the parser
 void xml::lite::XMLReaderXerces::create()

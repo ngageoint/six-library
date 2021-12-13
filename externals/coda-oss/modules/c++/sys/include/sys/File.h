@@ -112,11 +112,6 @@ struct File
      *  \param accessFlags File access flags
      *  \param creationFlags File creation flags
      */
-    File(const sys::Filesystem::path& str, int accessFlags = READ_ONLY, 
-         int creationFlags = EXISTING)
-    {
-        create(str, accessFlags, creationFlags);
-    }
     explicit File(const std::string& str, int accessFlags = READ_ONLY, 
          int creationFlags = EXISTING)
     {
@@ -166,7 +161,7 @@ struct File
      *  \param accessFlags File access flags
      *  \param creationFlags File creation flags
      */
-    void create(const sys::Filesystem::path& str, int accessFlags, 
+    void create(const std::string& str, int accessFlags, 
                 int creationFlags);
 
     /*!

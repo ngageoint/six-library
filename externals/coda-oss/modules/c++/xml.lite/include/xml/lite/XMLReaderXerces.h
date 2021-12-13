@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_XERCES_XML_READER_H__
-#define __XML_LITE_XERCES_XML_READER_H__
+#ifndef CODA_OSS_xml_lite_XMLReaderXerces_h_INCLUDED_
+#define CODA_OSS_xml_lite_XMLReaderXerces_h_INCLUDED_
 
 #include "xml/lite/xml_lite_config.h"
 
@@ -99,6 +99,9 @@ public:
     }
 
     void parse(io::InputStream& is, int size = io::InputStream::IS_END);
+
+    void parse(bool storeEncoding, io::InputStream& is, int size = io::InputStream::IS_END);
+    void parse(bool storeEncoding, io::InputStream& is, StringEncoding, int size = io::InputStream::IS_END);
     
     //! Method to create an xml reader
     void create();
@@ -109,6 +112,9 @@ public:
     std::string getDriverName() const { return "xerces"; }
 
 private:
+    void parse(bool storeEncoding, io::InputStream& is, const StringEncoding*, int size);
+    void parse(bool storeEncoding, const std::vector<sys::byte>&, const StringEncoding* pEncoding);
+
     virtual void write(const void*, size_t)
     {
         throw xml::lite::XMLException(Ctxt("I'm not sure how you got here!"));
@@ -119,4 +125,4 @@ private:
 }
 
 #endif
-#endif
+#endif // CODA_OSS_xml_lite_XMLReaderXerces_h_INCLUDED_
