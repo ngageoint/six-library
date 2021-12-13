@@ -579,7 +579,7 @@ static void readSicd_(const std::string& sicdPathname,
                          std::vector<std::complex<float>>& widebandData)
 {
     six::sicd::NITFReadComplexXMLControl reader;
-    reader.load(sicdPathname, schemaPaths);
+    reader.load(sicdPathname, &schemaPaths);
 
     // For SICD, there's only one image (container->size() == 1)
     if (reader.getContainer()->size() != 1)
@@ -640,7 +640,7 @@ static void readSicd_(const std::string& sicdPathname,
                          TScalarMeshPtr& scalarMesh)
 {
     six::sicd::NITFReadComplexXMLControl reader;
-    reader.load(sicdPathname, schemaPaths);
+    reader.load(sicdPathname, &schemaPaths);
 
     auto complexData_ = reader.getComplexData();
     complexData.reset(complexData_.release());
@@ -728,7 +728,7 @@ mem::auto_ptr<ComplexData> Utilities::getComplexData(
     else
     {
         six::sicd::NITFReadComplexXMLControl reader;
-        reader.load(pathname, schemaPaths);
+        reader.load(pathname, &schemaPaths);
 
         auto pComplexData = reader.getComplexData();
         return mem::auto_ptr<ComplexData>(pComplexData.release());
@@ -1553,12 +1553,12 @@ void Utilities::projectPixelsToSlantPlane(
 }
 }
 
-std::vector<std::byte> six::sicd::readFromNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths,
+std::vector<std::byte> six::sicd::readFromNITF(const fs::path& pathname, const std::vector<fs::path>* pSchemaPaths,
     std::unique_ptr<ComplexData>& pComplexData)
 {
     six::sicd::NITFReadComplexXMLControl reader;
     reader.setLogger();
-    reader.load(pathname, schemaPaths);
+    reader.load(pathname, pSchemaPaths);
     
     // For SICD, there's only one image (container->size() == 1)
     if (reader.getContainer()->size() != 1)
