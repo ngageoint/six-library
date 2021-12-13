@@ -68,7 +68,7 @@ xml::lite::Element* xml::lite::Document::createElement(const std::string& qname,
 }
 xml::lite::Element* xml::lite::Document::createElement(const std::string& qname,
                                    const std::string& uri,
-                                   const std::string& characterData, string_encoding encoding)
+                                   const std::string& characterData, StringEncoding encoding)
 {
     auto elem = newElement(qname, uri);
     elem->setCharacterData(characterData, encoding);

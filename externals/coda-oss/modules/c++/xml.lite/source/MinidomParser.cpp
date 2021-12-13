@@ -31,7 +31,11 @@ xml::lite::MinidomParser::MinidomParser(bool storeEncoding)
 void xml::lite::MinidomParser::parse(io::InputStream& is,
                                      int size)
 {
-    mReader.parse(is, size);
+    mReader.parse(mHandler.storeEncoding(), is, size);
+}
+void xml::lite::MinidomParser::parse(io::InputStream& is, StringEncoding encoding, int size)
+{
+    mReader.parse(mHandler.storeEncoding(), is, encoding, size);
 }
 
 void xml::lite::MinidomParser::clear()

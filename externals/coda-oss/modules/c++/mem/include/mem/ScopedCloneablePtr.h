@@ -20,14 +20,11 @@
  *
  */
 
-#ifndef __MEM_SCOPED_CLONEABLE_PTR_H__
-#define __MEM_SCOPED_CLONEABLE_PTR_H__
+#ifndef CODA_OSS_mem_ScopedCloneablePtr_h_INCLUDED_
+#define CODA_OSS_mem_ScopedCloneablePtr_h_INCLUDED_
 #pragma once
 
-#include <memory>
-#include <cstddef>
-
-#include "sys/Conf.h"
+#include "mem/ScopedPtr.h"
 
 namespace mem
 {
@@ -50,108 +47,8 @@ namespace mem
  *         (if all the other member variables are POD or have correct
  *         copy constructors / assignment operators).
  */
-template <class T>
-class ScopedCloneablePtr
-{
-    std::unique_ptr<T> mPtr;
-
-public:
-    explicit ScopedCloneablePtr(T* ptr = nullptr)
-    {
-        reset(ptr);
-    }
-
-    explicit ScopedCloneablePtr(std::unique_ptr<T>&& ptr)
-    {
-        reset(std::move(ptr));
-    }
-    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
-    explicit ScopedCloneablePtr(mem::auto_ptr<T> ptr)
-    {
-        reset(ptr);
-    }
-    #endif
-
-    ScopedCloneablePtr(const ScopedCloneablePtr& rhs)
-    {
-        *this = rhs;
-    }
-
-    const ScopedCloneablePtr&
-    operator=(const ScopedCloneablePtr& rhs)
-    {
-        if (this != &rhs)
-        {
-            auto rhs_ptr = rhs.get();
-            if (rhs_ptr != nullptr)
-            {
-                reset(rhs_ptr->clone());
-            }
-            else
-            {
-                reset();
-            }
-        }
-
-        return *this;
-    }
-
-    ScopedCloneablePtr(ScopedCloneablePtr&&) = default;
-    ScopedCloneablePtr& operator=(ScopedCloneablePtr&&) = default;
-
-    bool operator==(const ScopedCloneablePtr<T>& rhs) const
-    {
-        auto ptr = get();
-        auto rhs_ptr = rhs.get();
-        if (ptr == nullptr && rhs_ptr == nullptr)
-        {
-            return true;
-        }
-
-        if (ptr == nullptr || rhs_ptr == nullptr)
-        {
-            return false;
-        }
-
-        return *ptr == *rhs_ptr;
-    }
-
-    bool operator!=(const ScopedCloneablePtr<T>& rhs) const
-    {
-        return !(*this == rhs);
-    }
-
-    T* get() const
-    {
-        return mPtr.get();
-    }
-
-    T& operator*() const
-    {
-        return *get();
-    }
-
-    T* operator->() const
-    {
-        return get();
-    }
-
-    void reset(T* ptr = nullptr)
-    {
-        mPtr.reset(ptr);
-    }
-
-    void reset(std::unique_ptr<T>&& ptr)
-    {
-        mPtr = std::move(ptr);
-    }
-    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
-    void reset(mem::auto_ptr<T> ptr)
-    {
-        reset(std::unique_ptr<T>(ptr.release()));
-    }
-    #endif
-};
+template <typename T>
+using ScopedCloneablePtr = ScopedPtr<T, std::true_type /*CopyIsClone*/>;
 }
 
-#endif
+#endif // CODA_OSS_mem_ScopedCloneablePtr_h_INCLUDED_

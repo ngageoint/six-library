@@ -177,13 +177,13 @@ public:
      * the non-ASCII data.
      */
     virtual void storeEncoding(bool value);
-
-protected:
-    void characters(const char* value, int length, const string_encoding*);
     bool storeEncoding() const;
 
+protected:
+    void characters(const char* value, int length, const StringEncoding*);
+
     std::string currentCharacterData;
-    std::shared_ptr<const string_encoding> mpEncoding;
+    std::shared_ptr<const StringEncoding> mpEncoding;
     std::stack<int> bytesForElement;
     std::stack<Element *> nodeStack;
     Document *mDocument;
