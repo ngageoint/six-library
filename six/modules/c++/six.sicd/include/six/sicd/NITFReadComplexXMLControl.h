@@ -64,16 +64,25 @@ namespace six
 			const six::NITFReadControl& NITFReadControl() const { return reader; }
 			six::NITFReadControl& NITFReadControl() { return reader; }
 
-			void load(const std::string& fromFile,
-				const std::vector<std::string>& schemaPaths);
-			void load(const std::filesystem::path& fromFile,
-				const std::vector<std::filesystem::path>& schemaPaths);
+			void load(const std::string& fromFile, const std::vector<std::string>* pSchemaPaths);
+			void load(const std::string& fromFile, const std::vector<std::string>& schemaPaths)
+			{
+				load(fromFile, &schemaPaths);
+			}
+			void load(const std::filesystem::path& fromFile, const std::vector<std::filesystem::path>* pSchemaPaths);
+			void load(const std::filesystem::path& fromFile, const std::vector<std::filesystem::path>& schemaPaths)
+			{
+				load(fromFile, &schemaPaths);
+			}
 			void load(const std::filesystem::path& fromFile)
 			{
-				static const std::vector<std::filesystem::path> schemaPaths;
-				load(fromFile, schemaPaths);
+				load(fromFile, nullptr /*schemaPaths*/);
 			}
-			void load(io::FileInputStream&, const std::vector<std::string>& schemaPaths);
+			void load(io::FileInputStream&, const std::vector<std::string>* pSchemaPaths);
+			void load(io::FileInputStream& fis, const std::vector<std::string>& schemaPaths)
+			{
+				load(fis, &schemaPaths);
+			}
 
 			std::shared_ptr<const six::Container> getContainer() const;
 			std::shared_ptr<six::Container> getContainer();

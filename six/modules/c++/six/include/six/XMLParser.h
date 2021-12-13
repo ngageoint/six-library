@@ -191,10 +191,6 @@ protected:
     XMLElem createDateTime(const std::string& name,
             const std::string& uri, const DateTime& p, XMLElem parent = nullptr) const;
 
-    XMLElem createDateTime(const std::string& name,
-            const std::string& uri, const std::string& s,
-            XMLElem parent = nullptr) const;
-
     XMLElem createDate(const std::string& name,
             const std::string& uri, const DateTime& p, XMLElem parent = nullptr) const;
 
@@ -227,8 +223,6 @@ protected:
     XMLElem createBooleanType(const std::string& name, BooleanType b,
             XMLElem parent = nullptr) const;
 
-    XMLElem createDateTime(const std::string& name,
-            const std::string& s, XMLElem parent = nullptr) const;
     XMLElem createDate(const std::string& name, const DateTime& p,
             XMLElem parent = nullptr) const;
 

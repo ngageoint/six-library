@@ -657,12 +657,16 @@ public:
 
 
 // c.f. six_sicd.i
-extern std::vector<std::byte> readFromNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths,
-    std::unique_ptr<ComplexData>& pComplexData);
+extern std::vector<std::byte> readFromNITF(const std::filesystem::path& pathname, const std::vector<std::filesystem::path>*,
+    std::unique_ptr<ComplexData>& pComplexData); 
+inline std::vector<std::byte> readFromNITF(const std::filesystem::path& pathname, const std::vector<std::filesystem::path>& schemaPaths,
+    std::unique_ptr<ComplexData>& pComplexData)
+{
+    return readFromNITF(pathname, &schemaPaths, pComplexData);
+}
 inline std::vector<std::byte> readFromNITF(const std::filesystem::path& pathname, std::unique_ptr<ComplexData>& pComplexData)
 {
-    static const std::vector<std::filesystem::path> schemaPaths;
-    return readFromNITF(pathname, schemaPaths, pComplexData);
+    return readFromNITF(pathname, nullptr /*pSchemaPaths*/, pComplexData);
 }
 
 // c.f. six_sicd.i
