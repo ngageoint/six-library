@@ -66,16 +66,9 @@ xml::lite::Element& XmlLite::newElement(const xml::lite::QName& name, xml::lite:
     return *newElement(name, "", &parent);
 }
 
-static void addClassAttributes_(xml::lite::Element& elem, const std::string& type, const xml::lite::Uri& uri)
+static void addClassAttributes(xml::lite::Element& elem, const std::string& type, const xml::lite::Uri& uri)
 {
     XmlLite::setAttribute(elem, xml::lite::QName(uri, "class"), type);
-}
-void XmlLite::addClassAttributes(xml::lite::Element& elem, const std::string& type) const
-{
-    if (mAddClassAttributes)
-    {
-        addClassAttributes_(elem, type, getDefaultURI());
-    }
 }
 
 xml::lite::Element* XmlLite::newElement(const xml::lite::QName& name, const std::string& characterData,
@@ -101,7 +94,11 @@ xml::lite::Element& XmlLite::createString(const xml::lite::QName& name, const st
 {
     auto pElem = newElement(name, p, &parent);
     auto& elem = *pElem;
-    addClassAttributes(elem, "xs:string");
+
+    if (mAddClassAttributes)
+    {
+        addClassAttributes(elem, "xs:string", getDefaultURI());
+    }
 
     return elem;
 }
@@ -152,13 +149,13 @@ inline std::string toString_(const xml::lite::QName& name, const T& v, const xml
 template<typename T, typename ToString>
 static xml::lite::Element& createValue(const xml::lite::QName& name,
     const T& v, xml::lite::Element& parent,
-    bool addClassAttributes, const std::string& type, const xml::lite::Uri& attributeUri,
+    bool bAddClassAttributes, const std::string& type, const xml::lite::Uri& attributeUri,
     ToString toString)
 {
     auto& elem = xml::lite::addNewElement(name, v, parent, toString);
-    if (addClassAttributes)
+    if (bAddClassAttributes)
     {
-        addClassAttributes_(elem, type, attributeUri);
+        addClassAttributes(elem, type, attributeUri);
     }
 
     return elem;
@@ -191,7 +188,10 @@ xml::lite::Element& XmlLite::createInt(const xml::lite::QName& name,int p, xml::
 xml::lite::Element& XmlLite::createInt(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const
 {
     xml::lite::Element* const elem = newElement(name, p, &parent);
-    addClassAttributes(*elem, "xs:int");
+    if (mAddClassAttributes)
+    {
+        addClassAttributes(*elem, "xs:int", getDefaultURI());
+    }
     return *elem;
 }
 xml::lite::Element& XmlLite::createInt_(const std::string& name, int p, xml::lite::Element& parent) const

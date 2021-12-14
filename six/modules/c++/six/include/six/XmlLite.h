@@ -244,7 +244,6 @@ struct XmlLite final
 private:
     xml::lite::Element& createInt_(const std::string& name, int p, xml::lite::Element& parent) const;
     xml::lite::Element* createString_(const std::string& name, const std::string& p, xml::lite::Element* parent) const;
-    void addClassAttributes(xml::lite::Element& elem, const std::string& type) const;
 
     const xml::lite::Uri mDefaultURI;
     const bool mAddClassAttributes;
