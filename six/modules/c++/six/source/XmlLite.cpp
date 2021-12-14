@@ -119,8 +119,8 @@ xml::lite::Element* XmlLite::createString(const std::string& name,
 }
 #endif
 
-xml::lite::Element* XmlLite::createString_(const std::string& name,
-        const std::string& p, xml::lite::Element* parent) const
+xml::lite::Element& XmlLite::createString_(const std::string& name,
+        const std::string& p, xml::lite::Element& parent) const
 {
     return createString(xml::lite::QName(getDefaultURI(), name), p, parent);
 }

@@ -86,7 +86,8 @@ XMLElem XMLParser::newElement(const std::string& name,
 XMLElem XMLParser::createString(const std::string& name,
         const std::string& uri, const std::string& p, XMLElem parent) const
 {
-    return mXmlLite.createString(xml::lite::QName(uri, name), p, parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createString(xml::lite::QName(uri, name), p, *parent);
 }
 
 #if CODA_OSS_lib_char8_t

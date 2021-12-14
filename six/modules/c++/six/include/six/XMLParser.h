@@ -102,11 +102,12 @@ struct XMLParser
 #if CODA_OSS_lib_char8_t
     XMLElem createString(const std::string& name,
         const std::string& uri, const std::u8string& p,
-        XMLElem parent = nullptr) const;
+        XMLElem parent) const;
 #endif
-    XMLElem createString(const std::string& name, const char* p = "",
-        XMLElem parent = nullptr) const {
-        return mXmlLite.createString(name, p, parent);
+    XMLElem createString(const std::string& name, const char* p,
+        XMLElem parent) const {
+        assert(parent != nullptr);
+        return &mXmlLite.createString(name, p, *parent);
     }
     template<typename T>
     XMLElem createSixString(const std::string& name,
@@ -193,14 +194,15 @@ protected:
     // generic element creation methods, using default URI
     template<typename T>
     XMLElem createString(const std::string& name, const T& t,
-        XMLElem parent = nullptr) const {
+        XMLElem parent) const {
         assert(parent != nullptr);
         return & createString(name, t, *parent);
     }
     template<typename T>
     XMLElem createSixString(const std::string& name, const T& t, // six::toString(t) isntead of t.toString()
-        XMLElem parent = nullptr) const {
-        return mXmlLite.createSixString(name, t, parent);
+        XMLElem parent) const {
+        assert(parent != nullptr);
+        return &mXmlLite.createSixString(name, t, *parent);
     }
     template<typename T>
     XMLElem createInt(const std::string& name, T p = 0,
