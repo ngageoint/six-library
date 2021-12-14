@@ -164,18 +164,22 @@ protected:
 
     XMLElem createInt(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent) const
     {
-        return mXmlLite.createInt(xml::lite::QName(uri, name), p, parent);
+        assert(parent != nullptr);
+        return &mXmlLite.createInt(xml::lite::QName(uri, name), p, *parent);
     }
-    XMLElem createInt(const std::string& name, const std::string& uri, int p = 0, XMLElem parent = nullptr) const
+    XMLElem createInt(const std::string& name, const std::string& uri, int p, XMLElem parent) const
     {
-        return mXmlLite.createInt(xml::lite::QName(uri, name), p, parent);
+        assert(parent != nullptr);
+        return &mXmlLite.createInt(xml::lite::QName(uri, name), p, *parent);
     }
-    XMLElem createInt(const std::string& name, const std::string& uri, size_t p = 0, XMLElem parent = nullptr) const
+    XMLElem createInt(const std::string& name, const std::string& uri, size_t p, XMLElem parent) const
     {
+        assert(parent != nullptr);
         return createInt(name, uri, gsl::narrow<int>(p), parent);
     }
-    XMLElem createInt(const std::string& name, const std::string& uri, ptrdiff_t p = 0, XMLElem parent = nullptr) const
+    XMLElem createInt(const std::string& name, const std::string& uri, ptrdiff_t p, XMLElem parent) const
     {
+        assert(parent != nullptr);
         return createInt(name, uri, gsl::narrow<int>(p), parent);
     }
 
