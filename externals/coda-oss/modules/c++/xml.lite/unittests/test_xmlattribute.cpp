@@ -85,7 +85,7 @@ TEST_CASE(test_getAttributeByNS)
     TEST_ASSERT_EQ("314", strValue);
     strValue = getValue<std::string>(attributes, uri, "int");
     TEST_ASSERT_EQ("314", strValue);
-    const auto key = std::make_tuple(uri, "int");
+    const auto key = xml::lite::QName(uri, "int");
     strValue = getValue<std::string>(attributes, key);
     TEST_ASSERT_EQ("314", strValue);
 
