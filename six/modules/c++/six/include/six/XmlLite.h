@@ -94,14 +94,16 @@ struct XmlLite final
     }
 
     // generic element creation methods, w/URI
-    xml::lite::Element& createString(const std::string& name,
-        const xml::lite::Uri&, const std::string& p,
-        xml::lite::Element&) const;
-    xml::lite::Element* createString(const std::string& name,
-        const xml::lite::Uri& uri, const std::string& p = "",
-        xml::lite::Element* parent = nullptr) const
+    xml::lite::Element& createString(const xml::lite::QName&, const std::string& p, xml::lite::Element& parent) const;
+    xml::lite::Element& createString(const std::string& name, const xml::lite::Uri& uri, const std::string& p,
+        xml::lite::Element& parent) const
     {
-        return &createString(name, uri, p, *parent);
+        return createString(xml::lite::QName(uri, name), p, parent);
+    }
+    xml::lite::Element* createString(const std::string& name, const xml::lite::Uri& uri,
+        const std::string& p, xml::lite::Element* parent) const
+    {
+        return &createString(xml::lite::QName(uri, name), p, *parent);
     }
     #if CODA_OSS_lib_char8_t
     xml::lite::Element* createString(const std::string& name,
@@ -111,11 +113,10 @@ struct XmlLite final
     xml::lite::Element& createString(const std::string& name, const std::string&, xml::lite::Element& parent) const;
 
     template<typename T>
-    xml::lite::Element* createSixString(const std::string& name,
-        const xml::lite::Uri& uri, const T& t,
-        xml::lite::Element* parent = nullptr) const
+    xml::lite::Element& createSixString(const xml::lite::QName& name, const T& t,
+        xml::lite::Element& parent) const
     {
-        return createString(name, uri, toString(t), parent);
+        return createString(name.getName(), name.getUri(), toString(t), parent);
     }
 
     template <typename T>

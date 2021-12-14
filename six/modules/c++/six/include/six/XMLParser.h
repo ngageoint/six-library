@@ -111,9 +111,10 @@ struct XMLParser
     template<typename T>
     XMLElem createSixString(const std::string& name,
         const std::string& uri, const T& t,
-        XMLElem parent = nullptr) const
+        XMLElem parent) const
     {
-        return mXmlLite.createSixString(name, xml::lite::Uri(uri), t, parent);
+        assert(parent != nullptr);
+        return &mXmlLite.createSixString(xml::lite::QName(uri, name), t, *parent);
     }
 
     XMLElem createDateTime(const std::string& name, const DateTime& p,
