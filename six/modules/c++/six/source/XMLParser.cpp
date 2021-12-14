@@ -158,13 +158,15 @@ XMLElem XMLParser::createBooleanType(const std::string& name, BooleanType p,
 XMLElem XMLParser::createDateTime(const std::string& name,
         const std::string& uri, const DateTime& p, XMLElem parent) const
 {
-    return mXmlLite.createDateTime(name, xml::lite::Uri(uri), p, parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createDateTime(xml::lite::QName(uri, name), p, *parent);
 }
 
 XMLElem XMLParser::createDateTime(const std::string& name, const DateTime& p,
         XMLElem parent) const
 {
-    return mXmlLite.createDateTime(name, p, parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createDateTime(name, p, *parent);
 }
 
 XMLElem XMLParser::createDate(const std::string& name,

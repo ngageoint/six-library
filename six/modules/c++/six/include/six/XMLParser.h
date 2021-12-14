@@ -117,7 +117,7 @@ struct XMLParser
     }
 
     XMLElem createDateTime(const std::string& name, const DateTime& p,
-        XMLElem parent = nullptr) const;
+        XMLElem parent) const;
 
 protected:
     logging::Logger* log() const
@@ -189,7 +189,7 @@ protected:
            const std::string& uri, BooleanType b, XMLElem parent = nullptr) const;
 
     XMLElem createDateTime(const std::string& name,
-            const std::string& uri, const DateTime& p, XMLElem parent = nullptr) const;
+            const std::string& uri, const DateTime& p, XMLElem parent) const;
 
     XMLElem createDate(const std::string& name,
             const std::string& uri, const DateTime& p, XMLElem parent) const;

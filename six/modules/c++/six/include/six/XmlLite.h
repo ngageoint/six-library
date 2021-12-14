@@ -155,12 +155,7 @@ struct XmlLite final
     xml::lite::Element* createBooleanType(const std::string& name,
            const xml::lite::Uri&, BooleanType b, xml::lite::Element* parent = nullptr) const;
 
-    xml::lite::Element* createDateTime(const std::string& name,
-            const xml::lite::Uri&, const DateTime& p, xml::lite::Element* parent = nullptr) const;
-
-    xml::lite::Element* createDateTime(const std::string& name,
-            const xml::lite::Uri&, const std::string& s,
-            xml::lite::Element* parent = nullptr) const;
+    xml::lite::Element& createDateTime(const xml::lite::QName&, const DateTime& p, xml::lite::Element& parent) const;
 
     xml::lite::Element& createDate(const xml::lite::QName&, const DateTime& p, xml::lite::Element& parent) const;
 
@@ -194,10 +189,7 @@ struct XmlLite final
         xml::lite::Element* parent = nullptr) const;
     xml::lite::Element* createBooleanType(const std::string& name, BooleanType b,
             xml::lite::Element* parent = nullptr) const;
-    xml::lite::Element* createDateTime(const std::string& name, const DateTime& p,
-            xml::lite::Element* parent = nullptr) const;
-    xml::lite::Element* createDateTime(const std::string& name,
-            const std::string& s, xml::lite::Element* parent = nullptr) const;
+    xml::lite::Element& createDateTime(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
     xml::lite::Element& createDate(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
 
     template <typename T>

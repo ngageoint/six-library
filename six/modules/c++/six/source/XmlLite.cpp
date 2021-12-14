@@ -266,32 +266,14 @@ xml::lite::Element* XmlLite::createBooleanType(const std::string& name, BooleanT
     return createBooleanType(name, getDefaultURI(), p, parent);
 }
 
-xml::lite::Element* XmlLite::createDateTime(const std::string& name,
-        const xml::lite::Uri& uri, const std::string& s, xml::lite::Element* parent) const
+xml::lite::Element& XmlLite::createDateTime(const xml::lite::QName& name, const DateTime& p, xml::lite::Element& parent) const
 {
-    assert(parent != nullptr);
-    return &createValue(xml::lite::QName(uri, name), s, *parent,
+    return createValue(name, six::toString(p), parent,
         mAddClassAttributes, "xs:dateTime", getDefaultURI());
 }
-xml::lite::Element* XmlLite::createDateTime(const std::string& name,
-        const std::string& s, xml::lite::Element* parent) const
+xml::lite::Element& XmlLite::createDateTime(const std::string& name, const DateTime& p, xml::lite::Element& parent) const
 {
-    return createDateTime(name, getDefaultURI(), s, parent);
-}
-xml::lite::Element* XmlLite::createDateTime(const std::string& name,
-        const xml::lite::Uri& uri, const DateTime& p, xml::lite::Element* parent) const
-{
-    assert(parent != nullptr);
-
-    const auto toString = [&](const DateTime& v) { return six::toString(v); };
-    return &createValue(xml::lite::QName(uri, name), p, *parent,
-        mAddClassAttributes, "xs:dateTime", getDefaultURI(),
-        toString);
-}
-xml::lite::Element* XmlLite::createDateTime(const std::string& name, const DateTime& p,
-        xml::lite::Element* parent) const
-{
-    return createDateTime(name, getDefaultURI(), p, parent);
+    return createDateTime(xml::lite::QName(getDefaultURI(), name), p, parent);
 }
 
 xml::lite::Element& XmlLite::createDate(const xml::lite::QName& name, const DateTime& p, xml::lite::Element& parent) const
