@@ -162,13 +162,13 @@ protected:
         return & createStringFromEnum(name, enumVal, *parent);
     }
 
-    XMLElem createInt(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent = nullptr) const
+    XMLElem createInt(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent) const
     {
-        return mXmlLite.createInt(name, xml::lite::Uri(uri), p, parent);
+        return mXmlLite.createInt(xml::lite::QName(uri, name), p, parent);
     }
     XMLElem createInt(const std::string& name, const std::string& uri, int p = 0, XMLElem parent = nullptr) const
     {
-        return mXmlLite.createInt(name, xml::lite::Uri(uri), p, parent);
+        return mXmlLite.createInt(xml::lite::QName(uri, name), p, parent);
     }
     XMLElem createInt(const std::string& name, const std::string& uri, size_t p = 0, XMLElem parent = nullptr) const
     {

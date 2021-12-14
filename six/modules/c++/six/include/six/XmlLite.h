@@ -126,13 +126,13 @@ struct XmlLite final
         return createString(name, enumVal.toString(), parent);
     }
 
-    xml::lite::Element* createInt(const std::string& name, const xml::lite::Uri& uri, const std::string& p, xml::lite::Element* parent = nullptr) const
+    xml::lite::Element* createInt(const xml::lite::QName& name, const std::string& p, xml::lite::Element* parent) const
     {
-        return createInt_(name, uri, p, parent);
+        return createInt_(name, p, parent);
     }
-    xml::lite::Element* createInt(const std::string& name, const xml::lite::Uri& uri, int p = 0, xml::lite::Element* parent = nullptr) const
+    xml::lite::Element* createInt(const xml::lite::QName& name, int p, xml::lite::Element* parent) const
     {
-        return createInt_(name, uri, p, parent);
+        return createInt_(name, p, parent);
     }
 
     xml::lite::Element& createDouble(const xml::lite::QName&, double p, xml::lite::Element& parent) const;
@@ -249,8 +249,8 @@ struct XmlLite final
     static void setAttribute(xml::lite::Element&, const xml::lite::QName&, const std::string& v);
 
 private:
-    xml::lite::Element* createInt_(const std::string& name, const xml::lite::Uri&, int p, xml::lite::Element* parent) const;
-    xml::lite::Element* createInt_(const std::string& name, const xml::lite::Uri&, const std::string& p, xml::lite::Element* parent) const;
+    xml::lite::Element* createInt_(const xml::lite::QName&, int p, xml::lite::Element* parent) const;
+    xml::lite::Element* createInt_(const xml::lite::QName&, const std::string& p, xml::lite::Element* parent) const;
     xml::lite::Element* createInt_(const std::string& name, int p, xml::lite::Element* parent) const;
     xml::lite::Element* createString_(const std::string& name, const std::string& p, xml::lite::Element* parent) const;
     void addClassAttributes(xml::lite::Element& elem, const std::string& type) const;

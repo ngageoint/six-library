@@ -185,23 +185,21 @@ static xml::lite::Element* createOptionalValue(const xml::lite::QName& name,
 }
 
 
-xml::lite::Element* XmlLite::createInt_(const std::string& name, const xml::lite::Uri& uri,
-        int p, xml::lite::Element* parent) const
+xml::lite::Element* XmlLite::createInt_(const xml::lite::QName& name,int p, xml::lite::Element* parent) const
 {
     assert(parent != nullptr);
-    return &createValue(xml::lite::QName(uri, name), p, *parent, mAddClassAttributes, "xs:int", getDefaultURI());
+    return &createValue(name, p, *parent, mAddClassAttributes, "xs:int", getDefaultURI());
 }
-xml::lite::Element* XmlLite::createInt_(const std::string& name, const xml::lite::Uri& uri,
-    const std::string& p, xml::lite::Element* parent) const
+xml::lite::Element* XmlLite::createInt_(const xml::lite::QName& name, const std::string& p, xml::lite::Element* parent) const
 {
     assert(parent != nullptr);
-    xml::lite::Element* const elem = newElement(xml::lite::QName(uri, name), p, parent);
+    xml::lite::Element* const elem = newElement(name, p, parent);
     addClassAttributes(*elem, "xs:int");
     return elem;
 }
 xml::lite::Element* XmlLite::createInt_(const std::string& name, int p, xml::lite::Element* parent) const
 {
-    return createInt(name, getDefaultURI(), p, parent);
+    return createInt_(xml::lite::QName(getDefaultURI(), name), p, parent);
 }
 
 xml::lite::Element& XmlLite::createDouble(const xml::lite::QName& name, double p, xml::lite::Element& parent) const
