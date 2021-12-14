@@ -68,28 +68,28 @@ struct XmlLite final
     }
 
     //! Returns the default URI
-    const std::string& getDefaultURI() const
+    const xml::lite::Uri& getDefaultURI() const
     {
-        return mDefaultURI.value;
+        return mDefaultURI;
     }
 
     xml::lite::Element* newElement(const std::string& name, xml::lite::Element* prnt = nullptr) const;
     xml::lite::Element& newElement(const std::string& name, xml::lite::Element& prnt) const;
 
     static
-    xml::lite::Element* newElement(const std::string& name, const std::string& uri, xml::lite::Element* prnt = nullptr);
-    static xml::lite::Element& newElement(const std::string& name, const std::string& uri, xml::lite::Element& prnt);
+    xml::lite::Element* newElement(const std::string& name, const xml::lite::Uri&, xml::lite::Element* prnt = nullptr);
+    static xml::lite::Element& newElement(const std::string& name, const xml::lite::Uri&, xml::lite::Element& prnt);
 
     static
-    xml::lite::Element* newElement(const std::string& name, const std::string& uri,
+    xml::lite::Element* newElement(const std::string& name, const xml::lite::Uri&,
             const std::string& characterData, xml::lite::Element* parent = nullptr);
     #if CODA_OSS_lib_char8_t
-    static xml::lite::Element* newElement(const std::string& name, const std::string& uri,
+    static xml::lite::Element* newElement(const std::string& name, const xml::lite::Uri&,
             const std::u8string& characterData, xml::lite::Element* parent = nullptr);
     #endif
 
     template<typename T>
-    static xml::lite::Element* newElement(const T* pElement, const std::string& name, const std::string& uri,
+    static xml::lite::Element* newElement(const T* pElement, const std::string& name, const xml::lite::Uri& uri,
         xml::lite::Element* parent = nullptr)
     {
         return pElement == nullptr ? nullptr : newElement(name, uri, parent);
@@ -97,24 +97,24 @@ struct XmlLite final
 
     // generic element creation methods, w/URI
     xml::lite::Element& createString(const std::string& name,
-        const std::string& uri, const std::string& p,
+        const xml::lite::Uri&, const std::string& p,
         xml::lite::Element&) const;
     xml::lite::Element* createString(const std::string& name,
-        const std::string& uri, const std::string& p = "",
+        const xml::lite::Uri& uri, const std::string& p = "",
         xml::lite::Element* parent = nullptr) const
     {
         return &createString(name, uri, p, *parent);
     }
     #if CODA_OSS_lib_char8_t
     xml::lite::Element* createString(const std::string& name,
-        const std::string& uri, const std::u8string& p,
+        const xml::lite::Uri&, const std::u8string& p,
         xml::lite::Element* parent = nullptr) const;
     #endif
     xml::lite::Element& createString(const std::string& name, const std::string&, xml::lite::Element& parent) const;
 
     template<typename T>
     xml::lite::Element* createSixString(const std::string& name,
-        const std::string& uri, const T& t,
+        const xml::lite::Uri& uri, const T& t,
         xml::lite::Element* parent = nullptr) const
     {
         return createString(name, uri, toString(t), parent);
@@ -136,36 +136,36 @@ struct XmlLite final
                             parent);
     }
 
-    xml::lite::Element* createInt(const std::string& name, const std::string& uri, const std::string& p, xml::lite::Element* parent = nullptr) const
+    xml::lite::Element* createInt(const std::string& name, const xml::lite::Uri& uri, const std::string& p, xml::lite::Element* parent = nullptr) const
     {
         return createInt_(name, uri, p, parent);
     }
-    xml::lite::Element* createInt(const std::string& name, const std::string& uri, int p = 0, xml::lite::Element* parent = nullptr) const
+    xml::lite::Element* createInt(const std::string& name, const xml::lite::Uri& uri, int p = 0, xml::lite::Element* parent = nullptr) const
     {
         return createInt_(name, uri, p, parent);
     }
 
     xml::lite::Element* createDouble(const std::string& name,
-            const std::string& uri, double p = 0, xml::lite::Element* parent = nullptr) const;
+            const xml::lite::Uri&, double p = 0, xml::lite::Element* parent = nullptr) const;
     xml::lite::Element* createDouble(const std::string& name,
-        const std::string& uri, const std::optional<double>& p, xml::lite::Element* parent = nullptr) const;
+        const xml::lite::Uri&, const std::optional<double>& p, xml::lite::Element* parent = nullptr) const;
     xml::lite::Element* createOptionalDouble(const std::string& name,
-        const std::string& uri, const double& p, xml::lite::Element* parent = nullptr) const;
+        const xml::lite::Uri&, const double& p, xml::lite::Element* parent = nullptr) const;
     xml::lite::Element* createOptionalDouble(const std::string& name,
-        const std::string& uri, const std::optional<double>& p, xml::lite::Element* parent = nullptr) const;
+        const xml::lite::Uri&, const std::optional<double>& p, xml::lite::Element* parent = nullptr) const;
 
     xml::lite::Element* createBooleanType(const std::string& name,
-           const std::string& uri, BooleanType b, xml::lite::Element* parent = nullptr) const;
+           const xml::lite::Uri&, BooleanType b, xml::lite::Element* parent = nullptr) const;
 
     xml::lite::Element* createDateTime(const std::string& name,
-            const std::string& uri, const DateTime& p, xml::lite::Element* parent = nullptr) const;
+            const xml::lite::Uri&, const DateTime& p, xml::lite::Element* parent = nullptr) const;
 
     xml::lite::Element* createDateTime(const std::string& name,
-            const std::string& uri, const std::string& s,
+            const xml::lite::Uri&, const std::string& s,
             xml::lite::Element* parent = nullptr) const;
 
     xml::lite::Element* createDate(const std::string& name,
-            const std::string& uri, const DateTime& p, xml::lite::Element* parent = nullptr) const;
+            const xml::lite::Uri&, const DateTime& p, xml::lite::Element* parent = nullptr) const;
 
     // generic element creation methods, using default URI
     template<typename T>
@@ -250,12 +250,12 @@ struct XmlLite final
     void parseDateTime(const xml::lite::Element& element, DateTime& value) const;
 
     static void setAttribute(xml::lite::Element& e, const std::string& name,
-        const std::string& s, const std::string& uri = "")
+        const std::string& s, const xml::lite::Uri& uri)
     {
         setAttribute_(&e, name,s, uri);
     }
     static void setAttribute(xml::lite::Element& e, const std::string& name,
-        size_t i, const std::string& uri = "")
+        size_t i, const xml::lite::Uri& uri)
     {
         setAttribute_(&e, name, std::to_string(i), uri);
     }
@@ -284,17 +284,17 @@ struct XmlLite final
     static xml::lite::Element& require(xml::lite::Element* element, const std::string& name);
 
     static void setAttribute(xml::lite::Element&, const xml::lite::QName&, const std::string& v);
-    static inline void setAttribute_(xml::lite::Element& e, const std::string& name, const std::string& v, const std::string& uri)
+    static inline void setAttribute_(xml::lite::Element& e, const std::string& name, const std::string& v, const xml::lite::Uri& uri)
     {
         setAttribute(e, xml::lite::QName(uri, name), v);
     }
 
 private:
-    xml::lite::Element* createInt_(const std::string& name, const std::string& uri, int p, xml::lite::Element* parent) const;
-    xml::lite::Element* createInt_(const std::string& name, const std::string& uri, const std::string& p, xml::lite::Element* parent) const;
+    xml::lite::Element* createInt_(const std::string& name, const xml::lite::Uri&, int p, xml::lite::Element* parent) const;
+    xml::lite::Element* createInt_(const std::string& name, const xml::lite::Uri&, const std::string& p, xml::lite::Element* parent) const;
     xml::lite::Element* createInt_(const std::string& name, int p, xml::lite::Element* parent) const;
     xml::lite::Element* createString_(const std::string& name, const std::string& p, xml::lite::Element* parent) const;
-    static void setAttribute_(xml::lite::Element* e, const std::string& name, const std::string& v, const std::string& uri);
+    static void setAttribute_(xml::lite::Element* e, const std::string& name, const std::string& v, const xml::lite::Uri&);
     void addClassAttributes(xml::lite::Element& elem, const std::string& type) const;
 
     const xml::lite::Uri mDefaultURI;

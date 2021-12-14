@@ -50,24 +50,24 @@ namespace six
 
 xml::lite::Element* XmlLite::newElement(const std::string& name, xml::lite::Element* parent) const
 {
-    return newElement(name, mDefaultURI.value, parent);
+    return newElement(name, mDefaultURI, parent);
 }
 xml::lite::Element& XmlLite::newElement(const std::string& name, xml::lite::Element& parent) const
 {
-    return *newElement(name, mDefaultURI.value, &parent);
+    return *newElement(name, mDefaultURI, &parent);
 }
 
 xml::lite::Element* XmlLite::newElement(const std::string& name,
-        const std::string& uri, xml::lite::Element* parent)
+        const xml::lite::Uri& uri, xml::lite::Element* parent)
 {
     return newElement(name, uri, "", parent);
 }
-xml::lite::Element& XmlLite::newElement(const std::string& name, const std::string& uri, xml::lite::Element& parent)
+xml::lite::Element& XmlLite::newElement(const std::string& name, const xml::lite::Uri& uri, xml::lite::Element& parent)
 {
     return *newElement(name, uri, "", &parent);
 }
 
-static void addClassAttributes_(xml::lite::Element& elem, const std::string& type, const std::string& uri)
+static void addClassAttributes_(xml::lite::Element& elem, const std::string& type, const xml::lite::Uri& uri)
 {
     XmlLite::setAttribute_(elem, "class", type, uri);
 }
@@ -80,7 +80,7 @@ void XmlLite::addClassAttributes(xml::lite::Element& elem, const std::string& ty
 }
 
 xml::lite::Element* XmlLite::newElement(const std::string& name,
-        const std::string& uri, const std::string& characterData,
+        const xml::lite::Uri& uri, const std::string& characterData,
         xml::lite::Element* parent)
 {
     xml::lite::Element* elem = xml::lite::Element::create(name, uri, characterData).release();
@@ -90,7 +90,7 @@ xml::lite::Element* XmlLite::newElement(const std::string& name,
 }
 #if CODA_OSS_lib_char8_t
 xml::lite::Element* XmlLite::newElement(const std::string& name,
-    const std::string& uri, const std::u8string& characterData,
+    const xml::lite::Uri& uri, const std::u8string& characterData,
     xml::lite::Element* parent)
 {
     xml::lite::Element* elem = new xml::lite::Element(name, uri, characterData);
@@ -101,7 +101,7 @@ xml::lite::Element* XmlLite::newElement(const std::string& name,
 #endif
 
 xml::lite::Element& XmlLite::createString(const std::string& name,
-        const std::string& uri, const std::string& p, xml::lite::Element& parent) const
+        const xml::lite::Uri& uri, const std::string& p, xml::lite::Element& parent) const
 {
     auto pElem = newElement(name, uri, p, &parent);
     auto& elem = *pElem;
@@ -117,7 +117,7 @@ xml::lite::Element& XmlLite::createString(const std::string& name,
 
 #if CODA_OSS_lib_char8_t
 xml::lite::Element* XmlLite::createString(const std::string& name,
-    const std::string& uri, const std::u8string& p, xml::lite::Element* parent) const
+    const xml::lite::Uri& uri, const std::u8string& p, xml::lite::Element* parent) const
 {
     xml::lite::Element* const elem = newElement(name, uri, p, parent);
     addClassAttributes(*elem, "xs:string");
@@ -154,9 +154,9 @@ inline std::string toString_(const std::string& name, const T& v, const xml::lit
 }
 
 template<typename T, typename ToString>
-static xml::lite::Element& createValue(const std::string& name, const std::string& uri,
+static xml::lite::Element& createValue(const std::string& name, const xml::lite::Uri& uri,
     const T& v, xml::lite::Element& parent,
-    bool addClassAttributes, const std::string& type, const std::string& attributeUri,
+    bool addClassAttributes, const std::string& type, const xml::lite::Uri& attributeUri,
     ToString toString)
 {
     auto& elem = xml::lite::addNewElement(xml::lite::QName(uri, name), v, parent, toString);
@@ -168,18 +168,18 @@ static xml::lite::Element& createValue(const std::string& name, const std::strin
     return elem;
 }
 template<typename T>
-inline xml::lite::Element& createValue(const std::string& name, const std::string& uri,
+inline xml::lite::Element& createValue(const std::string& name, const xml::lite::Uri& uri,
     const T& v, xml::lite::Element& parent,
-    bool addClassAttributes, const std::string& type, const std::string& attributeUri)
+    bool addClassAttributes, const std::string& type, const xml::lite::Uri& attributeUri)
 {
     const auto toString = [&](const T& v) { return toString_(name, v, parent); };
     return createValue(name, uri, v, parent, addClassAttributes, type, attributeUri, toString);
 }
 
 template<typename T>
-static xml::lite::Element* createOptionalValue(const std::string& name, const std::string& uri,
+static xml::lite::Element* createOptionalValue(const std::string& name, const xml::lite::Uri& uri,
     const std::optional<T>& v, xml::lite::Element& parent,
-    bool addClassAttributes, const std::string& type, const std::string& attributeUri)
+    bool addClassAttributes, const std::string& type, const xml::lite::Uri& attributeUri)
 {
     if (v.has_value())
     {
@@ -189,13 +189,13 @@ static xml::lite::Element* createOptionalValue(const std::string& name, const st
 }
 
 
-xml::lite::Element* XmlLite::createInt_(const std::string& name, const std::string& uri,
+xml::lite::Element* XmlLite::createInt_(const std::string& name, const xml::lite::Uri& uri,
         int p, xml::lite::Element* parent) const
 {
     assert(parent != nullptr);
     return &createValue(name, uri, p, *parent, mAddClassAttributes, "xs:int", getDefaultURI());
 }
-xml::lite::Element* XmlLite::createInt_(const std::string& name, const std::string& uri,
+xml::lite::Element* XmlLite::createInt_(const std::string& name, const xml::lite::Uri& uri,
     const std::string& p, xml::lite::Element* parent) const
 {
     assert(parent != nullptr);
@@ -209,7 +209,7 @@ xml::lite::Element* XmlLite::createInt_(const std::string& name, int p, xml::lit
 }
 
 xml::lite::Element* XmlLite::createDouble(const std::string& name,
-        const std::string& uri, double p, xml::lite::Element* parent) const
+        const xml::lite::Uri& uri, double p, xml::lite::Element* parent) const
 {
     assert(parent != nullptr);
 
@@ -228,12 +228,12 @@ xml::lite::Element* XmlLite::createDouble(const std::string& name, const std::op
 }
 
 xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name,
-    const std::string& uri, const double& p, xml::lite::Element* parent) const
+    const xml::lite::Uri& uri, const double& p, xml::lite::Element* parent) const
 {
     return Init::isDefined(p) ? createDouble(name, uri, p, parent) : nullptr;
 }
 xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name,
-    const std::string& uri, const std::optional<double>& p, xml::lite::Element* parent) const
+    const xml::lite::Uri& uri, const std::optional<double>& p, xml::lite::Element* parent) const
 {
     assert(parent != nullptr);
     return createOptionalValue(name, uri, p, *parent, mAddClassAttributes, "xs::double", getDefaultURI());
@@ -250,7 +250,7 @@ xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name, const
 }
 
 xml::lite::Element* XmlLite::createBooleanType(const std::string& name,
-        const std::string& uri, BooleanType p, xml::lite::Element* parent) const
+        const xml::lite::Uri& uri, BooleanType p, xml::lite::Element* parent) const
 {
     if (p == six::BooleanType::NOT_SET)
     {
@@ -270,7 +270,7 @@ xml::lite::Element* XmlLite::createBooleanType(const std::string& name, BooleanT
 }
 
 xml::lite::Element* XmlLite::createDateTime(const std::string& name,
-        const std::string& uri, const std::string& s, xml::lite::Element* parent) const
+        const xml::lite::Uri& uri, const std::string& s, xml::lite::Element* parent) const
 {
     assert(parent != nullptr);
     return &createValue(name, uri, s, *parent,
@@ -282,7 +282,7 @@ xml::lite::Element* XmlLite::createDateTime(const std::string& name,
     return createDateTime(name, getDefaultURI(), s, parent);
 }
 xml::lite::Element* XmlLite::createDateTime(const std::string& name,
-        const std::string& uri, const DateTime& p, xml::lite::Element* parent) const
+        const xml::lite::Uri& uri, const DateTime& p, xml::lite::Element* parent) const
 {
     assert(parent != nullptr);
 
@@ -298,7 +298,7 @@ xml::lite::Element* XmlLite::createDateTime(const std::string& name, const DateT
 }
 
 xml::lite::Element* XmlLite::createDate(const std::string& name,
-        const std::string& uri, const DateTime& p, xml::lite::Element* parent) const
+        const xml::lite::Uri& uri, const DateTime& p, xml::lite::Element* parent) const
 {
     assert(parent != nullptr);
 
@@ -340,7 +340,7 @@ void XmlLite::setAttribute(xml::lite::Element& e, const xml::lite::QName& name, 
     e.getAttributes().add(node);
 }
 void XmlLite::setAttribute_(xml::lite::Element* e, const std::string& name,
-    const std::string& v, const std::string& uri)
+    const std::string& v, const xml::lite::Uri& uri)
 {
     assert(e != nullptr);
     setAttribute_(*e, name, v, uri);

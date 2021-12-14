@@ -92,7 +92,7 @@ struct XMLParser
     static void setAttribute(xml::lite::Element& e, const std::string& name,
         size_t i, const std::string& uri = "")
     {
-        return XmlLite::setAttribute(e, name, i, uri);
+        return XmlLite::setAttribute(e, name, i, xml::lite::Uri(uri));
     }
 
     // generic element creation methods, w/URI
@@ -113,7 +113,7 @@ struct XMLParser
         const std::string& uri, const T& t,
         XMLElem parent = nullptr) const
     {
-        return mXmlLite.createSixString(name, uri, t, parent);
+        return mXmlLite.createSixString(name, xml::lite::Uri(uri), t, parent);
     }
 
     XMLElem createDateTime(const std::string& name, const DateTime& p,
@@ -128,7 +128,7 @@ protected:
     //! Returns the default URI
     std::string getDefaultURI() const
     {
-        return mXmlLite.getDefaultURI();
+        return mXmlLite.getDefaultURI().value;
     }
 
     XMLElem newElement(const std::string& name, XMLElem prnt = nullptr) const;
@@ -150,7 +150,7 @@ protected:
     static XMLElem newElement(const T* pElement, const std::string& name, const std::string& uri,
         XMLElem parent = nullptr)
     {
-        return XmlLite::newElement(pElement, name, uri, parent);
+        return XmlLite::newElement(pElement, name, xml::lite::Uri(uri), parent);
     }
 
     template <typename T>
@@ -163,11 +163,11 @@ protected:
 
     XMLElem createInt(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent = nullptr) const
     {
-        return mXmlLite.createInt(name, uri, p, parent);
+        return mXmlLite.createInt(name, xml::lite::Uri(uri), p, parent);
     }
     XMLElem createInt(const std::string& name, const std::string& uri, int p = 0, XMLElem parent = nullptr) const
     {
-        return mXmlLite.createInt(name, uri, p, parent);
+        return mXmlLite.createInt(name, xml::lite::Uri(uri), p, parent);
     }
     XMLElem createInt(const std::string& name, const std::string& uri, size_t p = 0, XMLElem parent = nullptr) const
     {
@@ -292,7 +292,7 @@ protected:
         const std::string& s, const std::string& uri = "")
     {
         assert(e != nullptr);
-        return XmlLite::setAttribute(*e, name, s, uri);
+        return XmlLite::setAttribute(*e, name, s, xml::lite::Uri(uri));
     }
     static void setAttribute(XMLElem e, const std::string& name,
         size_t i, const std::string& uri = "")
