@@ -69,7 +69,7 @@ xml::lite::Element& XmlLite::newElement(const std::string& name, const xml::lite
 
 static void addClassAttributes_(xml::lite::Element& elem, const std::string& type, const xml::lite::Uri& uri)
 {
-    XmlLite::setAttribute_(elem, "class", type, uri);
+    XmlLite::setAttribute(elem, xml::lite::QName(uri, "class"), type);
 }
 void XmlLite::addClassAttributes(xml::lite::Element& elem, const std::string& type) const
 {
@@ -339,11 +339,10 @@ void XmlLite::setAttribute(xml::lite::Element& e, const xml::lite::QName& name, 
     node.setValue(v);
     e.getAttributes().add(node);
 }
-void XmlLite::setAttribute_(xml::lite::Element* e, const std::string& name,
-    const std::string& v, const xml::lite::Uri& uri)
+void XmlLite::setAttribute_(xml::lite::Element* e, const xml::lite::QName& name, const std::string& v)
 {
     assert(e != nullptr);
-    setAttribute_(*e, name, v, uri);
+    setAttribute(*e, name, v);
 }
 
 template<typename TGetValue>

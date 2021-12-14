@@ -92,7 +92,7 @@ struct XMLParser
     static void setAttribute(xml::lite::Element& e, const std::string& name,
         size_t i, const std::string& uri = "")
     {
-        return XmlLite::setAttribute(e, name, i, xml::lite::Uri(uri));
+        return XmlLite::setAttribute(e, xml::lite::QName(uri, name), i);
     }
 
     // generic element creation methods, w/URI
@@ -292,7 +292,7 @@ protected:
         const std::string& s, const std::string& uri = "")
     {
         assert(e != nullptr);
-        return XmlLite::setAttribute(*e, name, s, xml::lite::Uri(uri));
+        return XmlLite::setAttribute(*e, xml::lite::QName(uri, name), s);
     }
     static void setAttribute(XMLElem e, const std::string& name,
         size_t i, const std::string& uri = "")
