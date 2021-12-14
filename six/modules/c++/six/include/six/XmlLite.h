@@ -249,7 +249,7 @@ struct XmlLite final
 
     static void setAttribute(xml::lite::Element& e, const xml::lite::QName& name, size_t i)
     {
-        setAttribute_(&e, name, std::to_string(i));
+        setAttribute(e, name, std::to_string(i));
     }
 
     static xml::lite::Element* getOptional(const xml::lite::Element& parent, const std::string& tag);
@@ -282,7 +282,6 @@ private:
     xml::lite::Element* createInt_(const std::string& name, const xml::lite::Uri&, const std::string& p, xml::lite::Element* parent) const;
     xml::lite::Element* createInt_(const std::string& name, int p, xml::lite::Element* parent) const;
     xml::lite::Element* createString_(const std::string& name, const std::string& p, xml::lite::Element* parent) const;
-    static void setAttribute_(xml::lite::Element* e, const xml::lite::QName&, const std::string& v);
     void addClassAttributes(xml::lite::Element& elem, const std::string& type) const;
 
     const xml::lite::Uri mDefaultURI;

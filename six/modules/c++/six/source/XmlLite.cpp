@@ -336,11 +336,6 @@ void XmlLite::setAttribute(xml::lite::Element& e, const xml::lite::QName& name, 
     node.setValue(v);
     e.getAttributes().add(node);
 }
-void XmlLite::setAttribute_(xml::lite::Element* e, const xml::lite::QName& name, const std::string& v)
-{
-    assert(e != nullptr);
-    setAttribute(*e, name, v);
-}
 
 template<typename TGetValue>
 static bool parseValue(logging::Logger& log, TGetValue getValue)
