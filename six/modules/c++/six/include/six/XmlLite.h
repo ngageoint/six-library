@@ -35,16 +35,17 @@
 #include <six/Init.h>
 #include <six/Utilities.h>
 #include <xml/lite/Element.h>
+#include <xml/lite/QName.h>
 #include <six/Logger.h>
 
 namespace six
 {
 struct XmlLite final
 {
-    XmlLite(const std::string& defaultURI, bool addClassAttributes,
+    XmlLite(const xml::lite::Uri& defaultURI, bool addClassAttributes,
         logging::Logger* log = nullptr, bool ownLog = false);
-    XmlLite(const std::string& defaultURI, bool addClassAttributes, std::unique_ptr<logging::Logger>&&);
-    XmlLite(const std::string& defaultURI, bool addClassAttributes, logging::Logger&);
+    XmlLite(const xml::lite::Uri& defaultURI, bool addClassAttributes, std::unique_ptr<logging::Logger>&&);
+    XmlLite(const xml::lite::Uri& defaultURI, bool addClassAttributes, logging::Logger&);
     XmlLite(const XmlLite&) = delete;
     XmlLite& operator=(const XmlLite&) = delete;
     XmlLite(XmlLite&&) = delete;
@@ -69,7 +70,7 @@ struct XmlLite final
     //! Returns the default URI
     const std::string& getDefaultURI() const
     {
-        return mDefaultURI;
+        return mDefaultURI.value;
     }
 
     xml::lite::Element* newElement(const std::string& name, xml::lite::Element* prnt = nullptr) const;
@@ -282,7 +283,11 @@ struct XmlLite final
      */
     static xml::lite::Element& require(xml::lite::Element* element, const std::string& name);
 
-    static void setAttribute_(xml::lite::Element& e, const std::string& name, const std::string& v, const std::string& uri);
+    static void setAttribute(xml::lite::Element&, const xml::lite::QName&, const std::string& v);
+    static inline void setAttribute_(xml::lite::Element& e, const std::string& name, const std::string& v, const std::string& uri)
+    {
+        setAttribute(e, xml::lite::QName(uri, name), v);
+    }
 
 private:
     xml::lite::Element* createInt_(const std::string& name, const std::string& uri, int p, xml::lite::Element* parent) const;
@@ -292,7 +297,7 @@ private:
     static void setAttribute_(xml::lite::Element* e, const std::string& name, const std::string& v, const std::string& uri);
     void addClassAttributes(xml::lite::Element& elem, const std::string& type) const;
 
-    const std::string mDefaultURI;
+    const xml::lite::Uri mDefaultURI;
     const bool mAddClassAttributes;
 
     Logger mLogger;

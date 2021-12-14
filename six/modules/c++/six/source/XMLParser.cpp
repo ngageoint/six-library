@@ -41,13 +41,13 @@ typedef xml::lite::Element* XMLElem;
 namespace six
 {
     XMLParser::XMLParser(const std::string& defaultURI, bool addClassAttributes,
-        logging::Logger* log, bool ownLog) : mXmlLite(defaultURI, addClassAttributes, log, ownLog)
+        logging::Logger* log, bool ownLog) : mXmlLite(xml::lite::Uri(defaultURI), addClassAttributes, log, ownLog)
     {
     }
     XMLParser::XMLParser(const std::string& defaultURI, bool addClassAttributes, std::unique_ptr<logging::Logger>&& log) :
-        mXmlLite(defaultURI, addClassAttributes, std::move(log)) { }
+        mXmlLite(xml::lite::Uri(defaultURI), addClassAttributes, std::move(log)) { }
     XMLParser::XMLParser(const std::string& defaultURI, bool addClassAttributes, logging::Logger& log) :
-        mXmlLite(defaultURI, addClassAttributes, log) { }
+        mXmlLite(xml::lite::Uri(defaultURI), addClassAttributes, log) { }
 
 XMLElem XMLParser::newElement(const std::string& name, XMLElem parent) const
 {
