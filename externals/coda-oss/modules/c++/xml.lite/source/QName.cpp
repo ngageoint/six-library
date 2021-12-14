@@ -22,8 +22,6 @@
 
 #include "xml/lite/QName.h"
 
-
-
 std::string xml::lite::QName::getName() const
 {
     return mLocalName;
@@ -70,12 +68,20 @@ void xml::lite::QName::setQName(const std::string& str)
     }
 }
 
-void xml::lite::QName::setAssociatedUri( const std::string& str )
+void xml::lite::QName::setAssociatedUri(const Uri& v)
 {
-    mAssocUri = str;
+    mAssocUri = v;
 }
 
+void xml::lite::QName::getAssociatedUri(Uri& v) const
+{
+    v = getUri();
+}
 std::string xml::lite::QName::getAssociatedUri() const
+{
+    return getUri().value;
+}
+const xml::lite::Uri& xml::lite::QName::getUri() const
 {
     return mAssocUri;
 }
