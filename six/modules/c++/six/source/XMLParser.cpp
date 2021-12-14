@@ -170,12 +170,14 @@ XMLElem XMLParser::createDateTime(const std::string& name, const DateTime& p,
 XMLElem XMLParser::createDate(const std::string& name,
         const std::string& uri, const DateTime& p, XMLElem parent) const
 {
-    return mXmlLite.createDate(name, xml::lite::Uri(uri), p, parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createDate(xml::lite::QName(uri, name), p, *parent);
 }
 XMLElem XMLParser::createDate(const std::string& name, const DateTime& p,
         XMLElem parent) const
 {
-    return mXmlLite.createDate(name, p, parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createDate(name, p, *parent);
 }
 
 xml::lite::Element& XMLParser::getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag)

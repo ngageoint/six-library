@@ -192,7 +192,7 @@ protected:
             const std::string& uri, const DateTime& p, XMLElem parent = nullptr) const;
 
     XMLElem createDate(const std::string& name,
-            const std::string& uri, const DateTime& p, XMLElem parent = nullptr) const;
+            const std::string& uri, const DateTime& p, XMLElem parent) const;
 
     // generic element creation methods, using default URI
     template<typename T>
@@ -224,7 +224,7 @@ protected:
             XMLElem parent = nullptr) const;
 
     XMLElem createDate(const std::string& name, const DateTime& p,
-            XMLElem parent = nullptr) const;
+            XMLElem parent) const;
 
     template <typename T>
     void parseInt(const xml::lite::Element& element, T& value) const

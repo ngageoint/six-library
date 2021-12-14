@@ -294,20 +294,17 @@ xml::lite::Element* XmlLite::createDateTime(const std::string& name, const DateT
     return createDateTime(name, getDefaultURI(), p, parent);
 }
 
-xml::lite::Element* XmlLite::createDate(const std::string& name,
-        const xml::lite::Uri& uri, const DateTime& p, xml::lite::Element* parent) const
+xml::lite::Element& XmlLite::createDate(const xml::lite::QName& name, const DateTime& p, xml::lite::Element& parent) const
 {
-    assert(parent != nullptr);
-
     const auto toString = [&](const DateTime& p) { return p.format("%Y-%m-%d"); };
-    return &createValue(xml::lite::QName(uri, name), p, *parent,
+    return createValue(name, p, parent,
         mAddClassAttributes, "xs:date", getDefaultURI(),
         toString);
 }
-xml::lite::Element* XmlLite::createDate(const std::string& name, const DateTime& p,
-        xml::lite::Element* parent) const
+xml::lite::Element& XmlLite::createDate(const std::string& name, const DateTime& p,
+        xml::lite::Element& parent) const
 {
-    return createDate(name, getDefaultURI(), p, parent);
+    return createDate(xml::lite::QName(getDefaultURI(), name), p, parent);
 }
 
 xml::lite::Element& XmlLite::getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag)
