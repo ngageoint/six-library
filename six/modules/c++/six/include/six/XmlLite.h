@@ -73,22 +73,16 @@ struct XmlLite final
         return mDefaultURI;
     }
 
-    xml::lite::Element* newElement(const std::string& name, xml::lite::Element* prnt = nullptr) const;
-    xml::lite::Element& newElement(const std::string& name, xml::lite::Element& prnt) const;
-
-    static xml::lite::Element* newElement(const xml::lite::QName&, xml::lite::Element* prnt = nullptr);
+    static xml::lite::Element* newElement(const xml::lite::QName&, xml::lite::Element* prnt);
     static xml::lite::Element& newElement(const xml::lite::QName&, xml::lite::Element& prnt);
-
-    static xml::lite::Element* newElement(const xml::lite::QName&,
-            const std::string& characterData, xml::lite::Element* parent = nullptr);
-    #if CODA_OSS_lib_char8_t
-    static xml::lite::Element* newElement(const xml::lite::QName&,
-            const std::u8string& characterData, xml::lite::Element* parent = nullptr);
-    #endif
-
+    xml::lite::Element* newElement(const std::string& name, xml::lite::Element* prnt) const;
+    xml::lite::Element& newElement(const std::string& name, xml::lite::Element& prnt) const;
+    static xml::lite::Element* newElement(const xml::lite::QName&, const std::string& characterData, xml::lite::Element* parent);
+    static xml::lite::Element& newElement(const xml::lite::QName&, const std::string& characterData, xml::lite::Element& parent);
+    static xml::lite::Element* newElement(const xml::lite::QName&, const std::u8string& characterData, xml::lite::Element* parent);
+    static xml::lite::Element& newElement(const xml::lite::QName&, const std::u8string& characterData, xml::lite::Element& parent);
     template<typename T>
-    static xml::lite::Element* newElement(const T* pElement, const xml::lite::QName& name,
-        xml::lite::Element* parent = nullptr)
+    static xml::lite::Element* newElement(const T* pElement, const xml::lite::QName& name, xml::lite::Element* parent)
     {
         return pElement == nullptr ? nullptr : newElement(name, parent);
     }

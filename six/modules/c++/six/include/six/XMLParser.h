@@ -143,10 +143,8 @@ protected:
     static
     XMLElem newElement(const std::string& name, const std::string& uri,
             const std::string& characterData, XMLElem parent = nullptr);
-    #if CODA_OSS_lib_char8_t
     static XMLElem newElement(const std::string& name, const std::string& uri,
-            const std::u8string& characterData, XMLElem parent = nullptr);
-    #endif
+            const std::u8string& characterData, XMLElem parent);
 
     template<typename T>
     static XMLElem newElement(const T* pElement, const std::string& name, const std::string& uri,

@@ -50,20 +50,22 @@ namespace six
 
 xml::lite::Element* XmlLite::newElement(const std::string& name, xml::lite::Element* parent) const
 {
-    return newElement(xml::lite::QName(getDefaultURI(), name), parent);
+    const xml::lite::QName qname(getDefaultURI(), name);
+    // prefer reference version as that minimizes the opportunity for memory leaks
+    return parent != nullptr ? &newElement(qname, *parent) : newElement(qname, parent);
 }
 xml::lite::Element& XmlLite::newElement(const std::string& name, xml::lite::Element& parent) const
 {
-    return *newElement(xml::lite::QName(getDefaultURI(), name), &parent);
+    return newElement(xml::lite::QName(getDefaultURI(), name), parent);
 }
-
 xml::lite::Element* XmlLite::newElement(const xml::lite::QName& name, xml::lite::Element* parent)
 {
-    return newElement(name, "", parent);
+    // prefer reference version as that minimizes the opportunity for memory leaks
+    return parent != nullptr ? &newElement(name, *parent) : newElement(name, "", parent);
 }
 xml::lite::Element& XmlLite::newElement(const xml::lite::QName& name, xml::lite::Element& parent)
 {
-    return *newElement(name, "", &parent);
+    return newElement(name, "", parent);
 }
 
 static void addClassAttributes(xml::lite::Element& elem, const std::string& type, const xml::lite::Uri& uri)
@@ -71,35 +73,43 @@ static void addClassAttributes(xml::lite::Element& elem, const std::string& type
     XmlLite::setAttribute(elem, xml::lite::QName(uri, "class"), type);
 }
 
-xml::lite::Element* XmlLite::newElement(const xml::lite::QName& name, const std::string& characterData,
-        xml::lite::Element* parent)
+xml::lite::Element* XmlLite::newElement(const xml::lite::QName& name, const std::string& characterData, xml::lite::Element* parent)
 {
-    xml::lite::Element* elem = xml::lite::Element::create(name, characterData).release();
-    if (parent)
-        parent->addChild(elem);
-    return elem;
+    if (parent != nullptr)
+    {
+        // prefer reference version as that minimizes the opportunity for memory leaks
+        return &newElement(name, characterData, *parent);
+    }
+    return xml::lite::Element::create(name, characterData).release(); // caller must delete!
 }
-#if CODA_OSS_lib_char8_t
-xml::lite::Element* XmlLite::newElement(const xml::lite::QName& name, const std::u8string& characterData,
-    xml::lite::Element* parent)
+xml::lite::Element& XmlLite::newElement(const xml::lite::QName& name, const std::string& characterData, xml::lite::Element& parent)
 {
-    xml::lite::Element* elem = new xml::lite::Element(name, characterData);
-    if (parent)
-        parent->addChild(elem);
-    return elem;
+    auto elem = xml::lite::Element::create(name, characterData);
+    return parent.addChild(std::move(elem));
 }
-#endif
+xml::lite::Element* XmlLite::newElement(const xml::lite::QName& name, const std::u8string& characterData, xml::lite::Element* parent)
+{
+    if (parent != nullptr)
+    {
+        // prefer reference version as that minimizes the opportunity for memory leaks
+        return &newElement(name, characterData, *parent);
+    }
+
+    return xml::lite::Element::create(name, characterData).release();  // caller must delete!
+}
+xml::lite::Element& XmlLite::newElement(const xml::lite::QName& name, const std::u8string& characterData, xml::lite::Element& parent)
+{
+    auto elem = xml::lite::Element::create(name, characterData);
+    return parent.addChild(std::move(elem));
+}
 
 xml::lite::Element& XmlLite::createString(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const
 {
-    auto pElem = newElement(name, p, &parent);
-    auto& elem = *pElem;
-
+    auto& elem = newElement(name, p, parent);
     if (mAddClassAttributes)
     {
         addClassAttributes(elem, "xs:string", getDefaultURI());
     }
-
     return elem;
 }
 xml::lite::Element& XmlLite::createString(const std::string& name,
@@ -126,9 +136,8 @@ xml::lite::Element& XmlLite::createString_(const std::string& name,
 }
 
 template<typename T>
-static std::string toString(const xml::lite::QName& name, const T& p, const xml::lite::Element* parent)
+static std::string toString(const xml::lite::QName& name, const T& p, const xml::lite::Element& parent)
 {
-    assert(parent != nullptr);
     try
     {
         return str::toString(p);
@@ -136,14 +145,14 @@ static std::string toString(const xml::lite::QName& name, const T& p, const xml:
     catch (const except::Exception& ex)
     {
         std::string message("Unable to create " + name.getName() + " in element "
-                + parent->getLocalName() + ": " + ex.getMessage());
+                + parent.getLocalName() + ": " + ex.getMessage());
         throw except::Exception(Ctxt(message));
     }
 }
 template<typename T>
 inline std::string toString_(const xml::lite::QName& name, const T& v, const xml::lite::Element& parent)
 {
-    return toString(name, v, &parent);
+    return toString(name, v, parent);
 }
 
 template<typename T, typename ToString>
@@ -187,12 +196,12 @@ xml::lite::Element& XmlLite::createInt(const xml::lite::QName& name,int p, xml::
 }
 xml::lite::Element& XmlLite::createInt(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const
 {
-    xml::lite::Element* const elem = newElement(name, p, &parent);
+    auto& elem = newElement(name, p, parent);
     if (mAddClassAttributes)
     {
-        addClassAttributes(*elem, "xs:int", getDefaultURI());
+        addClassAttributes(elem, "xs:int", getDefaultURI());
     }
-    return *elem;
+    return elem;
 }
 xml::lite::Element& XmlLite::createInt_(const std::string& name, int p, xml::lite::Element& parent) const
 {
