@@ -179,21 +179,12 @@ protected:
         return createInt(name, uri, gsl::narrow<int>(p), parent);
     }
 
-    XMLElem createDouble(const std::string& name,
-        const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
-    XMLElem createOptionalDouble(const std::string& name,
-        const std::string& uri, const double& p, XMLElem parent = nullptr) const;
-    XMLElem createOptionalDouble(const std::string& name,
-        const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
-
-    XMLElem createBooleanType(const std::string& name,
-           const std::string& uri, BooleanType b, XMLElem parent) const;
-
-    XMLElem createDateTime(const std::string& name,
-            const std::string& uri, const DateTime& p, XMLElem parent) const;
-
-    XMLElem createDate(const std::string& name,
-            const std::string& uri, const DateTime& p, XMLElem parent) const;
+    XMLElem createDouble(const std::string& name, const std::string& uri, const std::optional<double>& p, XMLElem parent) const;
+    XMLElem createOptionalDouble(const std::string& name, const std::string& uri, double p, XMLElem parent) const;
+    XMLElem createOptionalDouble(const std::string& name, const std::string& uri, const std::optional<double>& p, XMLElem parent) const;
+    XMLElem createBooleanType(const std::string& name, const std::string& uri, BooleanType b, XMLElem parent) const;
+    XMLElem createDateTime(const std::string& name, const std::string& uri, const DateTime& p, XMLElem parent) const;
+    XMLElem createDate(const std::string& name, const std::string& uri, const DateTime& p, XMLElem parent) const;
 
     // generic element creation methods, using default URI
     template<typename T>
@@ -213,19 +204,13 @@ protected:
     {
         return & createInt(name, p, *parent);
     }
-    XMLElem createDouble(const std::string& name, double p = 0,
-            XMLElem parent = nullptr) const;
-    XMLElem createDouble(const std::string& name, const std::optional<double>& p,
-        XMLElem parent = nullptr) const;
-    XMLElem createOptionalDouble(const std::string& name, const double& p,
-            XMLElem parent = nullptr) const;
-    XMLElem createOptionalDouble(const std::string& name, const std::optional<double>& p,
-        XMLElem parent = nullptr) const;
-    XMLElem createBooleanType(const std::string& name, BooleanType b,
-            XMLElem parent) const;
 
-    XMLElem createDate(const std::string& name, const DateTime& p,
-            XMLElem parent) const;
+    XMLElem createDouble(const std::string& name, double p = 0, XMLElem parent = nullptr) const;
+    XMLElem createDouble(const std::string& name, const std::optional<double>& p, XMLElem parent) const;
+    XMLElem createOptionalDouble(const std::string& name, double p, XMLElem parent) const;
+    XMLElem createOptionalDouble(const std::string& name, const std::optional<double>& p, XMLElem parent) const;
+    XMLElem createBooleanType(const std::string& name, BooleanType b, XMLElem parent) const;
+    XMLElem createDate(const std::string& name, const DateTime& p, XMLElem parent) const;
 
     template <typename T>
     void parseInt(const xml::lite::Element& element, T& value) const

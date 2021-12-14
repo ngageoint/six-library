@@ -97,22 +97,21 @@ XMLElem XMLParser::createString(const std::string& name,
 }
 #endif
 
-XMLElem XMLParser::createDouble(const std::string& name,
-        const std::string& uri, double p, XMLElem parent) const
+XMLElem XMLParser::createDouble(const std::string& name, const std::string& uri, double p, XMLElem parent) const
 {
-    return mXmlLite.createDouble(name, xml::lite::Uri(uri), p, parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createDouble(xml::lite::QName(uri, name), p, *parent);
 }
-XMLElem XMLParser::createDouble(const std::string& name,
-    const std::string& uri, const std::optional<double>& p, XMLElem parent) const
+XMLElem XMLParser::createDouble(const std::string& name, const std::string& uri, const std::optional<double>& p, XMLElem parent) const
 {
-    return createDouble(name, uri, p.value(), parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createDouble(xml::lite::QName(uri, name), p, *parent);
 }
 xml::lite::Element& XMLParser::createDouble(const std::string& name, double p, xml::lite::Element& parent) const
 {
     return mXmlLite.createDouble(name, p, parent);
 }
-XMLElem XMLParser::createDouble(const std::string& name, double p,
-        XMLElem parent) const
+XMLElem XMLParser::createDouble(const std::string& name, double p, XMLElem parent) const
 {
     assert(parent != nullptr);
     return &createDouble(name, p, *parent);
@@ -123,25 +122,25 @@ XMLElem XMLParser::createDouble(const std::string& name, const std::optional<dou
     return createDouble(name, p.value(), parent);
 }
 
-XMLElem XMLParser::createOptionalDouble(const std::string& name,
-    const std::string& uri, const double& p, XMLElem parent) const
+XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::string& uri, double p, XMLElem parent) const
 {
-    return mXmlLite.createOptionalDouble(name, xml::lite::Uri(uri), p, parent);
+    assert(parent != nullptr);
+    return mXmlLite.createOptionalDouble(xml::lite::QName(uri, name), p, *parent);
 }
-XMLElem XMLParser::createOptionalDouble(const std::string& name,
-    const std::string& uri, const std::optional<double>& p, XMLElem parent) const
+XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::string& uri, const std::optional<double>& p, XMLElem parent) const
 {
-    return mXmlLite.createOptionalDouble(name, xml::lite::Uri(uri), p, parent);
+    assert(parent != nullptr);
+    return mXmlLite.createOptionalDouble(xml::lite::QName(uri, name), p, *parent);
 }
-XMLElem XMLParser::createOptionalDouble(const std::string& name, const double& p,
-        XMLElem parent) const
+XMLElem XMLParser::createOptionalDouble(const std::string& name, double p, XMLElem parent) const
 {
-    return mXmlLite.createOptionalDouble(name, p, parent);
+    assert(parent != nullptr);
+    return mXmlLite.createOptionalDouble(name, p, *parent);
 }
-XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::optional<double>& p,
-    XMLElem parent) const
+XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::optional<double>& p, XMLElem parent) const
 {
-    return mXmlLite.createOptionalDouble(name, p, parent);
+    assert(parent != nullptr);
+    return mXmlLite.createOptionalDouble(name, p, *parent);
 }
 
 XMLElem XMLParser::createBooleanType(const std::string& name,
