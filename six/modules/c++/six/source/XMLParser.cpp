@@ -147,12 +147,14 @@ XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::opti
 XMLElem XMLParser::createBooleanType(const std::string& name,
         const std::string& uri, BooleanType p, XMLElem parent) const
 {
-    return mXmlLite.createBooleanType(name, xml::lite::Uri(uri), p, parent);
+    assert(parent != nullptr);
+    return mXmlLite.createBooleanType(xml::lite::QName(uri, name), p, *parent);
 }
 XMLElem XMLParser::createBooleanType(const std::string& name, BooleanType p,
         XMLElem parent) const
 {
-    return mXmlLite.createBooleanType(name, p, parent);
+    assert(parent != nullptr);
+    return mXmlLite.createBooleanType(name, p, *parent);
 }
 
 XMLElem XMLParser::createDateTime(const std::string& name,

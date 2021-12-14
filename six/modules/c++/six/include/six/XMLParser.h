@@ -187,7 +187,7 @@ protected:
         const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
 
     XMLElem createBooleanType(const std::string& name,
-           const std::string& uri, BooleanType b, XMLElem parent = nullptr) const;
+           const std::string& uri, BooleanType b, XMLElem parent) const;
 
     XMLElem createDateTime(const std::string& name,
             const std::string& uri, const DateTime& p, XMLElem parent) const;
@@ -222,7 +222,7 @@ protected:
     XMLElem createOptionalDouble(const std::string& name, const std::optional<double>& p,
         XMLElem parent = nullptr) const;
     XMLElem createBooleanType(const std::string& name, BooleanType b,
-            XMLElem parent = nullptr) const;
+            XMLElem parent) const;
 
     XMLElem createDate(const std::string& name, const DateTime& p,
             XMLElem parent) const;

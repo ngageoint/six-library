@@ -144,9 +144,7 @@ struct XmlLite final
     xml::lite::Element* createOptionalDouble(const std::string& name,
         const xml::lite::Uri&, const std::optional<double>& p, xml::lite::Element* parent = nullptr) const;
 
-    xml::lite::Element* createBooleanType(const std::string& name,
-           const xml::lite::Uri&, BooleanType b, xml::lite::Element* parent = nullptr) const;
-
+    xml::lite::Element* createBooleanType(const xml::lite::QName&, BooleanType b, xml::lite::Element& parent) const;
     xml::lite::Element& createDateTime(const xml::lite::QName&, const DateTime& p, xml::lite::Element& parent) const;
     xml::lite::Element& createDate(const xml::lite::QName&, const DateTime& p, xml::lite::Element& parent) const;
 
@@ -178,9 +176,8 @@ struct XmlLite final
             xml::lite::Element* parent = nullptr) const;
     xml::lite::Element* createOptionalDouble(const std::string& name, const std::optional<double>& p,
         xml::lite::Element* parent = nullptr) const;
-    xml::lite::Element* createBooleanType(const std::string& name, BooleanType b,
-            xml::lite::Element* parent = nullptr) const;
 
+    xml::lite::Element* createBooleanType(const std::string& name, BooleanType b, xml::lite::Element&parent ) const;
     xml::lite::Element& createDateTime(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
     xml::lite::Element& createDate(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
 

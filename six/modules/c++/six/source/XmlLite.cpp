@@ -245,24 +245,21 @@ xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name, const
     return createOptionalDouble(name, getDefaultURI(), p, parent);
 }
 
-xml::lite::Element* XmlLite::createBooleanType(const std::string& name,
-        const xml::lite::Uri& uri, BooleanType p, xml::lite::Element* parent) const
+xml::lite::Element* XmlLite::createBooleanType(const xml::lite::QName& name, BooleanType p, xml::lite::Element& parent) const
 {
     if (p == six::BooleanType::NOT_SET)
     {
         return nullptr;
     }
 
-    assert(parent != nullptr);
     const auto toString = [&](const BooleanType& v) { return six::toString(v); };
-    return &createValue(xml::lite::QName(uri, name), p, *parent,
+    return &createValue(name, p, parent,
         mAddClassAttributes, "xs:boolean", getDefaultURI(),
         toString);
 }
-xml::lite::Element* XmlLite::createBooleanType(const std::string& name, BooleanType p,
-        xml::lite::Element* parent) const
+xml::lite::Element* XmlLite::createBooleanType(const std::string& name, BooleanType p, xml::lite::Element& parent) const
 {
-    return createBooleanType(name, getDefaultURI(), p, parent);
+    return createBooleanType(xml::lite::QName(getDefaultURI(), name), p, parent);
 }
 
 xml::lite::Element& XmlLite::createDateTime(const xml::lite::QName& name, const DateTime& p, xml::lite::Element& parent) const
