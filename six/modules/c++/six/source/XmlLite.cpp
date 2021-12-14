@@ -130,7 +130,7 @@ xml::lite::Element* XmlLite::createString_(const std::string& name,
 }
 
 template<typename T>
-static std::string toString(const std::string& name, const T& p, const xml::lite::Element* parent)
+static std::string toString(const xml::lite::QName& name, const T& p, const xml::lite::Element* parent)
 {
     assert(parent != nullptr);
     try
@@ -139,25 +139,15 @@ static std::string toString(const std::string& name, const T& p, const xml::lite
     }
     catch (const except::Exception& ex)
     {
-        std::string message("Unable to create " + name + " in element "
+        std::string message("Unable to create " + name.getName() + " in element "
                 + parent->getLocalName() + ": " + ex.getMessage());
         throw except::Exception(Ctxt(message));
     }
 }
 template<typename T>
-static std::string toString(const xml::lite::QName& name, const T& p, const xml::lite::Element* parent)
-{
-    return toString(name.getName(), p, parent);
-}
-template<typename T>
-inline std::string toString_(const std::string& name, const T& v, const xml::lite::Element& parent)
-{
-    return toString(name, v, &parent);
-}
-template<typename T>
 inline std::string toString_(const xml::lite::QName& name, const T& v, const xml::lite::Element& parent)
 {
-    return toString_(name.getName(), v, parent);
+    return toString(name, v, &parent);
 }
 
 template<typename T, typename ToString>
@@ -184,13 +174,13 @@ inline xml::lite::Element& createValue(const xml::lite::QName& name,
 }
 
 template<typename T>
-static xml::lite::Element* createOptionalValue(const std::string& name, const xml::lite::Uri& uri,
+static xml::lite::Element* createOptionalValue(const xml::lite::QName& name,
     const std::optional<T>& v, xml::lite::Element& parent,
     bool addClassAttributes, const std::string& type, const xml::lite::Uri& attributeUri)
 {
     if (v.has_value())
     {
-        return &createValue(xml::lite::QName(uri, name), v.value(), parent, addClassAttributes, type, attributeUri);
+        return &createValue(name, v.value(), parent, addClassAttributes, type, attributeUri);
     }
     return nullptr;
 }
@@ -243,7 +233,7 @@ xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name,
     const xml::lite::Uri& uri, const std::optional<double>& p, xml::lite::Element* parent) const
 {
     assert(parent != nullptr);
-    return createOptionalValue(name, uri, p, *parent, mAddClassAttributes, "xs::double", getDefaultURI());
+    return createOptionalValue(xml::lite::QName(uri, name), p, *parent, mAddClassAttributes, "xs::double", getDefaultURI());
 }
 xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name, const double& p,
         xml::lite::Element* parent) const
