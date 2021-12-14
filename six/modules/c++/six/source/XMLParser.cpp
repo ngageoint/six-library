@@ -86,14 +86,14 @@ XMLElem XMLParser::newElement(const std::string& name,
 XMLElem XMLParser::createString(const std::string& name,
         const std::string& uri, const std::string& p, XMLElem parent) const
 {
-    return mXmlLite.createString(name, xml::lite::Uri(uri), p, parent);
+    return mXmlLite.createString(xml::lite::QName(uri, name), p, parent);
 }
 
 #if CODA_OSS_lib_char8_t
 XMLElem XMLParser::createString(const std::string& name,
     const std::string& uri, const std::u8string& p, XMLElem parent) const
 {
-    return mXmlLite.createString(name, xml::lite::Uri(uri), p, parent);
+    return mXmlLite.createString(xml::lite::QName(uri, name), p, parent);
 }
 #endif
 

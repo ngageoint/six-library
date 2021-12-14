@@ -125,7 +125,7 @@ xml::lite::Element* XmlLite::createString(const std::string& name,
 xml::lite::Element* XmlLite::createString_(const std::string& name,
         const std::string& p, xml::lite::Element* parent) const
 {
-    return createString(name, getDefaultURI(), p, parent);
+    return createString(xml::lite::QName(getDefaultURI(), name), p, parent);
 }
 
 template<typename T>

@@ -95,15 +95,9 @@ struct XmlLite final
 
     // generic element creation methods, w/URI
     xml::lite::Element& createString(const xml::lite::QName&, const std::string& p, xml::lite::Element& parent) const;
-    xml::lite::Element& createString(const std::string& name, const xml::lite::Uri& uri, const std::string& p,
-        xml::lite::Element& parent) const
+    xml::lite::Element* createString(const xml::lite::QName& name, const std::string& p, xml::lite::Element* parent) const
     {
-        return createString(xml::lite::QName(uri, name), p, parent);
-    }
-    xml::lite::Element* createString(const std::string& name, const xml::lite::Uri& uri,
-        const std::string& p, xml::lite::Element* parent) const
-    {
-        return &createString(xml::lite::QName(uri, name), p, *parent);
+        return &createString(name, p, *parent);
     }
     #if CODA_OSS_lib_char8_t
     xml::lite::Element* createString(const std::string& name,
@@ -116,7 +110,7 @@ struct XmlLite final
     xml::lite::Element& createSixString(const xml::lite::QName& name, const T& t,
         xml::lite::Element& parent) const
     {
-        return createString(name.getName(), name.getUri(), toString(t), parent);
+        return createString(name, toString(t), parent);
     }
 
     template <typename T>
@@ -126,13 +120,10 @@ struct XmlLite final
     {
         if (six::Init::isUndefined(enumVal.value))
         {
-            throw six::UninitializedValueException(
-                Ctxt("Attempted use of uninitialized value"));
+            throw six::UninitializedValueException(Ctxt("Attempted use of uninitialized value"));
         }
 
-        return createString(name,
-                            enumVal.toString(),
-                            parent);
+        return createString(name, enumVal.toString(), parent);
     }
 
     xml::lite::Element* createInt(const std::string& name, const xml::lite::Uri& uri, const std::string& p, xml::lite::Element* parent = nullptr) const
@@ -157,7 +148,6 @@ struct XmlLite final
            const xml::lite::Uri&, BooleanType b, xml::lite::Element* parent = nullptr) const;
 
     xml::lite::Element& createDateTime(const xml::lite::QName&, const DateTime& p, xml::lite::Element& parent) const;
-
     xml::lite::Element& createDate(const xml::lite::QName&, const DateTime& p, xml::lite::Element& parent) const;
 
     // generic element creation methods, using default URI
@@ -190,6 +180,7 @@ struct XmlLite final
         xml::lite::Element* parent = nullptr) const;
     xml::lite::Element* createBooleanType(const std::string& name, BooleanType b,
             xml::lite::Element* parent = nullptr) const;
+
     xml::lite::Element& createDateTime(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
     xml::lite::Element& createDate(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
 
