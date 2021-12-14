@@ -89,9 +89,7 @@ struct XmlLite final
 
     // generic element creation methods, w/URI
     xml::lite::Element& createString(const xml::lite::QName&, const std::string& p, xml::lite::Element& parent) const;
-    #if CODA_OSS_lib_char8_t
     xml::lite::Element& createString(const xml::lite::QName&, const std::u8string& p, xml::lite::Element& parent) const;
-    #endif
     template<typename T>
     xml::lite::Element& createSixString(const xml::lite::QName& name, const T& t, xml::lite::Element& parent) const // six::toString(t) isntead of t.toString()
     {

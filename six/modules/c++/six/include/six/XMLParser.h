@@ -99,11 +99,9 @@ struct XMLParser
     XMLElem createString(const std::string& name,
         const std::string& uri, const std::string& p = "",
         XMLElem parent = nullptr) const;
-#if CODA_OSS_lib_char8_t
     XMLElem createString(const std::string& name,
         const std::string& uri, const std::u8string& p,
         XMLElem parent) const;
-#endif
     XMLElem createString(const std::string& name, const char* p,
         XMLElem parent) const {
         assert(parent != nullptr);

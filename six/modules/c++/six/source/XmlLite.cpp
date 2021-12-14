@@ -117,17 +117,15 @@ xml::lite::Element& XmlLite::createString(const std::string& name,
 {
     return createString(xml::lite::QName(getDefaultURI(), name), p, parent);
 }
-
-#if CODA_OSS_lib_char8_t
-xml::lite::Element* XmlLite::createString(const std::string& name,
-    const xml::lite::Uri& uri, const std::u8string& p, xml::lite::Element* parent) const
+xml::lite::Element& XmlLite::createString(const xml::lite::QName& name, const std::u8string& p, xml::lite::Element& parent) const
 {
-    xml::lite::Element* const elem = newElement(name, uri, p, parent);
-    addClassAttributes(*elem, "xs:string");
-
+    auto& elem = newElement(name, p, parent);
+    if (mAddClassAttributes)
+    {
+        addClassAttributes(elem, "xs:string", getDefaultURI());
+    }
     return elem;
 }
-#endif
 
 xml::lite::Element& XmlLite::createString_(const std::string& name,
         const std::string& p, xml::lite::Element& parent) const
