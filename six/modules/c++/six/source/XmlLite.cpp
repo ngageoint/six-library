@@ -159,7 +159,7 @@ static xml::lite::Element& createValue(const std::string& name, const std::strin
     bool addClassAttributes, const std::string& type, const std::string& attributeUri,
     ToString toString)
 {
-    auto& elem = xml::lite::createElement(name, uri, v, parent, toString);
+    auto& elem = xml::lite::addNewElement(xml::lite::QName(uri, name), v, parent, toString);
     if (addClassAttributes)
     {
         addClassAttributes_(elem, type, attributeUri);
