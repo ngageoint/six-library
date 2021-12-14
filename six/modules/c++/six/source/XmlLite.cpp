@@ -50,13 +50,13 @@ namespace six
 
 xml::lite::Element* XmlLite::newElement(const std::string& name, xml::lite::Element* parent) const
 {
-    const xml::lite::QName qname(getDefaultURI(), name);
+    const auto qname = makeQName(name);
     // prefer reference version as that minimizes the opportunity for memory leaks
     return parent != nullptr ? &newElement(qname, *parent) : newElement(qname, parent);
 }
 xml::lite::Element& XmlLite::newElement(const std::string& name, xml::lite::Element& parent) const
 {
-    return newElement(xml::lite::QName(getDefaultURI(), name), parent);
+    return newElement(makeQName(name), parent);
 }
 xml::lite::Element* XmlLite::newElement(const xml::lite::QName& name, xml::lite::Element* parent)
 {
@@ -115,7 +115,7 @@ xml::lite::Element& XmlLite::createString(const xml::lite::QName& name, const st
 xml::lite::Element& XmlLite::createString(const std::string& name,
     const std::string& p, xml::lite::Element& parent) const
 {
-    return createString(xml::lite::QName(getDefaultURI(), name), p, parent);
+    return createString(makeQName(name), p, parent);
 }
 xml::lite::Element& XmlLite::createString(const xml::lite::QName& name, const std::u8string& p, xml::lite::Element& parent) const
 {
@@ -130,7 +130,7 @@ xml::lite::Element& XmlLite::createString(const xml::lite::QName& name, const st
 xml::lite::Element& XmlLite::createString_(const std::string& name,
         const std::string& p, xml::lite::Element& parent) const
 {
-    return createString(xml::lite::QName(getDefaultURI(), name), p, parent);
+    return createString(makeQName(name), p, parent);
 }
 
 template<typename T>
@@ -203,7 +203,7 @@ xml::lite::Element& XmlLite::createInt(const xml::lite::QName& name, const std::
 }
 xml::lite::Element& XmlLite::createInt_(const std::string& name, int p, xml::lite::Element& parent) const
 {
-    return createInt(xml::lite::QName(getDefaultURI(), name), p, parent);
+    return createInt(makeQName(name), p, parent);
 }
 
 xml::lite::Element& XmlLite::createDouble(const xml::lite::QName& name, double p, xml::lite::Element& parent) const
@@ -217,7 +217,7 @@ xml::lite::Element& XmlLite::createDouble(const xml::lite::QName& name, const st
 }
 xml::lite::Element& XmlLite::createDouble(const std::string& name, double p, xml::lite::Element& parent) const
 {
-    return createDouble(xml::lite::QName(getDefaultURI(), name), p, parent);
+    return createDouble(makeQName(name), p, parent);
 }
 xml::lite::Element& XmlLite::createDouble(const std::string& name, const std::optional<double>& p, xml::lite::Element& parent) const
 {
@@ -230,7 +230,7 @@ xml::lite::Element* XmlLite::createOptionalDouble(const xml::lite::QName& name, 
 }
 xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name, double p, xml::lite::Element& parent) const
 {
-    return createOptionalDouble(xml::lite::QName(getDefaultURI(), name), p, parent);
+    return createOptionalDouble(makeQName(name), p, parent);
 }
 xml::lite::Element* XmlLite::createOptionalDouble(const xml::lite::QName& name, const std::optional<double>& p, xml::lite::Element& parent) const
 {
@@ -238,7 +238,7 @@ xml::lite::Element* XmlLite::createOptionalDouble(const xml::lite::QName& name, 
 }
 xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name, const std::optional<double>& p, xml::lite::Element& parent) const
 {
-    return createOptionalDouble(xml::lite::QName(getDefaultURI(), name), p, parent);
+    return createOptionalDouble(makeQName(name), p, parent);
 }
 
 xml::lite::Element* XmlLite::createBooleanType(const xml::lite::QName& name, BooleanType p, xml::lite::Element& parent) const
@@ -255,7 +255,7 @@ xml::lite::Element* XmlLite::createBooleanType(const xml::lite::QName& name, Boo
 }
 xml::lite::Element* XmlLite::createBooleanType(const std::string& name, BooleanType p, xml::lite::Element& parent) const
 {
-    return createBooleanType(xml::lite::QName(getDefaultURI(), name), p, parent);
+    return createBooleanType(makeQName(name), p, parent);
 }
 
 xml::lite::Element& XmlLite::createDateTime(const xml::lite::QName& name, const DateTime& p, xml::lite::Element& parent) const
@@ -265,7 +265,7 @@ xml::lite::Element& XmlLite::createDateTime(const xml::lite::QName& name, const 
 }
 xml::lite::Element& XmlLite::createDateTime(const std::string& name, const DateTime& p, xml::lite::Element& parent) const
 {
-    return createDateTime(xml::lite::QName(getDefaultURI(), name), p, parent);
+    return createDateTime(makeQName(name), p, parent);
 }
 
 xml::lite::Element& XmlLite::createDate(const xml::lite::QName& name, const DateTime& p, xml::lite::Element& parent) const
@@ -278,7 +278,7 @@ xml::lite::Element& XmlLite::createDate(const xml::lite::QName& name, const Date
 xml::lite::Element& XmlLite::createDate(const std::string& name, const DateTime& p,
         xml::lite::Element& parent) const
 {
-    return createDate(xml::lite::QName(getDefaultURI(), name), p, parent);
+    return createDate(makeQName(name), p, parent);
 }
 
 xml::lite::Element& XmlLite::getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag)
@@ -402,5 +402,10 @@ void XmlLite::parseBooleanType(const xml::lite::Element& element, BooleanType& v
 void XmlLite::parseDateTime(const xml::lite::Element& element, DateTime& value) const
 {
     value = castValue(element, six::toType<DateTime>);
+}
+
+xml::lite::QName XmlLite::makeQName(const std::string& name) const
+{
+    return xml::lite::QName(getDefaultURI(), name);
 }
 }

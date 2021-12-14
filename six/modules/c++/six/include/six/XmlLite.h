@@ -24,7 +24,7 @@
 #define SIX_six_XmlLite_h_INCLUDED_
 #pragma once
 
-#include <string>
+#include <std/string>
 #include <type_traits>
 #include <std/optional>
 #include <memory>
@@ -122,7 +122,6 @@ struct XmlLite final
     {
         return createString_(name, toString(t), parent);
     }
-
     template <typename T>
     xml::lite::Element& createStringFromEnum(const std::string& name, const T& enumVal, xml::lite::Element& parent) const
     {
@@ -133,7 +132,6 @@ struct XmlLite final
 
         return createString(name, enumVal.toString(), parent);
     }
-
     template<typename T>
     xml::lite::Element& createInt(const std::string& name, T p,
             xml::lite::Element& parent) const
@@ -226,6 +224,7 @@ struct XmlLite final
 private:
     xml::lite::Element& createInt_(const std::string& name, int p, xml::lite::Element& parent) const;
     xml::lite::Element& createString_(const std::string& name, const std::string& p, xml::lite::Element& parent) const;
+    xml::lite::QName makeQName(const std::string& name) const;
 
     const xml::lite::Uri mDefaultURI;
     const bool mAddClassAttributes;
