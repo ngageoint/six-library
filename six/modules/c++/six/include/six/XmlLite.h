@@ -76,23 +76,21 @@ struct XmlLite final
     xml::lite::Element* newElement(const std::string& name, xml::lite::Element* prnt = nullptr) const;
     xml::lite::Element& newElement(const std::string& name, xml::lite::Element& prnt) const;
 
-    static
-    xml::lite::Element* newElement(const std::string& name, const xml::lite::Uri&, xml::lite::Element* prnt = nullptr);
-    static xml::lite::Element& newElement(const std::string& name, const xml::lite::Uri&, xml::lite::Element& prnt);
+    static xml::lite::Element* newElement(const xml::lite::QName&, xml::lite::Element* prnt = nullptr);
+    static xml::lite::Element& newElement(const xml::lite::QName&, xml::lite::Element& prnt);
 
-    static
-    xml::lite::Element* newElement(const std::string& name, const xml::lite::Uri&,
+    static xml::lite::Element* newElement(const xml::lite::QName&,
             const std::string& characterData, xml::lite::Element* parent = nullptr);
     #if CODA_OSS_lib_char8_t
-    static xml::lite::Element* newElement(const std::string& name, const xml::lite::Uri&,
+    static xml::lite::Element* newElement(const xml::lite::QName&,
             const std::u8string& characterData, xml::lite::Element* parent = nullptr);
     #endif
 
     template<typename T>
-    static xml::lite::Element* newElement(const T* pElement, const std::string& name, const xml::lite::Uri& uri,
+    static xml::lite::Element* newElement(const T* pElement, const xml::lite::QName& name,
         xml::lite::Element* parent = nullptr)
     {
-        return pElement == nullptr ? nullptr : newElement(name, uri, parent);
+        return pElement == nullptr ? nullptr : newElement(name, parent);
     }
 
     // generic element creation methods, w/URI

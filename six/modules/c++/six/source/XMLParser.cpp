@@ -61,25 +61,25 @@ xml::lite::Element& XMLParser::newElement(const std::string& name, xml::lite::El
 XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, XMLElem parent)
 {
-    return XmlLite::newElement(name, xml::lite::Uri(uri), parent);
+    return XmlLite::newElement(xml::lite::QName(uri, name), parent);
 }
 xml::lite::Element& XMLParser::newElement(const std::string& name, const std::string& uri, xml::lite::Element& parent)
 {
-    return  XmlLite::newElement(name, xml::lite::Uri(uri), parent);
+    return  XmlLite::newElement(xml::lite::QName(uri, name), parent);
 }
 
 XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, const std::string& characterData,
         XMLElem parent)
 {
-    return XmlLite::newElement(name, xml::lite::Uri(uri), characterData, parent);
+    return XmlLite::newElement(xml::lite::QName(uri, name), characterData, parent);
 }
 #if CODA_OSS_lib_char8_t
 XMLElem XMLParser::newElement(const std::string& name,
     const std::string& uri, const std::u8string& characterData,
     XMLElem parent)
 {
-    return XmlLite::newElement(name, xml::lite::Uri(uri), characterData, parent);
+    return XmlLite::newElement(xml::lite::QName(uri, name), characterData, parent);
 }
 #endif
 

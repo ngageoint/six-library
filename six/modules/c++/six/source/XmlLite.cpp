@@ -50,21 +50,20 @@ namespace six
 
 xml::lite::Element* XmlLite::newElement(const std::string& name, xml::lite::Element* parent) const
 {
-    return newElement(name, mDefaultURI, parent);
+    return newElement(xml::lite::QName(getDefaultURI(), name), parent);
 }
 xml::lite::Element& XmlLite::newElement(const std::string& name, xml::lite::Element& parent) const
 {
-    return *newElement(name, mDefaultURI, &parent);
+    return *newElement(xml::lite::QName(getDefaultURI(), name), &parent);
 }
 
-xml::lite::Element* XmlLite::newElement(const std::string& name,
-        const xml::lite::Uri& uri, xml::lite::Element* parent)
+xml::lite::Element* XmlLite::newElement(const xml::lite::QName& name, xml::lite::Element* parent)
 {
-    return newElement(name, uri, "", parent);
+    return newElement(name, "", parent);
 }
-xml::lite::Element& XmlLite::newElement(const std::string& name, const xml::lite::Uri& uri, xml::lite::Element& parent)
+xml::lite::Element& XmlLite::newElement(const xml::lite::QName& name, xml::lite::Element& parent)
 {
-    return *newElement(name, uri, "", &parent);
+    return *newElement(name, "", &parent);
 }
 
 static void addClassAttributes_(xml::lite::Element& elem, const std::string& type, const xml::lite::Uri& uri)
@@ -79,21 +78,19 @@ void XmlLite::addClassAttributes(xml::lite::Element& elem, const std::string& ty
     }
 }
 
-xml::lite::Element* XmlLite::newElement(const std::string& name,
-        const xml::lite::Uri& uri, const std::string& characterData,
+xml::lite::Element* XmlLite::newElement(const xml::lite::QName& name, const std::string& characterData,
         xml::lite::Element* parent)
 {
-    xml::lite::Element* elem = xml::lite::Element::create(name, uri, characterData).release();
+    xml::lite::Element* elem = xml::lite::Element::create(name, characterData).release();
     if (parent)
         parent->addChild(elem);
     return elem;
 }
 #if CODA_OSS_lib_char8_t
-xml::lite::Element* XmlLite::newElement(const std::string& name,
-    const xml::lite::Uri& uri, const std::u8string& characterData,
+xml::lite::Element* XmlLite::newElement(const xml::lite::QName& name, const std::u8string& characterData,
     xml::lite::Element* parent)
 {
-    xml::lite::Element* elem = new xml::lite::Element(name, uri, characterData);
+    xml::lite::Element* elem = new xml::lite::Element(name, characterData);
     if (parent)
         parent->addChild(elem);
     return elem;
@@ -103,7 +100,7 @@ xml::lite::Element* XmlLite::newElement(const std::string& name,
 xml::lite::Element& XmlLite::createString(const std::string& name,
         const xml::lite::Uri& uri, const std::string& p, xml::lite::Element& parent) const
 {
-    auto pElem = newElement(name, uri, p, &parent);
+    auto pElem = newElement(xml::lite::QName(uri, name), p, &parent);
     auto& elem = *pElem;
     addClassAttributes(elem, "xs:string");
 
@@ -199,7 +196,7 @@ xml::lite::Element* XmlLite::createInt_(const std::string& name, const xml::lite
     const std::string& p, xml::lite::Element* parent) const
 {
     assert(parent != nullptr);
-    xml::lite::Element* const elem = newElement(name, uri, p, parent);
+    xml::lite::Element* const elem = newElement(xml::lite::QName(uri, name), p, parent);
     addClassAttributes(*elem, "xs:int");
     return elem;
 }

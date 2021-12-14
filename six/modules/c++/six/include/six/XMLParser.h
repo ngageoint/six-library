@@ -150,7 +150,7 @@ protected:
     static XMLElem newElement(const T* pElement, const std::string& name, const std::string& uri,
         XMLElem parent = nullptr)
     {
-        return XmlLite::newElement(pElement, name, xml::lite::Uri(uri), parent);
+        return XmlLite::newElement(pElement, xml::lite::QName(uri, name), parent);
     }
 
     template <typename T>
