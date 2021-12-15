@@ -89,6 +89,16 @@ const xml::lite::Uri& xml::lite::QName::getUri() const
     return mAssocUri;
 }
 
+static std::string flatten(const std::vector<std::string>& strs, size_t start = 0)
+{
+    std::string retval;
+    for (size_t i = start; i < strs.size(); i++)
+    {
+        retval += strs[i];
+    }
+    return retval;
+}
+
 xml::lite::Uri::Uri(const std::string& uri)
 {
     // do some very simply sanity-checking on a URI
@@ -107,10 +117,12 @@ xml::lite::Uri::Uri(const std::string& uri)
             throw std::invalid_argument("string value '" + r[0] + "' is not a URI scheme.");
         }
 
-        if (r[1].size() < 5)
+        const auto path = flatten(r, 1); // don't care about other ':'s
+        if (path.size() <= 6)
         {
             // does it make sense to have a really short path?
-            throw std::invalid_argument("string value '" + r[0] + "' is too short for a URI path.");        
+            // in SIX we have "urn:us:gov"
+            throw std::invalid_argument("string value '" +  path + "' is too short for a URI path.");        
         }
     }
     value = uri;
