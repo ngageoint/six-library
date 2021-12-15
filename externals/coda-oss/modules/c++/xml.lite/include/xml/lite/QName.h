@@ -64,7 +64,7 @@ namespace lite
 struct Uri final // help prevent mixups with std::string
 {
     Uri() = default;
-    explicit Uri(const std::string& v) : value(v) { }
+    explicit Uri(const std::string& v);
     std::string value;
 };
 

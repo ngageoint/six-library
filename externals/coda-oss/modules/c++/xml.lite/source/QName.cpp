@@ -20,7 +20,10 @@
  *
  */
 
+#include <stdexcept>
+
 #include "xml/lite/QName.h"
+#include "str/Manip.h"
 
 std::string xml::lite::QName::getName() const
 {
@@ -84,4 +87,31 @@ std::string xml::lite::QName::getAssociatedUri() const
 const xml::lite::Uri& xml::lite::QName::getUri() const
 {
     return mAssocUri;
+}
+
+xml::lite::Uri::Uri(const std::string& uri)
+{
+    // do some very simply sanity-checking on a URI
+    if (!uri.empty())
+    {
+        // https://en.wikipedia.org/wiki/Uniform_Resource_Identifier
+        const auto r = str::split(uri, ":");
+        if (r.size() < 2)
+        {
+            throw std::invalid_argument("string value '" + uri + "' is not a URI.");
+        }
+
+        if (r[0].size() <= 1)
+        {
+            // Is "a:" a real-world scheme?
+            throw std::invalid_argument("string value '" + r[0] + "' is not a URI scheme.");
+        }
+
+        if (r[1].size() < 5)
+        {
+            // does it make sense to have a really short path?
+            throw std::invalid_argument("string value '" + r[0] + "' is too short for a URI path.");        
+        }
+    }
+    value = uri;
 }
