@@ -299,9 +299,9 @@ xml_lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) const
 
     //set the ElemNS
     root->setNamespacePrefix("", getDefaultURI());
-    root->setNamespacePrefix("si", SI_COMMON_URI);
-    root->setNamespacePrefix("sfa", SFA_URI);
-    root->setNamespacePrefix("ism", ISM_URI);
+    root->setNamespacePrefix("si", xml_lite::Uri(SI_COMMON_URI));
+    root->setNamespacePrefix("sfa", xml_lite::Uri(SFA_URI));
+    root->setNamespacePrefix("ism", xml_lite::Uri(ISM_URI));
 
     return doc;
 }
