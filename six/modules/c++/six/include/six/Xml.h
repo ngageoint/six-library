@@ -24,7 +24,10 @@
 #define SIX_six_Xml_h_INCLUDED_
 #pragma once
 
-#include <xml/lite/QName.h> // get xml::lite namespace
+#include <xml/lite/Element.h>
+#include <xml/lite/Document.h>
+#include <xml/lite/MinidomParser.h>
+#include <xml/lite/Validator.h>
 
 namespace six
 {

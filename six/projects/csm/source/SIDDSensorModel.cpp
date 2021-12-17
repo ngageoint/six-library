@@ -158,8 +158,8 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
         // Check for the SIDD DES associated with imageIndex and parse it
         // DES's are always in the same order as the images, so we just have to
         // find the Nth DES
-        xml::lite::Document* siddXML = nullptr;
-        xml::lite::MinidomParser domParser;
+        six::xml_lite::Document* siddXML = nullptr;
+        six::xml_lite::MinidomParser domParser;
 
         size_t numSIDD = 0;
         const std::vector< csm::Des>& desList(isd.fileDess());
@@ -411,7 +411,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         io::StringStream stream;
         stream.write(sensorModelXML);
 
-        xml::lite::MinidomParser domParser;
+        six::xml_lite::MinidomParser domParser;
         domParser.parse(stream);
 
         six::XMLControlRegistry xmlRegistry;

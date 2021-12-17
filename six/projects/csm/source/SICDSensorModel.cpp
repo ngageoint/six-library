@@ -120,8 +120,8 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
     try
     {
         // Check for the first SICD DES and parse it
-        xml::lite::Document* sicdXML = nullptr;
-        xml::lite::MinidomParser domParser;
+        six::xml_lite::Document* sicdXML = nullptr;
+        six::xml_lite::MinidomParser domParser;
 
         const std::vector< csm::Des>& desList(isd.fileDess());
         for (const auto& desListItem : desList)
@@ -419,7 +419,7 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         io::StringStream stream;
         stream.write(sensorModelXML);
 
-        xml::lite::MinidomParser domParser;
+        six::xml_lite::MinidomParser domParser;
         domParser.parse(stream);
 
         six::XMLControlRegistry xmlRegistry;
