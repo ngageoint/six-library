@@ -349,15 +349,8 @@ struct Attributes final
 
     bool contains(const std::string& qname) const
     {
-        try
-        {
-            getValue(qname);
-            return true;
-        }
-        catch(const except::NoSuchKeyException&)
-        {
-            return false;
-        }
+        std::string unused;
+        return getValue(qname, unused);
     }
 
     /**

@@ -32,7 +32,7 @@
 #include <string>
 #include <ostream>
 
-#include "CPlusPlus.h"
+#include "sys/CPlusPlus.h"
 
 namespace sys
 {
