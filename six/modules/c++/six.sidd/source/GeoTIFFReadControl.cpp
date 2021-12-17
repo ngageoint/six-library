@@ -106,7 +106,7 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
                     io::StringStream stream;
                     stream.write(xmlStrs[ii]);
                     stream.seek(0, io::Seekable::START);
-                    xml::lite::MinidomParser xmlParser;
+                    xml_lite::MinidomParser xmlParser;
                     xmlParser.preserveCharacterData(true);
                     xmlParser.parse(stream);
 
@@ -153,10 +153,10 @@ void six::sidd::GeoTIFFReadControl::load(
         io::StringStream stream;
         stream.write(xmlStrs[ii]);
         stream.seek(0, io::Seekable::START);
-        xml::lite::MinidomParser xmlParser;
+        xml_lite::MinidomParser xmlParser;
         xmlParser.preserveCharacterData(true);
         xmlParser.parse(stream);
-        const xml::lite::Document* const doc = xmlParser.getDocument();
+        const xml_lite::Document* const doc = xmlParser.getDocument();
 
         // Get the associated XML control
         const std::string rootName(doc->getRootElement()->getQName());

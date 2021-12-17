@@ -97,7 +97,7 @@ public:
      *  \param schemaPaths Vector of XML Schema for validation
      *  \return pointer to xml Document object
      */
-    virtual mem::auto_ptr<xml::lite::Document> toXML(
+    virtual mem::auto_ptr<six::xml_lite::Document> toXML(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -126,9 +126,9 @@ public:
      *  \return pointer to metadata object
      */
     virtual std::unique_ptr<Metadata> fromXML(
-            const xml::lite::Document* doc,
+            const six::xml_lite::Document* doc,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
-    virtual Metadata fromXML(const xml::lite::Document& doc,
+    virtual Metadata fromXML(const six::xml_lite::Document& doc,
         const std::vector<std::filesystem::path>& schemaPaths = std::vector<std::filesystem::path>());
 
 
@@ -148,7 +148,7 @@ private:
      *  \param data A Metadata object
      *  \return An XML DOM
      */
-    virtual std::unique_ptr<xml::lite::Document> toXMLImpl(const Metadata& metadata);
+    virtual std::unique_ptr<six::xml_lite::Document> toXMLImpl(const Metadata& metadata);
 
     /*!
      *  Function takes a DOM Document* node and creates a new-allocated
@@ -157,7 +157,7 @@ private:
      *  \param doc An XML document pointer
      *  \return A Metadata object
      */
-    virtual std::unique_ptr<Metadata> fromXMLImpl(const xml::lite::Document* doc);
+    virtual std::unique_ptr<Metadata> fromXMLImpl(const six::xml_lite::Document* doc);
 
     /*
      *  \Function creates a new parser to parse XML or document

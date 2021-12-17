@@ -25,7 +25,7 @@
 
 namespace
 {
-typedef xml::lite::Element* XMLElem;
+typedef six::xml_lite::Element* XMLElem;
 }
 
 namespace six
@@ -341,10 +341,10 @@ XMLElem ComplexXMLParser04x::convertAntennaParamArrayToXML(
 
 
 void ComplexXMLParser04x::parseWeightTypeFromXML(
-    const xml::lite::Element* gridRowColXML,
+    const xml_lite::Element* gridRowColXML,
     mem::ScopedCopyablePtr<WeightType>& obj) const
 {
-    const xml::lite::Element* weightType = getOptional(gridRowColXML, "WgtType");
+    const xml_lite::Element* weightType = getOptional(gridRowColXML, "WgtType");
     if (weightType)
     {
         obj.reset(new WeightType());
@@ -357,7 +357,7 @@ void ComplexXMLParser04x::parseWeightTypeFromXML(
 }
 
 void ComplexXMLParser04x::parsePolarizationCalibrationFromXML(
-    const xml::lite::Element* polCalXML,
+    const xml_lite::Element* polCalXML,
     six::sicd::PolarizationCalibration* obj) const
 {
     parseBooleanType(getFirstAndOnly(polCalXML, "HVAngleCompApplied"),
@@ -368,7 +368,7 @@ void ComplexXMLParser04x::parsePolarizationCalibrationFromXML(
 }
 
 void ComplexXMLParser04x::parseTxRcvPolFromXML(
-    const xml::lite::Element* parent,
+    const xml_lite::Element* parent,
     six::DualPolarizationType& txRcvPol) const
 {
     //! Optional field
@@ -380,7 +380,7 @@ void ComplexXMLParser04x::parseTxRcvPolFromXML(
     }
 }
 
-void ComplexXMLParser04x::parseRMATFromXML(const xml::lite::Element* rmatElem,
+void ComplexXMLParser04x::parseRMATFromXML(const xml_lite::Element* rmatElem,
                                            RMAT* rmat) const
 {
     parseDouble(getFirstAndOnly(rmatElem, "RefTime"), rmat->refTime);
@@ -396,7 +396,7 @@ void ComplexXMLParser04x::parseRMATFromXML(const xml::lite::Element* rmatElem,
     parseDouble(getFirstAndOnly(rmatElem, "Ky2"), rmat->ky2);
 }
 
-void ComplexXMLParser04x::parseRMCRFromXML(const xml::lite::Element*,
+void ComplexXMLParser04x::parseRMCRFromXML(const xml_lite::Element*,
                                            RMCR*) const
 {
     // did not exist in 0.4
@@ -404,7 +404,7 @@ void ComplexXMLParser04x::parseRMCRFromXML(const xml::lite::Element*,
 }
 
 void ComplexXMLParser04x::parseAntennaParamArrayFromXML(
-    const xml::lite::Element* antennaParamsXML,
+    const xml_lite::Element* antennaParamsXML,
     six::sicd::AntennaParameters* params) const
 {
     //! this field is optional in 0.4
@@ -444,7 +444,7 @@ XMLElem ComplexXMLParser04x::createRcvChannels(const RadarCollection* radar,
 }
 
 void ComplexXMLParser04x::parseRadarCollectionFromXML(
-    const xml::lite::Element* radarCollectionXML,
+    const xml_lite::Element* radarCollectionXML,
     RadarCollection* radarCollection) const
 {
     parseOptionalInt(radarCollectionXML, "RefFreqIndex", radarCollection->refFrequencyIndex);

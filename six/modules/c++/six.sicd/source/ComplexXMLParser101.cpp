@@ -24,7 +24,7 @@
 
 namespace
 {
-typedef xml::lite::Element* XMLElem;
+typedef six::xml_lite::Element* XMLElem;
 }
 
 using namespace six::sicd;

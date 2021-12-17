@@ -43,10 +43,10 @@ namespace six
 {
 struct XmlLite final
 {
-    XmlLite(const xml::lite::Uri& defaultURI, bool addClassAttributes,
+    XmlLite(const xml_lite::Uri& defaultURI, bool addClassAttributes,
         logging::Logger* log = nullptr, bool ownLog = false);
-    XmlLite(const xml::lite::Uri& defaultURI, bool addClassAttributes, std::unique_ptr<logging::Logger>&&);
-    XmlLite(const xml::lite::Uri& defaultURI, bool addClassAttributes, logging::Logger&);
+    XmlLite(const xml_lite::Uri& defaultURI, bool addClassAttributes, std::unique_ptr<logging::Logger>&&);
+    XmlLite(const xml_lite::Uri& defaultURI, bool addClassAttributes, logging::Logger&);
     XmlLite(const XmlLite&) = delete;
     XmlLite& operator=(const XmlLite&) = delete;
     XmlLite(XmlLite&&) = delete;
@@ -69,21 +69,21 @@ struct XmlLite final
     }
 
     //! Returns the default URI
-    const xml::lite::Uri& getDefaultURI() const
+    const xml_lite::Uri& getDefaultURI() const
     {
         return mDefaultURI;
     }
 
-    static xml::lite::Element* newElement(const xml::lite::QName&, xml::lite::Element* prnt);
-    static xml::lite::Element& newElement(const xml::lite::QName&, xml::lite::Element& prnt);
-    xml::lite::Element* newElement(const std::string& name, xml::lite::Element* prnt) const;
-    xml::lite::Element& newElement(const std::string& name, xml::lite::Element& prnt) const;
-    static xml::lite::Element* newElement(const xml::lite::QName&, const std::string& characterData, xml::lite::Element* parent);
-    static xml::lite::Element& newElement(const xml::lite::QName&, const std::string& characterData, xml::lite::Element& parent);
-    static xml::lite::Element* newElement(const xml::lite::QName&, const std::u8string& characterData, xml::lite::Element* parent);
-    static xml::lite::Element& newElement(const xml::lite::QName&, const std::u8string& characterData, xml::lite::Element& parent);
+    static xml_lite::Element* newElement(const xml_lite::QName&, xml_lite::Element* prnt);
+    static xml_lite::Element& newElement(const xml_lite::QName&, xml_lite::Element& prnt);
+    xml_lite::Element* newElement(const std::string& name, xml_lite::Element* prnt) const;
+    xml_lite::Element& newElement(const std::string& name, xml_lite::Element& prnt) const;
+    static xml_lite::Element* newElement(const xml_lite::QName&, const std::string& characterData, xml_lite::Element* parent);
+    static xml_lite::Element& newElement(const xml_lite::QName&, const std::string& characterData, xml_lite::Element& parent);
+    static xml_lite::Element* newElement(const xml_lite::QName&, const std::u8string& characterData, xml_lite::Element* parent);
+    static xml_lite::Element& newElement(const xml_lite::QName&, const std::u8string& characterData, xml_lite::Element& parent);
     template<typename T>
-    static xml::lite::Element* newElement(const T* pElement, const xml::lite::QName& name, xml::lite::Element* parent)
+    static xml_lite::Element* newElement(const T* pElement, const xml_lite::QName& name, xml_lite::Element* parent)
     {
         return pElement == nullptr ? nullptr : newElement(name, parent);
     }
@@ -95,42 +95,42 @@ struct XmlLite final
     }
 
     // generic element creation methods, w/URI
-    xml::lite::Element& createString(const xml::lite::QName&, const std::string& p, xml::lite::Element& parent) const;
-    xml::lite::Element& createString(const xml::lite::QName&, const std::u8string& p, xml::lite::Element& parent) const;
+    xml_lite::Element& createString(const xml_lite::QName&, const std::string& p, xml_lite::Element& parent) const;
+    xml_lite::Element& createString(const xml_lite::QName&, const std::u8string& p, xml_lite::Element& parent) const;
     template<typename T>
-    xml::lite::Element& createSixString(const xml::lite::QName& name, const T& t, xml::lite::Element& parent) const // six::toString(t) isntead of t.toString()
+    xml_lite::Element& createSixString(const xml_lite::QName& name, const T& t, xml_lite::Element& parent) const // six::toString(t) isntead of t.toString()
     {
         return createString(name, six_toString(t), parent);
     }
-    xml::lite::Element& createInt(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const;
-    xml::lite::Element& createInt(const xml::lite::QName& name, int p, xml::lite::Element& parent) const;
-    xml::lite::Element& createDouble(const xml::lite::QName&, double p, xml::lite::Element& parent) const;
-    xml::lite::Element& createDouble(const xml::lite::QName&, const std::optional<double>& p, xml::lite::Element& parent) const;
-    xml::lite::Element* createOptionalDouble(const xml::lite::QName&, double p, xml::lite::Element& parent) const;
-    xml::lite::Element* createOptionalDouble(const xml::lite::QName&, const std::optional<double>& p, xml::lite::Element& parent) const;
-    xml::lite::Element* createBooleanType(const xml::lite::QName&, BooleanType b, xml::lite::Element& parent) const;
-    xml::lite::Element& createDateTime(const xml::lite::QName&, const DateTime& p, xml::lite::Element& parent) const;
-    xml::lite::Element& createDate(const xml::lite::QName&, const DateTime& p, xml::lite::Element& parent) const;
+    xml_lite::Element& createInt(const xml_lite::QName& name, const std::string& p, xml_lite::Element& parent) const;
+    xml_lite::Element& createInt(const xml_lite::QName& name, int p, xml_lite::Element& parent) const;
+    xml_lite::Element& createDouble(const xml_lite::QName&, double p, xml_lite::Element& parent) const;
+    xml_lite::Element& createDouble(const xml_lite::QName&, const std::optional<double>& p, xml_lite::Element& parent) const;
+    xml_lite::Element* createOptionalDouble(const xml_lite::QName&, double p, xml_lite::Element& parent) const;
+    xml_lite::Element* createOptionalDouble(const xml_lite::QName&, const std::optional<double>& p, xml_lite::Element& parent) const;
+    xml_lite::Element* createBooleanType(const xml_lite::QName&, BooleanType b, xml_lite::Element& parent) const;
+    xml_lite::Element& createDateTime(const xml_lite::QName&, const DateTime& p, xml_lite::Element& parent) const;
+    xml_lite::Element& createDate(const xml_lite::QName&, const DateTime& p, xml_lite::Element& parent) const;
 
     // generic element creation methods, using default URI
-    xml::lite::Element& createString(const std::string& name, const std::string&, xml::lite::Element& parent) const;
-    xml::lite::Element& createString(const std::string& name, const char* p, xml::lite::Element& parent) const
+    xml_lite::Element& createString(const std::string& name, const std::string&, xml_lite::Element& parent) const;
+    xml_lite::Element& createString(const std::string& name, const char* p, xml_lite::Element& parent) const
     {
         return createString_(name, p, parent);
     }
     template<typename T>
-    xml::lite::Element& createString(const std::string& name, const T& t, xml::lite::Element& parent) const
+    xml_lite::Element& createString(const std::string& name, const T& t, xml_lite::Element& parent) const
     {
         return createString_(name, t.toString(), parent);
     }
     template<typename T>
-    xml::lite::Element& createSixString(const std::string& name, const T& t, // six::toString(t) isntead of t.toString()
-        xml::lite::Element& parent) const
+    xml_lite::Element& createSixString(const std::string& name, const T& t, // six::toString(t) isntead of t.toString()
+        xml_lite::Element& parent) const
     {
         return createString_(name, six_toString(t), parent);
     }
     template <typename T>
-    xml::lite::Element& createStringFromEnum(const std::string& name, const T& enumVal, xml::lite::Element& parent) const
+    xml_lite::Element& createStringFromEnum(const std::string& name, const T& enumVal, xml_lite::Element& parent) const
     {
         if (six::Init::isUndefined(enumVal.value))
         {
@@ -140,21 +140,21 @@ struct XmlLite final
         return createString(name, enumVal.toString(), parent);
     }
     template<typename T>
-    xml::lite::Element& createInt(const std::string& name, T p,
-            xml::lite::Element& parent) const
+    xml_lite::Element& createInt(const std::string& name, T p,
+            xml_lite::Element& parent) const
     {
         return createInt_(name, gsl::narrow_cast<int>(p), parent);
     }
-    xml::lite::Element& createDouble(const std::string& name, double p, xml::lite::Element& parent ) const;
-    xml::lite::Element& createDouble(const std::string& name, const std::optional<double>& p, xml::lite::Element& parent) const;
-    xml::lite::Element* createOptionalDouble(const std::string& name, double p, xml::lite::Element& parent) const;
-    xml::lite::Element* createOptionalDouble(const std::string& name, const std::optional<double>& p, xml::lite::Element& parent) const;
-    xml::lite::Element* createBooleanType(const std::string& name, BooleanType b, xml::lite::Element&parent ) const;
-    xml::lite::Element& createDateTime(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
-    xml::lite::Element& createDate(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
+    xml_lite::Element& createDouble(const std::string& name, double p, xml_lite::Element& parent ) const;
+    xml_lite::Element& createDouble(const std::string& name, const std::optional<double>& p, xml_lite::Element& parent) const;
+    xml_lite::Element* createOptionalDouble(const std::string& name, double p, xml_lite::Element& parent) const;
+    xml_lite::Element* createOptionalDouble(const std::string& name, const std::optional<double>& p, xml_lite::Element& parent) const;
+    xml_lite::Element* createBooleanType(const std::string& name, BooleanType b, xml_lite::Element&parent ) const;
+    xml_lite::Element& createDateTime(const std::string& name, const DateTime& p, xml_lite::Element& parent) const;
+    xml_lite::Element& createDate(const std::string& name, const DateTime& p, xml_lite::Element& parent) const;
 
     template <typename T>
-    void parseInt(const xml::lite::Element& element, T& value) const
+    void parseInt(const xml_lite::Element& element, T& value) const
     {
         try
         {
@@ -167,28 +167,28 @@ struct XmlLite final
     }
 
     template <typename T>
-    void parseEnum(const xml::lite::Element& element, T& enumVal) const
+    void parseEnum(const xml_lite::Element& element, T& enumVal) const
     {
         std::string name;
         parseString(element, name);
         enumVal = T(name);
     }
 
-    bool parseDouble(const xml::lite::Element&, double&) const;
-    void parseDouble(const xml::lite::Element& element, std::optional<double>& value) const;
-    bool parseOptionalDouble(const xml::lite::Element& parent, const std::string& tag, double& value) const;
-    bool parseOptionalDouble(const xml::lite::Element& parent, const std::string& tag, std::optional<double>& value) const;
-    void parseComplex(const xml::lite::Element& element, std::complex<double>& value) const;
-    void parseString(const xml::lite::Element* element, std::string& value) const;
-    void parseString(const xml::lite::Element&, std::string&) const;
-    void parseBooleanType(const xml::lite::Element& element, BooleanType& value) const;
+    bool parseDouble(const xml_lite::Element&, double&) const;
+    void parseDouble(const xml_lite::Element& element, std::optional<double>& value) const;
+    bool parseOptionalDouble(const xml_lite::Element& parent, const std::string& tag, double& value) const;
+    bool parseOptionalDouble(const xml_lite::Element& parent, const std::string& tag, std::optional<double>& value) const;
+    void parseComplex(const xml_lite::Element& element, std::complex<double>& value) const;
+    void parseString(const xml_lite::Element* element, std::string& value) const;
+    void parseString(const xml_lite::Element&, std::string&) const;
+    void parseBooleanType(const xml_lite::Element& element, BooleanType& value) const;
 
-    bool parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const;
+    bool parseOptionalString(const xml_lite::Element& parent, const std::string& tag, std::string& value) const;
 
     template <typename T>
-    bool parseOptionalInt(const xml::lite::Element& parent, const std::string& tag, T& value) const
+    bool parseOptionalInt(const xml_lite::Element& parent, const std::string& tag, T& value) const
     {
-        if (const xml::lite::Element* const element = getOptional(parent, tag))
+        if (const xml_lite::Element* const element = getOptional(parent, tag))
         {
             parseInt(*element, value);
             return true;
@@ -196,17 +196,17 @@ struct XmlLite final
         return false;
     }
 
-    void parseDateTime(const xml::lite::Element& element, DateTime& value) const;
+    void parseDateTime(const xml_lite::Element& element, DateTime& value) const;
 
-    static void setAttribute(xml::lite::Element& e, const xml::lite::QName& name, size_t i)
+    static void setAttribute(xml_lite::Element& e, const xml_lite::QName& name, size_t i)
     {
         setAttribute(e, name, std::to_string(i));
     }
 
-    static xml::lite::Element* getOptional(const xml::lite::Element& parent, const std::string& tag);
+    static xml_lite::Element* getOptional(const xml_lite::Element& parent, const std::string& tag);
 
     template<typename T>
-    static xml::lite::Element* getOptional_reset(const xml::lite::Element& parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)
+    static xml_lite::Element* getOptional_reset(const xml_lite::Element& parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)
     {
         auto retval = getOptional(parent, tag);
         if (retval != nullptr)
@@ -217,30 +217,30 @@ struct XmlLite final
         return retval;
     }
 
-    static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag);
+    static xml_lite::Element& getFirstAndOnly(const xml_lite::Element& parent, const std::string& tag);
 
     /*!
      * Require an element to be not nullptr
      * @throw throws an Exception if the element is nullptr
      * @return returns the input Element
      */
-    static xml::lite::Element& require(xml::lite::Element* element, const std::string& name);
+    static xml_lite::Element& require(xml_lite::Element* element, const std::string& name);
 
-    static void setAttribute(xml::lite::Element&, const xml::lite::QName&, const std::string& v);
+    static void setAttribute(xml_lite::Element&, const xml_lite::QName&, const std::string& v);
 
 private:
-    xml::lite::Element& createInt_(const std::string& name, int p, xml::lite::Element& parent) const;
-    xml::lite::Element& createString_(const std::string& name, const std::string& p, xml::lite::Element& parent) const;
-    xml::lite::QName makeQName(const std::string& name) const;
+    xml_lite::Element& createInt_(const std::string& name, int p, xml_lite::Element& parent) const;
+    xml_lite::Element& createString_(const std::string& name, const std::string& p, xml_lite::Element& parent) const;
+    xml_lite::QName makeQName(const std::string& name) const;
 
-    const xml::lite::Uri mDefaultURI;
+    const xml_lite::Uri mDefaultURI;
     const bool mAddClassAttributes;
 
     Logger mLogger;
 };
 
- template<> inline xml::lite::Element& XmlLite::createString(const std::string& name,
-						      const std::string& p, xml::lite::Element& parent) const
+ template<> inline xml_lite::Element& XmlLite::createString(const std::string& name,
+						      const std::string& p, xml_lite::Element& parent) const
   {
     return createString_(name, p, parent);
   }

@@ -26,7 +26,7 @@
 
 namespace
 {
-typedef xml::lite::Element* XMLElem;
+typedef six::xml_lite::Element* XMLElem;
 }
 
 namespace six
@@ -78,7 +78,7 @@ XMLElem SICommonXMLParser01x::convertCompositeSCPToXML(
 }
 
 void SICommonXMLParser01x::parseCompositeSCPFromXML(
-    const xml::lite::Element* errorStatsXML,
+    const xml_lite::Element* errorStatsXML,
     ErrorStatistics* errorStatistics) const
 {
     //! optional field
@@ -172,7 +172,7 @@ XMLElem SICommonXMLParser01x::convertRadiometryToXML(
 }
 
 void SICommonXMLParser01x::parseRadiometryFromXML(
-    const xml::lite::Element* radiometricXML,
+    const xml_lite::Element* radiometricXML,
     Radiometric* radiometric) const
 {
     parseOptionalPoly2D(radiometricXML, "NoisePoly", radiometric->noiseLevel.noisePoly);
@@ -229,7 +229,7 @@ XMLElem SICommonXMLParser01x::convertMatchInformationToXML(
 }
 
 void SICommonXMLParser01x::parseMatchInformationFromXML(
-    const xml::lite::Element* matchInfoXML,
+    const xml_lite::Element* matchInfoXML,
     MatchInformation* matchInfo) const
 {
     assert(matchInfoXML != nullptr);

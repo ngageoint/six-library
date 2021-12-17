@@ -33,7 +33,7 @@
 
 namespace
 {
-typedef xml::lite::Element* XMLElem;
+typedef six::xml_lite::Element* XMLElem;
 }
 
 namespace cphd03
@@ -64,7 +64,7 @@ std::string CPHDXMLControl::getSICommonURI() const
 
 std::string CPHDXMLControl::toXMLString(const Metadata& metadata)
 {
-    std::unique_ptr<xml::lite::Document> doc(toXML( metadata));
+    std::unique_ptr<six::xml_lite::Document> doc(toXML( metadata));
     io::StringStream ss;
     doc->getRootElement()->print(ss);
 
@@ -76,9 +76,9 @@ size_t CPHDXMLControl::getXMLsize(const Metadata& metadata)
     return toXMLString(metadata).size();
 }
 
-mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
+mem::auto_ptr<six::xml_lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
 {
-    auto doc = std::make_unique<xml::lite::Document>();
+    auto doc = std::make_unique<six::xml_lite::Document>();
 
     XMLElem root = newElement("CPHD");
     doc->setRootElement(root);
@@ -99,7 +99,7 @@ mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadat
     //set the XMLNS
     root->setNamespacePrefix("", getDefaultURI());
 
-    return mem::auto_ptr<xml::lite::Document>(doc.release());
+    return mem::auto_ptr<six::xml_lite::Document>(doc.release());
 }
 
 XMLElem CPHDXMLControl::createLatLonAltFootprint(const std::string& name,
@@ -210,7 +210,7 @@ XMLElem CPHDXMLControl::toXML(const Global& global, XMLElem parent)
     return globalXML;
 }
 
-static void set_index_attribute(xml::lite::Element& elem, size_t value)
+static void set_index_attribute(six::xml_lite::Element& elem, size_t value)
 {
     elem.attribute("index") = std::to_string(value);
 }
@@ -489,12 +489,12 @@ mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
 {
     io::StringStream stringStream;
     stringStream.write(xmlString);
-    xml::lite::MinidomParser parser;
+    six::xml_lite::MinidomParser parser;
     parser.parse(stringStream);
     return fromXML(parser.getDocument());
 }
 
-mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
+mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const six::xml_lite::Document* doc)
 {
     auto cphd03 = std::make_unique<Metadata>();
 
@@ -526,13 +526,13 @@ mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 
     return mem::auto_ptr<Metadata>(cphd03.release());
 }
-Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc)
+Metadata CPHDXMLControl::fromXML(const six::xml_lite::Document& doc)
 {
     return *(fromXML(&doc));
 }
 
 
-void CPHDXMLControl::fromXML(const xml::lite::Element* dataXML, Data& data)
+void CPHDXMLControl::fromXML(const six::xml_lite::Element* dataXML, Data& data)
 {
     data.sampleType = cphd::SampleType(getFirstAndOnly(dataXML, "SampleType")->getCharacterData());
 
@@ -547,7 +547,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* dataXML, Data& data)
         throw except::Exception(Ctxt("Expected at least one ArraySize"));
     }
 
-    for (std::vector<xml::lite::Element*>::iterator it = arraySizeXML.begin();
+    for (auto it = arraySizeXML.begin();
          it != arraySizeXML.end();
          ++it)
     {
@@ -558,7 +558,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* dataXML, Data& data)
     }
 }
 
-void CPHDXMLControl::fromXML(const xml::lite::Element* globalXML, Global& global)
+void CPHDXMLControl::fromXML(const six::xml_lite::Element* globalXML, Global& global)
 {
     XMLElem tmpElem = nullptr;
 
@@ -733,7 +733,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* globalXML, Global& global
     }
 }
 
-void CPHDXMLControl::fromXML(const xml::lite::Element* channelXML, Channel& channel)
+void CPHDXMLControl::fromXML(const six::xml_lite::Element* channelXML, Channel& channel)
 {
     std::vector<XMLElem> chanParametersXML;
     channelXML->getElementsByTagName("Parameters", chanParametersXML);
@@ -762,7 +762,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* channelXML, Channel& chan
     }
 }
 
-void CPHDXMLControl::fromXML(const xml::lite::Element* srpXML, SRP& srp)
+void CPHDXMLControl::fromXML(const six::xml_lite::Element* srpXML, SRP& srp)
 {
 #if ENFORCESPEC
     srp.srpType = cphd::SRPType(getFirstAndOnly(srpXML, "SRPType")->getCharacterData());
@@ -841,7 +841,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* srpXML, SRP& srp)
     }
 }
 
-void CPHDXMLControl::fromXML(const xml::lite::Element* vectorParametersXML,
+void CPHDXMLControl::fromXML(const six::xml_lite::Element* vectorParametersXML,
                              VectorParameters& vp)
 {
     parseInt(getFirstAndOnly(vectorParametersXML, "TxTime"), vp.txTime);
@@ -892,7 +892,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* vectorParametersXML,
     }
 }
 
-void CPHDXMLControl::fromXML(const xml::lite::Element* antennaParamsXML,
+void CPHDXMLControl::fromXML(const six::xml_lite::Element* antennaParamsXML,
                              AntennaParameters& params)
 {
     mCommon.parsePolyXYZ(getFirstAndOnly(antennaParamsXML, "XAxisPoly"),
@@ -964,7 +964,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* antennaParamsXML,
     }
 }
 
-void CPHDXMLControl::fromXML(const xml::lite::Element* antennaXML, Antenna& antenna)
+void CPHDXMLControl::fromXML(const six::xml_lite::Element* antennaXML, Antenna& antenna)
 {
     parseInt(getFirstAndOnly(antennaXML, "NumTxAnt"),  antenna.numTxAnt);
     parseInt(getFirstAndOnly(antennaXML, "NumRcvAnt"), antenna.numRcvAnt);

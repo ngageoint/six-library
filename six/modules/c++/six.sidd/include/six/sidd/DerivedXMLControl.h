@@ -58,14 +58,14 @@ protected:
     /*!
      *  Returns a new allocated DOM document, created from the DerivedData*
      */
-    virtual xml::lite::Document* toXMLImpl(const Data* data);
-    virtual std::unique_ptr<xml::lite::Document> toXMLImpl(const Data&) const override;
+    virtual xml_lite::Document* toXMLImpl(const Data* data);
+    virtual std::unique_ptr<xml_lite::Document> toXMLImpl(const Data&) const override;
     /*!
      *  Returns a new allocated DerivedData*, created from the DOM Document*
      *
      */
-    virtual Data* fromXMLImpl(const xml::lite::Document* doc);
-    virtual std::unique_ptr<Data> fromXMLImpl(const xml::lite::Document&) const override;
+    virtual Data* fromXMLImpl(const xml_lite::Document* doc);
+    virtual std::unique_ptr<Data> fromXMLImpl(const xml_lite::Document&) const override;
 
 private:
     std::unique_ptr<DerivedXMLParser>

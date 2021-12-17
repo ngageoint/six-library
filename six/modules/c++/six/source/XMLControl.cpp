@@ -141,11 +141,11 @@ static std::vector<std::string> check_whether_paths_exist(const std::vector<std:
 
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
-static void do_validate_(const xml::lite::Document& doc,
+static void do_validate_(const xml_lite::Document& doc,
     const std::vector<std::string>& paths, logging::Logger* log)
 {
     // validate against any specified schemas
-    xml::lite::Validator validator(paths, log, true);
+    xml_lite::Validator validator(paths, log, true);
 
     const auto& rootElement = doc.getRootElement();
     if (rootElement->getUri().empty())
@@ -155,9 +155,9 @@ static void do_validate_(const xml::lite::Document& doc,
 
     // Pretty-print so that lines numbers are useful
     io::StringStream xmlStream;
-    rootElement->prettyPrint(xmlStream, xml::lite::StringEncoding::Utf8);
+    rootElement->prettyPrint(xmlStream, xml_lite::StringEncoding::Utf8);
 
-    std::vector<xml::lite::ValidationInfo> errors;
+    std::vector<xml_lite::ValidationInfo> errors;
     validator.validate(xmlStream, rootElement->getUri(), errors);
 
     // log any error found and throw
@@ -179,7 +179,7 @@ static void do_validate_(const xml::lite::Document& doc,
         throw six::DESValidationException(Ctxt("INVALID XML: Check both the XML being produced and the schemas available"));
     }
 }
-static void validate_(const xml::lite::Document& doc,
+static void validate_(const xml_lite::Document& doc,
     std::vector<std::string> paths, logging::Logger* log)
 {
     // If the paths we have don't exist, throw
@@ -191,7 +191,7 @@ static void validate_(const xml::lite::Document& doc,
         do_validate_(doc, paths, log);
     }
 }
-void XMLControl::validate(const xml::lite::Document* doc,
+void XMLControl::validate(const xml_lite::Document* doc,
                           const std::vector<std::string>& schemaPaths,
                           logging::Logger* log)
 {
@@ -214,7 +214,7 @@ void XMLControl::validate(const xml::lite::Document* doc,
     // validate against any specified schemas
     validate_(*doc, paths, log);
 }
-void XMLControl::validate(const xml::lite::Document& doc,
+void XMLControl::validate(const xml_lite::Document& doc,
     const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger* log)
 {
@@ -240,7 +240,7 @@ std::string XMLControl::getDefaultURI(const Data& data)
     return ("urn:" + dataTypeStr + ":" + data.getVersion());
 }
 
-std::string XMLControl::getVersionFromURI(const xml::lite::Document* doc)
+std::string XMLControl::getVersionFromURI(const xml_lite::Document* doc)
 {
     assert(doc != nullptr);
     const std::string uri = doc->getRootElement()->getUri();
@@ -255,7 +255,7 @@ std::string XMLControl::getVersionFromURI(const xml::lite::Document* doc)
     return uri.substr(9);  // remove "urn:SIxx:" from beginning
 }
 
-void XMLControl::getVersionFromURI(const xml::lite::Document* doc,
+void XMLControl::getVersionFromURI(const xml_lite::Document* doc,
                                    std::vector<std::string>& version)
 {
     splitVersion(getVersionFromURI(doc), version);
@@ -272,27 +272,27 @@ void XMLControl::splitVersion(const std::string& versionStr,
     }
 }
 
-std::unique_ptr<xml::lite::Document> XMLControl::toXMLImpl(const Data& data) const
+std::unique_ptr<xml_lite::Document> XMLControl::toXMLImpl(const Data& data) const
 {
     auto pThis = const_cast<XMLControl*>(this);
-    std::unique_ptr<xml::lite::Document> retval(pThis->toXMLImpl(&data)); // store raw pointer right away
+    std::unique_ptr<xml_lite::Document> retval(pThis->toXMLImpl(&data)); // store raw pointer right away
     assert(retval.get() != nullptr);
     return retval;
 }
 
-xml::lite::Document* XMLControl::toXML(
+xml_lite::Document* XMLControl::toXML(
         const Data* data, const std::vector<std::string>& schemaPaths)
 {
-    xml::lite::Document* doc = toXMLImpl(data);
+    xml_lite::Document* doc = toXMLImpl(data);
     validate(doc, schemaPaths, mLog);
     return doc;
 }
-std::unique_ptr<xml::lite::Document> XMLControl::toXML(
+std::unique_ptr<xml_lite::Document> XMLControl::toXML(
     const Data& data, const std::vector<std::string>& schemaPaths)
 {
-    return std::unique_ptr<xml::lite::Document>(toXML(&data, schemaPaths));
+    return std::unique_ptr<xml_lite::Document>(toXML(&data, schemaPaths));
 }
-std::unique_ptr<xml::lite::Document> XMLControl::toXML(
+std::unique_ptr<xml_lite::Document> XMLControl::toXML(
     const Data& data, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
     auto doc = toXMLImpl(data);
@@ -300,7 +300,7 @@ std::unique_ptr<xml::lite::Document> XMLControl::toXML(
     return doc;
 }
 
-std::unique_ptr<Data> XMLControl::fromXMLImpl(const xml::lite::Document& doc) const
+std::unique_ptr<Data> XMLControl::fromXMLImpl(const xml_lite::Document& doc) const
 {
     auto pThis = const_cast<XMLControl*>(this);
     std::unique_ptr<Data> retval(pThis->fromXMLImpl(&doc)); // store raw pointer right away
@@ -308,7 +308,7 @@ std::unique_ptr<Data> XMLControl::fromXMLImpl(const xml::lite::Document& doc) co
     return retval;
 }
 
-Data* XMLControl::fromXML(const xml::lite::Document* doc,
+Data* XMLControl::fromXML(const xml_lite::Document* doc,
                           const std::vector<std::string>& schemaPaths)
 {
     validate(doc, schemaPaths, mLog);
@@ -317,7 +317,7 @@ Data* XMLControl::fromXML(const xml::lite::Document* doc,
     data->setVersion(getVersionFromURI(doc));
     return data;
 }
-std::unique_ptr<Data> XMLControl::fromXML(const xml::lite::Document& doc,
+std::unique_ptr<Data> XMLControl::fromXML(const xml_lite::Document& doc,
     const std::vector<std::filesystem::path>* pSchemaPaths)
 {
     validate(doc, pSchemaPaths, mLog);

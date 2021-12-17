@@ -33,11 +33,11 @@ namespace sidd
 {
 struct DerivedXMLParser : public six::XMLParser
 {
-    virtual xml::lite::Document* toXML(const DerivedData* data) const = 0;
-    virtual std::unique_ptr<xml::lite::Document> toXML(const DerivedData&) const; // = 0;, breaks existing code
+    virtual xml_lite::Document* toXML(const DerivedData* data) const = 0;
+    virtual std::unique_ptr<xml_lite::Document> toXML(const DerivedData&) const; // = 0;, breaks existing code
 
-    virtual DerivedData* fromXML(const xml::lite::Document* doc) const = 0;
-    virtual std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const; // = 0;, breaks existing code
+    virtual DerivedData* fromXML(const xml_lite::Document* doc) const = 0;
+    virtual std::unique_ptr<DerivedData> fromXML(const xml_lite::Document&) const; // = 0;, breaks existing code
 
     DerivedXMLParser(const DerivedXMLParser&) = delete;
     DerivedXMLParser& operator=(const DerivedXMLParser&) = delete;
@@ -50,8 +50,8 @@ struct DerivedXMLParser : public six::XMLParser
         return *(mCommon.get());
     }
 
-    static xml::lite::Element& convertMeasurementToXML(const DerivedXMLParser&,
-        const Measurement&, xml::lite::Element& parent);
+    static xml_lite::Element& convertMeasurementToXML(const DerivedXMLParser&,
+        const Measurement&, xml_lite::Element& parent);
 
     XMLElem createLUTImpl(const LUT* l, XMLElem lutElem) const;
     virtual XMLElem createLUT(const std::string& name, const LUT* l,
@@ -74,7 +74,7 @@ protected:
 #endif
 
     virtual void parseDerivedClassificationFromXML(
-            const xml::lite::Element* classificationElem,
+            const xml_lite::Element* classificationElem,
             DerivedClassification& classification) const;
 
     virtual XMLElem convertDerivedClassificationToXML(
@@ -82,7 +82,7 @@ protected:
             XMLElem parent = nullptr) const = 0;
 
     virtual void parseProductFromXML(
-            const xml::lite::Element* exploitationFeaturesElem,
+            const xml_lite::Element* exploitationFeaturesElem,
             ExploitationFeatures* exploitationFeatures) const = 0;
 
     virtual XMLElem convertDisplayToXML(const Display& display,
@@ -91,36 +91,36 @@ protected:
     static const char SFA_URI[];
 
     static
-    void getAttributeList(const xml::lite::Attributes& attributes,
+    void getAttributeList(const xml_lite::Attributes& attributes,
                           const std::string& attributeName,
                           std::vector<std::string>& values);
 
     static
-    void getAttributeListIfExists(const xml::lite::Attributes& attributes,
+    void getAttributeListIfExists(const xml_lite::Attributes& attributes,
                                   const std::string& attributeName,
                                   std::vector<std::string>& values);
 
     static
-    void getAttributeIfExists(const xml::lite::Attributes& attributes,
+    void getAttributeIfExists(const xml_lite::Attributes& attributes,
                               const std::string& attributeName,
                               std::string& value);
     static
-    void getAttributeIfExists(const xml::lite::Attributes& attributes,
+    void getAttributeIfExists(const xml_lite::Attributes& attributes,
                               const std::string& attributeName,
                               ptrdiff_t& value);
 
     static
-    void getAttributeIfExists(const xml::lite::Attributes& attributes,
+    void getAttributeIfExists(const xml_lite::Attributes& attributes,
                               const std::string& attributeName,
                               size_t& value);
 
     static
-    void getAttributeIfExists(const xml::lite::Attributes& attributes,
+    void getAttributeIfExists(const xml_lite::Attributes& attributes,
                               const std::string& attributeName,
                               mem::ScopedCopyablePtr<DateTime>& date);
 
     static
-    void getAttributeIfExists(const xml::lite::Attributes& attributes,
+    void getAttributeIfExists(const xml_lite::Attributes& attributes,
                               const std::string& attributeName,
                               BooleanType& boolean);
 
@@ -202,39 +202,39 @@ protected:
     XMLElem convertGeographicCoordinateSystemToXML(
             const SFAGeographicCoordinateSystem* geographicCoordinateSystem,
             XMLElem parent) const;
-    void parseProductCreationFromXML(const xml::lite::Element* productCreationElem,
+    void parseProductCreationFromXML(const xml_lite::Element* productCreationElem,
                                      ProductCreation* productCreation) const;
-    void parseProductCreationFromXML(const xml::lite::Element& productCreationElem, ProductCreation&) const;
-    void parseProductCreationFromXML(const xml::lite::Element* informationElem,
+    void parseProductCreationFromXML(const xml_lite::Element& productCreationElem, ProductCreation&) const;
+    void parseProductCreationFromXML(const xml_lite::Element* informationElem,
                                      ProcessorInformation* processorInformation) const;
-    void parseProductCreationFromXML(const xml::lite::Element&, ProcessorInformation&) const;
-    void parseProductProcessingFromXML(const xml::lite::Element* elem,
+    void parseProductCreationFromXML(const xml_lite::Element&, ProcessorInformation&) const;
+    void parseProductProcessingFromXML(const xml_lite::Element* elem,
                                        ProductProcessing* productProcessing) const;
-    void parseProductProcessingFromXML(const xml::lite::Element&, ProductProcessing&) const;
-    void parseProcessingModuleFromXML(const xml::lite::Element* elem,
+    void parseProductProcessingFromXML(const xml_lite::Element&, ProductProcessing&) const;
+    void parseProcessingModuleFromXML(const xml_lite::Element* elem,
                                       ProcessingModule* procMod) const;
-    void parseDownstreamReprocessingFromXML(const xml::lite::Element* elem,
+    void parseDownstreamReprocessingFromXML(const xml_lite::Element* elem,
                                             DownstreamReprocessing* downstreamReproc) const;
-    void parseDownstreamReprocessingFromXML(const xml::lite::Element&, DownstreamReprocessing&) const;
-    Remap* parseRemapChoiceFromXML(const xml::lite::Element* remapInformationElem) const;
-    mem::auto_ptr<LUT> parseSingleLUT(const xml::lite::Element* elem) const;
-    void parseDisplayFromXML(const xml::lite::Element* displayElem, Display* display) const;
-    virtual void parseMeasurementFromXML(const xml::lite::Element* measurementElem,
+    void parseDownstreamReprocessingFromXML(const xml_lite::Element&, DownstreamReprocessing&) const;
+    Remap* parseRemapChoiceFromXML(const xml_lite::Element* remapInformationElem) const;
+    mem::auto_ptr<LUT> parseSingleLUT(const xml_lite::Element* elem) const;
+    void parseDisplayFromXML(const xml_lite::Element* displayElem, Display* display) const;
+    virtual void parseMeasurementFromXML(const xml_lite::Element* measurementElem,
                                  Measurement* measurement) const;
-    virtual void parseExploitationFeaturesFromXML(const xml::lite::Element* elem,
+    virtual void parseExploitationFeaturesFromXML(const xml_lite::Element* elem,
                                           ExploitationFeatures* exploitationFeatures) const;
-    void parseAnnotationFromXML(const xml::lite::Element* annotationElem,
+    void parseAnnotationFromXML(const xml_lite::Element* annotationElem,
                                 Annotation* a) const;
-    void parseSFAGeometryFromXML(const xml::lite::Element* elem,
+    void parseSFAGeometryFromXML(const xml_lite::Element* elem,
                                  SFAGeometry* g) const;
     void parseGeographicCoordinateSystemFromXML(
-            const xml::lite::Element* coorSysElem,
+            const xml_lite::Element* coorSysElem,
             SFAGeographicCoordinateSystem* coordSys) const;
-    void parseDatum(const xml::lite::Element* datumElem, SFADatum& datum) const;
-    XMLElem parsePolynomialProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
-    XMLElem parseGeographicProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
-    XMLElem parsePlaneProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
-    XMLElem parseCylindricalProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
+    void parseDatum(const xml_lite::Element* datumElem, SFADatum& datum) const;
+    XMLElem parsePolynomialProjection(const xml_lite::Element* projElem, const Measurement& measurement) const;
+    XMLElem parseGeographicProjection(const xml_lite::Element* projElem, const Measurement& measurement) const;
+    XMLElem parsePlaneProjection(const xml_lite::Element* projElem, const Measurement& measurement) const;
+    XMLElem parseCylindricalProjection(const xml_lite::Element* projElem, const Measurement& measurement) const;
 
     static
     std::string versionToURI(const std::string& strVersion)

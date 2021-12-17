@@ -48,7 +48,7 @@ struct SICommonXMLParser10x : public SICommonXMLParser
         XMLElem parent = nullptr) const override;
 
     void parseRadiometryFromXML(
-        const xml::lite::Element* radiometricXML,
+        const xml_lite::Element* radiometricXML,
         Radiometric *obj) const override;
 
     XMLElem convertMatchInformationToXML(
@@ -56,7 +56,7 @@ struct SICommonXMLParser10x : public SICommonXMLParser
         XMLElem parent) const override;
 
     void parseMatchInformationFromXML(
-        const xml::lite::Element* matchInfoXML,
+        const xml_lite::Element* matchInfoXML,
         MatchInformation* info) const override;
 
 protected:
@@ -66,7 +66,7 @@ protected:
         XMLElem parent = nullptr) const override;
 
     void parseCompositeSCPFromXML(
-        const xml::lite::Element* errorStatsXML,
+        const xml_lite::Element* errorStatsXML,
         ErrorStatistics* errorStatistics) const override;
 
 };

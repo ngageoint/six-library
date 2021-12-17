@@ -72,7 +72,7 @@ public:
      *  \param schemaPaths Vector of XML Schema for validation
      *  \return pointer to xml Document object
      */
-    std::unique_ptr<xml::lite::Document> toXML(
+    std::unique_ptr<six::xml_lite::Document> toXML(
             const Metadata& metadata);
 
     /*!
@@ -86,10 +86,10 @@ public:
      *  \return pointer to metadata object
      */
     std::unique_ptr<Metadata> fromXML(
-            const xml::lite::Document* doc);
+            const six::xml_lite::Document* doc);
 
 private:
-    typedef xml::lite::Element*  XMLElem;
+    typedef six::xml_lite::Element*  XMLElem;
 
 private:
 
@@ -111,21 +111,21 @@ private:
     XMLElem toXML(const MatchInformation& obj, XMLElem parent);
 
     //! Read from XML object
-    void fromXML(const xml::lite::Element* collectionIDXML, CollectionInformation& collectionID);
-    void fromXML(const xml::lite::Element* globalXML, Global& global);
-    void fromXML(const xml::lite::Element* sceneCoordsXML, SceneCoordinates& scene);
-    void fromXML(const xml::lite::Element* dataXML, Data& data);
-    void fromXML(const xml::lite::Element* channelXML, Channel& channel);
-    void fromXML(const xml::lite::Element* pvpXML, Pvp& pvp);
-    void fromXML(const xml::lite::Element* DwellXML, Dwell& dwell);
-    void fromXML(const xml::lite::Element* refGeoXML, ReferenceGeometry& refGeo);
-    void fromXML(const xml::lite::Element* supportArrayXML, SupportArray& supportArray);
-    void fromXML(const xml::lite::Element* antennaXML, Antenna& antenna);
-    void fromXML(const xml::lite::Element* txRcvXML, TxRcv& txRcv);
-    void fromXML(const xml::lite::Element* errParamXML, ErrorParameters& errParam);
-    void fromXML(const xml::lite::Element* productInfoXML, ProductInfo& productInfo);
-    void fromXML(const xml::lite::Element* geoInfoXML, GeoInfo& geoInfo);
-    void fromXML(const xml::lite::Element* matchInfoXML, MatchInformation& matchInfo);
+    void fromXML(const six::xml_lite::Element* collectionIDXML, CollectionInformation& collectionID);
+    void fromXML(const six::xml_lite::Element* globalXML, Global& global);
+    void fromXML(const six::xml_lite::Element* sceneCoordsXML, SceneCoordinates& scene);
+    void fromXML(const six::xml_lite::Element* dataXML, Data& data);
+    void fromXML(const six::xml_lite::Element* channelXML, Channel& channel);
+    void fromXML(const six::xml_lite::Element* pvpXML, Pvp& pvp);
+    void fromXML(const six::xml_lite::Element* DwellXML, Dwell& dwell);
+    void fromXML(const six::xml_lite::Element* refGeoXML, ReferenceGeometry& refGeo);
+    void fromXML(const six::xml_lite::Element* supportArrayXML, SupportArray& supportArray);
+    void fromXML(const six::xml_lite::Element* antennaXML, Antenna& antenna);
+    void fromXML(const six::xml_lite::Element* txRcvXML, TxRcv& txRcv);
+    void fromXML(const six::xml_lite::Element* errParamXML, ErrorParameters& errParam);
+    void fromXML(const six::xml_lite::Element* productInfoXML, ProductInfo& productInfo);
+    void fromXML(const six::xml_lite::Element* geoInfoXML, GeoInfo& geoInfo);
+    void fromXML(const six::xml_lite::Element* matchInfoXML, MatchInformation& matchInfo);
 
 
     //! Create helper functions
@@ -149,22 +149,22 @@ private:
         XMLElem parent) const;
 
     //! Parse helper functions
-    void parseAreaType(const xml::lite::Element* areaXML, AreaType& area) const;
-    void parseLineSample(const xml::lite::Element* lsXML, LineSample& ls) const;
-    void parseIAExtent(const xml::lite::Element* extentXML, ImageAreaXExtent& extent) const;
-    void parseIAExtent(const xml::lite::Element* extentXML, ImageAreaYExtent& extent) const;
-    void parseChannelParameters(const xml::lite::Element* paramXML,
+    void parseAreaType(const six::xml_lite::Element* areaXML, AreaType& area) const;
+    void parseLineSample(const six::xml_lite::Element* lsXML, LineSample& ls) const;
+    void parseIAExtent(const six::xml_lite::Element* extentXML, ImageAreaXExtent& extent) const;
+    void parseIAExtent(const six::xml_lite::Element* extentXML, ImageAreaYExtent& extent) const;
+    void parseChannelParameters(const six::xml_lite::Element* paramXML,
                                 ChannelParameter& param) const;
-    void parsePVPType(Pvp& p, const xml::lite::Element* paramXML, PVPType& param) const;
-    void parsePVPType(Pvp& p, const xml::lite::Element* paramXML) const;
-    bool parseOptionalPVPType(const xml::lite::Element* parent, const std::string& tag, Pvp& p, PVPType& param) const;
-    void parsePlatformParams(const xml::lite::Element* platXML, Bistatic::PlatformParams& plat) const;
-    void parseCommon(const xml::lite::Element* imgTypeXML, ImagingType* imgType) const;
-    void parsePosVelErr(const xml::lite::Element* posVelErrXML, six::PosVelError& posVelErr) const;
-    void parsePlatform(const xml::lite::Element* platXML,  ErrorParameters::Bistatic::Platform& plat) const;
-    void parseSupportArrayParameter(const xml::lite::Element* paramXML, SupportArrayParameter& param,
+    void parsePVPType(Pvp& p, const six::xml_lite::Element* paramXML, PVPType& param) const;
+    void parsePVPType(Pvp& p, const six::xml_lite::Element* paramXML) const;
+    bool parseOptionalPVPType(const six::xml_lite::Element* parent, const std::string& tag, Pvp& p, PVPType& param) const;
+    void parsePlatformParams(const six::xml_lite::Element* platXML, Bistatic::PlatformParams& plat) const;
+    void parseCommon(const six::xml_lite::Element* imgTypeXML, ImagingType* imgType) const;
+    void parsePosVelErr(const six::xml_lite::Element* posVelErrXML, six::PosVelError& posVelErr) const;
+    void parsePlatform(const six::xml_lite::Element* platXML,  ErrorParameters::Bistatic::Platform& plat) const;
+    void parseSupportArrayParameter(const six::xml_lite::Element* paramXML, SupportArrayParameter& param,
                                     bool additionalFlag) const;
-    void parseTxRcvParameter(const xml::lite::Element* paramXML, ParameterType& param) const;
+    void parseTxRcvParameter(const six::xml_lite::Element* paramXML, ParameterType& param) const;
 
 private:
     six::SICommonXMLParser10x mCommon;

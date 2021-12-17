@@ -25,7 +25,7 @@
 
 namespace
 {
-typedef xml::lite::Element* XMLElem;
+typedef six::xml_lite::Element* XMLElem;
 }
 
 namespace six
@@ -86,7 +86,7 @@ XMLElem ComplexXMLParser041::convertRMATToXML(
     return rmatXML;
 }
 
-void ComplexXMLParser041::parseRMATFromXML(const xml::lite::Element* rmatElem, 
+void ComplexXMLParser041::parseRMATFromXML(const xml_lite::Element* rmatElem, 
                                            RMAT* rmat) const
 {
     parseDouble(getFirstAndOnly(rmatElem, "RefTime"), rmat->refTime);

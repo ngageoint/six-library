@@ -57,7 +57,7 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
     const auto xmlSize = static_cast<int>(mFileHeader.getXMLsize());
     inStream->seek(mFileHeader.getXMLoffset(), io::Seekable::START);
 
-    xml::lite::MinidomParser xmlParser;
+    six::xml_lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(*inStream, xmlSize);
 

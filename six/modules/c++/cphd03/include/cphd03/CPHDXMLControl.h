@@ -51,14 +51,14 @@ public:
      *  This function takes in a Metadata object and converts
      *  it to a new-allocated XML DOM.
      */
-    mem::auto_ptr<xml::lite::Document> toXML(const Metadata& metadata);
+    mem::auto_ptr<six::xml_lite::Document> toXML(const Metadata& metadata);
 
     /*!
      *  Function takes a DOM Document* node and creates a new-allocated
      *  CPHDData* populated by the DOM.
      */
-    mem::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
-   Metadata fromXML(const xml::lite::Document& doc);
+    mem::auto_ptr<Metadata> fromXML(const six::xml_lite::Document* doc);
+   Metadata fromXML(const six::xml_lite::Document& doc);
 
     mem::auto_ptr<Metadata> fromXML(const std::string& xmlString);
 
@@ -66,7 +66,7 @@ public:
     size_t getXMLsize(const Metadata& metadata);
 
 private:
-    typedef xml::lite::Element* XMLElem;
+    typedef six::xml_lite::Element* XMLElem;
 
     // TODO: These are copies from some of the six.sicd XMLParsers
     XMLElem createLatLonAltFootprint(const std::string& name,
@@ -101,13 +101,13 @@ private:
             XMLElem parent = nullptr);
 
     // Read functions
-    void fromXML(const xml::lite::Element* dataXML, Data& obj);
-    void fromXML(const xml::lite::Element* globalXML, Global& obj);
-    void fromXML(const xml::lite::Element* channelXML, Channel& obj);
-    void fromXML(const xml::lite::Element* srpXML, SRP& obj);
-    void fromXML(const xml::lite::Element* antennaXML, Antenna& obj);
-    void fromXML(const xml::lite::Element* antennaParamsXML, AntennaParameters& params);
-    void fromXML(const xml::lite::Element* vectorParametersXML, VectorParameters& obj);
+    void fromXML(const six::xml_lite::Element* dataXML, Data& obj);
+    void fromXML(const six::xml_lite::Element* globalXML, Global& obj);
+    void fromXML(const six::xml_lite::Element* channelXML, Channel& obj);
+    void fromXML(const six::xml_lite::Element* srpXML, SRP& obj);
+    void fromXML(const six::xml_lite::Element* antennaXML, Antenna& obj);
+    void fromXML(const six::xml_lite::Element* antennaParamsXML, AntennaParameters& params);
+    void fromXML(const six::xml_lite::Element* vectorParametersXML, VectorParameters& obj);
 
 private:
     six::SICommonXMLParser10x mCommon;

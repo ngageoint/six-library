@@ -1138,11 +1138,11 @@ std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     return parseData(xmlReg, xmlStream, DataType::NOT_SET, pSchemaPaths, log);
 }
 
-inline mem::auto_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::string>& schemaPaths)
+inline mem::auto_ptr<Data> fromXML_(const xml_lite::Document& doc, XMLControl& xmlControl, const std::vector<std::string>& schemaPaths)
 {
     return mem::auto_ptr<Data>(xmlControl.fromXML(&doc, schemaPaths));
 }
-inline std::unique_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::filesystem::path>* pSchemaPaths)
+inline std::unique_ptr<Data> fromXML_(const xml_lite::Document& doc, XMLControl& xmlControl, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
     return xmlControl.fromXML(doc, pSchemaPaths);
 }
@@ -1153,7 +1153,7 @@ TReturn six_parseData(const XMLControlRegistry& xmlReg,
                                    const TSchemaPaths& schemaPaths,
                                    logging::Logger& log)
 {
-    xml::lite::MinidomParser xmlParser;
+    xml_lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     try
     {
@@ -1163,7 +1163,7 @@ TReturn six_parseData(const XMLControlRegistry& xmlReg,
     {
         throw except::Exception(ex, Ctxt("Invalid XML data"));
     }
-    const xml::lite::Document* pDoc = xmlParser.getDocument();
+    const xml_lite::Document* pDoc = xmlParser.getDocument();
     assert(pDoc != nullptr);
     const auto& doc = *pDoc;
 

@@ -66,7 +66,7 @@ TEST_CASE(Classification)
     io::StringStream ss;
     ss.stream() << six::sicd::Utilities::toXMLString(*data, schemaPaths);
 
-    xml::lite::MinidomParser xmlParser;
+    six::xml_lite::MinidomParser xmlParser;
     xmlParser.parse(ss);
     const auto doc = xmlParser.getDocument();
     TEST_ASSERT(doc != nullptr);
@@ -107,7 +107,7 @@ TEST_CASE(ClassificationCanada)
 
     io::StringStream ss;
     ss.stream() << strXml;
-    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
+    six::xml_lite::MinidomParser xmlParser(true /*storeEncoding*/);
     xmlParser.preserveCharacterData(true); // needed to parse UTF-8 XML
     xmlParser.parse(ss);
     const auto doc = xmlParser.getDocument();

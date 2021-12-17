@@ -100,10 +100,10 @@ class XMLControl
      *  \param schemaPaths  Directories or files of schema locations
      *  \param log Logs validation errors
      */
-    static void validate(const xml::lite::Document* doc,
+    static void validate(const xml_lite::Document* doc,
                          const std::vector<std::string>& schemaPaths,
                          logging::Logger* log);
-    static void validate(const xml::lite::Document&,
+    static void validate(const xml_lite::Document&,
         const std::vector<std::filesystem::path>* pSchemaPaths,
         logging::Logger* log);
 
@@ -130,10 +130,10 @@ class XMLControl
      *  \param schemaPaths  Directories or files of schema locations
      *  \return An XML DOM
      */
-    xml::lite::Document* toXML(const Data* data,
+    xml_lite::Document* toXML(const Data* data,
                                const std::vector<std::string>& schemaPaths);
-    std::unique_ptr<xml::lite::Document> toXML(const Data&, const std::vector<std::string>&);
-    std::unique_ptr<xml::lite::Document> toXML(const Data&, const std::vector<std::filesystem::path>*);
+    std::unique_ptr<xml_lite::Document> toXML(const Data&, const std::vector<std::string>&);
+    std::unique_ptr<xml_lite::Document> toXML(const Data&, const std::vector<std::filesystem::path>*);
 
     /*!
      *  Convert a document from a DOM into a Data model
@@ -141,9 +141,9 @@ class XMLControl
      *  \param schemaPaths  Directories or files of schema locations
      *  \return a Data model
      */
-    Data* fromXML(const xml::lite::Document* doc,
+    Data* fromXML(const xml_lite::Document* doc,
                   const std::vector<std::string>& schemaPaths);
-    std::unique_ptr<Data> fromXML(const xml::lite::Document&,
+    std::unique_ptr<Data> fromXML(const xml_lite::Document&,
         const std::vector<std::filesystem::path>*);
 
     /*!
@@ -170,22 +170,22 @@ class XMLControl
      *  \param doc
      *  \return a Data model
      */
-    virtual Data* fromXMLImpl(const xml::lite::Document* doc) = 0;
-    virtual std::unique_ptr<Data> fromXMLImpl(const xml::lite::Document&) const; // = 0;, would break existing code
+    virtual Data* fromXMLImpl(const xml_lite::Document* doc) = 0;
+    virtual std::unique_ptr<Data> fromXMLImpl(const xml_lite::Document&) const; // = 0;, would break existing code
 
     /*!
      *  Convert the Data model into an XML DOM.
      *  \param data the Data model
      *  \return An XML DOM
      */
-    virtual xml::lite::Document* toXMLImpl(const Data* data) = 0;
-    virtual std::unique_ptr<xml::lite::Document> toXMLImpl(const Data&) const; // = 0;, would break existing code
+    virtual xml_lite::Document* toXMLImpl(const Data* data) = 0;
+    virtual std::unique_ptr<xml_lite::Document> toXMLImpl(const Data&) const; // = 0;, would break existing code
 
     static std::string getDefaultURI(const Data& data);
 
-    static std::string getVersionFromURI(const xml::lite::Document* doc);
+    static std::string getVersionFromURI(const xml_lite::Document* doc);
 
-    static void getVersionFromURI(const xml::lite::Document* doc,
+    static void getVersionFromURI(const xml_lite::Document* doc,
                                   std::vector<std::string>& version);
 
 private:

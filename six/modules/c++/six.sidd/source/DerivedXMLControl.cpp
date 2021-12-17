@@ -65,22 +65,22 @@ DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) : XMLCon
 DerivedXMLControl::DerivedXMLControl(std::unique_ptr<logging::Logger>&& log) : XMLControl(std::move(log)) { }
 DerivedXMLControl::DerivedXMLControl(logging::Logger& log) : XMLControl(log) { }
 
-Data* DerivedXMLControl::fromXMLImpl(const xml::lite::Document* doc)
+Data* DerivedXMLControl::fromXMLImpl(const xml_lite::Document* doc)
 {
     assert(doc != nullptr);
     return fromXMLImpl(*doc).release();
 }
-std::unique_ptr<Data> DerivedXMLControl::fromXMLImpl(const xml::lite::Document& doc) const
+std::unique_ptr<Data> DerivedXMLControl::fromXMLImpl(const xml_lite::Document& doc) const
 {
     return getParser(getVersionFromURI(&doc))->fromXML(doc);
 }
 
-xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
+xml_lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
 {
     assert(data != nullptr);
     return toXMLImpl(*data).release();
 }
-std::unique_ptr<xml::lite::Document> DerivedXMLControl::toXMLImpl(const Data& data) const
+std::unique_ptr<xml_lite::Document> DerivedXMLControl::toXMLImpl(const Data& data) const
 {
     if (data.getDataType() != DataType::DERIVED)
     {

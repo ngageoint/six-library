@@ -33,8 +33,8 @@
 
 namespace
 {
-typedef xml::lite::Element* XMLElem;
-typedef xml::lite::Attributes XMLAttributes;
+typedef six::xml_lite::Element* XMLElem;
+typedef six::xml_lite::Attributes XMLAttributes;
 }
 
 namespace six
@@ -68,7 +68,7 @@ DerivedXMLParser::DerivedXMLParser(
 #endif
 
 void DerivedXMLParser::getAttributeList(
-        const xml::lite::Attributes& attributes,
+        const xml_lite::Attributes& attributes,
         const std::string& attributeName,
         std::vector<std::string>& values)
 {
@@ -76,7 +76,7 @@ void DerivedXMLParser::getAttributeList(
 }
 
 void DerivedXMLParser::getAttributeListIfExists(
-        const xml::lite::Attributes& attributes,
+        const xml_lite::Attributes& attributes,
         const std::string& attributeName,
         std::vector<std::string>& values)
 {
@@ -91,7 +91,7 @@ void DerivedXMLParser::getAttributeListIfExists(
 }
 
 void DerivedXMLParser::getAttributeIfExists(
-        const xml::lite::Attributes& attributes,
+        const xml_lite::Attributes& attributes,
         const std::string& attributeName,
         std::string& value)
 {
@@ -106,7 +106,7 @@ void DerivedXMLParser::getAttributeIfExists(
 }
 
 void DerivedXMLParser::getAttributeIfExists(
-    const xml::lite::Attributes& attributes,
+    const xml_lite::Attributes& attributes,
     const std::string& attributeName,
     ptrdiff_t& value)
 {
@@ -121,7 +121,7 @@ void DerivedXMLParser::getAttributeIfExists(
 }
 
 void DerivedXMLParser::getAttributeIfExists(
-    const xml::lite::Attributes& attributes,
+    const xml_lite::Attributes& attributes,
     const std::string& attributeName,
     size_t& value)
 {
@@ -136,7 +136,7 @@ void DerivedXMLParser::getAttributeIfExists(
 }
 
 void DerivedXMLParser::getAttributeIfExists(
-        const xml::lite::Attributes& attributes,
+        const xml_lite::Attributes& attributes,
         const std::string& attributeName,
         mem::ScopedCopyablePtr<DateTime>& date)
 {
@@ -152,7 +152,7 @@ void DerivedXMLParser::getAttributeIfExists(
 }
 
 void DerivedXMLParser::getAttributeIfExists(
-    const xml::lite::Attributes& attributes,
+    const xml_lite::Attributes& attributes,
     const std::string& attributeName,
     BooleanType& boolean)
 {
@@ -244,7 +244,7 @@ void DerivedXMLParser::setAttributeIfNonNull(XMLElem element,
 }
 
 void DerivedXMLParser::parseProductCreationFromXML(
-        const xml::lite::Element& informationElem,
+        const xml_lite::Element& informationElem,
         ProcessorInformation& processorInformation) const
 {
     parseString(getFirstAndOnly(informationElem, "Application"), processorInformation.application);
@@ -259,14 +259,14 @@ void DerivedXMLParser::parseProductCreationFromXML(
     }
 }
 void DerivedXMLParser::parseProductCreationFromXML(
-    const xml::lite::Element* informationElem,
+    const xml_lite::Element* informationElem,
     ProcessorInformation* processorInformation) const
 {
     parseProductCreationFromXML(*informationElem, *processorInformation);
 }
 
 void DerivedXMLParser::parseProductCreationFromXML(
-        const xml::lite::Element& productCreationElem,
+        const xml_lite::Element& productCreationElem,
         ProductCreation& productCreation) const
 {
     parseProductCreationFromXML(
@@ -294,14 +294,14 @@ void DerivedXMLParser::parseProductCreationFromXML(
                              productCreation.productCreationExtensions);
 }
 void DerivedXMLParser::parseProductCreationFromXML(
-    const xml::lite::Element* productCreationElem,
+    const xml_lite::Element* productCreationElem,
     ProductCreation* productCreation) const
 {
     parseProductCreationFromXML(*productCreationElem, *productCreation);
 }
 
 void DerivedXMLParser::parseDerivedClassificationFromXML(
-    const xml::lite::Element* classificationElem,
+    const xml_lite::Element* classificationElem,
     DerivedClassification& classification) const
 {
     // optional to unbounded
@@ -400,7 +400,7 @@ void DerivedXMLParser::parseDerivedClassificationFromXML(
 
 
 Remap* DerivedXMLParser::parseRemapChoiceFromXML(
-        const xml::lite::Element* remapInformationElem) const
+        const xml_lite::Element* remapInformationElem) const
 {
     if (remapInformationElem)
     {
@@ -482,7 +482,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
     }
 }
 
-mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const xml::lite::Element* elem) const
+mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const xml_lite::Element* elem) const
 {
     //get size attribute
     const auto size = str::toType<size_t>(const_cast<XMLElem>(elem)->attribute("size"));
@@ -502,7 +502,7 @@ mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const xml::lite::Element* el
 }
 
 void DerivedXMLParser::parseDisplayFromXML(
-        const xml::lite::Element* displayElem,
+        const xml_lite::Element* displayElem,
         Display* display) const
 {
     display->pixelType
@@ -556,7 +556,7 @@ void DerivedXMLParser::parseDisplayFromXML(
 }
 
 XMLElem DerivedXMLParser::parsePolynomialProjection(
-        const xml::lite::Element* measurementElem,
+        const xml_lite::Element* measurementElem,
         const Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "PolynomialProjection");
@@ -584,7 +584,7 @@ XMLElem DerivedXMLParser::parsePolynomialProjection(
 }
 
 XMLElem DerivedXMLParser::parseGeographicProjection(
-        const xml::lite::Element* measurementElem,
+        const xml_lite::Element* measurementElem,
         const Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "GeographicProjection");
@@ -601,7 +601,7 @@ XMLElem DerivedXMLParser::parseGeographicProjection(
 }
 
 XMLElem DerivedXMLParser::parsePlaneProjection(
-    const xml::lite::Element* measurementElem,
+    const xml_lite::Element* measurementElem,
     const Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "PlaneProjection");
@@ -625,7 +625,7 @@ XMLElem DerivedXMLParser::parsePlaneProjection(
 }
 
 XMLElem DerivedXMLParser::parseCylindricalProjection(
-    const xml::lite::Element* measurementElem,
+    const xml_lite::Element* measurementElem,
     const Measurement& measurement) const
 {
     XMLElem projElem = getFirstAndOnly(measurementElem, "CylindricalProjection");
@@ -651,7 +651,7 @@ XMLElem DerivedXMLParser::parseCylindricalProjection(
 
 // This function ASSUMES that the measurement projection has already been set!
 void DerivedXMLParser::parseMeasurementFromXML(
-        const xml::lite::Element* measurementElem,
+        const xml_lite::Element* measurementElem,
         Measurement* measurement) const
 {
     XMLElem projElem = nullptr;
@@ -696,7 +696,7 @@ void DerivedXMLParser::parseMeasurementFromXML(
 }
 
 void DerivedXMLParser::parseExploitationFeaturesFromXML(
-        const xml::lite::Element* exploitationFeaturesElem,
+        const xml_lite::Element* exploitationFeaturesElem,
         ExploitationFeatures* exploitationFeatures) const
 {
     std::vector<XMLElem> collectionsElem;
@@ -761,7 +761,7 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
         info->polarization.resize(polarization.size());
         for (size_t jj = 0; jj < polarization.size(); ++jj)
         {
-            const xml::lite::Element* const polElem = polarization[jj];
+            const xml_lite::Element* const polElem = polarization[jj];
             info->polarization[jj].reset(new TxRcvPolarization());
             TxRcvPolarization* p = info->polarization[jj].get();
 
@@ -1015,8 +1015,8 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     assert(parent != nullptr);
     return &convertMeasurementToXML(*this, *measurement, *parent);
 }
-xml::lite::Element& DerivedXMLParser::convertMeasurementToXML(const DerivedXMLParser& parser,
-    const Measurement& measurement, xml::lite::Element& parent)
+xml_lite::Element& DerivedXMLParser::convertMeasurementToXML(const DerivedXMLParser& parser,
+    const Measurement& measurement, xml_lite::Element& parent)
 {
     auto& measurementElem = parser.newElement("Measurement", parent);
 
@@ -1178,7 +1178,7 @@ XMLElem DerivedXMLParser::createFootprint(const std::string& name,
                                           XMLElem parent) const
 {
     XMLElem footprint = newElement(name, getDefaultURI(), parent);
-    xml::lite::AttributeNode node;
+    xml_lite::AttributeNode node;
     node.setQName("size");
     node.setValue(str::toString(LatLonCorners::NUM_CORNERS));
 
@@ -1321,7 +1321,7 @@ XMLElem DerivedXMLParser::convertDownstreamReprocessingToXML(
 }
 
 void DerivedXMLParser::parseProcessingModuleFromXML(
-        const xml::lite::Element* procElem,
+        const xml_lite::Element* procElem,
         ProcessingModule* procMod) const
 {
     common().parseParameter(getFirstAndOnly(procElem, "ModuleName"),
@@ -1341,7 +1341,7 @@ void DerivedXMLParser::parseProcessingModuleFromXML(
 }
 
 void DerivedXMLParser::parseProductProcessingFromXML(
-        const xml::lite::Element& elem,
+        const xml_lite::Element& elem,
         ProductProcessing& productProcessing) const
 {
     std::vector<XMLElem> procModuleElem;
@@ -1356,14 +1356,14 @@ void DerivedXMLParser::parseProductProcessingFromXML(
     }
 }
 void DerivedXMLParser::parseProductProcessingFromXML(
-    const xml::lite::Element* elem,
+    const xml_lite::Element* elem,
     ProductProcessing* productProcessing) const
 {
     parseProductProcessingFromXML(*elem, *productProcessing);
 }
 
 void DerivedXMLParser::parseDownstreamReprocessingFromXML(
-        const xml::lite::Element& elem,
+        const xml_lite::Element& elem,
         DownstreamReprocessing& downstreamReproc) const
 {
     XMLElem geometricChipElem = getOptional(elem, "GeometricChip");
@@ -1397,7 +1397,7 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
         ProcessingEvent* procEvent
                 = downstreamReproc.processingEvents[i].get();
 
-        const xml::lite::Element* const peElem = procEventElem[i];
+        const xml_lite::Element* const peElem = procEventElem[i];
         parseString(getFirstAndOnly(peElem, "ApplicationName"),
                     procEvent->applicationName);
         parseDateTime(getFirstAndOnly(peElem, "AppliedDateTime"),
@@ -1410,14 +1410,14 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
     }
 }
 void DerivedXMLParser::parseDownstreamReprocessingFromXML(
-    const xml::lite::Element* elem,
+    const xml_lite::Element* elem,
     DownstreamReprocessing* downstreamReproc) const
 {
     parseDownstreamReprocessingFromXML(*elem, *downstreamReproc);
 }
 
 void DerivedXMLParser::parseGeographicCoordinateSystemFromXML(
-        const xml::lite::Element* coorSysElem,
+        const xml_lite::Element* coorSysElem,
         SFAGeographicCoordinateSystem* coordSys) const
 {
     parseString(getFirstAndOnly(coorSysElem, "Csname"), coordSys->csName);
@@ -1436,7 +1436,7 @@ void DerivedXMLParser::parseGeographicCoordinateSystemFromXML(
 }
 
 void DerivedXMLParser::parseAnnotationFromXML(
-        const xml::lite::Element* elem,
+        const xml_lite::Element* elem,
         Annotation *a) const
 {
     parseString(getFirstAndOnly(elem, "Identifier"), a->identifier);
@@ -1544,7 +1544,7 @@ void DerivedXMLParser::parseAnnotationFromXML(
         if (!children.empty())
         {
             //just get the first one
-            const xml::lite::Element* const child = children[0];
+            const xml_lite::Element* const child = children[0];
             std::string childName = child->getLocalName();
             str::trim(childName);
 
@@ -1574,7 +1574,7 @@ void DerivedXMLParser::parseAnnotationFromXML(
     }
 }
 
-void DerivedXMLParser::parseDatum(const xml::lite::Element* datumElem, SFADatum& datum) const
+void DerivedXMLParser::parseDatum(const xml_lite::Element* datumElem, SFADatum& datum) const
 {
     XMLElem spheroidElem = getFirstAndOnly(datumElem, "Spheroid");
 
@@ -1709,7 +1709,7 @@ XMLElem DerivedXMLParser::convertAnnotationToXML(
     return annElem;
 }
 
-void DerivedXMLParser::parseSFAGeometryFromXML(const xml::lite::Element* elem, SFAGeometry *g) const
+void DerivedXMLParser::parseSFAGeometryFromXML(const xml_lite::Element* elem, SFAGeometry *g) const
 {
     std::string geoType = g->getType();
     if (geoType == SFAPoint::TYPE_NAME)
@@ -1958,11 +1958,11 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
     return geoElem;
 }
 
-std::unique_ptr<xml::lite::Document> DerivedXMLParser::toXML(const DerivedData& data) const
+std::unique_ptr<xml_lite::Document> DerivedXMLParser::toXML(const DerivedData& data) const
 {
-    return std::unique_ptr<xml::lite::Document>(toXML(&data));
+    return std::unique_ptr<xml_lite::Document>(toXML(&data));
 }
-std::unique_ptr<DerivedData> DerivedXMLParser::fromXML(const xml::lite::Document& doc) const
+std::unique_ptr<DerivedData> DerivedXMLParser::fromXML(const xml_lite::Document& doc) const
 {
     return std::unique_ptr<DerivedData>(fromXML(&doc));
 }
