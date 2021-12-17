@@ -30,13 +30,14 @@
 #include <memory>
 
 #include <import/gsl.h>
+#include <xml/lite/Element.h>
+#include <xml/lite/QName.h>
 
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/Utilities.h>
-#include <xml/lite/Element.h>
-#include <xml/lite/QName.h>
 #include <six/Logger.h>
+#include <six/Xml.h>
 
 namespace six
 {
@@ -87,13 +88,19 @@ struct XmlLite final
         return pElement == nullptr ? nullptr : newElement(name, parent);
     }
 
+    template<typename T>
+    static std::string six_toString(const T& t)
+    {
+        return ::six::toString(t);
+    }
+
     // generic element creation methods, w/URI
     xml::lite::Element& createString(const xml::lite::QName&, const std::string& p, xml::lite::Element& parent) const;
     xml::lite::Element& createString(const xml::lite::QName&, const std::u8string& p, xml::lite::Element& parent) const;
     template<typename T>
     xml::lite::Element& createSixString(const xml::lite::QName& name, const T& t, xml::lite::Element& parent) const // six::toString(t) isntead of t.toString()
     {
-        return createString(name, toString(t), parent);
+        return createString(name, six_toString(t), parent);
     }
     xml::lite::Element& createInt(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const;
     xml::lite::Element& createInt(const xml::lite::QName& name, int p, xml::lite::Element& parent) const;
@@ -120,7 +127,7 @@ struct XmlLite final
     xml::lite::Element& createSixString(const std::string& name, const T& t, // six::toString(t) isntead of t.toString()
         xml::lite::Element& parent) const
     {
-        return createString_(name, toString(t), parent);
+        return createString_(name, six_toString(t), parent);
     }
     template <typename T>
     xml::lite::Element& createStringFromEnum(const std::string& name, const T& enumVal, xml::lite::Element& parent) const

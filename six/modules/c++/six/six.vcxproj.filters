@@ -150,6 +150,9 @@
     <ClInclude Include="include\six\XmlLite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\six\Xml.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
