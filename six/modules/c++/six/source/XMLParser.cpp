@@ -61,49 +61,49 @@ xml_lite::Element& XMLParser::newElement(const std::string& name, xml_lite::Elem
 XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, XMLElem parent)
 {
-    return XmlLite::newElement(xml_lite::QName(uri, name), parent);
+    return XmlLite::newElement(xml_lite::QName(xml_lite::Uri(uri), name), parent);
 }
 xml_lite::Element& XMLParser::newElement(const std::string& name, const std::string& uri, xml_lite::Element& parent)
 {
-    return  XmlLite::newElement(xml_lite::QName(uri, name), parent);
+    return  XmlLite::newElement(xml_lite::QName(xml_lite::Uri(uri), name), parent);
 }
 
 XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, const std::string& characterData,
         XMLElem parent)
 {
-    return XmlLite::newElement(xml_lite::QName(uri, name), characterData, parent);
+    return XmlLite::newElement(xml_lite::QName(xml_lite::Uri(uri), name), characterData, parent);
 }
 XMLElem XMLParser::newElement(const std::string& name,
     const std::string& uri, const std::u8string& characterData,
     XMLElem parent)
 {
-    return XmlLite::newElement(xml_lite::QName(uri, name), characterData, parent);
+    return XmlLite::newElement(xml_lite::QName(xml_lite::Uri(uri), name), characterData, parent);
 }
 
 XMLElem XMLParser::createString(const std::string& name,
         const std::string& uri, const std::string& p, XMLElem parent) const
 {
     assert(parent != nullptr);
-    return &mXmlLite.createString(xml_lite::QName(uri, name), p, *parent);
+    return &mXmlLite.createString(xml_lite::QName(xml_lite::Uri(uri), name), p, *parent);
 }
 
 XMLElem XMLParser::createString(const std::string& name,
     const std::string& uri, const std::u8string& p, XMLElem parent) const
 {
     assert(parent != nullptr);
-    return &mXmlLite.createString(xml_lite::QName(uri, name), p, *parent);
+    return &mXmlLite.createString(xml_lite::QName(xml_lite::Uri(uri), name), p, *parent);
 }
 
 XMLElem XMLParser::createDouble(const std::string& name, const std::string& uri, double p, XMLElem parent) const
 {
     assert(parent != nullptr);
-    return &mXmlLite.createDouble(xml_lite::QName(uri, name), p, *parent);
+    return &mXmlLite.createDouble(xml_lite::QName(xml_lite::Uri(uri), name), p, *parent);
 }
 XMLElem XMLParser::createDouble(const std::string& name, const std::string& uri, const std::optional<double>& p, XMLElem parent) const
 {
     assert(parent != nullptr);
-    return &mXmlLite.createDouble(xml_lite::QName(uri, name), p, *parent);
+    return &mXmlLite.createDouble(xml_lite::QName(xml_lite::Uri(uri), name), p, *parent);
 }
 xml_lite::Element& XMLParser::createDouble(const std::string& name, double p, xml_lite::Element& parent) const
 {
@@ -123,12 +123,12 @@ XMLElem XMLParser::createDouble(const std::string& name, const std::optional<dou
 XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::string& uri, double p, XMLElem parent) const
 {
     assert(parent != nullptr);
-    return mXmlLite.createOptionalDouble(xml_lite::QName(uri, name), p, *parent);
+    return mXmlLite.createOptionalDouble(xml_lite::QName(xml_lite::Uri(uri), name), p, *parent);
 }
 XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::string& uri, const std::optional<double>& p, XMLElem parent) const
 {
     assert(parent != nullptr);
-    return mXmlLite.createOptionalDouble(xml_lite::QName(uri, name), p, *parent);
+    return mXmlLite.createOptionalDouble(xml_lite::QName(xml_lite::Uri(uri), name), p, *parent);
 }
 XMLElem XMLParser::createOptionalDouble(const std::string& name, double p, XMLElem parent) const
 {
@@ -145,7 +145,7 @@ XMLElem XMLParser::createBooleanType(const std::string& name,
         const std::string& uri, BooleanType p, XMLElem parent) const
 {
     assert(parent != nullptr);
-    return mXmlLite.createBooleanType(xml_lite::QName(uri, name), p, *parent);
+    return mXmlLite.createBooleanType(xml_lite::QName(xml_lite::Uri(uri), name), p, *parent);
 }
 XMLElem XMLParser::createBooleanType(const std::string& name, BooleanType p,
         XMLElem parent) const
@@ -158,7 +158,7 @@ XMLElem XMLParser::createDateTime(const std::string& name,
         const std::string& uri, const DateTime& p, XMLElem parent) const
 {
     assert(parent != nullptr);
-    return &mXmlLite.createDateTime(xml_lite::QName(uri, name), p, *parent);
+    return &mXmlLite.createDateTime(xml_lite::QName(xml_lite::Uri(uri), name), p, *parent);
 }
 
 XMLElem XMLParser::createDateTime(const std::string& name, const DateTime& p,
@@ -172,7 +172,7 @@ XMLElem XMLParser::createDate(const std::string& name,
         const std::string& uri, const DateTime& p, XMLElem parent) const
 {
     assert(parent != nullptr);
-    return &mXmlLite.createDate(xml_lite::QName(uri, name), p, *parent);
+    return &mXmlLite.createDate(xml_lite::QName(xml_lite::Uri(uri), name), p, *parent);
 }
 XMLElem XMLParser::createDate(const std::string& name, const DateTime& p,
         XMLElem parent) const

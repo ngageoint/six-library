@@ -92,7 +92,7 @@ struct XMLParser
     static void setAttribute(xml_lite::Element& e, const std::string& name,
         size_t i, const std::string& uri = "")
     {
-        return XmlLite::setAttribute(e, xml_lite::QName(uri, name), i);
+        return XmlLite::setAttribute(e, xml_lite::QName(xml_lite::Uri(uri), name), i);
     }
 
     // generic element creation methods, w/URI
@@ -162,12 +162,12 @@ protected:
     XMLElem createInt(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent) const
     {
         assert(parent != nullptr);
-        return &mXmlLite.createInt(xml_lite::QName(uri, name), p, *parent);
+        return &mXmlLite.createInt(xml_lite::QName(xml_lite::Uri(uri), name), p, *parent);
     }
     XMLElem createInt(const std::string& name, const std::string& uri, int p, XMLElem parent) const
     {
         assert(parent != nullptr);
-        return &mXmlLite.createInt(xml_lite::QName(uri, name), p, *parent);
+        return &mXmlLite.createInt(xml_lite::QName(xml_lite::Uri(uri), name), p, *parent);
     }
     XMLElem createInt(const std::string& name, const std::string& uri, size_t p, XMLElem parent) const
     {
@@ -280,7 +280,7 @@ protected:
         const std::string& s, const std::string& uri = "")
     {
         assert(e != nullptr);
-        return XmlLite::setAttribute(*e, xml_lite::QName(uri, name), s);
+        return XmlLite::setAttribute(*e, xml_lite::QName(xml_lite::Uri(uri), name), s);
     }
     static void setAttribute(XMLElem e, const std::string& name,
         size_t i, const std::string& uri = "")
