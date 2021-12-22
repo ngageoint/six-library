@@ -113,7 +113,7 @@ struct XMLParser
         XMLElem parent) const
     {
         assert(parent != nullptr);
-        return &mXmlLite.createSixString(xml_lite::QName(uri, name), t, *parent);
+        return &mXmlLite.createSixString(xml_lite::QName(xml_lite::Uri(uri), name), t, *parent);
     }
 
     XMLElem createDateTime(const std::string& name, const DateTime& p,
@@ -148,7 +148,7 @@ protected:
     static XMLElem newElement(const T* pElement, const std::string& name, const std::string& uri,
         XMLElem parent = nullptr)
     {
-        return XmlLite::newElement(pElement, xml_lite::QName(uri, name), parent);
+        return XmlLite::newElement(pElement, xml_lite::QName(xml_lite::Uri(uri), name), parent);
     }
 
     template <typename T>
