@@ -1540,7 +1540,7 @@ void DerivedXMLParser::parseAnnotationFromXML(
         XMLElem obj = objectsElem[i];
 
         //there should be only one child - a choice between types
-        std::vector<XMLElem> &children = obj->getChildren();
+        const auto& children = obj->getChildren();
         if (!children.empty())
         {
             //just get the first one

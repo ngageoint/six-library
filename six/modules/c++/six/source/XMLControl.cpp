@@ -309,13 +309,14 @@ std::unique_ptr<Data> XMLControl::fromXMLImpl(const xml_lite::Document& doc) con
 }
 
 Data* XMLControl::fromXML(const xml_lite::Document* doc,
-                          const std::vector<std::string>& schemaPaths)
+                          const std::vector<std::string>& schemaPaths_)
 {
-    validate(doc, schemaPaths, mLog);
-    Data* const data = fromXMLImpl(doc);
-    assert(data != nullptr);
-    data->setVersion(getVersionFromURI(doc));
-    return data;
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    auto data = fromXML(*doc, &schemaPaths);
+    return data.release();
 }
 std::unique_ptr<Data> XMLControl::fromXML(const xml_lite::Document& doc,
     const std::vector<std::filesystem::path>* pSchemaPaths)

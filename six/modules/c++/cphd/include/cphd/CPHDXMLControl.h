@@ -139,7 +139,7 @@ protected:
 
 private:
     //! \return Hardcoded version to uri mapping
-    static std::unordered_map<std::string, std::string> getVersionUriMap();
+    static std::unordered_map<std::string, six::xml_lite::Uri> getVersionUriMap();
 
     /*!
      *  This function takes in a Metadata object and converts
@@ -165,10 +165,10 @@ private:
      *  \param uri A string specifying CPHD uri
      */
     std::unique_ptr<CPHDXMLParser>
-    getParser(const std::string& uri) const;
+    getParser(const six::xml_lite::Uri&) const;
 
     // Given the URI get associated version
-    std::string uriToVersion(const std::string& uri) const;
+    std::string uriToVersion(const six::xml_lite::Uri&) const;
 };
 }
 

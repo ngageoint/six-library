@@ -39,6 +39,7 @@
  */
 
 #include <string>
+#include <ostream>
 
 namespace xml
 {
@@ -64,9 +65,26 @@ namespace lite
 struct Uri final // help prevent mixups with std::string
 {
     Uri() = default;
-    explicit Uri(const std::string& v);
+    Uri(const std::string& v);
     std::string value;
+    bool empty() const
+    {
+        return value.empty();
+    }
 };
+inline bool operator==(const Uri& lhs, const Uri& rhs)
+{
+    return lhs.value == rhs.value;
+}
+inline bool operator!=(const Uri& lhs, const Uri& rhs)
+{
+    return !(lhs == rhs);
+}
+inline std::ostream& operator<<(std::ostream& os, const Uri& uri)
+{
+    os << uri.value;
+    return os;
+}
 
 class QName final
 {

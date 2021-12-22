@@ -39,8 +39,9 @@ BaseConverter::readXML(const std::string& xmlPathname)
     xml_lite::MinidomParser parser;
     io::FileInputStream xmlInputStream(xmlPathname);
     parser.parse(xmlInputStream);
-    return mem::auto_ptr<xml_lite::Document>(
-            parser.getDocument(true));
+    std::unique_ptr<xml_lite::Document> pDocument;
+    parser.getDocument(pDocument);
+    return mem::auto_ptr<xml_lite::Document>(pDocument.release());
 }
 
 BaseConverter::XMLElem BaseConverter::findUniqueElement(

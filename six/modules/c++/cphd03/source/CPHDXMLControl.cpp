@@ -498,7 +498,7 @@ mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const six::xml_lite::Document* d
 {
     auto cphd03 = std::make_unique<Metadata>();
 
-    XMLElem root = doc->getRootElement();
+    const auto root = doc->getRootElement();
 
     XMLElem collectionInfoXML   = getFirstAndOnly(root, "CollectionInfo");
     XMLElem dataXML             = getFirstAndOnly(root, "Data");

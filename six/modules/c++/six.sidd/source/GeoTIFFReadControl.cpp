@@ -147,11 +147,11 @@ void six::sidd::GeoTIFFReadControl::load(
     std::unique_ptr<six::XMLControl> siddXMLControl;
     std::unique_ptr<six::XMLControl> sicdXMLControl;
 
-    for (size_t ii = 0; ii < xmlStrs.size(); ++ii)
+    for (const auto& xmlStr : xmlStrs)
     {
         // Parse it into an XML document
         io::StringStream stream;
-        stream.write(xmlStrs[ii]);
+        stream.write(xmlStr);
         stream.seek(0, io::Seekable::START);
         xml_lite::MinidomParser xmlParser;
         xmlParser.preserveCharacterData(true);

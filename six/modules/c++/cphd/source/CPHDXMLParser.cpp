@@ -897,7 +897,7 @@ std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
 {
     std::unique_ptr<Metadata> cphd(new Metadata());
 
-    XMLElem root = doc->getRootElement();
+    const auto root = doc->getRootElement();
 
     XMLElem collectionIDXML   = getFirstAndOnly(root, "CollectionID");
     XMLElem globalXML         = getFirstAndOnly(root, "Global");

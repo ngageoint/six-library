@@ -74,11 +74,11 @@ mem::auto_ptr<six::xml_lite::Document> CPHDXMLControl::toXML(
     return doc;
 }
 
-std::unordered_map<std::string, std::string> CPHDXMLControl::getVersionUriMap()
+std::unordered_map<std::string, six::xml_lite::Uri> CPHDXMLControl::getVersionUriMap()
 {
     return {
-        {"1.0.0", "urn:CPHD:1.0.0"},
-        {"1.0.1", "http://api.nsgreg.nga.mil/schema/cphd/1.0.1"}
+        {"1.0.0", six::xml_lite::Uri("urn:CPHD:1.0.0")},
+        {"1.0.1", six::xml_lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")}
     };
 }
 
@@ -133,19 +133,19 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const six::xml_lite::Docum
 }
 
 std::unique_ptr<CPHDXMLParser>
-CPHDXMLControl::getParser(const std::string& uri) const
+CPHDXMLControl::getParser(const six::xml_lite::Uri& uri) const
 {
-    return std::make_unique<CPHDXMLParser>(uri, false, mLog);
+    return std::make_unique<CPHDXMLParser>(uri.value, false, mLog);
 }
 
-std::string CPHDXMLControl::uriToVersion(const std::string& uri) const
+std::string CPHDXMLControl::uriToVersion(const six::xml_lite::Uri& uri) const
 {
     const auto versionUriMap = getVersionUriMap();
-    for (auto it = versionUriMap.begin(); it != versionUriMap.end(); ++it)
+    for (const auto& p : versionUriMap)
     {
-        if (it->second == uri)
+        if (p.second == uri)
         {
-            return it->first;
+            return p.first;
         }
     }
     std::ostringstream ostr;
