@@ -24,6 +24,8 @@
 #define __XML_LITE_MINIDOM_PARSER_H__
 #pragma once
 
+#include <memory>
+
 
 #include "xml/lite/XMLReader.h"
 #include "xml/lite/Document.h"
@@ -95,6 +97,7 @@ struct MinidomParser
     virtual Document *getDocument() const;
 
     virtual Document *getDocument(bool steal = false);
+    virtual void getDocument(std::unique_ptr<Document>&); // steal = true
 
     /*!
      *  Reader accessor
@@ -122,6 +125,7 @@ struct MinidomParser
      *  \param newDocument The new document.
      */
     virtual void setDocument(Document * newDocument, bool own = true);
+    virtual void setDocument(std::unique_ptr<Document>&&);  // own = true
 
     /*!
      * @see MinidomHandler::preserveCharacterData
