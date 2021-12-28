@@ -76,7 +76,7 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
-    mMetadata = CPHDXMLControl(logger.get()).fromXML(*(xmlParser.getDocument()), schemaPaths);
+    mMetadata = CPHDXMLControl(logger.get()).fromXML(xmlParser.getDocument(), schemaPaths);
 
     mSupportBlock = std::make_unique<SupportBlock>(inStream, mMetadata.data, mFileHeader);
 

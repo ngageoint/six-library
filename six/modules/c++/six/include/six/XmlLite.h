@@ -74,18 +74,9 @@ struct MinidomParser final
         *  so you dont get to keep it.
         *  \return Pointer to document.
         */
-    xml::lite::Document* getDocument() const;
-    xml::lite::Document* getDocument();
+    const xml::lite::Document& getDocument() const;
+    xml::lite::Document& getDocument();
     void getDocument(std::unique_ptr<xml::lite::Document>&); // steal = true
-
-    /*!
-        *  This is the public interface for resetting the
-        *  XML document.  This will call the handler version of this
-        *  function, which will delete the old document.
-        *
-        *  \param newDocument The new document.
-        */
-    void setDocument(std::unique_ptr< xml::lite::Document>&&);  // own = true
 
     /*!
         * @see MinidomHandler::preserveCharacterData
@@ -96,11 +87,9 @@ private:
     struct Impl;
     std::unique_ptr<Impl> pImpl;
 };
-inline xml::lite::Document& getDocument(MinidomParser& xmlParser)
+inline const xml::lite::Document& getDocument(const MinidomParser& xmlParser)
 {
-    auto retval = xmlParser.getDocument();
-    assert(retval != nullptr);
-    return *retval;
+    return xmlParser.getDocument();
 }
 
 

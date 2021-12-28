@@ -105,7 +105,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
     stringStream.write(xmlString);
     six::MinidomParser parser;
     parser.parse(stringStream);
-    return fromXML(parser.getDocument(), schemaPaths);
+    return fromXML(&parser.getDocument(), schemaPaths);
 }
 
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const six::xml_lite::Document* doc,

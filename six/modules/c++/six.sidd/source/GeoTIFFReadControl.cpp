@@ -111,8 +111,7 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
                     xmlParser.preserveCharacterData(true);
                     xmlParser.parse(stream);
 
-                    const std::string rootName =
-                        xmlParser.getDocument()->getRootElement()->getQName();
+                    const auto rootName = getDocument(xmlParser).getRootElement()->getQName();
                     if (rootName == "SIDD")
                     {
                         return six::DataType::DERIVED;
@@ -157,10 +156,10 @@ void six::sidd::GeoTIFFReadControl::load(
         six::MinidomParser xmlParser;
         xmlParser.preserveCharacterData(true);
         xmlParser.parse(stream);
-        const xml_lite::Document* const doc = xmlParser.getDocument();
+        const auto& doc = xmlParser.getDocument();
 
         // Get the associated XML control
-        const std::string rootName(doc->getRootElement()->getQName());
+        const std::string rootName(doc.getRootElement()->getQName());
         six::XMLControl* xmlControl = nullptr;
         if (rootName == "SIDD")
         {
@@ -188,7 +187,7 @@ void six::sidd::GeoTIFFReadControl::load(
 
         if (xmlControl)
         {
-            std::unique_ptr<six::Data> data(xmlControl->fromXML(doc,
+            std::unique_ptr<six::Data> data(xmlControl->fromXML(&doc,
                                                               schemaPaths));
 
             if (!data.get())

@@ -145,11 +145,10 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
                     domParser.clear();
                     domParser.parse(stream);
 
-                    const std::string localName = domParser.getDocument()->
-                            getRootElement()->getLocalName();
+                    const auto localName = getDocument(domParser).getRootElement()->getLocalName();
                     if (localName == "SICD")
                     {
-                        sicdXML = domParser.getDocument();
+                        sicdXML = &domParser.getDocument();
                         break;
                     }
                     else if (localName == "SIDD")
@@ -224,8 +223,7 @@ bool SICDSensorModel::containsComplexDES(const csm::Nitf21Isd& isd)
                 domParser.clear();
                 domParser.parse(stream);
 
-                const std::string localName = domParser.getDocument()->
-                        getRootElement()->getLocalName();
+                const auto localName = getDocument(domParser).getRootElement()->getLocalName();
                 if (localName == "SICD")
                 {
                     return true;
@@ -434,7 +432,7 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         mSensorModelState = sensorModelState;
 
         mData.reset(reinterpret_cast<six::sicd::ComplexData*>(control->fromXML(
-                domParser.getDocument(), mSchemaDirs)));
+                &domParser.getDocument(), mSchemaDirs)));
         reinitialize();
     }
     catch (const except::Exception& ex)

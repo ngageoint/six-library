@@ -69,9 +69,8 @@ TEST_CASE(Classification)
 
     six::MinidomParser xmlParser;
     xmlParser.parse(ss);
-    const auto doc = xmlParser.getDocument();
-    TEST_ASSERT(doc != nullptr);
-    const auto root = doc->getRootElement();
+    const auto& doc = getDocument(xmlParser);
+    const auto root = doc.getRootElement();
     TEST_ASSERT(root != nullptr);
 
     const auto classificationElements = root->getElementsByTagName("Classification", true /*recurse*/);

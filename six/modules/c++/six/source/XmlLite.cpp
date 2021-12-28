@@ -60,22 +60,17 @@ namespace six
         pImpl->parser.clear();
     }
 
-    xml::lite::Document* MinidomParser::getDocument() const
+    const xml::lite::Document& MinidomParser::getDocument() const
     {
-        return pImpl->parser.getDocument();
+        return *(pImpl->parser.getDocument());
     }
-    xml::lite::Document* MinidomParser::getDocument()
+    xml::lite::Document& MinidomParser::getDocument()
     {
-        return pImpl->parser.getDocument(false /*steal*/);
+        return *(pImpl->parser.getDocument(false /*steal*/));
     }
     void MinidomParser::getDocument(std::unique_ptr<xml::lite::Document>& pDoc)
     {
         pImpl->parser.getDocument(pDoc);
-    }
-
-    void MinidomParser::setDocument(std::unique_ptr<xml::lite::Document>&& newDocument)
-    {
-        pImpl->parser.setDocument(std::move(newDocument));
     }
 
     void MinidomParser::preserveCharacterData(bool preserve)

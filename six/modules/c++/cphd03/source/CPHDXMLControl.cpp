@@ -492,7 +492,7 @@ mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
     stringStream.write(xmlString);
     six::MinidomParser parser;
     parser.parse(stringStream);
-    return fromXML(parser.getDocument());
+    return fromXML(&parser.getDocument());
 }
 
 mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const six::xml_lite::Document* doc)

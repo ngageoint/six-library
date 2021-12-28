@@ -184,12 +184,11 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
                     domParser.clear();
                     domParser.parse(stream);
 
-                    if (domParser.getDocument()->getRootElement()->getLocalName()
-                            == "SIDD")
+                    if (getDocument(domParser).getRootElement()->getLocalName() == "SIDD")
                     {
                         if (numSIDD == imageIndex)
                         {
-                            siddXML = domParser.getDocument();
+                            siddXML = &domParser.getDocument();
                             break;
                         }
                         ++numSIDD;
@@ -257,8 +256,7 @@ bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd)
                 domParser.clear();
                 domParser.parse(stream);
 
-                if (domParser.getDocument()->getRootElement()->getLocalName()
-                        == "SIDD")
+                if (getDocument(domParser).getRootElement()->getLocalName() == "SIDD")
                 {
                     return true;
                 }
@@ -426,7 +424,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         mSensorModelState = sensorModelState;
 
         mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
-                domParser.getDocument(), mSchemaDirs)));
+                &domParser.getDocument(), mSchemaDirs)));
         reinitialize();
     }
     catch (const except::Exception& ex)
