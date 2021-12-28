@@ -52,27 +52,6 @@ namespace xml
 {
 namespace lite
 {
- /*!
- * \class StringEncoding
- * \brief Specifies how std::string is encoded by MinidomParser.
- *
- * This is needed because our use of Xerces generates different
- * results on Windows/Linux, and changing things might break existing
- * code.
- *
- * On Windows, the UTF-16 strings (internal to Xerces) are converted
- * to std::strings with Windows-1252 (more-or-less ISO8859-1) encoding;
- * this allows Western European languages to be displayed.  On *ix,
- * UTF-8 is the norm ...
- */
-enum class StringEncoding
-{
-    Windows1252  // more-or-less ISO5589-1, https://en.wikipedia.org/wiki/Windows-1252
-    , Utf8
-};
-// Could do the same for std::wstring, but there isn't any code needing it right now.
-
-
 /*!
  * \class Element
  * \brief The class defining one element of an XML document
@@ -106,6 +85,7 @@ public:
     {
         setCharacterData(characterData);
     }
+    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
     Element(const std::string& qname, const std::string& uri,
             const std::string& characterData, StringEncoding encoding) :
         Element(qname, uri, nullptr)
@@ -126,6 +106,7 @@ public:
     static std::unique_ptr<Element> create(const xml::lite::QName&, const sys::U8string&);
     // Encoding of "characterData" is always UTF-8
     static std::unique_ptr<Element> createU8(const xml::lite::QName&, const std::string& characterData = "");
+    #endif // SWIG
 
     //! Destructor
     virtual ~Element()
@@ -317,12 +298,13 @@ public:
     //
     // The only valid setting for StringEncoding is Utf8; but defaulting that
     // could change behavior on Windows.
-    void print(io::OutputStream& stream, StringEncoding /*=Utf8*/) const;
-
     void prettyPrint(io::OutputStream& stream,
                      const std::string& formatter = "    ") const;
+    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
+    void print(io::OutputStream& stream, StringEncoding /*=Utf8*/) const;
     void prettyPrint(io::OutputStream& stream, StringEncoding /*=Utf8*/,
                      const std::string& formatter = "    ") const;
+    #endif // SWIG
 
     /*!
      *  Determines if a child element exists
@@ -351,6 +333,7 @@ public:
     {
         return mCharacterData;
     }
+    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
     const sys::Optional<StringEncoding>& getEncoding() const
     {
         return mEncoding;
@@ -361,15 +344,18 @@ public:
         return getEncoding();
     }
     void getCharacterData(sys::U8string& result) const;
+    #endif // SWIG
 
     /*!
      *  Sets the character data for this element.
      *  \param characters The data to add to this element
      */
-    void setCharacterData_(const std::string& characters, const StringEncoding*);
     void setCharacterData(const std::string& characters);
+    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
+    void setCharacterData_(const std::string& characters, const StringEncoding*);
     void setCharacterData(const std::string& characters, StringEncoding);
     void setCharacterData(const sys::U8string& characters);
+    #endif // SWIG
 
     /*!
      *  Sets the local name for this element.

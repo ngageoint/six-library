@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __XML_LITE_QNAME_H__
-#define __XML_LITE_QNAME_H__
+#ifndef CODA_OSS_xml_lite_QName_h_INCLLUDED_
+#define CODA_OSS_xml_lite_QName_h_INCLLUDED_
+#pragma once
 
 /*!
  * \file QName.h
@@ -39,12 +40,35 @@
  */
 
 #include <string>
+#include <ostream>
 
 namespace xml
 {
 
 namespace lite
 {
+ /*!
+ * \class StringEncoding
+ * \brief Specifies how std::string is encoded by MinidomParser.
+ *
+ * This is needed because our use of Xerces generates different
+ * results on Windows/Linux, and changing things might break existing
+ * code.
+ *
+ * On Windows, the UTF-16 strings (internal to Xerces) are converted
+ * to std::strings with Windows-1252 (more-or-less ISO8859-1) encoding;
+ * this allows Western European languages to be displayed.  On *ix,
+ * UTF-8 is the norm ...
+ */
+#ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
+enum class StringEncoding
+{
+    Windows1252  // more-or-less ISO5589-1, https://en.wikipedia.org/wiki/Windows-1252
+    , Utf8
+};
+// Could do the same for std::wstring, but there isn't any code needing it right now.
+#endif
+
 /*!
  *  \class QName
  *  \brief A Qualified name (includes the namespace stuff)
@@ -64,9 +88,26 @@ namespace lite
 struct Uri final // help prevent mixups with std::string
 {
     Uri() = default;
-    explicit Uri(const std::string& v);
+    Uri(const std::string& v);
     std::string value;
+    bool empty() const
+    {
+        return value.empty();
+    }
 };
+inline bool operator==(const Uri& lhs, const Uri& rhs)
+{
+    return lhs.value == rhs.value;
+}
+inline bool operator!=(const Uri& lhs, const Uri& rhs)
+{
+    return !(lhs == rhs);
+}
+inline std::ostream& operator<<(std::ostream& os, const Uri& uri)
+{
+    os << uri.value;
+    return os;
+}
 
 class QName final
 {
@@ -100,6 +141,11 @@ public:
     QName(const std::string& lName)
     {
         setName(lName);
+    }
+    
+    QName(const xml::lite::Uri& uri)
+    {
+        setAssociatedUri(uri);
     }
 
     //! Destructor
@@ -168,5 +214,4 @@ public:
 };
 }
 }
-
-#endif
+#endif  // CODA_OSS_xml_lite_QName_h_INCLLUDED_

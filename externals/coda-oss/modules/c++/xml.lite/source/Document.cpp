@@ -58,6 +58,10 @@ newElement(const std::string& qname, const std::string& uri)
     elem->setUri(uri);
     return elem;
 }
+static xml::lite::Element* newElement(const xml::lite::QName& qname)
+{
+    return newElement(qname.getName(), qname.getAssociatedUri());
+}
 xml::lite::Element* xml::lite::Document::createElement(const std::string& qname,
                                    const std::string& uri,
                                    std::string characterData)
@@ -80,6 +84,21 @@ xml::lite::Element* xml::lite::Document::createElement(const std::string& qname,
 {
     auto elem = newElement(qname, uri);
     elem->setCharacterData(characterData);
+    return elem;
+}
+
+std::unique_ptr<xml::lite::Element> xml::lite::Document::createElement(const xml::lite::QName& qname,
+                                    const std::string& characterData) const
+{
+    std::unique_ptr<xml::lite::Element> elem(newElement(qname));
+    elem->setCharacterData(characterData);
+    return elem;
+}
+std::unique_ptr<xml::lite::Element> xml::lite::Document::createElement(const xml::lite::QName& qname,
+                                       const std::string& characterData, StringEncoding encoding) const
+{
+    std::unique_ptr<xml::lite::Element> elem(newElement(qname));
+    elem->setCharacterData(characterData, encoding);
     return elem;
 }
 

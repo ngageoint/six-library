@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_ATTRIBUTES_H__
-#define __XML_LITE_ATTRIBUTES_H__
+#ifndef CODA_OSS_xml_lite_Attributes_h_INCLUDED_
+#define CODA_OSS_xml_lite_Attributes_h_INCLUDED_
 #pragma once
 
 #include <string>
@@ -54,11 +54,8 @@ namespace lite
  *  internal organs.  We have a URI, a QName, and a local part
  *  as well.  We also need a value, of course.
  */
-class AttributeNode
+struct AttributeNode final
 {
-public:
-
-    //! Constructor
     AttributeNode() = default;
 
     /*!
@@ -75,7 +72,6 @@ public:
      */
     AttributeNode& operator=(const AttributeNode& attributeNode);
 
-    //! Destructor
     ~AttributeNode() = default;
 
     /*!
@@ -104,7 +100,7 @@ public:
      *  Set the URI association in the QName
      *  \param uri The new uri
      */
-    void setUri(const xml::lite::Uri&);
+    void setUri(const Uri&);
     void setUri(const std::string& uri)
     {
         setUri(Uri(uri));
@@ -122,7 +118,7 @@ public:
      *  \return The uri
      */
     std::string getUri() const;
-    void getUri(xml::lite::Uri&) const;
+    void getUri(Uri&) const;
     std::string getLocalName() const;
     std::string getPrefix() const;
     std::string getValue() const;
@@ -464,24 +460,24 @@ inline bool getValue(const Attributes& attributes, const TKey& k, T& result)
  * \return If the uri/localName is not found or not
  */
 template <typename ToType>
-inline auto castValue(const Attributes& attributes, const std::string & uri, const std::string & localName, ToType toType)
+inline auto castValue(const Attributes& attributes, const Uri & uri, const std::string & localName, ToType toType)
 -> decltype(toType(std::string()))
 {
     return castValue(attributes, QName(uri, localName), toType);
 }
 template <typename T>
-inline T getValue(const Attributes& attributes, const std::string & uri, const std::string & localName)
+inline T getValue(const Attributes& attributes, const Uri & uri, const std::string & localName)
 {
     return getValue<T>(attributes, QName(uri, localName));
 }
 
 template <typename T, typename ToType>
-inline bool castValue(const Attributes& attributes, const std::string & uri, const std::string & localName, T& result, ToType toType)
+inline bool castValue(const Attributes& attributes, const Uri & uri, const std::string & localName, T& result, ToType toType)
 {
     return getValue(attributes, QName(uri, localName), result, toType);
 }
 template <typename T>
-inline bool getValue(const Attributes& attributes, const std::string & uri, const std::string & localName, T& result)
+inline bool getValue(const Attributes& attributes, const Uri & uri, const std::string & localName, T& result)
 {
     return getValue(attributes, QName(uri, localName), result);
 }
@@ -568,13 +564,13 @@ inline bool setValue(Attributes& attributes, const xml::lite::QName& name, const
     return setValue_(attributes, name, value, details::toString<T>);
 }
 template <typename T, typename ToString>
-inline bool setValue(Attributes& attributes, const std::string & uri, const std::string & localName, const T& value,
+inline bool setValue(Attributes& attributes, const Uri & uri, const std::string & localName, const T& value,
      ToString toString)
 {
     return setValue(attributes, QName(uri, localName), value, toString);
 }
 template <typename T>
-inline bool setValue(Attributes& attributes, const std::string & uri, const std::string & localName, const T& value)
+inline bool setValue(Attributes& attributes, const Uri & uri, const std::string & localName, const T& value)
 {
     return setValue(attributes, uri, localName, value, details::toString<T>);
 }
@@ -583,4 +579,5 @@ inline bool setValue(Attributes& attributes, const std::string & uri, const std:
 }
 }
 
-#endif
+#endif // CODA_OSS_xml_lite_Attributes_h_INCLUDED_
+

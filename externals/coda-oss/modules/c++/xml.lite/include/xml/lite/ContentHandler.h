@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_CONTENT_HANDLER_H__
-#define __XML_LITE_CONTENT_HANDLER_H__
+#ifndef CODA_OSS_xml_lite_ContentHandler_h_INCLUDED_
+#define CODA_OSS_xml_lite_ContentHandler_h_INCLUDED_
 #pragma once
 
 #include <stdint.h>
@@ -30,8 +30,7 @@
 #include <string>
 #include <stdexcept>
 
-#include "sys/CPlusPlus.h"
-
+#include "xml/lite/QName.h" // Uri
 #include "xml/lite/Attributes.h"
 
 /*!
@@ -71,17 +70,12 @@ namespace lite
 
 class ContentHandler
 {
-public:
+protected:
     //! Constructor
-    ContentHandler()
-    {
-    }
+    ContentHandler() = default;
+    virtual ~ContentHandler() = default;
 
-    //! Destructor
-    virtual ~ContentHandler()
-    {
-    }
-
+public:
     //! Receive notification of the beginning of a document.
     virtual void startDocument()
     {
@@ -99,30 +93,11 @@ public:
      */
     virtual void characters(const char *data, int length) = 0;
 
-    virtual bool wcharacters_(const uint16_t* /*data*/, size_t /*length*/)
+    virtual bool vcharacters(const void/*XMLCh*/*, size_t /*length*/)  // avoid XMLCh, it's specific to Xerces
     { return false; /* continue on to existing characters()*/ } /* =0 would break existing code */
-    virtual bool wcharacters_(const uint32_t* /*data*/, size_t /*length*/)
-    { return false; /* continue on to existing characters()*/ } /* =0 would break existing code */
-    template <typename T>
-    inline bool wcharacters(const T* data_, size_t length)
+    virtual bool call_vcharacters() const  // =0 would break existing code
     {
-        static_assert(sizeof(T) == sizeof(wchar_t), "T should be a wchar_t.");
-        auto sizeof_T = sizeof(T); // "conditional expression is constant"
-        const void* data = data_;
-        if (sizeof_T == sizeof(uint16_t))
-        {
-            return wcharacters_(static_cast<const uint16_t*>(data), length);
-        }
-        if (sizeof_T == sizeof(uint32_t))
-        {
-            return wcharacters_(static_cast<const uint32_t*>(data), length);
-        }
-        throw std::invalid_argument("Wrong size for T");
-    }
-
-    virtual bool use_wchar_t() const // =0 would break existing code
-    {
-        return false; // call characters(const char*)
+        return false;  // don't call vcharacters(const void*)
     }
 
     /*!
@@ -135,7 +110,7 @@ public:
     virtual void startElement(const std::string & uri,
                               const std::string & localName,
                               const std::string & qname,
-                              const xml::lite::Attributes & attributes) = 0;
+                              const Attributes & attributes) = 0;
     /*!
      *  Receive notification of the end of an element.
      *  \param uri  The associated uri
@@ -156,5 +131,4 @@ public:
 };
 }
 }
-
-#endif
+#endif  // CODA_OSS_xml_lite_ContentHandler_h_INCLUDED_

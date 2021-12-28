@@ -52,8 +52,7 @@ struct test_MinidomParser final
         ss.stream() << strXml;
 
         xmlParser.parse(ss);
-        const auto doc = xmlParser.getDocument();
-        return xml::lite::getRootElement(*doc);    
+        return xml::lite::getRootElement(xmlParser.getDocument());
     }
     xml::lite::Element& getRootElement()
     {
@@ -61,8 +60,7 @@ struct test_MinidomParser final
         ss.stream() << strXml;
 
         xmlParser.parse(ss);
-        const auto doc = xmlParser.getDocument();
-        return xml::lite::getRootElement(*doc);
+        return xml::lite::getRootElement(xmlParser.getDocument());
     }
 };
 
@@ -74,7 +72,7 @@ TEST_CASE(test_CloneCopy_root_encoding)
         root_.setCharacterData("abc", xml::lite::StringEncoding::Utf8);
         const auto& root = root_;
         TEST_ASSERT_TRUE(root.getEncoding().has_value());
- 
+
         xml::lite::Element copy;
         copy.clone(root);
         copy.clearChildren();
@@ -132,10 +130,8 @@ TEST_CASE(test_getRootElement)
 
     xml::lite::MinidomParser xmlParser;
     xmlParser.parse(ss);
-    const auto doc = xmlParser.getDocument();
-    TEST_ASSERT(doc != nullptr);
-    const auto root = doc->getRootElement();
-    TEST_ASSERT(root != nullptr);
+    const auto pRoot = &getRootElement(getDocument(xmlParser));
+    TEST_ASSERT(pRoot != nullptr);
 }
 
 TEST_CASE(test_getElementsByTagName)
