@@ -45,8 +45,9 @@ namespace six
         Impl& operator=(Impl&&) = delete;
     };
 
-    MinidomParser::MinidomParser()
-        : pImpl(std::make_unique<Impl>(true /*storeEncoding*/))
+    // storeEncoding=true allows parsing of UTF-8 data; but it might break legacy code.
+    MinidomParser::MinidomParser(bool storeEncoding)
+        : pImpl(std::make_unique<Impl>(storeEncoding))
     {
     }
     MinidomParser::~MinidomParser() = default;

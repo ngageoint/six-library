@@ -67,7 +67,7 @@ TEST_CASE(Classification)
     io::StringStream ss;
     ss.stream() << six::sicd::Utilities::toXMLString(*data, schemaPaths);
 
-    six::MinidomParser xmlParser;
+    six::MinidomParser xmlParser(false /*storeEncoding*/);
     xmlParser.parse(ss);
     const auto& doc = getDocument(xmlParser);
     const auto root = doc.getRootElement();
@@ -107,7 +107,7 @@ TEST_CASE(ClassificationCanada)
 
     io::StringStream ss;
     ss.stream() << strXml;
-    six::MinidomParser xmlParser;
+    six::MinidomParser xmlParser(true /*storeEncoding*/);
     xmlParser.parse(ss);
     const auto& doc = getDocument(xmlParser);
     const auto root = doc.getRootElement();

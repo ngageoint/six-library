@@ -244,7 +244,7 @@ TEST_CASE(sicd_French_xml_raw)
     const auto result = find_string(input, "<SICD ");
     TEST_ASSERT_TRUE(result);
 
-    six::MinidomParser xmlParser;
+    six::MinidomParser xmlParser(true /*storeEncoding*/);
     xmlParser.parse(input);
     const auto& root = getRootElement(getDocument(xmlParser));
     const auto& classificationXML = root.getElementByTagName("Classification", true /*recurse*/);

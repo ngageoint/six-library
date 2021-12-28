@@ -46,7 +46,7 @@ namespace six
 // A simple wrapper around xml::lite::MinidomParser
 struct MinidomParser final
 {
-    MinidomParser();
+    MinidomParser(bool storeEncoding = false); // =true allows parsing of UTF-8 data; but it might break legacy code.
     ~MinidomParser();
     MinidomParser(const MinidomParser&) = delete;
     MinidomParser& operator=(const MinidomParser&) = delete;

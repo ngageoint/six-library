@@ -55,7 +55,7 @@ struct BaseConverter : protected six::XMLParser
 
 protected:
     static mem::auto_ptr<xml_lite::Document>
-            readXML(const std::string& xmlPathname);
+            readXML(const std::string& xmlPathname, bool storeEncoding=false);
 
     XMLElem findUniqueElement(const xml_lite::Element* root,
             const std::string& xmlPath) const;
