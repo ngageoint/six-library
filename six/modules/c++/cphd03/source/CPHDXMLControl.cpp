@@ -27,6 +27,7 @@
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <six/Utilities.h>
+#include <six/XmlLite.h>
 
 // CPHD Spec is not enforced
 #define ENFORCESPEC 0
@@ -489,7 +490,7 @@ mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
 {
     io::StringStream stringStream;
     stringStream.write(xmlString);
-    six::xml_lite::MinidomParser parser;
+    six::MinidomParser parser;
     parser.parse(stringStream);
     return fromXML(parser.getDocument());
 }

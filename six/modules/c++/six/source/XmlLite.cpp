@@ -55,6 +55,10 @@ namespace six
     {
         pImpl->parser.parse(is, size);
     }
+    void MinidomParser::clear()
+    {
+        pImpl->parser.clear();
+    }
 
     xml::lite::Document* MinidomParser::getDocument() const
     {

@@ -32,6 +32,7 @@
 #include <xml/lite/MinidomParser.h>
 #include <gsl/gsl.h>
 
+#include <six/XmlLite.h>
 #include <cphd/CPHDXMLControl.h>
 
 namespace cphd
@@ -63,7 +64,7 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
     // Read in the XML string
     inStream->seek(mFileHeader.getXMLBlockByteOffset(), io::Seekable::START);
 
-    six::xml_lite::MinidomParser xmlParser;
+    six::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(*inStream, gsl::narrow<int>(mFileHeader.getXMLBlockSize()));
 

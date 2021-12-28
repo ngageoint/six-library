@@ -28,6 +28,7 @@
 #include <mem/ScopedArray.h>
 #include "six/sidd/GeoTIFFReadControl.h"
 #include "six/XMLControlFactory.h"
+#include <six/XmlLite.h>
 
 namespace
 {
@@ -106,7 +107,7 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
                     io::StringStream stream;
                     stream.write(xmlStrs[ii]);
                     stream.seek(0, io::Seekable::START);
-                    xml_lite::MinidomParser xmlParser;
+                    six::MinidomParser xmlParser;
                     xmlParser.preserveCharacterData(true);
                     xmlParser.parse(stream);
 
@@ -153,7 +154,7 @@ void six::sidd::GeoTIFFReadControl::load(
         io::StringStream stream;
         stream.write(xmlStr);
         stream.seek(0, io::Seekable::START);
-        xml_lite::MinidomParser xmlParser;
+        six::MinidomParser xmlParser;
         xmlParser.preserveCharacterData(true);
         xmlParser.parse(stream);
         const xml_lite::Document* const doc = xmlParser.getDocument();

@@ -43,6 +43,7 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/NITFReadComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
+#include <six/XmlLite.h>
 
 #include "../tests/TestUtilities.h"
 #include "TestCase.h"
@@ -243,7 +244,7 @@ TEST_CASE(sicd_French_xml_raw)
     const auto result = find_string(input, "<SICD ");
     TEST_ASSERT_TRUE(result);
 
-    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
+    six::MinidomParser xmlParser;
     xmlParser.parse(input);
     const auto& root = getRootElement(getDocument(xmlParser));
     const auto& classificationXML = root.getElementByTagName("Classification", true /*recurse*/);

@@ -32,6 +32,7 @@
 #include <six/NITFReadControl.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/Utilities.h>
+#include <six/XmlLite.h>
 
 namespace six
 {
@@ -159,7 +160,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
         // DES's are always in the same order as the images, so we just have to
         // find the Nth DES
         six::xml_lite::Document* siddXML = nullptr;
-        six::xml_lite::MinidomParser domParser;
+        six::MinidomParser domParser;
 
         size_t numSIDD = 0;
         const std::vector< csm::Des>& desList(isd.fileDess());
@@ -239,7 +240,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
 
 bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd)
 {
-    xml::lite::MinidomParser domParser;
+    six::MinidomParser domParser;
 
     const std::vector< csm::Des>& desList(isd.fileDess());
     for (const auto& desListItem : desList)
@@ -411,7 +412,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         io::StringStream stream;
         stream.write(sensorModelXML);
 
-        six::xml_lite::MinidomParser domParser;
+        six::MinidomParser domParser;
         domParser.parse(stream);
 
         six::XMLControlRegistry xmlRegistry;

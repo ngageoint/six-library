@@ -20,9 +20,13 @@
  *
  */
 #include "six/convert/BaseConverter.h"
+
+#include <iostream>
+
 #include <io/FileInputStream.h>
 #include <xml/lite/MinidomParser.h>
-#include <iostream>
+
+#include <six/XmlLite.h>
 
 namespace six
 {
@@ -36,7 +40,7 @@ BaseConverter::BaseConverter() :
 mem::auto_ptr<xml_lite::Document>
 BaseConverter::readXML(const std::string& xmlPathname)
 {
-    xml_lite::MinidomParser parser;
+    six::MinidomParser parser;
     io::FileInputStream xmlInputStream(xmlPathname);
     parser.parse(xmlInputStream);
     std::unique_ptr<xml_lite::Document> pDocument;

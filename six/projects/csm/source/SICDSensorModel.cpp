@@ -30,6 +30,7 @@
 #include <six/NITFReadControl.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
+#include <six/XmlLite.h>
 
 namespace six
 {
@@ -121,7 +122,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
     {
         // Check for the first SICD DES and parse it
         six::xml_lite::Document* sicdXML = nullptr;
-        six::xml_lite::MinidomParser domParser;
+        six::MinidomParser domParser;
 
         const std::vector< csm::Des>& desList(isd.fileDess());
         for (const auto& desListItem : desList)
@@ -206,7 +207,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
 
 bool SICDSensorModel::containsComplexDES(const csm::Nitf21Isd& isd)
 {
-    xml::lite::MinidomParser domParser;
+   six::MinidomParser domParser;
 
     const std::vector< csm::Des>& desList(isd.fileDess());
     for (const auto& desListItem : desList)
@@ -419,7 +420,7 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         io::StringStream stream;
         stream.write(sensorModelXML);
 
-        six::xml_lite::MinidomParser domParser;
+        six::MinidomParser domParser;
         domParser.parse(stream);
 
         six::XMLControlRegistry xmlRegistry;

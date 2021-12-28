@@ -29,6 +29,7 @@
 #include <mem/ScopedArray.h>
 #include <xml/lite/MinidomParser.h>
 #include <cphd03/CPHDXMLControl.h>
+#include <six/XmlLite.h>
 
 namespace cphd03
 {
@@ -57,7 +58,7 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
     const auto xmlSize = static_cast<int>(mFileHeader.getXMLsize());
     inStream->seek(mFileHeader.getXMLoffset(), io::Seekable::START);
 
-    six::xml_lite::MinidomParser xmlParser;
+    six::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(*inStream, xmlSize);
 

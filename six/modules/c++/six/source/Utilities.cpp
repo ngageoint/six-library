@@ -30,6 +30,7 @@
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
 #include "six/Data.h"
+#include <six/XmlLite.h>
 
 #define string_to_Enum(strValue, enum, type) if (strValue == #type) return enum::type
 #define Enum_to_string(value, enum, type) if (value == enum::type) return #type
@@ -1153,7 +1154,7 @@ TReturn six_parseData(const XMLControlRegistry& xmlReg,
                                    const TSchemaPaths& schemaPaths,
                                    logging::Logger& log)
 {
-    xml_lite::MinidomParser xmlParser;
+    six::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     try
     {

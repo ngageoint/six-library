@@ -24,6 +24,8 @@
 #define SIX_six_XmlLite_h_INCLUDED_
 #pragma once
 
+#include <assert.h>
+
 #include <std/string>
 #include <type_traits>
 #include <std/optional>
@@ -41,46 +43,67 @@
 
 namespace six
 {
-    // A simple wrapper around xml::lite::MinidomParser
-    struct MinidomParser final
-    {
-        MinidomParser();
-        ~MinidomParser();
-        MinidomParser(const MinidomParser&) = delete;
-        MinidomParser& operator=(const MinidomParser&) = delete;
-        MinidomParser(MinidomParser&&) = default;
-        MinidomParser& operator=(MinidomParser&&) = default;
+// A simple wrapper around xml::lite::MinidomParser
+struct MinidomParser final
+{
+    MinidomParser();
+    ~MinidomParser();
+    MinidomParser(const MinidomParser&) = delete;
+    MinidomParser& operator=(const MinidomParser&) = delete;
+    MinidomParser(MinidomParser&&) = default;
+    MinidomParser& operator=(MinidomParser&&) = default;
 
-        void parse(io::InputStream& is, int size = io::InputStream::IS_END);
+     /*!
+     *  Present our parsing interface.  Similar to DOM, the input
+     *  is an InputStream (DOM's is called input source), but it
+     *  is even more flexible, and works within the XPC io paradigm.
+     *  \param is  This is the input stream to feed the parser
+     *  \param size  This is the size of the stream to feed the parser
+     */
+    void parse(io::InputStream& is, int size = io::InputStream::IS_END);
 
-        /*!
-         *  Return a pointer to the document.  Note that its a reference
-         *  so you dont get to keep it.
-         *  \return Pointer to document.
-         */
-        xml::lite::Document* getDocument() const;
-        xml::lite::Document* getDocument(bool steal = false);
-        void getDocument(std::unique_ptr<xml::lite::Document>&); // steal = true
+    /*!
+     *  This clears the MinidomHandler, killing its underlying Document
+     *  tree.  The Document node is preserved, however -- it must
+     *  be explicitly reset to another document to change element type.
+     */
+    void clear();
 
-        /*!
-         *  This is the public interface for resetting the
-         *  XML document.  This will call the handler version of this
-         *  function, which will delete the old document.
-         *
-         *  \param newDocument The new document.
-         */
-        void setDocument(xml::lite::Document* newDocument, bool own = true);
-        void setDocument(std::unique_ptr< xml::lite::Document>&&);  // own = true
+    /*!
+        *  Return a pointer to the document.  Note that its a reference
+        *  so you dont get to keep it.
+        *  \return Pointer to document.
+        */
+    xml::lite::Document* getDocument() const;
+    xml::lite::Document* getDocument(bool steal = false);
+    void getDocument(std::unique_ptr<xml::lite::Document>&); // steal = true
 
-        /*!
-         * @see MinidomHandler::preserveCharacterData
-         */
-        void preserveCharacterData(bool preserve);
+    /*!
+        *  This is the public interface for resetting the
+        *  XML document.  This will call the handler version of this
+        *  function, which will delete the old document.
+        *
+        *  \param newDocument The new document.
+        */
+    void setDocument(xml::lite::Document* newDocument, bool own = true);
+    void setDocument(std::unique_ptr< xml::lite::Document>&&);  // own = true
 
-    private:
-        struct Impl;
-        std::unique_ptr<Impl> pImpl;
-    };
+    /*!
+        * @see MinidomHandler::preserveCharacterData
+        */
+    void preserveCharacterData(bool preserve);
+
+private:
+    struct Impl;
+    std::unique_ptr<Impl> pImpl;
+};
+inline xml::lite::Document& getDocument(MinidomParser& xmlParser)
+{
+    auto retval = xmlParser.getDocument(false /*steal*/);
+    assert(retval != nullptr);
+    return *retval;
+}
+
 
 struct XmlLite final
 {

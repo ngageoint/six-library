@@ -31,6 +31,7 @@
 #include <xml/lite/MinidomParser.h>
 
 #include <six/XMLControl.h>
+#include <six/XmlLite.h>
 #include <cphd/CPHDXMLParser.h>
 #include <cphd/Enums.h>
 #include <cphd/Metadata.h>
@@ -102,7 +103,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
 {
     io::StringStream stringStream;
     stringStream.write(xmlString);
-    six::xml_lite::MinidomParser parser;
+    six::MinidomParser parser;
     parser.parse(stringStream);
     return fromXML(parser.getDocument(), schemaPaths);
 }

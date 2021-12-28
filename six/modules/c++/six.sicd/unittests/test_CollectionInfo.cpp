@@ -28,6 +28,7 @@
 #include <str/Convert.h>
 
 #include <import/six/sicd.h>
+#include <six/XmlLite.h>
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4464) // relative include path contains '..'
@@ -66,7 +67,7 @@ TEST_CASE(Classification)
     io::StringStream ss;
     ss.stream() << six::sicd::Utilities::toXMLString(*data, schemaPaths);
 
-    six::xml_lite::MinidomParser xmlParser;
+    six::MinidomParser xmlParser;
     xmlParser.parse(ss);
     const auto doc = xmlParser.getDocument();
     TEST_ASSERT(doc != nullptr);
@@ -107,12 +108,10 @@ TEST_CASE(ClassificationCanada)
 
     io::StringStream ss;
     ss.stream() << strXml;
-    six::xml_lite::MinidomParser xmlParser(true /*storeEncoding*/);
-    xmlParser.preserveCharacterData(true); // needed to parse UTF-8 XML
+    six::MinidomParser xmlParser;
     xmlParser.parse(ss);
-    const auto doc = xmlParser.getDocument();
-    TEST_ASSERT(doc != nullptr);
-    const auto root = doc->getRootElement();
+    const auto& doc = getDocument(xmlParser);
+    const auto root = doc.getRootElement();
     TEST_ASSERT(root != nullptr);
 
     const auto classificationElements = root->getElementsByTagName("Classification", true /*recurse*/);
