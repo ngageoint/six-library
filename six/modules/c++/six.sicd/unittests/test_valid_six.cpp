@@ -235,7 +235,7 @@ static bool find_string(io::FileInputStream& stream, const std::string& s)
     stream.seek(pos, io::Seekable::START);
     return false;
 }
-TEST_CASE(sicd_French_xml_raw)
+static void sicd_French_xml_raw_(bool storeEncoding)
 {
     // This is a binary file with XML burried in it somewhere
     const auto path = getNitfPath("sicd_French_xml.nitf");
@@ -244,25 +244,62 @@ TEST_CASE(sicd_French_xml_raw)
     const auto result = find_string(input, "<SICD ");
     TEST_ASSERT_TRUE(result);
 
-    six::MinidomParser xmlParser(true /*storeEncoding*/);
+    six::MinidomParser xmlParser(storeEncoding);
     xmlParser.parse(input);
     const auto& root = getRootElement(getDocument(xmlParser));
     const auto& classificationXML = root.getElementByTagName("Classification", true /*recurse*/);
 
-    const auto encoding = classificationXML.getEncoding();
-    TEST_ASSERT(encoding == PlatformEncoding);
+    if (storeEncoding)
+    {
+        const auto encoding = classificationXML.getEncoding();
+        TEST_ASSERT(encoding == PlatformEncoding);
+    }
 
     // UTF-8 characters in 50x50.nitf
-    const auto expectedCharData = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
+    std::string expectedCharData;
+    size_t expectedLength;
+    if (storeEncoding)
+    {
+        expectedCharData = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
+        expectedLength = expectedCharData.length();
+    }
+    else
+    {
+        expectedCharData = sys::Platform == sys::PlatformType::Linux ? std::string() : classificationText_iso8859_1;
+        expectedLength = sys::Platform == sys::PlatformType::Linux ? 28 : classificationText_iso8859_1.length();
+    }
     const auto characterData = classificationXML.getCharacterData();
-    TEST_ASSERT_EQ(characterData, expectedCharData);
+    TEST_ASSERT_EQ(characterData.length(), expectedLength);
+    if (storeEncoding)
+    {
+        TEST_ASSERT_EQ(characterData, expectedCharData);
+    }
+    else
+    {
+        TEST_ASSERT_EQ(characterData[0], expectedCharData[0]);
+    }
 
-    const auto u8_expectedCharData8 = str::fromUtf8(classificationText_utf_8);
+    std::u8string u8_expectedCharData8;
+    if (storeEncoding)
+    {
+        u8_expectedCharData8 = str::fromUtf8(classificationText_utf_8);
+    }
+    else
+    {
+        u8_expectedCharData8 = sys::Platform == sys::PlatformType::Linux ? std::u8string() : str::fromUtf8(classificationText_utf_8);
+    }
+    expectedLength = u8_expectedCharData8.length();
+
     std::u8string u8_characterData;
     classificationXML.getCharacterData(u8_characterData);
+    std::clog << "'" << u8_characterData.length() << "' '" << expectedLength << "'\n";
+    TEST_ASSERT_EQ(u8_characterData.length(), expectedLength);
     TEST_ASSERT(u8_characterData == u8_expectedCharData8);
-    const std::string u8_characterData_(str::c_str<std::string::const_pointer>(u8_characterData));
-    TEST_ASSERT_EQ(classificationText_utf_8, u8_characterData_);
+}
+TEST_CASE(sicd_French_xml_raw)
+{
+    sicd_French_xml_raw_(true /*storeEncoding*/);
+    sicd_French_xml_raw_(false /*storeEncoding*/);
 }
 
 static void test_assert(const six::sicd::ComplexData& complexData,
