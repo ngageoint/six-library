@@ -1155,7 +1155,6 @@ TReturn six_parseData(const XMLControlRegistry& xmlReg,
                                    logging::Logger& log)
 {
     six::MinidomParser xmlParser;
-    xmlParser.preserveCharacterData(true);
     try
     {
         xmlParser.parse(xmlStream);
@@ -1164,9 +1163,7 @@ TReturn six_parseData(const XMLControlRegistry& xmlReg,
     {
         throw except::Exception(ex, Ctxt("Invalid XML data"));
     }
-    const xml_lite::Document* pDoc = xmlParser.getDocument();
-    assert(pDoc != nullptr);
-    const auto& doc = *pDoc;
+    const auto& doc = getDocument(xmlParser);
 
     //! Check the root localName for the XML type
     std::string xmlType = doc.getRootElement()->getLocalName();

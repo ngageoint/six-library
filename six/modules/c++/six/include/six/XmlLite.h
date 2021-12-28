@@ -75,7 +75,7 @@ struct MinidomParser final
         *  \return Pointer to document.
         */
     xml::lite::Document* getDocument() const;
-    xml::lite::Document* getDocument(bool steal = false);
+    xml::lite::Document* getDocument();
     void getDocument(std::unique_ptr<xml::lite::Document>&); // steal = true
 
     /*!
@@ -85,7 +85,6 @@ struct MinidomParser final
         *
         *  \param newDocument The new document.
         */
-    void setDocument(xml::lite::Document* newDocument, bool own = true);
     void setDocument(std::unique_ptr< xml::lite::Document>&&);  // own = true
 
     /*!
@@ -99,7 +98,7 @@ private:
 };
 inline xml::lite::Document& getDocument(MinidomParser& xmlParser)
 {
-    auto retval = xmlParser.getDocument(false /*steal*/);
+    auto retval = xmlParser.getDocument();
     assert(retval != nullptr);
     return *retval;
 }
