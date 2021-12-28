@@ -42,7 +42,6 @@
 #include <six/XMLControlFactory.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/NITFReadComplexXMLControl.h>
-#include <six/sicd/KDTree.h>
 #include <six/sicd/Utilities.h>
 
 #include "../tests/TestUtilities.h"
@@ -55,6 +54,10 @@
 namespace fs = std::filesystem;
 
 static std::string testName;
+
+constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
+? xml::lite::StringEncoding::Windows1252
+    : xml::lite::StringEncoding::Utf8;
 
 static fs::path argv0()
 {
@@ -187,26 +190,78 @@ TEST_CASE(valid_six_50x50)
     valid_six_50x50_(&schemaPaths); // validate against schema
 }
 
+const std::string classificationText_iso8859_1("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
+const std::string classificationText_utf_8("NON CLASSIFI\xc3\x89 / UNCLASSIFIED");  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+
 TEST_CASE(sicd_French_xml)
 {
     setNitfPluginPath();
 
     const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
+    //const std::vector<std::filesystem::path> schemaPaths;
+    //const auto image = six::sicd::readFromNITF(inputPathname, &schemaPaths, pComplexData);
     const auto image = six::sicd::readFromNITF(inputPathname, pComplexData); // no validation
     const six::Data* pData = pComplexData.get();
 
-    // UTF-8 characters in 50x50.nitf
-    #ifdef _WIN32
-    const std::string classificationText("NON CLASSIFI\xc9 / UNCLASSIFIED"); // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
-    #else
-    const std::string classificationText("NON CLASSIFI\xc3\x89 / UNCLASSIFIED"); // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
-    #endif
+    const auto expectedCassificationText = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
     const auto& classification = pData->getClassification();
     const auto actual = classification.getLevel();
-    TEST_ASSERT_EQ(actual, classificationText);
+    TEST_ASSERT_EQ(actual, expectedCassificationText);
 
     test_nitf_image_info(*pComplexData, inputPathname, nitf::PixelValueType::Floating);
+}
+
+static bool find_string(io::FileInputStream& stream, const std::string& s)
+{
+    const auto pos = stream.tell();
+
+    constexpr sys::Off_T offset = 0x0000558e;
+    std::string streamAsString;
+    {
+        stream.seek(offset, io::Seekable::START);
+        io::StringStream stringStream;
+        stream.streamTo(stringStream);
+        streamAsString = stringStream.stream().str();
+    }
+    const auto result = streamAsString.find(s);
+    if ((result != std::string::npos) && (result == 0))
+    {
+        stream.seek(offset, io::Seekable::START);
+        return true;
+    }
+
+    stream.seek(pos, io::Seekable::START);
+    return false;
+}
+TEST_CASE(sicd_French_xml_raw)
+{
+    // This is a binary file with XML burried in it somewhere
+    const auto path = getNitfPath("sicd_French_xml.nitf");
+
+    io::FileInputStream input(path.string());
+    const auto result = find_string(input, "<SICD ");
+    TEST_ASSERT_TRUE(result);
+
+    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
+    xmlParser.parse(input);
+    const auto& root = getRootElement(getDocument(xmlParser));
+    const auto& classificationXML = root.getElementByTagName("Classification", true /*recurse*/);
+
+    const auto encoding = classificationXML.getEncoding();
+    TEST_ASSERT(encoding == PlatformEncoding);
+
+    // UTF-8 characters in 50x50.nitf
+    const auto expectedCharData = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
+    const auto characterData = classificationXML.getCharacterData();
+    TEST_ASSERT_EQ(characterData, expectedCharData);
+
+    const auto u8_expectedCharData8 = str::fromUtf8(classificationText_utf_8);
+    std::u8string u8_characterData;
+    classificationXML.getCharacterData(u8_characterData);
+    TEST_ASSERT(u8_characterData == u8_expectedCharData8);
+    const std::string u8_characterData_(str::c_str<std::string::const_pointer>(u8_characterData));
+    TEST_ASSERT_EQ(classificationText_utf_8, u8_characterData_);
 }
 
 static void test_assert(const six::sicd::ComplexData& complexData,
@@ -214,8 +269,8 @@ static void test_assert(const six::sicd::ComplexData& complexData,
 {
     TEST_ASSERT_EQ(expectedPixelType, complexData.getPixelType());
 
-    //const auto& classification = complexData.getClassification();
-    //TEST_ASSERT_TRUE(classification.isUnclassified());
+    const auto& classification = complexData.getClassification();
+    TEST_ASSERT_TRUE(classification.isUnclassified());
 
     const auto numBytesPerPixel = complexData.getNumBytesPerPixel();
     TEST_ASSERT_EQ(expectedNumBytesPerPixel, numBytesPerPixel);
@@ -377,6 +432,7 @@ TEST_CASE(test_create_sicd_from_mem_32f)
 
 TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(valid_six_50x50);
+    TEST_CHECK(sicd_French_xml_raw);
     //TEST_CHECK(sicd_French_xml);
     TEST_CHECK(test_readFromNITF_sicd_50x50);
     TEST_CHECK(test_read_sicd_50x50);
