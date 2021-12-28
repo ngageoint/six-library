@@ -64,10 +64,6 @@ namespace six
     {
         return *(pImpl->parser.getDocument());
     }
-    xml::lite::Document& MinidomParser::getDocument()
-    {
-        return *(pImpl->parser.getDocument(false /*steal*/));
-    }
     void MinidomParser::getDocument(std::unique_ptr<xml::lite::Document>& pDoc)
     {
         pImpl->parser.getDocument(pDoc);

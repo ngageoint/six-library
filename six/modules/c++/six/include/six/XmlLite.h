@@ -75,7 +75,6 @@ struct MinidomParser final
         *  \return Pointer to document.
         */
     const xml::lite::Document& getDocument() const;
-    xml::lite::Document& getDocument();
     void getDocument(std::unique_ptr<xml::lite::Document>&); // steal = true
 
     /*!

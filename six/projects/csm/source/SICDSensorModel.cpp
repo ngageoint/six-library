@@ -121,7 +121,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
     try
     {
         // Check for the first SICD DES and parse it
-        six::xml_lite::Document* sicdXML = nullptr;
+        const six::xml_lite::Document* sicdXML = nullptr;
         six::MinidomParser domParser;
 
         const std::vector< csm::Des>& desList(isd.fileDess());
