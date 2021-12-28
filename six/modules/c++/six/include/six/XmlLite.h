@@ -41,6 +41,47 @@
 
 namespace six
 {
+    // A simple wrapper around xml::lite::MinidomParser
+    struct MinidomParser final
+    {
+        MinidomParser();
+        ~MinidomParser();
+        MinidomParser(const MinidomParser&) = delete;
+        MinidomParser& operator=(const MinidomParser&) = delete;
+        MinidomParser(MinidomParser&&) = default;
+        MinidomParser& operator=(MinidomParser&&) = default;
+
+        void parse(io::InputStream& is, int size = io::InputStream::IS_END);
+
+        /*!
+         *  Return a pointer to the document.  Note that its a reference
+         *  so you dont get to keep it.
+         *  \return Pointer to document.
+         */
+        xml::lite::Document* getDocument() const;
+        xml::lite::Document* getDocument(bool steal = false);
+        void getDocument(std::unique_ptr<xml::lite::Document>&); // steal = true
+
+        /*!
+         *  This is the public interface for resetting the
+         *  XML document.  This will call the handler version of this
+         *  function, which will delete the old document.
+         *
+         *  \param newDocument The new document.
+         */
+        void setDocument(xml::lite::Document* newDocument, bool own = true);
+        void setDocument(std::unique_ptr< xml::lite::Document>&&);  // own = true
+
+        /*!
+         * @see MinidomHandler::preserveCharacterData
+         */
+        void preserveCharacterData(bool preserve);
+
+    private:
+        struct Impl;
+        std::unique_ptr<Impl> pImpl;
+    };
+
 struct XmlLite final
 {
     XmlLite(const xml_lite::Uri& defaultURI, bool addClassAttributes,

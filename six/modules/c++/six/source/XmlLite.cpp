@@ -35,6 +35,54 @@
 
 namespace six
 {
+    struct MinidomParser::Impl final
+    {
+        xml::lite::MinidomParser parser;
+        Impl(bool storeEncoding = false) : parser(storeEncoding) {}
+        Impl(const Impl&) = delete;
+        Impl& operator=(const Impl&) = delete;
+        Impl(Impl&&) = delete;
+        Impl& operator=(Impl&&) = delete;
+    };
+
+    MinidomParser::MinidomParser()
+        : pImpl(std::make_unique<Impl>(true /*storeEncoding*/))
+    {
+    }
+    MinidomParser::~MinidomParser() = default;
+
+    void MinidomParser::parse(io::InputStream& is, int size)
+    {
+        pImpl->parser.parse(is, size);
+    }
+
+    xml::lite::Document* MinidomParser::getDocument() const
+    {
+        return pImpl->parser.getDocument();
+    }
+    xml::lite::Document* MinidomParser::getDocument(bool steal)
+    {
+        return pImpl->parser.getDocument(steal);
+    }
+    void MinidomParser::getDocument(std::unique_ptr<xml::lite::Document>& pDoc)
+    {
+        pImpl->parser.getDocument(pDoc);
+    }
+
+    void MinidomParser::setDocument(xml::lite::Document* newDocument, bool own)
+    {
+        pImpl->parser.setDocument(newDocument, own);
+    }
+    void MinidomParser::setDocument(std::unique_ptr<xml::lite::Document>&& newDocument)
+    {
+        pImpl->parser.setDocument(std::move(newDocument));
+    }
+
+    void MinidomParser::preserveCharacterData(bool preserve)
+    {
+        pImpl->parser.preserveCharacterData(preserve);
+    }
+
     XmlLite::XmlLite(const xml_lite::Uri& defaultURI, bool addClassAttributes,
         logging::Logger* log, bool ownLog) :
         mDefaultURI(defaultURI), mAddClassAttributes(addClassAttributes)
