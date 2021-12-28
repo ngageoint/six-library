@@ -80,7 +80,9 @@ struct MinidomParser
      *  \param size  This is the size of the stream to feed the parser
      */
     virtual void parse(io::InputStream& is, int size = io::InputStream::IS_END);
+    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
     virtual void parse(io::InputStream& is, StringEncoding, int size = io::InputStream::IS_END);
+    #endif // SWIG
 
     /*!
      *  This clears the MinidomHandler, killing its underlying Document
@@ -97,7 +99,7 @@ struct MinidomParser
     virtual Document *getDocument() const;
 
     virtual Document *getDocument(bool steal = false);
-    virtual void getDocument(std::unique_ptr<Document>&); // steal = true
+    void getDocument(std::unique_ptr<Document>&); // steal = true
 
     /*!
      *  Reader accessor
@@ -125,7 +127,7 @@ struct MinidomParser
      *  \param newDocument The new document.
      */
     virtual void setDocument(Document * newDocument, bool own = true);
-    virtual void setDocument(std::unique_ptr<Document>&&);  // own = true
+    void setDocument(std::unique_ptr<Document>&&);  // own = true
 
     /*!
      * @see MinidomHandler::preserveCharacterData
@@ -141,6 +143,14 @@ protected:
     MinidomHandler mHandler;
     XMLReader mReader;
 };
+
+inline Document& getDocument(MinidomParser& xmlParser)
+{
+    auto retval = xmlParser.getDocument(false /*steal*/);
+    assert(retval != nullptr);
+    return *retval;
+}
+
 }
 }
 
