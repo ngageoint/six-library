@@ -48,8 +48,7 @@ struct test_MinidomParser final
         ss.stream() << strXml;
 
         xmlParser.parse(ss);
-        const auto doc = xmlParser.getDocument();
-        return doc->getRootElement();    
+        return getDocument(xmlParser).getRootElement();
     }
 };
 
@@ -81,11 +80,11 @@ TEST_CASE(test_getAttributeByNS)
     using namespace xml::lite;
 
     std::string strValue;
-    strValue = attributes.getValue(uri, "int");
+    strValue = attributes.getValue(xml::lite::QName(uri, "int"));
     TEST_ASSERT_EQ("314", strValue);
     strValue = getValue<std::string>(attributes, uri, "int");
     TEST_ASSERT_EQ("314", strValue);
-    const auto key = std::make_tuple(uri, "int");
+    const auto key = xml::lite::QName(uri, "int");
     strValue = getValue<std::string>(attributes, key);
     TEST_ASSERT_EQ("314", strValue);
 

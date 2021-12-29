@@ -32,6 +32,7 @@
 #include <six/NITFReadControl.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/Utilities.h>
+#include <six/XmlLite.h>
 
 namespace six
 {
@@ -158,8 +159,8 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
         // Check for the SIDD DES associated with imageIndex and parse it
         // DES's are always in the same order as the images, so we just have to
         // find the Nth DES
-        xml::lite::Document* siddXML = nullptr;
-        xml::lite::MinidomParser domParser;
+        const xml::lite::Document* siddXML = nullptr;
+        six::MinidomParser domParser;
 
         size_t numSIDD = 0;
         const std::vector< csm::Des>& desList(isd.fileDess());
@@ -183,12 +184,11 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
                     domParser.clear();
                     domParser.parse(stream);
 
-                    if (domParser.getDocument()->getRootElement()->getLocalName()
-                            == "SIDD")
+                    if (getDocument(domParser).getRootElement()->getLocalName() == "SIDD")
                     {
                         if (numSIDD == imageIndex)
                         {
-                            siddXML = domParser.getDocument();
+                            siddXML = &domParser.getDocument();
                             break;
                         }
                         ++numSIDD;
@@ -239,7 +239,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
 
 bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd)
 {
-    xml::lite::MinidomParser domParser;
+    six::MinidomParser domParser;
 
     const std::vector< csm::Des>& desList(isd.fileDess());
     for (const auto& desListItem : desList)
@@ -256,8 +256,7 @@ bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd)
                 domParser.clear();
                 domParser.parse(stream);
 
-                if (domParser.getDocument()->getRootElement()->getLocalName()
-                        == "SIDD")
+                if (getDocument(domParser).getRootElement()->getLocalName() == "SIDD")
                 {
                     return true;
                 }
@@ -411,7 +410,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         io::StringStream stream;
         stream.write(sensorModelXML);
 
-        xml::lite::MinidomParser domParser;
+        six::MinidomParser domParser;
         domParser.parse(stream);
 
         six::XMLControlRegistry xmlRegistry;
@@ -425,7 +424,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         mSensorModelState = sensorModelState;
 
         mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
-                domParser.getDocument(), mSchemaDirs)));
+                &domParser.getDocument(), mSchemaDirs)));
         reinitialize();
     }
     catch (const except::Exception& ex)

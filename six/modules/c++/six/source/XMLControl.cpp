@@ -155,7 +155,7 @@ static void do_validate_(const xml::lite::Document& doc,
 
     // Pretty-print so that lines numbers are useful
     io::StringStream xmlStream;
-    rootElement->prettyPrint(xmlStream, xml::lite::string_encoding::utf_8);
+    rootElement->prettyPrint(xmlStream, xml::lite::StringEncoding::Utf8);
 
     std::vector<xml::lite::ValidationInfo> errors;
     validator.validate(xmlStream, rootElement->getUri(), errors);
@@ -243,7 +243,7 @@ std::string XMLControl::getDefaultURI(const Data& data)
 std::string XMLControl::getVersionFromURI(const xml::lite::Document* doc)
 {
     assert(doc != nullptr);
-    const std::string uri = doc->getRootElement()->getUri();
+    const auto uri = doc->getRootElement()->getUri();
     if (!(str::startsWith(uri, "urn:SICD:") ||
           str::startsWith(uri, "urn:SIDD:")))
     {
@@ -309,13 +309,14 @@ std::unique_ptr<Data> XMLControl::fromXMLImpl(const xml::lite::Document& doc) co
 }
 
 Data* XMLControl::fromXML(const xml::lite::Document* doc,
-                          const std::vector<std::string>& schemaPaths)
+                          const std::vector<std::string>& schemaPaths_)
 {
-    validate(doc, schemaPaths, mLog);
-    Data* const data = fromXMLImpl(doc);
-    assert(data != nullptr);
-    data->setVersion(getVersionFromURI(doc));
-    return data;
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    auto data = fromXML(*doc, &schemaPaths);
+    return data.release();
 }
 std::unique_ptr<Data> XMLControl::fromXML(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>* pSchemaPaths)

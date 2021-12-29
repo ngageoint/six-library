@@ -213,9 +213,9 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
 
     //set the ElemNS
     root->setNamespacePrefix("", getDefaultURI());
-    root->setNamespacePrefix("si", SI_COMMON_URI);
-    root->setNamespacePrefix("sfa", SFA_URI);
-    root->setNamespacePrefix("ism", ISM_URI);
+    root->setNamespacePrefix("si", xml::lite::Uri(SI_COMMON_URI));
+    root->setNamespacePrefix("sfa", xml::lite::Uri(SFA_URI));
+    root->setNamespacePrefix("ism", xml::lite::Uri(ISM_URI));
 
     return doc;
 }

@@ -41,13 +41,13 @@ typedef xml::lite::Element* XMLElem;
 namespace six
 {
     XMLParser::XMLParser(const std::string& defaultURI, bool addClassAttributes,
-        logging::Logger* log, bool ownLog) : mXmlLite(defaultURI, addClassAttributes, log, ownLog)
+        logging::Logger* log, bool ownLog) : mXmlLite(xml::lite::Uri(defaultURI), addClassAttributes, log, ownLog)
     {
     }
     XMLParser::XMLParser(const std::string& defaultURI, bool addClassAttributes, std::unique_ptr<logging::Logger>&& log) :
-        mXmlLite(defaultURI, addClassAttributes, std::move(log)) { }
+        mXmlLite(xml::lite::Uri(defaultURI), addClassAttributes, std::move(log)) { }
     XMLParser::XMLParser(const std::string& defaultURI, bool addClassAttributes, logging::Logger& log) :
-        mXmlLite(defaultURI, addClassAttributes, log) { }
+        mXmlLite(xml::lite::Uri(defaultURI), addClassAttributes, log) { }
 
 XMLElem XMLParser::newElement(const std::string& name, XMLElem parent) const
 {
@@ -61,58 +61,55 @@ xml::lite::Element& XMLParser::newElement(const std::string& name, xml::lite::El
 XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, XMLElem parent)
 {
-    return XmlLite::newElement(name, uri, parent);
+    return XmlLite::newElement(xml::lite::QName(xml::lite::Uri(uri), name), parent);
 }
 xml::lite::Element& XMLParser::newElement(const std::string& name, const std::string& uri, xml::lite::Element& parent)
 {
-    return  XmlLite::newElement(name, uri, parent);
+    return  XmlLite::newElement(xml::lite::QName(xml::lite::Uri(uri), name), parent);
 }
 
 XMLElem XMLParser::newElement(const std::string& name,
         const std::string& uri, const std::string& characterData,
         XMLElem parent)
 {
-    return XmlLite::newElement(name, uri, characterData, parent);
+    return XmlLite::newElement(xml::lite::QName(xml::lite::Uri(uri), name), characterData, parent);
 }
-#if CODA_OSS_lib_char8_t
 XMLElem XMLParser::newElement(const std::string& name,
     const std::string& uri, const std::u8string& characterData,
     XMLElem parent)
 {
-    return XmlLite::newElement(name, uri, characterData, parent);
+    return XmlLite::newElement(xml::lite::QName(xml::lite::Uri(uri), name), characterData, parent);
 }
-#endif
 
 XMLElem XMLParser::createString(const std::string& name,
         const std::string& uri, const std::string& p, XMLElem parent) const
 {
-    return mXmlLite.createString(name, uri, p, parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createString(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
 }
 
-#if CODA_OSS_lib_char8_t
 XMLElem XMLParser::createString(const std::string& name,
     const std::string& uri, const std::u8string& p, XMLElem parent) const
 {
-    return mXmlLite.createString(name, uri, p, parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createString(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
 }
-#endif
 
-XMLElem XMLParser::createDouble(const std::string& name,
-        const std::string& uri, double p, XMLElem parent) const
+XMLElem XMLParser::createDouble(const std::string& name, const std::string& uri, double p, XMLElem parent) const
 {
-    return mXmlLite.createDouble(name, uri, p, parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createDouble(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
 }
-XMLElem XMLParser::createDouble(const std::string& name,
-    const std::string& uri, const std::optional<double>& p, XMLElem parent) const
+XMLElem XMLParser::createDouble(const std::string& name, const std::string& uri, const std::optional<double>& p, XMLElem parent) const
 {
-    return createDouble(name, uri, p.value(), parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createDouble(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
 }
 xml::lite::Element& XMLParser::createDouble(const std::string& name, double p, xml::lite::Element& parent) const
 {
     return mXmlLite.createDouble(name, p, parent);
 }
-XMLElem XMLParser::createDouble(const std::string& name, double p,
-        XMLElem parent) const
+XMLElem XMLParser::createDouble(const std::string& name, double p, XMLElem parent) const
 {
     assert(parent != nullptr);
     return &createDouble(name, p, *parent);
@@ -123,70 +120,65 @@ XMLElem XMLParser::createDouble(const std::string& name, const std::optional<dou
     return createDouble(name, p.value(), parent);
 }
 
-XMLElem XMLParser::createOptionalDouble(const std::string& name,
-    const std::string& uri, const double& p, XMLElem parent) const
+XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::string& uri, double p, XMLElem parent) const
 {
-    return mXmlLite.createOptionalDouble(name, uri, p, parent);
+    assert(parent != nullptr);
+    return mXmlLite.createOptionalDouble(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
 }
-XMLElem XMLParser::createOptionalDouble(const std::string& name,
-    const std::string& uri, const std::optional<double>& p, XMLElem parent) const
+XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::string& uri, const std::optional<double>& p, XMLElem parent) const
 {
-    return mXmlLite.createOptionalDouble(name, uri, p, parent);
+    assert(parent != nullptr);
+    return mXmlLite.createOptionalDouble(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
 }
-XMLElem XMLParser::createOptionalDouble(const std::string& name, const double& p,
-        XMLElem parent) const
+XMLElem XMLParser::createOptionalDouble(const std::string& name, double p, XMLElem parent) const
 {
-    return mXmlLite.createOptionalDouble(name, p, parent);
+    assert(parent != nullptr);
+    return mXmlLite.createOptionalDouble(name, p, *parent);
 }
-XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::optional<double>& p,
-    XMLElem parent) const
+XMLElem XMLParser::createOptionalDouble(const std::string& name, const std::optional<double>& p, XMLElem parent) const
 {
-    return mXmlLite.createOptionalDouble(name, p, parent);
+    assert(parent != nullptr);
+    return mXmlLite.createOptionalDouble(name, p, *parent);
 }
 
 XMLElem XMLParser::createBooleanType(const std::string& name,
         const std::string& uri, BooleanType p, XMLElem parent) const
 {
-    return mXmlLite.createBooleanType(name, uri, p, parent);
+    assert(parent != nullptr);
+    return mXmlLite.createBooleanType(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
 }
 XMLElem XMLParser::createBooleanType(const std::string& name, BooleanType p,
         XMLElem parent) const
 {
-    return mXmlLite.createBooleanType(name, p, parent);
-}
-
-XMLElem XMLParser::createDateTime(const std::string& name,
-        const std::string& uri, const std::string& s, XMLElem parent) const
-{
-    return mXmlLite.createDateTime(name, uri, s, parent);
-}
-XMLElem XMLParser::createDateTime(const std::string& name,
-        const std::string& s, XMLElem parent) const
-{
-    return mXmlLite.createDateTime(name, s, parent);
+    assert(parent != nullptr);
+    return mXmlLite.createBooleanType(name, p, *parent);
 }
 
 XMLElem XMLParser::createDateTime(const std::string& name,
         const std::string& uri, const DateTime& p, XMLElem parent) const
 {
-    return mXmlLite.createDateTime(name, uri, p, parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createDateTime(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
 }
 
 XMLElem XMLParser::createDateTime(const std::string& name, const DateTime& p,
         XMLElem parent) const
 {
-    return mXmlLite.createDateTime(name, p, parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createDateTime(name, p, *parent);
 }
 
 XMLElem XMLParser::createDate(const std::string& name,
         const std::string& uri, const DateTime& p, XMLElem parent) const
 {
-    return mXmlLite.createDate(name, uri, p, parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createDate(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
 }
 XMLElem XMLParser::createDate(const std::string& name, const DateTime& p,
         XMLElem parent) const
 {
-    return mXmlLite.createDate(name, p, parent);
+    assert(parent != nullptr);
+    return &mXmlLite.createDate(name, p, *parent);
 }
 
 xml::lite::Element& XMLParser::getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag)

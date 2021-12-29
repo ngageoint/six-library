@@ -31,6 +31,7 @@
 #include <xml/lite/MinidomParser.h>
 
 #include <six/XMLControl.h>
+#include <six/XmlLite.h>
 #include <cphd/CPHDXMLParser.h>
 #include <cphd/Enums.h>
 #include <cphd/Metadata.h>
@@ -74,11 +75,11 @@ mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
     return doc;
 }
 
-std::unordered_map<std::string, std::string> CPHDXMLControl::getVersionUriMap()
+std::unordered_map<std::string, xml::lite::Uri> CPHDXMLControl::getVersionUriMap()
 {
     return {
-        {"1.0.0", "urn:CPHD:1.0.0"},
-        {"1.0.1", "http://api.nsgreg.nga.mil/schema/cphd/1.0.1"}
+        {"1.0.0", xml::lite::Uri("urn:CPHD:1.0.0")},
+        {"1.0.1", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")}
     };
 }
 
@@ -102,9 +103,9 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
 {
     io::StringStream stringStream;
     stringStream.write(xmlString);
-    xml::lite::MinidomParser parser;
+    six::MinidomParser parser;
     parser.parse(stringStream);
-    return fromXML(parser.getDocument(), schemaPaths);
+    return fromXML(&parser.getDocument(), schemaPaths);
 }
 
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc,
@@ -133,19 +134,19 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document*
 }
 
 std::unique_ptr<CPHDXMLParser>
-CPHDXMLControl::getParser(const std::string& uri) const
+CPHDXMLControl::getParser(const xml::lite::Uri& uri) const
 {
-    return std::make_unique<CPHDXMLParser>(uri, false, mLog);
+    return std::make_unique<CPHDXMLParser>(uri.value, false, mLog);
 }
 
-std::string CPHDXMLControl::uriToVersion(const std::string& uri) const
+std::string CPHDXMLControl::uriToVersion(const xml::lite::Uri& uri) const
 {
     const auto versionUriMap = getVersionUriMap();
-    for (auto it = versionUriMap.begin(); it != versionUriMap.end(); ++it)
+    for (const auto& p : versionUriMap)
     {
-        if (it->second == uri)
+        if (p.second == uri)
         {
-            return it->first;
+            return p.first;
         }
     }
     std::ostringstream ostr;
