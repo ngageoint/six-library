@@ -31,7 +31,6 @@
 #include <six/CollectionInformation.h>
 #include <six/SICommonXMLParser.h>
 #include <six/ParameterCollection.h>
-#include <six/Xml.h>
 
 namespace
 {

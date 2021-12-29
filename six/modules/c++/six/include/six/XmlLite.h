@@ -39,7 +39,6 @@
 #include <six/Init.h>
 #include <six/Utilities.h>
 #include <six/Logger.h>
-#include <six/Xml.h>
 
 namespace six
 {

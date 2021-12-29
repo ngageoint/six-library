@@ -34,7 +34,6 @@
 
 #include "six/Types.h"
 #include "six/Logger.h"
-#include "six/Xml.h"
 
 namespace six
 {
