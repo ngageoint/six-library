@@ -21,10 +21,12 @@
  */
 
 #include <xml/lite/xml_lite_config.h>
-
 #ifdef USE_XERCES
-
 #include <xml/lite/ValidatorXerces.h>
+
+#include <algorithm>
+#include <iterator>
+
 #include <sys/OS.h>
 #include <io/StringStream.h>
 #include <mem/ScopedArray.h>
@@ -72,7 +74,20 @@ bool ValidationErrorHandler::handleError(
     return true;
 }
 
-
+inline std::vector<std::string> convert(const std::vector<sys::Filesystem::path>& schemaPaths)
+{
+    std::vector<std::string> retval;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
+                   [](const sys::Filesystem::path& p) { return p.string(); });
+    return retval;
+}
+ValidatorXerces::ValidatorXerces(
+        const std::vector<sys::Filesystem::path>& schemaPaths,
+        logging::Logger* log,
+        bool recursive) :
+    ValidatorXerces(convert(schemaPaths), log, recursive)
+{
+}
 ValidatorXerces::ValidatorXerces(
     const std::vector<std::string>& schemaPaths, 
     logging::Logger* log,
