@@ -92,32 +92,32 @@ struct XMLParser
     static void setAttribute(xml::lite::Element& e, const std::string& name,
         size_t i, const std::string& uri = "")
     {
-        return XmlLite::setAttribute(e, name, i, uri);
+        return XmlLite::setAttribute(e, xml::lite::QName(xml::lite::Uri(uri), name), i);
     }
 
     // generic element creation methods, w/URI
     XMLElem createString(const std::string& name,
         const std::string& uri, const std::string& p = "",
         XMLElem parent = nullptr) const;
-#if CODA_OSS_lib_char8_t
     XMLElem createString(const std::string& name,
         const std::string& uri, const std::u8string& p,
-        XMLElem parent = nullptr) const;
-#endif
-    XMLElem createString(const std::string& name, const char* p = "",
-        XMLElem parent = nullptr) const {
-        return mXmlLite.createString(name, p, parent);
+        XMLElem parent) const;
+    XMLElem createString(const std::string& name, const char* p,
+        XMLElem parent) const {
+        assert(parent != nullptr);
+        return &mXmlLite.createString(name, p, *parent);
     }
     template<typename T>
     XMLElem createSixString(const std::string& name,
         const std::string& uri, const T& t,
-        XMLElem parent = nullptr) const
+        XMLElem parent) const
     {
-        return mXmlLite.createSixString(name, uri, t, parent);
+        assert(parent != nullptr);
+        return &mXmlLite.createSixString(xml::lite::QName(xml::lite::Uri(uri), name), t, *parent);
     }
 
     XMLElem createDateTime(const std::string& name, const DateTime& p,
-        XMLElem parent = nullptr) const;
+        XMLElem parent) const;
 
 protected:
     logging::Logger* log() const
@@ -128,7 +128,7 @@ protected:
     //! Returns the default URI
     std::string getDefaultURI() const
     {
-        return mXmlLite.getDefaultURI();
+        return mXmlLite.getDefaultURI().value;
     }
 
     XMLElem newElement(const std::string& name, XMLElem prnt = nullptr) const;
@@ -141,16 +141,14 @@ protected:
     static
     XMLElem newElement(const std::string& name, const std::string& uri,
             const std::string& characterData, XMLElem parent = nullptr);
-    #if CODA_OSS_lib_char8_t
     static XMLElem newElement(const std::string& name, const std::string& uri,
-            const std::u8string& characterData, XMLElem parent = nullptr);
-    #endif
+            const std::u8string& characterData, XMLElem parent);
 
     template<typename T>
     static XMLElem newElement(const T* pElement, const std::string& name, const std::string& uri,
         XMLElem parent = nullptr)
     {
-        return XmlLite::newElement(pElement, name, uri, parent);
+        return XmlLite::newElement(pElement, xml::lite::QName(xml::lite::Uri(uri), name), parent);
     }
 
     template <typename T>
@@ -161,50 +159,46 @@ protected:
         return & createStringFromEnum(name, enumVal, *parent);
     }
 
-    XMLElem createInt(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent = nullptr) const
+    XMLElem createInt(const std::string& name, const std::string& uri, const std::string& p, XMLElem parent) const
     {
-        return mXmlLite.createInt(name, uri, p, parent);
+        assert(parent != nullptr);
+        return &mXmlLite.createInt(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
     }
-    XMLElem createInt(const std::string& name, const std::string& uri, int p = 0, XMLElem parent = nullptr) const
+    XMLElem createInt(const std::string& name, const std::string& uri, int p, XMLElem parent) const
     {
-        return mXmlLite.createInt(name, uri, p, parent);
+        assert(parent != nullptr);
+        return &mXmlLite.createInt(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
     }
-    XMLElem createInt(const std::string& name, const std::string& uri, size_t p = 0, XMLElem parent = nullptr) const
+    XMLElem createInt(const std::string& name, const std::string& uri, size_t p, XMLElem parent) const
     {
+        assert(parent != nullptr);
         return createInt(name, uri, gsl::narrow<int>(p), parent);
     }
-    XMLElem createInt(const std::string& name, const std::string& uri, ptrdiff_t p = 0, XMLElem parent = nullptr) const
+    XMLElem createInt(const std::string& name, const std::string& uri, ptrdiff_t p, XMLElem parent) const
     {
+        assert(parent != nullptr);
         return createInt(name, uri, gsl::narrow<int>(p), parent);
     }
 
-    XMLElem createDouble(const std::string& name,
-        const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
-    XMLElem createOptionalDouble(const std::string& name,
-        const std::string& uri, const double& p, XMLElem parent = nullptr) const;
-    XMLElem createOptionalDouble(const std::string& name,
-        const std::string& uri, const std::optional<double>& p, XMLElem parent = nullptr) const;
-
-    XMLElem createBooleanType(const std::string& name,
-           const std::string& uri, BooleanType b, XMLElem parent = nullptr) const;
-
-    XMLElem createDateTime(const std::string& name,
-            const std::string& uri, const DateTime& p, XMLElem parent = nullptr) const;
-
-    XMLElem createDate(const std::string& name,
-            const std::string& uri, const DateTime& p, XMLElem parent = nullptr) const;
+    XMLElem createDouble(const std::string& name, const std::string& uri, const std::optional<double>& p, XMLElem parent) const;
+    XMLElem createOptionalDouble(const std::string& name, const std::string& uri, double p, XMLElem parent) const;
+    XMLElem createOptionalDouble(const std::string& name, const std::string& uri, const std::optional<double>& p, XMLElem parent) const;
+    XMLElem createBooleanType(const std::string& name, const std::string& uri, BooleanType b, XMLElem parent) const;
+    XMLElem createDateTime(const std::string& name, const std::string& uri, const DateTime& p, XMLElem parent) const;
+    XMLElem createDate(const std::string& name, const std::string& uri, const DateTime& p, XMLElem parent) const;
 
     // generic element creation methods, using default URI
     template<typename T>
     XMLElem createString(const std::string& name, const T& t,
-        XMLElem parent = nullptr) const {
+        XMLElem parent) const {
         assert(parent != nullptr);
         return & createString(name, t, *parent);
     }
     template<typename T>
     XMLElem createSixString(const std::string& name, const T& t, // six::toString(t) isntead of t.toString()
-        XMLElem parent = nullptr) const {
-        return mXmlLite.createSixString(name, t, parent);
+        XMLElem parent) const {
+        assert(parent != nullptr);
+        return &mXmlLite.createSixString(name, t, *parent);
     }
     template<typename T>
     XMLElem createInt(const std::string& name, T p = 0,
@@ -212,19 +206,13 @@ protected:
     {
         return & createInt(name, p, *parent);
     }
-    XMLElem createDouble(const std::string& name, double p = 0,
-            XMLElem parent = nullptr) const;
-    XMLElem createDouble(const std::string& name, const std::optional<double>& p,
-        XMLElem parent = nullptr) const;
-    XMLElem createOptionalDouble(const std::string& name, const double& p,
-            XMLElem parent = nullptr) const;
-    XMLElem createOptionalDouble(const std::string& name, const std::optional<double>& p,
-        XMLElem parent = nullptr) const;
-    XMLElem createBooleanType(const std::string& name, BooleanType b,
-            XMLElem parent = nullptr) const;
 
-    XMLElem createDate(const std::string& name, const DateTime& p,
-            XMLElem parent = nullptr) const;
+    XMLElem createDouble(const std::string& name, double p = 0, XMLElem parent = nullptr) const;
+    XMLElem createDouble(const std::string& name, const std::optional<double>& p, XMLElem parent) const;
+    XMLElem createOptionalDouble(const std::string& name, double p, XMLElem parent) const;
+    XMLElem createOptionalDouble(const std::string& name, const std::optional<double>& p, XMLElem parent) const;
+    XMLElem createBooleanType(const std::string& name, BooleanType b, XMLElem parent) const;
+    XMLElem createDate(const std::string& name, const DateTime& p, XMLElem parent) const;
 
     template <typename T>
     void parseInt(const xml::lite::Element& element, T& value) const
@@ -292,7 +280,7 @@ protected:
         const std::string& s, const std::string& uri = "")
     {
         assert(e != nullptr);
-        return XmlLite::setAttribute(*e, name, s, uri);
+        return XmlLite::setAttribute(*e, xml::lite::QName(xml::lite::Uri(uri), name), s);
     }
     static void setAttribute(XMLElem e, const std::string& name,
         size_t i, const std::string& uri = "")

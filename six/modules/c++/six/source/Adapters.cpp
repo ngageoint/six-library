@@ -310,7 +310,6 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const uint8_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
-    const auto pixelType = data.getPixelType();
     switch (data.getPixelType())
     {
     case six::PixelType::MONO8I:
