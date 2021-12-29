@@ -30,6 +30,7 @@
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
 #include "six/Data.h"
+#include <six/XmlLite.h>
 
 #define string_to_Enum(strValue, enum, type) if (strValue == #type) return enum::type
 #define Enum_to_string(value, enum, type) if (value == enum::type) return #type
@@ -1151,10 +1152,9 @@ TReturn six_parseData(const XMLControlRegistry& xmlReg,
                                    ::io::InputStream& xmlStream,
                                    DataType dataType,
                                    const TSchemaPaths& schemaPaths,
-                                   logging::Logger& log)
+                                   logging::Logger& log, bool storeEncoding)
 {
-    xml::lite::MinidomParser xmlParser;
-    xmlParser.preserveCharacterData(true);
+    six::MinidomParser xmlParser(storeEncoding);
     try
     {
         xmlParser.parse(xmlStream);
@@ -1163,9 +1163,7 @@ TReturn six_parseData(const XMLControlRegistry& xmlReg,
     {
         throw except::Exception(ex, Ctxt("Invalid XML data"));
     }
-    const xml::lite::Document* pDoc = xmlParser.getDocument();
-    assert(pDoc != nullptr);
-    const auto& doc = *pDoc;
+    const auto& doc = getDocument(xmlParser);
 
     //! Check the root localName for the XML type
     std::string xmlType = doc.getRootElement()->getLocalName();
@@ -1191,17 +1189,17 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
-    logging::Logger& log)
+    logging::Logger& log, bool storeEncoding)
 {
-    return six_parseData<mem::auto_ptr<Data>>(xmlReg, xmlStream, dataType, schemaPaths, log);
+    return six_parseData<mem::auto_ptr<Data>>(xmlReg, xmlStream, dataType, schemaPaths, log, storeEncoding);
 }
 std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
     DataType dataType,
     const std::vector<std::filesystem::path>* pSchemaPaths,
-    logging::Logger& log)
+    logging::Logger& log, bool storeEncoding)
 {
-    return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlStream, dataType, pSchemaPaths, log);
+    return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlStream, dataType, pSchemaPaths, log, storeEncoding);
 }
 
 mem::auto_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,

@@ -27,6 +27,7 @@
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <six/Utilities.h>
+#include <six/XmlLite.h>
 
 // CPHD Spec is not enforced
 #define ENFORCESPEC 0
@@ -489,16 +490,16 @@ mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
 {
     io::StringStream stringStream;
     stringStream.write(xmlString);
-    xml::lite::MinidomParser parser;
+    six::MinidomParser parser;
     parser.parse(stringStream);
-    return fromXML(parser.getDocument());
+    return fromXML(&parser.getDocument());
 }
 
 mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 {
     auto cphd03 = std::make_unique<Metadata>();
 
-    XMLElem root = doc->getRootElement();
+    const auto root = doc->getRootElement();
 
     XMLElem collectionInfoXML   = getFirstAndOnly(root, "CollectionInfo");
     XMLElem dataXML             = getFirstAndOnly(root, "Data");
@@ -547,7 +548,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* dataXML, Data& data)
         throw except::Exception(Ctxt("Expected at least one ArraySize"));
     }
 
-    for (std::vector<xml::lite::Element*>::iterator it = arraySizeXML.begin();
+    for (auto it = arraySizeXML.begin();
          it != arraySizeXML.end();
          ++it)
     {

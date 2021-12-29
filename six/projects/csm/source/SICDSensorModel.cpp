@@ -30,6 +30,7 @@
 #include <six/NITFReadControl.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
+#include <six/XmlLite.h>
 
 namespace six
 {
@@ -120,8 +121,8 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
     try
     {
         // Check for the first SICD DES and parse it
-        xml::lite::Document* sicdXML = nullptr;
-        xml::lite::MinidomParser domParser;
+        const xml::lite::Document* sicdXML = nullptr;
+        six::MinidomParser domParser;
 
         const std::vector< csm::Des>& desList(isd.fileDess());
         for (const auto& desListItem : desList)
@@ -144,11 +145,10 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
                     domParser.clear();
                     domParser.parse(stream);
 
-                    const std::string localName = domParser.getDocument()->
-                            getRootElement()->getLocalName();
+                    const auto localName = getDocument(domParser).getRootElement()->getLocalName();
                     if (localName == "SICD")
                     {
-                        sicdXML = domParser.getDocument();
+                        sicdXML = &domParser.getDocument();
                         break;
                     }
                     else if (localName == "SIDD")
@@ -206,7 +206,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
 
 bool SICDSensorModel::containsComplexDES(const csm::Nitf21Isd& isd)
 {
-    xml::lite::MinidomParser domParser;
+   six::MinidomParser domParser;
 
     const std::vector< csm::Des>& desList(isd.fileDess());
     for (const auto& desListItem : desList)
@@ -223,8 +223,7 @@ bool SICDSensorModel::containsComplexDES(const csm::Nitf21Isd& isd)
                 domParser.clear();
                 domParser.parse(stream);
 
-                const std::string localName = domParser.getDocument()->
-                        getRootElement()->getLocalName();
+                const auto localName = getDocument(domParser).getRootElement()->getLocalName();
                 if (localName == "SICD")
                 {
                     return true;
@@ -419,7 +418,7 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         io::StringStream stream;
         stream.write(sensorModelXML);
 
-        xml::lite::MinidomParser domParser;
+        six::MinidomParser domParser;
         domParser.parse(stream);
 
         six::XMLControlRegistry xmlRegistry;
@@ -433,7 +432,7 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         mSensorModelState = sensorModelState;
 
         mData.reset(reinterpret_cast<six::sicd::ComplexData*>(control->fromXML(
-                domParser.getDocument(), mSchemaDirs)));
+                &domParser.getDocument(), mSchemaDirs)));
         reinitialize();
     }
     catch (const except::Exception& ex)
