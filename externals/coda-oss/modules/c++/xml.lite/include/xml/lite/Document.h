@@ -36,7 +36,10 @@
  * itself.
  */
 
+#include <assert.h>
+
 #include "xml/lite/Element.h"
+#include "xml/lite/QName.h"
 
 namespace xml
 {
@@ -87,12 +90,18 @@ public:
     virtual Element *createElement(const std::string & qname,
                                    const std::string & uri,
                                    std::string characterData = "");
-    virtual Element *createElement(const std::string & qname,
+    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
+    virtual Element* createElement(const std::string& qname,
                                    const std::string & uri,
-                                   const std::string& characterData, string_encoding);
+                                   const std::string& characterData, StringEncoding);
     virtual Element* createElement(const std::string& qname,
                                    const std::string& uri,
                                    const sys::U8string& characterData);
+    std::unique_ptr<Element> createElement(const xml::lite::QName& qname, const std::string& characterData) const;
+    std::unique_ptr<Element> createElement(const xml::lite::QName& qname,
+                                   const std::string& characterData, StringEncoding) const;
+    #endif // SWIG
+
 
     /*!
      * Blanket destructor.  This thing deletes everything
@@ -157,6 +166,30 @@ protected:
     Element *mRootNode;
     bool mOwnRoot;
 };
+
+inline Element& getRootElement(Document& doc)
+{
+    auto retval = doc.getRootElement();
+    assert(retval != nullptr);
+    return *retval;
+}
+inline const Element& getRootElement(const Document& doc)
+{
+    auto retval = doc.getRootElement();
+    assert(retval != nullptr);
+    return *retval;
+}
+inline Element& getRootElement(Document* pDoc)
+{
+    assert(pDoc != nullptr);
+    return getRootElement(*pDoc);
+}
+inline const Element& getRootElement(const Document* pDoc)
+{
+    assert(pDoc != nullptr);
+    return getRootElement(*pDoc);
+}
+
 }
 }
 

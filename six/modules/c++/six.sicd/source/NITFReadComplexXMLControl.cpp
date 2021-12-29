@@ -39,21 +39,27 @@ six::sicd::NITFReadComplexXMLControl::NITFReadComplexXMLControl()
 }
 
 void six::sicd::NITFReadComplexXMLControl::load(const std::string& fromFile,
-    const std::vector<std::string>& schemaPaths)
+    const std::vector<std::string>* pSchemaPaths)
 {
-    reader.load(fromFile, schemaPaths);
+    reader.load(fromFile, pSchemaPaths);
 }
 void six::sicd::NITFReadComplexXMLControl::load(const std::filesystem::path& fromFile,
-    const std::vector<std::filesystem::path>& schemaPaths)
+    const std::vector<std::filesystem::path>* pSchemaPaths)
 {
+    const std::vector<std::string>* pSchemaPaths_ = nullptr;
     std::vector<std::string> schemaPaths_;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
-    load(fromFile.string(), schemaPaths_);
+    if (pSchemaPaths != nullptr)
+    {
+        std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
+        pSchemaPaths_ = &schemaPaths_;
+    }
+    load(fromFile.string(), pSchemaPaths_);
 }
-void six::sicd::NITFReadComplexXMLControl::load(io::FileInputStream& stream, const std::vector<std::string>& schemaPaths)
+void six::sicd::NITFReadComplexXMLControl::load(io::FileInputStream& fis, const std::vector<std::string>* pSchemaPaths)
 {
-    reader.load(stream, schemaPaths);
+    reader.load(fis, pSchemaPaths);
 }
+
 
 std::shared_ptr<const six::Container> six::sicd::NITFReadComplexXMLControl::getContainer() const
 {

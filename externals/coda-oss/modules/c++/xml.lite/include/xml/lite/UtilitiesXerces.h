@@ -53,18 +53,18 @@
 #include <xercesc/util/XercesDefs.hpp>
 #include <xercesc/sax/ErrorHandler.hpp>
 
+#include <sys/Mutex.h>
+#include <mt/CriticalSection.h>
+#include <except/Error.h>
 #include <io/StringStream.h>
 #include <io/OutputStream.h>
 #include <io/InputStream.h>
-#include <sys/Mutex.h>
-#include <mt/CriticalSection.h>
+
 #include "xml/lite/XMLException.h"
 #include "xml/lite/ContentHandler.h"
 #include "xml/lite/Attributes.h"
 #include "xml/lite/NamespaceStack.h"
 #include "xml/lite/XMLReaderInterface.h"
-#include <except/Error.h>
-
 
 #if defined(XERCES_VERSION_MAJOR)
 #   if XERCES_VERSION_MAJOR == 2

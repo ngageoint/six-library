@@ -20,13 +20,12 @@
  *
  */
 
-#ifndef __XML_LITE_ATTRIBUTES_H__
-#define __XML_LITE_ATTRIBUTES_H__
+#ifndef CODA_OSS_xml_lite_Attributes_h_INCLUDED_
+#define CODA_OSS_xml_lite_Attributes_h_INCLUDED_
 #pragma once
 
 #include <string>
 #include <vector>
-#include <tuple>
 
 #include "sys/Conf.h"
 #include "except/Exception.h"
@@ -55,14 +54,9 @@ namespace lite
  *  internal organs.  We have a URI, a QName, and a local part
  *  as well.  We also need a value, of course.
  */
-class AttributeNode
+struct AttributeNode final
 {
-public:
-
-    //! Constructor
-    AttributeNode()
-    {
-    }
+    AttributeNode() = default;
 
     /*!
      *  Copy constructor
@@ -78,10 +72,7 @@ public:
      */
     AttributeNode& operator=(const AttributeNode& attributeNode);
 
-    //! Destructor
-    ~AttributeNode()
-    {
-    }
+    ~AttributeNode() = default;
 
     /*!
      *  This function takes a fully qualified name.
@@ -90,6 +81,7 @@ public:
      *  \param qname The fully qualified name
      */
     void setQName(const std::string& qname);
+    void setQName(const xml::lite::QName& qname);
 
     /*!
      *  Set the local (unqualified portion) of the name
@@ -108,7 +100,11 @@ public:
      *  Set the URI association in the QName
      *  \param uri The new uri
      */
-    void setUri(const std::string& uri);
+    void setUri(const Uri&);
+    void setUri(const std::string& uri)
+    {
+        setUri(Uri(uri));
+    }
 
     /*!
      *  Set the attribute value
@@ -122,6 +118,7 @@ public:
      *  \return The uri
      */
     std::string getUri() const;
+    void getUri(Uri&) const;
     std::string getLocalName() const;
     std::string getPrefix() const;
     std::string getValue() const;
@@ -130,6 +127,7 @@ public:
         return mValue;
     }
     std::string getQName() const;
+    void getQName(xml::lite::QName&) const;
 
 protected:
 
@@ -151,15 +149,11 @@ protected:
  *  this data structure everywhere.  That also allows us to
  *  simplify future dom classes
  */
-class Attributes
+struct Attributes final
 {
-public:
-
     typedef std::vector<AttributeNode> Attributes_T;
     //! Default constructor
-    Attributes()
-    {
-    }
+    Attributes() = default;
 
     //! Copy constructor
     Attributes(const Attributes & attributes);
@@ -168,9 +162,7 @@ public:
     Attributes & operator=(const Attributes & attributes);
 
     //! Destructor
-    ~Attributes()
-    {
-    }
+    ~Attributes() = default;
 
     /*!
      *  Adds an attribute to the list of attributes.
@@ -198,19 +190,23 @@ public:
      * \param localName  The local name of the attribute
      * \return the index or -1 if none found
      */
-    int getIndex(const std::string & uri, const std::string & localName) const;
-    int getIndex(const std::tuple<std::string, std::string>& name) const
+    int getIndex(const xml::lite::QName& name) const;
+    int getIndex(const std::string& uri, const std::string& localName) const
     {
-        return getIndex(std::get<0>(name), std::get<1>(name));
+        return getIndex(QName(uri, localName));
     }
 
     /*!
      * Return the number of attributes in the list.
      * \return The number of attributes contained herein
      */
+    size_t size() const
+    {
+        return mAttributes.size();
+    }
     int getLength() const
     {
-        return (int) mAttributes.size();
+        return static_cast<int>(size());
     }
 
     /*!
@@ -222,6 +218,7 @@ public:
     std::string getLocalName(int i) const;
 
     std::string getQName(int i) const;
+    void getQName(int i, xml::lite::QName&) const;
 
     /*!
      * Look up an attribute's Namespace URI by index.
@@ -230,6 +227,7 @@ public:
      * \throw IndexOutOfRangeException if the index is out of range
      */
     std::string getUri(int i) const;
+    void getUri(int i, xml::lite::Uri&) const;
 
     /*!
      * Look up an attribute's value by index.
@@ -268,10 +266,10 @@ public:
      * \return The value
      * \throw NoSuchKeyException If the uri/localName is not found
      */
-    std::string getValue(const std::string & uri, const std::string & localName) const;
-    std::string getValue(const std::tuple<std::string, std::string>& name) const
+    std::string getValue(const xml::lite::QName&) const;
+    std::string getValue(const std::string & uri, const std::string & localName) const
     {
-        return getValue(std::get<0>(name), std::get<1>(name));
+        return getValue(QName(uri, localName));
     }
 
     /*!
@@ -281,10 +279,10 @@ public:
      * \param result The value, if found
      * \return If the uri/localName is not found or not
      */
-    bool getValue(const std::string& uri, const std::string& localName, std::string& result) const;
-    bool getValue(const std::tuple<std::string, std::string>& name, std::string& result) const
+    bool getValue(const xml::lite::QName&, std::string& result) const;
+    bool getValue(const std::string& uri, const std::string& localName, std::string& result) const
     {
-        return getValue(std::get<0>(name), std::get<1>(name), result);
+        return getValue(QName(uri, localName), result);
     }
 
     /*!
@@ -347,15 +345,8 @@ public:
 
     bool contains(const std::string& qname) const
     {
-        try
-        {
-            getValue(qname);
-            return true;
-        }
-        catch(const except::NoSuchKeyException&)
-        {
-            return false;
-        }
+        std::string unused;
+        return getValue(qname, unused);
     }
 
     /**
@@ -469,26 +460,26 @@ inline bool getValue(const Attributes& attributes, const TKey& k, T& result)
  * \return If the uri/localName is not found or not
  */
 template <typename ToType>
-inline auto castValue(const Attributes& attributes, const std::string & uri, const std::string & localName, ToType toType)
+inline auto castValue(const Attributes& attributes, const Uri & uri, const std::string & localName, ToType toType)
 -> decltype(toType(std::string()))
 {
-    return castValue(attributes, std::make_tuple(uri, localName), toType);
+    return castValue(attributes, QName(uri, localName), toType);
 }
 template <typename T>
-inline T getValue(const Attributes& attributes, const std::string & uri, const std::string & localName)
+inline T getValue(const Attributes& attributes, const Uri & uri, const std::string & localName)
 {
-    return getValue<T>(attributes, std::make_tuple(uri, localName));
+    return getValue<T>(attributes, QName(uri, localName));
 }
 
 template <typename T, typename ToType>
-inline bool castValue(const Attributes& attributes, const std::string & uri, const std::string & localName, T& result, ToType toType)
+inline bool castValue(const Attributes& attributes, const Uri & uri, const std::string & localName, T& result, ToType toType)
 {
-    return getValue(attributes, std::make_tuple(uri, localName), result, toType);
+    return getValue(attributes, QName(uri, localName), result, toType);
 }
 template <typename T>
-inline bool getValue(const Attributes& attributes, const std::string & uri, const std::string & localName, T& result)
+inline bool getValue(const Attributes& attributes, const Uri & uri, const std::string & localName, T& result)
 {
-    return getValue(attributes, std::make_tuple(uri, localName), result);
+    return getValue(attributes, QName(uri, localName), result);
 }
 
 /*!
@@ -563,24 +554,23 @@ inline bool setValue(Attributes& attributes, const std::string& qname, const T& 
  * \return If the uri/localName is not found or not
  */
 template <typename T, typename ToString>
-inline bool setValue(Attributes& attributes, const std::tuple<std::string, std::string>& name, const T& value,
-        ToString toString)
+inline bool setValue(Attributes& attributes, const xml::lite::QName& name, const T& value, ToString toString)
 {
     return setValue_(attributes, name, value, toString);
 }
 template <typename T>
-inline bool setValue(Attributes& attributes, const std::tuple<std::string, std::string>& name, const T& value)
+inline bool setValue(Attributes& attributes, const xml::lite::QName& name, const T& value)
 {
     return setValue_(attributes, name, value, details::toString<T>);
 }
 template <typename T, typename ToString>
-inline bool setValue(Attributes& attributes, const std::string & uri, const std::string & localName, const T& value,
+inline bool setValue(Attributes& attributes, const Uri & uri, const std::string & localName, const T& value,
      ToString toString)
 {
-    return setValue(attributes, std::make_tuple(uri, localName), value, toString);
+    return setValue(attributes, QName(uri, localName), value, toString);
 }
 template <typename T>
-inline bool setValue(Attributes& attributes, const std::string & uri, const std::string & localName, const T& value)
+inline bool setValue(Attributes& attributes, const Uri & uri, const std::string & localName, const T& value)
 {
     return setValue(attributes, uri, localName, value, details::toString<T>);
 }
@@ -589,4 +579,5 @@ inline bool setValue(Attributes& attributes, const std::string & uri, const std:
 }
 }
 
-#endif
+#endif // CODA_OSS_xml_lite_Attributes_h_INCLUDED_
+

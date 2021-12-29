@@ -104,20 +104,21 @@ const char NITFHeaderCreator::OPT_NUM_ROWS_PER_BLOCK[] = "NumRowsPerBlock";
 const char NITFHeaderCreator::OPT_NUM_COLS_PER_BLOCK[] = "NumColsPerBlock";
 const size_t NITFHeaderCreator::DEFAULT_BUFFER_SIZE = 8 * 1024 * 1024;
 
-NITFHeaderCreator::NITFHeaderCreator()
+NITFHeaderCreator::NITFHeaderCreator(FILE* log /*= stderr=*/)
 {
     // Make sure that if we use XML_DATA_CONTENT that we've loaded it into the
     // singleton PluginRegistry
-    loadXmlDataContentHandler();
+    loadXmlDataContentHandler(log);
 }
 
-NITFHeaderCreator::NITFHeaderCreator(std::shared_ptr<Container> container) : NITFHeaderCreator()
+NITFHeaderCreator::NITFHeaderCreator(std::shared_ptr<Container> container,
+    FILE* log /*= stderr=*/) : NITFHeaderCreator(log)
 {
     initialize(container);
 }
 
-NITFHeaderCreator::NITFHeaderCreator(const six::Options& options,
-                                     std::shared_ptr<Container> container) : NITFHeaderCreator()
+NITFHeaderCreator::NITFHeaderCreator(const six::Options& options, std::shared_ptr<Container> container,
+    FILE* log /*= stderr=*/) : NITFHeaderCreator(log)
 {
     initialize(options, container);
 }

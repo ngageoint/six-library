@@ -41,31 +41,37 @@
 
 namespace six
 {
-NITFWriteControl::NITFWriteControl()
+NITFWriteControl::NITFWriteControl(FILE* log/* = stderr*/)
 {
-    mNITFHeaderCreator.reset(new six::NITFHeaderCreator());
+    mNITFHeaderCreator.reset(new six::NITFHeaderCreator(log));
 }
 
-NITFWriteControl::NITFWriteControl(std::shared_ptr<Container> container)
+NITFWriteControl::NITFWriteControl(std::shared_ptr<Container> container, FILE* log/* = stderr*/)
 {
-    mNITFHeaderCreator.reset(new six::NITFHeaderCreator(container));
+    mNITFHeaderCreator.reset(new six::NITFHeaderCreator(container, log));
 }
 NITFWriteControl::NITFWriteControl(std::unique_ptr<Data>&& pData)
     : NITFWriteControl(std::make_shared<six::Container>(std::move(pData)))
 {
 }
-
-
-NITFWriteControl::NITFWriteControl(const six::Options& options,
-                                   std::shared_ptr<Container> container,
-                                   const XMLControlRegistry* xmlRegistry)
+NITFWriteControl::NITFWriteControl(const six::Options& options, std::shared_ptr<Container> container,
+    const XMLControlRegistry* xmlRegistry /*=nullptr*/, FILE* log /*= stderr*/)
 {
-    mNITFHeaderCreator.reset(new six::NITFHeaderCreator(options, container));
+    mNITFHeaderCreator.reset(new six::NITFHeaderCreator(options, container, log));
     if (xmlRegistry)
     {
         // Indirecting through *Impl to avoid virtual function call in ctor
         setXMLControlRegistryImpl(xmlRegistry);
     }
+}
+NITFWriteControl::NITFWriteControl(const six::Options& options, std::shared_ptr<Container> container,
+    FILE* log) : NITFWriteControl(options, container, nullptr /*xmlRegistry*/, log)
+{
+}
+NITFWriteControl::NITFWriteControl(const six::Options& options, std::shared_ptr<Container> container,
+    const XMLControlRegistry& xmlRegistry, FILE* log/*= stderr*/) :
+    NITFWriteControl(options, container, &xmlRegistry, log)
+{
 }
 
 void NITFWriteControl::setXMLControlRegistryImpl(
@@ -309,16 +315,10 @@ static nitf::ImageSource make_ImageSource_(std::span<const std::byte> pData, siz
 }
 
 template<typename T>
-static nitf::ImageSource make_ImageSource(std::span<const T> pImageData_, const NITFSegmentInfo& segmentInfo, const Data& data)
+static nitf::ImageSource do_make_ImageSource(std::span<const T> pImageData_, const NITFSegmentInfo& segmentInfo, const Data& data)
 {
-    constexpr auto numBytesPerPixel = sizeof(pImageData_[0]);
-
     const auto numChannels = data.getNumChannels();
     const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
-    if (pixelSize != numBytesPerPixel)
-    {
-        throw std::invalid_argument("numBytesPerPixel mis-match!");
-    }
 
     const auto bandSize = getBandSize(segmentInfo, data);
     const auto pImageData = six::as_bytes(pImageData_);
@@ -332,12 +332,31 @@ static nitf::ImageSource make_ImageSource(std::span<const T> pImageData_, const 
     const  std::span<const std::byte> pData(pData_, bandSize);
     return make_ImageSource_(pData, numChannels, pixelSize);
 }
+template<typename T>
+static nitf::ImageSource make_ImageSource(std::span<const T> pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
+{
+    constexpr auto numBytesPerPixel = sizeof(pImageData[0]);
+
+    const auto numChannels = data.getNumChannels();
+    const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
+    if (pixelSize != numBytesPerPixel)
+    {
+        throw std::invalid_argument("numBytesPerPixel mis-match!");
+    }
+
+    return do_make_ImageSource(pImageData, segmentInfo, data);
+}
 
 // Existing code that uses BufferList needs raw "std::byte*" instead of std::span<std::byte>
+inline nitf::ImageSource make_ImageSource_from_BufferList(std::span<const std::byte> pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
+{
+    // The pixelSize calculation value probably won't match sizof(BufferList::value_type) which is "unsigned char"
+    return do_make_ImageSource(pImageData, segmentInfo, data);
+}
 static nitf::ImageSource make_ImageSource(const BufferList::value_type pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
 {
     const auto pImageData_ = as_bytes(pImageData, segmentInfo, data);
-    return make_ImageSource(pImageData_, segmentInfo, data);
+    return make_ImageSource_from_BufferList(pImageData_, segmentInfo, data);
 }
 
 template<typename TImageData>
@@ -494,40 +513,43 @@ void NITFWriteControl::do_save_(const T& imageData, bool doByteSwap, bool enable
         write_imageData(imageData, *pInfo, legend, doByteSwap, enableJ2K);
     }
 }
-template<>
-void NITFWriteControl::save_image(std::span<const std::complex<float>> imageData,
-                            nitf::IOInterface& outputFile,
-                            const std::vector<std::string>& schemaPaths)
+
+static std::vector<std::string> convert_paths( const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, schemaPaths);
+    std::vector<std::string> retval;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
+        [](const std::filesystem::path& p) { return p.string(); });
+    return retval;
 }
-template<>
+void NITFWriteControl::save_image(std::span<const std::complex<float>> imageData,
+    nitf::IOInterface& outputFile,
+    const std::vector<std::filesystem::path>& schemaPaths)
+{
+    do_save(imageData, outputFile, convert_paths(schemaPaths));
+}
 void NITFWriteControl::save_image(std::span<const std::complex<short>> imageData,
     nitf::IOInterface& outputFile,
-    const std::vector<std::string>& schemaPaths)
+    const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, schemaPaths);
+    do_save(imageData, outputFile, convert_paths(schemaPaths));
 }
-template<>
 void NITFWriteControl::save_image(std::span<const std::pair<uint8_t, uint8_t>> imageData,
-                            nitf::IOInterface& outputFile,
-                            const std::vector<std::string>& schemaPaths)
+    nitf::IOInterface& outputFile,
+    const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, schemaPaths);
+    do_save(imageData, outputFile, convert_paths(schemaPaths));
 }
-template<>
 void NITFWriteControl::save_image(std::span<const uint8_t> imageData,
     nitf::IOInterface& outputFile,
-    const std::vector<std::string>& schemaPaths)
+    const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, schemaPaths);
+    do_save(imageData, outputFile, convert_paths(schemaPaths));
 }
-template<>
 void NITFWriteControl::save_image(std::span<const uint16_t> imageData,
     nitf::IOInterface& outputFile,
-    const std::vector<std::string>& schemaPaths)
+    const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, schemaPaths);
+    do_save(imageData, outputFile, convert_paths(schemaPaths));
 }
 
 void NITFWriteControl::save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths)

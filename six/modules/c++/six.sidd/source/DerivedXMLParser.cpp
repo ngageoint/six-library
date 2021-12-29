@@ -43,15 +43,19 @@ namespace sidd
 {
 const char DerivedXMLParser::SFA_URI[] = "urn:SFA:1.2.0";
 
-DerivedXMLParser::DerivedXMLParser(
-        const std::string& strVersion,
-        std::unique_ptr<six::SICommonXMLParser>&& comParser,
-        logging::Logger* log,
-        bool ownLog) :
-    XMLParser(versionToURI(strVersion), false, log, ownLog),
-    mCommon(std::move(comParser))
-{
-}
+DerivedXMLParser::DerivedXMLParser(const std::string& strVersion,
+    std::unique_ptr<six::SICommonXMLParser>&& comParser,
+    logging::Logger* log, bool ownLog) : XMLParser(versionToURI(strVersion), false, log, ownLog),
+    mCommon(std::move(comParser)) { }
+DerivedXMLParser::DerivedXMLParser(const std::string& strVersion,
+    std::unique_ptr<six::SICommonXMLParser>&& comParser,
+    std::unique_ptr<logging::Logger>&& log) : XMLParser(versionToURI(strVersion), false, std::move(log)),
+    mCommon(std::move(comParser)) { }
+DerivedXMLParser::DerivedXMLParser(const std::string& strVersion,
+    std::unique_ptr<six::SICommonXMLParser>&& comParser,
+    logging::Logger& log) : XMLParser(versionToURI(strVersion), false, log),
+    mCommon(std::move(comParser)) { }
+
 #if !CODA_OSS_cpp17
 DerivedXMLParser::DerivedXMLParser(
         const std::string& strVersion,
@@ -240,51 +244,60 @@ void DerivedXMLParser::setAttributeIfNonNull(XMLElem element,
 }
 
 void DerivedXMLParser::parseProductCreationFromXML(
-        const xml::lite::Element* informationElem,
-        ProcessorInformation* processorInformation) const
+        const xml::lite::Element& informationElem,
+        ProcessorInformation& processorInformation) const
 {
-    parseString(getFirstAndOnly(informationElem, "Application"),
-                processorInformation->application);
-    parseDateTime(getFirstAndOnly(informationElem, "ProcessingDateTime"),
-                  processorInformation->processingDateTime);
-    parseString(getFirstAndOnly(informationElem, "Site"),
-                processorInformation->site);
+    parseString(getFirstAndOnly(informationElem, "Application"), processorInformation.application);
+    parseDateTime(getFirstAndOnly(&informationElem, "ProcessingDateTime"), processorInformation.processingDateTime);
+    parseString(getFirstAndOnly(informationElem, "Site"), processorInformation.site);
 
     // optional
     XMLElem profileElem = getOptional(informationElem, "Profile");
     if (profileElem)
     {
-        parseString(profileElem, processorInformation->profile);
+        parseString(profileElem, processorInformation.profile);
     }
+}
+void DerivedXMLParser::parseProductCreationFromXML(
+    const xml::lite::Element* informationElem,
+    ProcessorInformation* processorInformation) const
+{
+    parseProductCreationFromXML(*informationElem, *processorInformation);
 }
 
 void DerivedXMLParser::parseProductCreationFromXML(
-        const xml::lite::Element* productCreationElem,
-        ProductCreation* productCreation) const
+        const xml::lite::Element& productCreationElem,
+        ProductCreation& productCreation) const
 {
     parseProductCreationFromXML(
-            getFirstAndOnly(productCreationElem, "ProcessorInformation"),
-            &productCreation->processorInformation);
+            getFirstAndOnly(&productCreationElem, "ProcessorInformation"),
+            &(productCreation.processorInformation));
 
     parseDerivedClassificationFromXML(
-            getFirstAndOnly(productCreationElem, "Classification"),
-            productCreation->classification);
+            getFirstAndOnly(&productCreationElem, "Classification"),
+            productCreation.classification);
 
     parseString(getFirstAndOnly(productCreationElem, "ProductName"),
-                productCreation->productName);
+                productCreation.productName);
     parseString(getFirstAndOnly(productCreationElem, "ProductClass"),
-                productCreation->productClass);
+                productCreation.productClass);
 
     // optional
     XMLElem productTypeElem = getOptional(productCreationElem, "ProductType");
     if (productTypeElem)
     {
-        parseString(productTypeElem, productCreation->productType);
+        parseString(productTypeElem, productCreation.productType);
     }
 
     // optional
-    common().parseParameters(productCreationElem, "ProductCreationExtension",
-                             productCreation->productCreationExtensions);
+    common().parseParameters(&productCreationElem, "ProductCreationExtension",
+                             productCreation.productCreationExtensions);
+}
+void DerivedXMLParser::parseProductCreationFromXML(
+    const xml::lite::Element* productCreationElem,
+    ProductCreation* productCreation) const
+{
+    parseProductCreationFromXML(*productCreationElem, *productCreation);
 }
 
 void DerivedXMLParser::parseDerivedClassificationFromXML(
@@ -998,45 +1011,53 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
         const Measurement* measurement,
         XMLElem parent) const
 {
-    XMLElem measurementElem = newElement("Measurement", parent);
+    assert(measurement != nullptr);
+    assert(parent != nullptr);
+    return &convertMeasurementToXML(*this, *measurement, *parent);
+}
+xml::lite::Element& DerivedXMLParser::convertMeasurementToXML(const DerivedXMLParser& parser,
+    const Measurement& measurement, xml::lite::Element& parent)
+{
+    auto& measurementElem = parser.newElement("Measurement", parent);
 
-    XMLElem projectionElem = newElement("", measurementElem);
+    auto& projectionElem_ = parser.newElement("", measurementElem);
+    auto projectionElem = &projectionElem_;
 
     // NOTE: ReferencePoint is present in all of the ProjectionTypes
     //       so its added here for ease
-    XMLElem referencePointElem = newElement("ReferencePoint", projectionElem);
-    if (measurement->projection->referencePoint.name
+    auto& referencePointElem = parser.newElement("ReferencePoint", projectionElem_);
+    if (measurement.projection->referencePoint.name
             != Init::undefined<std::string>())
     {
-        setAttribute(referencePointElem, "name",
-                    measurement->projection->referencePoint.name);
+        parser.setAttribute(&referencePointElem, "name",
+                    measurement.projection->referencePoint.name);
     }
-    common().createVector3D("ECEF", common().getSICommonURI(),
-                            measurement->projection->referencePoint.ecef,
-                            referencePointElem);
-    common().createRowCol("Point", common().getSICommonURI(),
-                          measurement->projection->referencePoint.rowCol,
-                          referencePointElem);
+    parser.common().createVector3D("ECEF", parser.common().getSICommonURI(),
+                            measurement.projection->referencePoint.ecef,
+                            &referencePointElem);
+    parser.common().createRowCol("Point", parser.common().getSICommonURI(),
+                          measurement.projection->referencePoint.rowCol,
+                          &referencePointElem);
 
-    switch (measurement->projection->projectionType)
+    switch (measurement.projection->projectionType)
     {
     case ProjectionType::POLYNOMIAL:
     {
         projectionElem->setLocalName("PolynomialProjection");
 
-        const PolynomialProjection* const polyProj = dynamic_cast<PolynomialProjection*>(measurement->projection.get());
+        const PolynomialProjection* const polyProj = dynamic_cast<PolynomialProjection*>(measurement.projection.get());
 
-        common().createPoly2D("RowColToLat", polyProj->rowColToLat, projectionElem);
-        common().createPoly2D("RowColToLon", polyProj->rowColToLon, projectionElem);
+        parser.common().createPoly2D("RowColToLat", polyProj->rowColToLat, projectionElem);
+        parser.common().createPoly2D("RowColToLon", polyProj->rowColToLon, projectionElem);
 
         // optional
         if (polyProj->rowColToAlt != Init::undefined<Poly2D>())
         {
-            common().createPoly2D("RowColToAlt", polyProj->rowColToAlt, projectionElem);
+            parser.common().createPoly2D("RowColToAlt", polyProj->rowColToAlt, projectionElem);
         }
 
-        common().createPoly2D("LatLonToRow", polyProj->latLonToRow, projectionElem);
-        common().createPoly2D("LatLonToCol", polyProj->latLonToCol, projectionElem);
+        parser.common().createPoly2D("LatLonToRow", polyProj->latLonToRow, projectionElem);
+        parser.common().createPoly2D("LatLonToCol", polyProj->latLonToCol, projectionElem);
     }
         break;
 
@@ -1044,12 +1065,12 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("GeographicProjection");
 
-        const GeographicProjection* const geographicProj = dynamic_cast<GeographicProjection*>(measurement->projection.get());
+        const GeographicProjection* const geographicProj = dynamic_cast<GeographicProjection*>(measurement.projection.get());
 
-        common().createRowCol("SampleSpacing",
+        parser.common().createRowCol("SampleSpacing",
                               geographicProj->sampleSpacing,
                               projectionElem);
-        common().createPoly2D("TimeCOAPoly",
+        parser.common().createPoly2D("TimeCOAPoly",
                               geographicProj->timeCOAPoly,
                               projectionElem);
     }
@@ -1059,20 +1080,20 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("PlaneProjection");
 
-        const PlaneProjection* const planeProj = dynamic_cast<PlaneProjection*>(measurement->projection.get());
+        const PlaneProjection* const planeProj = dynamic_cast<PlaneProjection*>(measurement.projection.get());
 
-        common().createRowCol("SampleSpacing",
+        parser.common().createRowCol("SampleSpacing",
                               planeProj->sampleSpacing,
                               projectionElem);
-        common().createPoly2D("TimeCOAPoly",
+        parser.common().createPoly2D("TimeCOAPoly",
                               planeProj->timeCOAPoly,
                               projectionElem);
 
-        XMLElem productPlaneElem = newElement("ProductPlane", projectionElem);
-        common().createVector3D("RowUnitVector",
+        auto productPlaneElem = parser.newElement("ProductPlane", projectionElem);
+        parser.common().createVector3D("RowUnitVector",
                                 planeProj->productPlane.rowUnitVector,
                                 productPlaneElem);
-        common().createVector3D("ColUnitVector",
+        parser.common().createVector3D("ColUnitVector",
                                 planeProj->productPlane.colUnitVector,
                                 productPlaneElem);
     }
@@ -1082,21 +1103,21 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
     {
         projectionElem->setLocalName("CylindricalProjection");
 
-        const CylindricalProjection* const cylindricalProj = dynamic_cast<CylindricalProjection*>(measurement->projection.get());
+        const CylindricalProjection* const cylindricalProj = dynamic_cast<CylindricalProjection*>(measurement.projection.get());
 
-        common().createRowCol("SampleSpacing",
+        parser.common().createRowCol("SampleSpacing",
                               cylindricalProj->sampleSpacing,
                               projectionElem);
-        common().createPoly2D("TimeCOAPoly",
+        parser.common().createPoly2D("TimeCOAPoly",
                               cylindricalProj->timeCOAPoly,
                               projectionElem);
-        common().createVector3D("StripmapDirection",
+        parser.common().createVector3D("StripmapDirection",
                                 cylindricalProj->stripmapDirection,
                                 projectionElem);
         // optional
         if (cylindricalProj->curvatureRadius != Init::undefined<double>())
         {
-            createDouble("CurvatureRadius",
+            parser.createDouble("CurvatureRadius",
                          cylindricalProj->curvatureRadius,
                          projectionElem);
         }
@@ -1107,9 +1128,9 @@ XMLElem DerivedXMLParser::convertMeasurementToXML(
         throw except::Exception(Ctxt("Unknown projection type!"));
     }
 
-    common().createRowCol("PixelFootprint",
-                          measurement->pixelFootprint,
-                          measurementElem);
+    parser.common().createRowCol("PixelFootprint",
+                          measurement.getPixelFootprint(),
+                          &measurementElem);
 
     return measurementElem;
 }
@@ -1320,30 +1341,36 @@ void DerivedXMLParser::parseProcessingModuleFromXML(
 }
 
 void DerivedXMLParser::parseProductProcessingFromXML(
-        const xml::lite::Element* elem,
-        ProductProcessing* productProcessing) const
+        const xml::lite::Element& elem,
+        ProductProcessing& productProcessing) const
 {
     std::vector<XMLElem> procModuleElem;
-    elem->getElementsByTagName("ProcessingModule", procModuleElem);
-    productProcessing->processingModules.resize(procModuleElem.size());
+    elem.getElementsByTagName("ProcessingModule", procModuleElem);
+    productProcessing.processingModules.resize(procModuleElem.size());
     for (size_t i = 0; i < procModuleElem.size(); ++i)
     {
-        productProcessing->processingModules[i].reset(new ProcessingModule());
+        productProcessing.processingModules[i].reset(new ProcessingModule());
         parseProcessingModuleFromXML(
                 procModuleElem[i],
-                productProcessing->processingModules[i].get());
+                productProcessing.processingModules[i].get());
     }
+}
+void DerivedXMLParser::parseProductProcessingFromXML(
+    const xml::lite::Element* elem,
+    ProductProcessing* productProcessing) const
+{
+    parseProductProcessingFromXML(*elem, *productProcessing);
 }
 
 void DerivedXMLParser::parseDownstreamReprocessingFromXML(
-        const xml::lite::Element* elem,
-        DownstreamReprocessing* downstreamReproc) const
+        const xml::lite::Element& elem,
+        DownstreamReprocessing& downstreamReproc) const
 {
     XMLElem geometricChipElem = getOptional(elem, "GeometricChip");
     if (geometricChipElem)
     {
-        downstreamReproc->geometricChip.reset(new GeometricChip());
-        GeometricChip *chip = downstreamReproc->geometricChip.get();
+        downstreamReproc.geometricChip.reset(new GeometricChip());
+        GeometricChip *chip = downstreamReproc.geometricChip.get();
 
         common().parseRowColInt(getFirstAndOnly(geometricChipElem, "ChipSize"),
                                 chip->chipSize);
@@ -1362,13 +1389,13 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
     }
 
     std::vector<XMLElem> procEventElem;
-    elem->getElementsByTagName("ProcessingEvent", procEventElem);
-    downstreamReproc->processingEvents.resize(procEventElem.size());
+    elem.getElementsByTagName("ProcessingEvent", procEventElem);
+    downstreamReproc.processingEvents.resize(procEventElem.size());
     for (size_t i = 0; i < procEventElem.size(); ++i)
     {
-        downstreamReproc->processingEvents[i].reset(new ProcessingEvent());
+        downstreamReproc.processingEvents[i].reset(new ProcessingEvent());
         ProcessingEvent* procEvent
-                = downstreamReproc->processingEvents[i].get();
+                = downstreamReproc.processingEvents[i].get();
 
         const xml::lite::Element* const peElem = procEventElem[i];
         parseString(getFirstAndOnly(peElem, "ApplicationName"),
@@ -1381,6 +1408,12 @@ void DerivedXMLParser::parseDownstreamReprocessingFromXML(
         // optional to unbounded
         common().parseParameters(peElem, "Descriptor", procEvent->descriptor);
     }
+}
+void DerivedXMLParser::parseDownstreamReprocessingFromXML(
+    const xml::lite::Element* elem,
+    DownstreamReprocessing* downstreamReproc) const
+{
+    parseDownstreamReprocessingFromXML(*elem, *downstreamReproc);
 }
 
 void DerivedXMLParser::parseGeographicCoordinateSystemFromXML(
@@ -1507,7 +1540,7 @@ void DerivedXMLParser::parseAnnotationFromXML(
         XMLElem obj = objectsElem[i];
 
         //there should be only one child - a choice between types
-        std::vector<XMLElem> &children = obj->getChildren();
+        const auto& children = obj->getChildren();
         if (!children.empty())
         {
             //just get the first one
@@ -1924,5 +1957,15 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
 
     return geoElem;
 }
+
+std::unique_ptr<xml::lite::Document> DerivedXMLParser::toXML(const DerivedData& data) const
+{
+    return std::unique_ptr<xml::lite::Document>(toXML(&data));
+}
+std::unique_ptr<DerivedData> DerivedXMLParser::fromXML(const xml::lite::Document& doc) const
+{
+    return std::unique_ptr<DerivedData>(fromXML(&doc));
+}
+
 }
 }

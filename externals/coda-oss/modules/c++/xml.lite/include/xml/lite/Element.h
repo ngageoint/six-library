@@ -33,6 +33,7 @@
 #include <str/Convert.h>
 #include "xml/lite/XMLException.h"
 #include "xml/lite/Attributes.h"
+#include "xml/lite/QName.h"
 #include "sys/Conf.h"
 #include "sys/Optional.h"
 #include "mem/SharedPtr.h"
@@ -51,27 +52,6 @@ namespace xml
 {
 namespace lite
 {
- /*!
- * \class string_encoding
- * \brief Specifies how std::string is encoded by MinidomParser.
- *
- * This is needed because our use of Xerces generates different
- * results on Windows/Linux, and changing things might break existing
- * code.
- *
- * On Windows, the UTF-16 strings (internal to Xerces) are converted
- * to std::strings with Windows-1252 (more-or-less ISO8859-1) encoding;
- * this allows Western European languages to be displayed.  On *ix,
- * UTF-8 is the norm ...
- */
-enum class string_encoding
-{
-    windows_1252  // more-or-less ISO5589-1, https://en.wikipedia.org/wiki/Windows-1252
-    , utf_8
-};
-// Could do the same for std::wstring, but there isn't any code needing it right now.
-
-
 /*!
  * \class Element
  * \brief The class defining one element of an XML document
@@ -105,8 +85,9 @@ public:
     {
         setCharacterData(characterData);
     }
+    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
     Element(const std::string& qname, const std::string& uri,
-            const std::string& characterData, string_encoding encoding) :
+            const std::string& characterData, StringEncoding encoding) :
         Element(qname, uri, nullptr)
     {
         setCharacterData(characterData, encoding);
@@ -118,10 +99,14 @@ public:
         setCharacterData(characterData);
     }
 
-    // string_encoding is assumed based on the platform: Windows-1252 or UTF-8.
+    // StringEncoding is assumed based on the platform: Windows-1252 or UTF-8.
     static std::unique_ptr<Element> create(const std::string& qname, const std::string& uri = "", const std::string& characterData = "");
-    // Encoding of "characterData" is assumed based on the platform: Windows-1252 or UTF-8
-    static std::unique_ptr<Element> createU8(const std::string& qname, const std::string& uri = "", const std::string& characterData = "");
+    static std::unique_ptr<Element> create(const std::string& qname, const xml::lite::Uri& uri, const std::string& characterData = "");
+    static std::unique_ptr<Element> create(const xml::lite::QName&, const std::string& characterData = "");
+    static std::unique_ptr<Element> create(const xml::lite::QName&, const sys::U8string&);
+    // Encoding of "characterData" is always UTF-8
+    static std::unique_ptr<Element> createU8(const xml::lite::QName&, const std::string& characterData = "");
+    #endif // SWIG
 
     //! Destructor
     virtual ~Element()
@@ -132,18 +117,18 @@ public:
     //! Destroys any child elements.
     void destroyChildren();
 
-    /*!
-     * Copy constructor
-     * \param element  Takes an element
-     */
-    Element(const Element& element);
+    // use clone() to duplicate an Element
+#if !(defined(SWIG) || defined(SWIGPYTHON) || defined(HAVE_PYTHON_H))  // SWIG needs these
+//private: // encoded as part of the C++ name mangling by some compilers
+#endif
+    Element(const Element&);
+    Element& operator=(const Element&);
+#if !(defined(SWIG) || defined(SWIGPYTHON) || defined(HAVE_PYTHON_H))
+public:
+#endif
 
-    /*!
-     *  Assignment operator
-     *  \param element  Takes an element
-     *  \return a reference to *this
-     */
-    Element& operator=(const Element& element);
+    Element(Element&&) = default;
+    Element& operator=(Element&&) = default;
 
     /*!
      *  Clone function performs deep copy
@@ -222,11 +207,6 @@ public:
     void getElementsByTagName(const std::string& localName,
                               std::vector<Element*>& elements,
                               bool recurse = false) const;
-    /*!
-     *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
-     */
-    Element* getElementByTagName(std::nothrow_t, const std::string& localName, bool recurse = false) const;
-    Element& getElementByTagName(const std::string& localName, bool recurse = false) const;
 
     /*!
      *  Utility for people that dont like to pass by reference
@@ -240,31 +220,50 @@ public:
     }
 
     /*!
+     *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
+     */
+    Element* getElementByTagName(std::nothrow_t, const std::string& localName, bool recurse = false) const;
+    Element& getElementByTagName(const std::string& localName, bool recurse = false) const;
+
+    /*!
      *  Get the elements by tag name
      *  \param uri the URI
      *  \param localName the local name
      *  \param elements the elements that match the QName
      */
-    void getElementsByTagName(const std::string& uri, const std::string& localName,
-                              std::vector<Element*>& elements,
-                              bool recurse = false) const;
+    void getElementsByTagName(const xml::lite::QName& name, std::vector<Element*>& elements, bool recurse = false) const;
+    void getElementsByTagName(const std::string& uri, const std::string& localName, std::vector<Element*>& elements, bool recurse = false) const
+    {
+        getElementsByTagName(QName(uri, localName), elements, recurse);
+    }
+    
     /*!
-     *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
+     *  \param std::nothrow -- will still throw if MULTIPLE elements are found,
+     * returns NULL if none
      */
-    Element* getElementByTagName(std::nothrow_t, const std::string& uri, const std::string& localName,
-                                 bool recurse = false) const;
-    Element& getElementByTagName(const std::string& uri, const std::string& localName,
-                                 bool recurse = false) const;
+    Element* getElementByTagName(std::nothrow_t, const xml::lite::QName&, bool recurse = false) const;
+    Element* getElementByTagName(std::nothrow_t t, const std::string& uri, const std::string& localName, bool recurse = false) const 
+    {
+        return getElementByTagName(t, QName(uri, localName), recurse);
+    }
+    Element& getElementByTagName(const xml::lite::QName&, bool recurse = false) const;
+    Element& getElementByTagName(const std::string& uri, const std::string& localName, bool recurse = false) const 
+    {
+        return getElementByTagName(QName(uri, localName), recurse);
+    }
 
     /*!
      *  Utility for people that dont like to pass by reference
      */
-    std::vector<Element*> getElementsByTagName(const std::string& uri, const std::string& localName,
-                                               bool recurse = false) const
+    std::vector<Element*> getElementsByTagName(const xml::lite::QName& name, bool recurse = false) const
     {
         std::vector<Element*> v;
-        getElementsByTagName(uri, localName, v, recurse);
+        getElementsByTagName(name, v, recurse);
         return v;
+    }
+    std::vector<Element*> getElementsByTagName(const std::string& uri, const std::string& localName, bool recurse = false) const
+    {
+        return getElementsByTagName(QName(uri, localName), recurse);
     }
 
     /*!
@@ -272,9 +271,17 @@ public:
      *  2)  Recursively descend over children and fix all
      *  namespaces below using fixNodeNamespace()
      */
-    void setNamespacePrefix(std::string prefix, std::string uri);
+    void setNamespacePrefix(std::string prefix, const xml::lite::Uri&);
+    void setNamespacePrefix(std::string prefix, std::string uri)
+    {
+        setNamespacePrefix(prefix, Uri(uri));
+    }
 
-    void setNamespaceURI(std::string prefix, std::string uri);
+    void setNamespaceURI(std::string prefix, const xml::lite::Uri&);
+    void setNamespaceURI(std::string prefix, std::string uri)
+    {
+        setNamespaceURI(prefix, Uri(uri));
+    }
 
     /*!
      *  Prints the element to the specified OutputStream
@@ -289,14 +296,15 @@ public:
     // print() routine (above) can write documents with a Windows-1252 encoding
     // as the string is just copied to the output.
     //
-    // The only valid setting for string_encoding is utf_8; but defaulting that
+    // The only valid setting for StringEncoding is Utf8; but defaulting that
     // could change behavior on Windows.
-    void print(io::OutputStream& stream, string_encoding /*=utf_8*/) const;
-
     void prettyPrint(io::OutputStream& stream,
                      const std::string& formatter = "    ") const;
-    void prettyPrint(io::OutputStream& stream, string_encoding /*=utf_8*/,
+    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
+    void print(io::OutputStream& stream, StringEncoding /*=Utf8*/) const;
+    void prettyPrint(io::OutputStream& stream, StringEncoding /*=Utf8*/,
                      const std::string& formatter = "    ") const;
+    #endif // SWIG
 
     /*!
      *  Determines if a child element exists
@@ -311,7 +319,11 @@ public:
      *  \param localName the local name to search for
      *  \return true if it exists, false if not
      */
-    bool hasElement(const std::string& uri, const std::string& localName) const;
+    bool hasElement(const xml::lite::QName&) const;
+    bool hasElement(const std::string& uri, const std::string& localName) const
+    {
+        return hasElement(QName(uri, localName));
+    }
 
     /*!
      *  Returns the character data of this element.
@@ -321,25 +333,29 @@ public:
     {
         return mCharacterData;
     }
-    const sys::Optional<string_encoding>& getEncoding() const
+    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
+    const sys::Optional<StringEncoding>& getEncoding() const
     {
         return mEncoding;
     }
-   const sys::Optional<string_encoding>& getCharacterData(std::string& result) const
+   const sys::Optional<StringEncoding>& getCharacterData(std::string& result) const
     {
         result = getCharacterData();
         return getEncoding();
     }
     void getCharacterData(sys::U8string& result) const;
+    #endif // SWIG
 
     /*!
      *  Sets the character data for this element.
      *  \param characters The data to add to this element
      */
-    void setCharacterData_(const std::string& characters, const string_encoding*);
     void setCharacterData(const std::string& characters);
-    void setCharacterData(const std::string& characters, string_encoding);
+    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
+    void setCharacterData_(const std::string& characters, const StringEncoding*);
+    void setCharacterData(const std::string& characters, StringEncoding);
     void setCharacterData(const sys::U8string& characters);
+    #endif // SWIG
 
     /*!
      *  Sets the local name for this element.
@@ -367,6 +383,10 @@ public:
     {
         mName.setQName(qname);
     }
+    void setQName(const xml::lite::QName& qname)
+    {
+        mName = qname;
+    }
 
     /*!
      *  Returns the QName of this element.
@@ -374,16 +394,26 @@ public:
      */
     std::string getQName() const
     {
-        return mName.toString();
+        QName result;
+        getQName(result);
+        return result.toString();
+    }
+    void getQName(xml::lite::QName& result) const
+    {
+        result = mName;
     }
 
     /*!
      *  Sets the URI for this element.
      *  \param uri the data to add to this element
      */
-    void setUri(const std::string& uri)
+    void setUri(const xml::lite::Uri& uri)
     {
         mName.setAssociatedUri(uri);
+    }
+    void setUri(const std::string& uri)
+    {
+        setUri(Uri(uri));
     }
 
     /*!
@@ -392,7 +422,13 @@ public:
      */
     std::string getUri() const
     {
-        return mName.getAssociatedUri();
+        Uri result;
+        getUri(result);
+        return result.value;
+    }
+    void getUri(xml::lite::Uri& result) const
+    {
+        mName.getAssociatedUri(result);
     }
 
     /*!
@@ -405,9 +441,9 @@ public:
      *  Adds a child element to this element
      *  \param node the child element to add
      */
-    virtual void addChild(std::unique_ptr<Element>&& node);
+    virtual Element& addChild(std::unique_ptr<Element>&& node);
     #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-    virtual void addChild(mem::auto_ptr<Element> node);
+    virtual Element& addChild(mem::auto_ptr<Element> node);
     #endif
 
     /*!
@@ -458,7 +494,7 @@ protected:
 
     void depthPrint(io::OutputStream& stream, int depth,
                     const std::string& formatter) const;
-    void depthPrint(io::OutputStream& stream, string_encoding, int depth,
+    void depthPrint(io::OutputStream& stream, StringEncoding, int depth,
                     const std::string& formatter) const;
 
     Element* mParent;
@@ -472,10 +508,12 @@ protected:
 
     private:
         // ... and how that data is encoded
-        sys::Optional<string_encoding> mEncoding;
+        sys::Optional<StringEncoding> mEncoding;
         void depthPrint(io::OutputStream& stream, bool utf8, int depth,
                 const std::string& formatter) const;
 };
+
+extern Element& add(const xml::lite::QName&, const std::string& value, Element& parent);
 
 #ifndef SWIG
 // The (old) version of SWIG we're using doesn't like certain C++11 features.
@@ -535,6 +573,42 @@ inline void setValue(Element& element, const T& value)
 {
     setValue(element, value, details::toString<T>);
 }
+
+template <typename T, typename ToString>
+inline Element& addNewElement(const xml::lite::QName& name, const T& value, Element& parent,
+    ToString toString)
+{
+    return xml::lite::add(name, toString(value), parent);
+}
+template<typename T>
+inline Element& addNewElement(const xml::lite::QName& name, const T& value, Element& parent)
+{
+    return addNewElement(name, value, parent, details::toString<T>);
+}
+
+template <typename T, typename ToString>
+inline Element& addNewElement(const xml::lite::QName& name, const sys::Optional<T>& v, Element& parent,
+    ToString toString)
+{
+    return addNewElement(name, v.value(), parent, toString);
+}
+template<typename T>
+inline Element& addNewElement(const xml::lite::QName& name, const sys::Optional<T>& v, Element& parent)
+{
+    return addNewElement(name, v.value(), parent);
+}
+template <typename T, typename ToString>
+inline Element* addNewOptionalElement(const xml::lite::QName& name, const sys::Optional<T>& v, Element& parent,
+        ToString toString)
+{
+    return v.has_value() ? &addNewElement(name, v, parent, toString) : nullptr;
+}
+template<typename T>
+inline Element* addNewOptionalElement(const xml::lite::QName& name, const sys::Optional<T>& v, Element& parent)
+{
+    return v.has_value() ? &addNewElement(name, v, parent) : nullptr;
+}
+
 #endif // SWIG
 
 }

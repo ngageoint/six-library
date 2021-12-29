@@ -32,6 +32,8 @@ struct Foo final
 {
     int val1 = 0;
     int val2 = 0;
+    
+    Foo* clone() const = delete; // be sure there is no clone()
 };
 
 struct Bar final

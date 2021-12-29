@@ -20,16 +20,11 @@
  *
  */
 
-#ifndef __MEM_SCOPED_COPYABLE_PTR_H__
-#define __MEM_SCOPED_COPYABLE_PTR_H__
+#ifndef CODA_OSS_mem_ScopedCopyablePtr_h_INCLUDED_
+#define CODA_OSS_mem_ScopedCopyablePtr_h_INCLUDED_
 #pragma once
 
-#include <memory>
-#include <cstddef>
-#include <config/coda_oss_config.h>
-
-#include "sys/Conf.h"
-#include "mem/SharedPtr.h"
+#include "mem/ScopedPtr.h"
 
 namespace mem
 {
@@ -52,110 +47,9 @@ namespace mem
  *         (if all the other member variables are POD or have correct
  *         copy constructors / assignment operators).
  */
-template <class T>
-class ScopedCopyablePtr
-{
-    std::unique_ptr<T> mPtr;
+template <typename T>
+using ScopedCopyablePtr = ScopedPtr<T, std::false_type /*CopyIsClone*/>;
 
-public:
-    explicit ScopedCopyablePtr(T* ptr = nullptr)
-    {
-        reset(ptr);
-    }
-    explicit ScopedCopyablePtr(std::unique_ptr<T>&& ptr)
-    {
-        reset(std::move(ptr));
-    }
-    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
-    explicit ScopedCopyablePtr(mem::auto_ptr<T> ptr)
-    {
-        reset(ptr);
-    }
-    #endif
-
-    ScopedCopyablePtr(const ScopedCopyablePtr& rhs)
-    {
-        *this = rhs;
-    }
-
-    const ScopedCopyablePtr&
-    operator=(const ScopedCopyablePtr& rhs)
-    {
-        if (this != &rhs)
-        {
-            if (rhs.mPtr.get())
-            {
-                mPtr = make::unique<T>(*rhs.mPtr);
-            }
-            else
-            {
-                mPtr.reset();
-            }
-        }
-
-        return *this;
-    }
-
-    ScopedCopyablePtr(ScopedCopyablePtr&&) = default;
-    ScopedCopyablePtr& operator=(ScopedCopyablePtr&&) = default;
-
-    bool operator==(const ScopedCopyablePtr<T>& rhs) const
-    {
-        if (get() == nullptr && rhs.get() == nullptr)
-        {
-            return true;
-        }
-
-        if (get() == nullptr || rhs.get() == nullptr)
-        {
-            return false;
-        }
-
-        return (*(this->mPtr) == *rhs);
-    }
-
-    bool operator!=(const ScopedCopyablePtr<T>& rhs) const
-    {
-        return !(*this == rhs);
-    }
-
-    // explicit operators not supported until C++11
-    explicit operator bool() const
-    {
-        return get() == nullptr ? false : true;
-    }
-
-    T* get() const
-    {
-        return mPtr.get();
-    }
-
-    T& operator*() const
-    {
-        return *mPtr;
-    }
-
-    T* operator->() const
-    {
-        return mPtr.get();
-    }
-
-    void reset(T* ptr = nullptr)
-    {
-        mPtr.reset(ptr);
-    }
-
-    void reset(std::unique_ptr<T>&& ptr)
-    {
-        mPtr = std::move(ptr);
-    }
-    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
-    void reset(mem::auto_ptr<T> ptr)
-    {
-        reset(std::unique_ptr<T>(ptr.release()));
-    }
-    #endif
-};
 }
 
-#endif
+#endif // CODA_OSS_mem_ScopedCopyablePtr_h_INCLUDED_

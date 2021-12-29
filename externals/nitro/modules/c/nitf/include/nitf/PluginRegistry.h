@@ -90,6 +90,8 @@ nitf_PluginRegistry;
  */
 NITFPROT(nitf_PluginRegistry *)
     nitf_PluginRegistry_getInstance(nitf_Error * error);
+NITFPROT(nitf_PluginRegistry*)
+nitf_PluginRegistry_getInstanceLog(nitf_Error* error, FILE* log);
 
 
 /*!
@@ -169,6 +171,8 @@ NITFAPI(NITF_BOOL)
  */
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_TREHandlerExists(const char* ident);
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_TREHandlerExistsLog(const char* ident, FILE* log);
 
 /*!
  * Checks if a compression handler exists for 'ident'

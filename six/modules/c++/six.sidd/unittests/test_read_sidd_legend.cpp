@@ -276,7 +276,7 @@ TEST_CASE(testRead)
     reader.load(testHelper.mPathname);
     const auto container = reader.getContainer();
 
-    TEST_ASSERT_EQ(container->size(), 4);
+    TEST_ASSERT_EQ(container->size(), static_cast<size_t>(4));
     for (size_t ii = 0; ii < container->size(); ++ii)
     {
         TEST_ASSERT_NOT_EQ(container->getData(ii), nullptr);

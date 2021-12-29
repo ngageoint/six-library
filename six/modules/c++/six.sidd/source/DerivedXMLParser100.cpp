@@ -286,6 +286,10 @@ XMLElem DerivedXMLParser100::convertDerivedClassificationToXML(
 
     return classElem;
 }
+std::unique_ptr<DerivedData> DerivedXMLParser100::fromXML(const xml::lite::Document& doc) const
+{
+    return std::unique_ptr<DerivedData>(fromXML(&doc));
+}
 
 xml::lite::Document*
 DerivedXMLParser100::toXML(const DerivedData* derived) const
@@ -336,11 +340,15 @@ DerivedXMLParser100::toXML(const DerivedData* derived) const
 
     //set the ElemNS
     root->setNamespacePrefix("", getDefaultURI());
-    root->setNamespacePrefix("si", SI_COMMON_URI);
-    root->setNamespacePrefix("sfa", SFA_URI);
-    root->setNamespacePrefix("ism", ISM_URI);
+    root->setNamespacePrefix("si", xml::lite::Uri(SI_COMMON_URI));
+    root->setNamespacePrefix("sfa", xml::lite::Uri(SFA_URI));
+    root->setNamespacePrefix("ism", xml::lite::Uri(ISM_URI));
 
     return doc;
+}
+std::unique_ptr<xml::lite::Document> DerivedXMLParser100::toXML(const DerivedData& data) const
+{
+    return std::unique_ptr<xml::lite::Document>(toXML(&data));
 }
 
 XMLElem DerivedXMLParser100::convertDisplayToXML(

@@ -39,6 +39,7 @@
 #pragma warning(push)
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid (lifetime.4).
 #pragma warning(disable: 26482) // Only index into arrays using constant expressions (bounds.2).
+#pragma warning(disable: 26823) // Dereferencing a possibly null pointer '' (lifetime.1).
 #include <import/math/poly.h>
 #pragma warning(pop)
 #pragma warning(pop)
@@ -81,6 +82,7 @@
 #pragma warning(disable: 26429) // Symbol '...' is never tested for nullness, it can be marked as not_null(f.23).
 #pragma warning(disable: 26400) // Do not assign the result of an allocation or a function call with an owner<T> return value to a raw pointer, use owner<T> instead(i.11).
 #pragma warning(disable: 26467) // Converting from floating point to unsigned integral types results in non-portable code if the double/float has a negative value. Use gsl::narrow_cast or gsl::narrow instead to guard against undefined behavior and potential data loss (es.46).
+#pragma warning(disable: 26823) // Dereferencing a possibly null pointer '...' (lifetime.1).
 #include <import/xml/lite.h>
 
 #pragma warning(pop)
@@ -95,6 +97,7 @@
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
 #pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
 #pragma warning(disable: 26447) // The function is declared '...' but calls function '...' which may throw exceptions(f.6).
+#pragma warning(disable: 26823) // Dereferencing a possibly null pointer '' (lifetime.1).
 
 #include <import/nitf.hpp>
 #include <import/nitf.h>

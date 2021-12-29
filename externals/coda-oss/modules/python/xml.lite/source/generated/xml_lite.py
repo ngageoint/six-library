@@ -80,7 +80,7 @@ class Element(object):
         r"""
         __init__(Element self) -> Element
         __init__(Element self, std::string const & qname, std::string const & uri="", std::string const & characterData="") -> Element
-        __init__(Element self, std::string const & qname, std::string const & uri, std::string const & characterData, xml::lite::string_encoding encoding) -> Element
+        __init__(Element self, std::string const & qname, std::string const & uri, std::string const & characterData, xml::lite::StringEncoding encoding) -> Element
         __init__(Element self, std::string const & qname, std::string const & uri, sys::U8string const & characterData) -> Element
         __init__(Element self, Element element) -> Element
         """
@@ -137,14 +137,14 @@ class Element(object):
     def _print(self, *args) -> "void":
         r"""
         _print(Element self, io::OutputStream & stream)
-        _print(Element self, io::OutputStream & stream, xml::lite::string_encoding arg3)
+        _print(Element self, io::OutputStream & stream, xml::lite::StringEncoding arg3)
         """
         return _xml_lite.Element__print(self, *args)
 
     def prettyPrint(self, *args) -> "void":
         r"""
         prettyPrint(Element self, io::OutputStream & stream, std::string const & formatter="    ")
-        prettyPrint(Element self, io::OutputStream & stream, xml::lite::string_encoding arg3, std::string const & formatter="    ")
+        prettyPrint(Element self, io::OutputStream & stream, xml::lite::StringEncoding arg3, std::string const & formatter="    ")
         """
         return _xml_lite.Element_prettyPrint(self, *args)
 
@@ -155,26 +155,26 @@ class Element(object):
         """
         return _xml_lite.Element_hasElement(self, *args)
 
-    def getEncoding(self) -> "sys::Optional< xml::lite::string_encoding > const &":
-        r"""getEncoding(Element self) -> sys::Optional< xml::lite::string_encoding > const &"""
+    def getEncoding(self) -> "sys::Optional< xml::lite::StringEncoding > const &":
+        r"""getEncoding(Element self) -> sys::Optional< xml::lite::StringEncoding > const &"""
         return _xml_lite.Element_getEncoding(self)
 
     def getCharacterData(self, *args) -> "void":
         r"""
         getCharacterData(Element self) -> std::string
-        getCharacterData(Element self, std::string & result) -> sys::Optional< xml::lite::string_encoding > const
+        getCharacterData(Element self, std::string & result) -> sys::Optional< xml::lite::StringEncoding > const
         getCharacterData(Element self, sys::U8string & result)
         """
         return _xml_lite.Element_getCharacterData(self, *args)
 
-    def setCharacterData_(self, characters: "std::string const &", arg3: "xml::lite::string_encoding const *") -> "void":
-        r"""setCharacterData_(Element self, std::string const & characters, xml::lite::string_encoding const * arg3)"""
+    def setCharacterData_(self, characters: "std::string const &", arg3: "xml::lite::StringEncoding const *") -> "void":
+        r"""setCharacterData_(Element self, std::string const & characters, xml::lite::StringEncoding const * arg3)"""
         return _xml_lite.Element_setCharacterData_(self, characters, arg3)
 
     def setCharacterData(self, *args) -> "void":
         r"""
         setCharacterData(Element self, std::string const & characters)
-        setCharacterData(Element self, std::string const & characters, xml::lite::string_encoding arg3)
+        setCharacterData(Element self, std::string const & characters, xml::lite::StringEncoding arg3)
         setCharacterData(Element self, sys::U8string const & characters)
         """
         return _xml_lite.Element_setCharacterData(self, *args)
@@ -243,7 +243,7 @@ class Document(object):
     def createElement(self, *args) -> "xml::lite::Element *":
         r"""
         createElement(Document self, std::string const & qname, std::string const & uri, std::string characterData="") -> Element
-        createElement(Document self, std::string const & qname, std::string const & uri, std::string const & characterData, xml::lite::string_encoding arg5) -> Element
+        createElement(Document self, std::string const & qname, std::string const & uri, std::string const & characterData, xml::lite::StringEncoding arg5) -> Element
         createElement(Document self, std::string const & qname, std::string const & uri, sys::U8string const & characterData) -> Element
         """
         return _xml_lite.Document_createElement(self, *args)

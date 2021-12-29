@@ -53,8 +53,10 @@ public:
         ComplexXMLParser& operator=(const ComplexXMLParser&) = delete;
 
     xml::lite::Document* toXML(const ComplexData* data) const;
+    std::unique_ptr<xml::lite::Document> toXML(const ComplexData&) const;
 
     ComplexData* fromXML(const xml::lite::Document* doc) const;
+    std::unique_ptr<ComplexData> fromXML(const xml::lite::Document&) const;
 
 protected:
 

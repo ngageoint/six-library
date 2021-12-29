@@ -35,6 +35,7 @@ coda_add_module(
         source/Utilities.cpp
         source/VersionUpdater.cpp
         source/WriteControl.cpp
+        source/XmlLite.cpp
         source/XMLControl.cpp
         source/XMLControlFactory.cpp
         source/XMLParser.cpp)
@@ -61,5 +62,7 @@ coda_add_tests(
         test_serialize.cpp
         test_xml_control.cpp)
 
-target_compile_definitions(six_test_xml_control PRIVATE
-                           DEFAULT_SCHEMA_PATH="${DEFAULT_SCHEMA_PATH}")
+if(CODA_BUILD_TESTS)
+    target_compile_definitions(six_test_xml_control PRIVATE
+                               DEFAULT_SCHEMA_PATH="${DEFAULT_SCHEMA_PATH}")
+endif()

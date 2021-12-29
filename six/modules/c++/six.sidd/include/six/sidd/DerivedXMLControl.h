@@ -43,8 +43,12 @@ namespace sidd
 struct DerivedXMLControl : public XMLControl
 {
     DerivedXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+    DerivedXMLControl(std::unique_ptr<logging::Logger>&&);
+    DerivedXMLControl(logging::Logger&);
     DerivedXMLControl(const DerivedXMLControl&) = delete;
     DerivedXMLControl& operator=(const DerivedXMLControl&) = delete;
+    DerivedXMLControl(DerivedXMLControl&&) = delete;
+    DerivedXMLControl& operator=(DerivedXMLControl&&) = delete;
 
     static const six::DataType dataType;
 
@@ -55,11 +59,13 @@ protected:
      *  Returns a new allocated DOM document, created from the DerivedData*
      */
     virtual xml::lite::Document* toXMLImpl(const Data* data);
+    virtual std::unique_ptr<xml::lite::Document> toXMLImpl(const Data&) const override;
     /*!
      *  Returns a new allocated DerivedData*, created from the DOM Document*
      *
      */
     virtual Data* fromXMLImpl(const xml::lite::Document* doc);
+    virtual std::unique_ptr<Data> fromXMLImpl(const xml::lite::Document&) const override;
 
 private:
     std::unique_ptr<DerivedXMLParser>

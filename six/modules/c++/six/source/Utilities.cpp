@@ -30,6 +30,10 @@
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
 #include "six/Data.h"
+#include <six/XmlLite.h>
+
+#define string_to_Enum(strValue, enum, type) if (strValue == #type) return enum::type
+#define Enum_to_string(value, enum, type) if (value == enum::type) return #type
 
 namespace
 {
@@ -443,64 +447,38 @@ PolarizationSequenceType six::toType<PolarizationSequenceType>(
 {
     std::string type(s);
     str::trim(type);
-    if (type == "OTHER")
-    {
-        return PolarizationSequenceType::OTHER;
-    }
-    else if (type == "V")
-    {
-        return PolarizationSequenceType::V;
-    }
-    else if (type == "H")
-    {
-        return PolarizationSequenceType::H;
-    }
-    else if (type == "RHC")
-    {
-        return PolarizationSequenceType::RHC;
-    }
-    else if (type == "LHC")
-    {
-        return PolarizationSequenceType::LHC;
-    }
-    else if (type == "UNKNOWN")
-    {
-        return PolarizationSequenceType::UNKNOWN;
-    }
-    else if (type == "SEQUENCE")
-    {
-        return PolarizationSequenceType::SEQUENCE;
-    }
-    else
-    {
-        throw except::Exception(
-                Ctxt("Unsupported polarization type '" + s + "'"));
-    }
+    
+    string_to_Enum(type, PolarizationSequenceType, OTHER);
+    string_to_Enum(type, PolarizationSequenceType, V);
+    string_to_Enum(type, PolarizationSequenceType, H);
+    string_to_Enum(type, PolarizationSequenceType, X);
+    string_to_Enum(type, PolarizationSequenceType, Y);
+    string_to_Enum(type, PolarizationSequenceType, S);
+    string_to_Enum(type, PolarizationSequenceType, E);
+    string_to_Enum(type, PolarizationSequenceType, RHC);
+    string_to_Enum(type, PolarizationSequenceType, LHC);
+    string_to_Enum(type, PolarizationSequenceType, UNKNOWN);
+    string_to_Enum(type, PolarizationSequenceType, SEQUENCE);
+    
+    throw except::Exception(Ctxt("Unsupported polarization type '" + s + "'"));
 }
 
 template <>
 std::string six::toString(const PolarizationSequenceType& t)
 {
-    switch (t)
-    {
-    case PolarizationSequenceType::OTHER:
-        return "OTHER";
-    case PolarizationSequenceType::V:
-        return "V";
-    case PolarizationSequenceType::H:
-        return "H";
-    case PolarizationSequenceType::RHC:
-        return "RHC";
-    case PolarizationSequenceType::LHC:
-        return "LHC";
-    case PolarizationSequenceType::UNKNOWN:
-        return "UNKNOWN";
-    case PolarizationSequenceType::SEQUENCE:
-        return "SEQUENCE";
-    default:
-        throw except::Exception(
-                Ctxt("Unsupported conversion from polarization type"));
-    }
+    Enum_to_string(t, PolarizationSequenceType, OTHER);
+    Enum_to_string(t, PolarizationSequenceType, V);
+    Enum_to_string(t, PolarizationSequenceType, H);
+    Enum_to_string(t, PolarizationSequenceType, X);
+    Enum_to_string(t, PolarizationSequenceType, Y);
+    Enum_to_string(t, PolarizationSequenceType, S);
+    Enum_to_string(t, PolarizationSequenceType, E);
+    Enum_to_string(t, PolarizationSequenceType, RHC);
+    Enum_to_string(t, PolarizationSequenceType, LHC);
+    Enum_to_string(t, PolarizationSequenceType, UNKNOWN);
+    Enum_to_string(t, PolarizationSequenceType, SEQUENCE);
+    
+    throw except::Exception(Ctxt("Unsupported conversion from polarization type"));
 }
 
 template <>
@@ -1130,13 +1108,20 @@ void six::loadPluginDir(const std::string& pluginDir)
     nitf::PluginRegistry::loadDir(pluginDir);
 }
 
-void six::loadXmlDataContentHandler()
+void six::loadXmlDataContentHandler(FILE* log)
 {
-    if (!nitf::PluginRegistry::treHandlerExists("XML_DATA_CONTENT"))
+    // This can generate output from implicitConstruct() complaining about NITF_PLUGIN_PATH
+    // not being set; often the warning is benign and is just confusing.  Provide a way to turn
+    // it off (FILE* log = NULL) without upsetting existing code.
+    if (!nitf::PluginRegistry::treHandlerExists("XML_DATA_CONTENT", log))
     {
         nitf::PluginRegistry::registerTREHandler(XML_DATA_CONTENT_init,
                                                  XML_DATA_CONTENT_handler);
     }
+}
+void six::loadXmlDataContentHandler()
+{
+    loadXmlDataContentHandler(stderr); // existing/legacy behavior
 }
 
 mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
@@ -1146,15 +1131,30 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
 {
     return parseData(xmlReg, xmlStream, DataType::NOT_SET, schemaPaths, log);
 }
+std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger& log)
+{
+    return parseData(xmlReg, xmlStream, DataType::NOT_SET, pSchemaPaths, log);
+}
 
-mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+inline mem::auto_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::string>& schemaPaths)
+{
+    return mem::auto_ptr<Data>(xmlControl.fromXML(&doc, schemaPaths));
+}
+inline std::unique_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::filesystem::path>* pSchemaPaths)
+{
+    return xmlControl.fromXML(doc, pSchemaPaths);
+}
+template<typename TReturn, typename TSchemaPaths>
+TReturn six_parseData(const XMLControlRegistry& xmlReg,
                                    ::io::InputStream& xmlStream,
                                    DataType dataType,
-                                   const std::vector<std::string>& schemaPaths,
-                                   logging::Logger& log)
+                                   const TSchemaPaths& schemaPaths,
+                                   logging::Logger& log, bool storeEncoding)
 {
-    xml::lite::MinidomParser xmlParser;
-    xmlParser.preserveCharacterData(true);
+    six::MinidomParser xmlParser(storeEncoding);
     try
     {
         xmlParser.parse(xmlStream);
@@ -1163,11 +1163,10 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     {
         throw except::Exception(ex, Ctxt("Invalid XML data"));
     }
-    xml::lite::Document* doc = xmlParser.getDocument();
-    assert(doc != nullptr);
+    const auto& doc = getDocument(xmlParser);
 
     //! Check the root localName for the XML type
-    std::string xmlType = doc->getRootElement()->getLocalName();
+    std::string xmlType = doc.getRootElement()->getLocalName();
     DataType xmlDataType;
     if (str::startsWith(xmlType, "SICD"))
         xmlDataType = DataType::COMPLEX;
@@ -1183,10 +1182,24 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     }
 
     //! Create the correct type of XMLControl
-    const mem::auto_ptr<XMLControl> xmlControl(
-            xmlReg.newXMLControl(xmlDataType, &log));
-
-    return mem::auto_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
+    const std::unique_ptr<XMLControl> xmlControl(xmlReg.newXMLControl(xmlDataType, &log));
+    return fromXML_(doc, *xmlControl, schemaPaths);
+}
+mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    DataType dataType,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log, bool storeEncoding)
+{
+    return six_parseData<mem::auto_ptr<Data>>(xmlReg, xmlStream, dataType, schemaPaths, log, storeEncoding);
+}
+std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    DataType dataType,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger& log, bool storeEncoding)
+{
+    return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlStream, dataType, pSchemaPaths, log, storeEncoding);
 }
 
 mem::auto_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,
@@ -1194,8 +1207,7 @@ mem::auto_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
 {
-    return parseDataFromFile(xmlReg, pathname, DataType::NOT_SET, schemaPaths,
-        log);
+    return parseDataFromFile(xmlReg, pathname, DataType::NOT_SET, schemaPaths, log);
 }
 
 mem::auto_ptr<Data> six::parseDataFromFile(
@@ -1214,8 +1226,7 @@ mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
 {
-    return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, schemaPaths,
-        log);
+    return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, schemaPaths, log);
 }
 
 mem::auto_ptr<Data> six::parseDataFromString(
@@ -1336,4 +1347,36 @@ void six::getErrors(const ErrorStatistics* errorStats,
                             corr * (composite.rg * composite.az);
         }
     }
+}
+
+std::filesystem::path six::testing::findRootDir(const std::filesystem::path& dir)
+{
+    using namespace std::filesystem;
+    const auto six = dir / "six";
+    const auto externals = dir / "externals";
+    const auto six_sln = dir / "six.sln";
+    if (is_directory(six) && is_directory(externals) && is_regular_file(six_sln))
+    {
+        return dir;
+    }
+    const auto parent = dir.parent_path();
+    return findRootDir(parent);
+}
+
+std::filesystem::path six::testing::buildRootDir(const std::filesystem::path& argv0)
+{
+    auto platform = sys::Platform; // "conditional expression is constant"
+    if (platform == sys::PlatformType::Windows)
+    {
+        // On Windows ... in Visual Studio or stand-alone?
+        if (argv0.filename() == "Test.exe") // Google Test in Visual Studio
+        {
+            const auto cwd = std::filesystem::current_path();
+            const auto root_dir = cwd.parent_path().parent_path();
+            return root_dir;
+        }
+    }
+
+    // Linux or stand-alone
+    return six::testing::findRootDir(argv0);
 }
