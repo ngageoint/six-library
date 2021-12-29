@@ -46,7 +46,7 @@ public:
         XMLElem parent = nullptr) const override;
 
     void parseRadiometryFromXML(
-        const xml_lite::Element* radiometricXML,
+        const xml::lite::Element* radiometricXML,
         Radiometric *obj) const override;
 
     XMLElem convertMatchInformationToXML(
@@ -54,7 +54,7 @@ public:
         XMLElem parent) const override;
 
     void parseMatchInformationFromXML(
-        const xml_lite::Element* matchInfoXML,
+        const xml::lite::Element* matchInfoXML,
         MatchInformation* info) const override;
 
 protected:
@@ -64,7 +64,7 @@ protected:
         XMLElem parent = nullptr) const override;
 
     void parseCompositeSCPFromXML(
-        const xml_lite::Element* errorStatsXML,
+        const xml::lite::Element* errorStatsXML,
         ErrorStatistics* errorStatistics) const override;
 
 };

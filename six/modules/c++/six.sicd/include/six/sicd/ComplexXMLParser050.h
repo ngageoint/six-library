@@ -47,7 +47,7 @@ protected:
         const RgAzComp* rgAzComp,
         XMLElem parent = nullptr) const;
 
-    virtual void parseWeightTypeFromXML(const xml_lite::Element* gridRowColXML,
+    virtual void parseWeightTypeFromXML(const xml::lite::Element* gridRowColXML,
             mem::ScopedCopyablePtr<WeightType>& obj) const;
 
     virtual XMLElem convertMatchInformationToXML(const MatchInformation& obj,

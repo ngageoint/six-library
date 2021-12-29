@@ -123,10 +123,10 @@ struct SICommonXMLParser : public XMLParser
     //       This is the implementation for SICD 1.x / SIDD 2.0+
     XMLElem convertGeoInfoToXML(const GeoInfo& geoInfo,
             bool hasSIPrefix, XMLElem parent = nullptr) const;
-    void parseGeoInfoFromXML(const xml_lite::Element* geoInfoXML, GeoInfo* geoInfo) const;
+    void parseGeoInfoFromXML(const xml::lite::Element* geoInfoXML, GeoInfo* geoInfo) const;
 
-    void parseEarthModelType(const xml_lite::Element* element, EarthModelType& value) const;
-    void parseEarthModelType(const xml_lite::Element& element, EarthModelType& value) const;
+    void parseEarthModelType(const xml::lite::Element* element, EarthModelType& value) const;
+    void parseEarthModelType(const xml::lite::Element& element, EarthModelType& value) const;
 
     XMLElem createEarthModelType(const std::string& name,
             const EarthModelType& value,
@@ -137,45 +137,45 @@ struct SICommonXMLParser : public XMLParser
                                   const LatLonCorners& corners,
                                   XMLElem parent) const;
 
-    void parsePoly1D(const xml_lite::Element* polyXML, Poly1D& poly1D) const;
-    void parsePoly2D(const xml_lite::Element* polyXML, Poly2D& poly2D) const;
-    bool parseOptionalPoly2D(const xml_lite::Element*, const std::string&, Poly2D&) const;
-    void parsePolyXYZ(const xml_lite::Element* polyXML, PolyXYZ& polyXYZ) const;
+    void parsePoly1D(const xml::lite::Element* polyXML, Poly1D& poly1D) const;
+    void parsePoly2D(const xml::lite::Element* polyXML, Poly2D& poly2D) const;
+    bool parseOptionalPoly2D(const xml::lite::Element*, const std::string&, Poly2D&) const;
+    void parsePolyXYZ(const xml::lite::Element* polyXML, PolyXYZ& polyXYZ) const;
 
-    void parseVector2D(const xml_lite::Element* vecXML, Vector2& vec) const;
-    void parseVector3D(const xml_lite::Element* vecXML, Vector3& vec) const;
-    void parseLatLonAlt(const xml_lite::Element* llaXML, LatLonAlt& lla) const;
-    void parseLatLon(const xml_lite::Element* parent, LatLon& ll) const;
-    void parseLatLon(const xml_lite::Element& parent, LatLon& ll) const;
-    void parseLatLons(const xml_lite::Element* pointsXML, const std::string& pointName,
+    void parseVector2D(const xml::lite::Element* vecXML, Vector2& vec) const;
+    void parseVector3D(const xml::lite::Element* vecXML, Vector3& vec) const;
+    void parseLatLonAlt(const xml::lite::Element* llaXML, LatLonAlt& lla) const;
+    void parseLatLon(const xml::lite::Element* parent, LatLon& ll) const;
+    void parseLatLon(const xml::lite::Element& parent, LatLon& ll) const;
+    void parseLatLons(const xml::lite::Element* pointsXML, const std::string& pointName,
             std::vector<LatLon>& llVec) const;
-    void parseRangeAzimuth(const xml_lite::Element* parent, types::RgAz<double>& value) const;
+    void parseRangeAzimuth(const xml::lite::Element* parent, types::RgAz<double>& value) const;
 
-    void parseRowColDouble(const xml_lite::Element* parent, const std::string& rowName,
+    void parseRowColDouble(const xml::lite::Element* parent, const std::string& rowName,
             const std::string& colName, RowColDouble& rc) const;
-    void parseRowColDouble(const xml_lite::Element* parent, RowColDouble& rc) const;
+    void parseRowColDouble(const xml::lite::Element* parent, RowColDouble& rc) const;
 
-    void parseRowColInt(const xml_lite::Element* parent, const std::string& rowName,
+    void parseRowColInt(const xml::lite::Element* parent, const std::string& rowName,
             const std::string& colName, RowColInt& rc) const;
-    void parseRowColInt(const xml_lite::Element* parent, RowColInt& rc) const;
-    void parseRowColInts(const xml_lite::Element* pointsXML, const std::string& pointName,
+    void parseRowColInt(const xml::lite::Element* parent, RowColInt& rc) const;
+    void parseRowColInts(const xml::lite::Element* pointsXML, const std::string& pointName,
             std::vector<RowColInt>& rcVec) const;
-    void parseParameter(const xml_lite::Element* element, Parameter& param) const;
+    void parseParameter(const xml::lite::Element* element, Parameter& param) const;
 
-    void parseRowColLatLon(const xml_lite::Element* parent, RowColLatLon& rc) const;
+    void parseRowColLatLon(const xml::lite::Element* parent, RowColLatLon& rc) const;
 
-    void parseParameters(const xml_lite::Element* paramXML, const std::string& paramName,
+    void parseParameters(const xml::lite::Element* paramXML, const std::string& paramName,
             ParameterCollection& props) const;
 
-    void parseDecorrType(const xml_lite::Element* decorrXML, DecorrType& decorrType) const;
-    void parseOptionalDecorrType(const xml_lite::Element* parent, const std::string& tag, DecorrType& decorrType) const;
-    void parseOptionalDecorrType(const xml_lite::Element* parent, const std::string& tag, std::optional<DecorrType>& decorrType) const;
+    void parseDecorrType(const xml::lite::Element* decorrXML, DecorrType& decorrType) const;
+    void parseOptionalDecorrType(const xml::lite::Element* parent, const std::string& tag, DecorrType& decorrType) const;
+    void parseOptionalDecorrType(const xml::lite::Element* parent, const std::string& tag, std::optional<DecorrType>& decorrType) const;
 
-    void parseFootprint(const xml_lite::Element* footprint,
+    void parseFootprint(const xml::lite::Element* footprint,
             const std::string& cornerName, LatLonCorners& corners) const;
-    void parseFootprint(const xml_lite::Element&, const std::string& cornerName, LatLonCorners&) const;
+    void parseFootprint(const xml::lite::Element&, const std::string& cornerName, LatLonCorners&) const;
 
-    void parseFootprint(const xml_lite::Element* footprint,
+    void parseFootprint(const xml::lite::Element* footprint,
             const std::string& cornerName, LatLonAltCorners& corners) const;
 
     XMLElem convertErrorStatisticsToXML(
@@ -183,16 +183,16 @@ struct SICommonXMLParser : public XMLParser
         XMLElem parent = nullptr) const;
 
     void parseErrorStatisticsFromXML(
-        const xml_lite::Element* errorStatsXML,
+        const xml::lite::Element* errorStatsXML,
         ErrorStatistics* errorStatistics) const;
-    void parseErrorStatisticsFromXML(const xml_lite::Element& errorStatsXML, ErrorStatistics&) const;
+    void parseErrorStatisticsFromXML(const xml::lite::Element& errorStatsXML, ErrorStatistics&) const;
 
     XMLElem convertCollectionInformationToXML(
         const CollectionInformation *obj,
         XMLElem parent = nullptr) const;
 
     void parseCollectionInformationFromXML(
-        const xml_lite::Element* collectionInfoXML,
+        const xml::lite::Element* collectionInfoXML,
         CollectionInformation *obj) const;
 
     virtual XMLElem convertRadiometryToXML(
@@ -200,7 +200,7 @@ struct SICommonXMLParser : public XMLParser
         XMLElem parent = nullptr) const = 0;
 
     virtual void parseRadiometryFromXML(
-        const xml_lite::Element* radiometricXML,
+        const xml::lite::Element* radiometricXML,
         Radiometric *obj) const = 0;
 
     virtual XMLElem convertMatchInformationToXML(
@@ -208,7 +208,7 @@ struct SICommonXMLParser : public XMLParser
         XMLElem parent) const = 0;
 
     virtual void parseMatchInformationFromXML(
-        const xml_lite::Element* matchInfoXML,
+        const xml::lite::Element* matchInfoXML,
         MatchInformation* info) const = 0;
 
 protected:
@@ -217,12 +217,12 @@ protected:
         XMLElem parent = nullptr) const = 0;
 
     virtual void parseCompositeSCPFromXML(
-        const xml_lite::Element* errorStatsXML,
+        const xml::lite::Element* errorStatsXML,
         ErrorStatistics* errorStatistics) const = 0;
 
 private:
     // TODO: Can we combine this with parsePoly1D()?
-    void parsePoly(const xml_lite::Element* polyXML, size_t xyzIdx, PolyXYZ& polyXYZ) const;
+    void parsePoly(const xml::lite::Element* polyXML, size_t xyzIdx, PolyXYZ& polyXYZ) const;
 
 private:
     const std::string mSICommonURI;

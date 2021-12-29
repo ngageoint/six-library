@@ -36,7 +36,7 @@
 
 namespace
 {
-typedef six::xml_lite::Element* XMLElem;
+typedef xml::lite::Element* XMLElem;
 }
 
 namespace cphd
@@ -55,10 +55,10 @@ CPHDXMLParser::CPHDXMLParser(
 /*
  * TO XML
  */
-std::unique_ptr<six::xml_lite::Document> CPHDXMLParser::toXML(
+std::unique_ptr<xml::lite::Document> CPHDXMLParser::toXML(
         const Metadata& metadata)
 {
-    std::unique_ptr<six::xml_lite::Document> doc(new six::xml_lite::Document());
+    std::unique_ptr<xml::lite::Document> doc(new xml::lite::Document());
 
     XMLElem root = newElement("CPHD");
     doc->setRootElement(root);
@@ -893,7 +893,7 @@ XMLElem CPHDXMLParser::toXML(const MatchInformation& matchInfo, XMLElem parent)
  */
 
 std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
-        const six::xml_lite::Document* doc)
+        const xml::lite::Document* doc)
 {
     std::unique_ptr<Metadata> cphd(new Metadata());
 
@@ -965,7 +965,7 @@ std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
     return cphd;
 }
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* collectionIDXML, CollectionInformation& collectionID)
+void CPHDXMLParser::fromXML(const xml::lite::Element* collectionIDXML, CollectionInformation& collectionID)
 {
     parseString(getFirstAndOnly(collectionIDXML, "CollectorName"),
                 collectionID.collectorName);
@@ -1027,7 +1027,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* collectionIDXML, Colle
     mCommon.parseParameters(collectionIDXML, "Parameter", collectionID.parameters);
 }
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* globalXML, Global& global)
+void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
 {
     global.domainType = DomainType(
             getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
@@ -1035,13 +1035,13 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* globalXML, Global& glo
             getFirstAndOnly(globalXML, "SGN")->getCharacterData());
 
     // Timeline
-    const six::xml_lite::Element* timelineXML = getFirstAndOnly(globalXML, "Timeline");
+    const xml::lite::Element* timelineXML = getFirstAndOnly(globalXML, "Timeline");
     parseDateTime(
             getFirstAndOnly(timelineXML, "CollectionStart"),
             global.timeline.collectionStart);
 
     // Optional
-    const six::xml_lite::Element* rcvCollectionXML = getOptional(timelineXML,
+    const xml::lite::Element* rcvCollectionXML = getOptional(timelineXML,
                                                  "RcvCollectionStart");
     if (rcvCollectionXML)
     {
@@ -1055,17 +1055,17 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* globalXML, Global& glo
             getFirstAndOnly(timelineXML, "TxTime2"), global.timeline.txTime2);
 
     // FxBand
-    const six::xml_lite::Element* fxBandXML = getFirstAndOnly(globalXML, "FxBand");
+    const xml::lite::Element* fxBandXML = getFirstAndOnly(globalXML, "FxBand");
     parseDouble(getFirstAndOnly(fxBandXML, "FxMin"), global.fxBand.fxMin);
     parseDouble(getFirstAndOnly(fxBandXML, "FxMax"), global.fxBand.fxMax);
 
     // TOASwath
-    const six::xml_lite::Element* toaSwathXML = getFirstAndOnly(globalXML, "TOASwath");
+    const xml::lite::Element* toaSwathXML = getFirstAndOnly(globalXML, "TOASwath");
     parseDouble(getFirstAndOnly(toaSwathXML, "TOAMin"), global.toaSwath.toaMin);
     parseDouble(getFirstAndOnly(toaSwathXML, "TOAMax"), global.toaSwath.toaMax);
 
     // TropoParameters
-    const six::xml_lite::Element* tropoXML = getOptional(globalXML, "TropoParameters");
+    const xml::lite::Element* tropoXML = getOptional(globalXML, "TropoParameters");
     if (tropoXML)
     {
         // Optional
@@ -1076,7 +1076,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* globalXML, Global& glo
     }
 
     // IonoParameters
-    const six::xml_lite::Element* ionoXML = getOptional(globalXML, "IonoParameters");
+    const xml::lite::Element* ionoXML = getOptional(globalXML, "IonoParameters");
     if (ionoXML)
     {
         // Optional
@@ -1086,21 +1086,21 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* globalXML, Global& glo
     }
 }
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* sceneCoordsXML,
+void CPHDXMLParser::fromXML(const xml::lite::Element* sceneCoordsXML,
                              SceneCoordinates& scene)
 {
     scene.earthModel = EarthModelType(
             getFirstAndOnly(sceneCoordsXML, "EarthModel")->getCharacterData());
 
     // IARP
-    const six::xml_lite::Element* iarpXML = getFirstAndOnly(sceneCoordsXML, "IARP");
+    const xml::lite::Element* iarpXML = getFirstAndOnly(sceneCoordsXML, "IARP");
     mCommon.parseVector3D(getFirstAndOnly(iarpXML, "ECF"), scene.iarp.ecf);
     mCommon.parseLatLonAlt(getFirstAndOnly(iarpXML, "LLH"), scene.iarp.llh);
 
     // ReferenceSurface
-    const six::xml_lite::Element* surfaceXML = getFirstAndOnly(sceneCoordsXML, "ReferenceSurface");
-    const six::xml_lite::Element* planarXML = getOptional(surfaceXML, "Planar");
-    const six::xml_lite::Element* haeXML = getOptional(surfaceXML, "HAE");
+    const xml::lite::Element* surfaceXML = getFirstAndOnly(sceneCoordsXML, "ReferenceSurface");
+    const xml::lite::Element* planarXML = getOptional(surfaceXML, "Planar");
+    const xml::lite::Element* haeXML = getOptional(surfaceXML, "HAE");
     if (planarXML && !haeXML)
     {
         // Choice type
@@ -1126,16 +1126,16 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* sceneCoordsXML,
     }
 
     // ImageArea
-    const six::xml_lite::Element* imageAreaXML = getFirstAndOnly(sceneCoordsXML, "ImageArea");
+    const xml::lite::Element* imageAreaXML = getFirstAndOnly(sceneCoordsXML, "ImageArea");
     parseAreaType(imageAreaXML, scene.imageArea);
 
     // ImageAreaCorners
-    const six::xml_lite::Element* cornersXML = getFirstAndOnly(sceneCoordsXML,
+    const xml::lite::Element* cornersXML = getFirstAndOnly(sceneCoordsXML,
                                                "ImageAreaCornerPoints");
     mCommon.parseFootprint(cornersXML, "IACP", scene.imageAreaCorners);
 
     // Extended Area
-    const six::xml_lite::Element* extendedAreaXML = getOptional(sceneCoordsXML, "ExtendedArea");
+    const xml::lite::Element* extendedAreaXML = getOptional(sceneCoordsXML, "ExtendedArea");
     if (extendedAreaXML)
     {
         scene.extendedArea.reset(new AreaType());
@@ -1143,12 +1143,12 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* sceneCoordsXML,
     }
 
     // Image Grid
-    const six::xml_lite::Element* gridXML = getOptional(sceneCoordsXML, "ImageGrid");
+    const xml::lite::Element* gridXML = getOptional(sceneCoordsXML, "ImageGrid");
     if (gridXML)
     {
         // Optional
         scene.imageGrid.reset(new ImageGrid());
-        const six::xml_lite::Element* identifierXML = getOptional(gridXML, "Identifier");
+        const xml::lite::Element* identifierXML = getOptional(gridXML, "Identifier");
         if (identifierXML)
         {
             parseString(identifierXML, scene.imageGrid->identifier);
@@ -1161,7 +1161,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* sceneCoordsXML,
                       scene.imageGrid->yExtent);
 
         // Segment List
-        const six::xml_lite::Element* segListXML = getOptional(gridXML, "SegmentList");
+        const xml::lite::Element* segListXML = getOptional(gridXML, "SegmentList");
         if (segListXML)
         {
             // Optional
@@ -1174,7 +1174,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* sceneCoordsXML,
 
             for (size_t ii = 0; ii < segmentsXML.size(); ++ii)
             {
-                const six::xml_lite::Element* segmentXML = segmentsXML[ii];
+                const xml::lite::Element* segmentXML = segmentsXML[ii];
                 parseString(getFirstAndOnly(segmentXML, "Identifier"),
                          scene.imageGrid->segments[ii].identifier);
                 parseInt(getFirstAndOnly(segmentXML, "StartLine"),
@@ -1186,7 +1186,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* sceneCoordsXML,
                 parseInt(getFirstAndOnly(segmentXML, "EndSample"),
                          scene.imageGrid->segments[ii].endSample);
 
-                const six::xml_lite::Element* polygonXML = getOptional(segmentXML,
+                const xml::lite::Element* polygonXML = getOptional(segmentXML,
                                                        "SegmentPolygon");
                 if (polygonXML)
                 {
@@ -1222,9 +1222,9 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* sceneCoordsXML,
     }
 }
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* dataXML, Data& data)
+void CPHDXMLParser::fromXML(const xml::lite::Element* dataXML, Data& data)
 {
-    const six::xml_lite::Element* signalXML = getFirstAndOnly(dataXML, "SignalArrayFormat");
+    const xml::lite::Element* signalXML = getFirstAndOnly(dataXML, "SignalArrayFormat");
     data.signalArrayFormat = SignalArrayFormat(signalXML->getCharacterData());
 
     size_t numBytesPVP_temp = 0;
@@ -1285,7 +1285,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* dataXML, Data& data)
     }
 }
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* channelXML, Channel& channel)
+void CPHDXMLParser::fromXML(const xml::lite::Element* channelXML, Channel& channel)
 {
     parseString(getFirstAndOnly(channelXML, "RefChId"), channel.refChId);
     parseBooleanType(getFirstAndOnly(channelXML, "FXFixedCPHD"),
@@ -1310,7 +1310,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* channelXML, Channel& c
     }
 }
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* pvpXML, Pvp& pvp)
+void CPHDXMLParser::fromXML(const xml::lite::Element* pvpXML, Pvp& pvp)
 {
     parsePVPType(pvp, getFirstAndOnly(pvpXML, "TxTime"), pvp.txTime);
     parsePVPType(pvp, getFirstAndOnly(pvpXML, "TxPos"), pvp.txPos);
@@ -1351,7 +1351,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* pvpXML, Pvp& pvp)
     }
 }
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* DwellXML,
+void CPHDXMLParser::fromXML(const xml::lite::Element* DwellXML,
                              Dwell& dwell)
 {
     // CODTime
@@ -1381,7 +1381,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* DwellXML,
     }
 }
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* refGeoXML, ReferenceGeometry& refGeo)
+void CPHDXMLParser::fromXML(const xml::lite::Element* refGeoXML, ReferenceGeometry& refGeo)
 {
     XMLElem srpXML = getFirstAndOnly(refGeoXML, "SRP");
     mCommon.parseVector3D(getFirstAndOnly(srpXML, "ECF"), refGeo.srp.ecf);
@@ -1390,8 +1390,8 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* refGeoXML, ReferenceGe
     parseDouble(getFirstAndOnly(refGeoXML, "SRPCODTime"), refGeo.srpCODTime);
     parseDouble(getFirstAndOnly(refGeoXML, "SRPDwellTime"), refGeo.srpDwellTime);
 
-    const six::xml_lite::Element* monoXML = getOptional(refGeoXML, "Monostatic");
-    const six::xml_lite::Element* biXML = getOptional(refGeoXML, "Bistatic");
+    const xml::lite::Element* monoXML = getOptional(refGeoXML, "Monostatic");
+    const xml::lite::Element* biXML = getOptional(refGeoXML, "Bistatic");
     if (monoXML && !biXML)
     {
         refGeo.monostatic.reset(new Monostatic());
@@ -1425,7 +1425,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* refGeoXML, ReferenceGe
     }
 }
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* supportArrayXML, SupportArray& supportArray)
+void CPHDXMLParser::fromXML(const xml::lite::Element* supportArrayXML, SupportArray& supportArray)
 {
     std::vector<XMLElem> iazArrayXMLVec;
     supportArrayXML->getElementsByTagName("IAZArray", iazArrayXMLVec);
@@ -1466,7 +1466,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* supportArrayXML, Suppo
 }
 
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* antennaXML, Antenna& antenna)
+void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& antenna)
 {
     size_t numACFs = 0;
     size_t numAPCs = 0;
@@ -1569,7 +1569,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* antennaXML, Antenna& a
     }
 }
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* txRcvXML, TxRcv& txRcv)
+void CPHDXMLParser::fromXML(const xml::lite::Element* txRcvXML, TxRcv& txRcv)
 {
     size_t numTxWFs = 0;
     size_t numRcvs = 0;
@@ -1611,7 +1611,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* txRcvXML, TxRcv& txRcv
 
 }
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* errParamXML, ErrorParameters& errParam)
+void CPHDXMLParser::fromXML(const xml::lite::Element* errParamXML, ErrorParameters& errParam)
 {
     XMLElem monostaticXML = getOptional(errParamXML, "Monostatic");
     XMLElem bistaticXML = getOptional(errParamXML, "Bistatic");
@@ -1670,7 +1670,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* errParamXML, ErrorPara
 }
 
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* productInfoXML, ProductInfo& productInfo)
+void CPHDXMLParser::fromXML(const xml::lite::Element* productInfoXML, ProductInfo& productInfo)
 {
     XMLElem profileXML = getOptional(productInfoXML, "Profile");
     if(profileXML)
@@ -1703,7 +1703,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* productInfoXML, Produc
 
 }
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* geoInfoXML, GeoInfo& geoInfo)
+void CPHDXMLParser::fromXML(const xml::lite::Element* geoInfoXML, GeoInfo& geoInfo)
 {
     std::vector < XMLElem > geoInfosXML;
     geoInfoXML->getElementsByTagName("GeoInfo", geoInfosXML);
@@ -1746,7 +1746,7 @@ void CPHDXMLParser::fromXML(const six::xml_lite::Element* geoInfoXML, GeoInfo& g
     }
 }
 
-void CPHDXMLParser::fromXML(const six::xml_lite::Element* matchInfoXML, MatchInformation& matchInfo)
+void CPHDXMLParser::fromXML(const xml::lite::Element* matchInfoXML, MatchInformation& matchInfo)
 {
     mCommon.parseMatchInformationFromXML(matchInfoXML, &matchInfo);
 }
@@ -1860,11 +1860,11 @@ XMLElem CPHDXMLParser::createDecorrType(const std::string& name, const std::opti
 /*
  * Parser helper functions
  */
-void CPHDXMLParser::parseAreaType(const six::xml_lite::Element* areaXML, AreaType& area) const
+void CPHDXMLParser::parseAreaType(const xml::lite::Element* areaXML, AreaType& area) const
 {
     mCommon.parseVector2D(getFirstAndOnly(areaXML, "X1Y1"), area.x1y1);
     mCommon.parseVector2D(getFirstAndOnly(areaXML, "X2Y2"), area.x2y2);
-    const six::xml_lite::Element* polygonXML = getOptional(areaXML, "Polygon");
+    const xml::lite::Element* polygonXML = getOptional(areaXML, "Polygon");
     if (polygonXML)
     {
         std::vector<XMLElem> verticesXML;
@@ -1878,19 +1878,19 @@ void CPHDXMLParser::parseAreaType(const six::xml_lite::Element* areaXML, AreaTyp
         for (size_t ii = 0; ii < area.polygon.size(); ++ii)
         {
             Vector2& vertex = area.polygon[ii];
-            const six::xml_lite::Element* vertexXML = verticesXML[ii];
+            const xml::lite::Element* vertexXML = verticesXML[ii];
             mCommon.parseVector2D(vertexXML, vertex);
         }
     }
 }
 
-void CPHDXMLParser::parseLineSample(const six::xml_lite::Element* lsXML, LineSample& ls) const
+void CPHDXMLParser::parseLineSample(const xml::lite::Element* lsXML, LineSample& ls) const
 {
     parseDouble(getFirstAndOnly(lsXML, "Line"), ls.line);
     parseDouble(getFirstAndOnly(lsXML, "Sample"), ls.sample);
 }
 
-void CPHDXMLParser::parseIAExtent(const six::xml_lite::Element* extentXML,
+void CPHDXMLParser::parseIAExtent(const xml::lite::Element* extentXML,
                                    ImageAreaXExtent& extent) const
 {
     parseDouble(getFirstAndOnly(extentXML, "LineSpacing"),
@@ -1901,7 +1901,7 @@ void CPHDXMLParser::parseIAExtent(const six::xml_lite::Element* extentXML,
               extent.numLines);
 }
 
-void CPHDXMLParser::parseIAExtent(const six::xml_lite::Element* extentXML,
+void CPHDXMLParser::parseIAExtent(const xml::lite::Element* extentXML,
                                    ImageAreaYExtent& extent) const
 {
     parseDouble(getFirstAndOnly(extentXML, "SampleSpacing"),
@@ -1913,7 +1913,7 @@ void CPHDXMLParser::parseIAExtent(const six::xml_lite::Element* extentXML,
 }
 
 void CPHDXMLParser::parseChannelParameters(
-        const six::xml_lite::Element* paramXML, ChannelParameter& param) const
+        const xml::lite::Element* paramXML, ChannelParameter& param) const
 {
     parseString(getFirstAndOnly(paramXML, "Identifier"), param.identifier);
     parseUInt(getFirstAndOnly(paramXML, "RefVectorIndex"), param.refVectorIndex);
@@ -2043,16 +2043,16 @@ void CPHDXMLParser::parseChannelParameters(
     paramXML->getElementsByTagName("Polarization", PolarizationXML);
     for (size_t ii = 0; ii < PolarizationXML.size(); ++ii)
     {
-        const six::xml_lite::Element* TxPolXML = getFirstAndOnly(PolarizationXML[ii], "TxPol");
+        const xml::lite::Element* TxPolXML = getFirstAndOnly(PolarizationXML[ii], "TxPol");
         param.polarization.txPol = PolarizationType(TxPolXML->getCharacterData());
 
-        const six::xml_lite::Element* RcvPolXML = getFirstAndOnly(PolarizationXML[ii], "RcvPol");
+        const xml::lite::Element* RcvPolXML = getFirstAndOnly(PolarizationXML[ii], "RcvPol");
         param.polarization.rcvPol = PolarizationType(RcvPolXML->getCharacterData());
     }
 
 }
 
-void CPHDXMLParser::parsePVPType(Pvp& pvp, const six::xml_lite::Element* paramXML, PVPType& param) const
+void CPHDXMLParser::parsePVPType(Pvp& pvp, const xml::lite::Element* paramXML, PVPType& param) const
 {
     size_t size;
     size_t offset;
@@ -2079,7 +2079,7 @@ void CPHDXMLParser::parsePVPType(Pvp& pvp, const six::xml_lite::Element* paramXM
     pvp.setOffset(offset, param);
 }
 
-void CPHDXMLParser::parsePVPType(Pvp& pvp, const six::xml_lite::Element* paramXML) const
+void CPHDXMLParser::parsePVPType(Pvp& pvp, const xml::lite::Element* paramXML) const
 {
     std::string name;
     size_t size;
@@ -2092,9 +2092,9 @@ void CPHDXMLParser::parsePVPType(Pvp& pvp, const six::xml_lite::Element* paramXM
     pvp.setCustomParameter(size, offset, format, name);
 }
 
-bool CPHDXMLParser::parseOptionalPVPType(const six::xml_lite::Element* parent, const std::string& tag, Pvp& pvp, PVPType& param) const
+bool CPHDXMLParser::parseOptionalPVPType(const xml::lite::Element* parent, const std::string& tag, Pvp& pvp, PVPType& param) const
 {    
-    if (const six::xml_lite::Element* const element = getOptional(parent, tag))
+    if (const xml::lite::Element* const element = getOptional(parent, tag))
     {
         parsePVPType(pvp, element, param);
         return true;
@@ -2103,7 +2103,7 @@ bool CPHDXMLParser::parseOptionalPVPType(const six::xml_lite::Element* parent, c
 }
 
 
-void CPHDXMLParser::parsePlatformParams(const six::xml_lite::Element* platXML, Bistatic::PlatformParams& plat) const
+void CPHDXMLParser::parsePlatformParams(const xml::lite::Element* platXML, Bistatic::PlatformParams& plat) const
 {
     parseDouble(getFirstAndOnly(platXML, "Time"), plat.time);
     parseDouble(getFirstAndOnly(platXML, "SlantRange"), plat.slantRange);
@@ -2120,7 +2120,7 @@ void CPHDXMLParser::parsePlatformParams(const six::xml_lite::Element* platXML, B
 
 }
 
-void CPHDXMLParser::parseCommon(const six::xml_lite::Element* imgTypeXML, ImagingType* imgType) const
+void CPHDXMLParser::parseCommon(const xml::lite::Element* imgTypeXML, ImagingType* imgType) const
 {
     parseDouble(getFirstAndOnly(imgTypeXML, "TwistAngle"), imgType->twistAngle);
     parseDouble(getFirstAndOnly(imgTypeXML, "SlopeAngle"), imgType->slopeAngle);
@@ -2129,7 +2129,7 @@ void CPHDXMLParser::parseCommon(const six::xml_lite::Element* imgTypeXML, Imagin
     parseDouble(getFirstAndOnly(imgTypeXML, "GrazeAngle"), imgType->grazeAngle);
 }
 
-void CPHDXMLParser::parsePosVelErr(const six::xml_lite::Element* posVelErrXML, six::PosVelError& posVelErr) const
+void CPHDXMLParser::parsePosVelErr(const xml::lite::Element* posVelErrXML, six::PosVelError& posVelErr) const
 {
     std::string frameStr;
     parseString(getFirstAndOnly(posVelErrXML, "Frame"), frameStr);
@@ -2167,7 +2167,7 @@ void CPHDXMLParser::parsePosVelErr(const six::xml_lite::Element* posVelErrXML, s
     mCommon.parseOptionalDecorrType(posVelErrXML, "PositionDecorr", posVelErr.positionDecorr);
 }
 
-void CPHDXMLParser::parsePlatform(const six::xml_lite::Element* platXML, ErrorParameters::Bistatic::Platform& plat) const
+void CPHDXMLParser::parsePlatform(const xml::lite::Element* platXML, ErrorParameters::Bistatic::Platform& plat) const
 {
     parsePosVelErr(getFirstAndOnly(platXML, "PosVelErr"), plat.posVelErr);
     XMLElem radarSensorXML = getFirstAndOnly(platXML, "RadarSensor");
@@ -2175,7 +2175,7 @@ void CPHDXMLParser::parsePlatform(const six::xml_lite::Element* platXML, ErrorPa
     parseDouble(getFirstAndOnly(radarSensorXML, "CollectionStartTime"), plat.radarSensor.collectionStartTime);
 }
 
-void CPHDXMLParser::parseSupportArrayParameter(const six::xml_lite::Element* paramXML, SupportArrayParameter& param, bool additionalFlag) const
+void CPHDXMLParser::parseSupportArrayParameter(const xml::lite::Element* paramXML, SupportArrayParameter& param, bool additionalFlag) const
 {
     if(!additionalFlag)
     {
@@ -2190,7 +2190,7 @@ void CPHDXMLParser::parseSupportArrayParameter(const six::xml_lite::Element* par
     parseDouble(getFirstAndOnly(paramXML, "YSS"), param.ySS);
 }
 
-void CPHDXMLParser::parseTxRcvParameter(const six::xml_lite::Element* paramXML, ParameterType& param) const
+void CPHDXMLParser::parseTxRcvParameter(const xml::lite::Element* paramXML, ParameterType& param) const
 {
     parseString(getFirstAndOnly(paramXML, "Identifier"), param.identifier);
     parseDouble(getFirstAndOnly(paramXML, "FreqCenter"), param.freqCenter);

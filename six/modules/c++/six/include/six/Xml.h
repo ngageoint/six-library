@@ -29,14 +29,4 @@
 #include <xml/lite/MinidomParser.h>
 #include <xml/lite/Validator.h>
 
-namespace six
-{
-	// Making this "xml" instead of "xml_lite" causes an ambiguous symbol inside of the "six"
-	// namesapce if "xml" isn't fully-qualfied (which is usually the case).  Nobody writes
-	// "::xml::lite" as "::" is usually redundant.
-	//
-	// So, "six::xml_lite" instead of "six:xml".
-	namespace xml_lite = ::xml::lite;
-}
-
 #endif // SIX_six_Xml_h_INCLUDED_

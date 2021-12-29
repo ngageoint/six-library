@@ -26,8 +26,8 @@
 
 namespace
 {
-typedef six::xml_lite::Element* XMLElem;
-typedef six::xml_lite::Attributes ElemAttributes;
+typedef xml::lite::Element* XMLElem;
+typedef xml::lite::Attributes ElemAttributes;
 }
 
 namespace six
@@ -51,9 +51,9 @@ DerivedXMLParser100::DerivedXMLParser100(logging::Logger* log,
 {
 }
 
-DerivedData* DerivedXMLParser100::fromXML(const xml_lite::Document* doc) const
+DerivedData* DerivedXMLParser100::fromXML(const xml::lite::Document* doc) const
 {
-    const xml_lite::Element* const root = doc->getRootElement();
+    const xml::lite::Element* const root = doc->getRootElement();
 
     XMLElem productCreationElem        = getFirstAndOnly(root, "ProductCreation");
     XMLElem displayElem                = getFirstAndOnly(root, "Display");
@@ -150,7 +150,7 @@ DerivedData* DerivedXMLParser100::fromXML(const xml_lite::Document* doc) const
 }
 
 void DerivedXMLParser100::parseDerivedClassificationFromXML(
-        const xml_lite::Element* classificationElem,
+        const xml::lite::Element* classificationElem,
         DerivedClassification& classification) const
 {
     DerivedXMLParser::parseDerivedClassificationFromXML(classificationElem, classification);
@@ -286,15 +286,15 @@ XMLElem DerivedXMLParser100::convertDerivedClassificationToXML(
 
     return classElem;
 }
-std::unique_ptr<DerivedData> DerivedXMLParser100::fromXML(const xml_lite::Document& doc) const
+std::unique_ptr<DerivedData> DerivedXMLParser100::fromXML(const xml::lite::Document& doc) const
 {
     return std::unique_ptr<DerivedData>(fromXML(&doc));
 }
 
-xml_lite::Document*
+xml::lite::Document*
 DerivedXMLParser100::toXML(const DerivedData* derived) const
 {
-    xml_lite::Document* doc = new xml_lite::Document();
+    xml::lite::Document* doc = new xml::lite::Document();
     XMLElem root = newElement("SIDD");
     doc->setRootElement(root);
 
@@ -340,15 +340,15 @@ DerivedXMLParser100::toXML(const DerivedData* derived) const
 
     //set the ElemNS
     root->setNamespacePrefix("", getDefaultURI());
-    root->setNamespacePrefix("si", xml_lite::Uri(SI_COMMON_URI));
-    root->setNamespacePrefix("sfa", xml_lite::Uri(SFA_URI));
-    root->setNamespacePrefix("ism", xml_lite::Uri(ISM_URI));
+    root->setNamespacePrefix("si", xml::lite::Uri(SI_COMMON_URI));
+    root->setNamespacePrefix("sfa", xml::lite::Uri(SFA_URI));
+    root->setNamespacePrefix("ism", xml::lite::Uri(ISM_URI));
 
     return doc;
 }
-std::unique_ptr<xml_lite::Document> DerivedXMLParser100::toXML(const DerivedData& data) const
+std::unique_ptr<xml::lite::Document> DerivedXMLParser100::toXML(const DerivedData& data) const
 {
-    return std::unique_ptr<xml_lite::Document>(toXML(&data));
+    return std::unique_ptr<xml::lite::Document>(toXML(&data));
 }
 
 XMLElem DerivedXMLParser100::convertDisplayToXML(
@@ -445,7 +445,7 @@ XMLElem DerivedXMLParser100::convertGeographicTargetToXML(
 }
 
 void DerivedXMLParser100::parseGeographicTargetFromXML(
-        const xml_lite::Element* geographicAndTargetElem,
+        const xml::lite::Element* geographicAndTargetElem,
         GeographicAndTarget* geographicAndTarget) const
 {
     parseGeographicCoverageFromXML(
@@ -485,7 +485,7 @@ void DerivedXMLParser100::parseGeographicTargetFromXML(
 }
 
 void DerivedXMLParser100::parseGeographicCoverageFromXML(
-        const xml_lite::Element* geographicCoverageElem,
+        const xml::lite::Element* geographicCoverageElem,
         GeographicCoverage* geographicCoverage) const
 {
     // optional and unbounded
@@ -550,7 +550,7 @@ XMLElem DerivedXMLParser100::convertMeasurementToXML(
 }
 
 void DerivedXMLParser100::parseMeasurementFromXML(
-    const xml_lite::Element* measurementElem,
+    const xml::lite::Element* measurementElem,
     Measurement* measurement) const
 {
     DerivedXMLParser::parseMeasurementFromXML(measurementElem, measurement);
@@ -745,7 +745,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
 }
 
 void DerivedXMLParser100::parseProductFromXML(
-    const xml_lite::Element* exploitationFeaturesElem,
+    const xml::lite::Element* exploitationFeaturesElem,
     ExploitationFeatures* exploitationFeatures) const
 {
     XMLElem productElem = getFirstAndOnly(exploitationFeaturesElem, "Product");

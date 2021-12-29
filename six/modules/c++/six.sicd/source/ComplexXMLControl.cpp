@@ -41,22 +41,22 @@ ComplexXMLControl::ComplexXMLControl(logging::Logger* log, bool ownLog) :
 {
 }
 
-Data* ComplexXMLControl::fromXMLImpl(const xml_lite::Document* doc)
+Data* ComplexXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
     assert(doc != nullptr);
     return fromXMLImpl(*doc).release();
 }
-std::unique_ptr<Data> ComplexXMLControl::fromXMLImpl(const xml_lite::Document& doc) const
+std::unique_ptr<Data> ComplexXMLControl::fromXMLImpl(const xml::lite::Document& doc) const
 {
     return getParser(getVersionFromURI(&doc))->fromXML(doc);
 }
 
-xml_lite::Document* ComplexXMLControl::toXMLImpl(const Data* data)
+xml::lite::Document* ComplexXMLControl::toXMLImpl(const Data* data)
 {
     assert(data != nullptr);
     return toXMLImpl(*data).release();
 }
-std::unique_ptr<xml_lite::Document> ComplexXMLControl::toXMLImpl(const Data& data) const
+std::unique_ptr<xml::lite::Document> ComplexXMLControl::toXMLImpl(const Data& data) const
 {
     if (data.getDataType() != DataType::COMPLEX)
     {

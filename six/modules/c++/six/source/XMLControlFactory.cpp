@@ -100,11 +100,11 @@ std::string six_toValidXMLString(const Data& data,
         xmlControl(xmlRegistry->newXMLControl(data.getDataType(), log));
 
     // this will validate if SIX_SCHEMA_PATH EnvVar is set
-    const std::unique_ptr<xml_lite::Document> doc(
+    const std::unique_ptr<xml::lite::Document> doc(
         xmlControl->toXML(data, schemaPaths));
 
     io::StringStream oss;
-    getRootElement(*doc).print(oss, xml_lite::StringEncoding::Utf8);
+    getRootElement(*doc).print(oss, xml::lite::StringEncoding::Utf8);
 
     return oss.stream().str();
 }

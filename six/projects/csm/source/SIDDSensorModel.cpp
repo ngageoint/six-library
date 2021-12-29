@@ -159,7 +159,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
         // Check for the SIDD DES associated with imageIndex and parse it
         // DES's are always in the same order as the images, so we just have to
         // find the Nth DES
-        const six::xml_lite::Document* siddXML = nullptr;
+        const xml::lite::Document* siddXML = nullptr;
         six::MinidomParser domParser;
 
         size_t numSIDD = 0;

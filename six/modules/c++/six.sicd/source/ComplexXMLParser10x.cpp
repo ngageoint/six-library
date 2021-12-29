@@ -26,7 +26,7 @@
 
 namespace
 {
-typedef six::xml_lite::Element* XMLElem;
+typedef xml::lite::Element* XMLElem;
 }
 
 namespace six
@@ -291,10 +291,10 @@ XMLElem ComplexXMLParser10x::convertAntennaParamArrayToXML(
 
 
 void ComplexXMLParser10x::parseWeightTypeFromXML(
-    const xml_lite::Element* gridRowColXML,
+    const xml::lite::Element* gridRowColXML,
     mem::ScopedCopyablePtr<WeightType>& obj) const
 {
-    const xml_lite::Element* weightType = getOptional(gridRowColXML, "WgtType");
+    const xml::lite::Element* weightType = getOptional(gridRowColXML, "WgtType");
     if (weightType)
     {
         obj.reset(new WeightType());
@@ -309,7 +309,7 @@ void ComplexXMLParser10x::parseWeightTypeFromXML(
 }
 
 void ComplexXMLParser10x::parsePolarizationCalibrationFromXML(
-    const xml_lite::Element* polCalXML,
+    const xml::lite::Element* polCalXML,
     six::sicd::PolarizationCalibration* obj) const
 {
     // HVAngleCompApplied no longer exists in 1.0.0
@@ -318,7 +318,7 @@ void ComplexXMLParser10x::parsePolarizationCalibrationFromXML(
 }
 
 void ComplexXMLParser10x::parseTxRcvPolFromXML(
-    const xml_lite::Element* parent,
+    const xml::lite::Element* parent,
     six::DualPolarizationType& txRcvPol) const
 {
     //! Required field
@@ -329,7 +329,7 @@ void ComplexXMLParser10x::parseTxRcvPolFromXML(
 }
 
 void ComplexXMLParser10x::parseSCPCOAFromXML(
-        const xml_lite::Element* scpcoaXML, SCPCOA* scpcoa) const
+        const xml::lite::Element* scpcoaXML, SCPCOA* scpcoa) const
 {
     ComplexXMLParser::parseSCPCOAFromXML(scpcoaXML, scpcoa);
 
@@ -338,7 +338,7 @@ void ComplexXMLParser10x::parseSCPCOAFromXML(
     parseDouble(getFirstAndOnly(scpcoaXML, "LayoverAng"), scpcoa->layoverAngle);
 }
 
-void ComplexXMLParser10x::parseRMATFromXML(const xml_lite::Element* rmatElem,
+void ComplexXMLParser10x::parseRMATFromXML(const xml::lite::Element* rmatElem,
                                            RMAT* rmat) const
 {
     common().parseVector3D(getFirstAndOnly(rmatElem, "PosRef"), rmat->refPos);
@@ -347,7 +347,7 @@ void ComplexXMLParser10x::parseRMATFromXML(const xml_lite::Element* rmatElem,
 }
 
 
-void ComplexXMLParser10x::parseRMCRFromXML(const xml_lite::Element* rmcrElem,
+void ComplexXMLParser10x::parseRMCRFromXML(const xml::lite::Element* rmcrElem,
                                            RMCR* rmcr) const
 {
     common().parseVector3D(getFirstAndOnly(rmcrElem, "PosRef"), rmcr->refPos);
@@ -357,7 +357,7 @@ void ComplexXMLParser10x::parseRMCRFromXML(const xml_lite::Element* rmcrElem,
 
 
 void ComplexXMLParser10x::parseAntennaParamArrayFromXML(
-    const xml_lite::Element* antennaParamsXML,
+    const xml::lite::Element* antennaParamsXML,
     six::sicd::AntennaParameters* params) const
 {
     //! this field is mandatory in 1.0.0
@@ -397,7 +397,7 @@ XMLElem ComplexXMLParser10x::createRcvChannels(const RadarCollection* radar,
 }
 
 void ComplexXMLParser10x::parseRadarCollectionFromXML(
-        const xml_lite::Element* radarCollectionXML,
+        const xml::lite::Element* radarCollectionXML,
         RadarCollection* radarCollection) const
 {
     XMLElem tmpElem = getFirstAndOnly(radarCollectionXML, "TxFrequency");

@@ -1139,11 +1139,11 @@ std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     return parseData(xmlReg, xmlStream, DataType::NOT_SET, pSchemaPaths, log);
 }
 
-inline mem::auto_ptr<Data> fromXML_(const xml_lite::Document& doc, XMLControl& xmlControl, const std::vector<std::string>& schemaPaths)
+inline mem::auto_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::string>& schemaPaths)
 {
     return mem::auto_ptr<Data>(xmlControl.fromXML(&doc, schemaPaths));
 }
-inline std::unique_ptr<Data> fromXML_(const xml_lite::Document& doc, XMLControl& xmlControl, const std::vector<std::filesystem::path>* pSchemaPaths)
+inline std::unique_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
     return xmlControl.fromXML(doc, pSchemaPaths);
 }

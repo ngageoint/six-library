@@ -885,7 +885,7 @@ TEST_CASE(testOptional)
     io::StringStream cphdStream;
     cphdStream.write(XML, strlen(XML));
 
-    six::xml_lite::MinidomParser xmlParser;
+    xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(cphdStream, cphdStream.available());
     const std::unique_ptr<cphd::Metadata> metadata =

@@ -38,15 +38,15 @@ public:
     DerivedXMLParser100(const DerivedXMLParser100&) = delete;
     DerivedXMLParser100& operator=(const DerivedXMLParser100&) = delete;
 
-    virtual xml_lite::Document* toXML(const DerivedData* data) const override;
-    std::unique_ptr<xml_lite::Document> toXML(const DerivedData&) const override;
+    virtual xml::lite::Document* toXML(const DerivedData* data) const override;
+    std::unique_ptr<xml::lite::Document> toXML(const DerivedData&) const override;
 
-    virtual DerivedData* fromXML(const xml_lite::Document* doc) const override;
-    std::unique_ptr<DerivedData> fromXML(const xml_lite::Document&) const override;
+    virtual DerivedData* fromXML(const xml::lite::Document* doc) const override;
+    std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const override;
 
 protected:
     virtual void parseDerivedClassificationFromXML(
-            const xml_lite::Element* classificationElem,
+            const xml::lite::Element* classificationElem,
             DerivedClassification& classification) const;
 
     virtual XMLElem convertDerivedClassificationToXML(
@@ -58,7 +58,7 @@ protected:
             XMLElem parent = nullptr) const;
 
     virtual void parseMeasurementFromXML(
-            const xml_lite::Element* measruementElem,
+            const xml::lite::Element* measruementElem,
             Measurement* measurement) const;
 
     virtual XMLElem convertExploitationFeaturesToXML(
@@ -66,7 +66,7 @@ protected:
         XMLElem parent = nullptr) const;
 
     virtual void parseProductFromXML(
-        const xml_lite::Element* exploitationFeaturesElem,
+        const xml::lite::Element* exploitationFeaturesElem,
         ExploitationFeatures* exploitationFeatures) const;
 
     virtual XMLElem convertDisplayToXML(const Display& display,
@@ -81,11 +81,11 @@ private:
                                          XMLElem parent = nullptr) const;
 
     void parseGeographicTargetFromXML(
-            const xml_lite::Element* elem,
+            const xml::lite::Element* elem,
             GeographicAndTarget* geographicAndTarget) const;
 
     void parseGeographicCoverageFromXML(
-            const xml_lite::Element* elem,
+            const xml::lite::Element* elem,
             GeographicCoverage* geoCoverage) const;
 };
 }
