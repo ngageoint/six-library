@@ -37,6 +37,7 @@
 #include <io/InputStream.h>
 #include <str/Convert.h>
 #include <logging/Logger.h>
+#include <sys/Filesystem.h>
 #include <xml/lite/Element.h>
 
 namespace xml
@@ -112,9 +113,12 @@ public:
     ValidatorInterface(const std::vector<std::string>& /*schemaPaths*/,
                        logging::Logger* /*log*/,
                        bool /*recursive*/ = true) {}
+    ValidatorInterface(const std::vector<sys::Filesystem::path>&,
+                       logging::Logger* /*log*/,
+                       bool /*recursive*/ = true) { }
 
     //! Destructor.
-    virtual ~ValidatorInterface() {}
+    virtual ~ValidatorInterface() = default;
 
     /*!
      *  Validation against the internal schema pool

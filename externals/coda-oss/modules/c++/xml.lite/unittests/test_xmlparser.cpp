@@ -344,6 +344,68 @@ TEST_CASE(testReadXmlFiles)
     testReadXmlFile(testName, "windows-1252.xml", false /*preserveCharacterData*/);
 }
 
+static bool find_string(io::FileInputStream& stream, const std::string& s)
+{
+    const auto pos = stream.tell();
+
+    constexpr sys::Off_T offset = 0x0000558e;
+    std::string streamAsString;
+    {
+        stream.seek(offset, io::Seekable::START);
+        io::StringStream stringStream;
+        stream.streamTo(stringStream);
+        streamAsString = stringStream.stream().str();
+    }
+    const auto result = streamAsString.find(s);
+    if ((result != std::string::npos) && (result == 0))
+    {
+        stream.seek(offset, io::Seekable::START);
+        return true;
+    }
+
+    stream.seek(pos, io::Seekable::START);
+    return false;
+}
+
+TEST_CASE(testReadEmbeddedXml)
+{
+    // This is a binary file with XML burried in it somewhere
+    const auto coda_oss = findRoot();
+    const auto unittests = coda_oss / "modules" / "c++" / "xml.lite" / "unittests";
+
+    const auto path = unittests / "embedded_xml.bin";
+    if (!exists(path))  // running in "externals" of a different project
+    {
+        std::clog << "Path does not exist: '" << path << "'\n";
+        return;
+    }
+    io::FileInputStream input(path.string());
+    const auto result = find_string(input, "<SICD ");
+    TEST_ASSERT_TRUE(result);
+    
+    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
+    xmlParser.parse(input);
+    const auto& root = getRootElement(getDocument(xmlParser));
+    const auto& classificationXML = root.getElementByTagName("Classification", true /*recurse*/);
+
+     const auto encoding = classificationXML.getEncoding();
+    TEST_ASSERT(encoding == PlatformEncoding);
+
+     // UTF-8 characters in 50x50.nitf
+    const std::string classificationText_iso8859_1("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
+    const std::string classificationText_utf_8("NON CLASSIFI\xc3\x89 / UNCLASSIFIED");  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+    const auto expectedCharData = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
+    const auto characterData = classificationXML.getCharacterData();
+    TEST_ASSERT_EQ(characterData, expectedCharData);
+
+    const auto u8_expectedCharData8 = str::fromUtf8(classificationText_utf_8);
+    std::u8string u8_characterData;
+    classificationXML.getCharacterData(u8_characterData);
+    TEST_ASSERT(u8_characterData == u8_expectedCharData8);
+    const std::string u8_characterData_(str::c_str<std::string::const_pointer>(u8_characterData));
+    TEST_ASSERT_EQ(classificationText_utf_8, u8_characterData_);
+}
+
 int main(int, char**)
 {
     TEST_CHECK(testXmlParseSimple);
@@ -359,5 +421,6 @@ int main(int, char**)
     TEST_CHECK(testXmlPrintUtf8);
     
     TEST_CHECK(testReadEncodedXmlFiles);
-    TEST_CHECK(testReadXmlFiles);    
+    TEST_CHECK(testReadXmlFiles);
+    TEST_CHECK(testReadEmbeddedXml);
 }
