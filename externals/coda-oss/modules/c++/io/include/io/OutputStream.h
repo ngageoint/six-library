@@ -20,11 +20,16 @@
  *
  */
 
-#ifndef __IO_OUTPUT_STREAM_H__
-#define __IO_OUTPUT_STREAM_H__
+#ifndef CODA_OSS_io_OutputStream_h_INCLUDED_
+#define CODA_OSS_io_OutputStream_h_INCLUDED_
+#pragma once
+
+#include <string>
 
 #include "sys/Dbg.h"
 #include "sys/Conf.h"
+#include "sys/String.h"
+#include "sys/CStdDef.h"
 
 /*!
  * \file OutputStream.h
@@ -57,15 +62,30 @@ struct OutputStream
     {
         write(&b, 1);
     }
+    void write(sys::Byte b)
+    {
+        write(&b, 1);
+    }
 
     /*!
      *  Write a string
      *  \param str
      */
+    void write(std::string::const_pointer pStr, size_t length)  // i.e., std::string_view
+    {
+        write(static_cast<const void*>(pStr), length);
+    }
     void write(const std::string& str)
     {
-        const void* const pStr = str.c_str();
-        write(static_cast<const sys::byte*>(pStr), str.length());
+        write(str.c_str(), str.length());
+    }
+    void write(sys::U8string::const_pointer pStr, size_t length) // i.e., std::string_view
+    {
+        write(static_cast<const void*>(pStr), length);
+    }
+    void write(const sys::U8string& str)
+    {
+        write(str.c_str(), str.length());
     }
 
     /*!
@@ -73,6 +93,11 @@ struct OutputStream
      *  \param str
      */
     void writeln(const std::string& str)
+    {
+        write(str);
+        write('\n');
+    }
+    void writeln(const sys::U8string& str)
     {
         write(str);
         write('\n');
@@ -104,4 +129,4 @@ struct OutputStream
 };
 }
 
-#endif
+#endif // CODA_OSS_io_OutputStream_h_INCLUDED_
