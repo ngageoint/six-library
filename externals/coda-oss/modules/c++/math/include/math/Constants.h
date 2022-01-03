@@ -32,7 +32,17 @@ struct Constants
     static constexpr double METERS_TO_FEET = 1.0 / FEET_TO_METERS;
 
     static constexpr double RADIANS_TO_DEGREES = 180.0 / M_PI;
+    template <typename T>
+    static constexpr T radians_to_degrees() noexcept
+    {
+        return static_cast<T>(RADIANS_TO_DEGREES);
+    }
     static constexpr double DEGREES_TO_RADIANS = M_PI / 180.0;
+    template<typename T>
+    static constexpr T degrees_to_radians() noexcept
+    {
+        return static_cast<T>(DEGREES_TO_RADIANS);
+    }
 
     static constexpr double NAUTICAL_MILES_TO_METERS = 1852.0;
     static constexpr double METERS_TO_NAUTICAL_MILES =
