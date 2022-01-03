@@ -28,10 +28,13 @@
 #include <import/mem.h>
 #include <sys/OS.h>
 
+constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
+        ? xml::lite::StringEncoding::Windows1252
+        : xml::lite::StringEncoding::Utf8;
+
 std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const std::string& qname, const std::string& uri, const std::string& characterData)
 {
-    constexpr auto encoding = sys::Platform == sys::PlatformType::Windows ? StringEncoding::Windows1252 : StringEncoding::Utf8;
-    return mem::make::unique<Element>(qname, uri, characterData, encoding);
+    return mem::make::unique<Element>(qname, uri, characterData, PlatformEncoding);
 }
 std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const std::string& qname, const Uri& uri, const std::string& characterData)
 {
@@ -272,11 +275,7 @@ static xml::lite::StringEncoding getEncoding_(const sys::Optional<xml::lite::Str
     }
 
     // don't know the encoding ... assume a default based on the platform
-    #ifdef _WIN32
-    return xml::lite::StringEncoding::Windows1252;
-    #else
-    return xml::lite::StringEncoding::Utf8;
-    #endif
+    return PlatformEncoding;
 }
 
 void xml::lite::Element::getCharacterData(sys::U8string& result) const
@@ -302,18 +301,17 @@ static void writeCharacterData(io::OutputStream& stream,
     const std::string& characterData, const sys::Optional<xml::lite::StringEncoding>& encoding_)
 {
     const auto encoding = getEncoding_(encoding_);
-
     if (encoding == xml::lite::StringEncoding::Windows1252)
     {
         // need to convert before writing
         const auto utf8 = str::fromWindows1252(characterData);
-        auto const pStr = str::c_str<std::string::const_pointer>(utf8);
-        stream.write(pStr);
+        stream.write(utf8);
     }
     else if (encoding == xml::lite::StringEncoding::Utf8)
     {
-        // already UTF-8
-        stream.write(characterData);    
+        // already in UTF-8, no converstion necessary
+        auto pUtf8 = str::c_str<sys::U8string::const_pointer>(characterData);
+        stream.write(pUtf8, characterData.length()); // call UTF-8 overload
     }
     else
     {
