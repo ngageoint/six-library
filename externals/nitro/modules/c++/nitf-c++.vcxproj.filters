@@ -383,13 +383,13 @@
     <ClInclude Include="nitf\include\nitf\Property.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="nitf\include\nitf\TREs\TREField.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="nitf\include\nitf\Enum.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="nitf\include\nitf\Version.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TREField.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
