@@ -1,6 +1,6 @@
 coda_add_module(
     six.sicd
-    DEPS six-c++ units-C++
+    DEPS six-c++ units-c++
     SOURCES
         source/Antenna.cpp
         source/AreaPlaneUtility.cpp
