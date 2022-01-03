@@ -28,18 +28,20 @@
 #if defined(USE_XERCES)
 
 #include <string>
+
+#include <sys/Mutex.h>
+#include <mt/CriticalSection.h>
+#include <except/Error.h>
 #include <io/StringStream.h>
 #include <io/OutputStream.h>
 #include <io/InputStream.h>
-#include <sys/Mutex.h>
-#include <mt/CriticalSection.h>
+
 #include "xml/lite/XMLException.h"
 #include "xml/lite/ContentHandler.h"
 #include "xml/lite/Attributes.h"
 #include "xml/lite/NamespaceStack.h"
 #include "xml/lite/XMLReaderInterface.h"
 #include "xml/lite/UtilitiesXerces.h"
-#include <except/Error.h>
 
 namespace xml
 {
@@ -101,7 +103,9 @@ public:
     void parse(io::InputStream& is, int size = io::InputStream::IS_END);
 
     void parse(bool storeEncoding, io::InputStream& is, int size = io::InputStream::IS_END);
+    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
     void parse(bool storeEncoding, io::InputStream& is, StringEncoding, int size = io::InputStream::IS_END);
+    #endif  // SWIG
     
     //! Method to create an xml reader
     void create();
@@ -115,7 +119,7 @@ private:
     void parse(bool storeEncoding, io::InputStream& is, const StringEncoding*, int size);
     void parse(bool storeEncoding, const std::vector<sys::byte>&, const StringEncoding* pEncoding);
 
-    virtual void write(const void*, size_t)
+    void write(const void*, size_t) override
     {
         throw xml::lite::XMLException(Ctxt("I'm not sure how you got here!"));
     }

@@ -52,11 +52,18 @@ xml::lite::Document* xml::lite::MinidomParser::getDocument(bool steal)
 {
     return mHandler.getDocument(steal);
 }
+void xml::lite::MinidomParser::getDocument(std::unique_ptr<Document>& pDocument)
+{
+    mHandler.getDocument(pDocument);
+}
 
-void xml::lite::MinidomParser::setDocument(xml::lite::Document* newDocument,
-                                           bool own)
+void xml::lite::MinidomParser::setDocument(xml::lite::Document* newDocument, bool own)
 {
     mHandler.setDocument(newDocument, own);
+}
+void xml::lite::MinidomParser::setDocument(std::unique_ptr<Document>&& newDocument)
+{
+    mHandler.setDocument(std::move(newDocument));
 }
 
 void xml::lite::MinidomParser::preserveCharacterData(bool preserve)

@@ -60,9 +60,10 @@ int xml::lite::Attributes::getIndex(const std::string& qname) const
     return -1;
 }
 
-int xml::lite::Attributes::getIndex(const std::string& uri,
-                                    const std::string& localName) const
+int xml::lite::Attributes::getIndex(const QName& qname) const
 {
+    const auto uri = qname.getUri().value;
+    const auto localName = qname.getName();
     for (size_t i = 0; i < mAttributes.size(); i++)
     {
         if ((uri == mAttributes[i].getUri()) && (localName
@@ -96,7 +97,13 @@ bool xml::lite::Attributes::getValue(int i, std::string& result) const
 
 std::string xml::lite::Attributes::getUri(int i) const
 {
-    return mAttributes.at(i).getUri();
+    Uri result;
+    getUri(i, result);
+    return result.value;
+}
+void xml::lite::Attributes::getUri(int i, Uri& result) const
+{
+    return mAttributes.at(i).getUri(result);
 }
 
 std::string xml::lite::Attributes::getLocalName(int i) const
@@ -107,6 +114,10 @@ std::string xml::lite::Attributes::getLocalName(int i) const
 std::string xml::lite::Attributes::getQName(int i) const
 {
     return mAttributes.at(i).getQName();
+}
+void xml::lite::Attributes::getQName(int i, QName& result) const
+{
+    mAttributes.at(i).getQName(result);
 }
 
 std::string xml::lite::Attributes::getValue(const std::string& qname) const
@@ -134,23 +145,23 @@ bool xml::lite::Attributes::getValue(const std::string& qname, std::string& resu
     return false; // not found
 }
 
-std::string xml::lite::Attributes::getValue(
-    const std::string& uri,
-    const std::string& localName) const
+std::string xml::lite::Attributes::getValue(const QName& qname) const
 {
     std::string retval;
-    if (!getValue(uri, localName, retval))
+    if (!getValue(qname, retval))
     {
+        const auto uri = qname.getUri().value;
+        const auto localName = qname.getName();
         throw except::NoSuchKeyException(Ctxt(FmtX("(uri: %s, localName: %s",
                                                    uri.c_str(), localName.c_str())));
     }
     return retval;
 }
-bool xml::lite::Attributes::getValue(
-    const std::string& uri,
-    const std::string& localName,
-    std::string& result) const
+bool xml::lite::Attributes::getValue(const QName& qname, std::string& result) const
 {
+    const auto uri = qname.getUri().value;
+    const auto localName = qname.getName();
+
     for (size_t i = 0; i < mAttributes.size(); i++)
     {
         if ((uri == mAttributes[i].getUri()) && (localName
@@ -173,6 +184,10 @@ void xml::lite::AttributeNode::setQName(const std::string& qname)
 {
     mName.setQName(qname);
 }
+void xml::lite::AttributeNode::setQName(const QName& qname)
+{
+    mName = qname;
+}
 
 void xml::lite::AttributeNode::setLocalName(const std::string& lname)
 {
@@ -184,7 +199,7 @@ void xml::lite::AttributeNode::setPrefix(const std::string& prefix)
     mName.setPrefix(prefix);
 }
 
-void xml::lite::AttributeNode::setUri(const std::string& uri)
+void xml::lite::AttributeNode::setUri(const Uri& uri)
 {
     mName.setAssociatedUri(uri);
 }
@@ -196,7 +211,13 @@ void xml::lite::AttributeNode::setValue(const std::string& value)
 
 std::string xml::lite::AttributeNode::getUri() const
 {
-    return mName.getAssociatedUri();
+    Uri result;
+    getUri(result);
+    return result.value;
+}
+void xml::lite::AttributeNode::getUri(Uri& result) const
+{
+    mName.getAssociatedUri(result);
 }
 
 std::string xml::lite::AttributeNode::getLocalName() const
@@ -216,7 +237,13 @@ std::string xml::lite::AttributeNode::getValue() const
 
 std::string xml::lite::AttributeNode::getQName() const
 {
-    return mName.toString();
+    QName result;
+    getQName(result);
+    return result.toString();
+}
+void xml::lite::AttributeNode::getQName(QName& result) const
+{
+    result = mName;
 }
 
 xml::lite::Attributes::Attributes(const xml::lite::Attributes& attributes)

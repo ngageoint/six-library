@@ -90,12 +90,12 @@ XercesLocalString& XercesLocalString::operator=(const XercesLocalString& rhs)
 void XercesContentHandler::characters(const XMLCh* const chars,
                                       const XercesSize_T length)
 {
-    if (mLiteHandler->use_wchar_t())
+    if (mLiteHandler->call_vcharacters())
     {
-        if (mLiteHandler->wcharacters(chars, length))
+        if (mLiteHandler->vcharacters(chars, length))
         {
-            return; // processed as wide_char
-        }    
+            return;  // processed as void*
+        }
     }
 
     // Either use_wchar_t() is false (default, legacy behavior) or

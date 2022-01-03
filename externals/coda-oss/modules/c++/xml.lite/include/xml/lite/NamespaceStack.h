@@ -20,8 +20,10 @@
  *
  */
 
-#ifndef __XML_LITE_NAMESPACE_STACK_H__
-#define __XML_LITE_NAMESPACE_STACK_H__
+#ifndef CODA_OSS_xml_lite_NamespaceStack_h_INCLUDED_
+#define CODA_OSS_xml_lite_NamespaceStack_h_INCLUDED_
+
+#pragma once
 
 /*!
  *  \file NamespaceStack.h
@@ -50,7 +52,10 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <utility>
+
 #include "except/Exception.h"
+#include "xml/lite/QName.h"
 
 namespace xml
 {
@@ -70,16 +75,10 @@ typedef std::vector<NamespaceEntity> NamespaceEntityMap;
  *
  *
  */
-class NamespaceStack
+struct NamespaceStack final
 {
-public:
-    NamespaceStack()
-    {
-    }
-
-    ~NamespaceStack()
-    {
-    }
+    NamespaceStack() = default;
+    ~NamespaceStack() = default;
 
     /*!
      *  Push a new scope on the stack.  This will add a zero-
@@ -106,7 +105,11 @@ public:
      *  \param prefix  The unique prefix to associate
      *  \param uri     The uri to associate
      */
-    void newMapping(const std::string & prefix, const std::string & uri);
+    void newMapping(const std::string & prefix, const Uri&);
+    void newMapping(const std::string& prefix, const std::string& uri)
+    {
+        newMapping(prefix, Uri(uri));
+    }
 
     /*!
      *  Of course, we also wish to retrieve the
@@ -114,7 +117,13 @@ public:
      *  \param  prefix The unique prefix to retrieve our uri for
      *  \return The associated uri or "" if none is available
      */
-    std::string getMapping(const std::string & prefix) const;
+    void getMapping(const std::string& prefix, Uri&) const;
+    std::string getMapping(const std::string& prefix) const
+    {
+        Uri result;
+        getMapping(prefix, result);
+        return result.value;
+    }
 
     /*!
      *  Get back an array of all of the prefixes in our namespace
@@ -131,4 +140,4 @@ private:
 }
 }
 
-#endif
+#endif  // CODA_OSS_xml_lite_NamespaceStack_h_INCLUDED_

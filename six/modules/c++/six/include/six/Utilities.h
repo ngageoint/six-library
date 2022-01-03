@@ -202,10 +202,10 @@ mem::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               ::io::InputStream& xmlStream, 
                               DataType dataType,
                               const std::vector<std::string>& schemaPaths,
-                              logging::Logger& log);
+                              logging::Logger& log, bool storeEncoding=false);
 std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream, DataType dataType,
-    const std::vector<std::filesystem::path>*, logging::Logger&);
+    const std::vector<std::filesystem::path>*, logging::Logger&, bool storeEncoding = true);
 
 /*
  * Parses the XML in 'xmlStream' and converts it into a Data object.  Same as
