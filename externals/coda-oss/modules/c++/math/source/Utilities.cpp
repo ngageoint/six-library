@@ -84,15 +84,15 @@ inline void sincosl_(long double x, long double& sin, long double& cos)
     cos = std::cos(x);
 #endif
 }
-void math::SinCos(float x, float& sin, float& cos)
+void math::SinCos(float x, float& sin, float& cos) noexcept
 {
     sincosf_(x, sin, cos);
 }
-void math::SinCos(double x, double& sin, double& cos)
+void math::SinCos(double x, double& sin, double& cos) noexcept
 {
     sincos_(x, sin, cos);
 }
-void math::SinCos(long double x, long double& sin, long double& cos)
+void math::SinCos(long double x, long double& sin, long double& cos) noexcept
 {
     sincosl_(x, sin, cos);
 }
