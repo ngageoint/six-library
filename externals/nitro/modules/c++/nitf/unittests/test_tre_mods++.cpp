@@ -23,6 +23,8 @@
 #include <iostream>
 #include <vector>
 
+#include <str/Manip.h>
+
 #include <nitf/TRE.hpp>
 
 #include "TestCase.h"
@@ -54,7 +56,7 @@
 
 #include "nitf/TRE.hpp"
 #include "nitf/exports.hpp"
-#include "nitf/TREs/TREField.hpp"
+#include "nitf/TREField.hpp"
 
 // A sample "strongly-typed" TRE.  There are too many TREs (and too much unwillingness to change) to
 // actually hook this up.  But it's kind of neat code that I don't want to lose.
@@ -250,23 +252,63 @@ TEST_CASE(use_ENGRDA)
     engrda.setField("ENGDATA[0]", "ABC");
 }
 
+TEST_CASE(use_ENGRDA_typed_fields)
+{
+    nitf::TRE engrda("ENGRDA", "ENGRDA");
+
+    nitf::TREField_BCS_A<20> RESRC(engrda, "RESRC");
+    RESRC = "HSS"; // engrda.setField("RESRC", "HSS");
+    const auto resrc_ = str::strip(RESRC);
+    TEST_ASSERT_EQ(resrc_, "HSS");
+
+    nitf::TREField_BCS_N<3> RECNT(engrda, "RECNT", true /*forceUpdate*/);
+    RECNT = 1; // engrda.setField("RECNT", 1, true /*forceUpdate*/);
+    const int64_t recnt_ = RECNT;
+    TEST_ASSERT_EQ(recnt_, 1);
+
+    nitf::IndexedField<nitf::TREField_BCS_N<1>> ENGDTS(engrda, "ENGDTS", RECNT);
+    ENGDTS[0] = 3; // engrda.setField("ENGDTS[0]", 3); // size
+    const int64_t engdts_0_ = ENGDTS[0];
+    TEST_ASSERT_EQ(engdts_0_, 3);
+
+    nitf::IndexedField<nitf::TREField_BCS_N<8>> ENGDATC(engrda, "ENGDATC", RECNT);
+    ENGDATC[0] = 1; // engrda.setField("ENGDATC[0]", 1); // count
+    const int64_t engdatc_0_ = ENGDATC[0];
+    TEST_ASSERT_EQ(engdatc_0_, 1);
+
+    engrda.updateFields();
+
+    nitf::IndexedField<nitf::TREField_BCS_A<>> ENGDATA(engrda, "ENGDATA",  RECNT);
+    ENGDATA[0] = "ABC"; // engrda.setField("ENGDATA[0]", "ABC");
+    const auto engdata_0_ = str::strip(ENGDATA[0]);
+    TEST_ASSERT_EQ(engdata_0_, "ABC");
+}
+
 TEST_CASE(use_typed_ENGRDA)
 {
     nitf::TREs::ENGRDA engrda; // nitf::TRE engrda("ENGRDA", "ENGRDA");
 
     engrda.RESRC = "HSS"; // engrda.setField("RESRC", "HSS");
-    const std::string RESRC = engrda.RESRC;
+    const auto RESRC = str::strip(engrda.RESRC);
+    TEST_ASSERT_EQ(RESRC, "HSS");
+
     engrda.RECNT = 1; // engrda.setField("RECNT", 1, true /*forceUpdate*/);
     const int64_t RECNT = engrda.RECNT;
+    TEST_ASSERT_EQ(RECNT, 1);
 
     engrda.ENGDTS[0] = 3; // engrda.setField("ENGDTS[0]", 3); // size
     const int64_t ENGDTS_0 = engrda.ENGDTS[0];
+    TEST_ASSERT_EQ(ENGDTS_0, 3);
+
     engrda.ENGDATC[0] = 1; // engrda.setField("ENGDATC[0]", 1); // count
     const int64_t ENGDATC_0 = engrda.ENGDATC[0];
+    TEST_ASSERT_EQ(ENGDATC_0, 1);
+
     engrda.updateFields();
     engrda.ENGDATA[0] = "ABC"; // engrda.setField("ENGDATA[0]", "ABC");
     const auto& engrda_ = engrda;
-    const auto ENGDATA_0 = engrda_.ENGDATA[0];
+    const auto ENGDATA_0 = str::strip(engrda_.ENGDATA[0]);
+    TEST_ASSERT_EQ(ENGDATA_0, "ABC");
 
     try
     {
@@ -350,6 +392,7 @@ TEST_MAIN(
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
     TEST_CHECK(use_ENGRDA);
+    TEST_CHECK(use_ENGRDA_typed_fields);
     TEST_CHECK(use_typed_ENGRDA);
     TEST_CHECK(populateWhileIterating);
     TEST_CHECK(overflowingNumericFields);
