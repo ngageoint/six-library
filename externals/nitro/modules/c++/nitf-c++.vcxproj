@@ -138,7 +138,7 @@
     <ClInclude Include="nitf\include\nitf\TextSegment.hpp" />
     <ClInclude Include="nitf\include\nitf\TextSubheader.hpp" />
     <ClInclude Include="nitf\include\nitf\TRE.hpp" />
-    <ClInclude Include="nitf\include\nitf\TREs\TREField.hpp" />
+    <ClInclude Include="nitf\include\nitf\TREField.hpp" />
     <ClInclude Include="nitf\include\nitf\Utils.hpp" />
     <ClInclude Include="nitf\include\nitf\Version.hpp" />
     <ClInclude Include="nitf\include\nitf\WriteHandler.hpp" />

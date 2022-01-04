@@ -119,6 +119,8 @@ public:
 
     ValidatorXerces(const ValidatorXerces&) = delete;
     ValidatorXerces& operator=(const ValidatorXerces&) = delete;
+    ValidatorXerces(ValidatorXerces&&) = delete;
+    ValidatorXerces& operator=(ValidatorXerces&&) = delete;
 
     using ValidatorInterface::validate;
 

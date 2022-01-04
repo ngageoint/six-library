@@ -46,6 +46,7 @@
 #include <str/Manip.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
+#include <units/Angles.h>
 #include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/GeoLocator.h>
 #include <six/sicd/ImageData.h>
@@ -98,9 +99,9 @@ std::complex<float> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitu
 
     // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
     // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
-    const auto angle = 2 * M_PI * P;
+    const auto angle = units::Radians<long double>{ 2 * M_PI * P };
     long double sin_angle, cos_angle;
-    math::SinCos(angle, sin_angle, cos_angle);
+    SinCos(angle, sin_angle, cos_angle);
 
     const auto real = A * cos_angle;
     const auto imaginary = A * sin_angle;
