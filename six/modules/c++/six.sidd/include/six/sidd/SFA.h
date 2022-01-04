@@ -114,7 +114,7 @@ struct SFAPoint : public SFAGeometry
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFAPoint& rhs) const
+    bool operator_eq(const SFAPoint& rhs) const
     {
         return (x == rhs.x && y == rhs.y &&
             z == rhs.z && m == rhs.m);
@@ -124,7 +124,7 @@ private:
         const SFAPoint* point = dynamic_cast<const SFAPoint*>(&rhs);
         if (point != nullptr)
         {
-            return this->operator_equals(*point);
+            return this->operator_eq(*point);
         }
         return false;
     }
@@ -157,7 +157,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFALineString& rhs) const
+    bool operator_eq(const SFALineString& rhs) const
     {
         return (vertices == rhs.vertices);
     }
@@ -166,7 +166,7 @@ private:
         const SFALineString* lineString = dynamic_cast<const SFALineString*>(&rhs);
         if (lineString != nullptr)
         {
-            return this->operator_equals(*lineString);
+            return this->operator_eq(*lineString);
         }
         return false;
     }
@@ -187,7 +187,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFALine& rhs) const
+    bool operator_eq(const SFALine& rhs) const
     {
         return (vertices == rhs.vertices);
     }
@@ -196,7 +196,7 @@ private:
         const SFALine* line = dynamic_cast<const SFALine*>(&rhs);
         if (line != nullptr)
         {
-            return this->operator_equals(*line);
+            return this->operator_eq(*line);
         }
         return false;
     }
@@ -217,7 +217,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFALinearRing& rhs) const
+    bool operator_eq(const SFALinearRing& rhs) const
     {
         return (vertices == rhs.vertices);
     }
@@ -226,7 +226,7 @@ private:
         const SFALinearRing* linearRing = dynamic_cast<const SFALinearRing*>(&rhs);
         if (linearRing != nullptr)
         {
-            return this->operator_equals(*linearRing);
+            return this->operator_eq(*linearRing);
         }
         return false;
     }
@@ -259,7 +259,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFAPolygon& rhs) const
+    bool operator_eq(const SFAPolygon& rhs) const
     {
         return (rings == rhs.rings);
     }
@@ -268,7 +268,7 @@ private:
         const SFAPolygon* polygon = dynamic_cast<const SFAPolygon*>(&rhs);
         if (polygon != nullptr)
         {
-            return this->operator_equals(*polygon);
+            return this->operator_eq(*polygon);
         }
         return false;
     }
@@ -291,7 +291,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFATriangle& rhs) const
+    bool operator_eq(const SFATriangle& rhs) const
     {
         return (rings == rhs.rings);
     }
@@ -300,7 +300,7 @@ private:
         const SFATriangle* triangle = dynamic_cast<const SFATriangle*>(&rhs);
         if (triangle != nullptr)
         {
-            return this->operator_equals(*triangle);
+            return this->operator_eq(*triangle);
         }
         return false;
     }
@@ -323,7 +323,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFAPolyhedralSurface& rhs) const
+    bool operator_eq(const SFAPolyhedralSurface& rhs) const
     {
         return (patches == rhs.patches);
     }
@@ -332,7 +332,7 @@ private:
         const SFAPolyhedralSurface* surface = dynamic_cast<const SFAPolyhedralSurface*>(&rhs);
         if (surface != nullptr)
         {
-            return this->operator_equals(*surface);
+            return this->operator_eq(*surface);
         }
         return false;
     }
@@ -357,7 +357,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFATriangulatedIrregularNetwork& rhs) const
+    bool operator_eq(const SFATriangulatedIrregularNetwork& rhs) const
     {
         return (patches == rhs.patches);
     }
@@ -366,7 +366,7 @@ private:
         const SFATriangulatedIrregularNetwork* network = dynamic_cast<const SFATriangulatedIrregularNetwork*>(&rhs);
         if (network != nullptr)
         {
-            return this->operator_equals(*network);
+            return this->operator_eq(*network);
         }
         return false;
     }
@@ -397,7 +397,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFAMultiPoint& rhs) const
+    bool operator_eq(const SFAMultiPoint& rhs) const
     {
         return (vertices == rhs.vertices);
     }
@@ -406,7 +406,7 @@ private:
         const SFAMultiPoint* multiPoint = dynamic_cast<const SFAMultiPoint*>(&rhs);
         if (multiPoint != nullptr)
         {
-            return this->operator_equals(*multiPoint);
+            return this->operator_eq(*multiPoint);
         }
         return false;
     }
@@ -440,7 +440,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFAMultiLineString& rhs) const
+    bool operator_eq(const SFAMultiLineString& rhs) const
     {
         return (elements == rhs.elements);
     }
@@ -449,7 +449,7 @@ private:
         const SFAMultiLineString* string = dynamic_cast<const SFAMultiLineString*>(&rhs);
         if (string != nullptr)
         {
-            return this->operator_equals(*string);
+            return this->operator_eq(*string);
         }
         return false;
     }
@@ -482,7 +482,7 @@ public:
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFAMultiPolygon& rhs) const
+    bool operator_eq(const SFAMultiPolygon& rhs) const
     {
         return (elements == rhs.elements);
     }
@@ -491,7 +491,7 @@ private:
         const SFAMultiPolygon* polygon = dynamic_cast<const SFAMultiPolygon*>(&rhs);
         if (polygon != nullptr)
         {
-            return this->operator_equals(*polygon);
+            return this->operator_eq(*polygon);
         }
         return false;
     }
@@ -609,7 +609,7 @@ struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFAGeocentricCoordinateSystem& rhs) const
+    bool operator_eq(const SFAGeocentricCoordinateSystem& rhs) const
     {
         return (csName == rhs.csName && datum == rhs.datum &&
             primeMeridian == rhs.primeMeridian && linearUnit == rhs.linearUnit);
@@ -619,7 +619,7 @@ private:
         const SFAGeocentricCoordinateSystem* system = dynamic_cast<const SFAGeocentricCoordinateSystem*>(&rhs);
         if (system != nullptr)
         {
-            return this->operator_equals(*system);
+            return this->operator_eq(*system);
         }
         return false;
     }
@@ -647,7 +647,7 @@ struct SFAGeographicCoordinateSystem : public SFACoordinateSystem
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFAGeographicCoordinateSystem& rhs) const
+    bool operator_eq(const SFAGeographicCoordinateSystem& rhs) const
     {
         return (csName == rhs.csName && datum == rhs.datum &&
             primeMeridian == rhs.primeMeridian && linearUnit == rhs.linearUnit &&
@@ -658,7 +658,7 @@ private:
         const SFAGeographicCoordinateSystem* system = dynamic_cast<const SFAGeographicCoordinateSystem*>(&rhs);
         if (system != nullptr)
         {
-            return this->operator_equals(*system);
+            return this->operator_eq(*system);
         }
         return false;
     }
@@ -685,7 +685,7 @@ struct SFAProjectedCoordinateSystem : public SFACoordinateSystem
     static const char TYPE_NAME[];
 
 private:
-    bool operator_equals(const SFAProjectedCoordinateSystem& rhs) const
+    bool operator_eq(const SFAProjectedCoordinateSystem& rhs) const
     {
         return (csName == rhs.csName && projection == rhs.projection &&
             parameter == rhs.parameter && linearUnit == rhs.linearUnit &&
@@ -696,7 +696,7 @@ private:
         const SFAProjectedCoordinateSystem* system = dynamic_cast<const SFAProjectedCoordinateSystem*>(&rhs);
         if (system != nullptr)
         {
-            return this->operator_equals(*system);
+            return this->operator_eq(*system);
         }
         return false;
     }
