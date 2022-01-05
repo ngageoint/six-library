@@ -77,7 +77,7 @@ namespace nitf
  *  \class NITFException
  *  \brief  The C++ wrapper for the nitf_Error
  */
-class NITFException  /*final*/ : public except::Exception // no "final", SWIG doesn't like it
+class NITFException final : public except::Exception11
 {
     static except::Context make_Context_(const Error& error, const std::string& message)
     {
@@ -120,13 +120,7 @@ public:
      *  Construct from Context
      *  \param c  The Context
      */
-    NITFException(const except::Context& c) : except::Exception(c){}
-
-    /*!
-     *  Construct from an error message
-     *  \param message  The error message
-     */
-    NITFException(const std::string& message) : except::Exception(message){}
+    NITFException(const except::Context& c) : except::Exception11(c){}
 
     /*!
      *  Construct from Throwable and Context
@@ -134,7 +128,13 @@ public:
      *  \param c  The Context
      */
     NITFException(const except::Throwable& t, const except::Context& c) :
-            except::Exception(t, c){}
+        except::Exception11(t, c) {}
+
+    /*!
+     *  Construct from an error message
+     *  \param message  The error message
+     */
+    NITFException(const std::string& message) : except::Exception11(message){}
 }
 ;
 }
