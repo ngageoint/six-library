@@ -61,9 +61,9 @@ sys::Mutex RunNothing::counterLock;
 
 TEST_CASE(testExceptionLogger)
 {
-    std::unique_ptr<logging::Logger> log(new logging::Logger("test"));
+    logging::Logger log("test");
 
-    mem::SharedPtr<logging::ExceptionLogger> exLog(new logging::ExceptionLogger(log.get()));
+    logging::ExceptionLogger exLog(&log);
 
     size_t counter(0);
     uint16_t numThreads(2);
@@ -73,11 +73,11 @@ TEST_CASE(testExceptionLogger)
     mt::GenerationThreadPool pool(numThreads);
     pool.start();
 
-    runs.push_back(new RunNothing(counter, exLog.get()));
+    runs.push_back(new RunNothing(counter, &exLog));
     pool.addAndWaitGroup(runs);
     runs.clear();
 
-    runs.push_back(new RunNothing(counter, exLog.get()));
+    runs.push_back(new RunNothing(counter, &exLog));
     pool.addAndWaitGroup(runs);
     runs.clear();
 
