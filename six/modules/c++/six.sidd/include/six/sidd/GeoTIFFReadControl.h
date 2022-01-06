@@ -49,8 +49,8 @@ struct GeoTIFFReadControl : public ReadControl
      *  \param fromFile    Input filepath
      *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void load(const std::string& fromFile,
-                      const std::vector<std::string>& schemaPaths);
+    void load(const std::string& fromFile, const std::vector<std::string>& schemaPaths) override;
+    void load(const std::filesystem::path&, const std::vector<std::filesystem::path>* schemaPaths) override;
 
     using ReadControl::interleaved;
     virtual UByte* interleaved(Region& region, size_t imageNumber) override;
