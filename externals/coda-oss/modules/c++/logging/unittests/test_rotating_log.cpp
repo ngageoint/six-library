@@ -51,19 +51,18 @@ TEST_CASE(testRotate)
 
     sys::OS os;
     {
-        auto log = mem::make::unique<logging::Logger>("test");
-        auto formatter = mem::make::unique<logging::StandardFormatter>("%m");
+        logging::Logger log("test");
+
         auto logHandler = mem::make::unique<logging::RotatingFileHandler>(outFile, 10, maxFiles);
-
         logHandler->setLevel(logging::LogLevel::LOG_DEBUG);
-        logHandler->setFormatter(formatter.release());
-        log->addHandler(logHandler.release(), true);
+        logHandler->setFormatter(mem::make::unique<logging::StandardFormatter>("%m"));
+        log.addHandler(std::move(logHandler));
 
-        log->debug("0123456789");
+        log.debug("0123456789");
         TEST_ASSERT(os.exists(outFile));
         TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
 
-        log->debug("1");
+        log.debug("1");
         TEST_ASSERT(os.isFile(outFile + ".1"));
     }
 
@@ -77,13 +76,12 @@ TEST_CASE(testNeverRotate)
 
     sys::OS os;
     {
-        auto log = mem::make::unique<logging::Logger>("test");
-        auto formatter = mem::make::unique<logging::StandardFormatter>("%m");
-        auto logHandler = mem::make::unique<logging::RotatingFileHandler>(outFile);
+        logging::Logger log("test");
+        logging::RotatingFileHandler logHandler(outFile);
 
         for(size_t i = 0; i < 1024; ++i)
         {
-            log->debug("test");
+            log.debug("test");
         }
         TEST_ASSERT(os.exists(outFile));
         TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
@@ -99,14 +97,13 @@ TEST_CASE(testRotateReset)
 
     sys::OS os;
     {
-        auto log = mem::make::unique<logging::Logger>("test");
-        auto formatter = mem::make::unique<logging::StandardFormatter>("%m");
-        auto logHandler = mem::make::unique<logging::RotatingFileHandler>(outFile, 10);
-        log->debug("01234567890");
+        logging::Logger log("test");
+        logging::RotatingFileHandler logHandler(outFile, 10);
+        log.debug("01234567890");
         TEST_ASSERT(os.exists(outFile));
         TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
 
-        log->debug("0");
+        log.debug("0");
         TEST_ASSERT(os.exists(outFile));
         TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
     }

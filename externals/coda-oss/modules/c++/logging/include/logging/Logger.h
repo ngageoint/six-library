@@ -24,12 +24,13 @@
 //  Logger.h
 ///////////////////////////////////////////////////////////
 
-#ifndef __LOGGING_LOGGER_H__
-#define __LOGGING_LOGGER_H__
+#ifndef CODA_OSS_logging_Logger_h_INCLUDED_
+#define CODA_OSS_logging_Logger_h_INCLUDED_
 
 #include <string>
 #include <vector>
 #include <memory>
+
 #include "logging/Filterer.h"
 #include "logging/LogRecord.h"
 #include "logging/Handler.h"
@@ -104,6 +105,7 @@ struct Logger : public Filterer
      * This Logger does not own the passed-in Handler.
      */
     void addHandler(Handler* handler, bool own = false);
+    void addHandler(std::unique_ptr<Handler>&&); // own = true
 
     /*!
      * Removes the specified Handler from the list of Handlers.
@@ -139,14 +141,17 @@ struct Logger : public Filterer
 
 protected:
     void handle(const LogRecord* record);
+    void handle(const LogRecord& record)
+    {
+        handle(&record);
+    }
 
     typedef std::pair<Handler*, bool> Handler_T;
     typedef std::vector<Handler_T> Handlers_T;
 
     std::string mName;
     Handlers_T mHandlers;
-
 };
 typedef std::shared_ptr<Logger> LoggerPtr;
 }
-#endif
+#endif  // CODA_OSS_logging_Logger_h_INCLUDED_
