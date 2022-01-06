@@ -14,10 +14,14 @@
 #pragma warning(push)
 #pragma warning(disable: 26447) // The function is declared '...' but calls function '..' which may throw exceptions (f.6).
 #pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
-#pragma warning(disable: 26455) //	 Default constructor may not throw.Declare it 'noexcept' (f.6).
+#pragma warning(disable: 26455) //	 Default constructor may not throw. Declare it '...' (f.6).
 #pragma warning(disable: 26458) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
+#pragma warning(disable: 26823) // Dereferencing a possibly null pointer '...' (lifetime.1).
+#pragma warning(disable: 26447) // The function is declared '...' but calls function '...' which may throw exceptions(f.6).
+#pragma warning(disable: 26822) // Dereferencing a null pointer '...' (lifetime.1).
 
 #include <import/str.h>
+#include <str/Encoding.h>
 #include <import/sys.h>
 #pragma warning(push)
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
@@ -25,6 +29,8 @@
 #pragma warning(pop)
 #include <import/io.h>
 #include <import/logging.h>
+#include <import/except.h>
+#include <except/Throwable.h>
 
 #pragma warning(push)
 #pragma warning(disable: 26489) // Don't dereference a pointer that may be invalid: '...'. '...' may have been invalidated at line ... (lifetime.1).
@@ -39,7 +45,6 @@
 #pragma warning(push)
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid (lifetime.4).
 #pragma warning(disable: 26482) // Only index into arrays using constant expressions (bounds.2).
-#pragma warning(disable: 26823) // Dereferencing a possibly null pointer '' (lifetime.1).
 #include <import/math/poly.h>
 #pragma warning(pop)
 #pragma warning(pop)
