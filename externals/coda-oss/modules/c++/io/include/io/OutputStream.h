@@ -73,7 +73,8 @@ struct OutputStream
      */
     void write(std::string::const_pointer pStr, size_t length)  // i.e., std::string_view
     {
-        write(static_cast<const void*>(pStr), length);
+        const void* const pStr_ = pStr;
+        write(pStr_, length);
     }
     void write(const std::string& str)
     {
@@ -81,7 +82,8 @@ struct OutputStream
     }
     void write(sys::U8string::const_pointer pStr, size_t length) // i.e., std::string_view
     {
-        write(static_cast<const void*>(pStr), length);
+        const void* const pStr_ = pStr;
+        write(pStr_, length);
     }
     void write(const sys::U8string& str)
     {
