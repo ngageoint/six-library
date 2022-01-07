@@ -111,7 +111,7 @@ ComplexData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
     return imagePt;
 }
 
-bool ComplexData::operator==(const ComplexData& rhs) const
+bool ComplexData::operator_eq(const ComplexData& rhs) const
 {
     return (collectionInformation == rhs.collectionInformation &&
         imageCreation == rhs.imageCreation &&
@@ -134,10 +134,10 @@ bool ComplexData::operator==(const ComplexData& rhs) const
 
 bool ComplexData::equalTo(const Data& rhs) const
 {
-    const ComplexData* data = dynamic_cast<const ComplexData*>(&rhs);
+    auto data = dynamic_cast<const ComplexData*>(&rhs);
     if (data != nullptr)
     {
-        return *this == *data;
+        return this->operator_eq(*data);
     }
     return false;
 }
