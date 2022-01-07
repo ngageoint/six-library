@@ -35,9 +35,51 @@ CollectionInformation::CollectionInformation()
     mClassification = Init::undefined<std::string>();
 }
 
+bool operator==(const CollectionInformation& lhs, const CollectionInformation& rhs)
+{
+    const auto result = lhs.collectorName == rhs.collectorName &&
+        lhs.collectType == rhs.collectType &&
+        lhs.illuminatorName == rhs.illuminatorName &&
+        lhs.coreName == rhs.coreName &&
+        lhs.radarMode == rhs.radarMode &&
+        lhs.radarModeID == rhs.radarModeID &&
+        lhs.releaseInfo == rhs.releaseInfo &&
+        lhs.getClassificationLevel() == rhs.getClassificationLevel();
+    if (!result)
+    {
+        // no need to look at mClassification_u8
+        return false;
+    }
+
+    // Everything is equal up to this point
+    std::u8string lhs_classification_u8, rhs_classification_u8;
+    const auto lhs_result = lhs.getClassificationLevel(lhs_classification_u8);
+    const auto rhs_result = rhs.getClassificationLevel(rhs_classification_u8);
+    if (lhs_result && rhs_result) // mClassification_u8 might not be set
+    {
+        // we've got two u8strings
+        return lhs_classification_u8 == rhs_classification_u8;
+    }
+    return lhs_result == rhs_result; // either none, or only one
+}
+
 CollectionInformation* CollectionInformation::clone() const
 {
     return new CollectionInformation(*this);
+}
+
+bool CollectionInformation::getClassificationLevel(std::u8string& result) const
+{
+    if (mClassification_u8.has_value())
+    {
+        result = mClassification_u8.value();
+        return true;
+    }
+    return false;
+}
+void CollectionInformation::setClassificationLevel(const std::u8string& classification)
+{
+    mClassification_u8 = classification;
 }
 
 std::ostream& operator<< (std::ostream& os, const six::CollectionInformation& c)
