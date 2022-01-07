@@ -32,10 +32,9 @@ namespace sicd
  *  \class ComplexClassification
  *  \brief The implementation of Classification for complex products
  */
-class ComplexClassification: public Classification
+struct ComplexClassification: public Classification
 {
-public:
-    virtual std::string getLevel() const
+    std::string getLevel() const override
     {
         return level;
     }
@@ -46,22 +45,21 @@ public:
         return os;
     }
 
-    bool operator==(const ComplexClassification& rhs) const
-    {
-        return (level == rhs.getLevel() &&
-            fileOptions == rhs.fileOptions);
-    }
-
     //! This is spelled out (i.e. 'UNCLASSIFIED')
     std::string level;
 
 private:
+    bool operator_eq(const ComplexClassification& rhs) const
+    {
+        return (level == rhs.getLevel() &&
+            fileOptions == rhs.fileOptions);
+    }
     virtual bool equalTo(const Classification& rhs) const override
     {
-        const ComplexClassification* classification = dynamic_cast<const ComplexClassification*>(&rhs);
+        auto classification = dynamic_cast<const ComplexClassification*>(&rhs);
         if (classification != nullptr)
         {
-            return *this == *classification;
+            return this->operator_eq(*classification);
         }
         return false;
     }

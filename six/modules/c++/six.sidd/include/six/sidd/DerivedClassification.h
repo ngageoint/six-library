@@ -42,10 +42,9 @@ namespace sidd
  *
  *  Compiler-generated copy constructor and assignment operator are sufficient
  */
-class DerivedClassification: public Classification
+struct DerivedClassification: public Classification
 {
-public:
-    virtual std::string getLevel() const
+    std::string getLevel() const override
     {
         return classification;
     }
@@ -233,12 +232,11 @@ public:
     //  that type of data in this document.
     BooleanType externalNotice;
 
-    //! Equality operator
-    bool operator==(const DerivedClassification& rhs) const;
-
-
 private:
-    virtual bool equalTo(const Classification& rhs) const override;
+    //! Equality operator
+    bool operator_eq(const DerivedClassification& rhs) const;
+    bool equalTo(const Classification& rhs) const override;
+
     static
     void putImpl(const std::string& name,
                  const std::vector<std::string>& strs,
