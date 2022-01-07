@@ -65,19 +65,16 @@ struct Remap
 
     virtual Remap* clone() const = 0;
 
-    bool operator==(const Remap& rhs)
-    {
-        return this->equalTo(rhs);
-    }
-
-    bool operator!=(const Remap& rhs)
-    {
-        return !(*this == rhs);
-    }
-
     virtual bool equalTo(const Remap& rhs) const = 0;
-
 };
+inline bool operator==(const Remap& lhs, const Remap& rhs)
+{
+    return lhs.equalTo(rhs) && rhs.equalTo(lhs);
+}
+inline bool operator!=(const Remap& lhs, const Remap& rhs)
+{
+    return !(lhs == rhs);
+}
 
 /*!
  *  \struct MonochromeDisplayRemap
@@ -114,8 +111,9 @@ struct MonochromeDisplayRemap : public Remap
     //!  Remap parameters
     ParameterCollection remapParameters;
 
-    virtual bool equalTo(const Remap& rhs) const;
-    virtual bool operator==(const MonochromeDisplayRemap& rhs) const;
+    bool equalTo(const Remap& rhs) const override;
+private:
+    bool operator_eq(const MonochromeDisplayRemap& rhs) const;
 };
 
 /*!
@@ -140,8 +138,9 @@ struct ColorDisplayRemap : public Remap
         return new ColorDisplayRemap(*this);
     }
 
-    virtual bool equalTo(const Remap& rhs) const;
-    virtual bool operator==(const ColorDisplayRemap& rhs) const;
+    bool equalTo(const Remap& rhs) const override;
+private:
+    bool operator_eq(const ColorDisplayRemap& rhs) const;
 };
 
 /*!

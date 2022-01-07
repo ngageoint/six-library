@@ -65,11 +65,6 @@ struct Data
         return std::unique_ptr<Data>(clone());
     }
 
-    bool equals_(const Data& rhs) const
-    {
-        return this->equalTo(rhs) && rhs.equalTo(*this);
-    }
-
     /*!
      *  Data type/class is DERIVED for DerivedData and
      *  COMPLEX for ComplexData
@@ -208,16 +203,13 @@ struct Data
     //!  Set the version of the model contained within
     virtual void setVersion(const std::string& version) = 0;
 
-private:
     virtual bool equalTo(const Data& rhs) const = 0;
 };
-template<typename T>
-inline bool operator==(const Data& lhs, const T& rhs)
+inline bool operator==(const Data& lhs, const Data& rhs)
 {
-    return lhs.equals_(rhs);
+    return lhs.equalTo(rhs) && rhs.equalTo(lhs);
 }
-template<typename T>
-inline bool operator!=(const Data& lhs, const T& rhs)
+inline bool operator!=(const Data& lhs, const Data& rhs)
 {
     return !(lhs == rhs);
 }

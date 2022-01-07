@@ -54,7 +54,7 @@ private:
         return (level == rhs.getLevel() &&
             fileOptions == rhs.fileOptions);
     }
-    virtual bool equalTo(const Classification& rhs) const override
+    bool equalTo(const Classification& rhs) const override
     {
         auto classification = dynamic_cast<const ComplexClassification*>(&rhs);
         if (classification != nullptr)
