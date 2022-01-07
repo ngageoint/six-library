@@ -191,9 +191,27 @@ TEST_CASE(valid_six_50x50)
     valid_six_50x50_(&schemaPaths); // validate against schema
 }
 
+void readFromNITF_old(const fs::path& pathname, std::unique_ptr<six::sicd::ComplexData>& pComplexData)
+{
+    six::sicd::NITFReadComplexXMLControl reader;
+    reader.setLogger();
+    reader.load(pathname.string(), nullptr /*pSchemaPaths*/); // std::string ==> old XML parsing; no validation
+
+    if (reader.getContainer()->size() != 1)  // For SICD, there's only one image (container->size() == 1)
+    {
+        throw std::invalid_argument(pathname.string() + " is not a SICD; it contains more than one image.");
+    }
+
+    pComplexData = reader.getComplexData();
+    //return reader.interleaved();
+}
+void readFromNITF_new(const std::filesystem::path& pathname, std::unique_ptr<six::sicd::ComplexData>& pComplexData)
+{
+    six::sicd::readFromNITF(pathname, nullptr /*pSchemaPaths*/, pComplexData);  // no validation
+}
+
 const std::string classificationText_iso8859_1("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
 const std::string classificationText_utf_8("NON CLASSIFI\xc3\x89 / UNCLASSIFIED");  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
-
 TEST_CASE(sicd_French_xml)
 {
     setNitfPluginPath();
@@ -201,8 +219,8 @@ TEST_CASE(sicd_French_xml)
     const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
     //const std::vector<std::filesystem::path> schemaPaths;
-    //const auto image = six::sicd::readFromNITF(inputPathname, &schemaPaths, pComplexData);
-    const auto image = six::sicd::readFromNITF(inputPathname, pComplexData); // no validation
+    //::readFromNITF(inputPathname, &schemaPaths, pComplexData);
+    ::readFromNITF_new(inputPathname, pComplexData);
     const six::Data* pData = pComplexData.get();
 
     const auto expectedCassificationText = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
