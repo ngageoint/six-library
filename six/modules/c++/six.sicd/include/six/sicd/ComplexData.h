@@ -347,8 +347,6 @@ struct ComplexData: public Data
         return six::getImageMode(collectionInformation->radarMode);
     }
 
-    bool operator==(const ComplexData& rhs) const;
-
     /*
      * Check that class members are consistent with each other
      *
@@ -370,8 +368,13 @@ struct ComplexData: public Data
      */
     void fillDefaultFields();
 
+    bool operator==(const ComplexData& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Data&>(*this) == static_cast<const Data&>(rhs);
+    }
 private:
-    virtual bool equalTo(const Data& rhs) const override;
+    bool operator_eq(const ComplexData& rhs) const;
+    bool equalTo(const Data& rhs) const override;
 
     /*
      * Classification contains the classification level (stored in
