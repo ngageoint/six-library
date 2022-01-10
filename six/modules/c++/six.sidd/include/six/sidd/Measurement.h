@@ -79,26 +79,22 @@ struct Projection
     ProjectionType projectionType;
     ReferencePoint referencePoint;
 
-    virtual ~Projection() {}
-
-    friend bool operator==(const Projection& lhs, const Projection& rhs)
-    {
-        return lhs.equalTo(rhs);
-    }
-
-    friend bool operator!=(const Projection& lhs, const Projection& rhs)
-    {
-        return !(lhs == rhs);
-    }
+    virtual ~Projection() = default;
 
     //!  Pure
     virtual Projection* clone() const = 0;
     virtual bool isMeasurable() const { return false; }
 
-private:
     virtual bool equalTo(const Projection& rhs) const = 0;
-
 };
+inline bool operator==(const Projection& lhs, const Projection& rhs)
+{
+    return lhs.equalTo(rhs) && rhs.equalTo(lhs);
+}
+inline bool operator!=(const Projection& lhs, const Projection& rhs)
+{
+    return !(lhs == rhs);
+}
 
 /*!
  *  \struct PolynomialProjection
@@ -115,7 +111,7 @@ struct PolynomialProjection : public Projection
         this->projectionType = ProjectionType::POLYNOMIAL;
     }
 
-    virtual ~PolynomialProjection() {}
+    virtual ~PolynomialProjection() = default;
 
     /*!
      *  Define a copy operator
@@ -142,10 +138,13 @@ struct PolynomialProjection : public Projection
     //! Find a col in the image associated with a lat-lon
     Poly2D latLonToCol;
 
-    bool operator==(const PolynomialProjection& rhs) const;
-
+    bool operator==(const PolynomialProjection& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Projection&>(*this) == static_cast<const Projection&>(rhs);
+    }
 private:
-    virtual bool equalTo(const Projection& rhs) const override;
+    bool operator_eq(const PolynomialProjection& rhs) const;
+    bool equalTo(const Projection& rhs) const override;
 };
 
 /*!
@@ -154,7 +153,7 @@ private:
  */
 struct MeasurableProjection : public Projection
 {
-    virtual ~MeasurableProjection() {}
+    virtual ~MeasurableProjection() = default;
 
     RowColDouble sampleSpacing;
 
@@ -163,10 +162,13 @@ struct MeasurableProjection : public Projection
 
     bool isMeasurable() const { return true; }
 
-    bool operator==(const MeasurableProjection& rhs) const;
-
+    bool operator_eq(const MeasurableProjection& rhs) const;
+    bool operator==(const MeasurableProjection& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Projection&>(*this) == static_cast<const Projection&>(rhs);
+    }
 private:
-    virtual bool equalTo(const Projection& rhs) const override;
+    bool equalTo(const Projection& rhs) const override;
 };
 
 /*!
@@ -179,7 +181,6 @@ private:
  */
 struct GeographicProjection : public MeasurableProjection
 {
-
     //!  Initialize base class projection type
     GeographicProjection()
     {
@@ -191,10 +192,15 @@ struct GeographicProjection : public MeasurableProjection
     {
         return new GeographicProjection(*this);
     }
-    virtual ~GeographicProjection() {}
+    virtual ~GeographicProjection() = default;
 
+    bool operator==(const GeographicProjection& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Projection&>(*this) == static_cast<const Projection&>(rhs);
+    }
 private:
-    virtual bool equalTo(const Projection& rhs) const override;
+    bool operator_eq(const GeographicProjection& rhs) const;
+    bool equalTo(const Projection& rhs) const override;
 };
 
 /*!
@@ -215,7 +221,7 @@ struct CylindricalProjection : public MeasurableProjection
         this->curvatureRadius = Init::undefined<double>();
     }
 
-    virtual ~CylindricalProjection() {}
+    virtual ~CylindricalProjection() = default;
 
     /*!
      *  Define a copy operator
@@ -236,10 +242,13 @@ struct CylindricalProjection : public MeasurableProjection
      */
     double curvatureRadius;
 
-    bool operator==(const CylindricalProjection& rhs) const;
-
+    bool operator==(const CylindricalProjection& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Projection&>(*this) == static_cast<const Projection&>(rhs);
+    }
 private:
-    virtual bool equalTo(const Projection& rhs) const override;
+    bool operator_eq(const CylindricalProjection& rhs) const;
+    bool equalTo(const Projection& rhs) const override;
 };
 
 /*!
@@ -257,7 +266,7 @@ struct PlaneProjection : public MeasurableProjection
         this->projectionType = ProjectionType::PLANE;
     }
 
-    virtual ~PlaneProjection() {}
+    virtual ~PlaneProjection() = default;
 
     //!  Clone operation
     virtual Projection* clone() const
@@ -268,10 +277,13 @@ struct PlaneProjection : public MeasurableProjection
     //!  Product plane definition (defined by a basis)
     ProductPlane productPlane;
 
-    bool operator==(const PlaneProjection& rhs) const;
-
+    bool operator==(const PlaneProjection& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Projection&>(*this) == static_cast<const Projection&>(rhs);
+    }
 private:
-    virtual bool equalTo(const Projection& rhs) const override;
+    bool operator_eq(const PlaneProjection& rhs) const;
+    bool equalTo(const Projection& rhs) const override;
 };
 
 /*!
