@@ -69,6 +69,18 @@ CollectionInformation* CollectionInformation::clone() const
     return new CollectionInformation(*this);
 }
 
+std::string CollectionInformation::getClassificationLevel() const
+{
+    std::u8string utf8;
+    if (!getClassificationLevel(utf8))
+    {
+        // no UTF-8 value
+        return mClassification;
+    }
+
+    // use the UTF-8 value, converted to native
+    return str::toString(utf8);
+}
 bool CollectionInformation::getClassificationLevel(std::u8string& result) const
 {
     if (mClassification_u8.has_value())

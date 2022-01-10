@@ -113,10 +113,7 @@ struct CollectionInformation
     //! Deep copy
     CollectionInformation* clone() const;
 
-    inline virtual std::string getClassificationLevel() const
-    {
-        return mClassification;
-    }
+    virtual std::string getClassificationLevel() const;
     inline virtual void setClassificationLevel(const std::string& classification)
     {
         mClassification = classification;
