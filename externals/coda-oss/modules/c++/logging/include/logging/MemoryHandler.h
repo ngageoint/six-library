@@ -51,7 +51,7 @@ struct MemoryHandler : public Handler
 protected:
     virtual void write(const std::string& str);
 
-    virtual void emitRecord(const LogRecord* record);
+    void emitRecord(const LogRecord* record) override;
 
 private:
     typedef std::map<LogLevel, std::vector<std::string> > LogMap;

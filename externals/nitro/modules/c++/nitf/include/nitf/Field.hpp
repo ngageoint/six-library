@@ -26,6 +26,8 @@
 
 #include <string>
 #include <limits>
+#include <type_traits>
+#include <std/cstddef> // std::byte
 
 #include <nitf/Field.h>
 
@@ -185,6 +187,7 @@ public:
     Field(size_t length, FieldType type);
 
     //! Set native object
+    using native_t = nitf_Field;
     Field(nitf_Field * field)
     {
         setNative(field);
