@@ -70,6 +70,9 @@ inline std::string toString(const std::nullptr_t&)
     return "<nullptr>";
 }
 
+template <>
+std::string toString(const str::U8string&);
+
 template <typename T>
 std::string toString(const T& real, const T& imag)
 {

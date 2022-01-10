@@ -211,6 +211,16 @@ TEST_CASE(test_change_case)
     ////test_change_case_(testName, def, DEF);
     //test_change_case_(testName, def_1252, DEF_1252);
 }
+TEST_CASE(test_u8string_to_string)
+{
+    const std::string classificationText_utf_8("NON CLASSIFI\xc3\x89 / UNCLASSIFIED");  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+    const std::string classificationText_iso8859_1("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
+    const auto expected = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
+
+    const auto utf8 = str::fromUtf8(classificationText_utf_8);
+    const auto actual = str::toString(utf8);
+    TEST_ASSERT_EQ(expected, actual);
+}
 
 int main(int, char**)
 {
@@ -222,4 +232,5 @@ int main(int, char**)
     TEST_CHECK(test_string_to_u8string_windows_1252);
     TEST_CHECK(test_string_to_u8string_iso8859_1);
     TEST_CHECK(test_change_case);
+    TEST_CHECK(test_u8string_to_string);
 }
