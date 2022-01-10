@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2022, Maxar Technologies, Inc.
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,25 +21,16 @@
  *
  */
 
-#ifndef __NITF_TYPES_H__
-#define __NITF_TYPES_H__
-#pragma once
+#include <type_traits>
 
-#include <stddef.h>
+#include "nitf/FieldDescriptor.hpp"
 
-/* Enum for the supported version types */
-typedef enum _nitf_Version
+std::vector<nitf::FieldDescriptor> nitf::getFieldDescriptors(std::span<const nitf_StructFieldDescriptor> descriptors)
 {
-    NITF_VER_20 = 100,
-    NITF_VER_21,
-    NITF_VER_UNKNOWN
-} nitf_Version;
-
-/* These macros check the NITF Version */
-#define IS_NITF20(V) ((V) == NITF_VER_20)
-#define IS_NITF21(V) ((V) == NITF_VER_21)
-
-
-typedef void NITF_DATA;
-
-#endif
+    std::vector<nitf::FieldDescriptor> retval;
+    for (size_t i = 0; i < descriptors.size(); i++) // no iterators for our home-brew span<>
+    {
+        retval.emplace_back(descriptors[i]);
+    }
+    return retval;
+}

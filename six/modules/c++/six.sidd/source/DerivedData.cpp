@@ -143,7 +143,7 @@ DerivedData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
             (fullScenePos.col - ctrPt.col) * projection->sampleSpacing.col);
 }
 
-bool DerivedData::operator==(const DerivedData& rhs) const
+bool DerivedData::operator_eq(const DerivedData& rhs) const
 {
     return (productCreation == rhs.productCreation &&
         display == rhs.display &&
@@ -159,10 +159,10 @@ bool DerivedData::operator==(const DerivedData& rhs) const
 
 bool DerivedData::equalTo(const Data& rhs) const
 {
-    const DerivedData* data = dynamic_cast<const DerivedData*>(&rhs);
+    auto data = dynamic_cast<const DerivedData*>(&rhs);
     if (data != nullptr)
     {
-        return *this == *data;
+        return this->operator_eq(*data);
     }
     return false;
 }

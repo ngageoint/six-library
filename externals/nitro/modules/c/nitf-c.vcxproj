@@ -153,6 +153,7 @@
     <ClInclude Include="nitf\include\nitf\DownSampler.h" />
     <ClInclude Include="nitf\include\nitf\Extensions.h" />
     <ClInclude Include="nitf\include\nitf\Field.h" />
+    <ClInclude Include="nitf\include\nitf\FieldDescriptor.h" />
     <ClInclude Include="nitf\include\nitf\FieldWarning.h" />
     <ClInclude Include="nitf\include\nitf\FileHeader.h" />
     <ClInclude Include="nitf\include\nitf\FileSecurity.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="nitf\include\nitf\StreamIOWriteHandler.h" />
     <ClInclude Include="nitf\include\nitf\SubWindow.h" />
     <ClInclude Include="nitf\include\nitf\System.h" />
+    <ClInclude Include="nitf\include\nitf\TestingTest.h" />
     <ClInclude Include="nitf\include\nitf\TextSegment.h" />
     <ClInclude Include="nitf\include\nitf\TextSubheader.h" />
     <ClInclude Include="nitf\include\nitf\TRE.h" />
@@ -290,6 +292,7 @@
     <ClCompile Include="nitf\source\SegmentWriter.c" />
     <ClCompile Include="nitf\source\StreamIOWriteHandler.c" />
     <ClCompile Include="nitf\source\SubWindow.c" />
+    <ClCompile Include="nitf\source\TestingTest.c" />
     <ClCompile Include="nitf\source\TextSegment.c" />
     <ClCompile Include="nitf\source\TextSubheader.c" />
     <ClCompile Include="nitf\source\TRE.c" />
