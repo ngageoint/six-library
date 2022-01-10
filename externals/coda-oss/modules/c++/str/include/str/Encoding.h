@@ -124,6 +124,18 @@ inline void strto8(const std::u32string& s, sys::U8string& result)
     utf32to8(s, result);
 }
 
+void utf8to16(sys::U8string::const_pointer, size_t, std::u16string&);
+inline void utf8to16(const sys::U8string& s, std::u16string& result)
+{
+    utf8to16(s.c_str(), s.size(), result);
+}
+
+void utf8to32(sys::U8string::const_pointer, size_t, std::u32string&);
+inline void utf8to32(const sys::U8string& s, std::u32string& result)
+{
+    utf8to32(s.c_str(), s.size(), result);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
 // When the encoding is important, we want to "traffic" in sys::U8string (UTF-8), not

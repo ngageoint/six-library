@@ -22,14 +22,21 @@
 
 #include <assert.h>
 
+#ifdef _WIN32
+#include <comdef.h>  // _bstr_t
+#endif
+
 #include <map>
 #include <locale>
 #include <stdexcept>
 #include <vector>
+#include<iterator>
 
 #include "str/Encoding.h"
 #include "str/Manip.h"
+#include "str/Convert.h"
 #include "str/utf8.h"
+
 
 // Need to look up characters from \x80 (EURO SIGN) to \x9F (LATIN CAPITAL LETTER Y WITH DIAERESIS)
 // in a map: http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT
@@ -166,6 +173,17 @@ void str::utf32to8(std::u32string::const_pointer p, size_t sz, sys::U8string& re
     utf8::utf32to8(p, p + sz, back_inserter(result));
 }
 
+void str::utf8to16(sys::U8string::const_pointer p, size_t sz, std::u16string& result)
+{
+    auto p8 = cast<const uint8_t*>(p);
+    utf8::utf8to16(p8, p8 + sz, std::back_inserter(result));
+}
+void str::utf8to32(sys::U8string::const_pointer p, size_t sz, std::u32string& result)
+{
+    auto p8 = cast<const uint8_t*>(p);
+    utf8::utf8to32(p8, p8 + sz, std::back_inserter(result));
+}
+
 inline void wsto8_(std::u16string::const_pointer begin, std::u16string::const_pointer end, sys::U8string& result)
 {
     utf8::utf16to8(begin, end, back_inserter(result));
@@ -183,23 +201,18 @@ sys::U8string str::to_u8string(W1252string::const_pointer p, size_t sz)
 }
 sys::U8string str::to_u8string(std::string::const_pointer p, size_t sz)
 {
-    const void* const pStr = p;
-
     auto platform = details::Platform;  // "conditional expression is constant"
     if (platform == details::PlatformType::Windows)
     {    
         sys::U8string retval;
-        windows1252to8(static_cast<W1252string::const_pointer>(pStr), sz, retval);
+        windows1252to8(cast<W1252string::const_pointer>(p), sz, retval);
         return retval;
     }
     else if (platform == details::PlatformType::Linux)
     {
-        return static_cast<sys::U8string::const_pointer>(pStr);  // copy
+        return cast<sys::U8string::const_pointer>(p);  // copy
     }
-    else
-    {
-        throw std::logic_error("Unknown platform.");
-    }
+    throw std::logic_error("Unknown platform.");
 }
 
 sys::U8string str::fromWindows1252(std::string::const_pointer p, size_t sz)
@@ -210,4 +223,25 @@ sys::U8string str::fromWindows1252(std::string::const_pointer p, size_t sz)
 sys::U8string str::fromUtf8(std::string::const_pointer p, size_t)
 {
     return cast<sys::U8string::const_pointer>(p); // copy
+}
+
+template <>
+std::string str::toString(const str::U8string& utf8)
+{
+    auto platform = details::Platform;  // "conditional expression is constant"
+    if (platform == details::PlatformType::Windows)
+    {
+        #ifdef _WIN32
+        std::u16string utf16;
+        utf8to16(utf8, utf16);
+        const _bstr_t s(c_str<std::wstring::const_pointer>(utf16)); // wchar_t is UTF-16 on Windows
+        return static_cast<std::string::const_pointer>(s);
+        #endif
+    }
+    else if (platform == details::PlatformType::Linux)
+    {
+        return c_str<std::string::const_pointer>(utf8);  // copy
+    }
+    
+    throw std::logic_error("Unknown platform.");
 }
