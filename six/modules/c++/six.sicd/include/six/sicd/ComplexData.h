@@ -368,6 +368,10 @@ struct ComplexData: public Data
      */
     void fillDefaultFields();
 
+    bool operator==(const ComplexData& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Data&>(*this) == static_cast<const Data&>(rhs);
+    }
 private:
     bool operator_eq(const ComplexData& rhs) const;
     bool equalTo(const Data& rhs) const override;

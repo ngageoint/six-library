@@ -112,6 +112,10 @@ struct MonochromeDisplayRemap : public Remap
     ParameterCollection remapParameters;
 
     bool equalTo(const Remap& rhs) const override;
+    bool operator==(const MonochromeDisplayRemap& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Remap&>(*this) == static_cast<const Remap&>(rhs);
+    }
 private:
     bool operator_eq(const MonochromeDisplayRemap& rhs) const;
 };
@@ -139,6 +143,10 @@ struct ColorDisplayRemap : public Remap
     }
 
     bool equalTo(const Remap& rhs) const override;
+    bool operator==(const ColorDisplayRemap& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Remap&>(*this) == static_cast<const Remap&>(rhs);
+    }
 private:
     bool operator_eq(const ColorDisplayRemap& rhs) const;
 };

@@ -330,6 +330,10 @@ struct DerivedData: public Data
     types::RowCol<double>
     pixelToImagePoint(const types::RowCol<double>& pixelLoc) const;
 
+    bool operator==(const DerivedData& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Data&>(*this) == static_cast<const Data&>(rhs);
+    }
 private:
     bool operator_eq(const DerivedData& rhs) const;
     static const char VENDOR_ID[];
