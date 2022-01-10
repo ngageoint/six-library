@@ -232,6 +232,10 @@ struct DerivedClassification: public Classification
     //  that type of data in this document.
     BooleanType externalNotice;
 
+    bool operator==(const DerivedClassification& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Classification&>(*this) == static_cast<const Classification&>(rhs);
+    }
 private:
     //! Equality operator
     bool operator_eq(const DerivedClassification& rhs) const;

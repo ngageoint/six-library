@@ -138,6 +138,10 @@ struct PolynomialProjection : public Projection
     //! Find a col in the image associated with a lat-lon
     Poly2D latLonToCol;
 
+    bool operator==(const PolynomialProjection& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Projection&>(*this) == static_cast<const Projection&>(rhs);
+    }
 private:
     bool operator_eq(const PolynomialProjection& rhs) const;
     bool equalTo(const Projection& rhs) const override;
@@ -159,6 +163,10 @@ struct MeasurableProjection : public Projection
     bool isMeasurable() const { return true; }
 
     bool operator_eq(const MeasurableProjection& rhs) const;
+    bool operator==(const MeasurableProjection& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Projection&>(*this) == static_cast<const Projection&>(rhs);
+    }
 private:
     bool equalTo(const Projection& rhs) const override;
 };
@@ -186,6 +194,10 @@ struct GeographicProjection : public MeasurableProjection
     }
     virtual ~GeographicProjection() = default;
 
+    bool operator==(const GeographicProjection& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Projection&>(*this) == static_cast<const Projection&>(rhs);
+    }
 private:
     bool operator_eq(const GeographicProjection& rhs) const;
     bool equalTo(const Projection& rhs) const override;
@@ -230,6 +242,10 @@ struct CylindricalProjection : public MeasurableProjection
      */
     double curvatureRadius;
 
+    bool operator==(const CylindricalProjection& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Projection&>(*this) == static_cast<const Projection&>(rhs);
+    }
 private:
     bool operator_eq(const CylindricalProjection& rhs) const;
     bool equalTo(const Projection& rhs) const override;
@@ -261,6 +277,10 @@ struct PlaneProjection : public MeasurableProjection
     //!  Product plane definition (defined by a basis)
     ProductPlane productPlane;
 
+    bool operator==(const PlaneProjection& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Projection&>(*this) == static_cast<const Projection&>(rhs);
+    }
 private:
     bool operator_eq(const PlaneProjection& rhs) const;
     bool equalTo(const Projection& rhs) const override;

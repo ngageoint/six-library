@@ -48,6 +48,11 @@ struct ComplexClassification: public Classification
     //! This is spelled out (i.e. 'UNCLASSIFIED')
     std::string level;
 
+    bool operator==(const ComplexClassification& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Classification&>(*this) == static_cast<const Classification&>(rhs);
+    }
+
 private:
     bool operator_eq(const ComplexClassification& rhs) const
     {

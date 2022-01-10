@@ -113,6 +113,10 @@ struct SFAPoint : public SFAGeometry
 
     static const char TYPE_NAME[];
 
+    bool operator==(const SFAPoint& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const SFATyped&>(*this) == static_cast<const SFATyped&>(rhs);
+    }
 private:
     bool operator_eq(const SFAPoint& rhs) const
     {
@@ -156,6 +160,10 @@ public:
     std::vector<mem::ScopedCopyablePtr<SFAPoint> > vertices;
     static const char TYPE_NAME[];
 
+    bool operator==(const SFALineString& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const SFATyped&>(*this) == static_cast<const SFATyped&>(rhs);
+    }
 private:
     bool operator_eq(const SFALineString& rhs) const
     {
@@ -186,6 +194,10 @@ public:
     }
     static const char TYPE_NAME[];
 
+    bool operator==(const SFALine& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const SFATyped&>(*this) == static_cast<const SFATyped&>(rhs);
+    }
 private:
     bool operator_eq(const SFALine& rhs) const
     {
@@ -216,6 +228,10 @@ public:
     }
     static const char TYPE_NAME[];
 
+    bool operator==(const SFALinearRing& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const SFATyped&>(*this) == static_cast<const SFATyped&>(rhs);
+    }
 private:
     bool operator_eq(const SFALinearRing& rhs) const
     {
@@ -290,6 +306,10 @@ public:
 
     static const char TYPE_NAME[];
 
+    bool operator==(const SFATriangle& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const SFATyped&>(*this) == static_cast<const SFATyped&>(rhs);
+    }
 private:
     bool operator_eq(const SFATriangle& rhs) const
     {
@@ -322,6 +342,10 @@ public:
     std::vector<mem::ScopedCloneablePtr<SFAPolygon> > patches;
     static const char TYPE_NAME[];
 
+    bool operator==(const SFAPolyhedralSurface& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const SFATyped&>(*this) == static_cast<const SFATyped&>(rhs);
+    }
 private:
     bool operator_eq(const SFAPolyhedralSurface& rhs) const
     {
@@ -356,6 +380,10 @@ public:
     std::vector<mem::ScopedCloneablePtr<SFAPolygon> > patches;
     static const char TYPE_NAME[];
 
+    bool operator==(const SFATriangulatedIrregularNetwork& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const SFATyped&>(*this) == static_cast<const SFATyped&>(rhs);
+    }
 private:
     bool operator_eq(const SFATriangulatedIrregularNetwork& rhs) const
     {
@@ -396,6 +424,10 @@ public:
     std::vector<mem::ScopedCopyablePtr<SFAPoint> > vertices;
     static const char TYPE_NAME[];
 
+    bool operator==(const SFAMultiPoint& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const SFATyped&>(*this) == static_cast<const SFATyped&>(rhs);
+    }
 private:
     bool operator_eq(const SFAMultiPoint& rhs) const
     {
@@ -439,6 +471,10 @@ public:
     std::vector<mem::ScopedCloneablePtr<SFALineString> > elements;
     static const char TYPE_NAME[];
 
+    bool operator==(const SFAMultiLineString& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const SFATyped&>(*this) == static_cast<const SFATyped&>(rhs);
+    }
 private:
     bool operator_eq(const SFAMultiLineString& rhs) const
     {
@@ -481,6 +517,10 @@ public:
     std::vector<mem::ScopedCloneablePtr<SFAPolygon> > elements;
     static const char TYPE_NAME[];
 
+    bool operator==(const SFAMultiPolygon& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const SFATyped&>(*this) == static_cast<const SFATyped&>(rhs);
+    }
 private:
     bool operator_eq(const SFAMultiPolygon& rhs) const
     {
@@ -608,6 +648,10 @@ struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
 
     static const char TYPE_NAME[];
 
+    bool operator==(const SFAGeocentricCoordinateSystem& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const SFATyped&>(*this) == static_cast<const SFATyped&>(rhs);
+    }
 private:
     bool operator_eq(const SFAGeocentricCoordinateSystem& rhs) const
     {
@@ -646,6 +690,10 @@ struct SFAGeographicCoordinateSystem : public SFACoordinateSystem
 
     static const char TYPE_NAME[];
 
+    bool operator==(const SFAGeographicCoordinateSystem& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const SFATyped&>(*this) == static_cast<const SFATyped&>(rhs);
+    }
 private:
     bool operator_eq(const SFAGeographicCoordinateSystem& rhs) const
     {
