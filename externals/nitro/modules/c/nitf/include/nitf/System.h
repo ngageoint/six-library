@@ -86,6 +86,9 @@
 #define NITF_FREE NRT_FREE
 NITFAPI(char*) nitf_strdup(const char* src);
 
+#define NITF_NEW_nothrow(t_) (t_*)NITF_MALLOC(sizeof(t_)) // (Foo*) NITF_MALLOC(sizeof(Foo))
+#define NITF_NEW(var_, t_, error_, label_) t_* var_ = NITF_NEW_nothrow(t_); \
+    if (!var_) { nitf_Error_init(error_, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, NITF_ERR_MEMORY); goto label_; }
 
 /******************************************************************************/
 /* TYPES                                                                      */

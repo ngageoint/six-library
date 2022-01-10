@@ -55,6 +55,7 @@ coda_add_module(
         source/TRECursor.c
         source/TREPrivateData.c
         source/TREUtils.c
+        source/TestingTest.c
         source/TextSegment.c
         source/TextSubheader.c
         source/WriteHandler.c
