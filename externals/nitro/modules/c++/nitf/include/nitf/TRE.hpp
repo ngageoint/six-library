@@ -20,13 +20,13 @@
  *
  */
 
-#ifndef NITF_TRE_hpp_INCLUDED_
-#define NITF_TRE_hpp_INCLUDED_
+#ifndef NITRO_nitf_TRE_hpp_INCLUDED_
+#define NITRO_nitf_TRE_hpp_INCLUDED_
 #pragma once
 
 #include <string>
 #include <cstddef>
-#include <type_traits>
+#include <std/type_traits>
 #include <stdexcept>
 #include <utility>
 
@@ -372,4 +372,4 @@ public:
     mutable nitf_Error error{};
 };
 }
-#endif // NITF_TRE_hpp_INCLUDED_
+#endif // NITRO_nitf_TRE_hpp_INCLUDED_

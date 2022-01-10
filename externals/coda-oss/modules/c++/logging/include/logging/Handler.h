@@ -88,10 +88,6 @@ protected:
     // for writing directly to stream, 
     // used for the bulk of the logging for speed
     virtual void emitRecord(const LogRecord* record) = 0;
-    virtual void emitRecord(const LogRecord& record)
-    {
-        return emitRecord(&record);
-    }
 
     LogLevel mLevel = LogLevel::LOG_NOTSET;
     sys::Mutex mHandlerLock;
