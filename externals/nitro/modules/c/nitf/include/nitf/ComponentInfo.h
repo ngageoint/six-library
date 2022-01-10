@@ -44,6 +44,8 @@ typedef struct _nitf_ComponentInfo
 }
 nitf_ComponentInfo;
 
+typedef nitf_ComponentInfo* nitf_PComponentInfo;
+
 /*!
  *  Construct the component info object.  We allocate a new object,
  *  and initialize the subheader and data sizes to zero.

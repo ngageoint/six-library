@@ -24,7 +24,7 @@
 #define __NITF_TYPES_H__
 #pragma once
 
-#define NITF_DECLARE_ENUM(name, ...) NRT_DECLARE_ENUM(name,  __VA_ARGS__)
+#include <stddef.h>
 
 /* Enum for the supported version types */
 typedef enum _nitf_Version
@@ -40,4 +40,5 @@ typedef enum _nitf_Version
 
 
 typedef void NITF_DATA;
+
 #endif
