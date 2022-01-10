@@ -181,6 +181,12 @@
     <ClCompile Include="nitf\source\FieldWarning.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="nitf\source\FieldDescriptor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\TestingTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -390,6 +396,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="nitf\include\nitf\TREField.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\FieldDescriptor.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TestingTest.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
