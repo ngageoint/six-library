@@ -29,6 +29,7 @@
     <ClCompile Include="nitf\source\DownSampler.cpp" />
     <ClCompile Include="nitf\source\Extensions.cpp" />
     <ClCompile Include="nitf\source\Field.cpp" />
+    <ClCompile Include="nitf\source\FieldDescriptor.cpp" />
     <ClCompile Include="nitf\source\FieldWarning.cpp" />
     <ClCompile Include="nitf\source\FileHeader.cpp" />
     <ClCompile Include="nitf\source\FileSecurity.cpp" />
@@ -62,6 +63,7 @@
     <ClCompile Include="nitf\source\SegmentSource.cpp" />
     <ClCompile Include="nitf\source\SegmentWriter.cpp" />
     <ClCompile Include="nitf\source\SubWindow.cpp" />
+    <ClCompile Include="nitf\source\TestingTest.cpp" />
     <ClCompile Include="nitf\source\TextSegment.cpp" />
     <ClCompile Include="nitf\source\TextSubheader.cpp" />
     <ClCompile Include="nitf\source\TRE.cpp" />
@@ -96,6 +98,7 @@
     <ClInclude Include="nitf\include\nitf\exports.hpp" />
     <ClInclude Include="nitf\include\nitf\Extensions.hpp" />
     <ClInclude Include="nitf\include\nitf\Field.hpp" />
+    <ClInclude Include="nitf\include\nitf\FieldDescriptor.hpp" />
     <ClInclude Include="nitf\include\nitf\FieldWarning.hpp" />
     <ClInclude Include="nitf\include\nitf\FileHeader.hpp" />
     <ClInclude Include="nitf\include\nitf\FileSecurity.hpp" />
@@ -135,6 +138,7 @@
     <ClInclude Include="nitf\include\nitf\SegmentWriter.hpp" />
     <ClInclude Include="nitf\include\nitf\SubWindow.hpp" />
     <ClInclude Include="nitf\include\nitf\System.hpp" />
+    <ClInclude Include="nitf\include\nitf\TestingTest.hpp" />
     <ClInclude Include="nitf\include\nitf\TextSegment.hpp" />
     <ClInclude Include="nitf\include\nitf\TextSubheader.hpp" />
     <ClInclude Include="nitf\include\nitf\TRE.hpp" />
