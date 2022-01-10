@@ -108,9 +108,7 @@ struct CollectionInformation
     CollectionInformation();
 
     //!  Destructor
-    virtual ~CollectionInformation()
-    {
-    }
+    virtual ~CollectionInformation() = default;
 
     //! Deep copy
     CollectionInformation* clone() const;
@@ -130,6 +128,12 @@ struct CollectionInformation
     //! Ostream operators for six::CollectionInformation type (utility only).
     friend std::ostream& operator<<(std::ostream& os, const six::CollectionInformation& c);
 
+  bool operator==(const CollectionInformation& rhs) const; // needs to be member-function for SWIG
+  bool operator!=(const CollectionInformation& rhs) const  // needs to be member-function for SWIG
+  {
+    return !(*this == rhs);
+  }
+
 private:
     /*!
      *  Classification level
@@ -137,12 +141,6 @@ private:
     std::string mClassification;
     std::optional<std::u8string> mClassification_u8;
 };
-bool operator==(const CollectionInformation& lhs, const CollectionInformation& rhs);
-inline bool operator!=(const CollectionInformation& lhs, const CollectionInformation& rhs)
-{
-    return !(lhs == rhs);
-}
-
 
 }
 

@@ -35,8 +35,9 @@ CollectionInformation::CollectionInformation()
     mClassification = Init::undefined<std::string>();
 }
 
-bool operator==(const CollectionInformation& lhs, const CollectionInformation& rhs)
+  bool CollectionInformation::operator==(const CollectionInformation& rhs) const
 {
+    const auto& lhs = *this;
     const auto result = lhs.collectorName == rhs.collectorName &&
         lhs.collectType == rhs.collectType &&
         lhs.illuminatorName == rhs.illuminatorName &&
