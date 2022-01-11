@@ -124,6 +124,12 @@ inline void strto8(const std::u32string& s, sys::U8string& result)
     utf32to8(s, result);
 }
 
+/*
+Using the utf8:: library for these causes compiler-errors on some platforms.
+We don't really need them anyway: Linux has good support for UTF-8 and
+our existing code-bases don't use UTF-16 on Windows; so UTF-8 to 
+Windows-1252 will be good enough.
+
 void utf8to16(sys::U8string::const_pointer, size_t, std::u16string&);
 inline void utf8to16(const sys::U8string& s, std::u16string& result)
 {
@@ -135,6 +141,7 @@ inline void utf8to32(const sys::U8string& s, std::u32string& result)
 {
     utf8to32(s.c_str(), s.size(), result);
 }
+*/
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
