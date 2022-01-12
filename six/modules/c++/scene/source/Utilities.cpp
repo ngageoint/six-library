@@ -82,4 +82,14 @@ double Utilities::remapZeroTo360(double degree)
     }
     return delta;
 }
+
+double Utilities::remapMinus180To180(double degree)
+{
+    double outDegree = Utilities::remapZeroTo360(degree);
+    if (outDegree > 180) {
+        return outDegree - 360;
+    }
+    return outDegree;
+}
+
 }

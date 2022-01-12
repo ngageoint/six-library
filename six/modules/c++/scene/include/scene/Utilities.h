@@ -68,6 +68,13 @@ struct Utilities
      *      [-180:180]
      */
     static double remapZeroTo360(double degree);
+
+    /*!
+     *  Remaps angles into [-180:180]
+     *  Leverages remapZeroTo360 and then does simple
+     *  conversion to [-180:180]
+     */
+    static double remapMinus180To180(double degree);
 };
 
 }
