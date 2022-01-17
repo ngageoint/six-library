@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2020, 2021, 2022, Maxar Technologies, Inc.
  *
  * str-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,8 +21,8 @@
  *
  */
 
-#ifndef CODA_OSS_Encoding_h_INCLUDED_
-#define CODA_OSS_Encoding_h_INCLUDED_
+#ifndef CODA_OSS_str_Encoding_h_INCLUDED_
+#define CODA_OSS_str_Encoding_h_INCLUDED_
 #pragma once
 
 #include <wchar.h>
@@ -96,52 +97,16 @@ inline sys::U8string fromUtf8(const std::string& s)
 //////////////////////////////////////////////////////////////////////////////////////////
 // These use utf8:: routines; see utf8.h
 void utf16to8(std::u16string::const_pointer, size_t, sys::U8string&);
-inline void utf16to8(const std::u16string& s, sys::U8string& result)
-{
-    utf16to8(s.c_str(), s.size(), result);
-}
-
-void utf32to8(std::u32string::const_pointer, size_t, sys::U8string&);
-inline void utf32to8(const std::u32string& s, sys::U8string& result)
-{
-    utf32to8(s.c_str(), s.size(), result);
-}
-
 inline void strto8(std::u16string::const_pointer p, size_t sz, sys::U8string& result)
 {
     utf16to8(p, sz, result);
 }
-inline void strto8(const std::u16string& s, sys::U8string& result)
-{
-    utf16to8(s, result);
-}
+
+void utf32to8(std::u32string::const_pointer, size_t, sys::U8string&);
 inline void strto8(std::u32string::const_pointer p, size_t sz, sys::U8string& result)
 {
     utf32to8(p, sz, result);
 }
-inline void strto8(const std::u32string& s, sys::U8string& result)
-{
-    utf32to8(s, result);
-}
-
-/*
-Using the utf8:: library for these causes compiler-errors on some platforms.
-We don't really need them anyway: Linux has good support for UTF-8 and
-our existing code-bases don't use UTF-16 on Windows; so UTF-8 to 
-Windows-1252 will be good enough.
-
-void utf8to16(sys::U8string::const_pointer, size_t, std::u16string&);
-inline void utf8to16(const sys::U8string& s, std::u16string& result)
-{
-    utf8to16(s.c_str(), s.size(), result);
-}
-
-void utf8to32(sys::U8string::const_pointer, size_t, std::u32string&);
-inline void utf8to32(const sys::U8string& s, std::u32string& result)
-{
-    utf8to32(s.c_str(), s.size(), result);
-}
-*/
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -159,6 +124,13 @@ inline sys::U8string to_u8string(const std::basic_string<TChar>& s)
     return to_u8string(s.c_str(), s.size());
 }
 
+namespace details
+{
+// YOU should use EncodedStringView
+extern void toNative(const str::W1252string&, std::string&);  // encoding is lost
+extern void toString(sys::U8string::const_pointer, std::string&);  // encoding is lost
 }
 
-#endif // CODA_OSS_Encoding_h_INCLUDED_
+}
+
+#endif // CODA_OSS_str_Encoding_h_INCLUDED_

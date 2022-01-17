@@ -1,7 +1,7 @@
 NAME            = 'xml.lite'
 MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '1.2'
-MODULE_DEPS     = 'io mem mt logging str'
+MODULE_DEPS     = 'io mem mt logging str coda_oss'
 USELIB_CHECK    = 'XML'
 TEST_FILTER     = 'MMParserTest1.cpp MinidomParserTest2.cpp'
 TEST_DEPS       = 'cli'

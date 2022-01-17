@@ -24,9 +24,10 @@
 
 // Make it (too?) easy for clients to get our various std:: implementations
 
-#include "sys/Optional.h"
-static_assert(CODA_OSS_sys_Optional >= 201606L, "missing sys::Optional");
+#include "coda_oss/optional.h"
+static_assert(CODA_OSS_coda_oss_optional >= 201606L, "missing coda_oss::optional");
 
+#include "coda_oss/CPlusPlus.h"
 #if CODA_OSS_cpp17
     #include <optional>
     #undef CODA_OSS_NO_std_optional
@@ -41,11 +42,11 @@ static_assert(CODA_OSS_sys_Optional >= 201606L, "missing sys::Optional");
     namespace std // This is slightly uncouth: we're not supposed to augment "std".
     {
         template<typename T>
-        using optional = sys::Optional<T>;
+        using optional = coda_oss::optional<T>;
         template <typename T, typename... TArgs>
         inline optional<T> make_optional(TArgs && ... args)
         {
-            return sys::make_Optional<T>(std::forward<TArgs>(args)...);
+            return coda_oss::make_optional<T>(std::forward<TArgs>(args)...);
         }
     }
 #endif // !CODA_OSS_NO_std_optional

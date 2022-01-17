@@ -29,7 +29,7 @@
 #include "sys/Dbg.h"
 #include "sys/Conf.h"
 #include "sys/String.h"
-#include "sys/CStdDef.h"
+#include "coda_oss/cstddef.h"
 
 /*!
  * \file OutputStream.h
@@ -62,7 +62,7 @@ struct OutputStream
     {
         write(&b, 1);
     }
-    void write(sys::Byte b)
+    void write(coda_oss::byte b)
     {
         write(&b, 1);
     }

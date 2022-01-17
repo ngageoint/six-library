@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of coda_oss-c++
  * =========================================================================
  *
- * (C) Copyright 2022, Maxar Technologies, Inc.
+ * (C) Copyright 2020-2022, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,29 +18,27 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
-#ifndef CODA_OSS_sys_TypeTraits_h_INCLUDED_
-#define CODA_OSS_sys_TypeTraits_h_INCLUDED_
+#ifndef CODA_OSS_coda_oss_bit_h_INCLUDED_
+#define CODA_OSS_coda_oss_bit_h_INCLUDED_
 #pragma once
 
-#include <type_traits>
-
-#include "CPlusPlus.h"
-
-namespace sys
+#include "coda_oss/namespace_.h"
+namespace coda_oss
 {
-// workaround missing "is_trivially_copyable" in g++ < 5.0
-#if defined(__GNUC__) && (__GNUC__ < 5)
-template <typename T>
-struct IsTriviallyCopyable final
-{
-    static_assert(CODA_OSS_cplusplus < 201402L, "C++14 must have is_trivially_copyable.");
-    // https://stackoverflow.com/a/31798726/8877
-    static constexpr bool value = __has_trivial_copy(T);
-};
-#else
-template <typename T>
-using IsTriviallyCopyable = std::is_trivially_copyable<T>;
-#endif
+    // https://en.cppreference.com/w/cpp/types/endian
+    enum class endian
+    {
+    #ifdef _WIN32
+        little = 0,
+        big = 1,
+        native = little
+    #else
+        little = __ORDER_LITTLE_ENDIAN__,
+        big = __ORDER_BIG_ENDIAN__,
+        native = __BYTE_ORDER__
+    #endif
+    };
+    #define CODA_OSS_coda_oss_endian 201907L // __cpp_lib_endian
 }
 
-#endif  // CODA_OSS_sys_TypeTraits_h_INCLUDED_
+#endif  // CODA_OSS_coda_oss_bit_h_INCLUDED_
