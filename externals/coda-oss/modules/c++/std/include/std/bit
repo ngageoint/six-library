@@ -24,10 +24,10 @@
 
 // Make it (too?) easy for clients to get our various std:: implementations
 
-#include "sys/Bit.h"
-static_assert(CODA_OSS_sys_Endian >= 201907L, "missing sys::Endian");
+#include "coda_oss/bit.h"
+static_assert(CODA_OSS_coda_oss_endian >= 201907L, "missing coda_oss::endian");
 
-#include "sys/CPlusPlus.h"
+#include "coda_oss/CPlusPlus.h"
 #if CODA_OSS_cpp17
     // Some C++17 implementations have <bit>
     #if __has_include(<bit>) // __has_include is C++17
@@ -44,7 +44,7 @@ static_assert(CODA_OSS_sys_Endian >= 201907L, "missing sys::Endian");
 #if !CODA_OSS_NO_std_endian
     namespace std // This is slightly uncouth: we're not supposed to augment "std".
     {
-        using endian = ::sys::Endian;
+        using endian = coda_oss::endian;
     }
 #endif  // CODA_OSS_NO_std_endian
 

@@ -141,7 +141,7 @@ T& Singleton<T, AutoDestroy>::getInstance()
         std::lock_guard<std::mutex> obtainLock(mMutex);
         if (mInstance == nullptr)
         {
-            mInstance = mem::make::unique<T>().release(); //create the instance
+            mInstance = coda_oss::make_unique<T>().release(); //create the instance
             SingletonAutoDestroyer<AutoDestroy>::registerAtExit(destroy);
         }
     }

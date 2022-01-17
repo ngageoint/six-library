@@ -24,6 +24,7 @@
 #include <fstream>
 #include <memory>
 #include <thread>
+#include <std/span>
 
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDWriter.h>
@@ -38,7 +39,6 @@
 #include <io/FileOutputStream.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVPBlock.h>
-
 
 /*!
  * Reads in CPHD file from InputFile
@@ -85,7 +85,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
         for (size_t channel = 0, idx = 0; channel < metadata.data.getNumChannels(); ++channel)
         {
             const size_t bufSize = metadata.data.getCompressedSignalSize(channel);
-            wideband.read(channel, gsl::make_span(&data[idx], bufSize));
+            wideband.read(channel, std::span<std::byte>(&data[idx], bufSize));
             idx += bufSize;
         }
         writer.write(
@@ -101,7 +101,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
             const size_t bufSize = metadata.data.getSignalSize(channel);
             wideband.read(channel, 0, cphd::Wideband::ALL,
                  0, cphd::Wideband::ALL, numThreads,
-                gsl::make_span(&data[idx], bufSize));
+                std::span<std::byte>(&data[idx], bufSize));
             idx += bufSize;
         }
 

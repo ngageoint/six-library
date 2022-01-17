@@ -29,7 +29,7 @@
 #if !defined(USE_IO_STREAMS)
 
 #include "io/SeekableStreams.h"
-#include "sys/Filesystem.h"
+#include "sys/filesystem.h"
 #include "sys/File.h"
 
 #include "sys/CPlusPlus.h"
@@ -71,7 +71,7 @@ public:
     #if CODA_OSS_cpp17
     using path = std::filesystem::path;
     #else
-    using path = sys::Filesystem::path;
+    using path = coda_oss::filesystem::path;
     #endif
     FileOutputStreamOS(const path& outputFile,
                        int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);

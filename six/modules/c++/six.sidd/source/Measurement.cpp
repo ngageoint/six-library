@@ -30,73 +30,78 @@ bool PolynomialProjection::equalTo(const Projection& rhs) const
     PolynomialProjection const* projection = dynamic_cast<PolynomialProjection const*>(&rhs);
     if (projection != nullptr)
     {
-        return (rowColToLat == projection->rowColToLat &&
-            rowColToLon == projection->rowColToLon &&
-            rowColToAlt == projection->rowColToAlt &&
-            latLonToRow == projection->latLonToRow &&
-            latLonToCol == projection->latLonToCol &&
-            projectionType == projection->projectionType &&
-            referencePoint == projection->referencePoint);
+        this->operator_eq(*projection);
     }
     return false;
 }
+bool PolynomialProjection::operator_eq(const PolynomialProjection& rhs) const
+{
+    return (rowColToLat == rhs.rowColToLat &&
+        rowColToLon == rhs.rowColToLon &&
+        rowColToAlt == rhs.rowColToAlt &&
+        latLonToRow == rhs.latLonToRow &&
+        latLonToCol == rhs.latLonToCol &&
+        projectionType == rhs.projectionType &&
+        referencePoint == rhs.referencePoint);
+}
 
-bool MeasurableProjection::operator==(const MeasurableProjection& rhs) const
+bool MeasurableProjection::operator_eq(const MeasurableProjection& rhs) const
 {
     return (sampleSpacing == rhs.sampleSpacing &&
         timeCOAPoly == rhs.timeCOAPoly &&
         projectionType == rhs.projectionType &&
         referencePoint == rhs.referencePoint);
 }
-
 bool MeasurableProjection::equalTo(const Projection& rhs) const
 {
-    const MeasurableProjection* projection = dynamic_cast<const MeasurableProjection*>(&rhs);
+    auto projection = dynamic_cast<const MeasurableProjection*>(&rhs);
     if (projection != nullptr)
     {
-        return *this == *projection;
+        return this->operator_eq(*projection);
     }
     return false;
 }
 
+bool GeographicProjection::operator_eq(const GeographicProjection& rhs) const
+{
+    return this->projectionType == rhs.projectionType;
+}
 bool GeographicProjection::equalTo(const Projection& rhs) const
 {
-    const GeographicProjection* projection = dynamic_cast<const GeographicProjection*>(&rhs);
+    auto projection = dynamic_cast<const GeographicProjection*>(&rhs);
     if (projection != nullptr)
     {
-        return *this == *projection;
+        return this->operator_eq(*projection);
     }
     return false;
 }
 
-bool CylindricalProjection::operator==(const CylindricalProjection& rhs) const
+bool CylindricalProjection::operator_eq(const CylindricalProjection& rhs) const
 {
     return (stripmapDirection == rhs.stripmapDirection &&
         curvatureRadius == rhs.curvatureRadius &&
-        MeasurableProjection::operator==(rhs));
+        MeasurableProjection::operator_eq(rhs));
 }
-
 bool CylindricalProjection::equalTo(const Projection& rhs) const
 {
-    const CylindricalProjection* projection = dynamic_cast<const CylindricalProjection*>(&rhs);
+    auto projection = dynamic_cast<const CylindricalProjection*>(&rhs);
     if (projection != nullptr)
     {
-        return *this == *projection;
+        return this->operator_eq(*projection);
     }
     return false;
 }
 
-bool PlaneProjection::operator==(const PlaneProjection& rhs) const
+bool PlaneProjection::operator_eq(const PlaneProjection& rhs) const
 {
-    return *(dynamic_cast<const MeasurableProjection*>(this)) == *(dynamic_cast<const MeasurableProjection*>(&rhs));
+    return MeasurableProjection::operator_eq(rhs);
 }
-
 bool PlaneProjection::equalTo(const Projection& rhs) const
 {
-    const PlaneProjection* projection = dynamic_cast<const PlaneProjection*>(&rhs);
+    auto projection = dynamic_cast<const PlaneProjection*>(&rhs);
     if (projection != nullptr)
     {
-        return *this == *projection;
+        return this->operator_eq(*projection);
     }
     return false;
 }
