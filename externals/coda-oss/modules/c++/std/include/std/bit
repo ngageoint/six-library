@@ -23,7 +23,6 @@
 #pragma once
 
 #include <bit>
-
-#include "sys/Bit.h"
+#include "coda_oss/bit.h"
 
 #endif  // CODA_OSS_std_bit_INCLUDED_

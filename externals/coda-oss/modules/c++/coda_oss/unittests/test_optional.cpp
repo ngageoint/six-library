@@ -51,6 +51,21 @@ std::ostream& operator<<(std::ostream& s, const coda_oss::optional<T>& opt)
     }
     return s;
 }
+#if CODA_OSS_cpp17
+template <typename T>
+std::ostream& operator<<(std::ostream& s, const std::optional<T>& opt)
+{
+    if (opt.has_value())
+    {
+        s << *opt;
+    }
+    else
+    {
+        s << "[no value]";
+    }
+    return s;
+}
+#endif
     
 template<typename TOptional>
 static void testOptional_(const std::string& testName, const TOptional& opt)

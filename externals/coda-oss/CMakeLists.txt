@@ -7,6 +7,7 @@ cmake_minimum_required(VERSION 3.14)
 project(coda-oss)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CXX_STANDARD_REQUIRED true)
 
 if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     # build and package with conan
@@ -31,7 +32,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
             -Wno-unused-value
             -Wno-unused-but-set-variable
         )
-        add_compile_options(-std=c++20)
+        add_compile_options(--std=c++20)
     endif()
 
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

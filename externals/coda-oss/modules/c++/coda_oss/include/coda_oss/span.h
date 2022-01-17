@@ -19,31 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef CODA_OSS_coda_oss_span_h_INCLUDED_
-#define CODA_OSS_coda_oss_span_h_INCLUDED_
+#ifndef CODA_OSS_coda_oss_Span_h_INCLUDED_
+#define CODA_OSS_coda_oss_Span_h_INCLUDED_
 #pragma once
 
-#include <assert.h>
-#include <stddef.h>
+#include <span>
+#include "coda_oss/namespace_.h"  // coda_oss -> std
 
-#include "coda_oss/namespace_.h"
-#include "coda_oss/span_.h"
-
-// Need a fairly decent C++ compiler to use the real GSL.  This brings in more than 
-// we really need for span (e.g., gsl::narrow()), but it keeps things simple.
-#include "gsl/gsl.h"  // not gsl/span; need #pragma here to turn off warnings
-
-namespace coda_oss
-{
-#if defined(GSL_SPAN_H) // the above #include'd gsl/span
-	template <typename T>
-	using span = gsl::span<T>;
-#else // no gsl::span, use our own
-	template <typename T>
-	using span = details::span<T>;
-#endif  // GSL_SPAN_H
-}
-
-#define CODA_OSS_coda_oss_span 202002L  // c.f., __cpp_lib_span
-
-#endif  // CODA_OSS_coda_oss_span_h_INCLUDED_
+#endif  // CODA_OSS_coda_oss_Span_h_INCLUDED_

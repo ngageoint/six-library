@@ -24,21 +24,29 @@
 #define CODA_OSS_gsl_gsl_h_INCLUDED_
 #pragma once
 
-#if _MSC_VER
+// Need a fairly decent C++ compiler to use the real GSL
+#include "gsl/use_gsl.h"
+
+// always compile Gsl (not "gsl") code--our own simple implementation
+#include "gsl/Gsl_.h"  // our own "fake" GSL
+
+#if CODA_OSS_gsl_use_real_gsl_
+	#if _MSC_VER
 	#pragma warning(push)
 	#pragma warning(disable: 4626) // '...' : assignment operator was implicitly defined as deleted
 	#pragma warning(disable: 5027) // '...' : move assignment operator was implicitly defined as deleted
 	#pragma warning(disable: 26487) // Don 't return a pointer '...' that may be invalid (lifetime.4).
-#endif
+	#pragma warning(disable: 4814) // '...': in C++14 '...' will not imply '...'; consider explicitly specifying '...'
+	#endif
 
-#include "gsl/gsl"
-#include "gsl/gsl_byte"
+	#include "gsl/gsl"
+	#include "gsl/gsl_byte"
+	#include "gsl/span"
 
-#include "gsl/span"				// span
-#include "gsl/span_ext"				// make_span
-
-#if _MSC_VER
+	#if _MSC_VER
 	#pragma warning(pop)
+	#endif
+
 #endif
 
 #endif  // CODA_OSS_gsl_gsl_h_INCLUDED_

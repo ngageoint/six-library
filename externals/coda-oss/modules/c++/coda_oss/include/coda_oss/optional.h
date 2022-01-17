@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of coda_oss-c++
+ * This file is part of sys-c++
  * =========================================================================
  *
  * (C) Copyright 2020, Maxar Technologies, Inc.
@@ -22,27 +22,7 @@
 #define CODA_OSS_coda_oss_optional_h_INCLUDED_
 #pragma once
 
-#include <assert.h>
-
-#include <utility>
-#include <stdexcept>
-
-#include "coda_oss/namespace_.h"
-#include "coda_oss/optional_.h"
-
-namespace coda_oss
-{
-template<typename T>
-using optional = details::optional<T>;
-    
-// https://en.cppreference.com/w/cpp/utility/optional/make_optional
-template <typename T, typename... TArgs>
-inline optional<T> make_optional(TArgs&&... args)
-{
-    return details::make_optional<T>(std::forward<TArgs>(args)...);
-}
-}
-
-#define CODA_OSS_coda_oss_optional 201606L // c.f., __cpp_lib_optional
+#include <optional>
+#include "coda_oss/namespace_.h"  // coda_oss -> std
 
 #endif  // CODA_OSS_coda_oss_optional_h_INCLUDED_

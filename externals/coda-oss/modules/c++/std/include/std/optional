@@ -23,7 +23,6 @@
 #pragma once
 
 #include <optional>
-
-#include "sys/Optional.h"
+#include "coda_oss/optional.h"
 
 #endif  // CODA_OSS_std_optional_INCLUDED_

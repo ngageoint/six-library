@@ -22,24 +22,7 @@
 #define CODA_OSS_std_type_traits_INCLUDED_
 #pragma once
 
-// Make it (too?) easy for clients to get our various std:: implementations
 #include "coda_oss/type_traits.h"
-
-#ifndef CODA_OSS_NO_is_trivially_copyable
-#define CODA_OSS_NO_is_trivially_copyable 0  // enabled, unless explicitly disabled
-#endif
-
-#if !CODA_OSS_NO_is_trivially_copyable
-// https://stackoverflow.com/a/31798726/8877
-// workaround missing "is_trivially_copyable" in g++ < 5.0
-#if defined(__GNUC__) && (__GNUC__ < 5)
-namespace std // This is slightly uncouth: we're not supposed to augment "std".
-{
-template <typename T>
-using is_trivially_copyable = coda_oss::is_trivially_copyable<T>;
-}
-#endif // __GNUC__
-#endif // CODA_OSS_NO_is_trivially_copyable
 
 #endif  // CODA_OSS_std_type_traits_INCLUDED_
 

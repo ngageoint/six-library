@@ -23,7 +23,6 @@
 #pragma once
 
 #include <span>
-
-#include "mem/Span.h"
+#include "coda_oss/span.h"
 
 #endif  // CODA_OSS_std_span_INCLUDED_

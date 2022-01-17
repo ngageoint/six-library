@@ -22,8 +22,6 @@
 #define CODA_OSS_std_string_INCLUDED_
 #pragma once
 
-#include <string>
-
-#include "sys/String.h"
+#include "coda_oss/string.h"
 
 #endif  // CODA_OSS_std_string_INCLUDED_

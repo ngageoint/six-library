@@ -23,31 +23,13 @@
 #define CODA_OSS_mem_Span_h_INCLUDED_
 #pragma once
 
-#include <span>
+#include "coda_oss/span.h"
 
 namespace mem
 {
-    template <typename T>
-    using Span = std::span<T>;
+template <typename T>
+using Span = coda_oss::span<T>;
 
-     template <typename T>
-    inline Span<T> make_Span(T* d, size_t sz)
-    {
-         return Span<T>(d, sz);
-    }
-
-     template <typename TContainer>
-    inline Span<typename TContainer::value_type> make_Span(TContainer& c)
-    {
-         return make_Span(c.data(), c.size());
-    }
-    template <typename TContainer>
-    inline Span<typename TContainer::value_type> make_Span(const TContainer& c)
-    {
-        return make_Span(c.data(), c.size());
-    }
 }
-
-
 
 #endif  // CODA_OSS_mem_Span_h_INCLUDED_

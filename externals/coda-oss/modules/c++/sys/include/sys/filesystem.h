@@ -18,15 +18,11 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
-#ifndef CODA_OSS_sys_Filesystem_h_INCLUDED_
-#define CODA_OSS_sys_Filesystem_h_INCLUDED_
+#ifndef CODA_OSS_sys_filesystem_h_INCLUDED_
+#define CODA_OSS_sys_filesystem_h_INCLUDED_
 #pragma once
 
 #include <filesystem>
+#include "coda_oss/namespace_.h"  // coda_oss -> std
 
-namespace sys
-{
-    namespace Filesystem = std::filesystem;
-}
-
-#endif  // CODA_OSS_sys_Filesystem_h_INCLUDED_
+#endif  // CODA_OSS_sys_filesystem_h_INCLUDED_

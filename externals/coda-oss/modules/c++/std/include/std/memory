@@ -22,8 +22,6 @@
 #define CODA_OSS_std_memory_INCLUDED_
 #pragma once
 
-#include <memory>
-
-#include "mem/SharedPtrCpp11.h"
+#include "coda_oss/memory.h"
 
 #endif  // CODA_OSS_std_memory_INCLUDED_
