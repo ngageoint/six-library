@@ -64,7 +64,7 @@ struct span final
     }
 
     // https://en.cppreference.com/w/cpp/container/span/operator_at
-    /*constexpr*/ reference operator[](size_type idx) const
+    /*constexpr*/ reference operator[](size_type idx) const noexcept
     {
         assert(idx < size());  // prevents "constexpr" in C++11
         return data()[idx];

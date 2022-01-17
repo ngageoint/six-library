@@ -25,10 +25,16 @@
 
 // prefer "sys/String.h" instead of this file
 
+#include "config/compiler_extensions.h"
 #include "coda_oss/string.h"
 namespace str
 {
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable: 5052) // Keyword '...' was introduced in C++20 and requires use of the '...' command-line option
+    #endif
     using Char8_T = coda_oss::char8_t;
+    CODA_OSS_disable_warning_pop
     using U8string = coda_oss::u8string;
 }
 namespace sys
