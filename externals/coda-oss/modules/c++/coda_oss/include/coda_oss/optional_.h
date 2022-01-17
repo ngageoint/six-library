@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of coda_oss-c++
  * =========================================================================
  *
  * (C) Copyright 2020, Maxar Technologies, Inc.
@@ -18,35 +18,35 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
-#ifndef CODA_OSS_sys_Optional_h_INCLUDED_
-#define CODA_OSS_sys_Optional_h_INCLUDED_
+#ifndef CODA_OSS_coda_oss_optional__h_INCLUDED_
+#define CODA_OSS_coda_oss_optional__h_INCLUDED_
 #pragma once
 
 #include <assert.h>
 
-#include <stdexcept>
 #include <utility>
+#include <stdexcept>
 
-#include "CPlusPlus.h"
-
-// Simple version of std::Optional since that doesn't exist until C++17.
+// Simple version of std::optional since that doesn't exist until C++17.
 //
 // This doesn't even TRY to match the actual C++17 specification,
 // it only tries to minimize code changes.
 //
 // http://en.cppreference.com/w/cpp/utility/Optional
-namespace sys
+
+#include "coda_oss/namespace_.h"
+namespace coda_oss
 {
 namespace details
 {
-    inline void throw_bad_optional_access()
-    {
-        throw std::logic_error("No value for Optional<>.");  // TODO: std::bad_optional_access
-    }
+inline void throw_bad_optional_access()
+{
+    throw std::logic_error(
+            "No value for optional<>.");  // TODO: std::bad_optional_access
 }
 
 template <typename T>
-class Optional  // no "final" as SWIG doesn't like it
+class optional final
 {
     T value_;
     bool has_value_ = false;
@@ -62,44 +62,51 @@ class Optional  // no "final" as SWIG doesn't like it
 public:
     using value_type = T;
 
-    #if defined(_MSC_VER) && _PREFAST_ // Visual Studio /analyze
-    __pragma(warning(push))
-    __pragma(warning(disable: 26495)) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
-    #endif
-    Optional() noexcept
+#if defined(_MSC_VER) && _PREFAST_  // Visual Studio /analyze
+    __pragma(warning(push)) __pragma(warning(
+            disable : 26495))  // Variable '...' is uninitialized. Always
+                               // initialize a member variable(type.6).
+#endif
+            optional() noexcept
     {
     }
-    #if defined(_MSC_VER) && _PREFAST_
+#if defined(_MSC_VER) && _PREFAST_
     __pragma(warning(pop))
-    #endif
-    Optional(const value_type& v) : value_(v), has_value_(true)
+#endif
+            optional(const value_type& v) :
+        value_(v), has_value_(true)
     {
     }
-    #if defined(_MSC_VER) && _PREFAST_ // Visual Studio /analyze
-    __pragma(warning(push))
-    __pragma(warning(disable: 26495)) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
-    #endif
-    Optional(const Optional& other) : has_value_(other.has_value_)
+#if defined(_MSC_VER) && _PREFAST_  // Visual Studio /analyze
+    __pragma(warning(push)) __pragma(warning(
+            disable : 26495))  // Variable '...' is uninitialized. Always
+                               // initialize a member variable(type.6).
+#endif
+            optional(const optional& other) :
+        has_value_(other.has_value_)
     {
         if (has_value())
         {
             value_ = other.value_;
         }
     }
-    #if defined(_MSC_VER) && _PREFAST_
+#if defined(_MSC_VER) && _PREFAST_
     __pragma(warning(pop))
-    #endif
+#endif
 
-    template <typename... Args>  // https://en.cppreference.com/w/cpp/utility/Optional/emplace
-    T& emplace(Args&&... args)
+            template <
+                    typename... Args>  // https://en.cppreference.com/w/cpp/utility/Optional/emplace
+            T& emplace(Args&&... args)
     {
         value_ = value_type(std::forward<Args>(args)...);
         has_value_ = true;
         return value_;
     }
 
-    template<typename U = T> // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
-    Optional& operator=(U&& value) noexcept
+    template <
+            typename U =
+                    T>  // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
+    optional& operator=(U&& value) noexcept
     {
         value_ = std::forward<U>(value);
         has_value_ = true;
@@ -146,71 +153,85 @@ public:
     const T* operator->() const
     {
         assert(has_value());
-        return &value_; // "This operator does not check whether the optional contains a value!"
+        return &value_;  // "This operator does not check whether the optional
+                         // contains a value!"
     }
     T* operator->() noexcept
     {
         assert(has_value());
-        return &value_;  // "This operator does not check whether the optional contains a value!"
+        return &value_;  // "This operator does not check whether the optional
+                         // contains a value!"
     }
 
     const T& operator*() const&
     {
         assert(has_value());
-        return value_;  // "This operator does not check whether the optional contains a value!"
+        return value_;  // "This operator does not check whether the optional
+                        // contains a value!"
     }
     T& operator*() &
     {
         assert(has_value());
-        return value_;  // "This operator does not check whether the optional contains a value!"
+        return value_;  // "This operator does not check whether the optional
+                        // contains a value!"
     }
     const T&& operator*() const&&
     {
         assert(has_value());
-        return value_;  // "This operator does not check whether the optional contains a value!"
+        return value_;  // "This operator does not check whether the optional
+                        // contains a value!"
     }
     T&& operator*() &&
     {
         assert(has_value());
-        return value_;  // "This operator does not check whether the optional contains a value!"
+        return value_;  // "This operator does not check whether the optional
+                        // contains a value!"
     }
 
     // https://en.cppreference.com/w/cpp/utility/optional/value_or
-    template<typename U>
+    template <typename U>
     T value_or(U&& default_value) const&
     {
-        // Equivalent to bool(*this) ? **this : static_cast<T>(std::forward<U>(default_value))
-        return has_value() ? **this : static_cast<T>(std::forward<U>(default_value));
+        // Equivalent to bool(*this) ? **this :
+        // static_cast<T>(std::forward<U>(default_value))
+        return has_value() ? **this
+                           : static_cast<T>(std::forward<U>(default_value));
     }
     template <typename U>
     T value_or(U&& default_value) &&
     {
-        // Equivalent to bool(*this) ? std::move(**this) : static_cast<T>(std::forward<U>(default_value))
-        return has_value() ? std::move(**this) : static_cast<T>(std::forward<U>(default_value));
+        // Equivalent to bool(*this) ? std::move(**this) :
+        // static_cast<T>(std::forward<U>(default_value))
+        return has_value() ? std::move(**this)
+                           : static_cast<T>(std::forward<U>(default_value));
     }
 };
 
 // https://en.cppreference.com/w/cpp/utility/optional/make_optional
 template <typename T, typename... TArgs>
-inline Optional<T> make_Optional(TArgs&&... args)
+inline optional<T> make_optional(TArgs&&... args)
 {
-    return Optional<T>(T(std::forward<TArgs>(args)...));
+    return optional<T>(T(std::forward<TArgs>(args)...));
 }
 
 // https://en.cppreference.com/w/cpp/utility/optional/operator_cmp
 // Compares two optional objects, lhs and rhs. The contained values are compared
-// (using the corresponding operator of T) only if both lhs and rhs contain values. Otherwise,
-// * lhs is considered equal to rhs if, and only if, both lhs and rhs do not contain a value.
-// * lhs is considered less than rhs if, and only if, rhs contains a value and lhs does not.
+// (using the corresponding operator of T) only if both lhs and rhs contain
+// values. Otherwise,
+// * lhs is considered equal to rhs if, and only if, both lhs and rhs do not
+// contain a value.
+// * lhs is considered less than rhs if, and only if, rhs contains a value and
+// lhs does not.
 template <typename T, typename U>
-inline bool operator==(const Optional<T>& lhs, const Optional<U>& rhs)
+inline bool operator==(const optional<T>& lhs, const optional<U>& rhs)
 {
     // If bool(lhs) != bool(rhs), returns false
     if (bool(lhs) != bool(rhs))
     {
         return false;
     }
-    // Otherwise, if bool(lhs) == false (and so bool(rhs) == false as well), returns true
+    // Otherwise, if bool(lhs) == false (and so bool(rhs) == false as well),
+    // returns true
     if (!lhs.has_value())
     {
         assert(!rhs.has_value());
@@ -220,34 +241,34 @@ inline bool operator==(const Optional<T>& lhs, const Optional<U>& rhs)
     return *lhs == *rhs;
 }
 template <typename T, typename U>
-inline bool operator==(const T& value, const Optional<U>& opt)
+inline bool operator==(const T& value, const optional<U>& opt)
 {
-    return make_Optional<T>(value) == opt;
+    return make_optional<T>(value) == opt;
 }
 template <typename T, typename U>
-inline bool operator==(const Optional<T>& opt, const U& value)
+inline bool operator==(const optional<T>& opt, const U& value)
 {
-    return opt == make_Optional<U>(value);
+    return opt == make_optional<U>(value);
 }
 
 template <typename T, typename U>
-inline bool operator!=(const Optional<T>& lhs, const Optional<U>& rhs)
+inline bool operator!=(const optional<T>& lhs, const optional<U>& rhs)
 {
     return !(lhs == rhs);
 }
 template <typename T, typename U>
-inline bool operator!=(const T& value, const Optional<U>& opt)
+inline bool operator!=(const T& value, const optional<U>& opt)
 {
     return !(value == opt);
 }
 template <typename T, typename U>
-inline bool operator!=(const Optional<T>& opt, const U& value)
+inline bool operator!=(const optional<T>& opt, const U& value)
 {
     return !(opt == value);
 }
 
 template <typename T, typename U>
-inline bool operator<(const Optional<T>& lhs, const Optional<U>& rhs)
+inline bool operator<(const optional<T>& lhs, const optional<U>& rhs)
 {
     // If bool(rhs) == false returns false
     if (!rhs.has_value())
@@ -263,18 +284,18 @@ inline bool operator<(const Optional<T>& lhs, const Optional<U>& rhs)
     return *lhs < *rhs;
 }
 template <typename T, typename U>
-inline bool operator<(const T& value, const Optional<U>& opt)
+inline bool operator<(const T& value, const optional<U>& opt)
 {
-    return make_Optional<T>(value) < opt;
+    return make_optional<T>(value) < opt;
 }
 template <typename T, typename U>
-inline bool operator<(const Optional<T>& opt, const U& value)
+inline bool operator<(const optional<T>& opt, const U& value)
 {
-    return opt < make_Optional<U>(value);
+    return opt < make_optional<U>(value);
 }
 
 template <typename T, typename U>
-inline bool operator<=(const Optional<T>& lhs, const Optional<U>& rhs)
+inline bool operator<=(const optional<T>& lhs, const optional<U>& rhs)
 {
     // If bool(lhs) == false returns true
     if (!lhs.has_value())
@@ -290,18 +311,18 @@ inline bool operator<=(const Optional<T>& lhs, const Optional<U>& rhs)
     return *lhs <= *rhs;
 }
 template <typename T, typename U>
-inline bool operator<=(const T& value, const Optional<U>& opt)
+inline bool operator<=(const T& value, const optional<U>& opt)
 {
-    return make_Optional<T>(value) <= opt;
+    return make_optional<T>(value) <= opt;
 }
 template <typename T, typename U>
-inline bool operator<=(const Optional<T>& opt, const U& value)
+inline bool operator<=(const optional<T>& opt, const U& value)
 {
-    return opt <= make_Optional<U>(value);
+    return opt <= make_optional<U>(value);
 }
 
 template <typename T, typename U>
-inline bool operator>(const Optional<T>& lhs, const Optional<U>& rhs)
+inline bool operator>(const optional<T>& lhs, const optional<U>& rhs)
 {
     // If bool(lhs) == false returns false
     if (!lhs.has_value())
@@ -317,18 +338,18 @@ inline bool operator>(const Optional<T>& lhs, const Optional<U>& rhs)
     return *lhs > *rhs;
 }
 template <typename T, typename U>
-inline bool operator>(const T& value, const Optional<U>& opt)
+inline bool operator>(const T& value, const optional<U>& opt)
 {
-    return make_Optional<T>(value) > opt;
+    return make_optional<T>(value) > opt;
 }
 template <typename T, typename U>
-inline bool operator>(const Optional<T>& opt, const U& value)
+inline bool operator>(const optional<T>& opt, const U& value)
 {
-    return opt > make_Optional<U>(value);
+    return opt > make_optional<U>(value);
 }
 
 template <typename T, typename U>
-inline bool operator>=(const Optional<T>& lhs, const Optional<U>& rhs)
+inline bool operator>=(const optional<T>& lhs, const optional<U>& rhs)
 {
     // If bool(rhs) == false returns true
     if (!rhs.has_value())
@@ -344,27 +365,16 @@ inline bool operator>=(const Optional<T>& lhs, const Optional<U>& rhs)
     return *lhs >= *rhs;
 }
 template <typename T, typename U>
-inline bool operator>=(const T& value, const Optional<U>& opt)
+inline bool operator>=(const T& value, const optional<U>& opt)
 {
-    return make_Optional<T>(value) >= opt;
+    return make_optional<T>(value) >= opt;
 }
 template <typename T, typename U>
-inline bool operator>=(const Optional<T>& opt, const U& value)
+inline bool operator>=(const optional<T>& opt, const U& value)
 {
-    return opt >= make_Optional<U>(value);
+    return opt >= make_optional<U>(value);
 }
-
-#define CODA_OSS_sys_Optional 201606L // c.f., __cpp_lib_optional
-}
-
-#include "str/Convert.h"
-namespace str
-{
-template <typename T>
-std::string toString(const sys::Optional<T>& value)
-{
-    return toString(value.value());
 }
 }
 
-#endif  // CODA_OSS_sys_Optional_h_INCLUDED_
+#endif  // CODA_OSS_coda_oss_optional__h_INCLUDED_

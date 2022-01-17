@@ -26,11 +26,7 @@
 
 // Make it (too?) easy for clients to get our various std:: implementations
 
-#include "sys/String.h"
-static_assert(CODA_OSS_sys_Char8_T >= 201907L, "missing sys::Char8_T");
-
-#include "config/compiler_extensions.h"
-
+#include "coda_oss/string.h"
 #if defined(__cpp_char8_t) && (__cpp_char8_t >= 201811L) // https://en.cppreference.com/w/cpp/feature_test
     #undef CODA_OSS_NO_std_u8string
     #define CODA_OSS_NO_std_u8string 1  // don't need our own
@@ -40,6 +36,7 @@ static_assert(CODA_OSS_sys_Char8_T >= 201907L, "missing sys::Char8_T");
     #define CODA_OSS_NO_std_u8string 0 // enabled, unless explicitly disabled
 #endif
 
+#include "config/compiler_extensions.h"
 #if !CODA_OSS_NO_std_u8string
     namespace std // This is slightly uncouth: we're not supposed to augment "std".
     {
@@ -47,10 +44,10 @@ static_assert(CODA_OSS_sys_Char8_T >= 201907L, "missing sys::Char8_T");
         #if defined(_MSC_VER) && (_MSC_VER >= 1927)
         #pragma warning(disable: 5052) // Keyword '...' was introduced in C++ 20 and requires use of the '...' command-line option
         #endif
-        using char8_t = str::Char8_T;
+        using char8_t = coda_oss::char8_t;
         CODA_OSS_disable_warning_pop
 
-        using u8string = str::U8string;
+        using u8string = coda_oss::u8string;
     }
 #endif // !CODA_OSS_NO_std_u8string
 

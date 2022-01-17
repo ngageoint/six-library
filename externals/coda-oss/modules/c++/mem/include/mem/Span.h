@@ -23,34 +23,13 @@
 #define CODA_OSS_mem_Span_h_INCLUDED_
 #pragma once
 
-#include "sys/CPlusPlus.h"
-#include "gsl/gsl_span_.h"
+#include "coda_oss/span.h"
 
 namespace mem
 {
-    template <typename T>
-    using Span = gsl::span<T>;
+template <typename T>
+using Span = coda_oss::span<T>;
 
-     template <typename T>
-    inline Span<T> make_Span(T* d, size_t sz)
-    {
-        return gsl::make_span<T>(d, sz);
-    }
-
-     template <typename TContainer>
-    inline Span<typename TContainer::value_type> make_Span(TContainer& c)
-    {
-        return gsl::make_span(c);
-    }
-    template <typename TContainer>
-    inline Span<typename TContainer::value_type> make_Span(const TContainer& c)
-    {
-        return make_Span(const_cast<TContainer&>(c));
-    }
-
-#define CODA_OSS_mem_Span 202002L  // c.f., __cpp_lib_span
 }
-
-
 
 #endif  // CODA_OSS_mem_Span_h_INCLUDED_

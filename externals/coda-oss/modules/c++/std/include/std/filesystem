@@ -24,8 +24,7 @@
 
 // Make it (too?) easy for clients to get our various std:: implementations
 
-#include "sys/Filesystem.h"
-static_assert(CODA_OSS_sys_Filesystem >= 201703L, "missing sys::Filesystem");
+#include "sys/filesystem.h"
  
 #if CODA_OSS_cpp17
     // Some versions of G++ say they're C++17 but don't have <filesystem>
@@ -43,7 +42,7 @@ static_assert(CODA_OSS_sys_Filesystem >= 201703L, "missing sys::Filesystem");
 #if !CODA_OSS_NO_std_filesystem
     namespace std // This is slightly uncouth: we're not supposed to augment "std".
     {
-        namespace filesystem = ::sys::Filesystem;
+        namespace filesystem = coda_oss::filesystem;
     }
 #endif  // !CODA_OSS_NO_std_filesystem
 

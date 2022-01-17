@@ -2697,7 +2697,7 @@ SWIGINTERN PyObject *SWIG_PyStaticMethod_New(PyObject *SWIGUNUSEDPARM(self), PyO
 #define SWIGTYPE_p_std__nothrow_t swig_types[4]
 #define SWIGTYPE_p_std__string swig_types[5]
 #define SWIGTYPE_p_std__vectorT_xml__lite__Element_p_t swig_types[6]
-#define SWIGTYPE_p_sys__OptionalT_xml__lite__string_encoding_t swig_types[7]
+#define SWIGTYPE_p_coda_oss__optionalT_xml__lite__string_encoding_t swig_types[7]
 #define SWIGTYPE_p_sys__U8string swig_types[8]
 #define SWIGTYPE_p_xml__lite__Document swig_types[9]
 #define SWIGTYPE_p_xml__lite__Element swig_types[10]
@@ -5757,7 +5757,7 @@ SWIGINTERN PyObject *_wrap_Element_getEncoding(PyObject *SWIGUNUSEDPARM(self), P
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  sys::Optional< xml::lite::StringEncoding > *result = 0 ;
+  coda_oss::optional<xml::lite::StringEncoding>* result = 0;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
@@ -5766,8 +5766,8 @@ SWIGINTERN PyObject *_wrap_Element_getEncoding(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_getEncoding" "', argument " "1"" of type '" "xml::lite::Element const *""'"); 
   }
   arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
-  result = (sys::Optional< xml::lite::StringEncoding > *) &((xml::lite::Element const *)arg1)->getEncoding();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_sys__OptionalT_xml__lite__string_encoding_t, 0 |  0 );
+  result = (coda_oss::optional< xml::lite::StringEncoding > *) &((xml::lite::Element const *)arg1)->getEncoding();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_coda_oss__optionalT_xml__lite__string_encoding_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -5782,7 +5782,7 @@ SWIGINTERN PyObject *_wrap_Element_getCharacterData__SWIG_1(PyObject *SWIGUNUSED
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  sys::Optional< xml::lite::StringEncoding > *result = 0 ;
+  coda_oss::optional< xml::lite::StringEncoding > *result = 0 ;
   
   if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
@@ -5798,8 +5798,8 @@ SWIGINTERN PyObject *_wrap_Element_getCharacterData__SWIG_1(PyObject *SWIGUNUSED
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_getCharacterData" "', argument " "2"" of type '" "std::string &""'"); 
   }
   arg2 = reinterpret_cast< std::string * >(argp2);
-  result = (sys::Optional< xml::lite::StringEncoding > *) &((xml::lite::Element const *)arg1)->getCharacterData(*arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_sys__OptionalT_xml__lite__string_encoding_t, 0 |  0 );
+  result = (coda_oss::optional< xml::lite::StringEncoding > *) &((xml::lite::Element const *)arg1)->getCharacterData(*arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_coda_oss__optionalT_xml__lite__string_encoding_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -7992,10 +7992,10 @@ static PyMethodDef SwigMethods[] = {
 		"Element_hasElement(Element self, std::string const & localName) -> bool\n"
 		"Element_hasElement(Element self, std::string const & uri, std::string const & localName) -> bool\n"
 		""},
-	 { "Element_getEncoding", _wrap_Element_getEncoding, METH_O, "Element_getEncoding(Element self) -> sys::Optional< xml::lite::StringEncoding > const &"},
+	 { "Element_getEncoding", _wrap_Element_getEncoding, METH_O, "Element_getEncoding(Element self) -> coda_oss::optional< xml::lite::StringEncoding > const &"},
 	 { "Element_getCharacterData", _wrap_Element_getCharacterData, METH_VARARGS, "\n"
 		"Element_getCharacterData(Element self) -> std::string\n"
-		"Element_getCharacterData(Element self, std::string & result) -> sys::Optional< xml::lite::StringEncoding > const\n"
+		"Element_getCharacterData(Element self, std::string & result) -> coda_oss::optional< xml::lite::StringEncoding > const\n"
 		"Element_getCharacterData(Element self, sys::U8string & result)\n"
 		""},
 	 { "Element_setCharacterData_", _wrap_Element_setCharacterData_, METH_VARARGS, "Element_setCharacterData_(Element self, std::string const & characters, xml::lite::StringEncoding const * arg3)"},
@@ -8074,7 +8074,7 @@ static swig_type_info _swigt__p_io__OutputStream = {"_p_io__OutputStream", "io::
 static swig_type_info _swigt__p_std__nothrow_t = {"_p_std__nothrow_t", "std::nothrow_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_xml__lite__Element_p_t = {"_p_std__vectorT_xml__lite__Element_p_t", "std::vector< xml::lite::Element * > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_sys__OptionalT_xml__lite__string_encoding_t = {"_p_sys__OptionalT_xml__lite__string_encoding_t", "sys::Optional< xml::lite::StringEncoding > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_coda_oss__optionalT_xml__lite__string_encoding_t = {"_p_coda_oss__optionalT_xml__lite__string_encoding_t", "coda_oss::optional< xml::lite::StringEncoding > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sys__U8string = {"_p_sys__U8string", "sys::U8string *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_xml__lite__Document = {"_p_xml__lite__Document", "xml::lite::Document *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_xml__lite__Element = {"_p_xml__lite__Element", "xml::lite::Element *", 0, 0, (void*)0, 0};
@@ -8089,7 +8089,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__nothrow_t,
   &_swigt__p_std__string,
   &_swigt__p_std__vectorT_xml__lite__Element_p_t,
-  &_swigt__p_sys__OptionalT_xml__lite__string_encoding_t,
+  &_swigt__p_coda_oss__optionalT_xml__lite__string_encoding_t,
   &_swigt__p_sys__U8string,
   &_swigt__p_xml__lite__Document,
   &_swigt__p_xml__lite__Element,
@@ -8104,7 +8104,7 @@ static swig_cast_info _swigc__p_io__OutputStream[] = {  {&_swigt__p_io__OutputSt
 static swig_cast_info _swigc__p_std__nothrow_t[] = {  {&_swigt__p_std__nothrow_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_xml__lite__Element_p_t[] = {  {&_swigt__p_std__vectorT_xml__lite__Element_p_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_sys__OptionalT_xml__lite__string_encoding_t[] = {  {&_swigt__p_sys__OptionalT_xml__lite__string_encoding_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_coda_oss__optionalT_xml__lite__string_encoding_t[] = {  {&_swigt__p_coda_oss__optionalT_xml__lite__string_encoding_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sys__U8string[] = {  {&_swigt__p_sys__U8string, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_xml__lite__Document[] = {  {&_swigt__p_xml__lite__Document, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_xml__lite__Element[] = {  {&_swigt__p_xml__lite__Element, 0, 0, 0},{0, 0, 0, 0}};
@@ -8119,7 +8119,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__nothrow_t,
   _swigc__p_std__string,
   _swigc__p_std__vectorT_xml__lite__Element_p_t,
-  _swigc__p_sys__OptionalT_xml__lite__string_encoding_t,
+  _swigc__p_coda_oss__optionalT_xml__lite__string_encoding_t,
   _swigc__p_sys__U8string,
   _swigc__p_xml__lite__Document,
   _swigc__p_xml__lite__Element,

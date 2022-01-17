@@ -40,6 +40,7 @@
 #include "str/String_.h"
 
 #include "str/Encoding.h"
+#include "coda_oss/optional.h"
 
 namespace str
 {
@@ -68,6 +69,15 @@ template <>
 inline std::string toString(const std::nullptr_t&)
 {
     return "<nullptr>";
+}
+
+template <>
+std::string toString(const str::U8string&);
+
+template <typename T>
+std::string toString(const coda_oss::optional<T>& value)
+{
+    return toString(value.value());
 }
 
 template <typename T>
