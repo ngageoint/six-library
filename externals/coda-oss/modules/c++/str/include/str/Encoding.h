@@ -129,6 +129,7 @@ namespace details
 // YOU should use EncodedStringView
 extern void toNative(const str::W1252string&, std::string&);  // encoding is lost
 extern void toString(sys::U8string::const_pointer, std::string&);  // encoding is lost
+extern str::W1252string toWindows1252(const str::U8string& utf8);
 }
 
 }

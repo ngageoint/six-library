@@ -151,20 +151,73 @@ TEST_CASE(test_string_to_u8string_windows_1252)
         test_assert_eq(testName, actual, expected8);
         const std::u32string expected{cast32('|'), 0x0178, cast32('|')};  // UTF-32,  "|Ÿ|"
         test_assert_eq(testName, actual, expected);
-
     }
-    const std::vector<char> undefined{ '\x81', '\x8d', '\x8f', '\x90', '\x9d' };
-    for (const auto& ch : undefined)
     {
-        const std::string input{'|', ch, '|'};
-        const auto actual = fromWindows1252(input);
-        static const std::u8string expected8{cast8('|'), cast8('\xEF'), cast8('\xBF'), cast8('\xBD'), cast8('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
-        test_assert_eq(testName, actual, expected8);
-        const std::u32string expected{cast32('|'), 0xfffd, cast32('|')};  // UTF-32,  "|<REPLACEMENT CHARACTER>|"
-        test_assert_eq(testName, actual, expected);
+        const std::vector<char> undefined{ '\x81', '\x8d', '\x8f', '\x90', '\x9d' };
+        for (const auto& ch : undefined)
+        {
+            const std::string input{'|', ch, '|'};
+            const auto actual = fromWindows1252(input);
+            static const std::u8string expected8{cast8('|'), cast8('\xEF'), cast8('\xBF'), cast8('\xBD'), cast8('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
+            test_assert_eq(testName, actual, expected8);
+            const std::u32string expected{cast32('|'), 0xfffd, cast32('|')};  // UTF-32,  "|<REPLACEMENT CHARACTER>|"
+            test_assert_eq(testName, actual, expected);
+        }    
+    }
+    {
+        //  http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT
+        const std::vector<uint8_t> windows1252_characters{
+                //0x80,  // EURO SIGN
+                //0x82,  // SINGLE LOW-9 QUOTATION MARK
+                //0x83,  // LATIN SMALL LETTER F WITH HOOK
+                //0x84,  // DOUBLE LOW-9 QUOTATION MARK
+                //0x85,  // HORIZONTAL ELLIPSIS
+                //0x86,  // DAGGER
+                //0x87,  // DOUBLE DAGGER
+                //0x88,  // MODIFIER LETTER CIRCUMFLEX ACCENT
+                //0x89,  // PER MILLE SIGN
+                //0x8A,  // LATIN CAPITAL LETTER S WITH CARON
+                //0x8B,  // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+                //0x8C,  // LATIN CAPITAL LIGATURE OE
+                0x8E,  // LATIN CAPITAL LETTER Z WITH CARON
+                0x91,  // LEFT SINGLE QUOTATION MARK
+                0x92,  // RIGHT SINGLE QUOTATION MARK
+                0x93,  // LEFT DOUBLE QUOTATION MARK
+                0x94,  // RIGHT DOUBLE QUOTATION MARK
+                0x95,  // BULLET
+                0x96,  // EN DASH
+                0x97,  // EM DASH
+                0x98,  // SMALL TILDE
+                0x99,  // TRADE MARK SIGN
+                0x9A,  // LATIN SMALL LETTER S WITH CARON
+                0x9B,  // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+                0x9C,  // LATIN SMALL LIGATURE OE
+                0x9E,  // LATIN SMALL LETTER Z WITH CARON
+                0x9F};  // LATIN CAPITAL LETTER Y WITH DIAERESIS
+        for (const auto& ch : windows1252_characters)
+        {
+            const std::string input_ { '|', static_cast<std::string::value_type>(ch), '|'};
+            const str::W1252string input(str::c_str<str::W1252string::const_pointer>(input_));
+            const auto actual = to_u8string(input);
+
+            // No "expected" to test against as the UTF-8 values for these Windows-1252 characters
+            // are mapped one-by-one.  However, we can test that UTF-8 to Windows-1252
+            // works as that walks through a UTF-8 string which can have 1-, 2-, 3- and 4-bytes
+            // for a single code-point.
+            const str::W1252string w1252 = str::details::toWindows1252(actual);
+            TEST_ASSERT(input == w1252);
+
+            // Can't compare the values with == because TEST_ASSERT_EQ()
+            // wants to do toString() and that doesn't work on Linux as the encoding
+            // is wrong (see above).
+            //const std::string w1252_ = str::c_str<std::string::const_pointer>(w1252);
+            //TEST_ASSERT_EQ(input_, w1252_);
+            const str::EncodedStringView inputView(input);
+            const str::EncodedStringView w1252View(w1252);
+            TEST_ASSERT_EQ(inputView, w1252View);
+        }    
     }
 }
-
 
 TEST_CASE(test_string_to_u8string_iso8859_1)
 {
@@ -172,10 +225,21 @@ TEST_CASE(test_string_to_u8string_iso8859_1)
     constexpr uint8_t latin_small_letter_y_with_diaeresis = 0xff;  // 'ÿ'
     for (uint32_t ch = nobreak_space; ch <= latin_small_letter_y_with_diaeresis; ch++)  // ISO8859-1
     {
-        const std::string input { '|', static_cast<std::string::value_type>(ch), '|'};
-        const auto actual = fromWindows1252(input);
+        const std::string input_ { '|', static_cast<std::string::value_type>(ch), '|'};
+        const str::W1252string input(str::c_str<str::W1252string::const_pointer>(input_));
+        const auto actual = to_u8string(input);
         const std::u32string expected{cast32('|'), cast32(ch), cast32('|')};
         test_assert_eq(testName, actual, expected);
+
+        // Can't compare the values with == because TEST_ASSERT_EQ()
+        // wants to do toString() and that doesn't work on Linux as the encoding
+        // is wrong (see above).
+        //std::string actual_;
+        //str::details::toString(actual.c_str(), actual_);
+        //TEST_ASSERT_EQ(input_, actual_);
+        const str::EncodedStringView inputView(input);
+        const str::EncodedStringView actualView(actual);
+        TEST_ASSERT_EQ(inputView, actualView);
     }
 }
 

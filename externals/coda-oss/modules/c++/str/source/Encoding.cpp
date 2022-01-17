@@ -35,7 +35,6 @@
 #include "str/Convert.h"
 #include "str/utf8.h"
 
-
 // Need to look up characters from \x80 (EURO SIGN) to \x9F (LATIN CAPITAL LETTER Y WITH DIAERESIS)
 // in a map: http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT
 inline void utf32to8(const std::u32string& s, sys::U8string& result)
@@ -67,9 +66,9 @@ static const std::map<std::u32string::value_type, sys::U8string> Windows1252_x80
     , {0x8E, utf8_(0x017D)  } // LATIN CAPITAL LETTER Z WITH CARON
     //, {0x8F, replacement_character } // UNDEFINED
     //, {0x90, replacement_character } // UNDEFINED
-    , {0x91, utf8_(0x017D)  } // LEFT SINGLE QUOTATION MARK
-    , {0x92, utf8_(0x2018)  } // RIGHT SINGLE QUOTATION MARK
-    , {0x93, utf8_(0x2019)  } // LEFT DOUBLE QUOTATION MARK
+    , {0x91, utf8_(0x2018)  } // LEFT SINGLE QUOTATION MARK
+    , {0x92, utf8_(0x2019)  } // RIGHT SINGLE QUOTATION MARK
+    , {0x93, utf8_(0x201C)  } // LEFT DOUBLE QUOTATION MARK
     , {0x94, utf8_(0x201D)  } // RIGHT DOUBLE QUOTATION MARK
     , {0x95, utf8_(0x2022)  } // BULLET
     , {0x96, utf8_(0x2013)  } // EN DASH
@@ -168,52 +167,52 @@ std::map<TValue, TKey> kv_to_vk(const std::map<TKey, TValue>& kv)
     return retval;
 }
 
+static void get_next_utf8_byte(str::U8string::const_pointer p, size_t sz,
+    size_t& i,  str::U8string& utf8)
+{
+    if (!(i + i < sz))
+    {
+        throw std::invalid_argument("No remaining bytes, invalid UTF-8 encoding.");
+    }
+    i++;  // move to next byte
+
+    // Bytes 2, 3 and 4 are always >= 0x80 (10xxxxxx), see https://en.wikipedia.org/wiki/UTF-8
+    const auto b = static_cast<uint8_t>(p[i]);
+    if (b < static_cast<uint8_t>(0x80))  // 10xxxxxx
+    {
+        throw std::invalid_argument("Invalid next byte in UTF-8 encoding.");
+    }
+    utf8 += str::U8string{cast(b)};
+}
+
 template<typename TChar>
 void toWindows1252_(str::U8string::const_pointer p, size_t sz, std::basic_string<TChar>& result)
 {
     using value_type = typename std::basic_string<TChar>::value_type;
     for (size_t i = 0; i < sz; i++)
     {
+        const auto b1 = static_cast<uint8_t>(p[i]);
+
         // ASCII is the same in UTF-8
-        if (p[i] < static_cast<str::U8string::value_type>(0x80))
+        if (b1 < 0x80) // 0xxxxxxx
         {
-            result += static_cast<value_type>(p[i]);  // ASCII
+            result += static_cast<value_type>(b1);  // ASCII
             continue;
         }
 
-        constexpr auto invalid = static_cast<value_type>(0x7F);  // <DEL>
-        if (!(i + i < sz))
-        {
-            // No remaining bytes, invalid UTF-8 encoding
-            result += invalid;
-            return;
-        }
+        auto utf8 = str::U8string{cast(b1)};
 
-        // https://en.wikipedia.org/wiki/UTF-8
-        const auto b1 = static_cast<uint8_t>(p[i]);
-        i++;  // move to second byte
+        get_next_utf8_byte(p, sz, i, utf8);
         if (b1 >= 0xE0)  // 1110xxxx
         {
-            // not a two-byte sequence, nothing to convert to Windows-1252
-            result += invalid;  // <DEL>
-
-            i++;  // skip third byte
+            // should be a 3- or 4-byte sequence
+            get_next_utf8_byte(p, sz, i, utf8);      
             if (b1 >= 0xF0)  // 1111xxx
             {
-                i++;  // skip fourth byte
+                // should be a 4-byte sequence
+                get_next_utf8_byte(p, sz, i, utf8);     
             }
-            continue;
         }
-
-        const auto b2 = static_cast<uint8_t>(p[i]);
-        if (b2 < 0x80)  // 10xxxxxx
-        {
-            // invalid second byte
-            result += invalid;  // <DEL>
-            continue;
-        }
-
-        const str::U8string utf8{cast(b1), cast(b2)};
 
         static const auto map = kv_to_vk(Windows1252_to_u8string());
         const auto it = map.find(utf8);
@@ -223,23 +222,22 @@ void toWindows1252_(str::U8string::const_pointer p, size_t sz, std::basic_string
         }
         else
         {
-            // UTF-8 character can't be converted to Windows-1252
-            result += invalid;  // <DEL>
+            assert("UTF-8 sequence can't be converted to Windows-1252." && 0);
+            result += static_cast<TChar>(0x7F);  // <DEL>
         }
     }
 }
-// Keeping this "static" for now, don't want to encouarge this converstion.
-// Client access is via str::toString().
-//static void toWindows1252(str::U8string::const_pointer p, size_t sz, str::W1252string& result)
-//{
-//    toWindows1252_(p, sz, result);
-//}
-//static std::string toWindows1252(const str::U8string& utf8)
-//{
-//    std::string retval;
-//    toWindows1252_(utf8.c_str(), utf8.size(), retval);
-//    return retval;
-//}
+// Exposing for unit-tests
+static void toWindows1252(str::U8string::const_pointer p, size_t sz, str::W1252string& result)
+{
+    toWindows1252_(p, sz, result);
+}
+str::W1252string str::details::toWindows1252(const str::U8string& utf8)
+{
+    str::W1252string retval;
+    ::toWindows1252(utf8.c_str(), utf8.size(), retval);
+    return retval;
+}
 
 struct back_inserter final
 { 
