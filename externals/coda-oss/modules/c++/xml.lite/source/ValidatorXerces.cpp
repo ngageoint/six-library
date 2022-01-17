@@ -31,6 +31,8 @@
 #include <io/StringStream.h>
 #include <mem/ScopedArray.h>
 
+namespace fs = coda_oss::filesystem;
+
 namespace xml
 {
 namespace lite
@@ -74,15 +76,15 @@ bool ValidationErrorHandler::handleError(
     return true;
 }
 
-inline std::vector<std::string> convert(const std::vector<sys::Filesystem::path>& schemaPaths)
+inline std::vector<std::string> convert(const std::vector<fs::path>& schemaPaths)
 {
     std::vector<std::string> retval;
     std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
-                   [](const sys::Filesystem::path& p) { return p.string(); });
+                   [](const fs::path& p) { return p.string(); });
     return retval;
 }
 ValidatorXerces::ValidatorXerces(
-        const std::vector<sys::Filesystem::path>& schemaPaths,
+        const std::vector<fs::path>& schemaPaths,
         logging::Logger* log,
         bool recursive) :
     ValidatorXerces(convert(schemaPaths), log, recursive)

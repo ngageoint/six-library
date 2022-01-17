@@ -113,7 +113,7 @@ public:
     ValidatorXerces(const std::vector<std::string>& schemaPaths, 
                     logging::Logger* log,
                     bool recursive = true);
-    ValidatorXerces(const std::vector<sys::Filesystem::path>&,
+    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&,
                     logging::Logger* log,
                     bool recursive = true);
 

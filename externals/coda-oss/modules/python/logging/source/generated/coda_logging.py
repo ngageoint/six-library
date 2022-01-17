@@ -197,7 +197,7 @@ class FileHandler(StreamHandler):
     __repr__ = _swig_repr
 
     def __init__(self, *args):
-        r"""__init__(FileHandler self, sys::Filesystem::path const & fname, LogLevel level=LogLevel::LOG_NOTSET, int creationFlags=sys::File::CREATE|sys::File::TRUNCATE) -> FileHandler"""
+        r"""__init__(FileHandler self, coda_oss::filesystem::path const & fname, LogLevel level=LogLevel::LOG_NOTSET, int creationFlags=sys::File::CREATE|sys::File::TRUNCATE) -> FileHandler"""
         _coda_logging.FileHandler_swiginit(self, _coda_logging.new_FileHandler(*args))
     __swig_destroy__ = _coda_logging.delete_FileHandler
 

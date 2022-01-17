@@ -2708,7 +2708,7 @@ SWIGINTERN PyObject *SWIG_PyStaticMethod_New(PyObject *SWIGUNUSEDPARM(self), PyO
 #define SWIGTYPE_p_path swig_types[15]
 #define SWIGTYPE_p_std__stringstream swig_types[16]
 #define SWIGTYPE_p_sys__File swig_types[17]
-#define SWIGTYPE_p_sys__Filesystem__path swig_types[18]
+#define SWIGTYPE_p_coda_oss__filesystem__path swig_types[18]
 #define SWIGTYPE_p_sys__Off_T swig_types[19]
 #define SWIGTYPE_p_sys__SSize_T swig_types[20]
 #define SWIGTYPE_p_sys__Size_T swig_types[21]
@@ -5994,7 +5994,7 @@ SWIGINTERN PyObject *_wrap_new_FileOutputStream__SWIG_1(PyObject *SWIGUNUSEDPARM
   io::FileOutputStreamOS *result = 0 ;
   
   if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_sys__Filesystem__path,  0  | 0);
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_coda_oss__filesystem__path,  0  | 0);
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileOutputStream" "', argument " "1"" of type '" "io::FileOutputStreamOS::path const &""'"); 
   }
@@ -6023,7 +6023,7 @@ SWIGINTERN PyObject *_wrap_new_FileOutputStream__SWIG_2(PyObject *SWIGUNUSEDPARM
   io::FileOutputStreamOS *result = 0 ;
   
   if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_sys__Filesystem__path,  0  | 0);
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_coda_oss__filesystem__path,  0  | 0);
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileOutputStream" "', argument " "1"" of type '" "io::FileOutputStreamOS::path const &""'"); 
   }
@@ -6052,7 +6052,7 @@ SWIGINTERN PyObject *_wrap_new_FileOutputStream(PyObject *self, PyObject *args) 
   }
   if (argc == 1) {
     int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_sys__Filesystem__path, SWIG_POINTER_NO_NULL | 0);
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_coda_oss__filesystem__path, SWIG_POINTER_NO_NULL | 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       return _wrap_new_FileOutputStream__SWIG_2(self, argc, argv);
@@ -6060,7 +6060,7 @@ SWIGINTERN PyObject *_wrap_new_FileOutputStream(PyObject *self, PyObject *args) 
   }
   if (argc == 2) {
     int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_sys__Filesystem__path, SWIG_POINTER_NO_NULL | 0);
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_coda_oss__filesystem__path, SWIG_POINTER_NO_NULL | 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       {
@@ -6146,7 +6146,7 @@ SWIGINTERN PyObject *_wrap_FileOutputStream_create__SWIG_0(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileOutputStream_create" "', argument " "1"" of type '" "io::FileOutputStreamOS *""'"); 
   }
   arg1 = reinterpret_cast< io::FileOutputStreamOS * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_sys__Filesystem__path,  0  | 0);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_coda_oss__filesystem__path,  0  | 0);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileOutputStream_create" "', argument " "2"" of type '" "io::FileOutputStreamOS::path const &""'"); 
   }
@@ -6182,7 +6182,7 @@ SWIGINTERN PyObject *_wrap_FileOutputStream_create__SWIG_1(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileOutputStream_create" "', argument " "1"" of type '" "io::FileOutputStreamOS *""'"); 
   }
   arg1 = reinterpret_cast< io::FileOutputStreamOS * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_sys__Filesystem__path,  0  | 0);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_coda_oss__filesystem__path,  0  | 0);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileOutputStream_create" "', argument " "2"" of type '" "io::FileOutputStreamOS::path const &""'"); 
   }
@@ -6212,7 +6212,7 @@ SWIGINTERN PyObject *_wrap_FileOutputStream_create(PyObject *self, PyObject *arg
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_io__FileOutputStreamOS, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_sys__Filesystem__path, SWIG_POINTER_NO_NULL | 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_coda_oss__filesystem__path, SWIG_POINTER_NO_NULL | 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_FileOutputStream_create__SWIG_1(self, argc, argv);
@@ -6225,7 +6225,7 @@ SWIGINTERN PyObject *_wrap_FileOutputStream_create(PyObject *self, PyObject *arg
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_io__FileOutputStreamOS, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_sys__Filesystem__path, SWIG_POINTER_NO_NULL | 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_coda_oss__filesystem__path, SWIG_POINTER_NO_NULL | 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         {
@@ -6764,7 +6764,7 @@ static swig_type_info _swigt__p_io__StringStream = {"_p_io__StringStream", "io::
 static swig_type_info _swigt__p_path = {"_p_path", "path *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__stringstream = {"_p_std__stringstream", "std::stringstream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sys__File = {"_p_sys__File", "sys::File *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_sys__Filesystem__path = {"_p_sys__Filesystem__path", "sys::Filesystem::path *|io::FileOutputStreamOS::path *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_coda_oss__filesystem__path = {"_p_coda_oss__filesystem__path", "coda_oss::filesystem::path *|io::FileOutputStreamOS::path *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sys__Off_T = {"_p_sys__Off_T", "sys::Off_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sys__SSize_T = {"_p_sys__SSize_T", "sys::SSize_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sys__Size_T = {"_p_sys__Size_T", "sys::Size_T *", 0, 0, (void*)0, 0};
@@ -6789,7 +6789,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_path,
   &_swigt__p_std__stringstream,
   &_swigt__p_sys__File,
-  &_swigt__p_sys__Filesystem__path,
+  &_swigt__p_coda_oss__filesystem__path,
   &_swigt__p_sys__Off_T,
   &_swigt__p_sys__SSize_T,
   &_swigt__p_sys__Size_T,
@@ -6814,7 +6814,7 @@ static swig_cast_info _swigc__p_io__StringStream[] = {  {&_swigt__p_io__StringSt
 static swig_cast_info _swigc__p_path[] = {  {&_swigt__p_path, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__stringstream[] = {  {&_swigt__p_std__stringstream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sys__File[] = {  {&_swigt__p_sys__File, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_sys__Filesystem__path[] = {  {&_swigt__p_sys__Filesystem__path, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_coda_oss__filesystem__path[] = {  {&_swigt__p_coda_oss__filesystem__path, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sys__Off_T[] = {  {&_swigt__p_sys__Off_T, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sys__SSize_T[] = {  {&_swigt__p_sys__SSize_T, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sys__Size_T[] = {  {&_swigt__p_sys__Size_T, 0, 0, 0},{0, 0, 0, 0}};
@@ -6839,7 +6839,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_path,
   _swigc__p_std__stringstream,
   _swigc__p_sys__File,
-  _swigc__p_sys__Filesystem__path,
+  _swigc__p_coda_oss__filesystem__path,
   _swigc__p_sys__Off_T,
   _swigc__p_sys__SSize_T,
   _swigc__p_sys__Size_T,

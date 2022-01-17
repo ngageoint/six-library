@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of coda_oss-c++
  * =========================================================================
  *
- * (C) Copyright 2022, Maxar Technologies, Inc.
+ * (C) Copyright 2020, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,29 +18,31 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
-#ifndef CODA_OSS_sys_TypeTraits_h_INCLUDED_
-#define CODA_OSS_sys_TypeTraits_h_INCLUDED_
+#ifndef CODA_OSS_coda_oss_optional_h_INCLUDED_
+#define CODA_OSS_coda_oss_optional_h_INCLUDED_
 #pragma once
 
-#include <type_traits>
+#include <assert.h>
 
-#include "CPlusPlus.h"
+#include <utility>
+#include <stdexcept>
 
-namespace sys
+#include "coda_oss/namespace_.h"
+#include "coda_oss/optional_.h"
+
+namespace coda_oss
 {
-// workaround missing "is_trivially_copyable" in g++ < 5.0
-#if defined(__GNUC__) && (__GNUC__ < 5)
-template <typename T>
-struct IsTriviallyCopyable final
+template<typename T>
+using optional = details::optional<T>;
+    
+// https://en.cppreference.com/w/cpp/utility/optional/make_optional
+template <typename T, typename... TArgs>
+inline optional<T> make_optional(TArgs&&... args)
 {
-    static_assert(CODA_OSS_cplusplus < 201402L, "C++14 must have is_trivially_copyable.");
-    // https://stackoverflow.com/a/31798726/8877
-    static constexpr bool value = __has_trivial_copy(T);
-};
-#else
-template <typename T>
-using IsTriviallyCopyable = std::is_trivially_copyable<T>;
-#endif
+    return details::make_optional<T>(std::forward<TArgs>(args)...);
+}
 }
 
-#endif  // CODA_OSS_sys_TypeTraits_h_INCLUDED_
+#define CODA_OSS_coda_oss_optional 201606L // c.f., __cpp_lib_optional
+
+#endif  // CODA_OSS_coda_oss_optional_h_INCLUDED_

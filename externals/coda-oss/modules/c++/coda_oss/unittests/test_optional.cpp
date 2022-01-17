@@ -20,17 +20,26 @@
  *
  */
 
-#include "TestCase.h"
+#include "coda_oss_TestCase.h"
 
 #include <array>
+#include <ostream>
 
-#include <std/optional>
+#include "coda_oss/optional.h"
+
+namespace str
+{
+template <typename T>
+std::string toString(const coda_oss::optional<T>& value)
+{
+    return std::to_string(value.value());
+}
+}
 
 namespace
 {
-
-template<typename T>
-std::ostream& operator<<(std::ostream& s, const sys::Optional<T>& opt)    
+template <typename T>
+std::ostream& operator<<(std::ostream& s, const coda_oss::optional<T>& opt)
 {
     if (opt.has_value())
     {
@@ -61,7 +70,7 @@ std::ostream& operator<<(std::ostream& s, const std::optional<T>& opt)
 template<typename TOptional>
 static void testOptional_(const std::string& testName, const TOptional& opt)
 {
-    const sys::Optional<int> null;
+    const coda_oss::optional<int> null;
     TEST_ASSERT_FALSE(null.has_value());
     TEST_ASSERT_NOT_EQ(null, 314);
     TEST_ASSERT_GREATER(314, null);
@@ -95,28 +104,30 @@ static void testOptional_(const std::string& testName, const TOptional& opt)
 
 TEST_CASE(test_sys_Optional)
 {
-    const sys::Optional<int> null;
+    const coda_oss::optional<int> null;
     TEST_ASSERT_FALSE(null.has_value());
 
     {
-        sys::Optional<int> opt;
+        coda_oss::optional<int> opt;
         TEST_ASSERT_FALSE(opt.has_value());
         TEST_ASSERT_EQ(null, opt);
         opt = 314;
         testOptional_(testName, opt);
     }
     {
-        sys::Optional<int> opt = 314;
+        coda_oss::optional<int> opt = 314;
         testOptional_(testName, opt);
     }
     {
-        auto opt = sys::make_Optional<int>(314);
+        auto opt = coda_oss::make_optional<int>(314);
         testOptional_(testName, opt);
     }
 }
 
 TEST_CASE(test_std_optional)
 {
+    TEST_ASSERT(!testName.empty());
+#if CODA_OSS_cpp17
     const std::optional<int> null;
     TEST_ASSERT_FALSE(null.has_value());
 
@@ -135,6 +146,7 @@ TEST_CASE(test_std_optional)
         auto opt = std::make_optional<int>(314);
         testOptional_(testName, opt);
     }
+#endif
 }
 }
 

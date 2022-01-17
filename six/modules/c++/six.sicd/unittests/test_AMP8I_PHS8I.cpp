@@ -494,10 +494,13 @@ TEST_CASE(test_create_sicd_from_mem_8i)
     test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
 
-inline std::ostream& operator<<(std::ostream& os, const six::sicd::ImageData::AMP8I_PHS8I_t& p)
+namespace str
+{
+inline std::ostream & operator<<(std::ostream & os, const six::sicd::ImageData::AMP8I_PHS8I_t & p)
 {
     os << p.first << p.second;
     return os;
+}
 }
 template<typename TNearestNeighbor>
 static void test_near_point(const std::complex<float>& p, const six::sicd::ImageData::AMP8I_PHS8I_t& expected,

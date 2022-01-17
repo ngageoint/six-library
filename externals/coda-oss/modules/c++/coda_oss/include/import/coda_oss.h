@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of sys-c++ 
  * =========================================================================
- *
- * (C) Copyright 2020, Maxar Technologies, Inc.
+ * 
+ * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,24 +14,17 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not, http://www.gnu.org/licenses/.
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this program; If not, 
+ * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef CODA_OSS_sys_CStdDef_h_INCLUDED_
-#define CODA_OSS_sys_CStdDef_h_INCLUDED_
+
+
+#ifndef CODA_OSS_coda_oss_coda_oss_h_INCLUDED_
+#define CODA_OSS_coda_oss_coda_oss_h_INCLUDED_
 #pragma once
 
-#include <cstddef>
+#endif // CODA_OSS_coda_oss_coda_oss_h_INCLUDED_
 
-#include "CPlusPlus.h"
 
-namespace sys
-{
-    // https://en.cppreference.com/w/cpp/types/byte
-    enum class Byte : unsigned char {};
-
-    #define CODA_OSS_sys_Byte 201603L  // __cpp_lib_byte
-}
-
-#endif  // CODA_OSS_sys_CStdDef_h_INCLUDED_

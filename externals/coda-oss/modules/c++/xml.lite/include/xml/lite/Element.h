@@ -35,7 +35,7 @@
 #include "xml/lite/Attributes.h"
 #include "xml/lite/QName.h"
 #include "sys/Conf.h"
-#include "sys/Optional.h"
+#include "coda_oss/optional.h"
 #include "mem/SharedPtr.h"
 
 /*!
@@ -334,11 +334,11 @@ public:
         return mCharacterData;
     }
     #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
-    const sys::Optional<StringEncoding>& getEncoding() const
+    const coda_oss::optional<StringEncoding>& getEncoding() const
     {
         return mEncoding;
     }
-   const sys::Optional<StringEncoding>& getCharacterData(std::string& result) const
+   const coda_oss::optional<StringEncoding>& getCharacterData(std::string& result) const
     {
         result = getCharacterData();
         return getEncoding();
@@ -508,7 +508,7 @@ protected:
 
     private:
         // ... and how that data is encoded
-        sys::Optional<StringEncoding> mEncoding;
+        coda_oss::optional<StringEncoding> mEncoding;
         void depthPrint(io::OutputStream& stream, bool utf8, int depth,
                 const std::string& formatter) const;
 };
@@ -587,24 +587,24 @@ inline Element& addNewElement(const xml::lite::QName& name, const T& value, Elem
 }
 
 template <typename T, typename ToString>
-inline Element& addNewElement(const xml::lite::QName& name, const sys::Optional<T>& v, Element& parent,
+inline Element& addNewElement(const xml::lite::QName& name, const coda_oss::optional<T>& v, Element& parent,
     ToString toString)
 {
     return addNewElement(name, v.value(), parent, toString);
 }
 template<typename T>
-inline Element& addNewElement(const xml::lite::QName& name, const sys::Optional<T>& v, Element& parent)
+inline Element& addNewElement(const xml::lite::QName& name, const coda_oss::optional<T>& v, Element& parent)
 {
     return addNewElement(name, v.value(), parent);
 }
 template <typename T, typename ToString>
-inline Element* addNewOptionalElement(const xml::lite::QName& name, const sys::Optional<T>& v, Element& parent,
+inline Element* addNewOptionalElement(const xml::lite::QName& name, const coda_oss::optional<T>& v, Element& parent,
         ToString toString)
 {
     return v.has_value() ? &addNewElement(name, v, parent, toString) : nullptr;
 }
 template<typename T>
-inline Element* addNewOptionalElement(const xml::lite::QName& name, const sys::Optional<T>& v, Element& parent)
+inline Element* addNewOptionalElement(const xml::lite::QName& name, const coda_oss::optional<T>& v, Element& parent)
 {
     return v.has_value() ? &addNewElement(name, v, parent) : nullptr;
 }
