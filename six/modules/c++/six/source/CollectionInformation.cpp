@@ -74,12 +74,9 @@ std::string CollectionInformation::getClassificationLevel() const
     std::u8string utf8;
     if (!getClassificationLevel(utf8))
     {
-        // no UTF-8 value
-        return mClassification;
+        return mClassification; // no UTF-8 value
     }
-
-    // use the UTF-8 value, converted to native
-    return str::toString(utf8);
+    return str::toString(utf8); // use the UTF-8 value, converted to native
 }
 bool CollectionInformation::getClassificationLevel(std::u8string& result) const
 {
