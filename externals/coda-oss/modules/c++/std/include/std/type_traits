@@ -23,7 +23,7 @@
 #pragma once
 
 // Make it (too?) easy for clients to get our various std:: implementations
-#include "sys/TypeTraits.h"
+#include "coda_oss/type_traits.h"
 
 #ifndef CODA_OSS_NO_is_trivially_copyable
 #define CODA_OSS_NO_is_trivially_copyable 0  // enabled, unless explicitly disabled
@@ -35,8 +35,8 @@
 #if defined(__GNUC__) && (__GNUC__ < 5)
 namespace std // This is slightly uncouth: we're not supposed to augment "std".
 {
-template <class T>
-using is_trivially_copyable = sys::IsTriviallyCopyable<T>;
+template <typename T>
+using is_trivially_copyable = coda_oss::is_trivially_copyable<T>;
 }
 #endif // __GNUC__
 #endif // CODA_OSS_NO_is_trivially_copyable

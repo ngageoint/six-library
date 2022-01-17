@@ -31,7 +31,6 @@
 
 #include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
-#include <mem/Span.h>
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
 #include <cli/Value.h>
@@ -40,7 +39,6 @@
 #include <io/FileOutputStream.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVPBlock.h>
-
 
 /*!
  * Reads in CPHD file from InputFile
@@ -87,7 +85,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
         for (size_t channel = 0, idx = 0; channel < metadata.data.getNumChannels(); ++channel)
         {
             const size_t bufSize = metadata.data.getCompressedSignalSize(channel);
-            wideband.read(channel, mem::make_Span(&data[idx], bufSize));
+            wideband.read(channel, std::span<std::byte>(&data[idx], bufSize));
             idx += bufSize;
         }
         writer.write(
@@ -103,7 +101,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
             const size_t bufSize = metadata.data.getSignalSize(channel);
             wideband.read(channel, 0, cphd::Wideband::ALL,
                  0, cphd::Wideband::ALL, numThreads,
-                mem::make_Span(&data[idx], bufSize));
+                std::span<std::byte>(&data[idx], bufSize));
             idx += bufSize;
         }
 

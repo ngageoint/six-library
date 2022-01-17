@@ -7,7 +7,7 @@ if(ENABLE_XML)
         set(USE_XercesC 1)
     endif()
 
-    set(MODULE_DEPS io-c++ mem-c++ mt-c++ logging-c++ str-c++)
+    set(MODULE_DEPS io-c++ mem-c++ mt-c++ logging-c++ str-c++ coda_oss-c++)
     if (USE_XercesC)
         list(APPEND MODULE_DEPS xerces-c)
     endif()

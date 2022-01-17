@@ -80,7 +80,7 @@ class Matrix2D
 
     void reset()
     {
-        mStorage = mem::make::unique<_T[]>(mMN);
+        mStorage = coda_oss::make_unique<_T[]>(mMN);
         mRaw = mStorage.get();
     }
     Matrix2D(size_t M, size_t N, std::nullptr_t) :

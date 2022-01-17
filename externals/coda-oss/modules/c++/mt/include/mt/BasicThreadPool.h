@@ -139,7 +139,7 @@ protected:
     // For instance, you may want an IterativeRequestHandler
     virtual RequestHandler_T *newRequestHandler()
     {
-        return mem::make::unique<RequestHandler_T>(&mHandlerQueue).release();
+        return coda_oss::make_unique<RequestHandler_T>(&mHandlerQueue).release();
     }
 
     void destroy()

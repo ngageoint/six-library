@@ -34,7 +34,7 @@ constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
 
 std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const std::string& qname, const std::string& uri, const std::string& characterData)
 {
-    return mem::make::unique<Element>(qname, uri, characterData, PlatformEncoding);
+    return coda_oss::make_unique<Element>(qname, uri, characterData, PlatformEncoding);
 }
 std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const std::string& qname, const Uri& uri, const std::string& characterData)
 {
@@ -46,7 +46,7 @@ std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const QName& qnam
 }
 std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const QName& qname, const sys::U8string& characterData)
 {
-    return mem::make::unique<Element>(qname.getName(), qname.getUri().value,  characterData);
+    return coda_oss::make_unique<Element>(qname.getName(), qname.getUri().value,  characterData);
 }
 std::unique_ptr<xml::lite::Element> xml::lite::Element::createU8(const QName& qname, const std::string& characterData)
 {
@@ -261,7 +261,7 @@ void xml::lite::Element::prettyPrint(io::OutputStream& stream, StringEncoding en
     stream.writeln("");
 }
 
-static xml::lite::StringEncoding getEncoding_(const sys::Optional<xml::lite::StringEncoding>& encoding)
+static xml::lite::StringEncoding getEncoding_(const coda_oss::optional<xml::lite::StringEncoding>& encoding)
 {
     if (encoding.has_value())
     {
@@ -298,7 +298,7 @@ void xml::lite::Element::getCharacterData(sys::U8string& result) const
 }
 
 static void writeCharacterData(io::OutputStream& stream,
-    const std::string& characterData, const sys::Optional<xml::lite::StringEncoding>& encoding_)
+    const std::string& characterData, const coda_oss::optional<xml::lite::StringEncoding>& encoding_)
 {
     const auto encoding = getEncoding_(encoding_);
     if (encoding == xml::lite::StringEncoding::Windows1252)
