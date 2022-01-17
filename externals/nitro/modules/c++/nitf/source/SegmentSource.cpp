@@ -58,23 +58,15 @@ SegmentMemorySource::SegmentMemorySource(const std::span<const std::byte>& s, ni
 {
 }
 
-static std::span<const std::byte> make_span(const std::vector<std::byte>& data) noexcept
-{
-    return  std::span<const std::byte>(data.data(), data.size());
-}
 SegmentMemorySource::SegmentMemorySource(const std::vector<std::byte>& data,
     nitf::Off start, int byteSkip, bool copyData)
-    : SegmentMemorySource(make_span(data), start, byteSkip, copyData)
+    : SegmentMemorySource(std::span<const std::byte>(data.data(), data.size()), start, byteSkip, copyData)
 {
 }
 
-static std::span<const sys::byte> make_span(const std::vector<sys::byte>& data) noexcept
-{
-  return std::span<const sys::byte>(data.data(), data.size());
-}
 SegmentMemorySource::SegmentMemorySource(const std::vector<sys::byte>& data,
     nitf::Off start, int byteSkip, bool copyData)
-    : SegmentMemorySource(make_span(data), start, byteSkip, copyData)
+    : SegmentMemorySource(std::span<const sys::byte>(data.data(), data.size()), start, byteSkip, copyData)
 {
 }
 }
