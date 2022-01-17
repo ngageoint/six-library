@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.14)
 project(nitro)
 
 set(CMAKE_C_STANDARD 99)
+set(C_STANDARD_REQUIRED true)
 set(CMAKE_CXX_STANDARD 20)
+set(CXX_STANDARD_REQUIRED true)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
     # we are the top-level project and are responsible for configuration

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 project(six-library)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CXX_STANDARD_REQUIRED true)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
     # we are the top-level project and are responsible for configuration
