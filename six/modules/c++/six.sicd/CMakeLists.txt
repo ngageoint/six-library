@@ -78,6 +78,7 @@ coda_add_tests(
         test_update_sicd_version.cpp
         test_valid_six.cpp
         test_AMP8I_PHS8I.cpp
+        test_RGB24I.cpp
         test_utilities.cpp)
 
 # Install the schemas
