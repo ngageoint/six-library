@@ -25,6 +25,8 @@
 #pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
 #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r.11).
 #pragma warning(disable: 26458) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
+#pragma warning(disable: 26823) // Dereferencing a possibly null pointer '...' (lifetime.1).
+#pragma warning(disable: 26822) // Dereferencing a null pointer 'me' (lifetime.1).
 
 #pragma warning(push)
 #pragma warning(disable: 4464) // relative include path contains '..'

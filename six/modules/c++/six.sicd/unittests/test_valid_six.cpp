@@ -191,27 +191,11 @@ TEST_CASE(valid_six_50x50)
     valid_six_50x50_(&schemaPaths); // validate against schema
 }
 
-void readFromNITF_old(const fs::path& pathname, std::unique_ptr<six::sicd::ComplexData>& pComplexData)
-{
-    six::sicd::NITFReadComplexXMLControl reader;
-    reader.setLogger();
-    reader.load(pathname.string(), nullptr /*pSchemaPaths*/); // std::string ==> old XML parsing; no validation
+const std::string classificationText_iso8859_1_("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
+const auto classificationText_iso8859_1 = str::EncodedStringView::fromWindows1252(classificationText_iso8859_1_).details_w1252string();
+const std::string classificationText_utf_8_("NON CLASSIFI\xc3\x89 / UNCLASSIFIED");  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+const auto classificationText_utf_8 = str::EncodedStringView::fromUtf8(classificationText_utf_8_).u8string();
 
-    if (reader.getContainer()->size() != 1)  // For SICD, there's only one image (container->size() == 1)
-    {
-        throw std::invalid_argument(pathname.string() + " is not a SICD; it contains more than one image.");
-    }
-
-    pComplexData = reader.getComplexData();
-    //return reader.interleaved();
-}
-void readFromNITF_new(const std::filesystem::path& pathname, std::unique_ptr<six::sicd::ComplexData>& pComplexData)
-{
-    six::sicd::readFromNITF(pathname, nullptr /*pSchemaPaths*/, pComplexData);  // no validation
-}
-
-const std::string classificationText_iso8859_1("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
-const std::string classificationText_utf_8("NON CLASSIFI\xc3\x89 / UNCLASSIFIED");  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
 TEST_CASE(sicd_French_xml)
 {
     setNitfPluginPath();
@@ -219,11 +203,11 @@ TEST_CASE(sicd_French_xml)
     const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
     //const std::vector<std::filesystem::path> schemaPaths;
-    //::readFromNITF(inputPathname, &schemaPaths, pComplexData);
-    ::readFromNITF_new(inputPathname, pComplexData);
+    //const auto image = six::sicd::readFromNITF(inputPathname, &schemaPaths, pComplexData);
+    const auto image = six::sicd::readFromNITF(inputPathname, pComplexData); // no validation
     const six::Data* pData = pComplexData.get();
 
-    const auto expectedCassificationText = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
+    const auto expectedCassificationText = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8_ : classificationText_iso8859_1_;
     const auto& classification = pData->getClassification();
     const auto actual = classification.getLevel();
     TEST_ASSERT_EQ(actual, expectedCassificationText);
@@ -278,12 +262,12 @@ static void sicd_French_xml_raw_(bool storeEncoding)
     size_t expectedLength;
     if (storeEncoding)
     {
-        expectedCharData = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
+        expectedCharData = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8_ : classificationText_iso8859_1_;
         expectedLength = expectedCharData.length();
     }
     else
     {
-        expectedCharData = sys::Platform == sys::PlatformType::Linux ? std::string() : classificationText_iso8859_1;
+        expectedCharData = sys::Platform == sys::PlatformType::Linux ? std::string() : classificationText_iso8859_1_;
         expectedLength = sys::Platform == sys::PlatformType::Linux ? 28 : classificationText_iso8859_1.length();
     }
     const auto characterData = classificationXML.getCharacterData();
@@ -300,11 +284,11 @@ static void sicd_French_xml_raw_(bool storeEncoding)
     std::u8string u8_expectedCharData8;
     if (storeEncoding)
     {
-        u8_expectedCharData8 = str::fromUtf8(classificationText_utf_8);
+        u8_expectedCharData8 = classificationText_utf_8;
     }
     else
     {
-        u8_expectedCharData8 = sys::Platform == sys::PlatformType::Linux ? std::u8string() : str::fromUtf8(classificationText_utf_8);
+        u8_expectedCharData8 = sys::Platform == sys::PlatformType::Linux ? std::u8string() : classificationText_utf_8;
     }
     expectedLength = u8_expectedCharData8.length();
 

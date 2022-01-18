@@ -78,79 +78,67 @@ inline TReturn c_str(const std::basic_string<TChar>& s)
 // file) as we want to unit-test it. Windows1252_T for Windows-1252 characters
 enum class Windows1252_T : unsigned char { };  // https://en.cppreference.com/w/cpp/language/types
 using W1252string = std::basic_string<Windows1252_T>;  // https://en.cppreference.com/w/cpp/string
-void windows1252to8(W1252string::const_pointer, size_t, sys::U8string&); // c.f. utf16to8
 
-// assume std::string is Windows-1252 **ON ALL PLATFORMS**
-sys::U8string fromWindows1252(std::string::const_pointer, size_t);
-inline sys::U8string fromWindows1252(const std::string& s)
-{
-    return fromWindows1252(s.c_str(), s.size());
-}
-
-// assume std::string is UTF-8 **ON ALL PLATFORMS**
-sys::U8string fromUtf8(std::string::const_pointer, size_t);
-inline sys::U8string fromUtf8(const std::string& s)
-{
-    return fromUtf8(s.c_str(), s.size());
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// These use utf8:: routines; see utf8.h
-void utf16to8(std::u16string::const_pointer, size_t, sys::U8string&);
-inline void strto8(std::u16string::const_pointer p, size_t sz, sys::U8string& result)
-{
-    utf16to8(p, sz, result);
-}
-
-void utf32to8(std::u32string::const_pointer, size_t, sys::U8string&);
-inline void strto8(std::u32string::const_pointer p, size_t sz, sys::U8string& result)
-{
-    utf32to8(p, sz, result);
-}
-
-/*
-Using the utf8:: library for these causes compiler-errors on some platforms.
-We don't really need them anyway: Linux has good support for UTF-8 and
-our existing code-bases don't use UTF-16 on Windows; so UTF-8 to 
-Windows-1252 will be good enough.
-
-void utf8to16(sys::U8string::const_pointer, size_t, std::u16string&);
-inline void utf8to16(const sys::U8string& s, std::u16string& result)
-{
-    utf8to16(s.c_str(), s.size(), result);
-}
-
-void utf8to32(sys::U8string::const_pointer, size_t, std::u32string&);
-inline void utf8to32(const sys::U8string& s, std::u32string& result)
-{
-    utf8to32(s.c_str(), s.size(), result);
-}
-*/
+sys::U8string fromWindows1252(std::string::const_pointer, size_t); // std::string is Windows-1252 **ON ALL PLATFORMS**
+sys::U8string fromUtf8(std::string::const_pointer, size_t); // std::string is UTF-8 **ON ALL PLATFORMS**
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 // When the encoding is important, we want to "traffic" in sys::U8string (UTF-8), not
 // str::W1252string (Windows-1252) or std::string (unknown).  Make it easy to get those from other encodings.
-sys::U8string to_u8string(std::string::const_pointer, size_t);  // assume Windows-1252 or UTF-8  based on platform
+sys::U8string to_u8string(std::string::const_pointer, size_t);  // std::string is Windows-1252 or UTF-8  depending on platform
 sys::U8string to_u8string(str::W1252string::const_pointer, size_t);
 inline sys::U8string to_u8string(sys::U8string::const_pointer s, size_t sz)
 {
     return sys::U8string(s, sz);
 }
+
+// UTF-16 is typically uses on Windows (where it is std::wstring::value_type);
+// Linux preferred UTF-32.
+sys::U8string to_u8string(std::u16string::const_pointer, size_t);
+
+// UTF-32 is convenient because each code-point is a single 32-bit integer.
+// It's typically std::wstring::value_type on Linux, but NOT Windows.
+sys::U8string to_u8string(std::u32string::const_pointer, size_t);
+
 template <typename TChar>
 inline sys::U8string to_u8string(const std::basic_string<TChar>& s)
 {
     return to_u8string(s.c_str(), s.size());
 }
 
-namespace details
+namespace details // YOU should use EncodedStringView
 {
-// YOU should use EncodedStringView
-extern void toNative(const str::W1252string&, std::string&);  // encoding is lost
-extern void toString(sys::U8string::const_pointer, std::string&);  // encoding is lost
-extern str::W1252string toWindows1252(const str::U8string& utf8);
+sys::U8string to_u8string(std::string::const_pointer, size_t, bool is_utf8 /* is 's' UTF-8? */);
+std::string& to_u8string(std::string::const_pointer, size_t, bool is_utf8 /* is 's' UTF-8? */, std::string&); // encoding is lost
+std::string& to_u8string(std::u16string::const_pointer, size_t, std::string&); // encoding is lost
+std::string& to_u8string(std::u32string::const_pointer, size_t, std::string&); // encoding is lost
+
+str::W1252string to_w1252string(std::string::const_pointer, size_t); // std::string is Windows-1252 or UTF-8  depending on platform
+str::W1252string to_w1252string(std::string::const_pointer, size_t, bool is_utf8 /* is 's' UTF-8? */);
+str::W1252string to_w1252string(sys::U8string::const_pointer, size_t);
+inline str::W1252string to_w1252string(str::W1252string::const_pointer s, size_t sz)
+{
+    return str::W1252string(s, sz);
 }
 
+std::string to_native(sys::U8string::const_pointer, size_t); // std::string is Windows-1252 or UTF-8  depending on platform
+std::string to_native(str::W1252string::const_pointer s, size_t sz); // std::string is Windows-1252 or UTF-8  depending on platform
+inline std::string to_native(std::string::const_pointer s, size_t sz, bool is_utf8 /* is 's' UTF-8? */) // std::string is Windows-1252 or UTF-8  depending on platform
+{
+    return is_utf8 ? to_native(cast<sys::U8string::const_pointer>(s), sz)
+                   : to_native(cast<str::W1252string::const_pointer>(s), sz);
+}
+inline std::string to_native(std::string::const_pointer s, size_t sz)
+{
+    return std::string(s, sz);
+}
+template <typename TChar>
+inline std::string to_native(const std::basic_string<TChar>& s)
+{
+    return to_native(s.c_str(), s.size());
+}
+}
 }
 
 #endif // CODA_OSS_str_Encoding_h_INCLUDED_
