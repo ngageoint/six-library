@@ -126,9 +126,16 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
     return six::DataType::NOT_SET;
 }
 
-void six::sidd::GeoTIFFReadControl::load(
-        const std::string& fromFile,
-        const std::vector<std::string>& schemaPaths)
+inline std::unique_ptr<six::Data> fromXML_(six::XMLControl& xmlControl, const xml::lite::Document& doc, const std::vector<std::string>& schemaPaths)
+{
+    return std::unique_ptr<six::Data>(xmlControl.fromXML(&doc, schemaPaths));
+}
+inline std::unique_ptr<six::Data> fromXML_(six::XMLControl& xmlControl, const xml::lite::Document& doc, const std::vector< std::filesystem::path>* pSchemaPaths)
+{
+    return xmlControl.fromXML(doc, pSchemaPaths);
+}
+template<typename TSchemaPaths, typename TCreateXmlParser>
+void six::sidd::GeoTIFFReadControl::load_(const std::string& fromFile, const TSchemaPaths& schemaPaths, TCreateXmlParser createXmlParser)
 {
     mReader.openFile(fromFile);
 
@@ -153,7 +160,7 @@ void six::sidd::GeoTIFFReadControl::load(
         io::StringStream stream;
         stream.write(xmlStr);
         stream.seek(0, io::Seekable::START);
-        six::MinidomParser xmlParser(false /*storeEncoding*/);
+        auto xmlParser = createXmlParser();
         xmlParser.preserveCharacterData(true);
         xmlParser.parse(stream);
         const auto& doc = xmlParser.getDocument();
@@ -187,8 +194,7 @@ void six::sidd::GeoTIFFReadControl::load(
 
         if (xmlControl)
         {
-            std::unique_ptr<six::Data> data(xmlControl->fromXML(&doc,
-                                                              schemaPaths));
+            auto data = fromXML_(*xmlControl, doc, schemaPaths);
 
             if (!data.get())
             {
@@ -199,70 +205,18 @@ void six::sidd::GeoTIFFReadControl::load(
         }
     }
 }
+void six::sidd::GeoTIFFReadControl::load(
+    const std::string& fromFile,
+    const std::vector<std::string>& schemaPaths)
+{
+    const auto createXmlParser = []() { return six::MinidomParser(false /*storeEncoding*/); };
+    load_(fromFile, schemaPaths, createXmlParser);
+}
 void six::sidd::GeoTIFFReadControl::load(const std::filesystem::path& fromFile_, const std::vector< std::filesystem::path>* pSchemaPaths)
 {
     const auto fromFile = fromFile_.string();
-    mReader.openFile(fromFile);
-
-    if (mReader.getImageCount() <= 0 ||
-        !mReader[0]->getIFD()->exists(six::Constants::GT_XML_KEY))
-    {
-        throw except::Exception(Ctxt(fromFile + ": unexpected file type"));
-    }
-
-    std::vector<std::string> xmlStrs;
-    parseXMLEntry((*(mReader[0]->getIFD()))[six::Constants::GT_XML_KEY], xmlStrs);
-
-    mContainer.reset(new six::Container(six::DataType::DERIVED));
-
-    std::unique_ptr<six::XMLControl> siddXMLControl;
-    std::unique_ptr<six::XMLControl> sicdXMLControl;
-    for (const auto& xmlStr : xmlStrs)
-    {
-        // Parse it into an XML document
-        io::StringStream stream;
-        stream.write(xmlStr);
-        stream.seek(0, io::Seekable::START);
-        six::MinidomParser xmlParser(true /*storeEncoding*/);
-        xmlParser.preserveCharacterData(true);
-        xmlParser.parse(stream);
-        const auto& doc = xmlParser.getDocument();
-
-        // Get the associated XML control
-        const std::string rootName(doc.getRootElement()->getQName());
-        six::XMLControl* xmlControl = nullptr;
-        if (rootName == "SIDD")
-        {
-            if (siddXMLControl.get() == nullptr)
-            {
-                siddXMLControl.reset(mXMLRegistry->newXMLControl(DataType::DERIVED, mLog));
-            }
-            xmlControl = siddXMLControl.get();
-        }
-        else if (rootName == "SICD")
-        {
-            if (sicdXMLControl.get() == nullptr)
-            {
-                sicdXMLControl.reset(mXMLRegistry->newXMLControl(DataType::COMPLEX, mLog));
-            }
-            xmlControl = sicdXMLControl.get();
-        }
-        else
-        {
-            // If it's something we don't know about, just skip it
-            xmlControl = nullptr;
-        }
-
-        if (xmlControl)
-        {
-            auto data(xmlControl->fromXML(doc, pSchemaPaths));
-            if (!data.get())
-            {
-                throw except::Exception(Ctxt("Unable to transform " + rootName + " XML"));
-            }
-            mContainer->addData(std::move(data));
-        }
-    }
+    const auto createXmlParser = []() { return six::MinidomParser(true /*storeEncoding*/); };
+    load_(fromFile, pSchemaPaths, createXmlParser);
 }
 
 six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,

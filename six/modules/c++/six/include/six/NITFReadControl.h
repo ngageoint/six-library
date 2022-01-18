@@ -255,6 +255,9 @@ protected:
     }
 
 private:
+    template<typename TSchemaPath>
+    void load_(std::shared_ptr<nitf::IOInterface> ioInterface, const std::vector<TSchemaPath>* pSchemaPaths);
+
     std::unique_ptr<Legend> findLegend(size_t productNum);
 
     void readLegendPixelData(const nitf::ImageSubheader& subheader,

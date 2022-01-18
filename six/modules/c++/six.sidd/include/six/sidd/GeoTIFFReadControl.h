@@ -65,6 +65,10 @@ protected:
 
     tiff::FileReader mReader;
 
+private:
+    template<typename TSchemaPaths, typename TCreateXmlParser>
+    void load_(const std::string& fromFile, const TSchemaPaths&, TCreateXmlParser);
+
 };
 
 struct GeoTIFFReadControlCreator final : public ReadControlCreator
