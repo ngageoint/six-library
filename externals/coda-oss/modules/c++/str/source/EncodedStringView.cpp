@@ -61,35 +61,23 @@ str::EncodedStringView::EncodedStringView(const std::string& s) : mString(make_s
 str::EncodedStringView::EncodedStringView(const sys::U8string& s) : mString(make_span(s)), mIsUtf8(true) { }
 str::EncodedStringView::EncodedStringView(const str::W1252string& s) : mString(make_span(s)), mIsUtf8(false) { }
 
-static std::string utf8_to_native(coda_oss::span<const char> s)
-{
-    std::string retval;
-    str::details::toString(str::cast<sys::U8string::const_pointer>(s.data()), retval);
-    return retval;
-}
-static std::string w1252_to_native(coda_oss::span<const char> s)
-{
-    // This internal helper routine will convert from Windows-1252 to UTF-8 on Linux
-    std::string retval;
-    str::details::toNative(str::cast<str::W1252string::const_pointer>(s.data()), retval);
-    return retval;
-}
 std::string str::EncodedStringView::native() const
 {
-    return mIsUtf8 ? utf8_to_native(mString) : w1252_to_native(mString);
+    return details::to_native(mString.data(), mString.size(), mIsUtf8);
 }
 
-inline sys::U8string utf8_to_u8string(coda_oss::span<const char> s)
+sys::U8string str::EncodedStringView::u8string() const
 {
-    return str::cast<sys::U8string::const_pointer>(s.data());
+    return str::details::to_u8string(mString.data(), mString.size(), mIsUtf8);
 }
-inline sys::U8string w1252_to_u8string(coda_oss::span<const char> s)
+std::string& str::EncodedStringView::toUtf8(std::string& result) const
 {
-    return str::to_u8string(str::cast<str::W1252string::const_pointer>(s.data()), s.size());
+    return str::details::to_u8string(mString.data(), mString.size(), mIsUtf8, result);
 }
-sys::U8string str::EncodedStringView::to_u8string() const
+
+str::W1252string str::EncodedStringView::details_w1252string() const
 {
-    return mIsUtf8 ? utf8_to_u8string(mString) : w1252_to_u8string(mString);
+    return str::details::to_w1252string(mString.data(), mString.size(), mIsUtf8);
 }
 
 bool str::EncodedStringView::operator_eq(const EncodedStringView& rhs) const
@@ -113,37 +101,10 @@ bool str::EncodedStringView::operator_eq(const EncodedStringView& rhs) const
     auto& w1252 = !lhs.mIsUtf8 ? lhs : rhs;
 
     // If UTF-8 is native on this platform, convert to UTF-8; otherwise do a native comparision
-    return mNativeIsUtf8 ? str::cast<str::U8string::const_pointer>(utf8.mString.data()) == w1252.to_u8string() : 
-        utf8.native() == w1252.mString.data();
+    return mNativeIsUtf8 ?
+        str::cast<sys::U8string::const_pointer>(utf8.mString.data()) == w1252.u8string()
+        : utf8.native() == w1252.mString.data();
 }
 
-std::string& str::EncodedStringView::toUtf8(std::string& result) const
-{
-    // This is easy, but creates "unneeded" sys::U8string; it would be
-    // better to put the result directly into std::string
-    const auto utf8 = to_u8string(); // TODO: avoid this copy
-    result = str::c_str<std::string::const_pointer>(utf8);
-    return result;
-}
 
-namespace str
-{
-// GCC wants specializations outside of the class.  We need these here (now)
-// anyway for access to pImpl.
-template <>
-std::string::const_pointer EncodedStringView::cast() const
-{
-    return mString.data();
-}
-template <>
-sys::U8string::const_pointer EncodedStringView::cast() const
-{
-    return mIsUtf8 ? str::cast<sys::U8string::const_pointer>(mString.data()) : nullptr;
-}
-template <>
-str::W1252string::const_pointer EncodedStringView::cast() const
-{
-    return mIsUtf8 ? nullptr : str::cast<str::W1252string::const_pointer>(mString.data());
-}
-} // namespace str
 

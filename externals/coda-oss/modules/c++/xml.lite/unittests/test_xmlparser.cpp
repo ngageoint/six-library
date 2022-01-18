@@ -38,7 +38,7 @@ static const std::string text("TEXT");
 static const std::string strXml = "<root><doc><a>" + text + "</a></doc></root>";
 static const std::string iso88591Text_("T\xc9XT");  // ISO8859-1, "TÉXT"
 static const std::string utf8Text_("T\xc3\x89XT");  // UTF-8,  "TÉXT"
-static const auto utf8Text8 = str::EncodedStringView::create<sys::U8string>(utf8Text_).to_u8string();
+static const auto utf8Text8 = str::EncodedStringView::create<sys::U8string>(utf8Text_).u8string();
 static const auto strUtf8Xml = "<root><doc><a>" + utf8Text_ + "</a></doc></root>";
 constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
         ? xml::lite::StringEncoding::Windows1252
