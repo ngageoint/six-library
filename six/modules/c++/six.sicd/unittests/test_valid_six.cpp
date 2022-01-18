@@ -282,11 +282,11 @@ static void sicd_French_xml_raw_(bool storeEncoding)
     std::u8string u8_expectedCharData8;
     if (storeEncoding)
     {
-        u8_expectedCharData8 = str::fromUtf8(classificationText_utf_8);
+        u8_expectedCharData8 = str::fromUtf8(classificationText_utf_8.c_str(), classificationText_utf_8.length());
     }
     else
     {
-        u8_expectedCharData8 = sys::Platform == sys::PlatformType::Linux ? std::u8string() : str::fromUtf8(classificationText_utf_8);
+        u8_expectedCharData8 = sys::Platform == sys::PlatformType::Linux ? std::u8string() : str::fromUtf8(classificationText_utf_8.c_str(), classificationText_utf_8.length());
     }
     expectedLength = u8_expectedCharData8.length();
 
