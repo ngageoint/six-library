@@ -164,30 +164,16 @@ static void adjust_image(TImage& image)
     }
     pImageBytes[pImageBytes.size() - 1] = static_cast<std::byte>(']');
 }
-static std::vector<std::complex<float>> adjust_image(const six::sicd::ComplexData& complexData,
-    std::vector<std::complex<float>>&& image)
+static std::vector<std::complex<float>> adjust_image(std::vector<std::complex<float>>&& image)
 {
-    if (complexData.getPixelType() != six::PixelType::AMP8I_PHS8I)
-    {
         adjust_image(image);
         return image;
-    }
-
-    // Convert from AMP8I_PHS8I to that when we convert to AMP8I_PHS8I for writing
-    // we'll end up with the "[***...***]" in the file
-    void* image_data = image.data();
-    std::span<AMP8I_PHS8I_t> from(static_cast<AMP8I_PHS8I_t*>(image_data), getExtent(complexData).area());
-    adjust_image(from);
-
-    std::vector<std::complex<float>> retval(from.size());
-    complexData.imageData->from_AMP8I_PHS8I(from, retval);
-    return retval;
 }
 static std::vector<std::complex<float>> make_complex_image(const six::sicd::ComplexData& complexData, const types::RowCol<size_t>& dims)
 {
-    if (complexData.getPixelType() == six::PixelType::AMP8I_PHS8I)
+    if (complexData.getPixelType() == six::PixelType::RGB24I)
     {
-        return adjust_image(complexData, six::sicd::testing::make_complex_image(dims));
+        return adjust_image(six::sicd::testing::make_complex_image(dims));
     }
     throw std::invalid_argument("Unknown pixelType");
 }
@@ -263,37 +249,35 @@ static void save(const fs::path& outputName, const std::vector<std::complex<floa
 }
 
 template<typename TSave>
-static void test_create_sicd_from_mem_(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable,
-    TSave save)
+static void test_create_sicd_from_mem_(const fs::path& outputName, TSave save)
 {
     const types::RowCol<size_t> dims(2, 2);
 
-    auto pComplexData = six::sicd::Utilities::createFakeComplexData(pixelType, makeAmplitudeTable, &dims);
+    auto pComplexData = six::sicd::Utilities::createFakeComplexData(six::PixelType::RGB24I, false /*makeAmplitudeTable*/, &dims);
 
-    const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
-    test_assert(*pComplexData, pixelType, expectedNumBytesPerPixel);
+    constexpr size_t expectedNumBytesPerPixel = 3;
+    test_assert(*pComplexData, six::PixelType::RGB24I, expectedNumBytesPerPixel);
     TEST_ASSERT_EQ(dims.row, pComplexData->getNumRows());
     TEST_ASSERT_EQ(dims.col, pComplexData->getNumCols());
 
     const auto image = make_complex_image(*pComplexData, dims);
     save(outputName, image, std::move(pComplexData));
-    read_nitf(outputName, pixelType, image);
+    read_nitf(outputName, six::PixelType::RGB24I, image);
 }
-static void test_create_sicd_from_mem(const fs::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable = false)
+static void test_create_sicd_from_mem(const fs::path& outputName)
 {
-    test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, save);
-    test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, buffer_list_save);
+    test_create_sicd_from_mem_(outputName, save);
+    test_create_sicd_from_mem_(outputName, buffer_list_save);
 }
 
-TEST_CASE(test_create_sicd_from_mem_8i)
+TEST_CASE(test_create_sicd_from_mem_24i)
 {
     setNitfPluginPath();
 
-    test_create_sicd_from_mem("test_create_sicd_from_mem_8i_amp.sicd", six::PixelType::AMP8I_PHS8I, true /*makeAmplitudeTable*/);
-    test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
+    test_create_sicd_from_mem("test_create_sicd_from_mem_rgb24i.sicd");
 }
 
 TEST_MAIN((void)argc; (void)argv;
-    TEST_CHECK(test_create_sicd_from_mem_8i);
+    TEST_CHECK(test_create_sicd_from_mem_24i);
     )
 
