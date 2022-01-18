@@ -44,7 +44,7 @@ std::string to_std_string(const T& value)
 
 inline void utf32to8(const std::u32string& s, sys::U8string& result)
 {
-    str::utf32to8(s.c_str(), s.size(), result);
+    result = str::to_u8string(s.c_str(), s.size());
 }
 template<>
 std::string to_std_string(const std::u32string& value)
@@ -98,7 +98,7 @@ TEST_CASE(testCharToString)
 static sys::U8string fromWindows1252(const std::string& s)
 {
     // s is Windows-1252 on ALL platforms
-    return str::fromWindows1252(s);
+    return str::fromWindows1252(s.c_str(), s.size());
 }
 
 template<typename T>
@@ -204,7 +204,7 @@ TEST_CASE(test_string_to_u8string_windows_1252)
             // are mapped one-by-one.  However, we can test that UTF-8 to Windows-1252
             // works as that walks through a UTF-8 string which can have 1-, 2-, 3- and 4-bytes
             // for a single code-point.
-            const str::W1252string w1252 = str::details::toWindows1252(actual);
+            const str::W1252string w1252 = str::details::to_w1252string(actual.data(), actual.size());
             TEST_ASSERT(input == w1252);
 
             // Can't compare the values with == because TEST_ASSERT_EQ()
@@ -282,7 +282,7 @@ TEST_CASE(test_change_case)
 }
 
 static const std::string classificationText_utf_8_("NON CLASSIFI\xc3\x89 / UNCLASSIFIED");  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
-static const auto classificationText_utf_8 = str::fromUtf8(classificationText_utf_8_);
+static const auto classificationText_utf_8 = str::fromUtf8(classificationText_utf_8_.c_str(), classificationText_utf_8_.size());
 static const std::string classificationText_iso8859_1_("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"    
 static const str::W1252string classificationText_iso8859_1 = str::c_str<str::W1252string::const_pointer>(classificationText_iso8859_1_);
 static const auto classificationText_platform =
@@ -290,7 +290,7 @@ static const auto classificationText_platform =
 
 TEST_CASE(test_u8string_to_string)
 {
-    const auto utf8 = str::fromUtf8(classificationText_utf_8_);
+    const auto utf8 = str::fromUtf8(classificationText_utf_8_.c_str(), classificationText_utf_8_.size());
     const str::EncodedStringView utf8View(utf8);
     const auto actual = utf8View.native();
     TEST_ASSERT_EQ(classificationText_platform, actual);
@@ -309,16 +309,16 @@ static void test_EncodedStringView_(const std::string& testName,
     TEST_ASSERT_EQ(iso8859_1_view.native(), native);
     TEST_ASSERT_EQ(utf_8_view.native(), native);
 
-    TEST_ASSERT(utf_8_view.to_u8string() == classificationText_utf_8);
+    TEST_ASSERT(utf_8_view.u8string() == classificationText_utf_8);
     TEST_ASSERT_EQ(utf_8_view, classificationText_utf_8);
-    TEST_ASSERT(iso8859_1_view.to_u8string() == classificationText_utf_8);
+    TEST_ASSERT(iso8859_1_view.u8string() == classificationText_utf_8);
     TEST_ASSERT_EQ(iso8859_1_view, classificationText_utf_8);
-    TEST_ASSERT(iso8859_1_view.to_u8string() == utf_8_view.to_u8string());
+    TEST_ASSERT(iso8859_1_view.u8string() == utf_8_view.u8string());
 
     std::string utf8;
     TEST_ASSERT_EQ(utf_8_view.toUtf8(utf8), classificationText_utf_8_);
+    utf8.clear();
     TEST_ASSERT_EQ(iso8859_1_view.toUtf8(utf8), classificationText_utf_8_);
-
 }
 TEST_CASE(test_EncodedStringView)
 {
@@ -328,39 +328,27 @@ TEST_CASE(test_EncodedStringView)
 
     {
         str::EncodedStringView utf_8_view(classificationText_utf_8);
-        TEST_ASSERT(utf_8_view.cast<str::U8string::const_pointer>() != nullptr);
-        TEST_ASSERT_NULL(utf_8_view.cast<str::W1252string::const_pointer>());
-
         str::EncodedStringView iso8859_1_view(classificationText_iso8859_1);
-        TEST_ASSERT(iso8859_1_view.cast<str::W1252string::const_pointer>() != nullptr);
-        TEST_ASSERT_NULL(iso8859_1_view.cast<sys::U8string::const_pointer>());
-
         test_EncodedStringView_(testName, utf_8_view, iso8859_1_view);
-        //**********************************************************
+        
         utf_8_view = str::EncodedStringView(classificationText_iso8859_1);
-        TEST_ASSERT(utf_8_view.cast<str::W1252string::const_pointer>() != nullptr);
-        TEST_ASSERT_NULL(utf_8_view.cast<str::U8string::const_pointer>());
-
         iso8859_1_view = str::EncodedStringView(classificationText_utf_8);
-        TEST_ASSERT(iso8859_1_view.cast<sys::U8string::const_pointer>() != nullptr);
-        TEST_ASSERT_NULL(iso8859_1_view.cast<str::W1252string::const_pointer>());
-
         test_EncodedStringView_(testName, utf_8_view, iso8859_1_view);
     }
     {
-        auto utf_8_view = str::EncodedStringView::create<sys::U8string>(classificationText_utf_8_);
-        auto iso8859_1_view = str::EncodedStringView::create<str::W1252string>(classificationText_iso8859_1_);
+        auto utf_8_view = str::EncodedStringView::fromUtf8(classificationText_utf_8_);
+        auto iso8859_1_view = str::EncodedStringView::fromWindows1252(classificationText_iso8859_1_);
         test_EncodedStringView_(testName, utf_8_view, iso8859_1_view);
 
-        utf_8_view = str::EncodedStringView::create<str::W1252string>(classificationText_iso8859_1_);
-        iso8859_1_view = str::EncodedStringView::create<sys::U8string>(classificationText_utf_8_);
+        utf_8_view = str::EncodedStringView::fromWindows1252(classificationText_iso8859_1_);
+        iso8859_1_view = str::EncodedStringView::fromUtf8(classificationText_utf_8_);
         test_EncodedStringView_(testName, utf_8_view, iso8859_1_view);
     }
     {
         str::EncodedStringView utf_8_view;
-        utf_8_view = str::EncodedStringView::create<str::W1252string>(classificationText_iso8859_1_);  // clears internal pointers
+        utf_8_view = str::EncodedStringView::fromWindows1252(classificationText_iso8859_1_);  // clears internal pointers
         str::EncodedStringView iso8859_1_view;
-        iso8859_1_view = str::EncodedStringView::create<sys::U8string>(classificationText_utf_8_);  // clears internal pointers
+        iso8859_1_view = str::EncodedStringView::fromUtf8(classificationText_utf_8_);  // clears internal pointers
         test_EncodedStringView_(testName, utf_8_view, iso8859_1_view);
     }
 }
