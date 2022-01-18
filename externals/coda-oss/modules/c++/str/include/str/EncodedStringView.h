@@ -86,6 +86,22 @@ public:
     {
         return create<TBasicString>(s.c_str());
     }
+    static EncodedStringView fromUtf8(const char* s)
+    {
+        return create<sys::U8string>(s);
+    }
+    static EncodedStringView fromUtf8(const std::string& s)
+    {
+        return create<sys::U8string>(s);
+    }
+    static EncodedStringView fromWindows1252(const char* s)
+    {
+        return create<str::W1252string>(s);
+    }
+    static EncodedStringView fromWindows1252(const std::string& s)
+    {
+        return create<str::W1252string>(s);
+    }
 
     // Regardless of what string we're looking at, return a string in platform
     // native encoding: UTF-8 on Linux, Windows-1252 on Windows; this
@@ -93,15 +109,12 @@ public:
     std::string native() const; // c.f. std::filesystem::path::native()
 
     // Convert (perhaps) whatever we're looking at to UTF-8
-    sys::U8string to_u8string() const;
+    sys::U8string u8string() const;  // c.f. std::filesystem::path::u8string()
     std::string& toUtf8(std::string&) const; // std::string is encoded as UTF-8, always.
 
-    // Only casting done, no conversion.  This should be OK as all three
-    // string types are 8-bit encodings.
-    //
-    // Intentionally a bit of a mouth-full as these routines should be used sparingly.
-    template <typename TConstPointer>
-    TConstPointer cast() const;  // returns NULL if stored pointer not of the desired type
+    // Convert (perhaps) whatever we're looking at to Windows-1252
+    // Intended for unit-testing; normal use is native().
+    str::W1252string details_w1252string() const;  // c.f. std::filesystem::path::u8string()
 
     bool operator_eq(const EncodedStringView&) const;
 };

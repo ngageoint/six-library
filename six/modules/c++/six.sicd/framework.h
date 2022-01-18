@@ -24,6 +24,8 @@
 #pragma warning(disable: 26401) // Do not delete a raw pointer that is not an owner<T>(i.11).
 #pragma warning(disable: 26435) // Function '...' should specify exactly one of '...', '...', or '...' (c.128).
 #pragma warning(disable: 26408) // Avoid malloc() and free(), prefer the nothrow version of new with delete (r.10).
+#pragma warning(disable: 26823) // Dereferencing a possibly null pointer '...' (lifetime.1).
+#pragma warning(disable: 26822) // Dereferencing a null pointer 'me' (lifetime.1).
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).

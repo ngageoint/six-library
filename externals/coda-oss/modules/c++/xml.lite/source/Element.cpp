@@ -27,6 +27,7 @@
 #include <import/str.h>
 #include <import/mem.h>
 #include <sys/OS.h>
+#include <str/EncodedStringView.h>
 
 constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
         ? xml::lite::StringEncoding::Windows1252
@@ -282,19 +283,21 @@ void xml::lite::Element::getCharacterData(sys::U8string& result) const
 {
     const auto encoding = ::getEncoding_(this->getEncoding());
 
+    str::EncodedStringView view;
     if (encoding == xml::lite::StringEncoding::Utf8)
     {
-        // already in UTF-8, no converstion necessary
-        result = str::c_str<sys::U8string::const_pointer>(mCharacterData); // copy
+        view = str::EncodedStringView::fromUtf8(mCharacterData);
     }
     else if (encoding == xml::lite::StringEncoding::Windows1252)
     {
-        result = str::fromWindows1252(mCharacterData);
+        view = str::EncodedStringView::fromWindows1252(mCharacterData);
     }
     else
     {
         throw std::logic_error("getCharacterData(): unknown encoding");
     }
+
+    result = view.u8string(); // copy or conversion
 }
 
 static void writeCharacterData(io::OutputStream& stream,
@@ -304,8 +307,8 @@ static void writeCharacterData(io::OutputStream& stream,
     if (encoding == xml::lite::StringEncoding::Windows1252)
     {
         // need to convert before writing
-        const auto utf8 = str::fromWindows1252(characterData);
-        stream.write(utf8);
+        const auto view = str::EncodedStringView::fromWindows1252(characterData);
+        stream.write(view.u8string());
     }
     else if (encoding == xml::lite::StringEncoding::Utf8)
     {
