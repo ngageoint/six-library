@@ -21,6 +21,8 @@
  */
 #include <six/CollectionInformation.h>
 
+#include <str/EncodedStringView.h>
+
 namespace six
 {
 CollectionInformation::CollectionInformation()
@@ -76,7 +78,7 @@ std::string CollectionInformation::getClassificationLevel() const
     {
         return mClassification; // no UTF-8 value
     }
-    return str::toString(utf8); // use the UTF-8 value, converted to native
+    return str::EncodedStringView(utf8).native(); // use the UTF-8 value, converted to native
 }
 bool CollectionInformation::getClassificationLevel(std::u8string& result) const
 {
