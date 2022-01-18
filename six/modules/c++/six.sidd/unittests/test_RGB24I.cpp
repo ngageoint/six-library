@@ -1,5 +1,5 @@
 /* =========================================================================
-* This file is part of six.sicd-c++
+* This file is part of six.sidd-c++
 * =========================================================================
 *
 * (C) Copyright 2004 - 2016, MDA Information Systems LLC
@@ -36,14 +36,11 @@
 #include <import/sys.h>
 
 #include <import/six.h>
-#include <import/six/sicd.h>
+#include <import/six/sidd.h>
 #include <six/sicd/SICDByteProvider.h>
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
-#include <six/sicd/ComplexXMLControl.h>
-#include <six/sicd/NITFReadComplexXMLControl.h>
-#include <six/sicd/KDTree.h>
-#include <six/sicd/Utilities.h>
+#include <six/sidd/Utilities.h>
 
 #include "../tests/TestUtilities.h"
 #include "TestCase.h"
