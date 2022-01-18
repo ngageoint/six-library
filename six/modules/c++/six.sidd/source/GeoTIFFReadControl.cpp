@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+#include <std/memory>
 
 #include <str/Convert.h>
 #include <gsl/gsl.h>
@@ -160,7 +161,8 @@ void six::sidd::GeoTIFFReadControl::load_(const std::string& fromFile, const TSc
         io::StringStream stream;
         stream.write(xmlStr);
         stream.seek(0, io::Seekable::START);
-        auto xmlParser = createXmlParser();
+        auto pXmlParser = createXmlParser();
+	auto& xmlParser = *pXmlParser;
         xmlParser.preserveCharacterData(true);
         xmlParser.parse(stream);
         const auto& doc = xmlParser.getDocument();
@@ -209,13 +211,13 @@ void six::sidd::GeoTIFFReadControl::load(
     const std::string& fromFile,
     const std::vector<std::string>& schemaPaths)
 {
-    const auto createXmlParser = []() { return six::MinidomParser(false /*storeEncoding*/); };
+    const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(false /*storeEncoding*/); };
     load_(fromFile, schemaPaths, createXmlParser);
 }
 void six::sidd::GeoTIFFReadControl::load(const std::filesystem::path& fromFile_, const std::vector< std::filesystem::path>* pSchemaPaths)
 {
     const auto fromFile = fromFile_.string();
-    const auto createXmlParser = []() { return six::MinidomParser(true /*storeEncoding*/); };
+    const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(true /*storeEncoding*/); };
     load_(fromFile, pSchemaPaths, createXmlParser);
 }
 
