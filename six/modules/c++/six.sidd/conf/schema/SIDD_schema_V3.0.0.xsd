@@ -1315,12 +1315,12 @@
             <xs:documentation>Phenomenology related to both the geometry and the final product processing. All values computed at the center time of the full collection.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="Shadow" type="sicommon:Angle360MagnitudeType" minOccurs="0">
+            <xs:element name="Shadow" type="sicommon:AngleZeroToExclusive360MagnitudeType" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>The phenomon where vertical objects occlude radar energy.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="Layover" type="sicommon:Angle360MagnitudeType" minOccurs="0">
+            <xs:element name="Layover" type="sicommon:AngleZeroToExclusive360MagnitudeType" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>The phenomenon where vertical objects appear as ground objects with the same range/range rate.</xs:documentation>
                 </xs:annotation>
