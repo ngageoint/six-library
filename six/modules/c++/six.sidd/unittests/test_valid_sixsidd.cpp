@@ -84,18 +84,15 @@ static std::unique_ptr<six::sidd::DerivedData> test_assert_round_trip(const six:
     return six::sidd::Utilities::parseDataFromString(strXML, pSchemaPaths);
 }
 
-static mem::ScopedCopyablePtr<six::UnmodeledS> get_Unmodeled(const six::sidd::DerivedData& derivedData, const std::string& strVersion)
+inline const six::UnmodeledS* get_Unmodeled(const six::sidd::DerivedData& derivedData, const std::string& strVersion)
 {
-    auto&& errorStatistics = derivedData.errorStatistics;
-    TEST_ASSERT(errorStatistics.get() != nullptr);
-
     if (strVersion != "3.0.0") // Unmodeled added in SIDD 3.0
     {
-        return mem::ScopedCopyablePtr<six::UnmodeledS>();
+        return nullptr;
     }
     else
     {
-        return derivedData.errorStatistics->Unmodeled;
+        return derivedData.errorStatistics->Unmodeled.get();
     }
 }
 
@@ -103,23 +100,23 @@ static void test_createFakeDerivedData_(const std::string& strVersion)
 {
     const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData(strVersion);
     auto Unmodeled = get_Unmodeled(*pFakeDerivedData, strVersion);
-    TEST_ASSERT_NULL(Unmodeled.get());
+    TEST_ASSERT_NULL(Unmodeled); // not part of the fake data, only added in SIDD 3.0
 
     // NULL schemaPaths, no validation
     auto pDerivedData = test_assert_round_trip(*pFakeDerivedData, nullptr /*pSchemaPaths*/);
     Unmodeled = get_Unmodeled(*pDerivedData, strVersion);
-    TEST_ASSERT_NULL(Unmodeled.get());
+    TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SIDD 3.0
 
     // validate XML against schema
     const auto schemaPaths = getSchemaPaths();
     pDerivedData = test_assert_round_trip(*pFakeDerivedData, &schemaPaths);
     Unmodeled = get_Unmodeled(*pDerivedData, strVersion);
-    TEST_ASSERT_NULL(Unmodeled.get());
+    TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SIDD 3.0
 }
 
 TEST_CASE(test_createFakeDerivedData)
 {
-    //test_createFakeDerivedData_("2.0.0");
+    test_createFakeDerivedData_("2.0.0");
     test_createFakeDerivedData_("3.0.0");
 }
 
