@@ -168,10 +168,9 @@ class SICD_readerAndConverter final
     {
         process_AMP8I_PHS8I(elementsPerRow, row, rowsToRead, tempVector);
     }
-    void process_AMP8I_PHS8I(size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<uint8_t>& tempVector) const
+    void process_AMP8I_PHS8I(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<uint8_t>& tempVector) const
     {
-        //auto bufferPtr = buffer + ((row - offset.row) * elementsPerRow);
-        auto bufferPtr = buffer;
+        auto bufferPtr = buffer + ((row - offset.row) * (elementsPerRow / 2));
 
         // Take each (uint8_t, uint8_t) out of the temp buffer and put it into the real buffer as a std::complex<float>
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index += 2)
