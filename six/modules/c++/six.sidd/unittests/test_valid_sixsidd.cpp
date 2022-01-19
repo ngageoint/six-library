@@ -116,9 +116,9 @@ static void test_assert_unmodeled(const six::UnmodeledS& Unmodeled)
     TEST_ASSERT_EQ(567.8, UnmodeledDecor->Ycol.DecorrRate);
 }
 
-TEST_CASE(test_read_sidd300_xml)
+static void test_read_sidd_xml(const fs::path& path)
 {
-    const auto pathname = get_sample_xml_path("sidd300.xml");
+    const auto pathname = get_sample_xml_path(path);
 
     // NULL schemaPaths, no validation
     auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, nullptr /*pSchemaPaths*/);
@@ -144,7 +144,18 @@ TEST_CASE(test_read_sidd300_xml)
     test_assert_unmodeled(*Unmodeled);
 }
 
+TEST_CASE(test_read_sidd200_xml)
+{
+    test_read_sidd_xml("sidd200.xml");
+}
+
+TEST_CASE(test_read_sidd300_xml)
+{
+    test_read_sidd_xml("sidd300.xml");
+}
+
 TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(test_createFakeDerivedData);
+    TEST_CHECK(test_read_sidd200_xml);
     TEST_CHECK(test_read_sidd300_xml);
     )
