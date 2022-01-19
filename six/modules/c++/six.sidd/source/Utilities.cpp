@@ -938,8 +938,18 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     collection.geometry->extensions.push_back(param);
 
     collection.phenomenology.reset(new six::sidd::Phenomenology());
-    collection.phenomenology->shadow = six::AngleMagnitude(1.5, 3.7);
-    collection.phenomenology->layover = six::AngleMagnitude(10.13, 50.9);
+    if (strVersion != "3.0.0")
+    {
+        // [-180, 180) before SIDD 3.0
+        collection.phenomenology->shadow = six::AngleMagnitude(-1.5, 3.7);
+        collection.phenomenology->layover = six::AngleMagnitude(-10.13, 50.9);
+    }
+    else
+    {
+        // [0, 360) in SIDD 3.0
+        collection.phenomenology->shadow = six::AngleMagnitude(1.5, 3.7);
+        collection.phenomenology->layover = six::AngleMagnitude(10.13, 50.9);
+    }
     collection.phenomenology->multiPath = 3.79;
     collection.phenomenology->groundTrack = 8.11;
     collection.phenomenology->extensions.push_back(param);
