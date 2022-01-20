@@ -1615,7 +1615,7 @@ std::vector<std::complex<float>> six::sicd::testing::make_complex_image(const ty
     return image;
 }
 
-std::vector<std::byte> six::sicd::testing::to_bytes(const ComplexImageResult& result)
+std::vector<std::byte> six::sicd::testing::to_bytes(const ComplexImageResult& result, ptrdiff_t cutoff)
 {
     const auto& image = result.widebandData;
     const auto bytes = six::as_bytes(image);
@@ -1626,7 +1626,7 @@ std::vector<std::byte> six::sicd::testing::to_bytes(const ComplexImageResult& re
     {
         retval.resize(image.size() * data.getNumBytesPerPixel());
         const std::span<std::byte> pRetval(retval.data(), retval.size());
-        data.convertPixels(bytes, pRetval);
+        data.convertPixels(bytes, pRetval, cutoff);
     }
     else
     {
