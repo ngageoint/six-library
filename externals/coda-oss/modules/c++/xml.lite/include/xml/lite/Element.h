@@ -93,7 +93,7 @@ public:
         setCharacterData(characterData, encoding);
     }
     Element(const std::string& qname, const std::string& uri,
-            const sys::U8string& characterData) :
+            const coda_oss::u8string& characterData) :
         Element(qname, uri, nullptr)
     {
         setCharacterData(characterData);
@@ -103,7 +103,7 @@ public:
     static std::unique_ptr<Element> create(const std::string& qname, const std::string& uri = "", const std::string& characterData = "");
     static std::unique_ptr<Element> create(const std::string& qname, const xml::lite::Uri& uri, const std::string& characterData = "");
     static std::unique_ptr<Element> create(const xml::lite::QName&, const std::string& characterData = "");
-    static std::unique_ptr<Element> create(const xml::lite::QName&, const sys::U8string&);
+    static std::unique_ptr<Element> create(const xml::lite::QName&, const coda_oss::u8string&);
     // Encoding of "characterData" is always UTF-8
     static std::unique_ptr<Element> createU8(const xml::lite::QName&, const std::string& characterData = "");
     #endif // SWIG
@@ -343,7 +343,7 @@ public:
         result = getCharacterData();
         return getEncoding();
     }
-    void getCharacterData(sys::U8string& result) const;
+    void getCharacterData(coda_oss::u8string& result) const;
     #endif // SWIG
 
     /*!
@@ -354,7 +354,7 @@ public:
     #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
     void setCharacterData_(const std::string& characters, const StringEncoding*);
     void setCharacterData(const std::string& characters, StringEncoding);
-    void setCharacterData(const sys::U8string& characters);
+    void setCharacterData(const coda_oss::u8string& characters);
     #endif // SWIG
 
     /*!

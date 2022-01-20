@@ -80,7 +80,7 @@ xml::lite::Element* xml::lite::Document::createElement(const std::string& qname,
 }
 xml::lite::Element* xml::lite::Document::createElement(const std::string& qname,
                                    const std::string& uri,
-                                   const sys::U8string& characterData)
+                                   const coda_oss::u8string& characterData)
 {
     auto elem = newElement(qname, uri);
     elem->setCharacterData(characterData);

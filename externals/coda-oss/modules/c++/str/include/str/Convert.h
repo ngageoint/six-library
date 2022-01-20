@@ -36,11 +36,10 @@
 #include <string>
 #include <typeinfo>
 
-// This is a fairly low-level file, so don't #include a lot of our other files
-#include "str/String_.h"
+#include "coda_oss/string.h"
+#include "coda_oss/optional.h"
 
 #include "str/Encoding.h"
-#include "coda_oss/optional.h"
 
 namespace str
 {
@@ -72,7 +71,7 @@ inline std::string toString(const std::nullptr_t&)
 }
 
 template <>
-std::string toString(const str::U8string&);
+std::string toString(const coda_oss::u8string&);
 
 template <typename T>
 std::string toString(const coda_oss::optional<T>& value)
