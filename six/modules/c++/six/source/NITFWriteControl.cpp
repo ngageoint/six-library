@@ -227,20 +227,23 @@ inline std::span<const std::byte> as_bytes(BufferList::value_type pImageData,
 // this bypasses the normal NITF ImageWriter and streams directly to the output
 template<typename T>
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(const NITFSegmentInfo& segmentInfo,
-    std::span<const T> imageData, const Data& data, bool doByteSwap)
+    std::span<const T> imageData, const Data& data, bool doByteSwap,
+    ptrdiff_t cutoff) // for eventual use by to_AMP8I_PHS8I()
 {
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
-        imageData, segmentInfo.getFirstRow(), data, doByteSwap);
+        imageData, segmentInfo.getFirstRow(), data, doByteSwap,
+        cutoff);
 }
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(const NITFSegmentInfo& segmentInfo,
-    BufferList::value_type pImageData, const Data& data, bool doByteSwap)
+    BufferList::value_type pImageData, const Data& data, bool doByteSwap,
+    ptrdiff_t cutoff) // for eventual use by to_AMP8I_PHS8I()
 {
     const auto pImageData_ = as_bytes(pImageData, segmentInfo, data);
-    return makeWriteHandler(segmentInfo, pImageData_, data, doByteSwap);
+    return makeWriteHandler(segmentInfo, pImageData_, data, doByteSwap, cutoff);
 }
 
 inline std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-io::InputStream* imageData, const Data& data, bool doByteSwap)
+io::InputStream* imageData, const Data& data, bool doByteSwap, ptrdiff_t)
 {
 //! TODO: This section of code (unlike the memory section above)
 //        does not account for blocked writing or J2K compression.
@@ -250,11 +253,12 @@ return std::make_shared<StreamWriteHandler>(segmentInfo, imageData, data, doByte
 
 template<typename TImageData>
 void writeWithoutNitro(nitf::Writer& mWriter, const TImageData& imageData,
-    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap)
+    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap,
+    ptrdiff_t cutoff = -1) // for eventual use by to_AMP8I_PHS8I()
 {
     for (size_t j = 0; j < imageSegments.size(); ++j)
     {
-        auto writeHandler = makeWriteHandler(imageSegments[j], imageData, data, doByteSwap);
+        auto writeHandler = makeWriteHandler(imageSegments[j], imageData, data, doByteSwap, cutoff);
         mWriter.setImageWriteHandler(static_cast<int>(startIndex + j), writeHandler);
     }
 }

@@ -197,11 +197,12 @@ struct NewMemoryWriteHandler::Impl final
     // This needs to persist beyhond the constructor
     std::vector<std::pair<uint8_t, uint8_t>> ampi8i_phs8i;
 
-    void convertPixels(NewMemoryWriteHandler& instance, const NITFSegmentInfo& info, std::span<const std::complex<float>> buffer, const Data& data)
+    void convertPixels(NewMemoryWriteHandler& instance, const NITFSegmentInfo& info, std::span<const std::complex<float>> buffer, const Data& data,
+        ptrdiff_t cutoff = -1)
     {
         ampi8i_phs8i.resize(buffer.size());
         const std::span<std::pair<uint8_t, uint8_t>> ampi8i_phs8i_(ampi8i_phs8i.data(), ampi8i_phs8i.size());
-        if (!data.convertPixels(buffer, ampi8i_phs8i_))
+        if (!data.convertPixels(buffer, ampi8i_phs8i_, cutoff))
         {
             throw std::runtime_error("Unable to convert pixels.");
         }
@@ -245,7 +246,8 @@ inline const std::byte* cast(std::span<const T> buffer)
 }
 
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    std::span<const std::byte> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    std::span<const std::byte> buffer, size_t firstRow, const Data& data, bool doByteSwap,
+    ptrdiff_t cutoff)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
     validate_bandSize(buffer, info, data);
@@ -259,17 +261,18 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
         const void* pBuffer_ = buffer.data();
         const auto pBuffer = static_cast<const std::complex<float>*>(pBuffer_);
         const std::span<const std::complex<float>> buffer_(pBuffer, buffer.size() / sizeof(std::complex<float>));
-        m_pImpl->convertPixels(*this, info, buffer_, data);
+        m_pImpl->convertPixels(*this, info, buffer_, data, cutoff);
     }
 }
 
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    std::span<const std::complex<float>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    std::span<const std::complex<float>> buffer, size_t firstRow, const Data& data, bool doByteSwap,
+    ptrdiff_t cutoff)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
-        m_pImpl->convertPixels(*this, info, buffer, data);
+        m_pImpl->convertPixels(*this, info, buffer, data, cutoff);
     }
     else if (data.getPixelType() != six::PixelType::RE32F_IM32F)
     {
@@ -282,7 +285,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
 }
 
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    std::span<const std::pair<uint8_t, uint8_t>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    std::span<const std::pair<uint8_t, uint8_t>> buffer, size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
     // This is for the uncommon case where the data is already in this format; normally, it is std::complex<float>.
@@ -294,7 +297,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
 }
 
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    std::span<const std::complex<short>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    std::span<const std::complex<short>> buffer, size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
     // Each pixel is stored as a pair of numbers that represent the real and imaginary 
@@ -307,7 +310,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     validate_buffer(buffer, info, data);
 }
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    std::span<const uint8_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    std::span<const uint8_t> buffer, size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
     switch (data.getPixelType())
@@ -323,7 +326,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     validate_buffer(buffer, info, data);
 }
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    std::span<const uint16_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    std::span<const uint16_t> buffer, size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
     if (data.getPixelType() != six::PixelType::MONO16I)
