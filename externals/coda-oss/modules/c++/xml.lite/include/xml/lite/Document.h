@@ -96,7 +96,7 @@ public:
                                    const std::string& characterData, StringEncoding);
     virtual Element* createElement(const std::string& qname,
                                    const std::string& uri,
-                                   const sys::U8string& characterData);
+                                   const coda_oss::u8string& characterData);
     std::unique_ptr<Element> createElement(const xml::lite::QName& qname, const std::string& characterData) const;
     std::unique_ptr<Element> createElement(const xml::lite::QName& qname,
                                    const std::string& characterData, StringEncoding) const;

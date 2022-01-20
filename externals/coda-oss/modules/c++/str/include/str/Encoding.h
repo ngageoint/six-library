@@ -25,14 +25,13 @@
 #define CODA_OSS_str_Encoding_h_INCLUDED_
 #pragma once
 
+#include <string.h>
 #include <wchar.h>
 
 #include <memory>
 #include <string>
 
-// This is a fairly low-level file, so don't #include a lot of our other files
-#include "str/String_.h"
-
+#include "coda_oss/string.h"
 
 // This can be useful for code that will compile on all platforms, but needs
 // different platform-specific behavior.  This avoids the use of more #ifdefs
@@ -79,54 +78,62 @@ inline TReturn c_str(const std::basic_string<TChar>& s)
 enum class Windows1252_T : unsigned char { };  // https://en.cppreference.com/w/cpp/language/types
 using W1252string = std::basic_string<Windows1252_T>;  // https://en.cppreference.com/w/cpp/string
 
-sys::U8string fromWindows1252(std::string::const_pointer, size_t); // std::string is Windows-1252 **ON ALL PLATFORMS**
-sys::U8string fromUtf8(std::string::const_pointer, size_t); // std::string is UTF-8 **ON ALL PLATFORMS**
+coda_oss::u8string fromWindows1252(std::string::const_pointer, size_t); // std::string is Windows-1252 **ON ALL PLATFORMS**
+inline coda_oss::u8string fromWindows1252(std::string::const_pointer s)
+{
+    return fromWindows1252(s, static_cast<size_t>(strlen(s)));
+}
+coda_oss::u8string fromUtf8(std::string::const_pointer, size_t); // std::string is UTF-8 **ON ALL PLATFORMS**
+inline coda_oss::u8string fromUtf8(std::string::const_pointer s)
+{
+    return fromUtf8(s, static_cast<size_t>(strlen(s)));
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-// When the encoding is important, we want to "traffic" in sys::U8string (UTF-8), not
+// When the encoding is important, we want to "traffic" in coda_oss::u8string (UTF-8), not
 // str::W1252string (Windows-1252) or std::string (unknown).  Make it easy to get those from other encodings.
-sys::U8string to_u8string(std::string::const_pointer, size_t);  // std::string is Windows-1252 or UTF-8  depending on platform
-sys::U8string to_u8string(str::W1252string::const_pointer, size_t);
-inline sys::U8string to_u8string(sys::U8string::const_pointer s, size_t sz)
+coda_oss::u8string to_u8string(std::string::const_pointer, size_t);  // std::string is Windows-1252 or UTF-8  depending on platform
+coda_oss::u8string to_u8string(str::W1252string::const_pointer, size_t);
+inline coda_oss::u8string to_u8string(coda_oss::u8string::const_pointer s, size_t sz)
 {
-    return sys::U8string(s, sz);
+    return coda_oss::u8string(s, sz);
 }
 
 // UTF-16 is typically uses on Windows (where it is std::wstring::value_type);
 // Linux preferred UTF-32.
-sys::U8string to_u8string(std::u16string::const_pointer, size_t);
+coda_oss::u8string to_u8string(std::u16string::const_pointer, size_t);
 
 // UTF-32 is convenient because each code-point is a single 32-bit integer.
 // It's typically std::wstring::value_type on Linux, but NOT Windows.
-sys::U8string to_u8string(std::u32string::const_pointer, size_t);
+coda_oss::u8string to_u8string(std::u32string::const_pointer, size_t);
 
 template <typename TChar>
-inline sys::U8string to_u8string(const std::basic_string<TChar>& s)
+inline coda_oss::u8string to_u8string(const std::basic_string<TChar>& s)
 {
     return to_u8string(s.c_str(), s.size());
 }
 
 namespace details // YOU should use EncodedStringView
 {
-sys::U8string to_u8string(std::string::const_pointer, size_t, bool is_utf8 /* is 's' UTF-8? */);
+coda_oss::u8string to_u8string(std::string::const_pointer, size_t, bool is_utf8 /* is 's' UTF-8? */);
 std::string& to_u8string(std::string::const_pointer, size_t, bool is_utf8 /* is 's' UTF-8? */, std::string&); // encoding is lost
 std::string& to_u8string(std::u16string::const_pointer, size_t, std::string&); // encoding is lost
 std::string& to_u8string(std::u32string::const_pointer, size_t, std::string&); // encoding is lost
 
 str::W1252string to_w1252string(std::string::const_pointer, size_t); // std::string is Windows-1252 or UTF-8  depending on platform
 str::W1252string to_w1252string(std::string::const_pointer, size_t, bool is_utf8 /* is 's' UTF-8? */);
-str::W1252string to_w1252string(sys::U8string::const_pointer, size_t);
+str::W1252string to_w1252string(coda_oss::u8string::const_pointer, size_t);
 inline str::W1252string to_w1252string(str::W1252string::const_pointer s, size_t sz)
 {
     return str::W1252string(s, sz);
 }
 
-std::string to_native(sys::U8string::const_pointer, size_t); // std::string is Windows-1252 or UTF-8  depending on platform
+std::string to_native(coda_oss::u8string::const_pointer, size_t); // std::string is Windows-1252 or UTF-8  depending on platform
 std::string to_native(str::W1252string::const_pointer s, size_t sz); // std::string is Windows-1252 or UTF-8  depending on platform
 inline std::string to_native(std::string::const_pointer s, size_t sz, bool is_utf8 /* is 's' UTF-8? */) // std::string is Windows-1252 or UTF-8  depending on platform
 {
-    return is_utf8 ? to_native(cast<sys::U8string::const_pointer>(s), sz)
+    return is_utf8 ? to_native(cast<coda_oss::u8string::const_pointer>(s), sz)
                    : to_native(cast<str::W1252string::const_pointer>(s), sz);
 }
 inline std::string to_native(std::string::const_pointer s, size_t sz)

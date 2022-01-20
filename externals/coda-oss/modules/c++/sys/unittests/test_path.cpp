@@ -30,6 +30,25 @@ namespace fs = coda_oss::filesystem;
 
 namespace
 {
+static std::string find_directory(const std::vector<std::string>& paths)
+{
+    std::string bad_delim = sys::Path::delimiter();
+    bad_delim += sys::Path::delimiter();
+    for (const auto& p : paths)
+    {
+        if (fs::is_directory(p))
+        {
+            // Sometimes the value of PATH has "bad" strings in it ... at least it will
+            // confuse the unit-tests as we don't expect "C:\D1\\D2
+            if (!str::contains(p, bad_delim))
+            {
+                return p;
+            }
+        }
+    }
+    return "";
+}
+
 TEST_CASE(testPathMerge)
 {
     const sys::OS os;
@@ -40,15 +59,7 @@ TEST_CASE(testPathMerge)
     TEST_ASSERT_TRUE(splitResult);
     TEST_ASSERT_GREATER(paths.size(), 0);
 
-    std::string path;
-    for (const auto& p : paths)
-    {
-        if (fs::is_directory(p))
-        {
-            path = p;
-            break;
-        }
-    }
+    auto path = find_directory(paths);
     TEST_ASSERT_TRUE(fs::is_directory(path));
     // add trailing '/'
     if (!str::endsWith(path, sys::Path::delimiter()))

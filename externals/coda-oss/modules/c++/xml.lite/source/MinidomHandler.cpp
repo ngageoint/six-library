@@ -145,13 +145,13 @@ bool xml::lite::MinidomHandler::vcharacters(const void /*XMLCh*/* chars_, size_t
         throw std::invalid_argument("Wrong size for XMLCh");
     }
 
-    auto platform = sys::Platform;  // "conditional expression is constant"
-    if (platform == sys::PlatformType::Linux)
+    std::string chars;
+    auto platformEncoding = xml::lite::PlatformEncoding;  // "conditional expression is constant"
+    if (platformEncoding == xml::lite::StringEncoding::Utf8)
     {
-        const auto utf8Value = toUtf8(pChars16, pChars32, length);
-        call_characters(utf8Value, xml::lite::StringEncoding::Utf8);
+        chars = toUtf8(pChars16, pChars32, length);
     }
-    else if (platform == sys::PlatformType::Windows)
+    else if (platformEncoding == xml::lite::StringEncoding::Windows1252)
     {
         // On Windows, we want std::string encoded as Windows-1252 so that
         // western European characters will be displayed.  We can't convert
@@ -159,16 +159,16 @@ bool xml::lite::MinidomHandler::vcharacters(const void /*XMLCh*/* chars_, size_t
         // support for displaying such strings.  Using UTF-16 would be preferred
         // on Windows, but all existing code uses std::string instead of std::wstring.
         assert(pChars16 != nullptr);  // XMLCh == wchar_t == char16_t on Windows
-        const XMLCh* chars = static_cast<const XMLCh*>(chars_);
-        const auto windows1252Value(xml::lite::XercesLocalString(chars).str());
-        call_characters(windows1252Value, xml::lite::StringEncoding::Windows1252);
+        auto pChars = static_cast<const XMLCh*>(chars_);
+        chars = xml::lite::XercesLocalString(pChars).str();
     }
     else
     {
-        throw std::logic_error("Unknown sys::PlatformType");
+        throw std::logic_error("Unknown xml::lite::StringEncoding");
     }
 
-    return true;
+    call_characters(chars, platformEncoding);
+    return true; // vcharacters() processed
 }
 
 void xml::lite::MinidomHandler::startElement(const std::string & uri,
@@ -176,9 +176,7 @@ void xml::lite::MinidomHandler::startElement(const std::string & uri,
                                              const std::string & qname,
                                              const xml::lite::Attributes & atts)
 {
-    // Assign what we can now, and push rest on stack
-    // for later
-
+    // Assign what we can now, and push rest on stack for later
     xml::lite::Element * current = mDocument->createElement(qname, uri);
 
     current->setAttributes(atts);
