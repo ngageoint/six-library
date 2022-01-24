@@ -73,25 +73,25 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace KDTree
 {
     using node_t = six::sicd::KDTree::node_t;
-    inline node_t::value_type& index(node_t& p, size_t i)
+    inline node_t::value_type& index(node_t& p, size_t i) noexcept
     {
         return p.index(i);
     }
-    inline const node_t::value_type& index(const node_t& p, size_t i)
+    inline const node_t::value_type& index(const node_t& p, size_t i) noexcept
     {
         return p.index(i);
     }
-    inline size_t size(const node_t& p)
+    inline size_t size(const node_t& p) noexcept
     {
         return p.size();
     }
 
     // Euklidean distance (L2 norm)
-    inline node_t::value_type coordinate_distance(const node_t& p, const node_t& q, size_t i)
+    inline node_t::value_type coordinate_distance(const node_t& p, const node_t& q, size_t i) noexcept
     {
         return node_t::coordinate_distance(p, q, i);
     }
-    inline node_t::value_type distance(const node_t& p, const node_t& q)
+    inline node_t::value_type distance(const node_t& p, const node_t& q) noexcept
     {
         return node_t::distance(p, q);
     }
@@ -287,14 +287,14 @@ namespace KDTree
             return ball_within_bounds(point, dist, node);
         }
 
-        static value_type coordinate_distance(const node_t& p, const node_t& q, size_t i)
+        static value_type coordinate_distance(const node_t& p, const node_t& q, size_t i) noexcept
         {
             return KDTree::coordinate_distance(p, q, i);
         }
 
         // returns true when the bounds of *node* overlap with the
         // ball with radius *dist* around *point*
-        bool bounds_overlap_ball(const node_t& point, value_type dist, const tree_node& node) const
+        bool bounds_overlap_ball(const node_t& point, value_type dist, const tree_node& node) const noexcept
         {
             value_type distsum = 0.0;
             for (size_t i = 0; i < dimension; i++)
@@ -313,7 +313,7 @@ namespace KDTree
 
         // returns true when the bounds of *node* completely contain the
         // ball with radius *dist* around *point*
-        bool ball_within_bounds(const node_t& point, value_type dist, const tree_node& node) const
+        bool ball_within_bounds(const node_t& point, value_type dist, const tree_node& node) const noexcept
         {
             for (size_t i = 0; i < dimension; i++)
             {
