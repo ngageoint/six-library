@@ -157,7 +157,7 @@ class SICD_readerAndConverter final
     {
         // Take each Int16 out of the temp buffer and put it into the real buffer as a Float32
         void* const pBuffer = buffer;
-        float* const bufferPtr = reinterpret_cast<float*>(pBuffer) + ((row - offset.row) * elementsPerRow);
+        float* const bufferPtr = static_cast<float*>(pBuffer) + ((row - offset.row) * elementsPerRow);
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
         {
             bufferPtr[index] = tempVector[index];
