@@ -29,6 +29,7 @@
 #include <stdexcept>
 #include <string>
 
+#include <import/str.h>
 #include <sys/Path.h>
 #include <sys/DirectoryEntry.h>
 #include <sys/DateTime.h>
@@ -261,7 +262,7 @@ static std::string getSpecialEnv_PID(const AbstractOS& os, const std::string& en
     UNREFERENCED_PARAMETER(envVar);
     #endif
     const auto pid = os.getProcessId();
-    return std::to_string(pid);
+    return str::toString(pid);
 }
 
 static std::string getSpecialEnv_USER(const AbstractOS& os, const std::string& envVar)
@@ -335,7 +336,7 @@ static std::string getSpecialEnv_SECONDS_()
     // https://en.cppreference.com/w/cpp/chrono/c/difftime
     static const auto start = std::time(nullptr);
     const auto diff = static_cast<int64_t>(std::difftime(std::time(nullptr), start));
-    return std::to_string(diff);
+    return str::toString(diff);
 }
 static std::string getSpecialEnv_SECONDS(const AbstractOS&, const std::string& envVar)
 {
@@ -409,7 +410,7 @@ std::string AbstractOS::getSpecialEnv(const std::string& envVar) const
 
     if (envVar == "EPOCHSECONDS")
     {
-        return std::to_string(sys::DateTime::getEpochSeconds());
+        return str::toString(sys::DateTime::getEpochSeconds());
     }
 
     if (envVar == "OSTYPE")

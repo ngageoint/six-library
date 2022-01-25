@@ -45,7 +45,7 @@ std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const QName& qnam
 {
     return create(qname.getName(), qname.getUri(), characterData);
 }
-std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const QName& qname, const sys::U8string& characterData)
+std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const QName& qname, const coda_oss::u8string& characterData)
 {
     return coda_oss::make_unique<Element>(qname.getName(), qname.getUri().value,  characterData);
 }
@@ -138,7 +138,7 @@ std::tuple<xml::lite::Element*, std::string> getElement(TGetElements getElements
     {
         return std::make_tuple(elements[0], "");
     }
-    return std::make_tuple(nullptr, std::to_string(elements.size()));
+    return std::make_tuple(nullptr, str::toString(elements.size()));
 }
 template <typename TGetElements, typename TMakeContext>
 xml::lite::Element& getElement(TGetElements getElements, TMakeContext makeContext)
@@ -279,7 +279,7 @@ static xml::lite::StringEncoding getEncoding_(const coda_oss::optional<xml::lite
     return PlatformEncoding;
 }
 
-void xml::lite::Element::getCharacterData(sys::U8string& result) const
+void xml::lite::Element::getCharacterData(coda_oss::u8string& result) const
 {
     const auto encoding = ::getEncoding_(this->getEncoding());
 
@@ -313,7 +313,7 @@ static void writeCharacterData(io::OutputStream& stream,
     else if (encoding == xml::lite::StringEncoding::Utf8)
     {
         // already in UTF-8, no converstion necessary
-        auto pUtf8 = str::c_str<sys::U8string::const_pointer>(characterData);
+        auto pUtf8 = str::c_str<coda_oss::u8string::const_pointer>(characterData);
         stream.write(pUtf8, characterData.length()); // call UTF-8 overload
     }
     else
@@ -542,7 +542,7 @@ void xml::lite::Element::setCharacterData(const std::string& characters, StringE
 {
     setCharacterData_(characters, &encoding);
 }
-void xml::lite::Element::setCharacterData(const sys::U8string& characters)
+void xml::lite::Element::setCharacterData(const coda_oss::u8string& characters)
 {
     setCharacterData(str::c_str<std::string::const_pointer>(characters), StringEncoding::Utf8);
 }

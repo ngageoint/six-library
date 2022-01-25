@@ -27,8 +27,6 @@
 
 #include "sys/Thread.h"
 #include "mt/RequestQueue.h"
-#include "str/Convert.h"
-
 
 
 namespace mt
@@ -96,7 +94,7 @@ public:
      */
     std::string getThreadId()
     {
-	return str::toString<long>(sys::getThreadID());
+	return str::toString(sys::getThreadID());
     }
 protected:
 
