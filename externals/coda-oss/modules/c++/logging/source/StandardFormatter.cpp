@@ -56,7 +56,7 @@ void StandardFormatter::format(const LogRecord* record, io::OutputStream& os) co
     {
         str::replace(format, FILE_NAME, record->getFile());
         str::replace(format, LINE_NUM,  
-                str::toString<int>(record->getLineNum()));
+                str::toString(record->getLineNum()));
     }
     else
     {

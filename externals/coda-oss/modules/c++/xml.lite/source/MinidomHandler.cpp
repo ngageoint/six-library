@@ -24,6 +24,7 @@
 
 #include "str/Manip.h"
 #include "str/Convert.h"
+#include "str/Encoding.h"
 #include "sys/OS.h"
 
 #include "xml/lite/MinidomHandler.h"
