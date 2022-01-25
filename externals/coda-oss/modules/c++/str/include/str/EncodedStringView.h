@@ -27,14 +27,13 @@
 
 #include <string>
 #include <ostream>
-#include <memory>
 
 #include "coda_oss/span.h"
  #include "str/Encoding.h"
 
 /*!
  * \file EncodedStringView.h
- * \brief A String that can be either UTF-8 or "native" 
+ * \brief A read-only "view" onto a string.
  *
  * On Linux, there is good support for UTF-8, so a std::string encoded
  * as UTF-8 will display the "foreign" characters properly.  On Windows,
@@ -46,6 +45,7 @@
 
 namespace str
 {
+class EncodedString; // forward
 class EncodedStringView final
 {
     // Since we only support two encodings--UTF-8 (native on Linux) and Windows-1252
@@ -53,6 +53,18 @@ class EncodedStringView final
     coda_oss::span<const char> mString;
     static constexpr bool mNativeIsUtf8 = details::Platform == details::PlatformType::Linux ? true : false;
     bool mIsUtf8 = mNativeIsUtf8;
+    
+    // Want to create an EncodedString from EncodedStringView.  The public interface
+    // doesn't expose "mIsUtf8" so there's (intentinally) no way for clients to know the encoding.
+    friend EncodedString;
+
+    template <typename TReturn>
+    TReturn cast() const
+    {
+        return str::cast<TReturn>(mString.data());
+    }
+    
+    str::W1252string w1252string() const;  // c.f. std::filesystem::path::u8string()
 
 public:
     EncodedStringView() = default;
@@ -65,8 +77,8 @@ public:
     // Need the const char* overloads to avoid creating temporary std::basic_string<> instances.
     // Routnes always return a copy, never a reference, so there's no additional overhead
     // with storing a raw pointer rather than a pointer to  std::basic_string<>.
-    EncodedStringView(sys::U8string::const_pointer);
-    EncodedStringView(const sys::U8string&);
+    EncodedStringView(coda_oss::u8string::const_pointer);
+    EncodedStringView(const coda_oss::u8string&);
     EncodedStringView(str::W1252string::const_pointer);
     EncodedStringView(const str::W1252string&);
 
@@ -88,11 +100,11 @@ public:
     }
     static EncodedStringView fromUtf8(const char* s)
     {
-        return create<sys::U8string>(s);
+        return create<coda_oss::u8string>(s);
     }
     static EncodedStringView fromUtf8(const std::string& s)
     {
-        return create<sys::U8string>(s);
+        return create<coda_oss::u8string>(s);
     }
     static EncodedStringView fromWindows1252(const char* s)
     {
@@ -109,14 +121,20 @@ public:
     std::string native() const; // c.f. std::filesystem::path::native()
 
     // Convert (perhaps) whatever we're looking at to UTF-8
-    sys::U8string u8string() const;  // c.f. std::filesystem::path::u8string()
+    coda_oss::u8string u8string() const;  // c.f. std::filesystem::path::u8string()
     std::string& toUtf8(std::string&) const; // std::string is encoded as UTF-8, always.
 
-    // Convert (perhaps) whatever we're looking at to Windows-1252
-    // Intended for unit-testing; normal use is native().
-    str::W1252string details_w1252string() const;  // c.f. std::filesystem::path::u8string()
-
     bool operator_eq(const EncodedStringView&) const;
+
+    struct details final
+    {
+        // Convert (perhaps) whatever we're looking at to Windows-1252
+        // Intended for unit-testing; normal use is native().
+        static str::W1252string w1252string(const EncodedStringView& v)
+        {
+            return v.w1252string();
+        }
+    };
 };
 
 inline bool operator==(const EncodedStringView& lhs, const EncodedStringView& rhs)

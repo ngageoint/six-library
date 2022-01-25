@@ -37,11 +37,11 @@
 
 // Need to look up characters from \x80 (EURO SIGN) to \x9F (LATIN CAPITAL LETTER Y WITH DIAERESIS)
 // in a map: http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT
-inline str::U8string utf8_(std::u32string::value_type ch)
+inline coda_oss::u8string utf8_(std::u32string::value_type ch)
 {
     return str::to_u8string(std::u32string{ch});
 };
-static const std::map<std::u32string::value_type, sys::U8string> Windows1252_x80_x9F_to_u8string{
+static const std::map<std::u32string::value_type, coda_oss::u8string> Windows1252_x80_x9F_to_u8string{
     {0x80, utf8_(0x20AC) } // EURO SIGN
     // , {0x81, replacement_character } // UNDEFINED
     , {0x82, utf8_(0x201A) } // SINGLE LOW-9 QUOTATION MARK
@@ -76,7 +76,7 @@ static const std::map<std::u32string::value_type, sys::U8string> Windows1252_x80
     , {0x9F, utf8_(0x0178)  } // LATIN CAPITAL LETTER Y WITH DIAERESIS
 };
 
-static std::map<std::u32string::value_type, sys::U8string> Windows1252_to_u8string()
+static std::map<std::u32string::value_type, coda_oss::u8string> Windows1252_to_u8string()
 {
     auto retval = Windows1252_x80_x9F_to_u8string;
 
@@ -91,19 +91,19 @@ static std::map<std::u32string::value_type, sys::U8string> Windows1252_to_u8stri
         // *out++=0xc2+(*in>0xbf), *out++=(*in++&0x3f)+0x80;
         const auto b1 = 0xc2 + (ch > 0xbf);
         const auto b2 = (ch & 0x3f) + 0x80;
-        sys::U8string s {static_cast<sys::U8string::value_type>(b1)};
-        s += sys::U8string {static_cast<sys::U8string::value_type>(b2)};
+        coda_oss::u8string s {static_cast<coda_oss::u8string::value_type>(b1)};
+        s += coda_oss::u8string {static_cast<coda_oss::u8string::value_type>(b2)};
         retval[ch] = std::move(s);    
     }
 
     return retval;
 }
 
-inline void append(std::string& result, const sys::U8string& utf8)
+inline void append(std::string& result, const coda_oss::u8string& utf8)
 {
     result += str::c_str<std::string::const_pointer>(utf8);
 }
-inline void append(sys::U8string& result, const sys::U8string& utf8)
+inline void append(coda_oss::u8string& result, const coda_oss::u8string& utf8)
 {
     result += utf8;
 }
@@ -132,7 +132,7 @@ static void fromWindows1252_(str::W1252string::value_type ch, std::basic_string<
     // Windows-1252; return a "replacement character."  Yes, this will
     // **corrupt** the input data as information is lost:
     // https://en.wikipedia.org/wiki/Specials_(Unicode_block)#Replacement_character
-    static const sys::U8string replacement_character_ = utf8_(0xfffd);
+    static const coda_oss::u8string replacement_character_ = utf8_(0xfffd);
     static const std::basic_string<TChar> replacement_character = str::c_str<const_pointer>(replacement_character_);
     result += replacement_character;
 }
@@ -157,8 +157,8 @@ std::map<TValue, TKey> kv_to_vk(const std::map<TKey, TValue>& kv)
     return retval;
 }
 
-static void get_next_utf8_byte(str::U8string::const_pointer p, size_t sz,
-    size_t& i,  str::U8string& utf8)
+static void get_next_utf8_byte(coda_oss::u8string::const_pointer p, size_t sz,
+    size_t& i,  coda_oss::u8string& utf8)
 {
     if (!(i + i < sz))
     {
@@ -172,10 +172,10 @@ static void get_next_utf8_byte(str::U8string::const_pointer p, size_t sz,
     {
         throw std::invalid_argument("Invalid next byte in UTF-8 encoding.");
     }
-    utf8 += str::U8string{static_cast<sys::U8string::value_type>(b)};
+    utf8 += coda_oss::u8string{static_cast<coda_oss::u8string::value_type>(b)};
 }
 template<typename TChar>
-static void utf8to1252(str::U8string::const_pointer p, size_t sz, std::basic_string<TChar>& result)
+static void utf8to1252(coda_oss::u8string::const_pointer p, size_t sz, std::basic_string<TChar>& result)
 {
     using value_type = typename std::basic_string<TChar>::value_type;
     for (size_t i = 0; i < sz; i++)
@@ -189,7 +189,7 @@ static void utf8to1252(str::U8string::const_pointer p, size_t sz, std::basic_str
             continue;
         }
 
-        auto utf8 = str::U8string{static_cast<sys::U8string::value_type>(b1)};
+        auto utf8 = coda_oss::u8string{static_cast<coda_oss::u8string::value_type>(b1)};
 
         get_next_utf8_byte(p, sz, i, utf8);
         if (b1 >= 0xE0)  // 1110xxxx
@@ -219,19 +219,19 @@ static void utf8to1252(str::U8string::const_pointer p, size_t sz, std::basic_str
 
 struct back_inserter final
 { 
-    sys::U8string* container = nullptr; // pointer instead of reference for copy
-    explicit back_inserter(sys::U8string& s) noexcept : container(&s) { }
+    coda_oss::u8string* container = nullptr; // pointer instead of reference for copy
+    explicit back_inserter(coda_oss::u8string& s) noexcept : container(&s) { }
 
     back_inserter& operator=(uint8_t v)
     {
-        container->push_back(static_cast<sys::U8string::value_type>(v));
+        container->push_back(static_cast<coda_oss::u8string::value_type>(v));
         return *this;
     }
     back_inserter& operator*() noexcept { return *this; }
     back_inserter operator++(int) noexcept { return *this; }
 };
 
-sys::U8string str::to_u8string(std::u16string::const_pointer p, size_t sz)
+coda_oss::u8string str::to_u8string(std::u16string::const_pointer p, size_t sz)
 {
     // http://utfcpp.sourceforge.net/#introsample
     /*
@@ -243,7 +243,7 @@ sys::U8string str::to_u8string(std::u16string::const_pointer p, size_t sz)
     string utf8line;
     utf8::utf16to8(utf16line.begin(), utf16line.end(), back_inserter(utf8line));
     */
-    sys::U8string retval;
+    coda_oss::u8string retval;
     utf8::utf16to8(p, p + sz, back_inserter(retval));
     return retval;
 
@@ -259,9 +259,9 @@ std::string& str::details::to_u8string(std::u16string::const_pointer p, size_t s
     return result;
 }
 
-sys::U8string str::to_u8string(std::u32string::const_pointer p, size_t sz)
+coda_oss::u8string str::to_u8string(std::u32string::const_pointer p, size_t sz)
 {
-    sys::U8string retval;
+    coda_oss::u8string retval;
     utf8::utf32to8(p, p + sz, back_inserter(retval));
     return retval;
 }
@@ -272,9 +272,9 @@ std::string& str::details::to_u8string(std::u32string::const_pointer p, size_t s
 }
 
 
-sys::U8string str::to_u8string(W1252string::const_pointer p, size_t sz)
+coda_oss::u8string str::to_u8string(W1252string::const_pointer p, size_t sz)
 {
-    sys::U8string retval;
+    coda_oss::u8string retval;
     windows1252to8(p, sz, retval);
     return retval;
 }
@@ -286,19 +286,19 @@ std::string& str::details::to_u8string(std::string::const_pointer p, size_t sz, 
     return is_utf8 ? (result = p) : windows1252to8(cast<W1252string::const_pointer>(p), sz, result);
 }
 
-sys::U8string str::details::to_u8string(std::string::const_pointer p, size_t sz, bool is_utf8 /* is 'p' UTF-8? */)
+coda_oss::u8string str::details::to_u8string(std::string::const_pointer p, size_t sz, bool is_utf8 /* is 'p' UTF-8? */)
 {
     return is_utf8 ?
-        cast<sys::U8string::const_pointer>(p) :  // copy
+        cast<coda_oss::u8string::const_pointer>(p) :  // copy
         to_u8string(cast<W1252string::const_pointer>(p), sz);
 }
-sys::U8string str::to_u8string(std::string::const_pointer p, size_t sz)
+coda_oss::u8string str::to_u8string(std::string::const_pointer p, size_t sz)
 {
     auto platform = details::Platform;  // "conditional expression is constant"
     return details::to_u8string(p, sz, platform == details::PlatformType::Linux); // std::string is UTF-8 on Linux
 }
 
-str::W1252string str::details::to_w1252string(sys::U8string::const_pointer p, size_t sz)
+str::W1252string str::details::to_w1252string(coda_oss::u8string::const_pointer p, size_t sz)
 {
     str::W1252string retval;
     utf8to1252(p, sz, retval);
@@ -308,7 +308,7 @@ str::W1252string str::details::to_w1252string(sys::U8string::const_pointer p, si
 str::W1252string str::details::to_w1252string(std::string::const_pointer p, size_t sz, bool is_utf8 /* is 's' UTF-8? */)
 {
     return is_utf8 ?
-        to_w1252string(cast<sys::U8string ::const_pointer>(p), sz) :
+        to_w1252string(cast<coda_oss::u8string ::const_pointer>(p), sz) :
         cast<str::W1252string ::const_pointer>(p);  // copy
 }
 str::W1252string str::details::to_w1252string(std::string::const_pointer p, size_t sz)
@@ -317,7 +317,7 @@ str::W1252string str::details::to_w1252string(std::string::const_pointer p, size
     return to_w1252string(p, sz, platform == details::PlatformType::Linux); // std::string is UTF-8 on Linux
 }
 
-std::string str::details::to_native(sys::U8string::const_pointer p, size_t sz)
+std::string str::details::to_native(coda_oss::u8string::const_pointer p, size_t sz)
 {
     auto platform = str::details::Platform;  // "conditional expression is constant"
     if (platform == str::details::PlatformType::Windows)
@@ -349,18 +349,18 @@ std::string str::details::to_native(W1252string::const_pointer p, size_t sz)
     throw std::logic_error("Unknown platform.");
 }
 
-sys::U8string str::fromWindows1252(std::string::const_pointer p, size_t sz)
+coda_oss::u8string str::fromWindows1252(std::string::const_pointer p, size_t sz)
 {
     return to_u8string(cast<str::W1252string::const_pointer>(p), sz);
 }
 
-sys::U8string str::fromUtf8(std::string::const_pointer p, size_t sz)
+coda_oss::u8string str::fromUtf8(std::string::const_pointer p, size_t sz)
 {
-    return to_u8string(cast<sys::U8string::const_pointer>(p), sz);
+    return to_u8string(cast<coda_oss::u8string::const_pointer>(p), sz);
 }
 
 template <>
-std::string str::toString(const str::U8string& utf8)
+std::string str::toString(const coda_oss::u8string& utf8)
 {
     return str::details::to_native(utf8);
 }

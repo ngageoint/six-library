@@ -46,7 +46,6 @@
 #include "str/Format.h"
 #include "str/Manip.h"
 #include "str/Encoding.h"
-#include "str/EncodedStringView.h"
 #define STR_MAJOR_VERSION 0
 #define STR_MINOR_VERSION 1
 #define STR_MICRO_VERSION 0

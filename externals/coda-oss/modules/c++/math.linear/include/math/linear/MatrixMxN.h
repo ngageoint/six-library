@@ -24,6 +24,9 @@
 
 #include <cmath>
 #include <limits>
+#include <complex>
+#include <iomanip> // std::setw()
+
 #include <import/sys.h>
 
 namespace math
