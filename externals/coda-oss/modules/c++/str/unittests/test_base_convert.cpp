@@ -29,6 +29,7 @@
 #include <std/string>
 
 #include <import/str.h>
+#include <str/EncodedString.h>
 
 #include "TestCase.h"
 

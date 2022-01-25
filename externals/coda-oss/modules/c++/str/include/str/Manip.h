@@ -157,7 +157,7 @@ void upper(std::string& s);
 void escapeForXML(std::string& str);
 
 template<typename T>
-std::string join(std::vector<T> toks, std::string with)
+std::string join(const std::vector<T>& toks, std::string with)
 {
     if (toks.empty())
         return "";

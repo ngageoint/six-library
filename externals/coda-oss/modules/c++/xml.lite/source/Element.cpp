@@ -138,7 +138,7 @@ std::tuple<xml::lite::Element*, std::string> getElement(TGetElements getElements
     {
         return std::make_tuple(elements[0], "");
     }
-    return std::make_tuple(nullptr, std::to_string(elements.size()));
+    return std::make_tuple(nullptr, str::toString(elements.size()));
 }
 template <typename TGetElements, typename TMakeContext>
 xml::lite::Element& getElement(TGetElements getElements, TMakeContext makeContext)
