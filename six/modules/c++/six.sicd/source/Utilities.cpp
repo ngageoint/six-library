@@ -157,7 +157,7 @@ class SICD_readerAndConverter final
     {
         // Take each Int16 out of the temp buffer and put it into the real buffer as a Float32
         void* const pBuffer = buffer;
-        float* const bufferPtr = reinterpret_cast<float*>(pBuffer) + ((row - offset.row) * elementsPerRow);
+        float* const bufferPtr = static_cast<float*>(pBuffer) + ((row - offset.row) * elementsPerRow);
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
         {
             bufferPtr[index] = tempVector[index];
@@ -168,10 +168,9 @@ class SICD_readerAndConverter final
     {
         process_AMP8I_PHS8I(elementsPerRow, row, rowsToRead, tempVector);
     }
-    void process_AMP8I_PHS8I(size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<uint8_t>& tempVector) const
+    void process_AMP8I_PHS8I(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<uint8_t>& tempVector) const
     {
-        //auto bufferPtr = buffer + ((row - offset.row) * elementsPerRow);
-        auto bufferPtr = buffer;
+        auto bufferPtr = buffer + ((row - offset.row) * (elementsPerRow / 2));
 
         // Take each (uint8_t, uint8_t) out of the temp buffer and put it into the real buffer as a std::complex<float>
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index += 2)
@@ -1616,7 +1615,7 @@ std::vector<std::complex<float>> six::sicd::testing::make_complex_image(const ty
     return image;
 }
 
-std::vector<std::byte> six::sicd::testing::to_bytes(const ComplexImageResult& result)
+std::vector<std::byte> six::sicd::testing::to_bytes(const ComplexImageResult& result, ptrdiff_t cutoff)
 {
     const auto& image = result.widebandData;
     const auto bytes = six::as_bytes(image);
@@ -1627,7 +1626,7 @@ std::vector<std::byte> six::sicd::testing::to_bytes(const ComplexImageResult& re
     {
         retval.resize(image.size() * data.getNumBytesPerPixel());
         const std::span<std::byte> pRetval(retval.data(), retval.size());
-        data.convertPixels(bytes, pRetval);
+        data.convertPixels(bytes, pRetval, cutoff);
     }
     else
     {

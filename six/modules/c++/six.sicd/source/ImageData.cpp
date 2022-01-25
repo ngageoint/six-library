@@ -234,6 +234,7 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
     }
     else
     {
+        // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
         constexpr auto dimension = 128 * 8;
         constexpr auto default_cutoff = dimension * dimension;
         const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
@@ -278,6 +279,7 @@ void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I
     }
     else
     {
+        // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
         constexpr auto dimension = 128 * 8;
         constexpr auto default_cutoff = dimension * dimension;
         const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;

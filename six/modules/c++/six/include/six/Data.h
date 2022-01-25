@@ -80,11 +80,11 @@ struct Data
      */
     virtual PixelType getPixelType() const = 0;
     virtual void setPixelType(PixelType pixelType) = 0;
-    virtual bool convertPixels_(std::span<const std::byte>, std::span<std::byte>) const { return false; }
+    virtual bool convertPixels_(std::span<const std::byte>, std::span<std::byte>, ptrdiff_t /*cutoff*/) const { return false; }
     template<typename T, typename U>
-    bool convertPixels(std::span<const T> from, std::span<U> to) const
+    bool convertPixels(std::span<const T> from, std::span<U> to, ptrdiff_t cutoff = -1) const
     {
-        return convertPixels_(as_bytes(from), as_bytes(to));
+        return convertPixels_(as_bytes(from), as_bytes(to), cutoff);
     }
 
     /*!

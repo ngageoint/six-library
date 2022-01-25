@@ -60,6 +60,8 @@ class NITFWriteControl : public WriteControl
 {
     void addLegend(const Legend&, int imageNumber);
 
+    ptrdiff_t AMP8I_PHS8I_cutoff() const; // for eventual use by to_AMP8I_PHS8I());
+
     template<typename T>
     void write_imageData(const T& imageData, const NITFImageInfo&, const Legend* const legend,
         bool doByteSwap, bool enableJ2K);

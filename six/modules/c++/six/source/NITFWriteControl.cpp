@@ -227,20 +227,23 @@ inline std::span<const std::byte> as_bytes(BufferList::value_type pImageData,
 // this bypasses the normal NITF ImageWriter and streams directly to the output
 template<typename T>
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(const NITFSegmentInfo& segmentInfo,
-    std::span<const T> imageData, const Data& data, bool doByteSwap)
+    std::span<const T> imageData, const Data& data, bool doByteSwap,
+    ptrdiff_t cutoff) // for eventual use by to_AMP8I_PHS8I()
 {
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
-        imageData, segmentInfo.getFirstRow(), data, doByteSwap);
+        imageData, segmentInfo.getFirstRow(), data, doByteSwap,
+        cutoff);
 }
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(const NITFSegmentInfo& segmentInfo,
-    BufferList::value_type pImageData, const Data& data, bool doByteSwap)
+    BufferList::value_type pImageData, const Data& data, bool doByteSwap,
+    ptrdiff_t cutoff) // for eventual use by to_AMP8I_PHS8I()
 {
     const auto pImageData_ = as_bytes(pImageData, segmentInfo, data);
-    return makeWriteHandler(segmentInfo, pImageData_, data, doByteSwap);
+    return makeWriteHandler(segmentInfo, pImageData_, data, doByteSwap, cutoff);
 }
 
 inline std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-io::InputStream* imageData, const Data& data, bool doByteSwap)
+io::InputStream* imageData, const Data& data, bool doByteSwap, ptrdiff_t)
 {
 //! TODO: This section of code (unlike the memory section above)
 //        does not account for blocked writing or J2K compression.
@@ -250,11 +253,12 @@ return std::make_shared<StreamWriteHandler>(segmentInfo, imageData, data, doByte
 
 template<typename TImageData>
 void writeWithoutNitro(nitf::Writer& mWriter, const TImageData& imageData,
-    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap)
+    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap,
+    ptrdiff_t cutoff) // for eventual use by to_AMP8I_PHS8I()
 {
     for (size_t j = 0; j < imageSegments.size(); ++j)
     {
-        auto writeHandler = makeWriteHandler(imageSegments[j], imageData, data, doByteSwap);
+        auto writeHandler = makeWriteHandler(imageSegments[j], imageData, data, doByteSwap, cutoff);
         mWriter.setImageWriteHandler(static_cast<int>(startIndex + j), writeHandler);
     }
 }
@@ -274,6 +278,13 @@ bool NITFWriteControl::do_prepareIO(size_t imageDataSize, nitf::IOInterface& out
     return shouldByteSwap();
 }
 
+ptrdiff_t NITFWriteControl::AMP8I_PHS8I_cutoff() const
+{
+    static const Parameter default_cutoff_parameter(WriteControl::AMP8I_PHS8I_DEFAULT_CUTOFF);
+    const ptrdiff_t cutoff = getOptions().getParameter(WriteControl::AMP8I_PHS8I_CUTOFF, default_cutoff_parameter);
+    return cutoff;
+}
+
 void NITFWriteControl::save(const SourceList& imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::string>& schemaPaths)
@@ -291,7 +302,7 @@ void NITFWriteControl::save(const SourceList& imageData,
         const auto startIndex = info.getStartIndex();
         const six::Data* const pData = info.getData();
 
-        writeWithoutNitro(mWriter, imageData[i], imageSegments, startIndex, *pData, doByteSwap);
+        writeWithoutNitro(mWriter, imageData[i], imageSegments, startIndex, *pData, doByteSwap, AMP8I_PHS8I_cutoff());
     }
 
     addDataAndWrite(schemaPaths);
@@ -322,7 +333,7 @@ static nitf::ImageSource do_make_ImageSource(std::span<const T> pImageData_, con
 
     const auto bandSize = getBandSize(segmentInfo, data);
     const auto pImageData = six::as_bytes(pImageData_);
-    if (pImageData.size() != bandSize)
+    if ((pImageData.size() / numChannels) != bandSize)
     {
         throw std::invalid_argument("bandSize mis-match!");
     }
@@ -449,7 +460,7 @@ void NITFWriteControl::write_imageData(const T& imageData, const NITFImageInfo& 
     }
     else
     {
-        writeWithoutNitro(mWriter, imageData, imageSegments, startIndex, *pData, doByteSwap);
+        writeWithoutNitro(mWriter, imageData, imageSegments, startIndex, *pData, doByteSwap, AMP8I_PHS8I_cutoff());
     }
 
     if (legend)

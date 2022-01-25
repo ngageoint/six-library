@@ -73,25 +73,25 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace KDTree
 {
     using node_t = six::sicd::KDTree::node_t;
-    inline node_t::value_type& index(node_t& p, size_t i)
+    inline node_t::value_type& index(node_t& p, size_t i) noexcept
     {
         return p.index(i);
     }
-    inline const node_t::value_type& index(const node_t& p, size_t i)
+    inline const node_t::value_type& index(const node_t& p, size_t i) noexcept
     {
         return p.index(i);
     }
-    inline size_t size(const node_t& p)
+    inline size_t size(const node_t& p) noexcept
     {
         return p.size();
     }
 
     // Euklidean distance (L2 norm)
-    inline node_t::value_type coordinate_distance(const node_t& p, const node_t& q, size_t i)
+    inline node_t::value_type coordinate_distance(const node_t& p, const node_t& q, size_t i) noexcept
     {
         return node_t::coordinate_distance(p, q, i);
     }
-    inline node_t::value_type distance(const node_t& p, const node_t& q)
+    inline node_t::value_type distance(const node_t& p, const node_t& q) noexcept
     {
         return node_t::distance(p, q);
     }
@@ -193,11 +193,11 @@ namespace KDTree
     {
         size_t dataindex;  // index of actual kdnode in *allnodes*
         T distance;   // distance of this neighbor from *point*
-        nn4heap(size_t di, const T& d) : dataindex(di), distance(d) {}
+        nn4heap(size_t di, const T& d) noexcept : dataindex(di), distance(d) {}
 
         struct compare final
         {
-            bool operator()(const nn4heap& n, const nn4heap& m) const {
+            bool operator()(const nn4heap& n, const nn4heap& m) const noexcept {
                 return (n.distance < m.distance);
             }
         };
@@ -212,7 +212,30 @@ namespace KDTree
 
         // helper variables and functions for k nearest neighbor search
         using nn4heap_t = nn4heap<value_type>;
-        using priority_queue = std::priority_queue<nn4heap_t, std::vector<nn4heap_t>, typename nn4heap_t::compare>;
+
+        //using priority_queue = std::priority_queue<nn4heap_t, std::vector<nn4heap_t>, typename nn4heap_t::compare>;
+        // Derive to get access to "protected" members
+        struct priority_queue final : public std::priority_queue<nn4heap_t, std::vector<nn4heap_t>, typename nn4heap_t::compare>
+        {
+            using base_t = std::priority_queue<nn4heap_t, std::vector<nn4heap_t>, typename nn4heap_t::compare>;
+            typename base_t::container_type& c() noexcept { return base_t::c; }
+            const typename base_t::value_compare& comp() const noexcept { return base_t::comp; }
+        };
+        static void pop_emplace(priority_queue& neighborheap, size_t dataindex, value_type curdist)
+        {
+            // By accessing the container directly, we only have to rebuild the heap once.
+            // https://en.cppreference.com/w/cpp/container/priority_queue/pop
+            // https://en.cppreference.com/w/cpp/container/priority_queue/emplace
+            // neighborheap.pop();
+            // neighborheap.emplace(dataindex, curdist);
+            auto& c = neighborheap.c();
+            // https://en.cppreference.com/w/cpp/container/vector/pop_back
+            // "Calling pop_back on an empty container results in undefined behavior."
+            c.back().dataindex = dataindex;
+            c.back().distance = curdist;
+            std::make_heap(c.begin(), c.end(), neighborheap.comp());
+        }
+
         std::vector<size_t> range_result;
 
         //--------------------------------------------------------------
@@ -227,8 +250,8 @@ namespace KDTree
                 neighborheap.emplace(node.dataindex, curdist);
             }
             else if (curdist < neighborheap.top().distance) {
-                neighborheap.pop();
-                neighborheap.emplace(node.dataindex, curdist);
+                // By accessing the container directly, we only have to rebuild the heap once.
+                pop_emplace(neighborheap, node.dataindex, curdist);
             }
 
             // first search on side closer to point
@@ -264,14 +287,14 @@ namespace KDTree
             return ball_within_bounds(point, dist, node);
         }
 
-        static value_type coordinate_distance(const node_t& p, const node_t& q, size_t i)
+        static value_type coordinate_distance(const node_t& p, const node_t& q, size_t i) noexcept
         {
             return KDTree::coordinate_distance(p, q, i);
         }
 
         // returns true when the bounds of *node* overlap with the
         // ball with radius *dist* around *point*
-        bool bounds_overlap_ball(const node_t& point, value_type dist, const tree_node& node) const
+        bool bounds_overlap_ball(const node_t& point, value_type dist, const tree_node& node) const noexcept
         {
             value_type distsum = 0.0;
             for (size_t i = 0; i < dimension; i++)
@@ -290,7 +313,7 @@ namespace KDTree
 
         // returns true when the bounds of *node* completely contain the
         // ball with radius *dist* around *point*
-        bool ball_within_bounds(const node_t& point, value_type dist, const tree_node& node) const
+        bool ball_within_bounds(const node_t& point, value_type dist, const tree_node& node) const noexcept
         {
             for (size_t i = 0; i < dimension; i++)
             {
