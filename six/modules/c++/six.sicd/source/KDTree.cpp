@@ -217,9 +217,10 @@ namespace KDTree
         // Derive to get access to "protected" members
         struct priority_queue final : public std::priority_queue<nn4heap_t, std::vector<nn4heap_t>, typename nn4heap_t::compare>
         {
-            using base_t = std::priority_queue<nn4heap_t, std::vector<nn4heap_t>, typename nn4heap_t::compare>;
+	    using compare_t = typename nn4heap_t::compare; // GCC 4.9.4
+            using base_t = std::priority_queue<nn4heap_t, std::vector<nn4heap_t>, compare_t>;
             typename base_t::container_type& c() noexcept { return base_t::c; }
-            const typename base_t::value_compare& comp() const noexcept { return base_t::comp; }
+            const compare_t& comp() const noexcept { return base_t::comp; }
         };
         static void pop_emplace(priority_queue& neighborheap, size_t dataindex, value_type curdist)
         {
