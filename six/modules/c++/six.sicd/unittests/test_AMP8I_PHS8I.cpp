@@ -29,6 +29,7 @@
 #include <std/filesystem>
 #include <std/optional>
 #include <cmath>
+#include <random>
 #include <std/span>
 
 #include <io/FileInputStream.h>
@@ -40,6 +41,7 @@
 #include <six/sicd/SICDByteProvider.h>
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
+#include <six/sicd/ComplexToAMP8IPHS8I.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/NITFReadComplexXMLControl.h>
 #include <six/sicd/KDTree.h>
@@ -558,6 +560,104 @@ TEST_CASE(test_KDTree)
     test_near_point({ -100.0f, -100.0f }, node4.amp_and_value, nearest_neighbor_f); // closest to {-1.0, -1.0}
 }
 
+TEST_CASE(test_verify_phase_uint8_ordering)
+{
+    // Verify that the uint8 phase values are ordered and evenly spaced from [0, 2PI).
+    // If this fails, then a core assumption of the ComplexToAmpPhase8I structure is wrong.
+
+    auto to_phase = [](int v) {
+        double p = std::arg(six::sicd::Utilities::from_AMP8I_PHS8I(1, v, nullptr));
+        if(p < 0) p += 2.0 * M_PI;
+        return p;
+    };
+    auto p0 = to_phase(0);
+    auto p1 = to_phase(1);
+    TEST_ASSERT_EQ(p0, 0.0);
+
+    auto delta = p1 - p0;
+    auto last = p0;
+    for(int i = 1; i < 256; i++) {
+        auto check = to_phase(i);
+        TEST_ASSERT_ALMOST_EQ_EPS(delta, check - last, 1e-6);
+        last = check;
+    }
+    TEST_ASSERT_ALMOST_EQ_EPS(last + delta, M_PI * 2, 1e-6);
+}
+
+TEST_CASE(test_ComplexToAMP8IPHS8I)
+{
+    // Set up a converter that has a fake amplitude table.
+    six::AmplitudeTable amp;
+    for(size_t i = 0; i < 256; i++) {
+        amp.index(i) = static_cast<double>(i) + 10.0;
+    }
+    six::sicd::ComplexToAMP8IPHS8I item(&amp);
+
+    // Generate the full 256x256 matrix of possible AMP8I_PHS8I values.
+    struct Pairs {
+        std::complex<double> floating;
+        six::sicd::ImageData::AMP8I_PHS8I_t integral;
+    };
+    std::vector<Pairs> candidates;
+    for(int i = 0; i < 256; i++) {
+        for(int j = 0; j < 256; j++) {
+            Pairs p;
+            p.integral = {i, j};
+            p.floating = six::sicd::Utilities::from_AMP8I_PHS8I(i, j, &amp);
+            candidates.push_back(p);
+        }
+    }
+
+    // Loop through each item in our matrix and verify that it's mapped correctly.
+    // These are simple cases that don't necessarily exercise the nearest neighbor property.
+    for(auto& i : candidates) {
+        auto truth = i.integral;
+        auto test = item.nearest_neighbor(std::complex<float>(i.floating.real(), i.floating.imag()));
+        TEST_ASSERT_EQ(truth.first, test.first);
+        TEST_ASSERT_EQ(truth.second, test.second);
+    }
+
+    // Run an edge case that's very close to a phase of 2PI.
+    // The phase should have wrapped back around to 0.
+    std::complex<float> problem {
+        1, -1e-4
+    };
+    TEST_ASSERT_EQ(item.nearest_neighbor(problem).second, 0);
+
+    // Verify the nearest neighbor property via random search through the possible space.
+    // For each sampled point we check that we found the true nearest neighbor.
+    static const size_t kTests = 10000;
+    static const double kExpansion = 10.0;
+    double min_amplitude = amp.index(0) - kExpansion;
+    double max_amplitude = amp.index(amp.numEntries - 1) + kExpansion;
+    std::uniform_real_distribution<double> dist(min_amplitude, max_amplitude);
+    std::default_random_engine eng(654987);  // ... fixed seed means deterministic tests...
+    size_t bad_first = 0;
+    size_t bad_second = 0;
+    double worst_error = 0;
+    for(size_t k = 0; k < kTests; k++) {
+        double x = dist(eng);
+        double y = dist(eng);
+
+        // Calculate the nearest neighbor quickly.
+        const std::complex<double> input_dbl(x, y);
+        const auto test_integral = item.nearest_neighbor(input_dbl);
+
+        // Calculate the nearest neighbor via exhaustive calculation.
+        double min_distance = std::abs(candidates[0].floating - input_dbl);
+        auto best = candidates[0];
+        for(auto& i : candidates) {
+            double e = std::abs(i.floating - input_dbl);
+            if(e < min_distance) {
+                min_distance = e;
+                best = i;
+            }
+        }
+        TEST_ASSERT_EQ(test_integral.first, best.integral.first);
+        TEST_ASSERT_EQ(test_integral.second, best.integral.second);
+    }
+}
+
 TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(test_8bit_ampphs);
     TEST_CHECK(read_8bit_ampphs_with_table);
@@ -566,5 +666,7 @@ TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(test_read_sicd_8_bit_Amp_Phs_Examples);
     TEST_CHECK(test_create_sicd_from_mem_8i);
     TEST_CHECK(test_KDTree);
+    TEST_CHECK(test_verify_phase_uint8_ordering);
+    TEST_CHECK(test_ComplexToAMP8IPHS8I);
     )
 

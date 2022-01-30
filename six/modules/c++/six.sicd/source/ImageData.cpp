@@ -27,6 +27,7 @@
 #include <gsl/gsl.h>
 #include <mt/Algorithm.h>
 
+#include "six/sicd/ComplexToAMP8IPHS8I.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/ImageData.h"
 #include "six/sicd/Utilities.h"
@@ -242,18 +243,17 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
     }
 }
 
-static const KDTree* make_KDTree(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<KDTree>& pTree)
+static const ComplexToAMP8IPHS8I* make_ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<ComplexToAMP8IPHS8I>& pTree)
 {
-    // create all of of the possible KDNodes values
     if (pAmplitudeTable == nullptr)
     {
         // this won't change, so OK to cache
-        static const KDTree tree(make_KDNodes(nullptr));
+        static const ComplexToAMP8IPHS8I tree{};
         return &tree;
     }
     else
     {
-        pTree = std::make_unique<KDTree>(make_KDNodes(pAmplitudeTable));
+        pTree = std::make_unique<ComplexToAMP8IPHS8I>(pAmplitudeTable);
         return pTree.get();
     }
 }
@@ -261,13 +261,12 @@ static const KDTree* make_KDTree(const six::AmplitudeTable* pAmplitudeTable, std
 void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
     ptrdiff_t cutoff_) const
 {
-    // make the KDTree to quickly find the nearest neighbor
-    std::unique_ptr<KDTree> pTree; // not-cached, non-NULL amplitudeTable
-    const auto& tree = *(make_KDTree(amplitudeTable.get(), pTree));
-    const auto nearest_neighbor_f = [&tree](const std::complex<float>& v)
+    // make a structure to quickly find the nearest neighbor
+    std::unique_ptr<ComplexToAMP8IPHS8I> pTree; // not-cached, non-NULL amplitudeTable
+    const auto& tree = *(make_ComplexToAMP8IPHS8I(amplitudeTable.get(), pTree));
+    const auto nearest_neighbor_f = [&](const std::complex<float>& v)
     {
-        auto result = tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v });
-        return result.amp_and_value;
+        return tree.nearest_neighbor(v);
     };
 
     const auto begin = inputs.data(); // no iterators with our homebrew span<>
