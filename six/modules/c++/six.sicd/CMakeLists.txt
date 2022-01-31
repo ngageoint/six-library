@@ -6,6 +6,7 @@ coda_add_module(
         source/AreaPlaneUtility.cpp
         source/ComplexData.cpp
         source/ComplexDataBuilder.cpp
+        source/ComplexToAMP8IPHS8I.cpp
         source/ComplexXMLControl.cpp
         source/ComplexXMLParser.cpp
         source/ComplexXMLParser040.cpp
