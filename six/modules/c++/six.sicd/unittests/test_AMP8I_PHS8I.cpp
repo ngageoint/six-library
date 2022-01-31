@@ -595,7 +595,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
 
     // Generate the full 256x256 matrix of possible AMP8I_PHS8I values.
     struct Pairs {
-        std::complex<float> floating;
+        std::complex<double> floating;
         six::sicd::ImageData::AMP8I_PHS8I_t integral;
     };
     std::vector<Pairs> candidates;
@@ -619,7 +619,9 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
 
     // Run an edge case that's very close to a phase of 2PI.
     // The phase should have wrapped back around to 0.
-    std::complex<float> problem { 1.0f, -1e-4f };
+    std::complex<float> problem {
+        1, -1e-4
+    };
     TEST_ASSERT_EQ(item.nearest_neighbor(problem).second, 0);
 
     // Verify the nearest neighbor property via random search through the possible space.
@@ -630,25 +632,23 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     double max_amplitude = amp.index(amp.numEntries - 1) + kExpansion;
     std::uniform_real_distribution<double> dist(min_amplitude, max_amplitude);
     std::default_random_engine eng(654987);  // ... fixed seed means deterministic tests...
-    //size_t bad_first = 0;
-    //size_t bad_second = 0;
-    //double worst_error = 0;
+    size_t bad_first = 0;
+    size_t bad_second = 0;
+    double worst_error = 0;
     for(size_t k = 0; k < kTests; k++) {
         double x = dist(eng);
         double y = dist(eng);
 
         // Calculate the nearest neighbor quickly.
-        const std::complex<float> input_dbl(x, y);
+        const std::complex<double> input_dbl(x, y);
         const auto test_integral = item.nearest_neighbor(input_dbl);
 
         // Calculate the nearest neighbor via exhaustive calculation.
-        auto min_distance = std::abs(candidates[0].floating - input_dbl);
+        double min_distance = std::abs(candidates[0].floating - input_dbl);
         auto best = candidates[0];
-        for(const auto& i : candidates)
-        {
+        for(auto& i : candidates) {
             double e = std::abs(i.floating - input_dbl);
-            if(e < min_distance)
-            {
+            if(e < min_distance) {
                 min_distance = e;
                 best = i;
             }
