@@ -41,44 +41,6 @@ namespace sicd
 {
 using cx_float = std::complex<float>;
 using AMP8I_PHS8I_t = std::pair<uint8_t, uint8_t>;
-struct KDNode final
-{
-    using value_type = typename cx_float::value_type;
-    cx_float result;
-    AMP8I_PHS8I_t amp_and_value;
-
-    value_type& index(size_t i) noexcept
-    {
-        assert(i <= 1);
-        // https://en.cppreference.com/w/cpp/numeric/complex
-        return reinterpret_cast<value_type(&)[2]>(result)[i];
-    }
-    const value_type& index(size_t i) const noexcept
-    {
-        assert(i <= 1);
-        // https://en.cppreference.com/w/cpp/numeric/complex
-        return reinterpret_cast<const value_type(&)[2]>(result)[i];
-    }
-
-    constexpr size_t size() const noexcept
-    {
-        return 2;
-    }
-
-    // Euklidean distance (L2 norm)
-    static KDNode::value_type coordinate_distance(const KDNode& p, const KDNode& q, size_t i) noexcept
-    {
-        const auto x = p.index(i);
-        const auto y = q.index(i);
-        return (x - y) * (x - y);
-    }
-    static KDNode::value_type distance(const KDNode& p, const KDNode& q) noexcept
-    {
-        assert(p.size() == q.size());
-        assert(p.size() == 2);
-        return coordinate_distance(p, q, 0) + coordinate_distance(p, q, 1);
-    }
-};
 
 class GeoData;
 /*!

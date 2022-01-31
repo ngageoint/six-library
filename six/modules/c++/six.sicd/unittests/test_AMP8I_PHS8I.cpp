@@ -532,19 +532,19 @@ static void test_near_point(const std::complex<float>& p, const AMP8I_PHS8I_t& e
 
 TEST_CASE(test_KDTree)
 {
-    using KDNode = six::sicd::KDNode;
+    using KDNode_t = six::sicd::details::KDNode;
 
-    const KDNode node0{ {0.0, 0.0}, {static_cast<uint8_t>(0), static_cast<uint8_t>(0)} };
-    const KDNode node1{ {1.0, 1.0},  {static_cast<uint8_t>(1), static_cast<uint8_t>(1)} };
-    const KDNode node2{ {1.0, -1.0},  {static_cast<uint8_t>(2), static_cast<uint8_t>(2)} };
-    const KDNode node3{ {-1.0, 1.0},  {static_cast<uint8_t>(3), static_cast<uint8_t>(3)} };
-    const KDNode node4{ {-1.0, -1.0},  {static_cast<uint8_t>(4), static_cast<uint8_t>(4)} };
+    const KDNode_t node0{ {0.0, 0.0}, {static_cast<uint8_t>(0), static_cast<uint8_t>(0)} };
+    const KDNode_t node1{ {1.0, 1.0},  {static_cast<uint8_t>(1), static_cast<uint8_t>(1)} };
+    const KDNode_t node2{ {1.0, -1.0},  {static_cast<uint8_t>(2), static_cast<uint8_t>(2)} };
+    const KDNode_t node3{ {-1.0, 1.0},  {static_cast<uint8_t>(3), static_cast<uint8_t>(3)} };
+    const KDNode_t node4{ {-1.0, -1.0},  {static_cast<uint8_t>(4), static_cast<uint8_t>(4)} };
 
-    std::vector<KDNode> nodes{ node0, node1, node2, node3, node4 };
+    std::vector<KDNode_t> nodes{ node0, node1, node2, node3, node4 };
     const six::sicd::details::KDTree tree(std::move(nodes));
     const auto nearest_neighbor_f = [&tree](const std::complex<float>& v)
     {
-        auto result = tree.nearest_neighbor(KDNode{ v });
+        auto result = tree.nearest_neighbor(KDNode_t{ v });
         return result.amp_and_value;
     };
 

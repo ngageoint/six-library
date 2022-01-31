@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "six/sicd/ImageData.h"
 
 #include <stdexcept>
 #include <array>
@@ -27,11 +28,10 @@
 #include <gsl/gsl.h>
 #include <mt/Algorithm.h>
 
-#include "six/sicd/ComplexToAMP8IPHS8I.h"
 #include "six/sicd/GeoData.h"
-#include "six/sicd/ImageData.h"
 #include "six/sicd/Utilities.h"
 #include "six/sicd/KDTree.h"
+#include "six/sicd/ComplexToAMP8IPHS8I.h"
 
 using namespace six;
 using namespace six::sicd;
@@ -128,16 +128,18 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
-static std::vector<six::sicd::KDNode> make_KDNodes(const six::AmplitudeTable* pAmplitudeTable)
+using KDNode_t = six::sicd::details::KDNode;
+
+static std::vector<KDNode_t> make_KDNodes(const six::AmplitudeTable* pAmplitudeTable)
 {
     // For all possible amp/phase values (there are "only" 256*256), get and save the
     // complex<float> value.
     //
     // Be careful with indexing so that we don't wrap-around in the loops.
-    std::vector<six::sicd::KDNode> retval;
+    std::vector<KDNode_t> retval;
     for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
     {
-        six::sicd::KDNode v;
+        KDNode_t v;
         v.amp_and_value.first = gsl::narrow<uint8_t>(input_amplitude);
 
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
