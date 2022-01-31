@@ -55,7 +55,7 @@ public:
      * @param v complex value to query with
      * @return nearest amplitude and phase value
      */
-    ImageData::AMP8I_PHS8I_t nearest_neighbor(const std::complex<float>& v) const;
+    AMP8I_PHS8I_t nearest_neighbor(const std::complex<float>& v) const;
 
 private:
     //! The sorted set of possible magnitudes order from small to large.

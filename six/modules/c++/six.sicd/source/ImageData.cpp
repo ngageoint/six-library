@@ -128,16 +128,16 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
-static std::vector<ImageData::KDNode> make_KDNodes(const six::AmplitudeTable* pAmplitudeTable)
+static std::vector<six::sicd::KDNode> make_KDNodes(const six::AmplitudeTable* pAmplitudeTable)
 {
     // For all possible amp/phase values (there are "only" 256*256), get and save the
     // complex<float> value.
     //
     // Be careful with indexing so that we don't wrap-around in the loops.
-    std::vector<ImageData::KDNode> retval;
+    std::vector<six::sicd::KDNode> retval;
     for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
     {
-        ImageData::KDNode v;
+        six::sicd::KDNode v;
         v.amp_and_value.first = gsl::narrow<uint8_t>(input_amplitude);
 
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
@@ -220,7 +220,7 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
 
     std::unique_ptr<input_amplitudes_t> pValues_;
     const auto& values = get_RE32F_IM32F_values(amplitudeTable.get(), pValues_);
-    const auto get_RE32F_IM32F_value_f = [&values](const ImageData::AMP8I_PHS8I_t& v)
+    const auto get_RE32F_IM32F_value_f = [&values](const six::sicd::AMP8I_PHS8I_t& v)
     {
         return values[v.first][v.second];
     };
@@ -243,7 +243,7 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
     }
 }
 
-static void to_AMP8I_PHS8I_(std::span<const ImageData::cx_float> inputs, std::span<ImageData::AMP8I_PHS8I_t> results,
+static void to_AMP8I_PHS8I_(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
     const six::sicd::details::ComplexToAMP8IPHS8I& tree, ptrdiff_t cutoff_)
 {
     const auto nearest_neighbor_f = [&](const std::complex<float>& v)

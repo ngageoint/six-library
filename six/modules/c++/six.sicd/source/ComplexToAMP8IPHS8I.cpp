@@ -48,7 +48,7 @@ static std::array<long double, UINT8_MAX + 1> make_magnitudes(const six::Amplitu
     for (uint16_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
     {
         // AmpPhase -> Complex
-        six::sicd::ImageData::AMP8I_PHS8I_t v;
+        six::sicd::AMP8I_PHS8I_t v;
         v.first = v.second = gsl::narrow<uint8_t>(i);
         const auto complex = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, pAmplitudeTable);
         retval[i] = std::abs(complex);
@@ -116,9 +116,9 @@ static uint8_t nearest(const TIter& begin, const TIter& end, long double value)
     return gsl::narrow<uint8_t>(distance);
 }
 
-six::sicd::ImageData::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const std::complex<float> &v) const
+six::sicd::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const std::complex<float> &v) const
 {
-    ImageData::AMP8I_PHS8I_t retval;
+    six::sicd::AMP8I_PHS8I_t retval;
 
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around

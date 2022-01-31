@@ -55,7 +55,7 @@
 #endif
 
 namespace fs = std::filesystem;
-using AMP8I_PHS8I_t = six::sicd::ImageData::AMP8I_PHS8I_t;
+using AMP8I_PHS8I_t = six::sicd::AMP8I_PHS8I_t;
 
 static std::string testName;
 
@@ -498,14 +498,14 @@ TEST_CASE(test_create_sicd_from_mem_8i)
 
 namespace str
 {
-inline std::ostream & operator<<(std::ostream & os, const six::sicd::ImageData::AMP8I_PHS8I_t & p)
+inline std::ostream & operator<<(std::ostream & os, const AMP8I_PHS8I_t & p)
 {
     os << p.first << p.second;
     return os;
 }
 }
 template<typename TNearestNeighbor>
-static void test_near_point(const std::complex<float>& p, const six::sicd::ImageData::AMP8I_PHS8I_t& expected,
+static void test_near_point(const std::complex<float>& p, const AMP8I_PHS8I_t& expected,
     TNearestNeighbor nearest_neighbor_f)
 {
     auto actual = nearest_neighbor_f(p);
@@ -532,7 +532,7 @@ static void test_near_point(const std::complex<float>& p, const six::sicd::Image
 
 TEST_CASE(test_KDTree)
 {
-    using KDNode = six::sicd::ImageData::KDNode;
+    using KDNode = six::sicd::KDNode;
 
     const KDNode node0{ {0.0, 0.0}, {static_cast<uint8_t>(0), static_cast<uint8_t>(0)} };
     const KDNode node1{ {1.0, 1.0},  {static_cast<uint8_t>(1), static_cast<uint8_t>(1)} };
@@ -544,7 +544,7 @@ TEST_CASE(test_KDTree)
     const six::sicd::KDTree tree(std::move(nodes));
     const auto nearest_neighbor_f = [&tree](const std::complex<float>& v)
     {
-        auto result = tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v });
+        auto result = tree.nearest_neighbor(KDNode{ v });
         return result.amp_and_value;
     };
 
@@ -599,7 +599,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     struct Pairs final
     {
         std::complex<float> floating;
-        six::sicd::ImageData::AMP8I_PHS8I_t integral;
+        AMP8I_PHS8I_t integral;
     };
     std::vector<Pairs> candidates;
     for(int i = 0; i < 256; i++) {

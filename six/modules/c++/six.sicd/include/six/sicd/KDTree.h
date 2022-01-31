@@ -37,7 +37,7 @@ namespace six
             struct Impl;
             std::unique_ptr<Impl> pImpl;
         public:
-            using node_t = ImageData::KDNode;
+            using node_t = KDNode;
 
             KDTree(std::vector<node_t>&&);
             ~KDTree();
