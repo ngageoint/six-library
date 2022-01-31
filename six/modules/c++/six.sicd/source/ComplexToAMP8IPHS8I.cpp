@@ -1,6 +1,10 @@
+#include "six/sicd/ComplexToAMP8IPHS8I.h"
+
+#include <math.h>
+
 #include <cassert>
 
-#include <six/sicd/ComplexToAMP8IPHS8I.h>
+#include <gsl/gsl.h>
 #include <six/sicd/Utilities.h>
 #include <math/Utilities.h>
 
@@ -13,9 +17,9 @@ ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTa
     for (uint16_t i = 0; i <= UINT8_MAX; i++) {
         // AmpPhase -> Complex
         ImageData::AMP8I_PHS8I_t v;
-        v.first = i;
-        v.second = i;
-        auto complex = Utilities::from_AMP8I_PHS8I(v.first, v.second, pAmplitudeTable);
+        v.first = gsl::narrow<uint8_t>(i);
+        v.second = v.first;
+        const auto complex = Utilities::from_AMP8I_PHS8I(v.first, v.second, pAmplitudeTable);
         magnitudes[i] = {
                 std::abs(complex)
         };
@@ -32,9 +36,9 @@ ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTa
     assert(p0 == 0);
     assert(p1 > p0);
     phase_delta = p1 - p0;
-    for(int i = 0; i <= UINT8_MAX; i++) {
+    for(size_t i = 0; i <= UINT8_MAX; i++) {
         double y, x;
-        math::SinCos(p0 + i * phase_delta, y, x);
+        math::SinCos(p0 + gsl::narrow_cast<double>(i) * phase_delta, y, x);
         phase_directions[i] = { x, y };
     }
 }
@@ -69,9 +73,9 @@ ImageData::AMP8I_PHS8I_t ComplexToAMP8IPHS8I::nearest_neighbor(const std::comple
     // But it's not the magnitude of the input complex value - it's the projection of
     // the complex value onto the ray of candidate magnitudes at the selected phase.
     // I.e. dot product.
-    std::complex<double> direction = phase_directions[ans.second];
-    double projection = direction.real() * v.real() + direction.imag() * v.imag();
-    assert(std::abs(projection - std::abs(v)) < 1e-5);
+    const std::complex<double> direction = phase_directions[ans.second];
+    const double projection = direction.real() * v.real() + direction.imag() * v.imag();
+    //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
     ans.first = nearest(magnitudes.begin(), magnitudes.end(), projection);
     return ans;
 }

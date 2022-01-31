@@ -620,7 +620,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     // Run an edge case that's very close to a phase of 2PI.
     // The phase should have wrapped back around to 0.
     std::complex<float> problem {
-        1, -1e-4
+        1.0f, -1e-4f
     };
     TEST_ASSERT_EQ(item.nearest_neighbor(problem).second, 0);
 
@@ -632,9 +632,9 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     double max_amplitude = amp.index(amp.numEntries - 1) + kExpansion;
     std::uniform_real_distribution<double> dist(min_amplitude, max_amplitude);
     std::default_random_engine eng(654987);  // ... fixed seed means deterministic tests...
-    size_t bad_first = 0;
-    size_t bad_second = 0;
-    double worst_error = 0;
+    //size_t bad_first = 0;
+    //size_t bad_second = 0;
+    //double worst_error = 0;
     for(size_t k = 0; k < kTests; k++) {
         double x = dist(eng);
         double y = dist(eng);
