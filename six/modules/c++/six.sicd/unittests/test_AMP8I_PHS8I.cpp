@@ -588,14 +588,16 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
 {
     // Set up a converter that has a fake amplitude table.
     six::AmplitudeTable amp;
-    for(size_t i = 0; i < 256; i++) {
+    for(size_t i = 0; i < 256; i++)
+    {
         amp.index(i) = static_cast<double>(i) + 10.0;
     }
-    six::sicd::ComplexToAMP8IPHS8I item(&amp);
+    six::sicd::ComplexToAMP8IPHS8I item(amp);
 
     // Generate the full 256x256 matrix of possible AMP8I_PHS8I values.
-    struct Pairs {
-        std::complex<double> floating;
+    struct Pairs final
+    {
+        std::complex<float> floating;
         six::sicd::ImageData::AMP8I_PHS8I_t integral;
     };
     std::vector<Pairs> candidates;
@@ -635,20 +637,23 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     //size_t bad_first = 0;
     //size_t bad_second = 0;
     //double worst_error = 0;
-    for(size_t k = 0; k < kTests; k++) {
+    for(size_t k = 0; k < kTests; k++)
+    {
         double x = dist(eng);
         double y = dist(eng);
 
         // Calculate the nearest neighbor quickly.
-        const std::complex<double> input_dbl(x, y);
+        const std::complex<float> input_dbl(x, y);
         const auto test_integral = item.nearest_neighbor(input_dbl);
 
         // Calculate the nearest neighbor via exhaustive calculation.
         double min_distance = std::abs(candidates[0].floating - input_dbl);
         auto best = candidates[0];
-        for(auto& i : candidates) {
-            double e = std::abs(i.floating - input_dbl);
-            if(e < min_distance) {
+        for(const auto& i : candidates)
+        {
+            const auto e = std::abs(i.floating - input_dbl);
+            if(e < min_distance)
+            {
                 min_distance = e;
                 best = i;
             }
