@@ -592,7 +592,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     {
         amp.index(i) = static_cast<double>(i) + 10.0;
     }
-    six::sicd::ComplexToAMP8IPHS8I item(amp);
+    six::sicd::details::ComplexToAMP8IPHS8I item(&amp);
 
     // Generate the full 256x256 matrix of possible AMP8I_PHS8I values.
     struct Pairs final

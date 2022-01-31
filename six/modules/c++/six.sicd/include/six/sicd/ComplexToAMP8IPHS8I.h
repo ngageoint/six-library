@@ -34,20 +34,18 @@ namespace six
 {
 namespace sicd
 {
+namespace details
+{
 /*!
  * \brief A utility that's used to convert complex values into 8-bit amplitude and phase values.
  */
-class ComplexToAMP8IPHS8I final
+struct ComplexToAMP8IPHS8I final
 {
-    explicit ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable);
-
-public:
     /*!
      * Create a lookup structure that converts from complex to amplitude and phase.
      * @param pAmplitudeTable optional amplitude table.
      */
-    explicit ComplexToAMP8IPHS8I();
-    explicit ComplexToAMP8IPHS8I(const six::AmplitudeTable&);
+    explicit ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable = nullptr);
 
     /*!
      * Get the nearest amplitude and phase value given a complex value
@@ -64,6 +62,7 @@ private:
     //! Unit vector rays that represent each direction that phase can point.
     std::array<std::complex<long double>, UINT8_MAX + 1> phase_directions;
 };
+}
 }
 }
 #endif // SIX_six_sicd_ComplexToAMP8IPHS8I_h_INCLUDED_

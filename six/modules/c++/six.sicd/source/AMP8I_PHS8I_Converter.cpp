@@ -146,17 +146,17 @@ void AMP8I_PHS8I_Converter::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inpu
     }
 }
 
-static const ComplexToAMP8IPHS8I* make_ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<ComplexToAMP8IPHS8I>& pTree)
+static const six::sicd::details::ComplexToAMP8IPHS8I* make_ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I>& pTree)
 {
     if (pAmplitudeTable == nullptr)
     {
         // this won't change, so OK to cache
-        static const ComplexToAMP8IPHS8I tree{};
+        static const six::sicd::details::ComplexToAMP8IPHS8I tree{};
         return &tree;
     }
     else
     {
-        pTree = std::make_unique<ComplexToAMP8IPHS8I>(*pAmplitudeTable);
+        pTree = std::make_unique<six::sicd::details::ComplexToAMP8IPHS8I>(pAmplitudeTable);
         return pTree.get();
     }
 }
@@ -165,7 +165,7 @@ void AMP8I_PHS8I_Converter::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std
     ptrdiff_t cutoff_) const
 {
     // make a structure to quickly find the nearest neighbor
-    std::unique_ptr<ComplexToAMP8IPHS8I> pTree; // not-cached, non-NULL amplitudeTable
+    std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pTree; // not-cached, non-NULL amplitudeTable
     const auto& tree = *(make_ComplexToAMP8IPHS8I(amplitudeTable, pTree));
     const auto nearest_neighbor_f = [&](const std::complex<float>& v)
     {

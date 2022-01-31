@@ -29,9 +29,6 @@
 #include <six/sicd/Utilities.h>
 #include <math/Utilities.h>
 
-namespace six {
-namespace sicd {
-
 /*!
     * Get the phase of a complex value.
     * @param v complex value
@@ -50,9 +47,9 @@ static std::array<long double, UINT8_MAX + 1> make_magnitudes(const six::Amplitu
     for (uint16_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
     {
         // AmpPhase -> Complex
-        ImageData::AMP8I_PHS8I_t v;
+        six::sicd::ImageData::AMP8I_PHS8I_t v;
         v.first = v.second = gsl::narrow<uint8_t>(i);
-        const auto complex = Utilities::from_AMP8I_PHS8I(v.first, v.second, pAmplitudeTable);
+        const auto complex = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, pAmplitudeTable);
         retval[i] = std::abs(complex);
     }
     return retval;
@@ -80,7 +77,7 @@ static std::array<long double, UINT8_MAX + 1> get_magnitudes(const six::Amplitud
     return retval;
 }
 
-ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
+six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
 {
     magnitudes = get_magnitudes(pAmplitudeTable);
 
@@ -96,8 +93,6 @@ ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTa
         phase_directions[i] = { x, y };
     }
 }
-ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable& amplitudeTable) : ComplexToAMP8IPHS8I(&amplitudeTable) {}
-ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I() : ComplexToAMP8IPHS8I(nullptr /*pAmplitudeTable*/) {}
 
 /*!
  * Find the nearest element given an iterator range.
@@ -120,7 +115,7 @@ static uint8_t nearest(const TIter& begin, const TIter& end, long double value)
     return gsl::narrow<uint8_t>(distance);
 }
 
-ImageData::AMP8I_PHS8I_t ComplexToAMP8IPHS8I::nearest_neighbor(const std::complex<float> &v) const
+six::sicd::ImageData::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const std::complex<float> &v) const
 {
     ImageData::AMP8I_PHS8I_t retval;
 
@@ -138,6 +133,4 @@ ImageData::AMP8I_PHS8I_t ComplexToAMP8IPHS8I::nearest_neighbor(const std::comple
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
     retval.first = nearest(magnitudes.begin(), magnitudes.end(), projection);
     return retval;
-}
-}
 }
