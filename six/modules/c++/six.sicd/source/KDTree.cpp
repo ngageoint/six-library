@@ -439,13 +439,59 @@ namespace six
             KDTree::KDTree(KDTree&&) noexcept = default;
             KDTree& KDTree::operator=(KDTree&&) noexcept = default;
 
-            KDTree::node_t KDTree::nearest_neighbor(const node_t& point) const
+            KDTree::node_t KDTree::nearest_neighbor_(const node_t& point) const
             {
                 std::vector<node_t> result;
                 pImpl->tree.k_nearest_neighbors(point, 1, result);
                 assert(result.size() == 1);
                 return result[0];
             }
+            AMP8I_PHS8I_t KDTree::nearest_neighbor(const std::complex<float>& v) const
+            {
+                return nearest_neighbor_(six::sicd::details::KDNode{ v }).amp_and_value;
+            }
         }
+    }
+}
+
+//-----------------------------------------------------------------------------------------------
+#include "six/sicd//Utilities.h"
+
+using KDNode_t = six::sicd::details::KDNode;
+std::vector<KDNode_t> six::sicd::details::KDTree::make_nodes(const six::AmplitudeTable* pAmplitudeTable)
+{
+    // For all possible amp/phase values (there are "only" 256*256), get and save the
+    // complex<float> value.
+    //
+    // Be careful with indexing so that we don't wrap-around in the loops.
+    std::vector<KDNode_t> retval;
+    for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
+    {
+        KDNode_t v;
+        v.amp_and_value.first = gsl::narrow<uint8_t>(input_amplitude);
+
+        for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
+        {
+            v.amp_and_value.second = gsl::narrow<uint8_t>(input_value);
+            v.result = six::sicd::Utilities::from_AMP8I_PHS8I(v.amp_and_value.first, v.amp_and_value.second, pAmplitudeTable);
+            retval.push_back(v);
+        }
+    }
+    return retval;
+}
+
+const six::sicd::details::KDTree* six::sicd::details::KDTree::make(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<KDTree>& pTree)
+{
+    // create all of of the possible KDNodes values
+    if (pAmplitudeTable == nullptr)
+    {
+        // this won't change, so OK to cache
+        static const KDTree tree(make_nodes(nullptr));
+        return &tree;
+    }
+    else
+    {
+        pTree.reset(new KDTree(make_nodes(pAmplitudeTable)));
+        return pTree.get();
     }
 }

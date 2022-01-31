@@ -544,8 +544,7 @@ TEST_CASE(test_KDTree)
     const six::sicd::details::KDTree tree(std::move(nodes));
     const auto nearest_neighbor_f = [&tree](const std::complex<float>& v)
     {
-        auto result = tree.nearest_neighbor(KDNode_t{ v });
-        return result.amp_and_value;
+        return tree.nearest_neighbor(v);
     };
 
     test_near_point(node0.result, node0.amp_and_value, nearest_neighbor_f);

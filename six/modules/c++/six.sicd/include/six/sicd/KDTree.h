@@ -95,8 +95,12 @@ namespace six
                 KDTree(KDTree&&) noexcept;
                 KDTree& operator=(KDTree&&) noexcept;
 
+                static const KDTree* make(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<KDTree>&);
+                static std::vector<node_t> make_nodes(const six::AmplitudeTable* pAmplitudeTable);
+
                 // https://en.wikipedia.org/wiki/K-d_tree
-                node_t nearest_neighbor(const node_t& point) const;
+                node_t nearest_neighbor_(const node_t& point) const;
+                AMP8I_PHS8I_t nearest_neighbor(const std::complex<float>& v) const;
             };
         }
     }
