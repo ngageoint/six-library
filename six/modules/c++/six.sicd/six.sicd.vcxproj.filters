@@ -135,6 +135,9 @@
     <ClInclude Include="include\six\sicd\ComplexToAMP8IPHS8I.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\six\sicd\ComplexToAMP8IPHS8I_KDTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
