@@ -253,7 +253,7 @@ static const ComplexToAMP8IPHS8I* make_ComplexToAMP8IPHS8I(const six::AmplitudeT
     }
     else
     {
-        pTree = std::make_unique<ComplexToAMP8IPHS8I>(pAmplitudeTable);
+        pTree = std::make_unique<ComplexToAMP8IPHS8I>(*pAmplitudeTable);
         return pTree.get();
     }
 }
