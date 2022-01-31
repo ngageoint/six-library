@@ -541,7 +541,7 @@ TEST_CASE(test_KDTree)
     const KDNode node4{ {-1.0, -1.0},  {static_cast<uint8_t>(4), static_cast<uint8_t>(4)} };
 
     std::vector<KDNode> nodes{ node0, node1, node2, node3, node4 };
-    const six::sicd::KDTree tree(std::move(nodes));
+    const six::sicd::details::KDTree tree(std::move(nodes));
     const auto nearest_neighbor_f = [&tree](const std::complex<float>& v)
     {
         auto result = tree.nearest_neighbor(KDNode{ v });

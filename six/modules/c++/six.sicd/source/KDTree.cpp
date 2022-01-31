@@ -72,7 +72,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 namespace KDTree
 {
-    using node_t = six::sicd::KDTree::node_t;
+    using node_t = six::sicd::details::KDTree::node_t;
     inline node_t::value_type& index(node_t& p, size_t i) noexcept
     {
         return p.index(i);
@@ -420,29 +420,32 @@ namespace six
 {
     namespace sicd
     {
-        struct KDTree::Impl final
+        namespace details
         {
-            ::KDTree::Tree<node_t> tree;
-            Impl(std::vector<node_t>&& nodes) : tree(std::move(nodes)) { }
-            ~Impl() = default;
-            Impl(const Impl&) = delete;
-            Impl& operator=(const Impl&) = delete;
-            Impl(Impl&&) = delete;
-            Impl& operator=(Impl&&) = delete;
-        };
+            struct KDTree::Impl final
+            {
+                ::KDTree::Tree<node_t> tree;
+                Impl(std::vector<node_t>&& nodes) : tree(std::move(nodes)) { }
+                ~Impl() = default;
+                Impl(const Impl&) = delete;
+                Impl& operator=(const Impl&) = delete;
+                Impl(Impl&&) = delete;
+                Impl& operator=(Impl&&) = delete;
+            };
 
-        KDTree::KDTree(std::vector<node_t>&& nodes)
-            : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
-        KDTree::~KDTree() = default;
-        KDTree::KDTree(KDTree&&) noexcept = default;
-        KDTree& KDTree::operator=(KDTree&&) noexcept = default;
-        
-        KDTree::node_t KDTree::nearest_neighbor(const node_t& point) const
-        {
-            std::vector<node_t> result;
-            pImpl->tree.k_nearest_neighbors(point, 1, result);
-            assert(result.size() == 1);
-            return result[0];
+            KDTree::KDTree(std::vector<node_t>&& nodes)
+                : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
+            KDTree::~KDTree() = default;
+            KDTree::KDTree(KDTree&&) noexcept = default;
+            KDTree& KDTree::operator=(KDTree&&) noexcept = default;
+
+            KDTree::node_t KDTree::nearest_neighbor(const node_t& point) const
+            {
+                std::vector<node_t> result;
+                pImpl->tree.k_nearest_neighbors(point, 1, result);
+                assert(result.size() == 1);
+                return result[0];
+            }
         }
     }
 }
