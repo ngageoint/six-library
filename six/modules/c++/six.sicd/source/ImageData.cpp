@@ -243,27 +243,9 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
     }
 }
 
-static const six::sicd::details::ComplexToAMP8IPHS8I* make_ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I>& pTree)
+static void to_AMP8I_PHS8I_(std::span<const ImageData::cx_float> inputs, std::span<ImageData::AMP8I_PHS8I_t> results,
+    const six::sicd::details::ComplexToAMP8IPHS8I& tree, ptrdiff_t cutoff_)
 {
-    if (pAmplitudeTable == nullptr)
-    {
-        // this won't change, so OK to cache
-        static const six::sicd::details::ComplexToAMP8IPHS8I tree{};
-        return &tree;
-    }
-    else
-    {
-        pTree = std::make_unique<six::sicd::details::ComplexToAMP8IPHS8I>(pAmplitudeTable);
-        return pTree.get();
-    }
-}
-
-void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
-    ptrdiff_t cutoff_) const
-{
-    // make a structure to quickly find the nearest neighbor
-    std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pTree; // not-cached, non-NULL amplitudeTable
-    const auto& tree = *(make_ComplexToAMP8IPHS8I(amplitudeTable.get(), pTree));
     const auto nearest_neighbor_f = [&](const std::complex<float>& v)
     {
         return tree.nearest_neighbor(v);
@@ -284,4 +266,12 @@ void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I
         const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
         (void) mt::transform_async(begin, end, out, nearest_neighbor_f, cutoff, std::launch::async);
     }
+}
+void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
+    ptrdiff_t cutoff) const
+{
+    // make a structure to quickly find the nearest neighbor
+    std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pTree; // not-cached, non-NULL amplitudeTable
+    const auto& tree = *(six::sicd::details::ComplexToAMP8IPHS8I::make(amplitudeTable.get(), pTree));
+    to_AMP8I_PHS8I_(inputs, results, tree, cutoff);
 }

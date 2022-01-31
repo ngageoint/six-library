@@ -27,6 +27,7 @@
 
 #include <array>
 #include <complex>
+#include <memory>
 
 #include <six/sicd/ImageData.h>
 
@@ -39,13 +40,15 @@ namespace details
 /*!
  * \brief A utility that's used to convert complex values into 8-bit amplitude and phase values.
  */
-struct ComplexToAMP8IPHS8I final
+class ComplexToAMP8IPHS8I final
 {
     /*!
      * Create a lookup structure that converts from complex to amplitude and phase.
      * @param pAmplitudeTable optional amplitude table.
      */
     explicit ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable = nullptr);
+public:
+    static const ComplexToAMP8IPHS8I* make(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<ComplexToAMP8IPHS8I>&);
 
     /*!
      * Get the nearest amplitude and phase value given a complex value

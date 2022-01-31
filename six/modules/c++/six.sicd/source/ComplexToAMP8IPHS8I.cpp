@@ -24,6 +24,7 @@
 #include <math.h>
 
 #include <cassert>
+#include <std/memory>
 
 #include <gsl/gsl.h>
 #include <six/sicd/Utilities.h>
@@ -133,4 +134,19 @@ six::sicd::ImageData::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nea
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
     retval.first = nearest(magnitudes.begin(), magnitudes.end(), projection);
     return retval;
+}
+
+const six::sicd::details::ComplexToAMP8IPHS8I* six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<ComplexToAMP8IPHS8I>& pTree)
+{
+    if (pAmplitudeTable == nullptr)
+    {
+        // this won't change, so OK to cache
+        static const six::sicd::details::ComplexToAMP8IPHS8I tree{};
+        return &tree;
+    }
+    else
+    {
+        pTree.reset(new six::sicd::details::ComplexToAMP8IPHS8I(pAmplitudeTable));
+        return pTree.get();
+    }
 }

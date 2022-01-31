@@ -591,8 +591,9 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     for(size_t i = 0; i < 256; i++)
     {
         amp.index(i) = static_cast<double>(i) + 10.0;
-    }
-    six::sicd::details::ComplexToAMP8IPHS8I item(&amp);
+    }    
+    std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pTree; // not-cached, non-NULL amplitudeTable
+    const auto& item = *(six::sicd::details::ComplexToAMP8IPHS8I::make(&amp, pTree));
 
     // Generate the full 256x256 matrix of possible AMP8I_PHS8I values.
     struct Pairs final
