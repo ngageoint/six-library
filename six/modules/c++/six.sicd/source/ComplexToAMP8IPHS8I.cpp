@@ -44,33 +44,52 @@ inline double GetPhase(const std::complex<double>& v)
     return phase;
 }
 
-ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
+static std::array<long double, UINT8_MAX + 1> make_magnitudes(const six::AmplitudeTable* pAmplitudeTable)
 {
-    // Be careful with indexing so that we don't wrap-around in the loops.
-    for (uint16_t i = 0; i <= UINT8_MAX; i++)
+    std::array<long double, UINT8_MAX + 1> retval{};
+    for (uint16_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
     {
         // AmpPhase -> Complex
         ImageData::AMP8I_PHS8I_t v;
-        v.first = gsl::narrow<uint8_t>(i);
-        v.second = v.first;
+        v.first = v.second = gsl::narrow<uint8_t>(i);
         const auto complex = Utilities::from_AMP8I_PHS8I(v.first, v.second, pAmplitudeTable);
-        magnitudes[i] = {
-                std::abs(complex)
-        };
+        retval[i] = std::abs(complex);
+    }
+    return retval;
+}
+
+static std::array<long double, UINT8_MAX + 1> get_magnitudes(const six::AmplitudeTable* pAmplitudeTable)
+{
+    std::array<long double, UINT8_MAX + 1> retval{};
+    if (pAmplitudeTable == nullptr)
+    {
+        static auto magnitudes = make_magnitudes(nullptr); // OK to cache, won't change
+        retval = magnitudes;
+    }
+    else
+    {
+        retval = make_magnitudes(pAmplitudeTable);
     }
 
     // I don't know if we can guarantee that the amplitude table is non-decreasing.
     // Check to verify property at runtime.
-    if (!std::is_sorted(magnitudes.begin(), magnitudes.end())) {
+    if (!std::is_sorted(retval.begin(), retval.end()))
+    {
         throw std::runtime_error("magnitudes must be sorted");
     }
+    return retval;
+}
+
+ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
+{
+    magnitudes = get_magnitudes(pAmplitudeTable);
 
     const auto p0 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 0, pAmplitudeTable));
     const auto p1 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 1, pAmplitudeTable));
     assert(p0 == 0);
     assert(p1 > p0);
     phase_delta = p1 - p0;
-    for(size_t i = 0; i <= UINT8_MAX; i++)
+    for(size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
     {
         long double y, x;
         math::SinCos(p0 + gsl::narrow_cast<long double>(i) * phase_delta, y, x);
@@ -91,33 +110,34 @@ ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I() : ComplexToAMP8IPHS8I(nullptr /*pAmpl
 template<typename TIter>
 static uint8_t nearest(const TIter& begin, const TIter& end, long double value)
 {
-    auto it = std::lower_bound(begin, end, value);
+    const auto it = std::lower_bound(begin, end, value);
     if(it == begin) return 0;
-    auto prev_it = std::prev(it);
-    auto nearest = (it == end || value - *prev_it <= *it - value) ? prev_it : it;
-    assert(std::distance(begin, nearest) <= std::numeric_limits<uint8_t>::max());
-    return static_cast<uint8_t>(std::distance(begin, nearest));
+
+    const auto prev_it = std::prev(it);
+    const auto nearest = (it == end || value - *prev_it <= *it - value) ? prev_it : it;
+    const auto distance = std::distance(begin, nearest);
+    assert(distance <= std::numeric_limits<uint8_t>::max());
+    return gsl::narrow<uint8_t>(distance);
 }
 
 ImageData::AMP8I_PHS8I_t ComplexToAMP8IPHS8I::nearest_neighbor(const std::complex<float> &v) const
 {
-    ImageData::AMP8I_PHS8I_t ans;
+    ImageData::AMP8I_PHS8I_t retval;
 
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
-    ans.second = gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
+    retval.second = gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
 
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of
     // the complex value onto the ray of candidate magnitudes at the selected phase.
-    // I.e. dot product.
-    auto&& direction = phase_directions[ans.second];
-    const auto projection = direction.real() * gsl::narrow_cast<long double>(v.real()) + direction.imag() * gsl::narrow_cast<long double>(v.imag());
+    // i.e. dot product.
+    auto&& phase_direction = phase_directions[retval.second];
+    const auto projection = phase_direction.real() * v.real() + phase_direction.imag() * v.imag();
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
-    ans.first = nearest(magnitudes.begin(), magnitudes.end(), projection);
-    return ans;
+    retval.first = nearest(magnitudes.begin(), magnitudes.end(), projection);
+    return retval;
 }
-
 }
 }
