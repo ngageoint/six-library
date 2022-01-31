@@ -101,7 +101,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
-    <ClInclude Include="include\six\sicd\AMP8I_PHS8I_Converter.h" />
     <ClInclude Include="include\six\sicd\Antenna.h" />
     <ClInclude Include="include\six\sicd\AreaPlaneUtility.h" />
     <ClInclude Include="include\six\sicd\ComplexClassification.h" />
@@ -148,7 +147,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="source\AMP8I_PHS8I_Converter.cpp" />
     <ClCompile Include="source\Antenna.cpp" />
     <ClCompile Include="source\AreaPlaneUtility.cpp" />
     <ClCompile Include="source\ComplexData.cpp" />
