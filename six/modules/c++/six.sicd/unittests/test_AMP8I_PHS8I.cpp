@@ -588,23 +588,19 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
 {
     // Set up a converter that has a fake amplitude table.
     six::AmplitudeTable amp;
-    for(size_t i = 0; i < 256; i++)
-    {
+    for(size_t i = 0; i < 256; i++) {
         amp.index(i) = static_cast<double>(i) + 10.0;
     }
-    six::sicd::ComplexToAMP8IPHS8I item(amp);
+    six::sicd::ComplexToAMP8IPHS8I item(&amp);
 
     // Generate the full 256x256 matrix of possible AMP8I_PHS8I values.
-    struct Pairs final
-    {
+    struct Pairs {
         std::complex<float> floating;
         six::sicd::ImageData::AMP8I_PHS8I_t integral;
     };
     std::vector<Pairs> candidates;
-    for(int i = 0; i < 256; i++)
-    {
-        for(int j = 0; j < 256; j++)
-        {
+    for(int i = 0; i < 256; i++) {
+        for(int j = 0; j < 256; j++) {
             Pairs p;
             p.integral = {i, j};
             p.floating = six::sicd::Utilities::from_AMP8I_PHS8I(i, j, &amp);
@@ -614,8 +610,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
 
     // Loop through each item in our matrix and verify that it's mapped correctly.
     // These are simple cases that don't necessarily exercise the nearest neighbor property.
-    for(const auto& i : candidates)
-    {
+    for(auto& i : candidates) {
         auto truth = i.integral;
         auto test = item.nearest_neighbor(std::complex<float>(i.floating.real(), i.floating.imag()));
         TEST_ASSERT_EQ(truth.first, test.first);
@@ -629,10 +624,10 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
 
     // Verify the nearest neighbor property via random search through the possible space.
     // For each sampled point we check that we found the true nearest neighbor.
-    constexpr size_t kTests = 10000;
-    constexpr double kExpansion = 10.0;
-    const double min_amplitude = amp.index(0) - kExpansion;
-    const double max_amplitude = amp.index(amp.numEntries - 1) + kExpansion;
+    static const size_t kTests = 10000;
+    static const double kExpansion = 10.0;
+    double min_amplitude = amp.index(0) - kExpansion;
+    double max_amplitude = amp.index(amp.numEntries - 1) + kExpansion;
     std::uniform_real_distribution<double> dist(min_amplitude, max_amplitude);
     std::default_random_engine eng(654987);  // ... fixed seed means deterministic tests...
     //size_t bad_first = 0;
@@ -651,7 +646,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
         auto best = candidates[0];
         for(const auto& i : candidates)
         {
-            const auto e = std::abs(i.floating - input_dbl);
+            double e = std::abs(i.floating - input_dbl);
             if(e < min_distance)
             {
                 min_distance = e;

@@ -45,11 +45,10 @@ namespace sicd {
     return phase;
 }
 
-ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
-{
+ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable) {
+
     // Be careful with indexing so that we don't wrap-around in the loops.
-    for (uint16_t i = 0; i <= UINT8_MAX; i++)
-    {
+    for (uint16_t i = 0; i <= UINT8_MAX; i++) {
         // AmpPhase -> Complex
         ImageData::AMP8I_PHS8I_t v;
         v.first = gsl::narrow<uint8_t>(i);
@@ -76,12 +75,6 @@ ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTa
         math::SinCos(angle.value(), y, x);
         phase_directions[i] = { x, y };
     }
-}
-ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I() : ComplexToAMP8IPHS8I(nullptr /*pAmplitudeTable*/)
-{
-}
-ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable& amplitudeTable) : ComplexToAMP8IPHS8I(&amplitudeTable)
-{
 }
 
 /*!
