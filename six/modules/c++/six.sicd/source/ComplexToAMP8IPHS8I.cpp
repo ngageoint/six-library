@@ -42,9 +42,9 @@ inline double GetPhase(const std::complex<double>& v)
     return phase;
 }
 
-static std::array<long double, UINT8_MAX + 1> make_magnitudes(const six::AmplitudeTable* pAmplitudeTable)
+static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmplitudeTable)
 {
-    std::array<long double, UINT8_MAX + 1> retval{};
+    std::vector<long double> retval(UINT8_MAX + 1);
     for (uint16_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
     {
         // AmpPhase -> Complex
@@ -52,21 +52,6 @@ static std::array<long double, UINT8_MAX + 1> make_magnitudes(const six::Amplitu
         v.first = v.second = gsl::narrow<uint8_t>(i);
         const auto complex = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, pAmplitudeTable);
         retval[i] = std::abs(complex);
-    }
-    return retval;
-}
-
-static std::array<long double, UINT8_MAX + 1> get_magnitudes(const six::AmplitudeTable* pAmplitudeTable)
-{
-    std::array<long double, UINT8_MAX + 1> retval{};
-    if (pAmplitudeTable == nullptr)
-    {
-        static auto magnitudes = make_magnitudes(nullptr); // OK to cache, won't change
-        retval = magnitudes;
-    }
-    else
-    {
-        retval = make_magnitudes(pAmplitudeTable);
     }
 
     // I don't know if we can guarantee that the amplitude table is non-decreasing.
@@ -77,11 +62,22 @@ static std::array<long double, UINT8_MAX + 1> get_magnitudes(const six::Amplitud
     }
     return retval;
 }
+static std::vector<long double> get_magnitudes(const six::AmplitudeTable* pAmplitudeTable)
+{
+    if (pAmplitudeTable == nullptr)
+    {
+        static auto magnitudes = make_magnitudes(nullptr); // OK to cache, won't change
+        return magnitudes; // TODO: avoid copy
+    }
+    else
+    {
+        return make_magnitudes(pAmplitudeTable);
+    }
+}
 
 six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
+    : magnitudes(get_magnitudes(pAmplitudeTable))
 {
-    magnitudes = get_magnitudes(pAmplitudeTable);
-
     const auto p0 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 0, pAmplitudeTable));
     const auto p1 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 1, pAmplitudeTable));
     assert(p0 == 0);

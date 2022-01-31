@@ -28,6 +28,7 @@
 #include <array>
 #include <complex>
 #include <memory>
+#include <vector>
 
 #include <six/sicd/ImageData.h>
 
@@ -50,6 +51,12 @@ class ComplexToAMP8IPHS8I final
 public:
     static const ComplexToAMP8IPHS8I* make(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<ComplexToAMP8IPHS8I>&);
 
+    ~ComplexToAMP8IPHS8I() = default;
+    ComplexToAMP8IPHS8I(const ComplexToAMP8IPHS8I&) = delete;
+    ComplexToAMP8IPHS8I& operator=(const ComplexToAMP8IPHS8I&) = delete;
+    ComplexToAMP8IPHS8I(ComplexToAMP8IPHS8I&&) = delete;
+    ComplexToAMP8IPHS8I& operator=(ComplexToAMP8IPHS8I&&) = delete;
+
     /*!
      * Get the nearest amplitude and phase value given a complex value
      * @param v complex value to query with
@@ -59,7 +66,7 @@ public:
 
 private:
     //! The sorted set of possible magnitudes order from small to large.
-    std::array<long double, UINT8_MAX + 1> magnitudes;
+    const std::vector<long double> magnitudes;
     //! The difference in phase angle between two UINT phase values.
     long double phase_delta;
     //! Unit vector rays that represent each direction that phase can point.
