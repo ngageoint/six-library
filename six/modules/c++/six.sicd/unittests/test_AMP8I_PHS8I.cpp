@@ -664,7 +664,6 @@ TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(test_readFromNITF_8_bit_Amp_Phs_Examples);
     TEST_CHECK(test_read_sicd_8_bit_Amp_Phs_Examples);
     TEST_CHECK(test_create_sicd_from_mem_8i);
-    TEST_CHECK(test_nearest_neighbor);
     TEST_CHECK(test_verify_phase_uint8_ordering);
     TEST_CHECK(test_ComplexToAMP8IPHS8I);
     )
