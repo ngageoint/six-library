@@ -465,6 +465,7 @@ std::vector<KDNode_t> six::sicd::details::KDTree::make_nodes(const six::Amplitud
     //
     // Be careful with indexing so that we don't wrap-around in the loops.
     std::vector<KDNode_t> retval;
+    retval.reserve(UINT8_MAX * UINT8_MAX);
     for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
     {
         KDNode_t v;

@@ -35,9 +35,9 @@
     * @param v complex value
     * @return phase between [0, 2PI]
     */
-inline double GetPhase(const std::complex<double>& v)
+inline long double GetPhase(const std::complex<float>& v)
 {
-    double phase = std::arg(v);
+    long double phase = std::arg(v);
     if (phase < 0.0) phase += M_PI * 2.0; // Wrap from [0, 2PI]
     return phase;
 }
@@ -45,8 +45,9 @@ inline double GetPhase(const std::complex<double>& v)
 static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmplitudeTable)
 {
     std::vector<long double> retval(UINT8_MAX + 1);
-    for (uint16_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
+    for (size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
     {
+        static_assert(sizeof(size_t) > sizeof(uint8_t), "size_t can't hold UINT8_MAX!");
         // AmpPhase -> Complex
         six::sicd::AMP8I_PHS8I_t v;
         v.first = v.second = gsl::narrow<uint8_t>(i);
@@ -86,6 +87,7 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
     phase_delta = p1 - p0;
     for(size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
     {
+        static_assert(sizeof(size_t) > sizeof(uint8_t), "size_t can't hold UINT8_MAX!");
         long double y, x;
         math::SinCos(p0 + gsl::narrow_cast<long double>(i) * phase_delta, y, x);
         phase_directions[i] = { x, y };
