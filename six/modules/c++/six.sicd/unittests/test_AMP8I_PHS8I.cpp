@@ -290,8 +290,8 @@ TEST_CASE(read_8bit_ampphs_with_table)
     imageData.amplitudeTable.reset(std::make_unique< six::AmplitudeTable>(AmpTable));
     const auto actual = to_AMP8I_PHS8I(imageData, widebandData);
     const auto expected(sys::debug ? 
-        std::pair<uint64_t, uint64_t>(12647523, 16973148) : std::pair<uint64_t, uint64_t>(99912647523, 99916973148));
-    //TEST_ASSERT_EQ(actual.first, expected.first); // TODO
+        std::pair<uint64_t, uint64_t>(12647523, 16973148) : std::pair<uint64_t, uint64_t>(3044868397, 3394353166));
+    TEST_ASSERT_EQ(actual.first, expected.first); // TODO
     TEST_ASSERT_EQ(actual.second, expected.second);
 }
 TEST_CASE(read_8bit_ampphs_no_table)
@@ -309,7 +309,7 @@ TEST_CASE(read_8bit_ampphs_no_table)
     six::sicd::ImageData imageData;
     const auto actual = to_AMP8I_PHS8I(imageData, widebandData);
     const auto expected(sys::debug ?
-        std::pair<uint64_t, uint64_t>(12647654, 16973148) : std::pair<uint64_t, uint64_t>(99912647523, 99916973148));
+        std::pair<uint64_t, uint64_t>(12647654, 16973148) : std::pair<uint64_t, uint64_t>(3044873160, 3394353122));
     TEST_ASSERT_EQ(actual.first, expected.first);
     TEST_ASSERT_EQ(actual.second, expected.second);
 }
