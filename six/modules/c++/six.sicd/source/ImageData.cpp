@@ -251,12 +251,12 @@ void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I
     ptrdiff_t cutoff) const
 {
     // make the KDTree to quickly find the nearest neighbor
-    //std::unique_ptr<six::sicd::details::KDTree> pTree; // not-cached, non-NULL amplitudeTable
-    //const auto& tree = *(six::sicd::details::KDTree::make(amplitudeTable.get(), pTree));
+    std::unique_ptr<six::sicd::details::KDTree> pTree; // not-cached, non-NULL amplitudeTable
+    const auto& tree = *(six::sicd::details::KDTree::make(amplitudeTable.get(), pTree));
 
     // make a structure to quickly find the nearest neighbor
-    std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pConvert; // not-cached, non-NULL amplitudeTable
-    const auto& converter = *(six::sicd::details::ComplexToAMP8IPHS8I::make(amplitudeTable.get(), pConvert));
+    //std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pConvert; // not-cached, non-NULL amplitudeTable
+    //const auto& converter = *(six::sicd::details::ComplexToAMP8IPHS8I::make(amplitudeTable.get(), pConvert));
     
-    to_AMP8I_PHS8I_(inputs, results, converter, cutoff);
+    to_AMP8I_PHS8I_(inputs, results, tree, cutoff);
 }
