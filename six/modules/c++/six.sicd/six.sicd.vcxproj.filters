@@ -126,9 +126,6 @@
     <ClInclude Include="include\six\sicd\Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\six\sicd\KDTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\six\sicd\NITFReadComplexXMLControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -237,9 +234,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\Utilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\KDTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\NITFReadComplexXMLControl.cpp">

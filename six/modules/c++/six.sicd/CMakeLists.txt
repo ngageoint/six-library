@@ -23,7 +23,6 @@ coda_add_module(
         source/Grid.cpp
         source/ImageData.cpp
         source/ImageFormation.cpp
-        source/KDTree.cpp
         source/NITFReadComplexXMLControl.cpp
         source/PFA.cpp
         source/Position.cpp

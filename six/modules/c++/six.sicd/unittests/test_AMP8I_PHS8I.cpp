@@ -45,7 +45,6 @@
 #include <six/sicd/ComplexToAMP8IPHS8I.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/NITFReadComplexXMLControl.h>
-#include <six/sicd/KDTree.h>
 #include <six/sicd/Utilities.h>
 
 #include "../tests/TestUtilities.h"
@@ -290,8 +289,8 @@ TEST_CASE(read_8bit_ampphs_with_table)
     imageData.amplitudeTable.reset(std::make_unique< six::AmplitudeTable>(AmpTable));
     const auto actual = to_AMP8I_PHS8I(imageData, widebandData);
     const auto expected(sys::debug ? 
-        std::pair<uint64_t, uint64_t>(12647523, 16973148) : std::pair<uint64_t, uint64_t>(3044868397, 3394353166));
-    //TEST_ASSERT_EQ(actual.first, expected.first); // TODO
+        std::pair<uint64_t, uint64_t>(12647492, 16973148) : std::pair<uint64_t, uint64_t>(3044868397, 3394353166));
+    TEST_ASSERT_EQ(actual.first, expected.first);
     TEST_ASSERT_EQ(actual.second, expected.second);
 }
 TEST_CASE(read_8bit_ampphs_no_table)
@@ -554,69 +553,6 @@ TEST_CASE(test_create_sicd_from_mem_8i)
     test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
 
-namespace str
-{
-inline std::ostream & operator<<(std::ostream & os, const AMP8I_PHS8I_t & p)
-{
-    os << p.first << p.second;
-    return os;
-}
-}
-template<typename TNearestNeighbor>
-static void test_near_point(const std::complex<float>& p, const AMP8I_PHS8I_t& expected,
-    TNearestNeighbor nearest_neighbor_f)
-{
-    auto actual = nearest_neighbor_f(p);
-    TEST_ASSERT_EQ(expected, actual);
-
-    actual = nearest_neighbor_f(p + std::complex<float>(0.0f, 0.0f));
-    TEST_ASSERT_EQ(expected, actual);
-    actual = nearest_neighbor_f(p + std::complex<float>(0.1f, 0.0f));
-    TEST_ASSERT_EQ(expected, actual);
-    actual = nearest_neighbor_f(p + std::complex<float>(0.0f, 0.1f));
-    TEST_ASSERT_EQ(expected, actual);
-    actual = nearest_neighbor_f(p + std::complex<float>(0.1f, 0.1f));
-    TEST_ASSERT_EQ(expected, actual);
-
-    actual = nearest_neighbor_f(p - std::complex<float>(0.0f, 0.0f));
-    TEST_ASSERT_EQ(expected, actual);
-    actual = nearest_neighbor_f(p - std::complex<float>(0.1f, 0.0f));
-    TEST_ASSERT_EQ(expected, actual);
-    actual = nearest_neighbor_f(p - std::complex<float>(0.0f, 0.1f));
-    TEST_ASSERT_EQ(expected, actual);
-    actual = nearest_neighbor_f(p - std::complex<float>(0.1f, 0.1f));
-    TEST_ASSERT_EQ(expected, actual);
-}
-
-TEST_CASE(test_KDTree)
-{
-    using KDNode_t = six::sicd::details::KDNode;
-
-    const KDNode_t node0{ {0.0, 0.0}, {static_cast<uint8_t>(0), static_cast<uint8_t>(0)} };
-    const KDNode_t node1{ {1.0, 1.0},  {static_cast<uint8_t>(1), static_cast<uint8_t>(1)} };
-    const KDNode_t node2{ {1.0, -1.0},  {static_cast<uint8_t>(2), static_cast<uint8_t>(2)} };
-    const KDNode_t node3{ {-1.0, 1.0},  {static_cast<uint8_t>(3), static_cast<uint8_t>(3)} };
-    const KDNode_t node4{ {-1.0, -1.0},  {static_cast<uint8_t>(4), static_cast<uint8_t>(4)} };
-
-    std::vector<KDNode_t> nodes{ node0, node1, node2, node3, node4 };
-    const six::sicd::details::KDTree tree(std::move(nodes));
-    const auto nearest_neighbor_f = [&tree](const std::complex<float>& v)
-    {
-        return tree.nearest_neighbor(v);
-    };
-
-    test_near_point(node0.result, node0.amp_and_value, nearest_neighbor_f);
-    test_near_point(node1.result, node1.amp_and_value, nearest_neighbor_f);
-    test_near_point(node2.result, node2.amp_and_value, nearest_neighbor_f);
-    test_near_point(node3.result, node3.amp_and_value, nearest_neighbor_f);
-    test_near_point(node4.result, node4.amp_and_value, nearest_neighbor_f);
-
-    test_near_point({ 100.0f, 100.0f }, node1.amp_and_value, nearest_neighbor_f); // closest to {1.0, 1.0}
-    test_near_point({ 100.0f, -100.0f }, node2.amp_and_value, nearest_neighbor_f); // closest to {1.0, -1.0}
-    test_near_point({ -100.0f, 100.0f }, node3.amp_and_value, nearest_neighbor_f); // closest to {-1.0, 1.0}
-    test_near_point({ -100.0f, -100.0f }, node4.amp_and_value, nearest_neighbor_f); // closest to {-1.0, -1.0}
-}
-
 TEST_CASE(test_verify_phase_uint8_ordering)
 {
     // Verify that the uint8 phase values are ordered and evenly spaced from [0, 2PI).
@@ -728,7 +664,7 @@ TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(test_readFromNITF_8_bit_Amp_Phs_Examples);
     TEST_CHECK(test_read_sicd_8_bit_Amp_Phs_Examples);
     TEST_CHECK(test_create_sicd_from_mem_8i);
-    TEST_CHECK(test_KDTree);
+    TEST_CHECK(test_nearest_neighbor);
     TEST_CHECK(test_verify_phase_uint8_ordering);
     TEST_CHECK(test_ComplexToAMP8IPHS8I);
     )
