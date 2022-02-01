@@ -31,6 +31,7 @@
 #include <cmath>
 #include <random>
 #include <std/span>
+#include <numeric>
 
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
@@ -210,11 +211,20 @@ TEST_CASE(test_8bit_ampphs)
 }
 
 static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputPathname,
-    std::optional<six::AmplitudeTable>& amplitudeTable, std::unique_ptr<six::sicd::ComplexData>& pResultComplexData)
+    std::optional<six::AmplitudeTable>& amplitudeTable, std::unique_ptr<six::sicd::ComplexData>& pResultComplexData,
+    std::complex<long double> expected_sum)
 {
     auto result_ = six::sicd::Utilities::readSicd(inputPathname);
     auto retval = std::move(result_.widebandData);
     pResultComplexData = std::move(result_.pComplexData);
+
+    std::complex<long double> actual_sum;
+    for (const auto& cx : retval)
+    {
+        actual_sum += cx;
+    }
+    TEST_ASSERT_ALMOST_EQ(actual_sum.real(), expected_sum.real());
+    TEST_ASSERT_ALMOST_EQ(actual_sum.imag(), expected_sum.imag());
 
     auto& complexData = *pResultComplexData;
     TEST_ASSERT_EQ(six::PixelType::AMP8I_PHS8I, complexData.getPixelType());
@@ -241,13 +251,21 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const fs::path& inputP
     return retval;
 }
 
-static void to_AMP8I_PHS8I(const six::sicd::ImageData& imageData, const std::vector<std::complex<float>>& widebandData)
+static std::pair<uint64_t, uint64_t> to_AMP8I_PHS8I(const six::sicd::ImageData& imageData, const std::vector<std::complex<float>>& widebandData)
 {
     // image is far too big to call to_AMP8I_PHS8I() with DEBUG code
     const auto size = sys::debug ? widebandData.size() / 200 : widebandData.size();
-    std::span<const std::complex<float>> widebandData_(widebandData.data(), size);
+    const std::span<const std::complex<float>> widebandData_(widebandData.data(), size);
     std::vector<AMP8I_PHS8I_t> results(widebandData_.size());
     imageData.to_AMP8I_PHS8I(widebandData_, results, 0);
+
+    std::pair<uint64_t, uint64_t> retval(0, 0);
+    for (const auto& r : results)
+    {
+        retval.first += r.first;
+        retval.second += r.second;
+    }
+    return retval;
 }
 TEST_CASE(read_8bit_ampphs_with_table)
 {
@@ -257,20 +275,24 @@ TEST_CASE(read_8bit_ampphs_with_table)
 
     std::optional<six::AmplitudeTable> amplitudeTable;
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
-    const auto widebandData = read_8bit_ampphs(inputPathname, amplitudeTable, pComplexData);
+    const std::complex<long double> expected_sum(-193324027.52878466, -3688020.3755293526);
+    const auto widebandData = read_8bit_ampphs(inputPathname, amplitudeTable, pComplexData, expected_sum);
 
     TEST_ASSERT_TRUE(amplitudeTable.has_value());
     const auto& AmpTable = amplitudeTable.value();
-    // be sure we don't have garbage data
     for (size_t i = 0; i < AmpTable.size(); i++)
     {
-        const auto v = AmpTable.index(i);
-        TEST_ASSERT_TRUE(std::isfinite(v));
+        // be sure we don't have garbage data
+        TEST_ASSERT_TRUE(std::isfinite(AmpTable.index(i)));
     }
 
     six::sicd::ImageData imageData;
     imageData.amplitudeTable.reset(std::make_unique< six::AmplitudeTable>(AmpTable));
-    to_AMP8I_PHS8I(imageData, widebandData);
+    const auto actual = to_AMP8I_PHS8I(imageData, widebandData);
+    const auto expected(sys::debug ? 
+        std::pair<uint64_t, uint64_t>(12647523, 16973148) : std::pair<uint64_t, uint64_t>(99912647523, 99916973148));
+    //TEST_ASSERT_EQ(actual.first, expected.first); // TODO
+    TEST_ASSERT_EQ(actual.second, expected.second);
 }
 TEST_CASE(read_8bit_ampphs_no_table)
 {
@@ -280,11 +302,16 @@ TEST_CASE(read_8bit_ampphs_no_table)
 
     std::optional<six::AmplitudeTable> amplitudeTable;
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
-    const auto widebandData = read_8bit_ampphs(inputPathname, amplitudeTable, pComplexData);
+    const std::complex<long double> expected_sum(-12398989.376837999, 397846.88834372163);
+    const auto widebandData = read_8bit_ampphs(inputPathname, amplitudeTable, pComplexData, expected_sum);
     TEST_ASSERT_FALSE(amplitudeTable.has_value());
 
     six::sicd::ImageData imageData;
-    to_AMP8I_PHS8I(imageData, widebandData);
+    const auto actual = to_AMP8I_PHS8I(imageData, widebandData);
+    const auto expected(sys::debug ?
+        std::pair<uint64_t, uint64_t>(12647654, 16973148) : std::pair<uint64_t, uint64_t>(99912647523, 99916973148));
+    TEST_ASSERT_EQ(actual.first, expected.first);
+    TEST_ASSERT_EQ(actual.second, expected.second);
 }
 
 static void test_assert(const six::sicd::ComplexData& complexData,
