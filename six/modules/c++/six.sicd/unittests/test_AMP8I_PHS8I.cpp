@@ -569,8 +569,6 @@ static void test_near_point(const std::complex<float>& p, const AMP8I_PHS8I_t& e
     auto actual = nearest_neighbor_f(p);
     TEST_ASSERT_EQ(expected, actual);
 
-    actual = nearest_neighbor_f(p + std::complex<float>(0.0f, 0.0f));
-    TEST_ASSERT_EQ(expected, actual);
     actual = nearest_neighbor_f(p + std::complex<float>(0.1f, 0.0f));
     TEST_ASSERT_EQ(expected, actual);
     actual = nearest_neighbor_f(p + std::complex<float>(0.0f, 0.1f));
@@ -578,8 +576,6 @@ static void test_near_point(const std::complex<float>& p, const AMP8I_PHS8I_t& e
     actual = nearest_neighbor_f(p + std::complex<float>(0.1f, 0.1f));
     TEST_ASSERT_EQ(expected, actual);
 
-    actual = nearest_neighbor_f(p - std::complex<float>(0.0f, 0.0f));
-    TEST_ASSERT_EQ(expected, actual);
     actual = nearest_neighbor_f(p - std::complex<float>(0.1f, 0.0f));
     TEST_ASSERT_EQ(expected, actual);
     actual = nearest_neighbor_f(p - std::complex<float>(0.0f, 0.1f));
@@ -592,11 +588,21 @@ TEST_CASE(test_KDTree)
 {
     using KDNode_t = six::sicd::details::KDNode;
 
-    const KDNode_t node0{ {0.0, 0.0}, {static_cast<uint8_t>(0), static_cast<uint8_t>(0)} };
-    const KDNode_t node1{ {1.0, 1.0},  {static_cast<uint8_t>(1), static_cast<uint8_t>(1)} };
-    const KDNode_t node2{ {1.0, -1.0},  {static_cast<uint8_t>(2), static_cast<uint8_t>(2)} };
-    const KDNode_t node3{ {-1.0, 1.0},  {static_cast<uint8_t>(3), static_cast<uint8_t>(3)} };
-    const KDNode_t node4{ {-1.0, -1.0},  {static_cast<uint8_t>(4), static_cast<uint8_t>(4)} };
+    const std::vector<std::complex<float>> results{
+        {0.0, 0.0}, {1.0, 1.0}, {1.0, -1.0}, {-1.0, 1.0}, {-1.0, -1.0} };
+
+    const std::vector<AMP8I_PHS8I_t> values{
+        {static_cast<uint8_t>(0), static_cast<uint8_t>(0)},
+        {static_cast<uint8_t>(1), static_cast<uint8_t>(1)},
+        {static_cast<uint8_t>(2), static_cast<uint8_t>(2)},
+        {static_cast<uint8_t>(3), static_cast<uint8_t>(3)},
+        {static_cast<uint8_t>(4), static_cast<uint8_t>(4)} };
+
+    const KDNode_t node0{ results[0], values[0] };
+    const KDNode_t node1{ results[1], values[1] };
+    const KDNode_t node2{ results[2], values[2] };
+    const KDNode_t node3{ results[3], values[3] };
+    const KDNode_t node4{ results[4], values[4] };
 
     std::vector<KDNode_t> nodes{ node0, node1, node2, node3, node4 };
     const six::sicd::details::KDTree tree(std::move(nodes));
@@ -615,6 +621,59 @@ TEST_CASE(test_KDTree)
     test_near_point({ 100.0f, -100.0f }, node2.amp_and_value, nearest_neighbor_f); // closest to {1.0, -1.0}
     test_near_point({ -100.0f, 100.0f }, node3.amp_and_value, nearest_neighbor_f); // closest to {-1.0, 1.0}
     test_near_point({ -100.0f, -100.0f }, node4.amp_and_value, nearest_neighbor_f); // closest to {-1.0, -1.0}
+}
+
+static void test_adjusted_values(const std::vector<std::complex<float>>& values, const std::vector<AMP8I_PHS8I_t>& expected,
+    std::complex<float> delta)
+{
+    auto adjusted_values = values;
+    for (auto& v : adjusted_values)
+    {
+        v += delta;
+    }
+    std::vector<AMP8I_PHS8I_t> actual(expected.size());
+    std::span<AMP8I_PHS8I_t> actual_(actual.data(), actual.size());
+    std::span<const std::complex<float>> values_(adjusted_values.data(), adjusted_values.size());
+    six::sicd::ImageData::to_AMP8I_PHS8I(nullptr /*pAmplitudeTable*/, values_, actual_);
+    for (size_t i = 0; i < expected.size(); i++)
+    {
+        TEST_ASSERT_EQ(expected[i], actual[i]);
+    }
+}
+
+TEST_CASE(test_nearest_neighbor)
+{
+    using KDNode_t = six::sicd::details::KDNode;
+
+    const std::vector<std::complex<float>> values{
+        {0.0, 0.0}, {1.0, 1.0}, {10.0, -10.0}, {-100.0, 100.0}, {-1000.0, -1000.0} };
+
+    const std::vector<AMP8I_PHS8I_t> expected{
+        {static_cast<uint8_t>(0), static_cast<uint8_t>(130)},
+        {static_cast<uint8_t>(1), static_cast<uint8_t>(32)},
+        {static_cast<uint8_t>(14), static_cast<uint8_t>(224)},
+        {static_cast<uint8_t>(141), static_cast<uint8_t>(96)},
+        {static_cast<uint8_t>(255), static_cast<uint8_t>(160)} };
+
+    std::vector<AMP8I_PHS8I_t> actual(expected.size());
+    std::span<AMP8I_PHS8I_t> actual_(actual.data(), actual.size());
+    std::span<const std::complex<float>> values_(values.data(), values.size());
+    six::sicd::ImageData::to_AMP8I_PHS8I(nullptr /*pAmplitudeTable*/, values_, actual_);
+
+    for (size_t i = 0; i < expected.size(); i++)
+    {
+        TEST_ASSERT_EQ(expected[i], actual[i]);
+    }
+
+    constexpr auto delta = 0.0122f; // much larger than this causes results to change
+    test_adjusted_values(values, expected, std::complex<float>(delta, 0.0f));
+    test_adjusted_values(values, expected, std::complex<float>(-delta, 0.0f));
+    test_adjusted_values(values, expected, std::complex<float>(0.0f, delta));
+    test_adjusted_values(values, expected, std::complex<float>(0.0f, -delta));
+    test_adjusted_values(values, expected, std::complex<float>(delta, delta));
+    test_adjusted_values(values, expected, std::complex<float>(delta, -delta));
+    test_adjusted_values(values, expected, std::complex<float>(-delta, delta));
+    test_adjusted_values(values, expected, std::complex<float>(-delta, -delta));
 }
 
 TEST_CASE(test_verify_phase_uint8_ordering)
@@ -729,6 +788,7 @@ TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(test_read_sicd_8_bit_Amp_Phs_Examples);
     TEST_CHECK(test_create_sicd_from_mem_8i);
     TEST_CHECK(test_KDTree);
+    TEST_CHECK(test_nearest_neighbor);
     TEST_CHECK(test_verify_phase_uint8_ordering);
     TEST_CHECK(test_ComplexToAMP8IPHS8I);
     )
