@@ -309,7 +309,7 @@ TEST_CASE(read_8bit_ampphs_no_table)
     six::sicd::ImageData imageData;
     const auto actual = to_AMP8I_PHS8I(imageData, widebandData);
     const auto expected(sys::debug ?
-        std::pair<uint64_t, uint64_t>(12647654, 16973148) : std::pair<uint64_t, uint64_t>(3044873160, 3394353122));
+        std::pair<uint64_t, uint64_t>(12647654, 16973148) : std::pair<uint64_t, uint64_t>(3044873160, 3394353446));
     TEST_ASSERT_EQ(actual.first, expected.first);
     TEST_ASSERT_EQ(actual.second, expected.second);
 }
@@ -643,13 +643,11 @@ static void test_adjusted_values(const std::vector<std::complex<float>>& values,
 
 TEST_CASE(test_nearest_neighbor)
 {
-    using KDNode_t = six::sicd::details::KDNode;
-
     const std::vector<std::complex<float>> values{
         {0.0, 0.0}, {1.0, 1.0}, {10.0, -10.0}, {-100.0, 100.0}, {-1000.0, -1000.0} };
 
     const std::vector<AMP8I_PHS8I_t> expected{
-        {static_cast<uint8_t>(0), static_cast<uint8_t>(130)},
+        {static_cast<uint8_t>(0), static_cast<uint8_t>(177)},
         {static_cast<uint8_t>(1), static_cast<uint8_t>(32)},
         {static_cast<uint8_t>(14), static_cast<uint8_t>(224)},
         {static_cast<uint8_t>(141), static_cast<uint8_t>(96)},
