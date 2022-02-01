@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "six/sicd/ImageData.h"
 
 #include <stdexcept>
 #include <array>
@@ -28,9 +29,9 @@
 #include <mt/Algorithm.h>
 
 #include "six/sicd/GeoData.h"
-#include "six/sicd/ImageData.h"
 #include "six/sicd/Utilities.h"
 #include "six/sicd/KDTree.h"
+#include "six/sicd/ComplexToAMP8IPHS8I.h"
 
 using namespace six;
 using namespace six::sicd;
@@ -127,35 +128,14 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
-static std::vector<ImageData::KDNode> make_KDNodes(const six::AmplitudeTable* pAmplitudeTable)
-{
-    // For all possible amp/phase values (there are "only" 256*256), get and save the
-    // complex<float> value.
-    //
-    // Be careful with indexing so that we don't wrap-around in the loops.
-    std::vector<ImageData::KDNode> retval;
-    for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
-    {
-        ImageData::KDNode v;
-        v.amp_and_value.first = gsl::narrow<uint8_t>(input_amplitude);
-
-        for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
-        {
-            v.amp_and_value.second = gsl::narrow<uint8_t>(input_value);
-            v.result = Utilities::from_AMP8I_PHS8I(v.amp_and_value.first, v.amp_and_value.second, pAmplitudeTable);
-            retval.push_back(v);
-        }
-    }
-    return retval;
-}
-
 using input_values_t = std::array<std::complex<float>, UINT8_MAX + 1>;
 using input_amplitudes_t = std::array<input_values_t, UINT8_MAX + 1>;
 
 // input_amplitudes_t is too big for the stack
 static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
 {
-    auto nodes = make_KDNodes(pAmplitudeTable);
+    // This is an easy way to get all 256x256 values for the AmplitudeTable
+    auto nodes = six::sicd::details::KDTree::make_nodes(pAmplitudeTable);
 
     auto retval = std::make_unique<input_amplitudes_t>();
     auto& values = *retval;
@@ -219,7 +199,7 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
 
     std::unique_ptr<input_amplitudes_t> pValues_;
     const auto& values = get_RE32F_IM32F_values(amplitudeTable.get(), pValues_);
-    const auto get_RE32F_IM32F_value_f = [&values](const ImageData::AMP8I_PHS8I_t& v)
+    const auto get_RE32F_IM32F_value_f = [&values](const six::sicd::AMP8I_PHS8I_t& v)
     {
         return values[v.first][v.second];
     };
@@ -242,32 +222,13 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
     }
 }
 
-static const KDTree* make_KDTree(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<KDTree>& pTree)
+template<typename TConverter>
+static void to_AMP8I_PHS8I_(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
+    const TConverter& tree, ptrdiff_t cutoff_)
 {
-    // create all of of the possible KDNodes values
-    if (pAmplitudeTable == nullptr)
+    const auto nearest_neighbor_f = [&](const std::complex<float>& v)
     {
-        // this won't change, so OK to cache
-        static const KDTree tree(make_KDNodes(nullptr));
-        return &tree;
-    }
-    else
-    {
-        pTree = std::make_unique<KDTree>(make_KDNodes(pAmplitudeTable));
-        return pTree.get();
-    }
-}
-
-void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
-    ptrdiff_t cutoff_) const
-{
-    // make the KDTree to quickly find the nearest neighbor
-    std::unique_ptr<KDTree> pTree; // not-cached, non-NULL amplitudeTable
-    const auto& tree = *(make_KDTree(amplitudeTable.get(), pTree));
-    const auto nearest_neighbor_f = [&tree](const std::complex<float>& v)
-    {
-        auto result = tree.nearest_neighbor(six::sicd::ImageData::KDNode{ v });
-        return result.amp_and_value;
+        return tree.nearest_neighbor(v);
     };
 
     const auto begin = inputs.data(); // no iterators with our homebrew span<>
@@ -285,4 +246,17 @@ void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I
         const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
         (void) mt::transform_async(begin, end, out, nearest_neighbor_f, cutoff, std::launch::async);
     }
+}
+void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
+    ptrdiff_t cutoff) const
+{
+    // make the KDTree to quickly find the nearest neighbor
+    //std::unique_ptr<six::sicd::details::KDTree> pTree; // not-cached, non-NULL amplitudeTable
+    //const auto& tree = *(six::sicd::details::KDTree::make(amplitudeTable.get(), pTree));
+
+    // make a structure to quickly find the nearest neighbor
+    std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pConvert; // not-cached, non-NULL amplitudeTable
+    const auto& converter = *(six::sicd::details::ComplexToAMP8IPHS8I::make(amplitudeTable.get(), pConvert));
+    
+    to_AMP8I_PHS8I_(inputs, results, converter, cutoff);
 }

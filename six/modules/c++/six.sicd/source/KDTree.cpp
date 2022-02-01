@@ -72,7 +72,7 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 namespace KDTree
 {
-    using node_t = six::sicd::KDTree::node_t;
+    using node_t = six::sicd::details::KDTree::node_t;
     inline node_t::value_type& index(node_t& p, size_t i) noexcept
     {
         return p.index(i);
@@ -420,29 +420,79 @@ namespace six
 {
     namespace sicd
     {
-        struct KDTree::Impl final
+        namespace details
         {
-            ::KDTree::Tree<node_t> tree;
-            Impl(std::vector<node_t>&& nodes) : tree(std::move(nodes)) { }
-            ~Impl() = default;
-            Impl(const Impl&) = delete;
-            Impl& operator=(const Impl&) = delete;
-            Impl(Impl&&) = delete;
-            Impl& operator=(Impl&&) = delete;
-        };
+            struct KDTree::Impl final
+            {
+                ::KDTree::Tree<node_t> tree;
+                Impl(std::vector<node_t>&& nodes) : tree(std::move(nodes)) { }
+                ~Impl() = default;
+                Impl(const Impl&) = delete;
+                Impl& operator=(const Impl&) = delete;
+                Impl(Impl&&) = delete;
+                Impl& operator=(Impl&&) = delete;
+            };
 
-        KDTree::KDTree(std::vector<node_t>&& nodes)
-            : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
-        KDTree::~KDTree() = default;
-        KDTree::KDTree(KDTree&&) noexcept = default;
-        KDTree& KDTree::operator=(KDTree&&) noexcept = default;
-        
-        KDTree::node_t KDTree::nearest_neighbor(const node_t& point) const
-        {
-            std::vector<node_t> result;
-            pImpl->tree.k_nearest_neighbors(point, 1, result);
-            assert(result.size() == 1);
-            return result[0];
+            KDTree::KDTree(std::vector<node_t>&& nodes)
+                : pImpl(std::make_unique<Impl>(std::move(nodes))) { }
+            KDTree::~KDTree() = default;
+            KDTree::KDTree(KDTree&&) noexcept = default;
+            KDTree& KDTree::operator=(KDTree&&) noexcept = default;
+
+            KDTree::node_t KDTree::nearest_neighbor_(const node_t& point) const
+            {
+                std::vector<node_t> result;
+                pImpl->tree.k_nearest_neighbors(point, 1, result);
+                assert(result.size() == 1);
+                return result[0];
+            }
+            AMP8I_PHS8I_t KDTree::nearest_neighbor(const std::complex<float>& v) const
+            {
+                return nearest_neighbor_(six::sicd::details::KDNode{ v }).amp_and_value;
+            }
         }
+    }
+}
+
+//-----------------------------------------------------------------------------------------------
+#include "six/sicd//Utilities.h"
+
+using KDNode_t = six::sicd::details::KDNode;
+std::vector<KDNode_t> six::sicd::details::KDTree::make_nodes(const six::AmplitudeTable* pAmplitudeTable)
+{
+    // For all possible amp/phase values (there are "only" 256*256), get and save the
+    // complex<float> value.
+    //
+    // Be careful with indexing so that we don't wrap-around in the loops.
+    std::vector<KDNode_t> retval;
+    retval.reserve(UINT8_MAX * UINT8_MAX);
+    for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
+    {
+        KDNode_t v;
+        v.amp_and_value.first = gsl::narrow<uint8_t>(input_amplitude);
+
+        for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
+        {
+            v.amp_and_value.second = gsl::narrow<uint8_t>(input_value);
+            v.result = six::sicd::Utilities::from_AMP8I_PHS8I(v.amp_and_value.first, v.amp_and_value.second, pAmplitudeTable);
+            retval.push_back(v);
+        }
+    }
+    return retval;
+}
+
+const six::sicd::details::KDTree* six::sicd::details::KDTree::make(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<KDTree>& pTree)
+{
+    // create all of of the possible KDNodes values
+    if (pAmplitudeTable == nullptr)
+    {
+        // this won't change, so OK to cache
+        static const KDTree tree(make_nodes(nullptr));
+        return &tree;
+    }
+    else
+    {
+        pTree.reset(new KDTree(make_nodes(pAmplitudeTable)));
+        return pTree.get();
     }
 }

@@ -889,7 +889,7 @@ void Utilities::getRawData(NITFReadControl& reader,
     const ComplexData& complexData,
     const types::RowCol<size_t>& offset,
     const types::RowCol<size_t>& extent,
-    std::vector<ImageData::AMP8I_PHS8I_t>& buffer)
+    std::vector<AMP8I_PHS8I_t>& buffer)
 {
     const auto pixelType = complexData.getPixelType();
     if (pixelType != PixelType::AMP8I_PHS8I)
@@ -904,8 +904,8 @@ void Utilities::getRawData(NITFReadControl& reader,
     // Each pixel is stored as a pair of numbers that represent the amplitude and phase
     // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
     // component, 2 bytes per pixel). 
-    SICDreader<ImageData::AMP8I_PHS8I_t>(reader, imageNumber, offset, extent, extent.col,
-        [&](size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<ImageData::AMP8I_PHS8I_t>& tempVector)
+    SICDreader<AMP8I_PHS8I_t>(reader, imageNumber, offset, extent, extent.col,
+        [&](size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<AMP8I_PHS8I_t>& tempVector)
         {
             for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
             {
