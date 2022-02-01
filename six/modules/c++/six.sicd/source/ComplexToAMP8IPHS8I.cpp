@@ -42,10 +42,9 @@ inline long double GetPhase(const std::complex<float>& v)
     return phase;
 }
 
-static const std::vector<long double>& make_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
-    std::vector<long double>& result)
+static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmplitudeTable)
 {
-    result.resize(UINT8_MAX + 1);
+    std::vector<long double> retval(UINT8_MAX + 1);
     for (size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
     {
         static_assert(sizeof(size_t) > sizeof(uint8_t), "size_t can't hold UINT8_MAX!");
@@ -53,33 +52,32 @@ static const std::vector<long double>& make_magnitudes(const six::AmplitudeTable
         six::sicd::AMP8I_PHS8I_t v;
         v.first = v.second = gsl::narrow<uint8_t>(i);
         const auto complex = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, pAmplitudeTable);
-        result[i] = std::abs(complex);
+        retval[i] = std::abs(complex);
     }
 
     // I don't know if we can guarantee that the amplitude table is non-decreasing.
     // Check to verify property at runtime.
-    if (!std::is_sorted(result.begin(), result.end()))
+    if (!std::is_sorted(retval.begin(), retval.end()))
     {
         throw std::runtime_error("magnitudes must be sorted");
     }
-    return result;
+    return retval;
 }
-static const std::vector<long double>* get_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
-    std::unique_ptr<std::vector<long double>>& pUncachedMagnitudes)
+static const std::vector<long double>& get_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
+    std::vector<long double>& uncached_magnitudes)
 {
     if (pAmplitudeTable == nullptr)
     {
-        static std::vector<long double> magnitudes_;
-        static const auto magnitudes = make_magnitudes(nullptr, magnitudes_); // OK to cache, won't change
-        return &magnitudes;
+        static const auto magnitudes = make_magnitudes(nullptr); // OK to cache, won't change
+        return magnitudes;
     }
     
-    pUncachedMagnitudes = std::make_unique<std::vector<long double>>();
-    return &(make_magnitudes(pAmplitudeTable, *pUncachedMagnitudes));
+    uncached_magnitudes = make_magnitudes(pAmplitudeTable);
+    return uncached_magnitudes;
 }
 
 six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
-    : pMagnitudes(get_magnitudes(pAmplitudeTable, pUncachedMagnitudes))
+    : magnitudes(get_magnitudes(pAmplitudeTable, uncached_magnitudes))
 {
     const auto p0 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 0, pAmplitudeTable));
     const auto p1 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 1, pAmplitudeTable));
@@ -132,17 +130,17 @@ six::sicd::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighb
     auto&& phase_direction = phase_directions[retval.second];
     const auto projection = phase_direction.real() * v.real() + phase_direction.imag() * v.imag();
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
-    const auto& magnitudes = *pMagnitudes;
     retval.first = nearest(magnitudes.begin(), magnitudes.end(), projection);
     return retval;
 }
 
-const six::sicd::details::ComplexToAMP8IPHS8I* six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<ComplexToAMP8IPHS8I>& pTree)
+const six::sicd::details::ComplexToAMP8IPHS8I* six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable,
+    std::unique_ptr<ComplexToAMP8IPHS8I>& pTree)
 {
     if (pAmplitudeTable == nullptr)
     {
         // this won't change, so OK to cache
-        static const six::sicd::details::ComplexToAMP8IPHS8I tree{};
+        static const six::sicd::details::ComplexToAMP8IPHS8I tree;
         return &tree;
     }
     else
