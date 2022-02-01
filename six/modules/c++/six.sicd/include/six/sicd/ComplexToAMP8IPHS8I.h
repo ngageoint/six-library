@@ -67,7 +67,7 @@ public:
 private:
     //! The sorted set of possible magnitudes order from small to large.
     const std::vector<long double>* pMagnitudes = nullptr;
-    std::unique_ptr<const std::vector<long double>> pUncachedMagnitudes;
+    std::unique_ptr<std::vector<long double>> pUncachedMagnitudes;
 
     //! The difference in phase angle between two UINT phase values.
     long double phase_delta;

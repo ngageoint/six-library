@@ -42,9 +42,10 @@ inline long double GetPhase(const std::complex<float>& v)
     return phase;
 }
 
-static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmplitudeTable)
+static const std::vector<long double>& make_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
+    std::vector<long double>& result)
 {
-    std::vector<long double> retval(UINT8_MAX + 1);
+    result.resize(UINT8_MAX + 1);
     for (size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
     {
         static_assert(sizeof(size_t) > sizeof(uint8_t), "size_t can't hold UINT8_MAX!");
@@ -52,29 +53,29 @@ static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmpl
         six::sicd::AMP8I_PHS8I_t v;
         v.first = v.second = gsl::narrow<uint8_t>(i);
         const auto complex = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, pAmplitudeTable);
-        retval[i] = std::abs(complex);
+        result[i] = std::abs(complex);
     }
 
     // I don't know if we can guarantee that the amplitude table is non-decreasing.
     // Check to verify property at runtime.
-    if (!std::is_sorted(retval.begin(), retval.end()))
+    if (!std::is_sorted(result.begin(), result.end()))
     {
         throw std::runtime_error("magnitudes must be sorted");
     }
-    return retval;
+    return result;
 }
 static const std::vector<long double>* get_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
-    std::unique_ptr<const std::vector<long double>>& pUncachedMagnitudes)
+    std::unique_ptr<std::vector<long double>>& pUncachedMagnitudes)
 {
     if (pAmplitudeTable == nullptr)
     {
-        static const auto magnitudes = make_magnitudes(nullptr); // OK to cache, won't change
+        static std::vector<long double> magnitudes_;
+        static const auto magnitudes = make_magnitudes(nullptr, magnitudes_); // OK to cache, won't change
         return &magnitudes;
     }
     
-    auto result = make_magnitudes(pAmplitudeTable);
-    pUncachedMagnitudes = std::make_unique<const std::vector<long double>>(std::move(result));
-    return pUncachedMagnitudes.get();
+    pUncachedMagnitudes = std::make_unique<std::vector<long double>>();
+    return &(make_magnitudes(pAmplitudeTable, *pUncachedMagnitudes));
 }
 
 six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
