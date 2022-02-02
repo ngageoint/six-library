@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_DOM_DOCUMENT_H__
-#define __XML_LITE_DOM_DOCUMENT_H__
+#ifndef CODA_OSS_xml_lite_Doocument_h_INCLUDED_
+#define CODA_OSS_xml_lite_Doocument_h_INCLUDED_
 #pragma once
 
 /*!
@@ -37,6 +37,8 @@
  */
 
 #include <assert.h>
+
+#include "coda_oss/string.h"
 
 #include "xml/lite/Element.h"
 #include "xml/lite/QName.h"
@@ -91,12 +93,12 @@ public:
                                    const std::string & uri,
                                    std::string characterData = "");
     #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
-    virtual Element* createElement(const std::string& qname,
+    Element* createElement(const std::string& qname,
                                    const std::string & uri,
-                                   const std::string& characterData, StringEncoding);
-    virtual Element* createElement(const std::string& qname,
+                                   const std::string& characterData, StringEncoding) const;
+    Element* createElement(const std::string& qname,
                                    const std::string& uri,
-                                   const coda_oss::u8string& characterData);
+                                   const coda_oss::u8string& characterData) const;
     std::unique_ptr<Element> createElement(const xml::lite::QName& qname, const std::string& characterData) const;
     std::unique_ptr<Element> createElement(const xml::lite::QName& qname,
                                    const std::string& characterData, StringEncoding) const;
@@ -193,4 +195,5 @@ inline const Element& getRootElement(const Document* pDoc)
 }
 }
 
-#endif
+#endif // CODA_OSS_xml_lite_Doocument_h_INCLUDED_
+

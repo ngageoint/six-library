@@ -38,7 +38,6 @@ namespace coda_oss
         native = __BYTE_ORDER__
     #endif
     };
-    #define CODA_OSS_coda_oss_endian 201907L // __cpp_lib_endian
 }
 
 #endif  // CODA_OSS_coda_oss_bit_h_INCLUDED_
