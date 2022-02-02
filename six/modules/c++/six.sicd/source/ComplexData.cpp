@@ -376,8 +376,8 @@ bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, st
         return false; // no conversion done as there is nothing to convert
     }
 
-    const auto from = make_span<const six::sicd::ImageData::cx_float>(from_);
-    const auto to = make_span<six::sicd::ImageData::AMP8I_PHS8I_t>(to_);
+    const auto from = make_span<const six::sicd::cx_float>(from_);
+    const auto to = make_span<six::sicd::AMP8I_PHS8I_t>(to_);
     imageData->to_AMP8I_PHS8I(from, to, cutoff);
     return true; // converted
 }
