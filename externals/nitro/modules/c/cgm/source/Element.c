@@ -71,7 +71,7 @@ NITFAPI(void) cgm_Element_print(cgm_Element* element)
 
 NITFAPI(const char*) cgm_Element_getName(cgm_Element* element)
 {
-    static char* dontKnow = "No idea";
+    static const char* dontKnow = "No idea";
     cgm_ElementType t = element->type;
     TRY_NAME(CGM_TEXT_ELEMENT, t);
     TRY_NAME(CGM_POLYGON_ELEMENT, t);

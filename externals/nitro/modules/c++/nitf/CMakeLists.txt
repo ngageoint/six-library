@@ -92,8 +92,11 @@ coda_add_tests(
         test_image_blocker.cpp
         test_image_segment_blank_nm_compression.cpp
         test_image_segment_computer.cpp
+        test_image_writer.cpp
         test_nitf_buffer_list.cpp
-        test_tre_mods++.cpp)
+        test_tre_mods++.cpp
+        test_tre_create++.cpp
+        test_tre_read.cpp)
 
 add_executable(show_nitf++ apps/show_nitf++.cpp)
 target_link_libraries(show_nitf++ PRIVATE nitf-c++)
