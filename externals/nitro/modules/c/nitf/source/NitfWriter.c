@@ -2195,7 +2195,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer,
     /* if there wasn't a file datetime set, let's set one automatically */
     if (nitf_Utils_isBlank(header->NITF_FDT->raw))
     {
-        char *dateFormat = (nitf_Record_getVersion(writer->record) == NITF_VER_20 ?
+        const char *dateFormat = (nitf_Record_getVersion(writer->record) == NITF_VER_20 ?
                 NITF_DATE_FORMAT_20 : NITF_DATE_FORMAT_21);
 
         if (!nitf_Field_setDateTime(header->NITF_FDT, NULL, dateFormat, error))

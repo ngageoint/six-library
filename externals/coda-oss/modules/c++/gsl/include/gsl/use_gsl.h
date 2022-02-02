@@ -23,13 +23,16 @@
 #define CODA_OSS_gsl_use_gsl_h_INCLUDED_
 #pragma once
 
+#include "coda_oss/CPlusPlus.h"
+
 // Need a fairly decent C++ compiler to use the real GSL
 // It seems that the WAF build on GitHub gets a old compiler ...? Using just CODA_OSS_cpp14 doesn't work.
 #ifndef CODA_OSS_coda_oss_use_real_gsl_
 	#if defined(_MSC_VER) && (_MSC_VER < 1910) // VS2017: https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160
-		#define CODA_OSS_coda_oss_use_real_gsl_ 0
-	#else
-		#include "coda_oss/CPlusPlus.h"
+		#define CODA_OSS_coda_oss_use_real_gsl_ 0 // need VS2017 or later
+	#elif defined (__GNUC__) && (__GNUC__ < 5) 
+		#define CODA_OSS_coda_oss_use_real_gsl_ 0  // GCC 4.9.1 and 4.9.4 won't compile GSL
+	#else 
 		#define CODA_OSS_coda_oss_use_real_gsl_ CODA_OSS_cpp14
 	#endif
 #endif

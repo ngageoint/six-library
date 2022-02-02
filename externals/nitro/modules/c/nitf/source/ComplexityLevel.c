@@ -92,7 +92,7 @@ NITFPRIV(NITF_CLEVEL) checkCCSExtent(nitf_Record* record,
 
         int result = checkILOC(imageSegment->subheader, error);
         if (result == NITF_CLEVEL_CHECK_FAILED )
-            return result;
+            return (NITF_CLEVEL) result;
 
         if ( result > clevel )
         {
@@ -102,8 +102,7 @@ NITFPRIV(NITF_CLEVEL) checkCCSExtent(nitf_Record* record,
         nitf_ListIterator_increment(&it);
 
     }
-    return clevel;
-
+    return (NITF_CLEVEL) clevel;
 }
 
 NITFPRIV(NITF_CLEVEL) checkFileSize(nitf_Record* record,
@@ -173,7 +172,7 @@ NITFPRIV(NITF_CLEVEL) checkImageSize(nitf_Record* record,
         nitf_ImageSegment* imageSegment =
             (nitf_ImageSegment*)nitf_ListIterator_get(&it);
         int result = checkImage(imageSegment->subheader, error);
-        if ( result == NITF_CLEVEL_CHECK_FAILED ) return result;
+        if ( result == NITF_CLEVEL_CHECK_FAILED ) return (NITF_CLEVEL) result;
 
         if ( result > clevel )
         {
@@ -183,7 +182,7 @@ NITFPRIV(NITF_CLEVEL) checkImageSize(nitf_Record* record,
         ++i;
         nitf_ListIterator_increment(&it);
     }
-    return clevel;
+    return (NITF_CLEVEL) clevel;
 }
 
 NITFPRIV(NITF_CLEVEL) checkImageBlock(nitf_ImageSubheader* subhdr,
@@ -226,7 +225,7 @@ NITFPRIV(NITF_CLEVEL) checkBlockSize(nitf_Record* record, nitf_Error* error)
         nitf_ImageSegment* imageSegment =
             (nitf_ImageSegment*)nitf_ListIterator_get(&it);
         int result = checkImageBlock(imageSegment->subheader, error);
-        if ( result == NITF_CLEVEL_CHECK_FAILED ) return result;
+        if ( result == NITF_CLEVEL_CHECK_FAILED ) return (NITF_CLEVEL) result;
 
         if ( result > clevel )
         {
@@ -236,10 +235,7 @@ NITFPRIV(NITF_CLEVEL) checkBlockSize(nitf_Record* record, nitf_Error* error)
         ++i;
         nitf_ListIterator_increment(&it);
     }
-    return clevel;
-
-
-
+    return (NITF_CLEVEL)clevel;
 }
 
 NITFPRIV(NITF_CLEVEL) checkNumImages(nitf_Record* record, nitf_Error* error)
@@ -268,7 +264,7 @@ NITFPRIV(NITF_CLEVEL) checkNumDES(nitf_Record* record, nitf_Error* error)
             clevel = NITF_CLEVEL_09;
 
     }
-    return clevel;
+    return (NITF_CLEVEL)clevel;
 
 }
 
@@ -330,7 +326,7 @@ NITFPRIV(NITF_CLEVEL) checkRGBImage(nitf_ImageSubheader* subhdr,
         }
     }
 
-    return clevel;
+    return (NITF_CLEVEL)clevel;
 }
 
 NITFPRIV(NITF_CLEVEL) checkRGBLUTImage(nitf_ImageSubheader* subhdr,
@@ -364,7 +360,7 @@ NITFPRIV(NITF_CLEVEL) checkRGBLUTImage(nitf_ImageSubheader* subhdr,
     {
         clevel = NITF_CLEVEL_09;
     }
-    return clevel;
+    return (NITF_CLEVEL)clevel;
 
 }
 
@@ -407,7 +403,7 @@ NITFPRIV(NITF_CLEVEL) checkMonoImage(nitf_ImageSubheader* subhdr,
     {
         clevel = NITF_CLEVEL_09;
     }
-    return clevel;
+    return (NITF_CLEVEL)clevel;
 }
 
 /* This is an optional feature */
@@ -493,7 +489,7 @@ NITFPRIV(NITF_CLEVEL) checkMultiImage(nitf_ImageSubheader* subhdr,
     {
         clevel = NITF_CLEVEL_09;
     }
-    return clevel;
+    return (NITF_CLEVEL)clevel;
 }
 
 

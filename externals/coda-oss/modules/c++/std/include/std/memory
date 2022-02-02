@@ -27,7 +27,6 @@
 // Make it (too?) easy for clients to get our various std:: implementations
 
 #include "coda_oss/memory.h"
-static_assert(CODA_OSS_coda_oss_make_unique >= 201304L, "missing coda_oss::make_unique");
 
 #if defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique >= 201304L) // https://en.cppreference.com/w/cpp/utility/feature_test
     #undef CODA_OSS_NO_std_make_unique

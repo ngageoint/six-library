@@ -44,6 +44,4 @@ namespace coda_oss
 #endif  // GSL_SPAN_H
 }
 
-#define CODA_OSS_coda_oss_span 202002L  // c.f., __cpp_lib_span
-
 #endif  // CODA_OSS_coda_oss_span_h_INCLUDED_

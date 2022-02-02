@@ -58,12 +58,11 @@ class EncodedStringView final
     // doesn't expose "mIsUtf8" so there's (intentinally) no way for clients to know the encoding.
     friend EncodedString;
 
-    template <typename TReturn>
-    TReturn cast() const
+    coda_oss::u8string::const_pointer c_str() const
     {
-        return str::cast<TReturn>(mString.data());
+        return cast<coda_oss::u8string::const_pointer>(mString.data());
     }
-    
+
     str::W1252string w1252string() const;  // c.f. std::filesystem::path::u8string()
 
 public:
@@ -85,7 +84,10 @@ public:
     // Don't want to make it easy to use these; a known encoding is preferred.
     explicit EncodedStringView(std::string::const_pointer);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
     explicit EncodedStringView(const std::string&);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
-    
+
+    // Can't "view" UTF-16 or UTF-32 data; we assume we're looking at an 8-bit encoding,
+    // either UTF-8 or Windows-1252.
+
     // Input is encoded as specified on all platforms.
     template <typename TBasicString>
     static EncodedStringView create(const char* s)
@@ -123,6 +125,11 @@ public:
     // Convert (perhaps) whatever we're looking at to UTF-8
     coda_oss::u8string u8string() const;  // c.f. std::filesystem::path::u8string()
     std::string& toUtf8(std::string&) const; // std::string is encoded as UTF-8, always.
+
+    // Convert whatever we're looking at to UTF-16 or UTF-32
+    std::u16string u16string() const;  // c.f. std::filesystem::path::u8string()
+    std::u32string u32string() const;  // c.f. std::filesystem::path::u8string()
+    std::wstring wstring() const; // UTF-16 on Windows, UTF-32 on Linux
 
     bool operator_eq(const EncodedStringView&) const;
 

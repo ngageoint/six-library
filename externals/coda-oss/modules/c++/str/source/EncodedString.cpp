@@ -62,16 +62,20 @@ str::EncodedString::EncodedString(const str::W1252string& s) : EncodedString(s.c
 str::EncodedString::EncodedString(const std::u16string& s) : EncodedString(to_u8string(s)) { }
 str::EncodedString::EncodedString(const std::u32string& s) : EncodedString(to_u8string(s)) { }
 
+str::EncodedString::EncodedString(std::wstring::const_pointer s)  : EncodedString(to_u8string(s, wcslen(s))) { }
+str::EncodedString::EncodedString(const std::wstring& s) : EncodedString(to_u8string(s)) { }
+
 // create from a view
 str::EncodedString& str::EncodedString::operator=(const EncodedStringView& v)
 {
     if (v.mIsUtf8)
     {
-        assign(v.cast<coda_oss::u8string::const_pointer>());
+        assign(v.c_str());
     }
     else
     {
-        assign(v.cast<str::W1252string::const_pointer>());
+        auto p = cast<W1252string::const_pointer>(v.mString.data());
+        assign(p);
     }
     return *this;
 }
