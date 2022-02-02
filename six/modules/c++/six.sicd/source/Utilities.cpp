@@ -78,7 +78,7 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
 }
 }
 
-std::complex<float> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
+std::complex<long double> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
 {
     long double A = 0.0;
     if (pAmplitudeTable != nullptr)
@@ -102,10 +102,7 @@ std::complex<float> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitu
     const auto angle = units::Radians<long double>{ 2 * M_PI * P };
     long double sin_angle, cos_angle;
     SinCos(angle, sin_angle, cos_angle);
-
-    const auto real = A * cos_angle;
-    const auto imaginary = A * sin_angle;
-    std::complex<float> S(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
+    std::complex<long double> S(A * cos_angle, A * sin_angle);
     return S;
 }
 

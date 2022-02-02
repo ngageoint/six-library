@@ -197,13 +197,17 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
 
     // Do we have a cahced result to use (no amplitude table)?
     // Or must it be recomputed (have an amplutude table)?
-    return pValues != nullptr ? (*pValues)[input.first][input.second] :
-        Utilities::from_AMP8I_PHS8I(input.first, input.second, pAmplitudeTable);
+    if (pValues != nullptr)
+    {
+        return (*pValues)[input.first][input.second];
+    }
+
+    const auto S = Utilities::from_AMP8I_PHS8I(input.first, input.second, pAmplitudeTable);
+    return std::complex<float>(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
 }
 
 static const input_amplitudes_t& get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
     std::unique_ptr<input_amplitudes_t>& pValues_)
-
 {
     const input_amplitudes_t* pValues = get_RE32F_IM32F_values(pAmplitudeTable);
     if (pValues == nullptr)

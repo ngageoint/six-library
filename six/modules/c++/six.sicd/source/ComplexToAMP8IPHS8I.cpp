@@ -58,9 +58,9 @@ The resulting green point is then what's used to find the nearest magnitude via 
     * @param v complex value
     * @return phase between [0, 2PI]
     */
-inline long double GetPhase(const std::complex<float>& v)
+inline long double GetPhase(const std::complex<long double>& v)
 {
-    long double phase = std::arg(v);
+    auto phase = std::arg(v);
     if (phase < 0.0) phase += M_PI * 2.0; // Wrap from [0, 2PI]
     return phase;
 }
@@ -104,7 +104,7 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
 {
     const auto p0 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 0, pAmplitudeTable));
     const auto p1 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 1, pAmplitudeTable));
-    assert(p0 == 0);
+    assert(p0 == 0.0);
     assert(p1 > p0);
     phase_delta = p1 - p0;
     for(size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.

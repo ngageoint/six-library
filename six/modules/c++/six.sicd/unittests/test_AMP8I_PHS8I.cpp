@@ -168,7 +168,8 @@ static void test_assert_eq(const std::vector<std::complex<float>>& actuals, cons
     for (size_t i = 0; i < actuals.size(); i++)
     {
         const auto& v = amp8i_phs8i[i];
-        const auto result = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, nullptr);
+        const auto S = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, nullptr);
+        const std::complex<float> result(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
         const auto& expected = actuals[i];
         TEST_ASSERT_EQ(expected, result);
     }
@@ -186,10 +187,10 @@ TEST_CASE(test_8bit_ampphs)
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
             AMP8I_PHS8I_t input(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value));
-            auto actual = six::sicd::Utilities::from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value), nullptr);
+            const auto S = six::sicd::Utilities::from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value), nullptr);
 
             inputs.push_back(std::move(input));
-            expecteds.push_back(std::move(actual));
+            expecteds.emplace_back(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
         }
     }
 
