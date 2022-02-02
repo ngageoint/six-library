@@ -651,8 +651,7 @@ public:
         const std::vector<types::RowCol<double> >& opPixels,
         std::vector<types::RowCol<double> >& spPixels);
 
-    // for unit-testing
-    static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable*);
+    static std::complex<long double> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable*);
 };
 
 
@@ -678,7 +677,7 @@ extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::fil
 namespace testing
 {
     extern std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>&);
-    extern std::vector<std::byte> to_bytes(const ComplexImageResult&);
+    extern std::vector<std::byte> to_bytes(const ComplexImageResult&, ptrdiff_t cutoff=-1);
 }
 
 }
