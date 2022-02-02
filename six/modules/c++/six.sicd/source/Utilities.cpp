@@ -78,7 +78,7 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
 }
 }
 
-std::complex<float> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
+std::complex<long double> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
 {
     long double A = 0.0;
     if (pAmplitudeTable != nullptr)
@@ -102,10 +102,7 @@ std::complex<float> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitu
     const auto angle = units::Radians<long double>{ 2 * M_PI * P };
     long double sin_angle, cos_angle;
     SinCos(angle, sin_angle, cos_angle);
-
-    const auto real = A * cos_angle;
-    const auto imaginary = A * sin_angle;
-    std::complex<float> S(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
+    std::complex<long double> S(A * cos_angle, A * sin_angle);
     return S;
 }
 
@@ -889,7 +886,7 @@ void Utilities::getRawData(NITFReadControl& reader,
     const ComplexData& complexData,
     const types::RowCol<size_t>& offset,
     const types::RowCol<size_t>& extent,
-    std::vector<ImageData::AMP8I_PHS8I_t>& buffer)
+    std::vector<AMP8I_PHS8I_t>& buffer)
 {
     const auto pixelType = complexData.getPixelType();
     if (pixelType != PixelType::AMP8I_PHS8I)
@@ -904,8 +901,8 @@ void Utilities::getRawData(NITFReadControl& reader,
     // Each pixel is stored as a pair of numbers that represent the amplitude and phase
     // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
     // component, 2 bytes per pixel). 
-    SICDreader<ImageData::AMP8I_PHS8I_t>(reader, imageNumber, offset, extent, extent.col,
-        [&](size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<ImageData::AMP8I_PHS8I_t>& tempVector)
+    SICDreader<AMP8I_PHS8I_t>(reader, imageNumber, offset, extent, extent.col,
+        [&](size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<AMP8I_PHS8I_t>& tempVector)
         {
             for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
             {
