@@ -125,7 +125,7 @@ inline constexpr bool is_code_point_valid(u32 cp)
 }
 
 template <typename octet_iterator>
-inline constexpr typename std::iterator_traits<octet_iterator>::difference_type
+inline /*constexpr*/ typename std::iterator_traits<octet_iterator>::difference_type
 sequence_length(octet_iterator lead_it)
 {
     uint8_t lead = mask8(*lead_it);
@@ -142,7 +142,7 @@ sequence_length(octet_iterator lead_it)
 }
 
 template <typename octet_difference_type>
-inline constexpr bool is_overlong_sequence(uint32_t cp, octet_difference_type length)
+inline /*constexpr*/ bool is_overlong_sequence(uint32_t cp, octet_difference_type length)
 {
     if (cp < 0x80)
     {

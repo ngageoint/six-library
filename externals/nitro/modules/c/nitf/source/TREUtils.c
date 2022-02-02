@@ -74,7 +74,7 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE* tre, char* bufptr, nitf_Error* error)
 
             /* construct the field */
             field = nitf_Field_construct(length,
-                                         cursor.desc_ptr->data_type,
+                                         (nitf_FieldType) cursor.desc_ptr->data_type,
                                          error);
             if (!field)
                 goto CATCH_ERROR;
@@ -227,7 +227,7 @@ nitf_TREUtils_getRawData(nitf_TRE* tre,
                 field = (nitf_Field*)pair->data;
 
                 /* get the raw data */
-                tempBuf = NITF_MALLOC(tempLength);
+                tempBuf = (char*) NITF_MALLOC(tempLength);
                 if (!tempBuf)
                 {
                     nitf_Error_init(error,
@@ -553,7 +553,7 @@ fillEmptyTREField(nitf_TRECursor* cursor, nitf_Pair* pair, nitf_Error* error)
     }
 
     field = nitf_Field_construct(fieldLength,
-                                 cursor->desc_ptr->data_type,
+                                 (nitf_FieldType) cursor->desc_ptr->data_type,
                                  error);
 
     /* set the field to be resizable later on */

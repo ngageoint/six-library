@@ -68,6 +68,20 @@ std::string& str::EncodedStringView::toUtf8(std::string& result) const
     return str::details::to_u8string(mString.data(), mString.size(), mIsUtf8, result);
 }
 
+std::u16string str::EncodedStringView::u16string() const
+{
+    return str::details::to_u16string(mString.data(), mString.size(), mIsUtf8);
+}
+std::u32string str::EncodedStringView::u32string() const
+{
+    return str::details::to_u32string(mString.data(), mString.size(), mIsUtf8);
+}
+std::wstring str::EncodedStringView::wstring() const  // UTF-16 on Windows, UTF-32 on Linux
+{
+    return str::details::to_wstring(mString.data(), mString.size(), mIsUtf8);
+}
+
+
 str::W1252string str::EncodedStringView::w1252string() const
 {
     return str::details::to_w1252string(mString.data(), mString.size(), mIsUtf8);
@@ -94,9 +108,7 @@ bool str::EncodedStringView::operator_eq(const EncodedStringView& rhs) const
     auto& w1252 = !lhs.mIsUtf8 ? lhs : rhs;
 
     // If UTF-8 is native on this platform, convert to UTF-8; otherwise do a native comparision
-    return mNativeIsUtf8 ?
-        utf8.cast<coda_oss::u8string::const_pointer>() == w1252.u8string()
-        : utf8.native() == w1252.mString.data();
+    return mNativeIsUtf8 ? utf8.c_str() == w1252.u8string() : utf8.native() == w1252.mString.data();
 }
 
 

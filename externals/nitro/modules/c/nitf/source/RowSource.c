@@ -162,7 +162,7 @@ NITFAPI(nitf_BandSource *) nitf_RowSource_construct(void *algorithm,
     impl->numRows = numRows;
     impl->rowLength = rowLength;
 
-    impl->rowBuffer = (NITF_DATA *) NITF_MALLOC(rowLength);
+    impl->rowBuffer = (uint8_t*) NITF_MALLOC(rowLength);
     if (impl->rowBuffer == NULL)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),

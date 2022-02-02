@@ -62,8 +62,6 @@ std::unique_ptr<T> make_unique(size_t size)
 template <typename T, typename... TArgs, typename std::enable_if<std::extent<T>::value != 0, int>::type = 0>
 void make_unique(TArgs&&...) = delete;
 
-#define CODA_OSS_coda_oss_make_unique 201304L  // c.f., __cpp_lib_make_unique
-
 } // namespace coda_oss
 
 #endif // CODA_OSS_coda_oss_memory_h_INCLUDED_
