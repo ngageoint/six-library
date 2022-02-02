@@ -99,6 +99,7 @@ private:
 class ValidatorXerces : public ValidatorInterface
 {
     XercesContext mCtxt;    //! this must be the first member listed
+    bool mLegacyStringConversion = true; // use exsiting code for XMLCh* conversion
 
 public:
 
@@ -113,7 +114,7 @@ public:
     ValidatorXerces(const std::vector<std::string>& schemaPaths, 
                     logging::Logger* log,
                     bool recursive = true);
-    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&,
+    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, // fs::path -> mLegacyStringConversion = false
                     logging::Logger* log,
                     bool recursive = true);
 
@@ -133,8 +134,14 @@ public:
     virtual bool validate(const std::string& xml,
                           const std::string& xmlID,
                           std::vector<ValidationInfo>& errors) const override;
+    bool validate(const coda_oss::u8string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
+    bool validate(const str::W1252string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
 
 private:
+    template <typename CharT>
+    bool validate_(const std::basic_string<CharT>& xml, bool legacyStringConversion,
+                   const std::string& xmlID,
+                   std::vector<ValidationInfo>& errors) const;
 
     std::unique_ptr<xercesc::XMLGrammarPool> mSchemaPool;
     std::unique_ptr<xml::lite::ValidationErrorHandler> mErrorHandler;

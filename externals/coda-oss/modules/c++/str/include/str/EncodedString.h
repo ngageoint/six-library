@@ -56,6 +56,10 @@ class EncodedString final
         return s_;
     }
 
+    void assign(coda_oss::u8string::const_pointer);
+    void assign(str::W1252string::const_pointer);
+    void assign(std::string::const_pointer);
+
 public:
     EncodedString() = default;
     ~EncodedString() = default;
@@ -71,7 +75,11 @@ public:
     explicit EncodedString(const std::string&);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
     explicit EncodedString(std::string::const_pointer);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
     explicit EncodedString(const std::u16string&); // converted to UTF-8 for storage
+    //explicit EncodedString(std::u16string::const_pointer); // no wcslen() for std::u16string::value_type
     explicit EncodedString(const std::u32string&); // converted to UTF-8 for storage
+    //explicit EncodedString(std::u32string::const_pointer); // no wcslen() for std::u32string::value_type
+    explicit EncodedString(const std::wstring&);  // Assume platform native encoding: UTF-32 on Linux, UTF-16 on Windows
+    explicit EncodedString(std::wstring::const_pointer);  // can call wcslen()
 
     // create from a view
     EncodedString(const EncodedStringView&);
@@ -82,15 +90,6 @@ public:
     static EncodedString fromWindows1252(const std::string&);
     static EncodedString fromUtf16(const std::wstring&); // not currently implemetned, no need
     static EncodedString fromUtf32(const std::wstring&); // not currently implemetned, no need
-
-    void assign(coda_oss::u8string::const_pointer);
-    void assign(str::W1252string::const_pointer);
-    void assign(std::string::const_pointer);
-    template <typename CharT>
-    void assign(const std::basic_string<CharT>& s)
-    {
-        assign(s.c_str());
-    }
     
     // For "complex" operatations, use the view.  While creating a new one
     // is cheap, there's not really any need that.
@@ -114,6 +113,20 @@ public:
     }
     //std::string& toUtf8(std::string&) const; // std::string is encoded as UTF-8, always.
     //str::W1252string w1252string() const;  // c.f. std::filesystem::path::u8string()
+
+    // Convert whatever we're looking at to UTF-16 or UTF-32
+    std::u16string u16string() const  // c.f. std::filesystem::path::u8string()
+    {
+        return view().u16string();
+    }
+    std::u32string u32string() const  // c.f. std::filesystem::path::u8string()
+    {
+        return view().u32string();
+    }
+    std::wstring wstring() const // UTF-16 on Windows, UTF-32 on Linux
+    {
+        return view().wstring();
+    }
 
     struct details final
     {

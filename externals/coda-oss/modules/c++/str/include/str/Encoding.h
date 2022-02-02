@@ -32,6 +32,7 @@
 #include <string>
 
 #include "coda_oss/string.h"
+#include "gsl/gsl.h"
 
 // This can be useful for code that will compile on all platforms, but needs
 // different platform-specific behavior.  This avoids the use of more #ifdefs
@@ -81,12 +82,12 @@ using W1252string = std::basic_string<Windows1252_T>;  // https://en.cppreferenc
 coda_oss::u8string fromWindows1252(std::string::const_pointer, size_t); // std::string is Windows-1252 **ON ALL PLATFORMS**
 inline coda_oss::u8string fromWindows1252(std::string::const_pointer s)
 {
-    return fromWindows1252(s, static_cast<size_t>(strlen(s)));
+    return fromWindows1252(s, gsl::narrow<size_t>(strlen(s)));
 }
 coda_oss::u8string fromUtf8(std::string::const_pointer, size_t); // std::string is UTF-8 **ON ALL PLATFORMS**
 inline coda_oss::u8string fromUtf8(std::string::const_pointer s)
 {
-    return fromUtf8(s, static_cast<size_t>(strlen(s)));
+    return fromUtf8(s, gsl::narrow<size_t>(strlen(s)));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -99,24 +100,41 @@ inline coda_oss::u8string to_u8string(coda_oss::u8string::const_pointer s, size_
 {
     return coda_oss::u8string(s, sz);
 }
+coda_oss::u8string to_u8string(std::wstring::const_pointer, size_t);  // std::wstring is UTF-16 or UTF-32  depending on platform
 
 // UTF-16 is typically uses on Windows (where it is std::wstring::value_type);
 // Linux preferred UTF-32.
 coda_oss::u8string to_u8string(std::u16string::const_pointer, size_t);
+std::u16string to_u16string(coda_oss::u8string::const_pointer, size_t);
 
 // UTF-32 is convenient because each code-point is a single 32-bit integer.
 // It's typically std::wstring::value_type on Linux, but NOT Windows.
 coda_oss::u8string to_u8string(std::u32string::const_pointer, size_t);
+std::u32string to_u32string(coda_oss::u8string::const_pointer, size_t);
 
 template <typename TChar>
 inline coda_oss::u8string to_u8string(const std::basic_string<TChar>& s)
 {
     return to_u8string(s.c_str(), s.size());
 }
+template <typename TChar>
+inline std::u16string to_u16string(const std::basic_string<TChar>& s)
+{
+    return to_u16string(s.c_str(), s.size());
+}
+template <typename TChar>
+inline std::u32string to_u32string(const std::basic_string<TChar>& s)
+{
+    return to_u32string(s.c_str(), s.size());
+}
 
 namespace details // YOU should use EncodedStringView
 {
 coda_oss::u8string to_u8string(std::string::const_pointer, size_t, bool is_utf8 /* is 's' UTF-8? */);
+std::u16string to_u16string(std::string::const_pointer, size_t, bool is_utf8 /* is 's' UTF-8? */);
+std::u32string to_u32string(std::string::const_pointer, size_t, bool is_utf8 /* is 's' UTF-8? */);
+std::wstring to_wstring(std::string::const_pointer, size_t, bool is_utf8 /* is 's' UTF-8? */);
+
 std::string& to_u8string(std::string::const_pointer, size_t, bool is_utf8 /* is 's' UTF-8? */, std::string&); // encoding is lost
 std::string& to_u8string(std::u16string::const_pointer, size_t, std::string&); // encoding is lost
 std::string& to_u8string(std::u32string::const_pointer, size_t, std::string&); // encoding is lost
