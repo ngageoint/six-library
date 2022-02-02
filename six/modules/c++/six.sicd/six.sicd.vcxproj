@@ -110,6 +110,7 @@
     <ClInclude Include="include\six\sicd\ComplexClassification.h" />
     <ClInclude Include="include\six\sicd\ComplexData.h" />
     <ClInclude Include="include\six\sicd\ComplexDataBuilder.h" />
+    <ClInclude Include="include\six\sicd\ComplexToAMP8IPHS8I.h" />
     <ClInclude Include="include\six\sicd\ComplexXMLControl.h" />
     <ClInclude Include="include\six\sicd\ComplexXMLParser.h" />
     <ClInclude Include="include\six\sicd\ComplexXMLParser040.h" />
@@ -127,7 +128,6 @@
     <ClInclude Include="include\six\sicd\ImageCreation.h" />
     <ClInclude Include="include\six\sicd\ImageData.h" />
     <ClInclude Include="include\six\sicd\ImageFormation.h" />
-    <ClInclude Include="include\six\sicd\KDTree.h" />
     <ClInclude Include="include\six\sicd\NITFReadComplexXMLControl.h" />
     <ClInclude Include="include\six\sicd\PFA.h" />
     <ClInclude Include="include\six\sicd\Position.h" />
@@ -153,6 +153,7 @@
     <ClCompile Include="source\AreaPlaneUtility.cpp" />
     <ClCompile Include="source\ComplexData.cpp" />
     <ClCompile Include="source\ComplexDataBuilder.cpp" />
+    <ClCompile Include="source\ComplexToAMP8IPHS8I.cpp" />
     <ClCompile Include="source\ComplexXMLControl.cpp" />
     <ClCompile Include="source\ComplexXMLParser.cpp" />
     <ClCompile Include="source\ComplexXMLParser040.cpp" />
@@ -169,7 +170,6 @@
     <ClCompile Include="source\Grid.cpp" />
     <ClCompile Include="source\ImageData.cpp" />
     <ClCompile Include="source\ImageFormation.cpp" />
-    <ClCompile Include="source\KDTree.cpp" />
     <ClCompile Include="source\NITFReadComplexXMLControl.cpp" />
     <ClCompile Include="source\PFA.cpp" />
     <ClCompile Include="source\Position.cpp" />
