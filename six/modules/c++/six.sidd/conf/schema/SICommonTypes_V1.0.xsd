@@ -528,10 +528,19 @@
 			<xsd:documentation/>
 		</xsd:annotation>
 		<xsd:sequence>
-			<xsd:element name="Angle" type="ZeroToExclusive360Type"/>
+			<xsd:element name="Angle" type="Neg180To180Type"/>
 			<xsd:element name="Magnitude" type="xsd:double"/>
 		</xsd:sequence>
 	</xsd:complexType>
+	<xsd:complexType name="AngleZeroToExclusive360MagnitudeType">
+		<xsd:annotation>
+			<xsd:documentation/>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Angle" type="ZeroToExclusive360Type"/>
+			<xsd:element name="Magnitude" type="xsd:double"/>
+		</xsd:sequence>
+	</xsd:complexType>	
 	<xsd:complexType name="RangeAzimuthType">
 		<xsd:annotation>
 			<xsd:documentation>Represents range and azimuth</xsd:documentation>

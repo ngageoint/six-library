@@ -46,16 +46,13 @@ void six::sicd::NITFReadComplexXMLControl::load(const std::string& fromFile,
 void six::sicd::NITFReadComplexXMLControl::load(const std::filesystem::path& fromFile,
     const std::vector<std::filesystem::path>* pSchemaPaths)
 {
-    const std::vector<std::string>* pSchemaPaths_ = nullptr;
-    std::vector<std::string> schemaPaths_;
-    if (pSchemaPaths != nullptr)
-    {
-        std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
-        pSchemaPaths_ = &schemaPaths_;
-    }
-    load(fromFile.string(), pSchemaPaths_);
+    reader.load(fromFile, pSchemaPaths);
 }
 void six::sicd::NITFReadComplexXMLControl::load(io::FileInputStream& fis, const std::vector<std::string>* pSchemaPaths)
+{
+    reader.load(fis, pSchemaPaths);
+}
+void six::sicd::NITFReadComplexXMLControl::load(io::FileInputStream& fis, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
     reader.load(fis, pSchemaPaths);
 }
