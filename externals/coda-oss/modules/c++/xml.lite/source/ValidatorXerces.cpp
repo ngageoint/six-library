@@ -197,16 +197,14 @@ static void setStringData(xercesc::DOMLSInputImpl& input, const std::string& xml
         setStringData_(input, xml, pWString);
     }
 }
-inline void setStringData(xercesc::DOMLSInputImpl& input, const coda_oss::u8string& xml, bool legacyStringConversion,
+inline void setStringData(xercesc::DOMLSInputImpl& input, const coda_oss::u8string& xml, bool /*legacyStringConversion*/,
                           std::unique_ptr<XercesLocalString>&, std::unique_ptr<std::wstring>& pWString)
 {
-    assert(!legacyStringConversion);
     setStringData_(input, xml, pWString);
 }
-inline void setStringData(xercesc::DOMLSInputImpl& input, const str::W1252string& xml, bool legacyStringConversion,
+inline void setStringData(xercesc::DOMLSInputImpl& input, const str::W1252string& xml, bool /*legacyStringConversion*/,
                           std::unique_ptr<XercesLocalString>&, std::unique_ptr<std::wstring>& pWString)
 {
-    assert(!legacyStringConversion);
     setStringData_(input, xml, pWString);
 }
 
