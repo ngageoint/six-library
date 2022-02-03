@@ -222,26 +222,27 @@ TEST_CASE(sicd_French_xml)
 
     test_nitf_image_info(*pComplexData, inputPathname, nitf::PixelValueType::Floating);
 }
-TEST_CASE(sicd_French_legacy_xml)
-{
-    setNitfPluginPath();
 
-    const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
-    const auto pathname = inputPathname.string();
-    const auto schemaPaths = ::schemaPaths();
-
-    // Use legacy APIs ... to test other XML processing path
-    std::vector<std::string> schemaPaths_;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
-        [](const fs::path& p) { return p.string(); });
-
-    six::sicd::NITFReadComplexXMLControl reader;
-    reader.setLogger();
-    reader.load(pathname, schemaPaths_);
-
-    // For SICD, there's only one image (container->size() == 1)
-    TEST_ASSERT(reader.getContainer()->size() == 1);
-}
+//TEST_CASE(sicd_French_legacy_xml)
+//{
+//    setNitfPluginPath();
+//
+//    const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
+//    const auto pathname = inputPathname.string();
+//    const auto schemaPaths = ::schemaPaths();
+//
+//    // Use legacy APIs ... to test other XML processing path
+//    std::vector<std::string> schemaPaths_;
+//    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
+//        [](const fs::path& p) { return p.string(); });
+//
+//    six::sicd::NITFReadComplexXMLControl reader;
+//    reader.setLogger();
+//    reader.load(pathname, schemaPaths_);
+//
+//    // For SICD, there's only one image (container->size() == 1)
+//    TEST_ASSERT(reader.getContainer()->size() == 1);
+//}
 
 static bool find_string(io::FileInputStream& stream, const std::string& s)
 {
@@ -501,7 +502,7 @@ TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(valid_six_50x50);
     TEST_CHECK(sicd_French_xml_raw);
     TEST_CHECK(sicd_French_xml);
-    TEST_CHECK(sicd_French_legacy_xml);    
+    //TEST_CHECK(sicd_French_legacy_xml);    
     TEST_CHECK(test_readFromNITF_sicd_50x50);
     TEST_CHECK(test_read_sicd_50x50);
     TEST_CHECK(test_create_sicd_from_mem_32f);
