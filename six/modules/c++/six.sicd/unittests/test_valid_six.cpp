@@ -98,6 +98,13 @@ static void setNitfPluginPath()
     sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }
 
+static std::vector<fs::path> schemaPaths()
+{
+    const auto relativePath = fs::path("six") / "modules" / "c++" / "six.sicd" / "conf" / "schema";
+    auto path = six::testing::buildRootDir(argv0()) / relativePath;
+    TEST_ASSERT(fs::exists(path));
+    return { std::move(path) };
+}
 
 static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXMLControl& reader)
 {
@@ -187,8 +194,11 @@ TEST_CASE(valid_six_50x50)
 
     valid_six_50x50_(nullptr /*pSchemaPaths*/); // no XML validiaton
   
-    const std::vector<std::filesystem::path> schemaPaths;
-    valid_six_50x50_(&schemaPaths); // validate against schema
+    auto schemaPaths = ::schemaPaths();
+    valid_six_50x50_(&schemaPaths); // validate against schema (actual path)
+
+    schemaPaths.clear();
+    valid_six_50x50_(&schemaPaths); // "validate" against schema (use a default path)
 }
 
 const std::string classificationText_iso8859_1("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
@@ -200,9 +210,8 @@ TEST_CASE(sicd_French_xml)
 
     const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
-    //const std::vector<std::filesystem::path> schemaPaths;
-    //const auto image = six::sicd::readFromNITF(inputPathname, &schemaPaths, pComplexData);
-    const auto image = six::sicd::readFromNITF(inputPathname, pComplexData); // no validation
+    const auto schemaPaths = ::schemaPaths();
+    const auto image = six::sicd::readFromNITF(inputPathname, &schemaPaths, pComplexData);
     const six::Data* pData = pComplexData.get();
 
     const auto expectedCassificationText = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
@@ -255,7 +264,7 @@ static void sicd_French_xml_raw_(bool storeEncoding)
         TEST_ASSERT(encoding == PlatformEncoding);
     }
 
-    // UTF-8 characters in 50x50.nitf
+    // UTF-8 characters in sicd_French_xml.nitf
     std::string expectedCharData;
     size_t expectedLength;
     if (storeEncoding)
@@ -292,7 +301,6 @@ static void sicd_French_xml_raw_(bool storeEncoding)
 
     std::u8string u8_characterData;
     classificationXML.getCharacterData(u8_characterData);
-    std::clog << "'" << u8_characterData.length() << "' '" << expectedLength << "'\n";
     TEST_ASSERT_EQ(u8_characterData.length(), expectedLength);
     TEST_ASSERT(u8_characterData == u8_expectedCharData8);
 }
