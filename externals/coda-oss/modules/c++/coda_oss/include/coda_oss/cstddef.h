@@ -31,7 +31,7 @@
 namespace coda_oss
 {
 	#if defined(GSL_BYTE_H) // the above #include'd gsl/byte
-		using byte = gsl::byte;
+		using gsl::byte;
 	#else // no gsl::byte, use our own
         // https://en.cppreference.com/w/cpp/types/byte
         enum class byte : unsigned char {};

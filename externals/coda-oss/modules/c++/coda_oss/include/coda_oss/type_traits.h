@@ -30,17 +30,16 @@
 namespace coda_oss
 {
 // workaround missing "is_trivially_copyable" in g++ < 5.0
+// https://stackoverflow.com/a/31798726/8877
 #if defined(__GNUC__) && (__GNUC__ < 5)
 template <typename T>
 struct is_trivially_copyable final
 {
     static_assert(CODA_OSS_cplusplus < 201402L, "C++14 must have is_trivially_copyable.");
-    // https://stackoverflow.com/a/31798726/8877
     static constexpr bool value = __has_trivial_copy(T);
 };
 #else
-template <typename T>
-using is_trivially_copyable = std::is_trivially_copyable<T>;
+using std::is_trivially_copyable;
 #endif
 }
 

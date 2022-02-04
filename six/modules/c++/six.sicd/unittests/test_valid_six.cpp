@@ -384,6 +384,12 @@ static void test_assert_eq(std::span<const std::byte> bytes, const std::vector<T
         TEST_ASSERT_EQ(bytes_i, rawDataBytes_i);
     }
 }
+template<typename T>
+static void test_assert_eq(const std::vector<std::byte>& bytes, const std::vector<T>& rawData)
+{
+    test_assert_eq(std::span<const std::byte>(bytes.data(), bytes.size()), rawData);
+}
+
 
 static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::span<const std::byte> expectedBytes)
 {
@@ -419,7 +425,7 @@ static void read_nitf(const fs::path& path, six::PixelType pixelType, const std:
     TEST_ASSERT(result.widebandData == image);
 
     const auto bytes = six::sicd::testing::to_bytes(result);
-    read_raw_data(path, pixelType, bytes);
+    read_raw_data(path, pixelType, std::span<const std::byte>(bytes.data(), bytes.size()));
 }
 
 static void buffer_list_save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
@@ -436,7 +442,7 @@ static void save(const fs::path& outputName, const std::vector<std::complex<floa
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
     static const std::vector<fs::path> fs_schemaPaths;
-    six::sicd::writeAsNITF(outputName, fs_schemaPaths, *pComplexData, image);
+    six::sicd::writeAsNITF(outputName, fs_schemaPaths, *pComplexData, std::span<const std::complex<float>>(image.data(), image.size()));
 }
 
 template<typename TSave>

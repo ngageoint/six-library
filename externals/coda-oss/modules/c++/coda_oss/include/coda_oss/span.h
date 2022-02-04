@@ -23,9 +23,6 @@
 #define CODA_OSS_coda_oss_span_h_INCLUDED_
 #pragma once
 
-#include <assert.h>
-#include <stddef.h>
-
 #include "coda_oss/namespace_.h"
 #include "coda_oss/span_.h"
 
@@ -36,11 +33,9 @@
 namespace coda_oss
 {
 #if defined(GSL_SPAN_H) // the above #include'd gsl/span
-	template <typename T>
-	using span = gsl::span<T>;
+	using gsl::span;
 #else // no gsl::span, use our own
-	template <typename T>
-	using span = details::span<T>;
+	using details::span;
 #endif  // GSL_SPAN_H
 }
 

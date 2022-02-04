@@ -369,4 +369,10 @@ namespace sys
 
 }
 
+// https://en.wikipedia.org/wiki/Year_2038_problem
+// "Most operating systems designed to run on 64-bit hardware already use signed 64-bit `time_t` integers. ..."
+#include <time.h>
+#include <stdint.h>
+static_assert(sizeof(time_t) >= sizeof(int64_t), "Should have at least a 64-bit time_t.");
+
 #endif // CODA_OSS_sys_Conf_h_INCLUDED_

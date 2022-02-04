@@ -175,6 +175,22 @@ static void test_assert_eq(const std::vector<std::complex<float>>& actuals, cons
     }
 }
 
+static void from_AMP8I_PHS8I(const six::sicd::ImageData& imageData,
+    const std::vector<AMP8I_PHS8I_t>& inputs_, std::vector<std::complex<float>>& results_, ptrdiff_t cutoff = -1)
+{
+    const std::span<const AMP8I_PHS8I_t> inputs(inputs_.data(), inputs_.size());
+    const std::span<std::complex<float>> results(results_.data(), results_.size());
+    imageData.from_AMP8I_PHS8I(inputs, results, cutoff);
+}
+
+static void to_AMP8I_PHS8I(const six::sicd::ImageData& imageData,
+    const std::vector<std::complex<float>>& inputs_, std::vector<AMP8I_PHS8I_t>& results_, ptrdiff_t cutoff = -1)
+{
+    const std::span<const std::complex<float>> inputs(inputs_.data(), inputs_.size());
+    const std::span<AMP8I_PHS8I_t> results(results_.data(), results_.size());
+    imageData.to_AMP8I_PHS8I(inputs, results, cutoff);
+}
+
 TEST_CASE(test_8bit_ampphs)
 {
     six::sicd::ImageData imageData;
@@ -195,18 +211,18 @@ TEST_CASE(test_8bit_ampphs)
     }
 
     std::vector<std::complex<float>> actuals(inputs.size());
-    imageData.from_AMP8I_PHS8I(inputs, actuals);
+    from_AMP8I_PHS8I(imageData, inputs, actuals);
     TEST_ASSERT(actuals == expecteds);
 
 
     // we should now be able to convert the cx_floats back to amp/value
     std::vector<AMP8I_PHS8I_t> amp8i_phs8i(actuals.size());
-    imageData.to_AMP8I_PHS8I(actuals, amp8i_phs8i);
+    to_AMP8I_PHS8I(imageData, actuals, amp8i_phs8i);
     test_assert_eq(actuals, amp8i_phs8i);
 
     // ... and again, async
     const auto cutoff = actuals.size() / 10; // be sure std::async is called
-    imageData.to_AMP8I_PHS8I(actuals, amp8i_phs8i, cutoff);
+    to_AMP8I_PHS8I(imageData, actuals, amp8i_phs8i, cutoff);
     test_assert_eq(actuals, amp8i_phs8i);
 }
 
@@ -257,7 +273,7 @@ static std::pair<uint64_t, uint64_t> to_AMP8I_PHS8I(const six::sicd::ImageData& 
     const auto size = sys::debug ? widebandData.size() / 200 : widebandData.size();
     const std::span<const std::complex<float>> widebandData_(widebandData.data(), size);
     std::vector<AMP8I_PHS8I_t> results(widebandData_.size());
-    imageData.to_AMP8I_PHS8I(widebandData_, results, 0);
+    imageData.to_AMP8I_PHS8I(widebandData_, std::span< AMP8I_PHS8I_t>(results.data(), results.size()), 0);
 
     std::pair<uint64_t, uint64_t> retval(0, 0);
     for (const auto& r : results)
@@ -406,11 +422,12 @@ static std::vector<std::complex<float>> adjust_image(const six::sicd::ComplexDat
     // Convert from AMP8I_PHS8I to that when we convert to AMP8I_PHS8I for writing
     // we'll end up with the "[***...***]" in the file
     void* image_data = image.data();
-    std::span<AMP8I_PHS8I_t> from(static_cast<AMP8I_PHS8I_t*>(image_data), getExtent(complexData).area());
-    adjust_image(from);
+    std::span<AMP8I_PHS8I_t> from_(static_cast<AMP8I_PHS8I_t*>(image_data), getExtent(complexData).area());
+    adjust_image(from_);
 
+    std::span<const AMP8I_PHS8I_t> from(from_.data(), from_.size());
     std::vector<std::complex<float>> retval(from.size());
-    complexData.imageData->from_AMP8I_PHS8I(from, retval);
+    complexData.imageData->from_AMP8I_PHS8I(from, std::span<std::complex<float>>(retval.data(), retval.size()));
     return retval;
 }
 static std::vector<std::complex<float>> make_complex_image(const six::sicd::ComplexData& complexData, const types::RowCol<size_t>& dims)
@@ -436,6 +453,11 @@ static void test_assert_eq(std::span<const std::byte> bytes, const std::vector<T
         const auto rawDataBytes_i = static_cast<uint8_t>(rawDataBytes[i]);
         TEST_ASSERT_EQ(bytes_i, rawDataBytes_i);
     }
+}
+template<typename T>
+static void test_assert_eq(const std::vector<std::byte>& bytes, const std::vector<T>& rawData)
+{
+    test_assert_eq(std::span<const std::byte>(bytes.data(), bytes.size()), rawData);
 }
 
 static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::span<const std::byte> expectedBytes)
@@ -472,7 +494,7 @@ static void read_nitf(const fs::path& path, six::PixelType pixelType, const std:
     TEST_ASSERT(result.widebandData == image);
 
     const auto bytes = six::sicd::testing::to_bytes(result);
-    read_raw_data(path, pixelType, bytes);
+    read_raw_data(path, pixelType, std::span<const std::byte>(bytes.data(), bytes.size()));
 }
 
 static void buffer_list_save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
@@ -489,7 +511,7 @@ static void save(const fs::path& outputName, const std::vector<std::complex<floa
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
     static const std::vector<fs::path> fs_schemaPaths;
-    six::sicd::writeAsNITF(outputName, fs_schemaPaths, *pComplexData, image);
+    six::sicd::writeAsNITF(outputName, fs_schemaPaths, *pComplexData, std::span<const std::complex<float>>(image.data(), image.size()));
 }
 
 static void test_assert_image_(const std::vector<std::complex<float>>& image, const six::sicd::ComplexData& complexData)
