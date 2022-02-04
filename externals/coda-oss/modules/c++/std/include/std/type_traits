@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2022, Maxar Technologies, Inc.
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * std-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -26,19 +26,21 @@
 #include "coda_oss/type_traits.h"
 
 #ifndef CODA_OSS_NO_is_trivially_copyable
-#define CODA_OSS_NO_is_trivially_copyable 0  // enabled, unless explicitly disabled
+	#define CODA_OSS_NO_is_trivially_copyable 1  // *disabled*, unless explicitly enabled
+
+	// https://stackoverflow.com/a/31798726/8877
+	// workaround missing "is_trivially_copyable" in g++ < 5.0
+	#if defined(__GNUC__) && (__GNUC__ < 5)
+		#undef CODA_OSS_NO_is_trivially_copyable
+		#define CODA_OSS_NO_is_trivially_copyable 0  // *need* our own
+	#endif
 #endif
 
 #if !CODA_OSS_NO_is_trivially_copyable
-// https://stackoverflow.com/a/31798726/8877
-// workaround missing "is_trivially_copyable" in g++ < 5.0
-#if defined(__GNUC__) && (__GNUC__ < 5)
 namespace std // This is slightly uncouth: we're not supposed to augment "std".
 {
-template <typename T>
-using is_trivially_copyable = coda_oss::is_trivially_copyable<T>;
+	using coda_oss::is_trivially_copyable;
 }
-#endif // __GNUC__
 #endif // CODA_OSS_NO_is_trivially_copyable
 
 #endif  // CODA_OSS_std_type_traits_INCLUDED_

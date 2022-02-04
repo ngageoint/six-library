@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of std-c++
  * =========================================================================
  *
  * (C) Copyright 2021, Maxar Technologies, Inc.
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * std-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -25,27 +25,21 @@
 #include <memory>
 
 // Make it (too?) easy for clients to get our various std:: implementations
-
 #include "coda_oss/memory.h"
-
-#if defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique >= 201304L) // https://en.cppreference.com/w/cpp/utility/feature_test
-    #undef CODA_OSS_NO_std_make_unique
-    #define CODA_OSS_NO_std_make_unique 1  // don't need our own
-#endif
 
 #ifndef CODA_OSS_NO_std_make_unique
     #define CODA_OSS_NO_std_make_unique 0  // enabled, unless explicitly disabled
+
+    #if defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique >= 201304L) // https://en.cppreference.com/w/cpp/utility/feature_test
+        #undef CODA_OSS_NO_std_make_unique
+        #define CODA_OSS_NO_std_make_unique 1  // don't need our own
+    #endif
 #endif
 
 #if !CODA_OSS_NO_std_make_unique
 namespace std // This is slightly uncouth: we're not supposed to augment "std".
 {
-        template <typename T, typename... TArgs>
-        std::unique_ptr<T> make_unique(TArgs && ... args)
-        {
-            // let coda_oss::make_unique to all the template magic
-            return coda_oss::make_unique<T>(std::forward<TArgs>(args)...);
-        }
+    using coda_oss::make_unique;
 }
 #endif  // !CODA_OSS_NO_std_make_unique
 

@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of std-c++
  * =========================================================================
  *
  * (C) Copyright 2021, Maxar Technologies, Inc.
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * std-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -25,22 +25,22 @@
 #include <cstddef>
 
 // Make it (too?) easy for clients to get our various std:: implementations
-
 #include "coda_oss/cstddef.h"
-#if defined(__cpp_lib_byte) && (__cpp_lib_byte >= 201603L) // https://en.cppreference.com/w/cpp/utility/feature_test
-    #undef CODA_OSS_NO_std_byte
-    #define CODA_OSS_NO_std_byte 1  // don't need our own
-#endif
 
 #ifndef CODA_OSS_NO_std_byte
     #define CODA_OSS_NO_std_byte 0  // enabled, unless explicitly disabled
+
+    #if defined(__cpp_lib_byte) && (__cpp_lib_byte >= 201603L) // https://en.cppreference.com/w/cpp/utility/feature_test
+        #undef CODA_OSS_NO_std_byte
+        #define CODA_OSS_NO_std_byte 1  // don't need our own
+    #endif
 #endif
 
 #if !CODA_OSS_NO_std_byte
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-        using byte = coda_oss::byte;
-    }
+namespace std // This is slightly uncouth: we're not supposed to augment "std".
+{
+    using coda_oss::byte;
+}
 #endif  // !CODA_OSS_NO_std_byte
 
 #endif  // CODA_OSS_std_cstddef_INCLUDED_

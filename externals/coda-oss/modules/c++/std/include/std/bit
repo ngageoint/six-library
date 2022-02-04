@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of std-c++
  * =========================================================================
  *
  * (C) Copyright 2021, Maxar Technologies, Inc.
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * std-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -23,28 +23,27 @@
 #pragma once
 
 // Make it (too?) easy for clients to get our various std:: implementations
-
 #include "coda_oss/bit.h"
-
-#include "coda_oss/CPlusPlus.h"
-#if CODA_OSS_cpp17
-    // Some C++17 implementations have <bit>
-    #if __has_include(<bit>) // __has_include is C++17
-        #include <bit>
-        #undef CODA_OSS_NO_std_endian
-        #define CODA_OSS_NO_std_endian 1  // don't need our own
-    #endif
-#endif
 
 #ifndef CODA_OSS_NO_std_endian
     #define CODA_OSS_NO_std_endian 0  // enabled, unless explicitly disabled
+
+    #include "coda_oss/CPlusPlus.h"
+    #if CODA_OSS_cpp17
+        // Some C++17 implementations have <bit>
+        #if __has_include(<bit>) // __has_include is C++17
+            #include <bit>
+            #undef CODA_OSS_NO_std_endian
+            #define CODA_OSS_NO_std_endian 1  // don't need our own
+        #endif
+    #endif
 #endif
 
 #if !CODA_OSS_NO_std_endian
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-        using endian = coda_oss::endian;
-    }
+namespace std // This is slightly uncouth: we're not supposed to augment "std".
+{
+    using coda_oss::endian;
+}
 #endif  // CODA_OSS_NO_std_endian
 
 #endif  // CODA_OSS_std_bit_INCLUDED_

@@ -119,7 +119,8 @@ public:
     {
         std::vector<sys::byte> values_;
         serialize(values_);
-        auto begin = reinterpret_cast<std::byte*>(values_.data());
+        void* pData = values_.data();
+        auto begin = static_cast<std::byte*>(pData);
         auto end = begin + values_.size();
         values.insert(values.end(), begin, end);
     }
