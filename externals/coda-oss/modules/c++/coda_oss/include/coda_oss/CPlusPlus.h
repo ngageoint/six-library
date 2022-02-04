@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2021, 2022, Maxar Technologies, Inc.
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * coda_oss-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -47,13 +47,19 @@
     #endif // _MSVC_LANG
 
     #if defined(__GNUC__)
-    // ... similar things needed for other compilers ... ?
     #endif // __GNUC__
-
 #endif // CODA_OSS_cplusplus
+#if CODA_OSS_cplusplus < 202002L
+    // oops ... try to fix
+    #if defined(__GNUC__) && (__cplusplus >= 201709L) // note > C++ 17 of 201703L
+        // Enough C++20 for our needs
+        #undef CODA_OSS_cplusplus
+        #define CODA_OSS_cplusplus 202002L
+     #endif
+#endif  // CODA_OSS_cplusplus
 
-#if CODA_OSS_cplusplus < 201103L  
-#error "Must compile with C++11 or greater."
+#if CODA_OSS_cplusplus < 202002L
+#error "Must compile with C++20 or greater."
 #endif
 
 // Define a few macros as that's less verbose than testing against a version number

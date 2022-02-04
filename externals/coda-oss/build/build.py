@@ -813,12 +813,12 @@ def configureCompilerOptions(self):
         cxxCompiler = ccCompiler
     else:
         if ccCompiler == 'gcc':
-            self.env['COMPILER_CC'] = 'gcc-10'
-            ccCompiler = self.env['COMPILER_CC']
+            ccCompiler = 'gcc-10'
+            self.env['COMPILER_CC'] =ccCompiler
 
         if cxxCompiler == 'g++':
-            self.env['COMPILER_CXX'] = 'g++-10'
-            cxxCompiler = self.env['COMPILER_CXX']
+            cxxCompiler = 'g++-10'
+            self.env['COMPILER_CXX'] = cxxCompiler
 
     if not cxxCompiler or not ccCompiler:
         self.fatal('Unable to find C/C++ compiler')
@@ -865,9 +865,6 @@ def configureCompilerOptions(self):
         self.env.append_value('LINKFLAGS_THREAD', '-pthread')
         self.check_cc(lib='pthread', mandatory=True)
 
-        if re.match(solarisRegex, sys_platform):
-            self.env.append_value('LIB_SOCKET', 'socket')
-
         warningFlags = '-Wall'
         if ccCompiler == 'gcc' or ccCompiler == 'gcc-10':
             #warningFlags += ' -Wno-deprecated-declarations -Wold-style-cast'
@@ -893,7 +890,7 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
 
-            gxxCompileFlags='-fPIC -std=c++20'
+            gxxCompileFlags='-fPIC -std=c++2a'
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
@@ -919,56 +916,6 @@ def configureCompilerOptions(self):
             config['cc']['optz_fastest']   = '-O3'
 
             self.env.append_value('CFLAGS', '-fPIC'.split())
-
-    # Solaris (Studio compiler)
-    elif re.match(solarisRegex, sys_platform):
-        self.env.append_value('LIB_DL', 'dl')
-        self.env.append_value('LIB_NSL', 'nsl')
-        self.env.append_value('LIB_SOCKET', 'socket')
-        self.env.append_value('LIB_THREAD', 'thread')
-        self.env.append_value('LIB_MATH', 'm')
-        self.env.append_value('LIB_CRUN', 'Crun')
-        self.env.append_value('LIB_CSTD', 'Cstd')
-        self.check_cc(lib='thread', mandatory=True)
-
-        warningFlags = ''
-        if Options.options.warningsAsErrors:
-            warningFlags = '-errwarn=%all'
-
-        if cxxCompiler == 'sunc++':
-            bitFlag64 = getSolarisFlags(self.env['CXX'][0])
-            config['cxx']['debug']          = '-g'
-            config['cxx']['warn']           = warningFlags.split()
-            config['cxx']['nowarn']         = '-erroff=%all'
-            config['cxx']['verbose']        = '-v'
-            config['cxx']['64']             = bitFlag64
-            config['cxx']['optz_med']       = '-xO3'
-            config['cxx']['optz_fast']      = '-xO4'
-            config['cxx']['optz_fastest']   = '-xO5'
-            self.env['CXXFLAGS_cxxshlib']        = ['-KPIC', '-DPIC']
-
-            # DEFINES apply to both suncc and sunc++
-            self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
-            self.env.append_value('CXXFLAGS', '-KPIC -instances=global'.split())
-            self.env.append_value('CXXFLAGS_THREAD', '-mt')
-
-        if ccCompiler == 'suncc':
-            bitFlag64 = getSolarisFlags(self.env['CC'][0])
-            config['cc']['debug']          = '-g'
-            config['cc']['warn']           = warningFlags.split()
-            config['cc']['nowarn']         = '-erroff=%all'
-            config['cc']['verbose']        = '-v'
-            config['cc']['64']             = bitFlag64
-            config['cc']['linkflags_64']   = bitFlag64
-            config['cc']['optz_med']       = '-xO3'
-            config['cc']['optz_fast']      = '-xO4'
-            config['cc']['optz_fastest']   = '-xO5'
-            self.env['CFLAGS_cshlib']           = ['-KPIC', '-DPIC']
-
-            # C99 is required for Solaris to be compatible with
-            # macros that openjpeg sets
-            self.env.append_value('CFLAGS', ['-KPIC', '-xc99=all'])
-            self.env.append_value('CFLAGS_THREAD', '-mt')
 
     elif re.match(winRegex, sys_platform):
         crtFlag = '/%s' % Options.options.crt
@@ -1317,12 +1264,6 @@ def process_swig_linkage(tsk):
     linkarg_pattern = '-Wl,%s'
     rpath_pattern = '-Wl,-rpath=%s'
     soname_pattern = '-soname=%s'
-
-    # overrides for solaris's cc and ld
-    if re.match(solarisRegex,platform) and compiler != 'g++' and compiler != 'icpc':
-        linkarg_pattern = '%s'
-        soname_pattern = '-h%s'
-        rpath_pattern = '-Rpath%s'
 
     # overrides for osx
     if re.match(darwinRegex,platform) or re.match(osxRegex,platform):

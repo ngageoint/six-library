@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of std-c++
  * =========================================================================
  *
  * (C) Copyright 2021, Maxar Technologies, Inc.
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * std-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -22,6 +22,7 @@
 #define CODA_OSS_std_cstddef_INCLUDED_
 #pragma once
 
+#include <cstddef>
 #include "coda_oss/cstddef.h"
 
 #endif  // CODA_OSS_std_cstddef_INCLUDED_
