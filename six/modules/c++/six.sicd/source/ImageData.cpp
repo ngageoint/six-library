@@ -235,13 +235,10 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
         return values[v.first][v.second];
     };
 
-    const auto begin = inputs.data(); // no iterators with our homebrew span<>
-    const auto end = begin + inputs.size();
-    const auto out = results.data(); // no iterators with our homebrew span<>
-
     if (cutoff_ < 0)
     {
-        (void) std::transform(begin,end, out, get_RE32F_IM32F_value_f);
+        (void) std::transform(inputs.begin(), inputs.end(), results.begin(),
+            get_RE32F_IM32F_value_f);
     }
     else
     {
@@ -249,7 +246,8 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
         constexpr auto dimension = 128 * 8;
         constexpr auto default_cutoff = dimension * dimension;
         const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-        (void) mt::transform_async(begin, end, out, get_RE32F_IM32F_value_f, cutoff, std::launch::async);
+        (void) mt::transform_async(inputs.begin(), inputs.end(), results.begin(),
+            get_RE32F_IM32F_value_f, cutoff, std::launch::async);
     }
 }
 
@@ -262,12 +260,10 @@ static void to_AMP8I_PHS8I_(std::span<const cx_float> inputs, std::span<AMP8I_PH
         return tree.nearest_neighbor(v);
     };
 
-    const auto begin = inputs.data(); // no iterators with our homebrew span<>
-    const auto end = begin + inputs.size();
-    const auto out = results.data(); // no iterators with our homebrew span<>
     if (cutoff_ < 0)
     {
-        (void) std::transform(begin, end, out, nearest_neighbor_f);
+        (void) std::transform(inputs.begin(), inputs.end(), results.begin(),
+            nearest_neighbor_f);
     }
     else
     {
@@ -275,7 +271,8 @@ static void to_AMP8I_PHS8I_(std::span<const cx_float> inputs, std::span<AMP8I_PH
         constexpr auto dimension = 128 * 8;
         constexpr auto default_cutoff = dimension * dimension;
         const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-        (void) mt::transform_async(begin, end, out, nearest_neighbor_f, cutoff, std::launch::async);
+        (void) mt::transform_async(inputs.begin(), inputs.end(), results.begin(),
+            nearest_neighbor_f, cutoff, std::launch::async);
     }
 }
 void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,

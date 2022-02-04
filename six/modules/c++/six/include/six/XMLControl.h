@@ -121,7 +121,7 @@ class XMLControl
      *                Otherwise, we can just use what's already there.
      */
     static void loadSchemaPaths(std::vector<std::string>& schemaPaths);
-    static std::vector<std::string> loadSchemaPaths(const std::vector<std::filesystem::path>*);
+    static std::vector<std::filesystem::path> loadSchemaPaths(const std::vector<std::filesystem::path>*);
 
     /*!
      *  Convert the Data model into an XML DOM.
