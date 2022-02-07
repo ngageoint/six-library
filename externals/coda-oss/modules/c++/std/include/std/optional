@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of std-c++
  * =========================================================================
  *
  * (C) Copyright 2021, Maxar Technologies, Inc.
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * std-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -23,32 +23,25 @@
 #pragma once
 
 // Make it (too?) easy for clients to get our various std:: implementations
-
 #include "coda_oss/optional.h"
-static_assert(CODA_OSS_coda_oss_optional >= 201606L, "missing coda_oss::optional");
-
-#include "coda_oss/CPlusPlus.h"
-#if CODA_OSS_cpp17
-    #include <optional>
-    #undef CODA_OSS_NO_std_optional
-    #define CODA_OSS_NO_std_optional 1  // don't need our own
-#endif
 
 #ifndef CODA_OSS_NO_std_optional
     #define CODA_OSS_NO_std_optional 0  // enabled, unless explicitly disabled
+
+    #include "coda_oss/CPlusPlus.h"
+    #if CODA_OSS_cpp17
+        #include <optional>
+        #undef CODA_OSS_NO_std_optional
+        #define CODA_OSS_NO_std_optional 1  // don't need our own
+    #endif
 #endif
 
 #if !CODA_OSS_NO_std_optional
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-        template<typename T>
-        using optional = coda_oss::optional<T>;
-        template <typename T, typename... TArgs>
-        inline optional<T> make_optional(TArgs && ... args)
-        {
-            return coda_oss::make_optional<T>(std::forward<TArgs>(args)...);
-        }
-    }
+namespace std // This is slightly uncouth: we're not supposed to augment "std".
+{
+    using coda_oss::optional;
+    using coda_oss::make_optional;
+}
 #endif // !CODA_OSS_NO_std_optional
 
 #endif  // CODA_OSS_std_optional_INCLUDED_

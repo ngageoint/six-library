@@ -412,7 +412,8 @@ struct ComplexImage final
     const ComplexData& data;
     std::span<const std::complex<float>> image;
     ComplexImage(const ComplexData& d, std::span<const std::complex<float>> i) : data(d), image(i) {}
-    ComplexImage(const ComplexImageResult& r)  : ComplexImage(*(r.pComplexData), r.widebandData) {}
+    ComplexImage(const ComplexImageResult& r) 
+        : ComplexImage(*(r.pComplexData), std::span<const std::complex<float>>(r.widebandData.data(), r.widebandData.size())) {}
     ComplexImage(const ComplexImage&) = delete;
     ComplexImage& operator=(const ComplexImage&) = delete;
 };

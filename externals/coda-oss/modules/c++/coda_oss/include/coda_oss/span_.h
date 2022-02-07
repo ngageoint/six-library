@@ -47,15 +47,6 @@ struct span final
     }
     span(const span&) noexcept = default;
 
-    template <typename TContainer>
-    span(TContainer& c) : span(c.data(), c.size())
-    {
-    }
-    template <typename TContainer>
-    span(const TContainer& c) : span(const_cast<TContainer&>(c))
-    {
-    }
-
     // https://en.cppreference.com/w/cpp/container/span/data
     constexpr pointer data() const noexcept
     {
@@ -85,6 +76,19 @@ struct span final
     constexpr bool empty() const noexcept
     {
         return size() == 0;
+    }
+
+    using iterator = pointer;
+    // https://en.cppreference.com/w/cpp/container/span/begin
+    constexpr iterator begin() const noexcept
+    {
+        return data();
+    }
+
+    // https://en.cppreference.com/w/cpp/container/span/end
+    constexpr iterator end() const noexcept
+    {
+        return begin() + size();
     }
 
 private:

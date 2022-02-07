@@ -72,19 +72,24 @@ namespace Gsl
             return throw_exception(narrowing_error()), t;
         }
         CODA_OSS_disable_warning_pop
+
+        CODA_OSS_disable_warning_push
+        #if defined(_MSC_VER) && (_MSC_VER >= 1928) // don't want to trigger "unknown warning" warning :-)
+        #pragma warning(disable: 26472) // Don't use a static_cast for arithmetic  conversions. Use brace initialization, gsl::narrow_cast or gsl::narrow (type.1).
+        #endif
         template <class T, class U>
         constexpr T narrow1_(T t, U u) noexcept(false)
         {
             return (static_cast<U>(t) != u) ? narrow_throw_exception(t) : t;
         }
+        CODA_OSS_disable_warning_pop
 
         CODA_OSS_disable_warning_push
         CODA_OSS_UNREFERENCED_FORMAL_PARAMETER
         template <class T, class U>
         constexpr T narrow2_(T t, U u) noexcept(false)
         {
-            return (!is_same_signedness<T, U>::value && ((t < T{}) != (u < U{}))) ?
-                narrow_throw_exception(t) : t;
+            return (!is_same_signedness<T, U>::value && ((t < T{}) != (u < U{}))) ? narrow_throw_exception(t) : t;
         }
         CODA_OSS_disable_warning_pop
 
