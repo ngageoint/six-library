@@ -24,6 +24,9 @@
 #include <gsl/gsl.h>
 #include <six/Utilities.h>
 
+#undef min
+#undef max
+
 namespace
 {
 template <typename T>
@@ -344,8 +347,8 @@ types::RowCol<double> AreaPlane::getAdjustedReferencePoint() const
     //       pixel-centered 0-based.  More generally than this, we need to
     //       account for the SICD FirstLine/FirstSample offset
     //
-    refPt.row -= static_cast<double>(xDirection->first);
-    refPt.col -= static_cast<double>(yDirection->first);
+    refPt.row -= gsl::narrow_cast<double>(xDirection->first);
+    refPt.col -= gsl::narrow_cast<double>(yDirection->first);
 
     return refPt;
 }
@@ -430,10 +433,10 @@ void Segment::rotateCCW(size_t numColumns)
     const auto numColumns_ = gsl::narrow<int64_t>(numColumns);
     const six::RowColDouble start(types::RowCol<int64_t>(numColumns_ - 1 - endSample, startLine));
     const six::RowColDouble end(types::RowCol<int64_t>(numColumns_ - 1 - startSample, endLine));
-    startLine = static_cast<int>(start.row);
-    startSample = static_cast<int>(start.col);
-    endLine = static_cast<int>(end.row);
-    endSample = static_cast<int>(end.col);
+    startLine = gsl::narrow_cast<int>(start.row);
+    startSample = gsl::narrow_cast<int>(start.col);
+    endLine = gsl::narrow_cast<int>(end.row);
+    endSample = gsl::narrow_cast<int>(end.col);
 }
 
 
