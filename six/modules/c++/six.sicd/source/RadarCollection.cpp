@@ -20,6 +20,8 @@
  *
  */
 #include <six/sicd/RadarCollection.h>
+
+#include <gsl/gsl.h>
 #include <six/Utilities.h>
 
 namespace
@@ -409,11 +411,11 @@ void AreaPlane::rotateCCW()
 
     for (size_t ii = 0; ii < segmentList.size(); ++ii)
     {
-        segmentList[ii]->rotateCCW(yDirection->elements);
+        segmentList[ii]->rotateCCW(xDirection->elements);
     }
 }
 
-void Segment::rotateCCW(size_t /*numColumns*/)
+void Segment::rotateCCW(size_t numColumns)
 {
     /*
      *   5   wth           --    ! is reference corner
@@ -425,8 +427,9 @@ void Segment::rotateCCW(size_t /*numColumns*/)
      *                    !--
      */
    
-    const six::RowColDouble start(types::RowCol<int>(startSample * -1, startLine));
-    const six::RowColDouble end(types::RowCol<int>(endSample * -1, endLine));
+    const auto numColumns_ = gsl::narrow<int64_t>(numColumns);
+    const six::RowColDouble start(types::RowCol<int64_t>(numColumns_ - 1 - endSample, startLine));
+    const six::RowColDouble end(types::RowCol<int64_t>(numColumns_ - 1 - startSample, endLine));
     startLine = static_cast<int>(start.row);
     startSample = static_cast<int>(start.col);
     endLine = static_cast<int>(end.row);
