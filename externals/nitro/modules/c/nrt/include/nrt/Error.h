@@ -72,6 +72,10 @@ enum
  *
  *  The important components of an error are stored here
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _NRT_Error
 {
     char message[NRT_MAX_EMESSAGE + 1];
@@ -80,6 +84,9 @@ typedef struct _NRT_Error
     char func[NRT_MAX_PATH + 1];
     int level;
 } nrt_Error;
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*!
  *  \fn nrt_Error_init
