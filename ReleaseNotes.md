@@ -6,6 +6,7 @@
 * replace KDTree *`std::complex<float>` -> AMP8I_PHS8I conversion* with a
   ["math based" approach](https://github.com/ngageoint/six-library/pull/537#issuecomment-1026453353).
 * restore SIDD 2.0 `AngleMagnitudeType`, SIDD 3.0 is `AngleZeroToExclusive360MagnitudeType`
+* bugfix: "We found a bug/mistake/error in **six.sicd/source/RadarCollection.cpp**, specifically the function to rotate the Area\Plane\SegmentList block."
 
 ## Version 3.1.8; December 13, 2021
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2021-12-13](https://github.com/mdaus/coda-oss/releases/tag/2021-12-13)
