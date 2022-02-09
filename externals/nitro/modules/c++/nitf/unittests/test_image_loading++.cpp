@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <string>
+#include <std/filesystem>
 
 #include <import/nitf.hpp>
 

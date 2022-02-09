@@ -110,12 +110,12 @@ static fs::path findInputFile_(const std::string& name)
         return root / inputFile;
     }
 
-    const auto exe = fs::absolute(argv0);
+    const auto exe = absolute(fs::path(argv0));
     fs::path root = exe.parent_path();
     do
     {
         auto retval = root / inputFile;
-        if (fs::exists(retval))
+        if (exists(retval))
         {
             return retval;
         }

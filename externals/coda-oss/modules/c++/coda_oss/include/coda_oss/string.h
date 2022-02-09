@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2020-2022, Maxar Technologies, Inc.
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * coda_oss-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -36,7 +36,9 @@ namespace coda_oss
     #if _MSC_VER
     #pragma warning(disable: 5052) // Keyword '...' was introduced in C++20 and requires use of the '...' command-line option
     #endif
+    #if !defined(__cpp_char8_t) // https://en.cppreference.com/w/cpp/feature_test
     enum class char8_t : unsigned char { }; // https://en.cppreference.com/w/cpp/language/types
+    #endif
     using u8string = std::basic_string<char8_t>; // https://en.cppreference.com/w/cpp/string
     CODA_OSS_disable_warning_pop
 }

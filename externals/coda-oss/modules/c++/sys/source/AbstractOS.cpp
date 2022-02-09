@@ -35,6 +35,7 @@
 #include <sys/DateTime.h>
 #include <sys/Dbg.h>
 
+#include <sys/filesystem.h>
 namespace fs = coda_oss::filesystem;
 
 namespace sys
@@ -192,14 +193,15 @@ static bool splitEnv_(const AbstractOS& os, const std::string& envVar, std::vect
     const auto vals = str::split(value, sys::Path::separator());
     for (const auto& val : vals)
     {
+        const fs::path val_(val);
         bool matches = true;
         if (pType != nullptr)
         {
-            const auto isFile = (*pType == fs::file_type::regular) && fs::is_regular_file(val);
-            const auto isDirectory = (*pType == fs::file_type::directory) && fs::is_directory(val);
+            const auto isFile = (*pType == fs::file_type::regular) && is_regular_file(val_);
+            const auto isDirectory = (*pType == fs::file_type::directory) && is_directory(val_);
             matches = isFile || isDirectory;
         }
-        if (fs::exists(val) && matches)
+        if (exists(val_) && matches)
         {
             result.push_back(val);
         }
