@@ -23,6 +23,7 @@
 
 #include <algorithm>
 
+#include <sys/filesystem.h>
 namespace fs = coda_oss::filesystem;
 
 namespace sys
@@ -769,13 +770,14 @@ std::vector<std::string> Path::expandedEnvironmentVariables(const std::string& p
     return expandedEnvironmentVariables_(path, unused_specialPath);
 }
 
-static bool path_matches_type(const std::string &path, fs::file_type type)
+static bool path_matches_type(const std::string &path_, fs::file_type type)
 {
-    if ((type == fs::file_type::regular) && fs::is_regular_file(path))
+    const fs::path path(path_);
+    if ((type == fs::file_type::regular) && is_regular_file(path))
     {
         return true;
     }
-    if ((type== fs::file_type::directory) && fs::is_directory(path))
+    if ((type== fs::file_type::directory) && is_directory(path))
     {
         return true;
     }
