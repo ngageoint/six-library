@@ -54,8 +54,6 @@ fs::path::string_type fs::path::to_native(const std::string& s_)
 #endif
 }
 
-static const fs::path empty_path;
-
 fs::path::path() noexcept
 {
 }
@@ -141,7 +139,7 @@ fs::path fs::path::extension() const
     const auto pathname = string();
     if ((pathname == ".") || (pathname == ".."))
     {
-        return empty_path;
+        return fs::path();
     }
 
     auto fn = filename().string();
@@ -150,7 +148,7 @@ fs::path fs::path::extension() const
     // "If ... filename() does not contain the . character, then empty path is returned."
     if (dot == std::string::npos)
     {
-        return empty_path;
+        return fs::path();
     }
 
     // "If the first character in the filename is a period, that period is ignored

@@ -344,7 +344,7 @@ std::wstring str::details::to_wstring(std::string::const_pointer p, size_t sz, b
     to_u16string(p, sz, is_utf8);  // std::wstring is UTF-16 on Windows
     #endif
     #if !_WIN32
-        to_u32string(p, sz, is_utf8);  // std::wstring is UTF-32 on Linux
+    to_u32string(p, sz, is_utf8);  // std::wstring is UTF-32 on Linux
     #endif    
     return str::c_str<std::wstring::const_pointer>(s); // copy
 }

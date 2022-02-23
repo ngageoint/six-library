@@ -49,14 +49,16 @@ template <typename T>
 using Meters = Length<tags::Meters, T>;
 
 template <typename T, typename TResult = T>
-inline constexpr void convert(Meters<T> v, Feet<TResult>& result) noexcept
+inline /*constexpr*/ Feet<TResult>& convert(Meters<T> v, Feet<TResult>& result) noexcept
 {
     result.value() = v.value() * math::Constants::METERS_TO_FEET;
+    return result;  // ICC doesn't like "constexpr void"
 }
 template <typename T, typename TResult = T>
-inline constexpr void convert(Feet<T> v, Meters<TResult>& result) noexcept
+inline /*constexpr*/ Meters<TResult>& convert(Feet<T> v, Meters<TResult>& result) noexcept
 {
     result.value() = v.value() * math::Constants::FEET_TO_METERS;
+    return result;  // ICC doesn't like "constexpr void"
 }
 
 namespace tags
@@ -68,19 +70,22 @@ template <typename T>
 using NauticalMiles = Length<tags::NauticalMiles, T>;
 
 template <typename T, typename TResult = T>
-inline constexpr void convert(NauticalMiles<T> v, Feet<TResult>& result) noexcept
+inline /*constexpr*/ Feet<TResult>& convert(NauticalMiles<T> v, Feet<TResult>& result) noexcept
 {
     result.value() = v.value() * math::Constants::NAUTICAL_MILES_TO_FEET;
+    return result;  // ICC doesn't like "constexpr void"
 }
 template <typename T, typename TResult = T>
-inline constexpr void convert(NauticalMiles<T> v, Meters<TResult>& result) noexcept
+inline /*constexpr*/ Meters<TResult>& convert(NauticalMiles<T> v, Meters<TResult>& result) noexcept
 {
     result.value() = v.value() * math::Constants::NAUTICAL_MILES_TO_METERS;
+    return result;  // ICC doesn't like "constexpr void"
 }
 template <typename T, typename TResult = T>
-inline constexpr void convert(Meters<T> v, NauticalMiles<TResult>& result) noexcept
+inline /*constexpr*/ NauticalMiles<TResult>& convert(Meters<T> v, NauticalMiles<TResult>& result) noexcept
 {
     result.value() = v.value() * math::Constants::METERS_TO_NAUTICAL_MILES;
+    return result;  // ICC doesn't like "constexpr void"
 }
 }
 
