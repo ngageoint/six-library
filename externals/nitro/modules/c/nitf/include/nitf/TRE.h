@@ -85,13 +85,19 @@ struct _nitf_TREHandler;
  * The TRE structure, which contains the description of the TRE, as well as
  * the Field data.
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_TRE
 {
     struct _nitf_TREHandler* handler;  /*! The plug-in handler */
     NITF_DATA* priv;                   /*! Private data the plug-in knows about */
     char tag[NITF_MAX_TAG + 1];        /* the TRE tag */
 } nitf_TRE;
-
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 struct _nitf_TREEnumerator;
 

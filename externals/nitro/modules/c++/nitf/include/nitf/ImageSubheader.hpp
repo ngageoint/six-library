@@ -48,12 +48,14 @@ namespace nitf
 {
     enum class PixelValueType
     {
-        Integer = NITF_IMAGE_IO_PIXEL_TYPE_INT,
-        BiValued = NITF_IMAGE_IO_PIXEL_TYPE_B,
-        Signed = NITF_IMAGE_IO_PIXEL_TYPE_SI,
-        Floating = NITF_IMAGE_IO_PIXEL_TYPE_R,
-        Complex = NITF_IMAGE_IO_PIXEL_TYPE_C,
-        Pseudo12 = NITF_IMAGE_IO_PIXEL_TYPE_12
+        Integer = NITF_IMAGE_IO_PIXEL_TYPE_INT, /*! \def NITF_IMAGE_IO_PIXEL_TYPE_INT - Integer */
+        BiValued = NITF_IMAGE_IO_PIXEL_TYPE_B, /*! \def NITF_IMAGE_IO_PIXEL_TYPE_B - Bi-valued */
+        Signed = NITF_IMAGE_IO_PIXEL_TYPE_SI, /*! \def NITF_IMAGE_IO_PIXEL_TYPE_SI - Two's complement signed integer */
+        Floating = NITF_IMAGE_IO_PIXEL_TYPE_R, /*! \def NITF_IMAGE_IO_PIXEL_TYPE_R - Floating point */
+        Complex = NITF_IMAGE_IO_PIXEL_TYPE_C, /*! \def NITF_IMAGE_IO_PIXEL_TYPE_C - Complex floating point */
+        
+        /* Psuedo type for 12 bit integer (NBPP == 12 and ABPP = 12) */
+        Pseudo12 = NITF_IMAGE_IO_PIXEL_TYPE_12 /*! \def NITF_IMAGE_IO_PIXEL_TYPE_12 - 12 bit integer signed or unsigned */
     };
     NITF_ENUM_define_string_to_enum_begin(PixelValueType)
     { "INT", PixelValueType::Integer }, { "B", PixelValueType::BiValued }, { "SI", PixelValueType::Signed },
@@ -69,12 +71,35 @@ namespace nitf
     { "NODISPLY", ImageRepresentation::NODISPLY }
     NITF_ENUM_define_string_to_end
 
-    // see nitf_ImageIO_setup_SBR() in ImageIO.c
+    // see nitf_ImageIO_setup_SBR() and nitf_ImageIO_decodeBlockingMode() in ImageIO.c
     //NITF_ENUM(4, BlockingMode, B /*band interleaved by block*/, P /*band interleaved by pixel*/, R /*band interleaved by row*/, S /*band sequential*/);
     enum class BlockingMode { Block, Pixel, Row, Sequential };
     NITF_ENUM_define_string_to_enum_begin(BlockingMode)
-    { "B", BlockingMode::Block }, { "P", BlockingMode::Pixel }, { "R", BlockingMode::Row }, { "S", BlockingMode::Sequential }
+    { "B", BlockingMode::Block }, /*! \def NITF_IMAGE_IO_BLOCKING_MODE_B - Band interleaved by block */
+    { "P", BlockingMode::Pixel }, /*! \def NITF_IMAGE_IO_BLOCKING_MODE_P - Band interleaved by pixel */
+    { "R", BlockingMode::Row }, /*! \def NITF_IMAGE_IO_BLOCKING_MODE_R - Band interleaved by row */
+    { "S", BlockingMode::Sequential }, /*! \def NITF_IMAGE_IO_BLOCKING_MODE_S - Band sequential */
+    //{ "RGB", BlockingMode::RGB }, /*! \def NITF_IMAGE_IO_BLOCKING_MODE_RGB24 - Special case RGB 24-bit BIP */
+    //{ "IQ", BlockingMode::IQ } /*! \def NITF_IMAGE_IO_BLOCKING_MODE_IQ - Special case IQ 2-band BIP */
     NITF_ENUM_define_string_to_end
+
+    // see nitf_ImageIO_decodeCompression() in ImageIO.c
+   NITF_ENUM(15, ImageCompression,
+       NC, /*! \def NITF_IMAGE_IO_COMPRESSION_NC - No compression, no blocking */
+       NM, /*! \def NITF_IMAGE_IO_COMPRESSION_NM - No compression, blocking */
+       C1, /*! \def NITF_IMAGE_IO_COMPRESSION_C1 - Bi-level compression, no blocking */
+       C3, /*! \def NITF_IMAGE_IO_COMPRESSION_C3 - JPEG compression, no blocking */
+       C4, /*! \def NITF_IMAGE_IO_COMPRESSION_C4- Vector quantization  compression, no blocking */
+       C5, /*! \def NITF_IMAGE_IO_COMPRESSION_C5 - Lossless JPEG compression, no blocking */
+       C6, /*! \def NITF_IMAGE_IO_COMPRESSION_C6 - Reserved, no blocking */
+       C7, /*! \def NITF_IMAGE_IO_COMPRESSION_C7 - Reserved, Complex SAR compression */
+       C8, /*! \def NITF_IMAGE_IO_COMPRESSION_C8 - JPEG 2000 */
+       I1, /*! \def NITF_IMAGE_IO_COMPRESSION_I1 - Downsampled JPEG, no blocking */
+       M1, /*! \def NITF_IMAGE_IO_COMPRESSION_M1 - Bi-level compression, blocking */
+       M3, /*! \def NITF_IMAGE_IO_COMPRESSION_M3 - JPEG compression, blocking */
+       M4, /*! \def NITF_IMAGE_IO_COMPRESSION_M4 - Vector quantization  compression, blocking */
+       M5, /*! \def NITF_IMAGE_IO_COMPRESSION_M5 - Lossless JPEG compression, blocking */
+       M8); /*! \def NITF_IMAGE_IO_COMPRESSION_M8 - JPEG 2000 */
 
 /*!
  *  \class ImageSubheader
@@ -374,13 +399,18 @@ public:
 
     //! Get the imageCompression
     nitf::Field getImageCompression() const;
-    std::string imageCompression() const
+    std::string imageCompressionString() const
     {
         return getImageCompression().toTrimString();
     }
+    ImageCompression imageCompression() const { return from_string<ImageCompression>(imageCompressionString()); }
 
     //! Get the compressionRate
     nitf::Field getCompressionRate() const;
+
+    // wrapper around nitf_ImageSubheader_getCompression()
+    void getCompression(std::string& imageCompression, std::string& compressionRate) const;
+    void getCompression(ImageCompression&, std::string& compressionRate) const;
 
     //! Get the numImageBands
     nitf::Field getNumImageBands() const;

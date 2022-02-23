@@ -49,7 +49,7 @@ static fs::path findInputFile()
     }
     else
     {
-        root = fs::absolute(argv0).parent_path().parent_path().parent_path().parent_path();
+        root = absolute(fs::path(argv0)).parent_path().parent_path().parent_path().parent_path();
         root = root.parent_path().parent_path();
     }
 
@@ -147,7 +147,7 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     TEST_ASSERT_EQ(static_cast<size_t>(1), subheader.numBlocksPerCol());
     TEST_ASSERT_EQ(static_cast<size_t>(50), subheader.numPixelsPerHorizBlock());
     TEST_ASSERT_EQ(static_cast<size_t>(50), subheader.numPixelsPerVertBlock());
-    TEST_ASSERT_EQ("NC", subheader.imageCompression());
+    TEST_ASSERT_EQ(nitf::ImageCompression::NC, subheader.imageCompression());
     TEST_ASSERT_EQ("    ", subheader.getCompressionRate().toString());
 
     nitf::BufferList<std::byte> buffer(nBands);
