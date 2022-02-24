@@ -247,6 +247,16 @@ void XMLParser::parseString(const xml::lite::Element* element, std::string& valu
     assert(element != nullptr);
     parseString(*element, value);
 }
+bool XMLParser::parseString(const xml::lite::Element& element, std::u8string& value) const
+{
+    // Only set std::u8string value if we're storing an encoding (new XML processing)
+    if (element.getEncoding().has_value())
+    {
+        element.getCharacterData(value);
+        return true;
+    }
+    return false;
+}
 
 bool XMLParser::parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const
 {

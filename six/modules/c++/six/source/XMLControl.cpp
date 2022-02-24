@@ -92,28 +92,32 @@ void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
         loadDefaultSchemaPath(schemaPaths);
     }
 }
-std::vector<std::string> XMLControl::loadSchemaPaths(const std::vector<std::filesystem::path>* pSchemaPaths)
+std::vector<std::filesystem::path> XMLControl::loadSchemaPaths(const std::vector<std::filesystem::path>* pSchemaPaths)
 {
-    std::vector<std::string> retval;
+    std::vector<std::filesystem::path> retval;
 
     // a NULL pointer indicates that we don't want to validate against a schema
     if (pSchemaPaths != nullptr)
     {
-        std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(retval),
+        std::vector<std::string> paths;
+        std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(paths),
             [&](const std::filesystem::path& p) { return p.string();  });
 
         // If *pSchemaPaths is empty, this will use a default value.  To avoid all validation against a schema,
         // pass NULL for pSchemaPaths.
-        loadSchemaPaths(retval);
+        loadSchemaPaths(paths);
+
+        std::transform(paths.begin(), paths.end(), std::back_inserter(retval), [&](const std::string& s) { return s; });
     }
     return retval;
 }
 
-static std::vector<std::string> check_whether_paths_exist(const std::vector<std::string>& paths)
+template<typename TPath>
+static std::vector<TPath> check_whether_paths_exist(const std::vector<TPath>& paths)
 {
     // If the paths we have don't exist, throw
-    std::string does_not_exist_path;
-    std::vector<std::string> exist_paths;
+    typename std::vector<TPath>::value_type does_not_exist_path;
+    std::vector<TPath> exist_paths;
     for (const auto& path : paths)
     {
         if (!fs::exists(path))
@@ -141,8 +145,9 @@ static std::vector<std::string> check_whether_paths_exist(const std::vector<std:
 
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
+template<typename TPath>
 static void do_validate_(const xml::lite::Document& doc,
-    const std::vector<std::string>& paths, logging::Logger* log)
+    const std::vector<TPath>& paths, logging::Logger* log)
 {
     // validate against any specified schemas
     xml::lite::Validator validator(paths, log, true);
@@ -179,8 +184,9 @@ static void do_validate_(const xml::lite::Document& doc,
         throw six::DESValidationException(Ctxt("INVALID XML: Check both the XML being produced and the schemas available"));
     }
 }
+template<typename TPath>
 static void validate_(const xml::lite::Document& doc,
-    std::vector<std::string> paths, logging::Logger* log)
+    std::vector<TPath> paths, logging::Logger* log)
 {
     // If the paths we have don't exist, throw
     paths = check_whether_paths_exist(paths);
