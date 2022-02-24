@@ -22,6 +22,9 @@
 #define CODA_OSS_sys_filesystem_h_INCLUDED_
 #pragma once
 
+// always implement sys::filesystem::path
+#include "sys/sys_filesystem.h"
+
 #include <filesystem>
 #include "coda_oss/namespace_.h"  // coda_oss -> std
 
