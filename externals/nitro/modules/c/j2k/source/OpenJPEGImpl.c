@@ -22,13 +22,15 @@
 
 #include "j2k/Config.h"
 
+#include <stdlib.h>
+#include <assert.h>
+#include <string.h>
+
 #ifdef _MSC_VER
 #pragma warning(disable: 4706) // assignment within conditional expression
 #endif // _MSC_VER
 
 #ifdef HAVE_OPENJPEG_H
-
-#include <string.h>
 
 #include "j2k/Container.h"
 #include "j2k/Reader.h"
@@ -119,8 +121,9 @@ static j2k_IWriter WriterInterface = {&OpenJPEGWriter_setTile,
 
 
 J2KPRIV(void) OpenJPEG_cleanup(opj_stream_t **, opj_codec_t **, opj_image_t **);
-J2KPRIV( J2K_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *, j2k_WriterOptions *,
+J2KPRIV( J2K_BOOL) OpenJPEG_initImage_(OpenJPEGWriterImpl *, j2k_WriterOptions *, OPJ_CODEC_FORMAT,
                                       nrt_Error *);
+J2KPRIV(J2K_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl*, j2k_WriterOptions*, nrt_Error*);
 
 J2KPRIV(void) OpenJPEG_errorHandler(const char* msg, void* data)
 {
@@ -275,14 +278,152 @@ OpenJPEG_cleanup(opj_stream_t **stream, opj_codec_t **codec,
 /* UTILITIES                                                                  */
 /******************************************************************************/
 
+// these are private to cio.h
+extern OPJ_OFF_T opj_stream_tell(const opj_stream_t*);
+extern int opj_stream_read_seek(opj_stream_t*, OPJ_OFF_T p_size, void* p_event_mgr);
+extern OPJ_SIZE_T opj_stream_read_data(opj_stream_t*, OPJ_BYTE* p_buffer, OPJ_SIZE_T p_size, void* p_event_mgr);
+extern OPJ_OFF_T opj_stream_get_number_byte_left(const opj_stream_t*);
+
+// This is our own to distingish an error from an expected failure
+OPJ_CODEC_FORMAT nitf_OPJ_CODEC_ERROR_ = (OPJ_CODEC_FORMAT)(OPJ_CODEC_UNKNOWN - 1); // i.e., -2
+
+static OPJ_CODEC_FORMAT get_j2k_codec(const void* buffer)
+{
+    // http://fileformats.archiveteam.org/wiki/JPEG_2000_codestream
+    // "Files start with bytes FF 4F FF 51."
+    const OPJ_BYTE j2k_bytes[] = { 0xff, 0x4f, 0xff, 0x51 };
+    if (memcmp(j2k_bytes, buffer, sizeof(j2k_bytes)) != 0)
+    {
+        return OPJ_CODEC_UNKNOWN;
+    }
+
+    // everything checks out; caller will reset stream position
+    return OPJ_CODEC_J2K;
+}
+
+static OPJ_CODEC_FORMAT stream_read_cmp8(opj_stream_t* stream, const OPJ_BYTE* jp2_bytes, nrt_Error* error)
+{
+    OPJ_BYTE buffer8[8];
+    OPJ_SIZE_T bytes_read = opj_stream_read_data(stream, buffer8, sizeof(buffer8), NULL /*p_event_mgr*/);
+    if (bytes_read != sizeof(buffer8))
+    {
+        nrt_Error_init(error, "Error determining OpenJPEG codec", NRT_CTXT,
+            NRT_ERR_READING_FROM_FILE);
+        return nitf_OPJ_CODEC_ERROR_;
+    }
+    if (memcmp(jp2_bytes, buffer8, sizeof(buffer8)) != 0)
+    {
+        return OPJ_CODEC_UNKNOWN;
+    }
+    return OPJ_CODEC_JP2; // maybe, not nitf_OPJ_CODEC_ERROR_ and not OPJ_CODEC_UNKNOWN
+}
+
+static OPJ_CODEC_FORMAT get_jp2_codec(const void* buffer, opj_stream_t* stream, nrt_Error* error)
+{
+    // http://fileformats.archiveteam.org/wiki/JP2
+    // "JP2 files begin with bytes 00 00 00 0c 6a 50 20 20 0d 0a 87 0a ?? ?? ?? ?? 66 74 79 70 6a 70 32 20."
+    const OPJ_BYTE jp2_bytes_a0[] = { 0x00, 0x00, 0x00, 0x0c };
+    const OPJ_BYTE jp2_bytes_a1[] = { 0x6a, 0x50, 0x20, 0x20, 0x0d, 0x0a, 0x87, 0x0a };
+    const OPJ_BYTE jp2_bytes_b[] = { 0x66, 0x74, 0x79, 0x70, 0x6a, 0x70, 0x32, 0x20 };
+    
+    if (memcmp(jp2_bytes_a0, buffer, sizeof(jp2_bytes_a0)) != 0)
+    {
+        return OPJ_CODEC_UNKNOWN;
+    }
+
+    if (opj_stream_get_number_byte_left(stream) < sizeof(jp2_bytes_a1) + 4 /*bytes can be anything*/ + sizeof(jp2_bytes_b))
+    {
+        return OPJ_CODEC_UNKNOWN;
+    }
+    
+    OPJ_CODEC_FORMAT retval = stream_read_cmp8(stream, jp2_bytes_a1, error);
+    if (retval != OPJ_CODEC_JP2)
+    {
+        return retval; // nitf_OPJ_CODEC_ERROR_ or OPJ_CODEC_UNKNOWN
+    }
+
+    if (opj_stream_get_number_byte_left(stream) < 4 /*bytes can be anything*/ + sizeof(jp2_bytes_b))
+    {
+        return OPJ_CODEC_UNKNOWN;
+    }
+    OPJ_BYTE buffer4[4];
+    OPJ_SIZE_T bytes_read = opj_stream_read_data(stream, buffer4, sizeof(buffer4), NULL /*p_event_mgr*/);
+    if (bytes_read != sizeof(buffer4))
+    {
+        nrt_Error_init(error, "Error determining OpenJPEG codec", NRT_CTXT,
+            NRT_ERR_READING_FROM_FILE);
+        return nitf_OPJ_CODEC_ERROR_;
+    }
+    // nothing to check, these four bytes can be can be anything
+
+    if (opj_stream_get_number_byte_left(stream) < sizeof(jp2_bytes_b))
+    {
+        return OPJ_CODEC_UNKNOWN;
+    }
+
+    // everything checks out; caller will reset stream position
+    return stream_read_cmp8(stream, jp2_bytes_b, error);
+}
+
+J2KPRIV(OPJ_CODEC_FORMAT)
+OpenJPEG_get_format(opj_stream_t* stream, nrt_Error* error)
+{
+    // Save our current spot in the stream and move to the beginning.
+    OPJ_OFF_T current_pos = opj_stream_tell(stream);
+    int result = opj_stream_read_seek(stream, 0, NULL /*p_event_mgr*/);
+    if (!result)
+    {
+        nrt_Error_init(error, "Error determining OpenJPEG codec", NRT_CTXT,
+            NRT_ERR_SEEKING_IN_FILE);
+        return nitf_OPJ_CODEC_ERROR_;
+    }
+
+    // If we can't read at least four bytes, there's no way to figure out the type of the stream
+    OPJ_BYTE buffer4[4];
+    if (opj_stream_get_number_byte_left(stream) < sizeof(buffer4))
+    {
+        return OPJ_CODEC_UNKNOWN;
+    }
+    OPJ_SIZE_T bytes_read = opj_stream_read_data(stream, buffer4, sizeof(buffer4), NULL /*p_event_mgr*/);
+    if (bytes_read != sizeof(buffer4))
+    {
+        nrt_Error_init(error, "Error determining OpenJPEG codec", NRT_CTXT,
+            NRT_ERR_READING_FROM_FILE);
+        return nitf_OPJ_CODEC_ERROR_;
+    }
+
+    // Is this a J2K buffer?
+    OPJ_CODEC_FORMAT format = get_j2k_codec(buffer4);
+    if (format != OPJ_CODEC_J2K)
+    {
+        // Nope, how about JP2?
+        format = get_jp2_codec(buffer4, stream, error);
+    }
+
+    // Don't bother trying to reset file postion if an error occured
+    if (format != nitf_OPJ_CODEC_ERROR_)
+    {
+        // Go back to where we were in the stream
+        result = opj_stream_read_seek(stream, current_pos, NULL /*p_event_mgr*/);
+        if (!result)
+        {
+            nrt_Error_init(error, "Error determining OpenJPEG codec", NRT_CTXT,
+                NRT_ERR_SEEKING_IN_FILE);
+            return nitf_OPJ_CODEC_ERROR_;
+        }
+    }
+
+    return format;
+}
+
 J2KPRIV( NRT_BOOL)
-OpenJPEG_setup(OpenJPEGReaderImpl *impl, opj_stream_t **stream,
+OpenJPEG_setup_(OpenJPEGReaderImpl *impl, OPJ_CODEC_FORMAT format, opj_stream_t **stream,
                opj_codec_t **codec, nrt_Error *error)
 {
     if (!NRT_IO_SUCCESS(nrt_IOInterface_seek(impl->io,
-                                             impl->ioOffset,
-                                             NRT_SEEK_SET,
-                                             error)))
+        impl->ioOffset,
+        NRT_SEEK_SET,
+        error)))
     {
         goto CATCH_ERROR;
     }
@@ -292,7 +433,21 @@ OpenJPEG_setup(OpenJPEGReaderImpl *impl, opj_stream_t **stream,
         goto CATCH_ERROR;
     }
 
-    if (!(*codec = opj_create_decompress(OPJ_CODEC_J2K)))
+    // No format specified, try to figure it out from the stream
+    if (format == nitf_OPJ_CODEC_ERROR_) // distingish between "use default value" and "figure it out for me."
+    {
+        format = OpenJPEG_get_format(*stream, error);
+        if (format == nitf_OPJ_CODEC_ERROR_)
+        {
+            goto CATCH_ERROR;
+        }
+    }
+    if (format == OPJ_CODEC_UNKNOWN)
+    {
+        format = OPJ_CODEC_J2K; // existing code hard-coded OPJ_CODEC_J2K
+    }
+
+    if (!(*codec = opj_create_decompress(format)))
     {
         nrt_Error_init(error, "Error creating OpenJPEG codec", NRT_CTXT,
                        NRT_ERR_INVALID_OBJECT);
@@ -325,6 +480,24 @@ OpenJPEG_setup(OpenJPEGReaderImpl *impl, opj_stream_t **stream,
         OpenJPEG_cleanup(stream, codec, NULL);
         return NRT_FAILURE;
     }
+}
+//J2KPRIV(NRT_BOOL)
+//OpenJPEG_setup_j2k(OpenJPEGReaderImpl* impl, opj_stream_t** stream,
+//    opj_codec_t** codec, nrt_Error* error)
+//{
+//    return OpenJPEG_setup_(impl, OPJ_CODEC_J2K, stream, codec, error);
+//}
+//J2KPRIV(NRT_BOOL)
+//OpenJPEG_setup_jp2(OpenJPEGReaderImpl* impl, opj_stream_t** stream,
+//    opj_codec_t** codec, nrt_Error* error)
+//{
+//    return OpenJPEG_setup_(impl, OPJ_CODEC_JP2, stream, codec, error);
+//}
+J2KPRIV(NRT_BOOL)
+OpenJPEG_setup(OpenJPEGReaderImpl* impl, opj_stream_t** stream,
+    opj_codec_t** codec, nrt_Error* error)
+{
+    return OpenJPEG_setup_(impl, nitf_OPJ_CODEC_ERROR_, stream, codec, error); // "error" = figure it out from the stream
 }
 
 J2KPRIV( NRT_BOOL)
@@ -468,8 +641,8 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
     return rc;
 }
 
-J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
-                                      j2k_WriterOptions *writerOps,
+J2KPRIV( NRT_BOOL) OpenJPEG_initImage_(OpenJPEGWriterImpl *impl,
+                                      j2k_WriterOptions *writerOps, OPJ_CODEC_FORMAT format,
                                       nrt_Error *error)
 {
     NRT_BOOL rc = NRT_SUCCESS;
@@ -598,7 +771,7 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
         colorSpace = OPJ_CLRSPC_GRAY;
     }
 
-    if (!(impl->codec = opj_create_compress(OPJ_CODEC_J2K)))
+    if (!(impl->codec = opj_create_compress(format)))
     {
         nrt_Error_init(error, "Error creating OpenJPEG codec", NRT_CTXT,
                        NRT_ERR_INVALID_OBJECT);
@@ -658,6 +831,18 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     }
 
     return rc;
+}
+J2KPRIV(NRT_BOOL) OpenJPEG_initImage_j2k(OpenJPEGWriterImpl* impl, j2k_WriterOptions* writerOps, nrt_Error* error)
+{
+    return OpenJPEG_initImage_(impl, writerOps, OPJ_CODEC_J2K, error);
+}
+J2KPRIV(NRT_BOOL) OpenJPEG_initImage_jp2(OpenJPEGWriterImpl* impl, j2k_WriterOptions* writerOps, nrt_Error* error)
+{
+    return OpenJPEG_initImage_(impl, writerOps, OPJ_CODEC_JP2, error);
+}
+J2KPRIV(NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl* impl, j2k_WriterOptions* writerOps, nrt_Error* error)
+{
+    return OpenJPEG_initImage_j2k(impl, writerOps, error); // existing code
 }
 
 
@@ -838,7 +1023,6 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, uint32_t x0, uint32_t y0,
     opj_stream_t *stream = NULL;
     opj_image_t *image = NULL;
     opj_codec_t *codec = NULL;
-    uint64_t bufSize;
     uint64_t offset = 0;
     uint32_t componentBytes, nComponents;
 
@@ -868,7 +1052,15 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, uint32_t x0, uint32_t y0,
 
     nComponents = j2k_Container_getNumComponents(impl->container, error);
     componentBytes = (j2k_Container_getPrecision(impl->container, error) - 1) / 8 + 1;
-    bufSize = (uint64_t)(x1 - x0) * (y1 - y0) * componentBytes * nComponents;
+
+    // The buffer size must account for the remainder of the tile height and width
+    // given that opj_decode_tile_data have a memory access violation otherwise
+    const uint64_t tile_width = j2k_Container_getWidth(impl->container, error);
+    const uint64_t tile_height = j2k_Container_getHeight(impl->container, error);
+    const uint64_t x_tiles = (x1 - x0) % tile_width + (x1 - x0);
+    const uint64_t y_tiles = (y1 - y0) % tile_height + (y1 - y0);
+    uint64_t bufSize = x_tiles * y_tiles * componentBytes * nComponents;
+
     if (buf && !*buf)
     {
         *buf = (uint8_t*)J2K_MALLOC(bufSize);
@@ -1294,4 +1486,13 @@ J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container *container,
     }
 }
 
+J2KAPI(j2k_Implementation) j2k_getImplementation(nrt_Error* error)
+{
+    assert(NITRO_J2K_IMPLEMENTATION == j2k_Implementation_OpenJPEG);
+    if (error == NULL)
+    {
+        return j2k_Implementation_Error;
+    }
+    return j2k_Implementation_OpenJPEG;
+}
 #endif

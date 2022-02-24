@@ -91,7 +91,15 @@ namespace nitf
 #define NITF_ENUM_map_entry_4(name, n1, n2, n3, n4)  NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_3(name, n2, n3, n4)
 #define NITF_ENUM_map_entry_5(name, n1, n2, n3, n4, n5)  NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_4(name, n2, n3, n4, n5)
 #define NITF_ENUM_map_entry_6(name, n1, n2, n3, n4, n5, n6)  NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_5(name, n2, n3, n4, n5, n6)
-
+#define NITF_ENUM_map_entry_7(name, n1, n2, n3, n4, n5, n6, n7) NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_6(name, n2, n3, n4, n5, n6, n7)
+#define NITF_ENUM_map_entry_8(name, n1, n2, n3, n4, n5, n6, n7, n8) NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_7(name, n2, n3, n4, n5, n6, n7, n8)
+#define NITF_ENUM_map_entry_9(name, n1, n2, n3, n4, n5, n6, n7, n8, n9) NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_8(name, n2, n3, n4, n5, n6, n7, n8, n9)
+#define NITF_ENUM_map_entry_10(name, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10) NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_9(name, n2, n3, n4, n5, n6, n7, n8, n9, n10)
+#define NITF_ENUM_map_entry_11(name, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11) NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_10(name, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11)
+#define NITF_ENUM_map_entry_12(name, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12) NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_11(name, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12)
+#define NITF_ENUM_map_entry_13(name, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13) NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_12(name, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13)
+#define NITF_ENUM_map_entry_14(name, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14) NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_13(name, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14)
+#define NITF_ENUM_map_entry_15(name, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15) NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_14(name, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15)
 
 #define NITF_ENUM_define_string_to_enum_begin(name)  inline std::ostream& operator<<(std::ostream& os, name e) { os << to_string(e); return os; } \
     namespace details { template<> inline const std::map<std::string, name>& string_to_enum() { \

@@ -1,4 +1,4 @@
-#include "sys/filesystem.h"
+#include "sys/sys_filesystem.h"
 
 #include <stdlib.h>
 #ifdef _WIN32
@@ -17,7 +17,7 @@
 
 #include "sys/Path.h"
 
-namespace fs = coda_oss::filesystem;
+namespace fs = sys::filesystem;
 
 static std::string strerror_(int errnum)
 {
@@ -42,7 +42,7 @@ static inline std::string make_what(const char* curfile, const int lineNum, cons
 }
 // A macro for conveniently throwing errors.
 // Need "throw" to be visible, not hidden inside of a function, so that code-analysis tools can see it.
-#define CODA_OSS_filesystem_THROW_ERR(MSG) throw std::runtime_error(make_what(__FILE__, __LINE__, MSG)) // TODO: std::filesystem_error
+#define CODA_OSS_sys_filesystem_THROW_ERR(MSG) throw std::runtime_error(make_what(__FILE__, __LINE__, MSG)) // TODO: std::filesystem_error
 
 fs::path::string_type fs::path::to_native(const std::string& s_)
 {
@@ -53,8 +53,6 @@ fs::path::string_type fs::path::to_native(const std::string& s_)
     return s_;
 #endif
 }
-
-static const fs::path empty_path;
 
 fs::path::path() noexcept
 {
@@ -141,7 +139,7 @@ fs::path fs::path::extension() const
     const auto pathname = string();
     if ((pathname == ".") || (pathname == ".."))
     {
-        return empty_path;
+        return fs::path();
     }
 
     auto fn = filename().string();
@@ -150,7 +148,7 @@ fs::path fs::path::extension() const
     // "If ... filename() does not contain the . character, then empty path is returned."
     if (dot == std::string::npos)
     {
-        return empty_path;
+        return fs::path();
     }
 
     // "If the first character in the filename is a period, that period is ignored
@@ -205,7 +203,7 @@ fs::path fs::temp_directory_path()
     const auto result = GetTempPathA(static_cast<DWORD>(buf.size()), buf.data());
     if (result == 0)  // "If the function fails, the return value is zero"
     {
-        CODA_OSS_filesystem_THROW_ERR("GetTempPathA() failed.");
+        CODA_OSS_sys_filesystem_THROW_ERR("GetTempPathA() failed.");
     }
 
     return buf.data();
@@ -238,13 +236,13 @@ bool fs::create_directory(const path& p_)
         {
             const std::string stat_failed("stat failed: " + p);
             const std::string error("Error:\n" + strerror_(errno));
-            CODA_OSS_filesystem_THROW_ERR(stat_failed + "\n" + error);
+            CODA_OSS_sys_filesystem_THROW_ERR(stat_failed + "\n" + error);
         }
         else if (!os.isDirectory(p))
         {
             std::stringstream ss;
             ss << "Path '" << p << "' exists and is not a directory.";
-            CODA_OSS_filesystem_THROW_ERR(ss.str());
+            CODA_OSS_sys_filesystem_THROW_ERR(ss.str());
         }
 
         // If we got here, the path exists and is a directory, which is what we want

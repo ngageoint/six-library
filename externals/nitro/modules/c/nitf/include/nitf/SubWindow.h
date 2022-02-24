@@ -46,6 +46,10 @@ NITF_CXX_GUARD
  * want to perform pixel skipping, call setDownSampler() with a
  * PixelSkip object.
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_SubWindow
 {
     uint32_t startRow;       /*!< Start row */
@@ -61,7 +65,9 @@ typedef struct _nitf_SubWindow
 
 }
 nitf_SubWindow;
-
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*!
  *  \fn nitf_SubWindow_construct(error)

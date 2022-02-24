@@ -30,6 +30,7 @@
 #include "nitf/Field.h"
 #include "nitf/Types.h"
 #pragma comment(lib, "nitf-c")
+#pragma comment(lib, "openjpeg")
 
 // changing this breaks SWIG
 #pragma warning (disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...'

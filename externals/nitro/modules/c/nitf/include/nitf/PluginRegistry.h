@@ -47,6 +47,10 @@ NITF_CXX_GUARD
  *  variable, ${NITF_PLUGIN_PATH}
  *
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _protected_nitf_PluginRegistry
 {
 
@@ -63,7 +67,9 @@ typedef struct _protected_nitf_PluginRegistry
 
 }
 nitf_PluginRegistry;
-
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*!
  *  Since 3/14/2004, this object is a singleton.  If you wish to

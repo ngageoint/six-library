@@ -1,5 +1,5 @@
 set(MODULE_NAME nitf)
-set(MODULE_DEPS nitf-c except-c++ io-c++ mt-c++ sys-c++ str-c++ gsl-c++ std-c++)
+set(MODULE_DEPS nitf-c j2k-c except-c++ io-c++ mt-c++ sys-c++ str-c++ gsl-c++ std-c++)
 if (MSVC)
     list(APPEND MODULE_DEPS wsock32 ws2_32)
 endif()
@@ -46,6 +46,10 @@ coda_add_module(
         source/ImageSource.cpp
         source/ImageSubheader.cpp
         source/ImageWriter.cpp
+        source/J2KComponent.cpp
+        source/J2KContainer.cpp
+        source/J2KReader.cpp
+        source/J2KWriter.cpp
         source/LabelSegment.cpp
         source/LabelSubheader.cpp
         source/List.cpp
@@ -80,7 +84,8 @@ coda_add_tests(
         test_functional.cpp
         test_handles.cpp
         test_mem_source.cpp
-        test_static_plugin.cpp)
+        test_static_plugin.cpp
+        test_j2k_nitf_read_region.cpp)
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
@@ -93,7 +98,9 @@ coda_add_tests(
         test_image_segment_blank_nm_compression.cpp
         test_image_segment_computer.cpp
         test_nitf_buffer_list.cpp
-        test_tre_mods++.cpp)
+        test_tre_mods++.cpp
+        test_tre_create++.cpp
+        test_j2k_read_tile.cpp)
 
 add_executable(show_nitf++ apps/show_nitf++.cpp)
 target_link_libraries(show_nitf++ PRIVATE nitf-c++)

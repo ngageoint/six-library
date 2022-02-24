@@ -76,6 +76,10 @@ typedef enum _nitf_FieldType
  *  for determining how it should compensate for the disparity between
  *  an actual length provided by the user, and the length that is required
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_Field
 {
     nitf_FieldType type;
@@ -85,7 +89,9 @@ typedef struct _nitf_Field
                             can be resized - default is false */
 }
 nitf_Field;
-
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*!
  *  \fn nitf_Field_construct
