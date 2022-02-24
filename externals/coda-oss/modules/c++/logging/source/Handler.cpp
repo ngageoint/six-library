@@ -39,11 +39,10 @@ Handler::Handler(LogLevel level)
 void Handler::close()
 {
     // delete if necessary
-    if (mFormatter != &mDefaultFormatter &&
-        mFormatter != NULL)
+    if (mFormatter != &mDefaultFormatter) // "delete NULL" is ok
     {
         delete mFormatter;
-        mFormatter = NULL;
+        mFormatter = nullptr;
     }
 }
 
@@ -82,5 +81,9 @@ void Handler::setFormatter(Formatter* formatter)
 
         mFormatter = formatter;
     }
+}
+void Handler::setFormatter(std::unique_ptr<Formatter>&& formatter)
+{
+    setFormatter(formatter.release());
 }
 }

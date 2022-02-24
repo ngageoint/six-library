@@ -29,13 +29,13 @@
 #include <stdexcept>
 #include <string>
 
+#include <import/str.h>
 #include <sys/Path.h>
 #include <sys/DirectoryEntry.h>
-#include <sys/Filesystem.h>
 #include <sys/DateTime.h>
 #include <sys/Dbg.h>
 
-namespace fs = sys::Filesystem;
+namespace fs = coda_oss::filesystem;
 
 namespace sys
 {
@@ -182,7 +182,7 @@ std::string AbstractOS::getCurrentExecutable(
 }
 
 // A variable like PATH is often several directories, return each one that exists.
-static bool splitEnv_(const AbstractOS& os, const std::string& envVar, std::vector<std::string>& result, Filesystem::file_type* pType = nullptr)
+static bool splitEnv_(const AbstractOS& os, const std::string& envVar, std::vector<std::string>& result, fs::file_type* pType = nullptr)
 {
     std::string value;
     if (!os.getEnvIfSet(envVar, value))
@@ -195,18 +195,18 @@ static bool splitEnv_(const AbstractOS& os, const std::string& envVar, std::vect
         bool matches = true;
         if (pType != nullptr)
         {
-            const auto isFile = (*pType == Filesystem::file_type::regular) && Filesystem::is_regular_file(val);
-            const auto isDirectory = (*pType == Filesystem::file_type::directory) && Filesystem::is_directory(val);
+            const auto isFile = (*pType == fs::file_type::regular) && fs::is_regular_file(val);
+            const auto isDirectory = (*pType == fs::file_type::directory) && fs::is_directory(val);
             matches = isFile || isDirectory;
         }
-        if (Filesystem::exists(val) && matches)
+        if (fs::exists(val) && matches)
         {
             result.push_back(val);
         }
     }
     return !result.empty(); // false for no matches
 }
-bool AbstractOS::splitEnv(const std::string& envVar, std::vector<std::string>& result, Filesystem::file_type type) const
+bool AbstractOS::splitEnv(const std::string& envVar, std::vector<std::string>& result, fs::file_type type) const
 {
     return splitEnv_(*this, envVar, result, &type);
 }
@@ -262,7 +262,7 @@ static std::string getSpecialEnv_PID(const AbstractOS& os, const std::string& en
     UNREFERENCED_PARAMETER(envVar);
     #endif
     const auto pid = os.getProcessId();
-    return std::to_string(pid);
+    return str::toString(pid);
 }
 
 static std::string getSpecialEnv_USER(const AbstractOS& os, const std::string& envVar)
@@ -291,7 +291,7 @@ static std::string getSpecialEnv_HOME(const AbstractOS& os, const std::string& e
     #endif
 
     std::vector<std::string> paths;
-    if (!os.splitEnv(home, paths, sys::Filesystem::file_type::directory))
+    if (!os.splitEnv(home, paths, fs::file_type::directory))
     {
         // something is horribly wrong
         throw except::FileNotFoundException(Ctxt(home));
@@ -336,7 +336,7 @@ static std::string getSpecialEnv_SECONDS_()
     // https://en.cppreference.com/w/cpp/chrono/c/difftime
     static const auto start = std::time(nullptr);
     const auto diff = static_cast<int64_t>(std::difftime(std::time(nullptr), start));
-    return std::to_string(diff);
+    return str::toString(diff);
 }
 static std::string getSpecialEnv_SECONDS(const AbstractOS&, const std::string& envVar)
 {
@@ -410,7 +410,7 @@ std::string AbstractOS::getSpecialEnv(const std::string& envVar) const
 
     if (envVar == "EPOCHSECONDS")
     {
-        return std::to_string(sys::DateTime::getEpochSeconds());
+        return str::toString(sys::DateTime::getEpochSeconds());
     }
 
     if (envVar == "OSTYPE")

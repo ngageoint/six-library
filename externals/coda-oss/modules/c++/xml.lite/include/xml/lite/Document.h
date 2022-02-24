@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_DOM_DOCUMENT_H__
-#define __XML_LITE_DOM_DOCUMENT_H__
+#ifndef CODA_OSS_xml_lite_Doocument_h_INCLUDED_
+#define CODA_OSS_xml_lite_Doocument_h_INCLUDED_
 #pragma once
 
 /*!
@@ -38,7 +38,10 @@
 
 #include <assert.h>
 
+#include "coda_oss/string.h"
+
 #include "xml/lite/Element.h"
+#include "xml/lite/QName.h"
 
 namespace xml
 {
@@ -89,12 +92,18 @@ public:
     virtual Element *createElement(const std::string & qname,
                                    const std::string & uri,
                                    std::string characterData = "");
-    virtual Element *createElement(const std::string & qname,
+    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
+    Element* createElement(const std::string& qname,
                                    const std::string & uri,
-                                   const std::string& characterData, StringEncoding);
-    virtual Element* createElement(const std::string& qname,
+                                   const std::string& characterData, StringEncoding) const;
+    Element* createElement(const std::string& qname,
                                    const std::string& uri,
-                                   const sys::U8string& characterData);
+                                   const coda_oss::u8string& characterData) const;
+    std::unique_ptr<Element> createElement(const xml::lite::QName& qname, const std::string& characterData) const;
+    std::unique_ptr<Element> createElement(const xml::lite::QName& qname,
+                                   const std::string& characterData, StringEncoding) const;
+    #endif // SWIG
+
 
     /*!
      * Blanket destructor.  This thing deletes everything
@@ -172,8 +181,19 @@ inline const Element& getRootElement(const Document& doc)
     assert(retval != nullptr);
     return *retval;
 }
+inline Element& getRootElement(Document* pDoc)
+{
+    assert(pDoc != nullptr);
+    return getRootElement(*pDoc);
+}
+inline const Element& getRootElement(const Document* pDoc)
+{
+    assert(pDoc != nullptr);
+    return getRootElement(*pDoc);
+}
 
 }
 }
 
-#endif
+#endif // CODA_OSS_xml_lite_Doocument_h_INCLUDED_
+

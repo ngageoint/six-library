@@ -111,7 +111,7 @@ ComplexData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
     return imagePt;
 }
 
-bool ComplexData::operator==(const ComplexData& rhs) const
+bool ComplexData::operator_eq(const ComplexData& rhs) const
 {
     return (collectionInformation == rhs.collectionInformation &&
         imageCreation == rhs.imageCreation &&
@@ -134,10 +134,10 @@ bool ComplexData::operator==(const ComplexData& rhs) const
 
 bool ComplexData::equalTo(const Data& rhs) const
 {
-    const ComplexData* data = dynamic_cast<const ComplexData*>(&rhs);
+    auto data = dynamic_cast<const ComplexData*>(&rhs);
     if (data != nullptr)
     {
-        return *this == *data;
+        return this->operator_eq(*data);
     }
     return false;
 }
@@ -369,15 +369,15 @@ inline std::span<T> make_span(std::span<U> bytes)
     return std::span<T>(static_cast<T*>(cast_to_pvoid(bytes)), size);
 }
 
-bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, std::span<std::byte> to_) const
+bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, std::span<std::byte> to_, ptrdiff_t cutoff) const
 {
     if (getPixelType() != PixelType::AMP8I_PHS8I)
     {
         return false; // no conversion done as there is nothing to convert
     }
 
-    const auto from = make_span<const six::sicd::ImageData::cx_float>(from_);
-    const auto to = make_span<six::sicd::ImageData::AMP8I_PHS8I_t>(to_);
-    imageData->to_AMP8I_PHS8I(from, to);
+    const auto from = make_span<const six::sicd::cx_float>(from_);
+    const auto to = make_span<six::sicd::AMP8I_PHS8I_t>(to_);
+    imageData->to_AMP8I_PHS8I(from, to, cutoff);
     return true; // converted
 }

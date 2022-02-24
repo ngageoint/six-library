@@ -50,7 +50,6 @@
 
 #include "XMLReader.h"
 #include "io/StandardStreams.h"
-#include "io/DbgStream.h"
 #include "Document.h"
 
 namespace xml
@@ -66,9 +65,8 @@ namespace lite
  * whether it is allocated externally or not.  DONT delete it 
  * explicitly unless you are looking for disaster.
  */
-class MinidomHandler : public ContentHandler
+struct MinidomHandler final : public ContentHandler
 {
-public:
     //! Constructor.  Uses default document
     MinidomHandler() :
         mDocument(nullptr), mOwnDocument(true), mPreserveCharData(false)
@@ -81,8 +79,13 @@ public:
     {
         setDocument(nullptr, true);
     }
+    MinidomHandler(const MinidomHandler&) = delete;
+    MinidomHandler& operator=(const MinidomHandler&) = delete;
+    MinidomHandler(MinidomHandler&&) = default;
+    MinidomHandler& operator=(MinidomHandler&&) = default;
 
     virtual void setDocument(Document *newDocument, bool own = true);
+    void setDocument(std::unique_ptr<Document>&&);  // own = true
 
     /**
      * Retrieves the Document.
@@ -94,6 +97,7 @@ public:
             mOwnDocument = false;
         return mDocument;
     }
+    void getDocument(std::unique_ptr<Document>&);  // steal = true
 
     virtual Document *getDocument() const
     {
@@ -109,11 +113,8 @@ public:
      */
     virtual void characters(const char* value, int length) override;
 
-    bool wcharacters_(const uint16_t* /*data*/, size_t /*length*/) override;
-    bool wcharacters_(const uint32_t* /*data*/, size_t /*length*/) override;
-
-    // Which characters() routine should be called?
-    bool use_wchar_t() const override;
+    bool vcharacters(const void /*XMLCh*/*, size_t length) override;  
+    bool call_vcharacters() const override;
 
     /*!
      * This method is fired when a new tag is entered.
@@ -180,21 +181,18 @@ public:
     bool storeEncoding() const;
 
 protected:
-    void characters(const char* value, int length, const StringEncoding*);
-
     std::string currentCharacterData;
-    std::shared_ptr<const StringEncoding> mpEncoding;
     std::stack<int> bytesForElement;
     std::stack<Element *> nodeStack;
     Document *mDocument;
     bool mOwnDocument;
     bool mPreserveCharData;
-    bool mStoreEncoding = false;
 
  private:
-    template <typename T>
-    bool characters_(const T* value, size_t length);
-    bool call_characters(const std::string& utf8Value);
+    void characters(const char* value, int length, const StringEncoding*);
+    void call_characters(const std::string&, StringEncoding);
+    std::shared_ptr<const StringEncoding> mpEncoding;
+    bool mStoreEncoding = false;
 };
 }
 }

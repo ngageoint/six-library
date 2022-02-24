@@ -81,7 +81,7 @@ class Element(object):
         __init__(Element self) -> Element
         __init__(Element self, std::string const & qname, std::string const & uri="", std::string const & characterData="") -> Element
         __init__(Element self, std::string const & qname, std::string const & uri, std::string const & characterData, xml::lite::StringEncoding encoding) -> Element
-        __init__(Element self, std::string const & qname, std::string const & uri, sys::U8string const & characterData) -> Element
+        __init__(Element self, std::string const & qname, std::string const & uri, coda_oss::u8string const & characterData) -> Element
         __init__(Element self, Element element) -> Element
         """
         _xml_lite.Element_swiginit(self, _xml_lite.new_Element(*args))
@@ -155,15 +155,15 @@ class Element(object):
         """
         return _xml_lite.Element_hasElement(self, *args)
 
-    def getEncoding(self) -> "sys::Optional< xml::lite::StringEncoding > const &":
-        r"""getEncoding(Element self) -> sys::Optional< xml::lite::StringEncoding > const &"""
+    def getEncoding(self) -> "coda_oss::optional< xml::lite::StringEncoding > const &":
+        r"""getEncoding(Element self) -> coda_oss::optional< xml::lite::StringEncoding > const &"""
         return _xml_lite.Element_getEncoding(self)
 
     def getCharacterData(self, *args) -> "void":
         r"""
         getCharacterData(Element self) -> std::string
-        getCharacterData(Element self, std::string & result) -> sys::Optional< xml::lite::StringEncoding > const
-        getCharacterData(Element self, sys::U8string & result)
+        getCharacterData(Element self, std::string & result) -> coda_oss::optional< xml::lite::StringEncoding > const
+        getCharacterData(Element self, coda_oss::u8string & result)
         """
         return _xml_lite.Element_getCharacterData(self, *args)
 
@@ -175,7 +175,7 @@ class Element(object):
         r"""
         setCharacterData(Element self, std::string const & characters)
         setCharacterData(Element self, std::string const & characters, xml::lite::StringEncoding arg3)
-        setCharacterData(Element self, sys::U8string const & characters)
+        setCharacterData(Element self, coda_oss::u8string const & characters)
         """
         return _xml_lite.Element_setCharacterData(self, *args)
 
@@ -244,7 +244,7 @@ class Document(object):
         r"""
         createElement(Document self, std::string const & qname, std::string const & uri, std::string characterData="") -> Element
         createElement(Document self, std::string const & qname, std::string const & uri, std::string const & characterData, xml::lite::StringEncoding arg5) -> Element
-        createElement(Document self, std::string const & qname, std::string const & uri, sys::U8string const & characterData) -> Element
+        createElement(Document self, std::string const & qname, std::string const & uri, coda_oss::u8string const & characterData) -> Element
         """
         return _xml_lite.Document_createElement(self, *args)
 

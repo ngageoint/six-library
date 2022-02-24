@@ -31,6 +31,7 @@
 #include <stdexcept>
 #include <vector>
 
+#include <str/Convert.h>
 #include <sys/Path.h>
 #include <sys/LocalDateTime.h>
 #include <mem/SharedPtr.h>

@@ -29,7 +29,7 @@
 #include <import/sio/lite.h>
 #include <import/io.h>
 #include <import/xml/lite.h>
-#include <sys/Bit.h>
+#include <std/bit>
 #include "utils.h"
 
 namespace fs = std::filesystem;

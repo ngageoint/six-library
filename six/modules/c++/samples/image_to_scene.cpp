@@ -39,7 +39,7 @@
 #include <six/sicd/NITFReadComplexXMLControl.h>
 #include <six/sidd/DerivedXMLControl.h>
 
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {

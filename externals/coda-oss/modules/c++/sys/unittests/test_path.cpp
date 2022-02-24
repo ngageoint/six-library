@@ -24,13 +24,31 @@
 #include <assert.h>
 
 #include <sys/Path.h>
-#include <sys/Filesystem.h>
 #include "TestCase.h"
 
-namespace fs = sys::Filesystem;
+namespace fs = coda_oss::filesystem;
 
 namespace
 {
+static std::string find_directory(const std::vector<std::string>& paths)
+{
+    std::string bad_delim = sys::Path::delimiter();
+    bad_delim += sys::Path::delimiter();
+    for (const auto& p : paths)
+    {
+        if (fs::is_directory(p))
+        {
+            // Sometimes the value of PATH has "bad" strings in it ... at least it will
+            // confuse the unit-tests as we don't expect "C:\D1\\D2
+            if (!str::contains(p, bad_delim))
+            {
+                return p;
+            }
+        }
+    }
+    return "";
+}
+
 TEST_CASE(testPathMerge)
 {
     const sys::OS os;
@@ -41,16 +59,8 @@ TEST_CASE(testPathMerge)
     TEST_ASSERT_TRUE(splitResult);
     TEST_ASSERT_GREATER(paths.size(), 0);
 
-    std::string path;
-    for (const auto& p : paths)
-    {
-        if (sys::Filesystem::is_directory(p))
-        {
-            path = p;
-            break;
-        }
-    }
-    TEST_ASSERT_TRUE(sys::Filesystem::is_directory(path));
+    auto path = find_directory(paths);
+    TEST_ASSERT_TRUE(fs::is_directory(path));
     // add trailing '/'
     if (!str::endsWith(path, sys::Path::delimiter()))
     {
@@ -62,7 +72,7 @@ TEST_CASE(testPathMerge)
     TEST_ASSERT_GREATER(components.size(), 0);
     auto result = sys::Path::merge(components, isAbsolute);
     TEST_ASSERT_EQ(result, path);
-    TEST_ASSERT_TRUE(sys::Filesystem::is_directory(result));
+    TEST_ASSERT_TRUE(fs::is_directory(result));
 
     #if _WIN32
     path = R"(C:\dir\file.txt)";
@@ -80,10 +90,10 @@ TEST_CASE(testExpandEnvTilde)
     auto path = sys::Path::expandEnvironmentVariables("~");
     TEST_ASSERT_TRUE(fs::is_directory(path));
 
-    path = sys::Path::expandEnvironmentVariables("~", sys::Filesystem::file_type::directory);
+    path = sys::Path::expandEnvironmentVariables("~", fs::file_type::directory);
     TEST_ASSERT_TRUE(fs::is_directory(path));
 
-    path = sys::Path::expandEnvironmentVariables("~", sys::Filesystem::file_type::regular);
+    path = sys::Path::expandEnvironmentVariables("~", fs::file_type::regular);
     TEST_ASSERT_TRUE(path.empty());
 }
 
@@ -93,8 +103,8 @@ TEST_CASE(testExpandEnvTildePath)
     const std::vector<std::string> exts{"NTUSER.DAT", ".login", ".cshrc", ".bashrc"};
     os.prependEnv("exts", exts, true /*overwrite*/);
 
-    const auto path = sys::Path::expandEnvironmentVariables("~/$(exts)", sys::Filesystem::file_type::regular);
-    TEST_ASSERT_TRUE(sys::Filesystem::is_regular_file(path));
+    const auto path = sys::Path::expandEnvironmentVariables("~/$(exts)", fs::file_type::regular);
+    TEST_ASSERT_TRUE(fs::is_regular_file(path));
 }
 
 TEST_CASE(testExpandEnv)

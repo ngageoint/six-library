@@ -1,6 +1,5 @@
 NAME            = 'six.sicd'
-MAINTAINER      = 'adam.sylvester@mdaus.com'
-MODULE_DEPS     = 'scene nitf xml.lite six mem'
+MODULE_DEPS     = 'scene nitf xml.lite six mem units'
 TEST_DEPS       = 'cli'
 UNITTEST_DEPS   = 'cli sio.lite'
 

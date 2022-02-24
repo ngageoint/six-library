@@ -156,22 +156,22 @@ public:
 
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
 			  std::span<const std::byte> buffer,
-			  size_t firstRow, const Data& data, bool doByteSwap);
+			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t cutoff);
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
 			  std::span<const uint8_t> buffer,
-			  size_t firstRow, const Data& data, bool doByteSwap);
+			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t);
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
 			  std::span<const uint16_t> buffer,
-			  size_t firstRow, const Data& data, bool doByteSwap);
+			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t);
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
 			  std::span<const std::complex<float>> buffer,
-			  size_t firstRow, const Data& data, bool doByteSwap);
+			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t cutoff);
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
 			  std::span<const std::complex<short>> buffer,
-			  size_t firstRow, const Data& data, bool doByteSwap);
+			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t);
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
 			  std::span<const std::pair<uint8_t, uint8_t>> buffer,
-			  size_t firstRow, const Data& data, bool doByteSwap);
+			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t);
 };
 
 

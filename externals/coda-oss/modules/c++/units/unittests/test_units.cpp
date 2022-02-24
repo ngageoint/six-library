@@ -26,6 +26,15 @@
 
 namespace
 {
+template <typename T>
+static void test_degrees_(const std::string& testName)
+{
+    T sin, cos;
+    constexpr units::Degrees<T> degrees_180 = 180;
+    SinCos(degrees_180, sin, cos);
+    TEST_ASSERT_ALMOST_EQ(0.0, sin);
+    TEST_ASSERT_ALMOST_EQ(-1.0, cos);
+}
 TEST_CASE(test_degrees)
 {
     constexpr units::Degrees<double> degrees_0 = 0;
@@ -45,6 +54,10 @@ TEST_CASE(test_degrees)
     TEST_ASSERT_ALMOST_EQ(-1.0, cos(degrees_180));
     TEST_ASSERT_ALMOST_EQ(0.0, cos(degrees_270));
     TEST_ASSERT_ALMOST_EQ(1.0, cos(degrees_360));
+
+    test_degrees_<float>(testName);
+    test_degrees_<double>(testName);
+    test_degrees_<long double>(testName);
 }
 
 TEST_CASE(test_lengths)

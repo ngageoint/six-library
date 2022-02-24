@@ -23,14 +23,17 @@
 #pragma once
 
 #if _MSC_VER
+#pragma warning(disable: 5032) // detected #pragma warning(push) with no corresponding #pragma warning(pop)
 #pragma warning(push)
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid (lifetime.4).
+#pragma warning(disable: 5031) // #pragma warning(pop): likely mismatch, popping warning state pushed in different file
 #endif // _MSC_VER
 
 #include <std/bit> // std::endian
 #include <std/cstddef> // std::byte
 #include <std/filesystem>
 #include <std/span>
+#include <std/optional>
 
 #if _MSC_VER
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).

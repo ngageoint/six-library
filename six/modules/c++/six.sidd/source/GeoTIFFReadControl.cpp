@@ -28,6 +28,7 @@
 #include <mem/ScopedArray.h>
 #include "six/sidd/GeoTIFFReadControl.h"
 #include "six/XMLControlFactory.h"
+#include <six/XmlLite.h>
 
 namespace
 {
@@ -106,12 +107,11 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
                     io::StringStream stream;
                     stream.write(xmlStrs[ii]);
                     stream.seek(0, io::Seekable::START);
-                    xml::lite::MinidomParser xmlParser;
+                    six::MinidomParser xmlParser;
                     xmlParser.preserveCharacterData(true);
                     xmlParser.parse(stream);
 
-                    const std::string rootName =
-                        xmlParser.getDocument()->getRootElement()->getQName();
+                    const auto rootName = getDocument(xmlParser).getRootElement()->getQName();
                     if (rootName == "SIDD")
                     {
                         return six::DataType::DERIVED;
@@ -147,19 +147,19 @@ void six::sidd::GeoTIFFReadControl::load(
     std::unique_ptr<six::XMLControl> siddXMLControl;
     std::unique_ptr<six::XMLControl> sicdXMLControl;
 
-    for (size_t ii = 0; ii < xmlStrs.size(); ++ii)
+    for (const auto& xmlStr : xmlStrs)
     {
         // Parse it into an XML document
         io::StringStream stream;
-        stream.write(xmlStrs[ii]);
+        stream.write(xmlStr);
         stream.seek(0, io::Seekable::START);
-        xml::lite::MinidomParser xmlParser;
+        six::MinidomParser xmlParser;
         xmlParser.preserveCharacterData(true);
         xmlParser.parse(stream);
-        const xml::lite::Document* const doc = xmlParser.getDocument();
+        const auto& doc = xmlParser.getDocument();
 
         // Get the associated XML control
-        const std::string rootName(doc->getRootElement()->getQName());
+        const std::string rootName(doc.getRootElement()->getQName());
         six::XMLControl* xmlControl = nullptr;
         if (rootName == "SIDD")
         {
@@ -187,7 +187,7 @@ void six::sidd::GeoTIFFReadControl::load(
 
         if (xmlControl)
         {
-            std::unique_ptr<six::Data> data(xmlControl->fromXML(doc,
+            std::unique_ptr<six::Data> data(xmlControl->fromXML(&doc,
                                                               schemaPaths));
 
             if (!data.get())

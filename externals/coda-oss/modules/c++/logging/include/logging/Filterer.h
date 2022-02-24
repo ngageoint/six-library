@@ -24,8 +24,9 @@
 //  Filterer.h
 ///////////////////////////////////////////////////////////
 
-#ifndef __LOGGING_FILTERER_H__
-#define __LOGGING_FILTERER_H__
+#ifndef CODA_OSS_logging_Filterer_h_INCLUDED_
+#define CODA_OSS_logging_Filterer_h_INCLUDED_
+#pragma once
 
 #include <string>
 #include <map>
@@ -41,27 +42,32 @@ namespace logging
  * A base class for loggers and handlers which allows them to share
  * common code.
  */
-class Filterer
+struct Filterer
 {
-public:
-    Filterer(){}
-    virtual ~Filterer(){}
+    Filterer() = default;
+    virtual ~Filterer() = default;
 
     /*!
      * Adds a Filter to the managed map of Filters. We do NOT take control of
      * the pointer
      */
     void addFilter(Filter* filter);
+    void addFilter(Filter&);
 
-    bool filter(const LogRecord* record) const;
+    virtual bool filter(const LogRecord* record) const;
+    virtual bool filter(const LogRecord& record) const
+    {
+        return filter(&record);
+    }
 
     //! Removes the specified Filter
     void removeFilter(Filter* filter);
+    void removeFilter(Filter&);
 
 protected:
     std::map<std::string, Filter*> filters;
-
 };
 
 }
-#endif
+#endif // CODA_OSS_logging_Filterer_h_INCLUDED_
+

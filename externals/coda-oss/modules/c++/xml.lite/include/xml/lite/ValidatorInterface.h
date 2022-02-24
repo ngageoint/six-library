@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __XML_LITE_VALIDATOR_INTERFACE_H__
-#define __XML_LITE_VALIDATOR_INTERFACE_H__
+#ifndef CODA_OSS_xml_lite_ValidatorInterface_h_INCLUDED_
+#define CODA_OSS_xml_lite_ValidatorInterface_h_INCLUDED_
+#pragma once
 
 /*!
  * \file ValidatorInterface.h
@@ -37,7 +38,11 @@
 #include <io/InputStream.h>
 #include <str/Convert.h>
 #include <logging/Logger.h>
+#include <sys/filesystem.h>
 #include <xml/lite/Element.h>
+#include <xml/lite/QName.h>
+#include <coda_oss/string.h>
+#include <str/Encoding.h>
 
 namespace xml
 {
@@ -112,9 +117,12 @@ public:
     ValidatorInterface(const std::vector<std::string>& /*schemaPaths*/,
                        logging::Logger* /*log*/,
                        bool /*recursive*/ = true) {}
+    ValidatorInterface(const std::vector<coda_oss::filesystem::path>&,
+                       logging::Logger* /*log*/,
+                       bool /*recursive*/ = true) { }
 
     //! Destructor.
-    virtual ~ValidatorInterface() {}
+    virtual ~ValidatorInterface() = default;
 
     /*!
      *  Validation against the internal schema pool
@@ -131,6 +139,9 @@ public:
         xml.streamTo(oss);
         return validate(oss.stream().str(), xmlID, errors);
     }
+    bool validate(io::InputStream& xml, StringEncoding,
+                  const std::string& xmlID,
+                  std::vector<ValidationInfo>& errors) const;
 
     /*!
      *  Validation against the internal schema pool
@@ -148,7 +159,6 @@ public:
         return validate(oss.stream().str(), xmlID, errors);
     }
 
-
     /*!
      *  Validation against the internal schema pool
      *  \param xml     The xml document string to validate
@@ -158,7 +168,14 @@ public:
     virtual bool validate(const std::string& xml,
                           const std::string& xmlID,
                           std::vector<ValidationInfo>& errors) const = 0;
-
+    virtual bool validate(const coda_oss::u8string&, const std::string& /*xmlID*/, std::vector<ValidationInfo>&) const // =0 would cause existing code to break
+    {
+        return true;  // i.e., an error 
+    }
+     virtual bool validate(const str::W1252string&, const std::string& /*xmlID*/, std::vector<ValidationInfo>&) const // =0 would cause existing code to break
+    {
+        return true;  // i.e., an error 
+    }
 };
 
 inline std::ostream& operator<< (std::ostream& out,
@@ -170,4 +187,4 @@ inline std::ostream& operator<< (std::ostream& out,
 }
 }
 
-#endif
+#endif  // CODA_OSS_xml_lite_ValidatorInterface_h_INCLUDED_

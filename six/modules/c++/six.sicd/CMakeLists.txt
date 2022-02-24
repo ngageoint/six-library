@@ -1,11 +1,12 @@
 coda_add_module(
     six.sicd
-    DEPS six-c++
+    DEPS six-c++ units-c++
     SOURCES
         source/Antenna.cpp
         source/AreaPlaneUtility.cpp
         source/ComplexData.cpp
         source/ComplexDataBuilder.cpp
+        source/ComplexToAMP8IPHS8I.cpp
         source/ComplexXMLControl.cpp
         source/ComplexXMLParser.cpp
         source/ComplexXMLParser040.cpp
@@ -22,7 +23,6 @@ coda_add_module(
         source/Grid.cpp
         source/ImageData.cpp
         source/ImageFormation.cpp
-        source/KDTree.cpp
         source/NITFReadComplexXMLControl.cpp
         source/PFA.cpp
         source/Position.cpp

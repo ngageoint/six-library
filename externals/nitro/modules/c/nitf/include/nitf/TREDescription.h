@@ -33,8 +33,8 @@ typedef struct _nitf_TREDescription
 {
     int data_type;                  /*!< the type of field */
     int data_count;                 /*!< the size of the field */
-    char *label;                    /*!< description */
-    char *tag;                      /*!< unique tag */
+    const char *label;            /*!< description */
+    const char *tag;              /*!< unique tag */
     char *special;                  /*!< special field, reserved for special cases */
 } nitf_TREDescription;
 

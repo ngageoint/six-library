@@ -24,6 +24,8 @@
 
 #include "str/Manip.h"
 #include "str/Convert.h"
+#include "str/Encoding.h"
+#include "sys/OS.h"
 
 #include "xml/lite/MinidomHandler.h"
 
@@ -36,6 +38,14 @@ void xml::lite::MinidomHandler::setDocument(Document *newDocument, bool own)
     }
     mDocument = newDocument;
     mOwnDocument = own;
+}
+void xml::lite::MinidomHandler::setDocument(std::unique_ptr<Document>&& newDocument)
+{
+    setDocument(newDocument.release(), true /*own*/);
+}
+void  xml::lite::MinidomHandler::getDocument(std::unique_ptr<Document>& pDocument)
+{
+    pDocument.reset(getDocument(true /*steal*/));
 }
 
 void xml::lite::MinidomHandler::clear()
@@ -75,8 +85,7 @@ void xml::lite::MinidomHandler::characters(const char* value, int length, const 
 void xml::lite::MinidomHandler::characters(const char *value, int length)
 {
     const StringEncoding* pEncoding = nullptr;
-    #ifdef _WIN32
-    if (use_wchar_t())
+    if ((sys::Platform == sys::PlatformType::Windows) && call_vcharacters())
     {
         // If we're still here despite use_char() being "false" then the wide-character
         // routine "failed."  On Windows, that means the char* value is encoded
@@ -84,68 +93,83 @@ void xml::lite::MinidomHandler::characters(const char *value, int length)
         static const auto encoding = StringEncoding::Windows1252;
         pEncoding = &encoding;
     }
-    #endif
     characters(value, length, pEncoding);
 }
 
-template<typename CharT, typename ValueT>
-inline std::string toUtf8_(const ValueT* value_, size_t length)
+void xml::lite::MinidomHandler::call_characters(const std::string& s, StringEncoding encoding)
 {
-    const void* const pValue = value_;
-    const auto value = reinterpret_cast<CharT>(pValue);
-    static_assert(sizeof(*value_) == sizeof(*value), "sizeof(*CharT) != sizeof(*ValueT)"); 
-
-    str::U8string utf8Value;
-    str::strto8(value, length, utf8Value);
-    return str::c_str<std::string::const_pointer>(utf8Value);
-}
-inline std::string toUtf8(const uint16_t* value, size_t length)
-{
-    return toUtf8_<std::u16string::const_pointer>(value, length);
-}
-inline std::string toUtf8(const uint32_t* value, size_t length)
-{
-    return toUtf8_<std::u32string::const_pointer>(value, length);
+    const auto length = static_cast<int>(s.length());
+    characters(s.c_str(), length, &encoding);
 }
 
-bool xml::lite::MinidomHandler::call_characters(const std::string& utf8Value)
-{
-    const auto length = static_cast<int>(utf8Value.length());
-    static const auto encoding = xml::lite::StringEncoding::Utf8;
-    characters(utf8Value.c_str(), length, &encoding);
-    return true;  // all done, characters(char*) already called, above
-}
-
-template <typename T>
-bool xml::lite::MinidomHandler::characters_(const T* value, size_t length)
-{
-    #ifndef _WIN32
-    const auto utf8Value = toUtf8(value, length);
-    return call_characters(utf8Value);  // all done, characters(char*) already called, above
-    #else
-    UNREFERENCED_PARAMETER(value);
-    UNREFERENCED_PARAMETER(length);
-    // On Windows, we want std::string encoded as Windows-1252 (ISO8859-1)
-    // so that western European characters will be displayed.  We can't convert
-    // to UTF-8 (as above on Linux), because Windows doesn't have good support
-    // for displaying such strings.  Using UTF-16 would be preferred on Windows, but
-    // all existing code uses std::string instead of std::wstring.
-    return false; // call characters(char*) to get a Windows-1252 string
-    #endif
-}
-bool xml::lite::MinidomHandler::wcharacters_(const uint32_t* value, size_t length)
-{
-    return characters_(value, length);
-}
-bool xml::lite::MinidomHandler::wcharacters_(const uint16_t* value, size_t length)
-{
-    return characters_(value, length);
-}
-
-bool xml::lite::MinidomHandler::use_wchar_t() const
+bool xml::lite::MinidomHandler::call_vcharacters() const
 {
     // if we're storing the encoding, get wchar_t so that we can convert
     return storeEncoding();
+}
+
+inline std::string toUtf8(const char16_t* pChars16, const char32_t* pChars32, size_t length)
+{
+    std::string result;
+    if (pChars16 != nullptr)
+    {
+        assert(pChars32 == nullptr);
+        return str::details::to_u8string(pChars16, length, result);
+    }
+    if (pChars32 != nullptr)
+    {
+        assert(pChars16 == nullptr);
+        return str::details::to_u8string(pChars32, length, result);
+    }
+    throw std::invalid_argument("Both pChars16 and pChars32 are NULL.");
+}
+
+// XMLCh could be either 16- or 32-bits, depending on platform and Xerces configuration
+bool xml::lite::MinidomHandler::vcharacters(const void /*XMLCh*/* chars_, size_t length)
+{
+    if (chars_ == nullptr)
+    {
+        throw std::invalid_argument("chars_ is NULL.");
+    }
+    if (length == 0)
+    {
+        throw std::invalid_argument("length is 0.");
+    }
+
+    constexpr auto XMLCh_is_16 = sizeof(XMLCh) == sizeof(char16_t);
+    constexpr auto XMLCh_is_32 = sizeof(XMLCh) == sizeof(char32_t);
+    static_assert(XMLCh_is_16 || XMLCh_is_32, "XMLCh should be 16- or 32-bits.");
+    auto pChars16 = XMLCh_is_16 ? static_cast<const char16_t*>(chars_) : nullptr;
+    auto pChars32 = XMLCh_is_32 ? static_cast<const char32_t*>(chars_) : nullptr;
+    if ((pChars16 == nullptr) && (pChars32 == nullptr))
+    {
+        throw std::invalid_argument("Wrong size for XMLCh");
+    }
+
+    std::string chars;
+    auto platformEncoding = xml::lite::PlatformEncoding;  // "conditional expression is constant"
+    if (platformEncoding == xml::lite::StringEncoding::Utf8)
+    {
+        chars = toUtf8(pChars16, pChars32, length);
+    }
+    else if (platformEncoding == xml::lite::StringEncoding::Windows1252)
+    {
+        // On Windows, we want std::string encoded as Windows-1252 so that
+        // western European characters will be displayed.  We can't convert
+        // to UTF-8 (as above on Linux), because Windows doesn't have good
+        // support for displaying such strings.  Using UTF-16 would be preferred
+        // on Windows, but all existing code uses std::string instead of std::wstring.
+        assert(pChars16 != nullptr);  // XMLCh == wchar_t == char16_t on Windows
+        auto pChars = static_cast<const XMLCh*>(chars_);
+        chars = xml::lite::XercesLocalString(pChars).str();
+    }
+    else
+    {
+        throw std::logic_error("Unknown xml::lite::StringEncoding");
+    }
+
+    call_characters(chars, platformEncoding);
+    return true; // vcharacters() processed
 }
 
 void xml::lite::MinidomHandler::startElement(const std::string & uri,
@@ -153,9 +177,7 @@ void xml::lite::MinidomHandler::startElement(const std::string & uri,
                                              const std::string & qname,
                                              const xml::lite::Attributes & atts)
 {
-    // Assign what we can now, and push rest on stack
-    // for later
-
+    // Assign what we can now, and push rest on stack for later
     xml::lite::Element * current = mDocument->createElement(qname, uri);
 
     current->setAttributes(atts);
@@ -230,16 +252,5 @@ void xml::lite::MinidomHandler::storeEncoding(bool value)
 
 bool xml::lite::MinidomHandler::storeEncoding() const
 {
-    // Without mPreserveCharData=true, we gets asserts when parsing text containing
-    // non-ASCII characters.  Given that, don't bother storing an encoding w/o 
-    // mPreserveCharData also set.  This also further preserves existing behavior.
-    // Also note that much code leaves mPreserveCharData as it's default of false.
-    if (mStoreEncoding)
-    {
-        if (!mPreserveCharData)
-        {
-            throw std::logic_error("preserveCharacterData() must be set with storeEncoding()");
-        }
-    }
-    return mStoreEncoding && mPreserveCharData;
+    return mStoreEncoding;
 }

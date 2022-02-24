@@ -65,11 +65,6 @@ struct Data
         return std::unique_ptr<Data>(clone());
     }
 
-    bool equals_(const Data& rhs) const
-    {
-        return this->equalTo(rhs) && rhs.equalTo(*this);
-    }
-
     /*!
      *  Data type/class is DERIVED for DerivedData and
      *  COMPLEX for ComplexData
@@ -85,11 +80,11 @@ struct Data
      */
     virtual PixelType getPixelType() const = 0;
     virtual void setPixelType(PixelType pixelType) = 0;
-    virtual bool convertPixels_(std::span<const std::byte>, std::span<std::byte>) const { return false; }
+    virtual bool convertPixels_(std::span<const std::byte>, std::span<std::byte>, ptrdiff_t /*cutoff*/) const { return false; }
     template<typename T, typename U>
-    bool convertPixels(std::span<const T> from, std::span<U> to) const
+    bool convertPixels(std::span<const T> from, std::span<U> to, ptrdiff_t cutoff = -1) const
     {
-        return convertPixels_(as_bytes(from), as_bytes(to));
+        return convertPixels_(as_bytes(from), as_bytes(to), cutoff);
     }
 
     /*!
@@ -208,16 +203,13 @@ struct Data
     //!  Set the version of the model contained within
     virtual void setVersion(const std::string& version) = 0;
 
-private:
     virtual bool equalTo(const Data& rhs) const = 0;
 };
-template<typename T>
-inline bool operator==(const Data& lhs, const T& rhs)
+inline bool operator==(const Data& lhs, const Data& rhs)
 {
-    return lhs.equals_(rhs);
+    return lhs.equalTo(rhs) && rhs.equalTo(lhs);
 }
-template<typename T>
-inline bool operator!=(const Data& lhs, const T& rhs)
+inline bool operator!=(const Data& lhs, const Data& rhs)
 {
     return !(lhs == rhs);
 }

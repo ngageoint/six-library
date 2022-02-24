@@ -320,7 +320,7 @@ public:
         return toString() + backtrace;
     }
 
-    const char* what() const noexcept override final  // derived classes override toString()
+    const char* what() const noexcept final  // derived classes override toString()
     {
         // adding this to toString() output could (significantly) alter existing display
         mWhat = toString(true /*includeBacktrace*/);  // call any derived toString()

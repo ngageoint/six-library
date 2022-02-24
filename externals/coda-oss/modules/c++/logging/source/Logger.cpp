@@ -34,20 +34,18 @@ logging::Logger::~Logger()
 
 void logging::Logger::log(logging::LogLevel level, const std::string& msg)
 {
-    logging::LogRecord *rec = new logging::LogRecord(mName, msg, level);
+    const logging::LogRecord rec(mName, msg, level);
     handle(rec);
-    delete rec;
 }
 
 void logging::Logger::log(LogLevel level, const except::Context& ctxt)
 {
-    logging::LogRecord *rec = new logging::LogRecord(mName, ctxt.getMessage(),
+   const logging::LogRecord rec(mName, ctxt.getMessage(),
                                                      level, ctxt.getFile(),
                                                      ctxt.getFunction(),
                                                      ctxt.getLine(),
                                                      ctxt.getTime());
     handle(rec);
-    delete rec;
 }
 
 void logging::Logger::log(LogLevel level, const except::Throwable& t)
@@ -155,12 +153,12 @@ void logging::Logger::handle(const logging::LogRecord* record)
 {
     if (filter(record))
     {
-        for (Handlers_T::iterator p = mHandlers.begin(); p != mHandlers.end(); ++p)
+        for (const auto& p : mHandlers)
         {
             //std::cout << (int)(*p)->getLevel() << std::endl;
             //only handle if it is above/equal to threshold
-            if (p->first->getLevel() <= record->getLevel())
-                p->first->handle(record);
+            if (p.first->getLevel() <= record->getLevel())
+                p.first->handle(record);
         }
     }
 }
@@ -181,6 +179,10 @@ void logging::Logger::addHandler(logging::Handler* handler, bool own)
     if (!found)
         mHandlers.push_back(Handler_T(handler, own));
 }
+void logging::Logger::addHandler(std::unique_ptr<logging::Handler>&& handler)
+{
+    addHandler(handler.release(), true /*own*/);
+}
 
 void logging::Logger::removeHandler(logging::Handler* handler)
 {
@@ -197,20 +199,19 @@ void logging::Logger::removeHandler(logging::Handler* handler)
 
 void logging::Logger::setLevel(LogLevel level)
 {
-    for (Handlers_T::iterator p = mHandlers.begin(); p != mHandlers.end(); ++p)
+    for (const auto& p : mHandlers)
     {
         //set the level
-        p->first->setLevel(level);
+        p.first->setLevel(level);
     }
 }
 
 void logging::Logger::reset()
 {
-    for (Handlers_T::iterator p = mHandlers.begin(); p
-            != mHandlers.end(); ++p)
+    for (const auto& p : mHandlers)
     {
-        if (p->second && p->first)
-            delete p->first;
+        if (p.second && p.first)
+            delete p.first;
     }
     mHandlers.clear();
 }

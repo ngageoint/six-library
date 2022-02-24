@@ -43,24 +43,27 @@ namespace testing
         }
     }
 }
-#else
-
-inline bool operator==(std::byte lhs, char rhs)
-{
-    return static_cast<char>(lhs) == rhs;
-}
-inline bool operator!=(std::byte lhs, char rhs)
-{
-    return !(lhs == rhs);
-}
-
-inline std::ostream& operator<<(std::ostream& os, std::byte v)
-{
-    os << static_cast<unsigned char>(v);
-    return os;
-}
-
 #endif // GTEST_API_
+
+namespace
+{
+    inline bool operator==(std::byte lhs, char rhs)
+    {
+        return static_cast<char>(lhs) == rhs;
+    }
+    inline bool operator!=(std::byte lhs, char rhs)
+    {
+        return !(lhs == rhs);
+    }
+}
+namespace str
+{
+    inline std::ostream& operator<<(std::ostream& os, std::byte v)
+    {
+        os << static_cast<unsigned char>(v);
+        return os;
+    }
+}
 
 namespace
 {

@@ -38,6 +38,8 @@ namespace str
  *  @param  s  String to trim
  */
 void trim(std::string& s);
+extern std::string strip(const std::string& s);
+extern std::string& strip(std::string& s);
 
 /**
  *  Checks the end of s with match
@@ -46,6 +48,7 @@ void trim(std::string& s);
  *  @return true if it matches, otherwise false
  */
 bool endsWith(const std::string& s, const std::string& match);
+extern bool ends_with(const std::string& s, const std::string&) noexcept;
 
 /**
  *  Checks the start of s with match
@@ -54,6 +57,8 @@ bool endsWith(const std::string& s, const std::string& match);
  *  @return true if it matches, otherwise false
  */
 bool startsWith(const std::string& s, const std::string& match);
+extern bool starts_with(const std::string& s, const std::string&) noexcept;
+
 
 /**
  *  finds the first instance of "search" and
@@ -152,7 +157,7 @@ void upper(std::string& s);
 void escapeForXML(std::string& str);
 
 template<typename T>
-std::string join(std::vector<T> toks, std::string with)
+std::string join(const std::vector<T>& toks, std::string with)
 {
     if (toks.empty())
         return "";

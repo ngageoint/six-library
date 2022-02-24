@@ -46,6 +46,7 @@
 #include <str/Manip.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
+#include <units/Angles.h>
 #include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/GeoLocator.h>
 #include <six/sicd/ImageData.h>
@@ -77,7 +78,7 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
 }
 }
 
-std::complex<float> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
+std::complex<long double> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
 {
     long double A = 0.0;
     if (pAmplitudeTable != nullptr)
@@ -98,13 +99,10 @@ std::complex<float> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitu
 
     // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
     // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
-    const auto angle = 2 * M_PI * P;
+    const auto angle = units::Radians<long double>{ 2 * M_PI * P };
     long double sin_angle, cos_angle;
-    math::SinCos(angle, sin_angle, cos_angle);
-
-    const auto real = A * cos_angle;
-    const auto imaginary = A * sin_angle;
-    std::complex<float> S(gsl::narrow_cast<float>(real), gsl::narrow_cast<float>(imaginary));
+    SinCos(angle, sin_angle, cos_angle);
+    std::complex<long double> S(A * cos_angle, A * sin_angle);
     return S;
 }
 
@@ -156,7 +154,7 @@ class SICD_readerAndConverter final
     {
         // Take each Int16 out of the temp buffer and put it into the real buffer as a Float32
         void* const pBuffer = buffer;
-        float* const bufferPtr = reinterpret_cast<float*>(pBuffer) + ((row - offset.row) * elementsPerRow);
+        float* const bufferPtr = static_cast<float*>(pBuffer) + ((row - offset.row) * elementsPerRow);
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
         {
             bufferPtr[index] = tempVector[index];
@@ -167,10 +165,9 @@ class SICD_readerAndConverter final
     {
         process_AMP8I_PHS8I(elementsPerRow, row, rowsToRead, tempVector);
     }
-    void process_AMP8I_PHS8I(size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<uint8_t>& tempVector) const
+    void process_AMP8I_PHS8I(size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<uint8_t>& tempVector) const
     {
-        //auto bufferPtr = buffer + ((row - offset.row) * elementsPerRow);
-        auto bufferPtr = buffer;
+        auto bufferPtr = buffer + ((row - offset.row) * (elementsPerRow / 2));
 
         // Take each (uint8_t, uint8_t) out of the temp buffer and put it into the real buffer as a std::complex<float>
         for (size_t index = 0; index < elementsPerRow * rowsToRead; index += 2)
@@ -889,7 +886,7 @@ void Utilities::getRawData(NITFReadControl& reader,
     const ComplexData& complexData,
     const types::RowCol<size_t>& offset,
     const types::RowCol<size_t>& extent,
-    std::vector<ImageData::AMP8I_PHS8I_t>& buffer)
+    std::vector<AMP8I_PHS8I_t>& buffer)
 {
     const auto pixelType = complexData.getPixelType();
     if (pixelType != PixelType::AMP8I_PHS8I)
@@ -904,8 +901,8 @@ void Utilities::getRawData(NITFReadControl& reader,
     // Each pixel is stored as a pair of numbers that represent the amplitude and phase
     // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
     // component, 2 bytes per pixel). 
-    SICDreader<ImageData::AMP8I_PHS8I_t>(reader, imageNumber, offset, extent, extent.col,
-        [&](size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<ImageData::AMP8I_PHS8I_t>& tempVector)
+    SICDreader<AMP8I_PHS8I_t>(reader, imageNumber, offset, extent, extent.col,
+        [&](size_t elementsPerRow, size_t /*row*/, size_t rowsToRead, const std::vector<AMP8I_PHS8I_t>& tempVector)
         {
             for (size_t index = 0; index < elementsPerRow * rowsToRead; index++)
             {
@@ -1615,7 +1612,7 @@ std::vector<std::complex<float>> six::sicd::testing::make_complex_image(const ty
     return image;
 }
 
-std::vector<std::byte> six::sicd::testing::to_bytes(const ComplexImageResult& result)
+std::vector<std::byte> six::sicd::testing::to_bytes(const ComplexImageResult& result, ptrdiff_t cutoff)
 {
     const auto& image = result.widebandData;
     const auto bytes = six::as_bytes(image);
@@ -1626,7 +1623,7 @@ std::vector<std::byte> six::sicd::testing::to_bytes(const ComplexImageResult& re
     {
         retval.resize(image.size() * data.getNumBytesPerPixel());
         const std::span<std::byte> pRetval(retval.data(), retval.size());
-        data.convertPixels(bytes, pRetval);
+        data.convertPixels(bytes, pRetval, cutoff);
     }
     else
     {

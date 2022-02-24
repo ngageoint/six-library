@@ -162,7 +162,7 @@ struct ComplexData: public Data
     {
         imageData->pixelType = pixelType;
     }
-    bool convertPixels_(std::span<const std::byte>, std::span<std::byte>) const override;
+    bool convertPixels_(std::span<const std::byte>, std::span<std::byte>, ptrdiff_t cutoff) const override;
 
     /*!
      *  Maps to: /SICD/ImageData/NumRows,
@@ -347,8 +347,6 @@ struct ComplexData: public Data
         return six::getImageMode(collectionInformation->radarMode);
     }
 
-    bool operator==(const ComplexData& rhs) const;
-
     /*
      * Check that class members are consistent with each other
      *
@@ -370,8 +368,13 @@ struct ComplexData: public Data
      */
     void fillDefaultFields();
 
+    bool operator==(const ComplexData& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Data&>(*this) == static_cast<const Data&>(rhs);
+    }
 private:
-    virtual bool equalTo(const Data& rhs) const override;
+    bool operator_eq(const ComplexData& rhs) const;
+    bool equalTo(const Data& rhs) const override;
 
     /*
      * Classification contains the classification level (stored in
@@ -409,7 +412,8 @@ struct ComplexImage final
     const ComplexData& data;
     std::span<const std::complex<float>> image;
     ComplexImage(const ComplexData& d, std::span<const std::complex<float>> i) : data(d), image(i) {}
-    ComplexImage(const ComplexImageResult& r)  : ComplexImage(*(r.pComplexData), r.widebandData) {}
+    ComplexImage(const ComplexImageResult& r) 
+        : ComplexImage(*(r.pComplexData), std::span<const std::complex<float>>(r.widebandData.data(), r.widebandData.size())) {}
     ComplexImage(const ComplexImage&) = delete;
     ComplexImage& operator=(const ComplexImage&) = delete;
 };

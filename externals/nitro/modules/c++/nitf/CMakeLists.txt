@@ -27,6 +27,7 @@ coda_add_module(
         source/DownSampler.cpp
         source/Extensions.cpp
         source/Field.cpp
+        source/FieldDescriptor.cpp
         source/FieldWarning.cpp
         source/FileHeader.cpp
         source/FileSecurity.cpp
@@ -61,6 +62,7 @@ coda_add_module(
         source/SegmentWriter.cpp
         source/SubWindow.cpp
         source/TRE.cpp
+        source/TestingTest.cpp
         source/TextSegment.cpp
         source/TextSubheader.cpp
         source/Utils.cpp
@@ -92,3 +94,10 @@ coda_add_tests(
         test_image_segment_computer.cpp
         test_nitf_buffer_list.cpp
         test_tre_mods++.cpp)
+
+add_executable(show_nitf++ apps/show_nitf++.cpp)
+target_link_libraries(show_nitf++ PRIVATE nitf-c++)
+
+install(TARGETS show_nitf++
+        ${CODA_INSTALL_OPTION}
+        RUNTIME DESTINATION "${CODA_STD_PROJECT_BIN_DIR}")

@@ -497,7 +497,7 @@ static NRT_BOOL is_valid_dms(int degrees, int minutes, double seconds)
     {
         return NRT_FALSE;
     }
-    if (fabs(seconds) >= 60.0)
+    if (fabs(seconds) > 60.0) // From Eric: allow slightly out-of-spec IGEOLO fields
     {
         return NRT_FALSE;
     }
@@ -780,7 +780,7 @@ NRTAPI(char*) nrt_strdup(const char* src)
     if (src != NULL)
     {
         const size_t len = strlen(src);
-        char* retval = NRT_MALLOC(len + 1);
+        char* retval = (char*) NRT_MALLOC(len + 1);
         if (retval != NULL)
         {
             nrt_strcpy_s(retval, len + 1, src);
