@@ -19,6 +19,7 @@ coda_add_module(
     SOURCES
         source/Container.c
         source/Component.c
+        source/Defines.c
         source/JasPerImpl.c
         source/OpenJPEGImpl.c
         source/j2k_Reader.c
@@ -35,3 +36,5 @@ coda_add_tests(
         test_j2k_nitf.c
         test_j2k_read_region.c
         test_j2k_read_tile.c)
+
+

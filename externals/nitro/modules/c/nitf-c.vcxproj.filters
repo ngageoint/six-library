@@ -664,5 +664,8 @@
     <ClCompile Include="nitf\source\TestingTest.c">
       <Filter>nitf</Filter>
     </ClCompile>
+    <ClCompile Include="j2k\source\Defines.c">
+      <Filter>j2k</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

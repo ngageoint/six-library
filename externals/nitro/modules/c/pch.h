@@ -39,3 +39,4 @@
 #pragma warning(disable: 4505) // '...': unreferenced local function has been removed
 #pragma warning(disable: 4514) // '...' : unreferenced inline function has been removed
 
+#define OPJ_STATIC

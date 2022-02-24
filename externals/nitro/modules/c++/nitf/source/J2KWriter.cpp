@@ -3,7 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
- * (C) Copyright 2021, Maxar Technologies, Inc.
+ * (C) Copyright 2022, Maxar Technologies, Inc.
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,30 +16,33 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not,
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
-#ifndef NITF_Version_hpp_INCLUDED_
-#define NITF_Version_hpp_INCLUDED_
+#include "nitf/J2KWriter.hpp"
 
-#include "config/Version.h"
-#include "nitf/Version.h"
+#include <gsl/gsl.h>
 
-#define NITF_VERSION_MAJOR	2
-#define NITF_VERSION_MINOR	10
-#define NITF_VERSION_PATCH	8
-#define NITF_VERSION_BUILD		0
-#define NITF_VERSION CODA_OSS_MAKE_VERSION_MMPB(NITF_VERSION_MAJOR, NITF_VERSION_MINOR, NITF_VERSION_PATCH, NITF_VERSION_BUILD)
+#include "nitf/J2KContainer.hpp"
 
-namespace nitf
+j2k::details::Writer::Writer(j2k_Writer* x)
 {
-	constexpr auto version = NITF_VERSION;
-	constexpr auto version_major = CODA_OSS_GET_VERSION_MAJOR(NITF_VERSION);
-	constexpr auto version_minor = CODA_OSS_GET_VERSION_MINOR(NITF_VERSION);
-	constexpr auto version_patch = CODA_OSS_GET_VERSION_PATCH(NITF_VERSION);
-	constexpr auto version_build = CODA_OSS_GET_VERSION_BUILD(NITF_VERSION);
+    setNative(x);
+    getNativeOrThrow();
+}
+j2k::Writer::Writer(j2k_Writer*&& x) : impl_(x) {}
+
+j2k::Writer::Writer(const Container& container, const WriterOptions& options)
+    : Writer(container.createWriter(options)) { }
+
+void j2k::Writer::setTile(uint32_t tileX, uint32_t tileY, std::span<const uint8_t> buf)
+{
+    impl_.callNativeOrThrowV(j2k_Writer_setTile, tileX, tileY, buf.data(), gsl::narrow<uint32_t>(buf.size()));
 }
 
-#endif // NITF_Version_hpp_INCLUDED_
+void j2k::Writer::write(nitf::IOHandle& handle)
+{
+    impl_.callNativeOrThrowV(j2k_Writer_write, handle.getNativeOrThrow());
+}

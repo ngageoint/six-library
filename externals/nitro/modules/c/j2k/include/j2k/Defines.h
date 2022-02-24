@@ -20,9 +20,9 @@
  *
  */
 
-#ifndef __J2K_DEFINES_H__
-#define __J2K_DEFINES_H__
-
+ // J2K isn't part of "nitf" (yet?) so use NITRO, not NITF prefix
+#ifndef NITRO_j2k_Defines_h_INCLUDED_ 
+#define NITRO_j2k_Defines_h_INCLUDED_
 
 #if defined(WIN32) || defined(_WIN32)
 #      if defined(J2K_MODULE_EXPORTS)
@@ -65,4 +65,29 @@ typedef enum _j2k_ImageType
     J2K_TYPE_RGB
 } j2k_ImageType;
 
+// Different J2K implementations may offer different functionality; this
+// might be easier in certain instances than querying for specific functionality.
+// It also gives us a place to say "No J2K at all."
+#define NITRO_J2K_IMPLEMENTATION_ERROR -1 
+#define NITRO_J2K_IMPLEMENTATION_NONE (NITRO_J2K_IMPLEMENTATION_ERROR + 1)
+#define NITRO_J2K_IMPLEMENTATION_OPENJPEG (NITRO_J2K_IMPLEMENTATION_NONE + 1)
+#define NITRO_J2K_IMPLEMENTATION_JASPER (NITRO_J2K_IMPLEMENTATION_OPENJPEG + 1)
+typedef enum _j2k_Implementation
+{
+    j2k_Implementation_Error = NITRO_J2K_IMPLEMENTATION_ERROR, // e.g., NULL argument
+    j2k_Implementation_None = NITRO_J2K_IMPLEMENTATION_NONE,
+    j2k_Implementation_OpenJPEG = NITRO_J2K_IMPLEMENTATION_OPENJPEG,
+    j2k_Implementation_JasPer = NITRO_J2K_IMPLEMENTATION_JASPER,
+} j2k_Implementation;
+
+J2KAPI(j2k_Implementation) j2k_getImplementation(nrt_Error*);
+
+#if defined(HAVE_OPENJPEG_H)
+#define NITRO_J2K_IMPLEMENTATION NITRO_J2K_IMPLEMENTATION_OPENJPEG
+#elif defined(HAVE_JASPER_H)
+#define NITRO_J2K_IMPLEMENTATION NITRO_J2K_IMPLEMENTATION_JASPER
+#else
+#define NITRO_J2K_IMPLEMENTATION NITRO_J2K_IMPLEMENTATION_NONE
 #endif
+
+#endif // NITRO_j2k_Defines_h_INCLUDED_

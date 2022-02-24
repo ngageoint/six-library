@@ -27,6 +27,8 @@
 #include <assert.h>
 
 #include <cstddef> // std::nullptr_t
+#include <utility> // std::forward
+#include <tuple> // std::ignore
 
 #include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
@@ -135,7 +137,37 @@ public:
      */
     NITFException(const except::Throwable& t, const except::Context& c) :
             except::Exception(t, c){}
+};
+
+// These are here because if the native call fails, we'll throw a NITFException
+//
+template<typename TReturn, typename Func, typename Native, typename... Args>
+inline TReturn callNative(Func f, Native* pNative, Args&&... args) noexcept // no indication from call regarding failure
+{
+    // nitf_Error is just part of the "protocol," the call doesn't actually use it.
+    // Often used for simple "get" routines, e.g., see Component_getWidth()
+    nitf_Error error{};
+    return f(pNative, std::forward<Args>(args)..., &error);
 }
-;
+
+template<typename TReturn, typename Func, typename Native, typename... Args>
+inline TReturn callNativeOrThrow(Func f, Native* pNative, Args&&... args) // c.f. getNativeOrThrow()
+{
+    nitf_Error error{};
+    const auto retval = f(pNative, std::forward<Args>(args)..., &error);
+    if (!retval)
+    {
+        throw nitf::NITFException(&error);
+    }
+    return retval;
+}
+template<typename Func, typename Native, typename... Args>
+inline void callNativeOrThrowV(Func f, Native* pNative, Args&&... args) // c.f. getNativeOrThrow()
+{
+    // save caller the trouble of figuring out a return type that won't be used
+    constexpr nitf_Error* pError = nullptr; // only needed for decltype()
+    using retval_t = decltype(f(pNative, std::forward<Args>(args)..., pError));
+    std::ignore = callNativeOrThrow<retval_t>(f, pNative, std::forward<Args>(args)...);
+}
 }
 #endif
