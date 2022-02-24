@@ -38,8 +38,8 @@ six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
 
     //Check for optimization cases - RGB and IQ
     if ((nBands == 3 && imageMode == nitf::BlockingMode::Pixel && irep == nitf::ImageRepresentation::RGB && bytesPerPixel
-            == 1 && (ic == "NC" || ic == "NM")) || (nBands == 2 && imageMode == nitf::BlockingMode::Pixel &&
-                bytesPerPixel == 4 && (ic == "NC" || ic == "NM")))
+            == 1 && (ic == nitf::ImageCompression::NC || ic == nitf::ImageCompression::NM)) || (nBands == 2 && imageMode == nitf::BlockingMode::Pixel &&
+                bytesPerPixel == 4 && (ic == nitf::ImageCompression::NC || ic == nitf::ImageCompression::NM)))
     {
         auto subcategory = subheader.getBandInfo(0).subcategory;
         if (subcategory == nitf::Subcategory::I)

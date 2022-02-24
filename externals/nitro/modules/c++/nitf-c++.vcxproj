@@ -48,6 +48,10 @@
     <ClCompile Include="nitf\source\IOInterface.cpp" />
     <ClCompile Include="nitf\source\IOStreamReader.cpp" />
     <ClCompile Include="nitf\source\IOStreamWriter.cpp" />
+    <ClCompile Include="nitf\source\J2KComponent.cpp" />
+    <ClCompile Include="nitf\source\J2KContainer.cpp" />
+    <ClCompile Include="nitf\source\J2KReader.cpp" />
+    <ClCompile Include="nitf\source\J2KWriter.cpp" />
     <ClCompile Include="nitf\source\LabelSegment.cpp" />
     <ClCompile Include="nitf\source\LabelSubheader.cpp" />
     <ClCompile Include="nitf\source\List.cpp" />
@@ -118,6 +122,10 @@
     <ClInclude Include="nitf\include\nitf\IOInterface.hpp" />
     <ClInclude Include="nitf\include\nitf\IOStreamReader.hpp" />
     <ClInclude Include="nitf\include\nitf\IOStreamWriter.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KComponent.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KContainer.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KReader.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KWriter.hpp" />
     <ClInclude Include="nitf\include\nitf\LabelSegment.hpp" />
     <ClInclude Include="nitf\include\nitf\LabelSubheader.hpp" />
     <ClInclude Include="nitf\include\nitf\List.hpp" />
@@ -199,7 +207,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(ProjectDir)..\c\j2k\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
@@ -232,7 +240,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(ProjectDir)..\c\j2k\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>

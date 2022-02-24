@@ -20,6 +20,9 @@
  *
  */
 
+#include <tuple> // std::ignore
+
+#include <config/compiler_extensions.h>
 #include <import/str.h>
 #include "TestCase.h"
 
@@ -47,6 +50,25 @@ TEST_CASE(testStrip)
     const auto s4 = s;
     const auto s5 = str::strip(s4);
     TEST_ASSERT_EQ(s5, "test");
+}
+
+TEST_CASE(testData)
+{
+    std::string s;
+    // https://en.cppreference.com/w/cpp/string/basic_string/resize
+    s.resize(3); // "Resizes the string to contain count characters." 
+    
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable : 4996)  // '...': This function or variable may be unsafe. ...
+    #endif
+
+    // https://en.cppreference.com/w/cpp/string/basic_string/data
+    // "Modifying the past-the-end null terminator stored at data()+size() to any value other than CharT() has undefined behavior."
+    std::ignore = strcpy(str::data(s), "abc"); 
+    
+    CODA_OSS_disable_warning_pop
+    TEST_ASSERT_EQ(s, "abc");
 }
 
 TEST_CASE(testUpper)
@@ -202,6 +224,7 @@ int main(int, char**)
 {
     TEST_CHECK(testTrim);
     TEST_CHECK(testStrip);
+    TEST_CHECK(testData);
     TEST_CHECK(testUpper);
     TEST_CHECK(testLower);
     TEST_CHECK(testReplace);

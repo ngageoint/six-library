@@ -62,10 +62,96 @@ NRT_BOOL writeFile(uint32_t x0, uint32_t y0,
     return rc;
 }
 
+NRT_BOOL writeJ2K(uint32_t x0, uint32_t y0,
+    uint32_t x1, uint32_t y1, uint8_t* buf,
+    uint64_t bufSize, j2k_Container* inContainer,
+    const char* prefix, nrt_Error* error)
+{
+    NRT_BOOL rc = NRT_SUCCESS;
+    char outName[NRT_MAX_PATH];
+
+    NRT_SNPRINTF(outName, NRT_MAX_PATH, "%s-raw-%d_%d__%d_%d.j2k", prefix, x0,
+        y0, x1, y1);
+
+    //uint32_t width = x1 - x0;
+    //uint32_t height = y1 - y0;
+    const uint32_t num_x_tiles = j2k_Container_getTilesX(inContainer, error);
+    const uint32_t num_y_tiles = j2k_Container_getTilesY(inContainer, error);
+    const uint32_t tile_height = j2k_Container_getTileHeight(inContainer, error);
+    const uint32_t tile_width = j2k_Container_getTileWidth(inContainer, error);
+    const uint32_t num_components = j2k_Container_getNumComponents(inContainer, error);
+   
+    // TODO: May need to handle this differently for multiple components
+    j2k_Component* c = j2k_Container_getComponent(inContainer, 0, error);
+    const uint32_t precision = j2k_Component_getPrecision(c, error);
+
+    j2k_Writer* writer = NULL;
+    uint32_t tileSize = 0;
+    nrt_IOInterface* outIO = NULL;
+    uint32_t bytes = 0;
+
+    if (!inContainer)
+    {
+        goto CATCH_ERROR;
+    }
+
+    j2k_WriterOptions options;
+    memset(&options, 0, sizeof(j2k_WriterOptions));
+    /* TODO set some options here */
+
+    writer = j2k_Writer_construct(inContainer, &options, error);
+    if (!writer)
+    {
+        goto CATCH_ERROR;
+    }
+
+    outIO = nrt_IOHandleAdapter_open(outName, NRT_ACCESS_WRITEONLY,
+        NRT_CREATE, error);
+    if (!outIO)
+        goto CATCH_ERROR;
+
+    tileSize = tile_height * tile_width;
+    bytes = (precision - 1) / 8 + 1;
+    uint32_t x, y;
+    for (y = 0; y < num_y_tiles; ++y)
+    {
+        for (x = 0; x < num_x_tiles; ++x)
+        {
+            const uint32_t index = y * num_x_tiles + x % num_x_tiles;
+            const uint32_t offset = index * tile_height * tile_width * bytes * num_components;
+
+            if (!j2k_Writer_setTile(writer, x, y, (uint8_t*)(buf + offset), tileSize, error))
+            {
+                goto CATCH_ERROR;
+            }
+        }
+    }
+
+    if (!j2k_Writer_write(writer, outIO, error))
+        goto CATCH_ERROR;
+
+    printf("Wrote file: %s\n", outName);
+
+    goto CLEANUP;
+
+    CATCH_ERROR:
+    {
+        rc = NRT_FAILURE;
+    }
+
+CLEANUP:
+    {
+        // nothing to cleanup
+    }
+
+    return rc;
+}
+
 int main(int argc, char **argv)
 {
     int rc = 0;
-    int argIt = 0, i = 0, num = 0, dump = 0;
+    int argIt = 0, i = 0, dump = 0;
+    uint32_t num = 0;
     char *fname = NULL;
     nrt_Error error;
     nrt_IOInterface *io = NULL;
@@ -76,7 +162,9 @@ int main(int argc, char **argv)
     for (argIt = 1; argIt < argc; ++argIt)
     {
         if (strcmp(argv[argIt], "--dump") == 0)
+        {
             dump = 1;
+        }
         else if (!fname)
         {
             fname = argv[argIt];
@@ -129,7 +217,7 @@ int main(int argc, char **argv)
                 uint32_t cmpIt, nComponents;
                 printf("Image %d contains J2K compressed data\n", (i + 1));
                 printf("Offset: %" PRIu64 "\n", segment->imageOffset);
-                if (!nrt_IOInterface_seek(io, segment->imageOffset,
+                if (!nrt_IOInterface_seek(io, (nrt_Off) segment->imageOffset,
                                           NRT_SEEK_SET, &error))
                     goto CATCH_ERROR;
                 j2kReader = j2k_Reader_openIO(io, &error);
@@ -176,7 +264,7 @@ int main(int argc, char **argv)
                         buf = NULL;
                     }
                     width = j2k_Container_getWidth(container, &error);
-                    height = j2k_Container_getWidth(container, &error);
+                    height = j2k_Container_getHeight(container, &error);
 
                     if ((bufSize = j2k_Reader_readRegion(j2kReader, 0, 0,
                                                          width, height,
@@ -188,6 +276,12 @@ int main(int argc, char **argv)
                     NRT_SNPRINTF(namePrefix, NRT_MAX_PATH, "image-%d", (i + 1));
                     if (!writeFile(0, 0, width, height, buf, bufSize,
                                    namePrefix, &error))
+                    {
+                        goto CATCH_ERROR;
+                    }
+
+                    if (!writeJ2K(0, 0, width, height, buf, bufSize,
+                        container, namePrefix, &error))
                     {
                         goto CATCH_ERROR;
                     }

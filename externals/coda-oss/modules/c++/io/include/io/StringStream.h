@@ -47,7 +47,7 @@ namespace io
 template<typename CharT>
 struct StringStreamT final : public SeekableBidirectionalStream
 {
-    StringStreamT() = default;
+    StringStreamT(){} // "=default" causes error with old GCC
 
     StringStreamT(const StringStreamT&) = delete;
     StringStreamT& operator=(const StringStreamT&) = delete;

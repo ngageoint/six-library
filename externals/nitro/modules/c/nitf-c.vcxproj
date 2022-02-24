@@ -50,7 +50,7 @@
     <ClCompile>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);HAVE_OPENJPEG_H</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)nrt\include\;$(ProjectDir)nitf\include\;$(ProjectDir)jpeg\include\;$(ProjectDir)j2k\include\;$(ProjectDir)cgm\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -79,7 +79,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions);HAVE_OPENJPEG_H</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)nrt\include\;$(ProjectDir)nitf\include\;$(ProjectDir)jpeg\include\;$(ProjectDir)j2k\include\;$(ProjectDir)cgm\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -246,6 +246,7 @@
     <ClCompile Include="cgm\source\VertexClose.c" />
     <ClCompile Include="j2k\source\Component.c" />
     <ClCompile Include="j2k\source\Container.c" />
+    <ClCompile Include="j2k\source\Defines.c" />
     <ClCompile Include="j2k\source\j2k_Reader.c" />
     <ClCompile Include="j2k\source\j2k_Writer.c" />
     <ClCompile Include="j2k\source\JasPerImpl.c" />

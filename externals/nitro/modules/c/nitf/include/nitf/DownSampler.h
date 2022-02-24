@@ -148,7 +148,10 @@ nitf_IDownSampler;
  * sizes. Each bit represents one type/size pair (i.e. one byte INT). For the
  * binary pixel type, the byte count is one and for the 12-bit type it is two
  */
-
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_DownSampler
 {
     nitf_IDownSampler *iface;   /* The functional interface  */
@@ -161,7 +164,9 @@ typedef struct _nitf_DownSampler
     NITF_DATA *data;            /* To be overloaded by derived class  */
 }
 nitf_DownSampler;
-
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*! \def NITF_DOWNSAMPLER_TYPE_INT_1BYTE - Integer, one byte pixel */
 #   define NITF_DOWNSAMPLER_TYPE_INT_1BYTE ((uint32_t) 0x00000001)

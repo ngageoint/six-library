@@ -41,6 +41,10 @@ NITF_CXX_GUARD
  *  \struct nitf_Writer
  *  \brief  This object represents the 2.1 (2.0?) file writer
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_Writer
 {
     nitf_List *warningList;
@@ -57,7 +61,9 @@ typedef struct _nitf_Writer
     NITF_BOOL ownOutput;
 }
 nitf_Writer;
-
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /* ------------------------------------------------------------------ */
 /*                PUBLIC PROTOTYPES                                   */
