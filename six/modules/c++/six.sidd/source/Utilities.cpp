@@ -19,9 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "six/sidd/Utilities.h"
+
+#include <stdexcept>
+
 #include "six/Utilities.h"
 #include "six/sidd/DerivedXMLControl.h"
-#include "six/sidd/Utilities.h"
 #include "six/sidd/DerivedDataBuilder.h"
 
 namespace
@@ -938,8 +941,18 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     collection.geometry->extensions.push_back(param);
 
     collection.phenomenology.reset(new six::sidd::Phenomenology());
-    collection.phenomenology->shadow = six::AngleMagnitude(1.5, 3.7);
-    collection.phenomenology->layover = six::AngleMagnitude(10.13, 50.9);
+    if (strVersion != "3.0.0")
+    {
+        // [-180, 180) before SIDD 3.0
+        collection.phenomenology->shadow = six::AngleMagnitude(-1.5, 3.7);
+        collection.phenomenology->layover = six::AngleMagnitude(-10.13, 50.9);
+    }
+    else
+    {
+        // [0, 360) in SIDD 3.0
+        collection.phenomenology->shadow = six::AngleMagnitude(1.5, 3.7);
+        collection.phenomenology->layover = six::AngleMagnitude(10.13, 50.9);
+    }
     collection.phenomenology->multiPath = 3.79;
     collection.phenomenology->groundTrack = 8.11;
     collection.phenomenology->extensions.push_back(param);
@@ -1251,7 +1264,7 @@ static void update_for_SIDD_300(DerivedData& data) // n.b., much of this was add
 static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& strVersion)
 {
     std::unique_ptr<DerivedData> data;
-    if (strVersion == "3.0.0") // preserve behavior of existing code
+    if (!strVersion.empty()) // preserve behavior of existing code
     {
         //-----------------------------------------------------------
         // Make the object.  You could do this directly, but this way
@@ -1347,7 +1360,7 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& st
     data->exploitationFeatures->product[0].resolution.row = 0;
     data->exploitationFeatures->product[0].resolution.col = 0;
 
-    if (strVersion == "3.0.0") // TODO: better check for version; this avoid changing any existing test code
+    if (!strVersion.empty()) // TODO: better check for version; this avoid changing any existing test code
     {
         update_for_SIDD_300(*data);
     }
@@ -1356,7 +1369,11 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& st
 }
 std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& strVersion)
 {
-    return createFakeDerivedData_(strVersion);
+    if ((strVersion == "2.0.0") || (strVersion == "3.0.0"))
+    {
+        return createFakeDerivedData_(strVersion);
+    }
+    throw std::invalid_argument("strVersion = '" + strVersion + "' is not supported.");
 }
 mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
 {

@@ -44,22 +44,35 @@ typedef struct _nitf_TREDescription
 /*!
  * Information about one TREDescription object
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_TREDescriptionInfo
 {
     char *name; /*! The name to associate with the Description */
     nitf_TREDescription *description;   /*! The TREDescription */
     int lengthMatch;    /*! The length to match against TREs with; used to choose TREs */
 } nitf_TREDescriptionInfo;
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*!
  * Contains a set, or array, of TREDescriptionInfos*
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_TREDescriptionSet
 {
     int defaultIndex;   /*! Set to the index of the default description */
     nitf_TREDescriptionInfo* descriptions;
 } nitf_TREDescriptionSet;
-
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif
 

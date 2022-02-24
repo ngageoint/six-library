@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+#include <std/memory>
 
 #include <str/Convert.h>
 #include <gsl/gsl.h>
@@ -126,9 +127,16 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
     return six::DataType::NOT_SET;
 }
 
-void six::sidd::GeoTIFFReadControl::load(
-        const std::string& fromFile,
-        const std::vector<std::string>& schemaPaths)
+inline std::unique_ptr<six::Data> fromXML_(six::XMLControl& xmlControl, const xml::lite::Document& doc, const std::vector<std::string>& schemaPaths)
+{
+    return std::unique_ptr<six::Data>(xmlControl.fromXML(&doc, schemaPaths));
+}
+inline std::unique_ptr<six::Data> fromXML_(six::XMLControl& xmlControl, const xml::lite::Document& doc, const std::vector< std::filesystem::path>* pSchemaPaths)
+{
+    return xmlControl.fromXML(doc, pSchemaPaths);
+}
+template<typename TSchemaPaths, typename TCreateXmlParser>
+void six::sidd::GeoTIFFReadControl::load_(const std::string& fromFile, const TSchemaPaths& schemaPaths, TCreateXmlParser createXmlParser)
 {
     mReader.openFile(fromFile);
 
@@ -153,7 +161,8 @@ void six::sidd::GeoTIFFReadControl::load(
         io::StringStream stream;
         stream.write(xmlStr);
         stream.seek(0, io::Seekable::START);
-        six::MinidomParser xmlParser;
+        auto pXmlParser = createXmlParser();
+	auto& xmlParser = *pXmlParser;
         xmlParser.preserveCharacterData(true);
         xmlParser.parse(stream);
         const auto& doc = xmlParser.getDocument();
@@ -187,8 +196,7 @@ void six::sidd::GeoTIFFReadControl::load(
 
         if (xmlControl)
         {
-            std::unique_ptr<six::Data> data(xmlControl->fromXML(&doc,
-                                                              schemaPaths));
+            auto data = fromXML_(*xmlControl, doc, schemaPaths);
 
             if (!data.get())
             {
@@ -198,6 +206,19 @@ void six::sidd::GeoTIFFReadControl::load(
             mContainer->addData(std::move(data));
         }
     }
+}
+void six::sidd::GeoTIFFReadControl::load(
+    const std::string& fromFile,
+    const std::vector<std::string>& schemaPaths)
+{
+    const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(false /*storeEncoding*/); };
+    load_(fromFile, schemaPaths, createXmlParser);
+}
+void six::sidd::GeoTIFFReadControl::load(const std::filesystem::path& fromFile_, const std::vector< std::filesystem::path>* pSchemaPaths)
+{
+    const auto fromFile = fromFile_.string();
+    const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(true /*storeEncoding*/); };
+    load_(fromFile, pSchemaPaths, createXmlParser);
 }
 
 six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,

@@ -55,14 +55,16 @@ using Degrees = Angle<tags::Degrees, T>;
 //using Gradians = Angle<tags::Gradians, T>;
 
 template <typename T, typename TResult = T>
-inline constexpr void convert(Radians<T> v, Degrees<TResult>& result) noexcept
+inline /*constexpr*/ Degrees<TResult>& convert(Radians<T> v, Degrees<TResult>& result) noexcept
 {
     result.value() = v.value() * math::Constants::radians_to_degrees<T>();
+    return result;  // ICC doesn't like "constexpr void"
 }
 template <typename T, typename TResult = T>
-inline constexpr void convert(Degrees<T> v, Radians<TResult>& result) noexcept
+inline /*constexpr*/ Radians<TResult>& convert(Degrees<T> v, Radians<TResult>& result) noexcept
 {
     result.value() = v.value() * math::Constants::degrees_to_radians<T>();
+    return result;  // ICC doesn't like "constexpr void"
 }
 
 template<typename Tag, typename T>

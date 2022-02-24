@@ -232,6 +232,7 @@ void operator()(Package_##_##Name_ * nativeObject) noexcept(false) override \
 
 #define NITRO_DECLARE_CLASS_NRT(_Name) DECLARE_CLASS_IN(_Name, nrt)
 #define NITRO_DECLARE_CLASS_NITF(_Name) DECLARE_CLASS_IN(_Name, nitf)
+#define NITRO_DECLARE_CLASS_J2K(Name_) DECLARE_CLASS_IN(Name_, j2k)
 #define DECLARE_CLASS(_Name) NITRO_DECLARE_CLASS_NITF(_Name)
 
 namespace nitf

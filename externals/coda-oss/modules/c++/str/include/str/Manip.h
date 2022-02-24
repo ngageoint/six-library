@@ -29,10 +29,33 @@
 #include <string>
 #include <vector>
 
+#include "config/compiler_extensions.h"
+#include "coda_oss/CPlusPlus.h"
 #include "str/Convert.h"
 
 namespace str
 {
+// non-const overload for .data() in C++17
+template<typename CharT>
+inline CharT* data(std::basic_string<CharT>& s) noexcept
+{
+    #if CODA_OSS_cpp17
+    return s.data();
+    #else
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable : 26492)  // Don't use const_cast to cast away const or volatile (type.3).
+    #endif  
+    return const_cast <typename std::basic_string<CharT>::pointer>(s.data());
+    CODA_OSS_disable_warning_pop
+    #endif // CODA_OSS_cpp17
+}
+template <typename CharT>
+inline const CharT* data(const std::basic_string<CharT>& s) noexcept // to make generic programming easier
+{
+    return s.data();
+}
+
 /**
  *  Trim the white space off the back and front of a string
  *  @param  s  String to trim

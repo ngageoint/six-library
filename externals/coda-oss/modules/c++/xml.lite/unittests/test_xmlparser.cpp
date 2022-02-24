@@ -54,7 +54,7 @@ namespace fs = std::filesystem;
 
 static fs::path findRoot(const fs::path& p)
 {
-    if (fs::is_regular_file(p / "LICENSE")  && fs::is_regular_file(p / "README.md")  && fs::is_regular_file(p / "CMakeLists.txt"))
+    if (is_regular_file(p / "LICENSE")  && is_regular_file(p / "README.md")  && is_regular_file(p / "CMakeLists.txt"))
     {
         return p;
     }

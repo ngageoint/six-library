@@ -84,25 +84,43 @@ static std::unique_ptr<six::sidd::DerivedData> test_assert_round_trip(const six:
     return six::sidd::Utilities::parseDataFromString(strXML, pSchemaPaths);
 }
 
-TEST_CASE(test_createFakeDerivedData)
+inline const six::UnmodeledS* get_Unmodeled(const six::sidd::DerivedData& derivedData, const std::string& strVersion)
 {
-    const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData("3.0.0");
-    auto Unmodeled = pFakeDerivedData->errorStatistics->Unmodeled;
-    TEST_ASSERT_NULL(Unmodeled.get());
+    if (strVersion != "3.0.0") // Unmodeled added in SIDD 3.0
+    {
+        return nullptr;
+    }
+    else
+    {
+        return derivedData.errorStatistics->Unmodeled.get();
+    }
+}
+
+static void test_createFakeDerivedData_(const std::string& strVersion)
+{
+    const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData(strVersion);
+    auto Unmodeled = get_Unmodeled(*pFakeDerivedData, strVersion);
+    TEST_ASSERT_NULL(Unmodeled); // not part of the fake data, only added in SIDD 3.0
 
     // NULL schemaPaths, no validation
     auto pDerivedData = test_assert_round_trip(*pFakeDerivedData, nullptr /*pSchemaPaths*/);
-    Unmodeled = pDerivedData->errorStatistics->Unmodeled;
-    TEST_ASSERT_NULL(Unmodeled.get());
+    Unmodeled = get_Unmodeled(*pDerivedData, strVersion);
+    TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SIDD 3.0
 
     // validate XML against schema
     const auto schemaPaths = getSchemaPaths();
     pDerivedData = test_assert_round_trip(*pFakeDerivedData, &schemaPaths);
-    Unmodeled = pDerivedData->errorStatistics->Unmodeled;
-    TEST_ASSERT_NULL(Unmodeled.get());
+    Unmodeled = get_Unmodeled(*pDerivedData, strVersion);
+    TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SIDD 3.0
 }
 
-static void test_assert_unmodeled(const six::UnmodeledS& Unmodeled)
+TEST_CASE(test_createFakeDerivedData)
+{
+    test_createFakeDerivedData_("2.0.0");
+    test_createFakeDerivedData_("3.0.0");
+}
+
+static void test_assert_unmodeled_(const six::UnmodeledS& Unmodeled)
 {
     TEST_ASSERT_EQ(1.23, Unmodeled.Xrow);
     TEST_ASSERT_EQ(4.56, Unmodeled.Ycol);
@@ -115,36 +133,52 @@ static void test_assert_unmodeled(const six::UnmodeledS& Unmodeled)
     TEST_ASSERT_EQ(123.4, UnmodeledDecor->Ycol.CorrCoefZero);
     TEST_ASSERT_EQ(567.8, UnmodeledDecor->Ycol.DecorrRate);
 }
-
-TEST_CASE(test_read_sidd300_xml)
+static void test_assert_unmodeled(const six::sidd::DerivedData& derivedData)
 {
-    const auto pathname = get_sample_xml_path("sidd300.xml");
+    auto&& errorStatistics = derivedData.errorStatistics;
+    TEST_ASSERT(errorStatistics.get() != nullptr);
+    if (derivedData.getVersion() != "3.0.0")
+    {
+        return;
+    }
+
+    auto Unmodeled = errorStatistics->Unmodeled;
+    TEST_ASSERT(Unmodeled.get() != nullptr);
+    test_assert_unmodeled_(*Unmodeled);
+}
+
+static void test_read_sidd_xml(const fs::path& path)
+{
+    const auto pathname = get_sample_xml_path(path);
 
     // NULL schemaPaths, no validation
     auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, nullptr /*pSchemaPaths*/);
-    auto Unmodeled = pDerivedData->errorStatistics->Unmodeled;
-    TEST_ASSERT(Unmodeled.get() != nullptr);
-    test_assert_unmodeled(*Unmodeled);
+    test_assert_unmodeled(*pDerivedData);
 
     pDerivedData = test_assert_round_trip(*pDerivedData, nullptr /*pSchemaPaths*/);
-    Unmodeled = pDerivedData->errorStatistics->Unmodeled;
-    TEST_ASSERT(Unmodeled.get() != nullptr);
-    test_assert_unmodeled(*Unmodeled);
+    test_assert_unmodeled(*pDerivedData);
 
     // validate XML against schema
     const auto schemaPaths = getSchemaPaths();
     pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
-    Unmodeled = pDerivedData->errorStatistics->Unmodeled;
-    TEST_ASSERT(Unmodeled.get() != nullptr);
-    test_assert_unmodeled(*Unmodeled);
+    test_assert_unmodeled(*pDerivedData);
 
     pDerivedData = test_assert_round_trip(*pDerivedData, &schemaPaths);
-    Unmodeled = pDerivedData->errorStatistics->Unmodeled;
-    TEST_ASSERT(Unmodeled.get() != nullptr);
-    test_assert_unmodeled(*Unmodeled);
+    test_assert_unmodeled(*pDerivedData);
+}
+
+TEST_CASE(test_read_sidd200_xml)
+{
+    test_read_sidd_xml("sidd200.xml");
+}
+
+TEST_CASE(test_read_sidd300_xml)
+{
+    test_read_sidd_xml("sidd300.xml");
 }
 
 TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(test_createFakeDerivedData);
+    TEST_CHECK(test_read_sidd200_xml);
     TEST_CHECK(test_read_sidd300_xml);
     )

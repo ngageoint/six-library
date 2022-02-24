@@ -22,119 +22,42 @@
 #define CODA_OSS_sys_filesystem_h_INCLUDED_
 #pragma once
 
-//
-// For now, these are just some wrappers around the CODA-OSS routines ...
-// eventually, this should be replaced with C++17's <filesystem>.
-//
-// This does not even TRY to be a complete implementation of std::filesystem.
-//
-
-#include <string>
-#include <ostream>
+// always implement sys::filesystem::path
+#include "sys/sys_filesystem.h"
 
 #include "sys/CPlusPlus.h"
-#include "coda_oss/namespace_.h" // get something in the "coda_oss" namespace
+#if CODA_OSS_cpp17
+	// Some versions of G++ say they're C++17 but don't have <filesystem>
+	#if __has_include(<filesystem>)  // __has_include is C++17
+		#include <filesystem>
+		#define CODA_OSS_has_std_filesystem_ 1
+	#endif
+#else
+	#define CODA_OSS_has_std_filesystem_ 0
+#endif
 
-namespace coda_oss // should be in coda_oss, but implementation needs sys::Path
+namespace coda_oss
 {
-// http://en.cppreference.com/w/cpp/filesystem
-namespace filesystem
-{
-  struct path; // forward
-  namespace details
-  {
-    extern bool Equals(const path& lhs, const path& rhs) noexcept;
-    extern std::ostream& Ostream(std::ostream& os, const path& p);
-  }
+	// Allow coda_oss::filesystem to compile; used in .h files
+	namespace filesystem
+	{
+		#if CODA_OSS_has_std_filesystem_
+		#define CODA_OSS_coda_oss_filesystem_impl_ std
+		#else
+		#define CODA_OSS_coda_oss_filesystem_impl_ sys
+		#endif
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::file_type;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::path;
 
-  // https://en.cppreference.com/w/cpp/filesystem/file_type
-  enum class file_type // match C++17 spelling for easier transition from our C++11 work-around
-  {
-      none = 0,
-      not_found = 1,
-      regular,
-      directory,
-      unknown 
-  };
-
-// http://en.cppreference.com/w/cpp/filesystem/path
-struct path final // N.B. this is an INCOMPLETE and NON-STANDARD implementation!
-{
-    // character type used by the native encoding of the filesystem: char on POSIX, wchar_t on Windows
-    #ifdef _WIN32
-    using value_type = wchar_t;
-    #else
-    using value_type = char;
-    #endif
-    using string_type = std::basic_string<value_type>;
-
-    // http://en.cppreference.com/w/cpp/filesystem/path/path
-    path() noexcept;
-    path(const path&);
-    path(const string_type&);
-    template<typename TSource>
-    path(const TSource& source)
-    {
-        p_ = to_native(source);
-    }
-
-    path& operator/=(const path&);  // http://en.cppreference.com/w/cpp/filesystem/path/append
-    template <typename TSource>
-    path& operator/=(const TSource& source)  // http://en.cppreference.com/w/cpp/filesystem/path/append
-    {
-        return (*this) /= path(to_native(source));
-    }
-    void clear() noexcept;  // http://en.cppreference.com/w/cpp/filesystem/path/clear
-
-    // http://en.cppreference.com/w/cpp/filesystem/path/native
-    const value_type* c_str() const noexcept;
-    const string_type& native() const noexcept;
-    operator string_type() const;
-
-    std::string string() const;  // http://en.cppreference.com/w/cpp/filesystem/path/string
-
-    path root_path() const; // https://en.cppreference.com/w/cpp/filesystem/path/root_path
-    path parent_path() const;  // http://en.cppreference.com/w/cpp/filesystem/path/parent_path
-    path filename() const;  // http://en.cppreference.com/w/cpp/filesystem/path/filename
-    path stem() const;  // http://en.cppreference.com/w/cpp/filesystem/path/stem
-    path extension() const;  // https://en.cppreference.com/w/cpp/filesystem/path/extension
-
-    bool empty() const noexcept;  // http://en.cppreference.com/w/cpp/filesystem/path/empty
-    bool is_absolute() const;  // http://en.cppreference.com/w/cpp/filesystem/path/is_absrel
-    bool is_relative() const;  // http://en.cppreference.com/w/cpp/filesystem/path/is_absrel
-
-    friend bool operator==(const path& lhs, const path& rhs) noexcept  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
-    {
-      return details::Equals(lhs, rhs);
-    }
-    friend bool operator!=(const path& lhs, const path& rhs) noexcept  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
-    {
-      return !(lhs == rhs);
-    }
-    friend std::ostream& operator<<(std::ostream& os, const path& p) // https://en.cppreference.com/w/cpp/filesystem/path/operator_ltltgtgt
-    {
-      return details::Ostream(os, p);
-    }
-
-private:
-    string_type p_;
-    static string_type to_native(const std::string& s);
-};
-
-path operator/(const path& lhs, const path& rhs);  // http://en.cppreference.com/w/cpp/filesystem/path/operator_slash
-
-path absolute(const path&);  // http://en.cppreference.com/w/cpp/filesystem/absolute
-bool create_directory(const path&);  // https://en.cppreference.com/w/cpp/filesystem/create_directory
-path current_path();  // https://en.cppreference.com/w/cpp/filesystem/current_path
-bool remove(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/remove
-path temp_directory_path();  // https://en.cppreference.com/w/cpp/filesystem/temp_directory_path
-
-bool is_regular_file(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/is_regular_file
-bool is_directory(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/is_directory
-bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exists
-}
-
-#define CODA_OSS_coda_oss_filesystem 201703L  // c.f., __cpp_lib_filesystem
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::absolute;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::create_directory;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::current_path;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::remove;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::temp_directory_path;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::is_regular_file;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::is_directory;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::exists;
+	}
 }
 
 #endif  // CODA_OSS_sys_filesystem_h_INCLUDED_

@@ -22,6 +22,8 @@
 
 #include "j2k/Config.h"
 
+#include <assert.h>
+
 #ifdef _MSC_VER // Visual Studio
 #pragma warning(disable: 4206) //	nonstandard extension used : translation unit is empty
 #endif
@@ -925,6 +927,16 @@ J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container *container,
         }
         return NULL;
     }
+}
+
+J2KAPI(j2k_Implementation) j2k_getImplementation(nrt_Error* error)
+{
+    assert(NITRO_J2K_IMPLEMENTATION == j2k_Implementation_JasPer);
+    if (error == NULL)
+    {
+        return j2k_Implementation_Error;
+    }
+    return j2k_Implementation_JasPer;
 }
 
 #endif

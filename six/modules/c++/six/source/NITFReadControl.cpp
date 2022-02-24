@@ -250,23 +250,14 @@ void NITFReadControl::validateSegment(const nitf::ImageSubheader& subheader,
     }
 }
 
-void NITFReadControl::load(const std::string& fromFile,
-                           const std::vector<std::string>& schemaPaths)
-{
-    auto handle(std::make_shared<nitf::IOHandle>(fromFile));
-    load(handle, schemaPaths);
-}
-void NITFReadControl::load(const std::string& fromFile,
-    const std::vector<std::string>* pSchemaPaths)
+void NITFReadControl::load(const std::string& fromFile, const std::vector<std::string>* pSchemaPaths)
 {
     auto handle(std::make_shared<nitf::IOHandle>(fromFile));
     load(handle, pSchemaPaths);
 }
-
-void NITFReadControl::load(io::SeekableInputStream& stream,
-                           const std::vector<std::string>* pSchemaPaths)
+void NITFReadControl::load(const std::filesystem::path& fromFile, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
-    auto handle(std::make_shared<nitf::IOStreamReader>(stream));
+    std::shared_ptr<nitf::IOInterface> handle(std::make_shared<nitf::IOHandle>(fromFile.string()));
     load(handle, pSchemaPaths);
 }
 
@@ -307,22 +298,26 @@ static std::vector<six::NITFImageInfo*> getImageInfos(six::Container& container)
     return retval;
 }
 
-void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
-    const std::vector<std::string>& schemaPaths)
+inline std::unique_ptr<Data> parseData_(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    DataType dataType,
+    const std::vector<std::string>* pSchemaPaths,
+    logging::Logger& log)
 {
-    load(ioInterface, &schemaPaths);
+    return six::parseData(xmlReg, xmlStream, dataType, *pSchemaPaths, log, false /*storeEncoding*/);
 }
-void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
-                           const std::vector<std::string>* pSchemaPaths_)
+inline std::unique_ptr<Data> parseData_(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    DataType dataType,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger& log)
 {
-    const std::vector<std::filesystem::path>* pSchemaPaths = nullptr;
-    std::vector<std::filesystem::path> schemaPaths;
-    if (pSchemaPaths_ != nullptr)
-    {
-        std::transform(pSchemaPaths_->begin(), pSchemaPaths_->end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
-        pSchemaPaths = &schemaPaths;
-    }
+    return six::parseData(xmlReg, xmlStream, dataType, pSchemaPaths, log, true /*storeEncoding*/);
+}
 
+template<typename TSchemaPath>
+void NITFReadControl::load_(std::shared_ptr<nitf::IOInterface> ioInterface, const std::vector<TSchemaPath>* pSchemaPaths)
+{
     reset();
     mInterface = ioInterface;
 
@@ -347,7 +342,7 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         else
         {
             SegmentInputStreamAdapter ioAdapter(deReader);
-            std::unique_ptr<Data> data(parseData(*mXMLRegistry,
+            std::unique_ptr<Data> data(parseData_(*mXMLRegistry,
                                                ioAdapter,
                                                dataType,
                                                pSchemaPaths,
@@ -465,6 +460,16 @@ void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface,
         }
         currentInfo->addSegment(si);
     }
+}
+void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface, const std::vector<std::string>* pSchemaPaths_)
+{
+    const std::vector<std::string> schemaPaths;
+    const std::vector<std::string>* pSchemaPaths = (pSchemaPaths_ != nullptr) ? pSchemaPaths_ : &schemaPaths;
+    load_(ioInterface, pSchemaPaths);
+}
+void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface, const std::vector<std::filesystem::path>* pSchemaPaths)
+{
+    load_(ioInterface, pSchemaPaths);
 }
 
 void NITFReadControl::addImageClassOptions(const nitf::ImageSubheader& subheader,

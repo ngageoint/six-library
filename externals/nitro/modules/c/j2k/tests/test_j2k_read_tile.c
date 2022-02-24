@@ -78,13 +78,13 @@ int main(int argc, char **argv)
         {
             if (argIt >= argc - 1)
                 goto CATCH_ERROR;
-            tileX = atoi(argv[++argIt]);
+            tileX = (uint32_t) atoi(argv[++argIt]);
         }
         else if (strcmp(argv[argIt], "--y") == 0)
         {
             if (argIt >= argc - 1)
                 goto CATCH_ERROR;
-            tileY = atoi(argv[++argIt]);
+            tileY = (uint32_t) atoi(argv[++argIt]);
         }
         else if (!fname)
         {

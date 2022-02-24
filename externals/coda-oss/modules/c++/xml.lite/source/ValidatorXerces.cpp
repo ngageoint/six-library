@@ -177,14 +177,37 @@ ValidatorXerces::ValidatorXerces(
     mSchemaPool->lockPool();
 }
 
-template <typename CharT>
-static void setStringData_(xercesc::DOMLSInputImpl& input, const std::basic_string<CharT>& xml, std::unique_ptr<std::wstring>& pWString)
+// From config.h.in: Define to the 16 bit type used to represent Xerces UTF-16 characters
+// On Windows, this needs to be wchar_t so that various "wide character" Win32 APIs can be called.
+static_assert(sizeof(XMLCh) == 2, "XMLCh should be two bytes for UTF-16.");
+
+#if _WIN32
+// On other platforms, char16_t is used; only wchar_t on Windows.
+using XMLCh_t = wchar_t;
+static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be wchar_t");
+inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::wstring>& pWString)
 {
-    pWString.reset(new std::wstring(str::EncodedStringView(xml).wstring()));
+    pWString.reset(new std::wstring(xmlView.wstring()));
+}
+#else
+using XMLCh_t = char16_t;
+static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be char16_t");
+#endif
+inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::u16string>& pWString)
+{
+    pWString.reset(new std::u16string(xmlView.u16string()));
+}
+
+using XMLCh_string = std::basic_string<XMLCh_t>;
+
+template <typename CharT>
+static void setStringData_(xercesc::DOMLSInputImpl& input, const std::basic_string<CharT>& xml, std::unique_ptr<XMLCh_string>& pWString)
+{
+    reset(str::EncodedStringView(xml), pWString);
     input.setStringData(pWString->c_str());
 }
 static void setStringData(xercesc::DOMLSInputImpl& input, const std::string& xml, bool legacyStringConversion,
-                          std::unique_ptr<XercesLocalString>& pXmlWide, std::unique_ptr<std::wstring>& pWString)
+                          std::unique_ptr<XercesLocalString>& pXmlWide, std::unique_ptr<XMLCh_string>& pWString)
 {
     if (legacyStringConversion)
     {
@@ -198,12 +221,12 @@ static void setStringData(xercesc::DOMLSInputImpl& input, const std::string& xml
     }
 }
 inline void setStringData(xercesc::DOMLSInputImpl& input, const coda_oss::u8string& xml, bool /*legacyStringConversion*/,
-                          std::unique_ptr<XercesLocalString>&, std::unique_ptr<std::wstring>& pWString)
+                          std::unique_ptr<XercesLocalString>&, std::unique_ptr<XMLCh_string>& pWString)
 {
     setStringData_(input, xml, pWString);
 }
 inline void setStringData(xercesc::DOMLSInputImpl& input, const str::W1252string& xml, bool /*legacyStringConversion*/,
-                          std::unique_ptr<XercesLocalString>&, std::unique_ptr<std::wstring>& pWString)
+                          std::unique_ptr<XercesLocalString>&, std::unique_ptr<XMLCh_string>& pWString)
 {
     setStringData_(input, xml, pWString);
 }
@@ -228,7 +251,7 @@ bool ValidatorXerces::validate_(const std::basic_string<CharT>& xml, bool legacy
 
     // expand to the wide character data for use with xerces
     std::unique_ptr<XercesLocalString> pXmlWide;
-    std::unique_ptr<std::wstring> pWString;
+    std::unique_ptr<XMLCh_string> pWString;
     setStringData(input, xml, legacyStringConversion, pXmlWide, pWString);
 
     // validate the document
