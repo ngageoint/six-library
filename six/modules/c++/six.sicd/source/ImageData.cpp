@@ -155,9 +155,6 @@ static std::vector<KDNode_t> make_nodes(const six::AmplitudeTable* pAmplitudeTab
     return retval;
 }
 
-using input_values_t = std::array<std::complex<float>, UINT8_MAX + 1>;
-using input_amplitudes_t = std::array<input_values_t, UINT8_MAX + 1>;
-
 // input_amplitudes_t is too big for the stack
 static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
 {

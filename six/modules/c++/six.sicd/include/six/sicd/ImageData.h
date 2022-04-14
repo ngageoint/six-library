@@ -41,6 +41,10 @@ namespace sicd
 {
 using cx_float = std::complex<float>;
 using AMP8I_PHS8I_t = std::pair<uint8_t, uint8_t>;
+//! Fixed size 256 element array of complex values.
+using input_values_t = std::array<std::complex<float>, UINT8_MAX + 1>;
+//! Fixed size 256 x 256 matrix of complex values.
+using input_amplitudes_t = std::array<input_values_t, UINT8_MAX + 1>;
 
 class GeoData;
 /*!
