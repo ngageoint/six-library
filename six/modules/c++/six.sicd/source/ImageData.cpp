@@ -227,6 +227,12 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
 
     std::unique_ptr<input_amplitudes_t> pValues_;
     const auto& values = get_RE32F_IM32F_values(amplitudeTable.get(), pValues_);
+    from_AMP8I_PHS8I(values, inputs, results, cutoff_);
+}
+
+void ImageData::from_AMP8I_PHS8I(const input_amplitudes_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results,
+    ptrdiff_t cutoff_)
+{
     const auto get_RE32F_IM32F_value_f = [&values](const six::sicd::AMP8I_PHS8I_t& v)
     {
         return values[v.first][v.second];
