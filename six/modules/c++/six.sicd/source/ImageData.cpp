@@ -172,7 +172,7 @@ static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six
 }
 
 // This is a non-templatized function so that there is copy of the "static" data with a NULL AmplutdeTable.
-static const input_amplitudes_t* get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable)
+static const input_amplitudes_t* get_cached_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
     {
@@ -190,7 +190,7 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
     }
 
     auto const pAmplitudeTable = amplitudeTable.get();
-    auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
+    auto const pValues = get_cached_RE32F_IM32F_values(pAmplitudeTable);
 
     // Do we have a cahced result to use (no amplitude table)?
     // Or must it be recomputed (have an amplutude table)?
@@ -203,10 +203,10 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
     return std::complex<float>(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
 }
 
-static const input_amplitudes_t& get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
+const input_amplitudes_t& get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
     std::unique_ptr<input_amplitudes_t>& pValues_)
 {
-    const input_amplitudes_t* pValues = get_RE32F_IM32F_values(pAmplitudeTable);
+    const input_amplitudes_t* pValues = get_cached_RE32F_IM32F_values(pAmplitudeTable);
     if (pValues == nullptr)
     {
         assert(pAmplitudeTable != nullptr);
