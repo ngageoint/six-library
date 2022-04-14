@@ -203,7 +203,7 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
     return std::complex<float>(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
 }
 
-const input_amplitudes_t& get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
+const input_amplitudes_t& ImageData::get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
     std::unique_ptr<input_amplitudes_t>& pValues_)
 {
     const input_amplitudes_t* pValues = get_cached_RE32F_IM32F_values(pAmplitudeTable);
