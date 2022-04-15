@@ -169,27 +169,29 @@ class SICD_readerAndConverter final
     {
         auto bufferPtr = buffer + ((row - offset.row) * (elementsPerRow / 2));
 
-        // Take each (uint8_t, uint8_t) out of the temp buffer and put it into the real buffer as a std::complex<float>
-        for (size_t index = 0; index < elementsPerRow * rowsToRead; index += 2)
-        {
-            // "For amplitude and phase components, the amplitude component is  stored first."
-            const auto& input_amplitude = tempVector[index];
-            const auto& input_value = tempVector[index + 1];
+        // There's type mangling going on here.
+        // We're taking std::vector<uint8_t> and saying it's packed with std::pair<uint8_t, uint8_t>.
+        static_assert(sizeof(uint8_t) * 2 == sizeof(six::sicd::AMP8I_PHS8I_t), "expected packed layout in pair");
+        auto packed = reinterpret_cast<const six::sicd::AMP8I_PHS8I_t*>(tempVector.data());
 
-            *bufferPtr = six::sicd::Utilities::from_AMP8I_PHS8I(input_amplitude, input_value, pAmplitudeTable);
-            bufferPtr++;
-        }
+        // Reuse image data's conversion to complex.
+        static const ptrdiff_t kDefaultCutoff = 0;
+        size_t count = (elementsPerRow * rowsToRead) / 2;
+        std::span<const six::sicd::AMP8I_PHS8I_t> input(packed, count);
+        std::span<std::complex<float>> output(bufferPtr, input.size());
+        six::sicd::ImageData::from_AMP8I_PHS8I(lookup, input, output, kDefaultCutoff);
     }
     const types::RowCol<size_t>& offset;
     std::complex<float>* buffer;
-    const six::AmplitudeTable* pAmplitudeTable = nullptr;
+    std::unique_ptr<six::sicd::input_amplitudes_t> lookupScope;
+    const six::sicd::input_amplitudes_t& lookup;
     
 public:
     SICD_readerAndConverter(six::NITFReadControl& reader, size_t imageNumber,
 			    const types::RowCol<size_t>& offset, const types::RowCol<size_t>& extent,
                 size_t elementsPerRow,
 			    std::complex<float>* buffer,  const six::AmplitudeTable* pAmplitudeTable = nullptr)
-      : offset(offset), buffer(buffer), pAmplitudeTable(pAmplitudeTable)
+      : offset(offset), buffer(buffer), lookupScope(nullptr), lookup(six::sicd::ImageData::get_RE32F_IM32F_values(pAmplitudeTable, lookupScope))
     {
         SICDreader<T>(reader, imageNumber, offset, extent, elementsPerRow,
             [&](size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<T>& tempVector)

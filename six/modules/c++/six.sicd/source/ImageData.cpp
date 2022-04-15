@@ -155,9 +155,6 @@ static std::vector<KDNode_t> make_nodes(const six::AmplitudeTable* pAmplitudeTab
     return retval;
 }
 
-using input_values_t = std::array<std::complex<float>, UINT8_MAX + 1>;
-using input_amplitudes_t = std::array<input_values_t, UINT8_MAX + 1>;
-
 // input_amplitudes_t is too big for the stack
 static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
 {
@@ -175,7 +172,7 @@ static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six
 }
 
 // This is a non-templatized function so that there is copy of the "static" data with a NULL AmplutdeTable.
-static const input_amplitudes_t* get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable)
+static const input_amplitudes_t* get_cached_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
     {
@@ -193,7 +190,7 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
     }
 
     auto const pAmplitudeTable = amplitudeTable.get();
-    auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
+    auto const pValues = get_cached_RE32F_IM32F_values(pAmplitudeTable);
 
     // Do we have a cahced result to use (no amplitude table)?
     // Or must it be recomputed (have an amplutude table)?
@@ -206,10 +203,10 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
     return std::complex<float>(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
 }
 
-static const input_amplitudes_t& get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
+const input_amplitudes_t& ImageData::get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
     std::unique_ptr<input_amplitudes_t>& pValues_)
 {
-    const input_amplitudes_t* pValues = get_RE32F_IM32F_values(pAmplitudeTable);
+    const input_amplitudes_t* pValues = get_cached_RE32F_IM32F_values(pAmplitudeTable);
     if (pValues == nullptr)
     {
         assert(pAmplitudeTable != nullptr);
@@ -230,6 +227,12 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
 
     std::unique_ptr<input_amplitudes_t> pValues_;
     const auto& values = get_RE32F_IM32F_values(amplitudeTable.get(), pValues_);
+    from_AMP8I_PHS8I(values, inputs, results, cutoff_);
+}
+
+void ImageData::from_AMP8I_PHS8I(const input_amplitudes_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results,
+    ptrdiff_t cutoff_)
+{
     const auto get_RE32F_IM32F_value_f = [&values](const six::sicd::AMP8I_PHS8I_t& v)
     {
         return values[v.first][v.second];
