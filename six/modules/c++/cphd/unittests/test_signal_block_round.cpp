@@ -55,8 +55,8 @@ std::vector<std::complex<T> > generateData(size_t length)
     srand(0);
     for (size_t ii = 0; ii < data.size(); ++ii)
     {
-        float real = static_cast<T>(rand() / 100);
-        float imag = static_cast<T>(rand() / 100);
+        auto real = static_cast<T>(rand() / 100);
+        auto imag = static_cast<T>(rand() / 100);
         data[ii] = std::complex<T>(real, imag);
     }
     return data;

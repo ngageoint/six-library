@@ -49,10 +49,6 @@
 #include "sys/Thread.h"
 #include "sys/UTCDateTime.h"
 //#include "sys/Process.h"
-#include "sys/String.h"
-#include "sys/Filesystem.h"
-#include "sys/Bit.h"
-#include "sys/CStdDef.h"
 
 /*!
 

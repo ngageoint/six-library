@@ -30,6 +30,7 @@
 #include <std/optional>
 #include <cmath>
 #include <std/span>
+#include <algorithm>
 
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
@@ -98,6 +99,13 @@ static void setNitfPluginPath()
     sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
 }
 
+static std::vector<fs::path> schemaPaths()
+{
+    const auto relativePath = fs::path("six") / "modules" / "c++" / "six.sicd" / "conf" / "schema";
+    auto path = six::testing::buildRootDir(argv0()) / relativePath;
+    TEST_ASSERT(fs::exists(path));
+    return { std::move(path) };
+}
 
 static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXMLControl& reader)
 {
@@ -187,8 +195,11 @@ TEST_CASE(valid_six_50x50)
 
     valid_six_50x50_(nullptr /*pSchemaPaths*/); // no XML validiaton
   
-    const std::vector<std::filesystem::path> schemaPaths;
-    valid_six_50x50_(&schemaPaths); // validate against schema
+    auto schemaPaths = ::schemaPaths();
+    valid_six_50x50_(&schemaPaths); // validate against schema (actual path)
+
+    schemaPaths.clear();
+    valid_six_50x50_(&schemaPaths); // "validate" against schema (use a default path)
 }
 
 const std::string classificationText_iso8859_1("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
@@ -200,9 +211,8 @@ TEST_CASE(sicd_French_xml)
 
     const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
-    //const std::vector<std::filesystem::path> schemaPaths;
-    //const auto image = six::sicd::readFromNITF(inputPathname, &schemaPaths, pComplexData);
-    const auto image = six::sicd::readFromNITF(inputPathname, pComplexData); // no validation
+    const auto schemaPaths = ::schemaPaths();
+    const auto image = six::sicd::readFromNITF(inputPathname, &schemaPaths, pComplexData);
     const six::Data* pData = pComplexData.get();
 
     const auto expectedCassificationText = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
@@ -212,6 +222,27 @@ TEST_CASE(sicd_French_xml)
 
     test_nitf_image_info(*pComplexData, inputPathname, nitf::PixelValueType::Floating);
 }
+
+//TEST_CASE(sicd_French_legacy_xml)
+//{
+//    setNitfPluginPath();
+//
+//    const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
+//    const auto pathname = inputPathname.string();
+//    const auto schemaPaths = ::schemaPaths();
+//
+//    // Use legacy APIs ... to test other XML processing path
+//    std::vector<std::string> schemaPaths_;
+//    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
+//        [](const fs::path& p) { return p.string(); });
+//
+//    six::sicd::NITFReadComplexXMLControl reader;
+//    reader.setLogger();
+//    reader.load(pathname, schemaPaths_);
+//
+//    // For SICD, there's only one image (container->size() == 1)
+//    TEST_ASSERT(reader.getContainer()->size() == 1);
+//}
 
 static bool find_string(io::FileInputStream& stream, const std::string& s)
 {
@@ -255,7 +286,7 @@ static void sicd_French_xml_raw_(bool storeEncoding)
         TEST_ASSERT(encoding == PlatformEncoding);
     }
 
-    // UTF-8 characters in 50x50.nitf
+    // UTF-8 characters in sicd_French_xml.nitf
     std::string expectedCharData;
     size_t expectedLength;
     if (storeEncoding)
@@ -282,17 +313,16 @@ static void sicd_French_xml_raw_(bool storeEncoding)
     std::u8string u8_expectedCharData8;
     if (storeEncoding)
     {
-        u8_expectedCharData8 = str::fromUtf8(classificationText_utf_8);
+        u8_expectedCharData8 = str::fromUtf8(classificationText_utf_8.c_str(), classificationText_utf_8.length());
     }
     else
     {
-        u8_expectedCharData8 = sys::Platform == sys::PlatformType::Linux ? std::u8string() : str::fromUtf8(classificationText_utf_8);
+        u8_expectedCharData8 = sys::Platform == sys::PlatformType::Linux ? std::u8string() : str::fromUtf8(classificationText_utf_8.c_str(), classificationText_utf_8.length());
     }
     expectedLength = u8_expectedCharData8.length();
 
     std::u8string u8_characterData;
     classificationXML.getCharacterData(u8_characterData);
-    std::clog << "'" << u8_characterData.length() << "' '" << expectedLength << "'\n";
     TEST_ASSERT_EQ(u8_characterData.length(), expectedLength);
     TEST_ASSERT(u8_characterData == u8_expectedCharData8);
 }
@@ -384,6 +414,12 @@ static void test_assert_eq(std::span<const std::byte> bytes, const std::vector<T
         TEST_ASSERT_EQ(bytes_i, rawDataBytes_i);
     }
 }
+template<typename T>
+static void test_assert_eq(const std::vector<std::byte>& bytes, const std::vector<T>& rawData)
+{
+    test_assert_eq(std::span<const std::byte>(bytes.data(), bytes.size()), rawData);
+}
+
 
 static void read_raw_data(const fs::path& path, six::PixelType pixelType, std::span<const std::byte> expectedBytes)
 {
@@ -419,7 +455,7 @@ static void read_nitf(const fs::path& path, six::PixelType pixelType, const std:
     TEST_ASSERT(result.widebandData == image);
 
     const auto bytes = six::sicd::testing::to_bytes(result);
-    read_raw_data(path, pixelType, bytes);
+    read_raw_data(path, pixelType, std::span<const std::byte>(bytes.data(), bytes.size()));
 }
 
 static void buffer_list_save(const fs::path& outputName, const std::vector<std::complex<float>>& image,
@@ -436,7 +472,7 @@ static void save(const fs::path& outputName, const std::vector<std::complex<floa
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
     static const std::vector<fs::path> fs_schemaPaths;
-    six::sicd::writeAsNITF(outputName, fs_schemaPaths, *pComplexData, image);
+    six::sicd::writeAsNITF(outputName, fs_schemaPaths, *pComplexData, std::span<const std::complex<float>>(image.data(), image.size()));
 }
 
 template<typename TSave>
@@ -472,6 +508,7 @@ TEST_MAIN((void)argc; (void)argv;
     TEST_CHECK(valid_six_50x50);
     TEST_CHECK(sicd_French_xml_raw);
     TEST_CHECK(sicd_French_xml);
+    //TEST_CHECK(sicd_French_legacy_xml);    
     TEST_CHECK(test_readFromNITF_sicd_50x50);
     TEST_CHECK(test_read_sicd_50x50);
     TEST_CHECK(test_create_sicd_from_mem_32f);

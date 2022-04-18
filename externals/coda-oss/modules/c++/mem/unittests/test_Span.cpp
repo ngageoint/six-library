@@ -25,8 +25,7 @@
 #include <vector>
 #include <string>
 
-#include <mem/Span.h>
-#include <gsl/gsl.h>
+#include <coda_oss/span.h>
 
 #include "TestCase.h"
 
@@ -41,7 +40,11 @@ namespace
     TEST_ASSERT_EQ(ints.size(), span.size());
     TEST_ASSERT_EQ(ints.data(), span.data());
 
+    const size_t dist = std::distance(span.begin(), span.end());
+    TEST_ASSERT_EQ(span.size(), dist);
+
     TEST_ASSERT_EQ(1, span[0]);
+    TEST_ASSERT_EQ(1, *(span.begin()));
     TEST_ASSERT_EQ(5, span[4]);
 
     span[0] = span[4];
@@ -51,12 +54,7 @@ TEST_CASE(testSpanBuffer)
 {
     {
         std::vector<int> ints{1, 2, 3, 4, 5};
-        auto span = mem::make_Span(ints.data(), ints.size());
-        testSpanBuffer_(testName, ints, span);
-    }
-    {
-        std::vector<int> ints{1, 2, 3, 4, 5};
-        auto span = gsl::make_span(ints.data(), ints.size());
+        const coda_oss::span<int> span(ints.data(), ints.size());
         testSpanBuffer_(testName, ints, span);
     }
 }
@@ -69,19 +67,18 @@ static void testSpanVector_(const std::string& testName,
     TEST_ASSERT_EQ(ints.size(), span.size());
     TEST_ASSERT_EQ(ints.data(), span.data());
 
+    const size_t dist = std::distance(span.begin(), span.end());
+    TEST_ASSERT_EQ(span.size(), dist);
+
     TEST_ASSERT_EQ(1, span[0]);
+    TEST_ASSERT_EQ(1, *(span.begin()));
     TEST_ASSERT_EQ(5, span[4]);
 }
 TEST_CASE(testSpanVector)
 {
     {
         std::vector<int> ints{1, 2, 3, 4, 5};
-        const auto span = mem::make_Span(ints);
-        testSpanVector_(testName, ints, span);
-    }
-    {
-        std::vector<int> ints{1, 2, 3, 4, 5};
-        const auto span = gsl::make_span(ints);
+        const coda_oss::span<int> span(ints.data(), ints.size());
         testSpanVector_(testName, ints, span);
     }
 }

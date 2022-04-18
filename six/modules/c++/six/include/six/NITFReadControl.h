@@ -25,6 +25,7 @@
 
 #include <map>
 #include <memory>
+#include <std/filesystem>
 
 #include "six/NITFImageInfo.h"
 #include "six/ReadControl.h"
@@ -123,10 +124,16 @@ struct NITFReadControl : public ReadControl
      *  \param fromFile    Input filepath
      *  \param schemaPaths Directories or files of schema locations
      */
-    void load(const std::string& fromFile,
-              const std::vector<std::string>& schemaPaths) override;
-    void load(const std::string& fromFile,
-        const std::vector<std::string>* pSchemaPaths);
+    void load(const std::string& fromFile, const std::vector<std::string>* pSchemaPaths);
+    void load(const std::string& fromFile, const std::vector<std::string>& schemaPaths) override
+    {
+        load(fromFile, &schemaPaths);
+    }
+    void load(const std::filesystem::path& fromFile, const std::vector<std::filesystem::path>* pSchemaPaths) override;
+    void load(const std::filesystem::path& fromFile, const std::vector<std::filesystem::path>& schemaPaths)
+    {
+        load(fromFile, &schemaPaths);
+    }
 
     /*
      *  \func load
@@ -135,19 +142,26 @@ struct NITFReadControl : public ReadControl
      *  \param ioStream The stream to read from.
      *  \param schemaPaths Directories or files of schema locations.
      */
-    void load(io::SeekableInputStream& ioStream,
-        const std::vector<std::string>* pSchemaPaths);
-    void load(io::SeekableInputStream& ioStream,
-        const std::vector<std::string>& schemaPaths)
+    template<typename TSchemaPath>
+    void load(io::SeekableInputStream& stream, const std::vector<TSchemaPath>* pSchemaPaths)
+    {
+        std::shared_ptr<nitf::IOInterface> handle(std::make_shared<nitf::IOStreamReader>(stream));
+        load(handle, pSchemaPaths);
+    }
+    template<typename TSchemaPath>
+    void load(io::SeekableInputStream& ioStream, const std::vector<TSchemaPath>& schemaPaths)
     {
         load(ioStream, &schemaPaths);
     }
 
-    void load(std::shared_ptr<nitf::IOInterface> ioInterface);
-    void load(std::shared_ptr<nitf::IOInterface> ioInterface,
-              const std::vector<std::string>& schemaPaths);
-    void load(std::shared_ptr<nitf::IOInterface> ioInterface,
-        const std::vector<std::string>* pSchemaPaths);
+    void load(std::shared_ptr<nitf::IOInterface>);
+    void load(std::shared_ptr<nitf::IOInterface>, const std::vector<std::string>* pSchemaPaths);
+    void load(std::shared_ptr<nitf::IOInterface>, const std::vector<std::filesystem::path>* pSchemaPaths);
+    template<typename TSchemaPath>
+    void load(std::shared_ptr<nitf::IOInterface> ioInterface, const std::vector<TSchemaPath>& schemaPaths)
+    {
+        load(ioInterface, &schemaPaths);
+    }
 
     using ReadControl::interleaved;
     /*!
@@ -241,6 +255,9 @@ protected:
     }
 
 private:
+    template<typename TSchemaPath>
+    void load_(std::shared_ptr<nitf::IOInterface> ioInterface, const std::vector<TSchemaPath>* pSchemaPaths);
+
     std::unique_ptr<Legend> findLegend(size_t productNum);
 
     void readLegendPixelData(const nitf::ImageSubheader& subheader,

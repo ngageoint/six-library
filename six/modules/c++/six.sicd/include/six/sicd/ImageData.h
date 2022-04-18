@@ -39,6 +39,12 @@ namespace six
 {
 namespace sicd
 {
+using cx_float = std::complex<float>;
+using AMP8I_PHS8I_t = std::pair<uint8_t, uint8_t>;
+//! Fixed size 256 element array of complex values.
+using input_values_t = std::array<std::complex<float>, UINT8_MAX + 1>;
+//! Fixed size 256 x 256 matrix of complex values.
+using input_amplitudes_t = std::array<input_values_t, UINT8_MAX + 1>;
 
 class GeoData;
 /*!
@@ -96,53 +102,24 @@ struct ImageData
 
     bool validate(const GeoData& geoData, logging::Logger& log) const;
 
-    using cx_float = std::complex<float>;
-    using AMP8I_PHS8I_t = std::pair<uint8_t, uint8_t>;
-    struct KDNode final
-    {
-        using value_type = typename cx_float::value_type;
-        cx_float result;
-        AMP8I_PHS8I_t amp_and_value;
-
-        value_type& index(size_t i)
-        {
-            assert(i <= 1);
-            // https://en.cppreference.com/w/cpp/numeric/complex
-            return reinterpret_cast<value_type(&)[2]>(result)[i];
-        }
-        const value_type& index(size_t i) const
-        {
-            assert(i <= 1);
-            // https://en.cppreference.com/w/cpp/numeric/complex
-            return reinterpret_cast<const value_type(&)[2]>(result)[i];
-        }
-
-        constexpr size_t size() const
-        {
-            return 2;
-        }
-
-        // Euklidean distance (L2 norm)
-        static KDNode::value_type coordinate_distance(const KDNode& p, const KDNode& q, size_t i)
-        {
-            const auto x = p.index(i);
-            const auto y = q.index(i);
-            return (x - y) * (x - y);
-        }
-        static KDNode::value_type distance(const KDNode& p, const KDNode& q)
-        {
-            assert(p.size() == q.size());
-            assert(p.size() == 2);
-            return coordinate_distance(p, q, 0) + coordinate_distance(p, q, 1);
-        }
-    };
-
     // It would be nice to cache the results, but amplitudeTable could change at any time.
     cx_float from_AMP8I_PHS8I(const AMP8I_PHS8I_t&) const; // for unit-tests
+    static void to_AMP8I_PHS8I(const AmplitudeTable*, std::span<const cx_float>, std::span<AMP8I_PHS8I_t>, ptrdiff_t cutoff = -1); // for unit-tests
 
+    static void from_AMP8I_PHS8I(const input_amplitudes_t& lookup, std::span<const AMP8I_PHS8I_t>, std::span<cx_float>, ptrdiff_t cutoff = -1);
     void from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t>, std::span<cx_float>, ptrdiff_t cutoff = -1) const;
     void to_AMP8I_PHS8I(std::span<const cx_float>, std::span<AMP8I_PHS8I_t>, ptrdiff_t cutoff = -1) const;
+
+    /*!
+     * Create a lookup table for converting from AMP8I_PHS8I to complex.
+     * @param pAmplitudeTable Input amplitude table. May be nullptr if no amplitude table is defined.
+     * @param pValues_ Output table's scope to keep it around past the function call. May be empty if there was no input amplitude table.
+     * @return reference to the output lookup table.
+     */
+    static const input_amplitudes_t& get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
+                                                            std::unique_ptr<input_amplitudes_t>& pValues_);
 };
+
 }
 }
 

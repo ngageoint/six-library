@@ -24,16 +24,6 @@
 #define CODA_OSS_sys_String_h_INCLUDED_
 #pragma once
 
-#include "sys/CPlusPlus.h"
 #include "str/String_.h"
-
-#if !defined(CODA_OSS_sys_U8string_DEFINED_)
-#define CODA_OSS_sys_U8string_DEFINED_ 1
-namespace sys
-{
-	using Char8_T = str::Char8_T;
-	using U8string = str::U8string;
-}
-#endif  // CODA_OSS_sys_U8string_DEFINED_
 
 #endif  // CODA_OSS_sys_String_h_INCLUDED_

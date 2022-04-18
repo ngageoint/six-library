@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include <sstream>
 #include <iostream>
 
@@ -76,6 +78,9 @@ inline void show(const std::string& x_, const T& x)
 }
 #define SHOW(X) show(#X, X.toString())
 #define SHOWS(X) show(#X, static_cast<std::string>(X))
+
+#define TRY_SHOW(X) try { const auto value = X; show(#X, to_string(value)); } \
+    catch (const std::exception& ex) { show(#X " FAILED", ex.what()); assert(false); } // assert() to catch failure w/o examining output
 
 #define SHOWI(X) show(#X, static_cast<int>(X))
 #define SHOWRGB(X) printf("%s(R,G,B)=[%02x,%02x,%02x]\n", #X, \
@@ -398,7 +403,9 @@ void showImageSubheader(const nitf::ImageSubheader& imsub)
     SHOW( imsub.getNumRows() );
     SHOW( imsub.getNumCols() );
     SHOW( imsub.getPixelValueType() );
+    TRY_SHOW(imsub.pixelValueType());
     SHOW( imsub.getImageRepresentation() );
+    TRY_SHOW( imsub.imageRepresentation() );
     SHOW( imsub.getImageCategory() );
     SHOW( imsub.getActualBitsPerPixel() );
     SHOW( imsub.getPixelJustification() );
@@ -412,6 +419,11 @@ void showImageSubheader(const nitf::ImageSubheader& imsub)
 
     SHOW( imsub.getImageCompression() );
     SHOW( imsub.getCompressionRate() );
+
+    std::string imageCompression, compressionRate;
+    imsub.getCompression(imageCompression, compressionRate);
+    show("imsub.imageCompression", imageCompression);
+    show("imsub.compressionRate", compressionRate);
 
     SHOW( imsub.getNumImageBands() );
     SHOWI( imsub.getNumMultispectralImageBands() );
@@ -428,6 +440,7 @@ void showImageSubheader(const nitf::ImageSubheader& imsub)
 
     SHOW( imsub.getImageSyncCode() );
     SHOW( imsub.getImageMode() );
+    TRY_SHOW( imsub.imageBlockingMode() );
     SHOWI( imsub.getNumBlocksPerRow() );
     SHOWI( imsub.getNumBlocksPerCol() );
     SHOWI( imsub.getNumPixelsPerHorizBlock() );

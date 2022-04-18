@@ -19,8 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_COLLECTION_INFORMATION_H__
-#define __SIX_COLLECTION_INFORMATION_H__
+#ifndef SIX_six_CollectionInformation_h_INCLUDED_
+#define SIX_six_CollectionInformation_h_INCLUDED_
+#pragma once
+
+#include <std/string>
+#include <std/optional>
 
 #include "six/Types.h"
 #include "six/Init.h"
@@ -104,50 +108,37 @@ struct CollectionInformation
     CollectionInformation();
 
     //!  Destructor
-    virtual ~CollectionInformation()
-    {
-    }
+    virtual ~CollectionInformation() = default;
 
     //! Deep copy
     CollectionInformation* clone() const;
 
-    bool operator==(const CollectionInformation& other) const
-    {
-        return collectorName == other.collectorName &&
-               collectType == other.collectType &&
-               illuminatorName == other.illuminatorName &&
-               coreName == other.coreName &&
-               radarMode == other.radarMode &&
-               radarModeID == other.radarModeID &&
-               releaseInfo == other.releaseInfo &&
-               getClassificationLevel() == other.getClassificationLevel();
-    }
-
-    bool operator!=(const CollectionInformation& other) const
-    {
-        return !((*this) == other);
-    }
-
-    inline virtual std::string getClassificationLevel() const
-    {
-        return mClassification;
-    }
-
+    virtual std::string getClassificationLevel() const;
     inline virtual void setClassificationLevel(const std::string& classification)
     {
         mClassification = classification;
     }
 
+    virtual bool getClassificationLevel(std::u8string&) const;
+    virtual void setClassificationLevel(const std::u8string& classification);
+
     //! Ostream operators for six::CollectionInformation type (utility only).
     friend std::ostream& operator<<(std::ostream& os, const six::CollectionInformation& c);
+
+  bool operator==(const CollectionInformation& rhs) const; // needs to be member-function for SWIG
+  bool operator!=(const CollectionInformation& rhs) const  // needs to be member-function for SWIG
+  {
+    return !(*this == rhs);
+  }
 
 private:
     /*!
      *  Classification level
      */
     std::string mClassification;
+    std::optional<std::u8string> mClassification_u8;
 };
+
 }
 
-#endif
-
+#endif // SIX_six_CollectionInformation_h_INCLUDED_

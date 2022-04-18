@@ -53,9 +53,9 @@ TEST_CASE(testRotate)
     {
         logging::Logger log("test");
 
-        auto logHandler = mem::make::unique<logging::RotatingFileHandler>(outFile, 10, maxFiles);
+        auto logHandler = coda_oss::make_unique<logging::RotatingFileHandler>(outFile, 10, maxFiles);
         logHandler->setLevel(logging::LogLevel::LOG_DEBUG);
-        logHandler->setFormatter(mem::make::unique<logging::StandardFormatter>("%m"));
+        logHandler->setFormatter(coda_oss::make_unique<logging::StandardFormatter>("%m"));
         log.addHandler(std::move(logHandler));
 
         log.debug("0123456789");

@@ -42,6 +42,8 @@
 #include <string>
 #include <ostream>
 
+#include "sys/OS.h"
+
 namespace xml
 {
 
@@ -66,7 +68,11 @@ enum class StringEncoding
     Windows1252  // more-or-less ISO5589-1, https://en.wikipedia.org/wiki/Windows-1252
     , Utf8
 };
+constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
+        ? xml::lite::StringEncoding::Windows1252
+        : xml::lite::StringEncoding::Utf8;
 // Could do the same for std::wstring, but there isn't any code needing it right now.
+// Probably better to use std::u16string and std::u32string anyway.
 #endif
 
 /*!

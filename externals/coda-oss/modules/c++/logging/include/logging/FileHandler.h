@@ -43,9 +43,9 @@ namespace logging
  */
 struct FileHandler : public StreamHandler
 {
-    FileHandler(const sys::Filesystem::path& fname, LogLevel level = LogLevel::LOG_NOTSET,
+    FileHandler(const coda_oss::filesystem::path& fname, LogLevel level = LogLevel::LOG_NOTSET,
                 int creationFlags = sys::File::CREATE | sys::File::TRUNCATE) :
-        StreamHandler(mem::make::unique<io::FileOutputStream>(fname.string(), creationFlags), level)
+        StreamHandler(coda_oss::make_unique<io::FileOutputStream>(fname.string(), creationFlags), level)
     {
         // In case we are in append mode
         if (auto pStream = dynamic_cast<io::FileOutputStream*>(mStream.get()))

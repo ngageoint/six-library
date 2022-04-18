@@ -40,6 +40,10 @@ NITF_CXX_GUARD
  *  This reader class contains the
  *
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_Reader
 {
     nitf_List *warningList;
@@ -49,7 +53,9 @@ typedef struct _nitf_Reader
 
 }
 nitf_Reader;
-
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*!
  *  Construct a new reader

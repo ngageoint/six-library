@@ -53,7 +53,10 @@ NITF_CXX_GUARD
   \param baseOffset Offset to the start of data
   \param virtualOffset current offset (within this region)
 */
-
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_SegmentReader
 {
     nitf_IOInterface* input;
@@ -62,7 +65,9 @@ typedef struct _nitf_SegmentReader
     uint64_t virtualOffset;
 }
 nitf_SegmentReader;
-
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 
 

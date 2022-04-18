@@ -15,6 +15,7 @@
 #pragma warning(disable: 26467) // Converting from floating point to unsigned integral types results in non-portable code if the double/float has a negative value. Use gsl::narrow_cast or gsl::narrow instead to guard against undefined behavior and potential data loss(es.46).
 
 #include "nitf/coda-oss.hpp"
+
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
 #pragma comment(lib, "sys-c++")
@@ -29,6 +30,7 @@
 #include "nitf/Field.h"
 #include "nitf/Types.h"
 #pragma comment(lib, "nitf-c")
+#pragma comment(lib, "openjpeg")
 
 // changing this breaks SWIG
 #pragma warning (disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...'

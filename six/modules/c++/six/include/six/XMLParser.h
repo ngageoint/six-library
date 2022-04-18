@@ -252,6 +252,7 @@ protected:
     void parseComplex(const xml::lite::Element* element, std::complex<double>& value) const;
     void parseString(const xml::lite::Element* element, std::string& value) const;
     void parseString(const xml::lite::Element&, std::string&) const;
+    bool parseString(const xml::lite::Element&, std::u8string&) const;
     void parseBooleanType(const xml::lite::Element* element, BooleanType& value) const
     {
         assert(element != nullptr);

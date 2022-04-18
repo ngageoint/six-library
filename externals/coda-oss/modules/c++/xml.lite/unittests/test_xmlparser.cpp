@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of io-c++
+ * This file is part of xml.lite-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
- * io-c++ is free software; you can redistribute it and/or modify
+ * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -21,33 +21,40 @@
  */
 
 #include <std/string>
-#include <clocale>
 #include <std/filesystem>
 
 #include "io/StringStream.h"
 #include "io/FileInputStream.h"
 #include "str/Convert.h"
 #include "str/Encoding.h"
-#include "sys/OS.h"
+#include "str/EncodedString.h"
 #include <TestCase.h>
 
 #include "xml/lite/MinidomParser.h"
+#include "xml/lite/Validator.h"
 
 static const std::string text("TEXT");
 static const std::string strXml = "<root><doc><a>" + text + "</a></doc></root>";
-static const std::string iso88591Text("T\xc9XT");  // ISO8859-1, "TÉXT"
-static const std::string utf8Text("T\xc3\x89XT");  // UTF-8,  "TÉXT"
-static const sys::U8string utf8Text8 = str::fromUtf8(utf8Text);
-static const auto strUtf8Xml = "<root><doc><a>" + utf8Text + "</a></doc></root>";
-constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
-        ? xml::lite::StringEncoding::Windows1252
-        : xml::lite::StringEncoding::Utf8;
+
+static const auto iso88591Text = str::EncodedString::fromWindows1252("T\xc9XT");  // ISO8859-1, "TÉXT"
+static const auto iso88591Text1252 = str::EncodedStringView::details::w1252string(iso88591Text.view());
+static const auto pIso88591Text_ = str::c_str<std::string::const_pointer>(iso88591Text1252);
+
+static const auto utf8Text = str::EncodedString::fromUtf8("T\xc3\x89XT");  // UTF-8,  "TÉXT"
+static const auto utf8Text8 = utf8Text.u8string();
+static const auto pUtf8Text_ = str::c_str<std::string::const_pointer>(utf8Text8);
+
+static const auto strUtf8Xml8 = str::fromUtf8("<root><doc><a>") + utf8Text8 + str::fromUtf8("</a></doc></root>");
+static const std::string strUtf8Xml = str::c_str<std::string::const_pointer>(strUtf8Xml8);
+
+constexpr auto PlatformEncoding = xml::lite::PlatformEncoding;
+static const std::string  platfromText_ = PlatformEncoding == xml::lite::StringEncoding::Utf8 ? pUtf8Text_ : pIso88591Text_;
 
 namespace fs = std::filesystem;
 
 static fs::path findRoot(const fs::path& p)
 {
-    if (fs::is_regular_file(p / "LICENSE")  && fs::is_regular_file(p / "README.md")  && fs::is_regular_file(p / "CMakeLists.txt"))
+    if (is_regular_file(p / "LICENSE")  && is_regular_file(p / "README.md")  && is_regular_file(p / "CMakeLists.txt"))
     {
         return p;
     }
@@ -121,7 +128,7 @@ TEST_CASE(testXmlUtf8Legacy)
     // This is LEGACY behavior, it is INCORRECT on Linux!
     const auto actual = a.getCharacterData();
     #ifdef _WIN32
-    TEST_ASSERT_EQ(actual, iso88591Text);
+    TEST_ASSERT_EQ(actual, pIso88591Text_);
     #else
     TEST_ASSERT_EQ(actual.length(), static_cast<size_t>(4));
     #endif
@@ -135,11 +142,9 @@ TEST_CASE(testXmlUtf8_u8string)
     xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
     const auto& a = testXmlUtf8_(xmlParser);
 
-    sys::U8string actual;
+    coda_oss::u8string actual;
     a.getCharacterData(actual);
-    TEST_ASSERT(actual == utf8Text8);
-    const std::string actual_ = str::c_str<std::string::const_pointer>(actual);
-    TEST_ASSERT_EQ(actual_, utf8Text);
+    TEST_ASSERT_EQ(actual, utf8Text8);
 }
 
 TEST_CASE(testXmlUtf8)
@@ -148,7 +153,7 @@ TEST_CASE(testXmlUtf8)
     const auto& a = testXmlUtf8_(xmlParser);
 
     auto actual = a.getCharacterData();
-    const auto expected = sys::Platform == sys::PlatformType::Windows ? iso88591Text : utf8Text;
+    const auto expected = platfromText_;
     TEST_ASSERT_EQ(actual, expected);
 
     auto encoding = a.getEncoding();
@@ -175,7 +180,7 @@ TEST_CASE(testXml_setCharacterData)
     encoding = a.getCharacterData(actual);
     TEST_ASSERT_TRUE(encoding.has_value());
     TEST_ASSERT(encoding == xml::lite::StringEncoding::Utf8);
-    TEST_ASSERT_EQ(actual, utf8Text);
+    TEST_ASSERT_EQ(actual, pUtf8Text_);
 }
 
 static std::string testXmlPrint_(std::string& expected, const std::string& characterData)
@@ -201,7 +206,7 @@ TEST_CASE(testXmlPrintLegacy)
 {
     // This is LEGACY behavior, it generates bad XML
     std::string expected;
-    const auto actual = testXmlPrint_(expected, iso88591Text);
+    const auto actual = testXmlPrint_(expected, pIso88591Text_);
     TEST_ASSERT_EQ(actual, expected);
 }
 
@@ -210,12 +215,12 @@ TEST_CASE(testXmlPrintUtf8)
     xml::lite::MinidomParser xmlParser;
     auto& document = getDocument(xmlParser);
 
-    const auto pRootElement = document.createElement(xml::lite::QName(xml::lite::Uri(), "root"), iso88591Text, xml::lite::StringEncoding::Windows1252);
+    const auto pRootElement = document.createElement(xml::lite::QName(xml::lite::Uri(), "root"), pIso88591Text_, xml::lite::StringEncoding::Windows1252);
 
     io::StringStream output;
     pRootElement->print(output, xml::lite::StringEncoding::Utf8); // write UTF-8
     const auto actual = output.stream().str();
-    const auto expected = "<root>" + utf8Text + "</root>";
+    const auto expected = std::string("<root>") + pUtf8Text_ + "</root>";
     TEST_ASSERT_EQ(actual, expected);
 }
 
@@ -237,8 +242,7 @@ TEST_CASE(testXmlParseAndPrintUtf8)
 
 static void testReadEncodedXmlFile(const std::string& testName, const std::string& xmlFile, bool preserveCharacterData)
 {
-    const auto coda_oss = findRoot();
-    const auto unittests = coda_oss / "modules" / "c++" / "xml.lite" / "unittests";
+    const auto unittests = findRoot() / "modules" / "c++" / "xml.lite" / "unittests";
 
     const auto path = unittests / xmlFile;
     if (!exists(path))  // running in "externals" of a different project
@@ -255,15 +259,13 @@ static void testReadEncodedXmlFile(const std::string& testName, const std::strin
 
     const auto& a = root.getElementByTagName("a", true /*recurse*/);
     auto characterData = a.getCharacterData();
-    TEST_ASSERT_EQ(characterData, sys::Platform == sys::PlatformType::Linux ? utf8Text : iso88591Text);
     const auto encoding = a.getEncoding();
     TEST_ASSERT(encoding == PlatformEncoding);
+    TEST_ASSERT_EQ(characterData, platfromText_);
 
     std::u8string u8_characterData;
     a.getCharacterData(u8_characterData);
-    TEST_ASSERT(u8_characterData == utf8Text8);     
-    const std::string u8_characterData_(str::c_str<std::string::const_pointer>(u8_characterData));
-    TEST_ASSERT_EQ(utf8Text, u8_characterData_);     
+    TEST_ASSERT_EQ(utf8Text8, u8_characterData);     
 
     const auto& textXML = root.getElementByTagName("text", true /*recurse*/);
     characterData = textXML.getCharacterData();
@@ -290,8 +292,7 @@ TEST_CASE(testReadEncodedXmlFiles)
 
 static void testReadXmlFile(const std::string& testName, const std::string& xmlFile, bool preserveCharacterData)
 {
-    const auto coda_oss = findRoot();
-    const auto unittests = coda_oss / "modules" / "c++" / "xml.lite" / "unittests";
+    const auto unittests =  findRoot() / "modules" / "c++" / "xml.lite" / "unittests";
 
     const auto path = unittests / xmlFile;
     if (!exists(path))  // running in "externals" of a different project
@@ -311,15 +312,13 @@ static void testReadXmlFile(const std::string& testName, const std::string& xmlF
     const auto& a = *(aElements[0]);
 
     auto characterData = a.getCharacterData();
-    TEST_ASSERT_EQ(characterData, sys::Platform == sys::PlatformType::Linux ? utf8Text : iso88591Text);
     const auto encoding = a.getEncoding();
     TEST_ASSERT(encoding == PlatformEncoding);
+    TEST_ASSERT_EQ(characterData, platfromText_);
 
     std::u8string u8_characterData;
     a.getCharacterData(u8_characterData);
-    TEST_ASSERT(u8_characterData == utf8Text8);    
-    const std::string u8_characterData_(str::c_str<std::string::const_pointer>(u8_characterData));
-    TEST_ASSERT_EQ(utf8Text, u8_characterData_);
+    TEST_ASSERT_EQ(utf8Text8, u8_characterData);
 
     const auto& textXML = root.getElementByTagName("text", true /*recurse*/);
     characterData = textXML.getCharacterData();
@@ -370,8 +369,7 @@ static bool find_string(io::FileInputStream& stream, const std::string& s)
 TEST_CASE(testReadEmbeddedXml)
 {
     // This is a binary file with XML burried in it somewhere
-    const auto coda_oss = findRoot();
-    const auto unittests = coda_oss / "modules" / "c++" / "xml.lite" / "unittests";
+    const auto unittests = findRoot() / "modules" / "c++" / "xml.lite" / "unittests";
 
     const auto path = unittests / "embedded_xml.bin";
     if (!exists(path))  // running in "externals" of a different project
@@ -394,16 +392,114 @@ TEST_CASE(testReadEmbeddedXml)
      // UTF-8 characters in 50x50.nitf
     const std::string classificationText_iso8859_1("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
     const std::string classificationText_utf_8("NON CLASSIFI\xc3\x89 / UNCLASSIFIED");  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
-    const auto expectedCharData = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
+    const auto classificationText_platform = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
     const auto characterData = classificationXML.getCharacterData();
-    TEST_ASSERT_EQ(characterData, expectedCharData);
+    TEST_ASSERT_EQ(characterData, classificationText_platform);
 
-    const auto u8_expectedCharData8 = str::fromUtf8(classificationText_utf_8);
+    const auto expectedCharDataView = str::EncodedStringView::create<std::u8string>(classificationText_utf_8);
     std::u8string u8_characterData;
     classificationXML.getCharacterData(u8_characterData);
-    TEST_ASSERT(u8_characterData == u8_expectedCharData8);
-    const std::string u8_characterData_(str::c_str<std::string::const_pointer>(u8_characterData));
+    TEST_ASSERT_EQ(u8_characterData, expectedCharDataView);
+    std::string u8_characterData_;
+    str::EncodedStringView(u8_characterData).toUtf8(u8_characterData_);
     TEST_ASSERT_EQ(classificationText_utf_8, u8_characterData_);
+}
+
+static void testValidateXmlFile_(const std::string& testName, const std::string& xmlFile, const xml::lite::StringEncoding* pEncoding)
+{
+    const auto unittests = findRoot() / "modules" / "c++" / "xml.lite" / "unittests";
+
+    const auto xsd = unittests / "doc.xsd";
+    if (!exists(xsd))  // running in "externals" of a different project
+    {
+        std::clog << "Path does not exist: '" << xsd << "'\n";
+        return;
+    }
+    const auto path = unittests / xmlFile;
+
+    const std::vector<std::filesystem::path> schemaPaths{xsd.parent_path()}; // fs::path -> new string-conversion code
+    const xml::lite::Validator validator(schemaPaths, nullptr /*log*/);
+
+    io::FileInputStream fis(path);
+    std::vector<xml::lite::ValidationInfo> errors;
+    const auto result = (pEncoding == nullptr) ? validator.validate(fis, path.string() /*xmlID*/, errors) :
+        validator.validate(fis, *pEncoding, path.string() /*xmlID*/, errors);
+    for (const auto& error : errors)
+    {
+        std::clog << error.toString() << "\n";
+    }
+    TEST_ASSERT_FALSE(result);
+    TEST_ASSERT_TRUE(errors.empty());
+}
+static void testValidateXmlFile(const std::string& testName, const std::string& xmlFile)
+{
+    testValidateXmlFile_(testName, xmlFile, nullptr /*pEncoding*/);
+}
+static void testValidateXmlFile(const std::string& testName, const std::string& xmlFile, xml::lite::StringEncoding encoding)
+{
+    testValidateXmlFile_(testName, xmlFile, &encoding);
+}
+TEST_CASE(testValidateXmlFile)
+{
+    testValidateXmlFile(testName, "ascii.xml");
+    testValidateXmlFile(testName, "ascii_encoding_utf-8.xml");
+
+    // legacy validate() API, new string conversion
+    testValidateXmlFile(testName, "utf-8.xml");
+    testValidateXmlFile(testName, "encoding_utf-8.xml");
+
+    // new validate() API
+    testValidateXmlFile(testName, "utf-8.xml", xml::lite::StringEncoding::Utf8);
+    testValidateXmlFile(testName, "encoding_utf-8.xml", xml::lite::StringEncoding::Utf8);
+    testValidateXmlFile(testName, "windows-1252.xml", xml::lite::StringEncoding::Windows1252);
+    testValidateXmlFile(testName, "encoding_windows-1252.xml", xml::lite::StringEncoding::Windows1252);
+}
+
+static void testValidateXmlFileLegacy(const std::string& testName, const std::string& xmlFile, bool success=true)
+{
+    const auto unittests = findRoot() / "modules" / "c++" / "xml.lite" / "unittests";
+
+    const auto xsd = unittests / "doc.xsd";
+    if (!exists(xsd))  // running in "externals" of a different project
+    {
+        std::clog << "Path does not exist: '" << xsd << "'\n";
+        return;
+    }
+    const auto path = unittests / xmlFile;
+
+    const std::vector<std::string> schemaPaths{xsd.parent_path().string()}; // std::string -> legacy behavior
+    const xml::lite::Validator validator(schemaPaths, nullptr /*log*/);
+
+    io::FileInputStream fis(path);
+    std::vector<xml::lite::ValidationInfo> errors;
+    const auto result = validator.validate(fis, path.string() /*xmlID*/, errors);
+    for (const auto& error : errors)
+    {
+        std::clog << error.toString() << "\n";
+    }
+    if (success)
+    {
+        TEST_ASSERT_FALSE(result);
+        TEST_ASSERT_TRUE(errors.empty());
+    }
+    else
+    {
+        TEST_ASSERT_TRUE(result); // errors
+        TEST_ASSERT_FALSE(errors.empty());
+    }
+}
+TEST_CASE(testValidateXmlFileLegacy)
+{
+    // these two work on all platforms
+    testValidateXmlFile(testName, "ascii.xml");
+    testValidateXmlFile(testName, "ascii_encoding_utf-8.xml");
+
+    // These are OK on Windows but fail on Linux; this is as-expected with "legacy" string conversion.
+    constexpr auto success = sys::Platform == sys::PlatformType::Windows ? true : false;
+    testValidateXmlFileLegacy(testName, "utf-8.xml", success);
+    testValidateXmlFileLegacy(testName, "encoding_utf-8.xml", success);
+    testValidateXmlFileLegacy(testName, "windows-1252.xml", success);
+    testValidateXmlFileLegacy(testName, "encoding_windows-1252.xml", success);
 }
 
 int main(int, char**)
@@ -423,4 +519,7 @@ int main(int, char**)
     TEST_CHECK(testReadEncodedXmlFiles);
     TEST_CHECK(testReadXmlFiles);
     TEST_CHECK(testReadEmbeddedXml);
+
+    TEST_CHECK(testValidateXmlFile);
+    TEST_CHECK(testValidateXmlFileLegacy);
 }

@@ -29,7 +29,7 @@
 
 
 NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
-                                               char *descTag,
+                                               const char *descTag,
                                                char idx_str[10][10],
                                                int looping,
                                                nitf_Error * error);
@@ -152,7 +152,7 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_clone(nitf_TRECursor *tre_cursor,
  * the TRE hash that corresponds to the current normalized tag.
  */
 NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
-                                                char *descTag,
+                                                const char *descTag,
                                                 char idx_str[10][10],
                                                 int looping, nitf_Error * error)
 {
@@ -162,7 +162,7 @@ NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
     char tag_str[TAG_BUF_LEN];
 
     /* pointer for brace position */
-    char *bracePtr;
+    const char *bracePtr;
 
     /* used as in iterator */
     int index = 0;

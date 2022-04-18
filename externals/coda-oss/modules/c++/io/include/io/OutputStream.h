@@ -28,8 +28,8 @@
 
 #include "sys/Dbg.h"
 #include "sys/Conf.h"
-#include "sys/String.h"
-#include "sys/CStdDef.h"
+#include "coda_oss/string.h"
+#include "coda_oss/cstddef.h"
 
 /*!
  * \file OutputStream.h
@@ -62,7 +62,7 @@ struct OutputStream
     {
         write(&b, 1);
     }
-    void write(sys::Byte b)
+    void write(coda_oss::byte b)
     {
         write(&b, 1);
     }
@@ -80,12 +80,12 @@ struct OutputStream
     {
         write(str.c_str(), str.length());
     }
-    void write(sys::U8string::const_pointer pStr, size_t length) // i.e., std::string_view
+    void write(coda_oss::u8string::const_pointer pStr, size_t length) // i.e., std::string_view
     {
         const void* const pStr_ = pStr;
         write(pStr_, length);
     }
-    void write(const sys::U8string& str)
+    void write(const coda_oss::u8string& str)
     {
         write(str.c_str(), str.length());
     }
@@ -99,7 +99,7 @@ struct OutputStream
         write(str);
         write('\n');
     }
-    void writeln(const sys::U8string& str)
+    void writeln(const coda_oss::u8string& str)
     {
         write(str);
         write('\n');

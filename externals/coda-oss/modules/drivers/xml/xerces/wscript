@@ -165,10 +165,11 @@ def configure(conf):
                 conf.define('XERCES_U32BIT_INT', 'uint32_t', quote=False)
                 conf.define('XERCES_U64BIT_INT', 'uint64_t', quote=False)
                 conf.define('XERCES_SIZE_T', 'size_t', quote=False)
-                if 'HAVE_WCHAR_H=1' in conf.env['DEFINES'] :
+                # This is for a UTF-16 value, 16 bits
+                if sys.platform == 'win32':
                     conf.define('XERCES_XMLCH_T', 'wchar_t', quote=False)
-                else :
-                    conf.define('XERCES_XMLCH_T', 'uint16_t', quote=False)
+                else:
+                    conf.define('XERCES_XMLCH_T', 'char16_t', quote=False)
                 if 'HAVE_SSIZE_T=1' in conf.env['DEFINES'] :
                     conf.define('XERCES_SSIZE_T', 'ssize_t', quote=False)
                 else :

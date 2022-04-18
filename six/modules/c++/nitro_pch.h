@@ -16,6 +16,8 @@
 #pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 #pragma warning(disable: 26455) //	 Default constructor may not throw.Declare it 'noexcept' (f.6).
 #pragma warning(disable: 26458) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
+#pragma warning(disable: 26823) // Dereferencing a possibly null pointer '...' (lifetime.1).
+#pragma warning(disable: 26822) // Dereferencing a null pointer 'me' (lifetime.1).
 
 #include <import/str.h>
 #include <import/sys.h>

@@ -35,7 +35,7 @@
 #include "xml/lite/Attributes.h"
 #include "xml/lite/QName.h"
 #include "sys/Conf.h"
-#include "sys/Optional.h"
+#include "coda_oss/optional.h"
 #include "mem/SharedPtr.h"
 
 /*!
@@ -93,7 +93,7 @@ public:
         setCharacterData(characterData, encoding);
     }
     Element(const std::string& qname, const std::string& uri,
-            const sys::U8string& characterData) :
+            const coda_oss::u8string& characterData) :
         Element(qname, uri, nullptr)
     {
         setCharacterData(characterData);
@@ -103,7 +103,7 @@ public:
     static std::unique_ptr<Element> create(const std::string& qname, const std::string& uri = "", const std::string& characterData = "");
     static std::unique_ptr<Element> create(const std::string& qname, const xml::lite::Uri& uri, const std::string& characterData = "");
     static std::unique_ptr<Element> create(const xml::lite::QName&, const std::string& characterData = "");
-    static std::unique_ptr<Element> create(const xml::lite::QName&, const sys::U8string&);
+    static std::unique_ptr<Element> create(const xml::lite::QName&, const coda_oss::u8string&);
     // Encoding of "characterData" is always UTF-8
     static std::unique_ptr<Element> createU8(const xml::lite::QName&, const std::string& characterData = "");
     #endif // SWIG
@@ -334,16 +334,16 @@ public:
         return mCharacterData;
     }
     #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
-    const sys::Optional<StringEncoding>& getEncoding() const
+    const coda_oss::optional<StringEncoding>& getEncoding() const
     {
         return mEncoding;
     }
-   const sys::Optional<StringEncoding>& getCharacterData(std::string& result) const
+   const coda_oss::optional<StringEncoding>& getCharacterData(std::string& result) const
     {
         result = getCharacterData();
         return getEncoding();
     }
-    void getCharacterData(sys::U8string& result) const;
+    void getCharacterData(coda_oss::u8string& result) const;
     #endif // SWIG
 
     /*!
@@ -354,7 +354,7 @@ public:
     #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
     void setCharacterData_(const std::string& characters, const StringEncoding*);
     void setCharacterData(const std::string& characters, StringEncoding);
-    void setCharacterData(const sys::U8string& characters);
+    void setCharacterData(const coda_oss::u8string& characters);
     #endif // SWIG
 
     /*!
@@ -508,7 +508,7 @@ protected:
 
     private:
         // ... and how that data is encoded
-        sys::Optional<StringEncoding> mEncoding;
+        coda_oss::optional<StringEncoding> mEncoding;
         void depthPrint(io::OutputStream& stream, bool utf8, int depth,
                 const std::string& formatter) const;
 };
@@ -587,24 +587,24 @@ inline Element& addNewElement(const xml::lite::QName& name, const T& value, Elem
 }
 
 template <typename T, typename ToString>
-inline Element& addNewElement(const xml::lite::QName& name, const sys::Optional<T>& v, Element& parent,
+inline Element& addNewElement(const xml::lite::QName& name, const coda_oss::optional<T>& v, Element& parent,
     ToString toString)
 {
     return addNewElement(name, v.value(), parent, toString);
 }
 template<typename T>
-inline Element& addNewElement(const xml::lite::QName& name, const sys::Optional<T>& v, Element& parent)
+inline Element& addNewElement(const xml::lite::QName& name, const coda_oss::optional<T>& v, Element& parent)
 {
     return addNewElement(name, v.value(), parent);
 }
 template <typename T, typename ToString>
-inline Element* addNewOptionalElement(const xml::lite::QName& name, const sys::Optional<T>& v, Element& parent,
+inline Element* addNewOptionalElement(const xml::lite::QName& name, const coda_oss::optional<T>& v, Element& parent,
         ToString toString)
 {
     return v.has_value() ? &addNewElement(name, v, parent, toString) : nullptr;
 }
 template<typename T>
-inline Element* addNewOptionalElement(const xml::lite::QName& name, const sys::Optional<T>& v, Element& parent)
+inline Element* addNewOptionalElement(const xml::lite::QName& name, const coda_oss::optional<T>& v, Element& parent)
 {
     return v.has_value() ? &addNewElement(name, v, parent) : nullptr;
 }

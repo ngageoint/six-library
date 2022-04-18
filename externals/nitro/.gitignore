@@ -3,8 +3,7 @@
 .waf-*
 
 # CMake
-out/build/
-out/install/
+out/
 _deps/
 CMakeFiles/
 CMakeCache.txt

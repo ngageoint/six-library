@@ -26,6 +26,7 @@
 #include <vector>
 #include <memory>
 #include <stdexcept>
+#include <std/filesystem>
 
 #include <import/nitf.hpp>
 #include <nitf/ImageSubheader.hpp>
@@ -160,7 +161,7 @@ TEST_CASE(changeFileHeader)
 
 TEST_MAIN(
     (void)argc;
-	argv0 = fs::absolute(argv[0]).string();
+    argv0 = fs::absolute(argv[0]).string();
 
     TEST_CHECK(imageWriterThrowsOnFailedConstruction);
     TEST_CHECK(constructValidImageWriter);

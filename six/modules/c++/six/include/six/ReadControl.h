@@ -23,6 +23,8 @@
 #define __SIX_READ_CONTROL_H__
 
 #include <memory>
+#include <std/filesystem>
+#include <algorithm>
 
 #include "six/Types.h"
 #include "six/Region.h"
@@ -85,8 +87,16 @@ struct ReadControl
     {
         load(fromFile, std::vector<std::string>());
     }
-    virtual void load(const std::string& fromFile,
-                      const std::vector<std::string>& schemaPaths) = 0;
+    virtual void load(const std::string& fromFile, const std::vector<std::string>& schemaPaths) = 0;
+    virtual void load(const std::filesystem::path& fromFile, const std::vector<std::filesystem::path>* pSchemaPaths)
+    {
+        std::vector<std::string> schemaPaths_;
+        if (pSchemaPaths != nullptr)
+        {
+            std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(schemaPaths_), [](const std::filesystem::path& p) { return p.string(); });
+        }
+        load(fromFile.string(), schemaPaths_);
+    }
 
     /*!
      *  Get a const shared pointer to the current container.

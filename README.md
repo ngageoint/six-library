@@ -45,4 +45,4 @@ Software source code previously released under an open source license and then m
 copyrights of the non-government authors and must be released according to the terms of the original open source license.
 
 ### Contact
-July 2020, Dan <dot> Smith <at> maxar.com
+February 2022, Dan <dot> Smith <at> maxar <dot> <see><oh><em>

@@ -19,14 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_WRITE_CONTROL_H__
-#define __SIX_WRITE_CONTROL_H__
+#ifndef SIX_six_WriteControl_h_INCLUDED_
+#define SIX_six_WriteControl_h_INCLUDED_
+#pragma once
 
 #include <memory>
 #include <std/span>
 #include <vector>
 #include <std/filesystem>
 #include <complex>
+#include <string>
 
 #include "six/Types.h"
 #include "six/Region.h"
@@ -75,6 +77,14 @@ struct WriteControl
      *  may be ignored by an implementation file.
      */
     static const char OPT_BUFFER_SIZE[];
+
+    // Control multi-threading for AMP8I_PHS8I conversion in six::sicd::ImageData.
+    // A negative means no multithreading, 0 will have "the system" guess at
+    // an appropriate cutoff (a hardcoded value based on testing).  Any other
+    // positive value is the number of pixels to process in each thread; it should
+    // be fairly large to make-up for the overhead of threading.
+    static const std::string AMP8I_PHS8I_CUTOFF;
+    static constexpr ptrdiff_t AMP8I_PHS8I_DEFAULT_CUTOFF = 0; // to_AMP8I_PHS8I() is too slow w/o multi-threading
 
     //!  Constructor.  Null-sets the Container
     WriteControl() noexcept(false) :
@@ -283,5 +293,4 @@ private:
 };
 
 }
-#endif
-
+#endif // SIX_six_WriteControl_h_INCLUDED_

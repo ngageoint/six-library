@@ -58,6 +58,13 @@ void ConvertingReadControl::load(const std::string& pathname,
     mConverter->load(pathname);
     mContainer->addData(mConverter->convert().release());
 }
+void ConvertingReadControl::load(const std::filesystem::path& pathname,
+    const std::vector<std::filesystem::path>* /*pSchemaPaths*/)
+{
+    const std::vector<std::string> schemaPaths;
+    load(pathname.string(), schemaPaths);
+}
+
 
 std::string ConvertingReadControl::getFileType() const
 {

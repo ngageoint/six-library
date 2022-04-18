@@ -29,7 +29,7 @@
 #include <import/sio/lite.h>
 #include <import/io.h>
 #include <logging/Setup.h>
-#include <sys/Bit.h>
+#include <std/bit>
 
 #include <scene/Utilities.h>
 #include "utils.h"
