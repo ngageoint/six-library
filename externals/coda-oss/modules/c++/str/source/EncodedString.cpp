@@ -122,6 +122,11 @@ str::EncodedString& str::EncodedString::operator=(const EncodedString& es)
     }
     return *this;
 }
+str::EncodedString::EncodedString(const EncodedString& es) 
+{
+    *this = es;
+}
+
 str::EncodedString& str::EncodedString::operator=(EncodedString&& es) noexcept
 {
     if (this != &es)
