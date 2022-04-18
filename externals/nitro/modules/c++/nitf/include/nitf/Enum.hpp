@@ -30,6 +30,7 @@
 #include <ostream>
 
 #include "str/Manip.h"
+#include "str/EncodedStringView.h"
 
 namespace nitf
 {
@@ -101,7 +102,8 @@ namespace nitf
 #define NITF_ENUM_map_entry_14(name, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14) NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_13(name, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14)
 #define NITF_ENUM_map_entry_15(name, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15) NITF_ENUM_map_entry(name, n1), NITF_ENUM_map_entry_14(name, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15)
 
-#define NITF_ENUM_define_string_to_enum_begin(name)  inline std::ostream& operator<<(std::ostream& os, name e) { os << to_string(e); return os; } \
+#define NITF_ENUM_define_string_to_enum_ostream_(name) inline std::ostream& operator<<(std::ostream& os, name e) { os << to_string(e); return os; }
+#define NITF_ENUM_define_string_to_enum_begin(name)  NITF_ENUM_define_string_to_enum_ostream_(name) \
     namespace details { template<> inline const std::map<std::string, name>& string_to_enum() { \
     static const std::map<std::string, name> retval {
 #define NITF_ENUM_define_string_to_end }; return retval; } }
@@ -115,6 +117,11 @@ namespace nitf
     inline std::string to_string(T v) noexcept(false)
     {
         return details::to_string(v);
+    }
+    template<typename T>
+    inline std::wstring to_wstring(T v) noexcept(false)
+    {
+        return str::EncodedStringView(details::to_string(v)).wstring();
     }
     template<typename T>
     inline T from_string(std::string v) noexcept(false)

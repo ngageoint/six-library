@@ -79,7 +79,7 @@ TEST_CASE(testReadOutOfBounds)
         buffer, TEST_BUF_SIZE, 0, &error);
 
     nrt_Off success = nrt_IOInterface_seek(reader, TEST_BUF_SIZE, NRT_SEEK_SET, &error);
-    TEST_ASSERT(success);
+    TEST_ASSERT(success != 0);
     success = nrt_IOInterface_read(reader, output, sizeof(output), &error);
     TEST_ASSERT(!success);
 }
@@ -96,7 +96,7 @@ TEST_CASE(testWriteOutOfBounds)
         buffer, TEST_BUF_SIZE, 0, &error);
 
     nrt_Off success = nrt_IOInterface_seek(writer, TEST_BUF_SIZE, NRT_SEEK_SET, &error);
-    TEST_ASSERT(success);
+    TEST_ASSERT(success != 0);
     success = nrt_IOInterface_write(writer, input, 4, &error);
     TEST_ASSERT(!success);
 }

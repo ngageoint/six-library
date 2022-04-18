@@ -172,7 +172,7 @@ NRTAPI(NRT_BOOL) nrt_TreeNode_removeChild(nrt_TreeNode * node,
 {
     nrt_ListIterator where, end;
     nrt_List *list;
-    int found = 0;
+    NRT_BOOL found = NRT_FALSE;
     assert(node);
     assert(child);
 
@@ -187,7 +187,7 @@ NRTAPI(NRT_BOOL) nrt_TreeNode_removeChild(nrt_TreeNode * node,
         nrt_TreeNode *candidate = (nrt_TreeNode *) nrt_ListIterator_get(&where);
         if (candidate == node)
         {
-            found = 1;
+            found = NRT_TRUE;
             break;
         }
         nrt_ListIterator_increment(&where);

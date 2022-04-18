@@ -63,7 +63,7 @@ public:
     Component(j2k_Component*);
 };
 }
-struct Component final
+struct NITRO_NITFCPP_API Component final
 {
     Component() = delete;
     Component(const Component&) = delete;

@@ -86,6 +86,7 @@ public:
     };
 
     explicit BandInfo(Subcategory);
+    BandInfo(Representation, Subcategory, const std::string & imageFilterCondition, const std::string & imageFilterCode);
 
     //! Get the subcategory
     nitf::Field getSubcategory() const;

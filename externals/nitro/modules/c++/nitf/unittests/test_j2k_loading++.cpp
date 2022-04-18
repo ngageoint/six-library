@@ -28,43 +28,44 @@
 #include <string>
 #include <std/filesystem>
 #include <std/span>
+#include <std/cstddef>
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <numeric>
 
 #include <gsl/gsl.h>
 #include <str/Format.h>
+#include <io/FileInputStream.h>
+#include <io/FileOutputStream.h>
+#include <sio/lite/FileWriter.h>
+#include <sio/lite/ReadUtils.h>
+#include <io/ReadUtils.h>
+#include <io/FileOutputStream.h>
+#include <sys/OS.h>
 
 #include <import/nitf.hpp>
 #include <nitf/J2KReader.hpp>
 #include <nitf/J2KWriter.hpp>
+#include <nitf/ComponentInfo.hpp>
+#include <nitf/FileHeader.hpp>
+#include <nitf/IOHandle.hpp>
+#include <nitf/List.hpp>
+#include <nitf/Reader.hpp>
+#include <nitf/Record.hpp>
+#include <nitf/J2KCompressor.hpp>
+#include <nitf/UnitTests.hpp>
 
-namespace fs = std::filesystem;
+#include <TestCase.h>
 
-#include "TestCase.h"
+using path = std::filesystem::path;
 
 static std::string testName;
 
-static fs::path findRoot(const fs::path& p)
+static path findInputFile(const path& fn)
 {
-    if (fs::is_regular_file(p / "LICENSE") && fs::is_regular_file(p / "README.md") && fs::is_regular_file(p / "CMakeLists.txt"))
-    {
-        return p;
-    }
-    return findRoot(p.parent_path());
-}
-inline fs::path findRoot()
-{
-    return findRoot(fs::current_path());
-}
-
-static std::string argv0;
-static fs::path findInputFile_(const fs::path& inputFile)
-{
-    fs::path root = findRoot();
-    return root / inputFile;
-}
-static fs::path findInputFile(const fs::path& fn)
-{
-    const auto inputPath = fs::path("modules") / "c++" / "nitf" / "unittests" / fn;
-    return findInputFile_(inputPath);
+    const auto inputPath = path("modules") / "c++" / "nitf" / "unittests" / fn;
+    return nitf::Test::findInputFile(inputPath);
 }
 
 static void test_image_loading_(const std::string& input_file, bool /*optz*/)
@@ -99,9 +100,7 @@ static void test_image_loading_(const std::string& input_file, bool /*optz*/)
 
 TEST_CASE(test_j2k_loading)
 {
-    ::testName = testName;
-
-    auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf").string();
+    const auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf").string();
     test_image_loading_(input_file, false /*optz*/);
     //test_image_loading_(input_file, true /*optz*/);
 
@@ -150,8 +149,6 @@ static void test_j2k_nitf_(const std::string& fname)
 }
 TEST_CASE(test_j2k_nitf)
 {
-    ::testName = testName;
-
     j2k_Reader* pNative = nullptr;
     try
     {
@@ -164,7 +161,7 @@ TEST_CASE(test_j2k_nitf)
     }
 
     // This is a JP2 file, not J2K; see OpenJPEG_setup_()
-    auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf").string();
+    const auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf").string();
     test_j2k_nitf_(input_file);
 }
 
@@ -186,28 +183,29 @@ void writeJ2K(uint32_t x0, uint32_t y0,
     const auto num_y_tiles = inContainer.getTilesY();
 
     j2k::WriterOptions options;
+    options.setCompressionRatio(0.0); // lossless
+    //options.setCompressionRatio(12.0); // lossy
+
     /* TODO set some options here */
     j2k::Writer writer(inContainer, options);
 
     nitf::IOHandle outIO(outName, NRT_ACCESS_WRITEONLY, NRT_CREATE);
 
-    const auto tileSize = inContainer.tileSize();
+    j2k::WriteTiler tiler(writer, buf);
     // TODO: determine tile range from read region
     for (uint32_t y = 0; y < num_y_tiles; ++y)
     {
         for (uint32_t x = 0; x < num_x_tiles; ++x)
         {
             // TODO: May need to handle this differently for multiple components
-            const auto offset = inContainer.bufferOffset(x, y, 0);
-            const std::span<const uint8_t> buf_(buf.data() + offset, tileSize);
-            writer.setTile(x, y, buf_);
+            tiler.setTile(x, y, 0);
         }
     }
 
     writer.write(outIO);
     //printf("Wrote file: %s\n", outName.c_str());
 }
-void test_j2k_nitf_read_region_(const fs::path& fname)
+void test_j2k_nitf_read_region_(const path& fname)
 {
     nitf::IOHandle io(fname.string(), NRT_ACCESS_READONLY, NRT_OPEN_EXISTING);
     nitf::Reader reader;
@@ -280,16 +278,107 @@ void test_j2k_nitf_read_region_(const fs::path& fname)
 }
 TEST_CASE(test_j2k_nitf_read_region)
 {
-    ::testName = testName;
     // This is a JP2 file, not J2K; see OpenJPEG_setup_()
-    auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf");
+    const auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf");
     test_j2k_nitf_read_region_(input_file);
 }
 
-TEST_MAIN(
-    (void)argc;
-    argv0 = argv[0];
+static std::vector<std::byte> readImage(nitf::ImageReader& imageReader, const nitf::ImageSubheader& imageSubheader)
+{
+    const auto numBlocks = imageSubheader.numBlocksPerRow() * imageSubheader.numBlocksPerCol();
+    TEST_ASSERT_GREATER(numBlocks, static_cast<size_t>(0));
+
+    const auto imageLength = imageSubheader.getNumBytesOfImageData();
+    TEST_ASSERT_GREATER(imageLength, static_cast<size_t>(0));
+
+    // This assumes vertical blocking.
+    // Interleaving would be required for horizontal blocks
+    std::vector<std::byte> retval(imageLength);
+    uint64_t byteOffset = 0;
+    for (uint32_t block = 0; block < numBlocks; ++block)
+    {
+        uint64_t bytesRead;
+        const auto blockData = imageReader.readBlock(block, &bytesRead);
+        TEST_ASSERT(blockData != nullptr);
+        memcpy(retval.data() + byteOffset, blockData, bytesRead);
+        byteOffset += bytesRead;
+    }
+    return retval;
+}
+static void test_decompress_nitf_to_sio_(const path& inputPathname, const path& outputPathname)
+{
+    // Take a J2K-compressed NITF, decompress the image and save to an SIO.
+    nitf::Reader reader;
+    nitf::IOHandle io(inputPathname.string());
+    const auto record = reader.read(io);
+    auto iter = record.getImages().begin();
+    nitf::ImageSegment imageSegment = *iter;
+    const auto imageSubheader = imageSegment.getSubheader();
+
+    auto imageReader = reader.newImageReader(0 /*imageSegmentNumber*/);
+    const auto imageData = readImage(imageReader, imageSubheader);
+
+    sio::lite::writeSIO(imageData.data(), imageSubheader.dims(), outputPathname);
+}
+TEST_CASE(test_j2k_decompress_nitf_to_sio)
+{
+    const auto pluginsDir = nitf::Test::buildPluginsDir();
+    sys::OS().setEnv("NITF_PLUGIN_PATH", pluginsDir, true /*overwrite*/);
+
+    const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
+    test_decompress_nitf_to_sio_(inputPathname, "test_decompress_nitf.sio");
+}
+
+TEST_CASE(test_j2k_compress_raw_image)
+{
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
+    const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
+    const path outputPathname = "test_j2k_compress_raw_image.sio";
+    test_decompress_nitf_to_sio_(inputPathname, outputPathname);
+    // ---------------------------------------------------------------------------------------
+
+    // J2K compresses the raw image data of an SIO file
+    const auto& inPathname = outputPathname; // "input pathname to raw file or sio to compress"
+    const auto& testJ2KPathname = inputPathname; // "optional J2K file to compare compressed result to"
+
+    // Read in the raw data from the input SIO
+    types::RowCol<size_t> rawDims;
+    std::vector<std::byte> rawImage_;
+    sio::lite::readSIO(inPathname, rawDims, rawImage_);
+    const std::span<const std::byte> rawImage(rawImage_.data(), rawImage_.size());
+
+    const auto& tileDims = rawDims;
+    const size_t numThreads = sys::OS().getNumCPUs() - 1;
+    const j2k::CompressionParameters params(rawDims, tileDims);
+    const j2k::Compressor compressor(params, numThreads);
+
+    std::vector<std::byte> compressedImage_;
+    std::vector<size_t> bytesPerBlock;
+    compressor.compress(rawImage, compressedImage_, bytesPerBlock);
+    const std::span<const std::byte> compressedImage(compressedImage_.data(), compressedImage_.size());
+
+    const auto sumCompressedBytes = std::accumulate(bytesPerBlock.begin(), bytesPerBlock.end(), gsl::narrow<size_t>(0));
+    TEST_ASSERT_EQ(sumCompressedBytes, compressedImage.size()); // "Size of compressed image does not match sum of bytes per block"
+
+    const auto compressedPathname = "compressed_" + std::to_string(tileDims.row) + "x" + std::to_string(tileDims.col) + ".j2k";
+    ::io::FileOutputStream os(compressedPathname);
+    os.write(compressedImage);
+
+    std::vector<std::byte> j2kData;
+    io::readFileContents(testJ2KPathname, j2kData);
+    //TEST_ASSERT_EQ((compressedImage.size(), j2kData.size());
+    //for (size_t ii = 0; ii < compressedImage.size(); ++ii)
+    //{
+    //  //TEST_ASSERT_EQ(j2kData[ii], compressedImage[ii]);
+    //}
+}
+
+TEST_MAIN((void)argc; (void) argv;
     TEST_CHECK(test_j2k_loading);
     TEST_CHECK(test_j2k_nitf);
     TEST_CHECK(test_j2k_nitf_read_region);
+
+    TEST_CHECK(test_j2k_decompress_nitf_to_sio);
+    TEST_CHECK(test_j2k_compress_raw_image);
     )

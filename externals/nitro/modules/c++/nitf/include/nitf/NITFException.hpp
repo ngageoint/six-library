@@ -165,8 +165,7 @@ template<typename Func, typename Native, typename... Args>
 inline void callNativeOrThrowV(Func f, Native* pNative, Args&&... args) // c.f. getNativeOrThrow()
 {
     // save caller the trouble of figuring out a return type that won't be used
-    constexpr nitf_Error* pError = nullptr; // only needed for decltype()
-    using retval_t = decltype(f(pNative, std::forward<Args>(args)..., pError));
+    using retval_t = decltype(f(pNative, std::forward<Args>(args)..., nullptr /*error*/));
     std::ignore = callNativeOrThrow<retval_t>(f, pNative, std::forward<Args>(args)...);
 }
 }

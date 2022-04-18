@@ -52,10 +52,10 @@ TEST_CASE(testMemorySource)
                                                        numBytesPerPix, 0,
                                                        &error);
 
-    TEST_ASSERT(bs0);
-    TEST_ASSERT(bs1);
-    TEST_ASSERT(bs2);
-    TEST_ASSERT(all);
+    TEST_ASSERT(bs0 != NULL);
+    TEST_ASSERT(bs1 != NULL);
+    TEST_ASSERT(bs2 != NULL);
+    TEST_ASSERT(all != NULL);
 
     /*  Construct in memory band buffers for testing -- 0 terminate strings */
     band_0 = (char *) NITF_MALLOC(bandSize + 1);

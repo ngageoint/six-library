@@ -20,13 +20,15 @@
  *
  */
 
-#ifndef __IO_READ_UTILS_H__
-#define __IO_READ_UTILS_H__
+#ifndef CODA_OSS_io_ReadUtils_h_INCLUDED_
+#define CODA_OSS_io_ReadUtils_h_INCLUDED_
 
 #include <string>
 #include <vector>
 
 #include <sys/Conf.h>
+#include <coda_oss/cstddef.h> // byte
+#include <sys/filesystem.h>
 
 namespace io
 {
@@ -40,6 +42,7 @@ namespace io
  */
 void readFileContents(const std::string& pathname,
                       std::vector<sys::byte>& buffer);
+void readFileContents(const sys::filesystem::path& pathname, std::vector<coda_oss::byte>& buffer);
 
 /*!
  * Reads the contents of a file into a string.  The file is assumed to be a
@@ -67,4 +70,4 @@ std::string readFileContents(const std::string& pathname)
 }
 }
 
-#endif
+#endif  // CODA_OSS_io_ReadUtils_h_INCLUDED_

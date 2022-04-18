@@ -33,6 +33,7 @@
 #include "sys/Conf.h"
 #include "str/Convert.h"
 #include "str/Manip.h"
+#include "gsl/gsl.h"
 
 #if CODA_OSS_POSIX_SOURCE
 #include <sys/time.h>
@@ -694,16 +695,7 @@ int64_t sys::DateTime::getEpochSeconds() noexcept
     // Although not defined, this is almost always an integral value holding the number of seconds (not counting leap seconds)
     // since 00:00, Jan 1 1970 UTC, corresponding to POSIX time.
     // https://en.cppreference.com/w/cpp/chrono/c/time
-    const time_t result = std::time(nullptr);
-    size_t sizeof_time_t = sizeof(time_t); // "conditional expression is constant"
-    if (sizeof_time_t == sizeof(int64_t))
-    {
-        return static_cast<int64_t>(result);
-    }
-    if (sizeof_time_t == sizeof(int32_t))
-    {
-        return static_cast<int32_t>(result);
-    }
-    static_assert(sizeof(time_t) >= sizeof(int32_t), "should have at least a 32-bit time_t");
-    return -1;
+    static_assert(sizeof(time_t) >= sizeof(int64_t), "should have at least a 64-bit time_t");
+    const auto result = std::time(nullptr);
+    return gsl::narrow<int64_t>(result);
 }

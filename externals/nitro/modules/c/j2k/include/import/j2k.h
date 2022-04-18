@@ -25,7 +25,7 @@
 
 #include "j2k/Container.h"
 #include "j2k/Defines.h"
-#include "j2k/Reader.h"
-#include "j2k/Writer.h"
+#include "j2k/j2k_Reader.h"
+#include "j2k/j2k_Writer.h"
 
 #endif
