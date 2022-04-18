@@ -27,7 +27,6 @@ namespace cphd
 {
 
 ParameterType::ParameterType() :
-    identifier(six::Init::undefined<std::string>()),
     freqCenter(six::Init::undefined<double>()),
     lfmRate(six::Init::undefined<double>())
 {

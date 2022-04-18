@@ -27,14 +27,7 @@ namespace six
 {
 CollectionInformation::CollectionInformation()
 {
-    collectorName = Init::undefined<std::string>();
-    collectType = Init::undefined<six::CollectType>();
-    illuminatorName = Init::undefined<std::string>();
-    coreName = Init::undefined<std::string>();
     radarMode = Init::undefined<RadarModeType>();
-    radarModeID = Init::undefined<std::string>();
-    releaseInfo = Init::undefined<std::string>();
-    mClassification = Init::undefined<std::string>();
 }
 
   bool CollectionInformation::operator==(const CollectionInformation& rhs) const

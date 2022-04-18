@@ -24,15 +24,11 @@
 namespace six
 {
 MatchCollect::MatchCollect() :
-    coreName(Init::undefined<std::string>()),
     matchIndex(Init::undefined<int>())
 {
 }
 
 MatchType::MatchType() :
-    collectorName(Init::undefined<std::string>()),
-    illuminatorName(Init::undefined<std::string>()),
-    typeID(Init::undefined<std::string>()),
     currentIndex(Init::undefined<int>()),
     matchCollects(1)
 {

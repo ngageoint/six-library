@@ -27,7 +27,6 @@ const char six::Radiometric::NL_ABSOLUTE[] = "ABSOLUTE";
 const char six::Radiometric::NL_RELATIVE[] = "RELATIVE";
 
 NoiseLevel::NoiseLevel() :
-    noiseType(Init::undefined<std::string>()),
     noisePoly(Init::undefined<Poly2D>())
 {
 }

@@ -886,7 +886,7 @@ XMLElem DerivedXMLParser::convertProductCreationToXML(
                  productCreationElem);
 
     // optional
-    if (productCreation->productType != Init::undefined<std::string>())
+    if (!productCreation->productType.empty())
     {
         createString("ProductType", productCreation->productType,
                      productCreationElem);
@@ -1026,8 +1026,7 @@ xml::lite::Element& DerivedXMLParser::convertMeasurementToXML(const DerivedXMLPa
     // NOTE: ReferencePoint is present in all of the ProjectionTypes
     //       so its added here for ease
     auto& referencePointElem = parser.newElement("ReferencePoint", projectionElem_);
-    if (measurement.projection->referencePoint.name
-            != Init::undefined<std::string>())
+    if (!measurement.projection->referencePoint.name.empty())
     {
         parser.setAttribute(&referencePointElem, "name",
                     measurement.projection->referencePoint.name);
