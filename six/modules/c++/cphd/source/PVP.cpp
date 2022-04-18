@@ -32,13 +32,11 @@ namespace cphd
 {
 PVPType::PVPType() :
     mSize(0),
-    mOffset(six::Init::undefined<size_t>()),
-    mFormat(six::Init::undefined<std::string>())
+    mOffset(six::Init::undefined<size_t>())
 {
 }
 
-APVPType::APVPType() :
-    mName(six::Init::undefined<std::string>())
+APVPType::APVPType()
 {
 }
 

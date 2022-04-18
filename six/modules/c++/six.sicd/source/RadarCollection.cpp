@@ -305,8 +305,7 @@ Segment::Segment() :
     startLine(Init::undefined<int>()),
     startSample(Init::undefined<int>()),
     endLine(Init::undefined<int>()),
-    endSample(Init::undefined<int>()),
-    identifier(Init::undefined<std::string>())
+    endSample(Init::undefined<int>())
 {
 }
 
