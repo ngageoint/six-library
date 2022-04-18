@@ -81,7 +81,7 @@ NITFPRIV(NITF_BOOL) MemorySource_offsetRead(
     {
         memcpy(dest + destOffset,
                src + memorySource->mark,
-               memorySource->numBytesPerPixel);
+               (size_t)memorySource->numBytesPerPixel);
 
         destOffset += memorySource->numBytesPerPixel;
 

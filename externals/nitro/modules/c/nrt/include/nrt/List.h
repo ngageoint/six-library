@@ -22,6 +22,9 @@
 
 #ifndef __NRT_LIST_H__
 #define __NRT_LIST_H__
+
+#include <stdint.h>
+
 /*!
  *  \file
  *  \brief Contains OO-like linked-list data structure for pairs
@@ -202,6 +205,7 @@ NRTAPI(nrt_ListIterator) nrt_List_begin(const nrt_List * chain);
  *  \return An iterator to the index of the chain, as specified by i
  */
 NRTAPI(nrt_ListIterator) nrt_List_at(const nrt_List * chain, int i);
+NRTAPI(nrt_ListIterator) nrt_List_atui(const nrt_List* chain, uint32_t i);
 
 /*!
  *  Check to see if two iterators point at the same thing
@@ -299,6 +303,7 @@ NRTAPI(uint16_t) nrt_List_size16(nrt_List* list);
  *  \return the data at the specified position
  */
 NRTAPI(NRT_DATA *) nrt_List_get(nrt_List * list, int index, nrt_Error * error);
+NRTAPI(NRT_DATA*) nrt_List_getui(nrt_List* list, uint32_t index, nrt_Error* error);
 
 /*!
  *  Increment the iterator.  Eventually, this will point at NULL.

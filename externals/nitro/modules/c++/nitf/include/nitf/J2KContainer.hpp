@@ -30,6 +30,7 @@
 #include "j2k/Container.h"
 #include "j2k/Writer.h"
 
+#include "nitf/exports.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
@@ -71,7 +72,7 @@ public:
     Container(j2k_Container*);
 };
 }
-struct Container final
+struct NITRO_NITFCPP_API Container final
 {
     Container(const Container&) = delete;
     Container& operator=(const Container&) = delete;
@@ -81,6 +82,7 @@ struct Container final
 
     //! Set native object
     Container(j2k_Container*&&);
+    j2k_Container* getNativeOrThrow() const;
 
     uint32_t getNumComponents() const;
     Component getComponent(uint32_t) const;
@@ -101,7 +103,8 @@ struct Container final
 
     Writer createWriter(const WriterOptions&) const;
 
-    // Not part of the C API
+    // Not part of the C API.  It might be easier to use WriteTiler than calling
+    // these individual methods.
     size_t tileSize() const; // getTileWidth() * getTileHeight()
     size_t numBytes(uint32_t) const;
     ptrdiff_t bufferOffset(uint32_t tileX, uint32_t tileY, uint32_t i) const;

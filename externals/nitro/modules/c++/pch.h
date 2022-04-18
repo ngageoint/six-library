@@ -20,6 +20,8 @@
 #pragma comment(lib, "except-c++")
 #pragma comment(lib, "sys-c++")
 #pragma comment(lib, "str-c++")
+#pragma comment(lib, "mt-c++")
+#pragma comment(lib, "math-c++")
 
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1

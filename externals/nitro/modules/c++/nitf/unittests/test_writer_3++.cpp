@@ -34,29 +34,27 @@
 static std::string testName;
 const std::string output_file = "test_writer_3++.nitf";
 
-namespace fs = std::filesystem;
+using path = std::filesystem::path;
 
 static std::string argv0;
-static fs::path findInputFile()
+static path findInputFile()
 {
-    const fs::path inputFile = fs::path("modules") / "c++" / "nitf" / "unittests" / "sicd_50x50.nitf";
+    const auto inputFile = path("modules") / "c++" / "nitf" / "unittests" / "sicd_50x50.nitf";
  
-    fs::path root;
+    path root;
     if (argv0.empty())
     {
         // running in Visual Studio
-        root = fs::current_path().parent_path().parent_path();
+        root = std::filesystem::current_path().parent_path().parent_path();
     }
     else
     {
-        root = absolute(fs::path(argv0)).parent_path().parent_path().parent_path().parent_path();
+        root = absolute(path(argv0)).parent_path().parent_path().parent_path().parent_path();
         root = root.parent_path().parent_path();
     }
 
     return root / inputFile;
 }
-
-static nitf::Record doRead(const std::string& inFile, nitf::Reader& reader);
 
 static std::string makeBandName(const std::string& rootFile, int imageNum, int bandNum)
 {
@@ -137,18 +135,18 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     TEST_ASSERT_EQ(2, static_cast<int>(nBands));
     TEST_ASSERT_EQ(0, static_cast<int>(xBands));
     TEST_ASSERT_EQ(static_cast<size_t>(50), nRows);
-    TEST_ASSERT_EQ(static_cast<size_t>(50), nColumns);
+    TEST_ASSERT_EQ(static_cast<uint32_t>(50), nColumns);
     TEST_ASSERT_EQ(nitf::PixelValueType::Floating , subheader.pixelValueType());
     TEST_ASSERT_EQ(static_cast<size_t>(32), subheader.numBitsPerPixel());
-    TEST_ASSERT_EQ("32", subheader.getActualBitsPerPixel().toString());
-    TEST_ASSERT_EQ("R", subheader.getPixelJustification().toString());
+    TEST_ASSERT_EQ_STR("32", subheader.getActualBitsPerPixel().toString());
+    TEST_ASSERT_EQ_STR("R", subheader.getPixelJustification().toString());
     TEST_ASSERT_EQ(nitf::BlockingMode::Pixel, subheader.imageBlockingMode());
     TEST_ASSERT_EQ(static_cast<size_t>(1), subheader.numBlocksPerRow());
     TEST_ASSERT_EQ(static_cast<size_t>(1), subheader.numBlocksPerCol());
     TEST_ASSERT_EQ(static_cast<size_t>(50), subheader.numPixelsPerHorizBlock());
     TEST_ASSERT_EQ(static_cast<size_t>(50), subheader.numPixelsPerVertBlock());
     TEST_ASSERT_EQ(nitf::ImageCompression::NC, subheader.imageCompression());
-    TEST_ASSERT_EQ("    ", subheader.getCompressionRate().toString());
+    TEST_ASSERT_EQ_STR("    ", subheader.getCompressionRate().toString());
 
     nitf::BufferList<std::byte> buffer(nBands);
     std::vector<uint32_t> bandList(nBands);
@@ -215,78 +213,68 @@ static nitf::Record doRead(const std::string& inFile, nitf::Reader& reader)
     return record;
 }
 
-namespace test_writer_3
+/*
+    * This test tests the round-trip process of taking an input NITF
+    * file and writing it to a new file. This includes writing the image
+    * segments (headers, extensions, and image data). This is an example
+    * of how users can write the image data to their NITF file
+    */
+static void test_writer_3__doWrite(nitf::Record record, nitf::Reader& reader, const std::string& inRootFile, const std::string& outFile)
 {
-    /*
-     * This test tests the round-trip process of taking an input NITF
-     * file and writing it to a new file. This includes writing the image
-     * segments (headers, extensions, and image data). This is an example
-     * of how users can write the image data to their NITF file
-     */
-    static void doWrite(nitf::Record record, nitf::Reader& reader, const std::string& inRootFile, const std::string& outFile)
-    {
-        nitf::Writer writer;
-        nitf::IOHandle output(outFile, NITF_ACCESS_WRITEONLY, NITF_CREATE);
-        writer.prepare(output, record);
+    nitf::Writer writer;
+    nitf::IOHandle output(outFile, NITF_ACCESS_WRITEONLY, NITF_CREATE);
+    writer.prepare(output, record);
 
-        ::doWrite(record, reader, inRootFile, writer);
+    doWrite(record, reader, inRootFile, writer);
 
-        output.close();
-    }
+    output.close();
 }
 TEST_CASE(test_writer_3_)
 {
-    ::testName = testName;
-
     const auto input_file = findInputFile().string();
 
     nitf::Reader reader;
     nitf::Record record = doRead(input_file, reader);
-    test_writer_3::doWrite(record, reader, input_file, output_file);
+    test_writer_3__doWrite(record, reader, input_file, output_file);
 }
 
-namespace test_buffered_write
+/*
+    * This test tests the round-trip process of taking an input NITF
+    * file and writing it to a new file. This includes writing the image
+    * segments (headers, extensions, and image data).
+    *
+    * This example differs from test_writer_3 in that it tests the
+    * BufferedWriter classes, and writes the entire file as a set of
+    * configurable sized blocks.  The last block may be smaller than the others
+    * if the data does not fill the block.
+    *
+    */
+static void test_buffered_write__doWrite(nitf::Record record, nitf::Reader& reader,
+    const std::string& inRootFile,
+    const std::string& outFile,
+    size_t bufferSize)
 {
-    /*
-     * This test tests the round-trip process of taking an input NITF
-     * file and writing it to a new file. This includes writing the image
-     * segments (headers, extensions, and image data).
-     *
-     * This example differs from test_writer_3 in that it tests the
-     * BufferedWriter classes, and writes the entire file as a set of
-     * configurable sized blocks.  The last block may be smaller than the others
-     * if the data does not fill the block.
-     *
-     */
-    void doWrite(nitf::Record record, nitf::Reader& reader,
-        const std::string& inRootFile,
-        const std::string& outFile,
-        size_t bufferSize)
-    {
-        nitf::BufferedWriter output(outFile, bufferSize);
-        nitf::Writer writer;
-        writer.prepareIO(output, record);
+    nitf::BufferedWriter output(outFile, bufferSize);
+    nitf::Writer writer;
+    writer.prepareIO(output, record);
 
-        ::doWrite(record, reader, inRootFile, writer);
+    doWrite(record, reader, inRootFile, writer);
 
-        const auto blocksWritten = output.getNumBlocksWritten();
-        const auto partialBlocksWritten = output.getNumPartialBlocksWritten();
-        output.close();
-        TEST_ASSERT_EQ(static_cast<uint64_t>(60), blocksWritten);
-        TEST_ASSERT_EQ(static_cast<uint64_t>(53), partialBlocksWritten);
-    }
+    const auto blocksWritten = output.getNumBlocksWritten();
+    const auto partialBlocksWritten = output.getNumPartialBlocksWritten();
+    output.close();
+    TEST_ASSERT_EQ(static_cast<uint64_t>(60), blocksWritten);
+    TEST_ASSERT_EQ(static_cast<uint64_t>(53), partialBlocksWritten);
 }
 TEST_CASE(test_buffered_write_)
 {
-    ::testName = testName;
-
     const auto input_file = findInputFile().string();
 
     size_t blockSize = 8192;
 
     nitf::Reader reader;
     nitf::Record record = doRead(input_file, reader);
-    test_buffered_write::doWrite(record, reader, input_file, output_file, blockSize);
+    test_buffered_write__doWrite(record, reader, input_file, output_file, blockSize);
 
 }
 

@@ -31,6 +31,10 @@ j2k::details::Container::Container(j2k_Container* x)
     getNativeOrThrow();
 }
 j2k::Container::Container(j2k_Container*&& x) : impl_(x) {}
+j2k_Container* j2k::Container::getNativeOrThrow() const
+{
+    return impl_.getNativeOrThrow();
+}
 
 j2k::Writer j2k::Container::createWriter(const WriterOptions& options) const
 {
@@ -65,7 +69,9 @@ NITF_j2k__Container_IMPL(int, getImageType);
 
 size_t j2k::Container::tileSize() const
 {
-    return getTileWidth() * getTileHeight();
+    size_t retval = getTileWidth(); // avoid CodeQL diagnostic
+    retval *= getTileHeight();
+    return retval;
 }
 
 size_t j2k::Container::numBytes(uint32_t i) const

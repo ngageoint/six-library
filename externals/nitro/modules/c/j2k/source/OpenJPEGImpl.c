@@ -26,6 +26,8 @@
 #include <assert.h>
 #include <string.h>
 
+#include "j2k/TileWriter.h"
+
 #ifdef _MSC_VER
 #pragma warning(disable: 4706) // assignment within conditional expression
 #endif // _MSC_VER
@@ -33,8 +35,8 @@
 #ifdef HAVE_OPENJPEG_H
 
 #include "j2k/Container.h"
-#include "j2k/Reader.h"
-#include "j2k/Writer.h"
+#include "j2k/j2k_Reader.h"
+#include "j2k/j2k_Writer.h"
 
 #include <openjpeg.h>
 
@@ -666,24 +668,32 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage_(OpenJPEGWriterImpl *impl,
     /* TODO allow overrides somehow? */
     opj_set_default_encoder_parameters(&encoderParams);
 
-    /* For now we are enforcing lossless compression.  If we have a better
-     * way to allow overrides in the future, uncomment out the tcp_rates logic
-     * below (tcp_rates[0] == 0 via opj_set_default_encoder_parameters()).
+    /* TODO:
      * Also consider setting encoderParams.irreversible = 1; to use the
      * lossy DWT 9-7 instead of the reversible 5-3.
      */
-
-    /*if (writerOps && writerOps->compressionRatio > 0.0001)
-        encoderParams.tcp_rates[0] = 1.0 / writerOps->compressionRatio;
+    if (writerOps && writerOps->compressionRatio <= 1.0) // Compression Ratio 1:1
+    {
+        encoderParams.tcp_rates[0] = 0.0; // lossless
+        /* TODO: These two lines should not be necessary when using lossless
+         *       encoding but appear to be needed (at least in OpenJPEG 2.0) -
+         *       otherwise we get a seg fault.
+         *       The sample opj_compress.c is doing the same thing with a comment
+         *       indicating that it's a bug. */
+        ++encoderParams.tcp_numlayers;
+        encoderParams.cp_disto_alloc = 1;
+    }
+    else if (writerOps && writerOps->compressionRatio)
+    {
+        // Compression ratio is writerOps->compressionRatio : 1
+        encoderParams.tcp_rates[0] = writerOps->compressionRatio;
+    }
     else
+    {
+        // High quality, but not lossless
         encoderParams.tcp_rates[0] = 4.0;
-    */
+    }
 
-    /* TODO: These two lines should not be necessary when using lossless
-     *       encoding but appear to be needed (at least in OpenJPEG 2.0) -
-     *       otherwise we get a seg fault.
-     *       The sample opj_compress.c is doing the same thing with a comment
-     *       indicating that it's a bug. */
     ++encoderParams.tcp_numlayers;
     encoderParams.cp_disto_alloc = 1;
 
@@ -1020,11 +1030,16 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, uint32_t x0, uint32_t y0,
 {
     OpenJPEGReaderImpl *impl = (OpenJPEGReaderImpl*) data;
 
-    opj_stream_t *stream = NULL;
-    opj_image_t *image = NULL;
-    opj_codec_t *codec = NULL;
+    opj_stream_t* stream = NULL;
+    opj_image_t* image = NULL;
+    opj_codec_t* codec = NULL;
     uint64_t offset = 0;
     uint32_t componentBytes, nComponents;
+    uint64_t bufSize = 0;
+    uint64_t tile_width = 0;
+    uint64_t tile_height = 0;
+    uint64_t x_tiles = 0;
+    uint64_t y_tiles = 0;
 
     if (!OpenJPEG_setup(impl, &stream, &codec, error))
     {
@@ -1055,11 +1070,11 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, uint32_t x0, uint32_t y0,
 
     // The buffer size must account for the remainder of the tile height and width
     // given that opj_decode_tile_data have a memory access violation otherwise
-    const uint64_t tile_width = j2k_Container_getWidth(impl->container, error);
-    const uint64_t tile_height = j2k_Container_getHeight(impl->container, error);
-    const uint64_t x_tiles = (x1 - x0) % tile_width + (x1 - x0);
-    const uint64_t y_tiles = (y1 - y0) % tile_height + (y1 - y0);
-    uint64_t bufSize = x_tiles * y_tiles * componentBytes * nComponents;
+    tile_width = j2k_Container_getWidth(impl->container, error);
+    tile_height = j2k_Container_getHeight(impl->container, error);
+    x_tiles = (x1 - x0) % tile_width + (x1 - x0);
+    y_tiles = (y1 - y0) % tile_height + (y1 - y0);
+    bufSize = x_tiles * y_tiles * componentBytes * nComponents;
 
     if (buf && !*buf)
     {
@@ -1495,4 +1510,310 @@ J2KAPI(j2k_Implementation) j2k_getImplementation(nrt_Error* error)
     }
     return j2k_Implementation_OpenJPEG;
 }
+
+J2KAPI(j2k_stream_t*) j2k_stream_create(size_t chunkSize, J2K_BOOL isInputStream)
+{
+    j2k_stream_t* retval = (j2k_stream_t*)J2K_MALLOC(sizeof(j2k_stream_t));
+    if (retval != NULL)
+    {
+        retval->opj_stream = opj_stream_create(chunkSize, isInputStream);
+        if (retval->opj_stream == NULL)
+        {
+            J2K_FREE(retval);
+            retval = NULL;
+        }
+    }
+    return retval;
+}
+
+J2KAPI(void) j2k_stream_destroy(j2k_stream_t* pStream)
+{
+    if (pStream != NULL)
+    {
+        opj_stream_destroy((opj_stream_t*)pStream->opj_stream);
+        J2K_FREE(pStream);
+    }
+}
+
+J2KAPI(j2k_image_t*) j2k_image_tile_create(uint32_t numcmpts, const j2k_image_comptparm* cmptparms, J2K_COLOR_SPACE clrspc)
+{
+    if (cmptparms == NULL)
+    {
+        return NULL;
+    }
+
+    j2k_image_t* retval = (j2k_image_t*)J2K_MALLOC(sizeof(j2k_image_t));
+    if (retval != NULL)
+    {
+        opj_image_cmptparm_t cmptparms_;
+        cmptparms_.dx = cmptparms->dx;
+        cmptparms_.dy = cmptparms->dy;
+        cmptparms_.w = cmptparms->w;
+        cmptparms_.h = cmptparms->h;
+        cmptparms_.x0 = cmptparms->x0;
+        cmptparms_.y0 = cmptparms->y0;
+        cmptparms_.prec = cmptparms->prec;
+        cmptparms_.bpp = cmptparms->bpp;
+        cmptparms_.sgnd = cmptparms->sgnd;
+
+        retval->opj_image = opj_image_tile_create(numcmpts, &cmptparms_, (OPJ_COLOR_SPACE)clrspc);
+        if (retval->opj_image == NULL)
+        {
+            J2K_FREE(retval);
+            retval = NULL;
+        }
+    }
+    return retval;
+}
+
+J2KAPI(J2K_BOOL) j2k_image_init(j2k_image_t* pImage, int x0, int y0, int x1, int y1, int numcmpts, J2K_COLOR_SPACE color_space)
+{
+    if (pImage == NULL)
+    {
+        return J2K_FALSE;
+    }
+    opj_image_t* pImage_ = (opj_image_t*)pImage->opj_image;
+    if (pImage_ == NULL)
+    {
+        return J2K_FALSE;
+    }
+
+    // One image component corresponding to the full grayscale image
+    pImage_->numcomps = numcmpts;
+
+    pImage_->x0 = x0;
+    pImage_->y0 = y0;
+    pImage_->x1 = x1;
+    pImage_->y1 = y1;
+    pImage_->color_space = (OPJ_COLOR_SPACE)color_space;
+
+    return J2K_TRUE;
+}
+
+J2KAPI(void) j2k_image_destroy(j2k_image_t* pImage)
+{
+    if (pImage != NULL)
+    {
+        opj_image_destroy((opj_image_t*)pImage->opj_image);
+        J2K_FREE(pImage);
+    }
+}
+
+J2KAPI(j2k_codec_t*) j2k_create_compress(void)
+{
+    j2k_codec_t* retval = (j2k_codec_t*)J2K_MALLOC(sizeof(j2k_codec_t));
+    if (retval != NULL)
+    {
+        retval->opj_codec = opj_create_compress(OPJ_CODEC_J2K);
+        if (retval->opj_codec == NULL)
+        {
+            J2K_FREE(retval);
+            retval = NULL;
+        }
+    }
+    return retval;
+}
+
+J2KAPI(void) j2k_destroy_codec(j2k_codec_t* pEncoder)
+{
+    if (pEncoder != NULL)
+    {
+        opj_destroy_codec((opj_codec_t*)pEncoder->opj_codec);
+        J2K_FREE(pEncoder);
+    }
+}
+
+J2KAPI(j2k_cparameters_t*) j2k_set_default_encoder_parameters(void)
+{
+    j2k_cparameters_t* retval = (j2k_cparameters_t*)J2K_MALLOC(sizeof(j2k_cparameters_t));
+    if (retval != NULL)
+    {
+
+        //! The openjpeg codec parameters used to store the tiling and compression
+        //! configuration.
+        retval->opj_cparameters = J2K_MALLOC(sizeof(opj_cparameters_t));
+        if (retval->opj_cparameters == NULL)
+        {
+            J2K_FREE(retval);
+            retval = NULL;
+        }
+        else
+        {
+            opj_set_default_encoder_parameters((opj_cparameters_t*)retval->opj_cparameters);
+        }
+    }
+    return retval;
+}
+J2KAPI(void) j2k_destroy_encoder_parameters(j2k_cparameters_t* pParameters)
+{
+    if (pParameters != NULL)
+    {
+        J2K_FREE((opj_cparameters_t*)pParameters->opj_cparameters);
+        J2K_FREE(pParameters);
+    }
+}
+
+J2KAPI(NRT_BOOL) j2k_initEncoderParameters(j2k_cparameters_t* pParameters,
+    size_t tileRow, size_t tileCol, double compressionRatio, size_t numResolutions)
+{
+    if (pParameters == NULL)
+    {
+        return NRT_FALSE;
+    }
+    opj_cparameters_t* opj_cparameters = (opj_cparameters_t*)pParameters->opj_cparameters;
+    if (opj_cparameters == NULL)
+    {
+        return NRT_FALSE;
+    }
+
+    // 0: J2K, 1: JP2, 2: JPT
+    opj_cparameters->cod_format = 0;
+
+    // Turn on tiling
+    opj_cparameters->tile_size_on = 1;
+
+    // Set the tile dimensions
+    opj_cparameters->cp_tx0 = 0;
+    opj_cparameters->cp_tdx = (int)tileCol;
+    opj_cparameters->cp_tdy = (int)tileRow;
+
+    // Initialize number of resolutions
+    if (numResolutions > 0)
+    {
+        opj_cparameters->numresolution = (int)numResolutions;
+    }
+    else
+    {
+        // OpenJPEG defaults this to 6, but that causes the compressor
+        // to fail if the tile sizes are less than 2^6.  So we adjust this
+        // down if necessary.
+        const double logTwo = log(2);
+        const size_t minX = (size_t) (floor(log((double)tileCol) / logTwo));
+        const size_t minY = (size_t) (floor(log((double)tileRow) / logTwo));
+
+        const size_t minXY = (minX < minY) ? minX : minY;
+        if (minXY < (size_t)(opj_cparameters->numresolution))
+        {
+            opj_cparameters->numresolution = (int)minXY;
+        }
+    }
+
+    if (compressionRatio > 0)
+    {
+        opj_cparameters->tcp_rates[0] = (float)compressionRatio;
+    }
+    else
+    {
+        // Lossless compression
+        opj_cparameters->tcp_rates[0] = 1;
+    }
+
+    opj_cparameters->tcp_numlayers++;
+    opj_cparameters->cp_disto_alloc = 1;
+
+    return NRT_TRUE;
+}
+
+J2KAPI(NRT_BOOL) j2k_set_error_handler(j2k_codec_t* p_codec, j2k_msg_callback p_callback, void* p_user_data)
+{
+    if (p_codec == NULL)
+    {
+        return NRT_FALSE;
+    }
+
+    const int result = opj_set_error_handler((opj_codec_t*)p_codec->opj_codec, (opj_msg_callback)p_callback, p_user_data);
+    return result ? NRT_TRUE : NRT_FALSE;
+}
+
+J2KAPI(NRT_BOOL) j2k_setup_encoder(j2k_codec_t* p_codec, const j2k_cparameters_t* parameters, j2k_image_t* image)
+{
+    if ((p_codec == NULL) || (parameters == NULL) || (image == NULL))
+    {
+        return NRT_FALSE;
+    }
+
+    const int result = opj_setup_encoder((opj_codec_t*)p_codec->opj_codec,
+        (opj_cparameters_t*)parameters->opj_cparameters,
+        (opj_image_t*)image->opj_image);
+    return result ? NRT_TRUE : NRT_FALSE;
+}
+
+J2KAPI(void) j2k_stream_set_write_function(j2k_stream_t* p_stream, j2k_stream_write_fn p_function)
+{
+    if (p_stream != NULL)
+    {
+        opj_stream_set_write_function((opj_stream_t*)p_stream->opj_stream, p_function);
+    }
+}
+
+J2KAPI(void) j2k_stream_set_skip_function(j2k_stream_t* p_stream, j2k_stream_skip_fn p_function)
+{
+    if (p_stream != NULL)
+    {
+        opj_stream_set_skip_function((opj_stream_t*)p_stream->opj_stream, p_function);
+    }
+}
+
+J2KAPI(void) j2k_stream_set_seek_function(j2k_stream_t* p_stream, j2k_stream_seek_fn p_function)
+{
+    if (p_stream != NULL)
+    {
+        opj_stream_set_seek_function((opj_stream_t*)p_stream->opj_stream, (opj_stream_seek_fn)p_function);
+    }
+}
+
+J2KAPI(void) j2k_stream_set_user_data(j2k_stream_t* p_stream, void* p_data, j2k_stream_free_user_data_fn p_function)
+{
+    if (p_stream != NULL)
+    {
+        opj_stream_set_user_data((opj_stream_t*)p_stream->opj_stream, p_data, (opj_stream_free_user_data_fn)p_function);
+    }
+}
+
+J2KAPI(NRT_BOOL) j2k_flush(j2k_codec_t* p_codec, j2k_stream_t* p_stream)
+{
+    if ((p_codec == NULL) || (p_stream == NULL))
+    {
+        return NRT_FALSE;
+    }
+
+    const OPJ_BOOL result = opj_flush((opj_codec_t*)p_codec->opj_codec, (opj_stream_t*)p_stream->opj_stream);
+    return result ? NRT_TRUE : NRT_FALSE;
+}
+
+J2KAPI(NRT_BOOL) j2k_start_compress(j2k_codec_t* p_codec, j2k_image_t* p_image, j2k_stream_t* p_stream)
+{
+    if ((p_codec == NULL) || (p_image == NULL) || (p_stream == NULL))
+    {
+        return NRT_FALSE;
+    }
+
+    const OPJ_BOOL result = opj_start_compress((opj_codec_t*)p_codec->opj_codec, (opj_image_t*)p_image->opj_image, (opj_stream_t*)p_stream->opj_stream);
+    return result ? NRT_TRUE : NRT_FALSE;
+}
+
+J2KAPI(NRT_BOOL) j2k_end_compress(j2k_codec_t* p_codec, j2k_stream_t* p_stream)
+{
+    if ((p_codec == NULL) || (p_stream == NULL))
+    {
+        return NRT_FALSE;
+    }
+
+    const OPJ_BOOL result = opj_end_compress((opj_codec_t*)p_codec->opj_codec, (opj_stream_t*)p_stream->opj_stream);
+    return result ? NRT_TRUE : NRT_FALSE;
+}
+
+J2KAPI(NRT_BOOL) j2k_write_tile(j2k_codec_t* p_codec, uint32_t p_tile_index, const uint8_t* p_data, uint32_t p_data_size, j2k_stream_t* p_stream)
+{
+    if ((p_codec == NULL) || (p_stream == NULL))
+    {
+        return NRT_FALSE;
+    }
+
+    const OPJ_BOOL result = opj_write_tile((opj_codec_t*)p_codec->opj_codec,
+        p_tile_index, (OPJ_BYTE*)p_data, p_data_size,
+        (opj_stream_t*)p_stream->opj_stream);
+    return result ? NRT_TRUE : NRT_FALSE;
+}
+
 #endif

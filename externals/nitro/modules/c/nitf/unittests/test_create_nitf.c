@@ -32,7 +32,7 @@
 
 #include "nitro_image_.c_"
 
-static const char* RGB[] = {"R", "G", "B"};
+const char* RGB[3] = {"R", "G", "B"};
 
 
 
@@ -275,7 +275,7 @@ TEST_CASE_ARGS(testCreate)
     const char* outname = argc > 1 ? argv[1] : "test_create.ntf";
 
     record = nitf_Record_construct(NITF_VER_21, &error);
-    TEST_ASSERT(record);
+    TEST_ASSERT(record != NULL);
     TEST_ASSERT(populateFileHeader(record, outname, &error));
     TEST_ASSERT(addImageSegment(record, &error));
     TEST_ASSERT(writeNITF(record, outname, &error));
@@ -292,9 +292,9 @@ TEST_CASE_ARGS(testRead)
 
     io = nitf_IOHandle_create(outname, NITF_ACCESS_READONLY, NITF_OPEN_EXISTING, &error);
     reader = nitf_Reader_construct(&error);
-    TEST_ASSERT(reader);
+    TEST_ASSERT(reader != NULL);
     record = nitf_Reader_read(reader, io, &error);
-    TEST_ASSERT(record);
+    TEST_ASSERT(record != NULL);
     nitf_Reader_destruct(&reader);
     nitf_Record_destruct(&record);
 }

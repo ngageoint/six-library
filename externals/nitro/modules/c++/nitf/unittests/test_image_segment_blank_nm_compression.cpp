@@ -18,9 +18,9 @@
 
 #include "TestCase.h"
 
-const int64_t BLOCK_LENGTH = 256;
-const int64_t ILOC_MAX = 99999;
-std::string generateILOC(const types::RowCol<int64_t>& offset)
+static constexpr int64_t BLOCK_LENGTH = 256;
+static constexpr int64_t ILOC_MAX = 99999;
+static std::string generateILOC(const types::RowCol<int64_t>& offset)
 {
    std::ostringstream oss;
 
@@ -266,7 +266,7 @@ TEST_CASE(testBlankSegmentsValid)
 
             if (imgCtr == static_cast<int>(testIdx))
             {
-               TEST_ASSERT_EQ(nBlocksPresent, 0);
+               TEST_ASSERT_EQ(nBlocksPresent, static_cast<int64_t>(0));
             }
             else
             {

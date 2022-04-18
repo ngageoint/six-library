@@ -42,14 +42,28 @@ NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
         }
     }
 
+    const DWORD dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
     handle =
-        CreateFile(fname, access, FILE_SHARE_READ, NULL, creation,
-                   FILE_ATTRIBUTE_NORMAL, NULL);
+        CreateFile(fname, access, dwShareMode, NULL /*lpSecurityAttributes*/, creation,
+                   FILE_ATTRIBUTE_NORMAL, NULL /*hTemplateFile*/);
 
     if (handle == INVALID_HANDLE_VALUE)
     {
-        nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
-                       NRT_ERR_OPENING_FILE);
+        const DWORD dwLastError = GetLastError();
+        LPTSTR  lpBuffer;
+        const DWORD result = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER,
+            0 /*lpSource*/, dwLastError, LANG_USER_DEFAULT, (LPTSTR)&lpBuffer, 0 /*nSize*/, NULL /*Arguments*/);
+        if (result == 0)
+        {
+            // FormatMessage() failed
+            nrt_Error_init(error, NRT_STRERROR(dwLastError), NRT_CTXT,
+                NRT_ERR_OPENING_FILE);
+        }
+        else
+        {
+            nrt_Error_init(error, lpBuffer, NRT_CTXT, NRT_ERR_OPENING_FILE);
+            LocalFree(lpBuffer);
+        }
     }
     return handle;
 }
