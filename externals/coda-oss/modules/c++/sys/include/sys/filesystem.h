@@ -57,6 +57,7 @@ namespace coda_oss
 		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::is_regular_file;
 		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::is_directory;
 		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::exists;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::file_size;
 	}
 }
 
