@@ -333,6 +333,7 @@ typedef nrt_List                        nitf_List;
 #define nitf_List_destruct              nrt_List_destruct
 #define nitf_List_begin                 nrt_List_begin
 #define nitf_List_at                    nrt_List_at
+#define nitf_List_atui                    nrt_List_atui
 #define nitf_ListIterator_equals        nrt_ListIterator_equals
 #define nitf_ListIterator_notEqualTo    nrt_ListIterator_notEqualTo
 #define nitf_List_end                   nrt_List_end
@@ -342,6 +343,7 @@ typedef nrt_List                        nitf_List;
 #define nitf_List_size                  nrt_List_size
 #define nitf_List_size16                  nrt_List_size16
 #define nitf_List_get                   nrt_List_get
+#define nitf_List_getui                   nrt_List_getui
 #define nitf_ListIterator_increment     nrt_ListIterator_increment
 #define nitf_ListIterator_get           nrt_ListIterator_get
 

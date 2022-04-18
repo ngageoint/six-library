@@ -32,6 +32,7 @@
 #include "j2k/j2k_Reader.h"
 
 #include "nitf/coda-oss.hpp"
+#include "nitf/exports.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
@@ -80,7 +81,7 @@ public:
     Reader(const std::filesystem::path&);
 };
 }
-struct Reader final
+struct NITRO_NITFCPP_API Reader final
 {
     Reader() = delete;
     Reader(const Reader&) = delete;

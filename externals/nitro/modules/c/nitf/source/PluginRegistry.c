@@ -374,22 +374,21 @@ NITFPRIV(void) implicitDestruct(nitf_PluginRegistry** reg)
 NITFPRIV(const char**)
 doInit(nitf_DLL* dll, const char* prefix, nitf_Error* error)
 {
-    NITF_PLUGIN_INIT_FUNCTION init;
     const char** ident;
 
 #define NITF_MAX_PATH_NAME_SIZE_ NITF_MAX_PATH+4096
     char name[NITF_MAX_PATH_NAME_SIZE_];
     memset(name, 0, NITF_MAX_PATH_NAME_SIZE_);
     NITF_SNPRINTF(name, NITF_MAX_PATH_NAME_SIZE_, "%s" NITF_PLUGIN_INIT_SUFFIX, prefix);
-    init = (NITF_PLUGIN_INIT_FUNCTION)nitf_DLL_retrieve(dll, name, error);
-    if (!init)
+    NRT_DLL_FUNCTION_PTR init_ =  nitf_DLL_retrieve(dll, name, error);
+    if (!init_)
     {
         nitf_Error_print(error, stdout, "Invalid init hook in DSO");
         return NULL;
     }
 
     /*  Else, call it  */
-
+    NITF_PLUGIN_INIT_FUNCTION init = (NITF_PLUGIN_INIT_FUNCTION)init_;
     ident = (*init)(error);
     if (!ident)
     {
@@ -409,16 +408,14 @@ doInit(nitf_DLL* dll, const char* prefix, nitf_Error* error)
  */
 NITFPRIV(int) doCleanup(nitf_DLL* dll, nitf_Error* error)
 {
-    NITF_PLUGIN_CLEANUP_FUNCTION cleanup;
     const char* cleanupName = NITF_PLUGIN_CLEANUP;
-
-    cleanup = (NITF_PLUGIN_CLEANUP_FUNCTION)nitf_DLL_retrieve(dll,
-                                                              cleanupName,
-                                                              error);
-    if (!cleanup)
+    NRT_DLL_FUNCTION_PTR cleanup_ = nitf_DLL_retrieve(dll, cleanupName, error);
+    if (!cleanup_)
     {
         return 0;
     }
+
+    NITF_PLUGIN_CLEANUP_FUNCTION cleanup = (NITF_PLUGIN_CLEANUP_FUNCTION)cleanup_;
     /*  Else, call it  */
     cleanup();
 
@@ -532,7 +529,7 @@ nitf_PluginRegistry_registerCompressionHandler(
 
     const char** ident;
     int i = 1;
-    int ok = 1;
+    NITF_BOOL ok = NRT_TRUE;
     if (!reg)
     {
         return NITF_FAILURE;
@@ -578,7 +575,7 @@ nitf_PluginRegistry_registerDecompressionHandler(
 
     const char** ident;
     int i = 1;
-    int ok = 1;
+    NITF_BOOL ok = NRT_TRUE;
     if (!reg)
     {
         return NITF_FAILURE;
@@ -623,7 +620,7 @@ nitf_PluginRegistry_registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
 
     const char** ident;
     int i = 1;
-    int ok = 1;
+    NITF_BOOL ok = NRT_TRUE;
     if (!reg)
     {
         return NITF_FAILURE;

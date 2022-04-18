@@ -23,7 +23,7 @@
 #include <import/nrt.h>
 #include "Test.h"
 
-char *C(const char *p)
+static char *C(const char *p)
 {
     const size_t p_sz = strlen(p) + 1;
     void* x_ = malloc(p_sz);
@@ -58,10 +58,10 @@ void makeTree(nrt_Tree * t, const char* testName_)
     nrt_Error e;
     nrt_TreeNode *an, *ancho, *abso;
     t->root = nrt_TreeNode_construct(C("a"), &e);
-    TEST_ASSERT(t->root);
+    TEST_ASSERT(t->root != NULL);
 
     an = nrt_TreeNode_construct(C("an"), &e);
-    TEST_ASSERT(an);
+    TEST_ASSERT(an != NULL);
 
     nrt_TreeNode_addChild(t->root, an, &e);
 
@@ -75,7 +75,7 @@ void makeTree(nrt_Tree * t, const char* testName_)
     nrt_TreeNode_addChild(ancho, nrt_TreeNode_construct(C("anchor"), &e), &e);
 
     abso = nrt_TreeNode_construct(C("absolut"), &e);
-    TEST_ASSERT(abso);
+    TEST_ASSERT(abso != NULL);
 
     nrt_TreeNode_addChild(t->root, abso, &e);
 
@@ -107,7 +107,7 @@ TEST_CASE(testTree)
     /* Create a tree - root can be passed during or after */
     nrt_Tree *t = nrt_Tree_construct(NULL, &e);
     nrt_Tree *tc = NULL;
-    TEST_ASSERT(t);
+    TEST_ASSERT(t != NULL);
 
     makeTree(t, testName);
     printf("Pre-order traversal:\n");
@@ -117,7 +117,7 @@ TEST_CASE(testTree)
     printf("\n\n");
 
     tc = nrt_Tree_clone(t, (NRT_DATA_ITEM_CLONE) & C, &e);
-    TEST_ASSERT(tc);
+    TEST_ASSERT(tc != NULL);
 
     printf("Post-order traversal (cloned):\n");
     printf("=======================================================\n");

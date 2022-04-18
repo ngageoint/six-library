@@ -76,6 +76,10 @@ struct NITRO_NITFCPP_API CompressedByteProvider : public ByteProvider
                     std::vector<PtrAndLength>(),
             size_t numRowsPerBlock = 0,
             size_t numColsPerBlock = 0);
+    CompressedByteProvider(Record& record,
+        const std::vector<std::vector<size_t> >& bytesPerBlock,
+        const std::vector<PtrAndLength_t>& desData,
+        size_t numRowsPerBlock = 0, size_t numColsPerBlock = 0);
 
     /*!
      * Given a range of rows from [startRow, startRow + numRows), provide the
@@ -163,6 +167,10 @@ protected:
                     std::vector<PtrAndLength>(),
             size_t numRowsPerBlock = 0,
             size_t numColsPerBlock = 0);
+    void initialize(const Record & record,
+        const std::vector<std::vector<size_t> >&bytesPerBlock,
+        const std::vector<PtrAndLength_t>&desData,
+        size_t numRowsPerBlock = 0, size_t numColsPerBlock = 0);
 
     size_t countBytesForCompressedImageData(
             size_t seg, size_t startRow, size_t numRowsToWrite) const;
@@ -187,6 +195,11 @@ private:
             size_t numRowsToWrite) const;
 
 private:
+    template<typename TPtrAndLength>
+    void initialize_(const Record & record,
+        const std::vector<std::vector<size_t> >&bytesPerBlock,
+        const std::vector<TPtrAndLength>&desData,
+        size_t numRowsPerBlock = 0, size_t numColsPerBlock = 0);
     std::vector<std::vector<size_t> > mBytesInEachBlock;
 };
 }

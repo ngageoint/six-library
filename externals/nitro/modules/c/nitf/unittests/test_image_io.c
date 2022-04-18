@@ -158,7 +158,7 @@ void freeTestState(TestState* state)
     free(state);
 }
 
-void freeBands(uint8_t** bands, size_t numBands)
+static void freeBands(uint8_t** bands, size_t numBands)
 {
     size_t bandIndex;
     for (bandIndex = 0; bandIndex < numBands; ++bandIndex)

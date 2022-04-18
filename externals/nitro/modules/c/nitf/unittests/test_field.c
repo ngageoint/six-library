@@ -39,10 +39,10 @@ TEST_CASE( testField)
     hl = nitf_Field_construct(NITF_HL_SZ, NITF_BCS_N, &error);
     realField = nitf_Field_construct(NITF_HL_SZ, NITF_BCS_N, &error);
 
-    TEST_ASSERT(fhdr);
-    TEST_ASSERT(ubin);
-    TEST_ASSERT(hl);
-    TEST_ASSERT(realField);
+    TEST_ASSERT(fhdr != NULL);
+    TEST_ASSERT(ubin != NULL);
+    TEST_ASSERT(hl != NULL);
+    TEST_ASSERT(realField != NULL);
 
     printf("%d\n", int32);
     nitf_Field_setRawData(fhdr, "NIT", 3, &error);
@@ -110,7 +110,7 @@ TEST_CASE(setReal)
         or exponent
      */
     nitf_Field* field = nitf_Field_construct(length, NITF_BCS_A, error);
-    TEST_ASSERT(field);
+    TEST_ASSERT(field != NULL);
 
     #define BUF_SIZE 256
     char buffer[BUF_SIZE];
@@ -149,7 +149,7 @@ TEST_CASE(setReal)
 
 
     field = nitf_Field_construct(8, NITF_BCS_A, error);
-    TEST_ASSERT(field);
+    TEST_ASSERT(field != NULL);
     ret = nitf_Field_setReal(field, "f", 1, 12.3456, error);
     TEST_ASSERT(ret);
     nitf_Field_snprint(buffer, BUF_SIZE, field);

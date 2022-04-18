@@ -987,6 +987,7 @@ NITFPROT(NITF_BOOL) nitf_Writer_writeHeader(nitf_Writer* writer,
     uint32_t udhdl, udhofl, xhdl, xhdlofl;
     nitf_Version fver;
     char buf[256];              /* temp buf */
+    nitf_Off hdrLen_ = 0;
 
     fver = nitf_Record_getVersion(writer->record);
 
@@ -1111,7 +1112,7 @@ NITFPROT(NITF_BOOL) nitf_Writer_writeHeader(nitf_Writer* writer,
                           buf, NITF_XHDLOFL_SZ, error);
 
     /*   Get the header length */
-    const nitf_Off hdrLen_ = nitf_IOInterface_tell(writer->output, error);
+    hdrLen_ = nitf_IOInterface_tell(writer->output, error);
     if (!NITF_IO_SUCCESS(hdrLen_))
         goto CATCH_ERROR;
     *hdrLen = (uint32_t)hdrLen_;

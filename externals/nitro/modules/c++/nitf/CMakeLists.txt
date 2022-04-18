@@ -1,5 +1,5 @@
 set(MODULE_NAME nitf)
-set(MODULE_DEPS nitf-c j2k-c except-c++ io-c++ mt-c++ sys-c++ str-c++ gsl-c++ std-c++)
+set(MODULE_DEPS nitf-c j2k-c except-c++ sio.lite-c++ io-c++ mt-c++ sys-c++ str-c++ gsl-c++ std-c++)
 if (MSVC)
     list(APPEND MODULE_DEPS wsock32 ws2_32)
 endif()
@@ -47,8 +47,13 @@ coda_add_module(
         source/ImageSubheader.cpp
         source/ImageWriter.cpp
         source/J2KComponent.cpp
+        source/J2KCompressionParameters.cpp
+        source/J2KCompressor.cpp
         source/J2KContainer.cpp
+        source/J2KEncoder.cpp
+        source/J2KImage.cpp
         source/J2KReader.cpp
+        source/J2KStream.cpp
         source/J2KWriter.cpp
         source/LabelSegment.cpp
         source/LabelSubheader.cpp
@@ -69,6 +74,7 @@ coda_add_module(
         source/TestingTest.cpp
         source/TextSegment.cpp
         source/TextSubheader.cpp
+        source/UnitTests.cpp
         source/Utils.cpp
         source/WriteHandler.cpp
         source/Writer.cpp
@@ -97,10 +103,15 @@ coda_add_tests(
         test_image_blocker.cpp
         test_image_segment_blank_nm_compression.cpp
         test_image_segment_computer.cpp
+        test_image_writer.cpp
         test_nitf_buffer_list.cpp
         test_tre_mods++.cpp
         test_tre_create++.cpp
-        test_j2k_read_tile.cpp)
+        test_j2k_loading++.cpp
+        test_j2k_read_tile.cpp
+        test_j2k_compress_tile.cpp
+        test_j2k_compressed_byte_provider.cpp
+        test_tre_read.cpp)
 
 add_executable(show_nitf++ apps/show_nitf++.cpp)
 target_link_libraries(show_nitf++ PRIVATE nitf-c++)
