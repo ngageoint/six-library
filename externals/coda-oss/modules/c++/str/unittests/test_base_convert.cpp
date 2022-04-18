@@ -381,6 +381,14 @@ TEST_CASE(test_EncodedStringView)
     }
 }
 
+TEST_CASE(test_EncodedString)
+{
+    str::EncodedString es;
+    TEST_ASSERT_TRUE(es.native().empty());
+    es = str::EncodedString("abc");
+    TEST_ASSERT_EQ(es.native(), "abc");
+}
+
 int main(int, char**)
 {
     TEST_CHECK(testConvert);
@@ -395,4 +403,5 @@ int main(int, char**)
     TEST_CHECK(test_u8string_to_u16string);
     TEST_CHECK(test_u8string_to_u32string);
     TEST_CHECK(test_EncodedStringView);
+    TEST_CHECK(test_EncodedString);
 }
