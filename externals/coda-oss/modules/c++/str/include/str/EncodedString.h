@@ -56,6 +56,8 @@ class EncodedString final
         return s_;
     }
 
+    // No "public" operator=() for these; this class is mostly for storage and/or conversion,
+    // not extensive manipulation.  Create a new instance and assign/move that.
     void assign(coda_oss::u8string::const_pointer);
     void assign(str::W1252string::const_pointer);
     void assign(std::string::const_pointer);
