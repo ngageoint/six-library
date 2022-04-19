@@ -31,6 +31,7 @@
 
 #include <string>
 #include <ostream>
+#include <cstdint>
 
 #include "sys/CPlusPlus.h"
 #include "coda_oss/namespace_.h" // get something in the "coda_oss" namespace
@@ -132,6 +133,8 @@ path temp_directory_path();  // https://en.cppreference.com/w/cpp/filesystem/tem
 bool is_regular_file(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/is_regular_file
 bool is_directory(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/is_directory
 bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exists
+std::uintmax_t file_size(const path& p); // https://en.cppreference.com/w/cpp/filesystem/file_size
+
 }
 }
 

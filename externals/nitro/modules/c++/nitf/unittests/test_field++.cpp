@@ -25,8 +25,6 @@
 #include <nitf/FieldDescriptor.hpp>
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testCastOperator)
 {
     nitf::Field field(20, nitf::Field::BCS_A);
@@ -34,11 +32,11 @@ TEST_CASE(testCastOperator)
     // Test unsigned values
     field.set(123);
     const uint8_t valUint8 = field;
-    TEST_ASSERT_EQ(valUint8, 123);
+    TEST_ASSERT_EQ(valUint8, static_cast<uint8_t>(123));
 
     field.set(12345);
     const uint16_t valUint16 = field;
-    TEST_ASSERT_EQ(valUint16, 12345);
+    TEST_ASSERT_EQ(valUint16, static_cast<uint16_t>(12345));
 
     field.set(1234567890);
     const uint32_t valUint32 = field;
@@ -60,11 +58,11 @@ TEST_CASE(testCastOperator)
     // Test signed values
     field.set(-123);
     const int8_t valInt8 = field;
-    TEST_ASSERT_EQ(valInt8, -123);
+    TEST_ASSERT_EQ(valInt8, gsl::narrow<int8_t>(-123));
 
     field.set(-12345);
     const int16_t valInt16 = field;
-    TEST_ASSERT_EQ(valInt16, -12345);
+    TEST_ASSERT_EQ(valInt16, gsl::narrow<int16_t>(-12345));
 
     field.set(-1234567890);
     const int32_t valInt32 = field;
@@ -96,7 +94,7 @@ TEST_CASE(testCastOperator)
     // Test arbitrary string
     field.set("ABCxyz");
     const std::string valStr = field;
-    TEST_ASSERT_EQ(valStr, "ABCxyz              ");
+    TEST_ASSERT_EQ(valStr, std::string("ABCxyz              "));
 }
 TEST_CASE(testDescriptors)
 {
@@ -104,15 +102,14 @@ TEST_CASE(testDescriptors)
     test1a.setF1("1234");
 
     const auto descriptors = test1a.getDescriptors();
-    TEST_ASSERT_EQ(1, descriptors.size());
+    TEST_ASSERT_EQ(gsl::narrow<size_t>(1), descriptors.size());
     for (const auto& descriptor : descriptors)
     {
-        TEST_ASSERT_EQ("f1", descriptor.name());
+        TEST_ASSERT_EQ(std::string("f1"), descriptor.name());
         const auto field = descriptor.getField(test1a);
         const std::string value = field; // nitf::Field will implicitly cast
-        TEST_ASSERT_EQ("1234", value);
+        TEST_ASSERT_EQ(std::string("1234"), value);
     }
-}
 }
 
 TEST_MAIN(

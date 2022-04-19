@@ -20,6 +20,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+ #ifndef NITRO_nitf_unittests_nitro_image__c__INCLUDED_
+ #define NITRO_nitf_unittests_nitro_image__c__INCLUDED_
+ #pragma once
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -973,3 +976,5 @@ static const struct {
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
+
+#endif // NITRO_nitf_unittests_nitro_image__c__INCLUDED_

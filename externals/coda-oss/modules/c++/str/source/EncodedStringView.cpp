@@ -72,6 +72,11 @@ std::u16string str::EncodedStringView::u16string() const
 {
     return str::details::to_u16string(mString.data(), mString.size(), mIsUtf8);
 }
+str::ui16string str::EncodedStringView::ui16string_() const
+{
+    return str::details::to_ui16string(mString.data(), mString.size(), mIsUtf8);
+}
+
 std::u32string str::EncodedStringView::u32string() const
 {
     return str::details::to_u32string(mString.data(), mString.size(), mIsUtf8);

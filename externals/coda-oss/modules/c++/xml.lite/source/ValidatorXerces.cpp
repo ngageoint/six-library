@@ -182,20 +182,30 @@ ValidatorXerces::ValidatorXerces(
 static_assert(sizeof(XMLCh) == 2, "XMLCh should be two bytes for UTF-16.");
 
 #if _WIN32
-// On other platforms, char16_t is used; only wchar_t on Windows.
+// On other platforms, char16_t/uint16_t is used; only wchar_t on Windows.
 using XMLCh_t = wchar_t;
 static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be wchar_t");
 inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::wstring>& pWString)
 {
-    pWString.reset(new std::wstring(xmlView.wstring()));
+    pWString.reset(new std::wstring(xmlView.wstring())); // std::make_unique fails with older compilers
 }
+#else
+#if defined(__INTEL_COMPILER)  // ICC, high-side
+using XMLCh_t = uint16_t;
+static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be uint16_t");
 #else
 using XMLCh_t = char16_t;
 static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be char16_t");
 #endif
+#endif
+
 inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::u16string>& pWString)
 {
-    pWString.reset(new std::u16string(xmlView.u16string()));
+    pWString.reset(new std::u16string(xmlView.u16string())); // std::make_unique fails with older compilers
+}
+inline void reset(str::EncodedStringView xmlView, std::unique_ptr<str::ui16string>& pWString)
+{
+    pWString.reset(new str::ui16string(xmlView.ui16string_())); // std::make_unique fails with older compilers
 }
 
 using XMLCh_string = std::basic_string<XMLCh_t>;
@@ -212,7 +222,7 @@ static void setStringData(xercesc::DOMLSInputImpl& input, const std::string& xml
     if (legacyStringConversion)
     {
         // This doesn't work right for UTF-8 or Windows-1252
-        pXmlWide.reset(new XercesLocalString(xml));
+        pXmlWide.reset(new XercesLocalString(xml)); // std::make_unique fails with older compilers
         input.setStringData(pXmlWide->toXMLCh());
     }
     else

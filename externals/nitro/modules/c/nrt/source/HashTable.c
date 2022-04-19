@@ -25,7 +25,7 @@
 NRTAPI(nrt_HashTable *) nrt_HashTable_construct(int nbuckets, nrt_Error * error)
 {
     int i;
-    int hashSize;
+    size_t hashSize;
 
     /* Create the hash table object itself */
     nrt_HashTable *ht = (nrt_HashTable *) NRT_MALLOC(sizeof(nrt_HashTable));
@@ -197,7 +197,7 @@ NRTAPI(NRT_BOOL) nrt_HashTable_exists(nrt_HashTable * ht, const char *key)
 NRTAPI(NRT_DATA *) nrt_HashTable_remove(nrt_HashTable * ht, const char *key)
 {
     /* Find out which list it would be in */
-    int bucket = ht->hash(ht, key);
+    unsigned int bucket = ht->hash(ht, key);
 
     /* Get the list at this bucket */
     nrt_List *l = ht->buckets[bucket];
@@ -354,7 +354,7 @@ NRTAPI(NRT_BOOL) nrt_HashTable_insert(nrt_HashTable * ht, const char *key,
                                       NRT_DATA * data, nrt_Error * error)
 {
     /* Find the bucket */
-    int bucket = ht->hash(ht, key);
+    unsigned int bucket = ht->hash(ht, key);
 
     /* Malloc the pair -- that's our container item */
     nrt_Pair *p = (nrt_Pair *) NRT_MALLOC(sizeof(nrt_Pair));
@@ -378,7 +378,7 @@ NRTAPI(NRT_BOOL) nrt_HashTable_insert(nrt_HashTable * ht, const char *key,
 NRTAPI(nrt_Pair *) nrt_HashTable_find(nrt_HashTable * ht, const char *key)
 {
     /* Retrieve the pocket */
-    int bucket = ht->hash(ht, key);
+    unsigned int bucket = ht->hash(ht, key);
 
     /* Get the list for it */
     nrt_List *l = ht->buckets[bucket];

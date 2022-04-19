@@ -49,8 +49,13 @@
     <ClCompile Include="nitf\source\IOStreamReader.cpp" />
     <ClCompile Include="nitf\source\IOStreamWriter.cpp" />
     <ClCompile Include="nitf\source\J2KComponent.cpp" />
+    <ClCompile Include="nitf\source\J2KCompressionParameters.cpp" />
+    <ClCompile Include="nitf\source\J2KCompressor.cpp" />
     <ClCompile Include="nitf\source\J2KContainer.cpp" />
+    <ClCompile Include="nitf\source\J2KEncoder.cpp" />
+    <ClCompile Include="nitf\source\J2KImage.cpp" />
     <ClCompile Include="nitf\source\J2KReader.cpp" />
+    <ClCompile Include="nitf\source\J2KStream.cpp" />
     <ClCompile Include="nitf\source\J2KWriter.cpp" />
     <ClCompile Include="nitf\source\LabelSegment.cpp" />
     <ClCompile Include="nitf\source\LabelSubheader.cpp" />
@@ -71,6 +76,7 @@
     <ClCompile Include="nitf\source\TextSegment.cpp" />
     <ClCompile Include="nitf\source\TextSubheader.cpp" />
     <ClCompile Include="nitf\source\TRE.cpp" />
+    <ClCompile Include="nitf\source\UnitTests.cpp" />
     <ClCompile Include="nitf\source\Utils.cpp" />
     <ClCompile Include="nitf\source\WriteHandler.cpp" />
     <ClCompile Include="nitf\source\Writer.cpp" />
@@ -123,8 +129,13 @@
     <ClInclude Include="nitf\include\nitf\IOStreamReader.hpp" />
     <ClInclude Include="nitf\include\nitf\IOStreamWriter.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KComponent.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KCompressionParameters.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KCompressor.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KContainer.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KEncoder.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KImage.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KReader.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KStream.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KWriter.hpp" />
     <ClInclude Include="nitf\include\nitf\LabelSegment.hpp" />
     <ClInclude Include="nitf\include\nitf\LabelSubheader.hpp" />
@@ -151,6 +162,7 @@
     <ClInclude Include="nitf\include\nitf\TextSubheader.hpp" />
     <ClInclude Include="nitf\include\nitf\TRE.hpp" />
     <ClInclude Include="nitf\include\nitf\TREField.hpp" />
+    <ClInclude Include="nitf\include\nitf\UnitTests.hpp" />
     <ClInclude Include="nitf\include\nitf\Utils.hpp" />
     <ClInclude Include="nitf\include\nitf\Version.hpp" />
     <ClInclude Include="nitf\include\nitf\WriteHandler.hpp" />
@@ -215,12 +227,12 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <EnablePREfast>true</EnablePREfast>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <SupportJustMyCode>true</SupportJustMyCode>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -246,7 +258,6 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>

@@ -29,8 +29,6 @@
 
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testBlockSizedBoundaries)
 {
     // This test is meant to run through a lot of cases just to make sure
@@ -213,7 +211,6 @@ TEST_CASE(testKnownCase)
         TEST_ASSERT_EQ(size, expectedSize);
     }
 
-}
 }
 
 

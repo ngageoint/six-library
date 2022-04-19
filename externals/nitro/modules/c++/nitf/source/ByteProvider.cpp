@@ -52,9 +52,17 @@ ByteProvider::ByteProvider(Record& record,
 {
     initialize(record, desData, numRowsPerBlock, numColsPerBlock);
 }
-
-ByteProvider::~ByteProvider()
+ByteProvider::ByteProvider(Record& record,
+                           const std::vector<PtrAndLength_t>& desData,
+                           size_t numRowsPerBlock,
+                           size_t numColsPerBlock) :
+    mNumCols(0),
+    mOverallNumRowsPerBlock(0),
+    mNumColsPerBlock(0),
+    mNumBytesPerRow(0),
+    mNumBytesPerPixel(0)
 {
+    initialize(record, desData, numRowsPerBlock, numColsPerBlock);
 }
 
 template<typename T>
@@ -80,8 +88,9 @@ void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
     copyFromStreamAndClear_(stream, rawBytes);
 }
 
-void ByteProvider::initializeImpl(const Record& record,
-                                  const std::vector<PtrAndLength>& desData,
+template<typename TPtrAndLength>
+void ByteProvider::initializeImpl_(const Record& record,
+                                  const std::vector<TPtrAndLength>& desData,
                                   size_t numRowsPerBlock,
                                   size_t numColsPerBlock)
 {
@@ -117,6 +126,21 @@ void ByteProvider::initializeImpl(const Record& record,
     }
 }
 
+void ByteProvider::initializeImpl(const Record& record,
+                                  const std::vector<PtrAndLength>& desData,
+                                  size_t numRowsPerBlock,
+                                  size_t numColsPerBlock)
+{
+    initializeImpl_(record, desData, numRowsPerBlock, numColsPerBlock);
+}
+void ByteProvider::initializeImpl(const Record& record,
+    const std::vector<PtrAndLength_t>& desData,
+    size_t numRowsPerBlock,
+    size_t numColsPerBlock)
+{
+    initializeImpl_(record, desData, numRowsPerBlock, numColsPerBlock);
+}
+
 void ByteProvider::initialize(const Record& record,
                               const std::vector<PtrAndLength>& desData,
                               size_t numRowsPerBlock,
@@ -133,9 +157,40 @@ void ByteProvider::initialize(const Record& record,
     }
     initializeImpl(record, desData, numRowsPerBlock, numColsPerBlock);
 }
+void ByteProvider::initialize(const Record& record,
+    const std::vector<PtrAndLength_t>& desData,
+    size_t numRowsPerBlock,
+    size_t numColsPerBlock)
+{
+    // Set image lengths
+    const size_t numImages = record.getNumImages();
+    mImageDataLengths.resize(numImages);
+    for (size_t ii = 0; ii < numImages; ++ii)
+    {
+        nitf::ImageSegment imageSegment = record.getImages()[ii];
+        nitf::ImageSubheader subheader = imageSegment.getSubheader();
+        mImageDataLengths[ii] = subheader.getNumBytesOfImageData();
+    }
+    initializeImpl(record, desData, numRowsPerBlock, numColsPerBlock);
+}
 
-void ByteProvider::getFileLayout(const nitf::Record& inRecord,
-                                 const std::vector<PtrAndLength>& desData)
+static void Write_data(io::ByteStream& byteStream, const ByteProvider::PtrAndLength& curData,
+    size_t& desDataLengths_ii)
+{
+    // Write data
+    byteStream.write(curData.first, curData.second);
+    desDataLengths_ii = curData.second;
+}
+static void Write_data(io::ByteStream& byteStream, const ByteProvider::PtrAndLength_t& curData,
+    size_t& desDataLengths_ii)
+{
+    // Write data
+    byteStream.write(curData);
+    desDataLengths_ii = curData.size();
+}
+template<typename TPtrAndLength>
+void  ByteProvider::getFileLayout_(const nitf::Record& inRecord,
+    const std::vector<TPtrAndLength>& desData)
 {
    auto byteStream = std::make_shared<io::ByteStream>();
 
@@ -246,10 +301,7 @@ void ByteProvider::getFileLayout(const nitf::Record& inRecord,
         writer.writeDESubheader(subheader, userSublen, record.getVersion());
         desSubheaderLengths[ii] = byteStream->getSize() - prevSize;
 
-        // Write data
-        const PtrAndLength& curData(desData[ii]);
-        byteStream->write(curData.first, curData.second);
-        desDataLengths[ii] = curData.second;
+        Write_data(*byteStream, desData[ii], desDataLengths[ii]);
     }
 
     copyFromStreamAndClear(*byteStream, mDesSubheaderAndData);
@@ -316,6 +368,16 @@ void ByteProvider::getFileLayout(const nitf::Record& inRecord,
 
     // DES is right after that
     mDesSubheaderFileOffset = offset;
+}
+void ByteProvider::getFileLayout(const nitf::Record& inRecord,
+                                 const std::vector<PtrAndLength>& desData)
+{
+    getFileLayout_(inRecord, desData);
+}
+void ByteProvider::getFileLayout(const nitf::Record& inRecord,
+    const std::vector<PtrAndLength_t>& desData)
+{
+    getFileLayout_(inRecord, desData);
 }
 
 mem::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const

@@ -34,9 +34,10 @@
 #include <sys/Backtrace.h>
 #include <sys/Dbg.h>
 #include <sys/DateTime.h>
+#include <sys/sys_filesystem.h>
 #include "TestCase.h"
 
-namespace fs = coda_oss::filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -388,6 +389,22 @@ TEST_CASE(testSpecialEnvVars)
     TEST_ASSERT_FALSE(result.empty());
 }
 
+TEST_CASE(testFsFileSize)
+{
+    const sys::OS os;
+    {
+        const fs::path argv0(os.getSpecialEnv("ARGV0"));
+        const auto size = file_size(argv0);
+        TEST_ASSERT_GREATER(size, 0);
+    }
+    {
+        // We always have  sys::filesystem, even if it's not used.
+        const sys::filesystem::path argv0(os.getSpecialEnv("ARGV0"));
+        const auto size = file_size(argv0);
+        TEST_ASSERT_GREATER(size, 0);
+    }
+}
+
 }
 
 int main(int, char** argv)
@@ -402,6 +419,7 @@ int main(int, char** argv)
     TEST_CHECK(testFsOutput);
     TEST_CHECK(testBacktrace);
     TEST_CHECK(testSpecialEnvVars);
+    TEST_CHECK(testFsFileSize);
 
     return 0;
 }

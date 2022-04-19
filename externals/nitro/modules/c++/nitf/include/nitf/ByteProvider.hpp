@@ -19,13 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __NITF_BYTE_PROVIDER_HPP__
-#define __NITF_BYTE_PROVIDER_HPP__
+#ifndef NITF_ByteProvider_hpp_INCLUDED_
+#define NITF_ByteProvider_hpp_INCLUDED_
 #pragma once
 
 #include <vector>
 #include <utility>
 #include <memory>
+#include <std/span>
+#include <std/cstddef>
 
 #include <nitf/coda-oss.hpp>
 #include <nitf/System.hpp>
@@ -97,6 +99,7 @@ namespace nitf
 struct NITRO_NITFCPP_API ByteProvider
 {
     typedef std::pair<const void*, size_t> PtrAndLength;
+    using PtrAndLength_t = std::span<const std::byte>;
 
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
@@ -113,12 +116,16 @@ struct NITRO_NITFCPP_API ByteProvider
                             std::vector<PtrAndLength>(),
                     size_t numRowsPerBlock = 0,
                     size_t numColsPerBlock = 0);
+    ByteProvider(Record& record,
+        const std::vector<PtrAndLength_t>& desData,
+        size_t numRowsPerBlock = 0,
+        size_t numColsPerBlock = 0);
 
     /*!
      * Destructor.  No virtual methods but this is virtual in case it's useful
      * to inherit from this class and use it polymorphically.
      */
-    virtual ~ByteProvider();
+    virtual ~ByteProvider() = default;
 
     //! \return The total number of bytes in the NITF
     nitf::Off getFileNumBytes() const noexcept
@@ -261,6 +268,9 @@ protected:
                             std::vector<PtrAndLength>(),
                     size_t numRowsPerBlock = 0,
                     size_t numColsPerBlock = 0);
+    void initialize(const Record& record,
+        const std::vector<PtrAndLength_t>& desData,
+        size_t numRowsPerBlock = 0, size_t numColsPerBlock = 0);
 
     static void copyFromStreamAndClear(io::ByteStream& stream,
                                        std::vector<sys::byte>& rawBytes);
@@ -302,6 +312,8 @@ protected:
 
     void getFileLayout(const nitf::Record& inRecord,
                        const std::vector<PtrAndLength>& desData);
+    void getFileLayout(const nitf::Record & inRecord,
+        const std::vector<PtrAndLength_t>&desData);
 
     std::vector<size_t> mImageDataLengths;
 
@@ -314,6 +326,11 @@ protected:
             const std::vector<PtrAndLength>& desData,
             size_t numRowsPerBlock,
             size_t numColsPerBlock);
+    void initializeImpl(
+        const Record & record,
+        const std::vector<PtrAndLength_t>&desData,
+        size_t numRowsPerBlock,
+        size_t numColsPerBlock);
 
     // Represents the row information for a NITF image segment
     struct SegmentInfo
@@ -358,7 +375,19 @@ protected:
     std::vector<nitf::Off> mImageSubheaderFileOffsets; // Per segment
     nitf::Off mDesSubheaderFileOffset = 0;
     nitf::Off mFileNumBytes = 0;
+
+    private:
+        template<typename TPtrAndLength>
+        void getFileLayout_(const nitf::Record& inRecord,
+            const std::vector<TPtrAndLength>& desData);
+
+        template<typename TPtrAndLength>
+        void initializeImpl_(
+            const Record& record,
+            const std::vector<TPtrAndLength>& desData,
+            size_t numRowsPerBlock,
+            size_t numColsPerBlock);
 };
 }
 
-#endif
+#endif // NITF_ByteProvider_hpp_INCLUDED_

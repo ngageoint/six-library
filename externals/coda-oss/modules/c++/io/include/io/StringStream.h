@@ -144,7 +144,7 @@ private:
     {
         const auto maxSize = available();
         if (maxSize <= 0)
-            return io::InputStream::IS_END;
+            return ::io::InputStream::IS_END;
             
         auto len = gsl::narrow<sys::Off_T>(len_);
         if (maxSize < len)

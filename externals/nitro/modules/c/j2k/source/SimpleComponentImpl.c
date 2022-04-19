@@ -174,8 +174,8 @@ J2KAPI(j2k_Component*) j2k_Component_construct(uint32_t width,
     impl->height = height;
     impl->precision = precision;
     impl->isSigned = isSigned;
-    impl->x0 = offsetX;
-    impl->y0 = offsetY;
+    impl->x0 = (int32_t)offsetX;
+    impl->y0 = (int32_t)offsetY;
     impl->xSeparation = separationX;
     impl->ySeparation = separationY;
 

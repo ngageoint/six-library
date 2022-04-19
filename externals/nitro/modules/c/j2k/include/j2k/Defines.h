@@ -26,7 +26,9 @@
 
 #if defined(WIN32) || defined(_WIN32)
 #      if defined(J2K_MODULE_EXPORTS)
+#         if !defined(NRT_MODULE_EXPORTS)
 #          define NRT_MODULE_EXPORTS
+#         endif
 #      elif defined(J2K_MODULE_IMPORTS)
 #          define NRT_MODULE_IMPORTS
 #      endif

@@ -83,6 +83,7 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
     nitf_TREDescription *descr = NULL;
     char *data = NULL;
     NITF_BOOL success;
+    size_t length_ = 0;
 
     if (!tre)
     {
@@ -96,7 +97,7 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
         nitf_Error_init(error, "uint32_t+1 overflow", NITF_CTXT, NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
-    const size_t length_ = ((size_t)length) + 1;
+    length_ = ((size_t)length) + 1;
     data = (char *) NITF_MALLOC(length_);
     if (!data)
     {
@@ -118,7 +119,7 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
     }
 
     descr[0].data_type = NITF_BINARY;
-    descr[0].data_count = length;
+    descr[0].data_count = (int)length;
     descr[0].label = _NITF_DEFAULT_TRE_LABEL;
     descr[0].tag = NITF_TRE_RAW;
     descr[1].data_type = NITF_END;
@@ -354,7 +355,7 @@ NITFPRIV(int) defaultGetCurrentSize(nitf_TRE* tre, nitf_Error* error)
     (void)error;
 
     /* TODO - should we make sure length is equal to the descr data_count ? */
-    return ((nitf_TREPrivateData*)tre->priv)->length;
+    return (int)((nitf_TREPrivateData*)tre->priv)->length;
 }
 
 

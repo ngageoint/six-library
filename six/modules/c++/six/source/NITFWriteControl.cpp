@@ -410,7 +410,9 @@ static const Legend* getLegend(const six::Container* container, size_t i)
 void NITFWriteControl::addLegend(const Legend& legend, int imageNumber)
 {
     nitf::ImageSource iSource;
-    nitf::MemorySource memSource(legend.mImage, 0 /*start*/, 0 /*pixelSkip*/);
+    const void* pImage = legend.mImage.data();
+    const std::span<const std::byte> image(static_cast<const std::byte*>(pImage), legend.mImage.size());
+    nitf::MemorySource memSource(image, 0 /*start*/, 1 /*numBytesPerPixel*/, 0 /*pixelSkip*/);
     iSource.addBand(memSource);
 
     nitf::ImageWriter iWriter = mWriter.newImageWriter(imageNumber);
