@@ -38,9 +38,7 @@ TOAExtended::LFMEclipse::LFMEclipse() :
 {
 }
 
-DwellTimes::DwellTimes() :
-    codId(six::Init::undefined<std::string>()),
-    dwellId(six::Init::undefined<std::string>())
+DwellTimes::DwellTimes()
 {
 }
 
@@ -62,7 +60,6 @@ NoiseLevel::NoiseLevel() :
 }
 
 ChannelParameter::ChannelParameter() :
-    identifier(six::Init::undefined<std::string>()),
     refVectorIndex(six::Init::undefined<size_t>()),
     fxFixed(six::Init::undefined<six::BooleanType>()),
     toaFixed(six::Init::undefined<six::BooleanType>()),
@@ -75,16 +72,11 @@ ChannelParameter::ChannelParameter() :
 {
 }
 
-ChannelParameter::Antenna::Antenna() :
-    txAPCId(six::Init::undefined<std::string>()),
-    txAPATId(six::Init::undefined<std::string>()),
-    rcvAPCId(six::Init::undefined<std::string>()),
-    rcvAPATId(six::Init::undefined<std::string>())
+ChannelParameter::Antenna::Antenna()
 {
 }
 
 Channel::Channel() :
-    refChId(six::Init::undefined<std::string>()),
     fxFixedCphd(six::Init::undefined<six::BooleanType>()),
     toaFixedCphd(six::Init::undefined<six::BooleanType>()),
     srpFixedCphd(six::Init::undefined<six::BooleanType>())
