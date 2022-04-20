@@ -64,7 +64,7 @@
 // actually hook this up.  But it's kind of neat code that I don't want to lose.
 struct /*namespace*/ TREs
 {
-    class NITRO_NITFCPP_API ENGRDA final
+    class ENGRDA final
     {
         nitf::TRE tre_;
 

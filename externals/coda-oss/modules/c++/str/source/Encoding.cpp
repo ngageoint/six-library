@@ -418,7 +418,8 @@ std::string str::details::to_native(coda_oss::u8string::const_pointer p, size_t 
     }
     if (platform == str::details::PlatformType::Linux)
     {
-        return cast<std::string::const_pointer>(p);  // copy
+        auto retval = cast<std::string::const_pointer>(p);
+        return retval != nullptr ? retval /* copy */ : "";
     }
     throw std::logic_error("Unknown platform.");
 }
@@ -428,7 +429,8 @@ std::string str::details::to_native(W1252string::const_pointer p, size_t sz)
     auto platform = details::Platform;  // "conditional expression is constant"
     if (platform == details::PlatformType::Windows)
     {    
-        return cast<std::string::const_pointer>(p);  // copy
+        auto retval = cast<std::string::const_pointer>(p);
+        return retval != nullptr ? retval /* copy */ : "";
     }
     if (platform == details::PlatformType::Linux)
     {
