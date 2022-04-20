@@ -107,7 +107,7 @@ OneD<_T>
 TwoD<_T>::atY(double y) const
 {
     OneD<_T> ret(0);
-    if (orderX() > 0)
+    if (!empty())
     {
         // We have no more X, but we have Y still
         ret = OneD<_T>(orderX());
@@ -153,6 +153,11 @@ template<typename _T>
 TwoD<_T>
 TwoD<_T>::flipXY() const
 {
+    if (empty())
+    {
+        return TwoD<_T>();
+    }
+
     size_t oY = orderX();
     size_t oX = orderY();
     TwoD<_T> prime(oX, oY);

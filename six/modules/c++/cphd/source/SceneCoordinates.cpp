@@ -91,8 +91,7 @@ Segment::Segment() :
     startLine(0),
     startSample(0),
     endLine(0),
-    endSample(0),
-    identifier(six::Init::undefined<std::string>())
+    endSample(0)
 {
 }
 

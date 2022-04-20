@@ -435,12 +435,56 @@ TEST_CASE(testIsScalar)
         }
     }
 
-    TEST_ASSERT(!p1.isScalar());
+    TEST_ASSERT_FALSE(p1.isScalar());
 
 
     math::poly::TwoD<double> p2(1, 3);
     p2[0][0] = 1;
     TEST_ASSERT(p2.isScalar());
+}
+
+TEST_CASE(testAtY)
+{
+    math::poly::TwoD<double> p1(2, 2);
+    // x^0*(1*y^0 2*y^1 3*y^2 )
+    // x^1*(3*y^0 4*y^1 5*y^2 )
+    // x^2*(5*y^0 6*y^1 7*y^2 )
+    for (size_t ii = 0; ii <= p1.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= p1.orderY(); ++jj)
+        {
+            p1[ii][jj] = static_cast<double>(ii * p1.orderY() + jj + 1);
+        }
+    }
+    TEST_ASSERT_EQ(p1(2, 3), p1.atY(3)(2));
+
+    // 2D polynomials with one dimension having 0 order
+    math::poly::TwoD<double> p2(2, 0);
+    for (size_t ii = 0; ii <= p2.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= p2.orderY(); ++jj)
+        {
+            p2[ii][jj] = static_cast<double>(ii * p2.orderY() + jj + 1);
+        }
+    }
+    TEST_ASSERT_EQ(p2.atY(3)(2), p2(2, 3));
+    TEST_ASSERT_EQ(p2.flipXY().atY(4)(5), p2(4, 5));
+
+    math::poly::TwoD<double> p3(0, 2);
+    for (size_t ii = 0; ii <= p3.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= p3.orderY(); ++jj)
+        {
+            p3[ii][jj] = static_cast<double>(ii * p3.orderY() + jj + 1);
+        }
+    }
+    TEST_ASSERT_EQ(p3.atY(3)(2), p3(2, 3));
+    TEST_ASSERT_EQ(p3.flipXY().atY(4)(5), p3(4, 5));
+
+    // Empty polynomial object
+    math::poly::TwoD<double> p4;
+    TEST_ASSERT_EQ(p4.atY(3)(2), p4(2, 3));
+    TEST_ASSERT_EQ(p4.flipXY().atY(4)(5), p4(4, 5));
 }
 }
 
@@ -453,5 +497,6 @@ int main(int, char**)
     TEST_CHECK(testTransformInput);
     TEST_CHECK(testOperators);
     TEST_CHECK(testIsScalar);
+    TEST_CHECK(testAtY);
 }
 

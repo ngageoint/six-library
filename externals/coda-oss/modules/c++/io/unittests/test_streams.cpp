@@ -20,6 +20,9 @@
  *
  */
 
+#include <std/span>
+#include <std/cstddef>
+
 #include <import/io.h>
 #include <mem/BufferView.h>
 #include <sys/Conf.h>
@@ -82,15 +85,31 @@ TEST_CASE(testByteStream)
     stream.write("abcdef");
     TEST_ASSERT_EQ(stream.getSize(), static_cast<size_t>(24));
 
-    stream.clear();
-    TEST_ASSERT_EQ(stream.available(), 0);
-    stream.write("test");
-    stream.seek(0, io::Seekable::START);
-    TEST_ASSERT_EQ(stream.available(), 4);
-    sys::byte buf[255];
-    stream.read(buf, 4);
-    buf[4] = 0;
-    TEST_ASSERT_EQ(std::string(buf), "test");
+     const std::string test("test");
+    {
+        stream.clear();
+        TEST_ASSERT_EQ(stream.available(), 0);
+        stream.write(test);
+        stream.seek(0, io::Seekable::START);
+        TEST_ASSERT_EQ(stream.available(), 4);
+        sys::byte buf[255];
+        stream.read(buf, 4);
+        buf[4] = 0;
+        TEST_ASSERT_EQ(std::string(buf), test);
+    }
+    {
+        stream.clear();
+        const std::span<const std::string::value_type> test_span(test.data(), test.size());
+        stream.write(test_span);
+        stream.seek(0, io::Seekable::START);
+        TEST_ASSERT_EQ(stream.available(), 4);
+        std::byte buf[255];
+        stream.read(std::span<std::byte>(buf, 4));
+        buf[4] = std::byte(0);
+        const void* pBuf = buf;
+        auto pStrBuf = static_cast<std::string::const_pointer>(pBuf);
+        TEST_ASSERT_EQ(pStrBuf, test);
+    }
 }
 
 TEST_CASE(testProxyOutputStream)

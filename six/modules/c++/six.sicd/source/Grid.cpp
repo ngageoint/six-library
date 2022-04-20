@@ -47,8 +47,7 @@ const char Grid::WF_INCONSISTENT_STR[] = "Waveform fields not consistent";
 const char Grid::BOUNDS_ERROR_MESSAGE[] =
         "Violation of spatial frequency extent bounds";
 
-WeightType::WeightType() :
-    windowName(Init::undefined<std::string>())
+WeightType::WeightType()
 {
 }
 

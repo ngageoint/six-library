@@ -22,6 +22,18 @@
 
 #ifdef HAVE_J2K_H
 
+#if _MSC_VER
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#pragma warning(push)
+#pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' 
+#include <windows.h>
+#pragma warning(pop)
+#undef min
+#undef max
+
+#pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+#endif // _MSC_VER
+
 #include <import/nitf.h>
 #include <import/j2k.h>
 
@@ -41,7 +53,7 @@ NITFPRIV(uint8_t*) implReadBlock(nitf_DecompressionControl *control,
                                     uint32_t blockNumber,
                                     uint64_t* blockSize,
                                     nitf_Error* error);
-NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
+NITFPRIV(NITF_BOOL) implFreeBlock(nitf_DecompressionControl* control,
                             uint8_t* block,
                             nitf_Error* error);
 
@@ -82,8 +94,7 @@ NITFAPI(void) C8_cleanup(void)
     /* TODO */
 }
 
-
-NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
+NITFPRIV(NITF_BOOL) implFreeBlock(nitf_DecompressionControl* control,
                             uint8_t* block,
                             nitf_Error* error)
 {
@@ -231,7 +242,7 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader * subheader,
 
 NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
                               nitf_IOInterface*  io,
-                              uint64_t        offset,
+                              uint64_t        offset_,
                               uint64_t        fileLength,
                               nitf_BlockingInfo* blockInfo,
                               uint64_t*       blockMask,
@@ -242,6 +253,7 @@ NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
 
     ImplControl* implControl = (ImplControl*)control;
 
+    const nrt_Off offset = (nrt_Off)offset_;
     if (nitf_IOInterface_seek(io, offset, NITF_SEEK_SET, error) < 0)
         goto CATCH_ERROR;
 
@@ -249,7 +261,7 @@ NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
     if (!implControl->reader)
         goto CATCH_ERROR;
 
-    implControl->offset     = offset;
+    implControl->offset     = (uint64_t)offset;
     implControl->fileLength = fileLength;
     implControl->blockInfo  = *blockInfo;
     return NITF_SUCCESS;

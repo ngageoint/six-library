@@ -59,7 +59,7 @@ typedef DataSource BandSource;
  *  times during the case of memory mapping, although it may be used
  *  to sample down or cut the image into pieces).
  */
-struct NITRO_NITFCPP_API MemorySource : public BandSource
+struct NITRO_NITFCPP_API MemorySource final : public BandSource
 {
     /*!
      *  Constructor
@@ -74,10 +74,6 @@ struct NITRO_NITFCPP_API MemorySource : public BandSource
 
     MemorySource(std::span<const std::byte> span, nitf::Off start, int numBytesPerPixel, int pixelSkip)
         : MemorySource(span.data(), span.size(), start, numBytesPerPixel, pixelSkip) {}
-
-    template<typename TSpanLike>
-    MemorySource(const TSpanLike& span, nitf::Off start, int pixelSkip)
-        : MemorySource(span.data(), span.size() * sizeof(span[0]), start, sizeof(span[0]), pixelSkip) {}
 };
 
 /*!
@@ -90,7 +86,7 @@ struct NITRO_NITFCPP_API MemorySource : public BandSource
  *  we allow the creator to specify a start point, and a pixel skip
  *  (this would help you create a thumbnail as well).
  */
-struct NITRO_NITFCPP_API FileSource : public BandSource
+struct NITRO_NITFCPP_API FileSource final : public BandSource
 {
     FileSource(const std::string& fname,
                nitf::Off start,

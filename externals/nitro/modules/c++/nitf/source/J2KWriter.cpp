@@ -23,6 +23,8 @@
 
 #include "nitf/J2KWriter.hpp"
 
+#include <stdexcept>
+
 #include <gsl/gsl.h>
 
 #include "nitf/J2KContainer.hpp"
@@ -35,7 +37,20 @@ j2k::details::Writer::Writer(j2k_Writer* x)
 j2k::Writer::Writer(j2k_Writer*&& x) : impl_(x) {}
 
 j2k::Writer::Writer(const Container& container, const WriterOptions& options)
-    : Writer(container.createWriter(options)) { }
+    : Writer(container.createWriter(options))
+{
+    pContainer_ = &container;
+}
+
+const j2k::Container& j2k::Writer::getContainer() const
+{
+    auto pContainer = impl_.callNativeOrThrow<j2k_Container*>(j2k_Writer_getContainer);
+    if (pContainer != pContainer_->getNativeOrThrow())
+    {
+        throw std::logic_error("Pointers to native containers don't match!");
+    }
+    return *pContainer_;
+}
 
 void j2k::Writer::setTile(uint32_t tileX, uint32_t tileY, std::span<const uint8_t> buf)
 {
@@ -45,4 +60,23 @@ void j2k::Writer::setTile(uint32_t tileX, uint32_t tileY, std::span<const uint8_
 void j2k::Writer::write(nitf::IOHandle& handle)
 {
     impl_.callNativeOrThrowV(j2k_Writer_write, handle.getNativeOrThrow());
+}
+
+j2k::WriteTiler::WriteTiler(Writer& writer, std::span<const uint8_t> buf) : writer_(writer), buf_(buf)
+{
+    const auto& container = writer_.getContainer();
+    this->tileSize_ = container.tileSize();
+    this->num_x_tiles_ = container.getTilesX();
+    this->numComponents_ = container.getNumComponents();
+}
+void j2k::WriteTiler::setTile(uint32_t tileX, uint32_t tileY, uint32_t i)
+{
+    //const auto offset = container.bufferOffset(tileX, tileY, i);
+    const auto index = tileY * num_x_tiles_ + tileX % num_x_tiles_;
+    const auto bytes = writer_.getContainer().numBytes(i);
+    const auto offset_ = index * tileSize_ * bytes * numComponents_;
+    const auto offset = gsl::narrow<ptrdiff_t>(offset_);
+
+    const std::span<const uint8_t> buf(buf_.data() + offset, tileSize_);
+    writer_.setTile(tileX, tileY, buf);
 }

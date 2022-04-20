@@ -50,30 +50,32 @@ static void load_plugin(const char* tre)
     TEST_ASSERT(test_main_ != nullptr);
 }
 
-static const std::vector<std::string> all_plugins
+static const std::vector<std::string>& all_plugins()
 {
-#if _MSC_VER && NITRO_PCH
-    // only build a handful in Visual Studio
-    "ACCHZB", "ACCPOB", "ACFTA", "AIMIDB", "CSCRNA", "ENGRDA", "HISTOA", "JITCID", "PTPRAA", "RPFHDR",
-#else
-    "ACCHZB", "BANDSB", "CSDIDA", "GEOLOB", "JITCID", "NBLOCA", "PIAPEB", "REGPTB", "RSMIDA", "STEROB",
-    "ACCPOB", "BCKGDA", "CSEPHA", "GEOPSB", "MAPLOB", "OBJCTA", "PIAPRC", "RPC00B", "RSMPCA", "STREOB",
-    "ACCVTB", "BLOCKA", "CSEXRA", "GRDPSB", "MATESA", "OFFSET", "PIAPRD", "RPFDES", "RSMPIA", "TEST_DES",
-    "ACFTA", "BNDPLB", "CSPROA", "HISTOA", "MENSRA", "PATCHA", "PIATGA", "RPFHDR", "SECTGA", "TRGTA",
-    "ACFTB", "CCINFA", "CSSFAA", "ICHIPB", "MENSRB", "PATCHB", "PIATGB", "RPFIMG", "SENSRA", "USE00A",
-    "AIMIDA", "CLCTNA", "CSSHPA", "IMASDA", "MPDSRA", "PIAEQA", "PIXQLA", "RSMAPA", "SENSRB",
-    "AIMIDB", "CLCTNB", "ENGRDA", "IMGDTA", "MSDIRA", "PIAEVA", "PLTFMA", "RSMDCA", "SNSPSB",
-    "AIPBCA", "CMETAA", "EXOPTA", "IMRFCA", "MSTGTA", "PIAIMB", "PRADAA", "RSMECA", "SNSRA",
-    "ASTORA", "CSCCGA", "EXPLTA", "IOMAPA", "MTIRPA", "PIAIMC", "PRJPSB", "RSMGGA", "SOURCB",
-    "BANDSA", "CSCRNA", "EXPLTB", "J2KLRA", "MTIRPB", "PIAPEA", "PTPRAA", "RSMGIA", "STDIDC",
-#endif
-};
+    static const std::vector<std::string> all_plugins_
+    {
+    #if _MSC_VER && NITRO_PCH
+        // only build a handful in Visual Studio
+        "ACCHZB", "ACCPOB", "ACFTA", "AIMIDB", "CSCRNA", "ENGRDA", "HISTOA", "JITCID", "PTPRAA", "RPFHDR",
+    #else
+        "ACCHZB", "BANDSB", "CSDIDA", "GEOLOB", "JITCID", "NBLOCA", "PIAPEB", "REGPTB", "RSMIDA", "STEROB",
+        "ACCPOB", "BCKGDA", "CSEPHA", "GEOPSB", "MAPLOB", "OBJCTA", "PIAPRC", "RPC00B", "RSMPCA", "STREOB",
+        "ACCVTB", "BLOCKA", "CSEXRA", "GRDPSB", "MATESA", "OFFSET", "PIAPRD", "RPFDES", "RSMPIA", "TEST_DES",
+        "ACFTA", "BNDPLB", "CSPROA", "HISTOA", "MENSRA", "PATCHA", "PIATGA", "RPFHDR", "SECTGA", "TRGTA",
+        "ACFTB", "CCINFA", "CSSFAA", "ICHIPB", "MENSRB", "PATCHB", "PIATGB", "RPFIMG", "SENSRA", "USE00A",
+        "AIMIDA", "CLCTNA", "CSSHPA", "IMASDA", "MPDSRA", "PIAEQA", "PIXQLA", "RSMAPA", "SENSRB",
+        "AIMIDB", "CLCTNB", "ENGRDA", "IMGDTA", "MSDIRA", "PIAEVA", "PLTFMA", "RSMDCA", "SNSPSB",
+        "AIPBCA", "CMETAA", "EXOPTA", "IMRFCA", "MSTGTA", "PIAIMB", "PRADAA", "RSMECA", "SNSRA",
+        "ASTORA", "CSCCGA", "EXPLTA", "IOMAPA", "MTIRPA", "PIAIMC", "PRJPSB", "RSMGGA", "SOURCB",
+        "BANDSA", "CSCRNA", "EXPLTB", "J2KLRA", "MTIRPB", "PIAPEA", "PTPRAA", "RSMGIA", "STDIDC",
+    #endif
+    };
+    return all_plugins_;
+}
 
 TEST_CASE(test_load_all_plugins_C)
 {
-    ::testName = testName;
-
-    for (const auto& tre : all_plugins)
+    for (const auto& tre : all_plugins())
     {
         load_plugin(tre.c_str());
     }
@@ -90,9 +92,7 @@ TEST_CASE(test_load_ENGRDA)
 
 TEST_CASE(test_load_all_plugins)
 {
-    ::testName = testName;
-
-    for (const auto& tre : all_plugins)
+    for (const auto& tre : all_plugins())
     {
 #ifdef _WIN32
         // need the full path to load on Linux

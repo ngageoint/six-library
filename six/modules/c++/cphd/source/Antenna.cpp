@@ -25,14 +25,11 @@
 namespace cphd
 {
 
-AntCoordFrame::AntCoordFrame() :
-    identifier(six::Init::undefined<std::string>())
+AntCoordFrame::AntCoordFrame()
 {
 }
 
-AntPhaseCenter::AntPhaseCenter():
-    identifier(six::Init::undefined<std::string>()),
-    acfId(six::Init::undefined<std::string>())
+AntPhaseCenter::AntPhaseCenter()
 {
 }
 
@@ -46,9 +43,7 @@ AntPattern::AntPattern():
 }
 
 AntPattern::GainPhaseArray::GainPhaseArray() :
-    freq(six::Init::undefined<double>()),
-    arrayId(six::Init::undefined<std::string>()),
-    elementId(six::Init::undefined<std::string>())
+    freq(six::Init::undefined<double>())
 {
 }
 
