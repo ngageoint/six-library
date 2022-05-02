@@ -593,8 +593,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
             collection->information.radarMode,
             radarModeElem);
         // optional
-        if (collection->information.radarModeID
-            != Init::undefined<std::string>())
+        if (!collection->information.radarModeID.empty())
             createString("ModeID",
                 common().getSICommonURI(),
                 collection->information.radarModeID,

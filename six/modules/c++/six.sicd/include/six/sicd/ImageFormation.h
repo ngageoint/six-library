@@ -222,7 +222,6 @@ struct Processing
 {
     //! Constructor.
     Processing() :
-        type(Init::undefined<std::string>()),
         applied(Init::undefined<BooleanType>())
     {
     }

@@ -26,6 +26,8 @@
 #include <std/string>
 #include <std/optional>
 
+#include <str/EncodedString.h>
+
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -116,11 +118,11 @@ struct CollectionInformation
     virtual std::string getClassificationLevel() const;
     inline virtual void setClassificationLevel(const std::string& classification)
     {
-        mClassification = classification;
+        mClassification = str::EncodedString(classification);
     }
 
-    virtual bool getClassificationLevel(std::u8string&) const;
-    virtual void setClassificationLevel(const std::u8string& classification);
+    virtual void getClassificationLevel(str::EncodedString&) const;
+    virtual void setClassificationLevel(const str::EncodedString& classification);
 
     //! Ostream operators for six::CollectionInformation type (utility only).
     friend std::ostream& operator<<(std::ostream& os, const six::CollectionInformation& c);
@@ -135,8 +137,7 @@ private:
     /*!
      *  Classification level
      */
-    std::string mClassification;
-    std::optional<std::u8string> mClassification_u8;
+    str::EncodedString mClassification;
 };
 
 }
