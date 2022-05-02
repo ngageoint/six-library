@@ -23,12 +23,6 @@
 
 #include "str/EncodedString.h"
 
-void str::EncodedString::assign(std::string::const_pointer s)
-{
-    s_ = s; // copy
-    v_ = EncodedStringView(s_);
-}
-
 void str::EncodedString::assign(coda_oss::u8string::const_pointer s)
 {
     s_ = cast<std::string::const_pointer>(s);  // copy
@@ -39,20 +33,6 @@ void str::EncodedString::assign(str::W1252string::const_pointer s)
 {
     s_ = cast<std::string::const_pointer>(s);  // copy
     v_ = EncodedStringView(c_str<decltype(s)>(s_)); // avoid copy-paste error
-}
-
-void str::EncodedString::assign(const EncodedStringView& v)
-{
-    if (v.mIsUtf8)
-    {
-        assign(v.c_str());
-    }
-    else
-    {
-        // not UTF-8, assume Windows-1252
-        auto p = cast<W1252string::const_pointer>(v.mString.data());
-        assign(p);
-    }
 }
 
 static str::EncodedStringView make_EncodedStringView(const std::string& s, bool isUtf8)
@@ -66,23 +46,8 @@ static str::EncodedStringView make_EncodedStringView(const std::string& s, bool 
     return str::EncodedStringView(str::c_str<str::W1252string::const_pointer>(s));
 }
 
-void str::EncodedString::assign(const EncodedString& es)
-{
-    this->s_ = es.s_; // copy
-    v_ = make_EncodedStringView(s_, es.view().mIsUtf8);
-}
-
-void str::EncodedString::move(EncodedString&& es) noexcept
-{
-    this->s_ = std::move(es.s_);
-    v_ = make_EncodedStringView(s_, es.view().mIsUtf8);
-}
-
-str::EncodedString::EncodedString(std::string::const_pointer s)
-{
-    assign(s);
-}
-str::EncodedString::EncodedString(const std::string& s) : EncodedString(s.c_str()) { }
+str::EncodedString::EncodedString(std::string::const_pointer s) :  s_(s) /*copy*/, v_ (s_)  { }
+str::EncodedString::EncodedString(const std::string& s) :  s_(s) /*copy*/, v_ (s_) { }
 
 str::EncodedString::EncodedString(coda_oss::u8string::const_pointer s)
 {
@@ -106,7 +71,17 @@ str::EncodedString::EncodedString(const std::wstring& s) : EncodedString(to_u8st
 // create from a view
 str::EncodedString& str::EncodedString::operator=(const EncodedStringView& v)
 {
-    assign(v);
+    if (v.mIsUtf8)
+    {
+        assign(v.c_str());
+    }
+    else
+    {
+        // not UTF-8, assume Windows-1252
+        auto p = cast<W1252string::const_pointer>(v.mString.data());
+        assign(p);
+    }
+
     return *this;
 }
 str::EncodedString::EncodedString(const EncodedStringView& v)
@@ -118,7 +93,8 @@ str::EncodedString& str::EncodedString::operator=(const EncodedString& es)
 {
     if (this != &es)
     {
-        assign(es);
+        this->s_ = es.s_;  // copy
+        this->v_ = make_EncodedStringView(s_, es.view().mIsUtf8);
     }
     return *this;
 }
@@ -131,7 +107,8 @@ str::EncodedString& str::EncodedString::operator=(EncodedString&& es) noexcept
 {
     if (this != &es)
     {
-        move(std::move(es));
+        this->s_ = std::move(es.s_);
+        this->v_ = make_EncodedStringView(s_, es.view().mIsUtf8);
     }
     return *this;
 }
