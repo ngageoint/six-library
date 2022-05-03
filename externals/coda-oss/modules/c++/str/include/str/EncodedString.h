@@ -60,12 +60,7 @@ class EncodedString final
     // not extensive manipulation.  Create a new instance and assign/move that.
     void assign(coda_oss::u8string::const_pointer);
     void assign(str::W1252string::const_pointer);
-    void assign(std::string::const_pointer);
-    void assign(const EncodedStringView&);
-    void assign(const EncodedString&);
     
-    void move(EncodedString&&) noexcept;
-
 public:
     EncodedString() = default;
     ~EncodedString() = default;

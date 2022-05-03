@@ -35,6 +35,275 @@
 #  include <import/except.h>
 
 #  define IS_NAN(X) X != X
+
+namespace coda_oss { namespace test {
+inline void diePrintf(const char* format, const std::string& testName, const char* s)
+{
+    sys::diePrintf(format, testName.c_str(), s);
+}
+
+inline void diePrintf(const char* format, const std::string& testName, const char* file, const char* func, int line)
+{
+    sys::diePrintf(format, testName.c_str(), file, func, line);
+}
+
+template<typename TX1, typename TX2>
+inline void diePrintf(const char* format, const std::string& testName, const char* file, const char* func, int line,
+    TX1&& X1, TX2&& X2)
+{
+    sys::diePrintf(format, testName.c_str(), file, func, line,
+        str::toString(X1).c_str(), str::toString(X2).c_str());
+}
+
+template <typename TFunc>
+inline void check(TFunc f, const std::string& testName)
+{
+    try
+    {
+        f(testName);
+        std::cerr << testName  << ": PASSED" << std::endl;
+    }
+    catch (const except::Throwable& ex)
+    {
+        diePrintf("%s: FAILED: Exception thrown: %s\n", testName, ex.toString().c_str());
+    }
+    catch (const except::Throwable11& ex)
+    {
+        diePrintf("%s: FAILED: Exception thrown: %s\n", testName, ex.what());
+    }
+}
+
+template<typename TX>
+inline void assert_(TX&& X, const std::string& testName, const char* file, const char* func, int line)
+{
+    if (!X)
+    {
+        diePrintf("%s (%s,%s,%d): FAILED: Value should not be NULL\n", testName, file, func, line);
+    }
+}
+
+template<typename TX>
+inline void assert_null(TX&& X, const std::string& testName,  const char* file, const char* func, int line)
+{
+    if ((X != nullptr) || (!(X == nullptr)))
+    {
+        diePrintf("%s (%s,%s,%d): FAILED: Value should be NULL\n", testName, file, func, line);
+    }
+}
+
+template<typename TX>
+inline void test_assert_false(TX&& X, const std::string& testName,  const char* file, const char* func, int line)
+{
+    if (X)
+    {
+        diePrintf("%s (%s,%s,%d): FAILED: Value should evaluate to false\n", testName, file, func, line);
+    }
+}
+
+template<typename TX>
+inline void test_assert_true(TX&& X, const std::string& testName,  const char* file, const char* func, int line)
+{
+    if (!X)
+    {
+        diePrintf("%s (%s,%s,%d): FAILED: Value should evaluate to true\n", testName, file, func, line);
+    }
+}
+
+// These cause warnings (or even errors, depending on compile settings) if the types have different signedness.
+// assert_eq(v.size(), 1, ...);
+/*
+template<typename TX1, typename TX2>
+inline void assert_eq(TX1&& X1, TX2&& X2,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    if ((X1 != X2) || (!(X1 == X2)))
+    {
+        diePrintf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName, file, func, line, X1, X2);
+    }
+}
+template<typename TX1, typename TX2>
+inline void assert_eq_msg(const std::string& msg, TX1&& X1, TX2&& X2,
+    const std::string& testName,  const char* file, int line)
+{
+    if ((X1 != X2) || (!(X1 == X2)))
+    {
+        die_printf("%s (%s,%d): FAILED (%s): Recv'd %s, Expected %s\n", testName.c_str(), file, line, 
+                   msg.c_str(), str::toString(X1).c_str(), str::toString(X2).c_str());
+    }
+}
+
+template<typename TX1, typename TX2>
+inline void assert_not_eq(TX1&& X1, TX2&& X2,
+    const std::string& testName, const char* file, const char* func, int line)
+{
+    if ((X1 == X2) || (!(X1 != X2)))
+    {
+        diePrintf("%s (%s,%s,%d): FAILED: Recv'd %s should not equal %s\n", testName, file, func, line, X1, X2);
+    }
+}
+*/
+template<typename TX1, typename TX2, typename TEPS>
+inline void assert_almost_eq_eps(TX1&& X1, TX2&& X2, TEPS&& EPS,
+    const std::string& testName, const char* file, const char* func, int line)
+{
+    const auto abs_difference = std::abs(X1 - X2);
+    if (abs_difference > EPS || IS_NAN(abs_difference))
+    {
+        diePrintf("%s (%s,%d): FAILED: Recv'd %s, Expected %s\n", testName, file, func, line, X1, X2);
+    }
+}
+template<typename TX1, typename TX2>
+inline void assert_almost_eq(TX1&& X1, TX2&& X2,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    const auto abs_difference = std::abs(X1 - X2);
+    if (abs_difference > std::numeric_limits<float>::epsilon() || IS_NAN(abs_difference))
+    {
+        diePrintf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName, file, func, line, X1, X2);
+    }
+}
+/*
+template<typename TX1, typename TX2>
+inline void assert_greater_eq(TX1&& X1, TX2&& X2,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    if ((X1 < X2) || (!(X1 >= X2)))
+    {
+        diePrintf("%s (%s,%s,%d): FAILED: Value should be greater than or equal\n", testName, file, func, line);
+    }
+}
+
+template<typename TX1, typename TX2>
+inline void assert_greater(TX1&& X1, TX2&& X2,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    if ((X1 <= X2) || (!(X1 > X2)))
+    {
+        diePrintf("%s (%s,%s,%d): FAILED: Value should be greater than\n", testName, file, func, line);
+    }
+}
+
+template<typename TX1, typename TX2>
+inline void assert_lesser_eq(TX1&& X1, TX2&& X2,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    if ((X1 > X2) || (!(X1 <= X2)))
+    {
+        diePrintf("%s (%s,%s,%d): FAILED: Value should be less than or equal\n", testName, file, func, line);
+    }
+}
+
+template<typename TX1, typename TX2>
+inline void assert_lesser(TX1&& X1, TX2&& X2,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    if ((X1 >= X2) || (!(X1 < X2)))
+    {
+        diePrintf("%s (%s,%s,%d): FAILED: Value should be less than\n", testName, file, func, line);
+    }
+}
+*/
+template<typename Tmsg>
+inline void fail(Tmsg&& msg,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    die_printf("%s (%s,%s,%d): FAILED: %s\n", testName.c_str(), file, func, line, str::toString(msg).c_str());
+}
+
+template<typename TFunc>
+inline void exception(TFunc f,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    try
+    {
+        f();
+        diePrintf("%s (%s,%s,%d): FAILED: Should have thrown exception\n", testName, file, func, line);
+    }
+    catch (const except::Throwable&) { }
+    catch (const except::Throwable11&) { }
+}
+
+template<typename TFunc>
+inline void throws(TFunc f,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    try
+    {
+        f();
+        diePrintf("%s (%s,%s,%d): FAILED: Should have thrown exception\n", testName, file, func, line);
+    }
+    catch (...) { }
+}
+
+template <typename TException, typename TFunc>
+inline void specific_exception(TFunc f,
+                                    const char* format, const std::string& testName, const char* file, const char* func, int line)
+{
+    try
+    {
+        f();
+        diePrintf(format, testName, file, func, line);
+    }
+    catch (const TException&) {  }
+    catch (const except::Throwable&)
+    {
+        diePrintf(format, testName, file, func, line);
+    }
+    catch (const except::Throwable11&)
+    {
+        diePrintf(format, testName, file, func, line);
+    }
+}
+
+template <typename TFunc>
+inline int main(TFunc f)
+{
+    try
+    {
+        f();
+        return EXIT_SUCCESS;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown exception\n";
+    }
+    return EXIT_FAILURE;
+}
+}}
+#define TEST_CHECK(X) coda_oss::test::check([&](const std::string& testName) { X(testName); }, #X)
+#define TEST_ASSERT(X) coda_oss::test::assert_(X, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_NULL(X) coda_oss::test::assert_null(X, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_FALSE(X) coda_oss::test::test_assert_false(X, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_TRUE(X) coda_oss::test::test_assert_true(X, testName, __FILE__, SYS_FUNC, __LINE__)
+/*
+#define TEST_ASSERT_EQ(X1, X2) coda_oss::test::assert_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_EQ_MSG(msg, X1, X2) coda_oss::test::assert_eq_msg(msg, X1, X2, testName, __FILE__, __LINE__)
+#define TEST_ASSERT_NOT_EQ(X1, X2) coda_oss::test::assert_not_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+*/
+#define TEST_ASSERT_ALMOST_EQ_EPS(X1, X2, EPS) coda_oss::test::assert_almost_eq_eps(X1, X2, EPS, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_ALMOST_EQ(X1, X2) coda_oss::test::assert_almost_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+/*
+#define TEST_ASSERT_GREATER_EQ(X1, X2) coda_oss::test::assert_greater_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_GREATER(X1, X2) coda_oss::test::assert_greater(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_LESSER_EQ(X1, X2) coda_oss::test::assert_lesser_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_LESSER(X1, X2) coda_oss::test::assert_lesser(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+*/
+#define TEST_FAIL(msg) coda_oss::test::fail(msg, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_EXCEPTION(X) coda_oss::test::exception([&](){(X);}, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_THROWS(X) coda_oss::test::throws([&](){(X);}, testName, __FILE__, SYS_FUNC, __LINE__)
+# define TEST_SPECIFIC_EXCEPTION(X, Y) coda_oss::test::specific_exception<Y>([&](){(X);}, \
+    "%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName, __FILE__, SYS_FUNC, __LINE__)
+#  define TEST_CASE(X) void X(std::string testName)
+#define TEST_MAIN(X) int main(int argc, char** argv) { return coda_oss::test::main([&](){X;}); }
+/*
 #  define TEST_CHECK(X) try{ X(std::string(#X)); std::cerr << #X << ": PASSED" << std::endl; } \
     catch(const except::Throwable& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.toString().c_str()); } \
     catch(const except::Throwable11& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.what()); }
@@ -42,29 +311,33 @@
 #  define TEST_ASSERT_NULL(X) if ((X) != nullptr) { die_printf("%s (%s,%s,%d): FAILED: Value should be NULL\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_FALSE(X) if ((X)) { die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to false\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_TRUE(X) if (!(X)) { die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to true\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
+*/
 #  define TEST_ASSERT_EQ(X1, X2) if ((X1) != (X2)) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
 #  define TEST_ASSERT_EQ_MSG(msg, X1, X2) if ((X1) != (X2)) die_printf("%s (%s,%d): FAILED (%s): Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, __LINE__, (msg).c_str(), str::toString((X1)).c_str(), str::toString((X2)).c_str());
 #  define TEST_ASSERT_NOT_EQ(X1, X2) if ((X1) == (X2)) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s should not equal %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
 #  define TEST_ASSERT_NOT_EQ_MSG(msg, X1, X2) if ((X1) == (X2)) die_printf("%s (%s,%d): FAILED (%s): Recv'd %s should not equal %s\n", testName.c_str(), __FILE__, __LINE__, (msg).c_str(), str::toString((X1)).c_str(), str::toString((X2)).c_str());
+/*
 #  define TEST_ASSERT_ALMOST_EQ_EPS(X1, X2, EPS) if (std::abs((X1) - (X2)) > EPS || IS_NAN(std::abs((X1) - (X2)))) die_printf("%s (%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, __LINE__, str::toString((X1)).c_str(), str::toString((X2)).c_str());
 #  define TEST_ASSERT_ALMOST_EQ(X1, X2) if (std::abs((X1) - (X2)) > std::numeric_limits<float>::epsilon() || IS_NAN(std::abs((X1) - (X2)))) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
+*/
 #  define TEST_ASSERT_GREATER_EQ(X1, X2) if ((X1) < X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be greater than or equal\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_GREATER(X1, X2) if ((X1) <= X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be greater than\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_LESSER_EQ(X1, X2) if ((X1) > X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be less than or equal\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_LESSER(X1, X2) if ((X1) >= X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be less than\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
+/*
 #  define TEST_FAIL(msg) die_printf("%s (%s,%s,%d): FAILED: %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(msg).c_str());
 #  define TEST_EXCEPTION(X) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch (const except::Throwable&){} catch (const except::Throwable11&){}
 #  define TEST_THROWS(X) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch (...){}
 #  define TEST_SPECIFIC_EXCEPTION(X,Y) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch(const Y&) { }  \
     catch (const except::Throwable&){ die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__);} \
-    catch (const except::Throwable11&){ die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__);}
+    catch (const except::Throwable11&){ die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__);} #  define TEST_CASE(X) void X(std::string testName)
 #  define TEST_CASE(X) void X(std::string testName)
-
 #define TEST_MAIN(X) int main(int argc, char** argv) {  try { X;  return EXIT_SUCCESS; } \
     catch (const except::Exception& ex) { std::cerr << ex.toString() << std::endl; } \
     catch (const std::exception& e)  { std::cerr << e.what() << std::endl; } \
     catch (...) { std::cerr << "Unknown exception\n"; } \
     return EXIT_FAILURE; }
+*/
 
 #else /* C only */
 #  include <math.h>

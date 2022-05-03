@@ -180,7 +180,7 @@ TEST_CASE(test_getAttributeValue)
     }
     {
         auto toType = [](const std::string& value) { return value == "yes"; };
-        bool value;
+        bool value = false;
         auto result = castValue(attributes, "bool", value, toType);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(true, value);
@@ -332,7 +332,7 @@ TEST_CASE(test_setAttributeValue)
         TEST_ASSERT_TRUE(result);
 
         auto toType = [](const std::string& value) { return value == "yes"; };
-        bool value;
+        bool value = false;
         result = castValue(attributes, "bool", value, toType);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(true, value);
