@@ -21,8 +21,9 @@
  */
 
 
-#ifndef __EXCEPT_CONTEXT_H__
-#define __EXCEPT_CONTEXT_H__
+#ifndef CODA_OSS_except_Context_h_INCLUDED_
+#define CODA_OSS_except_Context_h_INCLUDED_
+#pragma once
 
 #include <string>
 #include <ostream>
@@ -43,10 +44,8 @@ namespace except
  * This class contains information such as the file, line,
  * function and time
  */
-class Context
+struct Context final
 {
-public:
-
     /*!
      * Constructor
      * \param message The message describing the exception
@@ -55,18 +54,28 @@ public:
      * \param file The file where the exception occurred
      * \param line The line number where the exception occurred
      */
-    Context(const std::string& file,
-            int line,
+    Context(const char* file /*__FILE__*/, int line /*__LINE__*/,
             const std::string& func,
             const std::string& time,
-            const std::string& message) :
+            const std::string& message = "") :
         mMessage(message),
         mTime(time),
         mFunc(func),
         mFile(file),
-        mLine(line)
-    {
-    }
+        mLine(line) { }
+    Context(const std::string& message,
+        const char* file /*__FILE__*/, int line /*__LINE__*/,
+        const std::string& func = "",
+        const std::string& time = "") : Context(file, line, func, time, message) {  }
+    explicit Context(const std::string& file, int line, // old API, needed by SWIG
+            const std::string& func, const std::string& time, const std::string& message) :
+        mMessage(message), mTime(time), mFunc(func), mFile(file), mLine(line) { }
+
+    ~Context() = default;
+    Context(const Context&) = default;
+    Context& operator=(const Context&) = default;
+    Context(Context&&) = default;
+    Context& operator=(Context&&) = default;
 
     /*!
      * Get the message describing the exception that occurred
@@ -128,4 +137,4 @@ public:
 std::ostream& operator<< (std::ostream& os, const Context& c);
 }
 
-#endif
+#endif  // CODA_OSS_except_Context_h_INCLUDED_
