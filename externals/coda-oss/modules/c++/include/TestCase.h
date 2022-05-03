@@ -36,7 +36,7 @@
 
 #  define IS_NAN(X) X != X
 
-namespace coda_oss { namespace test {
+namespace test {
 inline void diePrintf(const char* format, const std::string& testName, const char* s)
 {
     sys::diePrintf(format, testName.c_str(), s);
@@ -277,32 +277,32 @@ inline int main(TFunc f)
     }
     return EXIT_FAILURE;
 }
-}}
-#define TEST_CHECK(X) coda_oss::test::check([&](const std::string& testName) { X(testName); }, #X)
-#define TEST_ASSERT(X) coda_oss::test::assert_(X, testName, __FILE__, SYS_FUNC, __LINE__)
-#define TEST_ASSERT_NULL(X) coda_oss::test::assert_null(X, testName, __FILE__, SYS_FUNC, __LINE__)
-#define TEST_ASSERT_FALSE(X) coda_oss::test::test_assert_false(X, testName, __FILE__, SYS_FUNC, __LINE__)
-#define TEST_ASSERT_TRUE(X) coda_oss::test::test_assert_true(X, testName, __FILE__, SYS_FUNC, __LINE__)
+}
+#define TEST_CHECK(X) test::check([&](const std::string& testName) { X(testName); }, #X)
+#define TEST_ASSERT(X) test::assert_(X, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_NULL(X) test::assert_null(X, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_FALSE(X) test::test_assert_false(X, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_TRUE(X) test::test_assert_true(X, testName, __FILE__, SYS_FUNC, __LINE__)
 /*
-#define TEST_ASSERT_EQ(X1, X2) coda_oss::test::assert_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
-#define TEST_ASSERT_EQ_MSG(msg, X1, X2) coda_oss::test::assert_eq_msg(msg, X1, X2, testName, __FILE__, __LINE__)
-#define TEST_ASSERT_NOT_EQ(X1, X2) coda_oss::test::assert_not_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_EQ(X1, X2) test::assert_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_EQ_MSG(msg, X1, X2) test::assert_eq_msg(msg, X1, X2, testName, __FILE__, __LINE__)
+#define TEST_ASSERT_NOT_EQ(X1, X2) test::assert_not_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
 */
-#define TEST_ASSERT_ALMOST_EQ_EPS(X1, X2, EPS) coda_oss::test::assert_almost_eq_eps(X1, X2, EPS, testName, __FILE__, SYS_FUNC, __LINE__)
-#define TEST_ASSERT_ALMOST_EQ(X1, X2) coda_oss::test::assert_almost_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_ALMOST_EQ_EPS(X1, X2, EPS) test::assert_almost_eq_eps(X1, X2, EPS, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_ALMOST_EQ(X1, X2) test::assert_almost_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
 /*
-#define TEST_ASSERT_GREATER_EQ(X1, X2) coda_oss::test::assert_greater_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
-#define TEST_ASSERT_GREATER(X1, X2) coda_oss::test::assert_greater(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
-#define TEST_ASSERT_LESSER_EQ(X1, X2) coda_oss::test::assert_lesser_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
-#define TEST_ASSERT_LESSER(X1, X2) coda_oss::test::assert_lesser(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_GREATER_EQ(X1, X2) test::assert_greater_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_GREATER(X1, X2) test::assert_greater(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_LESSER_EQ(X1, X2) test::assert_lesser_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_LESSER(X1, X2) test::assert_lesser(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
 */
-#define TEST_FAIL(msg) coda_oss::test::fail(msg, testName, __FILE__, SYS_FUNC, __LINE__)
-#define TEST_EXCEPTION(X) coda_oss::test::exception([&](){(X);}, testName, __FILE__, SYS_FUNC, __LINE__)
-#define TEST_THROWS(X) coda_oss::test::throws([&](){(X);}, testName, __FILE__, SYS_FUNC, __LINE__)
-# define TEST_SPECIFIC_EXCEPTION(X, Y) coda_oss::test::specific_exception<Y>([&](){(X);}, \
+#define TEST_FAIL(msg) test::fail(msg, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_EXCEPTION(X) test::exception([&](){(X);}, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_THROWS(X) test::throws([&](){(X);}, testName, __FILE__, SYS_FUNC, __LINE__)
+# define TEST_SPECIFIC_EXCEPTION(X, Y) test::specific_exception<Y>([&](){(X);}, \
     "%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName, __FILE__, SYS_FUNC, __LINE__)
 #  define TEST_CASE(X) void X(std::string testName)
-#define TEST_MAIN(X) int main(int argc, char** argv) { return coda_oss::test::main([&](){X;}); }
+#define TEST_MAIN(X) int main(int argc, char** argv) { return test::main([&](){X;}); }
 /*
 #  define TEST_CHECK(X) try{ X(std::string(#X)); std::cerr << #X << ": PASSED" << std::endl; } \
     catch(const except::Throwable& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.toString().c_str()); } \

@@ -39,6 +39,7 @@ namespace filesystem
     using std::filesystem::is_regular_file;
     using std::filesystem::remove;
     using std::filesystem::temp_directory_path;
+    using std::filesystem::file_size;
 }
 }
 
