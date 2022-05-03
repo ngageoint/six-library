@@ -56,17 +56,23 @@ class EncodedString final
         return s_;
     }
 
+    // No "public" operator=() for these; this class is mostly for storage and/or conversion,
+    // not extensive manipulation.  Create a new instance and assign/move that.
     void assign(coda_oss::u8string::const_pointer);
     void assign(str::W1252string::const_pointer);
     void assign(std::string::const_pointer);
+    void assign(const EncodedStringView&);
+    void assign(const EncodedString&);
+    
+    void move(EncodedString&&) noexcept;
 
 public:
     EncodedString() = default;
     ~EncodedString() = default;
-    EncodedString(const EncodedString&) = default;
-    EncodedString& operator=(const EncodedString&) = default;
-    EncodedString(EncodedString&&) = default;
-    EncodedString& operator=(EncodedString&&) = default;
+    EncodedString(const EncodedString&);
+    EncodedString& operator=(const EncodedString&);
+    EncodedString(EncodedString&&) noexcept;
+    EncodedString& operator=(EncodedString&&) noexcept;
 
     explicit EncodedString(const coda_oss::u8string& s);
     explicit EncodedString(coda_oss::u8string::const_pointer);
@@ -91,8 +97,7 @@ public:
     static EncodedString fromUtf16(const std::wstring&); // not currently implemetned, no need
     static EncodedString fromUtf32(const std::wstring&); // not currently implemetned, no need
     
-    // For "complex" operatations, use the view.  While creating a new one
-    // is cheap, there's not really any need that.
+    // For "complex" operatations, use the view.
     const EncodedStringView& view() const
     {
         return v_;

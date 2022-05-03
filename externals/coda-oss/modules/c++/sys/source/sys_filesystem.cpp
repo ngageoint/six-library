@@ -16,15 +16,16 @@
 #include <vector>
 
 #include "sys/Path.h"
+#include "gsl/gsl.h"
 
 namespace fs = sys::filesystem;
 
-static std::string strerror_(int errnum)
+static inline std::string strerror_(int errnum)
 {
 #ifdef _MSC_VER
-    char errmsg[1024];
-    strerror_s(errmsg, 1024, errnum);
-    return errmsg;
+    std::array<char, 1014> errmsg;
+    strerror_s(errmsg.data(), errmsg.size(), errnum);
+    return errmsg.data();
 #else
     return ::strerror(errnum);
 #endif
@@ -48,7 +49,7 @@ fs::path::string_type fs::path::to_native(const std::string& s_)
 {
 #ifdef _WIN32
     const _bstr_t s(s_.c_str());  // convert to wchar_t
-    return static_cast<wchar_t*>(s);
+    return static_cast<const wchar_t*>(s);
 #else
     return s_;
 #endif
@@ -289,7 +290,13 @@ fs::path fs::current_path()
 #endif
             (temp, sizeof(temp))
             ? std::string(temp)
-            : std::string("");
+            : std::string();
+}
+
+std::uintmax_t fs::file_size(const fs::path& p)
+{
+    const sys::Path path(p.string());
+    return gsl::narrow <std::uintmax_t>(path.length());
 }
 
 bool fs::details::Equals(const path& lhs, const path& rhs) noexcept

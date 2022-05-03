@@ -19,14 +19,18 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIO_LITE_FILE_WRITER_H__
-#define __SIO_LITE_FILE_WRITER_H__
+#ifndef CODA_OSS_sio_lite_FileWriter_h_INCLUDED_
+#define CODA_OSS_sio_lite_FileWriter_h_INCLUDED_
 
 #include <memory>
 #include <vector>
+
 #include <import/sys.h>
 #include <import/io.h>
 #include <import/mem.h>
+#include <types/RowCol.h>
+#include <sys/filesystem.h>
+
 #include "sio/lite/InvalidHeaderException.h"
 #include "sio/lite/FileHeader.h"
 
@@ -44,10 +48,8 @@ namespace lite
  *  may be accessed directly.  Additionally, the writeSIO() routine provides
  *  simpler functionality
  */
-class FileWriter
+struct FileWriter
 {
-public:
-
     FileWriter(const std::string& outputFile) : mFileName(outputFile), mAdopt(true)
     {
         mStream.reset(new io::FileOutputStream(mFileName));
@@ -63,6 +65,12 @@ public:
     {
         mStream.reset(stream);
     }
+
+    // need copy for Python binding w/SWIG
+    //FileWriter(const FileWriter&) = default;
+    //FileWriter& operator=(const FileWriter&) = default;
+    //FileWriter(FileWriter&&) = default;
+    //FileWriter& operator=(FileWriter&&) = default;
 
     virtual ~FileWriter()
     {
@@ -174,10 +182,15 @@ template<typename T> void writeSIO(const T* image, size_t rows, size_t cols,
 
     imageStream.close();
 }
+template<typename T>
+void writeSIO(const T* image, const types::RowCol<size_t>& dims, const sys::filesystem::path& imageFile,
+                                   int et = AUTO, int es = AUTO)
+{
+    writeSIO(image, dims.row, dims.col, imageFile.string(), et, es);
+}
+
 
 }
 }
 
-#endif
-
-
+#endif  // CODA_OSS_sio_lite_FileWriter_h_INCLUDED_

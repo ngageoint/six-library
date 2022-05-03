@@ -381,6 +381,35 @@ TEST_CASE(test_EncodedStringView)
     }
 }
 
+TEST_CASE(test_EncodedString)
+{
+    str::EncodedString es;
+    TEST_ASSERT_TRUE(es.native().empty());
+    {
+        str::EncodedString es_copy(es);  // copy
+        TEST_ASSERT_TRUE(es_copy.native().empty());
+    }
+    es = str::EncodedString("abc"); // assignment
+    TEST_ASSERT_EQ(es.native(), "abc");
+    {
+        str::EncodedString es_copy(es);  // copy, again; this time w/o default content
+        TEST_ASSERT_EQ(es_copy.native(), "abc");
+    }
+
+    str::EncodedString abc(es); // copy, for use below
+    TEST_ASSERT_EQ(abc.native(), "abc");
+    
+    str::EncodedString es2;
+    es = std::move(es2);  // move assignment
+    TEST_ASSERT_TRUE(es.native().empty());
+    str::EncodedString abc_(abc);  // copy
+    es = std::move(abc_); // move assignment, w/o default content
+    TEST_ASSERT_EQ(es.native(), "abc");
+
+    str::EncodedString es3(std::move(abc)); // move constructor
+    TEST_ASSERT_EQ(es3.native(), "abc");
+}
+
 int main(int, char**)
 {
     TEST_CHECK(testConvert);
@@ -395,4 +424,5 @@ int main(int, char**)
     TEST_CHECK(test_u8string_to_u16string);
     TEST_CHECK(test_u8string_to_u32string);
     TEST_CHECK(test_EncodedStringView);
+    TEST_CHECK(test_EncodedString);
 }

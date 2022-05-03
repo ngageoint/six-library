@@ -50,7 +50,7 @@ typedef struct _j2k_IWriter
 typedef struct _j2k_WriterOptions
 {
     /* TODO add more options as we see fit */
-    double compressionRatio;
+    float compressionRatio;
     uint32_t numResolutions;
 } j2k_WriterOptions;
 #if _MSC_VER

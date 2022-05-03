@@ -68,6 +68,14 @@ nitf::Field BandInfo::getSubcategory() const
     return nitf::Field(getNativeOrThrow()->subcategory);
 }
 
+BandInfo::BandInfo(Representation representation_, // C4458: declaration of '...' hides class member
+    Subcategory subcategory_, // C4458: declaration of '...' hides class member
+    const std::string& imageFilterCondition,
+    const std::string& imageFilterCode) : BandInfo(representation_)
+{
+    init(representation_, subcategory_, imageFilterCondition, imageFilterCode);
+}
+
 nitf::Field BandInfo::getImageFilterCondition() const
 {
     return nitf::Field(getNativeOrThrow()->imageFilterCondition);

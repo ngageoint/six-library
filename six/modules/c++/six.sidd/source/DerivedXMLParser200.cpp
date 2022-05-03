@@ -1613,8 +1613,7 @@ xml::lite::Element& DerivedXMLParser200::convertExploitationFeaturesToXML(const 
             collection->information.radarMode,
             &radarModeElem);
         // optional
-        if (collection->information.radarModeID
-            != Init::undefined<std::string>())
+        if (!collection->information.radarModeID.empty())
             parser.createString("ModeID",
                 parser.common().getSICommonURI(),
                 collection->information.radarModeID,

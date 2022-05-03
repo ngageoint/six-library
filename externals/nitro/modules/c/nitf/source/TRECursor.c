@@ -74,7 +74,7 @@ NITFPRIV(int) nitf_TRECursor_evalCondLength(nitf_TRE * tre,
 NITFPRIV(int) nitf_TRECursor_evaluatePostfix(nitf_TRE *tre,
                                              char idx[10][10],
                                              int looping,
-                                             char *expression,
+                                             const char *expression,
                                              nitf_Error *error);
 
 typedef unsigned int (*NITF_TRE_CURSOR_COUNT_FUNCTION) (nitf_TRE *,
@@ -224,7 +224,7 @@ NITFAPI(void) nitf_TRECursor_cleanup(nitf_TRECursor * tre_cursor)
 NITFAPI(NITF_BOOL) nitf_TRECursor_isDone(nitf_TRECursor * tre_cursor)
 {
     nitf_Error error;
-    int isDone = (tre_cursor->desc_ptr == tre_cursor->end_ptr);
+    NITF_BOOL isDone = (tre_cursor->desc_ptr == tre_cursor->end_ptr);
 
     /* check if the passed in cursor is not at the beginning */
     if (!isDone && tre_cursor->index >= 0)
@@ -515,7 +515,7 @@ NITFPRIV(int) nitf_TRECursor_evalLoops(nitf_TRE* tre,
             (NITF_TRE_CURSOR_COUNT_FUNCTION)desc_ptr->tag;
 
 
-        loops = (*fn)(tre, idx_str, looping, error);
+        loops = (int)((*fn)(tre, idx_str, looping, error));
 
         if (loops == -1)
             return NITF_FAILURE;
@@ -854,7 +854,7 @@ NITFPRIV(int) nitf_TRECursor_evalCondLength(nitf_TRE* tre,
 NITFPRIV(int) nitf_TRECursor_evaluatePostfix(nitf_TRE *tre,
                                              char idx[10][10],
                                              int looping,
-                                             char *expression,
+                                             const char *expression,
                                              nitf_Error *error)
 {
     nitf_List *parts = NULL;

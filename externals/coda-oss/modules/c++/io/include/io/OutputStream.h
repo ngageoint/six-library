@@ -30,6 +30,7 @@
 #include "sys/Conf.h"
 #include "coda_oss/string.h"
 #include "coda_oss/cstddef.h"
+#include "coda_oss/span.h"
 
 /*!
  * \file OutputStream.h
@@ -71,23 +72,13 @@ struct OutputStream
      *  Write a string
      *  \param str
      */
-    void write(std::string::const_pointer pStr, size_t length)  // i.e., std::string_view
-    {
-        const void* const pStr_ = pStr;
-        write(pStr_, length);
-    }
     void write(const std::string& str)
     {
-        write(str.c_str(), str.length());
-    }
-    void write(coda_oss::u8string::const_pointer pStr, size_t length) // i.e., std::string_view
-    {
-        const void* const pStr_ = pStr;
-        write(pStr_, length);
+        write(coda_oss::span<const std::string::value_type>(str.data(), str.size()));
     }
     void write(const coda_oss::u8string& str)
     {
-        write(str.c_str(), str.length());
+        write(coda_oss::span<const coda_oss::u8string::value_type>(str.data(), str.size()));
     }
 
     /*!
@@ -114,6 +105,16 @@ struct OutputStream
      * \throw IOException
      */
     virtual void write(const void* buffer, size_t len) = 0;
+    template<typename T>
+    void write(coda_oss::span<const T> buffer)
+    {
+        write(buffer.data(), buffer.size_bytes());
+    }
+    template <typename T>
+    void write(coda_oss::span<T> buffer)
+    {
+        write(coda_oss::span<const T>(buffer.data(), buffer.size()));
+    }
 
     /*!
      *  Flush the stream if needed

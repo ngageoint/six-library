@@ -24,7 +24,7 @@
 #include <import/nrt.h>
 #include "TestCase.h"
 
-TEST_CASE(test_j2k_read_tile)
+TEST_CASE(j2k_read_tile)
 {
     /* placeholder */
 }
@@ -32,6 +32,6 @@ TEST_CASE(test_j2k_read_tile)
 TEST_MAIN(
     (void)argc;
     (void)argv;
-    TEST_CHECK(test_j2k_read_tile);
+    TEST_CHECK(j2k_read_tile);
     )
 

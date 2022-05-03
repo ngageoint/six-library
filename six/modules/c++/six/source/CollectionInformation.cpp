@@ -27,20 +27,13 @@ namespace six
 {
 CollectionInformation::CollectionInformation()
 {
-    collectorName = Init::undefined<std::string>();
-    collectType = Init::undefined<six::CollectType>();
-    illuminatorName = Init::undefined<std::string>();
-    coreName = Init::undefined<std::string>();
     radarMode = Init::undefined<RadarModeType>();
-    radarModeID = Init::undefined<std::string>();
-    releaseInfo = Init::undefined<std::string>();
-    mClassification = Init::undefined<std::string>();
 }
 
   bool CollectionInformation::operator==(const CollectionInformation& rhs) const
 {
     const auto& lhs = *this;
-    const auto result = lhs.collectorName == rhs.collectorName &&
+    return lhs.collectorName == rhs.collectorName &&
         lhs.collectType == rhs.collectType &&
         lhs.illuminatorName == rhs.illuminatorName &&
         lhs.coreName == rhs.coreName &&
@@ -48,22 +41,6 @@ CollectionInformation::CollectionInformation()
         lhs.radarModeID == rhs.radarModeID &&
         lhs.releaseInfo == rhs.releaseInfo &&
         lhs.getClassificationLevel() == rhs.getClassificationLevel();
-    if (!result)
-    {
-        // no need to look at mClassification_u8
-        return false;
-    }
-
-    // Everything is equal up to this point
-    std::u8string lhs_classification_u8, rhs_classification_u8;
-    const auto lhs_result = lhs.getClassificationLevel(lhs_classification_u8);
-    const auto rhs_result = rhs.getClassificationLevel(rhs_classification_u8);
-    if (lhs_result && rhs_result) // mClassification_u8 might not be set
-    {
-        // we've got two u8strings
-        return lhs_classification_u8 == rhs_classification_u8;
-    }
-    return lhs_result == rhs_result; // either none, or only one
 }
 
 CollectionInformation* CollectionInformation::clone() const
@@ -73,25 +50,15 @@ CollectionInformation* CollectionInformation::clone() const
 
 std::string CollectionInformation::getClassificationLevel() const
 {
-    std::u8string utf8;
-    if (!getClassificationLevel(utf8))
-    {
-        return mClassification; // no UTF-8 value
-    }
-    return str::EncodedStringView(utf8).native(); // use the UTF-8 value, converted to native
+    return mClassification.native();
 }
-bool CollectionInformation::getClassificationLevel(std::u8string& result) const
+void CollectionInformation::getClassificationLevel(str::EncodedString& result) const
 {
-    if (mClassification_u8.has_value())
-    {
-        result = mClassification_u8.value();
-        return true;
-    }
-    return false;
+    result = mClassification;
 }
-void CollectionInformation::setClassificationLevel(const std::u8string& classification)
+void CollectionInformation::setClassificationLevel(const str::EncodedString& classification)
 {
-    mClassification_u8 = classification;
+    mClassification = classification;
 }
 
 std::ostream& operator<< (std::ostream& os, const six::CollectionInformation& c)

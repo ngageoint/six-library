@@ -56,15 +56,15 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <SupportJustMyCode>true</SupportJustMyCode>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -86,7 +86,6 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
@@ -133,6 +132,7 @@
     <ClInclude Include="j2k\include\j2k\Container.h" />
     <ClInclude Include="j2k\include\j2k\Defines.h" />
     <ClInclude Include="j2k\include\j2k\j2k_Reader.h" />
+    <ClInclude Include="j2k\include\j2k\TileWriter.h" />
     <ClInclude Include="j2k\include\j2k\j2k_Writer.h" />
     <ClInclude Include="nitf\include\import\nitf.h" />
     <ClInclude Include="nitf\include\nitf\BandInfo.h" />
@@ -244,6 +244,7 @@
     <ClCompile Include="j2k\source\Container.c" />
     <ClCompile Include="j2k\source\Defines.c" />
     <ClCompile Include="j2k\source\j2k_Reader.c" />
+    <ClCompile Include="j2k\source\TileWriter.c" />
     <ClCompile Include="j2k\source\j2k_Writer.c" />
     <ClCompile Include="j2k\source\JasPerImpl.c" />
     <ClCompile Include="j2k\source\OpenJPEGImpl.c" />

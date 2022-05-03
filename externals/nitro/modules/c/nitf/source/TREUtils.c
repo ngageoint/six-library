@@ -184,6 +184,8 @@ nitf_TREUtils_getRawData(nitf_TRE* tre,
     /* the cursor */
     nitf_TRECursor cursor;
 
+    size_t length_ = 0;
+
     /* get actual length of TRE */
     length = nitf_TREUtils_computeLength(tre);
     *treLength = length;
@@ -207,7 +209,7 @@ nitf_TREUtils_getRawData(nitf_TRE* tre,
                         NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
-    const size_t length_ = ((size_t)length) + 1;
+    length_ = ((size_t)length) + 1;
     memset(data, 0, length_);
 
     cursor = nitf_TRECursor_begin(tre);
