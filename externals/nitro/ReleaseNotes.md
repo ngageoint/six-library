@@ -1,6 +1,7 @@
 # NITRO (NITF i/o) Release Notes
 
-## WIP: [Version 2.?.?](https://github.com/mdaus/nitro/releases/tag/NITRO-2.?.?); ??? ??, 2022
+## [Version 2.10.9](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.9); May 3, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) release [2022-05-03](https://github.com/mdaus/coda-oss/releases/tag/2022-05-03)
 * the large unused **archive** directory has been removed; contents are in [archive/java](https://github.com/mdaus/nitro/tree/archive/java)
 and [archive/mex](https://github.com/mdaus/nitro/tree/archive/mex).
 * the large unused **docs** directory has been removed; contents are in [archive/docs](https://github.com/mdaus/nitro/tree/archive/docs).
