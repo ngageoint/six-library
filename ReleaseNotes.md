@@ -2,9 +2,9 @@
 
 # SIX Release Notes
 
-## Version 3.?.?; ??? ??, 2022
-* [coda-oss](https://github.com/mdaus/coda-oss) version [...](https://github.com/mdaus/coda-oss/releases/tag/...)
-* [nitro](https://github.com/mdaus/nitro) version [2.??.?](https://github.com/mdaus/nitro/releases/tag/NITRO-2.??.?)
+## Version 3.1.10; May 3, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-05-03](https://github.com/mdaus/coda-oss/releases/tag/2022-05-03)
+* [nitro](https://github.com/mdaus/nitro) version [2.10.9](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.9)
 * improve performance of *AMP8I_PHS8I* reading.
 
 ## Version 3.1.9; February 22, 2022 (aka 2/22/22)
