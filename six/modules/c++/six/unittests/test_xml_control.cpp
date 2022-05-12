@@ -96,9 +96,29 @@ TEST_CASE(ignoreEmptyEnvVariable)
     }
 }
 
+TEST_CASE(dataTypeToString)
+{
+    std::string result = six::XMLControl::dataTypeToString(six::DataType::COMPLEX);
+    TEST_ASSERT_EQ("SICD_XML", result);
+
+    result = six::XMLControl::dataTypeToString(six::DataType::DERIVED, false /*appendXML*/);
+    TEST_ASSERT_EQ("SIDD", result);
+
+    // Generate a garbage value to test the exception.  Have to hack-things-up
+    // because there are overloads on six::DataType for integer assignment.
+    auto dataType = six::DataType::COMPLEX;
+    void* pDataType = &dataType;
+    int* pIntDataType = static_cast<int*>(pDataType);
+    *pIntDataType = 999; // bypass overloads; should now be a garbage value
+    TEST_ASSERT_NOT_EQ(dataType, six::DataType::COMPLEX);
+    TEST_ASSERT_NOT_EQ(dataType, six::DataType::DERIVED);
+    TEST_EXCEPTION(six::XMLControl::dataTypeToString(dataType)); // the "default:" case label will throw, as desired
+}
+
 TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(loadCompiledSchemaPath);
     TEST_CHECK(respectGivenPaths);
     TEST_CHECK(loadFromEnvVariable);
     TEST_CHECK(ignoreEmptyEnvVariable);
+    TEST_CHECK(dataTypeToString);
     )
