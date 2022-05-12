@@ -112,7 +112,7 @@ TEST_CASE(ecfFromLlh)
 }
 }
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(ecfFromLlh);
     TEST_CHECK(fillValidData);
     )

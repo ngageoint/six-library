@@ -776,7 +776,7 @@ TEST_CASE(forcing_various_numbers_of_segments)
 }
 }
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(no_funky_segmentation);
     TEST_CHECK(forcing_various_numbers_of_segments);
 )

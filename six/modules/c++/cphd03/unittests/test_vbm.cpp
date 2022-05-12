@@ -293,7 +293,7 @@ static int call_srand()
 }
 static int unused_ = call_srand();
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(testVbmFx);
     TEST_CHECK(testVbmToa);
     TEST_CHECK(testVbmThrow);

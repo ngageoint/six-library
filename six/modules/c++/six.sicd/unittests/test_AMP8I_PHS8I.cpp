@@ -759,7 +759,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     }
 }
 
-TEST_MAIN((void)argc; (void)argv;
+TEST_MAIN(
     TEST_CHECK(test_8bit_ampphs);
     TEST_CHECK(read_8bit_ampphs_with_table);
     TEST_CHECK(read_8bit_ampphs_no_table);
