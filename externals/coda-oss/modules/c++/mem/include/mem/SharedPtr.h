@@ -26,8 +26,6 @@
 
 #include <memory>
 
-#include <config/coda_oss_config.h>
-
 // Adding a forward declaration here in order to have SWIG correctly generate
 // bindings for SharedPtr.
 //

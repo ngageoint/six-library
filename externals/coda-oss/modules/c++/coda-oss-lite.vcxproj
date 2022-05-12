@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cli\include\cli\Argument.h" />
+    <ClInclude Include="cli\include\cli\ArgumentParser.h" />
+    <ClInclude Include="cli\include\cli\Results.h" />
+    <ClInclude Include="cli\include\cli\Value.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\bit.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\CPlusPlus.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\cstddef.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\memory.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\namespace_.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\optional.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\optional_.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\span.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\span_.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\string.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\type_traits.h" />
+    <ClInclude Include="config\include\config\compiler_extensions.h" />
+    <ClInclude Include="config\include\config\Exports.h" />
+    <ClInclude Include="config\include\config\Version.h" />
+    <ClInclude Include="except\include\except\Backtrace.h" />
+    <ClInclude Include="except\include\except\Context.h" />
+    <ClInclude Include="except\include\except\Error.h" />
+    <ClInclude Include="except\include\except\Exception.h" />
+    <ClInclude Include="except\include\except\HandlerInterface.h" />
+    <ClInclude Include="except\include\except\Throwable.h" />
+    <ClInclude Include="except\include\except\Trace.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="gsl\include\gsl\gsl.h" />
+    <ClInclude Include="gsl\include\gsl\Gsl_.h" />
+    <ClInclude Include="gsl\include\gsl\Gsl_narrow.h" />
+    <ClInclude Include="gsl\include\gsl\use_gsl.h" />
+    <ClInclude Include="include\TestCase.h" />
+    <ClInclude Include="io\include\io\BidirectionalStream.h" />
+    <ClInclude Include="io\include\io\BufferViewStream.h" />
+    <ClInclude Include="io\include\io\ByteStream.h" />
+    <ClInclude Include="io\include\io\CountingStreams.h" />
+    <ClInclude Include="io\include\io\DataStream.h" />
+    <ClInclude Include="io\include\io\DbgStream.h" />
+    <ClInclude Include="io\include\io\FileInputStream.h" />
+    <ClInclude Include="io\include\io\FileInputStreamIOS.h" />
+    <ClInclude Include="io\include\io\FileInputStreamOS.h" />
+    <ClInclude Include="io\include\io\FileOutputStream.h" />
+    <ClInclude Include="io\include\io\FileOutputStreamIOS.h" />
+    <ClInclude Include="io\include\io\FileOutputStreamOS.h" />
+    <ClInclude Include="io\include\io\FileUtils.h" />
+    <ClInclude Include="io\include\io\InputStream.h" />
+    <ClInclude Include="io\include\io\MMapInputStream.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="io\include\io\NullStreams.h" />
+    <ClInclude Include="io\include\io\OutputStream.h" />
+    <ClInclude Include="io\include\io\PipeStream.h" />
+    <ClInclude Include="io\include\io\ProxyStreams.h" />
+    <ClInclude Include="io\include\io\ReadUtils.h" />
+    <ClInclude Include="io\include\io\RotatingFileOutputStream.h" />
+    <ClInclude Include="io\include\io\Seekable.h" />
+    <ClInclude Include="io\include\io\SeekableStreams.h" />
+    <ClInclude Include="io\include\io\Serializable.h" />
+    <ClInclude Include="io\include\io\SerializableArray.h" />
+    <ClInclude Include="io\include\io\SerializableFile.h" />
+    <ClInclude Include="io\include\io\StandardStreams.h" />
+    <ClInclude Include="io\include\io\StreamSplitter.h" />
+    <ClInclude Include="io\include\io\StringStream.h" />
+    <ClInclude Include="io\include\io\TempFile.h" />
+    <ClInclude Include="math.linear\include\math\linear\Eigenvalue.h" />
+    <ClInclude Include="math.linear\include\math\linear\Line2D.h" />
+    <ClInclude Include="math.linear\include\math\linear\Matrix2D.h" />
+    <ClInclude Include="math.linear\include\math\linear\MatrixMxN.h" />
+    <ClInclude Include="math.linear\include\math\linear\Vector.h" />
+    <ClInclude Include="math.linear\include\math\linear\VectorN.h" />
+    <ClInclude Include="math.poly\include\math\poly\Fit.h" />
+    <ClInclude Include="math.poly\include\math\poly\Fixed1D.h" />
+    <ClInclude Include="math.poly\include\math\poly\Fixed2D.h" />
+    <ClInclude Include="math.poly\include\math\poly\OneD.h" />
+    <ClInclude Include="math.poly\include\math\poly\OneD.hpp" />
+    <ClInclude Include="math.poly\include\math\poly\TwoD.h" />
+    <ClInclude Include="math.poly\include\math\poly\TwoD.hpp" />
+    <ClInclude Include="math.poly\include\math\poly\Utils.h" />
+    <ClInclude Include="math\include\math\Bessel.h" />
+    <ClInclude Include="math\include\math\Constants.h" />
+    <ClInclude Include="math\include\math\ConvexHull.h" />
+    <ClInclude Include="math\include\math\Round.h" />
+    <ClInclude Include="math\include\math\Utilities.h" />
+    <ClInclude Include="mem\include\mem\Align.h" />
+    <ClInclude Include="mem\include\mem\BufferView.h" />
+    <ClInclude Include="mem\include\mem\ScopedAlignedArray.h" />
+    <ClInclude Include="mem\include\mem\ScopedArray.h" />
+    <ClInclude Include="mem\include\mem\ScopedCloneablePtr.h" />
+    <ClInclude Include="mem\include\mem\ScopedCopyablePtr.h" />
+    <ClInclude Include="mem\include\mem\ScopedPtr.h" />
+    <ClInclude Include="mem\include\mem\ScratchMemory.h" />
+    <ClInclude Include="mem\include\mem\ScratchMemory.hpp" />
+    <ClInclude Include="mem\include\mem\SharedPtr.h" />
+    <ClInclude Include="mem\include\mem\SharedPtrCpp11.h" />
+    <ClInclude Include="mem\include\mem\Span.h" />
+    <ClInclude Include="mem\include\mem\SwapBuffer.h" />
+    <ClInclude Include="mem\include\mem\VectorOfPointers.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="polygon\include\polygon\DrawPolygon.h" />
+    <ClInclude Include="polygon\include\polygon\Intersections.h" />
+    <ClInclude Include="polygon\include\polygon\PolygonMask.h" />
+    <ClInclude Include="str\include\str\Convert.h" />
+    <ClInclude Include="str\include\str\EncodedString.h" />
+    <ClInclude Include="str\include\str\EncodedStringView.h" />
+    <ClInclude Include="str\include\str\Encoding.h" />
+    <ClInclude Include="str\include\str\Format.h" />
+    <ClInclude Include="str\include\str\Manip.h" />
+    <ClInclude Include="str\include\str\Tokenizer.h" />
+    <ClInclude Include="str\include\str\utf8.h" />
+    <ClInclude Include="sys\include\sys\AbstractOS.h" />
+    <ClInclude Include="sys\include\sys\AtomicCounter.h" />
+    <ClInclude Include="sys\include\sys\AtomicCounterCpp11.h" />
+    <ClInclude Include="sys\include\sys\AtomicCounterMutex.h" />
+    <ClInclude Include="sys\include\sys\AtomicCounterSolaris.h" />
+    <ClInclude Include="sys\include\sys\AtomicCounterWin32.h" />
+    <ClInclude Include="sys\include\sys\AtomicCounterX86.h" />
+    <ClInclude Include="sys\include\sys\Backtrace.h" />
+    <ClInclude Include="sys\include\sys\ConditionVar.h" />
+    <ClInclude Include="sys\include\sys\ConditionVarInterface.h" />
+    <ClInclude Include="sys\include\sys\ConditionVarIrix.h" />
+    <ClInclude Include="sys\include\sys\ConditionVarNSPR.h" />
+    <ClInclude Include="sys\include\sys\ConditionVarPosix.h" />
+    <ClInclude Include="sys\include\sys\ConditionVarSolaris.h" />
+    <ClInclude Include="sys\include\sys\ConditionVarWin32.h" />
+    <ClInclude Include="sys\include\sys\Conf.h" />
+    <ClInclude Include="sys\include\sys\CPlusPlus.h" />
+    <ClInclude Include="sys\include\sys\DateTime.h" />
+    <ClInclude Include="sys\include\sys\Dbg.h" />
+    <ClInclude Include="sys\include\sys\DirectoryEntry.h" />
+    <ClInclude Include="sys\include\sys\DLL.h" />
+    <ClInclude Include="sys\include\sys\Err.h" />
+    <ClInclude Include="sys\include\sys\Exec.h" />
+    <ClInclude Include="sys\include\sys\File.h" />
+    <ClInclude Include="sys\include\sys\FileFinder.h" />
+    <ClInclude Include="sys\include\sys\filesystem.h" />
+    <ClInclude Include="sys\include\sys\LocalDateTime.h" />
+    <ClInclude Include="sys\include\sys\Mutex.h" />
+    <ClInclude Include="sys\include\sys\MutexInterface.h" />
+    <ClInclude Include="sys\include\sys\MutexIrix.h" />
+    <ClInclude Include="sys\include\sys\MutexNSPR.h" />
+    <ClInclude Include="sys\include\sys\MutexPosix.h" />
+    <ClInclude Include="sys\include\sys\MutexSolaris.h" />
+    <ClInclude Include="sys\include\sys\MutexWin32.h" />
+    <ClInclude Include="sys\include\sys\OS.h" />
+    <ClInclude Include="sys\include\sys\OSUnix.h" />
+    <ClInclude Include="sys\include\sys\OSWin32.h" />
+    <ClInclude Include="sys\include\sys\Path.h" />
+    <ClInclude Include="sys\include\sys\Process.h" />
+    <ClInclude Include="sys\include\sys\ProcessInterface.h" />
+    <ClInclude Include="sys\include\sys\ProcessUnix.h" />
+    <ClInclude Include="sys\include\sys\ProcessWin32.h" />
+    <ClInclude Include="sys\include\sys\ReadWriteMutex.h" />
+    <ClInclude Include="sys\include\sys\ResourceCheck.h" />
+    <ClInclude Include="sys\include\sys\Runnable.h" />
+    <ClInclude Include="sys\include\sys\ScopedCPUAffinityUnix.h" />
+    <ClInclude Include="sys\include\sys\Semaphore.h" />
+    <ClInclude Include="sys\include\sys\SemaphoreInterface.h" />
+    <ClInclude Include="sys\include\sys\SemaphoreIrix.h" />
+    <ClInclude Include="sys\include\sys\SemaphoreNSPR.h" />
+    <ClInclude Include="sys\include\sys\SemaphorePosix.h" />
+    <ClInclude Include="sys\include\sys\SemaphoreSolaris.h" />
+    <ClInclude Include="sys\include\sys\SemaphoreWin32.h" />
+    <ClInclude Include="sys\include\sys\StopWatch.h" />
+    <ClInclude Include="sys\include\sys\String.h" />
+    <ClInclude Include="sys\include\sys\SyncFactoryIrix.h" />
+    <ClInclude Include="sys\include\sys\SystemException.h" />
+    <ClInclude Include="sys\include\sys\sys_filesystem.h" />
+    <ClInclude Include="sys\include\sys\Thread.h" />
+    <ClInclude Include="sys\include\sys\ThreadInterface.h" />
+    <ClInclude Include="sys\include\sys\ThreadIrix.h" />
+    <ClInclude Include="sys\include\sys\ThreadNSPR.h" />
+    <ClInclude Include="sys\include\sys\ThreadPosix.h" />
+    <ClInclude Include="sys\include\sys\ThreadSolaris.h" />
+    <ClInclude Include="sys\include\sys\ThreadWin32.h" />
+    <ClInclude Include="sys\include\sys\TimeStamp.h" />
+    <ClInclude Include="sys\include\sys\UTCDateTime.h" />
+    <ClInclude Include="types\include\types\PageRowCol.h" />
+    <ClInclude Include="types\include\types\Range.h" />
+    <ClInclude Include="types\include\types\RangeList.h" />
+    <ClInclude Include="types\include\types\RgAz.h" />
+    <ClInclude Include="types\include\types\RowCol.h" />
+    <ClInclude Include="units\include\units\Angles.h" />
+    <ClInclude Include="units\include\units\Lengths.h" />
+    <ClInclude Include="units\include\units\Unit.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cli\source\Argument.cpp" />
+    <ClCompile Include="cli\source\ArgumentParser.cpp" />
+    <ClCompile Include="except\source\Backtrace.cpp" />
+    <ClCompile Include="except\source\Context.cpp" />
+    <ClCompile Include="except\source\Throwable.cpp" />
+    <ClCompile Include="except\source\Trace.cpp" />
+    <ClCompile Include="io\source\ByteStream.cpp" />
+    <ClCompile Include="io\source\FileInputStreamIOS.cpp" />
+    <ClCompile Include="io\source\FileInputStreamOS.cpp" />
+    <ClCompile Include="io\source\FileOutputStreamIOS.cpp" />
+    <ClCompile Include="io\source\FileOutputStreamOS.cpp" />
+    <ClCompile Include="io\source\FileUtils.cpp" />
+    <ClCompile Include="io\source\InputStream.cpp" />
+    <ClCompile Include="io\source\MMapInputStream.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="io\source\PipeStream.cpp" />
+    <ClCompile Include="io\source\ReadUtils.cpp" />
+    <ClCompile Include="io\source\RotatingFileOutputStream.cpp" />
+    <ClCompile Include="io\source\SerializableFile.cpp" />
+    <ClCompile Include="io\source\StandardStreams.cpp" />
+    <ClCompile Include="io\source\StreamSplitter.cpp" />
+    <ClCompile Include="io\source\StringStream.cpp" />
+    <ClCompile Include="io\source\TempFile.cpp" />
+    <ClCompile Include="math.linear\source\Line2D.cpp" />
+    <ClCompile Include="math.linear\unittests\test_eigenvalue.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_inf_equality.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_inverse.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_lin.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_Matrix2D_serialize.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_mx.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_Vector.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_VectorN.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_Vector_serialize.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math\source\Bessel.cpp" />
+    <ClCompile Include="math\source\Round.cpp" />
+    <ClCompile Include="math\source\Utilities.cpp" />
+    <ClCompile Include="math\unittests\test_bessel_functions.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math\unittests\test_convex_hull.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math\unittests\test_is_nan.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math\unittests\test_n_choose_k.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math\unittests\test_round.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="math\unittests\test_sign.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mem\source\Align.cpp" />
+    <ClCompile Include="mem\source\ScratchMemory.cpp" />
+    <ClCompile Include="mem\unittests\test_scoped_cloneable_ptr.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mem\unittests\test_scoped_copyable_ptr.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mem\unittests\test_scratch_memory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mem\unittests\test_shared_ptr.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mem\unittests\test_Span.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mem\unittests\test_unique_ptr.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mem\unittests\test_vector_pointers.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ForcedIncludeFiles>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="polygon\source\PolygonMask.cpp" />
+    <ClCompile Include="str\source\Convert.cpp" />
+    <ClCompile Include="str\source\EncodedString.cpp" />
+    <ClCompile Include="str\source\EncodedStringView.cpp" />
+    <ClCompile Include="str\source\Encoding.cpp" />
+    <ClCompile Include="str\source\Format.cpp" />
+    <ClCompile Include="str\source\Manip.cpp" />
+    <ClCompile Include="str\source\Tokenizer.cpp" />
+    <ClCompile Include="str\unittests\test_base_convert.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="str\unittests\test_str.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="sys\source\AbstractOS.cpp" />
+    <ClCompile Include="sys\source\ConditionVarIrix.cpp" />
+    <ClCompile Include="sys\source\ConditionVarNSPR.cpp" />
+    <ClCompile Include="sys\source\ConditionVarPosix.cpp" />
+    <ClCompile Include="sys\source\ConditionVarSolaris.cpp" />
+    <ClCompile Include="sys\source\ConditionVarWin32.cpp" />
+    <ClCompile Include="sys\source\Conf.cpp" />
+    <ClCompile Include="sys\source\DateTime.cpp" />
+    <ClCompile Include="sys\source\Dbg.cpp" />
+    <ClCompile Include="sys\source\DirectoryEntry.cpp" />
+    <ClCompile Include="sys\source\DLLUnix.cpp" />
+    <ClCompile Include="sys\source\DLLWin32.cpp" />
+    <ClCompile Include="sys\source\ErrUnix.cpp" />
+    <ClCompile Include="sys\source\ErrWin32.cpp" />
+    <ClCompile Include="sys\source\ExecUnix.cpp" />
+    <ClCompile Include="sys\source\ExecWin32.cpp" />
+    <ClCompile Include="sys\source\FileFinder.cpp" />
+    <ClCompile Include="sys\source\FileUnix.cpp" />
+    <ClCompile Include="sys\source\FileWin32.cpp" />
+    <ClCompile Include="sys\source\LocalDateTime.cpp" />
+    <ClCompile Include="sys\source\MutexIrix.cpp" />
+    <ClCompile Include="sys\source\MutexNSPR.cpp" />
+    <ClCompile Include="sys\source\MutexPosix.cpp" />
+    <ClCompile Include="sys\source\MutexSolaris.cpp" />
+    <ClCompile Include="sys\source\MutexWin32.cpp" />
+    <ClCompile Include="sys\source\OSUnix.cpp" />
+    <ClCompile Include="sys\source\OSWin32.cpp" />
+    <ClCompile Include="sys\source\Path.cpp" />
+    <ClCompile Include="sys\source\ProcessUnix.cpp" />
+    <ClCompile Include="sys\source\ProcessWin32.cpp" />
+    <ClCompile Include="sys\source\ReadWriteMutex.cpp" />
+    <ClCompile Include="sys\source\ResourceCheck.cpp" />
+    <ClCompile Include="sys\source\ScopedCPUAffinityUnix.cpp" />
+    <ClCompile Include="sys\source\SemaphoreIrix.cpp" />
+    <ClCompile Include="sys\source\SemaphorePosix.cpp" />
+    <ClCompile Include="sys\source\SemaphoreSolaris.cpp" />
+    <ClCompile Include="sys\source\SemaphoreWin32.cpp" />
+    <ClCompile Include="sys\source\StopWatch.cpp" />
+    <ClCompile Include="sys\source\SyncFactoryIrix.cpp" />
+    <ClCompile Include="sys\source\sys_Backtrace.cpp" />
+    <ClCompile Include="sys\source\sys_filesystem.cpp" />
+    <ClCompile Include="sys\source\ThreadIrix.cpp" />
+    <ClCompile Include="sys\source\ThreadNSPR.cpp" />
+    <ClCompile Include="sys\source\ThreadPosix.cpp" />
+    <ClCompile Include="sys\source\ThreadSolaris.cpp" />
+    <ClCompile Include="sys\source\ThreadWin32.cpp" />
+    <ClCompile Include="sys\source\UTCDateTime.cpp" />
+    <ClCompile Include="types\source\Range.cpp" />
+    <ClCompile Include="types\source\RangeList.cpp" />
+    <ClCompile Include="units\unittests\test_units.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gsl\include\gsl\algorithm" />
+    <None Include="gsl\include\gsl\assert" />
+    <None Include="gsl\include\gsl\byte" />
+    <None Include="gsl\include\gsl\gsl" />
+    <None Include="gsl\include\gsl\narrow" />
+    <None Include="gsl\include\gsl\pointers" />
+    <None Include="gsl\include\gsl\span" />
+    <None Include="gsl\include\gsl\span_ext" />
+    <None Include="gsl\include\gsl\string_span" />
+    <None Include="gsl\include\gsl\util" />
+    <None Include="std\include\std\bit" />
+    <None Include="std\include\std\cstddef" />
+    <None Include="std\include\std\filesystem" />
+    <None Include="std\include\std\memory" />
+    <None Include="std\include\std\optional" />
+    <None Include="std\include\std\span" />
+    <None Include="std\include\std\string" />
+    <None Include="std\include\std\type_traits" />
+    <None Include="sys\include\sys\sys_config.h.cmake.in" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{9997e895-5161-4ddf-8f3f-099894cb2f21}</ProjectGuid>
+    <RootNamespace>codaoss</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>coda-oss-lite</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;except\include\;gsl\include\;io\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;polygon\include\;std\include\;str\include\;sys\include\;types\include\;units\include\</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;except\include\;gsl\include\;io\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;polygon\include\;std\include\;str\include\;sys\include\;types\include\;units\include\</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

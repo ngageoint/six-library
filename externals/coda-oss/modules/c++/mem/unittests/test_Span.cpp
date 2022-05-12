@@ -29,14 +29,11 @@
 
 #include "TestCase.h"
 
-namespace
-{
-
-
  template<typename TContainer, typename TSpan>
  static void testSpanBuffer_(const std::string& testName,
      const TContainer& ints, const TSpan& span)
 {
+     (void)testName;
     TEST_ASSERT_EQ(ints.size(), span.size());
     TEST_ASSERT_EQ(ints.data(), span.data());
 
@@ -55,7 +52,7 @@ TEST_CASE(testSpanBuffer)
     {
         std::vector<int> ints{1, 2, 3, 4, 5};
         const coda_oss::span<int> span(ints.data(), ints.size());
-        testSpanBuffer_(testName, ints, span);
+        testSpanBuffer_("testSpanBuffer", ints, span);
     }
 }
 
@@ -64,6 +61,7 @@ static void testSpanVector_(const std::string& testName,
                             const TContainer& ints,
                             const TSpan& span)
 {
+     (void)testName;
     TEST_ASSERT_EQ(ints.size(), span.size());
     TEST_ASSERT_EQ(ints.data(), span.data());
 
@@ -79,7 +77,7 @@ TEST_CASE(testSpanVector)
     {
         std::vector<int> ints{1, 2, 3, 4, 5};
         const coda_oss::span<int> span(ints.data(), ints.size());
-        testSpanVector_(testName, ints, span);
+        testSpanVector_("testSpanVector", ints, span);
     }
 }
 
@@ -95,12 +93,9 @@ TEST_CASE(testGslNarrow)
 
     TEST_THROWS(gsl::narrow<int>(d));
 }
-}
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testSpanBuffer);
     TEST_CHECK(testSpanVector);
     TEST_CHECK(testGslNarrow);
-    return 0;
-}
+    )

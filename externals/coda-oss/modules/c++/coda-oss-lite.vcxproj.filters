@@ -1,0 +1,1004 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="config\include\config\compiler_extensions.h">
+      <Filter>config</Filter>
+    </ClInclude>
+    <ClInclude Include="config\include\config\Version.h">
+      <Filter>config</Filter>
+    </ClInclude>
+    <ClInclude Include="gsl\include\gsl\gsl.h">
+      <Filter>gsl</Filter>
+    </ClInclude>
+    <ClInclude Include="gsl\include\gsl\Gsl_.h">
+      <Filter>gsl</Filter>
+    </ClInclude>
+    <ClInclude Include="gsl\include\gsl\Gsl_narrow.h">
+      <Filter>gsl</Filter>
+    </ClInclude>
+    <ClInclude Include="gsl\include\gsl\use_gsl.h">
+      <Filter>gsl</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\bit.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\CPlusPlus.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\cstddef.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\memory.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\namespace_.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\optional.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\optional_.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\span.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\span_.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\string.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\type_traits.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
+    <ClInclude Include="except\include\except\Backtrace.h">
+      <Filter>except</Filter>
+    </ClInclude>
+    <ClInclude Include="except\include\except\Context.h">
+      <Filter>except</Filter>
+    </ClInclude>
+    <ClInclude Include="except\include\except\Error.h">
+      <Filter>except</Filter>
+    </ClInclude>
+    <ClInclude Include="except\include\except\Exception.h">
+      <Filter>except</Filter>
+    </ClInclude>
+    <ClInclude Include="except\include\except\HandlerInterface.h">
+      <Filter>except</Filter>
+    </ClInclude>
+    <ClInclude Include="except\include\except\Throwable.h">
+      <Filter>except</Filter>
+    </ClInclude>
+    <ClInclude Include="except\include\except\Trace.h">
+      <Filter>except</Filter>
+    </ClInclude>
+    <ClInclude Include="str\include\str\Convert.h">
+      <Filter>str</Filter>
+    </ClInclude>
+    <ClInclude Include="str\include\str\EncodedString.h">
+      <Filter>str</Filter>
+    </ClInclude>
+    <ClInclude Include="str\include\str\EncodedStringView.h">
+      <Filter>str</Filter>
+    </ClInclude>
+    <ClInclude Include="str\include\str\Encoding.h">
+      <Filter>str</Filter>
+    </ClInclude>
+    <ClInclude Include="str\include\str\Format.h">
+      <Filter>str</Filter>
+    </ClInclude>
+    <ClInclude Include="str\include\str\Manip.h">
+      <Filter>str</Filter>
+    </ClInclude>
+    <ClInclude Include="str\include\str\Tokenizer.h">
+      <Filter>str</Filter>
+    </ClInclude>
+    <ClInclude Include="str\include\str\utf8.h">
+      <Filter>str</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\AbstractOS.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\AtomicCounter.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\AtomicCounterCpp11.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\AtomicCounterMutex.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\AtomicCounterSolaris.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\AtomicCounterWin32.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\AtomicCounterX86.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\Backtrace.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ConditionVar.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ConditionVarInterface.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ConditionVarIrix.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ConditionVarNSPR.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ConditionVarPosix.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ConditionVarSolaris.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ConditionVarWin32.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\Conf.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\CPlusPlus.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\DateTime.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\Dbg.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\DirectoryEntry.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\DLL.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\Err.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\Exec.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\File.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\FileFinder.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\filesystem.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\LocalDateTime.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\Mutex.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\MutexInterface.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\MutexIrix.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\MutexNSPR.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\MutexPosix.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\MutexSolaris.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\MutexWin32.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\OS.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\OSUnix.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\OSWin32.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\Path.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\Process.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ProcessInterface.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ProcessUnix.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ProcessWin32.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ReadWriteMutex.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ResourceCheck.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\Runnable.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ScopedCPUAffinityUnix.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\Semaphore.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\SemaphoreInterface.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\SemaphoreIrix.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\SemaphoreNSPR.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\SemaphorePosix.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\SemaphoreSolaris.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\SemaphoreWin32.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\StopWatch.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\String.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\SyncFactoryIrix.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\sys_filesystem.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\SystemException.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\Thread.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ThreadInterface.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ThreadIrix.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ThreadNSPR.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ThreadPosix.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ThreadSolaris.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ThreadWin32.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\TimeStamp.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\UTCDateTime.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="types\include\types\PageRowCol.h">
+      <Filter>types</Filter>
+    </ClInclude>
+    <ClInclude Include="types\include\types\Range.h">
+      <Filter>types</Filter>
+    </ClInclude>
+    <ClInclude Include="types\include\types\RangeList.h">
+      <Filter>types</Filter>
+    </ClInclude>
+    <ClInclude Include="types\include\types\RgAz.h">
+      <Filter>types</Filter>
+    </ClInclude>
+    <ClInclude Include="types\include\types\RowCol.h">
+      <Filter>types</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\Align.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\BufferView.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\ScopedAlignedArray.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\ScopedArray.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\ScopedCloneablePtr.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\ScopedCopyablePtr.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\ScopedPtr.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\ScratchMemory.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\ScratchMemory.hpp">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\SharedPtr.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\SharedPtrCpp11.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\Span.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\SwapBuffer.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\VectorOfPointers.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="math\include\math\Bessel.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\include\math\Constants.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\include\math\ConvexHull.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\include\math\Round.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\include\math\Utilities.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="units\include\units\Angles.h">
+      <Filter>units</Filter>
+    </ClInclude>
+    <ClInclude Include="units\include\units\Lengths.h">
+      <Filter>units</Filter>
+    </ClInclude>
+    <ClInclude Include="units\include\units\Unit.h">
+      <Filter>units</Filter>
+    </ClInclude>
+    <ClInclude Include="math.linear\include\math\linear\Eigenvalue.h">
+      <Filter>math.linear</Filter>
+    </ClInclude>
+    <ClInclude Include="math.linear\include\math\linear\Line2D.h">
+      <Filter>math.linear</Filter>
+    </ClInclude>
+    <ClInclude Include="math.linear\include\math\linear\Matrix2D.h">
+      <Filter>math.linear</Filter>
+    </ClInclude>
+    <ClInclude Include="math.linear\include\math\linear\MatrixMxN.h">
+      <Filter>math.linear</Filter>
+    </ClInclude>
+    <ClInclude Include="math.linear\include\math\linear\Vector.h">
+      <Filter>math.linear</Filter>
+    </ClInclude>
+    <ClInclude Include="math.linear\include\math\linear\VectorN.h">
+      <Filter>math.linear</Filter>
+    </ClInclude>
+    <ClInclude Include="math.poly\include\math\poly\Fit.h">
+      <Filter>math.poly</Filter>
+    </ClInclude>
+    <ClInclude Include="math.poly\include\math\poly\Fixed1D.h">
+      <Filter>math.poly</Filter>
+    </ClInclude>
+    <ClInclude Include="math.poly\include\math\poly\Fixed2D.h">
+      <Filter>math.poly</Filter>
+    </ClInclude>
+    <ClInclude Include="math.poly\include\math\poly\OneD.h">
+      <Filter>math.poly</Filter>
+    </ClInclude>
+    <ClInclude Include="math.poly\include\math\poly\OneD.hpp">
+      <Filter>math.poly</Filter>
+    </ClInclude>
+    <ClInclude Include="math.poly\include\math\poly\TwoD.h">
+      <Filter>math.poly</Filter>
+    </ClInclude>
+    <ClInclude Include="math.poly\include\math\poly\TwoD.hpp">
+      <Filter>math.poly</Filter>
+    </ClInclude>
+    <ClInclude Include="math.poly\include\math\poly\Utils.h">
+      <Filter>math.poly</Filter>
+    </ClInclude>
+    <ClInclude Include="polygon\include\polygon\DrawPolygon.h">
+      <Filter>polygon</Filter>
+    </ClInclude>
+    <ClInclude Include="polygon\include\polygon\Intersections.h">
+      <Filter>polygon</Filter>
+    </ClInclude>
+    <ClInclude Include="polygon\include\polygon\PolygonMask.h">
+      <Filter>polygon</Filter>
+    </ClInclude>
+    <ClInclude Include="config\include\config\Exports.h">
+      <Filter>config</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TestCase.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="cli\include\cli\Argument.h">
+      <Filter>cli</Filter>
+    </ClInclude>
+    <ClInclude Include="cli\include\cli\ArgumentParser.h">
+      <Filter>cli</Filter>
+    </ClInclude>
+    <ClInclude Include="cli\include\cli\Results.h">
+      <Filter>cli</Filter>
+    </ClInclude>
+    <ClInclude Include="cli\include\cli\Value.h">
+      <Filter>cli</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\BidirectionalStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\BufferViewStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\ByteStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\CountingStreams.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\DataStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\DbgStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\FileInputStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\FileInputStreamIOS.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\FileInputStreamOS.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\FileOutputStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\FileOutputStreamIOS.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\FileOutputStreamOS.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\FileUtils.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\InputStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\MMapInputStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\NullStreams.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\OutputStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\PipeStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\ProxyStreams.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\ReadUtils.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\RotatingFileOutputStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\Seekable.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\SeekableStreams.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\Serializable.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\SerializableArray.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\SerializableFile.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\StandardStreams.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\StreamSplitter.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\StringStream.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\include\io\TempFile.h">
+      <Filter>io</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="except\source\Backtrace.cpp">
+      <Filter>except</Filter>
+    </ClCompile>
+    <ClCompile Include="except\source\Context.cpp">
+      <Filter>except</Filter>
+    </ClCompile>
+    <ClCompile Include="except\source\Throwable.cpp">
+      <Filter>except</Filter>
+    </ClCompile>
+    <ClCompile Include="except\source\Trace.cpp">
+      <Filter>except</Filter>
+    </ClCompile>
+    <ClCompile Include="str\source\Convert.cpp">
+      <Filter>str</Filter>
+    </ClCompile>
+    <ClCompile Include="str\source\EncodedString.cpp">
+      <Filter>str</Filter>
+    </ClCompile>
+    <ClCompile Include="str\source\EncodedStringView.cpp">
+      <Filter>str</Filter>
+    </ClCompile>
+    <ClCompile Include="str\source\Encoding.cpp">
+      <Filter>str</Filter>
+    </ClCompile>
+    <ClCompile Include="str\source\Format.cpp">
+      <Filter>str</Filter>
+    </ClCompile>
+    <ClCompile Include="str\source\Manip.cpp">
+      <Filter>str</Filter>
+    </ClCompile>
+    <ClCompile Include="str\source\Tokenizer.cpp">
+      <Filter>str</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\AbstractOS.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ConditionVarIrix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ConditionVarNSPR.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ConditionVarPosix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ConditionVarSolaris.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ConditionVarWin32.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\Conf.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\DateTime.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\Dbg.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\DirectoryEntry.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\DLLUnix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\DLLWin32.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ErrUnix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ErrWin32.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ExecUnix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ExecWin32.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\FileFinder.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\FileUnix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\FileWin32.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\LocalDateTime.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\MutexIrix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\MutexNSPR.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\MutexPosix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\MutexSolaris.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\MutexWin32.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\OSUnix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\OSWin32.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\Path.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ProcessUnix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ProcessWin32.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ReadWriteMutex.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ResourceCheck.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ScopedCPUAffinityUnix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\SemaphoreIrix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\SemaphorePosix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\SemaphoreSolaris.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\SemaphoreWin32.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\StopWatch.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\SyncFactoryIrix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\sys_Backtrace.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\sys_filesystem.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ThreadIrix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ThreadNSPR.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ThreadPosix.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ThreadSolaris.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\ThreadWin32.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\UTCDateTime.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="types\source\Range.cpp">
+      <Filter>types</Filter>
+    </ClCompile>
+    <ClCompile Include="types\source\RangeList.cpp">
+      <Filter>types</Filter>
+    </ClCompile>
+    <ClCompile Include="mem\source\Align.cpp">
+      <Filter>mem</Filter>
+    </ClCompile>
+    <ClCompile Include="mem\source\ScratchMemory.cpp">
+      <Filter>mem</Filter>
+    </ClCompile>
+    <ClCompile Include="math\source\Bessel.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\source\Round.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\source\Utilities.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="math.linear\source\Line2D.cpp">
+      <Filter>math.linear</Filter>
+    </ClCompile>
+    <ClCompile Include="polygon\source\PolygonMask.cpp">
+      <Filter>polygon</Filter>
+    </ClCompile>
+    <ClCompile Include="math\unittests\test_bessel_functions.cpp">
+      <Filter>math\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math\unittests\test_convex_hull.cpp">
+      <Filter>math\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math\unittests\test_is_nan.cpp">
+      <Filter>math\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math\unittests\test_n_choose_k.cpp">
+      <Filter>math\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math\unittests\test_round.cpp">
+      <Filter>math\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math\unittests\test_sign.cpp">
+      <Filter>math\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_eigenvalue.cpp">
+      <Filter>math.linear\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_inf_equality.cpp">
+      <Filter>math.linear\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_inverse.cpp">
+      <Filter>math.linear\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_lin.cpp">
+      <Filter>math.linear\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_Matrix2D_serialize.cpp">
+      <Filter>math.linear\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_mx.cpp">
+      <Filter>math.linear\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_Vector.cpp">
+      <Filter>math.linear\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_Vector_serialize.cpp">
+      <Filter>math.linear\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="math.linear\unittests\test_VectorN.cpp">
+      <Filter>math.linear\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="str\unittests\test_base_convert.cpp">
+      <Filter>str\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="str\unittests\test_str.cpp">
+      <Filter>str\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="units\unittests\test_units.cpp">
+      <Filter>units\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="mem\unittests\test_scoped_cloneable_ptr.cpp">
+      <Filter>mem\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="mem\unittests\test_scoped_copyable_ptr.cpp">
+      <Filter>mem\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="mem\unittests\test_scratch_memory.cpp">
+      <Filter>mem\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="mem\unittests\test_shared_ptr.cpp">
+      <Filter>mem\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="mem\unittests\test_Span.cpp">
+      <Filter>mem\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="mem\unittests\test_unique_ptr.cpp">
+      <Filter>mem\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="mem\unittests\test_vector_pointers.cpp">
+      <Filter>mem\unittests</Filter>
+    </ClCompile>
+    <ClCompile Include="cli\source\Argument.cpp">
+      <Filter>cli</Filter>
+    </ClCompile>
+    <ClCompile Include="cli\source\ArgumentParser.cpp">
+      <Filter>cli</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\ByteStream.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\FileInputStreamIOS.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\FileInputStreamOS.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\FileOutputStreamIOS.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\FileOutputStreamOS.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\FileUtils.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\InputStream.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\MMapInputStream.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\PipeStream.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\ReadUtils.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\RotatingFileOutputStream.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\SerializableFile.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\StandardStreams.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\StreamSplitter.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\StringStream.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\source\TempFile.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="config">
+      <UniqueIdentifier>{89602880-5929-45e9-a603-d13f81972397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gsl">
+      <UniqueIdentifier>{619ad1da-f21c-4027-9b5d-23f08225b96f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="coda_oss">
+      <UniqueIdentifier>{59f3d9a1-06d3-4779-aef2-cc55223c3017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="std">
+      <UniqueIdentifier>{3051f4b6-dad4-47ea-b4bd-d25d9e09f782}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="str">
+      <UniqueIdentifier>{44a8dfa7-099c-4dd5-87b6-3b05ce13580b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="except">
+      <UniqueIdentifier>{d714ac63-ef19-4629-a13f-59b550604842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sys">
+      <UniqueIdentifier>{d8059280-e435-4365-be67-865195b9e813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="types">
+      <UniqueIdentifier>{3613caf2-18d1-4af7-bfa0-a3712a44da45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mem">
+      <UniqueIdentifier>{0e318d08-1ee3-4644-a299-a81e436c9a32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{6d8f380f-54e3-4d0d-bd1a-a2edd0efbaa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="units">
+      <UniqueIdentifier>{1bf84676-4c62-4e2b-b943-59bf82f89126}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="math.linear">
+      <UniqueIdentifier>{b3d7f0e3-2e9f-4a19-b181-27cace7536c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="math.poly">
+      <UniqueIdentifier>{15f9b62f-d17e-4d84-bc34-de6fd5fbcb33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="polygon">
+      <UniqueIdentifier>{f2544ccb-0933-44c7-af39-cd986982af3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="math\unittests">
+      <UniqueIdentifier>{82d38fbe-b150-411a-8843-b584142c07ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="math.linear\unittests">
+      <UniqueIdentifier>{d17adbee-6720-4a93-b45f-2a05eb6a4620}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="str\unittests">
+      <UniqueIdentifier>{4cee5537-9ac0-4bb8-9b9f-78aae69d0084}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="units\unittests">
+      <UniqueIdentifier>{55522351-e752-4be8-9139-f7ac4b91a66d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mem\unittests">
+      <UniqueIdentifier>{6a70a638-d58c-4e34-87c1-6d1115690de8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{9050a469-23a5-4da0-92b1-a07a8e52e9fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cli">
+      <UniqueIdentifier>{de76f131-1cd6-4c3d-aa9c-37ca3b5079f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io">
+      <UniqueIdentifier>{cc681a99-da96-483e-a92a-eab0ea3a0ec0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gsl\include\gsl\algorithm">
+      <Filter>gsl</Filter>
+    </None>
+    <None Include="gsl\include\gsl\assert">
+      <Filter>gsl</Filter>
+    </None>
+    <None Include="gsl\include\gsl\byte">
+      <Filter>gsl</Filter>
+    </None>
+    <None Include="gsl\include\gsl\gsl">
+      <Filter>gsl</Filter>
+    </None>
+    <None Include="gsl\include\gsl\narrow">
+      <Filter>gsl</Filter>
+    </None>
+    <None Include="gsl\include\gsl\pointers">
+      <Filter>gsl</Filter>
+    </None>
+    <None Include="gsl\include\gsl\span">
+      <Filter>gsl</Filter>
+    </None>
+    <None Include="gsl\include\gsl\span_ext">
+      <Filter>gsl</Filter>
+    </None>
+    <None Include="gsl\include\gsl\string_span">
+      <Filter>gsl</Filter>
+    </None>
+    <None Include="gsl\include\gsl\util">
+      <Filter>gsl</Filter>
+    </None>
+    <None Include="std\include\std\bit">
+      <Filter>std</Filter>
+    </None>
+    <None Include="std\include\std\cstddef">
+      <Filter>std</Filter>
+    </None>
+    <None Include="std\include\std\filesystem">
+      <Filter>std</Filter>
+    </None>
+    <None Include="std\include\std\memory">
+      <Filter>std</Filter>
+    </None>
+    <None Include="std\include\std\optional">
+      <Filter>std</Filter>
+    </None>
+    <None Include="std\include\std\span">
+      <Filter>std</Filter>
+    </None>
+    <None Include="std\include\std\string">
+      <Filter>std</Filter>
+    </None>
+    <None Include="std\include\std\type_traits">
+      <Filter>std</Filter>
+    </None>
+    <None Include="sys\include\sys\sys_config.h.cmake.in">
+      <Filter>sys</Filter>
+    </None>
+  </ItemGroup>
+</Project>
