@@ -115,10 +115,41 @@ TEST_CASE(dataTypeToString)
     TEST_EXCEPTION(six::XMLControl::dataTypeToString(dataType)); // the "default:" case label will throw, as desired
 }
 
+TEST_CASE(testXmlLiteAttributeClass)
+{
+    six::XmlLite xmlLite(xml::lite::Uri("urn:example.com"), true /*addClassAttributes*/);
+    auto root = xmlLite.newElement("root", nullptr /*prnt*/);
+
+    {
+        auto& e = xmlLite.createDouble("double", 3.14, *root);
+        const auto& attrib = e.attribute("class");
+        TEST_ASSERT_EQ(attrib, "xs:double");
+    }
+    {
+        auto& e = xmlLite.createInt("int", 314, *root);
+        const auto& attrib = e.attribute("class");
+        TEST_ASSERT_EQ(attrib, "xs:int");
+    }
+    {
+        auto& e = xmlLite.createString("string", "abc", *root);
+        const auto& attrib = e.attribute("class");
+        TEST_ASSERT_EQ(attrib, "xs:string");
+    }
+    {
+        auto* e = xmlLite.createBooleanType(xml::lite::QName("Boolean"), six::BooleanType::IS_TRUE, *root);
+        const auto& attrib = e->attribute("class");
+        TEST_ASSERT_EQ(attrib, "xs:boolean");
+    }
+
+    // TODO: xs:date, xs:dateTime
+}
+
+
 TEST_MAIN((void)argv; (void)argc;
     TEST_CHECK(loadCompiledSchemaPath);
     TEST_CHECK(respectGivenPaths);
     TEST_CHECK(loadFromEnvVariable);
     TEST_CHECK(ignoreEmptyEnvVariable);
     TEST_CHECK(dataTypeToString);
+    TEST_CHECK(testXmlLiteAttributeClass);
     )
