@@ -23,16 +23,14 @@
 #pragma once
 
 // Make it (too?) easy for clients to get our various std:: implementations
-#include "coda_oss/optional.h"
-
 #ifndef CODA_OSS_NO_std_optional
-    #define CODA_OSS_NO_std_optional 0  // enabled, unless explicitly disabled
-
     #include "coda_oss/CPlusPlus.h"
     #if CODA_OSS_cpp17
         #include <optional>
-        #undef CODA_OSS_NO_std_optional
-        #define CODA_OSS_NO_std_optional 1  // don't need our own
+        #define CODA_OSS_NO_std_optional 1  // part of C++17
+    #else
+        #include "coda_oss/optional.h"
+        #define CODA_OSS_NO_std_optional 0  // use our own
     #endif
 #endif
 

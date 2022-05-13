@@ -25,6 +25,9 @@
 #include <six/XMLControl.h>
 #include <string>
 #include <vector>
+
+#include "six/XmlLite.h"
+
 #include "TestCase.h"
 
 namespace fs = std::filesystem;
@@ -96,9 +99,60 @@ TEST_CASE(ignoreEmptyEnvVariable)
     }
 }
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_CASE(dataTypeToString)
+{
+    std::string result = six::XMLControl::dataTypeToString(six::DataType::COMPLEX);
+    TEST_ASSERT_EQ("SICD_XML", result);
+
+    result = six::XMLControl::dataTypeToString(six::DataType::DERIVED, false /*appendXML*/);
+    TEST_ASSERT_EQ("SIDD", result);
+
+    // Generate a garbage value to test the exception.  Have to hack-things-up
+    // because there are overloads on six::DataType for integer assignment.
+    auto dataType = six::DataType::COMPLEX;
+    void* pDataType = &dataType;
+    int* pIntDataType = static_cast<int*>(pDataType);
+    *pIntDataType = 999; // bypass overloads; should now be a garbage value
+    TEST_ASSERT_NOT_EQ(dataType, six::DataType::COMPLEX);
+    TEST_ASSERT_NOT_EQ(dataType, six::DataType::DERIVED);
+    TEST_EXCEPTION(six::XMLControl::dataTypeToString(dataType)); // the "default:" case label will throw, as desired
+}
+
+TEST_CASE(testXmlLiteAttributeClass)
+{
+    six::XmlLite xmlLite(xml::lite::Uri("urn:example.com"), true /*addClassAttributes*/);
+    auto root = xmlLite.newElement("root", nullptr /*prnt*/);
+
+    {
+        auto& e = xmlLite.createDouble("double", 3.14, *root);
+        const auto& attrib = e.attribute("class");
+        TEST_ASSERT_EQ(attrib, "xs:double");
+    }
+    {
+        auto& e = xmlLite.createInt("int", 314, *root);
+        const auto& attrib = e.attribute("class");
+        TEST_ASSERT_EQ(attrib, "xs:int");
+    }
+    {
+        auto& e = xmlLite.createString("string", "abc", *root);
+        const auto& attrib = e.attribute("class");
+        TEST_ASSERT_EQ(attrib, "xs:string");
+    }
+    {
+        auto* e = xmlLite.createBooleanType(xml::lite::QName("Boolean"), six::BooleanType::IS_TRUE, *root);
+        const auto& attrib = e->attribute("class");
+        TEST_ASSERT_EQ(attrib, "xs:boolean");
+    }
+
+    // TODO: xs:date, xs:dateTime
+}
+
+
+TEST_MAIN(
     TEST_CHECK(loadCompiledSchemaPath);
     TEST_CHECK(respectGivenPaths);
     TEST_CHECK(loadFromEnvVariable);
     TEST_CHECK(ignoreEmptyEnvVariable);
+    TEST_CHECK(dataTypeToString);
+    TEST_CHECK(testXmlLiteAttributeClass);
     )

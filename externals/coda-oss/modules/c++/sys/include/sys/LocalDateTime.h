@@ -24,6 +24,7 @@
 #ifndef __SYS_LOCAL_DATE_TIME_H__
 #define __SYS_LOCAL_DATE_TIME_H__
 
+#include "config/Exports.h"
 #include <sys/DateTime.h>
 
 namespace sys
@@ -32,7 +33,7 @@ namespace sys
 /*!
  *  Representation of a local date/time structure.
  */
-class LocalDateTime : public DateTime
+class CODA_OSS_API LocalDateTime : public DateTime
 {
 protected:
     int mDST;

@@ -81,7 +81,7 @@ TEST_CASE(TxRcvMultIds)
 }
 }
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
         TEST_CHECK(EmptyChannel);
         TEST_CHECK(TestPolygonInvalid);
         TEST_CHECK(TxRcvMultIds);

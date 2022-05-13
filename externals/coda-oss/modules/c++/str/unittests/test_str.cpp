@@ -26,8 +26,11 @@
 #include <import/str.h>
 #include "TestCase.h"
 
-namespace
+inline std::string to_string(const std::string& value)
 {
+    return value;
+}
+
 TEST_CASE(testTrim)
 {
     std::string s = "  test   ";
@@ -218,10 +221,8 @@ TEST_CASE(testEscapeForXMLKitchenSink)
     str::escapeForXML(message);
     TEST_ASSERT_EQ(message, expectedMessage);
 }
-}
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testTrim);
     TEST_CHECK(testStrip);
     TEST_CHECK(testData);
@@ -243,5 +244,4 @@ int main(int, char**)
     TEST_CHECK(testRoundDouble);
     TEST_CHECK(testEscapeForXMLNoReplace);
     TEST_CHECK(testEscapeForXMLKitchenSink);
-    return 0;
-}
+    )

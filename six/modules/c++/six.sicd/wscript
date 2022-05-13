@@ -1,5 +1,5 @@
 NAME            = 'six.sicd'
-MODULE_DEPS     = 'scene nitf xml.lite six mem units'
+MODULE_DEPS     = 'scene nitf xml.lite six mem sys str units except types config gsl std'
 TEST_DEPS       = 'cli'
 UNITTEST_DEPS   = 'cli sio.lite'
 

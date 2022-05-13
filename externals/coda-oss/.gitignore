@@ -48,5 +48,8 @@ modules/drivers/zlib/zlib-1.2.*/
 .vs/
 project.sln
 .depproj/
+*.tlog
+**/x64/
+*.vcxproj.user
 
 CMakeSettings.json

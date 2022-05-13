@@ -101,7 +101,7 @@ static std::map<std::u32string::value_type, coda_oss::u8string> Windows1252_to_u
 
 inline void append(std::string& result, const coda_oss::u8string& utf8)
 {
-    result += str::c_str<std::string::const_pointer>(utf8);
+    result += str::c_str<std::string>(utf8);
 }
 inline void append(coda_oss::u8string& result, const coda_oss::u8string& utf8)
 {
@@ -110,12 +110,12 @@ inline void append(coda_oss::u8string& result, const coda_oss::u8string& utf8)
 template<typename CharT>
 inline void append(std::basic_string<CharT>& result, const coda_oss::u8string& utf8)
 {
-    auto p = str::cast<std::string::const_pointer>(utf8.c_str());
+    auto p = str::c_str<std::string>(utf8);
     utf8::utf8to16(p, p + utf8.size(), std::back_inserter(result));
 }
 inline void append(std::u32string& result, const coda_oss::u8string& utf8)
 {
-    auto p = str::cast<std::string::const_pointer>(utf8.c_str());
+    auto p = str::c_str<std::string>(utf8);
     utf8::utf8to32(p, p + utf8.size(), std::back_inserter(result));
 }
 
@@ -372,7 +372,7 @@ std::wstring str::details::to_wstring(std::string::const_pointer p, size_t sz, b
     #if !_WIN32
     to_u32string(p, sz, is_utf8);  // std::wstring is UTF-32 on Linux
     #endif    
-    return str::c_str<std::wstring::const_pointer>(s); // copy
+    return str::c_str<std::wstring>(s); // copy
 }
 
 coda_oss::u8string str::to_u8string(std::wstring::const_pointer p_, size_t sz)  // std::wstring is UTF-16 or UTF-32  depending on platform

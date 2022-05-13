@@ -67,7 +67,7 @@ TEST_CASE(EqInt)
     TEST_ASSERT_EQ(fromStrCtor, fromIntCtor);
 }
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(EnumConstructor);
     TEST_CHECK(ToType);
     TEST_CHECK(SixToString);

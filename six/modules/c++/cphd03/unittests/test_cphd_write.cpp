@@ -491,7 +491,7 @@ static int call_srand()
 }
 static int unused_ = call_srand();
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(testWriteFXOneWay);
     TEST_CHECK(testWriteFXTwoWay);
     TEST_CHECK(testWriteTOAOneWay);

@@ -25,19 +25,18 @@
 #include <string>
 
 // Make it (too?) easy for clients to get our various std:: implementations
-#include "coda_oss/string.h"
-
 #ifndef CODA_OSS_NO_std_u8string
-    #define CODA_OSS_NO_std_u8string 0  // enabled, unless explicitly disabled
-
-    #if defined(__cpp_char8_t) && (__cpp_char8_t >= 201811L) // https://en.cppreference.com/w/cpp/feature_test
-        #undef CODA_OSS_NO_std_u8string
-        #define CODA_OSS_NO_std_u8string 1  // don't need our own
+    #include "coda_oss/CPlusPlus.h"
+    #if CODA_OSS_cpp17
+        #define CODA_OSS_NO_std_u8string 1  // part of C++17
+    #else
+        #include "coda_oss/string.h"
+        #define CODA_OSS_NO_std_u8string 0  // use our own
     #endif
 #endif
 
-#include "config/compiler_extensions.h"
 #if !CODA_OSS_NO_std_u8string
+#include "config/compiler_extensions.h"
 namespace std // This is slightly uncouth: we're not supposed to augment "std".
 {
     CODA_OSS_disable_warning_push

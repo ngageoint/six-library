@@ -28,7 +28,6 @@
 #include <mutex>
 #include <stdexcept>
 
-#include <config/coda_oss_config.h>
 #include "except/Exception.h"
 #include "sys/Conf.h"
 #include "str/Convert.h"
