@@ -374,7 +374,7 @@ TEST_CASE(test_j2k_compress_raw_image)
     //}
 }
 
-TEST_MAIN((void)argc; (void) argv;
+TEST_MAIN(
     TEST_CHECK(test_j2k_loading);
     TEST_CHECK(test_j2k_nitf);
     TEST_CHECK(test_j2k_nitf_read_region);

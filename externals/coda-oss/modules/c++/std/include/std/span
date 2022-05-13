@@ -23,16 +23,14 @@
 #pragma once
 
 // Make it (too?) easy for clients to get our various std:: implementations
-#include "coda_oss/span.h"
-
 #ifndef CODA_OSS_NO_std_span
-    #define CODA_OSS_NO_std_span 0  // enabled, unless explicitly disabled
-
     #include "coda_oss/CPlusPlus.h"
     #if CODA_OSS_cpp20
         #include <span>
-        #undef CODA_OSS_NO_std_span
-        #define CODA_OSS_NO_std_span 1  // don't need our own
+        #define CODA_OSS_NO_std_span 1  // part of C++20
+    #else
+        #include "coda_oss/span.h"
+        #define CODA_OSS_NO_std_span 0  // use our own
     #endif
 #endif
 

@@ -21,29 +21,35 @@
  *
  */
 
+#include <type_traits>
+
 #include "str/EncodedString.h"
 
 void str::EncodedString::assign(coda_oss::u8string::const_pointer s)
 {
+    using char_t = std::remove_pointer<decltype(s)>::type; // avoid copy-paste error
+    using string_t = std::basic_string<std::remove_const<char_t>::type>;
     s_ = cast<std::string::const_pointer>(s);  // copy
-    v_ = EncodedStringView(c_str<decltype(s)>(s_)); // avoid copy-paste error
+    v_ = EncodedStringView(c_str<string_t>(s_));
 }
 
 void str::EncodedString::assign(str::W1252string::const_pointer s)
 {
+    using char_t = std::remove_pointer<decltype(s)>::type; // avoid copy-paste error
+    using string_t = std::basic_string<std::remove_const<char_t>::type>;
     s_ = cast<std::string::const_pointer>(s);  // copy
-    v_ = EncodedStringView(c_str<decltype(s)>(s_)); // avoid copy-paste error
+    v_ = EncodedStringView(c_str<string_t>(s_));  // avoid copy-paste error
 }
 
 static str::EncodedStringView make_EncodedStringView(const std::string& s, bool isUtf8)
 {
     if (isUtf8)
     {
-        return str::EncodedStringView(str::c_str<coda_oss::u8string::const_pointer>(s));
+        return str::EncodedStringView(str::c_str<coda_oss::u8string>(s));
     }
 
     // not UTF-8, assume Windows-1252
-    return str::EncodedStringView(str::c_str<str::W1252string::const_pointer>(s));
+    return str::EncodedStringView(str::c_str<str::W1252string>(s));
 }
 
 str::EncodedString::EncodedString(std::string::const_pointer s) :  s_(s) /*copy*/, v_ (s_)  { }
@@ -103,7 +109,7 @@ str::EncodedString::EncodedString(const EncodedString& es)
     *this = es;
 }
 
-str::EncodedString& str::EncodedString::operator=(EncodedString&& es) noexcept
+str::EncodedString& str::EncodedString::operator=(EncodedString&& es)
 {
     if (this != &es)
     {
@@ -112,16 +118,7 @@ str::EncodedString& str::EncodedString::operator=(EncodedString&& es) noexcept
     }
     return *this;
 }
-str::EncodedString::EncodedString(EncodedString&& es) noexcept
+str::EncodedString::EncodedString(EncodedString&& es)
 {
     *this = std::move(es);
-}
-
-str::EncodedString str::EncodedString::fromUtf8(const std::string& s)
-{
-    return str::EncodedStringView::fromUtf8(s);
-}
-str::EncodedString str::EncodedString::fromWindows1252(const std::string& s)
-{
-    return str::EncodedStringView::fromWindows1252(s);
 }

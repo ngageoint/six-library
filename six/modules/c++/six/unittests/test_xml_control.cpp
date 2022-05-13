@@ -148,7 +148,7 @@ TEST_CASE(testXmlLiteAttributeClass)
 }
 
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(loadCompiledSchemaPath);
     TEST_CHECK(respectGivenPaths);
     TEST_CHECK(loadFromEnvVariable);

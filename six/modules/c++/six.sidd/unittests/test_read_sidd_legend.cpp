@@ -342,7 +342,7 @@ TEST_CASE(test_getParser)
 
 }
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(testRead);
     TEST_CHECK(test_getParser);
     )

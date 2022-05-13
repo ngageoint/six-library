@@ -23,19 +23,20 @@
 #pragma once
 
 // Make it (too?) easy for clients to get our various std:: implementations
-#include "coda_oss/bit.h"
-
 #ifndef CODA_OSS_NO_std_endian
-    #define CODA_OSS_NO_std_endian 0  // enabled, unless explicitly disabled
-
     #include "coda_oss/CPlusPlus.h"
     #if CODA_OSS_cpp17
         // Some C++17 implementations have <bit>
         #if __has_include(<bit>) // __has_include is C++17
             #include <bit>
-            #undef CODA_OSS_NO_std_endian
-            #define CODA_OSS_NO_std_endian 1  // don't need our own
+            #define CODA_OSS_NO_std_endian 1  // provided by implementation, probably C++20
+        #else
+            #include "coda_oss/bit.h"
+            #define CODA_OSS_NO_std_endian 0  // no <bit>, use our own
         #endif
+    #else
+        #include "coda_oss/bit.h"
+        #define CODA_OSS_NO_std_endian 0  // < C++17, use our own
     #endif
 #endif
 
