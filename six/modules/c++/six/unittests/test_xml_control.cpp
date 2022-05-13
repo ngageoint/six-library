@@ -25,6 +25,9 @@
 #include <six/XMLControl.h>
 #include <string>
 #include <vector>
+
+#include "six/XmlLite.h"
+
 #include "TestCase.h"
 
 namespace fs = std::filesystem;
