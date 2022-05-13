@@ -116,7 +116,7 @@ TEST_CASE(testEquality)
 }
 }
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
         TEST_CHECK(testDerivativeCODValid);
         TEST_CHECK(testDerivativeDwellValid);
         TEST_CHECK(testEquality);

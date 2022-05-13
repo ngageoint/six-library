@@ -32,6 +32,8 @@
 #include "mt/BasicThreadPool.h"
 #include "mt/CPUAffinityInitializer.h"
 #include "mt/CPUAffinityThreadInitializer.h"
+#include "mt/Runnable1D.h"
+
 
 namespace mt
 {
@@ -104,6 +106,35 @@ namespace mt
 	    addGroup(toRun);
 	    waitGroup();
 	}
+
+    
+    /*!
+     *  \brief Runs a given operation on a sequence of numbers in parallel
+     *
+     *  \param numElements The number of elements to run - op will be called 
+     *                     with 0 through numElements-1
+     *  \param op          A function-like object taking a parameter of type
+     *                     size_t which will be called for each number in the
+     *                     given range
+     */
+    template <typename OpT>
+    void run1D(size_t numElements, const OpT& op)
+    {
+        std::vector<sys::Runnable*> runnables;
+        const ThreadPlanner planner(numElements, mNumThreads);
+ 
+        size_t threadNum(0);
+        size_t startElement(0);
+        size_t numElementsThisThread(0);
+        while(planner.getThreadInfo(threadNum++, startElement, numElementsThisThread))
+        {
+            runnables.push_back(new Runnable1D<OpT>(
+                startElement, numElementsThisThread, op));
+        }
+        addAndWaitGroup(runnables);
+        
+    }
+
 
     };
 }

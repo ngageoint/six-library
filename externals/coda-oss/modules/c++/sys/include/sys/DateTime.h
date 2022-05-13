@@ -30,13 +30,15 @@
 
 #include <string>
 
+#include "config/Exports.h"
+
 namespace sys
 {
 
 /*!
  *  Representation of a date/time structure.
  */
-class DateTime
+class CODA_OSS_API DateTime
 {
 protected:
     int mYear = 0;

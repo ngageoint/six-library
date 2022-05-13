@@ -24,16 +24,15 @@
 #include <units/Angles.h>
 #include <units/Lengths.h>
 
-namespace
-{
 template <typename T>
 static void test_degrees_(const std::string& testName)
 {
+    (void)testName;
     T sin, cos;
     constexpr units::Degrees<T> degrees_180 = 180;
     SinCos(degrees_180, sin, cos);
-    TEST_ASSERT_ALMOST_EQ(0.0, sin);
-    TEST_ASSERT_ALMOST_EQ(-1.0, cos);
+    TEST_ASSERT_ALMOST_EQ(static_cast<T>(0.0), sin);
+    TEST_ASSERT_ALMOST_EQ(static_cast<T>(-1.0), cos);
 }
 TEST_CASE(test_degrees)
 {
@@ -55,9 +54,9 @@ TEST_CASE(test_degrees)
     TEST_ASSERT_ALMOST_EQ(0.0, cos(degrees_270));
     TEST_ASSERT_ALMOST_EQ(1.0, cos(degrees_360));
 
-    test_degrees_<float>(testName);
-    test_degrees_<double>(testName);
-    test_degrees_<long double>(testName);
+    test_degrees_<float>("test_degrees");
+    test_degrees_<double>("test_degrees");
+    test_degrees_<long double>("test_degrees");
 }
 
 TEST_CASE(test_lengths)
@@ -86,12 +85,8 @@ TEST_CASE(test_lengths)
     }
 }
 
-}
-
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(test_degrees);
     TEST_CHECK(test_lengths);
-    return 0;
-}
+)
 

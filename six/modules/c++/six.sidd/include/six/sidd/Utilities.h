@@ -28,6 +28,7 @@
 
 #include <import/scene.h>
 #include <types/RgAz.h>
+#include <six/Utilities.h>
 #include <six/sidd/DerivedData.h>
 
 namespace six

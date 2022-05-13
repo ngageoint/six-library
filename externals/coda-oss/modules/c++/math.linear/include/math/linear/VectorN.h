@@ -342,7 +342,7 @@ public:
         return v2;
     }
 
-    template<typename Vector_T> bool operator==(const Vector_T& v) const
+    template<typename Vector_T> bool operator_eq(const Vector_T& v) const
     {
         const auto sz = v.size();
         for (size_t i = 0; i < sz; ++i)
@@ -351,11 +351,6 @@ public:
 
       
         return true;
-    }
-
-    template<typename Vector_T> bool operator!=(const Vector_T& v) const
-    {
-        return !(*this == v); 
     }
 
 };
@@ -402,6 +397,18 @@ template<size_t _ND, typename _T>
     }
     return os;
 }
+
+template <typename Vector_T, size_t ND, typename T = double>
+inline bool operator==(const VectorN<ND, T>& lhs, const Vector_T& rhs)
+{
+    return lhs.operator_eq(rhs);
+}
+template <typename Vector_T, size_t ND, typename T = double>
+inline bool operator!=(const VectorN<ND, T>& lhs, const Vector_T& rhs)
+{
+    return !(lhs == rhs);
+}
+
 } // linear
 } // math
 

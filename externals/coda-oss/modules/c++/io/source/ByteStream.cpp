@@ -42,6 +42,7 @@ sys::Off_T io::ByteStream::seek(sys::Off_T offset, Whence whence)
             mPosition = mData.size() - offset;
         }
         break;
+    case CURRENT:
     default:
         mPosition += offset;
         break;

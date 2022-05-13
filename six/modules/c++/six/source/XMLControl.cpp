@@ -335,7 +335,20 @@ std::unique_ptr<Data> XMLControl::fromXML(const xml::lite::Document& doc,
 
 std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
 {
-    std::string str = dataType;
+    std::string str;
+    switch (dataType)
+    {
+    case DataType::COMPLEX:
+        str = "SICD";
+        break;
+    case DataType::DERIVED:
+        str = "SIDD";
+        break;
+    default:
+        throw except::Exception(
+            Ctxt("Invalid data type " + str::toString(dataType)));
+    }
+
     if (appendXML)
     {
         str += "_XML";

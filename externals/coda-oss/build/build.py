@@ -672,11 +672,11 @@ def getPlatform(pwd=None, default=None):
         for loc in locs:
             if not exists(loc): continue
             try:
-                out = subprocess.Popen('chmod +x %s' % loc, shell=True)
+                out = subprocess.Popen('chmod +x %s' % loc, shell=True, universal_newlines=True)
                 out.close()
             except:{}
             try:
-                out = subprocess.Popen(loc, shell=True, stdout=PIPE).stdout
+                out = subprocess.Popen(loc, shell=True, stdout=subprocess.PIPE, universal_newlines=True).stdout
                 platform = out.readline()
                 platform = platform.strip('\n')
                 out.close()
@@ -1607,7 +1607,7 @@ def getSolarisFlags(compilerName):
     # If they don't, default to the old -xtarget flags
     # TODO: Is there a cleaner way to do this with check_cc() instead?
     bitFlag64 = '-xtarget=generic64'
-    (out, err) = subprocess.Popen([compilerName, '-flags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+    (out, err) = subprocess.Popen([compilerName, '-flags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True).communicate()
 
     for line in out.split('\n'):
         if re.match(r'-m64.*', line):
