@@ -249,7 +249,7 @@ xml::lite::Element& XmlLite::createInt_(const std::string& name, int p, xml::lit
 xml::lite::Element& XmlLite::createDouble(const xml::lite::QName& name, double p, xml::lite::Element& parent) const
 {
     p = value(p); // be sure this is initialized; throws if not
-    return createValue(name, p, parent, mAddClassAttributes, "xs::double", getDefaultURI());
+    return createValue(name, p, parent, mAddClassAttributes, "xs:double", getDefaultURI());
 }
 xml::lite::Element& XmlLite::createDouble(const xml::lite::QName& name, const std::optional<double>& p, xml::lite::Element& parent) const
 {
@@ -274,7 +274,7 @@ xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name, doubl
 }
 xml::lite::Element* XmlLite::createOptionalDouble(const xml::lite::QName& name, const std::optional<double>& p, xml::lite::Element& parent) const
 {
-    return createOptionalValue(name, p, parent, mAddClassAttributes, "xs::double", getDefaultURI());
+    return createOptionalValue(name, p, parent, mAddClassAttributes, "xs:double", getDefaultURI());
 }
 xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name, const std::optional<double>& p, xml::lite::Element& parent) const
 {
