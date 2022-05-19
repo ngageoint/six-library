@@ -177,7 +177,7 @@ TEST_CASE(test_read_sidd300_xml)
     test_read_sidd_xml("sidd300.xml");
 }
 
-TEST_MAIN((void)argc; (void)argv;
+TEST_MAIN(
     TEST_CHECK(test_createFakeDerivedData);
     TEST_CHECK(test_read_sidd200_xml);
     TEST_CHECK(test_read_sidd300_xml);

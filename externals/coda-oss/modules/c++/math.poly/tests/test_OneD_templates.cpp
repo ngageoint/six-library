@@ -59,7 +59,7 @@ TEST_CASE(testDouble)
 
     math::poly::OneD<double> derivative = poly.derivative();
     TEST_ASSERT_EQ(derivative[0], 4.2);
-    TEST_ASSERT_EQ(derivative[1], 10.6)
+    TEST_ASSERT_EQ(derivative[1], 10.6);
 
     poly[2] = 0;
     poly = poly.truncateToNonZeros();

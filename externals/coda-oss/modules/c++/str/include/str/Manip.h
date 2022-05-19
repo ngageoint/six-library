@@ -30,12 +30,18 @@
 #include <vector>
 
 #include "config/compiler_extensions.h"
+#include "config/Exports.h"
 #include "coda_oss/CPlusPlus.h"
 #include "str/Convert.h"
 
 namespace str
 {
-// non-const overload for .data() in C++17
+
+CODA_OSS_disable_warning_push
+#if _MSC_VER
+#pragma warning(disable: 26460) //The reference argument 's' for function 'str::data<char>' can be marked as const (con.3).
+#endif
+ // non-const overload for .data() in C++17
 template<typename CharT>
 inline CharT* data(std::basic_string<CharT>& s) noexcept
 {
@@ -50,6 +56,7 @@ inline CharT* data(std::basic_string<CharT>& s) noexcept
     CODA_OSS_disable_warning_pop
     #endif // CODA_OSS_cpp17
 }
+CODA_OSS_disable_warning_pop
 template <typename CharT>
 inline const CharT* data(const std::basic_string<CharT>& s) noexcept // to make generic programming easier
 {
@@ -60,9 +67,9 @@ inline const CharT* data(const std::basic_string<CharT>& s) noexcept // to make 
  *  Trim the white space off the back and front of a string
  *  @param  s  String to trim
  */
-void trim(std::string& s);
-extern std::string strip(const std::string& s);
-extern std::string& strip(std::string& s);
+CODA_OSS_API void trim(std::string& s);
+CODA_OSS_API std::string strip(const std::string& s);
+CODA_OSS_API std::string& strip(std::string& s);
 
 /**
  *  Checks the end of s with match
@@ -70,8 +77,8 @@ extern std::string& strip(std::string& s);
  *  @param  match  String to compare with
  *  @return true if it matches, otherwise false
  */
-bool endsWith(const std::string& s, const std::string& match);
-extern bool ends_with(const std::string& s, const std::string&) noexcept;
+CODA_OSS_API bool endsWith(const std::string& s, const std::string& match);
+CODA_OSS_API bool ends_with(const std::string& s, const std::string&) noexcept;
 
 /**
  *  Checks the start of s with match
@@ -79,8 +86,8 @@ extern bool ends_with(const std::string& s, const std::string&) noexcept;
  *  @param  s  String to compare with
  *  @return true if it matches, otherwise false
  */
-bool startsWith(const std::string& s, const std::string& match);
-extern bool starts_with(const std::string& s, const std::string&) noexcept;
+CODA_OSS_API bool startsWith(const std::string& s, const std::string& match);
+CODA_OSS_API bool starts_with(const std::string& s, const std::string&) noexcept;
 
 
 /**
@@ -94,7 +101,7 @@ extern bool starts_with(const std::string& s, const std::string&) noexcept;
  *  @param  start   starting position to start search
  *  @return position of first find, str.length() if not found
  */
-size_t replace(std::string& str, 
+CODA_OSS_API size_t replace(std::string& str, 
                const std::string& search,
                const std::string& replace,
                size_t start = 0);
@@ -106,56 +113,56 @@ size_t replace(std::string& str,
  *  @param  search  String to search for
  *  @param  replace String to replace with
  */
-void replaceAll(std::string& string, 
+CODA_OSS_API void replaceAll(std::string& string, 
                 const std::string& search,
                 const std::string& replace);
 
 /**
  * Returns true if the string contains the match
  */
-bool contains(const std::string& str, const std::string& match);
+CODA_OSS_API bool contains(const std::string& str, const std::string& match);
 
 
 /**
  * Returns true if the string contains only letters.
  */
-bool isAlpha(const std::string& s);
+CODA_OSS_API bool isAlpha(const std::string& s);
 
 /**
  * Returns true if the string contains only letters and spaces.
  */
-bool isAlphaSpace(const std::string& s);
+CODA_OSS_API bool isAlphaSpace(const std::string& s);
 
 /**
  * Returns true if the string contains only digits. This does not include
  * decimal points.
  */
-bool isNumeric(const std::string& s);
+CODA_OSS_API bool isNumeric(const std::string& s);
 
 /**
  * Returns true if the string contains only digits and spaces.
  */
-bool isNumericSpace(const std::string& s);
+CODA_OSS_API bool isNumericSpace(const std::string& s);
 
 /**
  * Returns true if the string contains only whitespace characters (or empty).
  */
-bool isWhitespace(const std::string& s);
+CODA_OSS_API bool isWhitespace(const std::string& s);
 
 /**
  * Returns true if the string contains only letters and digits.
  */
-bool isAlphanumeric(const std::string& s);
+CODA_OSS_API bool isAlphanumeric(const std::string& s);
 
 /**
  * Returns true if the string contains only ASCII printable characters.
  */
-bool isAsciiPrintable(const std::string& s);
+CODA_OSS_API bool isAsciiPrintable(const std::string& s);
 
 /**
  * Returns true if the string contains only the given allowed characters.
  */
-bool containsOnly(const std::string& s, const std::string& validChars);
+CODA_OSS_API bool containsOnly(const std::string& s, const std::string& validChars);
 
 /**
  *  Splits a string based on a splitter string. Similar to tokenization, except
@@ -164,20 +171,20 @@ bool containsOnly(const std::string& s, const std::string& validChars);
  *  @param  splitter  String to split upon
  *  @return vector of strings
  */
-std::vector<std::string> split(const std::string& s,
+CODA_OSS_API std::vector<std::string> split(const std::string& s,
                                const std::string& splitter = " ",
                                size_t maxSplit = std::string::npos);
 
 //! Uses std::transform to convert all chars to lower case
 //! Uses std::transform to convert all chars to upper case
-void lower(std::string& s);
-void upper(std::string& s);
+CODA_OSS_API void lower(std::string& s);
+CODA_OSS_API void upper(std::string& s);
 
 /*!
  * Replaces any characters that are invalid in XML (&, <, >, ', ") with their
  * escaped counterparts
  */
-void escapeForXML(std::string& str);
+CODA_OSS_API void escapeForXML(std::string& str);
 
 template<typename T>
 std::string join(const std::vector<T>& toks, std::string with)

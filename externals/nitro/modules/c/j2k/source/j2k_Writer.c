@@ -38,7 +38,7 @@ J2KAPI(NRT_BOOL) j2k_Writer_setOptions(j2k_WriterOptions* options,
 
         if(compressionRatio)
         {
-            options->compressionRatio = *((double*)compressionRatio->data);
+            options->compressionRatio = *((float*)compressionRatio->data);
         }
         if(numResolutions)
         {

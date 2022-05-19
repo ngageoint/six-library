@@ -26,13 +26,11 @@ namespace cphd
 {
 
 DwellTime::DwellTime() :
-    identifier(six::Init::undefined<std::string>()),
     dwellTimePoly(six::Init::undefined<Poly2D>())
 {
 }
 
 COD::COD() :
-    identifier(six::Init::undefined<std::string>()),
     codTimePoly(six::Init::undefined<Poly2D>())
 {
 }

@@ -22,13 +22,10 @@
 
 #include <std/memory>
 
-#include <config/coda_oss_config.h>
 #include <mem/SharedPtr.h>
 
 #include "TestCase.h"
 
-namespace
-{
 struct Foo final
 {
     Foo() = default;
@@ -77,7 +74,6 @@ TEST_CASE(test_make_unique)
         TEST_ASSERT_EQ(0, pFoos[122].mVal);
     }
 
-#if CODA_OSS_lib_make_unique
     {
         auto fooCtor = std::make_unique<Foo>(123);
         TEST_ASSERT_NOT_EQ(nullptr, fooCtor.get());
@@ -89,15 +85,9 @@ TEST_CASE(test_make_unique)
         TEST_ASSERT_EQ(0, pFoos[0].mVal);
         TEST_ASSERT_EQ(0, pFoos[122].mVal);
     }
-#endif 
 }
 
-}
-
-int main(int, char**)
-{
+TEST_MAIN(
    TEST_CHECK(testStdUniquePtr);
    TEST_CHECK(test_make_unique);
-
-   return 0;
-}
+   )

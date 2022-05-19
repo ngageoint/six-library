@@ -27,8 +27,6 @@
 
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testSingleSegmentNoLeftovers)
 {
     // 4 rows of blocks and 5 cols of blocks
@@ -474,7 +472,6 @@ TEST_CASE(testBlockPartialImage)
             }
         }
     }
-}
 }
 
 TEST_MAIN(

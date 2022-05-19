@@ -29,7 +29,6 @@ namespace cphd
 {
 
 SupportArrayParameter::SupportArrayParameter() :
-    elementFormat(six::Init::undefined<std::string>()),
     x0(six::Init::undefined<double>()),
     y0(six::Init::undefined<double>()),
     xSS(six::Init::undefined<double>()),
@@ -60,11 +59,7 @@ void SupportArrayParameter::initializeParams()
     validateFormat(elementFormat);
 }
 
-AdditionalSupportArray::AdditionalSupportArray() :
-    identifier(six::Init::undefined<std::string>()),
-    xUnits(six::Init::undefined<std::string>()),
-    yUnits(six::Init::undefined<std::string>()),
-    zUnits(six::Init::undefined<std::string>())
+AdditionalSupportArray::AdditionalSupportArray()
 {
 }
 

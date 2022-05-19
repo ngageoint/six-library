@@ -2,20 +2,25 @@
 #define NITRO_nitf_exports_hpp_INCLUDED_
 #pragma once
 
-// Use Windows naming conventions (DLL, LIB) because this really only matters
-// for _MSC_VER, see below.
+// Need to specify how this module will be consumed, either NITRO_NITFCPP_LIB (static library)
+// or NITRO_NITFCPP_DLL (aka "shared" library).
+//
+// Use Windows naming conventions (DLL, LIB) because this really only matters for _MSC_VER, see below.
 #if !defined(NITRO_NITFCPP_LIB) && !defined(NITRO_NITFCPP_DLL)
-    // Building a static library (not a DLL) is the default.
     #define NITRO_NITFCPP_LIB 1
+    //#define NITRO_NITFCPP_DLL 1
 #endif
-#if !defined(NITRO_NITFCPP_DLL)
-    #if defined(NITRO_NITFCPP_EXPORTS) && defined(NITRO_NITFCPP_LIB)
+#if defined(NITRO_NITFCPP_EXPORTS)
+    #if defined(NITRO_NITFCPP_LIB)
         #error "Can't export from a LIB'"
     #endif
 
-    #if !defined(NITRO_NITFCPP_LIB)
+    #if !defined(NITRO_NITFCPP_DLL)
         #define NITRO_NITFCPP_DLL 1
     #endif
+#endif
+#if defined(NITRO_NITFCPP_LIB) && defined(NITRO_NITFCPP_DLL)
+    #error "Both NITRO_NITFCPP_LIB and NITRO_NITFCPP_DLL are #define'd'"
 #endif
 
 // The following ifdef block is the standard way of creating macros which make exporting
@@ -25,11 +30,10 @@
 // NITRO_NITFCPP_API functions as being imported from a DLL, whereas this DLL sees symbols
 // defined with this macro as being exported.
 // https://www.gnu.org/software/gnulib/manual/html_node/Exported-Symbols-of-Shared-Libraries.html
-#if NITRO_NITFCPP_EXPORTS
+#ifdef NITRO_NITFCPP_EXPORTS
     #if defined(__GNUC__) // && HAVE_VISIBILITY 
         #define NITRO_NITFCPP_API __attribute__((visibility("default")))
     #elif defined(_MSC_VER) // && (defined(_WINDLL) && !defined(_LIB))
-        // Visual Studio projects define _WINDLL or _LIB, but not the compiler
         #define NITRO_NITFCPP_API __declspec(dllexport)
     #else
         // https://stackoverflow.com/a/2164853/8877

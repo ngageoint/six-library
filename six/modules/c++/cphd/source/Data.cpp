@@ -70,7 +70,6 @@ Data::Channel::Channel(size_t vectors, size_t samples,
 }
 
 Data::SupportArray::SupportArray() :
-    identifier(six::Init::undefined<std::string>()),
     numRows(0),
     numCols(0),
     bytesPerElement(0),

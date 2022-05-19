@@ -25,15 +25,12 @@
 
 namespace cphd
 {
-ProductInfo::ProductInfo():
-    profile(six::Init::undefined<std::string>())
+ProductInfo::ProductInfo()
 {
 }
 
 ProductInfo::CreationInfo::CreationInfo():
-    application(six::Init::undefined<std::string>()),
-    dateTime(six::Init::undefined<DateTime>()),
-    site(six::Init::undefined<std::string>())
+    dateTime(six::Init::undefined<DateTime>())
 {
 }
 

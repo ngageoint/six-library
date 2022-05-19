@@ -20,15 +20,17 @@
  *
  */
 
-#ifndef __IO_BUFFER_VIEW_STREAM_H__
-#define __IO_BUFFER_VIEW_STREAM_H__
+#ifndef CODA_OSS_io_BufferViewStream_h_INCLUDED_
+#define CODA_OSS_io_BufferViewStream_h_INCLUDED_
+
+#include <string.h>
 
 #include <mem/BufferView.h>
 #include <sys/Conf.h>
 #include <except/Error.h>
 #include <except/Exception.h>
 #include <io/SeekableStreams.h>
-#include <string.h>
+#include <gsl/gsl.h>
 
 /*!
  *  \file
@@ -43,23 +45,25 @@ namespace io
  *      SeekableInputStream, SeekableOutputStream
  */
 template <typename T>
-class BufferViewStream: public SeekableInputStream, public SeekableOutputStream
+struct BufferViewStream: public SeekableInputStream, public SeekableOutputStream
 {
-public:
     /*!
      * Default constructor
      * \param bufferView The BufferView to wrap in the stream
      */
     BufferViewStream(const mem::BufferView<T>& bufferView) :
-        mBufferView(bufferView),
-        mPosition(0)
+        mBufferView(bufferView)
     {
     }
+    BufferViewStream(const BufferViewStream&) = delete;
+    BufferViewStream& operator=(const BufferViewStream&) = delete;
+    BufferViewStream(BufferViewStream&&) = default;
+    BufferViewStream& operator=(BufferViewStream&&) = delete;
 
     //! Returns current location in buffer in bytes
     virtual sys::Off_T tell()
     {
-        return mPosition * sizeof(T);
+        return gsl::narrow<sys::Off_T>(mPosition * sizeof(T));
     }
 
     /*!
@@ -76,7 +80,7 @@ public:
      */
     virtual sys::Off_T available()
     {
-        return (mBufferView.size - mPosition) * sizeof(T);
+        return gsl::narrow<sys::Off_T>((mBufferView.size - mPosition) * sizeof(T));
     }
 
     using OutputStream::write;
@@ -140,7 +144,7 @@ protected:
 
 private:
     const mem::BufferView<T> mBufferView;
-    sys::Off_T mPosition;
+    sys::Off_T mPosition = 0;
 };
 
 template <typename T>
@@ -155,21 +159,22 @@ sys::Off_T BufferViewStream<T>::seek(sys::Off_T offset, Whence whence)
             newPos = offset;
             break;
         case END:
-            if (offset > static_cast<sys::Off_T>(mBufferView.size))
+            if (offset > gsl::narrow<sys::Off_T>(mBufferView.size))
             {
                 newPos = 0;
             }
             else
             {
-                newPos = mBufferView.size - offset;
+                newPos = gsl::narrow<sys::Off_T>(mBufferView.size - offset);
             }
             break;
+        case CURRENT:
         default:
             newPos += offset;
             break;
     }
 
-    if (newPos > static_cast<sys::Off_T>(mBufferView.size) || newPos < 0)
+    if (newPos > gsl::narrow<sys::Off_T>(mBufferView.size) || newPos < 0)
     {
         throw except::Exception(Ctxt("Attempted to seek beyond end of stream"));
     }
@@ -181,7 +186,7 @@ template <typename T>
 void BufferViewStream<T>::write(const void* buffer, size_t numBytes)
 {
     const size_t numElements = numBytes / sizeof(T);
-    const sys::Size_T newPos = mPosition + numElements;
+    const auto newPos = mPosition + numElements;
     if (newPos > mBufferView.size)
     {
         std::ostringstream msg;
@@ -190,16 +195,16 @@ void BufferViewStream<T>::write(const void* buffer, size_t numBytes)
     }
 
     ::memcpy(mBufferView.data + mPosition, buffer, numBytes);
-    mPosition = newPos;
+    mPosition = gsl::narrow<sys::Off_T>(newPos);
 }
 
 template <typename T>
 sys::SSize_T BufferViewStream<T>::readImpl(void* buffer, size_t numBytes)
 {
     size_t numElements = numBytes / sizeof(T);
-    if (available() < static_cast<sys::Off_T>(numBytes))
+    if (available() < gsl::narrow<sys::Off_T>(numBytes))
     {
-        numBytes = available();
+        numBytes = gsl::narrow<size_t>(available());
         numElements = numBytes / sizeof(T);
     }
     if (numBytes == 0)
@@ -209,8 +214,7 @@ sys::SSize_T BufferViewStream<T>::readImpl(void* buffer, size_t numBytes)
 
     ::memcpy(buffer, mBufferView.data + mPosition, numBytes);
     mPosition += numElements;
-    return numBytes;
+    return gsl::narrow<sys::SSize_T>(numBytes);
 }
 }
-#endif
-
+#endif  // CODA_OSS_io_BufferViewStream_h_INCLUDED_

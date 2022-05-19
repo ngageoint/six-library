@@ -31,6 +31,7 @@
 
 #include <scene/SceneGeometry.h>
 #include <scene/ProjectionModel.h>
+#include <six/Utilities.h>
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/SICDMesh.h>
 #include <six/NITFReadControl.h>

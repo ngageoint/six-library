@@ -67,6 +67,8 @@ NRT_BOOL writeJ2K(uint32_t x0, uint32_t y0,
     uint64_t bufSize, j2k_Container* inContainer,
     const char* prefix, nrt_Error* error)
 {
+    (void)bufSize;
+
     NRT_BOOL rc = NRT_SUCCESS;
     char outName[NRT_MAX_PATH];
 

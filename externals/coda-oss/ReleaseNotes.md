@@ -11,6 +11,13 @@
  ```
 # coda-oss Release Notes
 
+## Release 2022-05-03
+* Fixed a bug in `Poly2D::atY()`; imporved `flipXY()` behavior.
+* Implement [std::filesystem::file_size()](https://en.cppreference.com/w/cpp/filesystem/file_size).
+* use `inline` functions for `TEST_` macros
+* force use of [64-bit `time_t`](https://en.wikipedia.org/wiki/Year_2038_problem)
+* more routines now support a `std::span` overload; e.g., `io::InputStream::read()`.
+
 ## (Release 2022-02-22)
 * new `EnocdedString` and `EncodedStringView` to manage strings in different encodings
 * XML containing UTF-8 characters can now be validated

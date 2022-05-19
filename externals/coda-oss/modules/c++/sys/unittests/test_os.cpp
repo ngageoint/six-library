@@ -34,9 +34,10 @@
 #include <sys/Backtrace.h>
 #include <sys/Dbg.h>
 #include <sys/DateTime.h>
+#include <sys/sys_filesystem.h>
 #include "TestCase.h"
 
-namespace fs = coda_oss::filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -168,7 +169,7 @@ TEST_CASE(testSplitEnv)
     std::vector<std::string> paths;
     bool result = os.splitEnv(pathEnvVar, paths);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_GREATER(paths.size(), 0);
+    TEST_ASSERT_GREATER(paths.size(), static_cast<size_t>(0));
     for (const auto& path : paths)
     {
         TEST_ASSERT_TRUE(fs::exists(path));
@@ -308,11 +309,11 @@ TEST_CASE(testBacktrace)
         #if _WIN32
         constexpr auto frames_size_RELEASE = 2;
         constexpr auto frames_size_RELEASE_other = frames_size_RELEASE;
-        constexpr auto frames_size_DEBUG = 14;
+        constexpr auto frames_size_DEBUG = 16;
         #elif defined(__GNUC__)
         constexpr auto frames_size_RELEASE = 6;
-        constexpr auto frames_size_RELEASE_other = 7;
-        constexpr auto frames_size_DEBUG = 10;
+        constexpr auto frames_size_RELEASE_other = frames_size_RELEASE + 1; // 7
+        constexpr auto frames_size_DEBUG = frames_size_RELEASE + 6; // 12
         #else
         #error "CODA_OSS_sys_Backtrace inconsistency."
         #endif
@@ -388,6 +389,22 @@ TEST_CASE(testSpecialEnvVars)
     TEST_ASSERT_FALSE(result.empty());
 }
 
+TEST_CASE(testFsFileSize)
+{
+    const sys::OS os;
+    {
+        const fs::path argv0(os.getSpecialEnv("ARGV0"));
+        const auto size = file_size(argv0);
+        TEST_ASSERT_GREATER(size, static_cast<size_t>(0));
+    }
+    {
+        // We always have  sys::filesystem, even if it's not used.
+        const sys::filesystem::path argv0(os.getSpecialEnv("ARGV0"));
+        const auto size = file_size(argv0);
+        TEST_ASSERT_GREATER(size, static_cast<size_t>(0));
+    }
+}
+
 }
 
 int main(int, char** argv)
@@ -402,6 +419,7 @@ int main(int, char** argv)
     TEST_CHECK(testFsOutput);
     TEST_CHECK(testBacktrace);
     TEST_CHECK(testSpecialEnvVars);
+    TEST_CHECK(testFsFileSize);
 
     return 0;
 }

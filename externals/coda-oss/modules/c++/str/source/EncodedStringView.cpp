@@ -44,7 +44,7 @@ inline coda_oss::span<const char> make_span(const CharT* s)
 template<typename CharT>
 inline coda_oss::span<const char> make_span(const std::basic_string<CharT>& s)
 {
-    return coda_oss::span<const char>(str::c_str<const char*>(s), s.size());
+    return coda_oss::span<const char>(str::c_str<std::string>(s), s.size());
 }
 
 str::EncodedStringView::EncodedStringView(std::string::const_pointer p) : mString(make_span(p)) { }
@@ -72,6 +72,11 @@ std::u16string str::EncodedStringView::u16string() const
 {
     return str::details::to_u16string(mString.data(), mString.size(), mIsUtf8);
 }
+str::ui16string str::EncodedStringView::ui16string_() const
+{
+    return str::details::to_ui16string(mString.data(), mString.size(), mIsUtf8);
+}
+
 std::u32string str::EncodedStringView::u32string() const
 {
     return str::details::to_u32string(mString.data(), mString.size(), mIsUtf8);

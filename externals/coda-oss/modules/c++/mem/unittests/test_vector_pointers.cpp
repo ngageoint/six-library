@@ -24,9 +24,6 @@
 
 #include "TestCase.h"
 
-namespace
-{
-
 TEST_CASE(testVecOfRawPointers)
 {
     mem::VectorOfPointers<int> myVec;
@@ -117,11 +114,8 @@ TEST_CASE(testVecOfSharedPointers)
     }
 
 }
-}
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testVecOfRawPointers);
     TEST_CHECK(testVecOfSharedPointers);
-    return 0;
-}
+    )

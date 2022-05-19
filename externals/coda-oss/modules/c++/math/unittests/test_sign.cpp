@@ -24,8 +24,6 @@
 #include <math/Utilities.h>
 #include <limits>
 
-namespace
-{
 TEST_CASE(testZero)
 {
    TEST_ASSERT_EQ(math::sign(0), 0);
@@ -44,13 +42,10 @@ TEST_CASE(testNegative)
     TEST_ASSERT_EQ(math::sign(-std::numeric_limits<double>::epsilon()), -1);
     TEST_ASSERT_EQ(math::sign(-0.1), -1);
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(testZero);
     TEST_CHECK(testPositive);
     TEST_CHECK(testNegative);
-    return 0;
-}
+    )
 

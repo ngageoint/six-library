@@ -30,8 +30,6 @@
 #include <set>
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testReleaseSingleEndBuffer)
 {
     //A single release of the last element. Tests with different scratch templates.
@@ -622,10 +620,8 @@ TEST_CASE(testScratchMemory)
     mem::BufferView<sys::ubyte> invalidBuffer(NULL, buffer.size);
     TEST_EXCEPTION(scratch.setup(invalidBuffer));
 }
-}
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testScratchMemory);
     TEST_CHECK(testReleaseSingleEndBuffer);
     TEST_CHECK(testReleaseMultipleEndBuffers);
@@ -634,6 +630,4 @@ int main(int, char**)
     TEST_CHECK(testReleaseConcurrentKeys);
     TEST_CHECK(testReleaseConnectedKeys);
     TEST_CHECK(testGenerateBuffersForRelease);
-
-    return 0;
-}
+    )

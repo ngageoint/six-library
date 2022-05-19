@@ -31,9 +31,11 @@
 
 #include <string>
 #include <ostream>
+#include <cstdint>
 
 #include "sys/CPlusPlus.h"
 #include "coda_oss/namespace_.h" // get something in the "coda_oss" namespace
+#include "config/Exports.h"
 
 namespace sys // should be in coda_oss/, but implementation needs sys::Path
 {
@@ -58,7 +60,7 @@ namespace filesystem // not "Filesystem", make it easy to use code in other name
   };
 
 // http://en.cppreference.com/w/cpp/filesystem/path
-struct path final // N.B. this is an INCOMPLETE and NON-STANDARD implementation!
+struct CODA_OSS_API path final // N.B. this is an INCOMPLETE and NON-STANDARD implementation!
 {
     // character type used by the native encoding of the filesystem: char on POSIX, wchar_t on Windows
     #ifdef _WIN32
@@ -103,15 +105,15 @@ struct path final // N.B. this is an INCOMPLETE and NON-STANDARD implementation!
     bool is_absolute() const;  // http://en.cppreference.com/w/cpp/filesystem/path/is_absrel
     bool is_relative() const;  // http://en.cppreference.com/w/cpp/filesystem/path/is_absrel
 
-    friend bool operator==(const path& lhs, const path& rhs) noexcept  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
+    CODA_OSS_API friend bool operator==(const path& lhs, const path& rhs) noexcept  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
     {
       return details::Equals(lhs, rhs);
     }
-    friend bool operator!=(const path& lhs, const path& rhs) noexcept  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
+    CODA_OSS_API friend bool operator!=(const path& lhs, const path& rhs) noexcept  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
     {
       return !(lhs == rhs);
     }
-    friend std::ostream& operator<<(std::ostream& os, const path& p) // https://en.cppreference.com/w/cpp/filesystem/path/operator_ltltgtgt
+    CODA_OSS_API friend std::ostream& operator<<(std::ostream& os, const path& p) // https://en.cppreference.com/w/cpp/filesystem/path/operator_ltltgtgt
     {
       return details::Ostream(os, p);
     }
@@ -121,17 +123,19 @@ private:
     static string_type to_native(const std::string& s);
 };
 
-path operator/(const path& lhs, const path& rhs);  // http://en.cppreference.com/w/cpp/filesystem/path/operator_slash
+CODA_OSS_API path operator/(const path& lhs, const path& rhs);  // http://en.cppreference.com/w/cpp/filesystem/path/operator_slash
 
-path absolute(const path&);  // http://en.cppreference.com/w/cpp/filesystem/absolute
-bool create_directory(const path&);  // https://en.cppreference.com/w/cpp/filesystem/create_directory
-path current_path();  // https://en.cppreference.com/w/cpp/filesystem/current_path
-bool remove(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/remove
-path temp_directory_path();  // https://en.cppreference.com/w/cpp/filesystem/temp_directory_path
+CODA_OSS_API path absolute(const path&);  // http://en.cppreference.com/w/cpp/filesystem/absolute
+CODA_OSS_API bool create_directory(const path&);  // https://en.cppreference.com/w/cpp/filesystem/create_directory
+CODA_OSS_API path current_path();  // https://en.cppreference.com/w/cpp/filesystem/current_path
+CODA_OSS_API bool remove(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/remove
+CODA_OSS_API path temp_directory_path();  // https://en.cppreference.com/w/cpp/filesystem/temp_directory_path
 
-bool is_regular_file(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/is_regular_file
-bool is_directory(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/is_directory
-bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exists
+CODA_OSS_API bool is_regular_file(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/is_regular_file
+CODA_OSS_API bool is_directory(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/is_directory
+CODA_OSS_API bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exists
+CODA_OSS_API std::uintmax_t file_size(const path& p); // https://en.cppreference.com/w/cpp/filesystem/file_size
+
 }
 }
 

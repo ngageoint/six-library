@@ -91,9 +91,10 @@ SubWindow::SubWindow(const ImageSubheader& subheader) :
 
 SubWindow::~SubWindow()
 {
-    if (isValid() && getNative()->downsampler)
+    auto downsampler = getNative()->downsampler;
+    if (downsampler)
     {
-        nitf::DownSampler ds(getNativeOrThrow()->downsampler);
+        nitf::DownSampler ds(downsampler);
         //decrement the current DownSampler
         ds.decRef();
     }

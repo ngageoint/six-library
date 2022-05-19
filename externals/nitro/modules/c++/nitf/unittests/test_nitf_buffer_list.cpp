@@ -26,8 +26,6 @@
 
 #include <nitf/NITFBufferList.hpp>
 
-namespace
-{
 TEST_CASE(testGetNumBlocks)
 {
     // 5000 total bytes
@@ -176,7 +174,6 @@ TEST_CASE(testGetBlock_std_byte)
         TEST_EXCEPTION(bufferList.getBlock(blockSize, numBlocks, scratch,
             numBytesInBlock));
     }
-}
 }
 
 TEST_MAIN(

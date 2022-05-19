@@ -1140,7 +1140,7 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(ref.monostatic->dopplerConeAngle, 30.0);
 }
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
         TEST_CHECK(testReadXML);
         // TEST_CHECK(testValidation);
 )
