@@ -121,6 +121,8 @@ void initMenuList()
    menutype[SM_GET_COVARIANCE_MATRIX]          =  SENSOR_MODEL_TYPE;
    menulist[SM_GET_UNMODELED_ERROR]            = "getUnmodeledError";
    menutype[SM_GET_UNMODELED_ERROR]            = SENSOR_MODEL_TYPE;
+   menulist[SM_GET_SIX_UNMODELED_ERROR] = "getSIXUnmodeledError";
+   menutype[SM_GET_SIX_UNMODELED_ERROR] = SENSOR_MODEL_TYPE;
    menulist[SM_GET_UNMODELED_CROSS_COVARIANCE] = "getUnmodeledCrossCovariance";
    menutype[SM_GET_UNMODELED_CROSS_COVARIANCE] = SENSOR_MODEL_TYPE;
    menulist[SM_GET_PARAMETER_COVARIANCE]    = "getParameterCovariance";

@@ -3794,6 +3794,64 @@ bool processSensorModelCommand(int commandNumber,
             break;
          }
 
+          //----- CASE getUnmodeledSIXError MMLD CMD - tested
+         case SM_GET_SIX_UNMODELED_ERROR:
+         {
+            initCase();
+            
+            if(debugFlag)
+            {
+               cout << "\n  vts - Calling getSIXUnmodeledError\n";
+            }
+
+            for(i=0; i < repeat_count; i++)
+            {
+                _TRY
+				   covarianceErr = rasterGM->getSIXUnmodeledError();
+                _CATCH
+            }
+            end_clock = clock();
+
+            if(debugFlag)
+            {
+               cout << "    vts - Returned values are:\n";
+               cout << "      unmodeledErr=";
+               if (covarianceErr.empty())
+               {
+                   cout << "{}";
+               }
+               else if (covarianceErr.size() >= 3)
+               {
+                   cout << covarianceErr[0] << "," << covarianceErr[1] << "," << covarianceErr[2];
+                   if (covarianceErr.size() == 7)
+                   {
+                       cout << ","
+                           << covarianceErr[3] << "," << covarianceErr[4] << ","
+                           << covarianceErr[5] << "," << covarianceErr[6];
+                   }
+               }
+            }
+            cout << "\n\n";
+            param_array_index = 2;
+            maxReturnValuesToCompare = covarianceErr.size();
+            if (covarianceErr.size() >= 3)
+            {
+                act_val[0] = covarianceErr[0];
+                act_val[1] = covarianceErr[1];
+                act_val[2] = covarianceErr[2];
+                if (covarianceErr.size() == 7)
+                {
+                    act_val[3] = covarianceErr[3];
+                    act_val[4] = covarianceErr[4];
+                    act_val[5] = covarianceErr[5];
+                    act_val[6] = covarianceErr[6];
+                }
+            }
+
+            exitCase();
+            break;
+         }
+
             //----- CASE getUnmodeledCrossCovariance MMLD CMD - tested
          case SM_GET_UNMODELED_CROSS_COVARIANCE:
 		 {

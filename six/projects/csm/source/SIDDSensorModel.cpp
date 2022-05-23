@@ -21,7 +21,7 @@
 */
 #include <six/csm/SIDDSensorModel.h>
 
-#include <six/csm/SIDDSensorModel.h>
+#include <assert.h>
 
 #include "Error.h"
 #include <sys/OS.h>
@@ -448,6 +448,19 @@ const six::sidd::MeasurableProjection* SIDDSensorModel::getProjection() const
             reinterpret_cast<six::sidd::MeasurableProjection*>(
                     mData->measurement->projection.get());
     return projection;
+}
+
+std::vector<double>
+SIDDSensorModel::getSIXUnmodeledError() const
+{
+    assert(mData.get() != nullptr);
+
+    std::vector<double> retval;
+    if (auto pErrorStatistics = mData->errorStatistics.get())
+    {
+        retval = SIXSensorModel::getSIXUnmodeledError(*pErrorStatistics);
+    }
+    return retval;
 }
 
 void SIDDSensorModel::reinitialize()

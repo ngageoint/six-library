@@ -21,6 +21,8 @@
 */
 #include <six/csm/SICDSensorModel.h>
 
+#include <assert.h>
+
 #include "Error.h"
 #include <sys/OS.h>
 #include <sys/Path.h>
@@ -391,6 +393,19 @@ csm::ImageCoord SICDSensorModel::getImageStart() const
 {
     return csm::ImageCoord(mData->imageData->firstRow,
                            mData->imageData->firstCol);
+}
+
+std::vector<double>
+SICDSensorModel::getSIXUnmodeledError() const
+{
+    assert(mData.get() != nullptr);
+
+    std::vector<double> retval;
+    if (auto pErrorStatistics = mData->errorStatistics.get())
+    {
+        retval = SIXSensorModel::getSIXUnmodeledError(*pErrorStatistics);
+    }
+    return retval;
 }
 
 void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
