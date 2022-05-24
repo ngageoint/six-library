@@ -33,6 +33,7 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 #include <six/XmlLite.h>
+#include <six/ErrorStatistics.h>
 
 namespace six
 {

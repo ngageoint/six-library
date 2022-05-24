@@ -28,6 +28,7 @@
 #include "Error.h"
 #include <six/NITFReadControl.h>
 #include <six/csm/SIXSensorModel.h>
+#include <six/ErrorStatistics.h>
 
 namespace fs = std::filesystem;
 

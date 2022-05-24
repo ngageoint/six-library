@@ -37,6 +37,8 @@
 
 namespace six
 {
+  struct ErrorStatistics;
+
 namespace CSM
 {
 class SIXSensorModel : public csm::RasterGM
