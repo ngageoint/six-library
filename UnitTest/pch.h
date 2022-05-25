@@ -60,10 +60,12 @@
 #include <import/mt.h>
 #pragma warning(pop)
 #include <import/str.h>
+#include <str/EncodedStringView.h>
 #include <import/logging.h>
 #include <math/Utilities.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/Validator.h>
+#include <xml/lite/MinidomParser.h>
 
 #include <import/nitf.hpp>
 #include <import/nitf.h>
