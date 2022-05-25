@@ -3,20 +3,11 @@
   <ItemGroup>
     <ClCompile Include="CppUnitTestAssert.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="cphd_test_channel.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
+    <ClCompile Include="cphd.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="cphd_Test.h">
-      <Filter>cphd</Filter>
-    </ClInclude>
     <ClInclude Include="TestCase.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="cphd">
-      <UniqueIdentifier>{8bd6bd82-c3b8-4c70-8152-2f68872ec864}</UniqueIdentifier>
-    </Filter>
+    <ClInclude Include="cphd_Test.h" />
   </ItemGroup>
 </Project>

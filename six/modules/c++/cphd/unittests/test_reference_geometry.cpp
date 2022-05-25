@@ -31,8 +31,6 @@
 
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testEquality)
 {
     cphd::ReferenceGeometry refGeo;
@@ -58,7 +56,6 @@ TEST_CASE(testEquality)
     refGeoOther.monostatic->slantRange = 20.0;
 
     TEST_ASSERT_NOT_EQ(refGeo, refGeoOther);
-}
 }
 
 TEST_MAIN(

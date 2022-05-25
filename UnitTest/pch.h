@@ -44,6 +44,7 @@
 #pragma warning(disable: 5204) // 'Concurrency::details::_DefaultPPLTaskScheduler': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
 
 #include "six/modules/c++/cpp_pch.h"
+#include <fstream>
 
 #include <nitf/coda-oss.hpp>
 
@@ -57,6 +58,8 @@
 #pragma warning(disable: 26473) // Don't cast between pointer types where the source type and the target type are the same (type.1).
 #include <import/sys.h>
 #include <import/io.h>
+#include <io/TempFile.h>
+#include <io/StringStream.h>
 #include <import/mt.h>
 #pragma warning(pop)
 #include <import/str.h>

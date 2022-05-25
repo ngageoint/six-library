@@ -46,8 +46,6 @@
  * Fails if values don't match
  */
 
-namespace
-{
 template<typename T>
 std::vector<std::complex<T> > generateData(size_t length)
 {
@@ -219,7 +217,6 @@ TEST_CASE(testScaledFloat)
             generateData<float>(dims.area());
     const bool scale = true;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
-}
 }
 
 TEST_MAIN(
