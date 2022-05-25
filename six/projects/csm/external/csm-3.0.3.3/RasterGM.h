@@ -508,8 +508,7 @@ public:
       //  GeometricModel::getCrossCovarianceMatrix() be called instead.
       //<
 
-   inline std::vector<double> getUnmodeledError(const ImageCoord& imagePt) const
-   { return getUnmodeledCrossCovariance(imagePt, imagePt); }
+   std::vector<double> getUnmodeledError(const ImageCoord& imagePt) const;
 
    /**
     * Returns six::ErrorStatistics::Unmodeled values, if any.

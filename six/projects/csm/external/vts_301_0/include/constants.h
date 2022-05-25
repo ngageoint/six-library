@@ -62,7 +62,6 @@ enum MENU_ENUM {
       SM_GET_CROSS_COVARIANCE_MATRIX,                  //  13
       SM_GET_COVARIANCE_MATRIX,
 	  SM_GET_UNMODELED_ERROR,                          //  15
-      SM_GET_SIX_UNMODELED_ERROR,
       SM_GET_UNMODELED_CROSS_COVARIANCE,               //  16
       SM_GET_PARAMETER_COVARIANCE,                     //  17
       SM_SET_PARAMETER_COVARIANCE,                     //  18
