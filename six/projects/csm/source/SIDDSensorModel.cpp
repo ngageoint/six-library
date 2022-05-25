@@ -457,7 +457,7 @@ SIDDSensorModel::getSIXUnmodeledError() const
     assert(mData.get() != nullptr);
     if (auto pErrorStatistics = mData->errorStatistics.get())
     {
-        return SIXSensorModel::getSIXUnmodeledError(*pErrorStatistics);
+        return SIXSensorModel::getSIXUnmodeledError_(*pErrorStatistics);
     }
     return {};
 }

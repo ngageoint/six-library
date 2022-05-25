@@ -382,6 +382,12 @@ std::vector<double> SIXSensorModel::getUnmodeledError(
 {
     try
     {
+        auto sixUnmodeledError = convertUnmodeledError(getSIXUnmodeledError());
+        if (!sixUnmodeledError.empty())
+        {
+            return sixUnmodeledError;
+        }
+
         types::RowCol<double> pixelPt = fromPixel(imagePt);
         const math::linear::MatrixMxN<2, 2, double> unmodeledError =
                 mProjection->getUnmodeledErrorCovariance( pixelPt );
@@ -1154,7 +1160,7 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
     return NITFReadControl::getDataType(desid, desshl, desshsi, desid);
 }
 
-std::vector<double> SIXSensorModel::getSIXUnmodeledError(const six::ErrorStatistics& errorStatistics)
+std::vector<double> SIXSensorModel::getSIXUnmodeledError_(const six::ErrorStatistics& errorStatistics)
 {
     std::vector<double> retval;
     if (auto pUnmodeled = errorStatistics.Unmodeled.get())

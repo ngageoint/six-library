@@ -545,6 +545,10 @@ public:
       //  reported as the four terms of a 2x2 matrix, returned as a 4 element
       //  vector.
       //<
+
+   protected:
+       // utility routine to avoid duplicating code.
+       std::vector<double> convertUnmodeledError(const std::vector<double>& sixUnmodeledError) const;
 };
 
 } // namespace csm

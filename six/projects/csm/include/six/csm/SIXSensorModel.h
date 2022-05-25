@@ -678,7 +678,7 @@ protected:
     DataType getDataType(const csm::Des& des);
 
 protected:
-    static std::vector<double> getSIXUnmodeledError(const six::ErrorStatistics&);
+    static std::vector<double> getSIXUnmodeledError_(const six::ErrorStatistics&);
 
     const scene::ECEFToLLATransform mECEFToLLA;
     const csm::NoCorrelationModel mCorrelationModel;
