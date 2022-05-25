@@ -455,13 +455,11 @@ std::vector<double>
 SIDDSensorModel::getSIXUnmodeledError() const
 {
     assert(mData.get() != nullptr);
-
-    std::vector<double> retval;
     if (auto pErrorStatistics = mData->errorStatistics.get())
     {
-        retval = SIXSensorModel::getSIXUnmodeledError(*pErrorStatistics);
+        return SIXSensorModel::getSIXUnmodeledError(*pErrorStatistics);
     }
-    return retval;
+    return {};
 }
 
 void SIDDSensorModel::reinitialize()
