@@ -30,6 +30,9 @@
 #include <six/csm/SIXSensorModel.h>
 #include <six/ErrorStatistics.h>
 
+#undef min
+#undef max
+
 namespace fs = std::filesystem;
 
 
