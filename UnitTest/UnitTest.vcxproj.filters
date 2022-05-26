@@ -4,10 +4,12 @@
     <ClCompile Include="CppUnitTestAssert.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="cphd.cpp" />
+    <ClCompile Include="cphd03.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="TestCase.h" />
     <ClInclude Include="cphd_Test.h" />
+    <ClInclude Include="cphd03_Test.h" />
   </ItemGroup>
 </Project>

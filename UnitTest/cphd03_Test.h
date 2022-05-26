@@ -1,7 +1,8 @@
 #pragma once
 
-#if defined(GTEST_API_)
-#define __TEST_H__ // #include "../nitf/unittests/Test.h"
-#define __TEST_CASE_H__ // #include "../nitf/unittests/TestCase.h"
-#endif
+#include <cphd03/CPHDReader.h>
+#include <cphd03/CPHDWriter.h>
+#include <cphd/Wideband.h>
 
+#include "CppUnitTest.h"
+#include "TestCase.h"

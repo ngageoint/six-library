@@ -26,19 +26,21 @@
 #include <cphd/TestDataGenerator.h>
 #include "TestCase.h"
 
-static const size_t NUM_CHANNELS = 3;
-static const size_t NUM_VECTORS = 7;
+static constexpr size_t NUM_CHANNELS = 3;
+static constexpr size_t NUM_VECTORS = 7;
 
-static std::string testName;
-
-namespace
+static void call_srand()
 {
+    static const auto f = []() { const auto seed = 174; ::srand(seed); return nullptr; };
+    static const auto result = f();
+}
+
 void testVectorParameters(const std::string& testName_,
                           size_t channel,
                           size_t vector,
                           cphd03::VBM& vbm)
 {
-    testName = testName_;
+    const auto testName = testName_;
 
     const double txTime = cphd::getRandom();
     vbm.setTxTime(txTime, channel, vector);
@@ -76,7 +78,7 @@ void testVectorParameters(const std::string& testName_,
 
 TEST_CASE(testVbmFx)
 {
-    testName = "testVbmFx";
+    call_srand();
 
     cphd03::VBM vbm(NUM_CHANNELS,
                   std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
@@ -89,7 +91,7 @@ TEST_CASE(testVbmFx)
     {
         for (size_t vector = 0; vector < NUM_VECTORS; ++vector)
         {
-            testVectorParameters(testName, channel, vector, vbm);
+            testVectorParameters("testVbmFx", channel, vector, vbm);
 
             const double fx0 = cphd::getRandom();
             vbm.setFx0(fx0, channel, vector);
@@ -113,7 +115,7 @@ TEST_CASE(testVbmFx)
 
 TEST_CASE(testVbmToa)
 {
-    testName = "testVbmToa";
+    call_srand();
 
     cphd03::VBM vbm(NUM_CHANNELS,
                   std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
@@ -126,7 +128,7 @@ TEST_CASE(testVbmToa)
     {
         for (size_t vector = 0; vector < NUM_VECTORS; ++vector)
         {
-            testVectorParameters(testName, channel, vector, vbm);
+            testVectorParameters("testVbmToa", channel, vector, vbm);
 
             const double deltaToa0 = cphd::getRandom();
             vbm.setDeltaTOA0(deltaToa0, channel, vector);
@@ -142,6 +144,8 @@ TEST_CASE(testVbmToa)
 
 TEST_CASE(testVbmThrow)
 {
+    call_srand();
+
     cphd03::VBM vbmFx(NUM_CHANNELS,
                     std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
                     false,
@@ -198,6 +202,8 @@ TEST_CASE(testVbmThrow)
 
 TEST_CASE(testVbmCopy)
 {
+    call_srand();
+
     cphd03::VBM vbmFx(NUM_CHANNELS,
                     std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
                     false,
@@ -221,6 +227,8 @@ TEST_CASE(testVbmCopy)
 
 TEST_CASE(testDataConstructor)
 {
+    call_srand();
+
     std::vector<std::vector<double> > actualData(NUM_CHANNELS);
     const size_t numValuesNeeded = 18;
     for (size_t ii = 0; ii < NUM_CHANNELS; ++ii)
@@ -283,15 +291,6 @@ TEST_CASE(testDataConstructor)
         }
     }
 }
-}
-
-static int call_srand()
-{
-    const auto seed = 174;
-    ::srand(seed);
-    return seed;
-}
-static int unused_ = call_srand();
 
 TEST_MAIN(
     TEST_CHECK(testVbmFx);

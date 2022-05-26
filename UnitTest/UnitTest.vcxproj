@@ -162,6 +162,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cphd.cpp" />
+    <ClCompile Include="cphd03.cpp" />
     <ClCompile Include="CppUnitTestAssert.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -171,6 +172,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cphd03_Test.h" />
     <ClInclude Include="cphd_Test.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="TestCase.h" />
