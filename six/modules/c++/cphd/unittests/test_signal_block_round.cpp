@@ -60,7 +60,7 @@ std::vector<std::complex<T> > generateData(size_t length)
     return data;
 }
 
-std::vector<double> generateScaleFactors(size_t length, bool scale)
+inline std::vector<double> generateScaleFactors(size_t length, bool scale)
 {
     std::vector<double> scaleFactors(length, 1);
     if (scale)

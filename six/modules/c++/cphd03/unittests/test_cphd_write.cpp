@@ -484,6 +484,6 @@ TEST_MAIN(
     TEST_CHECK(testWriteFXTwoWay);
     TEST_CHECK(testWriteTOAOneWay);
     TEST_CHECK(testWriteTOATwoWay);
-    fs::remove(FILE_NAME);
+    std::filesystem::remove(FILE_NAME);
     )
 
