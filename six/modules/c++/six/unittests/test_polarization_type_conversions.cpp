@@ -26,23 +26,47 @@
 
 TEST_CASE(EnumConstructor)
 {
-    six::DualPolarizationType pType("UNKNOWN");
-    TEST_ASSERT(pType == "UNKNOWN");
-    TEST_ASSERT_EQ(pType, six::DualPolarizationType::UNKNOWN);
+    const auto test = [&](const std::string& strType, six::DualPolarizationType type)
+    {
+        six::DualPolarizationType pType(strType);
+        TEST_ASSERT(pType == strType);
+        TEST_ASSERT_EQ(pType, type);
+    };
+    test("UNKNOWN", six::DualPolarizationType::UNKNOWN);
+    test("V_V", six::DualPolarizationType::V_V);
+    test("E_V", six::DualPolarizationType::E_V); // SICD 1.3
 }
 
 TEST_CASE(ToType)
 {
-    six::DualPolarizationType fromToType = six::toType<six::DualPolarizationType>("UNKNOWN");
-    six::DualPolarizationType fromCtor("UNKNOWN");
-    TEST_ASSERT_EQ(fromToType, fromCtor);
+    const auto test = [&](const std::string& strType, const std::string& strCtorType, six::DualPolarizationType type)
+    {
+        auto fromToType = six::toType<six::DualPolarizationType>(strType);
+        TEST_ASSERT_EQ(fromToType, type);
+
+        six::DualPolarizationType fromCtor(strCtorType);
+        TEST_ASSERT_EQ(fromToType, fromCtor);
+    };
+    test("UNKNOWN", "UNKNOWN", six::DualPolarizationType::UNKNOWN);
+    test("V:V", "V_V", six::DualPolarizationType::V_V);
+    test("E:V", "E_V", six::DualPolarizationType::E_V); // SICD 1.3
 }
 
 TEST_CASE(SixToString)
 {
-    six::DualPolarizationType pType("UNKNOWN");
-    const std::string polarizationString = pType;
-    TEST_ASSERT_EQ("UNKNOWN", polarizationString);
+    const auto test = [&](const std::string& strType, const std::string& strCtorType, six::DualPolarizationType type)
+    {
+        six::DualPolarizationType pType(strCtorType);
+        TEST_ASSERT_EQ(pType, type);
+        std::string polarizationString = pType;
+        TEST_ASSERT_EQ(strCtorType, polarizationString);
+
+        polarizationString = six::toString(pType);
+        TEST_ASSERT_EQ(strType, polarizationString);
+    };
+    test("UNKNOWN", "UNKNOWN", six::DualPolarizationType::UNKNOWN);
+    test("V:V", "V_V", six::DualPolarizationType::V_V);
+    test("E:V", "E_V", six::DualPolarizationType::E_V); // SICD 1.3
 }
 
 TEST_CASE(NotSet)
@@ -54,17 +78,23 @@ TEST_CASE(NotSet)
 
 TEST_CASE(EqInt)
 {
-    const six::DualPolarizationType fromStrCtor("UNKNOWN");
-    TEST_ASSERT_EQ(18, fromStrCtor);
-    const int value = fromStrCtor;
-    TEST_ASSERT_EQ(18, value);
+    const auto test = [&](const std::string& strType, six::DualPolarizationType type, int enumValue)
+    {
+        const six::DualPolarizationType fromStrCtor(strType);
+        TEST_ASSERT_EQ(enumValue, fromStrCtor);
+        const int value = fromStrCtor;
+        TEST_ASSERT_EQ(enumValue, value);
 
-    const six::DualPolarizationType fromIntCtor(value);
-    TEST_ASSERT_EQ(18, fromIntCtor);
-    TEST_ASSERT(fromIntCtor == "UNKNOWN");
-    TEST_ASSERT_EQ(fromIntCtor, six::DualPolarizationType::UNKNOWN);
+        const six::DualPolarizationType fromIntCtor(value);
+        TEST_ASSERT_EQ(enumValue, fromIntCtor);
+        TEST_ASSERT(fromIntCtor == strType);
+        TEST_ASSERT_EQ(fromIntCtor, type);
 
-    TEST_ASSERT_EQ(fromStrCtor, fromIntCtor);
+        TEST_ASSERT_EQ(fromStrCtor, fromIntCtor);
+    };
+    test("UNKNOWN", six::DualPolarizationType::UNKNOWN, 18);
+    test("V_V", six::DualPolarizationType::V_V, 2);
+    test("E_V", six::DualPolarizationType::E_V, 51); // SICD 1.3
 }
 
 TEST_MAIN(
