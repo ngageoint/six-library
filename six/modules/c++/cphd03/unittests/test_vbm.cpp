@@ -31,7 +31,7 @@ static constexpr size_t NUM_VECTORS = 7;
 
 static void call_srand()
 {
-    static const auto f = []() { const auto seed = 174; ::srand(seed); return nullptr; };
+    static const auto f = []() { constexpr auto seed = 174; ::srand(seed); return nullptr; };
     static const auto result = f();
 }
 
@@ -91,7 +91,7 @@ TEST_CASE(testVbmFx)
     {
         for (size_t vector = 0; vector < NUM_VECTORS; ++vector)
         {
-            testVectorParameters("testVbmFx", channel, vector, vbm);
+            testVectorParameters(testName, channel, vector, vbm);
 
             const double fx0 = cphd::getRandom();
             vbm.setFx0(fx0, channel, vector);

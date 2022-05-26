@@ -442,7 +442,7 @@ TEST_CASE(testWriteFXOneWay)
     addFXParams(metadata);
     addOneWayParams(metadata);
 
-    runCPHDTest("testWriteFXOneWay", metadata);
+    runCPHDTest(testName, metadata);
 }
 
 TEST_CASE(testWriteFXTwoWay)
@@ -452,7 +452,7 @@ TEST_CASE(testWriteFXTwoWay)
     addFXParams(metadata);
     addTwoWayParams(metadata);
 
-    runCPHDTest("testWriteFXTwoWay", metadata);
+    runCPHDTest(testName, metadata);
 }
 
 TEST_CASE(testWriteTOAOneWay)
@@ -464,7 +464,7 @@ TEST_CASE(testWriteTOAOneWay)
     addTOAParams(metadata);
     addOneWayParams(metadata);
 
-    runCPHDTest("testWriteTOAOneWay", metadata);
+    runCPHDTest(testName, metadata);
 }
 
 TEST_CASE(testWriteTOATwoWay)
@@ -476,7 +476,7 @@ TEST_CASE(testWriteTOATwoWay)
     addTOAParams(metadata);
     addTwoWayParams(metadata);
 
-    runCPHDTest("testWriteTOATwoWay", metadata);
+    runCPHDTest(testName, metadata);
 }
 
 TEST_MAIN(

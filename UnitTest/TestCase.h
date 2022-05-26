@@ -20,7 +20,8 @@
 #define TEST_ASSERT_TRUE(X) Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsTrue((X))
 #define TEST_ASSERT_FALSE(X) Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsFalse((X))
 #define TEST_ASSERT(X) TEST_ASSERT_TRUE(X)
-#define TEST_CASE(X) TEST_METHOD(X)
+#define CODA_OSS_testMethod_(X)  testMethod ## _ ## X
+#define TEST_CASE(X) TEST_METHOD(X) { CODA_OSS_testMethod_(X)(#X); } void CODA_OSS_testMethod_(X)(std::string testName)
 
 namespace test
 {
