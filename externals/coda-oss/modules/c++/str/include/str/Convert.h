@@ -38,6 +38,7 @@
 #include "config/Exports.h"
 #include "coda_oss/string.h"
 #include "coda_oss/optional.h"
+#include "coda_oss/cstddef.h"
 #include "import/except.h"
 
 namespace str
@@ -78,6 +79,12 @@ template <typename T>
 std::string toString(const coda_oss::optional<T>& value)
 {
     return toString(value.value());
+}
+
+template <>
+inline std::string toString(const coda_oss::byte& v)
+{
+    return toString(static_cast<unsigned char>(v));
 }
 
 template <typename T>
