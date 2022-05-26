@@ -1333,18 +1333,28 @@ void six::getErrors(const ErrorStatistics* errorStats,
             }
         }
 
-        if (errorStats->compositeSCP &&
-            errorStats->compositeSCP->scpType == CompositeSCP::RG_AZ)
+        if (const auto compositeSCP = errorStats->compositeSCP.get())
         {
-            const types::RgAz<double> composite(errorStats->compositeSCP->xErr,
-                                                errorStats->compositeSCP->yErr);
-            const double corr = errorStats->compositeSCP->xyErr;
+            if (compositeSCP->scpType == CompositeSCP::RG_AZ)
+            {
+                const types::RgAz<double> composite(compositeSCP->xErr, compositeSCP->yErr);
+                const double corr = compositeSCP->xyErr;
 
-            errors.mUnmodeledErrorCovar(0, 0) = math::square(composite.rg);
-            errors.mUnmodeledErrorCovar(1, 1) = math::square(composite.az);
-            errors.mUnmodeledErrorCovar(0, 1) =
-                    errors.mUnmodeledErrorCovar(1, 0) =
-                            corr * (composite.rg * composite.az);
+                auto& unmodeledErrorCovar = errors.mUnmodeledErrorCovar;
+                unmodeledErrorCovar(0, 0) = math::square(composite.rg);
+                unmodeledErrorCovar(1, 1) = math::square(composite.az);
+                unmodeledErrorCovar(0, 1) = unmodeledErrorCovar(1, 0) = corr * (composite.rg * composite.az);
+            }
+        }
+        else if (const auto unmodeled = errorStats->Unmodeled.get())
+        {
+            // From Bill: Here is the mapping from the UnmodeledError to the 2x2 covariance matrix:
+            //    [0][0] = Xrow; [1][1] = Ycol; 
+            //    [1][0] = [0][1] = XrowYcol * Xrow * Ycol
+            auto& unmodeledErrorCovar = errors.mUnmodeledErrorCovar;
+            unmodeledErrorCovar(0, 0) = unmodeled->Xrow;
+            unmodeledErrorCovar(1, 1) = unmodeled->Ycol;
+            unmodeledErrorCovar(0, 1) = unmodeledErrorCovar(1, 0) = unmodeled->XrowYcol * unmodeled->Xrow * unmodeled->Ycol;
         }
     }
 }
