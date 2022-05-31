@@ -121,7 +121,7 @@ TEST_CASE(ClassificationCanada)
     TEST_ASSERT_EQ(characterData, classificationText);
 }
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(DummyData);
     TEST_CHECK(FakeComplexData);
     TEST_CHECK(Classification);

@@ -79,7 +79,7 @@ TEST_CASE(wfParamTxFrequencies)
     TEST_ASSERT_EQ(radarCollection.waveform[0]->txRFBandwidth, 4);
 }
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(fmRateFromDemodType);
     TEST_CHECK(demodTypeFromFmRate);
     TEST_CHECK(pulseLength);

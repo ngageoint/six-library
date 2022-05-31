@@ -37,16 +37,16 @@
 static const std::string text("TEXT");
 static const std::string strXml = "<root><doc><a>" + text + "</a></doc></root>";
 
-static const auto iso88591Text = str::EncodedString::fromWindows1252("T\xc9XT");  // ISO8859-1, "TÉXT"
+static const str::EncodedString iso88591Text(str::cast<str::W1252string::const_pointer>("T\xc9XT"));  // ISO8859-1, "TÉXT"
 static const auto iso88591Text1252 = str::EncodedStringView::details::w1252string(iso88591Text.view());
-static const auto pIso88591Text_ = str::c_str<std::string::const_pointer>(iso88591Text1252);
+static const auto pIso88591Text_ = str::c_str<std::string>(iso88591Text1252);
 
-static const auto utf8Text = str::EncodedString::fromUtf8("T\xc3\x89XT");  // UTF-8,  "TÉXT"
+static const str::EncodedString utf8Text(str::cast<coda_oss::u8string::const_pointer>("T\xc3\x89XT"));  // UTF-8,  "TÉXT"
 static const auto utf8Text8 = utf8Text.u8string();
-static const auto pUtf8Text_ = str::c_str<std::string::const_pointer>(utf8Text8);
+static const auto pUtf8Text_ = str::c_str<std::string>(utf8Text8);
 
 static const auto strUtf8Xml8 = str::fromUtf8("<root><doc><a>") + utf8Text8 + str::fromUtf8("</a></doc></root>");
-static const std::string strUtf8Xml = str::c_str<std::string::const_pointer>(strUtf8Xml8);
+static const std::string strUtf8Xml = str::c_str<std::string>(strUtf8Xml8);
 
 constexpr auto PlatformEncoding = xml::lite::PlatformEncoding;
 static const std::string  platfromText_ = PlatformEncoding == xml::lite::StringEncoding::Utf8 ? pUtf8Text_ : pIso88591Text_;
@@ -399,7 +399,7 @@ TEST_CASE(testReadEmbeddedXml)
     const auto characterData = classificationXML.getCharacterData();
     TEST_ASSERT_EQ(characterData, classificationText_platform);
 
-    const auto expectedCharDataView = str::EncodedStringView::create<std::u8string>(classificationText_utf_8);
+    const str::EncodedStringView expectedCharDataView(str::c_str<std::u8string>(classificationText_utf_8));
     std::u8string u8_characterData;
     classificationXML.getCharacterData(u8_characterData);
     TEST_ASSERT_EQ(u8_characterData, expectedCharDataView);

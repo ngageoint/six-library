@@ -23,8 +23,6 @@
 #include "TestCase.h"
 #include <math/linear/Eigenvalue.h>
 
-namespace
-{
 typedef math::linear::Matrix2D<double> Matrix;
 typedef math::linear::Vector<double> Vector;
 typedef math::linear::Eigenvalue<double> Eigenvalue;
@@ -88,11 +86,8 @@ TEST_CASE(testSymmetric)
         }
     }
 }
-}
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testNonSymmetric);
     TEST_CHECK(testSymmetric);
-    return 0;
-}
+    )

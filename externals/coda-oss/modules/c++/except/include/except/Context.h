@@ -27,7 +27,8 @@
 
 #include <string>
 #include <ostream>
-#include <config/coda_oss_config.h>
+
+#include "config/Exports.h"
 
 /*!
  * \file
@@ -44,7 +45,7 @@ namespace except
  * This class contains information such as the file, line,
  * function and time
  */
-struct Context final
+struct CODA_OSS_API Context final
 {
     /*!
      * Constructor

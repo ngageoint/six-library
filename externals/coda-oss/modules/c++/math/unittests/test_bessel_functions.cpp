@@ -23,8 +23,6 @@
 #include <TestCase.h>
 #include <math/Bessel.h>
 
-namespace
-{
 TEST_CASE(orderZero)
 {
     TEST_ASSERT_ALMOST_EQ(math::besselI(0, 1), 1.266065878);
@@ -45,13 +43,10 @@ TEST_CASE(orderFive)
     TEST_ASSERT_ALMOST_EQ(math::besselI(5, 0), 0);
     TEST_ASSERT_ALMOST_EQ(math::besselI(5, 1), 2.71463156e-4);
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(orderZero);
     TEST_CHECK(orderOne);
     TEST_CHECK(orderFive);
-    return 0;
-}
+    )
 

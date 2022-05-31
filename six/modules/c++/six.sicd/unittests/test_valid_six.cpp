@@ -504,7 +504,7 @@ TEST_CASE(test_create_sicd_from_mem_32f)
     test_create_sicd_from_mem("test_create_sicd_from_mem_32f.sicd", six::PixelType::RE32F_IM32F);
 }
 
-TEST_MAIN((void)argc; (void)argv;
+TEST_MAIN(
     TEST_CHECK(valid_six_50x50);
     TEST_CHECK(sicd_French_xml_raw);
     TEST_CHECK(sicd_French_xml);

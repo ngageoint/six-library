@@ -1,5 +1,5 @@
 NAME            = 'scene'
-MODULE_DEPS     = 'io math math.linear math.poly types polygon std'
+MODULE_DEPS     = 'io math.linear math.poly polygon math mem sys str units except types config gsl std'
 TEST_FILTER     = 'test_scene.cpp'
 
 options = configure = distclean = lambda p: None

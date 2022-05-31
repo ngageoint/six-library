@@ -27,6 +27,7 @@
 #include <import/str.h>
 #include <import/mem.h>
 #include <sys/OS.h>
+#include <str/Encoding.h>
 #include <str/EncodedStringView.h>
 
 constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
@@ -286,11 +287,11 @@ void xml::lite::Element::getCharacterData(coda_oss::u8string& result) const
     str::EncodedStringView view;
     if (encoding == xml::lite::StringEncoding::Utf8)
     {
-        view = str::EncodedStringView::fromUtf8(mCharacterData);
+        view = str::c_str<coda_oss::u8string>(mCharacterData);
     }
     else if (encoding == xml::lite::StringEncoding::Windows1252)
     {
-        view = str::EncodedStringView::fromWindows1252(mCharacterData);
+        view = str::c_str<str::W1252string>(mCharacterData);
     }
     else
     {
@@ -307,13 +308,13 @@ static void writeCharacterData(io::OutputStream& stream,
     if (encoding == xml::lite::StringEncoding::Windows1252)
     {
         // need to convert before writing
-        const auto view = str::EncodedStringView::fromWindows1252(characterData);
+        const str::EncodedStringView view(str::c_str<str::W1252string>(characterData));
         stream.write(view.u8string());
     }
     else if (encoding == xml::lite::StringEncoding::Utf8)
     {
         // already in UTF-8, no converstion necessary
-        auto pUtf8 = str::c_str<coda_oss::u8string::const_pointer>(characterData);
+        auto pUtf8 = str::c_str<coda_oss::u8string>(characterData);
         stream.write(pUtf8, characterData.length()); // call UTF-8 overload
     }
     else
@@ -544,7 +545,7 @@ void xml::lite::Element::setCharacterData(const std::string& characters, StringE
 }
 void xml::lite::Element::setCharacterData(const coda_oss::u8string& characters)
 {
-    setCharacterData(str::c_str<std::string::const_pointer>(characters), StringEncoding::Utf8);
+    setCharacterData(str::c_str<std::string>(characters), StringEncoding::Utf8);
 }
 
 xml::lite::Element& xml::lite::add(const QName& qname,
