@@ -26,6 +26,7 @@
 #include <string>
 #include <map>
 #include <ostream>
+#include <functional>
 
 #include <scene/sys_Conf.h>
 #include <import/except.h>
@@ -70,17 +71,27 @@ namespace details
         Enum() = default;
 
         //! string constructor
-        Enum(const std::string& s)
+        Enum(const std::string& s) : Enum()
         {
             value = index(s);
         }
 
         //! int constructor
-        Enum(int i)
+        Enum(int i) : Enum()
         {
             (void) index(i);
             value = i;
         }
+
+        using toTypeF_t = std::function<T(const std::string& v)>;
+        static T toType_(const std::string& v)
+        {
+            std::string type(v);
+            str::trim(type);
+            const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
+            return nitf::details::index(string_to_int(), type, ex);
+        }
+        toTypeF_t toTypeF_ = toType_;
 
     public:
         //! Returns string representation of the value
@@ -95,10 +106,7 @@ namespace details
 
         static T toType(const std::string& v)
         {
-            std::string type(v);
-            str::trim(type);
-            const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-            return nitf::details::index(string_to_int(), type, ex);
+            return toType_(v);
         }
 
         operator int() const { return value; }

@@ -100,6 +100,12 @@ TEST_CASE(ToType)
     test_toType<six::PolarizationSequenceType>("ToType", 13);
 }
 
+TEST_CASE(ToType_OTHER)
+{
+    auto fromToType = six::PolarizationType::toType("OTHER");
+    //fromToType = six::PolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
+}
+
 template<typename TSixEnum>
 static void test_six_toType_(const std::string& testName, const std::string& strType, TSixEnum type)
 {
@@ -335,6 +341,7 @@ TEST_CASE(DualPolarization)
 TEST_MAIN(
     TEST_CHECK(EnumConstructor);
     TEST_CHECK(ToType);
+    TEST_CHECK(ToType_OTHER);
     TEST_CHECK(SixToType);
     TEST_CHECK(ToString);
     TEST_CHECK(SixToString);
