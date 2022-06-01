@@ -509,7 +509,8 @@ std::string six::toString(const PolarizationType& t)
 {
     const std::string msg = "Unsupported conversion from polarization type";
     auto retval = toString_(t, msg);
-    if (retval != "UNKNOWN") // existing code only handled OTHER, not UNKNOWN/NOT_SET
+    static const auto strUnknown = PolarizationType(PolarizationType::UNKNOWN).toString();
+    if (retval != strUnknown) // existing code only handled OTHER, not UNKNOWN/NOT_SET
     {
         return retval;
     }
