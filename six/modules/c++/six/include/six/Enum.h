@@ -66,18 +66,26 @@ namespace details
             const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
             return nitf::details::index(int_to_string(), v, ex);
         }
+        
+        // Can use normal inheritance instead of "template magic" for this as
+        // it's an instance method rather than "static".
+        virtual std::string toString_(bool throw_if_not_set) const
+        {
+            return default_toString_(throw_if_not_set);
+        }
 
     protected:
         Enum() = default;
+        virtual ~Enum() = default;
 
         //! string constructor
-        Enum(const std::string& s) : Enum()
+        Enum(const std::string& s)
         {
             value = index(s);
         }
 
         //! int constructor
-        Enum(int i) : Enum()
+        Enum(int i)
         {
             (void) index(i);
             value = i;
@@ -104,7 +112,7 @@ namespace details
         //! Returns string representation of the value
         std::string toString(bool throw_if_not_set = false) const
         {
-            return default_toString_(throw_if_not_set);
+            return toString_(throw_if_not_set);
         }
 
         static T toType(const std::string& v)

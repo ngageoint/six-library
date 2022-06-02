@@ -106,10 +106,20 @@ SCP::SCP() :
 
 PolarizationType PolarizationType::toType_imp_(const std::string& v)
 {
+    // Handle OTHER.* for  SIDD 3.0/SICD 1.3
+    if (str::starts_with(v, "OTHER"))
+    {
+        // "where * = 0 or more characters that does not contain “:” (0x3A)."
+        if (v.find(':') == std::string::npos)
+        {
+            return PolarizationType::OTHER;
+        }
+        // let default_toType_() throw the exception for "OTHER:foo"
+    }
     return default_toType_(v); // TODO: handle OTHER.* for SIDD 3.0/SICD 1.3
 }
 
-std::string PolarizationType::toString_imp_(bool throw_if_not_set) const
+std::string PolarizationType::toString_(bool throw_if_not_set) const
 {
     return default_toString_(throw_if_not_set); // TODO: handle OTHER.* for SIDD 3.0/SICD 1.3
 }
