@@ -26,7 +26,7 @@
 #include <string>
 #include <map>
 #include <ostream>
-#include <functional>
+#include <type_traits>
 
 #include <scene/sys_Conf.h>
 #include <import/except.h>
@@ -83,19 +83,15 @@ namespace details
             value = i;
         }
 
-        using toTypeF_t = std::function<T(const std::string& v)>;
-        static T toType_(const std::string& v)
+        static T default_toType_(const std::string& v)
         {
             std::string type(v);
             str::trim(type);
             const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
             return nitf::details::index(string_to_int(), type, ex);
         }
-        toTypeF_t toTypeF_ = toType_;
 
-    public:
-        //! Returns string representation of the value
-        std::string toString(bool throw_if_not_set = false) const
+        std::string default_toString_(bool throw_if_not_set) const
         {
             if (throw_if_not_set && (value == NOT_SET_VALUE))
             {
@@ -104,9 +100,16 @@ namespace details
             return index(value);
         }
 
+    public:
+        //! Returns string representation of the value
+        std::string toString(bool throw_if_not_set = false) const
+        {
+            return default_toString_(throw_if_not_set);
+        }
+
         static T toType(const std::string& v)
         {
-            return toType_(v);
+            return default_toType_(v);
         }
 
         operator int() const { return value; }

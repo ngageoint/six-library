@@ -22,6 +22,7 @@
 #include "six/Init.h"
 #include "six/Types.h"
 #include <nitf/ImageSegmentComputer.h>
+#include "six/Enums.h"
 
 std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& latLonAlt)
 {
@@ -101,6 +102,16 @@ SCP::SCP() :
    ecf(Init::undefined<Vector3>()),
    llh(Init::undefined<LatLonAlt>())
 {
+}
+
+PolarizationType PolarizationType::toType_imp_(const std::string& v)
+{
+    return default_toType_(v); // TODO: handle OTHER.* for SIDD 3.0/SICD 1.3
+}
+
+std::string PolarizationType::toString_imp_(bool throw_if_not_set) const
+{
+    return default_toString_(throw_if_not_set); // TODO: handle OTHER.* for SIDD 3.0/SICD 1.3
 }
 
 }

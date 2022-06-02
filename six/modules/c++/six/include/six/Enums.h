@@ -505,6 +505,9 @@ SIX_Enum_END_DEFINE(PolarizationSequenceType);
  *  Enumeration used to represent PolarizationTypes
  */
 SIX_Enum_BEGIN_DEFINE(PolarizationType)
+    static PolarizationType toType_imp_(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
+    std::string toString_imp_(bool throw_if_not_set) const; // handle OTHER.* for SIDD 3.0/SICD 1.3
+
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
         OTHER = 1,
