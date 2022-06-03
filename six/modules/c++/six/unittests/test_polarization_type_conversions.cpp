@@ -181,7 +181,7 @@ static void test_ToString_(const std::string& testName, const std::string& strTy
         TEST_ASSERT_EQ(pType, type);
     }
     {
-        const std::string polarizationString = type.toString();
+        const auto polarizationString = type.toString();
         TEST_ASSERT_EQ(strType, polarizationString);
         decltype(type) pType(polarizationString);
         TEST_ASSERT_EQ(pType, type);
@@ -209,6 +209,13 @@ TEST_CASE(ToString)
     test_ToString_<six::PolarizationSequenceType>("ToString", "X", six::PolarizationSequenceType::X); // SICD 1.3
     test_ToString_<six::PolarizationSequenceType>("ToString", "SEQUENCE", six::PolarizationSequenceType::SEQUENCE);
     test_ToString<six::PolarizationSequenceType>("ToString");
+}
+
+TEST_CASE(ToString_OTHER)
+{
+    const auto fromToType = six::PolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(fromToType, six::PolarizationType::OTHER);
+    TEST_ASSERT_EQ("OTHER_abc", fromToType.toString());
 }
 
 template<typename TSixEnum>
@@ -358,6 +365,7 @@ TEST_MAIN(
     TEST_CHECK(ToType_OTHER);
     TEST_CHECK(SixToType);
     TEST_CHECK(ToString);
+    TEST_CHECK(ToString_OTHER);
     TEST_CHECK(SixToString);
     TEST_CHECK(NotSet);
     TEST_CHECK(EqInt);
