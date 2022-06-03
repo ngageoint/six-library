@@ -67,6 +67,24 @@ namespace details
             return nitf::details::index(int_to_string(), v, ex);
         }
         
+        // https://stackoverflow.com/questions/257288/templated-check-for-the-existence-of-a-class-member-function
+        static T toType_imp_(const std::string& v, ...)
+        {
+            return default_toType_(v);
+        }
+        // If U::toType_imp_() exists, then this function is visible and `void*` is a better match
+        // than `...` (above).  Otherwise, this function is not visiible and the overload above is used.
+        template<typename U>
+        static auto toType_imp_(const std::string& v, void*) -> decltype(U::toType_imp_(v))
+        {
+            return U::toType_imp_(v); // call toType_imp_ provided by U; e.g., PolarizationType::toType_imp_()
+        }
+        template<typename U>
+        static T toType_(const std::string& v)
+        {
+            return toType_imp_<U>(v, nullptr /*`void*` or `...`*/);
+        }
+
         // Can use normal inheritance instead of "template magic" for this as
         // it's an instance method rather than "static".
         virtual std::string toString_(bool throw_if_not_set) const
@@ -117,7 +135,7 @@ namespace details
 
         static T toType(const std::string& v)
         {
-            return default_toType_(v);
+            return toType_<T>(v);
         }
 
         operator int() const { return value; }
