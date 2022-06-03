@@ -94,6 +94,10 @@ namespace details
 
     protected:
         Enum() = default;
+        Enum(const Enum&) = default;
+        Enum(Enum&&) = default;
+        Enum& operator=(const Enum&) = default;
+        Enum& operator=(Enum&&) = default;
         virtual ~Enum() = default;
 
         //! string constructor
@@ -176,7 +180,8 @@ namespace details
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
     #define SIX_Enum_constructors_(name) name() = default; name(const std::string& s) : Enum(s) {} name(int i) : Enum(i) {} \
-            name& operator=(int v) {  *this = name(v); return *this; }
+            name& operator=(int v) {  *this = name(v); return *this; } ~name() = default; \
+            name(const name&) = default; name(name&&) = default; name& operator=(const name&) = default; name& operator=(name&&) = default; 
     #define SIX_Enum_BEGIN_enum enum {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }

@@ -104,24 +104,42 @@ SCP::SCP() :
 {
 }
 
+static bool is_OTHER_(const std::string& v)
+{
+    // OTHER.* for  SIDD 3.0/SICD 1.3, not "OTHER"
+    if ((v != "OTHER") && str::starts_with(v, "OTHER")) // i.e., "OTHER_foo"
+    {
+        // "where * = 0 or more characters that does not contain “:” (0x3A)."
+        return v.find(':') == std::string::npos; // "OTHER:foo" is invalid
+    }
+    return false; // "OTHER" or "<something else>"
+}
+
 PolarizationType PolarizationType::toType_imp_(const std::string& v)
 {
     // Handle OTHER.* for  SIDD 3.0/SICD 1.3
-    if (str::starts_with(v, "OTHER"))
+    if (is_OTHER_(v)) // handle "OTHER" with default_toType_()
     {
-        // "where * = 0 or more characters that does not contain “:” (0x3A)."
-        if (v.find(':') == std::string::npos)
-        {
-            return PolarizationType::OTHER;
-        }
-        // let default_toType_() throw the exception for "OTHER:foo"
+        PolarizationType retval = PolarizationType::OTHER;
+        retval.other_ = v; // know "v" is a valid OTHER.* 
+        return retval;
     }
-    return default_toType_(v); // TODO: handle OTHER.* for SIDD 3.0/SICD 1.3
+    return default_toType_(v); // let default_toType_() throw the exception for "OTHER:foo"
 }
 
 std::string PolarizationType::toString_(bool throw_if_not_set) const
 {
-    return default_toString_(throw_if_not_set); // TODO: handle OTHER.* for SIDD 3.0/SICD 1.3
+    // Handle OTHER.* for  SIDD 3.0/SICD 1.3
+    if (is_OTHER_(other_))
+    {
+        return other_;
+    }
+    if (!other_.empty())
+    {
+        // other_ got set to something other than an OTHER string
+        except::InvalidFormatException(Ctxt("Invalid enum value: " + other_));
+    }
+    return default_toString_(throw_if_not_set);
 }
 
 }
