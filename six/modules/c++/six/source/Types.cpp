@@ -174,12 +174,27 @@ DualPolarizationType DualPolarizationType::toType_imp_(const std::string& v)
     if (splits.size() == 2)
     {
         // Handle OTHER.* for  SIDD 3.0/SICD 1.3
-        if (is_OTHER_(splits[0]) && is_OTHER_(splits[1])) // handle "OTHER" with default_toType_()
+        DualPolarizationType retval;
+        if (is_OTHER_(splits[0]) && is_OTHER_(splits[1]))
         {
-            DualPolarizationType retval = DualPolarizationType::OTHER_OTHER;
-            retval.other_ = v; // know "v" is a valid OTHER.* 
-            return retval;
+            retval = DualPolarizationType::OTHER_OTHER;
         }
+        else
+        {
+            // The "dual" type is really two `PolarizationType`s next to each other
+            static const PolarizationType other = PolarizationType::OTHER;
+            const auto left = PolarizationType::toType(splits[0]);
+            const auto strLeft = left == PolarizationType::OTHER ? other.toString() : left.toString();
+            const auto right = PolarizationType::toType(splits[1]);
+            const auto strRight = right == PolarizationType::OTHER ? other.toString() : right.toString();
+            const auto str = strLeft + "_" + strRight; // can't do "A:B" in C++, so the enum/string is A_B
+            retval = DualPolarizationType::default_toType_(str);
+        }
+        if (is_OTHER_(splits[0]) || is_OTHER_(splits[1]))
+        {
+            retval.other_ = v; // know "v" is a valid OTHER.* 
+        }
+        return retval;
     }
 
     // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
@@ -195,7 +210,7 @@ std::string DualPolarizationType::toString_(bool throw_if_not_set) const
         if (splits.size() == 2)
         {
             // Handle OTHER.* for  SIDD 3.0/SICD 1.3
-            if (is_OTHER_(splits[0]) && is_OTHER_(splits[1])) // handle "OTHER" with default_toType_()
+            if (is_OTHER_(splits[0]) || is_OTHER_(splits[1])) // handle "OTHER" with default_toType_()
             {
                 return other_;
             }
