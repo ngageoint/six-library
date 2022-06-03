@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <functional>
 #include "six/Init.h"
 #include "six/Types.h"
 #include <nitf/ImageSegmentComputer.h>
@@ -115,31 +117,55 @@ static bool is_OTHER_(const std::string& v)
     return false; // "OTHER" or "<something else>"
 }
 
-PolarizationType PolarizationType::toType_imp_(const std::string& v)
+// See https://stackoverflow.com/questions/13358672/how-to-convert-a-lambda-to-an-stdfunction-using-templates for
+// some interesting reading regarding std::function<> and lambdas.
+template<typename T, typename TFunc>
+inline T toType_imp(const std::string& v, std::function<void(T&)> set_other, TFunc default_toType)
 {
     // Handle OTHER.* for  SIDD 3.0/SICD 1.3
     if (is_OTHER_(v)) // handle "OTHER" with default_toType_()
     {
-        PolarizationType retval = PolarizationType::OTHER;
-        retval.other_ = v; // know "v" is a valid OTHER.* 
+        T retval = T::OTHER;
+        set_other(retval); // know "v" is a valid OTHER.* 
         return retval;
     }
-    return default_toType_(v); // let default_toType_() throw the exception for "OTHER:foo"
+    return default_toType(); // let default_toType_() throw the exception for "OTHER:foo"
 }
 
-std::string PolarizationType::toString_(bool throw_if_not_set) const
+template<typename TFunc>
+inline std::string toString_imp(const std::string& other, TFunc default_toString)
 {
     // Handle OTHER.* for  SIDD 3.0/SICD 1.3
-    if (is_OTHER_(other_))
+    if (is_OTHER_(other))
     {
-        return other_;
+        return other;
     }
-    if (!other_.empty())
+    if (!other.empty())
     {
         // other_ got set to something other than an OTHER string
-        except::InvalidFormatException(Ctxt("Invalid enum value: " + other_));
+        except::InvalidFormatException(Ctxt("Invalid enum value: " + other));
     }
-    return default_toString_(throw_if_not_set);
+    return default_toString();
+}
+
+PolarizationType PolarizationType::toType_imp_(const std::string& v)
+{
+    // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
+    return toType_imp<PolarizationType>(v, [&](PolarizationType& t) { t.other_ = v; }, [&]() { return default_toType_(v); });
+}
+std::string PolarizationType::toString_(bool throw_if_not_set) const
+{
+    return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
+}
+
+PolarizationSequenceType PolarizationSequenceType::toType_imp_(const std::string& v)
+{
+    // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
+    return toType_imp<PolarizationSequenceType>(v, [&](PolarizationSequenceType& t) { t.other_ = v; }, [&]() { return default_toType_(v); });
+}
+std::string PolarizationSequenceType::toString_(bool throw_if_not_set) const
+{
+    return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
 }
 
 }

@@ -118,6 +118,8 @@ TEST_CASE(ToType_OTHER)
 
     six::PolarizationType OTHER_abc("OTHER_abc");
     TEST_ASSERT_EQ(OTHER_abc, six::PolarizationType::OTHER);
+
+    // ToString_OTHER() should be good enough for PolarizationSequenceType
 }
 
 template<typename TSixEnum>
@@ -213,9 +215,13 @@ TEST_CASE(ToString)
 
 TEST_CASE(ToString_OTHER)
 {
-    const auto fromToType = six::PolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ(fromToType, six::PolarizationType::OTHER);
-    TEST_ASSERT_EQ("OTHER_abc", fromToType.toString());
+    const auto toType_Polarization = six::PolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toType_Polarization, six::PolarizationType::OTHER);
+    TEST_ASSERT_EQ("OTHER_abc", toType_Polarization.toString());
+
+    const auto toType_PolarizationSequence = six::PolarizationSequenceType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toType_PolarizationSequence, six::PolarizationSequenceType::OTHER);
+    TEST_ASSERT_EQ("OTHER_abc", toType_PolarizationSequence.toString());
 }
 
 template<typename TSixEnum>

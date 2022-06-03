@@ -468,6 +468,12 @@ SIX_Enum_END_DEFINE(PixelType);
  *  Enumeration used to represent PolarizationSequenceTypes
  */
 SIX_Enum_BEGIN_DEFINE(PolarizationSequenceType)
+private:
+    std::string other_; // valid of OTHER.* for SIDD 3.0/SICD 1.3
+    std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
+public:
+    static PolarizationSequenceType toType_imp_(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
+
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
         OTHER = 1,
