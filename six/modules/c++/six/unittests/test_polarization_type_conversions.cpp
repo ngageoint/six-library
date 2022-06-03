@@ -120,6 +120,15 @@ TEST_CASE(ToType_OTHER)
     TEST_ASSERT_EQ(OTHER_abc, six::PolarizationType::OTHER);
 
     // ToString_OTHER() should be good enough for PolarizationSequenceType
+
+    //auto toTypeDual = six::DualPolarizationType::toType("OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    //TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER);
+    //toTypeDual = six::DualPolarizationType::toType("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    //TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
+    //toTypeDual = six::DualPolarizationType::toType("OTHER_xyz:V"); // SICD 1.3 "OTHER.*"   
+    //TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
+    auto toTypeDual = six::DualPolarizationType::toType("OTHER_abc:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
 }
 
 template<typename TSixEnum>
@@ -222,6 +231,17 @@ TEST_CASE(ToString_OTHER)
     const auto toType_PolarizationSequence = six::PolarizationSequenceType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
     TEST_ASSERT_EQ(toType_PolarizationSequence, six::PolarizationSequenceType::OTHER);
     TEST_ASSERT_EQ("OTHER_abc", toType_PolarizationSequence.toString());
+
+    //auto toType_DualPolarization = six::DualPolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
+    //TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER);
+    //TEST_ASSERT_EQ("OTHER_abc", toType_DualPolarization.toString());
+    //toTypeDual = six::DualPolarizationType::toType("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    //TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
+    //toTypeDual = six::DualPolarizationType::toType("OTHER_xyz:V"); // SICD 1.3 "OTHER.*"   
+    //TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
+    auto toType_DualPolarization = six::DualPolarizationType::toType("OTHER_abc:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER_OTHER);
+    TEST_ASSERT_EQ("OTHER_abc:OTHER_xyz", toType_DualPolarization.toString());
 }
 
 template<typename TSixEnum>

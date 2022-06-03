@@ -155,6 +155,12 @@ SIX_Enum_ENUM_2(DisplayType,
  *  Enumeration used to represent DualPolarizationTypes
  */
 SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
+private:
+    std::string other_; // valid of OTHER.* for SIDD 3.0/SICD 1.3
+    std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
+public:
+    static DualPolarizationType toType_imp_(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
+
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
         // SICD 1.3 add a few more allowable values, which means the number of combinations explodes.

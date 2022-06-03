@@ -168,5 +168,46 @@ std::string PolarizationSequenceType::toString_(bool throw_if_not_set) const
     return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
 }
 
+DualPolarizationType DualPolarizationType::toType_imp_(const std::string& v)
+{
+    const auto splits = str::split(v, ":");
+    if (splits.size() == 2)
+    {
+        // Handle OTHER.* for  SIDD 3.0/SICD 1.3
+        if (is_OTHER_(splits[0]) && is_OTHER_(splits[1])) // handle "OTHER" with default_toType_()
+        {
+            DualPolarizationType retval = DualPolarizationType::OTHER_OTHER;
+            retval.other_ = v; // know "v" is a valid OTHER.* 
+            return retval;
+        }
+    }
+
+    // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
+    //return toType_imp<DualPolarizationType>(v, [&](DualPolarizationType& t) { t.other_ = v; }, [&]() { return default_toType_(v); });
+    return default_toType_(v);
+}
+std::string DualPolarizationType::toString_(bool throw_if_not_set) const
+{
+    // Handle OTHER.* for  SIDD 3.0/SICD 1.3
+    if (!other_.empty())
+    {
+        const auto splits = str::split(other_, ":");
+        if (splits.size() == 2)
+        {
+            // Handle OTHER.* for  SIDD 3.0/SICD 1.3
+            if (is_OTHER_(splits[0]) && is_OTHER_(splits[1])) // handle "OTHER" with default_toType_()
+            {
+                return other_;
+            }
+
+            // other_ got set to something other than an OTHER string
+            except::InvalidFormatException(Ctxt("Invalid enum value: " + other_));
+        }
+    }
+
+    //return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
+    return default_toString_(throw_if_not_set);
+}
+
 }
 
