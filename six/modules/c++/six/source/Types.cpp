@@ -201,30 +201,31 @@ DualPolarizationType DualPolarizationType::toType_imp_(const std::string& v)
 }
 std::string DualPolarizationType::toString_(bool throw_if_not_set) const
 {
-    if ((left_ != DualPolarizationType::NOT_SET) && (right_ != DualPolarizationType::NOT_SET))
+    if ((left_ != PolarizationType::NOT_SET) && (right_ != PolarizationType::NOT_SET))
     {
-        return left_.toString() + ":" + right_.toString(); // use ":" not "_" so the string can be split apart
-    }
-
-    // Handle OTHER.* for  SIDD 3.0/SICD 1.3
-    if (!other_.empty())
-    {
-        const auto splits = str::split(other_, ":");
-        if (splits.size() == 2)
+        // Handle OTHER.* for  SIDD 3.0/SICD 1.3
+        const auto strLeft = left_.toString(throw_if_not_set);
+        const auto strRight = right_.toString(throw_if_not_set);
+        if (is_OTHER_(strLeft) || is_OTHER_(strRight))
         {
-            // Handle OTHER.* for  SIDD 3.0/SICD 1.3
-            if (is_OTHER_(splits[0]) || is_OTHER_(splits[1])) // handle "OTHER" with default_toType_()
-            {
-                return other_;
-            }
-
-            // other_ got set to something other than an OTHER string
-            except::InvalidFormatException(Ctxt("Invalid enum value: " + other_));
+            return strLeft + ":" + strRight; // use ":" not "_" so the string can be split apart
         }
+
+        // Using "_" instead of ":" matches pre- SIDD 3.0/SICD 1.3 behavior; yes, it makes "OTHER_V" ambiguous.
+        return strLeft + "_" + strRight; // use ":" not "_" so the string can be split apart
     }
 
-    //return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
-    return default_toString_(throw_if_not_set);
+    if (other_.empty() || is_OTHER_(other_))  // Handle OTHER.* for  SIDD 3.0/SICD 1.3
+    {
+        return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
+    }
+
+    if ((left_ == PolarizationType::NOT_SET) && (right_ == PolarizationType::NOT_SET))
+    {
+        default_toString_(throw_if_not_set);
+    }
+
+    throw except::InvalidFormatException(Ctxt("Invalid enum value: " + other_));
 }
 
 }

@@ -125,6 +125,9 @@ TEST_CASE(ToType_OTHER)
 }
 TEST_CASE(DualPolarizationType_ToType_OTHER)
 {
+    const six::DualPolarizationType not_set;
+    TEST_ASSERT_EQ(not_set, six::DualPolarizationType::NOT_SET);
+
     auto toTypeDual = six::DualPolarizationType::toType("OTHER");
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER);
     toTypeDual = six::DualPolarizationType::toType("OTHER_xyz"); // SICD 1.3 "OTHER.*"   
@@ -254,15 +257,27 @@ TEST_CASE(ToString_OTHER)
     const auto toType_PolarizationSequence = six::PolarizationSequenceType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
     TEST_ASSERT_EQ(toType_PolarizationSequence, six::PolarizationSequenceType::OTHER);
     TEST_ASSERT_EQ("OTHER_abc", toType_PolarizationSequence.toString());
+}
+TEST_CASE(DualPolarizationType_ToString_OTHER)
+{
+    const six::DualPolarizationType not_set;
+    TEST_ASSERT_EQ(not_set, six::DualPolarizationType::NOT_SET);
+    TEST_ASSERT_EQ("NOT_SET", not_set.toString(false /*throw_if_not_set*/));
+    TEST_EXCEPTION(not_set.toString(true /*throw_if_not_set*/));
 
-    //auto toType_DualPolarization = six::DualPolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
-    //TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER);
-    //TEST_ASSERT_EQ("OTHER_abc", toType_DualPolarization.toString());
-    auto toTypeDual = six::DualPolarizationType::toType("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ("V:OTHER_xyz", toTypeDual.toString());
-    toTypeDual = six::DualPolarizationType::toType("OTHER_xyz:V"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ("OTHER_xyz:V", toTypeDual.toString());
-    auto toType_DualPolarization = six::DualPolarizationType::toType("OTHER_abc:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    auto toType_DualPolarization = six::DualPolarizationType::toType("OTHER");
+    TEST_ASSERT_EQ("OTHER", toType_DualPolarization.toString());
+    toType_DualPolarization = six::DualPolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ("OTHER_abc", toType_DualPolarization.toString());
+    toType_DualPolarization = six::DualPolarizationType::toType("V:OTHER");
+    TEST_ASSERT_EQ("V_OTHER", toType_DualPolarization.toString());
+    toType_DualPolarization = six::DualPolarizationType::toType("OTHER:V");
+    TEST_ASSERT_EQ("OTHER_V", toType_DualPolarization.toString());
+    toType_DualPolarization = six::DualPolarizationType::toType("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ("V:OTHER_xyz", toType_DualPolarization.toString());
+    toType_DualPolarization = six::DualPolarizationType::toType("OTHER_xyz:V"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ("OTHER_xyz:V", toType_DualPolarization.toString());
+    toType_DualPolarization = six::DualPolarizationType::toType("OTHER_abc:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
     TEST_ASSERT_EQ("OTHER_abc:OTHER_xyz", toType_DualPolarization.toString());
 }
 
@@ -325,9 +340,9 @@ static void test_NotSet(const std::string& testName)
 }
 TEST_CASE(NotSet)
 {
-    test_NotSet< six::DualPolarizationType>("NotSet");
-    test_NotSet< six::PolarizationType>("NotSet");
-    test_NotSet< six::PolarizationSequenceType>("NotSet");
+    test_NotSet<six::DualPolarizationType>("NotSet");
+    test_NotSet<six::PolarizationType>("NotSet");
+    test_NotSet<six::PolarizationSequenceType>("NotSet");
 }
 
 template<typename TSixEnum>
@@ -415,6 +430,7 @@ TEST_MAIN(
     TEST_CHECK(SixToType);
     TEST_CHECK(ToString);
     TEST_CHECK(ToString_OTHER);
+    TEST_CHECK(DualPolarizationType_ToString_OTHER);
     TEST_CHECK(SixToString);
     TEST_CHECK(NotSet);
     TEST_CHECK(EqInt);
