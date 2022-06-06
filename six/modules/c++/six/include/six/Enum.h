@@ -68,21 +68,26 @@ namespace details
         }
         
         // https://stackoverflow.com/questions/257288/templated-check-for-the-existence-of-a-class-member-function
-        static T toType_imp_(const std::string& v, ...)
+        template<typename U>
+        static U toType_imp_(const std::string& v, long)
         {
             return default_toType_(v);
         }
-        // If U::toType_imp_() exists, then this function is visible and `void*` is a better match
-        // than `...` (above).  Otherwise, this function is not visiible and the overload above is used.
+        // If U::toType_imp_() exists, then this function is visible and `int` is a better match
+        // than `long` (above).  Otherwise, this function is not visiible and the overload above is used.
         template<typename U>
-        static auto toType_imp_(const std::string& v, void*) -> decltype(U::toType_imp_(v))
+        static auto toType_imp_(const std::string& v, int) -> decltype(U::toType_imp_(v))
         {
             return U::toType_imp_(v); // call toType_imp_ provided by U; e.g., PolarizationType::toType_imp_()
         }
         template<typename U>
         static T toType_(const std::string& v)
         {
-            return toType_imp_<U>(v, nullptr /*`void*` or `...`*/);
+            // Using `int` and `long` (https://stackoverflow.com/a/9154394/8877) as "..." (https://stackoverflow.com/a/63823318/8877)
+            // will match no arguments; accidentially omitting the argument below means the overload
+            // would never get called.  Note that `0` will convert to both `int` and `long`, with `int`
+            // being a better match than `long` (both functions must be templates).
+            return toType_imp_<U>(v, 0);
         }
 
         // Can use normal inheritance instead of "template magic" for this as
