@@ -150,6 +150,196 @@ SIX_Enum_ENUM_2(DisplayType,
 );
 
 /*!
+ *  \struct EarthModelType
+ *
+ *  Enumeration used to represent EarthModelTypes
+ */
+SIX_Enum_ENUM_1(EarthModelType,
+    WGS84, 1
+);
+
+/*!
+ *  \struct FFTSign
+ *
+ *  Enumeration used to represent FFTSigns
+ */
+SIX_Enum_ENUM_2(FFTSign,
+    NEG, -1,
+    POS, 1
+);
+
+/*!
+ *  \struct ImageBeamCompensationType
+ *
+ *  Enumeration used to represent ImageBeamCompensationTypes
+ */
+SIX_Enum_ENUM_2(ImageBeamCompensationType,
+    NO, 0,
+    SV, 1
+);
+
+/*!
+ *  \struct ImageFormationType
+ *
+ *  Enumeration used to represent ImageFormationTypes
+ */
+SIX_Enum_ENUM_4(ImageFormationType,
+    OTHER, 0,
+    PFA, 1,
+    RMA, 2,
+    RGAZCOMP, 3
+);
+
+/*!
+ *  \struct MagnificationMethod
+ *
+ *  Enumeration used to represent MagnificationMethods
+ */
+SIX_Enum_ENUM_3(MagnificationMethod,
+    NEAREST_NEIGHBOR, 1,
+    BILINEAR, 2,
+    LAGRANGE, 3
+);
+
+/*!
+ *  \struct OrientationType
+ *
+ *  Enumeration used to represent OrientationTypes
+ */
+SIX_Enum_ENUM_5(OrientationType,
+    UP, 1,
+    DOWN, 2,
+    LEFT, 3,
+    RIGHT, 4,
+    ARBITRARY, 5
+);
+
+/*!
+ *  \struct PixelType
+ *
+ *  Enumeration used to represent PixelTypes
+ */
+SIX_Enum_BEGIN_DEFINE(PixelType)
+    //! The enumerations allowed
+    SIX_Enum_BEGIN_enum
+        // Each pixel is stored as a pair of numbers that represent the realand imaginary
+        // components. Each component is stored in a 32-bit IEEE floating point format (4
+        // bytes per component, 8 bytes per pixel).
+        RE32F_IM32F = 1,
+
+        // Each pixel is stored as a pair of numbers that represent the real and imaginary 
+        // components. Each component is stored in a 16-bit signed integer in 2’s 
+        // complement format (2 bytes per component, 4 bytes per pixel). 
+        RE16I_IM16I = 2,
+
+        // Each pixel is stored as a pair of numbers that represent the amplitude and phase
+        // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
+        // component, 2 bytes per pixel). 
+        AMP8I_PHS8I = 3,
+
+        MONO8I = 4,
+        MONO8LU = 5,
+        MONO16I = 6,
+        RGB8LU = 7,
+        RGB24I = 8,
+    SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_int
+            SIX_Enum_map_entry_(RE32F_IM32F),
+            SIX_Enum_map_entry_(RE16I_IM16I),
+            SIX_Enum_map_entry_(AMP8I_PHS8I),
+            SIX_Enum_map_entry_(MONO8I),
+            SIX_Enum_map_entry_(MONO8LU),
+            SIX_Enum_map_entry_(MONO16I),
+            SIX_Enum_map_entry_(RGB8LU),
+            SIX_Enum_map_entry_(RGB24I),
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(PixelType);
+
+/*!
+ *  \struct PolarizationSequenceType
+ *
+ *  Enumeration used to represent PolarizationSequenceTypes
+ */
+SIX_Enum_BEGIN_DEFINE(PolarizationSequenceType)
+private:
+    std::string other_; // valid of OTHER.* for SIDD 3.0/SICD 1.3
+    std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
+public:
+    static PolarizationSequenceType toType_imp_(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
+
+    //! The enumerations allowed
+    SIX_Enum_BEGIN_enum
+        OTHER = 1,
+        V = 2,
+        H = 3,
+        X = 8, // SIDD 3.0, SICD 1.3
+        Y, // SIDD 3.0, SICD 1.3
+        S, // SIDD 3.0, SICD 1.3
+        E, // SIDD 3.0, SICD 1.3
+        RHC = 4,
+        LHC = 5,
+        UNKNOWN = 6,
+        SEQUENCE = 7,
+    SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_int
+            SIX_Enum_map_entry_(OTHER),
+            SIX_Enum_map_entry_(V),
+            SIX_Enum_map_entry_(H),
+            SIX_Enum_map_entry_(X),
+            SIX_Enum_map_entry_(Y),
+            SIX_Enum_map_entry_(S),
+            SIX_Enum_map_entry_(E),
+            SIX_Enum_map_entry_(RHC),
+            SIX_Enum_map_entry_(LHC),
+            SIX_Enum_map_entry_(UNKNOWN),
+            SIX_Enum_map_entry_(SEQUENCE),
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(PolarizationSequenceType);
+
+
+/*!
+ *  \struct PolarizationType
+ *
+ *  Enumeration used to represent PolarizationTypes
+ */
+SIX_Enum_BEGIN_DEFINE(PolarizationType)
+private:
+    std::string other_; // valid of OTHER.* for SIDD 3.0/SICD 1.3
+    std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
+public:
+    static PolarizationType toType_imp_(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
+
+    //! The enumerations allowed
+    SIX_Enum_BEGIN_enum
+        OTHER = 1,
+        V = 2,
+        H = 3,
+        X = 7, // SICD 1.3
+        Y, // SICD 1.3
+        S, // SICD 1.3
+        E, // SICD 1.3
+        RHC = 4,
+        LHC = 5,
+        UNKNOWN = 6,
+    SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_int
+        SIX_Enum_map_entry_(OTHER),
+        SIX_Enum_map_entry_(V),
+        SIX_Enum_map_entry_(H),
+        SIX_Enum_map_entry_(X),
+        SIX_Enum_map_entry_(Y),
+        SIX_Enum_map_entry_(S),
+        SIX_Enum_map_entry_(E),
+        SIX_Enum_map_entry_(RHC),
+        SIX_Enum_map_entry_(LHC),
+        SIX_Enum_map_entry_(UNKNOWN),
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(PolarizationType);
+
+/*!
  *  \struct DualPolarizationType
  *
  *  Enumeration used to represent DualPolarizationTypes
@@ -360,196 +550,6 @@ static_assert(six::DualPolarizationType::V_V == 2, "six::DualPolarizationType is
 static_assert(six::DualPolarizationType::UNKNOWN == 18, "six::DualPolarizationType is wrong!");
 static_assert(six::DualPolarizationType::V_X == 19, "six::DualPolarizationType is wrong!"); // SICD 1.3
 static_assert(six::DualPolarizationType::OTHER_OTHER == 83, "six::DualPolarizationType is wrong!");
-
-/*!
- *  \struct EarthModelType
- *
- *  Enumeration used to represent EarthModelTypes
- */
-SIX_Enum_ENUM_1(EarthModelType,
-    WGS84, 1
-);
-
-/*!
- *  \struct FFTSign
- *
- *  Enumeration used to represent FFTSigns
- */
-SIX_Enum_ENUM_2(FFTSign,
-    NEG, -1,
-    POS, 1
-);
-
-/*!
- *  \struct ImageBeamCompensationType
- *
- *  Enumeration used to represent ImageBeamCompensationTypes
- */
-SIX_Enum_ENUM_2(ImageBeamCompensationType,
-    NO, 0,
-    SV, 1
-);
-
-/*!
- *  \struct ImageFormationType
- *
- *  Enumeration used to represent ImageFormationTypes
- */
-SIX_Enum_ENUM_4(ImageFormationType,
-    OTHER, 0,
-    PFA, 1,
-    RMA, 2,
-    RGAZCOMP, 3
-);
-
-/*!
- *  \struct MagnificationMethod
- *
- *  Enumeration used to represent MagnificationMethods
- */
-SIX_Enum_ENUM_3(MagnificationMethod,
-    NEAREST_NEIGHBOR, 1,
-    BILINEAR, 2,
-    LAGRANGE, 3
-);
-
-/*!
- *  \struct OrientationType
- *
- *  Enumeration used to represent OrientationTypes
- */
-SIX_Enum_ENUM_5(OrientationType,
-    UP, 1,
-    DOWN, 2,
-    LEFT, 3,
-    RIGHT, 4,
-    ARBITRARY, 5
-);
-
-/*!
- *  \struct PixelType
- *
- *  Enumeration used to represent PixelTypes
- */
-SIX_Enum_BEGIN_DEFINE(PixelType)
-    //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
-        // Each pixel is stored as a pair of numbers that represent the realand imaginary
-        // components. Each component is stored in a 32-bit IEEE floating point format (4
-        // bytes per component, 8 bytes per pixel).
-        RE32F_IM32F = 1,
-
-        // Each pixel is stored as a pair of numbers that represent the real and imaginary 
-        // components. Each component is stored in a 16-bit signed integer in 2’s 
-        // complement format (2 bytes per component, 4 bytes per pixel). 
-        RE16I_IM16I = 2,
-
-        // Each pixel is stored as a pair of numbers that represent the amplitude and phase
-        // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
-        // component, 2 bytes per pixel). 
-        AMP8I_PHS8I = 3,
-
-        MONO8I = 4,
-        MONO8LU = 5,
-        MONO16I = 6,
-        RGB8LU = 7,
-        RGB24I = 8,
-    SIX_Enum_END_enum
-
-    SIX_Enum_BEGIN_string_to_int
-            SIX_Enum_map_entry_(RE32F_IM32F),
-            SIX_Enum_map_entry_(RE16I_IM16I),
-            SIX_Enum_map_entry_(AMP8I_PHS8I),
-            SIX_Enum_map_entry_(MONO8I),
-            SIX_Enum_map_entry_(MONO8LU),
-            SIX_Enum_map_entry_(MONO16I),
-            SIX_Enum_map_entry_(RGB8LU),
-            SIX_Enum_map_entry_(RGB24I),
-    SIX_Enum_END_string_to_int
-SIX_Enum_END_DEFINE(PixelType);
-
-/*!
- *  \struct PolarizationSequenceType
- *
- *  Enumeration used to represent PolarizationSequenceTypes
- */
-SIX_Enum_BEGIN_DEFINE(PolarizationSequenceType)
-private:
-    std::string other_; // valid of OTHER.* for SIDD 3.0/SICD 1.3
-    std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
-public:
-    static PolarizationSequenceType toType_imp_(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
-
-    //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
-        OTHER = 1,
-        V = 2,
-        H = 3,
-        X = 8, // SIDD 3.0, SICD 1.3
-        Y, // SIDD 3.0, SICD 1.3
-        S, // SIDD 3.0, SICD 1.3
-        E, // SIDD 3.0, SICD 1.3
-        RHC = 4,
-        LHC = 5,
-        UNKNOWN = 6,
-        SEQUENCE = 7,
-    SIX_Enum_END_enum
-
-    SIX_Enum_BEGIN_string_to_int
-            SIX_Enum_map_entry_(OTHER),
-            SIX_Enum_map_entry_(V),
-            SIX_Enum_map_entry_(H),
-            SIX_Enum_map_entry_(X),
-            SIX_Enum_map_entry_(Y),
-            SIX_Enum_map_entry_(S),
-            SIX_Enum_map_entry_(E),
-            SIX_Enum_map_entry_(RHC),
-            SIX_Enum_map_entry_(LHC),
-            SIX_Enum_map_entry_(UNKNOWN),
-            SIX_Enum_map_entry_(SEQUENCE),
-    SIX_Enum_END_string_to_int
-SIX_Enum_END_DEFINE(PolarizationSequenceType);
-
-
-/*!
- *  \struct PolarizationType
- *
- *  Enumeration used to represent PolarizationTypes
- */
-SIX_Enum_BEGIN_DEFINE(PolarizationType)
-private:
-    std::string other_; // valid of OTHER.* for SIDD 3.0/SICD 1.3
-    std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
-public:
-    static PolarizationType toType_imp_(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
-
-    //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
-        OTHER = 1,
-        V = 2,
-        H = 3,
-        X = 7, // SICD 1.3
-        Y, // SICD 1.3
-        S, // SICD 1.3
-        E, // SICD 1.3
-        RHC = 4,
-        LHC = 5,
-        UNKNOWN = 6,
-    SIX_Enum_END_enum
-
-    SIX_Enum_BEGIN_string_to_int
-        SIX_Enum_map_entry_(OTHER),
-        SIX_Enum_map_entry_(V),
-        SIX_Enum_map_entry_(H),
-        SIX_Enum_map_entry_(X),
-        SIX_Enum_map_entry_(Y),
-        SIX_Enum_map_entry_(S),
-        SIX_Enum_map_entry_(E),
-        SIX_Enum_map_entry_(RHC),
-        SIX_Enum_map_entry_(LHC),
-        SIX_Enum_map_entry_(UNKNOWN),
-    SIX_Enum_END_string_to_int
-SIX_Enum_END_DEFINE(PolarizationType);
 
 /*!
  *  \struct ProjectionType
