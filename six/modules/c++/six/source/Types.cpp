@@ -148,6 +148,23 @@ inline std::string toString_imp(const std::string& other, TFunc default_toString
     return default_toString();
 }
 
+template<typename T, typename TFunc>
+bool eq_imp(const T& e, const std::string& o, TFunc default_eq)
+{
+    using enum_t = typename T::enum_t;
+    if (is_OTHER_(o))
+    {
+        return e == enum_t::OTHER;
+    }
+    if (e == enum_t::OTHER)
+    {
+        const auto strOther = enum_t(enum_t::OTHER).toString();
+        return is_OTHER_(o) || (o == strOther);
+    }
+
+    return default_eq();
+}
+
 PolarizationType PolarizationType::toType_imp_(const std::string& v)
 {
     // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
@@ -156,6 +173,10 @@ PolarizationType PolarizationType::toType_imp_(const std::string& v)
 std::string PolarizationType::toString_(bool throw_if_not_set) const
 {
     return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
+}
+bool PolarizationType::eq_imp_(const Enum<PolarizationType>& e, const std::string& o)
+{
+    return eq_imp(e, o, [&]() { return default_eq_(e, o); });
 }
 
 PolarizationSequenceType PolarizationSequenceType::toType_imp_(const std::string& v)
@@ -166,6 +187,10 @@ PolarizationSequenceType PolarizationSequenceType::toType_imp_(const std::string
 std::string PolarizationSequenceType::toString_(bool throw_if_not_set) const
 {
     return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
+}
+bool PolarizationSequenceType::eq_imp_(const Enum<PolarizationSequenceType>& e, const std::string& o)
+{
+    return eq_imp(e, o, [&]() { return default_eq_(e, o); });
 }
 
 DualPolarizationType DualPolarizationType::toType_imp_(const std::string& v)
@@ -226,6 +251,10 @@ std::string DualPolarizationType::toString_(bool throw_if_not_set) const
     }
 
     throw except::InvalidFormatException(Ctxt("Invalid enum value: " + other_));
+}
+bool DualPolarizationType::eq_imp_(const Enum<DualPolarizationType>& e, const std::string& o)
+{
+    return eq_imp(e, o, [&]() { return default_eq_(e, o); });
 }
 
 }

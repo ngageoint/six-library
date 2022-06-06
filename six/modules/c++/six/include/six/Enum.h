@@ -92,6 +92,29 @@ namespace details
             return toType_imp_<U>(v, 0);
         }
 
+        // https://stackoverflow.com/questions/257288/templated-check-for-the-existence-of-a-class-member-function
+        template<typename U>
+        static bool eq_imp_(const Enum<U>& e, const std::string& o, long)
+        {
+            return default_eq_(e, o);
+        }
+        // If U::eq_imp_() exists, then this function is visible and `int` is a better match
+        // than `long` (above).  Otherwise, this function is not visiible and the overload above is used.
+        template<typename U>
+        static auto eq_imp_(const Enum<U>& e, const std::string& o, int) -> decltype(U::eq_imp_(e, o))
+        {
+            return U::eq_imp_(e, o); // call eq_imp_ provided by U; e.g., PolarizationType::eq_imp_()
+        }
+        template<typename U>
+        static bool eq_(const Enum<U>& e, const std::string& o)
+        {
+            // Using `int` and `long` (https://stackoverflow.com/a/9154394/8877) as "..." (https://stackoverflow.com/a/63823318/8877)
+            // will match no arguments; accidentially omitting the argument below means the overload
+            // would never get called.  Note that `0` will convert to both `int` and `long`, with `int`
+            // being a better match than `long` (both functions must be templates).
+            return eq_imp_<U>(e, o, 0);
+        }
+
         // Can use normal inheritance instead of "template magic" for this as
         // it's an instance method rather than "static".
         virtual std::string toString_(bool throw_if_not_set) const
@@ -146,7 +169,14 @@ namespace details
             return index(value);
         }
 
+        static bool default_eq_(const Enum<T>& e, const std::string& o)
+        {
+            return e.toString() == o;
+        }
+
     public:
+        using enum_t = T;
+
         //! Returns string representation of the value
         std::string toString(bool throw_if_not_set = false) const
         {
@@ -175,6 +205,8 @@ namespace details
         bool operator>(const Enum& o) const { return value > o.value; }
         bool operator>=(const int& o) const { return value >= o; }
         bool operator>=(const Enum& o) const { return value >= o.value; }
+        
+        bool eq(const std::string& o) const { return eq_(*this, o); }
 
         int value = NOT_SET_VALUE;
     };
@@ -185,7 +217,7 @@ namespace details
         return os;
     }
     template<typename T>
-    inline bool operator==(const Enum<T>& e, const std::string& o) { return e.toString() == o; } // for unittests, not SWIG
+    inline bool operator==(const Enum<T>& e, const std::string& o) { return e.eq(o); } // for unittests, not SWIG
     template<typename T>
     inline bool operator!=(const Enum<T>& e, const std::string& o) { return !(e == o); } // for unittests, not SWIG
 

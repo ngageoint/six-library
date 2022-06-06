@@ -267,6 +267,7 @@ private:
     std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
 public:
     static PolarizationSequenceType toType_imp_(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
+    static bool eq_imp_(const Enum<PolarizationSequenceType>&, const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
 
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
@@ -310,6 +311,7 @@ private:
     std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
 public:
     static PolarizationType toType_imp_(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
+    static bool eq_imp_(const Enum<PolarizationType>&, const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
 
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
@@ -351,6 +353,7 @@ private:
     std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
 public:
     static DualPolarizationType toType_imp_(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
+    static bool eq_imp_(const Enum<DualPolarizationType>&, const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
 
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
