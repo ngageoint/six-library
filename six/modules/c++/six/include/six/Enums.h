@@ -346,7 +346,8 @@ SIX_Enum_END_DEFINE(PolarizationType);
  */
 SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
 private:
-    std::string other_; // valid of OTHER.* for SIDD 3.0/SICD 1.3
+    PolarizationType left_,right_; // other than OTHER/NOT_SET/UNKNOWN, this is two `PolarizationType`s
+    std::string other_; // handle OTHER.* for SIDD 3.0/SICD 1.3
     std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
 public:
     static DualPolarizationType toType_imp_(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3

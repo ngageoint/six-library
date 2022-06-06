@@ -171,38 +171,41 @@ std::string PolarizationSequenceType::toString_(bool throw_if_not_set) const
 DualPolarizationType DualPolarizationType::toType_imp_(const std::string& v)
 {
     const auto splits = str::split(v, ":");
-    if (splits.size() == 2)
+    if (splits.size() != 2)
     {
-        // Handle OTHER.* for  SIDD 3.0/SICD 1.3
-        DualPolarizationType retval;
-        if (is_OTHER_(splits[0]) && is_OTHER_(splits[1]))
+        // It's not possible to determine whether a string like "OTHER_V" should be DualPolarizationType::OTHER (OTHER.*)
+        // or DualPolarizationType::OTHER_V; try the "old way" (pre SIDD 3.0/SICD 1.3) first.  Note this is really only a 
+        // problem for the default enums, in the XML ":" instead of "_" is the seperator.
+        auto result = default_toType_(v, std::nothrow);
+        if (result.has_value())
         {
-            retval = DualPolarizationType::OTHER_OTHER;
+            return *result;
         }
-        else
-        {
-            // The "dual" type is really two `PolarizationType`s next to each other
-            static const PolarizationType other = PolarizationType::OTHER;
-            const auto left = PolarizationType::toType(splits[0]);
-            const auto strLeft = left == PolarizationType::OTHER ? other.toString() : left.toString();
-            const auto right = PolarizationType::toType(splits[1]);
-            const auto strRight = right == PolarizationType::OTHER ? other.toString() : right.toString();
-            const auto str = strLeft + "_" + strRight; // can't do "A:B" in C++, so the enum/string is A_B
-            retval = DualPolarizationType::default_toType_(str);
-        }
-        if (is_OTHER_(splits[0]) || is_OTHER_(splits[1]))
-        {
-            retval.other_ = v; // know "v" is a valid OTHER.* 
-        }
-        return retval;
+
+        // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
+        return toType_imp<DualPolarizationType>(v, [&](DualPolarizationType& t) { t.other_ = v; }, [&]() { return default_toType_(v); });
     }
 
-    // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
-    //return toType_imp<DualPolarizationType>(v, [&](DualPolarizationType& t) { t.other_ = v; }, [&]() { return default_toType_(v); });
-    return default_toType_(v);
+    // Handle OTHER.* for  SIDD 3.0/SICD 1.3
+    // The "dual" type is really two `PolarizationType`s next to each other
+    static const PolarizationType other = PolarizationType::OTHER;
+    auto left = PolarizationType::toType(splits[0]);
+    const auto strLeft = left == PolarizationType::OTHER ? other.toString() : left.toString();
+    auto right = PolarizationType::toType(splits[1]);
+    const auto strRight = right == PolarizationType::OTHER ? other.toString() : right.toString();
+    const auto str = strLeft + "_" + strRight; // can't do "A:B" in C++, so the enum/string is A_B
+    auto retval = DualPolarizationType::default_toType_(str);
+    retval.left_ = std::move(left);
+    retval.right_ = std::move(right);
+    return retval;
 }
 std::string DualPolarizationType::toString_(bool throw_if_not_set) const
 {
+    if ((left_ != DualPolarizationType::NOT_SET) && (right_ != DualPolarizationType::NOT_SET))
+    {
+        return left_.toString() + ":" + right_.toString(); // use ":" not "_" so the string can be split apart
+    }
+
     // Handle OTHER.* for  SIDD 3.0/SICD 1.3
     if (!other_.empty())
     {

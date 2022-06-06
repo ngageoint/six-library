@@ -27,6 +27,8 @@
 #include <map>
 #include <ostream>
 #include <type_traits>
+#include <new> // std::nothrow
+#include <std/optional>
 
 #include <scene/sys_Conf.h>
 #include <import/except.h>
@@ -119,6 +121,14 @@ namespace details
             value = i;
         }
 
+        static std::optional<T> default_toType_(const std::string& v, std::nothrow_t)
+        {
+            std::string type(v);
+            str::trim(type);
+            auto&& map = string_to_int();
+            const auto it = map.find(type);
+            return it == map.end() ? std::optional<T>() : std::optional<T>(it->second);
+        }
         static T default_toType_(const std::string& v)
         {
             std::string type(v);
