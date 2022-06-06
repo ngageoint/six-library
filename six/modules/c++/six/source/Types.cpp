@@ -21,6 +21,7 @@
  */
 
 #include <functional>
+#include <std/optional>
 #include "six/Init.h"
 #include "six/Types.h"
 #include <nitf/ImageSegmentComputer.h>
@@ -158,7 +159,7 @@ bool eq_imp(const T& e, const std::string& o, TFunc default_eq)
     }
     if (e == enum_t::OTHER)
     {
-        const auto strOther = enum_t(enum_t::OTHER).toString();
+        static const auto strOther = enum_t(enum_t::OTHER).toString();
         return is_OTHER_(o) || (o == strOther);
     }
 
@@ -237,7 +238,7 @@ std::string DualPolarizationType::toString_(bool throw_if_not_set) const
         }
 
         // Using "_" instead of ":" matches pre- SIDD 3.0/SICD 1.3 behavior; yes, it makes "OTHER_V" ambiguous.
-        return strLeft + "_" + strRight; // use ":" not "_" so the string can be split apart
+        return strLeft + "_" + strRight; // retval could interpreted as OTHER.* or OTHER:V.
     }
 
     if (other_.empty() || is_OTHER_(other_))  // Handle OTHER.* for  SIDD 3.0/SICD 1.3
@@ -254,6 +255,40 @@ std::string DualPolarizationType::toString_(bool throw_if_not_set) const
 }
 bool DualPolarizationType::eq_imp_(const Enum<DualPolarizationType>& e, const std::string& o)
 {
+    // "o" could be complete nonsense, calling toType() will throw.
+    std::optional<DualPolarizationType> o_type;
+    try
+    {
+        o_type = DualPolarizationType::toType(o);
+    }
+    catch (const except::Exception& ex)
+    {
+        const auto msg = "Unknown type '" + o + "'";
+        if (ex.getMessage() != msg)
+        {
+            // not the exception we were expecting
+            throw; // TODO: add toType(o, std::nothrow)
+        }
+    }
+    if (o_type.has_value())
+    {
+        // Be sure we don't end up back here; existing code uses toString()
+        return e.toString() == o_type->toString();
+    }
+
+    const auto str_e = e.toString();
+    const auto splits_e = str::split(str_e, ":");
+    const auto splits_o = str::split(o, ":");
+    if ((splits_e.size() != 2) && (splits_o.size() != 2)) // no ":"s to be found
+    {
+        return eq_imp(e, o, [&]() { return default_eq_(e, o); });
+    }
+
+    if (splits_o.size() == 2)
+    {
+        return DualPolarizationType::toType(o) == e;
+    }
+
     return eq_imp(e, o, [&]() { return default_eq_(e, o); });
 }
 
