@@ -26,8 +26,8 @@
 #include <vector>
 #include <typeinfo>
 #include <string>
-
 #include <std/bit>
+#include <std/memory>
 
 #include <nitf/coda-oss.hpp>
 #include <six/Init.h>
@@ -164,131 +164,134 @@ void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::
     }
     if (pvpBlock.hasSignal())
     {
-        signal.reset(new std::int64_t());
+        signal.reset(std::make_unique<std::int64_t>().release());
         ::setData(input + p.signal.getByteOffset(), *signal);
     }
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
-        if (it->second.getFormat() == "F4")
+        const auto key = it->first;
+        const auto format = it->second.getFormat();
+        const auto byteOffset = it->second.getByteOffset();
+        if (format == "F4")
         {
             float val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "F8")
+        else if (format == "F8")
         {
             double val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "U1")
+        else if (format == "U1")
         {
             std::uint8_t val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "U2")
+        else if (format == "U2")
         {
             std::uint16_t val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "U4")
+        else if (format == "U4")
         {
             std::uint32_t val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "U8")
+        else if (format == "U8")
         {
             std::uint64_t val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "I1")
+        else if (format == "I1")
         {
             std::int8_t val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "I2")
+        else if (format == "I2")
         {
             std::int16_t val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "I4")
+        else if (format == "I4")
         {
             std::int32_t val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "I8")
+        else if (format == "I8")
         {
             std::int64_t val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "CI2")
+        else if (format == "CI2")
         {
             std::complex<std::int8_t> val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "CI4")
+        else if (format == "CI4")
         {
             std::complex<std::int16_t> val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "CI8")
+        else if (format == "CI8")
         {
             std::complex<std::int32_t> val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "CI16")
+        else if (format == "CI16")
         {
             std::complex<std::int64_t> val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "CF8")
+        else if (format == "CF8")
         {
             std::complex<float> val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "CF16")
+        else if (format == "CF16")
         {
             std::complex<double> val;
-            ::setData(input + it->second.getByteOffset(), val);
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            ::setData(input + byteOffset, val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
         else
         {
-            const auto pVal = input + it->second.getByteOffset();
+            const auto pVal = input + byteOffset;
             std::string val;
             val.assign(reinterpret_cast<const char*>(pVal),
                        it->second.getByteSize());
-            addedPVP[it->first] = six::Parameter();
-            addedPVP.find(it->first)->second.setValue(val);
+            addedPVP[key] = six::Parameter();
+            addedPVP.find(key)->second.setValue(val);
         }
     }
 }
@@ -349,73 +352,76 @@ void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest_) const
     }
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
-        if (it->second.getFormat() == "F4")
+        const auto key = it->first;
+        const auto format = it->second.getFormat();
+        const auto byteOffset = it->second.getByteOffset();
+        if (format == "F4")
         {
-            ::getData(dest + it->second.getByteOffset(), static_cast<float>(addedPVP.find(it->first)->second));
+            ::getData(dest + byteOffset, static_cast<float>(addedPVP.find(key)->second));
         }
-        else if (it->second.getFormat() == "F8")
+        else if (format == "F8")
         {
-            ::getData(dest + it->second.getByteOffset(), static_cast<double>(addedPVP.find(it->first)->second));
+            ::getData(dest + byteOffset, static_cast<double>(addedPVP.find(key)->second));
         }
-        else if (it->second.getFormat() == "U1")
+        else if (format == "U1")
         {
-            ::getData(dest + it->second.getByteOffset(), static_cast<std::uint8_t>(addedPVP.find(it->first)->second));
+            ::getData(dest + byteOffset, static_cast<std::uint8_t>(addedPVP.find(key)->second));
         }
-        else if (it->second.getFormat() == "U2")
+        else if (format == "U2")
         {
-            ::getData(dest + it->second.getByteOffset(), static_cast<std::uint16_t>(addedPVP.find(it->first)->second));
+            ::getData(dest + byteOffset, static_cast<std::uint16_t>(addedPVP.find(key)->second));
         }
-        else if (it->second.getFormat() == "U4")
+        else if (format == "U4")
         {
-            ::getData(dest + it->second.getByteOffset(), static_cast<std::uint32_t>(addedPVP.find(it->first)->second));
+            ::getData(dest + byteOffset, static_cast<std::uint32_t>(addedPVP.find(key)->second));
         }
-        else if (it->second.getFormat() == "U8")
+        else if (format == "U8")
         {
-            ::getData(dest + it->second.getByteOffset(), static_cast<std::uint64_t>(addedPVP.find(it->first)->second));
+            ::getData(dest + byteOffset, static_cast<std::uint64_t>(addedPVP.find(key)->second));
         }
-        else if (it->second.getFormat() == "I1")
+        else if (format == "I1")
         {
-            ::getData(dest + it->second.getByteOffset(), static_cast<std::int8_t>(addedPVP.find(it->first)->second));
+            ::getData(dest + byteOffset, static_cast<std::int8_t>(addedPVP.find(key)->second));
         }
-        else if (it->second.getFormat() == "I2")
+        else if (format == "I2")
         {
-            ::getData(dest + it->second.getByteOffset(), static_cast<std::int16_t>(addedPVP.find(it->first)->second));
+            ::getData(dest + byteOffset, static_cast<std::int16_t>(addedPVP.find(key)->second));
         }
-        else if (it->second.getFormat() == "I4")
+        else if (format == "I4")
         {
-            ::getData(dest + it->second.getByteOffset(), static_cast<std::int32_t>(addedPVP.find(it->first)->second));
+            ::getData(dest + byteOffset, static_cast<std::int32_t>(addedPVP.find(key)->second));
         }
-        else if (it->second.getFormat() == "I8")
+        else if (format == "I8")
         {
-            ::getData(dest + it->second.getByteOffset(), static_cast<std::int64_t>(addedPVP.find(it->first)->second));
+            ::getData(dest + byteOffset, static_cast<std::int64_t>(addedPVP.find(key)->second));
         }
-        else if (it->second.getFormat() == "CI2")
+        else if (format == "CI2")
         {
-            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<std::int8_t>());
+            ::getData(dest + byteOffset, addedPVP.find(key)->second.getComplex<std::int8_t>());
         }
-        else if (it->second.getFormat() == "CI4")
+        else if (format == "CI4")
         {
-            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<std::int16_t>());
+            ::getData(dest + byteOffset, addedPVP.find(key)->second.getComplex<std::int16_t>());
         }
-        else if (it->second.getFormat() == "CI8")
+        else if (format == "CI8")
         {
-            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<std::int32_t>());
+            ::getData(dest + byteOffset, addedPVP.find(key)->second.getComplex<std::int32_t>());
         }
-        else if (it->second.getFormat() == "CI16")
+        else if (format == "CI16")
         {
-            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<std::int64_t>());
+            ::getData(dest + byteOffset, addedPVP.find(key)->second.getComplex<std::int64_t>());
         }
-        else if (it->second.getFormat() == "CF8")
+        else if (format == "CF8")
         {
-            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<float>());
+            ::getData(dest + byteOffset, addedPVP.find(key)->second.getComplex<float>());
         }
-        else if (it->second.getFormat() == "CF16")
+        else if (format == "CF16")
         {
-            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<double>());
+            ::getData(dest + byteOffset, addedPVP.find(key)->second.getComplex<double>());
         }
         else
         {
-            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.str().c_str(), it->second.getByteSize());
+            ::getData(dest + byteOffset, addedPVP.find(key)->second.str().c_str(), it->second.getByteSize());
         }
     }
 }
