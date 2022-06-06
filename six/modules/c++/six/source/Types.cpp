@@ -19,9 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <functional>
+#include <std/optional>
 #include "six/Init.h"
 #include "six/Types.h"
 #include <nitf/ImageSegmentComputer.h>
+#include "six/Enums.h"
 
 std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& latLonAlt)
 {
@@ -101,6 +105,191 @@ SCP::SCP() :
    ecf(Init::undefined<Vector3>()),
    llh(Init::undefined<LatLonAlt>())
 {
+}
+
+static bool is_OTHER_(const std::string& v)
+{
+    // OTHER.* for  SIDD 3.0/SICD 1.3, not "OTHER"
+    if ((v != "OTHER") && str::starts_with(v, "OTHER")) // i.e., "OTHER_foo"
+    {
+        // "where * = 0 or more characters that does not contain “:” (0x3A)."
+        return v.find(':') == std::string::npos; // "OTHER:foo" is invalid
+    }
+    return false; // "OTHER" or "<something else>"
+}
+
+// See https://stackoverflow.com/questions/13358672/how-to-convert-a-lambda-to-an-stdfunction-using-templates for
+// some interesting reading regarding std::function<> and lambdas.
+template<typename T, typename TFunc>
+inline T toType_imp(const std::string& v, std::function<void(T&)> set_other, TFunc default_toType)
+{
+    // Handle OTHER.* for  SIDD 3.0/SICD 1.3
+    if (is_OTHER_(v)) // handle "OTHER" with default_toType_()
+    {
+        T retval = T::OTHER;
+        set_other(retval); // know "v" is a valid OTHER.* 
+        return retval;
+    }
+    return default_toType(); // let default_toType_() throw the exception for "OTHER:foo"
+}
+
+template<typename TFunc>
+inline std::string toString_imp(const std::string& other, TFunc default_toString)
+{
+    // Handle OTHER.* for  SIDD 3.0/SICD 1.3
+    if (is_OTHER_(other))
+    {
+        return other;
+    }
+    if (!other.empty())
+    {
+        // other_ got set to something other than an OTHER string
+        except::InvalidFormatException(Ctxt("Invalid enum value: " + other));
+    }
+    return default_toString();
+}
+
+template<typename T, typename TFunc>
+bool eq_imp(const T& e, const std::string& o, TFunc default_eq)
+{
+    using enum_t = typename T::enum_t;
+    if (is_OTHER_(o))
+    {
+        return e == enum_t::OTHER;
+    }
+    if (e == enum_t::OTHER)
+    {
+        static const auto strOther = enum_t(enum_t::OTHER).toString();
+        return is_OTHER_(o) || (o == strOther);
+    }
+
+    return default_eq();
+}
+
+PolarizationType PolarizationType::toType_imp_(const std::string& v)
+{
+    // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
+    return toType_imp<PolarizationType>(v, [&](PolarizationType& t) { t.other_ = v; }, [&]() { return default_toType_(v); });
+}
+std::string PolarizationType::toString_(bool throw_if_not_set) const
+{
+    return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
+}
+bool PolarizationType::eq_imp_(const Enum<PolarizationType>& e, const std::string& o)
+{
+    return eq_imp(e, o, [&]() { return default_eq_(e, o); });
+}
+
+PolarizationSequenceType PolarizationSequenceType::toType_imp_(const std::string& v)
+{
+    // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
+    return toType_imp<PolarizationSequenceType>(v, [&](PolarizationSequenceType& t) { t.other_ = v; }, [&]() { return default_toType_(v); });
+}
+std::string PolarizationSequenceType::toString_(bool throw_if_not_set) const
+{
+    return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
+}
+bool PolarizationSequenceType::eq_imp_(const Enum<PolarizationSequenceType>& e, const std::string& o)
+{
+    return eq_imp(e, o, [&]() { return default_eq_(e, o); });
+}
+
+DualPolarizationType DualPolarizationType::toType_imp_(const std::string& v)
+{
+    const auto splits = str::split(v, ":");
+    if (splits.size() != 2)
+    {
+        // It's not possible to determine whether a string like "OTHER_V" should be DualPolarizationType::OTHER (OTHER.*)
+        // or DualPolarizationType::OTHER_V; try the "old way" (pre SIDD 3.0/SICD 1.3) first.  Note this is really only a 
+        // problem for the default enums, in the XML ":" instead of "_" is the seperator.
+        auto result = default_toType_(v, std::nothrow);
+        if (result.has_value())
+        {
+            return *result;
+        }
+
+        // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
+        return toType_imp<DualPolarizationType>(v, [&](DualPolarizationType& t) { t.other_ = v; }, [&]() { return default_toType_(v); });
+    }
+
+    // Handle OTHER.* for  SIDD 3.0/SICD 1.3
+    // The "dual" type is really two `PolarizationType`s next to each other
+    static const PolarizationType other = PolarizationType::OTHER;
+    auto left = PolarizationType::toType(splits[0]);
+    const auto strLeft = left == PolarizationType::OTHER ? other.toString() : left.toString();
+    auto right = PolarizationType::toType(splits[1]);
+    const auto strRight = right == PolarizationType::OTHER ? other.toString() : right.toString();
+    const auto str = strLeft + "_" + strRight; // can't do "A:B" in C++, so the enum/string is A_B
+    auto retval = DualPolarizationType::default_toType_(str);
+    retval.left_ = std::move(left);
+    retval.right_ = std::move(right);
+    return retval;
+}
+std::string DualPolarizationType::toString_(bool throw_if_not_set) const
+{
+    if ((left_ != PolarizationType::NOT_SET) && (right_ != PolarizationType::NOT_SET))
+    {
+        // Handle OTHER.* for  SIDD 3.0/SICD 1.3
+        const auto strLeft = left_.toString(throw_if_not_set);
+        const auto strRight = right_.toString(throw_if_not_set);
+        if (is_OTHER_(strLeft) || is_OTHER_(strRight))
+        {
+            return strLeft + ":" + strRight; // use ":" not "_" so the string can be split apart
+        }
+
+        // Using "_" instead of ":" matches pre- SIDD 3.0/SICD 1.3 behavior; yes, it makes "OTHER_V" ambiguous.
+        return strLeft + "_" + strRight; // retval could interpreted as OTHER.* or OTHER:V.
+    }
+
+    if (other_.empty() || is_OTHER_(other_))  // Handle OTHER.* for  SIDD 3.0/SICD 1.3
+    {
+        return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
+    }
+
+    if ((left_ == PolarizationType::NOT_SET) && (right_ == PolarizationType::NOT_SET))
+    {
+        default_toString_(throw_if_not_set);
+    }
+
+    throw except::InvalidFormatException(Ctxt("Invalid enum value: " + other_));
+}
+bool DualPolarizationType::eq_imp_(const Enum<DualPolarizationType>& e, const std::string& o)
+{
+    // "o" could be complete nonsense, calling toType() will throw.
+    std::optional<DualPolarizationType> o_type;
+    try
+    {
+        o_type = DualPolarizationType::toType(o);
+    }
+    catch (const except::Exception& ex)
+    {
+        const auto msg = "Unknown type '" + o + "'";
+        if (ex.getMessage() != msg)
+        {
+            // not the exception we were expecting
+            throw; // TODO: add toType(o, std::nothrow)
+        }
+    }
+    if (o_type.has_value())
+    {
+        // Be sure we don't end up back here; existing code uses toString()
+        return e.toString() == o_type->toString();
+    }
+
+    const auto str_e = e.toString();
+    const auto splits_e = str::split(str_e, ":");
+    const auto splits_o = str::split(o, ":");
+    if ((splits_e.size() != 2) && (splits_o.size() != 2)) // no ":"s to be found
+    {
+        return eq_imp(e, o, [&]() { return default_eq_(e, o); });
+    }
+
+    if (splits_o.size() == 2)
+    {
+        return DualPolarizationType::toType(o) == e;
+    }
+
+    return eq_imp(e, o, [&]() { return default_eq_(e, o); });
 }
 
 }

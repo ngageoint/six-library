@@ -26,6 +26,9 @@
 #include <string>
 #include <map>
 #include <ostream>
+#include <type_traits>
+#include <new> // std::nothrow
+#include <std/optional>
 
 #include <scene/sys_Conf.h>
 #include <import/except.h>
@@ -65,14 +68,73 @@ namespace details
             const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
             return nitf::details::index(int_to_string(), v, ex);
         }
+        
+        // https://stackoverflow.com/questions/257288/templated-check-for-the-existence-of-a-class-member-function
+        template<typename U>
+        static U toType_imp_(const std::string& v, long)
+        {
+            return default_toType_(v);
+        }
+        // If U::toType_imp_() exists, then this function is visible and `int` is a better match
+        // than `long` (above).  Otherwise, this function is not visiible and the overload above is used.
+        template<typename U>
+        static auto toType_imp_(const std::string& v, int) -> decltype(U::toType_imp_(v))
+        {
+            return U::toType_imp_(v); // call toType_imp_ provided by U; e.g., PolarizationType::toType_imp_()
+        }
+        template<typename U>
+        static T toType_(const std::string& v)
+        {
+            // Using `int` and `long` (https://stackoverflow.com/a/9154394/8877) as "..." (https://stackoverflow.com/a/63823318/8877)
+            // will match no arguments; accidentially omitting the argument below means the overload
+            // would never get called.  Note that `0` will convert to both `int` and `long`, with `int`
+            // being a better match than `long` (both functions must be templates).
+            return toType_imp_<U>(v, 0);
+        }
+
+        // https://stackoverflow.com/questions/257288/templated-check-for-the-existence-of-a-class-member-function
+        template<typename U>
+        static bool eq_imp_(const Enum<U>& e, const std::string& o, long)
+        {
+            return default_eq_(e, o);
+        }
+        // If U::eq_imp_() exists, then this function is visible and `int` is a better match
+        // than `long` (above).  Otherwise, this function is not visiible and the overload above is used.
+        template<typename U>
+        static auto eq_imp_(const Enum<U>& e, const std::string& o, int) -> decltype(U::eq_imp_(e, o))
+        {
+            return U::eq_imp_(e, o); // call eq_imp_ provided by U; e.g., PolarizationType::eq_imp_()
+        }
+        template<typename U>
+        static bool eq_(const Enum<U>& e, const std::string& o)
+        {
+            // Using `int` and `long` (https://stackoverflow.com/a/9154394/8877) as "..." (https://stackoverflow.com/a/63823318/8877)
+            // will match no arguments; accidentially omitting the argument below means the overload
+            // would never get called.  Note that `0` will convert to both `int` and `long`, with `int`
+            // being a better match than `long` (both functions must be templates).
+            return eq_imp_<U>(e, o, 0);
+        }
+
+        // Can use normal inheritance instead of "template magic" for this as
+        // it's an instance method rather than "static".
+        virtual std::string toString_(bool throw_if_not_set) const
+        {
+            return default_toString_(throw_if_not_set);
+        }
 
     protected:
         Enum() = default;
+        Enum(const Enum&) = default;
+        Enum(Enum&&) = default;
+        Enum& operator=(const Enum&) = default;
+        Enum& operator=(Enum&&) = default;
+        virtual ~Enum() = default;
 
         //! string constructor
         Enum(const std::string& s)
         {
-            value = index(s);
+            // Go though toType() to account for OTHER.* in SIDD 3.0/SICD 1.3
+            *this = std::move(toType(s));
         }
 
         //! int constructor
@@ -82,9 +144,23 @@ namespace details
             value = i;
         }
 
-    public:
-        //! Returns string representation of the value
-        std::string toString(bool throw_if_not_set = false) const
+        static std::optional<T> default_toType_(const std::string& v, std::nothrow_t)
+        {
+            std::string type(v);
+            str::trim(type);
+            auto&& map = string_to_int();
+            const auto it = map.find(type);
+            return it == map.end() ? std::optional<T>() : std::optional<T>(it->second);
+        }
+        static T default_toType_(const std::string& v)
+        {
+            std::string type(v);
+            str::trim(type);
+            const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
+            return nitf::details::index(string_to_int(), type, ex);
+        }
+
+        std::string default_toString_(bool throw_if_not_set) const
         {
             if (throw_if_not_set && (value == NOT_SET_VALUE))
             {
@@ -93,12 +169,23 @@ namespace details
             return index(value);
         }
 
+        static bool default_eq_(const Enum<T>& e, const std::string& o)
+        {
+            return e.toString() == o;
+        }
+
+    public:
+        using enum_t = T;
+
+        //! Returns string representation of the value
+        std::string toString(bool throw_if_not_set = false) const
+        {
+            return toString_(throw_if_not_set);
+        }
+
         static T toType(const std::string& v)
         {
-            std::string type(v);
-            str::trim(type);
-            const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-            return nitf::details::index(string_to_int(), type, ex);
+            return toType_<T>(v);
         }
 
         operator int() const { return value; }
@@ -108,10 +195,8 @@ namespace details
         // needed for SWIG
         bool operator==(const int& o) const { return value == o; }
         bool operator==(const Enum& o) const { return value == o.value; }
-        bool operator==(const std::string& o) const { return toString() == o; } // for unittests, not SWIG
         bool operator!=(const int& o) const { return value != o; }
         bool operator!=(const Enum& o) const { return value != o.value; }
-        bool operator!=(const std::string& o) const { return !(*this == o); } // for unittests, not SWIG
         bool operator<(const int& o) const { return value < o; }
         bool operator<(const Enum& o) const { return value < o.value; }
         bool operator<=(const int& o) const { return value <= o; }
@@ -120,6 +205,8 @@ namespace details
         bool operator>(const Enum& o) const { return value > o.value; }
         bool operator>=(const int& o) const { return value >= o; }
         bool operator>=(const Enum& o) const { return value >= o.value; }
+        
+        bool eq(const std::string& o) const { return eq_(*this, o); }
 
         int value = NOT_SET_VALUE;
     };
@@ -129,6 +216,10 @@ namespace details
         os << e.toString();
         return os;
     }
+    template<typename T>
+    inline bool operator==(const Enum<T>& e, const std::string& o) { return e.eq(o); } // for unittests, not SWIG
+    template<typename T>
+    inline bool operator!=(const Enum<T>& e, const std::string& o) { return !(e == o); } // for unittests, not SWIG
 
 
     #define SIX_Enum_map_entry_(n) { #n, n }
@@ -137,7 +228,8 @@ namespace details
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
     #define SIX_Enum_constructors_(name) name() = default; name(const std::string& s) : Enum(s) {} name(int i) : Enum(i) {} \
-            name& operator=(int v) {  *this = name(v); return *this; }
+            name& operator=(int v) {  *this = name(v); return *this; } ~name() = default; \
+            name(const name&) = default; name(name&&) = default; name& operator=(const name&) = default; name& operator=(name&&) = default; 
     #define SIX_Enum_BEGIN_enum enum {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
