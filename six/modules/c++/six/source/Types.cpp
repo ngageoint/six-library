@@ -255,6 +255,21 @@ std::string DualPolarizationType::toString_(bool throw_if_not_set) const
 }
 bool DualPolarizationType::eq_imp_(const Enum<DualPolarizationType>& e, const std::string& o)
 {
+    static const auto strOther = DualPolarizationType(DualPolarizationType::OTHER).toString();
+
+    const auto str_e = e.toString();
+    if ((e == DualPolarizationType::OTHER) && (is_OTHER_(o) || (o == strOther)))
+    {
+        // If they're both OTHER.*, they should be equal only if the strings are the same: OTHER_abc != OTHER_xyz
+        if (is_OTHER_(str_e) && is_OTHER_(o))
+        {
+            return str_e == o;
+        }
+
+        // Otherwise, DualPolarizationType::OTHER matches any OTHER.*
+        return true;
+    }
+
     // "o" could be complete nonsense, calling toType() will throw.
     std::optional<DualPolarizationType> o_type;
     try
@@ -273,10 +288,9 @@ bool DualPolarizationType::eq_imp_(const Enum<DualPolarizationType>& e, const st
     if (o_type.has_value())
     {
         // Be sure we don't end up back here; existing code uses toString()
-        return e.toString() == o_type->toString();
+        return str_e == o_type->toString();
     }
 
-    const auto str_e = e.toString();
     const auto splits_e = str::split(str_e, ":");
     const auto splits_o = str::split(o, ":");
     if ((splits_e.size() != 2) && (splits_o.size() != 2)) // no ":"s to be found
