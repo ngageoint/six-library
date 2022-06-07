@@ -100,34 +100,41 @@ TEST_CASE(ToType)
     test_toType<six::PolarizationSequenceType>("ToType", 13);
 }
 
-TEST_CASE(ToType_OTHER)
+template<typename TSixEnum>
+static void test_toType_OTHER(const std::string& testName)
 {
-    auto fromToType = six::PolarizationType::toType("OTHER");
-    TEST_ASSERT_EQ(fromToType, six::PolarizationType::OTHER);
+    (void)testName;
+
+    const TSixEnum not_set;
+    TEST_ASSERT_EQ(not_set, TSixEnum::NOT_SET);
+
+    auto fromToType = TSixEnum::toType("OTHER");
+    TEST_ASSERT_EQ(fromToType, TSixEnum::OTHER);
 
     // SICD 1.3 "OTHER.*"
-    fromToType = six::PolarizationType::toType("OTHER_abc");
-    TEST_ASSERT_EQ(fromToType, six::PolarizationType::OTHER);
+    fromToType = TSixEnum::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(fromToType, TSixEnum::OTHER);
 
-    TEST_EXCEPTION(six::PolarizationType::toType("OTHER:abc"));
+    TEST_EXCEPTION(TSixEnum::toType("OTHER:abc"));
 
-    fromToType = six::PolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ(fromToType, six::PolarizationType::OTHER);
-    const six::PolarizationType OTHER_abc("OTHER_abc"); // SICD 1.3 "OTHER.*" 
-    TEST_ASSERT_EQ(OTHER_abc, six::PolarizationType::OTHER);
+    const TSixEnum OTHER_abc("OTHER_abc"); // SICD 1.3 "OTHER.*" 
+    TEST_ASSERT_EQ(OTHER_abc, fromToType);
+    TEST_ASSERT_EQ(OTHER_abc, TSixEnum::OTHER);
 
-    // ToString_OTHER() should be good enough for PolarizationSequenceType
+    const TSixEnum OTHER_xyz("OTHER_xyz"); // SICD 1.3 "OTHER.*" 
+    TEST_ASSERT_EQ(OTHER_xyz, TSixEnum::OTHER);
+    //TEST_ASSERT_NOT_EQ(OTHER_xyz, OTHER_abc);
+}
+TEST_CASE(ToType_OTHER)
+{
+    test_toType_OTHER<six::PolarizationType>("ToType_OTHER");
+    test_toType_OTHER<six::PolarizationSequenceType>("ToType_OTHER");
 }
 TEST_CASE(DualPolarizationType_ToType_OTHER)
 {
-    const six::DualPolarizationType not_set;
-    TEST_ASSERT_EQ(not_set, six::DualPolarizationType::NOT_SET);
+    test_toType_OTHER<six::DualPolarizationType>("DualPolarizationType_ToType_OTHER");
 
-    auto toTypeDual = six::DualPolarizationType::toType("OTHER");
-    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER);
-    toTypeDual = six::DualPolarizationType::toType("OTHER_xyz"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER);
-    toTypeDual = six::DualPolarizationType::toType("V:OTHER");
+    auto toTypeDual = six::DualPolarizationType::toType("V:OTHER");
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
     toTypeDual = six::DualPolarizationType::toType("V_OTHER");
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
@@ -408,6 +415,17 @@ static void test_EqInt(const std::string& testName, int unknownEnumValue)
 }
 TEST_CASE(EqInt)
 {
+    test_EqInt_<six::PolarizationType>("EqInt", "V", six::PolarizationType::V, 2);
+    test_EqInt_<six::PolarizationType>("EqInt", "X", six::PolarizationType::X, 7); // SICD 1.3
+    test_EqInt<six::PolarizationType>("EqInt", 6 /*unknownEnumValue*/);
+
+    test_EqInt_<six::PolarizationSequenceType>("EqInt", "V", six::PolarizationSequenceType::V, 2);
+    test_EqInt_<six::PolarizationSequenceType>("EqInt", "X", six::PolarizationSequenceType::X, 8); // SICD 1.3
+    test_EqInt_<six::PolarizationSequenceType>("EqInt", "SEQUENCE", six::PolarizationSequenceType::SEQUENCE, 7);
+    test_EqInt<six::PolarizationSequenceType>("EqInt", 6 /*unknownEnumValue*/);
+}
+TEST_CASE(DualPolarizationType_EqInt)
+{
     test_EqInt_<six::DualPolarizationType>("EqInt", "V_V", six::DualPolarizationType::V_V, 2);
     test_EqInt_<six::DualPolarizationType>("EqInt", "E_V", six::DualPolarizationType::E_V, 56); // SICD 1.3
     test_EqInt_<six::DualPolarizationType>("EqInt", "OTHER_V", six::DualPolarizationType::OTHER_V, 75);
@@ -417,15 +435,6 @@ TEST_CASE(EqInt)
     test_EqInt_<six::DualPolarizationType>("EqInt", "OTHER:OTHER", six::DualPolarizationType::OTHER_OTHER, 83);
     //test_EqInt_<six::DualPolarizationType>("EqInt", "OTHER_abc:OTHER_xyz", six::DualPolarizationType::OTHER_OTHER, 83); // SIDD 3.0/SICD 1.3
     test_EqInt<six::DualPolarizationType>("EqInt", 18 /*unknownEnumValue*/);
-
-    test_EqInt_<six::PolarizationType>("EqInt", "V", six::PolarizationType::V, 2);
-    test_EqInt_<six::PolarizationType>("EqInt", "X", six::PolarizationType::X, 7); // SICD 1.3
-    test_EqInt<six::PolarizationType>("EqInt", 6 /*unknownEnumValue*/);
-
-    test_EqInt_<six::PolarizationSequenceType>("EqInt", "V", six::PolarizationSequenceType::V, 2);
-    test_EqInt_<six::PolarizationSequenceType>("EqInt", "X", six::PolarizationSequenceType::X, 8); // SICD 1.3
-    test_EqInt_<six::PolarizationSequenceType>("EqInt", "SEQUENCE", six::PolarizationSequenceType::SEQUENCE, 7);
-    test_EqInt<six::PolarizationSequenceType>("EqInt", 6 /*unknownEnumValue*/);
 }
 
 TEST_CASE(DualPolarization)
@@ -478,5 +487,6 @@ TEST_MAIN(
     TEST_CHECK(SixToString);
     TEST_CHECK(NotSet);
     TEST_CHECK(EqInt);
+    TEST_CHECK(DualPolarizationType_EqInt);
     TEST_CHECK(DualPolarization);
     )
