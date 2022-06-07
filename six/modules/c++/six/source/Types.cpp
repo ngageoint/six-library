@@ -166,7 +166,7 @@ bool eq_imp(const T& e, const std::string& o, TFunc default_eq)
     return default_eq();
 }
 
-PolarizationType PolarizationType::toType_imp_(const std::string& v)
+PolarizationType PolarizationType::toType(const std::string& v)
 {
     // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
     return toType_imp<PolarizationType>(v, [&](PolarizationType& t) { t.other_ = v; }, [&]() { return default_toType_(v); });
@@ -180,7 +180,7 @@ bool PolarizationType::eq_imp_(const Enum<PolarizationType>& e, const std::strin
     return eq_imp(e, o, [&]() { return default_eq_(e, o); });
 }
 
-PolarizationSequenceType PolarizationSequenceType::toType_imp_(const std::string& v)
+PolarizationSequenceType PolarizationSequenceType::toType(const std::string& v)
 {
     // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
     return toType_imp<PolarizationSequenceType>(v, [&](PolarizationSequenceType& t) { t.other_ = v; }, [&]() { return default_toType_(v); });
@@ -194,7 +194,7 @@ bool PolarizationSequenceType::eq_imp_(const Enum<PolarizationSequenceType>& e, 
     return eq_imp(e, o, [&]() { return default_eq_(e, o); });
 }
 
-DualPolarizationType DualPolarizationType::toType_imp_(const std::string& v)
+DualPolarizationType DualPolarizationType::toType(const std::string& v)
 {
     const auto splits = str::split(v, ":");
     if (splits.size() != 2)
