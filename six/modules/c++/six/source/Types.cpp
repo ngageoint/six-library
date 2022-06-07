@@ -169,11 +169,11 @@ bool eq_imp(const T& e, const std::string& o, TFunc default_eq)
 PolarizationType PolarizationType::toType(const std::string& v)
 {
     // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
-    return toType_imp<PolarizationType>(v, [&](PolarizationType& t) { t.other_ = v; }, [&]() { return default_toType_(v); });
+    return toType_imp<PolarizationType>(v, [&](PolarizationType& t) { t.other_ = v; }, [&]() { return default_toType(v); });
 }
 std::string PolarizationType::toString_(bool throw_if_not_set) const
 {
-    return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
+    return toString_imp(other_, [&]() { return default_toString(throw_if_not_set); });
 }
 bool PolarizationType::eq_(const Enum<PolarizationType>& e, const std::string& o)
 {
@@ -183,11 +183,11 @@ bool PolarizationType::eq_(const Enum<PolarizationType>& e, const std::string& o
 PolarizationSequenceType PolarizationSequenceType::toType(const std::string& v)
 {
     // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
-    return toType_imp<PolarizationSequenceType>(v, [&](PolarizationSequenceType& t) { t.other_ = v; }, [&]() { return default_toType_(v); });
+    return toType_imp<PolarizationSequenceType>(v, [&](PolarizationSequenceType& t) { t.other_ = v; }, [&]() { return default_toType(v); });
 }
 std::string PolarizationSequenceType::toString_(bool throw_if_not_set) const
 {
-    return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
+    return toString_imp(other_, [&]() { return default_toString(throw_if_not_set); });
 }
 bool PolarizationSequenceType::eq_(const Enum<PolarizationSequenceType>& e, const std::string& o)
 {
@@ -202,14 +202,14 @@ DualPolarizationType DualPolarizationType::toType(const std::string& v)
         // It's not possible to determine whether a string like "OTHER_V" should be DualPolarizationType::OTHER (OTHER.*)
         // or DualPolarizationType::OTHER_V; try the "old way" (pre SIDD 3.0/SICD 1.3) first.  Note this is really only a 
         // problem for the default enums, in the XML ":" instead of "_" is the seperator.
-        auto result = default_toType_(v, std::nothrow);
+        auto result = default_toType(v, std::nothrow);
         if (result.has_value())
         {
             return *result;
         }
 
         // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
-        return toType_imp<DualPolarizationType>(v, [&](DualPolarizationType& t) { t.other_ = v; }, [&]() { return default_toType_(v); });
+        return toType_imp<DualPolarizationType>(v, [&](DualPolarizationType& t) { t.other_ = v; }, [&]() { return default_toType(v); });
     }
 
     // Handle OTHER.* for  SIDD 3.0/SICD 1.3
@@ -220,7 +220,7 @@ DualPolarizationType DualPolarizationType::toType(const std::string& v)
     auto right = PolarizationType::toType(splits[1]);
     const auto strRight = right == PolarizationType::OTHER ? other.toString() : right.toString();
     const auto str = strLeft + "_" + strRight; // can't do "A:B" in C++, so the enum/string is A_B
-    auto retval = DualPolarizationType::default_toType_(str);
+    auto retval = DualPolarizationType::default_toType(str);
     retval.left_ = std::move(left);
     retval.right_ = std::move(right);
     return retval;
@@ -243,12 +243,12 @@ std::string DualPolarizationType::toString_(bool throw_if_not_set) const
 
     if (other_.empty() || is_OTHER_(other_))  // Handle OTHER.* for  SIDD 3.0/SICD 1.3
     {
-        return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
+        return toString_imp(other_, [&]() { return default_toString(throw_if_not_set); });
     }
 
     if ((left_ == PolarizationType::NOT_SET) && (right_ == PolarizationType::NOT_SET))
     {
-        default_toString_(throw_if_not_set);
+        default_toString(throw_if_not_set);
     }
 
     throw except::InvalidFormatException(Ctxt("Invalid enum value: " + other_));
