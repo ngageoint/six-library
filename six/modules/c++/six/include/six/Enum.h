@@ -23,6 +23,8 @@
 #define SIX_SIX_Enum_h_INCLUDED_
 #pragma once
 
+#include <assert.h>
+
 #include <string>
 #include <map>
 #include <ostream>
@@ -79,6 +81,19 @@ namespace details
             return default_toString(throw_if_not_set);
         }
 
+        static std::optional<T> default_toType(const std::string& v, const except::Exception* pEx)
+        {
+            std::string type(v);
+            str::trim(type);
+            auto&& map = string_to_int();
+            if (pEx == nullptr)
+            {
+                const auto it = map.find(type);
+                return it == map.end() ? std::optional<T>() : std::optional<T>(it->second);
+            }
+            return std::optional<T>(nitf::details::index(map, type, *pEx));
+        }
+
     protected:
         Enum() = default;
         Enum(const Enum&) = default;
@@ -103,18 +118,14 @@ namespace details
 
         static std::optional<T> default_toType(const std::string& v, std::nothrow_t)
         {
-            std::string type(v);
-            str::trim(type);
-            auto&& map = string_to_int();
-            const auto it = map.find(type);
-            return it == map.end() ? std::optional<T>() : std::optional<T>(it->second);
+            return default_toType(v, nullptr /*pEx*/);
         }
         static T default_toType(const std::string& v)
         {
-            std::string type(v);
-            str::trim(type);
             const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-            return nitf::details::index(string_to_int(), type, ex);
+            const auto result = default_toType(v, &ex);
+            assert(result.has_value()); // nitf::details::index() should have already thrown, if necessary
+            return *result; 
         }
 
         std::string default_toString(bool throw_if_not_set) const
@@ -143,6 +154,10 @@ namespace details
         static T toType(const std::string& v)
         {
             return default_toType(v);
+        }
+        static std::optional<T> toType(const std::string& v, std::nothrow_t)
+        {
+            return default_toType(v, std::nothrow_t);
         }
 
         operator int() const { return value; }

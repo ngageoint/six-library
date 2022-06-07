@@ -22,6 +22,7 @@
 
 #include <functional>
 #include <std/optional>
+#include <stdexcept>
 #include "six/Init.h"
 #include "six/Types.h"
 #include <nitf/ImageSegmentComputer.h>
@@ -225,6 +226,19 @@ DualPolarizationType DualPolarizationType::toType(const std::string& v)
     retval.right_ = std::move(right);
     return retval;
 }
+std::optional<DualPolarizationType> DualPolarizationType::toType(const std::string& v, std::nothrow_t)
+{
+    try
+    {
+        return std::optional<DualPolarizationType>(toType(v));
+    }
+    catch (const except::Exception&)
+    {
+        return std::optional<DualPolarizationType>();
+    }
+    throw std::logic_error("toType() failed.");
+}
+
 std::string DualPolarizationType::toString_(bool throw_if_not_set) const
 {
     if ((left_ != PolarizationType::NOT_SET) && (right_ != PolarizationType::NOT_SET))
@@ -271,20 +285,7 @@ bool DualPolarizationType::eq_(const Enum<DualPolarizationType>& e, const std::s
     }
 
     // "o" could be complete nonsense, calling toType() will throw.
-    std::optional<DualPolarizationType> o_type;
-    try
-    {
-        o_type = DualPolarizationType::toType(o);
-    }
-    catch (const except::Exception& ex)
-    {
-        const auto msg = "Unknown type '" + o + "'";
-        if (ex.getMessage() != msg)
-        {
-            // not the exception we were expecting
-            throw; // TODO: add toType(o, std::nothrow)
-        }
-    }
+    const auto o_type = DualPolarizationType::toType(o, std::nothrow);
     if (o_type.has_value())
     {
         // Be sure we don't end up back here; existing code uses toString()
