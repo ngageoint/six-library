@@ -109,7 +109,7 @@ TEST_CASE(ToType_OTHER)
     fromToType = six::PolarizationType::toType("OTHER_abc");
     TEST_ASSERT_EQ(fromToType, six::PolarizationType::OTHER);
 
-    TEST_EXCEPTION(six::PolarizationType::toType("OTHER:abc")); // explicitly call _imp_()
+    TEST_EXCEPTION(six::PolarizationType::toType("OTHER:abc"));
 
     fromToType = six::PolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
     TEST_ASSERT_EQ(fromToType, six::PolarizationType::OTHER);
@@ -148,8 +148,11 @@ TEST_CASE(DualPolarizationType_ToType_OTHER)
     toTypeDual = six::DualPolarizationType::toType("OTHER_abc:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
 
+    toTypeDual = six::DualPolarizationType::toType("OTHER_abc_OTHER"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER);
+
     TEST_EXCEPTION(six::DualPolarizationType::toType("V_OTHER_xyz"));
-    TEST_EXCEPTION(six::DualPolarizationType::toType("OTHER_abc_OTHER"));
+    TEST_EXCEPTION(six::DualPolarizationType::toType("abc_OTHER_abc_OTHER"));
 }
 
 template<typename TSixEnum>

@@ -110,8 +110,8 @@ namespace details
         //! string constructor
         Enum(const std::string& s)
         {
-            // Go though toType() to account for OTHER.* in SIDD 3.0/SICD 1.3
-            *this = std::move(toType(s));
+            // Go though T::toType() to account for OTHER.* in SIDD 3.0/SICD 1.3
+            *this = std::move(T::toType(s));
         }
 
         //! int constructor
