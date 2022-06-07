@@ -175,9 +175,9 @@ std::string PolarizationType::toString_(bool throw_if_not_set) const
 {
     return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
 }
-bool PolarizationType::eq_imp_(const Enum<PolarizationType>& e, const std::string& o)
+bool PolarizationType::eq_(const Enum<PolarizationType>& e, const std::string& o)
 {
-    return eq_imp(e, o, [&]() { return default_eq_(e, o); });
+    return eq_imp(e, o, [&]() { return default_eq(e, o); });
 }
 
 PolarizationSequenceType PolarizationSequenceType::toType(const std::string& v)
@@ -189,9 +189,9 @@ std::string PolarizationSequenceType::toString_(bool throw_if_not_set) const
 {
     return toString_imp(other_, [&]() { return default_toString_(throw_if_not_set); });
 }
-bool PolarizationSequenceType::eq_imp_(const Enum<PolarizationSequenceType>& e, const std::string& o)
+bool PolarizationSequenceType::eq_(const Enum<PolarizationSequenceType>& e, const std::string& o)
 {
-    return eq_imp(e, o, [&]() { return default_eq_(e, o); });
+    return eq_imp(e, o, [&]() { return default_eq(e, o); });
 }
 
 DualPolarizationType DualPolarizationType::toType(const std::string& v)
@@ -253,7 +253,7 @@ std::string DualPolarizationType::toString_(bool throw_if_not_set) const
 
     throw except::InvalidFormatException(Ctxt("Invalid enum value: " + other_));
 }
-bool DualPolarizationType::eq_imp_(const Enum<DualPolarizationType>& e, const std::string& o)
+bool DualPolarizationType::eq_(const Enum<DualPolarizationType>& e, const std::string& o)
 {
     static const auto strOther = DualPolarizationType(DualPolarizationType::OTHER).toString();
 
@@ -295,7 +295,7 @@ bool DualPolarizationType::eq_imp_(const Enum<DualPolarizationType>& e, const st
     const auto splits_o = str::split(o, ":");
     if ((splits_e.size() != 2) && (splits_o.size() != 2)) // no ":"s to be found
     {
-        return eq_imp(e, o, [&]() { return default_eq_(e, o); });
+        return eq_imp(e, o, [&]() { return default_eq(e, o); });
     }
 
     if (splits_o.size() == 2)
@@ -303,7 +303,7 @@ bool DualPolarizationType::eq_imp_(const Enum<DualPolarizationType>& e, const st
         return DualPolarizationType::toType(o) == e;
     }
 
-    return eq_imp(e, o, [&]() { return default_eq_(e, o); });
+    return eq_imp(e, o, [&]() { return default_eq(e, o); });
 }
 
 }
