@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2022, Maxar Technologies, Inc.
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +20,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef SIX_SIX_Enum_h_INCLUDED_
-#define SIX_SIX_Enum_h_INCLUDED_
+#ifndef SIX_six_Enum_h_INCLUDED_
+#define SIX_six_Enum_h_INCLUDED_
 #pragma once
 
 #include <assert.h>
@@ -46,9 +47,14 @@ constexpr int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
 namespace details
 {
-    // Base type for all enums; avoids code duplication
+    struct EnumBase
+    {
+        int value = NOT_SET_VALUE;
+        operator int() const { return value; }
+    };
+
     template<typename T>
-    class Enum
+    class EnumDetails final
     {
         static const std::map<std::string, int>& string_to_int()
         {
@@ -59,6 +65,8 @@ namespace details
             static const auto retval = nitf::details::swap_key_value(string_to_int());
             return retval;
         }
+    public:
+        static size_t size() { return int_to_string().size(); }
 
         static int index(const std::string& v)
         {
@@ -69,20 +77,6 @@ namespace details
         {
             const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
             return nitf::details::index(int_to_string(), v, ex);
-        }
-        
-        static bool eq_(const Enum& e, const std::string& o)
-        {
-            return default_eq(e, o);
-        }
-        static bool lt_(const Enum& lhs, const Enum& rhs)
-        {
-            return default_lt(lhs, rhs);
-        }
-
-        virtual std::string toString_(bool throw_if_not_set) const
-        {
-            return default_toString(throw_if_not_set);
         }
 
         static std::optional<T> default_toType(const std::string& v, const except::Exception* pEx)
@@ -96,6 +90,36 @@ namespace details
                 return it == map.end() ? std::optional<T>() : std::optional<T>(it->second);
             }
             return std::optional<T>(nitf::details::index(map, type, *pEx));
+        }
+        static std::optional<T> default_toType(const std::string& v, std::nothrow_t)
+        {
+            return default_toType(v, nullptr /*pEx*/);
+        }
+        static T default_toType(const std::string& v)
+        {
+            const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
+            const auto result = default_toType(v, &ex);
+            assert(result.has_value()); // nitf::details::index() should have already thrown, if necessary
+            return *result;
+        }
+    };
+
+    // Base type for all enums; avoids code duplication
+    template<typename T>
+    class Enum : public EnumBase
+    {
+        static bool eq_(const Enum& e, const std::string& o)
+        {
+            return default_eq(e, o);
+        }
+        static bool lt_(const Enum& lhs, const Enum& rhs)
+        {
+            return default_lt(lhs, rhs);
+        }
+
+        virtual std::string toString_(bool throw_if_not_set) const
+        {
+            return default_toString(throw_if_not_set);
         }
 
     protected:
@@ -116,20 +140,17 @@ namespace details
         //! int constructor
         Enum(int i)
         {
-            (void) index(i);
+            (void)EnumDetails<T>::index(i);
             value = i;
         }
 
         static std::optional<T> default_toType(const std::string& v, std::nothrow_t)
         {
-            return default_toType(v, nullptr /*pEx*/);
+            return EnumDetails<T>::default_toType(v, std::nothrow);
         }
         static T default_toType(const std::string& v)
         {
-            const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-            const auto result = default_toType(v, &ex);
-            assert(result.has_value()); // nitf::details::index() should have already thrown, if necessary
-            return *result; 
+            return EnumDetails<T>::default_toType(v);
         }
 
         std::string default_toString(bool throw_if_not_set) const
@@ -138,7 +159,7 @@ namespace details
             {
                 throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
             }
-            return index(value);
+            return EnumDetails<T>::index(value);
         }
 
         static bool default_eq(const Enum& e, const std::string& o)
@@ -168,9 +189,8 @@ namespace details
             return default_toType(v, std::nothrow);
         }
 
-        operator int() const { return value; }
         operator std::string() const { return toString(); }
-        static size_t size() { return int_to_string().size(); }
+        static size_t size() { return EnumDetails<T>::size(); }
 
         // needed for SWIG
         bool operator<(const int& o) const { return value < o; }
@@ -188,8 +208,6 @@ namespace details
 
         bool eq(const std::string& o) const { return T::eq_(*this, o); }
         bool lt(const Enum& o) const { return T::lt_(*this, o); }
-
-        int value = NOT_SET_VALUE;
     };
     template<typename T>
     inline std::ostream& operator<<(std::ostream& os, const Enum<T>& e)
@@ -241,4 +259,4 @@ namespace details
         n1 = v1, n2 = v2, n3 = v3, n4 = v4, n5 = v5, SIX_Enum_ENUM_(SIX_Enum_map_entry_5_(n1, n2, n3, n4, n5))
 } // namespace details
 }
-#endif // SIX_SIX_Enum_h_INCLUDED_
+#endif // SIX_six_Enum_h_INCLUDED_
