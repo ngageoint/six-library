@@ -75,6 +75,10 @@ namespace details
         {
             return default_eq(e, o);
         }
+        static bool lt_(const Enum& lhs, const Enum& rhs)
+        {
+            return default_lt(lhs, rhs);
+        }
 
         virtual std::string toString_(bool throw_if_not_set) const
         {
@@ -141,6 +145,10 @@ namespace details
         {
             return e.toString() == o;
         }
+        static bool default_lt(const Enum& lhs, const Enum& rhs)
+        {
+            return lhs.value < rhs.value;
+        }
 
     public:
         using enum_t = T;
@@ -157,7 +165,7 @@ namespace details
         }
         static std::optional<T> toType(const std::string& v, std::nothrow_t)
         {
-            return default_toType(v, std::nothrow_t);
+            return default_toType(v, std::nothrow);
         }
 
         operator int() const { return value; }
@@ -165,20 +173,21 @@ namespace details
         static size_t size() { return int_to_string().size(); }
 
         // needed for SWIG
+        bool operator<(const int& o) const { return value < o; }
+        bool operator<(const Enum& o) const { return lt(o); }
+        bool operator>=(const int& o) const { return value >= o; }
+        bool operator>=(const Enum& o) const { return !(*this < o); }
         bool operator==(const int& o) const { return value == o; }
-        bool operator==(const Enum& o) const { return *this == o.value; }
+        bool operator==(const Enum& o) const { return !(*this < o) && !(o < *this); }
         bool operator!=(const int& o) const { return value != o; }
         bool operator!=(const Enum& o) const { return !(*this == o); }
-        bool operator<(const int& o) const { return value < o; }
-        bool operator<(const Enum& o) const { return *this < o.value; }
         bool operator<=(const int& o) const { return value <= o; }
-        bool operator<=(const Enum& o) const { return *this <= o.value; }
+        bool operator<=(const Enum& o) const { return (*this < o) || (*this == o); }
         bool operator>(const int& o) const { return value > o; }
-        bool operator>(const Enum& o) const { return *this > o.value; }
-        bool operator>=(const int& o) const { return value >= o; }
-        bool operator>=(const Enum& o) const { return *this >= o.value; }
-        
+        bool operator>(const Enum& o) const { return !(*this <= o); }
+
         bool eq(const std::string& o) const { return T::eq_(*this, o); }
+        bool lt(const Enum& o) const { return T::lt_(*this, o); }
 
         int value = NOT_SET_VALUE;
     };

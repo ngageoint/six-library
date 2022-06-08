@@ -236,7 +236,6 @@ std::optional<DualPolarizationType> DualPolarizationType::toType(const std::stri
     {
         return std::optional<DualPolarizationType>();
     }
-    throw std::logic_error("toType() failed.");
 }
 
 std::string DualPolarizationType::toString_(bool throw_if_not_set) const
