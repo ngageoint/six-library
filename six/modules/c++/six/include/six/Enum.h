@@ -75,7 +75,11 @@ namespace details
         EnumBase& operator=(EnumBase&&) = default;
         /*virtual*/ ~EnumBase() = default; // don't want "delete pEnumBase"
 
-        virtual std::string toString_(bool throw_if_not_set) const = 0;
+        virtual std::string default_toString(bool throw_if_not_set) const = 0;
+        virtual std::string toString_(bool throw_if_not_set) const
+        {
+            return default_toString(throw_if_not_set);
+        }
 
         bool default_less(const EnumBase& rhs) const
         {
@@ -179,7 +183,7 @@ namespace details
     template<typename T>
     class Enum : public EnumBase
     {
-        virtual std::string toString_(bool throw_if_not_set) const override
+        std::string default_toString(bool throw_if_not_set) const override
         {
             return details().default_toString(value, throw_if_not_set);
         }
@@ -238,8 +242,8 @@ namespace details
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     /*
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::EnumBase { \
-        virtual std::string toString_(bool throw_if_not_set) const override { return details().default_toString(value, throw_if_not_set); } \
-        protected: static const EnumDetails<name>& details() { static const EnumDetails<name> details_; return details_;  } \
+        std::string default_toString(bool throw_if_not_set) const override { return details().default_toString(value, throw_if_not_set); } \
+        protected: static const six::details::EnumDetails<name>& details() { static const six::details::EnumDetails<name> details_; return details_;  } \
         public: using enum_t = name; \
         static name toType(const std::string& v) { return details().default_toType(v); } \
         static std::optional<name> toType(const std::string& v, std::nothrow_t) { return details().default_toType(v, std::nothrow); } \
@@ -254,8 +258,7 @@ namespace details
         bool operator<=(const int& o) const { return value <= o; } \
         bool operator<=(const name& o) const { return (*this < o) || (*this == o); } \
         bool operator>(const int& o) const { return value > o; } \
-        bool operator>(const name& o) const { return !(*this <= o); } \
-        };
+        bool operator>(const name& o) const { return !(*this <= o); }
      */
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
     #define SIX_Enum_BEGIN_string_to_int static const std::map<std::string, int>& string_to_int_() { static const std::map<std::string, int> retval {
