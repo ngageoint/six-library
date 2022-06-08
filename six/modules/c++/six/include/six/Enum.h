@@ -77,24 +77,33 @@ namespace details
 
         virtual std::string toString_(bool throw_if_not_set) const = 0;
 
-        virtual bool less_(const EnumBase& rhs) const
+        bool default_less(const EnumBase& rhs) const
         {
             return value < rhs.value;
         }
-        virtual bool equals_(const std::string& rhs) const // equals(), not less(); order based on ints, not strings
+        virtual bool less_(const EnumBase& rhs) const
+        {
+            return default_less(rhs);
+        }
+
+        bool default_equals(const std::string& rhs) const
         {
             return toString() == rhs;
+        }
+        virtual bool equals_(const std::string& rhs) const // equals(), not less(); order based on ints, not strings
+        {
+            return default_equals(rhs);
         }
     };
     inline bool operator<(const EnumBase& lhs, const EnumBase& rhs)
     {
         return lhs.less(rhs);
     }
-    inline bool operator==(const EnumBase& lhs, const std::string& rhs)
+    inline bool operator==(const EnumBase& lhs, const std::string& rhs) // for unittests, not SWIG
     {
         return lhs.equals(rhs);
     }
-    inline bool operator!=(const EnumBase& lhs, const std::string& rhs)
+    inline bool operator!=(const EnumBase& lhs, const std::string& rhs) // for unittests, not SWIG
     {
         return !(lhs == rhs);
     }
@@ -176,15 +185,6 @@ namespace details
             return details_;
         }
 
-        static bool eq_(const Enum& e, const std::string& o)
-        {
-            return default_eq(e, o);
-        }
-        static bool lt_(const Enum& lhs, const Enum& rhs)
-        {
-            return default_lt(lhs, rhs);
-        }
-
         virtual std::string toString_(bool throw_if_not_set) const override
         {
             return default_toString(throw_if_not_set);
@@ -226,15 +226,6 @@ namespace details
             return details().default_toString(value, throw_if_not_set);
         }
 
-        static bool default_eq(const Enum& e, const std::string& o)
-        {
-            return e.toString() == o;
-        }
-        static bool default_lt(const Enum& lhs, const Enum& rhs)
-        {
-            return lhs.less(rhs);
-        }
-
     public:
         using enum_t = T;
 
@@ -251,7 +242,7 @@ namespace details
 
         // needed for SWIG
         bool operator<(const int& o) const { return value < o; }
-        bool operator<(const Enum& o) const { return lt(o); }
+        bool operator<(const Enum& o) const { return less(o); }
         bool operator>=(const int& o) const { return value >= o; }
         bool operator>=(const Enum& o) const { return !(*this < o); }
         bool operator==(const int& o) const { return value == o; }
@@ -262,12 +253,9 @@ namespace details
         bool operator<=(const Enum& o) const { return (*this < o) || (*this == o); }
         bool operator>(const int& o) const { return value > o; }
         bool operator>(const Enum& o) const { return !(*this <= o); }
-
-        bool eq(const std::string& o) const { return T::eq_(*this, o); }
-        bool lt(const Enum& o) const { return T::lt_(*this, o); }
     };
     template<typename T>
-    inline bool operator==(const Enum<T>& e, const std::string& o) { return e.eq(o); } // for unittests, not SWIG
+    inline bool operator==(const Enum<T>& e, const std::string& o) { return e.equals(o); } // for unittests, not SWIG
     template<typename T>
     inline bool operator!=(const Enum<T>& e, const std::string& o) { return !(e == o); } // for unittests, not SWIG
 
