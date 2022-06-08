@@ -24,6 +24,7 @@
 #pragma once
 
 #include "Enum.h"
+#include "SIEnum.h"
 
 namespace six
 {
