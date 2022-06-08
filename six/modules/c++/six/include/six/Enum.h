@@ -56,30 +56,17 @@ namespace details
     template<typename T>
     class EnumDetails final
     {
-        static const std::map<std::string, int>& string_to_int()
+        const std::map<std::string, int>& string_to_int() const
         {
             return T::string_to_int_();
         }
-        static const std::map<int, std::string>& int_to_string()
+        const std::map<int, std::string>& int_to_string() const
         {
             static const auto retval = nitf::details::swap_key_value(string_to_int());
             return retval;
         }
-    public:
-        static size_t size() { return int_to_string().size(); }
 
-        static int index(const std::string& v)
-        {
-            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
-            return nitf::details::index(string_to_int(), v, ex);
-        }
-        static std::string index(int v)
-        {
-            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
-            return nitf::details::index(int_to_string(), v, ex);
-        }
-
-        static std::optional<T> default_toType(const std::string& v, const except::Exception* pEx)
+        std::optional<T> default_toType(const std::string& v, const except::Exception* pEx) const
         {
             std::string type(v);
             str::trim(type);
@@ -91,11 +78,26 @@ namespace details
             }
             return std::optional<T>(nitf::details::index(map, type, *pEx));
         }
-        static std::optional<T> default_toType(const std::string& v, std::nothrow_t)
+
+    public:
+        //size_t size() const { return int_to_string().size(); }
+
+        int index(const std::string& v) const
+        {
+            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
+            return nitf::details::index(string_to_int(), v, ex);
+        }
+        std::string index(int v) const
+        {
+            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
+            return nitf::details::index(int_to_string(), v, ex);
+        }
+
+        std::optional<T> default_toType(const std::string& v, std::nothrow_t) const
         {
             return default_toType(v, nullptr /*pEx*/);
         }
-        static T default_toType(const std::string& v)
+        T default_toType(const std::string& v) const
         {
             const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
             const auto result = default_toType(v, &ex);
@@ -108,6 +110,12 @@ namespace details
     template<typename T>
     class Enum : public EnumBase
     {
+        static const EnumDetails<T>& details()
+        {
+            static const EnumDetails<T> details_;
+            return details_;
+        }
+
         static bool eq_(const Enum& e, const std::string& o)
         {
             return default_eq(e, o);
@@ -140,17 +148,17 @@ namespace details
         //! int constructor
         Enum(int i)
         {
-            (void)EnumDetails<T>::index(i);
+            (void)details().index(i);
             value = i;
         }
 
         static std::optional<T> default_toType(const std::string& v, std::nothrow_t)
         {
-            return EnumDetails<T>::default_toType(v, std::nothrow);
+            return details().default_toType(v, std::nothrow);
         }
         static T default_toType(const std::string& v)
         {
-            return EnumDetails<T>::default_toType(v);
+            return details().default_toType(v);
         }
 
         std::string default_toString(bool throw_if_not_set) const
@@ -159,7 +167,7 @@ namespace details
             {
                 throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
             }
-            return EnumDetails<T>::index(value);
+            return details().index(value);
         }
 
         static bool default_eq(const Enum& e, const std::string& o)
@@ -190,7 +198,7 @@ namespace details
         }
 
         operator std::string() const { return toString(); }
-        static size_t size() { return EnumDetails<T>::size(); }
+        //static size_t size() { return details_.size(); }
 
         // needed for SWIG
         bool operator<(const int& o) const { return value < o; }
