@@ -51,7 +51,58 @@ namespace details
     {
         int value = NOT_SET_VALUE;
         operator int() const { return value; }
+        bool less(const EnumBase& rhs) const
+        {
+            return less_(rhs);
+        }
+
+        //! Returns string representation of the value
+        std::string toString(bool throw_if_not_set = false) const
+        {
+            return toString_(throw_if_not_set);
+        }
+        operator std::string() const { return toString(); }
+        bool equals(const std::string& rhs) const // equals(), not less(); order based on ints, not strings
+        {
+            return equals_(rhs);
+        }
+
+    protected:
+        EnumBase() = default;
+        EnumBase(const EnumBase&) = default;
+        EnumBase(EnumBase&&) = default;
+        EnumBase& operator=(const EnumBase&) = default;
+        EnumBase& operator=(EnumBase&&) = default;
+        virtual ~EnumBase() = default;
+
+        virtual std::string toString_(bool throw_if_not_set) const = 0;
+
+        virtual bool less_(const EnumBase& rhs) const
+        {
+            return value < rhs.value;
+        }
+        virtual bool equals_(const std::string& rhs) const // equals(), not less(); order based on ints, not strings
+        {
+            return toString() == rhs;
+        }
     };
+    inline bool operator<(const EnumBase& lhs, const EnumBase& rhs)
+    {
+        return lhs.less(rhs);
+    }
+    inline bool operator==(const EnumBase& lhs, const std::string& rhs)
+    {
+        return lhs.equals(rhs);
+    }
+    inline bool operator!=(const EnumBase& lhs, const std::string& rhs)
+    {
+        return !(lhs == rhs);
+    }
+    inline std::ostream& operator<<(std::ostream& os, const EnumBase& e)
+    {
+        os << e.toString();
+        return os;
+    }
 
     template<typename T>
     class EnumDetails final
@@ -104,6 +155,15 @@ namespace details
             assert(result.has_value()); // nitf::details::index() should have already thrown, if necessary
             return *result;
         }
+
+        std::string default_toString(int value, bool throw_if_not_set) const
+        {
+            if (throw_if_not_set && (value == NOT_SET_VALUE))
+            {
+                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+            }
+            return index(value);
+        }
     };
 
     // Base type for all enums; avoids code duplication
@@ -125,7 +185,7 @@ namespace details
             return default_lt(lhs, rhs);
         }
 
-        virtual std::string toString_(bool throw_if_not_set) const
+        virtual std::string toString_(bool throw_if_not_set) const override
         {
             return default_toString(throw_if_not_set);
         }
@@ -163,11 +223,7 @@ namespace details
 
         std::string default_toString(bool throw_if_not_set) const
         {
-            if (throw_if_not_set && (value == NOT_SET_VALUE))
-            {
-                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-            }
-            return details().index(value);
+            return details().default_toString(value, throw_if_not_set);
         }
 
         static bool default_eq(const Enum& e, const std::string& o)
@@ -176,17 +232,11 @@ namespace details
         }
         static bool default_lt(const Enum& lhs, const Enum& rhs)
         {
-            return lhs.value < rhs.value;
+            return lhs.less(rhs);
         }
 
     public:
         using enum_t = T;
-
-        //! Returns string representation of the value
-        std::string toString(bool throw_if_not_set = false) const
-        {
-            return toString_(throw_if_not_set);
-        }
 
         static T toType(const std::string& v)
         {
@@ -197,7 +247,6 @@ namespace details
             return default_toType(v, std::nothrow);
         }
 
-        operator std::string() const { return toString(); }
         //static size_t size() { return details_.size(); }
 
         // needed for SWIG
@@ -217,12 +266,6 @@ namespace details
         bool eq(const std::string& o) const { return T::eq_(*this, o); }
         bool lt(const Enum& o) const { return T::lt_(*this, o); }
     };
-    template<typename T>
-    inline std::ostream& operator<<(std::ostream& os, const Enum<T>& e)
-    {
-        os << e.toString();
-        return os;
-    }
     template<typename T>
     inline bool operator==(const Enum<T>& e, const std::string& o) { return e.eq(o); } // for unittests, not SWIG
     template<typename T>
