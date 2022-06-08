@@ -198,26 +198,17 @@ namespace details
             value = i;
         }
 
-        static std::optional<T> default_toType(const std::string& v, std::nothrow_t)
-        {
-            return details().default_toType(v, std::nothrow);
-        }
-        static T default_toType(const std::string& v)
-        {
-            return details().default_toType(v);
-        }
-
     public:
         using enum_t = T;
         virtual ~Enum() = default;
 
         static T toType(const std::string& v)
         {
-            return default_toType(v);
+            return details().default_toType(v);
         }
         static std::optional<T> toType(const std::string& v, std::nothrow_t)
         {
-            return default_toType(v, std::nothrow);
+            return details().default_toType(v, std::nothrow);
         }
 
         //static size_t size() { return details_.size(); }
