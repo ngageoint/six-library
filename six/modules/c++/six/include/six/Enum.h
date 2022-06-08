@@ -73,7 +73,7 @@ namespace details
         EnumBase(EnumBase&&) = default;
         EnumBase& operator=(const EnumBase&) = default;
         EnumBase& operator=(EnumBase&&) = default;
-        virtual ~EnumBase() = default;
+        /*virtual*/ ~EnumBase() = default; // don't want "delete pEnumBase"
 
         virtual std::string toString_(bool throw_if_not_set) const = 0;
 
@@ -179,36 +179,22 @@ namespace details
     template<typename T>
     class Enum : public EnumBase
     {
+        virtual std::string toString_(bool throw_if_not_set) const override
+        {
+            return details().default_toString(value, throw_if_not_set);
+        }
+
+    protected:
         static const EnumDetails<T>& details()
         {
             static const EnumDetails<T> details_;
             return details_;
         }
 
-        virtual std::string toString_(bool throw_if_not_set) const override
-        {
-            return default_toString(throw_if_not_set);
-        }
-
-    protected:
         Enum() = default;
-        Enum(const Enum&) = default;
-        Enum(Enum&&) = default;
-        Enum& operator=(const Enum&) = default;
-        Enum& operator=(Enum&&) = default;
-        virtual ~Enum() = default;
-
-        //! string constructor
-        Enum(const std::string& s)
-        {
-            // Go though T::toType() to account for OTHER.* in SIDD 3.0/SICD 1.3
-            *this = std::move(T::toType(s));
-        }
-
-        //! int constructor
         Enum(int i)
         {
-            (void)details().index(i);
+            (void)details().index(i); // validate "i"
             value = i;
         }
 
@@ -221,13 +207,9 @@ namespace details
             return details().default_toType(v);
         }
 
-        std::string default_toString(bool throw_if_not_set) const
-        {
-            return details().default_toString(value, throw_if_not_set);
-        }
-
     public:
         using enum_t = T;
+        virtual ~Enum() = default;
 
         static T toType(const std::string& v)
         {
@@ -265,7 +247,7 @@ namespace details
 
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
-    #define SIX_Enum_constructors_(name) name() = default; name(const std::string& s) : Enum(s) {} name(int i) : Enum(i) {} \
+    #define SIX_Enum_constructors_(name) name() = default; name(const std::string& s) { *this = std::move(name::toType(s)); } name(int i) : Enum(i) {} \
             name& operator=(int v) {  *this = name(v); return *this; } ~name() = default; \
             name(const name&) = default; name(name&&) = default; name& operator=(const name&) = default; name& operator=(name&&) = default; 
     #define SIX_Enum_BEGIN_enum enum {

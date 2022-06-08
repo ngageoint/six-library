@@ -174,7 +174,7 @@ PolarizationType PolarizationType::toType(const std::string& v)
 }
 std::string PolarizationType::toString_(bool throw_if_not_set) const
 {
-    return toString_imp(other_, [&]() { return default_toString(throw_if_not_set); });
+    return toString_imp(other_, [&]() { return details().default_toString(value, throw_if_not_set); });
 }
 bool PolarizationType::equals_(const std::string& rhs) const
 {
@@ -188,7 +188,7 @@ PolarizationSequenceType PolarizationSequenceType::toType(const std::string& v)
 }
 std::string PolarizationSequenceType::toString_(bool throw_if_not_set) const
 {
-    return toString_imp(other_, [&]() { return default_toString(throw_if_not_set); });
+    return toString_imp(other_, [&]() { return details().default_toString(value, throw_if_not_set); });
 }
 bool PolarizationSequenceType::equals_(const std::string& rhs) const
 {
@@ -256,12 +256,12 @@ std::string DualPolarizationType::toString_(bool throw_if_not_set) const
 
     if (other_.empty() || is_OTHER_(other_))  // Handle OTHER.* for  SIDD 3.0/SICD 1.3
     {
-        return toString_imp(other_, [&]() { return default_toString(throw_if_not_set); });
+        return toString_imp(other_, [&]() { return details().default_toString(value, throw_if_not_set); });
     }
 
     if ((left_ == PolarizationType::NOT_SET) && (right_ == PolarizationType::NOT_SET))
     {
-        default_toString(throw_if_not_set);
+        details().default_toString(value, throw_if_not_set);
     }
 
     throw except::InvalidFormatException(Ctxt("Invalid enum value: " + other_));
