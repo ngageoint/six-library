@@ -47,6 +47,8 @@ constexpr int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
 namespace details
 {
+    // This class is provides a base class for all of our custom enums.  It's intentionally
+    // not templated and just deals with `int`s and `std::string`s.
     struct EnumBase
     {
         int value = NOT_SET_VALUE;
@@ -75,7 +77,16 @@ namespace details
         EnumBase& operator=(EnumBase&&) = default;
         /*virtual*/ ~EnumBase() = default; // don't want "delete pEnumBase"
 
-        virtual std::string default_toString(bool throw_if_not_set) const = 0;
+        virtual const std::map<std::string, int>& string_to_int() const = 0;
+
+        std::string default_toString(bool throw_if_not_set) const
+        {
+            if (throw_if_not_set && (value == NOT_SET_VALUE))
+            {
+                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+            }
+            return index(value);
+        }
         virtual std::string toString_(bool throw_if_not_set) const
         {
             return default_toString(throw_if_not_set);
@@ -97,6 +108,29 @@ namespace details
         virtual bool equals_(const std::string& rhs) const // equals(), not less(); order based on ints, not strings
         {
             return default_equals(rhs);
+        }
+
+        int index(const std::string& v) const
+        {
+            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
+            return nitf::details::index(string_to_int(), v, ex);
+        }
+        std::string index(int v) const
+        {
+            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
+            return nitf::details::index(int_to_string(), v, ex);
+        }
+
+    private:
+        //size_t size() const { return int_to_string_.size(); }
+        mutable std::map<int, std::string> int_to_string_;
+        const std::map<int, std::string>& int_to_string() const
+        {
+            if (int_to_string_.empty())
+            {
+                int_to_string_ = nitf::details::swap_key_value(string_to_int());
+            }
+            return int_to_string_;
         }
     };
     inline bool operator<(const EnumBase& lhs, const EnumBase& rhs)
@@ -144,8 +178,6 @@ namespace details
         }
 
     public:
-        //size_t size() const { return int_to_string().size(); }
-
         int index(const std::string& v) const
         {
             const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
@@ -168,26 +200,12 @@ namespace details
             assert(result.has_value()); // nitf::details::index() should have already thrown, if necessary
             return *result;
         }
-
-        std::string default_toString(int value, bool throw_if_not_set) const
-        {
-            if (throw_if_not_set && (value == NOT_SET_VALUE))
-            {
-                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-            }
-            return index(value);
-        }
     };
 
     // Base type for all enums; avoids code duplication
     template<typename T>
     class Enum : public EnumBase
     {
-        std::string default_toString(bool throw_if_not_set) const override
-        {
-            return details().default_toString(value, throw_if_not_set);
-        }
-
     protected:
         static const EnumDetails<T>& details()
         {
@@ -242,26 +260,19 @@ namespace details
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     /*
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::EnumBase { \
-        std::string default_toString(bool throw_if_not_set) const override { return details().default_toString(value, throw_if_not_set); } \
         protected: static const six::details::EnumDetails<name>& details() { static const six::details::EnumDetails<name> details_; return details_;  } \
         public: using enum_t = name; \
         static name toType(const std::string& v) { return details().default_toType(v); } \
         static std::optional<name> toType(const std::string& v, std::nothrow_t) { return details().default_toType(v, std::nothrow); } \
-        bool operator<(const int& o) const { return value < o; } \
-        bool operator<(const name& o) const { return less(o); } \
-        bool operator>=(const int& o) const { return value >= o; } \
-        bool operator>=(const name& o) const { return !(*this < o); } \
-        bool operator==(const int& o) const { return value == o; } \
-        bool operator==(const name& o) const { return !(*this < o) && !(o < *this); } \
-        bool operator!=(const int& o) const { return value != o; } \
-        bool operator!=(const name& o) const { return !(*this == o); } \
-        bool operator<=(const int& o) const { return value <= o; } \
-        bool operator<=(const name& o) const { return (*this < o) || (*this == o); } \
-        bool operator>(const int& o) const { return value > o; } \
-        bool operator>(const name& o) const { return !(*this <= o); }
+        bool operator<(const int& o) const { return value < o; } bool operator<(const name& o) const { return less(o); } \
+        bool operator>=(const int& o) const { return value >= o; } bool operator>=(const name& o) const { return !(*this < o); } \
+        bool operator==(const int& o) const { return value == o; } bool operator==(const name& o) const { return !(*this < o) && !(o < *this); } \
+        bool operator!=(const int& o) const { return value != o; } bool operator!=(const name& o) const { return !(*this == o); } \
+        bool operator<=(const int& o) const { return value <= o; } bool operator<=(const name& o) const { return (*this < o) || (*this == o); } \
+        bool operator>(const int& o) const { return value > o; } bool operator>(const name& o) const { return !(*this <= o); }
      */
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
-    #define SIX_Enum_BEGIN_string_to_int static const std::map<std::string, int>& string_to_int_() { static const std::map<std::string, int> retval {
+    #define SIX_Enum_BEGIN_string_to_int const std::map<std::string, int>& string_to_int() const override { return string_to_int_(); } static const std::map<std::string, int>& string_to_int_() { static const std::map<std::string, int> retval {
     #define SIX_Enum_END_enum NOT_SET = six::NOT_SET_VALUE };
     #define SIX_Enum_END_string_to_int SIX_Enum_map_entry_NOT_SET }; return retval; }
 
