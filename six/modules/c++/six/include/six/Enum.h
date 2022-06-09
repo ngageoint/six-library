@@ -53,6 +53,21 @@ namespace details
     {
         int value = NOT_SET_VALUE;
         operator int() const { return value; }
+        EnumBase(int i)
+        {
+            if (!int_to_string_.empty()) // object still being constructed, can't call pure virtual methods yet
+            {
+                (void)index(i);
+            }
+            value = i;
+        }
+        EnumBase& operator=(int i)
+        {
+            (void)index(i);
+            value = i;
+            return *this; // DO NOT DO: *this = EnumBase(i); that will slice this
+        }
+
         bool less(const EnumBase& rhs) const
         {
             return less_(rhs);
@@ -110,11 +125,6 @@ namespace details
             return default_equals(rhs);
         }
 
-        std::string index(int v) const
-        {
-            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
-            return nitf::details::index(int_to_string(), v, ex);
-        }
         virtual const std::map<std::string, int>& string_to_int() const = 0;
 
         std::optional<int> toInt(const std::string& v, const except::Exception* pEx) const
@@ -131,6 +141,11 @@ namespace details
         }
 
     private:
+        std::string index(int v) const
+        {
+            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
+            return nitf::details::index(int_to_string(), v, ex);
+        }
         int index(const std::string& v) const
         {
             const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
@@ -218,6 +233,8 @@ namespace details
         Enum& operator=(const Enum&) = default;
         Enum& operator=(Enum&&) = default;
 
+        Enum(int i) : EnumBase(i) {}
+
         std::optional<T> default_toType(const std::string& v, const except::Exception* pEx) const
         {
             auto result = toInt(v, pEx);
@@ -235,10 +252,9 @@ namespace details
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
    #define SIX_Enum_default_ctor_assign_(name) name() = default; virtual ~name() = default; \
-            name(const name&) = default; name(name&&) = default; name& operator=(const name&) = default; name& operator=(name&&) = default; 
+            name(const name&) = default; name(name&&) = default; name& operator=(const name&) = default; name& operator=(name&&) = default
     #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); \
-            name(const std::string& s) { *this = std::move(name::toType(s)); } \
-            name(int i) { (void)index(i); value = i; } name& operator=(int v) {  *this = name(v); return *this; } 
+            name(const std::string& s) { *this = std::move(name::toType(s)); } name(int i) : Enum<name>(i) { }
     #define SIX_Enum_BEGIN_enum enum {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }

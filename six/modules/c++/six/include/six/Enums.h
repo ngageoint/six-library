@@ -559,8 +559,7 @@ public:
 
      SIX_Enum_default_ctor_assign_(DualPolarizationType);
     DualPolarizationType(const std::string& s) { *this = std::move(DualPolarizationType::toType(s)); }
-    DualPolarizationType(int i) { (void)index(i); value = i; }
-    DualPolarizationType& operator=(int v) { *this = DualPolarizationType(v); return *this; }
+    DualPolarizationType(int i) : Enum<DualPolarizationType>(i) { }
 };
 static_assert(six::DualPolarizationType::V_V == 2, "six::DualPolarizationType is wrong!");
 static_assert(six::DualPolarizationType::UNKNOWN == 18, "six::DualPolarizationType is wrong!");

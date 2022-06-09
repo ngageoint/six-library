@@ -461,7 +461,7 @@ void ComplexXMLParser04x::parseRadarCollectionFromXML(
         //optional
         // Note that in SICD 0.4, UNKNOWN and SEQUENCE are not allowed here
         radarCollection->txPolarization
-                = six::toType<PolarizationType>(tmpElem->getCharacterData());
+                = six::toType<PolarizationSequenceType>(tmpElem->getCharacterData());
     }
 
     tmpElem = getOptional(radarCollectionXML, "PolarizationHVAnglePoly");
