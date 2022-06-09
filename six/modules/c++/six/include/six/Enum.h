@@ -151,19 +151,10 @@ namespace details
         return os;
     }
 
+    // Base type for all enums; avoids code duplication
     template<typename T>
-    class EnumDetails final
+    class Enum : public EnumBase
     {
-        const std::map<std::string, int>& string_to_int() const
-        {
-            return T::string_to_int_();
-        }
-        const std::map<int, std::string>& int_to_string() const
-        {
-            static const auto retval = nitf::details::swap_key_value(string_to_int());
-            return retval;
-        }
-
         std::optional<T> default_toType(const std::string& v, const except::Exception* pEx) const
         {
             std::string type(v);
@@ -176,19 +167,7 @@ namespace details
             }
             return std::optional<T>(nitf::details::index(map, type, *pEx));
         }
-
-    public:
-        int index(const std::string& v) const
-        {
-            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
-            return nitf::details::index(string_to_int(), v, ex);
-        }
-        std::string index(int v) const
-        {
-            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
-            return nitf::details::index(int_to_string(), v, ex);
-        }
-
+    protected:
         std::optional<T> default_toType(const std::string& v, std::nothrow_t) const
         {
             return default_toType(v, nullptr /*pEx*/);
@@ -200,17 +179,11 @@ namespace details
             assert(result.has_value()); // nitf::details::index() should have already thrown, if necessary
             return *result;
         }
-    };
 
-    // Base type for all enums; avoids code duplication
-    template<typename T>
-    class Enum : public EnumBase
-    {
-    protected:
-        static const EnumDetails<T>& details()
+        static const T& instance()
         {
-            static const EnumDetails<T> details_;
-            return details_;
+            static const T instance_;
+            return instance_;
         }
 
     public:
@@ -219,11 +192,11 @@ namespace details
 
         static T toType(const std::string& v)
         {
-            return details().default_toType(v);
+            return instance().default_toType(v);
         }
         static std::optional<T> toType(const std::string& v, std::nothrow_t)
         {
-            return details().default_toType(v, std::nothrow);
+            return instance().default_toType(v, std::nothrow);
         }
 
         // needed for SWIG
@@ -253,7 +226,7 @@ namespace details
     // There are a few examples of expanded code below.
     #define SIX_Enum_constructors_(name) name() = default; \
             name(const std::string& s) { *this = std::move(name::toType(s)); } \
-            name(int i) { (void)details().index(i); value = i; } \
+            name(int i) { (void)index(i); value = i; } \
             name& operator=(int v) {  *this = name(v); return *this; } virtual ~name() = default; \
             name(const name&) = default; name(name&&) = default; name& operator=(const name&) = default; name& operator=(name&&) = default; 
     #define SIX_Enum_BEGIN_enum enum {

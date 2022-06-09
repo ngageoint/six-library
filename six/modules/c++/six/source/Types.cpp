@@ -170,7 +170,7 @@ bool eq_imp(const T& e, const std::string& o, TFunc default_eq)
 PolarizationType PolarizationType::toType(const std::string& v)
 {
     // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
-    return toType_imp<PolarizationType>(v, [&](PolarizationType& t) { t.other_ = v; }, [&]() { return details().default_toType(v); });
+    return toType_imp<PolarizationType>(v, [&](PolarizationType& t) { t.other_ = v; }, [&]() { return instance().default_toType(v); });
 }
 std::string PolarizationType::toString_(bool throw_if_not_set) const
 {
@@ -184,7 +184,7 @@ bool PolarizationType::equals_(const std::string& rhs) const
 PolarizationSequenceType PolarizationSequenceType::toType(const std::string& v)
 {
     // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
-    return toType_imp<PolarizationSequenceType>(v, [&](PolarizationSequenceType& t) { t.other_ = v; }, [&]() { return details().default_toType(v); });
+    return toType_imp<PolarizationSequenceType>(v, [&](PolarizationSequenceType& t) { t.other_ = v; }, [&]() { return instance().default_toType(v); });
 }
 std::string PolarizationSequenceType::toString_(bool throw_if_not_set) const
 {
@@ -203,14 +203,14 @@ DualPolarizationType DualPolarizationType::toType(const std::string& v)
         // It's not possible to determine whether a string like "OTHER_V" should be DualPolarizationType::OTHER (OTHER.*)
         // or DualPolarizationType::OTHER_V; try the "old way" (pre SIDD 3.0/SICD 1.3) first.  Note this is really only a 
         // problem for the default enums, in the XML ":" instead of "_" is the seperator.
-        auto result = details().default_toType(v, std::nothrow);
+        auto result = instance().default_toType(v, std::nothrow);
         if (result.has_value())
         {
             return *result;
         }
 
         // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
-        return toType_imp<DualPolarizationType>(v, [&](DualPolarizationType& t) { t.other_ = v; }, [&]() { return details().default_toType(v); });
+        return toType_imp<DualPolarizationType>(v, [&](DualPolarizationType& t) { t.other_ = v; }, [&]() { return instance().default_toType(v); });
     }
 
     // Handle OTHER.* for  SIDD 3.0/SICD 1.3
@@ -221,7 +221,7 @@ DualPolarizationType DualPolarizationType::toType(const std::string& v)
     auto right = PolarizationType::toType(splits[1]);
     const auto strRight = right == PolarizationType::OTHER ? other.toString() : right.toString();
     const auto str = strLeft + "_" + strRight; // can't do "A:B" in C++, so the enum/string is A_B
-    auto retval = DualPolarizationType::details().default_toType(str);
+    auto retval = DualPolarizationType::instance().default_toType(str);
     retval.left_ = std::move(left);
     retval.right_ = std::move(right);
     return retval;
