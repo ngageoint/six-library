@@ -38,15 +38,20 @@ static void test_EnumConstructor(const std::string& testName, const std::string&
 }
 TEST_CASE(EnumConstructor)
 {
+    test_EnumConstructor<six::DualPolarizationType>("EnumConstructor", "OTHER", six::DualPolarizationType::OTHER);
+    test_EnumConstructor<six::DualPolarizationType>("EnumConstructor", "OTHER_abc", six::DualPolarizationType::OTHER);  // SIDD 3.0/SICD 1.3
+    //test_EnumConstructor<six::DualPolarizationType>("EnumConstructor", "OTHER_abc:OTHER_xyz", six::DualPolarizationType::OTHER);  // SIDD 3.0/SICD 1.3
     test_EnumConstructor<six::DualPolarizationType>("EnumConstructor", "UNKNOWN", six::DualPolarizationType::UNKNOWN);
     test_EnumConstructor<six::DualPolarizationType>("EnumConstructor", "V_V", six::DualPolarizationType::V_V);
     test_EnumConstructor<six::DualPolarizationType>("EnumConstructor", "E_V", six::DualPolarizationType::E_V); // SICD 1.3
 
     test_EnumConstructor<six::PolarizationType>("EnumConstructor", "OTHER", six::PolarizationType::OTHER);
+    test_EnumConstructor<six::PolarizationType>("EnumConstructor", "OTHER_abc", six::PolarizationSequenceType::OTHER);  // SIDD 3.0/SICD 1.3
     test_EnumConstructor<six::PolarizationType>("EnumConstructor", "UNKNOWN", six::PolarizationType::UNKNOWN);
     test_EnumConstructor<six::PolarizationType>("EnumConstructor", "X", six::PolarizationType::X); // SICD 1.3
 
     test_EnumConstructor<six::PolarizationSequenceType>("EnumConstructor", "OTHER", six::PolarizationSequenceType::OTHER);
+    test_EnumConstructor<six::PolarizationSequenceType>("EnumConstructor", "OTHER_abc", six::PolarizationSequenceType::OTHER);  // SIDD 3.0/SICD 1.3
     test_EnumConstructor<six::PolarizationSequenceType>("EnumConstructor", "UNKNOWN", six::PolarizationSequenceType::UNKNOWN);
     test_EnumConstructor<six::PolarizationSequenceType>("EnumConstructor", "SEQUENCE", six::PolarizationSequenceType::SEQUENCE);
     test_EnumConstructor<six::PolarizationSequenceType>("EnumConstructor", "X", six::PolarizationSequenceType::X); // SICD 1.3
@@ -71,6 +76,7 @@ static void test_toType(const std::string& testName, size_t sz)
 {
     test_toType_<TSixEnum>("ToType", "UNKNOWN", TSixEnum::UNKNOWN);
     test_toType_<TSixEnum>("ToType", "OTHER", TSixEnum::OTHER);
+    test_toType_<TSixEnum>("ToType", "OTHER_abc", TSixEnum::OTHER); // SIDD 3.0/SICD 1.3
 
     const auto string_to_int = TSixEnum::string_to_int_();
     TEST_ASSERT_EQ(string_to_int.size(), sz);
