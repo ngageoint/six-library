@@ -49,11 +49,11 @@ namespace details
 {
     // This class is provides a base class for all of our custom enums.  It's intentionally
     // not templated and just deals with `int`s and `std::string`s.
-    struct EnumBase
+    struct EnumBase_
     {
         int value = NOT_SET_VALUE;
         operator int() const { return value; }
-        bool less(const EnumBase& rhs) const
+        bool less(const EnumBase_& rhs) const
         {
             return less_(rhs);
         }
@@ -70,12 +70,12 @@ namespace details
         }
 
     protected:
-        EnumBase() = default;
-        EnumBase(const EnumBase&) = default;
-        EnumBase(EnumBase&&) = default;
-        EnumBase& operator=(const EnumBase&) = default;
-        EnumBase& operator=(EnumBase&&) = default;
-        /*virtual*/ ~EnumBase() = default; // don't want "delete pEnumBase"
+        EnumBase_() = default;
+        EnumBase_(const EnumBase_&) = default;
+        EnumBase_(EnumBase_&&) = default;
+        EnumBase_& operator=(const EnumBase_&) = default;
+        EnumBase_& operator=(EnumBase_&&) = default;
+        /*virtual*/ ~EnumBase_() = default; // don't want "delete pEnumBase_"
 
         virtual const std::map<std::string, int>& string_to_int() const = 0;
 
@@ -92,11 +92,11 @@ namespace details
             return default_toString(throw_if_not_set);
         }
 
-        bool default_less(const EnumBase& rhs) const
+        bool default_less(const EnumBase_& rhs) const
         {
             return value < rhs.value;
         }
-        virtual bool less_(const EnumBase& rhs) const
+        virtual bool less_(const EnumBase_& rhs) const
         {
             return default_less(rhs);
         }
@@ -133,28 +133,48 @@ namespace details
             return int_to_string_;
         }
     };
-    inline bool operator<(const EnumBase& lhs, const EnumBase& rhs)
+    inline bool operator<(const EnumBase_& lhs, const EnumBase_& rhs)
     {
         return lhs.less(rhs);
     }
-    inline bool operator==(const EnumBase& lhs, const std::string& rhs) // for unittests, not SWIG
+    inline bool operator==(const EnumBase_& lhs, const std::string& rhs) // for unittests, not SWIG
     {
         return lhs.equals(rhs);
     }
-    inline bool operator!=(const EnumBase& lhs, const std::string& rhs) // for unittests, not SWIG
+    inline bool operator!=(const EnumBase_& lhs, const std::string& rhs) // for unittests, not SWIG
     {
         return !(lhs == rhs);
     }
-    inline std::ostream& operator<<(std::ostream& os, const EnumBase& e)
+    inline std::ostream& operator<<(std::ostream& os, const EnumBase_& e)
     {
         os << e.toString();
         return os;
     }
 
-    // Base type for all enums; avoids code duplication
+    // A thin wrapper around EnumBase_ to add a little bit of "type" support
     template<typename T>
-    class Enum : public EnumBase
+    struct EnumBase : public EnumBase_
     {
+        std::optional<T> convertToType(const std::string& v, std::nothrow_t) const
+        {
+            return toType_(v, nullptr /*pEx*/);
+        }
+        T convertToType(const std::string& v) const
+        {
+            const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
+            const auto result = toType_(v, &ex);
+            assert(result.has_value()); // nitf::details::index() should have already thrown, if necessary
+            return *result;
+        }
+
+    protected:
+        EnumBase() = default;
+        EnumBase(const EnumBase&) = default;
+        EnumBase(EnumBase&&) = default;
+        EnumBase& operator=(const EnumBase&) = default;
+        EnumBase& operator=(EnumBase&&) = default;
+        /*virtual*/ ~EnumBase() = default; // don't want "delete pEnumBase"
+
         std::optional<T> default_toType(const std::string& v, const except::Exception* pEx) const
         {
             std::string type(v);
@@ -167,7 +187,10 @@ namespace details
             }
             return std::optional<T>(nitf::details::index(map, type, *pEx));
         }
-    protected:
+        virtual std::optional<T> toType_(const std::string& v, const except::Exception* pEx) const
+        {
+            return default_toType(v, pEx);
+        }
         std::optional<T> default_toType(const std::string& v, std::nothrow_t) const
         {
             return default_toType(v, nullptr /*pEx*/);
@@ -179,7 +202,13 @@ namespace details
             assert(result.has_value()); // nitf::details::index() should have already thrown, if necessary
             return *result;
         }
+    };
 
+    // Base type for all enums; avoids code duplication
+    template<typename T>
+    class Enum : public EnumBase<T>
+    {
+    protected:
         static const T& instance()
         {
             static const T instance_;
@@ -192,25 +221,25 @@ namespace details
 
         static T toType(const std::string& v)
         {
-            return instance().default_toType(v);
+            return instance().convertToType(v);
         }
         static std::optional<T> toType(const std::string& v, std::nothrow_t)
         {
-            return instance().default_toType(v, std::nothrow);
+            return instance().convertToType(v, std::nothrow);
         }
 
         // needed for SWIG
-        bool operator<(const int& o) const { return value < o; }
-        bool operator<(const Enum& o) const { return less(o); }
-        bool operator>=(const int& o) const { return value >= o; }
+        bool operator<(const int& o) const { return this->value < o; }
+        bool operator<(const Enum& o) const { return this->less(o); }
+        bool operator>=(const int& o) const { return  this->value >= o; }
         bool operator>=(const Enum& o) const { return !(*this < o); }
-        bool operator==(const int& o) const { return value == o; }
+        bool operator==(const int& o) const { return  this->value == o; }
         bool operator==(const Enum& o) const { return !(*this < o) && !(o < *this); }
-        bool operator!=(const int& o) const { return value != o; }
+        bool operator!=(const int& o) const { return  this->value != o; }
         bool operator!=(const Enum& o) const { return !(*this == o); }
-        bool operator<=(const int& o) const { return value <= o; }
+        bool operator<=(const int& o) const { return  this->value <= o; }
         bool operator<=(const Enum& o) const { return (*this < o) || (*this == o); }
-        bool operator>(const int& o) const { return value > o; }
+        bool operator>(const int& o) const { return  this->value > o; }
         bool operator>(const Enum& o) const { return !(*this <= o); }
     };
     template<typename T>
