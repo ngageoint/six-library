@@ -266,9 +266,9 @@ SIX_Enum_BEGIN_DEFINE(PolarizationSequenceType)
 private:
     std::string other_; // valid of OTHER.* for SIDD 3.0/SICD 1.3
     std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
-public:
-    static PolarizationSequenceType toType(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
     bool equals_(const std::string& rhs) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
+public:
+    std::optional<PolarizationSequenceType> toType_(const std::string&, const except::Exception*) const override; // for OTHER.* support in SIDD 3.0/SICD 1.3
 
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
@@ -310,9 +310,9 @@ SIX_Enum_BEGIN_DEFINE(PolarizationType)
 private:
     std::string other_; // valid of OTHER.* for SIDD 3.0/SICD 1.3
     std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
-public:
-    static PolarizationType toType(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
     bool equals_(const std::string& rhs) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
+public:
+    std::optional<PolarizationType> toType_(const std::string&, const except::Exception*) const override; // for OTHER.* support in SIDD 3.0/SICD 1.3
 
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
@@ -352,10 +352,9 @@ private:
     PolarizationType left_,right_; // other than OTHER/NOT_SET/UNKNOWN, this is two `PolarizationType`s
     std::string other_; // handle OTHER.* for SIDD 3.0/SICD 1.3
     std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
-public:
-    static DualPolarizationType toType(const std::string&); // handle OTHER.* for SIDD 3.0/SICD 1.3
-    static std::optional<DualPolarizationType> toType(const std::string& v, std::nothrow_t); // handle OTHER.* for SIDD 3.0/SICD 1.3
     bool equals_(const std::string& rhs) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
+public:
+    std::optional<DualPolarizationType> toType_(const std::string&, const except::Exception*) const override; // for OTHER.* support in SIDD 3.0/SICD 1.3
 
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum

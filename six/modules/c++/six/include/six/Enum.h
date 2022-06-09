@@ -116,6 +116,19 @@ namespace details
         }
         virtual const std::map<std::string, int>& string_to_int() const = 0;
 
+        std::optional<int> default_to_int(const std::string& v, const except::Exception* pEx) const
+        {
+            std::string type(v);
+            str::trim(type);
+            auto&& map = string_to_int();
+            if (pEx == nullptr)
+            {
+                const auto it = map.find(type);
+                return it == map.end() ? std::optional<int>() : std::optional<int>(it->second);
+            }
+            return std::optional<int>(nitf::details::index(map, type, *pEx));
+        }
+
     private:
         int index(const std::string& v) const
         {
@@ -201,24 +214,17 @@ namespace details
 
         std::optional<T> default_toType(const std::string& v, const except::Exception* pEx) const
         {
-            std::string type(v);
-            str::trim(type);
-            auto&& map = string_to_int();
-            if (pEx == nullptr)
-            {
-                const auto it = map.find(type);
-                return it == map.end() ? std::optional<T>() : std::optional<T>(it->second);
-            }
-            return std::optional<T>(nitf::details::index(map, type, *pEx));
-        }
-        std::optional<T> default_toType(const std::string& v, std::nothrow_t) const
-        {
-            return default_toType(v, nullptr /*pEx*/);
+            auto result = default_to_int(v, pEx);
+            return result.has_value() ? std::optional<T>(*result) : std::optional<T>();
         }
         T default_toType(const std::string& v) const
         {
             const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
             const auto result = default_toType(v, &ex);
+            if (result.has_value())
+            {
+                return *result;
+            }
             assert(result.has_value()); // nitf::details::index() should have already thrown, if necessary
             return *result;
         }

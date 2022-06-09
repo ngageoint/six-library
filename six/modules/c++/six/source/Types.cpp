@@ -167,10 +167,10 @@ bool eq_imp(const T& e, const std::string& o, TFunc default_eq)
     return default_eq();
 }
 
-PolarizationType PolarizationType::toType(const std::string& v)
+std::optional<PolarizationType> PolarizationType::toType_(const std::string& v, const except::Exception* pEx) const
 {
     // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
-    return toType_imp<PolarizationType>(v, [&](PolarizationType& t) { t.other_ = v; }, [&]() { return instance().default_toType(v); });
+    return toType_imp<PolarizationType>(v, [&](PolarizationType& t) { t.other_ = v; }, [&]() { auto result = instance().default_toType(v, pEx); return *result; });
 }
 std::string PolarizationType::toString_(bool throw_if_not_set) const
 {
@@ -181,10 +181,10 @@ bool PolarizationType::equals_(const std::string& rhs) const
     return eq_imp(*this, rhs, [&]() { return this->default_equals(rhs); });
 }
 
-PolarizationSequenceType PolarizationSequenceType::toType(const std::string& v)
+std::optional<PolarizationSequenceType> PolarizationSequenceType::toType_(const std::string& v, const except::Exception* pEx) const
 {
     // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
-    return toType_imp<PolarizationSequenceType>(v, [&](PolarizationSequenceType& t) { t.other_ = v; }, [&]() { return instance().default_toType(v); });
+    return toType_imp<PolarizationSequenceType>(v, [&](PolarizationSequenceType& t) { t.other_ = v; }, [&]() { auto result = instance().default_toType(v, pEx); return *result; });
 }
 std::string PolarizationSequenceType::toString_(bool throw_if_not_set) const
 {
@@ -195,7 +195,7 @@ bool PolarizationSequenceType::equals_(const std::string& rhs) const
     return eq_imp(*this, rhs, [&]() { return this->default_equals(rhs); });
 }
 
-DualPolarizationType DualPolarizationType::toType(const std::string& v)
+std::optional<DualPolarizationType> DualPolarizationType::toType_(const std::string& v, const except::Exception* pEx) const
 {
     const auto splits = str::split(v, ":");
     if (splits.size() != 2)
@@ -203,10 +203,14 @@ DualPolarizationType DualPolarizationType::toType(const std::string& v)
         // It's not possible to determine whether a string like "OTHER_V" should be DualPolarizationType::OTHER (OTHER.*)
         // or DualPolarizationType::OTHER_V; try the "old way" (pre SIDD 3.0/SICD 1.3) first.  Note this is really only a 
         // problem for the default enums, in the XML ":" instead of "_" is the seperator.
-        auto result = instance().default_toType(v, std::nothrow);
+        auto result = instance().default_toType(v, nullptr /*pEx*/);
         if (result.has_value())
         {
             return *result;
+        }
+        if (pEx == nullptr)
+        {
+            return std::optional<DualPolarizationType>();
         }
 
         // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
@@ -221,23 +225,11 @@ DualPolarizationType DualPolarizationType::toType(const std::string& v)
     auto right = PolarizationType::toType(splits[1]);
     const auto strRight = right == PolarizationType::OTHER ? other.toString() : right.toString();
     const auto str = strLeft + "_" + strRight; // can't do "A:B" in C++, so the enum/string is A_B
-    auto retval = DualPolarizationType::instance().default_toType(str);
+    auto retval = default_toType(str);
     retval.left_ = std::move(left);
     retval.right_ = std::move(right);
     return retval;
 }
-std::optional<DualPolarizationType> DualPolarizationType::toType(const std::string& v, std::nothrow_t)
-{
-    try
-    {
-        return std::optional<DualPolarizationType>(toType(v));
-    }
-    catch (const except::Exception&)
-    {
-        return std::optional<DualPolarizationType>();
-    }
-}
-
 std::string DualPolarizationType::toString_(bool throw_if_not_set) const
 {
     if ((left_ != PolarizationType::NOT_SET) && (right_ != PolarizationType::NOT_SET))
