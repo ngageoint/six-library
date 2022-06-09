@@ -69,6 +69,11 @@ namespace details
             return equals_(rhs);
         }
 
+        bool default_less_(const EnumBase& rhs) const
+        {
+            return value < rhs.value;
+        }
+
     protected:
         EnumBase() = default;
         EnumBase(const EnumBase&) = default;
@@ -90,13 +95,9 @@ namespace details
             return default_toString(throw_if_not_set);
         }
 
-        bool default_less(const EnumBase& rhs) const
-        {
-            return value < rhs.value;
-        }
         virtual bool less_(const EnumBase& rhs) const // for OTHER.* support in SIDD 3.0/SICD 1.3
         {
-            return default_less(rhs);
+            return default_less_(rhs);
         }
 
         bool default_equals(const std::string& rhs) const

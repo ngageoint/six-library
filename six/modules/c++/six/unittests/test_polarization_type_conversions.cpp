@@ -123,7 +123,7 @@ static void test_toType_OTHER(const std::string& testName)
 
     const TSixEnum OTHER_xyz("OTHER_xyz"); // SICD 1.3 "OTHER.*" 
     TEST_ASSERT_EQ(OTHER_xyz, TSixEnum::OTHER);
-    //TEST_ASSERT_NOT_EQ(OTHER_xyz, OTHER_abc);
+    TEST_ASSERT_NOT_EQ(OTHER_xyz, OTHER_abc);
 }
 TEST_CASE(ToType_OTHER)
 {

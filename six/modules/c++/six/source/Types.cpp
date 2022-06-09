@@ -173,6 +173,22 @@ bool eq_imp(const T& e, const std::string& o, TFunc default_eq)
     return default_eq();
 }
 
+template<typename T>
+bool less_imp(const T& lhs, const six::details::EnumBase& rhs)
+{
+    // handle OTHER.* for SIDD 3.0/SICD 1.3
+    const auto strLhs = lhs.toString();
+    const auto strRhs = rhs.toString();
+    if (is_OTHER_(strLhs) && is_OTHER_(strRhs))
+    {
+        // order OTHER.* < OTHER.* based on the strings
+        return strLhs < strRhs;
+    }
+
+    // no OTHER.*, use the default
+    return lhs.default_less_(rhs);
+}
+
 std::optional<PolarizationType> PolarizationType::toType_(const std::string& v, const except::Exception* pEx) const
 {
     // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
@@ -185,6 +201,10 @@ std::string PolarizationType::toString_(bool throw_if_not_set) const
 bool PolarizationType::equals_(const std::string& rhs) const
 {
     return eq_imp(*this, rhs, [&]() { return this->default_equals(rhs); });
+}
+bool PolarizationType::less_(const EnumBase& rhs) const
+{
+    return less_imp(*this, rhs);
 }
 
 std::optional<PolarizationSequenceType> PolarizationSequenceType::toType_(const std::string& v, const except::Exception* pEx) const
@@ -199,6 +219,10 @@ std::string PolarizationSequenceType::toString_(bool throw_if_not_set) const
 bool PolarizationSequenceType::equals_(const std::string& rhs) const
 {
     return eq_imp(*this, rhs, [&]() { return this->default_equals(rhs); });
+}
+bool PolarizationSequenceType::less_(const EnumBase& rhs) const
+{
+    return less_imp(*this, rhs);
 }
 
 std::optional<DualPolarizationType> DualPolarizationType::toType_(const std::string& v, const except::Exception* pEx) const
@@ -304,6 +328,10 @@ bool DualPolarizationType::equals_(const std::string& rhs) const
     }
 
     return eq_imp(e, o, [&]() { return e.default_equals(o); });
+}
+bool DualPolarizationType::less_(const EnumBase& rhs) const
+{
+    return less_imp(*this, rhs);
 }
 
 }

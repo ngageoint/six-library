@@ -267,6 +267,7 @@ private:
     std::string other_; // valid of OTHER.* for SIDD 3.0/SICD 1.3
     std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
     bool equals_(const std::string& rhs) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
+    bool less_(const EnumBase& rhs) const override; // for OTHER.* support in SIDD 3.0/SICD 1.3
 public:
     std::optional<PolarizationSequenceType> toType_(const std::string&, const except::Exception*) const override; // for OTHER.* support in SIDD 3.0/SICD 1.3
 
@@ -311,6 +312,7 @@ private:
     std::string other_; // valid of OTHER.* for SIDD 3.0/SICD 1.3
     std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
     bool equals_(const std::string& rhs) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
+    bool less_(const EnumBase& rhs) const override; // for OTHER.* support in SIDD 3.0/SICD 1.3
 public:
     std::optional<PolarizationType> toType_(const std::string&, const except::Exception*) const override; // for OTHER.* support in SIDD 3.0/SICD 1.3
 
@@ -353,6 +355,7 @@ private:
     std::string other_; // handle OTHER.* for SIDD 3.0/SICD 1.3
     std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
     bool equals_(const std::string& rhs) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
+    bool less_(const EnumBase& rhs) const override; // for OTHER.* support in SIDD 3.0/SICD 1.3
 public:
     std::optional<DualPolarizationType> toType_(const std::string&, const except::Exception*) const override; // for OTHER.* support in SIDD 3.0/SICD 1.3
 
