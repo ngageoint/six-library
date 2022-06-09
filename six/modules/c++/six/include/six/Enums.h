@@ -349,8 +349,11 @@ SIX_Enum_END_DEFINE(PolarizationType);
  *
  *  Enumeration used to represent DualPolarizationTypes
  */
-SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
-private:
+// The SIX_Enum macros are only marginally useful because so much must be written out anyway.
+// Minimizing their use here provides an example of how things look after the pre-processor is done.
+// Not having the macros also can make stepping through code in a debugger easier.
+class DualPolarizationType final : public six::details::Enum<DualPolarizationType> // SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
+{
     PolarizationType left_,right_; // other than OTHER/NOT_SET/UNKNOWN, this is two `PolarizationType`s
     std::string other_; // handle OTHER.* for SIDD 3.0/SICD 1.3
     std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
@@ -553,7 +556,12 @@ public:
 
             SIX_Enum_map_entry_(UNKNOWN),
     SIX_Enum_END_string_to_int
-SIX_Enum_END_DEFINE(DualPolarizationType);
+
+     SIX_Enum_default_ctor_assign_(DualPolarizationType);
+    DualPolarizationType(const std::string& s) { *this = std::move(DualPolarizationType::toType(s)); }
+    DualPolarizationType(int i) { (void)index(i); value = i; }
+    DualPolarizationType& operator=(int v) { *this = DualPolarizationType(v); return *this; }
+};
 static_assert(six::DualPolarizationType::V_V == 2, "six::DualPolarizationType is wrong!");
 static_assert(six::DualPolarizationType::UNKNOWN == 18, "six::DualPolarizationType is wrong!");
 static_assert(six::DualPolarizationType::V_X == 19, "six::DualPolarizationType is wrong!"); // SICD 1.3
