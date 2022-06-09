@@ -116,7 +116,7 @@ namespace details
         }
         virtual const std::map<std::string, int>& string_to_int() const = 0;
 
-        std::optional<int> default_to_int(const std::string& v, const except::Exception* pEx) const
+        std::optional<int> toInt(const std::string& v, const except::Exception* pEx) const
         {
             std::string type(v);
             str::trim(type);
@@ -168,8 +168,15 @@ namespace details
     // A wrapper around EnumBase_ to add of "type" support
     // Base type for all enums; avoids code duplication
     template<typename T>
-    struct Enum : public EnumBase
+    class Enum : public EnumBase
     {
+        static const T& instance()
+        {
+            static const T instance_;
+            return instance_;
+        }
+
+    public:
         using enum_t = T;
         virtual ~Enum() = default;
 
@@ -183,6 +190,10 @@ namespace details
             const auto result = instance().toType_(v, &ex);
             assert(result.has_value()); // nitf::details::index() should have already thrown, if necessary
             return *result;
+        }
+        static std::optional<T> default_toType_(const std::string& v, const except::Exception* pEx)
+        {
+            return instance().default_toType(v, pEx);
         }
 
         // needed for SWIG
@@ -206,38 +217,16 @@ namespace details
         Enum& operator=(const Enum&) = default;
         Enum& operator=(Enum&&) = default;
 
-        static const T& instance()
-        {
-            static const T instance_;
-            return instance_;
-        }
-
         std::optional<T> default_toType(const std::string& v, const except::Exception* pEx) const
         {
-            auto result = default_to_int(v, pEx);
+            auto result = toInt(v, pEx);
             return result.has_value() ? std::optional<T>(*result) : std::optional<T>();
         }
-        T default_toType(const std::string& v) const
-        {
-            const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-            const auto result = default_toType(v, &ex);
-            if (result.has_value())
-            {
-                return *result;
-            }
-            assert(result.has_value()); // nitf::details::index() should have already thrown, if necessary
-            return *result;
-        }
-
         virtual std::optional<T> toType_(const std::string& v, const except::Exception* pEx) const // for OTHER.* support in SIDD 3.0/SICD 1.3
         {
             return default_toType(v, pEx);
         }
     };
-    template<typename T>
-    inline bool operator==(const Enum<T>& e, const std::string& o) { return e.equals(o); } // for unittests, not SWIG
-    template<typename T>
-    inline bool operator!=(const Enum<T>& e, const std::string& o) { return !(e == o); } // for unittests, not SWIG
 
     #define SIX_Enum_map_entry_(n) { #n, n }
     #define SIX_Enum_map_entry_NOT_SET SIX_Enum_map_entry_(NOT_SET), { "NOT SET", NOT_SET }

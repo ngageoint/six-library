@@ -121,17 +121,23 @@ static bool is_OTHER_(const std::string& v)
 
 // See https://stackoverflow.com/questions/13358672/how-to-convert-a-lambda-to-an-stdfunction-using-templates for
 // some interesting reading regarding std::function<> and lambdas.
-template<typename T, typename TFunc>
-inline T toType_imp(const std::string& v, std::function<void(T&)> set_other, TFunc default_toType)
+template<typename T>
+inline std::optional<T> toType_imp(const std::string& v, const except::Exception* pEx, std::function<void(T&)> set_other)
 {
     // Handle OTHER.* for  SIDD 3.0/SICD 1.3
     if (is_OTHER_(v)) // handle "OTHER" with default_toType_()
     {
-        T retval = T::OTHER;
-        set_other(retval); // know "v" is a valid OTHER.* 
-        return retval;
+        T result = T::OTHER;
+        set_other(result); // know "v" is a valid OTHER.* 
+        return result;
     }
-    return default_toType(); // let default_toType_() throw the exception for "OTHER:foo"
+
+    const auto result = T::default_toType_(v, pEx); // let default_toType_() throw the exception for "OTHER:foo"
+    if ((pEx == nullptr) && !result.has_value())
+    {
+        return std::optional<T>();
+    }
+    return result;
 }
 
 template<typename TFunc>
@@ -170,7 +176,7 @@ bool eq_imp(const T& e, const std::string& o, TFunc default_eq)
 std::optional<PolarizationType> PolarizationType::toType_(const std::string& v, const except::Exception* pEx) const
 {
     // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
-    return toType_imp<PolarizationType>(v, [&](PolarizationType& t) { t.other_ = v; }, [&]() { auto result = instance().default_toType(v, pEx); return *result; });
+    return toType_imp<PolarizationType>(v, pEx, [&](PolarizationType& t) { t.other_ = v; });
 }
 std::string PolarizationType::toString_(bool throw_if_not_set) const
 {
@@ -184,7 +190,7 @@ bool PolarizationType::equals_(const std::string& rhs) const
 std::optional<PolarizationSequenceType> PolarizationSequenceType::toType_(const std::string& v, const except::Exception* pEx) const
 {
     // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
-    return toType_imp<PolarizationSequenceType>(v, [&](PolarizationSequenceType& t) { t.other_ = v; }, [&]() { auto result = instance().default_toType(v, pEx); return *result; });
+    return toType_imp<PolarizationSequenceType>(v, pEx, [&](PolarizationSequenceType& t) { t.other_ = v; });
 }
 std::string PolarizationSequenceType::toString_(bool throw_if_not_set) const
 {
@@ -203,18 +209,14 @@ std::optional<DualPolarizationType> DualPolarizationType::toType_(const std::str
         // It's not possible to determine whether a string like "OTHER_V" should be DualPolarizationType::OTHER (OTHER.*)
         // or DualPolarizationType::OTHER_V; try the "old way" (pre SIDD 3.0/SICD 1.3) first.  Note this is really only a 
         // problem for the default enums, in the XML ":" instead of "_" is the seperator.
-        auto result = instance().default_toType(v, nullptr /*pEx*/);
+        auto result = DualPolarizationType::default_toType_(v, nullptr /*pEx*/);
         if (result.has_value())
         {
             return *result;
         }
-        if (pEx == nullptr)
-        {
-            return std::optional<DualPolarizationType>();
-        }
 
         // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
-        return toType_imp<DualPolarizationType>(v, [&](DualPolarizationType& t) { t.other_ = v; }, [&]() { return instance().default_toType(v); });
+        return toType_imp<DualPolarizationType>(v, pEx, [&](DualPolarizationType& t) { t.other_ = v; });
     }
 
     // Handle OTHER.* for  SIDD 3.0/SICD 1.3
@@ -225,10 +227,13 @@ std::optional<DualPolarizationType> DualPolarizationType::toType_(const std::str
     auto right = PolarizationType::toType(splits[1]);
     const auto strRight = right == PolarizationType::OTHER ? other.toString() : right.toString();
     const auto str = strLeft + "_" + strRight; // can't do "A:B" in C++, so the enum/string is A_B
-    auto retval = default_toType(str);
-    retval.left_ = std::move(left);
-    retval.right_ = std::move(right);
-    return retval;
+    auto result = DualPolarizationType::default_toType_(str, pEx);
+    if (result.has_value())
+    {
+        result->left_ = std::move(left);
+        result->right_ = std::move(right);
+    }
+    return result;
 }
 std::string DualPolarizationType::toString_(bool throw_if_not_set) const
 {
