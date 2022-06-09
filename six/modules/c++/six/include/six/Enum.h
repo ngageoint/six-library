@@ -155,14 +155,14 @@ namespace details
     template<typename T>
     struct EnumBase : public EnumBase_
     {
-        std::optional<T> convertToType(const std::string& v, std::nothrow_t) const
+        static std::optional<T> toType(const std::string& v, std::nothrow_t)
         {
-            return toType_(v, nullptr /*pEx*/);
+            return instance().toType_(v, nullptr /*pEx*/);
         }
-        T convertToType(const std::string& v) const
+        static T toType(const std::string& v)
         {
             const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-            const auto result = toType_(v, &ex);
+            const auto result = instance().toType_(v, &ex);
             assert(result.has_value()); // nitf::details::index() should have already thrown, if necessary
             return *result;
         }
@@ -174,6 +174,12 @@ namespace details
         EnumBase& operator=(const EnumBase&) = default;
         EnumBase& operator=(EnumBase&&) = default;
         /*virtual*/ ~EnumBase() = default; // don't want "delete pEnumBase"
+
+        static const T& instance()
+        {
+            static const T instance_;
+            return instance_;
+        }
 
         std::optional<T> default_toType(const std::string& v, const except::Exception* pEx) const
         {
@@ -187,10 +193,6 @@ namespace details
             }
             return std::optional<T>(nitf::details::index(map, type, *pEx));
         }
-        virtual std::optional<T> toType_(const std::string& v, const except::Exception* pEx) const
-        {
-            return default_toType(v, pEx);
-        }
         std::optional<T> default_toType(const std::string& v, std::nothrow_t) const
         {
             return default_toType(v, nullptr /*pEx*/);
@@ -202,31 +204,19 @@ namespace details
             assert(result.has_value()); // nitf::details::index() should have already thrown, if necessary
             return *result;
         }
+
+        virtual std::optional<T> toType_(const std::string& v, const except::Exception* pEx) const
+        {
+            return default_toType(v, pEx);
+        }
     };
 
     // Base type for all enums; avoids code duplication
     template<typename T>
-    class Enum : public EnumBase<T>
+    struct Enum : public EnumBase<T>
     {
-    protected:
-        static const T& instance()
-        {
-            static const T instance_;
-            return instance_;
-        }
-
-    public:
         using enum_t = T;
         virtual ~Enum() = default;
-
-        static T toType(const std::string& v)
-        {
-            return instance().convertToType(v);
-        }
-        static std::optional<T> toType(const std::string& v, std::nothrow_t)
-        {
-            return instance().convertToType(v, std::nothrow);
-        }
 
         // needed for SWIG
         bool operator<(const int& o) const { return this->value < o; }
