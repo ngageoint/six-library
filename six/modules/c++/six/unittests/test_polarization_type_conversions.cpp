@@ -78,7 +78,7 @@ static void test_toType(const std::string& testName, size_t sz)
     test_toType_<TSixEnum>("ToType", "OTHER", TSixEnum::OTHER);
     test_toType_<TSixEnum>("ToType", "OTHER_abc", TSixEnum::OTHER); // SIDD 3.0/SICD 1.3
 
-    const auto string_to_int = TSixEnum::string_to_int_();
+    const auto string_to_int = TSixEnum().string_to_int();
     TEST_ASSERT_EQ(string_to_int.size(), sz);
     for (auto&& kv : string_to_int)
     {
@@ -183,7 +183,7 @@ static void test_six_toType(const std::string& testName, size_t sz)
 {
     test_six_toType_<TSixEnum>("SixToType", "OTHER", TSixEnum::OTHER);
 
-    const auto string_to_int = TSixEnum::string_to_int_();
+    const auto string_to_int = TSixEnum().string_to_int();
     TEST_ASSERT_EQ(string_to_int.size(), sz);
     for (auto&& kv : string_to_int)
     {
@@ -450,7 +450,7 @@ TEST_CASE(DualPolarization)
     // Allowed TX values: “V”, “H”, “X”, “Y”, “S”, “E”, “RHC”, “LHC”, “OTHER*”
     // Allowed RCV values:  “V”, “H”, “X”, “Y”, “S”, “E”, “RHC”, “LHC”, “OTHER*”,    
 
-    const auto polarizationTypeMap = six::PolarizationType::string_to_int_();
+    const auto polarizationTypeMap = six::PolarizationType().string_to_int();
     for (auto&& tx : polarizationTypeMap)
     {
         const auto txType = six::PolarizationType::toType(tx.first);

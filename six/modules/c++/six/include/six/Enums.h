@@ -307,8 +307,11 @@ SIX_Enum_END_DEFINE(PolarizationSequenceType);
  *
  *  Enumeration used to represent PolarizationTypes
  */
-SIX_Enum_BEGIN_DEFINE(PolarizationType)
-private:
+ // The SIX_Enum macros are only marginally useful because so much must be written out anyway.
+ // Minimizing their use here provides an example of how things look after the pre-processor is done.
+ // Not having the macros also can make stepping through code in a debugger easier.
+class PolarizationType : public six::details::Enum<PolarizationType> // SIX_Enum_BEGIN_DEFINE(PolarizationType)
+{
     std::string other_; // valid of OTHER.* for SIDD 3.0/SICD 1.3
     std::string toString_(bool throw_if_not_set) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
     bool equals_(const std::string& rhs) const override; // handle OTHER.* for SIDD 3.0/SICD 1.3
@@ -330,7 +333,9 @@ public:
         UNKNOWN = 6,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_int
+    const std::map<std::string, int>& string_to_int() const override
+    {
+        static const std::map<std::string, int> retval{
         SIX_Enum_map_entry_(OTHER),
         SIX_Enum_map_entry_(V),
         SIX_Enum_map_entry_(H),
@@ -341,8 +346,14 @@ public:
         SIX_Enum_map_entry_(RHC),
         SIX_Enum_map_entry_(LHC),
         SIX_Enum_map_entry_(UNKNOWN),
-    SIX_Enum_END_string_to_int
-SIX_Enum_END_DEFINE(PolarizationType);
+        SIX_Enum_map_entry_NOT_SET };
+        return retval;
+    }
+    
+    SIX_Enum_default_ctor_assign_(PolarizationType);
+    PolarizationType(const std::string& s) { *this = std::move(PolarizationType::toType(s)); }
+    PolarizationType(int i) : Enum<PolarizationType>(i) { }
+};
 
 /*!
  *  \struct DualPolarizationType

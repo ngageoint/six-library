@@ -250,7 +250,7 @@ namespace details
     #define SIX_Enum_map_entry_NOT_SET SIX_Enum_map_entry_(NOT_SET), { "NOT SET", NOT_SET }
 
     // Generate an enum class derived from details::Enum
-    // There are a few examples of expanded code below.
+    // There are a few examples of expanded code in Enums.h
    #define SIX_Enum_default_ctor_assign_(name) name() = default; virtual ~name() = default; \
             name(const name&) = default; name(name&&) = default; name& operator=(const name&) = default; name& operator=(name&&) = default
     #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); \
@@ -258,7 +258,7 @@ namespace details
     #define SIX_Enum_BEGIN_enum enum {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
-    #define SIX_Enum_BEGIN_string_to_int const std::map<std::string, int>& string_to_int() const override { return string_to_int_(); } static const std::map<std::string, int>& string_to_int_() { static const std::map<std::string, int> retval {
+    #define SIX_Enum_BEGIN_string_to_int const std::map<std::string, int>& string_to_int() const override { static const std::map<std::string, int> retval {
     #define SIX_Enum_END_enum NOT_SET = six::NOT_SET_VALUE };
     #define SIX_Enum_END_string_to_int SIX_Enum_map_entry_NOT_SET }; return retval; }
 
