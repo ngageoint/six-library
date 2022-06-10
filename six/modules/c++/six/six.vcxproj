@@ -133,7 +133,6 @@
     <ClInclude Include="include\six\SICommonXMLParser.h" />
     <ClInclude Include="include\six\SICommonXMLParser01x.h" />
     <ClInclude Include="include\six\SICommonXMLParser10x.h" />
-    <ClInclude Include="include\six\SIEnum.h" />
     <ClInclude Include="include\six\Types.h" />
     <ClInclude Include="include\six\Utilities.h" />
     <ClInclude Include="include\six\Version.h" />
