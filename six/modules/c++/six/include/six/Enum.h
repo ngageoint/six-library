@@ -89,6 +89,30 @@ namespace details
             return value < rhs.value;
         }
 
+        static std::string default_toString(const std::map<int, std::string>& map, 
+            int v, bool throw_if_not_set)
+        {
+            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
+            if (throw_if_not_set && (v == NOT_SET_VALUE))
+            {
+                throw ex;
+            }
+            return nitf::details::index(map, v, ex);
+        }
+
+        static std::optional<int> toInt(const std::map<std::string, int>& map,
+            const std::string& v, const except::Exception* pEx)
+        {
+            std::string type(v);
+            str::trim(type);
+            if (pEx == nullptr)
+            {
+                const auto it = map.find(type);
+                return it == map.end() ? std::optional<int>() : std::optional<int>(it->second);
+            }
+            return std::optional<int>(nitf::details::index(map, type, *pEx));
+        }
+
     protected:
         EnumBase() = default;
         EnumBase(const EnumBase&) = default;
@@ -99,11 +123,7 @@ namespace details
 
         std::string default_toString(bool throw_if_not_set) const
         {
-            if (throw_if_not_set && (value == NOT_SET_VALUE))
-            {
-                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-            }
-            return index(value);
+            return default_toString(int_to_string(), value, throw_if_not_set);
         }
         virtual std::string toString_(bool throw_if_not_set) const // for OTHER.* support in SIDD 3.0/SICD 1.3
         {
@@ -129,15 +149,7 @@ namespace details
 
         std::optional<int> toInt(const std::string& v, const except::Exception* pEx) const
         {
-            std::string type(v);
-            str::trim(type);
-            auto&& map = string_to_int();
-            if (pEx == nullptr)
-            {
-                const auto it = map.find(type);
-                return it == map.end() ? std::optional<int>() : std::optional<int>(it->second);
-            }
-            return std::optional<int>(nitf::details::index(map, type, *pEx));
+            return toInt(string_to_int(), v, pEx);
         }
 
     private:
@@ -192,6 +204,15 @@ namespace details
             return instance_;
         }
 
+        static std::optional<T> convert_toInt_result_(const std::optional<int>& result)
+        {
+            if (!result.has_value())
+            {
+                return std::optional<T>();
+            }
+            return T(*result); // create a T from an int
+        }
+
     public:
         using enum_t = T;
         virtual ~Enum() = default;
@@ -226,6 +247,13 @@ namespace details
         bool operator>(const int& o) const { return  this->value > o; }
         bool operator>(const Enum& o) const { return !(*this <= o); }
 
+        static std::optional<T> toType(const std::map<std::string, int>& string_to_int,
+            const std::string& v, const except::Exception* pEx)
+        {
+            const auto result = toInt(string_to_int, v, pEx);
+            return convert_toInt_result_(result);
+        }
+
     protected:
         Enum() = default;
         Enum(const Enum&) = default;
@@ -238,7 +266,7 @@ namespace details
         std::optional<T> default_toType(const std::string& v, const except::Exception* pEx) const
         {
             auto result = toInt(v, pEx);
-            return result.has_value() ? std::optional<T>(*result) : std::optional<T>();
+            return convert_toInt_result_(result);
         }
         virtual std::optional<T> toType_(const std::string& v, const except::Exception* pEx) const // for OTHER.* support in SIDD 3.0/SICD 1.3
         {
