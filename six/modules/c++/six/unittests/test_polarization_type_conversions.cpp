@@ -306,7 +306,7 @@ TEST_CASE(DualPolarizationType_ToString_OTHER)
     toType_DualPolarization = six::DualPolarizationType::toType("OTHER_V");
     TEST_ASSERT_EQ("OTHER_V", toType_DualPolarization.toString());
     TEST_ASSERT(toType_DualPolarization == "OTHER_V");
-    //TEST_ASSERT(toType_DualPolarization == "OTHER:V");
+    TEST_ASSERT(toType_DualPolarization == "OTHER:V");
     //TEST_ASSERT(toType_DualPolarization != "OTHER_abc:V"); // "OTHER_V" is OTHER:V, not OTHER.*
 
     toType_DualPolarization = six::DualPolarizationType::toType("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   

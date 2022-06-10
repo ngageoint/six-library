@@ -245,19 +245,31 @@ std::optional<DualPolarizationType> DualPolarizationType::toType_(const std::str
 
     // Handle OTHER.* for  SIDD 3.0/SICD 1.3
     // The "dual" type is really two `PolarizationType`s next to each other
-    static const PolarizationType other = PolarizationType::OTHER;
-    auto left = PolarizationType::toType(splits[0]);
-    const auto strLeft = left == PolarizationType::OTHER ? other.toString() : left.toString();
-    auto right = PolarizationType::toType(splits[1]);
-    const auto strRight = right == PolarizationType::OTHER ? other.toString() : right.toString();
-    const auto str = strLeft + "_" + strRight; // can't do "A:B" in C++, so the enum/string is A_B
-    auto result = DualPolarizationType::default_toType_(str, pEx);
-    if (result.has_value())
+    const auto left = PolarizationType::toType(splits[0], std::nothrow);
+    if (left.has_value())
     {
-        result->left_ = std::move(left);
-        result->right_ = std::move(right);
+        const auto right = PolarizationType::toType(splits[1], std::nothrow);
+        if (right.has_value())
+        {
+            static const PolarizationType other = PolarizationType::OTHER;
+            const auto strLeft = *left == PolarizationType::OTHER ? other.toString() : left->toString();
+            const auto strRight = *right == PolarizationType::OTHER ? other.toString() : right->toString();
+
+            // Get the right enum value set
+            const auto str = strLeft + "_" + strRight; // can't do "A:B" in C++, so the enum/string is A_B
+            auto result = DualPolarizationType::default_toType_(str, pEx);
+            if (result.has_value())
+            {
+                // save away the exact strings for OTHER.*
+                result->left_ =*left;
+                result->right_ = *right;
+                return *result;
+            }
+        }
     }
-    return result;
+
+    // Need something more than C++11 to avoid mentioning the type twice; in C++14, the lambda could be "auto"
+    return toType_imp<DualPolarizationType>(v, pEx, [&](DualPolarizationType& t) { t.other_ = v; });
 }
 std::string DualPolarizationType::toString_(bool throw_if_not_set) const
 {
