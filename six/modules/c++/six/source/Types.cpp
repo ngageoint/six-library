@@ -290,43 +290,37 @@ std::string DualPolarizationType::toString_(bool throw_if_not_set) const
 
 bool DualPolarizationType::equals_(const std::string& rhs) const
 {
-    static const auto strOther = DualPolarizationType(DualPolarizationType::OTHER).toString();
-
     const auto& e = *this;
     const auto& o = rhs;
-    const auto str_e = e.toString();
-    if ((e == DualPolarizationType::OTHER) && (is_OTHER_(o) || (o == strOther)))
-    {
-        // If they're both OTHER.*, they should be equal only if the strings are the same: OTHER_abc != OTHER_xyz
-        if (is_OTHER_(str_e) && is_OTHER_(o))
-        {
-            return str_e == o;
-        }
 
-        // Otherwise, DualPolarizationType::OTHER matches any OTHER.*
-        return true;
+    if ((e.left_ == PolarizationType::OTHER) || (e.right_ == PolarizationType::OTHER))
+    {
+        // For OTHER.*_V or V_OTHER.* (i.e. "OTHER_abc:V" or "V:OTHER_xyz"), split
+        // the string to compare the parts.
+        const auto splits = str::split(o, ":");
+        if (splits.size() == 2) // str is, e.g., "OTHER_abc:V"
+        {
+            // Can split the string, try to compare using PolarizationType
+            const auto left = PolarizationType::toType(splits[0], std::nothrow);
+            if (left.has_value())
+            {
+                const auto right = PolarizationType::toType(splits[1], std::nothrow);
+                if (right.has_value())
+                {
+                    return (e.left_ == left) && (e.right_ == right);
+                }
+            }
+        }
     }
 
-    // "o" could be complete nonsense, calling toType() will throw.
+    // If we can make a DualPolarizationType from the string; try that.
     const auto o_type = DualPolarizationType::toType(o, std::nothrow);
     if (o_type.has_value())
     {
-        // Be sure we don't end up back here; existing code uses toString()
-        return str_e == o_type->toString();
+        return e == *o_type;
     }
 
-    const auto splits_e = str::split(str_e, ":");
-    const auto splits_o = str::split(o, ":");
-    if ((splits_e.size() != 2) && (splits_o.size() != 2)) // no ":"s to be found
-    {
-        return eq_imp(e, o, [&]() { return e.default_equals(o); });
-    }
-
-    if (splits_o.size() == 2)
-    {
-        return DualPolarizationType::toType(o) == e;
-    }
-
+    // special processing needed only when comparing OTHERs
     return eq_imp(e, o, [&]() { return e.default_equals(o); });
 }
 bool DualPolarizationType::less_(const EnumBase& rhs) const
