@@ -97,20 +97,19 @@ namespace details
             {
                 throw ex;
             }
-            return nitf::details::index(map, v, ex);
+            const auto result = nitf::details::index(map, v);
+            return nitf::details::value(result, ex);
         }
 
         static std::optional<int> toInt(const std::map<std::string, int>& map,
-            const std::string& v, const except::Exception* pEx)
+            const std::string& type, const except::Exception* pEx)
         {
-            std::string type(v);
-            str::trim(type);
-            if (pEx == nullptr)
+            auto result = nitf::details::from_string(type, map);
+            if ((pEx != nullptr) && !result.has_value())
             {
-                const auto it = map.find(type);
-                return it == map.end() ? std::optional<int>() : std::optional<int>(it->second);
+                throw *pEx;
             }
-            return std::optional<int>(nitf::details::index(map, type, *pEx));
+            return result;
         }
 
     protected:
@@ -155,13 +154,15 @@ namespace details
     private:
         std::string index(int v) const
         {
+            const auto result = nitf::details::to_string(v, int_to_string());
             const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
-            return nitf::details::index(int_to_string(), v, ex);
+            return nitf::details::value(result, ex);
         }
         int index(const std::string& v) const
         {
+            const auto result = nitf::details::from_string(v, string_to_int());
             const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
-            return nitf::details::index(string_to_int(), v, ex);
+            return nitf::details::value(result, ex);
         }
 
         //size_t size() const { return int_to_string_.size(); }
