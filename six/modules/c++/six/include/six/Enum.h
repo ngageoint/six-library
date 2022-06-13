@@ -180,14 +180,6 @@ namespace details
     {
         return lhs.less(rhs);
     }
-    inline bool operator==(const EnumBase& lhs, const std::string& rhs) // for unittests, not SWIG
-    {
-        return lhs.equals(rhs);
-    }
-    inline bool operator!=(const EnumBase& lhs, const std::string& rhs) // for unittests, not SWIG
-    {
-        return !(lhs == rhs);
-    }
     inline std::ostream& operator<<(std::ostream& os, const EnumBase& e)
     {
         os << e.toString();

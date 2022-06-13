@@ -28,6 +28,19 @@
 #include <six/Enums.h>
 #include <six/Utilities.h>
 
+namespace six
+{
+    inline bool operator==(const details::EnumBase& lhs, const std::string& rhs) // for unittests, not SWIG
+    {
+        return lhs.equals(rhs);
+    }
+    inline bool operator!=(const details::EnumBase& lhs, const std::string& rhs) // for unittests, not SWIG
+    {
+        return !(lhs == rhs);
+    }
+}
+
+
 template<typename TSixEnum>
 static void test_EnumConstructor(const std::string& testName, const std::string& strType, TSixEnum type)
 {
