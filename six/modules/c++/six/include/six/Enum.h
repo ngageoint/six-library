@@ -78,7 +78,7 @@ namespace details
         {
             return toString_(throw_if_not_set);
         }
-        operator std::string() const { return toString(); }
+        //operator std::string() const { return toString(); }
         bool equals(const std::string& rhs) const // equals(), not less(); order based on ints, not strings
         {
             return equals_(rhs);
@@ -210,7 +210,8 @@ namespace details
             {
                 return std::optional<T>();
             }
-            return T(*result); // create a T from an int
+            const T retval(static_cast<T::values>(*result));  // create a T from an int
+            return retval;
         }
 
     public:
@@ -282,9 +283,10 @@ namespace details
    #define SIX_Enum_default_ctor_assign_(name) name() = default; virtual ~name() = default; \
             name(const name&) = default; name(name&&) = default; name& operator=(const name&) = default; name& operator=(name&&) = default
     #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); \
-            name(const std::string& s) { *this = std::move(name::toType(s)); } name(int i) : Enum<name>(i) { }
-    #define SIX_Enum_BEGIN_enum enum {
-    #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
+            explicit name(const std::string& s) { *this = std::move(name::toType(s)); } \
+            name(int i) : Enum<name>(i) { }; name(values v) : Enum<name>(v) { }
+    #define SIX_Enum_BEGIN_enum enum values {
+    #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { enum values : int;
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
     #define SIX_Enum_BEGIN_string_to_int const std::map<std::string, int>& string_to_int() const override { static const std::map<std::string, int> retval {
     #define SIX_Enum_END_enum NOT_SET = six::NOT_SET_VALUE };
