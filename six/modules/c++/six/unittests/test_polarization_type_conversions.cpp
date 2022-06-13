@@ -223,7 +223,7 @@ static void test_ToString_(const std::string& testName, const std::string& strTy
 {
     (void)testName;
     {
-        const std::string polarizationString = type;
+        const auto polarizationString = type.toString();
         TEST_ASSERT_EQ(strType, polarizationString);
         decltype(type) pType(polarizationString);
         TEST_ASSERT_EQ(pType, type);
@@ -375,7 +375,7 @@ static void test_NotSet(const std::string& testName)
 
     TSixEnum pType;
     TEST_ASSERT_EQ(pType, TSixEnum::NOT_SET);
-    std::string polarizationString = pType;
+    auto polarizationString = pType.toString();
     TEST_ASSERT_EQ(polarizationString, "NOT_SET");
     TEST_EXCEPTION(polarizationString = pType.toString(true /*throw_if_not_set*/));
     polarizationString = pType.toString(false /*throw_if_not_set*/);

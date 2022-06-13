@@ -478,7 +478,7 @@ static std::string toString_(const TSixEnum& t, const std::string& msg)
     {
         throw except::Exception(Ctxt(msg));
     }
-    return t;
+    return t.toString();
 }
 
 template <>
