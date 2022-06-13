@@ -151,6 +151,8 @@ namespace details
             return toInt(string_to_int(), v, pEx);
         }
 
+        size_t size_() const { return int_to_string().size(); } // for SWIG bindings
+
     private:
         std::string index(int v) const
         {
@@ -165,7 +167,6 @@ namespace details
             return nitf::details::value(result, ex);
         }
 
-        //size_t size() const { return int_to_string_.size(); }
         mutable std::map<int, std::string> int_to_string_;
         const std::map<int, std::string>& int_to_string() const
         {
@@ -203,7 +204,8 @@ namespace details
             {
                 return std::optional<T>();
             }
-            const T retval(static_cast<T::values>(*result));  // create a T from an int
+	    using t_values = typename T::values;
+            const T retval(static_cast<t_values>(*result));  // create a T from an int
             return retval;
         }
 
@@ -228,6 +230,7 @@ namespace details
         }
 
         // needed for SWIG
+        static size_t size() { return instance().size_(); }
         bool operator<(const int& o) const { return this->value < o; }
         bool operator<(const Enum& o) const { return this->less(o); }
         bool operator>=(const int& o) const { return  this->value >= o; }
@@ -278,7 +281,7 @@ namespace details
     #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); \
             explicit name(const std::string& s) { *this = std::move(name::toType(s)); } \
             name(int i) : Enum<name>(i) { }; name(values v) : Enum<name>(v) { }
-    #define SIX_Enum_BEGIN_enum enum values {
+    #define SIX_Enum_BEGIN_enum enum values : int {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { enum values : int;
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
     #define SIX_Enum_BEGIN_string_to_int const std::map<std::string, int>& string_to_int() const override { static const std::map<std::string, int> retval {
