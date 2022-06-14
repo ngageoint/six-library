@@ -1127,7 +1127,7 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(ref.monostatic->arpVel[0], 10);
     TEST_ASSERT_EQ(ref.monostatic->arpVel[1], 10);
     TEST_ASSERT_EQ(ref.monostatic->arpVel[2], 10);
-    TEST_ASSERT(ref.monostatic->sideOfTrack == "LEFT");
+    TEST_ASSERT(ref.monostatic->sideOfTrack.toString() == "LEFT");
     TEST_ASSERT_EQ(ref.monostatic->sideOfTrack, six::SideOfTrackType::LEFT);
     TEST_ASSERT_EQ(ref.monostatic->azimuthAngle, 30.0);
     TEST_ASSERT_EQ(ref.monostatic->grazeAngle, 30.0);

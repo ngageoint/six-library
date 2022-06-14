@@ -580,7 +580,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         XMLElem monoXML = newElement("Monostatic", refGeoXML);
         mCommon.createVector3D("ARPPos", refGeo.monostatic->arpPos, monoXML);
         mCommon.createVector3D("ARPVel", refGeo.monostatic->arpVel, monoXML);
-        std::string side = refGeo.monostatic->sideOfTrack;
+        const auto side = refGeo.monostatic->sideOfTrack.toString();
         createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), monoXML);
         createDouble("SlantRange", refGeo.monostatic->slantRange, monoXML);
         createDouble("GroundRange", refGeo.monostatic->groundRange, monoXML);
@@ -609,7 +609,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         mCommon.createVector3D("Vel", refGeo.bistatic->txPlatform.vel, txPlatXML);
 
         {
-            const std::string side = refGeo.bistatic->txPlatform.sideOfTrack;
+            const auto side = refGeo.bistatic->txPlatform.sideOfTrack.toString();
             createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), txPlatXML);
         }
         createDouble("SlantRange", refGeo.bistatic->txPlatform.slantRange, txPlatXML);
@@ -624,7 +624,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         mCommon.createVector3D("Vel", refGeo.bistatic->rcvPlatform.vel, rcvPlatXML);
 
         {
-            const std::string side = refGeo.bistatic->rcvPlatform.sideOfTrack;
+            const auto side = refGeo.bistatic->rcvPlatform.sideOfTrack.toString();
             createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), rcvPlatXML);
         }
         createDouble("SlantRange", refGeo.bistatic->rcvPlatform.slantRange, rcvPlatXML);
@@ -1072,7 +1072,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
         global.tropoParameters.reset(new TropoParameters());
         parseDouble(getFirstAndOnly(tropoXML, "N0"), global.tropoParameters->n0);
         global.tropoParameters->refHeight =
-                getFirstAndOnly(tropoXML, "RefHeight")->getCharacterData();
+            RefHeight(getFirstAndOnly(tropoXML, "RefHeight")->getCharacterData());
     }
 
     // IonoParameters

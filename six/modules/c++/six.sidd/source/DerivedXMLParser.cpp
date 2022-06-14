@@ -765,10 +765,10 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
             info->polarization[jj].reset(new TxRcvPolarization());
             TxRcvPolarization* p = info->polarization[jj].get();
 
-            p->txPolarization = six::toType<PolarizationType>(
+            p->txPolarization = six::toType<PolarizationSequenceType>(
                 getFirstAndOnly(polElem, "TxPolarization")->
                 getCharacterData());
-            p->rcvPolarization = six::toType<PolarizationType>(
+            p->rcvPolarization = six::toType<PolarizationSequenceType>(
                 getFirstAndOnly(polElem, "RcvPolarization")->
                 getCharacterData());
 

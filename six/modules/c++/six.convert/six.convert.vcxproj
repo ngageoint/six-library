@@ -15,7 +15,6 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{DB4ECC28-A862-4CF4-8A03-69B3CC0C4E8B}</ProjectGuid>
     <RootNamespace>six</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -63,7 +62,6 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <WarningLevel>EnableAllWarnings</WarningLevel>
-      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>
