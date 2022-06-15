@@ -71,45 +71,6 @@
     <ClCompile Include="cphd03_test_vbm.cpp">
       <Filter>cphd03</Filter>
     </ClCompile>
-    <ClCompile Include="cphd_test_channel.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd_test_compressed_signal_block_round.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd_test_cphd_xml_control.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd_test_cphd_xml_optional.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd_test_dwell.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd_test_file_header.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd_test_pvp.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd_test_pvp_block.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd_test_pvp_block_round.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd_test_read_wideband.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd_test_reference_geometry.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd_test_signal_block_round.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd_test_support_block_round.cpp">
-      <Filter>cphd</Filter>
-    </ClCompile>
     <ClCompile Include="six.sicd_test_CollectionInfo.cpp">
       <Filter>six.sicd</Filter>
     </ClCompile>
@@ -142,9 +103,6 @@
     <ClInclude Include="cphd03_Test.h">
       <Filter>cphd03</Filter>
     </ClInclude>
-    <ClInclude Include="cphd_Test.h">
-      <Filter>cphd</Filter>
-    </ClInclude>
     <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
@@ -162,9 +120,6 @@
     </Filter>
     <Filter Include="cphd03">
       <UniqueIdentifier>{d356dcdd-bdb8-47ae-a3c1-b99f28c38909}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="cphd">
-      <UniqueIdentifier>{8dbd3ccb-d3e2-4154-8dd5-e135bb0d0364}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

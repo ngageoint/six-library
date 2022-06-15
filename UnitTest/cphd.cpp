@@ -20,6 +20,10 @@ TEST_CLASS(test_cphd_xml_control) { public:
 TEST_CLASS(test_cphd_xml_optional) { public:
 #include "six/modules/c++/cphd/unittests/test_cphd_xml_optional.cpp"
 };
+										
+TEST_CLASS(test_dwell) { public:
+#include "six/modules/c++/cphd/unittests/test_dwell.cpp"
+};
 
 TEST_CLASS(test_file_header) { public:
 #include "six/modules/c++/cphd/unittests/test_file_header.cpp"

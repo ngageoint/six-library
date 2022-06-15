@@ -25,7 +25,6 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClInclude Include="cphd03_Test.h" />
-    <ClInclude Include="cphd_Test.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="sicd_Test.h" />
     <ClInclude Include="sidd_Test.h" />
@@ -37,19 +36,6 @@
     <ClCompile Include="cphd03_test_cphd_read_unscaled_int.cpp" />
     <ClCompile Include="cphd03_test_cphd_write.cpp" />
     <ClCompile Include="cphd03_test_vbm.cpp" />
-    <ClCompile Include="cphd_test_channel.cpp" />
-    <ClCompile Include="cphd_test_compressed_signal_block_round.cpp" />
-    <ClCompile Include="cphd_test_cphd_xml_control.cpp" />
-    <ClCompile Include="cphd_test_cphd_xml_optional.cpp" />
-    <ClCompile Include="cphd_test_dwell.cpp" />
-    <ClCompile Include="cphd_test_file_header.cpp" />
-    <ClCompile Include="cphd_test_pvp.cpp" />
-    <ClCompile Include="cphd_test_pvp_block.cpp" />
-    <ClCompile Include="cphd_test_pvp_block_round.cpp" />
-    <ClCompile Include="cphd_test_read_wideband.cpp" />
-    <ClCompile Include="cphd_test_reference_geometry.cpp" />
-    <ClCompile Include="cphd_test_signal_block_round.cpp" />
-    <ClCompile Include="cphd_test_support_block_round.cpp" />
     <ClCompile Include="six.sicd_test_AMP8I_PHS8I.cpp" />
     <ClCompile Include="six.sicd_test_area_plane.cpp" />
     <ClCompile Include="six.sicd_test_CollectionInfo.cpp" />
