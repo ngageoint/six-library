@@ -62,15 +62,6 @@
     <ClCompile Include="six.sicd_test_update_sicd_version.cpp">
       <Filter>six.sicd</Filter>
     </ClCompile>
-    <ClCompile Include="cphd03_test_cphd_read_unscaled_int.cpp">
-      <Filter>cphd03</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd03_test_cphd_write.cpp">
-      <Filter>cphd03</Filter>
-    </ClCompile>
-    <ClCompile Include="cphd03_test_vbm.cpp">
-      <Filter>cphd03</Filter>
-    </ClCompile>
     <ClCompile Include="six.sicd_test_CollectionInfo.cpp">
       <Filter>six.sicd</Filter>
     </ClCompile>
@@ -100,9 +91,6 @@
     <ClInclude Include="sicd_Test.h">
       <Filter>six.sicd</Filter>
     </ClInclude>
-    <ClInclude Include="cphd03_Test.h">
-      <Filter>cphd03</Filter>
-    </ClInclude>
     <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
@@ -117,9 +105,6 @@
     </Filter>
     <Filter Include="six.sicd">
       <UniqueIdentifier>{f16bae40-a534-49e4-a641-180ef8121614}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="cphd03">
-      <UniqueIdentifier>{d356dcdd-bdb8-47ae-a3c1-b99f28c38909}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
