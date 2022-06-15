@@ -2,18 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="six_test_fft_sign_conversions.cpp">
-      <Filter>six</Filter>
-    </ClCompile>
-    <ClCompile Include="six_test_polarization_type_conversions.cpp">
-      <Filter>six</Filter>
-    </ClCompile>
-    <ClCompile Include="six_test_serialize.cpp">
-      <Filter>six</Filter>
-    </ClCompile>
-    <ClCompile Include="six_test_xml_control.cpp">
-      <Filter>six</Filter>
-    </ClCompile>
     <ClCompile Include="six.sidd_test_annotations_equality.cpp">
       <Filter>six.sidd</Filter>
     </ClCompile>
@@ -82,9 +70,6 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="GTest.h" />
-    <ClInclude Include="six_Test.h">
-      <Filter>six</Filter>
-    </ClInclude>
     <ClInclude Include="sidd_Test.h">
       <Filter>six.sidd</Filter>
     </ClInclude>
@@ -97,9 +82,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="six">
-      <UniqueIdentifier>{1f1d779d-e28e-4ce9-9861-51d7374ba3de}</UniqueIdentifier>
-    </Filter>
     <Filter Include="six.sidd">
       <UniqueIdentifier>{f0ddd87d-61c8-4d94-945a-d0364bc5c576}</UniqueIdentifier>
     </Filter>

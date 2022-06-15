@@ -177,6 +177,14 @@ namespace details
             return int_to_string_;
         }
     };
+    inline bool operator==(const EnumBase& lhs, const std::string& rhs) // for unittests, not SWIG
+    {
+        return lhs.equals(rhs);
+    }
+    inline bool operator!=(const EnumBase& lhs, const std::string& rhs) // for unittests, not SWIG
+    {
+        return !(lhs == rhs);
+    }
     inline bool operator<(const EnumBase& lhs, const EnumBase& rhs)
     {
         return lhs.less(rhs);

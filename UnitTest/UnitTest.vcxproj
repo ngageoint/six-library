@@ -170,11 +170,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="six.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cphd03_Test.h" />
     <ClInclude Include="cphd_Test.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="six_Test.h" />
     <ClInclude Include="TestCase.h" />
   </ItemGroup>
   <ItemGroup>
