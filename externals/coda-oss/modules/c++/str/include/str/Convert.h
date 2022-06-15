@@ -67,6 +67,9 @@ template <>
 CODA_OSS_API std::string toString(const int8_t& value);
 
 template <>
+CODA_OSS_API std::string toString(const coda_oss::byte& value);
+
+template <>
 inline std::string toString(const std::nullptr_t&)
 {
     return "<nullptr>";
@@ -79,12 +82,6 @@ template <typename T>
 std::string toString(const coda_oss::optional<T>& value)
 {
     return toString(value.value());
-}
-
-template <>
-inline std::string toString(const coda_oss::byte& v)
-{
-    return toString(static_cast<unsigned char>(v));
 }
 
 template <typename T>

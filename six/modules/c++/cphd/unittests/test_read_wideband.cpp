@@ -25,18 +25,6 @@
 #include <io/ByteStream.h>
 #include "TestCase.h"
 
-//namespace
-//{
-//    inline bool operator==(std::byte lhs, char rhs)
-//    {
-//        return static_cast<char>(lhs) == rhs;
-//    }
-//    inline bool operator!=(std::byte lhs, char rhs)
-//    {
-//        return !(lhs == rhs);
-//    }
-//}
-
 TEST_CASE(testReadCompressedChannel)
 {
     auto input = std::make_shared<io::ByteStream>();
