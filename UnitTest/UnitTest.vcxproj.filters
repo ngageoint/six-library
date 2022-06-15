@@ -6,6 +6,8 @@
     <ClCompile Include="cphd.cpp" />
     <ClCompile Include="cphd03.cpp" />
     <ClCompile Include="six.cpp" />
+    <ClCompile Include="sidd.cpp" />
+    <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -13,5 +15,7 @@
     <ClInclude Include="cphd_Test.h" />
     <ClInclude Include="cphd03_Test.h" />
     <ClInclude Include="six_Test.h" />
+    <ClInclude Include="sidd_Test.h" />
+    <ClInclude Include="Test.h" />
   </ItemGroup>
 </Project>

@@ -2,15 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="six.sidd_test_annotations_equality.cpp">
-      <Filter>six.sidd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sidd_test_geometric_chip.cpp">
-      <Filter>six.sidd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sidd_test_read_sidd_legend.cpp">
-      <Filter>six.sidd</Filter>
-    </ClCompile>
     <ClCompile Include="six.sicd_test_utilities.cpp">
       <Filter>six.sicd</Filter>
     </ClCompile>
@@ -59,20 +50,11 @@
     <ClCompile Include="six.sicd_test_AMP8I_PHS8I.cpp">
       <Filter>six.sicd</Filter>
     </ClCompile>
-    <ClCompile Include="six.sidd_test_sidd_byte_provider.cpp">
-      <Filter>six.sidd</Filter>
-    </ClCompile>
     <ClCompile Include="Test.cpp" />
-    <ClCompile Include="six.sidd_test_valid_six.cpp">
-      <Filter>six.sidd</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="GTest.h" />
-    <ClInclude Include="sidd_Test.h">
-      <Filter>six.sidd</Filter>
-    </ClInclude>
     <ClInclude Include="sicd_Test.h">
       <Filter>six.sicd</Filter>
     </ClInclude>
@@ -82,9 +64,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="six.sidd">
-      <UniqueIdentifier>{f0ddd87d-61c8-4d94-945a-d0364bc5c576}</UniqueIdentifier>
-    </Filter>
     <Filter Include="six.sicd">
       <UniqueIdentifier>{f16bae40-a534-49e4-a641-180ef8121614}</UniqueIdentifier>
     </Filter>

@@ -41,50 +41,46 @@
 #pragma warning(disable: 4459) //  declaration of '...' hides global declaration
 #endif
 
-namespace fs = std::filesystem;
-
-static fs::path argv0()
+static std::filesystem::path argv0()
 {
     static const sys::OS os;
-    static const fs::path retval = os.getSpecialEnv("0");
+    static const auto retval = os.getSpecialEnv("0");
     return retval;
 }
 
-inline fs::path six_sidd_relative_path()
+static inline std::filesystem::path six_sidd_relative_path()
 {
-    return fs::path("six") / "modules" / "c++" / "six.sidd";
+    return std::filesystem::path("six") / "modules" / "c++" / "six.sidd";
 }
-static fs::path sample_xml_relative_path(const fs::path& filename)
+static std::filesystem::path sample_xml_relative_path(const std::filesystem::path& filename)
 {
     return six_sidd_relative_path() / "tests" / "sample_xml" / filename;
 }
-static fs::path schema_relative_path()
+static std::filesystem::path schema_relative_path()
 {
     return six_sidd_relative_path() / "conf" / "schema";
 }
 
-inline fs::path get_sample_xml_path(const fs::path& filename)
+static std::filesystem::path get_sample_xml_path(const std::filesystem::path& filename)
 {
     const auto root_dir = six::testing::buildRootDir(argv0());
     return root_dir / sample_xml_relative_path(filename);
 }
 
-inline std::vector<std::filesystem::path> getSchemaPaths()
+static std::vector<std::filesystem::path> getSchemaPaths()
 {
     const auto root_dir = six::testing::buildRootDir(argv0());
     return std::vector<std::filesystem::path> { (root_dir / schema_relative_path()) };
 }
 
-static std::string testName;
-
-static std::unique_ptr<six::sidd::DerivedData> test_assert_round_trip(const six::sidd::DerivedData& derivedData, const std::vector<fs::path>* pSchemaPaths)
+static std::unique_ptr<six::sidd::DerivedData> test_assert_round_trip(const six::sidd::DerivedData& derivedData, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
     auto strXML = six::sidd::Utilities::toXMLString(derivedData, pSchemaPaths);
     TEST_ASSERT_FALSE(strXML.empty());
     return six::sidd::Utilities::parseDataFromString(strXML, pSchemaPaths);
 }
 
-inline const six::UnmodeledS* get_Unmodeled(const six::sidd::DerivedData& derivedData, const std::string& strVersion)
+inline static const six::UnmodeledS* get_Unmodeled(const six::sidd::DerivedData& derivedData, const std::string& strVersion)
 {
     if (strVersion != "3.0.0") // Unmodeled added in SIDD 3.0
     {
@@ -147,7 +143,7 @@ static void test_assert_unmodeled(const six::sidd::DerivedData& derivedData)
     test_assert_unmodeled_(*Unmodeled);
 }
 
-static void test_read_sidd_xml(const fs::path& path)
+static void test_read_sidd_xml(const std::filesystem::path& path)
 {
     const auto pathname = get_sample_xml_path(path);
 
