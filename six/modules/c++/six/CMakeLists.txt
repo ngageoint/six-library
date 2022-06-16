@@ -12,7 +12,6 @@ coda_add_module(
         source/CompressedByteProvider.cpp
         source/Container.cpp
         source/Data.cpp
-        source/Enums.cpp
         source/ErrorStatistics.cpp
         source/GeoDataBase.cpp
         source/GeoInfo.cpp

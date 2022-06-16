@@ -156,7 +156,6 @@
     <ClCompile Include="source\CompressedByteProvider.cpp" />
     <ClCompile Include="source\Container.cpp" />
     <ClCompile Include="source\Data.cpp" />
-    <ClCompile Include="source\Enums.cpp" />
     <ClCompile Include="source\ErrorStatistics.cpp" />
     <ClCompile Include="source\GeoDataBase.cpp" />
     <ClCompile Include="source\GeoInfo.cpp" />
