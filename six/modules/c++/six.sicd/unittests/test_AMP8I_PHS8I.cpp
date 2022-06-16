@@ -96,6 +96,7 @@ static void setNitfPluginPath()
 
 static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXMLControl& reader)
 {
+    static const std::string testName("test_AMP8I_PHS8I");
     auto container = reader.getContainer();
     TEST_ASSERT_EQ(six::DataType::COMPLEX, container->getDataType());
     TEST_ASSERT_EQ(static_cast<size_t>(1), container->size());
@@ -124,7 +125,8 @@ static std::unique_ptr<six::sicd::ComplexData> getComplexData(const six::Contain
     return retval;
 }
 
-static void test_nitf_image_info(six::sicd::ComplexData& complexData, const std::filesystem::path& inputPathname,
+static void test_nitf_image_info(const std::string& testName,
+    six::sicd::ComplexData& complexData, const std::filesystem::path& inputPathname,
     nitf::PixelValueType expectedPixelValueType)
 {
     constexpr auto expectedBlockingMode = nitf::BlockingMode::Pixel;
@@ -160,7 +162,8 @@ static void test_nitf_image_info(six::sicd::ComplexData& complexData, const std:
     }
 }
 
-static void test_assert_eq(const std::vector<std::complex<float>>& actuals, const std::vector<AMP8I_PHS8I_t>& amp8i_phs8i)
+static void test_assert_eq(const std::string& testName,
+    const std::vector<std::complex<float>>& actuals, const std::vector<AMP8I_PHS8I_t>& amp8i_phs8i)
 {
     TEST_ASSERT_EQ(actuals.size(), amp8i_phs8i.size());
     for (size_t i = 0; i < actuals.size(); i++)
@@ -216,12 +219,12 @@ TEST_CASE(test_8bit_ampphs)
     // we should now be able to convert the cx_floats back to amp/value
     std::vector<AMP8I_PHS8I_t> amp8i_phs8i(actuals.size());
     to_AMP8I_PHS8I(imageData, actuals, amp8i_phs8i);
-    test_assert_eq(actuals, amp8i_phs8i);
+    test_assert_eq(testName, actuals, amp8i_phs8i);
 
     // ... and again, async
     const auto cutoff = actuals.size() / 10; // be sure std::async is called
     to_AMP8I_PHS8I(imageData, actuals, amp8i_phs8i, cutoff);
-    test_assert_eq(actuals, amp8i_phs8i);
+    test_assert_eq(testName, actuals, amp8i_phs8i);
 }
 
 static std::vector <std::complex<float>> read_8bit_ampphs(const std::string& testName,
@@ -261,7 +264,7 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const std::string& tes
     const auto numChannels = complexData.getNumChannels();
     TEST_ASSERT_EQ(static_cast<size_t>(2), numChannels);
 
-    test_nitf_image_info(complexData, inputPathname, nitf::PixelValueType::Integer);
+    test_nitf_image_info(testName, complexData, inputPathname, nitf::PixelValueType::Integer);
 
     return retval;
 }
@@ -443,6 +446,7 @@ static std::vector<std::complex<float>> make_complex_image(const six::sicd::Comp
 template<typename T>
 static void test_assert_eq(std::span<const std::byte> bytes, const std::vector<T>& rawData)
 {
+    static const std::string testName("test_AMP8I_PHS8I");
     const auto rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
     TEST_ASSERT_EQ(bytes.size(), rawDataSizeInBytes);
 
@@ -581,7 +585,7 @@ TEST_CASE(test_create_sicd_from_mem_8i)
     test_create_sicd_from_mem(testName, "test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
 
-static void test_adjusted_values(const std::vector<std::complex<float>>& values,
+static void test_adjusted_values(const std::string& testName, const std::vector<std::complex<float>>& values,
     const std::vector<AMP8I_PHS8I_t>& expected, std::complex<float> delta)
 {
     auto adjusted_values = values;
@@ -626,28 +630,28 @@ TEST_CASE(test_nearest_neighbor)
     auto other_expected = expected;
 
     constexpr auto delta = 0.0122f;
-    test_adjusted_values(values, other_expected,  std::complex<float>(delta, 0.0f));
+    test_adjusted_values(testName, values, other_expected,  std::complex<float>(delta, 0.0f));
 
     other_expected[0].second = 32;
-    test_adjusted_values(values, other_expected, std::complex<float>(delta, delta));
+    test_adjusted_values(testName, values, other_expected, std::complex<float>(delta, delta));
 
     other_expected[0].second += 32;
-    test_adjusted_values(values, other_expected, std::complex<float>(0.0f, delta));
+    test_adjusted_values(testName, values, other_expected, std::complex<float>(0.0f, delta));
 
     other_expected[0].second += 32;
-    test_adjusted_values(values, other_expected, std::complex<float>(-delta, delta));
+    test_adjusted_values(testName, values, other_expected, std::complex<float>(-delta, delta));
 
     other_expected[0].second += 32;
-    test_adjusted_values(values, other_expected,  std::complex<float>(-delta, 0.0f));
+    test_adjusted_values(testName, values, other_expected, std::complex<float>(-delta, 0.0f));
 
     other_expected[0].second += 32;
-    test_adjusted_values(values, other_expected, std::complex<float>(-delta, -delta));
+    test_adjusted_values(testName, values, other_expected, std::complex<float>(-delta, -delta));
 
     other_expected[0].second += 32;
-    test_adjusted_values(values, other_expected,  std::complex<float>(0.0f, -delta));
+    test_adjusted_values(testName, values, other_expected, std::complex<float>(0.0f, -delta));
 
     other_expected[0].second += 32;
-    test_adjusted_values(values, other_expected,  std::complex<float>(delta, -delta));
+    test_adjusted_values(testName, values, other_expected, std::complex<float>(delta, -delta));
 
     other_expected[0].second += 32;
     TEST_ASSERT_EQ(other_expected[0].second, expected[0].second);

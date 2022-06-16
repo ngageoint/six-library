@@ -410,6 +410,7 @@ static std::vector<std::complex<float>> make_complex_image(const six::sicd::Comp
 template<typename T>
 static void test_assert_eq(std::span<const std::byte> bytes, const std::vector<T>& rawData)
 {
+    static const std::string testName("test_valid_six");
     const auto rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
     TEST_ASSERT_EQ(bytes.size(), rawDataSizeInBytes);
 
