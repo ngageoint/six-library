@@ -44,6 +44,7 @@
 #pragma warning(disable: 5204) // 'Concurrency::details::_DefaultPPLTaskScheduler': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
 
 #include "six/modules/c++/cpp_pch.h"
+#include <fstream>
 
 #include <nitf/coda-oss.hpp>
 
@@ -57,13 +58,17 @@
 #pragma warning(disable: 26473) // Don't cast between pointer types where the source type and the target type are the same (type.1).
 #include <import/sys.h>
 #include <import/io.h>
+#include <io/TempFile.h>
+#include <io/StringStream.h>
 #include <import/mt.h>
 #pragma warning(pop)
 #include <import/str.h>
+#include <str/EncodedStringView.h>
 #include <import/logging.h>
 #include <math/Utilities.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/Validator.h>
+#include <xml/lite/MinidomParser.h>
 
 #include <import/nitf.hpp>
 #include <import/nitf.h>
@@ -80,13 +85,14 @@
 #pragma comment(lib, "mt-c++")
 #pragma comment(lib, "sys-c++")
 #pragma comment(lib, "except-c++")
+#pragma comment(lib, "str-c++")
 
 #pragma warning(push)
 #pragma warning(disable: 4800) // Implicit conversion from '...' to bool.Possible information loss
 #pragma warning(disable: 4388) // '...': signed / unsigned mismatch
 #pragma warning(disable: 4866) // compiler may not enforce left - to - right evaluation order for call to '...'
 
-#include "gtest/gtest.h"
+#include "CppUnitTest.h"
 #pragma warning(pop)
 
 #pragma warning(disable: 4464) // relative include path contains '..'

@@ -57,13 +57,15 @@ namespace details
 
         static int index(const std::string& v)
         {
+            const auto result = nitf::details::index(string_to_int(), v);
             const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
-            return nitf::details::index(string_to_int(), v, ex);
+            return nitf::details::value(result, ex);
         }
         static std::string index(int v)
         {
+            const auto result = nitf::details::index(int_to_string(), v);
             const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
-            return nitf::details::index(int_to_string(), v, ex);
+            return nitf::details::value(result, ex);
         }
 
     protected:
@@ -95,10 +97,9 @@ namespace details
 
         static T toType(const std::string& v)
         {
-            std::string type(v);
-            str::trim(type);
+            const auto result = nitf::details::index(string_to_int(), v);
             const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-            return nitf::details::index(string_to_int(), type, ex);
+            return nitf::details::value(result, ex);
         }
 
         operator int() const { return value; }

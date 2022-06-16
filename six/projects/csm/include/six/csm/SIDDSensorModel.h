@@ -160,6 +160,11 @@ public: // RasterGM methods
      */
     virtual csm::ImageVector getImageSize() const;
 
+    /**
+     * Returns ErrorStatistics::Unmodeled values, if any.
+     */
+    std::vector<double> getSIXUnmodeledError() const override;
+
 protected:
     virtual six::DateTime getReferenceDateAndTimeImpl() const;
 

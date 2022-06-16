@@ -30,8 +30,6 @@
 
 #include "TestCase.h"
 
-namespace fs = std::filesystem;
-
 // prefer SIX_DEFAULT_SCHEMA_PATH, existing scripts use DEFAULT_SCHEMA_PATH
 #if defined(DEFAULT_SCHEMA_PATH) && !defined(SIX_DEFAULT_SCHEMA_PATH)
 #define SIX_DEFAULT_SCHEMA_PATH DEFAULT_SCHEMA_PATH 
@@ -40,9 +38,9 @@ namespace fs = std::filesystem;
 // Don't want to set a dummy schema path to a directory that exists as that causes
 // the code to check for valid schemas and validate.
 #if defined(_WIN32)
-#define SIX_DEFAULT_SCHEMA_PATH R"(C:\some\path)" // just to compile ...
+#define SIX_DEFAULT_SCHEMA_PATH "Z:\\s 0 m e\\p at h" // just to compile ...
 #else
-#define SIX_DEFAULT_SCHEMA_PATH R"(/some/path)" // just to compile ...
+#define SIX_DEFAULT_SCHEMA_PATH "/s 0 m e/p at h" // just to compile ...
 #endif
 #endif
 
@@ -53,7 +51,7 @@ TEST_CASE(loadCompiledSchemaPath)
     six::XMLControl::loadSchemaPaths(schemaPaths);
 
     size_t schemaPathsSize = 0;
-    if (fs::exists(SIX_DEFAULT_SCHEMA_PATH))
+    if (std::filesystem::exists(SIX_DEFAULT_SCHEMA_PATH))
     {
         schemaPathsSize++;
     }
@@ -88,7 +86,7 @@ TEST_CASE(ignoreEmptyEnvVariable)
     six::XMLControl::loadSchemaPaths(schemaPaths);
 
     size_t schemaPathsSize = 0;
-    if (fs::exists(SIX_DEFAULT_SCHEMA_PATH))
+    if (std::filesystem::exists(SIX_DEFAULT_SCHEMA_PATH))
     {
         schemaPathsSize++;
     }

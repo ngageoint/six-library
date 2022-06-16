@@ -21,7 +21,7 @@
 */
 #include <six/csm/SIDDSensorModel.h>
 
-#include <six/csm/SIDDSensorModel.h>
+#include <assert.h>
 
 #include "Error.h"
 #include <sys/OS.h>
@@ -33,6 +33,7 @@
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/Utilities.h>
 #include <six/XmlLite.h>
+#include <six/ErrorStatistics.h>
 
 namespace six
 {
@@ -448,6 +449,17 @@ const six::sidd::MeasurableProjection* SIDDSensorModel::getProjection() const
             reinterpret_cast<six::sidd::MeasurableProjection*>(
                     mData->measurement->projection.get());
     return projection;
+}
+
+std::vector<double>
+SIDDSensorModel::getSIXUnmodeledError() const
+{
+    assert(mData.get() != nullptr);
+    if (auto pErrorStatistics = mData->errorStatistics.get())
+    {
+        return SIXSensorModel::getSIXUnmodeledError_(*pErrorStatistics);
+    }
+    return {};
 }
 
 void SIDDSensorModel::reinitialize()

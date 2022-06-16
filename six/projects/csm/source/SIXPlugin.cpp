@@ -31,6 +31,7 @@
 
 #include <str/Manip.h>
 #include <six/NITFReadControl.h>
+#include <six/ErrorStatistics.h>
 
 namespace six
 {

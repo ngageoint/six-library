@@ -25,48 +25,6 @@
 #include <io/ByteStream.h>
 #include "TestCase.h"
 
-#ifdef GTEST_API_
-namespace testing
-{
-    namespace internal
-    {
-        template<>
-        AssertionResult CmpHelperEQ(const char* lhs_expression,
-            const char* rhs_expression,
-            const std::byte& lhs,
-            const char& rhs) {
-            if (static_cast<char>(lhs) == rhs) {
-                return AssertionSuccess();
-            }
-
-            return CmpHelperEQFailure(lhs_expression, rhs_expression, lhs, rhs);
-        }
-    }
-}
-#endif // GTEST_API_
-
-namespace
-{
-    inline bool operator==(std::byte lhs, char rhs)
-    {
-        return static_cast<char>(lhs) == rhs;
-    }
-    inline bool operator!=(std::byte lhs, char rhs)
-    {
-        return !(lhs == rhs);
-    }
-}
-namespace str
-{
-    inline std::ostream& operator<<(std::ostream& os, std::byte v)
-    {
-        os << static_cast<unsigned char>(v);
-        return os;
-    }
-}
-
-namespace
-{
 TEST_CASE(testReadCompressedChannel)
 {
     auto input = std::make_shared<io::ByteStream>();
@@ -201,7 +159,6 @@ TEST_CASE(testCannotDoPartialReadOfCompressedChannel)
 
     TEST_EXCEPTION(wideband.read(0, 0, 0, 1, 1, 1));
     TEST_EXCEPTION(wideband.getBytesRequiredForRead(0, 0, 0, 1, 1));
-}
 }
 
 TEST_MAIN(
