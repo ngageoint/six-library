@@ -336,6 +336,37 @@ public:
         compare("Multiple writes");
     }
 
+    static size_t countNumRows(const nitf::ImageBlocker& imageBlocker,
+        size_t startBlock,
+        size_t numBlocks,
+        size_t& currentSegment,
+        size_t& startBlockThisSegment,
+        size_t& numBlocksThisSegment)
+    {
+        size_t numRows = 0;
+        size_t lastBlockThisSegment = startBlockThisSegment + numBlocksThisSegment - 1;
+        for (size_t block = startBlock; block < startBlock + numBlocks; ++block)
+        {
+            const size_t segment = imageBlocker.getSegmentFromGlobalBlockRow(block);
+            numRows += imageBlocker.getNumRowsPerBlock()[segment];
+
+            if (segment > currentSegment)
+            {
+                startBlockThisSegment += numBlocksThisSegment;
+                currentSegment = segment;
+                numBlocksThisSegment = imageBlocker.getNumRowsOfBlocks(currentSegment);
+                lastBlockThisSegment = startBlockThisSegment + numBlocksThisSegment - 1;
+            }
+
+            if (block == lastBlockThisSegment)
+            {
+                numRows -= imageBlocker.getNumPadRowsInFinalBlock(segment);
+            }
+
+        }
+        return numRows;
+    }
+
     void testMultipleWritesBlocked(size_t blocksPerWrite)
     {
         const EnsureFileCleanup ensureFileCleanup(mTestPathname);
@@ -615,38 +646,6 @@ private:
 
     bool mSuccess;
 };
-
-
-static size_t countNumRows(const nitf::ImageBlocker& imageBlocker,
-                    size_t startBlock,
-                    size_t numBlocks,
-                    size_t& currentSegment,
-                    size_t& startBlockThisSegment,
-                    size_t& numBlocksThisSegment)
-{
-    size_t numRows = 0;
-    size_t lastBlockThisSegment = startBlockThisSegment + numBlocksThisSegment - 1;
-    for (size_t block = startBlock; block < startBlock + numBlocks; ++block)
-    {
-        const size_t segment = imageBlocker.getSegmentFromGlobalBlockRow(block);
-        numRows += imageBlocker.getNumRowsPerBlock()[segment];
-
-        if (segment > currentSegment)
-        {
-            startBlockThisSegment += numBlocksThisSegment;
-            currentSegment = segment;
-            numBlocksThisSegment = imageBlocker.getNumRowsOfBlocks(currentSegment);
-            lastBlockThisSegment = startBlockThisSegment + numBlocksThisSegment - 1;
-        }
-
-        if (block == lastBlockThisSegment)
-        {
-            numRows -= imageBlocker.getNumPadRowsInFinalBlock(segment);
-        }
-
-    }
-    return numRows;
-}
 
 template <typename DataTypeT>
 bool doTests(const std::vector<std::string>& schemaPaths,

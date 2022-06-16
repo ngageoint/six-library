@@ -13,7 +13,7 @@
 
 std::filesystem::path findSixHome(const std::filesystem::path& exePath)
 {
-    auto sixHome = exePath.parent_path();
+    std::filesystem::path sixHome = exePath;
     do
     {
         const auto croppedNitfs = sixHome / "croppedNitfs";
@@ -101,7 +101,7 @@ TEST_CASE(testProjectOutputToSlant)
 {
     if (globalFitter == nullptr)
     {
-        globalFitter = loadPolynomialFitter(argv0());
+        globalFitter = loadPolynomialFitter(six::testing::buildRootDir(argv0()));
     }
 
     math::poly::TwoD<double> outputToSlantRow;
@@ -132,7 +132,7 @@ TEST_CASE(testProjectSlantToOutput)
 {
     if (globalFitter == nullptr)
     {
-        globalFitter = loadPolynomialFitter(argv0());
+        globalFitter = loadPolynomialFitter(six::testing::buildRootDir(argv0()));
     }
 
     math::poly::TwoD<double> slantToOutputRow;
