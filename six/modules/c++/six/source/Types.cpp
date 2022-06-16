@@ -19,9 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/Types.h"
-
 #include "six/Init.h"
+#include "six/Types.h"
 #include <nitf/ImageSegmentComputer.h>
 
 std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& latLonAlt)
