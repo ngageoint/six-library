@@ -55,4 +55,28 @@ TEST_CLASS(test_filling_scpcoa) { public:
 #include "six/modules/c++/six.sicd/unittests/test_filling_scpcoa.cpp"
 };
 
+TEST_CLASS(test_get_segment) { public:
+#include "six/modules/c++/six.sicd/unittests/test_get_segment.cpp"
+};
+
+TEST_CLASS(test_projection_polynomial_fitter) { public:
+#include "six/modules/c++/six.sicd/unittests/test_projection_polynomial_fitter.cpp"
+};
+
+TEST_CLASS(test_radar_collection) { public:
+#include "six/modules/c++/six.sicd/unittests/test_radar_collection.cpp"
+};
+
+TEST_CLASS(test_update_sicd_version) { public:
+#include "six/modules/c++/six.sicd/unittests/test_update_sicd_version.cpp"
+};
+
+TEST_CLASS(test_utilities) { public:
+#include "six/modules/c++/six.sicd/unittests/test_utilities.cpp"
+};
+
+TEST_CLASS(test_valid_six) { public:
+#include "six/modules/c++/six.sicd/unittests/test_valid_six.cpp"
+};
+
 }

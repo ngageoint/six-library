@@ -22,6 +22,7 @@
 #include <sys/OS.h>
 
 #include "six_Test.h"
+#include <import/six/sicd.h>
 #include <six/sicd/Utilities.h>
 #include <six/NITFReadControl.h>
 #include <six/NITFWriteControl.h>
@@ -29,6 +30,8 @@
 #include <six/XMLControlFactory.h>
 #include <six/sicd/SICDByteProvider.h>
 #include <six/sicd/ComplexToAMP8IPHS8I.h>
+#include <six/VersionUpdater.h>
+#include <six/sicd/SICDVersionUpdater.h>
 
 #include "CppUnitTest.h"
 #include "TestCase.h"
