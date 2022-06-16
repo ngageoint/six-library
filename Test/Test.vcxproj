@@ -30,11 +30,6 @@
     <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="six.sicd_test_AMP8I_PHS8I.cpp" />
-    <ClCompile Include="six.sicd_test_area_plane.cpp" />
-    <ClCompile Include="six.sicd_test_CollectionInfo.cpp" />
-    <ClCompile Include="six.sicd_test_filling_geo_data.cpp" />
-    <ClCompile Include="six.sicd_test_filling_grid.cpp" />
     <ClCompile Include="six.sicd_test_filling_pfa.cpp" />
     <ClCompile Include="six.sicd_test_filling_position.cpp" />
     <ClCompile Include="six.sicd_test_filling_rgazcomp.cpp" />

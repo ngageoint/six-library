@@ -5,15 +5,6 @@
     <ClCompile Include="six.sicd_test_utilities.cpp">
       <Filter>six.sicd</Filter>
     </ClCompile>
-    <ClCompile Include="six.sicd_test_area_plane.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_geo_data.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_grid.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
     <ClCompile Include="six.sicd_test_filling_pfa.cpp">
       <Filter>six.sicd</Filter>
     </ClCompile>
@@ -41,13 +32,7 @@
     <ClCompile Include="six.sicd_test_update_sicd_version.cpp">
       <Filter>six.sicd</Filter>
     </ClCompile>
-    <ClCompile Include="six.sicd_test_CollectionInfo.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
     <ClCompile Include="six.sicd_test_valid_six.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_AMP8I_PHS8I.cpp">
       <Filter>six.sicd</Filter>
     </ClCompile>
     <ClCompile Include="Test.cpp" />
