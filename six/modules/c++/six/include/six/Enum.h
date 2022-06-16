@@ -97,10 +97,9 @@ namespace details
 
         static T toType(const std::string& v)
         {
-            std::string type(v);
-            str::trim(type);
+            const auto result = nitf::details::index(string_to_int(), v);
             const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-            return nitf::details::index(string_to_int(), type, ex);
+            return nitf::details::value(result, ex);
         }
 
         operator int() const { return value; }
