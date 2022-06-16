@@ -34,5 +34,25 @@ TEST_CLASS(test_filling_geo_data) { public:
 TEST_CLASS(test_filling_grid) { public:
 #include "six/modules/c++/six.sicd/unittests/test_filling_grid.cpp"
 };
+
+TEST_CLASS(test_filling_pfa) { public:
+#include "six/modules/c++/six.sicd/unittests/test_filling_pfa.cpp"
+};
 	
+TEST_CLASS(test_filling_position) { public:
+#include "six/modules/c++/six.sicd/unittests/test_filling_position.cpp"
+};
+
+TEST_CLASS(test_filling_rgazcomp) { public:
+#include "six/modules/c++/six.sicd/unittests/test_filling_rgazcomp.cpp"
+};
+
+TEST_CLASS(test_filling_rma) { public:
+#include "six/modules/c++/six.sicd/unittests/test_filling_rma.cpp"
+};
+
+TEST_CLASS(test_filling_scpcoa) { public:
+#include "six/modules/c++/six.sicd/unittests/test_filling_scpcoa.cpp"
+};
+
 }

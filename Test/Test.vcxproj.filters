@@ -5,21 +5,6 @@
     <ClCompile Include="six.sicd_test_utilities.cpp">
       <Filter>six.sicd</Filter>
     </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_pfa.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_position.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_rgazcomp.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_rma.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_filling_scpcoa.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
     <ClCompile Include="six.sicd_test_get_segment.cpp">
       <Filter>six.sicd</Filter>
     </ClCompile>

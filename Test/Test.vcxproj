@@ -30,11 +30,6 @@
     <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="six.sicd_test_filling_pfa.cpp" />
-    <ClCompile Include="six.sicd_test_filling_position.cpp" />
-    <ClCompile Include="six.sicd_test_filling_rgazcomp.cpp" />
-    <ClCompile Include="six.sicd_test_filling_rma.cpp" />
-    <ClCompile Include="six.sicd_test_filling_scpcoa.cpp" />
     <ClCompile Include="six.sicd_test_get_segment.cpp" />
     <ClCompile Include="six.sicd_test_projection_polynomial_fitter.cpp" />
     <ClCompile Include="six.sicd_test_radar_collection.cpp" />

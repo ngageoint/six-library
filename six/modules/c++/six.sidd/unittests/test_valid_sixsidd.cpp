@@ -141,7 +141,7 @@ static void test_assert_unmodeled(const std::string& testName, const six::sidd::
 
     auto Unmodeled = errorStatistics->Unmodeled;
     TEST_ASSERT(Unmodeled.get() != nullptr);
-    test_assert_unmodeled_(*Unmodeled);
+    test_assert_unmodeled_(testName, *Unmodeled);
 }
 
 static void test_read_sidd_xml(const std::string& testName, const std::filesystem::path& path)
