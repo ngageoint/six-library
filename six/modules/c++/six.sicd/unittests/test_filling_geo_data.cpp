@@ -24,9 +24,6 @@
 #include <scene/ProjectionModel.h>
 #include "TestCase.h"
 
-namespace
-{
-
 bool isNaN(double val)
 {
     // This only works with IEEE 754 floats
@@ -109,7 +106,6 @@ TEST_CASE(ecfFromLlh)
         // MATLAB give.
         TEST_ASSERT_ALMOST_EQ_EPS(expected[ii], geoData.scp.ecf[ii], 1e-4);
     }
-}
 }
 
 TEST_MAIN(

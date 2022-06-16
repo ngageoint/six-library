@@ -1281,7 +1281,7 @@ std::filesystem::path six::testing::buildRootDir(const std::filesystem::path& ar
     if (platform == sys::PlatformType::Windows)
     {
         // On Windows ... in Visual Studio or stand-alone?
-        if (argv0.filename() == "Test.exe") // Google Test in Visual Studio
+        if ((argv0.filename() == "Test.exe") || (argv0.filename() == "testhost.exe")) // Visual Studio
         {
             const auto cwd = std::filesystem::current_path();
             const auto root_dir = cwd.parent_path().parent_path();

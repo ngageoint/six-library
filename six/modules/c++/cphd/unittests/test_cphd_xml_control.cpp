@@ -31,9 +31,7 @@
 #include <xml/lite/MinidomParser.h>
 #include "TestCase.h"
 
-namespace
-{
-static const char XML[] =
+const char* test_cphd_xml_control_XML =
 "<CPHD xmlns=\"urn:CPHD:1.0.0\">\n"
 "    <CollectionID>\n"
 "        <CollectorName>Collector</CollectorName>\n"
@@ -879,12 +877,11 @@ static const char XML[] =
 "        </MatchType>\n"
 "    </MatchInfo>\n"
 "</CPHD>\n";
-}
 
 TEST_CASE(testReadXML)
 {
     io::StringStream cphdStream;
-    cphdStream.write(XML, strlen(XML));
+    cphdStream.write(test_cphd_xml_control_XML, strlen(test_cphd_xml_control_XML));
 
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);

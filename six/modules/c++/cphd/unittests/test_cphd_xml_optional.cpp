@@ -33,7 +33,7 @@
 
 #include "TestCase.h"
 
-static const char XML[] =
+const char* test_cphd_xml_optional_XML =
 "<CPHD xmlns=\"urn:CPHD:1.0.0\">\n"
 "    <CollectionID>\n"
 "        <CollectorName>Collector</CollectorName>\n"
@@ -883,7 +883,7 @@ static const char XML[] =
 TEST_CASE(testOptional)
 {
     io::StringStream cphdStream;
-    cphdStream.write(XML, strlen(XML));
+    cphdStream.write(test_cphd_xml_optional_XML, strlen(test_cphd_xml_optional_XML));
 
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);

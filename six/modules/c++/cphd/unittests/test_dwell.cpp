@@ -30,8 +30,6 @@
 
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testDerivativeCODValid)
 {
     cphd::Dwell dwell;
@@ -113,7 +111,6 @@ TEST_CASE(testEquality)
     // Test different polynomial vectors
     TEST_ASSERT_NOT_EQ(dwell.dtime[0].dwellTimePoly.derivativeX(), dwell.dtime[1].dwellTimePoly.derivativeX());
     TEST_ASSERT_TRUE((dwell.dtime[0] != dwell.dtime[1]));
-}
 }
 
 TEST_MAIN(

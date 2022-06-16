@@ -3,8 +3,6 @@
 #include <six/sicd/Utilities.h>
 #include "TestCase.h"
 
-namespace
-{
 void setupData(six::sicd::ComplexData& data)
 {
     data.grid->row.reset(new six::sicd::DirectionParameters());
@@ -217,7 +215,6 @@ TEST_CASE(testCanRotateFourTimes)
     plane.rotateCCW();
     plane.rotateCCW();
     TEST_ASSERT(plane == *originalPlane);
-}
 }
 
 TEST_MAIN(
