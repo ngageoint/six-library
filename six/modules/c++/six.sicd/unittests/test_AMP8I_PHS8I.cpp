@@ -104,6 +104,7 @@ static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXM
 
 static std::unique_ptr<six::sicd::ComplexData> getComplexData(const six::Container& container, size_t jj)
 {
+    static const std::string testName("test_AMP8I_PHS8I");
     std::unique_ptr<six::Data> data_;
     data_.reset(container.getData(jj)->clone());
 
@@ -223,7 +224,8 @@ TEST_CASE(test_8bit_ampphs)
     test_assert_eq(actuals, amp8i_phs8i);
 }
 
-static std::vector <std::complex<float>> read_8bit_ampphs(const std::filesystem::path& inputPathname,
+static std::vector <std::complex<float>> read_8bit_ampphs(const std::string& testName,
+    const std::filesystem::path& inputPathname,
     std::optional<six::AmplitudeTable>& amplitudeTable, std::unique_ptr<six::sicd::ComplexData>& pResultComplexData,
     std::complex<long double> expected_sum)
 {
@@ -289,7 +291,7 @@ TEST_CASE(read_8bit_ampphs_with_table)
     std::optional<six::AmplitudeTable> amplitudeTable;
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
     const std::complex<long double> expected_sum(-193324027.52878466, -3688020.3755293526);
-    const auto widebandData = read_8bit_ampphs(inputPathname, amplitudeTable, pComplexData, expected_sum);
+    const auto widebandData = read_8bit_ampphs(testName, inputPathname, amplitudeTable, pComplexData, expected_sum);
 
     TEST_ASSERT_TRUE(amplitudeTable.has_value());
     const auto& AmpTable = amplitudeTable.value();
@@ -316,7 +318,7 @@ TEST_CASE(read_8bit_ampphs_no_table)
     std::optional<six::AmplitudeTable> amplitudeTable;
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
     const std::complex<long double> expected_sum(-12398989.376837999, 397846.88834372163);
-    const auto widebandData = read_8bit_ampphs(inputPathname, amplitudeTable, pComplexData, expected_sum);
+    const auto widebandData = read_8bit_ampphs(testName, inputPathname, amplitudeTable, pComplexData, expected_sum);
     TEST_ASSERT_FALSE(amplitudeTable.has_value());
 
     six::sicd::ImageData imageData;
@@ -330,6 +332,8 @@ TEST_CASE(read_8bit_ampphs_no_table)
 static void test_assert(const six::sicd::ComplexData& complexData,
     six::PixelType expectedPixelType, size_t expectedNumBytesPerPixel)
 {
+    static const std::string testName("test_AMP8I_PHS8I");
+
     TEST_ASSERT_EQ(expectedPixelType, complexData.getPixelType());
 
     const auto& classification = complexData.getClassification();
@@ -484,7 +488,8 @@ static void read_raw_data(const std::filesystem::path& path, six::PixelType pixe
     }
 }
 
-static void read_nitf(const std::filesystem::path& path, six::PixelType pixelType, const std::vector<std::complex<float>>& image)
+static void read_nitf(const std::string& testName,
+    const std::filesystem::path& path, six::PixelType pixelType, const std::vector<std::complex<float>>& image)
 {
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
     const auto result = readSicd_(path, pixelType, expectedNumBytesPerPixel);
@@ -511,7 +516,8 @@ static void save(const std::filesystem::path& outputName, const std::vector<std:
     six::sicd::writeAsNITF(outputName, fs_schemaPaths, *pComplexData, std::span<const std::complex<float>>(image.data(), image.size()));
 }
 
-static void test_assert_image_(const std::vector<std::complex<float>>& image, const six::sicd::ComplexData& complexData)
+static void test_assert_image_(const std::string& testName,
+    const std::vector<std::complex<float>>& image, const six::sicd::ComplexData& complexData)
 {
     static const std::vector<std::complex<float>> expected_cxfloat{
         std::complex<float>(46.7833481f, 78.0533066f),
@@ -540,7 +546,8 @@ static void test_assert_image_(const std::vector<std::complex<float>>& image, co
 }
 
 template<typename TSave>
-static void test_create_sicd_from_mem_(const std::filesystem::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable,
+static void test_create_sicd_from_mem_(const std::string& testName,
+    const std::filesystem::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable,
     TSave save)
 {
     const types::RowCol<size_t> dims(2, 2);
@@ -554,23 +561,24 @@ static void test_create_sicd_from_mem_(const std::filesystem::path& outputName, 
 
     const auto image = make_complex_image(*pComplexData, dims);
     TEST_ASSERT_EQ(image.size(), dims.area());
-    test_assert_image_(image, *pComplexData);
+    test_assert_image_(testName, image, *pComplexData);
 
     save(outputName, image, std::move(pComplexData));
-    read_nitf(outputName, pixelType, image);
+    read_nitf(testName, outputName, pixelType, image);
 }
-static void test_create_sicd_from_mem(const std::filesystem::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable = false)
+static void test_create_sicd_from_mem(const std::string& testName,
+    const std::filesystem::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable = false)
 {
-    test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, save);
-    test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, buffer_list_save);
+    test_create_sicd_from_mem_(testName, outputName, pixelType, makeAmplitudeTable, save);
+    test_create_sicd_from_mem_(testName, outputName, pixelType, makeAmplitudeTable, buffer_list_save);
 }
 
 TEST_CASE(test_create_sicd_from_mem_8i)
 {
     setNitfPluginPath();
 
-    test_create_sicd_from_mem("test_create_sicd_from_mem_8i_amp.sicd", six::PixelType::AMP8I_PHS8I, true /*makeAmplitudeTable*/);
-    test_create_sicd_from_mem("test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
+    test_create_sicd_from_mem(testName, "test_create_sicd_from_mem_8i_amp.sicd", six::PixelType::AMP8I_PHS8I, true /*makeAmplitudeTable*/);
+    test_create_sicd_from_mem(testName, "test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
 
 static void test_adjusted_values(const std::vector<std::complex<float>>& values,

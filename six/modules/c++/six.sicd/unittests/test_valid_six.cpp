@@ -274,6 +274,7 @@ static bool find_string(io::FileInputStream& stream, const std::string& s)
 }
 static void sicd_French_xml_raw_(bool storeEncoding)
 {
+    static const std::string testName("test_valid_six");
     // This is a binary file with XML burried in it somewhere
     const auto path = getNitfPath("sicd_French_xml.nitf");
 
@@ -341,6 +342,7 @@ TEST_CASE(sicd_French_xml_raw)
 static void test_assert(const six::sicd::ComplexData& complexData,
     six::PixelType expectedPixelType, size_t expectedNumBytesPerPixel)
 {
+    static const std::string testName("test_valid_six");
     TEST_ASSERT_EQ(expectedPixelType, complexData.getPixelType());
 
     const auto& classification = complexData.getClassification();
@@ -454,7 +456,8 @@ static void read_raw_data(const std::filesystem::path& path, six::PixelType pixe
     }
 }
 
-static void read_nitf(const std::filesystem::path& path, six::PixelType pixelType, const std::vector<std::complex<float>>& image)
+static void read_nitf(const std::string& testName,
+    const std::filesystem::path& path, six::PixelType pixelType, const std::vector<std::complex<float>>& image)
 {
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
     const auto result = readSicd_(path, pixelType, expectedNumBytesPerPixel);
@@ -482,7 +485,8 @@ static void save(const std::filesystem::path& outputName, const std::vector<std:
 }
 
 template<typename TSave>
-static void test_create_sicd_from_mem_(const std::filesystem::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable,
+static void test_create_sicd_from_mem_(const std::string& testName,
+    const std::filesystem::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable,
     TSave save)
 {
     const types::RowCol<size_t> dims(2, 2);
@@ -496,18 +500,18 @@ static void test_create_sicd_from_mem_(const std::filesystem::path& outputName, 
 
     const auto image = make_complex_image(*pComplexData, dims);
     save(outputName, image, std::move(pComplexData));
-    read_nitf(outputName, pixelType, image);
+    read_nitf(testName, outputName, pixelType, image);
 }
-static void test_create_sicd_from_mem(const std::filesystem::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable = false)
+static void test_create_sicd_from_mem(const std::string& testName, const std::filesystem::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable = false)
 {
-    test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, save);
-    test_create_sicd_from_mem_(outputName, pixelType, makeAmplitudeTable, buffer_list_save);
+    test_create_sicd_from_mem_(testName, outputName, pixelType, makeAmplitudeTable, save);
+    test_create_sicd_from_mem_(testName, outputName, pixelType, makeAmplitudeTable, buffer_list_save);
 }
 
 TEST_CASE(test_create_sicd_from_mem_32f)
 {
     setNitfPluginPath();
-    test_create_sicd_from_mem("test_create_sicd_from_mem_32f.sicd", six::PixelType::RE32F_IM32F);
+    test_create_sicd_from_mem(testName, "test_create_sicd_from_mem_32f.sicd", six::PixelType::RE32F_IM32F);
 }
 
 TEST_MAIN(

@@ -2,40 +2,14 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="six.sicd_test_utilities.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_get_segment.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_projection_polynomial_fitter.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_radar_collection.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_update_sicd_version.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.sicd_test_valid_six.cpp">
-      <Filter>six.sicd</Filter>
-    </ClCompile>
     <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="GTest.h" />
-    <ClInclude Include="sicd_Test.h">
-      <Filter>six.sicd</Filter>
-    </ClInclude>
     <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="six.sicd">
-      <UniqueIdentifier>{f16bae40-a534-49e4-a641-180ef8121614}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
 </Project>
