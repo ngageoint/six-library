@@ -27,6 +27,7 @@
 #include <string>
 #include <map>
 #include <ostream>
+#include <new>
 
 #include <scene/sys_Conf.h>
 #include <import/except.h>
@@ -87,6 +88,10 @@ namespace details
 
     public:
         //! Returns string representation of the value
+        std::optional<std::string> toString(std::nothrow_t) const
+        {
+            return nitf::details::index(int_to_string(), value);
+        }
         std::string toString(bool throw_if_not_set = false) const
         {
             if (throw_if_not_set && (value == NOT_SET_VALUE))
@@ -96,9 +101,14 @@ namespace details
             return index(value);
         }
 
-        static T toType(const std::string& v)
+        static std::optional<T> toType(const std::string& v, std::nothrow_t)
         {
             const auto result = nitf::details::index(string_to_int(), v);
+            return result.has_value() ? std::optional<T>(*result) : std::optional<T>();
+        }
+        static T toType(const std::string& v)
+        {
+            const auto result = toType(v, std::nothrow);
             const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
             return nitf::details::value(result, ex);
         }

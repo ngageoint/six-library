@@ -80,19 +80,19 @@ static void test_toType(const std::string& testName, size_t sz)
     test_toType_<TSixEnum>(testName, "OTHER", TSixEnum::OTHER);
     //test_toType_<TSixEnum>(testName, "OTHER_abc", TSixEnum::OTHER); // SIDD 3.0/SICD 1.3
 
-    //const auto string_to_int = TSixEnum().string_to_int();
-    //TEST_ASSERT_EQ(string_to_int.size(), sz);
-    //for (auto&& kv : string_to_int)
-    //{
-    //    const TSixEnum fromInt(kv.second);
-    //    const auto toType = TSixEnum::toType(kv.first);
-    //    TEST_ASSERT_EQ(toType, fromInt);
+    auto&& string_to_int = TSixEnum::string_to_int_();
+    TEST_ASSERT_EQ(string_to_int.size(), sz);
+    for (auto&& kv : string_to_int)
+    {
+        const TSixEnum fromInt(kv.second);
+        const auto toType = TSixEnum::toType(kv.first);
+        TEST_ASSERT_EQ(toType, fromInt);
 
-    //    if (fromInt != TSixEnum::NOT_SET)
-    //    {
-    //        test_toType_<TSixEnum >(testName, kv.first, fromInt);
-    //    }
-    //}
+        if (fromInt != TSixEnum::NOT_SET)
+        {
+            test_toType_<TSixEnum >(testName, kv.first, fromInt);
+        }
+    }
 }
 TEST_CASE(ToType)
 {
@@ -185,34 +185,34 @@ static void test_six_toType(const std::string& testName, size_t sz)
 {
     test_six_toType_<TSixEnum>(testName, "OTHER", TSixEnum::OTHER);
 
-    //const auto string_to_int = TSixEnum().string_to_int();
-    //TEST_ASSERT_EQ(string_to_int.size(), sz);
-    //for (auto&& kv : string_to_int)
-    //{
-    //    const TSixEnum fromInt(kv.second);
-    //    if ((fromInt != TSixEnum::NOT_SET) && (fromInt != TSixEnum::UNKNOWN))
-    //    {
-    //        auto s = kv.first;
-    //        str::replace(s, "_", ":");
-    //        const auto toType = six::toType<TSixEnum>(s);
-    //        TEST_ASSERT_EQ(toType, fromInt);
+    auto&& string_to_int = TSixEnum::string_to_int_();
+    TEST_ASSERT_EQ(string_to_int.size(), sz);
+    for (auto&& kv : string_to_int)
+    {
+        const TSixEnum fromInt(kv.second);
+        if (fromInt != TSixEnum::NOT_SET)
+        {
+            auto s = kv.first;
+            str::replace(s, "_", ":");
+            const auto toType = six::toType<TSixEnum>(s);
+            TEST_ASSERT_EQ(toType, fromInt);
 
-    //        test_six_toType_<TSixEnum>(testName, s, fromInt);
-    //    }
-    //}
+            test_six_toType_<TSixEnum>(testName, s, fromInt);
+        }
+    }
 }
 TEST_CASE(SixToType)
 {
     test_six_toType_<six::DualPolarizationType>(testName, "V:V", six::DualPolarizationType::V_V);
-    //test_six_toType_<six::DualPolarizationType>(testName, "E:V", six::DualPolarizationType::E_V); // SICD 1.3
+    test_six_toType_<six::DualPolarizationType>(testName, "E:V", six::DualPolarizationType::E_V); // SICD 1.3
     test_six_toType_<six::DualPolarizationType>(testName, "UNKNOWN", six::DualPolarizationType::UNKNOWN);
     test_six_toType<six::DualPolarizationType>(testName, 85);
 
-    //test_six_toType_<six::PolarizationType>(testName, "X", six::PolarizationType::X);  // SICD 1.3
+    test_six_toType_<six::PolarizationType>(testName, "X", six::PolarizationType::X);  // SICD 1.3
     test_six_toType<six::PolarizationType>(testName, 12);
     TEST_EXCEPTION(six::toType<six::PolarizationType>("UNKNOWN")); // no conversion for six::PolarizationType::UNKNOWN
 
-    //test_six_toType_<six::PolarizationSequenceType>(testName, "X", six::PolarizationSequenceType::X);  // SICD 1.3
+    test_six_toType_<six::PolarizationSequenceType>(testName, "X", six::PolarizationSequenceType::X);  // SICD 1.3
     test_six_toType_<six::PolarizationSequenceType>(testName, "SEQUENCE", six::PolarizationSequenceType::SEQUENCE);
     test_six_toType_<six::PolarizationSequenceType>(testName, "UNKNOWN", six::PolarizationSequenceType::UNKNOWN);
     test_six_toType<six::PolarizationSequenceType>(testName, 13);
@@ -354,16 +354,16 @@ static void test_six_toString(const std::string& testName)
 TEST_CASE(SixToString)
 {
     test_six_toString_<six::DualPolarizationType>(testName, "V:V", six::DualPolarizationType::V_V);
-    //test_six_toString_<six::DualPolarizationType>(testName, "E:V", six::DualPolarizationType::E_V); // SICD 1.3
+    test_six_toString_<six::DualPolarizationType>(testName, "E:V", six::DualPolarizationType::E_V); // SICD 1.3
     test_six_toString<six::DualPolarizationType>(testName);
 
     test_six_toString_<six::PolarizationType>(testName, "V", six::PolarizationType::V);
-    //test_six_toString_<six::PolarizationType>(testName, "X", six::PolarizationType::X); // SICD 1.3
+    test_six_toString_<six::PolarizationType>(testName, "X", six::PolarizationType::X); // SICD 1.3
     test_six_toString_<six::PolarizationType>(testName, "OTHER", six::PolarizationType::OTHER);
     TEST_EXCEPTION(six::toString<six::PolarizationType>(six::PolarizationType::UNKNOWN)); // no conversion for six::PolarizationType::UNKNOWN
 
     test_six_toString_<six::PolarizationSequenceType>(testName, "V", six::PolarizationSequenceType::V);
-    //test_six_toString_<six::PolarizationSequenceType>(testName, "X", six::PolarizationSequenceType::X); // SICD 1.3
+    test_six_toString_<six::PolarizationSequenceType>(testName, "X", six::PolarizationSequenceType::X); // SICD 1.3
     test_six_toString_<six::PolarizationSequenceType>(testName, "SEQUENCE", six::PolarizationSequenceType::SEQUENCE);
     test_six_toString<six::PolarizationSequenceType>(testName);
 }
@@ -452,35 +452,35 @@ TEST_CASE(DualPolarization)
     // Allowed TX values: “V”, “H”, “X”, “Y”, “S”, “E”, “RHC”, “LHC”, “OTHER*”
     // Allowed RCV values:  “V”, “H”, “X”, “Y”, “S”, “E”, “RHC”, “LHC”, “OTHER*”,    
 
-    //const auto polarizationTypeMap = six::PolarizationType().string_to_int();
-    //for (auto&& tx : polarizationTypeMap)
-    //{
-    //    const auto txType = six::PolarizationType::toType(tx.first);
-    //    if ((txType == six::PolarizationType::NOT_SET) || (txType == six::PolarizationType::UNKNOWN))
-    //    {
-    //        continue;
-    //    }
-    //    for (auto&& rcv : polarizationTypeMap)
-    //    {
-    //        const auto rcvType = six::PolarizationType::toType(rcv.first);
-    //        if ((rcvType == six::PolarizationType::NOT_SET) || (rcvType == six::PolarizationType::UNKNOWN))
-    //        {
-    //            continue;
-    //        }
-    //        auto strType = txType.toString() + "_" + rcvType.toString();
+    auto&& polarizationTypeMap = six::PolarizationType::string_to_int_();
+    for (auto&& tx : polarizationTypeMap)
+    {
+        const auto txType = six::PolarizationType::toType(tx.first);
+        if ((txType == six::PolarizationType::NOT_SET) || (txType == six::PolarizationType::UNKNOWN))
+        {
+            continue;
+        }
+        for (auto&& rcv : polarizationTypeMap)
+        {
+            const auto rcvType = six::PolarizationType::toType(rcv.first);
+            if ((rcvType == six::PolarizationType::NOT_SET) || (rcvType == six::PolarizationType::UNKNOWN))
+            {
+                continue;
+            }
+            auto strType = txType.toString() + "_" + rcvType.toString();
 
-    //        auto fromToType = six::DualPolarizationType::toType(strType);
-    //        auto str = fromToType.toString();
-    //        TEST_ASSERT_EQ(str, strType);
-    //        test_toType_("DualPolarization", strType, fromToType);
+            auto fromToType = six::DualPolarizationType::toType(strType);
+            auto str = fromToType.toString();
+            TEST_ASSERT_EQ(str, strType);
+            test_toType_("DualPolarization", strType, fromToType);
 
-    //        str::replace(strType, "_", ":");
-    //        fromToType = six::toType<six::DualPolarizationType>(strType);
-    //        str = six::toString(fromToType);
-    //        TEST_ASSERT_EQ(str, strType);
-    //        test_six_toType_("DualPolarization", strType, fromToType);
-    //    }
-    //}
+            str::replace(strType, "_", ":");
+            fromToType = six::toType<six::DualPolarizationType>(strType);
+            str = six::toString(fromToType);
+            TEST_ASSERT_EQ(str, strType);
+            test_six_toType_("DualPolarization", strType, fromToType);
+        }
+    }
 }
 
 TEST_MAIN(
