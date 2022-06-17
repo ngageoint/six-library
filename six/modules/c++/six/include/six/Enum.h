@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2022, Maxar Technologies, Inc.
  *
  * six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +20,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef SIX_SIX_Enum_h_INCLUDED_
-#define SIX_SIX_Enum_h_INCLUDED_
+#ifndef SIX_six_Enum_h_INCLUDED_
+#define SIX_six_Enum_h_INCLUDED_
 #pragma once
 
 #include <string>
@@ -176,8 +177,6 @@ namespace details
     #define SIX_Enum_ENUM_5(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5) SIX_Enum_BEGIN_DEFINE(name) \
         SIX_Enum_BEGIN_enum n1 = v1, n2 = v2,  n3 = v3, n4 = v4, n5 = v5, SIX_Enum_END_enum \
         SIX_Enum_map_5_(n1, n2, n3, n4, n5) SIX_Enum_END_DEFINE(name)
-
-
 } // namespace details
 }
-#endif // SIX_SIX_Enum_h_INCLUDED_
+#endif // SIX_six_Enum_h_INCLUDED_

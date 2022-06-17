@@ -25,6 +25,7 @@
 #include <functional>
 #include <std/optional>
 
+#if 0
 static bool is_OTHER_(const std::string& v)
 {
     // OTHER.* for  SIDD 3.0/SICD 1.3, not "OTHER"
@@ -256,3 +257,4 @@ bool six::DualPolarizationType::less_(const EnumBase& rhs) const
 {
     return less_imp(*this, rhs);
 }
+#endif
