@@ -114,11 +114,11 @@ namespace details
         bool operator!=(const int& o) const { return !(*this == o); }
         bool operator!=(const Enum& o) const { return !(*this == o); }
         bool operator<=(const int& o) const { return (*this < o) || (*this == o); }
-        bool operator<=(const Enum& o) const { return *this <= o.value; }
-        bool operator>(const int& o) const { return !(this <= o); }
-        bool operator>(const Enum& o) const { return *this > o.value; }
+        bool operator<=(const Enum& o) const { return (*this < o) || (*this == o); }
+        bool operator>(const int& o) const { return !(*this <= o); }
+        bool operator>(const Enum& o) const { return !(*this <= o); }
         bool operator>=(const int& o) const { return !(*this < o); }
-        bool operator>=(const Enum& o) const { return *this >= o.value; }
+        bool operator>=(const Enum& o) const { return !(*this < o); }
 
         int value = NOT_SET_VALUE;
     };
