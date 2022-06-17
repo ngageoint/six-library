@@ -156,26 +156,26 @@ namespace details
     #define SIX_Enum_map_entry_4_(n1, n2, n3, n4)  SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_3_(n2, n3, n4)
     #define SIX_Enum_map_entry_5_(n1, n2, n3, n4, n5)  SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_4_(n2, n3, n4, n5)
 
+    #define SIX_Enum_map_1_(n) SIX_Enum_BEGIN_string_to_int  SIX_Enum_map_entry_1_(n), SIX_Enum_END_string_to_int
+    #define SIX_Enum_map_2_(n1, n2) SIX_Enum_BEGIN_string_to_int  SIX_Enum_map_entry_2_(n1, n2), SIX_Enum_END_string_to_int
+    #define SIX_Enum_map_3_(n1, n2, n3) SIX_Enum_BEGIN_string_to_int  SIX_Enum_map_entry_3_(n1, n2, n3), SIX_Enum_END_string_to_int
+    #define SIX_Enum_map_4_(n1, n2, n3, n4) SIX_Enum_BEGIN_string_to_int  SIX_Enum_map_entry_4_(n1, n2, n3, n4), SIX_Enum_END_string_to_int
+    #define SIX_Enum_map_5_(n1, n2, n3, n4, n5) SIX_Enum_BEGIN_string_to_int  SIX_Enum_map_entry_5_(n1, n2, n3, n4, n5), SIX_Enum_END_string_to_int
+
     #define SIX_Enum_ENUM_1(name, n, v) SIX_Enum_BEGIN_DEFINE(name) \
-        SIX_Enum_BEGIN_enum n = v,  SIX_Enum_END_enum \
-        SIX_Enum_BEGIN_string_to_int  SIX_Enum_map_entry_1_(n), SIX_Enum_END_string_to_int \
-        SIX_Enum_END_DEFINE(name)
+        SIX_Enum_BEGIN_enum n = v,  SIX_Enum_END_enum SIX_Enum_map_1_(n) SIX_Enum_END_DEFINE(name)
     #define SIX_Enum_ENUM_2(name, n1, v1, n2, v2) SIX_Enum_BEGIN_DEFINE(name) \
         SIX_Enum_BEGIN_enum n1 = v1, n2 = v2,  SIX_Enum_END_enum \
-        SIX_Enum_BEGIN_string_to_int  SIX_Enum_map_entry_2_(n1, n2), SIX_Enum_END_string_to_int \
-        SIX_Enum_END_DEFINE(name)
+        SIX_Enum_map_2_(n1, n2) SIX_Enum_END_DEFINE(name)
     #define SIX_Enum_ENUM_3(name, n1, v1, n2, v2, n3, v3) SIX_Enum_BEGIN_DEFINE(name) \
         SIX_Enum_BEGIN_enum n1 = v1, n2 = v2,  n3 = v3, SIX_Enum_END_enum \
-        SIX_Enum_BEGIN_string_to_int  SIX_Enum_map_entry_3_(n1, n2, n3), SIX_Enum_END_string_to_int \
-        SIX_Enum_END_DEFINE(name)
+        SIX_Enum_map_3_(n1, n2, n3) SIX_Enum_END_DEFINE(name)
     #define SIX_Enum_ENUM_4(name, n1, v1, n2, v2, n3, v3, n4, v4) SIX_Enum_BEGIN_DEFINE(name) \
         SIX_Enum_BEGIN_enum n1 = v1, n2 = v2,  n3 = v3, n4 = v4, SIX_Enum_END_enum \
-        SIX_Enum_BEGIN_string_to_int  SIX_Enum_map_entry_4_(n1, n2, n3, n4), SIX_Enum_END_string_to_int \
-        SIX_Enum_END_DEFINE(name)
+        SIX_Enum_map_4_(n1, n2, n3, n4) SIX_Enum_END_DEFINE(name)
     #define SIX_Enum_ENUM_5(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5) SIX_Enum_BEGIN_DEFINE(name) \
         SIX_Enum_BEGIN_enum n1 = v1, n2 = v2,  n3 = v3, n4 = v4, n5 = v5, SIX_Enum_END_enum \
-        SIX_Enum_BEGIN_string_to_int  SIX_Enum_map_entry_5_(n1, n2, n3, n4, n5), SIX_Enum_END_string_to_int \
-        SIX_Enum_END_DEFINE(name)
+        SIX_Enum_map_5_(n1, n2, n3, n4, n5) SIX_Enum_END_DEFINE(name)
 
 
 } // namespace details
