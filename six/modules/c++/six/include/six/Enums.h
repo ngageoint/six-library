@@ -260,6 +260,9 @@ SIX_Enum_END_DEFINE(PixelType);
  *  \struct PolarizationSequenceType
  *
  *  Enumeration used to represent PolarizationSequenceTypes
+ * 
+ * From Table 3.7, Transmit polarization type.
+ *  Allowed values: "V", "H", "X", "Y", "S", "E", "RHC", "LHC", "UNKNOWN", "SEQUENCE", "OTHER*"
  */
 SIX_Enum_BEGIN_DEFINE(Polarization1Type)
     //! The enumerations allowed
@@ -297,6 +300,9 @@ using PolarizationSequenceType = Polarization1Type;
  *  \struct PolarizationType
  *
  *  Enumeration used to represent PolarizationTypes (no SEQUENCE)
+ * 
+ * From Table 3.7, Transmit signal polarization for this step:
+ *  Allowed values: "V", "H", "X", "Y", "S", "E", "RHC", "LHC", "UNKNOWN", "OTHER*"
  */
 SIX_Enum_ENUM_5(Polarization2Type,
     OTHER, 1,
@@ -311,7 +317,12 @@ using PolarizationType = Polarization2Type;
  *  \struct DualPolarizationType
  *
  *  Enumeration used to represent DualPolarizationTypes
- * (This is two `PolarizationType`s.)
+ * 
+ * From Table 3.7, Indicates the combined transmit and receive polarization for the channel.
+ *  Allowed values include the formTX:RCV that is formed from one TX valueand one RCV value.
+ *  Allowed TX values:  "V", "H", "X", "Y", "S", "E", "RHC", "LHC", "OTHER*"
+ *  Allowed RCV values: "V", "H", "X", "Y", "S", "E", "RHC", "LHC", "OTHER*"
+ *  Allowed values also include: "OTHER", "UNKNOWN"
  */
 SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
     //! The enumerations allowed
