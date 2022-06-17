@@ -150,56 +150,6 @@ SIX_Enum_ENUM_2(DisplayType,
 );
 
 /*!
- *  \struct DualPolarizationType
- *
- *  Enumeration used to represent DualPolarizationTypes
- */
-SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
-    //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
-        OTHER = 1,
-        V_V = 2,
-        V_H = 3,
-        V_RHC = 4,
-        V_LHC = 5,
-        H_V = 6,
-        H_H = 7,
-        H_RHC = 8,
-        H_LHC = 9,
-        RHC_RHC = 10,
-        RHC_LHC = 11,
-        RHC_V = 12,
-        RHC_H = 13,
-        LHC_RHC = 14,
-        LHC_LHC = 15,
-        LHC_V = 16,
-        LHC_H = 17,
-        UNKNOWN = 18,
-    SIX_Enum_END_enum
-
-    SIX_Enum_BEGIN_string_to_int
-            SIX_Enum_map_entry_(OTHER),
-            SIX_Enum_map_entry_(V_V),
-            SIX_Enum_map_entry_(V_H),
-            SIX_Enum_map_entry_(V_RHC),
-            SIX_Enum_map_entry_(V_LHC),
-            SIX_Enum_map_entry_(H_V),
-            SIX_Enum_map_entry_(H_H),
-            SIX_Enum_map_entry_(H_RHC),
-            SIX_Enum_map_entry_(H_LHC),
-            SIX_Enum_map_entry_(RHC_RHC),
-            SIX_Enum_map_entry_(RHC_LHC),
-            SIX_Enum_map_entry_(RHC_V),
-            SIX_Enum_map_entry_(RHC_H),
-            SIX_Enum_map_entry_(LHC_RHC),
-            SIX_Enum_map_entry_(LHC_LHC),
-            SIX_Enum_map_entry_(LHC_V),
-            SIX_Enum_map_entry_(LHC_H),
-            SIX_Enum_map_entry_(UNKNOWN),
-    SIX_Enum_END_string_to_int
-SIX_Enum_END_DEFINE(DualPolarizationType);
-
-/*!
  *  \struct EarthModelType
  *
  *  Enumeration used to represent EarthModelTypes
@@ -311,7 +261,7 @@ SIX_Enum_END_DEFINE(PixelType);
  *
  *  Enumeration used to represent PolarizationSequenceTypes
  */
-SIX_Enum_BEGIN_DEFINE(PolarizationSequenceType)
+SIX_Enum_BEGIN_DEFINE(Polarization1Type)
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
         OTHER = 1,
@@ -340,21 +290,73 @@ SIX_Enum_BEGIN_DEFINE(PolarizationSequenceType)
             SIX_Enum_map_entry_(UNKNOWN),
             SIX_Enum_map_entry_(SEQUENCE),
     SIX_Enum_END_string_to_int
-SIX_Enum_END_DEFINE(PolarizationSequenceType);
-
+SIX_Enum_END_DEFINE(Polarization1Type);
+using PolarizationSequenceType = Polarization1Type;
 
 /*!
  *  \struct PolarizationType
  *
- *  Enumeration used to represent PolarizationTypes
+ *  Enumeration used to represent PolarizationTypes (no SEQUENCE)
  */
-SIX_Enum_ENUM_5(PolarizationType,
+SIX_Enum_ENUM_5(Polarization2Type,
     OTHER, 1,
     V, 2,
     H, 3,
     RHC, 4,
     LHC, 5
 );
+using PolarizationType = Polarization2Type;
+
+/*!
+ *  \struct DualPolarizationType
+ *
+ *  Enumeration used to represent DualPolarizationTypes
+ * (This is two `PolarizationType`s.)
+ */
+SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
+    //! The enumerations allowed
+    SIX_Enum_BEGIN_enum
+        OTHER = 1,
+        V_V = 2,
+        V_H = 3,
+        V_RHC = 4,
+        V_LHC = 5,
+        H_V = 6,
+        H_H = 7,
+        H_RHC = 8,
+        H_LHC = 9,
+        RHC_RHC = 10,
+        RHC_LHC = 11,
+        RHC_V = 12,
+        RHC_H = 13,
+        LHC_RHC = 14,
+        LHC_LHC = 15,
+        LHC_V = 16,
+        LHC_H = 17,
+        UNKNOWN = 18,
+    SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_int
+            SIX_Enum_map_entry_(OTHER),
+            SIX_Enum_map_entry_(V_V),
+            SIX_Enum_map_entry_(V_H),
+            SIX_Enum_map_entry_(V_RHC),
+            SIX_Enum_map_entry_(V_LHC),
+            SIX_Enum_map_entry_(H_V),
+            SIX_Enum_map_entry_(H_H),
+            SIX_Enum_map_entry_(H_RHC),
+            SIX_Enum_map_entry_(H_LHC),
+            SIX_Enum_map_entry_(RHC_RHC),
+            SIX_Enum_map_entry_(RHC_LHC),
+            SIX_Enum_map_entry_(RHC_V),
+            SIX_Enum_map_entry_(RHC_H),
+            SIX_Enum_map_entry_(LHC_RHC),
+            SIX_Enum_map_entry_(LHC_LHC),
+            SIX_Enum_map_entry_(LHC_V),
+            SIX_Enum_map_entry_(LHC_H),
+            SIX_Enum_map_entry_(UNKNOWN),
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(DualPolarizationType);
 
 /*!
  *  \struct ProjectionType
