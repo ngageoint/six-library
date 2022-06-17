@@ -441,80 +441,97 @@ std::string six::toString(const OrientationType& t)
     }
 }
 
-template<typename TSixEnum>
-TSixEnum toType_(const std::string& s, const std::string& msg)
+template <>
+PolarizationSequenceType six::toType<PolarizationSequenceType>(
+        const std::string& s)
 {
     std::string type(s);
     str::trim(type);
-    auto retval = TSixEnum::toType(type);
-    if (retval != TSixEnum::NOT_SET) // existing code only handled OTHER/UNKNOWN, not NOT_SET
-    {
-        return retval;
-    }
-
-    throw except::Exception(Ctxt(msg + " '" + s + "'"));
+    
+    string_to_Enum(type, PolarizationSequenceType, OTHER);
+    string_to_Enum(type, PolarizationSequenceType, V);
+    string_to_Enum(type, PolarizationSequenceType, H);
+    string_to_Enum(type, PolarizationSequenceType, X);
+    string_to_Enum(type, PolarizationSequenceType, Y);
+    string_to_Enum(type, PolarizationSequenceType, S);
+    string_to_Enum(type, PolarizationSequenceType, E);
+    string_to_Enum(type, PolarizationSequenceType, RHC);
+    string_to_Enum(type, PolarizationSequenceType, LHC);
+    string_to_Enum(type, PolarizationSequenceType, UNKNOWN);
+    string_to_Enum(type, PolarizationSequenceType, SEQUENCE);
+    
+    throw except::Exception(Ctxt("Unsupported polarization type '" + s + "'"));
 }
 
-template<typename TSixEnum>
-static inline std::string toString__(const TSixEnum& t, const std::string& msg)
-{
-    if (t != TSixEnum::NOT_SET) // existing code only handled OTHER and UNKNOWN, not NOT_SET
-    {
-        try
-        {
-            return t.toString(true /*throw_if_not_set*/);
-        }
-        catch (const except::InvalidFormatException&)
-        {
-        }
-    }
-    throw except::Exception(Ctxt(msg));
-}
-template<typename TSixEnum>
-static std::string toString_(const TSixEnum& t, const std::string& msg)
-{
-    auto retval = toString__(t, msg);
-    if (retval.empty())
-    {
-        throw except::Exception(Ctxt(msg));
-    }
-    return t.toString();
-}
-
-template <>
-PolarizationSequenceType six::toType<PolarizationSequenceType>(
-    const std::string& s)
-{
-    return toType_<PolarizationSequenceType>(s, "Unsupported polarization type");
-}
 template <>
 std::string six::toString(const PolarizationSequenceType& t)
 {
-    return toString_(t, "Unsupported polarization type to string");
+    Enum_to_string(t, PolarizationSequenceType, OTHER);
+    Enum_to_string(t, PolarizationSequenceType, V);
+    Enum_to_string(t, PolarizationSequenceType, H);
+    Enum_to_string(t, PolarizationSequenceType, X);
+    Enum_to_string(t, PolarizationSequenceType, Y);
+    Enum_to_string(t, PolarizationSequenceType, S);
+    Enum_to_string(t, PolarizationSequenceType, E);
+    Enum_to_string(t, PolarizationSequenceType, RHC);
+    Enum_to_string(t, PolarizationSequenceType, LHC);
+    Enum_to_string(t, PolarizationSequenceType, UNKNOWN);
+    Enum_to_string(t, PolarizationSequenceType, SEQUENCE);
+    
+    throw except::Exception(Ctxt("Unsupported conversion from polarization type"));
 }
 
 template <>
 PolarizationType six::toType<PolarizationType>(const std::string& s)
 {
-    const std::string msg = "Unsupported polarization type";
-    auto retval = toType_<PolarizationType>(s, msg);
-    if (retval != PolarizationType::UNKNOWN) // existing code only handled OTHER, not UNKNOWN/NOT_SET
+    std::string type(s);
+    str::trim(type);
+    if (type == "OTHER")
     {
-        return retval;
+        return PolarizationType::OTHER;
     }
-    throw except::Exception(Ctxt(msg + " '" + s + "'"));
+    else if (type == "V")
+    {
+        return PolarizationType::V;
+    }
+    else if (type == "H")
+    {
+        return PolarizationType::H;
+    }
+    else if (type == "RHC")
+    {
+        return PolarizationType::RHC;
+    }
+    else if (type == "LHC")
+    {
+        return PolarizationType::LHC;
+    }
+    else
+    {
+        throw except::Exception(
+                Ctxt("Unsupported polarization type '" + s + "'"));
+    }
 }
+
 template <>
 std::string six::toString(const PolarizationType& t)
 {
-    const std::string msg = "Unsupported conversion from polarization type";
-    auto retval = toString_(t, msg);
-    static const auto strUnknown = PolarizationType(PolarizationType::UNKNOWN).toString();
-    if (retval != strUnknown) // existing code only handled OTHER, not UNKNOWN/NOT_SET
+    switch (t)
     {
-        return retval;
+    case PolarizationType::OTHER:
+        return "OTHER";
+    case PolarizationType::V:
+        return "V";
+    case PolarizationType::H:
+        return "H";
+    case PolarizationType::RHC:
+        return "RHC";
+    case PolarizationType::LHC:
+        return "LHC";
+    default:
+        throw except::Exception(
+                Ctxt("Unsupported conversion from polarization type"));
     }
-    throw except::Exception(Ctxt(msg));
 }
 
 template <>
@@ -522,15 +539,96 @@ DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
 {
     std::string type(s);
     str::trim(type);
-    str::replace(type, ":", "_"); // assume input is the result of toString()
-    return toType_<DualPolarizationType>(type, "Unsupported conversion to dual polarization type");
+    if (type == "OTHER")
+        return DualPolarizationType::OTHER;
+    else if (type == "V:V")
+        return DualPolarizationType::V_V;
+    else if (type == "V:H")
+        return DualPolarizationType::V_H;
+    else if (type == "V:RHC")
+        return DualPolarizationType::V_RHC;
+    else if (type == "V:LHC")
+        return DualPolarizationType::V_LHC;
+    else if (type == "H:V")
+        return DualPolarizationType::H_V;
+    else if (type == "H:H")
+        return DualPolarizationType::H_H;
+    else if (type == "H:RHC")
+        return DualPolarizationType::H_RHC;
+    else if (type == "H:LHC")
+        return DualPolarizationType::H_LHC;
+    else if (type == "RHC:RHC")
+        return DualPolarizationType::RHC_RHC;
+    else if (type == "RHC:LHC")
+        return DualPolarizationType::RHC_LHC;
+    else if (type == "RHC:V")
+        return DualPolarizationType::RHC_V;
+    else if (type == "RHC:H")
+        return DualPolarizationType::RHC_H;
+    else if (type == "LHC:LHC")
+        return DualPolarizationType::LHC_LHC;
+    else if (type == "LHC:RHC")
+        return DualPolarizationType::LHC_RHC;
+    else if (type == "LHC:V")
+        return DualPolarizationType::LHC_V;
+    else if (type == "LHC:H")
+        return DualPolarizationType::LHC_H;
+
+    else if (type == "UNKNOWN")
+        return DualPolarizationType::UNKNOWN;
+    else
+    {
+        throw except::Exception(
+                Ctxt("Unsupported conversion to dual polarization type '" + s +
+                     "'"));
+    }
 }
+
 template <>
 std::string six::toString(const DualPolarizationType& t)
 {
-    auto retval = toString_(t, "Unsupported dual polarization type to string");
-    str::replace(retval, "_", ":");
-    return retval;
+    switch (t)
+    {
+    case DualPolarizationType::OTHER:
+        return "OTHER";
+    case DualPolarizationType::V_V:
+        return "V:V";
+    case DualPolarizationType::V_H:
+        return "V:H";
+    case DualPolarizationType::V_RHC:
+        return "V:RHC";
+    case DualPolarizationType::V_LHC:
+        return "V:LHC";
+    case DualPolarizationType::H_V:
+        return "H:V";
+    case DualPolarizationType::H_H:
+        return "H:H";
+    case DualPolarizationType::H_RHC:
+        return "H:RHC";
+    case DualPolarizationType::H_LHC:
+        return "H:LHC";
+    case DualPolarizationType::RHC_RHC:
+        return "RHC:RHC";
+    case DualPolarizationType::RHC_LHC:
+        return "RHC:LHC";
+    case DualPolarizationType::RHC_V:
+        return "RHC:V";
+    case DualPolarizationType::RHC_H:
+        return "RHC:H";
+    case DualPolarizationType::LHC_LHC:
+        return "LHC:LHC";
+    case DualPolarizationType::LHC_RHC:
+        return "LHC:RHC";
+    case DualPolarizationType::LHC_V:
+        return "LHC:V";
+    case DualPolarizationType::LHC_H:
+        return "LHC:H";
+    case DualPolarizationType::UNKNOWN:
+        return "UNKNOWN";
+    default:
+        throw except::Exception(
+                Ctxt("Unsupported dual polarization type to string"));
+    }
 }
 
 template <>
