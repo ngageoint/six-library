@@ -72,7 +72,7 @@ namespace details
         Enum() = default;
 
         //! string constructor
-        Enum(const std::string& s)
+        explicit Enum(const std::string& s)
         {
             value = index(s);
         }
@@ -103,24 +103,22 @@ namespace details
         }
 
         operator int() const { return value; }
-        operator std::string() const { return toString(); }
-        static size_t size() { return int_to_string().size(); }
+        //operator std::string() const { return toString(); }
 
         // needed for SWIG
-        bool operator==(const int& o) const { return value == o; }
-        bool operator==(const Enum& o) const { return value == o.value; }
-        bool operator==(const std::string& o) const { return toString() == o; } // for unittests, not SWIG
-        bool operator!=(const int& o) const { return value != o; }
-        bool operator!=(const Enum& o) const { return value != o.value; }
-        bool operator!=(const std::string& o) const { return !(*this == o); } // for unittests, not SWIG
+        static size_t size() { return int_to_string().size(); }
         bool operator<(const int& o) const { return value < o; }
-        bool operator<(const Enum& o) const { return value < o.value; }
-        bool operator<=(const int& o) const { return value <= o; }
-        bool operator<=(const Enum& o) const { return value <= o.value; }
-        bool operator>(const int& o) const { return value > o; }
-        bool operator>(const Enum& o) const { return value > o.value; }
-        bool operator>=(const int& o) const { return value >= o; }
-        bool operator>=(const Enum& o) const { return value >= o.value; }
+        bool operator<(const Enum& o) const { return *this < o.value; }
+        bool operator==(const int& o) const { return value == o; }
+        bool operator==(const Enum& o) const { return *this == o.value; }
+        bool operator!=(const int& o) const { return !(*this == o); }
+        bool operator!=(const Enum& o) const { return !(*this == o); }
+        bool operator<=(const int& o) const { return (*this < o) || (*this == o); }
+        bool operator<=(const Enum& o) const { return *this <= o.value; }
+        bool operator>(const int& o) const { return !(this <= o); }
+        bool operator>(const Enum& o) const { return *this > o.value; }
+        bool operator>=(const int& o) const { return !(*this < o); }
+        bool operator>=(const Enum& o) const { return *this >= o.value; }
 
         int value = NOT_SET_VALUE;
     };
@@ -137,9 +135,11 @@ namespace details
 
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
-    #define SIX_Enum_constructors_(name) name() = default; name(const std::string& s) : Enum(s) {} name(int i) : Enum(i) {} \
-            name& operator=(int v) {  *this = name(v); return *this; }
-    #define SIX_Enum_BEGIN_enum enum {
+    #define SIX_Enum_default_ctor_assign_(name) name() = default; name(const name&) = default; name(name&&) = default; \
+            name& operator=(const name&) = default; name& operator=(name&&) = default
+    #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name);  explicit name(const std::string& s) { *this = std::move(name::toType(s)); } \
+            name(int i) : Enum(i) {} name& operator=(int v) { *this = name(v); return *this; } 
+    #define SIX_Enum_BEGIN_enum enum values {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
     #define SIX_Enum_BEGIN_string_to_int static const std::map<std::string, int>& string_to_int_() { static const std::map<std::string, int> retval {
