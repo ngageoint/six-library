@@ -33,7 +33,7 @@ static void test_EnumConstructor(const std::string& testName, const std::string&
 {
     (void)testName;
     const decltype(type) pType(strType);
-    TEST_ASSERT(pType == strType);
+    TEST_ASSERT(pType.toString() == strType);
     TEST_ASSERT_EQ(pType, type);
 }
 TEST_CASE(EnumConstructor)
@@ -279,11 +279,11 @@ TEST_CASE(DualPolarizationType_ToString_OTHER)
     TEST_ASSERT_EQ(not_set, six::DualPolarizationType::NOT_SET);
     TEST_ASSERT_EQ("NOT_SET", not_set.toString(false /*throw_if_not_set*/));
     TEST_EXCEPTION(not_set.toString(true /*throw_if_not_set*/));
-    TEST_ASSERT(not_set == "NOT_SET");
+    TEST_ASSERT(not_set.toString() == "NOT_SET");
 
     auto toType_DualPolarization = six::DualPolarizationType::toType("OTHER");
     TEST_ASSERT_EQ("OTHER", toType_DualPolarization.toString());
-    TEST_ASSERT(toType_DualPolarization == "OTHER");
+    TEST_ASSERT(toType_DualPolarization.toString() == "OTHER");
 
     toType_DualPolarization = six::DualPolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
     TEST_ASSERT_EQ("OTHER_abc", toType_DualPolarization.toString());
@@ -409,7 +409,7 @@ static void test_EqInt_(const std::string& testName, const std::string& strType,
 
     const decltype(type)fromIntCtor(value);
     TEST_ASSERT_EQ(enumValue, fromIntCtor);
-    TEST_ASSERT(fromIntCtor == strType);
+    TEST_ASSERT(fromIntCtor.toString() == strType);
     TEST_ASSERT_EQ(fromIntCtor, type);
 
     TEST_ASSERT_EQ(fromStrCtor, fromIntCtor);
