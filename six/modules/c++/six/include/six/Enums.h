@@ -270,14 +270,14 @@ SIX_Enum_BEGIN_DEFINE(Polarization1Type)
         OTHER = 1,
         V = 2,
         H = 3,
+        X = 8, // SIDD 3.0, SICD 1.3
+        Y, // SIDD 3.0, SICD 1.3
+        S, // SIDD 3.0, SICD 1.3
+        E, // SIDD 3.0, SICD 1.3
         RHC = 4,
         LHC = 5,
         UNKNOWN = 6,
         SEQUENCE = 7,
-        X = 8, // SIDD 3.0
-        Y = 9, // SIDD 3.0
-        S = 10, // SIDD 3.0
-        E = 11, // SIDD 3.0
     SIX_Enum_END_enum
 
     SIX_Enum_BEGIN_string_to_int
@@ -304,13 +304,34 @@ using PolarizationSequenceType = Polarization1Type;
  * From Table 3.7, Transmit signal polarization for this step:
  *  Allowed values: "V", "H", "X", "Y", "S", "E", "RHC", "LHC", "UNKNOWN", "OTHER*"
  */
-SIX_Enum_ENUM_5(Polarization2Type,
-    OTHER, 1,
-    V, 2,
-    H, 3,
-    RHC, 4,
-    LHC, 5
-);
+SIX_Enum_BEGIN_DEFINE(Polarization2Type)
+    //! The enumerations allowed
+    SIX_Enum_BEGIN_enum
+        OTHER = 1,
+        V = 2,
+        H = 3,
+        X = 7, // SIDD 3.0, SICD 1.3
+        Y, // SIDD 3.0, SICD 1.3
+        S, // SIDD 3.0, SICD 1.3
+        E, // SIDD 3.0, SICD 1.3
+        RHC = 4,
+        LHC = 5,
+        UNKNOWN = 6,
+    SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_int
+            SIX_Enum_map_entry_(OTHER),
+            SIX_Enum_map_entry_(V),
+            SIX_Enum_map_entry_(H),
+            SIX_Enum_map_entry_(X),
+            SIX_Enum_map_entry_(Y),
+            SIX_Enum_map_entry_(S),
+            SIX_Enum_map_entry_(E),
+            SIX_Enum_map_entry_(RHC),
+            SIX_Enum_map_entry_(LHC),
+            SIX_Enum_map_entry_(UNKNOWN),
+    SIX_Enum_END_string_to_int
+SIX_Enum_END_DEFINE(Polarization2Type);
 using PolarizationType = Polarization2Type;
 
 /*!
@@ -327,45 +348,197 @@ using PolarizationType = Polarization2Type;
 SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
+        // SICD 1.3 add a few more allowable values, which means the number of combinations explodes.
+        // Keeping integer values the same in case there's some code somewhere that depends on it.
         OTHER = 1,
+
         V_V = 2,
         V_H = 3,
+        V_X = 19, // SICD 1.3
+        V_Y, // SICD 1.3
+        V_S, // SICD 1.3
+        V_E, // SICD 1.3
         V_RHC = 4,
         V_LHC = 5,
+        V_OTHER = V_E+1, // SICD 1.3
+
         H_V = 6,
         H_H = 7,
+        H_X = V_OTHER +1, // SICD 1.3
+        H_Y, // SICD 1.3
+        H_S, // SICD 1.3
+        H_E, // SICD 1.3
         H_RHC = 8,
         H_LHC = 9,
-        RHC_RHC = 10,
-        RHC_LHC = 11,
+        H_OTHER = H_E + 1, // SICD 1.3
+
+        X_V = H_OTHER +1, // SICD 1.3
+        X_H,
+        X_X,
+        X_Y,
+        X_S,
+        X_E,
+        X_RHC,
+        X_LHC,
+        X_OTHER,
+
+        Y_V = X_OTHER+1, // SICD 1.3
+        Y_H,
+        Y_X,
+        Y_Y,
+        Y_S,
+        Y_E,
+        Y_RHC,
+        Y_LHC,
+        Y_OTHER,
+
+        S_V = Y_OTHER +1, // SICD 1.3
+        S_H,
+        S_X,
+        S_Y,
+        S_S,
+        S_E,
+        S_RHC,
+        S_LHC,
+        S_OTHER,
+
+        E_V = S_OTHER +1, // SICD 1.3
+        E_H,
+        E_X,
+        E_Y,
+        E_S,
+        E_E,
+        E_RHC,
+        E_LHC,
+        E_OTHER,
+
         RHC_V = 12,
         RHC_H = 13,
-        LHC_RHC = 14,
-        LHC_LHC = 15,
+        RHC_X = E_OTHER +1, // SICD 1.3
+        RHC_Y, // SICD 1.3
+        RHC_S, // SICD 1.3
+        RHC_E, // SICD 1.3
+        RHC_RHC = 10,
+        RHC_LHC = 11,
+        RHC_OTHER = RHC_E + 1, // SICD 1.3
+
         LHC_V = 16,
         LHC_H = 17,
+        LHC_X = RHC_OTHER + 1, // SICD 1.3
+        LHC_Y, // SICD 1.3
+        LHC_S, // SICD 1.3
+        LHC_E, // SICD 1.3
+        LHC_RHC = 14,
+        LHC_LHC = 15,
+        LHC_OTHER = LHC_E + 1,
+
+        OTHER_V = LHC_OTHER + 1, // SICD 1.3
+        OTHER_H,
+        OTHER_X,
+        OTHER_Y,
+        OTHER_S,
+        OTHER_E,
+        OTHER_RHC,
+        OTHER_LHC,
+        OTHER_OTHER,
+
         UNKNOWN = 18,
     SIX_Enum_END_enum
 
     SIX_Enum_BEGIN_string_to_int
-            SIX_Enum_map_entry_(OTHER),
-            SIX_Enum_map_entry_(V_V),
-            SIX_Enum_map_entry_(V_H),
-            SIX_Enum_map_entry_(V_RHC),
-            SIX_Enum_map_entry_(V_LHC),
-            SIX_Enum_map_entry_(H_V),
-            SIX_Enum_map_entry_(H_H),
-            SIX_Enum_map_entry_(H_RHC),
-            SIX_Enum_map_entry_(H_LHC),
-            SIX_Enum_map_entry_(RHC_RHC),
-            SIX_Enum_map_entry_(RHC_LHC),
-            SIX_Enum_map_entry_(RHC_V),
-            SIX_Enum_map_entry_(RHC_H),
-            SIX_Enum_map_entry_(LHC_RHC),
-            SIX_Enum_map_entry_(LHC_LHC),
-            SIX_Enum_map_entry_(LHC_V),
-            SIX_Enum_map_entry_(LHC_H),
-            SIX_Enum_map_entry_(UNKNOWN),
+        SIX_Enum_map_entry_(OTHER),
+
+        SIX_Enum_map_entry_(V_V),
+        SIX_Enum_map_entry_(V_H),
+        SIX_Enum_map_entry_(V_X),
+        SIX_Enum_map_entry_(V_Y),
+        SIX_Enum_map_entry_(V_S),
+        SIX_Enum_map_entry_(V_E),
+        SIX_Enum_map_entry_(V_RHC),
+        SIX_Enum_map_entry_(V_LHC),
+        SIX_Enum_map_entry_(V_OTHER),
+
+        SIX_Enum_map_entry_(H_V),
+        SIX_Enum_map_entry_(H_H),
+        SIX_Enum_map_entry_(H_X),
+        SIX_Enum_map_entry_(H_Y),
+        SIX_Enum_map_entry_(H_S),
+        SIX_Enum_map_entry_(H_E),
+        SIX_Enum_map_entry_(H_RHC),
+        SIX_Enum_map_entry_(H_LHC),
+        SIX_Enum_map_entry_(H_OTHER),
+
+        SIX_Enum_map_entry_(X_V),
+        SIX_Enum_map_entry_(X_H),
+        SIX_Enum_map_entry_(X_X),
+        SIX_Enum_map_entry_(X_Y),
+        SIX_Enum_map_entry_(X_S),
+        SIX_Enum_map_entry_(X_E),
+        SIX_Enum_map_entry_(X_RHC),
+        SIX_Enum_map_entry_(X_LHC),
+        SIX_Enum_map_entry_(X_OTHER),
+
+        SIX_Enum_map_entry_(Y_V),
+        SIX_Enum_map_entry_(Y_H),
+        SIX_Enum_map_entry_(Y_X),
+        SIX_Enum_map_entry_(Y_Y),
+        SIX_Enum_map_entry_(Y_S),
+        SIX_Enum_map_entry_(Y_E),
+        SIX_Enum_map_entry_(Y_RHC),
+        SIX_Enum_map_entry_(Y_LHC),
+        SIX_Enum_map_entry_(Y_OTHER),
+
+        SIX_Enum_map_entry_(S_V),
+        SIX_Enum_map_entry_(S_H),
+        SIX_Enum_map_entry_(S_X),
+        SIX_Enum_map_entry_(S_Y),
+        SIX_Enum_map_entry_(S_S),
+        SIX_Enum_map_entry_(S_E),
+        SIX_Enum_map_entry_(S_RHC),
+        SIX_Enum_map_entry_(S_LHC),
+        SIX_Enum_map_entry_(S_OTHER),
+
+        SIX_Enum_map_entry_(E_V),
+        SIX_Enum_map_entry_(E_H),
+        SIX_Enum_map_entry_(E_X),
+        SIX_Enum_map_entry_(E_Y),
+        SIX_Enum_map_entry_(E_S),
+        SIX_Enum_map_entry_(E_E),
+        SIX_Enum_map_entry_(E_RHC),
+        SIX_Enum_map_entry_(E_LHC),
+        SIX_Enum_map_entry_(E_OTHER),
+
+        SIX_Enum_map_entry_(RHC_V),
+        SIX_Enum_map_entry_(RHC_H),
+        SIX_Enum_map_entry_(RHC_X),
+        SIX_Enum_map_entry_(RHC_Y),
+        SIX_Enum_map_entry_(RHC_S),
+        SIX_Enum_map_entry_(RHC_E),
+        SIX_Enum_map_entry_(RHC_RHC),
+        SIX_Enum_map_entry_(RHC_LHC),
+        SIX_Enum_map_entry_(RHC_OTHER),
+
+        SIX_Enum_map_entry_(LHC_V),
+        SIX_Enum_map_entry_(LHC_H),
+        SIX_Enum_map_entry_(LHC_X),
+        SIX_Enum_map_entry_(LHC_Y),
+        SIX_Enum_map_entry_(LHC_S),
+        SIX_Enum_map_entry_(LHC_E),
+        SIX_Enum_map_entry_(LHC_RHC),
+        SIX_Enum_map_entry_(LHC_LHC),
+        SIX_Enum_map_entry_(LHC_OTHER),
+
+        SIX_Enum_map_entry_(OTHER_V),
+        SIX_Enum_map_entry_(OTHER_H),
+        SIX_Enum_map_entry_(OTHER_X),
+        SIX_Enum_map_entry_(OTHER_Y),
+        SIX_Enum_map_entry_(OTHER_S),
+        SIX_Enum_map_entry_(OTHER_E),
+        SIX_Enum_map_entry_(OTHER_RHC),
+        SIX_Enum_map_entry_(OTHER_LHC),
+        SIX_Enum_map_entry_(OTHER_OTHER),
+
+        SIX_Enum_map_entry_(UNKNOWN),
     SIX_Enum_END_string_to_int
 SIX_Enum_END_DEFINE(DualPolarizationType);
 
