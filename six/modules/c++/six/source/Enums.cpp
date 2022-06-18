@@ -22,14 +22,14 @@
  */
 #include "six/Enums.h"
 
-#include <functional>
 #include <std/optional>
 
-#if 0
+#include "six/Utilities.h"
+
 static bool is_OTHER_(const std::string& v)
 {
     // OTHER.* for  SIDD 3.0/SICD 1.3, not "OTHER"
-    if ((v != "OTHER") && str::starts_with(v, "OTHER")) // i.e., "OTHER_foo"
+    if (str::starts_with(v, "OTHER") && (v != "OTHER")) // i.e., "OTHER_foo"
     {
         // "where * = 0 or more characters that does not contain “:” (0x3A)."
         return v.find(':') == std::string::npos; // "OTHER:foo" is invalid
@@ -37,6 +37,117 @@ static bool is_OTHER_(const std::string& v)
     return false; // "OTHER" or "<something else>"
 }
 
+template<typename T>
+inline T toType_(const std::string& s, const except::Exception& ex)
+{
+    const auto result = T::toType(s, std::nothrow);
+    auto retval = nitf::details::value(result, ex);
+    if (retval == T::NOT_SET)
+    {
+        throw ex;
+    }
+    return retval;
+}
+
+template<typename T>
+inline std::string toString_(const T& t, const except::Exception& ex)
+{
+    if (t == T::NOT_SET)
+    {
+        throw ex;
+    }
+
+    const auto result = t.toString(std::nothrow);
+    return nitf::details::value(result, ex);
+}
+
+namespace six
+{
+    template <>
+    six::PolarizationSequenceType six::toType<six::PolarizationSequenceType>(
+        const std::string& s)
+    {
+        if (is_OTHER_(s))
+        {
+            PolarizationSequenceType retval = PolarizationSequenceType::OTHER;
+            retval.other_ = s;
+            return retval;
+        }
+
+        const except::Exception ex(Ctxt("Unsupported polarization type '" + s + "'"));
+        return toType_<PolarizationSequenceType>(s, ex);
+    }
+    template <>
+    std::string six::toString(const PolarizationSequenceType& t)
+    {
+        // use the OTHER.* string, if we have one
+        if ((t == PolarizationSequenceType::OTHER) && is_OTHER_(t.other_))
+        {
+            return t.other_;
+        }
+
+        const except::Exception ex(Ctxt("Unsupported conversion from polarization type"));
+        if (!t.other_.empty())
+        {
+            // other_ got set to some non-OTHER.* string
+            throw ex;
+        }
+        return toString_(t, ex);
+    }
+
+    template <>
+    PolarizationType six::toType<PolarizationType>(const std::string& s)
+    {
+        if (is_OTHER_(s))
+        {
+            PolarizationType retval = PolarizationType::OTHER;
+            retval.other_ = s;
+            return retval;
+        }
+
+        const except::Exception ex(Ctxt("Unsupported polarization type '" + s + "'"));
+        return toType_<PolarizationType>(s, ex);
+    }
+    template <>
+    std::string six::toString(const PolarizationType& t)
+    {
+        // use the OTHER.* string, if we have one
+        if ((t == PolarizationType::OTHER) && is_OTHER_(t.other_))
+        {
+            return t.other_;
+        }
+
+        const except::Exception ex(Ctxt("Unsupported conversion from polarization type"));
+        if (!t.other_.empty())
+        {
+            // other_ got set to some non-OTHER.* string
+            throw ex;
+        }
+        return toString_(t, ex);
+    }
+
+    template <>
+    DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
+    {
+        // Note there is no "top level" OTHER.*; rather it's OTHER.*:OTHER.*
+
+        const except::Exception ex(Ctxt("Unsupported conversion to dual polarization type '" + s + "'"));
+
+        std::string type(s);
+        str::replace(type, ":", "_"); // "V:V" -> "V_V"
+        return toType_<DualPolarizationType>(type, ex);
+    }
+    template <>
+    std::string six::toString(const DualPolarizationType& t)
+    {
+        const except::Exception ex(Ctxt("Unsupported dual polarization type to string"));
+        auto retval = toString_(t, ex);
+        str::replace(retval, "_", ":"); // "V_V" -> "V:V"
+        return retval;
+    }
+}
+
+#if 0
 // See https://stackoverflow.com/questions/13358672/how-to-convert-a-lambda-to-an-stdfunction-using-templates for
 // some interesting reading regarding std::function<> and lambdas.
 template<typename T>

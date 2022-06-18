@@ -265,6 +265,8 @@ SIX_Enum_END_DEFINE(PixelType);
  *  Allowed values: "V", "H", "X", "Y", "S", "E", "RHC", "LHC", "UNKNOWN", "SEQUENCE", "OTHER*"
  */
 SIX_Enum_BEGIN_DEFINE(Polarization1Type)
+    std::string other_; // value of OTHER.* for SIDD 3.0/SICD 1.3
+
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
         OTHER = 1,
@@ -305,6 +307,8 @@ using PolarizationSequenceType = Polarization1Type;
  *  Allowed values: "V", "H", "X", "Y", "S", "E", "RHC", "LHC", "UNKNOWN", "OTHER*"
  */
 SIX_Enum_BEGIN_DEFINE(Polarization2Type)
+    std::string other_; // value of OTHER.* for SIDD 3.0/SICD 1.3
+
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
         OTHER = 1,

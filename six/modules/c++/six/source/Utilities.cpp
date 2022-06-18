@@ -241,6 +241,30 @@ std::string six::toString(const DateTime& dateTime)
     return strDate;
 }
 
+template<typename T>
+inline T toType_(const std::string& s, const except::Exception& ex)
+{
+    const auto result = T::toType(s, std::nothrow);
+    auto retval = nitf::details::value(result, ex);
+    if (retval == T::NOT_SET)
+    {
+        throw ex;
+    }
+    return retval;
+}
+
+template<typename T>
+inline std::string toString_(const T& t, const except::Exception& ex)
+{
+    if (t == T::NOT_SET)
+    {
+        throw ex;
+    }
+
+    const auto result = t.toString(std::nothrow);
+    return nitf::details::value(result, ex);
+}
+
 template <>
 std::string six::toString(const RadarModeType& type)
 {
@@ -436,75 +460,6 @@ std::string six::toString(const OrientationType& t)
     default:
         throw except::Exception(Ctxt("Unsupported orientation"));
     }
-}
-
-template<typename T>
-inline T toType_(const std::string& s, const except::Exception& ex)
-{
-    const auto result = T::toType(s, std::nothrow);
-    auto retval = nitf::details::value(result, ex);
-    if (retval == T::NOT_SET)
-    {
-        throw ex;
-    }
-    return retval;
-}
-
-template<typename T>
-inline std::string toString_(const T& t, const except::Exception& ex)
-{
-    if (t == T::NOT_SET)
-    {
-        throw ex;
-    }
-
-    const auto result = t.toString(std::nothrow);
-    return nitf::details::value(result, ex);
-}
-
-template <>
-PolarizationSequenceType six::toType<PolarizationSequenceType>(
-        const std::string& s)
-{
-    const except::Exception ex(Ctxt("Unsupported polarization type '" + s + "'"));
-    return toType_<PolarizationSequenceType>(s, ex);
-}
-template <>
-std::string six::toString(const PolarizationSequenceType& t)
-{
-    const except::Exception ex(Ctxt("Unsupported conversion from polarization type"));
-    return toString_(t, ex);
-}
-
-template <>
-PolarizationType six::toType<PolarizationType>(const std::string& s)
-{
-    const except::Exception ex(Ctxt("Unsupported polarization type '" + s + "'"));
-    return toType_<PolarizationType>(s, ex);
-}
-template <>
-std::string six::toString(const PolarizationType& t)
-{
-    const except::Exception ex(Ctxt("Unsupported conversion from polarization type"));
-    return toString_(t, ex);
-}
-
-template <>
-DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
-{
-    const except::Exception ex(Ctxt("Unsupported conversion to dual polarization type '" + s + "'"));
-
-    std::string type(s);
-    str::replace(type, ":", "_"); // "V:V" -> "V_V"
-    return toType_<DualPolarizationType>(type, ex);
-}
-template <>
-std::string six::toString(const DualPolarizationType& t)
-{
-    const except::Exception ex(Ctxt("Unsupported dual polarization type to string"));
-    auto retval = toString_(t, ex);
-    str::replace(retval, "_", ":"); // "V_V" -> "V:V"
-    return retval;
 }
 
 template <>
