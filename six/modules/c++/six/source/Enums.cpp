@@ -70,7 +70,7 @@ namespace six
         if (is_OTHER_(s))
         {
             PolarizationSequenceType retval = PolarizationSequenceType::OTHER;
-            retval.other_ = s;
+            retval.other_ = s; // save away original value for toString()
             return retval;
         }
 
@@ -101,7 +101,7 @@ namespace six
         if (is_OTHER_(s))
         {
             PolarizationType retval = PolarizationType::OTHER;
-            retval.other_ = s;
+            retval.other_ = s; // save away original value for toString()
             return retval;
         }
 
@@ -129,13 +129,30 @@ namespace six
     template <>
     DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
     {
-        // Note there is no "top level" OTHER.*; rather it's OTHER.*:OTHER.*
-
         const except::Exception ex(Ctxt("Unsupported conversion to dual polarization type '" + s + "'"));
+        const auto splits = str::split(s, ":");
+        if (splits.size() != 2)
+        {
+            // Note there is no "top level" OTHER.*; rather it's OTHER.*:OTHER.*
+            return toType_<DualPolarizationType>(s, ex); // No ":", assume it is another allowed value.
+        }
 
-        std::string type(s);
-        str::replace(type, ":", "_"); // "V:V" -> "V_V"
-        return toType_<DualPolarizationType>(type, ex);
+        // "Allowed values include the form TX:RCV that is formed from one TX value and one RCV value."
+        auto&& tx = splits[0];
+        auto&& rcv = splits[1];
+
+        // "V:OTHER.*" or "OTHER.*:V" or "OTHER.*:OTHER.*"
+        static const PolarizationType other = PolarizationType::OTHER;
+        const auto strTx = is_OTHER_(tx) ? other.toString() : tx;  // get rid of .* from OTHER strings
+        const auto strRcv = is_OTHER_(rcv) ? other.toString() : rcv;  // get rid of .* from OTHER strings
+        const auto type = strTx + "_" + strRcv; // "OTHER_abc:V" -> "OTHER_V"
+
+        auto retval = toType_<DualPolarizationType>(type, ex);
+        if (is_OTHER_(tx) || is_OTHER_(rcv))
+        {
+            retval.other_ = s;  // save away original value for toString()
+        }
+        return retval;
     }
     template <>
     std::string six::toString(const DualPolarizationType& t)

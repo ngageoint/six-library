@@ -344,12 +344,14 @@ using PolarizationType = Polarization2Type;
  *  Enumeration used to represent DualPolarizationTypes
  * 
  * From Table 3.7, Indicates the combined transmit and receive polarization for the channel.
- *  Allowed values include the formTX:RCV that is formed from one TX valueand one RCV value.
+ *  Allowed values include the form TX:RCV that is formed from one TX value and one RCV value.
  *  Allowed TX values:  "V", "H", "X", "Y", "S", "E", "RHC", "LHC", "OTHER*"
  *  Allowed RCV values: "V", "H", "X", "Y", "S", "E", "RHC", "LHC", "OTHER*"
  *  Allowed values also include: "OTHER", "UNKNOWN"
  */
 SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
+    std::string other_; // value of OTHER.* for SIDD 3.0/SICD 1.3
+
     //! The enumerations allowed
     SIX_Enum_BEGIN_enum
         // SICD 1.3 add a few more allowable values, which means the number of combinations explodes.

@@ -273,43 +273,30 @@ TEST_CASE(DualPolarizationType_SixToType_OTHER)
     TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER);
     TEST_ASSERT_EQ("OTHER", toType_DualPolarization.toString());
 
-    //toType_DualPolarization = six::DualPolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
-    //TEST_ASSERT_EQ("OTHER_abc", toType_DualPolarization.toString());
-    //TEST_ASSERT(toType_DualPolarization == "OTHER_abc");
-
-    //TEST_ASSERT(toType_DualPolarization == "V_OTHER");
-    //TEST_ASSERT(toType_DualPolarization == "V:OTHER");
-    //TEST_ASSERT(toType_DualPolarization != "OTHER");
-    //TEST_ASSERT(toType_DualPolarization != "abc");
-
     toType_DualPolarization = six::toType<six::DualPolarizationType>("OTHER:V");
     TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER_V);
     TEST_ASSERT_EQ("OTHER_V", toType_DualPolarization.toString());
     TEST_ASSERT_EQ("OTHER:V", six::toString(toType_DualPolarization));
 
-    //TEST_ASSERT(toType_DualPolarization == "OTHER_V");
-    //TEST_ASSERT(toType_DualPolarization == "OTHER:V");
-    //TEST_ASSERT(toType_DualPolarization != "OTHER_abc:V"); // "OTHER_V" is OTHER:V, not OTHER.*
+    toType_DualPolarization = six::toType<six::DualPolarizationType>("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::V_OTHER);
+    TEST_ASSERT_EQ("V_OTHER", toType_DualPolarization.toString());
+    //TEST_ASSERT_EQ("V:OTHER_xyz", six::toString(toType_DualPolarization));
 
-    //toType_DualPolarization = six::DualPolarizationType::toType("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
-    //TEST_ASSERT_EQ("V:OTHER_xyz", toType_DualPolarization.toString());
-    //TEST_ASSERT(toType_DualPolarization == "V:OTHER_xyz");
+    toType_DualPolarization = six::toType<six::DualPolarizationType>("OTHER_xyz:V"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER_V);
+    TEST_ASSERT_EQ("OTHER_V", toType_DualPolarization.toString());
+    //TEST_ASSERT_EQ("OTHER_xyz:V", six::toString(toType_DualPolarization));
 
-    //toType_DualPolarization = six::DualPolarizationType::toType("OTHER_xyz:V"); // SICD 1.3 "OTHER.*"   
-    //TEST_ASSERT_EQ("OTHER_xyz:V", toType_DualPolarization.toString());
-    //TEST_ASSERT(toType_DualPolarization == "OTHER_xyz:V");
-    //TEST_ASSERT(toType_DualPolarization != "OTHER:V");
-    //TEST_ASSERT(toType_DualPolarization != "OTHER_abc:V");
-    //TEST_ASSERT(toType_DualPolarization != "OTHER_V");
+    toType_DualPolarization = six::toType<six::DualPolarizationType>("OTHER:OTHER");
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER_OTHER);
+    TEST_ASSERT_EQ("OTHER_OTHER", toType_DualPolarization.toString());
+    TEST_ASSERT_EQ("OTHER:OTHER", six::toString(toType_DualPolarization));
 
-    //toType_DualPolarization = six::DualPolarizationType::toType("OTHER:OTHER");
-    //TEST_ASSERT_EQ("OTHER_OTHER", toType_DualPolarization.toString());
-    //TEST_ASSERT(toType_DualPolarization == "OTHER:OTHER");
-    //TEST_ASSERT(toType_DualPolarization == "OTHER_OTHER");
-
-    //toType_DualPolarization = six::DualPolarizationType::toType("OTHER_abc:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
-    //TEST_ASSERT_EQ("OTHER_abc:OTHER_xyz", toType_DualPolarization.toString());
-    //TEST_ASSERT(toType_DualPolarization == "OTHER_abc:OTHER_xyz");
+    toType_DualPolarization = six::toType<six::DualPolarizationType>("OTHER_abc:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER_OTHER);
+    TEST_ASSERT_EQ("OTHER_OTHER", toType_DualPolarization.toString());
+    //TEST_ASSERT_EQ("OTHER_abc:OTHER_xyz", six::toString(toType_DualPolarization));
 }
 
 template<typename TSixEnum>
