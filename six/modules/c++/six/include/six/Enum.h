@@ -43,6 +43,46 @@ constexpr int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
 namespace details
 {
+    template<typename T>
+    inline T index(const std::map<std::string, T>& map, const std::string& v)
+    {
+        const auto result = nitf::details::index(map, v);
+        const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
+        return nitf::details::value(result, ex);
+    }
+    template<typename T>
+    inline std::string index(const std::map<T, std::string>& map, T v)
+    {
+        const auto result = nitf::details::index(map, v);
+        const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
+        return nitf::details::value(result, ex);
+    }
+
+    template<typename T>
+    inline std::string toString(const std::map<T, std::string>& map, T value, bool throw_if_not_set)
+    {
+        constexpr auto not_set_value = static_cast<T>(NOT_SET_VALUE);
+        if (throw_if_not_set && (value == not_set_value))
+        {
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+        }
+        return index(map, value);
+    }
+
+    template<typename T, typename TValues = typename T::values>
+    inline std::optional<T> toType(const std::map<std::string, TValues>& map, const std::string& v, std::nothrow_t)
+    {
+        const auto result = nitf::details::index(map, v);
+        return result.has_value() ? std::optional<T>(*result) : std::optional<T>();
+    }
+    template<typename T, typename TValues = typename T::values>
+    inline T toType(const std::map<std::string, TValues>& map, const std::string& v)
+    {
+        const auto result = toType<T>(map, v, std::nothrow);
+        const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
+        return nitf::details::value(result, ex);
+    }
+
     // Base type for all enums; avoids code duplication
     template<typename T>
     class Enum
@@ -57,32 +97,19 @@ namespace details
             return retval;
         }
 
-        static int index(const std::string& v)
-        {
-            const auto result = nitf::details::index(string_to_int(), v);
-            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
-            return nitf::details::value(result, ex);
-        }
-        static std::string index(int v)
-        {
-            const auto result = nitf::details::index(int_to_string(), v);
-            const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
-            return nitf::details::value(result, ex);
-        }
-
     protected:
         Enum() = default;
 
         //! string constructor
         explicit Enum(const std::string& s)
         {
-            value = index(s);
+            value = details::index(string_to_int(), s);
         }
 
         //! int constructor
         Enum(int i)
         {
-            (void) index(i);
+            (void)details::index(int_to_string(), i);
             value = i;
         }
 
@@ -94,23 +121,16 @@ namespace details
         }
         std::string toString(bool throw_if_not_set = false) const
         {
-            if (throw_if_not_set && (value == NOT_SET_VALUE))
-            {
-                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-            }
-            return index(value);
+            return details::toString(int_to_string(), value, throw_if_not_set);
         }
 
         static std::optional<T> toType(const std::string& v, std::nothrow_t)
         {
-            const auto result = nitf::details::index(string_to_int(), v);
-            return result.has_value() ? std::optional<T>(*result) : std::optional<T>();
+            return details::toType<T>(string_to_int(), v, std::nothrow);
         }
         static T toType(const std::string& v)
         {
-            const auto result = toType(v, std::nothrow);
-            const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-            return nitf::details::value(result, ex);
+            return details::toType<T>(string_to_int(), v);
         }
 
         operator int() const { return value; }
@@ -149,7 +169,7 @@ namespace details
     #define SIX_Enum_default_ctor_assign_(name) name() = default; name(const name&) = default; name(name&&) = default; \
             name& operator=(const name&) = default; name& operator=(name&&) = default
     #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name);  explicit name(const std::string& s) { *this = std::move(name::toType(s)); } \
-            name(int i) : Enum(i) {} name& operator=(int v) { *this = name(v); return *this; } 
+            name(int i) : Enum(i) {} name& operator=(int v) { *this = std::move(name(v)); return *this; } 
     #define SIX_Enum_BEGIN_enum enum values {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
