@@ -41,11 +41,11 @@ SIX_Enum_BEGIN_DEFINE(ARPFlag)
         POST_PROCESSED = 2,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_int
+    SIX_Enum_BEGIN_string_to_value
             SIX_Enum_map_entry_(REALTIME),
             SIX_Enum_map_entry_(PREDICTED),
             {"POST PROCESSED", POST_PROCESSED },
-    SIX_Enum_END_string_to_int
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(ARPFlag);
 
 /*!
@@ -59,9 +59,9 @@ SIX_Enum_BEGIN_DEFINE(BandEqualizationAlgorithm)
         LUT_1D = 0,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_int
+    SIX_Enum_BEGIN_string_to_value
             {"LUT 1D", LUT_1D },
-    SIX_Enum_END_string_to_int
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(BandEqualizationAlgorithm);
 
 /*!
@@ -101,14 +101,14 @@ SIX_Enum_BEGIN_DEFINE(DownsamplingMethod)
         LAGRANGE = 5,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_int
+    SIX_Enum_BEGIN_string_to_value
             SIX_Enum_map_entry_(DECIMATE),
             { "MAX PIXEL", MAX_PIXEL },
             SIX_Enum_map_entry_(AVERAGE),
             { "NEAREST NEIGHBOR", NEAREST_NEIGHBOR },
             SIX_Enum_map_entry_(BILINEAR),
             SIX_Enum_map_entry_(LAGRANGE),
-    SIX_Enum_END_string_to_int
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(DownsamplingMethod);
 
 
@@ -126,12 +126,12 @@ SIX_Enum_BEGIN_DEFINE(FilterDatabaseName)
         NEAREST_NEIGHBOR = 3,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_int
+    SIX_Enum_BEGIN_string_to_value
             SIX_Enum_map_entry_(BILINEAR),
             SIX_Enum_map_entry_(CUBIC),
             SIX_Enum_map_entry_(LAGRANGE),
             { "NEAREST NEIGHBOR", NEAREST_NEIGHBOR },
-    SIX_Enum_END_string_to_int
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(FilterDatabaseName);
 
 /*!
@@ -158,12 +158,12 @@ SIX_Enum_BEGIN_DEFINE(RenderingIntent)
         ABSOLUTE_INTENT = 3,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_int
+    SIX_Enum_BEGIN_string_to_value
             SIX_Enum_map_entry_(PERCEPTUAL),
             SIX_Enum_map_entry_(SATURATION),
             { "RELATIVE INTENT", RELATIVE_INTENT },
             { "ABSOLUTE INTENT", ABSOLUTE_INTENT },
-    SIX_Enum_END_string_to_int
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(RenderingIntent);
 
 /*!

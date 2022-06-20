@@ -244,7 +244,7 @@ SIX_Enum_BEGIN_DEFINE(PixelType)
         RGB24I = 8,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_int
+    SIX_Enum_BEGIN_string_to_value
             SIX_Enum_map_entry_(RE32F_IM32F),
             SIX_Enum_map_entry_(RE16I_IM16I),
             SIX_Enum_map_entry_(AMP8I_PHS8I),
@@ -253,7 +253,7 @@ SIX_Enum_BEGIN_DEFINE(PixelType)
             SIX_Enum_map_entry_(MONO16I),
             SIX_Enum_map_entry_(RGB8LU),
             SIX_Enum_map_entry_(RGB24I),
-    SIX_Enum_END_string_to_int
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(PixelType);
 
 /*!
@@ -282,7 +282,7 @@ SIX_Enum_BEGIN_DEFINE(Polarization1Type)
         SEQUENCE = 7,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_int
+    SIX_Enum_BEGIN_string_to_value
             SIX_Enum_map_entry_(OTHER),
             SIX_Enum_map_entry_(V),
             SIX_Enum_map_entry_(H),
@@ -294,7 +294,7 @@ SIX_Enum_BEGIN_DEFINE(Polarization1Type)
             SIX_Enum_map_entry_(LHC),
             SIX_Enum_map_entry_(UNKNOWN),
             SIX_Enum_map_entry_(SEQUENCE),
-    SIX_Enum_END_string_to_int
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(Polarization1Type);
 using PolarizationSequenceType = Polarization1Type;
 
@@ -323,7 +323,7 @@ SIX_Enum_BEGIN_DEFINE(Polarization2Type)
         UNKNOWN = 6,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_int
+    SIX_Enum_BEGIN_string_to_value
             SIX_Enum_map_entry_(OTHER),
             SIX_Enum_map_entry_(V),
             SIX_Enum_map_entry_(H),
@@ -334,7 +334,7 @@ SIX_Enum_BEGIN_DEFINE(Polarization2Type)
             SIX_Enum_map_entry_(RHC),
             SIX_Enum_map_entry_(LHC),
             SIX_Enum_map_entry_(UNKNOWN),
-    SIX_Enum_END_string_to_int
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(Polarization2Type);
 using PolarizationType = Polarization2Type;
 
@@ -451,7 +451,7 @@ SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
         UNKNOWN = 18,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_int
+    SIX_Enum_BEGIN_string_to_value
         SIX_Enum_map_entry_(OTHER),
 
         SIX_Enum_map_entry_(V_V),
@@ -545,7 +545,7 @@ SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
         SIX_Enum_map_entry_(OTHER_OTHER),
 
         SIX_Enum_map_entry_(UNKNOWN),
-    SIX_Enum_END_string_to_int
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(DualPolarizationType);
 
 /*!
