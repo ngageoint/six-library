@@ -94,7 +94,6 @@ ComplexXMLControl::getParser(const std::string& strVersion) const
     //   SICD 1.1.0
     //   SICD 1.2.0
     //   SICD 1.2.1
-    //   SICD 1.3.0
     if (majorVersion == "0")
     {
         if (minorVersion == "4")
@@ -144,11 +143,6 @@ ComplexXMLControl::getParser(const std::string& strVersion) const
         else if (minorVersion == "2" && patchVersion == "1")
         {
             // The only change is in the DualPolarization enum, which is handled in the schema
-            parser.reset(new ComplexXMLParser101(strVersion, mLog));
-        }
-        else if (minorVersion == "3" && patchVersion == "0")
-        {
-            // polarization and UnmodeledError
             parser.reset(new ComplexXMLParser101(strVersion, mLog));
         }
     }
