@@ -44,7 +44,7 @@ TEST_CASE(testEquality)
     refGeo.monostatic->twistAngle = 1.0;
     refGeo.monostatic->slopeAngle = 1.0;
     refGeo.monostatic->layoverAngle = 1.0;
-    refGeo.monostatic->sideOfTrack = six::SideOfTrackType("LEFT");
+    refGeo.monostatic->sideOfTrack = six::SideOfTrackType::LEFT;
     refGeo.monostatic->slantRange = 20.0;
 
     refGeoOther.monostatic->azimuthAngle = 2.0;
@@ -52,7 +52,7 @@ TEST_CASE(testEquality)
     refGeoOther.monostatic->twistAngle = 2.0;
     refGeoOther.monostatic->slopeAngle = 2.0;
     refGeoOther.monostatic->layoverAngle = 2.0;
-    refGeoOther.monostatic->sideOfTrack = six::SideOfTrackType("LEFT");
+    refGeoOther.monostatic->sideOfTrack = six::SideOfTrackType::LEFT;
     refGeoOther.monostatic->slantRange = 20.0;
 
     TEST_ASSERT_NOT_EQ(refGeo, refGeoOther);

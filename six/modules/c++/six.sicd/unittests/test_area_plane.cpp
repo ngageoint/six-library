@@ -6,9 +6,9 @@
 void setupData(six::sicd::ComplexData& data)
 {
     data.grid->row.reset(new six::sicd::DirectionParameters());
-    data.grid->row->sign = -1;
+    data.grid->row->sign = six::FFTSign::NEG;
     data.grid->col.reset(new six::sicd::DirectionParameters());
-    data.grid->col->sign = -1;
+    data.grid->col->sign = six::FFTSign::NEG;
     data.setNumRows(100);
     data.setNumCols(100);
 }

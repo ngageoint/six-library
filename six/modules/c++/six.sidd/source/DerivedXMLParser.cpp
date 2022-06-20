@@ -163,22 +163,22 @@ void DerivedXMLParser::getAttributeIfExists(
         //So I'd think we should be able to parse that, too
         if (name == "true" || name == "1")
         {
-            boolean = BooleanType("IS_TRUE");
+            boolean = BooleanType::IS_TRUE;
         }
         else if (name == "false" || name == "0")
         {
-            boolean = BooleanType("IS_FALSE");
+            boolean = BooleanType::IS_FALSE;
         }
         else
         {
             //This allows the function to continue parsing IS_TRUE, IS_FALSE as desired,
             //as well as throwing an exception for undesired input
-            boolean = BooleanType(name);
+            boolean = BooleanType::toType(name);
         }
     }
     else
     {
-        boolean = BooleanType("NOT_SET");
+        boolean = BooleanType::NOT_SET;
     }
 }
 
