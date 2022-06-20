@@ -53,6 +53,16 @@ namespace details
         }
         return retval;
     }
+    template<typename T>
+    inline std::map<std::string, int> to_string_to_int(const std::map<std::string, T>& map)
+    {
+        std::map<std::string, int> retval;
+        for (auto&& kv : map)
+        {
+            retval[kv.first] = kv.second;
+        }
+        return retval;
+    }
 
     template<typename T>
     inline T index(const std::map<std::string, T>& map, const std::string& v)
@@ -100,7 +110,8 @@ namespace details
     {
         static const std::map<std::string, int>& string_to_int()
         {
-            return T::string_to_int_();
+            static const auto retval = details::to_string_to_int(T::string_to_value_());
+            return retval;
         }
         static const std::map<int, std::string>& int_to_string()
         {
@@ -172,11 +183,12 @@ namespace details
     // There are a few examples of expanded code below.
     #define SIX_Enum_default_ctor_assign_(name) name() = default; name(const name&) = default; name(name&&) = default; \
             name& operator=(const name&) = default; name& operator=(name&&) = default
-    #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); name(int i) : Enum(i) {} name& operator=(int v) { *this = std::move(name(v)); return *this; } 
+    #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); name(int i) : Enum(i) {} \
+        name(values v) : Enum(static_cast<int>(v)) {} name& operator=(values v) { *this = std::move(name(v)); return *this; }
     #define SIX_Enum_BEGIN_enum enum values {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
-    #define SIX_Enum_BEGIN_string_to_int static const std::map<std::string, int>& string_to_int_() { static const std::map<std::string, int> retval {
+    #define SIX_Enum_BEGIN_string_to_int static const std::map<std::string, values>& string_to_value_() { static const std::map<std::string, values> retval {
     #define SIX_Enum_END_enum NOT_SET = six::NOT_SET_VALUE };
     #define SIX_Enum_END_string_to_int SIX_Enum_map_entry_NOT_SET }; return retval; }
 
