@@ -34,13 +34,13 @@ typedef xml::lite::Attributes XMLAttributes;
 template <typename T>
 bool isDefined(const T& enumVal)
 {
-    return six::Init::isDefined(enumVal.value);
+    return six::Init::isDefined(enumVal);
 }
 
 template <typename T>
 bool isUndefined(const T& enumVal)
 {
-    return six::Init::isUndefined(enumVal.value);
+    return six::Init::isUndefined(enumVal);
 }
 
 template <typename SmartPtrT>

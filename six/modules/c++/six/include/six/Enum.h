@@ -44,16 +44,6 @@ constexpr int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 namespace details
 {
     template<typename T>
-    inline std::map<int, std::string> to_int_to_string(const std::map<T, std::string>& map)
-    {
-        std::map<int, std::string> retval;
-        for (auto&& kv : map)
-        {
-            retval[kv.first] = kv.second;
-        }
-        return retval;
-    }
-    template<typename T>
     inline std::map<std::string, int> to_string_to_int(const std::map<std::string, T>& map)
     {
         std::map<std::string, int> retval;
@@ -108,6 +98,8 @@ namespace details
     template<typename T>
     class Enum
     {
+        int value_ = NOT_SET_VALUE;
+
         static const std::map<std::string, int>& string_to_int()
         {
             static const auto retval = details::to_string_to_int(T::string_to_value_());
@@ -125,19 +117,19 @@ namespace details
         //! int constructor
         Enum(int i)
         {
-            (void)details::index(int_to_string(), i);
-            value = i;
+            (void)details::index(int_to_string(), i); // validate "i"
+            value_ = i;
         }
 
     public:
         //! Returns string representation of the value
         std::optional<std::string> toString(std::nothrow_t) const
         {
-            return nitf::details::index(int_to_string(), value);
+            return nitf::details::index(int_to_string(), value_);
         }
         std::string toString(bool throw_if_not_set = false) const
         {
-            return details::toString(int_to_string(), value, throw_if_not_set);
+            return details::toString(int_to_string(), value_, throw_if_not_set);
         }
 
         static std::optional<T> toType(const std::string& v, std::nothrow_t)
@@ -149,14 +141,14 @@ namespace details
             return details::toType<T>(string_to_int(), v);
         }
 
-        operator int() const { return value; }
+        operator int() const { return value_; }
 
         // needed for SWIG
         static size_t size() { return int_to_string().size(); }
-        bool operator<(const int& o) const { return value < o; }
-        bool operator<(const Enum& o) const { return *this < o.value; }
-        bool operator==(const int& o) const { return value == o; }
-        bool operator==(const Enum& o) const { return *this == o.value; }
+        bool operator<(const int& o) const { return value_ < o; }
+        bool operator<(const Enum& o) const { return *this < o.value_; }
+        bool operator==(const int& o) const { return value_ == o; }
+        bool operator==(const Enum& o) const { return *this == o.value_; }
         bool operator!=(const int& o) const { return !(*this == o); }
         bool operator!=(const Enum& o) const { return !(*this == o); }
         bool operator<=(const int& o) const { return (*this < o) || (*this == o); }
@@ -165,8 +157,6 @@ namespace details
         bool operator>(const Enum& o) const { return !(*this <= o); }
         bool operator>=(const int& o) const { return !(*this < o); }
         bool operator>=(const Enum& o) const { return !(*this < o); }
-
-        int value = NOT_SET_VALUE;
     };
     template<typename T>
     inline std::ostream& operator<<(std::ostream& os, const Enum<T>& e)
