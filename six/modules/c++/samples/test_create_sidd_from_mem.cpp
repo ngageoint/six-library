@@ -2158,8 +2158,8 @@ void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures,
 
     mem::ScopedCopyablePtr<six::sidd::TxRcvPolarization> polarization(
             new six::sidd::TxRcvPolarization());
-    polarization->txPolarization = six::PolarizationType::V;
-    polarization->rcvPolarization = six::PolarizationType::OTHER;
+    polarization->txPolarization = six::PolarizationSequenceType::V;
+    polarization->rcvPolarization = six::PolarizationSequenceType::OTHER;
     polarization->rcvPolarizationOffset = 1.37;
     if (version == "1.0.0")
     {
