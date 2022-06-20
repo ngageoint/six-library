@@ -44,6 +44,17 @@ constexpr int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 namespace details
 {
     template<typename T>
+    inline std::map<int, std::string> to_int_to_string(const std::map<T, std::string>& map)
+    {
+        std::map<int, std::string> retval;
+        for (auto&& kv : map)
+        {
+            retval[kv.first] = kv.second;
+        }
+        return retval;
+    }
+
+    template<typename T>
     inline T index(const std::map<std::string, T>& map, const std::string& v)
     {
         const auto result = nitf::details::index(map, v);
@@ -100,12 +111,6 @@ namespace details
     protected:
         Enum() = default;
 
-        //! string constructor
-        explicit Enum(const std::string& s)
-        {
-            value = details::index(string_to_int(), s);
-        }
-
         //! int constructor
         Enum(int i)
         {
@@ -134,7 +139,6 @@ namespace details
         }
 
         operator int() const { return value; }
-        //operator std::string() const { return toString(); }
 
         // needed for SWIG
         static size_t size() { return int_to_string().size(); }
@@ -168,8 +172,7 @@ namespace details
     // There are a few examples of expanded code below.
     #define SIX_Enum_default_ctor_assign_(name) name() = default; name(const name&) = default; name(name&&) = default; \
             name& operator=(const name&) = default; name& operator=(name&&) = default
-    #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name);  explicit name(const std::string& s) { *this = std::move(name::toType(s)); } \
-            name(int i) : Enum(i) {} name& operator=(int v) { *this = std::move(name(v)); return *this; } 
+    #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); name(int i) : Enum(i) {} name& operator=(int v) { *this = std::move(name(v)); return *this; } 
     #define SIX_Enum_BEGIN_enum enum values {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
@@ -207,6 +210,7 @@ namespace details
     #define SIX_Enum_ENUM_5(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5) SIX_Enum_BEGIN_DEFINE(name) \
         SIX_Enum_BEGIN_enum n1 = v1, n2 = v2,  n3 = v3, n4 = v4, n5 = v5, SIX_Enum_END_enum \
         SIX_Enum_map_5_(n1, n2, n3, n4, n5) SIX_Enum_END_DEFINE(name)
+
 } // namespace details
 }
 #endif // SIX_six_Enum_h_INCLUDED_

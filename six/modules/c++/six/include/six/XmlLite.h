@@ -221,7 +221,7 @@ struct XmlLite final
     {
         std::string name;
         parseString(element, name);
-        enumVal = T(name);
+        enumVal = T::toType(name);
     }
 
     bool parseDouble(const xml::lite::Element&, double&) const;

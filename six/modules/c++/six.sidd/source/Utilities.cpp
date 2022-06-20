@@ -925,7 +925,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     polarization->rcvPolarizationOffset = 1.37;
     if (strVersion == "1.0.0")
     {
-        polarization->processed = six::BooleanType("IS_TRUE");
+        polarization->processed = six::BooleanType::IS_TRUE;
     }
     collection.information.polarization.push_back(polarization);
 

@@ -32,7 +32,7 @@ template<typename TSixEnum>
 static void test_EnumConstructor(const std::string& testName, const std::string& strType, TSixEnum type)
 {
     (void)testName;
-    const decltype(type) pType(strType);
+    const auto pType = TSixEnum::toType(strType);
     TEST_ASSERT(pType.toString() == strType);
     TEST_ASSERT_EQ(pType, type);
 }
@@ -62,7 +62,7 @@ static void test_toType_(const std::string& testName, const std::string& strType
     auto str = fromToType.toString();
     TEST_ASSERT_EQ(str, strType);
 
-    const decltype(type) fromCtor(strType);
+    const auto fromCtor = TSixEnum::toType(strType);
     TEST_ASSERT_EQ(fromToType, fromCtor);
     str = fromCtor.toString();
     TEST_ASSERT_EQ(str, strType);
@@ -207,17 +207,13 @@ static void test_ToString_(const std::string& testName, const std::string& strTy
     {
         const auto polarizationString = type.toString();
         TEST_ASSERT_EQ(strType, polarizationString);
-        decltype(type) pType(polarizationString);
-        TEST_ASSERT_EQ(pType, type);
-        pType = TSixEnum::toType(polarizationString);
+        auto pType = TSixEnum::toType(polarizationString);
         TEST_ASSERT_EQ(pType, type);
     }
     {
         const auto polarizationString = type.toString();
         TEST_ASSERT_EQ(strType, polarizationString);
-        decltype(type) pType(polarizationString);
-        TEST_ASSERT_EQ(pType, type);
-        pType = TSixEnum::toType(polarizationString);
+        auto pType = TSixEnum::toType(polarizationString);
         TEST_ASSERT_EQ(pType, type);
     }
 }
@@ -382,7 +378,7 @@ static void test_EqInt_(const std::string& testName, const std::string& strType,
 {
     (void)testName;
 
-    const decltype(type) fromStrCtor(strType);
+    const auto fromStrCtor = TSixEnum::toType(strType);
     TEST_ASSERT_EQ(enumValue, fromStrCtor);
     const int value = fromStrCtor;
     TEST_ASSERT_EQ(enumValue, value);

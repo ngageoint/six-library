@@ -569,11 +569,11 @@ void DerivedXMLParser200::parseBandEqualizationFromXML(const xml::lite::Element*
 
     if (bandAlgo == "1DLUT")
     {
-        band.algorithm = BandEqualizationAlgorithm("LUT 1D");
+        band.algorithm = BandEqualizationAlgorithm::LUT_1D;
     }
     else
     {
-        band.algorithm = BandEqualizationAlgorithm(bandAlgo);
+        band.algorithm = BandEqualizationAlgorithm::toType(bandAlgo);
     }
 
     std::vector<XMLElem> lutElems;
@@ -849,7 +849,7 @@ void DerivedXMLParser200::parseColorSpaceTransformFromXML(
     }
     else
     {
-        transform.colorManagementModule.renderingIntent = RenderingIntent(renderIntentStr);
+        transform.colorManagementModule.renderingIntent = RenderingIntent::toType(renderIntentStr);
     }
     parseString(getFirstAndOnly(manageElem, "SourceProfile"),
                 transform.colorManagementModule.sourceProfile);
@@ -2077,7 +2077,7 @@ void DerivedXMLParser200::parseDigitalElevationDataFromXML(
     XMLElem posElem = getFirstAndOnly(elem, "Geopositioning");
     std::string coordSystemType;
     parseString(getFirstAndOnly(posElem, "CoordinateSystemType"), coordSystemType);
-    ded.geopositioning.coordinateSystemType = CoordinateSystemType(coordSystemType);
+    ded.geopositioning.coordinateSystemType = CoordinateSystemType::toType(coordSystemType);
     parseUInt(getFirstAndOnly(posElem, "FalseOrigin"), ded.geopositioning.falseOrigin);
     if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
     {

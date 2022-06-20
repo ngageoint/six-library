@@ -316,12 +316,10 @@ std::string six::toString(const DataType& type)
 template <>
 PixelType six::toType<PixelType>(const std::string& s)
 {
-    std::string type(s);
-    str::trim(type);
-    PixelType p(type);
+    auto p = PixelType::toType(s);
     if (p == PixelType::NOT_SET)
         throw except::Exception(
-                Ctxt(FmtX("Type not understood [%s]", type.c_str())));
+                Ctxt(FmtX("Type not understood [%s]", s.c_str())));
     return p;
 }
 
