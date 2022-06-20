@@ -73,9 +73,9 @@ static void test_toType(const std::string& testName, size_t sz)
     test_toType_<TSixEnum>(testName, "UNKNOWN", TSixEnum::UNKNOWN);
     test_toType_<TSixEnum>(testName, "OTHER", TSixEnum::OTHER);
 
-    auto&& string_to_int = TSixEnum::string_to_int_();
-    TEST_ASSERT_EQ(string_to_int.size(), sz);
-    for (auto&& kv : string_to_int)
+    auto&& map = TSixEnum::string_to_value_();
+    TEST_ASSERT_EQ(map.size(), sz);
+    for (auto&& kv : map)
     {
         const TSixEnum fromInt(kv.second);
         const auto toType = TSixEnum::toType(kv.first);
@@ -148,9 +148,9 @@ static void test_six_toType(const std::string& testName, size_t sz)
 {
     test_six_toType_<TSixEnum>(testName, "OTHER", TSixEnum::OTHER);
 
-    auto&& string_to_int = TSixEnum::string_to_int_();
-    TEST_ASSERT_EQ(string_to_int.size(), sz);
-    for (auto&& kv : string_to_int)
+    auto&& map = TSixEnum::string_to_value_();
+    TEST_ASSERT_EQ(map.size(), sz);
+    for (auto&& kv : map)
     {
         const TSixEnum fromInt(kv.second);
         if (fromInt != TSixEnum::NOT_SET)
@@ -423,17 +423,19 @@ TEST_CASE(DualPolarization)
     // Allowed TX values: “V”, “H”, “X”, “Y”, “S”, “E”, “RHC”, “LHC”, “OTHER*”
     // Allowed RCV values:  “V”, “H”, “X”, “Y”, “S”, “E”, “RHC”, “LHC”, “OTHER*”,    
 
-    auto&& polarizationTypeMap = six::PolarizationType::string_to_int_();
-    for (auto&& tx : polarizationTypeMap)
+    auto&& map = six::PolarizationType::string_to_value_();
+    for (auto&& tx : map)
     {
         const auto txType = six::PolarizationType::toType(tx.first);
+        TEST_ASSERT_EQ(tx.second, txType);
         if ((txType == six::PolarizationType::NOT_SET) || (txType == six::PolarizationType::UNKNOWN))
         {
             continue;
         }
-        for (auto&& rcv : polarizationTypeMap)
+        for (auto&& rcv : map)
         {
             const auto rcvType = six::PolarizationType::toType(rcv.first);
+            TEST_ASSERT_EQ(rcv.second, rcvType);
             if ((rcvType == six::PolarizationType::NOT_SET) || (rcvType == six::PolarizationType::UNKNOWN))
             {
                 continue;
@@ -443,13 +445,13 @@ TEST_CASE(DualPolarization)
             auto fromToType = six::DualPolarizationType::toType(strType);
             auto str = fromToType.toString();
             TEST_ASSERT_EQ(str, strType);
-            test_toType_("DualPolarization", strType, fromToType);
+            test_toType_(testName, strType, fromToType);
 
             str::replace(strType, "_", ":");
             fromToType = six::toType<six::DualPolarizationType>(strType);
             str = six::toString(fromToType);
             TEST_ASSERT_EQ(str, strType);
-            test_six_toType_("DualPolarization", strType, fromToType);
+            test_six_toType_(testName, strType, fromToType);
         }
     }
 }
