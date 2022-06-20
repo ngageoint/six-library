@@ -84,7 +84,12 @@ namespace details
     inline std::optional<T> toType(const std::map<std::string, TValues>& map, const std::string& v, std::nothrow_t)
     {
         const auto result = nitf::details::index(map, v);
-        return result.has_value() ? std::optional<T>(*result) : std::optional<T>();
+        if (!result.has_value())
+        {
+            return std::optional<T>();
+        }
+        // TValues will be "int" when used from the "Enum" base class
+        return std::optional<T>(static_cast<typename T::values>(*result));
     }
     template<typename T, typename TValues = typename T::values>
     inline T toType(const std::map<std::string, TValues>& map, const std::string& v)
@@ -173,7 +178,7 @@ namespace details
     // There are a few examples of expanded code below.
     #define SIX_Enum_default_ctor_assign_(name) name() = default; name(const name&) = default; name(name&&) = default; \
             name& operator=(const name&) = default; name& operator=(name&&) = default
-    #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); name(int i) : Enum(i) {} \
+    #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); \
         name(values v) : Enum(static_cast<int>(v)) {} name& operator=(values v) { *this = std::move(name(v)); return *this; }
     #define SIX_Enum_BEGIN_enum enum values {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 

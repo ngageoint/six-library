@@ -162,10 +162,10 @@ void buildRandomMetadata(cphd03::Metadata& metadata)
     metadata.collectionInformation.collectorName = "DummyCollectorName";
     metadata.collectionInformation.illuminatorName = "DummyIlluminatorName";
     metadata.collectionInformation.coreName = "DummyCoreName";
-    metadata.collectionInformation.collectType = getRandomInt(
-            cphd::CollectType::MONOSTATIC, cphd::CollectType::BISTATIC);
-    metadata.collectionInformation.radarMode = getRandomInt(
-            cphd::RadarModeType::SPOTLIGHT, cphd::RadarModeType::SCANSAR);
+    const auto collectType_ = getRandomInt(cphd::CollectType::MONOSTATIC, cphd::CollectType::BISTATIC);
+    metadata.collectionInformation.collectType = static_cast<six::CollectType::values>(collectType_);
+    const auto radarMode_ = getRandomInt(cphd::RadarModeType::SPOTLIGHT, cphd::RadarModeType::SCANSAR);
+    metadata.collectionInformation.radarMode = static_cast<six::RadarModeType::values>(radarMode_);
     metadata.collectionInformation.radarModeID = "DummyRadarModeID";
     metadata.collectionInformation.setClassificationLevel("UNCLASSIFIED");
     metadata.collectionInformation.countryCodes.push_back("DummyCountryCode1");
@@ -250,8 +250,8 @@ void buildRandomMetadata(cphd03::Metadata& metadata)
     }
 
     //! Dummy SRP
-    metadata.srp.srpType = getRandomInt(
-            cphd::SRPType::FIXEDPT, cphd::SRPType::STEPPED);
+    const auto srpType_ = getRandomInt(cphd::SRPType::FIXEDPT, cphd::SRPType::STEPPED);
+    metadata.srp.srpType = static_cast<cphd::SRPType::values>(srpType_);
     metadata.srp.numSRPs =
             metadata.srp.srpType != cphd::SRPType::STEPPED ? 5 : 0;
     for (size_t ii = 0; ii < metadata.srp.numSRPs; ++ii)

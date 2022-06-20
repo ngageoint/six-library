@@ -55,10 +55,19 @@ SIX_Enum_ENUM_3(AutofocusType,
  *
  *  Enumeration used to represent BooleanTypes
  */
-SIX_Enum_ENUM_2(BooleanType,
-    IS_FALSE, 0,
-    IS_TRUE, 1
-);
+//SIX_Enum_ENUM_2(BooleanType,
+//    IS_FALSE, 0,
+//    IS_TRUE, 1
+//);
+SIX_Enum_BEGIN_DEFINE(BooleanType)
+    SIX_Enum_BEGIN_enum IS_FALSE = 0, IS_TRUE = 1, SIX_Enum_END_enum
+    SIX_Enum_map_2_(IS_FALSE, IS_TRUE);
+    BooleanType& operator=(bool b)
+    {
+        *this = BooleanType(b ? IS_TRUE : IS_FALSE);
+        return *this;
+    }
+SIX_Enum_END_DEFINE(BooleanType);
 
 /*!
  *  \struct ByteSwapping
