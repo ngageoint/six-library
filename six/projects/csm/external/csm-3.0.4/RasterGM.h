@@ -508,8 +508,21 @@ public:
       //  GeometricModel::getCrossCovarianceMatrix() be called instead.
       //<
 
-   inline std::vector<double> getUnmodeledError(const ImageCoord& imagePt) const
-   { return getUnmodeledCrossCovariance(imagePt, imagePt); }
+       /**
+        * Returns six::ErrorStatistics::Unmodeled values, if any.
+        *
+        * \return A vector of zero, three or seven elements:
+        * [0] = Xrow
+        * [1] = Ycol
+        * [2] = XrowYcol
+        * [3] = Xrow.CorrCoefZero
+        * [4] = Xrow.DecorrRate
+        * [5] = Ycol.CorrCoefZero
+        * [6] = Ycol.DecorrRate
+        */
+       virtual std::vector<double> getSIXUnmodeledError() const = 0;
+
+       std::vector<double> getUnmodeledError(const ImageCoord& imagePt) const;
       //> This method returns the 2x2 line and sample covariance (in pixels
       //  squared) at the given imagePt for any model error not accounted for
       //  by the model parameters.
@@ -531,6 +544,10 @@ public:
       //  reported as the four terms of a 2x2 matrix, returned as a 4 element
       //  vector.
       //<
+
+   protected:
+       // utility routine to avoid duplicating code.
+       std::vector<double> convertUnmodeledError(const std::vector<double>& sixUnmodeledError) const;
 };
 
 } // namespace csm
