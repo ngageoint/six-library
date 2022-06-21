@@ -26,6 +26,7 @@
 //     30-Oct-2012   SCM      Renamed to Isd.h
 //     06-Dec-2012   JPK      Used CSM_UNKNOWN instead of "UNKNOWN"
 //     17-Dec-2012   BAH      Documentation updates.
+//     03-Sep-2021   SCM      Added FRAME_INDEX_PARAM and define checks.
 //
 //    NOTES:
 //
@@ -151,10 +152,21 @@ inline void Isd::addParam(const std::string& name, const std::string& value)
    theParameters.insert(val);
 }
 
+#ifndef IMAGE_ID_PARAM
 #define IMAGE_ID_PARAM       "IMAGE_ID"
+#endif
+#ifndef IMAGE_INDEX_PARAM
 #define IMAGE_INDEX_PARAM    "IMAGE_INDEX"
+#endif
+#ifndef FRAME_INDEX_PARAM
+#define FRAME_INDEX_PARAM    "FRAME_INDEX"
+#endif
+#ifndef LOGICAL_INDEX_PARAM
 #define LOGICAL_INDEX_PARAM  "LOGICAL_INDEX"
+#endif
+#ifndef MODEL_NAME_PARAM
 #define MODEL_NAME_PARAM     "MODEL_NAME"
+#endif
 
 } // namespace csm
 

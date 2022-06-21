@@ -20,6 +20,7 @@
 //     30-Oct-2012   SCM      Added version() accessors.
 //     30-Oct-2012   SCM      Renamed to Version.h
 //     17-Dec-2012   BAH      Documentation updates.
+//     15-Sep-2020   bradh    Undef major / minor macros from <sys/types.h>
 //
 //    NOTES:
 //
@@ -34,6 +35,12 @@
 #include <iosfwd>
 #include <vector>
 #include <sstream>
+#ifdef major
+#undef major
+#endif
+#ifdef minor
+#undef minor
+#endif
 
 namespace csm
 {

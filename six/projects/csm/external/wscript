@@ -38,9 +38,9 @@ def configure(conf):
             #         conf.path.abspath())
             conf.env['HAVE_CSM'] = True
 
-            if Options.options.csm_version == '3.0.3.3':
-                conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-3.0.3.3')
-                conf.env['CSM_DIR'] = 'csm-3.0.3.3'
+            if Options.options.csm_version == '3.0.4':
+                conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-3.0.4')
+                conf.env['CSM_DIR'] = 'csm-3.0.4'
             else:
                 conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-master')
                 conf.env['CSM_DIR'] = 'csm-master'

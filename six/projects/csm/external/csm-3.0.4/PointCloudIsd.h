@@ -172,7 +172,7 @@ public:
    //<
 
    void setFileHeader(const std::string& head) { theFileHeader = head; }
-   //> This method sets the file header. The interprtation of the header 
+   //> This method sets the file header. The interpretation of the header 
    //  depends upon the format setting.
    //<
 
