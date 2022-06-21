@@ -21,6 +21,7 @@
 //     20-Dec-2012   JPK      Fixed bug in constructor.
 //     18-Feb-2013   JPK      Removed getNumCorrelationParameterGroups,
 //                            now provided on base class.
+//     03-Sep-2021   SCM      Removed IRIX support.
 //
 //    NOTES:
 //     Refer to LinearDecayCorrelationModel.h for more information.
@@ -29,13 +30,9 @@
 #include "LinearDecayCorrelationModel.h"
 #include "Error.h"
 
-#ifdef IRIXN32
-#include "math.h"
-#else
 #include <cmath>
 using std::exp;
 using std::fabs;
-#endif
 
 namespace csm {
 
@@ -160,6 +157,7 @@ double LinearDecayCorrelationModel::getCorrelationCoefficient(
 
    // compute the value of the correlation coefficient
    const Parameters& cp = theCorrParams[cpGroupIndex];
+   const size_t size = cp.theInitialCorrsPerSegment.size();
 
    const double adt = fabs(deltaTime);
    double prevCorr = cp.theInitialCorrsPerSegment[0];
@@ -167,7 +165,7 @@ double LinearDecayCorrelationModel::getCorrelationCoefficient(
 
    double correlation = prevCorr;
 
-   for(size_t s = 1; s < cp.theInitialCorrsPerSegment.size(); ++s)
+   for(size_t s = 1; s < size; ++s)
    {
       const double corr = cp.theInitialCorrsPerSegment[s];
       const double time = cp.theTimesPerSegment[s];

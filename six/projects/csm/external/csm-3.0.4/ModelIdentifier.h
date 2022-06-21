@@ -251,15 +251,15 @@ public:
          //  valid step size is specified.
          //<
       Data theMinimum;
-         //> This data member represents the minimum value assoicated with the
+         //> This data member represents the minimum value associated with the
          //  current range.
          //<
       Data theMaximum;
-         //> This data member represents the maximum value assoicated with the
+         //> This data member represents the maximum value associated with the
          //  current range.
          //<
       Data theStep;
-         //> This data member represents the step size assoicated with the
+         //> This data member represents the step size associated with the
          //  current range.
          //<
       bool theMinInclusive;
@@ -333,7 +333,7 @@ public:
       //<
    
    ~RangeList() {}
-      //> This is the destuctor
+      //> This is the destructor
       //<
    
    void addRange(const Range& argRange) {theRanges.push_back(argRange);}
@@ -347,7 +347,7 @@ public:
 private:
 
    std::vector<Range> theRanges;
-      //> this data member represents the set of Ranges own by the current
+      //> this data member represents the set of Ranges owned by the current
       //  MICRangeList.
       //<
 };
@@ -365,7 +365,7 @@ typedef MIComponentDescMap::value_type  MIComponentDesc;
 
 //*****************************************************************************
 // ModelIdentifier
-//> This class holds a set of "Components" which are intented to uniquely
+//> This class holds a set of "Components" which are intended to uniquely
 //  identify a specific Model within a "bundle" of models.
 //<
 //*****************************************************************************

@@ -345,7 +345,7 @@ public:
                 double* achievedPrecision = NULL,
                 WarningList* warnings     = NULL) const = 0;
       //> This is one of two overloaded methods.  This method takes only
-      //  the necessary inputs.  Some effieciency can be obtained by using the
+      //  the necessary inputs.  Some efficiency can be obtained by using the
       //  other method.  Even more efficiency can be obtained by using the
       //  computeAllSensorPartials method.
       //
@@ -410,7 +410,7 @@ public:
                 double* achievedPrecision = NULL,
                 WarningList* warnings     = NULL) const;
       //> This is one of two overloaded methods.  This method takes only
-      //  the necessary inputs.  Some effieciency can be obtained by using the
+      //  the necessary inputs.  Some efficiency can be obtained by using the
       //  other method.
       //
       //  This method returns the partial derivatives of line and sample
@@ -508,22 +508,8 @@ public:
       //  GeometricModel::getCrossCovarianceMatrix() be called instead.
       //<
 
-   std::vector<double> getUnmodeledError(const ImageCoord& imagePt) const;
-
-   /**
-    * Returns six::ErrorStatistics::Unmodeled values, if any.
-    *
-    * \return A vector of zero, three or seven elements:
-    * [0] = Xrow
-    * [1] = Ycol
-    * [2] = XrowYcol
-    * [3] = Xrow.CorrCoefZero
-    * [4] = Xrow.DecorrRate
-    * [5] = Ycol.CorrCoefZero
-    * [6] = Ycol.DecorrRate
-    */
-   virtual std::vector<double> getSIXUnmodeledError() const = 0;
-
+   inline std::vector<double> getUnmodeledError(const ImageCoord& imagePt) const
+   { return getUnmodeledCrossCovariance(imagePt, imagePt); }
       //> This method returns the 2x2 line and sample covariance (in pixels
       //  squared) at the given imagePt for any model error not accounted for
       //  by the model parameters.
@@ -545,10 +531,6 @@ public:
       //  reported as the four terms of a 2x2 matrix, returned as a 4 element
       //  vector.
       //<
-
-   protected:
-       // utility routine to avoid duplicating code.
-       std::vector<double> convertUnmodeledError(const std::vector<double>& sixUnmodeledError) const;
 };
 
 } // namespace csm

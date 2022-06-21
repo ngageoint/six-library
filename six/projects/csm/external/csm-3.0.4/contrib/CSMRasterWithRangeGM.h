@@ -7,7 +7,7 @@
 //    DESCRIPTION:
 //
 //    Header for abstract base class that is to provide a common interface from
-//    which all imaging sensors providing range date will derive from
+//    which all imaging sensors providing range data will derive from
 //
 //    LIMITATIONS:       None
 //
