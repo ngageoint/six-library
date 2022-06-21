@@ -2,6 +2,9 @@
 
 # SIX Release Notes
 
+## Version 3.1.??; ??? ??, 2022
+* Support `OTHER.*` polarization values in XML from SIDD 3.0/SICD 1.3
+
 ## Version 3.1.11; May 13, 2022
 * Lastest [coda-oss](https://github.com/mdaus/coda-oss) and [nitro](https://github.com/mdaus/nitro) (updates from **master**, no new releases)
 * Fix bug in XML serializaton where `double`s were given a class of `xs::double` (two `:`s) instead of `xs:double`.
