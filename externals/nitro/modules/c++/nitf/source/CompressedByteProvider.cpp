@@ -170,7 +170,7 @@ types::Range CompressedByteProvider::findBlocksToWrite(
 #undef max
 template<typename T>
 static size_t addImageData_(const std::vector<std::vector<size_t> > mBytesInEachBlock,
-    const std::vector<std::vector<sys::byte> >& mImageSubheaders,
+    const std::vector<std::vector<nitf::byte> >& mImageSubheaders,
     const std::vector<nitf::Off>& mImageSubheaderFileOffsets,
     const types::Range& blockRange,
         size_t seg,
@@ -218,7 +218,7 @@ size_t CompressedByteProvider::addImageData(
         size_t seg,
         size_t startRow,
         size_t numRowsToWrite,
-        const sys::byte* imageData,
+        const nitf::byte* imageData,
         nitf::Off& fileOffset,
         NITFBufferList& buffers) const
 {

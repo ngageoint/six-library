@@ -279,11 +279,11 @@ private:
                           size_t& lastBlockWithinLastSeg) const;
 
     void blockImpl(size_t seg,
-                   const sys::byte* input,
+                   const nitf::byte* input,
                    size_t numValidRowsInBlock,
                    size_t numValidColsInBlock,
                    size_t numBytesPerPixel,
-                   sys::byte* output) const noexcept
+                   nitf::byte* output) const noexcept
     {
         block(input, numBytesPerPixel, mNumCols, mNumRowsPerBlock[seg],
               mNumColsPerBlock, numValidRowsInBlock, numValidColsInBlock,
@@ -336,10 +336,10 @@ private:
         input += mNumCols * numBytesPerPixel * (numValidRowsInBlock - 1);
     }
     void blockAcrossRow(size_t seg,
-                        const sys::byte*& input,
+                        const nitf::byte*& input,
                         size_t numValidRowsInBlock,
                         size_t numBytesPerPixel,
-                       sys::byte*& output) const noexcept
+                       nitf::byte*& output) const noexcept
     {
         blockAcrossRowImpl(seg, input, numValidRowsInBlock, numBytesPerPixel, output);
     }
