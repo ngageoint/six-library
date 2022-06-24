@@ -25,6 +25,7 @@
 
 #include "coda_oss/span.h"
 
+#include "config/Exports.h"
 #include "sys/Dbg.h"
 #include "io/OutputStream.h"
 
@@ -53,7 +54,7 @@ namespace io
  * of large streams of bytes.
  *
  */
-struct InputStream
+struct CODA_OSS_API InputStream
 {
     enum
     {

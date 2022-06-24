@@ -27,6 +27,8 @@
 
 #include <types/Range.h>
 
+#include "config/Exports.h"
+
 namespace types
 {
 /*!
@@ -50,7 +52,7 @@ namespace types
  * TODO: Take a look at replacing the internals with some interval list
  *       structure.
  */
-class RangeList
+class CODA_OSS_API RangeList
 {
 public:
     /*!

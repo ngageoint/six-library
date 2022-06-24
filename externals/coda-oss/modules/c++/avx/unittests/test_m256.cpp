@@ -27,8 +27,6 @@
 #include <sys/Conf.h>
 #include <avx/extractf.h>
 
-namespace
-{
 TEST_CASE(extractf)
 {
   /*
@@ -52,11 +50,7 @@ TEST_CASE(extractf)
   TEST_ASSERT_TRUE(true);
 }
     
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(extractf);
-
-    return 0;
-}
+)

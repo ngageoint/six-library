@@ -26,6 +26,8 @@
 
 #include <assert.h>
 
+#include "config/Exports.h"
+
 #if !defined(__APPLE_CC__)
 
 #include <import/sys.h>
@@ -37,7 +39,7 @@
 
 namespace mt
 {
-    class TiedRequestHandler : public sys::Runnable
+    class CODA_OSS_API TiedRequestHandler : public sys::Runnable
     {
 	RunnableRequestQueue* mRequestQueue;
 	sys::Semaphore* mSem = nullptr;
@@ -64,7 +66,7 @@ namespace mt
 	virtual void run();
     };
 
-    class GenerationThreadPool : public BasicThreadPool<TiedRequestHandler>
+    class CODA_OSS_API GenerationThreadPool : public BasicThreadPool<TiedRequestHandler>
     {
 	sys::Semaphore mGenerationSync;
 	CPUAffinityInitializer* mAffinityInit = nullptr;

@@ -11,8 +11,14 @@
  ```
 # coda-oss Release Notes
 
+## Release 2022-??-??
+* Build most code in Visual Studio 2022
+* Removed more compiler warnings
+* Begin work on `CODA_OSS_API` (needed for building a shared-library/DLL)
+* Add `run1D()` method to `mt::GenerationThreadPool` 
+
 ## Release 2022-05-03
-* Fixed a bug in `Poly2D::atY()`; imporved `flipXY()` behavior.
+* Fixed a bug in `Poly2D::atY()`; improved `flipXY()` behavior.
 * Implement [std::filesystem::file_size()](https://en.cppreference.com/w/cpp/filesystem/file_size).
 * use `inline` functions for `TEST_` macros
 * force use of [64-bit `time_t`](https://en.wikipedia.org/wiki/Year_2038_problem)

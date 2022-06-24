@@ -29,8 +29,6 @@
 #include <polygon/DrawPolygon.h>
 #include <polygon/PolygonMask.h>
 
-namespace
-{
 TEST_CASE(testMarkAllTrue)
 {
     const polygon::PolygonMask mask(polygon::PolygonMask::MARK_ALL_TRUE,
@@ -94,15 +92,9 @@ TEST_CASE(testWithPoints)
     // Each point should match between the two masks
     for (size_t row = 0, idx = 0; row < dims.row; ++row)
     {
-        std::ostringstream ostr;
-        ostr << "row = " << row;
-
         for (size_t col = 0; col < dims.col; ++col, ++idx)
         {
-            ostr << ", col = " << col;
-
-            TEST_ASSERT_EQ_MSG(ostr.str(),
-                               maskArray[idx], mask.isInPolygon(row, col));
+            TEST_ASSERT_EQ(maskArray[idx], mask.isInPolygon(row, col));
         }
     }
 }
@@ -130,15 +122,9 @@ TEST_CASE(testWithMask)
     // Each point should match between the two masks
     for (size_t row = 0, idx = 0; row < dims.row; ++row)
     {
-        std::ostringstream ostr;
-        ostr << "row = " << row;
-
         for (size_t col = 0; col < dims.col; ++col, ++idx)
         {
-            ostr << ", col = " << col;
-
-            TEST_ASSERT_EQ_MSG(ostr.str(),
-                               maskArray[idx], mask.isInPolygon(row, col));
+            TEST_ASSERT_EQ(maskArray[idx], mask.isInPolygon(row, col));
         }
     }
 }
@@ -282,10 +268,8 @@ TEST_CASE(testWithNarrowPassthrough)
     TEST_ASSERT_TRUE(mask.getRange(4).empty());
     TEST_ASSERT_TRUE(mask.getRange(5).empty());
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(testMarkAllTrue);
     TEST_CHECK(testMarkAllFalse);
     TEST_CHECK(testWithPoints);
@@ -295,5 +279,4 @@ int main(int /*argc*/, char** /*argv*/)
     TEST_CHECK(testWithPartialCutBotomLeft);
     TEST_CHECK(testWithPartialCutTopRight);
     TEST_CHECK(testWithNarrowPassthrough);
-    return 0;
-}
+)

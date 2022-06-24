@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "tiff/FileReader.h"
+#include "tiff/TiffFileReader.h"
 
 #include <string>
 #include <vector>
