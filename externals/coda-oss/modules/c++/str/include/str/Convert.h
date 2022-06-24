@@ -38,6 +38,7 @@
 #include "config/Exports.h"
 #include "coda_oss/string.h"
 #include "coda_oss/optional.h"
+#include "coda_oss/cstddef.h"
 #include "import/except.h"
 
 namespace str
@@ -64,6 +65,9 @@ CODA_OSS_API std::string toString(const uint8_t& value);
 
 template <>
 CODA_OSS_API std::string toString(const int8_t& value);
+
+template <>
+CODA_OSS_API std::string toString(const coda_oss::byte& value);
 
 template <>
 inline std::string toString(const std::nullptr_t&)

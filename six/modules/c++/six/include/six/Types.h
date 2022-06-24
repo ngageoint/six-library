@@ -172,7 +172,7 @@ struct Constants
      */
     inline static int getNumBytesPerPixel(PixelType type)
     {
-        switch (type.value)
+        switch (type)
         {
         case PixelType::RE32F_IM32F:
         {

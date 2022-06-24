@@ -52,14 +52,16 @@ struct AdjustableParams
 
     static int group(ParamsEnum param);
 
+    /// The returned Vector3 is a reference to values in the object's mParams.
     Vector3 getARPVector() const
     {
-        return Vector3(mParams[ARP_RADIAL]);
+        return Vector3(&mParams[ARP_RADIAL]);
     }
 
+    /// The returned Vector3 is a reference to values in the object's mParams.
     Vector3 getARPVelocityVector() const
     {
-        return Vector3(mParams[ARP_VEL_RADIAL]);
+        return Vector3(&mParams[ARP_VEL_RADIAL]);
     }
 
     double operator[](std::ptrdiff_t idx) const

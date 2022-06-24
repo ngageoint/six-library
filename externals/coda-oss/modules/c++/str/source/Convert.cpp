@@ -50,6 +50,11 @@ template<> std::string str::toString(const int8_t& value)
     return str::toString(static_cast<int>(value));
 }
 
+template<> std::string str::toString(const coda_oss::byte& value)
+{
+    return str::toString(static_cast<uint8_t>(value));
+}
+
 template<> bool str::toType<bool>(const std::string& s)
 {
     std::string ss = s;

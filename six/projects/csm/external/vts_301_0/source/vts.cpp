@@ -3768,6 +3768,8 @@ bool processSensorModelCommand(int commandNumber,
                 // note that: getUnmodeledError calls getUnmodeledCrossCovariance
 				//            passing imagePt as both ImageCoord arguments
 				//            (see getUnmodeledError in CsmRasterGM.h)
+                // getUnmodeledError() now also calls getSIXUnmodeledError() to get
+                // values from the SICD/SIDD XML.
                 _TRY
 				   covarianceErr = rasterGM->getUnmodeledError(imagePt);
                 _CATCH

@@ -21,7 +21,6 @@
  */
 
 #include <string>
-
 #include <std/filesystem>
 
 #include <cphd03/CPHDWriter.h>
@@ -29,20 +28,20 @@
 #include <cphd/Wideband.h>
 #include <types/RowCol.h>
 
-namespace fs = std::filesystem;
-
 #include "TestCase.h"
 
-static std::string testName;
+static constexpr size_t MAX_SIZE_T = 1000000;
+static constexpr double MAX_DOUBLE = 1000000.0;
+static constexpr int64_t MAX_OFF_T = 1000000;
+const char* FILE_NAME = "temp.cphd03";
+static constexpr size_t NUM_IMAGES = 3;
+static constexpr size_t NUM_THREADS = 13;
 
-namespace
+static void call_srand()
 {
-static const size_t MAX_SIZE_T = 1000000;
-static const double MAX_DOUBLE = 1000000.0;
-static const int64_t MAX_OFF_T = 1000000;
-static const std::string FILE_NAME("temp.cphd03");
-static const size_t NUM_IMAGES(3);
-static const size_t NUM_THREADS(13);
+    static const auto f = []() { const auto seed = 334; ::srand(seed); return nullptr; };
+    static const auto result = f();
+}
 
 double round(double num, int places)
 {
@@ -163,10 +162,10 @@ void buildRandomMetadata(cphd03::Metadata& metadata)
     metadata.collectionInformation.collectorName = "DummyCollectorName";
     metadata.collectionInformation.illuminatorName = "DummyIlluminatorName";
     metadata.collectionInformation.coreName = "DummyCoreName";
-    metadata.collectionInformation.collectType = getRandomInt(
-            cphd::CollectType::MONOSTATIC, cphd::CollectType::BISTATIC);
-    metadata.collectionInformation.radarMode = getRandomInt(
-            cphd::RadarModeType::SPOTLIGHT, cphd::RadarModeType::SCANSAR);
+    const auto collectType_ = getRandomInt(cphd::CollectType::MONOSTATIC, cphd::CollectType::BISTATIC);
+    metadata.collectionInformation.collectType = static_cast<six::CollectType::values>(collectType_);
+    const auto radarMode_ = getRandomInt(cphd::RadarModeType::SPOTLIGHT, cphd::RadarModeType::SCANSAR);
+    metadata.collectionInformation.radarMode = static_cast<six::RadarModeType::values>(radarMode_);
     metadata.collectionInformation.radarModeID = "DummyRadarModeID";
     metadata.collectionInformation.setClassificationLevel("UNCLASSIFIED");
     metadata.collectionInformation.countryCodes.push_back("DummyCountryCode1");
@@ -251,8 +250,8 @@ void buildRandomMetadata(cphd03::Metadata& metadata)
     }
 
     //! Dummy SRP
-    metadata.srp.srpType = getRandomInt(
-            cphd::SRPType::FIXEDPT, cphd::SRPType::STEPPED);
+    const auto srpType_ = getRandomInt(cphd::SRPType::FIXEDPT, cphd::SRPType::STEPPED);
+    metadata.srp.srpType = static_cast<cphd::SRPType::values>(srpType_);
     metadata.srp.numSRPs =
             metadata.srp.srpType != cphd::SRPType::STEPPED ? 5 : 0;
     for (size_t ii = 0; ii < metadata.srp.numSRPs; ++ii)
@@ -359,7 +358,7 @@ void writeCPHD(
 void runCPHDTest(const std::string& testName_,
                  cphd03::Metadata& metadata)
 {
-    testName = testName_;
+    const auto testName = testName_;
 
     metadata.data.numCPHDChannels = NUM_IMAGES;
 
@@ -436,7 +435,7 @@ void runCPHDTest(const std::string& testName_,
 
 TEST_CASE(testWriteFXOneWay)
 {
-    testName = "testWriteFXOneWay";
+    call_srand();
 
     cphd03::Metadata metadata;
     buildRandomMetadata(metadata);
@@ -448,8 +447,6 @@ TEST_CASE(testWriteFXOneWay)
 
 TEST_CASE(testWriteFXTwoWay)
 {
-    testName = "testWriteFXTwoWay";
-
     cphd03::Metadata metadata;
     buildRandomMetadata(metadata);
     addFXParams(metadata);
@@ -460,7 +457,7 @@ TEST_CASE(testWriteFXTwoWay)
 
 TEST_CASE(testWriteTOAOneWay)
 {
-    testName = "testWriteTOAOneWay";
+    call_srand();
 
     cphd03::Metadata metadata;
     buildRandomMetadata(metadata);
@@ -472,7 +469,7 @@ TEST_CASE(testWriteTOAOneWay)
 
 TEST_CASE(testWriteTOATwoWay)
 {
-    testName = "testWriteTOATwoWay";
+    call_srand();
 
     cphd03::Metadata metadata;
     buildRandomMetadata(metadata);
@@ -481,21 +478,12 @@ TEST_CASE(testWriteTOATwoWay)
 
     runCPHDTest(testName, metadata);
 }
-}
-
-static int call_srand()
-{
-    const auto seed = 334;
-    ::srand(seed);
-    return seed;
-}
-static int unused_ = call_srand();
 
 TEST_MAIN(
     TEST_CHECK(testWriteFXOneWay);
     TEST_CHECK(testWriteFXTwoWay);
     TEST_CHECK(testWriteTOAOneWay);
     TEST_CHECK(testWriteTOATwoWay);
-    fs::remove(FILE_NAME);
+    std::filesystem::remove(FILE_NAME);
     )
 

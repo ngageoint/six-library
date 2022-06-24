@@ -37,6 +37,8 @@
 
 namespace six
 {
+  struct ErrorStatistics;
+
 namespace CSM
 {
 class SIXSensorModel : public csm::RasterGM
@@ -233,7 +235,7 @@ public: // GeometricModel methods
      */
     virtual std::vector<double>
     getUnmodeledError(const csm::ImageCoord& imagePt) const;
-
+    
     /**
      * This method returns the partial derivatives of line and sample
      * in pixels per the applicable model parameter units), respectively,
@@ -676,6 +678,8 @@ protected:
     DataType getDataType(const csm::Des& des);
 
 protected:
+    static std::vector<double> getSIXUnmodeledError_(const six::ErrorStatistics&);
+
     const scene::ECEFToLLATransform mECEFToLLA;
     const csm::NoCorrelationModel mCorrelationModel;
     std::vector<std::string> mSchemaDirs;

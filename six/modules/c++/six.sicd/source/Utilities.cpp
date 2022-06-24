@@ -1146,7 +1146,7 @@ std::unique_ptr<ComplexData> Utilities::createFakeComplexData(PixelType pixelTyp
     data->timeline->collectDuration = 0;
     data->radarCollection->txFrequencyMin = 0;
     data->radarCollection->txFrequencyMax = 0;
-    data->radarCollection->txPolarization = PolarizationType::V;
+    data->radarCollection->txPolarization = PolarizationSequenceType::V;
     data->radarCollection->rcvChannels.resize(1);
     data->radarCollection->rcvChannels[0].reset(new ChannelParameters());
     data->radarCollection->rcvChannels[0]->txRcvPolarization =
