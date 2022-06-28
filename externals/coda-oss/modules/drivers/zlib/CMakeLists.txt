@@ -1,5 +1,17 @@
 set(TARGET_NAME z)
 
+if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    # use this CMakeLists.txt to build and package zlib with conan
+    project(coda-oss_zlib)
+    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    conan_basic_setup()
+    set(CODA_SKIP_SYSTEM_DEPENDENCIES ON)
+    include(CodaBuild.cmake)
+    coda_initialize_build()
+    set(ENABLE_ZIP ON)
+    coda_generate_package_config()
+endif()
+
 if (ZIP_HOME)
     find_library(${TARGET_NAME}_PATH
                  ${TARGET_NAME}
@@ -65,10 +77,16 @@ elseif(ENABLE_ZIP)
     message("ZIP_HOME not specified, so zlib and minizip will be built")
     coda_fetch_driver(
         NAME ${TARGET_NAME}
-        ARCHIVE "zlib-1.2.7.tar"
-        HASH "SHA256=df0ba700245709ea54a18536ed266c2f0a0b3e4c3eb029abc42bf48a087901c5")
+        ARCHIVE "zlib-1.2.12.tar"
+        HASH "SHA256=789e49eaa1fae9e186444db3ec0526ad87254406be27e76c687a0761524b7127")
+
+    if (MSVC)
+        add_compile_options(/wd4996) # '...': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: .... See online help for details.
+    endif()
 
     set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
+    # remove crypt.h due to name clash with glibc
+    file(REMOVE "${SOURCE_DIR}/contrib/minizip/crypt.h")
     foreach(src "adler32.c" "crc32.c" "deflate.c" "infback.c" "inffast.c"
                 "inflate.c" "inftrees.c" "trees.c" "zutil.c" "compress.c"
                 "uncompr.c" "gzclose.c" "gzlib.c" "gzread.c" "gzwrite.c")
@@ -96,6 +114,9 @@ elseif(ENABLE_ZIP)
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
             ${CODA_INSTALL_OPTION})
 endif()
+
+# disable include of crypt.h in minizip to fix name clash issue with glibc
+target_compile_definitions(minizip PUBLIC -DNOCRYPT -DNOUNCRYPT)
 
 install(TARGETS z minizip
         EXPORT ${CODA_EXPORT_SET_NAME}

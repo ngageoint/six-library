@@ -27,11 +27,13 @@
 
 #include <vector>
 #include <string>
+
+#include "config/Exports.h"
 #include "sys/Conf.h"
 #include "sys/FileFinder.h"
 #include "sys/SystemException.h"
 #include "str/Tokenizer.h"
-#include "sys/Filesystem.h"
+#include "sys/filesystem.h"
 
 
 /*!
@@ -51,9 +53,8 @@ namespace sys
  *  The AbstractOS class defines the base for a system
  *  independent layer of function calls.
  */
-class AbstractOS
+struct CODA_OSS_API AbstractOS
 {
-public:
     AbstractOS();
 
     virtual ~AbstractOS();
@@ -212,7 +213,7 @@ public:
 
     // A variable like PATH is often several directories, return each one that exists.
     bool splitEnv(const std::string& envVar, std::vector<std::string>&) const;
-    bool splitEnv(const std::string& envVar, std::vector<std::string>&, Filesystem::FileType) const;
+    bool splitEnv(const std::string& envVar, std::vector<std::string>&, coda_oss::filesystem::file_type) const;
 
     // Modify the specified env-var as indicated.
     void prependEnv(const std::string& envVar, const std::vector<std::string>&, bool overwrite);

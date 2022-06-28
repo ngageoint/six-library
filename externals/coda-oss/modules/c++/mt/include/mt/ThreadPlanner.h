@@ -25,13 +25,15 @@
 
 #include <stddef.h>
 
+#include <config/Exports.h>
+
 namespace mt
 {
 /*!
  * \class ThreadPlanner
  * \brief Assists with dividing up work evenly between threads
  */
-class ThreadPlanner
+class CODA_OSS_API ThreadPlanner
 {
 public:
     /*!

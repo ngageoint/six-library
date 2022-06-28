@@ -495,8 +495,7 @@ TEST_CASE(testHttpResponse)
     TEST_ASSERT_EQ(p.getContentLength(), "96");
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testCompile);
     TEST_CHECK(testMatches);
     TEST_CHECK(testMatchOptional);
@@ -509,5 +508,4 @@ int main(int, char**)
     TEST_CHECK(testSub);
     TEST_CHECK(testSplit);
     TEST_CHECK(testHttpResponse);
-    return 0;
-}
+    )

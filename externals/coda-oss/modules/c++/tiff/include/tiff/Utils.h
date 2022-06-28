@@ -32,7 +32,7 @@ class Utils
 {
 public:
 
-    static bool hasGeoTiffIFD(tiff::IFD* inputIFD);
+    static bool hasGeoTiffIFD(const tiff::IFD* inputIFD);
     static tiff::IFD* createGeoTiffIFD(tiff::IFD* inputIFD);
 
 private:

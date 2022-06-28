@@ -24,7 +24,11 @@
 #ifndef __MT_SINGLETON_H__
 #define __MT_SINGLETON_H__
 
+#include <mutex>
+
 #include <import/sys.h>
+#include <config/compiler_extensions.h>
+#include <mem/SharedPtr.h>
 #include "mt/CriticalSection.h"
 
 namespace mt
@@ -81,17 +85,14 @@ template <> struct SingletonAutoDestroyer<true>
 {
     static void registerAtExit(void (*function)(void))
     {
-#if defined(__SunOS_5_10)
-/*
- * Fix for Solaris bug where atexit is not extern C++
- * http://bugs.opensolaris.org/bugdatabase/view_bug.do;jsessionid=9c8c03419fb896b730de20cd53ae?bug_id=6455603
- */
-#   if !defined(ELIMINATE_BROKEN_LINKAGE)
-        atexit(function);
-#   endif
-#else
+        CODA_OSS_disable_warning_push
+        #if _MSC_VER
+        #pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' function under -EHc. Undefined behavior may occur if this function throws an exception.
+        #endif
+        
         std::atexit(function);
-#endif
+
+        CODA_OSS_disable_warning_pop
     }
 };
 
@@ -124,7 +125,7 @@ protected:
 
 private:
     static T* mInstance; //static instance
-    static sys::Mutex mMutex; //static mutex for locking access to the instance
+    static std::mutex mMutex; //static mutex for locking access to the instance
     inline explicit Singleton(Singleton const&) {}
     inline Singleton& operator=(Singleton const&) { return *this; }
 };
@@ -135,10 +136,10 @@ T& Singleton<T, AutoDestroy>::getInstance()
     //double-checked locking
     if (mInstance == nullptr)
     {
-        CriticalSection<sys::Mutex> obtainLock(&mMutex);
+        std::lock_guard<std::mutex> obtainLock(mMutex);
         if (mInstance == nullptr)
         {
-            mInstance = new T; //create the instance
+            mInstance = coda_oss::make_unique<T>().release(); //create the instance
             SingletonAutoDestroyer<AutoDestroy>::registerAtExit(destroy);
         }
     }
@@ -151,7 +152,7 @@ void Singleton<T, AutoDestroy>::destroy()
     //double-checked locking
     if (mInstance != nullptr)
     {
-        CriticalSection<sys::Mutex> obtainLock(&mMutex);
+        std::lock_guard<std::mutex> obtainLock(mMutex);
         if (mInstance != nullptr)
         {
             //we are OK to delete it
@@ -162,7 +163,7 @@ void Singleton<T, AutoDestroy>::destroy()
 }
 
 template<typename T, bool AutoDestroy> T* Singleton<T, AutoDestroy>::mInstance = nullptr;
-template<typename T, bool AutoDestroy> sys::Mutex Singleton<T, AutoDestroy>::mMutex;
+template<typename T, bool AutoDestroy> std::mutex Singleton<T, AutoDestroy>::mMutex;
 
 }
 #endif

@@ -24,8 +24,6 @@
 #include "TestCase.h"
 #include <types/RangeList.h>
 
-namespace
-{
 TEST_CASE(TestDisjointInsertion)
 {
     types::RangeList RL;
@@ -205,10 +203,8 @@ TEST_CASE(TestIntersection)
     TEST_ASSERT_TRUE(types::Range(31,2) == ranges[4]);
     TEST_ASSERT_TRUE(types::Range(37,1) == ranges[5]);
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(TestDisjointInsertion);
     TEST_CHECK(TestMergedInsertion);
     TEST_CHECK(TestSinglePointTouching);
@@ -218,5 +214,4 @@ int main(int /*argc*/, char** /*argv*/)
     TEST_CHECK(TestRemoveMultiRangeOverlap);
     TEST_CHECK(TestExpansion);
     TEST_CHECK(TestIntersection);
-    return 0;
-}
+)

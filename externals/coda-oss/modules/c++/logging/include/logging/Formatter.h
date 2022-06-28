@@ -28,6 +28,7 @@
 #define __LOGGING_FORMATTER_H__
 
 #include <string>
+#include "config/Exports.h"
 #include "logging/LogRecord.h"
 #include "import/io.h"
 
@@ -39,7 +40,7 @@ namespace logging
  *  \class Formatter
  *  \brief  This class is the interface for deriving formatters.
  */
-class Formatter
+class CODA_OSS_API Formatter
 {
 public:
 

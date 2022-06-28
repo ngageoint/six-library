@@ -29,6 +29,7 @@
 
 #include <string>
 #include <iostream>
+#include "config/Exports.h"
 #include "logging/LogRecord.h"
 #include "logging/StreamHandler.h"
 #include <import/io.h>
@@ -47,10 +48,8 @@ namespace logging
  * renamed to 'error.log.1', and all future logs will be logged to error.log.
  * This is useful if you would like to keep backups of logs.
  */
-class RotatingFileHandler : public StreamHandler
+struct CODA_OSS_API RotatingFileHandler : public StreamHandler
 {
-
-public:
     /*!
      * \param fname         The file to log to
      * \param maxBytes      The max file size
@@ -61,6 +60,9 @@ public:
                         int backupCount = 0, LogLevel level = LogLevel::LOG_NOTSET);
 
     virtual ~RotatingFileHandler();
+
+    RotatingFileHandler(const RotatingFileHandler&) = delete;
+    RotatingFileHandler& operator=(const RotatingFileHandler&) = delete;
 };
 }
 #endif

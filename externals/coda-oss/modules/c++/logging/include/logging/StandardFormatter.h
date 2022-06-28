@@ -29,6 +29,7 @@
 
 #include <string>
 #include <str/Manip.h>
+#include "config/Exports.h"
 #include "logging/Formatter.h"
 #include "logging/LogRecord.h"
 
@@ -52,7 +53,7 @@ namespace logging
  *  The default format looks like this:
  *  [%c] %p %d ==> %m
  */
-class StandardFormatter : public Formatter
+class CODA_OSS_API StandardFormatter : public Formatter
 {
 public:
     static const char DEFAULT_FORMAT[];

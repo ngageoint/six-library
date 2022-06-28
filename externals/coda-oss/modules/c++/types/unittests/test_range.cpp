@@ -25,8 +25,6 @@
 
 #include <types/Range.h>
 
-namespace
-{
 TEST_CASE(TestGetNumSharedElements)
 {
     const types::Range range(100, 50);
@@ -143,12 +141,9 @@ TEST_CASE(TestSplit)
                        std::numeric_limits<size_t>::max());
     }
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(TestGetNumSharedElements);
     TEST_CHECK(TestTouches);
     TEST_CHECK(TestSplit);
-    return 0;
-}
+    )

@@ -30,6 +30,7 @@
 #include <iostream>
 #include "sys/SystemException.h"
 
+#include "config/Exports.h"
 
 namespace sys
 {
@@ -68,7 +69,7 @@ namespace sys
  *
  */
 
-struct ThreadInterface : public Runnable
+struct CODA_OSS_API ThreadInterface : public Runnable
 {
     enum { DEFAULT_LEVEL, KERNEL_LEVEL, USER_LEVEL };
     enum { MINIMUM_PRIORITY, NORMAL_PRIORITY, MAXIMUM_PRIORITY };

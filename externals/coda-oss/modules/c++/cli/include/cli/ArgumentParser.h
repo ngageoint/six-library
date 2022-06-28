@@ -28,6 +28,7 @@
 #include <import/str.h>
 #include <import/mem.h>
 #include <iostream>
+#include "config/Exports.h"
 
 namespace cli
 {
@@ -37,7 +38,7 @@ enum
     EXIT_USAGE = 1, EXIT_VERSION = 2
 };
 
-class ArgumentParser
+class CODA_OSS_API ArgumentParser
 {
 public:
     ArgumentParser();

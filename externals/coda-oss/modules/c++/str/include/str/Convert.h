@@ -138,9 +138,9 @@ T toType(const std::string& s)
 }
 
 template <>
-bool toType<bool>(const std::string& s);
+CODA_OSS_API bool toType<bool>(const std::string& s);
 template <>
-std::string toType<std::string>(const std::string& s);
+CODA_OSS_API std::string toType<std::string>(const std::string& s);
 
 /**
  *  strtoll wrapper for msvc compatibility.

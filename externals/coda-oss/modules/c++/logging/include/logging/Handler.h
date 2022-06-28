@@ -24,10 +24,11 @@
 //  Handler.h
 ///////////////////////////////////////////////////////////
 
-#ifndef __LOGGING_HANDLER_H__
-#define __LOGGING_HANDLER_H__
+#ifndef CODA_OSS_logging_Handler_h_INCLUDED_
+#define CODA_OSS_logging_Handler_h_INCLUDED_
 
 #include <string>
+#include "config/Exports.h"
 #include "logging/LogRecord.h"
 #include "logging/Formatter.h"
 #include "logging/StandardFormatter.h"
@@ -45,22 +46,21 @@ namespace logging
  * The Handler class is abstract. Sub-classes handle LogRecord* objects,
  * emitting the information in a user-defined manner.
  */
-class Handler : public Filterer
+struct CODA_OSS_API Handler : public Filterer
 {
-public:
     /*!
      * Construct a Handler at the specified LogLevel (LogLevel::LOG_NOTSET is default)
      */
     Handler(LogLevel level = LogLevel::LOG_NOTSET);
-    virtual ~Handler()
-    {
-    }
+    virtual ~Handler() = default;
+    Handler& operator=(const Handler&) = delete;
 
     /*! 
      * Sets the Formatter to use when formatting LogRecords
      * Not Threads Safe!
      */ 
     virtual void setFormatter(Formatter* formatter);
+    virtual void setFormatter(std::unique_ptr<Formatter>&&);
 
     //! Sets the minimum LogLevel required to emit LogRecords
     void setLevel(LogLevel level);
@@ -74,6 +74,10 @@ public:
      * and emitted.
      */
     virtual bool handle(const LogRecord* record);
+    virtual bool handle(const LogRecord& record)
+    {
+        return handle(&record);
+    }
 
     virtual void close();
 
@@ -86,12 +90,11 @@ protected:
     // used for the bulk of the logging for speed
     virtual void emitRecord(const LogRecord* record) = 0;
 
-
-    LogLevel mLevel;
+    LogLevel mLevel = LogLevel::LOG_NOTSET;
     sys::Mutex mHandlerLock;
-    Formatter* mFormatter;
+    Formatter* mFormatter = nullptr;
     StandardFormatter mDefaultFormatter; 
 };
 
 }
-#endif
+#endif  // CODA_OSS_logging_Handler_h_INCLUDED_

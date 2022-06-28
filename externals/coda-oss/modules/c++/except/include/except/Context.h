@@ -125,7 +125,7 @@ public:
     int mLine;
 };
 
-std::ostream& operator<< (std::ostream& os, const Context& c);
+CODA_OSS_API std::ostream& operator<<(std::ostream& os, const Context& c);
 }
 
 #endif

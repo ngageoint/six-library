@@ -28,6 +28,8 @@
 #include <deque>
 #include <utility>
 
+#include "config/Exports.h"
+
 #include <import/str.h>
 
 #include "sys/OS.h"
@@ -43,7 +45,7 @@
 namespace sys
 {
 
-class Path
+class CODA_OSS_API Path
 {
 public:
     Path();

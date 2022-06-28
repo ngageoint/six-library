@@ -380,7 +380,7 @@ double sys::DateTime::toMillis(tm t) const
 {
     time_t timeInSeconds = mktime(&t);
     double timediff = mSecond - t.tm_sec;
-    return (timeInSeconds + timediff) * 1000;
+    return (timeInSeconds + timediff) * 1000.0;
 }
 
 static double getNowInMillis()

@@ -27,6 +27,8 @@
 #include <import/str.h>
 #include <iterator>
 
+#include "config/Exports.h"
+
 namespace cli
 {
 
@@ -34,7 +36,7 @@ namespace cli
  * The Value class provides access to one or more actual values.
  * It provides index-based access to parameters.
  */
-class Value
+class CODA_OSS_API Value
 {
 public:
     Value()
