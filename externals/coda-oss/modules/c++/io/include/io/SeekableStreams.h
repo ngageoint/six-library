@@ -23,6 +23,7 @@
 #ifndef __IO_SEEKABLE_STREAMS_H__
 #define __IO_SEEKABLE_STREAMS_H__
 
+#include "config/Exports.h"
 #include "io/InputStream.h"
 #include "io/OutputStream.h"
 #include "io/BidirectionalStream.h"
@@ -41,7 +42,7 @@
 
 namespace io
 {
-struct SeekableInputStream :
+struct CODA_OSS_API SeekableInputStream :
             public InputStream, public Seekable
 {
     SeekableInputStream() = default;
@@ -49,7 +50,7 @@ struct SeekableInputStream :
     using InputStream::streamTo;
 };
 
-struct SeekableOutputStream :
+struct CODA_OSS_API SeekableOutputStream :
             public OutputStream, public Seekable
 {
     SeekableOutputStream() = default;

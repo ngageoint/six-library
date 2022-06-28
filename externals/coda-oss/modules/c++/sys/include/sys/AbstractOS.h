@@ -27,6 +27,8 @@
 
 #include <vector>
 #include <string>
+
+#include "config/Exports.h"
 #include "sys/Conf.h"
 #include "sys/FileFinder.h"
 #include "sys/SystemException.h"
@@ -51,7 +53,7 @@ namespace sys
  *  The AbstractOS class defines the base for a system
  *  independent layer of function calls.
  */
-struct AbstractOS
+struct CODA_OSS_API AbstractOS
 {
     AbstractOS();
 

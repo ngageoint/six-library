@@ -25,9 +25,6 @@
 
 #include "TestCase.h"
 
-namespace
-{
-
 typedef mt::CriticalSection<sys::Mutex> CriticalSection;
 
 TEST_CASE(testDefaultConstructor)
@@ -69,14 +66,9 @@ TEST_CASE(testMultipleTimeouts)
     }
 }
 
-}
-
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testDefaultConstructor);
     TEST_CHECK(testParameterizedConstructor);
     TEST_CHECK(testMultipleTimeouts);
-
-    return 0;
-}
+    )
 
