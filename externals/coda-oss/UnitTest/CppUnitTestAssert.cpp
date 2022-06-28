@@ -9,7 +9,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 // This hooks up our existing str::toString() into the VC++ unit-test infrastructure
 
 // C++ hack to call private methods
-// https://stackoverflow.com/questions/6873138/calling-private-method-in-c?msclkid=dd8b1f8bd09711ec8610b4501a04de94
+// https://stackoverflow.com/a/71578383/8877
 
 using FailOnCondition_t = void(bool condition, const unsigned short* message, const __LineInfo* pLineInfo); // declare method's type
 using GetAssertMessage_t = std::wstring(bool equality, const std::wstring& expected, const std::wstring& actual, const wchar_t *message); // declare method's type
