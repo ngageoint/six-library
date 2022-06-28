@@ -22,6 +22,8 @@
 #ifndef __SCENE_COORDINATE_TRANSFORM_H__
 #define __SCENE_COORDINATE_TRANSFORM_H__
 
+#include <std/memory>
+
 #include "scene/Types.h"
 #include "scene/EllipsoidModel.h"
 
@@ -29,14 +31,13 @@
 namespace scene
 {
 
-class CoordinateTransform
+struct CoordinateTransform
 {
-public:
     /**
      * Default constructor initializes the CoordinateTransform object with
      * a WGS84EllipsoidModel.
      */
-    CoordinateTransform();
+    CoordinateTransform() = default;
 
     /**
      * This constructor initializes the CoordinateTransform object with
@@ -80,8 +81,7 @@ public:
 
 protected:
 
-    EllipsoidModel* model;
-
+    EllipsoidModel* model = std::make_unique<WGS84EllipsoidModel>().release();
 };
 
 }

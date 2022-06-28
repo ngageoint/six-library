@@ -41,7 +41,7 @@ SlantPlanePixelTransformer::SlantPlanePixelTransformer(
     const scene::ProjectionModel& projection) :
     mGeom(geom),
     mProjection(projection),
-    mSicdData(*static_cast<six::sicd::ComplexData*>(data.clone())),
+    mSicdData(*dynamic_cast<six::sicd::ComplexData*>(data.clone())),
     mGroundPlaneNormal(mGeom.getReferencePosition())
 {
     mGroundPlaneNormal.normalize();
@@ -72,7 +72,7 @@ scene::LatLon SlantPlanePixelTransformer::toLatLon(
     const types::RowCol<double>& pixel) const
 {
     //! project then convert LLA to LatLon
-    scene::LatLonAlt lla = toLLA(pixel);
+    const scene::LatLonAlt lla = toLLA(pixel);
     return scene::LatLon(lla.getLat(), lla.getLon());
 }
 

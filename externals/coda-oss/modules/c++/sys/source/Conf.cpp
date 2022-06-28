@@ -23,11 +23,10 @@
 #include <stdexcept>
 #include <type_traits>
 
-
 #include "sys/Conf.h"
-#include "sys/Bit.h"
+#include "coda_oss/bit.h"
 
-using endian = sys::Endian;
+using endian = coda_oss::endian;
 
 // https://en.cppreference.com/w/cpp/types/endian
 inline bool is_big_endian()

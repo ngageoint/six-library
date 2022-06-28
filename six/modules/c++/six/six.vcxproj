@@ -15,18 +15,17 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{62aad4dd-35ba-41a0-8263-1f4dfd755689}</ProjectGuid>
     <RootNamespace>six</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -43,6 +42,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>..\six.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -55,16 +55,15 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <WarningLevel>EnableAllWarnings</WarningLevel>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <EnablePREfast>true</EnablePREfast>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -82,13 +81,13 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -114,6 +113,7 @@
     <ClInclude Include="include\six\GeoInfo.h" />
     <ClInclude Include="include\six\Init.h" />
     <ClInclude Include="include\six\Legend.h" />
+    <ClInclude Include="include\six\Logger.h" />
     <ClInclude Include="include\six\MatchInformation.h" />
     <ClInclude Include="include\six\Mesh.h" />
     <ClInclude Include="include\six\NITFHeaderCreator.h" />
@@ -133,12 +133,15 @@
     <ClInclude Include="include\six\SICommonXMLParser.h" />
     <ClInclude Include="include\six\SICommonXMLParser01x.h" />
     <ClInclude Include="include\six\SICommonXMLParser10x.h" />
+    <ClInclude Include="include\six\SIEnum.h" />
     <ClInclude Include="include\six\Types.h" />
     <ClInclude Include="include\six\Utilities.h" />
+    <ClInclude Include="include\six\Version.h" />
     <ClInclude Include="include\six\VersionUpdater.h" />
     <ClInclude Include="include\six\WriteControl.h" />
     <ClInclude Include="include\six\XMLControl.h" />
     <ClInclude Include="include\six\XMLControlFactory.h" />
+    <ClInclude Include="include\six\XmlLite.h" />
     <ClInclude Include="include\six\XMLParser.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
@@ -154,10 +157,12 @@
     <ClCompile Include="source\CompressedByteProvider.cpp" />
     <ClCompile Include="source\Container.cpp" />
     <ClCompile Include="source\Data.cpp" />
+    <ClCompile Include="source\Enums.cpp" />
     <ClCompile Include="source\ErrorStatistics.cpp" />
     <ClCompile Include="source\GeoDataBase.cpp" />
     <ClCompile Include="source\GeoInfo.cpp" />
     <ClCompile Include="source\Init.cpp" />
+    <ClCompile Include="source\Logger.cpp" />
     <ClCompile Include="source\MatchInformation.cpp" />
     <ClCompile Include="source\Mesh.cpp" />
     <ClCompile Include="source\NITFHeaderCreator.cpp" />
@@ -179,6 +184,7 @@
     <ClCompile Include="source\WriteControl.cpp" />
     <ClCompile Include="source\XMLControl.cpp" />
     <ClCompile Include="source\XMLControlFactory.cpp" />
+    <ClCompile Include="source\XmlLite.cpp" />
     <ClCompile Include="source\XMLParser.cpp" />
   </ItemGroup>
   <ItemGroup>

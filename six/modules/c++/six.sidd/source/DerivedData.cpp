@@ -87,7 +87,7 @@ DateTime DerivedData::getCollectionStartDateTime() const
     return exploitationFeatures->collections[0]->information.collectionDateTime;
 }
 
-mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT()
+const mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT() const
 {
     if (mVersion == "1.0.0")
     {
@@ -97,14 +97,18 @@ mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT()
         }
         return display->remapInformation->remapLUT;
     }
-    else if (mVersion == "2.0.0")
+    else if ((mVersion == "2.0.0") || (mVersion == "3.0.0"))
     {
         return nitfLUT;
     }
     else
     {
-        throw except::Exception(Ctxt("Unknown version. Expected 2.0.0 or 1.0.0"));
+        throw except::Exception(Ctxt("Unknown version. Expected 3.0.0, 2.0.0, or 1.0.0"));
     }
+}
+void DerivedData::setDisplayLUT(std::unique_ptr<AmplitudeTable>&& pLUT)
+{
+    nitfLUT.reset(pLUT.release());
 }
 
 types::RowCol<double>
@@ -130,7 +134,7 @@ DerivedData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
     }
 
     const six::sidd::MeasurableProjection* projection =
-        static_cast<six::sidd::MeasurableProjection*>(
+        dynamic_cast<six::sidd::MeasurableProjection*>(
                     measurement->projection.get());
     const types::RowCol<double> ctrPt = projection->referencePoint.rowCol;
 
@@ -139,7 +143,7 @@ DerivedData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
             (fullScenePos.col - ctrPt.col) * projection->sampleSpacing.col);
 }
 
-bool DerivedData::operator==(const DerivedData& rhs) const
+bool DerivedData::operator_eq(const DerivedData& rhs) const
 {
     return (productCreation == rhs.productCreation &&
         display == rhs.display &&
@@ -155,10 +159,10 @@ bool DerivedData::operator==(const DerivedData& rhs) const
 
 bool DerivedData::equalTo(const Data& rhs) const
 {
-    const DerivedData* data = dynamic_cast<const DerivedData*>(&rhs);
+    auto data = dynamic_cast<const DerivedData*>(&rhs);
     if (data != nullptr)
     {
-        return *this == *data;
+        return this->operator_eq(*data);
     }
     return false;
 }

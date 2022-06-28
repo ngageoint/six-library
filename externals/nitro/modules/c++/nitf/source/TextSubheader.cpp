@@ -20,6 +20,12 @@
  *
  */
 
+#include <map>
+#include <functional>
+#include <stdexcept>
+#include <cstddef>
+#include <type_traits>
+
 #include "nitf/TextSubheader.hpp"
 
 using namespace nitf;
@@ -42,10 +48,8 @@ TextSubheader::TextSubheader(nitf_TextSubheader * x)
     getNativeOrThrow();
 }
 
-TextSubheader::TextSubheader()
+TextSubheader::TextSubheader() noexcept(false) : TextSubheader(nitf_TextSubheader_construct(&error))
 {
-    setNative(nitf_TextSubheader_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
@@ -56,8 +60,45 @@ nitf::TextSubheader TextSubheader::clone() const
     return dolly;
 }
 
+//nitf::Field TextSubheader::get(nitf_TextSubheaderFields_enum v) const
+//{
+//    using get_t = nitf::Field(TextSubheader::*)() const;
+//    static const std::map<nitf_TextSubheaderFields_enum, get_t> getFieldMap = {
+//        { filePartType, &TextSubheader::getFilePartType }
+//    };
+//
+//    auto it = getFieldMap.find(v);
+//    if (it != getFieldMap.end())
+//    {
+//        auto&& p_mf = it->second;
+//        return (this->*p_mf)();
+//    }
+//
+//    throw std::invalid_argument("member-function not in map.");
+//}
+
+//nitf::Field TextSubheader::get(nitf_TextSubheaderFields_enum v) const
+//{
+//    static const std::map<nitf_TextSubheaderFields_enum, size_t> offsetMap = {
+//        { filePartType, offsetof(nitf_TextSubheader, filePartType) }
+//    };
+//
+//    auto it = offsetMap.find(v);
+//    if (it != offsetMap.end())
+//    {
+//        const auto fieldOffset = it->second;
+//        return Field::fromNativeOffset(getNativeOrThrow(), fieldOffset);
+//    }
+//
+//    throw std::invalid_argument("member-function not in map.");
+//}
+
+//#define getField_(name) nitf::Field(getNativeOrThrow()->name)
+//#define getField_(name) getField(*this, offsetof(native_t, name));
+
 nitf::Field TextSubheader::getFilePartType() const
 {
+    //return getField(*this, offsetof(native_t, filePartType));
     return nitf::Field(getNativeOrThrow()->filePartType);
 }
 

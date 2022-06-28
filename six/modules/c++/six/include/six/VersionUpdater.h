@@ -59,6 +59,8 @@ public:
     {
     }
 
+    VersionUpdater& operator=(const VersionUpdater&) = delete;
+
     //! Update version of data to target version
     void update();
 

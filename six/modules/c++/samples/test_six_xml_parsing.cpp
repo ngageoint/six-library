@@ -25,6 +25,8 @@
 #include <string>
 #include <vector>
 
+#include <std/filesystem>
+
 #include <sys/OS.h>
 #include <sys/Path.h>
 #include <except/Exception.h>
@@ -36,7 +38,6 @@
 #include <io/FileInputStream.h>
 #include <logging/StreamHandler.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace
@@ -64,12 +65,8 @@ XMLVerifier::XMLVerifier()
     // Verify schema path is set
     six::XMLControl::loadSchemaPaths(mSchemaPaths);
 
-    mXmlRegistry.addCreator(six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<
-                    six::sicd::ComplexXMLControl>());
-    mXmlRegistry.addCreator(six::DataType::DERIVED,
-            new six::XMLControlCreatorT<
-                    six::sidd::DerivedXMLControl>());
+    mXmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+    mXmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
     mLog.addHandler(new logging::StreamHandler(logging::LogLevel::LOG_INFO),
                     true);

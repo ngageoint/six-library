@@ -22,7 +22,8 @@
 #ifndef __SIX_DISPLAY_H__
 #define __SIX_DISPLAY_H__
 
-#include <sys/Optional.h>
+#include <std/optional>
+
 #include <mem/ScopedCopyablePtr.h>
 #include <mem/ScopedCloneablePtr.h>
 
@@ -64,19 +65,16 @@ struct Remap
 
     virtual Remap* clone() const = 0;
 
-    bool operator==(const Remap& rhs)
-    {
-        return this->equalTo(rhs);
-    }
-
-    bool operator!=(const Remap& rhs)
-    {
-        return !(*this == rhs);
-    }
-
     virtual bool equalTo(const Remap& rhs) const = 0;
-
 };
+inline bool operator==(const Remap& lhs, const Remap& rhs)
+{
+    return lhs.equalTo(rhs) && rhs.equalTo(lhs);
+}
+inline bool operator!=(const Remap& lhs, const Remap& rhs)
+{
+    return !(lhs == rhs);
+}
 
 /*!
  *  \struct MonochromeDisplayRemap
@@ -113,8 +111,13 @@ struct MonochromeDisplayRemap : public Remap
     //!  Remap parameters
     ParameterCollection remapParameters;
 
-    virtual bool equalTo(const Remap& rhs) const;
-    virtual bool operator==(const MonochromeDisplayRemap& rhs) const;
+    bool equalTo(const Remap& rhs) const override;
+    bool operator==(const MonochromeDisplayRemap& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Remap&>(*this) == static_cast<const Remap&>(rhs);
+    }
+private:
+    bool operator_eq(const MonochromeDisplayRemap& rhs) const;
 };
 
 /*!
@@ -139,8 +142,13 @@ struct ColorDisplayRemap : public Remap
         return new ColorDisplayRemap(*this);
     }
 
-    virtual bool equalTo(const Remap& rhs) const;
-    virtual bool operator==(const ColorDisplayRemap& rhs) const;
+    bool equalTo(const Remap& rhs) const override;
+    bool operator==(const ColorDisplayRemap& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Remap&>(*this) == static_cast<const Remap&>(rhs);
+    }
+private:
+    bool operator_eq(const ColorDisplayRemap& rhs) const;
 };
 
 /*!
@@ -380,7 +388,7 @@ struct DynamicRangeAdjustment
     };
 
     DRAType algorithmType; //! Algorithm used for dynamic range adjustment
-    size_t bandStatsSource; //! Indicates which band to use for DRA stats
+    size_t bandStatsSource = 0; //! Indicates which band to use for DRA stats
 
     // In SIDD 1.0, must include exactly one of draParameters or draOverrides
     // In SIDD 2.0, include draParameters if algorithmType == AUTO,
@@ -462,7 +470,7 @@ struct Display
     // Beginning of SIDD 2.0-only section
 
     //Required
-    size_t numBands;
+    size_t numBands = 0;
     //Optional
     size_t defaultBandDisplay = six::Init::undefined<size_t>();
 

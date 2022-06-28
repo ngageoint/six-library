@@ -1,5 +1,5 @@
 set(MODULE_NAME nitf)
-set(MODULE_DEPS nitf-c except-c++ io-c++ mt-c++ sys-c++ str-c++ gsl-c++)
+set(MODULE_DEPS nitf-c j2k-c except-c++ sio.lite-c++ io-c++ mt-c++ sys-c++ str-c++ gsl-c++ std-c++)
 if (MSVC)
     list(APPEND MODULE_DEPS wsock32 ws2_32)
 endif()
@@ -25,6 +25,10 @@ coda_add_module(
         source/DateTime.cpp
         source/DecompressionInterface.cpp
         source/DownSampler.cpp
+        source/Extensions.cpp
+        source/Field.cpp
+        source/FieldDescriptor.cpp
+        source/FieldWarning.cpp
         source/FileHeader.cpp
         source/FileSecurity.cpp
         source/GraphicSegment.cpp
@@ -42,6 +46,15 @@ coda_add_module(
         source/ImageSource.cpp
         source/ImageSubheader.cpp
         source/ImageWriter.cpp
+        source/J2KComponent.cpp
+        source/J2KCompressionParameters.cpp
+        source/J2KCompressor.cpp
+        source/J2KContainer.cpp
+        source/J2KEncoder.cpp
+        source/J2KImage.cpp
+        source/J2KReader.cpp
+        source/J2KStream.cpp
+        source/J2KWriter.cpp
         source/LabelSegment.cpp
         source/LabelSubheader.cpp
         source/List.cpp
@@ -58,11 +71,14 @@ coda_add_module(
         source/SegmentWriter.cpp
         source/SubWindow.cpp
         source/TRE.cpp
+        source/TestingTest.cpp
         source/TextSegment.cpp
         source/TextSubheader.cpp
+        source/UnitTests.cpp
         source/Utils.cpp
         source/WriteHandler.cpp
-        source/Writer.cpp)
+        source/Writer.cpp
+        )
 
 target_compile_features(nitf-c++ PUBLIC cxx_inheriting_constructors)
 
@@ -74,17 +90,29 @@ coda_add_tests(
         test_functional.cpp
         test_handles.cpp
         test_mem_source.cpp
-        test_static_plugin.cpp)
+        test_static_plugin.cpp
+        test_j2k_nitf_read_region.cpp)
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
     DIRECTORY "unittests"
     UNITTEST
     SOURCES
-	    test_create_nitf++.cpp
+	test_create_nitf++.cpp
         test_field++.cpp
         test_image_blocker.cpp
         test_image_segment_blank_nm_compression.cpp
         test_image_segment_computer.cpp
         test_nitf_buffer_list.cpp
-        test_tre_mods++.cpp)
+        test_tre_mods++.cpp
+        test_tre_create++.cpp
+        test_j2k_read_tile.cpp
+        test_j2k_compress_tile.cpp
+        test_j2k_compressed_byte_provider.cpp)
+
+add_executable(show_nitf++ apps/show_nitf++.cpp)
+target_link_libraries(show_nitf++ PRIVATE nitf-c++)
+
+install(TARGETS show_nitf++
+        ${CODA_INSTALL_OPTION}
+        RUNTIME DESTINATION "${CODA_STD_PROJECT_BIN_DIR}")

@@ -23,6 +23,8 @@
 #define __SIX_DERIVED_XML_CONTROL_H__
 
 #include <six/XMLControl.h>
+#include <six/Enums.h>
+
 #include <six/sidd/DerivedXMLParser.h>
 
 namespace six
@@ -38,25 +40,36 @@ namespace sidd
  *  if necessary.  A best practice is to use the six::toXMLCharArray
  *  and six::toXMLString functions to turn Data* objects into XML
  */
-class DerivedXMLControl : public XMLControl
+struct DerivedXMLControl : public XMLControl
 {
-public:
     DerivedXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+    DerivedXMLControl(std::unique_ptr<logging::Logger>&&);
+    DerivedXMLControl(logging::Logger&);
+    DerivedXMLControl(const DerivedXMLControl&) = delete;
+    DerivedXMLControl& operator=(const DerivedXMLControl&) = delete;
+    DerivedXMLControl(DerivedXMLControl&&) = delete;
+    DerivedXMLControl& operator=(DerivedXMLControl&&) = delete;
+
+    static const six::DataType dataType;
+
+    static std::unique_ptr<DerivedXMLParser> getParser_(const std::string& strVersion); // for unit-testing
 
 protected:
     /*!
      *  Returns a new allocated DOM document, created from the DerivedData*
      */
     virtual xml::lite::Document* toXMLImpl(const Data* data);
+    virtual std::unique_ptr<xml::lite::Document> toXMLImpl(const Data&) const override;
     /*!
      *  Returns a new allocated DerivedData*, created from the DOM Document*
      *
      */
     virtual Data* fromXMLImpl(const xml::lite::Document* doc);
+    virtual std::unique_ptr<Data> fromXMLImpl(const xml::lite::Document&) const override;
 
 private:
     std::unique_ptr<DerivedXMLParser>
-    getParser(const std::string& version) const;
+    getParser(const std::string& strVersion) const;
 };
 }
 }

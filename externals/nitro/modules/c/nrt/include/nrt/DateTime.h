@@ -32,6 +32,10 @@ NRT_CXX_GUARD
  * coordinated universal time (UTC). The precision depends on the host machine.
  * In many cases, seconds is the highest amount of granularity.
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _NRT_DateTime
 {
     int year;
@@ -44,6 +48,9 @@ typedef struct _NRT_DateTime
     double second;
     double timeInMillis;
 } nrt_DateTime;
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*!
  * Returns a DateTime object representing the current moment in time.

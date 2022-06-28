@@ -25,6 +25,8 @@
 #include <memory>
 
 #include <six/XMLControl.h>
+#include <six/Enums.h>
+
 #include <six/sicd/ComplexXMLParser.h>
 
 namespace six
@@ -46,12 +48,14 @@ namespace sicd
  *  XMLControlFactory::newXMLControl() methods
  *  to create this object.
  */
-class ComplexXMLControl : public XMLControl
+struct ComplexXMLControl : public XMLControl
 {
-
-public:
     //!  Constructor
     ComplexXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+    ComplexXMLControl(const ComplexXMLControl&) = delete;
+    ComplexXMLControl& operator=(const ComplexXMLControl&) = delete;
+
+    static const six::DataType dataType;
 
 protected:
     /*!
@@ -62,6 +66,7 @@ protected:
      *  \return An XML DOM
      */
     virtual xml::lite::Document* toXMLImpl(const Data* data);
+    virtual std::unique_ptr<xml::lite::Document> toXMLImpl(const Data&) const override;
 
     /*!
      *  Function takes a DOM Document* node and creates a new-allocated
@@ -70,7 +75,8 @@ protected:
      *  
      */
     virtual Data* fromXMLImpl(const xml::lite::Document* doc);
-
+    virtual std::unique_ptr<Data> fromXMLImpl(const xml::lite::Document&) const override;
+\
 private:
     std::unique_ptr<ComplexXMLParser>
     getParser(const std::string& version) const;

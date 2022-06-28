@@ -28,6 +28,7 @@
 #include "nitf/NITFException.hpp"
 #include "nitf/System.hpp"
 #include "nitf/IOInterface.hpp"
+#include "nitf/exports.hpp"
 
 /*!
  * \file IOHandle.hpp
@@ -41,11 +42,8 @@ namespace nitf
  *  \class IOHandle
  *  \brief The C++ wrapper of the nitf_IOHandle
  */
-class IOHandle : public IOInterface
+struct NITRO_NITFCPP_API IOHandle : public IOInterface
 {
-
-public:
-
     IOHandle(const std::string& fname,
              nitf::AccessFlags access = NITF_ACCESS_READONLY,
              nitf::CreationFlags creation = NITF_OPEN_EXISTING);

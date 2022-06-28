@@ -38,12 +38,10 @@ SICDWriteControl::SICDWriteControl(const std::string& outputPathname,
 
 void SICDWriteControl::initialize(const ComplexData& data)
 {
-    mem::SharedPtr<Container> container(new Container(DataType::COMPLEX));
-
     // The container wants to take ownership of the data
     // To avoid memory problems, we'll just clone it. After calling
     // initialize, the base class will refer to this Container.
-    container->addData(data.clone());
+    auto container = std::make_shared<Container>(data.clone());
     initialize(container);
 }
 
@@ -110,7 +108,7 @@ void SICDWriteControl::save(void* imageData,
     }
 
     const six::Data* const data = getContainer()->getData(0);
-    static const size_t NUM_BANDS = 2;
+    constexpr size_t NUM_BANDS = 2;
     const size_t numBytesPerPixel = data->getNumBytesPerPixel() / NUM_BANDS;
     const size_t numPixelsTotal = dims.area() * NUM_BANDS;
     const bool doByteSwap = shouldByteSwap();
@@ -157,7 +155,7 @@ void SICDWriteControl::save(void* imageData,
             if (dims.col == globalNumCols)
             {
                 // Life is easy - one write
-                mIO->seek(byteOffset, NITF_SEEK_SET);
+                mIO->seek(static_cast<nitf::Off>(byteOffset), NITF_SEEK_SET);
                 mIO->write(imageDataPtr,
                            numRowsToWrite * dims.col * NUM_BANDS *
                                numBytesPerPixel);
@@ -173,7 +171,7 @@ void SICDWriteControl::save(void* imageData,
                      ++row, byteOffset += rowSeekStride,
                          imageDataPtr += numBytesPerRow)
                 {
-                    mIO->seek(byteOffset, NITF_SEEK_SET);
+                    mIO->seek(static_cast<nitf::Off>(byteOffset), NITF_SEEK_SET);
                     mIO->write(imageDataPtr, numBytesPerRow);
                 }
             }

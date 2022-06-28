@@ -23,6 +23,8 @@
 #define __SIX_XML_CONTROL_FACTORY_H__
 
 #include <memory>
+#include <vector>
+#include <std/filesystem>
 
 #include <scene/sys_Conf.h>
 
@@ -43,8 +45,7 @@ namespace six
  */
 struct XMLControlCreator
 {
-    //!  Constructor
-    XMLControlCreator() {}
+    XMLControlCreator() = default;
 
     //!  Destructor
     virtual ~XMLControlCreator() {}
@@ -85,14 +86,8 @@ template <typename T> struct XMLControlCreatorT : public XMLControlCreator
  *  identify which reader/writer to create, and one that uses a
  *  string (the same one that identifies the type in the container)
  */
-class XMLControlRegistry
+struct XMLControlRegistry
 {
-public:
-    //!  Constructor
-    XMLControlRegistry()
-    {
-    }
-
     //!  Destructor
     virtual ~XMLControlRegistry();
 
@@ -100,7 +95,7 @@ public:
                     std::unique_ptr<XMLControlCreator>&& creator);
 #if !CODA_OSS_cpp17
     void addCreator(const std::string& identifier,
-                    std::auto_ptr<XMLControlCreator> creator);
+                    mem::auto_ptr<XMLControlCreator> creator);
 #endif
 
     /*!
@@ -120,7 +115,7 @@ public:
     }
 #if !CODA_OSS_cpp17
     void addCreator(DataType dataType,
-                    std::auto_ptr<XMLControlCreator> creator)
+                    mem::auto_ptr<XMLControlCreator> creator)
     {
         addCreator(dataType.toString(), creator);
     }
@@ -133,6 +128,13 @@ public:
     {
         std::unique_ptr<XMLControlCreator> scopedCreator(creator);
         addCreator(dataType, std::move(scopedCreator));
+    }
+
+    template<typename TXMLControlCreator>
+    void addCreator()
+    {
+        auto scopedCreator = std::make_unique<XMLControlCreatorT<TXMLControlCreator>>();
+        addCreator(TXMLControlCreator::dataType, std::move(scopedCreator));
     }
 
     /*!
@@ -177,7 +179,10 @@ std::string toValidXMLString(
         const std::vector<std::string>& schemaPaths,
         logging::Logger* log,
         const XMLControlRegistry *xmlRegistry = nullptr);
-
+std::string toValidXMLString(const Data&,
+    const std::vector<std::string>& schemaPaths, logging::Logger*, const XMLControlRegistry* xmlRegistry = nullptr);
+std::string toValidXMLString(const Data&,
+    const std::vector<std::filesystem::path>*, logging::Logger*, const XMLControlRegistry* xmlRegistry = nullptr);
 
 //!  Singleton declaration of our XMLControlRegistry
 typedef mt::Singleton<XMLControlRegistry, true> XMLControlFactory;

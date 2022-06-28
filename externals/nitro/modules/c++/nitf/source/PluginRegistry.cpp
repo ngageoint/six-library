@@ -80,9 +80,16 @@ nitf_CompressionInterface* PluginRegistry::retrieveCompressionInterface(
     return compIface;
 }
 
+bool PluginRegistry::treHandlerExists(const std::string& ident, FILE* log) noexcept
+{
+    // This can generate output from implicitConstruct() complaining about NITF_PLUGIN_PATH
+    // not being set; often the warning is benign and is just confusing.  Provide a way to turn
+    // it off (FILE* log = NULL) without upsetting existing code.
+    return nitf_PluginRegistry_TREHandlerExistsLog(ident.c_str(), log);
+}
 bool PluginRegistry::treHandlerExists(const std::string& ident) noexcept
 {
-    return nitf_PluginRegistry_TREHandlerExists(ident.c_str());
+    return treHandlerExists(ident, stderr); // legacy/default: log=stderr
 }
 
 bool PluginRegistry::compressionHandlerExists(const std::string& ident) noexcept
@@ -94,4 +101,15 @@ bool PluginRegistry::decompressionHandlerExists(const std::string& ident) noexce
 {
     return nitf_PluginRegistry_decompressionHandlerExists(ident.c_str());
 }
+
+nitf_PluginRegistry* PluginRegistry::getInstance(nitf_Error& error) noexcept
+{
+    return nitf_PluginRegistry_getInstance(&error);
+}
+
+nitf_TREHandler* PluginRegistry::retrieveTREHandler(nitf_PluginRegistry& reg, const std::string& treIdent, int& hadError, nitf_Error& error) noexcept
+{
+    return nitf_PluginRegistry_retrieveTREHandler(&reg, treIdent.c_str(), &hadError, &error);
+}
+
 }

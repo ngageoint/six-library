@@ -22,16 +22,22 @@
 #ifndef __SIX_XML_CONTROL_H__
 #define __SIX_XML_CONTROL_H__
 
+#include <vector>
+#include <std/filesystem>
+#include <memory>
+
 #include <scene/sys_Conf.h>
 
 #include <logging/Logger.h>
-#include <xml/lite/Document.h>
-#include <xml/lite/Validator.h>
+#include <import/xml/lite.h>
 
-#include <six/Data.h>
+#include "six/Types.h"
+#include "six/Logger.h"
 
 namespace six
 {
+    struct Data; // forward
+
 /*!
  *  \class XMLControl
  *  \brief Base class for reading and writing a Data object
@@ -58,12 +64,31 @@ class XMLControl
 {
     public:
     //!  Constructor
-    XMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+        XMLControl(logging::Logger* log = nullptr, bool ownLog = false);
+        XMLControl(std::unique_ptr<logging::Logger>&&);
+        XMLControl(logging::Logger&);
 
     //!  Destructor
     virtual ~XMLControl();
 
-    void setLogger(logging::Logger* log, bool ownLog = false);
+    XMLControl(const XMLControl&) = delete;
+    XMLControl& operator=(const XMLControl&) = delete;
+    XMLControl(XMLControl&&) = delete;
+    XMLControl& operator=(XMLControl&&) = delete;
+
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
+    {
+        mLogger.setLogger(std::forward<TLogger>(logger));
+    }
+    void setLogger(logging::Logger* logger, bool ownLog)
+    {
+        mLogger.setLogger(logger, ownLog);
+    }
+    logging::Logger& getLogger() const
+    {
+        return mLogger.get();
+    }
 
     /*
      *  \func validate
@@ -76,6 +101,9 @@ class XMLControl
     static void validate(const xml::lite::Document* doc,
                          const std::vector<std::string>& schemaPaths,
                          logging::Logger* log);
+    static void validate(const xml::lite::Document&,
+        const std::vector<std::filesystem::path>* pSchemaPaths,
+        logging::Logger* log);
 
     /*!
      * Retrieve the proper schema paths for validation.
@@ -92,6 +120,7 @@ class XMLControl
      *                Otherwise, we can just use what's already there.
      */
     static void loadSchemaPaths(std::vector<std::string>& schemaPaths);
+    static std::vector<std::filesystem::path> loadSchemaPaths(const std::vector<std::filesystem::path>*);
 
     /*!
      *  Convert the Data model into an XML DOM.
@@ -101,6 +130,8 @@ class XMLControl
      */
     xml::lite::Document* toXML(const Data* data,
                                const std::vector<std::string>& schemaPaths);
+    std::unique_ptr<xml::lite::Document> toXML(const Data&, const std::vector<std::string>&);
+    std::unique_ptr<xml::lite::Document> toXML(const Data&, const std::vector<std::filesystem::path>*);
 
     /*!
      *  Convert a document from a DOM into a Data model
@@ -110,6 +141,8 @@ class XMLControl
      */
     Data* fromXML(const xml::lite::Document* doc,
                   const std::vector<std::string>& schemaPaths);
+    std::unique_ptr<Data> fromXML(const xml::lite::Document&,
+        const std::vector<std::filesystem::path>*);
 
     /*!
      *  Provides a mapping from COMPLEX --> SICD and DERIVED --> SIDD
@@ -127,8 +160,8 @@ class XMLControl
                              std::vector<std::string>& version);
 
     protected:
-    logging::Logger* mLog;
-    bool mOwnLog;
+    logging::Logger* mLog = nullptr;
+    bool mOwnLog = false;
 
     /*!
      *  Convert a document from a DOM into a Data model
@@ -136,6 +169,7 @@ class XMLControl
      *  \return a Data model
      */
     virtual Data* fromXMLImpl(const xml::lite::Document* doc) = 0;
+    virtual std::unique_ptr<Data> fromXMLImpl(const xml::lite::Document&) const; // = 0;, would break existing code
 
     /*!
      *  Convert the Data model into an XML DOM.
@@ -143,6 +177,7 @@ class XMLControl
      *  \return An XML DOM
      */
     virtual xml::lite::Document* toXMLImpl(const Data* data) = 0;
+    virtual std::unique_ptr<xml::lite::Document> toXMLImpl(const Data&) const; // = 0;, would break existing code
 
     static std::string getDefaultURI(const Data& data);
 
@@ -150,6 +185,9 @@ class XMLControl
 
     static void getVersionFromURI(const xml::lite::Document* doc,
                                   std::vector<std::string>& version);
+
+private:
+    Logger mLogger;
 };
 }
 

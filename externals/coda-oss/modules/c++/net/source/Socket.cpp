@@ -22,6 +22,8 @@
 
 #include "net/Socket.h"
 
+#include <std/memory>
+
 net::Socket::Socket(int proto)
 {
     mNative = ::socket(AF_INET, proto, 0);
@@ -73,8 +75,7 @@ mem::auto_ptr<net::Socket> net::Socket::accept(net::SocketAddress& fromClient)
     net::SockAddrIn_T& in = fromClient.getAddress();
 
     net::SockLen_T addrLen = sizeof(in);
-    return mem::auto_ptr<net::Socket>( 
-        new Socket(::accept(mNative, (net::SockAddr_T *) &in, &addrLen), true) );
+    return mem::auto_ptr<net::Socket>(new Socket(::accept(mNative, (net::SockAddr_T *) &in, &addrLen), true));
 }
 
 size_t net::Socket::recv(void* b, size_t len, int flags)

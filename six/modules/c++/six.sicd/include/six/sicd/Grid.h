@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_GRID_H__
-#define __SIX_GRID_H__
+#ifndef SIX_six_sicd_Grid_h_INCLUDED_
+#define SIX_six_sicd_Grid_h_INCLUDED_
+#pragma once
 
 #include <logging/Logger.h>
 #include <mem/ScopedCopyablePtr.h>
@@ -147,9 +148,9 @@ struct DirectionParameters
     void fillDerivedFields(const ImageData& imageData);
     void fillDerivedFields(const RgAzComp& rgAzComp, double offset = 0);
 
-private:
     std::unique_ptr<Functor> calculateWeightFunction() const;
 
+private:
     bool validateWeights(const Functor& weightFunction,
             logging::Logger& log) const;
 
@@ -278,5 +279,4 @@ private:
 
 }
 }
-#endif
-
+#endif // SIX_six_sicd_Grid_h_INCLUDED_

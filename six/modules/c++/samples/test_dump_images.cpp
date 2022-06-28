@@ -22,6 +22,8 @@
 #include <sstream>
 #include <limits>
 
+#include <std/filesystem>
+
 #include <import/six.h>
 
 #include <mem/ScopedArray.h>
@@ -31,7 +33,6 @@
 #include <import/sio/lite.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace
@@ -117,10 +118,8 @@ int main(int argc, char** argv)
         // The reason to do this is to avoid adding XMLControlCreators to the
         // XMLControlFactory singleton - this way has more fine-grained control
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl> ());
-        xmlRegistry.addCreator(six::DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl> ());
+        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+        xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
         // create a Reader registry (now, only NITF and TIFF)
         six::ReadControlRegistry readerRegistry;
@@ -140,13 +139,13 @@ int main(int argc, char** argv)
         size_t numImages = 0;
 
         if (container->getDataType() == six::DataType::COMPLEX
-                && container->getNumData() > 0)
+                && (!container->empty()))
         {
             numImages = 1;
         }
         else if (container->getDataType() == six::DataType::DERIVED)
         {
-            for (; numImages < container->getNumData()
+            for (; numImages < container->size()
                     && container->getData(numImages)->getDataType()
                             == six::DataType::DERIVED; ++numImages)
                 ;
@@ -158,12 +157,12 @@ int main(int argc, char** argv)
             fs::create_directory(outputDir);
 
         // first, write out the XMLs
-        for (size_t i = 0, total = container->getNumData(); i < total; ++i)
+        for (size_t i = 0, total = container->size(); i < total; ++i)
         {
             const six::Data* data = container->getData(i);
             std::string filename = FmtX("%s_DES_%d.xml", base.c_str(), i);
             const auto xmlFile = fs::path(outputDir) / filename;
-            io::FileOutputStream xmlStream(xmlFile);
+            io::FileOutputStream xmlStream(xmlFile.string());
 
             std::string xmlData = six::toXMLString(data, &xmlRegistry);
             xmlStream.write(xmlData.c_str(), xmlData.length());
@@ -193,7 +192,7 @@ int main(int argc, char** argv)
                      << (isSIO ? "sio" : "raw");
 
             const auto outputFile = fs::path(outputDir) / filename.str();
-            io::FileOutputStream outputStream(outputFile);
+            io::FileOutputStream outputStream(outputFile.string());
 
             if (isSIO)
             {

@@ -33,16 +33,11 @@ SICDByteProvider::SICDByteProvider(
         size_t maxProductSize)
 {
     XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::COMPLEX,
-                           new six::XMLControlCreatorT<ComplexXMLControl>());
-
-    mem::SharedPtr<Container> container(new Container(
-            DataType::COMPLEX));
+    xmlRegistry.addCreator<ComplexXMLControl>();
 
     // The container wants to take ownership of the data
     // To avoid memory problems, we'll just clone it
-    container->addData(data.clone());
-
+    auto container = std::make_shared<Container>(data.clone());
     initialize(container, xmlRegistry, schemaPaths, maxProductSize);
 }
 

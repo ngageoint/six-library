@@ -78,7 +78,7 @@ XMLElem SICommonXMLParser01x::convertCompositeSCPToXML(
 }
 
 void SICommonXMLParser01x::parseCompositeSCPFromXML(
-    const XMLElem errorStatsXML,
+    const xml::lite::Element* errorStatsXML,
     ErrorStatistics* errorStatistics) const
 {
     //! optional field
@@ -172,40 +172,15 @@ XMLElem SICommonXMLParser01x::convertRadiometryToXML(
 }
 
 void SICommonXMLParser01x::parseRadiometryFromXML(
-    const XMLElem radiometricXML, 
+    const xml::lite::Element* radiometricXML,
     Radiometric* radiometric) const
 {
-    XMLElem tmpElem = nullptr;
+    parseOptionalPoly2D(radiometricXML, "NoisePoly", radiometric->noiseLevel.noisePoly);
+    parseOptionalPoly2D(radiometricXML, "RCSSFPoly", radiometric->rcsSFPoly);
+    parseOptionalPoly2D(radiometricXML, "BetaZeroSFPoly", radiometric->betaZeroSFPoly);
+    parseOptionalPoly2D(radiometricXML, "SigmaZeroSFPoly", radiometric->sigmaZeroSFPoly);
 
-    tmpElem = getOptional(radiometricXML, "NoisePoly");
-    if (tmpElem)
-    {
-        //optional
-        parsePoly2D(tmpElem, radiometric->noiseLevel.noisePoly);
-    }
-
-    tmpElem = getOptional(radiometricXML, "RCSSFPoly");
-    if (tmpElem)
-    {
-        //optional
-        parsePoly2D(tmpElem, radiometric->rcsSFPoly);
-    }
-
-    tmpElem = getOptional(radiometricXML, "BetaZeroSFPoly");
-    if (tmpElem)
-    {
-        //optional
-        parsePoly2D(tmpElem, radiometric->betaZeroSFPoly);
-    }
-
-    tmpElem = getOptional(radiometricXML, "SigmaZeroSFPoly");
-    if (tmpElem)
-    {
-        //optional
-        parsePoly2D(tmpElem, radiometric->sigmaZeroSFPoly);
-    }
-
-    tmpElem = getOptional(radiometricXML, "SigmaZeroSFIncidenceMap");
+    XMLElem tmpElem = getOptional(radiometricXML, "SigmaZeroSFIncidenceMap");
     if (tmpElem)
     {
         //optional
@@ -213,12 +188,7 @@ void SICommonXMLParser01x::parseRadiometryFromXML(
             six::toType<six::AppliedType>(tmpElem->getCharacterData());
     }
 
-    tmpElem = getOptional(radiometricXML, "GammaZeroSFPoly");
-    if (tmpElem)
-    {
-        //optional
-        parsePoly2D(tmpElem, radiometric->gammaZeroSFPoly);
-    }
+    parseOptionalPoly2D(radiometricXML, "GammaZeroSFPoly", radiometric->gammaZeroSFPoly);
 
     tmpElem = getOptional(radiometricXML, "GammaZeroSFIncidenceMap");
     if (tmpElem)
@@ -259,9 +229,11 @@ XMLElem SICommonXMLParser01x::convertMatchInformationToXML(
 }
 
 void SICommonXMLParser01x::parseMatchInformationFromXML(
-    const XMLElem matchInfoXML,
+    const xml::lite::Element* matchInfoXML,
     MatchInformation* matchInfo) const
 {
+    assert(matchInfoXML != nullptr);
+
     //This is SICD 0.4 format
 
     //TODO make sure there is at least one

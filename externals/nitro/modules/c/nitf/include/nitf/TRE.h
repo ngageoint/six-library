@@ -64,11 +64,7 @@ NITF_CXX_GUARD
 /* Control values that are put in the TREDescription data_type field */
 enum
 {
-    NITF_LOOP = 
-#ifdef __cplusplus
-    (int) nitf_FieldType::
-#endif
-    NITF_BINARY + 1,    /*!< data_type control loop */
+    NITF_LOOP = NITF_BINARY + 1,    /*!< data_type control loop */
     NITF_ENDLOOP,                   /*!< data_type control end loop */
     NITF_IF,                        /*!< data_type control if */
     NITF_ENDIF,                     /*!< data_type control endif */
@@ -89,13 +85,19 @@ struct _nitf_TREHandler;
  * The TRE structure, which contains the description of the TRE, as well as
  * the Field data.
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_TRE
 {
     struct _nitf_TREHandler* handler;  /*! The plug-in handler */
     NITF_DATA* priv;                   /*! Private data the plug-in knows about */
     char tag[NITF_MAX_TAG + 1];        /* the TRE tag */
 } nitf_TRE;
-
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 struct _nitf_TREEnumerator;
 
@@ -187,7 +189,7 @@ typedef nitf_List* (*NITF_TRE_FIND)(nitf_TRE * tre,
  */
 typedef NITF_BOOL (*NITF_TRE_FIELD_SET)(nitf_TRE * tre,
                                         const char *tag,
-                                        NITF_DATA * data,
+                                        const NITF_DATA * data,
                                         size_t dataLength,
                                         nitf_Error * error);
 
@@ -376,7 +378,7 @@ NITFAPI(NITF_BOOL) nitf_TRE_exists(nitf_TRE * tre, const char *tag);
  */
 NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
                                      const char *tag,
-                                     NITF_DATA * data,
+                                     const NITF_DATA * data,
                                      size_t dataLength,
                                      nitf_Error * error);
 

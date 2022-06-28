@@ -26,10 +26,11 @@
 #include <ostream>
 #include <vector>
 #include <complex>
+#include <cstdint>
 #include <stddef.h>
 #include <unordered_map>
 
-#include <sys/Optional.h>
+#include <std/optional>
 
 #include <scene/sys_Conf.h>
 #include <cphd/Types.h>
@@ -41,6 +42,7 @@
 
 namespace cphd
 {
+    class FileHeader;
 /*
  *  \struct AddedPVP
  *  \brief Template Specialization to get additional pvp
@@ -98,6 +100,7 @@ struct PVPBlock
      *  if provided number of bytes is not sufficient
     */
     PVPBlock(const Pvp& pvp, const Data& data);
+    PVPBlock(const Metadata&);
 
     /*!
      *  \func PVPBlock
@@ -170,7 +173,7 @@ struct PVPBlock
     double getTOAE1(size_t channel, size_t set) const;
     double getTOAE2(size_t channel, size_t set) const;
     double getTdIonoSRP(size_t channel, size_t set) const;
-    double getSignal(size_t channel, size_t set) const;
+    std::int64_t getSignal(size_t channel, size_t set) const;
 
     template<typename T>
     T getAddedPVP(size_t channel, size_t set, const std::string& name) const
@@ -210,7 +213,7 @@ struct PVPBlock
     void setTOAE1(double value, size_t channel, size_t set);
     void setTOAE2(double value, size_t channel, size_t set);
     void setTdIonoSRP(double value, size_t channel, size_t set);
-    void setSignal(double value, size_t channel, size_t set);
+    void setSignal(std::int64_t value, size_t channel, size_t set);
 
     template<typename T>
     void setAddedPVP(T value, size_t channel, size_t set, const std::string& name)
@@ -323,6 +326,7 @@ struct PVPBlock
                     int64_t startPVP,
                     int64_t sizePVP,
                     size_t numThreads);
+    int64_t load(io::SeekableInputStream& inStream, const FileHeader&, size_t numThreads);
 
     //! Equality operators
     bool operator==(const PVPBlock& other) const
@@ -438,7 +442,7 @@ protected:
         mem::ScopedCopyablePtr<double> toaE1;
         mem::ScopedCopyablePtr<double> toaE2;
         mem::ScopedCopyablePtr<double> tdIonoSRP;
-        mem::ScopedCopyablePtr<double> signal;
+        mem::ScopedCopyablePtr<std::int64_t> signal;
 
         //! (Optional) Additional parameters
         std::unordered_map<std::string,six::Parameter> addedPVP;

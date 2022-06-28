@@ -30,13 +30,15 @@
 
 #include <string>
 
+#include "config/Exports.h"
+
 namespace sys
 {
 
 /*!
  *  Representation of a date/time structure.
  */
-class DateTime
+class CODA_OSS_API DateTime
 {
 protected:
     int mYear = 0;
@@ -80,26 +82,26 @@ public: // for unit-testing
 
 public:
     DateTime() = default;
-    virtual ~DateTime() {}
+    virtual ~DateTime() = default;
 
     //! Return month {1,12}
-    int getMonth() const { return mMonth; }
+    int getMonth() const noexcept { return mMonth; }
     //! Return day of month {1,31}
-    int getDayOfMonth() const { return mDayOfMonth; }
+    int getDayOfMonth() const noexcept { return mDayOfMonth; }
     //! Return day of week {1,7}
-    int getDayOfWeek() const { return mDayOfWeek; }
+    int getDayOfWeek() const noexcept { return mDayOfWeek; }
     //! Return day of year {1,366}
-    int getDayOfYear() const { return mDayOfYear; }
+    int getDayOfYear() const noexcept { return mDayOfYear; }
     //! Return hour {0,23}
-    int getHour() const { return mHour; }
+    int getHour() const noexcept { return mHour; }
     //! Return minute {0,59}
-    int getMinute() const { return mMinute; }
+    int getMinute() const noexcept { return mMinute; }
     //! Return second {0,59}
-    double getSecond() const { return mSecond; }
+    double getSecond() const noexcept { return mSecond; }
     //! Return millis since 1 Jan 1970
-    double getTimeInMillis() const { return mTimeInMillis; }
+    double getTimeInMillis() const noexcept { return mTimeInMillis; }
     //! Return the current year
-    int getYear() const { return mYear; }
+    int getYear() const noexcept { return mYear; }
     //! Return the number of seconds since the time epoch
     static int64_t getEpochSeconds() noexcept;
 
@@ -183,15 +185,6 @@ public:
     }
     //@}
 };
-
-// Always make our own versions available for unit-testing.  Clients should use
-// DateTme methods and implementers DateTime::localtime()/DateTime::gmtime().
-namespace details
-{
-extern int localtime_s(tm*, const time_t*);
-extern int gmtime_s(tm*, const time_t*);
-}
-
 }
 
 #endif//CODA_OSS_sys_DateTime_h_INCLUDED_

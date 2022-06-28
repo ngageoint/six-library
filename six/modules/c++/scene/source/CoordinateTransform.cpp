@@ -21,15 +21,10 @@
  */
 #include "scene/CoordinateTransform.h"
 
-scene::CoordinateTransform::CoordinateTransform()
-{
-    model = new WGS84EllipsoidModel();
-}
-
 scene::CoordinateTransform::CoordinateTransform(
         const scene::EllipsoidModel *initVals)
 {
-    model = new EllipsoidModel();
+    model = std::make_unique<WGS84EllipsoidModel>().release();
 
     if(initVals != nullptr)
     {
@@ -39,10 +34,7 @@ scene::CoordinateTransform::CoordinateTransform(
 
 scene::CoordinateTransform::~CoordinateTransform()
 {
-    if(model != nullptr)
-    {
-        delete model;
-    }
+    delete model;
 }
 
 scene::CoordinateTransform* scene::CoordinateTransform::clone() const

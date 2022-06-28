@@ -12,6 +12,7 @@ coda_add_module(
         source/DerivedXMLParser.cpp
         source/DerivedXMLParser100.cpp
         source/DerivedXMLParser200.cpp
+        source/DerivedXMLParser300.cpp
         source/DigitalElevationData.cpp
         source/Display.cpp
         source/DownstreamReprocessing.cpp
@@ -47,7 +48,9 @@ coda_add_tests(
     SOURCES
         test_annotations_equality.cpp
         test_geometric_chip.cpp
-        test_read_sidd_legend.cpp)
+        test_read_sidd_legend.cpp
+        test_valid_sixsidd.cpp
+        unittest_sidd_byte_provider.cpp)
 
 # Install the schemas
 install(DIRECTORY "conf/schema/"

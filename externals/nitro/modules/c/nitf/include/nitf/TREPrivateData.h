@@ -33,6 +33,10 @@ NITF_CXX_GUARD
  * A structure meant to be used for the private data of the TRE structure.
  * It keeps track of the length (if given) as well as the Description
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_TREPrivateData
 {
     uint32_t length;
@@ -41,7 +45,9 @@ typedef struct _nitf_TREPrivateData
     nitf_HashTable *hash;
     NITF_DATA *userData;    /*! user-defined - meant for extending this */
 } nitf_TREPrivateData;
-
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_construct(
         nitf_Error * error);

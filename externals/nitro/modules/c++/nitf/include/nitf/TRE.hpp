@@ -20,15 +20,22 @@
  *
  */
 
-#ifndef __NITF_TRE_HPP__
-#define __NITF_TRE_HPP__
+#ifndef NITRO_nitf_TRE_hpp_INCLUDED_
+#define NITRO_nitf_TRE_hpp_INCLUDED_
+#pragma once
 
 #include <string>
+#include <cstddef>
+#include <std/type_traits>
+#include <stdexcept>
+#include <utility>
+
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/Pair.hpp"
 #include "nitf/System.hpp"
 #include "nitf/TRE.h"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file TRE.hpp
@@ -40,7 +47,7 @@ namespace nitf
  *  \class FieldIterator
  *  \brief  The C++ wrapper for the nitf_TREEnumerator
  */
-struct TREFieldIterator : public nitf::Object<nitf_TREEnumerator> // no "final", SWIG doesn't like it
+struct NITRO_NITFCPP_API TREFieldIterator : public nitf::Object<nitf_TREEnumerator> // no "final", SWIG doesn't like it
 {
     TREFieldIterator() noexcept(false)
     {
@@ -166,7 +173,10 @@ struct TREFieldIterator : public nitf::Object<nitf_TREEnumerator> // no "final",
  */
 DECLARE_CLASS(TRE)
 {
-    public:
+    nitf_Field& nitf_TRE_getField(const std::string&) const;
+    void setFieldValue(const nitf_Field&, const std::string & tag, const std::string & data, bool forceUpdate);
+
+public:
     typedef nitf::TREFieldIterator Iterator;
 
     //! Copy constructor
@@ -191,12 +201,20 @@ DECLARE_CLASS(TRE)
 
     TRE(const std::string& tag);
 
-    TRE(const std::string& tag, const std::string& id);
+    TRE(const std::string& tag, const std::string& id, std::nullptr_t = nullptr);
+
+    // for unit-tests
+    static nitf_TRE* create(const std::string & tag, const std::string & id, nitf_Error& error) noexcept;
+    static bool setFieldValue(nitf_TRE*, const std::string & tag, const std::string& data, nitf_Error&) noexcept;
+    static bool setField(nitf_TRE* tre, const std::string & tag, const std::string & data, nitf_Error & error) noexcept
+    {
+        return setFieldValue(tre, tag, data, error);
+    }
 
     //! Clone
     nitf::TRE clone() const;
 
-    ~TRE();
+    ~TRE() = default;
 
     /*!
      *  Get a begin TRE field iterator
@@ -261,45 +279,69 @@ DECLARE_CLASS(TRE)
      * \param forceUpdate If true, recalculate the number and positions
      *                    of the TRE fields. See `updateFields()`
      */
-    template <typename T>
-    void setField(std::string key, T value, bool forceUpdate = false)
-    {
-        nitf_Field* field = nitf_TRE_getField(getNative(), key.c_str());
-        if (!field)
+
+    // TRE fields use some of the "field" infrastructure, but have their own API.
+
+    void setFieldValue(const std::string& tag, const std::string& value, bool forceUpdate);
+    void setFieldValue(const std::string & tag, const char* value, bool forceUpdate);
+    void setFieldValue(const std::string& tag, const void* data, size_t dataLength, bool forceUpdate);
+    // Can't do anything with just a pointer, need the size too.
+    template<typename T> void setFieldValue(const std::string&, const T*, bool forceUpdate) = delete;
+
+    // This is wrong when T is "const char*" and the field is NITF_BINARY; sizeof(T) won't make sense.
+    // That's why there is a "const char*" overload above.
+    private:
+        // This is far from a 100% solid check; it will catch many simple mistakes.
+        template<typename T> struct can_call_setFieldValue : std::integral_constant<bool,
+            std::is_trivially_copyable<T>::value &&
+            !std::is_pointer<T>::value && !std::is_array<T>::value> {};
+    public:
+        template <typename T>
+        void setFieldValue(const std::string& tag, const T& value, bool forceUpdate)
         {
-            std::ostringstream msg;
-            msg << key << " is not a recognized field for this TRE";
-            throw except::Exception(Ctxt(msg.str()));
-        }
-        if (field->type == NITF_BINARY)
-        {
-            if (!nitf_TRE_setField(getNative(),
-                                   key.c_str(),
-                                   &value,
-                                   sizeof(value),
-                                   &error))
+            const auto& field = nitf_TRE_getField(tag);
+            if (field.type == NITF_BINARY)
             {
-                throw NITFException(&error);
+                // In the C code, this is a call to memcpy(). be sure that is OK for T.
+                static_assert(can_call_setFieldValue<T>::value, "Can't call setFieldValue() with T.");
+                setFieldValue(tag, &value, sizeof(value), forceUpdate);
             }
-        }
-        else
-        {
-            std::string s = truncate(str::toString(value), field->length);
-            if (!nitf_TRE_setField(getNative(),
-                                   key.c_str(),
-                                   (NITF_DATA*)s.c_str(),
-                                   s.size(),
-                                   &error))
+            else
             {
-                throw NITFException(&error);
+                setFieldValue(field, tag, str::toString(value), forceUpdate);
             }
         }
 
-        if (forceUpdate)
-        {
-            updateFields();
-        }
+    template <typename T>
+    void setField(const std::string& tag, T&& value, bool forceUpdate = false)
+    {
+        setFieldValue(tag, std::forward<T>(value), forceUpdate);
     }
+
+    void setField(const std::string& tag, const void* data, size_t dataLength, bool forceUpdate = false)
+    {
+        setFieldValue(tag, data, dataLength, forceUpdate);
+    }
+
+    template<typename T>
+    const T& getFieldValue(const std::string& tag, T& value) const
+    {
+        value = static_cast<T>(getField(tag));
+        return value;
+    }
+    const std::string& getFieldValue(const std::string& tag, std::string& value, bool trim = false) const
+    {
+        value = getField(tag).toString(trim);
+        return value;
+    }
+    template<typename T>
+    const T getFieldValue(const std::string& tag) const
+    {
+        T retval;
+        getFieldValue(tag, retval);
+        return retval;
+    }
+
 
     /*!
      *  Does the field exist?
@@ -330,4 +372,4 @@ DECLARE_CLASS(TRE)
     mutable nitf_Error error{};
 };
 }
-#endif
+#endif // NITRO_nitf_TRE_hpp_INCLUDED_

@@ -52,9 +52,7 @@ namespace cphd03
  */
 struct Metadata : cphd::MetadataBase
 {
-    Metadata()
-    {
-    }
+    Metadata() = default;
 
     void setSampleType(cphd::SampleType sampleType)
     {

@@ -24,6 +24,9 @@
 #define __MEM_SCOPED_ARRAY_H__
 
 #include <cstddef>
+#include <memory>
+
+#include "mem/SharedPtr.h" // coda_oss::make_unique
 
 namespace mem
 {
@@ -33,49 +36,7 @@ namespace mem
      *         It is based on boost::scoped_array.
      */
     template <class T>
-    struct ScopedArray
-    { 
-        typedef T ElementType;
-
-        explicit ScopedArray(T* array = nullptr) :
-            mArray(array)
-        {
-        }
-
-        ~ScopedArray()
-        {
-            delete[] mArray;
-        }
-
-        void reset(T* array = nullptr)
-        {
-            delete[] mArray;
-            mArray = array;
-        }
-
-        T& operator[](std::ptrdiff_t idx) const
-        {
-            return mArray[idx];
-        }
-
-        T* get() const
-        {
-            return mArray;
-        }
-
-        T* release()
-        {
-            T* const array = mArray;
-            mArray = nullptr;
-            return array;
-        }
-
-        ScopedArray(const ScopedArray&) = delete;
-        ScopedArray& operator=(const ScopedArray&) = delete;
-
-    private:
-        T* mArray;
-    };
+    using  ScopedArray = std::unique_ptr<T[]>;
 }
 
 #endif

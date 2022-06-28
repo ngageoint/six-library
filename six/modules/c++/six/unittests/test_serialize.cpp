@@ -26,8 +26,6 @@
 #include "TestCase.h"
 #include <six/Serialize.h>
 
-namespace
-{
 template<typename T> T getRandomScalar()
 {
     return static_cast<T>(rand() / static_cast<T>(RAND_MAX));
@@ -92,7 +90,6 @@ bool testString(const std::string& str, bool byteSwap)
     six::deserialize<std::string>(buffer, byteSwap, strCopy);
     return str == strCopy;
 }
-}
 
 TEST_CASE(ScalarSerialize)
 {
@@ -140,7 +137,7 @@ TEST_CASE(VectorSerialize)
 }
 
 TEST_MAIN(
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(NULL)));
     TEST_CHECK(ScalarSerialize);
     TEST_CHECK(VectorSerialize);
     TEST_CHECK(StringSerialize);

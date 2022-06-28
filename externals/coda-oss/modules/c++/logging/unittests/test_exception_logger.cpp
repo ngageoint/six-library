@@ -64,9 +64,9 @@ public:
 
 TEST_CASE(testExceptionLogger)
 {
-    std::unique_ptr<logging::Logger> log(new logging::Logger("test"));
+    logging::Logger log("test");
 
-    mem::SharedPtr<logging::ExceptionLogger> exLog(new logging::ExceptionLogger(log.get()));
+    logging::ExceptionLogger exLog(&log);
 
     size_t counter(0);
     uint16_t numThreads(2);
@@ -76,11 +76,11 @@ TEST_CASE(testExceptionLogger)
     mt::GenerationThreadPool pool(numThreads);
     pool.start();
 
-    runs.push_back(new RunNothing(counter, exLog.get()));
+    runs.push_back(new RunNothing(counter, &exLog));
     pool.addAndWaitGroup(runs);
     runs.clear();
 
-    runs.push_back(new RunNothing(counter, exLog.get()));
+    runs.push_back(new RunNothing(counter, &exLog));
     pool.addAndWaitGroup(runs);
     runs.clear();
 
@@ -102,7 +102,7 @@ TEST_CASE(testExceptionWithBacktrace)
     }
     catch (const except::Throwable& t)
     {
-        TEST_ASSERT_EQ(t.getBacktrace().size(), 0);
+        TEST_ASSERT_EQ(t.getBacktrace().size(), static_cast<size_t>(0));
         s = t.toString();
         what = t.what();
     }
@@ -121,7 +121,7 @@ TEST_CASE(testExceptionWithBacktrace)
     }
     catch (const except::Throwable& t)
     {
-        TEST_ASSERT_GREATER(t.getBacktrace().size(), 0);
+        TEST_ASSERT_GREATER(t.getBacktrace().size(), static_cast<size_t>(0));
         s = t.toString(true /*includeBacktrace*/);
         what = t.what();
     }

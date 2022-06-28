@@ -28,7 +28,7 @@ typedef struct TestSpec
     // Image spec
     const char* imageMode;
     uint32_t bitsPerPixel;
-    char* pixels;
+    const char* pixels;
     uint64_t imageSize;
     uint32_t numBands;
 
@@ -116,7 +116,7 @@ TestState* constructTestSubheader(TestSpec* spec)
     assert(imageIO);
 
     nitf_IOInterface *io = nitf_BufferAdapter_construct(
-            spec->pixels, spec->imageSize, 0, &error);
+            (char*) spec->pixels, spec->imageSize, 0, &error);
     assert(io);
 
     nitf_SubWindow *subwindow = nitf_SubWindow_construct(&error);
@@ -158,7 +158,7 @@ void freeTestState(TestState* state)
     free(state);
 }
 
-void freeBands(uint8_t** bands, size_t numBands)
+static void freeBands(uint8_t** bands, size_t numBands)
 {
     size_t bandIndex;
     for (bandIndex = 0; bandIndex < numBands; ++bandIndex)
@@ -249,7 +249,7 @@ static NITF_BOOL doReadTest(TestSpec* spec, TestState* test)
     return result;
 }
 
-static NITF_BOOL roundTripTest(TestSpec* spec, TestState* test, char* pixels)
+static NITF_BOOL roundTripTest(TestSpec* spec, TestState* test, const char* pixels)
 {
     NITF_BOOL result = NITF_SUCCESS;
     nitf_Error error;

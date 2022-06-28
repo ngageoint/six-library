@@ -19,8 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sicd/GeoData.h"
 #include "six/sicd/Grid.h"
+
+#include <std/memory>
+
+#include "six/sicd/GeoData.h"
 #include "six/sicd/ImageData.h"
 #include "six/sicd/PFA.h"
 #include "six/sicd/SCPCOA.h"
@@ -44,8 +47,7 @@ const char Grid::WF_INCONSISTENT_STR[] = "Waveform fields not consistent";
 const char Grid::BOUNDS_ERROR_MESSAGE[] =
         "Violation of spatial frequency extent bounds";
 
-WeightType::WeightType() :
-    windowName(Init::undefined<std::string>())
+WeightType::WeightType()
 {
 }
 
@@ -125,45 +127,45 @@ std::pair<double, double> DirectionParameters::calculateDeltaKs(
 std::unique_ptr<Functor>
 DirectionParameters::calculateWeightFunction() const
 {
-    std::unique_ptr<Functor> weightFunction;
-
-    if (weightType.get() != nullptr)
+    if (weightType.get() == nullptr)
     {
-        std::string windowName(weightType->windowName);
-        str::upper(windowName);
-
-        if (windowName == "UNIFORM")
-        {
-            weightFunction.reset(new Identity());
-        }
-        else if (windowName == "HAMMING")
-        {
-            double coef;
-            if (weightType->parameters.empty() || weightType->parameters[0].str().empty())
-            {
-                //A Hamming window is defined in many places as a raised cosine of weight .54,
-                //so this is the default. However, some data use a generalized raised cosine and
-                //call it HAMMING, so we allow for both uses.
-                coef = .54;
-            }
-            else
-            {
-                coef = weightType->parameters[0];
-            }
-
-            weightFunction.reset(new RaisedCos(coef));
-        }
-        else if (windowName == "HANNING")
-        {
-            weightFunction.reset(new RaisedCos(0.50));
-        }
-        else if (windowName == "KAISER")
-        {
-            weightFunction.reset(new Kaiser(double(weightType->parameters[0])));
-        }
+        return nullptr;
     }
 
-    return weightFunction;
+    std::string windowName(weightType->windowName);
+    str::upper(windowName);
+
+    if (windowName == "UNIFORM")
+    {
+        return std::make_unique<Identity>();
+    }
+    if (windowName == "HAMMING")
+    {
+        double coef = 0.0;
+        if (weightType->parameters.empty() || weightType->parameters[0].str().empty())
+        {
+            //A Hamming window is defined in many places as a raised cosine of weight .54,
+            //so this is the default. However, some data use a generalized raised cosine and
+            //call it HAMMING, so we allow for both uses.
+            coef = .54;
+        }
+        else
+        {
+            coef = weightType->parameters[0];
+        }
+
+        return std::make_unique<RaisedCos>(coef);
+    }
+    if (windowName == "HANNING")
+    {
+        return std::make_unique<RaisedCos>(0.50);
+    }
+    if (windowName == "KAISER")
+    {
+        return std::make_unique<Kaiser>(double(weightType->parameters[0]));
+    }
+
+    return nullptr;
 }
 
 std::vector<RowColInt>
@@ -180,9 +182,9 @@ DirectionParameters::calculateImageVertices(const ImageData& imageData) const
         vertices.resize(4);
         //use edges of full image
         vertices[0] = RowColInt(0, 0);
-        vertices[1] = RowColInt(imageData.numCols - 1, 0);
-        vertices[2] = RowColInt(imageData.numCols - 1, imageData.numCols - 1);
-        vertices[3] = RowColInt(0, imageData.numCols - 1);
+        vertices[1] = RowColInt(static_cast<ptrdiff_t>(imageData.numCols) - 1, 0);
+        vertices[2] = RowColInt(static_cast<ptrdiff_t>(imageData.numCols) - 1, static_cast<ptrdiff_t>(imageData.numCols) - 1);
+        vertices[3] = RowColInt(0, static_cast<ptrdiff_t>(imageData.numCols) - 1);
     }
     return vertices;
 }
@@ -202,7 +204,7 @@ void DirectionParameters::fillDerivedFields(const ImageData& imageData)
         // of the image, since it is smooth and monotonic in most cases--although in
         // actuality this is not always the case. To be totally generic, we would 
         // have to search for an interior min and max as well.
-        std::pair<double, double> deltas = calculateDeltaKs(imageData);
+        const std::pair<double, double> deltas = calculateDeltaKs(imageData);
         deltaK1 = deltas.first;
         deltaK2 = deltas.second;
     }
@@ -279,11 +281,11 @@ bool DirectionParameters::validate(const ImageData& imageData,
 
     // 2.3.9. Compute our own DeltaK1/K2 and test for consistency with DelaKCOAPoly,
     // ImpRespBW, and SS.
-    std::pair<double, double> deltas = calculateDeltaKs(imageData);
+    const auto deltas = calculateDeltaKs(imageData);
     const double minDk = deltas.first;
     const double maxDk = deltas.second;
 
-    const double DK_TOL = 1e-2;
+    constexpr double DK_TOL = 1e-2;
 
     //2.3.9.1, 2.3.9.3
     if (std::abs((deltaK1 / minDk) - 1) > DK_TOL)
@@ -357,7 +359,7 @@ bool DirectionParameters::validateWeights(const Functor& weightFunction,
     //Arg doesn't matter. Just checking for Uniform-type Functor
     if (weightFunction(5).empty())
     {
-        double key = weights[0];
+        const auto key = weights[0];
         for (size_t ii = 0; ii < weights.size(); ++ii)
         {
             if (key != weights[ii])
@@ -494,7 +496,7 @@ bool Grid::validateTimeCOAPoly(
     }
     else
     {
-        bool isScalar = timeCOAPoly.isScalar();
+        const auto isScalar = timeCOAPoly.isScalar();
 
         if (mode == RadarModeType::SPOTLIGHT && !isScalar)
         {
@@ -957,7 +959,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
 {
     bool valid = true;
     std::ostringstream messageBuilder;
-    const double IFP_POLY_TOL = 1e-5;
+    constexpr double IFP_POLY_TOL = 1e-5;
 
     if (!Init::isUndefined(inca.dopplerCentroidPoly) &&
         inca.dopplerCentroidCOA == BooleanType::IS_TRUE)
@@ -1074,12 +1076,12 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
         !Init::isUndefined(fc))
     {
         // PFA.SpatialFreqSFPoly affects Row.KCtr
-        double kapCtr = fc * pfa.spatialFrequencyScaleFactorPoly[0] *
+        const auto kapCtr = fc * pfa.spatialFrequencyScaleFactorPoly[0] *
                 2 / math::Constants::SPEED_OF_LIGHT_METERS_PER_SEC;
 
         // PFA inscription could cause kapCtr and Row.KCtr 
         // to be somewhat different
-        double theta = std::atan((col->impulseResponseBandwidth / 2) /
+        const auto theta = std::atan((col->impulseResponseBandwidth / 2) /
                 row->kCenter);
         double kCtrTol = 1 - std::cos(theta);
         kCtrTol = std::max(0.01, kCtrTol);

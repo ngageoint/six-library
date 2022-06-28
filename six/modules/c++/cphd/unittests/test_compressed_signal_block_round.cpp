@@ -27,6 +27,7 @@
 #include <string>
 #include <memory>
 #include <thread>
+#include <std/span>
 
 #include <nitf/coda-oss.hpp>
 #include <types/RowCol.h>
@@ -47,8 +48,6 @@
  * Tests write and read of Signal Block with compressed data
  * Fails if values don't match
  */
-namespace
-{
 std::vector<std::byte> generateCompressedData(size_t length)
 {
     std::vector<std::byte> data(length);
@@ -98,7 +97,7 @@ std::vector<std::byte> checkCompressedData(const std::string& pathname,
     const cphd::Wideband& wideband = reader.getWideband();
     std::vector<std::byte> readData(dims.area());
 
-    auto data = gsl::make_span(readData.data(), readData.size());
+    std::span<std::byte> data(readData.data(), readData.size());
     for (size_t ii = 0; ii < reader.getMetadata().data.getNumChannels(); ++ii)
     {
         wideband.read(ii, data);
@@ -144,7 +143,6 @@ TEST_CASE(testCompressed)
     const std::vector<std::byte> writeData =
             generateCompressedData(dims.area());
     TEST_ASSERT_TRUE(runTest(writeData));
-}
 }
 
 TEST_MAIN(

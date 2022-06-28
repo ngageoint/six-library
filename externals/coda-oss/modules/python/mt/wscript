@@ -8,6 +8,6 @@ distclean = options = configure = lambda p: None
 def build(bld):
     bld.swigModule(name = 'mt',
                    use = 'sys-c++ except-python mem-python types-python ' \
-                         'mt-c++' ,
+                         'mt-c++ config-python' ,
                    package = 'coda')
 

@@ -1,5 +1,4 @@
 import sys, os, shutil, re
-from build import unzipper
 from waflib import Options, Logs
 
 def options(opt):
@@ -25,8 +24,6 @@ def configure(conf):
             #    csmZipfile = 'csm-3.0.3.3_2019.09.23.zip'
             #else:
             #    csmZipfile = 'csm-3.0.1_2013.07.03.zip'
-            #unzipper(os.path.join(conf.path.abspath(), csmZipfile),
-            #         conf.path.abspath())
 
             # NOTE: Originally checked in the VTS zip file that was received from
             #       Leonard Tomko that corresponded to CSM 3.0.1.  However, this
@@ -34,8 +31,6 @@ def configure(conf):
             #       needed to make a few local mods to vts.cpp.  Since I was
             #       re-zipping anyway, trimmed this down to just the header and
             #       source files that were needed
-            #unzipper(os.path.join(conf.path.abspath(), 'vts_301_0.zip'),
-            #         conf.path.abspath())
             conf.env['HAVE_CSM'] = True
 
             if Options.options.csm_version == '3.0.4':
@@ -76,7 +71,7 @@ def build(bld):
 def distclean(context):
     # remove the unzipped directory
     dirs = filter(lambda x: os.path.exists(os.path.join(context.path.abspath(), x)),
-                  ['csm-master', 'vts_301_0'])
+                  ['csm-master'])
     for d in dirs:
         try:
             shutil.rmtree(os.path.join(context.path.abspath(), d), ignore_errors=True)

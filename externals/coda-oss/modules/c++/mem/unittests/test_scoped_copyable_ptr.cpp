@@ -26,29 +26,29 @@
 
 #include "TestCase.h"
 
-namespace
-{
 struct Foo final
 {
-    size_t val1 = 0;
-    size_t val2 = 0;
+    int val1 = 0;
+    int val2 = 0;
+    
+    Foo* clone() const = delete; // be sure there is no clone()
 };
 
 struct Bar final
 {
     mem::ScopedCopyablePtr<Foo> foo;
-    size_t val3 = 0;
+    int val3 = 0;
 };
 
 struct Baz final
 {
     std::shared_ptr<Foo> pFoo;
-    size_t val3 = 0;
+    int val3 = 0;
 };
 
 struct AssignOnDestruct final
 {
-    AssignOnDestruct(size_t &ref, size_t finalVal) :
+    AssignOnDestruct(int &ref, int finalVal) :
         mRef(ref),
         mFinalVal(finalVal)
     {
@@ -60,8 +60,8 @@ struct AssignOnDestruct final
     }
 
 private:
-    size_t&      mRef;
-    const size_t mFinalVal;
+    int&      mRef;
+    const int mFinalVal;
 };
 
 TEST_CASE(testCopyConstructor)
@@ -158,7 +158,7 @@ TEST_CASE(testDestructor)
     // When the ScopedCopyablePtr goes out of scope, it should delete the
     // pointer which will cause the AssignOnDestruct destructor to assign
     // 'val'
-    size_t val(0);
+    int val(0);
     {
         const mem::ScopedCopyablePtr<AssignOnDestruct> ptr(
             new AssignOnDestruct(val, 334));
@@ -198,10 +198,8 @@ TEST_CASE(testEqualityOperator)
 
     TEST_ASSERT_FALSE(ptr1 != ptr2);
 }
-}
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testCopyConstructor);
     TEST_CHECK(testSharedCopyConstructor);
     TEST_CHECK(testAssignmentOperator);
@@ -209,6 +207,4 @@ int main(int, char**)
     TEST_CHECK(testDestructor);
     TEST_CHECK(testSyntax);
     TEST_CHECK(testEqualityOperator);
-
-    return 0;
-}
+    )

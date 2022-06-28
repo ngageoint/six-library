@@ -23,12 +23,14 @@
 #ifndef __NITF_IMAGE_WRITER_HPP__
 #define __NITF_IMAGE_WRITER_HPP__
 
+#include <string>
+
 #include "nitf/ImageWriter.h"
 #include "nitf/Object.hpp"
 #include "nitf/WriteHandler.hpp"
 #include "nitf/ImageSource.hpp"
 #include "nitf/ImageSubheader.hpp"
-#include <string>
+#include "nitf/exports.hpp"
 
 /*!
  *  \file ImageWriter.hpp
@@ -42,9 +44,8 @@ namespace nitf
  *  \class ImageWriter
  *  \brief  The C++ wrapper for the nitf_ImageWriter
  */
-class ImageWriter : public WriteHandler
+struct NITRO_NITFCPP_API ImageWriter : public WriteHandler
 {
-public:
     /*!
      *  Constructor
      *  \param subheader    The subheader of the Image to write

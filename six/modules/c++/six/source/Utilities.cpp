@@ -29,6 +29,8 @@
 #include "six/Init.h"
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
+#include "six/Data.h"
+#include <six/XmlLite.h>
 
 namespace
 {
@@ -108,13 +110,13 @@ std::string six::toString<float>(const float& value)
     }
 
     std::ostringstream os;
-    size_t precision = std::numeric_limits<float>::max_digits10;
+    constexpr size_t precision = std::numeric_limits<float>::max_digits10;
     os << std::uppercase << std::scientific << std::setprecision(precision)
        << value;
     std::string strValue = os.str();
 
     // remove any + in scientific notation to meet SICD XML standard
-    size_t plusPos = strValue.find("+");
+    const size_t plusPos = strValue.find("+");
     if (plusPos != std::string::npos)
     {
         strValue.erase(plusPos, 1);
@@ -132,13 +134,13 @@ std::string six::toString<double>(const double& value)
     }
 
     std::ostringstream os;
-    size_t precision = std::numeric_limits<double>::max_digits10;
+    constexpr size_t precision = std::numeric_limits<double>::max_digits10;
     os << std::uppercase << std::scientific << std::setprecision(precision)
        << value;
     std::string strValue = os.str();
 
     // remove any + in scientific notation to meet SICD XML standard
-    size_t plusPos = strValue.find("+");
+    const size_t plusPos = strValue.find("+");
     if (plusPos != std::string::npos)
     {
         strValue.erase(plusPos, 1);
@@ -239,6 +241,30 @@ std::string six::toString(const DateTime& dateTime)
     return strDate;
 }
 
+template<typename T>
+inline T toType_(const std::string& s, const except::Exception& ex)
+{
+    const auto result = T::toType(s, std::nothrow);
+    auto retval = nitf::details::value(result, ex);
+    if (retval == T::NOT_SET)
+    {
+        throw ex;
+    }
+    return retval;
+}
+
+template<typename T>
+inline std::string toString_(const T& t, const except::Exception& ex)
+{
+    if (t == T::NOT_SET)
+    {
+        throw ex;
+    }
+
+    const auto result = t.toString(std::nothrow);
+    return nitf::details::value(result, ex);
+}
+
 template <>
 std::string six::toString(const RadarModeType& type)
 {
@@ -290,12 +316,10 @@ std::string six::toString(const DataType& type)
 template <>
 PixelType six::toType<PixelType>(const std::string& s)
 {
-    std::string type(s);
-    str::trim(type);
-    PixelType p(type);
+    auto p = PixelType::toType(s);
     if (p == PixelType::NOT_SET)
         throw except::Exception(
-                Ctxt(FmtX("Type not understood [%s]", type.c_str())));
+                Ctxt(FmtX("Type not understood [%s]", s.c_str())));
     return p;
 }
 
@@ -433,222 +457,6 @@ std::string six::toString(const OrientationType& t)
         return "ARBITRARY";
     default:
         throw except::Exception(Ctxt("Unsupported orientation"));
-    }
-}
-
-template <>
-PolarizationSequenceType six::toType<PolarizationSequenceType>(
-        const std::string& s)
-{
-    std::string type(s);
-    str::trim(type);
-    if (type == "OTHER")
-    {
-        return PolarizationSequenceType::OTHER;
-    }
-    else if (type == "V")
-    {
-        return PolarizationSequenceType::V;
-    }
-    else if (type == "H")
-    {
-        return PolarizationSequenceType::H;
-    }
-    else if (type == "RHC")
-    {
-        return PolarizationSequenceType::RHC;
-    }
-    else if (type == "LHC")
-    {
-        return PolarizationSequenceType::LHC;
-    }
-    else if (type == "UNKNOWN")
-    {
-        return PolarizationSequenceType::UNKNOWN;
-    }
-    else if (type == "SEQUENCE")
-    {
-        return PolarizationSequenceType::SEQUENCE;
-    }
-    else
-    {
-        throw except::Exception(
-                Ctxt("Unsupported polarization type '" + s + "'"));
-    }
-}
-
-template <>
-std::string six::toString(const PolarizationSequenceType& t)
-{
-    switch (t)
-    {
-    case PolarizationSequenceType::OTHER:
-        return "OTHER";
-    case PolarizationSequenceType::V:
-        return "V";
-    case PolarizationSequenceType::H:
-        return "H";
-    case PolarizationSequenceType::RHC:
-        return "RHC";
-    case PolarizationSequenceType::LHC:
-        return "LHC";
-    case PolarizationSequenceType::UNKNOWN:
-        return "UNKNOWN";
-    case PolarizationSequenceType::SEQUENCE:
-        return "SEQUENCE";
-    default:
-        throw except::Exception(
-                Ctxt("Unsupported conversion from polarization type"));
-    }
-}
-
-template <>
-PolarizationType six::toType<PolarizationType>(const std::string& s)
-{
-    std::string type(s);
-    str::trim(type);
-    if (type == "OTHER")
-    {
-        return PolarizationType::OTHER;
-    }
-    else if (type == "V")
-    {
-        return PolarizationType::V;
-    }
-    else if (type == "H")
-    {
-        return PolarizationType::H;
-    }
-    else if (type == "RHC")
-    {
-        return PolarizationType::RHC;
-    }
-    else if (type == "LHC")
-    {
-        return PolarizationType::LHC;
-    }
-    else
-    {
-        throw except::Exception(
-                Ctxt("Unsupported polarization type '" + s + "'"));
-    }
-}
-
-template <>
-std::string six::toString(const PolarizationType& t)
-{
-    switch (t)
-    {
-    case PolarizationType::OTHER:
-        return "OTHER";
-    case PolarizationType::V:
-        return "V";
-    case PolarizationType::H:
-        return "H";
-    case PolarizationType::RHC:
-        return "RHC";
-    case PolarizationType::LHC:
-        return "LHC";
-    default:
-        throw except::Exception(
-                Ctxt("Unsupported conversion from polarization type"));
-    }
-}
-
-template <>
-DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
-{
-    std::string type(s);
-    str::trim(type);
-    if (type == "OTHER")
-        return DualPolarizationType::OTHER;
-    else if (type == "V:V")
-        return DualPolarizationType::V_V;
-    else if (type == "V:H")
-        return DualPolarizationType::V_H;
-    else if (type == "V:RHC")
-        return DualPolarizationType::V_RHC;
-    else if (type == "V:LHC")
-        return DualPolarizationType::V_LHC;
-    else if (type == "H:V")
-        return DualPolarizationType::H_V;
-    else if (type == "H:H")
-        return DualPolarizationType::H_H;
-    else if (type == "H:RHC")
-        return DualPolarizationType::H_RHC;
-    else if (type == "H:LHC")
-        return DualPolarizationType::H_LHC;
-    else if (type == "RHC:RHC")
-        return DualPolarizationType::RHC_RHC;
-    else if (type == "RHC:LHC")
-        return DualPolarizationType::RHC_LHC;
-    else if (type == "RHC:V")
-        return DualPolarizationType::RHC_V;
-    else if (type == "RHC:H")
-        return DualPolarizationType::RHC_H;
-    else if (type == "LHC:LHC")
-        return DualPolarizationType::LHC_LHC;
-    else if (type == "LHC:RHC")
-        return DualPolarizationType::LHC_RHC;
-    else if (type == "LHC:V")
-        return DualPolarizationType::LHC_V;
-    else if (type == "LHC:H")
-        return DualPolarizationType::LHC_H;
-
-    else if (type == "UNKNOWN")
-        return DualPolarizationType::UNKNOWN;
-    else
-    {
-        throw except::Exception(
-                Ctxt("Unsupported conversion to dual polarization type '" + s +
-                     "'"));
-    }
-}
-
-template <>
-std::string six::toString(const DualPolarizationType& t)
-{
-    switch (t)
-    {
-    case DualPolarizationType::OTHER:
-        return "OTHER";
-    case DualPolarizationType::V_V:
-        return "V:V";
-    case DualPolarizationType::V_H:
-        return "V:H";
-    case DualPolarizationType::V_RHC:
-        return "V:RHC";
-    case DualPolarizationType::V_LHC:
-        return "V:LHC";
-    case DualPolarizationType::H_V:
-        return "H:V";
-    case DualPolarizationType::H_H:
-        return "H:H";
-    case DualPolarizationType::H_RHC:
-        return "H:RHC";
-    case DualPolarizationType::H_LHC:
-        return "H:LHC";
-    case DualPolarizationType::RHC_RHC:
-        return "RHC:RHC";
-    case DualPolarizationType::RHC_LHC:
-        return "RHC:LHC";
-    case DualPolarizationType::RHC_V:
-        return "RHC:V";
-    case DualPolarizationType::RHC_H:
-        return "RHC:H";
-    case DualPolarizationType::LHC_LHC:
-        return "LHC:LHC";
-    case DualPolarizationType::LHC_RHC:
-        return "LHC:RHC";
-    case DualPolarizationType::LHC_V:
-        return "LHC:V";
-    case DualPolarizationType::LHC_H:
-        return "LHC:H";
-    case DualPolarizationType::UNKNOWN:
-        return "UNKNOWN";
-    default:
-        throw except::Exception(
-                Ctxt("Unsupported dual polarization type to string"));
     }
 }
 
@@ -1100,8 +908,8 @@ std::string six::toString(const six::LatLonCorners& corners)
 
     // BASE_WIDTH = sign + at least 2 leading digits + decimal point +
     // decimal digits
-    static const size_t NUM_TRAILING_DIGITS = 8;
-    static const size_t BASE_WIDTH = 1 + 2 + 1 + NUM_TRAILING_DIGITS;
+    constexpr size_t NUM_TRAILING_DIGITS = 8;
+    constexpr size_t BASE_WIDTH = 1 + 2 + 1 + NUM_TRAILING_DIGITS;
 
     std::ostringstream ostr;
     ostr.fill('0');
@@ -1129,23 +937,53 @@ void six::loadPluginDir(const std::string& pluginDir)
     nitf::PluginRegistry::loadDir(pluginDir);
 }
 
-void six::loadXmlDataContentHandler()
+void six::loadXmlDataContentHandler(FILE* log)
 {
-    if (!nitf::PluginRegistry::treHandlerExists("XML_DATA_CONTENT"))
+    // This can generate output from implicitConstruct() complaining about NITF_PLUGIN_PATH
+    // not being set; often the warning is benign and is just confusing.  Provide a way to turn
+    // it off (FILE* log = NULL) without upsetting existing code.
+    if (!nitf::PluginRegistry::treHandlerExists("XML_DATA_CONTENT", log))
     {
         nitf::PluginRegistry::registerTREHandler(XML_DATA_CONTENT_init,
                                                  XML_DATA_CONTENT_handler);
     }
 }
+void six::loadXmlDataContentHandler()
+{
+    loadXmlDataContentHandler(stderr); // existing/legacy behavior
+}
 
 mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    return parseData(xmlReg, xmlStream, DataType::NOT_SET, schemaPaths, log);
+}
+std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger& log)
+{
+    return parseData(xmlReg, xmlStream, DataType::NOT_SET, pSchemaPaths, log);
+}
+
+inline mem::auto_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::string>& schemaPaths)
+{
+    return mem::auto_ptr<Data>(xmlControl.fromXML(&doc, schemaPaths));
+}
+inline std::unique_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::filesystem::path>* pSchemaPaths)
+{
+    return xmlControl.fromXML(doc, pSchemaPaths);
+}
+template<typename TReturn, typename TSchemaPaths>
+TReturn six_parseData(const XMLControlRegistry& xmlReg,
                                    ::io::InputStream& xmlStream,
                                    DataType dataType,
-                                   const std::vector<std::string>& schemaPaths,
-                                   logging::Logger& log)
+                                   const TSchemaPaths& schemaPaths,
+                                   logging::Logger& log, bool storeEncoding)
 {
-    xml::lite::MinidomParser xmlParser;
-    xmlParser.preserveCharacterData(true);
+    six::MinidomParser xmlParser(storeEncoding);
     try
     {
         xmlParser.parse(xmlStream);
@@ -1154,10 +992,10 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     {
         throw except::Exception(ex, Ctxt("Invalid XML data"));
     }
-    xml::lite::Document* doc = xmlParser.getDocument();
+    const auto& doc = getDocument(xmlParser);
 
     //! Check the root localName for the XML type
-    std::string xmlType = doc->getRootElement()->getLocalName();
+    std::string xmlType = doc.getRootElement()->getLocalName();
     DataType xmlDataType;
     if (str::startsWith(xmlType, "SICD"))
         xmlDataType = DataType::COMPLEX;
@@ -1173,10 +1011,32 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     }
 
     //! Create the correct type of XMLControl
-    const mem::auto_ptr<XMLControl> xmlControl(
-            xmlReg.newXMLControl(xmlDataType, &log));
+    const std::unique_ptr<XMLControl> xmlControl(xmlReg.newXMLControl(xmlDataType, &log));
+    return fromXML_(doc, *xmlControl, schemaPaths);
+}
+mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    DataType dataType,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log, bool storeEncoding)
+{
+    return six_parseData<mem::auto_ptr<Data>>(xmlReg, xmlStream, dataType, schemaPaths, log, storeEncoding);
+}
+std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+    ::io::InputStream& xmlStream,
+    DataType dataType,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger& log, bool storeEncoding)
+{
+    return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlStream, dataType, pSchemaPaths, log, storeEncoding);
+}
 
-    return mem::auto_ptr<Data>(xmlControl->fromXML(doc, schemaPaths));
+mem::auto_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,
+    const std::string& pathname,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    return parseDataFromFile(xmlReg, pathname, DataType::NOT_SET, schemaPaths, log);
 }
 
 mem::auto_ptr<Data> six::parseDataFromFile(
@@ -1188,6 +1048,14 @@ mem::auto_ptr<Data> six::parseDataFromFile(
 {
     io::FileInputStream inStream(pathname);
     return parseData(xmlReg, inStream, dataType, schemaPaths, log);
+}
+
+mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::string& xmlStr,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger& log)
+{
+    return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, schemaPaths, log);
 }
 
 mem::auto_ptr<Data> six::parseDataFromString(
@@ -1209,7 +1077,7 @@ std::string six::findSchemaPath(const std::string& progname)
 
     // Arbitrary depth to prevent infinite loop in case
     // of weird project structure
-    const static size_t MAX_DEPTH = 5;
+    constexpr size_t MAX_DEPTH = 5;
     size_t levelsTraversed = 0;
 
     std::string schemaPath;
@@ -1242,7 +1110,7 @@ void six::getErrors(const ErrorStatistics* errorStats,
 
         if (components)
         {
-            double rangeBias;
+            double rangeBias = 0.0;
             if (components->radarSensor)
             {
                 const RadarSensor& radarSensor(*components->radarSensor);
@@ -1255,10 +1123,6 @@ void six::getErrors(const ErrorStatistics* errorStats,
                 }
 
                 rangeBias = value(radarSensor.rangeBias);
-            }
-            else
-            {
-                rangeBias = 0.0;
             }
 
             if (components->posVelError)
@@ -1298,18 +1162,60 @@ void six::getErrors(const ErrorStatistics* errorStats,
             }
         }
 
-        if (errorStats->compositeSCP &&
-            errorStats->compositeSCP->scpType == CompositeSCP::RG_AZ)
+        if (const auto compositeSCP = errorStats->compositeSCP.get())
         {
-            const types::RgAz<double> composite(errorStats->compositeSCP->xErr,
-                                                errorStats->compositeSCP->yErr);
-            const double corr = errorStats->compositeSCP->xyErr;
+            if (compositeSCP->scpType == CompositeSCP::RG_AZ)
+            {
+                const types::RgAz<double> composite(compositeSCP->xErr, compositeSCP->yErr);
+                const double corr = compositeSCP->xyErr;
 
-            errors.mUnmodeledErrorCovar(0, 0) = math::square(composite.rg);
-            errors.mUnmodeledErrorCovar(1, 1) = math::square(composite.az);
-            errors.mUnmodeledErrorCovar(0, 1) =
-                    errors.mUnmodeledErrorCovar(1, 0) =
-                            corr * (composite.rg * composite.az);
+                auto& unmodeledErrorCovar = errors.mUnmodeledErrorCovar;
+                unmodeledErrorCovar(0, 0) = math::square(composite.rg);
+                unmodeledErrorCovar(1, 1) = math::square(composite.az);
+                unmodeledErrorCovar(0, 1) = unmodeledErrorCovar(1, 0) = corr * (composite.rg * composite.az);
+            }
+        }
+        else if (const auto unmodeled = errorStats->Unmodeled.get())
+        {
+            // From Bill: Here is the mapping from the UnmodeledError to the 2x2 covariance matrix:
+            //    [0][0] = Xrow; [1][1] = Ycol; 
+            //    [1][0] = [0][1] = XrowYcol * Xrow * Ycol
+            auto& unmodeledErrorCovar = errors.mUnmodeledErrorCovar;
+            unmodeledErrorCovar(0, 0) = unmodeled->Xrow;
+            unmodeledErrorCovar(1, 1) = unmodeled->Ycol;
+            unmodeledErrorCovar(0, 1) = unmodeledErrorCovar(1, 0) = unmodeled->XrowYcol * unmodeled->Xrow * unmodeled->Ycol;
         }
     }
+}
+
+std::filesystem::path six::testing::findRootDir(const std::filesystem::path& dir)
+{
+    using namespace std::filesystem;
+    const auto six = dir / "six";
+    const auto externals = dir / "externals";
+    const auto six_sln = dir / "six.sln";
+    if (is_directory(six) && is_directory(externals) && is_regular_file(six_sln))
+    {
+        return dir;
+    }
+    const auto parent = dir.parent_path();
+    return findRootDir(parent);
+}
+
+std::filesystem::path six::testing::buildRootDir(const std::filesystem::path& argv0)
+{
+    auto platform = sys::Platform; // "conditional expression is constant"
+    if (platform == sys::PlatformType::Windows)
+    {
+        // On Windows ... in Visual Studio or stand-alone?
+        if ((argv0.filename() == "Test.exe") || (argv0.filename() == "testhost.exe")) // Visual Studio
+        {
+            const auto cwd = std::filesystem::current_path();
+            const auto root_dir = cwd.parent_path().parent_path();
+            return root_dir;
+        }
+    }
+
+    // Linux or stand-alone
+    return six::testing::findRootDir(argv0);
 }

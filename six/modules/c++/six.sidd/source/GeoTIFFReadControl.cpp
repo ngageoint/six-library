@@ -21,11 +21,15 @@
  */
 
 #include <string>
+#include <vector>
+#include <std/memory>
 
 #include <str/Convert.h>
+#include <gsl/gsl.h>
 #include <mem/ScopedArray.h>
 #include "six/sidd/GeoTIFFReadControl.h"
 #include "six/XMLControlFactory.h"
+#include <six/XmlLite.h>
 
 namespace
 {
@@ -104,12 +108,11 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
                     io::StringStream stream;
                     stream.write(xmlStrs[ii]);
                     stream.seek(0, io::Seekable::START);
-                    xml::lite::MinidomParser xmlParser;
+                    six::MinidomParser xmlParser;
                     xmlParser.preserveCharacterData(true);
                     xmlParser.parse(stream);
 
-                    const std::string rootName =
-                        xmlParser.getDocument()->getRootElement()->getQName();
+                    const auto rootName = getDocument(xmlParser).getRootElement()->getQName();
                     if (rootName == "SIDD")
                     {
                         return six::DataType::DERIVED;
@@ -124,9 +127,16 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
     return six::DataType::NOT_SET;
 }
 
-void six::sidd::GeoTIFFReadControl::load(
-        const std::string& fromFile,
-        const std::vector<std::string>& schemaPaths)
+inline std::unique_ptr<six::Data> fromXML_(six::XMLControl& xmlControl, const xml::lite::Document& doc, const std::vector<std::string>& schemaPaths)
+{
+    return std::unique_ptr<six::Data>(xmlControl.fromXML(&doc, schemaPaths));
+}
+inline std::unique_ptr<six::Data> fromXML_(six::XMLControl& xmlControl, const xml::lite::Document& doc, const std::vector< std::filesystem::path>* pSchemaPaths)
+{
+    return xmlControl.fromXML(doc, pSchemaPaths);
+}
+template<typename TSchemaPaths, typename TCreateXmlParser>
+void six::sidd::GeoTIFFReadControl::load_(const std::string& fromFile, const TSchemaPaths& schemaPaths, TCreateXmlParser createXmlParser)
 {
     mReader.openFile(fromFile);
 
@@ -145,20 +155,21 @@ void six::sidd::GeoTIFFReadControl::load(
     std::unique_ptr<six::XMLControl> siddXMLControl;
     std::unique_ptr<six::XMLControl> sicdXMLControl;
 
-    for (size_t ii = 0; ii < xmlStrs.size(); ++ii)
+    for (const auto& xmlStr : xmlStrs)
     {
         // Parse it into an XML document
         io::StringStream stream;
-        stream.write(xmlStrs[ii]);
+        stream.write(xmlStr);
         stream.seek(0, io::Seekable::START);
-        xml::lite::MinidomParser xmlParser;
+        auto pXmlParser = createXmlParser();
+	auto& xmlParser = *pXmlParser;
         xmlParser.preserveCharacterData(true);
         xmlParser.parse(stream);
-        const xml::lite::Document* const doc = xmlParser.getDocument();
+        const auto& doc = xmlParser.getDocument();
 
         // Get the associated XML control
-        const std::string rootName(doc->getRootElement()->getQName());
-        six::XMLControl *xmlControl;
+        const std::string rootName(doc.getRootElement()->getQName());
+        six::XMLControl* xmlControl = nullptr;
         if (rootName == "SIDD")
         {
             if (siddXMLControl.get() == nullptr)
@@ -185,8 +196,7 @@ void six::sidd::GeoTIFFReadControl::load(
 
         if (xmlControl)
         {
-            std::unique_ptr<six::Data> data(xmlControl->fromXML(doc,
-                                                              schemaPaths));
+            auto data = fromXML_(*xmlControl, doc, schemaPaths);
 
             if (!data.get())
             {
@@ -196,6 +206,19 @@ void six::sidd::GeoTIFFReadControl::load(
             mContainer->addData(std::move(data));
         }
     }
+}
+void six::sidd::GeoTIFFReadControl::load(
+    const std::string& fromFile,
+    const std::vector<std::string>& schemaPaths)
+{
+    const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(false /*storeEncoding*/); };
+    load_(fromFile, schemaPaths, createXmlParser);
+}
+void six::sidd::GeoTIFFReadControl::load(const std::filesystem::path& fromFile_, const std::vector< std::filesystem::path>* pSchemaPaths)
+{
+    const auto fromFile = fromFile_.string();
+    const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(true /*storeEncoding*/); };
+    load_(fromFile, pSchemaPaths, createXmlParser);
 }
 
 six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
@@ -207,26 +230,26 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
                 "Invalid index: " + std::to_string(imIndex)));
     }
 
-    tiff::ImageReader *imReader = mReader[imIndex];
+    tiff::ImageReader *imReader = mReader[static_cast<uint32_t>(imIndex)];
     tiff::IFD *ifd = imReader->getIFD();
 
-    size_t numRowsTotal = ifd->getImageLength();
-    size_t numColsTotal = ifd->getImageWidth();
-    size_t elemSize = ifd->getElementSize();
+    const auto numRowsTotal = ifd->getImageLength();
+    const auto numColsTotal = ifd->getImageWidth();
+    const auto elemSize = ifd->getElementSize();
 
     if (region.getNumRows() == -1)
         region.setNumRows(numRowsTotal);
     if (region.getNumCols() == -1)
         region.setNumCols(numColsTotal);
 
-    size_t numRowsReq = region.getNumRows();
-    size_t numColsReq = region.getNumCols();
+    const auto numRowsReq = region.getNumRows();
+    const auto numColsReq = region.getNumCols();
 
-    size_t startRow = region.getStartRow();
-    size_t startCol = region.getStartCol();
+    const auto startRow = region.getStartRow();
+    const auto startCol = region.getStartCol();
 
-    size_t extentRows = startRow + numRowsReq;
-    size_t extentCols = startCol + numColsReq;
+    const auto extentRows = startRow + numRowsReq;
+    const auto extentCols = startCol + numColsReq;
 
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
     {
@@ -244,19 +267,19 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
 
     if (buffer == nullptr)
     {
-        buffer = region.setBuffer(numRowsReq * numColsReq * elemSize).release();
+        const types::RowCol<size_t> regionExtent(getExtent(region));
+        buffer = region.setBuffer(regionExtent.area() * elemSize).release();
     }
 
     if (numRowsReq == numRowsTotal && numColsReq == numColsTotal)
     {
         // one read
-        imReader->getData(reinterpret_cast<unsigned char*>(buffer), numRowsReq * numColsReq);
+        imReader->getData(reinterpret_cast<unsigned char*>(buffer), static_cast<uint32_t>(numRowsReq * numColsReq));
     }
     else
     {
-        const std::unique_ptr<std::byte[]>
-            scopedRowBuf(new std::byte[numColsTotal * elemSize]);
-        std::byte* const rowBuf(scopedRowBuf.get());
+        std::vector<std::byte> scopedRowBuf(gsl::narrow<size_t>(numColsTotal) * elemSize);
+        std::byte* const rowBuf(scopedRowBuf.data());
 
         //        // skip past rows
         //        for (size_t i = 0; i < startRow; ++i)
@@ -264,18 +287,18 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
 
         size_t offset = 0;
         // this is not the most efficient, but it works
-        for (size_t i = 0; i < numRowsReq; ++i)
+        for (size_t i = 0; i < static_cast<size_t>(numRowsReq); ++i)
         {
             auto rowBuf_ = reinterpret_cast<unsigned char*>(rowBuf);
             // possibly skip past some cols
             if (startCol > 0)
-                imReader->getData(rowBuf_, startCol);
-            imReader->getData(rowBuf_, numColsReq);
-            memcpy(buffer + offset, rowBuf, numColsReq * elemSize);
+                imReader->getData(rowBuf_, static_cast<uint32_t>(startCol));
+            imReader->getData(rowBuf_, static_cast<uint32_t>(numColsReq));
+            memcpy(buffer + offset, rowBuf, static_cast<size_t>(numColsReq * elemSize));
             offset += numColsReq * elemSize;
             // more skipping..
             if (extentCols < numColsTotal)
-                imReader->getData(rowBuf_, numColsTotal - extentCols);
+                imReader->getData(rowBuf_, static_cast<uint32_t>(numColsTotal - extentCols));
         }
     }
     return buffer;

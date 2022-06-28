@@ -22,8 +22,9 @@ Problems and Configurations
 
   - Pass -DCMAKE_INSTALL_PREFIX to set the install location.
 
-  - Java, MATLAB, Python, C++ bindings all build. Just make sure the relevant tools
-    are on your PATH
+  - Python and C++ bindings are built. Just make sure the relevant tools
+    are on your PATH.  Java and MATLAB bindings are now in the **archive** directory
+    and no longer built.
 
   - See the [coda-oss CMake build README](externals/coda-oss/cmake/README.md)
     for further build configuration information, particularly for Python-related
@@ -36,6 +37,14 @@ Problems and Configurations
           cmake --build . --config Release -j
           cmake --build . --config Release --target install
       The CMake default build type `Debug` may not work with Python, unless the Python installation includes debug versions of the Python libraries.
+  - Regenerating python bindings
+      - Currently, cmake configuration for regenerating swig bindings is incomplete and use of `waf` is required.
+      - The `.regenerate_python_bindings.py` script is wrapper around `waf` can be run to quickly update these files.
+
+          python3 .regenerate_python_bindings.py
+          DEBUG_PY_BINDINGS=1 python3 .regenerate_python_bindings.py # see all details
+      - This is typically required when project dependencies (e.g. CODA-OSS) are updated.
+
   - If the CMake build system does not support a required feature that Waf does, create
     an issue or a pull request!
 
@@ -233,4 +242,4 @@ to make sure NITRO can find them.
 Contact
 ---------
 
-July 2020, Dan.Smith@maxar.com
+February 2022, Dan <dot> Smith <at> Maxar <dot><see><oh><em>

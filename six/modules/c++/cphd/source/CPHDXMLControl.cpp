@@ -23,11 +23,15 @@
 
 #include <set>
 #include <unordered_map>
+#include <algorithm>
+#include <std/memory>
+
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <xml/lite/MinidomParser.h>
 
 #include <six/XMLControl.h>
+#include <six/XmlLite.h>
 #include <cphd/CPHDXMLParser.h>
 #include <cphd/Enums.h>
 #include <cphd/Metadata.h>
@@ -40,38 +44,9 @@ namespace cphd
 {
 
 CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog) :
-    mLog(nullptr),
-    mOwnLog(false)
+    mLogger(mLog, mOwnLog, nullptr)
 {
     setLogger(log, ownLog);
-}
-
-CPHDXMLControl::~CPHDXMLControl()
-{
-    if (mLog && mOwnLog)
-    {
-        delete mLog;
-    }
-}
-
-void CPHDXMLControl::setLogger(logging::Logger* log, bool own)
-{
-    if (mLog && mOwnLog && log != mLog)
-    {
-        delete mLog;
-        mLog = nullptr;
-    }
-
-    if (log)
-    {
-        mLog = log;
-        mOwnLog = own;
-    }
-    else
-    {
-        mLog = new logging::NullLogger;
-        mOwnLog = true;
-    }
 }
 
 /* TO XML */
@@ -100,11 +75,11 @@ mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
     return doc;
 }
 
-std::unordered_map<std::string, std::string> CPHDXMLControl::getVersionUriMap()
+std::unordered_map<std::string, xml::lite::Uri> CPHDXMLControl::getVersionUriMap()
 {
     return {
-        {"1.0.0", "urn:CPHD:1.0.0"},
-        {"1.0.1", "http://api.nsgreg.nga.mil/schema/cphd/1.0.1"}
+        {"1.0.0", xml::lite::Uri("urn:CPHD:1.0.0")},
+        {"1.0.1", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")}
     };
 }
 
@@ -127,10 +102,10 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
                                      const std::vector<std::string>& schemaPaths)
 {
     io::StringStream stringStream;
-    stringStream.write(xmlString.c_str(), xmlString.size());
-    xml::lite::MinidomParser parser;
+    stringStream.write(xmlString);
+    six::MinidomParser parser;
     parser.parse(stringStream);
-    return fromXML(parser.getDocument(), schemaPaths);
+    return fromXML(&parser.getDocument(), schemaPaths);
 }
 
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc,
@@ -144,6 +119,14 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc
     metadata->setVersion(uriToVersion(doc->getRootElement()->getUri()));
     return metadata;
 }
+Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc, const std::vector<std::filesystem::path>& schemaPaths)
+{
+    std::vector<std::string> schemaPaths_;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
+        [](const std::filesystem::path& p) { return p.string(); });
+    auto result = fromXML(&doc, schemaPaths_);
+    return *(result.release());
+}
 
 std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
@@ -151,21 +134,19 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document*
 }
 
 std::unique_ptr<CPHDXMLParser>
-CPHDXMLControl::getParser(const std::string& uri) const
+CPHDXMLControl::getParser(const xml::lite::Uri& uri) const
 {
-    std::unique_ptr<CPHDXMLParser> parser;
-    parser.reset(new CPHDXMLParser(uri, false, mLog));
-    return parser;
+    return std::make_unique<CPHDXMLParser>(uri.value, false, mLog);
 }
 
-std::string CPHDXMLControl::uriToVersion(const std::string& uri) const
+std::string CPHDXMLControl::uriToVersion(const xml::lite::Uri& uri) const
 {
     const auto versionUriMap = getVersionUriMap();
-    for (auto it = versionUriMap.begin(); it != versionUriMap.end(); ++it)
+    for (const auto& p : versionUriMap)
     {
-        if (it->second == uri)
+        if (p.second == uri)
         {
-            return it->first;
+            return p.first;
         }
     }
     std::ostringstream ostr;

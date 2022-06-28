@@ -20,6 +20,8 @@
  *
  */
 
+#include <type_traits>
+
 #include "nitf/FileHeader.hpp"
 
 using namespace nitf;
@@ -42,10 +44,8 @@ FileHeader::FileHeader(nitf_FileHeader * x)
     getNativeOrThrow();
 }
 
-FileHeader::FileHeader()
+FileHeader::FileHeader() noexcept(false)  : FileHeader(nitf_FileHeader_construct(&error))
 {
-    setNative(nitf_FileHeader_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
@@ -57,48 +57,52 @@ nitf::FileHeader FileHeader::clone() const
     return dolly;
 }
 
+#define getField_(name) nitf::Field(getNativeOrThrow()->name)
+//#define getField_(name) fromNativeOffset<Field>(*this, nitf_offsetof(name));
+
 nitf::Field FileHeader::getFileHeader() const
 {
-    return nitf::Field(getNativeOrThrow()->fileHeader);
+    return getField_(fileHeader);
 }
 
 nitf::Field FileHeader::getFileVersion() const
 {
-    return nitf::Field(getNativeOrThrow()->fileVersion);
+    return getField_(fileVersion);
 }
 
 nitf::Field FileHeader::getComplianceLevel() const
 {
-    return nitf::Field(getNativeOrThrow()->complianceLevel);
+    return getField_(complianceLevel);
 }
 
 nitf::Field FileHeader::getSystemType() const
 {
-    return nitf::Field(getNativeOrThrow()->systemType);
+    return getField_(systemType);
 }
 
 nitf::Field FileHeader::getOriginStationID() const
 {
-    return nitf::Field(getNativeOrThrow()->originStationID);
+    return getField_(originStationID);
 }
 
 nitf::Field FileHeader::getFileDateTime() const
 {
-    return nitf::Field(getNativeOrThrow()->fileDateTime);
+    return getField_(fileDateTime);
 }
 
 nitf::Field FileHeader::getFileTitle() const
 {
-    return nitf::Field(getNativeOrThrow()->fileTitle);
+    return getField_(fileTitle);
 }
 
 nitf::Field FileHeader::getClassification() const
 {
-    return nitf::Field(getNativeOrThrow()->classification);
+    return getField_(classification);
 }
 
 nitf::FileSecurity FileHeader::getSecurityGroup() const
 {
+    //return fromNativeOffset<FileSecurity>(*this, nitf_offsetof(securityGroup));
     return nitf::FileSecurity(getNativeOrThrow()->securityGroup);
 }
 
@@ -115,72 +119,72 @@ void FileHeader::setSecurityGroup(nitf::FileSecurity value)
 
 nitf::Field FileHeader::getMessageCopyNum() const
 {
-    return nitf::Field(getNativeOrThrow()->messageCopyNum);
+    return getField_(messageCopyNum);
 }
 
 nitf::Field FileHeader::getMessageNumCopies() const
 {
-    return nitf::Field(getNativeOrThrow()->messageNumCopies);
+    return getField_(messageNumCopies);
 }
 
 nitf::Field FileHeader::getEncrypted() const
 {
-    return nitf::Field(getNativeOrThrow()->encrypted);
+    return getField_(encrypted);
 }
 
 nitf::Field FileHeader::getBackgroundColor() const
 {
-    return nitf::Field(getNativeOrThrow()->backgroundColor);
+    return getField_(backgroundColor);
 }
 
 nitf::Field FileHeader::getOriginatorName() const
 {
-    return nitf::Field(getNativeOrThrow()->originatorName);
+    return getField_(originatorName);
 }
 
 nitf::Field FileHeader::getOriginatorPhone() const
 {
-    return nitf::Field(getNativeOrThrow()->originatorPhone);
+    return getField_(originatorPhone);
 }
 
 nitf::Field FileHeader::getFileLength() const
 {
-    return nitf::Field(getNativeOrThrow()->fileLength);
+    return getField_(fileLength);
 }
 
 nitf::Field FileHeader::getHeaderLength() const
 {
-    return nitf::Field(getNativeOrThrow()->headerLength);
+    return getField_(headerLength);
 }
 
 nitf::Field FileHeader::getNumImages() const
 {
-    return nitf::Field(getNativeOrThrow()->numImages);
+    return getField_(numImages);
 }
 
 nitf::Field FileHeader::getNumGraphics() const
 {
-    return nitf::Field(getNativeOrThrow()->numGraphics);
+    return getField_(numGraphics);
 }
 
 nitf::Field FileHeader::getNumLabels() const
 {
-    return nitf::Field(getNativeOrThrow()->numLabels);
+    return getField_(numLabels);
 }
 
 nitf::Field FileHeader::getNumTexts() const
 {
-    return nitf::Field(getNativeOrThrow()->numTexts);
+    return getField_(numTexts);
 }
 
 nitf::Field FileHeader::getNumDataExtensions() const
 {
-    return nitf::Field(getNativeOrThrow()->numDataExtensions);
+    return getField_(numDataExtensions);
 }
 
 nitf::Field FileHeader::getNumReservedExtensions() const
 {
-    return nitf::Field(getNativeOrThrow()->numReservedExtensions);
+    return getField_(numReservedExtensions);
 }
 
 static nitf::ComponentInfo make_ComponentInfo(nitf_ComponentInfo** pComponentInfo, int i)
@@ -248,22 +252,22 @@ nitf::ComponentInfo FileHeader::getReservedExtensionInfo(int i) const
 
 nitf::Field FileHeader::getUserDefinedHeaderLength() const
 {
-    return nitf::Field(getNativeOrThrow()->userDefinedHeaderLength);
+    return getField_(userDefinedHeaderLength);
 }
 
 nitf::Field FileHeader::getUserDefinedOverflow() const
 {
-    return nitf::Field(getNativeOrThrow()->userDefinedOverflow);
+    return getField_(userDefinedOverflow);
 }
 
 nitf::Field FileHeader::getExtendedHeaderLength() const
 {
-    return nitf::Field(getNativeOrThrow()->extendedHeaderLength);
+    return getField_(extendedHeaderLength);
 }
 
 nitf::Field FileHeader::getExtendedHeaderOverflow() const
 {
-    return nitf::Field(getNativeOrThrow()->extendedHeaderOverflow);
+    return getField_(extendedHeaderOverflow);
 }
 
 nitf::Extensions FileHeader::getUserDefinedSection() const
@@ -308,3 +312,22 @@ void FileHeader::setExtendedSection(nitf::Extensions value)
     value.setManaged(true);
 }
 
+/*
+std::vector<nitf::Field> FileHeader::getFields() const
+{
+    std::vector<nitf::Field> retval;
+
+    constexpr auto extent = std::extent<decltype(nitf_FileHeader_fields)>::value;
+    for (size_t i = 0; i < extent; i++)
+    {
+        const auto& desc = nitf_FileHeader_fields[i];
+        if (desc.type == NITF_FieldType_Field)
+        {
+            auto field = fromNativeOffset<Field>(*this, desc.offset);
+            retval.push_back(std::move(field));
+        }
+    }
+
+    return retval;
+}
+*/

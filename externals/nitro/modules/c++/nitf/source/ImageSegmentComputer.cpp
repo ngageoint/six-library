@@ -36,9 +36,6 @@
 
 namespace nitf
 {
-const size_t ImageSegmentComputer::ILOC_MAX = 99999;
-const uint64_t ImageSegmentComputer::NUM_BYTES_MAX = 9999999998LL;
-
 std::string ImageSegmentComputer::Segment::getILOC() const
 {
     constexpr size_t COL = 0;
@@ -224,8 +221,8 @@ void ImageSegmentComputer::computeSegmentInfo()
     {
         // NOTE: See header for why rowOffset is always set to mNumRowsLimit
         //       for image segments 1 and above
-        const auto numIS = static_cast<size_t>(std::ceil(
-                static_cast<double>(mNumRows) / static_cast<double>(mNumRowsLimit)));
+        const auto numIS = gsl::narrow_cast<size_t>(std::ceil(
+            gsl::narrow_cast<double>(mNumRows) / gsl::narrow_cast<double>(mNumRowsLimit)));
 
         mSegments.resize(numIS);
         mSegments[0].numRows = mNumRowsLimit;

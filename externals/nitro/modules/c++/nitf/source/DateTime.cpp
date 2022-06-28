@@ -22,7 +22,9 @@
 
 #include "nitf/DateTime.hpp"
 
-nitf::DateTime::DateTime()
+#include <array>
+
+nitf::DateTime::DateTime() noexcept(false)
 {
     nitf_Error error;
     mDateTime = nitf_DateTime_now(&error);
@@ -139,10 +141,10 @@ void nitf::DateTime::format(const std::string& format,
 {
     str.clear();
 
-    char raw[256];
+    std::array<char, 256> raw;
     raw[255] = '\0';
-    this->format(format, raw, 255);
-    str.assign(raw);
+    this->format(format, raw.data(), 255);
+    str.assign(raw.data());
 }
 
 std::string nitf::DateTime::format(const std::string& format) const

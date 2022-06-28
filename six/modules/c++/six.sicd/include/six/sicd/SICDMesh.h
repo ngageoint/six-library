@@ -78,6 +78,11 @@ public:
                          const std::vector<double>& x,
                          const std::vector<double>& y);
 
+    PlanarCoordinateMesh(const PlanarCoordinateMesh&) = delete;
+    PlanarCoordinateMesh& operator=(const PlanarCoordinateMesh&) = delete;
+    PlanarCoordinateMesh(PlanarCoordinateMesh&&) = default;
+    PlanarCoordinateMesh& operator=(PlanarCoordinateMesh&&) = delete;
+
     //! \return The mesh name
     std::string getName() const
     {
@@ -114,7 +119,8 @@ public:
     {
         std::vector<sys::byte> values_;
         serialize(values_);
-        auto begin = reinterpret_cast<std::byte*>(values_.data());
+        void* pData = values_.data();
+        auto begin = static_cast<std::byte*>(pData);
         auto end = begin + values_.size();
         values.insert(values.end(), begin, end);
     }
@@ -172,6 +178,10 @@ public:
                const std::vector<double>& y,
                size_t numScalarsPerCoord,
                const std::map<std::string, std::vector<double> >& scalars);
+
+
+    ScalarMesh(const ScalarMesh&) = delete;
+    ScalarMesh& operator=(const ScalarMesh&) = delete;
 
     /*!
      * \returns The scalar values over the mesh.
@@ -270,6 +280,9 @@ public:
               const std::vector<double>& mainBeamNoise,
               const std::vector<double>& azimuthAmbiguityNoise,
               const std::vector<double>& combinedNoise);
+
+    NoiseMesh(const NoiseMesh&) = delete;
+    NoiseMesh& operator=(const NoiseMesh&) = delete;
 
     //! \return The flat main beam noise over the mesh (amp)
     const std::vector<double>& getMainBeamNoise() const

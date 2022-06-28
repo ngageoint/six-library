@@ -27,6 +27,7 @@
 #include <string>
 #include <memory>
 #include <thread>
+#include <std/span>
 
 #include <cphd03/CPHDReader.h>
 #include <cphd03/CPHDWriter.h>
@@ -35,9 +36,6 @@
 #include <io/TempFile.h>
 
 #include "TestCase.h"
-
-namespace
-{
 
 template<typename T>
 std::vector<std::complex<T> > generateData(size_t length)
@@ -53,7 +51,7 @@ std::vector<std::complex<T> > generateData(size_t length)
     return data;
 }
 
-std::vector<double> generateScaleFactors(size_t length, bool scale)
+inline std::vector<double> generateScaleFactors(size_t length, bool scale)
 {
     std::vector<double> scaleFactors(length, 1);
 
@@ -156,9 +154,9 @@ std::vector<std::complex<float> > checkData(const std::string& pathname,
     std::vector<std::complex<float> > readData(dims.area());
 
     size_t sizeInBytes = readData.size() * sizeof(readData[0]);
-    std::unique_ptr<std::byte[]> scratchData(new std::byte[sizeInBytes]);
-    auto scratch = gsl::make_span(scratchData.get(), sizeInBytes);
-    auto data = gsl::make_span(readData.data(), readData.size());
+    std::vector<std::byte> scratchData(sizeInBytes);
+    std::span<std::byte> scratch(scratchData.data(), scratchData.size());
+    std::span<std::complex<float>> data(readData.data(), readData.size());
 
     wideband.read(0, 0, cphd::Wideband::ALL, 0, cphd::Wideband::ALL,
             scaleFactors, numThreads, scratch, data);
@@ -256,7 +254,6 @@ TEST_CASE(testScaledFloat)
             generateData<float>(dims.area());
     const bool scale = true;
     TEST_ASSERT(runTest(scale, writeData));
-}
 }
 
 TEST_MAIN(

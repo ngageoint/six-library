@@ -19,16 +19,20 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <str/Manip.h>
+#include "str/Manip.h"
 
 #include <limits.h>
 #include <stdio.h>
 #include <wctype.h>
+#include <assert.h>
 
 #include <iostream>
 #include <sstream>
 #include <algorithm>
 #include <stdexcept>
+
+#include "str/Convert.h"
+#include "str/Encoding.h"
 
 namespace
 {
@@ -82,7 +86,19 @@ void trim(std::string & s)
         s.erase(i + 1);
 }
 
-bool endsWith(const std::string & s, const std::string & match)
+// https://stackoverflow.com/questions/31959532/best-way-to-remove-white-spaces-from-stdstring
+std::string& strip(std::string& str)
+{
+    str.erase(std::remove_if(str.begin(), str.end(), ::isspace), str.end());
+    return str;
+}
+std::string strip(const std::string& str)
+{
+    auto retval = str;
+    return strip(retval);
+}
+
+bool ends_with(const std::string& s, const std::string& match) noexcept
 {
     const size_t mLen = match.length();
     const size_t sLen = s.length();
@@ -91,8 +107,12 @@ bool endsWith(const std::string & s, const std::string & match)
             return false;
     return sLen >= mLen;
 }
+bool endsWith(const std::string& s, const std::string& match)
+{
+    return ends_with(s, match);
+}
 
-bool startsWith(const std::string & s, const std::string & match)
+bool starts_with(const std::string& s, const std::string& match) noexcept
 {
     const size_t mLen = match.length();
     const size_t sLen = s.length();
@@ -101,11 +121,15 @@ bool startsWith(const std::string & s, const std::string & match)
             return false;
     return sLen >= mLen;
 }
+bool startsWith(const std::string& s, const std::string& match)
+{
+    return starts_with(s, match);
+}
 
 size_t replace(std::string& str,
-               const std::string& search,
-               const std::string& replace,
-               size_t start)
+        const std::string& search,
+        const std::string& replace,
+        size_t start)
 {
     size_t index = str.find(search, start);
 
@@ -141,12 +165,27 @@ bool contains(const std::string& str, const std::string& match)
     return str.find(match) != std::string::npos;
 }
 
+static inline bool isTest(const std::string& s, int (*is)(int))
+{
+    for (const auto& ch : s)
+    {
+        if (!is(ch))
+            return false;
+    }
+    return !s.empty();
+}
+
 bool isAlpha(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
+    return isTest(s, isalpha);
+}
+
+template<typename Pred>
+static inline bool isTest(const std::string& s, int (*is1)(int), Pred is2)
+{
+    for (const auto& ch : s)
     {
-        if (!isalpha(*it))
+        if (!is1(ch) && !is2(ch))
             return false;
     }
     return !s.empty();
@@ -154,43 +193,24 @@ bool isAlpha(const std::string& s)
 
 bool isAlphaSpace(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
-    {
-        if (!isalpha(*it) && *it != ' ')
-            return false;
-    }
-    return !s.empty();
+    return isTest(s, isalpha, isspace);
 }
 
 bool isNumeric(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
-    {
-        if (!isdigit(*it))
-            return false;
-    }
-    return !s.empty();
+    return isTest(s, isdigit);
 }
 
 bool isNumericSpace(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
-    {
-        if (!isdigit(*it) && *it != ' ')
-            return false;
-    }
-    return !s.empty();
+    return isTest(s, isdigit, isspace);
 }
 
 bool isWhitespace(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
+    for (const auto& ch : s)
     {
-        if (!isspace(*it))
+        if (!isspace(ch))
             return false;
     }
     return true;
@@ -198,21 +218,14 @@ bool isWhitespace(const std::string& s)
 
 bool isAlphanumeric(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
-    {
-        if (!isalpha(*it) && !isdigit(*it))
-            return false;
-    }
-    return !s.empty();
+    return isTest(s, isalpha, isdigit);
 }
 
 bool isAsciiPrintable(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
+    for (const auto& ch : s)
     {
-        char c = *it;
+        char c = ch;
         if (c < 32 || c > 126)
             return false;
     }
@@ -255,15 +268,18 @@ std::vector<std::string> split(const std::string& s,
 
     return vec;
 }
-
+template <typename TChar, typename Fn>
+inline void transform(std::basic_string<TChar>& s, Fn f)
+{
+    (void) std::transform(s.begin(), s.end(), s.begin(), f);
+}
 void lower(std::string& s)
 {
-    std::transform(s.begin(), s.end(), s.begin(), tolowerCheck);
+    transform(s, tolowerCheck);
 }
-
 void upper(std::string& s)
 {
-    std::transform(s.begin(), s.end(), s.begin(), toupperCheck);
+    transform(s, toupperCheck);
 }
 
 void escapeForXML(std::string& str)

@@ -69,7 +69,7 @@ void populateScalarMeshVectors(
     x.clear();
     y.clear();
 
-    std::srand(static_cast<size_t>(std::time(0)));
+    std::srand(static_cast<unsigned int>(std::time(0)));
 
     for (size_t row = 0; row < meshDims.row; ++row)
     {

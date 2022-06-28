@@ -349,6 +349,15 @@
     <ClInclude Include="j2k\include\j2k\Config.h">
       <Filter>j2k</Filter>
     </ClInclude>
+    <ClInclude Include="nitf\include\nitf\FieldDescriptor.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TestingTest.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="j2k\include\j2k\TileWriter.h">
+      <Filter>j2k</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cgm\source\CircleElement.c">
@@ -654,6 +663,15 @@
     <ClCompile Include="pch.c" />
     <ClCompile Include="nitf\source\NitfSystem.c">
       <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\TestingTest.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="j2k\source\Defines.c">
+      <Filter>j2k</Filter>
+    </ClCompile>
+    <ClCompile Include="j2k\source\TileWriter.c">
+      <Filter>j2k</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

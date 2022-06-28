@@ -24,8 +24,13 @@
 #define __NUMPYUTILS_NUMPYUTILS_H__
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+
+#include <config/compiler_extensions.h>
 #include <Python.h>
+CODA_OSS_disable_warning_system_header_push
 #include <numpy/arrayobject.h>
+CODA_OSS_disable_warning_pop
+
 #include <types/RowCol.h>
 #include <vector>
 

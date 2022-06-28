@@ -41,6 +41,8 @@
  *
  */
 
+#include <std/filesystem>
+
 #include <import/six/sidd.h>
 
 #include <import/cli.h>
@@ -50,7 +52,6 @@
 #include <import/six/sicd.h>
 #include "utils.h"
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 using namespace six;
@@ -1872,7 +1873,7 @@ std::unique_ptr<six::sidd::DerivedData> initData(const std::string& lutType)
 }
 
 void initProductCreation(six::sidd::ProductCreation& productCreation,
-                         const std::string& version)
+                         const std::string& strVersion)
 {
     productCreation.productName = "ProductName";
     productCreation.productClass = "Unclassified";
@@ -1885,7 +1886,7 @@ void initProductCreation(six::sidd::ProductCreation& productCreation,
     productCreation.classification.createDate = six::DateTime();
     productCreation.classification.classification = "U";
 
-    if (version == "1.0.0")
+    if (strVersion == "1.0.0")
     {
         productCreation.classification.compliesWith.push_back("ICD-710");
     }
@@ -2157,12 +2158,12 @@ void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures,
 
     mem::ScopedCopyablePtr<six::sidd::TxRcvPolarization> polarization(
             new six::sidd::TxRcvPolarization());
-    polarization->txPolarization = six::PolarizationType::V;
-    polarization->rcvPolarization = six::PolarizationType::OTHER;
+    polarization->txPolarization = six::PolarizationSequenceType::V;
+    polarization->rcvPolarization = six::PolarizationSequenceType::OTHER;
     polarization->rcvPolarizationOffset = 1.37;
     if (version == "1.0.0")
     {
-        polarization->processed = six::BooleanType("IS_TRUE");
+        polarization->processed = six::BooleanType::IS_TRUE;
     }
     collection.information.polarization.push_back(polarization);
 
@@ -2293,9 +2294,9 @@ void initRadiometric(six::Radiometric& radiometric)
     radiometric.rcsSFPoly = six::Poly2D(0, 0);
     radiometric.betaZeroSFPoly = six::Poly2D(1, 3);
     radiometric.sigmaZeroSFPoly = six::Poly2D(0, 0);
-    radiometric.sigmaZeroSFIncidenceMap = six::AppliedType("IS_TRUE");
+    radiometric.sigmaZeroSFIncidenceMap = six::AppliedType::IS_TRUE;
     radiometric.gammaZeroSFPoly = six::Poly2D(0, 0);
-    radiometric.gammaZeroSFIncidenceMap = six::AppliedType("IS_FALSE");
+    radiometric.gammaZeroSFIncidenceMap = six::AppliedType::IS_FALSE;
 }
 
 void initAnnotations(six::sidd::Annotations& annotations)
@@ -2347,16 +2348,16 @@ void initProductProcessing(six::sidd::ProductProcessing& processing)
 void populateData(six::sidd::DerivedData& siddData,
                   const std::string& lutType,
                   bool smallImage,
-                  const std::string& version)
+                  const std::string& strVersion)
 {
-    siddData.setVersion(version);
+    siddData.setVersion(strVersion);
     size_t elementSize = lutType == "Mono" ? 2 : 3;
 
-    if (version == "2.0.0")
+    if (strVersion == "2.0.0")
     {
         // This will naturally get constructed in the course of 1.0.0
         // Separate field in 2.0.0
-        siddData.getDisplayLUT().reset(new six::LUT(256, elementSize));
+        siddData.setDisplayLUT(std::make_unique<six::AmplitudeTable>(elementSize));
 
         for (size_t ii = 0; ii < siddData.getDisplayLUT()->table.size(); ++ii)
         {
@@ -2382,7 +2383,7 @@ void populateData(six::sidd::DerivedData& siddData,
     siddData.setImageCorners(makeUpCornersFromDMS());
 
     // Can certainly be init'ed in a function
-    initProductCreation(*siddData.productCreation, version);
+    initProductCreation(*siddData.productCreation, strVersion);
 
     // Or directly if preferred
     siddData.display->decimationMethod = DecimationMethod::BRIGHTEST_PIXEL;
@@ -2441,7 +2442,7 @@ void populateData(six::sidd::DerivedData& siddData,
     planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
     planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
 
-    initExploitationFeatures(*siddData.exploitationFeatures, version);
+    initExploitationFeatures(*siddData.exploitationFeatures, strVersion);
     initDED(siddData.digitalElevationData);
     initProductProcessing(*siddData.productProcessing);
     initDownstreamReprocessing(*siddData.downstreamReprocessing);
@@ -2522,15 +2523,11 @@ int main(int argc, char** argv)
         }
 
         const bool smallImage = options->get<bool>("smallImage");
-        const std::string version = options->get<std::string>("version");
+        const std::string strVersion = options->get<std::string>("version");
 
-        six::XMLControlFactory::getInstance().addCreator(
-                DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
-        six::XMLControlFactory::getInstance().addCreator(
-                DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
 
         // Output file name
         std::string outputName(options->get<std::string>("output"));
@@ -2600,7 +2597,7 @@ int main(int argc, char** argv)
 
             std::unique_ptr<six::sidd::DerivedData> siddData = initData(lutType);
 
-            populateData(*siddData, lutType, smallImage, version);
+            populateData(*siddData, lutType, smallImage, strVersion);
             container->addData(siddData->clone());
             if (!smallImage)
             {

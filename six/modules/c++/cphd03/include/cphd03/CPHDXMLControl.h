@@ -26,7 +26,6 @@
 
 #include <memory>
 
-#include <mem/SharedPtr.h>
 #include <logging/Logger.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/Document.h>
@@ -59,6 +58,7 @@ public:
      *  CPHDData* populated by the DOM.
      */
     mem::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
+   Metadata fromXML(const xml::lite::Document& doc);
 
     mem::auto_ptr<Metadata> fromXML(const std::string& xmlString);
 
@@ -101,13 +101,13 @@ private:
             XMLElem parent = nullptr);
 
     // Read functions
-    void fromXML(const XMLElem dataXML, Data& obj);
-    void fromXML(const XMLElem globalXML, Global& obj);
-    void fromXML(const XMLElem channelXML, Channel& obj);
-    void fromXML(const XMLElem srpXML, SRP& obj);
-    void fromXML(const XMLElem antennaXML, Antenna& obj);
-    void fromXML(const XMLElem antennaParamsXML, AntennaParameters& params);
-    void fromXML(const XMLElem vectorParametersXML, VectorParameters& obj);
+    void fromXML(const xml::lite::Element* dataXML, Data& obj);
+    void fromXML(const xml::lite::Element* globalXML, Global& obj);
+    void fromXML(const xml::lite::Element* channelXML, Channel& obj);
+    void fromXML(const xml::lite::Element* srpXML, SRP& obj);
+    void fromXML(const xml::lite::Element* antennaXML, Antenna& obj);
+    void fromXML(const xml::lite::Element* antennaParamsXML, AntennaParameters& params);
+    void fromXML(const xml::lite::Element* vectorParametersXML, VectorParameters& obj);
 
 private:
     six::SICommonXMLParser10x mCommon;

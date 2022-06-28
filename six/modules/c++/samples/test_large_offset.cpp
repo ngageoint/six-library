@@ -29,6 +29,7 @@
 #include <six/NITFReadControl.h>
 #include <six/NITFWriteControl.h>
 #include <six/sicd/ComplexXMLControl.h>
+#include <six/sicd/NITFReadComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/Utilities.h>
@@ -52,12 +53,8 @@ void createNITF(const std::string& outputPathname,
         const six::DataType& datatype)
 {
     six::XMLControlRegistry registry;
-    registry.addCreator(six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<
-                    six::sicd::ComplexXMLControl>());
-    registry.addCreator(six::DataType::DERIVED,
-            new six::XMLControlCreatorT<
-                    six::sidd::DerivedXMLControl>());
+    registry.addCreator<six::sicd::ComplexXMLControl>();
+    registry.addCreator<six::sidd::DerivedXMLControl>();
     const std::vector<std::string> schemaPaths;
 
     std::unique_ptr<six::Data> data;
@@ -76,7 +73,7 @@ void createNITF(const std::string& outputPathname,
         data->setPixelType(six::PixelType::MONO16I);
     }
 
-    const size_t elementsInImage = data->getNumRows() * data->getNumCols();
+    const size_t elementsInImage = getExtent(*data).area();
     const size_t imageSize = elementsInImage * data->getNumBytesPerPixel();
 
     mem::SharedPtr<six::Container> container(
@@ -114,16 +111,9 @@ void createNITF(const std::string& outputPathname,
 
 bool checkNITF(const std::string& pathname)
 {
-    six::XMLControlRegistry registry;
-    registry.addCreator(six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<
-                    six::sicd::ComplexXMLControl>());
-    registry.addCreator(six::DataType::DERIVED,
-            new six::XMLControlCreatorT<
-                    six::sidd::DerivedXMLControl>());
+    six::sicd::NITFReadComplexXMLControl reader;
+    reader.addCreator<six::sidd::DerivedXMLControl>();
 
-    six::NITFReadControl reader;
-    reader.setXMLControlRegistry(&registry);
     const std::vector<std::string> schemaPaths;
     reader.load(pathname, schemaPaths);
     std::unique_ptr<six::Data> data(reader.getContainer()->getData(0)->clone());
@@ -133,12 +123,13 @@ bool checkNITF(const std::string& pathname)
     six::Region region;
     region.setStartRow(ROWS_TO_SKIP);
     region.setNumRows(data->getNumRows() - ROWS_TO_SKIP);
-    reader.interleaved(region, 0);
+    reader.interleaved(region);
     auto buffer = region.getBuffer();
 
-    const size_t elementsPerRow = data->getNumCols();
+    const auto extent = getExtent(*data);
+    const auto elementsPerRow = extent.col;
     const size_t skipSize = ROWS_TO_SKIP * elementsPerRow;
-    const size_t imageSize = data->getNumRows() * elementsPerRow;
+    const size_t imageSize = extent.area();
 
     if (data->getDataType() == six::DataType::COMPLEX)
     {
@@ -188,7 +179,7 @@ bool runTest(const six::DataType& datatype)
 }
 }
 
-int main(int argc, char** argv)
+int main(int, char**)
 {
     try
     {
@@ -196,7 +187,7 @@ int main(int argc, char** argv)
         testPassed = runTest(six::DataType::DERIVED) && testPassed;
         return testPassed ? 0 : 1;
     }
-    catch (const std::bad_alloc& ex)
+    catch (const std::bad_alloc&)
     {
         std::cerr << "Not enough memory available to build test NITF. "
                 "Skipping test.\n";

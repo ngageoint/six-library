@@ -24,6 +24,8 @@
 #define __MT_BASIC_THREAD_POOL_H__
 
 #include <vector>
+#include <memory>
+
 #include "except/Exception.h"
 #include "sys/Mutex.h"
 #include "sys/Thread.h"
@@ -35,15 +37,13 @@
 namespace mt
 {
 template<typename RequestHandler_T>
-class BasicThreadPool
+struct BasicThreadPool
 {
-public:
-
     /*! Constructor.  Set up the thread pool.
      *  \param numThreads the number of threads
      */
-    BasicThreadPool(size_t numThreads = 0) :
-        mStarted(false),
+    BasicThreadPool() = default;
+    BasicThreadPool(size_t numThreads) :
         mNumThreads(numThreads)
     {
     }
@@ -55,11 +55,14 @@ public:
         shutdown();
     }
 
+    BasicThreadPool(const BasicThreadPool&) = delete;
+    BasicThreadPool& operator=(const BasicThreadPool&) = delete;
+
     void start()
     {
         if (mStarted)
         {
-            throw(ThreadPoolException("The thread pool is already started."));
+            throw ThreadPoolException("The thread pool is already started.");
         }
 
         mStarted = true;
@@ -70,7 +73,7 @@ public:
     {
         for (size_t i = 0; i < mPool.size(); i++)
         {
-            dbg_printf("mPool[%d]->join()\n", i);
+            dbg_printf("mPool[%ju]->join()\n", i);
             mPool[i]->join();
         }
         destroy();
@@ -136,7 +139,7 @@ protected:
     // For instance, you may want an IterativeRequestHandler
     virtual RequestHandler_T *newRequestHandler()
     {
-        return new RequestHandler_T(&mHandlerQueue);
+        return coda_oss::make_unique<RequestHandler_T>(&mHandlerQueue).release();
     }
 
     void destroy()
@@ -144,16 +147,15 @@ protected:
         mPool.clear();
     }
 
-    bool mStarted;
-    size_t mNumThreads;
-    std::vector<mem::SharedPtr<sys::Thread> > mPool;
+    bool mStarted = false;
+    size_t mNumThreads = 0;
+    std::vector<std::shared_ptr<sys::Thread>> mPool;
     mt::RunnableRequestQueue mHandlerQueue;
 
 private:
     void addThread()
     {
-        mem::SharedPtr<sys::Thread>
-                thread(new sys::Thread(newRequestHandler()));
+        auto thread(std::make_shared<sys::Thread>(newRequestHandler()));
         mPool.push_back(thread);
         thread->start();
     }

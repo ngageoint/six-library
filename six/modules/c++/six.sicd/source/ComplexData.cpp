@@ -21,6 +21,8 @@
  */
 #include "six/sicd/ComplexData.h"
 
+#include <assert.h>
+
 namespace six
 {
 namespace sicd
@@ -84,10 +86,8 @@ void ComplexData::getOutputPlaneOffsetAndExtent(
             //       incorrectly - they're setting the
             //       FirstLine/FirstSample values to 1 but then setting
             //       startLine and startSample to 0.
-            offset.row = segment.startLine;
-            offset.col = segment.startSample;
-            extent.row = segment.getNumLines();
-            extent.col = segment.getNumSamples();
+            offset = segment.getOffset();
+            extent = segment.getExtent();
         }
     }
 }
@@ -111,7 +111,7 @@ ComplexData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
     return imagePt;
 }
 
-bool ComplexData::operator==(const ComplexData& rhs) const
+bool ComplexData::operator_eq(const ComplexData& rhs) const
 {
     return (collectionInformation == rhs.collectionInformation &&
         imageCreation == rhs.imageCreation &&
@@ -134,10 +134,10 @@ bool ComplexData::operator==(const ComplexData& rhs) const
 
 bool ComplexData::equalTo(const Data& rhs) const
 {
-    const ComplexData* data = dynamic_cast<const ComplexData*>(&rhs);
+    auto data = dynamic_cast<const ComplexData*>(&rhs);
     if (data != nullptr)
     {
-        return *this == *data;
+        return this->operator_eq(*data);
     }
     return false;
 }
@@ -164,7 +164,7 @@ bool ComplexData::validate(logging::Logger& log) const
     valid = geoData->validate(log) && valid;
     valid = radarCollection->validate(log) && valid;
 
-    double fc = computeFc();
+    const auto fc = computeFc();
 
     std::ostringstream messageBuilder;
     switch (imageFormation->imageFormationAlgorithm)
@@ -255,7 +255,7 @@ void ComplexData::fillDerivedFields(bool includeDefault)
 
     geoData->fillDerivedFields(*imageData, model);
 
-    double fc = computeFc();
+    const auto fc = computeFc();
 
     switch (imageFormation->imageFormationAlgorithm)
     {
@@ -279,6 +279,10 @@ void ComplexData::fillDerivedFields(bool includeDefault)
             grid->fillDerivedFields(*rma, geoData->scp.ecf, position->arpPoly);
         }
         break;
+    case ImageFormationType::NOT_SET:
+    case ImageFormationType::OTHER:
+    default:
+        break; // nothing to do
     }
 
     if (includeDefault)
@@ -290,7 +294,7 @@ void ComplexData::fillDerivedFields(bool includeDefault)
 void ComplexData::fillDefaultFields()
 {
     imageFormation->fillDefaultFields(*radarCollection);
-    double fc = computeFc();
+    const auto fc = computeFc();
 
     switch (imageFormation->imageFormationAlgorithm)
     {
@@ -308,7 +312,72 @@ void ComplexData::fillDefaultFields()
             grid->fillDefaultFields(*rma, fc);
         }
         break;
+
+    case ImageFormationType::RGAZCOMP:        
+    case ImageFormationType::NOT_SET:
+    case ImageFormationType::OTHER:
+    default:
+        break; // nothing to do
     }
 }
 }
+}
+// Okay, little bit of a hack for now
+const mem::ScopedCopyablePtr<six::LUT>& six::sicd::ComplexData::getDisplayLUT() const
+{
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        throw except::Exception(Ctxt("Display LUT operation not supported"));
+    }
+    // throw except::Exception(Ctxt("Display LUT operation not supported"));
+
+    // imageData->amplitudeTable is a ScopedCloneablePtr which can't be returned by 
+    // reference as a ScopedCopyablePtr.  Instead, return something that is NULL
+    // calling code can then try getAmplitudeTable().
+    static mem::ScopedCopyablePtr<six::LUT> retval;
+    retval.reset(); // in case somebody changed it
+    return retval;
+}
+void six::sicd::ComplexData::setDisplayLUT(std::unique_ptr<AmplitudeTable>&& pLUT)
+{
+    imageData->amplitudeTable.reset(pLUT.release());
+}
+
+six::AmplitudeTable* six::sicd::ComplexData::getAmplitudeTable() const
+{
+    auto const retval = imageData->amplitudeTable.get();
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        assert(retval == nullptr);
+        throw except::Exception(Ctxt("Display LUT operation not supported"));
+    }
+    return retval;
+}
+
+inline const void* cast_to_pvoid(std::span<const std::byte> bytes)
+{
+    return bytes.data();
+}
+inline void* cast_to_pvoid(std::span<std::byte> bytes)
+{
+    return bytes.data();
+}
+template<typename T, typename U>
+inline std::span<T> make_span(std::span<U> bytes)
+{
+    const auto size = bytes.size() / sizeof(T);
+    return std::span<T>(static_cast<T*>(cast_to_pvoid(bytes)), size);
+}
+
+bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, std::span<std::byte> to_, ptrdiff_t cutoff) const
+{
+    if (getPixelType() != PixelType::AMP8I_PHS8I)
+    {
+        return false; // no conversion done as there is nothing to convert
+    }
+
+    const auto from = make_span<const six::sicd::cx_float>(from_);
+    const auto to = make_span<six::sicd::AMP8I_PHS8I_t>(to_);
+    imageData->to_AMP8I_PHS8I(from, to, cutoff);
+    return true; // converted
 }

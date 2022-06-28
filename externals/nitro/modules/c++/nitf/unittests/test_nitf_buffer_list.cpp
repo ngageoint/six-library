@@ -26,8 +26,6 @@
 
 #include <nitf/NITFBufferList.hpp>
 
-namespace
-{
 TEST_CASE(testGetNumBlocks)
 {
     // 5000 total bytes
@@ -38,10 +36,10 @@ TEST_CASE(testGetNumBlocks)
     bufferList.pushBack(nullptr, 1500);
 
     // Evenly divides
-    TEST_ASSERT_EQ(bufferList.getNumBlocks(1000), 5);
+    TEST_ASSERT_EQ(bufferList.getNumBlocks(1000), static_cast<size_t>(5));
 
     // Doesn't evenly divide - we should just get one bigger block
-    TEST_ASSERT_EQ(bufferList.getNumBlocks(999), 5);
+    TEST_ASSERT_EQ(bufferList.getNumBlocks(999), static_cast<size_t>(5));
 }
 
 TEST_CASE(testGetBlock_sys_byte)
@@ -176,7 +174,6 @@ TEST_CASE(testGetBlock_std_byte)
         TEST_EXCEPTION(bufferList.getBlock(blockSize, numBlocks, scratch,
             numBytesInBlock));
     }
-}
 }
 
 TEST_MAIN(

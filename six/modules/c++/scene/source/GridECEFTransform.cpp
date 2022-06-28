@@ -21,8 +21,10 @@
  */
 #include <scene/GridECEFTransform.h>
 
-#include <scene/sys_Conf.h>
 #include <except/Exception.h>
+#include <math/Utilities.h>
+
+#include <scene/sys_Conf.h>
 #include <scene/Utilities.h>
 
 namespace scene
@@ -94,9 +96,13 @@ Vector3 CylindricalGridECEFTransform::rowColToECEF(
 
     const double theta =
             mSampleSpacing.col * (pixel.col - mSceneCenter.col) / mRs;
-    const scene::Vector3 colDisp = mCol * mRs * sin(theta);
 
-    const scene::Vector3 hgtDisp = mNormal * mRs * (cos(theta) - 1);
+    double sin_theta, cos_theta;
+    math::SinCos(theta, sin_theta, cos_theta);
+
+    const scene::Vector3 colDisp = mCol * mRs * sin_theta;
+
+    const scene::Vector3 hgtDisp = mNormal * mRs * (cos_theta - 1);
     return (mRefPt + rowDisp + colDisp + hgtDisp);
 }
 

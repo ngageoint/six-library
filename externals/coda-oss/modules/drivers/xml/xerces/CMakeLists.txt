@@ -1,5 +1,16 @@
 set(TARGET_NAME xerces-c)
 
+if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    # use this CMakeLists.txt to build and package zlib with conan
+    project(coda-oss_xerces-c)
+    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    conan_basic_setup()
+    set(CODA_SKIP_SYSTEM_DEPENDENCIES ON)
+    include(CodaBuild.cmake)
+    coda_initialize_build()
+    coda_generate_package_config()
+endif()
+
 if (WIN32)
     set(EXTERNAL_DEPS ws2_32 advapi32)
 elseif (UNIX)
@@ -174,10 +185,11 @@ else()
     set(XERCES_U32BIT_INT "uint32_t")
     set(XERCES_U64BIT_INT "uint64_t")
     set(XERCES_SIZE_T "size_t")
-    if (HAVE_WCHAR_H)
+    # This is for a UTF-16 value, 16 bits
+    if (WIN32)
         set(XERCES_XMLCH_T "wchar_t")
     else()
-        set(XERCES_XMLCH_T "uint16_t")
+        set(XERCES_XMLCH_T "char16_t")
     endif()
     if (HAVE_SSIZE_T)
         set(XERCES_SSIZE_T "ssize_t")
@@ -188,7 +200,7 @@ else()
             set(XERCES_SSIZE_T "int32_t")
         endif()
     endif()
-    set(XERCES_SIZE_MAX "SIZE_MAX") 
+    set(XERCES_SIZE_MAX "SIZE_MAX")
 
     set(LT_OBJDIR .libs/)
     set(PACKAGE xerces-c)
@@ -197,8 +209,8 @@ else()
     set(PACKAGE_STRING "xerces-c 3.2.3")
     set(PACKAGE_TARNAME "xerces-c")
     set(PACKAGE_URL "")
-    set(PACKAGE_VERSION "3.1.1")
-    set(VERSION "3.1.1")
+    set(PACKAGE_VERSION "3.2.3")
+    set(VERSION "3.2.3")
 
     # extra defines for Xerces_autoconf_config.hpp
     set(XERCES_USE_MSGLOADER_INMEMORY 1)
@@ -282,13 +294,9 @@ else()
         PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
                "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
                "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/config.h"
-            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
-            ${CODA_INSTALL_OPTION})
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xercesc/util/Xerces_autoconf_config.hpp"
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/util"
             ${CODA_INSTALL_OPTION})
-    configure_file("Xerces_autoconf_config.hpp.in" "")
     install(DIRECTORY "${SOURCE_DIR}/src/xercesc"
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
             ${CODA_INSTALL_OPTION}

@@ -86,6 +86,11 @@
 #define NITF_FREE NRT_FREE
 NITFAPI(char*) nitf_strdup(const char* src);
 
+#define NITF_NEW_nothrow(t_) (t_*)NITF_MALLOC(sizeof(t_)) // (Foo*) NITF_MALLOC(sizeof(Foo))
+#define NITF_if_NULL_goto(var_, error_, label_) if (!var_) { nitf_Error_init(error_, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, NITF_ERR_MEMORY); goto label_; }
+#define NITF_NEW_goto(var_, t_, error_, label_) t_* var_ = NITF_NEW_nothrow(t_); NITF_if_NULL_goto(var_, error_, label_)
+#define NITF_NEW_return(var_, t_, error_) t_* var_ = NITF_NEW_nothrow(t_); \
+    if (!var_) { nitf_Error_init(error_, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, NITF_ERR_MEMORY); return NULL; }
 
 /******************************************************************************/
 /* TYPES                                                                      */
@@ -328,6 +333,7 @@ typedef nrt_List                        nitf_List;
 #define nitf_List_destruct              nrt_List_destruct
 #define nitf_List_begin                 nrt_List_begin
 #define nitf_List_at                    nrt_List_at
+#define nitf_List_atui                    nrt_List_atui
 #define nitf_ListIterator_equals        nrt_ListIterator_equals
 #define nitf_ListIterator_notEqualTo    nrt_ListIterator_notEqualTo
 #define nitf_List_end                   nrt_List_end
@@ -337,6 +343,7 @@ typedef nrt_List                        nitf_List;
 #define nitf_List_size                  nrt_List_size
 #define nitf_List_size16                  nrt_List_size16
 #define nitf_List_get                   nrt_List_get
+#define nitf_List_getui                   nrt_List_getui
 #define nitf_ListIterator_increment     nrt_ListIterator_increment
 #define nitf_ListIterator_get           nrt_ListIterator_get
 

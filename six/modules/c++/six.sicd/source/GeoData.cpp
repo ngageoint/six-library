@@ -71,10 +71,9 @@ void GeoData::fillDerivedFields(const ImageData& imageData,
         scene::ECEFToLLATransform transformer;
         for (size_t ii = 0; ii < cornerLineSample.size(); ++ii)
         {
-            LatLonAlt lla = transformer.transform(model.imageGridToECEF(
+            const LatLonAlt lla = transformer.transform(model.imageGridToECEF(
                     cornerLineSample[ii]));
-            imageCorners.getCorner(ii).setLat(lla.getLat());
-            imageCorners.getCorner(ii).setLon(lla.getLon());
+            imageCorners.getCorner(ii).setLatLon(lla);
         }
     }
 
@@ -86,7 +85,7 @@ void GeoData::fillDerivedFields(const ImageData& imageData,
         scene::ECEFToLLATransform transformer;
         for (size_t ii = 0; ii < imageData.validData.size(); ++ii)
         {
-            LatLonAlt lla = transformer.transform(model.imageGridToECEF(
+            const LatLonAlt lla = transformer.transform(model.imageGridToECEF(
                     imageData.validData[ii]));
             validData[ii] = LatLon(lla.getLat(), lla.getLon());
         }
@@ -95,34 +94,27 @@ void GeoData::fillDerivedFields(const ImageData& imageData,
 
 bool GeoData::validate(logging::Logger& log) const
 {
-    bool valid = true;
-    std::ostringstream messageBuilder;
-
-    if (Init::isUndefined(scp.llh) ||
-        Init::isUndefined(scp.ecf))
+    if (Init::isUndefined(scp.llh) || Init::isUndefined(scp.ecf))
     {
         log.error("GeoData.SCP is undefined\n");
-        valid = false;
+        return false;
     }
-    else
-    {
-        // 2.10
-        scene::LLAToECEFTransform transformer;
-        Vector3 derivedEcf = transformer.transform(scp.llh);
-        double ecfDiff = (scp.ecf - derivedEcf).norm();
 
-        if (ecfDiff > ECF_THRESHOLD)
-        {
-            messageBuilder.str("");
-            messageBuilder << "GeoData.SCP.ECF and GeoData.SCP.LLH "
-                << "not consistent." << std::endl
-                << "SICD.GeoData.SCP.ECF - SICD.GeoData.SCP.LLH: "
-                << ecfDiff << " (m)" << std::endl;
-            log.error(messageBuilder.str());
-            valid = false;
-        }
+    // 2.10
+    const scene::LLAToECEFTransform transformer;
+    const Vector3 derivedEcf = transformer.transform(scp.llh);
+    const auto ecfDiff = (scp.ecf - derivedEcf).norm();
+    if (ecfDiff > ECF_THRESHOLD)
+    {
+        std::ostringstream messageBuilder;
+        messageBuilder.str("");
+        messageBuilder << "GeoData.SCP.ECF and GeoData.SCP.LLH not consistent.\n"
+            << "SICD.GeoData.SCP.ECF - SICD.GeoData.SCP.LLH: " << ecfDiff << " (m)\n";
+        log.error(messageBuilder.str());
+        return false;
     }
-    return valid;
+
+    return true;
 }
 }
 }

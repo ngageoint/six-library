@@ -1,7 +1,8 @@
 coda_add_module(
     six
     DEPS XML_DATA_CONTENT-static-c nitf-c++
-         scene-c++ logging-c++ xml.lite-c++
+         scene-c++ logging-c++ xml.lite-c++ sys-c++ str-c++
+         except-c++ types-c++ config-c++ gsl-c++ std-c++
          ${CMAKE_DL_LIBS}
     SOURCES
         source/Adapters.cpp
@@ -11,10 +12,12 @@ coda_add_module(
         source/CompressedByteProvider.cpp
         source/Container.cpp
         source/Data.cpp
+        source/Enums.cpp
         source/ErrorStatistics.cpp
         source/GeoDataBase.cpp
         source/GeoInfo.cpp
         source/Init.cpp
+        source/Logger.cpp
         source/MatchInformation.cpp
         source/Mesh.cpp
         source/NITFHeaderCreator.cpp
@@ -34,6 +37,7 @@ coda_add_module(
         source/Utilities.cpp
         source/VersionUpdater.cpp
         source/WriteControl.cpp
+        source/XmlLite.cpp
         source/XMLControl.cpp
         source/XMLControlFactory.cpp
         source/XMLParser.cpp)
@@ -60,5 +64,7 @@ coda_add_tests(
         test_serialize.cpp
         test_xml_control.cpp)
 
-target_compile_definitions(six_test_xml_control PRIVATE
-                           DEFAULT_SCHEMA_PATH="${DEFAULT_SCHEMA_PATH}")
+if(CODA_BUILD_TESTS)
+    target_compile_definitions(six_test_xml_control PRIVATE
+                               DEFAULT_SCHEMA_PATH="${DEFAULT_SCHEMA_PATH}")
+endif()

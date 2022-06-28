@@ -31,6 +31,10 @@ NITF_CXX_GUARD
 /*!
  *  TODO: Add documentation
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_ImageReader
 {
     nitf_IOInterface* input;
@@ -38,6 +42,9 @@ typedef struct _nitf_ImageReader
     int directBlockRead;
 }
 nitf_ImageReader;
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*!
  *  TODO: Add documentation

@@ -24,12 +24,14 @@
 #define __NITF_TEXTSUBHEADER_HPP__
 #pragma once
 
+#include <string>
+
 #include "nitf/TextSubheader.h"
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/FileSecurity.hpp"
 #include "nitf/Extensions.hpp"
-#include <string>
+#include "nitf/Property.hpp"
 
 /*!
  *  \file TextSubheader.hpp
@@ -54,10 +56,11 @@ public:
     TextSubheader & operator=(const TextSubheader & x);
 
     //! Set native object
-    TextSubheader(nitf_TextSubheader * x);
+    using native_t = nitf_TextSubheader;
+    TextSubheader(native_t* x);
 
     //! Default Constructor
-    TextSubheader();
+    TextSubheader() noexcept(false);
 
     //! Clone
     nitf::TextSubheader clone() const;
@@ -66,6 +69,7 @@ public:
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;
+    //PropertyGet<std::string> filePartType{ [&]() -> std::string { return getFilePartType(); } };
 
     //! Get the textID
     nitf::Field getTextID() const;

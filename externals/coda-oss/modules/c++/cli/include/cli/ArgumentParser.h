@@ -23,6 +23,8 @@
 #ifndef __CLI_ARGUMENT_PARSER_H__
 #define __CLI_ARGUMENT_PARSER_H__
 
+#include <memory>
+
 #include "cli/Argument.h"
 #include "cli/Results.h"
 #include <import/str.h>
@@ -41,13 +43,14 @@ enum
 class CODA_OSS_API ArgumentParser
 {
 public:
-    ArgumentParser();
+    explicit ArgumentParser(bool ignoreUnknown = false,
+                            std::ostream* iuOStream = &std::cerr);
     ~ArgumentParser();
 
     /**
      * Shortcut for adding an argument. Returns the newly created argument.
      */
-    mem::SharedPtr<Argument> addArgument(const std::string& nameOrFlags,
+    std::shared_ptr<Argument> addArgument(const std::string& nameOrFlags,
                                          const std::string& help = "",
                                          cli::Action action = cli::STORE,
                                          const std::string& destination = "",
@@ -86,6 +89,19 @@ public:
     ArgumentParser& setProgram(const std::string& program);
 
     /**
+     * Set the flag to ignore unknown arguments (default is false)
+     */
+    ArgumentParser& setIgnoreUnknownArgumentsFlag(bool uaFlag);
+
+    /**
+     * Set the output stream name if ignoring unknown arguments (default is 
+     * cerr).  Note:  This will only be used if the flag for ignoring
+     * unknown arguments is true.
+     */
+    ArgumentParser& setIgnoreUnknownArgumentsOutputStream(
+             std::ostream* iuaOutstream);
+
+    /**
      * Prints the help and optionally exits.
      */
     void printHelp(std::ostream& out = std::cerr, bool andExit = false) const;
@@ -118,7 +134,7 @@ public:
 protected:
     friend class Argument;
 
-    mem::VectorOfSharedPointers<Argument> mArgs;
+    std::vector<std::shared_ptr<Argument>> mArgs;
     std::string mDescription;
     std::string mProlog;
     std::string mEpilog;
@@ -126,6 +142,8 @@ protected:
     std::string mProgram;
     bool mHelpEnabled;
     char mPrefixChar;
+    bool mIgnoreUnknownArguments;
+    std::ostream* mIgnoreUnknownOStream;
 
     void parseError(const std::string& msg);
 

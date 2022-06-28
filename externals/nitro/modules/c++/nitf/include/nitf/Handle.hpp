@@ -20,18 +20,20 @@
  *
  */
 
-#ifndef __NITF_HANDLE_HPP__
-#define __NITF_HANDLE_HPP__
+#ifndef NITRO_nitf_Handle_hpp_INCLUDED_
+#define NITRO_nitf_Handle_hpp_INCLUDED_
 #pragma once
 
 #include <iostream>
 #include <mutex>
+#include <memory>
 
 /*!
  *  \file Handle.hpp
  *  \brief Contains handle wrapper to manage shared native objects
  */
 #include "nitf/System.hpp"
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
@@ -40,38 +42,28 @@ namespace nitf
  *  \class Handle
  *  \brief  This class is the base definition of a Handle
  */
-struct Handle
+class NITRO_NITFCPP_API Handle
 {
-    Handle() = default;
-    virtual ~Handle() {}
+    class Impl;
+    std::unique_ptr<Impl> mPimpl;
+
+public:
+    Handle() noexcept(false);
+    virtual ~Handle()  /*noexcept(false)*/;
 
     Handle(const Handle&) = delete;
     Handle& operator=(const Handle&) = delete;
+    Handle(Handle&&) noexcept;
+    Handle& operator=(Handle&&) noexcept;
 
     //! Get the ref count
-    int getRef() const noexcept { return refCount; }
+    int getRef() const noexcept;
 
     //! Increment the ref count
-    int incRef()
-    {
-        std::lock_guard<std::mutex> lock(mutex);
-        if (refCount < 0) refCount = 0;
-        refCount++;
-        return refCount;
-    }
+    int incRef();
 
     //! Decrement the ref count
-    int decRef()
-    {
-        std::lock_guard<std::mutex> lock(mutex);
-        refCount--;
-        if (refCount < 0) refCount = 0;
-        return refCount;
-    }
-
-protected:
-    std::mutex mutex;
-    int refCount{ 0 };
+    int decRef();
 };
 
 
@@ -81,10 +73,10 @@ protected:
  *          in handles. Extend this class to custom-destruct objects.
  */
 template <typename T>
-struct MemoryDestructor
+struct NITRO_NITFCPP_API MemoryDestructor
 {
     virtual void operator() (T* /*nativeObject*/) noexcept(false) {}
-    virtual ~MemoryDestructor() noexcept(false) {}
+    virtual ~MemoryDestructor() {}
 };
 
 
@@ -95,35 +87,32 @@ struct MemoryDestructor
  *  and decRef functions.
  */
 template <typename Class_T, typename DestructFunctor_T = MemoryDestructor<Class_T> >
-class BoundHandle : public Handle
+class NITRO_NITFCPP_API BoundHandle : public Handle  // no "final", SWIG doesn't like it
 {
-private:
     Class_T* handle = nullptr;
     int managed = 1;
 
 public:
     //! Create handle from native object
-    BoundHandle() = default;
+    BoundHandle() = delete;
     BoundHandle(Class_T* h) : handle(h) {}
 
-    ~BoundHandle()
+    ~BoundHandle() /*noexcept(false)*/
     {
         //call the destructor, to destroy the object
-        if(handle && managed <= 0)
+        if(handle && !isManaged())
         {
             DestructFunctor_T functor;
             functor(handle);
         }
-    }
-    
+    }    
     BoundHandle(const BoundHandle&) = delete;
-    BoundHandle(BoundHandle&&) = delete;
+    BoundHandle(BoundHandle&&) = default;
     BoundHandle& operator=(const BoundHandle&) = delete;
-    BoundHandle& operator=(BoundHandle&&) = delete;
-
+    BoundHandle& operator=(BoundHandle&&) = default;
 
     //! Assign from native object
-    Handle& operator=(Class_T* h)
+    Handle& operator=(Class_T* h) noexcept
     {
         if (h != handle)
             handle = h;
@@ -132,6 +121,7 @@ public:
 
     //! Get the native object
     Class_T* get() noexcept { return handle; }
+    const Class_T* get() const noexcept { return handle; }
 
     //! Get the address of then native object
     Class_T** getAddress() noexcept { return &handle; }
@@ -151,4 +141,4 @@ public:
 };
 
 }
-#endif
+#endif // NITRO_nitf_Handle_hpp_INCLUDED_

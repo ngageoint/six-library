@@ -24,6 +24,7 @@
 #include <sstream>
 #include <thread>
 #include <string>
+#include <std/memory>
 
 #include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
@@ -34,6 +35,7 @@
 #include <six/Init.h>
 #include <cphd/ByteSwap.h>
 #include <cphd/Wideband.h>
+#include <cphd/FileHeader.h>
 
 #undef min
 #undef max
@@ -98,8 +100,8 @@ public:
             for (size_t col = 0; col < mDims.col; ++col, ++idx)
             {
                 const std::complex<InT>& input(mInput[idx]);
-                mOutput[idx] = std::complex<float>(input.real() * scaleFactor,
-                                                   input.imag() * scaleFactor);
+                mOutput[idx] = std::complex<float>(static_cast<float>(input.real() * scaleFactor),
+                                                   static_cast<float>(input.imag() * scaleFactor));
             }
         }
     }
@@ -136,12 +138,12 @@ void promote(const void* input,
         size_t numRowsThisThread(0);
         while (planner.getThreadInfo(threadNum++, startRow, numRowsThisThread))
         {
-            std::unique_ptr<sys::Runnable> scaler(new PromoteRunnable<InT>(
+           auto scaler = std::make_unique<PromoteRunnable<InT>>(
                     static_cast<const std::complex<InT>*>(input),
                     startRow,
                     numRowsThisThread,
                     dims.col,
-                    output));
+                    output);
             threads.createThread(std::move(scaler));
         }
 
@@ -198,13 +200,13 @@ void scale(const void* input,
         size_t numRowsThisThread(0);
         while (planner.getThreadInfo(threadNum++, startRow, numRowsThisThread))
         {
-            std::unique_ptr<sys::Runnable> scaler(new ScaleRunnable<InT>(
+           auto scaler = std::make_unique<ScaleRunnable<InT>>(
                     static_cast<const std::complex<InT>*>(input),
                     startRow,
                     numRowsThisThread,
                     dims.col,
                     scaleFactors,
-                    output));
+                    output);
             threads.createThread(std::move(scaler));
         }
 
@@ -245,7 +247,7 @@ Wideband::Wideband(const std::string& pathname,
                    const cphd::MetadataBase& metadata,
                    int64_t startWB,
                    int64_t sizeWB) :
-    mInStream(new io::FileInputStream(pathname)),
+    mInStream(std::make_shared<io::FileInputStream>(pathname)),
     mMetadata(metadata),
     mWBOffset(startWB),
     mWBSize(sizeWB),
@@ -301,17 +303,17 @@ int64_t Wideband::getFileOffset(size_t channel,
 {
     if (channel >= mOffsets.size())
     {
-        throw(except::Exception(Ctxt("Invalid channel number")));
+        throw except::Exception(Ctxt("Invalid channel number"));
     }
 
     if (vector >= mMetadata.getNumVectors(channel))
     {
-        throw(except::Exception(Ctxt("Invalid vector")));
+        throw except::Exception(Ctxt("Invalid vector"));
     }
 
     if (sample >= mMetadata.getNumSamples(channel))
     {
-        throw(except::Exception(Ctxt("Invalid sample")));
+        throw except::Exception(Ctxt("Invalid sample"));
     }
 
     const int64_t bytesPerVectorFile =
@@ -326,7 +328,7 @@ int64_t Wideband::getFileOffset(size_t channel) const
 {
     if (channel >= mOffsets.size())
     {
-        throw(except::Exception(Ctxt("Invalid channel number")));
+        throw except::Exception(Ctxt("Invalid channel number"));
     }
 
     const int64_t offset = mOffsets[channel];
@@ -554,14 +556,14 @@ void Wideband::read(size_t channel,
                     size_t firstSample,
                     size_t lastSample,
                     size_t numThreads,
-                    mem::ScopedArray<sys::ubyte>& data) const
+                    std::unique_ptr<sys::ubyte[]>& data) const
 {
     types::RowCol<size_t> dims;
     checkReadInputs(
             channel, firstVector, lastVector, firstSample, lastSample, dims);
 
     const size_t bufSize = dims.row * dims.col * mElementSize;
-    data.reset(new sys::ubyte[bufSize]);
+    data = std::make_unique<sys::ubyte[]>(bufSize);
 
     read(channel,
          firstVector,
@@ -572,10 +574,10 @@ void Wideband::read(size_t channel,
          mem::BufferView<sys::ubyte>(data.get(), bufSize));
 }
 
-void Wideband::read(size_t channel, mem::ScopedArray<sys::ubyte>& data) const
+void Wideband::read(size_t channel, std::unique_ptr<sys::ubyte[]>& data) const
 {
     const size_t bufSize = getBytesRequiredForRead(channel);
-    data.reset(new sys::ubyte[bufSize]);
+    data = std::make_unique<sys::ubyte[]>(bufSize);
 
     read(channel, mem::BufferView<sys::ubyte>(data.get(), bufSize));
 }

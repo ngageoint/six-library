@@ -22,7 +22,8 @@
 #ifndef __SIX_DERIVED_CLASSIFICATION_H__
 #define __SIX_DERIVED_CLASSIFICATION_H__
 
-#include <sys/Optional.h>
+#include <std/optional>
+
 #include <mem/ScopedCopyablePtr.h>
 
 #include "six/Classification.h"
@@ -41,10 +42,9 @@ namespace sidd
  *
  *  Compiler-generated copy constructor and assignment operator are sufficient
  */
-class DerivedClassification: public Classification
+struct DerivedClassification: public Classification
 {
-public:
-    virtual std::string getLevel() const
+    std::string getLevel() const override
     {
         return classification;
     }
@@ -62,7 +62,7 @@ public:
     //! The version number of the DES. Should there be multiple specified in
     //  an instance document the one at the root node is the one that will
     //  apply to the entire document.
-    int32_t                     desVersion;
+    int32_t                     desVersion = 0;
 
     //! Used to designate what date the document was produced on. This is the
     //  date that will be used by various constraint rules to determine if the
@@ -232,12 +232,15 @@ public:
     //  that type of data in this document.
     BooleanType externalNotice;
 
-    //! Equality operator
-    bool operator==(const DerivedClassification& rhs) const;
-
-
+    bool operator==(const DerivedClassification& rhs) const // need member-function for SWIG
+    {
+        return static_cast<const Classification&>(*this) == static_cast<const Classification&>(rhs);
+    }
 private:
-    virtual bool equalTo(const Classification& rhs) const;
+    //! Equality operator
+    bool operator_eq(const DerivedClassification& rhs) const;
+    bool equalTo(const Classification& rhs) const override;
+
     static
     void putImpl(const std::string& name,
                  const std::vector<std::string>& strs,

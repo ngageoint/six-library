@@ -29,23 +29,20 @@
 #include <stdexcept>
 #include <string>
 
+#include <import/str.h>
 #include <sys/Path.h>
 #include <sys/DirectoryEntry.h>
-#include <sys/Filesystem.h>
 #include <sys/DateTime.h>
 #include <sys/Dbg.h>
 
+#include <sys/filesystem.h>
 namespace fs = coda_oss::filesystem;
 
 namespace sys
 {
-AbstractOS::AbstractOS()
-{
-}
+AbstractOS::AbstractOS() = default;
 
-AbstractOS::~AbstractOS()
-{
-}
+AbstractOS::~AbstractOS() = default;
 
 std::vector<std::string>
 AbstractOS::search(const std::vector<std::string>& searchPaths,
@@ -186,7 +183,7 @@ std::string AbstractOS::getCurrentExecutable(
 }
 
 // A variable like PATH is often several directories, return each one that exists.
-static bool splitEnv_(const AbstractOS& os, const std::string& envVar, std::vector<std::string>& result, Filesystem::FileType* pType = nullptr)
+static bool splitEnv_(const AbstractOS& os, const std::string& envVar, std::vector<std::string>& result, fs::file_type* pType = nullptr)
 {
     std::string value;
     if (!os.getEnvIfSet(envVar, value))
@@ -196,21 +193,22 @@ static bool splitEnv_(const AbstractOS& os, const std::string& envVar, std::vect
     const auto vals = str::split(value, sys::Path::separator());
     for (const auto& val : vals)
     {
+        const fs::path val_(val);
         bool matches = true;
         if (pType != nullptr)
         {
-            const auto isFile = (*pType == Filesystem::FileType::Regular) && Filesystem::is_regular_file(val);
-            const auto isDirectory = (*pType == Filesystem::FileType::Directory) && Filesystem::is_directory(val);
+            const auto isFile = (*pType == fs::file_type::regular) && is_regular_file(val_);
+            const auto isDirectory = (*pType == fs::file_type::directory) && is_directory(val_);
             matches = isFile || isDirectory;
         }
-        if (Filesystem::exists(val) && matches)
+        if (exists(val_) && matches)
         {
             result.push_back(val);
         }
     }
     return !result.empty(); // false for no matches
 }
-bool AbstractOS::splitEnv(const std::string& envVar, std::vector<std::string>& result, Filesystem::FileType type) const
+bool AbstractOS::splitEnv(const std::string& envVar, std::vector<std::string>& result, fs::file_type type) const
 {
     return splitEnv_(*this, envVar, result, &type);
 }
@@ -262,8 +260,11 @@ void AbstractOS::appendEnv(const std::string& envVar, const std::vector<std::str
 static std::string getSpecialEnv_PID(const AbstractOS& os, const std::string& envVar)
 {
     assert((envVar == "$") || (envVar == "PID"));
+    #if _MSC_VER
+    UNREFERENCED_PARAMETER(envVar);
+    #endif
     const auto pid = os.getProcessId();
-    return std::to_string(pid);
+    return str::toString(pid);
 }
 
 static std::string getSpecialEnv_USER(const AbstractOS& os, const std::string& envVar)
@@ -271,6 +272,7 @@ static std::string getSpecialEnv_USER(const AbstractOS& os, const std::string& e
     // $USER on *nix, %USERNAME% on Windows; make it so either one always works
     assert((envVar == "USER") || (envVar == "USERNAME"));
     #if _WIN32
+    UNREFERENCED_PARAMETER(envVar);
     return os.getEnv("USERNAME");
     #else
     return os.getEnv("USER");
@@ -283,6 +285,7 @@ static std::string getSpecialEnv_HOME(const AbstractOS& os, const std::string& e
     assert((envVar == "HOME") || (envVar == "USERPROFILE"));
 
     #ifdef _WIN32
+    UNREFERENCED_PARAMETER(envVar);
     constexpr auto home = "USERPROFILE";
     #else  // assuming *nix
     // Is there a better way to support ~ on *nix than $HOME ?
@@ -290,7 +293,7 @@ static std::string getSpecialEnv_HOME(const AbstractOS& os, const std::string& e
     #endif
 
     std::vector<std::string> paths;
-    if (!os.splitEnv(home, paths, sys::Filesystem::FileType::Directory))
+    if (!os.splitEnv(home, paths, fs::file_type::directory))
     {
         // something is horribly wrong
         throw except::FileNotFoundException(Ctxt(home));
@@ -307,8 +310,11 @@ static std::string getSpecialEnv_HOME(const AbstractOS& os, const std::string& e
 static std::string getSpecialEnv_Configuration(const AbstractOS&, const std::string& envVar)
 {
     assert(envVar == "Configuration");
+    #if _MSC_VER
+    UNREFERENCED_PARAMETER(envVar);
+    #endif
     // in Visual Studio, by default this is usually "Debug" and "Release"
-    return sys::debug_build ? "Debug" : "Release";
+    return sys::debug_build() ? "Debug" : "Release";
 }
 static std::string getSpecialEnv_Platform(const AbstractOS&, const std::string& envVar)
 {
@@ -316,6 +322,7 @@ static std::string getSpecialEnv_Platform(const AbstractOS&, const std::string& 
 
     // in Visual Studio, this is "Win32" (maybe "x86") or "x64"
     #ifdef _WIN32
+        UNREFERENCED_PARAMETER(envVar);
         #ifdef _WIN64
         return "x64";
         #else
@@ -331,13 +338,16 @@ static std::string getSpecialEnv_SECONDS_()
     // https://en.cppreference.com/w/cpp/chrono/c/difftime
     static const auto start = std::time(nullptr);
     const auto diff = static_cast<int64_t>(std::difftime(std::time(nullptr), start));
-    return std::to_string(diff);
+    return str::toString(diff);
 }
 static std::string getSpecialEnv_SECONDS(const AbstractOS&, const std::string& envVar)
 {
     // https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
     // "This variable expands to the number of seconds since the shell was started. ..."
     assert(envVar == "SECONDS");
+    #if _MSC_VER
+    UNREFERENCED_PARAMETER(envVar);
+    #endif
     return getSpecialEnv_SECONDS_();
 }
 static std::string strUnusedSeconds = getSpecialEnv_SECONDS_(); // "start" the "shell"
@@ -402,7 +412,13 @@ std::string AbstractOS::getSpecialEnv(const std::string& envVar) const
 
     if (envVar == "EPOCHSECONDS")
     {
-        return std::to_string(sys::DateTime::getEpochSeconds());
+        return str::toString(sys::DateTime::getEpochSeconds());
+    }
+
+    if (envVar == "OSTYPE")
+    {
+        // TODO: Mac
+        return sys::Platform == sys::PlatformType::Linux ? " linux-gnu" : "Windows";
     }
     
     // should explicitly handle all env. vars in some way    

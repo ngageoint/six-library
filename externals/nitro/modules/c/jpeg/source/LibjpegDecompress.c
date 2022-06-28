@@ -219,7 +219,7 @@ NITFPRIV(void) JPEGMarkerItem_printList(
  *  will be populated
  *  \return One on success, zero on failure
  */
-NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
+NITFPRIV(NITF_BOOL) implFreeBlock(nitf_DecompressionControl* control,
                             uint8_t* block,
                             nitf_Error* error);
 
@@ -448,7 +448,7 @@ void JPEGBlock_reorder(JPEGBlock* block)
 
     for (i = 0; i < block->bands; i++)
     {
-        bands[i] = (DATA_BUFFER) NITF_MALLOC(block->rows * block->cols);
+        bands[i] = (DATA_BUFFER) NITF_MALLOC(((size_t)block->rows) * block->cols);
     }
 
     for (n = 0; n < block->rows * block->cols; n++)
@@ -467,7 +467,10 @@ void JPEGBlock_reorder(JPEGBlock* block)
 
     for (i = 0; i < block->bands; i++)
     {
-        memcpy(block->uncompressed + current, bands[i], n);
+        if (bands[i] != NULL)
+        {
+            memcpy(block->uncompressed + current, bands[i], n);
+        }
         current += n;
     }
 
@@ -488,7 +491,7 @@ static nitf_DecompressionInterface interfaceTable =
     NULL
 };
 
-NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
+NITFPRIV(NITF_BOOL) implFreeBlock(nitf_DecompressionControl* control,
                             uint8_t* block,
                             nitf_Error* error)
 {
@@ -1058,7 +1061,7 @@ NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
         while (nitf_ListIterator_notEqualTo(&x, &e))
 
         {
-            JPEGMarkerItem *item = nitf_ListIterator_get(&x);
+            JPEGMarkerItem *item = (JPEGMarkerItem*) nitf_ListIterator_get(&x);
             DPRINTA2("[%s:%d]", item->name, item->off );
 
             if (strcmp(item->name, "SOI") == 0)
@@ -1302,6 +1305,12 @@ NITFPRIV(NITF_BOOL) findBlockSOI(JPEGImplControl* control,
     return NITF_SUCCESS;
 }
 
+static uint64_t block_size(const JPEGBlock* block)
+{
+    const int retval = _BLOCK_SIZE(block);
+    return retval;
+}
+
 NITFPRIV(uint8_t*) implReadBlock(nitf_DecompressionControl* control,
                                     uint32_t blockNumber,
                                     uint64_t* blockSize,
@@ -1326,7 +1335,7 @@ NITFPRIV(uint8_t*) implReadBlock(nitf_DecompressionControl* control,
     JPEGBlock* block;
     NITF_DATA *uncompressed;
 
-    if (!findBlockSOI(control, blockNumber, &soi, error))
+    if (!findBlockSOI((JPEGImplControl*)control, blockNumber, &soi, error))
 #ifdef ZERO_BLOCK
     {
         uint8_t *zeros; /* Buffer of zeros */
@@ -1476,12 +1485,12 @@ NITFPRIV(uint8_t*) implReadBlock(nitf_DecompressionControl* control,
         JPEGBlock_reorder(block);
     }
 
-    uncompressed = (uint8_t*)(block->uncompressed);
+    uncompressed = (block->uncompressed);
     block->uncompressed = NULL;
-    *blockSize = _BLOCK_SIZE(block);
+    *blockSize = block_size(block);
     JPEGBlock_destruct(&block);
 
-    return uncompressed;
+    return (uint8_t*)uncompressed;
 }
 
 
@@ -1659,3 +1668,5 @@ NITFPRIV(void) hexDump(char *buffer, int size)
 }
 
 */
+
+NRT_ENDGUARD

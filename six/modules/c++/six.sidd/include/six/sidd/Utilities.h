@@ -23,9 +23,12 @@
 #define __SIX_SIDD_UTILITIES_H__
 
 #include <memory>
+#include <vector>
+#include <std/filesystem>
 
 #include <import/scene.h>
 #include <types/RgAz.h>
+#include <six/Utilities.h>
 #include <six/sidd/DerivedData.h>
 
 namespace six
@@ -64,7 +67,7 @@ public:
             Vector3 refPos, const Vector3* row, const Vector3* col,
             Collection* collection);
 
-    static std::pair<six::PolarizationType, six::PolarizationType>
+    static std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType>
             convertDualPolarization(six::DualPolarizationType pol);
 
     static mem::auto_ptr<scene::ProjectionModel>
@@ -78,6 +81,7 @@ public:
      * \return mock DerivedData object
      */
     static mem::auto_ptr<DerivedData> createFakeDerivedData();
+    static std::unique_ptr<DerivedData> createFakeDerivedData(const std::string& strVersion);
 
 
     /*
@@ -94,6 +98,8 @@ public:
         ::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
+    static std::unique_ptr<DerivedData> parseData(::io::InputStream& xmlStream,
+        const std::vector<std::filesystem::path>*, logging::Logger&);
 
     /*
     * Parses the XML in 'pathname' and converts it into a DerivedData object.
@@ -109,6 +115,8 @@ public:
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
+    static std::unique_ptr<DerivedData> parseDataFromFile(const std::filesystem::path&,
+        const std::vector<std::filesystem::path>*, logging::Logger* pLogger = nullptr);
 
     /*
     * Parses the XML in 'xmlStr' and converts it into a DerivedData object.
@@ -123,6 +131,10 @@ public:
         const std::string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
+    static std::unique_ptr<DerivedData> parseDataFromString(
+        const std::string& xmlStr,
+        const std::vector<std::filesystem::path>* pSchemaPaths,
+        logging::Logger* pLogger=nullptr);
 
     /*
      * Converts 'data' back into a formatted XML string
@@ -138,6 +150,8 @@ public:
     static std::string toXMLString(const DerivedData& data,
             const std::vector<std::string>& schemaPaths,
             logging::Logger* logger);
+    static std::string toXMLString(const DerivedData&,
+        const std::vector<std::filesystem::path>*, logging::Logger* pLogger = nullptr);
 };
 }
 }

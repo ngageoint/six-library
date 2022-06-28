@@ -21,12 +21,18 @@
  */
 #include <cphd/CPHDReader.h>
 
+#include <std/memory>
+#include <algorithm>
+
 #include <except/Exception.h>
 #include <io/StringStream.h>
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
 #include <mem/ScopedArray.h>
 #include <xml/lite/MinidomParser.h>
+#include <gsl/gsl.h>
+
+#include <six/XmlLite.h>
 #include <cphd/CPHDXMLControl.h>
 
 namespace cphd
@@ -51,38 +57,35 @@ CPHDReader::CPHDReader(const std::string& fromFile,
 void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
                             size_t numThreads,
                             std::shared_ptr<logging::Logger> logger,
-                            const std::vector<std::string>& schemaPaths)
+                            const std::vector<std::string>& schemaPaths_)
 {
     mFileHeader.read(*inStream);
 
     // Read in the XML string
     inStream->seek(mFileHeader.getXMLBlockByteOffset(), io::Seekable::START);
 
-    xml::lite::MinidomParser xmlParser;
+    six::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
-    xmlParser.parse(*inStream, mFileHeader.getXMLBlockSize());
+    xmlParser.parse(*inStream, gsl::narrow<int>(mFileHeader.getXMLBlockSize()));
 
     if (logger.get() == nullptr)
     {
-        logger.reset(new logging::NullLogger());
+        logger = std::make_shared<logging::NullLogger>();
     }
 
-    mMetadata = CPHDXMLControl(logger.get(), false).fromXML(xmlParser.getDocument(), schemaPaths);
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+    mMetadata = CPHDXMLControl(logger.get()).fromXML(xmlParser.getDocument(), schemaPaths);
 
-    mSupportBlock.reset(new SupportBlock(inStream, mMetadata->data,
-                        mFileHeader.getSupportBlockByteOffset(),
-                        mFileHeader.getSupportBlockSize()));
+    mSupportBlock = std::make_unique<SupportBlock>(inStream, mMetadata.data, mFileHeader);
 
     // Load the PVPBlock into memory
-    mPVPBlock.reset(new PVPBlock(mMetadata->pvp, mMetadata->data));
-    mPVPBlock->load(*inStream,
-                    mFileHeader.getPvpBlockByteOffset(),
-                    mFileHeader.getPvpBlockSize(),
-                    numThreads);
+    mPVPBlock = PVPBlock(mMetadata);
+    mPVPBlock.load(*inStream, mFileHeader, numThreads);
 
     // Setup for wideband reading
-    mWideband.reset(new Wideband(inStream, *mMetadata,
-                                 mFileHeader.getSignalBlockByteOffset(),
-                                 mFileHeader.getSignalBlockSize()));
+    mWideband = std::make_unique<Wideband>(inStream, mMetadata,
+        mFileHeader.getSignalBlockByteOffset(), mFileHeader.getSignalBlockSize());
 }
 }

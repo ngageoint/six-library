@@ -21,17 +21,17 @@
  */
 #include <iostream>
 
+#include <std/filesystem>
+
 #include <import/six.h>
 #include <import/six/sidd.h>
 #include <import/six/sicd.h>
 #include <import/sio/lite.h>
 #include <import/io.h>
 #include <import/xml/lite.h>
-#include <sys/Bit.h>
+#include <std/bit>
 #include "utils.h"
 
-
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 /*!
@@ -210,16 +210,10 @@ int main(int argc, char** argv)
     try
     {
         six::XMLControlFactory::getInstance().
-            addCreator(
-                six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>()
-                );
+            addCreator<six::sicd::ComplexXMLControl>();
 
         six::XMLControlFactory::getInstance().
-            addCreator(
-                six::DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>()
-                );
+            addCreator<six::sidd::DerivedXMLControl>();
 
         // Get a Complex Data structure from an XML file
         six::Options options;

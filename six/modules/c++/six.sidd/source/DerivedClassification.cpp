@@ -280,7 +280,7 @@ std::ostream& DerivedClassification::put(std::ostream& os) const
     return os;
 }
 
-bool DerivedClassification::operator==(const DerivedClassification& rhs) const
+bool DerivedClassification::operator_eq(const DerivedClassification& rhs) const
 {
     return (securityExtensions == rhs.securityExtensions &&
         desVersion == rhs.desVersion &&
@@ -311,10 +311,10 @@ bool DerivedClassification::operator==(const DerivedClassification& rhs) const
 
 bool DerivedClassification::equalTo(const Classification& rhs) const
 {
-    const DerivedClassification* derivedClassification = dynamic_cast<const DerivedClassification*>(&rhs);
+    auto derivedClassification = dynamic_cast<const DerivedClassification*>(&rhs);
     if (derivedClassification != nullptr)
     {
-        return *this == *derivedClassification;
+        return this->operator_eq(*derivedClassification);
     }
     return false;
 }

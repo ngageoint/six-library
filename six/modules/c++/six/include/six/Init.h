@@ -28,7 +28,7 @@
 #include <limits>
 #include <stdexcept>
 
-#include <sys/Optional.h>
+#include <std/optional>
 
 #include <six/Parameter.h>
 #include <types/RgAz.h>
@@ -144,7 +144,7 @@ namespace details
 {
     inline void throw_undefined_value()
     {
-        sys::details::throw_bad_optional_access();
+        coda_oss::details::throw_bad_optional_access();
     }
 }
 

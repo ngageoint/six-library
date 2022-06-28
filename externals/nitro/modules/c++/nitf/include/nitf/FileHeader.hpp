@@ -59,10 +59,11 @@ public:
     FileHeader & operator=(const FileHeader & x);
 
     //! Set native object
-    FileHeader(nitf_FileHeader * x);
+    using native_t = nitf_FileHeader;
+    FileHeader(native_t * x);
 
     //! Constructor
-    FileHeader();
+    FileHeader() noexcept(false);
 
     //! Clone
     nitf::FileHeader clone() const;
@@ -194,6 +195,8 @@ public:
 
     //! Set the extendedSection
     void setExtendedSection(nitf::Extensions value);
+
+    //std::vector<nitf::Field> getFields() const;
 
 private:
     mutable nitf_Error error{};

@@ -40,16 +40,14 @@ class RowStreamer : public nitf::RowSourceCallback
 {
 public:
     RowStreamer(uint32_t band,
-                uint32_t numCols,
-                nitf::ImageReader reader) :
+        uint32_t numCols,
+        nitf::ImageReader reader) :
         mReader(reader),
-        mBand(band)
+        mBand(band),
+        mWindow(1, numCols, &mBand, 1)
     {
-        mWindow.setNumRows(1);
-        mWindow.setNumCols(numCols);
-        mWindow.setBandList(&mBand);
-        mWindow.setNumBands(1);
     }
+    ~RowStreamer() noexcept {}
 
     virtual void nextRow(uint32_t /*band*/, void* buffer)
     {
@@ -60,8 +58,8 @@ public:
 
 private:
     nitf::ImageReader mReader;
-    nitf::SubWindow mWindow;
     uint32_t mBand;
+    nitf::SubWindow mWindow;
 };
 
 // RAII for managing a list of RowStreamer's
@@ -123,8 +121,8 @@ int main(int argc, char **argv)
             uint32_t nBands = imseg.getSubheader().getNumImageBands();
             uint32_t nRows = imseg.getSubheader().getNumRows();
             uint32_t nCols = imseg.getSubheader().getNumCols();
-            uint32_t pixelSize = NITF_NBPP_TO_BYTES(
-                    imseg.getSubheader().getNumBitsPerPixel());
+            const auto pixelSize = static_cast<uint32_t>(NITF_NBPP_TO_BYTES(
+                    imseg.getSubheader().getNumBitsPerPixel()));
 
             for (uint32_t ii = 0; i < nBands; i++)
             {

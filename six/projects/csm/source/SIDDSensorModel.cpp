@@ -21,7 +21,7 @@
 */
 #include <six/csm/SIDDSensorModel.h>
 
-#include <six/csm/SIDDSensorModel.h>
+#include <assert.h>
 
 #include "Error.h"
 #include <sys/OS.h>
@@ -32,6 +32,8 @@
 #include <six/NITFReadControl.h>
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/Utilities.h>
+#include <six/XmlLite.h>
+#include <six/ErrorStatistics.h>
 
 namespace six
 {
@@ -107,8 +109,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         // The reason to do this is to avoid adding XMLControlCreators to the
         // XMLControlFactory singleton - this way has more fine-grained control
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+        xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
         // create a reader and load the file
         six::NITFReadControl reader;
@@ -120,7 +121,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         // the Nth Data object
         const auto container = reader.getContainer();
         if (container->getDataType() != six::DataType::DERIVED ||
-            container->getNumData() < imageIndex + 1)
+            container->size() < imageIndex + 1)
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                                "Not a SIDD",
@@ -159,37 +160,36 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
         // Check for the SIDD DES associated with imageIndex and parse it
         // DES's are always in the same order as the images, so we just have to
         // find the Nth DES
-        xml::lite::Document* siddXML = nullptr;
-        xml::lite::MinidomParser domParser;
+        const xml::lite::Document* siddXML = nullptr;
+        six::MinidomParser domParser;
 
         size_t numSIDD = 0;
         const std::vector< csm::Des>& desList(isd.fileDess());
-        for (size_t ii = 0; ii < desList.size(); ++ii)
+        for (const auto& desListItem : desList)
         {
-            DataType dataType = getDataType(desList[ii]);
+            DataType dataType = getDataType(desListItem);
             if (dataType != DataType::DERIVED)
             {
                 continue;
             }
 
-            const std::string& desData(desList[ii].data());
+            const std::string& desData(desListItem.data());
 
             if (!desData.empty())
             {
                 try
                 {
                     io::StringStream stream;
-                    stream.write(desData.c_str(), desData.length());
+                    stream.write(desData);
 
                     domParser.clear();
                     domParser.parse(stream);
 
-                    if (domParser.getDocument()->getRootElement()->getLocalName()
-                            == "SIDD")
+                    if (getDocument(domParser).getRootElement()->getLocalName() == "SIDD")
                     {
                         if (numSIDD == imageIndex)
                         {
-                            siddXML = domParser.getDocument();
+                            siddXML = &domParser.getDocument();
                             break;
                         }
                         ++numSIDD;
@@ -220,8 +220,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
         mSensorModelState = NAME + std::string(" ") + stringStream.stream().str();
 
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+        xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
         logging::NullLogger logger;
         std::unique_ptr<six::XMLControl> control(
@@ -241,25 +240,24 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
 
 bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd)
 {
-    xml::lite::MinidomParser domParser;
+    six::MinidomParser domParser;
 
     const std::vector< csm::Des>& desList(isd.fileDess());
-    for (size_t ii = 0; ii < desList.size(); ++ii)
+    for (const auto& desListItem : desList)
     {
-        const std::string& desData(desList[ii].data());
+        const std::string& desData(desListItem.data());
 
         if (!desData.empty())
         {
             try
             {
                 io::StringStream stream;
-                stream.write(desData.c_str(), desData.length());
+                stream.write(desData);
 
                 domParser.clear();
                 domParser.parse(stream);
 
-                if (domParser.getDocument()->getRootElement()->getLocalName()
-                        == "SIDD")
+                if (getDocument(domParser).getRootElement()->getLocalName() == "SIDD")
                 {
                     return true;
                 }
@@ -411,14 +409,13 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
     try
     {
         io::StringStream stream;
-        stream.write(sensorModelXML.c_str(), sensorModelXML.length());
+        stream.write(sensorModelXML);
 
-        xml::lite::MinidomParser domParser;
+        six::MinidomParser domParser;
         domParser.parse(stream);
 
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::DERIVED,
-                new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+        xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
         logging::NullLogger logger;
         std::unique_ptr<six::XMLControl> control(xmlRegistry.newXMLControl(
@@ -428,7 +425,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         mSensorModelState = sensorModelState;
 
         mData.reset(reinterpret_cast<six::sidd::DerivedData*>(control->fromXML(
-                domParser.getDocument(), mSchemaDirs)));
+                &domParser.getDocument(), mSchemaDirs)));
         reinitialize();
     }
     catch (const except::Exception& ex)
@@ -452,6 +449,17 @@ const six::sidd::MeasurableProjection* SIDDSensorModel::getProjection() const
             reinterpret_cast<six::sidd::MeasurableProjection*>(
                     mData->measurement->projection.get());
     return projection;
+}
+
+std::vector<double>
+SIDDSensorModel::getSIXUnmodeledError() const
+{
+    assert(mData.get() != nullptr);
+    if (auto pErrorStatistics = mData->errorStatistics.get())
+    {
+        return SIXSensorModel::getSIXUnmodeledError_(*pErrorStatistics);
+    }
+    return {};
 }
 
 void SIDDSensorModel::reinitialize()

@@ -74,7 +74,7 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE* tre, char* bufptr, nitf_Error* error)
 
             /* construct the field */
             field = nitf_Field_construct(length,
-                                         cursor.desc_ptr->data_type,
+                                         (nitf_FieldType) cursor.desc_ptr->data_type,
                                          error);
             if (!field)
                 goto CATCH_ERROR;
@@ -184,6 +184,8 @@ nitf_TREUtils_getRawData(nitf_TRE* tre,
     /* the cursor */
     nitf_TRECursor cursor;
 
+    size_t length_ = 0;
+
     /* get actual length of TRE */
     length = nitf_TREUtils_computeLength(tre);
     *treLength = length;
@@ -207,7 +209,8 @@ nitf_TREUtils_getRawData(nitf_TRE* tre,
                         NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
-    memset(data, 0, length + 1);
+    length_ = ((size_t)length) + 1;
+    memset(data, 0, length_);
 
     cursor = nitf_TRECursor_begin(tre);
     while (!nitf_TRECursor_isDone(&cursor) && status && offset < length)
@@ -226,7 +229,7 @@ nitf_TREUtils_getRawData(nitf_TRE* tre,
                 field = (nitf_Field*)pair->data;
 
                 /* get the raw data */
-                tempBuf = NITF_MALLOC(tempLength);
+                tempBuf = (char*) NITF_MALLOC(tempLength);
                 if (!tempBuf)
                 {
                     nitf_Error_init(error,
@@ -318,7 +321,7 @@ nitf_TREUtils_readField(nitf_IOInterface* io,
 NITFAPI(NITF_BOOL)
 nitf_TREUtils_setValue(nitf_TRE* tre,
                        const char* tag,
-                       NITF_DATA* data,
+                       const NITF_DATA* data,
                        size_t dataLength,
                        nitf_Error* error)
 {
@@ -552,7 +555,7 @@ fillEmptyTREField(nitf_TRECursor* cursor, nitf_Pair* pair, nitf_Error* error)
     }
 
     field = nitf_Field_construct(fieldLength,
-                                 cursor->desc_ptr->data_type,
+                                 (nitf_FieldType) cursor->desc_ptr->data_type,
                                  error);
 
     /* set the field to be resizable later on */
@@ -1031,7 +1034,7 @@ nitf_TREUtils_basicFind(nitf_TRE* tre, const char* pattern, nitf_Error* error)
 NITFAPI(NITF_BOOL)
 nitf_TREUtils_basicSetField(nitf_TRE* tre,
                             const char* tag,
-                            NITF_DATA* data,
+                            const NITF_DATA* data,
                             size_t dataLength,
                             nitf_Error* error)
 {

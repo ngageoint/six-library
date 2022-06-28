@@ -39,19 +39,6 @@ void setToZero(MatT& matrix)
 
 namespace scene
 {
-Errors::Errors() :
-    mFrameType(FrameType::RIC_ECF),
-    mSensorErrorCovar(0.0),
-    mUnmodeledErrorCovar(0.0),
-    mIonoErrorCovar(0.0),
-    mTropoErrorCovar(0.0),
-    mPositionCorrCoefZero(0.0),
-    mPositionDecorrRate(0.0),
-    mRangeCorrCoefZero(0.0),
-    mRangeDecorrRate(0.0)
-{
-}
-
 void Errors::clear()
 {
     mFrameType = FrameType::RIC_ECF;

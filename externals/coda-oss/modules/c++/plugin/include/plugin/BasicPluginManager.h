@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <map>
+#include<memory>
 
 #include <import/sys.h>
 #include <import/str.h>
@@ -83,7 +84,7 @@ namespace plugin
 template<typename T> class BasicPluginManager
 {
 public:
-    typedef mem::SharedPtr<PluginIdentity<T> > SharedPluginIdentity;
+    typedef std::shared_ptr<PluginIdentity<T>> SharedPluginIdentity;
     typedef std::map<std::string,
                      std::pair<T*, SharedPluginIdentity> >
         HandlerRegistry;
@@ -253,7 +254,7 @@ public:
      *  \param identity The plugin identifier
      *  \param eh The error handler to be used if something bad happens
      */
-    virtual void addHandler(mem::SharedPtr<PluginIdentity<T> > identity,
+    virtual void addHandler(std::shared_ptr<PluginIdentity<T> > identity,
                             ErrorHandler* eh)
     {
         try
@@ -352,9 +353,15 @@ public:
 
             // Retrieve the plugin identity and add a handler to the registry.
 
-            const void*(*ident)(void) =
-                (const void*(*)(void))
-                dso->retrieve(getPluginIdentName());
+            // Retrieve the plugin identity and add a handler to the registry.
+            #if _MSC_VER
+            __pragma(warning(push))
+            __pragma(warning(disable: 4191)) // '...': unsafe conversion from '...' to '...'
+            #endif
+            auto ident = reinterpret_cast<const void*(*)(void)>(dso->retrieve(getPluginIdentName()));
+            #if _MSC_VER
+            __pragma(warning(pop))
+            #endif
 
             const SharedPluginIdentity* const plugin =
                 static_cast<const SharedPluginIdentity*>((*ident)());

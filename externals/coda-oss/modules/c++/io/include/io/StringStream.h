@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __IO_STRING_STREAM_H__
-#define __IO_STRING_STREAM_H__
+#ifndef CODA_OSS_io_StringStream_h_INCLUDED_
+#define CODA_OSS_io_StringStream_h_INCLUDED_
+#pragma once
 
 /*! \file StringStream.h
  *  \brief  A stream interface to the std::stringstream from C++ STL.
@@ -33,33 +34,31 @@
  */
 
 #include <sstream>
+
+#include "gsl/gsl.h"
 #include "io/BidirectionalStream.h"
 #include "sys/Conf.h"
 #include "io/SeekableStreams.h"
+#include "coda_oss/string.h"
+#include "str/Encoding.h"
 
 namespace io
 {
-/*!
- *  The StringStream class is the cafe interface to std::stringstream.
- *  Added capabilities allow it to send and receive information quickly
- *  and easily to any other stream-inheriting class.  
- */
-class StringStream : public SeekableBidirectionalStream
+template<typename CharT>
+struct StringStreamT final : public SeekableBidirectionalStream
 {
-public:
+    StringStreamT(){} // "=default" causes error with old GCC
 
-    //! Default constructor
-    StringStream() :
-        mData(std::stringstream::in | std::stringstream::out
-                | std::stringstream::binary)
-    {
-    }
+    StringStreamT(const StringStreamT&) = delete;
+    StringStreamT& operator=(const StringStreamT&) = delete;
+
+    using stringstream = std::basic_stringstream<CharT>;
 
     /*!
      *  Returns the stringstream associated with this StringStream
      *  \return the stringstream
      */
-    const std::stringstream& stream() const
+    const stringstream& stream() const
     {
         return mData;
     }
@@ -95,7 +94,16 @@ public:
      *  Returns the available bytes to read from the stream
      *  \return the available bytes to read
      */
-    sys::Off_T available();
+    sys::Off_T available()
+    {
+        const auto where = tell();
+
+        mData.seekg(0, std::ios::end);
+        const auto until = tell();
+
+        mData.seekg(where, std::ios::beg);
+        return (until - where);
+    }
 
     using OutputStream::write;
 
@@ -104,22 +112,26 @@ public:
      *  \param buffer the data to write to the stream
      *  \param size the number of bytes to write to the stream
      */
-    void write(const void* buffer, sys::Size_T size);
+    void write(const void* buffer, sys::Size_T size)
+    {
+        auto buffer_ = static_cast<const CharT*>(buffer);
+        mData.write(buffer_, gsl::narrow<std::streamsize>(size));
+    }
 
     //! Returns the internal std::stringstream
-    std::stringstream& stream()
+    stringstream& stream()
     {
         return mData;
     }
 
     void reset()
     {
-        mData.str("");
+        mData.str(std::basic_string<CharT>());
         // clear eof/errors/etc.
         mData.clear();
     }
 
-protected:
+private:
     /*!
      * Read up to len bytes of data from this buffer into an array
      * update the mark
@@ -128,11 +140,33 @@ protected:
      * \throw IoException
      * \return  The number of bytes read
      */
-    virtual sys::SSize_T readImpl(void* buffer, size_t len);
+    sys::SSize_T readImpl(void* buffer, size_t len_) override
+    {
+        const auto maxSize = available();
+        if (maxSize <= 0)
+            return ::io::InputStream::IS_END;
+            
+        auto len = gsl::narrow<sys::Off_T>(len_);
+        if (maxSize < len)
+            len = maxSize;
+            
+        if (len <= 0)
+            return 0;
+            
+        auto buffer_ = static_cast<CharT*>(buffer);
+        mData.read(buffer_, gsl::narrow<std::streamsize>(len));
+            
+        // Could be problem if streams are broken alternately could
+        // return gcount in else case above
+        return gsl::narrow<sys::SSize_T>(len);
+    }
 
-private:
-    std::stringstream mData;
+    stringstream mData{stringstream::in | stringstream::out | stringstream::binary};
 };
 
+using StringStream = StringStreamT<std::string::value_type>;
+using U8StringStream = StringStreamT<coda_oss::u8string::value_type>;
+using W1252StringStream = StringStreamT<str::W1252string::value_type>;
+
 }
-#endif //__STRING_STREAM_H__
+#endif // CODA_OSS_io_StringStream_h_INCLUDED_

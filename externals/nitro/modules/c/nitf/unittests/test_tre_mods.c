@@ -28,7 +28,7 @@ TEST_CASE(testNestedMod)
     nitf_Error error;
     NITF_BOOL exists;
     nitf_TRE* tre = nitf_TRE_construct("ACCHZB", NULL, &error);
-    TEST_ASSERT(tre);
+    TEST_ASSERT(tre != NULL);
     exists = nitf_TRE_setField(tre, "NUMACHZ", "02", 2, &error);
     TEST_ASSERT(exists);
     exists = nitf_TRE_setField(tre, "UNIAAH[0]", "abc", 3, &error);
@@ -61,7 +61,7 @@ TEST_CASE(testIncompleteCondMod)
     nitf_Error error;
     NITF_BOOL exists;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
-    TEST_ASSERT(tre);
+    TEST_ASSERT(tre != NULL);
     int treLength = tre->handler->getCurrentSize(tre, &error);
     TEST_ASSERT_EQ_INT(treLength, 2);
 
@@ -90,16 +90,16 @@ TEST_CASE(testClone)
     nitf_Error error;
 
     nitf_TRE* tre = nitf_TRE_construct("JITCID", NULL, &error);
-    TEST_ASSERT(tre);
+    TEST_ASSERT(tre != NULL);
 
     exists = nitf_TRE_setField(tre, "FILCMT", "fyi", 3, &error);
     TEST_ASSERT(exists);
 
     dolly = nitf_TRE_clone(tre, &error);
-    TEST_ASSERT(dolly);
+    TEST_ASSERT(dolly != NULL);
 
     clonedField = nitf_TRE_getField(dolly, "FILCMT");
-    TEST_ASSERT(clonedField);
+    TEST_ASSERT(clonedField != NULL);
     TEST_ASSERT_EQ_STR(clonedField->raw, "fyi");
 
     /* destruct the TREs */
@@ -114,7 +114,7 @@ TEST_CASE(testBasicMod)
     nitf_Error error;
     nitf_Field* field;
     nitf_TRE *tre = nitf_TRE_construct("ACFTA", "ACFTA_132", &error);
-    TEST_ASSERT(tre);
+    TEST_ASSERT(tre != NULL);
     field = (nitf_TRE_getField(tre, "AC_MSN_ID"));
     TEST_ASSERT_EQ_STR(field->raw, "          ");
 
@@ -142,7 +142,7 @@ TEST_CASE(testSize)
     int treLength;
     nitf_TRE* tre = nitf_TRE_construct("AIMIDB", NULL, &error);
 
-    TEST_ASSERT(tre);
+    TEST_ASSERT(tre != NULL);
     treLength = tre->handler->getCurrentSize(tre, &error);
     TEST_ASSERT_EQ_INT(treLength, 89);
 
@@ -156,16 +156,16 @@ TEST_CASE(iterateUnfilled)
     nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
     uint32_t numFields = 0;
-    TEST_ASSERT(tre);
+    TEST_ASSERT(tre != NULL);
     cursor = nitf_TRECursor_begin(tre);
 
     while (!nitf_TRECursor_isDone(&cursor))
     {
-        TEST_ASSERT(nitf_TRECursor_iterate(&cursor, &error));
+        TEST_ASSERT(nitf_TRECursor_iterate(&cursor, &error) != 0);
         ++numFields;
     }
 
-    TEST_ASSERT_EQ_INT(numFields, 1);
+    TEST_ASSERT_EQ_INT(numFields, (uint32_t)1);
 
     nitf_TRECursor_cleanup(&cursor);
     nitf_TRE_destruct(&tre);
@@ -177,7 +177,7 @@ TEST_CASE(populateThenIterate)
     nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
     uint32_t numFields = 0;
-    TEST_ASSERT(tre);
+    TEST_ASSERT(tre != NULL);
 
     nitf_TRE_setField(tre, "NUMACPO", "2", 1, &error);
     nitf_TRE_setField(tre, "NUMPTS[0]", "3", 1, &error);
@@ -187,11 +187,11 @@ TEST_CASE(populateThenIterate)
 
     while (!nitf_TRECursor_isDone(&cursor))
     {
-        TEST_ASSERT(nitf_TRECursor_iterate(&cursor, &error));
+        TEST_ASSERT(nitf_TRECursor_iterate(&cursor, &error) != 0);
         ++numFields;
     }
 
-    TEST_ASSERT_EQ_INT(numFields, 29);
+    TEST_ASSERT_EQ_INT(numFields, (uint32_t)29);
 
     nitf_TRECursor_cleanup(&cursor);
     nitf_TRE_destruct(&tre);
@@ -203,12 +203,12 @@ TEST_CASE(populateWhileIterating)
     nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
     uint32_t numFields = 0;
-    TEST_ASSERT(tre);
+    TEST_ASSERT(tre != NULL);
 
     cursor = nitf_TRECursor_begin(tre);
     while (!nitf_TRECursor_isDone(&cursor))
     {
-        TEST_ASSERT(nitf_TRECursor_iterate(&cursor, &error));
+        TEST_ASSERT(nitf_TRECursor_iterate(&cursor, &error) != 0);
         ++numFields;
         if (strcmp(cursor.tag_str, "NUMACPO") == 0)
         {
@@ -223,7 +223,7 @@ TEST_CASE(populateWhileIterating)
             nitf_TRE_setField(cursor.tre, cursor.tag_str, "2", 1, &error);
         }
     }
-    TEST_ASSERT_EQ_INT(numFields, 29);
+    TEST_ASSERT_EQ_INT(numFields, (uint32_t)29);
 
     nitf_TRECursor_cleanup(&cursor);
     nitf_TRE_destruct(&tre);

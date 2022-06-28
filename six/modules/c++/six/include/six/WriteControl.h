@@ -19,16 +19,24 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_WRITE_CONTROL_H__
-#define __SIX_WRITE_CONTROL_H__
+#ifndef SIX_six_WriteControl_h_INCLUDED_
+#define SIX_six_WriteControl_h_INCLUDED_
+#pragma once
+
+#include <memory>
+#include <std/span>
+#include <vector>
+#include <std/filesystem>
+#include <complex>
+#include <string>
 
 #include "six/Types.h"
 #include "six/Region.h"
 #include "six/Container.h"
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
+#include "six/Logger.h"
 #include <import/logging.h>
-#include <mem/SharedPtr.h>
 
 namespace six
 {
@@ -38,12 +46,10 @@ typedef std::vector<io::InputStream*> SourceList;
 
 //!  A vector of Buffer objects (one per SICD, N per SIDD)
 typedef std::vector<const UByte*> BufferList;
-using buffer_list = std::vector<const std::byte*>;
 
 //!  Same as above but used in overloadings to help the compiler out when
 //   it's convenient for the caller to put non-const pointers in the vector
 typedef std::vector<UByte*> NonConstBufferList;
-using buffer_list_mutable = std::vector<std::byte*>;
 
 /*!
  *  \class WriteControl
@@ -61,10 +67,8 @@ using buffer_list_mutable = std::vector<std::byte*>;
  *  allows that data model to be transmitted to the container file format.
  *
  */
-class WriteControl
+struct WriteControl
 {
-public:
-
     //!  Global byte swap option.  Normally, you should leave this up to us
     static const char OPT_BYTE_SWAP[];
 
@@ -74,20 +78,27 @@ public:
      */
     static const char OPT_BUFFER_SIZE[];
 
+    // Control multi-threading for AMP8I_PHS8I conversion in six::sicd::ImageData.
+    // A negative means no multithreading, 0 will have "the system" guess at
+    // an appropriate cutoff (a hardcoded value based on testing).  Any other
+    // positive value is the number of pixels to process in each thread; it should
+    // be fairly large to make-up for the overhead of threading.
+    static const std::string AMP8I_PHS8I_CUTOFF;
+    static constexpr ptrdiff_t AMP8I_PHS8I_DEFAULT_CUTOFF = 0; // to_AMP8I_PHS8I() is too slow w/o multi-threading
+
     //!  Constructor.  Null-sets the Container
-    WriteControl() :
-        mContainer(nullptr), mLog(nullptr), mOwnLog(false), mXMLRegistry(nullptr)
+    WriteControl() noexcept(false) :
+        mLogger(mLog, mOwnLog, nullptr)
     {
         setLogger(nullptr);
         setXMLControlRegistry(nullptr);
     }
 
     //!  Destructor.  Does not release any memory
-    virtual ~WriteControl()
-    {
-        if (mLog && mOwnLog)
-            delete mLog;
-    }
+    virtual ~WriteControl() noexcept {}
+
+    WriteControl(const WriteControl&) = delete;
+    WriteControl& operator=(const WriteControl&) = delete;
 
     /*!
      *  Initialize sets the underlying Container pointer to the
@@ -97,7 +108,7 @@ public:
      *
      *  \param container Container to bind to
      */
-    virtual void initialize(mem::SharedPtr<Container> container) = 0;
+    virtual void initialize(std::shared_ptr<Container> container) = 0;
 
     /*!
      *  Save a list of InputStream sources.  This should always be
@@ -129,18 +140,8 @@ public:
     {
         save(sources, toFile, std::vector<std::string>());
     }
-    void save(const buffer_list& sources, const std::string& toFile)
-    {
-        save(convertBufferList(sources), toFile);
-    }
-
     virtual void save(const BufferList& sources, const std::string& toFile,
                       const std::vector<std::string>& schemaPaths) = 0;
-    virtual void save(const buffer_list& sources, const std::string& toFile,
-                      const std::vector<std::string>& schemaPaths)
-    {
-        save(convertBufferList(sources), toFile, schemaPaths);
-    }
 
     // For convenience since the compiler can't implicitly convert
     // std::vector<T*> to std::vector<const T*>
@@ -148,18 +149,8 @@ public:
     {
         save(convertBufferList(sources), toFile);
     }
-    void save(const buffer_list_mutable& sources, const std::string& toFile)
-    {
-        save(convertBufferList(sources), toFile);
-    }
 
     void save(const NonConstBufferList& sources,
-              const std::string& toFile,
-              const std::vector<std::string>& schemaPaths)
-    {
-        save(convertBufferList(sources), toFile, schemaPaths);
-    }
-    void save(const buffer_list_mutable& sources,
               const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
     {
@@ -190,7 +181,8 @@ public:
     }
     void save(const std::byte* buffer, const std::string& toFile)
     {
-        save(reinterpret_cast<const UByte*>(buffer), toFile);
+        const void* buffer_ = buffer;
+        save(static_cast<const UByte*>(buffer_), toFile);
     }
     void save(const UByte* buffer, const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
@@ -202,13 +194,14 @@ public:
     void save(const std::byte* buffer, const std::string& toFile,
               const std::vector<std::string>& schemaPaths)
     {
-        save(reinterpret_cast<const UByte*>(buffer), toFile, schemaPaths);
+        const void* buffer_ = buffer;
+        save(static_cast<const UByte*>(buffer_), toFile, schemaPaths);
     }
 
     /*!
      * shared pointer to Container
      */
-    mem::SharedPtr<Container> getContainer()
+    std::shared_ptr<Container> getContainer()
     {
         return mContainer;
     }
@@ -216,8 +209,9 @@ public:
     /*!
      *  shared const pointer to Container.
      */
-    mem::SharedPtr<const Container> getContainer() const
+    std::shared_ptr<const Container> getContainer() const
     {
+        std::shared_ptr<const Container> retval = mContainer;
         return mContainer;
     }
 
@@ -249,12 +243,14 @@ public:
     /*!
      * Sets the logger to use internally
      */
-    void setLogger(logging::Logger* log, bool ownLog = false)
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
     {
-        if (mLog && mOwnLog && log != mLog)
-            delete mLog;
-        mLog = log ? log : new logging::NullLogger;
-        mOwnLog = log ? ownLog : true;
+        mLogger.setLogger(std::forward<TLogger>(logger));
+    }
+    void setLogger(logging::Logger* logger, bool ownLog)
+    {
+        mLogger.setLogger(logger, ownLog);
     }
 
     virtual void setXMLControlRegistry(const XMLControlRegistry* xmlRegistry)
@@ -268,14 +264,13 @@ public:
         return mXMLRegistry;
     }
 
-    template<typename TBufferList>
-    static inline
-    BufferList convertBufferList(const TBufferList& buffers)
+    BufferList convertBufferList(const NonConstBufferList& buffers)
     {
         BufferList retval;
         for (const auto& buffer : buffers)
         {
-            retval.push_back(reinterpret_cast<BufferList::value_type>(buffer));
+            const void* buffer_ = buffer;
+            retval.push_back(static_cast<BufferList::value_type>(buffer_));
         }
         return retval;
     }
@@ -287,14 +282,15 @@ protected:
         if (!mXMLRegistry)
             mXMLRegistry = &XMLControlFactory::getInstance();
     }
-    mem::SharedPtr<Container> mContainer;
+    std::shared_ptr<Container> mContainer;
     Options mOptions;
-    logging::Logger *mLog;
-    bool mOwnLog;
-    const XMLControlRegistry *mXMLRegistry;
+    logging::Logger* mLog = nullptr;
+    bool mOwnLog = false;
+    const XMLControlRegistry* mXMLRegistry = nullptr;
 
+private:
+    Logger mLogger;
 };
 
 }
-#endif
-
+#endif // SIX_six_WriteControl_h_INCLUDED_

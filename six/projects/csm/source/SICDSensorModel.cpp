@@ -21,6 +21,8 @@
 */
 #include <six/csm/SICDSensorModel.h>
 
+#include <assert.h>
+
 #include "Error.h"
 #include <sys/OS.h>
 #include <sys/Path.h>
@@ -30,6 +32,8 @@
 #include <six/NITFReadControl.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
+#include <six/XmlLite.h>
+#include <six/ErrorStatistics.h>
 
 namespace six
 {
@@ -81,8 +85,7 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
         // The reason to do this is to avoid adding XMLControlCreators to the
         // XMLControlFactory singleton - this way has more fine-grained control
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
         // create a reader and load the file
         six::NITFReadControl reader;
@@ -91,7 +94,7 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
 
         const auto container = reader.getContainer();
         if (container->getDataType() != six::DataType::COMPLEX ||
-            container->getNumData() != 1 ||
+            container->size() != 1 ||
             container->getData(0)->getDataType() != six::DataType::COMPLEX)
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
@@ -121,35 +124,34 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
     try
     {
         // Check for the first SICD DES and parse it
-        xml::lite::Document* sicdXML = nullptr;
-        xml::lite::MinidomParser domParser;
+        const xml::lite::Document* sicdXML = nullptr;
+        six::MinidomParser domParser;
 
         const std::vector< csm::Des>& desList(isd.fileDess());
-        for (size_t ii = 0; ii < desList.size(); ++ii)
+        for (const auto& desListItem : desList)
         {
-            DataType dataType = getDataType(desList[ii]);
+            DataType dataType = getDataType(desListItem);
             if (dataType != DataType::COMPLEX)
             {
                 continue;
             }
 
-            const std::string& desData(desList[ii].data());
+            const std::string& desData(desListItem.data());
 
             if (!desData.empty())
             {
                 try
                 {
                     io::StringStream stream;
-                    stream.write(desData.c_str(), desData.length());
+                    stream.write(desData);
 
                     domParser.clear();
                     domParser.parse(stream);
 
-                    const std::string localName = domParser.getDocument()->
-                            getRootElement()->getLocalName();
+                    const auto localName = getDocument(domParser).getRootElement()->getLocalName();
                     if (localName == "SICD")
                     {
-                        sicdXML = domParser.getDocument();
+                        sicdXML = &domParser.getDocument();
                         break;
                     }
                     else if (localName == "SIDD")
@@ -187,8 +189,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
         mSensorModelState = NAME + std::string(" ") + stringStream.stream().str();
 
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
         logging::NullLogger logger;
         std::unique_ptr<six::XMLControl> control(
@@ -208,25 +209,24 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
 
 bool SICDSensorModel::containsComplexDES(const csm::Nitf21Isd& isd)
 {
-    xml::lite::MinidomParser domParser;
+   six::MinidomParser domParser;
 
     const std::vector< csm::Des>& desList(isd.fileDess());
-    for (size_t ii = 0; ii < desList.size(); ++ii)
+    for (const auto& desListItem : desList)
     {
-        const std::string& desData(desList[ii].data());
+        const std::string& desData(desListItem.data());
 
         if (!desData.empty())
         {
             try
             {
                 io::StringStream stream;
-                stream.write(desData.c_str(), desData.length());
+                stream.write(desData);
 
                 domParser.clear();
                 domParser.parse(stream);
 
-                const std::string localName = domParser.getDocument()->
-                        getRootElement()->getLocalName();
+                const auto localName = getDocument(domParser).getRootElement()->getLocalName();
                 if (localName == "SICD")
                 {
                     return true;
@@ -396,6 +396,17 @@ csm::ImageCoord SICDSensorModel::getImageStart() const
                            mData->imageData->firstCol);
 }
 
+std::vector<double>
+SICDSensorModel::getSIXUnmodeledError() const
+{
+    assert(mData.get() != nullptr);
+    if (auto pErrorStatistics = mData->errorStatistics.get())
+    {
+        return SIXSensorModel::getSIXUnmodeledError_(*pErrorStatistics);
+    }
+    return {};
+}
+
 void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
 {
     const size_t idx = sensorModelState.find(' ');
@@ -419,14 +430,13 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
     try
     {
         io::StringStream stream;
-        stream.write(sensorModelXML.c_str(), sensorModelXML.length());
+        stream.write(sensorModelXML);
 
-        xml::lite::MinidomParser domParser;
+        six::MinidomParser domParser;
         domParser.parse(stream);
 
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator(six::DataType::COMPLEX,
-                new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
         logging::NullLogger logger;
         std::unique_ptr<six::XMLControl> control(
@@ -436,7 +446,7 @@ void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
         mSensorModelState = sensorModelState;
 
         mData.reset(reinterpret_cast<six::sicd::ComplexData*>(control->fromXML(
-                domParser.getDocument(), mSchemaDirs)));
+                &domParser.getDocument(), mSchemaDirs)));
         reinitialize();
     }
     catch (const except::Exception& ex)

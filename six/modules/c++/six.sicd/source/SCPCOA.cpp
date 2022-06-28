@@ -92,7 +92,7 @@ Vector3 SCPCOA::slantPlaneNormal(const Vector3& scp) const
 double SCPCOA::derivedTwistAngle(const scene::SceneGeometry& geometry) const
 {
     // Angle from +GPY axis to the +SPY axis in plane of incidence
-    Vector3 uGPY = cross(geometry.getGroundPlaneNormal(),
+    const Vector3 uGPY = cross(geometry.getGroundPlaneNormal(),
             -geometry.getGroundRange().unit());
     return -1 * std::asin(uGPY.dot(geometry.getSlantPlaneZ())) *
         math::Constants::RADIANS_TO_DEGREES;
@@ -130,7 +130,7 @@ void SCPCOA::fillDerivedFields(const GeoData& geoData,
     const Vector3& scp = geoData.scp.ecf;
     if (sideOfTrack == SideOfTrackType::NOT_SET)
     {
-        sideOfTrack = geometry.getSideOfTrack();
+        sideOfTrack = static_cast<six::SideOfTrackType::values>(geometry.getSideOfTrack());
     }
     if (Init::isUndefined(slantRange))
     {

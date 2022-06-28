@@ -61,7 +61,7 @@ public:
     std::vector<OneD<_T> >& coeffs(){ return mCoef; }
 
     //! The polynomial is invalid (i.e. orderX() and orderY() will throw)
-    TwoD() {}
+    TwoD() {}  // = default; // error w/ICC and "const" member data
 
     TwoD(size_t orderX, size_t orderY) : mCoef(orderX+1,OneD<_T>(orderY)) {}
 
@@ -110,14 +110,14 @@ public:
     {
         if (i > orderX())
             throw except::Exception(
-                Ctxt("Index [" + str::toString<size_t>(i) +
+                Ctxt("Index [" + str::toString(i) +
                 "] is out of bounds for orderX [" +
-                str::toString<size_t>(orderX()) + "]"));
+                str::toString(orderX()) + "]"));
         else if (p.order() != orderY())
             throw except::Exception(
-                Ctxt("OneD poly [" + str::toString<size_t>(p.order()) +
+                Ctxt("OneD poly [" + str::toString(p.order()) +
                 "] is of the incorrect size for orderY [" +
-                str::toString<size_t>(orderY()) + "]"));
+                str::toString(orderY()) + "]"));
         else
             mCoef[i] = p;
     }

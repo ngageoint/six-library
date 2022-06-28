@@ -22,10 +22,12 @@
 #include <cphd03/CPHDXMLControl.h>
 
 #include <string>
+#include <std/memory>
 
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <six/Utilities.h>
+#include <six/XmlLite.h>
 
 // CPHD Spec is not enforced
 #define ENFORCESPEC 0
@@ -77,7 +79,7 @@ size_t CPHDXMLControl::getXMLsize(const Metadata& metadata)
 
 mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
 {
-    mem::auto_ptr<xml::lite::Document> doc(new xml::lite::Document());
+    auto doc = std::make_unique<xml::lite::Document>();
 
     XMLElem root = newElement("CPHD");
     doc->setRootElement(root);
@@ -98,7 +100,7 @@ mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadat
     //set the XMLNS
     root->setNamespacePrefix("", getDefaultURI());
 
-    return doc;
+    return mem::auto_ptr<xml::lite::Document>(doc.release());
 }
 
 XMLElem CPHDXMLControl::createLatLonAltFootprint(const std::string& name,
@@ -487,17 +489,17 @@ XMLElem CPHDXMLControl::areaSampleDirectionParametersToXML(
 mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
 {
     io::StringStream stringStream;
-    stringStream.write(xmlString.c_str(), xmlString.size());
-    xml::lite::MinidomParser parser;
+    stringStream.write(xmlString);
+    six::MinidomParser parser;
     parser.parse(stringStream);
-    return fromXML(parser.getDocument());
+    return fromXML(&parser.getDocument());
 }
 
 mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 {
-    mem::auto_ptr<Metadata> cphd03(new Metadata());
+    auto cphd03 = std::make_unique<Metadata>();
 
-    XMLElem root = doc->getRootElement();
+    const auto root = doc->getRootElement();
 
     XMLElem collectionInfoXML   = getFirstAndOnly(root, "CollectionInfo");
     XMLElem dataXML             = getFirstAndOnly(root, "Data");
@@ -523,12 +525,17 @@ mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 
     fromXML(vectorParametersXML, cphd03->vectorParameters);
 
-    return cphd03;
+    return mem::auto_ptr<Metadata>(cphd03.release());
+}
+Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc)
+{
+    return *(fromXML(&doc));
 }
 
-void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
+
+void CPHDXMLControl::fromXML(const xml::lite::Element* dataXML, Data& data)
 {
-    data.sampleType = cphd::SampleType(getFirstAndOnly(dataXML, "SampleType")->getCharacterData());
+    data.sampleType = cphd::SampleType::toType(getFirstAndOnly(dataXML, "SampleType")->getCharacterData());
 
     parseUInt(getFirstAndOnly(dataXML, "NumCPHDChannels"), data.numCPHDChannels);
     parseUInt(getFirstAndOnly(dataXML, "NumBytesVBP"), data.numBytesVBP);
@@ -541,7 +548,7 @@ void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
         throw except::Exception(Ctxt("Expected at least one ArraySize"));
     }
 
-    for (std::vector<xml::lite::Element*>::iterator it = arraySizeXML.begin();
+    for (auto it = arraySizeXML.begin();
          it != arraySizeXML.end();
          ++it)
     {
@@ -552,19 +559,14 @@ void CPHDXMLControl::fromXML(const XMLElem dataXML, Data& data)
     }
 }
 
-void CPHDXMLControl::fromXML(const XMLElem globalXML, Global& global)
+void CPHDXMLControl::fromXML(const xml::lite::Element* globalXML, Global& global)
 {
     XMLElem tmpElem = nullptr;
 
-    global.domainType = cphd::DomainType(getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
-    global.phaseSGN   = cphd::PhaseSGN(getFirstAndOnly(globalXML, "PhaseSGN")->getCharacterData());
+    global.domainType = cphd::DomainType::toType(getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
+    global.phaseSGN   = cphd::PhaseSGN::toType(getFirstAndOnly(globalXML, "PhaseSGN")->getCharacterData());
 
-    tmpElem = getOptional(globalXML, "RefFreqIndex");
-    if (tmpElem)
-    {
-        //optional
-        parseInt(tmpElem, global.refFrequencyIndex);
-    }
+    parseOptionalInt(globalXML, "RefFreqIndex", global.refFrequencyIndex);
 
     parseDateTime(getFirstAndOnly(globalXML, "CollectStart"), global.collectStart);
 
@@ -732,7 +734,7 @@ void CPHDXMLControl::fromXML(const XMLElem globalXML, Global& global)
     }
 }
 
-void CPHDXMLControl::fromXML(const XMLElem channelXML, Channel& channel)
+void CPHDXMLControl::fromXML(const xml::lite::Element* channelXML, Channel& channel)
 {
     std::vector<XMLElem> chanParametersXML;
     channelXML->getElementsByTagName("Parameters", chanParametersXML);
@@ -753,36 +755,22 @@ void CPHDXMLControl::fromXML(const XMLElem channelXML, Channel& channel)
         parseDouble(getFirstAndOnly(*it, "BWSavedNom"), chanParam.bwSavedNom);
         parseDouble(getFirstAndOnly(*it, "TOASavedNom"), chanParam.toaSavedNom);
 
-        XMLElem tmpElem = getOptional(*it, "TxAnt_Index");
-        if (tmpElem)
-        {
-            parseInt(tmpElem, chanParam.txAntIndex);
-        }
-
-        tmpElem = getOptional(*it, "RcvAnt_Index");
-        if (tmpElem)
-        {
-            parseInt(tmpElem, chanParam.rcvAntIndex);
-        }
-
-        tmpElem = getOptional(*it, "TWAnt_Index");
-        if (tmpElem)
-        {
-            parseInt(tmpElem, chanParam.twAntIndex);
-        }
+        parseOptionalInt(*it, "TxAnt_Index", chanParam.txAntIndex);
+        parseOptionalInt(*it, "RcvAnt_Index", chanParam.rcvAntIndex);
+        parseOptionalInt(*it, "TWAnt_Index", chanParam.twAntIndex);
 
         channel.parameters.push_back(chanParam);
     }
 }
 
-void CPHDXMLControl::fromXML(const XMLElem srpXML, SRP& srp)
+void CPHDXMLControl::fromXML(const xml::lite::Element* srpXML, SRP& srp)
 {
 #if ENFORCESPEC
     srp.srpType = cphd::SRPType(getFirstAndOnly(srpXML, "SRPType")->getCharacterData());
 #else
     std::string s(getFirstAndOnly(srpXML, "SRPType")->getCharacterData());
     str::upper(s);
-    srp.srpType = cphd::SRPType(s);
+    srp.srpType = cphd::SRPType::toType(s);
 #endif
     parseInt(getFirstAndOnly(srpXML, "NumSRPs"), srp.numSRPs);
 
@@ -854,7 +842,7 @@ void CPHDXMLControl::fromXML(const XMLElem srpXML, SRP& srp)
     }
 }
 
-void CPHDXMLControl::fromXML(const XMLElem vectorParametersXML,
+void CPHDXMLControl::fromXML(const xml::lite::Element* vectorParametersXML,
                              VectorParameters& vp)
 {
     parseInt(getFirstAndOnly(vectorParametersXML, "TxTime"), vp.txTime);
@@ -862,25 +850,13 @@ void CPHDXMLControl::fromXML(const XMLElem vectorParametersXML,
     parseInt(getFirstAndOnly(vectorParametersXML, "RcvTime"), vp.rcvTime);
     parseInt(getFirstAndOnly(vectorParametersXML, "RcvPos"), vp.rcvPos);
 
-    XMLElem SRPTimeXML = getOptional(vectorParametersXML, "SRPTime");
-    if (SRPTimeXML)
-    {
-        parseInt(SRPTimeXML, vp.srpTime);
-    }
+    parseOptionalInt(vectorParametersXML, "SRPTime", vp.srpTime);
 
     parseInt(getFirstAndOnly(vectorParametersXML, "SRPPos"), vp.srpPos);
 
-    XMLElem AmpSFXML = getOptional(vectorParametersXML, "AmpSF");
-    if (AmpSFXML)
-    {
-        parseInt(AmpSFXML, vp.ampSF);
-    }
+    parseOptionalInt(vectorParametersXML, "AmpSF", vp.ampSF);
 
-    XMLElem TropoSRPXML = getOptional(vectorParametersXML, "TropoSRP");
-    if (TropoSRPXML)
-    {
-        parseInt(TropoSRPXML, vp.tropoSRP);
-    }
+    parseOptionalInt(vectorParametersXML, "TropoSRP", vp.tropoSRP);
 
     // We must have either FxParameters or TOAParameters
     XMLElem FxParametersXML = getOptional(vectorParametersXML, "FxParameters");
@@ -917,7 +893,7 @@ void CPHDXMLControl::fromXML(const XMLElem vectorParametersXML,
     }
 }
 
-void CPHDXMLControl::fromXML(const XMLElem antennaParamsXML,
+void CPHDXMLControl::fromXML(const xml::lite::Element* antennaParamsXML,
                              AntennaParameters& params)
 {
     mCommon.parsePolyXYZ(getFirstAndOnly(antennaParamsXML, "XAxisPoly"),
@@ -989,7 +965,7 @@ void CPHDXMLControl::fromXML(const XMLElem antennaParamsXML,
     }
 }
 
-void CPHDXMLControl::fromXML(const XMLElem antennaXML, Antenna& antenna)
+void CPHDXMLControl::fromXML(const xml::lite::Element* antennaXML, Antenna& antenna)
 {
     parseInt(getFirstAndOnly(antennaXML, "NumTxAnt"),  antenna.numTxAnt);
     parseInt(getFirstAndOnly(antennaXML, "NumRcvAnt"), antenna.numRcvAnt);

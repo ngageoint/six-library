@@ -32,14 +32,12 @@ namespace six
 namespace sidd
 {
 
-class GeoTIFFReadControl : public ReadControl
+struct GeoTIFFReadControl : public ReadControl
 {
-public:
+    GeoTIFFReadControl() = default;
 
-    //!  Constructor
-    GeoTIFFReadControl()
-    {
-    }
+    GeoTIFFReadControl(const GeoTIFFReadControl&) = delete;
+    GeoTIFFReadControl operator=(const GeoTIFFReadControl&) = delete;
 
     virtual DataType getDataType(const std::string& fromFile) const;
 
@@ -51,8 +49,8 @@ public:
      *  \param fromFile    Input filepath
      *  \param schemaPaths Directories or files of schema locations
      */
-    virtual void load(const std::string& fromFile,
-                      const std::vector<std::string>& schemaPaths);
+    void load(const std::string& fromFile, const std::vector<std::string>& schemaPaths) override;
+    void load(const std::filesystem::path&, const std::vector<std::filesystem::path>* schemaPaths) override;
 
     using ReadControl::interleaved;
     virtual UByte* interleaved(Region& region, size_t imageNumber) override;
@@ -66,6 +64,10 @@ public:
 protected:
 
     tiff::FileReader mReader;
+
+private:
+    template<typename TSchemaPaths, typename TCreateXmlParser>
+    void load_(const std::string& fromFile, const TSchemaPaths&, TCreateXmlParser);
 
 };
 

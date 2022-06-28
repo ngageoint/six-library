@@ -20,7 +20,12 @@
  *
  */
 #include <six/sicd/RadarCollection.h>
+
+#include <gsl/gsl.h>
 #include <six/Utilities.h>
+
+#undef min
+#undef max
 
 namespace
 {
@@ -29,7 +34,7 @@ types::RowCol<T> rotatePixel(size_t origNumCols, const types::RowCol<T>& pixel)
 {
     types::RowCol<T> rotatedPixel;
     rotatedPixel.col = pixel.row;
-    rotatedPixel.row = origNumCols - pixel.col;
+    rotatedPixel.row = static_cast<T>(origNumCols) - pixel.col;
     return rotatedPixel;
 }
 }
@@ -130,7 +135,7 @@ void WaveformParameters::fillDerivedFields()
 bool WaveformParameters::validate(int refFrequencyIndex,
         logging::Logger& log) const
 {
-    bool valid = false;
+    bool valid = true;
     std::ostringstream messageBuilder;
 
     //2.8.3
@@ -203,7 +208,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
     }
 
     //2.8.9
-    if (txPulseLength > rcvWindowLength)
+    if (six::Init::isDefined(txPulseLength) && (txPulseLength > rcvWindowLength)) // TxPulseLength is optional
     {
         messageBuilder.str("");
         messageBuilder << WF_INCONSISTENT_STR << std::endl
@@ -216,7 +221,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
     }
 
     //2.8.10
-    if (rcvIFBandwidth > adcSampleRate)
+    if (six::Init::isDefined(rcvIFBandwidth) && (rcvIFBandwidth > adcSampleRate)) // RcvIFBandwidth is optional
     {
         messageBuilder.str("");
         messageBuilder << WF_INCONSISTENT_STR << std::endl
@@ -244,16 +249,19 @@ bool WaveformParameters::validate(int refFrequencyIndex,
     }
 
     //2.8.12
-    double freq_tol = (rcvWindowLength - txPulseLength) * txFMRate;
-    if (rcvFrequencyStart >= (txFrequencyStart + txRFBandwidth + freq_tol) ||
-        rcvFrequencyStart <= txFrequencyStart - freq_tol)
+    if (six::Init::isDefined(rcvFrequencyStart)) // RcvFreqStart is optional
     {
-        messageBuilder.str("");
-        messageBuilder << WF_INCONSISTENT_STR << std::endl
-            << "SICD.RadarCollection.Waveform.WFParameters.RcvFreqStart: "
-            << rcvFrequencyStart << std::endl;
-        log.error(messageBuilder.str());
-        valid = false;
+        const auto freq_tol = (rcvWindowLength - txPulseLength) * txFMRate;
+        if (rcvFrequencyStart >= (txFrequencyStart + txRFBandwidth + freq_tol) ||
+            rcvFrequencyStart <= txFrequencyStart - freq_tol)
+        {
+            messageBuilder.str("");
+                messageBuilder << WF_INCONSISTENT_STR << std::endl
+                << "SICD.RadarCollection.Waveform.WFParameters.RcvFreqStart: "
+                << rcvFrequencyStart << std::endl;
+                log.error(messageBuilder.str());
+                valid = false;
+        }
     }
 
     return valid;
@@ -297,8 +305,7 @@ Segment::Segment() :
     startLine(Init::undefined<int>()),
     startSample(Init::undefined<int>()),
     endLine(Init::undefined<int>()),
-    endSample(Init::undefined<int>()),
-    identifier(Init::undefined<std::string>())
+    endSample(Init::undefined<int>())
 {
 }
 
@@ -339,8 +346,8 @@ types::RowCol<double> AreaPlane::getAdjustedReferencePoint() const
     //       pixel-centered 0-based.  More generally than this, we need to
     //       account for the SICD FirstLine/FirstSample offset
     //
-    refPt.row -= xDirection->first;
-    refPt.col -= yDirection->first;
+    refPt.row -= gsl::narrow_cast<double>(xDirection->first);
+    refPt.col -= gsl::narrow_cast<double>(yDirection->first);
 
     return refPt;
 }
@@ -406,11 +413,11 @@ void AreaPlane::rotateCCW()
 
     for (size_t ii = 0; ii < segmentList.size(); ++ii)
     {
-        segmentList[ii]->rotateCCW(yDirection->elements);
+        segmentList[ii]->rotateCCW(xDirection->elements);
     }
 }
 
-void Segment::rotateCCW(size_t /*numColumns*/)
+void Segment::rotateCCW(size_t numColumns)
 {
     /*
      *   5   wth           --    ! is reference corner
@@ -421,12 +428,14 @@ void Segment::rotateCCW(size_t /*numColumns*/)
      *                    |  |
      *                    !--
      */
-    const six::RowColDouble start(startSample * -1, startLine);
-    const six::RowColDouble end(endSample * -1, endLine);
-    startLine = start.row;
-    startSample = start.col;
-    endLine = end.row;
-    endSample = end.col;
+   
+    const auto numColumns_ = gsl::narrow<int64_t>(numColumns);
+    const six::RowColDouble start(types::RowCol<int64_t>(numColumns_ - 1 - endSample, startLine));
+    const six::RowColDouble end(types::RowCol<int64_t>(numColumns_ - 1 - startSample, endLine));
+    startLine = gsl::narrow_cast<int>(start.row);
+    startSample = gsl::narrow_cast<int>(start.col);
+    endLine = gsl::narrow_cast<int>(end.row);
+    endSample = gsl::narrow_cast<int>(end.col);
 }
 
 
@@ -535,8 +544,8 @@ bool RadarCollection::validate(logging::Logger& log) const
     std::ostringstream messageBuilder;
 
     // 2.8 Waveform description consistency
-    double wfMin = waveformMin();
-    double wfMax = waveformMax();
+    const auto wfMin = waveformMin();
+    const auto wfMax = waveformMax();
 
     // 2.8.1
     if (wfMin != std::numeric_limits<double>::infinity() &&

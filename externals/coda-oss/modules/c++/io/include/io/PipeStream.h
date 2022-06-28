@@ -23,6 +23,8 @@
 #ifndef __IO_PIPE_STREAM_H__
 #define __IO_PIPE_STREAM_H__
 
+#include <memory>
+
 #include <import/except.h>
 #include <str/Convert.h>
 #include <sys/Err.h>
@@ -52,16 +54,14 @@ struct PipeStream : InputStream
                size_t streamBufferSize = DEFAULT_CHUNK_SIZE) : 
         InputStream(),
         mExecPipe(cmd),
-        mCharString(new char[streamBufferSize]),
+        mCharString(coda_oss::make_unique<char[]>(streamBufferSize)),
         mBufferSize(streamBufferSize)
     {
         mExecPipe.run();
     }
 
     //! cleanup the stream if not done already
-    virtual ~PipeStream() 
-    {
-    }
+    virtual ~PipeStream() = default;
 
     //! closes the stream connected to the child process manually
     int close()
@@ -103,7 +103,7 @@ protected:
 
 
     sys::ExecPipe mExecPipe;
-    mem::ScopedArray<char> mCharString;
+    std::unique_ptr<char[]> mCharString;
     size_t mBufferSize = DEFAULT_CHUNK_SIZE;
 };
 

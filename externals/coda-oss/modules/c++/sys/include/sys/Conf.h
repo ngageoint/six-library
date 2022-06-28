@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,8 +21,8 @@
  *
  */
 
-#ifndef __SYS_CONF_H__
-#define __SYS_CONF_H__
+#ifndef CODA_OSS_sys_Conf_h_INCLUDED_
+#define CODA_OSS_sys_Conf_h_INCLUDED_
 #pragma once
 
 // POSIX is more-or-less "Unix"
@@ -33,7 +34,8 @@
 #define CODA_OSS_POSIX2001_SOURCE CODA_OSS_POSIX_SOURCE && (_POSIX_C_SOURCE >= 200112L)
 #define CODA_OSS_POSIX2008_SOURCE CODA_OSS_POSIX2001_SOURCE && (_POSIX_C_SOURCE >= 200809L)
 
-#include <config/coda_oss_config.h>
+#include <config/Version.h>
+#include <config/Exports.h>
 #include <sys/CPlusPlus.h>
 #include <str/Convert.h>
 
@@ -367,4 +369,10 @@ namespace sys
 
 }
 
-#endif // __SYS_CONF_H__
+// https://en.wikipedia.org/wiki/Year_2038_problem
+// "Most operating systems designed to run on 64-bit hardware already use signed 64-bit `time_t` integers. ..."
+#include <time.h>
+#include <stdint.h>
+static_assert(sizeof(time_t) >= sizeof(int64_t), "Should have at least a 64-bit time_t.");
+
+#endif // CODA_OSS_sys_Conf_h_INCLUDED_

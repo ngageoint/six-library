@@ -28,18 +28,21 @@
 #include <complex>
 #include <unordered_map>
 
+#include <std/cstddef>
+
 #include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 #include <types/RowCol.h>
 #include <mem/ScopedArray.h>
 #include <mem/BufferView.h>
-#include <sys/CStdDef.h>
 
 #include <cphd/Data.h>
 #include <cphd/Utilities.h>
 
 namespace cphd
 {
+    class FileHeader;
+
 
 /*
  *  \struct SupportBlock
@@ -47,9 +50,8 @@ namespace cphd
  *  \brief This class contains information about the SupportBlock CPHD data.
  */
 //  Provides methods to read support block data from CPHD file/stream
-class SupportBlock
+struct SupportBlock final
 {
-public:
     /*
      *  \func SupportBlock
      *
@@ -79,6 +81,8 @@ public:
                  const cphd::Data& data,
                  int64_t startSupport,
                  int64_t sizeSupport);
+    SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
+        const cphd::Data& data, const FileHeader&);
 
     // Noncopyable
     SupportBlock(const SupportBlock&) = delete;
@@ -137,12 +141,12 @@ public:
     // Same as above but allocates the memory
     void read(const std::string& id,
               size_t numThreads,
-              mem::ScopedArray<sys::ubyte>& data) const;
+              std::unique_ptr<sys::ubyte[]>& data) const;
     void read(const std::string& id,
               size_t numThreads,
               std::unique_ptr<std::byte[]>& data) const
     {
-        mem::ScopedArray<sys::ubyte> data_;
+        std::unique_ptr<sys::ubyte[]> data_;
         read(id, numThreads, data_);
         data.reset(reinterpret_cast<std::byte*>(data_.release()));
     }
@@ -160,11 +164,11 @@ public:
      *
      */
     void readAll(size_t numThreads,
-                 mem::ScopedArray<sys::ubyte>& data) const;
+                std::unique_ptr<sys::ubyte[]>& data) const;
     void readAll(size_t numThreads,
                  std::unique_ptr<std::byte[]>& data) const
     {
-        mem::ScopedArray<sys::ubyte> data_;
+        std::unique_ptr<sys::ubyte[]> data_;
         readAll(numThreads, data_);
         data.reset(reinterpret_cast<std::byte*>(data_.release()));
     }

@@ -25,6 +25,8 @@
 #include <string>
 #include <vector>
 
+#include <std/optional>
+
 #include "nitf/SubWindow.h"
 #include "nitf/DownSampler.hpp"
 #include "nitf/Object.hpp"
@@ -36,7 +38,7 @@
  */
 namespace nitf
 {
-
+    class ImageSubheader;
 /*!
  *  \class SubWindow
  *  \brief  The C++ wrapper for the nitf_SubWindow
@@ -70,10 +72,12 @@ public:
     SubWindow(nitf_SubWindow * x);
 
     //! Constructor
-    SubWindow();
+    SubWindow() noexcept(false);
+    SubWindow(const ImageSubheader&);
+    SubWindow(uint32_t rows, uint32_t cols, uint32_t* bands = nullptr, uint32_t numBands = 0);
 
     //! Destructor
-    ~SubWindow();
+    ~SubWindow() /*noexcept(false)*/;
 
     uint32_t getStartRow() const;
     uint32_t getNumRows() const;
@@ -87,8 +91,8 @@ public:
     void setStartCol(uint32_t value);
     void setNumCols(uint32_t value);
     void setBandList(uint32_t * value);
+    void setBandList(std::vector<uint32_t>&&);
     void setNumBands(uint32_t value);
-
 
     /*!
      * Reference a DownSampler within the SubWindow
@@ -103,13 +107,16 @@ public:
 
     /*!
      * Return the DownSampler that is referenced by this SubWindow.
-     * If no DownSampler is referenced, a NITFException is thrown.
      */
     nitf::DownSampler* getDownSampler() noexcept;
+    const nitf::DownSampler* getDownSampler() const noexcept;
 
 private:
-    nitf::DownSampler* mDownSampler;
+    nitf::DownSampler* mDownSampler = nullptr;
     nitf_Error error{};
+
+    void updateBandList();
+    std::optional<std::vector<uint32_t>> bandList;
 };
 
 #if CODA_OSS_cpp14

@@ -23,13 +23,14 @@
 #include <vector>
 #include <string>
 
+#include <std/filesystem>
+
 #include <import/six.h>
 #include <import/six/sidd.h>
 #include <import/six/sicd.h>
 #include <import/xml/lite.h>
 #include <import/io.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 /*
@@ -67,16 +68,8 @@ void preview(const fs::path& outputFile)
 void registerHandlers()
 {
 
-    six::XMLControlFactory::getInstance(). addCreator(
-                                                      six::DataType::COMPLEX,
-                                                      new six::XMLControlCreatorT<
-                                                              six::sicd::ComplexXMLControl>());
-
-    six::XMLControlFactory::getInstance(). addCreator(
-                                                      six::DataType::DERIVED,
-                                                      new six::XMLControlCreatorT<
-                                                              six::sidd::DerivedXMLControl>());
-
+    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+    six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
 }
 /*
  * Dump all files out to the local directory
@@ -116,7 +109,7 @@ std::vector<std::string> extractXML(std::string inputFile,
 
             xml::lite::Document* doc = parser.getDocument();
 
-            io::FileOutputStream fos(fileName);
+            io::FileOutputStream fos(fileName.string());
             doc->getRootElement()->prettyPrint(fos);
             fos.close();
         }
@@ -169,12 +162,13 @@ void run(const fs::path& inputFile_, std::string dataType)
 
         six::Data *data = control->fromXML(treeBuilder.getDocument(),
                                            std::vector<std::string>());
+        const auto extent = getExtent(*data);
 
         // Dump some core info
         std::cout << "Data Class: " << data->getDataType() << "\n";
         std::cout << "Pixel Type: " << data->getPixelType() << "\n";
-        std::cout << "Num Rows  : " << data->getNumRows() << "\n";
-        std::cout << "Num Cols  : " << data->getNumCols() << "\n";
+        std::cout << "Num Rows  : " << extent.row << "\n";
+        std::cout << "Num Cols  : " << extent.col << "\n";
 
         // Generate a KML in this directory
         preview(generateKML(data, outputDir));
@@ -183,7 +177,7 @@ void run(const fs::path& inputFile_, std::string dataType)
         const auto outputFile = outputDir / "round-trip.xml";
         xml::lite::Document* outDom = 
             control->toXML(data, std::vector<std::string>());
-        io::FileOutputStream outXML(outputFile);
+        io::FileOutputStream outXML(outputFile.string());
         outDom->getRootElement()->prettyPrint(outXML);
         outXML.close();
         delete outDom;
@@ -405,7 +399,7 @@ std::string generateKML(six::Data* data, const fs::path& outputDir)
     const std::string kmlFile = "visualization.kml";
     const auto kmlPath = outputDir / kmlFile;
 
-    io::FileOutputStream fos(kmlPath);
+    io::FileOutputStream fos(kmlPath.string());
     xml::lite::Element* root = new xml::lite::Element("kml", KML_URI);
 
     xml::lite::Element* docXML = new xml::lite::Element("Document", KML_URI);

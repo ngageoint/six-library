@@ -22,9 +22,10 @@
 #include <cphd/CPHDWriter.h>
 
 #include <thread>
+#include <std/bit>
+#include <std/memory>
 
 #include <except/Exception.h>
-#include <sys/Bit.h>
 
 #include <cphd/ByteSwap.h>
 #include <cphd/CPHDXMLControl.h>
@@ -54,8 +55,7 @@ DataWriterLittleEndian::DataWriterLittleEndian(
         size_t numThreads,
         size_t scratchSize) :
     DataWriter(stream, numThreads),
-    mScratchSize(scratchSize),
-    mScratch(new std::byte[mScratchSize])
+    mScratch(scratchSize)
 {
 }
 
@@ -68,16 +68,16 @@ void DataWriterLittleEndian::operator()(const sys::ubyte* data,
     while (dataProcessed < dataSize)
     {
         const size_t dataToProcess =
-                std::min(mScratchSize, dataSize - dataProcessed);
+                std::min(mScratch.size(), dataSize - dataProcessed);
 
-        memcpy(mScratch.get(), data + dataProcessed, dataToProcess);
+        memcpy(mScratch.data(), data + dataProcessed, dataToProcess);
 
-        cphd::byteSwap(mScratch.get(),
+        cphd::byteSwap(mScratch.data(),
                        elementSize,
                        dataToProcess / elementSize,
                        mNumThreads);
 
-        mStream->write(mScratch.get(), dataToProcess);
+        mStream->write(mScratch.data(), dataToProcess);
 
         dataProcessed += dataToProcess;
     }
@@ -97,6 +97,24 @@ void DataWriterBigEndian::operator()(const sys::ubyte* data,
                    numElements * elementSize);
 }
 
+void CPHDWriter::initializeDataWriter()
+{
+    // Get the correct dataWriter.
+    // The CPHD file needs to be big endian.
+    auto endianness = std::endian::native; // "conditional expression is constant"
+    if (endianness == std::endian::big)
+    {
+        mDataWriter = std::make_unique<DataWriterBigEndian>(mStream, mNumThreads);
+    }
+    else
+    {
+        mDataWriter = std::make_unique<DataWriterLittleEndian>(mStream,
+            mNumThreads,
+            mScratchSpaceSize);
+    }
+}
+
+
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        std::shared_ptr<io::SeekableOutputStream> outStream,
                        const std::vector<std::string>& schemaPaths,
@@ -109,18 +127,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mSchemaPaths(schemaPaths),
     mStream(outStream)
 {
-    // Get the correct dataWriter.
-    // The CPHD file needs to be big endian.
-    if (std::endian::native == std::endian::big)
-    {
-        mDataWriter.reset(new DataWriterBigEndian(mStream, mNumThreads));
-    }
-    else
-    {
-        mDataWriter.reset(new DataWriterLittleEndian(mStream,
-                                                     mNumThreads,
-                                                     mScratchSpaceSize));
-    }
+    initializeDataWriter();
 }
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
@@ -135,20 +142,9 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mSchemaPaths(schemaPaths)
 {
     // Initialize output stream
-    mStream.reset(new io::FileOutputStream(pathname));
+    mStream = std::make_shared<io::FileOutputStream>(pathname);
 
-    // Get the correct dataWriter.
-    // The CPHD file needs to be big endian.
-    if (std::endian::native == std::endian::big)
-    {
-        mDataWriter.reset(new DataWriterBigEndian(mStream, mNumThreads));
-    }
-    else
-    {
-        mDataWriter.reset(new DataWriterLittleEndian(mStream,
-                                                     mNumThreads,
-                                                     mScratchSpaceSize));
-    }
+    initializeDataWriter();
 }
 
 void CPHDWriter::writeMetadata(size_t supportSize,
@@ -177,10 +173,10 @@ void CPHDWriter::writeMetadata(size_t supportSize,
     }
     // set header size, final step before write
     mHeader.set(xmlMetadata.size(), supportSize, pvpSize, cphdSize);
-    mStream->write(mHeader.toString().c_str(), mHeader.size());
-    mStream->write("\f\n", 2);
-    mStream->write(xmlMetadata.c_str(), xmlMetadata.size());
-    mStream->write("\f\n", 2);
+    mStream->write(mHeader.toString());
+    mStream->write("\f\n");
+    mStream->write(xmlMetadata);
+    mStream->write("\f\n");
 }
 
 void CPHDWriter::writePVPData(const std::byte* pvpBlock, size_t channel)
@@ -241,12 +237,14 @@ void CPHDWriter::write(const PVPBlock& pvpBlock,
 
     // Doesn't require pading because pvp block is always 8 bytes words
     // Write wideband (or signal) block
+    size_t elementsWritten = 0;  // Used to increment widebandData pointer
     for (size_t ii = 0; ii < mMetadata.data.getNumChannels(); ++ii)
     {
         size_t numElements = mMetadata.data.getNumVectors(ii) *
                 mMetadata.data.getNumSamples(ii);
         // writeCPHDData handles compressed data as well
-        writeCPHDData<T>(widebandData, numElements, ii);
+        writeCPHDData<T>(widebandData + elementsWritten, numElements, ii);
+        elementsWritten += numElements;
     }
 }
 

@@ -39,10 +39,7 @@ namespace six
 class Parameter
 {
 public:
-    //!  Constructor
-    Parameter()
-    {
-    }
+    Parameter() = default;
     //!  Destructor
     ~Parameter()
     {

@@ -4,7 +4,6 @@ from os.path import splitext, dirname, join
 from build import writeConfig
 
 NAME            = 'nitf'
-MAINTAINER      = 'dan.smith@maxar.com'
 MODULE_DEPS     = 'nrt'
 LANG            = 'c'
 DEFINES         = 'NITF_MODULE_EXPORTS'
@@ -24,7 +23,7 @@ TEST_FILTER     = 'test_1band_rw_line.c ' \
                   'test_ImageIO_read_data.c ' \
                   'test_ImageIO_writePattern.c'
 
-SUBDIRS = 'shared apps'
+SUBDIRS = 'shared apps tests unittests'
 
 distclean = lambda p: None
 

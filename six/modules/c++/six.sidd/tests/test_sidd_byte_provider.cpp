@@ -34,7 +34,7 @@
 
 #include <io/ReadUtils.h>
 #include <math/Round.h>
-#include <sys/Bit.h>
+#include <std/bit>
 
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
@@ -75,8 +75,7 @@ createData(const types::RowCol<size_t>& dims)
 {
     std::unique_ptr<six::sidd::DerivedData> data =
             six::sidd::Utilities::createFakeDerivedData();
-    data->setNumRows(dims.row);
-    data->setNumCols(dims.col);
+    setExtent(*data, dims);
     data->setPixelType(GetPixelType<DataTypeT>::getPixelType());
     return data;
 }
@@ -208,7 +207,8 @@ public:
         }
 
         mBigEndianImage = mImage;
-        if (std::endian::native == std::endian::little)
+        auto endianness = std::endian::native; // "conditional expression is constant"
+        if (endianness == std::endian::little)
         {
             sys::byteSwap(mBigEndianImage.data(),
                           sizeof(DataTypeT),
@@ -375,17 +375,16 @@ void Tester<DataTypeT>::normalWrite()
     container->addData(mData->clone());
 
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator(six::DataType::DERIVED,
-                           new six::XMLControlCreatorT<
-                                   six::sidd::DerivedXMLControl>());
+    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
     six::Options options;
     setWriterOptions(options);
     six::NITFWriteControl writer(options, container, &xmlRegistry);
 
-    six::buffer_list buffers;
-    buffers.push_back(reinterpret_cast<std::byte*>(mImage.data()));
-    writer.save(buffers, mNormalPathname, mSchemaPaths);
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(mSchemaPaths.begin(), mSchemaPaths.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+
+    save(writer, mImage, mNormalPathname, schemaPaths);
 
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
 }

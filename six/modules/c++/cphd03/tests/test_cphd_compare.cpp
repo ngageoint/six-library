@@ -79,15 +79,15 @@ bool compareWideband(cphd03::CPHDReader& reader1,
 
         if (dims1 == dims2)
         {
-            wideband1.read(ii,
+            cphd03Data1 = wideband1.read(ii,
                            0, cphd::Wideband::ALL, 0,
                            cphd::Wideband::ALL,
-                           numThreads, cphd03Data1);
+                           numThreads);
 
-            wideband2.read(ii,
+            cphd03Data2 = wideband2.read(ii,
                            0, cphd::Wideband::ALL, 0,
                            cphd::Wideband::ALL,
-                           numThreads, cphd03Data2);
+                           numThreads);
 
             switch (reader1.getMetadata().getSampleType())
             {

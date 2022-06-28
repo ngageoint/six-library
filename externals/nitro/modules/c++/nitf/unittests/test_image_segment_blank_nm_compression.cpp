@@ -18,16 +18,9 @@
 
 #include "TestCase.h"
 
-extern "C"{
-   NITF_BOOL nitf_ImageIO_getMaskInfo(nitf_ImageIO* nitf,
-                                      uint32_t* imageDataOffset, uint32_t* blockRecordLength,
-                                      uint32_t* padRecordLength, uint32_t* padPixelValueLength,
-                                      uint8_t** padValue, uint64_t** blockMask, uint64_t** padMask);
-                     
-}
-const int64_t BLOCK_LENGTH = 256;
-const int64_t ILOC_MAX = 99999;
-std::string generateILOC(const types::RowCol<int64_t>& offset)
+static constexpr int64_t BLOCK_LENGTH = 256;
+static constexpr int64_t ILOC_MAX = 99999;
+static std::string generateILOC(const types::RowCol<int64_t>& offset)
 {
    std::ostringstream oss;
 
@@ -68,11 +61,11 @@ static nitf::ImageSubheader setImageSubHeader(
    bandI.getImageFilterCode().set("   ");
    bandI.getNumLUTs().set(0);
    bands.push_back(bandI);
-   const std::string pixelValueType = "INT";
+   const auto pixelValueType = nitf::PixelValueType::Integer;
    const int64_t numBitsPerPixel = 8;
    const int64_t actualBitsPerPixel = 8;
    const std::string pixelJustification = "R";
-   const std::string imageRepresentation = "MONO";
+   const auto imageRepresentation = nitf::ImageRepresentation::MONO;
    const std::string imageCategory = "SOS";
 
    imgSubHdr.setPixelInformation(
@@ -191,11 +184,11 @@ TEST_CASE(testBlankSegmentsValid)
    const std::vector<nitf::ImageSegmentComputer::Segment> &segments = imageSegmentComputer.getSegments();
 
    auto numberOfTests = numSegments;
-   TEST_ASSERT_EQ(numSegments, 3);
+   TEST_ASSERT_EQ(numSegments, static_cast<size_t>(3));
    for (size_t testSegmentIdx = 0; testSegmentIdx < numSegments; ++testSegmentIdx)
    {
       const types::RowCol<size_t> dims(segments[testSegmentIdx].numRows, numberElements);
-      TEST_ASSERT_EQ(dims.area(), bytesPerSegment);
+      TEST_ASSERT_EQ(dims.area(), static_cast<size_t>(bytesPerSegment));
    }
    createBuffers(buffers, imageSegmentComputer, fullDims);
    for (size_t testIdx = 0; testIdx < numberOfTests; ++testIdx)
@@ -258,11 +251,10 @@ TEST_CASE(testBlankSegmentsValid)
             nitf::ImageSubheader subhdr     = seg.getSubheader();
             nitf::ImageReader imageReader   = reader.newImageReader(imgCtr);
             nitf::BlockingInfo blockingInfo = imageReader.getBlockingInfo();
-            nitf_ImageReader *iReader       = static_cast<nitf_ImageReader *>(imageReader.getNativeOrThrow());
-            TEST_ASSERT_TRUE(nitf_ImageIO_getMaskInfo(iReader->imageDeblocker,
-                                                      &imageDataOffset, &blockRecordLength,
-                                                      &padRecordLength, &padPixelValueLength,
-                                                      &padValue, &blockMask, &padMask) != 0);
+            TEST_ASSERT_TRUE(imageReader.getMaskInfo(
+                                                      imageDataOffset, blockRecordLength,
+                                                      padRecordLength, padPixelValueLength,
+                                                      padValue, blockMask, padMask) != 0);
             TEST_ASSERT_GREATER(blockRecordLength, 0u);
 
             const int64_t totalBlocks = blockingInfo.getNumBlocksPerRow()*blockingInfo.getNumBlocksPerCol();
@@ -274,7 +266,7 @@ TEST_CASE(testBlankSegmentsValid)
 
             if (imgCtr == static_cast<int>(testIdx))
             {
-               TEST_ASSERT_EQ(nBlocksPresent, 0);
+               TEST_ASSERT_EQ(nBlocksPresent, static_cast<int64_t>(0));
             }
             else
             {

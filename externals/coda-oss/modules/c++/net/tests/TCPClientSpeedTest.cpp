@@ -31,6 +31,7 @@
 #include <stdexcept>
 #include <vector>
 
+#include <str/Convert.h>
 #include <sys/Path.h>
 #include <sys/LocalDateTime.h>
 #include <mem/SharedPtr.h>
@@ -53,7 +54,7 @@ int main(int argc, char** argv)
         const size_t bytesToSend = str::toType<size_t>(argv[4]) * 1024 * 1024;
 
         net::SocketAddress sa(host, port);
-        mem::auto_ptr<net::Socket> socket =
+        std::unique_ptr<net::Socket> socket =
                 net::TCPClientSocketFactory().create(sa);
 
         std::vector<sys::ubyte> bufferVec(std::min(bufferSize, bytesToSend), 0);

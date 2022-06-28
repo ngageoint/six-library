@@ -46,8 +46,6 @@
  * Fails if values don't match
  */
 
-namespace
-{
 template<typename T>
 std::vector<std::complex<T> > generateData(size_t length)
 {
@@ -55,14 +53,14 @@ std::vector<std::complex<T> > generateData(size_t length)
     srand(0);
     for (size_t ii = 0; ii < data.size(); ++ii)
     {
-        float real = static_cast<T>(rand() / 100);
-        float imag = static_cast<T>(rand() / 100);
+        auto real = static_cast<T>(rand() / 100);
+        auto imag = static_cast<T>(rand() / 100);
         data[ii] = std::complex<T>(real, imag);
     }
     return data;
 }
 
-std::vector<double> generateScaleFactors(size_t length, bool scale)
+inline std::vector<double> generateScaleFactors(size_t length, bool scale)
 {
     std::vector<double> scaleFactors(length, 1);
     if (scale)
@@ -112,9 +110,9 @@ std::vector<std::complex<float> > checkData(const std::string& pathname,
     std::vector<std::complex<float> > readData(dims.area());
 
     size_t sizeInBytes = readData.size() * sizeof(readData[0]);
-    std::unique_ptr<std::byte[]> scratchData(new std::byte[sizeInBytes]);
-    auto scratch = gsl::make_span(scratchData.get(), sizeInBytes);
-    auto data = gsl::make_span(readData.data(), readData.size());
+    std::vector<std::byte> scratchData(sizeInBytes);
+    std::span<std::byte> scratch(scratchData.data(), scratchData.size());
+    std::span<std::complex<float>> data(readData.data(), readData.size());
 
     wideband.read(0, 0, cphd::Wideband::ALL, 0, cphd::Wideband::ALL,
                   scaleFactors, numThreads, scratch, data);
@@ -219,7 +217,6 @@ TEST_CASE(testScaledFloat)
             generateData<float>(dims.area());
     const bool scale = true;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
-}
 }
 
 TEST_MAIN(

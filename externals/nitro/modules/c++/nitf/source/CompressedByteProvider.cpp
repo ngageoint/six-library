@@ -36,10 +36,6 @@
 
 namespace nitf
 {
-CompressedByteProvider::CompressedByteProvider() :
-    ByteProvider()
-{
-}
 
 CompressedByteProvider::CompressedByteProvider(Record& record,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
@@ -51,10 +47,20 @@ CompressedByteProvider::CompressedByteProvider(Record& record,
     initialize(record, bytesPerBlock, desData,
                numRowsPerBlock, numColsPerBlock);
 }
+CompressedByteProvider::CompressedByteProvider(Record& record,
+    const std::vector<std::vector<size_t> >& bytesPerBlock,
+    const std::vector<PtrAndLength_t>& desData,
+    size_t numRowsPerBlock,
+    size_t numColsPerBlock) :
+    ByteProvider()
+{
+    initialize(record, bytesPerBlock, desData, numRowsPerBlock, numColsPerBlock);
+}
 
-void CompressedByteProvider::initialize(const Record& record,
+template<typename TPtrAndLength>
+void CompressedByteProvider::initialize_(const Record& record,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
-        const std::vector<PtrAndLength>& desData,
+        const std::vector<TPtrAndLength>& desData,
         size_t numRowsPerBlock,
         size_t numColsPerBlock)
 {
@@ -80,6 +86,22 @@ void CompressedByteProvider::initialize(const Record& record,
     }
     mBytesInEachBlock = bytesPerBlock;
     initializeImpl(record, desData, numRowsPerBlock, numColsPerBlock);
+}
+void CompressedByteProvider::initialize(const Record& record,
+        const std::vector<std::vector<size_t> >& bytesPerBlock,
+        const std::vector<PtrAndLength>& desData,
+        size_t numRowsPerBlock,
+        size_t numColsPerBlock)
+{
+    initialize_(record, bytesPerBlock, desData, numRowsPerBlock, numColsPerBlock);
+}
+void CompressedByteProvider::initialize(const Record& record,
+    const std::vector<std::vector<size_t> >& bytesPerBlock,
+    const std::vector<PtrAndLength_t>& desData,
+    size_t numRowsPerBlock,
+    size_t numColsPerBlock)
+{
+    initialize_(record, bytesPerBlock, desData, numRowsPerBlock, numColsPerBlock);
 }
 
 size_t CompressedByteProvider::countBytesForCompressedImageData(

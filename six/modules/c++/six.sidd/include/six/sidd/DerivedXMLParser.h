@@ -31,27 +31,50 @@ namespace six
 {
 namespace sidd
 {
-class DerivedXMLParser : public six::XMLParser
+struct DerivedXMLParser : public six::XMLParser
 {
-public:
-    DerivedXMLParser(const std::string& version,
-                     std::unique_ptr<six::SICommonXMLParser>&& comParser,
-                     logging::Logger* log = nullptr,
-                     bool ownLog = false);
-#if !CODA_OSS_cpp17
-    DerivedXMLParser(const std::string& version,
-                     std::auto_ptr<six::SICommonXMLParser> comParser,
-                     logging::Logger* log = nullptr,
-                     bool ownLog = false);
-#endif
-
     virtual xml::lite::Document* toXML(const DerivedData* data) const = 0;
+    virtual std::unique_ptr<xml::lite::Document> toXML(const DerivedData&) const; // = 0;, breaks existing code
 
     virtual DerivedData* fromXML(const xml::lite::Document* doc) const = 0;
+    virtual std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const; // = 0;, breaks existing code
+
+    DerivedXMLParser(const DerivedXMLParser&) = delete;
+    DerivedXMLParser& operator=(const DerivedXMLParser&) = delete;
+    DerivedXMLParser(DerivedXMLParser&&) = delete;
+    DerivedXMLParser& operator=(DerivedXMLParser&&) = delete;
+    virtual ~DerivedXMLParser() = default;
+
+    const six::SICommonXMLParser& common() const
+    {
+        return *(mCommon.get());
+    }
+
+    static xml::lite::Element& convertMeasurementToXML(const DerivedXMLParser&,
+        const Measurement&, xml::lite::Element& parent);
+
+    XMLElem createLUTImpl(const LUT* l, XMLElem lutElem) const;
+    virtual XMLElem createLUT(const std::string& name, const LUT* l,
+        XMLElem parent = nullptr) const;
 
 protected:
+    DerivedXMLParser(const std::string& version,
+        std::unique_ptr<six::SICommonXMLParser>&& comParser,
+        logging::Logger* log = nullptr, bool ownLog = false);
+    DerivedXMLParser(const std::string& version,
+        std::unique_ptr<six::SICommonXMLParser>&&,
+        std::unique_ptr<logging::Logger>&&);
+    DerivedXMLParser(const std::string& version,
+        std::unique_ptr<six::SICommonXMLParser>&&,
+        logging::Logger&);
+#if !CODA_OSS_cpp17
+    DerivedXMLParser(const std::string& version,
+        mem::auto_ptr<six::SICommonXMLParser> comParser,
+        logging::Logger* log = nullptr, bool ownLog = false);
+#endif
+
     virtual void parseDerivedClassificationFromXML(
-            const XMLElem classificationElem,
+            const xml::lite::Element* classificationElem,
             DerivedClassification& classification) const;
 
     virtual XMLElem convertDerivedClassificationToXML(
@@ -59,18 +82,13 @@ protected:
             XMLElem parent = nullptr) const = 0;
 
     virtual void parseProductFromXML(
-            const XMLElem exploitationFeaturesElem,
+            const xml::lite::Element* exploitationFeaturesElem,
             ExploitationFeatures* exploitationFeatures) const = 0;
 
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = nullptr) const = 0;
 
     static const char SFA_URI[];
-
-    const six::SICommonXMLParser& common() const
-    {
-        return *(mCommon.get());
-    }
 
     static
     void getAttributeList(const xml::lite::Attributes& attributes,
@@ -131,9 +149,6 @@ protected:
                                const DateTime* value,
                                const std::string& uri = "");
 
-    virtual XMLElem createLUT(const std::string& name, const LUT *l,
-            XMLElem parent = nullptr) const;
-    XMLElem createLUTImpl(const LUT *l, XMLElem lutElem) const;
     XMLElem createFootprint(const std::string& name,
                             const std::string& cornerName,
                             const LatLonCorners& corners,
@@ -187,40 +202,44 @@ protected:
     XMLElem convertGeographicCoordinateSystemToXML(
             const SFAGeographicCoordinateSystem* geographicCoordinateSystem,
             XMLElem parent) const;
-    void parseProductCreationFromXML(const XMLElem productCreationElem,
+    void parseProductCreationFromXML(const xml::lite::Element* productCreationElem,
                                      ProductCreation* productCreation) const;
-    void parseProductCreationFromXML(const XMLElem informationElem,
+    void parseProductCreationFromXML(const xml::lite::Element& productCreationElem, ProductCreation&) const;
+    void parseProductCreationFromXML(const xml::lite::Element* informationElem,
                                      ProcessorInformation* processorInformation) const;
-    void parseProductProcessingFromXML(const XMLElem elem,
+    void parseProductCreationFromXML(const xml::lite::Element&, ProcessorInformation&) const;
+    void parseProductProcessingFromXML(const xml::lite::Element* elem,
                                        ProductProcessing* productProcessing) const;
-    void parseProcessingModuleFromXML(const XMLElem elem,
+    void parseProductProcessingFromXML(const xml::lite::Element&, ProductProcessing&) const;
+    void parseProcessingModuleFromXML(const xml::lite::Element* elem,
                                       ProcessingModule* procMod) const;
-    void parseDownstreamReprocessingFromXML(const XMLElem elem,
+    void parseDownstreamReprocessingFromXML(const xml::lite::Element* elem,
                                             DownstreamReprocessing* downstreamReproc) const;
-    Remap* parseRemapChoiceFromXML(const XMLElem remapInformationElem) const;
-    mem::auto_ptr<LUT> parseSingleLUT(const XMLElem elem) const;
-    void parseDisplayFromXML(const XMLElem displayElem, Display* display) const;
-    virtual void parseMeasurementFromXML(const XMLElem measurementElem,
+    void parseDownstreamReprocessingFromXML(const xml::lite::Element&, DownstreamReprocessing&) const;
+    Remap* parseRemapChoiceFromXML(const xml::lite::Element* remapInformationElem) const;
+    mem::auto_ptr<LUT> parseSingleLUT(const xml::lite::Element* elem) const;
+    void parseDisplayFromXML(const xml::lite::Element* displayElem, Display* display) const;
+    virtual void parseMeasurementFromXML(const xml::lite::Element* measurementElem,
                                  Measurement* measurement) const;
-    virtual void parseExploitationFeaturesFromXML(const XMLElem elem,
+    virtual void parseExploitationFeaturesFromXML(const xml::lite::Element* elem,
                                           ExploitationFeatures* exploitationFeatures) const;
-    void parseAnnotationFromXML(const XMLElem annotationElem,
+    void parseAnnotationFromXML(const xml::lite::Element* annotationElem,
                                 Annotation* a) const;
-    void parseSFAGeometryFromXML(const XMLElem elem,
+    void parseSFAGeometryFromXML(const xml::lite::Element* elem,
                                  SFAGeometry* g) const;
     void parseGeographicCoordinateSystemFromXML(
-            const XMLElem coorSysElem,
+            const xml::lite::Element* coorSysElem,
             SFAGeographicCoordinateSystem* coordSys) const;
-    void parseDatum(const XMLElem datumElem, SFADatum& datum) const;
-    XMLElem parsePolynomialProjection(XMLElem projElem, Measurement& measurement) const;
-    XMLElem parseGeographicProjection(XMLElem projElem, Measurement& measurement) const;
-    XMLElem parsePlaneProjection(XMLElem projElem, Measurement& measurement) const;
-    XMLElem parseCylindricalProjection(XMLElem projElem, Measurement& measurement) const;
+    void parseDatum(const xml::lite::Element* datumElem, SFADatum& datum) const;
+    XMLElem parsePolynomialProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
+    XMLElem parseGeographicProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
+    XMLElem parsePlaneProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
+    XMLElem parseCylindricalProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
 
     static
-    std::string versionToURI(const std::string& version)
+    std::string versionToURI(const std::string& strVersion)
     {
-        return ("urn:SIDD:" + version);
+        return ("urn:SIDD:" + strVersion);
     }
 
 private:

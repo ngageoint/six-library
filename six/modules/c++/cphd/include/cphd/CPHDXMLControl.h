@@ -22,16 +22,19 @@
 
 #ifndef __CPHD_CPHD_XML_CONTROL_H__
 #define __CPHD_CPHD_XML_CONTROL_H__
+#pragma once
 
 #include <memory>
 #include <unordered_map>
+#include <std/filesystem>
+#include <vector>
 
 #include <scene/sys_Conf.h>
-#include <logging/Logger.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/Document.h>
 #include <cphd/CPHDXMLParser.h>
 #include <cphd/Types.h>
+#include <six/Logger.h>
 
 namespace cphd
 {
@@ -54,7 +57,7 @@ public:
     CPHDXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
 
     //! Destructor
-    virtual ~CPHDXMLControl();
+    virtual ~CPHDXMLControl() = default;
 
     /*
      *  \func setLogger
@@ -63,7 +66,15 @@ public:
      *  \param log provide logger object
      *  \param ownLog flag indicates if log should be deleted
      */
-    void setLogger(logging::Logger* log, bool ownLog = false);
+    template<typename TLogger>
+    void setLogger(TLogger&& logger)
+    {
+        mLogger.setLogger(std::forward<TLogger>(logger));
+    }
+    void setLogger(logging::Logger* logger, bool ownLog)
+    {
+        mLogger.setLogger(logger, ownLog);
+    }
 
     /*!
      *  \func toXMLString
@@ -117,14 +128,18 @@ public:
     virtual std::unique_ptr<Metadata> fromXML(
             const xml::lite::Document* doc,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
+    virtual Metadata fromXML(const xml::lite::Document& doc,
+        const std::vector<std::filesystem::path>& schemaPaths = std::vector<std::filesystem::path>());
+
 
 protected:
-    logging::Logger *mLog;
-    bool mOwnLog;
+    logging::Logger *mLog = nullptr;
+    bool mOwnLog = false;
+    six::Logger mLogger;
 
 private:
     //! \return Hardcoded version to uri mapping
-    static std::unordered_map<std::string, std::string> getVersionUriMap();
+    static std::unordered_map<std::string, xml::lite::Uri> getVersionUriMap();
 
     /*!
      *  This function takes in a Metadata object and converts
@@ -150,10 +165,10 @@ private:
      *  \param uri A string specifying CPHD uri
      */
     std::unique_ptr<CPHDXMLParser>
-    getParser(const std::string& uri) const;
+    getParser(const xml::lite::Uri&) const;
 
     // Given the URI get associated version
-    std::string uriToVersion(const std::string& uri) const;
+    std::string uriToVersion(const xml::lite::Uri&) const;
 };
 }
 

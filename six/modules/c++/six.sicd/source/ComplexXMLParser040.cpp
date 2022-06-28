@@ -33,13 +33,13 @@ namespace six
 namespace sicd
 {
 
-ComplexXMLParser040::ComplexXMLParser040(const std::string& version,
+ComplexXMLParser040::ComplexXMLParser040(const std::string& strVersion,
                                          logging::Logger* log,
                                          bool ownLog) :
-    ComplexXMLParser04x(version, true, std::unique_ptr<six::SICommonXMLParser>(
+    ComplexXMLParser04x(strVersion, true, std::unique_ptr<six::SICommonXMLParser>(
                            new six::SICommonXMLParser01x(
-                               versionToURI(version), true,
-                               versionToURI(version), log)),
+                               versionToURI(strVersion), true,
+                               versionToURI(strVersion), log)),
                         log, ownLog)
 {
 }
@@ -64,7 +64,7 @@ XMLElem ComplexXMLParser040::convertRMATToXML(
     return rmatXML;
 }
 
-void ComplexXMLParser040::parseRMATFromXML(const XMLElem rmatElem,
+void ComplexXMLParser040::parseRMATFromXML(const xml::lite::Element* rmatElem,
                                            RMAT* rmat) const
 {
     parseDouble(getFirstAndOnly(rmatElem, "RMRefTime"), rmat->refTime);
@@ -108,7 +108,7 @@ void ComplexXMLParser040::convertDRateSFPolyToXML(
 }
 
 void ComplexXMLParser040::parseDRateSFPolyFromXML(
-    const XMLElem incaElem, INCA* inca) const
+    const xml::lite::Element* incaElem, INCA* inca) const
 {
     //! Poly1D in 0.4.0
     Poly1D dRateSFPoly;

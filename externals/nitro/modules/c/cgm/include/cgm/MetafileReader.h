@@ -59,8 +59,8 @@ typedef struct _cgm_ParseContext
 
 typedef NITF_BOOL (*CGM_UNPACK)(cgm_Metafile*,
 				cgm_ParseContext*,
-				short,
-				short,
+				int,
+				int,
 				char*, 
 				int,
 				nitf_Error*);

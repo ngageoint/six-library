@@ -24,6 +24,8 @@
 #define __XML_LITE_MINIDOM_PARSER_H__
 #pragma once
 
+#include <memory>
+
 
 #include "xml/lite/XMLReader.h"
 #include "xml/lite/Document.h"
@@ -54,9 +56,8 @@ namespace lite
  * bloat of the spec.  It was inspired by python's xml.dom.minidom
  * module.
  */
-class MinidomParser
+struct MinidomParser
 {
-public:
     /*!
      *  Constructor.  Set our SAX ContentHandler.
      */
@@ -67,6 +68,10 @@ public:
     {
     }
 
+    MinidomParser(const MinidomParser&) = delete;
+    MinidomParser& operator=(const MinidomParser&) = delete;
+
+
     /*!
      *  Present our parsing interface.  Similar to DOM, the input
      *  is an InputStream (DOM's is called input source), but it
@@ -75,7 +80,9 @@ public:
      *  \param size  This is the size of the stream to feed the parser
      */
     virtual void parse(io::InputStream& is, int size = io::InputStream::IS_END);
-    
+    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
+    virtual void parse(io::InputStream& is, StringEncoding, int size = io::InputStream::IS_END);
+    #endif // SWIG
 
     /*!
      *  This clears the MinidomHandler, killing its underlying Document
@@ -92,6 +99,7 @@ public:
     virtual Document *getDocument() const;
 
     virtual Document *getDocument(bool steal = false);
+    void getDocument(std::unique_ptr<Document>&); // steal = true
 
     /*!
      *  Reader accessor
@@ -119,6 +127,7 @@ public:
      *  \param newDocument The new document.
      */
     virtual void setDocument(Document * newDocument, bool own = true);
+    void setDocument(std::unique_ptr<Document>&&);  // own = true
 
     /*!
      * @see MinidomHandler::preserveCharacterData
@@ -134,6 +143,14 @@ protected:
     MinidomHandler mHandler;
     XMLReader mReader;
 };
+
+inline Document& getDocument(MinidomParser& xmlParser)
+{
+    auto retval = xmlParser.getDocument(false /*steal*/);
+    assert(retval != nullptr);
+    return *retval;
+}
+
 }
 }
 

@@ -25,6 +25,7 @@
 
 #include <map>
 #include <memory>
+#include <std/filesystem>
 
 #include "six/NITFImageInfo.h"
 #include "six/ReadControl.h"
@@ -54,10 +55,11 @@ namespace six
 struct NITFReadControl : public ReadControl
 {
     //!  Constructor
+    NITFReadControl(FILE* log);
     NITFReadControl();
 
     //!  Destructor
-    virtual ~NITFReadControl()
+    virtual ~NITFReadControl() noexcept(true)
     {
         reset();
     }
@@ -79,7 +81,7 @@ struct NITFReadControl : public ReadControl
     *  \return datatype of Record contents
     */
     static
-    DataType getDataType(nitf::Record& record);
+    DataType getDataType(const nitf::Record& record);
 
     /*!
     *  Read whether a DESegment has COMPLEX or DERIVED data
@@ -87,7 +89,7 @@ struct NITFReadControl : public ReadControl
     *  \return datatype of DESegment contents
     */
     static
-    DataType getDataType(nitf::DESegment& segment);
+    DataType getDataType(const nitf::DESegment& segment);
 
     /*!
     *  Determine whether specific attribute outline COMPLEX or DERIVED contents
@@ -111,9 +113,8 @@ struct NITFReadControl : public ReadControl
      *  segment in question at least follows some of the rules
      *  that its supposed to.
      */
-    void validateSegment(nitf::ImageSubheader subheader,
-                         const NITFImageInfo* info);
-    void validateSegment(nitf::ImageSubheader subheader, const NITFImageInfo&);
+    void validateSegment(const nitf::ImageSubheader&, const NITFImageInfo*) const;
+    void validateSegment(const nitf::ImageSubheader&, const NITFImageInfo&) const;
 
     using ReadControl::load;
 
@@ -123,8 +124,16 @@ struct NITFReadControl : public ReadControl
      *  \param fromFile    Input filepath
      *  \param schemaPaths Directories or files of schema locations
      */
-    void load(const std::string& fromFile,
-              const std::vector<std::string>& schemaPaths) override;
+    void load(const std::string& fromFile, const std::vector<std::string>* pSchemaPaths);
+    void load(const std::string& fromFile, const std::vector<std::string>& schemaPaths) override
+    {
+        load(fromFile, &schemaPaths);
+    }
+    void load(const std::filesystem::path& fromFile, const std::vector<std::filesystem::path>* pSchemaPaths) override;
+    void load(const std::filesystem::path& fromFile, const std::vector<std::filesystem::path>& schemaPaths)
+    {
+        load(fromFile, &schemaPaths);
+    }
 
     /*
      *  \func load
@@ -133,13 +142,26 @@ struct NITFReadControl : public ReadControl
      *  \param ioStream The stream to read from.
      *  \param schemaPaths Directories or files of schema locations.
      */
-    void load(io::SeekableInputStream& ioStream,
-              const std::vector<std::string>& schemaPaths);
+    template<typename TSchemaPath>
+    void load(io::SeekableInputStream& stream, const std::vector<TSchemaPath>* pSchemaPaths)
+    {
+        std::shared_ptr<nitf::IOInterface> handle(std::make_shared<nitf::IOStreamReader>(stream));
+        load(handle, pSchemaPaths);
+    }
+    template<typename TSchemaPath>
+    void load(io::SeekableInputStream& ioStream, const std::vector<TSchemaPath>& schemaPaths)
+    {
+        load(ioStream, &schemaPaths);
+    }
 
-    void load(mem::SharedPtr<nitf::IOInterface> ioInterface);
-    void load(mem::SharedPtr<nitf::IOInterface> ioInterface,
-              const std::vector<std::string>& schemaPaths);
-
+    void load(std::shared_ptr<nitf::IOInterface>);
+    void load(std::shared_ptr<nitf::IOInterface>, const std::vector<std::string>* pSchemaPaths);
+    void load(std::shared_ptr<nitf::IOInterface>, const std::vector<std::filesystem::path>* pSchemaPaths);
+    template<typename TSchemaPath>
+    void load(std::shared_ptr<nitf::IOInterface> ioInterface, const std::vector<TSchemaPath>& schemaPaths)
+    {
+        load(ioInterface, &schemaPaths);
+    }
 
     using ReadControl::interleaved;
     /*!
@@ -212,10 +234,10 @@ protected:
     };
     void getIndices(const nitf::ImageSubheader& subheader, ImageAndSegment&) const;
 
-    void addImageClassOptions(nitf::ImageSubheader& s,
+    void addImageClassOptions(const nitf::ImageSubheader& s,
             six::Classification& c) const;
 
-    void addDEClassOptions(nitf::DESubheader& s,
+    void addDEClassOptions(const nitf::DESubheader& s,
                            six::Classification& c) const;
 
     void addSecurityOptions(nitf::FileSecurity security,
@@ -233,6 +255,9 @@ protected:
     }
 
 private:
+    template<typename TSchemaPath>
+    void load_(std::shared_ptr<nitf::IOInterface> ioInterface, const std::vector<TSchemaPath>* pSchemaPaths);
+
     std::unique_ptr<Legend> findLegend(size_t productNum);
 
     void readLegendPixelData(const nitf::ImageSubheader& subheader,
@@ -257,7 +282,7 @@ private:
     // to prevent data from being deleted prematurely
     // The issue occurs from the explicit destructor of
     // IOControl
-    mem::SharedPtr<nitf::IOInterface> mInterface;
+    std::shared_ptr<nitf::IOInterface> mInterface;
 };
 
 

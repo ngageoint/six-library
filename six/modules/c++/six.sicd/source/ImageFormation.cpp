@@ -61,7 +61,6 @@ bool Distortion::operator==(const Distortion& rhs) const
 }
 
 ImageFormation::ImageFormation() :
-    segmentIdentifier(Init::undefined<std::string>()),
     rcvChannelProcessed(new RcvChannelProcessed()),
     txRcvPolarizationProc(DualPolarizationType::NOT_SET),
     imageFormationAlgorithm(ImageFormationType::PFA),

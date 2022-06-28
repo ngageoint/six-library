@@ -25,7 +25,8 @@
 
 #include <assert.h>
 
-#include <sys/Optional.h>
+#include <std/optional>
+
 #include <mem/ScopedCopyablePtr.h>
 
 #include "six/Types.h"
@@ -248,6 +249,57 @@ struct IonoError
 };
 
 /*!
+ *  \struct Unmodeled
+ *  \brief (Optional) Unmodeled error statistics 
+ *
+ *  Contains Unmodeled error statistics 
+ */
+struct UnmodeledS final
+{
+    // By making member names match XML element names, macros can
+    // help generate boilerplate code.
+    double Xrow = 0.0;
+    double Ycol = 0.0;
+    double XrowYcol = 0.0;
+
+    struct Decorr final
+    {
+        struct Xrow_Ycol final
+        {
+            double CorrCoefZero = 0.0;
+            double DecorrRate = 0.0;
+        };
+        Xrow_Ycol Xrow;
+        Xrow_Ycol Ycol;
+    };
+    mem::ScopedCopyablePtr<Decorr> UnmodeledDecorr;
+};
+inline bool operator==(const UnmodeledS::Decorr& lhs, const UnmodeledS::Decorr& rhs)
+{
+    return (lhs.Xrow.CorrCoefZero == rhs.Xrow.CorrCoefZero)
+        && (lhs.Xrow.DecorrRate == rhs.Xrow.DecorrRate)
+        && (lhs.Ycol.CorrCoefZero == rhs.Ycol.CorrCoefZero)
+        && (lhs.Ycol.DecorrRate == rhs.Ycol.DecorrRate)
+        ;
+}
+inline bool operator!=(const UnmodeledS::Decorr& lhs, const UnmodeledS::Decorr& rhs)
+{
+    return !(lhs == rhs);
+}
+inline bool operator==(const UnmodeledS& lhs, const UnmodeledS& rhs)
+{
+    return (lhs.Xrow == rhs.Xrow)
+        && (lhs.Ycol == rhs.Ycol)
+        && (lhs.XrowYcol == rhs.XrowYcol)
+        && (lhs.UnmodeledDecorr == rhs.UnmodeledDecorr)
+        ;
+}
+inline bool operator!=(const UnmodeledS& lhs, const UnmodeledS& rhs)
+{
+    return !(lhs == rhs);
+}
+
+/*!
  *  \struct Components
  *  \brief (Optional) SICD/SIDD error components
  *
@@ -301,7 +353,8 @@ struct CompositeSCP
     };
 
     //!  Constructor
-    CompositeSCP(SCPType scpTypeIn = RG_AZ) :
+    CompositeSCP() = default;
+    CompositeSCP(SCPType scpTypeIn) :
         scpType(scpTypeIn)
     {
     }
@@ -351,18 +404,25 @@ struct ErrorStatistics
     mem::ScopedCopyablePtr<Components> components;
 
     /*!
+     *  (Optional) Unmodeled
+     *
+     */
+    mem::ScopedCopyablePtr<UnmodeledS> Unmodeled;
+
+    /*!
      *  Additional parameters
      *  Note, this is Parms in SICD, but we want a consistent API
      */
     ParameterCollection additionalParameters;
 
-    ErrorStatistics() = default;
-
     //! Equality operators
     bool operator==(const ErrorStatistics& rhs) const
     {
-        return (compositeSCP == rhs.compositeSCP && components == rhs.components &&
-            additionalParameters == rhs.additionalParameters);
+        return (compositeSCP == rhs.compositeSCP)
+            && (components == rhs.components)
+            && (additionalParameters == rhs.additionalParameters)
+            && (Unmodeled == rhs.Unmodeled)
+            ;
     }
     bool operator!=(const ErrorStatistics& rhs) const
     {

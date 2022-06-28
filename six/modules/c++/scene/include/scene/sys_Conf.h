@@ -2,7 +2,14 @@
 #define SIX_scene_sys_Conf_h_INCLUDED_
 #pragma once
 
-#define CODA_OSS_AUGMENT_std_namespace 1
+#include <std/bit>
+#include <std/cstddef>
+#include <std/filesystem>
+#include <std/memory>
+#include <std/optional>
+#include <std/span>
+#include <std/string>
+
 #include <sys/Conf.h>
 
 #endif // SIX_scene_sys_Conf_h_INCLUDED_

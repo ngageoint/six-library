@@ -24,7 +24,7 @@
 
 using namespace nitf;
 
-SegmentWriter::SegmentWriter()
+SegmentWriter::SegmentWriter() noexcept(false)
 {
     setNative(nitf_SegmentWriter_construct(&error));
     setManaged(false);
@@ -37,14 +37,14 @@ SegmentWriter::SegmentWriter(nitf::SegmentSource segmentSource)
     attachSource(segmentSource);
 }
 
-SegmentWriter::~SegmentWriter()
-{
+//SegmentWriter::~SegmentWriter()
+//{
 //    if (mAdopt && mSegmentSource)
 //    {
 //        mSegmentSource->decRef();
 //        delete mSegmentSource;
 //    }
-}
+//}
 
 void SegmentWriter::attachSource(nitf::SegmentSource segmentSource)
 {

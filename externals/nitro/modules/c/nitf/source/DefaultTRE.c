@@ -83,6 +83,7 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
     nitf_TREDescription *descr = NULL;
     char *data = NULL;
     NITF_BOOL success;
+    size_t length_ = 0;
 
     if (!tre)
     {
@@ -96,7 +97,8 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
         nitf_Error_init(error, "uint32_t+1 overflow", NITF_CTXT, NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
-    data = (char *) NITF_MALLOC(length + 1);
+    length_ = ((size_t)length) + 1;
+    data = (char *) NITF_MALLOC(length_);
     if (!data)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -104,7 +106,7 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
 
         goto CATCH_ERROR;
     }
-    memset(data, 0, length + 1);
+    memset(data, 0, length_);
 
     descr =
         (nitf_TREDescription *) NITF_MALLOC(2 *
@@ -117,7 +119,7 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
     }
 
     descr[0].data_type = NITF_BINARY;
-    descr[0].data_count = length;
+    descr[0].data_count = (int)length;
     descr[0].label = _NITF_DEFAULT_TRE_LABEL;
     descr[0].tag = NITF_TRE_RAW;
     descr[1].data_type = NITF_END;
@@ -301,7 +303,7 @@ NITFPRIV(nitf_List*) defaultFind(nitf_TRE* tre,
 
 NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE* tre,
     const char* tag,
-    NITF_DATA* data,
+    const NITF_DATA* data,
     size_t dataLength, nitf_Error* error)
 {
     nitf_Field* field = NULL;
@@ -353,7 +355,7 @@ NITFPRIV(int) defaultGetCurrentSize(nitf_TRE* tre, nitf_Error* error)
     (void)error;
 
     /* TODO - should we make sure length is equal to the descr data_count ? */
-    return ((nitf_TREPrivateData*)tre->priv)->length;
+    return (int)((nitf_TREPrivateData*)tre->priv)->length;
 }
 
 
@@ -370,7 +372,7 @@ NITFPRIV(NITF_BOOL) defaultClone(nitf_TRE *source,
     tre->priv = nitf_TREPrivateData_clone(sourcePriv, error);
     if (tre->priv == NULL)
         return NITF_FAILURE;
-    nitf_TREPrivateData* trePriv = tre->priv;
+    nitf_TREPrivateData* trePriv = (nitf_TREPrivateData*)tre->priv;
 
     /* just copy over the optional length */
     trePriv->length = sourcePriv->length;

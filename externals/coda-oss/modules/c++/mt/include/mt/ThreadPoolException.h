@@ -28,12 +28,9 @@
 
 namespace mt
 {
-class ThreadPoolException : public except::Exception
+struct ThreadPoolException : public except::Exception
 {
-public:
-    //! Default Constructor
-    ThreadPoolException()
-    {}
+    ThreadPoolException() = default;
 
     /*!
      *  User constructor.  Sets the exception message.
@@ -59,9 +56,7 @@ public:
             except::Exception(c)
     {}
 
-    //!  Destructor
-    virtual ~ThreadPoolException()
-    {}
+    virtual ~ThreadPoolException() = default;
 }
 ;
 }

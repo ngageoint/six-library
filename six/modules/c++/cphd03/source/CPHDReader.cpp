@@ -29,6 +29,7 @@
 #include <mem/ScopedArray.h>
 #include <xml/lite/MinidomParser.h>
 #include <cphd03/CPHDXMLControl.h>
+#include <six/XmlLite.h>
 
 namespace cphd03
 {
@@ -54,30 +55,26 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
     mFileHeader.read(*inStream);
 
     // Read in the XML string
-    const int xmlSize = static_cast<int>(mFileHeader.getXMLsize());
+    const auto xmlSize = static_cast<int>(mFileHeader.getXMLsize());
     inStream->seek(mFileHeader.getXMLoffset(), io::Seekable::START);
 
-    xml::lite::MinidomParser xmlParser;
+    six::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(*inStream, xmlSize);
 
     if (logger.get() == nullptr)
     {
-        logger.reset(new logging::NullLogger());
+        logger = std::make_shared<logging::NullLogger>();
     }
 
     mMetadata = CPHDXMLControl(logger.get()).fromXML(xmlParser.getDocument());
 
     // Load the VBP into memory
-    mVBM.reset(new VBM(mMetadata->data, mMetadata->vectorParameters));
-    mVBM->load(*inStream,
-               mFileHeader.getVBMoffset(),
-               mFileHeader.getVBMsize(),
-               numThreads);
+    mVBM = VBM(mMetadata);
+    mVBM.load(*inStream, mFileHeader, numThreads);
 
     // Setup for wideband reading
-    mWideband.reset(new cphd::Wideband(inStream, *mMetadata,
-                                 mFileHeader.getCPHDoffset(),
-                                 mFileHeader.getCPHDsize()));
+    mWideband = std::make_unique<cphd::Wideband>(inStream, mMetadata,
+                                 mFileHeader.getCPHDoffset(), mFileHeader.getCPHDsize());
 }
 }

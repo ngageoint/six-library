@@ -51,25 +51,25 @@ public:
 
     size_t getNumChannels() const
     {
-        return mMetadata->getNumChannels();
+        return mMetadata.getNumChannels();
     }
 
     // 0-based channel number
     size_t getNumVectors(size_t channel) const
     {
-        return mMetadata->getNumVectors(channel);
+        return mMetadata.getNumVectors(channel);
     }
 
     // 0-based channel number
     size_t getNumSamples(size_t channel) const
     {
-        return mMetadata->getNumSamples(channel);
+        return mMetadata.getNumSamples(channel);
     }
 
     // returns total per complex sample (2, 4, or 8)
     size_t getNumBytesPerSample() const
     {
-        return mMetadata->getNumBytesPerSample();
+        return mMetadata.getNumBytesPerSample();
     }
 
     // Return offset from start of CPHD file for a vector and sample for a channel
@@ -94,13 +94,13 @@ public:
     // returns "FX", "TOA", or "NOT_SET"
     std::string getDomainTypeString() const
     {
-        return std::string(getDomainType());
+        return getDomainType().toString();
     }
 
     // returns enum for FX, TOA, or NOT_SET
     cphd::DomainType getDomainType() const
     {
-        return mMetadata->getDomainType();
+        return mMetadata.getDomainType();
     }
 
     // Functions required to access Header, Metadata, VBP and PH data
@@ -111,12 +111,12 @@ public:
 
     const Metadata& getMetadata() const
     {
-        return *mMetadata;
+        return mMetadata;
     }
 
     const VBM& getVBM() const
     {
-        return *mVBM;
+        return mVBM;
     }
 
     cphd::Wideband& getWideband()
@@ -127,8 +127,8 @@ public:
 private:
     // Keep info about the CPHD collection
     FileHeader mFileHeader;
-    std::unique_ptr<Metadata> mMetadata;
-    std::unique_ptr<VBM> mVBM;
+    Metadata mMetadata;
+    VBM mVBM;
     std::unique_ptr<cphd::Wideband> mWideband;
 
     void initialize(std::shared_ptr<io::SeekableInputStream> inStream,

@@ -3,8 +3,6 @@
 #include <six/Utilities.h>
 #include <six/Enums.h>
 
-namespace
-{
 TEST_CASE(testToType)
 {
     TEST_ASSERT_EQ(six::toType<six::FFTSign>("+1"),
@@ -15,8 +13,7 @@ TEST_CASE(testToType)
             six::FFTSign(six::FFTSign::NEG));
 
 }
-}
 
 TEST_MAIN(
     TEST_CHECK(testToType);
-)
+    )

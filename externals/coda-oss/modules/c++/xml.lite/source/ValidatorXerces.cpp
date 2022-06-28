@@ -20,14 +20,21 @@
  *
  */
 
-#include <xml/lite/xml_lite_config.h>
+#include <algorithm>
+#include <iterator>
+#include <std/filesystem>
+#include <std/memory>
 
-#ifdef USE_XERCES
-
-#include <xml/lite/ValidatorXerces.h>
 #include <sys/OS.h>
 #include <io/StringStream.h>
 #include <mem/ScopedArray.h>
+#include <str/EncodedStringView.h>
+
+namespace fs = std::filesystem;
+
+#include <xml/lite/xml_lite_config.h>
+#ifdef USE_XERCES
+#include <xml/lite/ValidatorXerces.h>
 
 namespace xml
 {
@@ -72,7 +79,25 @@ bool ValidationErrorHandler::handleError(
     return true;
 }
 
-
+inline std::vector<std::string> convert(const std::vector<fs::path>& schemaPaths)
+{
+    std::vector<std::string> retval;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
+                   [](const fs::path& p) { return p.string(); });
+    return retval;
+}
+ValidatorXerces::ValidatorXerces(
+        const std::vector<fs::path>& schemaPaths,
+        logging::Logger* log,
+        bool recursive) :
+    ValidatorXerces(convert(schemaPaths), log, recursive)
+{
+    // The string conversion code in validate() doesn't work right on all platforms
+    // for non-ASCII characters.  But changing that to be correct could break
+    // existing code someplace; thus, it's enabled only if using the new
+    // fs::path overload, std::string retains existing behavior.
+    mLegacyStringConversion = false;
+}
 ValidatorXerces::ValidatorXerces(
     const std::vector<std::string>& schemaPaths, 
     logging::Logger* log,
@@ -152,7 +177,72 @@ ValidatorXerces::ValidatorXerces(
     mSchemaPool->lockPool();
 }
 
-bool ValidatorXerces::validate(const std::string& xml,
+// From config.h.in: Define to the 16 bit type used to represent Xerces UTF-16 characters
+// On Windows, this needs to be wchar_t so that various "wide character" Win32 APIs can be called.
+static_assert(sizeof(XMLCh) == 2, "XMLCh should be two bytes for UTF-16.");
+
+#if _WIN32
+// On other platforms, char16_t/uint16_t is used; only wchar_t on Windows.
+using XMLCh_t = wchar_t;
+static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be wchar_t");
+inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::wstring>& pWString)
+{
+    pWString.reset(new std::wstring(xmlView.wstring())); // std::make_unique fails with older compilers
+}
+#else
+#if defined(__INTEL_COMPILER)  // ICC, high-side
+using XMLCh_t = uint16_t;
+static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be uint16_t");
+#else
+using XMLCh_t = char16_t;
+static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be char16_t");
+#endif
+#endif
+
+inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::u16string>& pWString)
+{
+    pWString.reset(new std::u16string(xmlView.u16string())); // std::make_unique fails with older compilers
+}
+inline void reset(str::EncodedStringView xmlView, std::unique_ptr<str::ui16string>& pWString)
+{
+    pWString.reset(new str::ui16string(xmlView.ui16string_())); // std::make_unique fails with older compilers
+}
+
+using XMLCh_string = std::basic_string<XMLCh_t>;
+
+template <typename CharT>
+static void setStringData_(xercesc::DOMLSInputImpl& input, const std::basic_string<CharT>& xml, std::unique_ptr<XMLCh_string>& pWString)
+{
+    reset(str::EncodedStringView(xml), pWString);
+    input.setStringData(pWString->c_str());
+}
+static void setStringData(xercesc::DOMLSInputImpl& input, const std::string& xml, bool legacyStringConversion,
+                          std::unique_ptr<XercesLocalString>& pXmlWide, std::unique_ptr<XMLCh_string>& pWString)
+{
+    if (legacyStringConversion)
+    {
+        // This doesn't work right for UTF-8 or Windows-1252
+        pXmlWide.reset(new XercesLocalString(xml)); // std::make_unique fails with older compilers
+        input.setStringData(pXmlWide->toXMLCh());
+    }
+    else
+    {
+        setStringData_(input, xml, pWString);
+    }
+}
+inline void setStringData(xercesc::DOMLSInputImpl& input, const coda_oss::u8string& xml, bool /*legacyStringConversion*/,
+                          std::unique_ptr<XercesLocalString>&, std::unique_ptr<XMLCh_string>& pWString)
+{
+    setStringData_(input, xml, pWString);
+}
+inline void setStringData(xercesc::DOMLSInputImpl& input, const str::W1252string& xml, bool /*legacyStringConversion*/,
+                          std::unique_ptr<XercesLocalString>&, std::unique_ptr<XMLCh_string>& pWString)
+{
+    setStringData_(input, xml, pWString);
+}
+
+template<typename CharT>
+bool ValidatorXerces::validate_(const std::basic_string<CharT>& xml, bool legacyStringConversion,
                                const std::string& xmlID,
                                std::vector<ValidationInfo>& errors) const
 {
@@ -170,8 +260,9 @@ bool ValidatorXerces::validate(const std::string& xml,
         xercesc::XMLPlatformUtils::fgMemoryManager);
 
     // expand to the wide character data for use with xerces
-    XercesLocalString xmlWide(xml);
-    input.setStringData(xmlWide.toXMLCh());
+    std::unique_ptr<XercesLocalString> pXmlWide;
+    std::unique_ptr<XMLCh_string> pWString;
+    setStringData(input, xml, legacyStringConversion, pXmlWide, pWString);
 
     // validate the document
     mValidator->parse(&input)->release();
@@ -186,6 +277,25 @@ bool ValidatorXerces::validate(const std::string& xml,
 
     return (!mErrorHandler->getErrorLog().empty());
 }
+bool ValidatorXerces::validate(const std::string& xml,
+                               const std::string& xmlID,
+                               std::vector<ValidationInfo>& errors) const
+{
+    return validate_(xml, mLegacyStringConversion, xmlID, errors);
+}
+bool ValidatorXerces::validate(const coda_oss::u8string& xml,
+                               const std::string& xmlID,
+                               std::vector<ValidationInfo>& errors) const
+{
+    return validate_(xml, false /*legacyStringConversion*/, xmlID, errors);
+}
+bool ValidatorXerces::validate(const str::W1252string& xml,
+                               const std::string& xmlID,
+                               std::vector<ValidationInfo>& errors) const
+{
+    return validate_(xml, false /*legacyStringConversion*/, xmlID, errors);
+}
+
 }
 }
 #endif

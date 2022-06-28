@@ -43,7 +43,8 @@ struct FrameType final
     };
 
     //! Value constructor
-    FrameType(FrameTypesEnum value = NOT_SET);
+    FrameType() = default;
+    FrameType(FrameTypesEnum value);
 
     //! String constructor
     FrameType(const std::string& str);
@@ -54,39 +55,36 @@ struct FrameType final
     static
     FrameTypesEnum fromString(const std::string& str);
 
-    bool operator==(FrameTypesEnum rhs) const
-    {
-        return (mValue == rhs);
-    }
-
-    bool operator!=(FrameTypesEnum rhs) const
-    {
-        return !(*this == rhs);
-    }
-
     bool operator==(const FrameType& rhs) const
     {
-        return (mValue == rhs.mValue);
+        return value() == rhs.value();
     }
-
     bool operator!=(const FrameType& rhs) const
     {
         return !(*this == rhs);
     }
 
-    bool operator==(const std::string& rhs) const
-    {
-        return toString() == rhs;
-    }
-
-    bool operator!=(const std::string& rhs) const
-    {
-        return !(*this == rhs);
-    }
-
-    FrameTypesEnum mValue;
-
+    FrameTypesEnum value() const { return mValue; }
+    FrameTypesEnum mValue = NOT_SET;
 };
+
+inline bool operator==(const FrameType& lhs, FrameType::FrameTypesEnum rhs)
+{
+    return (lhs.value() == rhs);
+}
+inline bool operator!=(const FrameType& lhs, FrameType::FrameTypesEnum rhs)
+{
+    return !(lhs == rhs);
+}
+
+inline bool operator==(const FrameType& lhs, const std::string& rhs)
+{
+    return lhs.toString() == rhs;
+}
+inline bool operator!=(const FrameType& lhs, const std::string& rhs)
+{
+    return !(lhs == rhs);
+}
 
 inline std::ostream& operator<<(std::ostream& os, const FrameType& e)
 {

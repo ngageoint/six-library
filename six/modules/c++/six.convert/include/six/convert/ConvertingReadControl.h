@@ -53,6 +53,9 @@ struct ConvertingReadControl : public ReadControl
      */
     ConvertingReadControl(const std::vector<std::string>& pluginPathnames);
 
+    ConvertingReadControl(const ConvertingReadControl&) = delete;
+    ConvertingReadControl& operator=(const ConvertingReadControl&) = delete;
+
     /*!
      * Read whether a file has COMPLEX or DERIVED data
      * \param pathname path to file
@@ -76,8 +79,8 @@ struct ConvertingReadControl : public ReadControl
      * \param pathname        Input filepath
      * \param schemaPathnames Not used
      */
-    virtual void load(const std::string& pathname,
-            const std::vector<std::string>& schemaPaths);
+    void load(const std::string& pathname, const std::vector<std::string>& schemaPaths) override;
+    void load(const std::filesystem::path& pathname, const std::vector<std::filesystem::path>* pSchemaPaths) override;
 
     /*!
      * \return type of file being converted

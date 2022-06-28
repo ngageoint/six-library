@@ -19,12 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "sys/Path.h"
 
 #include <algorithm>
 
-#include <sys/Path.h>
-#include <sys/Filesystem.h>
-
+#include <sys/filesystem.h>
 namespace fs = coda_oss::filesystem;
 
 namespace sys
@@ -341,6 +340,8 @@ static void clean_slashes(std::string& path, bool isAbsolute)
     {
         path = Path::delimiter() + path;
     }
+    #else
+    UNREFERENCED_PARAMETER(isAbsolute);
     #endif
 
     // Do this last so that we have the best chance of finding the path on disk
@@ -769,13 +770,14 @@ std::vector<std::string> Path::expandedEnvironmentVariables(const std::string& p
     return expandedEnvironmentVariables_(path, unused_specialPath);
 }
 
-static bool path_matches_type(const std::string &path, sys::Filesystem::FileType type)
+static bool path_matches_type(const std::string &path_, fs::file_type type)
 {
-    if ((type == Filesystem::FileType::Regular) && Filesystem::is_regular_file(path))
+    const fs::path path(path_);
+    if ((type == fs::file_type::regular) && is_regular_file(path))
     {
         return true;
     }
-    if ((type== Filesystem::FileType::Directory) && Filesystem::is_directory(path))
+    if ((type== fs::file_type::directory) && is_directory(path))
     {
         return true;
     }
@@ -783,7 +785,7 @@ static bool path_matches_type(const std::string &path, sys::Filesystem::FileType
 }
 
 static std::string expandEnvironmentVariables_(const std::string& path,
-                                               bool checkIfExists, sys::Filesystem::FileType* pType = nullptr)
+                                               bool checkIfExists, fs::file_type* pType = nullptr)
 {
     bool specialPath;
     const auto expanded_paths = expandedEnvironmentVariables_(path, specialPath);
@@ -794,7 +796,7 @@ static std::string expandEnvironmentVariables_(const std::string& path,
         // more handling for "~"; it's a directory, not a file
         if (path == "~")
         {
-            if ((pType != nullptr) && (*pType == Filesystem::FileType::Regular))
+            if ((pType != nullptr) && (*pType == fs::file_type::regular))
             {
                 return ""; // looking for files, "~" can't be it
             }
@@ -820,7 +822,7 @@ static std::string expandEnvironmentVariables_(const std::string& path,
             {
                 return expanded_path; // not checking for existence, just grab the first one
             }
-            if (Filesystem::exists(expanded_path))
+            if (fs::exists(expanded_path))
             {
                 return expanded_path;
             }
@@ -832,7 +834,7 @@ std::string Path::expandEnvironmentVariables(const std::string& path, bool check
 {
     return expandEnvironmentVariables_(path, checkIfExists);
 }
-std::string Path::expandEnvironmentVariables(const std::string& path, sys::Filesystem::FileType type)
+std::string Path::expandEnvironmentVariables(const std::string& path, fs::file_type type)
 {
     bool unused_checkIfExists = true;
     return expandEnvironmentVariables_(path, unused_checkIfExists, &type);

@@ -21,6 +21,9 @@
 */
 
 #include <cstdio>
+
+#include <std/filesystem>
+
 #include <six/NITFWriteControl.h>
 #include <six/Types.h>
 #include <six/XMLControlFactory.h>
@@ -28,7 +31,6 @@
 #include <six/sicd/Utilities.h>
 #include <io/TempFile.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 namespace
@@ -52,8 +54,7 @@ void validateArguments(int argc, char** argv)
 
 std::vector<std::byte> generateBandData(const six::sicd::ComplexData& data)
 {
-    std::vector<std::byte> bandData(data.getNumRows() * data.getNumCols()
-            * data.getNumBytesPerPixel());
+    std::vector<std::byte> bandData(getExtent(data).area() * data.getNumBytesPerPixel());
 
     for (size_t ii = 0; ii < bandData.size(); ++ii)
     {
@@ -252,9 +253,7 @@ int main(int argc, char** argv)
         validateArguments(argc, argv);
         const std::string xmlPathname(argv[1]);
 
-        six::XMLControlFactory::getInstance().addCreator(
-            six::DataType::COMPLEX,
-            new six::XMLControlCreatorT<six::sicd::ComplexXMLControl>());
+        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
         bool allPassed = true;
         allPassed = addingNullSegmentWriterShouldThrow(xmlPathname) && allPassed;

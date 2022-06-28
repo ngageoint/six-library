@@ -26,6 +26,8 @@
 
 #include <string>
 #include <limits>
+#include <type_traits>
+#include <std/cstddef> // std::byte
 
 #include <nitf/Field.h>
 
@@ -36,6 +38,7 @@
 #include <nitf/DateTime.hpp>
 #include <nitf/Object.hpp>
 #include <nitf/NITFException.hpp>
+#include <nitf/exports.hpp>
 
 /*!
  *  \file Field.hpp
@@ -82,25 +85,11 @@ struct GetConvType<false, IsSignedT>
  *  The Field is a generic type object that allows storage
  *  and casting of data amongst disparate data types.
  */
-class Field /*final*/ : public nitf::Object<nitf_Field> // no "final", SWIG doesn't like it
+class NITRO_NITFCPP_API Field /*final*/ : public nitf::Object<nitf_Field> // no "final", SWIG doesn't like it
 {
-    void setU_(uint32_t data)
-    {
-        const NITF_BOOL x = nitf_Field_setUint32(getNativeOrThrow(), data, &error);
-        if (!x)
-            throw nitf::NITFException(&error);
-    }
-    void set_(int32_t data)
-    {
-        if (!nitf_Field_setInt32(getNativeOrThrow(), data, &error))
-            throw nitf::NITFException(&error);
-    }
-    void set_(double data)
-    {
-        if (!nitf_Field_setReal(getNativeOrThrow(),
-            "f", false, data, &error))
-            throw nitf::NITFException(&error);
-    }
+    void setU_(uint32_t data);
+    void set_(int32_t data);
+    void set_(double data);
 
 public:
     using FieldType = nitf::FieldType;
@@ -183,7 +172,7 @@ public:
     //! Copy constructor
     Field(const Field & x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
 
     //! Assignment Operator
@@ -194,7 +183,11 @@ public:
         return *this;
     }
 
+    Field() = delete; // does not make sense to construct a Field from scratch
+    Field(size_t length, FieldType type);
+
     //! Set native object
+    using native_t = nitf_Field;
     Field(nitf_Field * field)
     {
         setNative(field);
@@ -227,13 +220,7 @@ public:
     {
         setU_(data);
     }
-    void set(uint64_t data)
-    {
-        const NITF_BOOL x = nitf_Field_setUint64(getNativeOrThrow(), data, &error);
-        if (!x)
-            throw nitf::NITFException(&error);
-    }
-
+    void set(uint64_t data);
     void set(int8_t data)
     {
         set_(data);
@@ -246,12 +233,7 @@ public:
     {
         set_(data);
     }
-    void set(int64_t data)
-    {
-        if (!nitf_Field_setInt64(getNativeOrThrow(), data, &error))
-            throw nitf::NITFException(&error);
-    }
-
+    void set(int64_t data);
     void set(float data)
     {
         set_(data);
@@ -260,38 +242,14 @@ public:
     {
         set_(data);
     }
-
-    void set(const char * data)
-    {
-        const NITF_BOOL x = nitf_Field_setString(getNativeOrThrow(), data, &error);
-        if (!x)
-            throw nitf::NITFException(&error);
-    }
+    void set(const char* data);
     void set(const std::string& data)
     {
         set(data.c_str());
     }
+    void set(const nitf::DateTime& dateTime, const std::string& format = NITF_DATE_FORMAT_21);
 
-    void set(const nitf::DateTime& dateTime,
-             const std::string& format = NITF_DATE_FORMAT_21)
-    {
-        const NITF_BOOL x = nitf_Field_setDateTime(getNativeOrThrow(),
-                dateTime.getNative(), format.c_str(), &error);
-        if (!x)
-            throw nitf::NITFException(&error);
-    }
-
-    nitf::DateTime asDateTime(const std::string& format = NITF_DATE_FORMAT_21)
-    {
-        nitf_DateTime* const dateTime =
-                nitf_Field_asDateTime(getNativeOrThrow(), format.c_str(),
-                                      &error);
-        if (!dateTime)
-        {
-            throw nitf::NITFException(&error);
-        }
-        return nitf::DateTime(dateTime);
-    }
+    nitf::DateTime asDateTime(const std::string& format = NITF_DATE_FORMAT_21) const;
 
     //! Get the type
     FieldType getType() const
@@ -327,16 +285,7 @@ public:
      * Use this method with caution as it can resize a field to be larger than
      * it should be, according to specs.
      */
-    void resize(size_t length)
-    {
-        nitf_Field *field = getNativeOrThrow();
-        const NITF_BOOL resizable = field->resizable;
-        field->resizable = 1;
-
-        if (!nitf_Field_resizeField(field, length, &error))
-            throw nitf::NITFException(&error);
-        field->resizable = resizable;
-    }
+    void resize(size_t length);
 
     //! Returns the field as any numeric type T
     template <typename T>
@@ -353,12 +302,12 @@ public:
     //! Returns the field as a string
     operator std::string() const
     {
-        return std::string(getNativeOrThrow()->raw,
-            getNativeOrThrow()->length);
+        const auto pNative = getNativeOrThrow();
+        return std::string(pNative->raw, pNative->length);
     }
-    std::string toString() const
+    std::string toString(bool trim=false) const
     {
-        return *this;
+        return trim ? toTrimString() : *this;
     }
     std::string toTrimString() const
     {
@@ -367,28 +316,20 @@ public:
         return retval;
     }
 
-    Field() = delete; // does not make sense to construct a Field from scratch
     operator char* () const = delete; // Don't allow this cast ever.
 
 private:
     //! get the value
+    void get_(NITF_DATA* outval, nitf_ConvType vtype, size_t length) const;
     void get(NITF_DATA* outval, nitf::ConvType vtype, size_t length) const
     {
-        nitf_Error e;
-        const NITF_BOOL x = nitf_Field_get(getNativeOrThrow(), outval, vtype, length, &e);
-        if (!x)
-            throw nitf::NITFException(&e);
+        get_(outval, vtype, length);
     }
 
     //! set the value
-    void set(NITF_DATA* inval, size_t length)
-    {
-        const NITF_BOOL x = nitf_Field_setRawData(getNativeOrThrow(), inval, length, &error);
-        if (!x)
-            throw nitf::NITFException(&error);
-    }
+    void set(NITF_DATA* inval, size_t length);
 
-    nitf_Error error{};
+    mutable nitf_Error error{};
 };
 
 }

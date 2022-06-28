@@ -21,6 +21,7 @@
  */
 #ifndef __IMPORT_SIX_SICD_H__
 #define __IMPORT_SIX_SICD_H__
+#pragma once
 
 #include <import/six.h>
 
@@ -42,5 +43,6 @@
 #include "six/sicd/SICDMesh.h"
 #include "six/sicd/SCPCOA.h"
 #include "six/sicd/Utilities.h"
+#include "six/sicd/NITFReadComplexXMLControl.h"
 
 #endif

@@ -27,9 +27,13 @@
 #include <stddef.h>
 #include <string.h>
 #include <vector>
+#include <std/span>
+#include <std/cstddef>
 
 #include "nitf/coda-oss.hpp"
+#include "types/RowCol.h"
 #include "nitf/System.hpp"
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
@@ -43,7 +47,7 @@ namespace nitf
  * means for multi-segment cases, there may be a different num rows / block in
  * each segment).
  */
-struct ImageBlocker /*final*/   // no "final", SWIG doesn't like it
+struct NITRO_NITFCPP_API ImageBlocker /*final*/   // no "final", SWIG doesn't like it
 {
     ImageBlocker(const ImageBlocker&) = delete;
     ImageBlocker& operator=(const ImageBlocker&) = delete;
@@ -168,6 +172,12 @@ struct ImageBlocker /*final*/   // no "final", SWIG doesn't like it
                size_t numValidRowsInBlock,
                size_t numValidColsInBlock,
                void* output) noexcept;
+    static void block(std::span<const std::byte> input,
+            size_t numBytesPerPixel,
+            size_t numCols,
+            const types::RowCol<size_t>& perBlock,
+            const types::RowCol<size_t>& validInBlock,
+            std::span<std::byte> output) noexcept;
 
     //! \return The number of columns of blocks
     size_t getNumColsOfBlocks() const noexcept

@@ -399,7 +399,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_getBlocking
   NITF_IC_SZ+1 bytes
 
   The compressionRate argument must is a char array with at least
-  NITF_CCOMRAT_SZ+1 bytes
+  NITF_COMRAT_SZ+1 bytes
 
   The only errors are associated with fetching field objects.
 
@@ -460,7 +460,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setDimensions
 NITFAPI(NITF_BOOL)
 nitf_ImageSubheader_setCornersFromLatLons(nitf_ImageSubheader* subheader,
                                           nitf_CornersType type,
-                                          double corners[4][2],
+                                          const double corners[4][2],
                                           nitf_Error* error);
 
 /*!
@@ -549,7 +549,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_setBlocking
 
   The imageCompression argument must is a char array with at least
   NITF_IC_SZ+1 bytes. The compressionRate argument must is a char array
-  with at least NITF_CCOMRAT_SZ+1 bytes. If either string is too long
+  with at least NITF_COMRAT_SZ+1 bytes. If either string is too long
   for the field, it is truncated.
 
   Writing of a masked image with blocking mode S is currently not supported.

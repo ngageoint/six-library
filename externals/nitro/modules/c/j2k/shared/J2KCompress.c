@@ -22,6 +22,18 @@
 
 #ifdef HAVE_J2K_H
 
+#if _MSC_VER
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#pragma warning(push)
+#pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' 
+#include <windows.h>
+#pragma warning(pop)
+#undef min
+#undef max
+
+#pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+#endif // _MSC_VER
+
 #include <import/nitf.h>
 #include <import/j2k.h>
 
@@ -60,6 +72,10 @@ static nitf_CompressionInterface interfaceTable =
     implOpen, implStart, implWriteBlock, implEnd, implDestroy, NULL
 };
 
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _ImplControl
 {
     nitf_BlockingInfo blockInfo; /* Kept for convenience */
@@ -70,6 +86,9 @@ typedef struct _ImplControl
     uint32_t curBlock;
     nitf_Field *comratField;     /* kept so we can update it */
 }ImplControl;
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 NITF_CXX_ENDGUARD
 
@@ -125,7 +144,8 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     char irep[NITF_IREP_SZ+1];
     int imageType;
     J2K_BOOL isSigned = 0;
-    uint32_t idx;
+    uint32_t idx = 0;
+    j2k_Component** components = NULL;
 
     /* reset the options */
     memset(&options, 0, sizeof(j2k_WriterOptions));
@@ -288,7 +308,7 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     implControl->comratField = subheader->NITF_COMRAT;
 
     /* initialize the container */
-    j2k_Component** components = (j2k_Component**)J2K_MALLOC(
+    components = (j2k_Component**)J2K_MALLOC(
         sizeof(j2k_Component*) * nBands);
     if (!components)
     {
@@ -434,7 +454,7 @@ NITFPRIV(NITF_BOOL) implEnd( nitf_CompressionControl * control,
         The decimal point is implicit and assumed to be one
         digit from the right (i.e. xy.z).
      */
-    comrat = (1.0f * compressedSize * nBits) / rawSize;
+    comrat = (float) (((double)(compressedSize * nBits)) / (double)rawSize);
     comratInt = (uint32_t)(comrat * 10.0f + 0.5f);
 
     /* write the comrat field */

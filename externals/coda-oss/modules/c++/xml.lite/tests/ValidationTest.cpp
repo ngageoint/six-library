@@ -41,7 +41,7 @@ int main(int argc, char** argv)
         parser.addArgument("-x --xml", "xml document to validate", 
                            cli::STORE);
         // parse!
-        const mem::auto_ptr<cli::Results>
+        const std::unique_ptr<cli::Results>
             options(parser.parse(argc, (const char**) argv));
         logging::LoggerPtr log(
             logging::setupLogger("ValidationTest"));

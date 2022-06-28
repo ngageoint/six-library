@@ -20,19 +20,20 @@
  *
  */
 
+#include <assert.h>
+
 #include "six/XMLControlFactory.h"
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
+#include "six/Data.h"
 
 using namespace six;
 
 XMLControlRegistry::~XMLControlRegistry()
 {
-    for (RegistryMap::const_iterator iter = mRegistry.begin();
-         iter != mRegistry.end();
-         ++iter)
+    for (auto& entry : mRegistry)
     {
-        delete iter->second;
+        delete entry.second;
     }
 }
 
@@ -58,7 +59,7 @@ void XMLControlRegistry::addCreator(const std::string& identifier,
 }
 #if !CODA_OSS_cpp17
 void XMLControlRegistry::addCreator(const std::string& identifier,
-                                    std::auto_ptr<XMLControlCreator> creator)
+                                    mem::auto_ptr<XMLControlCreator> creator)
 {
     addCreator(identifier, std::unique_ptr<XMLControlCreator>(creator.release()));
 }
@@ -80,15 +81,15 @@ XMLControlRegistry::newXMLControl(const std::string& identifier,
 std::string six::toXMLString(const Data* data,
                              const six::XMLControlRegistry *xmlRegistry)
 {
-    std::unique_ptr<logging::Logger> log (new logging::NullLogger());
+    logging::NullLogger log;
     return toValidXMLString(data, std::vector<std::string>(),
-                            log.get(), xmlRegistry);
+                            &log, xmlRegistry);
 }
 
-std::string six::toValidXMLString(const Data* data,
-                                  const std::vector<std::string>& schemaPaths,
-                                  logging::Logger* log,
-                                  const six::XMLControlRegistry *xmlRegistry)
+template<typename TSchemaPaths>
+std::string six_toValidXMLString(const Data& data,
+    const TSchemaPaths& schemaPaths,
+    logging::Logger* log, const six::XMLControlRegistry* xmlRegistry)
 {
     if (!xmlRegistry)
     {
@@ -96,15 +97,34 @@ std::string six::toValidXMLString(const Data* data,
     }
 
     const std::unique_ptr<XMLControl>
-        xmlControl(xmlRegistry->newXMLControl(data->getDataType(), log));
+        xmlControl(xmlRegistry->newXMLControl(data.getDataType(), log));
 
     // this will validate if SIX_SCHEMA_PATH EnvVar is set
     const std::unique_ptr<xml::lite::Document> doc(
         xmlControl->toXML(data, schemaPaths));
 
     io::StringStream oss;
-    doc->getRootElement()->print(oss, xml::lite::string_encoding::utf_8);
+    getRootElement(*doc).print(oss, xml::lite::StringEncoding::Utf8);
 
     return oss.stream().str();
 }
-
+std::string six::toValidXMLString(const Data* data,
+                                  const std::vector<std::string>& schemaPaths,
+                                  logging::Logger* log,
+                                  const six::XMLControlRegistry *xmlRegistry)
+{
+    assert(data != nullptr);
+    return toValidXMLString(*data, schemaPaths, log, xmlRegistry);
+}
+std::string six::toValidXMLString(const Data& data,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger* log, const six::XMLControlRegistry* xmlRegistry)
+{
+    return six_toValidXMLString(data, schemaPaths, log, xmlRegistry);
+}
+std::string six::toValidXMLString(const Data& data,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger* log, const six::XMLControlRegistry* xmlRegistry)
+{
+    return six_toValidXMLString(data, pSchemaPaths, log, xmlRegistry);
+}

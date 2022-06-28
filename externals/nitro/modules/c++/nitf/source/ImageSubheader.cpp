@@ -47,10 +47,8 @@ ImageSubheader::ImageSubheader(nitf_ImageSubheader * x)
     getNativeOrThrow();
 }
 
-ImageSubheader::ImageSubheader()
+ImageSubheader::ImageSubheader() noexcept(false) : ImageSubheader(nitf_ImageSubheader_construct(&error))
 {
-    setNative(nitf_ImageSubheader_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
@@ -110,6 +108,15 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
     if (!x)
         throw nitf::NITFException(&error);
 }
+void ImageSubheader::setPixelInformation(PixelValueType pvtype,
+                         uint32_t nbpp,
+                         uint32_t abpp,
+                         std::string justification,
+                         ImageRepresentation irep, std::string icat,
+                         std::vector<nitf::BandInfo>& bands)
+{
+    setPixelInformation(to_string(pvtype), nbpp, abpp, justification, to_string(irep), icat, bands);
+}
 
 void ImageSubheader::setBlocking(uint32_t numRows,
                      uint32_t numCols,
@@ -122,6 +129,14 @@ void ImageSubheader::setBlocking(uint32_t numRows,
         &error);
     if (!x)
         throw nitf::NITFException(&error);
+}
+void ImageSubheader::setBlocking(uint32_t numRows,
+                     uint32_t numCols,
+                     uint32_t numRowsPerBlock,
+                     uint32_t numColsPerBlock,
+                     BlockingMode imode)
+{
+    setBlocking(numRows, numCols, numRowsPerBlock, numColsPerBlock, to_string(imode));
 }
 
 void ImageSubheader::computeBlocking(uint32_t numRows,
@@ -162,8 +177,8 @@ void ImageSubheader::createBands(uint32_t numBands)
 }
 
 
-void ImageSubheader::setCornersFromLatLons(nitf::CornersType type,
-                                           double corners[4][2])
+void ImageSubheader::setCornersFromLatLons_(nitf::CornersType type,
+                                           const double (*corners)[2])
 {
     const NITF_BOOL x = nitf_ImageSubheader_setCornersFromLatLons(getNativeOrThrow(),
                                                             type,
@@ -174,7 +189,7 @@ void ImageSubheader::setCornersFromLatLons(nitf::CornersType type,
 
 }
 
-void ImageSubheader::getCornersAsLatLons(double corners[4][2]) const
+void ImageSubheader::getCornersAsLatLons_(double (*corners)[2]) const
 {
     const NITF_BOOL x = nitf_ImageSubheader_getCornersAsLatLons(getNativeOrThrow(),
                                                           corners,
@@ -233,7 +248,11 @@ nitf::Field ImageSubheader::getImageTitle() const
     return nitf::Field(getNativeOrThrow()->imageTitle);
 }
 
-nitf::Field ImageSubheader::getImageSecurityClass() const
+nitf::Field ImageSubheader::getImageSecurityClass()
+{
+    return nitf::Field(getNativeOrThrow()->imageSecurityClass);
+}
+const nitf::Field ImageSubheader::getImageSecurityClass() const
 {
     return nitf::Field(getNativeOrThrow()->imageSecurityClass);
 }
@@ -327,6 +346,24 @@ nitf::Field ImageSubheader::getImageCompression() const
 nitf::Field ImageSubheader::getCompressionRate() const
 {
     return nitf::Field(getNativeOrThrow()->compressionRate);
+}
+
+void ImageSubheader::getCompression(std::string& imageCompression, std::string& compressionRate) const
+{
+    imageCompression.resize(NITF_IC_SZ + 1); // "... char array with at least NITF_IC_SZ+1 bytes"
+    compressionRate.resize(NITF_COMRAT_SZ + 1); // "... char array with at least NITF_COMRAT_SZ+1 bytes"
+    const auto result = nitf_ImageSubheader_getCompression(getNativeOrThrow(),
+        str::data(imageCompression), str::data(compressionRate), &error);
+    if (result != NITF_SUCCESS)
+    {
+        throw nitf::NITFException(&error);
+    }
+}
+void  ImageSubheader::getCompression(ImageCompression& imageCompression, std::string& compressionRate) const
+{
+    std::string strImageCompression;
+    getCompression(strImageCompression, compressionRate);
+    imageCompression = from_string<ImageCompression>(strImageCompression);
 }
 
 nitf::Field ImageSubheader::getNumImageBands() const 

@@ -57,7 +57,7 @@ public:
      *  be DERIVED.
      *
      */
-    DataType getDataType() const
+    DataType getDataType() const noexcept
     {
         return mDataType;
     }
@@ -67,10 +67,13 @@ public:
      *  or DERIVED (for SIDD products).
      *
      */
-    Container(DataType dataType);
+    Container(DataType dataType);    
+    Container(Data*); // Note that the container takes ownership of the data, so the caller should not delete it.
+    Container(std::unique_ptr<Data>&& data);
+    Container(std::unique_ptr<Data>&& data, std::unique_ptr<Legend>&& legend) noexcept(false); // Only valid for derived data.
 
     //! Destructor
-    virtual ~Container();
+    virtual ~Container() = default;
 
     /*!
      *  Add a new Data object to the back of this container.
@@ -89,7 +92,7 @@ public:
      */
     void addData(std::unique_ptr<Data>&& data);
 #if !CODA_OSS_cpp17    
-    void addData(std::auto_ptr<Data> data);
+    void addData(mem::auto_ptr<Data> data);
 #endif
 
 
@@ -99,7 +102,7 @@ public:
      */
     void addData(std::unique_ptr<Data>&& data, std::unique_ptr<Legend>&& legend);
 #if !CODA_OSS_cpp17
-    void addData(std::auto_ptr<Data> data, std::auto_ptr<Legend> legend);
+    void addData(mem::auto_ptr<Data> data, mem::auto_ptr<Legend> legend);
 #endif
 
     /*!
@@ -145,10 +148,12 @@ public:
      */
     Data* getData(const std::string& iid, size_t numImages);
 
+    size_t size() const { return mData.size(); }
     size_t getNumData() const
     {
-        return mData.size();
+        return size();
     }
+    bool empty() const { return mData.empty(); }
 
     /*!
      * Removes data from the container that matches this pointer
@@ -189,7 +194,7 @@ private:
     void addData(std::unique_ptr<Data>&& data,
                  mem::ScopedCopyablePtr<Legend> legend);
 #if !CODA_OSS_cpp17
-    void addData(std::auto_ptr<Data> data,
+    void addData(mem::auto_ptr<Data> data,
                  mem::ScopedCopyablePtr<Legend> legend);
 #endif
 };

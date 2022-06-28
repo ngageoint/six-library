@@ -46,12 +46,9 @@ namespace six
  *  directly.  The free parameters are applied last, by the file format
  *  container.  Currently only NITF free parameters are supported.
  */
-class Classification
+struct Classification
 {
-public:
-    virtual ~Classification()
-    {
-    }
+    virtual ~Classification() = default;
 
     // SICD spells this out, SIDD does not
     virtual std::string getLevel() const = 0;
@@ -71,18 +68,17 @@ public:
     //! Use this to fit in anything you might need for the file container
     Options fileOptions;
 
-    friend bool operator==(const Classification& lhs, const Classification& rhs)
-    {
-        return lhs.equalTo(rhs);
-    }
-    friend bool operator!=(const Classification& lhs, const Classification& rhs)
-    {
-        return !(lhs == rhs);
-    }
-
-private:
     virtual bool equalTo(const Classification& rhs) const = 0;
 };
+inline bool operator==(const Classification& lhs, const Classification& rhs)
+{
+    return lhs.equalTo(rhs) && rhs.equalTo(lhs);
+}
+inline bool operator!=(const Classification& lhs, const Classification& rhs)
+{
+    return !(lhs == rhs);
+}
+
 }
 
 //! Print operator (utility only).

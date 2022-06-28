@@ -29,7 +29,7 @@ TEST_CASE(test_geo_utils)
     const char* DECIMAL_LON_STR = "+123.456";
 
     const char* DMS_LAT_STR = "123456S";
-    const char* DMS_LON_STR = "1234567E";
+    const char* DMS_LON_STR = "1234556E";
 
     /* Try geographic stuff */
     char ll[10];
@@ -47,11 +47,11 @@ TEST_CASE(test_geo_utils)
     TEST_ASSERT_EQ_INT(m, 34);
     TEST_ASSERT_EQ_FLOAT(s, 56.0);
     nitf_Utils_geographicLatToCharArray(d, m, s, ll);
-    TEST_ASSERT_EQ_STR(ll, "112504S");
+    TEST_ASSERT_EQ_STR(ll, DMS_LAT_STR);
 
     TEST_ASSERT((decimal <= -12.582) && (decimal >= -12.583));
     nitf_Utils_decimalLatToGeoCharArray(decimal, ll);
-    TEST_ASSERT_EQ_STR(ll, "112504S");
+    TEST_ASSERT_EQ_STR(ll, DMS_LAT_STR);
 
     /* Now convert it back */
     nitf_Utils_decimalToGeographic(decimal, &d, &m, &s);
@@ -68,19 +68,21 @@ TEST_CASE(test_geo_utils)
     decimal = nitf_Utils_geographicToDecimal(d, m, s);
     TEST_ASSERT_EQ_INT(d, 123);
     TEST_ASSERT_EQ_INT(m, 45);
-    TEST_ASSERT_EQ_FLOAT(s, 67.0);
+    TEST_ASSERT_EQ_FLOAT(s, 56.0);
+    TEST_ASSERT((decimal >= 123.765) && (decimal <= 123.766));
+
+    s = 67.0;
     nitf_Utils_geographicLonToCharArray(d, m, s, ll);
-    TEST_ASSERT_EQ_STR(ll, "1234607E");
-    TEST_ASSERT((decimal >= 123.768) && (decimal <= 123.769));
+    TEST_ASSERT_EQ_STR(ll, "9999999E");
 
     nitf_Utils_decimalLonToGeoCharArray(decimal, ll);
-    TEST_ASSERT_EQ_STR(ll, "1234607E");
+    TEST_ASSERT_EQ_STR(ll, "1234556E");
 
     /* Now convert it back */
     nitf_Utils_decimalToGeographic(decimal, &d, &m, &s);
     TEST_ASSERT_EQ_INT(d, 123);
-    TEST_ASSERT_EQ_INT(m, 46);
-    TEST_ASSERT_EQ_FLOAT(s, 7.0);
+    TEST_ASSERT_EQ_INT(m, 45);
+    TEST_ASSERT_EQ_FLOAT(s, 56.0);
 
     /* Try decimal stuff */
     if (!nitf_Utils_parseDecimalString(DECIMAL_LAT_STR, &decimal, &e))
@@ -101,9 +103,72 @@ TEST_CASE(test_geo_utils)
     TEST_ASSERT_EQ_STR(ll, "+123.456");
 }
 
+TEST_CASE(test_decimalToGeographic_normal)
+{
+    /*
+    These are some examples run through nrt_Utils_decimalToGeographic and I agree with all of them:    
+    */
+    int degrees, minutes; double seconds;
+
+    // 0.000000 -> 0 0 0.000000
+    nrt_Utils_decimalToGeographic(0.0, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+
+    // -84.500000 -> -84 30 0.000000
+    nrt_Utils_decimalToGeographic(-84.500000, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(-84, degrees);
+    TEST_ASSERT_EQ_INT(30, minutes);
+    TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+
+    //  -0.100000 -> 0 -6 0.000000
+    nrt_Utils_decimalToGeographic(-0.1, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(-6, minutes);
+    TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+
+    // -0.010000 -> 0 0 -36.000000
+    nrt_Utils_decimalToGeographic(-0.01, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_FLOAT(-36.0, seconds);
+
+    // -0.001000 -> 0 0 -3.600000
+    nrt_Utils_decimalToGeographic(-0.001, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_FLOAT(-3.6, seconds);
+
+    // 180.000000 -> 180 0 0.000000
+    nrt_Utils_decimalToGeographic(180.0, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(180, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+
+    // -180.000000 -> -180 0 0.000000
+    nrt_Utils_decimalToGeographic(-180.0, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(-180, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+
+    // 179.950000 -> 179 56 60.000000
+    nrt_Utils_decimalToGeographic(179.95, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(179, degrees);
+    TEST_ASSERT_EQ_INT(56, minutes);
+    TEST_ASSERT_EQ_FLOAT(60.0, seconds);
+
+    // -179.950000 -> -179 56 60.000000
+    nrt_Utils_decimalToGeographic(-179.95, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(-179, degrees);
+    TEST_ASSERT_EQ_INT(56, minutes);
+    TEST_ASSERT_EQ_FLOAT(60.0, seconds);
+}
+
 TEST_MAIN(
     (void)argc;
     (void)argv;
     CHECK(test_geo_utils);
+    CHECK(test_decimalToGeographic_normal);
     )
 

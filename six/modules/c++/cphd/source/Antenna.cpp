@@ -25,14 +25,11 @@
 namespace cphd
 {
 
-AntCoordFrame::AntCoordFrame() :
-    identifier(six::Init::undefined<std::string>())
+AntCoordFrame::AntCoordFrame()
 {
 }
 
-AntPhaseCenter::AntPhaseCenter():
-    identifier(six::Init::undefined<std::string>()),
-    acfId(six::Init::undefined<std::string>())
+AntPhaseCenter::AntPhaseCenter()
 {
 }
 
@@ -46,9 +43,7 @@ AntPattern::AntPattern():
 }
 
 AntPattern::GainPhaseArray::GainPhaseArray() :
-    freq(six::Init::undefined<double>()),
-    arrayId(six::Init::undefined<std::string>()),
-    elementId(six::Init::undefined<std::string>())
+    freq(six::Init::undefined<double>())
 {
 }
 
@@ -97,9 +92,9 @@ std::ostream& operator<< (std::ostream& os, const AntPattern& a)
         << a.array << "\n"
         << "    Element:: \n"
         << a.element << "\n";
-    for (size_t ii = 0; ii < a.gainPhaseArray.size(); ++ii)
+    for (const auto& gainPhase : a.gainPhaseArray)
     {
-        os << a.gainPhaseArray[ii] << "\n";
+        os << gainPhase << "\n";
     }
     return os;
 }

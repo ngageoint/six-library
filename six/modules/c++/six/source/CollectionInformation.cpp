@@ -21,23 +21,44 @@
  */
 #include <six/CollectionInformation.h>
 
+#include <str/EncodedStringView.h>
+
 namespace six
 {
 CollectionInformation::CollectionInformation()
 {
-    collectorName = Init::undefined<std::string>();
-    collectType = Init::undefined<six::CollectType>();
-    illuminatorName = Init::undefined<std::string>();
-    coreName = Init::undefined<std::string>();
     radarMode = Init::undefined<RadarModeType>();
-    radarModeID = Init::undefined<std::string>();
-    releaseInfo = Init::undefined<std::string>();
-    mClassification = Init::undefined<std::string>();
+}
+
+  bool CollectionInformation::operator==(const CollectionInformation& rhs) const
+{
+    const auto& lhs = *this;
+    return lhs.collectorName == rhs.collectorName &&
+        lhs.collectType == rhs.collectType &&
+        lhs.illuminatorName == rhs.illuminatorName &&
+        lhs.coreName == rhs.coreName &&
+        lhs.radarMode == rhs.radarMode &&
+        lhs.radarModeID == rhs.radarModeID &&
+        lhs.releaseInfo == rhs.releaseInfo &&
+        lhs.getClassificationLevel() == rhs.getClassificationLevel();
 }
 
 CollectionInformation* CollectionInformation::clone() const
 {
     return new CollectionInformation(*this);
+}
+
+std::string CollectionInformation::getClassificationLevel() const
+{
+    return mClassification.native();
+}
+void CollectionInformation::getClassificationLevel(str::EncodedString& result) const
+{
+    result = mClassification;
+}
+void CollectionInformation::setClassificationLevel(const str::EncodedString& classification)
+{
+    mClassification = classification;
 }
 
 std::ostream& operator<< (std::ostream& os, const six::CollectionInformation& c)

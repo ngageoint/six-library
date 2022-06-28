@@ -22,13 +22,14 @@
 #ifndef __SIX_NITF_IMAGE_INPUT_STREAM_H__
 #define __SIX_NITF_IMAGE_INPUT_STREAM_H__
 
+#include <std/span>
+
 #include <scene/sys_Conf.h>
 #include <import/six.h>
 #include <import/nitf.hpp>
 #include <import/io.h>
 
 #include <mem/ScopedArray.h>
-#include <mem/Span.h>
 
 namespace six
 {
@@ -55,7 +56,11 @@ public:
             nitf::ImageReader imageReader);
 
     //!  Destructor
-    virtual ~NITFImageInputStream() {}
+    virtual ~NITFImageInputStream() noexcept {}
+
+
+    NITFImageInputStream(const NITFImageInputStream&) = delete;
+    NITFImageInputStream& operator=(const NITFImageInputStream&) = delete;
 
     //!  How many bytes in the image
     int64_t available();
@@ -73,9 +78,9 @@ protected:
     nitf::ImageReader mReader;
     int64_t mAvailable;
     size_t mRowBufferRemaining, mRowSize, mRowOffset;
-    mem::ScopedArray<sys::ubyte> mRowBuffer;
+    std::unique_ptr<sys::ubyte[]> mRowBuffer;
     nitf::SubWindow mWindow;
-    mem::ScopedArray<uint32_t> mBandList;
+    std::unique_ptr<uint32_t[]> mBandList;
 };
 
 }

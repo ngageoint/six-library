@@ -42,9 +42,8 @@ namespace cphd03
  *  \brief Used to write a CPHD file. You must be able to provide the
  *         appropriate metadata and vector based metadata.
  */
-class CPHDWriter
+struct CPHDWriter
 {
-public:
     /*
      *  \func Constructor
      *  \brief Sets up the internal structure of the CPHDWriter
@@ -188,6 +187,7 @@ private:
                            size_t size);
 
     std::unique_ptr<cphd::DataWriter> mDataWriter;
+    void initializeDataWriter();
 
     Metadata mMetadata;
     const size_t mElementSize;

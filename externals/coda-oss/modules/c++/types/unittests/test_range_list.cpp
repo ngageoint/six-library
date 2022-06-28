@@ -33,13 +33,13 @@ TEST_CASE(TestDisjointInsertion)
 
     const std::vector<types::Range> ranges = RL.getRanges();
 
-    TEST_ASSERT_EQ(ranges.size(), 3);
-    TEST_ASSERT_EQ(ranges[0].mStartElement, 1);
-    TEST_ASSERT_EQ(ranges[0].mNumElements, 1);
-    TEST_ASSERT_EQ(ranges[1].mStartElement, 3);
-    TEST_ASSERT_EQ(ranges[1].mNumElements, 4);
-    TEST_ASSERT_EQ(ranges[2].mStartElement, 9);
-    TEST_ASSERT_EQ(ranges[2].mNumElements, 2);
+    TEST_ASSERT_EQ(ranges.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(ranges[0].mStartElement, static_cast<size_t>(1));
+    TEST_ASSERT_EQ(ranges[0].mNumElements, static_cast<size_t>(1));
+    TEST_ASSERT_EQ(ranges[1].mStartElement, static_cast<size_t>(3));
+    TEST_ASSERT_EQ(ranges[1].mNumElements, static_cast<size_t>(4));
+    TEST_ASSERT_EQ(ranges[2].mStartElement, static_cast<size_t>(9));
+    TEST_ASSERT_EQ(ranges[2].mNumElements, static_cast<size_t>(2));
 }
 
 TEST_CASE(TestMergedInsertion)
@@ -54,9 +54,9 @@ TEST_CASE(TestMergedInsertion)
 
     const std::vector<types::Range> ranges = RL.getRanges();
 
-    TEST_ASSERT_EQ(ranges.size(), 1);
-    TEST_ASSERT_EQ(ranges[0].mStartElement, 1);
-    TEST_ASSERT_EQ(ranges[0].mNumElements, 11);
+    TEST_ASSERT_EQ(ranges.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(ranges[0].mStartElement, static_cast<size_t>(1));
+    TEST_ASSERT_EQ(ranges[0].mNumElements, static_cast<size_t>(11));
 }
 
 TEST_CASE(TestSinglePointTouching)
@@ -73,9 +73,9 @@ TEST_CASE(TestSinglePointTouching)
 
     const std::vector<types::Range> ranges = RL.getRanges();
 
-    TEST_ASSERT_EQ(ranges.size(), 1);
-    TEST_ASSERT_EQ(ranges[0].mStartElement, 1);
-    TEST_ASSERT_EQ(ranges[0].mNumElements, 7);
+    TEST_ASSERT_EQ(ranges.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(ranges[0].mStartElement, static_cast<size_t>(1));
+    TEST_ASSERT_EQ(ranges[0].mNumElements, static_cast<size_t>(7));
 }
 
 TEST_CASE(TestRemoveFromMiddle)
@@ -86,11 +86,11 @@ TEST_CASE(TestRemoveFromMiddle)
 
     const std::vector<types::Range> ranges = RL.getRanges();
 
-    TEST_ASSERT_EQ(ranges.size(), 2);
-    TEST_ASSERT_EQ(ranges[0].mStartElement, 10);
-    TEST_ASSERT_EQ(ranges[0].mNumElements, 1);
-    TEST_ASSERT_EQ(ranges[1].mStartElement, 16);
-    TEST_ASSERT_EQ(ranges[1].mNumElements, 4);
+    TEST_ASSERT_EQ(ranges.size(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(ranges[0].mStartElement, static_cast<size_t>(10));
+    TEST_ASSERT_EQ(ranges[0].mNumElements, static_cast<size_t>(1));
+    TEST_ASSERT_EQ(ranges[1].mStartElement, static_cast<size_t>(16));
+    TEST_ASSERT_EQ(ranges[1].mNumElements, static_cast<size_t>(4));
 }
 
 TEST_CASE(TestRemoveFromLeft)
@@ -101,9 +101,9 @@ TEST_CASE(TestRemoveFromLeft)
 
     const std::vector<types::Range> ranges = RL.getRanges();
 
-    TEST_ASSERT_EQ(ranges.size(), 1);
-    TEST_ASSERT_EQ(ranges[0].mStartElement, 13);
-    TEST_ASSERT_EQ(ranges[0].mNumElements, 7);
+    TEST_ASSERT_EQ(ranges.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(ranges[0].mStartElement, static_cast<size_t>(13));
+    TEST_ASSERT_EQ(ranges[0].mNumElements, static_cast<size_t>(7));
 }
 
 TEST_CASE(TestRemoveFromRight)
@@ -114,9 +114,9 @@ TEST_CASE(TestRemoveFromRight)
 
     const std::vector<types::Range> ranges = RL.getRanges();
 
-    TEST_ASSERT_EQ(ranges.size(), 1);
-    TEST_ASSERT_EQ(ranges[0].mStartElement, 10);
-    TEST_ASSERT_EQ(ranges[0].mNumElements, 5);
+    TEST_ASSERT_EQ(ranges.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(ranges[0].mStartElement, static_cast<size_t>(10));
+    TEST_ASSERT_EQ(ranges[0].mNumElements, static_cast<size_t>(5));
 }
 
 TEST_CASE(TestRemoveMultiRangeOverlap)
@@ -134,11 +134,11 @@ TEST_CASE(TestRemoveMultiRangeOverlap)
 
     const std::vector<types::Range> ranges = RL.getRanges();
 
-    TEST_ASSERT_EQ(ranges.size(), 2);
-    TEST_ASSERT_EQ(ranges[0].mStartElement, 0);
-    TEST_ASSERT_EQ(ranges[0].mNumElements, 2);
-    TEST_ASSERT_EQ(ranges[1].mStartElement, 27);
-    TEST_ASSERT_EQ(ranges[1].mNumElements, 3);
+    TEST_ASSERT_EQ(ranges.size(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(ranges[0].mStartElement, static_cast<size_t>(0));
+    TEST_ASSERT_EQ(ranges[0].mNumElements, static_cast<size_t>(2));
+    TEST_ASSERT_EQ(ranges[1].mStartElement, static_cast<size_t>(27));
+    TEST_ASSERT_EQ(ranges[1].mNumElements, static_cast<size_t>(3));
 }
 
 TEST_CASE(TestExpansion)
@@ -156,11 +156,11 @@ TEST_CASE(TestExpansion)
 
     const std::vector<types::Range> ranges = RL.getRanges();
 
-    TEST_ASSERT_EQ(ranges.size(), 2);
-    TEST_ASSERT_EQ(ranges[0].mStartElement, 0);
-    TEST_ASSERT_EQ(ranges[0].mNumElements, 6);
-    TEST_ASSERT_EQ(ranges[1].mStartElement, 8);
-    TEST_ASSERT_EQ(ranges[1].mNumElements, 23);
+    TEST_ASSERT_EQ(ranges.size(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(ranges[0].mStartElement, static_cast<size_t>(0));
+    TEST_ASSERT_EQ(ranges[0].mNumElements, static_cast<size_t>(6));
+    TEST_ASSERT_EQ(ranges[1].mStartElement, static_cast<size_t>(8));
+    TEST_ASSERT_EQ(ranges[1].mNumElements, static_cast<size_t>(23));
 }
 
 TEST_CASE(TestIntersection)
@@ -195,7 +195,7 @@ TEST_CASE(TestIntersection)
     const types::RangeList C = A.intersect(B);
 
     const std::vector<types::Range> ranges = C.getRanges();
-    TEST_ASSERT_EQ(ranges.size(), 6);
+    TEST_ASSERT_EQ(ranges.size(), static_cast<size_t>(6));
     TEST_ASSERT_TRUE(types::Range(2,5) == ranges[0]);
     TEST_ASSERT_TRUE(types::Range(12,2) == ranges[1]);
     TEST_ASSERT_TRUE(types::Range(22,1) == ranges[2]);

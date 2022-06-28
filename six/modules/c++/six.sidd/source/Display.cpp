@@ -53,16 +53,15 @@ DynamicRangeAdjustment::DRAOverrides::DRAOverrides() :
 
 bool MonochromeDisplayRemap::equalTo(const Remap& rhs) const
 {
-    const MonochromeDisplayRemap* remap =
-            dynamic_cast<const MonochromeDisplayRemap*>(&rhs);
+    auto remap = dynamic_cast<const MonochromeDisplayRemap*>(&rhs);
     if (remap != nullptr)
     {
-        return *this == *remap;
+        return this->operator_eq(*remap);
     }
     return false;
 }
 
-bool MonochromeDisplayRemap::operator==(const MonochromeDisplayRemap& rhs) const
+bool MonochromeDisplayRemap::operator_eq(const MonochromeDisplayRemap& rhs) const
 {
     return (remapType == rhs.remapType &&
             remapParameters == rhs.remapParameters && remapLUT == rhs.remapLUT);
@@ -70,16 +69,15 @@ bool MonochromeDisplayRemap::operator==(const MonochromeDisplayRemap& rhs) const
 
 bool ColorDisplayRemap::equalTo(const Remap& rhs) const
 {
-    ColorDisplayRemap const* remap =
-            dynamic_cast<ColorDisplayRemap const*>(&rhs);
+    auto remap = dynamic_cast<ColorDisplayRemap const*>(&rhs);
     if (remap != nullptr)
     {
-        return *this == *remap;
+        return this->operator_eq(*remap);
     }
     return false;
 }
 
-bool ColorDisplayRemap::operator==(const ColorDisplayRemap& rhs) const
+bool ColorDisplayRemap::operator_eq(const ColorDisplayRemap& rhs) const
 {
     return remapLUT == rhs.remapLUT;
 }
@@ -124,7 +122,6 @@ bool ColorManagementModule::operator==(const ColorManagementModule& rhs) const
             displayProfile == rhs.displayProfile &&
             iccProfile == rhs.iccProfile);
 }
-
 bool ColorManagementModule::operator!=(const ColorManagementModule& rhs) const
 {
     return !(*this == rhs);
