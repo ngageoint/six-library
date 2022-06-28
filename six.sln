@@ -21,7 +21,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "six.sidd", "six\modules\c++
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "six.convert", "six\modules\c++\six.convert\six.convert.vcxproj", "{DB4ECC28-A862-4CF4-8A03-69B3CC0C4E8B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{D653E81E-9C18-4730-BA69-002982771529}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{D653E81E-9C18-4730-BA69-002982771529}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XML_DATA_CONTENT", "externals\nitro\modules\c\nitf\XML_DATA_CONTENT.vcxproj", "{78849481-D356-4CC7-B182-31C21F857ED1}"
 EndProject
