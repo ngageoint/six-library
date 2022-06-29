@@ -25,8 +25,7 @@ install/
 install.dbg/
 **/install-*/
 test_package/build/
-out/build/
-out/install/
+out/
 test_package/build/
 *.pyc
 *.swp
@@ -59,3 +58,4 @@ six/projects/csm/external/csm-master/
 # Giant test files
 regression_files/
 six/modules/c++/cphd/tests/sample_cphd/
+
