@@ -31,9 +31,7 @@
 #include <xml/lite/MinidomParser.h>
 #include "TestCase.h"
 
-namespace
-{
-static const char XML[] =
+const char* test_cphd_xml_control_XML =
 "<CPHD xmlns=\"urn:CPHD:1.0.0\">\n"
 "    <CollectionID>\n"
 "        <CollectorName>Collector</CollectorName>\n"
@@ -879,12 +877,11 @@ static const char XML[] =
 "        </MatchType>\n"
 "    </MatchInfo>\n"
 "</CPHD>\n";
-}
 
 TEST_CASE(testReadXML)
 {
     io::StringStream cphdStream;
-    cphdStream.write(XML, strlen(XML));
+    cphdStream.write(test_cphd_xml_control_XML, strlen(test_cphd_xml_control_XML));
 
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
@@ -1130,7 +1127,7 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(ref.monostatic->arpVel[0], 10);
     TEST_ASSERT_EQ(ref.monostatic->arpVel[1], 10);
     TEST_ASSERT_EQ(ref.monostatic->arpVel[2], 10);
-    TEST_ASSERT(ref.monostatic->sideOfTrack == "LEFT");
+    TEST_ASSERT(ref.monostatic->sideOfTrack.toString() == "LEFT");
     TEST_ASSERT_EQ(ref.monostatic->sideOfTrack, six::SideOfTrackType::LEFT);
     TEST_ASSERT_EQ(ref.monostatic->azimuthAngle, 30.0);
     TEST_ASSERT_EQ(ref.monostatic->grazeAngle, 30.0);

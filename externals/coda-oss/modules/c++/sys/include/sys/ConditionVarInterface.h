@@ -25,6 +25,9 @@
 #define __SYS_CONDITION_VAR_INTERFACE_H__
 
 #include <typeinfo>
+
+#include "config/Exports.h"
+
 #include "sys/SystemException.h"
 #include "sys/Mutex.h"
 namespace sys
@@ -36,7 +39,7 @@ namespace sys
  *  Provide the API for condition variables in this thread wrapper
  */
 
-struct ConditionVarInterface
+struct CODA_OSS_API ConditionVarInterface
 {
     /*!
      *  This constructor means that you are creating the lock

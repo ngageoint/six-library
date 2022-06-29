@@ -3471,20 +3471,6 @@ fail:
 }
 
 
-SWIGINTERN int Swig_var_UTCDateTime_DEFAULT_DATETIME_FORMAT_set(PyObject *) {
-  SWIG_Error(SWIG_AttributeError,"Variable UTCDateTime_DEFAULT_DATETIME_FORMAT is read-only.");
-  return 1;
-}
-
-
-SWIGINTERN PyObject *Swig_var_UTCDateTime_DEFAULT_DATETIME_FORMAT_get(void) {
-  PyObject *pyobj = 0;
-  
-  pyobj = SWIG_FromCharPtr(sys::UTCDateTime::DEFAULT_DATETIME_FORMAT);
-  return pyobj;
-}
-
-
 SWIGINTERN PyObject *_wrap_new_UTCDateTime__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **SWIGUNUSEDPARM(swig_obj)) {
   PyObject *resultobj = 0;
   sys::UTCDateTime *result = 0 ;
@@ -4025,7 +4011,7 @@ static PyMethodDef SwigMethods[] = {
 		"UTCDateTime(int year, int month, int day)\n"
 		"UTCDateTime(int year, int month, int day, int hour, int minute, double second)\n"
 		"UTCDateTime(double timeInMillis)\n"
-		"UTCDateTime(std::string const & time, std::string const & format=DEFAULT_DATETIME_FORMAT)\n"
+		"UTCDateTime(std::string const & time)\n"
 		""},
 	 { "UTCDateTime_format", _wrap_UTCDateTime_format, METH_VARARGS, "\n"
 		"format()\n"
@@ -4881,7 +4867,6 @@ SWIG_init(void) {
   PyDict_SetItemString(md, "cvar", globals);
   Py_DECREF(globals);
   SWIG_addvarlink(globals, "SSE_INSTRUCTION_ALIGNMENT", Swig_var_SSE_INSTRUCTION_ALIGNMENT_get, Swig_var_SSE_INSTRUCTION_ALIGNMENT_set);
-  SWIG_addvarlink(globals, "UTCDateTime_DEFAULT_DATETIME_FORMAT", Swig_var_UTCDateTime_DEFAULT_DATETIME_FORMAT_get, Swig_var_UTCDateTime_DEFAULT_DATETIME_FORMAT_set);
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else

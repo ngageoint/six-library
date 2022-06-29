@@ -24,11 +24,7 @@
 #include <import/math/poly.h>
 #include "TestCase.h"
 
-using namespace math::linear;
-using namespace math::poly;
 
-namespace
-{
 inline
 double diffSq(double lhs, double rhs)
 {
@@ -38,6 +34,9 @@ double diffSq(double lhs, double rhs)
 
 TEST_CASE(test1DPolyfit)
 {
+    using namespace math::linear;
+    using namespace math::poly;
+
     const double xObs[] = { 1, -1, 2, -2 };
     const double yObs[] = { 3, 13, 1, 33 };
     const double zPoly[] = { 5, -4, 3, -1 };
@@ -72,6 +71,9 @@ TEST_CASE(test1DPolyfit)
 
 TEST_CASE(test1DPolyfitLarge)
 {
+    using namespace math::linear;
+    using namespace math::poly;
+
     // Fit a polynomial
     static const size_t NUM_OBS = 9;
     double xObs[] = { 1, -1, 2, -2, 3, 15, 29, -4, -14 };
@@ -129,6 +131,9 @@ TEST_CASE(test1DPolyfitLarge)
 
 TEST_CASE(test2DPolyfit)
 {
+    using namespace math::linear;
+    using namespace math::poly;
+
     const double coeffs[] =
     {
         -1.02141e-16, 0.15,
@@ -162,6 +167,9 @@ TEST_CASE(test2DPolyfit)
 
 TEST_CASE(test2DPolyfitLarge)
 {
+    using namespace math::linear;
+    using namespace math::poly;
+
     // Use a defined polynomial to generate mapped values.  This ensures
     // it is possible to fit the points using at least as many coefficients.
     const double coeffs[] =
@@ -233,6 +241,9 @@ TEST_CASE(test2DPolyfitLarge)
 
 TEST_CASE(testVectorValuedOrderChange)
 {
+    using namespace math::linear;
+    using namespace math::poly;
+
     // When fitting a vector-valued polynomial, math::poly::fit()
     // will perform 3 independent fits, and then assemble the coefficients
     // into vector-valued coefficients for the resulting polynomial.
@@ -336,14 +347,11 @@ TEST_CASE(testVectorValuedOrderChange)
         TEST_ASSERT_ALMOST_EQ(poly[2][2], 0.0);
     }
 }
-}
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(test1DPolyfit);
     TEST_CHECK(test1DPolyfitLarge);
     TEST_CHECK(test2DPolyfit);
     TEST_CHECK(test2DPolyfitLarge);
     TEST_CHECK(testVectorValuedOrderChange);
-    return 0;
-}
+    )

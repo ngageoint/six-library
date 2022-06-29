@@ -111,9 +111,8 @@ TEST_CASE(testRotateReset)
     cleanupFiles( outFile);
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK( testNeverRotate);
     TEST_CHECK( testRotateReset);
     TEST_CHECK( testRotate);
-}
+    )

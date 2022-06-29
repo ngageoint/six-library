@@ -23,6 +23,7 @@
 #ifndef __IO_ROTATING_FILE_STREAMS_H__
 #define __IO_ROTATING_FILE_STREAMS_H__
 
+#include "config/Exports.h"
 #include <import/sys.h>
 #include "io/CountingStreams.h"
 
@@ -32,7 +33,7 @@ namespace io
 /**
  * An OutputStream that keeps track of the number of bytes written to the stream.
  */
-struct RotatingFileOutputStream: public CountingOutputStream
+struct CODA_OSS_API RotatingFileOutputStream : public CountingOutputStream
 {
     RotatingFileOutputStream(const std::string& filename,
                              unsigned long maxBytes = 0,

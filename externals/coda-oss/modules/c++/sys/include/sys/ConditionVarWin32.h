@@ -24,6 +24,8 @@
 #ifndef __SYS_WIN32_CONDITION_VARIABLE_H__
 #define __SYS_WIN32_CONDITION_VARIABLE_H__
 
+#include "config/Exports.h"
+
 #if defined(WIN32) || defined(_WIN32)
 #if !defined(USE_NSPR_THREADS)
 
@@ -37,7 +39,7 @@ namespace sys
 ///        "Strategies for Implementing POSIX Condition Variables on Win32"
 ///        article at www.cse.wustl.edu/~schmidt/win32-cv-1.html.
 ///        This is the ACE framework implementation.
-class ConditionVarDataWin32
+class CODA_OSS_API ConditionVarDataWin32
 {
 public:
     ConditionVarDataWin32();
@@ -74,7 +76,7 @@ private:
     bool mWasBroadcast;
 };
 
-struct ConditionVarWin32 final : public ConditionVarInterface
+struct CODA_OSS_API ConditionVarWin32 final : public ConditionVarInterface
 
 {
     ConditionVarWin32();

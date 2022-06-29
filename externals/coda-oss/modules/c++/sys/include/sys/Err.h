@@ -38,6 +38,8 @@
 #include "sys/Conf.h"
 #include <string.h>
 
+#include "config/Exports.h"
+
 namespace sys
 {
 //!  The default value for the Err object.  Maps to errno or GetLastError()
@@ -54,7 +56,7 @@ constexpr static int __last_err__ = 0;
  *
  */
 
-struct Err
+struct CODA_OSS_API Err
 {
     /*!
      * Copy constructor

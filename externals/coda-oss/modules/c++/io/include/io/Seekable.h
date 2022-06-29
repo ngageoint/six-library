@@ -24,6 +24,8 @@
 #define __IO_SEEKABLE_H__
 #pragma once
 
+#include "config/Exports.h"
+
 /*!
  *  Unlike in Java, we have chosen to make our InputStream and OutputStream
  *  classes into interfaces, not abstract classes (in the sense that we
@@ -40,7 +42,7 @@
 
 namespace io
 {
-class Seekable
+class CODA_OSS_API Seekable
 {
 public:
     Seekable() = default;

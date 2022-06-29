@@ -43,11 +43,9 @@
 #include <cphd/TestDataGenerator.h>
 #include <TestCase.h>
 
-namespace
-{
-constexpr size_t NUM_SUPPORT = 3;
-constexpr size_t NUM_ROWS = 3;
-constexpr size_t NUM_COLS = 4;
+static constexpr size_t NUM_SUPPORT = 3;
+static constexpr size_t NUM_ROWS = 3;
+static constexpr size_t NUM_COLS = 4;
 
 template<typename T>
 std::vector<T> generateSupportData(size_t length)
@@ -162,7 +160,6 @@ TEST_CASE(testSupportsDouble)
     const std::vector<double> writeData =
             generateSupportData<double>(NUM_SUPPORT*dims.area());
     TEST_ASSERT_TRUE(runTest(writeData));
-}
 }
 
 TEST_MAIN(

@@ -42,8 +42,6 @@
 #include <stdexcept>
 #include <string>
 
-namespace
-{
 template <typename T>
 std::vector<std::complex<T>> generateComplexData(size_t length)
 {
@@ -248,7 +246,6 @@ TEST_CASE(testPVPBlockAdditional)
                 addedParams);
 
     TEST_ASSERT_TRUE(runTest(scale, writeData, meta, pvpBlock, dims));
-}
 }
 
 TEST_MAIN(
