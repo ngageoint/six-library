@@ -75,6 +75,12 @@ private:
     const size_t mNumElements;
 };
 
+inline const std::byte* calc_offset(const void* input_, size_t offset)
+{
+    auto input = static_cast<const std::byte*>(input_);
+    return input + offset;
+}
+
 template <typename InT>
 class ByteSwapAndPromoteRunnable : public sys::Runnable
 {
@@ -84,8 +90,7 @@ public:
                              size_t numRows,
                              size_t numCols,
                              std::complex<float>* output) :
-        mInput(static_cast<const std::byte*>(input) +
-                       startRow * numCols * sizeof(std::complex<InT>)),
+        mInput(calc_offset(input, startRow * numCols * sizeof(std::complex<InT>))),
         mDims(numRows, numCols),
         mOutput(output + startRow * numCols)
     {
@@ -105,9 +110,9 @@ public:
                 // Have to be careful here - can't treat mInput as a
                 // std::complex<InT> directly in case InT is a float (see
                 // explanation in byteSwap() comments)
-                const std::byte* const input = mInput + inIdx;
+                const auto input = calc_offset(mInput, inIdx);
                 byteSwap(input, real);
-                byteSwap(input + sizeof(InT), imag);
+                byteSwap(calc_offset(input, sizeof(InT)), imag);
 
                 mOutput[outIdx] = std::complex<float>(real,
                                                       imag);
@@ -132,8 +137,7 @@ public:
                              size_t numCols,
                              const double* scaleFactors,
                              std::complex<float>* output) :
-        mInput(static_cast<const std::byte*>(input) +
-                       startRow * numCols * sizeof(std::complex<InT>)),
+        mInput(calc_offset(input, startRow * numCols * sizeof(std::complex<InT>))),
         mDims(numRows, numCols),
         mScaleFactors(scaleFactors + startRow),
         mOutput(output + startRow * numCols)
@@ -156,9 +160,9 @@ public:
                 // Have to be careful here - can't treat mInput as a
                 // std::complex<InT> directly in case InT is a float (see
                 // explanation in byteSwap() comments)
-                const std::byte* const input = mInput + inIdx;
+                const auto input = calc_offset(mInput, inIdx);
                 byteSwap(input, real);
-                byteSwap(input + sizeof(InT), imag);
+                byteSwap(calc_offset(input, sizeof(InT)), imag);
 
                 mOutput[outIdx] = std::complex<float>(
                         static_cast<float>(real * scaleFactor),
