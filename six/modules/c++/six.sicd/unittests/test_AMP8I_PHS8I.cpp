@@ -32,6 +32,7 @@
 #include <random>
 #include <std/span>
 #include <numeric>
+#include <future>
 
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
@@ -681,29 +682,80 @@ TEST_CASE(test_verify_phase_uint8_ordering)
     TEST_ASSERT_ALMOST_EQ_EPS(last + delta, M_PI * 2, 1e-6);
 }
 
+struct Pairs final
+{
+    std::complex<float> floating;
+    AMP8I_PHS8I_t integral;
+};
+static void do_test_ComplexToAMP8IPHS8I_(const std::string& testName,
+    const six::sicd::details::ComplexToAMP8IPHS8I& item,
+    const std::complex<float>& input_dbl, const std::vector<Pairs>& candidates)
+{
+    // Calculate the nearest neighbor quickly.
+    const auto test_integral = item.nearest_neighbor(input_dbl);
+
+    // Calculate the nearest neighbor via exhaustive calculation.
+    double min_distance = std::abs(candidates[0].floating - input_dbl);
+    auto best = candidates[0];
+    for (const auto& i : candidates)
+    {
+        const auto e = std::abs(i.floating - input_dbl);
+        if (e < min_distance)
+        {
+            min_distance = e;
+            best = i;
+        }
+    }
+    TEST_ASSERT_EQ(test_integral.first, best.integral.first);
+    TEST_ASSERT_EQ(test_integral.second, best.integral.second);
+}
+using it_t = std::vector<std::complex<float>>::const_iterator;
+static void test_ComplexToAMP8IPHS8I_(const std::string& testName,
+    const six::sicd::details::ComplexToAMP8IPHS8I& item,
+    it_t beg, it_t end, const std::vector<Pairs>& candidates)
+{
+    for (auto it = beg; it != end; ++it)
+    {
+        do_test_ComplexToAMP8IPHS8I_(testName, item, *it, candidates);
+    }
+}
+static void test_ComplexToAMP8IPHS8I(const std::string& testName,
+    const six::sicd::details::ComplexToAMP8IPHS8I& item,
+    it_t beg, it_t end, const std::vector<Pairs>& candidates)
+{
+    // https://en.cppreference.com/w/cpp/thread/async
+    const auto len = end - beg;
+    if (len < 500)
+    {
+        test_ComplexToAMP8IPHS8I_(testName, item, beg, end, candidates);
+        return;
+    }
+
+    const auto mid = beg + len / 2;
+    static const auto f = [&](it_t mid, it_t end) { test_ComplexToAMP8IPHS8I(testName, item, mid, end, candidates); };
+    auto handle = std::async(std::launch::async, f, mid, end);
+    f(beg, mid);
+    handle.get();
+}
+
 TEST_CASE(test_ComplexToAMP8IPHS8I)
 {
     // Set up a converter that has a fake amplitude table.
-    six::AmplitudeTable amp;
+    six::AmplitudeTable amplitudeTable; // "amp" is a (somewhat) reserved with MSVC
     for(size_t i = 0; i < 256; i++)
     {
-        amp.index(i) = static_cast<double>(i) + 10.0;
+        amplitudeTable.index(i) = static_cast<double>(i) + 10.0;
     }    
     std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pTree; // not-cached, non-NULL amplitudeTable
-    const auto& item = *(six::sicd::details::ComplexToAMP8IPHS8I::make(&amp, pTree));
+    const auto& item = *(six::sicd::details::ComplexToAMP8IPHS8I::make(&amplitudeTable, pTree));
 
     // Generate the full 256x256 matrix of possible AMP8I_PHS8I values.
-    struct Pairs final
-    {
-        std::complex<float> floating;
-        AMP8I_PHS8I_t integral;
-    };
     std::vector<Pairs> candidates;
     for(int i = 0; i < 256; i++) {
         for(int j = 0; j < 256; j++) {
             Pairs p;
             p.integral = {i, j};
-            p.floating = six::sicd::Utilities::from_AMP8I_PHS8I(i, j, &amp);
+            p.floating = six::sicd::Utilities::from_AMP8I_PHS8I(i, j, &amplitudeTable);
             candidates.push_back(p);
         }
     }
@@ -726,39 +778,23 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
 
     // Verify the nearest neighbor property via random search through the possible space.
     // For each sampled point we check that we found the true nearest neighbor.
-    static const size_t kTests = 10000;
-    static const double kExpansion = 10.0;
-    double min_amplitude = amp.index(0) - kExpansion;
-    double max_amplitude = amp.index(amp.numEntries - 1) + kExpansion;
+    constexpr size_t kTests = 10000;
+    constexpr double kExpansion = 10.0;
+    double min_amplitude = amplitudeTable.index(0) - kExpansion;
+    double max_amplitude = amplitudeTable.index(amplitudeTable.numEntries - 1) + kExpansion;
     std::uniform_real_distribution<double> dist(min_amplitude, max_amplitude);
     std::default_random_engine eng(654987);  // ... fixed seed means deterministic tests...
     //size_t bad_first = 0;
     //size_t bad_second = 0;
     //double worst_error = 0;
+    std::vector<std::complex<float>> inputs;
     for(size_t k = 0; k < kTests; k++)
     {
         double x = dist(eng);
         double y = dist(eng);
-
-        // Calculate the nearest neighbor quickly.
-        const std::complex<float> input_dbl(x, y);
-        const auto test_integral = item.nearest_neighbor(input_dbl);
-
-        // Calculate the nearest neighbor via exhaustive calculation.
-        double min_distance = std::abs(candidates[0].floating - input_dbl);
-        auto best = candidates[0];
-        for(const auto& i : candidates)
-        {
-            const auto e = std::abs(i.floating - input_dbl);
-            if(e < min_distance)
-            {
-                min_distance = e;
-                best = i;
-            }
-        }
-        TEST_ASSERT_EQ(test_integral.first, best.integral.first);
-        TEST_ASSERT_EQ(test_integral.second, best.integral.second);
+        inputs.emplace_back(x, y);
     }
+    test_ComplexToAMP8IPHS8I(testName, item, inputs.begin(), inputs.end(), candidates);
 }
 
 TEST_MAIN(

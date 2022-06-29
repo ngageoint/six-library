@@ -22,6 +22,7 @@
 
 #include <string>
 #include <std/filesystem>
+#include <tuple>
 
 #include <cphd03/CPHDWriter.h>
 #include <cphd03/CPHDReader.h>
@@ -41,6 +42,7 @@ static void call_srand()
 {
     static const auto f = []() { const auto seed = 334; ::srand(seed); return nullptr; };
     static const auto result = f();
+    std::ignore = result;
 }
 
 double round(double num, int places)
