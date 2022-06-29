@@ -57,8 +57,12 @@ jobs:
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
 
     - run: |
-	echo "Run, Build Application using script"
-	./0_build
+        mkdir build
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX=installLinux-CodeQL -DENABLE_PYTHON=false ..
+        cd build
+        cmake --build . -j1
+        cmake --build . --target install
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
