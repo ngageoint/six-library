@@ -43,6 +43,8 @@ jobs:
       run: |
         mkdir build
         cd build
+        export CC=gcc-10
+        export CXX=g++-10
         cmake -DCMAKE_INSTALL_PREFIX=installLinux-Github -DPYTHON_VERSION=3.7 ..
     - name: make
       run: |

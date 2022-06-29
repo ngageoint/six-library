@@ -18,6 +18,7 @@
 
 #pragma warning(push)
 #pragma warning(disable: 4464) // relative include path contains '..'
+#pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed/unsigned mismatch
 #include "../modules/c++/cpp.h"
 #pragma warning(pop)
 #pragma comment(lib, "ws2_32")
