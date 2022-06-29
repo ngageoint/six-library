@@ -78,7 +78,7 @@ static void copyFromStreamAndClear_(io::ByteStream& stream,
     stream.clear();
 }
 void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
-                                          std::vector<nitf::byte>& rawBytes)
+                                          std::vector<sys::byte>& rawBytes)
 {
     copyFromStreamAndClear_(stream, rawBytes);
 }
@@ -474,7 +474,7 @@ void ByteProvider::addImageData(
     const size_t startLocalRowToWrite =
             startGlobalRowToWrite - startRow + numPadRowsSoFar;
     const auto imageDataPtr =
-            static_cast<const nitf::byte*>(imageData) +
+            static_cast<const sys::byte*>(imageData) +
             startLocalRowToWrite * mNumBytesPerRow;
 
     if (buffers.empty())
@@ -631,7 +631,7 @@ void ByteProvider::getBytes(const void* imageData,
 }
 }
 
-static std::span<const std::byte> make_span(const std::vector<nitf::byte>& v) noexcept
+static std::span<const std::byte> make_span(const std::vector<sys::byte>& v) noexcept
 {
     const void* const pData = v.data();
     return std::span<const std::byte>(static_cast<const std::byte*>(pData), v.size());
