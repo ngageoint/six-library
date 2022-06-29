@@ -11,7 +11,7 @@
  ```
 # coda-oss Release Notes
 
-## Release 2022-??-??
+## Release 2022-06-29
 * remove **modules/drivers/boost** as it was empty (and unused);
   **modules/c++/serialize** depended on boost, so it has also been removed.
 * Update to [zlib 1.2.12](https://www.zlib.net/zlib-1.2.12.tar.gz),
