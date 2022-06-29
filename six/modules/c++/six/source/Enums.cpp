@@ -95,30 +95,30 @@ namespace six
 {
 
 template <>
-PolarizationSequenceType six::toType<PolarizationSequenceType>(
+PolarizationSequenceType toType<PolarizationSequenceType>(
     const std::string& s)
 {
     return ::toType<PolarizationSequenceType>(s);
 }
 template <>
-std::string six::toString(const PolarizationSequenceType& t)
+std::string toString(const PolarizationSequenceType& t)
 {
     return ::toString(t);
 }
 
 template <>
-PolarizationType six::toType<PolarizationType>(const std::string& s)
+PolarizationType toType<PolarizationType>(const std::string& s)
 {
     return ::toType<PolarizationType>(s);
 }
 template <>
-std::string six::toString(const PolarizationType& t)
+std::string toString(const PolarizationType& t)
 {
     return ::toString(t);
 }
 
 template <>
-DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
+DualPolarizationType toType<DualPolarizationType>(const std::string& s)
 {
     const except::Exception ex(Ctxt("Unsupported conversion to dual polarization type '" + s + "'"));
     const auto splits = str::split(s, ":");
@@ -146,7 +146,7 @@ DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
     return retval;
 }
 template <>
-std::string six::toString(const DualPolarizationType& t)
+std::string toString(const DualPolarizationType& t)
 {
     // use the OTHER.* string, if we have one
     const auto splits = str::split(t.other_, ":");
