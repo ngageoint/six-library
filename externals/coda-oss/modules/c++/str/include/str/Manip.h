@@ -31,16 +31,32 @@
 
 #include "config/compiler_extensions.h"
 #include "config/Exports.h"
+#include "coda_oss/CPlusPlus.h"
 #include "str/Convert.h"
 
 namespace str
 {
+
+CODA_OSS_disable_warning_push
+#if _MSC_VER
+#pragma warning(disable: 26460) //The reference argument 's' for function 'str::data<char>' can be marked as const (con.3).
+#endif
  // non-const overload for .data() in C++17
 template<typename CharT>
 inline CharT* data(std::basic_string<CharT>& s) noexcept
 {
+    #if CODA_OSS_cpp17
     return s.data();
+    #else
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable : 26492)  // Don't use const_cast to cast away const or volatile (type.3).
+    #endif  
+    return const_cast <typename std::basic_string<CharT>::pointer>(s.data());
+    CODA_OSS_disable_warning_pop
+    #endif // CODA_OSS_cpp17
 }
+CODA_OSS_disable_warning_pop
 template <typename CharT>
 inline const CharT* data(const std::basic_string<CharT>& s) noexcept // to make generic programming easier
 {
