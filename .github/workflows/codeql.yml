@@ -57,8 +57,8 @@ jobs:
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
 
     - run: |
-      echo "Run, Build Application using script"
-      ./0_build
+	echo "Run, Build Application using script"
+	./0_build
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
