@@ -129,7 +129,7 @@ public:
      *  \param  padded  Returns TRUE if pad pixels may have been read
      */
     void read(const nitf::SubWindow & subWindow, uint8_t ** user, int * padded);
-    void read(const nitf::SubWindow & subWindow, nitf::byte** user, int * padded)
+    void read(const nitf::SubWindow & subWindow, sys::byte** user, int * padded)
     {
         void* user_ = user;
         read(subWindow, static_cast<uint8_t**>(user_), padded);
