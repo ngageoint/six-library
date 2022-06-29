@@ -54,6 +54,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "J2KCompress", "modules\c\j2
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "J2KDecompress", "modules\c\j2k\J2KDecompress.vcxproj", "{C787537A-0CAC-4D6D-A6D6-A66765A06753}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{A45CB073-25A7-411D-A7E7-589BCC8AF547}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{AC22B9D3-0749-486F-A8F2-D6977BF9505D}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\workflows\frequent_check.yml = .github\workflows\frequent_check.yml
+		.github\workflows\master.yml = .github\workflows\master.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -150,6 +159,8 @@ Global
 		{53F9F908-C678-4DEE-9309-E71C1E03A45F} = {27A2685A-E869-42A2-956D-92994F60C536}
 		{A676EDF3-F231-47C8-A6E6-0FE50B50B71B} = {27A2685A-E869-42A2-956D-92994F60C536}
 		{C787537A-0CAC-4D6D-A6D6-A66765A06753} = {27A2685A-E869-42A2-956D-92994F60C536}
+		{A45CB073-25A7-411D-A7E7-589BCC8AF547} = {5C5727E7-0CFF-42B4-8F5A-D31B3BC81F21}
+		{AC22B9D3-0749-486F-A8F2-D6977BF9505D} = {A45CB073-25A7-411D-A7E7-589BCC8AF547}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2D7AC542-BBB6-4BAC-8BF1-7E76C714BBA4}

@@ -144,7 +144,7 @@ const void* getBlock_(const std::vector<NITFBuffer>& mBuffers,
 }
 const void* NITFBufferList::getBlock(size_t blockSize,
                                      size_t blockIdx,
-                                     std::vector<nitf::byte>& scratch,
+                                     std::vector<sys::byte>& scratch,
                                      size_t& numBytes) const
 {
     numBytes = getNumBytesInBlock(blockSize, blockIdx);
