@@ -46,8 +46,6 @@
  * Fails if values don't match
  */
 
-namespace
-{
 template<typename T>
 std::vector<std::complex<T> > generateData(size_t length)
 {
@@ -62,7 +60,7 @@ std::vector<std::complex<T> > generateData(size_t length)
     return data;
 }
 
-std::vector<double> generateScaleFactors(size_t length, bool scale)
+inline std::vector<double> generateScaleFactors(size_t length, bool scale)
 {
     std::vector<double> scaleFactors(length, 1);
     if (scale)
@@ -219,7 +217,6 @@ TEST_CASE(testScaledFloat)
             generateData<float>(dims.area());
     const bool scale = true;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
-}
 }
 
 TEST_MAIN(

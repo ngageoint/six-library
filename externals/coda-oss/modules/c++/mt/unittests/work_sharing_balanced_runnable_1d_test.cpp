@@ -22,11 +22,8 @@
 #include <mt/WorkSharingBalancedRunnable1D.h>
 #include "TestCase.h"
 
-namespace
+struct IncOp final
 {
-class IncOp
-{
-public:
     IncOp(std::vector<size_t>& globalWorkDone) :
         mGlobalWorkDone(globalWorkDone)
     {
@@ -84,11 +81,8 @@ TEST_CASE(WorkSharingBalancedRunnable1DTestWorkDoneLessWorkThanThreads)
         }
     }
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(WorkSharingBalancedRunnable1DTestWorkDone);
     TEST_CHECK(WorkSharingBalancedRunnable1DTestWorkDoneLessWorkThanThreads);
-    return 0;
-}
+)

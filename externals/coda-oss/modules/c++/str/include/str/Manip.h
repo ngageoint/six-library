@@ -171,7 +171,7 @@ CODA_OSS_API void upper(std::string& s);
 CODA_OSS_API void escapeForXML(std::string& str);
 
 template<typename T>
-std::string join(const std::vector<T>& toks, std::string with)
+inline std::string join(const std::vector<T>& toks, const std::string& with)
 {
     if (toks.empty())
         return "";

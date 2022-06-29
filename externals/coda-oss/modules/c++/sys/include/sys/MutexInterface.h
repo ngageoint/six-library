@@ -26,6 +26,8 @@
 
 
 #include <typeinfo>
+
+#include "config/Exports.h"
 #include "sys/SystemException.h"
 #include "sys/Dbg.h"
 
@@ -39,7 +41,7 @@ namespace sys
  *  This class defines the interface for any mutex in any package that
  *  is wrapped herein
  */
-class MutexInterface
+class CODA_OSS_API MutexInterface
 {
 public:
     //!  Constructor

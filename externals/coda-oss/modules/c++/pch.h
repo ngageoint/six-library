@@ -11,6 +11,13 @@
 #pragma warning(disable: 4710) // '...': function not inlined
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
 #pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
+#pragma warning(disable: 5027) // '...': move assignment operator was implicitly defined as deleted
+#pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
+#pragma warning(disable: 4626) // '...': assignment operator was implicitly defined as deleted
+#pragma warning(disable: 4625) // '...': copy constructor was implicitly defined as deleted
+#pragma warning(disable: 4355) // '...': used in base member initializer list
+#pragma warning(disable: 5220) // '...': a non-static data member with a volatile qualified type no longer implies that compiler generated copy/move constructors and copy/move assignment operators are not trivial
+#pragma warning(disable: 5204) // '...': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
 
 // add headers that you want to pre-compile here
 #include "framework.h"
@@ -43,7 +50,7 @@
 #include <iostream>
 #include <ostream>
 #include <sstream>
-
+#include <future>
 #include <std/span>
 #include <std/string>
 #include <std/filesystem>

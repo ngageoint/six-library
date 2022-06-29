@@ -35,7 +35,14 @@
 tiff::IFDEntry *tiff::IFD::operator[](const char *name)
 {
     tiff::IFDEntry *mapEntry = tiff::KnownTagsRegistry::getInstance()[name];
-    if (!mapEntry) return NULL;
+    if (!mapEntry) return nullptr;
+    return (*this)[mapEntry->getTagID()];
+}
+const tiff::IFDEntry* tiff::IFD::operator[](const char* name) const
+{
+    tiff::IFDEntry* mapEntry = tiff::KnownTagsRegistry::getInstance()[name];
+    if (!mapEntry)
+        return nullptr;
     return (*this)[mapEntry->getTagID()];
 }
 
@@ -48,13 +55,22 @@ tiff::IFDEntry *tiff::IFD::operator[](unsigned short tag)
     // a key already exists of not.
     return exists(tag) ? mIFD[tag] : NULL;
 }
+const tiff::IFDEntry* tiff::IFD::operator[](unsigned short tag) const
+{
+    // Ensures that the key exists.  Without this check, the defined
+    // behavior for the [] operator is to create an entry if it does
+    // not exist.  This is to make sure that the map doesn't get full
+    // of invalid key/value pairs if you're just trying to verify whether
+    // a key already exists of not.
+    return exists(tag) ? ifd()[tag] : nullptr;
+}
 
-bool tiff::IFD::exists(unsigned short tag)
+bool tiff::IFD::exists(unsigned short tag) const
 {
     return mIFD.find(tag) != mIFD.end();
 }
 
-bool tiff::IFD::exists(const char *name)
+bool tiff::IFD::exists(const char *name) const
 {
     tiff::IFDEntry *mapEntry = tiff::KnownTagsRegistry::getInstance()[name];
     if (!mapEntry)
@@ -153,9 +169,9 @@ void tiff::IFD::print(io::OutputStream& output) const
     }
 }
 
-sys::Uint32_T tiff::IFD::getImageWidth()
+sys::Uint32_T tiff::IFD::getImageWidth() const
 {
-    tiff::IFDEntry *imageWidth = (*this)[tiff::KnownTags::IMAGE_WIDTH];
+    auto imageWidth = (*this)[tiff::KnownTags::IMAGE_WIDTH];
     if (!imageWidth)
         return 0;
 
@@ -165,9 +181,9 @@ sys::Uint32_T tiff::IFD::getImageWidth()
     return *(tiff::GenericType<unsigned short> *)(*imageWidth)[0];
 }
 
-sys::Uint32_T tiff::IFD::getImageLength()
+sys::Uint32_T tiff::IFD::getImageLength() const
 {
-    tiff::IFDEntry *imageLength = (*this)[tiff::KnownTags::IMAGE_LENGTH];
+    auto imageLength = (*this)[tiff::KnownTags::IMAGE_LENGTH];
     if (!imageLength)
         return 0;
 
@@ -177,7 +193,7 @@ sys::Uint32_T tiff::IFD::getImageLength()
     return *(tiff::GenericType<unsigned short> *)(*imageLength)[0];
 }
 
-sys::Uint32_T tiff::IFD::getImageSize()
+sys::Uint32_T tiff::IFD::getImageSize() const
 {
     sys::Uint32_T width = getImageWidth();
     sys::Uint32_T length = getImageLength();
@@ -186,12 +202,12 @@ sys::Uint32_T tiff::IFD::getImageSize()
     return width * length * elementSize;
 }
 
-unsigned short tiff::IFD::getNumBands()
+unsigned short tiff::IFD::getNumBands() const
 {
     unsigned short numBands = 1;
     
-    tiff::IFDEntry *samplesPerPixel = (*this)[tiff::KnownTags::SAMPLES_PER_PIXEL];
-    tiff::IFDEntry *bitsPerSample = (*this)[tiff::KnownTags::BITS_PER_SAMPLE];
+    auto samplesPerPixel = (*this)[tiff::KnownTags::SAMPLES_PER_PIXEL];
+    auto bitsPerSample = (*this)[tiff::KnownTags::BITS_PER_SAMPLE];
     
     if (samplesPerPixel)
         numBands = *(::tiff::GenericType<unsigned short> *)(*samplesPerPixel)[0];
@@ -201,13 +217,13 @@ unsigned short tiff::IFD::getNumBands()
     return numBands;
 }
 
-unsigned short tiff::IFD::getElementSize()
+unsigned short tiff::IFD::getElementSize() const
 {
-    tiff::IFDEntry *bitsPerSample = (*this)[tiff::KnownTags::BITS_PER_SAMPLE];
-    unsigned short bytesPerSample = (!bitsPerSample) ? 1
+    auto bitsPerSample = (*this)[tiff::KnownTags::BITS_PER_SAMPLE];
+    const auto bytesPerSample = (!bitsPerSample) ? 1
             : *(tiff::GenericType<unsigned short> *)(*bitsPerSample)[0] >> 3;
 
-    return bytesPerSample * getNumBands();
+    return static_cast<unsigned short>(bytesPerSample * getNumBands());
 }
 
 sys::Uint32_T tiff::IFD::finalize(const sys::Uint32_T offset)

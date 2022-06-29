@@ -105,7 +105,6 @@ void initFilenameISD( Isd *isdfilename,
 ///////////////////////////////////////////////////////////////
 void initBytestreamISD( BytestreamIsd *bytestream,
                         std::string filename)
-   throw (Error)
 {
    Error err;
    const size_t bufflen = 1048576;
@@ -208,7 +207,6 @@ void initNitf20ISD( Nitf20Isd *isd,
                     std::string& fname,
                     const int imageIndex,
                     WarningList* warnings)
-//   throw (Error)
 {
    std::string ftype ("NITF20");
    FILE *ifile = NULL;
@@ -258,7 +256,6 @@ void initNitf21ISD( Nitf21Isd *isd,
                     const int imageIndex,
                     WarningList* warnings)
 
-//   throw (Error)
 {
    FILE *ifile = NULL;
    std::string ftype ("NITF21");
@@ -399,7 +396,7 @@ FILE * fillBuff( std::string& fname,
 #else
 				 struct stat64 &statbuf,
 #endif
-                 char** buff) throw (Error)
+                 char** buff)
 {
     try
     {
@@ -1893,7 +1890,7 @@ void parseDes(Nitf21Isd *isd,
 ///////////////////////////////////////////////////////////////
 char* getSegment(FILE *pFile,
                  const size_t offset,
-		 const size_t bufferSize)  throw (Error)
+		 const size_t bufferSize)
 {
    char* buff = NULL;
    size_t bytesRead;                   //----- Number of Bytes read
@@ -2768,7 +2765,7 @@ void dumpHdr(Nitf21Isd *isd)
 //      Returns: none
 //
 ///////////////////////////////////////////////////////////////
-void writeStateFile(std::string fname, std::string state) throw (Error)
+void writeStateFile(std::string fname, std::string state)
 {
    Error csmerr;
    size_t buffsize;
@@ -2823,7 +2820,7 @@ void writeStateFile(std::string fname, std::string state) throw (Error)
 //  Returns: state_from_file - Data read from the requested file
 //
 ///////////////////////////////////////////////////////////////
-std::string readStateFile(std::string fname) throw (Error)
+std::string readStateFile(std::string fname)
 {
    Error csmerr;
    FILE *ifile = NULL;

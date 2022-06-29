@@ -38,6 +38,7 @@
 #include "config/Exports.h"
 #include "coda_oss/string.h"
 #include "coda_oss/optional.h"
+#include "coda_oss/cstddef.h"
 #include "import/except.h"
 
 namespace str
@@ -64,6 +65,9 @@ CODA_OSS_API std::string toString(const uint8_t& value);
 
 template <>
 CODA_OSS_API std::string toString(const int8_t& value);
+
+template <>
+CODA_OSS_API std::string toString(const coda_oss::byte& value);
 
 template <>
 inline std::string toString(const std::nullptr_t&)
@@ -119,9 +123,9 @@ T toType(const std::string& s)
 }
 
 template <>
-bool toType<bool>(const std::string& s);
+CODA_OSS_API bool toType<bool>(const std::string& s);
 template <>
-std::string toType<std::string>(const std::string& s);
+CODA_OSS_API std::string toType<std::string>(const std::string& s);
 
 /**
  *  strtoll wrapper for msvc compatibility.

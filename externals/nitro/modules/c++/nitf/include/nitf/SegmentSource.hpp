@@ -71,16 +71,16 @@ struct NITRO_NITFCPP_API SegmentMemorySource : public SegmentSource
      *  \param copyData Whether or not to make a copy of the data.  If this is
      *  false, the data must outlive the memory source.
      */
-    SegmentMemorySource(const sys::byte* data, nitf::Off size, nitf::Off start,
+    SegmentMemorySource(const nitf::byte* data, nitf::Off size, nitf::Off start,
         int byteSkip, bool copyData);
 
     SegmentMemorySource(const std::span<const std::byte>& data, nitf::Off start,
                         int byteSkip, bool copyData);
-    SegmentMemorySource(const std::span<const sys::byte>& data, nitf::Off start,
+    SegmentMemorySource(const std::span<const nitf::byte>& data, nitf::Off start,
                         int byteSkip, bool copyData);
     SegmentMemorySource(const std::vector<std::byte>& data, nitf::Off start,
                         int byteSkip, bool copyData);
-    SegmentMemorySource(const std::vector<sys::byte>& data, nitf::Off start,
+    SegmentMemorySource(const std::vector<nitf::byte>& data, nitf::Off start,
                         int byteSkip, bool copyData);
     SegmentMemorySource(const std::string& data, nitf::Off start,
                     int byteSkip, bool copyData);

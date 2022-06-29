@@ -163,22 +163,22 @@ void DerivedXMLParser::getAttributeIfExists(
         //So I'd think we should be able to parse that, too
         if (name == "true" || name == "1")
         {
-            boolean = BooleanType("IS_TRUE");
+            boolean = BooleanType::IS_TRUE;
         }
         else if (name == "false" || name == "0")
         {
-            boolean = BooleanType("IS_FALSE");
+            boolean = BooleanType::IS_FALSE;
         }
         else
         {
             //This allows the function to continue parsing IS_TRUE, IS_FALSE as desired,
             //as well as throwing an exception for undesired input
-            boolean = BooleanType(name);
+            boolean = BooleanType::toType(name);
         }
     }
     else
     {
-        boolean = BooleanType("NOT_SET");
+        boolean = BooleanType::NOT_SET;
     }
 }
 
@@ -765,10 +765,10 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
             info->polarization[jj].reset(new TxRcvPolarization());
             TxRcvPolarization* p = info->polarization[jj].get();
 
-            p->txPolarization = six::toType<PolarizationType>(
+            p->txPolarization = six::toType<PolarizationSequenceType>(
                 getFirstAndOnly(polElem, "TxPolarization")->
                 getCharacterData());
-            p->rcvPolarization = six::toType<PolarizationType>(
+            p->rcvPolarization = six::toType<PolarizationSequenceType>(
                 getFirstAndOnly(polElem, "RcvPolarization")->
                 getCharacterData());
 

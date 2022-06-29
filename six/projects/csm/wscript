@@ -10,7 +10,7 @@ DIRS = 'external'
 
 def options(opt):
     opt.add_option('--csm-version', dest='csm_version',
-                   choices=['3.0.3.3', '3.0.1'], default='3.0.3.3',
+                   choices=['3.0.4'], default='3.0.4',
                    help='Choose verision of CSM to install')
     opt.recurse(DIRS)
 
@@ -46,8 +46,8 @@ def configure(conf):
             raise Errors.WafError('Unsupported platform %s' % sys.platform)
 
         pluginVersion = '115'
-        if Options.options.csm_version == '3.0.3.3':
-            csmVersion = '3033'
+        if Options.options.csm_version == '3.0.4':
+            csmVersion = '304'
         else:
             csmVersion = '301'
         conf.env['SIX_CSM_PLATFORM_NAME'] = 'SIX_SAR_RADIANT-SOLUTIONS_' + pluginVersion + '_' + platformName + '_CSM' + csmVersion

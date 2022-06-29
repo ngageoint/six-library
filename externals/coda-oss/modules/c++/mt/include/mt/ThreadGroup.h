@@ -33,8 +33,11 @@
 #include <sys/Thread.h>
 #include <sys/Mutex.h>
 #include <mem/SharedPtr.h>
+#include <config/Exports.h>
 
+#if !defined(MT_DEFAULT_PINNING)
 #include "mt/mt_config.h"
+#endif
 #include <mt/CPUAffinityInitializer.h>
 #include <mt/CPUAffinityThreadInitializer.h>
 
@@ -50,7 +53,7 @@ namespace mt
  * sys::Runnable objects and wait for all threads to complete.
  *
  */
-struct ThreadGroup
+struct CODA_OSS_API ThreadGroup
 {
     /*!
      * Constructor.

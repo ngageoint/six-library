@@ -29,11 +29,15 @@
 
 #include "TestCase.h"
 
-static const size_t NUM_CHANNELS = 3;
-static const size_t NUM_VECTORS = 2;
+static constexpr size_t NUM_CHANNELS = 3;
+static constexpr size_t NUM_VECTORS = 2;
 
-namespace
+static void call_srand()
 {
+    const auto f = []() { ::srand(174); return nullptr; };
+    static const auto result = f();
+}
+
 void setVectorParameters(size_t channel,
                          size_t vector,
                          cphd::PVPBlock& pvpBlock,
@@ -110,6 +114,7 @@ void setVectorParameters(size_t channel,
 
 TEST_CASE(testPvpRequired)
 {
+    call_srand();
     cphd::Pvp pvp;
     cphd::setPVPXML(pvp);
     cphd::PVPBlock pvpBlock(NUM_CHANNELS,
@@ -127,6 +132,7 @@ TEST_CASE(testPvpRequired)
 
 TEST_CASE(testPvpOptional)
 {
+    call_srand();
     cphd::Pvp pvp;
     cphd::setPVPXML(pvp);
     pvp.setOffset(28, pvp.ampSF);
@@ -170,6 +176,8 @@ TEST_CASE(testPvpOptional)
 
 TEST_CASE(testPvpThrow)
 {
+    call_srand();
+
     cphd::Pvp pvp;
     cphd::setPVPXML(pvp);
     pvp.setOffset(29, pvp.ampSF);
@@ -239,6 +247,8 @@ TEST_CASE(testPvpThrow)
 
 TEST_CASE(testPvpEquality)
 {
+    call_srand();
+
     cphd::Pvp pvp1;
     cphd::setPVPXML(pvp1);
     pvp1.setOffset(28, pvp1.ampSF);
@@ -295,6 +305,8 @@ TEST_CASE(testPvpEquality)
 
 TEST_CASE(testLoadPVPBlockFromMemory)
 {
+    call_srand();
+
     // For ease of testing, we make the somewhat specious assumption
     // that an item of PVP data is equivalent to a double.
     static_assert(sizeof(double) == cphd::PVPType::WORD_BYTE_SIZE,
@@ -335,14 +347,6 @@ TEST_CASE(testLoadPVPBlockFromMemory)
     TEST_ASSERT_EQ(pvpBlock.getTxPos(0, 0)[1], 6);
     TEST_ASSERT_EQ(pvpBlock.getTxPos(0, 0)[2], 9);
 }
-}
-
-static void* call_srand()
-{
-    ::srand(174);
-    return nullptr;
-}
-static const auto unused_ = call_srand();
 
 TEST_MAIN(
     TEST_CHECK(testPvpRequired);

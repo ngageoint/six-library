@@ -5,7 +5,6 @@ if (MSVC)
     add_compile_options(/wd4244) # '...': conversion from '...' to '...', possible loss of data
 endif()
 
-add_subdirectory("boost")
 #add_subdirectory("curl") # this is handled in coda_find_system_dependencies
 #add_subdirectory("numpy") # this is handled in coda_find_system_dependencies
 
