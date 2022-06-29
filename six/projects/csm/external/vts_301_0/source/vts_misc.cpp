@@ -1310,6 +1310,9 @@ string ISDType2str(ISDType ISDFileType)
        case FILENAME_TYPE:
 	      ret = "FILENAME_TYPE";
           break;
+       case NO_FILE_TYPE:
+       default:
+          break;
 	}
 	return ret;
 } 
