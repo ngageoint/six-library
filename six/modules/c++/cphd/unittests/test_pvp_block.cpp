@@ -22,6 +22,7 @@
 
 #include <complex>
 #include <thread>
+#include <tuple>
 
 #include <cphd/PVP.h>
 #include <cphd/PVPBlock.h>
@@ -36,6 +37,7 @@ static void call_srand()
 {
     const auto f = []() { ::srand(174); return nullptr; };
     static const auto result = f();
+    std::ignore = result;
 }
 
 void setVectorParameters(size_t channel,

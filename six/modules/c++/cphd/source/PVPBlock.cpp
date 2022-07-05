@@ -57,20 +57,33 @@ template <typename T> inline void setData(const sys::byte* data,
 {
     setData(reinterpret_cast<const unsigned char*>(data), dest);
 }
+template <typename T> inline void setData(const double* data_,
+    T& dest)
+{
+    const void* pData_ = data_;
+    auto data = static_cast<const unsigned char*>(pData_);
+    setData(data, dest);
+}
 
-inline void setData(const std::byte* data,
+inline void setData(const std::byte* data_,
                     cphd::Vector3& dest)
 {
-    setData(data, dest[0]);
-    setData(data + sizeof(double), dest[1]);
-    setData(data + 2*sizeof(double), dest[2]);
+    const void* pData_ = data_;
+    auto data = static_cast<const double*>(pData_);
+    setData(&(data[0]), dest[0]);
+    setData(&(data[1]), dest[1]);
+    setData(&(data[2]), dest[2]);
 }
 
 // Get data from data struct and put into data block
 template <typename T> inline void getData(std::byte* dest,
                     T value)
 {
-    memcpy(dest, &value, sizeof(T));
+    memcpy(dest, &value, sizeof(value));
+}
+inline void getData(double* dest, double value)
+{
+    memcpy(dest, &value, sizeof(value));
 }
 
 template <typename T> inline void getData(std::byte* dest,
@@ -79,12 +92,15 @@ template <typename T> inline void getData(std::byte* dest,
     memcpy(dest, value, size);
 }
 
-inline void getData(std::byte* dest,
+inline void getData(std::byte* dest_,
                     const cphd::Vector3& value)
 {
-    getData(dest, value[0]);
-    getData(dest + sizeof(double), value[1]);
-    getData(dest + 2*sizeof(double), value[2]);
+    void* pDest_ = dest_;
+    auto dest = static_cast<double*>(pDest_);
+
+    getData(&(dest[0]), value[0]);
+    getData(&(dest[1]), value[1]);
+    getData(&(dest[2]), value[2]);
 }
 }
 
