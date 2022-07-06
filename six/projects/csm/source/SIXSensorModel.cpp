@@ -959,7 +959,7 @@ static std::string getSchemaPath(std::vector<std::string>& mSchemaDirs)
     std::string schemaPath;
     try
     {
-        schemaPath = six::getSchemaPath(mSchemaDirs);
+        schemaPath = six::getSchemaPath(mSchemaDirs, true /*tryToExpandIfNotFound*/);
     }
     catch (const except::IOException&)
     {
