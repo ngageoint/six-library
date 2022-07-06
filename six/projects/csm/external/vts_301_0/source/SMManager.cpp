@@ -116,6 +116,10 @@ std::string formatError(int errorCode)
 //*****************************************************************************
 void SMManager::loadLibraries(const char* dirName)
 {
+#if !defined(NDEBUG)
+    fprintf(stderr, "SMManager::loadLibraries(): %s\n", dirName);
+#endif
+
    //---
    // PDL:
    // Go to specified directory.
@@ -146,7 +150,7 @@ void SMManager::loadLibraries(const char* dirName)
    TCHAR           szDir[MAX_PATH+1];
 
    // Get the proper directory path
-   sprintf(szDir, "%s\*.dll", dirName);
+   sprintf(szDir, "%s\\*.dll", dirName);
 //	System.IO.Directory dir;
    WIN32_FIND_DATA FileData;
    HANDLE          hList;
