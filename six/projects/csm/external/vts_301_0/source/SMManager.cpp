@@ -315,3 +315,8 @@ SMManager::~SMManager()
 
    delete theImpl;
 }
+
+size_t SMManager::pluginCount() const
+{
+    return theImpl->theDlls.size();
+}

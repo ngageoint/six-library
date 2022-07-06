@@ -196,6 +196,24 @@ bool fpcvm = false;
 bool ldcvm = false;
 //LinearDecayCorrelationModel ldcvm(1,1);
 
+static const csm::PluginList& Plugin_getList()
+{
+    try
+    {
+        const auto& retval = Plugin::getList();
+        if (retval.empty())
+        {
+            // TODO: try to load from someplace else
+        }
+        return retval;
+    }
+    catch (const Error&)
+    {
+        throw;
+    }
+}
+
+
 ///////////////////////////////////////////////////////
 //
 //   Function: processVTSCommand
@@ -1136,7 +1154,7 @@ bool processVTSCommand(int commandNumber,
          for(i=0; i < repeat_count; i++)
          {
             _TRY
-               pluginList = Plugin::getList();
+               pluginList = Plugin_getList();
             _CATCH
          }
          end_clock = clock();
@@ -1182,7 +1200,7 @@ bool processVTSCommand(int commandNumber,
 
          for(i=0; i < repeat_count; i++)
          {
-			 pluginList = Plugin::getList();
+			 pluginList = Plugin_getList();
          }
          end_clock = clock();
          comment.clear();
@@ -1467,14 +1485,14 @@ bool processFileCommand(int commandNumber,
             pluginName = param_array[1];
             logCommand = false;
             _TRY
-               pluginList = Plugin::getList();
+               pluginList = Plugin_getList();
             _CATCH
             if (warnings.size() == 0)
             {                           // no warning returned
                end_clock = clock();
                j=0;
                // count loaded plugins
-               if (pluginList.size() == 0)
+               if (pluginList.empty())
                   cerr << "\a\n\a\n\a\t "
                      << "***** pluginList is NULL *****"
                      << "\a\n\a\n\a\n";
@@ -6185,6 +6203,16 @@ int main(int argc, char** argv)
    //---
 
    SMManager::instance().loadLibraries(dirName.c_str());
+   if (SMManager::instance().pluginCount() == 0)
+   {
+       if (Plugin_getList().empty())
+       {
+           //if (debugFlag)
+           {
+               cout << "No plugins loaded from '" << dirName << "'; trying elsewhere.\n";
+           }
+       }
+   }
 
    // printList(logFile);
 
