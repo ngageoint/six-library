@@ -1341,7 +1341,64 @@ bool processVTSCommand(int commandNumber,
 		 exitCase();
          break;
 
+         //----- CASE vtsSetEnv
+      case VTS_SET_ENV:
+      {
+          logCommand = false;
+          initCase();
+
+          if (debugFlag)
+          {
+              cout << "vts>    You requested routine " << menulist[commandNumber] << "\n";
+          }
+
+          text.clear();
+          for (i = 0; i < (int)param_array.size(); i++)
+              text += (param_array[i] + ' ');
+
+          if (debugFlag)
+          {
+              cout << "    Passing values are: \n" << "\ttext=" << text << "\n";
+          }
+
+          // initialize text in case threads don't work
+          text = " vtsSetEnv success unknown ";
+
+          param_array_index = 1; // = (int)param_array.size() ?;
+          maxReturnValuesToCompare = 0;
+
+          const auto name = param_array[0];
+          const auto value = param_array[1];
+
+          _TRY
+              #if !_WIN32
+              setenv(name, value, true /*overwrite*/); // https://man7.org/linux/man-pages/man3/setenv.3.html
+              #else
+              const auto env = name + "=" + value;
+              _putenv(env.c_str());
+              #endif
+          _CATCH
+              if (error_thrown)
+              {
+                  break;
+              }
+              else
+              {
+                  if (debugFlag)
+                  {
+                      cout << text;
+                  }
+              }
+          end_clock = clock();           // Record the end time for call.
+          comment.clear();
+          recordLog(logFile, comment, command, text);
+
+          exitCase();
+          break;
+      }
+
          //----- CASE getNumGeometricCorrectionSwitches NSetup
+      case VTS_last_command_: // avoid compiler warning
       default:
          command_found = false;
    }                                    // switch
