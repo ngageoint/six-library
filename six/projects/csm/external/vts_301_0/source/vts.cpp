@@ -78,7 +78,7 @@
       {
 #define _CATCH                                                  \
       }                                                         \
-      catch (Error err)                                         \
+      catch (const Error& err)                                         \
       {                                                         \
          error_thrown = true;                                   \
          global_err = err;                                      \
@@ -1372,7 +1372,7 @@ bool processVTSCommand(int commandNumber,
 
           _TRY
               #if !_WIN32
-              setenv(name, value, true /*overwrite*/); // https://man7.org/linux/man-pages/man3/setenv.3.html
+	    setenv(name.c_str(), value.c_str(), true /*overwrite*/); // https://man7.org/linux/man-pages/man3/setenv.3.html
               #else
               const auto env = name + "=" + value;
               _putenv(env.c_str());
