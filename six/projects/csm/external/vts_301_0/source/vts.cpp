@@ -53,6 +53,7 @@
 #include <ctime>
 #include <list>
 #include <vector>
+#include <std/filesystem>
 
 // includes for CSM classes -- this code is configured by a global
 // committee -- any changes must be approved by that committe.
@@ -6045,6 +6046,19 @@ void processCommand(int commandNumber,
 //   } 
 //} 
 
+static std::filesystem::path findRelativePath(const std::filesystem::path& start, const std::filesystem::path& search)
+{
+  if (start.parent_path() == start)
+    {
+      return search; // break infinite recursion with an "error"
+    }
+  auto retval = start / search;
+  if (is_directory(retval))
+    {
+      return retval;
+    }
+  return findRelativePath(start.parent_path(), search);
+}
 
 //*****************************************************************************
 // main
@@ -6203,16 +6217,22 @@ int main(int argc, char** argv)
    //---
 
    SMManager::instance().loadLibraries(dirName.c_str());
-   if (SMManager::instance().pluginCount() == 0)
-   {
-       if (Plugin_getList().empty())
+   if ((SMManager::instance().pluginCount() == 0) && Plugin_getList().empty())
+     {
+       const auto argv0 = std::filesystem::absolute(argv[0]);
+       const auto plugins = std::filesystem::path("share") / "CSM" / "plugins";
+       if (debugFlag)
        {
-           //if (debugFlag)
-           {
-               cout << "No plugins loaded from '" << dirName << "'; trying elsewhere.\n";
-           }
+	 clog << "No plugins loaded from \"" << dirName << "\"\n";
+	 clog << "Trying to find " << plugins << " from " << argv0 << "\n";
        }
-   }
+       const auto path = findRelativePath(argv0.parent_path(), plugins);
+       if (is_directory(path))
+	 {
+	   const auto strPath = path.string() + "/";
+	   SMManager::instance().loadLibraries(strPath.c_str());
+	 }
+     }
 
    // printList(logFile);
 
