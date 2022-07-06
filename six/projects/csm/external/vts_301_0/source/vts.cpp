@@ -1361,7 +1361,6 @@ bool processVTSCommand(int commandNumber,
               cout << "    Passing values are: \n" << "\ttext=" << text << "\n";
           }
 
-          // initialize text in case threads don't work
           text = " vtsSetEnv success unknown ";
 
           param_array_index = 1; // = (int)param_array.size() ?;
@@ -1377,6 +1376,7 @@ bool processVTSCommand(int commandNumber,
               const auto env = name + "=" + value;
               _putenv(env.c_str());
               #endif
+	      text = name + "=" + getenv(name.c_str());
           _CATCH
               if (error_thrown)
               {
