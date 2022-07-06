@@ -197,24 +197,6 @@ bool fpcvm = false;
 bool ldcvm = false;
 //LinearDecayCorrelationModel ldcvm(1,1);
 
-static const csm::PluginList& Plugin_getList()
-{
-    try
-    {
-        const auto& retval = Plugin::getList();
-        if (retval.empty())
-        {
-            // TODO: try to load from someplace else
-        }
-        return retval;
-    }
-    catch (const Error&)
-    {
-        throw;
-    }
-}
-
-
 ///////////////////////////////////////////////////////
 //
 //   Function: processVTSCommand
@@ -1155,7 +1137,7 @@ bool processVTSCommand(int commandNumber,
          for(i=0; i < repeat_count; i++)
          {
             _TRY
-               pluginList = Plugin_getList();
+               pluginList = Plugin::getList();
             _CATCH
          }
          end_clock = clock();
@@ -1201,7 +1183,7 @@ bool processVTSCommand(int commandNumber,
 
          for(i=0; i < repeat_count; i++)
          {
-			 pluginList = Plugin_getList();
+			 pluginList = Plugin::getList();
          }
          end_clock = clock();
          comment.clear();
@@ -1486,7 +1468,7 @@ bool processFileCommand(int commandNumber,
             pluginName = param_array[1];
             logCommand = false;
             _TRY
-               pluginList = Plugin_getList();
+               pluginList = Plugin::getList();
             _CATCH
             if (warnings.size() == 0)
             {                           // no warning returned
@@ -6048,16 +6030,16 @@ void processCommand(int commandNumber,
 
 static std::filesystem::path findRelativePath(const std::filesystem::path& start, const std::filesystem::path& search)
 {
-  if (start.parent_path() == start)
+    if (start.parent_path() == start)
     {
-      return search; // break infinite recursion with an "error"
+        return search; // break infinite recursion with an "error"
     }
-  auto retval = start / search;
-  if (is_directory(retval))
+    auto retval = start / search;
+    if (is_directory(retval))
     {
-      return retval;
+        return retval;
     }
-  return findRelativePath(start.parent_path(), search);
+    return findRelativePath(start.parent_path(), search);
 }
 
 //*****************************************************************************
@@ -6217,22 +6199,24 @@ int main(int argc, char** argv)
    //---
 
    SMManager::instance().loadLibraries(dirName.c_str());
-   if ((SMManager::instance().pluginCount() == 0) && Plugin_getList().empty())
-     {
+
+   // This works-around having to run the "vts" executable from the share/CSM/plugins directory
+   if ((SMManager::instance().pluginCount() == 0) && Plugin::getList().empty())
+   {
        const auto argv0 = std::filesystem::absolute(argv[0]);
        const auto plugins = std::filesystem::path("share") / "CSM" / "plugins";
        if (debugFlag)
        {
-	 clog << "No plugins loaded from \"" << dirName << "\"\n";
-	 clog << "Trying to find " << plugins << " from " << argv0 << "\n";
+           clog << "No plugins loaded from \"" << dirName << "\"\n";
+           clog << "Trying to find " << plugins << " from " << argv0 << "\n";
        }
        const auto path = findRelativePath(argv0.parent_path(), plugins);
        if (is_directory(path))
-	 {
-	   const auto strPath = path.string() + "/";
-	   SMManager::instance().loadLibraries(strPath.c_str());
-	 }
-     }
+       {
+           const auto strPath = path.string() + "/";
+           SMManager::instance().loadLibraries(strPath.c_str());
+       }
+   }
 
    // printList(logFile);
 
