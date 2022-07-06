@@ -29,7 +29,9 @@
 //
 //#############################################################################
 
+#ifndef CSM_LIBRARY
 #define CSM_LIBRARY
+#endif
 #include "FourParameterCorrelationModel.h"
 #include "Error.h"
 

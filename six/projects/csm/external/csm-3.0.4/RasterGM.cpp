@@ -28,8 +28,9 @@
 //
 //#############################################################################
 
+#ifndef CSM_LIBRARY
 #define CSM_LIBRARY
-
+#endif
 #include "RasterGM.h"
 
 #include <stdexcept>
