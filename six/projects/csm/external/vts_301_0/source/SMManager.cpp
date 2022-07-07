@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <list>
 #include <vector>
+#include <std/filesystem>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -116,8 +117,9 @@ std::string formatError(int errorCode)
 //*****************************************************************************
 void SMManager::loadLibraries(const char* dirName)
 {
-#if !defined(NDEBUG)
-    fprintf(stderr, "SMManager::loadLibraries(): %s\n", dirName);
+    const auto fsDirName = std::filesystem::absolute(dirName);
+#ifdef _DEBUG // see vts.cpp
+    std::clog << "SMManager::loadLibraries(" << fsDirName << ")\n";
 #endif
 
    //---
@@ -172,14 +174,21 @@ void SMManager::loadLibraries(const char* dirName)
          if (! (FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
          {
             Impl::DllHandle dll = LoadLibrary(FileData.cFileName);
-            if (NULL != dll)
+            if (dll == NULL)
             {
-               instance().theImpl->theDlls.push_back(dll);
+                const auto lastError = GetLastError(); // use the original error message if retry fails
+
+                const auto fsFileName = fsDirName / FileData.cFileName; 
+                dll = LoadLibrary(fsFileName.string().c_str()); // Try again with the full path
+                if (dll == NULL)
+                {
+                    // report the original failure
+                    std::cout << "SMManager:   error: " << formatError(lastError) << "\n";
+                }
             }
-            else
+            if (dll != NULL) // either the original or the full-path retry
             {
-               std::cout << "SMManager:   error: "
-                  << formatError(GetLastError()) << std::endl;
+                instance().theImpl->theDlls.push_back(dll);
             }
          }
 
