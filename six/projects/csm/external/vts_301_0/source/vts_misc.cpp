@@ -322,6 +322,8 @@ void initMenuList()
    menutype[EXIT1]                       = VTS_TYPE;
    menulist[EXIT2]                       = "Exit";
    menutype[EXIT2]                       = VTS_TYPE;
+   menulist[VTS_SET_ENV] = "vtsSetEnv";
+   menutype[VTS_SET_ENV] = VTS_TYPE;
 }
 
 ///////////////////////////////////////////////////////////////

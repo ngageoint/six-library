@@ -21,7 +21,9 @@
 //
 //#############################################################################
 
+#ifndef CSM_LIBRARY
 #define CSM_LIBRARY
+#endif
 
 #include "Version.h"
 #include "Error.h"
