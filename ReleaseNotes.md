@@ -2,6 +2,9 @@
 
 # SIX Release Notes
 
+## Version 3.?.??; ??? ??, 202?
+* add `vtsSetEnv <name> <value>` command to **vts**
+
 ## Version 3.1.12; June 29, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2022-06-29](https://github.com/mdaus/coda-oss/releases/tag/2022-06-29)
 * [nitro](https://github.com/mdaus/nitro) version [2.10.10](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.10)
