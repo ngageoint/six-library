@@ -983,21 +983,26 @@ bool Utilities::isClockwise(const std::vector<RowColInt>& vertices,
     return (area > 0);
 }
 
+template<typename TReturn, typename TSchemaPaths>
+TReturn Utilities_parseData(::io::InputStream& xmlStream, const TSchemaPaths& schemaPaths, logging::Logger& log)
+{
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator<ComplexXMLControl>();
+
+    auto data(six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
+    return TReturn(static_cast<ComplexData*>(data.release()));
+}
 mem::auto_ptr<ComplexData> Utilities::parseData(
         ::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
 {
-    XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<ComplexXMLControl>();
-
-    std::unique_ptr<Data> data(
-			       six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
-
-    mem::auto_ptr<ComplexData> complexData(
-        static_cast<ComplexData*>(data.release()));
-
-    return complexData;
+    return Utilities_parseData<mem::auto_ptr<ComplexData>>(xmlStream, schemaPaths, log);
+}
+std::unique_ptr<ComplexData> Utilities::parseData(::io::InputStream& xmlStream,
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
+{
+    return Utilities_parseData<std::unique_ptr<ComplexData>>(xmlStream, pSchemaPaths, log);
 }
 
 mem::auto_ptr<ComplexData> Utilities::parseDataFromFile(
@@ -1007,6 +1012,15 @@ mem::auto_ptr<ComplexData> Utilities::parseDataFromFile(
 {
     io::FileInputStream inStream(pathname);
     return parseData(inStream, schemaPaths, log);
+}
+std::unique_ptr<ComplexData> Utilities::parseDataFromFile(const std::filesystem::path& pathname,
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
+{
+    logging::NullLogger nullLogger;
+    logging::Logger* const logger = (pLogger == nullptr) ? &nullLogger : pLogger;
+
+    io::FileInputStream inStream(pathname.string());
+    return parseData(inStream, pSchemaPaths, *logger);
 }
 
 mem::auto_ptr<ComplexData> Utilities::parseDataFromString(
@@ -1018,25 +1032,59 @@ mem::auto_ptr<ComplexData> Utilities::parseDataFromString(
     inStream.write(xmlStr);
     return parseData(inStream, schemaPaths, log);
 }
+std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::string& xmlStr,
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
+{
+    logging::NullLogger nullLogger;
+    logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
 
-std::string Utilities::toXMLString(const ComplexData& data,
-                                   const std::vector<std::string>& schemaPaths,
-                                   logging::Logger* logger)
+    io::StringStream inStream;
+    inStream.write(xmlStr);
+    return parseData(inStream, pSchemaPaths, *log);
+}
+
+template<typename TSchemaPaths>
+std::string Utilities_toXMLString(const ComplexData& data,
+    const TSchemaPaths& schemaPaths, logging::Logger* pLogger)
 {
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<ComplexXMLControl>();
 
     logging::NullLogger nullLogger;
-    return ::six::toValidXMLString(&data,
-                                   schemaPaths,
-                                   (logger == nullptr) ? &nullLogger : logger,
-                                   &xmlRegistry);
+    logging::Logger* const logger = (pLogger == nullptr) ? &nullLogger : pLogger;
+
+    return ::six::toValidXMLString(data, schemaPaths, logger, &xmlRegistry);
+}
+std::string Utilities::toXMLString(const ComplexData& data,
+                                   const std::vector<std::string>& schemaPaths,
+                                   logging::Logger* logger)
+{
+    return Utilities_toXMLString(data, schemaPaths, logger);
+}
+std::string Utilities::toXMLString(const ComplexData& data,
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* logger)
+{
+    return Utilities_toXMLString(data, pSchemaPaths, logger);
 }
 
-std::unique_ptr<ComplexData> Utilities::createFakeComplexData(PixelType pixelType, bool makeAmplitudeTable,
-    const types::RowCol<size_t>* pDims)
+static void update_for_SICD_130(ComplexData& data)
+{
+    data.errorStatistics.reset(new ErrorStatistics());
+
+    // Use a OTHER.*:OTHER.* DualPolarizationType type to test more code
+    constexpr auto dualPolarizationType = "OTHER_TxRcvPolarizationProc:OTHER_TxRcvPolarizationProc"; // match sicd130.xml
+    data.imageFormation->txRcvPolarizationProc = six::toType<DualPolarizationType>(dualPolarizationType);
+}
+
+static std::unique_ptr<ComplexData> createFakeComplexData_(const std::string& strVersion, 
+    PixelType pixelType, bool makeAmplitudeTable, const types::RowCol<size_t>* pDims)
 {
     std::unique_ptr<ComplexData> data(std::make_unique<six::sicd::ComplexData>());
+    if (strVersion == "1.3.0")
+    {
+        data->setVersion(strVersion);
+    }
+
     data->position->arpPoly = six::PolyXYZ(5);
     data->position->arpPoly[0][0] = 4.45303008e6;
     data->position->arpPoly[1][0] = 5.75153322e3;
@@ -1174,11 +1222,26 @@ std::unique_ptr<ComplexData> Utilities::createFakeComplexData(PixelType pixelTyp
     data->collectionInformation->setClassificationLevel("UNCLASSIFIED");
     data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
 
+    if (!strVersion.empty()) // TODO: better check for version; this avoid changing any existing test code
+    {
+        update_for_SICD_130(*data);
+    }
+
     return data;
+}
+std::unique_ptr<ComplexData> Utilities::createFakeComplexData(const std::string& strVersion,
+    PixelType pixelType, bool makeAmplitudeTable, const types::RowCol<size_t>* pDims)
+{
+    if ((strVersion == "1.2.1") || (strVersion == "1.3.0"))
+    {
+        return createFakeComplexData_(strVersion, pixelType, makeAmplitudeTable, pDims);
+    }
+    throw std::invalid_argument("strVersion = '" + strVersion + "' is not supported.");
 }
 mem::auto_ptr<ComplexData> Utilities::createFakeComplexData(const types::RowCol<size_t>* pDims)
 {
-    auto result = createFakeComplexData(PixelType::RE32F_IM32F, false /*makeAmplitudeTable*/, pDims);
+    auto result = createFakeComplexData_("" /*strVersion*/,
+        PixelType::RE32F_IM32F, false /*makeAmplitudeTable*/, pDims);
     return mem::auto_ptr<ComplexData>(result.release());
 }
 
