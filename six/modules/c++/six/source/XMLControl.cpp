@@ -376,6 +376,7 @@ std::string six::getSchemaPath(std::vector<std::string>& schemaPaths, bool tryTo
         schemaPath = sys::Path::expandEnvironmentVariables(schemaPath, fs::file_type::directory);
         if (fs::is_directory(schemaPath))
         {
+            schemaPath = fs::absolute(schemaPath).string(); // get rid of embedded ".."
             schemaPaths[0] = schemaPath;
             return schemaPath;
         }
