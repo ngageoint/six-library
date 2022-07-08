@@ -316,7 +316,7 @@
 				</InputROI>
 				<Polarization>
 					<TxPolarization>V</TxPolarization>
-					<RcvPolarization>OTHER</RcvPolarization>
+					<RcvPolarization>OTHER_RcvPolarization</RcvPolarization>
 					<RcvPolarizationOffset>1.3700000000000001</RcvPolarizationOffset>
 				</Polarization>
 			</Information>

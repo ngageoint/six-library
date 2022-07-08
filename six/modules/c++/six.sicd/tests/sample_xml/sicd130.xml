@@ -130,7 +130,7 @@
                 <RcvFMRate>9.000000000000000E00</RcvFMRate>
             </WFParameters>
         </Waveform>
-        <TxPolarization>OTHER</TxPolarization>
+        <TxPolarization>OTHER_TxPolarization</TxPolarization>
         <TxSequence size="1">
             <TxStep index="1">
                 <WFIndex>12</WFIndex>
@@ -139,7 +139,7 @@
         </TxSequence>
         <RcvChannels size="1">
             <ChanParameters index="1">
-                <TxRcvPolarization>OTHER</TxRcvPolarization>
+                <TxRcvPolarization>OTHER_TxRcvPolarization:OTHER_TxRcvPolarization</TxRcvPolarization>
                 <RcvAPCIndex>334</RcvAPCIndex>
             </ChanParameters>
         </RcvChannels>
@@ -173,7 +173,7 @@
             <NumChanProc>1</NumChanProc>
             <ChanIndex>0</ChanIndex>
         </RcvChanProc>
-        <TxRcvPolarizationProc>OTHER</TxRcvPolarizationProc>
+        <TxRcvPolarizationProc>OTHER_TxRcvPolarizationProc:OTHER_TxRcvPolarizationProc</TxRcvPolarizationProc>
         <TStartProc>0.000000000000000E00</TStartProc>
         <TEndProc>0.000000000000000E00</TEndProc>
         <TxFrequencyProc>
