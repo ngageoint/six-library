@@ -130,7 +130,7 @@ void SCPCOA::fillDerivedFields(const GeoData& geoData,
     const Vector3& scp = geoData.scp.ecf;
     if (sideOfTrack == SideOfTrackType::NOT_SET)
     {
-        sideOfTrack = static_cast<six::SideOfTrackType::values>(geometry.getSideOfTrack());
+        sideOfTrack = six::SideOfTrackType::cast(geometry.getSideOfTrack());
     }
     if (Init::isUndefined(slantRange))
     {

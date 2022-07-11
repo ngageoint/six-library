@@ -89,7 +89,7 @@ namespace details
             return std::optional<T>();
         }
         // TValues will be "int" when used from the "Enum" base class
-        return std::optional<T>(static_cast<typename T::values>(*result));
+        return std::optional<T>(T::cast(*result));
     }
     template<typename T, typename TValues = typename T::values>
     inline T toType(const std::map<std::string, TValues>& map, const std::string& v)
@@ -179,14 +179,15 @@ namespace details
     #define SIX_Enum_default_ctor_assign_(name) name() = default; name(const name&) = default; name(name&&) = default; \
             name& operator=(const name&) = default; name& operator=(name&&) = default
     #ifdef SWIGPYTHON
-       // Normal C++ code shouldn't use these constructors
+       // Normal C++ code shouldn't use these constructors; use toType() or cast() instead
        #define SIX_Enum_constructors_SWIGPYTHON_(name) explicit name(int i) : name(static_cast<values>(i)) { } \
            explicit name(const std::string& s) { *this = std::move(toType(s)); }
     #else
        #define SIX_Enum_constructors_SWIGPYTHON_(name)
     #endif
     #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); SIX_Enum_constructors_SWIGPYTHON_(name); \
-        name(values v) : Enum(static_cast<int>(v)) {} name& operator=(values v) { *this = std::move(name(v)); return *this; } 
+        name(values v) : Enum(static_cast<int>(v)) {} name& operator=(values v) { *this = std::move(name(v)); return *this; } \
+        static name cast(int i) { return name(static_cast<values>(i)); } /* toType(int) causes confuson with Enum::toType(string) */
     #define SIX_Enum_BEGIN_enum enum values {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
