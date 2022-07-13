@@ -383,7 +383,7 @@ static void test_EqInt_(const std::string& testName, const std::string& strType,
     const int value = fromStrCtor;
     TEST_ASSERT_EQ(enumValue, value);
 
-    const decltype(type)fromIntCtor(TSixEnum::cast(value));
+    const decltype(type)fromIntCtor(six::Enum::cast<TSixEnum>(value));
     TEST_ASSERT_EQ(enumValue, fromIntCtor);
     TEST_ASSERT(fromIntCtor.toString() == strType);
     TEST_ASSERT_EQ(fromIntCtor, type);

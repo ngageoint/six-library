@@ -41,6 +41,15 @@ namespace six
 
 constexpr int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
+namespace Enum
+{
+    template<typename TEnum, typename TValues = typename TEnum::values>
+    inline TEnum cast(int i)
+    {
+        return TEnum(static_cast<TValues>(i));
+    }
+}
+
 namespace details
 {
     template<typename T>
@@ -89,7 +98,7 @@ namespace details
             return std::optional<T>();
         }
         // TValues will be "int" when used from the "Enum" base class
-        return std::optional<T>(T::cast(*result));
+        return std::optional<T>(six::Enum::cast<T>(*result));
     }
     template<typename T, typename TValues = typename T::values>
     inline T toType(const std::map<std::string, TValues>& map, const std::string& v)
@@ -118,7 +127,7 @@ namespace details
         Enum() = default;
 
         //! int constructor
-        Enum(int i)
+        explicit Enum(int i)
         {
             (void)details::index(int_to_string(), i); // validate "i"
             value = i;
@@ -186,8 +195,7 @@ namespace details
        #define SIX_Enum_constructors_SWIGPYTHON_(name)
     #endif
     #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); SIX_Enum_constructors_SWIGPYTHON_(name); \
-        name(values v) : Enum(static_cast<int>(v)) {} name& operator=(values v) { *this = std::move(name(v)); return *this; } \
-        static name cast(int i) { return name(static_cast<values>(i)); } /* toType(int) causes confuson with Enum::toType(string) */
+        name(values v) : Enum(static_cast<int>(v)) {} name& operator=(values v) { *this = std::move(name(v)); return *this; }
     #define SIX_Enum_BEGIN_enum enum values {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
@@ -227,5 +235,6 @@ namespace details
         SIX_Enum_map_5_(n1, n2, n3, n4, n5) SIX_Enum_END_DEFINE(name)
 
 } // namespace details
+
 }
 #endif // SIX_six_Enum_h_INCLUDED_
