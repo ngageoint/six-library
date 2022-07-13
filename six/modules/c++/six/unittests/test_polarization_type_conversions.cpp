@@ -392,6 +392,14 @@ static void test_EqInt(const std::string& testName, int unknownEnumValue)
 {
     test_EqInt_<TSixEnum>(testName, "UNKNOWN", TSixEnum::UNKNOWN, unknownEnumValue);
     test_EqInt_<TSixEnum>(testName, "OTHER", TSixEnum::OTHER, 1);
+    test_EqInt_<TSixEnum>(testName, "NOT_SET", TSixEnum::NOT_SET, six::NOT_SET_VALUE);
+
+    // These will throw, at least for the polarization types
+    static const std::vector<int> invalidIntValuesToTest{ -1, 0, six::NOT_SET_VALUE - 1 };
+    for (auto&& v : invalidIntValuesToTest)
+    {
+        TEST_EXCEPTION(six::Enum::cast<TSixEnum>(v));
+    }
 }
 TEST_CASE(EqInt)
 {
