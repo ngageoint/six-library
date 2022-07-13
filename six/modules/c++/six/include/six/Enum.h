@@ -195,7 +195,8 @@ namespace details
        #define SIX_Enum_constructors_SWIGPYTHON_(name)
     #endif
     #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); SIX_Enum_constructors_SWIGPYTHON_(name); \
-        name(values v) : Enum(static_cast<int>(v)) {} name& operator=(values v) { *this = std::move(name(v)); return *this; }
+        name(values v) : Enum(static_cast<int>(v)) {} name& operator=(values v) { *this = std::move(name(v)); return *this; } \
+        static name cast(int i) { return six::Enum::cast<name>(i); }
     #define SIX_Enum_BEGIN_enum enum values {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
