@@ -28,6 +28,8 @@
 #include <string>
 #include <vector>
 
+#include "config/Exports.h"
+
 #include "except/Backtrace.h"
 
 #define CODA_OSS_sys_Backtrace CODA_OSS_except_Backtrace
@@ -46,8 +48,8 @@ namespace sys
  * return with an error message instead of a backtrace if the current
  * configuration is unsupported.
  */
-std::string getBacktrace(bool* pSupported = nullptr);
-std::string getBacktrace(bool& supported, std::vector<std::string>& frames);
+CODA_OSS_API std::string getBacktrace(bool* pSupported = nullptr);
+CODA_OSS_API std::string getBacktrace(bool& supported, std::vector<std::string>& frames);
 }
 
 #endif // CODA_OSS_sys_Backtrace_h_INCLUDED_

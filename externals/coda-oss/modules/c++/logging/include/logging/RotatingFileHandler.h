@@ -29,6 +29,7 @@
 
 #include <string>
 #include <iostream>
+#include "config/Exports.h"
 #include "logging/LogRecord.h"
 #include "logging/StreamHandler.h"
 #include <import/io.h>
@@ -47,7 +48,7 @@ namespace logging
  * renamed to 'error.log.1', and all future logs will be logged to error.log.
  * This is useful if you would like to keep backups of logs.
  */
-struct RotatingFileHandler : public StreamHandler
+struct CODA_OSS_API RotatingFileHandler : public StreamHandler
 {
     /*!
      * \param fname         The file to log to

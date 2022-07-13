@@ -32,9 +32,6 @@
 #include "six/Data.h"
 #include <six/XmlLite.h>
 
-#define string_to_Enum(strValue, enum, type) if (strValue == #type) return enum::type
-#define Enum_to_string(value, enum, type) if (value == enum::type) return #type
-
 namespace
 {
 NITF_TRE_STATIC_HANDLER_REF(XML_DATA_CONTENT);
@@ -244,6 +241,30 @@ std::string six::toString(const DateTime& dateTime)
     return strDate;
 }
 
+template<typename T>
+inline T toType_(const std::string& s, const except::Exception& ex)
+{
+    const auto result = T::toType(s, std::nothrow);
+    auto retval = nitf::details::value(result, ex);
+    if (retval == T::NOT_SET)
+    {
+        throw ex;
+    }
+    return retval;
+}
+
+template<typename T>
+inline std::string toString_(const T& t, const except::Exception& ex)
+{
+    if (t == T::NOT_SET)
+    {
+        throw ex;
+    }
+
+    const auto result = t.toString(std::nothrow);
+    return nitf::details::value(result, ex);
+}
+
 template <>
 std::string six::toString(const RadarModeType& type)
 {
@@ -295,12 +316,10 @@ std::string six::toString(const DataType& type)
 template <>
 PixelType six::toType<PixelType>(const std::string& s)
 {
-    std::string type(s);
-    str::trim(type);
-    PixelType p(type);
+    auto p = PixelType::toType(s);
     if (p == PixelType::NOT_SET)
         throw except::Exception(
-                Ctxt(FmtX("Type not understood [%s]", type.c_str())));
+                Ctxt(FmtX("Type not understood [%s]", s.c_str())));
     return p;
 }
 
@@ -438,196 +457,6 @@ std::string six::toString(const OrientationType& t)
         return "ARBITRARY";
     default:
         throw except::Exception(Ctxt("Unsupported orientation"));
-    }
-}
-
-template <>
-PolarizationSequenceType six::toType<PolarizationSequenceType>(
-        const std::string& s)
-{
-    std::string type(s);
-    str::trim(type);
-    
-    string_to_Enum(type, PolarizationSequenceType, OTHER);
-    string_to_Enum(type, PolarizationSequenceType, V);
-    string_to_Enum(type, PolarizationSequenceType, H);
-    string_to_Enum(type, PolarizationSequenceType, X);
-    string_to_Enum(type, PolarizationSequenceType, Y);
-    string_to_Enum(type, PolarizationSequenceType, S);
-    string_to_Enum(type, PolarizationSequenceType, E);
-    string_to_Enum(type, PolarizationSequenceType, RHC);
-    string_to_Enum(type, PolarizationSequenceType, LHC);
-    string_to_Enum(type, PolarizationSequenceType, UNKNOWN);
-    string_to_Enum(type, PolarizationSequenceType, SEQUENCE);
-    
-    throw except::Exception(Ctxt("Unsupported polarization type '" + s + "'"));
-}
-
-template <>
-std::string six::toString(const PolarizationSequenceType& t)
-{
-    Enum_to_string(t, PolarizationSequenceType, OTHER);
-    Enum_to_string(t, PolarizationSequenceType, V);
-    Enum_to_string(t, PolarizationSequenceType, H);
-    Enum_to_string(t, PolarizationSequenceType, X);
-    Enum_to_string(t, PolarizationSequenceType, Y);
-    Enum_to_string(t, PolarizationSequenceType, S);
-    Enum_to_string(t, PolarizationSequenceType, E);
-    Enum_to_string(t, PolarizationSequenceType, RHC);
-    Enum_to_string(t, PolarizationSequenceType, LHC);
-    Enum_to_string(t, PolarizationSequenceType, UNKNOWN);
-    Enum_to_string(t, PolarizationSequenceType, SEQUENCE);
-    
-    throw except::Exception(Ctxt("Unsupported conversion from polarization type"));
-}
-
-template <>
-PolarizationType six::toType<PolarizationType>(const std::string& s)
-{
-    std::string type(s);
-    str::trim(type);
-    if (type == "OTHER")
-    {
-        return PolarizationType::OTHER;
-    }
-    else if (type == "V")
-    {
-        return PolarizationType::V;
-    }
-    else if (type == "H")
-    {
-        return PolarizationType::H;
-    }
-    else if (type == "RHC")
-    {
-        return PolarizationType::RHC;
-    }
-    else if (type == "LHC")
-    {
-        return PolarizationType::LHC;
-    }
-    else
-    {
-        throw except::Exception(
-                Ctxt("Unsupported polarization type '" + s + "'"));
-    }
-}
-
-template <>
-std::string six::toString(const PolarizationType& t)
-{
-    switch (t)
-    {
-    case PolarizationType::OTHER:
-        return "OTHER";
-    case PolarizationType::V:
-        return "V";
-    case PolarizationType::H:
-        return "H";
-    case PolarizationType::RHC:
-        return "RHC";
-    case PolarizationType::LHC:
-        return "LHC";
-    default:
-        throw except::Exception(
-                Ctxt("Unsupported conversion from polarization type"));
-    }
-}
-
-template <>
-DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
-{
-    std::string type(s);
-    str::trim(type);
-    if (type == "OTHER")
-        return DualPolarizationType::OTHER;
-    else if (type == "V:V")
-        return DualPolarizationType::V_V;
-    else if (type == "V:H")
-        return DualPolarizationType::V_H;
-    else if (type == "V:RHC")
-        return DualPolarizationType::V_RHC;
-    else if (type == "V:LHC")
-        return DualPolarizationType::V_LHC;
-    else if (type == "H:V")
-        return DualPolarizationType::H_V;
-    else if (type == "H:H")
-        return DualPolarizationType::H_H;
-    else if (type == "H:RHC")
-        return DualPolarizationType::H_RHC;
-    else if (type == "H:LHC")
-        return DualPolarizationType::H_LHC;
-    else if (type == "RHC:RHC")
-        return DualPolarizationType::RHC_RHC;
-    else if (type == "RHC:LHC")
-        return DualPolarizationType::RHC_LHC;
-    else if (type == "RHC:V")
-        return DualPolarizationType::RHC_V;
-    else if (type == "RHC:H")
-        return DualPolarizationType::RHC_H;
-    else if (type == "LHC:LHC")
-        return DualPolarizationType::LHC_LHC;
-    else if (type == "LHC:RHC")
-        return DualPolarizationType::LHC_RHC;
-    else if (type == "LHC:V")
-        return DualPolarizationType::LHC_V;
-    else if (type == "LHC:H")
-        return DualPolarizationType::LHC_H;
-
-    else if (type == "UNKNOWN")
-        return DualPolarizationType::UNKNOWN;
-    else
-    {
-        throw except::Exception(
-                Ctxt("Unsupported conversion to dual polarization type '" + s +
-                     "'"));
-    }
-}
-
-template <>
-std::string six::toString(const DualPolarizationType& t)
-{
-    switch (t)
-    {
-    case DualPolarizationType::OTHER:
-        return "OTHER";
-    case DualPolarizationType::V_V:
-        return "V:V";
-    case DualPolarizationType::V_H:
-        return "V:H";
-    case DualPolarizationType::V_RHC:
-        return "V:RHC";
-    case DualPolarizationType::V_LHC:
-        return "V:LHC";
-    case DualPolarizationType::H_V:
-        return "H:V";
-    case DualPolarizationType::H_H:
-        return "H:H";
-    case DualPolarizationType::H_RHC:
-        return "H:RHC";
-    case DualPolarizationType::H_LHC:
-        return "H:LHC";
-    case DualPolarizationType::RHC_RHC:
-        return "RHC:RHC";
-    case DualPolarizationType::RHC_LHC:
-        return "RHC:LHC";
-    case DualPolarizationType::RHC_V:
-        return "RHC:V";
-    case DualPolarizationType::RHC_H:
-        return "RHC:H";
-    case DualPolarizationType::LHC_LHC:
-        return "LHC:LHC";
-    case DualPolarizationType::LHC_RHC:
-        return "LHC:RHC";
-    case DualPolarizationType::LHC_V:
-        return "LHC:V";
-    case DualPolarizationType::LHC_H:
-        return "LHC:H";
-    case DualPolarizationType::UNKNOWN:
-        return "UNKNOWN";
-    default:
-        throw except::Exception(
-                Ctxt("Unsupported dual polarization type to string"));
     }
 }
 
@@ -1333,18 +1162,28 @@ void six::getErrors(const ErrorStatistics* errorStats,
             }
         }
 
-        if (errorStats->compositeSCP &&
-            errorStats->compositeSCP->scpType == CompositeSCP::RG_AZ)
+        if (const auto compositeSCP = errorStats->compositeSCP.get())
         {
-            const types::RgAz<double> composite(errorStats->compositeSCP->xErr,
-                                                errorStats->compositeSCP->yErr);
-            const double corr = errorStats->compositeSCP->xyErr;
+            if (compositeSCP->scpType == CompositeSCP::RG_AZ)
+            {
+                const types::RgAz<double> composite(compositeSCP->xErr, compositeSCP->yErr);
+                const double corr = compositeSCP->xyErr;
 
-            errors.mUnmodeledErrorCovar(0, 0) = math::square(composite.rg);
-            errors.mUnmodeledErrorCovar(1, 1) = math::square(composite.az);
-            errors.mUnmodeledErrorCovar(0, 1) =
-                    errors.mUnmodeledErrorCovar(1, 0) =
-                            corr * (composite.rg * composite.az);
+                auto& unmodeledErrorCovar = errors.mUnmodeledErrorCovar;
+                unmodeledErrorCovar(0, 0) = math::square(composite.rg);
+                unmodeledErrorCovar(1, 1) = math::square(composite.az);
+                unmodeledErrorCovar(0, 1) = unmodeledErrorCovar(1, 0) = corr * (composite.rg * composite.az);
+            }
+        }
+        else if (const auto unmodeled = errorStats->Unmodeled.get())
+        {
+            // From Bill: Here is the mapping from the UnmodeledError to the 2x2 covariance matrix:
+            //    [0][0] = Xrow; [1][1] = Ycol; 
+            //    [1][0] = [0][1] = XrowYcol * Xrow * Ycol
+            auto& unmodeledErrorCovar = errors.mUnmodeledErrorCovar;
+            unmodeledErrorCovar(0, 0) = unmodeled->Xrow;
+            unmodeledErrorCovar(1, 1) = unmodeled->Ycol;
+            unmodeledErrorCovar(0, 1) = unmodeledErrorCovar(1, 0) = unmodeled->XrowYcol * unmodeled->Xrow * unmodeled->Ycol;
         }
     }
 }

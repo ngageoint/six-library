@@ -21,23 +21,18 @@
  *
  */
 
-#include <assert.h>
-
 #include <sys/Path.h>
 #include "TestCase.h"
 
 #include <sys/filesystem.h>
-namespace fs = coda_oss::filesystem;
 
-namespace
-{
 static std::string find_directory(const std::vector<std::string>& paths)
 {
     std::string bad_delim = sys::Path::delimiter();
     bad_delim += sys::Path::delimiter();
     for (const auto& p : paths)
     {
-        if (fs::is_directory(p))
+        if (coda_oss::filesystem::is_directory(p))
         {
             // Sometimes the value of PATH has "bad" strings in it ... at least it will
             // confuse the unit-tests as we don't expect "C:\D1\\D2
@@ -61,7 +56,7 @@ TEST_CASE(testPathMerge)
     TEST_ASSERT_GREATER(paths.size(), static_cast<size_t>(0));
 
     auto path = find_directory(paths);
-    TEST_ASSERT_TRUE(fs::is_directory(path));
+    TEST_ASSERT_TRUE(coda_oss::filesystem::is_directory(path));
     // add trailing '/'
     if (!str::endsWith(path, sys::Path::delimiter()))
     {
@@ -73,7 +68,7 @@ TEST_CASE(testPathMerge)
     TEST_ASSERT_GREATER(components.size(), static_cast<size_t>(0));
     auto result = sys::Path::merge(components, isAbsolute);
     TEST_ASSERT_EQ(result, path);
-    TEST_ASSERT_TRUE(fs::is_directory(result));
+    TEST_ASSERT_TRUE(coda_oss::filesystem::is_directory(result));
 
     #if _WIN32
     path = R"(C:\dir\file.txt)";
@@ -89,12 +84,12 @@ TEST_CASE(testPathMerge)
 TEST_CASE(testExpandEnvTilde)
 {
     auto path = sys::Path::expandEnvironmentVariables("~");
-    TEST_ASSERT_TRUE(fs::is_directory(path));
+    TEST_ASSERT_TRUE(coda_oss::filesystem::is_directory(path));
 
-    path = sys::Path::expandEnvironmentVariables("~", fs::file_type::directory);
-    TEST_ASSERT_TRUE(fs::is_directory(path));
+    path = sys::Path::expandEnvironmentVariables("~", coda_oss::filesystem::file_type::directory);
+    TEST_ASSERT_TRUE(coda_oss::filesystem::is_directory(path));
 
-    path = sys::Path::expandEnvironmentVariables("~", fs::file_type::regular);
+    path = sys::Path::expandEnvironmentVariables("~", coda_oss::filesystem::file_type::regular);
     TEST_ASSERT_TRUE(path.empty());
 }
 
@@ -104,8 +99,8 @@ TEST_CASE(testExpandEnvTildePath)
     const std::vector<std::string> exts{"NTUSER.DAT", ".login", ".cshrc", ".bashrc"};
     os.prependEnv("exts", exts, true /*overwrite*/);
 
-    const auto path = sys::Path::expandEnvironmentVariables("~/$(exts)", fs::file_type::regular);
-    TEST_ASSERT_TRUE(fs::is_regular_file(path));
+    const auto path = sys::Path::expandEnvironmentVariables("~/$(exts)", coda_oss::filesystem::file_type::regular);
+    TEST_ASSERT_TRUE(coda_oss::filesystem::is_regular_file(path));
 }
 
 TEST_CASE(testExpandEnv)
@@ -193,7 +188,7 @@ TEST_CASE(testExpandEnvPathMultiple)
     os.prependEnv("paths", paths, true /*overwrite*/);
     auto expanded_path = sys::Path::expandEnvironmentVariables("$(paths)", false /*checkIfExists*/);
     std::string home = "home";
-    if (fs::is_directory(home) && !str::endsWith(home, sys::Path::delimiter()))
+    if (coda_oss::filesystem::is_directory(home) && !str::endsWith(home, sys::Path::delimiter()))
     {
         home += sys::Path::delimiter();
     }
@@ -237,11 +232,11 @@ TEST_CASE(testModifyVar)
     const auto argv0_t = sys::Path::expandEnvironmentVariables("${ARGV0@t}", false /*checkIfExists*/);
     TEST_ASSERT_FALSE(argv0_t.empty());
 
-    const auto result = os.getSpecialEnv("0");  // i.e., ${0)
+    const auto result = os.getSpecialEnv("0");  // i.e., ${0}
     TEST_ASSERT_FALSE(result.empty());
-    const fs::path fsresult(result);
-    const fs::path this_file(__FILE__);
-    TEST_ASSERT_EQ(fsresult.stem(), this_file.stem());
+    const coda_oss::filesystem::path fsresult(result);
+    //const coda_oss::filesystem::path this_file(__FILE__);
+    //TEST_ASSERT_EQ(fsresult.stem(), this_file.stem());
     TEST_ASSERT_EQ(argv0_t, fsresult.filename());
 }
 
@@ -325,10 +320,7 @@ TEST_CASE(testModifyVar2)
     TEST_ASSERT_EQ(s, "file");
 }
 
-}
-
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testPathMerge);
     TEST_CHECK(testExpandEnvTilde);
     TEST_CHECK(testExpandEnv);
@@ -337,7 +329,5 @@ int main(int, char**)
     TEST_CHECK(testExpandEnvPathMultiple);
     TEST_CHECK(testModifyVar);
     TEST_CHECK(testModifyVar2);
-
-    return 0;
-}
+ )
 

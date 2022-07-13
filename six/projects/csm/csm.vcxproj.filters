@@ -42,72 +42,6 @@
     <ClInclude Include="external\vts_301_0\include\VTSMisc.h">
       <Filter>vts</Filter>
     </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\BundleGM.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\BytestreamIsd.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\CorrelationModel.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\csm.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\csmPointCloud.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\Ellipsoid.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\Error.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\FourParameterCorrelationModel.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\GeometricModel.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\Isd.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\LinearDecayCorrelationModel.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\Model.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\ModelIdentifier.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\MultiNitfIsd.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\NitfIsd.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\Plugin.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\PointCloudGM.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\PointCloudIsd.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\RasterGM.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\SettableEllipsoid.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\Version.h">
-      <Filter>csm</Filter>
-    </ClInclude>
-    <ClInclude Include="external\csm-3.0.3.3\Warning.h">
-      <Filter>csm</Filter>
-    </ClInclude>
     <ClInclude Include="include\six\csm\SICDSensorModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -118,6 +52,72 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\six\csm\SIXSensorModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\BundleGM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\BytestreamIsd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\CorrelationModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\csm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\csmPointCloud.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\Ellipsoid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\Error.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\FourParameterCorrelationModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\GeometricModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\Isd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\LinearDecayCorrelationModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\ModelIdentifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\MultiNitfIsd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\NitfIsd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\Plugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\PointCloudGM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\PointCloudIsd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\RasterGM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\SettableEllipsoid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\Version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\csm-3.0.4\Warning.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -152,54 +152,6 @@
     <ClCompile Include="external\vts_301_0\source\vts_misc.cpp">
       <Filter>vts</Filter>
     </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\BundleGM.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\CorrelationModel.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\csmPointCloud.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\Ellipsoid.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\FourParameterCorrelationModel.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\GeometricModel.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\Isd.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\LinearDecayCorrelationModel.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\ModelIdentifier.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\MultiNitfIsd.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\Plugin.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\PointCloudGM.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\PointCloudIsd.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\RasterGM.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\SettableEllipsoid.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
-    <ClCompile Include="external\csm-3.0.3.3\Version.cpp">
-      <Filter>csm</Filter>
-    </ClCompile>
     <ClCompile Include="source\SICDSensorModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -212,49 +164,69 @@
     <ClCompile Include="source\SIXSensorModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\BundleGM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\CorrelationModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\csmPointCloud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\Ellipsoid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\FourParameterCorrelationModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\GeometricModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\Isd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\LinearDecayCorrelationModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\ModelIdentifier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\MultiNitfIsd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\Plugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\PointCloudGM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\PointCloudIsd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\RasterGM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\SettableEllipsoid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\csm-3.0.4\Version.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="external\csm-3.0.3.3\Doxyfile">
-      <Filter>csm</Filter>
-    </None>
-    <None Include="external\csm-3.0.3.3\LICENSE">
-      <Filter>csm</Filter>
-    </None>
-    <None Include="external\csm-3.0.3.3\Makefile">
-      <Filter>csm</Filter>
-    </None>
-    <None Include="external\csm-3.0.3.3\Makefile.linux">
-      <Filter>csm</Filter>
-    </None>
-    <None Include="external\csm-3.0.3.3\Makefile.linux64">
-      <Filter>csm</Filter>
-    </None>
-    <None Include="external\csm-3.0.3.3\Makefile.linuxIA64">
-      <Filter>csm</Filter>
-    </None>
-    <None Include="external\csm-3.0.3.3\Makefile.sgi">
-      <Filter>csm</Filter>
-    </None>
-    <None Include="external\csm-3.0.3.3\Makefile.solaris">
-      <Filter>csm</Filter>
-    </None>
-    <None Include="external\csm-3.0.3.3\Makefile.solaris64">
-      <Filter>csm</Filter>
-    </None>
-    <None Include="external\csm-3.0.3.3\Makefile.solaris64-stlport">
-      <Filter>csm</Filter>
-    </None>
-    <None Include="external\csm-3.0.3.3\Makefile.solaris86">
-      <Filter>csm</Filter>
-    </None>
-    <None Include="external\csm-3.0.3.3\Makefile.solaris-stlport">
-      <Filter>csm</Filter>
-    </None>
-    <None Include="external\csm-3.0.3.3\Makefile.win32">
-      <Filter>csm</Filter>
-    </None>
-    <None Include="external\csm-3.0.3.3\README">
-      <Filter>csm</Filter>
-    </None>
+    <None Include="external\csm-3.0.4\Doxyfile" />
+    <None Include="external\csm-3.0.4\LICENSE" />
+    <None Include="external\csm-3.0.4\Makefile" />
+    <None Include="external\csm-3.0.4\Makefile.linux" />
+    <None Include="external\csm-3.0.4\Makefile.linux64" />
+    <None Include="external\csm-3.0.4\Makefile.linuxIA64" />
+    <None Include="external\csm-3.0.4\Makefile.sgi" />
+    <None Include="external\csm-3.0.4\Makefile.solaris" />
+    <None Include="external\csm-3.0.4\Makefile.solaris-stlport" />
+    <None Include="external\csm-3.0.4\Makefile.solaris64" />
+    <None Include="external\csm-3.0.4\Makefile.solaris64-stlport" />
+    <None Include="external\csm-3.0.4\Makefile.solaris86" />
+    <None Include="external\csm-3.0.4\Makefile.win32" />
+    <None Include="external\csm-3.0.4\README" />
   </ItemGroup>
 </Project>

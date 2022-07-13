@@ -322,6 +322,8 @@ void initMenuList()
    menutype[EXIT1]                       = VTS_TYPE;
    menulist[EXIT2]                       = "Exit";
    menutype[EXIT2]                       = VTS_TYPE;
+   menulist[VTS_SET_ENV] = "vtsSetEnv";
+   menutype[VTS_SET_ENV] = VTS_TYPE;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -1309,6 +1311,9 @@ string ISDType2str(ISDType ISDFileType)
 
        case FILENAME_TYPE:
 	      ret = "FILENAME_TYPE";
+          break;
+       case NO_FILE_TYPE:
+       default:
           break;
 	}
 	return ret;

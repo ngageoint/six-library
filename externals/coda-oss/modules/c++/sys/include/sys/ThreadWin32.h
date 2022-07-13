@@ -28,6 +28,8 @@
 
 #include <import/gsl.h>
 
+#include "config/Exports.h"
+
 #if defined(WIN32) || defined(_WIN32)
 
 #if !defined(USE_NSPR_THREADS)
@@ -69,8 +71,8 @@ namespace sys
 	return gsl::narrow<long>(GetCurrentThreadId());
     }
 
-struct ThreadWin32 : public ThreadInterface
-{
+struct CODA_OSS_API ThreadWin32 : public ThreadInterface
+    {
     ThreadWin32(const std::string& name = "") : ThreadInterface(name)
     {}
 

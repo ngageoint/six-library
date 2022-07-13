@@ -128,7 +128,7 @@ createData(const types::RowCol<size_t>& dims)
 
     data->radarCollection->txFrequencyMin = 0.0;
     data->radarCollection->txFrequencyMax = 0.0;
-    data->radarCollection->txPolarization = six::PolarizationType::OTHER;
+    data->radarCollection->txPolarization = six::Polarization1Type::OTHER;
     mem::ScopedCloneablePtr<six::sicd::ChannelParameters>
             rcvChannel(new six::sicd::ChannelParameters());
     rcvChannel->txRcvPolarization = six::DualPolarizationType::OTHER;

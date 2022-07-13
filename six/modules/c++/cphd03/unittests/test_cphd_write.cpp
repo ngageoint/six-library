@@ -22,6 +22,7 @@
 
 #include <string>
 #include <std/filesystem>
+#include <tuple>
 
 #include <cphd03/CPHDWriter.h>
 #include <cphd03/CPHDReader.h>
@@ -41,6 +42,7 @@ static void call_srand()
 {
     static const auto f = []() { const auto seed = 334; ::srand(seed); return nullptr; };
     static const auto result = f();
+    std::ignore = result;
 }
 
 double round(double num, int places)
@@ -162,10 +164,10 @@ void buildRandomMetadata(cphd03::Metadata& metadata)
     metadata.collectionInformation.collectorName = "DummyCollectorName";
     metadata.collectionInformation.illuminatorName = "DummyIlluminatorName";
     metadata.collectionInformation.coreName = "DummyCoreName";
-    metadata.collectionInformation.collectType = getRandomInt(
-            cphd::CollectType::MONOSTATIC, cphd::CollectType::BISTATIC);
-    metadata.collectionInformation.radarMode = getRandomInt(
-            cphd::RadarModeType::SPOTLIGHT, cphd::RadarModeType::SCANSAR);
+    const auto collectType_ = getRandomInt(cphd::CollectType::MONOSTATIC, cphd::CollectType::BISTATIC);
+    metadata.collectionInformation.collectType = six::CollectType::cast(collectType_);
+    const auto radarMode_ = getRandomInt(cphd::RadarModeType::SPOTLIGHT, cphd::RadarModeType::SCANSAR);
+    metadata.collectionInformation.radarMode = six::RadarModeType::cast(radarMode_);
     metadata.collectionInformation.radarModeID = "DummyRadarModeID";
     metadata.collectionInformation.setClassificationLevel("UNCLASSIFIED");
     metadata.collectionInformation.countryCodes.push_back("DummyCountryCode1");
@@ -250,8 +252,8 @@ void buildRandomMetadata(cphd03::Metadata& metadata)
     }
 
     //! Dummy SRP
-    metadata.srp.srpType = getRandomInt(
-            cphd::SRPType::FIXEDPT, cphd::SRPType::STEPPED);
+    const auto srpType_ = getRandomInt(cphd::SRPType::FIXEDPT, cphd::SRPType::STEPPED);
+    metadata.srp.srpType = cphd::SRPType::cast(srpType_);
     metadata.srp.numSRPs =
             metadata.srp.srpType != cphd::SRPType::STEPPED ? 5 : 0;
     for (size_t ii = 0; ii < metadata.srp.numSRPs; ++ii)

@@ -52,7 +52,7 @@ TEST_CASE(testSpanBuffer)
     {
         std::vector<int> ints{1, 2, 3, 4, 5};
         const coda_oss::span<int> span(ints.data(), ints.size());
-        testSpanBuffer_("testSpanBuffer", ints, span);
+        testSpanBuffer_(testName, ints, span);
     }
 }
 
@@ -77,7 +77,7 @@ TEST_CASE(testSpanVector)
     {
         std::vector<int> ints{1, 2, 3, 4, 5};
         const coda_oss::span<int> span(ints.data(), ints.size());
-        testSpanVector_("testSpanVector", ints, span);
+        testSpanVector_(testName, ints, span);
     }
 }
 

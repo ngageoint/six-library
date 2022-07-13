@@ -925,7 +925,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     polarization->rcvPolarizationOffset = 1.37;
     if (strVersion == "1.0.0")
     {
-        polarization->processed = six::BooleanType("IS_TRUE");
+        polarization->processed = six::BooleanType::IS_TRUE;
     }
     collection.information.polarization.push_back(polarization);
 
@@ -1060,9 +1060,9 @@ static void initRadiometric(six::Radiometric& radiometric)
     radiometric.rcsSFPoly = six::Poly2D(0, 0);
     radiometric.betaZeroSFPoly = six::Poly2D(1, 3);
     radiometric.sigmaZeroSFPoly = six::Poly2D(0, 0);
-    radiometric.sigmaZeroSFIncidenceMap = six::AppliedType("IS_TRUE");
+    radiometric.sigmaZeroSFIncidenceMap = six::AppliedType::IS_TRUE;
     radiometric.gammaZeroSFPoly = six::Poly2D(0, 0);
-    radiometric.gammaZeroSFIncidenceMap = six::AppliedType("IS_FALSE");
+    radiometric.gammaZeroSFIncidenceMap = six::AppliedType::IS_FALSE;
 }
 
 static void initAnnotations(six::sidd::Annotations& annotations)
@@ -1377,7 +1377,7 @@ std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string&
 }
 mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
 {
-    return mem::auto_ptr<DerivedData>(createFakeDerivedData("").release());
+    return mem::auto_ptr<DerivedData>(createFakeDerivedData_("").release());
 }
 
 }

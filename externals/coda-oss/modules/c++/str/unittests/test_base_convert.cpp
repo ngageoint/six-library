@@ -226,8 +226,6 @@ TEST_CASE(test_string_to_u8string_iso8859_1)
 template<typename TString>
 static void test_change_case_(const std::string& testName, const TString& lower, const TString& upper)
 {
-    (void)testName;
-
     auto s = upper;
     str::lower(s);
     TEST_ASSERT(s == lower);
@@ -246,7 +244,7 @@ TEST_CASE(test_change_case)
 {
     const std::string ABC = "ABC";
     const std::string abc = "abc";
-    test_change_case_("test_change_case", abc, ABC);
+    test_change_case_(testName, abc, ABC);
 
     //const std::wstring ABC_w = L"ABC";
     //const std::wstring abc_w = L"abc";
@@ -266,16 +264,16 @@ TEST_CASE(test_change_case)
 // https://en.wikipedia.org/wiki/%C3%89#Character_mappings
 static const str::EncodedString& classificationText_utf_8()
 {
-    static const str::EncodedString retval(str::cast<coda_oss::u8string::const_pointer>("NON CLASSIFI\xc3\x89 / UNCLASSIFIED")); // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+    static const str::EncodedString retval(str::cast<coda_oss::u8string::const_pointer>("A\xc3\x89IOU")); // UTF-8 "AÉIOU"
     return retval;
  }
 static const str::EncodedString& classificationText_iso8859_1()
 {
-    static const str::EncodedString retval(str::cast<str::W1252string::const_pointer>("NON CLASSIFI\xc9 / UNCLASSIFIED"));  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"    
+    static const str::EncodedString retval(str::cast<str::W1252string::const_pointer>("A\xc9IOU"));  // ISO8859-1 "AÉIOU"    
     return retval;
  }
 // UTF-16 on Windows, UTF-32 on Linux
-static const wchar_t* classificationText_wide_() { return L"NON CLASSIFI\xc9 / UNCLASSIFIED"; } // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+static const wchar_t* classificationText_wide_() { return L"A\xc9IOU"; } // UTF-8 "AÉIOU"
 static str::EncodedString classificationText_wide() { return str::EncodedString(classificationText_wide_()); }
 static std::string classificationText_platform() { return 
     sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8().native() : classificationText_iso8859_1().native(); }
@@ -346,10 +344,17 @@ static void test_EncodedStringView_(const std::string& testName,
     TEST_ASSERT_EQ(iso8859_1_view, classificationText_utf_8());
     TEST_ASSERT(iso8859_1_view.u8string() == utf_8_view.u8string());
 
-    std::string utf8;
-    TEST_ASSERT_EQ(utf_8_view.toUtf8(utf8), str::EncodedString::details::string(classificationText_utf_8()));
-    utf8.clear();
-    TEST_ASSERT_EQ(iso8859_1_view.toUtf8(utf8), str::EncodedString::details::string(classificationText_utf_8()));
+    const auto expected = str::EncodedString::details::string(classificationText_utf_8());
+    {
+        std::string buf;
+        const auto& actual = utf_8_view.toUtf8(buf);
+        TEST_ASSERT_EQ(actual, expected);
+    }
+    {
+        std::string buf;
+        const auto& actual = iso8859_1_view.toUtf8(buf);
+        TEST_ASSERT_EQ(actual, expected);
+    }
 }
 TEST_CASE(test_EncodedStringView)
 {
@@ -360,27 +365,27 @@ TEST_CASE(test_EncodedStringView)
     {
         auto utf_8_view(classificationText_utf_8().view());
         auto iso8859_1_view(classificationText_iso8859_1().view());
-        test_EncodedStringView_("test_EncodedStringView", utf_8_view, iso8859_1_view);
+        test_EncodedStringView_(testName, utf_8_view, iso8859_1_view);
         
         utf_8_view = classificationText_iso8859_1().view();
         iso8859_1_view = classificationText_utf_8().view();
-        test_EncodedStringView_("test_EncodedStringView", utf_8_view, iso8859_1_view);
+        test_EncodedStringView_(testName, utf_8_view, iso8859_1_view);
     }
     {
         auto utf_8_view = classificationText_utf_8().view();
         auto iso8859_1_view = classificationText_iso8859_1().view();
-        test_EncodedStringView_("test_EncodedStringView", utf_8_view, iso8859_1_view);
+        test_EncodedStringView_(testName, utf_8_view, iso8859_1_view);
 
         utf_8_view = classificationText_iso8859_1().view();
         iso8859_1_view = classificationText_utf_8().view();
-        test_EncodedStringView_("test_EncodedStringView", utf_8_view, iso8859_1_view);
+        test_EncodedStringView_(testName, utf_8_view, iso8859_1_view);
     }
     {
         str::EncodedStringView utf_8_view;
         utf_8_view = classificationText_iso8859_1().view();
         str::EncodedStringView iso8859_1_view;
         iso8859_1_view = classificationText_utf_8().view();
-        test_EncodedStringView_("test_EncodedStringView", utf_8_view, iso8859_1_view);
+        test_EncodedStringView_(testName, utf_8_view, iso8859_1_view);
     }
 }
 

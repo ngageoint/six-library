@@ -24,6 +24,8 @@
 #define __IO_BYTE_STREAM_H__
 
 #include <vector>
+
+#include "config/Exports.h"
 #include "sys/Conf.h"
 #include "except/Error.h"
 #include "except/Exception.h"
@@ -56,7 +58,7 @@ namespace io
  *  0's can be anywhere (Null-bytes) making it impossible to use
  *  strings as containers.  
  */
-struct ByteStream : public SeekableInputStream, public SeekableOutputStream
+struct CODA_OSS_API ByteStream : public SeekableInputStream, public SeekableOutputStream
 {
     ByteStream() = default;
     virtual ~ByteStream() = default;
