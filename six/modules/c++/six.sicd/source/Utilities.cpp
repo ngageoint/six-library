@@ -363,7 +363,7 @@ scene::ProjectionModel* Utilities::getProjectionModel(
                                                errors);
     default:
         throw except::Exception(
-                Ctxt("Invalid grid type: " + gridType.toString()));
+                Ctxt("Invalid grid type: " + Enum::toString(gridType)));
     }
 }
 

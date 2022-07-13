@@ -1345,7 +1345,7 @@ XMLElem SICommonXMLParser::convertCollectionInformationToXML(
     createString("CoreName", si, collInfo->coreName, collInfoXML);
     if (!Init::isUndefined(collInfo->collectType))
     {
-        createString("CollectType", si, collInfo->collectType.toString(), collInfoXML);
+        createString("CollectType", si, Enum::toString(collInfo->collectType), collInfoXML);
     }
 
     XMLElem radarModeXML = newElement("RadarMode", si, collInfoXML);

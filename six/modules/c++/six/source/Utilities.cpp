@@ -316,7 +316,7 @@ std::string six::toString(const DataType& type)
 template <>
 PixelType six::toType<PixelType>(const std::string& s)
 {
-    auto p = PixelType::toType(s);
+    auto p = Enum::toType<PixelType>(s);
     if (p == PixelType::NOT_SET)
         throw except::Exception(
                 Ctxt(FmtX("Type not understood [%s]", s.c_str())));
@@ -330,7 +330,7 @@ std::string six::toString(const PixelType& type)
     {
         throw except::Exception(Ctxt("Unsupported pixel type"));
     }
-    return type.toString();
+    return Enum::toString(type);
 }
 
 template <>

@@ -236,5 +236,30 @@ namespace details
 
 } // namespace details
 
+namespace Enum
+{
+    template<typename T>
+    inline std::optional<std::string> toString(const details::Enum<T>& e, std::nothrow_t)
+    {
+        return e.toString(std::nothrow);
+    }
+    template<typename T>
+    inline std::string toString(const details::Enum<T>& e, bool throw_if_not_set = false)
+    {
+        return e.toString(throw_if_not_set);
+    }
+
+    template<typename T>
+    inline std::optional<T> toType(const std::string& v, std::nothrow_t)
+    {
+        return details::Enum<T>::toType(v, std::nothrow);
+    }
+    template<typename T>
+    inline T toType(const std::string& v)
+    {
+        return details::Enum<T>::toType(v);
+    }
+}
+
 }
 #endif // SIX_six_Enum_h_INCLUDED_
