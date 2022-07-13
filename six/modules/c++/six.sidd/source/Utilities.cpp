@@ -166,7 +166,7 @@ mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
     {
         throw except::Exception(Ctxt(
                 "Projection type is not measurable: " +
-                Enum::toString(derived->measurement->projection->projectionType)));
+                derived->measurement->projection->projectionType.toString()));
     }
 
     const six::sidd::MeasurableProjection* p =
@@ -243,7 +243,7 @@ mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
 
     default:
         throw except::Exception(Ctxt("Invalid projection type: " +
-                                     Enum::toString(p->projectionType)));
+                                     p->projectionType.toString()));
     }
 
     return transform;
@@ -256,7 +256,7 @@ mem::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
     {
         throw except::Exception(Ctxt(
                 "Projection type is not measurable: " +
-                Enum::toString(derived->measurement->projection->projectionType)));
+                derived->measurement->projection->projectionType.toString()));
     }
 
     const six::sidd::MeasurableProjection* p =
@@ -284,7 +284,7 @@ mem::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
 
     default:
         throw except::Exception(Ctxt("Invalid/unsupported projection type: " +
-                                     Enum::toString(p->projectionType)));
+                                     p->projectionType.toString()));
     }
 
     return geom;
@@ -514,10 +514,10 @@ mem::auto_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
     case six::ProjectionType::CYLINDRICAL:
     case six::ProjectionType::NOT_SET:
         throw except::Exception(
-                Ctxt("Grid type not supported: " + Enum::toString(gridType)));
+                Ctxt("Grid type not supported: " + gridType.toString()));
     default:
         throw except::Exception(
-                Ctxt("Invalid grid type: " + Enum::toString(gridType)));
+                Ctxt("Invalid grid type: " + gridType.toString()));
     }
 
     return projModel;

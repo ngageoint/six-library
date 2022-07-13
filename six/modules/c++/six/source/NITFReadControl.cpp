@@ -603,7 +603,7 @@ void NITFReadControl::getIndices(const nitf::ImageSubheader& subheader, ImageAnd
     }
     else
     {
-        throw except::Exception(Ctxt("Unknown 'DataType' value: " + Enum::toString(dataType)));
+        throw except::Exception(Ctxt("Unknown 'DataType' value: " + dataType.toString()));
     }
 }
 

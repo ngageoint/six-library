@@ -111,13 +111,13 @@ struct XMLControlRegistry
     void addCreator(DataType dataType,
                     std::unique_ptr<XMLControlCreator>&& creator)
     {
-        addCreator(Enum::toString(dataType), std::move(creator));
+        addCreator(dataType.toString(), std::move(creator));
     }
 #if !CODA_OSS_cpp17
     void addCreator(DataType dataType,
                     mem::auto_ptr<XMLControlCreator> creator)
     {
-        addCreator(Enum::toString(dataType), creator);
+        addCreator(dataType.toString(), creator);
     }
 #endif
 
@@ -151,7 +151,7 @@ struct XMLControlRegistry
     XMLControl* newXMLControl(DataType dataType,
                               logging::Logger* log) const
     {
-        return newXMLControl(Enum::toString(dataType), log);
+        return newXMLControl(dataType.toString(), log);
     }
 
 private:

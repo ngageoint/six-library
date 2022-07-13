@@ -212,9 +212,9 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
         ProjectionType::GEOGRAPHIC)
     {
         throw except::Exception(Ctxt("Only a projection type of " +
-            Enum::toString(ProjectionType(ProjectionType::GEOGRAPHIC)) +
+            ProjectionType(ProjectionType::GEOGRAPHIC).toString() +
             " is supported but the type is set to " +
-            Enum::toString(data->measurement->projection->projectionType)));
+            data->measurement->projection->projectionType.toString()));
     }
     const GeographicProjection& projection =
         *dynamic_cast<GeographicProjection *>(
