@@ -159,24 +159,54 @@ TEST_CASE(test_six_toString)
     // This doesn't have anything to do with XML per-se, but that's the main use-case for six::toString()
 
     test_six_toString_Exception<six::MagnificationMethod>(testName);
+    test_six_toString_Exception<six::DecimationMethod>(testName);
+    test_six_toString_Exception<six::OrientationType>(testName);
+    test_six_toString_Exception<six::DemodType>(testName);
+    test_six_toString_Exception<six::ImageFormationType>(testName);
+    test_six_toString_Exception<six::SlowTimeBeamCompensationType>(testName);
+    test_six_toString_Exception<six::ImageBeamCompensationType>(testName);
+    test_six_toString_Exception<six::AutofocusType>(testName);
+    test_six_toString_Exception<six::RMAlgoType>(testName);
+    test_six_toString_Exception<six::ComplexImagePlaneType>(testName);
 }
 
 template<typename T>
+void test_six_toType_(const std::string& testName)
+{
+    const auto v = six::Enum::cast<T>(1); // most enums have a value for 1
+    const auto s = six::toString(v);
+    auto v_ = six::toType<T>(s);
+    TEST_ASSERT_EQ(v_, v);
+    v_ = six::toType<T>(" " + s + " "); // code should call str::trim()
+    TEST_ASSERT_EQ(v, v_);
+}
+template<typename T>
 void test_six_toType_NOT_SET(const std::string& testName)
 {
-    auto v = six::Enum::cast<T>(1); // most enums have a value for 1
-    const auto s = six::toString(v);
-    const auto v_ = six::toType<T>(s);
-    TEST_ASSERT_EQ(v_, v);
-
-    v = six::toType<T>("Q W E R T Y"); // any string that will cause failure
+    test_six_toType_<T>(testName);
+    const auto v = six::toType<T>("Q W E R T Y"); // any string that will cause failure
     TEST_ASSERT_EQ(v, T::NOT_SET); // returns NOT_SET rather than throwing
+}
+template<typename T>
+void test_six_toType_Exception(const std::string& testName)
+{
+    test_six_toType_<T>(testName);
+    TEST_EXCEPTION(six::toType<T>("Q W E R T Y" /*any string that will cause failure*/)); // throw rather than returning NOT_SET
 }
 TEST_CASE(test_six_toType)
 {
     // This doesn't have anything to do with XML per-se, but that's the main use-case for six::toString()
 
     test_six_toType_NOT_SET<six::MagnificationMethod>(testName);
+    test_six_toType_NOT_SET<six::DecimationMethod>(testName);
+    test_six_toType_Exception<six::OrientationType>(testName);
+    test_six_toType_Exception<six::DemodType>(testName);
+    test_six_toType_Exception<six::ImageFormationType>(testName);
+    test_six_toType_Exception<six::SlowTimeBeamCompensationType>(testName);
+    test_six_toType_Exception<six::ImageBeamCompensationType>(testName);
+    test_six_toType_Exception<six::AutofocusType>(testName);
+    test_six_toType_Exception<six::RMAlgoType>(testName);
+    test_six_toType_Exception<six::ComplexImagePlaneType>(testName);
 }
 
 TEST_MAIN(
