@@ -145,6 +145,39 @@ TEST_CASE(testXmlLiteAttributeClass)
     // TODO: xs:date, xs:dateTime
 }
 
+template<typename T>
+void test_six_toString_Exception(const std::string& testName)
+{
+    auto v = six::Enum::cast<T>(1); // most enums have a value for 1
+    v.value = -2; // cause toString() to fail
+    TEST_EXCEPTION(six::toString(v));
+    v = T::NOT_SET;
+    TEST_EXCEPTION(six::toString(v)); // NOT_SET throws for this type
+}
+TEST_CASE(test_six_toString)
+{
+    // This doesn't have anything to do with XML per-se, but that's the main use-case for six::toString()
+
+    test_six_toString_Exception<six::MagnificationMethod>(testName);
+}
+
+template<typename T>
+void test_six_toType_NOT_SET(const std::string& testName)
+{
+    auto v = six::Enum::cast<T>(1); // most enums have a value for 1
+    const auto s = six::toString(v);
+    const auto v_ = six::toType<T>(s);
+    TEST_ASSERT_EQ(v_, v);
+
+    v = six::toType<T>("Q W E R T Y"); // any string that will cause failure
+    TEST_ASSERT_EQ(v, T::NOT_SET); // returns NOT_SET rather than throwing
+}
+TEST_CASE(test_six_toType)
+{
+    // This doesn't have anything to do with XML per-se, but that's the main use-case for six::toString()
+
+    test_six_toType_NOT_SET<six::MagnificationMethod>(testName);
+}
 
 TEST_MAIN(
     TEST_CHECK(loadCompiledSchemaPath);
@@ -153,4 +186,7 @@ TEST_MAIN(
     TEST_CHECK(ignoreEmptyEnvVariable);
     TEST_CHECK(dataTypeToString);
     TEST_CHECK(testXmlLiteAttributeClass);
+
+    TEST_CHECK(test_six_toString);
+    TEST_CHECK(test_six_toType);
     )
