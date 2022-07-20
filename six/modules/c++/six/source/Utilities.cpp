@@ -245,12 +245,22 @@ template<typename T>
 inline T toType_(const std::string& s, const except::Exception& ex)
 {
     const auto result = T::toType(s, std::nothrow);
-    auto retval = nitf::details::value(result, ex);
+    auto retval = nitf::details::value(result, ex); // throw our exception rather than a default one
     if (retval == T::NOT_SET)
     {
         throw ex;
     }
     return retval;
+}
+template<typename T>
+inline T toType_(const std::string& s)
+{
+    const auto result = T::toType(s, std::nothrow);
+    if (result.has_value())
+    {
+        return *result;
+    }
+    return T::NOT_SET;
 }
 
 template<typename T>
@@ -260,9 +270,8 @@ inline std::string toString_(const T& t, const except::Exception& ex)
     {
         throw ex;
     }
-
     const auto result = t.toString(std::nothrow);
-    return nitf::details::value(result, ex);
+    return nitf::details::value(result, ex); // throw our exception rather than a default one
 }
 
 template <>
@@ -336,31 +345,12 @@ std::string six::toString(const PixelType& type)
 template <>
 MagnificationMethod six::toType<MagnificationMethod>(const std::string& s)
 {
-    std::string type(s);
-    str::trim(type);
-    if (type == "NEAREST_NEIGHBOR")
-        return MagnificationMethod::NEAREST_NEIGHBOR;
-    if (type == "BILINEAR")
-        return MagnificationMethod::BILINEAR;
-    if (type == "LAGRANGE")
-        return MagnificationMethod::LAGRANGE;
-    return MagnificationMethod::NOT_SET;
+    return toType_<MagnificationMethod>(s);
 }
-
 template <>
 std::string six::toString(const MagnificationMethod& method)
 {
-    switch (method)
-    {
-    case MagnificationMethod::NEAREST_NEIGHBOR:
-        return "NEAREST_NEIGHBOR";
-    case MagnificationMethod::BILINEAR:
-        return "BILINEAR";
-    case MagnificationMethod::LAGRANGE:
-        return "LAGRANGE";
-    default:
-        throw except::Exception(Ctxt("Unsupported method"));
-    }
+    return toString_(method, except::Exception(Ctxt("Unsupported method")));
 }
 
 template <>
