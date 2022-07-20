@@ -344,27 +344,20 @@ std::string six::toString(const PixelType& type)
     return type.toString();
 }
 
-template <>
-MagnificationMethod six::toType<MagnificationMethod>(const std::string& s)
-{
-    return toType_<MagnificationMethod>(s);
-}
-template <>
-std::string six::toString(const MagnificationMethod& method)
-{
-    return toString_(method, except::Exception(Ctxt("Unsupported method")));
-}
+#define SIX_define_six_toType_(T) template <> T six::toType<T>(const std::string& s) { return toType_<T>(s); }
+#define SIX_define_six_toTypeEx_(T, message) template <> T six::toType<T>(const std::string& s) { \
+    return toType_<T>(s,  except::Exception(Ctxt(message + s + "'"))); }
+#define SIX_define_six_toString_(T, message) template <> std::string six::toString(const T& s) { \
+    return toString_(s, except::Exception(Ctxt(message))); }
 
-template <>
-DecimationMethod six::toType<DecimationMethod>(const std::string& s)
-{
-    return toType_<DecimationMethod>(s);
-}
-template <>
-std::string six::toString(const DecimationMethod& method)
-{
-    return toString_(method, except::Exception(Ctxt("Unsupported method")));
-}
+#define SIX_define_six_toType_toString_(T, message) SIX_define_six_toType_(T); SIX_define_six_toString_(T, message)
+#define SIX_define_six_toTypeEx_toString_(T, toTypeMessage, toStringMessage) \
+    SIX_define_six_toTypeEx_(T, toTypeMessage); SIX_define_six_toString_(T, toStringMessage)
+#define SIX_define_six_toType_toString(T) SIX_define_six_toType_toString_(T, "Unsupported " #T)
+#define SIX_define_six_toTypeEx_toString(T) SIX_define_six_toTypeEx_toString_(T, "Unsupported " #T, "Unsupported " #T)
+
+SIX_define_six_toType_toString(MagnificationMethod);
+SIX_define_six_toType_toString(DecimationMethod);
 
 template <>
 EarthModelType six::toType<EarthModelType>(const std::string& s)
@@ -375,7 +368,6 @@ EarthModelType six::toType<EarthModelType>(const std::string& s)
         return EarthModelType::WGS84;
     return EarthModelType::NOT_SET;
 }
-
 template <>
 std::string six::toString(const EarthModelType& t)
 {
@@ -388,91 +380,13 @@ std::string six::toString(const EarthModelType& t)
     }
 }
 
-template <>
-OrientationType six::toType<OrientationType>(const std::string& s)
-{
-    return toType_<OrientationType>(s, except::Exception(
-        Ctxt("Unsupported orientation type '" + s + "'")));
-}
-template <>
-std::string six::toString(const OrientationType& t)
-{
-    return toString_(t, except::Exception(Ctxt("Unsupported orientation")));
-}
-
-template <>
-DemodType six::toType<DemodType>(const std::string& s)
-{
-    return toType_<DemodType>(s, except::Exception(
-        Ctxt("Unsupported demod type  '" + s + "'")));
-}
-template <>
-std::string six::toString(const DemodType& t)
-{
-    return toString_(t, except::Exception(Ctxt("Unsupported demod type")));
-}
-
-template <>
-ImageFormationType six::toType<ImageFormationType>(const std::string& s)
-{
-    return toType_<ImageFormationType>(s, except::Exception(
-        Ctxt("Unsupported image formation type  '" + s + "'")));
-}
-template <>
-std::string six::toString(const ImageFormationType& t)
-{
-    return toString_(t, except::Exception(Ctxt("Unsupported image formation type")));
-}
-
-template <>
-SlowTimeBeamCompensationType six::toType<SlowTimeBeamCompensationType>(
-        const std::string& s)
-{
-    return toType_<SlowTimeBeamCompensationType>(s, except::Exception(
-        Ctxt("Unsupported slow time beam compensation type  '" + s + "'")));
-}
-template <>
-std::string six::toString(const SlowTimeBeamCompensationType& t)
-{
-    return toString_(t, except::Exception(Ctxt("Unsupported slow time beam compensation type")));
-}
-
-template <>
-ImageBeamCompensationType six::toType<ImageBeamCompensationType>(
-        const std::string& s)
-{
-    return toType_<ImageBeamCompensationType>(s, except::Exception(
-        Ctxt("Unsupported image beam compensation type  '" + s + "'")));
-}
-template <>
-std::string six::toString(const ImageBeamCompensationType& t)
-{
-    return toString_(t, except::Exception(Ctxt("Unsupported image beam compensation type")));
-}
-
-template <>
-AutofocusType six::toType<AutofocusType>(const std::string& s)
-{
-    return toType_<AutofocusType>(s, except::Exception(
-        Ctxt("Unsupported autofocus type  '" + s + "'")));
-}
-template <>
-std::string six::toString(const AutofocusType& t)
-{
-    return toString_(t, except::Exception(Ctxt("Unsupported autofocus type")));
-}
-
-template <>
-RMAlgoType six::toType<RMAlgoType>(const std::string& s)
-{
-    return toType_<RMAlgoType>(s, except::Exception(
-        Ctxt("Unsupported RM algorithm type  '" + s + "'")));
-}
-template <>
-std::string six::toString(const RMAlgoType& t)
-{
-    return toString_(t, except::Exception(Ctxt("Unsupported RM algorithm type")));
-}
+SIX_define_six_toTypeEx_toString(OrientationType); // "Unsupported orientation type '", "Unsupported orientation"
+SIX_define_six_toTypeEx_toString(DemodType); // "Unsupported demod type '", "Unsupported demod type"
+SIX_define_six_toTypeEx_toString(ImageFormationType); // "Unsupported image formation type '", "Unsupported image formation type"
+SIX_define_six_toTypeEx_toString(SlowTimeBeamCompensationType); // "Unsupported slow time beam compensation type  '", "Unsupported slow time beam compensation type"
+SIX_define_six_toTypeEx_toString(ImageBeamCompensationType); // "Unsupported image beam compensation type  '", "Unsupported image beam compensation type"
+SIX_define_six_toTypeEx_toString(AutofocusType); // "Unsupported autofocus type  '", "Unsupported autofocus type"
+SIX_define_six_toTypeEx_toString(RMAlgoType); // "Unsupported RM algorithm type  '", "Unsupported RM algorithm type"
 
 template <>
 SideOfTrackType six::toType<SideOfTrackType>(const std::string& s)
@@ -500,59 +414,8 @@ std::string six::toString(const SideOfTrackType& t)
     }
 }
 
-template <>
-ComplexImagePlaneType six::toType<ComplexImagePlaneType>(const std::string& s)
-{
-    return toType_<ComplexImagePlaneType>(s, except::Exception(
-        Ctxt("Unsupported complex image plane   '" + s + "'")));
-}
-template <>
-std::string six::toString(const ComplexImagePlaneType& t)
-{
-    return toString_(t, except::Exception(Ctxt("Unsupported complex image plane")));
-}
-
-template <>
-ComplexImageGridType six::toType<ComplexImageGridType>(const std::string& s)
-{
-    std::string type(s);
-    str::trim(type);
-    if (type == "RGAZIM")
-        return ComplexImageGridType::RGAZIM;
-    else if (type == "RGZERO")
-        return ComplexImageGridType::RGZERO;
-    else if (type == "XRGYCR")
-        return ComplexImageGridType::XRGYCR;
-    else if (type == "XCTYAT")
-        return ComplexImageGridType::XCTYAT;
-    else if (type == "PLANE")
-        return ComplexImageGridType::PLANE;
-    else
-    {
-        throw except::Exception(
-                Ctxt("Unsupported complex image grid '" + s + "'"));
-    }
-}
-
-template <>
-std::string six::toString(const ComplexImageGridType& t)
-{
-    switch (t)
-    {
-    case ComplexImageGridType::RGAZIM:
-        return "RGAZIM";
-    case ComplexImageGridType::RGZERO:
-        return "RGZERO";
-    case ComplexImageGridType::XRGYCR:
-        return "XRGYCR";
-    case ComplexImageGridType::XCTYAT:
-        return "XCTYAT";
-    case ComplexImageGridType::PLANE:
-        return "PLANE";
-    default:
-        throw except::Exception(Ctxt("Unsupported complex image grid"));
-    }
-}
+SIX_define_six_toTypeEx_toString(ComplexImagePlaneType); // "Unsupported complex image plane   '", "Unsupported complex image plane"
+SIX_define_six_toTypeEx_toString(ComplexImageGridType); // "Unsupported complex image grid '", "Unsupported complex image grid"
 
 template <>
 FFTSign six::toType<FFTSign>(const std::string& s)
@@ -629,32 +492,7 @@ std::string six::toString(const AppliedType& value)
     }
 }
 
-template <>
-CollectType six::toType<CollectType>(const std::string& s)
-{
-    std::string type(s);
-    str::trim(type);
-    if (type == "MONOSTATIC")
-        return CollectType::MONOSTATIC;
-    else if (type == "BISTATIC")
-        return CollectType::BISTATIC;
-    else
-        throw except::Exception(Ctxt("Unsupported collect type '" + s + "'"));
-}
-
-template <>
-std::string six::toString(const CollectType& value)
-{
-    switch (value)
-    {
-    case CollectType::MONOSTATIC:
-        return "MONOSTATIC";
-    case CollectType::BISTATIC:
-        return "BISTATIC";
-    default:
-        throw except::Exception(Ctxt("Unsupported collect type"));
-    }
-}
+SIX_define_six_toTypeEx_toString(CollectType); // "Unsupported collect type '", "Unsupported collect type"
 
 template <>
 std::string six::toString(const six::FrameType& value)
@@ -672,7 +510,6 @@ std::string six::toString(const six::FrameType& value)
         throw except::Exception(Ctxt("Unsupported frame type"));
     }
 }
-
 template <>
 six::FrameType six::toType<six::FrameType>(const std::string& s)
 {

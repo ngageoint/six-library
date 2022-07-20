@@ -168,6 +168,8 @@ TEST_CASE(test_six_toString)
     test_six_toString_Exception<six::AutofocusType>(testName);
     test_six_toString_Exception<six::RMAlgoType>(testName);
     test_six_toString_Exception<six::ComplexImagePlaneType>(testName);
+    test_six_toString_Exception<six::ComplexImageGridType>(testName);
+    test_six_toString_Exception<six::CollectType>(testName);
 }
 
 template<typename T>
@@ -207,6 +209,8 @@ TEST_CASE(test_six_toType)
     test_six_toType_Exception<six::AutofocusType>(testName);
     test_six_toType_Exception<six::RMAlgoType>(testName);
     test_six_toType_Exception<six::ComplexImagePlaneType>(testName);
+    test_six_toType_Exception<six::ComplexImageGridType>(testName);
+    test_six_toType_Exception<six::CollectType>(testName);
 }
 
 TEST_MAIN(
