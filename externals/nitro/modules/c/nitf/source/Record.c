@@ -764,9 +764,10 @@ nitf_Record_clone(const nitf_Record* source, nitf_Error* error)
         nitf_Record_destruct(&record);
         return NULL;
     }
+    void* nitf_ImageSegment_clone_ = (void*)nitf_ImageSegment_clone; // avoid casting directly "incompatible" type in C++
     record->images =
             nitf_List_clone(source->images,
-                            (NITF_DATA_ITEM_CLONE)nitf_ImageSegment_clone,
+                            (NITF_DATA_ITEM_CLONE)nitf_ImageSegment_clone_,
                             error);
 
     if (!record->images)
@@ -776,9 +777,10 @@ nitf_Record_clone(const nitf_Record* source, nitf_Error* error)
         return NULL;
     }
 
+    void* nitf_GraphicSegment_clone_ = (void*)nitf_GraphicSegment_clone; // avoid casting directly "incompatible" type in C++
     record->graphics =
             nitf_List_clone(source->graphics,
-                            (NITF_DATA_ITEM_CLONE)nitf_GraphicSegment_clone,
+                            (NITF_DATA_ITEM_CLONE)nitf_GraphicSegment_clone_,
                             error);
     if (!record->graphics)
     {
@@ -787,9 +789,10 @@ nitf_Record_clone(const nitf_Record* source, nitf_Error* error)
         return NULL;
     }
 
+    void* nitf_LabelSegment_clone_ = (void*)nitf_LabelSegment_clone; // avoid casting directly "incompatible" type in C++
     record->labels =
             nitf_List_clone(source->labels,
-                            (NITF_DATA_ITEM_CLONE)nitf_LabelSegment_clone,
+                            (NITF_DATA_ITEM_CLONE)nitf_LabelSegment_clone_,
                             error);
     if (!record->labels)
     {
@@ -798,9 +801,10 @@ nitf_Record_clone(const nitf_Record* source, nitf_Error* error)
         return NULL;
     }
 
+    void* nitf_TextSegment_clone_ = (void*)nitf_TextSegment_clone; // avoid casting directly "incompatible" type in C++
     record->texts =
             nitf_List_clone(source->texts,
-                            (NITF_DATA_ITEM_CLONE)nitf_TextSegment_clone,
+                            (NITF_DATA_ITEM_CLONE)nitf_TextSegment_clone_,
                             error);
     if (!record->texts)
     {
@@ -809,9 +813,10 @@ nitf_Record_clone(const nitf_Record* source, nitf_Error* error)
         return NULL;
     }
 
+    void* nitf_DESegment_clone_ = (void*)nitf_DESegment_clone; // avoid casting directly "incompatible" type in C++
     record->dataExtensions =
             nitf_List_clone(source->dataExtensions,
-                            (NITF_DATA_ITEM_CLONE)nitf_DESegment_clone,
+                            (NITF_DATA_ITEM_CLONE)nitf_DESegment_clone_,
                             error);
     if (!record->dataExtensions)
     {
@@ -820,9 +825,10 @@ nitf_Record_clone(const nitf_Record* source, nitf_Error* error)
         return NULL;
     }
 
+    void* nitf_RESegment_clone_ = (void*)nitf_RESegment_clone; // avoid casting directly "incompatible" type in C++
     record->reservedExtensions =
             nitf_List_clone(source->reservedExtensions,
-                            (NITF_DATA_ITEM_CLONE)nitf_RESegment_clone,
+                            (NITF_DATA_ITEM_CLONE)nitf_RESegment_clone_,
                             error);
     if (!record->reservedExtensions)
     {

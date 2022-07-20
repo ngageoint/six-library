@@ -14,6 +14,9 @@
 #pragma warning(disable: 26822) // Dereferencing a null pointer '...' (lifetime.1).
 #pragma warning(disable: 26467) // Converting from floating point to unsigned integral types results in non-portable code if the double/float has a negative value. Use gsl::narrow_cast or gsl::narrow instead to guard against undefined behavior and potential data loss(es.46).
 
+// changing this breaks SWIG
+#pragma warning (disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...'
+
 #include "nitf/coda-oss.hpp"
 
 #pragma comment(lib, "io-c++")
@@ -33,9 +36,6 @@
 #include "nitf/Types.h"
 #pragma comment(lib, "nitf-c")
 #pragma comment(lib, "openjpeg")
-
-// changing this breaks SWIG
-#pragma warning (disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...'
 
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
 #pragma warning(disable: 26456) // Operator '...' hides a non-virtual operator '...' (c.128).
