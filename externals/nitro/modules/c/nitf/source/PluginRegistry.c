@@ -380,7 +380,7 @@ doInit(nitf_DLL* dll, const char* prefix, nitf_Error* error)
     char name[NITF_MAX_PATH_NAME_SIZE_];
     memset(name, 0, NITF_MAX_PATH_NAME_SIZE_);
     NITF_SNPRINTF(name, NITF_MAX_PATH_NAME_SIZE_, "%s" NITF_PLUGIN_INIT_SUFFIX, prefix);
-    NRT_DLL_FUNCTION_PTR init_ =  nitf_DLL_retrieve(dll, name, error);
+    void* init_ =  (void*) nitf_DLL_retrieve(dll, name, error);
     if (!init_)
     {
         nitf_Error_print(error, stdout, "Invalid init hook in DSO");
@@ -409,7 +409,7 @@ doInit(nitf_DLL* dll, const char* prefix, nitf_Error* error)
 NITFPRIV(int) doCleanup(nitf_DLL* dll, nitf_Error* error)
 {
     const char* cleanupName = NITF_PLUGIN_CLEANUP;
-    NRT_DLL_FUNCTION_PTR cleanup_ = nitf_DLL_retrieve(dll, cleanupName, error);
+    void* cleanup_ = (void*) nitf_DLL_retrieve(dll, cleanupName, error);
     if (!cleanup_)
     {
         return 0;
