@@ -101,9 +101,10 @@ NITFAPI(nitf_Extensions *) nitf_Extensions_clone(nitf_Extensions * source,
          *  to do anyway
          *
          */
+        void* nitf_TRE_clone_ = (void*) nitf_TRE_clone; // avoid casting directly "incompatible" type in C++
         if ( (ext->ref = nitf_List_clone(source->ref,
                                          (NITF_DATA_ITEM_CLONE)
-                                         nitf_TRE_clone,
+                                         nitf_TRE_clone_,
                                          error)) == NULL )
         {
             nitf_Extensions_destruct(&ext);
