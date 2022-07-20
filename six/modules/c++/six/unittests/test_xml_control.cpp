@@ -170,6 +170,7 @@ TEST_CASE(test_six_toString)
     test_six_toString_Exception<six::ComplexImagePlaneType>(testName);
     test_six_toString_Exception<six::ComplexImageGridType>(testName);
     test_six_toString_Exception<six::CollectType>(testName);
+    test_six_toString_Exception<six::RadarModeType>(testName);
 }
 
 template<typename T>
@@ -211,6 +212,8 @@ TEST_CASE(test_six_toType)
     test_six_toType_Exception<six::ComplexImagePlaneType>(testName);
     test_six_toType_Exception<six::ComplexImageGridType>(testName);
     test_six_toType_Exception<six::CollectType>(testName);
+    test_six_toType_NOT_SET<six::RadarModeType>(testName);
+
 }
 
 TEST_MAIN(

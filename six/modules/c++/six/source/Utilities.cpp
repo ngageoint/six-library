@@ -94,10 +94,9 @@ BooleanType six::toType<BooleanType>(const std::string& s)
     str::lower(type);
     if (type == "true" || type == "1" || type == "yes")
         return BooleanType::IS_TRUE;
-    else if (type == "false" || type == "0" || type == "no")
+    if (type == "false" || type == "0" || type == "no")
         return BooleanType::IS_FALSE;
-    else
-        return BooleanType::NOT_SET;
+    return BooleanType::NOT_SET;
 }
 
 template <>
@@ -279,35 +278,28 @@ inline std::string toString_(const T& t, const except::Exception& ex)
 template <>
 std::string six::toString(const RadarModeType& type)
 {
-    switch (type)
+    auto result = toString_(type, except::Exception(Ctxt("Radar mode not set!")));
+    static const auto strDYNAMIC_STRIPMAP = RadarModeType(RadarModeType::DYNAMIC_STRIPMAP).toString();
+    if (result == strDYNAMIC_STRIPMAP)
     {
-    case RadarModeType::SPOTLIGHT:
-        return "SPOTLIGHT";
-    case RadarModeType::STRIPMAP:
-        return "STRIPMAP";
-    case RadarModeType::DYNAMIC_STRIPMAP:
-        return "DYNAMIC STRIPMAP";
-    case RadarModeType::SCANSAR:
-        return "SCANSAR";
-    default:
-        throw except::Exception(Ctxt("Radar mode not set!"));
+        return "DYNAMIC STRIPMAP"; // no "_"
     }
+    return result;
 }
-
 template <>
 RadarModeType six::toType<RadarModeType>(const std::string& s)
 {
     std::string type(s);
     str::trim(type);
-    if (type == "SPOTLIGHT")
-        return RadarModeType::SPOTLIGHT;
-    if (type == "STRIPMAP")
-        return RadarModeType::STRIPMAP;
-    if (type == "DYNAMIC STRIPMAP")
+    if (type == "DYNAMIC STRIPMAP") // no "_"
         return RadarModeType::DYNAMIC_STRIPMAP;
-    if (type == "SCANSAR")
-        return RadarModeType::SCANSAR;
-    return RadarModeType::NOT_SET;
+
+    static const auto strDYNAMIC_STRIPMAP = RadarModeType(RadarModeType::DYNAMIC_STRIPMAP).toString();
+    if (type == strDYNAMIC_STRIPMAP)
+    {
+        return RadarModeType::NOT_SET; // "DYNAMIC_STRIPMAP" (with '_') doesn't convert
+    }
+    return toType_<RadarModeType>(type);
 }
 
 template <>
@@ -344,6 +336,7 @@ std::string six::toString(const PixelType& type)
     return type.toString();
 }
 
+// There's a lot of boiler-plate code that can be hidden behind a few macros
 #define SIX_define_six_toType_(T) template <> T six::toType<T>(const std::string& s) { return toType_<T>(s); }
 #define SIX_define_six_toTypeEx_(T, message) template <> T six::toType<T>(const std::string& s) { \
     return toType_<T>(s,  except::Exception(Ctxt(message + s + "'"))); }
@@ -426,7 +419,7 @@ FFTSign six::toType<FFTSign>(const std::string& s)
     {
         return FFTSign::NEG;
     }
-    else if (type == "+1" || type == "1")
+    if (type == "+1" || type == "1")
     {
         // NOTE: The SICD Volume 1 spec says only "+1" and "-1" are allowed,
         //       and while the schema uses those same strings, it sets the
@@ -434,14 +427,11 @@ FFTSign six::toType<FFTSign>(const std::string& s)
         //       producers do use "1" so for simplicity just support it here.
         return FFTSign::POS;
     }
-    else if (type == "0")
+    if (type == "0")
     {
         return FFTSign::NOT_SET;
     }
-    else
-    {
-        throw except::Exception(Ctxt("Unsupported fft sign '" + s + "'"));
-    }
+    throw except::Exception(Ctxt("Unsupported fft sign '" + s + "'"));
 }
 
 template <>
@@ -469,10 +459,9 @@ AppliedType six::toType<AppliedType>(const std::string& s)
     // from 03/17/2009.
     if (type == "APPLIED" || type == "APPILED")
         return AppliedType::IS_TRUE;
-    else if (type == "NOT_APPLIED")
+    if (type == "NOT_APPLIED")
         return AppliedType::IS_FALSE;
-    else
-        throw except::Exception(Ctxt("Unsupported applied type '" + s + "'"));
+    throw except::Exception(Ctxt("Unsupported applied type '" + s + "'"));
 }
 
 template <>
@@ -517,12 +506,11 @@ six::FrameType six::toType<six::FrameType>(const std::string& s)
     str::trim(type);
     if (type == "ECF")
         return FrameType::ECF;
-    else if (type == "RIC_ECF")
+    if (type == "RIC_ECF")
         return FrameType::RIC_ECF;
-    else if (type == "RIC_ECI")
+    if (type == "RIC_ECI")
         return FrameType::RIC_ECI;
-    else
-        throw except::Exception(Ctxt("Unsupported frame type '" + s + "'"));
+    throw except::Exception(Ctxt("Unsupported frame type '" + s + "'"));
 }
 
 template <>
