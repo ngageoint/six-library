@@ -26,24 +26,15 @@
 #include <vector>
 #include <iterator>
 #include <numeric>
+#include <future>
 
 #include "import/sys.h"
 #include "import/mt.h"
 #include "TestCase.h"
 
-using namespace sys;
-using namespace mt;
-using namespace std;
-
-namespace
+struct AddOp final
 {
-class AddOp
-{
-public:
-    AddOp()
-    {
-    }
-
+    AddOp() = default;
     void operator()(size_t element) const
     {
         std::ostringstream ostr;
@@ -55,13 +46,9 @@ public:
     }
 };
 
-class LocalStorage
+struct LocalStorage final
 {
-public:
-    LocalStorage() : mValue(0)
-    {
-    }
-
+    LocalStorage() = default;
     void operator()(size_t element) const
     {
         // All we're really showing here is that we never print out the same
@@ -73,25 +60,25 @@ public:
     }
 
 private:
-    mutable size_t mValue;
+    mutable size_t mValue = 0;
 };
 
-TEST_CASE(Runnable1DTest)
+TEST_CASE(DoRunnable1DTest)
 {
-    std::cout << "Running test case" << std::endl;
+    std::cout << "Running test case\n";
     const AddOp op;
-    std::cout << "Calling run1D" << std::endl;
-    run1D(10, 16, op);
+    std::cout << "Calling run1D\n";
+    mt::run1D(10, 16, op);
 }
 
 TEST_CASE(Runnable1DWithCopiesTest)
 {
     // TODO: Have LocalStorage actually store its values off in a vector, then
     //       show we got all those values.
-    std::cout << "Running test case" << std::endl;
+    std::cout << "Running test case\n";
     const LocalStorage op;
-    std::cout << "Calling run1D" << std::endl;
-    run1DWithCopies(47, 16, op);
+    std::cout << "Calling run1D\n";
+    mt::run1DWithCopies(47, 16, op);
 }
 
 TEST_CASE(transform_async_test)
@@ -116,13 +103,9 @@ TEST_CASE(transform_async_test)
     mt::transform_async(ints.begin(), ints.end(), results.begin(), f, 1000, std::launch::async);
     TEST_ASSERT_EQ(results.back(), f(ints.back()));
 }
-}
 
-int main(int, char**)
-{
-    TEST_CHECK(Runnable1DTest);
+TEST_MAIN(
+    TEST_CHECK(DoRunnable1DTest);
     TEST_CHECK(Runnable1DWithCopiesTest);
     TEST_CHECK(transform_async_test);
-
-    return 0;
-}
+    )

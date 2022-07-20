@@ -21,14 +21,16 @@
  */
 
 #include <stdlib.h>
+#include <tuple>
 
 #include <math/poly/TwoD.h>
 #include "TestCase.h"
 
-namespace
-{
 double getRand()
 {
+    static const auto call_srand = [](){ srand(176); return true; };
+    static auto srand_called = call_srand();
+    std::ignore = srand_called;
     return (50.0 * rand() / RAND_MAX - 25.0);
 }
 
@@ -486,11 +488,8 @@ TEST_CASE(testAtY)
     TEST_ASSERT_EQ(p4.atY(3)(2), p4(2, 3));
     TEST_ASSERT_EQ(p4.flipXY().atY(4)(5), p4(4, 5));
 }
-}
 
-int main(int, char**)
-{
-    srand(176);
+TEST_MAIN(
     TEST_CHECK(testScaleVariable);
     TEST_CHECK(testTruncateTo);
     TEST_CHECK(testTruncateToNonZeros);
@@ -498,5 +497,5 @@ int main(int, char**)
     TEST_CHECK(testOperators);
     TEST_CHECK(testIsScalar);
     TEST_CHECK(testAtY);
-}
+    )
 

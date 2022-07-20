@@ -48,6 +48,19 @@ inline T toType_(const std::string& s, const except::Exception& ex)
     }
     return retval;
 }
+template <typename T>
+inline T toType(const std::string& s)
+{
+    if (is_OTHER_(s))
+    {
+        T retval = T::OTHER;
+        retval.other_ = s; // save away original value for toString()
+        return retval;
+    }
+
+    const except::Exception ex(Ctxt("Unsupported polarization type '" + s + "'"));
+    return toType_<T>(s, ex);
+}
 
 template<typename T>
 inline std::string toString_(const T& t, const except::Exception& ex)
@@ -60,75 +73,52 @@ inline std::string toString_(const T& t, const except::Exception& ex)
     const auto result = t.toString(std::nothrow);
     return nitf::details::value(result, ex);
 }
+template <typename T>
+inline std::string toString(const T& t)
+{
+    // use the OTHER.* string, if we have one
+    if ((t == T::OTHER) && is_OTHER_(t.other_))
+    {
+        return t.other_;
+    }
+
+    const except::Exception ex(Ctxt("Unsupported conversion from polarization type"));
+    if (!t.other_.empty())
+    {
+        // other_ got set to some non-OTHER.* string
+        throw ex;
+    }
+    return toString_(t, ex);
+}
 
 namespace six
 {
 
 template <>
-six::PolarizationSequenceType six::toType<six::PolarizationSequenceType>(
+PolarizationSequenceType toType<PolarizationSequenceType>(
     const std::string& s)
 {
-    if (is_OTHER_(s))
-    {
-        PolarizationSequenceType retval = PolarizationSequenceType::OTHER;
-        retval.other_ = s; // save away original value for toString()
-        return retval;
-    }
-
-    const except::Exception ex(Ctxt("Unsupported polarization type '" + s + "'"));
-    return toType_<PolarizationSequenceType>(s, ex);
+    return ::toType<PolarizationSequenceType>(s);
 }
 template <>
-std::string six::toString(const PolarizationSequenceType& t)
+std::string toString(const PolarizationSequenceType& t)
 {
-    // use the OTHER.* string, if we have one
-    if ((t == PolarizationSequenceType::OTHER) && is_OTHER_(t.other_))
-    {
-        return t.other_;
-    }
-
-    const except::Exception ex(Ctxt("Unsupported conversion from polarization type"));
-    if (!t.other_.empty())
-    {
-        // other_ got set to some non-OTHER.* string
-        throw ex;
-    }
-    return toString_(t, ex);
+    return ::toString(t);
 }
 
 template <>
-PolarizationType six::toType<PolarizationType>(const std::string& s)
+PolarizationType toType<PolarizationType>(const std::string& s)
 {
-    if (is_OTHER_(s))
-    {
-        PolarizationType retval = PolarizationType::OTHER;
-        retval.other_ = s; // save away original value for toString()
-        return retval;
-    }
-
-    const except::Exception ex(Ctxt("Unsupported polarization type '" + s + "'"));
-    return toType_<PolarizationType>(s, ex);
+    return ::toType<PolarizationType>(s);
 }
 template <>
-std::string six::toString(const PolarizationType& t)
+std::string toString(const PolarizationType& t)
 {
-    // use the OTHER.* string, if we have one
-    if ((t == PolarizationType::OTHER) && is_OTHER_(t.other_))
-    {
-        return t.other_;
-    }
-
-    const except::Exception ex(Ctxt("Unsupported conversion from polarization type"));
-    if (!t.other_.empty())
-    {
-        // other_ got set to some non-OTHER.* string
-        throw ex;
-    }
-    return toString_(t, ex);
+    return ::toString(t);
 }
 
 template <>
-DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
+DualPolarizationType toType<DualPolarizationType>(const std::string& s)
 {
     const except::Exception ex(Ctxt("Unsupported conversion to dual polarization type '" + s + "'"));
     const auto splits = str::split(s, ":");
@@ -156,7 +146,7 @@ DualPolarizationType six::toType<DualPolarizationType>(const std::string& s)
     return retval;
 }
 template <>
-std::string six::toString(const DualPolarizationType& t)
+std::string toString(const DualPolarizationType& t)
 {
     // use the OTHER.* string, if we have one
     const auto splits = str::split(t.other_, ":");

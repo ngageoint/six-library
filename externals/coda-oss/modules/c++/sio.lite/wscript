@@ -1,5 +1,4 @@
 NAME            = 'sio.lite'
-MAINTAINER      = 'adam.sylvester@mdaus.com'
 VERSION         = '1.0'
 MODULE_DEPS     = 'io types'
 

@@ -22,28 +22,28 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="external\csm-3.0.3.3\BundleGM.h" />
-    <ClInclude Include="external\csm-3.0.3.3\BytestreamIsd.h" />
-    <ClInclude Include="external\csm-3.0.3.3\CorrelationModel.h" />
-    <ClInclude Include="external\csm-3.0.3.3\csm.h" />
-    <ClInclude Include="external\csm-3.0.3.3\csmPointCloud.h" />
-    <ClInclude Include="external\csm-3.0.3.3\Ellipsoid.h" />
-    <ClInclude Include="external\csm-3.0.3.3\Error.h" />
-    <ClInclude Include="external\csm-3.0.3.3\FourParameterCorrelationModel.h" />
-    <ClInclude Include="external\csm-3.0.3.3\GeometricModel.h" />
-    <ClInclude Include="external\csm-3.0.3.3\Isd.h" />
-    <ClInclude Include="external\csm-3.0.3.3\LinearDecayCorrelationModel.h" />
-    <ClInclude Include="external\csm-3.0.3.3\Model.h" />
-    <ClInclude Include="external\csm-3.0.3.3\ModelIdentifier.h" />
-    <ClInclude Include="external\csm-3.0.3.3\MultiNitfIsd.h" />
-    <ClInclude Include="external\csm-3.0.3.3\NitfIsd.h" />
-    <ClInclude Include="external\csm-3.0.3.3\Plugin.h" />
-    <ClInclude Include="external\csm-3.0.3.3\PointCloudGM.h" />
-    <ClInclude Include="external\csm-3.0.3.3\PointCloudIsd.h" />
-    <ClInclude Include="external\csm-3.0.3.3\RasterGM.h" />
-    <ClInclude Include="external\csm-3.0.3.3\SettableEllipsoid.h" />
-    <ClInclude Include="external\csm-3.0.3.3\Version.h" />
-    <ClInclude Include="external\csm-3.0.3.3\Warning.h" />
+    <ClInclude Include="external\csm-3.0.4\BundleGM.h" />
+    <ClInclude Include="external\csm-3.0.4\BytestreamIsd.h" />
+    <ClInclude Include="external\csm-3.0.4\CorrelationModel.h" />
+    <ClInclude Include="external\csm-3.0.4\csm.h" />
+    <ClInclude Include="external\csm-3.0.4\csmPointCloud.h" />
+    <ClInclude Include="external\csm-3.0.4\Ellipsoid.h" />
+    <ClInclude Include="external\csm-3.0.4\Error.h" />
+    <ClInclude Include="external\csm-3.0.4\FourParameterCorrelationModel.h" />
+    <ClInclude Include="external\csm-3.0.4\GeometricModel.h" />
+    <ClInclude Include="external\csm-3.0.4\Isd.h" />
+    <ClInclude Include="external\csm-3.0.4\LinearDecayCorrelationModel.h" />
+    <ClInclude Include="external\csm-3.0.4\Model.h" />
+    <ClInclude Include="external\csm-3.0.4\ModelIdentifier.h" />
+    <ClInclude Include="external\csm-3.0.4\MultiNitfIsd.h" />
+    <ClInclude Include="external\csm-3.0.4\NitfIsd.h" />
+    <ClInclude Include="external\csm-3.0.4\Plugin.h" />
+    <ClInclude Include="external\csm-3.0.4\PointCloudGM.h" />
+    <ClInclude Include="external\csm-3.0.4\PointCloudIsd.h" />
+    <ClInclude Include="external\csm-3.0.4\RasterGM.h" />
+    <ClInclude Include="external\csm-3.0.4\SettableEllipsoid.h" />
+    <ClInclude Include="external\csm-3.0.4\Version.h" />
+    <ClInclude Include="external\csm-3.0.4\Warning.h" />
     <ClInclude Include="external\vts_301_0\include\constants.h" />
     <ClInclude Include="external\vts_301_0\include\SMManager.h" />
     <ClInclude Include="external\vts_301_0\include\tinyxml.h" />
@@ -57,22 +57,22 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="external\csm-3.0.3.3\BundleGM.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\CorrelationModel.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\csmPointCloud.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\Ellipsoid.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\FourParameterCorrelationModel.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\GeometricModel.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\Isd.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\LinearDecayCorrelationModel.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\ModelIdentifier.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\MultiNitfIsd.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\Plugin.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\PointCloudGM.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\PointCloudIsd.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\RasterGM.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\SettableEllipsoid.cpp" />
-    <ClCompile Include="external\csm-3.0.3.3\Version.cpp" />
+    <ClCompile Include="external\csm-3.0.4\BundleGM.cpp" />
+    <ClCompile Include="external\csm-3.0.4\CorrelationModel.cpp" />
+    <ClCompile Include="external\csm-3.0.4\csmPointCloud.cpp" />
+    <ClCompile Include="external\csm-3.0.4\Ellipsoid.cpp" />
+    <ClCompile Include="external\csm-3.0.4\FourParameterCorrelationModel.cpp" />
+    <ClCompile Include="external\csm-3.0.4\GeometricModel.cpp" />
+    <ClCompile Include="external\csm-3.0.4\Isd.cpp" />
+    <ClCompile Include="external\csm-3.0.4\LinearDecayCorrelationModel.cpp" />
+    <ClCompile Include="external\csm-3.0.4\ModelIdentifier.cpp" />
+    <ClCompile Include="external\csm-3.0.4\MultiNitfIsd.cpp" />
+    <ClCompile Include="external\csm-3.0.4\Plugin.cpp" />
+    <ClCompile Include="external\csm-3.0.4\PointCloudGM.cpp" />
+    <ClCompile Include="external\csm-3.0.4\PointCloudIsd.cpp" />
+    <ClCompile Include="external\csm-3.0.4\RasterGM.cpp" />
+    <ClCompile Include="external\csm-3.0.4\SettableEllipsoid.cpp" />
+    <ClCompile Include="external\csm-3.0.4\Version.cpp" />
     <ClCompile Include="external\vts_301_0\source\compareParam.cpp" />
     <ClCompile Include="external\vts_301_0\source\recordLog.cpp" />
     <ClCompile Include="external\vts_301_0\source\SensorModelThreadSafe.cpp" />
@@ -92,27 +92,26 @@
     <ClCompile Include="source\SIXSensorModel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="external\csm-3.0.3.3\Doxyfile" />
-    <None Include="external\csm-3.0.3.3\LICENSE" />
-    <None Include="external\csm-3.0.3.3\Makefile" />
-    <None Include="external\csm-3.0.3.3\Makefile.linux" />
-    <None Include="external\csm-3.0.3.3\Makefile.linux64" />
-    <None Include="external\csm-3.0.3.3\Makefile.linuxIA64" />
-    <None Include="external\csm-3.0.3.3\Makefile.sgi" />
-    <None Include="external\csm-3.0.3.3\Makefile.solaris" />
-    <None Include="external\csm-3.0.3.3\Makefile.solaris-stlport" />
-    <None Include="external\csm-3.0.3.3\Makefile.solaris64" />
-    <None Include="external\csm-3.0.3.3\Makefile.solaris64-stlport" />
-    <None Include="external\csm-3.0.3.3\Makefile.solaris86" />
-    <None Include="external\csm-3.0.3.3\Makefile.win32" />
-    <None Include="external\csm-3.0.3.3\README" />
+    <None Include="external\csm-3.0.4\Doxyfile" />
+    <None Include="external\csm-3.0.4\LICENSE" />
+    <None Include="external\csm-3.0.4\Makefile" />
+    <None Include="external\csm-3.0.4\Makefile.linux" />
+    <None Include="external\csm-3.0.4\Makefile.linux64" />
+    <None Include="external\csm-3.0.4\Makefile.linuxIA64" />
+    <None Include="external\csm-3.0.4\Makefile.sgi" />
+    <None Include="external\csm-3.0.4\Makefile.solaris" />
+    <None Include="external\csm-3.0.4\Makefile.solaris-stlport" />
+    <None Include="external\csm-3.0.4\Makefile.solaris64" />
+    <None Include="external\csm-3.0.4\Makefile.solaris64-stlport" />
+    <None Include="external\csm-3.0.4\Makefile.solaris86" />
+    <None Include="external\csm-3.0.4\Makefile.win32" />
+    <None Include="external\csm-3.0.4\README" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{6E767B43-D1A9-4B02-8D08-42037B7C9262}</ProjectGuid>
     <RootNamespace>six</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -149,12 +148,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);CSM_LIBRARY</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)external\vts_301_0\include\;$(ProjectDir)external\csm-3.0.3.3\;$(SolutionDir)six\modules\c++\six.sidd\include;$(SolutionDir)six\modules\c++\six.sicd\include;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)external\vts_301_0\include\;$(ProjectDir)external\csm-3.0.4\;$(SolutionDir)six\modules\c++\six.sidd\include;$(SolutionDir)six\modules\c++\six.sicd\include;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
@@ -177,11 +176,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);CSM_LIBRARY</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)external\vts_301_0\include\;$(ProjectDir)external\csm-3.0.3.3\;$(SolutionDir)six\modules\c++\six.sidd\include;$(SolutionDir)six\modules\c++\six.sicd\include;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)external\vts_301_0\include\;$(ProjectDir)external\csm-3.0.4\;$(SolutionDir)six\modules\c++\six.sidd\include;$(SolutionDir)six\modules\c++\six.sicd\include;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>

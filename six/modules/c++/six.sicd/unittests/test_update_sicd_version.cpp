@@ -53,6 +53,28 @@ TEST_CASE(test110To120)
     TEST_ASSERT_EQ(complexData.getVersion(), "1.2.0");
 }
 
+TEST_CASE(test120To121)
+{
+    six::sicd::ComplexData complexData;
+    complexData.setVersion("1.2.0");
+    logging::NullLogger log;
+    six::sicd::SICDVersionUpdater(complexData, "1.2.1", log).update();
+
+    // AFAIK, this is the only difference...
+    TEST_ASSERT_EQ(complexData.getVersion(), "1.2.1");
+}
+
+TEST_CASE(test120To130)
+{
+    six::sicd::ComplexData complexData;
+    complexData.setVersion("1.2.0");
+    logging::NullLogger log;
+    six::sicd::SICDVersionUpdater(complexData, "1.3.0", log).update();
+
+    // AFAIK, this is the only difference...
+    TEST_ASSERT_EQ(complexData.getVersion(), "1.3.0");
+}
+
 TEST_CASE(testTransitiveUpdate)
 {
     six::sicd::ComplexData complexData;
@@ -127,6 +149,8 @@ TEST_MAIN(
     // most likely be due to misreading the standards.
     TEST_CHECK(testInvalidVersions);
     TEST_CHECK(test110To120);
+    TEST_CHECK(test120To121);
+    TEST_CHECK(test120To130);
     TEST_CHECK(testTransitiveUpdate);
     TEST_CHECK(testUpdateDistRefLinePoly);
     TEST_CHECK(testWarningParameters);

@@ -20,6 +20,7 @@
  *
  */
 #include <cassert>
+#include <set>
 #include <six/sicd/Utilities.h>
 #include <logging/Logger.h>
 #include <scene/SceneGeometry.h>
@@ -46,7 +47,7 @@ SICDVersionUpdater::getValidVersions()
 {
     static const std::vector<std::string> sicdVersions =
     {
-        "0.4.0", "0.4.1", "0.5.0", "1.0.0", "1.0.1", "1.1.0", "1.2.0"
+        "0.4.0", "0.4.1", "0.5.0", "1.0.0", "1.0.1", "1.1.0", "1.2.0", "1.2.1", "1.3.0"
     };
     return sicdVersions;
 }
@@ -75,13 +76,18 @@ void SICDVersionUpdater::addProcessingParameter(const std::string& fieldName)
     mData.imageFormation->processing[index].parameters.push_back(parameter);
 }
 
+// https://en.cppreference.com/w/cpp/container/set/contains
+template<typename K>
+inline static bool contains(const std::set<K>& set, const K& key)
+{
+    return set.find(key) != set.end();
+}
+
 void SICDVersionUpdater::updateSingleIncrement()
 {
     const std::string thisVersion = mData.getVersion();
-    if (thisVersion == "0.4.1" ||
-        thisVersion == "1.0.0" ||
-        thisVersion == "1.0.1" ||
-        thisVersion == "1.1.0")
+    static const std::set<std::string> nothingToDoVersions{ "0.4.1", "1.0.0", "1.0.1", "1.1.0", "1.2.0", "1.2.1" };
+    if (contains(nothingToDoVersions, thisVersion))
     {
         // Nothing to do
         return;

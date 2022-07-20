@@ -26,6 +26,7 @@
 
 #include <string>
 
+#include "config/Exports.h"
 #include "sys/Dbg.h"
 #include "sys/Conf.h"
 #include "coda_oss/string.h"
@@ -50,7 +51,7 @@ namespace io
  *
  */
 
-struct OutputStream
+struct CODA_OSS_API OutputStream
 {
     OutputStream() = default;
     virtual ~OutputStream() = default;

@@ -201,7 +201,7 @@ namespace sys
      * On Intel systems, we are usually small-endian, and on
      * RISC architectures we are big-endian.
      */
-    bool isBigEndianSystem();
+    bool CODA_OSS_API isBigEndianSystem();
 
 
    /*!

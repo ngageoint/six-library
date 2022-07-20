@@ -29,8 +29,6 @@
 
 #include <sys/Conf.h>
 
-namespace
-{
 TEST_CASE(testEndianness)
 {
     /*const*/ auto native = coda_oss::endian::native; // "const" causes "conditional expression is constant."
@@ -102,13 +100,9 @@ TEST_CASE(testByteSwap)
         TEST_ASSERT_EQ(values1[ii], swappedValues2[ii]);
     }
 }
-   
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+
+TEST_MAIN(
     TEST_CHECK(testEndianness);
     TEST_CHECK(testByteSwap);
-
-    return 0;
-}
+    )

@@ -21,6 +21,7 @@
  */
 
 #include <string>
+#include <tuple>
 
 #include <cphd03/VBM.h>
 #include <cphd/TestDataGenerator.h>
@@ -33,6 +34,7 @@ static void call_srand()
 {
     static const auto f = []() { constexpr auto seed = 174; ::srand(seed); return nullptr; };
     static const auto result = f();
+    std::ignore = result;
 }
 
 void testVectorParameters(const std::string& testName_,
