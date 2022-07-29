@@ -173,7 +173,7 @@ int main(int argc, char** argv)
 
         data->radarCollection->txFrequencyMin = 0.0;
         data->radarCollection->txFrequencyMax = 0.0;
-        data->radarCollection->txPolarization = six::PolarizationType::OTHER;
+        data->radarCollection->txPolarization = six::PolarizationSequenceType::OTHER;
         mem::ScopedCloneablePtr<six::sicd::ChannelParameters>
                 rcvChannel(new six::sicd::ChannelParameters());
         rcvChannel->txRcvPolarization = six::DualPolarizationType::OTHER;

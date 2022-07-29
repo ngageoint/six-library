@@ -20,14 +20,19 @@
  *
  */
 
+#include <assert.h>
+
 #include <cmath>
 #include <limits>
-
 #include <std/filesystem>
 
 #include "Error.h"
 #include <six/NITFReadControl.h>
 #include <six/csm/SIXSensorModel.h>
+#include <six/ErrorStatistics.h>
+
+#undef min
+#undef max
 
 namespace fs = std::filesystem;
 
@@ -381,6 +386,12 @@ std::vector<double> SIXSensorModel::getUnmodeledError(
 {
     try
     {
+        auto sixUnmodeledError = convertUnmodeledError(getSIXUnmodeledError());
+        if (!sixUnmodeledError.empty())
+        {
+            return sixUnmodeledError;
+        }
+
         types::RowCol<double> pixelPt = fromPixel(imagePt);
         const math::linear::MatrixMxN<2, 2, double> unmodeledError =
                 mProjection->getUnmodeledErrorCovariance( pixelPt );
@@ -942,6 +953,32 @@ csm::EcefVector SIXSensorModel::getSensorVelocity(double time) const
     }
 }
 
+static std::string getSchemaPath(std::vector<std::string>& mSchemaDirs)
+{
+    // OK, but you better have your schema path set then
+    std::string schemaPath;
+    try
+    {
+        schemaPath = six::getSchemaPath(mSchemaDirs, true /*tryToExpandIfNotFound*/);
+    }
+    catch (const except::IOException&)
+    {
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            "Must specify SICD schema path via "
+            "Plugin::getDataDirectory() or " +
+            std::string(six::SCHEMA_PATH) + " environment variable",
+            "SIXSensorModel::setSchemaDir");
+    }
+
+    if (schemaPath.empty())
+    {
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            std::string(six::SCHEMA_PATH) +
+            " environment variable is set but is empty",
+            "SIXSensorModel::setSchemaDir");
+    }
+    return schemaPath;
+}
 void SIXSensorModel::setSchemaDir(const std::string& dataDir)
 {
     sys::OS os;
@@ -950,27 +987,8 @@ void SIXSensorModel::setSchemaDir(const std::string& dataDir)
         mSchemaDirs.clear();
 
         // OK, but you better have your schema path set then
-        std::string schemaPath;
-        try
-        {
-            schemaPath = six::getSchemaPath(mSchemaDirs);
-        }
-        catch(const except::Exception& )
-        {
-            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    "Must specify SICD schema path via "
-                    "Plugin::getDataDirectory() or " +
-                    std::string(six::SCHEMA_PATH) + " environment variable",
-                    "SIXSensorModel::setSchemaDir");
-        }
-
-        if (schemaPath.empty())
-        {
-            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    std::string(six::SCHEMA_PATH) +
-                    " environment variable is set but is empty",
-                    "SIXSensorModel::setSchemaDir");
-        }
+        std::string schemaPath = getSchemaPath(mSchemaDirs);
+        assert(!schemaPath.empty());
     }
     else
     {
@@ -1152,5 +1170,28 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
 
     return NITFReadControl::getDataType(desid, desshl, desshsi, desid);
 }
+
+std::vector<double> SIXSensorModel::getSIXUnmodeledError_(const six::ErrorStatistics& errorStatistics)
+{
+    std::vector<double> retval;
+    if (auto pUnmodeled = errorStatistics.Unmodeled.get())
+    {
+        retval.push_back(pUnmodeled->Xrow);
+        retval.push_back(pUnmodeled->Ycol);
+        retval.push_back(pUnmodeled->XrowYcol);
+
+        if (auto pDecor = pUnmodeled->UnmodeledDecorr.get())
+        {
+            retval.push_back(pDecor->Xrow.CorrCoefZero);
+            retval.push_back(pDecor->Xrow.DecorrRate);
+
+            retval.push_back(pDecor->Ycol.CorrCoefZero);
+            retval.push_back(pDecor->Ycol.DecorrRate);
+        }
+    }
+
+    return retval;
+}
+
 }
 }

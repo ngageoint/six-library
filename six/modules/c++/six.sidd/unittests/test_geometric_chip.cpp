@@ -23,8 +23,6 @@
 #include <six/sidd/DownstreamReprocessing.h>
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testGeometricChip)
 {
     six::sidd::GeometricChip chip;
@@ -57,7 +55,6 @@ TEST_CASE(testGeometricChip)
             chip.getFullImageCoordinateFromChip(computedChipCoord);
     TEST_ASSERT_ALMOST_EQ_EPS(computedFullCoord.row, fullCoord.row, TOL);
     TEST_ASSERT_ALMOST_EQ_EPS(computedFullCoord.col, fullCoord.col, TOL);
-}
 }
 
 TEST_MAIN(

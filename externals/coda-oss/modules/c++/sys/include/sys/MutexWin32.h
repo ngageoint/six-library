@@ -24,6 +24,8 @@
 #ifndef __SYS_MUTEX_WIN32_H__
 #define __SYS_MUTEX_WIN32_H__
 
+#include "config/Exports.h"
+
 #if defined(WIN32) || defined(_WIN32)
 #if !defined(USE_NSPR_THREADS)
 
@@ -31,7 +33,7 @@
 
 namespace sys
 {
-class MutexWin32 : public MutexInterface
+class CODA_OSS_API MutexWin32 : public MutexInterface
 {
 public:
     //! \todo Add string name option

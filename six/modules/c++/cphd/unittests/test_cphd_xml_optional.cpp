@@ -33,7 +33,7 @@
 
 #include "TestCase.h"
 
-static const char XML[] =
+const char* test_cphd_xml_optional_XML =
 "<CPHD xmlns=\"urn:CPHD:1.0.0\">\n"
 "    <CollectionID>\n"
 "        <CollectorName>Collector</CollectorName>\n"
@@ -883,7 +883,7 @@ static const char XML[] =
 TEST_CASE(testOptional)
 {
     io::StringStream cphdStream;
-    cphdStream.write(XML, strlen(XML));
+    cphdStream.write(test_cphd_xml_optional_XML, strlen(test_cphd_xml_optional_XML));
 
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
@@ -1009,7 +1009,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].rfBandwidth, 2.3);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].freqCenter, 1.8);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].lfmRate, 1.0);
-    TEST_ASSERT(txRcv.txWFParameters[0].polarization == "LHC");
+    TEST_ASSERT(txRcv.txWFParameters[0].polarization.toString() == "LHC");
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].polarization, cphd::PolarizationType::LHC);
     TEST_ASSERT_EQ(txRcv.txWFParameters[0].power, 5.0);
 
@@ -1020,7 +1020,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].ifFilterBW, 2.3);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].freqCenter, 1.8);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].lfmRate, 1.0);
-    TEST_ASSERT(txRcv.rcvParameters[0].polarization == "LHC");
+    TEST_ASSERT(txRcv.rcvParameters[0].polarization.toString() == "LHC");
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].polarization, cphd::PolarizationType::LHC);
     TEST_ASSERT_EQ(txRcv.rcvParameters[0].pathGain, 5.0);
 
@@ -1030,7 +1030,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].ifFilterBW, 2.3);
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].freqCenter, 1.8);
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].lfmRate, 1.0);
-    TEST_ASSERT(txRcv.rcvParameters[1].polarization == "LHC");
+    TEST_ASSERT(txRcv.rcvParameters[1].polarization.toString() == "LHC");
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].polarization, cphd::PolarizationType::LHC);
     TEST_ASSERT_EQ(txRcv.rcvParameters[1].pathGain, 5.0);
 
@@ -1124,6 +1124,6 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(matchInfo.types[1].matchCollects[0].parameters[0].getName(), "param1");
 }
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
         TEST_CHECK(testOptional);
 )

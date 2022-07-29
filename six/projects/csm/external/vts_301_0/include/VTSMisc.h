@@ -174,8 +174,7 @@ void reportError(Error* err, std::string& logFile);
 //void initFilenameISD (Isd *isdfilename, 
 //		      string isd);
 
-void initBytestreamISD(BytestreamIsd *bytestream, string filename)  
-     throw (Error);
+void initBytestreamISD(BytestreamIsd *bytestream, string filename);
 
 void initNitf20ISD(Nitf20Isd *isd,
                    string& fname,
@@ -193,10 +192,10 @@ FILE * fillBuff (string& fname,
 #else
                     struct stat64 &statbuf,
 #endif
-                    char **buff) throw (Error);
+                    char **buff);
 
-string readStateFile( string fname) throw (Error);
-void writeStateFile(string fname, string state) throw (Error);
+string readStateFile( string fname);
+void writeStateFile(string fname, string state);
 
 void parseFile(Nitf20Isd *isd,
                FILE *ifile,
@@ -255,7 +254,7 @@ void parseDes(Nitf21Isd *isd,
 
 char* getSegment( FILE *ifile,
                   const size_t offset,
-		  const size_t bufferSize)  throw (Error);
+		  const size_t bufferSize);
 
 void dumpHdr(Nitf20Isd *isd);
 

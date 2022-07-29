@@ -30,9 +30,6 @@
 
 #include "TestCase.h"
 
-
-namespace
-{
 TEST_CASE(EmptyChannel)
 {
     cphd::Channel channel1, channel2;
@@ -79,9 +76,8 @@ TEST_CASE(TxRcvMultIds)
     TEST_ASSERT_EQ(channel.parameters[0].txRcv->txWFId.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(channel.parameters[0].txRcv->rcvId.size(), static_cast<size_t>(2));
 }
-}
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
         TEST_CHECK(EmptyChannel);
         TEST_CHECK(TestPolygonInvalid);
         TEST_CHECK(TxRcvMultIds);

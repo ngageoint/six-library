@@ -29,8 +29,7 @@
 #include <scene/sys_Conf.h>
 
 #include <logging/Logger.h>
-#include <xml/lite/Document.h>
-#include <xml/lite/Validator.h>
+#include <import/xml/lite.h>
 
 #include "six/Types.h"
 #include "six/Logger.h"

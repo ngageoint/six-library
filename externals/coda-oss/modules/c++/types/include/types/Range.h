@@ -25,6 +25,8 @@
 #include <algorithm>
 #include <limits>
 
+#include "config/Exports.h"
+
 namespace types
 {
 /*!
@@ -32,7 +34,7 @@ namespace types
  *  \brief Holds range information i.e a starting element and number of
  *  elements in a range (exclusive)
  */
-struct Range
+struct CODA_OSS_API Range
 {
     /*!
      * Initializes to an empty range

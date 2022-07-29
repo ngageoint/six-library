@@ -20,6 +20,10 @@
  *
  */
 #include "io/PipeStream.h"
+#undef min
+#undef max
+
+#include "gsl/gsl.h"
 
 using namespace io;
 
@@ -32,7 +36,7 @@ sys::SSize_T io::PipeStream::readImpl(void* buffer, size_t numBytes)
     size_t bytesLeft = numBytes;
     while (bytesLeft && !feof(pipe))
     {
-        sys::SSize_T bytesRead = fread(cStr, 1, bytesLeft, pipe);
+        const auto bytesRead = fread(cStr, 1, bytesLeft, pipe);
         if (bytesRead > 0)
         {
             bytesLeft -= bytesRead;
@@ -48,7 +52,7 @@ sys::SSize_T io::PipeStream::readImpl(void* buffer, size_t numBytes)
     if (bytesLeft == numBytes)
         return IS_EOF;
 
-    return numBytes - bytesLeft;
+    return gsl::narrow<sys::SSize_T>(numBytes - bytesLeft);
 }
 
 sys::SSize_T io::PipeStream::readln(sys::byte *cStr,
@@ -61,7 +65,7 @@ sys::SSize_T io::PipeStream::readln(sys::byte *cStr,
         // get the next line or return null
         if (fgets(cStr, static_cast<int>(strLenPlusNullByte), pipe) != NULL)
         {
-            return strlen(cStr);
+            return gsl::narrow<sys::SSize_T>(strlen(cStr));
         }
 
         // throw if error reading stream
@@ -79,30 +83,30 @@ sys::SSize_T io::PipeStream::streamTo(OutputStream& soi,
     {
         while (!feof(mExecPipe.getPipe()))
         {
-            sys::SSize_T bytesRead = read(mCharString.get(), mBufferSize);
+            const auto bytesRead = read(mCharString.get(), mBufferSize);
             if (bytesRead > 0)
             {
-                soi.write(mCharString.get(), bytesRead);
+                soi.write(mCharString.get(), gsl::narrow<size_t>(bytesRead));
                 totalBytesRead += bytesRead;
             }
         }
     }
     else
     {
-        sys::Size_T bytesLeft = numBytes;
+        auto bytesLeft = gsl::narrow<sys::Size_T>(numBytes);
         while (bytesLeft && !feof(mExecPipe.getPipe()))
         {
             // don't read more bytes than streaming forward or buff size
-            sys::SSize_T bytesRead = read(mCharString.get(),
+            const auto bytesRead = read(mCharString.get(),
                                           std::min(bytesLeft, mBufferSize));
             if (bytesRead > 0)
             {
-                soi.write(mCharString.get(), bytesRead);
+                soi.write(mCharString.get(), gsl::narrow<size_t>(bytesRead));
                 bytesLeft -= bytesRead;
             }
         }
 
-        totalBytesRead = numBytes - bytesLeft;
+        totalBytesRead = gsl::narrow<sys::SSize_T>(numBytes - bytesLeft);
     }
 
     // check if didn't read any bytes before end of file

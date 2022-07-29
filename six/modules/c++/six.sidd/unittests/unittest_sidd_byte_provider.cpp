@@ -44,8 +44,6 @@
 #include <six/sidd/DerivedXMLControl.h>
 
 
-namespace
-{
 // Template specialization to get appropriate pixel type
 template <typename DataTypeT>
 struct GetPixelType
@@ -72,7 +70,7 @@ struct GetPixelType<uint16_t>
 
 // Create dummy SIDD data
 template <typename DataTypeT>
-std::unique_ptr<six::sidd::DerivedData>
+static std::unique_ptr<six::sidd::DerivedData>
 createData(const types::RowCol<size_t>& dims)
 {
     std::unique_ptr<six::sidd::DerivedData> data =
@@ -224,16 +222,298 @@ public:
     }
 
     // Write the file out with a SIDDByteProvider in one shot
-    void testSingleWrite();
+    void testSingleWrite()
+    {
+        const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
-    void testMultipleWrites();
+        const six::sidd::SIDDByteProvider siddByteProvider(
+            *mData,
+            mSchemaPaths,
+            mNumRowsPerBlock,
+            mNumColsPerBlock,
+            mSetMaxProductSize ? mMaxProductSize : 0);
 
-    void testMultipleWritesBlocked(size_t blocksPerWrite);
+        std::vector<DataTypeT> scratch;
+        const DataTypeT* const inImage = getImage(siddByteProvider, scratch);
 
-    void testOneWritePerRow();
+        nitf::NITFBufferList buffers;
+        nitf::Off fileOffset;
+        siddByteProvider.getBytes(inImage, 0, mDims.row, fileOffset, buffers);
+        const nitf::Off numBytes = siddByteProvider.getNumBytes(0, mDims.row);
+
+        io::FileOutputStream outStream(mTestPathname);
+        write(fileOffset, buffers, numBytes, outStream);
+        outStream.close();
+
+        compare("Single write");
+    }
+
+    void testMultipleWrites()
+    {
+        const EnsureFileCleanup ensureFileCleanup(mTestPathname);
+
+        const six::sidd::SIDDByteProvider siddByteProvider(
+            *mData,
+            mSchemaPaths,
+            mNumRowsPerBlock,
+            mNumColsPerBlock,
+            mSetMaxProductSize ? mMaxProductSize : 0);
+
+        const DataTypeT* const inImage = mBigEndianImage.data();
+
+        // Rows [40, 60)
+        nitf::Off fileOffset;
+        nitf::NITFBufferList buffers;
+        size_t startRow = 40;
+        size_t numRows = 20;
+        siddByteProvider.getBytes(inImage + startRow * mDims.col,
+            startRow,
+            numRows,
+            fileOffset,
+            buffers);
+        nitf::Off numBytes = siddByteProvider.getNumBytes(startRow, numRows);
+
+        io::FileOutputStream outStream(mTestPathname);
+        write(fileOffset, buffers, numBytes, outStream);
+
+        // Rows [5, 25)
+        startRow = 5;
+        numRows = 20;
+        siddByteProvider.getBytes(inImage + startRow * mDims.col,
+            startRow,
+            numRows,
+            fileOffset,
+            buffers);
+        numBytes = siddByteProvider.getNumBytes(startRow, numRows);
+        write(fileOffset, buffers, numBytes, outStream);
+
+        // Rows [0, 5)
+        startRow = 0;
+        numRows = 5;
+        siddByteProvider.getBytes(inImage + startRow * mDims.col,
+            startRow,
+            numRows,
+            fileOffset,
+            buffers);
+        numBytes = siddByteProvider.getNumBytes(startRow, numRows);
+        write(fileOffset, buffers, numBytes, outStream);
+
+        // Rows [100, 123)
+        startRow = 100;
+        numRows = 23;
+        siddByteProvider.getBytes(inImage + startRow * mDims.col,
+            startRow,
+            numRows,
+            fileOffset,
+            buffers);
+        numBytes = siddByteProvider.getNumBytes(startRow, numRows);
+        write(fileOffset, buffers, numBytes, outStream);
+
+        // Rows [25, 40)
+        startRow = 25;
+        numRows = 15;
+        siddByteProvider.getBytes(inImage + startRow * mDims.col,
+            startRow,
+            numRows,
+            fileOffset,
+            buffers);
+        numBytes = siddByteProvider.getNumBytes(startRow, numRows);
+        write(fileOffset, buffers, numBytes, outStream);
+
+        // Rows [60, 100)
+        startRow = 60;
+        numRows = 40;
+        siddByteProvider.getBytes(inImage + startRow * mDims.col,
+            startRow,
+            numRows,
+            fileOffset,
+            buffers);
+        numBytes = siddByteProvider.getNumBytes(startRow, numRows);
+        write(fileOffset, buffers, numBytes, outStream);
+
+        outStream.close();
+
+        compare("Multiple writes");
+    }
+
+    static size_t countNumRows(const nitf::ImageBlocker& imageBlocker,
+        size_t startBlock,
+        size_t numBlocks,
+        size_t& currentSegment,
+        size_t& startBlockThisSegment,
+        size_t& numBlocksThisSegment)
+    {
+        size_t numRows = 0;
+        size_t lastBlockThisSegment = startBlockThisSegment + numBlocksThisSegment - 1;
+        for (size_t block = startBlock; block < startBlock + numBlocks; ++block)
+        {
+            const size_t segment = imageBlocker.getSegmentFromGlobalBlockRow(block);
+            numRows += imageBlocker.getNumRowsPerBlock()[segment];
+
+            if (segment > currentSegment)
+            {
+                startBlockThisSegment += numBlocksThisSegment;
+                currentSegment = segment;
+                numBlocksThisSegment = imageBlocker.getNumRowsOfBlocks(currentSegment);
+                lastBlockThisSegment = startBlockThisSegment + numBlocksThisSegment - 1;
+            }
+
+            if (block == lastBlockThisSegment)
+            {
+                numRows -= imageBlocker.getNumPadRowsInFinalBlock(segment);
+            }
+
+        }
+        return numRows;
+    }
+
+    void testMultipleWritesBlocked(size_t blocksPerWrite)
+    {
+        const EnsureFileCleanup ensureFileCleanup(mTestPathname);
+
+        io::FileOutputStream outStream(mTestPathname);
+
+        const six::sidd::SIDDByteProvider siddByteProvider(
+            *mData,
+            mSchemaPaths,
+            mNumRowsPerBlock,
+            mNumColsPerBlock,
+            mSetMaxProductSize ? mMaxProductSize : 0);
+
+        // Write the blocks in reverse order
+        std::unique_ptr<const nitf::ImageBlocker> imageBlocker =
+            siddByteProvider.getImageBlocker();
+
+        const size_t numSegs(imageBlocker->getNumSegments());
+        size_t totalNumBlocks(0);
+        for (size_t seg = 0; seg < numSegs; ++seg)
+        {
+            totalNumBlocks += imageBlocker->getNumRowsOfBlocks(seg);
+        }
+
+        size_t currentSegment = 0;
+        size_t numBlocksThisSeg = imageBlocker->getNumRowsOfBlocks(currentSegment);
+        size_t startBlockThisSeg = 0;
+        size_t startRow = 0;
+
+        // Want to write out the blocks in reverse order to make sure offsetting
+        // works. But I don't want to do the math backwards, so this will just go
+        // through and collect the data needed for each block write.
+        std::vector<WriteData> data;
+        for (size_t startBlock = 0;
+            startBlock < totalNumBlocks;
+            startBlock += blocksPerWrite)
+        {
+            WriteData writeData;
+            if (startBlock >= startBlockThisSeg + numBlocksThisSeg)
+            {
+                ++currentSegment;
+                startBlockThisSeg += numBlocksThisSeg;
+                numBlocksThisSeg = imageBlocker->getNumRowsOfBlocks(currentSegment);
+            }
+            const size_t blocksThisWrite =
+                std::min<size_t>(blocksPerWrite, totalNumBlocks - startBlock);
+
+            const size_t numRows = countNumRows(*imageBlocker, startBlock, blocksThisWrite,
+                currentSegment, startBlockThisSeg, numBlocksThisSeg);
+
+            writeData.numBlocks = blocksThisWrite;
+            writeData.startRow = startRow;
+            writeData.numRows = numRows;
+            data.push_back(writeData);
+
+            startRow += numRows;
+        }
+
+        // Solaris doesn't know how to get a const_reverse_iterator from a
+        // reverse_iterator.
+        const std::vector<WriteData>& constData = data;
+
+        for (std::vector<WriteData>::const_reverse_iterator iter = constData.rbegin();
+            iter != constData.rend(); ++iter)
+        {
+            const size_t bytesThisWrite =
+                imageBlocker->getNumBytesRequired<DataTypeT>(
+                    iter->startRow, iter->numRows);
+
+            std::vector<DataTypeT> blockData(bytesThisWrite);
+            imageBlocker->block(&mBigEndianImage[iter->startRow * 456],
+                iter->startRow,
+                iter->numRows,
+                blockData.data());
+
+            nitf::Off fileOffset;
+            nitf::NITFBufferList buffers;
+            siddByteProvider.getBytes(blockData.data(),
+                iter->startRow,
+                iter->numRows,
+                fileOffset,
+                buffers);
+            const size_t numBytes = siddByteProvider.getNumBytes(iter->startRow,
+                iter->numRows);
+            write(fileOffset, buffers, numBytes, outStream);
+        }
+        outStream.close();
+
+        compare("Multiple writes blocked");
+    }
+
+    void testOneWritePerRow()
+    {
+        const EnsureFileCleanup ensureFileCleanup(mTestPathname);
+
+        six::sidd::SIDDByteProvider siddByteProvider(
+            *mData,
+            mSchemaPaths,
+            mNumRowsPerBlock,
+            mNumColsPerBlock,
+            mSetMaxProductSize ? mMaxProductSize : 0);
+
+        io::FileOutputStream outStream(mTestPathname);
+        for (size_t row = 0; row < mDims.row; ++row)
+        {
+            // Write it backwards
+            const size_t startRow = mDims.row - 1 - row;
+
+            nitf::Off fileOffset;
+            nitf::NITFBufferList buffers;
+            siddByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
+                startRow,
+                1,
+                fileOffset,
+                buffers);
+            const nitf::Off numBytes = siddByteProvider.getNumBytes(startRow, 1);
+            write(fileOffset, buffers, numBytes, outStream);
+        }
+
+        outStream.close();
+
+        compare("One write per row");
+    }
 
 private:
-    void normalWrite();
+    void normalWrite()
+    {
+        mem::SharedPtr<six::Container> container(new six::Container(
+            six::DataType::DERIVED));
+        container->addData(mData->clone());
+
+        six::XMLControlRegistry xmlRegistry;
+        xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
+
+        six::Options options;
+        setWriterOptions(options);
+        six::NITFWriteControl writer(options, container, &xmlRegistry);
+
+        // For these tests, "mImage" is just some "random" size we know will be large enough.
+        // However, passing that as an "image" to save(), the code expects that it will
+        // be the correct size, which it isn't.  The work-around is to pass a raw pointer.
+        const void* pImage = mImage.data();
+        const six::BufferList image{ static_cast<const six::UByte*>(pImage) };
+        writer.save(image, mNormalPathname, mSchemaPaths);
+
+        mCompareFiles.reset(new CompareFiles(mNormalPathname));
+    }
 
 private:
     std::string getSuffix() const
@@ -368,303 +648,6 @@ private:
 };
 
 template <typename DataTypeT>
-void Tester<DataTypeT>::normalWrite()
-{
-    mem::SharedPtr<six::Container> container(new six::Container(
-        six::DataType::DERIVED));
-    container->addData(mData->clone());
-
-    six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
-
-    six::Options options;
-    setWriterOptions(options);
-    six::NITFWriteControl writer(options, container, &xmlRegistry);
-
-    // For these tests, "mImage" is just some "random" size we know will be large enough.
-    // However, passing that as an "image" to save(), the code expects that it will
-    // be the correct size, which it isn't.  The work-around is to pass a raw pointer.
-    const void* pImage = mImage.data();
-    const six::BufferList image{ static_cast<const six::UByte*>(pImage) };
-    writer.save(image, mNormalPathname, mSchemaPaths);
-
-    mCompareFiles.reset(new CompareFiles(mNormalPathname));
-}
-
-template <typename DataTypeT>
-void Tester<DataTypeT>::testSingleWrite()
-{
-    const EnsureFileCleanup ensureFileCleanup(mTestPathname);
-
-    const six::sidd::SIDDByteProvider siddByteProvider(
-            *mData,
-            mSchemaPaths,
-            mNumRowsPerBlock,
-            mNumColsPerBlock,
-            mSetMaxProductSize ? mMaxProductSize : 0);
-
-    std::vector<DataTypeT> scratch;
-    const DataTypeT* const inImage = getImage(siddByteProvider, scratch);
-
-    nitf::NITFBufferList buffers;
-    nitf::Off fileOffset;
-    siddByteProvider.getBytes(inImage, 0, mDims.row, fileOffset, buffers);
-    const nitf::Off numBytes = siddByteProvider.getNumBytes(0, mDims.row);
-
-    io::FileOutputStream outStream(mTestPathname);
-    write(fileOffset, buffers, numBytes, outStream);
-    outStream.close();
-
-    compare("Single write");
-}
-
-template <typename DataTypeT>
-void Tester<DataTypeT>::testMultipleWrites()
-{
-    const EnsureFileCleanup ensureFileCleanup(mTestPathname);
-
-    const six::sidd::SIDDByteProvider siddByteProvider(
-            *mData,
-            mSchemaPaths,
-            mNumRowsPerBlock,
-            mNumColsPerBlock,
-            mSetMaxProductSize ? mMaxProductSize : 0);
-
-    const DataTypeT* const inImage = mBigEndianImage.data();
-
-    // Rows [40, 60)
-    nitf::Off fileOffset;
-    nitf::NITFBufferList buffers;
-    size_t startRow = 40;
-    size_t numRows = 20;
-    siddByteProvider.getBytes(inImage + startRow * mDims.col,
-                              startRow,
-                              numRows,
-                              fileOffset,
-                              buffers);
-    nitf::Off numBytes = siddByteProvider.getNumBytes(startRow, numRows);
-
-    io::FileOutputStream outStream(mTestPathname);
-    write(fileOffset, buffers, numBytes, outStream);
-
-    // Rows [5, 25)
-    startRow = 5;
-    numRows = 20;
-    siddByteProvider.getBytes(inImage + startRow * mDims.col,
-                              startRow,
-                              numRows,
-                              fileOffset,
-                              buffers);
-    numBytes = siddByteProvider.getNumBytes(startRow, numRows);
-    write(fileOffset, buffers, numBytes, outStream);
-
-    // Rows [0, 5)
-    startRow = 0;
-    numRows = 5;
-    siddByteProvider.getBytes(inImage + startRow * mDims.col,
-                              startRow,
-                              numRows,
-                              fileOffset,
-                              buffers);
-    numBytes = siddByteProvider.getNumBytes(startRow, numRows);
-    write(fileOffset, buffers, numBytes, outStream);
-
-    // Rows [100, 123)
-    startRow = 100;
-    numRows = 23;
-    siddByteProvider.getBytes(inImage + startRow * mDims.col,
-                              startRow,
-                              numRows,
-                              fileOffset,
-                              buffers);
-    numBytes = siddByteProvider.getNumBytes(startRow, numRows);
-    write(fileOffset, buffers, numBytes, outStream);
-
-    // Rows [25, 40)
-    startRow = 25;
-    numRows = 15;
-    siddByteProvider.getBytes(inImage + startRow * mDims.col,
-                              startRow,
-                              numRows,
-                              fileOffset,
-                              buffers);
-    numBytes = siddByteProvider.getNumBytes(startRow, numRows);
-    write(fileOffset, buffers, numBytes, outStream);
-
-    // Rows [60, 100)
-    startRow = 60;
-    numRows = 40;
-    siddByteProvider.getBytes(inImage + startRow * mDims.col,
-                              startRow,
-                              numRows,
-                              fileOffset,
-                              buffers);
-    numBytes = siddByteProvider.getNumBytes(startRow, numRows);
-    write(fileOffset, buffers, numBytes, outStream);
-
-    outStream.close();
-
-    compare("Multiple writes");
-}
-
-size_t countNumRows(const nitf::ImageBlocker& imageBlocker,
-                    size_t startBlock,
-                    size_t numBlocks,
-                    size_t& currentSegment,
-                    size_t& startBlockThisSegment,
-                    size_t& numBlocksThisSegment)
-{
-    size_t numRows = 0;
-    size_t lastBlockThisSegment = startBlockThisSegment + numBlocksThisSegment - 1;
-    for (size_t block = startBlock; block < startBlock + numBlocks; ++block)
-    {
-        const size_t segment = imageBlocker.getSegmentFromGlobalBlockRow(block);
-        numRows += imageBlocker.getNumRowsPerBlock()[segment];
-
-        if (segment > currentSegment)
-        {
-            startBlockThisSegment += numBlocksThisSegment;
-            currentSegment = segment;
-            numBlocksThisSegment = imageBlocker.getNumRowsOfBlocks(currentSegment);
-            lastBlockThisSegment = startBlockThisSegment + numBlocksThisSegment - 1;
-        }
-
-        if (block == lastBlockThisSegment)
-        {
-            numRows -= imageBlocker.getNumPadRowsInFinalBlock(segment);
-        }
-
-    }
-    return numRows;
-}
-
-template <typename DataTypeT>
-void Tester<DataTypeT>::testMultipleWritesBlocked(size_t blocksPerWrite)
-{
-    const EnsureFileCleanup ensureFileCleanup(mTestPathname);
-
-    io::FileOutputStream outStream(mTestPathname);
-
-    const six::sidd::SIDDByteProvider siddByteProvider(
-            *mData,
-            mSchemaPaths,
-            mNumRowsPerBlock,
-            mNumColsPerBlock,
-            mSetMaxProductSize ? mMaxProductSize : 0);
-
-    // Write the blocks in reverse order
-    std::unique_ptr<const nitf::ImageBlocker> imageBlocker =
-            siddByteProvider.getImageBlocker();
-
-    const size_t numSegs(imageBlocker->getNumSegments());
-    size_t totalNumBlocks(0);
-    for (size_t seg = 0; seg < numSegs; ++seg)
-    {
-        totalNumBlocks += imageBlocker->getNumRowsOfBlocks(seg);
-    }
-
-    size_t currentSegment = 0;
-    size_t numBlocksThisSeg = imageBlocker->getNumRowsOfBlocks(currentSegment);
-    size_t startBlockThisSeg = 0;
-    size_t startRow = 0;
-
-    // Want to write out the blocks in reverse order to make sure offsetting
-    // works. But I don't want to do the math backwards, so this will just go
-    // through and collect the data needed for each block write.
-    std::vector<WriteData> data;
-    for (size_t startBlock = 0;
-            startBlock < totalNumBlocks;
-            startBlock += blocksPerWrite)
-    {
-        WriteData writeData;
-        if (startBlock >= startBlockThisSeg + numBlocksThisSeg)
-        {
-            ++currentSegment;
-            startBlockThisSeg += numBlocksThisSeg;
-            numBlocksThisSeg = imageBlocker->getNumRowsOfBlocks(currentSegment);
-        }
-        const size_t blocksThisWrite =
-                std::min<size_t>(blocksPerWrite, totalNumBlocks - startBlock);
-
-        const size_t numRows = countNumRows(*imageBlocker, startBlock, blocksThisWrite,
-                currentSegment, startBlockThisSeg, numBlocksThisSeg);
-
-        writeData.numBlocks = blocksThisWrite;
-        writeData.startRow = startRow;
-        writeData.numRows = numRows;
-        data.push_back(writeData);
-
-        startRow += numRows;
-    }
-
-    // Solaris doesn't know how to get a const_reverse_iterator from a
-    // reverse_iterator.
-    const std::vector<WriteData>& constData = data;
-
-    for (std::vector<WriteData>::const_reverse_iterator iter = constData.rbegin();
-            iter != constData.rend(); ++iter)
-    {
-        const size_t bytesThisWrite =
-            imageBlocker->getNumBytesRequired<DataTypeT>(
-                    iter->startRow, iter->numRows);
-
-        std::vector<DataTypeT> blockData(bytesThisWrite);
-        imageBlocker->block(&mBigEndianImage[iter->startRow * 456],
-                            iter->startRow,
-                            iter->numRows,
-                            blockData.data());
-
-        nitf::Off fileOffset;
-        nitf::NITFBufferList buffers;
-        siddByteProvider.getBytes(blockData.data(),
-                                  iter->startRow,
-                                  iter->numRows,
-                                  fileOffset,
-                                  buffers);
-        const size_t numBytes = siddByteProvider.getNumBytes(iter->startRow,
-                                                             iter->numRows);
-        write(fileOffset, buffers, numBytes, outStream);
-    }
-    outStream.close();
-
-    compare("Multiple writes blocked");
-}
-
-template <typename DataTypeT>
-void Tester<DataTypeT>::testOneWritePerRow()
-{
-    const EnsureFileCleanup ensureFileCleanup(mTestPathname);
-
-    six::sidd::SIDDByteProvider siddByteProvider(
-            *mData,
-            mSchemaPaths,
-            mNumRowsPerBlock,
-            mNumColsPerBlock,
-            mSetMaxProductSize ? mMaxProductSize : 0);
-
-    io::FileOutputStream outStream(mTestPathname);
-    for (size_t row = 0; row < mDims.row; ++row)
-    {
-        // Write it backwards
-        const size_t startRow = mDims.row - 1 - row;
-
-        nitf::Off fileOffset;
-        nitf::NITFBufferList buffers;
-        siddByteProvider.getBytes(&mBigEndianImage[startRow * mDims.col],
-                                  startRow,
-                                  1,
-                                  fileOffset,
-                                  buffers);
-        const nitf::Off numBytes = siddByteProvider.getNumBytes(startRow, 1);
-        write(fileOffset, buffers, numBytes, outStream);
-    }
-
-    outStream.close();
-
-    compare("One write per row");
-}
-
-template <typename DataTypeT>
 bool doTests(const std::vector<std::string>& schemaPaths,
              bool setBlocking,
              bool setMaxProductSize,
@@ -774,9 +757,8 @@ TEST_CASE(forcing_various_numbers_of_segments)
         }
     }
 }
-}
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(no_funky_segmentation);
     TEST_CHECK(forcing_various_numbers_of_segments);
 )

@@ -37,11 +37,7 @@
 #include <six/NITFWriteControl.h>
 #include <six/NITFHeaderCreator.h>
 
-namespace fs = std::filesystem;
-
-namespace
-{
-six::LatLonCorners makeUpCornersFromDMS()
+static six::LatLonCorners makeUpCornersFromDMS()
 {
     int latTopDMS[3] = { 42, 17, 50 };
     int latBottomDMS[3] = { 42, 15, 14 };
@@ -76,7 +72,7 @@ six::LatLonCorners makeUpCornersFromDMS()
     return corners;
 }
 
-mem::auto_ptr<six::Data>
+static mem::auto_ptr<six::Data>
 mockupDerivedData(const types::RowCol<size_t>& dims)
 {
     six::PixelType pixelType = six::PixelType::MONO8I;
@@ -186,7 +182,7 @@ struct TestHelper
     {
         try
         {
-           fs::remove(mPathname);
+           std::filesystem::remove(mPathname);
         }
         catch (...)
         {
@@ -340,9 +336,8 @@ TEST_CASE(test_getParser)
     }
 }
 
-}
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(testRead);
     TEST_CHECK(test_getParser);
     )

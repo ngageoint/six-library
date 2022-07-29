@@ -1,0 +1,137 @@
+html,body {
+    text-align: left;
+    font-family: Verdana,Arial,'Bitstream Vera Sans',Helvetica,"Lucida Grande",sans-serif; 
+    font-size: 14px;
+    background-color: #000080;
+    color: #000;
+    padding: 0;
+    height: 100%;
+    margin: auto;
+}
+
+.error{
+    color: #f00;
+}	
+
+.spacer {
+    clear: both;
+}
+
+img {
+    border: 0px;
+}
+
+
+a {
+    cursor: pointer;
+}
+
+.file{
+    background-color: #fff;
+}
+
+.invisible, .hidden {
+    display: none;
+}
+
+.dir-title{
+}
+
+.header{
+    font-size: 2em;
+    font-weight: bold;
+    font-style: italic;
+    color: #fff;
+    padding-left: .5em;
+    background-color:#6593CF;
+    background-image:url("/static/header_bg.jpg");
+    background-repeat:repeat-x;
+}
+
+.file-title{
+    font-size: 1.2em;
+    cursor: pointer;
+    border: 1px solid #6593CF;
+    padding-left: .5em;
+    color: #000080;
+}
+
+.file .even{
+    background-color: #fff;
+}
+.file .odd{
+    background-color: #d4e7ff;
+}
+
+.file .hover{
+    background-color: #ffffbb;
+}
+
+.file-data{
+    background-color: #fff;
+}
+
+.file-data table{
+    width:100%;
+}
+
+.file-data table tr.even{
+    background-color:#f2f2f2;
+}
+
+.file-data table tr.odd{
+    background-color:#fff;
+}
+
+.file-data table tr.title{
+    background-color:#3386ee;
+    color:#fff;
+    text-align:center;
+    font-weight:bold;
+}
+
+.dir-link{
+    font-size: 1.2em;
+    background-color:#d4e7ff;
+    border: 1px solid #6593CF;
+    padding: .5em;
+    color: #000080;
+    text-decoration:underline;
+}
+
+a, a:link, a:visited{
+    text-decoration:none;
+    color: inherit;
+    font-weight: bold;
+}
+
+.dir{
+    padding-bottom: 1em;
+}
+
+
+#content{
+    width: 80%;
+    margin:auto;
+}
+
+.loading{
+    text-align:center;
+}
+
+#header{
+    background-color:#6593CF;
+    width: 80%;
+    margin:auto;
+}
+
+#header table{
+    background-color:#fff;
+    margin: .5em auto;
+    width: 98%;
+    text-align:center;
+    font-size: 2em;
+    font-weight: bold;
+    color: #000080;
+    border: 5px solid #d4e7ff;
+}

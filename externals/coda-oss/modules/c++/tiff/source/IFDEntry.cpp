@@ -118,7 +118,7 @@ void tiff::IFDEntry::deserialize(io::InputStream& input, const bool reverseBytes
         input.read(buffer, size);
         if (reverseBytes)
         {
-            sys::Uint32_T elementSize = tiff::Const::sizeOf(mType);
+            auto elementSize = tiff::Const::sizeOf(mType);
             sys::Uint32_T numElements = mCount;
             if (mType == tiff::Const::Type::RATIONAL && mType
                     == tiff::Const::Type::SRATIONAL)
@@ -142,9 +142,8 @@ void tiff::IFDEntry::deserialize(io::InputStream& input, const bool reverseBytes
         {
             // Re-reverse because a value may be less than 4 bytes.
             mOffset = sys::byteSwap(mOffset);
-            unsigned short elementSize = tiff::Const::sizeOf(mType);
-            sys::byteSwap((sys::byte*)&mOffset, elementSize, sizeof(mOffset)
-              / elementSize);
+            const auto elementSize = tiff::Const::sizeOf(mType);
+            sys::byteSwap((sys::byte*)&mOffset, elementSize, sizeof(mOffset) / elementSize);
         }
         parseValues((unsigned char *)&mOffset);
     }

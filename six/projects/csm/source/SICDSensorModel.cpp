@@ -21,6 +21,8 @@
 */
 #include <six/csm/SICDSensorModel.h>
 
+#include <assert.h>
+
 #include "Error.h"
 #include <sys/OS.h>
 #include <sys/Path.h>
@@ -31,6 +33,7 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 #include <six/XmlLite.h>
+#include <six/ErrorStatistics.h>
 
 namespace six
 {
@@ -391,6 +394,17 @@ csm::ImageCoord SICDSensorModel::getImageStart() const
 {
     return csm::ImageCoord(mData->imageData->firstRow,
                            mData->imageData->firstCol);
+}
+
+std::vector<double>
+SICDSensorModel::getSIXUnmodeledError() const
+{
+    assert(mData.get() != nullptr);
+    if (auto pErrorStatistics = mData->errorStatistics.get())
+    {
+        return SIXSensorModel::getSIXUnmodeledError_(*pErrorStatistics);
+    }
+    return {};
 }
 
 void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)

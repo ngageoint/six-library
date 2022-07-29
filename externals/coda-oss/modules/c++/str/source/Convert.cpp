@@ -50,6 +50,11 @@ template<> std::string str::toString(const int8_t& value)
     return str::toString(static_cast<int>(value));
 }
 
+template<> std::string str::toString(const coda_oss::byte& value)
+{
+    return str::toString(static_cast<uint8_t>(value));
+}
+
 template<> bool str::toType<bool>(const std::string& s)
 {
     std::string ss = s;
@@ -98,15 +103,15 @@ unsigned long long str::strtoull(const char *str, char **endptr, int base)
 #endif
 }
 
-template<> int str::getPrecision(const float& )
+template<> CODA_OSS_API int str::getPrecision(const float&)
 {
     return std::numeric_limits<float>::max_digits10;
 }
-template<> int str::getPrecision(const double& )
+template<> CODA_OSS_API int str::getPrecision(const double& )
 {
     return std::numeric_limits<double>::max_digits10;
 }
-template<> int str::getPrecision(const long double& )
+template <> CODA_OSS_API int str::getPrecision(const long double&)
 {
     return std::numeric_limits<long double>::max_digits10;
 }

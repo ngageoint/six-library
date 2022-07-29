@@ -26,8 +26,9 @@
 #include <string>
 #include <vector>
 
-#include <sys/Conf.h>
-#include <io/InputStream.h>
+#include "config/Exports.h"
+#include "sys/Conf.h"
+#include "io/InputStream.h"
 
 namespace io
 {
@@ -36,7 +37,8 @@ namespace io
  * specified delimiter string. It uses buffered stream reads internally for
  * better efficiency than InputStream::readln for reading large amounts of data.
  */
-struct StreamSplitter {
+struct CODA_OSS_API StreamSplitter
+{
     /*!
      * \brief Create a stream splitter.
      *

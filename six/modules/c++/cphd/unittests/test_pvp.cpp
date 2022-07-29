@@ -30,8 +30,6 @@
 #include "TestCase.h"
 
 
-namespace
-{
 TEST_CASE(testSimpleEqualityOperatorTrue)
 {
     cphd::Pvp pvp1, pvp2;
@@ -102,9 +100,8 @@ TEST_CASE(testAddedParamsEqualityOperatorFalse)
     TEST_ASSERT_TRUE((pvp1 != pvp2));
     TEST_ASSERT_TRUE((pvp1 != pvp3));
 }
-}
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
         TEST_CHECK(testSimpleEqualityOperatorTrue);
         TEST_CHECK(testAppend);
         TEST_CHECK(testAddedParamsEqualityOperatorTrue);

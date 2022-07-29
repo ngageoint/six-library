@@ -30,8 +30,6 @@
 
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testDerivativeCODValid)
 {
     cphd::Dwell dwell;
@@ -114,9 +112,8 @@ TEST_CASE(testEquality)
     TEST_ASSERT_NOT_EQ(dwell.dtime[0].dwellTimePoly.derivativeX(), dwell.dtime[1].dwellTimePoly.derivativeX());
     TEST_ASSERT_TRUE((dwell.dtime[0] != dwell.dtime[1]));
 }
-}
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
         TEST_CHECK(testDerivativeCODValid);
         TEST_CHECK(testDerivativeDwellValid);
         TEST_CHECK(testEquality);

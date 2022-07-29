@@ -525,8 +525,8 @@ std::string ImageTest::intializeTestData(const ImageInfo imageInfo, int numberOf
 
 		   int   numParams;
 		   numParams = model->getNumParameters();
-		   double *linePartial = new double [numParams];
-		   double *sampPartial = new double [numParams];
+		   //double *linePartial = new double [numParams];
+		   //double *sampPartial = new double [numParams];
 		   for( int j = 0; j < numParams; j++ )
 		   {
 		      RasterGM::SensorPartials sp = model->computeSensorPartials(

@@ -2,9 +2,29 @@
 
 # SIX Release Notes
 
-## Version 3.?.?; ??? ??, 2022
-* [coda-oss](https://github.com/mdaus/coda-oss) version [...](https://github.com/mdaus/coda-oss/releases/tag/...)
-* [nitro](https://github.com/mdaus/nitro) version [2.??.?](https://github.com/mdaus/nitro/releases/tag/NITRO-2.??.?)
+## Version 3.1.12; June 29, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-06-29](https://github.com/mdaus/coda-oss/releases/tag/2022-06-29)
+* [nitro](https://github.com/mdaus/nitro) version [2.10.10](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.10)
+* Support `OTHER.*` polarization values in XML from SIDD 3.0/SICD 1.3
+* Updated to [CSM 3.0.4](https://github.com/ngageoint/csm/releases/tag/v3.0.4).
+* Implements the back-end C++ changes from #351.
+
+   * Support writing multiple CPHD channels to file from a single wideband buffer.
+   * Support 1-, 2-, and 4-byte datatypes within the `PVPBlock`. All user-defined PVP were hard-coded to 8-byte types before.
+   * Make `cphd::PVPBlock` used `std::map` to store added PVP parameters instead of `std::unordered_map`;
+    this was needed to support older versions of SWIG.
+   * Fix signal datatype in PVP to be 8-byte integer according to the CPHD v1.x spec. Was set to double previously.
+
+* Fix `getARPVector()` and `getARPVelocityVector()` methods to return vectors filled with constant values;
+  these values are used when performing `imageToSceneAdjustment`.
+
+## Version 3.1.11; May 13, 2022
+* Lastest [coda-oss](https://github.com/mdaus/coda-oss) and [nitro](https://github.com/mdaus/nitro) (updates from **master**, no new releases)
+* Fix bug in XML serializaton where `double`s were given a class of `xs::double` (two `:`s) instead of `xs:double`.
+
+## Version 3.1.10; May 3, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-05-03](https://github.com/mdaus/coda-oss/releases/tag/2022-05-03)
+* [nitro](https://github.com/mdaus/nitro) version [2.10.9](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.9)
 * improve performance of *AMP8I_PHS8I* reading.
 
 ## Version 3.1.9; February 22, 2022 (aka 2/22/22)

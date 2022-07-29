@@ -283,7 +283,7 @@ TEST_CASE(test_getValue)
         const auto& e = root.getElementByTagName("bool", true /*recurse*/);
         auto toType = [](const std::string& value) { return value == "yes"; };
 
-        bool value;
+        bool value = false;
         auto result = castValue(e, value, toType);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(true, value);
@@ -385,7 +385,7 @@ TEST_CASE(test_setValue)
         setValue(e, true, toString);
         
         auto toType = [](const std::string& value) { return value == "yes"; };
-        bool value;
+        bool value = false;
         auto result = castValue(e, value, toType);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(true, value);

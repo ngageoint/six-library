@@ -51,7 +51,7 @@ TEST_CASE(testMatches)
 
     re::Regex rx2("^([^:]+):[ ]*([^\r\n]+)\r\n(.*)");
     TEST_ASSERT(rx2.match("Proxy-Connection: Keep-Alive\r\n", matches));
-    TEST_ASSERT_EQ(matches.size(), 4);
+    TEST_ASSERT_EQ(matches.size(), static_cast<size_t>(4));
 
     TEST_ASSERT_EQ(matches[0], "Proxy-Connection: Keep-Alive\r\n");
     TEST_ASSERT_EQ(matches[1], "Proxy-Connection");
@@ -66,8 +66,8 @@ TEST_CASE(testMatchOptional)
     std::string url = "http://localhost:80/something/page.com?param1=foo&param2=bar#fragment";
 
     rx.match(url, matches);
-    TEST_ASSERT_EQ(matches.size(), 7);
-    TEST_ASSERT_EQ(matches[0], url)
+    TEST_ASSERT_EQ(matches.size(), static_cast<size_t>(7));
+    TEST_ASSERT_EQ(matches[0], url);
     TEST_ASSERT_EQ(matches[1], "http");
     TEST_ASSERT_EQ(matches[2], "localhost");
     TEST_ASSERT_EQ(matches[3], "80");
@@ -79,7 +79,7 @@ TEST_CASE(testMatchOptional)
     matches.clear();
     rx.match(url, matches);
     TEST_ASSERT_GREATER_EQ(matches.size(), 7);
-    TEST_ASSERT_EQ(matches[0], url)
+    TEST_ASSERT_EQ(matches[0], url);
     TEST_ASSERT_EQ(matches[1], "http");
     TEST_ASSERT_EQ(matches[2], "localhost");
     TEST_ASSERT_EQ(matches[3], "");
@@ -100,7 +100,7 @@ TEST_CASE(testSearchAll)
     re::RegexMatch matches;
     re::Regex rx("ar");
     rx.searchAll("arabsdsarbjudarc34ardnjfsdveqvare3arfarg", matches);
-    TEST_ASSERT_EQ(matches.size(), 7);
+    TEST_ASSERT_EQ(matches.size(), static_cast<size_t>(7));
     for (size_t ii = 0; ii < matches.size(); ++ii)
     {
         TEST_ASSERT_EQ(matches[ii], "ar");
@@ -110,7 +110,7 @@ TEST_CASE(testSearchAll)
     re::Regex rx2("a[bc]");
     rx2.searchAll("abadabbaccaddaeabaac", matches);
     //            0    1  2       3  4
-    TEST_ASSERT_EQ(matches.size(), 5);
+    TEST_ASSERT_EQ(matches.size(), static_cast<size_t>(5));
     TEST_ASSERT_EQ(matches[0], "ab");
     TEST_ASSERT_EQ(matches[1], "ab");
     TEST_ASSERT_EQ(matches[2], "ac");
@@ -121,7 +121,7 @@ TEST_CASE(testSearchAll)
     matches.clear();
     re::Regex rx3("^bar");
     rx3.searchAll("barbar", matches);
-    TEST_ASSERT_EQ(matches.size(), 1);
+    TEST_ASSERT_EQ(matches.size(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(matches[0], "bar");
 }
 
@@ -132,7 +132,7 @@ TEST_CASE(testSearchAllWithOverlap)
     rx.searchAll("abAbabAbabAbbAbAaba", matches);
     //            0 1 2 3 4    5  6
 
-    TEST_ASSERT_EQ(matches.size(), 7);
+    TEST_ASSERT_EQ(matches.size(), static_cast<size_t>(7));
     TEST_ASSERT_EQ(matches[0], "abA");
     TEST_ASSERT_EQ(matches[1], "Aba");
     TEST_ASSERT_EQ(matches[2], "abA");
@@ -149,7 +149,7 @@ TEST_CASE(testSearchAllJokersWild)
     rx1.searchAll("0123456789", matches);
     //            0123456
 
-    TEST_ASSERT_EQ(matches.size(), 7);
+    TEST_ASSERT_EQ(matches.size(), static_cast<size_t>(7));
     TEST_ASSERT_EQ(matches[0], "0123");
     TEST_ASSERT_EQ(matches[1], "1234");
     TEST_ASSERT_EQ(matches[2], "2345");
@@ -165,7 +165,7 @@ TEST_CASE(testSearchAllJokersWild)
     rx2.searchAll("__xXXXxxx__XXXXxxXX", matches);
     //              0123     45678
 
-    TEST_ASSERT_EQ(matches.size(), 9);
+    TEST_ASSERT_EQ(matches.size(), static_cast<size_t>(9));
     TEST_ASSERT_EQ(matches[0], "xXXX");
     TEST_ASSERT_EQ(matches[1], "XXXx");
     TEST_ASSERT_EQ(matches[2], "XXxx");
@@ -184,7 +184,7 @@ TEST_CASE(testDotAllFlag)
     re::RegexMatch matches;
     re::Regex rx1("\\d.\\d");
     rx1.searchAll("3.3 4\n2", matches);
-    TEST_ASSERT_EQ(matches.size(), 3);
+    TEST_ASSERT_EQ(matches.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(matches[0], "3.3");
     TEST_ASSERT_EQ(matches[1], "3 4");
     TEST_ASSERT_EQ(matches[2], "4\n2");
@@ -194,7 +194,7 @@ TEST_CASE(testDotAllFlag)
     matches.clear();
     re::Regex rx2("\\d\\.\\d");
     rx2.searchAll("3.3 4\n2", matches);
-    TEST_ASSERT_EQ(matches.size(), 1);
+    TEST_ASSERT_EQ(matches.size(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(matches[0], "3.3");
 }
 
@@ -212,19 +212,19 @@ TEST_CASE(testMultilineBehavior)
     // This should match just the beginning
     rx.compile("^.");
     rx.searchAll(inputString, matches);
-    TEST_ASSERT_EQ(matches.size(), 1);
+    TEST_ASSERT_EQ(matches.size(), static_cast<size_t>(1));
 
     // This should match nothing
     matches.clear();
     rx.compile("^.$");
     TEST_ASSERT_FALSE(rx.match(inputString, matches));
-    TEST_ASSERT_EQ(matches.size(), 0);
+    TEST_ASSERT(matches.empty());
 
     // This should match the whole inputString
     matches.clear();
     rx.compile("^.*$");
     TEST_ASSERT_TRUE(rx.match(inputString, matches));
-    TEST_ASSERT_EQ(matches.size(), 1);
+    TEST_ASSERT_EQ(matches.size(), static_cast<size_t>(1));
     TEST_ASSERT_EQ(matches[0].length(), inputString.length());
 
 #ifdef RE_ENABLE_STD_REGEX
@@ -279,14 +279,14 @@ TEST_CASE(testSplit)
     re::Regex rx1("ar");
     std::vector<std::string> vec;
     rx1.split("ONEarTWOarTHREE", vec);
-    TEST_ASSERT_EQ(vec.size(), 3);
+    TEST_ASSERT_EQ(vec.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(vec[0], "ONE");
     TEST_ASSERT_EQ(vec[1], "TWO");
     TEST_ASSERT_EQ(vec[2], "THREE");
 
     vec.clear();
     rx1.split("ONEarTWOarTHREEar", vec);
-    TEST_ASSERT_EQ(vec.size(), 3);
+    TEST_ASSERT_EQ(vec.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(vec[0], "ONE");
     TEST_ASSERT_EQ(vec[1], "TWO");
     TEST_ASSERT_EQ(vec[2], "THREE");
@@ -294,14 +294,14 @@ TEST_CASE(testSplit)
     re::Regex rx2("x");
     vec.clear();
     rx2.split("ONExTWOxTHREE", vec);
-    TEST_ASSERT_EQ(vec.size(), 3);
+    TEST_ASSERT_EQ(vec.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(vec[0], "ONE");
     TEST_ASSERT_EQ(vec[1], "TWO");
     TEST_ASSERT_EQ(vec[2], "THREE");
 
     vec.clear();
     rx2.split("ONExTWOxTHREEx", vec);
-    TEST_ASSERT_EQ(vec.size(), 3);
+    TEST_ASSERT_EQ(vec.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(vec[0], "ONE");
     TEST_ASSERT_EQ(vec[1], "TWO");
     TEST_ASSERT_EQ(vec[2], "THREE");
@@ -309,14 +309,14 @@ TEST_CASE(testSplit)
     re::Regex rx3("xxxxxxxxxx");
     vec.clear();
     rx3.split("ONExxxxxxxxxxTWOxxxxxxxxxxTHREE", vec);
-    TEST_ASSERT_EQ(vec.size(), 3);
+    TEST_ASSERT_EQ(vec.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(vec[0], "ONE");
     TEST_ASSERT_EQ(vec[1], "TWO");
     TEST_ASSERT_EQ(vec[2], "THREE");
 
     vec.clear();
     rx3.split("ONExxxxxxxxxxTWOxxxxxxxxxxTHREExxxxxxxxxx", vec);
-    TEST_ASSERT_EQ(vec.size(), 3);
+    TEST_ASSERT_EQ(vec.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(vec[0], "ONE");
     TEST_ASSERT_EQ(vec[1], "TWO");
     TEST_ASSERT_EQ(vec[2], "THREE");
@@ -324,7 +324,7 @@ TEST_CASE(testSplit)
     // Test the case where match is at the beginning
     vec.clear();
     rx3.split("xxxxxxxxxxTWOxxxxxxxxxxTHREExxxxxxxxxx", vec);
-    TEST_ASSERT_EQ(vec.size(), 3);
+    TEST_ASSERT_EQ(vec.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(vec[0], "");
     TEST_ASSERT_EQ(vec[1], "TWO");
     TEST_ASSERT_EQ(vec[2], "THREE");
@@ -333,7 +333,7 @@ TEST_CASE(testSplit)
     vec.clear();
     re::Regex rx4("^bar");
     rx4.split("barfoobar", vec);
-    TEST_ASSERT_EQ(vec.size(), 2);
+    TEST_ASSERT_EQ(vec.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(vec[0], "");
     TEST_ASSERT_EQ(vec[1], "foobar");
 }
@@ -495,8 +495,7 @@ TEST_CASE(testHttpResponse)
     TEST_ASSERT_EQ(p.getContentLength(), "96");
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testCompile);
     TEST_CHECK(testMatches);
     TEST_CHECK(testMatchOptional);
@@ -509,5 +508,4 @@ int main(int, char**)
     TEST_CHECK(testSub);
     TEST_CHECK(testSplit);
     TEST_CHECK(testHttpResponse);
-    return 0;
-}
+    )

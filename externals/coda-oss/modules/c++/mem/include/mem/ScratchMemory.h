@@ -33,6 +33,7 @@
 #include <except/Exception.h>
 #include <mem/BufferView.h>
 #include <sys/Conf.h>
+#include <config/Exports.h>
 
 namespace mem
 {
@@ -46,7 +47,7 @@ namespace mem
  *  The get method may be used afterwards to obtain pointers to the memory
  *  segments.
  */
-class ScratchMemory
+class CODA_OSS_API ScratchMemory
 {
 public:
     //! Default constructor
@@ -161,7 +162,7 @@ public:
     ScratchMemory& operator=(const ScratchMemory&) = delete;
 
 private:
-    struct Segment
+    struct CODA_OSS_API Segment final
     {
         Segment(size_t numBytes, size_t numBuffers, size_t alignment, size_t offset);
 

@@ -31,6 +31,7 @@
 
 #include <scene/SceneGeometry.h>
 #include <scene/ProjectionModel.h>
+#include <six/Utilities.h>
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/SICDMesh.h>
 #include <six/NITFReadControl.h>
@@ -404,6 +405,8 @@ public:
             ::io::InputStream& xmlStream,
             const std::vector<std::string>& schemaPaths,
             logging::Logger& log);
+    static std::unique_ptr<ComplexData> parseData(::io::InputStream& xmlStream,
+        const std::vector<std::filesystem::path>*, logging::Logger&);
 
     /*
      * Parses the XML in 'pathname' and converts it into a ComplexData object.
@@ -419,6 +422,8 @@ public:
             const std::string& pathname,
             const std::vector<std::string>& schemaPaths,
             logging::Logger& log);
+    static std::unique_ptr<ComplexData> parseDataFromFile(const std::filesystem::path&,
+        const std::vector<std::filesystem::path>*, logging::Logger* pLogger = nullptr);
 
     /*
      * Parses the XML in 'xmlStr' and converts it into a ComplexData object.
@@ -433,6 +438,10 @@ public:
         const std::string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
+    static std::unique_ptr<ComplexData> parseDataFromString(
+        const std::string& xmlStr,
+        const std::vector<std::filesystem::path>* pSchemaPaths,
+        logging::Logger* pLogger = nullptr);
 
     /*
      * Converts 'data' back into a formatted XML string
@@ -448,7 +457,8 @@ public:
             const ComplexData& data,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             logging::Logger* logger = nullptr);
-
+    static std::string toXMLString(const ComplexData&,
+        const std::vector<std::filesystem::path>*, logging::Logger* pLogger = nullptr);
     /*!
      * Create a fake SICD that's populated enough for
      * general testing code to run without throwing exceptions
@@ -456,7 +466,8 @@ public:
      * \return mock ComplexData object
      */
     static mem::auto_ptr<ComplexData> createFakeComplexData(const types::RowCol<size_t>* pDims = nullptr);
-    static std::unique_ptr<ComplexData> createFakeComplexData(PixelType, bool makeAmplitudeTable, const types::RowCol<size_t>* pDims = nullptr);
+    static std::unique_ptr<ComplexData> createFakeComplexData(const std::string& strVersion,
+        PixelType, bool makeAmplitudeTable, const types::RowCol<size_t>* pDims = nullptr);
 
     /*
      * Given a reference to a loaded NITFReadControl, this function

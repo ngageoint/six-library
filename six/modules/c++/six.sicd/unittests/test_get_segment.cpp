@@ -23,8 +23,6 @@
 #include <import/six/sicd.h>
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testCanFindSegment)
 {
     six::sicd::AreaPlane areaPlane;
@@ -69,9 +67,8 @@ TEST_CASE(testHandlesNullPointers)
     areaPlane.segmentList[2]->identifier = "void";
     areaPlane.getSegment("void");
 }
-}
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(testCanFindSegment);
     TEST_CHECK(testThrowIfMissingSegment);
     TEST_CHECK(testHandlesNullPointers);

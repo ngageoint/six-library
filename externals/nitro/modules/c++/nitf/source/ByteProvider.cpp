@@ -393,8 +393,7 @@ mem::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
             mNumCols,
             mOverallNumRowsPerBlock,
             mNumColsPerBlock);
-    mem::auto_ptr<const ImageBlocker> blocker_(blocker.release());
-    return blocker_;
+    return mem::auto_ptr<const ImageBlocker>(blocker.release());
 }
 
 void ByteProvider::checkBlocking(size_t seg,

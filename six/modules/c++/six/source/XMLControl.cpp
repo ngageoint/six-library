@@ -61,9 +61,9 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
 // Don't want to set a dummy schema path to a directory that exists as that causes
 // the code to check for valid schemas and validate.
 #if defined(_WIN32)
-#define SIX_DEFAULT_SCHEMA_PATH R"(C:\s 0 m e\p at h)" // just to compile ...
+#define SIX_DEFAULT_SCHEMA_PATH "Z:\\s 0 m e\\p at h" // just to compile ...
 #else
-#define SIX_DEFAULT_SCHEMA_PATH R"(/s 0 m e/p at h)" // just to compile ...
+#define SIX_DEFAULT_SCHEMA_PATH "/s 0 m e/p at h" // just to compile ...
 #endif
 #endif
 
@@ -73,7 +73,7 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
         if (!envPath.empty())
         {
             // SIX_SCHEMA_PATH might be a search path
-	  if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, std::filesystem::file_type::directory))
+	        if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, std::filesystem::file_type::directory))
             {
                 // Nope; assume the caller can figure things out (existing behavior).
                 schemaPaths.push_back(envPath);
@@ -335,7 +335,20 @@ std::unique_ptr<Data> XMLControl::fromXML(const xml::lite::Document& doc,
 
 std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
 {
-    std::string str = dataType;
+    std::string str;
+    switch (dataType)
+    {
+    case DataType::COMPLEX:
+        str = "SICD";
+        break;
+    case DataType::DERIVED:
+        str = "SIDD";
+        break;
+    default:
+        throw except::Exception(
+            Ctxt("Invalid data type " + str::toString(dataType)));
+    }
+
     if (appendXML)
     {
         str += "_XML";
@@ -345,13 +358,29 @@ std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
 }
 }
 
-std::string six::getSchemaPath(std::vector<std::string>& schemaPaths)
+std::string six::getSchemaPath(std::vector<std::string>& schemaPaths, bool tryToExpandIfNotFound)
 {
     loadDefaultSchemaPath(schemaPaths);
-    auto schemaPath = schemaPaths.empty() ? "" : schemaPaths[0];
-    if (!fs::is_directory(schemaPath))
+
+    // This is hacky; the whole point of having "schemaPaths" be a vector is that there could
+    // be MULTIPLE valid directories, not just one.
+    auto schemaPath = schemaPaths.empty() ? "" : schemaPaths[0]; // TODO: use all directories in schemaPaths
+    if (fs::is_directory(schemaPath))
     {
-        throw except::IOException(Ctxt(FmtX("Directory does not exist: '%s'", schemaPath.c_str())));
+        return schemaPath;
     }
-    return schemaPath;
+
+    if (tryToExpandIfNotFound)
+    {
+        // schemaPath might contain special enviroment variables
+        schemaPath = sys::Path::expandEnvironmentVariables(schemaPath, fs::file_type::directory);
+        if (fs::is_directory(schemaPath))
+        {
+            schemaPath = fs::absolute(schemaPath).string(); // get rid of embedded ".."
+            schemaPaths[0] = schemaPath;
+            return schemaPath;
+        }
+    }
+
+    throw except::IOException(Ctxt(FmtX("Directory does not exist: '%s'", schemaPath.c_str())));
 }

@@ -11,9 +11,22 @@
  ```
 # coda-oss Release Notes
 
-## WIP: (Release 202?-??-??)
-* Fixed a bug in `Poly2D::atY()`; imporved `flipXY()` behavior.
+## Release 2022-06-29
+* remove **modules/drivers/boost** as it was empty (and unused);
+  **modules/c++/serialize** depended on boost, so it has also been removed.
+* Update to [zlib 1.2.12](https://www.zlib.net/zlib-1.2.12.tar.gz),
+  ["Due to the bug fixes, any installations of 1.2.11 should be replaced with 1.2.12."](https://www.zlib.net/)
+* Build most code in Visual Studio 2022
+* Removed more compiler warnings
+* Begin work on `CODA_OSS_API` (needed for building a shared-library/DLL)
+* Add `run1D()` method to `mt::GenerationThreadPool` 
+
+## Release 2022-05-03
+* Fixed a bug in `Poly2D::atY()`; improved `flipXY()` behavior.
 * Implement [std::filesystem::file_size()](https://en.cppreference.com/w/cpp/filesystem/file_size).
+* use `inline` functions for `TEST_` macros
+* force use of [64-bit `time_t`](https://en.wikipedia.org/wiki/Year_2038_problem)
+* more routines now support a `std::span` overload; e.g., `io::InputStream::read()`.
 
 ## (Release 2022-02-22)
 * new `EnocdedString` and `EncodedStringView` to manage strings in different encodings

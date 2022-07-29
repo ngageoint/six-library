@@ -26,16 +26,20 @@
 
 #include <assert.h>
 
+#include "config/Exports.h"
+
 #if !defined(__APPLE_CC__)
 
 #include <import/sys.h>
 #include "mt/BasicThreadPool.h"
 #include "mt/CPUAffinityInitializer.h"
 #include "mt/CPUAffinityThreadInitializer.h"
+#include "mt/Runnable1D.h"
+
 
 namespace mt
 {
-    class TiedRequestHandler : public sys::Runnable
+    class CODA_OSS_API TiedRequestHandler : public sys::Runnable
     {
 	RunnableRequestQueue* mRequestQueue;
 	sys::Semaphore* mSem = nullptr;
@@ -62,7 +66,7 @@ namespace mt
 	virtual void run();
     };
 
-    class GenerationThreadPool : public BasicThreadPool<TiedRequestHandler>
+    class CODA_OSS_API GenerationThreadPool : public BasicThreadPool<TiedRequestHandler>
     {
 	sys::Semaphore mGenerationSync;
 	CPUAffinityInitializer* mAffinityInit = nullptr;
@@ -104,6 +108,35 @@ namespace mt
 	    addGroup(toRun);
 	    waitGroup();
 	}
+
+    
+    /*!
+     *  \brief Runs a given operation on a sequence of numbers in parallel
+     *
+     *  \param numElements The number of elements to run - op will be called 
+     *                     with 0 through numElements-1
+     *  \param op          A function-like object taking a parameter of type
+     *                     size_t which will be called for each number in the
+     *                     given range
+     */
+    template <typename OpT>
+    void run1D(size_t numElements, const OpT& op)
+    {
+        std::vector<sys::Runnable*> runnables;
+        const ThreadPlanner planner(numElements, mNumThreads);
+ 
+        size_t threadNum(0);
+        size_t startElement(0);
+        size_t numElementsThisThread(0);
+        while(planner.getThreadInfo(threadNum++, startElement, numElementsThisThread))
+        {
+            runnables.push_back(new Runnable1D<OpT>(
+                startElement, numElementsThisThread, op));
+        }
+        addAndWaitGroup(runnables);
+        
+    }
+
 
     };
 }

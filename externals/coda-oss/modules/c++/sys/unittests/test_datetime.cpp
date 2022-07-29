@@ -26,9 +26,6 @@
 
 #include "TestCase.h"
 
-namespace
-{
-
 TEST_CASE(testDefaultConstructor)
 {
     sys::OS os;
@@ -199,14 +196,9 @@ TEST_CASE(testGetTimeInMillis)
     TEST_ASSERT_LESSER_EQ(result, far_into_the_future);
 }
 
-}
-
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testDefaultConstructor);
     TEST_CHECK(testParameterizedConstructor);
     TEST_CHECK(testDateTimeDetails);
     TEST_CHECK(testGetTimeInMillis);
-
-    return 0;
-}
+)
