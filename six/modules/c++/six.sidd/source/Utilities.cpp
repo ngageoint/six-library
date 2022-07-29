@@ -559,26 +559,26 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem:
     return parseData(inStream, pSchemaPaths, *logger);
 }
 
-mem::auto_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr,
+mem::auto_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string& xmlStr,
         const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
-    io::StringStream inStream;
+    io::U8StringStream inStream;
     inStream.write(xmlStr);
     return parseData(inStream, schemaPaths, log);
 }
-std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr,
+std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
     logging::NullLogger nullLogger;
     logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
 
-    io::StringStream inStream;
+    io::U8StringStream inStream;
     inStream.write(xmlStr);
     return parseData(inStream, pSchemaPaths, *log);
 }
 
 template<typename TSchemaPaths>
-std::string Utilities_toXMLString(const DerivedData& data,
+std::u8string Utilities_toXMLString(const DerivedData& data,
     const TSchemaPaths& schemaPaths, logging::Logger* pLogger)
 {
     XMLControlRegistry xmlRegistry;
@@ -589,12 +589,12 @@ std::string Utilities_toXMLString(const DerivedData& data,
 
     return ::six::toValidXMLString(data, schemaPaths, logger, &xmlRegistry);
 }
-std::string Utilities::toXMLString(const DerivedData& data,
+std::u8string Utilities::toXMLString(const DerivedData& data,
                                    const std::vector<std::string>& schemaPaths, logging::Logger* logger)
 {
     return Utilities_toXMLString(data, schemaPaths, logger);
 }
-std::string Utilities::toXMLString(const DerivedData& data,
+std::u8string Utilities::toXMLString(const DerivedData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* logger)
 {
     return Utilities_toXMLString(data, pSchemaPaths, logger);

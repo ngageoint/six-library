@@ -82,7 +82,7 @@ void CompressedByteProvider::initialize(
         const std::vector<std::vector<size_t> >& bytesPerBlock)
 
 {
-    std::vector<std::string> xmlStrings;
+    std::vector<std::u8string> xmlStrings;
     std::vector<PtrAndLength> desData;
     size_t numRowsPerBlock;
     size_t numColsPerBlock;

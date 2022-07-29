@@ -308,7 +308,7 @@ inline std::unique_ptr<Data> parseData_(const XMLControlRegistry& xmlReg,
     const std::vector<std::string>* pSchemaPaths,
     logging::Logger& log)
 {
-    return six::parseData(xmlReg, xmlStream, dataType, *pSchemaPaths, log, false /*storeEncoding*/);
+    return six::parseData(xmlReg, xmlStream, dataType, *pSchemaPaths, log);
 }
 inline std::unique_ptr<Data> parseData_(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
@@ -316,7 +316,7 @@ inline std::unique_ptr<Data> parseData_(const XMLControlRegistry& xmlReg,
     const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger& log)
 {
-    return six::parseData(xmlReg, xmlStream, dataType, pSchemaPaths, log, true /*storeEncoding*/);
+    return six::parseData(xmlReg, xmlStream, dataType, pSchemaPaths, log);
 }
 
 template<typename TSchemaPath>

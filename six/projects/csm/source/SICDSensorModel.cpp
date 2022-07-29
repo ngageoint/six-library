@@ -28,6 +28,7 @@
 #include <sys/Path.h>
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
+#include <str/EncodedStringView.h>
 #include <six/XMLControlFactory.h>
 #include <six/NITFReadControl.h>
 #include <six/sicd/ComplexXMLControl.h>
@@ -107,8 +108,8 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
                 container->getData(0)->clone()));
 
         // get xml as string for sensor model state
-        const std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
-        mSensorModelState = NAME + std::string(" ") + xmlStr;
+        const auto xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
+        mSensorModelState = NAME + std::string(" ") + str::EncodedStringView(xmlStr).native();
         reinitialize();
     }
     catch (const except::Exception& ex)
