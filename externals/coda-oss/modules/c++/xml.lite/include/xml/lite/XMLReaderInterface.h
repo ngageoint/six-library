@@ -25,7 +25,6 @@
 
 #include <typeinfo>
 #include "XMLException.h"
-#include "Element.h" // StringEncoding
 
 namespace xml
 {

@@ -29,6 +29,7 @@
 
 #include <memory>
 #include <vector>
+#include <coda_oss/string.h>
 
 #include <xml/lite/UtilitiesXerces.h>
 #include <xml/lite/ValidatorInterface.h>
@@ -99,7 +100,6 @@ private:
 class ValidatorXerces : public ValidatorInterface
 {
     XercesContext mCtxt;    //! this must be the first member listed
-    bool mLegacyStringConversion = true; // use exsiting code for XMLCh* conversion
 
 public:
 
@@ -138,8 +138,7 @@ public:
     bool validate(const str::W1252string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
 
 private:
-    template <typename CharT>
-    bool validate_(const std::basic_string<CharT>& xml, bool legacyStringConversion,
+    bool validate_(const coda_oss::u8string& xml, 
                    const std::string& xmlID,
                    std::vector<ValidationInfo>& errors) const;
 

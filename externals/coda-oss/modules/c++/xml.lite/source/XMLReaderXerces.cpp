@@ -34,8 +34,53 @@ xml::lite::XMLReaderXerces::XMLReaderXerces()
     create();
 }
 
-void xml::lite::XMLReaderXerces::parse(bool storeEncoding,
-    io::InputStream& is, const StringEncoding* pEncoding, int size)
+const void* xml::lite::XMLReaderXerces::getWindows1252Encoding()
+{
+    return XMLUni::fgWin1252EncodingString;
+}
+
+static void parse(SAX2XMLReader& parser, const std::vector<sys::byte>& buffer, const XMLCh* pEncoding)
+{
+    // Does not take ownership
+    MemBufInputSource memBuffer((const unsigned char*)buffer.data(),
+                                buffer.size(),
+                                xml::lite::XMLReaderXerces::MEM_BUFFER_ID(),
+                                false);
+
+    if (pEncoding != nullptr)
+    {
+        memBuffer.setEncoding(pEncoding);
+    }
+    parser.parse(memBuffer);
+}
+static void parse(SAX2XMLReader& parser, const std::vector<sys::byte>& buffer,
+    const XMLCh* pInitialEncoding, const XMLCh* pFallbackEncoding)
+{
+    try
+    {
+        parse(parser, buffer, pInitialEncoding);
+        return; // successful parse
+    }
+    catch (const except::Error& e)
+    {
+        const auto msg = e.getMessage();
+        if (msg != " (1,1): invalid byte 'X' at position 2 of a 2-byte sequence")
+        {
+            throw;
+        }
+        
+        // Trying again will fail, so don't bother
+        if (pFallbackEncoding == pInitialEncoding)
+        {
+            throw;
+        }
+    }
+
+    // Try again using the fallback encoding
+    parse(parser, buffer, pFallbackEncoding);
+}
+
+void xml::lite::XMLReaderXerces::parse(io::InputStream& is, const void*pInitialEncoding_, const void* pFallbackEncoding_, int size)
 {
     io::StringStream oss;
     is.streamTo(oss, size);
@@ -47,69 +92,16 @@ void xml::lite::XMLReaderXerces::parse(bool storeEncoding,
     }
     std::vector<sys::byte> buffer(available);
     oss.read(buffer.data(), buffer.size());
-    parse(storeEncoding, buffer, pEncoding);
-}
-void xml::lite::XMLReaderXerces::parse(bool storeEncoding,
-    const std::vector<sys::byte>& buffer, const StringEncoding* pEncoding)
-{
-    // Does not take ownership
-    MemBufInputSource memBuffer((const unsigned char *)buffer.data(),
-                                buffer.size(),
-                                XMLReaderXerces::MEM_BUFFER_ID(),
-                                false);
 
-    if ((pEncoding != nullptr) && (*pEncoding == StringEncoding::Windows1252))
-    {
-        // The only other value is StringEncoding::Utf8 which is the default
-        memBuffer.setEncoding(XMLUni::fgWin1252EncodingString);
-    }
-
-    try
-    {
-        mNative->parse(memBuffer);
-        return; // successful parse
-    }
-    catch (const except::Error& e)
-    {
-        const auto msg = e.getMessage();
-        if (msg != " (1,1): invalid byte 'X' at position 2 of a 2-byte sequence")
-        {
-            throw;
-        }
-        // Caller specified an encoding; don't try calling parse() again
-        if (pEncoding != nullptr)
-        {
-            throw;
-        }
-        // legacy code, didn't pass storeEncoding=true to MinidomParser
-        if (!storeEncoding)
-        {
-            throw;
-        }
-    }
-
-    // If we're here, the initial parse failed and the caller did NOT specify an encoding
-    // (pEncoding == NULL).  Since the default is UTF-8 and that failed, try again
-    // with Windows-1252.
-    assert(pEncoding == nullptr);
-    assert(storeEncoding);
-    const auto windows1252 = StringEncoding::Windows1252;
-    parse(true /*storeEncoding*/, buffer, &windows1252);
+    const auto pInitialEncoding = static_cast<const XMLCh*>(pInitialEncoding_);
+    const auto pFallbackEncoding = static_cast<const XMLCh*>(pFallbackEncoding_);
+    ::parse(*mNative, buffer, pInitialEncoding, pFallbackEncoding);
 }
 void xml::lite::XMLReaderXerces::parse(io::InputStream& is, int size)
 {
-    parse(false /*storeEncoding*/, is, size);
+    // This will try parsing the default (UTF-8) first, then Windows1252
+    parse(is, nullptr /*pInitialEncoding*/, getWindows1252Encoding(), size);
 }
-void xml::lite::XMLReaderXerces::parse(bool storeEncoding, io::InputStream& is, int size)
-{
-    parse(storeEncoding, is, nullptr /*pEncoding*/, size);
-}
-void xml::lite::XMLReaderXerces::parse(bool storeEncoding, 
-    io::InputStream& is, StringEncoding encoding, int size)
-{
-    parse(storeEncoding, is, &encoding, size);
-}
-
 
 // This function creates the parser
 void xml::lite::XMLReaderXerces::create()
