@@ -4834,22 +4834,6 @@ class SixSicdUtilities(_object):
 
     parseDataFromFile = staticmethod(parseDataFromFile)
 
-    def parseDataFromString(xmlStr: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "mem::auto_ptr< six::sicd::ComplexData >":
-        """parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::sicd::ComplexData >"""
-        return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
-
-    parseDataFromString = staticmethod(parseDataFromString)
-
-    def toXMLString(*args) -> "std::string":
-        """
-        toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
-        toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
-        toXMLString(ComplexData data) -> std::string
-        """
-        return _six_sicd.SixSicdUtilities_toXMLString(*args)
-
-    toXMLString = staticmethod(toXMLString)
-
     def createFakeComplexData() -> "mem::auto_ptr< six::sicd::ComplexData >":
         """createFakeComplexData() -> mem::auto_ptr< six::sicd::ComplexData >"""
         return _six_sicd.SixSicdUtilities_createFakeComplexData()
@@ -4993,18 +4977,6 @@ def SixSicdUtilities_parseData(xmlStream: 'InputStream', schemaPaths: 'VectorStr
 def SixSicdUtilities_parseDataFromFile(pathname: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "mem::auto_ptr< six::sicd::ComplexData >":
     """SixSicdUtilities_parseDataFromFile(std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::sicd::ComplexData >"""
     return _six_sicd.SixSicdUtilities_parseDataFromFile(pathname, schemaPaths, log)
-
-def SixSicdUtilities_parseDataFromString(xmlStr: 'std::string const &', schemaPaths: 'VectorString', log: 'logging::Logger &') -> "mem::auto_ptr< six::sicd::ComplexData >":
-    """SixSicdUtilities_parseDataFromString(std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::sicd::ComplexData >"""
-    return _six_sicd.SixSicdUtilities_parseDataFromString(xmlStr, schemaPaths, log)
-
-def SixSicdUtilities_toXMLString(*args) -> "std::string":
-    """
-    toXMLString(ComplexData data, VectorString schemaPaths, logging::Logger * logger=None) -> std::string
-    toXMLString(ComplexData data, VectorString schemaPaths) -> std::string
-    SixSicdUtilities_toXMLString(ComplexData data) -> std::string
-    """
-    return _six_sicd.SixSicdUtilities_toXMLString(*args)
 
 def SixSicdUtilities_createFakeComplexData() -> "mem::auto_ptr< six::sicd::ComplexData >":
     """SixSicdUtilities_createFakeComplexData() -> mem::auto_ptr< six::sicd::ComplexData >"""
