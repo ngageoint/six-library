@@ -27,7 +27,8 @@
 
 #include "xml/lite/MinidomParser.h"
 
-static const std::string uri = "urn:example.com";
+static const std::string strUri = "urn:example.com";
+static const xml::lite::Uri uri(strUri);
 static const std::string strXml_1_ = R"(
 <root>
     <doc name="doc">
@@ -37,7 +38,7 @@ static const std::string strXml_1_ = R"(
 static const std::string strXml_2_ = R"(" ns:int="314" />
     </doc>
 </root>)";
-static const auto strXml = strXml_1_ + uri + strXml_2_;
+static const auto strXml = strXml_1_ + strUri + strXml_2_;
 
 struct test_MinidomParser final
 {
