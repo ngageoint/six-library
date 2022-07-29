@@ -4400,16 +4400,6 @@ class XMLControl(_object):
 
     loadSchemaPaths = staticmethod(loadSchemaPaths)
 
-    def toXML(self, data: 'Data', schemaPaths: 'VectorString') -> "xml::lite::Document *":
-        """toXML(XMLControl self, Data data, VectorString schemaPaths) -> xml::lite::Document *"""
-        return _six_base.XMLControl_toXML(self, data, schemaPaths)
-
-
-    def fromXML(self, doc: 'xml::lite::Document const *', schemaPaths: 'VectorString') -> "six::Data *":
-        """fromXML(XMLControl self, xml::lite::Document const * doc, VectorString schemaPaths) -> Data"""
-        return _six_base.XMLControl_fromXML(self, doc, schemaPaths)
-
-
     def dataTypeToString(dataType: 'DataType', appendXML: 'bool'=True) -> "std::string":
         """
         dataTypeToString(DataType dataType, bool appendXML=True) -> std::string
@@ -4607,19 +4597,6 @@ XMLControlRegistry_swigregister = _six_base.XMLControlRegistry_swigregister
 XMLControlRegistry_swigregister(XMLControlRegistry)
 
 
-def toXMLString(data: 'Data', xmlRegistry: 'XMLControlRegistry'=None) -> "std::string":
-    """
-    toXMLString(Data data, XMLControlRegistry xmlRegistry=None) -> std::string
-    toXMLString(Data data) -> std::string
-    """
-    return _six_base.toXMLString(data, xmlRegistry)
-
-def toValidXMLString(data: 'Data', schemaPaths: 'VectorString', log: 'logging::Logger *', xmlRegistry: 'XMLControlRegistry'=None) -> "std::string":
-    """
-    toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log, XMLControlRegistry xmlRegistry=None) -> std::string
-    toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log) -> std::string
-    """
-    return _six_base.toValidXMLString(data, schemaPaths, log, xmlRegistry)
 class GeoInfo(_object):
     """Proxy of C++ six::GeoInfo class."""
 
