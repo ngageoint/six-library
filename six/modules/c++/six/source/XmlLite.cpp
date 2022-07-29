@@ -38,16 +38,15 @@ namespace six
     struct MinidomParser::Impl final
     {
         xml::lite::MinidomParser parser;
-        Impl(bool storeEncoding = false) : parser(storeEncoding) {}
+        Impl() : parser() {}
         Impl(const Impl&) = delete;
         Impl& operator=(const Impl&) = delete;
         Impl(Impl&&) = delete;
         Impl& operator=(Impl&&) = delete;
     };
 
-    // storeEncoding=true allows parsing of UTF-8 data; but it might break legacy code.
-    MinidomParser::MinidomParser(bool storeEncoding)
-        : pImpl(std::make_unique<Impl>(storeEncoding))
+    MinidomParser::MinidomParser()
+        : pImpl(std::make_unique<Impl>())
     {
     }
     MinidomParser::~MinidomParser() = default;
