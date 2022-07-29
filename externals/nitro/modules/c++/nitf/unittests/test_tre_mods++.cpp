@@ -267,7 +267,7 @@ TEST_CASE(use_ENGRDA_typed_fields)
 
     nitf::TREField_BCS_A<20> RESRC(engrda, "RESRC");
     RESRC = "HSS"; // engrda.setField("RESRC", "HSS");
-    const auto resrc_ = str::strip(RESRC);
+    const auto resrc_ = str::trim(RESRC);
     TEST_ASSERT_EQ_STR(resrc_, "HSS");
 
     nitf::TREField_BCS_N<3> RECNT(engrda, "RECNT", true /*forceUpdate*/);
@@ -289,7 +289,7 @@ TEST_CASE(use_ENGRDA_typed_fields)
 
     nitf::IndexedField<nitf::TREField_BCS_A<>> ENGDATA(engrda, "ENGDATA",  RECNT);
     ENGDATA[0] = "ABC"; // engrda.setField("ENGDATA[0]", "ABC");
-    const auto engdata_0_ = str::strip(ENGDATA[0]);
+    const auto engdata_0_ = str::trim(ENGDATA[0]);
     TEST_ASSERT_EQ_STR(engdata_0_, "ABC");
 }
 
@@ -300,7 +300,7 @@ TEST_CASE(use_typed_ENGRDA)
     TREs::ENGRDA engrda; // nitf::TRE engrda("ENGRDA", "ENGRDA");
 
     engrda.RESRC = "HSS"; // engrda.setField("RESRC", "HSS");
-    const auto RESRC = str::strip(engrda.RESRC);
+    const auto RESRC = str::trim(engrda.RESRC);
     TEST_ASSERT_EQ_STR(RESRC, "HSS");
 
     engrda.RECNT = 1; // engrda.setField("RECNT", 1, true /*forceUpdate*/);
@@ -318,7 +318,7 @@ TEST_CASE(use_typed_ENGRDA)
     engrda.updateFields();
     engrda.ENGDATA[0] = "ABC"; // engrda.setField("ENGDATA[0]", "ABC");
     const auto& engrda_ = engrda;
-    const auto ENGDATA_0 = str::strip(engrda_.ENGDATA[0]);
+    const auto ENGDATA_0 = str::trim(engrda_.ENGDATA[0]);
     TEST_ASSERT_EQ_STR(ENGDATA_0, "ABC");
 
     try

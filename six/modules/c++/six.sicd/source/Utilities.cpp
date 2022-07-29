@@ -1024,27 +1024,27 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromFile(const std::filesystem:
 }
 
 mem::auto_ptr<ComplexData> Utilities::parseDataFromString(
-        const std::string& xmlStr,
+        const std::u8string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
 {
-    io::StringStream inStream;
+    io::U8StringStream inStream;
     inStream.write(xmlStr);
     return parseData(inStream, schemaPaths, log);
 }
-std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::string& xmlStr,
+std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
     logging::NullLogger nullLogger;
     logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
 
-    io::StringStream inStream;
+    io::U8StringStream inStream;
     inStream.write(xmlStr);
     return parseData(inStream, pSchemaPaths, *log);
 }
 
 template<typename TSchemaPaths>
-std::string Utilities_toXMLString(const ComplexData& data,
+std::u8string Utilities_toXMLString(const ComplexData& data,
     const TSchemaPaths& schemaPaths, logging::Logger* pLogger)
 {
     XMLControlRegistry xmlRegistry;
@@ -1055,13 +1055,13 @@ std::string Utilities_toXMLString(const ComplexData& data,
 
     return ::six::toValidXMLString(data, schemaPaths, logger, &xmlRegistry);
 }
-std::string Utilities::toXMLString(const ComplexData& data,
+std::u8string Utilities::toXMLString(const ComplexData& data,
                                    const std::vector<std::string>& schemaPaths,
                                    logging::Logger* logger)
 {
     return Utilities_toXMLString(data, schemaPaths, logger);
 }
-std::string Utilities::toXMLString(const ComplexData& data,
+std::u8string Utilities::toXMLString(const ComplexData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* logger)
 {
     return Utilities_toXMLString(data, pSchemaPaths, logger);

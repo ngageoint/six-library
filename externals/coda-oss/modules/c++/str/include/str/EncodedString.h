@@ -125,6 +125,11 @@ public:
         return view().wstring();
     }
 
+    bool empty() const
+    {
+        return s_.empty();
+    }
+
     struct details final
     {
         static const std::string& string(const EncodedString& es) // for unit-testing

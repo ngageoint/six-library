@@ -79,7 +79,7 @@ str::EncodedString& str::EncodedString::operator=(const EncodedStringView& v)
 {
     if (v.mIsUtf8)
     {
-        assign(v.c_str());
+        assign(v.c_u8str());
     }
     else
     {
