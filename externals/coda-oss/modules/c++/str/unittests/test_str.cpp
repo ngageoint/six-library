@@ -38,23 +38,6 @@ TEST_CASE(testTrim)
     TEST_ASSERT_EQ(s, "test");
 }
 
-TEST_CASE(testStrip)
-{
-    std::string s = "  test   ";
-    str::strip(s);
-    TEST_ASSERT_EQ(s, "test");
-
-    const auto s2 = str::strip(s);
-    TEST_ASSERT_EQ(s2, "test");
-
-    const auto s3 = str::strip("  test   ");
-    TEST_ASSERT_EQ(s3, "test");
-
-    const auto s4 = s;
-    const auto s5 = str::strip(s4);
-    TEST_ASSERT_EQ(s5, "test");
-}
-
 TEST_CASE(testData)
 {
     std::string s;
@@ -224,7 +207,6 @@ TEST_CASE(testEscapeForXMLKitchenSink)
 
 TEST_MAIN(
     TEST_CHECK(testTrim);
-    TEST_CHECK(testStrip);
     TEST_CHECK(testData);
     TEST_CHECK(testUpper);
     TEST_CHECK(testLower);

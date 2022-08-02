@@ -34,6 +34,11 @@
 #include "xml/lite/MinidomParser.h"
 #include "xml/lite/Validator.h"
 
+static inline std::u8string fromUtf8(const std::string& utf8)
+{
+    return str::EncodedStringView::fromUtf8(utf8).u8string();
+}
+
 static const std::string text("TEXT");
 static const std::string strXml = "<root><doc><a>" + text + "</a></doc></root>";
 
@@ -45,7 +50,7 @@ static const str::EncodedString utf8Text(str::cast<coda_oss::u8string::const_poi
 static const auto utf8Text8 = utf8Text.u8string();
 static const auto pUtf8Text_ = str::c_str<std::string>(utf8Text8);
 
-static const auto strUtf8Xml8 = str::fromUtf8("<root><doc><a>") + utf8Text8 + str::fromUtf8("</a></doc></root>");
+static const auto strUtf8Xml8 = fromUtf8("<root><doc><a>") + utf8Text8 + fromUtf8("</a></doc></root>");
 static const std::string strUtf8Xml = str::c_str<std::string>(strUtf8Xml8);
 
 constexpr auto PlatformEncoding = xml::lite::PlatformEncoding;
@@ -403,8 +408,7 @@ TEST_CASE(testReadEmbeddedXml)
     std::u8string u8_characterData;
     classificationXML.getCharacterData(u8_characterData);
     TEST_ASSERT_EQ(u8_characterData, expectedCharDataView);
-    std::string u8_characterData_;
-    str::EncodedStringView(u8_characterData).toUtf8(u8_characterData_);
+    const auto u8_characterData_ = str::EncodedStringView(u8_characterData).asUtf8();
     TEST_ASSERT_EQ(classificationText_utf_8, u8_characterData_);
 }
 
