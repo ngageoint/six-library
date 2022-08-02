@@ -16,6 +16,8 @@ if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
         add_compile_options(/W3 /wd4290 /wd4512)
         add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
     elseif (UNIX)
+	set(CMAKE_C_COMPILER gcc-10)
+	set(CMAKE_CXX_COMPILER g++-10)
 	add_compile_options(-std=c++20)
         add_compile_options(
             -Wno-deprecated
