@@ -52,18 +52,13 @@ class CODA_OSS_API EncodedString final
     // We can do most everything through the view, so keep one around.
     EncodedStringView v_;
 
-    const std::string& string() const
-    {
-        return s_;
-    }
-
     // No "public" operator=() for these; this class is mostly for storage and/or conversion,
     // not extensive manipulation.  Create a new instance and assign/move that.
     void assign(coda_oss::u8string::const_pointer);
     void assign(str::W1252string::const_pointer);
     
 public:
-    EncodedString() = default;
+    EncodedString();
     ~EncodedString() = default;
     EncodedString(const EncodedString&);
     EncodedString& operator=(const EncodedString&);
@@ -134,7 +129,7 @@ public:
     {
         static const std::string& string(const EncodedString& es) // for unit-testing
         {
-            return es.string();
+            return es.s_;
         }
     };
 };

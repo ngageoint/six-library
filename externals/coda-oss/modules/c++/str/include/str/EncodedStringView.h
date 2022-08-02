@@ -52,7 +52,11 @@ class CODA_OSS_API EncodedStringView final
     // Since we only support two encodings--UTF-8 (native on Linux) and Windows-1252
     // (native on Windows)--both of which are 8-bits, a simple "bool" flag will do.
     coda_oss::span<const char> mString;
-    static constexpr bool mNativeIsUtf8 = details::Platform == details::PlatformType::Linux ? true : false;
+    #if _WIN32
+    static constexpr bool mNativeIsUtf8 = false; // Windows-1252
+    #else
+    static constexpr bool mNativeIsUtf8 = true;  // !_WIN32, assume Linux
+    #endif
     bool mIsUtf8 = mNativeIsUtf8;
     
     // Want to create an EncodedString from EncodedStringView.  The public interface
@@ -89,7 +93,6 @@ public:
 
     // Convert (perhaps) whatever we're looking at to UTF-8
     coda_oss::u8string u8string() const;  // c.f. std::filesystem::path::u8string()
-    std::string& toUtf8(std::string&) const; // std::string is encoded as UTF-8, always.
 
     // Convert whatever we're looking at to UTF-16 or UTF-32
     std::u16string u16string() const;  // c.f. std::filesystem::path::u8string()
@@ -111,34 +114,34 @@ public:
     {
         return mIsUtf8 ? cast<coda_oss::u8string::const_pointer>(c_str()) : nullptr;
     }
+    str::W1252string::const_pointer c_w1252str() const
+    {
+        return mIsUtf8 ? nullptr : cast<str::W1252string::const_pointer>(c_str());
+    }
     size_t size() const
     {
         return mString.size();
     }
 
     // Input is encoded as specified on all platforms.
-    static EncodedStringView fromUtf8(const std::string& s)
+    static EncodedStringView fromUtf8(const std::string& utf8)
     {
-        return EncodedStringView(str::c_str<coda_oss::u8string>(s));
+        return EncodedStringView(str::c_str<coda_oss::u8string>(utf8));
     }
-    static EncodedStringView fromUtf8(std::string::const_pointer p)
+    static EncodedStringView fromUtf8(std::string::const_pointer pUtf8)
     {
-        return EncodedStringView(str::cast<coda_oss::u8string::const_pointer>(p));
+        return EncodedStringView(str::cast<coda_oss::u8string::const_pointer>(pUtf8));
     }
-    static EncodedStringView fromWindows1252(const std::string& s)
+    static EncodedStringView fromWindows1252(const std::string& w1252)
     {
-        return EncodedStringView(str::c_str<str::W1252string>(s));
+        return EncodedStringView(str::c_str<str::W1252string>(w1252));
     }
-    static EncodedStringView fromWindows1252(std::string::const_pointer p)
+    static EncodedStringView fromWindows1252(std::string::const_pointer pW1252)
     {
-        return EncodedStringView(str::cast<str::W1252string::const_pointer>(p));
+        return EncodedStringView(str::cast<str::W1252string::const_pointer>(pW1252));
     }
 
-    std::string asUtf8() const
-    {
-        std::string retval;
-        return toUtf8(retval);
-    }
+    std::string asUtf8() const;
     std::string asWindows1252() const;
 
     bool operator_eq(const EncodedStringView&) const;

@@ -54,7 +54,7 @@ void xml::lite::NamespaceStack::getMapping(const std::string& prefix, Uri& resul
     {
         if (mMappingStack[i].first == prefix)
         {
-            result = Uri(mMappingStack[i].second);
+            result = mMappingStack[i].second;
             return;
         }
     }

@@ -95,6 +95,10 @@ public:
 
     virtual bool vcharacters(const void/*XMLCh*/*, size_t /*length*/)  // avoid XMLCh, it's specific to Xerces
     { return false; /* continue on to existing characters()*/ } /* =0 would break existing code */
+    virtual bool call_vcharacters() const  // =0 would break existing code
+    {
+        return false;  // don't call vcharacters(const void*)
+    }
 
     /*!
      *  Receive notification of the beginning of an element.

@@ -22,8 +22,6 @@
 
 #include "xml/lite/Document.h"
 
-#include <stdexcept>
-
 void xml::lite::Document::setRootElement(Element * element, bool own)
 {
     destroy();
@@ -49,39 +47,58 @@ void xml::lite::Document::remove(Element * toDelete)
         remove(toDelete, mRootNode);
 }
 
-static std::unique_ptr<xml::lite::Element> newElement(const std::string& qname, const std::string& uri)
+static
+xml::lite::Element *
+newElement(const std::string& qname, const std::string& uri)
 {
-    std::unique_ptr<xml::lite::Element> elem(new xml::lite::Element());
+    auto elem = new xml::lite::Element();
     elem->setQName(qname);
     //std::cout << "qname: " << qname << std::endl;
 
     elem->setUri(uri);
     return elem;
 }
-static std::unique_ptr<xml::lite::Element>newElement(const xml::lite::QName& qname)
+static xml::lite::Element* newElement(const xml::lite::QName& qname)
 {
     return newElement(qname.getName(), qname.getAssociatedUri());
 }
-
-xml::lite::Element* xml::lite::Document::createElement(const std::string& qname, const std::string& uri,
+xml::lite::Element* xml::lite::Document::createElement(const std::string& qname,
+                                   const std::string& uri,
                                    std::string characterData)
 {
     auto elem = newElement(qname, uri);
     elem->setCharacterData(characterData);
-    return elem.release();
+    return elem;
 }
-std::unique_ptr<xml::lite::Element> xml::lite::Document::createElement(const QName& qname,
+xml::lite::Element* xml::lite::Document::createElement(const std::string& qname,
+                                   const std::string& uri,
+                                   const std::string& characterData, StringEncoding encoding) const
+{
+    auto elem = newElement(qname, uri);
+    elem->setCharacterData(characterData, encoding);
+    return elem;
+}
+xml::lite::Element* xml::lite::Document::createElement(const std::string& qname,
+                                   const std::string& uri,
                                    const coda_oss::u8string& characterData) const
 {
-    auto elem = newElement(qname);
+    auto elem = newElement(qname, uri);
     elem->setCharacterData(characterData);
     return elem;
 }
-std::unique_ptr<xml::lite::Element> xml::lite::Document::createElement(const QName& qname,
+
+std::unique_ptr<xml::lite::Element> xml::lite::Document::createElement(const xml::lite::QName& qname,
                                     const std::string& characterData) const
 {
-    auto elem = newElement(qname);
+    std::unique_ptr<xml::lite::Element> elem(newElement(qname));
     elem->setCharacterData(characterData);
+    return elem;
+}
+std::unique_ptr<xml::lite::Element> xml::lite::Document::createElement(const xml::lite::QName& qname,
+                                       const std::string& characterData, StringEncoding encoding) const
+{
+    std::unique_ptr<xml::lite::Element> elem(newElement(qname));
+    elem->setCharacterData(characterData, encoding);
     return elem;
 }
 

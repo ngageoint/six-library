@@ -11,9 +11,11 @@
  ```
 # coda-oss Release Notes
 
-## Release 2022-??-??
+## [Release 2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)
 * remove *Expat* and *libXML* modules and support in **xml.lite**; only *Xerces* was actively used.
-* **xml.lite** now uses UTF-8 internally and is no longer tries to preserve incorrect behavior.
+* fix `waf` to work-around FIPS warning because of insecure *md5* hashing.
+* tweak `str::EncodedStringView` and `str::EncodedString` for
+  [future XML changes](https://github.com/mdaus/coda-oss/tree/feature/always-write-xml-as-utf8).
 
 ## [Release 2022-06-29](https://github.com/mdaus/coda-oss/releases/tag/2022-06-29)
 * remove **modules/drivers/boost** as it was empty (and unused);

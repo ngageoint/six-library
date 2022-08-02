@@ -21,14 +21,11 @@
  */
 
 #include <stdexcept>
-#include <std/string>
-#include <utility>
 
 #include "str/Manip.h"
 #include "str/Convert.h"
 #include "str/Encoding.h"
 #include "sys/OS.h"
-#include "str/EncodedStringView.h"
 
 #include "xml/lite/MinidomHandler.h"
 
@@ -46,36 +43,69 @@ void xml::lite::MinidomHandler::setDocument(std::unique_ptr<Document>&& newDocum
 {
     setDocument(newDocument.release(), true /*own*/);
 }
-std::unique_ptr<xml::lite::Document>& xml::lite::MinidomHandler::getDocument(std::unique_ptr<Document>& pDocument)
+void  xml::lite::MinidomHandler::getDocument(std::unique_ptr<Document>& pDocument)
 {
     pDocument.reset(getDocument(true /*steal*/));
-    return pDocument;
 }
 
 void xml::lite::MinidomHandler::clear()
 {
     mDocument->destroy();
-    currentCharacterData.clear();
+    currentCharacterData = "";
     assert(bytesForElement.empty());
     assert(nodeStack.empty());
 }
 
-void xml::lite::MinidomHandler::characters(std::u8string&& s)
+void xml::lite::MinidomHandler::characters(const char* value, int length, const StringEncoding* pEncoding)
 {
-    // Append number of bytes added to this node's stack value
-    assert(bytesForElement.size());
-    bytesForElement.top() += static_cast<int>(s.length());
+    if (pEncoding != nullptr)
+    {
+        if (mpEncoding != nullptr)
+        {
+            // be sure the given encoding matches any encoding already set
+            if (*pEncoding != *mpEncoding)
+            {
+                throw std::invalid_argument("New 'encoding' is different than value already set.");
+            }
+        }
+        else if (storeEncoding())
+        {
+            mpEncoding = std::make_shared<const StringEncoding>(*pEncoding);
+        }
+    }
 
     // Append new data
-    currentCharacterData += std::move(s);
+    if (length)
+        currentCharacterData += std::string(value, length);
+
+    // Append number of bytes added to this node's stack value
+    assert(bytesForElement.size());
+    bytesForElement.top() += length;
 }
 void xml::lite::MinidomHandler::characters(const char *value, int length)
 {
-    // If we're still here despite use_char() being "false" then the
-    // wide-character routine "failed."  On Windows, that means the char* value
-    // is encoded as Windows-1252 (more-or-less ISO8859-1).
-    const str::EncodedString chars(std::string(value, length)); 
-    characters(chars.u8string());
+    const StringEncoding* pEncoding = nullptr;
+    if ((sys::Platform == sys::PlatformType::Windows) && call_vcharacters())
+    {
+        // If we're still here despite use_char() being "false" then the wide-character
+        // routine "failed."  On Windows, that means the char* value is encoded
+        // as Windows-1252 (more-or-less ISO8859-1).
+        static const auto encoding = StringEncoding::Windows1252;
+        pEncoding = &encoding;
+    }
+    characters(value, length, pEncoding);
+}
+
+void xml::lite::MinidomHandler::call_characters(const std::string& s, StringEncoding encoding)
+{
+    const auto length = static_cast<int>(s.length());
+    characters(s.c_str(), length, &encoding);
+}
+
+bool xml::lite::MinidomHandler::call_vcharacters() const
+{
+    // if we're storing the encoding, get wchar_t so that we can convert
+    return storeEncoding();
 }
 
 bool xml::lite::MinidomHandler::vcharacters(const void /*XMLCh*/* chars_, size_t length)
@@ -92,8 +122,29 @@ bool xml::lite::MinidomHandler::vcharacters(const void /*XMLCh*/* chars_, size_t
     static_assert(sizeof(XMLCh) == sizeof(char16_t), "XMLCh should be 16-bits.");
     auto pChars16 = static_cast<const char16_t*>(chars_);
 
-    auto chars = str::EncodedString(std::u16string(pChars16, length)).u8string();
-    characters(std::move(chars));
+    std::string chars;
+    auto platformEncoding = xml::lite::PlatformEncoding;  // "conditional expression is constant"
+    if (platformEncoding == xml::lite::StringEncoding::Utf8)
+    {
+        str::details::utf16to8(pChars16, length, chars);
+    }
+    else if (platformEncoding == xml::lite::StringEncoding::Windows1252)
+    {
+        // On Windows, we want std::string encoded as Windows-1252 so that
+        // western European characters will be displayed.  We can't convert
+        // to UTF-8 (as above on Linux), because Windows doesn't have good
+        // support for displaying such strings.  Using UTF-16 would be preferred
+        // on Windows, but all existing code uses std::string instead of std::wstring.
+        assert(pChars16 != nullptr);  // XMLCh == wchar_t == char16_t on Windows
+        auto pChars = static_cast<const XMLCh*>(chars_);
+        chars = xml::lite::XercesLocalString(pChars).str();
+    }
+    else
+    {
+        throw std::logic_error("Unknown xml::lite::StringEncoding");
+    }
+
+    call_characters(chars, platformEncoding);
     return true; // vcharacters() processed
 }
 
@@ -113,14 +164,14 @@ void xml::lite::MinidomHandler::startElement(const std::string & uri,
 }
 
 // This function subtracts off the char place from the push
-std::u8string xml::lite::MinidomHandler::adjustCharacterData()
+std::string xml::lite::MinidomHandler::adjustCharacterData()
 {
     // Edit the string with regard to this node's char data
     // Get rid of what we take on char data accumulator
 
     int diff = (int) (currentCharacterData.length()) - bytesForElement.top();
 
-    auto newCharacterData(currentCharacterData.substr(
+    std::string newCharacterData(currentCharacterData.substr(
                                  diff,
                                  currentCharacterData.length())
                 );
@@ -132,7 +183,7 @@ std::u8string xml::lite::MinidomHandler::adjustCharacterData()
     return newCharacterData;
 }
 
-void xml::lite::MinidomHandler::trim(std::u8string& s)
+void xml::lite::MinidomHandler::trim(std::string & s)
 {
     str::trim(s);
 }
@@ -145,7 +196,7 @@ void xml::lite::MinidomHandler::endElement(const std::string & /*uri*/,
     xml::lite::Element * current = nodeStack.top();
     nodeStack.pop();
 
-    current->setCharacterData(adjustCharacterData());
+    current->setCharacterData_(adjustCharacterData(), mpEncoding.get());
 
     // Remove corresponding int on bytes stack
     bytesForElement.pop();
@@ -170,3 +221,12 @@ void xml::lite::MinidomHandler::preserveCharacterData(bool preserve)
     mPreserveCharData = preserve;
 }
 
+void xml::lite::MinidomHandler::storeEncoding(bool value)
+{
+    mStoreEncoding = value;
+}
+
+bool xml::lite::MinidomHandler::storeEncoding() const
+{
+    return mStoreEncoding;
+}
