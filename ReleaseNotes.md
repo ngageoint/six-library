@@ -2,6 +2,12 @@
 
 # SIX Release Notes
 
+## Version 3.1.13; August 2, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)
+* [nitro](https://github.com/mdaus/nitro) version [2.10.11](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.11)
+* Better handling of optional error fields
+* `vtsSetEnv` command
+
 ## Version 3.1.12; June 29, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2022-06-29](https://github.com/mdaus/coda-oss/releases/tag/2022-06-29)
 * [nitro](https://github.com/mdaus/nitro) version [2.10.10](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.10)
