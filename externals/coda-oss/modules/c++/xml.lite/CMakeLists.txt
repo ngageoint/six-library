@@ -17,8 +17,7 @@ if(ENABLE_XML)
     coda_add_module(
         ${MODULE_NAME}
         VERSION 1.2
-        DEPS ${MODULE_DEPS}
-        SOURCE_FILTER "XMLReaderExpat.cpp" "XMLReaderLibXML.cpp")
+        DEPS ${MODULE_DEPS})
 
     coda_add_tests(
         MODULE_NAME ${MODULE_NAME}

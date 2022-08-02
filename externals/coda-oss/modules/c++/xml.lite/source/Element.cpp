@@ -52,7 +52,7 @@ std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const QName& qnam
 }
 std::unique_ptr<xml::lite::Element> xml::lite::Element::createU8(const QName& qname, const std::string& characterData)
 {
-    return create(qname,  str::to_u8string(characterData));
+    return create(qname,  str::EncodedStringView(characterData).u8string());
 }
 
 xml::lite::Element::Element(const xml::lite::Element& node)
@@ -287,11 +287,11 @@ void xml::lite::Element::getCharacterData(coda_oss::u8string& result) const
     str::EncodedStringView view;
     if (encoding == xml::lite::StringEncoding::Utf8)
     {
-        view = str::c_str<coda_oss::u8string>(mCharacterData);
+        view = str::EncodedStringView(str::c_str<coda_oss::u8string>(mCharacterData));
     }
     else if (encoding == xml::lite::StringEncoding::Windows1252)
     {
-        view = str::c_str<str::W1252string>(mCharacterData);
+        view = str::EncodedStringView(str::c_str<str::W1252string>(mCharacterData));
     }
     else
     {

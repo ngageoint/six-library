@@ -557,7 +557,7 @@ static void test_create_sicd_from_mem_(const std::string& testName,
 {
     const types::RowCol<size_t> dims(2, 2);
 
-    auto pComplexData = six::sicd::Utilities::createFakeComplexData(pixelType, makeAmplitudeTable, &dims);
+    auto pComplexData = six::sicd::Utilities::createFakeComplexData("1.2.1", pixelType, makeAmplitudeTable, &dims);
 
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
     test_assert(*pComplexData, pixelType, expectedNumBytesPerPixel);

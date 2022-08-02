@@ -27,7 +27,9 @@
 //
 //#############################################################################
 
+#ifndef CSM_LIBRARY
 #define CSM_LIBRARY
+#endif
 #include "csmPointCloud.h"
 #include "Error.h"
 #include <cmath>

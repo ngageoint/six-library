@@ -1377,7 +1377,7 @@ std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string&
 }
 mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
 {
-    return mem::auto_ptr<DerivedData>(createFakeDerivedData("").release());
+    return mem::auto_ptr<DerivedData>(createFakeDerivedData_("").release());
 }
 
 }
