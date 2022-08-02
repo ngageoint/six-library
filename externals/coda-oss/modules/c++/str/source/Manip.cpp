@@ -66,36 +66,47 @@ char toupperCheck(char c)
 
 namespace str
 {
-void trim(std::string & s)
+
+// TODO: https://stackoverflow.com/questions/31959532/best-way-to-remove-white-spaces-from-stdstring
+template<typename TChar>
+inline void trim_(std::basic_string<TChar> & s)
 {
     size_t i;
     for (i = 0; i < s.length(); i++)
     {
-        if (!iswspace(s[i]))
+        if (!iswspace(static_cast<wint_t>(s[i])))
             break;
     }
     s.erase(0, i);
 
     for (i = s.length() - 1; (int) i >= 0; i--)
     {
-        if (!iswspace(s[i]))
+        if (!iswspace(static_cast<wint_t>(s[i])))
             break;
 
     }
     if (i + 1 < s.length())
         s.erase(i + 1);
 }
-
-// https://stackoverflow.com/questions/31959532/best-way-to-remove-white-spaces-from-stdstring
-std::string& strip(std::string& str)
+void trim(std::string& s)
 {
-    str.erase(std::remove_if(str.begin(), str.end(), ::isspace), str.end());
-    return str;
+    trim_(s);
 }
-std::string strip(const std::string& str)
+std::string trim(const std::string& str)
 {
     auto retval = str;
-    return strip(retval);
+    trim(retval);
+    return retval;
+}
+void trim(coda_oss::u8string& s)
+{
+    trim_(s);
+}
+coda_oss::u8string trim(const coda_oss::u8string& str)
+{
+    auto retval = str;
+    trim(retval);
+    return retval;
 }
 
 bool ends_with(const std::string& s, const std::string& match) noexcept

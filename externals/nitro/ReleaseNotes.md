@@ -1,5 +1,9 @@
 # NITRO (NITF i/o) Release Notes
 
+## [Version 2.10.11](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.11); August 2, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) release [2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)
+* remove more compiler warnings
+
 ## [Version 2.10.10](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.10); June 29, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) release [2022-06-29](https://github.com/mdaus/coda-oss/releases/tag/2022-06-29)
 

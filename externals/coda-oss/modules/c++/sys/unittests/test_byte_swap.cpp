@@ -31,10 +31,10 @@
 
 TEST_CASE(testEndianness)
 {
-    /*const*/ auto native = coda_oss::endian::native; // "const" causes "conditional expression is constant."
+    /*const*/ auto native = std::endian::native; // "const" causes "conditional expression is constant."
 
-    if (native == coda_oss::endian::big) { }
-    else if (native == coda_oss::endian::little) { }
+    if (native == std::endian::big) { }
+    else if (native == std::endian::little) { }
     else
     {
         TEST_FAIL("Mixed-endian not supported!");
@@ -42,7 +42,7 @@ TEST_CASE(testEndianness)
 
     const bool isBigEndianSystem = sys::isBigEndianSystem();
 
-    if (native == coda_oss::endian::big)
+    if (native == std::endian::big)
     {
         TEST_ASSERT(isBigEndianSystem);
     }
@@ -50,7 +50,7 @@ TEST_CASE(testEndianness)
     {
         TEST_ASSERT(!isBigEndianSystem);    
     }
-    if (native == coda_oss::endian::little)
+    if (native == std::endian::little)
     {
         TEST_ASSERT(!isBigEndianSystem);
     }
@@ -62,11 +62,11 @@ TEST_CASE(testEndianness)
 
     if (isBigEndianSystem)
     {
-        TEST_ASSERT(native == coda_oss::endian::big);
+        TEST_ASSERT(native == std::endian::big);
     }
     else
     {
-        TEST_ASSERT(native == coda_oss::endian::little);    
+        TEST_ASSERT(native == std::endian::little);    
     }
 }
 
