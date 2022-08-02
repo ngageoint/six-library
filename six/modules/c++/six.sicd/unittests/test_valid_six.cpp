@@ -34,6 +34,7 @@
 
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
+#include <str/EncodedStringView.h>
 #include <import/sys.h>
 
 #include <import/six.h>
@@ -320,18 +321,18 @@ static void sicd_French_xml_raw_(bool storeEncoding)
     std::u8string u8_expectedCharData8;
     if (storeEncoding)
     {
-        u8_expectedCharData8 = str::fromUtf8(classificationText_utf_8().c_str(), classificationText_utf_8().length());
+        u8_expectedCharData8 = str::EncodedStringView::fromUtf8(classificationText_utf_8()).u8string();
     }
     else
     {
-        u8_expectedCharData8 = sys::Platform == sys::PlatformType::Linux ? std::u8string() : str::fromUtf8(classificationText_utf_8().c_str(), classificationText_utf_8().length());
+        u8_expectedCharData8 = sys::Platform == sys::PlatformType::Linux ? std::u8string() : str::EncodedStringView::fromUtf8(classificationText_utf_8()).u8string();
     }
     expectedLength = u8_expectedCharData8.length();
 
     std::u8string u8_characterData;
     classificationXML.getCharacterData(u8_characterData);
     TEST_ASSERT_EQ(u8_characterData.length(), expectedLength);
-    TEST_ASSERT(u8_characterData == u8_expectedCharData8);
+    TEST_ASSERT_EQ(u8_characterData, u8_expectedCharData8);
 }
 TEST_CASE(sicd_French_xml_raw)
 {
@@ -492,7 +493,7 @@ static void test_create_sicd_from_mem_(const std::string& testName,
 {
     const types::RowCol<size_t> dims(2, 2);
 
-    auto pComplexData = six::sicd::Utilities::createFakeComplexData(pixelType, makeAmplitudeTable, &dims);
+    auto pComplexData = six::sicd::Utilities::createFakeComplexData("1.2.1", pixelType, makeAmplitudeTable, &dims);
 
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
     test_assert(*pComplexData, pixelType, expectedNumBytesPerPixel);

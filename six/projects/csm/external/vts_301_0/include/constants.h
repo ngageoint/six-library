@@ -163,7 +163,10 @@ enum MENU_ENUM {
       HELP2,                                           //  99
       HELP3,                                           // 100
       EXIT1,                                           // 101
-      EXIT2                                            // 102
+      EXIT2,                                            // 102
+      VTS_SET_ENV,
+      
+      VTS_last_command_
 };
 
 enum MENU_TYPE {
@@ -180,7 +183,7 @@ enum MENU_TYPE {
 
 //*****************************************************************
 //**IMPORTANT:update these numbers when menulist changes
-#define MAX_NUMBER_COMMANDS EXIT2+1   // Total number of commands
+#define MAX_NUMBER_COMMANDS VTS_last_command_   // Total number of commands
 // First Sensor Plugin command
 #define BEGIN_SP_NUMBER     SP_GET_LIST
 // Last Sensor Plugin command

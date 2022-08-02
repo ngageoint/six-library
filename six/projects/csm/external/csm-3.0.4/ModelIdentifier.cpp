@@ -23,7 +23,9 @@
 //<
 //#############################################################################
 
+#ifndef CSM_LIBRARY
 #define CSM_LIBRARY
+#endif
 
 #include "ModelIdentifier.h"
 #include "Error.h"

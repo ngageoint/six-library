@@ -1145,14 +1145,23 @@ void six::getErrors(const ErrorStatistics* errorStats,
             if (components->ionoError)
             {
                 const six::IonoError& ionoError(*components->ionoError);
-                errors.mIonoErrorCovar(0, 0) =
+                if (has_value(ionoError.ionoRangeVertical))
+                {
+                    errors.mIonoErrorCovar(0, 0) =
                         math::square(value(ionoError.ionoRangeVertical));
-                errors.mIonoErrorCovar(1, 1) =
+                }
+                if (has_value(ionoError.ionoRangeRateVertical))
+                {
+                    errors.mIonoErrorCovar(1, 1) =
                         math::square(value(ionoError.ionoRangeRateVertical));
-                errors.mIonoErrorCovar(0, 1) = errors.mIonoErrorCovar(1, 0) =
+                }
+                if (has_value(ionoError.ionoRangeVertical) && has_value(ionoError.ionoRangeRateVertical))
+                {
+                    errors.mIonoErrorCovar(0, 1) = errors.mIonoErrorCovar(1, 0) =
                         value(ionoError.ionoRangeVertical) *
                         value(ionoError.ionoRangeRateVertical) *
                         value(ionoError.ionoRgRgRateCC);
+                }
             }
 
             if (components->tropoError)

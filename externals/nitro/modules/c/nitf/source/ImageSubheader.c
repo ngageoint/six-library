@@ -185,8 +185,9 @@ nitf_ImageSubheader_clone(nitf_ImageSubheader * source, nitf_Error * error)
         if (!subhdr->securityGroup)
             goto CATCH_ERROR;
 
+        void* nitf_Field_clone_ = (void*)nitf_Field_clone; // avoid casting directly "incompatible" type in C++
         subhdr->imageComments = nitf_List_clone(source->imageComments,
-                                                (NITF_DATA_ITEM_CLONE) nitf_Field_clone, error);
+                                                (NITF_DATA_ITEM_CLONE)nitf_Field_clone_, error);
         if (!subhdr->imageComments)
             goto CATCH_ERROR;
 
