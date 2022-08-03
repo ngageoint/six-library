@@ -33,9 +33,9 @@ def configure(conf):
             #       source files that were needed
             conf.env['HAVE_CSM'] = True
 
-            if Options.options.csm_version == '3.0.3.3':
-                conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-3.0.3.3')
-                conf.env['CSM_DIR'] = 'csm-3.0.3.3'
+            if Options.options.csm_version == '3.0.4':
+                conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-3.0.4')
+                conf.env['CSM_DIR'] = 'csm-3.0.4'
             else:
                 conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-master')
                 conf.env['CSM_DIR'] = 'csm-master'
@@ -57,12 +57,19 @@ def build(bld):
         #       need to use.
         vtsDir = 'vts_301_0'
         six_root = '../../../../../..'
+        nested_six_root = six_root + '/../..'
         install = six_root + '/install'
+        nested_install = nested_six_root + '/install'
         coda_oss = six_root + '/externals/coda-oss/modules/c++'
+        nested_coda_oss = nested_six_root + '/externals/coda-oss/modules/c++'
         bld.program(target='vts', name='vts',
                     includes=['include',
-                        install + '/include',
-                        coda_oss + '/sys/include', coda_oss + '/str/include', coda_oss + '/except/include'],
+                        install + '/include', nested_install + '/include',
+			coda_oss + '/sys/include', coda_oss + '/str/include', coda_oss + '/std/include',
+			coda_oss + '/coda_oss/include', coda_oss + '/gsl/include', coda_oss + '/except/include',
+			nested_coda_oss + '/sys/include', nested_coda_oss + '/str/include', nested_coda_oss + '/std/include',
+			nested_coda_oss + '/coda_oss/include', nested_coda_oss + '/gsl/include', nested_coda_oss + '/except/include'
+			],
                     source=bld.path.find_dir(os.path.join(vtsDir, 'source')).ant_glob('*.cpp'),
                     use='sys-c++ CSMAPI THREAD DL',
                     path=bld.path.find_dir(vtsDir),

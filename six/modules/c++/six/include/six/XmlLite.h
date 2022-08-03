@@ -182,7 +182,7 @@ struct XmlLite final
     template <typename T>
     xml::lite::Element& createStringFromEnum(const std::string& name, const T& enumVal, xml::lite::Element& parent) const
     {
-        if (six::Init::isUndefined(enumVal.value))
+        if (six::Init::isUndefined(enumVal))
         {
             throw six::UninitializedValueException(Ctxt("Attempted use of uninitialized value"));
         }
@@ -221,7 +221,7 @@ struct XmlLite final
     {
         std::string name;
         parseString(element, name);
-        enumVal = T(name);
+        enumVal = T::toType(name);
     }
 
     bool parseDouble(const xml::lite::Element&, double&) const;

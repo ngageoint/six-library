@@ -50,7 +50,7 @@ namespace six
 static const char SCHEMA_PATH[] = "SIX_SCHEMA_PATH";
 // Gets the value of SIX_SCHEMA_PATH, or the compiled default if not set.
 // If the resulting path doesn't exist, an exception is thrown.
-extern std::string getSchemaPath(std::vector<std::string>&);
+extern std::string getSchemaPath(std::vector<std::string>&, bool tryToExpandIfNotFound = false);
 
 /*!
  * \class DESValidationException
@@ -172,7 +172,7 @@ struct Constants
      */
     inline static int getNumBytesPerPixel(PixelType type)
     {
-        switch (type.value)
+        switch (type)
         {
         case PixelType::RE32F_IM32F:
         {

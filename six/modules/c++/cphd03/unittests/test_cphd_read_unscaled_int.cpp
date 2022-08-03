@@ -37,9 +37,6 @@
 
 #include "TestCase.h"
 
-namespace
-{
-
 template<typename T>
 std::vector<std::complex<T> > generateData(size_t length)
 {
@@ -54,7 +51,7 @@ std::vector<std::complex<T> > generateData(size_t length)
     return data;
 }
 
-std::vector<double> generateScaleFactors(size_t length, bool scale)
+inline std::vector<double> generateScaleFactors(size_t length, bool scale)
 {
     std::vector<double> scaleFactors(length, 1);
 
@@ -257,7 +254,6 @@ TEST_CASE(testScaledFloat)
             generateData<float>(dims.area());
     const bool scale = true;
     TEST_ASSERT(runTest(scale, writeData));
-}
 }
 
 TEST_MAIN(

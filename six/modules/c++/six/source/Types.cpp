@@ -19,11 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#include <functional>
-#include <std/optional>
-#include "six/Init.h"
 #include "six/Types.h"
+
+#include "six/Init.h"
 #include <nitf/ImageSegmentComputer.h>
 #include "six/Enums.h"
 

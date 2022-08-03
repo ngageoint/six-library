@@ -20,9 +20,10 @@
  *
  */
 
+#include <assert.h>
+
 #include <cmath>
 #include <limits>
-
 #include <std/filesystem>
 
 #include "Error.h"
@@ -952,6 +953,32 @@ csm::EcefVector SIXSensorModel::getSensorVelocity(double time) const
     }
 }
 
+static std::string getSchemaPath(std::vector<std::string>& mSchemaDirs)
+{
+    // OK, but you better have your schema path set then
+    std::string schemaPath;
+    try
+    {
+        schemaPath = six::getSchemaPath(mSchemaDirs, true /*tryToExpandIfNotFound*/);
+    }
+    catch (const except::IOException&)
+    {
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            "Must specify SICD schema path via "
+            "Plugin::getDataDirectory() or " +
+            std::string(six::SCHEMA_PATH) + " environment variable",
+            "SIXSensorModel::setSchemaDir");
+    }
+
+    if (schemaPath.empty())
+    {
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            std::string(six::SCHEMA_PATH) +
+            " environment variable is set but is empty",
+            "SIXSensorModel::setSchemaDir");
+    }
+    return schemaPath;
+}
 void SIXSensorModel::setSchemaDir(const std::string& dataDir)
 {
     sys::OS os;
@@ -960,27 +987,8 @@ void SIXSensorModel::setSchemaDir(const std::string& dataDir)
         mSchemaDirs.clear();
 
         // OK, but you better have your schema path set then
-        std::string schemaPath;
-        try
-        {
-            schemaPath = six::getSchemaPath(mSchemaDirs);
-        }
-        catch(const except::Exception& )
-        {
-            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    "Must specify SICD schema path via "
-                    "Plugin::getDataDirectory() or " +
-                    std::string(six::SCHEMA_PATH) + " environment variable",
-                    "SIXSensorModel::setSchemaDir");
-        }
-
-        if (schemaPath.empty())
-        {
-            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    std::string(six::SCHEMA_PATH) +
-                    " environment variable is set but is empty",
-                    "SIXSensorModel::setSchemaDir");
-        }
+        std::string schemaPath = getSchemaPath(mSchemaDirs);
+        assert(!schemaPath.empty());
     }
     else
     {

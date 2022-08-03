@@ -24,10 +24,8 @@
 #include <io/ByteStream.h>
 #include "TestCase.h"
 
-namespace
-{
-static const char FILE_TYPE_HEADER[] = "CPHD/1.0\n";
-static const char FILE_HEADER_CONTENT[] = "CPHD/1.0\n"
+const char* FILE_TYPE_HEADER = "CPHD/1.0\n";
+const char* FILE_HEADER_CONTENT = "CPHD/1.0\n"
         "XML_BLOCK_SIZE := 3\n"
         "XML_BLOCK_BYTE_OFFSET := 10\n"
         "SUPPORT_BLOCK_SIZE := 4\n"
@@ -150,7 +148,6 @@ TEST_CASE(testRoundTripHeader)
             roundTrippedHeader.getClassification());
     TEST_ASSERT_EQ(header.getReleaseInfo(),
             roundTrippedHeader.getReleaseInfo());
-}
 }
 
 TEST_MAIN(

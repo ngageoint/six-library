@@ -45,8 +45,8 @@ namespace filesystem // not "Filesystem", make it easy to use code in other name
   struct path; // forward
   namespace details
   {
-    extern bool Equals(const path& lhs, const path& rhs) noexcept;
-    extern std::ostream& Ostream(std::ostream& os, const path& p);
+      CODA_OSS_API bool Equals(const path& lhs, const path& rhs) noexcept;
+      CODA_OSS_API std::ostream& Ostream(std::ostream& os, const path& p);
   }
 
   // https://en.cppreference.com/w/cpp/filesystem/file_type

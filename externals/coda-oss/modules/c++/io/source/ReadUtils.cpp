@@ -40,7 +40,7 @@ void readFileContents(const std::string& pathname,
 {
     readFileContents_(pathname, buffer);
 }
-void readFileContents(const sys::filesystem::path& pathname, std::vector<coda_oss::byte>& buffer)
+void readFileContents(const coda_oss::filesystem::path& pathname, std::vector<coda_oss::byte>& buffer)
 {
     readFileContents_(pathname, buffer);
 }

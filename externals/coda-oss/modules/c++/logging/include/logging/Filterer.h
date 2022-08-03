@@ -30,6 +30,9 @@
 
 #include <string>
 #include <map>
+
+#include "config/Exports.h"
+
 #include "logging/Filter.h"
 #include "logging/LogRecord.h"
 
@@ -42,7 +45,7 @@ namespace logging
  * A base class for loggers and handlers which allows them to share
  * common code.
  */
-struct Filterer
+struct CODA_OSS_API Filterer
 {
     Filterer() = default;
     virtual ~Filterer() = default;

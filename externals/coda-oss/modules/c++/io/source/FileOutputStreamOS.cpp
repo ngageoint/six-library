@@ -64,6 +64,7 @@ sys::Off_T io::FileOutputStreamOS::seek(sys::Off_T offset,
     case io::Seekable::END:
         fileWhence = sys::File::FROM_END;
         break;
+    case io::Seekable::CURRENT:
     default:
         fileWhence = sys::File::FROM_CURRENT;
         break;

@@ -1,0 +1,12 @@
+#!/bin/sh -f
+#
+# "autobuild" script for CodeQL.  Maybe useful for others too.
+
+rm -r -f out && mkdir out && cd out
+cmake -DCMAKE_INSTALL_PREFIX=install-autobuild -DENABLE_PYTHON=false ..
+
+cmake --build . -j 2
+exec cmake --build . --target install
+
+
+

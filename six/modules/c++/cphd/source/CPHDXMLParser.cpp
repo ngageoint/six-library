@@ -580,7 +580,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         XMLElem monoXML = newElement("Monostatic", refGeoXML);
         mCommon.createVector3D("ARPPos", refGeo.monostatic->arpPos, monoXML);
         mCommon.createVector3D("ARPVel", refGeo.monostatic->arpVel, monoXML);
-        std::string side = refGeo.monostatic->sideOfTrack;
+        const auto side = refGeo.monostatic->sideOfTrack.toString();
         createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), monoXML);
         createDouble("SlantRange", refGeo.monostatic->slantRange, monoXML);
         createDouble("GroundRange", refGeo.monostatic->groundRange, monoXML);
@@ -609,7 +609,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         mCommon.createVector3D("Vel", refGeo.bistatic->txPlatform.vel, txPlatXML);
 
         {
-            const std::string side = refGeo.bistatic->txPlatform.sideOfTrack;
+            const auto side = refGeo.bistatic->txPlatform.sideOfTrack.toString();
             createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), txPlatXML);
         }
         createDouble("SlantRange", refGeo.bistatic->txPlatform.slantRange, txPlatXML);
@@ -624,7 +624,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         mCommon.createVector3D("Vel", refGeo.bistatic->rcvPlatform.vel, rcvPlatXML);
 
         {
-            const std::string side = refGeo.bistatic->rcvPlatform.sideOfTrack;
+            const auto side = refGeo.bistatic->rcvPlatform.sideOfTrack.toString();
             createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), rcvPlatXML);
         }
         createDouble("SlantRange", refGeo.bistatic->rcvPlatform.slantRange, rcvPlatXML);
@@ -1029,9 +1029,9 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* collectionIDXML, Collectio
 
 void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
 {
-    global.domainType = DomainType(
+    global.domainType = DomainType::toType(
             getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
-    global.sgn = PhaseSGN(
+    global.sgn = PhaseSGN::toType(
             getFirstAndOnly(globalXML, "SGN")->getCharacterData());
 
     // Timeline
@@ -1072,7 +1072,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
         global.tropoParameters.reset(new TropoParameters());
         parseDouble(getFirstAndOnly(tropoXML, "N0"), global.tropoParameters->n0);
         global.tropoParameters->refHeight =
-                getFirstAndOnly(tropoXML, "RefHeight")->getCharacterData();
+            RefHeight::toType(getFirstAndOnly(tropoXML, "RefHeight")->getCharacterData());
     }
 
     // IonoParameters
@@ -1089,7 +1089,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
 void CPHDXMLParser::fromXML(const xml::lite::Element* sceneCoordsXML,
                              SceneCoordinates& scene)
 {
-    scene.earthModel = EarthModelType(
+    scene.earthModel = EarthModelType::toType(
             getFirstAndOnly(sceneCoordsXML, "EarthModel")->getCharacterData());
 
     // IARP
@@ -1225,7 +1225,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* sceneCoordsXML,
 void CPHDXMLParser::fromXML(const xml::lite::Element* dataXML, Data& data)
 {
     const xml::lite::Element* signalXML = getFirstAndOnly(dataXML, "SignalArrayFormat");
-    data.signalArrayFormat = SignalArrayFormat(signalXML->getCharacterData());
+    data.signalArrayFormat = SignalArrayFormat::toType(signalXML->getCharacterData());
 
     size_t numBytesPVP_temp = 0;
     XMLElem numBytesPVPXML = getFirstAndOnly(dataXML, "NumBytesPVP");
@@ -1404,7 +1404,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* refGeoXML, ReferenceGeomet
         mCommon.parseVector3D(getFirstAndOnly(monoXML, "ARPVel"), refGeo.monostatic->arpVel);
         std::string side = "";
         parseString(getFirstAndOnly(monoXML, "SideOfTrack"), side);
-        refGeo.monostatic->sideOfTrack = (side == "L" ? six::SideOfTrackType("LEFT") : six::SideOfTrackType("RIGHT"));
+        refGeo.monostatic->sideOfTrack = (side == "L" ? six::SideOfTrackType::LEFT : six::SideOfTrackType::RIGHT);
 
     }
     else if (!monoXML && biXML)
@@ -2044,10 +2044,10 @@ void CPHDXMLParser::parseChannelParameters(
     for (size_t ii = 0; ii < PolarizationXML.size(); ++ii)
     {
         const xml::lite::Element* TxPolXML = getFirstAndOnly(PolarizationXML[ii], "TxPol");
-        param.polarization.txPol = PolarizationType(TxPolXML->getCharacterData());
+        param.polarization.txPol = PolarizationType::toType(TxPolXML->getCharacterData());
 
         const xml::lite::Element* RcvPolXML = getFirstAndOnly(PolarizationXML[ii], "RcvPol");
-        param.polarization.rcvPol = PolarizationType(RcvPolXML->getCharacterData());
+        param.polarization.rcvPol = PolarizationType::toType(RcvPolXML->getCharacterData());
     }
 
 }
@@ -2116,7 +2116,7 @@ void CPHDXMLParser::parsePlatformParams(const xml::lite::Element* platXML, Bista
     mCommon.parseVector3D(getFirstAndOnly(platXML, "Vel"), plat.vel);
     std::string side = "";
     parseString(getFirstAndOnly(platXML, "SideOfTrack"), side);
-    plat.sideOfTrack = (side == "L" ? six::SideOfTrackType("LEFT") : six::SideOfTrackType("RIGHT"));
+    plat.sideOfTrack = (side == "L" ? six::SideOfTrackType::LEFT : six::SideOfTrackType::RIGHT);
 
 }
 
@@ -2195,6 +2195,6 @@ void CPHDXMLParser::parseTxRcvParameter(const xml::lite::Element* paramXML, Para
     parseString(getFirstAndOnly(paramXML, "Identifier"), param.identifier);
     parseDouble(getFirstAndOnly(paramXML, "FreqCenter"), param.freqCenter);
     parseOptionalDouble(paramXML, "LFMRate", param.lfmRate);
-    param.polarization = PolarizationType(getFirstAndOnly(paramXML, "Polarization")->getCharacterData());
+    param.polarization = PolarizationType::toType(getFirstAndOnly(paramXML, "Polarization")->getCharacterData());
 }
 }

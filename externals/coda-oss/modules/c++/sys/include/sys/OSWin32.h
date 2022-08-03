@@ -46,7 +46,7 @@ namespace sys
  *  This class is the abstraction layer as defined for
  *  the windows operating system.
  */
-struct OSWin32 final : public AbstractOS
+struct CODA_OSS_API OSWin32 final : public AbstractOS
 {
     OSWin32() = default;
     virtual ~OSWin32() = default;

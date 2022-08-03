@@ -285,7 +285,11 @@ static std::vector<six::NITFImageInfo*> getImageInfos(six::Container& container)
 
     // We will validate that we got a SIDD DES per image product in the
     // for loop below
-    assert(container.getDataType() == DataType::DERIVED);
+    if (container.getDataType() != DataType::DERIVED)
+    {
+        throw except::Exception(Ctxt("Unrecognized Data Extension Segment")); // N.B. not assert(), calling code can catch an exception
+    }
+
     std::vector<six::NITFImageInfo*> retval;
     for (size_t ii = 0; ii < container.size(); ++ii)
     {

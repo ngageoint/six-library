@@ -32,24 +32,25 @@ template<typename TSixEnum>
 static void test_EnumConstructor(const std::string& testName, const std::string& strType, TSixEnum type)
 {
     (void)testName;
-    const decltype(type) pType(strType);
-    TEST_ASSERT(pType == strType);
+    const auto pType = TSixEnum::toType(strType);
+    TEST_ASSERT(pType.toString() == strType);
     TEST_ASSERT_EQ(pType, type);
 }
 TEST_CASE(EnumConstructor)
 {
-    test_EnumConstructor<six::DualPolarizationType>("EnumConstructor", "UNKNOWN", six::DualPolarizationType::UNKNOWN);
-    test_EnumConstructor<six::DualPolarizationType>("EnumConstructor", "V_V", six::DualPolarizationType::V_V);
-    test_EnumConstructor<six::DualPolarizationType>("EnumConstructor", "E_V", six::DualPolarizationType::E_V); // SICD 1.3
+    test_EnumConstructor<six::DualPolarizationType>(testName, "OTHER", six::DualPolarizationType::OTHER);
+    test_EnumConstructor<six::DualPolarizationType>(testName, "UNKNOWN", six::DualPolarizationType::UNKNOWN);
+    test_EnumConstructor<six::DualPolarizationType>(testName, "V_V", six::DualPolarizationType::V_V);
+    test_EnumConstructor<six::DualPolarizationType>(testName, "E_V", six::DualPolarizationType::E_V); // SICD 1.3
 
-    test_EnumConstructor<six::PolarizationType>("EnumConstructor", "OTHER", six::PolarizationType::OTHER);
-    test_EnumConstructor<six::PolarizationType>("EnumConstructor", "UNKNOWN", six::PolarizationType::UNKNOWN);
-    test_EnumConstructor<six::PolarizationType>("EnumConstructor", "X", six::PolarizationType::X); // SICD 1.3
+    test_EnumConstructor<six::PolarizationType>(testName, "OTHER", six::PolarizationType::OTHER);
+    test_EnumConstructor<six::PolarizationType>(testName, "UNKNOWN", six::PolarizationType::UNKNOWN);
+    test_EnumConstructor<six::PolarizationType>(testName, "X", six::PolarizationType::X); // SICD 1.3
 
-    test_EnumConstructor<six::PolarizationSequenceType>("EnumConstructor", "OTHER", six::PolarizationSequenceType::OTHER);
-    test_EnumConstructor<six::PolarizationSequenceType>("EnumConstructor", "UNKNOWN", six::PolarizationSequenceType::UNKNOWN);
-    test_EnumConstructor<six::PolarizationSequenceType>("EnumConstructor", "SEQUENCE", six::PolarizationSequenceType::SEQUENCE);
-    test_EnumConstructor<six::PolarizationSequenceType>("EnumConstructor", "X", six::PolarizationSequenceType::X); // SICD 1.3
+    test_EnumConstructor<six::PolarizationSequenceType>(testName, "OTHER", six::PolarizationSequenceType::OTHER);
+    test_EnumConstructor<six::PolarizationSequenceType>(testName, "UNKNOWN", six::PolarizationSequenceType::UNKNOWN);
+    test_EnumConstructor<six::PolarizationSequenceType>(testName, "SEQUENCE", six::PolarizationSequenceType::SEQUENCE);
+    test_EnumConstructor<six::PolarizationSequenceType>(testName, "X", six::PolarizationSequenceType::X); // SICD 1.3
 }
 
 template<typename TSixEnum>
@@ -61,7 +62,7 @@ static void test_toType_(const std::string& testName, const std::string& strType
     auto str = fromToType.toString();
     TEST_ASSERT_EQ(str, strType);
 
-    const decltype(type) fromCtor(strType);
+    const auto fromCtor = TSixEnum::toType(strType);
     TEST_ASSERT_EQ(fromToType, fromCtor);
     str = fromCtor.toString();
     TEST_ASSERT_EQ(str, strType);
@@ -69,12 +70,12 @@ static void test_toType_(const std::string& testName, const std::string& strType
 template<typename TSixEnum>
 static void test_toType(const std::string& testName, size_t sz)
 {
-    test_toType_<TSixEnum>("ToType", "UNKNOWN", TSixEnum::UNKNOWN);
-    test_toType_<TSixEnum>("ToType", "OTHER", TSixEnum::OTHER);
+    test_toType_<TSixEnum>(testName, "UNKNOWN", TSixEnum::UNKNOWN);
+    test_toType_<TSixEnum>(testName, "OTHER", TSixEnum::OTHER);
 
-    const auto string_to_int = TSixEnum::string_to_int_();
-    TEST_ASSERT_EQ(string_to_int.size(), sz);
-    for (auto&& kv : string_to_int)
+    auto&& map = TSixEnum::string_to_value_();
+    TEST_ASSERT_EQ(map.size(), sz);
+    for (auto&& kv : map)
     {
         const TSixEnum fromInt(kv.second);
         const auto toType = TSixEnum::toType(kv.first);
@@ -88,73 +89,48 @@ static void test_toType(const std::string& testName, size_t sz)
 }
 TEST_CASE(ToType)
 {
-    test_toType_<six::DualPolarizationType>("ToType", "V_V", six::DualPolarizationType::V_V);
-    test_toType_<six::DualPolarizationType>("ToType", "E_V", six::DualPolarizationType::E_V); // SICD 1.3
-    test_toType<six::DualPolarizationType>("ToType", 85);
+    test_toType_<six::DualPolarizationType>(testName, "V_V", six::DualPolarizationType::V_V);
+    test_toType_<six::DualPolarizationType>(testName, "E_V", six::DualPolarizationType::E_V); // SICD 1.3
+    test_toType<six::DualPolarizationType>(testName, 85);
 
-    test_toType_<six::PolarizationType>("ToType", "X", six::PolarizationType::X);  // SICD 1.3
-    test_toType<six::PolarizationType>("ToType", 12);
+    test_toType_<six::PolarizationType>(testName, "X", six::PolarizationType::X);  // SICD 1.3
+    test_toType<six::PolarizationType>(testName, 12);
 
-    test_toType_<six::PolarizationSequenceType>("ToType", "X", six::PolarizationSequenceType::X);  // SICD 1.3
-    test_toType_<six::PolarizationSequenceType>("ToType", "SEQUENCE", six::PolarizationSequenceType::SEQUENCE); 
-    test_toType<six::PolarizationSequenceType>("ToType", 13);
+    test_toType_<six::PolarizationSequenceType>(testName, "X", six::PolarizationSequenceType::X);  // SICD 1.3
+    test_toType_<six::PolarizationSequenceType>(testName, "SEQUENCE", six::PolarizationSequenceType::SEQUENCE); 
+    test_toType<six::PolarizationSequenceType>(testName, 13);
 }
 
+template<typename TSixEnum>
+static void test_toType_OTHER(const std::string& testName)
+{
+    (void)testName;
+
+    const TSixEnum not_set;
+    TEST_ASSERT_EQ(not_set, TSixEnum::NOT_SET);
+
+    auto fromToType = TSixEnum::toType("OTHER");
+    TEST_ASSERT_EQ(fromToType, TSixEnum::OTHER);
+
+    TEST_EXCEPTION(TSixEnum::toType("OTHER:abc"));
+}
 TEST_CASE(ToType_OTHER)
 {
-    auto fromToType = six::PolarizationType::toType("OTHER");
-    TEST_ASSERT_EQ(fromToType, six::PolarizationType::OTHER);
-    fromToType = six::PolarizationType::toType_imp_("OTHER"); // explicitly call _imp_()
-    TEST_ASSERT_EQ(fromToType, six::PolarizationType::OTHER);
-
-    // SICD 1.3 "OTHER.*"
-    fromToType = six::PolarizationType::toType("OTHER_abc");
-    TEST_ASSERT_EQ(fromToType, six::PolarizationType::OTHER);
-    fromToType = six::PolarizationType::toType_imp_("OTHER_abc"); // explicitly call _imp_()
-    TEST_ASSERT_EQ(fromToType, six::PolarizationType::OTHER);
-
-    TEST_EXCEPTION(six::PolarizationType::toType("OTHER:abc")); // explicitly call _imp_()
-    TEST_EXCEPTION(six::PolarizationType::toType_imp_("OTHER:abc")); // explicitly call _imp_()
-
-    fromToType = six::PolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ(fromToType, six::PolarizationType::OTHER);
-    const six::PolarizationType OTHER_abc("OTHER_abc");
-    TEST_ASSERT_EQ(OTHER_abc, six::PolarizationType::OTHER);
-
-    // ToString_OTHER() should be good enough for PolarizationSequenceType
+    test_toType_OTHER<six::PolarizationType>(testName);
+    test_toType_OTHER<six::PolarizationSequenceType>(testName);
 }
 TEST_CASE(DualPolarizationType_ToType_OTHER)
 {
-    const six::DualPolarizationType not_set;
-    TEST_ASSERT_EQ(not_set, six::DualPolarizationType::NOT_SET);
+    test_toType_OTHER<six::DualPolarizationType>("DualPolarizationType_ToType_OTHER");
 
-    auto toTypeDual = six::DualPolarizationType::toType("OTHER");
-    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER);
-    toTypeDual = six::DualPolarizationType::toType("OTHER_xyz"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER);
-    toTypeDual = six::DualPolarizationType::toType("V:OTHER");
+    auto toTypeDual = six::DualPolarizationType::toType("V_OTHER");
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
-    toTypeDual = six::DualPolarizationType::toType("V_OTHER");
-    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
-    toTypeDual = six::DualPolarizationType::toType("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
-    toTypeDual = six::DualPolarizationType::toType("OTHER:V");
-    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
     toTypeDual = six::DualPolarizationType::toType("OTHER_V");
-    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
-    toTypeDual = six::DualPolarizationType::toType("OTHER_xyz:V"); // SICD 1.3 "OTHER.*"   
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
     toTypeDual = six::DualPolarizationType::toType("OTHER_OTHER");
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
-    toTypeDual = six::DualPolarizationType::toType("OTHER_abc:OTHER"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
-    toTypeDual = six::DualPolarizationType::toType("OTHER:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
-    toTypeDual = six::DualPolarizationType::toType("OTHER_abc:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
 
-    //TEST_EXCEPTION(six::DualPolarizationType::toType("V_OTHER_xyz"));
-    //TEST_EXCEPTION(six::DualPolarizationType::toType("OTHER_abc_OTHER"));
+    TEST_EXCEPTION(six::DualPolarizationType::toType("OTHER_xyz")); // no "top level" OTHER.*
 }
 
 template<typename TSixEnum>
@@ -170,14 +146,14 @@ static void test_six_toType_(const std::string& testName, const std::string& str
 template<typename TSixEnum>
 static void test_six_toType(const std::string& testName, size_t sz)
 {
-    test_six_toType_<TSixEnum>("SixToType", "OTHER", TSixEnum::OTHER);
+    test_six_toType_<TSixEnum>(testName, "OTHER", TSixEnum::OTHER);
 
-    const auto string_to_int = TSixEnum::string_to_int_();
-    TEST_ASSERT_EQ(string_to_int.size(), sz);
-    for (auto&& kv : string_to_int)
+    auto&& map = TSixEnum::string_to_value_();
+    TEST_ASSERT_EQ(map.size(), sz);
+    for (auto&& kv : map)
     {
         const TSixEnum fromInt(kv.second);
-        if ((fromInt != TSixEnum::NOT_SET) && (fromInt != TSixEnum::UNKNOWN))
+        if (fromInt != TSixEnum::NOT_SET)
         {
             auto s = kv.first;
             str::replace(s, "_", ":");
@@ -190,19 +166,35 @@ static void test_six_toType(const std::string& testName, size_t sz)
 }
 TEST_CASE(SixToType)
 {
-    test_six_toType_<six::DualPolarizationType>("SixToType", "V:V", six::DualPolarizationType::V_V);
-    test_six_toType_<six::DualPolarizationType>("SixToType", "E:V", six::DualPolarizationType::E_V); // SICD 1.3
-    test_six_toType_<six::DualPolarizationType>("SixToType", "UNKNOWN", six::DualPolarizationType::UNKNOWN);
-    test_six_toType<six::DualPolarizationType>("SixToType", 85);
+    test_six_toType_<six::DualPolarizationType>(testName, "V:V", six::DualPolarizationType::V_V);
+    test_six_toType_<six::DualPolarizationType>(testName, "E:V", six::DualPolarizationType::E_V); // SICD 1.3
+    test_six_toType_<six::DualPolarizationType>(testName, "UNKNOWN", six::DualPolarizationType::UNKNOWN);
+    test_six_toType<six::DualPolarizationType>(testName, 85);
 
-    test_six_toType_<six::PolarizationType>("SixToType", "X", six::PolarizationType::X);  // SICD 1.3
-    test_six_toType<six::PolarizationType>("SixToType", 12);
-    TEST_EXCEPTION(six::toType<six::PolarizationType>("UNKNOWN")); // no conversion for six::PolarizationType::UNKNOWN
+    test_six_toType_<six::PolarizationType>(testName, "X", six::PolarizationType::X);  // SICD 1.3
+    test_six_toType_<six::PolarizationType>(testName, "OTHER_abc", six::PolarizationType::OTHER); // SIDD 3.0/SICD 1.3
+    test_six_toType<six::PolarizationType>(testName, 12);
 
-    test_six_toType_<six::PolarizationSequenceType>("SixToType", "X", six::PolarizationSequenceType::X);  // SICD 1.3
-    test_six_toType_<six::PolarizationSequenceType>("SixToType", "SEQUENCE", six::PolarizationSequenceType::SEQUENCE);
-    test_six_toType_<six::PolarizationSequenceType>("SixToType", "UNKNOWN", six::PolarizationSequenceType::UNKNOWN);
-    test_six_toType<six::PolarizationSequenceType>("SixToType", 13);
+    test_six_toType_<six::PolarizationSequenceType>(testName, "X", six::PolarizationSequenceType::X);  // SICD 1.3
+    test_six_toType_<six::PolarizationSequenceType>(testName, "SEQUENCE", six::PolarizationSequenceType::SEQUENCE);
+    test_six_toType_<six::PolarizationSequenceType>(testName, "UNKNOWN", six::PolarizationSequenceType::UNKNOWN);
+    test_six_toType_<six::PolarizationSequenceType>(testName, "OTHER_abc", six::PolarizationSequenceType::OTHER); // SIDD 3.0/SICD 1.3
+    test_six_toType<six::PolarizationSequenceType>(testName, 13);
+
+    auto toTypeDual = six::DualPolarizationType::toType("V_OTHER");
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
+    toTypeDual = six::toType<six::DualPolarizationType>("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
+    toTypeDual = six::DualPolarizationType::toType("OTHER_V");
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
+    toTypeDual = six::toType<six::DualPolarizationType>("OTHER_xyz:V"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
+    toTypeDual = six::toType<six::DualPolarizationType>("OTHER_abc:OTHER"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
+    toTypeDual = six::toType<six::DualPolarizationType>("OTHER:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
+    toTypeDual = six::toType<six::DualPolarizationType>("OTHER_abc:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
 }
 
 template<typename TSixEnum>
@@ -210,19 +202,15 @@ static void test_ToString_(const std::string& testName, const std::string& strTy
 {
     (void)testName;
     {
-        const std::string polarizationString = type;
+        const auto polarizationString = type.toString();
         TEST_ASSERT_EQ(strType, polarizationString);
-        decltype(type) pType(polarizationString);
-        TEST_ASSERT_EQ(pType, type);
-        pType = TSixEnum::toType(polarizationString);
+        auto pType = TSixEnum::toType(polarizationString);
         TEST_ASSERT_EQ(pType, type);
     }
     {
         const auto polarizationString = type.toString();
         TEST_ASSERT_EQ(strType, polarizationString);
-        decltype(type) pType(polarizationString);
-        TEST_ASSERT_EQ(pType, type);
-        pType = TSixEnum::toType(polarizationString);
+        auto pType = TSixEnum::toType(polarizationString);
         TEST_ASSERT_EQ(pType, type);
     }
 }
@@ -234,90 +222,82 @@ static void test_ToString(const std::string& testName)
 }
 TEST_CASE(ToString)
 {
-    test_ToString_<six::DualPolarizationType>("ToString", "V_V", six::DualPolarizationType::V_V);
-    test_ToString_<six::DualPolarizationType>("ToString", "E_V", six::DualPolarizationType::E_V); // SICD 1.3
+    test_ToString_<six::DualPolarizationType>(testName, "V_V", six::DualPolarizationType::V_V);
+    test_ToString_<six::DualPolarizationType>(testName, "E_V", six::DualPolarizationType::E_V); // SICD 1.3
     test_ToString<six::DualPolarizationType>("ToString");
 
-    test_ToString_<six::PolarizationType>("ToString", "V", six::PolarizationType::V);
-    test_ToString_<six::PolarizationType>("ToString", "X", six::PolarizationType::X); // SICD 1.3
+    test_ToString_<six::PolarizationType>(testName, "V", six::PolarizationType::V);
+    test_ToString_<six::PolarizationType>(testName, "X", six::PolarizationType::X); // SICD 1.3
     test_ToString<six::PolarizationType>("ToString");
 
-    test_ToString_<six::PolarizationSequenceType>("ToString", "V", six::PolarizationSequenceType::V);
-    test_ToString_<six::PolarizationSequenceType>("ToString", "X", six::PolarizationSequenceType::X); // SICD 1.3
-    test_ToString_<six::PolarizationSequenceType>("ToString", "SEQUENCE", six::PolarizationSequenceType::SEQUENCE);
+    test_ToString_<six::PolarizationSequenceType>(testName, "V", six::PolarizationSequenceType::V);
+    test_ToString_<six::PolarizationSequenceType>(testName, "X", six::PolarizationSequenceType::X); // SICD 1.3
+    test_ToString_<six::PolarizationSequenceType>(testName, "SEQUENCE", six::PolarizationSequenceType::SEQUENCE);
     test_ToString<six::PolarizationSequenceType>("ToString");
 }
 
-TEST_CASE(ToString_OTHER)
-{
-    const auto toType_Polarization = six::PolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ(toType_Polarization, six::PolarizationType::OTHER);
-    TEST_ASSERT_EQ("OTHER_abc", toType_Polarization.toString());
-    TEST_ASSERT(toType_Polarization == "OTHER_abc");
-
-    const auto toType_PolarizationSequence = six::PolarizationSequenceType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ(toType_PolarizationSequence, six::PolarizationSequenceType::OTHER);
-    TEST_ASSERT_EQ("OTHER_abc", toType_PolarizationSequence.toString());
-    TEST_ASSERT(toType_PolarizationSequence == "OTHER_abc");
-}
 TEST_CASE(DualPolarizationType_ToString_OTHER)
 {
     const six::DualPolarizationType not_set;
     TEST_ASSERT_EQ(not_set, six::DualPolarizationType::NOT_SET);
     TEST_ASSERT_EQ("NOT_SET", not_set.toString(false /*throw_if_not_set*/));
     TEST_EXCEPTION(not_set.toString(true /*throw_if_not_set*/));
-    TEST_ASSERT(not_set == "NOT_SET");
+    TEST_ASSERT(not_set.toString() == "NOT_SET");
 
     auto toType_DualPolarization = six::DualPolarizationType::toType("OTHER");
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER);
     TEST_ASSERT_EQ("OTHER", toType_DualPolarization.toString());
-    TEST_ASSERT(toType_DualPolarization == "OTHER");
 
-    toType_DualPolarization = six::DualPolarizationType::toType("OTHER_abc"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ("OTHER_abc", toType_DualPolarization.toString());
-    TEST_ASSERT(toType_DualPolarization == "OTHER_abc");
-
-    toType_DualPolarization = six::DualPolarizationType::toType("V:OTHER");
+    toType_DualPolarization = six::DualPolarizationType::toType("V_OTHER");
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::V_OTHER);
     TEST_ASSERT_EQ("V_OTHER", toType_DualPolarization.toString());
-    TEST_ASSERT(toType_DualPolarization == "V_OTHER");
-    TEST_ASSERT(toType_DualPolarization == "V:OTHER");
-    TEST_ASSERT(toType_DualPolarization != "OTHER");
-    TEST_ASSERT(toType_DualPolarization != "abc");
-
-    toType_DualPolarization = six::DualPolarizationType::toType("OTHER:V");
-    TEST_ASSERT_EQ("OTHER_V", toType_DualPolarization.toString());
-    TEST_ASSERT(toType_DualPolarization == "OTHER_V");
-    TEST_ASSERT(toType_DualPolarization == "OTHER:V");
-    TEST_ASSERT(toType_DualPolarization != "abc");
-    TEST_ASSERT(toType_DualPolarization != "OTHER_abc:V"); // clearly OTHER:V, not OTHER.*
 
     toType_DualPolarization = six::DualPolarizationType::toType("OTHER_V");
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER_V);
     TEST_ASSERT_EQ("OTHER_V", toType_DualPolarization.toString());
-    TEST_ASSERT(toType_DualPolarization == "OTHER_V");
-    TEST_ASSERT(toType_DualPolarization == "OTHER:V");
-    TEST_ASSERT(toType_DualPolarization != "OTHER_abc:V"); // "OTHER_V" is OTHER:V, not OTHER.*
-
-    toType_DualPolarization = six::DualPolarizationType::toType("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ("V:OTHER_xyz", toType_DualPolarization.toString());
-    TEST_ASSERT(toType_DualPolarization == "V:OTHER_xyz");
-
-    toType_DualPolarization = six::DualPolarizationType::toType("OTHER_xyz:V"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ("OTHER_xyz:V", toType_DualPolarization.toString());
-    TEST_ASSERT(toType_DualPolarization == "OTHER_xyz:V");
-    TEST_ASSERT(toType_DualPolarization != "OTHER:V");
-    TEST_ASSERT(toType_DualPolarization != "OTHER_abc:V");
-    TEST_ASSERT(toType_DualPolarization != "OTHER_V");
 
     toType_DualPolarization = six::DualPolarizationType::toType("OTHER_OTHER");
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER_OTHER);
     TEST_ASSERT_EQ("OTHER_OTHER", toType_DualPolarization.toString());
+}
+TEST_CASE(DualPolarizationType_SixToType_OTHER)
+{
+    auto toType_DualPolarization = six::toType<six::DualPolarizationType>("OTHER");
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER);
+    TEST_ASSERT_EQ("OTHER", toType_DualPolarization.toString());
 
-    toType_DualPolarization = six::DualPolarizationType::toType("OTHER:OTHER");
+    TEST_EXCEPTION(six::toType<six::DualPolarizationType>("OTHER_abc")); // no "top level" OTHER.*
+
+    toType_DualPolarization = six::toType<six::DualPolarizationType>("OTHER:V");
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER_V);
+    TEST_ASSERT_EQ("OTHER_V", toType_DualPolarization.toString());
+    TEST_ASSERT_EQ("OTHER:V", six::toString(toType_DualPolarization));
+
+    toType_DualPolarization = six::toType<six::DualPolarizationType>("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::V_OTHER);
+    TEST_ASSERT_EQ("V_OTHER", toType_DualPolarization.toString());
+    TEST_ASSERT_EQ("V:OTHER_xyz", six::toString(toType_DualPolarization));
+
+    toType_DualPolarization = six::toType<six::DualPolarizationType>("OTHER_xyz:V"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER_V);
+    TEST_ASSERT_EQ("OTHER_V", toType_DualPolarization.toString());
+    TEST_ASSERT_EQ("OTHER_xyz:V", six::toString(toType_DualPolarization));
+
+    toType_DualPolarization = six::toType<six::DualPolarizationType>("OTHER:OTHER");
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER_OTHER);
     TEST_ASSERT_EQ("OTHER_OTHER", toType_DualPolarization.toString());
-    TEST_ASSERT(toType_DualPolarization == "OTHER:OTHER");
-    TEST_ASSERT(toType_DualPolarization == "OTHER_OTHER");
+    TEST_ASSERT_EQ("OTHER:OTHER", six::toString(toType_DualPolarization));
 
-    toType_DualPolarization = six::DualPolarizationType::toType("OTHER_abc:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
-    TEST_ASSERT_EQ("OTHER_abc:OTHER_xyz", toType_DualPolarization.toString());
-    TEST_ASSERT(toType_DualPolarization == "OTHER_abc:OTHER_xyz");
+    toType_DualPolarization = six::toType<six::DualPolarizationType>("OTHER_abc:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER_OTHER);
+    TEST_ASSERT_EQ("OTHER_OTHER", toType_DualPolarization.toString());
+    TEST_ASSERT_EQ("OTHER_abc:OTHER_xyz", six::toString(toType_DualPolarization));
+
+    toType_DualPolarization.other_ = "abc";
+    TEST_EXCEPTION(six::toString(toType_DualPolarization));
+
+    toType_DualPolarization.other_ = "OTHER_xyz:V";
+    TEST_EXCEPTION(six::toString(toType_DualPolarization)); // OTHER_OTHER, not OTHER_V
 }
 
 template<typename TSixEnum>
@@ -326,11 +306,17 @@ static void test_six_toString_(const std::string& testName, const std::string& s
     (void)testName;
 
     const std::string polarizationString = six::toString<TSixEnum>(type);
-    TEST_ASSERT_EQ(strType, polarizationString);
+    if (type != TSixEnum::OTHER)
+    {
+        TEST_ASSERT_EQ(strType, polarizationString);
+    }
     TEST_ASSERT_EQ(polarizationString, six::toString(type)); // no template parameter
 
-    const auto pType = six::toType<TSixEnum>(polarizationString);
+    auto pType = six::toType<TSixEnum>(polarizationString);
     TEST_ASSERT_EQ(pType, type);
+
+    pType.other_ = "abc";
+    TEST_EXCEPTION(six::toString(pType));
 }
 template<typename TSixEnum>
 static void test_six_toString(const std::string& testName)
@@ -340,19 +326,19 @@ static void test_six_toString(const std::string& testName)
 }
 TEST_CASE(SixToString)
 {
-    test_six_toString_<six::DualPolarizationType>("ToString", "V:V", six::DualPolarizationType::V_V);
-    test_six_toString_<six::DualPolarizationType>("ToString", "E:V", six::DualPolarizationType::E_V); // SICD 1.3
-    test_six_toString<six::DualPolarizationType>("SixToString");
+    test_six_toString_<six::DualPolarizationType>(testName, "V:V", six::DualPolarizationType::V_V);
+    test_six_toString_<six::DualPolarizationType>(testName, "E:V", six::DualPolarizationType::E_V); // SICD 1.3
+    test_six_toString<six::DualPolarizationType>(testName);
 
-    test_six_toString_<six::PolarizationType>("ToString", "V", six::PolarizationType::V);
-    test_six_toString_<six::PolarizationType>("ToString", "X", six::PolarizationType::X); // SICD 1.3
-    test_six_toString_<six::PolarizationType>("ToString", "OTHER", six::PolarizationType::OTHER);
-    TEST_EXCEPTION(six::toString<six::PolarizationType>(six::PolarizationType::UNKNOWN)); // no conversion for six::PolarizationType::UNKNOWN
+    test_six_toString_<six::PolarizationType>(testName, "V", six::PolarizationType::V);
+    test_six_toString_<six::PolarizationType>(testName, "X", six::PolarizationType::X); // SICD 1.3
+    test_six_toString_<six::PolarizationType>(testName, "OTHER_abc", six::PolarizationType::OTHER); // SICD 1.3
 
-    test_six_toString_<six::PolarizationSequenceType>("ToString", "V", six::PolarizationSequenceType::V);
-    test_six_toString_<six::PolarizationSequenceType>("ToString", "X", six::PolarizationSequenceType::X); // SICD 1.3
-    test_six_toString_<six::PolarizationSequenceType>("ToString", "SEQUENCE", six::PolarizationSequenceType::SEQUENCE);
-    test_six_toString<six::PolarizationSequenceType>("SixToString");
+    test_six_toString_<six::PolarizationSequenceType>(testName, "V", six::PolarizationSequenceType::V);
+    test_six_toString_<six::PolarizationSequenceType>(testName, "X", six::PolarizationSequenceType::X); // SICD 1.3
+    test_six_toString_<six::PolarizationSequenceType>(testName, "SEQUENCE", six::PolarizationSequenceType::SEQUENCE);
+    test_six_toString_<six::PolarizationSequenceType>(testName, "OTHER_abc", six::PolarizationSequenceType::OTHER); // SICD 1.3
+    test_six_toString<six::PolarizationSequenceType>(testName);
 }
 
 template<typename TSixEnum>
@@ -362,7 +348,7 @@ static void test_NotSet(const std::string& testName)
 
     TSixEnum pType;
     TEST_ASSERT_EQ(pType, TSixEnum::NOT_SET);
-    std::string polarizationString = pType;
+    auto polarizationString = pType.toString();
     TEST_ASSERT_EQ(polarizationString, "NOT_SET");
     TEST_EXCEPTION(polarizationString = pType.toString(true /*throw_if_not_set*/));
     polarizationString = pType.toString(false /*throw_if_not_set*/);
@@ -389,14 +375,14 @@ static void test_EqInt_(const std::string& testName, const std::string& strType,
 {
     (void)testName;
 
-    const decltype(type) fromStrCtor(strType);
+    const auto fromStrCtor = TSixEnum::toType(strType);
     TEST_ASSERT_EQ(enumValue, fromStrCtor);
     const int value = fromStrCtor;
     TEST_ASSERT_EQ(enumValue, value);
 
-    const decltype(type)fromIntCtor(value);
+    const decltype(type)fromIntCtor(six::Enum::cast<TSixEnum>(value));
     TEST_ASSERT_EQ(enumValue, fromIntCtor);
-    TEST_ASSERT(fromIntCtor == strType);
+    TEST_ASSERT(fromIntCtor.toString() == strType);
     TEST_ASSERT_EQ(fromIntCtor, type);
 
     TEST_ASSERT_EQ(fromStrCtor, fromIntCtor);
@@ -406,22 +392,33 @@ static void test_EqInt(const std::string& testName, int unknownEnumValue)
 {
     test_EqInt_<TSixEnum>(testName, "UNKNOWN", TSixEnum::UNKNOWN, unknownEnumValue);
     test_EqInt_<TSixEnum>(testName, "OTHER", TSixEnum::OTHER, 1);
-    test_EqInt_<TSixEnum>(testName, "OTHER_abc", TSixEnum::OTHER, 1); // SICD 1.3
+    test_EqInt_<TSixEnum>(testName, "NOT_SET", TSixEnum::NOT_SET, six::NOT_SET_VALUE);
+
+    // These will throw, at least for the polarization types
+    static const std::vector<int> invalidIntValuesToTest{ -1, 0, six::NOT_SET_VALUE - 1 };
+    for (auto&& v : invalidIntValuesToTest)
+    {
+        TEST_EXCEPTION(six::Enum::cast<TSixEnum>(v));
+    }
 }
 TEST_CASE(EqInt)
 {
-    test_EqInt_<six::DualPolarizationType>("EqInt", "V_V", six::DualPolarizationType::V_V, 2);
-    test_EqInt_<six::DualPolarizationType>("EqInt", "E_V", six::DualPolarizationType::E_V, 56); // SICD 1.3
-    test_EqInt< six::DualPolarizationType>("EqInt", 18 /*unknownEnumValue*/);
+    test_EqInt_<six::PolarizationType>(testName, "V", six::PolarizationType::V, 2);
+    test_EqInt_<six::PolarizationType>(testName, "X", six::PolarizationType::X, 7); // SICD 1.3
+    test_EqInt<six::PolarizationType>(testName, 6 /*unknownEnumValue*/);
 
-    test_EqInt_<six::PolarizationType>("EqInt", "V", six::PolarizationType::V, 2);
-    test_EqInt_<six::PolarizationType>("EqInt", "X", six::PolarizationType::X, 7); // SICD 1.3
-    test_EqInt<six::PolarizationType>("EqInt", 6 /*unknownEnumValue*/);
-
-    test_EqInt_<six::PolarizationSequenceType>("EqInt", "V", six::PolarizationSequenceType::V, 2);
-    test_EqInt_<six::PolarizationSequenceType>("EqInt", "X", six::PolarizationSequenceType::X, 8); // SICD 1.3
-    test_EqInt_<six::PolarizationSequenceType>("EqInt", "SEQUENCE", six::PolarizationSequenceType::SEQUENCE, 7);
-    test_EqInt<six::PolarizationSequenceType>("EqInt", 6 /*unknownEnumValue*/);
+    test_EqInt_<six::PolarizationSequenceType>(testName, "V", six::PolarizationSequenceType::V, 2);
+    test_EqInt_<six::PolarizationSequenceType>(testName, "X", six::PolarizationSequenceType::X, 8); // SICD 1.3
+    test_EqInt_<six::PolarizationSequenceType>(testName, "SEQUENCE", six::PolarizationSequenceType::SEQUENCE, 7);
+    test_EqInt<six::PolarizationSequenceType>(testName, 6 /*unknownEnumValue*/);
+}
+TEST_CASE(DualPolarizationType_EqInt)
+{
+    test_EqInt_<six::DualPolarizationType>(testName, "V_V", six::DualPolarizationType::V_V, 2);
+    test_EqInt_<six::DualPolarizationType>(testName, "E_V", six::DualPolarizationType::E_V, 56); // SICD 1.3
+    test_EqInt_<six::DualPolarizationType>(testName, "OTHER_V", six::DualPolarizationType::OTHER_V, 75);
+    test_EqInt_<six::DualPolarizationType>(testName, "OTHER_OTHER", six::DualPolarizationType::OTHER_OTHER, 83);
+    test_EqInt<six::DualPolarizationType>(testName, 18 /*unknownEnumValue*/);
 }
 
 TEST_CASE(DualPolarization)
@@ -431,17 +428,19 @@ TEST_CASE(DualPolarization)
     // Allowed TX values: “V”, “H”, “X”, “Y”, “S”, “E”, “RHC”, “LHC”, “OTHER*”
     // Allowed RCV values:  “V”, “H”, “X”, “Y”, “S”, “E”, “RHC”, “LHC”, “OTHER*”,    
 
-    const auto polarizationTypeMap = six::PolarizationType::string_to_int_();
-    for (auto&& tx : polarizationTypeMap)
+    auto&& map = six::PolarizationType::string_to_value_();
+    for (auto&& tx : map)
     {
         const auto txType = six::PolarizationType::toType(tx.first);
+        TEST_ASSERT_EQ(tx.second, txType);
         if ((txType == six::PolarizationType::NOT_SET) || (txType == six::PolarizationType::UNKNOWN))
         {
             continue;
         }
-        for (auto&& rcv : polarizationTypeMap)
+        for (auto&& rcv : map)
         {
             const auto rcvType = six::PolarizationType::toType(rcv.first);
+            TEST_ASSERT_EQ(rcv.second, rcvType);
             if ((rcvType == six::PolarizationType::NOT_SET) || (rcvType == six::PolarizationType::UNKNOWN))
             {
                 continue;
@@ -451,28 +450,29 @@ TEST_CASE(DualPolarization)
             auto fromToType = six::DualPolarizationType::toType(strType);
             auto str = fromToType.toString();
             TEST_ASSERT_EQ(str, strType);
-            test_toType_("DualPolarization", strType, fromToType);
+            test_toType_(testName, strType, fromToType);
 
             str::replace(strType, "_", ":");
             fromToType = six::toType<six::DualPolarizationType>(strType);
             str = six::toString(fromToType);
             TEST_ASSERT_EQ(str, strType);
-            test_six_toType_("DualPolarization", strType, fromToType);
+            test_six_toType_(testName, strType, fromToType);
         }
     }
 }
 
 TEST_MAIN(
+    TEST_CHECK(DualPolarization);
+    TEST_CHECK(DualPolarizationType_EqInt);
+    TEST_CHECK(DualPolarizationType_SixToType_OTHER);
+    TEST_CHECK(DualPolarizationType_ToString_OTHER);
+    TEST_CHECK(DualPolarizationType_ToType_OTHER);
     TEST_CHECK(EnumConstructor);
-    TEST_CHECK(ToType);
-    TEST_CHECK(ToType_OTHER);
-    TEST_CHECK(DualPolarizationType_ToType_OTHER);    
+    TEST_CHECK(EqInt);
+    TEST_CHECK(NotSet);
+    TEST_CHECK(SixToString);
     TEST_CHECK(SixToType);
     TEST_CHECK(ToString);
-    TEST_CHECK(ToString_OTHER);
-    TEST_CHECK(DualPolarizationType_ToString_OTHER);
-    TEST_CHECK(SixToString);
-    TEST_CHECK(NotSet);
-    TEST_CHECK(EqInt);
-    TEST_CHECK(DualPolarization);
+    TEST_CHECK(ToType);
+    TEST_CHECK(ToType_OTHER);
     )
