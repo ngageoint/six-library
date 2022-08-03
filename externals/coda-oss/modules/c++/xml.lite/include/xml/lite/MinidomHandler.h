@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_MINIDOM_HANDLER_H__
-#define __XML_LITE_MINIDOM_HANDLER_H__
+#ifndef CODA_OSS_xml_lite_MinidomHandler_h_INCLUDED_
+#define CODA_OSS_xml_lite_MinidomHandler_h_INCLUDED_
 #pragma once
 
 /*!
@@ -179,4 +179,4 @@ private:
 }
 }
 
-#endif
+#endif  // CODA_OSS_xml_lite_MinidomHandler_h_INCLUDED_

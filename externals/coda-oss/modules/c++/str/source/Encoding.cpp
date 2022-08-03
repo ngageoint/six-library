@@ -299,10 +299,6 @@ coda_oss::u8string str::to_u8string(std::u16string::const_pointer p, size_t sz)
     utf8::utf8to16(begin, begin+result.size(), std::back_inserter(utf16line));
     */
 }
-void str::details::utf16to8(std::u16string::const_pointer p, size_t sz, std::string& result)
-{
-    utf8::utf16to8(p, p + sz, std::back_inserter(result));
-}
 
 std::u16string str::to_u16string(coda_oss::u8string::const_pointer p_, size_t sz)
 {

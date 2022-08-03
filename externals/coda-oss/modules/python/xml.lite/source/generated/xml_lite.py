@@ -84,10 +84,6 @@ class Element(object):
         """
         _xml_lite.Element_swiginit(self, _xml_lite.new_Element(*args))
 
-    def clone(self, element: "Element") -> "void":
-        r"""clone(Element self, Element element)"""
-        return _xml_lite.Element_clone(self, element)
-
     def attribute(self, s: "std::string const &") -> "std::string &":
         r"""attribute(Element self, std::string const & s) -> std::string &"""
         return _xml_lite.Element_attribute(self, s)
@@ -219,10 +215,6 @@ class Document(object):
         r"""__init__(Document self, Element rootNode=None, bool own=True) -> Document"""
         _xml_lite.Document_swiginit(self, _xml_lite.new_Document(rootNode, own))
     __swig_destroy__ = _xml_lite.delete_Document
-
-    def clone(self) -> "xml::lite::Document *":
-        r"""clone(Document self) -> Document"""
-        return _xml_lite.Document_clone(self)
 
     def createElement(self, *args) -> "xml::lite::Element *":
         r"""

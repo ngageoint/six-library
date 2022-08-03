@@ -182,11 +182,6 @@ std::string str::EncodedStringView::asWindows1252() const
     const auto result = w1252string();
     return str::c_str<std::string>(result); // cast & copy
 }
-std::string str::EncodedStringView::asWindows1252() const
-{
-    const auto result = w1252string();
-    return str::c_str<std::string>(result); // cast & copy
-}
 
 bool str::EncodedStringView::operator_eq(const EncodedStringView& rhs) const
 {

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_MINIDOM_PARSER_H__
-#define __XML_LITE_MINIDOM_PARSER_H__
+#ifndef CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_
+#define CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_
 #pragma once
 
 #include <memory>
@@ -145,4 +145,4 @@ inline Document& getDocument(MinidomParser& xmlParser)
 }
 }
 
-#endif
+#endif  // CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_

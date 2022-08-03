@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_VALIDATOR_XERCES_H__
-#define __XML_LITE_VALIDATOR_XERCES_H__
+#ifndef CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
+#define CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
 
 #include <xml/lite/xml_lite_config.h>
 
@@ -52,7 +52,7 @@ namespace lite
 
 typedef xercesc::DOMError ValidationError;
 
-struct ValidationErrorHandler : public xercesc::DOMErrorHandler
+struct ValidationErrorHandler final : public xercesc::DOMErrorHandler
 {
     ValidationErrorHandler() = default;
 
@@ -62,7 +62,7 @@ struct ValidationErrorHandler : public xercesc::DOMErrorHandler
     ValidationErrorHandler& operator=(ValidationErrorHandler&&) = delete;
 
     //! handle the errors during validation
-    virtual bool handleError (const ValidationError& err);
+    bool handleError (const ValidationError& err) override;
 
     //! get the raw information
     const std::vector<ValidationInfo>& getErrorLog() const
@@ -156,4 +156,4 @@ std::ostream& operator<< (std::ostream& out,
 
 #endif
 
-#endif
+#endif  // CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
