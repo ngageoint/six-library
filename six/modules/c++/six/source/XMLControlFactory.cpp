@@ -78,7 +78,7 @@ XMLControlRegistry::newXMLControl(const std::string& identifier,
     return iter->second->newXMLControl(log);
 }
 
-std::string six::toXMLString(const Data* data,
+std::u8string six::toXMLString(const Data* data,
                              const six::XMLControlRegistry *xmlRegistry)
 {
     logging::NullLogger log;
@@ -87,7 +87,7 @@ std::string six::toXMLString(const Data* data,
 }
 
 template<typename TSchemaPaths>
-std::string six_toValidXMLString(const Data& data,
+std::u8string six_toValidXMLString(const Data& data,
     const TSchemaPaths& schemaPaths,
     logging::Logger* log, const six::XMLControlRegistry* xmlRegistry)
 {
@@ -103,12 +103,12 @@ std::string six_toValidXMLString(const Data& data,
     const std::unique_ptr<xml::lite::Document> doc(
         xmlControl->toXML(data, schemaPaths));
 
-    io::StringStream oss;
-    getRootElement(*doc).print(oss, xml::lite::StringEncoding::Utf8);
+    io::U8StringStream oss;
+    getRootElement(*doc).print(oss);
 
     return oss.stream().str();
 }
-std::string six::toValidXMLString(const Data* data,
+std::u8string six::toValidXMLString(const Data* data,
                                   const std::vector<std::string>& schemaPaths,
                                   logging::Logger* log,
                                   const six::XMLControlRegistry *xmlRegistry)
@@ -116,13 +116,13 @@ std::string six::toValidXMLString(const Data* data,
     assert(data != nullptr);
     return toValidXMLString(*data, schemaPaths, log, xmlRegistry);
 }
-std::string six::toValidXMLString(const Data& data,
+std::u8string six::toValidXMLString(const Data& data,
     const std::vector<std::string>& schemaPaths,
     logging::Logger* log, const six::XMLControlRegistry* xmlRegistry)
 {
     return six_toValidXMLString(data, schemaPaths, log, xmlRegistry);
 }
-std::string six::toValidXMLString(const Data& data,
+std::u8string six::toValidXMLString(const Data& data,
     const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger* log, const six::XMLControlRegistry* xmlRegistry)
 {

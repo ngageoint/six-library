@@ -21,7 +21,9 @@
  */
 
 #include <std/filesystem>
+#include <std/string>
 
+#include <str/EncodedStringView.h>
 #include <six/Utilities.h>
 #include <NitfIsd.h>
 
@@ -135,7 +137,8 @@ inline mem::auto_ptr<csm::Nitf21Isd> constructIsd(const std::string& pathname,
     des.setSubHeader(toString(segment.getSubheader()));
 
     // The DES's data is just the XML string
-    des.setData(six::toXMLString(data, &registry));
+    const auto xml = six::toXMLString(data, &registry);
+    des.setData(str::EncodedStringView(xml).native());
     nitfIsd->addFileDes(des);
 
     return nitfIsd;

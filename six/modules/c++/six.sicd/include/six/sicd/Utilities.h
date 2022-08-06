@@ -23,7 +23,7 @@
 #define __SIX_SICD_UTILITIES_H__
 
 #include <memory>
-#include <string>
+#include <std/string>
 #include <vector>
 #include <utility>
 #include <std/span>
@@ -435,11 +435,11 @@ public:
      * \return Data representation of 'xmlStr'
      */
     static mem::auto_ptr<ComplexData> parseDataFromString(
-        const std::string& xmlStr,
+        const std::u8string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
     static std::unique_ptr<ComplexData> parseDataFromString(
-        const std::string& xmlStr,
+        const std::u8string& xmlStr,
         const std::vector<std::filesystem::path>* pSchemaPaths,
         logging::Logger* pLogger = nullptr);
 
@@ -453,11 +453,11 @@ public:
      *
      * \return XML string representation of 'data'
      */
-    static std::string toXMLString(
+    static std::u8string toXMLString(
             const ComplexData& data,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             logging::Logger* logger = nullptr);
-    static std::string toXMLString(const ComplexData&,
+    static std::u8string toXMLString(const ComplexData&,
         const std::vector<std::filesystem::path>*, logging::Logger* pLogger = nullptr);
     /*!
      * Create a fake SICD that's populated enough for
