@@ -12,18 +12,6 @@ macro(coda_find_system_dependencies)
     # creates imported target Boost::serialization, if found
     # see https://cmake.org/cmake/help/latest/module/FindBoost.html
     set(ENABLE_BOOST OFF CACHE BOOL "Enable building modules dependent on Boost")
-    set(BOOST_HOME "" CACHE PATH "path to boost installation")
-    if (ENABLE_BOOST OR BOOST_HOME)
-        if (BOOST_HOME)
-            set(BOOST_ROOT ${BOOST_HOME})
-        endif()
-        find_package(Boost COMPONENTS serialization)
-        if (NOT Boost_FOUND)
-            message(FATAL_ERROR "Unable to find Boost. Set BOOST_HOME to help \
-                                 locate it, or set ENABLE_BOOST=OFF.")
-        endif()
-        set(HAVE_BOOST ${Boost_FOUND})
-    endif()
 
     # sets the following variables if Python installation found:
     #   Python_FOUND                - flag indicating system has the requested components
