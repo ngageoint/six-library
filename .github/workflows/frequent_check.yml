@@ -44,13 +44,10 @@ jobs:
       run: |
         mkdir build
         cd build
-        export CC=gcc-10
-        export CXX=g++-10
         cmake -DCMAKE_INSTALL_PREFIX=installLinux-Github -DPYTHON_VERSION=3.7 ..
     - name: make
       run: |
         cd build
-        # using the default number of threads (-j) causes G++ to crash
         cmake --build . -j 2
         cmake --build . --target install
     - name: test

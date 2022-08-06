@@ -14,7 +14,7 @@ inline std::wstring ToString(const uint16_t& q)
 }
 }}}
 
-#define TEST_ASSERT(X) Assert::IsTrue((X) ? true : false)
+#define TEST_ASSERT(X) Assert::IsTrue(X)
 
 template<typename T, typename U>
 inline void test_assert_eq_(T&& t, U&& u)
@@ -46,7 +46,7 @@ inline void test_assert_greater_(T&& t, U&& u)
 }
 #define TEST_ASSERT_GREATER(X1, X2) test_assert_greater_(X1, X2)
 
-#define TEST_ASSERT_ALMOST_EQ_EPS(X1, X2, EPS) { Microsoft::VisualStudio::CppUnitTestFramework::Assert:AreEqual(X1, X2, EPS); Microsoft::VisualStudio::CppUnitTestFramework::Assert:AreEqual(X2, X1, EPS); }
+#define TEST_ASSERT_ALMOST_EQ_EPS(X1, X2, EPS) { Assert:AreEqual(X1, X2, EPS); Assert:AreEqual(X2, X1, EPS); }
 #define TEST_ASSERT_ALMOST_EQ(X1, X2) TEST_ASSERT_ALMOST_EQ_EPS(X1, X2, 0.0001)
 
 #define TEST_ASSERT_EQ_MSG(msg, X1, X2) Logger::WriteMessage(msg.c_str()); TEST_ASSERT_EQ(X1, X2)

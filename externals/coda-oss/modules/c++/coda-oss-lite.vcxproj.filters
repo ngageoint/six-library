@@ -1267,5 +1267,8 @@
     <None Include="std\include\std\type_traits">
       <Filter>std</Filter>
     </None>
+    <None Include="sys\include\sys\sys_config.h.cmake.in">
+      <Filter>sys</Filter>
+    </None>
   </ItemGroup>
 </Project>

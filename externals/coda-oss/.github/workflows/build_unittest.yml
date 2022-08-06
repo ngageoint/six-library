@@ -73,14 +73,11 @@ jobs:
         which python
         mkdir target
         cd target
-        export CC=gcc-10
-        export CXX=g++-10
         cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }} -DENABLE_SWIG=ON
     - name: build
       run: |
         cd target
-        # using the default number of threads (-j) causes G++ to crash
-        cmake --build . -j 3
+        cmake --build . -j
     - name: install
       run: |
         cd target
@@ -93,7 +90,7 @@ jobs:
   build-waf:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-2019]
         python-version: ['3.7']
         debugging: ['--enable-debugging', '']
     name: ${{ matrix.os }}-${{ matrix.python-version }}-waf
@@ -109,8 +106,6 @@ jobs:
       run: |
         pip install numpy
         mkdir install${{ matrix.os }}Waf-Github
-        export CC=gcc-10
-        export CXX=g++-10
         python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" --enable-swig ${{ matrix.debugging }}
     - name: configure_without_swig
       if: ${{ matrix.os == 'windows-2019' }}

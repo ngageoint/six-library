@@ -22,9 +22,8 @@
 #define CODA_OSS_coda_oss_namespace__h_INCLUDED_
 #pragma once
 
-#include <cstddef> // get std namespace
-
-// Our "coda_oss" namespace is just a place-holder for things that are really in "std."
-namespace coda_oss = std;
+namespace coda_oss
+{
+}
 
 #endif  // CODA_OSS_coda_oss_namespace__h_INCLUDED_

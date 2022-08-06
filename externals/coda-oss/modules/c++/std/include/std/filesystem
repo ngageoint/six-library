@@ -22,7 +22,26 @@
 #define CODA_OSS_std_filesystem_INCLUDED_
 #pragma once
 
-#include <filesystem>
-#include "sys/filesystem.h"
+// Make it (too?) easy for clients to get our various std:: implementations
+#ifndef CODA_OSS_NO_std_filesystem
+    #include "coda_oss/CPlusPlus.h"
+    #if CODA_OSS_cpp17
+        // Some versions of G++ say they're C++17 but don't have <filesystem>
+        #if __has_include(<filesystem>)  // __has_include is C++17
+            #include <filesystem>
+            #define CODA_OSS_NO_std_filesystem 1  // part of C++17
+        #endif
+    #else
+        #include "sys/filesystem.h"
+        #define CODA_OSS_NO_std_filesystem 0  // use our own
+    #endif
+#endif
+
+#if !CODA_OSS_NO_std_filesystem
+namespace std // This is slightly uncouth: we're not supposed to augment "std".
+{
+    namespace filesystem = coda_oss::filesystem;
+}
+#endif  // !CODA_OSS_NO_std_filesystem
 
 #endif  // CODA_OSS_std_filesystem_INCLUDED_

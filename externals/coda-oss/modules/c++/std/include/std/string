@@ -23,6 +23,31 @@
 #pragma once
 
 #include <string>
-#include "coda_oss/string.h"
+
+// Make it (too?) easy for clients to get our various std:: implementations
+#ifndef CODA_OSS_NO_std_u8string
+    #include "coda_oss/CPlusPlus.h"
+    #if CODA_OSS_cpp20
+        #define CODA_OSS_NO_std_u8string 1  // part of C++20
+    #else
+        #include "coda_oss/string.h"
+        #define CODA_OSS_NO_std_u8string 0  // use our own
+    #endif
+#endif
+
+#if !CODA_OSS_NO_std_u8string
+#include "config/compiler_extensions.h"
+namespace std // This is slightly uncouth: we're not supposed to augment "std".
+{
+    CODA_OSS_disable_warning_push
+    #if defined(_MSC_VER) && (_MSC_VER >= 1927)
+    #pragma warning(disable: 5052) // Keyword '...' was introduced in C++ 20 and requires use of the '...' command-line option
+    #endif
+    using char8_t = coda_oss::char8_t;
+    CODA_OSS_disable_warning_pop
+
+    using coda_oss::u8string;
+}
+#endif // !CODA_OSS_NO_std_u8string
 
 #endif  // CODA_OSS_std_string_INCLUDED_

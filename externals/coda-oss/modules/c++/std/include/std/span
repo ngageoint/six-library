@@ -22,7 +22,23 @@
 #define CODA_OSS_std_span_INCLUDED_
 #pragma once
 
-#include <span>
-#include "coda_oss/span.h"
+// Make it (too?) easy for clients to get our various std:: implementations
+#ifndef CODA_OSS_NO_std_span
+    #include "coda_oss/CPlusPlus.h"
+    #if CODA_OSS_cpp20
+        #include <span>
+        #define CODA_OSS_NO_std_span 1  // part of C++20
+    #else
+        #include "coda_oss/span.h"
+        #define CODA_OSS_NO_std_span 0  // use our own
+    #endif
+#endif
+
+#if !CODA_OSS_NO_std_span
+namespace std // This is slightly uncouth: we're not supposed to augment "std".
+{
+    using coda_oss::span;
+}
+#endif  // CODA_OSS_DEFINE_std_span_
 
 #endif  // CODA_OSS_std_span_INCLUDED_
