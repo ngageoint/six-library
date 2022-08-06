@@ -14,12 +14,14 @@ if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
         add_compile_options(/W3 /wd4290 /wd4512)
         add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
+	add_compile_options(/std:c++14)
     elseif (UNIX)
         add_compile_options(
             -Wno-deprecated
             -Wno-unused-value
             -Wno-unused-but-set-variable
         )
+	add_compile_options(-std=c++14)
     endif()
 
     if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")
