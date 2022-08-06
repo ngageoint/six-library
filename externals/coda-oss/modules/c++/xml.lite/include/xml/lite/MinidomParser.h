@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_MINIDOM_PARSER_H__
-#define __XML_LITE_MINIDOM_PARSER_H__
+#ifndef CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_
+#define CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_
 #pragma once
 
 #include <memory>
@@ -56,17 +56,15 @@ namespace lite
  * bloat of the spec.  It was inspired by python's xml.dom.minidom
  * module.
  */
-struct MinidomParser
+struct MinidomParser final
 {
     /*!
      *  Constructor.  Set our SAX ContentHandler.
      */
-    MinidomParser(bool storeEncoding = false); // see MinidomHandler::storeEncoding()
+    explicit MinidomParser(bool storeEncoding = true);
 
     //! Destructor.
-    virtual ~MinidomParser()
-    {
-    }
+    ~MinidomParser() = default;
 
     MinidomParser(const MinidomParser&) = delete;
     MinidomParser& operator=(const MinidomParser&) = delete;
@@ -79,27 +77,25 @@ struct MinidomParser
      *  \param is  This is the input stream to feed the parser
      *  \param size  This is the size of the stream to feed the parser
      */
-    virtual void parse(io::InputStream& is, int size = io::InputStream::IS_END);
-    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
-    virtual void parse(io::InputStream& is, StringEncoding, int size = io::InputStream::IS_END);
-    #endif // SWIG
+    void parse(io::InputStream& is, int size = io::InputStream::IS_END);
+    void parse(io::InputStream& is, const void*pInitialEncoding, const void* pFallbackEncoding,
+        int size = io::InputStream::IS_END);
 
     /*!
      *  This clears the MinidomHandler, killing its underlying Document
      *  tree.  The Document node is preserved, however -- it must
      *  be explicitly reset to another document to change element type.
      */
-    virtual void clear();
+    void clear();
 
     /*!
      *  Return a pointer to the document.  Note that its a reference
      *  so you dont get to keep it.
      *  \return Pointer to document.
      */
-    virtual Document *getDocument() const;
-
-    virtual Document *getDocument(bool steal = false);
-    void getDocument(std::unique_ptr<Document>&); // steal = true
+    Document *getDocument() const;
+    Document *getDocument(bool steal = false);
+    std::unique_ptr<Document>& getDocument(std::unique_ptr<Document>&); // steal = true
 
     /*!
      *  Reader accessor
@@ -126,20 +122,15 @@ struct MinidomParser
      *
      *  \param newDocument The new document.
      */
-    virtual void setDocument(Document * newDocument, bool own = true);
+    void setDocument(Document * newDocument, bool own = true);
     void setDocument(std::unique_ptr<Document>&&);  // own = true
 
     /*!
      * @see MinidomHandler::preserveCharacterData
      */
-    virtual void preserveCharacterData(bool preserve);
+    void preserveCharacterData(bool preserve);
 
-     /*!
-     * @see MinidomHandler::storeEncoding
-     */
-    virtual void storeEncoding(bool preserve);
-
-protected:
+private:
     MinidomHandler mHandler;
     XMLReader mReader;
 };
@@ -154,4 +145,4 @@ inline Document& getDocument(MinidomParser& xmlParser)
 }
 }
 
-#endif
+#endif  // CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_

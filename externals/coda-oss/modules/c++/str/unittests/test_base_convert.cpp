@@ -28,17 +28,14 @@
 
 #include <import/str.h>
 #include <str/EncodedString.h>
+#include <str/EncodedStringView.h>
 #include <str/Encoding.h>
 
 #include "TestCase.h"
 
-inline static void test_assert_eq(const std::string& testName, const std::u8string& actual, const std::u8string& expected)
-{
-    TEST_ASSERT_EQ(actual, expected);
-}
 inline static void test_assert_eq(const std::string& testName, const std::u8string& actual, const std::u32string& expected)
 {
-    test_assert_eq(testName, actual, str::to_u8string(expected));
+    TEST_ASSERT_EQ(actual, str::to_u8string(expected));
 }
 
 TEST_CASE(testConvert)
@@ -106,7 +103,7 @@ TEST_CASE(test_string_to_u8string_ascii)
         const std::string input { '|', static_cast<std::string::value_type>(ch), '|'};
         const auto actual = fromWindows1252(input);
         const std::u8string expected8{cast8('|'), cast8(ch), cast8('|')}; 
-        test_assert_eq(testName, actual, expected8);
+        TEST_ASSERT_EQ(actual, expected8);
         const std::u32string expected{U'|', U(ch), U'|'};
         test_assert_eq(testName, actual, expected);
     }
@@ -119,16 +116,16 @@ TEST_CASE(test_string_to_u8string_windows_1252)
         const std::string input = "|\x80|";  // Windows-1252, "|€|"
         const auto actual = fromWindows1252(input);
         const std::u8string expected8{cast8('|'), cast8('\xE2'), cast8('\x82'), cast8('\xAC'), cast8('|')};  // UTF-8,  "|€|"
-        test_assert_eq(testName, actual, expected8);
-        const std::u32string expected{U"|\U000020AC|"};  // UTF-32,  "|€|"
+        TEST_ASSERT_EQ(actual, expected8);
+        const std::u32string expected{U"|\u20AC|"};  // UTF-32,  "|€|"
         test_assert_eq(testName, actual, expected);
     }
     {
         const std::string input = "|\x9F|";  // Windows-1252, "|Ÿ|"
         const auto actual = fromWindows1252(input);
         const std::u8string expected8{cast8('|'), cast8('\xC5'), cast8('\xB8'), cast8('|')};  // UTF-8,  "|Ÿ|"
-        test_assert_eq(testName, actual, expected8);
-        const std::u32string expected{U"|\U00000178|"};  // UTF-32,  "|Ÿ|"
+        TEST_ASSERT_EQ(actual, expected8);
+        const std::u32string expected{U"|\u0178|"};  // UTF-32,  "|Ÿ|"
         test_assert_eq(testName, actual, expected);
     }
     {
@@ -138,8 +135,8 @@ TEST_CASE(test_string_to_u8string_windows_1252)
             const std::string input{'|', ch, '|'};
             const auto actual = fromWindows1252(input);
             static const std::u8string expected8{cast8('|'), cast8('\xEF'), cast8('\xBF'), cast8('\xBD'), cast8('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
-            test_assert_eq(testName, actual, expected8);
-            const std::u32string expected{U"|\U0000fffd|"};  // UTF-32,  "|<REPLACEMENT CHARACTER>|"
+            TEST_ASSERT_EQ(actual, expected8);
+            const std::u32string expected{U"|\ufffd|"};  // UTF-32,  "|<REPLACEMENT CHARACTER>|"
             test_assert_eq(testName, actual, expected);
         }    
     }
@@ -183,7 +180,7 @@ TEST_CASE(test_string_to_u8string_windows_1252)
             // are mapped one-by-one.  However, we can test that UTF-8 to Windows-1252
             // works as that walks through a UTF-8 string which can have 1-, 2-, 3- and 4-bytes
             // for a single code-point.
-            const auto w1252 = str::EncodedStringView::details::w1252string(str::EncodedStringView(actual));
+            const auto w1252 = str::to_w1252string(actual.data(), actual.size());
             TEST_ASSERT(input == w1252);
 
             // Can't compare the values with == because TEST_ASSERT_EQ()

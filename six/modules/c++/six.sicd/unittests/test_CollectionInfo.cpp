@@ -37,6 +37,16 @@
 
 #include "TestCase.h"
 
+// It seems that a macro is better than a utility routine, see https://github.com/tahonermann/char8_t-remediation
+// C++20 changed the type of u8 to char8_t* https://en.cppreference.com/w/cpp/language/string_literal
+// Not putting this everywhere because (1) well, it's a macro, and (2) it's mostly
+// only test code that uses string literals.
+#if CODA_OSS_cpp20
+#define U8(s) u8##s
+#else
+#define U8(s) static_cast<const std::char8_t*>(static_cast<const void*>(s))
+#endif
+
 TEST_CASE(DummyData)
 {
     const auto data = createData<float>(types::RowCol<size_t>(10, 10));
@@ -64,10 +74,10 @@ TEST_CASE(Classification)
     TEST_ASSERT_TRUE(data->getClassification().isUnclassified());
 
     const std::vector<std::string> schemaPaths;
-    io::StringStream ss;
+    io::U8StringStream ss;
     ss.stream() << six::sicd::Utilities::toXMLString(*data, schemaPaths);
 
-    six::MinidomParser xmlParser(false /*storeEncoding*/);
+    six::MinidomParser xmlParser;
     xmlParser.parse(ss);
     const auto& doc = getDocument(xmlParser);
     const auto root = doc.getRootElement();
@@ -96,18 +106,18 @@ TEST_CASE(ClassificationCanada)
     const std::vector<std::string> schemaPaths;
     const auto strXml = six::sicd::Utilities::toXMLString(*data, schemaPaths);
 
-    const auto NON_CLASSIFI = strXml.find("NON CLASSIFI");
+    const auto NON_CLASSIFI = strXml.find(U8("NON CLASSIFI"));
     TEST_ASSERT(NON_CLASSIFI != std::string::npos);
-    const auto UNCLASSIFIED = strXml.find(" / UNCLASSIFIED");
+    const auto UNCLASSIFIED = strXml.find(U8(" / UNCLASSIFIED"));
     TEST_ASSERT(UNCLASSIFIED != std::string::npos);
     const auto utf8 = strXml.substr(NON_CLASSIFI, UNCLASSIFIED - NON_CLASSIFI);
     TEST_ASSERT_EQ(utf8.size(), std::string("NON CLASSIFI\xc3\x89").size()); // UTF-8, "NON CLASSIFIÉ"
-    const auto E_ = utf8.find("\xc3\x89"); // UTF-8,  "É"
+    const auto E_ = utf8.find(U8("\xc3\x89")); // UTF-8,  "É"
     TEST_ASSERT(E_ != std::string::npos);
 
-    io::StringStream ss;
+    io::U8StringStream ss;
     ss.stream() << strXml;
-    six::MinidomParser xmlParser(true /*storeEncoding*/);
+    six::MinidomParser xmlParser;
     xmlParser.parse(ss);
     const auto& doc = getDocument(xmlParser);
     const auto root = doc.getRootElement();

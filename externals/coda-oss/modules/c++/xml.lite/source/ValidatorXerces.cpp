@@ -24,11 +24,14 @@
 #include <iterator>
 #include <std/filesystem>
 #include <std/memory>
+#include <std/string>
+#include <regex>
 
 #include <sys/OS.h>
 #include <io/StringStream.h>
 #include <mem/ScopedArray.h>
 #include <str/EncodedStringView.h>
+#include <str/utf8.h>
 
 namespace fs = std::filesystem;
 
@@ -92,11 +95,6 @@ ValidatorXerces::ValidatorXerces(
         bool recursive) :
     ValidatorXerces(convert(schemaPaths), log, recursive)
 {
-    // The string conversion code in validate() doesn't work right on all platforms
-    // for non-ASCII characters.  But changing that to be correct could break
-    // existing code someplace; thus, it's enabled only if using the new
-    // fs::path overload, std::string retains existing behavior.
-    mLegacyStringConversion = false;
 }
 ValidatorXerces::ValidatorXerces(
     const std::vector<std::string>& schemaPaths, 
@@ -209,40 +207,16 @@ inline void reset(str::EncodedStringView xmlView, std::unique_ptr<str::ui16strin
 }
 
 using XMLCh_string = std::basic_string<XMLCh_t>;
-
-template <typename CharT>
-static void setStringData_(xercesc::DOMLSInputImpl& input, const std::basic_string<CharT>& xml, std::unique_ptr<XMLCh_string>& pWString)
+static std::unique_ptr<XMLCh_string> setStringData(xercesc::DOMLSInputImpl& input, const std::u8string& xml)
 {
-    reset(str::EncodedStringView(xml), pWString);
-    input.setStringData(pWString->c_str());
-}
-static void setStringData(xercesc::DOMLSInputImpl& input, const std::string& xml, bool legacyStringConversion,
-                          std::unique_ptr<XercesLocalString>& pXmlWide, std::unique_ptr<XMLCh_string>& pWString)
-{
-    if (legacyStringConversion)
-    {
-        // This doesn't work right for UTF-8 or Windows-1252
-        pXmlWide.reset(new XercesLocalString(xml)); // std::make_unique fails with older compilers
-        input.setStringData(pXmlWide->toXMLCh());
-    }
-    else
-    {
-        setStringData_(input, xml, pWString);
-    }
-}
-inline void setStringData(xercesc::DOMLSInputImpl& input, const coda_oss::u8string& xml, bool /*legacyStringConversion*/,
-                          std::unique_ptr<XercesLocalString>&, std::unique_ptr<XMLCh_string>& pWString)
-{
-    setStringData_(input, xml, pWString);
-}
-inline void setStringData(xercesc::DOMLSInputImpl& input, const str::W1252string& xml, bool /*legacyStringConversion*/,
-                          std::unique_ptr<XercesLocalString>&, std::unique_ptr<XMLCh_string>& pWString)
-{
-    setStringData_(input, xml, pWString);
+    // expand to the wide character data for use with xerces
+    std::unique_ptr<XMLCh_string> retval;
+    reset(str::EncodedStringView(xml), retval);
+    input.setStringData(retval->c_str());
+    return retval;
 }
 
-template<typename CharT>
-bool ValidatorXerces::validate_(const std::basic_string<CharT>& xml, bool legacyStringConversion,
+bool ValidatorXerces::validate_(const std::u8string& xml, 
                                const std::string& xmlID,
                                std::vector<ValidationInfo>& errors) const
 {
@@ -260,9 +234,7 @@ bool ValidatorXerces::validate_(const std::basic_string<CharT>& xml, bool legacy
         xercesc::XMLPlatformUtils::fgMemoryManager);
 
     // expand to the wide character data for use with xerces
-    std::unique_ptr<XercesLocalString> pXmlWide;
-    std::unique_ptr<XMLCh_string> pWString;
-    setStringData(input, xml, legacyStringConversion, pXmlWide, pWString);
+    auto pWString = setStringData(input, xml);
 
     // validate the document
     mValidator->parse(&input)->release();
@@ -277,23 +249,58 @@ bool ValidatorXerces::validate_(const std::basic_string<CharT>& xml, bool legacy
 
     return (!mErrorHandler->getErrorLog().empty());
 }
+
+static str::EncodedStringView encodeXml(const std::string& xml)
+{
+    // The XML might contain contain a specific encoding, if it does;
+    // we want to use it, otherwise we'll corrupt the data.
+
+    // UTF-8 is the normal case, so check it first
+    const std::regex reUtf8("<\?.*encoding=.*['\"]?.*utf-8.*['\"]?.*\?>", std::regex::icase);
+    std::cmatch m;
+    if (std::regex_search(xml.c_str(), m, reUtf8))
+    {
+        return str::EncodedStringView::fromUtf8(xml);
+    }
+
+    // Maybe this is is poor XML with Windows-1252 encoding :-(
+    const std::regex reWindows1252("<\?.*encoding=.*['\"]?.*windows-1252.*['\"]?.*\?>", std::regex::icase);
+    if (std::regex_search(xml.c_str(), m, reWindows1252))
+    {
+        return str::EncodedStringView::fromWindows1252(xml);
+    }
+
+    // No "... encoding= ..."; let EncodedStringView deal with it   
+    return str::EncodedStringView(xml);
+}
+
 bool ValidatorXerces::validate(const std::string& xml,
                                const std::string& xmlID,
                                std::vector<ValidationInfo>& errors) const
 {
-    return validate_(xml, mLegacyStringConversion, xmlID, errors);
+    const auto view = encodeXml(xml);
+    try
+    {
+      return validate(view.u8string(), xmlID, errors);
+    }
+    catch (const utf8::invalid_utf8&) { }
+
+    // Can't process as "native" (UTF-8 on Linux, Windows-1252 on Windows).
+    // Must be Windows-1252 on Linux.
+    return validate(str::c_str<str::W1252string>(xml), xmlID, errors);
 }
 bool ValidatorXerces::validate(const coda_oss::u8string& xml,
                                const std::string& xmlID,
                                std::vector<ValidationInfo>& errors) const
 {
-    return validate_(xml, false /*legacyStringConversion*/, xmlID, errors);
+    return validate_(xml, xmlID, errors);
 }
 bool ValidatorXerces::validate(const str::W1252string& xml,
                                const std::string& xmlID,
                                std::vector<ValidationInfo>& errors) const
 {
-    return validate_(xml, false /*legacyStringConversion*/, xmlID, errors);
+    const str::EncodedStringView xmlView(xml);
+    return validate(xmlView.u8string(), xmlID, errors);
 }
 
 }
