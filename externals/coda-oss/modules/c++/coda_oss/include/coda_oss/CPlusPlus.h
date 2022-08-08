@@ -65,8 +65,8 @@
 #define CODA_OSS_cpp20 (CODA_OSS_cplusplus >= 202002L)
 #define CODA_OSS_cpp23 0
 
-#if !CODA_OSS_cpp11
-#error "Must compile with C++11 or greater."
+#if !CODA_OSS_cpp14
+#error "Must compile with C++14 or greater."
 #endif
 
 #endif // CODA_OSS_coda_oss_CPlusPlus_h_INCLUDED_

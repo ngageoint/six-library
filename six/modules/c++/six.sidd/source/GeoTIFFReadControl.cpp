@@ -211,13 +211,13 @@ void six::sidd::GeoTIFFReadControl::load(
     const std::string& fromFile,
     const std::vector<std::string>& schemaPaths)
 {
-    const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(false /*storeEncoding*/); };
+    const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(); };
     load_(fromFile, schemaPaths, createXmlParser);
 }
 void six::sidd::GeoTIFFReadControl::load(const std::filesystem::path& fromFile_, const std::vector< std::filesystem::path>* pSchemaPaths)
 {
     const auto fromFile = fromFile_.string();
-    const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(true /*storeEncoding*/); };
+    const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(); };
     load_(fromFile, pSchemaPaths, createXmlParser);
 }
 

@@ -596,9 +596,9 @@ TReturn six_parseData(const XMLControlRegistry& xmlReg,
                                    ::io::InputStream& xmlStream,
                                    DataType dataType,
                                    const TSchemaPaths& schemaPaths,
-                                   logging::Logger& log, bool storeEncoding)
+                                   logging::Logger& log)
 {
-    six::MinidomParser xmlParser(storeEncoding);
+    six::MinidomParser xmlParser;
     try
     {
         xmlParser.parse(xmlStream);
@@ -633,17 +633,17 @@ mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
-    logging::Logger& log, bool storeEncoding)
+    logging::Logger& log)
 {
-    return six_parseData<mem::auto_ptr<Data>>(xmlReg, xmlStream, dataType, schemaPaths, log, storeEncoding);
+    return six_parseData<mem::auto_ptr<Data>>(xmlReg, xmlStream, dataType, schemaPaths, log);
 }
 std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
     DataType dataType,
     const std::vector<std::filesystem::path>* pSchemaPaths,
-    logging::Logger& log, bool storeEncoding)
+    logging::Logger& log)
 {
-    return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlStream, dataType, pSchemaPaths, log, storeEncoding);
+    return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlStream, dataType, pSchemaPaths, log);
 }
 
 mem::auto_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,
