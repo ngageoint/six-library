@@ -24,6 +24,7 @@
 #define __SIX_BYTE_PROVIDER_H__
 
 #include <memory>
+#include <std/string>
 
 #include <scene/sys_Conf.h>
 #include <nitf/ByteProvider.hpp>
@@ -106,7 +107,7 @@ public:
     static void populateInitArgs(
             const NITFWriteControl& writer,
             const std::vector<std::string>& schemaPaths,
-            std::vector<std::string>& xmlStrings,
+            std::vector<std::u8string>& xmlStrings,
             std::vector<PtrAndLength>& desData,
             size_t& numRowsPerBlock,
             size_t& numColsPerBlock);
@@ -129,7 +130,7 @@ public:
     static void populateInitArgs(
             const NITFHeaderCreator& headerCreator,
             const std::vector<std::string>& schemaPaths,
-            std::vector<std::string>& xmlStrings,
+            std::vector<std::u8string>& xmlStrings,
             std::vector<PtrAndLength>& desData,
             size_t& numRowsPerBlock,
             size_t& numColsPerBlock);

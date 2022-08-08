@@ -49,32 +49,6 @@ namespace xml
 
 namespace lite
 {
- /*!
- * \class StringEncoding
- * \brief Specifies how std::string is encoded by MinidomParser.
- *
- * This is needed because our use of Xerces generates different
- * results on Windows/Linux, and changing things might break existing
- * code.
- *
- * On Windows, the UTF-16 strings (internal to Xerces) are converted
- * to std::strings with Windows-1252 (more-or-less ISO8859-1) encoding;
- * this allows Western European languages to be displayed.  On *ix,
- * UTF-8 is the norm ...
- */
-#ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
-enum class StringEncoding
-{
-    Windows1252  // more-or-less ISO5589-1, https://en.wikipedia.org/wiki/Windows-1252
-    , Utf8
-};
-constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
-        ? xml::lite::StringEncoding::Windows1252
-        : xml::lite::StringEncoding::Utf8;
-// Could do the same for std::wstring, but there isn't any code needing it right now.
-// Probably better to use std::u16string and std::u32string anyway.
-#endif
-
 /*!
  *  \class QName
  *  \brief A Qualified name (includes the namespace stuff)
@@ -94,7 +68,7 @@ constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
 struct Uri final // help prevent mixups with std::string
 {
     Uri() = default;
-    Uri(const std::string& v);
+    explicit Uri(const std::string& v);
     std::string value;
     bool empty() const
     {
@@ -144,7 +118,7 @@ public:
      * Constructor taking just the local name (no namespace). 
      * \param lName  Just the local name of the object. 
      */
-    QName(const std::string& lName)
+    explicit QName(const std::string& lName)
     {
         setName(lName);
     }

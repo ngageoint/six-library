@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_MINIDOM_HANDLER_H__
-#define __XML_LITE_MINIDOM_HANDLER_H__
+#ifndef CODA_OSS_xml_lite_MinidomHandler_h_INCLUDED_
+#define CODA_OSS_xml_lite_MinidomHandler_h_INCLUDED_
 #pragma once
 
 /*!
@@ -47,7 +47,11 @@
 
 #include <stack>
 #include <memory>
+#include "coda_oss/string.h"
+#include "coda_oss/memory.h"
 
+#include "str/EncodedString.h"
+#include "str/EncodedStringView.h"
 #include "XMLReader.h"
 #include "io/StandardStreams.h"
 #include "Document.h"
@@ -68,14 +72,13 @@ namespace lite
 struct MinidomHandler final : public ContentHandler
 {
     //! Constructor.  Uses default document
-    MinidomHandler() :
-        mDocument(nullptr), mOwnDocument(true), mPreserveCharData(false)
+    MinidomHandler() 
     {
-        setDocument(new Document());
+        setDocument(coda_oss::make_unique<Document>());
     }
 
     //! Destructor
-    virtual ~ MinidomHandler()
+    ~ MinidomHandler()
     {
         setDocument(nullptr, true);
     }
@@ -84,22 +87,22 @@ struct MinidomHandler final : public ContentHandler
     MinidomHandler(MinidomHandler&&) = default;
     MinidomHandler& operator=(MinidomHandler&&) = default;
 
-    virtual void setDocument(Document *newDocument, bool own = true);
+    void setDocument(Document *newDocument, bool own = true);
     void setDocument(std::unique_ptr<Document>&&);  // own = true
 
     /**
      * Retrieves the Document.
      * @param steal     if specified, ownership will be given up (if owned)
      */
-    virtual Document *getDocument(bool steal = false)
+    Document *getDocument(bool steal = false)
     {
         if (steal)
             mOwnDocument = false;
         return mDocument;
     }
-    void getDocument(std::unique_ptr<Document>&);  // steal = true
+    std::unique_ptr<Document>& getDocument(std::unique_ptr<Document>&);  // steal = true
 
-    virtual Document *getDocument() const
+    Document *getDocument() const
     {
         return mDocument;
     }
@@ -111,10 +114,8 @@ struct MinidomHandler final : public ContentHandler
      * \param value The value of the char data
      * \param length The length of the char data
      */
-    virtual void characters(const char* value, int length) override;
-
+    void characters(const char* value, int length) override;
     bool vcharacters(const void /*XMLCh*/*, size_t length) override;  
-    bool call_vcharacters() const override;
 
     /*!
      * This method is fired when a new tag is entered.
@@ -127,18 +128,10 @@ struct MinidomHandler final : public ContentHandler
      * \param qname  The qname
      * \param atts  The attributes
      */
-    virtual void startElement(const std::string & uri,
+    void startElement(const std::string & uri,
                               const std::string & localName,
                               const std::string & qname,
-                              const Attributes & atts);
-
-    /*!
-     * We want to push only the proper amount of bytes
-     * to the node when we start writing.  Here we chew
-     * up the pieces we take as we are taking them.
-     * \return The chracter data for the node
-     */
-    virtual std::string adjustCharacterData();
+                              const Attributes & atts) override;
 
     /*!
      * Handles the actual popping of the node off the node
@@ -148,53 +141,42 @@ struct MinidomHandler final : public ContentHandler
      * \param localName The local name
      * \param qname  The qname
      */
-    virtual void endElement(const std::string & uri,
+    void endElement(const std::string & uri,
                             const std::string & localName,
-                            const std::string & qname);
+                            const std::string & qname) override;
 
-    virtual void clear();
-
-    /*!
-     *  Trim the white space off the back and front of a string
-     *  \param  s  String to trim
-     */
-    static void trim(std::string & s);
+    void clear();
 
     /*!
      * If set to true, whitespaces will be preserved in the parsed
      * character data. Otherwise, it will be trimmed.
      */
-    virtual void preserveCharacterData(bool preserve);
+    void preserveCharacterData(bool preserve);
     
+private:
     /*!
-     * If set to true, how std::string values are encoded will be set.
-     * 
-     * This is a bit goofy to preserve existing behavior: on *ix,
-     * XML containing non-ASCII data is lost (it turns into 
-     * Windows-1252 on Windows).
-     * 
-     * When set, there won't be any change on Windows.  However,
-     * on *ix, std::string will be encoding as UTF-8 thus preserving
-     * the non-ASCII data.
+     * We want to push only the proper amount of bytes
+     * to the node when we start writing.  Here we chew
+     * up the pieces we take as we are taking them.
+     * \return The chracter data for the node
      */
-    virtual void storeEncoding(bool value);
-    bool storeEncoding() const;
+    coda_oss::u8string adjustCharacterData();
 
-protected:
-    std::string currentCharacterData;
+    /*!
+     *  Trim the white space off the back and front of a string
+     *  \param  s  String to trim
+     */
+    static void trim(coda_oss::u8string& s);
+
+    coda_oss::u8string currentCharacterData;
     std::stack<int> bytesForElement;
     std::stack<Element *> nodeStack;
-    Document *mDocument;
-    bool mOwnDocument;
-    bool mPreserveCharData;
-
- private:
-    void characters(const char* value, int length, const StringEncoding*);
-    void call_characters(const std::string&, StringEncoding);
-    std::shared_ptr<const StringEncoding> mpEncoding;
-    bool mStoreEncoding = false;
+    Document* mDocument = nullptr;
+    bool mOwnDocument = true;
+    bool mPreserveCharData = false;
+    void characters(coda_oss::u8string&&);
 };
 }
 }
 
-#endif
+#endif  // CODA_OSS_xml_lite_MinidomHandler_h_INCLUDED_

@@ -25,6 +25,7 @@
 #include <memory>
 #include <vector>
 #include <std/filesystem>
+#include <std/string>
 
 #include <import/scene.h>
 #include <types/RgAz.h>
@@ -128,11 +129,11 @@ public:
     * \return Data representation of 'xmlStr'
     */
     static mem::auto_ptr<DerivedData> parseDataFromString(
-        const std::string& xmlStr,
+        const std::u8string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
     static std::unique_ptr<DerivedData> parseDataFromString(
-        const std::string& xmlStr,
+        const std::u8string& xmlStr,
         const std::vector<std::filesystem::path>* pSchemaPaths,
         logging::Logger* pLogger=nullptr);
 
@@ -147,10 +148,10 @@ public:
      * \return XML string representation of
      *'data'
      */
-    static std::string toXMLString(const DerivedData& data,
+    static std::u8string toXMLString(const DerivedData& data,
             const std::vector<std::string>& schemaPaths,
             logging::Logger* logger);
-    static std::string toXMLString(const DerivedData&,
+    static std::u8string toXMLString(const DerivedData&,
         const std::vector<std::filesystem::path>*, logging::Logger* pLogger = nullptr);
 };
 }

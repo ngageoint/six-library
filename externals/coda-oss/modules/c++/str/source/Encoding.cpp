@@ -23,6 +23,9 @@
 
 #include <assert.h>
 #include <string.h>
+#if _WIN32
+#include <comdef.h>  // _bstr_t
+#endif
 
 #include <map>
 #include <locale>
@@ -171,7 +174,13 @@ void str::details::w1252to8(str::W1252string::const_pointer p, size_t sz, std::s
 }
 std::u16string str::to_u16string(str::W1252string::const_pointer p, size_t sz)
 {
-    return to_Tstring<std::u16string>(p, sz);
+    auto retval = to_Tstring<std::u16string>(p, sz);
+    #if defined(_WIN32) && (!defined(_NDEBUG) || defined(DEBUG))
+    const _bstr_t bstr(str::cast<const char*>(p));
+    const std::wstring wstr(static_cast<const wchar_t*>(bstr));
+    assert(retval == str::cast<std::u16string::const_pointer>(wstr.c_str()));
+    #endif
+    return retval;
 }
 str::ui16string str::to_ui16string(str::W1252string::const_pointer p, size_t sz)
 {
@@ -298,10 +307,6 @@ coda_oss::u8string str::to_u8string(std::u16string::const_pointer p, size_t sz)
     auto begin = c_str<const uint8_t*>(result);
     utf8::utf8to16(begin, begin+result.size(), std::back_inserter(utf16line));
     */
-}
-void str::details::utf16to8(std::u16string::const_pointer p, size_t sz, std::string& result)
-{
-    utf8::utf16to8(p, p + sz, std::back_inserter(result));
 }
 
 std::u16string str::to_u16string(coda_oss::u8string::const_pointer p_, size_t sz)
