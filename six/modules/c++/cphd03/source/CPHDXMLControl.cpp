@@ -72,6 +72,10 @@ std::u8string CPHDXMLControl::toXMLString(const Metadata& metadata)
 
     return str::EncodedStringView("<?xml version=\"1.0\"?>").u8string() + ss.stream().str();
 }
+std::string CPHDXMLControl::toXMLString_(const Metadata& metadata)
+{
+    return str::EncodedStringView(toXMLString(metadata)).native();
+}
 
 size_t CPHDXMLControl::getXMLsize(const Metadata& metadata)
 {

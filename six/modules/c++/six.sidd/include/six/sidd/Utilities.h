@@ -148,7 +148,7 @@ public:
      * \return XML string representation of
      *'data'
      */
-    static std::u8string toXMLString(const DerivedData& data,
+    static std::string toXMLString(const DerivedData& data,
             const std::vector<std::string>& schemaPaths,
             logging::Logger* logger);
     static std::u8string toXMLString(const DerivedData&,

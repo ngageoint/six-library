@@ -84,10 +84,14 @@ public:
      *  Calls toXML
      *  \return XML String
      */
-    virtual std::u8string toXMLString(
+    virtual std::string toXMLString(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             bool prettyPrint = false);
+    virtual std::u8string toXMLString(
+        const Metadata& metadata,
+        const std::vector<std::filesystem::path>* pSchemaPaths,
+        bool prettyPrint = false);
 
     /*!
      *  \func toXML

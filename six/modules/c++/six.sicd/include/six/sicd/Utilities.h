@@ -453,7 +453,7 @@ public:
      *
      * \return XML string representation of 'data'
      */
-    static std::u8string toXMLString(
+    static std::string toXMLString(
             const ComplexData& data,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             logging::Logger* logger = nullptr);
