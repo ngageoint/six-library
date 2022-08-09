@@ -5,7 +5,7 @@
 ## [Version 3.?.??](https://github.com/ngageoint/six-library/releases/tag/SIX-3.?.??); ??? ?, 202?
 * [coda-oss](https://github.com/mdaus/coda-oss) version [202?-??-??](https://github.com/mdaus/coda-oss/releases/tag/202?-??-??)
 * [nitro](https://github.com/mdaus/nitro) version [2.??.??](https://github.com/mdaus/nitro/releases/tag/NITRO-2.??.??)
-* Routines that "traffic" in XML strings (e.g., `six::sicd::Utilities::parseDataFromString()`) now use
+* Routines that "traffic" in XML strings (e.g., `parseDataFromString()` or `toXMLString()`) now use
   `std::u8string` (actually `coda_oss::u8string`) instead of `std::string`; **this is a breaking change**. 
   `str::EncodedStringView` or `str::EncodedString` can be used to convert between other encodings.
 

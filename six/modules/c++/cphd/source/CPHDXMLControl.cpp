@@ -50,13 +50,13 @@ CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog) :
 }
 
 /* TO XML */
-std::string CPHDXMLControl::toXMLString(
+std::u8string CPHDXMLControl::toXMLString(
         const Metadata& metadata,
         const std::vector<std::string>& schemaPaths,
         bool prettyPrint)
 {
     std::unique_ptr<xml::lite::Document> doc(toXML(metadata, schemaPaths));
-    io::StringStream ss;
+    io::U8StringStream ss;
     (prettyPrint) ?
             doc->getRootElement()->prettyPrint(ss) :
             doc->getRootElement()->print(ss);

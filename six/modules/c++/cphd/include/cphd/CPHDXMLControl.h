@@ -28,6 +28,7 @@
 #include <unordered_map>
 #include <std/filesystem>
 #include <vector>
+#include <std/string>
 
 #include <scene/sys_Conf.h>
 #include <xml/lite/Element.h>
@@ -83,7 +84,7 @@ public:
      *  Calls toXML
      *  \return XML String
      */
-    virtual std::string toXMLString(
+    virtual std::u8string toXMLString(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             bool prettyPrint = false);

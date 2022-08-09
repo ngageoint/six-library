@@ -62,7 +62,7 @@ public:
 
     mem::auto_ptr<Metadata> fromXML(const std::string& xmlString);
 
-    std::string toXMLString(const Metadata& metadata);
+    std::u8string toXMLString(const Metadata& metadata);
     size_t getXMLsize(const Metadata& metadata);
 
 private:

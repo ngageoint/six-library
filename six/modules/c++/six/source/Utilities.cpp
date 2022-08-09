@@ -666,7 +666,7 @@ mem::auto_ptr<Data> six::parseDataFromFile(
 }
 
 mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
-    const std::string& xmlStr,
+    const std::u8string& xmlStr,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
 {
@@ -675,7 +675,7 @@ mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
 
 mem::auto_ptr<Data> six::parseDataFromString(
         const XMLControlRegistry& xmlReg,
-        const std::string& xmlStr,
+        const std::u8string& xmlStr,
         DataType dataType,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
