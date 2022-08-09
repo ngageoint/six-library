@@ -2,6 +2,13 @@
 
 # SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
 
+## [Version 3.?.??](https://github.com/ngageoint/six-library/releases/tag/SIX-3.?.??); ??? ?, 202?
+* [coda-oss](https://github.com/mdaus/coda-oss) version [202?-??-??](https://github.com/mdaus/coda-oss/releases/tag/202?-??-??)
+* [nitro](https://github.com/mdaus/nitro) version [2.??.??](https://github.com/mdaus/nitro/releases/tag/NITRO-2.??.??)
+* Routines that "traffic" in XML strings (e.g., `six::sicd::Utilities::parseDataFromString()`) now use
+  `std::u8string` (actually `coda_oss::u8string`) instead of `std::string`; **this is a breaking change**. 
+  `str::EncodedStringView` or `str::EncodedString` can be used to convert between other encodings.
+
 ## [Version 3.1.13](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.13); August 2, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)
 * [nitro](https://github.com/mdaus/nitro) version [2.10.11](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.11)
