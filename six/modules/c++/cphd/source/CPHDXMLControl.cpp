@@ -25,10 +25,12 @@
 #include <unordered_map>
 #include <algorithm>
 #include <std/memory>
+#include <iterator>
 
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <xml/lite/MinidomParser.h>
+#include <str/EncodedStringView.h>
 
 #include <six/XMLControl.h>
 #include <six/XmlLite.h>
@@ -50,17 +52,36 @@ CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog) :
 }
 
 /* TO XML */
+std::u8string CPHDXMLControl::toXMLString(
+    const Metadata& metadata,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    bool prettyPrint)
+{
+    std::vector<std::string> schemaPaths;
+    if (pSchemaPaths != nullptr)
+    {
+        std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(schemaPaths),
+            [](const std::filesystem::path& p) { return p.string(); });
+    }
+
+    std::unique_ptr<xml::lite::Document> doc(toXML(metadata, schemaPaths));
+    io::U8StringStream ss;
+    (prettyPrint) ?
+        doc->getRootElement()->prettyPrint(ss) :
+        doc->getRootElement()->print(ss);
+    return ss.stream().str();
+}
 std::string CPHDXMLControl::toXMLString(
         const Metadata& metadata,
-        const std::vector<std::string>& schemaPaths,
+        const std::vector<std::string>& schemaPaths_,
         bool prettyPrint)
 {
-    std::unique_ptr<xml::lite::Document> doc(toXML(metadata, schemaPaths));
-    io::StringStream ss;
-    (prettyPrint) ?
-            doc->getRootElement()->prettyPrint(ss) :
-            doc->getRootElement()->print(ss);
-    return ss.stream().str();
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    const auto result = toXMLString(metadata, &schemaPaths, prettyPrint);
+    return str::EncodedStringView(result).native();
 }
 
 mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(

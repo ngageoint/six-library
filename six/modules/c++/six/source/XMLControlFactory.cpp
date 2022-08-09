@@ -25,6 +25,7 @@
 #include "six/XMLControlFactory.h"
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
+#include <str/EncodedStringView.h>
 #include "six/Data.h"
 
 using namespace six;
@@ -84,6 +85,12 @@ std::u8string six::toXMLString(const Data* data,
     logging::NullLogger log;
     return toValidXMLString(data, std::vector<std::string>(),
                             &log, xmlRegistry);
+}
+std::string six::toXMLString_(const Data* data,
+    const six::XMLControlRegistry* xmlRegistry)
+{
+    const auto result = toXMLString(data, xmlRegistry);
+    return str::EncodedStringView(result).native();
 }
 
 template<typename TSchemaPaths>

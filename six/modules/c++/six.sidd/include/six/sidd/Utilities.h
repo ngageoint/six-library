@@ -129,7 +129,7 @@ public:
     * \return Data representation of 'xmlStr'
     */
     static mem::auto_ptr<DerivedData> parseDataFromString(
-        const std::u8string& xmlStr,
+        const std::string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
     static std::unique_ptr<DerivedData> parseDataFromString(
@@ -148,7 +148,7 @@ public:
      * \return XML string representation of
      *'data'
      */
-    static std::u8string toXMLString(const DerivedData& data,
+    static std::string toXMLString(const DerivedData& data,
             const std::vector<std::string>& schemaPaths,
             logging::Logger* logger);
     static std::u8string toXMLString(const DerivedData&,

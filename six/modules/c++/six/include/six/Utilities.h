@@ -27,6 +27,7 @@
 #include <std/span>
 #include <std/cstddef>
 #include <std/filesystem>
+#include <std/string>
 
 #include <import/io.h>
 #include <import/xml/lite.h>
@@ -276,6 +277,11 @@ mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log);
+std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::u8string& xmlStr,
+    DataType dataType,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger* pLogger = nullptr);
 
 /*
  * Parses the XML in 'xmlStr' and converts it into a Data object.  Same as
@@ -292,6 +298,10 @@ mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log);
+std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::u8string& xmlStr,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger* pLogger = nullptr);
 
 void getErrors(const ErrorStatistics* errorStats,
                const types::RgAz<double>& sampleSpacing,

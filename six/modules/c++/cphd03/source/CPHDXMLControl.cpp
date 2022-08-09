@@ -26,6 +26,7 @@
 
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
+#include <str/EncodedStringView.h>
 #include <six/Utilities.h>
 #include <six/XmlLite.h>
 
@@ -63,13 +64,17 @@ std::string CPHDXMLControl::getSICommonURI() const
     return CPHD03_URI;
 }
 
-std::string CPHDXMLControl::toXMLString(const Metadata& metadata)
+std::u8string CPHDXMLControl::toXMLString(const Metadata& metadata)
 {
     std::unique_ptr<xml::lite::Document> doc(toXML( metadata));
-    io::StringStream ss;
+    io::U8StringStream ss;
     doc->getRootElement()->print(ss);
 
-    return (std::string("<?xml version=\"1.0\"?>") + ss.stream().str());
+    return str::EncodedStringView("<?xml version=\"1.0\"?>").u8string() + ss.stream().str();
+}
+std::string CPHDXMLControl::toXMLString_(const Metadata& metadata)
+{
+    return str::EncodedStringView(toXMLString(metadata)).native();
 }
 
 size_t CPHDXMLControl::getXMLsize(const Metadata& metadata)

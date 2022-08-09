@@ -28,6 +28,7 @@
 #include <unordered_map>
 #include <std/filesystem>
 #include <vector>
+#include <std/string>
 
 #include <scene/sys_Conf.h>
 #include <xml/lite/Element.h>
@@ -87,6 +88,10 @@ public:
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             bool prettyPrint = false);
+    virtual std::u8string toXMLString(
+        const Metadata& metadata,
+        const std::vector<std::filesystem::path>* pSchemaPaths,
+        bool prettyPrint = false);
 
     /*!
      *  \func toXML
