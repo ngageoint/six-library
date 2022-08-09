@@ -559,10 +559,10 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem:
     return parseData(inStream, pSchemaPaths, *logger);
 }
 
-mem::auto_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string& xmlStr,
+mem::auto_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr,
         const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
-    io::U8StringStream inStream;
+    io::StringStream inStream;
     inStream.write(xmlStr);
     return parseData(inStream, schemaPaths, log);
 }

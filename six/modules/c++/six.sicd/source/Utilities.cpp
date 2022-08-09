@@ -1024,11 +1024,11 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromFile(const std::filesystem:
 }
 
 mem::auto_ptr<ComplexData> Utilities::parseDataFromString(
-        const std::u8string& xmlStr,
+        const std::string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
 {
-    io::U8StringStream inStream;
+    io::StringStream inStream;
     inStream.write(xmlStr);
     return parseData(inStream, schemaPaths, log);
 }

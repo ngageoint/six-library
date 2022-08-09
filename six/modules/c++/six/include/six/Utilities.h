@@ -273,10 +273,15 @@ mem::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
  * \return Data representation of 'xmlStr'
  */
 mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
-    const std::u8string& xmlStr,
+    const std::string& xmlStr,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log);
+std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::u8string& xmlStr,
+    DataType dataType,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger* pLogger = nullptr);
 
 /*
  * Parses the XML in 'xmlStr' and converts it into a Data object.  Same as
@@ -290,9 +295,13 @@ mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
  * \return Data representation of 'xmlStr'
  */
 mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
-    const std::u8string& xmlStr,
+    const std::string& xmlStr,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log);
+std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::u8string& xmlStr,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger* pLogger = nullptr);
 
 void getErrors(const ErrorStatistics* errorStats,
                const types::RgAz<double>& sampleSpacing,

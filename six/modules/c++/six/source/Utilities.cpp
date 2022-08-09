@@ -22,9 +22,12 @@
 
 #include <iomanip>
 #include <sstream>
+#include <algorithm>
+#include <iterator>
 
 #include <logging/NullLogger.h>
 #include <math/Utilities.h>
+#include <str/EncodedStringView.h>
 #include <nitf/PluginRegistry.hpp>
 #include "six/Init.h"
 #include "six/Utilities.h"
@@ -665,24 +668,56 @@ mem::auto_ptr<Data> six::parseDataFromFile(
     return parseData(xmlReg, inStream, dataType, schemaPaths, log);
 }
 
-mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::u8string& xmlStr,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger* pLogger)
+{
+    return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, pSchemaPaths, pLogger);
+}
+mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::string& xmlStr,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
 {
     return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, schemaPaths, log);
 }
 
-mem::auto_ptr<Data> six::parseDataFromString(
+std::unique_ptr<Data> six::parseDataFromString(
         const XMLControlRegistry& xmlReg,
         const std::u8string& xmlStr,
         DataType dataType,
-        const std::vector<std::string>& schemaPaths,
-        logging::Logger& log)
+        const std::vector<std::filesystem::path>* pSchemaPaths,
+        logging::Logger* pLogger)
 {
-    io::StringStream inStream;
+    io::U8StringStream inStream;
     inStream.write(xmlStr);
-    return parseData(xmlReg, inStream, dataType, schemaPaths, log);
+
+    std::vector<std::string> schemaPaths;
+    if (pSchemaPaths != nullptr)
+    {
+        std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(schemaPaths),
+            [](const std::filesystem::path& p) { return p.string(); });
+    }
+
+    logging::NullLogger nullLogger;
+    logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
+
+    return parseData(xmlReg, inStream, dataType, schemaPaths, *pLogger_);
+}
+mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::string& xmlStr,
+    DataType dataType,
+    const std::vector<std::string>& schemaPaths_,
+    logging::Logger& log)
+{
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    const str::EncodedStringView view(xmlStr);
+    auto result = parseDataFromString(xmlReg, view.u8string(), dataType, &schemaPaths, &log);
+    return mem::auto_ptr<Data>(result.release());
 }
 
 std::string six::findSchemaPath(const std::string& progname)
