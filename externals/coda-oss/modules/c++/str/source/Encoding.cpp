@@ -124,7 +124,7 @@ inline void append(std::u32string& result, const coda_oss::u8string& utf8)
 }
 
 template<typename TChar>
-static void fromWindows1252_(str::W1252string::value_type ch, std::basic_string<TChar>& result)
+static void fromWindows1252_(str::W1252string::value_type ch, std::basic_string<TChar>& result, bool strict=false)
 {
     // ASCII is the same in UTF-8
     if (ch < static_cast<str::W1252string::value_type>(0x80))
@@ -135,18 +135,40 @@ static void fromWindows1252_(str::W1252string::value_type ch, std::basic_string<
     }
 
     static const auto map = Windows1252_to_u8string();
-    const auto it = map.find(static_cast<std::u32string::value_type>(ch));
+    const auto ch32 = static_cast<std::u32string::value_type>(ch);
+    const auto it = map.find(ch32);
     if (it != map.end())
     {
         append(result, it->second);
         return;
     }
 
-    // If the input text contains a character that isn't defined in Windows-1252; return a
-    // "replacement character."  Yes, this will  **corrupt** the input data as information is lost:
-    // https://en.wikipedia.org/wiki/Specials_(Unicode_block)#Replacement_character
-    static const coda_oss::u8string replacement_character = utf8_(0xfffd);
-    append(result, replacement_character);
+    switch (static_cast<uint8_t>(ch))
+    {
+    case 0x81:
+    case 0x8d:
+    case 0x8f:
+    case 0x90:
+    case 0x9d:
+    {
+        if (strict)
+        {
+            // If the input text contains a character that isn't defined in Windows-1252; return a
+            // "replacement character."  Yes, this will  **corrupt** the input data as information is lost:
+            // https://en.wikipedia.org/wiki/Specials_(Unicode_block)#Replacement_character
+            static const coda_oss::u8string replacement_character = utf8_(0xfffd);
+            append(result, replacement_character);
+        }
+        else
+        {
+            // _bstr_t just preserves these values, do the same
+            append(result, utf8_(ch32));
+        }
+        break;
+    }
+    default:
+        throw std::invalid_argument("Invalid Windows-1252 character.");
+    }
 }
 template<typename TChar>
 void windows1252_to_string_(str::W1252string::const_pointer p, size_t sz, std::basic_string<TChar>& result)
@@ -205,7 +227,7 @@ std::map<TValue, TKey> kv_to_vk(const std::map<TKey, TValue>& kv)
 static void get_next_utf8_byte(coda_oss::u8string::const_pointer p, size_t sz,
     size_t& i,  coda_oss::u8string& utf8)
 {
-    if (!(i + i < sz))
+    if (!(i + 1 < sz))
     {
         throw std::invalid_argument("No remaining bytes, invalid UTF-8 encoding.");
     }
@@ -220,7 +242,7 @@ static void get_next_utf8_byte(coda_oss::u8string::const_pointer p, size_t sz,
     utf8 += coda_oss::u8string{static_cast<coda_oss::u8string::value_type>(b)};
 }
 template<typename TChar>
-static void utf8to1252(coda_oss::u8string::const_pointer p, size_t sz, std::basic_string<TChar>& result)
+static void utf8to1252(coda_oss::u8string::const_pointer p, size_t sz, std::basic_string<TChar>& result, bool strict=false)
 {
     using value_type = typename std::basic_string<TChar>::value_type;
     for (size_t i = 0; i < sz; i++)
@@ -254,10 +276,24 @@ static void utf8to1252(coda_oss::u8string::const_pointer p, size_t sz, std::basi
         {
             result += static_cast<value_type>(it->second);
         }
+        else if (strict)
+        {
+            throw std::invalid_argument("UTF-8 sequence can't be converted to Windows-1252.");
+            //assert("UTF-8 sequence can't be converted to Windows-1252." && 0);
+            //result += static_cast<TChar>(0x7F);  // <DEL>
+        }
         else
         {
-            assert("UTF-8 sequence can't be converted to Windows-1252." && 0);
-            result += static_cast<TChar>(0x7F);  // <DEL>
+            // _bstr_t preserves these values
+            if (utf8.length() == 2)
+            {
+                result += static_cast<TChar>(utf8[1]);
+            }
+            else
+            {
+                assert("UTF-8 sequence can't be converted to Windows-1252." && 0);
+                result += static_cast<TChar>(0x7F);  // <DEL>
+            }
         }
     }
 }
