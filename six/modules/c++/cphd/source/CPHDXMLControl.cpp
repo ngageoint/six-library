@@ -120,13 +120,23 @@ std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& m
 
 /* FROM XML */
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
-                                     const std::vector<std::string>& schemaPaths)
+                                     const std::vector<std::string>& schemaPaths_)
 {
-    io::StringStream stringStream;
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    return fromXML(str::EncodedStringView(xmlString).u8string(), schemaPaths);
+}
+std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::u8string& xmlString,
+    const std::vector<std::filesystem::path>& schemaPaths)
+{
+    io::U8StringStream stringStream;
     stringStream.write(xmlString);
     six::MinidomParser parser;
     parser.parse(stringStream);
-    return fromXML(&parser.getDocument(), schemaPaths);
+    auto result = fromXML(parser.getDocument(), schemaPaths);
+    return std::make_unique<Metadata>(std::move(result));
 }
 
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc,

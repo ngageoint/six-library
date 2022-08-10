@@ -1025,13 +1025,18 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromFile(const std::filesystem:
 }
 
 mem::auto_ptr<ComplexData> Utilities::parseDataFromString(
-        const std::string& xmlStr,
-        const std::vector<std::string>& schemaPaths,
+        const std::string& xmlStr_,
+        const std::vector<std::string>& schemaPaths_,
         logging::Logger& log)
 {
-    io::StringStream inStream;
-    inStream.write(xmlStr);
-    return parseData(inStream, schemaPaths, log);
+    const auto xmlStr = str::EncodedStringView(xmlStr_).u8string();
+
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    auto result = parseDataFromString(xmlStr, &schemaPaths, &log);
+    return mem::auto_ptr<ComplexData>(result.release());
 }
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)

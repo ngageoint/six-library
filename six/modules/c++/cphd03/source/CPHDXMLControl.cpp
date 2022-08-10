@@ -493,7 +493,12 @@ XMLElem CPHDXMLControl::areaSampleDirectionParametersToXML(
 
 mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
 {
-    io::StringStream stringStream;
+    auto result = fromXML(str::EncodedStringView(xmlString).u8string());
+    return mem::auto_ptr<Metadata>(result.release());
+}
+std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::u8string& xmlString)
+{
+    io::U8StringStream stringStream;
     stringStream.write(xmlString);
     six::MinidomParser parser;
     parser.parse(stringStream);
