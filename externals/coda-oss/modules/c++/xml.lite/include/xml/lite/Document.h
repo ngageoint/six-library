@@ -56,7 +56,7 @@ namespace lite
  * Use the Document to access the Element nodes contained within.
  * The DocumentParser will build a tree that you can use.
  */
-struct Document final
+struct Document // SOAPDocument derives :-(
 {
     //! Constructor
     Document(Element* rootNode = nullptr, bool own = true) :
@@ -74,7 +74,7 @@ struct Document final
      * Destroy the xml tree.  This deletes the nodes if they exist
      * Careful, this may delete your copy if you are not careful
      */
-    ~Document() noexcept(false)
+    virtual ~Document() noexcept(false)
     {
         destroy();
     }

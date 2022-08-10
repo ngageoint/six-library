@@ -23,6 +23,8 @@
 
 #include <stdexcept>
 
+#include <str/EncodedStringView.h>
+
 #include "six/Utilities.h"
 #include "six/sidd/DerivedXMLControl.h"
 #include "six/sidd/DerivedDataBuilder.h"
@@ -559,12 +561,17 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem:
     return parseData(inStream, pSchemaPaths, *logger);
 }
 
-mem::auto_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string& xmlStr,
-        const std::vector<std::string>& schemaPaths, logging::Logger& log)
+mem::auto_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr_,
+        const std::vector<std::string>& schemaPaths_, logging::Logger& log)
 {
-    io::U8StringStream inStream;
-    inStream.write(xmlStr);
-    return parseData(inStream, schemaPaths, log);
+    const auto xmlStr = str::EncodedStringView(xmlStr_).u8string();
+
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    auto result = parseDataFromString(xmlStr, &schemaPaths, &log);
+    return mem::auto_ptr<DerivedData>(result.release());
 }
 std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
@@ -577,27 +584,26 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string&
     return parseData(inStream, pSchemaPaths, *log);
 }
 
-template<typename TSchemaPaths>
-std::u8string Utilities_toXMLString(const DerivedData& data,
-    const TSchemaPaths& schemaPaths, logging::Logger* pLogger)
+std::string Utilities::toXMLString(const DerivedData& data,
+                                   const std::vector<std::string>& schemaPaths_, logging::Logger* logger)
+{
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    const auto result = toXMLString(data, &schemaPaths, logger);
+    return str::EncodedStringView(result).native();
+}
+std::u8string Utilities::toXMLString(const DerivedData& data,
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<DerivedXMLControl>();
 
     logging::NullLogger nullLogger;
-    logging::Logger* const logger = (pLogger == nullptr) ? &nullLogger : pLogger;
+    logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
 
-    return ::six::toValidXMLString(data, schemaPaths, logger, &xmlRegistry);
-}
-std::u8string Utilities::toXMLString(const DerivedData& data,
-                                   const std::vector<std::string>& schemaPaths, logging::Logger* logger)
-{
-    return Utilities_toXMLString(data, schemaPaths, logger);
-}
-std::u8string Utilities::toXMLString(const DerivedData& data,
-    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* logger)
-{
-    return Utilities_toXMLString(data, pSchemaPaths, logger);
+    return ::six::toValidXMLString(data, pSchemaPaths, pLogger_, &xmlRegistry);
 }
 
 static void createPredefinedFilter(six::sidd::Filter& filter)

@@ -170,6 +170,8 @@ private:
  */
 std::u8string toXMLString(const Data* data,
                         const XMLControlRegistry *xmlRegistry = nullptr);
+std::string toXMLString_(const Data* data,
+    const XMLControlRegistry* xmlRegistry = nullptr);
 
 /*!
  *  Additionally performs schema validation --

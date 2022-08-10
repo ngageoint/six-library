@@ -435,7 +435,7 @@ public:
      * \return Data representation of 'xmlStr'
      */
     static mem::auto_ptr<ComplexData> parseDataFromString(
-        const std::u8string& xmlStr,
+        const std::string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
     static std::unique_ptr<ComplexData> parseDataFromString(
@@ -453,7 +453,7 @@ public:
      *
      * \return XML string representation of 'data'
      */
-    static std::u8string toXMLString(
+    static std::string toXMLString(
             const ComplexData& data,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             logging::Logger* logger = nullptr);

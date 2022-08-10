@@ -56,7 +56,7 @@ namespace lite
  * bloat of the spec.  It was inspired by python's xml.dom.minidom
  * module.
  */
-struct MinidomParser final
+struct MinidomParser // SOAPParser inherits :-(
 {
     /*!
      *  Constructor.  Set our SAX ContentHandler.
@@ -64,7 +64,7 @@ struct MinidomParser final
     explicit MinidomParser(bool storeEncoding = true);
 
     //! Destructor.
-    ~MinidomParser() = default;
+    virtual ~MinidomParser() = default;
 
     MinidomParser(const MinidomParser&) = delete;
     MinidomParser& operator=(const MinidomParser&) = delete;
@@ -77,7 +77,7 @@ struct MinidomParser final
      *  \param is  This is the input stream to feed the parser
      *  \param size  This is the size of the stream to feed the parser
      */
-    void parse(io::InputStream& is, int size = io::InputStream::IS_END);
+    virtual void parse(io::InputStream& is, int size = io::InputStream::IS_END);
     void parse(io::InputStream& is, const void*pInitialEncoding, const void* pFallbackEncoding,
         int size = io::InputStream::IS_END);
 
