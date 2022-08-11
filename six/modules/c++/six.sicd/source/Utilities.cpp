@@ -44,6 +44,7 @@
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDMesh.h>
 #include <str/Manip.h>
+#include <str/EncodedStringView.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
 #include <units/Angles.h>
@@ -1024,13 +1025,18 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromFile(const std::filesystem:
 }
 
 mem::auto_ptr<ComplexData> Utilities::parseDataFromString(
-        const std::u8string& xmlStr,
-        const std::vector<std::string>& schemaPaths,
+        const std::string& xmlStr_,
+        const std::vector<std::string>& schemaPaths_,
         logging::Logger& log)
 {
-    io::U8StringStream inStream;
-    inStream.write(xmlStr);
-    return parseData(inStream, schemaPaths, log);
+    const auto xmlStr = str::EncodedStringView(xmlStr_).u8string();
+
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    auto result = parseDataFromString(xmlStr, &schemaPaths, &log);
+    return mem::auto_ptr<ComplexData>(result.release());
 }
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
@@ -1043,28 +1049,27 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string&
     return parseData(inStream, pSchemaPaths, *log);
 }
 
-template<typename TSchemaPaths>
-std::u8string Utilities_toXMLString(const ComplexData& data,
-    const TSchemaPaths& schemaPaths, logging::Logger* pLogger)
+std::string Utilities::toXMLString(const ComplexData& data,
+                                   const std::vector<std::string>& schemaPaths_,
+                                   logging::Logger* logger)
+{
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    const auto result = toXMLString(data, &schemaPaths, logger);
+    return str::EncodedStringView(result).native();
+}
+std::u8string Utilities::toXMLString(const ComplexData& data,
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<ComplexXMLControl>();
 
     logging::NullLogger nullLogger;
-    logging::Logger* const logger = (pLogger == nullptr) ? &nullLogger : pLogger;
+    logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
 
-    return ::six::toValidXMLString(data, schemaPaths, logger, &xmlRegistry);
-}
-std::u8string Utilities::toXMLString(const ComplexData& data,
-                                   const std::vector<std::string>& schemaPaths,
-                                   logging::Logger* logger)
-{
-    return Utilities_toXMLString(data, schemaPaths, logger);
-}
-std::u8string Utilities::toXMLString(const ComplexData& data,
-    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* logger)
-{
-    return Utilities_toXMLString(data, pSchemaPaths, logger);
+    return ::six::toValidXMLString(data, pSchemaPaths, pLogger_, &xmlRegistry);
 }
 
 static void update_for_SICD_130(ComplexData& data)

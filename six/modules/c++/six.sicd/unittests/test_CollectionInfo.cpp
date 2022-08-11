@@ -73,9 +73,8 @@ TEST_CASE(Classification)
     data->collectionInformation->setClassificationLevel(classificationText);
     TEST_ASSERT_TRUE(data->getClassification().isUnclassified());
 
-    const std::vector<std::string> schemaPaths;
     io::U8StringStream ss;
-    ss.stream() << six::sicd::Utilities::toXMLString(*data, schemaPaths);
+    ss.stream() << six::sicd::Utilities::toXMLString(*data, nullptr /*pSchemaPaths*/);
 
     six::MinidomParser xmlParser;
     xmlParser.parse(ss);
@@ -103,8 +102,7 @@ TEST_CASE(ClassificationCanada)
     data->collectionInformation->setClassificationLevel(classificationText);
     TEST_ASSERT_TRUE(data->getClassification().isUnclassified());
 
-    const std::vector<std::string> schemaPaths;
-    const auto strXml = six::sicd::Utilities::toXMLString(*data, schemaPaths);
+    const auto strXml = six::sicd::Utilities::toXMLString(*data, nullptr /*pSchemaPaths*/);
 
     const auto NON_CLASSIFI = strXml.find(U8("NON CLASSIFI"));
     TEST_ASSERT(NON_CLASSIFI != std::string::npos);
