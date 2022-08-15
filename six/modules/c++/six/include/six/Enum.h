@@ -109,6 +109,25 @@ namespace Enum
         const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
         return nitf::details::value(result, ex);
     }
+
+    //! Returns string representation of the value
+    template<typename T>
+    inline const std::map<int, std::string>& int_to_string_()
+    {
+        static const auto string_to_int = details::to_string_to_int(T::string_to_value_());
+        static const auto retval = nitf::details::swap_key_value(string_to_int);
+        return retval;
+    }
+    template<typename T>
+    inline std::optional<std::string> toString(int value, std::nothrow_t)
+    {
+        return nitf::details::index(int_to_string_<T>(), value);
+    }
+    template<typename T>
+    inline std::string toString(int value, bool throw_if_not_set = false)
+    {
+        return details::toString(int_to_string_<T>(), value, throw_if_not_set);
+    }
 }
 
 namespace details
@@ -117,34 +136,27 @@ namespace details
     template<typename T>
     class Enum
     {
-        static const std::map<int, std::string>& int_to_string()
-        {
-            static const auto string_to_int = details::to_string_to_int(T::string_to_value_());
-            static const auto retval = nitf::details::swap_key_value(string_to_int);
-            return retval;
-        }
-
     protected:
         Enum() = default;
 
         //! int constructor
         explicit Enum(int i)
         {
-            (void)details::index(int_to_string(), i); // validate "i"
+            (void)details::index(six::Enum::int_to_string_<T>(), i); // validate "i"
             value = i;
         }
 
     public:
-        int value = NOT_SET_VALUE; // existing SWIG code uses "value", regenerating is a PITA
+        int value = NOT_SET_VALUE; // existing SWIG code uses "value", regenerating is a huge nusiance
 
         //! Returns string representation of the value
         std::optional<std::string> toString(std::nothrow_t) const
         {
-            return nitf::details::index(int_to_string(), value);
+            return six::Enum::toString<T>(value, std::nothrow);
         }
         std::string toString(bool throw_if_not_set = false) const
         {
-            return details::toString(int_to_string(), value, throw_if_not_set);
+            return six::Enum::toString<T>(value, throw_if_not_set);
         }
 
         static std::optional<T> toType(const std::string& v, std::nothrow_t)
@@ -159,7 +171,7 @@ namespace details
         operator int() const { return value; }
 
         // needed for SWIG
-        static size_t size() { return int_to_string().size(); }
+        static size_t size() { return six::Enum::int_to_string_<T>().size(); }
         bool operator<(const int& o) const { return value < o; }
         bool operator<(const Enum& o) const { return *this < o.value; }
         bool operator==(const int& o) const { return value == o; }
