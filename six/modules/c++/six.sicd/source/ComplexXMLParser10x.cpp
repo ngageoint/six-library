@@ -82,7 +82,7 @@ XMLElem ComplexXMLParser10x::convertRadarCollectionToXML(
     createWaveform(radar, radarXML);
 
     //! required in 1.0
-    createString("TxPolarization", radar->txPolarization, radarXML);
+    createStringFromEnum("TxPolarization", radar->txPolarization, radarXML);
 
     createTxSequence(radar, radarXML);
     createRcvChannels(radar, radarXML);
@@ -130,20 +130,20 @@ XMLElem ComplexXMLParser10x::convertImageFormationToXML(
         createString("SegmentIdentifier", imageFormation->segmentIdentifier,
                      imageFormationXML);
 
-    createString("ImageFormAlgo",
+    createStringFromEnum("ImageFormAlgo",
                  imageFormation->imageFormationAlgorithm,
                  imageFormationXML);
 
-    createString("STBeamComp",
+    createStringFromEnum("STBeamComp",
                  imageFormation->slowTimeBeamCompensation,
                  imageFormationXML);
-    createString("ImageBeamComp",
+    createStringFromEnum("ImageBeamComp",
                  imageFormation->imageBeamCompensation,
                  imageFormationXML);
-    createString("AzAutofocus",
+    createStringFromEnum("AzAutofocus",
                  imageFormation->azimuthAutofocus,
                  imageFormationXML);
-    createString("RgAutofocus", imageFormation->rangeAutofocus, imageFormationXML);
+    createStringFromEnum("RgAutofocus", imageFormation->rangeAutofocus, imageFormationXML);
 
     for (unsigned int i = 0; i < imageFormation->processing.size(); ++i)
     {
@@ -221,7 +221,7 @@ XMLElem ComplexXMLParser10x::convertRMAToXML(
 {
     XMLElem rmaXML = newElement("RMA", parent);
 
-    createString("RMAlgoType", rma->algoType, rmaXML);
+    createStringFromEnum("RMAlgoType", rma->algoType, rmaXML);
 
     if (rma->rmat.get() && !rma->rmcr.get() && !rma->inca.get())
     {

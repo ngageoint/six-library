@@ -148,11 +148,6 @@ namespace details
     public:
         int value = NOT_SET_VALUE; // existing SWIG code uses "value", regenerating is a huge nusiance
 
-        //! Returns string representation of the value
-        std::optional<std::string> toString(std::nothrow_t) const
-        {
-            return nitf::details::index(int_to_string(), value);
-        }
         std::string toString(bool throw_if_not_set = false) const
         {
             if (throw_if_not_set && (value == NOT_SET_VALUE))
@@ -162,10 +157,6 @@ namespace details
             return details::index(int_to_string(), value);
         }
 
-        static std::optional<T> toType(const std::string& v, std::nothrow_t)
-        {
-            return six::Enum::toType<T>(v, std::nothrow);
-        }
         static T toType(const std::string& v)
         {
             return six::Enum::toType<T>(v);

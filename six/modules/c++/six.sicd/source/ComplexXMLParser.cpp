@@ -241,7 +241,7 @@ XMLElem ComplexXMLParser::convertImageDataToXML(
 {
     XMLElem imageDataXML = newElement("ImageData", parent);
 
-    createString("PixelType", imageData->pixelType, imageDataXML);
+    createStringFromEnum("PixelType", imageData->pixelType, imageDataXML);
     if (imageData->amplitudeTable.get())
     {
         const AmplitudeTable& ampTable = *imageData->amplitudeTable;
@@ -321,8 +321,8 @@ XMLElem ComplexXMLParser::convertGridToXML(
 {
     XMLElem gridXML = newElement("Grid", parent);
 
-    createString("ImagePlane", grid->imagePlane, gridXML);
-    createString("Type", grid->type, gridXML);
+    createStringFromEnum("ImagePlane", grid->imagePlane, gridXML);
+    createStringFromEnum("Type", grid->type, gridXML);
     common().createPoly2D("TimeCOAPoly", grid->timeCOAPoly, gridXML);
 
     XMLElem rowDirXML = newElement("Row", gridXML);
@@ -494,7 +494,7 @@ XMLElem ComplexXMLParser::createTxSequence(const RadarCollection* radar,
             }
             if (tx->txPolarization != PolarizationType::NOT_SET)
             {
-                createString("TxPolarization", tx->txPolarization, txStepXML);
+                createStringFromEnum("TxPolarization", tx->txPolarization, txStepXML);
             }
         }
 
@@ -531,7 +531,7 @@ XMLElem ComplexXMLParser::createWaveform(const RadarCollection* radar,
             if (!Init::isUndefined(wf->txFMRate))
                 createDouble("TxFMRate", wf->txFMRate, wfpXML);
             if (wf->rcvDemodType != DemodType::NOT_SET)
-                createString("RcvDemodType", wf->rcvDemodType, wfpXML);
+                createStringFromEnum("RcvDemodType", wf->rcvDemodType, wfpXML);
             if (!Init::isUndefined(wf->rcvWindowLength))
                 createDouble("RcvWindowLength", wf->rcvWindowLength, wfpXML);
             if (!Init::isUndefined(wf->adcSampleRate))
@@ -616,7 +616,7 @@ XMLElem ComplexXMLParser::createArea(const RadarCollection* radar,
 
             if (!Init::isUndefined(plane->orientation))
             {
-                createString("Orientation", plane->orientation, planeXML);
+                createStringFromEnum("Orientation", plane->orientation, planeXML);
             }
         }
 

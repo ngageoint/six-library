@@ -357,7 +357,7 @@ XMLElem DerivedXMLParser100::convertDisplayToXML(
 {
     XMLElem displayElem = newElement("Display", parent);
 
-    createString("PixelType", display.pixelType, displayElem);
+    createStringFromEnum("PixelType", display.pixelType, displayElem);
 
     // optional
     if (display.remapInformation.get())
@@ -369,14 +369,14 @@ XMLElem DerivedXMLParser100::convertDisplayToXML(
     // optional
     if (display.magnificationMethod != MagnificationMethod::NOT_SET)
     {
-        createString("MagnificationMethod",
+        createStringFromEnum("MagnificationMethod",
                      display.magnificationMethod, displayElem);
     }
 
     // optional
     if (display.decimationMethod != DecimationMethod::NOT_SET)
     {
-        createString("DecimationMethod",
+        createStringFromEnum("DecimationMethod",
                      display.decimationMethod, displayElem);
     }
 
@@ -636,10 +636,10 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
             const TxRcvPolarization *p = pPolarization.get();
             XMLElem polElem = newElement("Polarization", informationElem);
 
-            createString("TxPolarization",
+            createStringFromEnum("TxPolarization",
                 p->txPolarization,
                 polElem);
-            createString("RcvPolarization",
+            createStringFromEnum("RcvPolarization",
                 p->rcvPolarization,
                 polElem);
             // optional

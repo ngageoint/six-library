@@ -1656,10 +1656,10 @@ xml::lite::Element& DerivedXMLParser200::convertExploitationFeaturesToXML(const 
             const TxRcvPolarization *p = pPolarization.get();
             auto& polElem = parser.newElement("Polarization", informationElem);
 
-            parser.createString("TxPolarization",
+            parser.createStringFromEnum("TxPolarization",
                 p->txPolarization,
                 polElem);
-            parser.createString("RcvPolarization",
+            parser.createStringFromEnum("RcvPolarization",
                 p->rcvPolarization,
                 polElem);
             // optional
@@ -1807,7 +1807,7 @@ xml::lite::Element& DerivedXMLParser200::convertDisplayToXML(const DerivedXMLPar
     //       in SIDD 1.0, so need to confirm it's allocated
     auto& displayElem = parser.newElement("Display", parent);
 
-    parser.createString("PixelType", display.pixelType, displayElem);
+    parser.createStringFromEnum("PixelType", display.pixelType, displayElem);
 
     parser.createInt("NumBands", display.numBands, displayElem);
     if (six::Init::isDefined(display.defaultBandDisplay))

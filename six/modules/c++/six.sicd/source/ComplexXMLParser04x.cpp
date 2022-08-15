@@ -113,7 +113,7 @@ XMLElem ComplexXMLParser04x::convertRadarCollectionToXML(
     if (radar->txPolarization != PolarizationSequenceType::NOT_SET)
     {
         // In SICD 0.4, this is not allowed to contain UNKNOWN or SEQUENCE
-        createString(
+        createStringFromEnum(
                 "TxPolarization",
                 six::Enum::toType<PolarizationType>(six::Enum::toString(radar->txPolarization)),
                 radarXML);
@@ -167,7 +167,7 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
                      imageFormationXML);
     }
 
-    createString("ImageFormAlgo",
+    createStringFromEnum("ImageFormAlgo",
                  imageFormation->imageFormationAlgorithm,
                  imageFormationXML);
 
@@ -178,16 +178,16 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
     createDouble("MinProc", imageFormation->txFrequencyProcMin, txFreqXML);
     createDouble("MaxProc", imageFormation->txFrequencyProcMax, txFreqXML);
 
-    createString("STBeamComp",
+    createStringFromEnum("STBeamComp",
                  imageFormation->slowTimeBeamCompensation,
                  imageFormationXML);
-    createString("ImageBeamComp",
+    createStringFromEnum("ImageBeamComp",
                  imageFormation->imageBeamCompensation,
                  imageFormationXML);
-    createString("AzAutofocus",
+    createStringFromEnum("AzAutofocus",
                  imageFormation->azimuthAutofocus,
                  imageFormationXML);
-    createString("RgAutofocus", imageFormation->rangeAutofocus,
+    createStringFromEnum("RgAutofocus", imageFormation->rangeAutofocus,
                  imageFormationXML);
 
     for (size_t i = 0; i < imageFormation->processing.size(); ++i)
@@ -257,7 +257,7 @@ XMLElem ComplexXMLParser04x::convertRMAToXML(
 {
     XMLElem rmaXML = newElement("RMA", parent);
 
-    createString("RMAlgoType", rma->algoType, rmaXML);
+    createStringFromEnum("RMAlgoType", rma->algoType, rmaXML);
 
     if (rma->rmcr.get())
     {
