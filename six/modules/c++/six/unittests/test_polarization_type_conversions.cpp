@@ -33,7 +33,7 @@ static void test_EnumConstructor(const std::string& testName, const std::string&
 {
     (void)testName;
     const auto pType = six::Enum::toType<TSixEnum>(strType);
-    TEST_ASSERT(six::Enum::toString<TSixEnum>(pType) == strType);
+    TEST_ASSERT(six::Enum::toString(pType) == strType);
     TEST_ASSERT_EQ(pType, type);
 }
 TEST_CASE(EnumConstructor)
@@ -59,12 +59,12 @@ static void test_toType_(const std::string& testName, const std::string& strType
     (void)testName;
     const auto fromToType = six::Enum::toType<TSixEnum>(strType);
     TEST_ASSERT_EQ(fromToType, type);
-    auto str = six::Enum::toString<TSixEnum>(fromToType);
+    auto str = six::Enum::toString(fromToType);
     TEST_ASSERT_EQ(str, strType);
 
     const auto fromCtor = six::Enum::toType<TSixEnum>(strType);
     TEST_ASSERT_EQ(fromToType, fromCtor);
-    str = six::Enum::toString<TSixEnum>(fromCtor);
+    str = six::Enum::toString(fromCtor);
     TEST_ASSERT_EQ(str, strType);
 }
 template<typename TSixEnum>
@@ -202,13 +202,13 @@ static void test_ToString_(const std::string& testName, const std::string& strTy
 {
     (void)testName;
     {
-        const auto polarizationString = six::Enum::toString<TSixEnum>(type);
+        const auto polarizationString = six::Enum::toString(type);
         TEST_ASSERT_EQ(strType, polarizationString);
         auto pType = six::Enum::toType<TSixEnum>(polarizationString);
         TEST_ASSERT_EQ(pType, type);
     }
     {
-        const auto polarizationString = six::Enum::toString<TSixEnum>(type);
+        const auto polarizationString = six::Enum::toString(type);
         TEST_ASSERT_EQ(strType, polarizationString);
         auto pType = six::Enum::toType<TSixEnum>(polarizationString);
         TEST_ASSERT_EQ(pType, type);
@@ -348,10 +348,10 @@ static void test_NotSet(const std::string& testName)
 
     TSixEnum pType;
     TEST_ASSERT_EQ(pType, TSixEnum::NOT_SET);
-    auto polarizationString = six::Enum::toString<TSixEnum>(pType);
+    auto polarizationString = six::Enum::toString(pType);
     TEST_ASSERT_EQ(polarizationString, "NOT_SET");
-    TEST_EXCEPTION(polarizationString = six::Enum::toString<TSixEnum>(pType, true /*throw_if_not_set*/));
-    polarizationString = six::Enum::toString<TSixEnum>(pType, false /*throw_if_not_set*/);
+    TEST_EXCEPTION(polarizationString = six::Enum::toString(pType, true /*throw_if_not_set*/));
+    polarizationString = six::Enum::toString(pType, false /*throw_if_not_set*/);
     TEST_ASSERT_EQ(polarizationString, "NOT_SET");
 
     pType = six::Enum::toType<TSixEnum>("NOT SET");
@@ -382,7 +382,7 @@ static void test_EqInt_(const std::string& testName, const std::string& strType,
 
     const decltype(type)fromIntCtor(six::Enum::cast<TSixEnum>(value));
     TEST_ASSERT_EQ(enumValue, fromIntCtor);
-    TEST_ASSERT(six::Enum::toString<TSixEnum>(fromIntCtor) == strType);
+    TEST_ASSERT(six::Enum::toString(fromIntCtor) == strType);
     TEST_ASSERT_EQ(fromIntCtor, type);
 
     TEST_ASSERT_EQ(fromStrCtor, fromIntCtor);
