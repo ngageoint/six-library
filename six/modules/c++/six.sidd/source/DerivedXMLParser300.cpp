@@ -473,7 +473,7 @@ void DerivedXMLParser300::parseBandEqualizationFromXML(const xml::lite::Element&
     }
     else
     {
-        band.algorithm = six::toEnum<BandEqualizationAlgorithm>(bandAlgo);
+        band.algorithm = six::Enum::toType<BandEqualizationAlgorithm>(bandAlgo);
     }
 
     std::vector<XMLElem> lutElems;
@@ -747,7 +747,7 @@ void DerivedXMLParser300::parseColorSpaceTransformFromXML(
     }
     else
     {
-        transform.colorManagementModule.renderingIntent = six::toEnum<RenderingIntent>(renderIntentStr);
+        transform.colorManagementModule.renderingIntent = six::Enum::toType<RenderingIntent>(renderIntentStr);
     }
     parseString(getFirstAndOnly(manageElem, "SourceProfile"),
                 transform.colorManagementModule.sourceProfile);
@@ -946,7 +946,7 @@ void DerivedXMLParser300::parseDigitalElevationDataFromXML(const xml::lite::Elem
     auto& posElem = getFirstAndOnly(elem, "Geopositioning");
     std::string coordSystemType;
     parseString(getFirstAndOnly(posElem, "CoordinateSystemType"), coordSystemType);
-    ded.geopositioning.coordinateSystemType = six::toEnum<CoordinateSystemType>(coordSystemType);
+    ded.geopositioning.coordinateSystemType = six::Enum::toType<CoordinateSystemType>(coordSystemType);
     parseUInt(getFirstAndOnly(posElem, "FalseOrigin"), ded.geopositioning.falseOrigin);
     if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
     {

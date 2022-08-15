@@ -222,7 +222,7 @@ struct XmlLite final
     {
         std::string name;
         parseString(element, name);
-        enumVal = six::toEnum<T>(name);
+        enumVal = six::Enum::toType<T>(name);
     }
 
     bool parseDouble(const xml::lite::Element&, double&) const;

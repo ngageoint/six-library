@@ -32,7 +32,7 @@ template<typename TSixEnum>
 static void test_EnumConstructor(const std::string& testName, const std::string& strType, TSixEnum type)
 {
     (void)testName;
-    const auto pType = six::toEnum<TSixEnum>(strType);
+    const auto pType = six::Enum::toType<TSixEnum>(strType);
     TEST_ASSERT(pType.toString() == strType);
     TEST_ASSERT_EQ(pType, type);
 }
@@ -57,12 +57,12 @@ template<typename TSixEnum>
 static void test_toType_(const std::string& testName, const std::string& strType, TSixEnum type)
 {
     (void)testName;
-    const auto fromToType = six::toEnum<TSixEnum>(strType);
+    const auto fromToType = six::Enum::toType<TSixEnum>(strType);
     TEST_ASSERT_EQ(fromToType, type);
     auto str = fromToType.toString();
     TEST_ASSERT_EQ(str, strType);
 
-    const auto fromCtor = six::toEnum<TSixEnum>(strType);
+    const auto fromCtor = six::Enum::toType<TSixEnum>(strType);
     TEST_ASSERT_EQ(fromToType, fromCtor);
     str = fromCtor.toString();
     TEST_ASSERT_EQ(str, strType);
@@ -78,7 +78,7 @@ static void test_toType(const std::string& testName, size_t sz)
     for (auto&& kv : map)
     {
         const TSixEnum fromInt(kv.second);
-        const auto toType = six::toEnum<TSixEnum>(kv.first);
+        const auto toType = six::Enum::toType<TSixEnum>(kv.first);
         TEST_ASSERT_EQ(toType, fromInt);
 
         if (fromInt != TSixEnum::NOT_SET)
@@ -109,10 +109,10 @@ static void test_toType_OTHER(const std::string& testName)
     const TSixEnum not_set;
     TEST_ASSERT_EQ(not_set, TSixEnum::NOT_SET);
 
-    auto fromToType = six::toEnum<TSixEnum>("OTHER");
+    auto fromToType = six::Enum::toType<TSixEnum>("OTHER");
     TEST_ASSERT_EQ(fromToType, TSixEnum::OTHER);
 
-    TEST_EXCEPTION(six::toEnum<TSixEnum>("OTHER:abc"));
+    TEST_EXCEPTION(six::Enum::toType<TSixEnum>("OTHER:abc"));
 }
 TEST_CASE(ToType_OTHER)
 {
@@ -123,14 +123,14 @@ TEST_CASE(DualPolarizationType_ToType_OTHER)
 {
     test_toType_OTHER<six::DualPolarizationType>("DualPolarizationType_ToType_OTHER");
 
-    auto toTypeDual = six::toEnum<six::DualPolarizationType>("V_OTHER");
+    auto toTypeDual = six::Enum::toType<six::DualPolarizationType>("V_OTHER");
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
-    toTypeDual = six::toEnum<six::DualPolarizationType>("OTHER_V");
+    toTypeDual = six::Enum::toType<six::DualPolarizationType>("OTHER_V");
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
-    toTypeDual = six::toEnum<six::DualPolarizationType>("OTHER_OTHER");
+    toTypeDual = six::Enum::toType<six::DualPolarizationType>("OTHER_OTHER");
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
 
-    TEST_EXCEPTION(six::toEnum<six::DualPolarizationType>("OTHER_xyz")); // no "top level" OTHER.*
+    TEST_EXCEPTION(six::Enum::toType<six::DualPolarizationType>("OTHER_xyz")); // no "top level" OTHER.*
 }
 
 template<typename TSixEnum>
@@ -181,11 +181,11 @@ TEST_CASE(SixToType)
     test_six_toType_<six::PolarizationSequenceType>(testName, "OTHER_abc", six::PolarizationSequenceType::OTHER); // SIDD 3.0/SICD 1.3
     test_six_toType<six::PolarizationSequenceType>(testName, 13);
 
-    auto toTypeDual = six::toEnum<six::DualPolarizationType>("V_OTHER");
+    auto toTypeDual = six::Enum::toType<six::DualPolarizationType>("V_OTHER");
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
     toTypeDual = six::toType<six::DualPolarizationType>("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
-    toTypeDual = six::toEnum<six::DualPolarizationType>("OTHER_V");
+    toTypeDual = six::Enum::toType<six::DualPolarizationType>("OTHER_V");
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
     toTypeDual = six::toType<six::DualPolarizationType>("OTHER_xyz:V"); // SICD 1.3 "OTHER.*"   
     TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
@@ -204,13 +204,13 @@ static void test_ToString_(const std::string& testName, const std::string& strTy
     {
         const auto polarizationString = type.toString();
         TEST_ASSERT_EQ(strType, polarizationString);
-        auto pType = six::toEnum<TSixEnum>(polarizationString);
+        auto pType = six::Enum::toType<TSixEnum>(polarizationString);
         TEST_ASSERT_EQ(pType, type);
     }
     {
         const auto polarizationString = type.toString();
         TEST_ASSERT_EQ(strType, polarizationString);
-        auto pType = six::toEnum<TSixEnum>(polarizationString);
+        auto pType = six::Enum::toType<TSixEnum>(polarizationString);
         TEST_ASSERT_EQ(pType, type);
     }
 }
@@ -244,19 +244,19 @@ TEST_CASE(DualPolarizationType_ToString_OTHER)
     TEST_EXCEPTION(not_set.toString(true /*throw_if_not_set*/));
     TEST_ASSERT(not_set.toString() == "NOT_SET");
 
-    auto toType_DualPolarization = six::toEnum<six::DualPolarizationType>("OTHER");
+    auto toType_DualPolarization = six::Enum::toType<six::DualPolarizationType>("OTHER");
     TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER);
     TEST_ASSERT_EQ("OTHER", toType_DualPolarization.toString());
 
-    toType_DualPolarization = six::toEnum<six::DualPolarizationType>("V_OTHER");
+    toType_DualPolarization = six::Enum::toType<six::DualPolarizationType>("V_OTHER");
     TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::V_OTHER);
     TEST_ASSERT_EQ("V_OTHER", toType_DualPolarization.toString());
 
-    toType_DualPolarization = six::toEnum<six::DualPolarizationType>("OTHER_V");
+    toType_DualPolarization = six::Enum::toType<six::DualPolarizationType>("OTHER_V");
     TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER_V);
     TEST_ASSERT_EQ("OTHER_V", toType_DualPolarization.toString());
 
-    toType_DualPolarization = six::toEnum<six::DualPolarizationType>("OTHER_OTHER");
+    toType_DualPolarization = six::Enum::toType<six::DualPolarizationType>("OTHER_OTHER");
     TEST_ASSERT_EQ(toType_DualPolarization, six::DualPolarizationType::OTHER_OTHER);
     TEST_ASSERT_EQ("OTHER_OTHER", toType_DualPolarization.toString());
 }
@@ -354,9 +354,9 @@ static void test_NotSet(const std::string& testName)
     polarizationString = pType.toString(false /*throw_if_not_set*/);
     TEST_ASSERT_EQ(polarizationString, "NOT_SET");
 
-    pType = six::toEnum<TSixEnum>("NOT SET");
+    pType = six::Enum::toType<TSixEnum>("NOT SET");
     TEST_ASSERT_EQ(pType, TSixEnum::NOT_SET);
-    pType = six::toEnum<TSixEnum>("NOT_SET");
+    pType = six::Enum::toType<TSixEnum>("NOT_SET");
     TEST_ASSERT_EQ(pType, TSixEnum::NOT_SET);
 
     TEST_EXCEPTION(six::toType<TSixEnum>("NOT_SET"));
@@ -375,7 +375,7 @@ static void test_EqInt_(const std::string& testName, const std::string& strType,
 {
     (void)testName;
 
-    const auto fromStrCtor = six::toEnum<TSixEnum>(strType);
+    const auto fromStrCtor = six::Enum::toType<TSixEnum>(strType);
     TEST_ASSERT_EQ(enumValue, fromStrCtor);
     const int value = fromStrCtor;
     TEST_ASSERT_EQ(enumValue, value);
@@ -431,7 +431,7 @@ TEST_CASE(DualPolarization)
     auto&& map = six::PolarizationType::string_to_value_();
     for (auto&& tx : map)
     {
-        const auto txType = six::toEnum<six::PolarizationType>(tx.first);
+        const auto txType = six::Enum::toType<six::PolarizationType>(tx.first);
         TEST_ASSERT_EQ(tx.second, txType);
         if ((txType == six::PolarizationType::NOT_SET) || (txType == six::PolarizationType::UNKNOWN))
         {
@@ -439,7 +439,7 @@ TEST_CASE(DualPolarization)
         }
         for (auto&& rcv : map)
         {
-            const auto rcvType = six::toEnum<six::PolarizationType>(rcv.first);
+            const auto rcvType = six::Enum::toType<six::PolarizationType>(rcv.first);
             TEST_ASSERT_EQ(rcv.second, rcvType);
             if ((rcvType == six::PolarizationType::NOT_SET) || (rcvType == six::PolarizationType::UNKNOWN))
             {
@@ -447,7 +447,7 @@ TEST_CASE(DualPolarization)
             }
             auto strType = txType.toString() + "_" + rcvType.toString();
 
-            auto fromToType = six::toEnum<six::DualPolarizationType>(strType);
+            auto fromToType = six::Enum::toType<six::DualPolarizationType>(strType);
             auto str = fromToType.toString();
             TEST_ASSERT_EQ(str, strType);
             test_toType_(testName, strType, fromToType);

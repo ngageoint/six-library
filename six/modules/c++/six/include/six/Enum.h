@@ -90,22 +90,25 @@ namespace details
     }
 } // namespace details
 
-template<typename T>
-inline std::optional<T> toEnum(const std::string& v, std::nothrow_t)
+namespace Enum
 {
-    const auto result = nitf::details::index(T::string_to_value_(), v);
-    if (!result.has_value())
+    template<typename T>
+    inline std::optional<T> toType(const std::string& v, std::nothrow_t)
     {
-        return std::optional<T>();
+        const auto result = nitf::details::index(T::string_to_value_(), v);
+        if (!result.has_value())
+        {
+            return std::optional<T>();
+        }
+        return std::optional<T>(*result);
     }
-    return std::optional<T>(*result);
-}
-template<typename T>
-inline T toEnum(const std::string& v)
-{
-    const auto result = toEnum<T>(v, std::nothrow);
-    const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-    return nitf::details::value(result, ex);
+    template<typename T>
+    inline T toType(const std::string& v)
+    {
+        const auto result = toType<T>(v, std::nothrow);
+        const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
+        return nitf::details::value(result, ex);
+    }
 }
 
 namespace details
@@ -146,11 +149,11 @@ namespace details
 
         static std::optional<T> toType(const std::string& v, std::nothrow_t)
         {
-            return toEnum<T>(v, std::nothrow);
+            return six::Enum::toType<T>(v, std::nothrow);
         }
         static T toType(const std::string& v)
         {
-            return toEnum<T>(v);
+            return six::Enum::toType<T>(v);
         }
 
         operator int() const { return value; }
