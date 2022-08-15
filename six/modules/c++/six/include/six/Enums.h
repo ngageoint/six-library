@@ -60,8 +60,8 @@ SIX_Enum_ENUM_3(AutofocusType,
 //    IS_TRUE, 1
 //);
 SIX_Enum_BEGIN_DEFINE(BooleanType)
-    SIX_Enum_BEGIN_enum IS_FALSE = 0, IS_TRUE = 1, SIX_Enum_END_enum
-    SIX_Enum_map_2_(IS_FALSE, IS_TRUE);
+    SIX_Enum_BEGIN_enum(BooleanType) IS_FALSE = 0, IS_TRUE = 1, SIX_Enum_END_enum
+    SIX_Enum_map_2_(BooleanType, IS_FALSE, IS_TRUE);
     BooleanType& operator=(bool b)
     {
         *this = BooleanType(b ? IS_TRUE : IS_FALSE);
@@ -230,7 +230,7 @@ SIX_Enum_ENUM_5(OrientationType,
  */
 SIX_Enum_BEGIN_DEFINE(PixelType)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
+    SIX_Enum_BEGIN_enum(PixelType)
         // Each pixel is stored as a pair of numbers that represent the realand imaginary
         // components. Each component is stored in a 32-bit IEEE floating point format (4
         // bytes per component, 8 bytes per pixel).
@@ -253,7 +253,7 @@ SIX_Enum_BEGIN_DEFINE(PixelType)
         RGB24I = 8,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_value
+    SIX_Enum_BEGIN_string_to_value(PixelType)
             SIX_Enum_map_entry_(RE32F_IM32F),
             SIX_Enum_map_entry_(RE16I_IM16I),
             SIX_Enum_map_entry_(AMP8I_PHS8I),
@@ -277,7 +277,7 @@ SIX_Enum_BEGIN_DEFINE(Polarization1Type)
     std::string other_; // value of OTHER.* for SIDD 3.0/SICD 1.3
 
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
+    SIX_Enum_BEGIN_enum(Polarization1Type)
         OTHER = 1,
         V = 2,
         H = 3,
@@ -291,7 +291,7 @@ SIX_Enum_BEGIN_DEFINE(Polarization1Type)
         SEQUENCE = 7,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_value
+    SIX_Enum_BEGIN_string_to_value(Polarization1Type)
             SIX_Enum_map_entry_(OTHER),
             SIX_Enum_map_entry_(V),
             SIX_Enum_map_entry_(H),
@@ -319,7 +319,7 @@ SIX_Enum_BEGIN_DEFINE(Polarization2Type)
     std::string other_; // value of OTHER.* for SIDD 3.0/SICD 1.3
 
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
+    SIX_Enum_BEGIN_enum(Polarization2Type)
         OTHER = 1,
         V = 2,
         H = 3,
@@ -332,7 +332,7 @@ SIX_Enum_BEGIN_DEFINE(Polarization2Type)
         UNKNOWN = 6,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_value
+    SIX_Enum_BEGIN_string_to_value(Polarization2Type)
             SIX_Enum_map_entry_(OTHER),
             SIX_Enum_map_entry_(V),
             SIX_Enum_map_entry_(H),
@@ -362,7 +362,7 @@ SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
     std::string other_; // value of OTHER.* for SIDD 3.0/SICD 1.3
 
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
+    SIX_Enum_BEGIN_enum(DualPolarizationType)
         // SICD 1.3 add a few more allowable values, which means the number of combinations explodes.
         // Keeping integer values the same in case there's some code somewhere that depends on it.
         OTHER = 1,
@@ -460,7 +460,7 @@ SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
         UNKNOWN = 18,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_value
+    SIX_Enum_BEGIN_string_to_value(DualPolarizationType)
         SIX_Enum_map_entry_(OTHER),
 
         SIX_Enum_map_entry_(V_V),

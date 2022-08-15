@@ -62,12 +62,12 @@ SIX_Enum_ENUM_3(DomainType,
  */
 SIX_Enum_BEGIN_DEFINE(PhaseSGN)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
+    SIX_Enum_BEGIN_enum(PhaseSGN)
         MINUS_1 = -1,
         PLUS_1 = 1,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_value
+    SIX_Enum_BEGIN_string_to_value(PhaseSGN)
     { "-1", MINUS_1 },
     { "+1", PLUS_1 },
     SIX_Enum_END_string_to_value
@@ -124,7 +124,7 @@ SIX_Enum_ENUM_4(SRPType,
  */
 SIX_Enum_BEGIN_DEFINE(PolarizationType)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
+    SIX_Enum_BEGIN_enum(PolarizationType)
         X = 1,
         Y = 2,
         V = 3,
@@ -134,7 +134,7 @@ SIX_Enum_BEGIN_DEFINE(PolarizationType)
         UNSPECIFIED = 7,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_value
+    SIX_Enum_BEGIN_string_to_value(PolarizationType)
         SIX_Enum_map_entry_(X),
         SIX_Enum_map_entry_(Y),
         SIX_Enum_map_entry_(V),

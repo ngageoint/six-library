@@ -35,13 +35,13 @@ namespace sidd
  */
 SIX_Enum_BEGIN_DEFINE(ARPFlag)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
+    SIX_Enum_BEGIN_enum(ARPFlag)
         REALTIME = 0,
         PREDICTED = 1,
         POST_PROCESSED = 2,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_value
+    SIX_Enum_BEGIN_string_to_value(ARPFlag)
             SIX_Enum_map_entry_(REALTIME),
             SIX_Enum_map_entry_(PREDICTED),
             {"POST PROCESSED", POST_PROCESSED },
@@ -55,11 +55,11 @@ SIX_Enum_END_DEFINE(ARPFlag);
 */
 SIX_Enum_BEGIN_DEFINE(BandEqualizationAlgorithm)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
+    SIX_Enum_BEGIN_enum(BandEqualizationAlgorithm)
         LUT_1D = 0,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_value
+    SIX_Enum_BEGIN_string_to_value(BandEqualizationAlgorithm)
             {"LUT 1D", LUT_1D },
     SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(BandEqualizationAlgorithm);
@@ -92,7 +92,7 @@ SIX_Enum_ENUM_3(DRAType,
 */
 SIX_Enum_BEGIN_DEFINE(DownsamplingMethod)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
+    SIX_Enum_BEGIN_enum(DownsamplingMethod)
         DECIMATE = 0,
         MAX_PIXEL = 1,
         AVERAGE = 2,
@@ -101,7 +101,7 @@ SIX_Enum_BEGIN_DEFINE(DownsamplingMethod)
         LAGRANGE = 5,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_value
+    SIX_Enum_BEGIN_string_to_value(DownsamplingMethod)
             SIX_Enum_map_entry_(DECIMATE),
             { "MAX PIXEL", MAX_PIXEL },
             SIX_Enum_map_entry_(AVERAGE),
@@ -119,14 +119,14 @@ SIX_Enum_END_DEFINE(DownsamplingMethod);
 */
 SIX_Enum_BEGIN_DEFINE(FilterDatabaseName)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
+    SIX_Enum_BEGIN_enum(FilterDatabaseName)
         BILINEAR = 0,
         CUBIC = 1,
         LAGRANGE = 2,
         NEAREST_NEIGHBOR = 3,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_value
+    SIX_Enum_BEGIN_string_to_value(FilterDatabaseName)
             SIX_Enum_map_entry_(BILINEAR),
             SIX_Enum_map_entry_(CUBIC),
             SIX_Enum_map_entry_(LAGRANGE),
@@ -151,14 +151,14 @@ SIX_Enum_ENUM_2(FilterOperation,
 */
 SIX_Enum_BEGIN_DEFINE(RenderingIntent)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum
+    SIX_Enum_BEGIN_enum(RenderingIntent)
         PERCEPTUAL = 0,
         SATURATION = 1,
         RELATIVE_INTENT = 2,
         ABSOLUTE_INTENT = 3,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_value
+    SIX_Enum_BEGIN_string_to_value(RenderingIntent)
             SIX_Enum_map_entry_(PERCEPTUAL),
             SIX_Enum_map_entry_(SATURATION),
             { "RELATIVE INTENT", RELATIVE_INTENT },

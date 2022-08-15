@@ -36,6 +36,8 @@
 #include <import/scene.h>
 #include <nitf/Enum.hpp>
 
+#define SIX_Enum_as_class_ 1
+
 namespace six
 {
 
@@ -207,10 +209,10 @@ namespace details
         os << six::Enum::toString(e);
         return os;
     }
-
+} // namespace details
 
     #define SIX_Enum_map_entry_(n) { #n, n }
-    #define SIX_Enum_map_entry_NOT_SET SIX_Enum_map_entry_(NOT_SET), { "NOT SET", NOT_SET }
+    #define SIX_Enum_map_entry_NOT_SET_ SIX_Enum_map_entry_(NOT_SET), { "NOT SET", NOT_SET }
 
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
@@ -225,12 +227,13 @@ namespace details
     #endif
     #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); SIX_Enum_constructors_SWIGPYTHON_(name); \
         name(values v) : Enum(static_cast<int>(v)) {} name& operator=(values v) { *this = std::move(name(v)); return *this; }
-    #define SIX_Enum_BEGIN_enum enum values {
+    #define SIX_Enum_BEGIN_enum(name) enum values {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
-    #define SIX_Enum_BEGIN_string_to_value static const std::map<std::string, values>& string_to_value_() { static const std::map<std::string, values> retval {
+    #define SIX_Enum_BEGIN_string_to_value(name) static const std::map<std::string, values>& string_to_value_() { static const std::map<std::string, values> retval { \
+        SIX_Enum_map_entry_NOT_SET_, 
     #define SIX_Enum_END_enum NOT_SET = six::NOT_SET_VALUE };
-    #define SIX_Enum_END_string_to_value SIX_Enum_map_entry_NOT_SET }; return retval; }
+    #define SIX_Enum_END_string_to_value }; return retval; }
 
     #define SIX_Enum_ENUM_begin_(name) SIX_Enum_BEGIN_DEFINE(name) SIX_Enum_constructors_(name); SIX_Enum_BEGIN_enum
     #define SIX_Enum_ENUM_1_ SIX_Enum_END_enum SIX_Enum_BEGIN_string_to_value
@@ -242,28 +245,42 @@ namespace details
     #define SIX_Enum_map_entry_4_(n1, n2, n3, n4)  SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_3_(n2, n3, n4)
     #define SIX_Enum_map_entry_5_(n1, n2, n3, n4, n5)  SIX_Enum_map_entry_(n1), SIX_Enum_map_entry_4_(n2, n3, n4, n5)
 
-    #define SIX_Enum_map_1_(n) SIX_Enum_BEGIN_string_to_value  SIX_Enum_map_entry_1_(n), SIX_Enum_END_string_to_value
-    #define SIX_Enum_map_2_(n1, n2) SIX_Enum_BEGIN_string_to_value  SIX_Enum_map_entry_2_(n1, n2), SIX_Enum_END_string_to_value
-    #define SIX_Enum_map_3_(n1, n2, n3) SIX_Enum_BEGIN_string_to_value  SIX_Enum_map_entry_3_(n1, n2, n3), SIX_Enum_END_string_to_value
-    #define SIX_Enum_map_4_(n1, n2, n3, n4) SIX_Enum_BEGIN_string_to_value  SIX_Enum_map_entry_4_(n1, n2, n3, n4), SIX_Enum_END_string_to_value
-    #define SIX_Enum_map_5_(n1, n2, n3, n4, n5) SIX_Enum_BEGIN_string_to_value  SIX_Enum_map_entry_5_(n1, n2, n3, n4, n5), SIX_Enum_END_string_to_value
+    #define SIX_Enum_map_1_(name, n) SIX_Enum_BEGIN_string_to_value(name)  SIX_Enum_map_entry_1_(n), SIX_Enum_END_string_to_value
+    #define SIX_Enum_map_2_(name, n1, n2) SIX_Enum_BEGIN_string_to_value(name)  SIX_Enum_map_entry_2_(n1, n2), SIX_Enum_END_string_to_value
+    #define SIX_Enum_map_3_(name, n1, n2, n3) SIX_Enum_BEGIN_string_to_value(name)  SIX_Enum_map_entry_3_(n1, n2, n3), SIX_Enum_END_string_to_value
+    #define SIX_Enum_map_4_(name, n1, n2, n3, n4) SIX_Enum_BEGIN_string_to_value(name)  SIX_Enum_map_entry_4_(n1, n2, n3, n4), SIX_Enum_END_string_to_value
+    #define SIX_Enum_map_5_(name, n1, n2, n3, n4, n5) SIX_Enum_BEGIN_string_to_value(name)  SIX_Enum_map_entry_5_(n1, n2, n3, n4, n5), SIX_Enum_END_string_to_value
 
     #define SIX_Enum_ENUM_1(name, n, v) SIX_Enum_BEGIN_DEFINE(name) \
-        SIX_Enum_BEGIN_enum n = v,  SIX_Enum_END_enum SIX_Enum_map_1_(n) SIX_Enum_END_DEFINE(name)
+        SIX_Enum_BEGIN_enum(name) n = v,  SIX_Enum_END_enum SIX_Enum_map_1_(name, n) SIX_Enum_END_DEFINE(name)
     #define SIX_Enum_ENUM_2(name, n1, v1, n2, v2) SIX_Enum_BEGIN_DEFINE(name) \
-        SIX_Enum_BEGIN_enum n1 = v1, n2 = v2,  SIX_Enum_END_enum \
-        SIX_Enum_map_2_(n1, n2) SIX_Enum_END_DEFINE(name)
+        SIX_Enum_BEGIN_enum(name) n1 = v1, n2 = v2,  SIX_Enum_END_enum \
+        SIX_Enum_map_2_(name, n1, n2) SIX_Enum_END_DEFINE(name)
     #define SIX_Enum_ENUM_3(name, n1, v1, n2, v2, n3, v3) SIX_Enum_BEGIN_DEFINE(name) \
-        SIX_Enum_BEGIN_enum n1 = v1, n2 = v2,  n3 = v3, SIX_Enum_END_enum \
-        SIX_Enum_map_3_(n1, n2, n3) SIX_Enum_END_DEFINE(name)
+        SIX_Enum_BEGIN_enum(name) n1 = v1, n2 = v2,  n3 = v3, SIX_Enum_END_enum \
+        SIX_Enum_map_3_(name, n1, n2, n3) SIX_Enum_END_DEFINE(name)
     #define SIX_Enum_ENUM_4(name, n1, v1, n2, v2, n3, v3, n4, v4) SIX_Enum_BEGIN_DEFINE(name) \
-        SIX_Enum_BEGIN_enum n1 = v1, n2 = v2,  n3 = v3, n4 = v4, SIX_Enum_END_enum \
-        SIX_Enum_map_4_(n1, n2, n3, n4) SIX_Enum_END_DEFINE(name)
+        SIX_Enum_BEGIN_enum(name) n1 = v1, n2 = v2,  n3 = v3, n4 = v4, SIX_Enum_END_enum \
+        SIX_Enum_map_4_(name, n1, n2, n3, n4) SIX_Enum_END_DEFINE(name)
     #define SIX_Enum_ENUM_5(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5) SIX_Enum_BEGIN_DEFINE(name) \
-        SIX_Enum_BEGIN_enum n1 = v1, n2 = v2,  n3 = v3, n4 = v4, n5 = v5, SIX_Enum_END_enum \
-        SIX_Enum_map_5_(n1, n2, n3, n4, n5) SIX_Enum_END_DEFINE(name)
+        SIX_Enum_BEGIN_enum(name) n1 = v1, n2 = v2,  n3 = v3, n4 = v4, n5 = v5, SIX_Enum_END_enum \
+        SIX_Enum_map_5_(name, n1, n2, n3, n4, n5) SIX_Enum_END_DEFINE(name)
 
-} // namespace details
+    //#define SIX_six_Enum_map_entry_(name, n) { #n, name::n }
+    //#define SIX_six_Enum_map_entry_NOT_SET_(name) SIX_six_Enum_map_entry_(name, NOT_SET), { "NOT SET", name::NOT_SET }
+
+    //#define SIX_six_Enum_BEGIN_enum(name) enum class name {
+    //#define SIX_six_Enum_BEGIN_string_to_value(name) template<typename T> inline const std::map<std::string, T>& string_to_value_() { \
+    //    static const std::map<std::string, name> retval {
+    //#define SIX_six_Enum_END_string_to_value(name) SIX_six_Enum_map_entry_NOT_SET_(name) }; return retval; }
+
+    //#define SIX_six_Enum_map_entry_1_(name, n) SIX_six_Enum_map_entry_(name, n)
+    //#define SIX_six_Enum_map_entry_2_(name, n1, n2)  SIX_six_Enum_map_entry_1_(name, n1), SIX_six_Enum_map_entry_1_(name, n2)
+
+    //#define SIX_six_Enum_map_2_(name, n1, n2) SIX_six_Enum_BEGIN_string_to_value(name)  SIX_six_Enum_map_entry_2_(name, n1, n2), SIX_six_Enum_END_string_to_value(name)
+
+    //#define SIX_six_Enum_ENUM_2(name, n1, v1, n2, v2) SIX_six_Enum_BEGIN_enum(name) n1 = v1, n2 = v2,  SIX_Enum_END_enum \
+    //        SIX_six_Enum_map_2_(name, n1, n2) 
 
 }
 #endif // SIX_six_Enum_h_INCLUDED_
