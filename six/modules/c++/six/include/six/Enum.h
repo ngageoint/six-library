@@ -77,17 +77,6 @@ namespace details
         const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
         return nitf::details::value(result, ex);
     }
-
-    template<typename T>
-    inline std::string toString(const std::map<T, std::string>& map, T value, bool throw_if_not_set)
-    {
-        constexpr auto not_set_value = static_cast<T>(NOT_SET_VALUE);
-        if (throw_if_not_set && (value == not_set_value))
-        {
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-        }
-        return index(map, value);
-    }
 } // namespace details
 
 namespace Enum
@@ -132,7 +121,11 @@ namespace Enum
     template<typename T>
     inline std::string toString(int value, bool throw_if_not_set = false, std::nullptr_t = nullptr)
     {
-        return details::toString(int_to_string_<T>(), value, throw_if_not_set);
+        if (throw_if_not_set && (value == NOT_SET_VALUE))
+        {
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+        }
+        return details::index(int_to_string_<T>(), value);
     }
     template<typename T>
     inline std::string toString(const T& value, bool throw_if_not_set = false)
