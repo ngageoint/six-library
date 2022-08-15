@@ -1285,13 +1285,12 @@ void ComplexXMLParser::parseImageFormationFromXML(
 
     for (unsigned int i = 0; i < procXML.size(); ++i)
     {
-        Processing* proc = new Processing();
+        imageFormation->processing.emplace_back();
+        Processing* proc = &imageFormation->processing.back();
 
         parseString(getFirstAndOnly(procXML[i], "Type"), proc->type);
         parseBooleanType(getFirstAndOnly(procXML[i], "Applied"), proc->applied);
         common().parseParameters(procXML[i], "Parameter", proc->parameters);
-
-        imageFormation->processing.push_back(*proc);
     }
 
     XMLElem polCalXML = getOptional(imageFormationXML,
