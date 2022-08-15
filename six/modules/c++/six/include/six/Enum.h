@@ -119,25 +119,25 @@ namespace Enum
         return retval;
     }
     template<typename T>
-    inline std::optional<std::string> toString(int value, std::nothrow_t)
+    inline std::optional<std::string> toString(int value, std::nothrow_t, std::nullptr_t = nullptr)
     {
         return nitf::details::index(int_to_string_<T>(), value);
     }
     template<typename T>
     inline std::optional<std::string> toString(const T& value, std::nothrow_t)
     {
-        return nitf::details::index(int_to_string_<T>(), value.value);
+        return toString<T>(value.value, std::nothrow, nullptr);
     }
 
     template<typename T>
-    inline std::string toString(int value, bool throw_if_not_set = false)
+    inline std::string toString(int value, bool throw_if_not_set = false, std::nullptr_t = nullptr)
     {
         return details::toString(int_to_string_<T>(), value, throw_if_not_set);
     }
     template<typename T>
     inline std::string toString(const T& value, bool throw_if_not_set = false)
     {
-        return details::toString(int_to_string_<T>(), value.value, throw_if_not_set);
+        return toString<T>(value.value, throw_if_not_set, nullptr);
     }
 }
 
