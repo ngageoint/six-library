@@ -219,7 +219,7 @@ int main(int argc, char** argv)
         if (sidd->getDataType() != six::DataType::DERIVED)
         {
             throw except::Exception(Ctxt("Exepcted " + siddPathname + " to be"\
-                    " DERIVED. Got " + sidd->getDataType().toString()));
+	      " DERIVED. Got " + six::Enum::toString(sidd->getDataType())));
         }
 
         sidd->setPixelType(six::PixelType::MONO8I);
