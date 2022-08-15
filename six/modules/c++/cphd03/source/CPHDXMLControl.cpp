@@ -545,7 +545,7 @@ Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc)
 
 void CPHDXMLControl::fromXML(const xml::lite::Element* dataXML, Data& data)
 {
-    data.sampleType = cphd::SampleType::toType(getFirstAndOnly(dataXML, "SampleType")->getCharacterData());
+    data.sampleType = six::toEnum<cphd::SampleType>(getFirstAndOnly(dataXML, "SampleType")->getCharacterData());
 
     parseUInt(getFirstAndOnly(dataXML, "NumCPHDChannels"), data.numCPHDChannels);
     parseUInt(getFirstAndOnly(dataXML, "NumBytesVBP"), data.numBytesVBP);
@@ -573,8 +573,8 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* globalXML, Global& global
 {
     XMLElem tmpElem = nullptr;
 
-    global.domainType = cphd::DomainType::toType(getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
-    global.phaseSGN   = cphd::PhaseSGN::toType(getFirstAndOnly(globalXML, "PhaseSGN")->getCharacterData());
+    global.domainType = six::toEnum<cphd::DomainType>(getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
+    global.phaseSGN   = six::toEnum<cphd::PhaseSGN>(getFirstAndOnly(globalXML, "PhaseSGN")->getCharacterData());
 
     parseOptionalInt(globalXML, "RefFreqIndex", global.refFrequencyIndex);
 
@@ -780,7 +780,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* srpXML, SRP& srp)
 #else
     std::string s(getFirstAndOnly(srpXML, "SRPType")->getCharacterData());
     str::upper(s);
-    srp.srpType = cphd::SRPType::toType(s);
+    srp.srpType = six::toEnum<cphd::SRPType>(s);
 #endif
     parseInt(getFirstAndOnly(srpXML, "NumSRPs"), srp.numSRPs);
 

@@ -173,7 +173,7 @@ void DerivedXMLParser::getAttributeIfExists(
         {
             //This allows the function to continue parsing IS_TRUE, IS_FALSE as desired,
             //as well as throwing an exception for undesired input
-            boolean = BooleanType::toType(name);
+            boolean = six::toEnum<BooleanType>(name);
         }
     }
     else

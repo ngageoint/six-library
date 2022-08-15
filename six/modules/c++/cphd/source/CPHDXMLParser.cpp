@@ -1029,9 +1029,9 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* collectionIDXML, Collectio
 
 void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
 {
-    global.domainType = DomainType::toType(
+    global.domainType = six::toEnum<DomainType>(
             getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
-    global.sgn = PhaseSGN::toType(
+    global.sgn = six::toEnum<PhaseSGN>(
             getFirstAndOnly(globalXML, "SGN")->getCharacterData());
 
     // Timeline
@@ -1072,7 +1072,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
         global.tropoParameters.reset(new TropoParameters());
         parseDouble(getFirstAndOnly(tropoXML, "N0"), global.tropoParameters->n0);
         global.tropoParameters->refHeight =
-            RefHeight::toType(getFirstAndOnly(tropoXML, "RefHeight")->getCharacterData());
+            six::toEnum<RefHeight>(getFirstAndOnly(tropoXML, "RefHeight")->getCharacterData());
     }
 
     // IonoParameters
@@ -1089,7 +1089,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
 void CPHDXMLParser::fromXML(const xml::lite::Element* sceneCoordsXML,
                              SceneCoordinates& scene)
 {
-    scene.earthModel = EarthModelType::toType(
+    scene.earthModel = six::toEnum<EarthModelType>(
             getFirstAndOnly(sceneCoordsXML, "EarthModel")->getCharacterData());
 
     // IARP
@@ -1225,7 +1225,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* sceneCoordsXML,
 void CPHDXMLParser::fromXML(const xml::lite::Element* dataXML, Data& data)
 {
     const xml::lite::Element* signalXML = getFirstAndOnly(dataXML, "SignalArrayFormat");
-    data.signalArrayFormat = SignalArrayFormat::toType(signalXML->getCharacterData());
+    data.signalArrayFormat = six::toEnum<SignalArrayFormat>(signalXML->getCharacterData());
 
     size_t numBytesPVP_temp = 0;
     XMLElem numBytesPVPXML = getFirstAndOnly(dataXML, "NumBytesPVP");
@@ -2044,10 +2044,10 @@ void CPHDXMLParser::parseChannelParameters(
     for (size_t ii = 0; ii < PolarizationXML.size(); ++ii)
     {
         const xml::lite::Element* TxPolXML = getFirstAndOnly(PolarizationXML[ii], "TxPol");
-        param.polarization.txPol = PolarizationType::toType(TxPolXML->getCharacterData());
+        param.polarization.txPol = six::toEnum<PolarizationType>(TxPolXML->getCharacterData());
 
         const xml::lite::Element* RcvPolXML = getFirstAndOnly(PolarizationXML[ii], "RcvPol");
-        param.polarization.rcvPol = PolarizationType::toType(RcvPolXML->getCharacterData());
+        param.polarization.rcvPol = six::toEnum<PolarizationType>(RcvPolXML->getCharacterData());
     }
 
 }
@@ -2195,6 +2195,6 @@ void CPHDXMLParser::parseTxRcvParameter(const xml::lite::Element* paramXML, Para
     parseString(getFirstAndOnly(paramXML, "Identifier"), param.identifier);
     parseDouble(getFirstAndOnly(paramXML, "FreqCenter"), param.freqCenter);
     parseOptionalDouble(paramXML, "LFMRate", param.lfmRate);
-    param.polarization = PolarizationType::toType(getFirstAndOnly(paramXML, "Polarization")->getCharacterData());
+    param.polarization = six::toEnum<PolarizationType>(getFirstAndOnly(paramXML, "Polarization")->getCharacterData());
 }
 }

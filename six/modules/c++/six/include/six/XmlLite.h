@@ -39,6 +39,7 @@
 #include <six/Init.h>
 #include <six/Utilities.h>
 #include <six/Logger.h>
+#include <six/Enums.h>
 
 namespace six
 {
@@ -221,7 +222,7 @@ struct XmlLite final
     {
         std::string name;
         parseString(element, name);
-        enumVal = T::toType(name);
+        enumVal = six::toEnum<T>(name);
     }
 
     bool parseDouble(const xml::lite::Element&, double&) const;

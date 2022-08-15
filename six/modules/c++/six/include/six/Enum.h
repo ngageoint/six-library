@@ -107,19 +107,31 @@ namespace details
         const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
         return nitf::details::value(result, ex);
     }
+} // namespace details
 
+template<typename T>
+inline std::optional<T> toEnum(const std::string& v, std::nothrow_t)
+{
+    static const auto string_to_int = details::to_string_to_int(T::string_to_value_());
+    return details::toType<T>(string_to_int, v, std::nothrow);
+}
+template<typename T>
+inline T toEnum(const std::string& v)
+{
+    static const auto string_to_int = details::to_string_to_int(T::string_to_value_());
+    return details::toType<T>(string_to_int, v);
+}
+
+namespace details
+{
     // Base type for all enums; avoids code duplication
     template<typename T>
     class Enum
     {
-        static const std::map<std::string, int>& string_to_int()
-        {
-            static const auto retval = details::to_string_to_int(T::string_to_value_());
-            return retval;
-        }
         static const std::map<int, std::string>& int_to_string()
         {
-            static const auto retval = nitf::details::swap_key_value(string_to_int());
+            static const auto string_to_int = details::to_string_to_int(T::string_to_value_());
+            static const auto retval = nitf::details::swap_key_value(string_to_int);
             return retval;
         }
 
@@ -148,11 +160,11 @@ namespace details
 
         static std::optional<T> toType(const std::string& v, std::nothrow_t)
         {
-            return details::toType<T>(string_to_int(), v, std::nothrow);
+            return toEnum<T>(v, std::nothrow);
         }
         static T toType(const std::string& v)
         {
-            return details::toType<T>(string_to_int(), v);
+            return toEnum<T>(v);
         }
 
         operator int() const { return value; }

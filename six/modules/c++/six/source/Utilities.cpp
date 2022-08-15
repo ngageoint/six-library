@@ -247,7 +247,7 @@ template<typename T>
 inline T toType_(std::string s, const except::Exception& ex)
 {
     str::trim(s);
-    const auto result = T::toType(s, std::nothrow);
+    const auto result = six::toEnum<T>(s, std::nothrow);
     auto retval = nitf::details::value(result, ex); // throw our exception rather than a default one
     if (retval == T::NOT_SET)
     {
@@ -259,7 +259,7 @@ template<typename T>
 inline T toType_(std::string s)
 {
     str::trim(s);
-    const auto result = T::toType(s, std::nothrow);
+    const auto result = six::toEnum<T>(s, std::nothrow);
     if (result.has_value())
     {
         return *result;
@@ -322,7 +322,7 @@ std::string six::toString(const DataType& type)
 template <>
 PixelType six::toType<PixelType>(const std::string& s)
 {
-    auto p = PixelType::toType(s);
+    auto p = six::toEnum<PixelType>(s);
     if (p == PixelType::NOT_SET)
         throw except::Exception(
                 Ctxt(FmtX("Type not understood [%s]", s.c_str())));
