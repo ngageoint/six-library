@@ -124,9 +124,20 @@ namespace Enum
         return nitf::details::index(int_to_string_<T>(), value);
     }
     template<typename T>
+    inline std::optional<std::string> toString(const T& value, std::nothrow_t)
+    {
+        return nitf::details::index(int_to_string_<T>(), value.value);
+    }
+
+    template<typename T>
     inline std::string toString(int value, bool throw_if_not_set = false)
     {
         return details::toString(int_to_string_<T>(), value, throw_if_not_set);
+    }
+    template<typename T>
+    inline std::string toString(const T& value, bool throw_if_not_set = false)
+    {
+        return details::toString(int_to_string_<T>(), value.value, throw_if_not_set);
     }
 }
 
@@ -188,7 +199,7 @@ namespace details
     template<typename T>
     inline std::ostream& operator<<(std::ostream& os, const Enum<T>& e)
     {
-        os << e.toString();
+        os << six::Enum::toString<T>(e);
         return os;
     }
 

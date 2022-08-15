@@ -321,7 +321,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
 
     default:
         throw except::Exception(Ctxt(
-                "Invalid SRPType: " + srp.srpType.toString()));
+                "Invalid SRPType: " + six::Enum::toString(srp.srpType)));
         break;
     }
 
@@ -846,7 +846,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* srpXML, SRP& srp)
 
     default:
         throw except::Exception(Ctxt(std::string("Invalid SRPType: ")
-                + srp.srpType.toString()));
+                + six::Enum::toString(srp.srpType)));
 
         break;
     }

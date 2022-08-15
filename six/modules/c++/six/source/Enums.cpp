@@ -70,7 +70,7 @@ inline std::string toString_(const T& t, const except::Exception& ex)
         throw ex;
     }
 
-    const auto result = t.toString(std::nothrow);
+    const auto result = six::Enum::toString(t, std::nothrow);
     return nitf::details::value(result, ex);
 }
 template <typename T>
@@ -134,8 +134,8 @@ DualPolarizationType toType<DualPolarizationType>(const std::string& s)
 
     // "V:OTHER.*" or "OTHER.*:V" or "OTHER.*:OTHER.*"
     static const PolarizationType other = PolarizationType::OTHER;
-    const auto strTx = is_OTHER_(tx) ? other.toString() : tx;  // get rid of .* from OTHER strings
-    const auto strRcv = is_OTHER_(rcv) ? other.toString() : rcv;  // get rid of .* from OTHER strings
+    const auto strTx = is_OTHER_(tx) ? six::Enum::toString(other) : tx;  // get rid of .* from OTHER strings
+    const auto strRcv = is_OTHER_(rcv) ? six::Enum::toString(other) : rcv;  // get rid of .* from OTHER strings
     const auto type = strTx + "_" + strRcv; // "OTHER_abc:V" -> "OTHER_V"
 
     auto retval = toType_<DualPolarizationType>(type, ex);

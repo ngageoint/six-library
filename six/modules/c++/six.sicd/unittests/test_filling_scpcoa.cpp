@@ -67,7 +67,7 @@ TEST_CASE(DerivedSCPCOA)
     TEST_ASSERT_EQ(scpcoa.arpAcc[1], 2958);
     TEST_ASSERT_EQ(scpcoa.arpAcc[2], 3698);
 
-    TEST_ASSERT(scpcoa.sideOfTrack.toString() == "RIGHT");
+    TEST_ASSERT(six::Enum::toString(scpcoa.sideOfTrack) == "RIGHT");
     TEST_ASSERT_EQ(scpcoa.sideOfTrack, six::SideOfTrackType::RIGHT);
     TEST_ASSERT_ALMOST_EQ(scpcoa.slantRange, 1.015372838920571e7);
     TEST_ASSERT_ALMOST_EQ(scpcoa.groundRange, 5.327326157987932e6);

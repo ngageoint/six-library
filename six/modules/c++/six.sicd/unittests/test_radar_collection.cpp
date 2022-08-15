@@ -37,7 +37,7 @@ TEST_CASE(demodTypeFromFmRate)
     six::sicd::WaveformParameters params;
     params.rcvFMRate = 0;
     params.fillDerivedFields();
-    TEST_ASSERT(params.rcvDemodType.toString() == "CHIRP");
+    TEST_ASSERT_EQ(six::Enum::toString(params.rcvDemodType), "CHIRP");
     TEST_ASSERT_EQ(params.rcvDemodType, six::DemodType::CHIRP);
 }
 

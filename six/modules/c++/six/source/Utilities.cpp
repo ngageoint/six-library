@@ -274,7 +274,7 @@ inline std::string toString_(const T& t, const except::Exception& ex)
     {
         throw ex;
     }
-    const auto result = t.toString(std::nothrow);
+    const auto result = six::Enum::toString(t, std::nothrow);
     return nitf::details::value(result, ex); // throw our exception rather than a default one
 }
 
@@ -282,7 +282,7 @@ template <>
 std::string six::toString(const RadarModeType& type)
 {
     auto result = toString_(type, except::Exception(Ctxt("Radar mode not set!")));
-    static const auto strDYNAMIC_STRIPMAP = RadarModeType(RadarModeType::DYNAMIC_STRIPMAP).toString();
+    static const auto strDYNAMIC_STRIPMAP = six::Enum::toString(RadarModeType(RadarModeType::DYNAMIC_STRIPMAP));
     if (result == strDYNAMIC_STRIPMAP)
     {
         return "DYNAMIC STRIPMAP"; // no "_"
@@ -297,7 +297,7 @@ RadarModeType six::toType<RadarModeType>(const std::string& s)
     if (type == "DYNAMIC STRIPMAP") // no "_"
         return RadarModeType::DYNAMIC_STRIPMAP;
 
-    static const auto strDYNAMIC_STRIPMAP = RadarModeType(RadarModeType::DYNAMIC_STRIPMAP).toString();
+    static const auto strDYNAMIC_STRIPMAP = six::Enum::toString(RadarModeType(RadarModeType::DYNAMIC_STRIPMAP));
     if (type == strDYNAMIC_STRIPMAP)
     {
         return RadarModeType::NOT_SET; // "DYNAMIC_STRIPMAP" (with '_') doesn't convert
@@ -336,7 +336,7 @@ std::string six::toString(const PixelType& type)
     {
         throw except::Exception(Ctxt("Unsupported pixel type"));
     }
-    return type.toString();
+    return six::Enum::toString(type);
 }
 
 // There's a lot of boiler-plate code that can be hidden behind a few macros

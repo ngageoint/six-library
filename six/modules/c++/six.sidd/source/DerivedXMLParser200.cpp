@@ -81,14 +81,14 @@ void DerivedXMLParser200::validateDRAFields(const six::sidd::DRAType& algorithmT
     {
         throw except::Exception(Ctxt(
             "DRAParameters invalid for algorithmType " +
-            algorithmType.toString()));
+            six::Enum::toString(algorithmType)));
     }
 
     if (algorithmType == six::sidd::DRAType::NONE && hasDraOverrides)
     {
         throw except::Exception(Ctxt(
             "DRAOverrides invalid for algorithmType " +
-            algorithmType.toString()));
+            six::Enum::toString(algorithmType)));
     }
 }
 void DerivedXMLParser200::validateDRAFields(const six::sidd::DynamicRangeAdjustment& adjust)

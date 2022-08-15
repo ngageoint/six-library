@@ -580,7 +580,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         XMLElem monoXML = newElement("Monostatic", refGeoXML);
         mCommon.createVector3D("ARPPos", refGeo.monostatic->arpPos, monoXML);
         mCommon.createVector3D("ARPVel", refGeo.monostatic->arpVel, monoXML);
-        const auto side = refGeo.monostatic->sideOfTrack.toString();
+        const auto side = six::Enum::toString(refGeo.monostatic->sideOfTrack);
         createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), monoXML);
         createDouble("SlantRange", refGeo.monostatic->slantRange, monoXML);
         createDouble("GroundRange", refGeo.monostatic->groundRange, monoXML);
@@ -609,7 +609,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         mCommon.createVector3D("Vel", refGeo.bistatic->txPlatform.vel, txPlatXML);
 
         {
-            const auto side = refGeo.bistatic->txPlatform.sideOfTrack.toString();
+            const auto side = six::Enum::toString(refGeo.bistatic->txPlatform.sideOfTrack);
             createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), txPlatXML);
         }
         createDouble("SlantRange", refGeo.bistatic->txPlatform.slantRange, txPlatXML);
@@ -624,7 +624,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         mCommon.createVector3D("Vel", refGeo.bistatic->rcvPlatform.vel, rcvPlatXML);
 
         {
-            const auto side = refGeo.bistatic->rcvPlatform.sideOfTrack.toString();
+            const auto side = six::Enum::toString(refGeo.bistatic->rcvPlatform.sideOfTrack);
             createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), rcvPlatXML);
         }
         createDouble("SlantRange", refGeo.bistatic->rcvPlatform.slantRange, rcvPlatXML);

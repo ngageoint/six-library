@@ -115,7 +115,7 @@ XMLElem ComplexXMLParser04x::convertRadarCollectionToXML(
         // In SICD 0.4, this is not allowed to contain UNKNOWN or SEQUENCE
         createString(
                 "TxPolarization",
-                six::Enum::toType<PolarizationType>(radar->txPolarization.toString()),
+                six::Enum::toType<PolarizationType>(six::Enum::toString(radar->txPolarization)),
                 radarXML);
     }
 

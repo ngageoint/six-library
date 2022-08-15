@@ -188,7 +188,7 @@ struct XmlLite final
             throw six::UninitializedValueException(Ctxt("Attempted use of uninitialized value"));
         }
 
-        return createString(name, enumVal.toString(), parent);
+        return createString(name, six::Enum::toString(enumVal), parent);
     }
     template<typename T>
     xml::lite::Element& createInt(const std::string& name, T p,
