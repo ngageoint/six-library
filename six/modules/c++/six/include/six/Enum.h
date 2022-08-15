@@ -146,9 +146,10 @@ namespace details
         }
 
     public:
-        //#if defined(SWIG) || defined(SWIGPYTHON)
         int value = NOT_SET_VALUE; // existing SWIG code uses "value", regenerating is a huge nusiance
+        operator int() const { return value; }
 
+        //#if defined(SWIG) || defined(SWIGPYTHON)
         std::string toString(bool throw_if_not_set = false) const
         {
             if (throw_if_not_set && (value == NOT_SET_VALUE))
@@ -163,8 +164,6 @@ namespace details
             return six::Enum::toType<T>(v);
         }
 
-        operator int() const { return value; }
-
         static size_t size() { return int_to_string().size(); }
         bool operator<(const int& o) const { return value < o; }
         bool operator<(const Enum& o) const { return *this < o.value; }
@@ -178,8 +177,29 @@ namespace details
         bool operator>(const Enum& o) const { return !(*this <= o); }
         bool operator>=(const int& o) const { return !(*this < o); }
         bool operator>=(const Enum& o) const { return !(*this < o); }
-	// #endif // SWIG
+	    //#endif // SWIG
     };
+    template<typename T>
+    inline bool operator==(const Enum<T>& lhs, const Enum<T>& rhs)
+    {
+        return lhs.value == rhs.value;
+    }
+    template<typename T>
+    inline bool operator==(const Enum<T>& lhs, typename T::values rhs)
+    {
+        return lhs.value == rhs;
+    }
+    template<typename T>
+    inline bool operator!=(const Enum<T>& lhs, const Enum<T>& rhs)
+    {
+        return !(lhs == rhs);
+    }
+    template<typename T>
+    inline bool operator!=(const Enum<T>& lhs, typename T::values rhs)
+    {
+        return !(lhs == rhs);
+    }
+
     template<typename T>
     inline std::ostream& operator<<(std::ostream& os, const Enum<T>& e_)
     {
