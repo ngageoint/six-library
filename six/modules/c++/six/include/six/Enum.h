@@ -108,18 +108,21 @@ namespace Enum
         return retval;
     }
     template<typename T>
-    inline std::optional<std::string> toString(int value, std::nothrow_t, std::nullptr_t = nullptr)
+    inline std::optional<std::string> toString(int value, std::nothrow_t)
     {
         return nitf::details::index(int_to_string_<T>(), value);
     }
     template<typename T>
-    inline std::optional<std::string> toString(const T& value, std::nothrow_t)
+    inline std::optional<std::string> toString(const T& value_, std::nothrow_t)
     {
-        return toString<T>(value.value, std::nothrow, nullptr);
+        const auto value = static_cast<typename T::values>(value_.value); // get  the "enum" value
+
+        static const auto value_to_string = nitf::details::swap_key_value(T::string_to_value_());
+        return nitf::details::index(value_to_string, value);
     }
 
     template<typename T>
-    inline std::string toString(int value, bool throw_if_not_set = false, std::nullptr_t = nullptr)
+    inline std::string toString(int value, bool throw_if_not_set = false)
     {
         if (throw_if_not_set && (value == NOT_SET_VALUE))
         {
@@ -128,9 +131,16 @@ namespace Enum
         return details::index(int_to_string_<T>(), value);
     }
     template<typename T>
-    inline std::string toString(const T& value, bool throw_if_not_set = false)
+    inline std::string toString(const T& value_, bool throw_if_not_set = false)
     {
-        return toString<T>(value.value, throw_if_not_set, nullptr);
+        const auto value = static_cast<typename T::values>(value_.value); // get  the "enum" value
+        if (throw_if_not_set && (value == NOT_SET_VALUE))
+        {
+            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+        }
+
+        static const auto value_to_string = nitf::details::swap_key_value(T::string_to_value_());
+        return details::index(value_to_string, value);
     }
 }
 
