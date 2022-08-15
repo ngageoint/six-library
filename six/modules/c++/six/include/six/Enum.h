@@ -101,34 +101,12 @@ namespace Enum
 
     //! Returns string representation of the value
     template<typename T>
-    inline const std::map<int, std::string>& int_to_string_()
-    {
-        static const auto string_to_int = details::to_string_to_int(T::string_to_value_());
-        static const auto retval = nitf::details::swap_key_value(string_to_int);
-        return retval;
-    }
-    template<typename T>
-    inline std::optional<std::string> toString(int value, std::nothrow_t)
-    {
-        return nitf::details::index(int_to_string_<T>(), value);
-    }
-    template<typename T>
     inline std::optional<std::string> toString(const T& value_, std::nothrow_t)
     {
         const auto value = static_cast<typename T::values>(value_.value); // get  the "enum" value
 
         static const auto value_to_string = nitf::details::swap_key_value(T::string_to_value_());
         return nitf::details::index(value_to_string, value);
-    }
-
-    template<typename T>
-    inline std::string toString(int value, bool throw_if_not_set = false)
-    {
-        if (throw_if_not_set && (value == NOT_SET_VALUE))
-        {
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-        }
-        return details::index(int_to_string_<T>(), value);
     }
     template<typename T>
     inline std::string toString(const T& value_, bool throw_if_not_set = false)
@@ -150,13 +128,20 @@ namespace details
     template<typename T>
     class Enum
     {
+        const std::map<int, std::string>& int_to_string() const
+        {
+            static const auto string_to_int = details::to_string_to_int(T::string_to_value_());
+            static const auto retval = nitf::details::swap_key_value(string_to_int);
+            return retval;
+        }
+
     protected:
         Enum() = default;
 
         //! int constructor
         explicit Enum(int i)
         {
-            (void)details::index(six::Enum::int_to_string_<T>(), i); // validate "i"
+            (void)details::index(int_to_string(), i); // validate "i"
             value = i;
         }
 
@@ -166,11 +151,15 @@ namespace details
         //! Returns string representation of the value
         std::optional<std::string> toString(std::nothrow_t) const
         {
-            return six::Enum::toString<T>(value, std::nothrow);
+            return nitf::details::index(int_to_string(), value);
         }
         std::string toString(bool throw_if_not_set = false) const
         {
-            return six::Enum::toString<T>(value, throw_if_not_set);
+            if (throw_if_not_set && (value == NOT_SET_VALUE))
+            {
+                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+            }
+            return details::index(int_to_string(), value);
         }
 
         static std::optional<T> toType(const std::string& v, std::nothrow_t)
@@ -185,7 +174,7 @@ namespace details
         operator int() const { return value; }
 
         // needed for SWIG
-        static size_t size() { return six::Enum::int_to_string_<T>().size(); }
+        static size_t size() { return int_to_string().size(); }
         bool operator<(const int& o) const { return value < o; }
         bool operator<(const Enum& o) const { return *this < o.value; }
         bool operator==(const int& o) const { return value == o; }
@@ -200,9 +189,10 @@ namespace details
         bool operator>=(const Enum& o) const { return !(*this < o); }
     };
     template<typename T>
-    inline std::ostream& operator<<(std::ostream& os, const Enum<T>& e)
+    inline std::ostream& operator<<(std::ostream& os, const Enum<T>& e_)
     {
-        os << six::Enum::toString<T>(e);
+        const T e(static_cast<typename T::values>(e_.value)); // get  the "enum" value
+        os << six::Enum::toString(e);
         return os;
     }
 
