@@ -105,6 +105,14 @@ std::unique_ptr<xml::lite::Document> CPHDXMLParser::toXML(
     return doc;
 }
 
+template<typename T>
+static XMLElem createStringFromEnum_(six::XMLParser& p, const std::string& name, const T& e,
+    XMLElem parent) {
+    assert(parent != nullptr);
+    const auto s = six::Enum::toString(e);
+    return &(p.createString(name, s, *parent));
+}
+
 XMLElem CPHDXMLParser::toXML(const CollectionInformation& collectionID, XMLElem parent)
 {
     XMLElem collectionXML = newElement("CollectionID", parent);
@@ -115,7 +123,7 @@ XMLElem CPHDXMLParser::toXML(const CollectionInformation& collectionID, XMLElem 
         createString("IlluminatorName", collectionID.illuminatorName, collectionXML);
     }
     createString("CoreName", collectionID.coreName, collectionXML);
-    createString("CollectType", collectionID.collectType, collectionXML);
+    createStringFromEnum_(*this, "CollectType", collectionID.collectType, collectionXML);
 
     // RadarMode
     XMLElem radarModeXML = newElement("RadarMode", collectionXML);
@@ -138,8 +146,8 @@ XMLElem CPHDXMLParser::toXML(const CollectionInformation& collectionID, XMLElem 
 XMLElem CPHDXMLParser::toXML(const Global& global, XMLElem parent)
 {
     XMLElem globalXML = newElement("Global", parent);
-    createString("DomainType", global.domainType, globalXML);
-    createString("SGN", global.sgn, globalXML);
+    createStringFromEnum_(*this, "DomainType", global.domainType, globalXML);
+    createStringFromEnum_(*this, "SGN", global.sgn, globalXML);
 
     //Timeline
     XMLElem timelineXML = newElement("Timeline", globalXML);
@@ -163,7 +171,7 @@ XMLElem CPHDXMLParser::toXML(const Global& global, XMLElem parent)
     {
         XMLElem tropoXML = newElement("TropoParameters", globalXML);
         createDouble("N0", global.tropoParameters->n0, tropoXML);
-        createString("RefHeight", global.tropoParameters->refHeight, tropoXML);
+        createStringFromEnum_(*this, "RefHeight", global.tropoParameters->refHeight, tropoXML);
     }
     if (global.ionoParameters.get())
     {
@@ -177,7 +185,7 @@ XMLElem CPHDXMLParser::toXML(const Global& global, XMLElem parent)
 XMLElem CPHDXMLParser::toXML(const SceneCoordinates& sceneCoords, XMLElem parent)
 {
     XMLElem sceneCoordsXML = newElement("SceneCoordinates", parent);
-    createString("EarthModel", sceneCoords.earthModel, sceneCoordsXML);
+    createStringFromEnum_(*this, "EarthModel", sceneCoords.earthModel, sceneCoordsXML);
 
     XMLElem iarpXML = newElement("IARP", sceneCoordsXML);
     mCommon.createVector3D("ECF", sceneCoords.iarp.ecf, iarpXML);
@@ -294,7 +302,7 @@ XMLElem CPHDXMLParser::toXML(const SceneCoordinates& sceneCoords, XMLElem parent
 XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
 {
     XMLElem dataXML = newElement("Data", parent);
-    createString("SignalArrayFormat", data.signalArrayFormat, dataXML);
+    createStringFromEnum_(*this, "SignalArrayFormat", data.signalArrayFormat, dataXML);
     createInt("NumBytesPVP", data.numBytesPVP, dataXML);
     createInt("NumCPHDChannels", data.channels.size(), dataXML);
     if (!six::Init::isUndefined(data.signalCompressionID))
@@ -349,8 +357,8 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
             createBooleanType("SignalNormal", channel.parameters[ii].signalNormal, parametersXML);
         }
         XMLElem polXML = newElement("Polarization", parametersXML);
-        createString("TxPol", channel.parameters[ii].polarization.txPol, polXML);
-        createString("RcvPol", channel.parameters[ii].polarization.rcvPol, polXML);
+        createStringFromEnum_(*this, "TxPol", channel.parameters[ii].polarization.txPol, polXML);
+        createStringFromEnum_(*this, "RcvPol", channel.parameters[ii].polarization.rcvPol, polXML);
         createDouble("FxC", channel.parameters[ii].fxC, parametersXML);
         createDouble("FxBW", channel.parameters[ii].fxBW, parametersXML);
         createOptionalDouble("FxBWNoise", channel.parameters[ii].fxBWNoise, parametersXML);
@@ -710,7 +718,7 @@ XMLElem CPHDXMLParser::toXML(const TxRcv& txRcv, XMLElem parent)
         createDouble("RFBandwidth", txRcv.txWFParameters[ii].rfBandwidth, txWFParamsXML);
         createDouble("FreqCenter", txRcv.txWFParameters[ii].freqCenter, txWFParamsXML);
         createOptionalDouble("LFMRate", txRcv.txWFParameters[ii].lfmRate, txWFParamsXML);
-        createString("Polarization", txRcv.txWFParameters[ii].polarization, txWFParamsXML);
+        createStringFromEnum_(*this, "Polarization", txRcv.txWFParameters[ii].polarization, txWFParamsXML);
         createOptionalDouble("Power", txRcv.txWFParameters[ii].power, txWFParamsXML);
     }
     createInt("NumRcvs", txRcv.rcvParameters.size(), txRcvXML);
@@ -723,7 +731,7 @@ XMLElem CPHDXMLParser::toXML(const TxRcv& txRcv, XMLElem parent)
         createDouble("IFFilterBW", txRcv.rcvParameters[ii].ifFilterBW, rcvParamsXML);
         createDouble("FreqCenter", txRcv.rcvParameters[ii].freqCenter, rcvParamsXML);
         createOptionalDouble("LFMRate", txRcv.rcvParameters[ii].lfmRate, rcvParamsXML);
-        createString("Polarization", txRcv.rcvParameters[ii].polarization, rcvParamsXML);
+        createStringFromEnum_(*this, "Polarization", txRcv.rcvParameters[ii].polarization, rcvParamsXML);
         createOptionalDouble("PathGain", txRcv.rcvParameters[ii].pathGain, rcvParamsXML);
     }
     return txRcvXML;

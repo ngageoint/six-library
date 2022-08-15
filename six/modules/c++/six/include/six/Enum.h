@@ -128,7 +128,7 @@ namespace details
     template<typename T>
     class Enum
     {
-        const std::map<int, std::string>& int_to_string() const
+        static const std::map<int, std::string>& int_to_string()
         {
             static const auto string_to_int = details::to_string_to_int(T::string_to_value_());
             static const auto retval = nitf::details::swap_key_value(string_to_int);
