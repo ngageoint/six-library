@@ -88,38 +88,24 @@ namespace details
         }
         return index(map, value);
     }
-
-    template<typename T, typename TValues = typename T::values>
-    inline std::optional<T> toType(const std::map<std::string, TValues>& map, const std::string& v, std::nothrow_t)
-    {
-        const auto result = nitf::details::index(map, v);
-        if (!result.has_value())
-        {
-            return std::optional<T>();
-        }
-        // TValues will be "int" when used from the "Enum" base class
-        return std::optional<T>(six::Enum::cast<T>(*result));
-    }
-    template<typename T, typename TValues = typename T::values>
-    inline T toType(const std::map<std::string, TValues>& map, const std::string& v)
-    {
-        const auto result = toType<T>(map, v, std::nothrow);
-        const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-        return nitf::details::value(result, ex);
-    }
 } // namespace details
 
 template<typename T>
 inline std::optional<T> toEnum(const std::string& v, std::nothrow_t)
 {
-    static const auto string_to_int = details::to_string_to_int(T::string_to_value_());
-    return details::toType<T>(string_to_int, v, std::nothrow);
+    const auto result = nitf::details::index(T::string_to_value_(), v);
+    if (!result.has_value())
+    {
+        return std::optional<T>();
+    }
+    return std::optional<T>(*result);
 }
 template<typename T>
 inline T toEnum(const std::string& v)
 {
-    static const auto string_to_int = details::to_string_to_int(T::string_to_value_());
-    return details::toType<T>(string_to_int, v);
+    const auto result = toEnum<T>(v, std::nothrow);
+    const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
+    return nitf::details::value(result, ex);
 }
 
 namespace details
