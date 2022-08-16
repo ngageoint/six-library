@@ -42,8 +42,8 @@ SIX_Enum_BEGIN_DEFINE(ARPFlag)
     SIX_Enum_END_enum
 
     SIX_Enum_BEGIN_string_to_value(ARPFlag)
-            SIX_Enum_map_entry_(REALTIME),
-            SIX_Enum_map_entry_(PREDICTED),
+            SIX_Enum_map_entry(REALTIME),
+            SIX_Enum_map_entry(PREDICTED),
             {"POST PROCESSED", POST_PROCESSED },
     SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(ARPFlag);
@@ -102,12 +102,12 @@ SIX_Enum_BEGIN_DEFINE(DownsamplingMethod)
     SIX_Enum_END_enum
 
     SIX_Enum_BEGIN_string_to_value(DownsamplingMethod)
-            SIX_Enum_map_entry_(DECIMATE),
+            SIX_Enum_map_entry(DECIMATE),
             { "MAX PIXEL", MAX_PIXEL },
-            SIX_Enum_map_entry_(AVERAGE),
+            SIX_Enum_map_entry(AVERAGE),
             { "NEAREST NEIGHBOR", NEAREST_NEIGHBOR },
-            SIX_Enum_map_entry_(BILINEAR),
-            SIX_Enum_map_entry_(LAGRANGE),
+            SIX_Enum_map_entry(BILINEAR),
+            SIX_Enum_map_entry(LAGRANGE),
     SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(DownsamplingMethod);
 
@@ -127,9 +127,9 @@ SIX_Enum_BEGIN_DEFINE(FilterDatabaseName)
     SIX_Enum_END_enum
 
     SIX_Enum_BEGIN_string_to_value(FilterDatabaseName)
-            SIX_Enum_map_entry_(BILINEAR),
-            SIX_Enum_map_entry_(CUBIC),
-            SIX_Enum_map_entry_(LAGRANGE),
+            SIX_Enum_map_entry(BILINEAR),
+            SIX_Enum_map_entry(CUBIC),
+            SIX_Enum_map_entry(LAGRANGE),
             { "NEAREST NEIGHBOR", NEAREST_NEIGHBOR },
     SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(FilterDatabaseName);
@@ -159,8 +159,8 @@ SIX_Enum_BEGIN_DEFINE(RenderingIntent)
     SIX_Enum_END_enum
 
     SIX_Enum_BEGIN_string_to_value(RenderingIntent)
-            SIX_Enum_map_entry_(PERCEPTUAL),
-            SIX_Enum_map_entry_(SATURATION),
+            SIX_Enum_map_entry(PERCEPTUAL),
+            SIX_Enum_map_entry(SATURATION),
             { "RELATIVE INTENT", RELATIVE_INTENT },
             { "ABSOLUTE INTENT", ABSOLUTE_INTENT },
     SIX_Enum_END_string_to_value

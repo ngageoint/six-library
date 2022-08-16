@@ -135,13 +135,13 @@ SIX_Enum_BEGIN_DEFINE(PolarizationType)
     SIX_Enum_END_enum
 
     SIX_Enum_BEGIN_string_to_value(PolarizationType)
-        SIX_Enum_map_entry_(X),
-        SIX_Enum_map_entry_(Y),
-        SIX_Enum_map_entry_(V),
-        SIX_Enum_map_entry_(H),
-        SIX_Enum_map_entry_(RHC),
-        SIX_Enum_map_entry_(LHC),
-        SIX_Enum_map_entry_(UNSPECIFIED),
+        SIX_Enum_map_entry(X),
+        SIX_Enum_map_entry(Y),
+        SIX_Enum_map_entry(V),
+        SIX_Enum_map_entry(H),
+        SIX_Enum_map_entry(RHC),
+        SIX_Enum_map_entry(LHC),
+        SIX_Enum_map_entry(UNSPECIFIED),
     SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(PolarizationType);
 }
