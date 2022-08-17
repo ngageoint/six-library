@@ -179,12 +179,6 @@ namespace details
         void set_value_(int v) { value = v; } // for unit-testing
         operator int() const { return value; }
 
-        template<typename TValues = typename T::values>
-        TValues cast() const
-        {
-            return static_cast<TValues>(value); // get  the "enum" value
-        }
-
         std::string toString(bool throw_if_not_set = false) const
         {
             if (throw_if_not_set && (value == NOT_SET_VALUE))
@@ -216,15 +210,23 @@ namespace details
 	    #endif // SWIGPYTHON
     };
 
+    template<typename T, typename TValues = typename T::values>
+    inline TValues cast(const Enum<T>& e)
+    {
+      // assume Enum doesn't allow a bad value to get set
+      const auto value = static_cast<int>(e);
+      return static_cast<TValues>(value);  // get  the "enum" value
+    }
+
     template<typename T>
     inline bool operator==(const Enum<T>& lhs, typename T::values rhs)
     {
-        return lhs.cast() == rhs;
+        return cast(lhs) == rhs;
     }
     template<typename T>
     inline bool operator==(const Enum<T>& lhs, const Enum<T>& rhs)
     {
-        return lhs == rhs.cast();
+        return lhs == cast(rhs);
     }
     template<typename T>
     inline bool operator!=(const Enum<T>& lhs, typename T::values rhs)
@@ -240,12 +242,12 @@ namespace details
     template<typename T>
     inline std::optional<std::string> toString(const Enum<T>& e, std::nothrow_t)
     {
-        return value_to_string<T>(e.cast(), std::nothrow);
+        return value_to_string<T>(cast(e), std::nothrow);
     }
     template<typename T>
     inline std::string toString(const Enum<T>& e, bool throw_if_not_set = false)
     {
-        return value_to_string<T>(e.cast(), throw_if_not_set);
+        return value_to_string<T>(cast(e), throw_if_not_set);
     }
 
     template<typename T>
