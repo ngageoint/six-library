@@ -204,14 +204,18 @@ static void test_ToString_(const std::string& testName, const std::string& strTy
     {
         const auto polarizationString = six::Enum::toString(type);
         TEST_ASSERT_EQ(strType, polarizationString);
-        auto pType = six::Enum::toType<TSixEnum>(polarizationString);
+        const auto pType = six::Enum::toType<TSixEnum>(polarizationString);
         TEST_ASSERT_EQ(pType, type);
+
+        std::ostringstream ss;
+        ss << type;
+        TEST_ASSERT_EQ(strType, ss.str());
     }
     {
-        const auto polarizationString = six::Enum::toString(type);
-        TEST_ASSERT_EQ(strType, polarizationString);
-        auto pType = six::Enum::toType<TSixEnum>(polarizationString);
+        const auto polarizationString = six::toString(type); // e.g., "V:V" instead of "V_V"
+        const auto pType = six::toType<TSixEnum>(polarizationString);
         TEST_ASSERT_EQ(pType, type);
+        TEST_ASSERT_EQ(six::toString(pType), polarizationString);
     }
 }
 template<typename TSixEnum>

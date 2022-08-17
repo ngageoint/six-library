@@ -119,24 +119,34 @@ namespace Enum
     }
 
     //! Returns string representation of the value
-    template<typename T>
-    inline std::optional<std::string> toString(const T& value_, std::nothrow_t)
+    template<typename TEnum, typename TValues = typename TEnum::values>
+    inline std::optional<std::string> toString_(TValues value, std::nothrow_t)
     {
-        const auto value = details::cast<T>(value_); // get  the "enum" value
-        static const auto value_to_string = nitf::details::swap_key_value(details::string_to_value<T>());
+        static const auto value_to_string = nitf::details::swap_key_value(details::string_to_value<TEnum, TValues>());
         return nitf::details::index(value_to_string, value);
     }
-    template<typename T>
-    inline std::string toString(const T& value_, bool throw_if_not_set = false)
+    template<typename TEnum, typename TValues = typename TEnum::values>
+    inline std::string toString_(TValues value, bool throw_if_not_set = false)
     {
-        const auto value = details::cast<T>(value_); // get  the "enum" value
         if (throw_if_not_set && (value == NOT_SET_VALUE))
         {
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
-
-        static const auto value_to_string = nitf::details::swap_key_value(details::string_to_value<T>());
+        static const auto value_to_string = nitf::details::swap_key_value(details::string_to_value<TEnum, TValues>());
         return details::index(value_to_string, value);
+    }
+
+    template<typename TEnum>
+    inline std::optional<std::string> toString(const TEnum& value_, std::nothrow_t)
+    {
+        const auto value = details::cast<TEnum>(value_); // get  the "enum" value
+        return toString_<TEnum>(value, std::nothrow);
+    }
+    template<typename TEnum>
+    inline std::string toString(const TEnum& value_, bool throw_if_not_set = false)
+    {
+        const auto value = details::cast<TEnum>(value_); // get  the "enum" value
+        return toString_<TEnum>(value, throw_if_not_set);
     }
 } // namespace Enum
 
@@ -224,12 +234,25 @@ namespace details
     }
 
     template<typename T>
-    inline std::ostream& operator<<(std::ostream& os, const Enum<T>& e_)
+    inline std::optional<std::string> toString(const Enum<T>& e_, std::nothrow_t)
     {
         const T e(details::cast<T>(e_)); // get rid of wrapper class: Enum<T> -> T
-        os << six::Enum::toString(e);
+        return six::Enum::toString(e, std::nothrow);
+    }
+    template<typename T>
+    inline std::string toString(const Enum<T>& e_, bool throw_if_not_set = false)
+    {
+        const T e(details::cast<T>(e_)); // get rid of wrapper class: Enum<T> -> T
+        return six::Enum::toString(e, throw_if_not_set);
+    }
+
+    template<typename T>
+    inline std::ostream& operator<<(std::ostream& os, const Enum<T>& e)
+    {
+        os << toString(e);
         return os;
     }
+
 } // namespace details
 
     #define SIX_Enum_map_entry_values_(name, n) { #n, n }
@@ -257,8 +280,9 @@ namespace details
     #define SIX_Enum_END_enum NOT_SET = six::NOT_SET_VALUE };
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
-    #define SIX_Enum_BEGIN_string_to_value(name) inline const std::map<std::string, name::values>& six_Enum_string_to_value_(const name&) { \
-        static const std::map<std::string, name::values> retval { SIX_Enum_map_entry_NOT_SET_(name), 
+    #define SIX_Enum_BEGIN_string_to_value_(name, values) inline const std::map<std::string, values>& six_Enum_string_to_value_(const name&) { \
+        static const std::map<std::string, values> retval { SIX_Enum_map_entry_NOT_SET_(name), 
+    #define SIX_Enum_BEGIN_string_to_value(name) SIX_Enum_BEGIN_string_to_value_(name, name::values)
     #define SIX_Enum_END_string_to_value }; return retval; }
 
     #define SIX_Enum_map_entry_1_(name, n) SIX_Enum_map_entry_(name, n)
@@ -289,21 +313,13 @@ namespace details
         SIX_Enum_END_DEFINE(name); SIX_Enum_map_5_(name, n1, n2, n3, n4, n5) 
 
     /*
-    #define SIX_six_Enum_map_entry_(name, n) { #n, name::n }
-    #define SIX_six_Enum_map_entry_NOT_SET_(name) SIX_six_Enum_map_entry_(name, NOT_SET), { "NOT SET", name::NOT_SET }
-
-    #define SIX_six_Enum_BEGIN_enum(name) enum class name {
-    #define SIX_six_Enum_BEGIN_string_to_value(name) template<typename T> inline const std::map<std::string, T>& string_to_value_() { \
-        static const std::map<std::string, name> retval {
-    #define SIX_six_Enum_END_string_to_value(name) SIX_six_Enum_map_entry_NOT_SET_(name) }; return retval; }
-
-    #define SIX_six_Enum_map_entry_1_(name, n) SIX_six_Enum_map_entry_(name, n)
+    #define SIX_six_Enum_map_entry_1_(name, n) SIX_Enum_map_entry_class_(name, n)
     #define SIX_six_Enum_map_entry_2_(name, n1, n2)  SIX_six_Enum_map_entry_1_(name, n1), SIX_six_Enum_map_entry_1_(name, n2)
-
-    #define SIX_six_Enum_map_2_(name, n1, n2) SIX_six_Enum_BEGIN_string_to_value(name)  SIX_six_Enum_map_entry_2_(name, n1, n2), SIX_six_Enum_END_string_to_value(name)
-
-    #define SIX_six_Enum_ENUM_2(name, n1, v1, n2, v2) SIX_six_Enum_BEGIN_enum(name) n1 = v1, n2 = v2,  SIX_Enum_END_enum \
+ 
+    #define SIX_six_Enum_map_2_(name, n1, n2) SIX_Enum_BEGIN_string_to_value_(name, name)  SIX_six_Enum_map_entry_2_(name, n1, n2), SIX_Enum_END_string_to_value
+    #define SIX_Enum_ENUM_2(name, n1, v1, n2, v2) SIX_Enum_BEGIN_enum_class_(name) n1 = v1, n2 = v2,  SIX_Enum_END_enum \
             SIX_six_Enum_map_2_(name, n1, n2) 
-    */
+     */
+
 }
 #endif // SIX_six_Enum_h_INCLUDED_
