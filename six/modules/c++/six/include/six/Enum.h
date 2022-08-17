@@ -74,17 +74,6 @@ namespace Enum
 namespace details
 {
     template<typename T>
-    inline std::map<std::string, int> to_string_to_int(const std::map<std::string, T>& map)
-    {
-        std::map<std::string, int> retval;
-        for (auto&& kv : map)
-        {
-            retval[kv.first] = kv.second;
-        }
-        return retval;
-    }
-
-    template<typename T>
     inline T index(const std::map<std::string, T>& map, const std::string& v)
     {
         const auto result = nitf::details::index(map, v);
@@ -164,10 +153,21 @@ namespace details
     template<typename T>
     class Enum
     {
+        template<typename TValues>
+        static std::map<std::string, int> to_string_to_int(const std::map<std::string, TValues>& map)
+        {
+            std::map<std::string, int> retval;
+            for (auto&& kv : map)
+            {
+                retval[kv.first] = kv.second;
+            }
+            return retval;
+        }
+
         static const std::map<int, std::string>& int_to_string()
         {
-            static const auto string_to_int = details::to_string_to_int(details::string_to_value<T>());
-            static const auto retval = nitf::details::swap_key_value(string_to_int);
+            static const auto map = to_string_to_int(details::string_to_value<T>());
+            static const auto retval = nitf::details::swap_key_value(map);
             return retval;
         }
 
