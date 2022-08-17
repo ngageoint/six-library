@@ -85,7 +85,7 @@ namespace details
     template<typename TEnum, typename TValues = typename TEnum::values>
     const std::map<std::string, TValues>& string_to_value()
     {
-        return TEnum::string_to_value_();
+        return six_Enum_string_to_value_(TEnum());
     }
 } // namespace details
 
@@ -130,7 +130,7 @@ namespace Enum
         static const auto value_to_string = nitf::details::swap_key_value(details::string_to_value<T>());
         return details::index(value_to_string, value);
     }
-}
+} // namespace Enum
 
 namespace details
 {
@@ -221,9 +221,9 @@ namespace details
 
     #define SIX_Enum_map_entry_values_(name, n) { #n, n }
     #define SIX_Enum_map_entry_class_(name, n) { #n, name::n }
-    #define SIX_Enum_map_entry_(name, n) SIX_Enum_map_entry_values_(name, n)
+    #define SIX_Enum_map_entry_(name, n) SIX_Enum_map_entry_class_(name, n)
     #define SIX_Enum_map_entry(n) SIX_Enum_map_entry_(SIX_Enum_map_entry_name, n)
-    #define SIX_Enum_map_entry_NOT_SET_(name) SIX_Enum_map_entry_(name, NOT_SET), { "NOT SET", NOT_SET }
+    #define SIX_Enum_map_entry_NOT_SET_(name) SIX_Enum_map_entry_(name, NOT_SET), { "NOT SET", name::NOT_SET }
 
     // Generate an enum class derived from details::Enum
     // There are a few examples of expanded code below.
@@ -241,11 +241,11 @@ namespace details
     #define SIX_Enum_BEGIN_enum_values_(name) enum values {
     #define SIX_Enum_BEGIN_enum_class_(name) enum class name {
     #define SIX_Enum_BEGIN_enum(name) SIX_Enum_BEGIN_enum_values_(name)
+    #define SIX_Enum_END_enum NOT_SET = six::NOT_SET_VALUE };
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
-    #define SIX_Enum_BEGIN_string_to_value(name) static const std::map<std::string, values>& string_to_value_() { static const std::map<std::string, values> retval { \
-        SIX_Enum_map_entry_NOT_SET_(name), 
-    #define SIX_Enum_END_enum NOT_SET = six::NOT_SET_VALUE };
+    #define SIX_Enum_BEGIN_string_to_value(name) inline const std::map<std::string, name::values>& six_Enum_string_to_value_(const name&) { \
+        static const std::map<std::string, name::values> retval { SIX_Enum_map_entry_NOT_SET_(name), 
     #define SIX_Enum_END_string_to_value }; return retval; }
 
     #define SIX_Enum_map_entry_1_(name, n) SIX_Enum_map_entry_(name, n)
@@ -261,19 +261,19 @@ namespace details
     #define SIX_Enum_map_5_(name, n1, n2, n3, n4, n5) SIX_Enum_BEGIN_string_to_value(name)  SIX_Enum_map_entry_5_(name, n1, n2, n3, n4, n5), SIX_Enum_END_string_to_value
 
     #define SIX_Enum_ENUM_1(name, n, v) SIX_Enum_BEGIN_DEFINE(name) \
-        SIX_Enum_BEGIN_enum_values_(name) n = v,  SIX_Enum_END_enum SIX_Enum_map_1_(name, n) SIX_Enum_END_DEFINE(name)
+        SIX_Enum_BEGIN_enum_values_(name) n = v,  SIX_Enum_END_enum SIX_Enum_END_DEFINE(name); SIX_Enum_map_1_(name, n)
     #define SIX_Enum_ENUM_2(name, n1, v1, n2, v2) SIX_Enum_BEGIN_DEFINE(name) \
         SIX_Enum_BEGIN_enum_values_(name) n1 = v1, n2 = v2,  SIX_Enum_END_enum \
-        SIX_Enum_map_2_(name, n1, n2) SIX_Enum_END_DEFINE(name)
+        SIX_Enum_END_DEFINE(name); SIX_Enum_map_2_(name, n1, n2) 
     #define SIX_Enum_ENUM_3(name, n1, v1, n2, v2, n3, v3) SIX_Enum_BEGIN_DEFINE(name) \
         SIX_Enum_BEGIN_enum_values_(name) n1 = v1, n2 = v2,  n3 = v3, SIX_Enum_END_enum \
-        SIX_Enum_map_3_(name, n1, n2, n3) SIX_Enum_END_DEFINE(name)
+        SIX_Enum_END_DEFINE(name); SIX_Enum_map_3_(name, n1, n2, n3) 
     #define SIX_Enum_ENUM_4(name, n1, v1, n2, v2, n3, v3, n4, v4) SIX_Enum_BEGIN_DEFINE(name) \
         SIX_Enum_BEGIN_enum_values_(name) n1 = v1, n2 = v2,  n3 = v3, n4 = v4, SIX_Enum_END_enum \
-        SIX_Enum_map_4_(name, n1, n2, n3, n4) SIX_Enum_END_DEFINE(name)
+        SIX_Enum_END_DEFINE(name); SIX_Enum_map_4_(name, n1, n2, n3, n4) 
     #define SIX_Enum_ENUM_5(name, n1, v1, n2, v2, n3, v3, n4, v4, n5, v5) SIX_Enum_BEGIN_DEFINE(name) \
         SIX_Enum_BEGIN_enum_values_(name) n1 = v1, n2 = v2,  n3 = v3, n4 = v4, n5 = v5, SIX_Enum_END_enum \
-        SIX_Enum_map_5_(name, n1, n2, n3, n4, n5) SIX_Enum_END_DEFINE(name)
+        SIX_Enum_END_DEFINE(name); SIX_Enum_map_5_(name, n1, n2, n3, n4, n5) 
 
     //#define SIX_six_Enum_map_entry_(name, n) { #n, name::n }
     //#define SIX_six_Enum_map_entry_NOT_SET_(name) SIX_six_Enum_map_entry_(name, NOT_SET), { "NOT SET", name::NOT_SET }
