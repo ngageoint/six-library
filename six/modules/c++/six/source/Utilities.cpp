@@ -314,6 +314,7 @@ std::string six::toString(const DataType& type)
         return "SICD";
     case DataType::DERIVED:
         return "SIDD";
+    case DataType::NOT_SET:
     default:
         throw except::Exception(Ctxt("Unsupported data type"));
     }
@@ -405,6 +406,7 @@ std::string six::toString(const SideOfTrackType& t)
         return "L";
     case SideOfTrackType::RIGHT:
         return "R";
+    case SideOfTrackType::NOT_SET:
     default:
         throw except::Exception(Ctxt("Unsupported side of track"));
     }
@@ -479,6 +481,7 @@ std::string six::toString(const AppliedType& value)
         return "APPLIED";  // fixed in 2010-07-08 version of schema
     case AppliedType::IS_FALSE:
         return "NOT_APPLIED";
+    case AppliedType::NOT_SET:
     default:
         throw except::Exception(Ctxt("Unsupported applied type"));
     }

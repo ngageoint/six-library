@@ -40,6 +40,7 @@
 
  // This is to help developers ensure details::Enum<T> is the same as "enum class"
 #define SIX_Enum_as_class_ 1 // using six::details::Enum<T>
+//#define SIX_Enum_as_class_ 0 // most enums are "enum class", not six::details::Enum<T>
 // There can be up to THREE types in use:
 // * T, the type of the "enum"; e.g., six::MyEnum
 // * TEnum, the details::Enum<T> wrapper
@@ -91,14 +92,14 @@ namespace details
     }
 
     template<typename T, typename TValues = typename T::values>
-    const std::map<std::string, TValues>& strings_to_values()
+    const std::map<std::string, TValues>& strings_to_values(const T& t)
     {
-        return six_Enum_string_to_value_(T());
+        return six_Enum_string_to_value_(t);
     }
     template<typename T, typename TValues = typename T::values>
-    const std::map<TValues, std::string>& values_to_strings()
+    const std::map<TValues, std::string>& values_to_strings(const T& t)
     {
-        static const auto retval = nitf::details::swap_key_value(strings_to_values<T, TValues>());
+        static const auto retval = nitf::details::swap_key_value(strings_to_values(t));
         return retval;
     }
 
@@ -106,12 +107,12 @@ namespace details
     template<typename T, typename TValues = typename T::values>
     inline std::optional<std::string> value_to_string(TValues value, std::nothrow_t)
     {
-        return nitf::details::index(values_to_strings<T, TValues>(), value);
+        return nitf::details::index(values_to_strings(T()), value);
     }
     template<typename T, typename TValues = typename T::values>
     inline std::string value_to_string(TValues value, bool throw_if_not_set = false)
     {
-        return index(values_to_strings<T, TValues>(), value, throw_if_not_set);
+        return index(values_to_strings(T()), value, throw_if_not_set);
     }
 } // namespace details
 
@@ -120,7 +121,7 @@ namespace Enum
     template<typename T>
     inline std::optional<T> toType(const std::string& v, std::nothrow_t)
     {
-        const auto result = nitf::details::index(details::strings_to_values<T>(), v);
+        const auto result = nitf::details::index(details::strings_to_values(T()), v);
         if (!result.has_value())
         {
             return std::optional<T>();
@@ -155,7 +156,7 @@ namespace details
 
         static const std::map<int, std::string>& int_to_string()
         {
-            static const auto map = to_string_to_int(details::strings_to_values<T>());
+            static const auto map = to_string_to_int(details::strings_to_values(T()));
             static const auto retval = nitf::details::swap_key_value(map);
             return retval;
         }
@@ -271,6 +272,7 @@ namespace Enum
     {
         return details::toString(value, throw_if_not_set);
     }
+
 } // namespace Enum
 
 

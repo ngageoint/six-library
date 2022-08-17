@@ -73,7 +73,7 @@ static void test_toType(const std::string& testName, size_t sz)
     test_toType_<TSixEnum>(testName, "UNKNOWN", TSixEnum::UNKNOWN);
     test_toType_<TSixEnum>(testName, "OTHER", TSixEnum::OTHER);
 
-    auto&& map = six::details::strings_to_values<TSixEnum>();
+    auto&& map = six::details::strings_to_values(TSixEnum());
     TEST_ASSERT_EQ(map.size(), sz);
     for (auto&& kv : map)
     {
@@ -148,7 +148,7 @@ static void test_six_toType(const std::string& testName, size_t sz)
 {
     test_six_toType_<TSixEnum>(testName, "OTHER", TSixEnum::OTHER);
 
-    auto&& map = six::details::strings_to_values<TSixEnum>();
+    auto&& map = six::details::strings_to_values(TSixEnum());
     TEST_ASSERT_EQ(map.size(), sz);
     for (auto&& kv : map)
     {
@@ -432,7 +432,7 @@ TEST_CASE(DualPolarization)
     // Allowed TX values: "V", "H", "X", "Y", "S", "E", "RHC", "LHC", "OTHER*"
     // Allowed RCV values:  "V", "H", "X", "Y", "S", "E", "RHC", "LHC", "OTHER*",    
 
-    auto&& map = six::details::strings_to_values<six::PolarizationType>();
+    auto&& map = six::details::strings_to_values(six::PolarizationType());
     for (auto&& tx : map)
     {
         const auto txType = six::Enum::toType<six::PolarizationType>(tx.first);
