@@ -45,12 +45,21 @@ namespace six
 
 constexpr int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
+namespace details
+{
+    template<typename TEnum, typename TValues = typename TEnum::values>
+    inline TValues cast(int i)
+    {
+        return static_cast<TValues>(i);
+    }
+}
+
 namespace Enum
 {
     template<typename TEnum, typename TValues = typename TEnum::values>
     inline TEnum cast(int i)
     {
-        return TEnum(static_cast<TValues>(i));
+        return TEnum(details::cast<TEnum, TValues>(i));
     }
 }
 
@@ -113,15 +122,14 @@ namespace Enum
     template<typename T>
     inline std::optional<std::string> toString(const T& value_, std::nothrow_t)
     {
-        const auto value = static_cast<typename T::values>(value_.value); // get  the "enum" value
-
+        const auto value = details::cast<T>(value_); // get  the "enum" value
         static const auto value_to_string = nitf::details::swap_key_value(details::string_to_value<T>());
         return nitf::details::index(value_to_string, value);
     }
     template<typename T>
     inline std::string toString(const T& value_, bool throw_if_not_set = false)
     {
-        const auto value = static_cast<typename T::values>(value_.value); // get  the "enum" value
+        const auto value = details::cast<T>(value_); // get  the "enum" value
         if (throw_if_not_set && (value == NOT_SET_VALUE))
         {
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
@@ -155,11 +163,15 @@ namespace details
             value = i;
         }
 
+#ifdef SWIGPYTHON
     public:
+#endif
         int value = NOT_SET_VALUE; // existing SWIG code uses "value", regenerating is a huge nusiance
+
+    public:
+        void set_value_(int v) { value = v; } // for unit-testing
         operator int() const { return value; }
 
-        //#if defined(SWIG) || defined(SWIGPYTHON)
         std::string toString(bool throw_if_not_set = false) const
         {
             if (throw_if_not_set && (value == NOT_SET_VALUE))
@@ -174,6 +186,7 @@ namespace details
             return six::Enum::toType<T>(v);
         }
 
+        #ifdef SWIGPYTHON
         static size_t size() { return int_to_string().size(); }
         bool operator<(const int& o) const { return value < o; }
         bool operator<(const Enum& o) const { return *this < o.value; }
@@ -187,25 +200,25 @@ namespace details
         bool operator>(const Enum& o) const { return !(*this <= o); }
         bool operator>=(const int& o) const { return !(*this < o); }
         bool operator>=(const Enum& o) const { return !(*this < o); }
-	    //#endif // SWIG
+	    #endif // SWIGPYTHON
     };
-    template<typename T>
-    inline bool operator==(const Enum<T>& lhs, const Enum<T>& rhs)
-    {
-        return lhs.value == rhs.value;
-    }
     template<typename T>
     inline bool operator==(const Enum<T>& lhs, typename T::values rhs)
     {
-        return lhs.value == rhs;
+        return details::cast<T>(lhs) == rhs;
     }
     template<typename T>
-    inline bool operator!=(const Enum<T>& lhs, const Enum<T>& rhs)
+    inline bool operator==(const Enum<T>& lhs, const Enum<T>& rhs)
+    {
+        return lhs == details::cast<T>(rhs);
+    }
+    template<typename T>
+    inline bool operator!=(const Enum<T>& lhs, typename T::values rhs)
     {
         return !(lhs == rhs);
     }
     template<typename T>
-    inline bool operator!=(const Enum<T>& lhs, typename T::values rhs)
+    inline bool operator!=(const Enum<T>& lhs, const Enum<T>& rhs)
     {
         return !(lhs == rhs);
     }
@@ -213,7 +226,7 @@ namespace details
     template<typename T>
     inline std::ostream& operator<<(std::ostream& os, const Enum<T>& e_)
     {
-        const T e(static_cast<typename T::values>(e_.value)); // get  the "enum" value
+        const T e(details::cast<T>(e_)); // get rid of wrapper class: Enum<T> -> T
         os << six::Enum::toString(e);
         return os;
     }

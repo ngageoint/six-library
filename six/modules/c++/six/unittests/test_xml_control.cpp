@@ -149,7 +149,7 @@ template<typename T>
 void test_six_toString_Exception(const std::string& testName)
 {
     auto v = six::Enum::cast<T>(1); // most enums have a value for 1
-    v.value = -2; // cause toString() to fail
+    v.set_value_(-2); // cause toString() to fail
     TEST_EXCEPTION(six::toString(v));
     v = T::NOT_SET;
     TEST_EXCEPTION(six::toString(v)); // NOT_SET throws for this type
