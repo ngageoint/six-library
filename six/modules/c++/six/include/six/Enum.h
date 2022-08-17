@@ -39,7 +39,14 @@
 #include <nitf/Enum.hpp>
 
  // This is to help developers ensure details::Enum<T> is the same as "enum class"
-#define SIX_Enum_as_class_ 1
+#define SIX_Enum_as_class_ 1 // using six::details::Enum<T>
+// There can be up to THREE types in use:
+// * T, the type of the "enum"; e.g., six::MyEnum
+// * TEnum, the details::Enum<T> wrapper
+// * TValues, the actual enum; e.g., six::MyEnum::values { one, two, three }
+// 
+// When using "enum class" (SIX_Enum_as_class_=0), TEnum is not used (no wrapper)
+// and T and TValues are the same: enum class six::MyEnum { one, two, three }
 
 namespace six
 {
