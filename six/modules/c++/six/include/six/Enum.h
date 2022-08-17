@@ -103,6 +103,19 @@ namespace details
         return retval;
     }
 
+    template<typename T, typename TValues = typename T::values>
+    inline std::optional<TValues> string_to_value(const std::string& v, std::nothrow_t)
+    {
+        return nitf::details::index(details::strings_to_values(T()), v);
+    }
+    template<typename T, typename TValues = typename T::values>
+    inline TValues string_to_value(const std::string& v)
+    {
+        const auto result = string_to_value<T>(v, std::nothrow);
+        const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
+        return nitf::details::value(result, ex);
+    }
+
     //! Returns string representation of the value
     template<typename T, typename TValues = typename T::values>
     inline std::optional<std::string> value_to_string(TValues value, std::nothrow_t)
@@ -121,7 +134,7 @@ namespace Enum
     template<typename T>
     inline std::optional<T> toType(const std::string& v, std::nothrow_t)
     {
-        const auto result = nitf::details::index(details::strings_to_values(T()), v);
+        const auto result = details::string_to_value<T>(v, std::nothrow);
         if (!result.has_value())
         {
             return std::optional<T>();
@@ -131,9 +144,7 @@ namespace Enum
     template<typename T>
     inline T toType(const std::string& v)
     {
-        const auto result = toType<T>(v, std::nothrow);
-        const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-        return nitf::details::value(result, ex);
+        return details::string_to_value<T>(v);
     }
 } // namespace Enum
 
