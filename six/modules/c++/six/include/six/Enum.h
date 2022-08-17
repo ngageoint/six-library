@@ -81,6 +81,12 @@ namespace details
         const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
         return nitf::details::value(result, ex);
     }
+
+    template<typename TEnum, typename TValues = typename TEnum::values>
+    const std::map<std::string, TValues>& string_to_value()
+    {
+        return TEnum::string_to_value_();
+    }
 } // namespace details
 
 namespace Enum
@@ -88,7 +94,7 @@ namespace Enum
     template<typename T>
     inline std::optional<T> toType(const std::string& v, std::nothrow_t)
     {
-        const auto result = nitf::details::index(T::string_to_value_(), v);
+        const auto result = nitf::details::index(details::string_to_value<T>(), v);
         if (!result.has_value())
         {
             return std::optional<T>();
@@ -109,7 +115,7 @@ namespace Enum
     {
         const auto value = static_cast<typename T::values>(value_.value); // get  the "enum" value
 
-        static const auto value_to_string = nitf::details::swap_key_value(T::string_to_value_());
+        static const auto value_to_string = nitf::details::swap_key_value(details::string_to_value<T>());
         return nitf::details::index(value_to_string, value);
     }
     template<typename T>
@@ -121,7 +127,7 @@ namespace Enum
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
 
-        static const auto value_to_string = nitf::details::swap_key_value(T::string_to_value_());
+        static const auto value_to_string = nitf::details::swap_key_value(details::string_to_value<T>());
         return details::index(value_to_string, value);
     }
 }
@@ -134,7 +140,7 @@ namespace details
     {
         static const std::map<int, std::string>& int_to_string()
         {
-            static const auto string_to_int = details::to_string_to_int(T::string_to_value_());
+            static const auto string_to_int = details::to_string_to_int(details::string_to_value<T>());
             static const auto retval = nitf::details::swap_key_value(string_to_int);
             return retval;
         }
@@ -212,16 +218,6 @@ namespace details
         return os;
     }
 } // namespace details
-
-namespace Enum
-{
-    template<typename T> inline const std::map<std::string, T>& string_to_value()
-    {
-        static const std::map<std::string, T> retval;
-        assert(!retval.empty()); // should never get here
-        return retval;
-    }
-}
 
     #define SIX_Enum_map_entry_values_(name, n) { #n, n }
     #define SIX_Enum_map_entry_class_(name, n) { #n, name::n }
