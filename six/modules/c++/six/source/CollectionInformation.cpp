@@ -72,7 +72,7 @@ std::ostream& operator<< (std::ostream& os, const six::CollectionInformation& c)
     os << "  CoreName         : " << c.coreName << "\n";
     if (!six::Init::isUndefined(c.collectType))
     {
-        os << "  CollectType      : " << c.collectType << "\n";
+        os << "  CollectType      : " << six::Enum::toString(c.collectType) << "\n";
     }
     os << "  RadarMode        : " << c.radarMode << "\n";
     if (!six::Init::isUndefined(c.radarModeID))
