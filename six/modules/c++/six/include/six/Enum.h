@@ -120,6 +120,19 @@ namespace details
 
 
     // Base type for all enums; avoids code duplication
+    template<typename T> class Enum; // forward; want to call these routines from Enum, below
+    template<typename T, typename TValues = typename T::values>
+    inline const std::map<std::string, TValues>& strings_to_values_(const Enum<T>&)
+    {
+        return six_Enum_strings_to_values_(T());
+    }
+    template<typename T, typename TValues = typename T::values>
+    inline const std::map<TValues, std::string>& values_to_strings_(const Enum<T>&)
+    {
+        static const auto retval = nitf::details::swap_key_value(strings_to_values_(T()));
+        return retval;
+    }
+
     template<typename T>
     class Enum
     {
@@ -136,7 +149,7 @@ namespace details
 
         static const std::map<int, std::string>& int_to_string()
         {
-            static const auto map = to_string_to_int(six_Enum_strings_to_values_(T()));
+            static const auto map = to_string_to_int(details::strings_to_values_(Enum<T>()));
             static const auto retval = nitf::details::swap_key_value(map);
             return retval;
         }
@@ -167,7 +180,7 @@ namespace details
 
         static T toType(const std::string& s)
         {
-            return details::string_to_value(six_Enum_strings_to_values_(T()), s);
+            return details::string_to_value(details::strings_to_values_(Enum<T>()), s);
         }
 
         #ifdef SWIGPYTHON
@@ -215,19 +228,6 @@ namespace details
     inline bool operator!=(const Enum<T>& lhs, const Enum<T>& rhs)
     {
         return !(lhs == rhs);
-    }
-
-    // These need to be after the Enum class so that we can overload
-    template<typename T, typename TValues = typename T::values>
-    inline const std::map<std::string, TValues>& strings_to_values_(const Enum<T>&)
-    {
-        return six_Enum_strings_to_values_(T());
-    }
-    template<typename T, typename TValues = typename T::values>
-    inline const std::map<TValues, std::string>& values_to_strings_(const Enum<T>&)
-    {
-        static const auto retval = nitf::details::swap_key_value(strings_to_values_(T()));
-        return retval;
     }
 
     template<typename T>
