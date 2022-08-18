@@ -31,6 +31,7 @@
 #include <ostream>
 #include <new>
 #include <tuple> // std::ignore
+#include <type_traits>
 
 #include <scene/sys_Conf.h>
 #include <import/except.h>
@@ -92,6 +93,14 @@ namespace Enum
 
 namespace details
 {
+#if CODA_OSS_cpp14
+    template<bool B, typename T = void>
+    using enable_if_t = std::enable_if_t<B, T>;
+#else
+    template<bool B, typename T = void>
+    using enable_if_t = typename std::enable_if<B, T>::type;
+#endif
+
     // all of these routines take a value->string or string->value map
     template<typename T>
     inline T string_to_value(const std::map<std::string, T>& map, const std::string& v)
@@ -120,18 +129,52 @@ namespace details
 
     // Having a hard time getting overloading/specialization/etc. to work, so just
     // use different names ... <shrug>
-    template<typename TValues>
+    template<typename TValues, enable_if_t<std::is_enum<TValues>::value, bool> = true>
     inline const std::map<std::string, TValues>& strings_to_values_(const TValues& v)
     {
         return six_Enum_strings_to_values_(v);
     }
-    template<typename TValues>
+    template<typename TValues, enable_if_t<std::is_enum<TValues>::value, bool> = true>
     inline const std::map<TValues, std::string>& values_to_strings_(const TValues& v)
     {
         static const auto retval = nitf::details::swap_key_value(strings_to_values_(v));
         return retval;
     }
+} // namespace details
 
+namespace Enum
+{
+    template<typename TValues, details::enable_if_t<std::is_enum<TValues>::value, bool> = true>
+    inline std::optional<std::string> toString(TValues v, std::nothrow_t)
+    {
+        return nitf::details::index(details::values_to_strings_(v), v);
+    }
+    template<typename TValues, details::enable_if_t<std::is_enum<TValues>::value, bool> = true>
+    inline std::string toString(TValues v, bool throw_if_not_set = false)
+    {
+        return details::value_to_string(details::values_to_strings_(v), v, throw_if_not_set);
+    }
+    template<typename TValues, details::enable_if_t<std::is_enum<TValues>::value, bool> = true>
+    inline bool toType(TValues& result, const std::string& s, std::nothrow_t)
+    {
+        const auto value = nitf::details::index(details::strings_to_values_(result), s);
+        if (!value.has_value())
+        {
+            return false;
+        }
+        result = *value;
+        return true;
+    }
+    template<typename TValues, details::enable_if_t<std::is_enum<TValues>::value, bool> = true>
+    inline void toType(TValues& result, const std::string& s)
+    {
+        result = details::string_to_value(details::strings_to_values_(result), s);
+    }
+} // namespace Enum
+
+
+namespace details
+{
     // Base type for all "class enums" (NOT C++11's "enum class"); avoids code duplication
     // Want to call these routines from Enum class (below) while overloading on Enum<T>
     template<typename T> class Enum; // forward
