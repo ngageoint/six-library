@@ -118,19 +118,32 @@ namespace details
         return value_to_string(map, v);
     }
 
+    // Having a hard time getting overloading/specialization/etc. to work, so just
+    // use different names ... <shrug>
+    template<typename TValues>
+    inline const std::map<std::string, TValues>& strings_to_values_(const TValues& v)
+    {
+        return six_Enum_strings_to_values_(v);
+    }
+    template<typename TValues>
+    inline const std::map<TValues, std::string>& values_to_strings_(const TValues& v)
+    {
+        static const auto retval = nitf::details::swap_key_value(strings_to_values_(v));
+        return retval;
+    }
 
     // Base type for all "class enums" (NOT C++11's "enum class"); avoids code duplication
     // Want to call these routines from Enum class (below) while overloading on Enum<T>
     template<typename T> class Enum; // forward
     template<typename T, typename TValues = typename T::values>
-    inline const std::map<std::string, TValues>& strings_to_values_(const Enum<T>&)
+    inline const std::map<std::string, TValues>& Enum_strings_to_values_(const Enum<T>&)
     {
         return six_Enum_strings_to_values_(T());
     }
     template<typename T, typename TValues = typename T::values>
-    inline const std::map<TValues, std::string>& values_to_strings_(const Enum<T>&)
+    inline const std::map<TValues, std::string>& Enum_values_to_strings_(const Enum<T>& e)
     {
-        static const auto retval = nitf::details::swap_key_value(strings_to_values_(T()));
+        static const auto retval = nitf::details::swap_key_value(Enum_strings_to_values_(e));
         return retval;
     }
 
@@ -150,7 +163,7 @@ namespace details
 
         static const std::map<int, std::string>& int_to_string()
         {
-            static const auto map = to_string_to_int(details::strings_to_values_(Enum<T>()));
+            static const auto map = to_string_to_int(details::Enum_strings_to_values_(Enum<T>()));
             static const auto retval = nitf::details::swap_key_value(map);
             return retval;
         }
@@ -181,7 +194,7 @@ namespace details
 
         static T toType(const std::string& s)
         {
-            return details::string_to_value(details::strings_to_values_(Enum<T>()), s);
+            return details::string_to_value(details::Enum_strings_to_values_(Enum<T>()), s);
         }
 
         #ifdef SWIGPYTHON
@@ -234,12 +247,13 @@ namespace details
     template<typename T>
     inline std::optional<std::string> toString(const Enum<T>& e, std::nothrow_t)
     {
-        return nitf::details::index(values_to_strings_(e), to_underlying(e), std::nothrow);
+        return nitf::details::index(Enum_values_to_strings_(e), to_underlying(e), std::nothrow);
     }
     template<typename T>
     inline std::string toString(const Enum<T>& e, bool throw_if_not_set = false)
     {
-        return details::value_to_string(values_to_strings_(e), to_underlying(e), throw_if_not_set);
+        // This is more strongly-typed than e.toString()
+        return details::value_to_string(Enum_values_to_strings_(e), to_underlying(e), throw_if_not_set);
     }
 
     template<typename T>
@@ -252,7 +266,7 @@ namespace details
     template<typename T>
     inline bool toType(Enum<T>& result, const std::string& s, std::nothrow_t)
     {
-        const auto value = nitf::details::index(strings_to_values_(result), s);
+        const auto value = nitf::details::index(Enum_strings_to_values_(result), s);
         if (!value.has_value())
         {
             return false;
