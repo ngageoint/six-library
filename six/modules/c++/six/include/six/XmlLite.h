@@ -222,7 +222,7 @@ struct XmlLite final
     {
         std::string name;
         parseString(element, name);
-        enumVal = six::Enum::toType<T>(name);
+        six::Enum::toType(enumVal, name);
     }
 
     bool parseDouble(const xml::lite::Element&, double&) const;
@@ -291,7 +291,7 @@ private:
 };
 
  template<> inline xml::lite::Element& XmlLite::createString(const std::string& name,
-						      const std::string& p, xml::lite::Element& parent) const
+                              const std::string& p, xml::lite::Element& parent) const
   {
     return createString_(name, p, parent);
   }

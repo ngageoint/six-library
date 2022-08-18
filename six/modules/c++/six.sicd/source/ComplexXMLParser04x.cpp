@@ -113,10 +113,9 @@ XMLElem ComplexXMLParser04x::convertRadarCollectionToXML(
     if (radar->txPolarization != PolarizationSequenceType::NOT_SET)
     {
         // In SICD 0.4, this is not allowed to contain UNKNOWN or SEQUENCE
-        createStringFromEnum(
-                "TxPolarization",
-                six::Enum::toType<PolarizationType>(six::Enum::toString(radar->txPolarization)),
-                radarXML);
+        PolarizationType txPolarization;
+        six::Enum::toType(txPolarization, six::Enum::toString(radar->txPolarization));
+        createStringFromEnum("TxPolarization", txPolarization, radarXML);
     }
 
     if (!Init::isUndefined(radar->polarizationHVAnglePoly))

@@ -40,13 +40,16 @@ static bool is_OTHER_(const std::string& v)
 template<typename T>
 inline T toType_(const std::string& s, const except::Exception& ex)
 {
-    const auto result = six::Enum::toType<T>(s, std::nothrow);
-    auto retval = nitf::details::value(result, ex);
-    if (retval == T::NOT_SET)
+    T result;
+    if (six::Enum::toType<T>(result, s, std::nothrow))
     {
-        throw ex;
+        auto retval = nitf::details::value(std::make_optional<T>(result), ex);
+        if (retval != T::NOT_SET)
+        {
+            return retval;
+        }
     }
-    return retval;
+    throw ex;
 }
 template <typename T>
 inline T toType(const std::string& s)

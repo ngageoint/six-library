@@ -132,19 +132,20 @@ namespace details
 namespace Enum
 {
     template<typename T>
-    inline std::optional<T> toType(const std::string& v, std::nothrow_t)
+    inline bool toType(T& result, const std::string& s, std::nothrow_t)
     {
-        const auto result = details::string_to_value<T>(v, std::nothrow);
-        if (!result.has_value())
+        const auto value = details::string_to_value<T>(s, std::nothrow);
+        if (!value.has_value())
         {
-            return std::optional<T>();
+            return false;
         }
-        return std::optional<T>(*result);
+        result = *value;
+        return true;
     }
     template<typename T>
-    inline T toType(const std::string& v)
+    inline void toType(T& result, const std::string& s)
     {
-        return details::string_to_value<T>(v);
+        result = details::string_to_value<T>(s);
     }
 } // namespace Enum
 
@@ -202,7 +203,9 @@ namespace details
 
         static T toType(const std::string& v)
         {
-            return six::Enum::toType<T>(v);
+            T retval;
+            six::Enum::toType(retval, v);
+            return retval;
         }
 
         #ifdef SWIGPYTHON
@@ -219,7 +222,7 @@ namespace details
         bool operator>(const Enum& o) const { return !(*this <= o); }
         bool operator>=(const int& o) const { return !(*this < o); }
         bool operator>=(const Enum& o) const { return !(*this < o); }
-	    #endif // SWIGPYTHON
+        #endif // SWIGPYTHON
     };
 
     template<typename T, typename TValues = typename T::values>
