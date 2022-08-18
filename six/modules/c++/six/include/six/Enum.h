@@ -75,11 +75,17 @@ constexpr int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
 namespace Enum
 {
-    template<typename T, typename TValues = typename T::values>
+    // see https://en.cppreference.com/w/cpp/utility/to_underlying
+    template<typename T, typename TUnderlying, typename TValues = typename T::values>
+    inline T from_underlying(TUnderlying v)
+    {
+        const auto value = static_cast<TValues>(v);
+        return T(value); // T() might throw if value is out-of-range
+    }
+    template<typename T>
     inline T cast(int i)
     {
-        const auto value = static_cast<TValues>(i);
-        return T(value);
+        return from_underlying<T>(i);
     }
 }
 
@@ -218,23 +224,24 @@ namespace details
         #endif // SWIGPYTHON
     };
 
+    // see https ://en.cppreference.com/w/cpp/utility/to_underlying
     template<typename T, typename TValues = typename T::values>
-    inline TValues cast(const Enum<T>& e)
+    inline TValues to_underlying(const Enum<T>& e) noexcept
     {
       // assume Enum doesn't allow a bad value to get set
-      const auto value = static_cast<int>(e); // operator int() 
+      const auto value = static_cast<int>(e); //  call Enum::operator int() 
       return static_cast<TValues>(value);  // get  the "enum" value
     }
 
     template<typename T>
     inline bool operator==(const Enum<T>& lhs, typename T::values rhs)
     {
-        return cast(lhs) == rhs;
+        return to_underlying(lhs) == rhs;
     }
     template<typename T>
     inline bool operator==(const Enum<T>& lhs, const Enum<T>& rhs)
     {
-        return lhs == cast(rhs);
+        return lhs == to_underlying(rhs);
     }
     template<typename T>
     inline bool operator!=(const Enum<T>& lhs, typename T::values rhs)
@@ -250,12 +257,12 @@ namespace details
     template<typename T>
     inline std::optional<std::string> toString(const Enum<T>& e, std::nothrow_t)
     {
-        return value_to_string<T>(cast(e), std::nothrow);
+        return value_to_string<T>(to_underlying(e), std::nothrow);
     }
     template<typename T>
     inline std::string toString(const Enum<T>& e, bool throw_if_not_set = false)
     {
-        return value_to_string<T>(cast(e), throw_if_not_set);
+        return value_to_string<T>(to_underlying(e), throw_if_not_set);
     }
 
     template<typename T>
