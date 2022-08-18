@@ -30,6 +30,7 @@
 #include <map>
 #include <ostream>
 #include <new>
+#include <tuple> // std::ignore
 
 #include <scene/sys_Conf.h>
 #include <import/except.h>
@@ -92,7 +93,7 @@ namespace Enum
 namespace details
 {
     template<typename T>
-    inline T index(const std::map<std::string, T>& map, const std::string& v)
+    inline T string_to_value_(const std::map<std::string, T>& map, const std::string& v)
     {
         const auto result = nitf::details::index(map, v);
         const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
@@ -100,29 +101,31 @@ namespace details
     }
 
     template<typename T>
-    inline std::string index(const std::map<T, std::string>& map, T v)
+    inline std::string value_to_string(const std::map<T, std::string>& map, T v)
     {
         const auto result = nitf::details::index(map, v);
         const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
         return nitf::details::value(result, ex);
     }
     template<typename T>
-    inline std::string index(const std::map<T, std::string>& map, T v, bool throw_if_not_set)
+    inline std::string value_to_string(const std::map<T, std::string>& map, T v, bool throw_if_not_set)
     {
         if (throw_if_not_set && (v == NOT_SET_VALUE))
         {
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", v)));
         }
-        return index(map, v);
+        return value_to_string(map, v);
     }
-
+}
+namespace details
+{
     template<typename T, typename TValues = typename T::values>
-    const std::map<std::string, TValues>& strings_to_values(const T& t)
+    inline const std::map<std::string, TValues>& strings_to_values(const T& t)
     {
         return six_Enum_string_to_value_(t);
     }
     template<typename T, typename TValues = typename T::values>
-    const std::map<TValues, std::string>& values_to_strings(const T& t)
+    inline const std::map<TValues, std::string>& values_to_strings(const T& t)
     {
         static const auto retval = nitf::details::swap_key_value(strings_to_values(t));
         return retval;
@@ -141,17 +144,6 @@ namespace details
         return nitf::details::value(result, ex);
     }
 
-    //! Returns string representation of the value
-    template<typename T, typename TValues = typename T::values>
-    inline std::optional<std::string> value_to_string(TValues value, std::nothrow_t)
-    {
-        return nitf::details::index(values_to_strings(T()), value);
-    }
-    template<typename T, typename TValues = typename T::values>
-    inline std::string value_to_string(TValues value, bool throw_if_not_set = false)
-    {
-        return index(values_to_strings(T()), value, throw_if_not_set);
-    }
 } // namespace details
 
 namespace details
@@ -184,7 +176,7 @@ namespace details
         //! int constructor
         explicit Enum(int i)
         {
-            (void)details::index(int_to_string(), i); // validate "i"
+            std::ignore = details::value_to_string(int_to_string(), i); // validate "i"
             value = i;
         }
 
@@ -199,7 +191,7 @@ namespace details
 
         std::string toString(bool throw_if_not_set = false) const
         {
-            return details::index(int_to_string(), value, throw_if_not_set);
+            return details::value_to_string(int_to_string(), value, throw_if_not_set);
         }
 
         static T toType(const std::string& s)
@@ -254,15 +246,27 @@ namespace details
         return !(lhs == rhs);
     }
 
+    template<typename T, typename TValues = typename T::values>
+    inline const std::map<std::string, TValues>& strings_to_values(const Enum<T>&)
+    {
+        return six_Enum_string_to_value_(T());
+    }
+    template<typename T, typename TValues = typename T::values>
+    inline const std::map<TValues, std::string>& values_to_strings(const Enum<T>&)
+    {
+        static const auto retval = nitf::details::swap_key_value(strings_to_values(T()));
+        return retval;
+    }
+
     template<typename T>
     inline std::optional<std::string> toString(const Enum<T>& e, std::nothrow_t)
     {
-        return value_to_string<T>(to_underlying(e), std::nothrow);
+        return nitf::details::index(values_to_strings(e), to_underlying(e), std::nothrow);
     }
     template<typename T>
     inline std::string toString(const Enum<T>& e, bool throw_if_not_set = false)
     {
-        return value_to_string<T>(to_underlying(e), throw_if_not_set);
+        return details::value_to_string(values_to_strings(e), to_underlying(e), throw_if_not_set);
     }
 
     template<typename T>
