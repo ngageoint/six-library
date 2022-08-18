@@ -93,7 +93,7 @@ namespace Enum
 namespace details
 {
     template<typename T>
-    inline T string_to_value_(const std::map<std::string, T>& map, const std::string& v)
+    inline T string_to_value(const std::map<std::string, T>& map, const std::string& v)
     {
         const auto result = nitf::details::index(map, v);
         const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
@@ -116,38 +116,8 @@ namespace details
         }
         return value_to_string(map, v);
     }
-}
-namespace details
-{
-    template<typename T, typename TValues = typename T::values>
-    inline const std::map<std::string, TValues>& strings_to_values(const T& t)
-    {
-        return six_Enum_string_to_value_(t);
-    }
-    template<typename T, typename TValues = typename T::values>
-    inline const std::map<TValues, std::string>& values_to_strings(const T& t)
-    {
-        static const auto retval = nitf::details::swap_key_value(strings_to_values(t));
-        return retval;
-    }
 
-    template<typename T, typename TValues = typename T::values>
-    inline std::optional<TValues> string_to_value(const std::string& v, std::nothrow_t)
-    {
-        return nitf::details::index(details::strings_to_values(T()), v);
-    }
-    template<typename T, typename TValues = typename T::values>
-    inline TValues string_to_value(const std::string& v)
-    {
-        const auto result = string_to_value<T>(v, std::nothrow);
-        const except::Exception ex(Ctxt("Unknown type '" + v + "'"));
-        return nitf::details::value(result, ex);
-    }
 
-} // namespace details
-
-namespace details
-{
     // Base type for all enums; avoids code duplication
     template<typename T>
     class Enum
@@ -163,9 +133,15 @@ namespace details
             return retval;
         }
 
+        template<typename TValues = typename T::values>
+        static const std::map<std::string, TValues>& strings_to_values()
+        {
+            return six_Enum_strings_to_values_(T());
+        }
+
         static const std::map<int, std::string>& int_to_string()
         {
-            static const auto map = to_string_to_int(details::strings_to_values(T()));
+            static const auto map = to_string_to_int(strings_to_values());
             static const auto retval = nitf::details::swap_key_value(map);
             return retval;
         }
@@ -196,7 +172,9 @@ namespace details
 
         static T toType(const std::string& s)
         {
-            return details::string_to_value<T>(s);
+            const auto result = nitf::details::index(strings_to_values(), s);
+            const except::Exception ex(Ctxt("Unknown type '" + s + "'"));
+            return nitf::details::value(result, ex);
         }
 
         #ifdef SWIGPYTHON
@@ -249,7 +227,7 @@ namespace details
     template<typename T, typename TValues = typename T::values>
     inline const std::map<std::string, TValues>& strings_to_values(const Enum<T>&)
     {
-        return six_Enum_string_to_value_(T());
+        return six_Enum_strings_to_values_(T());
     }
     template<typename T, typename TValues = typename T::values>
     inline const std::map<TValues, std::string>& values_to_strings(const Enum<T>&)
@@ -276,6 +254,23 @@ namespace details
         return os;
     }
 
+    template<typename T>
+    inline bool toType(details::Enum<T>& result, const std::string& s, std::nothrow_t)
+    {
+        const auto value = nitf::details::index(strings_to_values(result), s);
+        if (!value.has_value())
+        {
+            return false;
+        }
+        result = T(*value); // no details::Enum::operator=(); it's on T
+        return true;
+    }
+    template<typename T>
+    inline void toType(details::Enum<T>& result, const std::string& s)
+    {
+        const auto value = details::string_to_value(strings_to_values(result), s);
+        result = T(value);  // no details::Enum::operator=(); it's on T
+    }
 } // namespace details
 
 namespace Enum
@@ -294,18 +289,12 @@ namespace Enum
     template<typename T>
     inline bool toType(details::Enum<T>& result, const std::string& s, std::nothrow_t)
     {
-        const auto value = details::string_to_value<T>(s, std::nothrow);
-        if (!value.has_value())
-        {
-            return false;
-        }
-        result = T(*value); // no details::Enum::operator=(); it's on T
-        return true;
+        return details::toType(result, s, std::nothrow);
     }
     template<typename T>
     inline void toType(details::Enum<T>& result, const std::string& s)
     {
-        result = T(details::string_to_value<T>(s)); // no details::Enum::operator=(); it's on T
+        details::toType(result, s);
     }
 } // namespace Enum
 
@@ -335,7 +324,7 @@ namespace Enum
     #define SIX_Enum_END_enum NOT_SET = six::NOT_SET_VALUE };
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }
-    #define SIX_Enum_BEGIN_string_to_value_(name, values) inline const std::map<std::string, values>& six_Enum_string_to_value_(const name&) { \
+    #define SIX_Enum_BEGIN_string_to_value_(name, values) inline const std::map<std::string, values>& six_Enum_strings_to_values_(const name&) { \
         static const std::map<std::string, values> retval { SIX_Enum_map_entry_NOT_SET_(name), 
     #define SIX_Enum_BEGIN_string_to_value(name) SIX_Enum_BEGIN_string_to_value_(name, name::values)
     #define SIX_Enum_END_string_to_value }; return retval; }
