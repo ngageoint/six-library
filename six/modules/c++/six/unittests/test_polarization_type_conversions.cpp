@@ -211,6 +211,9 @@ static void test_ToString_(const std::string& testName, const std::string& strTy
     {
         const auto polarizationString = six::Enum::toString(type);
         TEST_ASSERT_EQ(strType, polarizationString);
+        const auto polarizationString_ = type.toString(); // uses "int" instead of TSixEnum::values
+        TEST_ASSERT_EQ(polarizationString_, polarizationString);
+
         TSixEnum pType;
         six::Enum::toType(pType, polarizationString);
         TEST_ASSERT_EQ(pType, type);

@@ -149,6 +149,13 @@ template<typename T>
 void test_six_toString_Exception(const std::string& testName)
 {
     auto v = six::Enum::cast<T>(1); // most enums have a value for 1
+
+    const auto s1 = v.toString(); // uses "int"
+    const auto s2 = six::Enum::toString(v); // uses T::values
+    TEST_ASSERT_EQ(s1, s2);
+    const auto s3 = six::toString(v);
+    TEST_ASSERT_EQ(s1, s3);
+
     v.set_value_(-2); // cause toString() to fail
     TEST_EXCEPTION(six::toString(v));
     v = T::NOT_SET;
