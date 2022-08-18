@@ -38,12 +38,31 @@
 #include <import/scene.h>
 #include <nitf/Enum.hpp>
 
+// This is messy file with a bunch of ugly macros ... it's all about making "strongly typed" enums
+// (i.e., "enum class" in C++11) and converting to/from strings. But, there are some complicatons ...
+//
+// First, pre-C++11 infrastructure (i.e., `struct Enum { enum values { one } };`) was already in place
+// and "widely used" (well, at least in SWIG bindings), changing it can break things.
+// 
+// Furthermore, SIDD 3.0 and SICD 1.3 introduced "OTHER*" strings for polarization types which is
+// exposed in C++ enums as having different strings for an enum value.  (Yes, other options are possible
+// but "OTHER*" strings are more of a one-off; the preference is for strongly-typed enums.)
+// This means that even if it were possible to switch everything to "enum class", there would still
+// need to be a way to handle "OTHER*"; this is fairly easy to do using a class.
+//
+// Unsurprisingly, the conversion to/from strings involves a bunch of boilerplate code; this would
+// be easier if there weren't a handful of special cases such as wanting spaces in the string:
+//    MyEnum::My_Value <-> "My Value"
+// 
+// And it would be nice to have `struct Enum { ... };` behave like `enum class Enum { ... };`
+// as much as possible.
+ 
  // This is to help developers ensure details::Enum<T> is the same as "enum class"
 #define SIX_Enum_as_class_ 1 // using six::details::Enum<T>
 //#define SIX_Enum_as_class_ 0 // most enums are "enum class", not six::details::Enum<T>
 // There can be up to THREE types in use:
 // * T, the type of the "enum"; e.g., six::MyEnum
-// * TEnum, the details::Enum<T> wrapper
+// * the details::Enum<T> wrapper, sometimes TEnum
 // * TValues, the actual enum; e.g., six::MyEnum::values { one, two, three }
 // 
 // When using "enum class" (SIX_Enum_as_class_=0), TEnum is not used (no wrapper)
@@ -129,26 +148,6 @@ namespace details
     }
 } // namespace details
 
-namespace Enum
-{
-    template<typename T>
-    inline bool toType(T& result, const std::string& s, std::nothrow_t)
-    {
-        const auto value = details::string_to_value<T>(s, std::nothrow);
-        if (!value.has_value())
-        {
-            return false;
-        }
-        result = *value;
-        return true;
-    }
-    template<typename T>
-    inline void toType(T& result, const std::string& s)
-    {
-        result = details::string_to_value<T>(s);
-    }
-} // namespace Enum
-
 namespace details
 {
     // Base type for all enums; avoids code duplication
@@ -194,18 +193,12 @@ namespace details
 
         std::string toString(bool throw_if_not_set = false) const
         {
-            if (throw_if_not_set && (value == NOT_SET_VALUE))
-            {
-                throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
-            }
-            return details::index(int_to_string(), value);
+            return details::index(int_to_string(), value, throw_if_not_set);
         }
 
-        static T toType(const std::string& v)
+        static T toType(const std::string& s)
         {
-            T retval;
-            six::Enum::toType(retval, v);
-            return retval;
+            return details::string_to_value<T>(s);
         }
 
         #ifdef SWIGPYTHON
@@ -229,7 +222,7 @@ namespace details
     inline TValues cast(const Enum<T>& e)
     {
       // assume Enum doesn't allow a bad value to get set
-      const auto value = static_cast<int>(e);
+      const auto value = static_cast<int>(e); // operator int() 
       return static_cast<TValues>(value);  // get  the "enum" value
     }
 
@@ -287,6 +280,22 @@ namespace Enum
         return details::toString(value, throw_if_not_set);
     }
 
+    template<typename T>
+    inline bool toType(details::Enum<T>& result, const std::string& s, std::nothrow_t)
+    {
+        const auto value = details::string_to_value<T>(s, std::nothrow);
+        if (!value.has_value())
+        {
+            return false;
+        }
+        result = T(*value); // no details::Enum::operator=(); it's on T
+        return true;
+    }
+    template<typename T>
+    inline void toType(details::Enum<T>& result, const std::string& s)
+    {
+        result = T(details::string_to_value<T>(s)); // no details::Enum::operator=(); it's on T
+    }
 } // namespace Enum
 
 
