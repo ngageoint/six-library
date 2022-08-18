@@ -172,9 +172,7 @@ namespace details
 
         static T toType(const std::string& s)
         {
-            const auto result = nitf::details::index(strings_to_values(), s);
-            const except::Exception ex(Ctxt("Unknown type '" + s + "'"));
-            return nitf::details::value(result, ex);
+            return details::string_to_value(strings_to_values(), s);
         }
 
         #ifdef SWIGPYTHON
@@ -255,7 +253,7 @@ namespace details
     }
 
     template<typename T>
-    inline bool toType(details::Enum<T>& result, const std::string& s, std::nothrow_t)
+    inline bool toType(Enum<T>& result, const std::string& s, std::nothrow_t)
     {
         const auto value = nitf::details::index(strings_to_values(result), s);
         if (!value.has_value())
@@ -266,9 +264,9 @@ namespace details
         return true;
     }
     template<typename T>
-    inline void toType(details::Enum<T>& result, const std::string& s)
+    inline void toType(Enum<T>& result, const std::string& s)
     {
-        const auto value = details::string_to_value(strings_to_values(result), s);
+        const auto value = string_to_value(strings_to_values(result), s);
         result = T(value);  // no details::Enum::operator=(); it's on T
     }
 } // namespace details
