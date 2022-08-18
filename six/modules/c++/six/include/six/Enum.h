@@ -92,6 +92,7 @@ namespace Enum
 
 namespace details
 {
+    // all of these routines take a value->string or string->value map
     template<typename T>
     inline T string_to_value(const std::map<std::string, T>& map, const std::string& v)
     {
@@ -223,26 +224,26 @@ namespace details
     }
 
     template<typename T, typename TValues = typename T::values>
-    inline const std::map<std::string, TValues>& strings_to_values(const Enum<T>&)
+    inline const std::map<std::string, TValues>& strings_to_values_(const Enum<T>&)
     {
         return six_Enum_strings_to_values_(T());
     }
     template<typename T, typename TValues = typename T::values>
-    inline const std::map<TValues, std::string>& values_to_strings(const Enum<T>&)
+    inline const std::map<TValues, std::string>& values_to_strings_(const Enum<T>&)
     {
-        static const auto retval = nitf::details::swap_key_value(strings_to_values(T()));
+        static const auto retval = nitf::details::swap_key_value(strings_to_values_(T()));
         return retval;
     }
 
     template<typename T>
     inline std::optional<std::string> toString(const Enum<T>& e, std::nothrow_t)
     {
-        return nitf::details::index(values_to_strings(e), to_underlying(e), std::nothrow);
+        return nitf::details::index(values_to_strings_(e), to_underlying(e), std::nothrow);
     }
     template<typename T>
     inline std::string toString(const Enum<T>& e, bool throw_if_not_set = false)
     {
-        return details::value_to_string(values_to_strings(e), to_underlying(e), throw_if_not_set);
+        return details::value_to_string(values_to_strings_(e), to_underlying(e), throw_if_not_set);
     }
 
     template<typename T>
@@ -255,7 +256,7 @@ namespace details
     template<typename T>
     inline bool toType(Enum<T>& result, const std::string& s, std::nothrow_t)
     {
-        const auto value = nitf::details::index(strings_to_values(result), s);
+        const auto value = nitf::details::index(strings_to_values_(result), s);
         if (!value.has_value())
         {
             return false;
@@ -266,7 +267,7 @@ namespace details
     template<typename T>
     inline void toType(Enum<T>& result, const std::string& s)
     {
-        const auto value = string_to_value(strings_to_values(result), s);
+        const auto value = string_to_value(strings_to_values_(result), s);
         result = T(value);  // no details::Enum::operator=(); it's on T
     }
 } // namespace details
@@ -283,7 +284,6 @@ namespace Enum
     {
         return details::toString(value, throw_if_not_set);
     }
-
     template<typename T>
     inline bool toType(details::Enum<T>& result, const std::string& s, std::nothrow_t)
     {
