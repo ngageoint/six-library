@@ -245,28 +245,30 @@ namespace details
     }
 
     template<typename T>
-    inline std::optional<std::string> toString(const Enum<T>& e, std::nothrow_t)
-    {
-        return nitf::details::index(Enum_values_to_strings_(e), to_underlying(e), std::nothrow);
-    }
-    template<typename T>
-    inline std::string toString(const Enum<T>& e, bool throw_if_not_set = false)
-    {
-        // This is more strongly-typed than e.toString()
-        return details::value_to_string(Enum_values_to_strings_(e), to_underlying(e), throw_if_not_set);
-    }
-
-    template<typename T>
     inline std::ostream& operator<<(std::ostream& os, const Enum<T>& e)
     {
-        os << toString(e);
+        os << e.toString();
         return os;
     }
+} // namespace details
 
+namespace Enum
+{
     template<typename T>
-    inline bool toType(Enum<T>& result, const std::string& s, std::nothrow_t)
+    inline std::optional<std::string> toString(const details::Enum<T>& e, std::nothrow_t)
     {
-        const auto value = nitf::details::index(Enum_strings_to_values_(result), s);
+        return nitf::details::index(details::Enum_values_to_strings_(e), details::to_underlying(e));
+    }
+    template<typename T>
+    inline std::string toString(const details::Enum<T>& e, bool throw_if_not_set = false)
+    {
+        // This is more strongly-typed than e.toString()
+        return details::value_to_string(details::Enum_values_to_strings_(e), details::to_underlying(e), throw_if_not_set);
+    }
+    template<typename T>
+    inline bool toType(details::Enum<T>& result, const std::string& s, std::nothrow_t)
+    {
+        const auto value = nitf::details::index(details::Enum_strings_to_values_(result), s);
         if (!value.has_value())
         {
             return false;
@@ -275,33 +277,9 @@ namespace details
         return true;
     }
     template<typename T>
-    inline void toType(Enum<T>& result, const std::string& s)
-    {
-        result = Enum<T>::toType(s);
-    }
-} // namespace details
-
-namespace Enum
-{
-    template<typename T>
-    inline std::optional<std::string> toString(const details::Enum<T>& value, std::nothrow_t)
-    {
-        return details::toString(value);
-    }
-    template<typename T>
-    inline std::string toString(const details::Enum<T>& value, bool throw_if_not_set = false)
-    {
-        return details::toString(value, throw_if_not_set);
-    }
-    template<typename T>
-    inline bool toType(details::Enum<T>& result, const std::string& s, std::nothrow_t)
-    {
-        return details::toType(result, s, std::nothrow);
-    }
-    template<typename T>
     inline void toType(details::Enum<T>& result, const std::string& s)
     {
-        details::toType(result, s);
+        result = details::Enum<T>::toType(s);
     }
 } // namespace Enum
 
