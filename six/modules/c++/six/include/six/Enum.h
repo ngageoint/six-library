@@ -119,8 +119,9 @@ namespace details
     }
 
 
-    // Base type for all enums; avoids code duplication
-    template<typename T> class Enum; // forward; want to call these routines from Enum, below
+    // Base type for all "class enums" (NOT C++11's "enum class"); avoids code duplication
+    // Want to call these routines from Enum class (below) while overloading on Enum<T>
+    template<typename T> class Enum; // forward
     template<typename T, typename TValues = typename T::values>
     inline const std::map<std::string, TValues>& strings_to_values_(const Enum<T>&)
     {
@@ -262,8 +263,7 @@ namespace details
     template<typename T>
     inline void toType(Enum<T>& result, const std::string& s)
     {
-        const auto value = string_to_value(strings_to_values_(result), s);
-        result = T(value);  // no details::Enum::operator=(); it's on T
+        result = Enum<T>::toType(s);
     }
 } // namespace details
 
