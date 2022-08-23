@@ -56,27 +56,30 @@ namespace lite
  * Use the Document to access the Element nodes contained within.
  * The DocumentParser will build a tree that you can use.
  */
-struct Document final
+struct Document // SOAPDocument derives :-(
 {
     //! Constructor
     Document(Element* rootNode = nullptr, bool own = true) :
         mRootNode(rootNode), mOwnRoot(own)
     {
     }
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
     explicit Document(std::unique_ptr<Element>&& rootNode) : // implicitly own=true
         Document(rootNode.release(), true /*own*/)
     {
     }
+    #endif // SWIG
 
     /*!
      * Destroy the xml tree.  This deletes the nodes if they exist
      * Careful, this may delete your copy if you are not careful
      */
-    ~Document()
+    virtual ~Document() noexcept(false)
     {
         destroy();
     }
 
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
     std::unique_ptr<Document>& clone(std::unique_ptr<Document>& doc) const
     {
         doc = coda_oss::make_unique<Document>();
@@ -91,6 +94,7 @@ struct Document final
         std::unique_ptr<Document> doc;
         return clone(doc).release();
     }
+    #endif // SWIG
 
     /*!
      * Factory-type method for creating a new Element
@@ -100,8 +104,10 @@ struct Document final
      * \return A new element
      */
     Element *createElement(const std::string & qname, const std::string & uri, std::string characterData = "");
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
     std::unique_ptr<Element> createElement(const xml::lite::QName&, const std::string& characterData) const;
     std::unique_ptr<Element> createElement(const xml::lite::QName&, const coda_oss::u8string& characterData) const;
+    #endif // SWIG
 
     /*!
      * Blanket destructor.  This thing deletes everything
@@ -138,10 +144,12 @@ struct Document final
      * \param element The node to set.
      */
     void setRootElement(Element * element, bool own = true);
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
     void setRootElement(std::unique_ptr<Element>&& element) // implicitly own=true
     {
         setRootElement(element.release(), true /*own*/);
     }
+    #endif // SWIG
 
     /*!
      * Retrieves the internal root element
@@ -153,11 +161,13 @@ struct Document final
             mOwnRoot = false;
         return mRootNode;
     }
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
     std::unique_ptr<Element>& getRootElement(std::unique_ptr<Element>& rootNode) // implicitly steal=true
     {
         rootNode.reset(getRootElement(true /*steal*/));
         return rootNode;
     }
+    #endif // SWIG
     Element *getRootElement() const
     {
         return mRootNode;

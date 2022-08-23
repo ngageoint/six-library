@@ -54,9 +54,8 @@ namespace lite
  * \brief This is the information for one 
  *        schema validation error.
  */
-class ValidationInfo
+struct ValidationInfo final
 {
-public:
     ValidationInfo(const std::string& message,
                    const std::string& level,
                    const std::string& file,

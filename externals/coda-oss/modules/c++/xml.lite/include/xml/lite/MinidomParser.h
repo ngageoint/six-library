@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_MINIDOM_PARSER_H__
-#define __XML_LITE_MINIDOM_PARSER_H__
+#ifndef CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_
+#define CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_
 #pragma once
 
 #include <memory>
@@ -56,7 +56,7 @@ namespace lite
  * bloat of the spec.  It was inspired by python's xml.dom.minidom
  * module.
  */
-struct MinidomParser final
+struct MinidomParser // SOAPParser inherits :-(
 {
     /*!
      *  Constructor.  Set our SAX ContentHandler.
@@ -64,7 +64,7 @@ struct MinidomParser final
     explicit MinidomParser(bool storeEncoding = true);
 
     //! Destructor.
-    ~MinidomParser() = default;
+    virtual ~MinidomParser() = default;
 
     MinidomParser(const MinidomParser&) = delete;
     MinidomParser& operator=(const MinidomParser&) = delete;
@@ -77,7 +77,7 @@ struct MinidomParser final
      *  \param is  This is the input stream to feed the parser
      *  \param size  This is the size of the stream to feed the parser
      */
-    void parse(io::InputStream& is, int size = io::InputStream::IS_END);
+    virtual void parse(io::InputStream& is, int size = io::InputStream::IS_END);
     void parse(io::InputStream& is, const void*pInitialEncoding, const void* pFallbackEncoding,
         int size = io::InputStream::IS_END);
 
@@ -145,4 +145,4 @@ inline Document& getDocument(MinidomParser& xmlParser)
 }
 }
 
-#endif
+#endif  // CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_

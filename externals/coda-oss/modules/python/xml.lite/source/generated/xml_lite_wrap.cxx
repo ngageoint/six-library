@@ -3249,36 +3249,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Element_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  xml::lite::Element *arg1 = (xml::lite::Element *) 0 ;
-  xml::lite::Element *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject *swig_obj[2] ;
-  
-  if (!SWIG_Python_UnpackTuple(args, "Element_clone", 2, 2, swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_xml__lite__Element, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Element_clone" "', argument " "1"" of type '" "xml::lite::Element *""'"); 
-  }
-  arg1 = reinterpret_cast< xml::lite::Element * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_xml__lite__Element,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Element_clone" "', argument " "2"" of type '" "xml::lite::Element const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Element_clone" "', argument " "2"" of type '" "xml::lite::Element const &""'"); 
-  }
-  arg2 = reinterpret_cast< xml::lite::Element * >(argp2);
-  (arg1)->clone((xml::lite::Element const &)*arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
 
 
 SWIGINTERN PyObject *_wrap_Element_attribute(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
@@ -5961,27 +5931,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Document_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  xml::lite::Document *arg1 = (xml::lite::Document *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  xml::lite::Document *result = 0 ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Document_clone" "', argument " "1"" of type '" "xml::lite::Document const *""'"); 
-  }
-  arg1 = reinterpret_cast< xml::lite::Document * >(argp1);
-  result = (xml::lite::Document *)((xml::lite::Document const *)arg1)->clone();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Document, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
 
 
 SWIGINTERN PyObject *_wrap_Document_createElement__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
@@ -7163,7 +7112,6 @@ static PyMethodDef SwigMethods[] = {
 		"Element(std::string const & qname, std::string const & uri=\"\", std::string const & characterData=\"\")\n"
 		"new_Element(Element element) -> Element\n"
 		""},
-	 { "Element_clone", _wrap_Element_clone, METH_VARARGS, "Element_clone(Element self, Element element)"},
 	 { "Element_attribute", _wrap_Element_attribute, METH_VARARGS, "Element_attribute(Element self, std::string const & s) -> std::string &"},
 	 { "Element_getElementByTagNameNS", _wrap_Element_getElementByTagNameNS, METH_VARARGS, "\n"
 		"Element_getElementByTagNameNS(Element self, std::nothrow_t arg2, std::string const & qname, bool recurse=False) -> Element\n"
@@ -7220,7 +7168,6 @@ static PyMethodDef SwigMethods[] = {
 	 { "Element_swiginit", Element_swiginit, METH_VARARGS, NULL},
 	 { "new_Document", _wrap_new_Document, METH_VARARGS, "Document(Element rootNode=None, bool own=True)"},
 	 { "delete_Document", _wrap_delete_Document, METH_O, "delete_Document(Document self)"},
-	 { "Document_clone", _wrap_Document_clone, METH_O, "Document_clone(Document self) -> Document"},
 	 { "Document_createElement", _wrap_Document_createElement, METH_VARARGS, "\n"
 		"Document_createElement(Document self, std::string const & qname, std::string const & uri, std::string characterData=\"\") -> Element\n"
 		""},

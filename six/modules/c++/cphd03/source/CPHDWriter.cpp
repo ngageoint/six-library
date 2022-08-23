@@ -152,7 +152,7 @@ void CPHDWriter::writeMetadata(size_t vbmSize,
                                const std::string& classification,
                                const std::string& releaseInfo)
 {
-    const std::string xmlMetadata(CPHDXMLControl().toXMLString(mMetadata));
+    const auto xmlMetadata(CPHDXMLControl().toXMLString(mMetadata));
 
     FileHeader header;
     if (!classification.empty())

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_ELEMENT_H__
-#define __XML_LITE_ELEMENT_H__
+#ifndef CODA_OSS_xml_lite_Element_h_INCLUDED_
+#define CODA_OSS_xml_lite_Element_h_INCLUDED_
 #pragma once
 
 #include <memory>
@@ -60,7 +60,7 @@ namespace lite
  * This class stores all of the element information about an XML
  * document.
  */
-struct Element final
+struct Element // SOAPElement derives :-(
 {
     Element() = default;
 
@@ -81,12 +81,14 @@ struct Element final
         setCharacterData(characterData);
     }
 
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
     static std::unique_ptr<Element> create(const std::string& qname, const std::string& uri = "", const std::string& characterData = "");
     static std::unique_ptr<Element> create(const xml::lite::QName&, const std::string& characterData = "");
     static std::unique_ptr<Element> create(const xml::lite::QName&, const coda_oss::u8string&);
-
+    #endif // SWIG
+    
     //! Destructor
-    ~Element()
+    virtual ~Element() noexcept(false)
     {
         destroyChildren();
     }
@@ -392,6 +394,12 @@ struct Element final
         mName.getAssociatedUri(result);
     }
 
+    void setPrefix(const std::string& prefix)
+    {
+        mName.setPrefix(prefix);
+    }
+
+
     /*!
      *  Adds a child element to this element
      *  \param node the child element to add
@@ -402,7 +410,9 @@ struct Element final
      *  Adds a child element to this element
      *  \param node the child element to add
      */
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
     virtual Element& addChild(std::unique_ptr<Element>&& node);
+    #endif // SWIG
     #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
     virtual Element& addChild(mem::auto_ptr<Element> node);
     #endif
@@ -443,6 +453,11 @@ struct Element final
         mParent = parent;
     }
 
+protected:
+    //! The children of this element
+    std::vector<Element*> mChildren;
+    xml::lite::QName mName;
+
 private:
     void changePrefix(Element* element,
                       const std::string& prefix,
@@ -455,9 +470,6 @@ private:
     void depthPrint(io::OutputStream& stream, int depth, const std::string& formatter, bool isConsoleOutput = false) const;
 
     Element* mParent = nullptr;
-    //! The children of this element
-    std::vector<Element*> mChildren;
-    xml::lite::QName mName;
     //! The attributes for this element
     xml::lite::Attributes mAttributes;
     coda_oss::u8string mCharacterData;
@@ -564,4 +576,4 @@ inline Element* addNewOptionalElement(const xml::lite::QName& name, const coda_o
 }
 }
 
-#endif
+#endif // CODA_OSS_xml_lite_Element_h_INCLUDED_

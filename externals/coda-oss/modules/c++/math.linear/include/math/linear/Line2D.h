@@ -57,6 +57,13 @@ public:
     double distanceToPoint(const Point& P) const;
     //Return a point that is a distance d from the point P which is on the line
     Point offsetFromPoint(const Point& P, double distance) const;
+    //
+    bool equals(const Line2D& other) const;
+
+    friend bool operator==(const Line2D& lhs, const Line2D& rhs)
+    {
+        return lhs.equals(rhs);
+    }
 private:
     Line2DType mType;
     double mSlope;

@@ -34,6 +34,66 @@
 #include "str/Encoding.h"
 #include "str/EncodedString.h"
 
+enum class PlatformType
+{
+    Windows,
+    Linux,
+    // MacOS
+};
+
+#if _WIN32
+static auto Platform = PlatformType::Windows;
+#else
+static auto Platform = PlatformType::Linux;
+#endif
+
+inline std::u16string to_u16string(std::string::const_pointer s, size_t sz, bool is_utf8 /* is 's' UTF-8? */)
+{
+    if (is_utf8)
+    {
+        return str::to_u16string(str::cast<coda_oss::u8string::const_pointer>(s), sz);
+    }
+    return str::to_u16string(str::cast<str::W1252string::const_pointer>(s), sz);
+}
+inline str::ui16string to_ui16string(std::string::const_pointer s, size_t sz, bool is_utf8 /* is 's' UTF-8? */)
+{
+    if (is_utf8)
+    {
+        return str::to_ui16string(str::cast<coda_oss::u8string::const_pointer>(s), sz);
+    }
+    return str::to_ui16string(str::cast<str::W1252string::const_pointer>(s), sz);
+}
+
+static std::string to_native(coda_oss::u8string::const_pointer p, size_t sz)
+{
+    if (Platform == PlatformType::Windows)
+    {
+        std::string retval;
+        str::details::utf8to1252(p, sz, retval);
+        return retval;
+    }
+    if (Platform == PlatformType::Linux)
+    {
+        return str::cast<std::string::const_pointer>(p); // copy
+    }
+    throw std::logic_error("Unknown platform.");
+}
+
+static std::string to_native(str::W1252string::const_pointer p, size_t sz)
+{
+    if (Platform == PlatformType::Windows)
+    {    
+        return str::cast<std::string::const_pointer>(p); // copy
+    }
+    if (Platform == PlatformType::Linux)
+    {
+        std::string retval;
+        str::details::w1252to8(p, sz, retval);
+        return retval;
+    }
+    throw std::logic_error("Unknown platform.");
+}
+
 template <typename CharT>
 inline coda_oss::span<const char> make_span(const CharT* s)
 {
@@ -56,40 +116,71 @@ str::EncodedStringView::EncodedStringView(const str::W1252string& s) : mString(m
 
 std::string str::EncodedStringView::native() const
 {
-    return str::details::to_native(mString.data(), mString.size(), mIsUtf8);
+    const auto s = mString.data();
+    const auto sz = mString.size();
+    return mIsUtf8 ? to_native(str::cast<coda_oss::u8string::const_pointer>(s), sz)
+                   : to_native(str::cast<str::W1252string::const_pointer>(s), sz);
 }
 
 coda_oss::u8string str::EncodedStringView::u8string() const
 {
-    return str::details::to_u8string(mString.data(), mString.size(), mIsUtf8);
+    return mIsUtf8 ?
+        str::cast<coda_oss::u8string::const_pointer>(mString.data()) :  // copy
+        str::to_u8string(str::cast<str::W1252string::const_pointer>(mString.data()), mString.size());
 }
-std::string& str::EncodedStringView::toUtf8(std::string& result) const
+std::string str::EncodedStringView::asUtf8() const
 {
-    return str::details::to_u8string(mString.data(), mString.size(), mIsUtf8, result);
+    const auto result = u8string();
+    return str::c_str<std::string>(result);  // cast & copy
 }
 
 std::u16string str::EncodedStringView::u16string() const
 {
-    return str::details::to_u16string(mString.data(), mString.size(), mIsUtf8);
+    return ::to_u16string(mString.data(), mString.size(), mIsUtf8);
 }
 str::ui16string str::EncodedStringView::ui16string_() const
 {
-    return str::details::to_ui16string(mString.data(), mString.size(), mIsUtf8);
+    return ::to_ui16string(mString.data(), mString.size(), mIsUtf8);
 }
 
+inline std::u32string to_u32string(std::string::const_pointer s, size_t sz, bool is_utf8 /* is 's' UTF-8? */)
+{
+    if (is_utf8)
+    {
+        return str::to_u32string(str::cast<coda_oss::u8string::const_pointer>(s), sz);
+    }
+    return str::to_u32string(str::cast<str::W1252string::const_pointer>(s), sz);
+}
 std::u32string str::EncodedStringView::u32string() const
 {
-    return str::details::to_u32string(mString.data(), mString.size(), mIsUtf8);
-}
-std::wstring str::EncodedStringView::wstring() const  // UTF-16 on Windows, UTF-32 on Linux
-{
-    return str::details::to_wstring(mString.data(), mString.size(), mIsUtf8);
+    return ::to_u32string(mString.data(), mString.size(), mIsUtf8);
 }
 
+std::wstring str::EncodedStringView::wstring() const  // UTF-16 on Windows, UTF-32 on Linux
+{
+    const auto p = mString.data();
+    const auto sz = mString.size();
+    const auto s =
+    // Need to use #ifdef's because str::cast() checks to be sure the sizes are correct.
+    #if _WIN32
+    ::to_u16string(p, sz, mIsUtf8);  // std::wstring is UTF-16 on Windows
+    #endif
+    #if !_WIN32
+    ::to_u32string(p, sz, mIsUtf8);  // std::wstring is UTF-32 on Linux
+    #endif    
+    return str::c_str<std::wstring>(s); // copy
+}
 
 str::W1252string str::EncodedStringView::w1252string() const
 {
-    return str::details::to_w1252string(mString.data(), mString.size(), mIsUtf8);
+    return mIsUtf8 ?
+        str::to_w1252string(str::cast<coda_oss::u8string ::const_pointer>(mString.data()), mString.size()) :
+        str::cast<str::W1252string ::const_pointer>(mString.data());  // copy
+}
+std::string str::EncodedStringView::asWindows1252() const
+{
+    const auto result = w1252string();
+    return str::c_str<std::string>(result); // cast & copy
 }
 std::string str::EncodedStringView::asWindows1252() const
 {

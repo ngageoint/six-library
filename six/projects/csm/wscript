@@ -1,4 +1,4 @@
-MODULE_DEPS        = 'six.sicd six.sidd std sys str except'
+MODULE_DEPS        = 'six.sicd six.sidd sys str std coda-oss gsl except'
 PLUGIN             = 'CSM'
 PLUGIN_VERSION     = '115'
 REMOVEPLUGINPREFIX = True
