@@ -508,8 +508,8 @@ public:
       //  GeometricModel::getCrossCovarianceMatrix() be called instead.
       //<
 
-       std::vector<double> getUnmodeledError(const ImageCoord& imagePt) const
-      { return getUnmodeledCrossCovariance(imagePt, imagePt); }
+   inline std::vector<double> getUnmodeledError(const ImageCoord& imagePt) const
+   { return getUnmodeledCrossCovariance(imagePt, imagePt); }
       //> This method returns the 2x2 line and sample covariance (in pixels
       //  squared) at the given imagePt for any model error not accounted for
       //  by the model parameters.
