@@ -19,9 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "sys/FileFinder.h"
 
 #include <iterator>
-#include "sys/FileFinder.h"
+#include <stdexcept>
+
 #include "sys/DirectoryEntry.h"
 #include "sys/Path.h"
 
@@ -202,3 +204,41 @@ std::vector<std::string> sys::FileFinder::search(
     return files;
 }
 
+coda_oss::filesystem::path sys::test::findRootDirectory(const coda_oss::filesystem::path& p, const std::string& rootName,
+        std::function<bool(const coda_oss::filesystem::path&)> isRoot)
+{
+    const auto isRootDirectory = [&](const coda_oss::filesystem::path& p) { return is_directory(p) && isRoot(p); };
+
+    // Does the given path look good?
+    if (isRootDirectory(p))
+    {
+        return p;
+    }
+
+    // Nope, maybe the directory we're interested in is here
+    auto root = p / rootName;
+    if (isRootDirectory(root))
+    {
+        return root;
+    }
+
+    // We put other code in an "externals" directory; try that.
+    const auto externals = p / "externals";
+    if (is_directory(externals))
+    {
+        root = externals / rootName;
+        if (isRootDirectory(root))
+        {
+            return root;
+        }
+    }
+
+    // Once we're at a .git directory, we have to go down, not up ... or fail.
+    if (!is_directory(p / ".git"))
+    {
+        return findRootDirectory(p.parent_path(), rootName, isRoot);
+    }
+    
+    // TODO: since we're in the "FileFinder" module, maybe try a bit hard to find "rootName"?
+    throw std::invalid_argument("Can't find '" + rootName + "' root directory");
+}
