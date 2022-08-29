@@ -125,7 +125,8 @@ static fs::path findRoot(fs::path& exec_root, fs::path& cwd_root)
 	catch (const std::invalid_argument&) { }
 
 	// CWD can change while the program is running
-	return sys::test::findRootDirectory(current_path(), "" /*rootName*/, isRoot);
+	cwd_root = sys::test::findRootDirectory(current_path(), "" /*rootName*/, isRoot);
+	return cwd_root;
 }
 static fs::path findRoot()
 {
@@ -232,9 +233,19 @@ static fs::path buildDir(const fs::path& relativePath)
 	return install / relativePath;
 }
 
-std::string nitf::Test::buildPluginsDir()
+std::string nitf::Test::buildPluginsDir(const std::string& dir)
 {
-	const auto plugins = buildDir(fs::path("share") / "nitf" / "plugins");
+	const auto buildDir_ = buildDir("");
+	auto plugins = buildDir_ / "share" / "nitf" / "plugins";
+	if (!is_directory(plugins))
+	{
+		// Developers might not set things up for "cmake --install ."
+		plugins = buildDir_.parent_path() / "modules" / "c" / dir;
+		if (!is_directory(plugins))
+		{
+			throw std::logic_error("Can't find 'plugins' directory: " + plugins.string());
+		}
+	}
 	return plugins.string();
 }
 

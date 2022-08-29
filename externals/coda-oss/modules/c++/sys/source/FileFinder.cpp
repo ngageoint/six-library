@@ -216,20 +216,23 @@ coda_oss::filesystem::path sys::test::findRootDirectory(const coda_oss::filesyst
     }
 
     // Nope, maybe the directory we're interested in is here
-    auto root = p / rootName;
-    if (isRootDirectory(root))
+    if (!rootName.empty())
     {
-        return root;
-    }
-
-    // We put other code in an "externals" directory; try that.
-    const auto externals = p / "externals";
-    if (is_directory(externals))
-    {
-        root = externals / rootName;
+        auto root = p / rootName;
         if (isRootDirectory(root))
         {
             return root;
+        }
+
+        // We put other code in an "externals" directory; try that.
+        const auto externals = p / "externals";
+        if (is_directory(externals))
+        {
+            root = externals / rootName;
+            if (isRootDirectory(root))
+            {
+                return root;
+            }
         }
     }
 
