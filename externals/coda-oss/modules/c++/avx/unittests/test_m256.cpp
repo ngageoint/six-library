@@ -47,7 +47,7 @@ TEST_CASE(extractf)
     val = avx::mm256_extractf(ymm, 7);
     if (val) {} // suppress compiler warning about unused "val"
   */
-  TEST_ASSERT_TRUE(true);
+  TEST_ASSERT_SUCCESS;
 }
     
 

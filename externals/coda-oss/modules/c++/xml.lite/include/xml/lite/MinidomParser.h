@@ -116,6 +116,15 @@ struct MinidomParser // SOAPParser inherits :-(
     }
 
     /*!
+     * Handler accessor
+     * \return The handler by reference
+     */
+    MinidomHandler& getHandler()
+    {
+        return mHandler;
+    }
+
+    /*!
      *  This is the public interface for resetting the
      *  XML document.  This will call the handler version of this
      *  function, which will delete the old document.

@@ -33,6 +33,7 @@
   using xml::lite::Document;
   using xml::lite::MinidomParser;
   using xml::lite::XMLReader;
+  using xml::lite::MinidomHandler;
 %}
 
 %ignore xml::lite::Element::setAttributes;
