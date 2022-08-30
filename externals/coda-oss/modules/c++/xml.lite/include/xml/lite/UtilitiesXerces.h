@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_UTILITIES_XERCES_H__
-#define __XML_LITE_UTILITIES_XERCES_H__
+#ifndef CODA_OSS_xml_lite_UtilitiesXerces_h_INCLUDED_
+#define CODA_OSS_xml_lite_UtilitiesXerces_h_INCLUDED_
 
 #include <stdint.h>
 
@@ -400,7 +400,7 @@ protected:
 *  Our error handler implementation, then, simply calls the raise,
 *  and warning macros in the factory.
 */
-struct XercesErrorHandler : public XercesErrorHandlerInterface_T
+struct XercesErrorHandler final : public XercesErrorHandlerInterface_T
 {
     XercesErrorHandler() = default;
     XercesErrorHandler(const XercesErrorHandler&) = delete;
@@ -413,24 +413,22 @@ struct XercesErrorHandler : public XercesErrorHandlerInterface_T
      *  __warning__(message);
      *  \param exception  The exception
      */
-    virtual void warning(const SAXParseException &exception);
+    void warning(const SAXParseException &exception) override;
 
-    virtual void error (const SAXParseException &exception);
+    void error(const SAXParseException& exception) override;
 
-    virtual void fatalError (const SAXParseException &exception);
+    void fatalError(const SAXParseException& exception) override;
 
     // Useless??
-    virtual void resetErrors() {}
+    void resetErrors() override {}
 };
 
 /*!
  *  \class XercesContext
  *  \brief This class safely creates and destroys Xerces
  */
-class XercesContext
+struct XercesContext final
 {
-public:
-
     //! Constructor
     XercesContext();
     
@@ -440,7 +438,6 @@ public:
     void destroy();
     
 private:
-
     static std::mutex mMutex;
     bool mIsDestroyed;
 };
@@ -449,4 +446,4 @@ private:
 
 #endif
 
-#endif
+#endif  // CODA_OSS_xml_lite_UtilitiesXerces_h_INCLUDED_

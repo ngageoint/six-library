@@ -80,15 +80,9 @@ class Element(object):
         r"""
         __init__(Element self) -> Element
         __init__(Element self, std::string const & qname, std::string const & uri="", std::string const & characterData="") -> Element
-        __init__(Element self, std::string const & qname, std::string const & uri, std::string const & characterData, xml::lite::StringEncoding encoding) -> Element
-        __init__(Element self, std::string const & qname, std::string const & uri, coda_oss::u8string const & characterData) -> Element
         __init__(Element self, Element element) -> Element
         """
         _xml_lite.Element_swiginit(self, _xml_lite.new_Element(*args))
-
-    def clone(self, element: "Element") -> "void":
-        r"""clone(Element self, Element element)"""
-        return _xml_lite.Element_clone(self, element)
 
     def attribute(self, s: "std::string const &") -> "std::string &":
         r"""attribute(Element self, std::string const & s) -> std::string &"""
@@ -137,14 +131,12 @@ class Element(object):
     def _print(self, *args) -> "void":
         r"""
         _print(Element self, io::OutputStream & stream)
-        _print(Element self, io::OutputStream & stream, xml::lite::StringEncoding arg3)
         """
         return _xml_lite.Element__print(self, *args)
 
     def prettyPrint(self, *args) -> "void":
         r"""
         prettyPrint(Element self, io::OutputStream & stream, std::string const & formatter="    ")
-        prettyPrint(Element self, io::OutputStream & stream, xml::lite::StringEncoding arg3, std::string const & formatter="    ")
         """
         return _xml_lite.Element_prettyPrint(self, *args)
 
@@ -155,27 +147,15 @@ class Element(object):
         """
         return _xml_lite.Element_hasElement(self, *args)
 
-    def getEncoding(self) -> "coda_oss::optional< xml::lite::StringEncoding > const &":
-        r"""getEncoding(Element self) -> coda_oss::optional< xml::lite::StringEncoding > const &"""
-        return _xml_lite.Element_getEncoding(self)
-
     def getCharacterData(self, *args) -> "void":
         r"""
         getCharacterData(Element self) -> std::string
-        getCharacterData(Element self, std::string & result) -> coda_oss::optional< xml::lite::StringEncoding > const
-        getCharacterData(Element self, coda_oss::u8string & result)
         """
         return _xml_lite.Element_getCharacterData(self, *args)
-
-    def setCharacterData_(self, characters: "std::string const &", arg3: "xml::lite::StringEncoding const *") -> "void":
-        r"""setCharacterData_(Element self, std::string const & characters, xml::lite::StringEncoding const * arg3)"""
-        return _xml_lite.Element_setCharacterData_(self, characters, arg3)
 
     def setCharacterData(self, *args) -> "void":
         r"""
         setCharacterData(Element self, std::string const & characters)
-        setCharacterData(Element self, std::string const & characters, xml::lite::StringEncoding arg3)
-        setCharacterData(Element self, coda_oss::u8string const & characters)
         """
         return _xml_lite.Element_setCharacterData(self, *args)
 
@@ -236,15 +216,9 @@ class Document(object):
         _xml_lite.Document_swiginit(self, _xml_lite.new_Document(rootNode, own))
     __swig_destroy__ = _xml_lite.delete_Document
 
-    def clone(self) -> "xml::lite::Document *":
-        r"""clone(Document self) -> Document"""
-        return _xml_lite.Document_clone(self)
-
     def createElement(self, *args) -> "xml::lite::Element *":
         r"""
         createElement(Document self, std::string const & qname, std::string const & uri, std::string characterData="") -> Element
-        createElement(Document self, std::string const & qname, std::string const & uri, std::string const & characterData, xml::lite::StringEncoding arg5) -> Element
-        createElement(Document self, std::string const & qname, std::string const & uri, coda_oss::u8string const & characterData) -> Element
         """
         return _xml_lite.Document_createElement(self, *args)
 
@@ -283,8 +257,8 @@ class MinidomParser(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
     __repr__ = _swig_repr
 
-    def __init__(self, storeEncoding: "bool"=False):
-        r"""__init__(MinidomParser self, bool storeEncoding=False) -> MinidomParser"""
+    def __init__(self, storeEncoding: "bool"=True):
+        r"""__init__(MinidomParser self, bool storeEncoding=True) -> MinidomParser"""
         _xml_lite.MinidomParser_swiginit(self, _xml_lite.new_MinidomParser(storeEncoding))
     __swig_destroy__ = _xml_lite.delete_MinidomParser
 
@@ -317,10 +291,6 @@ class MinidomParser(object):
     def preserveCharacterData(self, preserve: "bool") -> "void":
         r"""preserveCharacterData(MinidomParser self, bool preserve)"""
         return _xml_lite.MinidomParser_preserveCharacterData(self, preserve)
-
-    def storeEncoding(self, preserve: "bool") -> "void":
-        r"""storeEncoding(MinidomParser self, bool preserve)"""
-        return _xml_lite.MinidomParser_storeEncoding(self, preserve)
 
 # Register MinidomParser in _xml_lite:
 _xml_lite.MinidomParser_swigregister(MinidomParser)

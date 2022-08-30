@@ -62,7 +62,7 @@ bool testEqual(const std::string& inPathname, const std::string& outPathname,
     const std::unique_ptr<cphd::Metadata> metadata =
             xmlControl.fromXML(xmlParser.getDocument(), schemas);
 
-    const std::string xmlMetadata(xmlControl.toXMLString(*metadata));
+    const auto xmlMetadata(xmlControl.toXMLString(*metadata));
 
     //Output XML file to temp file
     io::FileOutputStream ofs(outPathname);

@@ -20,10 +20,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "str/EncodedString.h"
 
 #include <type_traits>
-
-#include "str/EncodedString.h"
 
 void str::EncodedString::assign(coda_oss::u8string::const_pointer s)
 {

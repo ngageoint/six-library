@@ -246,6 +246,26 @@ Line2D::Point Line2D::offsetFromPoint(const Point& P, double distance) const
     ret.col += distance * std::sin(theta);
     return ret;
 }
+
+bool Line2D::equals(const Line2D& other) const
+{
+    if (mType == other.mType)
+    {
+        if (mType != Line2D::NORMAL)
+        {
+            return true;
+        }
+        else
+        {
+            if ((getSlope() == other.getSlope())
+                && (getYIntercept() == other.getYIntercept()))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 }
 }
 
