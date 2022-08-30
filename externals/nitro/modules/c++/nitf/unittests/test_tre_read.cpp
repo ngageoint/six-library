@@ -2,6 +2,7 @@
 #include <std/filesystem>
 
 #include <import/nitf.h>
+#include <nitf/UnitTests.hpp>
 
 #include "TestCase.h"
 
@@ -93,36 +94,9 @@ files, this bug may allow an attacker to cause a denial of service.
 static std::string testName;
 const char* output_file = "test_writer_3++.nitf";
 
-static const char* argv0;
-static bool is_vs_gtest()
+static std::filesystem::path findInputFile_(const std::string& name)
 {
-    return argv0 == NULL;
-}
-
-using path = std::filesystem::path;
-static path findInputFile_(const std::string& name)
-{
-    const auto inputFile = path("modules") / "c++" / "nitf" / "unittests" / name;
-
-    if (is_vs_gtest()) // running Google Test in Visual Studio
-    {
-        const auto root= std::filesystem::current_path().parent_path().parent_path();
-        return root / inputFile;
-    }
-
-    const auto exe = absolute(path(argv0));
-    auto root = exe.parent_path();
-    do
-    {
-        auto retval = root / inputFile;
-        if (exists(retval))
-        {
-            return retval;
-        }
-        root = root.parent_path();
-    } while (!root.empty());
-
-    return inputFile;
+    return nitf::Test::findInputFile(std::filesystem::path("modules") / "c++" / "nitf" / "unittests" / name);
 }
 static const char* findInputFile(const char* name)
 {
@@ -272,8 +246,7 @@ TEST_CASE(test_readRESubheader_crash)
 }
 
 TEST_MAIN(
-    (void)argc;
-argv0 = argv[0];
+    (void)argc; (void)argv;
 
 TEST_CHECK(test_nitf_Record_unmergeTREs_crash); // 2
 TEST_CHECK(test_defaultRead_crash); // 3

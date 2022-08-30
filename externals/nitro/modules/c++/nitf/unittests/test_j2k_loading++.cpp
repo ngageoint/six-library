@@ -322,7 +322,7 @@ static void test_decompress_nitf_to_sio_(const path& inputPathname, const path& 
 }
 TEST_CASE(test_j2k_decompress_nitf_to_sio)
 {
-    const auto pluginsDir = nitf::Test::buildPluginsDir();
+    const auto pluginsDir = nitf::Test::buildPluginsDir("j2k");
     sys::OS().setEnv("NITF_PLUGIN_PATH", pluginsDir, true /*overwrite*/);
 
     const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
@@ -331,7 +331,7 @@ TEST_CASE(test_j2k_decompress_nitf_to_sio)
 
 TEST_CASE(test_j2k_compress_raw_image)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir("j2k"), true /*overwrite*/);
 
     const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
     const path outputPathname = "test_j2k_compress_raw_image.sio";

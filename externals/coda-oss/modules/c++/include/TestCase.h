@@ -163,11 +163,15 @@ inline int main(TFunc f)
 #define TEST_CHECK(X) try{ X(std::string(#X)); std::cerr << #X << ": PASSED\n"; } \
   catch(const except::Throwable& ex) { test::diePrintf("%s: FAILED: Exception thrown: %s\n", #X, ex.toString().c_str()); } \
   catch(const except::Throwable11& ex) { test::diePrintf("%s: FAILED: Exception thrown: %s\n", #X, ex.what()); }
+
 #define TEST_ASSERT_NULL(X) if ((X) != nullptr) { test_diePrintf0("%s (%s,%s,%d): FAILED: Value should be NULL\n"); }
 #define TEST_ASSERT_NOT_NULL(X) if ((X) == nullptr) { test_diePrintf0("%s (%s,%s,%d): FAILED: Value should *not* be NULL\n"); }
 #define TEST_ASSERT_FALSE(X) if ((X)) { test_diePrintf0("%s (%s,%s,%d): FAILED: Value should evaluate to false\n"); }
 #define TEST_ASSERT_TRUE(X) if (!(X)) { test_diePrintf0("%s (%s,%s,%d): FAILED: Value should evaluate to true\n"); }
 #define TEST_ASSERT(X) TEST_ASSERT_TRUE(X)
+#define TEST_ASSERT_SUCCESS TEST_ASSERT_TRUE(true) // for "We better get here, always."
+#define TEST_ASSERT_FAILURE TEST_ASSERT_TRUE(false) // for "This should NEVER happen."
+
 #define TEST_ASSERT_ALMOST_EQ_EPS(X1, X2, EPS) test::assert_almost_eq_eps(X1, X2, EPS, testName, __FILE__, SYS_FUNC, __LINE__)
 #define TEST_ASSERT_ALMOST_EQ(X1, X2) TEST_ASSERT_ALMOST_EQ_EPS(X1, X2,  std::numeric_limits<float>::epsilon())
 #define TEST_FAIL(msg) test_diePrintf1("%s (%s,%s,%d): FAILED: %s\n", str::toString(msg).c_str())
