@@ -84,7 +84,7 @@ TEST_CASE(constructValidImageWriter)
 
 TEST_CASE(changeFileHeader)
 {
-	const auto inputPathname = nitf::Test::buildFileDir(path("modules") / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
+	const auto inputPathname = nitf::Test::findInputFile(path("modules") / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
     TEST_ASSERT_TRUE(std::filesystem::is_regular_file(inputPathname));
 	const auto outputPathname = nitf::Test::buildFileDir(path("outputPathname.ntf")).string();
 
