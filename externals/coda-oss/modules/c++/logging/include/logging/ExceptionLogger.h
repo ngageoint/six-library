@@ -43,20 +43,24 @@ namespace logging
 class ExceptionLogger
 {
 protected:
-    sys::Mutex mLock;
+    mutable sys::Mutex mLock;
 
-    Logger* mLogger;
+    Logger* mLogger = nullptr;
 
-    bool mHasLogged;
+    bool mHasLogged = false;
 
 public:
-    ExceptionLogger(Logger* logger) : mLogger(logger), mHasLogged(false) 
+    ExceptionLogger(Logger* logger) : mLogger(logger)
     {}
 
-    virtual ~ExceptionLogger() {}
+    virtual ~ExceptionLogger() = default;
+    ExceptionLogger(const ExceptionLogger&) = delete;
+    ExceptionLogger& operator=(const ExceptionLogger&) = delete;
+    ExceptionLogger(ExceptionLogger&&) = delete;
+    ExceptionLogger& operator=(ExceptionLogger&&) = delete;  
 
     //! Tells whether it has logged at least one exception
-    bool hasLogged()
+    bool hasLogged() const
     {
         mt::CriticalSection<sys::Mutex> crit(&mLock);
         return mHasLogged;
