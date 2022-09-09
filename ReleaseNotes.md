@@ -2,6 +2,11 @@
 
 # SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
 
+## [Version 3.2.0](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.0); August 30, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-30_cpp14](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30_cpp14)
+* [nitro](https://github.com/mdaus/nitro) version [2.11.0](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.0)
+* This version is identical to [Version 3.1.14](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.14) except that C++14 is now required.
+
 ## [Version 3.1.14](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.14); August 30, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30)
 * [nitro](https://github.com/mdaus/nitro) version [2.10.12](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.12)
