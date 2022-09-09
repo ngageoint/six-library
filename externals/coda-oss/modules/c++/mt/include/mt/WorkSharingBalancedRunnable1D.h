@@ -247,7 +247,8 @@ void runWorkSharingBalanced1D(size_t numElements,
     {
         threadPoolEndElements.push_back(numElements);
 
-        threadPoolCounters.push_back(std::make_shared<sys::AtomicCounter>(0));
+        constexpr size_t zero = 0;
+        threadPoolCounters.push_back(std::make_shared<sys::AtomicCounter>(zero));
 
         const types::Range range(0, numElements);
         WorkSharingBalancedRunnable1D<OpT>(range,

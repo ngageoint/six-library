@@ -6,7 +6,7 @@ jobs:
   build-cmake-windows:
     strategy:
       matrix:
-        os: [windows-2019]
+        os: [windows-latest]
         python-version: ['3.7']
     name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}

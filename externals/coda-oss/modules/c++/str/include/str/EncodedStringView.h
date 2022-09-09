@@ -193,9 +193,14 @@ inline bool operator!=(const coda_oss::u8string& lhs, const EncodedStringView& r
     return !(lhs == rhs);
 }
 
+inline std::string toString(const EncodedStringView& esv) 
+{
+    return esv.native();
+}
+
 inline std::ostream& operator<<(std::ostream& os, const EncodedStringView& esv)
 {
-    os << esv.native();
+    os << toString(esv);
     return os;
 }
 

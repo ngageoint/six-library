@@ -74,7 +74,7 @@ struct MinidomHandler final : public ContentHandler
     //! Constructor.  Uses default document
     MinidomHandler() 
     {
-        setDocument(coda_oss::make_unique<Document>());
+        setDocument(std::make_unique<Document>());
     }
 
     //! Destructor

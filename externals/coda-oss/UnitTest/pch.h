@@ -85,6 +85,7 @@
 #include <sys/Runnable.h>
 #include <sys/Thread.h>
 #include <sys/Mutex.h>
+#include <sys/FileFinder.h>
 #include <import/sys.h>
 #include <import/math/linear.h>
 #include <import/math/poly.h>
