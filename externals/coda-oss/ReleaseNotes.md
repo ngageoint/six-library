@@ -1,4 +1,4 @@
-```
+﻿```
      _________________________
     |   ____  _||_  ___  __   |
     |  /___ \/_||_\| __\/  \  |
@@ -10,6 +10,18 @@
     |__________||_____________|
  ```
 # coda-oss Release Notes
+
+## [Release 2022-08-30_cpp14](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30_cpp14)
+* Same as [Release 2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30) except that
+C++14 is now required (on [main](https://github.com/mdaus/coda-oss/tree/main)).
+The last C++11 build is [Release 2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30),
+cut from [master](https://github.com/mdaus/coda-oss/tree/master).
+
+## [Release 2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30)
+* XML is now always written as UTF-8; the code will still try to read Windows-1252.
+* `Uri`s are no longer validated by default.
+* Minor tweaks from other projects.
+* Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/mdaus/coda-oss/tree/main).
 
 ## [Release 2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)
 * remove *Expat* and *libXML* modules and support in **xml.lite**; only *Xerces* was actively used.

@@ -351,17 +351,17 @@ static void test_wide_(const std::string& testName, const char* pStr, std::u16st
 
     #if _WIN32
     // Since we're using UTF-16, on Windows that can be cast to wchar_t
-    auto pWide = str::cast<const wchar_t*>(pUtf16);
+    auto pWide = str::cast<std::wstring::const_pointer>(pUtf16);
 
     const _bstr_t str(pStr);
-    std::wstring std_wstr(static_cast<const wchar_t*>(str)); // Windows-1252 -> UTF-16
+    const std::wstring std_wstr(static_cast<const wchar_t*>(str)); // Windows-1252 -> UTF-16
     TEST_ASSERT(encoded.wstring() == std_wstr);
     TEST_ASSERT(std_wstr == pWide);
 
     const _bstr_t wide_str(pWide);
-    std::string std_str(static_cast<const char*>(wide_str)); //  UTF-16 -> Windows-1252
+    const std::string std_str(static_cast<const char*>(wide_str)); //  UTF-16 -> Windows-1252
     TEST_ASSERT_EQ(encoded.native(), std_str);
-    TEST_ASSERT(std_str == pStr);
+    TEST_ASSERT_EQ(std_str, pStr);
     #endif
 }
 
@@ -441,57 +441,58 @@ TEST_CASE(test_Windows1252_WIN32)
 
 TEST_CASE(test_Windows1252)
 {
-    // Use a map of integers to avoid interpreting string literals
     // https://en.wikipedia.org/wiki/Windows-1252
-    const std::map<int, int> w1252_to_utf16{
-        {0x80, 0x20AC } // EURO SIGN
-        // , {0x81, replacement_character } // UNDEFINED
-        , {0x82, 0x201A } // SINGLE LOW-9 QUOTATION MARK
-        , {0x83, 0x0192  } // LATIN SMALL LETTER F WITH HOOK
-        , {0x84, 0x201E  } // DOUBLE LOW-9 QUOTATION MARK
-        , {0x85, 0x2026  } // HORIZONTAL ELLIPSIS
-        , {0x86, 0x2020  } // DAGGER
-        , {0x87, 0x2021  } // DOUBLE DAGGER
-        , {0x88, 0x02C6  } // MODIFIER LETTER CIRCUMFLEX ACCENT
-        , {0x89, 0x2030  } // PER MILLE SIGN
-        , {0x8A, 0x0160  } // LATIN CAPITAL LETTER S WITH CARON
-        , {0x8B, 0x2039  } // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-        , {0x8C, 0x0152  } // LATIN CAPITAL LIGATURE OE
-        //, {0x8D, replacement_character } // UNDEFINED
-        , {0x8E, 0x017D  } // LATIN CAPITAL LETTER Z WITH CARON
-        //, {0x8F, replacement_character } // UNDEFINED
-        //, {0x90, replacement_character } // UNDEFINED
-        , {0x91, 0x2018  } // LEFT SINGLE QUOTATION MARK
-        , {0x92, 0x2019  } // RIGHT SINGLE QUOTATION MARK
-        , {0x93, 0x201C  } // LEFT DOUBLE QUOTATION MARK
-        , {0x94, 0x201D  } // RIGHT DOUBLE QUOTATION MARK
-        , {0x95, 0x2022  } // BULLET
-        , {0x96, 0x2013  } // EN DASH
-        , {0x97, 0x2014  } // EM DASH
-        , {0x98, 0x02DC  } // SMALL TILDE
-        , {0x99, 0x2122  } // TRADE MARK SIGN
-        , {0x9A, 0x0161  } // LATIN SMALL LETTER S WITH CARON
-        , {0x9B, 0x203A  } // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-        , {0x9C, 0x0153  } // LATIN SMALL LIGATURE OE
-        //, {0x9D, replacement_character } // UNDEFINED
-        , {0x9E, 0x017E  } // LATIN SMALL LETTER Z WITH CARON
-        , {0x9F, 0x0178  } // LATIN CAPITAL LETTER Y WITH DIAERESIS
+    const std::map<std::string::value_type, std::u16string::value_type>
+            w1252_to_utf16{
+          {'\x80', u'\u20AC'} // EURO SIGN
+        , {'\x81', u'\u0081'} // UNDEFINED
+        , {'\x82', u'\u201A'} // SINGLE LOW-9 QUOTATION MARK
+        , {'\x83', u'\u0192'} // LATIN SMALL LETTER F WITH HOOK
+        , {'\x84', u'\u201E'} // DOUBLE LOW-9 QUOTATION MARK
+        , {'\x85', u'\u2026'} // HORIZONTAL ELLIPSIS
+        , {'\x86', u'\u2020'} // DAGGER
+        , {'\x87', u'\u2021'} // DOUBLE DAGGER
+        , {'\x88', u'\u02C6'} // MODIFIER LETTER CIRCUMFLEX ACCENT
+        , {'\x89', u'\u2030'} // PER MILLE SIGN
+        , {'\x8A', u'\u0160'} // LATIN CAPITAL LETTER S WITH CARON
+        , {'\x8B', u'\u2039'} // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+        , {'\x8C', u'\u0152'} // LATIN CAPITAL LIGATURE OE
+        , {'\x81', u'\u0081'} // UNDEFINED
+        , {'\x8E', u'\u017D'} // LATIN CAPITAL LETTER Z WITH CARON
+        , {'\x8F', u'\u008F'} // UNDEFINED
+        , {'\x90', u'\u0090'} // UNDEFINED
+        , {'\x91', u'\u2018'} // LEFT SINGLE QUOTATION MARK
+        , {'\x92', u'\u2019'} // RIGHT SINGLE QUOTATION MARK
+        , {'\x93', u'\u201C'} // LEFT DOUBLE QUOTATION MARK
+        , {'\x94', u'\u201D'} // RIGHT DOUBLE QUOTATION MARK
+        , {'\x95', u'\u2022'} // BULLET
+        , {'\x96', u'\u2013'} // EN DASH
+        , {'\x97', u'\u2014'} // EM DASH
+        , {'\x98', u'\u02DC'} // SMALL TILDE
+        , {'\x99', u'\u2122'} // TRADE MARK SIGN
+        , {'\x9A', u'\u0161'} // LATIN SMALL LETTER S WITH CARON
+        , {'\x9B', u'\u203A'} // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+        , {'\x9C', u'\u0153'} // LATIN SMALL LIGATURE OE
+        , {'\x9D', u'\u009D'} // UNDEFINED
+        , {'\x9E', u'\u017E'} // LATIN SMALL LETTER Z WITH CARON
+        , {'\x9F', u'\u0178'} // LATIN CAPITAL LETTER Y WITH DIAERESIS
 
-        , {0xA1, 0x00A1  } // INVERTED EXCLAMATION MARK
-        , {0xA2, 0x00A2  } // CENT SIGN
-        // ...
-        , {0xFE, 0x00FE  } // LATIN SMALL LETTER THORN
-        , {0xFF, 0x00FF  } // LATIN SMALL LETTER Y WITH DIAERESIS
+        , {'\xA0', u'\u00A0'} // NO-BREAK SPACE
+        , {'\xA1', u'\u00A1'} // INVERTED EXCLAMATION MARK
+        , {'\xA2', u'\u00A2'} // CENT SIGN
+          // ...
+        , {'\xFE', u'\u00FE'} // LATIN SMALL LETTER THORN
+        , {'\xFF', u'\u00FF'} // LATIN SMALL LETTER Y WITH DIAERESIS
     };
     std::string running_w1252;
     std::u16string running_utf16;
     for (auto&& ch : w1252_to_utf16)
     {
-        TEST_ASSERT(ch.first <= 0xff);
-        TEST_ASSERT(ch.second <= 0xffff);
+        TEST_ASSERT_LESSER_EQ(static_cast<int>(ch.first), 0xff);
+        TEST_ASSERT_LESSER_EQ(static_cast<int>(ch.second), 0xffff);
 
-        const std::string w1252{static_cast<std::string::value_type>(ch.first)};
-        const std::u16string utf16{static_cast<std::u16string::value_type>(ch.second)};
+        const std::string w1252{ch.first};
+        const std::u16string utf16{ch.second};
         test_Windows1252_(testName, w1252.c_str(), utf16.c_str());
 
         running_w1252 += w1252;

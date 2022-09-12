@@ -52,13 +52,16 @@ class CODA_OSS_API EncodedStringView final
     // Since we only support two encodings--UTF-8 (native on Linux) and Windows-1252
     // (native on Windows)--both of which are 8-bits, a simple "bool" flag will do.
     coda_oss::span<const char> mString;
-    #if _WIN32
+    explicit EncodedStringView(coda_oss::span<const coda_oss::u8string::value_type>);
+    explicit EncodedStringView(coda_oss::span<const str::W1252string::value_type>);
+
+#if _WIN32
     static constexpr bool mNativeIsUtf8 = false; // Windows-1252
     #else
     static constexpr bool mNativeIsUtf8 = true;  // !_WIN32, assume Linux
     #endif
     bool mIsUtf8 = mNativeIsUtf8;
-    
+
     // Want to create an EncodedString from EncodedStringView.  The public interface
     // doesn't expose "mIsUtf8" so there's (intentinally) no way for clients to know the encoding.
     friend EncodedString;
@@ -76,10 +79,15 @@ public:
     // Need the const char* overloads to avoid creating temporary std::basic_string<> instances.
     // Routnes always return a copy, never a reference, so there's no additional overhead
     // with storing a raw pointer rather than a pointer to  std::basic_string<>.
+    EncodedStringView(coda_oss::u8string::const_pointer, coda_oss::u8string::size_type);
     explicit EncodedStringView(coda_oss::u8string::const_pointer);
     explicit EncodedStringView(const coda_oss::u8string&);
+
+    EncodedStringView(str::W1252string::const_pointer, str::W1252string::size_type);
     explicit EncodedStringView(str::W1252string::const_pointer);
     explicit EncodedStringView(const str::W1252string&);
+
+    EncodedStringView(std::string::const_pointer, std::string::size_type);
     explicit EncodedStringView(std::string::const_pointer);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
     explicit EncodedStringView(const std::string&);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
 
@@ -126,7 +134,7 @@ public:
     // Input is encoded as specified on all platforms.
     static EncodedStringView fromUtf8(const std::string& utf8)
     {
-        return EncodedStringView(str::c_str<coda_oss::u8string>(utf8));
+        return EncodedStringView(str::c_str<coda_oss::u8string>(utf8),  utf8.length());
     }
     static EncodedStringView fromUtf8(std::string::const_pointer pUtf8)
     {
@@ -134,7 +142,7 @@ public:
     }
     static EncodedStringView fromWindows1252(const std::string& w1252)
     {
-        return EncodedStringView(str::c_str<str::W1252string>(w1252));
+        return EncodedStringView(str::c_str<str::W1252string>(w1252), w1252.length());
     }
     static EncodedStringView fromWindows1252(std::string::const_pointer pW1252)
     {
