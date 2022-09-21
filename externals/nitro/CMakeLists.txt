@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(nitro)
 
-set(CMAKE_C_STANDARD 11)
-set(C_STANDARD_REQUIRED true)
 set(CMAKE_CXX_STANDARD 14)
 set(CXX_STANDARD_REQUIRED true)
 
@@ -22,7 +20,6 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
             add_compile_options(/fsanitize=address)
         endif()
 	add_compile_options(/std:c++14)
-    add_compile_options(/std:c11)
     elseif (UNIX)
         add_compile_options(
             -Wall

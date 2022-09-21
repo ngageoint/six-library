@@ -98,7 +98,7 @@ TEST_CASE(testExceptionWithBacktrace)
     try
     {
         throw except::Exception("Bad run");
-        TEST_FAIL("Should not get here");
+        TEST_FAIL;
     }
     catch (const except::Throwable& t)
     {
@@ -117,7 +117,7 @@ TEST_CASE(testExceptionWithBacktrace)
     try
     {
         throw except::Exception("Bad run").backtrace();
-        TEST_FAIL("Should not get here");
+        TEST_FAIL;
     }
     catch (const except::Throwable& t)
     {
