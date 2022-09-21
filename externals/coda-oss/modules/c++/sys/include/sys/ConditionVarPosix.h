@@ -21,15 +21,19 @@
  */
 
 
-#ifndef __SYS_THREAD_PTHREAD_CONDITION_VARIABLE_H__
-#define __SYS_THREAD_PTHREAD_CONDITION_VARIABLE_H__
+#ifndef CODA_OSS_sys_ConditionVarPosix_h_INCLUDED_
+#define CODA_OSS_sys_ConditionVarPosix_h_INCLUDED_
+#pragma once
+
+#include <new>
 
 #include <sys/Conf.h>
+#include "sys/ConditionVarInterface.h"
 
 #if CODA_OSS_POSIX_SOURCE
 
 #include "sys/MutexPosix.h"
-#include "sys/ConditionVarInterface.h"
+
 #include <pthread.h>
 
 namespace sys
@@ -42,12 +46,16 @@ namespace sys
  *  This class is the wrapper implementation for a pthread_cond_t
  *  (Pthread condition variable)
  */
-struct ConditionVarPosix final : public ConditionVarInterface
+class ConditionVarPosix final : public ConditionVarInterface
 {
+    ConditionVarPosix(MutexPosix* theLock, bool isOwner, std::nullptr_t);
+
+public:
     ConditionVarPosix();
 
     //!  Constructor
-    ConditionVarPosix(MutexPosix* theLock, bool isOwner = false);
+    explicit ConditionVarPosix(MutexPosix* theLock, bool isOwner = false);
+    explicit ConditionVarPosix(MutexPosix&);  // isOwner = false
 
     //!  Destructor
     virtual ~ConditionVarPosix();
@@ -121,4 +129,4 @@ private:
 }
 
 #endif
-#endif
+#endif  // CODA_OSS_sys_ConditionVarPosix_h_INCLUDED_

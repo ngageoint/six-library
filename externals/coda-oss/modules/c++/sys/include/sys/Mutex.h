@@ -58,7 +58,7 @@ using MutexOS = MutexPosix;
 #error "Which thread package?"
 #endif
 
-#define CODA_OSS_sys_use_MutexOS 1 // other code depends on the OS mutex ... for now
+#define CODA_OSS_sys_use_MutexOS 1 // ConditionVar depends on the OS mutex ... for now
 #if !CODA_OSS_sys_use_MutexOS
 namespace sys
 {

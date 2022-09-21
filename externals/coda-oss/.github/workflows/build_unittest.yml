@@ -77,7 +77,8 @@ jobs:
     - name: build
       run: |
         cd target
-        cmake --build . -j
+        # "-j" spawns too many processes causing GCC to crash
+        cmake --build . -j 12
     - name: install
       run: |
         cd target
