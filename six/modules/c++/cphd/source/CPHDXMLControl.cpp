@@ -71,16 +71,23 @@ std::u8string CPHDXMLControl::toXMLString(
         doc->getRootElement()->print(ss);
     return ss.stream().str();
 }
-std::string CPHDXMLControl::toXMLString(
-        const Metadata& metadata,
-        const std::vector<std::string>& schemaPaths_,
-        bool prettyPrint)
+std::u8string CPHDXMLControl::toXMLString(
+    const Metadata& metadata,
+    const std::vector<std::string>& schemaPaths_,
+    bool prettyPrint)
 {
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    const auto result = toXMLString(metadata, &schemaPaths, prettyPrint);
+    return toXMLString(metadata, &schemaPaths, prettyPrint);
+}
+std::string CPHDXMLControl::toXMLString_(
+    const Metadata& metadata,
+    const std::vector<std::string>& schemaPaths,
+    bool prettyPrint)
+{
+    const auto result = toXMLString(metadata, schemaPaths, prettyPrint);
     return str::EncodedStringView(result).native();
 }
 
