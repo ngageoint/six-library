@@ -30,6 +30,11 @@
 
 namespace sys
 {
+/*!
+ *  \class AtomicCounter
+ *  \brief This class provides atomic incrementing, decrementing, and setting
+ *         of an unsigned integer.  All operations are thread-safe.
+ */
 struct AtomicCounterImplCpp11 final
 {
     using ValueType = size_t ;

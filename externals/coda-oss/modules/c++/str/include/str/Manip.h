@@ -199,7 +199,7 @@ inline std::string join(const std::vector<T>& toks, const std::string& with)
     int i = 0;
     for (; i < len - 1; i++)
     {
-        oss << str::toString<T>(toks[i]) << with;
+        oss << str::toString(toks[i]) << with;
     }
     oss << str::toString(toks[i]);
     return oss.str();

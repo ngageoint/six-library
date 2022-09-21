@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of xml.lite-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,36 +20,10 @@
  *
  */
 
+#ifndef CODA_OSS_hd5_lite_import_lite_h_INCLUDED_
+#define CODA_OSS_hd5_lite_import_lite_h_INCLUDED_
+#pragma once
 
-#if defined(__sgi)
-#include "sys/ThreadIrix.h"
+#include "hdf5/lite/Read.h"
 
-// void sys::ThreadIrix::start()
-// {
-//     sys::SyncFactoryIrix()->startThread(*this);
-// }
-// bool sys::ThreadIrix::kill()
-// {
-//     return sys::SyncFactoryIrix()->killThread(*this);
-// }
-
-void sys::ThreadIrix::join()
-{
-    dbg_printf("Joining on thread\n");
-    int lStatus;
-    do
-    {
-        waitpid(mNative, &lStatus, 0);
-        dbg_printf("Waiting on thread [%d]\n", mNative);
-    }
-    while ( WIFEXITED(lStatus) == 0 );
-    dbg_printf("Done joining on thread\n");
-}
-
-void sys::ThreadIrix::yield()
-{
-    dbg_printf("ThreadIrix::yield()\n");
-    sginap(0);
-}
-#endif
-
+#endif  // CODA_OSS_hd5_lite_import_lite_h_INCLUDED_

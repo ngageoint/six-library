@@ -20,37 +20,34 @@
  *
  */
 
+#include "sys/MutexCpp11.h"
 
-#if defined(USE_NSPR_THREADS)
-#include "sys/MutexNSPR.h"
-
-sys::MutexNSPR::MutexNSPR()
+sys::MutexCpp11::MutexCpp11()
 {
-    mNative = PR_NewLock();
-    if (mNative == NULL)
-        throw sys::SystemException("Mutex initialization failed");
-}
-sys::MutexNSPR::~MutexNSPR()
-{
-    if (mNative != NULL)
-        PR_DestroyLock(mNative);
-}
-void sys::MutexNSPR::lock()
-{
-    PR_Lock(mNative);
 }
 
-void sys::MutexNSPR::unlock()
+sys::MutexCpp11::~MutexCpp11()
 {
-    PRStatus status = PR_Unlock(mNative);
-    if (status == PR_FAILURE)
-        throw sys::SystemException("Mutex unlock failed");
 }
 
-PRLock*& sys::MutexNSPR::getNative()
+void sys::MutexCpp11::lock()
+{
+#ifdef THREAD_DEBUG
+    dbg_printf("Locking mutex\n");
+#endif
+    mNative.lock();
+}
+
+void sys::MutexCpp11::unlock()
+{
+#ifdef THREAD_DEBUG
+    dbg_printf("Unlocking mutex\n");
+#endif
+    mNative.unlock();
+}
+
+std::mutex& sys::MutexCpp11::getNative()
 {
     return mNative;
 }
-
-#endif
 

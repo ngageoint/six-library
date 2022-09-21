@@ -30,6 +30,7 @@
 #  include <limits>
 # include <exception>
 # include <iostream>
+#include <utility>
 #  include <import/sys.h>
 #  include <import/str.h>
 #  include <import/except.h>
@@ -64,34 +65,42 @@ inline void diePrintf(const char* format, const std::string& testName, const cha
 // older C++ compilers don't like __VA_ARGS__ :-(
 #define test_diePrintf0(format) test::diePrintf(format, testName, __FILE__, SYS_FUNC, __LINE__)
 
+// Route all toString() for unittests through here ... so that we can have more control
+// over the routine used.
+template <typename TX>
+inline std::string toString(const TX& X)
+{
+    return str::toString(X);
+}
+
 template<typename TX>
 inline void diePrintf_(const char* format, const std::string& testName, const char* file, const char* func, int line,
     const TX& X)
 {
-    diePrintf(format, testName, file, func, line, str::toString(X));
+    diePrintf(format, testName, file, func, line, test::toString(X));
 }
-#define test_diePrintf1(format, X1) test::diePrintf_(format, testName, __FILE__, SYS_FUNC, __LINE__, (X1)) // might not want str::toString()
+#define test_diePrintf1(format, X1) test::diePrintf_(format, testName, __FILE__, SYS_FUNC, __LINE__, X1)
 
 template<typename TX1, typename TX2>
 inline void diePrintf_(const char* format, const std::string& testName, const char* file, const char* func, int line,
     const TX1& X1, const TX2& X2)
 {
-    diePrintf(format, testName, file, func, line, str::toString(X1), str::toString(X2));
+    diePrintf(format, testName, file, func, line, test::toString(X1), test::toString(X2));
 }
-#define test_diePrintf2(format, X1, X2) test::diePrintf_(format, testName, __FILE__, SYS_FUNC, __LINE__, (X1), (X2)) // might not want str::toString()
+#define test_diePrintf2(format, X1, X2) test::diePrintf_(format, testName, __FILE__, SYS_FUNC, __LINE__, X1, X2)
 
 template<typename TX1, typename TX2>
 inline void diePrintf_(const char* format, const std::string& testName, const char* file, int line, const std::string& msg,
     const TX1& X1, const TX2& X2)
 {
-    diePrintf(format, testName, file, line, msg, str::toString(X1), str::toString(X2));
+    diePrintf(format, testName, file, line, msg, test::toString(X1), test::toString(X2));
 }
-#define test_diePrintf2_msg(format, msg, X1, X2) test::diePrintf_(format, testName, __FILE__, __LINE__, msg, (X1), (X2)) // might not want str::toString()
+#define test_diePrintf2_msg(format, msg, X1, X2) test::diePrintf_(format, testName, __FILE__, __LINE__, msg, X1, X2)
 
-#define CODA_OSS_test_diePrintf_eq_(X1, X2) test_diePrintf2("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", (X1), (X2))
-#define CODA_OSS_test_diePrintf_eq_msg_(msg, X1, X2) test_diePrintf2_msg("%s (%s,%d): FAILED (%s): Recv'd %s, Expected %s\n", msg, (X1), (X2))
+#define CODA_OSS_test_diePrintf_eq_(X1, X2) test_diePrintf2("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", X1, X2)
+#define CODA_OSS_test_diePrintf_eq_msg_(msg, X1, X2) test_diePrintf2_msg("%s (%s,%d): FAILED (%s): Recv'd %s, Expected %s\n", msg, X1, X2)
 #define CODA_OSS_test_diePrintf_not_eq_(X1, X2) test_diePrintf2("%s (%s,%s,%d): FAILED: Recv'd %s should not equal %s\n", X1, X2)
-#define CODA_OSS_test_diePrintf_not_eq_msg_(msg, X1, X2) test_diePrintf2_msg("%s (%s,%d): FAILED (%s): Recv'd %s should not equal %s\n", msg, (X1), (X2))
+#define CODA_OSS_test_diePrintf_not_eq_msg_(msg, X1, X2) test_diePrintf2_msg("%s (%s,%d): FAILED (%s): Recv'd %s should not equal %s\n", msg, X1, X2)
 #define CODA_OSS_test_diePrintf_greater_eq_(X1, X2) test_diePrintf0("%s (%s,%s,%d): FAILED: Value should be greater than or equal\n")
 #define CODA_OSS_test_diePrintf_greater_(X1, X2) test_diePrintf0("%s (%s,%s,%d): FAILED: Value should be greater than\n")
 #define CODA_OSS_test_diePrintf_lesser_eq_(X1, X2) test_diePrintf0("%s (%s,%s,%d): FAILED: Value should be less than or equal\n")
@@ -169,12 +178,13 @@ inline int main(TFunc f)
 #define TEST_ASSERT_FALSE(X) if ((X)) { test_diePrintf0("%s (%s,%s,%d): FAILED: Value should evaluate to false\n"); }
 #define TEST_ASSERT_TRUE(X) if (!(X)) { test_diePrintf0("%s (%s,%s,%d): FAILED: Value should evaluate to true\n"); }
 #define TEST_ASSERT(X) TEST_ASSERT_TRUE(X)
-#define TEST_ASSERT_SUCCESS TEST_ASSERT_TRUE(true) // for "We better get here, always."
-#define TEST_ASSERT_FAILURE TEST_ASSERT_TRUE(false) // for "This should NEVER happen."
+
+#define TEST_SUCCESS TEST_ASSERT_TRUE(true) // for "We better get here, always."
+#define TEST_FAIL_MSG(msg) test_diePrintf1("%s (%s,%s,%d): FAILED: %s\n", test::toString(msg).c_str())
+#define TEST_FAIL TEST_FAIL_MSG("This should NEVER happen.")
 
 #define TEST_ASSERT_ALMOST_EQ_EPS(X1, X2, EPS) test::assert_almost_eq_eps(X1, X2, EPS, testName, __FILE__, SYS_FUNC, __LINE__)
 #define TEST_ASSERT_ALMOST_EQ(X1, X2) TEST_ASSERT_ALMOST_EQ_EPS(X1, X2,  std::numeric_limits<float>::epsilon())
-#define TEST_FAIL(msg) test_diePrintf1("%s (%s,%s,%d): FAILED: %s\n", str::toString(msg).c_str())
 #define TEST_EXCEPTION(X) try{ (X); test_diePrintf0("%s (%s,%s,%d): FAILED: Should have thrown exception\n"); } \
   catch (const except::Throwable&){} catch (const except::Throwable11&){}
 #define TEST_THROWS(X) try{ (X); test_diePrintf0("%s (%s,%s,%d): FAILED: Should have thrown exception\n"); } catch (...){}

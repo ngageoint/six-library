@@ -37,7 +37,7 @@ TEST_CASE(testCompile)
     }
     catch (...)
     {
-        TEST_FAIL("Compiling a valid regexp should not have thrown exception!");
+        TEST_FAIL_MSG("Compiling a valid regexp should not have thrown exception!");
     }
 }
 
