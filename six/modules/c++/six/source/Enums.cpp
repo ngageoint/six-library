@@ -40,16 +40,13 @@ static bool is_OTHER_(const std::string& v)
 template<typename T>
 inline T toType_(const std::string& s, const except::Exception& ex)
 {
-    T result;
-    if (six::Enum::toType<T>(result, s, std::nothrow))
+    const auto result = T::toType(s, std::nothrow);
+    auto retval = nitf::details::value(result, ex);
+    if (retval == T::NOT_SET)
     {
-        auto retval = nitf::details::value(std::make_optional<T>(result), ex);
-        if (retval != T::NOT_SET)
-        {
-            return retval;
-        }
+        throw ex;
     }
-    throw ex;
+    return retval;
 }
 template <typename T>
 inline T toType(const std::string& s)
@@ -73,7 +70,7 @@ inline std::string toString_(const T& t, const except::Exception& ex)
         throw ex;
     }
 
-    const auto result = six::Enum::toString(t, std::nothrow);
+    const auto result = t.toString(std::nothrow);
     return nitf::details::value(result, ex);
 }
 template <typename T>
@@ -137,8 +134,8 @@ DualPolarizationType toType<DualPolarizationType>(const std::string& s)
 
     // "V:OTHER.*" or "OTHER.*:V" or "OTHER.*:OTHER.*"
     static const PolarizationType other = PolarizationType::OTHER;
-    const auto strTx = is_OTHER_(tx) ? six::Enum::toString(other) : tx;  // get rid of .* from OTHER strings
-    const auto strRcv = is_OTHER_(rcv) ? six::Enum::toString(other) : rcv;  // get rid of .* from OTHER strings
+    const auto strTx = is_OTHER_(tx) ? other.toString() : tx;  // get rid of .* from OTHER strings
+    const auto strRcv = is_OTHER_(rcv) ? other.toString() : rcv;  // get rid of .* from OTHER strings
     const auto type = strTx + "_" + strRcv; // "OTHER_abc:V" -> "OTHER_V"
 
     auto retval = toType_<DualPolarizationType>(type, ex);

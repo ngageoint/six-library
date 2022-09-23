@@ -247,25 +247,22 @@ template<typename T>
 inline T toType_(std::string s, const except::Exception& ex)
 {
     str::trim(s);
-    T result;
-    if (six::Enum::toType<T>(result, s, std::nothrow))
+    const auto result = T::toType(s, std::nothrow);
+    auto retval = nitf::details::value(result, ex); // throw our exception rather than a default one
+    if (retval == T::NOT_SET)
     {
-        auto retval = nitf::details::value(std::make_optional<T>(result), ex); // throw our exception rather than a default one
-        if (retval != T::NOT_SET)
-        {
-            return retval;
-        }
+        throw ex;
     }
-    throw ex;
+    return retval;
 }
 template<typename T>
 inline T toType_(std::string s)
 {
     str::trim(s);
-    T result;
-    if (six::Enum::toType<T>(result, s, std::nothrow))
+    const auto result = T::toType(s, std::nothrow);
+    if (result.has_value())
     {
-        return result;
+        return *result;
     }
     return T::NOT_SET;
 }
@@ -277,7 +274,7 @@ inline std::string toString_(const T& t, const except::Exception& ex)
     {
         throw ex;
     }
-    const auto result = six::Enum::toString(t, std::nothrow);
+    const auto result = t.toString(std::nothrow);
     return nitf::details::value(result, ex); // throw our exception rather than a default one
 }
 
@@ -285,7 +282,7 @@ template <>
 std::string six::toString(const RadarModeType& type)
 {
     auto result = toString_(type, except::Exception(Ctxt("Radar mode not set!")));
-    static const auto strDYNAMIC_STRIPMAP = six::Enum::toString(RadarModeType(RadarModeType::DYNAMIC_STRIPMAP));
+    static const auto strDYNAMIC_STRIPMAP = RadarModeType(RadarModeType::DYNAMIC_STRIPMAP).toString();
     if (result == strDYNAMIC_STRIPMAP)
     {
         return "DYNAMIC STRIPMAP"; // no "_"
@@ -300,7 +297,7 @@ RadarModeType six::toType<RadarModeType>(const std::string& s)
     if (type == "DYNAMIC STRIPMAP") // no "_"
         return RadarModeType::DYNAMIC_STRIPMAP;
 
-    static const auto strDYNAMIC_STRIPMAP = six::Enum::toString(RadarModeType(RadarModeType::DYNAMIC_STRIPMAP));
+    static const auto strDYNAMIC_STRIPMAP = RadarModeType(RadarModeType::DYNAMIC_STRIPMAP).toString();
     if (type == strDYNAMIC_STRIPMAP)
     {
         return RadarModeType::NOT_SET; // "DYNAMIC_STRIPMAP" (with '_') doesn't convert
@@ -317,7 +314,6 @@ std::string six::toString(const DataType& type)
         return "SICD";
     case DataType::DERIVED:
         return "SIDD";
-    case DataType::NOT_SET:
     default:
         throw except::Exception(Ctxt("Unsupported data type"));
     }
@@ -326,8 +322,7 @@ std::string six::toString(const DataType& type)
 template <>
 PixelType six::toType<PixelType>(const std::string& s)
 {
-    PixelType p;
-    six::Enum::toType(p, s);
+    auto p = PixelType::toType(s);
     if (p == PixelType::NOT_SET)
         throw except::Exception(
                 Ctxt(FmtX("Type not understood [%s]", s.c_str())));
@@ -341,7 +336,7 @@ std::string six::toString(const PixelType& type)
     {
         throw except::Exception(Ctxt("Unsupported pixel type"));
     }
-    return six::Enum::toString(type);
+    return type.toString();
 }
 
 // There's a lot of boiler-plate code that can be hidden behind a few macros
@@ -410,7 +405,6 @@ std::string six::toString(const SideOfTrackType& t)
         return "L";
     case SideOfTrackType::RIGHT:
         return "R";
-    case SideOfTrackType::NOT_SET:
     default:
         throw except::Exception(Ctxt("Unsupported side of track"));
     }
@@ -485,7 +479,6 @@ std::string six::toString(const AppliedType& value)
         return "APPLIED";  // fixed in 2010-07-08 version of schema
     case AppliedType::IS_FALSE:
         return "NOT_APPLIED";
-    case AppliedType::NOT_SET:
     default:
         throw except::Exception(Ctxt("Unsupported applied type"));
     }

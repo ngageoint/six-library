@@ -46,7 +46,7 @@ size_t Metadata::getNumBytesPerSample() const
 
 std::string Metadata::getDomainTypeString() const
 {
-    return six::Enum::toString(global.domainType);
+    return global.domainType.toString();
 }
 
 cphd::DomainType Metadata::getDomainType() const

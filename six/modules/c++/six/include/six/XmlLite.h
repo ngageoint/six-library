@@ -39,7 +39,6 @@
 #include <six/Init.h>
 #include <six/Utilities.h>
 #include <six/Logger.h>
-#include <six/Enums.h>
 
 namespace six
 {
@@ -188,7 +187,7 @@ struct XmlLite final
             throw six::UninitializedValueException(Ctxt("Attempted use of uninitialized value"));
         }
 
-        return createString(name, six::Enum::toString(enumVal), parent);
+        return createString(name, enumVal.toString(), parent);
     }
     template<typename T>
     xml::lite::Element& createInt(const std::string& name, T p,
@@ -222,7 +221,7 @@ struct XmlLite final
     {
         std::string name;
         parseString(element, name);
-        six::Enum::toType(enumVal, name);
+        enumVal = T::toType(name);
     }
 
     bool parseDouble(const xml::lite::Element&, double&) const;
@@ -291,7 +290,7 @@ private:
 };
 
  template<> inline xml::lite::Element& XmlLite::createString(const std::string& name,
-                              const std::string& p, xml::lite::Element& parent) const
+						      const std::string& p, xml::lite::Element& parent) const
   {
     return createString_(name, p, parent);
   }

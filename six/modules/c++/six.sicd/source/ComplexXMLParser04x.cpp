@@ -113,9 +113,10 @@ XMLElem ComplexXMLParser04x::convertRadarCollectionToXML(
     if (radar->txPolarization != PolarizationSequenceType::NOT_SET)
     {
         // In SICD 0.4, this is not allowed to contain UNKNOWN or SEQUENCE
-        PolarizationType txPolarization;
-        six::Enum::toType(txPolarization, six::Enum::toString(radar->txPolarization));
-        createStringFromEnum("TxPolarization", txPolarization, radarXML);
+        createString(
+                "TxPolarization",
+                PolarizationType::toType(radar->txPolarization.toString()),
+                radarXML);
     }
 
     if (!Init::isUndefined(radar->polarizationHVAnglePoly))
@@ -166,7 +167,7 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
                      imageFormationXML);
     }
 
-    createStringFromEnum("ImageFormAlgo",
+    createString("ImageFormAlgo",
                  imageFormation->imageFormationAlgorithm,
                  imageFormationXML);
 
@@ -177,16 +178,16 @@ XMLElem ComplexXMLParser04x::convertImageFormationToXML(
     createDouble("MinProc", imageFormation->txFrequencyProcMin, txFreqXML);
     createDouble("MaxProc", imageFormation->txFrequencyProcMax, txFreqXML);
 
-    createStringFromEnum("STBeamComp",
+    createString("STBeamComp",
                  imageFormation->slowTimeBeamCompensation,
                  imageFormationXML);
-    createStringFromEnum("ImageBeamComp",
+    createString("ImageBeamComp",
                  imageFormation->imageBeamCompensation,
                  imageFormationXML);
-    createStringFromEnum("AzAutofocus",
+    createString("AzAutofocus",
                  imageFormation->azimuthAutofocus,
                  imageFormationXML);
-    createStringFromEnum("RgAutofocus", imageFormation->rangeAutofocus,
+    createString("RgAutofocus", imageFormation->rangeAutofocus,
                  imageFormationXML);
 
     for (size_t i = 0; i < imageFormation->processing.size(); ++i)
@@ -256,7 +257,7 @@ XMLElem ComplexXMLParser04x::convertRMAToXML(
 {
     XMLElem rmaXML = newElement("RMA", parent);
 
-    createStringFromEnum("RMAlgoType", rma->algoType, rmaXML);
+    createString("RMAlgoType", rma->algoType, rmaXML);
 
     if (rma->rmcr.get())
     {

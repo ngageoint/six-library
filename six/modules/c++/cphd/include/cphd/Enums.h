@@ -62,15 +62,16 @@ SIX_Enum_ENUM_3(DomainType,
  */
 SIX_Enum_BEGIN_DEFINE(PhaseSGN)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum(PhaseSGN)
+    SIX_Enum_BEGIN_enum
         MINUS_1 = -1,
         PLUS_1 = 1,
     SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_value
+    { "-1", MINUS_1 },
+    { "+1", PLUS_1 },
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(PhaseSGN);
-SIX_Enum_BEGIN_string_to_value(PhaseSGN)
-    { "-1", PhaseSGN::MINUS_1 },
-    { "+1", PhaseSGN::PLUS_1 },
-SIX_Enum_END_string_to_value
 
 /*!
  *  \struct RefHeight
@@ -123,7 +124,7 @@ SIX_Enum_ENUM_4(SRPType,
  */
 SIX_Enum_BEGIN_DEFINE(PolarizationType)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum(PolarizationType)
+    SIX_Enum_BEGIN_enum
         X = 1,
         Y = 2,
         V = 3,
@@ -132,17 +133,16 @@ SIX_Enum_BEGIN_DEFINE(PolarizationType)
         LHC = 6,
         UNSPECIFIED = 7,
     SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_value
+        SIX_Enum_map_entry_(X),
+        SIX_Enum_map_entry_(Y),
+        SIX_Enum_map_entry_(V),
+        SIX_Enum_map_entry_(H),
+        SIX_Enum_map_entry_(RHC),
+        SIX_Enum_map_entry_(LHC),
+        SIX_Enum_map_entry_(UNSPECIFIED),
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(PolarizationType);
-#undef SIX_Enum_map_entry_name
-#define SIX_Enum_map_entry_name PolarizationType
-SIX_Enum_BEGIN_string_to_value(PolarizationType)
-    SIX_Enum_map_entry(X),
-    SIX_Enum_map_entry(Y),
-    SIX_Enum_map_entry(V),
-    SIX_Enum_map_entry(H),
-    SIX_Enum_map_entry(RHC),
-    SIX_Enum_map_entry(LHC),
-    SIX_Enum_map_entry(UNSPECIFIED),
-SIX_Enum_END_string_to_value
 }
 #endif

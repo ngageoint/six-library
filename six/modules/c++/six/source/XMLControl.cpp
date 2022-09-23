@@ -344,10 +344,9 @@ std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
     case DataType::DERIVED:
         str = "SIDD";
         break;
-    case DataType::NOT_SET:
     default:
         throw except::Exception(
-            Ctxt("Invalid data type " + six::Enum::toString(dataType)));
+            Ctxt("Invalid data type " + str::toString(dataType)));
     }
 
     if (appendXML)

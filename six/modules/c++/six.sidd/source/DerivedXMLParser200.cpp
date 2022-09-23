@@ -81,14 +81,14 @@ void DerivedXMLParser200::validateDRAFields(const six::sidd::DRAType& algorithmT
     {
         throw except::Exception(Ctxt(
             "DRAParameters invalid for algorithmType " +
-            six::Enum::toString(algorithmType)));
+            algorithmType.toString()));
     }
 
     if (algorithmType == six::sidd::DRAType::NONE && hasDraOverrides)
     {
         throw except::Exception(Ctxt(
             "DRAOverrides invalid for algorithmType " +
-            six::Enum::toString(algorithmType)));
+            algorithmType.toString()));
     }
 }
 void DerivedXMLParser200::validateDRAFields(const six::sidd::DynamicRangeAdjustment& adjust)
@@ -573,7 +573,7 @@ void DerivedXMLParser200::parseBandEqualizationFromXML(const xml::lite::Element*
     }
     else
     {
-         six::Enum::toType(band.algorithm, bandAlgo);
+        band.algorithm = BandEqualizationAlgorithm::toType(bandAlgo);
     }
 
     std::vector<XMLElem> lutElems;
@@ -849,7 +849,7 @@ void DerivedXMLParser200::parseColorSpaceTransformFromXML(
     }
     else
     {
-        six::Enum::toType(transform.colorManagementModule.renderingIntent, renderIntentStr);
+        transform.colorManagementModule.renderingIntent = RenderingIntent::toType(renderIntentStr);
     }
     parseString(getFirstAndOnly(manageElem, "SourceProfile"),
                 transform.colorManagementModule.sourceProfile);
@@ -1656,10 +1656,10 @@ xml::lite::Element& DerivedXMLParser200::convertExploitationFeaturesToXML(const 
             const TxRcvPolarization *p = pPolarization.get();
             auto& polElem = parser.newElement("Polarization", informationElem);
 
-            parser.createStringFromEnum("TxPolarization",
+            parser.createString("TxPolarization",
                 p->txPolarization,
                 polElem);
-            parser.createStringFromEnum("RcvPolarization",
+            parser.createString("RcvPolarization",
                 p->rcvPolarization,
                 polElem);
             // optional
@@ -1807,7 +1807,7 @@ xml::lite::Element& DerivedXMLParser200::convertDisplayToXML(const DerivedXMLPar
     //       in SIDD 1.0, so need to confirm it's allocated
     auto& displayElem = parser.newElement("Display", parent);
 
-    parser.createStringFromEnum("PixelType", display.pixelType, displayElem);
+    parser.createString("PixelType", display.pixelType, displayElem);
 
     parser.createInt("NumBands", display.numBands, displayElem);
     if (six::Init::isDefined(display.defaultBandDisplay))
@@ -2077,7 +2077,7 @@ void DerivedXMLParser200::parseDigitalElevationDataFromXML(
     XMLElem posElem = getFirstAndOnly(elem, "Geopositioning");
     std::string coordSystemType;
     parseString(getFirstAndOnly(posElem, "CoordinateSystemType"), coordSystemType);
-    six::Enum::toType(ded.geopositioning.coordinateSystemType, coordSystemType);
+    ded.geopositioning.coordinateSystemType = CoordinateSystemType::toType(coordSystemType);
     parseUInt(getFirstAndOnly(posElem, "FalseOrigin"), ded.geopositioning.falseOrigin);
     if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
     {

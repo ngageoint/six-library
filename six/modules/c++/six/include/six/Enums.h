@@ -60,14 +60,14 @@ SIX_Enum_ENUM_3(AutofocusType,
 //    IS_TRUE, 1
 //);
 SIX_Enum_BEGIN_DEFINE(BooleanType)
-    SIX_Enum_BEGIN_enum(BooleanType) IS_FALSE = 0, IS_TRUE = 1, SIX_Enum_END_enum
+    SIX_Enum_BEGIN_enum IS_FALSE = 0, IS_TRUE = 1, SIX_Enum_END_enum
+    SIX_Enum_map_2_(IS_FALSE, IS_TRUE);
     BooleanType& operator=(bool b)
     {
         *this = BooleanType(b ? IS_TRUE : IS_FALSE);
         return *this;
     }
 SIX_Enum_END_DEFINE(BooleanType);
-SIX_Enum_map_2_(BooleanType, IS_FALSE, IS_TRUE);
 
 /*!
  *  \struct ByteSwapping
@@ -230,7 +230,7 @@ SIX_Enum_ENUM_5(OrientationType,
  */
 SIX_Enum_BEGIN_DEFINE(PixelType)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum(PixelType)
+    SIX_Enum_BEGIN_enum
         // Each pixel is stored as a pair of numbers that represent the realand imaginary
         // components. Each component is stored in a 32-bit IEEE floating point format (4
         // bytes per component, 8 bytes per pixel).
@@ -252,19 +252,18 @@ SIX_Enum_BEGIN_DEFINE(PixelType)
         RGB8LU = 7,
         RGB24I = 8,
     SIX_Enum_END_enum
- SIX_Enum_END_DEFINE(PixelType);
-#undef SIX_Enum_map_entry_name
-#define SIX_Enum_map_entry_name PixelType
-SIX_Enum_BEGIN_string_to_value(PixelType)
-        SIX_Enum_map_entry(RE32F_IM32F),
-        SIX_Enum_map_entry(RE16I_IM16I),
-        SIX_Enum_map_entry(AMP8I_PHS8I),
-        SIX_Enum_map_entry(MONO8I),
-        SIX_Enum_map_entry(MONO8LU),
-        SIX_Enum_map_entry(MONO16I),
-        SIX_Enum_map_entry(RGB8LU),
-        SIX_Enum_map_entry(RGB24I),
-SIX_Enum_END_string_to_value
+
+    SIX_Enum_BEGIN_string_to_value
+            SIX_Enum_map_entry_(RE32F_IM32F),
+            SIX_Enum_map_entry_(RE16I_IM16I),
+            SIX_Enum_map_entry_(AMP8I_PHS8I),
+            SIX_Enum_map_entry_(MONO8I),
+            SIX_Enum_map_entry_(MONO8LU),
+            SIX_Enum_map_entry_(MONO16I),
+            SIX_Enum_map_entry_(RGB8LU),
+            SIX_Enum_map_entry_(RGB24I),
+    SIX_Enum_END_string_to_value
+SIX_Enum_END_DEFINE(PixelType);
 
 /*!
  *  \struct PolarizationSequenceType
@@ -278,7 +277,7 @@ SIX_Enum_BEGIN_DEFINE(Polarization1Type)
     std::string other_; // value of OTHER.* for SIDD 3.0/SICD 1.3
 
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum(Polarization1Type)
+    SIX_Enum_BEGIN_enum
         OTHER = 1,
         V = 2,
         H = 3,
@@ -291,23 +290,22 @@ SIX_Enum_BEGIN_DEFINE(Polarization1Type)
         UNKNOWN = 6,
         SEQUENCE = 7,
     SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_value
+            SIX_Enum_map_entry_(OTHER),
+            SIX_Enum_map_entry_(V),
+            SIX_Enum_map_entry_(H),
+            SIX_Enum_map_entry_(X),
+            SIX_Enum_map_entry_(Y),
+            SIX_Enum_map_entry_(S),
+            SIX_Enum_map_entry_(E),
+            SIX_Enum_map_entry_(RHC),
+            SIX_Enum_map_entry_(LHC),
+            SIX_Enum_map_entry_(UNKNOWN),
+            SIX_Enum_map_entry_(SEQUENCE),
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(Polarization1Type);
 using PolarizationSequenceType = Polarization1Type;
-#undef SIX_Enum_map_entry_name
-#define SIX_Enum_map_entry_name Polarization1Type
-SIX_Enum_BEGIN_string_to_value(Polarization1Type)
-        SIX_Enum_map_entry(OTHER),
-        SIX_Enum_map_entry(V),
-        SIX_Enum_map_entry(H),
-        SIX_Enum_map_entry(X),
-        SIX_Enum_map_entry(Y),
-        SIX_Enum_map_entry(S),
-        SIX_Enum_map_entry(E),
-        SIX_Enum_map_entry(RHC),
-        SIX_Enum_map_entry(LHC),
-        SIX_Enum_map_entry(UNKNOWN),
-        SIX_Enum_map_entry(SEQUENCE),
-SIX_Enum_END_string_to_value
 
 /*!
  *  \struct PolarizationType
@@ -321,7 +319,7 @@ SIX_Enum_BEGIN_DEFINE(Polarization2Type)
     std::string other_; // value of OTHER.* for SIDD 3.0/SICD 1.3
 
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum(Polarization2Type)
+    SIX_Enum_BEGIN_enum
         OTHER = 1,
         V = 2,
         H = 3,
@@ -333,22 +331,21 @@ SIX_Enum_BEGIN_DEFINE(Polarization2Type)
         LHC = 5,
         UNKNOWN = 6,
     SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_value
+            SIX_Enum_map_entry_(OTHER),
+            SIX_Enum_map_entry_(V),
+            SIX_Enum_map_entry_(H),
+            SIX_Enum_map_entry_(X),
+            SIX_Enum_map_entry_(Y),
+            SIX_Enum_map_entry_(S),
+            SIX_Enum_map_entry_(E),
+            SIX_Enum_map_entry_(RHC),
+            SIX_Enum_map_entry_(LHC),
+            SIX_Enum_map_entry_(UNKNOWN),
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(Polarization2Type);
 using PolarizationType = Polarization2Type;
-#undef SIX_Enum_map_entry_name
-#define SIX_Enum_map_entry_name Polarization2Type
-SIX_Enum_BEGIN_string_to_value(Polarization2Type)
-        SIX_Enum_map_entry(OTHER),
-        SIX_Enum_map_entry(V),
-        SIX_Enum_map_entry(H),
-        SIX_Enum_map_entry(X),
-        SIX_Enum_map_entry(Y),
-        SIX_Enum_map_entry(S),
-        SIX_Enum_map_entry(E),
-        SIX_Enum_map_entry(RHC),
-        SIX_Enum_map_entry(LHC),
-        SIX_Enum_map_entry(UNKNOWN),
-SIX_Enum_END_string_to_value
 
 /*!
  *  \struct DualPolarizationType
@@ -365,7 +362,7 @@ SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
     std::string other_; // value of OTHER.* for SIDD 3.0/SICD 1.3
 
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum(DualPolarizationType)
+    SIX_Enum_BEGIN_enum
         // SICD 1.3 add a few more allowable values, which means the number of combinations explodes.
         // Keeping integer values the same in case there's some code somewhere that depends on it.
         OTHER = 1,
@@ -462,105 +459,103 @@ SIX_Enum_BEGIN_DEFINE(DualPolarizationType)
 
         UNKNOWN = 18,
     SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_value
+        SIX_Enum_map_entry_(OTHER),
+
+        SIX_Enum_map_entry_(V_V),
+        SIX_Enum_map_entry_(V_H),
+        SIX_Enum_map_entry_(V_X),
+        SIX_Enum_map_entry_(V_Y),
+        SIX_Enum_map_entry_(V_S),
+        SIX_Enum_map_entry_(V_E),
+        SIX_Enum_map_entry_(V_RHC),
+        SIX_Enum_map_entry_(V_LHC),
+        SIX_Enum_map_entry_(V_OTHER),
+
+        SIX_Enum_map_entry_(H_V),
+        SIX_Enum_map_entry_(H_H),
+        SIX_Enum_map_entry_(H_X),
+        SIX_Enum_map_entry_(H_Y),
+        SIX_Enum_map_entry_(H_S),
+        SIX_Enum_map_entry_(H_E),
+        SIX_Enum_map_entry_(H_RHC),
+        SIX_Enum_map_entry_(H_LHC),
+        SIX_Enum_map_entry_(H_OTHER),
+
+        SIX_Enum_map_entry_(X_V),
+        SIX_Enum_map_entry_(X_H),
+        SIX_Enum_map_entry_(X_X),
+        SIX_Enum_map_entry_(X_Y),
+        SIX_Enum_map_entry_(X_S),
+        SIX_Enum_map_entry_(X_E),
+        SIX_Enum_map_entry_(X_RHC),
+        SIX_Enum_map_entry_(X_LHC),
+        SIX_Enum_map_entry_(X_OTHER),
+
+        SIX_Enum_map_entry_(Y_V),
+        SIX_Enum_map_entry_(Y_H),
+        SIX_Enum_map_entry_(Y_X),
+        SIX_Enum_map_entry_(Y_Y),
+        SIX_Enum_map_entry_(Y_S),
+        SIX_Enum_map_entry_(Y_E),
+        SIX_Enum_map_entry_(Y_RHC),
+        SIX_Enum_map_entry_(Y_LHC),
+        SIX_Enum_map_entry_(Y_OTHER),
+
+        SIX_Enum_map_entry_(S_V),
+        SIX_Enum_map_entry_(S_H),
+        SIX_Enum_map_entry_(S_X),
+        SIX_Enum_map_entry_(S_Y),
+        SIX_Enum_map_entry_(S_S),
+        SIX_Enum_map_entry_(S_E),
+        SIX_Enum_map_entry_(S_RHC),
+        SIX_Enum_map_entry_(S_LHC),
+        SIX_Enum_map_entry_(S_OTHER),
+
+        SIX_Enum_map_entry_(E_V),
+        SIX_Enum_map_entry_(E_H),
+        SIX_Enum_map_entry_(E_X),
+        SIX_Enum_map_entry_(E_Y),
+        SIX_Enum_map_entry_(E_S),
+        SIX_Enum_map_entry_(E_E),
+        SIX_Enum_map_entry_(E_RHC),
+        SIX_Enum_map_entry_(E_LHC),
+        SIX_Enum_map_entry_(E_OTHER),
+
+        SIX_Enum_map_entry_(RHC_V),
+        SIX_Enum_map_entry_(RHC_H),
+        SIX_Enum_map_entry_(RHC_X),
+        SIX_Enum_map_entry_(RHC_Y),
+        SIX_Enum_map_entry_(RHC_S),
+        SIX_Enum_map_entry_(RHC_E),
+        SIX_Enum_map_entry_(RHC_RHC),
+        SIX_Enum_map_entry_(RHC_LHC),
+        SIX_Enum_map_entry_(RHC_OTHER),
+
+        SIX_Enum_map_entry_(LHC_V),
+        SIX_Enum_map_entry_(LHC_H),
+        SIX_Enum_map_entry_(LHC_X),
+        SIX_Enum_map_entry_(LHC_Y),
+        SIX_Enum_map_entry_(LHC_S),
+        SIX_Enum_map_entry_(LHC_E),
+        SIX_Enum_map_entry_(LHC_RHC),
+        SIX_Enum_map_entry_(LHC_LHC),
+        SIX_Enum_map_entry_(LHC_OTHER),
+
+        SIX_Enum_map_entry_(OTHER_V),
+        SIX_Enum_map_entry_(OTHER_H),
+        SIX_Enum_map_entry_(OTHER_X),
+        SIX_Enum_map_entry_(OTHER_Y),
+        SIX_Enum_map_entry_(OTHER_S),
+        SIX_Enum_map_entry_(OTHER_E),
+        SIX_Enum_map_entry_(OTHER_RHC),
+        SIX_Enum_map_entry_(OTHER_LHC),
+        SIX_Enum_map_entry_(OTHER_OTHER),
+
+        SIX_Enum_map_entry_(UNKNOWN),
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(DualPolarizationType);
-#undef SIX_Enum_map_entry_name
-#define SIX_Enum_map_entry_name DualPolarizationType
-SIX_Enum_BEGIN_string_to_value(DualPolarizationType)
-    SIX_Enum_map_entry(OTHER),
-
-    SIX_Enum_map_entry(V_V),
-    SIX_Enum_map_entry(V_H),
-    SIX_Enum_map_entry(V_X),
-    SIX_Enum_map_entry(V_Y),
-    SIX_Enum_map_entry(V_S),
-    SIX_Enum_map_entry(V_E),
-    SIX_Enum_map_entry(V_RHC),
-    SIX_Enum_map_entry(V_LHC),
-    SIX_Enum_map_entry(V_OTHER),
-
-    SIX_Enum_map_entry(H_V),
-    SIX_Enum_map_entry(H_H),
-    SIX_Enum_map_entry(H_X),
-    SIX_Enum_map_entry(H_Y),
-    SIX_Enum_map_entry(H_S),
-    SIX_Enum_map_entry(H_E),
-    SIX_Enum_map_entry(H_RHC),
-    SIX_Enum_map_entry(H_LHC),
-    SIX_Enum_map_entry(H_OTHER),
-
-    SIX_Enum_map_entry(X_V),
-    SIX_Enum_map_entry(X_H),
-    SIX_Enum_map_entry(X_X),
-    SIX_Enum_map_entry(X_Y),
-    SIX_Enum_map_entry(X_S),
-    SIX_Enum_map_entry(X_E),
-    SIX_Enum_map_entry(X_RHC),
-    SIX_Enum_map_entry(X_LHC),
-    SIX_Enum_map_entry(X_OTHER),
-
-    SIX_Enum_map_entry(Y_V),
-    SIX_Enum_map_entry(Y_H),
-    SIX_Enum_map_entry(Y_X),
-    SIX_Enum_map_entry(Y_Y),
-    SIX_Enum_map_entry(Y_S),
-    SIX_Enum_map_entry(Y_E),
-    SIX_Enum_map_entry(Y_RHC),
-    SIX_Enum_map_entry(Y_LHC),
-    SIX_Enum_map_entry(Y_OTHER),
-
-    SIX_Enum_map_entry(S_V),
-    SIX_Enum_map_entry(S_H),
-    SIX_Enum_map_entry(S_X),
-    SIX_Enum_map_entry(S_Y),
-    SIX_Enum_map_entry(S_S),
-    SIX_Enum_map_entry(S_E),
-    SIX_Enum_map_entry(S_RHC),
-    SIX_Enum_map_entry(S_LHC),
-    SIX_Enum_map_entry(S_OTHER),
-
-    SIX_Enum_map_entry(E_V),
-    SIX_Enum_map_entry(E_H),
-    SIX_Enum_map_entry(E_X),
-    SIX_Enum_map_entry(E_Y),
-    SIX_Enum_map_entry(E_S),
-    SIX_Enum_map_entry(E_E),
-    SIX_Enum_map_entry(E_RHC),
-    SIX_Enum_map_entry(E_LHC),
-    SIX_Enum_map_entry(E_OTHER),
-
-    SIX_Enum_map_entry(RHC_V),
-    SIX_Enum_map_entry(RHC_H),
-    SIX_Enum_map_entry(RHC_X),
-    SIX_Enum_map_entry(RHC_Y),
-    SIX_Enum_map_entry(RHC_S),
-    SIX_Enum_map_entry(RHC_E),
-    SIX_Enum_map_entry(RHC_RHC),
-    SIX_Enum_map_entry(RHC_LHC),
-    SIX_Enum_map_entry(RHC_OTHER),
-
-    SIX_Enum_map_entry(LHC_V),
-    SIX_Enum_map_entry(LHC_H),
-    SIX_Enum_map_entry(LHC_X),
-    SIX_Enum_map_entry(LHC_Y),
-    SIX_Enum_map_entry(LHC_S),
-    SIX_Enum_map_entry(LHC_E),
-    SIX_Enum_map_entry(LHC_RHC),
-    SIX_Enum_map_entry(LHC_LHC),
-    SIX_Enum_map_entry(LHC_OTHER),
-
-    SIX_Enum_map_entry(OTHER_V),
-    SIX_Enum_map_entry(OTHER_H),
-    SIX_Enum_map_entry(OTHER_X),
-    SIX_Enum_map_entry(OTHER_Y),
-    SIX_Enum_map_entry(OTHER_S),
-    SIX_Enum_map_entry(OTHER_E),
-    SIX_Enum_map_entry(OTHER_RHC),
-    SIX_Enum_map_entry(OTHER_LHC),
-    SIX_Enum_map_entry(OTHER_OTHER),
-
-    SIX_Enum_map_entry(UNKNOWN),
-SIX_Enum_END_string_to_value
-
 
 /*!
  *  \struct ProjectionType

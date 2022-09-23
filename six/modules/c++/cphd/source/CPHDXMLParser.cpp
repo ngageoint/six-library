@@ -105,14 +105,6 @@ std::unique_ptr<xml::lite::Document> CPHDXMLParser::toXML(
     return doc;
 }
 
-template<typename T>
-static XMLElem createStringFromEnum_(six::XMLParser& p, const std::string& name, const T& e,
-    XMLElem parent) {
-    assert(parent != nullptr);
-    const auto s = six::Enum::toString(e);
-    return &(p.createString(name, s, *parent));
-}
-
 XMLElem CPHDXMLParser::toXML(const CollectionInformation& collectionID, XMLElem parent)
 {
     XMLElem collectionXML = newElement("CollectionID", parent);
@@ -123,7 +115,7 @@ XMLElem CPHDXMLParser::toXML(const CollectionInformation& collectionID, XMLElem 
         createString("IlluminatorName", collectionID.illuminatorName, collectionXML);
     }
     createString("CoreName", collectionID.coreName, collectionXML);
-    createStringFromEnum_(*this, "CollectType", collectionID.collectType, collectionXML);
+    createString("CollectType", collectionID.collectType, collectionXML);
 
     // RadarMode
     XMLElem radarModeXML = newElement("RadarMode", collectionXML);
@@ -146,8 +138,8 @@ XMLElem CPHDXMLParser::toXML(const CollectionInformation& collectionID, XMLElem 
 XMLElem CPHDXMLParser::toXML(const Global& global, XMLElem parent)
 {
     XMLElem globalXML = newElement("Global", parent);
-    createStringFromEnum_(*this, "DomainType", global.domainType, globalXML);
-    createStringFromEnum_(*this, "SGN", global.sgn, globalXML);
+    createString("DomainType", global.domainType, globalXML);
+    createString("SGN", global.sgn, globalXML);
 
     //Timeline
     XMLElem timelineXML = newElement("Timeline", globalXML);
@@ -171,7 +163,7 @@ XMLElem CPHDXMLParser::toXML(const Global& global, XMLElem parent)
     {
         XMLElem tropoXML = newElement("TropoParameters", globalXML);
         createDouble("N0", global.tropoParameters->n0, tropoXML);
-        createStringFromEnum_(*this, "RefHeight", global.tropoParameters->refHeight, tropoXML);
+        createString("RefHeight", global.tropoParameters->refHeight, tropoXML);
     }
     if (global.ionoParameters.get())
     {
@@ -185,7 +177,7 @@ XMLElem CPHDXMLParser::toXML(const Global& global, XMLElem parent)
 XMLElem CPHDXMLParser::toXML(const SceneCoordinates& sceneCoords, XMLElem parent)
 {
     XMLElem sceneCoordsXML = newElement("SceneCoordinates", parent);
-    createStringFromEnum_(*this, "EarthModel", sceneCoords.earthModel, sceneCoordsXML);
+    createString("EarthModel", sceneCoords.earthModel, sceneCoordsXML);
 
     XMLElem iarpXML = newElement("IARP", sceneCoordsXML);
     mCommon.createVector3D("ECF", sceneCoords.iarp.ecf, iarpXML);
@@ -302,7 +294,7 @@ XMLElem CPHDXMLParser::toXML(const SceneCoordinates& sceneCoords, XMLElem parent
 XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
 {
     XMLElem dataXML = newElement("Data", parent);
-    createStringFromEnum_(*this, "SignalArrayFormat", data.signalArrayFormat, dataXML);
+    createString("SignalArrayFormat", data.signalArrayFormat, dataXML);
     createInt("NumBytesPVP", data.numBytesPVP, dataXML);
     createInt("NumCPHDChannels", data.channels.size(), dataXML);
     if (!six::Init::isUndefined(data.signalCompressionID))
@@ -357,8 +349,8 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
             createBooleanType("SignalNormal", channel.parameters[ii].signalNormal, parametersXML);
         }
         XMLElem polXML = newElement("Polarization", parametersXML);
-        createStringFromEnum_(*this, "TxPol", channel.parameters[ii].polarization.txPol, polXML);
-        createStringFromEnum_(*this, "RcvPol", channel.parameters[ii].polarization.rcvPol, polXML);
+        createString("TxPol", channel.parameters[ii].polarization.txPol, polXML);
+        createString("RcvPol", channel.parameters[ii].polarization.rcvPol, polXML);
         createDouble("FxC", channel.parameters[ii].fxC, parametersXML);
         createDouble("FxBW", channel.parameters[ii].fxBW, parametersXML);
         createOptionalDouble("FxBWNoise", channel.parameters[ii].fxBWNoise, parametersXML);
@@ -588,7 +580,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         XMLElem monoXML = newElement("Monostatic", refGeoXML);
         mCommon.createVector3D("ARPPos", refGeo.monostatic->arpPos, monoXML);
         mCommon.createVector3D("ARPVel", refGeo.monostatic->arpVel, monoXML);
-        const auto side = six::Enum::toString(refGeo.monostatic->sideOfTrack);
+        const auto side = refGeo.monostatic->sideOfTrack.toString();
         createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), monoXML);
         createDouble("SlantRange", refGeo.monostatic->slantRange, monoXML);
         createDouble("GroundRange", refGeo.monostatic->groundRange, monoXML);
@@ -617,7 +609,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         mCommon.createVector3D("Vel", refGeo.bistatic->txPlatform.vel, txPlatXML);
 
         {
-            const auto side = six::Enum::toString(refGeo.bistatic->txPlatform.sideOfTrack);
+            const auto side = refGeo.bistatic->txPlatform.sideOfTrack.toString();
             createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), txPlatXML);
         }
         createDouble("SlantRange", refGeo.bistatic->txPlatform.slantRange, txPlatXML);
@@ -632,7 +624,7 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
         mCommon.createVector3D("Vel", refGeo.bistatic->rcvPlatform.vel, rcvPlatXML);
 
         {
-            const auto side = six::Enum::toString(refGeo.bistatic->rcvPlatform.sideOfTrack);
+            const auto side = refGeo.bistatic->rcvPlatform.sideOfTrack.toString();
             createString("SideOfTrack", (side == "LEFT" ? "L" : "R"), rcvPlatXML);
         }
         createDouble("SlantRange", refGeo.bistatic->rcvPlatform.slantRange, rcvPlatXML);
@@ -718,7 +710,7 @@ XMLElem CPHDXMLParser::toXML(const TxRcv& txRcv, XMLElem parent)
         createDouble("RFBandwidth", txRcv.txWFParameters[ii].rfBandwidth, txWFParamsXML);
         createDouble("FreqCenter", txRcv.txWFParameters[ii].freqCenter, txWFParamsXML);
         createOptionalDouble("LFMRate", txRcv.txWFParameters[ii].lfmRate, txWFParamsXML);
-        createStringFromEnum_(*this, "Polarization", txRcv.txWFParameters[ii].polarization, txWFParamsXML);
+        createString("Polarization", txRcv.txWFParameters[ii].polarization, txWFParamsXML);
         createOptionalDouble("Power", txRcv.txWFParameters[ii].power, txWFParamsXML);
     }
     createInt("NumRcvs", txRcv.rcvParameters.size(), txRcvXML);
@@ -731,7 +723,7 @@ XMLElem CPHDXMLParser::toXML(const TxRcv& txRcv, XMLElem parent)
         createDouble("IFFilterBW", txRcv.rcvParameters[ii].ifFilterBW, rcvParamsXML);
         createDouble("FreqCenter", txRcv.rcvParameters[ii].freqCenter, rcvParamsXML);
         createOptionalDouble("LFMRate", txRcv.rcvParameters[ii].lfmRate, rcvParamsXML);
-        createStringFromEnum_(*this, "Polarization", txRcv.rcvParameters[ii].polarization, rcvParamsXML);
+        createString("Polarization", txRcv.rcvParameters[ii].polarization, rcvParamsXML);
         createOptionalDouble("PathGain", txRcv.rcvParameters[ii].pathGain, rcvParamsXML);
     }
     return txRcvXML;
@@ -1037,9 +1029,9 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* collectionIDXML, Collectio
 
 void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
 {
-    six::Enum::toType(global.domainType,
+    global.domainType = DomainType::toType(
             getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
-    six::Enum::toType(global.sgn,
+    global.sgn = PhaseSGN::toType(
             getFirstAndOnly(globalXML, "SGN")->getCharacterData());
 
     // Timeline
@@ -1079,8 +1071,8 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
         // Optional
         global.tropoParameters.reset(new TropoParameters());
         parseDouble(getFirstAndOnly(tropoXML, "N0"), global.tropoParameters->n0);
-        six::Enum::toType(global.tropoParameters->refHeight,
-           getFirstAndOnly(tropoXML, "RefHeight")->getCharacterData());
+        global.tropoParameters->refHeight =
+            RefHeight::toType(getFirstAndOnly(tropoXML, "RefHeight")->getCharacterData());
     }
 
     // IonoParameters
@@ -1097,7 +1089,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
 void CPHDXMLParser::fromXML(const xml::lite::Element* sceneCoordsXML,
                              SceneCoordinates& scene)
 {
-    six::Enum::toType(scene.earthModel,
+    scene.earthModel = EarthModelType::toType(
             getFirstAndOnly(sceneCoordsXML, "EarthModel")->getCharacterData());
 
     // IARP
@@ -1233,7 +1225,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* sceneCoordsXML,
 void CPHDXMLParser::fromXML(const xml::lite::Element* dataXML, Data& data)
 {
     const xml::lite::Element* signalXML = getFirstAndOnly(dataXML, "SignalArrayFormat");
-    six::Enum::toType(data.signalArrayFormat, signalXML->getCharacterData());
+    data.signalArrayFormat = SignalArrayFormat::toType(signalXML->getCharacterData());
 
     size_t numBytesPVP_temp = 0;
     XMLElem numBytesPVPXML = getFirstAndOnly(dataXML, "NumBytesPVP");
@@ -2052,10 +2044,10 @@ void CPHDXMLParser::parseChannelParameters(
     for (size_t ii = 0; ii < PolarizationXML.size(); ++ii)
     {
         const xml::lite::Element* TxPolXML = getFirstAndOnly(PolarizationXML[ii], "TxPol");
-        six::Enum::toType(param.polarization.txPol, TxPolXML->getCharacterData());
+        param.polarization.txPol = PolarizationType::toType(TxPolXML->getCharacterData());
 
         const xml::lite::Element* RcvPolXML = getFirstAndOnly(PolarizationXML[ii], "RcvPol");
-        six::Enum::toType(param.polarization.rcvPol, RcvPolXML->getCharacterData());
+        param.polarization.rcvPol = PolarizationType::toType(RcvPolXML->getCharacterData());
     }
 
 }
@@ -2203,6 +2195,6 @@ void CPHDXMLParser::parseTxRcvParameter(const xml::lite::Element* paramXML, Para
     parseString(getFirstAndOnly(paramXML, "Identifier"), param.identifier);
     parseDouble(getFirstAndOnly(paramXML, "FreqCenter"), param.freqCenter);
     parseOptionalDouble(paramXML, "LFMRate", param.lfmRate);
-    six::Enum::toType(param.polarization, getFirstAndOnly(paramXML, "Polarization")->getCharacterData());
+    param.polarization = PolarizationType::toType(getFirstAndOnly(paramXML, "Polarization")->getCharacterData());
 }
 }

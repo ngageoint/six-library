@@ -35,19 +35,18 @@ namespace sidd
  */
 SIX_Enum_BEGIN_DEFINE(ARPFlag)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum(ARPFlag)
+    SIX_Enum_BEGIN_enum
         REALTIME = 0,
         PREDICTED = 1,
         POST_PROCESSED = 2,
     SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_value
+            SIX_Enum_map_entry_(REALTIME),
+            SIX_Enum_map_entry_(PREDICTED),
+            {"POST PROCESSED", POST_PROCESSED },
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(ARPFlag);
-#undef SIX_Enum_map_entry_name
-#define SIX_Enum_map_entry_name ARPFlag
-SIX_Enum_BEGIN_string_to_value(ARPFlag)
-        SIX_Enum_map_entry(REALTIME),
-        SIX_Enum_map_entry(PREDICTED),
-        {"POST PROCESSED", ARPFlag::POST_PROCESSED },
-SIX_Enum_END_string_to_value
 
 /*!
 *  \struct BandEqualizationAlgorithm
@@ -56,13 +55,14 @@ SIX_Enum_END_string_to_value
 */
 SIX_Enum_BEGIN_DEFINE(BandEqualizationAlgorithm)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum(BandEqualizationAlgorithm)
+    SIX_Enum_BEGIN_enum
         LUT_1D = 0,
     SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_value
+            {"LUT 1D", LUT_1D },
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(BandEqualizationAlgorithm);
-SIX_Enum_BEGIN_string_to_value(BandEqualizationAlgorithm)
-        {"LUT 1D", BandEqualizationAlgorithm::LUT_1D },
-SIX_Enum_END_string_to_value
 
 /*!
 *  \struct CoordinateSystemType
@@ -92,7 +92,7 @@ SIX_Enum_ENUM_3(DRAType,
 */
 SIX_Enum_BEGIN_DEFINE(DownsamplingMethod)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum(DownsamplingMethod)
+    SIX_Enum_BEGIN_enum
         DECIMATE = 0,
         MAX_PIXEL = 1,
         AVERAGE = 2,
@@ -100,17 +100,17 @@ SIX_Enum_BEGIN_DEFINE(DownsamplingMethod)
         BILINEAR = 4,
         LAGRANGE = 5,
     SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_value
+            SIX_Enum_map_entry_(DECIMATE),
+            { "MAX PIXEL", MAX_PIXEL },
+            SIX_Enum_map_entry_(AVERAGE),
+            { "NEAREST NEIGHBOR", NEAREST_NEIGHBOR },
+            SIX_Enum_map_entry_(BILINEAR),
+            SIX_Enum_map_entry_(LAGRANGE),
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(DownsamplingMethod);
-#undef SIX_Enum_map_entry_name
-#define SIX_Enum_map_entry_name DownsamplingMethod
-SIX_Enum_BEGIN_string_to_value(DownsamplingMethod)
-        SIX_Enum_map_entry(DECIMATE),
-        { "MAX PIXEL", DownsamplingMethod::MAX_PIXEL },
-        SIX_Enum_map_entry(AVERAGE),
-        { "NEAREST NEIGHBOR", DownsamplingMethod::NEAREST_NEIGHBOR },
-        SIX_Enum_map_entry(BILINEAR),
-        SIX_Enum_map_entry(LAGRANGE),
-SIX_Enum_END_string_to_value
+
 
 /*!
 *  \struct FilterDatabaseName
@@ -119,21 +119,20 @@ SIX_Enum_END_string_to_value
 */
 SIX_Enum_BEGIN_DEFINE(FilterDatabaseName)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum(FilterDatabaseName)
+    SIX_Enum_BEGIN_enum
         BILINEAR = 0,
         CUBIC = 1,
         LAGRANGE = 2,
         NEAREST_NEIGHBOR = 3,
     SIX_Enum_END_enum
+
+    SIX_Enum_BEGIN_string_to_value
+            SIX_Enum_map_entry_(BILINEAR),
+            SIX_Enum_map_entry_(CUBIC),
+            SIX_Enum_map_entry_(LAGRANGE),
+            { "NEAREST NEIGHBOR", NEAREST_NEIGHBOR },
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(FilterDatabaseName);
-#undef SIX_Enum_map_entry_name
-#define SIX_Enum_map_entry_name FilterDatabaseName
-SIX_Enum_BEGIN_string_to_value(FilterDatabaseName)
-        SIX_Enum_map_entry(BILINEAR),
-        SIX_Enum_map_entry(CUBIC),
-        SIX_Enum_map_entry(LAGRANGE),
-        { "NEAREST NEIGHBOR", FilterDatabaseName::NEAREST_NEIGHBOR },
-SIX_Enum_END_string_to_value
 
 /*!
 *  \struct FilterOperation
@@ -152,22 +151,20 @@ SIX_Enum_ENUM_2(FilterOperation,
 */
 SIX_Enum_BEGIN_DEFINE(RenderingIntent)
     //! The enumerations allowed
-    SIX_Enum_BEGIN_enum(RenderingIntent)
+    SIX_Enum_BEGIN_enum
         PERCEPTUAL = 0,
         SATURATION = 1,
         RELATIVE_INTENT = 2,
         ABSOLUTE_INTENT = 3,
     SIX_Enum_END_enum
-SIX_Enum_END_DEFINE(RenderingIntent);
-#undef SIX_Enum_map_entry_name
-#define SIX_Enum_map_entry_name RenderingIntent
-SIX_Enum_BEGIN_string_to_value(RenderingIntent)
-        SIX_Enum_map_entry(PERCEPTUAL),
-        SIX_Enum_map_entry(SATURATION),
-        { "RELATIVE INTENT", RenderingIntent::RELATIVE_INTENT },
-        { "ABSOLUTE INTENT", RenderingIntent::ABSOLUTE_INTENT },
-SIX_Enum_END_string_to_value
 
+    SIX_Enum_BEGIN_string_to_value
+            SIX_Enum_map_entry_(PERCEPTUAL),
+            SIX_Enum_map_entry_(SATURATION),
+            { "RELATIVE INTENT", RELATIVE_INTENT },
+            { "ABSOLUTE INTENT", ABSOLUTE_INTENT },
+    SIX_Enum_END_string_to_value
+SIX_Enum_END_DEFINE(RenderingIntent);
 
 /*!
 *  \struct ShadowDirection

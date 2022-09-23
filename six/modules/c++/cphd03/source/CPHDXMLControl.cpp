@@ -132,19 +132,11 @@ XMLElem CPHDXMLControl::createLatLonAltFootprint(const std::string& name,
     return footprint;
 }
 
-template<typename T>
-static XMLElem createStringFromEnum_(six::XMLParser& p, const std::string& name, const T& e,
-    XMLElem parent) {
-    assert(parent != nullptr);
-    const auto s = six::Enum::toString(e);
-    return &(p.createString(name, s, *parent));
-}
-
 XMLElem CPHDXMLControl::toXML(const Data& data, XMLElem parent)
 {
     XMLElem dataXML = newElement("Data", parent);
 
-    createStringFromEnum_(*this, "SampleType", data.sampleType, dataXML);
+    createString("SampleType", data.sampleType, dataXML);
 
     createInt("NumCPHDChannels", data.numCPHDChannels, dataXML);
     createInt("NumBytesVBP", data.numBytesVBP, dataXML);
@@ -163,8 +155,8 @@ XMLElem CPHDXMLControl::toXML(const Global& global, XMLElem parent)
 {
     XMLElem globalXML = newElement("Global", parent);
 
-    createStringFromEnum_(*this, "DomainType", global.domainType, globalXML);
-    createStringFromEnum_(*this, "PhaseSGN", global.phaseSGN, globalXML);
+    createString("DomainType", global.domainType, globalXML);
+    createString("PhaseSGN", global.phaseSGN, globalXML);
 
     if (!six::Init::isUndefined(global.refFrequencyIndex))
     {
@@ -270,7 +262,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
 {
     XMLElem srpXML = newElement("SRP", parent);
 
-    createStringFromEnum_(*this, "SRPType", srp.srpType, srpXML);
+    createString("SRPType", srp.srpType, srpXML);
     createInt("NumSRPs", srp.numSRPs, srpXML);
 
     switch ((int)srp.srpType)
@@ -329,7 +321,7 @@ XMLElem CPHDXMLControl::toXML(const SRP& srp, XMLElem parent)
 
     default:
         throw except::Exception(Ctxt(
-                "Invalid SRPType: " + six::Enum::toString(srp.srpType)));
+                "Invalid SRPType: " + srp.srpType.toString()));
         break;
     }
 
@@ -553,7 +545,7 @@ Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc)
 
 void CPHDXMLControl::fromXML(const xml::lite::Element* dataXML, Data& data)
 {
-    six::Enum::toType(data.sampleType, getFirstAndOnly(dataXML, "SampleType")->getCharacterData());
+    data.sampleType = cphd::SampleType::toType(getFirstAndOnly(dataXML, "SampleType")->getCharacterData());
 
     parseUInt(getFirstAndOnly(dataXML, "NumCPHDChannels"), data.numCPHDChannels);
     parseUInt(getFirstAndOnly(dataXML, "NumBytesVBP"), data.numBytesVBP);
@@ -581,8 +573,8 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* globalXML, Global& global
 {
     XMLElem tmpElem = nullptr;
 
-    six::Enum::toType(global.domainType, getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
-    six::Enum::toType(global.phaseSGN, getFirstAndOnly(globalXML, "PhaseSGN")->getCharacterData());
+    global.domainType = cphd::DomainType::toType(getFirstAndOnly(globalXML, "DomainType")->getCharacterData());
+    global.phaseSGN   = cphd::PhaseSGN::toType(getFirstAndOnly(globalXML, "PhaseSGN")->getCharacterData());
 
     parseOptionalInt(globalXML, "RefFreqIndex", global.refFrequencyIndex);
 
@@ -788,7 +780,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* srpXML, SRP& srp)
 #else
     std::string s(getFirstAndOnly(srpXML, "SRPType")->getCharacterData());
     str::upper(s);
-    six::Enum::toType(srp.srpType, s);
+    srp.srpType = cphd::SRPType::toType(s);
 #endif
     parseInt(getFirstAndOnly(srpXML, "NumSRPs"), srp.numSRPs);
 
@@ -854,7 +846,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* srpXML, SRP& srp)
 
     default:
         throw except::Exception(Ctxt(std::string("Invalid SRPType: ")
-                + six::Enum::toString(srp.srpType)));
+                + srp.srpType.toString()));
 
         break;
     }

@@ -94,7 +94,7 @@ public:
     // returns "FX", "TOA", or "NOT_SET"
     std::string getDomainTypeString() const
     {
-        return six::Enum::toString(getDomainType());
+        return getDomainType().toString();
     }
 
     // returns enum for FX, TOA, or NOT_SET

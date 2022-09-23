@@ -364,7 +364,7 @@ scene::ProjectionModel* Utilities::getProjectionModel(
                                                errors);
     default:
         throw except::Exception(
-                Ctxt("Invalid grid type: " + six::Enum::toString(gridType)));
+                Ctxt("Invalid grid type: " + gridType.toString()));
     }
 }
 
