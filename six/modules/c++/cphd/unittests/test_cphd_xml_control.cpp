@@ -1147,12 +1147,12 @@ TEST_CASE(testPhaseSGN)
     v = cphd::PhaseSGN::toType("+1");
     TEST_ASSERT_EQ(v, +1);
     s = v.toString();
-    TEST_ASSERT_EQ("+1", s);
+    TEST_ASSERT_EQ("1", s);
 
-    //v = cphd::PhaseSGN::toType("1");
-    //TEST_ASSERT_EQ(v, 1);
+    v = cphd::PhaseSGN::toType("1");
+    TEST_ASSERT_EQ(v, 1);
     s = v.toString();
-    TEST_ASSERT_EQ("+1", s);
+    TEST_ASSERT_EQ("1", s);
 }
 
 TEST_MAIN(
