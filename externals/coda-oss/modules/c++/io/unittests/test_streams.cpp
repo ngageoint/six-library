@@ -311,7 +311,7 @@ TEST_CASE(testRotateReset)
     try
     {
         out.write("0");
-        TEST_FAIL("Stream is closed; should throw.");
+        TEST_FAIL_MSG("Stream is closed; should throw.");
     }
     catch(except::Exception&)
     {

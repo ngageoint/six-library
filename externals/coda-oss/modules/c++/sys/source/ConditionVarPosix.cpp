@@ -27,25 +27,27 @@
 #include <pthread.h>
 
 sys::ConditionVarPosix::ConditionVarPosix() :
-    mMutexOwned(new sys::MutexPosix()),
+    mMutexOwned(std::make_unique<sys::MutexPosix>()),
     mMutex(mMutexOwned.get())
 {
     if ( ::pthread_cond_init(&mNative, NULL) != 0)
         throw SystemException("ConditionVar initialization failed");
 }
 
-sys::ConditionVarPosix::ConditionVarPosix(sys::MutexPosix* theLock, bool isOwner) :
-    mMutex(theLock)
+sys::ConditionVarPosix::ConditionVarPosix(MutexPosix* theLock, bool isOwner, std::nullptr_t) : mMutex(theLock)
 {
-    if (!theLock)
-        throw SystemException("ConditionVar received NULL mutex");
-
     if (isOwner)
         mMutexOwned.reset(theLock);
 
-    if ( ::pthread_cond_init(&mNative, NULL) != 0)
+    if (::pthread_cond_init(&mNative, NULL) != 0)
         throw SystemException("ConditionVar initialization failed");
 }
+sys::ConditionVarPosix::ConditionVarPosix(sys::MutexPosix* theLock, bool isOwner) : ConditionVarPosix(theLock, isOwner, nullptr)
+{
+    if (!theLock)
+        throw SystemException("ConditionVar received NULL mutex");
+}
+sys::ConditionVarPosix::ConditionVarPosix(sys::MutexPosix& theLock) : ConditionVarPosix(&theLock, false /*isOwner*/, nullptr) { }
 
 sys::ConditionVarPosix::~ConditionVarPosix()
 {

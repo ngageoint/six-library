@@ -1,4 +1,15 @@
-# NITRO (NITF i/o) Release Notes
+﻿# NITRO (NITF i/o) Release Notes
+
+## [Version 2.11.0](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.0); August 30, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) release [2022-08-30_cpp14](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30_cpp14)
+* Cut from [main](https://github.com/mdaus/nitro/tree/main); identical to [Version 2.10.12](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.12)
+except that C++14 is now required.  [master](https://github.com/mdaus/nitro/tree/master) remains at C++11.
+
+## [Version 2.10.12](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.12); August 30, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) release [2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30)
+* Build JPEG decompression as a plug-in.
+* tweak unittests so they run in SIX.
+* Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/mdaus/nitro/tree/main).
 
 ## [Version 2.10.11](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.11); August 2, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) release [2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)

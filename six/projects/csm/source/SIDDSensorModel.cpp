@@ -454,12 +454,7 @@ const six::sidd::MeasurableProjection* SIDDSensorModel::getProjection() const
 std::vector<double>
 SIDDSensorModel::getSIXUnmodeledError() const
 {
-    assert(mData.get() != nullptr);
-    if (auto pErrorStatistics = mData->errorStatistics.get())
-    {
-        return SIXSensorModel::getSIXUnmodeledError_(*pErrorStatistics);
-    }
-    return {};
+    return SIXSensorModel::getSIXUnmodeledError_(mData->errorStatistics.get());
 }
 
 void SIDDSensorModel::reinitialize()

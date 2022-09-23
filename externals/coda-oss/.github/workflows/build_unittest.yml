@@ -6,7 +6,7 @@ jobs:
   build-cmake-windows:
     strategy:
       matrix:
-        os: [windows-2019]
+        os: [windows-latest]
         python-version: ['3.7']
     name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
@@ -77,7 +77,8 @@ jobs:
     - name: build
       run: |
         cd target
-        cmake --build . -j
+        # "-j" spawns too many processes causing GCC to crash
+        cmake --build . -j 12
     - name: install
       run: |
         cd target

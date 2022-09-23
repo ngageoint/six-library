@@ -82,9 +82,9 @@ struct Document // SOAPDocument derives :-(
     #ifndef SWIG // SWIG doesn't like std::unique_ptr
     std::unique_ptr<Document>& clone(std::unique_ptr<Document>& doc) const
     {
-        doc = coda_oss::make_unique<Document>();
+        doc = std::make_unique<Document>();
 
-        auto cloneRoot = coda_oss::make_unique<Element>();
+        auto cloneRoot = std::make_unique<Element>();
         cloneRoot->clone(*mRootNode);
         doc->setRootElement(std::move(cloneRoot));
         return doc;

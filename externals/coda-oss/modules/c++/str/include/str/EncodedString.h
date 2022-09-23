@@ -54,8 +54,6 @@ class CODA_OSS_API EncodedString final
 
     // No "public" operator=() for these; this class is mostly for storage and/or conversion,
     // not extensive manipulation.  Create a new instance and assign/move that.
-    void assign(coda_oss::u8string::const_pointer);
-    void assign(str::W1252string::const_pointer);
     
 public:
     EncodedString();
@@ -65,12 +63,18 @@ public:
     EncodedString(EncodedString&&);
     EncodedString& operator=(EncodedString&&);
 
+    EncodedString(coda_oss::u8string::const_pointer, coda_oss::u8string::size_type);
     explicit EncodedString(coda_oss::u8string::const_pointer);
     explicit EncodedString(const coda_oss::u8string& s);
-    explicit EncodedString(const str::W1252string&);
+
+    EncodedString(str::W1252string::const_pointer, str::W1252string::size_type);
     explicit EncodedString(str::W1252string::const_pointer);
-    explicit EncodedString(const std::string&);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
+    explicit EncodedString(const str::W1252string&);
+
+    EncodedString(std::string::const_pointer, std::string::size_type);
     explicit EncodedString(std::string::const_pointer);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
+    explicit EncodedString(const std::string&);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
+
     explicit EncodedString(const std::u16string&); // converted to UTF-8 for storage
     explicit EncodedString(const std::u32string&); // converted to UTF-8 for storage
     explicit EncodedString(const std::wstring&);  // Assume platform native encoding: UTF-32 on Linux, UTF-16 on Windows
@@ -152,9 +156,14 @@ inline bool operator!=(const EncodedString& lhs, const EncodedString& rhs)
     return !(lhs == rhs);
 }
 
+inline std::string toString(const EncodedString& es)
+{
+    return es.native();
+}
+
 inline std::ostream& operator<<(std::ostream& os, const EncodedString& es)
 {
-    os << es.native();
+    os << toString(es);
     return os;
 }
 
