@@ -21,8 +21,9 @@
  */
 
 
-#ifndef __SYS_CONDITION_VAR_INTERFACE_H__
-#define __SYS_CONDITION_VAR_INTERFACE_H__
+#ifndef CODA_OSS_sys_ConditionVarInterface_h_INCLUDED_
+#define CODA_OSS_sys_ConditionVarInterface_h_INCLUDED_
+#pragma once
 
 #include <typeinfo>
 
@@ -67,8 +68,8 @@ struct CODA_OSS_API ConditionVarInterface
      *  a lock, but this class will STILL delete it.
      *
      */
-    ConditionVarInterface(Mutex *, bool = false)
-    {}
+    explicit ConditionVarInterface(Mutex *, bool = false) {}
+    explicit ConditionVarInterface(Mutex&) { }
 
     virtual ~ConditionVarInterface() = default;
 
@@ -121,4 +122,4 @@ struct CODA_OSS_API ConditionVarInterface
 };
 
 }
-#endif
+#endif  // CODA_OSS_sys_ConditionVarInterface_h_INCLUDED_

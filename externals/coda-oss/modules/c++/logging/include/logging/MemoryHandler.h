@@ -43,7 +43,10 @@ struct MemoryHandler : public Handler
 {
     MemoryHandler(LogLevel level = LogLevel::LOG_NOTSET);
 
+    MemoryHandler(const MemoryHandler&) = delete;
     MemoryHandler& operator=(const MemoryHandler&) = delete;
+    MemoryHandler(MemoryHandler&&) = delete;
+    MemoryHandler& operator=(MemoryHandler&&) = delete;    
 
     const std::vector<std::string>&
     getLogs(LogLevel level = LogLevel::LOG_NOTSET) const;

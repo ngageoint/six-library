@@ -32,7 +32,7 @@
 
 namespace mem
 {
-// This won't work everywhere since C++11's std::unique_ptr<> often requries
+// This won't work everywhere since C++11's std::unique_ptr<> often requires
 // "&&" and std::move. But for member data and the like it can reduce some
 // boiler-plate code; note that it's often possible to just use std::unique_ptr
 // directly.  This is mostly needed to support existing interfaces.
@@ -59,89 +59,8 @@ namespace mem
 // compile with all the different compilers; let somebody else worry about that
 // via std::shared_ptr.  The only code change is use_count() instead of getCount(),
 // and that's mostly used in unit-tests.
-#if !CODA_OSS_enable_mem_SharedPtr
 template<typename T>
 using SharedPtr = std::shared_ptr<T>;
-#else
-/*!
- *  \class SharedPtr
- *  \brief This is a derived class of std::shared_ptr. The purpose of this
- *         class is to provide backwards compatibility in systems that do
- *         not have C++11 support.
- *         Because this inherits from std::shared_ptr it can be directly
- *         passed into interfaces requiring std::shared_ptr or legacy
- *         interfaces.
- *         For future work, prefer std::shared_ptr when possible.
- *
- *         WARNING: std::shared_ptr<T>* foo = new SharedPtr<T> will leak!
- */
-template <class T>
-class SharedPtr : public std::shared_ptr<T>
-{
-public:
-    SharedPtr() = default;
-    ~SharedPtr() = default;
-
-    using std::shared_ptr<T>::shared_ptr;
-
-    using std::shared_ptr<T>::reset;
-
-    SharedPtr(const SharedPtr&) = default;
-    SharedPtr& operator=(const SharedPtr&) = default;
-    SharedPtr(SharedPtr&&) = default;
-    SharedPtr& operator=(SharedPtr&&) = default;
-
-    template<typename OtherT>
-    SharedPtr(const std::shared_ptr<OtherT>& ptr)
-    {
-        *this = ptr;
-    } 
-    template<typename OtherT>
-    SharedPtr& operator=(const std::shared_ptr<OtherT>& ptr)
-    {
-      std::shared_ptr<T>& base = *this;
-      base = ptr;
-      return *this;
-    }
-
-    template <typename OtherT>
-    explicit SharedPtr(std::unique_ptr<OtherT>&& ptr) :
-        std::shared_ptr<T>(ptr.release())
-    {
-    }
-
-    void reset(std::unique_ptr<T>&& scopedPtr)
-    {
-        std::shared_ptr<T>::reset(scopedPtr.release());
-    }
-
-    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
-    // The base class only handles auto_ptr<T>&&
-    explicit SharedPtr(mem::auto_ptr<T> ptr) :
-        std::shared_ptr<T>(ptr.release())
-    {
-    }
-
-    // The base class only handles auto_ptr<T>&&
-    template <typename OtherT>
-    explicit SharedPtr(mem::auto_ptr<OtherT> ptr) :
-        std::shared_ptr<T>(ptr.release())
-    {
-    }
-
-    void reset(mem::auto_ptr<T> scopedPtr)
-    {
-        std::shared_ptr<T>::reset(scopedPtr.release());
-    }
-    #endif
-
-    // Implemented to support the legacy SharedPtr. Prefer use_count.
-    long getCount() const
-    {
-        return std::shared_ptr<T>::use_count();
-    }
-};
-#endif // CODA_OSS_enable_mem_SharedPtr
 } // namespace mem
 
 // try to make code changes a tiny bit easier?

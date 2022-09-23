@@ -95,24 +95,41 @@ static std::string to_native(str::W1252string::const_pointer p, size_t sz)
 }
 
 template <typename CharT>
-inline coda_oss::span<const char> make_span(const CharT* s)
+inline coda_oss::span<const CharT> make_span(const CharT* s, size_t c)
+{
+    return coda_oss::span<const CharT>(s, c);
+}
+template <typename CharT>
+inline coda_oss::span<const CharT> make_span(const CharT* s)
 {
     auto s_ = str::cast<const char*>(s);
-    return coda_oss::span<const char>(s_, strlen(s_));
+    return make_span(s, strlen(s_));
 }
-
 template<typename CharT>
-inline coda_oss::span<const char> make_span(const std::basic_string<CharT>& s)
+inline coda_oss::span<const CharT> make_span(const std::basic_string<CharT>& s)
 {
-    return coda_oss::span<const char>(str::c_str<std::string>(s), s.size());
+    return make_span(s.c_str(), s.size());
+}
+template <typename CharT>
+inline coda_oss::span<const char> make_span(coda_oss::span<const CharT> s)
+{
+    auto s_ = str::cast<const char*>(s.data());
+    return coda_oss::span<const char>(s_, s.size());
 }
 
+str::EncodedStringView::EncodedStringView(std::string::const_pointer p, std::string::size_type c) : mString(make_span(p, c)) { }
 str::EncodedStringView::EncodedStringView(std::string::const_pointer p) : mString(make_span(p)) { }
-str::EncodedStringView::EncodedStringView(coda_oss::u8string::const_pointer p) : mString(make_span(p)), mIsUtf8(true) { }
-str::EncodedStringView::EncodedStringView(str::W1252string::const_pointer p) :  mString(make_span(p)), mIsUtf8(false) { }
 str::EncodedStringView::EncodedStringView(const std::string& s) : mString(make_span(s)){ }
-str::EncodedStringView::EncodedStringView(const coda_oss::u8string& s) : mString(make_span(s)), mIsUtf8(true) { }
-str::EncodedStringView::EncodedStringView(const str::W1252string& s) : mString(make_span(s)), mIsUtf8(false) { }
+
+str::EncodedStringView::EncodedStringView(coda_oss::span<const coda_oss::u8string::value_type> s) : mString(make_span(s)), mIsUtf8(true) {}
+str::EncodedStringView::EncodedStringView(coda_oss::u8string::const_pointer p, coda_oss::u8string::size_type c) : EncodedStringView(make_span(p, c)) { }
+str::EncodedStringView::EncodedStringView(coda_oss::u8string::const_pointer p) : EncodedStringView(make_span(p)) { }
+str::EncodedStringView::EncodedStringView(const coda_oss::u8string& s) : EncodedStringView(make_span(s)) { }
+
+str::EncodedStringView::EncodedStringView(coda_oss::span<const str::W1252string::value_type> s) : mString(make_span(s)), mIsUtf8(false) {}
+str::EncodedStringView::EncodedStringView(str::W1252string::const_pointer p, str::W1252string::size_type c) : EncodedStringView(make_span(p, c)) { }
+str::EncodedStringView::EncodedStringView(str::W1252string::const_pointer p) :  EncodedStringView(make_span(p)) { }
+str::EncodedStringView::EncodedStringView(const str::W1252string& s) : EncodedStringView(make_span(s)) { }
 
 std::string str::EncodedStringView::native() const
 {

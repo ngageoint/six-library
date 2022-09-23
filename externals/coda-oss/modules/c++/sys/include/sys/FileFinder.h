@@ -161,6 +161,13 @@ struct FileFinder final
         bool recursive = false);
 };
 
+// This is here most to avoid creating a new module for one utility routine
+namespace test // i.e., sys::test
+{
+    // Try to find the specified "root" directory starting at the given path.
+    // Used by unittest to find sample files.
+    coda_oss::filesystem::path findRootDirectory(const coda_oss::filesystem::path& p, const std::string& rootName,
+        std::function<bool(const coda_oss::filesystem::path&)> isRoot);
 }
-
+}
 #endif

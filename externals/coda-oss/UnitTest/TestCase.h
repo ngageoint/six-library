@@ -30,8 +30,8 @@ namespace test
         static void FailOnCondition(bool condition, const unsigned short* message, const Microsoft::VisualStudio::CppUnitTestFramework::__LineInfo* pLineInfo);    
         static std::wstring GetAssertMessage(bool equality, const std::string& expected, const std::string& actual, const wchar_t *message);
     };
-#define CODA_OSS_equals_message_(expected, actual, message) reinterpret_cast<const unsigned short*>(test::Assert::GetAssertMessage(true, str::toString(expected),  str::toString(actual), message).c_str())
-#define CODA_OSS_not_equals_message_(notExpected, actual, message) reinterpret_cast<const unsigned short*>(test::Assert::GetAssertMessage(false,  str::toString(notExpected),  str::toString(actual), message).c_str())
+#define CODA_OSS_equals_message_(expected, actual, message) reinterpret_cast<const unsigned short*>(test::Assert::GetAssertMessage(true, test::toString(expected),  test::toString(actual), message).c_str())
+#define CODA_OSS_not_equals_message_(notExpected, actual, message) reinterpret_cast<const unsigned short*>(test::Assert::GetAssertMessage(false,  test::toString(notExpected),  test::toString(actual), message).c_str())
 #define CODA_OSS_message_(message) reinterpret_cast<const unsigned short*>(test::Assert::GetAssertMessage(false,  "", "", message).c_str())
 
 // see Assert::AreEqual<>
@@ -39,7 +39,7 @@ template<typename TExpected, typename TActual>
 inline void diePrintf_eq(const TExpected& expected, const TActual& actual,
     const wchar_t* message = NULL, const Microsoft::VisualStudio::CppUnitTestFramework::__LineInfo* pLineInfo = NULL)
 {
-	Assert::FailOnCondition(expected == actual, CODA_OSS_equals_message_(expected, actual, message), pLineInfo);
+    Assert::FailOnCondition(expected == actual, CODA_OSS_equals_message_(expected, actual, message), pLineInfo);
 }
 
 // see Assert::AreNotEqual<>
@@ -47,7 +47,7 @@ template<typename TExpected, typename TActual>
 inline void diePrintf_ne(const TExpected& notExpected, const TActual& actual,
     const wchar_t* message = NULL, const Microsoft::VisualStudio::CppUnitTestFramework::__LineInfo* pLineInfo = NULL)
 {
-	Assert::FailOnCondition(notExpected != actual, CODA_OSS_not_equals_message_(notExpected, actual, message), pLineInfo);
+    Assert::FailOnCondition(notExpected != actual, CODA_OSS_not_equals_message_(notExpected, actual, message), pLineInfo);
 }
 
 template <typename TX1, typename TX2>
@@ -78,22 +78,22 @@ inline void diePrintf_lt(const TX1& X1, const TX2& X2,
 }
 #undef CODA_OSS_test_diePrintf_eq_
 #undef CODA_OSS_test_diePrintf_not_eq_
-#define CODA_OSS_test_diePrintf_eq_(X1, X2) testName, test::diePrintf_eq(X1, X2)
-#define CODA_OSS_test_diePrintf_not_eq_(X1, X2) testName, test::diePrintf_ne(X1, X2)
+#define CODA_OSS_test_diePrintf_eq_(X1, X2) testName, ::test::diePrintf_eq(X1, X2)
+#define CODA_OSS_test_diePrintf_not_eq_(X1, X2) testName, ::test::diePrintf_ne(X1, X2)
 
 #undef CODA_OSS_test_diePrintf_greater_eq_
 #undef CODA_OSS_test_diePrintf_greater_
 #undef CODA_OSS_test_diePrintf_lesser_eq_
 #undef CODA_OSS_test_diePrintf_lesser_
-#define CODA_OSS_test_diePrintf_greater_eq_(X1, X2) testName, test::diePrintf_ge(X1, X2)
-#define CODA_OSS_test_diePrintf_greater_(X1, X2) testName, test::diePrintf_gt(X1, X2)
-#define CODA_OSS_test_diePrintf_lesser_eq_(X1, X2) testName, test::diePrintf_le(X1, X2)
-#define CODA_OSS_test_diePrintf_lesser_(X1, X2) testName, test::diePrintf_lt(X1, X2)
+#define CODA_OSS_test_diePrintf_greater_eq_(X1, X2) testName, ::test::diePrintf_ge(X1, X2)
+#define CODA_OSS_test_diePrintf_greater_(X1, X2) testName, ::test::diePrintf_gt(X1, X2)
+#define CODA_OSS_test_diePrintf_lesser_eq_(X1, X2) testName, ::test::diePrintf_le(X1, X2)
+#define CODA_OSS_test_diePrintf_lesser_(X1, X2) testName, ::test::diePrintf_lt(X1, X2)
 
 template <typename TX1, typename TX2>
 inline void test_assert_greater_(const TX1& X1, const TX2& X2)
 {
-	Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsTrue(X1 > X2);
+    Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsTrue(X1 > X2);
 }
 #undef TEST_ASSERT_GREATER
 #define TEST_ASSERT_GREATER(X1, X2) testName, test_assert_greater_(X1, X2)
@@ -124,8 +124,8 @@ inline void assert_almost_eq(const std::string& testName, long double X1, long d
 #undef TEST_ASSERT_EQ_MSG
 #define TEST_ASSERT_EQ_MSG(msg, X1, X2) testName, Microsoft::VisualStudio::CppUnitTestFramework::Logger::WriteMessage(msg.c_str()); TEST_ASSERT_EQ(X1, X2)
 
-#undef TEST_FAIL
-#define TEST_FAIL(msg) { (void)testName; const str::EncodedStringView vw(msg); Microsoft::VisualStudio::CppUnitTestFramework::Assert::Fail(vw.wstring().c_str()); }
+#undef TEST_FAIL_MSG
+#define TEST_FAIL_MSG(msg) { (void)testName; const str::EncodedStringView vw(msg); Microsoft::VisualStudio::CppUnitTestFramework::Assert::Fail(vw.wstring().c_str()); }
 
 #undef TEST_EXCEPTION
 #undef TEST_THROWS

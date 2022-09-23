@@ -20,4 +20,3 @@ public:
 #include "nitf/unittests/test_tre_read.cpp"
 
 };
-const char* test_tre_read::argv0 = nullptr;

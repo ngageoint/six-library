@@ -21,52 +21,39 @@
  */
 
 
-#ifndef __SYS_THREAD_H__
-#define __SYS_THREAD_H__ 
+#ifndef CODA_OSS_sys_Thread_h_INCLUDED_
+#define CODA_OSS_sys_Thread_h_INCLUDED_
+#pragma once
 
+#include "sys/Conf.h"
 /**
- *  \file 
+ *  \file
  *  \brief Include the right thread.
  *
  *  This file will auto-select the thread of choice,
- *  if one is to be defined.  
+ *  if one is to be defined.
  *  \note We need to change the windows part to check _MT
  *  because that is how it determines reentrance!
  *
  */
 
-// Netscape portable runtime
-#    if defined(USE_NSPR_THREADS)
-#        include "sys/ThreadNSPR.h"
+#if defined(_WIN32)
+#include "sys/ThreadWin32.h"
 namespace sys
 {
-typedef ThreadNSPR Thread;
+using Thread = ThreadWin32;
 }
-#    elif (defined(WIN32) || defined(_WIN32))
-#        include "sys/ThreadWin32.h"
-namespace sys
-{
-typedef ThreadWin32 Thread;
-}
-#    elif defined(__sun)
-#        include "sys/ThreadSolaris.h"
-namespace sys
-{
-typedef ThreadSolaris Thread;
-}
-#    elif defined(__sgi)
-#        include "sys/ThreadIrix.h"
-namespace sys
-{
-typedef ThreadIrix Thread;
-}
-// If they havent defined anything and its !windows, we'll give 'em posix
-#    else
-#        include "sys/ThreadPosix.h"
-namespace sys
-{
-typedef ThreadPosix Thread;
-}
-#    endif // Which thread package?
 
+#elif defined(CODA_OSS_POSIX_SOURCE)
+#include "sys/ThreadPosix.h"
+namespace sys
+{
+using Thread = ThreadPosix;
+}
+
+#else
+#error "Which thread package?"
 #endif
+
+#endif  // CODA_OSS_sys_Thread_h_INCLUDED_
+

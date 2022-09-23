@@ -21,8 +21,9 @@
  */
 
 
-#ifndef __SYS_MUTEX_INTERFACE_H__
-#define __SYS_MUTEX_INTERFACE_H__
+#ifndef CODA_OSS_sys_MutexInterface_h_INCLUDED_
+#define CODA_OSS_sys_MutexInterface_h_INCLUDED_
+#pragma once
 
 
 #include <typeinfo>
@@ -62,6 +63,9 @@ public:
 
     }
 
+    MutexInterface(const MutexInterface&) = delete;
+    MutexInterface& operator=(const MutexInterface&) = delete;
+
     /*!
      *  Lock the mutex up.
      */
@@ -76,4 +80,4 @@ public:
 
 }
 
-#endif
+#endif  // CODA_OSS_sys_MutexInterface_h_INCLUDED_
