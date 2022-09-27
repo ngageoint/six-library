@@ -2,6 +2,11 @@
 
 # SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
 
+## [Version 3.?.?](https://github.com/ngageoint/six-library/releases/tag/SIX-3.?.?); ??? ??, 202?
+* [coda-oss](https://github.com/mdaus/coda-oss) version [202?-??-??](https://github.com/mdaus/coda-oss/releases/tag/202?-??-??)
+* [nitro](https://github.com/mdaus/nitro) version [2.?.?](https://github.com/mdaus/nitro/releases/tag/NITRO-2.?.?)
+* cphd::PhaseSGN accepts both `1` and `+1`, toString() is now `"1"` instead of `"+1"`.
+
 ## [Version 3.2.0](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.0); August 30, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-30_cpp14](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30_cpp14)
 * [nitro](https://github.com/mdaus/nitro) version [2.11.0](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.0)
