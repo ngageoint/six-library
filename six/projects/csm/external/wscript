@@ -56,13 +56,24 @@ def build(bld):
         #       dependency, we could recompile in the CSM source code that we
         #       need to use.
         vtsDir = 'vts_301_0'
+        six_root = '../../../../../..'
+        nested_six_root = six_root + '/../..'
+        install = six_root + '/install'
+        nested_install = nested_six_root + '/install'
+        coda_oss = six_root + '/externals/coda-oss/modules/c++'
+        nested_coda_oss = nested_six_root + '/externals/coda-oss/modules/c++'
         bld.program(target='vts', name='vts',
-		module_deps=['sys', 'str', 'std', 'coda_oss', 'gsl', 'except'],
-		includes=['include'],
-		source=bld.path.find_dir(os.path.join(vtsDir, 'source')).ant_glob('*.cpp'),
-		use='sys-c++ std-c++ CSMAPI THREAD DL',
-		path=bld.path.find_dir(vtsDir),
-		install_path=bld.env['install_bindir'])
+                    includes=['include',
+                        install + '/include', nested_install + '/include',
+			coda_oss + '/sys/include', coda_oss + '/str/include', coda_oss + '/std/include',
+			coda_oss + '/coda_oss/include', coda_oss + '/gsl/include', coda_oss + '/except/include',
+			nested_coda_oss + '/sys/include', nested_coda_oss + '/str/include', nested_coda_oss + '/std/include',
+			nested_coda_oss + '/coda_oss/include', nested_coda_oss + '/gsl/include', nested_coda_oss + '/except/include'
+			],
+                    source=bld.path.find_dir(os.path.join(vtsDir, 'source')).ant_glob('*.cpp'),
+                    use='sys-c++ CSMAPI THREAD DL',
+                    path=bld.path.find_dir(vtsDir),
+                    install_path=bld.env['install_bindir'])
 
 def distclean(context):
     # remove the unzipped directory
