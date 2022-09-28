@@ -28,6 +28,7 @@
 #include <std/filesystem>
 #include <std/optional>
 #include <import/sys.h>
+#include <sys/FileFinder.h>
 
 namespace fs = std::filesystem;
 
@@ -232,4 +233,88 @@ fs::path nitf::Test::findInputFile(const fs::path& inputFile)
 {
 	const auto root = find_NITRO_root();
 	return root / inputFile;
+}
+
+// Try to find a directory containing a plugin
+static std::filesystem::path findPluginPath(const std::string& pluginName)
+{
+	struct FileExistsPredicate final : public sys::FileOnlyPredicate
+	{
+		const std::string name_;
+		FileExistsPredicate(const std::string& name) : name_(name) {}
+		bool operator()(const std::string& entry) const override
+		{
+			const auto p = std::filesystem::path(entry) / name_;
+			return std::filesystem::is_regular_file(p);
+		}
+	};
+	const FileExistsPredicate pred(pluginName);
+
+	auto dir = getCurrentExecutable();
+	while (true)
+	{
+		const std::vector<std::string> searchPaths{ dir.string() };
+		const auto results = sys::FileFinder::search(pred, searchPaths, true /*recursive*/);
+		if (results.size() == 1)
+		{
+			return results[0];
+		}
+		else if (results.size() > 1)
+		{
+			throw std::logic_error("Found the same file at multiple locations: " + searchPaths[0]);
+		}
+
+		if (is_directory(dir / ".git"))
+		{
+			throw std::logic_error("Won't traverse above .git directory at: " + dir.string());
+		}
+		dir = dir.parent_path();
+	}
+}
+static std::filesystem::path getNitfPluginPath(const std::string& pluginName)
+{
+	std::filesystem::path p;
+	try
+	{
+		p = nitf::Test::buildPluginsDir();
+	}
+	catch (const std::invalid_argument&)
+	{
+		p = getCurrentExecutable();
+	}
+	auto plugin = p / pluginName;
+	if (!is_regular_file(plugin))
+	{
+		p = findPluginPath(pluginName);
+		plugin = p / pluginName;
+		if (!is_regular_file(plugin))
+		{
+			throw std::logic_error("Can't find plugin: " + plugin.string());
+		}
+	}
+	return p;
+}
+
+static std::string buildPluginName(const std::string& base)
+{
+#ifdef _WIN32
+	return base + ".DLL";
+#else
+	// Note that these do NOT have the typical "lib" prefix;
+	// i.e., file is "ENGRDA.so" instead of "libENGRDA.so"
+	return base + ".so";
+#endif
+}
+
+void nitf::Test::setNitfPluginPath()
+{
+	// The name of the plugin we know exists and will always be built, see test_load_plugins
+	static auto p = getNitfPluginPath(buildPluginName("ENGRDA"));
+	sys::OS().setEnv("NITF_PLUGIN_PATH", p.string(), true /*overwrite*/);	
+}
+
+void nitf::Test::j2kSetNitfPluginPath()
+{
+	static auto p = getNitfPluginPath(buildPluginName("J2KCompress"));
+	sys::OS().setEnv("NITF_PLUGIN_PATH", p.string(), true /*overwrite*/);
 }

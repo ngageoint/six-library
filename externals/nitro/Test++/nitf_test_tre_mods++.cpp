@@ -29,7 +29,7 @@ TEST_CLASS(test_load_plugins) {
 public:
 	test_load_plugins() {
 		// initialization code here
-		sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+		nitf::Test::setNitfPluginPath();
 	}
 	~test_load_plugins() = default;
 	test_load_plugins(const test_load_plugins&) = delete;

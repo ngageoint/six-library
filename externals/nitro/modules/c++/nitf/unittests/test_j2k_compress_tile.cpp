@@ -181,7 +181,7 @@ static bool equals(const std::vector<std::byte>& lhs, const std::vector<std::byt
 
 TEST_CASE(j2k_compress_tile)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     const size_t numThreads = sys::OS().getNumCPUs() - 1;
 

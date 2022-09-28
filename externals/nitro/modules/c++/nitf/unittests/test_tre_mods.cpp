@@ -26,7 +26,7 @@
 
 TEST_CASE(testNestedMod)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     nitf_Error error;
     NITF_BOOL exists;
@@ -61,7 +61,7 @@ TEST_CASE(testNestedMod)
 
 TEST_CASE(testIncompleteCondMod)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     nitf_Error error;
     NITF_BOOL exists;
@@ -89,7 +89,7 @@ TEST_CASE(testIncompleteCondMod)
 
 TEST_CASE(testClone)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     NITF_BOOL exists;
     nitf_TRE* dolly;            /* used for clone */
@@ -116,7 +116,7 @@ TEST_CASE(testClone)
 
 TEST_CASE(testBasicMod)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     /* construct a tre */
     NITF_BOOL exists;
@@ -147,7 +147,7 @@ TEST_CASE(testBasicMod)
 
 TEST_CASE(testSize)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     nitf_Error error;
     int treLength;
@@ -163,7 +163,7 @@ TEST_CASE(testSize)
 
 TEST_CASE(iterateUnfilled)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     nitf_Error error;
     nitf_TRECursor cursor;
@@ -186,7 +186,7 @@ TEST_CASE(iterateUnfilled)
 
 TEST_CASE(populateThenIterate)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     nitf_Error error;
     nitf_TRECursor cursor;
@@ -214,7 +214,7 @@ TEST_CASE(populateThenIterate)
 
 TEST_CASE(populateWhileIterating)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     nitf_Error error;
     nitf_TRECursor cursor;
