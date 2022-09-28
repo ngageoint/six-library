@@ -21,10 +21,13 @@
  */
 
 #include <import/nitf.h>
-#include "Test.h"
+#include <nitf/UnitTests.hpp>
+#include "TestCase.h"
 
 TEST_CASE(testNestedMod)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     nitf_Error error;
     NITF_BOOL exists;
     nitf_TRE* tre = nitf_TRE_construct("ACCHZB", NULL, &error);
@@ -58,12 +61,14 @@ TEST_CASE(testNestedMod)
 
 TEST_CASE(testIncompleteCondMod)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     nitf_Error error;
     NITF_BOOL exists;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
     TEST_ASSERT(tre != NULL);
     int treLength = tre->handler->getCurrentSize(tre, &error);
-    TEST_ASSERT_EQ_INT(treLength, 2);
+    TEST_ASSERT_EQ(treLength, 2);
 
     exists = nitf_TRE_setField(tre, "NUMACPO", "01", 2, &error);
     TEST_ASSERT(exists);
@@ -71,12 +76,12 @@ TEST_CASE(testIncompleteCondMod)
     exists = nitf_TRE_setField(tre, "UNIAAH[0]", "FT0", 3, &error);
     TEST_ASSERT(exists);
     treLength = tre->handler->getCurrentSize(tre, &error);
-    TEST_ASSERT_EQ_INT(treLength, 37);
+    TEST_ASSERT_EQ(treLength, 37);
 
     exists = nitf_TRE_setField(tre, "NUMPTS[0]", "002", 3, &error);
     TEST_ASSERT(exists);
     treLength = tre->handler->getCurrentSize(tre, &error);
-    TEST_ASSERT_EQ_INT(treLength, 97);
+    TEST_ASSERT_EQ(treLength, 97);
 
     /* destruct the TREs */
     nitf_TRE_destruct(&tre);
@@ -84,6 +89,8 @@ TEST_CASE(testIncompleteCondMod)
 
 TEST_CASE(testClone)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     NITF_BOOL exists;
     nitf_TRE* dolly;            /* used for clone */
     nitf_Field* clonedField = NULL;
@@ -109,6 +116,8 @@ TEST_CASE(testClone)
 
 TEST_CASE(testBasicMod)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     /* construct a tre */
     NITF_BOOL exists;
     nitf_Error error;
@@ -138,13 +147,15 @@ TEST_CASE(testBasicMod)
 
 TEST_CASE(testSize)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     nitf_Error error;
     int treLength;
     nitf_TRE* tre = nitf_TRE_construct("AIMIDB", NULL, &error);
 
     TEST_ASSERT(tre != NULL);
     treLength = tre->handler->getCurrentSize(tre, &error);
-    TEST_ASSERT_EQ_INT(treLength, 89);
+    TEST_ASSERT_EQ(treLength, 89);
 
     /* destruct the TRE */
     nitf_TRE_destruct(&tre);
@@ -152,6 +163,8 @@ TEST_CASE(testSize)
 
 TEST_CASE(iterateUnfilled)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     nitf_Error error;
     nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
@@ -165,7 +178,7 @@ TEST_CASE(iterateUnfilled)
         ++numFields;
     }
 
-    TEST_ASSERT_EQ_INT(numFields, (uint32_t)1);
+    TEST_ASSERT_EQ(numFields, (uint32_t)1);
 
     nitf_TRECursor_cleanup(&cursor);
     nitf_TRE_destruct(&tre);
@@ -173,6 +186,8 @@ TEST_CASE(iterateUnfilled)
 
 TEST_CASE(populateThenIterate)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     nitf_Error error;
     nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
@@ -191,7 +206,7 @@ TEST_CASE(populateThenIterate)
         ++numFields;
     }
 
-    TEST_ASSERT_EQ_INT(numFields, (uint32_t)29);
+    TEST_ASSERT_EQ(numFields, (uint32_t)29);
 
     nitf_TRECursor_cleanup(&cursor);
     nitf_TRE_destruct(&tre);
@@ -199,6 +214,8 @@ TEST_CASE(populateThenIterate)
 
 TEST_CASE(populateWhileIterating)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     nitf_Error error;
     nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
@@ -223,7 +240,7 @@ TEST_CASE(populateWhileIterating)
             nitf_TRE_setField(cursor.tre, cursor.tag_str, "2", 1, &error);
         }
     }
-    TEST_ASSERT_EQ_INT(numFields, (uint32_t)29);
+    TEST_ASSERT_EQ(numFields, (uint32_t)29);
 
     nitf_TRECursor_cleanup(&cursor);
     nitf_TRE_destruct(&tre);
@@ -233,12 +250,12 @@ TEST_MAIN(
     (void) argc;
     (void) argv;
 
-    CHECK(testClone);
-    CHECK(testSize);
-    CHECK(testBasicMod);
-    CHECK(testNestedMod);
-    CHECK(testIncompleteCondMod);
-    CHECK(iterateUnfilled);
-    CHECK(populateThenIterate);
-    CHECK(populateWhileIterating);
+    TEST_CHECK(testClone);
+    TEST_CHECK(testSize);
+    TEST_CHECK(testBasicMod);
+    TEST_CHECK(testNestedMod);
+    TEST_CHECK(testIncompleteCondMod);
+    TEST_CHECK(iterateUnfilled);
+    TEST_CHECK(populateThenIterate);
+    TEST_CHECK(populateWhileIterating);
     )

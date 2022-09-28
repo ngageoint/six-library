@@ -343,6 +343,21 @@ TEST_CASE(use_typed_ENGRDA)
 
 }
 
+TEST_CASE(use_CSEXRB_typed_fields)
+{
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
+    nitf::TRE tre("CSEXRB", "CSEXRB");
+
+    constexpr auto length = 12;
+    nitf::TREField_BCS_A<length> MAX_GSD(tre, "MAX_GSD");
+    TEST_ASSERT_EQ(length, static_cast<int>(MAX_GSD.getLength()));
+
+    MAX_GSD = "0123456789ab";
+    const auto s = str::trim(MAX_GSD);
+    TEST_ASSERT_EQ_STR(s, "0123456789ab");
+}
+
 TEST_CASE(populateWhileIterating)
 {
     sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
@@ -408,6 +423,7 @@ TEST_MAIN(
     TEST_CHECK(use_ENGRDA);
     TEST_CHECK(use_ENGRDA_typed_fields);
     TEST_CHECK(use_typed_ENGRDA);
+    TEST_CHECK(use_CSEXRB_typed_fields);
     TEST_CHECK(populateWhileIterating);
     TEST_CHECK(overflowingNumericFields);
     )
