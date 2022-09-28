@@ -26,6 +26,8 @@
 #define CODA_OSS_sys_Dbg_h_INCLUDED_
 #pragma once
 
+#include "config/Exports.h"
+
 // A "debug" build has debugging symbols, detailed call stacks, minimal optimization, STL validation, etc.
 // A "release" build is likely to "run fast" and be "shipped;" it might lack much of what is in a "debug" build.
 #ifndef CODA_OSS_DEBUG
@@ -110,7 +112,7 @@ namespace sys
     // build-time for Dbg.cpp; may (although shouldn't) be different than above.
     // C++ says little about debug/release/optimize/etc. (there's NDEBUG inherited from C);
     // but mixing is likely to cause all kinds of problems.
-    extern bool debug_build();
+    CODA_OSS_API bool debug_build();
     inline bool release_build()
     {
         return !debug_build();
@@ -186,7 +188,7 @@ namespace sys
  *  \param format
  *  \param ...  Put in any format value here
  */
-void dbgPrintf(const char *format, ...);
+CODA_OSS_API void dbgPrintf(const char *format, ...);
 
 /*!
  *  Prints to DEBUG_STREAM and kills the program

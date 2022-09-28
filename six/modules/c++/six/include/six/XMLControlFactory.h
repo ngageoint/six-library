@@ -25,6 +25,7 @@
 #include <memory>
 #include <vector>
 #include <std/filesystem>
+#include <std/string>
 
 #include <scene/sys_Conf.h>
 
@@ -167,21 +168,23 @@ private:
  *  \return A C++ string object containing the XML
  *
  */
-std::string toXMLString(const Data* data,
+std::u8string toXMLString(const Data* data,
                         const XMLControlRegistry *xmlRegistry = nullptr);
+std::string toXMLString_(const Data* data,
+    const XMLControlRegistry* xmlRegistry = nullptr);
 
 /*!
  *  Additionally performs schema validation --
  *  This function must must receive a valid logger to print validation errors
  */
-std::string toValidXMLString(
+std::u8string toValidXMLString(
         const Data* data,
         const std::vector<std::string>& schemaPaths,
         logging::Logger* log,
         const XMLControlRegistry *xmlRegistry = nullptr);
-std::string toValidXMLString(const Data&,
+std::u8string toValidXMLString(const Data&,
     const std::vector<std::string>& schemaPaths, logging::Logger*, const XMLControlRegistry* xmlRegistry = nullptr);
-std::string toValidXMLString(const Data&,
+std::u8string toValidXMLString(const Data&,
     const std::vector<std::filesystem::path>*, logging::Logger*, const XMLControlRegistry* xmlRegistry = nullptr);
 
 //!  Singleton declaration of our XMLControlRegistry

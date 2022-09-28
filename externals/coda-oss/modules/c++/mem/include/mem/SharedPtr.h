@@ -35,13 +35,8 @@
 // as part of a SWIG interface will result in a missing template type error.
 namespace mem
 {
-#if !CODA_OSS_enable_mem_SharedPtr
 template <typename T>
 using SharedPtr = std::shared_ptr<T>;
-#else
-template<typename T>
-class SharedPtr;
-#endif
 }
 
 #include <mem/SharedPtrCpp11.h>

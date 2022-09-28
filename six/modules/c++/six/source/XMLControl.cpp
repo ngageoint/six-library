@@ -73,7 +73,7 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
         if (!envPath.empty())
         {
             // SIX_SCHEMA_PATH might be a search path
-	  if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, std::filesystem::file_type::directory))
+	        if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, std::filesystem::file_type::directory))
             {
                 // Nope; assume the caller can figure things out (existing behavior).
                 schemaPaths.push_back(envPath);
@@ -159,8 +159,8 @@ static void do_validate_(const xml::lite::Document& doc,
     }
 
     // Pretty-print so that lines numbers are useful
-    io::StringStream xmlStream;
-    rootElement->prettyPrint(xmlStream, xml::lite::StringEncoding::Utf8);
+    io::U8StringStream xmlStream;
+    rootElement->prettyPrint(xmlStream);
 
     std::vector<xml::lite::ValidationInfo> errors;
     validator.validate(xmlStream, rootElement->getUri(), errors);
@@ -358,13 +358,29 @@ std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
 }
 }
 
-std::string six::getSchemaPath(std::vector<std::string>& schemaPaths)
+std::string six::getSchemaPath(std::vector<std::string>& schemaPaths, bool tryToExpandIfNotFound)
 {
     loadDefaultSchemaPath(schemaPaths);
-    auto schemaPath = schemaPaths.empty() ? "" : schemaPaths[0];
-    if (!fs::is_directory(schemaPath))
+
+    // This is hacky; the whole point of having "schemaPaths" be a vector is that there could
+    // be MULTIPLE valid directories, not just one.
+    auto schemaPath = schemaPaths.empty() ? "" : schemaPaths[0]; // TODO: use all directories in schemaPaths
+    if (fs::is_directory(schemaPath))
     {
-        throw except::IOException(Ctxt(FmtX("Directory does not exist: '%s'", schemaPath.c_str())));
+        return schemaPath;
     }
-    return schemaPath;
+
+    if (tryToExpandIfNotFound)
+    {
+        // schemaPath might contain special enviroment variables
+        schemaPath = sys::Path::expandEnvironmentVariables(schemaPath, fs::file_type::directory);
+        if (fs::is_directory(schemaPath))
+        {
+            schemaPath = fs::absolute(schemaPath).string(); // get rid of embedded ".."
+            schemaPaths[0] = schemaPath;
+            return schemaPath;
+        }
+    }
+
+    throw except::IOException(Ctxt(FmtX("Directory does not exist: '%s'", schemaPath.c_str())));
 }

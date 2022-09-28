@@ -20,22 +20,23 @@
  *
  */
 
-#ifndef __XML_LITE_ELEMENT_H__
-#define __XML_LITE_ELEMENT_H__
+#ifndef CODA_OSS_xml_lite_Element_h_INCLUDED_
+#define CODA_OSS_xml_lite_Element_h_INCLUDED_
 #pragma once
 
 #include <memory>
 #include <string>
 #include <new> // std::nothrow_t
+#include <coda_oss/string.h>
 
 #include <io/InputStream.h>
 #include <io/OutputStream.h>
 #include <str/Convert.h>
+#include <str/EncodedString.h>
 #include "xml/lite/XMLException.h"
 #include "xml/lite/Attributes.h"
 #include "xml/lite/QName.h"
 #include "sys/Conf.h"
-#include "coda_oss/optional.h"
 #include "mem/SharedPtr.h"
 
 /*!
@@ -59,19 +60,9 @@ namespace lite
  * This class stores all of the element information about an XML
  * document.
  */
-class Element
+struct Element // SOAPElement derives :-(
 {
-    Element(const std::string& qname, const std::string& uri, std::nullptr_t) :
-        mParent(nullptr), mName(uri, qname)
-    {
-    }
-
-public:
-    //! Default constructor
-    Element() :
-        mParent(nullptr)
-    {
-    }
+    Element() = default;
 
     /*!
      * Constructor taking the namespace prefix and the local name 
@@ -79,37 +70,25 @@ public:
      * \param uri The uri of the object
      * \param characterData The character data (if any)
      */
-    Element(const std::string& qname, const std::string& uri = "",
-            const std::string& characterData = "") :
-        Element(qname, uri, nullptr)
+    explicit Element(const std::string& qname, const std::string& uri = "", const std::string& characterData = "") :
+        mName(uri, qname)
     {
         setCharacterData(characterData);
     }
-    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
-    Element(const std::string& qname, const std::string& uri,
-            const std::string& characterData, StringEncoding encoding) :
-        Element(qname, uri, nullptr)
-    {
-        setCharacterData(characterData, encoding);
-    }
-    Element(const std::string& qname, const std::string& uri,
-            const coda_oss::u8string& characterData) :
-        Element(qname, uri, nullptr)
+    Element(const xml::lite::QName& qname, const coda_oss::u8string& characterData) :
+        mName(qname.getName(), qname.getUri().value)
     {
         setCharacterData(characterData);
     }
 
-    // StringEncoding is assumed based on the platform: Windows-1252 or UTF-8.
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
     static std::unique_ptr<Element> create(const std::string& qname, const std::string& uri = "", const std::string& characterData = "");
-    static std::unique_ptr<Element> create(const std::string& qname, const xml::lite::Uri& uri, const std::string& characterData = "");
     static std::unique_ptr<Element> create(const xml::lite::QName&, const std::string& characterData = "");
     static std::unique_ptr<Element> create(const xml::lite::QName&, const coda_oss::u8string&);
-    // Encoding of "characterData" is always UTF-8
-    static std::unique_ptr<Element> createU8(const xml::lite::QName&, const std::string& characterData = "");
     #endif // SWIG
-
+    
     //! Destructor
-    virtual ~Element()
+    virtual ~Element() noexcept(false)
     {
         destroyChildren();
     }
@@ -118,14 +97,14 @@ public:
     void destroyChildren();
 
     // use clone() to duplicate an Element
-#if !(defined(SWIG) || defined(SWIGPYTHON) || defined(HAVE_PYTHON_H))  // SWIG needs these
-//private: // encoded as part of the C++ name mangling by some compilers
-#endif
+    #if !(defined(SWIG) || defined(SWIGPYTHON) || defined(HAVE_PYTHON_H))  // SWIG needs these
+    //private: // encoded as part of the C++ name mangling by some compilers
+    #endif
     Element(const Element&);
     Element& operator=(const Element&);
-#if !(defined(SWIG) || defined(SWIGPYTHON) || defined(HAVE_PYTHON_H))
-public:
-#endif
+    #if !(defined(SWIG) || defined(SWIGPYTHON) || defined(HAVE_PYTHON_H))
+    public:
+    #endif
 
     Element(Element&&) = default;
     Element& operator=(Element&&) = default;
@@ -290,21 +269,17 @@ public:
      *  \todo Add format capability
      */
     void print(io::OutputStream& stream) const;
-
-    // This is another slightly goofy routine to maintain backwards compatibility.
-    // XML documents must be properly (UTF-8, UTF-16 or UTF-32).  The legacy
-    // print() routine (above) can write documents with a Windows-1252 encoding
-    // as the string is just copied to the output.
-    //
-    // The only valid setting for StringEncoding is Utf8; but defaulting that
-    // could change behavior on Windows.
     void prettyPrint(io::OutputStream& stream,
                      const std::string& formatter = "    ") const;
-    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
-    void print(io::OutputStream& stream, StringEncoding /*=Utf8*/) const;
-    void prettyPrint(io::OutputStream& stream, StringEncoding /*=Utf8*/,
+
+    // Outputs (presumablly to the console) using the **NATIVE** encoding.
+    // For most XML processing, **THIS IS WRONG** as output should
+    // always be UTF-8.  However, for displaying XML on the console in Windows,
+    // the native (Windows-1252) encoding will work better as "special" characters
+    // will be displayed.
+    void consoleOutput_(io::OutputStream& stream) const; // be sure OutputStream is the console, not a file
+    void prettyConsoleOutput_(io::OutputStream& stream, // be sure OutputStream is the console, not a file
                      const std::string& formatter = "    ") const;
-    #endif // SWIG
 
     /*!
      *  Determines if a child element exists
@@ -329,33 +304,21 @@ public:
      *  Returns the character data of this element.
      *  \return the charater data
      */
-    std::string getCharacterData() const
-    {
-        return mCharacterData;
-    }
-    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
-    const coda_oss::optional<StringEncoding>& getEncoding() const
-    {
-        return mEncoding;
-    }
-   const coda_oss::optional<StringEncoding>& getCharacterData(std::string& result) const
-    {
-        result = getCharacterData();
-        return getEncoding();
-    }
-    void getCharacterData(coda_oss::u8string& result) const;
-    #endif // SWIG
+    std::string getCharacterData() const;
+    coda_oss::u8string& getCharacterData(coda_oss::u8string& result) const;
 
     /*!
      *  Sets the character data for this element.
      *  \param characters The data to add to this element
      */
-    void setCharacterData(const std::string& characters);
-    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
-    void setCharacterData_(const std::string& characters, const StringEncoding*);
-    void setCharacterData(const std::string& characters, StringEncoding);
-    void setCharacterData(const coda_oss::u8string& characters);
-    #endif // SWIG
+    void setCharacterData(const std::string&);
+    void setCharacterData(coda_oss::u8string s)
+    {
+        // See Item #41 in "Effective Modern C++" by Scott Meyers.
+        // std::basic_string<T> is "cheap to move" and "always copied"
+        // into mCharacterData.
+        mCharacterData = std::move(s);
+    }
 
     /*!
      *  Sets the local name for this element.
@@ -431,6 +394,12 @@ public:
         mName.getAssociatedUri(result);
     }
 
+    void setPrefix(const std::string& prefix)
+    {
+        mName.setPrefix(prefix);
+    }
+
+
     /*!
      *  Adds a child element to this element
      *  \param node the child element to add
@@ -441,7 +410,9 @@ public:
      *  Adds a child element to this element
      *  \param node the child element to add
      */
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
     virtual Element& addChild(std::unique_ptr<Element>&& node);
+    #endif // SWIG
     #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
     virtual Element& addChild(mem::auto_ptr<Element> node);
     #endif
@@ -483,7 +454,11 @@ public:
     }
 
 protected:
+    //! The children of this element
+    std::vector<Element*> mChildren;
+    xml::lite::QName mName;
 
+private:
     void changePrefix(Element* element,
                       const std::string& prefix,
                       const std::string& uri);
@@ -492,28 +467,15 @@ protected:
                    const std::string& prefix,
                    const std::string& uri);
 
-    void depthPrint(io::OutputStream& stream, int depth,
-                    const std::string& formatter) const;
-    void depthPrint(io::OutputStream& stream, StringEncoding, int depth,
-                    const std::string& formatter) const;
+    void depthPrint(io::OutputStream& stream, int depth, const std::string& formatter, bool isConsoleOutput = false) const;
 
-    Element* mParent;
-    //! The children of this element
-    std::vector<Element*> mChildren;
-    xml::lite::QName mName;
+    Element* mParent = nullptr;
     //! The attributes for this element
     xml::lite::Attributes mAttributes;
-    //! The character data ...
-    std::string mCharacterData;
-
-    private:
-        // ... and how that data is encoded
-        coda_oss::optional<StringEncoding> mEncoding;
-        void depthPrint(io::OutputStream& stream, bool utf8, int depth,
-                const std::string& formatter) const;
+    coda_oss::u8string mCharacterData;
 };
 
-extern Element& add(const xml::lite::QName&, const std::string& value, Element& parent);
+Element& add(const xml::lite::QName&, const std::string& value, Element& parent);
 
 #ifndef SWIG
 // The (old) version of SWIG we're using doesn't like certain C++11 features.
@@ -614,4 +576,4 @@ inline Element* addNewOptionalElement(const xml::lite::QName& name, const coda_o
 }
 }
 
-#endif
+#endif // CODA_OSS_xml_lite_Element_h_INCLUDED_

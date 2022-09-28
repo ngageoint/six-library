@@ -22,7 +22,7 @@
 
 #include "tiff/Utils.h"
 
-bool tiff::Utils::hasGeoTiffIFD(tiff::IFD* ifd)
+bool tiff::Utils::hasGeoTiffIFD(const tiff::IFD* ifd)
 {
     return ifd->exists("GeoKeyDirectoryTag");
 }

@@ -41,6 +41,15 @@ namespace six
 
 constexpr int NOT_SET_VALUE = 2147483647; //std::numeric_limits<int>::max()
 
+namespace Enum
+{
+    template<typename TEnum, typename TValues = typename TEnum::values>
+    inline TEnum cast(int i)
+    {
+        return TEnum(static_cast<TValues>(i));
+    }
+}
+
 namespace details
 {
     template<typename T>
@@ -89,7 +98,7 @@ namespace details
             return std::optional<T>();
         }
         // TValues will be "int" when used from the "Enum" base class
-        return std::optional<T>(static_cast<typename T::values>(*result));
+        return std::optional<T>(six::Enum::cast<T>(*result));
     }
     template<typename T, typename TValues = typename T::values>
     inline T toType(const std::map<std::string, TValues>& map, const std::string& v)
@@ -103,8 +112,6 @@ namespace details
     template<typename T>
     class Enum
     {
-        int value_ = NOT_SET_VALUE;
-
         static const std::map<std::string, int>& string_to_int()
         {
             static const auto retval = details::to_string_to_int(T::string_to_value_());
@@ -120,21 +127,23 @@ namespace details
         Enum() = default;
 
         //! int constructor
-        Enum(int i)
+        explicit Enum(int i)
         {
             (void)details::index(int_to_string(), i); // validate "i"
-            value_ = i;
+            value = i;
         }
 
     public:
+        int value = NOT_SET_VALUE; // existing SWIG code uses "value", regenerating is a PITA
+
         //! Returns string representation of the value
         std::optional<std::string> toString(std::nothrow_t) const
         {
-            return nitf::details::index(int_to_string(), value_);
+            return nitf::details::index(int_to_string(), value);
         }
         std::string toString(bool throw_if_not_set = false) const
         {
-            return details::toString(int_to_string(), value_, throw_if_not_set);
+            return details::toString(int_to_string(), value, throw_if_not_set);
         }
 
         static std::optional<T> toType(const std::string& v, std::nothrow_t)
@@ -146,14 +155,14 @@ namespace details
             return details::toType<T>(string_to_int(), v);
         }
 
-        operator int() const { return value_; }
+        operator int() const { return value; }
 
         // needed for SWIG
         static size_t size() { return int_to_string().size(); }
-        bool operator<(const int& o) const { return value_ < o; }
-        bool operator<(const Enum& o) const { return *this < o.value_; }
-        bool operator==(const int& o) const { return value_ == o; }
-        bool operator==(const Enum& o) const { return *this == o.value_; }
+        bool operator<(const int& o) const { return value < o; }
+        bool operator<(const Enum& o) const { return *this < o.value; }
+        bool operator==(const int& o) const { return value == o; }
+        bool operator==(const Enum& o) const { return *this == o.value; }
         bool operator!=(const int& o) const { return !(*this == o); }
         bool operator!=(const Enum& o) const { return !(*this == o); }
         bool operator<=(const int& o) const { return (*this < o) || (*this == o); }
@@ -178,7 +187,14 @@ namespace details
     // There are a few examples of expanded code below.
     #define SIX_Enum_default_ctor_assign_(name) name() = default; name(const name&) = default; name(name&&) = default; \
             name& operator=(const name&) = default; name& operator=(name&&) = default
-    #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); \
+    #ifdef SWIGPYTHON
+       // Normal C++ code shouldn't use these constructors; use toType() or cast() instead
+       #define SIX_Enum_constructors_SWIGPYTHON_(name) explicit name(int i) : name(static_cast<values>(i)) { } \
+           explicit name(const std::string& s) { *this = std::move(toType(s)); }
+    #else
+       #define SIX_Enum_constructors_SWIGPYTHON_(name)
+    #endif
+    #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); SIX_Enum_constructors_SWIGPYTHON_(name); \
         name(values v) : Enum(static_cast<int>(v)) {} name& operator=(values v) { *this = std::move(name(v)); return *this; }
     #define SIX_Enum_BEGIN_enum enum values {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
@@ -219,5 +235,6 @@ namespace details
         SIX_Enum_map_5_(n1, n2, n3, n4, n5) SIX_Enum_END_DEFINE(name)
 
 } // namespace details
+
 }
 #endif // SIX_six_Enum_h_INCLUDED_

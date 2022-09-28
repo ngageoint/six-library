@@ -28,10 +28,7 @@
 #pragma warning(disable: 26823) // Dereferencing a possibly null pointer '...' (lifetime.1).
 #pragma warning(disable: 26822) // Dereferencing a null pointer 'me' (lifetime.1).
 
-#pragma warning(push)
-#pragma warning(disable: 4464) // relative include path contains '..'
-#include "../../nitro_pch.h"
-#pragma warning(pop)
+#include "nitro_pch.h"
 
 #pragma warning(disable: 26400) // Do not assign the result of an allocation or a function call with an owner<T> return value to a raw pointer, use owner<T> instead(i.11).
 #pragma warning(disable: 26052) // Potentially unconstrained access using expression '...' ...

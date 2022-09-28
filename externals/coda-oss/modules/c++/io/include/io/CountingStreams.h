@@ -23,6 +23,7 @@
 #ifndef __IO_COUNTING_STREAMS_H__
 #define __IO_COUNTING_STREAMS_H__
 
+#include "config/Exports.h"
 #include "io/ProxyStreams.h"
 
 namespace io
@@ -31,7 +32,7 @@ namespace io
 /**
  * An OutputStream that keeps track of the number of bytes written to the stream.
  */
-struct CountingOutputStream: public ProxyOutputStream
+struct CODA_OSS_API CountingOutputStream : public ProxyOutputStream
 {
     CountingOutputStream(OutputStream *proxy, bool ownPtr = false) :
         ProxyOutputStream(proxy, ownPtr), mByteCount(0)

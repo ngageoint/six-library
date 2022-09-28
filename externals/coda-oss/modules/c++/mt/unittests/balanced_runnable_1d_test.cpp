@@ -22,8 +22,6 @@
 #include <mt/BalancedRunnable1D.h>
 #include "TestCase.h"
 
-namespace
-{
 class IncOp
 {
 public:
@@ -63,10 +61,7 @@ TEST_CASE(BalancedRunnable1DTestWorkDone)
         }
     }
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(BalancedRunnable1DTestWorkDone);
-    return 0;
-}
+)

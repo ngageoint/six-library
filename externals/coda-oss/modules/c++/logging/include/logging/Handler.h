@@ -28,6 +28,7 @@
 #define CODA_OSS_logging_Handler_h_INCLUDED_
 
 #include <string>
+#include "config/Exports.h"
 #include "logging/LogRecord.h"
 #include "logging/Formatter.h"
 #include "logging/StandardFormatter.h"
@@ -45,14 +46,17 @@ namespace logging
  * The Handler class is abstract. Sub-classes handle LogRecord* objects,
  * emitting the information in a user-defined manner.
  */
-struct Handler : public Filterer
+struct CODA_OSS_API Handler : public Filterer
 {
     /*!
      * Construct a Handler at the specified LogLevel (LogLevel::LOG_NOTSET is default)
      */
     Handler(LogLevel level = LogLevel::LOG_NOTSET);
     virtual ~Handler() = default;
+    Handler(const Handler&) = delete;
     Handler& operator=(const Handler&) = delete;
+    Handler(Handler&&) = delete;
+    Handler& operator=(Handler&&) = delete;    
 
     /*! 
      * Sets the Formatter to use when formatting LogRecords

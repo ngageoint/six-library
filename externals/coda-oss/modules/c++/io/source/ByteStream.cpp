@@ -39,7 +39,7 @@ sys::Off_T io::ByteStream::seek(sys::Off_T offset, Whence whence)
         }
         else
         {
-            mPosition = mData.size() - offset;
+            mPosition = static_cast<sys::Off_T>(mData.size() - offset);
         }
         break;
     case CURRENT:
@@ -77,10 +77,9 @@ void io::ByteStream::write(const void* buffer, sys::Size_T size)
         if (newPos >= mData.size())
             mData.resize(newPos);
 
-        const sys::ubyte* const bufferPtr =
-                static_cast<const sys::ubyte*>(buffer);
-        std::copy(bufferPtr, bufferPtr + size, &mData[mPosition]);
-        mPosition = newPos;
+        const auto bufferPtr = static_cast<const sys::ubyte*>(buffer);
+        std::copy(bufferPtr, bufferPtr + size, &mData[static_cast<size_t>(mPosition)]);
+        mPosition = static_cast<sys::Off_T>(newPos);
     }
 }
 
@@ -92,11 +91,11 @@ sys::SSize_T io::ByteStream::readImpl(void* buffer, size_t len)
     sys::Off_T maxSize = available();
     if (maxSize <= 0) return io::InputStream::IS_END;
 
-    if (maxSize <  static_cast<sys::Off_T>(len)) len = maxSize;
+    if (maxSize <  static_cast<sys::Off_T>(len)) len = static_cast<size_t>(maxSize);
     if (len     <= 0)                            return 0;
 
-    ::memcpy(buffer, &mData[mPosition], len);
+    ::memcpy(buffer, &mData[static_cast<size_t>(mPosition)], len);
     mPosition += len;
-    return len;
+    return static_cast<sys::SSize_T>(len);
 }
 

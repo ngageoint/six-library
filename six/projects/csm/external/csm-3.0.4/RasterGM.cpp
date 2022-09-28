@@ -28,11 +28,11 @@
 //
 //#############################################################################
 
+#ifndef CSM_LIBRARY
 #define CSM_LIBRARY
+#endif
 
 #include "RasterGM.h"
-
-#include <stdexcept>
 
 namespace csm {
 
@@ -140,42 +140,6 @@ RasterGM::computeAllSensorPartials(const ImageCoord& imagePt,
       }
    }
    return val;
-}
-
-//*****************************************************************************
-// RasterGM::getUnmodeledError()
-//*****************************************************************************
-std::vector<double> RasterGM::convertUnmodeledError(const std::vector<double>& sixUnmodeledError) const
-{
-    if (sixUnmodeledError.empty())
-    {
-        return {};
-    }
-
-    if (!((sixUnmodeledError.size() == 3) || (sixUnmodeledError.size() == 7)))
-    {
-        throw std::logic_error("sixUnmodeledError should contain 3 or 7 values.");
-    }
-
-    // From Bill: Here is the mapping from the UnmodeledError to the 2x2 covariance matrix:
-    //    [0][0] = Xrow; [1][1] = Ycol; 
-    //    [1][0] = [0][1] = XrowYcol * Xrow * Ycol
-    const auto line_variance = sixUnmodeledError[0] /*Xrow*/;
-    const auto sample_variance = sixUnmodeledError[1] /*Ycol*/;
-    const auto linesample_covariance = sixUnmodeledError[2] /*XrowYcol*/ * line_variance * sample_variance;
-    const auto sampleline_covariance = linesample_covariance;
-    return { line_variance, linesample_covariance, sampleline_covariance, sample_variance }; // see getUnmodeledCrossCovariance()
-}
-std::vector<double> RasterGM::getUnmodeledError(const ImageCoord& imagePt) const
-{
-    auto sixUnmodeledError = convertUnmodeledError(getSIXUnmodeledError());
-    if (!sixUnmodeledError.empty())
-    {
-        return sixUnmodeledError;
-    }
-
-    // Nothing in the XML, use existing code
-    return getUnmodeledCrossCovariance(imagePt, imagePt);
 }
 
 } // namespace csm

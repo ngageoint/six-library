@@ -30,13 +30,18 @@
 #include <mt/GenerationThreadPool.h>
 #include <logging/ExceptionLogger.h>
 
-class RunNothing : public sys::Runnable
+class RunNothing final : public sys::Runnable
 {
-private:
     size_t& counter;
     logging::ExceptionLogger* exLog;
     bool getBacktrace;
-    static sys::Mutex counterLock;
+
+    static sys::Mutex* counterLock()
+    {
+        static sys::Mutex lock;
+        return &lock;
+    }
+
 public:
     RunNothing(size_t& c, logging::ExceptionLogger* el, bool getBacktrace=false) : counter(c), exLog(el), getBacktrace(getBacktrace) {}
 
@@ -46,7 +51,7 @@ public:
             return;
        
         {
-            mt::CriticalSection<sys::Mutex> crit(&counterLock);
+            mt::CriticalSection<sys::Mutex> crit(counterLock());
             counter++;
         }
 
@@ -56,8 +61,6 @@ public:
             exLog->log(except::Exception("Bad run"), logging::LogLevel::LOG_ERROR);
     }
 };
-
-sys::Mutex RunNothing::counterLock;
 
 TEST_CASE(testExceptionLogger)
 {
@@ -95,7 +98,7 @@ TEST_CASE(testExceptionWithBacktrace)
     try
     {
         throw except::Exception("Bad run");
-        TEST_FAIL("Should not get here");
+        TEST_FAIL;
     }
     catch (const except::Throwable& t)
     {
@@ -114,7 +117,7 @@ TEST_CASE(testExceptionWithBacktrace)
     try
     {
         throw except::Exception("Bad run").backtrace();
-        TEST_FAIL("Should not get here");
+        TEST_FAIL;
     }
     catch (const except::Throwable& t)
     {
@@ -135,8 +138,7 @@ TEST_CASE(testExceptionWithBacktrace)
 #pragma warning(pop)
 #endif
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testExceptionLogger);
     TEST_CHECK(testExceptionWithBacktrace);
-}
+)

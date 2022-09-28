@@ -21,14 +21,16 @@
  */
 
 #include <stdlib.h>
+#include <tuple>
 
 #include <math/poly/OneD.h>
 #include "TestCase.h"
 
-namespace
-{
 double getRand()
 {
+    static const auto call_srand = [](){ srand(176); return true; };
+    static auto srand_called = call_srand();
+    std::ignore = srand_called;
     return (50.0 * rand() / RAND_MAX - 25.0);
 }
 
@@ -143,13 +145,10 @@ TEST_CASE(testTransformInput)
                                   std::abs(.01 * expectedValue));
     }
 }
-}
 
-int main(int, char**)
-{
-    srand(176);
+TEST_MAIN(
     TEST_CHECK(testScaleVariable);
     TEST_CHECK(testTruncateTo);
     TEST_CHECK(testTruncateToNonZeros);
     TEST_CHECK(testTransformInput);
-}
+    )

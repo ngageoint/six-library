@@ -21,10 +21,14 @@
  */
 
 
-#ifndef __SYS_CONDITION_VAR_INTERFACE_H__
-#define __SYS_CONDITION_VAR_INTERFACE_H__
+#ifndef CODA_OSS_sys_ConditionVarInterface_h_INCLUDED_
+#define CODA_OSS_sys_ConditionVarInterface_h_INCLUDED_
+#pragma once
 
 #include <typeinfo>
+
+#include "config/Exports.h"
+
 #include "sys/SystemException.h"
 #include "sys/Mutex.h"
 namespace sys
@@ -36,7 +40,7 @@ namespace sys
  *  Provide the API for condition variables in this thread wrapper
  */
 
-struct ConditionVarInterface
+struct CODA_OSS_API ConditionVarInterface
 {
     /*!
      *  This constructor means that you are creating the lock
@@ -64,8 +68,8 @@ struct ConditionVarInterface
      *  a lock, but this class will STILL delete it.
      *
      */
-    ConditionVarInterface(Mutex *, bool = false)
-    {}
+    explicit ConditionVarInterface(Mutex *, bool = false) {}
+    explicit ConditionVarInterface(Mutex&) { }
 
     virtual ~ConditionVarInterface() = default;
 
@@ -118,4 +122,4 @@ struct ConditionVarInterface
 };
 
 }
-#endif
+#endif  // CODA_OSS_sys_ConditionVarInterface_h_INCLUDED_

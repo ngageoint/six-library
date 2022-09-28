@@ -285,7 +285,11 @@ static std::vector<six::NITFImageInfo*> getImageInfos(six::Container& container)
 
     // We will validate that we got a SIDD DES per image product in the
     // for loop below
-    assert(container.getDataType() == DataType::DERIVED);
+    if (container.getDataType() != DataType::DERIVED)
+    {
+        throw except::Exception(Ctxt("Unrecognized Data Extension Segment")); // N.B. not assert(), calling code can catch an exception
+    }
+
     std::vector<six::NITFImageInfo*> retval;
     for (size_t ii = 0; ii < container.size(); ++ii)
     {
@@ -304,7 +308,7 @@ inline std::unique_ptr<Data> parseData_(const XMLControlRegistry& xmlReg,
     const std::vector<std::string>* pSchemaPaths,
     logging::Logger& log)
 {
-    return six::parseData(xmlReg, xmlStream, dataType, *pSchemaPaths, log, false /*storeEncoding*/);
+    return six::parseData(xmlReg, xmlStream, dataType, *pSchemaPaths, log);
 }
 inline std::unique_ptr<Data> parseData_(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
@@ -312,7 +316,7 @@ inline std::unique_ptr<Data> parseData_(const XMLControlRegistry& xmlReg,
     const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger& log)
 {
-    return six::parseData(xmlReg, xmlStream, dataType, pSchemaPaths, log, true /*storeEncoding*/);
+    return six::parseData(xmlReg, xmlStream, dataType, pSchemaPaths, log);
 }
 
 template<typename TSchemaPath>
