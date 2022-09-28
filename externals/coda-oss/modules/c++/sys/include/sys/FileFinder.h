@@ -168,6 +168,12 @@ namespace test // i.e., sys::test
     // Used by unittest to find sample files.
     coda_oss::filesystem::path findRootDirectory(const coda_oss::filesystem::path& p, const std::string& rootName,
         std::function<bool(const coda_oss::filesystem::path&)> isRoot);
+
+    coda_oss::filesystem::path findCMakeBuildRoot(const coda_oss::filesystem::path& p);
+    bool isCMakeBuild(const coda_oss::filesystem::path& p);
+
+    coda_oss::filesystem::path findCMakeInstallRoot(const coda_oss::filesystem::path& p);
+    bool isCMakeInstall(const coda_oss::filesystem::path& p);
 }
 }
 #endif
