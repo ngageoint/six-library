@@ -21,8 +21,9 @@
  */
 
 
-#ifndef __MT_CRITICAL_SECTION_H__
-#define __MT_CRITICAL_SECTION_H__
+#ifndef CODA_OSS_mt_CriticalSection_h_INCLUDED_
+#define CODA_OSS_mt_CriticalSection_h_INCLUDED_
+#pragma once
 
 /*!
  *  \file
@@ -60,6 +61,7 @@ template <typename T> struct CriticalSection
     {
         manualLock();
     }
+    CriticalSection(T& mutex) : CriticalSection(&mutex){}
 
     //!  Destructor.  Unlock the mutex (if necessary).
     ~CriticalSection()
@@ -100,4 +102,4 @@ private:
 
 };
 }
-#endif
+#endif // CODA_OSS_mt_CriticalSection_h_INCLUDED_

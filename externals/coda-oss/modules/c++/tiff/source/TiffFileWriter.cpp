@@ -95,7 +95,7 @@ tiff::ImageWriter *tiff::FileWriter::addImage()
     if (!mImages.empty())
         mIFDOffset = mImages.back()->getNextIFDOffset();
 
-    auto image = coda_oss::make_unique<tiff::ImageWriter>(&mOutput, mIFDOffset);
+    auto image = std::make_unique<tiff::ImageWriter>(&mOutput, mIFDOffset);
     mImages.push_back(image.get());
     tiff::ImageWriter* const writer = image.release();
 

@@ -39,6 +39,12 @@ public:
     //! \todo Add string name option
     MutexWin32();
     virtual ~MutexWin32();
+
+    MutexWin32(const MutexWin32&) = delete;
+    MutexWin32& operator = (const MutexWin32&) = delete;
+    MutexWin32(MutexWin32&&) = delete;
+    MutexWin32& operator=(MutexWin32&&) = delete;
+
     /*!
      *  Lock the mutex.
      */

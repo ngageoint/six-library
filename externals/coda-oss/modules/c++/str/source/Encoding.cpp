@@ -382,7 +382,6 @@ coda_oss::u8string str::to_u8string(W1252string::const_pointer p, size_t sz)
     return retval;
 }
 
-template <>
 std::string str::toString(const coda_oss::u8string& utf8)
 {
     return str::EncodedStringView(utf8).native();

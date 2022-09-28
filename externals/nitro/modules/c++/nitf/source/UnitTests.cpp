@@ -240,15 +240,10 @@ std::string nitf::Test::buildPluginsDir(const std::string& dir)
 	if (!is_directory(plugins))
 	{
 		// Developers might not set things up for "cmake --install ."
-	        static const auto modules_c_dir = std::filesystem::path("modules") / "c" / dir;
-		plugins = buildDir_.parent_path() / modules_c_dir;
+		plugins = buildDir_.parent_path() / "modules" / "c" / dir;
 		if (!is_directory(plugins))
 		{
-		    plugins = buildDir_.parent_path() / "externals" / "nitro" / modules_c_dir;
-		    if (!is_directory(plugins))
-		    {
 			throw std::logic_error("Can't find 'plugins' directory: " + plugins.string());
-		    }
 		}
 	}
 	return plugins.string();

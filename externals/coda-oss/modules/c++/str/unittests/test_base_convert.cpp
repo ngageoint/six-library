@@ -63,15 +63,15 @@ TEST_CASE(testBadConvert)
 
 TEST_CASE(testEightBitIntToString)
 {
-    TEST_ASSERT_EQ(str::toString<uint8_t>(1), "1");
-    TEST_ASSERT_EQ(str::toString<int8_t>(2), "2");
-    TEST_ASSERT_EQ(str::toString<int8_t>(-2), "-2");
+    TEST_ASSERT_EQ(str::toString(static_cast<uint8_t>(1)), "1");
+    TEST_ASSERT_EQ(str::toString(static_cast<int8_t>(2)), "2");
+    TEST_ASSERT_EQ(str::toString(static_cast<int8_t>(-2)), "-2");
 }
 
 TEST_CASE(testCharToString)
 {
-    TEST_ASSERT_EQ(str::toString<char>('a'), "a");
-    TEST_ASSERT_EQ(str::toString<char>(65), "A");
+    TEST_ASSERT_EQ(str::toString('a'), "a");
+    TEST_ASSERT_EQ(str::toString(static_cast<char>(65)), "A");
 }
 
 static std::u8string fromWindows1252(const std::string& s)
