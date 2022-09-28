@@ -25,10 +25,12 @@
 #include <unordered_map>
 #include <algorithm>
 #include <std/memory>
+#include <iterator>
 
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <xml/lite/MinidomParser.h>
+#include <str/EncodedStringView.h>
 
 #include <six/XMLControl.h>
 #include <six/XmlLite.h>
@@ -50,17 +52,43 @@ CPHDXMLControl::CPHDXMLControl(logging::Logger* log, bool ownLog) :
 }
 
 /* TO XML */
-std::string CPHDXMLControl::toXMLString(
-        const Metadata& metadata,
-        const std::vector<std::string>& schemaPaths,
-        bool prettyPrint)
+std::u8string CPHDXMLControl::toXMLString(
+    const Metadata& metadata,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    bool prettyPrint)
 {
+    std::vector<std::string> schemaPaths;
+    if (pSchemaPaths != nullptr)
+    {
+        std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(schemaPaths),
+            [](const std::filesystem::path& p) { return p.string(); });
+    }
+
     std::unique_ptr<xml::lite::Document> doc(toXML(metadata, schemaPaths));
-    io::StringStream ss;
+    io::U8StringStream ss;
     (prettyPrint) ?
-            doc->getRootElement()->prettyPrint(ss) :
-            doc->getRootElement()->print(ss);
+        doc->getRootElement()->prettyPrint(ss) :
+        doc->getRootElement()->print(ss);
     return ss.stream().str();
+}
+std::u8string CPHDXMLControl::toXMLString(
+    const Metadata& metadata,
+    const std::vector<std::string>& schemaPaths_,
+    bool prettyPrint)
+{
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    return toXMLString(metadata, &schemaPaths, prettyPrint);
+}
+std::string CPHDXMLControl::toXMLString_(
+    const Metadata& metadata,
+    const std::vector<std::string>& schemaPaths,
+    bool prettyPrint)
+{
+    const auto result = toXMLString(metadata, schemaPaths, prettyPrint);
+    return str::EncodedStringView(result).native();
 }
 
 mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
@@ -78,8 +106,9 @@ mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
 std::unordered_map<std::string, xml::lite::Uri> CPHDXMLControl::getVersionUriMap()
 {
     return {
-        {"1.0.0", xml::lite::Uri("urn:CPHD:1.0.0")},
-        {"1.0.1", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")}
+        {"1.0.0", xml::lite::Uri("urn:CPHD:1.0.0")}
+        , {"1.0.1", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")}
+        , {"1.1.0", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
     };
 }
 
@@ -99,13 +128,23 @@ std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& m
 
 /* FROM XML */
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
-                                     const std::vector<std::string>& schemaPaths)
+                                     const std::vector<std::string>& schemaPaths_)
 {
-    io::StringStream stringStream;
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    return fromXML(str::EncodedStringView(xmlString).u8string(), schemaPaths);
+}
+std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::u8string& xmlString,
+    const std::vector<std::filesystem::path>& schemaPaths)
+{
+    io::U8StringStream stringStream;
     stringStream.write(xmlString);
     six::MinidomParser parser;
     parser.parse(stringStream);
-    return fromXML(&parser.getDocument(), schemaPaths);
+    auto result = fromXML(parser.getDocument(), schemaPaths);
+    return std::make_unique<Metadata>(std::move(result));
 }
 
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc,
@@ -116,7 +155,8 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc
         six::XMLControl::validate(doc, schemaPaths, mLog);
     }
     std::unique_ptr<Metadata> metadata = fromXMLImpl(doc);
-    metadata->setVersion(uriToVersion(doc->getRootElement()->getUri()));
+    const xml::lite::Uri uri(doc->getRootElement()->getUri());
+    metadata->setVersion(uriToVersion(uri));
     return metadata;
 }
 Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc, const std::vector<std::filesystem::path>& schemaPaths)
@@ -130,7 +170,8 @@ Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc, const std::vect
 
 std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
-  return getParser(doc->getRootElement()->getUri())->fromXML(doc);
+    const xml::lite::Uri uri(doc->getRootElement()->getUri());
+    return getParser(uri)->fromXML(doc);
 }
 
 std::unique_ptr<CPHDXMLParser>

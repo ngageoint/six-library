@@ -386,7 +386,7 @@ std::vector<double> SIXSensorModel::getUnmodeledError(
 {
     try
     {
-        auto sixUnmodeledError = convertUnmodeledError(getSIXUnmodeledError());
+        auto sixUnmodeledError = getSIXUnmodeledError();
         if (!sixUnmodeledError.empty())
         {
             return sixUnmodeledError;
@@ -618,10 +618,11 @@ const csm::CorrelationModel& SIXSensorModel::getCorrelationModel() const
 }
 
 std::vector<double> SIXSensorModel::getUnmodeledCrossCovariance(
-        const csm::ImageCoord& ,
-        const csm::ImageCoord& ) const
+    const csm::ImageCoord&,
+    const csm::ImageCoord&) const
 {
-    return std::vector<double>(4, 0.0);
+    auto sixUnmodeledError = getSIXUnmodeledError();
+    return !sixUnmodeledError.empty() ? sixUnmodeledError : std::vector<double>(4, 0.0);
 }
 
 void SIXSensorModel::setReferencePoint(const csm::EcefCoord& )
@@ -1171,26 +1172,23 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
     return NITFReadControl::getDataType(desid, desshl, desshsi, desid);
 }
 
-std::vector<double> SIXSensorModel::getSIXUnmodeledError_(const six::ErrorStatistics& errorStatistics)
+std::vector<double> SIXSensorModel::getSIXUnmodeledError_(const six::ErrorStatistics* pErrorStatistics)
 {
-    std::vector<double> retval;
-    if (auto pUnmodeled = errorStatistics.Unmodeled.get())
+    if (pErrorStatistics != nullptr)
     {
-        retval.push_back(pUnmodeled->Xrow);
-        retval.push_back(pUnmodeled->Ycol);
-        retval.push_back(pUnmodeled->XrowYcol);
-
-        if (auto pDecor = pUnmodeled->UnmodeledDecorr.get())
+        if (auto pUnmodeled = pErrorStatistics->Unmodeled.get())
         {
-            retval.push_back(pDecor->Xrow.CorrCoefZero);
-            retval.push_back(pDecor->Xrow.DecorrRate);
-
-            retval.push_back(pDecor->Ycol.CorrCoefZero);
-            retval.push_back(pDecor->Ycol.DecorrRate);
+            // From Bill: Here is the mapping from the UnmodeledError to the 2x2 covariance matrix:
+            //    [0][0] = Xrow; [1][1] = Ycol; 
+            //    [1][0] = [0][1] = XrowYcol * Xrow * Ycol
+            const auto line_variance = pUnmodeled->Xrow;
+            const auto sample_variance = pUnmodeled->Ycol;
+            const auto linesample_covariance = pUnmodeled->XrowYcol * line_variance * sample_variance;
+            const auto sampleline_covariance = linesample_covariance;
+            return { line_variance, linesample_covariance, sampleline_covariance, sample_variance };
         }
     }
-
-    return retval;
+    return {};
 }
 
 }

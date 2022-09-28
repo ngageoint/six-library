@@ -32,6 +32,7 @@
 #include "config/compiler_extensions.h"
 #include "config/Exports.h"
 #include "coda_oss/CPlusPlus.h"
+#include "coda_oss/string.h"
 #include "str/Convert.h"
 
 namespace str
@@ -68,8 +69,9 @@ inline const CharT* data(const std::basic_string<CharT>& s) noexcept // to make 
  *  @param  s  String to trim
  */
 CODA_OSS_API void trim(std::string& s);
-CODA_OSS_API std::string strip(const std::string& s);
-CODA_OSS_API std::string& strip(std::string& s);
+CODA_OSS_API std::string trim(const std::string& s);
+CODA_OSS_API void trim(coda_oss::u8string& s);
+CODA_OSS_API coda_oss::u8string trim(const coda_oss::u8string& s);
 
 /**
  *  Checks the end of s with match
@@ -197,7 +199,7 @@ inline std::string join(const std::vector<T>& toks, const std::string& with)
     int i = 0;
     for (; i < len - 1; i++)
     {
-        oss << str::toString<T>(toks[i]) << with;
+        oss << str::toString(toks[i]) << with;
     }
     oss << str::toString(toks[i]);
     return oss.str();

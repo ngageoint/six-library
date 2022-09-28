@@ -64,7 +64,7 @@ class ScopedPtr
     }
     void duplicate(const T& from, std::false_type)
     {
-        reset(coda_oss::make_unique<T>(from));
+        reset(std::make_unique<T>(from));
     }
 
 public:

@@ -54,7 +54,7 @@ struct PipeStream : InputStream
                size_t streamBufferSize = DEFAULT_CHUNK_SIZE) : 
         InputStream(),
         mExecPipe(cmd),
-        mCharString(coda_oss::make_unique<char[]>(streamBufferSize)),
+        mCharString(std::make_unique<char[]>(streamBufferSize)),
         mBufferSize(streamBufferSize)
     {
         mExecPipe.run();

@@ -70,6 +70,7 @@ SIX_Enum_BEGIN_DEFINE(PhaseSGN)
     SIX_Enum_BEGIN_string_to_value
     { "-1", MINUS_1 },
     { "+1", PLUS_1 },
+    { "1", PLUS_1 },
     SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(PhaseSGN);
 

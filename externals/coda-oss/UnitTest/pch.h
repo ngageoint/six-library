@@ -12,6 +12,7 @@
 #define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
 #include <WinSock.h>
 #include <windows.h>
+#include <comdef.h>
 #undef min
 #undef max
 
@@ -84,6 +85,7 @@
 #include <sys/Runnable.h>
 #include <sys/Thread.h>
 #include <sys/Mutex.h>
+#include <sys/FileFinder.h>
 #include <import/sys.h>
 #include <import/math/linear.h>
 #include <import/math/poly.h>

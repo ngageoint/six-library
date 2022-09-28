@@ -15,6 +15,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{1CFCDE59-6410-4037-95EB-B37D31E10820}</ProjectGuid>
     <RootNamespace>six</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -65,6 +66,7 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <EnablePREfast>true</EnablePREfast>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -89,6 +91,7 @@
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>

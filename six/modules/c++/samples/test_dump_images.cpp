@@ -164,8 +164,8 @@ int main(int argc, char** argv)
             const auto xmlFile = fs::path(outputDir) / filename;
             io::FileOutputStream xmlStream(xmlFile.string());
 
-            std::string xmlData = six::toXMLString(data, &xmlRegistry);
-            xmlStream.write(xmlData.c_str(), xmlData.length());
+            const auto xmlData = six::toXMLString(data, &xmlRegistry);
+            xmlStream.write(xmlData);
             xmlStream.close();
         }
 

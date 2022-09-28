@@ -159,8 +159,8 @@ static void do_validate_(const xml::lite::Document& doc,
     }
 
     // Pretty-print so that lines numbers are useful
-    io::StringStream xmlStream;
-    rootElement->prettyPrint(xmlStream, xml::lite::StringEncoding::Utf8);
+    io::U8StringStream xmlStream;
+    rootElement->prettyPrint(xmlStream);
 
     std::vector<xml::lite::ValidationInfo> errors;
     validator.validate(xmlStream, rootElement->getUri(), errors);

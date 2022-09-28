@@ -181,23 +181,20 @@ TEST_CASE(SixToType)
     test_six_toType_<six::PolarizationSequenceType>(testName, "OTHER_abc", six::PolarizationSequenceType::OTHER); // SIDD 3.0/SICD 1.3
     test_six_toType<six::PolarizationSequenceType>(testName, 13);
 
-    //auto toTypeDual = six::DualPolarizationType::toType("V:OTHER");
-    //TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
-    //toTypeDual = six::DualPolarizationType::toType("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
-    //TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
-    //toTypeDual = six::DualPolarizationType::toType("OTHER:V");
-    //TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
-    //toTypeDual = six::DualPolarizationType::toType("OTHER_xyz:V"); // SICD 1.3 "OTHER.*"   
-    //TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
-    //toTypeDual = six::DualPolarizationType::toType("OTHER_abc:OTHER"); // SICD 1.3 "OTHER.*"   
-    //TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
-    //toTypeDual = six::DualPolarizationType::toType("OTHER:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
-    //TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
-    //toTypeDual = six::DualPolarizationType::toType("OTHER_abc:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
-    //TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
-
-    //toTypeDual = six::DualPolarizationType::toType("OTHER_abc_OTHER"); // SICD 1.3 "OTHER.*"   
-    //TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER);
+    auto toTypeDual = six::DualPolarizationType::toType("V_OTHER");
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
+    toTypeDual = six::toType<six::DualPolarizationType>("V:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::V_OTHER);
+    toTypeDual = six::DualPolarizationType::toType("OTHER_V");
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
+    toTypeDual = six::toType<six::DualPolarizationType>("OTHER_xyz:V"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_V);
+    toTypeDual = six::toType<six::DualPolarizationType>("OTHER_abc:OTHER"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
+    toTypeDual = six::toType<six::DualPolarizationType>("OTHER:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
+    toTypeDual = six::toType<six::DualPolarizationType>("OTHER_abc:OTHER_xyz"); // SICD 1.3 "OTHER.*"   
+    TEST_ASSERT_EQ(toTypeDual, six::DualPolarizationType::OTHER_OTHER);
 }
 
 template<typename TSixEnum>
@@ -383,7 +380,7 @@ static void test_EqInt_(const std::string& testName, const std::string& strType,
     const int value = fromStrCtor;
     TEST_ASSERT_EQ(enumValue, value);
 
-    const decltype(type)fromIntCtor(static_cast<typename TSixEnum::values>(value));
+    const decltype(type)fromIntCtor(six::Enum::cast<TSixEnum>(value));
     TEST_ASSERT_EQ(enumValue, fromIntCtor);
     TEST_ASSERT(fromIntCtor.toString() == strType);
     TEST_ASSERT_EQ(fromIntCtor, type);
@@ -395,6 +392,14 @@ static void test_EqInt(const std::string& testName, int unknownEnumValue)
 {
     test_EqInt_<TSixEnum>(testName, "UNKNOWN", TSixEnum::UNKNOWN, unknownEnumValue);
     test_EqInt_<TSixEnum>(testName, "OTHER", TSixEnum::OTHER, 1);
+    test_EqInt_<TSixEnum>(testName, "NOT_SET", TSixEnum::NOT_SET, six::NOT_SET_VALUE);
+
+    // These will throw, at least for the polarization types
+    static const std::vector<int> invalidIntValuesToTest{ -1, 0, six::NOT_SET_VALUE - 1 };
+    for (auto&& v : invalidIntValuesToTest)
+    {
+        TEST_EXCEPTION(six::Enum::cast<TSixEnum>(v));
+    }
 }
 TEST_CASE(EqInt)
 {

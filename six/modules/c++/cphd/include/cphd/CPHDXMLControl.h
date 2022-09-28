@@ -28,6 +28,7 @@
 #include <unordered_map>
 #include <std/filesystem>
 #include <vector>
+#include <std/string>
 
 #include <scene/sys_Conf.h>
 #include <xml/lite/Element.h>
@@ -83,10 +84,18 @@ public:
      *  Calls toXML
      *  \return XML String
      */
-    virtual std::string toXMLString(
+    virtual std::u8string toXMLString(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             bool prettyPrint = false);
+    std::string toXMLString_(
+        const Metadata& metadata,
+        const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
+        bool prettyPrint = false);
+    virtual std::u8string toXMLString(
+        const Metadata& metadata,
+        const std::vector<std::filesystem::path>* pSchemaPaths,
+        bool prettyPrint = false);
 
     /*!
      *  \func toXML
@@ -114,6 +123,9 @@ public:
     virtual std::unique_ptr<Metadata> fromXML(
             const std::string& xmlString,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
+    virtual std::unique_ptr<Metadata> fromXML(
+        const std::u8string& xmlString,
+        const std::vector<std::filesystem::path>& schemaPaths = std::vector<std::filesystem::path>());
 
     /*!
      *  \func fromXML
