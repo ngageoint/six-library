@@ -878,3 +878,18 @@ std::filesystem::path six::testing::buildRootDir(const std::filesystem::path& ar
     // Linux or stand-alone
     return six::testing::findRootDir(argv0);
 }
+
+// Try to find a directory containing a plugin
+void six::testing::setNitfPluginPath()
+{
+    static const sys::OS os;
+    static const  std::filesystem::path argv0 = os.getSpecialEnv("0");
+    static const auto p = buildRootDir(argv0);
+    static const auto share_nitf_plugins = std::filesystem::path("share") / "nitf" / "plugins";
+    
+    static const auto pluginPath_ = sys::findFirstDirectory(p, share_nitf_plugins);
+    static const auto pluginPath = pluginPath_ / share_nitf_plugins;
+    //std::clog << "setNitfPluginPath(): " << pluginPath << "\n";
+    // SIX unittests don't actually use any plugins
+    sys::OS().setEnv("NITF_PLUGIN_PATH", pluginPath.string(), true /*overwrite*/);
+}

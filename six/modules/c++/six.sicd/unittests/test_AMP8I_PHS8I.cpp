@@ -88,12 +88,6 @@ static std::filesystem::path nitfPluginRelativelPath()
     //return fs::path("install") / "share" / "six.sicd" / "conf" / "schema";
     return std::filesystem::path("install") / "share" / "CSM" / "plugins";
 }
-static void setNitfPluginPath()
-{
-    const auto path = six::testing::buildRootDir(argv0()) / nitfPluginRelativelPath();
-    //std::clog << "NITF_PLUGIN_PATH=" << path << "\n";
-    sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
-}
 
 static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXMLControl& reader)
 {
@@ -580,7 +574,7 @@ static void test_create_sicd_from_mem(const std::string& testName,
 
 TEST_CASE(test_create_sicd_from_mem_8i)
 {
-    setNitfPluginPath();
+    six::testing::setNitfPluginPath();
 
     test_create_sicd_from_mem(testName, "test_create_sicd_from_mem_8i_amp.sicd", six::PixelType::AMP8I_PHS8I, true /*makeAmplitudeTable*/);
     test_create_sicd_from_mem(testName, "test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);

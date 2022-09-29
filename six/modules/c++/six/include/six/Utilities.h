@@ -380,8 +380,9 @@ inline std::span<std::byte> as_bytes(std::vector<T>& buffer)
 
 namespace testing
 {
-    extern std::filesystem::path findRootDir(const std::filesystem::path& dir);
-    extern std::filesystem::path buildRootDir(const std::filesystem::path& argv0);
+    std::filesystem::path findRootDir(const std::filesystem::path& dir);
+    std::filesystem::path buildRootDir(const std::filesystem::path& argv0);
+    void setNitfPluginPath();
 }
 
 }

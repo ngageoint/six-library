@@ -85,12 +85,6 @@ static std::filesystem::path nitfPluginRelativelPath()
     //return std::filesystem::path("install") / "share" / "six.sicd" / "conf" / "schema";
     return std::filesystem::path("install") / "share" / "CSM" / "plugins";
 }
-static void setNitfPluginPath()
-{
-    const auto path = six::testing::buildRootDir(argv0()) / nitfPluginRelativelPath();
-    //std::clog << "NITF_PLUGIN_PATH=" << path << "\n";
-    sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
-}
 
 static std::vector<std::filesystem::path> schemaPaths()
 {
@@ -189,7 +183,7 @@ static void valid_six_50x50_(const std::string& testName, const std::vector<std:
 }
 TEST_CASE(valid_six_50x50)
 {
-    setNitfPluginPath();
+    six::testing::setNitfPluginPath();
 
     valid_six_50x50_(testName, nullptr /*pSchemaPaths*/); // no XML validiaton
   
@@ -211,7 +205,7 @@ inline static std::string classificationText_utf_8()
 
 TEST_CASE(sicd_French_xml)
 {
-    setNitfPluginPath();
+    six::testing::setNitfPluginPath();
 
     const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
@@ -229,7 +223,7 @@ TEST_CASE(sicd_French_xml)
 
 //TEST_CASE(sicd_French_legacy_xml)
 //{
-//    setNitfPluginPath();
+//        six::testing::setNitfPluginPath();
 //
 //    const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
 //    const auto pathname = inputPathname.string();
@@ -339,7 +333,7 @@ static std::vector<std::byte> readFromNITF(const std::filesystem::path& inputPat
 
 TEST_CASE(test_readFromNITF_sicd_50x50)
 {
-    setNitfPluginPath();
+    six::testing::setNitfPluginPath();
 
     auto inputPathname = getNitfPath("sicd_50x50.nitf");
     auto buffer = readFromNITF(inputPathname);
@@ -358,7 +352,7 @@ static std::vector<std::complex<float>> readSicd(const std::filesystem::path& in
 }
 TEST_CASE(test_read_sicd_50x50)
 {
-    setNitfPluginPath();
+    six::testing::setNitfPluginPath();
 
     auto inputPathname = getNitfPath("sicd_50x50.nitf");
     auto widebandData = readSicd(inputPathname);
@@ -477,7 +471,7 @@ static void test_create_sicd_from_mem(const std::string& testName, const std::fi
 
 TEST_CASE(test_create_sicd_from_mem_32f)
 {
-    setNitfPluginPath();
+    six::testing::setNitfPluginPath();
     test_create_sicd_from_mem(testName, "test_create_sicd_from_mem_32f.sicd", six::PixelType::RE32F_IM32F);
 }
 
