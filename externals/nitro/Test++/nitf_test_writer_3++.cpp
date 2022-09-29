@@ -10,7 +10,7 @@ TEST_CLASS(nitf_test_writer_3__) {
 public:
 	nitf_test_writer_3__() {
 		// initialization code here
-		sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+		nitf::Test::setNitfPluginPath();
 	}
 	~nitf_test_writer_3__() = default;
 	nitf_test_writer_3__(const nitf_test_writer_3__&) = delete;

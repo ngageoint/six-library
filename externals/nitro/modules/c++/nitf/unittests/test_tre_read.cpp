@@ -245,6 +245,31 @@ TEST_CASE(test_readRESubheader_crash)
     TEST_ASSERT_TRUE(true);
 }
 
+TEST_CASE(test_nitf_CSEXRB_bugfix)
+{
+    const char* input_file = findInputFile("TEST_CSEXRB.nitf");
+
+    nitf_Error error;
+    nitf_IOHandle io = nitf_IOHandle_create(input_file, NITF_ACCESS_READONLY,
+        NITF_OPEN_EXISTING, &error);
+    if (NITF_INVALID_HANDLE(io))
+    {
+        TEST_ASSERT_FALSE(true);
+    }
+
+    /*  We need to make a reader so we can parse the NITF */
+    nitf_Reader* reader = nitf_Reader_construct(&error);
+    TEST_ASSERT_NOT_NULL(reader);
+
+    /*  This parses all header data within the NITF  */
+    nitf_Record* record = nitf_Reader_read(reader, io, &error);
+    TEST_ASSERT_NOT_NULL(record);
+
+    nitf_IOHandle_close(io);
+    nitf_Record_destruct(&record);
+    nitf_Reader_destruct(&reader);
+}
+
 TEST_MAIN(
     (void)argc; (void)argv;
 
@@ -253,4 +278,6 @@ TEST_CHECK(test_defaultRead_crash); // 3
 TEST_CHECK(test_readBandInfo_crash); // 4
 TEST_CHECK(test_readRESubheader_crash); // 5
 TEST_CHECK(test_nitf_Record_unmergeTREs_hangs); // 6
+
+TEST_CHECK(test_nitf_CSEXRB_bugfix);
 )
