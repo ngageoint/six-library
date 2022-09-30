@@ -166,7 +166,7 @@ static void test_nitf_image_info(six::sicd::ComplexData& complexData, const std:
 
 static void valid_six_50x50_(const std::string& testName, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
-    static const auto inputPathname = getNitfPath("sicd_50x50.nitf");
+    static const auto inputPathname = six::testing::getNitfPath("sicd_50x50.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
     const auto image = six::sicd::readFromNITF(inputPathname, pSchemaPaths, pComplexData);
     const six::Data* pData = pComplexData.get();
@@ -207,7 +207,7 @@ TEST_CASE(sicd_French_xml)
 {
     six::testing::setNitfPluginPath();
 
-    const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
+    const auto inputPathname = six::testing::getNitfPath("sicd_French_xml.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
     const auto schemaPaths_ = schemaPaths();
     const auto image = six::sicd::readFromNITF(inputPathname, &schemaPaths_, pComplexData);
@@ -225,7 +225,7 @@ TEST_CASE(sicd_French_xml)
 //{
 //        six::testing::setNitfPluginPath();
 //
-//    const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
+//    const auto inputPathname = six::testing::getNitfExternalsPath("sicd_French_xml.nitf");
 //    const auto pathname = inputPathname.string();
 //    const auto schemaPaths = ::schemaPaths();
 //
@@ -268,7 +268,7 @@ static void sicd_French_xml_raw_()
 {
     static const std::string testName("test_valid_six");
     // This is a binary file with XML burried in it somewhere
-    const auto path = getNitfPath("sicd_French_xml.nitf");
+    const auto path = six::testing::getNitfPath("sicd_French_xml.nitf");
 
     io::FileInputStream input(path.string());
     const auto result = find_string(input, "<SICD ");
@@ -335,7 +335,7 @@ TEST_CASE(test_readFromNITF_sicd_50x50)
 {
     six::testing::setNitfPluginPath();
 
-    auto inputPathname = getNitfPath("sicd_50x50.nitf");
+    auto inputPathname = six::testing::getNitfPath("sicd_50x50.nitf");
     auto buffer = readFromNITF(inputPathname);
 }
 
@@ -354,7 +354,7 @@ TEST_CASE(test_read_sicd_50x50)
 {
     six::testing::setNitfPluginPath();
 
-    auto inputPathname = getNitfPath("sicd_50x50.nitf");
+    auto inputPathname = six::testing::getNitfPath("sicd_50x50.nitf");
     auto widebandData = readSicd(inputPathname);
 }
 

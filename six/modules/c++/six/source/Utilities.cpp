@@ -879,17 +879,49 @@ std::filesystem::path six::testing::buildRootDir(const std::filesystem::path& ar
     return six::testing::findRootDir(argv0);
 }
 
-// Try to find a directory containing a plugin
-void six::testing::setNitfPluginPath()
+static std::filesystem::path buildRootDir_()
 {
     static const sys::OS os;
     static const  std::filesystem::path argv0 = os.getSpecialEnv("0");
-    static const auto p = buildRootDir(argv0);
+    static const auto retval = six::testing::buildRootDir(argv0);
+    return retval;
+}
+
+// Try to find a directory containing a plugin
+void six::testing::setNitfPluginPath()
+{
+    static const auto root_dir = buildRootDir_();
     static const auto share_nitf_plugins = std::filesystem::path("share") / "nitf" / "plugins";
     
-    static const auto pluginPath_ = sys::findFirstDirectory(p, share_nitf_plugins);
+    static const auto pluginPath_ = sys::findFirstDirectory(root_dir, share_nitf_plugins);
     static const auto pluginPath = pluginPath_ / share_nitf_plugins;
     //std::clog << "setNitfPluginPath(): " << pluginPath << "\n";
     // SIX unittests don't actually use any plugins
     sys::OS().setEnv("NITF_PLUGIN_PATH", pluginPath.string(), true /*overwrite*/);
+}
+
+static std::filesystem::path getPath_(const std::filesystem::path& subdir, const  std::filesystem::path& filename)
+{
+    static const auto root_dir = buildRootDir_();
+    const auto startDir = root_dir / subdir;
+    auto retval = startDir / filename;
+    // Try to avoid searching
+    if (!is_regular_file(retval))
+    {
+        const auto foundDir = sys::findFirstDirectory(startDir, subdir);
+        retval = foundDir / subdir / filename;
+    }
+
+    return retval;
+}
+
+std::filesystem::path six::testing::getNitroPath(const  std::filesystem::path& filename)
+{
+    static const auto nitf_unittests = std::filesystem::path("nitro") / "modules" / "c++" / "nitf" / "unittests";
+    return getPath_(nitf_unittests, filename);
+}
+std::filesystem::path six::testing::getNitfPath(const std::filesystem::path& filename)
+{
+    static const auto tests_nitf = std::filesystem::path("six") / "modules" / "c++" / "six" / "tests" / "nitf";
+    return getPath_(tests_nitf, filename);
 }
