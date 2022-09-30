@@ -386,6 +386,8 @@ namespace testing
 
     std::filesystem::path getNitfPath(const  std::filesystem::path& filename);
     std::filesystem::path getNitroPath(const  std::filesystem::path& filename);
+
+    std::vector<std::filesystem::path> getSchemaPaths();
 }
 
 }

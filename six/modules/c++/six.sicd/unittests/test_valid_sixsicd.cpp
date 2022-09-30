@@ -52,21 +52,10 @@ static std::filesystem::path sample_xml_relative_path(const std::filesystem::pat
 {
     return six_sicd_relative_path() / "tests" / "sample_xml" / filename;
 }
-static std::filesystem::path schema_relative_path()
-{
-    return six_sicd_relative_path() / "conf" / "schema";
-}
-
 static std::filesystem::path get_sample_xml_path(const std::filesystem::path& filename)
 {
     const auto root_dir = six::testing::buildRootDir(argv0());
     return root_dir / sample_xml_relative_path(filename);
-}
-
-static std::vector<std::filesystem::path> getSchemaPaths()
-{
-    const auto root_dir = six::testing::buildRootDir(argv0());
-    return std::vector<std::filesystem::path> { (root_dir / schema_relative_path()) };
 }
 
 static std::unique_ptr<six::sicd::ComplexData> test_assert_round_trip(const std::string& testName,

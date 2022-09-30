@@ -925,3 +925,17 @@ std::filesystem::path six::testing::getNitfPath(const std::filesystem::path& fil
     static const auto tests_nitf = std::filesystem::path("six") / "modules" / "c++" / "six" / "tests" / "nitf";
     return getPath_(tests_nitf, filename);
 }
+
+static inline std::filesystem::path six_sicd_relative_path()
+{
+    return std::filesystem::path("six") / "modules" / "c++" / "six.sicd";
+}
+static std::filesystem::path schema_relative_path()
+{
+    return six_sicd_relative_path() / "conf" / "schema";
+}
+std::vector<std::filesystem::path> six::testing::getSchemaPaths()
+{
+    static const auto root_dir = buildRootDir_();
+    return std::vector<std::filesystem::path> { (root_dir / schema_relative_path()) };
+}

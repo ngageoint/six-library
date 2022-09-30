@@ -57,27 +57,6 @@
 
 using AMP8I_PHS8I_t = six::sicd::AMP8I_PHS8I_t;
 
-static std::filesystem::path argv0()
-{
-    static const sys::OS os;
-    static const  std::filesystem::path retval = os.getSpecialEnv("0");
-    return retval;
-}
-
-static std::filesystem::path nitfPluginRelativelPath()
-{
-    if ((argv0().filename() == "Test.exe") || (argv0().filename() == "testhost.exe")) // Visual Studio
-    {
-        static const sys::OS os;
-        static const std::string configuration = os.getSpecialEnv("Configuration");
-        static const std::string platform = os.getSpecialEnv("Platform");
-        return std::filesystem::path("externals") / "nitro" / platform / configuration / "share" / "nitf" / "plugins";
-    }
-
-    //return fs::path("install") / "share" / "six.sicd" / "conf" / "schema";
-    return std::filesystem::path("install") / "share" / "CSM" / "plugins";
-}
-
 static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXMLControl& reader)
 {
     static const std::string testName("test_AMP8I_PHS8I");
