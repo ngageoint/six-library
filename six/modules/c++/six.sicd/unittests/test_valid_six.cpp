@@ -54,47 +54,6 @@
 #pragma warning(disable: 4459) //  declaration of '...' hides global declaration
 #endif
 
-static std::filesystem::path argv0()
-{
-    static const sys::OS os;
-    static const std::filesystem::path retval = os.getSpecialEnv("0");
-    return retval;
-}
-
-static std::filesystem::path nitfRelativelPath(const std::filesystem::path& filename)
-{
-    return std::filesystem::path("six") / "modules" / "c++" / "six" / "tests" / "nitf" / filename;
-}
-
-static std::filesystem::path getNitfPath(const std::filesystem::path& filename)
-{
-    const auto root_dir = six::testing::buildRootDir(argv0());
-    return root_dir / nitfRelativelPath(filename);
-}
-
-static std::filesystem::path nitfPluginRelativelPath()
-{
-    if (argv0().filename() == "Test.exe") // Google Test in Visual Studio
-    {
-        static const sys::OS os;
-        static const std::string configuration = os.getSpecialEnv("Configuration");
-        static const std::string platform = os.getSpecialEnv("Platform");
-        return std::filesystem::path("externals") / "nitro" / platform / configuration / "share" / "nitf" / "plugins";
-    }
-
-    //return std::filesystem::path("install") / "share" / "six.sicd" / "conf" / "schema";
-    return std::filesystem::path("install") / "share" / "CSM" / "plugins";
-}
-
-static std::vector<std::filesystem::path> schemaPaths()
-{
-    static const std::string testName = "test_valid_six";
-    const auto relativePath = std::filesystem::path("six") / "modules" / "c++" / "six.sicd" / "conf" / "schema";
-    auto path = six::testing::buildRootDir(argv0()) / relativePath;
-    TEST_ASSERT(exists(path));
-    return { std::move(path) };
-}
-
 static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXMLControl& reader)
 {
     static const std::string testName = "test_valid_six";
@@ -187,7 +146,7 @@ TEST_CASE(valid_six_50x50)
 
     valid_six_50x50_(testName, nullptr /*pSchemaPaths*/); // no XML validiaton
   
-    auto schemaPaths_ = schemaPaths();
+    auto schemaPaths_ = six::testing::getSchemaPaths();
     valid_six_50x50_(testName, &schemaPaths_); // validate against schema (actual path)
 
     schemaPaths_.clear();
@@ -209,7 +168,7 @@ TEST_CASE(sicd_French_xml)
 
     const auto inputPathname = six::testing::getNitfPath("sicd_French_xml.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
-    const auto schemaPaths_ = schemaPaths();
+    const auto schemaPaths_ = six::testing::getSchemaPaths();
     const auto image = six::sicd::readFromNITF(inputPathname, &schemaPaths_, pComplexData);
     const six::Data* pData = pComplexData.get();
 
@@ -227,7 +186,7 @@ TEST_CASE(sicd_French_xml)
 //
 //    const auto inputPathname = six::testing::getNitfExternalsPath("sicd_French_xml.nitf");
 //    const auto pathname = inputPathname.string();
-//    const auto schemaPaths = ::schemaPaths();
+//    const auto schemaPaths = ::six::testing::getSchemaPaths();
 //
 //    // Use legacy APIs ... to test other XML processing path
 //    std::vector<std::string> schemaPaths_;

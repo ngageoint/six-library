@@ -90,7 +90,7 @@ static void test_createFakeComplexData_(const std::string& testName, const std::
     TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SICD 1.3
 
     // validate XML against schema
-    const auto schemaPaths = getSchemaPaths();
+    const auto schemaPaths = six::testing::getSchemaPaths();
     pComplexData = test_assert_round_trip(testName , *pFakeComplexData, &schemaPaths);
     Unmodeled = get_Unmodeled(*pComplexData, strVersion);
     TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SICD 1.3
@@ -147,7 +147,7 @@ static void test_read_sicd_xml(const std::string& testName, const std::filesyste
     test_assert(testName, *pComplexData);
 
     // validate XML against schema
-    const auto schemaPaths = getSchemaPaths();
+    const auto schemaPaths = six::testing::getSchemaPaths();
     pComplexData = six::sicd::Utilities::parseDataFromFile(pathname, &schemaPaths);
     test_assert(testName, *pComplexData);
 
