@@ -109,7 +109,6 @@ static fs::path find_GIT_root()
 // This may be the same as find_GIT_root() if this code isn't in "externals"
 static fs::path find_NITRO_root()
 {
-	const auto is_NITRO_root = [](const std::filesystem::path& p) { return is_directory(p / ".git") && isRoot(p); };
 	try
 	{
 		return sys::test::findRootDirectory(getCurrentExecutable(), "nitro", isNitroRoot);
@@ -232,10 +231,17 @@ fs::path nitf::Test::buildFileDir(const fs::path& relativePath)
 fs::path nitf::Test::findInputFile(const fs::path& inputFile)
 {
 	const auto root = find_NITRO_root();
-	return root / inputFile;
+
+	auto p = root / inputFile;
+	if (is_regular_file(p))
+	{
+		return p;
+	}
+
+	p = sys::findFirstFile(root, inputFile);
+	return p / inputFile;
 }
 
-// Try to find a directory containing a plugin
 static std::filesystem::path getNitfPluginPath(const std::string& pluginName)
 {
 	std::filesystem::path p;
@@ -245,12 +251,13 @@ static std::filesystem::path getNitfPluginPath(const std::string& pluginName)
 	}
 	catch (const std::invalid_argument&)
 	{
-		p = getCurrentExecutable().parent_path();
+		p = getCurrentExecutable();
 	}
 	auto plugin = p / pluginName;
 	if (!is_regular_file(plugin))
 	{
-		plugin = sys::findFirstFile(p, pluginName);
+		p = sys::findFirstFile(p, pluginName);
+		plugin = p / pluginName;
 		if (!is_regular_file(plugin))
 		{
 			throw std::logic_error("Can't find plugin: " + plugin.string());

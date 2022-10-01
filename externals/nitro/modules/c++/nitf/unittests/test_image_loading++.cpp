@@ -32,27 +32,10 @@ using path = std::filesystem::path;
 
 static std::string testName;
 
-static std::string argv0;
-static path findInputFile(const path& inputFile)
-{
-    path root;
-    if (argv0.empty())
-    {
-        // running in Visual Studio
-        root = std::filesystem::current_path().parent_path().parent_path();
-    }
-    else
-    {
-        root = absolute(path(argv0)).parent_path().parent_path().parent_path().parent_path();
-        root = root.parent_path().parent_path();
-    }
-
-    return root / inputFile;
-}
 static path findInputFile()
 {
     const auto inputPath = path("modules") / "c++" / "nitf" / "unittests" / "sicd_50x50.nitf";
-    return findInputFile(inputPath);
+    return nitf::Test::findInputFile(inputPath);
 }
 static path findInputFile(bool withAmpTable)
 {
@@ -70,7 +53,7 @@ static path findInputFile(bool withAmpTable)
             "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
 
     }
-    return findInputFile(inputPath);
+    return nitf::Test::findInputFile(inputPath);
 }
 
 struct expected_values final
@@ -258,8 +241,6 @@ TEST_CASE(test_8bit_image_loading)
 }
 
 TEST_MAIN(
-    (void)argc;
-    argv0 = argv[0];
     TEST_CHECK(test_image_loading);
     TEST_CHECK(test_8bit_image_loading);
 )
