@@ -388,6 +388,7 @@ namespace testing
     std::filesystem::path getNitroPath(const  std::filesystem::path& filename);
 
     std::vector<std::filesystem::path> getSchemaPaths();
+    std::filesystem::path getSampleXmlPath(const std::filesystem::path& module /*"six.sicd"*/, const  std::filesystem::path& filename);
 }
 
 }

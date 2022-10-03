@@ -926,16 +926,20 @@ std::filesystem::path six::testing::getNitfPath(const std::filesystem::path& fil
     return getPath_(tests_nitf, filename);
 }
 
-static inline std::filesystem::path six_sicd_relative_path()
+static auto six_relative_path(const std::filesystem::path& module)
 {
-    return std::filesystem::path("six") / "modules" / "c++" / "six.sicd";
+    return std::filesystem::path("six") / "modules" / "c++" / module;
 }
-static std::filesystem::path schema_relative_path()
-{
-    return six_sicd_relative_path() / "conf" / "schema";
-}
+
 std::vector<std::filesystem::path> six::testing::getSchemaPaths()
 {
     static const auto root_dir = buildRootDir_();
-    return std::vector<std::filesystem::path> { (root_dir / schema_relative_path()) };
+    const auto schemaPath = root_dir / six_relative_path("six.sicd") / "conf" / "schema";
+    return std::vector<std::filesystem::path> { schemaPath };
+}
+
+std::filesystem::path six::testing::getSampleXmlPath(const std::filesystem::path& module, const  std::filesystem::path& filename)
+{
+    const auto subdir = six_relative_path(module) / "tests" / "sample_xml";
+    return getPath_(subdir, filename);
 }
