@@ -25,6 +25,7 @@
 #include <std/filesystem>
 
 #include <import/nitf.hpp>
+#include <nitf/UnitTests.hpp>
 
 using path = std::filesystem::path;
 
