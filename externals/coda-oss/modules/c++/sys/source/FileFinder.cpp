@@ -205,6 +205,60 @@ std::vector<std::string> sys::FileFinder::search(
     return files;
 }
 
+static coda_oss::filesystem::path findFirst(const sys::FilePredicate& pred, const coda_oss::filesystem::path& startingDirectory)
+{
+    auto dir = startingDirectory;
+    while (true)
+    {
+        const std::vector<std::string> searchPaths{dir.string()};
+        const auto results = sys::FileFinder::search(pred, searchPaths, true /*recursive*/);
+        if (results.size() == 1)
+        {
+            return results[0];
+        }
+        if (results.size() > 1)
+        {
+            throw std::logic_error("Found the same file at multiple locations: " + searchPaths[0]);
+        }
+
+        if (is_directory(dir / ".git"))
+        {
+            throw std::logic_error("Won't traverse above .git directory at: " + dir.string());
+        }
+        dir = dir.parent_path();
+    }
+}
+coda_oss::filesystem::path sys::findFirstFile(const coda_oss::filesystem::path& startingDirectory, const coda_oss::filesystem::path& filename)
+{
+    struct FileExistsPredicate final : public FileOnlyPredicate
+    {
+        coda_oss::filesystem::path name_;
+        FileExistsPredicate(const coda_oss::filesystem::path& name) : name_(name) { }
+        bool operator()(const std::string& entry) const override
+        {
+            const auto p =entry / name_;
+            return coda_oss::filesystem::is_regular_file(p);
+        }
+    };
+    const FileExistsPredicate pred(filename);
+    return findFirst(pred, startingDirectory);
+}
+coda_oss::filesystem::path sys::findFirstDirectory(const coda_oss::filesystem::path& startingDirectory, const coda_oss::filesystem::path& dir)
+{
+    struct DirectoryExistsPredicate final : public DirectoryOnlyPredicate
+    {
+        coda_oss::filesystem::path name_;
+        DirectoryExistsPredicate(const coda_oss::filesystem::path& name) : name_(name) { }
+        bool operator()(const std::string& entry) const override
+        {
+            const auto p =entry / name_;
+            return coda_oss::filesystem::is_directory(p);
+        }
+    };
+    const DirectoryExistsPredicate pred(dir);
+    return findFirst(pred, startingDirectory);
+}
+
 coda_oss::filesystem::path sys::test::findRootDirectory(const coda_oss::filesystem::path& p, const std::string& rootName,
         std::function<bool(const coda_oss::filesystem::path&)> isRoot)
 {

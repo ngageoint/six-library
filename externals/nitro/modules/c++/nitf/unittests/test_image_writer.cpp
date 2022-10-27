@@ -86,7 +86,7 @@ TEST_CASE(changeFileHeader)
 {
 	const auto inputPathname = nitf::Test::findInputFile(path("modules") / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
     TEST_ASSERT_TRUE(std::filesystem::is_regular_file(inputPathname));
-	const auto outputPathname = nitf::Test::buildFileDir(path("outputPathname.ntf")).string();
+    constexpr auto outputPathname = "outputPathname.ntf";
 
     doChangeFileHeader(inputPathname, outputPathname);
 
