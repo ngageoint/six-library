@@ -29,6 +29,7 @@
 #include <math/Utilities.h>
 #include <str/EncodedStringView.h>
 #include <nitf/PluginRegistry.hpp>
+#include <sys/FileFinder.h>
 #include "six/Init.h"
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
@@ -847,16 +848,27 @@ void six::getErrors(const ErrorStatistics* errorStats,
     }
 }
 
+static bool is_six_root(const std::filesystem::path& dir)
+{
+    const auto six = dir / "six";
+    const auto six_sln = dir / "six.sln";
+    return is_directory(six) && is_regular_file(six_sln);
+}
 std::filesystem::path six::testing::findRootDir(const std::filesystem::path& dir)
 {
-    using namespace std::filesystem;
-    const auto six = dir / "six";
-    const auto externals = dir / "externals";
-    const auto six_sln = dir / "six.sln";
-    if (is_directory(six) && is_directory(externals) && is_regular_file(six_sln))
+    // <dir>/six.sln
+    if (is_six_root(dir))
     {
         return dir;
     }
+
+    // <dir>/externals/six/six.sln
+    const auto externals = dir / "externals" / "six"; // not "six-library"
+    if (is_six_root(externals))
+    {
+        return externals;
+    }
+    
     const auto parent = dir.parent_path();
     return findRootDir(parent);
 }
@@ -887,19 +899,6 @@ static std::filesystem::path buildRootDir_()
     return retval;
 }
 
-// Try to find a directory containing a plugin
-void six::testing::setNitfPluginPath()
-{
-    static const auto root_dir = buildRootDir_();
-    static const auto share_nitf_plugins = std::filesystem::path("share") / "nitf" / "plugins";
-    
-    static const auto pluginPath_ = sys::findFirstDirectory(root_dir, share_nitf_plugins);
-    static const auto pluginPath = pluginPath_ / share_nitf_plugins;
-    //std::clog << "setNitfPluginPath(): " << pluginPath << "\n";
-    // SIX unittests don't actually use any plugins
-    sys::OS().setEnv("NITF_PLUGIN_PATH", pluginPath.string(), true /*overwrite*/);
-}
-
 static std::filesystem::path getPath_(const std::filesystem::path& subdir, const  std::filesystem::path& filename)
 {
     static const auto root_dir = buildRootDir_();
@@ -920,6 +919,7 @@ std::filesystem::path six::testing::getNitroPath(const  std::filesystem::path& f
     static const auto nitf_unittests = std::filesystem::path("nitro") / "modules" / "c++" / "nitf" / "unittests";
     return getPath_(nitf_unittests, filename);
 }
+
 std::filesystem::path six::testing::getNitfPath(const std::filesystem::path& filename)
 {
     static const auto tests_nitf = std::filesystem::path("six") / "modules" / "c++" / "six" / "tests" / "nitf";

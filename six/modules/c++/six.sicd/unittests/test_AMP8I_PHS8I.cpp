@@ -542,8 +542,6 @@ static void test_create_sicd_from_mem(const std::string& testName,
 
 TEST_CASE(test_create_sicd_from_mem_8i)
 {
-    six::testing::setNitfPluginPath();
-
     test_create_sicd_from_mem(testName, "test_create_sicd_from_mem_8i_amp.sicd", six::PixelType::AMP8I_PHS8I, true /*makeAmplitudeTable*/);
     test_create_sicd_from_mem(testName, "test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
