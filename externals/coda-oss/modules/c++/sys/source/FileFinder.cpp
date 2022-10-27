@@ -259,20 +259,6 @@ coda_oss::filesystem::path sys::findFirstDirectory(const coda_oss::filesystem::p
     return findFirst(pred, startingDirectory);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 coda_oss::filesystem::path sys::test::findRootDirectory(const coda_oss::filesystem::path& p, const std::string& rootName,
         std::function<bool(const coda_oss::filesystem::path&)> isRoot)
 {
