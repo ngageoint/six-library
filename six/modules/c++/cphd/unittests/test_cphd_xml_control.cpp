@@ -31,8 +31,11 @@
 #include <xml/lite/MinidomParser.h>
 #include "TestCase.h"
 
-const char* test_cphd_xml_control_XML =
-"<CPHD xmlns=\"urn:CPHD:1.0.0\">\n"
+namespace
+{
+std::string testCPHDXMLBody()
+{
+    const char* xmlBody =
 "    <CollectionID>\n"
 "        <CollectorName>Collector</CollectorName>\n"
 "        <CoreName>Core</CoreName>\n"
@@ -48,7 +51,7 @@ const char* test_cphd_xml_control_XML =
 "    </CollectionID>\n"
 "    <Global>\n"
 "        <DomainType>FX</DomainType>\n"
-"        <SGN>+1</SGN>\n"
+"        <SGN>1</SGN>\n"
 "        <Timeline>\n"
 "            <CollectionStart>2013-04-10T08:52:09.000000Z</CollectionStart>\n"
 "            <RcvCollectionStart>2014-04-10T08:52:09.000000Z</RcvCollectionStart>\n"
@@ -875,13 +878,25 @@ const char* test_cphd_xml_control_XML =
 "                <Parameter name=\"param1\">Match1</Parameter>\n"
 "            </MatchCollection>\n"
 "        </MatchType>\n"
-"    </MatchInfo>\n"
-"</CPHD>\n";
+"    </MatchInfo>\n";
+    return std::string(xmlBody);
+}
 
-TEST_CASE(testReadXML)
+std::string testCPHDXML(const std::string& version)
 {
+    auto uri = cphd::CPHDXMLControl::getVersionUriMap().at(version);
+    return "<CPHD xmlns=\""
+        + uri.value
+        + "\">\n"
+        + testCPHDXMLBody()
+        + "</CPHD>\n";
+}
+
+void runTest(const std::string& testName, const std::string& version)
+{
+    auto xmlString = testCPHDXML(version);
     io::StringStream cphdStream;
-    cphdStream.write(test_cphd_xml_control_XML, strlen(test_cphd_xml_control_XML));
+    cphdStream.write(xmlString.c_str(), xmlString.size());
 
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
@@ -1136,27 +1151,28 @@ TEST_CASE(testReadXML)
     TEST_ASSERT_EQ(ref.monostatic->layoverAngle, 30.0);
     TEST_ASSERT_EQ(ref.monostatic->dopplerConeAngle, 30.0);
 }
+}
 
-TEST_CASE(testPhaseSGN)
+TEST_CASE(testVersions)
 {
-    auto v = cphd::PhaseSGN::toType("-1");
-    TEST_ASSERT_EQ(v, -1);
-    auto s = v.toString();
-    TEST_ASSERT_EQ("-1", s);
+    auto versionUriMap = cphd::CPHDXMLControl::getVersionUriMap();
+    for (auto version : {"1.0.0", "1.0.1", "1.1.0"})
+    {
+        TEST_ASSERT_TRUE(
+            versionUriMap.find(version) != versionUriMap.end());
+    }
+}
 
-    v = cphd::PhaseSGN::toType("+1");
-    TEST_ASSERT_EQ(v, +1);
-    s = v.toString();
-    TEST_ASSERT_EQ("1", s);
-
-    v = cphd::PhaseSGN::toType("1");
-    TEST_ASSERT_EQ(v, 1);
-    s = v.toString();
-    TEST_ASSERT_EQ("1", s);
+TEST_CASE(testReadXML)
+{
+    for (auto pair : cphd::CPHDXMLControl::getVersionUriMap())
+    {
+        auto& version = pair.first;
+        runTest("testReadXML" + version, version);
+    }
 }
 
 TEST_MAIN(
-        TEST_CHECK(testReadXML);
-        TEST_CHECK(testPhaseSGN);
-        // TEST_CHECK(testValidation);
+    TEST_CHECK(testVersions);
+    TEST_CHECK(testReadXML);
 )
