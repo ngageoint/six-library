@@ -31,9 +31,7 @@
 #include <xml/lite/MinidomParser.h>
 #include "TestCase.h"
 
-namespace
-{
-std::string testCPHDXMLBody()
+static std::string testCPHDXMLBody()
 {
     const char* xmlBody =
 "    <CollectionID>\n"
@@ -1150,7 +1148,6 @@ void runTest(const std::string& testName, const std::string& version)
     TEST_ASSERT_EQ(ref.monostatic->slopeAngle, 30.0);
     TEST_ASSERT_EQ(ref.monostatic->layoverAngle, 30.0);
     TEST_ASSERT_EQ(ref.monostatic->dopplerConeAngle, 30.0);
-}
 }
 
 TEST_CASE(testVersions)
