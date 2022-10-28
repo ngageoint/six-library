@@ -382,7 +382,6 @@ namespace testing
 {
     std::filesystem::path findRootDir(const std::filesystem::path& dir);
     std::filesystem::path buildRootDir(const std::filesystem::path& argv0);
-    void setNitfPluginPath();
 
     std::filesystem::path getNitfPath(const  std::filesystem::path& filename);
     std::filesystem::path getNitroPath(const  std::filesystem::path& filename);
