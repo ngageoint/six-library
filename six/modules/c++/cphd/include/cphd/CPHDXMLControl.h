@@ -139,6 +139,8 @@ public:
     virtual Metadata fromXML(const xml::lite::Document& doc,
         const std::vector<std::filesystem::path>& schemaPaths = std::vector<std::filesystem::path>());
 
+    //! \return Suported version to uri mapping
+    static std::unordered_map<std::string, xml::lite::Uri> getVersionUriMap();
 
 protected:
     logging::Logger *mLog = nullptr;
@@ -146,9 +148,6 @@ protected:
     six::Logger mLogger;
 
 private:
-    //! \return Hardcoded version to uri mapping
-    static std::unordered_map<std::string, xml::lite::Uri> getVersionUriMap();
-
     /*!
      *  This function takes in a Metadata object and converts
      *  it to a new-allocated XML DOM.
