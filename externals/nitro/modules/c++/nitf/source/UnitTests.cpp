@@ -28,6 +28,7 @@
 #include <std/filesystem>
 #include <std/optional>
 #include <import/sys.h>
+#include <sys/FileFinder.h>
 
 namespace fs = std::filesystem;
 
@@ -38,7 +39,7 @@ static inline std::string Configuration() // "Configuration" is typically "Debug
 }
 static inline std::string Platform()
 {
-	return os.getSpecialEnv("Platform");
+	return os.getSpecialEnv("Platform"); // e.g., "x64" on Windows
 }
 
 static const fs::path& getCurrentExecutable()
@@ -55,13 +56,16 @@ static fs::path current_path()
 // https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
 static inline std::string PlatformToolset()
 {
-	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
 #ifdef _WIN32
-#if _MSC_FULL_VER >= 190000000
-	return "v142";
-#else
-#error "Don't know $(PlatformToolset) value.'"
-#endif
+	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
+	// https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
+	#if _MSC_VER >= 1930
+		return "v143"; // Visual Studio 2022
+	#elif _MSC_VER >= 1920
+		return "v142"; // Visual Studio 2019
+	#else
+		#error "Don't know $(PlatformToolset) value.'"
+	#endif
 #else 
 	// Linux
 	return "";
@@ -105,7 +109,6 @@ static fs::path find_GIT_root()
 // This may be the same as find_GIT_root() if this code isn't in "externals"
 static fs::path find_NITRO_root()
 {
-	const auto is_NITRO_root = [](const std::filesystem::path& p) { return is_directory(p / ".git") && isRoot(p); };
 	try
 	{
 		return sys::test::findRootDirectory(getCurrentExecutable(), "nitro", isNitroRoot);
@@ -117,6 +120,7 @@ static fs::path find_NITRO_root()
 
 static fs::path findRoot(fs::path& exec_root, fs::path& cwd_root)
 {
+	cwd_root.clear();
 	try
 	{
 		exec_root = sys::test::findRootDirectory(getCurrentExecutable(), "" /*rootName*/, isRoot);
@@ -146,72 +150,9 @@ static fs::path make_waf_install(const fs::path& p)
 #endif
 }
 
-static fs::path make_cmake_install(const fs::path& exec, const fs::path& relativePath)
-{
-	const auto root = find_GIT_root();
-
-	auto out = exec;
-	fs::path configuration_and_platform;
-	fs::path build;
-	while (out.parent_path() != root)
-	{
-		configuration_and_platform = build.stem(); // "x64-Debug"
-		build = out; // "...\out\build"
-		out = out.parent_path(); // "...\out"
-	}
-
-	fs::path install;
-	const sys::DirectoryEntry dirEntry(out.string());
-	for (auto entry : dirEntry)
-	{
-		str::upper(entry);
-		if (str::contains(entry, "INSTALL"))
-		{
-			install = out / dirEntry.getCurrent(); // preserve orignal case
-			if (is_directory(install))
-			{
-			  break;
-			}
-		}
-	}
-
-	if (is_directory(install / configuration_and_platform / relativePath))
-	{
-		return install / configuration_and_platform;
-	}
-	else
-	{
-		return install;
-	}
-}
-
-static std::string makeRelative(const fs::path& path, const fs::path& root)
-{
-	// remove the "root" part from "path"
-	std::string relative = path.string();
-	str::replaceAll(relative, root.string(), "");
-	return relative;
-}
-static std::string relativeRoot()
-{
-	fs::path exec_root, cwd_root;
-	findRoot(exec_root, cwd_root);
-
-	if (!exec_root.empty())
-	{
-		return makeRelative(getCurrentExecutable(), exec_root);
-	}
-
-	assert(!cwd_root.empty());
-	return makeRelative(current_path(), cwd_root);
-}
-
 static bool is_cmake_build()
 {
-	static const auto retlativeRoot = relativeRoot();
-	static const auto retval = 
-		(str::starts_with(retlativeRoot, "/out") || str::starts_with(retlativeRoot, "\\out")) ||
-		(str::starts_with(retlativeRoot, "/build") || str::starts_with(retlativeRoot, "\\build"));
+	static const auto retval = sys::test::isCMakeBuild(getCurrentExecutable());
 	return retval;
 }
 
@@ -229,22 +170,54 @@ static fs::path buildDir(const fs::path& relativePath)
 		return current_path() / relativePath;
 	}
 
-	const auto install = is_cmake_build() ? make_cmake_install(exec, relativePath) : make_waf_install(findRoot());
-	return install / relativePath;
+	const auto p = is_cmake_build() ? sys::test::findCMakeBuildRoot(exec) : make_waf_install(findRoot());
+	return p / relativePath;
 }
 
+std::string buildPluginsDir_(const std::string& dir, const std::filesystem::path& installDir)
+{
+	// Developers might not set things up for "cmake --install ."
+	const auto modules_c_dir = std::filesystem::path("modules") / "c" / dir;
+	auto plugins = installDir / modules_c_dir / Configuration();
+	std::clog << "plugins: " << plugins << '\n';
+	if (is_directory(plugins))
+	{
+		return plugins.string();
+	}
+	plugins = installDir / modules_c_dir;
+	std::clog << "plugins: " << plugins << '\n';
+	if (is_directory(plugins))
+	{
+		return plugins.string();
+	}
+
+	static const auto exec = getCurrentExecutable();
+	auto buildRoot = sys::test::findCMakeBuildRoot(exec);
+	plugins = buildRoot / modules_c_dir;
+	std::clog << "plugins: " << plugins << '\n';
+	if (is_directory(plugins))
+	{
+		return plugins.string();
+	}
+
+	buildRoot = buildRoot / "externals" / "nitro";
+	plugins = buildRoot / modules_c_dir;
+	std::clog << "plugins: " << plugins << '\n';
+	if (is_directory(plugins))
+	{
+		return plugins.string();
+	}
+
+	throw std::logic_error("Can't find 'plugins' directory: " + plugins.string());
+}
 std::string nitf::Test::buildPluginsDir(const std::string& dir)
 {
-	const auto buildDir_ = buildDir("");
-	auto plugins = buildDir_ / "share" / "nitf" / "plugins";
+	auto installDir = buildDir("");
+	auto plugins = installDir / "share" / "nitf" / "plugins";
 	if (!is_directory(plugins))
 	{
 		// Developers might not set things up for "cmake --install ."
-		plugins = buildDir_.parent_path() / "modules" / "c" / dir;
-		if (!is_directory(plugins))
-		{
-			throw std::logic_error("Can't find 'plugins' directory: " + plugins.string());
-		}
+		return buildPluginsDir_(dir, installDir);
 	}
 	return plugins.string();
 }
@@ -258,5 +231,61 @@ fs::path nitf::Test::buildFileDir(const fs::path& relativePath)
 fs::path nitf::Test::findInputFile(const fs::path& inputFile)
 {
 	const auto root = find_NITRO_root();
-	return root / inputFile;
+
+	auto p = root / inputFile;
+	if (is_regular_file(p))
+	{
+		return p;
+	}
+
+	p = sys::findFirstFile(root, inputFile);
+	return p / inputFile;
+}
+
+static std::filesystem::path getNitfPluginPath(const std::string& pluginName)
+{
+	std::filesystem::path p;
+	try
+	{
+		p = nitf::Test::buildPluginsDir();
+	}
+	catch (const std::invalid_argument&)
+	{
+		p = getCurrentExecutable();
+	}
+	auto plugin = p / pluginName;
+	if (!is_regular_file(plugin))
+	{
+		p = sys::findFirstFile(p, pluginName);
+		plugin = p / pluginName;
+		if (!is_regular_file(plugin))
+		{
+			throw std::logic_error("Can't find plugin: " + plugin.string());
+		}
+	}
+	return p;
+}
+
+static std::string buildPluginName(const std::string& base)
+{
+#ifdef _WIN32
+	return base + ".DLL";
+#else
+	// Note that these do NOT have the typical "lib" prefix;
+	// i.e., file is "ENGRDA.so" instead of "libENGRDA.so"
+	return base + ".so";
+#endif
+}
+
+void nitf::Test::setNitfPluginPath()
+{
+	// The name of the plugin we know exists and will always be built, see test_load_plugins
+	static const auto p = getNitfPluginPath(buildPluginName("ENGRDA"));
+	sys::OS().setEnv("NITF_PLUGIN_PATH", p.string(), true /*overwrite*/);	
+}
+
+void nitf::Test::j2kSetNitfPluginPath()
+{
+	static const auto p = getNitfPluginPath(buildPluginName("J2KCompress"));
+	sys::OS().setEnv("NITF_PLUGIN_PATH", p.string(), true /*overwrite*/);
 }

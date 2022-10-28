@@ -54,53 +54,6 @@
 #pragma warning(disable: 4459) //  declaration of '...' hides global declaration
 #endif
 
-static std::filesystem::path argv0()
-{
-    static const sys::OS os;
-    static const std::filesystem::path retval = os.getSpecialEnv("0");
-    return retval;
-}
-
-static std::filesystem::path nitfRelativelPath(const std::filesystem::path& filename)
-{
-    return std::filesystem::path("six") / "modules" / "c++" / "six" / "tests" / "nitf" / filename;
-}
-
-static std::filesystem::path getNitfPath(const std::filesystem::path& filename)
-{
-    const auto root_dir = six::testing::buildRootDir(argv0());
-    return root_dir / nitfRelativelPath(filename);
-}
-
-static std::filesystem::path nitfPluginRelativelPath()
-{
-    if (argv0().filename() == "Test.exe") // Google Test in Visual Studio
-    {
-        static const sys::OS os;
-        static const std::string configuration = os.getSpecialEnv("Configuration");
-        static const std::string platform = os.getSpecialEnv("Platform");
-        return std::filesystem::path("externals") / "nitro" / platform / configuration / "share" / "nitf" / "plugins";
-    }
-
-    //return std::filesystem::path("install") / "share" / "six.sicd" / "conf" / "schema";
-    return std::filesystem::path("install") / "share" / "CSM" / "plugins";
-}
-static void setNitfPluginPath()
-{
-    const auto path = six::testing::buildRootDir(argv0()) / nitfPluginRelativelPath();
-    //std::clog << "NITF_PLUGIN_PATH=" << path << "\n";
-    sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
-}
-
-static std::vector<std::filesystem::path> schemaPaths()
-{
-    static const std::string testName = "test_valid_six";
-    const auto relativePath = std::filesystem::path("six") / "modules" / "c++" / "six.sicd" / "conf" / "schema";
-    auto path = six::testing::buildRootDir(argv0()) / relativePath;
-    TEST_ASSERT(exists(path));
-    return { std::move(path) };
-}
-
 static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXMLControl& reader)
 {
     static const std::string testName = "test_valid_six";
@@ -172,7 +125,7 @@ static void test_nitf_image_info(six::sicd::ComplexData& complexData, const std:
 
 static void valid_six_50x50_(const std::string& testName, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
-    static const auto inputPathname = getNitfPath("sicd_50x50.nitf");
+    static const auto inputPathname = six::testing::getNitfPath("sicd_50x50.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
     const auto image = six::sicd::readFromNITF(inputPathname, pSchemaPaths, pComplexData);
     const six::Data* pData = pComplexData.get();
@@ -189,11 +142,9 @@ static void valid_six_50x50_(const std::string& testName, const std::vector<std:
 }
 TEST_CASE(valid_six_50x50)
 {
-    setNitfPluginPath();
-
     valid_six_50x50_(testName, nullptr /*pSchemaPaths*/); // no XML validiaton
   
-    auto schemaPaths_ = schemaPaths();
+    auto schemaPaths_ = six::testing::getSchemaPaths();
     valid_six_50x50_(testName, &schemaPaths_); // validate against schema (actual path)
 
     schemaPaths_.clear();
@@ -211,11 +162,9 @@ inline static std::string classificationText_utf_8()
 
 TEST_CASE(sicd_French_xml)
 {
-    setNitfPluginPath();
-
-    const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
+    const auto inputPathname = six::testing::getNitfPath("sicd_French_xml.nitf");
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
-    const auto schemaPaths_ = schemaPaths();
+    const auto schemaPaths_ = six::testing::getSchemaPaths();
     const auto image = six::sicd::readFromNITF(inputPathname, &schemaPaths_, pComplexData);
     const six::Data* pData = pComplexData.get();
 
@@ -229,11 +178,9 @@ TEST_CASE(sicd_French_xml)
 
 //TEST_CASE(sicd_French_legacy_xml)
 //{
-//    setNitfPluginPath();
-//
-//    const auto inputPathname = getNitfPath("sicd_French_xml.nitf");
+//    const auto inputPathname = six::testing::getNitfExternalsPath("sicd_French_xml.nitf");
 //    const auto pathname = inputPathname.string();
-//    const auto schemaPaths = ::schemaPaths();
+//    const auto schemaPaths = ::six::testing::getSchemaPaths();
 //
 //    // Use legacy APIs ... to test other XML processing path
 //    std::vector<std::string> schemaPaths_;
@@ -274,7 +221,7 @@ static void sicd_French_xml_raw_()
 {
     static const std::string testName("test_valid_six");
     // This is a binary file with XML burried in it somewhere
-    const auto path = getNitfPath("sicd_French_xml.nitf");
+    const auto path = six::testing::getNitfPath("sicd_French_xml.nitf");
 
     io::FileInputStream input(path.string());
     const auto result = find_string(input, "<SICD ");
@@ -339,9 +286,7 @@ static std::vector<std::byte> readFromNITF(const std::filesystem::path& inputPat
 
 TEST_CASE(test_readFromNITF_sicd_50x50)
 {
-    setNitfPluginPath();
-
-    auto inputPathname = getNitfPath("sicd_50x50.nitf");
+    auto inputPathname = six::testing::getNitfPath("sicd_50x50.nitf");
     auto buffer = readFromNITF(inputPathname);
 }
 
@@ -358,9 +303,7 @@ static std::vector<std::complex<float>> readSicd(const std::filesystem::path& in
 }
 TEST_CASE(test_read_sicd_50x50)
 {
-    setNitfPluginPath();
-
-    auto inputPathname = getNitfPath("sicd_50x50.nitf");
+    auto inputPathname = six::testing::getNitfPath("sicd_50x50.nitf");
     auto widebandData = readSicd(inputPathname);
 }
 
@@ -477,7 +420,6 @@ static void test_create_sicd_from_mem(const std::string& testName, const std::fi
 
 TEST_CASE(test_create_sicd_from_mem_32f)
 {
-    setNitfPluginPath();
     test_create_sicd_from_mem(testName, "test_create_sicd_from_mem_32f.sicd", six::PixelType::RE32F_IM32F);
 }
 

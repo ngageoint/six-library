@@ -37,38 +37,6 @@
 
 #include "TestCase.h"
 
-static std::filesystem::path argv0()
-{
-    static const sys::OS os;
-    static const auto retval = os.getSpecialEnv("0");
-    return retval;
-}
-
-static inline std::filesystem::path six_sicd_relative_path()
-{
-    return std::filesystem::path("six") / "modules" / "c++" / "six.sicd";
-}
-static std::filesystem::path sample_xml_relative_path(const std::filesystem::path& filename)
-{
-    return six_sicd_relative_path() / "tests" / "sample_xml" / filename;
-}
-static std::filesystem::path schema_relative_path()
-{
-    return six_sicd_relative_path() / "conf" / "schema";
-}
-
-static std::filesystem::path get_sample_xml_path(const std::filesystem::path& filename)
-{
-    const auto root_dir = six::testing::buildRootDir(argv0());
-    return root_dir / sample_xml_relative_path(filename);
-}
-
-static std::vector<std::filesystem::path> getSchemaPaths()
-{
-    const auto root_dir = six::testing::buildRootDir(argv0());
-    return std::vector<std::filesystem::path> { (root_dir / schema_relative_path()) };
-}
-
 static std::unique_ptr<six::sicd::ComplexData> test_assert_round_trip(const std::string& testName,
     const six::sicd::ComplexData& complexData, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
@@ -101,7 +69,7 @@ static void test_createFakeComplexData_(const std::string& testName, const std::
     TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SICD 1.3
 
     // validate XML against schema
-    const auto schemaPaths = getSchemaPaths();
+    const auto schemaPaths = six::testing::getSchemaPaths();
     pComplexData = test_assert_round_trip(testName , *pFakeComplexData, &schemaPaths);
     Unmodeled = get_Unmodeled(*pComplexData, strVersion);
     TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SICD 1.3
@@ -148,7 +116,7 @@ static void test_assert(const std::string& testName, const six::sicd::ComplexDat
 
 static void test_read_sicd_xml(const std::string& testName, const std::filesystem::path& path)
 {
-    const auto pathname = get_sample_xml_path(path);
+    const auto pathname = six::testing::getSampleXmlPath("six.sicd", path);
 
     // NULL schemaPaths, no validation
     auto pComplexData = six::sicd::Utilities::parseDataFromFile(pathname, nullptr /*pSchemaPaths*/);
@@ -158,7 +126,7 @@ static void test_read_sicd_xml(const std::string& testName, const std::filesyste
     test_assert(testName, *pComplexData);
 
     // validate XML against schema
-    const auto schemaPaths = getSchemaPaths();
+    const auto schemaPaths = six::testing::getSchemaPaths();
     pComplexData = six::sicd::Utilities::parseDataFromFile(pathname, &schemaPaths);
     test_assert(testName, *pComplexData);
 
