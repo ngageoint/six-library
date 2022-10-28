@@ -1172,7 +1172,26 @@ TEST_CASE(testReadXML)
     }
 }
 
+TEST_CASE(testPhaseSGN)
+{
+    auto v = cphd::PhaseSGN::toType("-1");
+    TEST_ASSERT_EQ(v, -1);
+    auto s = v.toString();
+    TEST_ASSERT_EQ("-1", s);
+
+    v = cphd::PhaseSGN::toType("+1");
+    TEST_ASSERT_EQ(v, +1);
+    s = v.toString();
+    TEST_ASSERT_EQ("1", s);
+
+    v = cphd::PhaseSGN::toType("1");
+    TEST_ASSERT_EQ(v, 1);
+    s = v.toString();
+    TEST_ASSERT_EQ("1", s);
+}
+
 TEST_MAIN(
     TEST_CHECK(testVersions);
     TEST_CHECK(testReadXML);
+    TEST_CHECK(testPhaseSGN);
 )
