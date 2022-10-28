@@ -22,14 +22,6 @@ from makewheel import makewheel
 from package import package
 
 
-try:
-    import hashlib
-    hashlib.md5()
-except ValueError:
-    Logs.error('MD5 error - you are likely trying to use an old python on a new machine to run waf. '
-               'If you run into a fatal FIPS error try finding a newer version of python.')
-
-
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
 
@@ -856,6 +848,7 @@ def configureCompilerOptions(self):
         config['cxx']['warn']           = '-Wall'
         config['cxx']['verbose']        = '-v'
         config['cxx']['64']             = '-m64'
+        config['cxx']['optz_debug']     = ''
         config['cxx']['optz_med']       = '-O1'
         config['cxx']['optz_fast']      = '-O2'
         config['cxx']['optz_fastest']   = '-O3'
@@ -868,6 +861,7 @@ def configureCompilerOptions(self):
         config['cc']['warn']           = config['cxx']['warn']
         config['cc']['verbose']        = config['cxx']['verbose']
         config['cc']['64']             = config['cxx']['64']
+        config['cc']['optz_debug']     = config['cxx']['optz_debug']
         config['cc']['optz_med']       = config['cxx']['optz_med']
         config['cc']['optz_fast']      = config['cxx']['optz_fast']
         config['cc']['optz_fastest']   = config['cxx']['optz_fastest']
@@ -903,8 +897,13 @@ def configureCompilerOptions(self):
         #       If you want the plugins to not depend on Intel libraries,
         #       configure with:
         #       --with-cflags=-static-intel --with-cxxflags=-static-intel --with-linkflags=-static-intel
-        if cxxCompiler == 'g++' or cxxCompiler == 'icpc':
+        if cxxCompiler == 'gcc':
+            config['cxx']['debug']          = '-ggdb3'
+            config['cxx']['optz_debug']     = '-Og'
+        elif cxxCompiler == 'icpc':
             config['cxx']['debug']          = '-g'
+            config['cxx']['optz_debug']     = ''
+        if cxxCompiler == 'g++' or cxxCompiler == 'icpc':
             config['cxx']['warn']           = warningFlags.split()
             config['cxx']['verbose']        = '-v'
             config['cxx']['64']             = '-m64'
@@ -931,8 +930,13 @@ def configureCompilerOptions(self):
 
             self.env.append_value('LINKFLAGS', linkFlags.split())
 
-        if ccCompiler == 'gcc' or ccCompiler == 'icc':
+        if ccCompiler == 'gcc':
+            config['cc']['debug']          = '-ggdb3'
+            config['cc']['optz_debug']     = '-Og'
+        elif ccCompiler == 'icc':
             config['cc']['debug']          = '-g'
+            config['cc']['optz_debug']     = ''
+        if ccCompiler == 'gcc' or ccCompiler == 'icc':
             config['cc']['warn']           = warningFlags.split()
             config['cc']['verbose']        = '-v'
             config['cc']['64']             = '-m64'
@@ -965,6 +969,7 @@ def configureCompilerOptions(self):
             config['cxx']['nowarn']         = '-erroff=%all'
             config['cxx']['verbose']        = '-v'
             config['cxx']['64']             = bitFlag64
+            config['cxx']['optz_debug']     = ''
             config['cxx']['optz_med']       = '-xO3'
             config['cxx']['optz_fast']      = '-xO4'
             config['cxx']['optz_fastest']   = '-xO5'
@@ -983,6 +988,7 @@ def configureCompilerOptions(self):
             config['cc']['verbose']        = '-v'
             config['cc']['64']             = bitFlag64
             config['cc']['linkflags_64']   = bitFlag64
+            config['cc']['optz_debug']     = ''
             config['cc']['optz_med']       = '-xO3'
             config['cc']['optz_fast']      = '-xO4'
             config['cc']['optz_fastest']   = '-xO5'
@@ -1019,6 +1025,7 @@ def configureCompilerOptions(self):
         vars['warn']           = warningFlags.split()
         vars['nowarn']         = '/w'
         vars['verbose']        = ''
+        vars['optz_debug']     = ['', crtFlag]
         vars['optz_med']       = ['-O2', crtFlag]
         vars['optz_fast']      = ['-O2', crtFlag]
         vars['optz_fastest']   = ['-Ox', crtFlag]
@@ -1083,6 +1090,9 @@ def configureCompilerOptions(self):
         variantName = '%s-debug' % sys_platform
         variant.append_value('CXXFLAGS', config['cxx'].get('debug', ''))
         variant.append_value('CFLAGS', config['cc'].get('debug', ''))
+        optz = 'debug'
+        variant.append_value('CXXFLAGS', config['cxx'].get('optz_%s' % optz, ''))
+        variant.append_value('CFLAGS', config['cc'].get('optz_%s' % optz, ''))
     else:
         variantName = '%s-release' % sys_platform
         optz = Options.options.with_optz
