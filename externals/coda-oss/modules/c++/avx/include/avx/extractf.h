@@ -24,19 +24,24 @@
 #define CODA_OSS_avx_extractf_h_INCLUDED_
 #pragma once
 
+// Not supported on GCC < 7.1; see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80322 (also 80323-80325)
+#if ((__GNUC__) && (GCC_VERSION < 70100))
+#pragma warning Disabling CODA AVX m256 support due to gcc compiler bug.
+#else
+
 #include <config/compiler_extensions.h>
 
 #ifndef CODA_OSS_mm256_extractf_DEFINED_
     #define CODA_OSS_mm256_extractf_DEFINED_ 1
 
     #include <immintrin.h>
+    //This looks awful, but almost all of these intrinsics simply reinterpret bits and generate no actual instructions.
+    #define CODA_OSS_sys_MM256_EXTRACTF_(ymm_,i_) _mm256_cvtss_f32(_mm256_castsi256_ps(_mm256_set1_epi32(_mm256_extract_epi32(_mm256_castps_si256(ymm_),i_))))
     namespace avx
     {
         template <typename T>
         inline T& mm256_extractf_(T& ymm, int i)
         {
-            //This looks awful, but almost all of these intrinsics simply reinterpret bits and generate no actual instructions.
-            #define CODA_OSS_sys_MM256_EXTRACTF_(ymm_,i_) _mm256_cvtss_f32(_mm256_castsi256_ps(_mm256_set1_epi32(_mm256_extract_epi32(_mm256_castps_si256(ymm_),i_))))
             return CODA_OSS_sys_MM256_EXTRACTF_(ymm, i);
         }
         template <typename T>
@@ -53,5 +58,7 @@
     }
 
 #endif
+
+#endif  // gcc version checking
 
 #endif  // CODA_OSS_avx_extractf_h_INCLUDED_
