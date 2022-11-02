@@ -65,13 +65,6 @@ net::NetConnection* net::NetConnectionClientFactory::newConnection(
 {
     return new net::NetConnection(std::move(toServer));
 }
-#if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
-net::NetConnection* net::NetConnectionClientFactory::newConnection(
-        mem::auto_ptr<net::Socket> toServer)
-{
-    return new net::NetConnection(toServer);
-}
-#endif
 
 net::NetConnection * net::NetConnectionClientFactory::create(
         const net::SocketAddress& address)

@@ -74,7 +74,7 @@ protected:
     // used for the bulk of the logging for speed
     void emitRecord(const LogRecord* record) override;
 
-    mem::auto_ptr<io::OutputStream> mStream;
+    std::unique_ptr<io::OutputStream> mStream;
 
 private:
     bool mClosed;
