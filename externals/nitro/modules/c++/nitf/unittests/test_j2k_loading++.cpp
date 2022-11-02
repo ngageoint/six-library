@@ -318,7 +318,8 @@ static void test_decompress_nitf_to_sio_(const path& inputPathname, const path& 
     auto imageReader = reader.newImageReader(0 /*imageSegmentNumber*/);
     const auto imageData = readImage(imageReader, imageSubheader);
 
-    sio::lite::writeSIO(imageData.data(), imageSubheader.dims(), outputPathname);
+    const sys::filesystem::path outputPathname_ = outputPathname.string();
+    sio::lite::writeSIO(imageData.data(), imageSubheader.dims(), outputPathname_);
 }
 TEST_CASE(test_j2k_decompress_nitf_to_sio)
 {
@@ -344,7 +345,8 @@ TEST_CASE(test_j2k_compress_raw_image)
     // Read in the raw data from the input SIO
     types::RowCol<size_t> rawDims;
     std::vector<std::byte> rawImage_;
-    sio::lite::readSIO(inPathname, rawDims, rawImage_);
+    const sys::filesystem::path inPathname_ = inPathname.string();
+    sio::lite::readSIO(inPathname_, rawDims, rawImage_);
     const std::span<const std::byte> rawImage(rawImage_.data(), rawImage_.size());
 
     const auto& tileDims = rawDims;

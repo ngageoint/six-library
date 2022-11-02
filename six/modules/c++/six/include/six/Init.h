@@ -144,7 +144,7 @@ namespace details
 {
     inline void throw_undefined_value()
     {
-        coda_oss::details::throw_bad_optional_access();
+        throw std::bad_optional_access();
     }
 }
 

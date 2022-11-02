@@ -72,9 +72,9 @@ std::u8string CPHDXMLControl::toXMLString(
     return ss.stream().str();
 }
 std::u8string CPHDXMLControl::toXMLString(
-    const Metadata& metadata,
-    const std::vector<std::string>& schemaPaths_,
-    bool prettyPrint)
+        const Metadata& metadata,
+        const std::vector<std::string>& schemaPaths_,
+        bool prettyPrint)
 {
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
@@ -106,9 +106,9 @@ mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
 std::unordered_map<std::string, xml::lite::Uri> CPHDXMLControl::getVersionUriMap()
 {
     return {
-        {"1.0.0", xml::lite::Uri("urn:CPHD:1.0.0")}
-        , {"1.0.1", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")}
-        , {"1.1.0", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
+        {"1.0.0", xml::lite::Uri("urn:CPHD:1.0.0")},
+        {"1.0.1", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")},
+        {"1.1.0", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
     };
 }
 

@@ -109,7 +109,6 @@ static fs::path find_GIT_root()
 // This may be the same as find_GIT_root() if this code isn't in "externals"
 static fs::path find_NITRO_root()
 {
-	const auto is_NITRO_root = [](const std::filesystem::path& p) { return is_directory(p / ".git") && isRoot(p); };
 	try
 	{
 		return sys::test::findRootDirectory(getCurrentExecutable(), "nitro", isNitroRoot);
@@ -232,45 +231,17 @@ fs::path nitf::Test::buildFileDir(const fs::path& relativePath)
 fs::path nitf::Test::findInputFile(const fs::path& inputFile)
 {
 	const auto root = find_NITRO_root();
-	return root / inputFile;
-}
 
-// Try to find a directory containing a plugin
-static std::filesystem::path findPluginPath(const std::string& pluginName)
-{
-	struct FileExistsPredicate final : public sys::FileOnlyPredicate
+	auto p = root / inputFile;
+	if (is_regular_file(p))
 	{
-		const std::string name_;
-		FileExistsPredicate(const std::string& name) : name_(name) {}
-		bool operator()(const std::string& entry) const override
-		{
-			const auto p = std::filesystem::path(entry) / name_;
-			return std::filesystem::is_regular_file(p);
-		}
-	};
-	const FileExistsPredicate pred(pluginName);
-
-	auto dir = getCurrentExecutable();
-	while (true)
-	{
-		const std::vector<std::string> searchPaths{ dir.string() };
-		const auto results = sys::FileFinder::search(pred, searchPaths, true /*recursive*/);
-		if (results.size() == 1)
-		{
-			return results[0];
-		}
-		else if (results.size() > 1)
-		{
-			throw std::logic_error("Found the same file at multiple locations: " + searchPaths[0]);
-		}
-
-		if (is_directory(dir / ".git"))
-		{
-			throw std::logic_error("Won't traverse above .git directory at: " + dir.string());
-		}
-		dir = dir.parent_path();
+		return p;
 	}
+
+	p = sys::findFirstFile(root, inputFile);
+	return p / inputFile;
 }
+
 static std::filesystem::path getNitfPluginPath(const std::string& pluginName)
 {
 	std::filesystem::path p;
@@ -285,7 +256,7 @@ static std::filesystem::path getNitfPluginPath(const std::string& pluginName)
 	auto plugin = p / pluginName;
 	if (!is_regular_file(plugin))
 	{
-		p = findPluginPath(pluginName);
+		p = sys::findFirstFile(p, pluginName);
 		plugin = p / pluginName;
 		if (!is_regular_file(plugin))
 		{
@@ -309,12 +280,12 @@ static std::string buildPluginName(const std::string& base)
 void nitf::Test::setNitfPluginPath()
 {
 	// The name of the plugin we know exists and will always be built, see test_load_plugins
-	static auto p = getNitfPluginPath(buildPluginName("ENGRDA"));
+	static const auto p = getNitfPluginPath(buildPluginName("ENGRDA"));
 	sys::OS().setEnv("NITF_PLUGIN_PATH", p.string(), true /*overwrite*/);	
 }
 
 void nitf::Test::j2kSetNitfPluginPath()
 {
-	static auto p = getNitfPluginPath(buildPluginName("J2KCompress"));
+	static const auto p = getNitfPluginPath(buildPluginName("J2KCompress"));
 	sys::OS().setEnv("NITF_PLUGIN_PATH", p.string(), true /*overwrite*/);
 }

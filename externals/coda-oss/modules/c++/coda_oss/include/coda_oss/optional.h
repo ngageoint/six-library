@@ -22,13 +22,12 @@
 #define CODA_OSS_coda_oss_optional_h_INCLUDED_
 #pragma once
 
-#include "coda_oss/namespace_.h"
-#include "coda_oss/optional_.h"
+#include <optional>
 
 namespace coda_oss
 {
-    using details::optional;
-    using details::make_optional;
+    using std::optional;
+    using std::make_optional;
 }
 
 #endif  // CODA_OSS_coda_oss_optional_h_INCLUDED_

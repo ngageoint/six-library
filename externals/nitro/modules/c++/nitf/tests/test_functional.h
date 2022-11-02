@@ -48,7 +48,7 @@ typedef typename std::vector< std::pair< std::string,
     Iterator end() { return mVec.end(); }
 
     std::mem_fun_ref_t<nitf::Field, T> operator[] (const std::string& key)
-        throw(except::NoSuchKeyException)
+        
     {
         if (!exists(key))
             throw except::NoSuchKeyException(key);

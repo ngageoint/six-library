@@ -64,6 +64,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <SupportJustMyCode>true</SupportJustMyCode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -87,6 +88,7 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <WarningLevel>Level3</WarningLevel>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

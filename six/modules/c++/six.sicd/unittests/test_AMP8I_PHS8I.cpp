@@ -57,44 +57,6 @@
 
 using AMP8I_PHS8I_t = six::sicd::AMP8I_PHS8I_t;
 
-static std::filesystem::path argv0()
-{
-    static const sys::OS os;
-    static const  std::filesystem::path retval = os.getSpecialEnv("0");
-    return retval;
-}
-
-static std::filesystem::path externals_nitro_RelativelPath(const  std::filesystem::path& filename)
-{
-    return  std::filesystem::path("externals") / "nitro" / "modules"/ "c++" / "nitf" / "unittests" / filename;
-}
-
-static std::filesystem::path getNitfExternalsPath(const  std::filesystem::path& filename)
-{
-    const auto root_dir = six::testing::buildRootDir(argv0());
-    return root_dir / externals_nitro_RelativelPath(filename);
-}
-
-static std::filesystem::path nitfPluginRelativelPath()
-{
-    if ((argv0().filename() == "Test.exe") || (argv0().filename() == "testhost.exe")) // Visual Studio
-    {
-        static const sys::OS os;
-        static const std::string configuration = os.getSpecialEnv("Configuration");
-        static const std::string platform = os.getSpecialEnv("Platform");
-        return std::filesystem::path("externals") / "nitro" / platform / configuration / "share" / "nitf" / "plugins";
-    }
-
-    //return fs::path("install") / "share" / "six.sicd" / "conf" / "schema";
-    return std::filesystem::path("install") / "share" / "CSM" / "plugins";
-}
-static void setNitfPluginPath()
-{
-    const auto path = six::testing::buildRootDir(argv0()) / nitfPluginRelativelPath();
-    //std::clog << "NITF_PLUGIN_PATH=" << path << "\n";
-    sys::OS().setEnv("NITF_PLUGIN_PATH", path.string(), true /*overwrite*/);
-}
-
 static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXMLControl& reader)
 {
     static const std::string testName("test_AMP8I_PHS8I");
@@ -290,7 +252,7 @@ TEST_CASE(read_8bit_ampphs_with_table)
 {
     const auto subdir = std::filesystem::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     const auto filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
-    const auto inputPathname = getNitfExternalsPath(filename);
+    const auto inputPathname = six::testing::getNitroPath(filename);
 
     std::optional<six::AmplitudeTable> amplitudeTable;
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
@@ -317,7 +279,7 @@ TEST_CASE(read_8bit_ampphs_no_table)
 {
     const auto subdir = std::filesystem::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     const auto filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
-    const auto inputPathname = getNitfExternalsPath(filename);
+    const auto inputPathname = six::testing::getNitroPath(filename);
 
     std::optional<six::AmplitudeTable> amplitudeTable;
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
@@ -369,12 +331,12 @@ TEST_CASE(test_readFromNITF_8_bit_Amp_Phs_Examples)
 {
     auto subdir = std::filesystem::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     auto filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
-    auto inputPathname = getNitfExternalsPath(filename);
+    auto inputPathname = six::testing::getNitroPath(filename);
     auto buffer = readFromNITF(inputPathname);
 
     subdir = std::filesystem::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
-    inputPathname = getNitfExternalsPath(filename);
+    inputPathname = six::testing::getNitroPath(filename);
     buffer = readFromNITF(inputPathname);
 }
 
@@ -393,12 +355,12 @@ TEST_CASE(test_read_sicd_8_bit_Amp_Phs_Examples)
 {
     auto subdir = std::filesystem::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     auto filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
-    auto inputPathname = getNitfExternalsPath(filename);
+    auto inputPathname = six::testing::getNitroPath(filename);
     auto widebandData = readSicd(inputPathname);
 
     subdir = std::filesystem::path("8_bit_Amp_Phs_Examples") / "With_amplitude_table";
     filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
-    inputPathname = getNitfExternalsPath(filename);
+    inputPathname = six::testing::getNitroPath(filename);
     widebandData = readSicd(inputPathname);
 }
 
@@ -580,8 +542,6 @@ static void test_create_sicd_from_mem(const std::string& testName,
 
 TEST_CASE(test_create_sicd_from_mem_8i)
 {
-    setNitfPluginPath();
-
     test_create_sicd_from_mem(testName, "test_create_sicd_from_mem_8i_amp.sicd", six::PixelType::AMP8I_PHS8I, true /*makeAmplitudeTable*/);
     test_create_sicd_from_mem(testName, "test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }

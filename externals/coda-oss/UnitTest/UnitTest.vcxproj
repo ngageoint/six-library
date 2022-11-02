@@ -68,6 +68,8 @@
       <ConformanceMode>true</ConformanceMode>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <TranslateIncludes>true</TranslateIncludes>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -88,6 +90,8 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <TranslateIncludes>true</TranslateIncludes>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
