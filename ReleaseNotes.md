@@ -2,9 +2,9 @@
 
 # SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
 
-## [Version 3.?.?](https://github.com/ngageoint/six-library/releases/tag/SIX-3.?.?); ??? ??, 202?
-* [coda-oss](https://github.com/mdaus/coda-oss) version [202?-??-??](https://github.com/mdaus/coda-oss/releases/tag/202?-??-??)
-* [nitro](https://github.com/mdaus/nitro) version [2.?.?](https://github.com/mdaus/nitro/releases/tag/NITRO-2.?.?)
+## [Version 3.2.1](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.1); November 4, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-11-04](https://github.com/mdaus/coda-oss/releases/tag/2022-11-04)
+* [nitro](https://github.com/mdaus/nitro) version [2.11.1](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.1)
 * cphd::PhaseSGN accepts both `1` and `+1`, toString() is now `"1"` instead of `"+1"`.
 * CPHD XML parser handles URI's for versions 1.0.0, 1.0.1, and 1.1.0; unit test updated to test metadata parsing extensions
 
