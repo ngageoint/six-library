@@ -380,7 +380,7 @@ void ByteProvider::getFileLayout(const nitf::Record& inRecord,
     getFileLayout_(inRecord, desData);
 }
 
-std::unique_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
+mem::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
 {
     std::vector<size_t> numRowsPerSegment(mImageSegmentInfo.size());
     for (size_t ii = 0; ii < mImageSegmentInfo.size(); ++ii)
@@ -393,7 +393,7 @@ std::unique_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
             mNumCols,
             mOverallNumRowsPerBlock,
             mNumColsPerBlock);
-    return std::unique_ptr<const ImageBlocker>(blocker.release());
+    return mem::auto_ptr<const ImageBlocker>(blocker.release());
 }
 
 void ByteProvider::checkBlocking(size_t seg,

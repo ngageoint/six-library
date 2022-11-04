@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(nitro)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CXX_STANDARD_REQUIRED true)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
@@ -19,7 +19,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
             # https://docs.microsoft.com/en-us/cpp/sanitizers/asan?view=msvc-160
             add_compile_options(/fsanitize=address)
         endif()
-	add_compile_options(/std:c++17)
+	add_compile_options(/std:c++14)
     elseif (UNIX)
         add_compile_options(
             -Wall
@@ -31,7 +31,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
             # https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
             add_compile_options(-fsanitize=address)
         endif()
-	add_compile_options(-std=c++17)
+	add_compile_options(-std=c++14)
     endif()
 
     if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")
