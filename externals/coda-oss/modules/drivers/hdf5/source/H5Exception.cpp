@@ -352,7 +352,7 @@ Exception::printErrorStack(FILE *stream, hid_t err_stack)
 ///\brief       Noop destructor
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
-Exception::~Exception() throw()
+Exception::~Exception() noexcept
 {
 }
 
@@ -382,7 +382,7 @@ FileIException::FileIException(const H5std_string &func, const H5std_string &mes
 // Function:    FileIException destructor
 ///\brief       Noop destructor.
 //--------------------------------------------------------------------------
-FileIException::~FileIException() throw()
+FileIException::~FileIException() noexcept
 {
 }
 
@@ -412,7 +412,7 @@ GroupIException::GroupIException(const H5std_string &func, const H5std_string &m
 // Function:    GroupIException destructor
 ///\brief       Noop destructor.
 //--------------------------------------------------------------------------
-GroupIException::~GroupIException() throw()
+GroupIException::~GroupIException() noexcept
 {
 }
 
@@ -442,7 +442,7 @@ DataSpaceIException::DataSpaceIException(const H5std_string &func, const H5std_s
 // Function:    DataSpaceIException destructor
 ///\brief       Noop destructor.
 //--------------------------------------------------------------------------
-DataSpaceIException::~DataSpaceIException() throw()
+DataSpaceIException::~DataSpaceIException() noexcept
 {
 }
 
@@ -472,7 +472,7 @@ DataTypeIException::DataTypeIException(const H5std_string &func, const H5std_str
 // Function:    DataTypeIException destructor
 ///\brief       Noop destructor.
 //--------------------------------------------------------------------------
-DataTypeIException::~DataTypeIException() throw()
+DataTypeIException::~DataTypeIException() noexcept
 {
 }
 
@@ -502,7 +502,7 @@ ObjHeaderIException::ObjHeaderIException(const H5std_string &func, const H5std_s
 // Function:    ObjHeaderIException destructor
 ///\brief       Noop destructor.
 //--------------------------------------------------------------------------
-ObjHeaderIException::~ObjHeaderIException() throw()
+ObjHeaderIException::~ObjHeaderIException() noexcept
 {
 }
 
@@ -532,7 +532,7 @@ PropListIException::PropListIException(const H5std_string &func, const H5std_str
 // Function:    PropListIException destructor
 ///\brief       Noop destructor.
 //--------------------------------------------------------------------------
-PropListIException::~PropListIException() throw()
+PropListIException::~PropListIException() noexcept
 {
 }
 
@@ -562,7 +562,7 @@ DataSetIException::DataSetIException(const H5std_string &func, const H5std_strin
 // Function:    DataSetIException destructor
 ///\brief       Noop destructor.
 //--------------------------------------------------------------------------
-DataSetIException::~DataSetIException() throw()
+DataSetIException::~DataSetIException() noexcept
 {
 }
 
@@ -592,7 +592,7 @@ AttributeIException::AttributeIException(const H5std_string &func, const H5std_s
 // Function:    AttributeIException destructor
 ///\brief       Noop destructor.
 //--------------------------------------------------------------------------
-AttributeIException::~AttributeIException() throw()
+AttributeIException::~AttributeIException() noexcept
 {
 }
 
@@ -622,7 +622,7 @@ ReferenceException::ReferenceException(const H5std_string &func, const H5std_str
 // Function:    ReferenceException destructor
 ///\brief       Noop destructor.
 //--------------------------------------------------------------------------
-ReferenceException::~ReferenceException() throw()
+ReferenceException::~ReferenceException() noexcept
 {
 }
 
@@ -652,7 +652,7 @@ LibraryIException::LibraryIException(const H5std_string &func, const H5std_strin
 // Function:    LibraryIException destructor
 ///\brief       Noop destructor.
 //--------------------------------------------------------------------------
-LibraryIException::~LibraryIException() throw()
+LibraryIException::~LibraryIException() noexcept
 {
 }
 
@@ -682,7 +682,7 @@ LocationException::LocationException(const H5std_string &func, const H5std_strin
 // Function:    LocationException destructor
 ///\brief       Noop destructor.
 //--------------------------------------------------------------------------
-LocationException::~LocationException() throw()
+LocationException::~LocationException() noexcept
 {
 }
 
@@ -712,7 +712,7 @@ IdComponentException::IdComponentException(const H5std_string &func, const H5std
 // Function:    IdComponentException destructor
 ///\brief       Noop destructor.
 //--------------------------------------------------------------------------
-IdComponentException::~IdComponentException() throw()
+IdComponentException::~IdComponentException() noexcept
 {
 }
 

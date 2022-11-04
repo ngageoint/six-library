@@ -28,6 +28,8 @@
 #pragma warning(disable: 5032) // detected #pragma warning(push) with no corresponding #pragma warning(pop)
 #pragma warning(push)
 #pragma warning(disable: 4464) // relative include path contains '..'
+#pragma warning(disable: 4625) // '...' : copy constructor was implicitly defined as deleted
+#pragma warning(disable: 4626) // '...' : assignment operator was implicitly defined as deleted
 #include <nitf/coda-oss.hpp>
 #include <math/Round.h>
 #include <import/io.h>

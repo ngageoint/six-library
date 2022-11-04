@@ -11,12 +11,14 @@
  ```
 # coda-oss Release Notes
 
-## [Release 202?-??-??](https://github.com/mdaus/coda-oss/releases/tag/202?-??-??)
+## [Release 2022-11-04](https://github.com/mdaus/coda-oss/releases/tag/2022-11-04)
+* "Cut" from [main](https://github.com/mdaus/coda-oss/tree/main), not *master*.
 * The [HDFGroup](https://hdfgroup.org/)s [HDF5 library](https://github.com/HDFGroup/hdf5) is built
    and installed; a simple (and very incomplete!) wrapper is provided, this is at the "hello world!" stage.
 * A few **cli** routines have been tweaked to make unit-testing easier.
 * Utilitiy routines for finding various files when unit-testing.
-* Removed C++14 work-arounds needed in C++11.
+* Removed C++14 work-arounds needed in C++11. Legacy C++ exception specificatons removed.
+* Rebuild `waf` for FIPS error; added more debug options.
 
 ## [Release 2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30)
 * XML is now always written as UTF-8; the code will still try to read Windows-1252.
