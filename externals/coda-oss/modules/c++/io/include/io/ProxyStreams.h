@@ -66,7 +66,7 @@ protected:
         return mProxy->read(buffer, len);
     }
 
-    std::unique_ptr<InputStream> mProxy;
+    mem::auto_ptr<InputStream> mProxy;
     bool mOwnPtr;
 };
 
@@ -117,7 +117,7 @@ struct CODA_OSS_API ProxyOutputStream : public OutputStream
     }
 
 protected:
-    std::unique_ptr<OutputStream> mProxy;
+    mem::auto_ptr<OutputStream> mProxy;
     bool mOwnPtr = false;
 };
 

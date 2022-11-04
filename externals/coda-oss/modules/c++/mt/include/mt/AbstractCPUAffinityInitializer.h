@@ -44,14 +44,14 @@ public:
      * \returns a new thread initializer. In general, this should return
      *          a different affinity initializer each time it is called.
      */
-    std::unique_ptr<AbstractCPUAffinityThreadInitializer> newThreadInitializer()
+    mem::auto_ptr<AbstractCPUAffinityThreadInitializer> newThreadInitializer()
     {
-        return std::unique_ptr<AbstractCPUAffinityThreadInitializer>(
+        return mem::auto_ptr<AbstractCPUAffinityThreadInitializer>(
                 newThreadInitializerImpl());
     }
 
 private:
-    // To allow for covariant unique_ptrs, this private function can be
+    // To allow for covariant auto_ptrs, this private function can be
     // implemented in derived classes to return a raw, unmanaged pointer
     // with the override having a covariant return type.
     // Using name hiding, we can define newThreadInitializer() implementations

@@ -40,6 +40,13 @@ CPUAffinityThreadInitializerLinux::CPUAffinityThreadInitializerLinux(
     mCPU(std::move(cpu))
 {
 }
+#if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
+CPUAffinityThreadInitializerLinux::CPUAffinityThreadInitializerLinux(
+        mem::auto_ptr<const sys::ScopedCPUMaskUnix> cpu) :
+    CPUAffinityThreadInitializerLinux(std::unique_ptr<const sys::ScopedCPUMaskUnix>(cpu.release()))
+{
+}
+#endif
 
 void CPUAffinityThreadInitializerLinux::initialize()
 {

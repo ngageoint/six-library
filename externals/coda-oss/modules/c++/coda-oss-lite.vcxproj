@@ -454,8 +454,6 @@
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <TranslateIncludes>true</TranslateIncludes>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -479,8 +477,6 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <TranslateIncludes>true</TranslateIncludes>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>

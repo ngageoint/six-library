@@ -248,7 +248,7 @@ public:
      *  \param fromClient Client socket address returned
      *  \return A new socket connection to the client
      */
-    std::unique_ptr<Socket> accept(SocketAddress& fromClient);
+    mem::auto_ptr<Socket> accept(SocketAddress& fromClient);
 
     net::Socket_T getHandle() const
     {

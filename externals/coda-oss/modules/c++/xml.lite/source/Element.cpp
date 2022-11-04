@@ -343,6 +343,12 @@ xml::lite::Element& xml::lite::Element::addChild(std::unique_ptr<xml::lite::Elem
     addChild(node.release());
     return *retval;
 }
+#if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
+xml::lite::Element& xml::lite::Element::addChild(mem::auto_ptr<xml::lite::Element> node)
+{
+    return addChild(std::unique_ptr<xml::lite::Element>(node.release()));
+}
+#endif
 
 void xml::lite::Element::changePrefix(Element* element,
     const std::string& prefix, const std::string& uri)

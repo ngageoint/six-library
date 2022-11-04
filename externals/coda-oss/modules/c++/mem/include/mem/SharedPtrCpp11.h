@@ -32,8 +32,28 @@
 
 namespace mem
 {
-//  std::auto_ptr was removed in C++17.
-template <typename T> using auto_ptr = std::unique_ptr<T>;
+// This won't work everywhere since C++11's std::unique_ptr<> often requires
+// "&&" and std::move. But for member data and the like it can reduce some
+// boiler-plate code; note that it's often possible to just use std::unique_ptr
+// directly.  This is mostly needed to support existing interfaces.
+#if CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    #if defined(CODA_OSS_no_autoptr) && (!CODA_OSS_no_autoptr)
+        #error "std::auto_ptr was removed in C++17."
+    #endif
+    #define CODA_OSS_autoptr_is_std 0  // mem::auto_ptr != std::auto_ptr
+#else // C++11 or C++14 still have std::auto_ptr, but it's depricated
+    #ifdef CODA_OSS_no_autoptr  // don't use std::auto_ptr even if it's available
+        #define CODA_OSS_autoptr_is_std 0  // mem::auto_ptr != std::auto_ptr
+    #else
+        #define CODA_OSS_autoptr_is_std 1  // mem::auto_ptr == std::auto_ptr
+    #endif
+#endif
+ template <typename T> using auto_ptr =
+#if CODA_OSS_autoptr_is_std
+   std::auto_ptr<T>;
+#else
+    std::unique_ptr<T>;
+#endif
 
 // Pretty much give-up on mem::SharedPtr as it's too hard to get something that will
 // compile with all the different compilers; let somebody else worry about that

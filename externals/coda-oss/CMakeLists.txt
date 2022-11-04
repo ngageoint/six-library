@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 set(TARGET_LANGUAGE c++)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CXX_STANDARD_REQUIRED true)
 
 project(coda-oss)
@@ -26,14 +26,14 @@ if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
         # set warning level to /W3
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-	add_compile_options(/std:c++17)
+	add_compile_options(/std:c++14)
     elseif (UNIX)
         add_compile_options(
             -Wno-deprecated
             -Wno-unused-value
             -Wno-unused-but-set-variable
         )
-	add_compile_options(-std=c++17)
+	add_compile_options(-std=c++14)
     endif()
 
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

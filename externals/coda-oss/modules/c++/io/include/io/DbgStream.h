@@ -116,7 +116,7 @@ struct DbgStream : public OutputStream
     }
 protected:
     //!  The bound stream
-    std::unique_ptr<OutputStream> mStream;
+    mem::auto_ptr<OutputStream> mStream;
     //!  On or off??
     bool mOn = false;
 };

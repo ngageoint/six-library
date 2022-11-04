@@ -413,6 +413,9 @@ struct Element // SOAPElement derives :-(
     #ifndef SWIG // SWIG doesn't like std::unique_ptr
     virtual Element& addChild(std::unique_ptr<Element>&& node);
     #endif // SWIG
+    #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
+    virtual Element& addChild(mem::auto_ptr<Element> node);
+    #endif
 
     /*!
      *  Returns all of the children of this element

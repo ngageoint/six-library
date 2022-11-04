@@ -22,7 +22,24 @@
 #define CODA_OSS_std_optional_INCLUDED_
 #pragma once
 
-#include "coda_oss/CPlusPlus.h"
-#include "coda_oss/optional.h"
+// Make it (too?) easy for clients to get our various std:: implementations
+#ifndef CODA_OSS_NO_std_optional
+    #include "coda_oss/CPlusPlus.h"
+    #if CODA_OSS_cpp17
+        #include <optional>
+        #define CODA_OSS_NO_std_optional 1  // part of C++17
+    #else
+        #include "coda_oss/optional.h"
+        #define CODA_OSS_NO_std_optional 0  // use our own
+    #endif
+#endif
+
+#if !CODA_OSS_NO_std_optional
+namespace std // This is slightly uncouth: we're not supposed to augment "std".
+{
+    using coda_oss::optional;
+    using coda_oss::make_optional;
+}
+#endif // !CODA_OSS_NO_std_optional
 
 #endif  // CODA_OSS_std_optional_INCLUDED_

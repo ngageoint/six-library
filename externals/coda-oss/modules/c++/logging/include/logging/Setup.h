@@ -57,7 +57,7 @@ using path = std::filesystem::path;
 #else
 using path = coda_oss::filesystem::path;
 #endif
-std::unique_ptr<logging::Logger> setupLogger(
+mem::auto_ptr<logging::Logger> setupLogger(
     const path& program, 
     const std::string& logLevel = "warning", 
     const path& logFile = "console",

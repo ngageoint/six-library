@@ -105,7 +105,7 @@ struct FileWriter
 
 protected:
     std::string mFileName;
-    std::unique_ptr<io::OutputStream> mStream;
+    mem::auto_ptr<io::OutputStream> mStream;
     bool mAdopt;
 };
 

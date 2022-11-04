@@ -99,7 +99,7 @@ TEST_CASE(testAutoPtrConstructor)
 TEST_CASE(testAutoPtrReset)
 {
     // Similar to the construction test,
-    // except using the reset() that takes an unique_ptr
+    // except using the reset() that takes an auto_ptr
     int* const rawPtr1 = new int(90);
     std::unique_ptr<int> autoPtr(rawPtr1);
 

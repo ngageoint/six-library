@@ -22,7 +22,24 @@
 #define CODA_OSS_std_cstddef_INCLUDED_
 #pragma once
 
-#include "coda_oss/CPlusPlus.h"
-#include "coda_oss/cstddef.h"
+#include <cstddef>
+
+// Make it (too?) easy for clients to get our various std:: implementations
+#ifndef CODA_OSS_NO_std_byte
+    #if defined(__cpp_lib_byte) && (__cpp_lib_byte >= 201603L) // https://en.cppreference.com/w/cpp/utility/feature_test
+        #undef CODA_OSS_NO_std_byte
+        #define CODA_OSS_NO_std_byte 1  // provided by implementation, probably C++20
+    #else
+        #include "coda_oss/cstddef.h"
+        #define CODA_OSS_NO_std_byte 0  // use our own
+    #endif
+#endif
+
+#if !CODA_OSS_NO_std_byte
+namespace std // This is slightly uncouth: we're not supposed to augment "std".
+{
+    using coda_oss::byte;
+}
+#endif  // !CODA_OSS_NO_std_byte
 
 #endif  // CODA_OSS_std_cstddef_INCLUDED_

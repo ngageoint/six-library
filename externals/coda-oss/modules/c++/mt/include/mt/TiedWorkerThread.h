@@ -49,8 +49,8 @@ public:
 #if !CODA_OSS_cpp17
     TiedWorkerThread(
             mt::RequestQueue<Request_T>* requestQueue,
-            std::unique_ptr<CPUAffinityThreadInitializer> cpuAffinityInit =
-                    std::unique_ptr<CPUAffinityThreadInitializer>(nullptr)) :
+            mem::auto_ptr<CPUAffinityThreadInitializer> cpuAffinityInit =
+                    mem::auto_ptr<CPUAffinityThreadInitializer>(nullptr)) :
         TiedWorkerThread(requestQueue, std::unique_ptr<CPUAffinityThreadInitializer>(cpuAffinityInit.release()))
     {
     }

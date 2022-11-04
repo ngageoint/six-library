@@ -64,6 +64,10 @@ public:
     //! we own the ptr after this transaction
     NetConnection(std::unique_ptr<net::Socket>&& socket) : mSocket(socket.release())
     {}
+    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
+    NetConnection(mem::auto_ptr<net::Socket> socket) : mSocket(socket.release())
+    {}
+    #endif
 
     /*!
      *  Copy constructor
