@@ -38,9 +38,9 @@ BaseConverter::BaseConverter() :
 }
 
 mem::auto_ptr<xml::lite::Document>
-BaseConverter::readXML(const std::string& xmlPathname, bool storeEncoding)
+BaseConverter::readXML(const std::string& xmlPathname)
 {
-    six::MinidomParser parser(storeEncoding);
+    six::MinidomParser parser;
     io::FileInputStream xmlInputStream(xmlPathname);
     parser.parse(xmlInputStream);
     std::unique_ptr<xml::lite::Document> pDocument;

@@ -16,7 +16,6 @@
     <ClCompile Include="nitf_test_field.cpp" />
     <ClCompile Include="nitf_test_image_io.cpp" />
     <ClCompile Include="nitf_test_create_nitf.cpp" />
-    <ClCompile Include="nitf_test_tre_mods.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nrt_Test.h" />

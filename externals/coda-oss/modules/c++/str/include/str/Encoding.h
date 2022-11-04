@@ -109,7 +109,6 @@ CODA_OSS_API str::W1252string to_w1252string(coda_oss::u8string::const_pointer p
 namespace details // YOU should use EncodedStringView
 {
 void w1252to8(str::W1252string::const_pointer p, size_t sz, std::string&); // encoding is lost
-void utf16to8(std::u16string::const_pointer, size_t, std::string&);  // encoding is lost
 void utf8to1252(coda_oss::u8string::const_pointer p, size_t sz, std::string&); // encoding is lost
 }
 }

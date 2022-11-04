@@ -28,6 +28,7 @@
 #include <unordered_map>
 #include <std/filesystem>
 #include <vector>
+#include <std/string>
 
 #include <scene/sys_Conf.h>
 #include <xml/lite/Element.h>
@@ -83,10 +84,18 @@ public:
      *  Calls toXML
      *  \return XML String
      */
-    virtual std::string toXMLString(
+    virtual std::u8string toXMLString(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             bool prettyPrint = false);
+    std::string toXMLString_(
+        const Metadata& metadata,
+        const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
+        bool prettyPrint = false);
+    virtual std::u8string toXMLString(
+        const Metadata& metadata,
+        const std::vector<std::filesystem::path>* pSchemaPaths,
+        bool prettyPrint = false);
 
     /*!
      *  \func toXML
@@ -114,6 +123,9 @@ public:
     virtual std::unique_ptr<Metadata> fromXML(
             const std::string& xmlString,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
+    virtual std::unique_ptr<Metadata> fromXML(
+        const std::u8string& xmlString,
+        const std::vector<std::filesystem::path>& schemaPaths = std::vector<std::filesystem::path>());
 
     /*!
      *  \func fromXML
@@ -131,6 +143,8 @@ public:
     virtual Metadata fromXML(const xml::lite::Document& doc,
         const std::vector<std::filesystem::path>& schemaPaths = std::vector<std::filesystem::path>());
 
+    //! \return Suported version to uri mapping
+    static std::unordered_map<std::string, xml::lite::Uri> getVersionUriMap();
 
 protected:
     logging::Logger *mLog = nullptr;
@@ -138,9 +152,6 @@ protected:
     six::Logger mLogger;
 
 private:
-    //! \return Hardcoded version to uri mapping
-    static std::unordered_map<std::string, xml::lite::Uri> getVersionUriMap();
-
     /*!
      *  This function takes in a Metadata object and converts
      *  it to a new-allocated XML DOM.

@@ -27,8 +27,8 @@
 // Make it (too?) easy for clients to get our various std:: implementations
 #ifndef CODA_OSS_NO_std_u8string
     #include "coda_oss/CPlusPlus.h"
-    #if CODA_OSS_cpp17
-        #define CODA_OSS_NO_std_u8string 1  // part of C++17
+    #if CODA_OSS_cpp20
+        #define CODA_OSS_NO_std_u8string 1  // part of C++20
     #else
         #include "coda_oss/string.h"
         #define CODA_OSS_NO_std_u8string 0  // use our own

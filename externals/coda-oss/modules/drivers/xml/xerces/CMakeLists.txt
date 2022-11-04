@@ -293,9 +293,10 @@ else()
     target_include_directories(${TARGET_NAME}
         PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
                "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
-               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xercesc/util/Xerces_autoconf_config.hpp"
-            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/util"
+               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>"
+               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/config>")
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/config.h"
+            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/config"
             ${CODA_INSTALL_OPTION})
     install(DIRECTORY "${SOURCE_DIR}/src/xercesc"
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
@@ -304,6 +305,9 @@ else()
                 PATTERN "*.h"
                 PATTERN "*.hpp"
                 PATTERN "*.c")
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xercesc/util/Xerces_autoconf_config.hpp"
+            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/util"
+            ${CODA_INSTALL_OPTION})
 endif()
 install(TARGETS ${TARGET_NAME}
         EXPORT ${CODA_EXPORT_SET_NAME}

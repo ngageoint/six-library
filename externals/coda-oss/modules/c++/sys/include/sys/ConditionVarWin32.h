@@ -21,17 +21,18 @@
  */
 
 
-#ifndef __SYS_WIN32_CONDITION_VARIABLE_H__
-#define __SYS_WIN32_CONDITION_VARIABLE_H__
+#ifndef CODA_OSS_sys_ConditionVarWin32_h_INCLUDED_
+#define CODA_OSS_sys_ConditionVarWin32_h_INCLUDED_
+#pragma once
+
+#include <new>
 
 #include "config/Exports.h"
-
-#if defined(WIN32) || defined(_WIN32)
-#if !defined(USE_NSPR_THREADS)
-
 #include "sys/ConditionVarInterface.h"
-#include "sys/MutexWin32.h"
 
+#if defined(_WIN32)
+
+#include "sys/MutexWin32.h"
 
 namespace sys
 {
@@ -39,9 +40,8 @@ namespace sys
 ///        "Strategies for Implementing POSIX Condition Variables on Win32"
 ///        article at www.cse.wustl.edu/~schmidt/win32-cv-1.html.
 ///        This is the ACE framework implementation.
-class CODA_OSS_API ConditionVarDataWin32
+struct CODA_OSS_API ConditionVarDataWin32 final
 {
-public:
     ConditionVarDataWin32();
 
     ~ConditionVarDataWin32();
@@ -76,15 +76,16 @@ private:
     bool mWasBroadcast;
 };
 
-struct CODA_OSS_API ConditionVarWin32 final : public ConditionVarInterface
-
+class CODA_OSS_API ConditionVarWin32 final : public ConditionVarInterface
 {
-    ConditionVarWin32();
+    ConditionVarWin32(MutexWin32* theLock, bool isOwner, std::nullptr_t);
+
+public:
+    ConditionVarWin32();    
+    explicit ConditionVarWin32(MutexWin32* theLock, bool isOwner = false);
+    explicit ConditionVarWin32(MutexWin32&);  // isOwner = false
     
-    ConditionVarWin32(MutexWin32 *theLock, bool isOwner = false);
-    
-    virtual ~ConditionVarWin32()
-    {}
+    virtual ~ConditionVarWin32() = default;
     
     ConditionVarWin32(const ConditionVarWin32&) = delete;
     ConditionVarWin32& operator=(const ConditionVarWin32&) = delete;
@@ -149,12 +150,10 @@ struct CODA_OSS_API ConditionVarWin32 final : public ConditionVarInterface
 private:
     // This is set if we own the mutex, to make sure it gets deleted.
     std::unique_ptr<MutexWin32> mMutexOwned;
-    MutexWin32 *mMutex;
+    MutexWin32* mMutex;
     ConditionVarDataWin32 mNative;
 };
 }
 #endif
 
-#endif
-
-#endif
+#endif // CODA_OSS_sys_ConditionVarWin32_h_INCLUDED_

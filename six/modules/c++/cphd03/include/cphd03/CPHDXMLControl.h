@@ -61,8 +61,11 @@ public:
    Metadata fromXML(const xml::lite::Document& doc);
 
     mem::auto_ptr<Metadata> fromXML(const std::string& xmlString);
+    std::unique_ptr<Metadata> fromXML(const std::u8string& xmlString);
 
-    std::string toXMLString(const Metadata& metadata);
+    std::string toXMLString_(const Metadata& metadata);
+    std::u8string toXMLString(const Metadata& metadata);
+
     size_t getXMLsize(const Metadata& metadata);
 
 private:

@@ -1,6 +1,26 @@
-![alt tag](https://raw.github.com/ngageoint/six-library/master/docs/six_logo.png?raw=true)
+﻿![alt tag](https://raw.github.com/ngageoint/six-library/master/docs/six_logo.png?raw=true)
 
 # SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
+
+## [Version 3.?.?](https://github.com/ngageoint/six-library/releases/tag/SIX-3.?.?); ??? ??, 202?
+* [coda-oss](https://github.com/mdaus/coda-oss) version [202?-??-??](https://github.com/mdaus/coda-oss/releases/tag/202?-??-??)
+* [nitro](https://github.com/mdaus/nitro) version [2.?.?](https://github.com/mdaus/nitro/releases/tag/NITRO-2.?.?)
+* cphd::PhaseSGN accepts both `1` and `+1`, toString() is now `"1"` instead of `"+1"`.
+* CPHD XML parser handles URI's for versions 1.0.0, 1.0.1, and 1.1.0; unit test updated to test metadata parsing extensions
+
+## [Version 3.2.0](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.0); August 30, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-30_cpp14](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30_cpp14)
+* [nitro](https://github.com/mdaus/nitro) version [2.11.0](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.0)
+* This version is identical to [Version 3.1.14](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.14) except that C++14 is now required.
+
+## [Version 3.1.14](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.14); August 30, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30)
+* [nitro](https://github.com/mdaus/nitro) version [2.10.12](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.12)
+* Routines that "traffic" in XML strings (e.g., `parseDataFromString()` or `toXMLString()`) now use
+  `std::u8string` (actually `coda_oss::u8string`) instead of `std::string`.
+* Fixed memory leak in `ComplexXMLParser`.
+* Files in **six/projects/csm/external/csm-3.0.4** are unchanged (almost!) from [CSM 3.0.4](https://github.com/ngageoint/csm/releases/tag/v3.0.4).
+* Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/ngageoint/six-library/tree/main).
 
 ## [Version 3.1.13](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.13); August 2, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)

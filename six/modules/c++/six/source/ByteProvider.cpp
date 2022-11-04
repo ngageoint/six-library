@@ -93,7 +93,7 @@ void ByteProvider::populateOptions(
 void ByteProvider::populateInitArgs(
         const NITFWriteControl& writer,
         const std::vector<std::string>& schemaPaths,
-        std::vector<std::string>& xmlStrings,
+        std::vector<std::u8string>& xmlStrings,
         std::vector<PtrAndLength>& desData,
         size_t& numRowsPerBlock,
         size_t& numColsPerBlock)
@@ -118,7 +118,7 @@ void ByteProvider::populateInitArgs(
 void ByteProvider::populateInitArgs(
         const NITFHeaderCreator& headerCreator,
         const std::vector<std::string>& schemaPaths,
-        std::vector<std::string>& xmlStrings,
+        std::vector<std::u8string>& xmlStrings,
         std::vector<PtrAndLength>& desData,
         size_t& numRowsPerBlock,
         size_t& numColsPerBlock)
@@ -161,7 +161,7 @@ void ByteProvider::populateInitArgs(
     desData.resize(xmlStrings.size());
     for (size_t ii = 0; ii < xmlStrings.size(); ++ii)
     {
-        std::string& xmlString(xmlStrings[ii]);
+        auto& xmlString(xmlStrings[ii]);
         xmlString = six::toValidXMLString(container->getData(ii),
                                           schemaPaths,
                                           &logger,
@@ -210,7 +210,7 @@ void ByteProvider::initialize(const NITFWriteControl& writer,
 {
     // We don't explicitly use it, but each element in desData has a pointer
     // into this vector, so we need it to stick around
-    std::vector<std::string> xmlStrings;
+    std::vector<std::u8string> xmlStrings;
     std::vector<PtrAndLength> desData;
     size_t numRowsPerBlock;
     size_t numColsPerBlock;
@@ -240,7 +240,7 @@ void ByteProvider::initialize(const six::NITFHeaderCreator& headerCreator,
 {
     // We don't explicitly use it, but each element in desData has a pointer
     // into this vector, so we need it to stick around
-    std::vector<std::string> xmlStrings;
+    std::vector<std::u8string> xmlStrings;
     std::vector<PtrAndLength> desData;
     size_t numRowsPerBlock;
     size_t numColsPerBlock;

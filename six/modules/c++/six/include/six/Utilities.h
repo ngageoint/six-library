@@ -27,6 +27,7 @@
 #include <std/span>
 #include <std/cstddef>
 #include <std/filesystem>
+#include <std/string>
 
 #include <import/io.h>
 #include <import/xml/lite.h>
@@ -202,10 +203,10 @@ mem::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               ::io::InputStream& xmlStream, 
                               DataType dataType,
                               const std::vector<std::string>& schemaPaths,
-                              logging::Logger& log, bool storeEncoding=false);
+                              logging::Logger& log);
 std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream, DataType dataType,
-    const std::vector<std::filesystem::path>*, logging::Logger&, bool storeEncoding = true);
+    const std::vector<std::filesystem::path>*, logging::Logger&);
 
 /*
  * Parses the XML in 'xmlStream' and converts it into a Data object.  Same as
@@ -276,6 +277,11 @@ mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log);
+std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::u8string& xmlStr,
+    DataType dataType,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger* pLogger = nullptr);
 
 /*
  * Parses the XML in 'xmlStr' and converts it into a Data object.  Same as
@@ -292,6 +298,10 @@ mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log);
+std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
+    const std::u8string& xmlStr,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger* pLogger = nullptr);
 
 void getErrors(const ErrorStatistics* errorStats,
                const types::RgAz<double>& sampleSpacing,
@@ -370,8 +380,14 @@ inline std::span<std::byte> as_bytes(std::vector<T>& buffer)
 
 namespace testing
 {
-    extern std::filesystem::path findRootDir(const std::filesystem::path& dir);
-    extern std::filesystem::path buildRootDir(const std::filesystem::path& argv0);
+    std::filesystem::path findRootDir(const std::filesystem::path& dir);
+    std::filesystem::path buildRootDir(const std::filesystem::path& argv0);
+
+    std::filesystem::path getNitfPath(const  std::filesystem::path& filename);
+    std::filesystem::path getNitroPath(const  std::filesystem::path& filename);
+
+    std::vector<std::filesystem::path> getSchemaPaths();
+    std::filesystem::path getSampleXmlPath(const std::filesystem::path& module /*"six.sicd"*/, const  std::filesystem::path& filename);
 }
 
 }

@@ -10,7 +10,7 @@ TEST_CLASS(test_tre_read) {
 public:
 	test_tre_read() {
 		// initialization code here
-		sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+		nitf::Test::setNitfPluginPath();
 	}
 	~test_tre_read() = default;
 	test_tre_read(const test_tre_read&) = delete;
@@ -20,4 +20,3 @@ public:
 #include "nitf/unittests/test_tre_read.cpp"
 
 };
-const char* test_tre_read::argv0 = nullptr;

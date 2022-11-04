@@ -34362,7 +34362,7 @@ SWIGINTERN PyObject *_wrap_CPHDXMLControl_toXMLString(PyObject *SWIGUNUSEDPARM(s
   {
     try
     {
-      result = (arg1)->toXMLString((cphd03::Metadata const &)*arg2);
+      result = (arg1)->toXMLString_((cphd03::Metadata const &)*arg2);
     } 
     catch (const std::exception& e)
     {

@@ -37,7 +37,7 @@ TEST_CASE(testEndianness)
     else if (native == std::endian::little) { }
     else
     {
-        TEST_FAIL("Mixed-endian not supported!");
+        TEST_FAIL_MSG("Mixed-endian not supported!");
     }
 
     const bool isBigEndianSystem = sys::isBigEndianSystem();

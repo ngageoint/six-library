@@ -21,10 +21,7 @@
  */
 
 
-#if defined(WIN32) || defined(_WIN32)
-
-#if !defined(USE_NSPR_THREADS)
-
+#if defined(_WIN32)
 #include "sys/ConditionVarWin32.h"
 
 namespace
@@ -202,18 +199,22 @@ void sys::ConditionVarDataWin32::broadcast()
 }
 
 sys::ConditionVarWin32::ConditionVarWin32() :
-    mMutexOwned(new sys::MutexWin32()),
+    mMutexOwned(std::make_unique<sys::MutexWin32>()),
     mMutex(mMutexOwned.get())
 {}
 
-sys::ConditionVarWin32::ConditionVarWin32(sys::MutexWin32 *theLock, bool isOwner) :
-    mMutex(theLock)
+sys::ConditionVarWin32::ConditionVarWin32(MutexWin32* theLock, bool isOwner, std::nullptr_t) : mMutex(theLock)
+{
+    if (isOwner)
+        mMutexOwned.reset(theLock);
+}
+sys::ConditionVarWin32::ConditionVarWin32(MutexWin32 *theLock, bool isOwner) : ConditionVarWin32(theLock, isOwner, nullptr)
 {
     if (!theLock)
         throw SystemException("ConditionVar received NULL mutex");
-
-    if (isOwner)
-        mMutexOwned.reset(theLock);
+}
+sys::ConditionVarWin32::ConditionVarWin32(MutexWin32& theLock) : ConditionVarWin32(&theLock, false /*isOwner*/, nullptr)
+{
 }
 
 void sys::ConditionVarWin32::acquireLock()
@@ -241,7 +242,7 @@ void sys::ConditionVarWin32::wait()
 
 void sys::ConditionVarWin32::signal()
 {
-    dbg_printf("Signalling condition\n");
+    dbg_printf("Signaling condition\n");
     mNative.signal();
 }
 
@@ -255,8 +256,6 @@ sys::ConditionVarDataWin32& sys::ConditionVarWin32::getNative()
 {
     return mNative;
 }
-
-#endif // No other thread package
 
 #endif // Windows
 

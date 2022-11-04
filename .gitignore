@@ -51,7 +51,10 @@ six/Makefile
 six/modules/**/Makefile
 *_config.h
 *_config.hpp
+# ignore build directories ...
 build/
+# ... but not coda-oss/build
+!/externals/coda-oss/build/
 
 # Drivers
 six/projects/csm/external/csm-master/
@@ -59,3 +62,5 @@ six/projects/csm/external/csm-master/
 # Giant test files
 regression_files/
 six/modules/c++/cphd/tests/sample_cphd/
+outputPathname.ntf
+

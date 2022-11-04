@@ -10,7 +10,7 @@ TEST_CLASS(nitf_test_tre_create__) {
 public:
 	nitf_test_tre_create__() {
 		// initialization code here
-		sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+		nitf::Test::setNitfPluginPath();
 	}
 	~nitf_test_tre_create__() = default;
 	nitf_test_tre_create__(const nitf_test_tre_create__&) = delete;

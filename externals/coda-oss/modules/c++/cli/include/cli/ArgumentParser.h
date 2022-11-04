@@ -20,17 +20,18 @@
  *
  */
 
-#ifndef __CLI_ARGUMENT_PARSER_H__
-#define __CLI_ARGUMENT_PARSER_H__
+#ifndef CODA_OSS_cli_ArgumentParser_h_INCLUDED_
+#define CODA_OSS_cli_ArgumentParser_h_INCLUDED_
+#pragma once
 
 #include <memory>
+#include <iostream>
+#include <vector>
+#include <string>
 
+#include "config/Exports.h"
 #include "cli/Argument.h"
 #include "cli/Results.h"
-#include <import/str.h>
-#include <import/mem.h>
-#include <iostream>
-#include "config/Exports.h"
 
 namespace cli
 {
@@ -125,11 +126,19 @@ public:
         return parse(argc, const_cast<const char**>(argv));
     }
 
+   /**
+    * Copies argc into a std::vector<std::string> that can be passed directly
+    * to parse().  setProgram(argv[0]) is called if setProgram() hasn't already been called.
+    */
+    static std::vector<std::string> make_args(int argc, const char** argv, std::string& program);
+    std::vector<std::string> make_args(int argc, const char** argv);
+
     /**
      * Parses the arguments. args[0] is NOT used as the program name, so you
      * will need to specify it explicitly using setProgramName().
      */
     Results* parse(const std::vector<std::string>& args);
+    std::unique_ptr<Results> parse(const std::string& program, const std::vector<std::string>& args);
 
 protected:
     friend class Argument;
@@ -169,4 +178,4 @@ protected:
 };
 
 }
-#endif
+#endif  // CODA_OSS_cli_ArgumentParser_h_INCLUDED_
