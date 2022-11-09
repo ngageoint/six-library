@@ -1,7 +1,7 @@
 #!/bin/csh -f
 
-git remote add -f coda-oss_remote git@github.com:mdaus/coda-oss.git
-git remote add -f nitro_remote git@github.com:mdaus/nitro.git
+git remote add -m main -f coda-oss_remote git@github.com:mdaus/coda-oss.git
+git remote add -m main -f nitro_remote git@github.com:mdaus/nitro.git
 
 # To set this up the very first time
 # This does a subtree merge and puts it in the externals/coda-oss directory.  --squash avoids copying all the history
