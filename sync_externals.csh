@@ -16,7 +16,7 @@ git remote add -f nitro_remote git@github.com:mdaus/nitro.git
 # pull these in
 # git rm -r externals/coda-oss/modules/drivers/fftw externals/coda-oss/modules/drivers/openssl externals/coda-oss/modules/drivers/pcre externals/coda-oss/modules/drivers/sql externals/coda-oss/modules/drivers/uuid externals/coda-oss/modules/drivers/zlib externals/coda-oss/modules/drivers/jars externals/coda-oss/modules/drivers/jpeg externals/coda-oss/waf externals/coda-oss/wscript
 
-# git rm -r externals/nitro/externals externals/nitro/projects externals/nitro/utils externals/nitro/waf externals/nitro/wscript
+git rm -r externals/nitro/externals
 
 # Now we just want to update
 # Here I'm assuming you're running this on the master branch... otherwise the push command should change
