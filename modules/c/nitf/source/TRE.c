@@ -28,7 +28,6 @@
 NITFAPI(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
                                             nitf_Error* error)
 {
-    int toCopy = NITF_MAX_TAG;
     nitf_TRE *tre = (nitf_TRE *) NITF_MALLOC(sizeof(nitf_TRE));
 
     if (!tre)
@@ -43,6 +42,7 @@ NITFAPI(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
     tre->priv = NULL;
 
     /* This happens with things like "DES" */
+    size_t toCopy = NITF_MAX_TAG;
     if (strlen(tag) < NITF_MAX_TAG )
     {
         toCopy = strlen(tag);
@@ -115,12 +115,11 @@ NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
                                        const char* id,
                                        nitf_Error * error)
 {
-    int bad = 0;
     nitf_TRE* tre = nitf_TRE_createSkeleton(tag, error);
-    nitf_PluginRegistry *reg = nitf_PluginRegistry_getInstance(error);
-
     if (!tre)
         return NULL;
+
+    nitf_PluginRegistry *reg = nitf_PluginRegistry_getInstance(error);
     if (!reg)
         return NULL;
 
@@ -128,6 +127,7 @@ NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
     /* if it's not a RAW id, try to load it from the registry */
     if (!id || strcmp(id, NITF_TRE_RAW) != 0)
     {
+        int bad = 0;
         tre->handler =
             nitf_PluginRegistry_retrieveTREHandler(reg, tag, &bad, error);
 
@@ -171,7 +171,7 @@ NITFAPI(nitf_List*) nitf_TRE_find(nitf_TRE* tre,
 
 NITFAPI(NITF_BOOL) nitf_TRE_setField(nitf_TRE * tre,
                                      const char *tag,
-                                     NITF_DATA * data,
+                                     const NITF_DATA * data,
                                      size_t dataLength, nitf_Error * error)
 {
     return tre->handler->setField(tre, tag, data, dataLength, error);

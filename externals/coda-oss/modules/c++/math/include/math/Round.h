@@ -26,6 +26,8 @@
 #include <cmath>
 #include <stddef.h>
 
+#include "config/Exports.h"
+
 namespace math
 {
 /*!
@@ -48,7 +50,7 @@ template<typename T> inline T fix(T value)
  */
 template<typename T> inline T round(T value)
 {
-    return (value > 0.0 ? std::floor(value + 0.5) : std::ceil(value - 0.5));
+    return static_cast<T>(value > 0.0 ? std::floor(value + 0.5) : std::ceil(value - 0.5));
 }
 
 /*!
@@ -66,7 +68,7 @@ template<typename T> inline T round(T value, size_t fractionalDigits)
         power10 *= 10.0;
     }
 
-    return (value > 0.0 ? std::floor(value * power10 + 0.5) / power10
+    return static_cast<T>(value > 0.0 ? std::floor(value * power10 + 0.5) / power10
                         : std::ceil(value * power10 - 0.5) / power10);
 }
 
@@ -78,7 +80,7 @@ template<typename T> inline T round(T value, size_t fractionalDigits)
  * \return Result of division, rounded up
  * \throw if denominator is 0
  */
-size_t ceilingDivide(size_t numerator, size_t denominator);
+CODA_OSS_API size_t ceilingDivide(size_t numerator, size_t denominator);
 }
 
 #endif

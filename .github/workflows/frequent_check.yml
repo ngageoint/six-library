@@ -22,13 +22,12 @@ jobs:
     - name: make
       run: |
         cd build
-        cmake --build . --config Release -j
+        cmake --build . --config Release -j 2
         cmake --build . --config Release --target install
     - name: test
       run: |
         cd build
-        ctest -C Release
-
+        ctest -C Release --output-on-failure
 
   build-linux:
     name: Linux
@@ -48,9 +47,10 @@ jobs:
     - name: make
       run: |
         cd build
-        cmake --build . -j
+        # using the default number of threads (-j) causes G++ to crash
+        cmake --build . -j 2
         cmake --build . --target install
     - name: test
       run: |
         cd build
-        ctest
+        ctest --output-on-failure

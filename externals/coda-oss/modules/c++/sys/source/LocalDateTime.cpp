@@ -19,11 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#include <errno.h>
-
-#include <config/coda_oss_config.h>
-
 #include <sys/LocalDateTime.h>
 
 #include <sys/Conf.h>
@@ -31,9 +26,10 @@
 #include <str/Convert.h>
 #include <str/Manip.h>
 
+static const char DEFAULT_DATETIME_FORMAT[] = "%Y-%m-%d_%H:%M:%S";
+
 namespace sys
 {
-const char LocalDateTime::DEFAULT_DATETIME_FORMAT[] = "%Y-%m-%d_%H:%M:%S";
 
 void LocalDateTime::fromMillis(const tm& t)
 {
@@ -59,26 +55,7 @@ void LocalDateTime::toMillis()
 
 void LocalDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const
 {
-    // Would like to use the reentrant version.  If we don't have one, cross
-    // our fingers and hope the regular function actually is reentrant
-    // (supposedly this is the case on Windows).
-#ifdef HAVE_LOCALTIME_R
-    if (::localtime_r(&numSecondsSinceEpoch, &t) == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("localtime_r() failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-#else
-    tm const * const localTimePtr = ::localtime(&numSecondsSinceEpoch);
-    if (localTimePtr == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("localtime failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-    t = *localTimePtr;
-#endif
+    DateTime::localtime(numSecondsSinceEpoch, t);
 }
 
 LocalDateTime::LocalDateTime() :
@@ -140,6 +117,9 @@ LocalDateTime::LocalDateTime(const std::string& time,
     setTime(time, format);
     DateTime::fromMillis();
 }
+LocalDateTime::LocalDateTime(const std::string& time) : LocalDateTime(time, DEFAULT_DATETIME_FORMAT)
+{
+}
 
 void LocalDateTime::setDST(bool isDST)
 {
@@ -164,7 +144,7 @@ std::istream& operator>>(std::istream& is, LocalDateTime& dateTime)
 {
     std::string str;
     is >> str;
-    dateTime.setTime(str, LocalDateTime::DEFAULT_DATETIME_FORMAT);
+    dateTime.setTime(str, DEFAULT_DATETIME_FORMAT);
     return is;
 }
 }

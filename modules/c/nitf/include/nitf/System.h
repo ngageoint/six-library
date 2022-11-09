@@ -22,6 +22,9 @@
 
 #ifndef __NITF_SYSTEM_H__
 #define __NITF_SYSTEM_H__
+#pragma once
+
+#include <stdint.h>
 
 #ifdef WIN32
 #      if defined(NITF_MODULE_EXPORTS)
@@ -81,20 +84,28 @@
 #define NITF_MALLOC NRT_MALLOC
 #define NITF_REALLOC NRT_REALLOC
 #define NITF_FREE NRT_FREE
+NITFAPI(char*) nitf_strdup(const char* src);
 
+#define NITF_NEW_nothrow(t_) (t_*)NITF_MALLOC(sizeof(t_)) // (Foo*) NITF_MALLOC(sizeof(Foo))
+#define NITF_if_NULL_goto(var_, error_, label_) if (!var_) { nitf_Error_init(error_, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, NITF_ERR_MEMORY); goto label_; }
+#define NITF_NEW_goto(var_, t_, error_, label_) t_* var_ = NITF_NEW_nothrow(t_); NITF_if_NULL_goto(var_, error_, label_)
+#define NITF_NEW_return(var_, t_, error_) t_* var_ = NITF_NEW_nothrow(t_); \
+    if (!var_) { nitf_Error_init(error_, NITF_STRERROR(NITF_ERRNO), NITF_CTXT, NITF_ERR_MEMORY); return NULL; }
 
 /******************************************************************************/
 /* TYPES                                                                      */
 /******************************************************************************/
 #include "nrt/Types.h"
-typedef nrt_Uint8                   nitf_Uint8;
-typedef nrt_Uint16                  nitf_Uint16;
-typedef nrt_Uint32                  nitf_Uint32;
-typedef nrt_Uint64                  nitf_Uint64;
-typedef nrt_Int8                    nitf_Int8;
-typedef nrt_Int16                   nitf_Int16;
-typedef nrt_Int32                   nitf_Int32;
-typedef nrt_Int64                   nitf_Int64;
+ // Keeping these here so that code using "nitf_Uint8" still compiles;
+ // we can't make others change to "uint8_t".
+typedef uint8_t                   nitf_Uint8;
+typedef uint16_t                  nitf_Uint16;
+typedef uint32_t                  nitf_Uint32;
+typedef uint64_t                  nitf_Uint64;
+typedef int8_t                    nitf_Int8;
+typedef int16_t                   nitf_Int16;
+typedef int32_t                   nitf_Int32;
+typedef int64_t                   nitf_Int64;
 typedef nrt_IOHandle                nitf_IOHandle;
 typedef NRT_NATIVE_DLL              NITF_NATIVE_DLL;
 typedef NRT_DLL_FUNCTION_PTR        NITF_DLL_FUNCTION_PTR;
@@ -322,6 +333,7 @@ typedef nrt_List                        nitf_List;
 #define nitf_List_destruct              nrt_List_destruct
 #define nitf_List_begin                 nrt_List_begin
 #define nitf_List_at                    nrt_List_at
+#define nitf_List_atui                    nrt_List_atui
 #define nitf_ListIterator_equals        nrt_ListIterator_equals
 #define nitf_ListIterator_notEqualTo    nrt_ListIterator_notEqualTo
 #define nitf_List_end                   nrt_List_end
@@ -329,7 +341,9 @@ typedef nrt_List                        nitf_List;
 #define nitf_List_remove                nrt_List_remove
 #define nitf_List_move                  nrt_List_move
 #define nitf_List_size                  nrt_List_size
+#define nitf_List_size16                  nrt_List_size16
 #define nitf_List_get                   nrt_List_get
+#define nitf_List_getui                   nrt_List_getui
 #define nitf_ListIterator_increment     nrt_ListIterator_increment
 #define nitf_ListIterator_get           nrt_ListIterator_get
 

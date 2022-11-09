@@ -68,14 +68,12 @@ NITF_BOOL addGraphicSegment(nitf_Record *record, nitf_Error *error)
 
 cgm_Metafile* createCGM(nitf_Error *error)
 {
-    cgm_Metafile *mf = NULL;
-    cgm_Element *element = NULL, *dolly = NULL;
-    cgm_TextElement *textElement = NULL;
     cgm_PolyLineElement *lineElement = NULL, *lineClone = NULL;
     cgm_Vertex *vertex = NULL;
 
     /* first, we create a metafile object */
-    if (!(mf = cgm_Metafile_construct("TEXT", "TEXT", error)))
+    cgm_Metafile* mf = cgm_Metafile_construct("TEXT", "TEXT", error);
+    if (!mf)
         goto CATCH_ERROR;
 
     /* next, create a picture */
@@ -93,18 +91,21 @@ cgm_Metafile* createCGM(nitf_Error *error)
         goto CATCH_ERROR;
 
     /* let's create a text element */
-    if (!(element = cgm_TextElement_construct(error)))
+    cgm_Element* element = cgm_TextElement_construct(error);
+    if (!element)
         goto CATCH_ERROR;
 
     /* because of how the Elements are derived, get the text-specific part */
-    textElement = (cgm_TextElement*)element->data;
+    cgm_TextElement* textElement = (cgm_TextElement*)element->data;
 
     /* create text attributes */
-    if (!(textElement->attributes = cgm_TextAttributes_construct(error)))
+    textElement->attributes = cgm_TextAttributes_construct(error);
+    if (!textElement->attributes)
         goto CATCH_ERROR;
 
     /* create the text that goes in the text element */
-    if (!(textElement->text = cgm_Text_construct("NITRO rocks!", error)))
+    textElement->text = cgm_Text_construct("NITRO rocks!", error);
+    if (!textElement->text)
         goto CATCH_ERROR;
 
     /* set some attributes */
@@ -128,13 +129,15 @@ cgm_Metafile* createCGM(nitf_Error *error)
 
 
     /* let's create some polyline elements to make a cross */
-    if (!(element = cgm_PolyLineElement_construct(error)))
+    element = cgm_PolyLineElement_construct(error);
+    if (!element)
         goto CATCH_ERROR;
 
     lineElement = (cgm_PolyLineElement*)element->data;
 
     /* create attributes */
-    if (!(lineElement->attributes = cgm_LineAttributes_construct(error)))
+    lineElement->attributes = cgm_LineAttributes_construct(error);
+    if (!lineElement->attributes)
         goto CATCH_ERROR;
 
     /* set some attributes */
@@ -147,27 +150,32 @@ cgm_Metafile* createCGM(nitf_Error *error)
     lineElement->attributes->lineColor->b = 0;
 
     /* before we add vertices, let's clone it as it is now */
-    if (!(dolly = cgm_Element_clone(element, error)))
+    cgm_Element* dolly = cgm_Element_clone(element, error);
+    if (!dolly)
         goto CATCH_ERROR;
     lineClone = (cgm_PolyLineElement*)dolly->data;
 
     /* add some vertices */
-    if (!(vertex = cgm_Vertex_construct(25, 50, error)))
+    vertex = cgm_Vertex_construct(25, 50, error);
+    if (!vertex)
         goto CATCH_ERROR;
     if (!(nitf_List_pushBack(lineElement->vertices, (NITF_DATA*)vertex, error)))
         goto CATCH_ERROR;
 
-    if (!(vertex = cgm_Vertex_construct(75, 50, error)))
+    vertex = cgm_Vertex_construct(75, 50, error);
+    if (!vertex)
         goto CATCH_ERROR;
     if (!(nitf_List_pushBack(lineElement->vertices, (NITF_DATA*)vertex, error)))
         goto CATCH_ERROR;
 
-    if (!(vertex = cgm_Vertex_construct(50, 25, error)))
+    vertex = cgm_Vertex_construct(50, 25, error);
+    if (!vertex)
         goto CATCH_ERROR;
     if (!(nitf_List_pushBack(lineClone->vertices, (NITF_DATA*)vertex, error)))
         goto CATCH_ERROR;
 
-    if (!(vertex = cgm_Vertex_construct(50, 75, error)))
+    vertex = cgm_Vertex_construct(50, 75, error);
+    if (!vertex)
         goto CATCH_ERROR;
     if (!(nitf_List_pushBack(lineClone->vertices, (NITF_DATA*)vertex, error)))
         goto CATCH_ERROR;

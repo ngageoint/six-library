@@ -57,7 +57,7 @@ int main(int argc, char **argv)
             /*  Get the last data  */
             char* p = (char*)it.get();
             /*  Make sure  */
-            assert(p != NULL);
+            assert(p != nullptr);
 
             /*  Show the data  */
             printf("Found data: [%s]\n", p);
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
             /*  Get the last data  */
             char* p = (char*)l.remove(it);
             /*  Make sure  */
-            assert(p != NULL);
+            assert(p != nullptr);
 
             /*  Show the data  */
             printf("Removed data: [%s]\n", p);
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
         /*  Double check  */
         //assert( l.getHandle() == NULL );
     }
-    catch (except::Throwable& t)
+    catch (const except::Throwable& t)
     {
         std::cout << t.getTrace() << std::endl;
     }

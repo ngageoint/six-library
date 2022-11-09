@@ -1,0 +1,217 @@
+import os
+from waflib import Options
+from waflib.TaskGen import feature, before, task_gen
+from build import untarFile
+
+ZLIB_VERSION = 'zlib-1.2.12'
+
+def options(opt):
+    opt.add_option('--with-zip-home', action='store', dest='zip_home',
+                   help='Specify the ZIP Home - where the ZIP library is installed')
+    opt.add_option('--disable-zip', action='store_false', dest='enable_zip',
+                   help='will not build the zip (zlib) library')
+    opt.add_option('--enable-zip', action='store_true',
+                   default=True, help='will build the zip (libz) library if not found on the system (default)')
+    opt.add_option('--build-zip', action='store_true', dest="build_zip",
+                   help='force building zip (zlib) library from scratch',
+                   default=os.path.exists(os.path.join(opt.path.abspath(), ZLIB_VERSION + '.tar')))
+    opt.add_option('--nobuild-zip', action='store_false', dest="build_zip",
+                   help='force not building zip (zlib) library from scratch')
+
+def configure(conf):
+    #-- ZIP --------------------------------------------------------------------
+    if Options.options.enable_zip:
+
+        zipHome = Options.options.zip_home
+        if zipHome:
+            if conf.check(lib='z', uselib_store='ZIP',
+                       header_name='zlib.h', function_name='inflate',
+                       define_name='HAVE_INFLATE',
+                       libpath=os.path.join(zipHome, 'lib'),
+                       includes=os.path.join(zipHome, 'include'),
+                       msg='Checking for library zlib', okmsg=zipHome,
+                       mandatory=False):
+                           conf.undefine('HAVE_INFLATE')
+
+            # TODO: This is a little hokey since in reality if someone just
+            #       built zlib from a tarball they would not get this library
+            conf.check(lib='minizip', uselib_store='MINIZIP',
+                       header_name='zip.h', function_name='zipOpen',
+                       libpath=os.path.join(zipHome, 'lib'),
+                       includes=os.path.join(zipHome, 'include'),
+                       msg='Checking for library minizip', okmsg=zipHome,
+                       mandatory=False)
+
+        elif Options.options.build_zip:
+            # Build is off by default when tarfile not found, fail if forced on
+            if not os.path.exists(os.path.join(conf.path.abspath(), ZLIB_VERSION + '.tar')):
+                conf.fatal('Missing zlib tarfile')
+
+            conf.env['MAKE_ZIP'] = True
+            conf.env['MAKE_MINIZIP'] = True
+            conf.msg('Building local lib', 'zip (zlib)')
+
+            untarFile(path=conf.path, fname=ZLIB_VERSION + '.tar')
+
+            # remove minizip's crypt.h and define NOCRYPT and NOUNCRYPT macros
+            # minizip crypt.h clashes with glibc crypt.h
+            crypt_h_path = os.path.join(
+                conf.path.abspath(),
+                ZLIB_VERSION,
+                'contrib', 'minizip', 'crypt.h')
+            if os.path.exists(crypt_h_path):
+                os.remove(crypt_h_path)
+
+        else:
+            if conf.check(lib='z', uselib_store='ZIP',
+                       header_name='zlib.h', function_name='inflate',
+                       define_name='HAVE_INFLATE',
+                       msg='Checking for library zlib',
+                       mandatory=False):
+                           conf.undefine('HAVE_INFLATE')
+
+            conf.check(lib='minizip', uselib_store='MINIZIP',
+                       header_name='zip.h', function_name='zipOpen',
+                       msg='Checking for library minizip',
+                       mandatory=False)
+        conf.define('NOCRYPT', 1)
+        conf.define('NOUNCRYPT', 1)
+
+
+def writeDefsFile(pathname, *exports):
+    with open(pathname, 'w') as f:
+        f.write('EXPORTS\n')
+        for export in exports:
+            f.write('\t{0}\n'.format(export))
+
+
+def useDefsFile(environment, defsFilePathname):
+    environment.append_value('LINKFLAGS', '/def:{0}'.format(defsFilePathname))
+
+
+def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.all_envs[variant]
+
+    driversNode = bld.path
+    buildDirname = os.path.join(bld.path.abspath(), ZLIB_VERSION)
+
+    if 'MAKE_ZIP' in env:
+        fname = ZLIB_VERSION
+
+        driverNode = driversNode.make_node(fname)
+        defs = env['DEFINES']
+
+        zlibEnv = env.derive()
+        if zlibEnv['windows_dll']:
+            useDefsFile(zlibEnv, os.path.join(buildDirname, 'win32', 'zlib.def'))
+        zlib = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
+                   includes=['.'],
+                   export_includes='.',
+                   target='z',
+                   source='adler32.c crc32.c deflate.c infback.c inffast.c inflate.c inftrees.c trees.c zutil.c ' \
+                          'compress.c uncompr.c gzclose.c gzlib.c gzread.c gzwrite.c',
+                   path=driverNode,
+                   defines=defs,
+                   env=zlibEnv,
+                   name='ZIP',
+                   targets_to_add=[])
+
+        # Minizip is included in the zlib tarball but is not built when you
+        # just run configure.  Beyond that, when you build minizip, you just
+        # get two binaries and no actual library.
+        # There is a configure.ac that looks like it would do a check for
+        # unistd.h but this configure does not appear to ever actually get run
+        # and a check for that header doesn't appear in the code, so I don't
+        # think this is needed.  Note that here I am building just enough to
+        # get compression to work, not decompression.
+
+        minizipEnv = env.derive()
+        if minizipEnv['windows_dll']:
+            minizipDefsPathname = os.path.join(buildDirname,
+                                               'contrib',
+                                               'minizip',
+                                               'minizip.def')
+            if not os.path.isfile(minizipDefsPathname):
+                writeDefsFile(minizipDefsPathname,
+                              'zipOpen',
+                              'zipOpen64',
+                              'zipOpen2',
+                              'zipOpen2_64',
+                              'zipOpenNewFileInZip',
+                              'zipOpenNewFileInZip64',
+                              'zipOpenNewFileInZip2',
+                              'zipOpenNewFileInZip2_64',
+                              'zipOpenNewFileInZip3',
+                              'zipOpenNewFileInZip3_64',
+                              'zipOpenNewFileInZip4',
+                              'zipOpenNewFileInZip4_64',
+                              'zipWriteInFileInZip',
+                              'zipCloseFileInZip',
+                              'zipCloseFileInZipRaw',
+                              'zipCloseFileInZipRaw64',
+                              'zipClose',
+                              'zipRemoveExtraInfoBlock')
+            useDefsFile(minizipEnv, minizipDefsPathname)
+
+        minizipDir = os.path.join('contrib', 'minizip')
+        minizipIncludes = ['.', minizipDir]
+        minizip = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
+                      includes=minizipIncludes,
+                      export_includes=minizipIncludes,
+                      target='minizip',
+                      source=[os.path.join(minizipDir, 'ioapi.c'),
+                              os.path.join(minizipDir, 'zip.c')],
+                      path=driverNode,
+                      env=minizipEnv,
+                      lib='z',
+                      libpath=os.path.join(os.getcwd(), env['install_libdir']),
+                      name='MINIZIP',
+                      targets_to_add=[])
+
+        # combine the two into a single target
+        zlib.targets_to_add.append('MINIZIP')
+
+        if env['install_libs']:
+            zlib.install_path = env['install_libdir']
+            minizip.install_path = env['install_libdir']
+
+        if env['install_headers']:
+            bld(features='install_tgt', install_path=env['install_includedir'],
+                dir=driverNode, pattern=['zconf.h', 'zlib.h'], name='ZIP_HEADERS_INSTALL')
+            zlib.targets_to_add.append('ZIP_HEADERS_INSTALL')
+
+            minizipNode = driverNode.find_dir(minizipDir)
+            bld(features='install_tgt', install_path=env['install_includedir'],
+                dir=minizipNode, pattern=['zip.h', 'ioapi.h'],
+                name='MINIZIP_HEADERS_INSTALL')
+            minizip.targets_to_add.append('MINIZIP_HEADERS_INSTALL')
+
+        if env['install_source']:
+            sourceNode = driversNode.make_node('source')
+            bld.install_tgt(files = fname + '.tar',
+                            dir = driversNode,
+                            install_path = os.path.join('${PREFIX}',
+                            sourceNode.path_from(driversNode)),
+                            relative_trick=True,
+                            name='ZIP_SOURCE_INSTALL')
+            zlib.targets_to_add.append('ZIP_SOURCE_INSTALL')
+
+            # TODO: This is a hack to make USELIB_CHECK happy.  Not sure how
+            #       to cleanly get around this.
+            bld(features = 'install_tgt',
+                dir = driversNode,
+                name='MINIZIP_SOURCE_INSTALL')
+            minizip.targets_to_add.append('MINIZIP_SOURCE_INSTALL')
+
+def distclean(context):
+    #remove the untarred directories
+    import shutil
+
+    dirs = map(lambda d: os.path.join(context.path.abspath(), d),
+               [ZLIB_VERSION])
+    for d in dirs:
+        try:
+            if os.path.exists(d):
+                shutil.rmtree(d, ignore_errors=True)
+        except:{}

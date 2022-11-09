@@ -62,12 +62,19 @@ typedef int (*NRT_HASH_FUNCTOR) (nrt_HashTable *, nrt_Pair * pair,
  *  \struct nrt_HashTableIterator
  *  \brief This is a basic iterator object for a HashTable
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _NRT_HashTableIterator
 {
     nrt_HashTable *hash;        /* ! The hash this is an iterator for */
     int curBucket;              /* ! The current bucket */
     nrt_ListIterator listIter;  /* ! The iterator for the current bucket chain */
 } nrt_HashTableIterator;
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*!
  *  Constructor.  This creates the hash table.
@@ -177,7 +184,7 @@ NRTAPI(NRT_BOOL) nrt_HashTable_exists(nrt_HashTable * ht, const char *key);
  *  This is a debug tool to see what's in our hash
  *  \param ht The hash to print
  */
-NRTAPI(void) nrt_HashTable_print(nrt_HashTable * ht);
+NRTAPI(void) nrt_HashTable_print(const nrt_HashTable * ht);
 
 /*!
  *  Foreach item in the hash table, do something (slow)

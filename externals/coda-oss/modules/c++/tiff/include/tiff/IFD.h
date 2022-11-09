@@ -52,16 +52,13 @@ public:
     typedef std::map<unsigned short, tiff::IFDEntry *> IFDType;
 
     //! Constructor
-    IFD() :
-        mNextIFDOffsetPosition(0)
-    {
-    }
+    IFD() = default;
 
     //! Deconstructor
     ~IFD()
     {
-        for (sys::Uint32_T i = 0; i < mIFD.size(); ++i)
-            delete mIFD[i];
+        for (auto& kv : mIFD)
+            delete kv.second;
     }
 
     /**
@@ -76,8 +73,13 @@ public:
      *   NULL if the entry doesn't exist in the IFD
      *****************************************************************/
     tiff::IFDEntry *operator[](const char *name);
+    const tiff::IFDEntry* operator[](const char* name) const;
 
     tiff::IFDEntry *operator[](const std::string& name)
+    {
+        return this->operator[](name.c_str());
+    }
+    const tiff::IFDEntry* operator[](const std::string& name) const
     {
         return this->operator[](name.c_str());
     }
@@ -94,24 +96,25 @@ public:
      *   NULL if the entry doesn't exist in the IFD
      *****************************************************************/
     tiff::IFDEntry *operator[](unsigned short tag);
+    const tiff::IFDEntry* operator[](unsigned short tag) const;
 
     /**
      * Returns true if an IFDEntry for the given tag exists in the IFD.
      * \return true if the entry exists, otherwise false.
      */
-    bool exists(unsigned short tag);
+    bool exists(unsigned short tag) const;
 
     /**
      * Returns true if an IFDEntry with the given name exists in the IFD.
      * \return true if the entry exists, otherwise false.
      */
-    bool exists(const char *name);
+    bool exists(const char *name) const;
 
     /**
      * Returns true if an IFDEntry with the given name exists in the IFD.
      * \return true if the entry exists, otherwise false.
      */
-    bool exists(const std::string& name)
+    bool exists(const std::string& name) const
     {
         return exists(name.c_str());
     }
@@ -149,14 +152,14 @@ public:
      *****************************************************************/
     template <typename T> void addEntry(const std::string& name, const T& value)
     {
-        tiff::IFDEntry *mapEntry = tiff::KnownTagsRegistry::getInstance()[name];
+        const tiff::IFDEntry *mapEntry = tiff::KnownTagsRegistry::getInstance()[name];
         //we can't add it if we don't know about it
         if (!mapEntry)
             throw except::Exception(Ctxt(FmtX(
                                     "Unable to add IFD Entry: unknown tag [%s]", name.c_str())));
 
-        unsigned short id = mapEntry->getTagID();
-        unsigned short type = mapEntry->getType();
+        const auto id = mapEntry->getTagID();
+        const auto type = mapEntry->getType();
 
         mIFD[id] = new tiff::IFDEntry;
         *(mIFD[id]) = *mapEntry;
@@ -221,9 +224,9 @@ public:
      * @return
      *   the number of IFD entries in the IFD
      *****************************************************************/
-    sys::Uint32_T size()
+    sys::Uint32_T size() const
     {
-        return mIFD.size();
+        return static_cast<sys::Uint32_T>(mIFD.size());
     }
 
     /**
@@ -234,7 +237,7 @@ public:
      * @return 
      *   the calculated image size in bytes
      *****************************************************************/
-    sys::Uint32_T getImageSize();
+    sys::Uint32_T getImageSize() const;
 
     /**
      *****************************************************************
@@ -244,7 +247,7 @@ public:
      * @return 
      *   the calculated image width in elements
      *****************************************************************/
-    sys::Uint32_T getImageWidth();
+    sys::Uint32_T getImageWidth() const;
 
     /**
      *****************************************************************
@@ -254,7 +257,7 @@ public:
      * @return 
      *   the calculated image length in lines
      *****************************************************************/
-    sys::Uint32_T getImageLength();
+    sys::Uint32_T getImageLength() const;
 
     /**
      *****************************************************************
@@ -264,10 +267,10 @@ public:
      * @return 
      *   the calculated element size in bytes
      *****************************************************************/
-    unsigned short getElementSize();
+    unsigned short getElementSize() const;
     
     
-    unsigned short getNumBands();
+    unsigned short getNumBands() const;
 
     /**
      *****************************************************************
@@ -301,9 +304,13 @@ private:
 
     //! The IFD entries
     IFDType mIFD;
+    IFDType ifd() const
+    {
+        return mIFD;
+    }
 
     //! Offset where the next IFD offset can be written to
-    sys::Uint32_T mNextIFDOffsetPosition;
+    sys::Uint32_T mNextIFDOffsetPosition = 0;
 };
 
 } // End namespace.

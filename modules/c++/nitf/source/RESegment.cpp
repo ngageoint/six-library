@@ -42,27 +42,24 @@ RESegment::RESegment(nitf_RESegment * x)
     getNativeOrThrow();
 }
 
-RESegment::RESegment()
+RESegment::RESegment() noexcept(false) : RESegment(nitf_RESegment_construct(&error))
 {
-    setNative(nitf_RESegment_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
 RESegment::RESegment(NITF_DATA * x)
 {
-    setNative((nitf_RESegment*)x);
-    getNativeOrThrow();
+    *this = x;
 }
 
 RESegment & RESegment::operator=(NITF_DATA * x)
 {
-    setNative((nitf_RESegment*)x);
+    setNative(static_cast<nitf_RESegment*>(x));
     getNativeOrThrow();
     return *this;
 }
 
-nitf::RESegment RESegment::clone()
+nitf::RESegment RESegment::clone() const
 {
     nitf::RESegment dolly(
         nitf_RESegment_clone(getNativeOrThrow(), &error));
@@ -70,9 +67,7 @@ nitf::RESegment RESegment::clone()
     return dolly;
 }
 
-RESegment::~RESegment(){}
-
-nitf::RESubheader RESegment::getSubheader()
+nitf::RESubheader RESegment::getSubheader() const
 {
     return nitf::RESubheader(getNativeOrThrow()->subheader);
 }
@@ -88,22 +83,22 @@ void RESegment::setSubheader(nitf::RESubheader & value)
     value.setManaged(true);
 }
 
-nitf::Uint64 RESegment::getOffset() const
+uint64_t RESegment::getOffset() const
 {
     return getNativeOrThrow()->offset;
 }
 
-void RESegment::setOffset(nitf::Uint64 value)
+void RESegment::setOffset(uint64_t value)
 {
     getNativeOrThrow()->offset = value;
 }
 
-nitf::Uint64 RESegment::getEnd() const
+uint64_t RESegment::getEnd() const
 {
     return getNativeOrThrow()->end;
 }
 
-void RESegment::setEnd(nitf::Uint64 value)
+void RESegment::setEnd(uint64_t value)
 {
     getNativeOrThrow()->end = value;
 }

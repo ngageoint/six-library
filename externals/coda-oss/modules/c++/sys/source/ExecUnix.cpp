@@ -21,7 +21,7 @@
  */
 
 
-#if !defined(WIN32)
+#if !(defined(WIN32) || defined(_WIN32))
 
 #include <sys/wait.h>
 #include <str/Manip.h>
@@ -166,14 +166,14 @@ int ExecPipe::closePipe()
             throw except::IOException(
                 Ctxt("The child process was terminated by " \
                         "an uncaught signal: " +
-                        str::toString<int>(WTERMSIG(encodedStatus))));
+                        str::toString(WTERMSIG(encodedStatus))));
         }
         // due to unplanned stoppage
         if (WIFSTOPPED(encodedStatus))
         {
             throw except::IOException(
                 Ctxt("The child process was unexpectedly stopped: " +
-                        str::toString<int>(WSTOPSIG(encodedStatus))));
+                        str::toString(WSTOPSIG(encodedStatus))));
         }
 
         // all other errors

@@ -20,30 +20,28 @@
  *
  */
 
-#include <except/Exception.h>
-#include <nitf/NITFBufferList.hpp>
+#include <stdlib.h>
+
+#include "nitf/NITFBufferList.hpp"
+
+#undef min
+#undef max
 
 namespace nitf
 {
-NITFBuffer::NITFBuffer() :
-    mData(NULL),
-    mNumBytes(0)
-{
-}
 
-NITFBuffer::NITFBuffer(const void* data, size_t numBytes) :
+NITFBuffer::NITFBuffer(const void* data, size_t numBytes) noexcept :
     mData(data),
     mNumBytes(numBytes)
 {
 }
 
-size_t NITFBufferList::getTotalNumBytes() const
+size_t NITFBufferList::getTotalNumBytes() const noexcept
 {
     size_t numBytes(0);
-
-    for (size_t ii = 0; ii < mBuffers.size(); ++ii)
+    for (const auto& buffer : mBuffers)
     {
-        numBytes += mBuffers[ii].mNumBytes;
+        numBytes += buffer.mNumBytes;
     }
 
     return numBytes;
@@ -79,13 +77,14 @@ size_t NITFBufferList::getNumBytesInBlock(
     return numBytes;
 }
 
-const void* NITFBufferList::getBlock(size_t blockSize,
+template<typename T>
+const void* getBlock_(const std::vector<NITFBuffer>& mBuffers,
+                                     size_t blockSize,
                                      size_t blockIdx,
-                                     std::vector<sys::byte>& scratch,
-                                     size_t& numBytes) const
+                                     std::vector<T>& scratch,
+                                     const size_t numBytes)
 {
     const size_t startByte = blockIdx * blockSize;
-    numBytes = getNumBytesInBlock(blockSize, blockIdx);
 
     size_t byteCount(0);
     for (size_t ii = 0; ii < mBuffers.size(); ++ii)
@@ -98,8 +97,8 @@ const void* NITFBufferList::getBlock(size_t blockSize,
             const size_t numBytesLeftInBuffer =
                     buffer.mNumBytes - numBytesToSkip;
 
-            const sys::byte* const startPtr =
-                    static_cast<const sys::byte*>(buffer.mData) +
+            const auto startPtr =
+                    static_cast<const T*>(buffer.mData) +
                     numBytesToSkip;
             if (numBytesLeftInBuffer >= numBytes)
             {
@@ -113,7 +112,7 @@ const void* NITFBufferList::getBlock(size_t blockSize,
                 // and copy in the bytes we want to that
                 scratch.resize(numBytes);
                 size_t numBytesCopied(0);
-                memcpy(&scratch[0], startPtr, numBytesLeftInBuffer);
+                memcpy(scratch.data(), startPtr, numBytesLeftInBuffer);
                 numBytesCopied += numBytesLeftInBuffer;
 
                 for (size_t jj = ii + 1; jj < mBuffers.size(); ++jj)
@@ -133,7 +132,7 @@ const void* NITFBufferList::getBlock(size_t blockSize,
                     }
                 }
 
-                return &scratch[0];
+                return scratch.data();
             }
         }
 
@@ -141,6 +140,24 @@ const void* NITFBufferList::getBlock(size_t blockSize,
     }
 
     // Should not be possible to get here
-    return NULL;
+    return nullptr;
+}
+const void* NITFBufferList::getBlock(size_t blockSize,
+                                     size_t blockIdx,
+                                     std::vector<sys::byte>& scratch,
+                                     size_t& numBytes) const
+{
+    numBytes = getNumBytesInBlock(blockSize, blockIdx);
+    return getBlock_(mBuffers,
+        blockSize, blockIdx, scratch, numBytes);
+}
+const void* NITFBufferList::getBlock(size_t blockSize,
+                                     size_t blockIdx,
+                                     std::vector<std::byte>& scratch,
+                                     size_t& numBytes) const
+{
+    numBytes = getNumBytesInBlock(blockSize, blockIdx);
+    return getBlock_(mBuffers,
+        blockSize, blockIdx, scratch, numBytes);
 }
 }

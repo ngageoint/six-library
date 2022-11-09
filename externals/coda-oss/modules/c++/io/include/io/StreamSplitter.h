@@ -26,8 +26,9 @@
 #include <string>
 #include <vector>
 
-#include <sys/Conf.h>
-#include <io/InputStream.h>
+#include "config/Exports.h"
+#include "sys/Conf.h"
+#include "io/InputStream.h"
 
 namespace io
 {
@@ -36,8 +37,8 @@ namespace io
  * specified delimiter string. It uses buffered stream reads internally for
  * better efficiency than InputStream::readln for reading large amounts of data.
  */
-class StreamSplitter {
-public:
+struct CODA_OSS_API StreamSplitter
+{
     /*!
      * \brief Create a stream splitter.
      *
@@ -50,6 +51,9 @@ public:
     explicit StreamSplitter(io::InputStream& inputStream,
                             const std::string& delimiter = std::string("\n"),
                             size_t bufferSize = 65536);
+
+    StreamSplitter(const StreamSplitter&) = delete;
+    StreamSplitter& operator=(const StreamSplitter&) = delete;
 
     /*!
      * \brief Get the next substring from the stream.

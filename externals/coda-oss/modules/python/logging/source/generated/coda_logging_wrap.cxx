@@ -3008,24 +3008,27 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_LogLevel swig_types[1]
 #define SWIGTYPE_p_LogRecord swig_types[2]
 #define SWIGTYPE_p_char swig_types[3]
-#define SWIGTYPE_p_except__Context swig_types[4]
-#define SWIGTYPE_p_except__Throwable swig_types[5]
-#define SWIGTYPE_p_io__OutputStream swig_types[6]
-#define SWIGTYPE_p_logging__FileHandler swig_types[7]
-#define SWIGTYPE_p_logging__Filter swig_types[8]
-#define SWIGTYPE_p_logging__Filterer swig_types[9]
-#define SWIGTYPE_p_logging__Formatter swig_types[10]
-#define SWIGTYPE_p_logging__Handler swig_types[11]
-#define SWIGTYPE_p_logging__Logger swig_types[12]
-#define SWIGTYPE_p_logging__LoggerManager swig_types[13]
-#define SWIGTYPE_p_logging__NullHandler swig_types[14]
-#define SWIGTYPE_p_logging__NullLogger swig_types[15]
-#define SWIGTYPE_p_logging__StandardFormatter swig_types[16]
-#define SWIGTYPE_p_logging__StreamHandler swig_types[17]
-#define SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t swig_types[18]
+#define SWIGTYPE_p_coda_oss__filesystem__path swig_types[4]
+#define SWIGTYPE_p_except__Context swig_types[5]
+#define SWIGTYPE_p_except__Throwable swig_types[6]
+#define SWIGTYPE_p_io__OutputStream swig_types[7]
+#define SWIGTYPE_p_logging__FileHandler swig_types[8]
+#define SWIGTYPE_p_logging__Filter swig_types[9]
+#define SWIGTYPE_p_logging__Filterer swig_types[10]
+#define SWIGTYPE_p_logging__Formatter swig_types[11]
+#define SWIGTYPE_p_logging__Handler swig_types[12]
+#define SWIGTYPE_p_logging__Logger swig_types[13]
+#define SWIGTYPE_p_logging__LoggerManager swig_types[14]
+#define SWIGTYPE_p_logging__NullHandler swig_types[15]
+#define SWIGTYPE_p_logging__NullLogger swig_types[16]
+#define SWIGTYPE_p_logging__StandardFormatter swig_types[17]
+#define SWIGTYPE_p_logging__StreamHandler swig_types[18]
 #define SWIGTYPE_p_mt__SingletonT_logging__LoggerManager_true_t swig_types[19]
-static swig_type_info *swig_types[21];
-static swig_module_info swig_module = {swig_types, 20, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__shared_ptrT_logging__Logger_t swig_types[20]
+#define SWIGTYPE_p_std__unique_ptrT_io__OutputStream_t swig_types[21]
+#define SWIGTYPE_p_std__unique_ptrT_logging__Handler_t swig_types[22]
+static swig_type_info *swig_types[24];
+static swig_module_info swig_module = {swig_types, 23, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3957,7 +3960,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Filterer_addFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Filterer_addFilter__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   logging::Filterer *arg1 = (logging::Filterer *) 0 ;
   Filter *arg2 = (Filter *) 0 ;
@@ -3987,7 +3990,90 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Filterer_filter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Filterer_addFilter__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Filterer *arg1 = (logging::Filterer *) 0 ;
+  Filter *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Filterer_addFilter",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Filterer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Filterer_addFilter" "', argument " "1"" of type '" "logging::Filterer *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Filterer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Filter,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Filterer_addFilter" "', argument " "2"" of type '" "Filter &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Filterer_addFilter" "', argument " "2"" of type '" "Filter &""'"); 
+  }
+  arg2 = reinterpret_cast< Filter * >(argp2);
+  (arg1)->addFilter(*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Filterer_addFilter(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Filterer, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Filter, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Filterer_addFilter__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Filterer, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Filter, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Filterer_addFilter__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Filterer_addFilter'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::Filterer::addFilter(Filter *)\n"
+    "    logging::Filterer::addFilter(Filter &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Filterer_filter__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   logging::Filterer *arg1 = (logging::Filterer *) 0 ;
   LogRecord *arg2 = (LogRecord *) 0 ;
@@ -4018,7 +4104,90 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Filterer_removeFilter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Filterer_filter__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Filterer *arg1 = (logging::Filterer *) 0 ;
+  LogRecord *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Filterer_filter",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Filterer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Filterer_filter" "', argument " "1"" of type '" "logging::Filterer const *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Filterer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogRecord,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Filterer_filter" "', argument " "2"" of type '" "LogRecord const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Filterer_filter" "', argument " "2"" of type '" "LogRecord const &""'"); 
+  }
+  arg2 = reinterpret_cast< LogRecord * >(argp2);
+  result = (bool)((logging::Filterer const *)arg1)->filter((LogRecord const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Filterer_filter(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Filterer, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_LogRecord, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Filterer_filter__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Filterer, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogRecord, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Filterer_filter__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Filterer_filter'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::Filterer::filter(LogRecord const *) const\n"
+    "    logging::Filterer::filter(LogRecord const &) const\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_Filterer_removeFilter__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   logging::Filterer *arg1 = (logging::Filterer *) 0 ;
   Filter *arg2 = (Filter *) 0 ;
@@ -4045,6 +4214,89 @@ SWIGINTERN PyObject *_wrap_Filterer_removeFilter(PyObject *SWIGUNUSEDPARM(self),
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Filterer_removeFilter__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Filterer *arg1 = (logging::Filterer *) 0 ;
+  Filter *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Filterer_removeFilter",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Filterer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Filterer_removeFilter" "', argument " "1"" of type '" "logging::Filterer *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Filterer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Filter,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Filterer_removeFilter" "', argument " "2"" of type '" "Filter &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Filterer_removeFilter" "', argument " "2"" of type '" "Filter &""'"); 
+  }
+  arg2 = reinterpret_cast< Filter * >(argp2);
+  (arg1)->removeFilter(*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Filterer_removeFilter(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Filterer, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Filter, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Filterer_removeFilter__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Filterer, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Filter, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Filterer_removeFilter__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Filterer_removeFilter'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::Filterer::removeFilter(Filter *)\n"
+    "    logging::Filterer::removeFilter(Filter &)\n");
+  return 0;
 }
 
 
@@ -4136,7 +4388,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Handler_handle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Handler_handle__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   logging::Handler *arg1 = (logging::Handler *) 0 ;
   LogRecord *arg2 = (LogRecord *) 0 ;
@@ -4164,6 +4416,89 @@ SWIGINTERN PyObject *_wrap_Handler_handle(PyObject *SWIGUNUSEDPARM(self), PyObje
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Handler_handle__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Handler *arg1 = (logging::Handler *) 0 ;
+  LogRecord *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Handler_handle",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Handler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Handler_handle" "', argument " "1"" of type '" "logging::Handler *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Handler * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogRecord,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Handler_handle" "', argument " "2"" of type '" "LogRecord const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Handler_handle" "', argument " "2"" of type '" "LogRecord const &""'"); 
+  }
+  arg2 = reinterpret_cast< LogRecord * >(argp2);
+  result = (bool)(arg1)->handle((LogRecord const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Handler_handle(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Handler, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_LogRecord, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Handler_handle__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Handler, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogRecord, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Handler_handle__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Handler_handle'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::Handler::handle(LogRecord const *)\n"
+    "    logging::Handler::handle(LogRecord const &)\n");
+  return 0;
 }
 
 
@@ -4327,6 +4662,73 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_new_StreamHandler__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::unique_ptr< io::OutputStream > *arg1 = 0 ;
+  LogLevel arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  logging::StreamHandler *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_StreamHandler",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__unique_ptrT_io__OutputStream_t,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_StreamHandler" "', argument " "1"" of type '" "std::unique_ptr< io::OutputStream > &&""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_StreamHandler" "', argument " "1"" of type '" "std::unique_ptr< io::OutputStream > &&""'"); 
+  }
+  arg1 = reinterpret_cast< std::unique_ptr< io::OutputStream > * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogLevel,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_StreamHandler" "', argument " "2"" of type '" "LogLevel""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_StreamHandler" "', argument " "2"" of type '" "LogLevel""'");
+    } else {
+      LogLevel * temp = reinterpret_cast< LogLevel * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  result = (logging::StreamHandler *)new logging::StreamHandler((std::unique_ptr< io::OutputStream > &&)*arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__StreamHandler, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_StreamHandler__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::unique_ptr< io::OutputStream > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  logging::StreamHandler *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_StreamHandler",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__unique_ptrT_io__OutputStream_t,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_StreamHandler" "', argument " "1"" of type '" "std::unique_ptr< io::OutputStream > &&""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_StreamHandler" "', argument " "1"" of type '" "std::unique_ptr< io::OutputStream > &&""'"); 
+  }
+  arg1 = reinterpret_cast< std::unique_ptr< io::OutputStream > * >(argp1);
+  result = (logging::StreamHandler *)new logging::StreamHandler((std::unique_ptr< io::OutputStream > &&)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__StreamHandler, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_StreamHandler(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
   PyObject *argv[3] = {
@@ -4359,6 +4761,28 @@ SWIGINTERN PyObject *_wrap_new_StreamHandler(PyObject *self, PyObject *args) {
       return _wrap_new_StreamHandler__SWIG_3(self, args);
     }
   }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_std__unique_ptrT_io__OutputStream_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_StreamHandler__SWIG_5(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_std__unique_ptrT_io__OutputStream_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_StreamHandler__SWIG_4(self, args);
+      }
+    }
+  }
   if (argc == 2) {
     int _v;
     void *vptr = 0;
@@ -4379,7 +4803,9 @@ fail:
     "    logging::StreamHandler::StreamHandler(LogLevel)\n"
     "    logging::StreamHandler::StreamHandler()\n"
     "    logging::StreamHandler::StreamHandler(io::OutputStream *,LogLevel)\n"
-    "    logging::StreamHandler::StreamHandler(io::OutputStream *)\n");
+    "    logging::StreamHandler::StreamHandler(io::OutputStream *)\n"
+    "    logging::StreamHandler::StreamHandler(std::unique_ptr< io::OutputStream > &&,LogLevel)\n"
+    "    logging::StreamHandler::StreamHandler(std::unique_ptr< io::OutputStream > &&)\n");
   return 0;
 }
 
@@ -4435,10 +4861,11 @@ SWIGINTERN PyObject *StreamHandler_swigregister(PyObject *SWIGUNUSEDPARM(self), 
 
 SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
+  coda_oss::filesystem::path *arg1 = 0 ;
   LogLevel arg2 ;
   int arg3 ;
-  int res1 = SWIG_OLDOBJ ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
   int val3 ;
@@ -4449,17 +4876,14 @@ SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   logging::FileHandler *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:new_FileHandler",&obj0,&obj1,&obj2)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_coda_oss__filesystem__path,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
   }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
+  }
+  arg1 = reinterpret_cast< coda_oss::filesystem::path * >(argp1);
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogLevel,  0  | 0);
     if (!SWIG_IsOK(res2)) {
@@ -4478,21 +4902,20 @@ SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_FileHandler" "', argument " "3"" of type '" "int""'");
   } 
   arg3 = static_cast< int >(val3);
-  result = (logging::FileHandler *)new logging::FileHandler((std::string const &)*arg1,arg2,arg3);
+  result = (logging::FileHandler *)new logging::FileHandler((coda_oss::filesystem::path const &)*arg1,arg2,arg3);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__FileHandler, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
   return NULL;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
+  coda_oss::filesystem::path *arg1 = 0 ;
   LogLevel arg2 ;
-  int res1 = SWIG_OLDOBJ ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
@@ -4500,17 +4923,14 @@ SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   logging::FileHandler *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:new_FileHandler",&obj0,&obj1)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_coda_oss__filesystem__path,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
   }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
+  }
+  arg1 = reinterpret_cast< coda_oss::filesystem::path * >(argp1);
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogLevel,  0  | 0);
     if (!SWIG_IsOK(res2)) {
@@ -4524,41 +4944,35 @@ SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_1(PyObject *SWIGUNUSEDPARM(self
       if (SWIG_IsNewObj(res2)) delete temp;
     }
   }
-  result = (logging::FileHandler *)new logging::FileHandler((std::string const &)*arg1,arg2);
+  result = (logging::FileHandler *)new logging::FileHandler((coda_oss::filesystem::path const &)*arg1,arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__FileHandler, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
   return NULL;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
+  coda_oss::filesystem::path *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
   PyObject * obj0 = 0 ;
   logging::FileHandler *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_FileHandler",&obj0)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_coda_oss__filesystem__path,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
   }
-  result = (logging::FileHandler *)new logging::FileHandler((std::string const &)*arg1);
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
+  }
+  arg1 = reinterpret_cast< coda_oss::filesystem::path * >(argp1);
+  result = (logging::FileHandler *)new logging::FileHandler((coda_oss::filesystem::path const &)*arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__FileHandler, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
   return NULL;
 }
 
@@ -4577,7 +4991,7 @@ SWIGINTERN PyObject *_wrap_new_FileHandler(PyObject *self, PyObject *args) {
   }
   if (argc == 1) {
     int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_coda_oss__filesystem__path, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       return _wrap_new_FileHandler__SWIG_2(self, args);
@@ -4585,7 +4999,7 @@ SWIGINTERN PyObject *_wrap_new_FileHandler(PyObject *self, PyObject *args) {
   }
   if (argc == 2) {
     int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_coda_oss__filesystem__path, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, 0);
@@ -4597,7 +5011,7 @@ SWIGINTERN PyObject *_wrap_new_FileHandler(PyObject *self, PyObject *args) {
   }
   if (argc == 3) {
     int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_coda_oss__filesystem__path, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, 0);
@@ -4617,9 +5031,9 @@ SWIGINTERN PyObject *_wrap_new_FileHandler(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_FileHandler'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    logging::FileHandler::FileHandler(std::string const &,LogLevel,int)\n"
-    "    logging::FileHandler::FileHandler(std::string const &,LogLevel)\n"
-    "    logging::FileHandler::FileHandler(std::string const &)\n");
+    "    logging::FileHandler::FileHandler(coda_oss::filesystem::path const &,LogLevel,int)\n"
+    "    logging::FileHandler::FileHandler(coda_oss::filesystem::path const &,LogLevel)\n"
+    "    logging::FileHandler::FileHandler(coda_oss::filesystem::path const &)\n");
   return 0;
 }
 
@@ -4743,7 +5157,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Filter_filter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Filter_filter__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   logging::Filter *arg1 = (logging::Filter *) 0 ;
   LogRecord *arg2 = (LogRecord *) 0 ;
@@ -4771,6 +5185,89 @@ SWIGINTERN PyObject *_wrap_Filter_filter(PyObject *SWIGUNUSEDPARM(self), PyObjec
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Filter_filter__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Filter *arg1 = (logging::Filter *) 0 ;
+  LogRecord *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Filter_filter",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Filter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Filter_filter" "', argument " "1"" of type '" "logging::Filter const *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Filter * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_LogRecord,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Filter_filter" "', argument " "2"" of type '" "LogRecord const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Filter_filter" "', argument " "2"" of type '" "LogRecord const &""'"); 
+  }
+  arg2 = reinterpret_cast< LogRecord * >(argp2);
+  result = (bool)((logging::Filter const *)arg1)->filter((LogRecord const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Filter_filter(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  Py_ssize_t ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Filter, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_LogRecord, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Filter_filter__SWIG_0(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Filter, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogRecord, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Filter_filter__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Filter_filter'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    logging::Filter::filter(LogRecord const *) const\n"
+    "    logging::Filter::filter(LogRecord const &) const\n");
+  return 0;
 }
 
 
@@ -6021,6 +6518,39 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Logger_addHandler__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Logger *arg1 = (logging::Logger *) 0 ;
+  std::unique_ptr< logging::Handler > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Logger_addHandler",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Logger, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Logger_addHandler" "', argument " "1"" of type '" "logging::Logger *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Logger * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__unique_ptrT_logging__Handler_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Logger_addHandler" "', argument " "2"" of type '" "std::unique_ptr< logging::Handler > &&""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Logger_addHandler" "', argument " "2"" of type '" "std::unique_ptr< logging::Handler > &&""'"); 
+  }
+  arg2 = reinterpret_cast< std::unique_ptr< logging::Handler > * >(argp2);
+  (arg1)->addHandler((std::unique_ptr< logging::Handler > &&)*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Logger_addHandler(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
   PyObject *argv[4] = {
@@ -6044,6 +6574,20 @@ SWIGINTERN PyObject *_wrap_Logger_addHandler(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_Logger_addHandler__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_logging__Logger, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__unique_ptrT_logging__Handler_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Logger_addHandler__SWIG_2(self, args);
       }
     }
   }
@@ -6072,7 +6616,8 @@ fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Logger_addHandler'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    logging::Logger::addHandler(logging::Handler *,bool)\n"
-    "    logging::Logger::addHandler(logging::Handler *)\n");
+    "    logging::Logger::addHandler(logging::Handler *)\n"
+    "    logging::Logger::addHandler(std::unique_ptr< logging::Handler > &&)\n");
   return 0;
 }
 
@@ -6461,7 +7006,7 @@ SWIGINTERN PyObject *_wrap_LoggerManager_getLoggerSharedPtr__SWIG_0(PyObject *SW
   int res2 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  mem::SharedPtr< logging::Logger > result;
+  SwigValueWrapper< std::shared_ptr< logging::Logger > > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:LoggerManager_getLoggerSharedPtr",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__LoggerManager, 0 |  0 );
@@ -6481,7 +7026,7 @@ SWIGINTERN PyObject *_wrap_LoggerManager_getLoggerSharedPtr__SWIG_0(PyObject *SW
     arg2 = ptr;
   }
   result = (arg1)->getLoggerSharedPtr((std::string const &)*arg2);
-  resultobj = SWIG_NewPointerObj((new mem::SharedPtr< logging::Logger >(static_cast< const mem::SharedPtr< logging::Logger >& >(result))), SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new std::shared_ptr< logging::Logger >(static_cast< const std::shared_ptr< logging::Logger >& >(result))), SWIGTYPE_p_std__shared_ptrT_logging__Logger_t, SWIG_POINTER_OWN |  0 );
   if (SWIG_IsNewObj(res2)) delete arg2;
   return resultobj;
 fail:
@@ -6496,7 +7041,7 @@ SWIGINTERN PyObject *_wrap_LoggerManager_getLoggerSharedPtr__SWIG_1(PyObject *SW
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  mem::SharedPtr< logging::Logger > result;
+  SwigValueWrapper< std::shared_ptr< logging::Logger > > result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:LoggerManager_getLoggerSharedPtr",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__LoggerManager, 0 |  0 );
@@ -6505,7 +7050,7 @@ SWIGINTERN PyObject *_wrap_LoggerManager_getLoggerSharedPtr__SWIG_1(PyObject *SW
   }
   arg1 = reinterpret_cast< logging::LoggerManager * >(argp1);
   result = (arg1)->getLoggerSharedPtr();
-  resultobj = SWIG_NewPointerObj((new mem::SharedPtr< logging::Logger >(static_cast< const mem::SharedPtr< logging::Logger >& >(result))), SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new std::shared_ptr< logging::Logger >(static_cast< const std::shared_ptr< logging::Logger >& >(result))), SWIGTYPE_p_std__shared_ptrT_logging__Logger_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -7323,11 +7868,11 @@ fail:
 
 SWIGINTERN PyObject *_wrap_getLoggerSharedPtr(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::SharedPtr< logging::Logger > result;
+  SwigValueWrapper< std::shared_ptr< logging::Logger > > result;
   
   if (!PyArg_ParseTuple(args,(char *)":getLoggerSharedPtr")) SWIG_fail;
   result = logging::getLoggerSharedPtr();
-  resultobj = SWIG_NewPointerObj((new mem::SharedPtr< logging::Logger >(static_cast< const mem::SharedPtr< logging::Logger >& >(result))), SWIGTYPE_p_mem__SharedPtrT_logging__Logger_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new std::shared_ptr< logging::Logger >(static_cast< const std::shared_ptr< logging::Logger >& >(result))), SWIGTYPE_p_std__shared_ptrT_logging__Logger_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -7352,14 +7897,26 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StandardFormatter_swigregister", StandardFormatter_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Filterer", _wrap_new_Filterer, METH_VARARGS, (char *)"new_Filterer() -> Filterer"},
 	 { (char *)"delete_Filterer", _wrap_delete_Filterer, METH_VARARGS, (char *)"delete_Filterer(Filterer self)"},
-	 { (char *)"Filterer_addFilter", _wrap_Filterer_addFilter, METH_VARARGS, (char *)"Filterer_addFilter(Filterer self, Filter * filter)"},
-	 { (char *)"Filterer_filter", _wrap_Filterer_filter, METH_VARARGS, (char *)"Filterer_filter(Filterer self, LogRecord const * record) -> bool"},
-	 { (char *)"Filterer_removeFilter", _wrap_Filterer_removeFilter, METH_VARARGS, (char *)"Filterer_removeFilter(Filterer self, Filter * filter)"},
+	 { (char *)"Filterer_addFilter", _wrap_Filterer_addFilter, METH_VARARGS, (char *)"\n"
+		"addFilter(Filter * filter)\n"
+		"Filterer_addFilter(Filterer self, Filter & arg3)\n"
+		""},
+	 { (char *)"Filterer_filter", _wrap_Filterer_filter, METH_VARARGS, (char *)"\n"
+		"filter(LogRecord const * record) -> bool\n"
+		"Filterer_filter(Filterer self, LogRecord const & record) -> bool\n"
+		""},
+	 { (char *)"Filterer_removeFilter", _wrap_Filterer_removeFilter, METH_VARARGS, (char *)"\n"
+		"removeFilter(Filter * filter)\n"
+		"Filterer_removeFilter(Filterer self, Filter & arg3)\n"
+		""},
 	 { (char *)"Filterer_swigregister", Filterer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_Handler", _wrap_delete_Handler, METH_VARARGS, (char *)"delete_Handler(Handler self)"},
 	 { (char *)"Handler_setLevel", _wrap_Handler_setLevel, METH_VARARGS, (char *)"Handler_setLevel(Handler self, LogLevel level)"},
 	 { (char *)"Handler_getLevel", _wrap_Handler_getLevel, METH_VARARGS, (char *)"Handler_getLevel(Handler self) -> LogLevel"},
-	 { (char *)"Handler_handle", _wrap_Handler_handle, METH_VARARGS, (char *)"Handler_handle(Handler self, LogRecord const * record) -> bool"},
+	 { (char *)"Handler_handle", _wrap_Handler_handle, METH_VARARGS, (char *)"\n"
+		"handle(LogRecord const * record) -> bool\n"
+		"Handler_handle(Handler self, LogRecord const & record) -> bool\n"
+		""},
 	 { (char *)"Handler_close", _wrap_Handler_close, METH_VARARGS, (char *)"Handler_close(Handler self)"},
 	 { (char *)"Handler_setFormatter", _wrap_Handler_setFormatter, METH_VARARGS, (char *)"Handler_setFormatter(Handler self, Formatter formatter)"},
 	 { (char *)"Handler_swigregister", Handler_swigregister, METH_VARARGS, NULL},
@@ -7367,15 +7924,17 @@ static PyMethodDef SwigMethods[] = {
 		"StreamHandler(LogLevel level)\n"
 		"StreamHandler()\n"
 		"StreamHandler(io::OutputStream * stream, LogLevel level)\n"
-		"new_StreamHandler(io::OutputStream * stream) -> StreamHandler\n"
+		"StreamHandler(io::OutputStream * stream)\n"
+		"StreamHandler(std::unique_ptr< io::OutputStream > && stream, LogLevel level)\n"
+		"new_StreamHandler(std::unique_ptr< io::OutputStream > && stream) -> StreamHandler\n"
 		""},
 	 { (char *)"delete_StreamHandler", _wrap_delete_StreamHandler, METH_VARARGS, (char *)"delete_StreamHandler(StreamHandler self)"},
 	 { (char *)"StreamHandler_close", _wrap_StreamHandler_close, METH_VARARGS, (char *)"StreamHandler_close(StreamHandler self)"},
 	 { (char *)"StreamHandler_swigregister", StreamHandler_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_FileHandler", _wrap_new_FileHandler, METH_VARARGS, (char *)"\n"
-		"FileHandler(std::string const & fname, LogLevel level, int creationFlags)\n"
-		"FileHandler(std::string const & fname, LogLevel level)\n"
-		"new_FileHandler(std::string const & fname) -> FileHandler\n"
+		"FileHandler(coda_oss::filesystem::path const & fname, LogLevel level, int creationFlags)\n"
+		"FileHandler(coda_oss::filesystem::path const & fname, LogLevel level)\n"
+		"new_FileHandler(coda_oss::filesystem::path const & fname) -> FileHandler\n"
 		""},
 	 { (char *)"delete_FileHandler", _wrap_delete_FileHandler, METH_VARARGS, (char *)"delete_FileHandler(FileHandler self)"},
 	 { (char *)"FileHandler_swigregister", FileHandler_swigregister, METH_VARARGS, NULL},
@@ -7384,7 +7943,10 @@ static PyMethodDef SwigMethods[] = {
 		"new_Filter() -> Filter\n"
 		""},
 	 { (char *)"delete_Filter", _wrap_delete_Filter, METH_VARARGS, (char *)"delete_Filter(Filter self)"},
-	 { (char *)"Filter_filter", _wrap_Filter_filter, METH_VARARGS, (char *)"Filter_filter(Filter self, LogRecord const * record) -> bool"},
+	 { (char *)"Filter_filter", _wrap_Filter_filter, METH_VARARGS, (char *)"\n"
+		"filter(LogRecord const * record) -> bool\n"
+		"Filter_filter(Filter self, LogRecord const & record) -> bool\n"
+		""},
 	 { (char *)"Filter_getName", _wrap_Filter_getName, METH_VARARGS, (char *)"Filter_getName(Filter self) -> std::string"},
 	 { (char *)"Filter_swigregister", Filter_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Logger", _wrap_new_Logger, METH_VARARGS, (char *)"\n"
@@ -7424,7 +7986,8 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"Logger_addHandler", _wrap_Logger_addHandler, METH_VARARGS, (char *)"\n"
 		"addHandler(Handler handler, bool own=False)\n"
-		"Logger_addHandler(Logger self, Handler handler)\n"
+		"addHandler(Handler handler)\n"
+		"Logger_addHandler(Logger self, std::unique_ptr< logging::Handler > && arg3)\n"
 		""},
 	 { (char *)"Logger_removeHandler", _wrap_Logger_removeHandler, METH_VARARGS, (char *)"Logger_removeHandler(Logger self, Handler handler)"},
 	 { (char *)"Logger_setLevel", _wrap_Logger_setLevel, METH_VARARGS, (char *)"Logger_setLevel(Logger self, LogLevel level)"},
@@ -7446,8 +8009,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"NullLogger_swigregister", NullLogger_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_LoggerManager", _wrap_new_LoggerManager, METH_VARARGS, (char *)"new_LoggerManager() -> LoggerManager"},
 	 { (char *)"LoggerManager_getLoggerSharedPtr", _wrap_LoggerManager_getLoggerSharedPtr, METH_VARARGS, (char *)"\n"
-		"getLoggerSharedPtr(std::string const & name) -> mem::SharedPtr< logging::Logger >\n"
-		"LoggerManager_getLoggerSharedPtr(LoggerManager self) -> mem::SharedPtr< logging::Logger >\n"
+		"getLoggerSharedPtr(std::string const & name) -> std::shared_ptr< logging::Logger >\n"
+		"LoggerManager_getLoggerSharedPtr(LoggerManager self) -> std::shared_ptr< logging::Logger >\n"
 		""},
 	 { (char *)"LoggerManager_getLogger", _wrap_LoggerManager_getLogger, METH_VARARGS, (char *)"\n"
 		"getLogger(std::string const & name) -> Logger\n"
@@ -7481,7 +8044,7 @@ static PyMethodDef SwigMethods[] = {
 		"critical(except::Throwable & t)\n"
 		""},
 	 { (char *)"getLogger", _wrap_getLogger, METH_VARARGS, (char *)"getLogger() -> Logger"},
-	 { (char *)"getLoggerSharedPtr", _wrap_getLoggerSharedPtr, METH_VARARGS, (char *)"getLoggerSharedPtr() -> mem::SharedPtr< logging::Logger >"},
+	 { (char *)"getLoggerSharedPtr", _wrap_getLoggerSharedPtr, METH_VARARGS, (char *)"getLoggerSharedPtr() -> std::shared_ptr< logging::Logger >"},
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -7528,6 +8091,7 @@ static swig_type_info _swigt__p_Filter = {"_p_Filter", "Filter *", 0, 0, (void*)
 static swig_type_info _swigt__p_LogLevel = {"_p_LogLevel", "LogLevel *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_LogRecord = {"_p_LogRecord", "LogRecord *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_coda_oss__filesystem__path = {"_p_coda_oss__filesystem__path", "coda_oss::filesystem::path *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__Context = {"_p_except__Context", "except::Context *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__Throwable = {"_p_except__Throwable", "except::Throwable *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__OutputStream = {"_p_io__OutputStream", "io::OutputStream *", 0, 0, (void*)0, 0};
@@ -7542,14 +8106,17 @@ static swig_type_info _swigt__p_logging__NullHandler = {"_p_logging__NullHandler
 static swig_type_info _swigt__p_logging__NullLogger = {"_p_logging__NullLogger", "logging::NullLogger *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_logging__StandardFormatter = {"_p_logging__StandardFormatter", "logging::StandardFormatter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_logging__StreamHandler = {"_p_logging__StreamHandler", "logging::StreamHandler *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_mem__SharedPtrT_logging__Logger_t = {"_p_mem__SharedPtrT_logging__Logger_t", "mem::SharedPtr< logging::Logger > *|logging::LoggerPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mt__SingletonT_logging__LoggerManager_true_t = {"_p_mt__SingletonT_logging__LoggerManager_true_t", "logging::LoggerFactory *|mt::Singleton< logging::LoggerManager,true > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__shared_ptrT_logging__Logger_t = {"_p_std__shared_ptrT_logging__Logger_t", "std::shared_ptr< logging::Logger > *|logging::LoggerPtr *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__unique_ptrT_io__OutputStream_t = {"_p_std__unique_ptrT_io__OutputStream_t", "std::unique_ptr< io::OutputStream > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__unique_ptrT_logging__Handler_t = {"_p_std__unique_ptrT_logging__Handler_t", "std::unique_ptr< logging::Handler > *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Filter,
   &_swigt__p_LogLevel,
   &_swigt__p_LogRecord,
   &_swigt__p_char,
+  &_swigt__p_coda_oss__filesystem__path,
   &_swigt__p_except__Context,
   &_swigt__p_except__Throwable,
   &_swigt__p_io__OutputStream,
@@ -7564,14 +8131,17 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_logging__NullLogger,
   &_swigt__p_logging__StandardFormatter,
   &_swigt__p_logging__StreamHandler,
-  &_swigt__p_mem__SharedPtrT_logging__Logger_t,
   &_swigt__p_mt__SingletonT_logging__LoggerManager_true_t,
+  &_swigt__p_std__shared_ptrT_logging__Logger_t,
+  &_swigt__p_std__unique_ptrT_io__OutputStream_t,
+  &_swigt__p_std__unique_ptrT_logging__Handler_t,
 };
 
 static swig_cast_info _swigc__p_Filter[] = {  {&_swigt__p_Filter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_LogLevel[] = {  {&_swigt__p_LogLevel, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_LogRecord[] = {  {&_swigt__p_LogRecord, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_coda_oss__filesystem__path[] = {  {&_swigt__p_coda_oss__filesystem__path, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__Context[] = {  {&_swigt__p_except__Context, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__Throwable[] = {  {&_swigt__p_except__Throwable, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__OutputStream[] = {  {&_swigt__p_io__OutputStream, 0, 0, 0},{0, 0, 0, 0}};
@@ -7586,14 +8156,17 @@ static swig_cast_info _swigc__p_logging__NullHandler[] = {  {&_swigt__p_logging_
 static swig_cast_info _swigc__p_logging__NullLogger[] = {  {&_swigt__p_logging__NullLogger, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_logging__StandardFormatter[] = {  {&_swigt__p_logging__StandardFormatter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_logging__StreamHandler[] = {  {&_swigt__p_logging__StreamHandler, 0, 0, 0},  {&_swigt__p_logging__FileHandler, _p_logging__FileHandlerTo_p_logging__StreamHandler, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_mem__SharedPtrT_logging__Logger_t[] = {  {&_swigt__p_mem__SharedPtrT_logging__Logger_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mt__SingletonT_logging__LoggerManager_true_t[] = {  {&_swigt__p_mt__SingletonT_logging__LoggerManager_true_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__shared_ptrT_logging__Logger_t[] = {  {&_swigt__p_std__shared_ptrT_logging__Logger_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__unique_ptrT_io__OutputStream_t[] = {  {&_swigt__p_std__unique_ptrT_io__OutputStream_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__unique_ptrT_logging__Handler_t[] = {  {&_swigt__p_std__unique_ptrT_logging__Handler_t, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Filter,
   _swigc__p_LogLevel,
   _swigc__p_LogRecord,
   _swigc__p_char,
+  _swigc__p_coda_oss__filesystem__path,
   _swigc__p_except__Context,
   _swigc__p_except__Throwable,
   _swigc__p_io__OutputStream,
@@ -7608,8 +8181,10 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_logging__NullLogger,
   _swigc__p_logging__StandardFormatter,
   _swigc__p_logging__StreamHandler,
-  _swigc__p_mem__SharedPtrT_logging__Logger_t,
   _swigc__p_mt__SingletonT_logging__LoggerManager_true_t,
+  _swigc__p_std__shared_ptrT_logging__Logger_t,
+  _swigc__p_std__unique_ptrT_io__OutputStream_t,
+  _swigc__p_std__unique_ptrT_logging__Handler_t,
 };
 
 

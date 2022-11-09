@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,10 +21,25 @@
  *
  */
 
-#ifndef __SYS_CONF_H__
-#define __SYS_CONF_H__
+#ifndef CODA_OSS_sys_Conf_h_INCLUDED_
+#define CODA_OSS_sys_Conf_h_INCLUDED_
+#pragma once
 
-#include <config/coda_oss_config.h>
+// POSIX is more-or-less "Unix"
+// https://linux.die.net/man/7/feature_test_macros
+// "If no feature test macros are explicitly defined, then the following feature test macros
+// are defined by default: ... _POSIX_SOURCE, and _POSIX_C_SOURCE=200809L. [...] 
+// _POSIX_SOURCE Defining this obsolete macro ... is equivalent to defining _POSIX_C_SOURCE ..."
+#ifndef _WIN32
+#include <features.h>
+#endif
+#define CODA_OSS_POSIX_SOURCE (defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE >= 1))
+#define CODA_OSS_POSIX2001_SOURCE CODA_OSS_POSIX_SOURCE && (_POSIX_C_SOURCE >= 200112L)
+#define CODA_OSS_POSIX2008_SOURCE CODA_OSS_POSIX2001_SOURCE && (_POSIX_C_SOURCE >= 200809L)
+
+#include <config/Version.h>
+#include <config/Exports.h>
+#include <sys/CPlusPlus.h>
 #include <str/Convert.h>
 
 #if defined (__APPLE_CC__)
@@ -33,6 +49,7 @@
 #include <assert.h>
 #include <iostream>
 #include <stdio.h>
+#include <stdint.h>
 #include <algorithm>
 
 #if defined(__sgi) || defined(__sgi__)
@@ -56,7 +73,7 @@
 #if defined(__GNUC__)
     /*  We get a really nice function macro  */
 #   define NativeLayer_func__ __PRETTY_FUNCTION__
-#elif defined(WIN32) && (_MSC_VER >= 1300)
+#elif (defined(WIN32) || defined(_WIN32)) && (_MSC_VER >= 1300)
 #   define NativeLayer_func__ __FUNCSIG__
 /*  Otherwise, lets look for C99 compatibility  */
 #elif defined (__STDC_VERSION__)
@@ -77,6 +94,20 @@
 #endif
 
 
+namespace sys
+{
+    typedef char              byte;
+    typedef unsigned char     ubyte;
+    typedef uint8_t            Uint8_T;
+    typedef uint16_t           Uint16_T;
+    typedef uint32_t           Uint32_T;
+    typedef uint64_t           Uint64_T;
+    typedef size_t             Size_T;
+    typedef int8_t             Int8_T;
+    typedef int16_t            Int16_T;
+    typedef int32_t            Int32_T;
+    typedef int64_t            Int64_T;
+}
 
 #if defined(WIN32) || defined(_WIN32)
 #  include <malloc.h>
@@ -86,27 +117,17 @@
 
 namespace sys
 {
-    typedef char              byte;
-    typedef unsigned char     ubyte;
     typedef HANDLE            Handle_T;
-    typedef unsigned char     Uint8_T;
-    typedef unsigned __int16  Uint16_T;
-    typedef unsigned __int32  Uint32_T;
-    typedef unsigned __int64  Uint64_T;
-    typedef signed char       Int8_T;
-    typedef __int16           Int16_T;
-    typedef __int32           Int32_T;
-    typedef __int64           Int64_T;
     typedef Int64_T           Off_T;
     typedef DWORD             Pid_T;
-    typedef size_t            Size_T;
-#   if SIZEOF_SIZE_T == 8
-        typedef __int64   SSize_T;
-#   elif SIZEOF_SIZE_T == 4
-        typedef __int32   SSize_T;
-#   else
-        #error SIZEOF_SIZE_T must be set at configure time
+#   if _WIN64 // SIZEOF_SIZE_T == 8
+        static_assert(sizeof(size_t) == 8, "wrong sizeof(size_t)");
+        typedef Int64_T   SSize_T;
+#   else // SIZEOF_SIZE_T == 4
+        static_assert(sizeof(size_t) == 4, "wrong sizeof(size_t)");
+        typedef Int32_T   SSize_T;
 #   endif
+        static_assert(sizeof(size_t) == sizeof(SSize_T), "size_t and SSize_T should be the same size");
 }
 #else // !windows
 #   include <sys/types.h>
@@ -141,19 +162,8 @@ namespace sys
 
 namespace sys
 {
-    typedef char               byte;
-    typedef unsigned char      ubyte;
-    typedef uint8_t            Uint8_T;
-    typedef uint16_t           Uint16_T;
-    typedef uint32_t           Uint32_T;
-    typedef uint64_t           Uint64_T;
-    typedef size_t             Size_T;
     typedef ssize_t            SSize_T;
     typedef off_t              Off_T;
-    typedef int8_t             Int8_T;
-    typedef int16_t            Int16_T;
-    typedef int32_t            Int32_T;
-    typedef int64_t            Int64_T;
     typedef int                Handle_T;
     // Should we remove this?
     typedef pid_t              Pid_T;
@@ -187,14 +197,14 @@ namespace sys
      *  NOTE: This should be updated as architectures require greater
      *        intervals. Alignments require base 2 increments.
      */
-    static const size_t SSE_INSTRUCTION_ALIGNMENT = 32;
+    static constexpr size_t SSE_INSTRUCTION_ALIGNMENT = 32;
 
     /*!
      * Returns true if the system is big-endian, otherwise false.
      * On Intel systems, we are usually small-endian, and on
      * RISC architectures we are big-endian.
      */
-    bool isBigEndianSystem();
+    bool CODA_OSS_API isBigEndianSystem();
 
 
    /*!
@@ -214,7 +224,7 @@ namespace sys
         if (!bufferPtr || elemSize < 2 || !numElems)
             return;
 
-        unsigned short half = elemSize >> 1;
+        const auto half = elemSize >> 1;
         size_t offset = 0, innerOff = 0, innerSwap = 0;
 
         for(size_t i = 0; i < numElems; ++i, offset += elemSize)
@@ -252,7 +262,7 @@ namespace sys
             return;
         }
 
-        const unsigned short half = elemSize >> 1;
+        const auto half = elemSize >> 1;
         size_t offset = 0;
 
         for (size_t ii = 0; ii < numElems; ++ii, offset += elemSize)
@@ -295,7 +305,7 @@ namespace sys
 
         unsigned char* cOut = reinterpret_cast<unsigned char*>(&out);
         unsigned char* cIn = reinterpret_cast<unsigned char*>(&val);
-        for (int i = 0, j = size - 1; i < j; ++i, --j)
+        for (size_t i = 0, j = size - 1; i < j; ++i, --j)
         {
             cOut[i] = cIn[j];
             cOut[j] = cIn[i];
@@ -319,19 +329,23 @@ namespace sys
     inline void* alignedAlloc(size_t size,
                               size_t alignment = SSE_INSTRUCTION_ALIGNMENT)
     {
-#ifdef WIN32
-        void* p = _aligned_malloc(size, alignment);
-#elif defined(HAVE_POSIX_MEMALIGN)
-        void* p = NULL;
+        void* p = nullptr;
+#if defined(WIN32) || defined(_WIN32)
+        p = _aligned_malloc(size, alignment);
+#elif CODA_OSS_POSIX2001_SOURCE
+        // https://linux.die.net/man/3/posix_memalign
         if (posix_memalign(&p, alignment, size) != 0)
         {
-            p = NULL;
+            p = nullptr;
         }
-#elif defined(HAVE_MEMALIGN)
-        void* const p = memalign(alignment, size);
+#elif CODA_OSS_POSIX_SOURCE
+        // https://linux.die.net/man/3/posix_memalign
+        // "The functions memalign(), ... have been available in all Linux libc libraries."
+        p = memalign(alignment, size);
 #else
         //! this is a basic unaligned allocation
-        void* p = malloc(size);
+        p = malloc(size);
+        #error "Don't know how to implement alignedAlloc()."
 #endif
         if (!p)
             throw except::Exception(Ctxt(
@@ -348,7 +362,7 @@ namespace sys
      */
     inline void alignedFree(void* p)
     {
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
         _aligned_free(p);
 #else
         free(p);
@@ -358,4 +372,10 @@ namespace sys
 
 }
 
-#endif
+// https://en.wikipedia.org/wiki/Year_2038_problem
+// "Most operating systems designed to run on 64-bit hardware already use signed 64-bit `time_t` integers. ..."
+#include <time.h>
+#include <stdint.h>
+static_assert(sizeof(time_t) >= sizeof(int64_t), "Should have at least a 64-bit time_t.");
+
+#endif // CODA_OSS_sys_Conf_h_INCLUDED_

@@ -24,12 +24,15 @@
 #ifndef __SYS_THREAD_INTERFACE_H__
 #define __SYS_THREAD_INTERFACE_H__
 
+#include <assert.h>
+
 #include "sys/Runnable.h"
 
 #include <typeinfo>
 #include <iostream>
 #include "sys/SystemException.h"
 
+#include "config/Exports.h"
 
 namespace sys
 {
@@ -49,11 +52,11 @@ namespace sys
  *  \endcode
  */
 #define STANDARD_START_CALL(MY_NAME, PTR_TO_ME) \
-   sys::MY_NAME *me = \
-        static_cast<sys::MY_NAME*>(PTR_TO_ME); \
+   sys::MY_NAME *me = static_cast<sys::MY_NAME*>(PTR_TO_ME); \
+   assert(me != nullptr); \
    me->setIsRunning(true); \
    me->target()->run(); \
-   me->setIsRunning(false); \
+   me->setIsRunning(false)
 
 
 /*!
@@ -68,9 +71,8 @@ namespace sys
  *
  */
 
-class ThreadInterface : public Runnable
+struct CODA_OSS_API ThreadInterface : public Runnable
 {
-public:
     enum { DEFAULT_LEVEL, KERNEL_LEVEL, USER_LEVEL };
     enum { MINIMUM_PRIORITY, NORMAL_PRIORITY, MAXIMUM_PRIORITY };
 
@@ -233,7 +235,7 @@ public:
         return mTarget;
     }
 
-    bool isRunning()
+    bool isRunning() noexcept
     {
         return mIsRunning;
     }
@@ -241,6 +243,10 @@ public:
     {
         mIsRunning = isRunning;
     }
+
+        
+    ThreadInterface(const ThreadInterface&) = delete;
+    ThreadInterface& operator=(const ThreadInterface&) = delete;
 
 private:
     bool mIsSelf;
@@ -272,10 +278,6 @@ private:
     //!  The level at which this thread runs
     int mLevel;
     bool mIsRunning;
-    
-    // Noncopyable
-    ThreadInterface(const ThreadInterface& );
-    const ThreadInterface& operator=(const ThreadInterface& );
 };
 }
 

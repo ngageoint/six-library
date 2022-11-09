@@ -62,22 +62,22 @@ extern "C"
 
     typedef struct
     {
-        nitf_Uint32 nRows;          /*!< Number of rows in the image */
-        nitf_Uint32 nColumns;       /*!< Number of columns in the image */
-        nitf_Uint32 nBands;         /*!< Number of bands */
-        nitf_Uint32 nMultiBands;    /*!< Number of mutli-spectral bands */
+        uint32_t nRows;          /*!< Number of rows in the image */
+        uint32_t nColumns;       /*!< Number of columns in the image */
+        uint32_t nBands;         /*!< Number of bands */
+        uint32_t nMultiBands;    /*!< Number of mutli-spectral bands */
         char pixelType[TEST_NITF_IMAGE_IO_MAX_STRING+2];  /*!< Pixel type */
-        nitf_Uint32 nBits;          /*!< Number of bits per pixel */
-        nitf_Uint32 nBitsActual;    /*!< Actual number of bits per pixel */
+        uint32_t nBits;          /*!< Number of bits per pixel */
+        uint32_t nBitsActual;    /*!< Actual number of bits per pixel */
         char justify[TEST_NITF_IMAGE_IO_MAX_STRING+2];  /*!< ;Pixels justification */
-        nitf_Uint32 nBlksPerRow;    /*!< Number of blocks per row */
-        nitf_Uint32 nBlksPerColumn; /*!< Number of blocks per Columns */
-        nitf_Uint32 nRowsPerBlk;    /*!< Number of rows per block */
-        nitf_Uint32 nColumnsPerBlk; /*!< Number of columns per block */
+        uint32_t nBlksPerRow;    /*!< Number of blocks per row */
+        uint32_t nBlksPerColumn; /*!< Number of blocks per Columns */
+        uint32_t nRowsPerBlk;    /*!< Number of rows per block */
+        uint32_t nColumnsPerBlk; /*!< Number of columns per block */
         char mode[TEST_NITF_IMAGE_IO_MAX_STRING+2];  /*!< Blocking mode */
         char compression[TEST_NITF_IMAGE_IO_MAX_STRING+2];  /*!< Compression type */
-        nitf_Uint8 padValue[8];     /*!< Pad value */
-        nitf_Uint32 offset;         /*!< Byte offset in file to image data segment */
+        uint8_t padValue[8];     /*!< Pad value */
+        uint32_t offset;         /*!< Byte offset in file to image data segment */
         char dataPattern[TEST_NITF_IMAGE_IO_MAX_STRING+2]; /*!< Pattern gen method */
     }
     test_nitf_ImageIOConstructArgs;
@@ -95,16 +95,16 @@ extern "C"
     typedef struct
     {
         char name[TEST_NITF_IMAGE_IO_MAX_STRING+2]; /*!< File name to read */
-        nitf_Uint32 row;                            /*!< Start row */
-        nitf_Uint32 nRows;                          /*!< Number of rows to read */
-        nitf_Uint32 rowSkip;                        /*!< Row skip factor */
-        nitf_Uint32 column;                         /*!< Start column */
-        nitf_Uint32 nColumns;                       /*!< Number of columns to read */
-        nitf_Uint32 columnSkip;                     /*!< Column skip factor */
+        uint32_t row;                            /*!< Start row */
+        uint32_t nRows;                          /*!< Number of rows to read */
+        uint32_t rowSkip;                        /*!< Row skip factor */
+        uint32_t column;                         /*!< Start column */
+        uint32_t nColumns;                       /*!< Number of columns to read */
+        uint32_t columnSkip;                     /*!< Column skip factor */
         char
         downSample[TEST_NITF_IMAGE_IO_MAX_STRING+2];/*!< Down-sample method */
-        nitf_Uint32 nBands;                         /*!< Number of bands to read */
-        nitf_Uint32 bands[TEST_NITF_IMAGE_IO_MAX_BANDS]; /*!< Bands to read */
+        uint32_t nBands;                         /*!< Number of bands to read */
+        uint32_t bands[TEST_NITF_IMAGE_IO_MAX_BANDS]; /*!< Bands to read */
     }
     test_nitf_ImageIOReadArgs;
 
@@ -183,7 +183,7 @@ extern "C"
 
     NITFAPI(void) test_nitf_ImageIO_freeArray
     (
-        nitf_Uint8 ***data     /*!< The array to free */
+        uint8_t ***data     /*!< The array to free */
     );
 
     /*!

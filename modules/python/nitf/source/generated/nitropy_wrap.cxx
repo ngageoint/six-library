@@ -2455,25 +2455,22 @@ SWIG_Python_ConvertFunctionPtr(PyObject *obj, void **ptr, swig_type_info *ty) {
     return SWIG_ConvertPtr(obj, ptr, ty, 0);
   } else {
     void *vptr = 0;
-    
+    swig_cast_info *tc;
+
     /* here we get the method pointer for callbacks */
     const char *doc = (((PyCFunctionObject *)obj) -> m_ml -> ml_doc);
     const char *desc = doc ? strstr(doc, "swig_ptr: ") : 0;
     if (desc)
       desc = ty ? SWIG_UnpackVoidPtr(desc + 10, &vptr, ty->name) : 0;
-    if (!desc) 
+    if (!desc)
       return SWIG_ERROR;
-    if (ty) {
-      swig_cast_info *tc = SWIG_TypeCheck(desc,ty);
-      if (tc) {
-        int newmemory = 0;
-        *ptr = SWIG_TypeCast(tc,vptr,&newmemory);
-        assert(!newmemory); /* newmemory handling not yet implemented */
-      } else {
-        return SWIG_ERROR;
-      }
+    tc = SWIG_TypeCheck(desc,ty);
+    if (tc) {
+      int newmemory = 0;
+      *ptr = SWIG_TypeCast(tc,vptr,&newmemory);
+      assert(!newmemory); /* newmemory handling not yet implemented */
     } else {
-      *ptr = vptr;
+      return SWIG_ERROR;
     }
     return SWIG_OK;
   }
@@ -3070,7 +3067,7 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_f_p__nitf_TRE_p__nitf_TRE_p__NRT_Error__bool swig_types[63]
 #define SWIGTYPE_p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__bool swig_types[64]
 #define SWIGTYPE_p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__p_nrt_List swig_types[65]
-#define SWIGTYPE_p_f_p__nitf_TRE_p_q_const__char_p_void_size_t_p__NRT_Error__bool swig_types[66]
+#define SWIGTYPE_p_f_p__nitf_TRE_p_q_const__char_p_q_const__void_size_t_p__NRT_Error__bool swig_types[66]
 #define SWIGTYPE_p_f_p_nitf_TRE_p_nitf_Error__p__nitf_TREEnumerator swig_types[67]
 #define SWIGTYPE_p_f_p_nitf_TRE_p_q_const__char__p__nitf_Field swig_types[68]
 #define SWIGTYPE_p_f_p_p__nitf_TREEnumerator__bool swig_types[69]
@@ -3617,6 +3614,13 @@ SWIG_AsVal_int (PyObject * obj, int *val)
 
 
 
+SWIGINTERNINLINE PyObject * 
+SWIG_FromCharPtr(const char *cptr)
+{ 
+  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
+}
+
+
 SWIGINTERN int
 SWIG_AsVal_unsigned_SS_long (PyObject *obj, unsigned long *val) 
 {
@@ -3753,32 +3757,6 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
 }
 
 
-SWIGINTERNINLINE PyObject * 
-SWIG_FromCharPtr(const char *cptr)
-{ 
-  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
-}
-
-
-SWIGINTERN int
-SWIG_AsVal_char (PyObject * obj, char *val)
-{    
-  int res = SWIG_AsCharArray(obj, val, 1);
-  if (!SWIG_IsOK(res)) {
-    long v;
-    res = SWIG_AddCast(SWIG_AsVal_long (obj, &v));
-    if (SWIG_IsOK(res)) {
-      if ((CHAR_MIN <= v) && (v <= CHAR_MAX)) {
-	if (val) *val = static_cast< char >(v);
-      } else {
-	res = SWIG_OverflowError;
-      }
-    }
-  }
-  return res;
-}
-
-
   #define SWIG_From_long   PyInt_FromLong 
 
 
@@ -3820,6 +3798,25 @@ SWIGINTERNINLINE PyObject*
   SWIG_From_unsigned_SS_int  (unsigned int value)
 {
   return PyInt_FromSize_t((size_t) value);
+}
+
+
+SWIGINTERN int
+SWIG_AsVal_char (PyObject * obj, char *val)
+{    
+  int res = SWIG_AsCharArray(obj, val, 1);
+  if (!SWIG_IsOK(res)) {
+    long v;
+    res = SWIG_AddCast(SWIG_AsVal_long (obj, &v));
+    if (SWIG_IsOK(res)) {
+      if ((CHAR_MIN <= v) && (v <= CHAR_MAX)) {
+	if (val) *val = static_cast< char >(v);
+      } else {
+	res = SWIG_OverflowError;
+      }
+    }
+  }
+  return res;
 }
 
 
@@ -3946,9 +3943,9 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
         return buf;
     }
 
-    nitf_Uint32 py_Field_getInt(nitf_Field *field, nitf_Error *error)
+    uint32_t py_Field_getInt(nitf_Field *field, nitf_Error *error)
     {
-        nitf_Uint32 intVal;
+        uint32_t intVal;
         NITF_TRY_GET_UINT32(field, &intVal, error);
         return intVal;
 
@@ -3957,14 +3954,24 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
         return 0;
     }
 
-    void py_Field_setRawData(nitf_Field *field, char* buf, int length,  nitf_Error *error)
+    void py_Field_setRawData(nitf_Field *field, char* pfsrd_buf, int length,  nitf_Error *error)
     {
-        nitf_Field_setRawData(field, (NITF_DATA*)buf, length, error);
+        nitf_Field_setRawData(field, (NITF_DATA*)pfsrd_buf, length, error);
     }
 
     void py_TRE_setField(nitf_TRE *tre, const char* tag, char* buf, int length, nitf_Error *error)
     {
         nitf_TRE_setField(tre, tag, (NITF_DATA*)buf, length, error);
+    }
+
+    PyObject* py_Field_getRawData(nitf_Field *field, nitf_Error *error)
+    {
+        return PyBytes_FromStringAndSize(field->raw, field->length);
+    }
+
+    nitf_TRE *py_TRE_clone(nitf_TRE *tre, nitf_Error *error)
+    {
+        return nitf_TRE_clone(tre, error);
     }
 
 
@@ -4052,9 +4059,10 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
 
 
 
+
     nitf_ComponentInfo* py_FileHeader_getComponentInfo(nitf_FileHeader* header, int index, char* type, nitf_Error* error)
     {
-        nitf_Uint32 num;
+        uint32_t num;
 
         if (!type)
         	goto CATCH_ERROR;
@@ -4101,11 +4109,36 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
     }
 
 
+
+    bool py_nitf_PluginRegistry_canRetrieveTREHandler(nitf_PluginRegistry * reg, const char *ident, nitf_Error * error)
+    {
+        int had_error;
+        nitf_TREHandler *result = nitf_PluginRegistry_retrieveTREHandler(reg, ident, &had_error, error);
+        if (had_error) { return false; }
+        else { return (result != NULL); }
+    }
+
+
     nitf_ImageReader* py_nitf_Reader_newImageReader(nitf_Reader* reader, int imageSegmentNumber, PyObject* options, nitf_Error* error)
     {
         /* TODO: Support taking in options here and converting it */
         nrt_HashTable* nullOptions = NULL;
         return nitf_Reader_newImageReader(reader, imageSegmentNumber, nullOptions, error);
+    }
+
+    nitf_Writer* py_nitf_Writer_construct(nitf_Error *error)
+    {
+        return nitf_Writer_construct(error);
+    }
+
+    bool py_nitf_Writer_prepare(nitf_Writer *writer, nitf_Record *record, nitf_IOHandle ioHandle, nitf_Error *error)
+    {
+        return nitf_Writer_prepare(writer, record, ioHandle, error);
+    }
+
+    void py_nitf_Writer_destruct(nitf_Writer ** writer)
+    {
+        nitf_Writer_destruct(writer);
     }
 
     nitf_ImageWriter* py_nitf_Writer_newImageWriter(nitf_Writer* writer, int index, PyObject* options, nitf_Error* error)
@@ -4152,14 +4185,14 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
 
         window->numBands = PySequence_Length(bandList);
         if (window->numBands < 0) window->numBands = 0;
-        window->bandList = (nitf_Uint32*)NITF_MALLOC(sizeof(nitf_Uint32) * window->numBands);
+        window->bandList = (uint32_t*)NITF_MALLOC(sizeof(uint32_t) * window->numBands);
         if (!window->bandList)
         {
             PyErr_NoMemory();
             return NULL;
         }
 
-      for (i = 0; i < window->numBands; i++) {
+      for (decltype(window->numBands) i = 0; i < window->numBands; i++) {
         PyObject *o = PySequence_GetItem(bandList,i);
         if (PyNumber_Check(o)) {
           window->bandList[i] = (int) PyInt_AsLong(o);
@@ -4178,17 +4211,17 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
     PyObject* py_ImageReader_read(nitf_ImageReader* reader, nitf_SubWindow* window, int nbpp, nitf_Error* error)
     {
         /* TODO somehow get the NUMBITSPERPIXEL in the future */
-        nitf_Uint8 **buf = NULL;
-        nitf_Uint8 *pyArrayBuffer = NULL;
+        uint8_t **buf = NULL;
+        uint8_t *pyArrayBuffer = NULL;
         PyObject* result = Py_None;
         int padded, rowSkip, colSkip;
-        nitf_Uint64 subimageSize;
-        nitf_Uint32 i;
+        uint64_t subimageSize;
+        uint32_t i;
         types::RowCol<size_t> dims;
 
         rowSkip = window->downsampler ? window->downsampler->rowSkip : 1;
         colSkip = window->downsampler ? window->downsampler->colSkip : 1;
-        subimageSize = static_cast<nitf_Uint64>(window->numRows/rowSkip) *
+        subimageSize = static_cast<uint64_t>(window->numRows/rowSkip) *
                 (window->numCols/colSkip) *
                 nitf_ImageIO_pixelSize(reader->imageDeblocker);
         if (subimageSize > std::numeric_limits<size_t>::max())
@@ -4204,18 +4237,18 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
 
         numpyutils::createOrVerify(result, NPY_UINT8, dims);
 
-        buf = (nitf_Uint8**) NITF_MALLOC(sizeof(nitf_Uint8*) * window->numBands);
+        buf = (uint8_t**) NITF_MALLOC(sizeof(uint8_t*) * window->numBands);
         if (!buf)
         {
             PyErr_NoMemory();
             goto CATCH_ERROR;
         }
 
-        memset(buf, 0, sizeof(nitf_Uint8*) * window->numBands);
+        memset(buf, 0, sizeof(uint8_t*) * window->numBands);
 
         for (i = 0; i < window->numBands; ++i)
         {
-            buf[i] = (nitf_Uint8*) NITF_MALLOC(sizeof(nitf_Uint8) * subimageSize);
+            buf[i] = (uint8_t*) NITF_MALLOC(sizeof(uint8_t) * subimageSize);
             if (!buf[i])
             {
                 PyErr_NoMemory();
@@ -4232,11 +4265,11 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
         }
 
         // Copy to output numpy array
-        pyArrayBuffer = numpyutils::getBuffer<nitf_Uint8>(result);
+        pyArrayBuffer = numpyutils::getBuffer<uint8_t>(result);
         for (i = 0; i < window->numBands; ++i)
         {
             memcpy(pyArrayBuffer + i * subimageSize,
-                   buf[i], sizeof(nitf_Uint8) * subimageSize);
+                   buf[i], sizeof(uint8_t) * subimageSize);
         }
 
         for (i = 0; i < window->numBands; ++i)
@@ -4356,28 +4389,28 @@ extern "C" {
 #endif
 SWIGINTERN PyObject *_wrap_nrt_System_swap16(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_Uint16 arg1 ;
+  uint16_t arg1 ;
   void *argp1 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nrt_Uint16 result;
+  uint16_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nrt_System_swap16",&obj0)) SWIG_fail;
   {
     res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_uint16_t,  0  | 0);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap16" "', argument " "1"" of type '" "nrt_Uint16""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap16" "', argument " "1"" of type '" "uint16_t""'"); 
     }  
     if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap16" "', argument " "1"" of type '" "nrt_Uint16""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap16" "', argument " "1"" of type '" "uint16_t""'");
     } else {
-      nrt_Uint16 * temp = reinterpret_cast< nrt_Uint16 * >(argp1);
+      uint16_t * temp = reinterpret_cast< uint16_t * >(argp1);
       arg1 = *temp;
       if (SWIG_IsNewObj(res1)) delete temp;
     }
   }
   result = nrt_System_swap16(arg1);
-  resultobj = SWIG_NewPointerObj((new nrt_Uint16(static_cast< const nrt_Uint16& >(result))), SWIGTYPE_p_uint16_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint16_t(static_cast< const uint16_t& >(result))), SWIGTYPE_p_uint16_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -4386,28 +4419,18 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nrt_System_swap32(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_Uint32 arg1 ;
-  void *argp1 ;
-  int res1 = 0 ;
+  uint32_t arg1 ;
   PyObject * obj0 = 0 ;
-  nrt_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nrt_System_swap32",&obj0)) SWIG_fail;
   {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_uint32_t,  0  | 0);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap32" "', argument " "1"" of type '" "nrt_Uint32""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap32" "', argument " "1"" of type '" "nrt_Uint32""'");
-    } else {
-      nrt_Uint32 * temp = reinterpret_cast< nrt_Uint32 * >(argp1);
-      arg1 = *temp;
-      if (SWIG_IsNewObj(res1)) delete temp;
-    }
+    arg1 = (uint32_t)PyInt_AsLong(obj0);
   }
   result = nrt_System_swap32(arg1);
-  resultobj = SWIG_NewPointerObj((new nrt_Uint32(static_cast< const nrt_Uint32& >(result))), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
+  {
+    resultobj = PyInt_FromLong(result);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -4416,28 +4439,28 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nrt_System_swap64(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_Uint64 arg1 ;
+  uint64_t arg1 ;
   void *argp1 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nrt_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nrt_System_swap64",&obj0)) SWIG_fail;
   {
     res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap64" "', argument " "1"" of type '" "nrt_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap64" "', argument " "1"" of type '" "uint64_t""'"); 
     }  
     if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap64" "', argument " "1"" of type '" "nrt_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap64" "', argument " "1"" of type '" "uint64_t""'");
     } else {
-      nrt_Uint64 * temp = reinterpret_cast< nrt_Uint64 * >(argp1);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp1);
       arg1 = *temp;
       if (SWIG_IsNewObj(res1)) delete temp;
     }
   }
   result = nrt_System_swap64(arg1);
-  resultobj = SWIG_NewPointerObj((new nrt_Uint64(static_cast< const nrt_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -4446,28 +4469,28 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nrt_System_swap64c(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_Uint64 arg1 ;
+  uint64_t arg1 ;
   void *argp1 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nrt_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nrt_System_swap64c",&obj0)) SWIG_fail;
   {
     res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap64c" "', argument " "1"" of type '" "nrt_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap64c" "', argument " "1"" of type '" "uint64_t""'"); 
     }  
     if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap64c" "', argument " "1"" of type '" "nrt_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap64c" "', argument " "1"" of type '" "uint64_t""'");
     } else {
-      nrt_Uint64 * temp = reinterpret_cast< nrt_Uint64 * >(argp1);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp1);
       arg1 = *temp;
       if (SWIG_IsNewObj(res1)) delete temp;
     }
   }
   result = nrt_System_swap64c(arg1);
-  resultobj = SWIG_NewPointerObj((new nrt_Uint64(static_cast< const nrt_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -5122,6 +5145,28 @@ SWIGINTERN PyObject *_wrap_nrt_Error_print(PyObject *SWIGUNUSEDPARM(self), PyObj
   return resultobj;
 fail:
   if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nrt_strerror(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nrt_strerror",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "nrt_strerror" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  result = (char *)nrt_strerror(arg1);
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
   return NULL;
 }
 
@@ -6553,6 +6598,31 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_nitf_strdup(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *arg1 = (char *) 0 ;
+  int res1 ;
+  char *buf1 = 0 ;
+  int alloc1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_strdup",&obj0)) SWIG_fail;
+  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_strdup" "', argument " "1"" of type '" "char const *""'");
+  }
+  arg1 = reinterpret_cast< char * >(buf1);
+  result = (char *)nitf_strdup((char const *)arg1);
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return resultobj;
+fail:
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_nitf_PluginRegistry_path_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _protected_nitf_PluginRegistry *arg1 = (_protected_nitf_PluginRegistry *) 0 ;
@@ -7433,2022 +7503,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_nitf_Reader_warningList_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
-  nitf_List *arg2 = (nitf_List *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Reader_warningList_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_warningList_set" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_nrt_List, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Reader_warningList_set" "', argument " "2"" of type '" "nitf_List *""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_List * >(argp2);
-  if (arg1) (arg1)->warningList = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_warningList_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_List *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_warningList_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_warningList_get" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
-  result = (nitf_List *) ((arg1)->warningList);
-  {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
-      iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
-        nitf_FieldWarning *thisObj=                  (nitf_FieldWarning *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p_nitf_FieldWarning, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
-      }      
-    } 
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_input_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
-  nitf_IOInterface *arg2 = (nitf_IOInterface *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Reader_input_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_input_set" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_IOInterface, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Reader_input_set" "', argument " "2"" of type '" "nitf_IOInterface *""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_IOInterface * >(argp2);
-  if (arg1) (arg1)->input = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_input_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_IOInterface *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_input_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_input_get" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
-  result = (nitf_IOInterface *) ((arg1)->input);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_record_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
-  nitf_Record *arg2 = (nitf_Record *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Reader_record_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_record_set" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Record, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Reader_record_set" "', argument " "2"" of type '" "nitf_Record *""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_Record * >(argp2);
-  if (arg1) (arg1)->record = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_record_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_Record *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_record_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_record_get" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
-  result = (nitf_Record *) ((arg1)->record);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Record, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_ownInput_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
-  bool arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  bool val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Reader_ownInput_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_ownInput_set" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
-  ecode2 = SWIG_AsVal_bool(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Reader_ownInput_set" "', argument " "2"" of type '" "bool""'");
-  } 
-  arg2 = static_cast< bool >(val2);
-  if (arg1) (arg1)->ownInput = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_ownInput_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_ownInput_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_ownInput_get" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
-  result = (bool) ((arg1)->ownInput);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_nitf_Reader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_nitf_Reader",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_nitf_Reader" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
-  delete arg1;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *nitf_Reader_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p__nitf_Reader, SWIG_NewClientData(obj));
-  return SWIG_Py_Void();
-}
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Error *arg1 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_Reader *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_construct",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_construct" "', argument " "1"" of type '" "nitf_Error *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Error * >(argp1);
-  result = (nitf_Reader *)nitf_Reader_construct(arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_destruct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Reader **arg1 = (nitf_Reader **) 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_destruct",&obj0)) SWIG_fail;
-  {
-    if (obj0)
-    {
-      nitf_Reader* temp = 0;
-      if (SWIG_ConvertPtr(obj0, (void**)&temp,SWIGTYPE_p__nitf_Reader, 0 |  0 ) != -1 && temp)
-      arg1 = (nitf_Reader**)&temp;
-    }
-  }
-  nitf_Reader_destruct(arg1);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_read(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Reader *arg1 = (nitf_Reader *) 0 ;
-  nitf_IOHandle arg2 ;
-  nitf_Error *arg3 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  nitf_Record *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Reader_read",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_read" "', argument " "1"" of type '" "nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Reader * >(argp1);
-  {
-    if (obj1)
-    {
-#ifdef SWIGWIN
-      arg2 = (nrt_IOHandle) PyLong_AsUnsignedLongLongMask(obj1);
-#else
-      arg2 = (nrt_IOHandle) PyInt_AsLong(obj1);
-#endif
-    }
-  }
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Reader_read" "', argument " "3"" of type '" "nitf_Error *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_Error * >(argp3);
-  result = (nitf_Record *)nitf_Reader_read(arg1,arg2,arg3);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Record, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_readIO(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Reader *arg1 = (nitf_Reader *) 0 ;
-  nitf_IOInterface *arg2 = (nitf_IOInterface *) 0 ;
-  nitf_Error *arg3 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  nitf_Record *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Reader_readIO",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_readIO" "', argument " "1"" of type '" "nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Reader * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Reader_readIO" "', argument " "2"" of type '" "nitf_IOInterface *""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_IOInterface * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Reader_readIO" "', argument " "3"" of type '" "nitf_Error *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_Error * >(argp3);
-  result = (nitf_Record *)nitf_Reader_readIO(arg1,arg2,arg3);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Record, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_newImageReader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Reader *arg1 = (nitf_Reader *) 0 ;
-  int arg2 ;
-  nrt_HashTable *arg3 = (nrt_HashTable *) 0 ;
-  nitf_Error *arg4 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  nitf_ImageReader *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Reader_newImageReader",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_newImageReader" "', argument " "1"" of type '" "nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Reader * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Reader_newImageReader" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_HashTable, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Reader_newImageReader" "', argument " "3"" of type '" "nrt_HashTable *""'"); 
-  }
-  arg3 = reinterpret_cast< nrt_HashTable * >(argp3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Reader_newImageReader" "', argument " "4"" of type '" "nitf_Error *""'"); 
-  }
-  arg4 = reinterpret_cast< nitf_Error * >(argp4);
-  result = (nitf_ImageReader *)nitf_Reader_newImageReader(arg1,arg2,arg3,arg4);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_ImageReader, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_newTextReader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Reader *arg1 = (nitf_Reader *) 0 ;
-  int arg2 ;
-  nitf_Error *arg3 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  nitf_SegmentReader *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Reader_newTextReader",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_newTextReader" "', argument " "1"" of type '" "nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Reader * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Reader_newTextReader" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Reader_newTextReader" "', argument " "3"" of type '" "nitf_Error *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_Error * >(argp3);
-  result = (nitf_SegmentReader *)nitf_Reader_newTextReader(arg1,arg2,arg3);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_SegmentReader, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_newGraphicReader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Reader *arg1 = (nitf_Reader *) 0 ;
-  int arg2 ;
-  nitf_Error *arg3 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  nitf_SegmentReader *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Reader_newGraphicReader",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_newGraphicReader" "', argument " "1"" of type '" "nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Reader * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Reader_newGraphicReader" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Reader_newGraphicReader" "', argument " "3"" of type '" "nitf_Error *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_Error * >(argp3);
-  result = (nitf_SegmentReader *)nitf_Reader_newGraphicReader(arg1,arg2,arg3);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_SegmentReader, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_newDEReader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Reader *arg1 = (nitf_Reader *) 0 ;
-  int arg2 ;
-  nitf_Error *arg3 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  nitf_SegmentReader *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Reader_newDEReader",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_newDEReader" "', argument " "1"" of type '" "nitf_Reader *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Reader * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Reader_newDEReader" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Reader_newDEReader" "', argument " "3"" of type '" "nitf_Error *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_Error * >(argp3);
-  result = (nitf_SegmentReader *)nitf_Reader_newDEReader(arg1,arg2,arg3);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_SegmentReader, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_getNITFVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  char *arg1 = (char *) 0 ;
-  int res1 ;
-  char *buf1 = 0 ;
-  int alloc1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_Version result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_getNITFVersion",&obj0)) SWIG_fail;
-  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_getNITFVersion" "', argument " "1"" of type '" "char const *""'");
-  }
-  arg1 = reinterpret_cast< char * >(buf1);
-  result = (nitf_Version)nitf_Reader_getNITFVersion((char const *)arg1);
-  resultobj = SWIG_From_int(static_cast< int >(result));
-  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
-  return resultobj;
-fail:
-  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Reader_getNITFVersionIO(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_IOInterface *arg1 = (nitf_IOInterface *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_Version result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_getNITFVersionIO",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_getNITFVersionIO" "', argument " "1"" of type '" "nitf_IOInterface *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_IOInterface * >(argp1);
-  result = (nitf_Version)nitf_Reader_getNITFVersionIO(arg1);
-  resultobj = SWIG_From_int(static_cast< int >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_warningList_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  nitf_List *arg2 = (nitf_List *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_warningList_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_warningList_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_nrt_List, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_warningList_set" "', argument " "2"" of type '" "nitf_List *""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_List * >(argp2);
-  if (arg1) (arg1)->warningList = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_warningList_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_List *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_warningList_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_warningList_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  result = (nitf_List *) ((arg1)->warningList);
-  {
-    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
-      iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
-        nitf_FieldWarning *thisObj=                  (nitf_FieldWarning *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p_nitf_FieldWarning, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
-      }      
-    } 
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_imageWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  nitf_WriteHandler **arg2 = (nitf_WriteHandler **) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_imageWriters_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_imageWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_imageWriters_set" "', argument " "2"" of type '" "nitf_WriteHandler **""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_WriteHandler ** >(argp2);
-  if (arg1) (arg1)->imageWriters = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_imageWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_WriteHandler **result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_imageWriters_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_imageWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  result = (nitf_WriteHandler **) ((arg1)->imageWriters);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_textWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  nitf_WriteHandler **arg2 = (nitf_WriteHandler **) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_textWriters_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_textWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_textWriters_set" "', argument " "2"" of type '" "nitf_WriteHandler **""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_WriteHandler ** >(argp2);
-  if (arg1) (arg1)->textWriters = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_textWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_WriteHandler **result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_textWriters_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_textWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  result = (nitf_WriteHandler **) ((arg1)->textWriters);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_graphicWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  nitf_WriteHandler **arg2 = (nitf_WriteHandler **) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_graphicWriters_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_graphicWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_graphicWriters_set" "', argument " "2"" of type '" "nitf_WriteHandler **""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_WriteHandler ** >(argp2);
-  if (arg1) (arg1)->graphicWriters = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_graphicWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_WriteHandler **result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_graphicWriters_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_graphicWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  result = (nitf_WriteHandler **) ((arg1)->graphicWriters);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_dataExtensionWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  nitf_WriteHandler **arg2 = (nitf_WriteHandler **) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_dataExtensionWriters_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_dataExtensionWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_dataExtensionWriters_set" "', argument " "2"" of type '" "nitf_WriteHandler **""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_WriteHandler ** >(argp2);
-  if (arg1) (arg1)->dataExtensionWriters = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_dataExtensionWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_WriteHandler **result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_dataExtensionWriters_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_dataExtensionWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  result = (nitf_WriteHandler **) ((arg1)->dataExtensionWriters);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_output_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  nitf_IOInterface *arg2 = (nitf_IOInterface *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_output_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_output_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_IOInterface, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_output_set" "', argument " "2"" of type '" "nitf_IOInterface *""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_IOInterface * >(argp2);
-  if (arg1) (arg1)->output = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_output_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_IOInterface *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_output_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_output_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  result = (nitf_IOInterface *) ((arg1)->output);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_record_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  nitf_Record *arg2 = (nitf_Record *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_record_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_record_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Record, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_record_set" "', argument " "2"" of type '" "nitf_Record *""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_Record * >(argp2);
-  if (arg1) (arg1)->record = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_record_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_Record *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_record_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_record_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  result = (nitf_Record *) ((arg1)->record);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Record, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_numImageWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_numImageWriters_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numImageWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_numImageWriters_set" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  if (arg1) (arg1)->numImageWriters = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_numImageWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  int result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_numImageWriters_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numImageWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  result = (int) ((arg1)->numImageWriters);
-  resultobj = SWIG_From_int(static_cast< int >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_numTextWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_numTextWriters_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numTextWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_numTextWriters_set" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  if (arg1) (arg1)->numTextWriters = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_numTextWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  int result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_numTextWriters_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numTextWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  result = (int) ((arg1)->numTextWriters);
-  resultobj = SWIG_From_int(static_cast< int >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_numGraphicWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_numGraphicWriters_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numGraphicWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_numGraphicWriters_set" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  if (arg1) (arg1)->numGraphicWriters = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_numGraphicWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  int result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_numGraphicWriters_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numGraphicWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  result = (int) ((arg1)->numGraphicWriters);
-  resultobj = SWIG_From_int(static_cast< int >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_numDataExtensionWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_numDataExtensionWriters_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numDataExtensionWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_numDataExtensionWriters_set" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  if (arg1) (arg1)->numDataExtensionWriters = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_numDataExtensionWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  int result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_numDataExtensionWriters_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numDataExtensionWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  result = (int) ((arg1)->numDataExtensionWriters);
-  resultobj = SWIG_From_int(static_cast< int >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_ownOutput_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  bool arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  bool val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_ownOutput_set",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_ownOutput_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  ecode2 = SWIG_AsVal_bool(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_ownOutput_set" "', argument " "2"" of type '" "bool""'");
-  } 
-  arg2 = static_cast< bool >(val2);
-  if (arg1) (arg1)->ownOutput = arg2;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_ownOutput_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_ownOutput_get",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_ownOutput_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  result = (bool) ((arg1)->ownOutput);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_nitf_Writer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_nitf_Writer",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_nitf_Writer" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
-  delete arg1;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *nitf_Writer_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p__nitf_Writer, SWIG_NewClientData(obj));
-  return SWIG_Py_Void();
-}
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Error *arg1 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  nitf_Writer *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_construct",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_construct" "', argument " "1"" of type '" "nitf_Error *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Error * >(argp1);
-  result = (nitf_Writer *)nitf_Writer_construct(arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_destruct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer **arg1 = (nitf_Writer **) 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_destruct",&obj0)) SWIG_fail;
-  {
-    if (obj0)
-    {
-      nitf_Writer* temp = 0;
-      if (SWIG_ConvertPtr(obj0, (void**)&temp,SWIGTYPE_p__nitf_Writer, 0 |  0 ) != -1 && temp)
-      arg1 = (nitf_Writer**)&temp;
-    }
-  }
-  nitf_Writer_destruct(arg1);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_prepare(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  nitf_Record *arg2 = (nitf_Record *) 0 ;
-  nitf_IOHandle arg3 ;
-  nitf_Error *arg4 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_prepare",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_prepare" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Record, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_prepare" "', argument " "2"" of type '" "nitf_Record *""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_Record * >(argp2);
-  {
-    if (obj2)
-    {
-#ifdef SWIGWIN
-      arg3 = (nrt_IOHandle) PyLong_AsUnsignedLongLongMask(obj2);
-#else
-      arg3 = (nrt_IOHandle) PyInt_AsLong(obj2);
-#endif
-    }
-  }
-  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_prepare" "', argument " "4"" of type '" "nitf_Error *""'"); 
-  }
-  arg4 = reinterpret_cast< nitf_Error * >(argp4);
-  result = (bool)nitf_Writer_prepare(arg1,arg2,arg3,arg4);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_prepareIO(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  nitf_Record *arg2 = (nitf_Record *) 0 ;
-  nitf_IOInterface *arg3 = (nitf_IOInterface *) 0 ;
-  nitf_Error *arg4 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_prepareIO",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_prepareIO" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Record, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_prepareIO" "', argument " "2"" of type '" "nitf_Record *""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_Record * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_prepareIO" "', argument " "3"" of type '" "nitf_IOInterface *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_IOInterface * >(argp3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_prepareIO" "', argument " "4"" of type '" "nitf_Error *""'"); 
-  }
-  arg4 = reinterpret_cast< nitf_Error * >(argp4);
-  result = (bool)nitf_Writer_prepareIO(arg1,arg2,arg3,arg4);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_setImageWriteHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  int arg2 ;
-  nitf_WriteHandler *arg3 = (nitf_WriteHandler *) 0 ;
-  nitf_Error *arg4 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_setImageWriteHandler",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_setImageWriteHandler" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_setImageWriteHandler" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_setImageWriteHandler" "', argument " "3"" of type '" "nitf_WriteHandler *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_WriteHandler * >(argp3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_setImageWriteHandler" "', argument " "4"" of type '" "nitf_Error *""'"); 
-  }
-  arg4 = reinterpret_cast< nitf_Error * >(argp4);
-  result = (bool)nitf_Writer_setImageWriteHandler(arg1,arg2,arg3,arg4);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_setGraphicWriteHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  int arg2 ;
-  nitf_WriteHandler *arg3 = (nitf_WriteHandler *) 0 ;
-  nitf_Error *arg4 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_setGraphicWriteHandler",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_setGraphicWriteHandler" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_setGraphicWriteHandler" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_setGraphicWriteHandler" "', argument " "3"" of type '" "nitf_WriteHandler *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_WriteHandler * >(argp3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_setGraphicWriteHandler" "', argument " "4"" of type '" "nitf_Error *""'"); 
-  }
-  arg4 = reinterpret_cast< nitf_Error * >(argp4);
-  result = (bool)nitf_Writer_setGraphicWriteHandler(arg1,arg2,arg3,arg4);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_setTextWriteHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  int arg2 ;
-  nitf_WriteHandler *arg3 = (nitf_WriteHandler *) 0 ;
-  nitf_Error *arg4 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_setTextWriteHandler",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_setTextWriteHandler" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_setTextWriteHandler" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_setTextWriteHandler" "', argument " "3"" of type '" "nitf_WriteHandler *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_WriteHandler * >(argp3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_setTextWriteHandler" "', argument " "4"" of type '" "nitf_Error *""'"); 
-  }
-  arg4 = reinterpret_cast< nitf_Error * >(argp4);
-  result = (bool)nitf_Writer_setTextWriteHandler(arg1,arg2,arg3,arg4);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_setDEWriteHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  int arg2 ;
-  nitf_WriteHandler *arg3 = (nitf_WriteHandler *) 0 ;
-  nitf_Error *arg4 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_setDEWriteHandler",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_setDEWriteHandler" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_setDEWriteHandler" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_setDEWriteHandler" "', argument " "3"" of type '" "nitf_WriteHandler *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_WriteHandler * >(argp3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_setDEWriteHandler" "', argument " "4"" of type '" "nitf_Error *""'"); 
-  }
-  arg4 = reinterpret_cast< nitf_Error * >(argp4);
-  result = (bool)nitf_Writer_setDEWriteHandler(arg1,arg2,arg3,arg4);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_newImageWriter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  int arg2 ;
-  nrt_HashTable *arg3 = (nrt_HashTable *) 0 ;
-  nitf_Error *arg4 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  nitf_ImageWriter *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_newImageWriter",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_newImageWriter" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_newImageWriter" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_HashTable, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_newImageWriter" "', argument " "3"" of type '" "nrt_HashTable *""'"); 
-  }
-  arg3 = reinterpret_cast< nrt_HashTable * >(argp3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_newImageWriter" "', argument " "4"" of type '" "nitf_Error *""'"); 
-  }
-  arg4 = reinterpret_cast< nitf_Error * >(argp4);
-  result = (nitf_ImageWriter *)nitf_Writer_newImageWriter(arg1,arg2,arg3,arg4);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_newGraphicWriter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  int arg2 ;
-  nitf_Error *arg3 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  nitf_SegmentWriter *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Writer_newGraphicWriter",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_newGraphicWriter" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_newGraphicWriter" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_newGraphicWriter" "', argument " "3"" of type '" "nitf_Error *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_Error * >(argp3);
-  result = (nitf_SegmentWriter *)nitf_Writer_newGraphicWriter(arg1,arg2,arg3);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_newTextWriter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  int arg2 ;
-  nitf_Error *arg3 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  nitf_SegmentWriter *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Writer_newTextWriter",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_newTextWriter" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_newTextWriter" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_newTextWriter" "', argument " "3"" of type '" "nitf_Error *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_Error * >(argp3);
-  result = (nitf_SegmentWriter *)nitf_Writer_newTextWriter(arg1,arg2,arg3);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_newDEWriter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  int arg2 ;
-  nitf_Error *arg3 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  nitf_SegmentWriter *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Writer_newDEWriter",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_newDEWriter" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_newDEWriter" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_newDEWriter" "', argument " "3"" of type '" "nitf_Error *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_Error * >(argp3);
-  result = (nitf_SegmentWriter *)nitf_Writer_newDEWriter(arg1,arg2,arg3);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_write(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  nitf_Error *arg2 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_write",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_write" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_write" "', argument " "2"" of type '" "nitf_Error *""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_Error * >(argp2);
-  result = (bool)nitf_Writer_write(arg1,arg2);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_writeHeader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  nitf_Off *arg2 = (nitf_Off *) 0 ;
-  nitf_Uint32 *arg3 = (nitf_Uint32 *) 0 ;
-  nitf_Error *arg4 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_writeHeader",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_writeHeader" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_off_t, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_writeHeader" "', argument " "2"" of type '" "nitf_Off *""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_Off * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_uint32_t, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_writeHeader" "', argument " "3"" of type '" "nitf_Uint32 *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_Uint32 * >(argp3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_writeHeader" "', argument " "4"" of type '" "nitf_Error *""'"); 
-  }
-  arg4 = reinterpret_cast< nitf_Error * >(argp4);
-  result = (bool)nitf_Writer_writeHeader(arg1,arg2,arg3,arg4);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_writeImageSubheader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  nitf_ImageSubheader *arg2 = (nitf_ImageSubheader *) 0 ;
-  nitf_Version arg3 ;
-  nitf_Off *arg4 = (nitf_Off *) 0 ;
-  nitf_Error *arg5 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  void *argp5 = 0 ;
-  int res5 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:nitf_Writer_writeImageSubheader",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_writeImageSubheader" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_ImageSubheader, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_writeImageSubheader" "', argument " "2"" of type '" "nitf_ImageSubheader const *""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_ImageSubheader * >(argp2);
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "nitf_Writer_writeImageSubheader" "', argument " "3"" of type '" "nitf_Version""'");
-  } 
-  arg3 = static_cast< nitf_Version >(val3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_off_t, 0 |  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_writeImageSubheader" "', argument " "4"" of type '" "nitf_Off *""'"); 
-  }
-  arg4 = reinterpret_cast< nitf_Off * >(argp4);
-  res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_Writer_writeImageSubheader" "', argument " "5"" of type '" "nitf_Error *""'"); 
-  }
-  arg5 = reinterpret_cast< nitf_Error * >(argp5);
-  result = (bool)nitf_Writer_writeImageSubheader(arg1,(_nitf_ImageSubheader const *)arg2,arg3,arg4,arg5);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_writeDESubheader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  nitf_DESubheader *arg2 = (nitf_DESubheader *) 0 ;
-  nitf_Uint32 *arg3 = (nitf_Uint32 *) 0 ;
-  nitf_Version arg4 ;
-  nitf_Error *arg5 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  int val4 ;
-  int ecode4 = 0 ;
-  void *argp5 = 0 ;
-  int res5 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:nitf_Writer_writeDESubheader",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_writeDESubheader" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_DESubheader, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_writeDESubheader" "', argument " "2"" of type '" "nitf_DESubheader const *""'"); 
-  }
-  arg2 = reinterpret_cast< nitf_DESubheader * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_uint32_t, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_writeDESubheader" "', argument " "3"" of type '" "nitf_Uint32 *""'"); 
-  }
-  arg3 = reinterpret_cast< nitf_Uint32 * >(argp3);
-  ecode4 = SWIG_AsVal_int(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "nitf_Writer_writeDESubheader" "', argument " "4"" of type '" "nitf_Version""'");
-  } 
-  arg4 = static_cast< nitf_Version >(val4);
-  res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_Writer_writeDESubheader" "', argument " "5"" of type '" "nitf_Error *""'"); 
-  }
-  arg5 = reinterpret_cast< nitf_Error * >(argp5);
-  result = (bool)nitf_Writer_writeDESubheader(arg1,(_nitf_DESubheader const *)arg2,arg3,arg4,arg5);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_nitf_Writer_writeInt64Field(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
-  nitf_Uint64 arg2 ;
-  nitf_Uint32 arg3 ;
-  char arg4 ;
-  nitf_Uint32 arg5 ;
-  nitf_Error *arg6 = (nitf_Error *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  char val4 ;
-  int ecode4 = 0 ;
-  void *argp6 = 0 ;
-  int res6 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:nitf_Writer_writeInt64Field",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_writeInt64Field" "', argument " "1"" of type '" "nitf_Writer *""'"); 
-  }
-  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_writeInt64Field" "', argument " "2"" of type '" "nitf_Uint64""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_Writer_writeInt64Field" "', argument " "2"" of type '" "nitf_Uint64""'");
-    } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
-  {
-    arg3 = (nitf_Uint32)PyInt_AsLong(obj2);
-  }
-  ecode4 = SWIG_AsVal_char(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "nitf_Writer_writeInt64Field" "', argument " "4"" of type '" "char""'");
-  } 
-  arg4 = static_cast< char >(val4);
-  {
-    arg5 = (nitf_Uint32)PyInt_AsLong(obj4);
-  }
-  res6 = SWIG_ConvertPtr(obj5, &argp6,SWIGTYPE_p__NRT_Error, 0 |  0 );
-  if (!SWIG_IsOK(res6)) {
-    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "nitf_Writer_writeInt64Field" "', argument " "6"" of type '" "nitf_Error *""'"); 
-  }
-  arg6 = reinterpret_cast< nitf_Error * >(argp6);
-  result = (bool)nitf_Writer_writeInt64Field(arg1,arg2,arg3,arg4,arg5,arg6);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_nitf_Record_header_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_Record *arg1 = (_nitf_Record *) 0 ;
@@ -9993,7 +8047,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_getNumImages(PyObject *SWIGUNUSEDPARM(sel
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Record_getNumImages",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
@@ -10057,7 +8111,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_getNumGraphics(PyObject *SWIGUNUSEDPARM(s
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Record_getNumGraphics",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
@@ -10121,7 +8175,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_getNumTexts(PyObject *SWIGUNUSEDPARM(self
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Record_getNumTexts",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
@@ -10185,7 +8239,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_getNumDataExtensions(PyObject *SWIGUNUSED
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Record_getNumDataExtensions",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
@@ -10242,7 +8296,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Record_removeImageSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10260,7 +8314,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_removeImageSegment(PyObject *SWIGUNUSEDPA
   }
   arg1 = reinterpret_cast< nitf_Record * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -10278,7 +8332,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Record_removeGraphicSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10296,7 +8350,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_removeGraphicSegment(PyObject *SWIGUNUSED
   }
   arg1 = reinterpret_cast< nitf_Record * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -10321,7 +8375,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_getNumLabels(PyObject *SWIGUNUSEDPARM(sel
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Record_getNumLabels",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
@@ -10347,7 +8401,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Record_removeLabelSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10365,7 +8419,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_removeLabelSegment(PyObject *SWIGUNUSEDPA
   }
   arg1 = reinterpret_cast< nitf_Record * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -10383,7 +8437,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Record_removeTextSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10401,7 +8455,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_removeTextSegment(PyObject *SWIGUNUSEDPAR
   }
   arg1 = reinterpret_cast< nitf_Record * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -10419,7 +8473,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Record_removeDataExtensionSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10437,7 +8491,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_removeDataExtensionSegment(PyObject *SWIG
   }
   arg1 = reinterpret_cast< nitf_Record * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -10462,7 +8516,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_getNumReservedExtensions(PyObject *SWIGUN
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Record_getNumReservedExtensions",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Record, 0 |  0 );
@@ -10488,7 +8542,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Record_removeReservedExtensionSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10506,7 +8560,7 @@ SWIGINTERN PyObject *_wrap_nitf_Record_removeReservedExtensionSegment(PyObject *
   }
   arg1 = reinterpret_cast< nitf_Record * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -10524,8 +8578,8 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Record_moveImageSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Uint32 arg2 ;
-  nitf_Uint32 arg3 ;
+  uint32_t arg2 ;
+  uint32_t arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10544,10 +8598,10 @@ SWIGINTERN PyObject *_wrap_nitf_Record_moveImageSegment(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< nitf_Record * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   {
-    arg3 = (nitf_Uint32)PyInt_AsLong(obj2);
+    arg3 = (uint32_t)PyInt_AsLong(obj2);
   }
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
@@ -10565,8 +8619,8 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Record_moveGraphicSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Uint32 arg2 ;
-  nitf_Uint32 arg3 ;
+  uint32_t arg2 ;
+  uint32_t arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10585,10 +8639,10 @@ SWIGINTERN PyObject *_wrap_nitf_Record_moveGraphicSegment(PyObject *SWIGUNUSEDPA
   }
   arg1 = reinterpret_cast< nitf_Record * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   {
-    arg3 = (nitf_Uint32)PyInt_AsLong(obj2);
+    arg3 = (uint32_t)PyInt_AsLong(obj2);
   }
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
@@ -10606,8 +8660,8 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Record_moveLabelSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Uint32 arg2 ;
-  nitf_Uint32 arg3 ;
+  uint32_t arg2 ;
+  uint32_t arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10626,10 +8680,10 @@ SWIGINTERN PyObject *_wrap_nitf_Record_moveLabelSegment(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< nitf_Record * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   {
-    arg3 = (nitf_Uint32)PyInt_AsLong(obj2);
+    arg3 = (uint32_t)PyInt_AsLong(obj2);
   }
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
@@ -10647,8 +8701,8 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Record_moveTextSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Uint32 arg2 ;
-  nitf_Uint32 arg3 ;
+  uint32_t arg2 ;
+  uint32_t arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10667,10 +8721,10 @@ SWIGINTERN PyObject *_wrap_nitf_Record_moveTextSegment(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< nitf_Record * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   {
-    arg3 = (nitf_Uint32)PyInt_AsLong(obj2);
+    arg3 = (uint32_t)PyInt_AsLong(obj2);
   }
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
@@ -10688,8 +8742,8 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Record_moveDataExtensionSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Uint32 arg2 ;
-  nitf_Uint32 arg3 ;
+  uint32_t arg2 ;
+  uint32_t arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10708,10 +8762,10 @@ SWIGINTERN PyObject *_wrap_nitf_Record_moveDataExtensionSegment(PyObject *SWIGUN
   }
   arg1 = reinterpret_cast< nitf_Record * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   {
-    arg3 = (nitf_Uint32)PyInt_AsLong(obj2);
+    arg3 = (uint32_t)PyInt_AsLong(obj2);
   }
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
@@ -10729,8 +8783,8 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Record_moveReservedExtensionSegment(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Record *arg1 = (nitf_Record *) 0 ;
-  nitf_Uint32 arg2 ;
-  nitf_Uint32 arg3 ;
+  uint32_t arg2 ;
+  uint32_t arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10749,10 +8803,10 @@ SWIGINTERN PyObject *_wrap_nitf_Record_moveReservedExtensionSegment(PyObject *SW
   }
   arg1 = reinterpret_cast< nitf_Record * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   {
-    arg3 = (nitf_Uint32)PyInt_AsLong(obj2);
+    arg3 = (uint32_t)PyInt_AsLong(obj2);
   }
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
@@ -11164,7 +9218,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Field_setUint32(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Field *arg1 = (nitf_Field *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -11182,7 +9236,7 @@ SWIGINTERN PyObject *_wrap_nitf_Field_setUint32(PyObject *SWIGUNUSEDPARM(self), 
   }
   arg1 = reinterpret_cast< nitf_Field * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -11200,7 +9254,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Field_setUint64(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Field *arg1 = (nitf_Field *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -11222,12 +9276,12 @@ SWIGINTERN PyObject *_wrap_nitf_Field_setUint64(PyObject *SWIGUNUSEDPARM(self), 
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Field_setUint64" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Field_setUint64" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_Field_setUint64" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_Field_setUint64" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -11248,7 +9302,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Field_setInt32(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Field *arg1 = (nitf_Field *) 0 ;
-  nitf_Int32 arg2 ;
+  int32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -11270,12 +9324,12 @@ SWIGINTERN PyObject *_wrap_nitf_Field_setInt32(PyObject *SWIGUNUSEDPARM(self), P
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_int32_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Field_setInt32" "', argument " "2"" of type '" "nitf_Int32""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Field_setInt32" "', argument " "2"" of type '" "int32_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_Field_setInt32" "', argument " "2"" of type '" "nitf_Int32""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_Field_setInt32" "', argument " "2"" of type '" "int32_t""'");
     } else {
-      nitf_Int32 * temp = reinterpret_cast< nitf_Int32 * >(argp2);
+      int32_t * temp = reinterpret_cast< int32_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -11296,7 +9350,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_Field_setInt64(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Field *arg1 = (nitf_Field *) 0 ;
-  nitf_Int64 arg2 ;
+  int64_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -11318,12 +9372,12 @@ SWIGINTERN PyObject *_wrap_nitf_Field_setInt64(PyObject *SWIGUNUSEDPARM(self), P
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_int64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Field_setInt64" "', argument " "2"" of type '" "nitf_Int64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Field_setInt64" "', argument " "2"" of type '" "int64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_Field_setInt64" "', argument " "2"" of type '" "nitf_Int64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_Field_setInt64" "', argument " "2"" of type '" "int64_t""'");
     } else {
-      nitf_Int64 * temp = reinterpret_cast< nitf_Int64 * >(argp2);
+      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -11738,6 +9792,48 @@ SWIGINTERN PyObject *_wrap_nitf_Field_print(PyObject *SWIGUNUSEDPARM(self), PyOb
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Field_snprint(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *arg1 = (char *) 0 ;
+  size_t arg2 ;
+  nitf_Field *arg3 = (nitf_Field *) 0 ;
+  int res1 ;
+  char *buf1 = 0 ;
+  int alloc1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Field_snprint",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Field_snprint" "', argument " "1"" of type '" "char *""'");
+  }
+  arg1 = reinterpret_cast< char * >(buf1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Field_snprint" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__nitf_Field, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Field_snprint" "', argument " "3"" of type '" "nitf_Field *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_Field * >(argp3);
+  nitf_Field_snprint(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return resultobj;
+fail:
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
   return NULL;
 }
 
@@ -13293,7 +11389,7 @@ SWIGINTERN PyObject *_wrap_nitf_TREHandler_setField_set(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< _nitf_TREHandler * >(argp1);
   {
-    int res = SWIG_ConvertFunctionPtr(obj1, (void**)(&arg2), SWIGTYPE_p_f_p__nitf_TRE_p_q_const__char_p_void_size_t_p__NRT_Error__bool);
+    int res = SWIG_ConvertFunctionPtr(obj1, (void**)(&arg2), SWIGTYPE_p_f_p__nitf_TRE_p_q_const__char_p_q_const__void_size_t_p__NRT_Error__bool);
     if (!SWIG_IsOK(res)) {
       SWIG_exception_fail(SWIG_ArgError(res), "in method '" "nitf_TREHandler_setField_set" "', argument " "2"" of type '" "NITF_TRE_FIELD_SET""'"); 
     }
@@ -13321,7 +11417,7 @@ SWIGINTERN PyObject *_wrap_nitf_TREHandler_setField_get(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< _nitf_TREHandler * >(argp1);
   result = (NITF_TRE_FIELD_SET) ((arg1)->setField);
-  resultobj = SWIG_NewFunctionPtrObj((void *)(result), SWIGTYPE_p_f_p__nitf_TRE_p_q_const__char_p_void_size_t_p__NRT_Error__bool);
+  resultobj = SWIG_NewFunctionPtrObj((void *)(result), SWIGTYPE_p_f_p__nitf_TRE_p_q_const__char_p_q_const__void_size_t_p__NRT_Error__bool);
   return resultobj;
 fail:
   return NULL;
@@ -13966,7 +12062,7 @@ SWIGINTERN PyObject *_wrap_nitf_TRE_setField(PyObject *SWIGUNUSEDPARM(self), PyO
   arg2 = reinterpret_cast< char * >(buf2);
   res3 = SWIG_ConvertPtr(obj2,SWIG_as_voidptrptr(&arg3), 0, 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_TRE_setField" "', argument " "3"" of type '" "NITF_DATA *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_TRE_setField" "', argument " "3"" of type '" "NITF_DATA const *""'"); 
   }
   ecode4 = SWIG_AsVal_size_t(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
@@ -13978,7 +12074,7 @@ SWIGINTERN PyObject *_wrap_nitf_TRE_setField(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_TRE_setField" "', argument " "5"" of type '" "nitf_Error *""'"); 
   }
   arg5 = reinterpret_cast< nitf_Error * >(argp5);
-  result = (bool)nitf_TRE_setField(arg1,(char const *)arg2,arg3,arg4,arg5);
+  result = (bool)nitf_TRE_setField(arg1,(char const *)arg2,(void const *)arg3,arg4,arg5);
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
@@ -14854,7 +12950,7 @@ SWIGINTERN PyObject *_wrap_nitf_Extensions_computeLength(PyObject *SWIGUNUSEDPAR
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Extensions_computeLength",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Extensions, 0 |  0 );
@@ -15572,10 +13668,10 @@ SWIGINTERN PyObject *_wrap_nrt_HashTable_print(PyObject *SWIGUNUSEDPARM(self), P
   if (!PyArg_ParseTuple(args,(char *)"O:nrt_HashTable_print",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_HashTable, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_HashTable_print" "', argument " "1"" of type '" "nrt_HashTable *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_HashTable_print" "', argument " "1"" of type '" "nrt_HashTable const *""'"); 
   }
   arg1 = reinterpret_cast< nrt_HashTable * >(argp1);
-  nrt_HashTable_print(arg1);
+  nrt_HashTable_print((_NRT_HashTable const *)arg1);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -15882,13 +13978,12 @@ SWIGINTERN PyObject *_wrap_nrt_Pair_key_set(PyObject *SWIGUNUSEDPARM(self), PyOb
   arg1 = reinterpret_cast< _NRT_Pair * >(argp1);
   res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nrt_Pair_key_set" "', argument " "2"" of type '" "char *""'");
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nrt_Pair_key_set" "', argument " "2"" of type '" "char const *""'");
   }
   arg2 = reinterpret_cast< char * >(buf2);
-  if (arg1->key) delete[] arg1->key;
   if (arg2) {
-    size_t size = strlen(reinterpret_cast< const char * >(arg2)) + 1;
-    arg1->key = (char *)reinterpret_cast< char* >(memcpy(new char[size], reinterpret_cast< const char * >(arg2), sizeof(char)*(size)));
+    size_t size = strlen(reinterpret_cast< const char * >(reinterpret_cast< const char * >(arg2))) + 1;
+    arg1->key = (char const *)reinterpret_cast< char* >(memcpy(new char[size], arg2, sizeof(char)*(size)));
   } else {
     arg1->key = 0;
   }
@@ -17096,8 +15191,8 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_ImageWriter_setPadPixel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_ImageWriter *arg1 = (nitf_ImageWriter *) 0 ;
-  nitf_Uint8 *arg2 = (nitf_Uint8 *) 0 ;
-  nitf_Uint32 arg3 ;
+  uint8_t *arg2 = (uint8_t *) 0 ;
+  uint32_t arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -17119,11 +15214,11 @@ SWIGINTERN PyObject *_wrap_nitf_ImageWriter_setPadPixel(PyObject *SWIGUNUSEDPARM
   arg1 = reinterpret_cast< nitf_ImageWriter * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_uint8_t, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_ImageWriter_setPadPixel" "', argument " "2"" of type '" "nitf_Uint8 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_ImageWriter_setPadPixel" "', argument " "2"" of type '" "uint8_t *""'"); 
   }
-  arg2 = reinterpret_cast< nitf_Uint8 * >(argp2);
+  arg2 = reinterpret_cast< uint8_t * >(argp2);
   {
-    arg3 = (nitf_Uint32)PyInt_AsLong(obj2);
+    arg3 = (uint32_t)PyInt_AsLong(obj2);
   }
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
@@ -19115,7 +17210,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_ImageSegment_imageOffset_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_ImageSegment *arg1 = (_nitf_ImageSegment *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -19132,12 +17227,12 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSegment_imageOffset_set(PyObject *SWIGUNUSE
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_ImageSegment_imageOffset_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_ImageSegment_imageOffset_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_ImageSegment_imageOffset_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_ImageSegment_imageOffset_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -19156,7 +17251,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSegment_imageOffset_get(PyObject *SWIGUNUSE
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_ImageSegment_imageOffset_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_ImageSegment, 0 |  0 );
@@ -19165,7 +17260,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSegment_imageOffset_get(PyObject *SWIGUNUSE
   }
   arg1 = reinterpret_cast< _nitf_ImageSegment * >(argp1);
   result =  ((arg1)->imageOffset);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -19175,7 +17270,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_ImageSegment_imageEnd_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_ImageSegment *arg1 = (_nitf_ImageSegment *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -19192,12 +17287,12 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSegment_imageEnd_set(PyObject *SWIGUNUSEDPA
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_ImageSegment_imageEnd_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_ImageSegment_imageEnd_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_ImageSegment_imageEnd_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_ImageSegment_imageEnd_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -19216,7 +17311,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSegment_imageEnd_get(PyObject *SWIGUNUSEDPA
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_ImageSegment_imageEnd_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_ImageSegment, 0 |  0 );
@@ -19225,7 +17320,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSegment_imageEnd_get(PyObject *SWIGUNUSEDPA
   }
   arg1 = reinterpret_cast< _nitf_ImageSegment * >(argp1);
   result =  ((arg1)->imageEnd);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -21630,12 +19725,12 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_setPixelInformation(PyObject *SWI
   PyObject *resultobj = 0;
   nitf_ImageSubheader *arg1 = (nitf_ImageSubheader *) 0 ;
   char *arg2 = (char *) 0 ;
-  nitf_Uint32 arg3 ;
-  nitf_Uint32 arg4 ;
+  uint32_t arg3 ;
+  uint32_t arg4 ;
   char *arg5 = (char *) 0 ;
   char *arg6 = (char *) 0 ;
   char *arg7 = (char *) 0 ;
-  nitf_Uint32 arg8 ;
+  uint32_t arg8 ;
   nitf_BandInfo **arg9 = (nitf_BandInfo **) 0 ;
   nitf_Error *arg10 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
@@ -21680,10 +19775,10 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_setPixelInformation(PyObject *SWI
   }
   arg2 = reinterpret_cast< char * >(buf2);
   {
-    arg3 = (nitf_Uint32)PyInt_AsLong(obj2);
+    arg3 = (uint32_t)PyInt_AsLong(obj2);
   }
   {
-    arg4 = (nitf_Uint32)PyInt_AsLong(obj3);
+    arg4 = (uint32_t)PyInt_AsLong(obj3);
   }
   res5 = SWIG_AsCharPtrAndSize(obj4, &buf5, NULL, &alloc5);
   if (!SWIG_IsOK(res5)) {
@@ -21701,7 +19796,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_setPixelInformation(PyObject *SWI
   }
   arg7 = reinterpret_cast< char * >(buf7);
   {
-    arg8 = (nitf_Uint32)PyInt_AsLong(obj7);
+    arg8 = (uint32_t)PyInt_AsLong(obj7);
   }
   res9 = SWIG_ConvertPtr(obj8, &argp9,SWIGTYPE_p_p__nitf_BandInfo, 0 |  0 );
   if (!SWIG_IsOK(res9)) {
@@ -21739,7 +19834,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_getBandCount(PyObject *SWIGUNUSED
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:nitf_ImageSubheader_getBandCount",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_ImageSubheader, 0 |  0 );
@@ -21765,7 +19860,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_getBandInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_ImageSubheader *arg1 = (nitf_ImageSubheader *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -21783,7 +19878,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_getBandInfo(PyObject *SWIGUNUSEDP
   }
   arg1 = reinterpret_cast< nitf_ImageSubheader * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -21801,7 +19896,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_createBands(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_ImageSubheader *arg1 = (nitf_ImageSubheader *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -21819,7 +19914,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_createBands(PyObject *SWIGUNUSEDP
   }
   arg1 = reinterpret_cast< nitf_ImageSubheader * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -21837,7 +19932,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_removeBand(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_ImageSubheader *arg1 = (nitf_ImageSubheader *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -21855,7 +19950,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_removeBand(PyObject *SWIGUNUSEDPA
   }
   arg1 = reinterpret_cast< nitf_ImageSubheader * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -21873,8 +19968,8 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_getDimensions(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_ImageSubheader *arg1 = (nitf_ImageSubheader *) 0 ;
-  nitf_Uint32 *arg2 = (nitf_Uint32 *) 0 ;
-  nitf_Uint32 *arg3 = (nitf_Uint32 *) 0 ;
+  uint32_t *arg2 = (uint32_t *) 0 ;
+  uint32_t *arg3 = (uint32_t *) 0 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -21898,14 +19993,14 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_getDimensions(PyObject *SWIGUNUSE
   arg1 = reinterpret_cast< nitf_ImageSubheader * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_uint32_t, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_ImageSubheader_getDimensions" "', argument " "2"" of type '" "nitf_Uint32 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_ImageSubheader_getDimensions" "', argument " "2"" of type '" "uint32_t *""'"); 
   }
-  arg2 = reinterpret_cast< nitf_Uint32 * >(argp2);
+  arg2 = reinterpret_cast< uint32_t * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_uint32_t, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageSubheader_getDimensions" "', argument " "3"" of type '" "nitf_Uint32 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageSubheader_getDimensions" "', argument " "3"" of type '" "uint32_t *""'"); 
   }
-  arg3 = reinterpret_cast< nitf_Uint32 * >(argp3);
+  arg3 = reinterpret_cast< uint32_t * >(argp3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_ImageSubheader_getDimensions" "', argument " "4"" of type '" "nitf_Error *""'"); 
@@ -21922,12 +20017,12 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_getBlocking(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_ImageSubheader *arg1 = (nitf_ImageSubheader *) 0 ;
-  nitf_Uint32 *arg2 = (nitf_Uint32 *) 0 ;
-  nitf_Uint32 *arg3 = (nitf_Uint32 *) 0 ;
-  nitf_Uint32 *arg4 = (nitf_Uint32 *) 0 ;
-  nitf_Uint32 *arg5 = (nitf_Uint32 *) 0 ;
-  nitf_Uint32 *arg6 = (nitf_Uint32 *) 0 ;
-  nitf_Uint32 *arg7 = (nitf_Uint32 *) 0 ;
+  uint32_t *arg2 = (uint32_t *) 0 ;
+  uint32_t *arg3 = (uint32_t *) 0 ;
+  uint32_t *arg4 = (uint32_t *) 0 ;
+  uint32_t *arg5 = (uint32_t *) 0 ;
+  uint32_t *arg6 = (uint32_t *) 0 ;
+  uint32_t *arg7 = (uint32_t *) 0 ;
   char *arg8 = (char *) 0 ;
   nitf_Error *arg9 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
@@ -21968,34 +20063,34 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_getBlocking(PyObject *SWIGUNUSEDP
   arg1 = reinterpret_cast< nitf_ImageSubheader * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_uint32_t, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_ImageSubheader_getBlocking" "', argument " "2"" of type '" "nitf_Uint32 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_ImageSubheader_getBlocking" "', argument " "2"" of type '" "uint32_t *""'"); 
   }
-  arg2 = reinterpret_cast< nitf_Uint32 * >(argp2);
+  arg2 = reinterpret_cast< uint32_t * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_uint32_t, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageSubheader_getBlocking" "', argument " "3"" of type '" "nitf_Uint32 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageSubheader_getBlocking" "', argument " "3"" of type '" "uint32_t *""'"); 
   }
-  arg3 = reinterpret_cast< nitf_Uint32 * >(argp3);
+  arg3 = reinterpret_cast< uint32_t * >(argp3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_uint32_t, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_ImageSubheader_getBlocking" "', argument " "4"" of type '" "nitf_Uint32 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_ImageSubheader_getBlocking" "', argument " "4"" of type '" "uint32_t *""'"); 
   }
-  arg4 = reinterpret_cast< nitf_Uint32 * >(argp4);
+  arg4 = reinterpret_cast< uint32_t * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_uint32_t, 0 |  0 );
   if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_ImageSubheader_getBlocking" "', argument " "5"" of type '" "nitf_Uint32 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_ImageSubheader_getBlocking" "', argument " "5"" of type '" "uint32_t *""'"); 
   }
-  arg5 = reinterpret_cast< nitf_Uint32 * >(argp5);
+  arg5 = reinterpret_cast< uint32_t * >(argp5);
   res6 = SWIG_ConvertPtr(obj5, &argp6,SWIGTYPE_p_uint32_t, 0 |  0 );
   if (!SWIG_IsOK(res6)) {
-    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "nitf_ImageSubheader_getBlocking" "', argument " "6"" of type '" "nitf_Uint32 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "nitf_ImageSubheader_getBlocking" "', argument " "6"" of type '" "uint32_t *""'"); 
   }
-  arg6 = reinterpret_cast< nitf_Uint32 * >(argp6);
+  arg6 = reinterpret_cast< uint32_t * >(argp6);
   res7 = SWIG_ConvertPtr(obj6, &argp7,SWIGTYPE_p_uint32_t, 0 |  0 );
   if (!SWIG_IsOK(res7)) {
-    SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "nitf_ImageSubheader_getBlocking" "', argument " "7"" of type '" "nitf_Uint32 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "nitf_ImageSubheader_getBlocking" "', argument " "7"" of type '" "uint32_t *""'"); 
   }
-  arg7 = reinterpret_cast< nitf_Uint32 * >(argp7);
+  arg7 = reinterpret_cast< uint32_t * >(argp7);
   res8 = SWIG_AsCharPtrAndSize(obj7, &buf8, NULL, &alloc8);
   if (!SWIG_IsOK(res8)) {
     SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "nitf_ImageSubheader_getBlocking" "', argument " "8"" of type '" "char *""'");
@@ -22074,8 +20169,8 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_setDimensions(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_ImageSubheader *arg1 = (nitf_ImageSubheader *) 0 ;
-  nitf_Uint32 arg2 ;
-  nitf_Uint32 arg3 ;
+  uint32_t arg2 ;
+  uint32_t arg3 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -22094,10 +20189,10 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_setDimensions(PyObject *SWIGUNUSE
   }
   arg1 = reinterpret_cast< nitf_ImageSubheader * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   {
-    arg3 = (nitf_Uint32)PyInt_AsLong(obj2);
+    arg3 = (uint32_t)PyInt_AsLong(obj2);
   }
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
@@ -22145,7 +20240,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_setCornersFromLatLons(PyObject *S
   arg2 = static_cast< nitf_CornersType >(val2);
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_a_2__double, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageSubheader_setCornersFromLatLons" "', argument " "3"" of type '" "double [4][2]""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageSubheader_setCornersFromLatLons" "', argument " "3"" of type '" "double const [4][2]""'"); 
   } 
   arg3 = reinterpret_cast< double (*)[2] >(argp3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
@@ -22153,7 +20248,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_setCornersFromLatLons(PyObject *S
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_ImageSubheader_setCornersFromLatLons" "', argument " "4"" of type '" "nitf_Error *""'"); 
   }
   arg4 = reinterpret_cast< nitf_Error * >(argp4);
-  result = (bool)nitf_ImageSubheader_setCornersFromLatLons(arg1,arg2,(double (*)[2])arg3,arg4);
+  result = (bool)nitf_ImageSubheader_setCornersFromLatLons(arg1,arg2,(double const (*)[2])arg3,arg4);
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
@@ -22225,12 +20320,12 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_computeBlocking(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nitf_Uint32 arg1 ;
-  nitf_Uint32 arg2 ;
-  nitf_Uint32 *arg3 = (nitf_Uint32 *) 0 ;
-  nitf_Uint32 *arg4 = (nitf_Uint32 *) 0 ;
-  nitf_Uint32 *arg5 = (nitf_Uint32 *) 0 ;
-  nitf_Uint32 *arg6 = (nitf_Uint32 *) 0 ;
+  uint32_t arg1 ;
+  uint32_t arg2 ;
+  uint32_t *arg3 = (uint32_t *) 0 ;
+  uint32_t *arg4 = (uint32_t *) 0 ;
+  uint32_t *arg5 = (uint32_t *) 0 ;
+  uint32_t *arg6 = (uint32_t *) 0 ;
   void *argp3 = 0 ;
   int res3 = 0 ;
   void *argp4 = 0 ;
@@ -22248,31 +20343,31 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_computeBlocking(PyObject *SWIGUNU
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOOO:nitf_ImageSubheader_computeBlocking",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
   {
-    arg1 = (nitf_Uint32)PyInt_AsLong(obj0);
+    arg1 = (uint32_t)PyInt_AsLong(obj0);
   }
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_uint32_t, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageSubheader_computeBlocking" "', argument " "3"" of type '" "nitf_Uint32 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageSubheader_computeBlocking" "', argument " "3"" of type '" "uint32_t *""'"); 
   }
-  arg3 = reinterpret_cast< nitf_Uint32 * >(argp3);
+  arg3 = reinterpret_cast< uint32_t * >(argp3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_uint32_t, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_ImageSubheader_computeBlocking" "', argument " "4"" of type '" "nitf_Uint32 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_ImageSubheader_computeBlocking" "', argument " "4"" of type '" "uint32_t *""'"); 
   }
-  arg4 = reinterpret_cast< nitf_Uint32 * >(argp4);
+  arg4 = reinterpret_cast< uint32_t * >(argp4);
   res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_uint32_t, 0 |  0 );
   if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_ImageSubheader_computeBlocking" "', argument " "5"" of type '" "nitf_Uint32 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_ImageSubheader_computeBlocking" "', argument " "5"" of type '" "uint32_t *""'"); 
   }
-  arg5 = reinterpret_cast< nitf_Uint32 * >(argp5);
+  arg5 = reinterpret_cast< uint32_t * >(argp5);
   res6 = SWIG_ConvertPtr(obj5, &argp6,SWIGTYPE_p_uint32_t, 0 |  0 );
   if (!SWIG_IsOK(res6)) {
-    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "nitf_ImageSubheader_computeBlocking" "', argument " "6"" of type '" "nitf_Uint32 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "nitf_ImageSubheader_computeBlocking" "', argument " "6"" of type '" "uint32_t *""'"); 
   }
-  arg6 = reinterpret_cast< nitf_Uint32 * >(argp6);
+  arg6 = reinterpret_cast< uint32_t * >(argp6);
   nitf_ImageSubheader_computeBlocking(arg1,arg2,arg3,arg4,arg5,arg6);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -22284,10 +20379,10 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_setBlocking(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_ImageSubheader *arg1 = (nitf_ImageSubheader *) 0 ;
-  nitf_Uint32 arg2 ;
-  nitf_Uint32 arg3 ;
-  nitf_Uint32 arg4 ;
-  nitf_Uint32 arg5 ;
+  uint32_t arg2 ;
+  uint32_t arg3 ;
+  uint32_t arg4 ;
+  uint32_t arg5 ;
   char *arg6 = (char *) 0 ;
   nitf_Error *arg7 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
@@ -22313,16 +20408,16 @@ SWIGINTERN PyObject *_wrap_nitf_ImageSubheader_setBlocking(PyObject *SWIGUNUSEDP
   }
   arg1 = reinterpret_cast< nitf_ImageSubheader * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   {
-    arg3 = (nitf_Uint32)PyInt_AsLong(obj2);
+    arg3 = (uint32_t)PyInt_AsLong(obj2);
   }
   {
-    arg4 = (nitf_Uint32)PyInt_AsLong(obj3);
+    arg4 = (uint32_t)PyInt_AsLong(obj3);
   }
   {
-    arg5 = (nitf_Uint32)PyInt_AsLong(obj4);
+    arg5 = (uint32_t)PyInt_AsLong(obj4);
   }
   res6 = SWIG_AsCharPtrAndSize(obj5, &buf6, NULL, &alloc6);
   if (!SWIG_IsOK(res6)) {
@@ -22546,7 +20641,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_GraphicSegment_offset_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_GraphicSegment *arg1 = (_nitf_GraphicSegment *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -22563,12 +20658,12 @@ SWIGINTERN PyObject *_wrap_nitf_GraphicSegment_offset_set(PyObject *SWIGUNUSEDPA
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_GraphicSegment_offset_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_GraphicSegment_offset_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_GraphicSegment_offset_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_GraphicSegment_offset_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -22587,7 +20682,7 @@ SWIGINTERN PyObject *_wrap_nitf_GraphicSegment_offset_get(PyObject *SWIGUNUSEDPA
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_GraphicSegment_offset_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_GraphicSegment, 0 |  0 );
@@ -22596,7 +20691,7 @@ SWIGINTERN PyObject *_wrap_nitf_GraphicSegment_offset_get(PyObject *SWIGUNUSEDPA
   }
   arg1 = reinterpret_cast< _nitf_GraphicSegment * >(argp1);
   result =  ((arg1)->offset);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -22606,7 +20701,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_GraphicSegment_end_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_GraphicSegment *arg1 = (_nitf_GraphicSegment *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -22623,12 +20718,12 @@ SWIGINTERN PyObject *_wrap_nitf_GraphicSegment_end_set(PyObject *SWIGUNUSEDPARM(
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_GraphicSegment_end_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_GraphicSegment_end_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_GraphicSegment_end_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_GraphicSegment_end_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -22647,7 +20742,7 @@ SWIGINTERN PyObject *_wrap_nitf_GraphicSegment_end_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_GraphicSegment_end_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_GraphicSegment, 0 |  0 );
@@ -22656,7 +20751,7 @@ SWIGINTERN PyObject *_wrap_nitf_GraphicSegment_end_get(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< _nitf_GraphicSegment * >(argp1);
   result =  ((arg1)->end);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -23919,7 +22014,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_LabelSegment_offset_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_LabelSegment *arg1 = (_nitf_LabelSegment *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -23936,12 +22031,12 @@ SWIGINTERN PyObject *_wrap_nitf_LabelSegment_offset_set(PyObject *SWIGUNUSEDPARM
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_LabelSegment_offset_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_LabelSegment_offset_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_LabelSegment_offset_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_LabelSegment_offset_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -23960,7 +22055,7 @@ SWIGINTERN PyObject *_wrap_nitf_LabelSegment_offset_get(PyObject *SWIGUNUSEDPARM
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_LabelSegment_offset_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_LabelSegment, 0 |  0 );
@@ -23969,7 +22064,7 @@ SWIGINTERN PyObject *_wrap_nitf_LabelSegment_offset_get(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< _nitf_LabelSegment * >(argp1);
   result =  ((arg1)->offset);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -23979,7 +22074,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_LabelSegment_end_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_LabelSegment *arg1 = (_nitf_LabelSegment *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -23996,12 +22091,12 @@ SWIGINTERN PyObject *_wrap_nitf_LabelSegment_end_set(PyObject *SWIGUNUSEDPARM(se
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_LabelSegment_end_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_LabelSegment_end_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_LabelSegment_end_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_LabelSegment_end_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -24020,7 +22115,7 @@ SWIGINTERN PyObject *_wrap_nitf_LabelSegment_end_get(PyObject *SWIGUNUSEDPARM(se
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_LabelSegment_end_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_LabelSegment, 0 |  0 );
@@ -24029,7 +22124,7 @@ SWIGINTERN PyObject *_wrap_nitf_LabelSegment_end_get(PyObject *SWIGUNUSEDPARM(se
   }
   arg1 = reinterpret_cast< _nitf_LabelSegment * >(argp1);
   result =  ((arg1)->end);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -25240,7 +23335,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_TextSegment_offset_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_TextSegment *arg1 = (_nitf_TextSegment *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -25257,12 +23352,12 @@ SWIGINTERN PyObject *_wrap_nitf_TextSegment_offset_set(PyObject *SWIGUNUSEDPARM(
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_TextSegment_offset_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_TextSegment_offset_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_TextSegment_offset_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_TextSegment_offset_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -25281,7 +23376,7 @@ SWIGINTERN PyObject *_wrap_nitf_TextSegment_offset_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_TextSegment_offset_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_TextSegment, 0 |  0 );
@@ -25290,7 +23385,7 @@ SWIGINTERN PyObject *_wrap_nitf_TextSegment_offset_get(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< _nitf_TextSegment * >(argp1);
   result =  ((arg1)->offset);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -25300,7 +23395,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_TextSegment_end_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_TextSegment *arg1 = (_nitf_TextSegment *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -25317,12 +23412,12 @@ SWIGINTERN PyObject *_wrap_nitf_TextSegment_end_set(PyObject *SWIGUNUSEDPARM(sel
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_TextSegment_end_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_TextSegment_end_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_TextSegment_end_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_TextSegment_end_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -25341,7 +23436,7 @@ SWIGINTERN PyObject *_wrap_nitf_TextSegment_end_get(PyObject *SWIGUNUSEDPARM(sel
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_TextSegment_end_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_TextSegment, 0 |  0 );
@@ -25350,7 +23445,7 @@ SWIGINTERN PyObject *_wrap_nitf_TextSegment_end_get(PyObject *SWIGUNUSEDPARM(sel
   }
   arg1 = reinterpret_cast< _nitf_TextSegment * >(argp1);
   result =  ((arg1)->end);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -26240,7 +24335,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_DESegment_offset_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_DESegment *arg1 = (_nitf_DESegment *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -26257,12 +24352,12 @@ SWIGINTERN PyObject *_wrap_nitf_DESegment_offset_set(PyObject *SWIGUNUSEDPARM(se
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_DESegment_offset_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_DESegment_offset_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_DESegment_offset_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_DESegment_offset_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -26281,7 +24376,7 @@ SWIGINTERN PyObject *_wrap_nitf_DESegment_offset_get(PyObject *SWIGUNUSEDPARM(se
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_DESegment_offset_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_DESegment, 0 |  0 );
@@ -26290,7 +24385,7 @@ SWIGINTERN PyObject *_wrap_nitf_DESegment_offset_get(PyObject *SWIGUNUSEDPARM(se
   }
   arg1 = reinterpret_cast< _nitf_DESegment * >(argp1);
   result =  ((arg1)->offset);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -26300,7 +24395,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_DESegment_end_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_DESegment *arg1 = (_nitf_DESegment *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -26317,12 +24412,12 @@ SWIGINTERN PyObject *_wrap_nitf_DESegment_end_set(PyObject *SWIGUNUSEDPARM(self)
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_DESegment_end_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_DESegment_end_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_DESegment_end_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_DESegment_end_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -26341,7 +24436,7 @@ SWIGINTERN PyObject *_wrap_nitf_DESegment_end_get(PyObject *SWIGUNUSEDPARM(self)
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_DESegment_end_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_DESegment, 0 |  0 );
@@ -26350,7 +24445,7 @@ SWIGINTERN PyObject *_wrap_nitf_DESegment_end_get(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< _nitf_DESegment * >(argp1);
   result =  ((arg1)->end);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -26930,7 +25025,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_DESubheader_dataLength_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_DESubheader *arg1 = (_nitf_DESubheader *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -26947,12 +25042,12 @@ SWIGINTERN PyObject *_wrap_nitf_DESubheader_dataLength_set(PyObject *SWIGUNUSEDP
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_DESubheader_dataLength_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_DESubheader_dataLength_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_DESubheader_dataLength_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_DESubheader_dataLength_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -26971,7 +25066,7 @@ SWIGINTERN PyObject *_wrap_nitf_DESubheader_dataLength_get(PyObject *SWIGUNUSEDP
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_DESubheader_dataLength_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_DESubheader, 0 |  0 );
@@ -26980,7 +25075,7 @@ SWIGINTERN PyObject *_wrap_nitf_DESubheader_dataLength_get(PyObject *SWIGUNUSEDP
   }
   arg1 = reinterpret_cast< _nitf_DESubheader * >(argp1);
   result =  ((arg1)->dataLength);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -27196,7 +25291,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_RESegment_offset_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_RESegment *arg1 = (_nitf_RESegment *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -27213,12 +25308,12 @@ SWIGINTERN PyObject *_wrap_nitf_RESegment_offset_set(PyObject *SWIGUNUSEDPARM(se
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_RESegment_offset_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_RESegment_offset_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_RESegment_offset_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_RESegment_offset_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -27237,7 +25332,7 @@ SWIGINTERN PyObject *_wrap_nitf_RESegment_offset_get(PyObject *SWIGUNUSEDPARM(se
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_RESegment_offset_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_RESegment, 0 |  0 );
@@ -27246,7 +25341,7 @@ SWIGINTERN PyObject *_wrap_nitf_RESegment_offset_get(PyObject *SWIGUNUSEDPARM(se
   }
   arg1 = reinterpret_cast< _nitf_RESegment * >(argp1);
   result =  ((arg1)->offset);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -27256,7 +25351,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_RESegment_end_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_RESegment *arg1 = (_nitf_RESegment *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -27273,12 +25368,12 @@ SWIGINTERN PyObject *_wrap_nitf_RESegment_end_set(PyObject *SWIGUNUSEDPARM(self)
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_RESegment_end_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_RESegment_end_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_RESegment_end_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_RESegment_end_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -27297,7 +25392,7 @@ SWIGINTERN PyObject *_wrap_nitf_RESegment_end_get(PyObject *SWIGUNUSEDPARM(self)
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_RESegment_end_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_RESegment, 0 |  0 );
@@ -27306,7 +25401,7 @@ SWIGINTERN PyObject *_wrap_nitf_RESegment_end_get(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< _nitf_RESegment * >(argp1);
   result =  ((arg1)->end);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -27852,7 +25947,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_RESubheader_dataLength_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_RESubheader *arg1 = (_nitf_RESubheader *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -27869,12 +25964,12 @@ SWIGINTERN PyObject *_wrap_nitf_RESubheader_dataLength_set(PyObject *SWIGUNUSEDP
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_RESubheader_dataLength_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_RESubheader_dataLength_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_RESubheader_dataLength_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_RESubheader_dataLength_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -27893,7 +25988,7 @@ SWIGINTERN PyObject *_wrap_nitf_RESubheader_dataLength_get(PyObject *SWIGUNUSEDP
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_RESubheader_dataLength_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_RESubheader, 0 |  0 );
@@ -27902,7 +25997,7 @@ SWIGINTERN PyObject *_wrap_nitf_RESubheader_dataLength_get(PyObject *SWIGUNUSEDP
   }
   arg1 = reinterpret_cast< _nitf_RESubheader * >(argp1);
   result =  ((arg1)->dataLength);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -28145,8 +26240,8 @@ SWIGINTERN PyObject *nitf_ComponentInfo_swigregister(PyObject *SWIGUNUSEDPARM(se
 
 SWIGINTERN PyObject *_wrap_nitf_ComponentInfo_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nitf_Uint32 arg1 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg1 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp3 = 0 ;
   int res3 = 0 ;
@@ -28157,10 +26252,10 @@ SWIGINTERN PyObject *_wrap_nitf_ComponentInfo_construct(PyObject *SWIGUNUSEDPARM
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_ComponentInfo_construct",&obj0,&obj1,&obj2)) SWIG_fail;
   {
-    arg1 = (nitf_Uint32)PyInt_AsLong(obj0);
+    arg1 = (uint32_t)PyInt_AsLong(obj0);
   }
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -28446,7 +26541,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageReader_read(PyObject *SWIGUNUSEDPARM(self),
   PyObject *resultobj = 0;
   nitf_ImageReader *arg1 = (nitf_ImageReader *) 0 ;
   nitf_SubWindow *arg2 = (nitf_SubWindow *) 0 ;
-  nitf_Uint8 **arg3 = (nitf_Uint8 **) 0 ;
+  uint8_t **arg3 = (uint8_t **) 0 ;
   int *arg4 = (int *) 0 ;
   nitf_Error *arg5 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
@@ -28479,9 +26574,9 @@ SWIGINTERN PyObject *_wrap_nitf_ImageReader_read(PyObject *SWIGUNUSEDPARM(self),
   arg2 = reinterpret_cast< nitf_SubWindow * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_p_uint8_t, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageReader_read" "', argument " "3"" of type '" "nitf_Uint8 **""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageReader_read" "', argument " "3"" of type '" "uint8_t **""'"); 
   }
-  arg3 = reinterpret_cast< nitf_Uint8 ** >(argp3);
+  arg3 = reinterpret_cast< uint8_t ** >(argp3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_int, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_ImageReader_read" "', argument " "4"" of type '" "int *""'"); 
@@ -28503,8 +26598,8 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_ImageReader_readBlock(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_ImageReader *arg1 = (nitf_ImageReader *) 0 ;
-  nitf_Uint32 arg2 ;
-  nitf_Uint64 *arg3 = (nitf_Uint64 *) 0 ;
+  uint32_t arg2 ;
+  uint64_t *arg3 = (uint64_t *) 0 ;
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -28516,7 +26611,7 @@ SWIGINTERN PyObject *_wrap_nitf_ImageReader_readBlock(PyObject *SWIGUNUSEDPARM(s
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  nitf_Uint8 *result = 0 ;
+  uint8_t *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_ImageReader_readBlock",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_ImageReader, 0 |  0 );
@@ -28525,19 +26620,19 @@ SWIGINTERN PyObject *_wrap_nitf_ImageReader_readBlock(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< nitf_ImageReader * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_uint64_t, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageReader_readBlock" "', argument " "3"" of type '" "nitf_Uint64 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_ImageReader_readBlock" "', argument " "3"" of type '" "uint64_t *""'"); 
   }
-  arg3 = reinterpret_cast< nitf_Uint64 * >(argp3);
+  arg3 = reinterpret_cast< uint64_t * >(argp3);
   res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_ImageReader_readBlock" "', argument " "4"" of type '" "nitf_Error *""'"); 
   }
   arg4 = reinterpret_cast< nitf_Error * >(argp4);
-  result = (nitf_Uint8 *)nitf_ImageReader_readBlock(arg1,arg2,arg3,arg4);
+  result = (uint8_t *)nitf_ImageReader_readBlock(arg1,arg2,arg3,arg4);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_uint8_t, 0 |  0 );
   return resultobj;
 fail:
@@ -28643,7 +26738,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_SegmentReader_dataLength_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_SegmentReader *arg1 = (_nitf_SegmentReader *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -28656,7 +26751,7 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentReader_dataLength_set(PyObject *SWIGUNUSE
   }
   arg1 = reinterpret_cast< _nitf_SegmentReader * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   if (arg1) (arg1)->dataLength = arg2;
   resultobj = SWIG_Py_Void();
@@ -28672,7 +26767,7 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentReader_dataLength_get(PyObject *SWIGUNUSE
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_SegmentReader_dataLength_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_SegmentReader, 0 |  0 );
@@ -28693,7 +26788,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_SegmentReader_baseOffset_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_SegmentReader *arg1 = (_nitf_SegmentReader *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -28710,12 +26805,12 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentReader_baseOffset_set(PyObject *SWIGUNUSE
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_SegmentReader_baseOffset_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_SegmentReader_baseOffset_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_SegmentReader_baseOffset_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_SegmentReader_baseOffset_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -28734,7 +26829,7 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentReader_baseOffset_get(PyObject *SWIGUNUSE
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_SegmentReader_baseOffset_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_SegmentReader, 0 |  0 );
@@ -28743,7 +26838,7 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentReader_baseOffset_get(PyObject *SWIGUNUSE
   }
   arg1 = reinterpret_cast< _nitf_SegmentReader * >(argp1);
   result =  ((arg1)->baseOffset);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -28753,7 +26848,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_SegmentReader_virtualOffset_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_SegmentReader *arg1 = (_nitf_SegmentReader *) 0 ;
-  nitf_Uint64 arg2 ;
+  uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -28770,12 +26865,12 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentReader_virtualOffset_set(PyObject *SWIGUN
   {
     res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_SegmentReader_virtualOffset_set" "', argument " "2"" of type '" "nitf_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_SegmentReader_virtualOffset_set" "', argument " "2"" of type '" "uint64_t""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_SegmentReader_virtualOffset_set" "', argument " "2"" of type '" "nitf_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_SegmentReader_virtualOffset_set" "', argument " "2"" of type '" "uint64_t""'");
     } else {
-      nitf_Uint64 * temp = reinterpret_cast< nitf_Uint64 * >(argp2);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
       arg2 = *temp;
       if (SWIG_IsNewObj(res2)) delete temp;
     }
@@ -28794,7 +26889,7 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentReader_virtualOffset_get(PyObject *SWIGUN
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_SegmentReader_virtualOffset_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_SegmentReader, 0 |  0 );
@@ -28803,7 +26898,7 @@ SWIGINTERN PyObject *_wrap_nitf_SegmentReader_virtualOffset_get(PyObject *SWIGUN
   }
   arg1 = reinterpret_cast< _nitf_SegmentReader * >(argp1);
   result =  ((arg1)->virtualOffset);
-  resultobj = SWIG_NewPointerObj((new nitf_Uint64(static_cast< const nitf_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -29085,7 +27180,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_SubWindow_startRow_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_SubWindow *arg1 = (_nitf_SubWindow *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -29098,7 +27193,7 @@ SWIGINTERN PyObject *_wrap_nitf_SubWindow_startRow_set(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< _nitf_SubWindow * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   if (arg1) (arg1)->startRow = arg2;
   resultobj = SWIG_Py_Void();
@@ -29114,7 +27209,7 @@ SWIGINTERN PyObject *_wrap_nitf_SubWindow_startRow_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_SubWindow_startRow_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_SubWindow, 0 |  0 );
@@ -29135,7 +27230,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_SubWindow_startCol_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_SubWindow *arg1 = (_nitf_SubWindow *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -29148,7 +27243,7 @@ SWIGINTERN PyObject *_wrap_nitf_SubWindow_startCol_set(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< _nitf_SubWindow * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   if (arg1) (arg1)->startCol = arg2;
   resultobj = SWIG_Py_Void();
@@ -29164,7 +27259,7 @@ SWIGINTERN PyObject *_wrap_nitf_SubWindow_startCol_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_SubWindow_startCol_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_SubWindow, 0 |  0 );
@@ -29185,7 +27280,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_SubWindow_numRows_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_SubWindow *arg1 = (_nitf_SubWindow *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -29198,7 +27293,7 @@ SWIGINTERN PyObject *_wrap_nitf_SubWindow_numRows_set(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< _nitf_SubWindow * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   if (arg1) (arg1)->numRows = arg2;
   resultobj = SWIG_Py_Void();
@@ -29214,7 +27309,7 @@ SWIGINTERN PyObject *_wrap_nitf_SubWindow_numRows_get(PyObject *SWIGUNUSEDPARM(s
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_SubWindow_numRows_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_SubWindow, 0 |  0 );
@@ -29235,7 +27330,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_SubWindow_numCols_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_SubWindow *arg1 = (_nitf_SubWindow *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -29248,7 +27343,7 @@ SWIGINTERN PyObject *_wrap_nitf_SubWindow_numCols_set(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< _nitf_SubWindow * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   if (arg1) (arg1)->numCols = arg2;
   resultobj = SWIG_Py_Void();
@@ -29264,7 +27359,7 @@ SWIGINTERN PyObject *_wrap_nitf_SubWindow_numCols_get(PyObject *SWIGUNUSEDPARM(s
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_SubWindow_numCols_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_SubWindow, 0 |  0 );
@@ -29285,7 +27380,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_SubWindow_bandList_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_SubWindow *arg1 = (_nitf_SubWindow *) 0 ;
-  nitf_Uint32 *arg2 = (nitf_Uint32 *) 0 ;
+  uint32_t *arg2 = (uint32_t *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -29301,9 +27396,9 @@ SWIGINTERN PyObject *_wrap_nitf_SubWindow_bandList_set(PyObject *SWIGUNUSEDPARM(
   arg1 = reinterpret_cast< _nitf_SubWindow * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_uint32_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_SubWindow_bandList_set" "', argument " "2"" of type '" "nitf_Uint32 *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_SubWindow_bandList_set" "', argument " "2"" of type '" "uint32_t *""'"); 
   }
-  arg2 = reinterpret_cast< nitf_Uint32 * >(argp2);
+  arg2 = reinterpret_cast< uint32_t * >(argp2);
   if (arg1) (arg1)->bandList = arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -29318,7 +27413,7 @@ SWIGINTERN PyObject *_wrap_nitf_SubWindow_bandList_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint32 *result = 0 ;
+  uint32_t *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_SubWindow_bandList_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_SubWindow, 0 |  0 );
@@ -29326,7 +27421,7 @@ SWIGINTERN PyObject *_wrap_nitf_SubWindow_bandList_get(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_SubWindow_bandList_get" "', argument " "1"" of type '" "_nitf_SubWindow *""'"); 
   }
   arg1 = reinterpret_cast< _nitf_SubWindow * >(argp1);
-  result = (nitf_Uint32 *) ((arg1)->bandList);
+  result = (uint32_t *) ((arg1)->bandList);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_uint32_t, 0 |  0 );
   return resultobj;
 fail:
@@ -29337,7 +27432,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_SubWindow_numBands_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_SubWindow *arg1 = (_nitf_SubWindow *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -29350,7 +27445,7 @@ SWIGINTERN PyObject *_wrap_nitf_SubWindow_numBands_set(PyObject *SWIGUNUSEDPARM(
   }
   arg1 = reinterpret_cast< _nitf_SubWindow * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   if (arg1) (arg1)->numBands = arg2;
   resultobj = SWIG_Py_Void();
@@ -29366,7 +27461,7 @@ SWIGINTERN PyObject *_wrap_nitf_SubWindow_numBands_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_SubWindow_numBands_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_SubWindow, 0 |  0 );
@@ -29732,7 +27827,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_DownSampler_rowSkip_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_DownSampler *arg1 = (_nitf_DownSampler *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -29745,7 +27840,7 @@ SWIGINTERN PyObject *_wrap_nitf_DownSampler_rowSkip_set(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< _nitf_DownSampler * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   if (arg1) (arg1)->rowSkip = arg2;
   resultobj = SWIG_Py_Void();
@@ -29761,7 +27856,7 @@ SWIGINTERN PyObject *_wrap_nitf_DownSampler_rowSkip_get(PyObject *SWIGUNUSEDPARM
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_DownSampler_rowSkip_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_DownSampler, 0 |  0 );
@@ -29782,7 +27877,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_DownSampler_colSkip_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_DownSampler *arg1 = (_nitf_DownSampler *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -29795,7 +27890,7 @@ SWIGINTERN PyObject *_wrap_nitf_DownSampler_colSkip_set(PyObject *SWIGUNUSEDPARM
   }
   arg1 = reinterpret_cast< _nitf_DownSampler * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   if (arg1) (arg1)->colSkip = arg2;
   resultobj = SWIG_Py_Void();
@@ -29811,7 +27906,7 @@ SWIGINTERN PyObject *_wrap_nitf_DownSampler_colSkip_get(PyObject *SWIGUNUSEDPARM
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_DownSampler_colSkip_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_DownSampler, 0 |  0 );
@@ -29884,7 +27979,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_DownSampler_minBands_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_DownSampler *arg1 = (_nitf_DownSampler *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -29897,7 +27992,7 @@ SWIGINTERN PyObject *_wrap_nitf_DownSampler_minBands_set(PyObject *SWIGUNUSEDPAR
   }
   arg1 = reinterpret_cast< _nitf_DownSampler * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   if (arg1) (arg1)->minBands = arg2;
   resultobj = SWIG_Py_Void();
@@ -29913,7 +28008,7 @@ SWIGINTERN PyObject *_wrap_nitf_DownSampler_minBands_get(PyObject *SWIGUNUSEDPAR
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_DownSampler_minBands_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_DownSampler, 0 |  0 );
@@ -29934,7 +28029,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_DownSampler_maxBands_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_DownSampler *arg1 = (_nitf_DownSampler *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -29947,7 +28042,7 @@ SWIGINTERN PyObject *_wrap_nitf_DownSampler_maxBands_set(PyObject *SWIGUNUSEDPAR
   }
   arg1 = reinterpret_cast< _nitf_DownSampler * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   if (arg1) (arg1)->maxBands = arg2;
   resultobj = SWIG_Py_Void();
@@ -29963,7 +28058,7 @@ SWIGINTERN PyObject *_wrap_nitf_DownSampler_maxBands_get(PyObject *SWIGUNUSEDPAR
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_DownSampler_maxBands_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_DownSampler, 0 |  0 );
@@ -29984,7 +28079,7 @@ fail:
 SWIGINTERN PyObject *_wrap_nitf_DownSampler_types_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   _nitf_DownSampler *arg1 = (_nitf_DownSampler *) 0 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -29997,7 +28092,7 @@ SWIGINTERN PyObject *_wrap_nitf_DownSampler_types_set(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< _nitf_DownSampler * >(argp1);
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   if (arg1) (arg1)->types = arg2;
   resultobj = SWIG_Py_Void();
@@ -30013,7 +28108,7 @@ SWIGINTERN PyObject *_wrap_nitf_DownSampler_types_get(PyObject *SWIGUNUSEDPARM(s
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nitf_DownSampler_types_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_DownSampler, 0 |  0 );
@@ -30111,8 +28206,8 @@ SWIGINTERN PyObject *nitf_DownSampler_swigregister(PyObject *SWIGUNUSEDPARM(self
 
 SWIGINTERN PyObject *_wrap_nitf_PixelSkip_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nitf_Uint32 arg1 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg1 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp3 = 0 ;
   int res3 = 0 ;
@@ -30123,10 +28218,10 @@ SWIGINTERN PyObject *_wrap_nitf_PixelSkip_construct(PyObject *SWIGUNUSEDPARM(sel
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_PixelSkip_construct",&obj0,&obj1,&obj2)) SWIG_fail;
   {
-    arg1 = (nitf_Uint32)PyInt_AsLong(obj0);
+    arg1 = (uint32_t)PyInt_AsLong(obj0);
   }
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -30143,8 +28238,8 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nitf_MaxDownSample_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nitf_Uint32 arg1 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg1 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp3 = 0 ;
   int res3 = 0 ;
@@ -30155,10 +28250,10 @@ SWIGINTERN PyObject *_wrap_nitf_MaxDownSample_construct(PyObject *SWIGUNUSEDPARM
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_MaxDownSample_construct",&obj0,&obj1,&obj2)) SWIG_fail;
   {
-    arg1 = (nitf_Uint32)PyInt_AsLong(obj0);
+    arg1 = (uint32_t)PyInt_AsLong(obj0);
   }
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -30175,8 +28270,8 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nitf_SumSq2DownSample_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nitf_Uint32 arg1 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg1 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp3 = 0 ;
   int res3 = 0 ;
@@ -30187,10 +28282,10 @@ SWIGINTERN PyObject *_wrap_nitf_SumSq2DownSample_construct(PyObject *SWIGUNUSEDP
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_SumSq2DownSample_construct",&obj0,&obj1,&obj2)) SWIG_fail;
   {
-    arg1 = (nitf_Uint32)PyInt_AsLong(obj0);
+    arg1 = (uint32_t)PyInt_AsLong(obj0);
   }
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -30207,8 +28302,8 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nitf_Select2DownSample_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nitf_Uint32 arg1 ;
-  nitf_Uint32 arg2 ;
+  uint32_t arg1 ;
+  uint32_t arg2 ;
   nitf_Error *arg3 = (nitf_Error *) 0 ;
   void *argp3 = 0 ;
   int res3 = 0 ;
@@ -30219,10 +28314,10 @@ SWIGINTERN PyObject *_wrap_nitf_Select2DownSample_construct(PyObject *SWIGUNUSED
   
   if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Select2DownSample_construct",&obj0,&obj1,&obj2)) SWIG_fail;
   {
-    arg1 = (nitf_Uint32)PyInt_AsLong(obj0);
+    arg1 = (uint32_t)PyInt_AsLong(obj0);
   }
   {
-    arg2 = (nitf_Uint32)PyInt_AsLong(obj1);
+    arg2 = (uint32_t)PyInt_AsLong(obj1);
   }
   res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
   if (!SWIG_IsOK(res3)) {
@@ -30918,8 +29013,8 @@ SWIGINTERN PyObject *_wrap_nitf_BandInfo_init(PyObject *SWIGUNUSEDPARM(self), Py
   char *arg3 = (char *) 0 ;
   char *arg4 = (char *) 0 ;
   char *arg5 = (char *) 0 ;
-  nitf_Uint32 arg6 ;
-  nitf_Uint32 arg7 ;
+  uint32_t arg6 ;
+  uint32_t arg7 ;
   nitf_LookupTable *arg8 = (nitf_LookupTable *) 0 ;
   nitf_Error *arg9 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
@@ -30978,10 +29073,10 @@ SWIGINTERN PyObject *_wrap_nitf_BandInfo_init(PyObject *SWIGUNUSEDPARM(self), Py
   }
   arg5 = reinterpret_cast< char * >(buf5);
   {
-    arg6 = (nitf_Uint32)PyInt_AsLong(obj5);
+    arg6 = (uint32_t)PyInt_AsLong(obj5);
   }
   {
-    arg7 = (nitf_Uint32)PyInt_AsLong(obj6);
+    arg7 = (uint32_t)PyInt_AsLong(obj6);
   }
   res8 = SWIG_ConvertPtr(obj7, &argp8,SWIGTYPE_p_nitf_LookupTable, 0 |  0 );
   if (!SWIG_IsOK(res8)) {
@@ -31005,6 +29100,2022 @@ fail:
   if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
   if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
   if (alloc5 == SWIG_NEWOBJ) delete[] buf5;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_warningList_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  nitf_List *arg2 = (nitf_List *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_warningList_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_warningList_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_nrt_List, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_warningList_set" "', argument " "2"" of type '" "nitf_List *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_List * >(argp2);
+  if (arg1) (arg1)->warningList = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_warningList_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_List *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_warningList_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_warningList_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  result = (nitf_List *) ((arg1)->warningList);
+  {
+    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+      iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
+        nitf_Field *thisObj=                  (nitf_Field *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p__nitf_Field, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
+      }      
+    } 
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_imageWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  nitf_WriteHandler **arg2 = (nitf_WriteHandler **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_imageWriters_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_imageWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_imageWriters_set" "', argument " "2"" of type '" "nitf_WriteHandler **""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_WriteHandler ** >(argp2);
+  if (arg1) (arg1)->imageWriters = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_imageWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_WriteHandler **result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_imageWriters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_imageWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  result = (nitf_WriteHandler **) ((arg1)->imageWriters);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_textWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  nitf_WriteHandler **arg2 = (nitf_WriteHandler **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_textWriters_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_textWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_textWriters_set" "', argument " "2"" of type '" "nitf_WriteHandler **""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_WriteHandler ** >(argp2);
+  if (arg1) (arg1)->textWriters = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_textWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_WriteHandler **result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_textWriters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_textWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  result = (nitf_WriteHandler **) ((arg1)->textWriters);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_graphicWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  nitf_WriteHandler **arg2 = (nitf_WriteHandler **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_graphicWriters_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_graphicWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_graphicWriters_set" "', argument " "2"" of type '" "nitf_WriteHandler **""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_WriteHandler ** >(argp2);
+  if (arg1) (arg1)->graphicWriters = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_graphicWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_WriteHandler **result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_graphicWriters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_graphicWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  result = (nitf_WriteHandler **) ((arg1)->graphicWriters);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_dataExtensionWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  nitf_WriteHandler **arg2 = (nitf_WriteHandler **) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_dataExtensionWriters_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_dataExtensionWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_dataExtensionWriters_set" "', argument " "2"" of type '" "nitf_WriteHandler **""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_WriteHandler ** >(argp2);
+  if (arg1) (arg1)->dataExtensionWriters = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_dataExtensionWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_WriteHandler **result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_dataExtensionWriters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_dataExtensionWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  result = (nitf_WriteHandler **) ((arg1)->dataExtensionWriters);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_p_nitf_WriteHandler, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_output_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  nitf_IOInterface *arg2 = (nitf_IOInterface *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_output_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_output_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_IOInterface, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_output_set" "', argument " "2"" of type '" "nitf_IOInterface *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_IOInterface * >(argp2);
+  if (arg1) (arg1)->output = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_output_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_IOInterface *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_output_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_output_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  result = (nitf_IOInterface *) ((arg1)->output);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_record_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  nitf_Record *arg2 = (nitf_Record *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_record_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_record_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Record, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_record_set" "', argument " "2"" of type '" "nitf_Record *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_Record * >(argp2);
+  if (arg1) (arg1)->record = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_record_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Record *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_record_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_record_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  result = (nitf_Record *) ((arg1)->record);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Record, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_numImageWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_numImageWriters_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numImageWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_numImageWriters_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  if (arg1) (arg1)->numImageWriters = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_numImageWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_numImageWriters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numImageWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  result = (int) ((arg1)->numImageWriters);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_numTextWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_numTextWriters_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numTextWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_numTextWriters_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  if (arg1) (arg1)->numTextWriters = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_numTextWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_numTextWriters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numTextWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  result = (int) ((arg1)->numTextWriters);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_numGraphicWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_numGraphicWriters_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numGraphicWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_numGraphicWriters_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  if (arg1) (arg1)->numGraphicWriters = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_numGraphicWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_numGraphicWriters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numGraphicWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  result = (int) ((arg1)->numGraphicWriters);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_numDataExtensionWriters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_numDataExtensionWriters_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numDataExtensionWriters_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_numDataExtensionWriters_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  if (arg1) (arg1)->numDataExtensionWriters = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_numDataExtensionWriters_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_numDataExtensionWriters_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_numDataExtensionWriters_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  result = (int) ((arg1)->numDataExtensionWriters);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_ownOutput_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_ownOutput_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_ownOutput_set" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_ownOutput_set" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  if (arg1) (arg1)->ownOutput = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_ownOutput_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_ownOutput_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_ownOutput_get" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  result = (bool) ((arg1)->ownOutput);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_nitf_Writer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Writer *arg1 = (_nitf_Writer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_nitf_Writer",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_nitf_Writer" "', argument " "1"" of type '" "_nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Writer * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *nitf_Writer_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p__nitf_Writer, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Error *arg1 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Writer *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_construct",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_construct" "', argument " "1"" of type '" "nitf_Error *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Error * >(argp1);
+  result = (nitf_Writer *)nitf_Writer_construct(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_destruct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer **arg1 = (nitf_Writer **) 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Writer_destruct",&obj0)) SWIG_fail;
+  {
+    if (obj0)
+    {
+      nitf_Writer* temp = 0;
+      if (SWIG_ConvertPtr(obj0, (void**)&temp,SWIGTYPE_p__nitf_Writer, 0 |  0 ) != -1 && temp)
+      arg1 = (nitf_Writer**)&temp;
+    }
+  }
+  nitf_Writer_destruct(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_prepare(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  nitf_Record *arg2 = (nitf_Record *) 0 ;
+  nitf_IOHandle arg3 ;
+  nitf_Error *arg4 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_prepare",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_prepare" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Record, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_prepare" "', argument " "2"" of type '" "nitf_Record *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_Record * >(argp2);
+  {
+    if (obj2)
+    {
+#ifdef SWIGWIN
+      arg3 = (nrt_IOHandle) PyLong_AsUnsignedLongLongMask(obj2);
+#else
+      arg3 = (nrt_IOHandle) PyInt_AsLong(obj2);
+#endif
+    }
+  }
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_prepare" "', argument " "4"" of type '" "nitf_Error *""'"); 
+  }
+  arg4 = reinterpret_cast< nitf_Error * >(argp4);
+  result = (bool)nitf_Writer_prepare(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_prepareIO(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  nitf_Record *arg2 = (nitf_Record *) 0 ;
+  nitf_IOInterface *arg3 = (nitf_IOInterface *) 0 ;
+  nitf_Error *arg4 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_prepareIO",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_prepareIO" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Record, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_prepareIO" "', argument " "2"" of type '" "nitf_Record *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_Record * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_prepareIO" "', argument " "3"" of type '" "nitf_IOInterface *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_IOInterface * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_prepareIO" "', argument " "4"" of type '" "nitf_Error *""'"); 
+  }
+  arg4 = reinterpret_cast< nitf_Error * >(argp4);
+  result = (bool)nitf_Writer_prepareIO(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_setImageWriteHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  int arg2 ;
+  nitf_WriteHandler *arg3 = (nitf_WriteHandler *) 0 ;
+  nitf_Error *arg4 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_setImageWriteHandler",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_setImageWriteHandler" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_setImageWriteHandler" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_setImageWriteHandler" "', argument " "3"" of type '" "nitf_WriteHandler *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_WriteHandler * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_setImageWriteHandler" "', argument " "4"" of type '" "nitf_Error *""'"); 
+  }
+  arg4 = reinterpret_cast< nitf_Error * >(argp4);
+  result = (bool)nitf_Writer_setImageWriteHandler(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_setGraphicWriteHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  int arg2 ;
+  nitf_WriteHandler *arg3 = (nitf_WriteHandler *) 0 ;
+  nitf_Error *arg4 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_setGraphicWriteHandler",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_setGraphicWriteHandler" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_setGraphicWriteHandler" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_setGraphicWriteHandler" "', argument " "3"" of type '" "nitf_WriteHandler *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_WriteHandler * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_setGraphicWriteHandler" "', argument " "4"" of type '" "nitf_Error *""'"); 
+  }
+  arg4 = reinterpret_cast< nitf_Error * >(argp4);
+  result = (bool)nitf_Writer_setGraphicWriteHandler(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_setTextWriteHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  int arg2 ;
+  nitf_WriteHandler *arg3 = (nitf_WriteHandler *) 0 ;
+  nitf_Error *arg4 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_setTextWriteHandler",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_setTextWriteHandler" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_setTextWriteHandler" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_setTextWriteHandler" "', argument " "3"" of type '" "nitf_WriteHandler *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_WriteHandler * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_setTextWriteHandler" "', argument " "4"" of type '" "nitf_Error *""'"); 
+  }
+  arg4 = reinterpret_cast< nitf_Error * >(argp4);
+  result = (bool)nitf_Writer_setTextWriteHandler(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_setDEWriteHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  int arg2 ;
+  nitf_WriteHandler *arg3 = (nitf_WriteHandler *) 0 ;
+  nitf_Error *arg4 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_setDEWriteHandler",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_setDEWriteHandler" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_setDEWriteHandler" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_setDEWriteHandler" "', argument " "3"" of type '" "nitf_WriteHandler *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_WriteHandler * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_setDEWriteHandler" "', argument " "4"" of type '" "nitf_Error *""'"); 
+  }
+  arg4 = reinterpret_cast< nitf_Error * >(argp4);
+  result = (bool)nitf_Writer_setDEWriteHandler(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_newImageWriter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  int arg2 ;
+  nrt_HashTable *arg3 = (nrt_HashTable *) 0 ;
+  nitf_Error *arg4 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  nitf_ImageWriter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_newImageWriter",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_newImageWriter" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_newImageWriter" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_HashTable, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_newImageWriter" "', argument " "3"" of type '" "nrt_HashTable *""'"); 
+  }
+  arg3 = reinterpret_cast< nrt_HashTable * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_newImageWriter" "', argument " "4"" of type '" "nitf_Error *""'"); 
+  }
+  arg4 = reinterpret_cast< nitf_Error * >(argp4);
+  result = (nitf_ImageWriter *)nitf_Writer_newImageWriter(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_newGraphicWriter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  int arg2 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  nitf_SegmentWriter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Writer_newGraphicWriter",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_newGraphicWriter" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_newGraphicWriter" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_newGraphicWriter" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_Error * >(argp3);
+  result = (nitf_SegmentWriter *)nitf_Writer_newGraphicWriter(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_newTextWriter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  int arg2 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  nitf_SegmentWriter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Writer_newTextWriter",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_newTextWriter" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_newTextWriter" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_newTextWriter" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_Error * >(argp3);
+  result = (nitf_SegmentWriter *)nitf_Writer_newTextWriter(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_newDEWriter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  int arg2 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  nitf_SegmentWriter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Writer_newDEWriter",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_newDEWriter" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Writer_newDEWriter" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_newDEWriter" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_Error * >(argp3);
+  result = (nitf_SegmentWriter *)nitf_Writer_newDEWriter(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_nitf_WriteHandler, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_write(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  nitf_Error *arg2 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Writer_write",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_write" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_write" "', argument " "2"" of type '" "nitf_Error *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_Error * >(argp2);
+  result = (bool)nitf_Writer_write(arg1,arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_writeHeader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  nitf_Off *arg2 = (nitf_Off *) 0 ;
+  uint32_t *arg3 = (uint32_t *) 0 ;
+  nitf_Error *arg4 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Writer_writeHeader",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_writeHeader" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_off_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_writeHeader" "', argument " "2"" of type '" "nitf_Off *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_Off * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_uint32_t, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_writeHeader" "', argument " "3"" of type '" "uint32_t *""'"); 
+  }
+  arg3 = reinterpret_cast< uint32_t * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_writeHeader" "', argument " "4"" of type '" "nitf_Error *""'"); 
+  }
+  arg4 = reinterpret_cast< nitf_Error * >(argp4);
+  result = (bool)nitf_Writer_writeHeader(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_writeImageSubheader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  nitf_ImageSubheader *arg2 = (nitf_ImageSubheader *) 0 ;
+  nitf_Version arg3 ;
+  nitf_Off *arg4 = (nitf_Off *) 0 ;
+  nitf_Error *arg5 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:nitf_Writer_writeImageSubheader",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_writeImageSubheader" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_ImageSubheader, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_writeImageSubheader" "', argument " "2"" of type '" "nitf_ImageSubheader const *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_ImageSubheader * >(argp2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "nitf_Writer_writeImageSubheader" "', argument " "3"" of type '" "nitf_Version""'");
+  } 
+  arg3 = static_cast< nitf_Version >(val3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_off_t, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Writer_writeImageSubheader" "', argument " "4"" of type '" "nitf_Off *""'"); 
+  }
+  arg4 = reinterpret_cast< nitf_Off * >(argp4);
+  res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_Writer_writeImageSubheader" "', argument " "5"" of type '" "nitf_Error *""'"); 
+  }
+  arg5 = reinterpret_cast< nitf_Error * >(argp5);
+  result = (bool)nitf_Writer_writeImageSubheader(arg1,(_nitf_ImageSubheader const *)arg2,arg3,arg4,arg5);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_writeDESubheader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  nitf_DESubheader *arg2 = (nitf_DESubheader *) 0 ;
+  uint32_t *arg3 = (uint32_t *) 0 ;
+  nitf_Version arg4 ;
+  nitf_Error *arg5 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:nitf_Writer_writeDESubheader",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_writeDESubheader" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_DESubheader, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_writeDESubheader" "', argument " "2"" of type '" "nitf_DESubheader const *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_DESubheader * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_uint32_t, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Writer_writeDESubheader" "', argument " "3"" of type '" "uint32_t *""'"); 
+  }
+  arg3 = reinterpret_cast< uint32_t * >(argp3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "nitf_Writer_writeDESubheader" "', argument " "4"" of type '" "nitf_Version""'");
+  } 
+  arg4 = static_cast< nitf_Version >(val4);
+  res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "nitf_Writer_writeDESubheader" "', argument " "5"" of type '" "nitf_Error *""'"); 
+  }
+  arg5 = reinterpret_cast< nitf_Error * >(argp5);
+  result = (bool)nitf_Writer_writeDESubheader(arg1,(_nitf_DESubheader const *)arg2,arg3,arg4,arg5);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Writer_writeInt64Field(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  uint64_t arg2 ;
+  uint32_t arg3 ;
+  char arg4 ;
+  uint32_t arg5 ;
+  nitf_Error *arg6 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  char val4 ;
+  int ecode4 = 0 ;
+  void *argp6 = 0 ;
+  int res6 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:nitf_Writer_writeInt64Field",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Writer_writeInt64Field" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_uint64_t,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Writer_writeInt64Field" "', argument " "2"" of type '" "uint64_t""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nitf_Writer_writeInt64Field" "', argument " "2"" of type '" "uint64_t""'");
+    } else {
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  {
+    arg3 = (uint32_t)PyInt_AsLong(obj2);
+  }
+  ecode4 = SWIG_AsVal_char(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "nitf_Writer_writeInt64Field" "', argument " "4"" of type '" "char""'");
+  } 
+  arg4 = static_cast< char >(val4);
+  {
+    arg5 = (uint32_t)PyInt_AsLong(obj4);
+  }
+  res6 = SWIG_ConvertPtr(obj5, &argp6,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res6)) {
+    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "nitf_Writer_writeInt64Field" "', argument " "6"" of type '" "nitf_Error *""'"); 
+  }
+  arg6 = reinterpret_cast< nitf_Error * >(argp6);
+  result = (bool)nitf_Writer_writeInt64Field(arg1,arg2,arg3,arg4,arg5,arg6);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_warningList_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
+  nitf_List *arg2 = (nitf_List *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Reader_warningList_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_warningList_set" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_nrt_List, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Reader_warningList_set" "', argument " "2"" of type '" "nitf_List *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_List * >(argp2);
+  if (arg1) (arg1)->warningList = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_warningList_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_List *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_warningList_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_warningList_get" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
+  result = (nitf_List *) ((arg1)->warningList);
+  {
+    nitf_Error _error;      nitf_ListIterator iter;      nitf_ListIterator end;      int count = 0;      int size = 0;           if (result)          size = nrt_List_size(result);           resultobj = PyList_New(size);      if (result)      {
+      iter = nrt_List_begin(result);          end = nrt_List_end(result);          while (nrt_ListIterator_notEqualTo(&iter, &end))          {
+        nitf_Field *thisObj=                  (nitf_Field *) nrt_ListIterator_get(&iter);              PyObject *o = SWIG_NewPointerObj(SWIG_as_voidptr(thisObj), SWIGTYPE_p__nitf_Field, 0 |  0 );              PyList_SetItem(resultobj,count,o);              nrt_ListIterator_increment(&iter);              count++;          
+      }      
+    } 
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_input_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
+  nitf_IOInterface *arg2 = (nitf_IOInterface *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Reader_input_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_input_set" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_IOInterface, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Reader_input_set" "', argument " "2"" of type '" "nitf_IOInterface *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_IOInterface * >(argp2);
+  if (arg1) (arg1)->input = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_input_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_IOInterface *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_input_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_input_get" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
+  result = (nitf_IOInterface *) ((arg1)->input);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_record_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
+  nitf_Record *arg2 = (nitf_Record *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Reader_record_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_record_set" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Record, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Reader_record_set" "', argument " "2"" of type '" "nitf_Record *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_Record * >(argp2);
+  if (arg1) (arg1)->record = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_record_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Record *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_record_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_record_get" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
+  result = (nitf_Record *) ((arg1)->record);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Record, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_ownInput_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:nitf_Reader_ownInput_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_ownInput_set" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Reader_ownInput_set" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  if (arg1) (arg1)->ownInput = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_ownInput_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_ownInput_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_ownInput_get" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
+  result = (bool) ((arg1)->ownInput);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_nitf_Reader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  _nitf_Reader *arg1 = (_nitf_Reader *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_nitf_Reader",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_nitf_Reader" "', argument " "1"" of type '" "_nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< _nitf_Reader * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *nitf_Reader_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p__nitf_Reader, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Error *arg1 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Reader *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_construct",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_construct" "', argument " "1"" of type '" "nitf_Error *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Error * >(argp1);
+  result = (nitf_Reader *)nitf_Reader_construct(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_destruct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Reader **arg1 = (nitf_Reader **) 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_destruct",&obj0)) SWIG_fail;
+  {
+    if (obj0)
+    {
+      nitf_Reader* temp = 0;
+      if (SWIG_ConvertPtr(obj0, (void**)&temp,SWIGTYPE_p__nitf_Reader, 0 |  0 ) != -1 && temp)
+      arg1 = (nitf_Reader**)&temp;
+    }
+  }
+  nitf_Reader_destruct(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_read(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Reader *arg1 = (nitf_Reader *) 0 ;
+  nitf_IOHandle arg2 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  nitf_Record *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Reader_read",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_read" "', argument " "1"" of type '" "nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Reader * >(argp1);
+  {
+    if (obj1)
+    {
+#ifdef SWIGWIN
+      arg2 = (nrt_IOHandle) PyLong_AsUnsignedLongLongMask(obj1);
+#else
+      arg2 = (nrt_IOHandle) PyInt_AsLong(obj1);
+#endif
+    }
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Reader_read" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_Error * >(argp3);
+  result = (nitf_Record *)nitf_Reader_read(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Record, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_readIO(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Reader *arg1 = (nitf_Reader *) 0 ;
+  nitf_IOInterface *arg2 = (nitf_IOInterface *) 0 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  nitf_Record *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Reader_readIO",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_readIO" "', argument " "1"" of type '" "nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Reader * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "nitf_Reader_readIO" "', argument " "2"" of type '" "nitf_IOInterface *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_IOInterface * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Reader_readIO" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_Error * >(argp3);
+  result = (nitf_Record *)nitf_Reader_readIO(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Record, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_newImageReader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Reader *arg1 = (nitf_Reader *) 0 ;
+  int arg2 ;
+  nrt_HashTable *arg3 = (nrt_HashTable *) 0 ;
+  nitf_Error *arg4 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  nitf_ImageReader *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:nitf_Reader_newImageReader",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_newImageReader" "', argument " "1"" of type '" "nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Reader * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Reader_newImageReader" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_HashTable, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Reader_newImageReader" "', argument " "3"" of type '" "nrt_HashTable *""'"); 
+  }
+  arg3 = reinterpret_cast< nrt_HashTable * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "nitf_Reader_newImageReader" "', argument " "4"" of type '" "nitf_Error *""'"); 
+  }
+  arg4 = reinterpret_cast< nitf_Error * >(argp4);
+  result = (nitf_ImageReader *)nitf_Reader_newImageReader(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_ImageReader, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_newTextReader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Reader *arg1 = (nitf_Reader *) 0 ;
+  int arg2 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  nitf_SegmentReader *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Reader_newTextReader",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_newTextReader" "', argument " "1"" of type '" "nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Reader * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Reader_newTextReader" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Reader_newTextReader" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_Error * >(argp3);
+  result = (nitf_SegmentReader *)nitf_Reader_newTextReader(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_SegmentReader, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_newGraphicReader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Reader *arg1 = (nitf_Reader *) 0 ;
+  int arg2 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  nitf_SegmentReader *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Reader_newGraphicReader",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_newGraphicReader" "', argument " "1"" of type '" "nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Reader * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Reader_newGraphicReader" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Reader_newGraphicReader" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_Error * >(argp3);
+  result = (nitf_SegmentReader *)nitf_Reader_newGraphicReader(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_SegmentReader, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_newDEReader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Reader *arg1 = (nitf_Reader *) 0 ;
+  int arg2 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  nitf_SegmentReader *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:nitf_Reader_newDEReader",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Reader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_newDEReader" "', argument " "1"" of type '" "nitf_Reader *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Reader * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "nitf_Reader_newDEReader" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "nitf_Reader_newDEReader" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_Error * >(argp3);
+  result = (nitf_SegmentReader *)nitf_Reader_newDEReader(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_SegmentReader, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_getNITFVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *arg1 = (char *) 0 ;
+  int res1 ;
+  char *buf1 = 0 ;
+  int alloc1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Version result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_getNITFVersion",&obj0)) SWIG_fail;
+  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_getNITFVersion" "', argument " "1"" of type '" "char const *""'");
+  }
+  arg1 = reinterpret_cast< char * >(buf1);
+  result = (nitf_Version)nitf_Reader_getNITFVersion((char const *)arg1);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return resultobj;
+fail:
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_nitf_Reader_getNITFVersionIO(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_IOInterface *arg1 = (nitf_IOInterface *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Version result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:nitf_Reader_getNITFVersionIO",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_IOInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nitf_Reader_getNITFVersionIO" "', argument " "1"" of type '" "nitf_IOInterface *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_IOInterface * >(argp1);
+  result = (nitf_Version)nitf_Reader_getNITFVersionIO(arg1);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
   return NULL;
 }
 
@@ -31210,7 +31321,7 @@ SWIGINTERN PyObject *_wrap_py_Field_getInt(PyObject *SWIGUNUSEDPARM(self), PyObj
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  nitf_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:py_Field_getInt",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Field, 0 |  0 );
@@ -31241,9 +31352,6 @@ SWIGINTERN PyObject *_wrap_py_Field_setRawData(PyObject *SWIGUNUSEDPARM(self), P
   nitf_Error *arg4 = (nitf_Error *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
   int val3 ;
   int ecode3 = 0 ;
   void *argp4 = 0 ;
@@ -31259,11 +31367,18 @@ SWIGINTERN PyObject *_wrap_py_Field_setRawData(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "py_Field_setRawData" "', argument " "1"" of type '" "nitf_Field *""'"); 
   }
   arg1 = reinterpret_cast< nitf_Field * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "py_Field_setRawData" "', argument " "2"" of type '" "char *""'");
+  {
+    if (obj1)
+    {
+      char *buffer;
+      Py_ssize_t outlength;
+      if(PyBytes_AsStringAndSize(obj1,&buffer,&outlength) == -1) {
+        SWIG_fail;
+      }
+      arg2 = buffer;
+      //$2 = outlength;
+    }
   }
-  arg2 = reinterpret_cast< char * >(buf2);
   ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "py_Field_setRawData" "', argument " "3"" of type '" "int""'");
@@ -31276,10 +31391,8 @@ SWIGINTERN PyObject *_wrap_py_Field_setRawData(PyObject *SWIGUNUSEDPARM(self), P
   arg4 = reinterpret_cast< nitf_Error * >(argp4);
   py_Field_setRawData(arg1,arg2,arg3,arg4);
   resultobj = SWIG_Py_Void();
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return resultobj;
 fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return NULL;
 }
 
@@ -31343,6 +31456,68 @@ SWIGINTERN PyObject *_wrap_py_TRE_setField(PyObject *SWIGUNUSEDPARM(self), PyObj
 fail:
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_py_Field_getRawData(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Field *arg1 = (nitf_Field *) 0 ;
+  nitf_Error *arg2 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:py_Field_getRawData",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Field, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "py_Field_getRawData" "', argument " "1"" of type '" "nitf_Field *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Field * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "py_Field_getRawData" "', argument " "2"" of type '" "nitf_Error *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_Error * >(argp2);
+  result = (PyObject *)py_Field_getRawData(arg1,arg2);
+  resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_py_TRE_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_TRE *arg1 = (nitf_TRE *) 0 ;
+  nitf_Error *arg2 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  nitf_TRE *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:py_TRE_clone",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_TRE, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "py_TRE_clone" "', argument " "1"" of type '" "nitf_TRE *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_TRE * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "py_TRE_clone" "', argument " "2"" of type '" "nitf_Error *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_Error * >(argp2);
+  result = (nitf_TRE *)py_TRE_clone(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_TRE, 0 |  0 );
+  return resultobj;
+fail:
   return NULL;
 }
 
@@ -31836,6 +32011,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_py_nitf_PluginRegistry_canRetrieveTREHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_PluginRegistry *arg1 = (nitf_PluginRegistry *) 0 ;
+  char *arg2 = (char *) 0 ;
+  nitf_Error *arg3 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:py_nitf_PluginRegistry_canRetrieveTREHandler",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__protected_nitf_PluginRegistry, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "py_nitf_PluginRegistry_canRetrieveTREHandler" "', argument " "1"" of type '" "nitf_PluginRegistry *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_PluginRegistry * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "py_nitf_PluginRegistry_canRetrieveTREHandler" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "py_nitf_PluginRegistry_canRetrieveTREHandler" "', argument " "3"" of type '" "nitf_Error *""'"); 
+  }
+  arg3 = reinterpret_cast< nitf_Error * >(argp3);
+  result = (bool)py_nitf_PluginRegistry_canRetrieveTREHandler(arg1,(char const *)arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_py_nitf_Reader_newImageReader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   nitf_Reader *arg1 = (nitf_Reader *) 0 ;
@@ -31873,6 +32091,102 @@ SWIGINTERN PyObject *_wrap_py_nitf_Reader_newImageReader(PyObject *SWIGUNUSEDPAR
   arg4 = reinterpret_cast< nitf_Error * >(argp4);
   result = (nitf_ImageReader *)py_nitf_Reader_newImageReader(arg1,arg2,arg3,arg4);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_ImageReader, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_py_nitf_Writer_construct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Error *arg1 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  nitf_Writer *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:py_nitf_Writer_construct",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "py_nitf_Writer_construct" "', argument " "1"" of type '" "nitf_Error *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Error * >(argp1);
+  result = (nitf_Writer *)py_nitf_Writer_construct(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_py_nitf_Writer_prepare(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer *arg1 = (nitf_Writer *) 0 ;
+  nitf_Record *arg2 = (nitf_Record *) 0 ;
+  nitf_IOHandle arg3 ;
+  nitf_Error *arg4 = (nitf_Error *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:py_nitf_Writer_prepare",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p__nitf_Writer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "py_nitf_Writer_prepare" "', argument " "1"" of type '" "nitf_Writer *""'"); 
+  }
+  arg1 = reinterpret_cast< nitf_Writer * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p__nitf_Record, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "py_nitf_Writer_prepare" "', argument " "2"" of type '" "nitf_Record *""'"); 
+  }
+  arg2 = reinterpret_cast< nitf_Record * >(argp2);
+  {
+    if (obj2)
+    {
+#ifdef SWIGWIN
+      arg3 = (nrt_IOHandle) PyLong_AsUnsignedLongLongMask(obj2);
+#else
+      arg3 = (nrt_IOHandle) PyInt_AsLong(obj2);
+#endif
+    }
+  }
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p__NRT_Error, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "py_nitf_Writer_prepare" "', argument " "4"" of type '" "nitf_Error *""'"); 
+  }
+  arg4 = reinterpret_cast< nitf_Error * >(argp4);
+  result = (bool)py_nitf_Writer_prepare(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_py_nitf_Writer_destruct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  nitf_Writer **arg1 = (nitf_Writer **) 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:py_nitf_Writer_destruct",&obj0)) SWIG_fail;
+  {
+    if (obj0)
+    {
+      nitf_Writer* temp = 0;
+      if (SWIG_ConvertPtr(obj0, (void**)&temp,SWIGTYPE_p__nitf_Writer, 0 |  0 ) != -1 && temp)
+      arg1 = (nitf_Writer**)&temp;
+    }
+  }
+  py_nitf_Writer_destruct(arg1);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -32382,6 +32696,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nrt_Error_fprintf", _wrap_nrt_Error_fprintf, METH_VARARGS, NULL},
 	 { (char *)"nrt_Error_initf", _wrap_nrt_Error_initf, METH_VARARGS, NULL},
 	 { (char *)"nrt_Error_print", _wrap_nrt_Error_print, METH_VARARGS, NULL},
+	 { (char *)"nrt_strerror", _wrap_nrt_strerror, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOHandle_create", _wrap_nrt_IOHandle_create, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOHandle_read", _wrap_nrt_IOHandle_read, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOHandle_write", _wrap_nrt_IOHandle_write, METH_VARARGS, NULL},
@@ -32429,6 +32744,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nrt_IOHandleAdapter_construct", _wrap_nrt_IOHandleAdapter_construct, METH_VARARGS, NULL},
 	 { (char *)"nrt_IOHandleAdapter_open", _wrap_nrt_IOHandleAdapter_open, METH_VARARGS, NULL},
 	 { (char *)"nrt_BufferAdapter_construct", _wrap_nrt_BufferAdapter_construct, METH_VARARGS, NULL},
+	 { (char *)"nitf_strdup", _wrap_nitf_strdup, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_path_set", _wrap_nitf_PluginRegistry_path_set, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_path_get", _wrap_nitf_PluginRegistry_path_get, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_treHandlers_set", _wrap_nitf_PluginRegistry_treHandlers_set, METH_VARARGS, NULL},
@@ -32456,69 +32772,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nitf_PluginRegistry_retrieveDecompConstructor", _wrap_nitf_PluginRegistry_retrieveDecompConstructor, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_retrieveCompConstructor", _wrap_nitf_PluginRegistry_retrieveCompConstructor, METH_VARARGS, NULL},
 	 { (char *)"nitf_PluginRegistry_retrieveCompInterface", _wrap_nitf_PluginRegistry_retrieveCompInterface, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_warningList_set", _wrap_nitf_Reader_warningList_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_warningList_get", _wrap_nitf_Reader_warningList_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_input_set", _wrap_nitf_Reader_input_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_input_get", _wrap_nitf_Reader_input_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_record_set", _wrap_nitf_Reader_record_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_record_get", _wrap_nitf_Reader_record_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_ownInput_set", _wrap_nitf_Reader_ownInput_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_ownInput_get", _wrap_nitf_Reader_ownInput_get, METH_VARARGS, NULL},
-	 { (char *)"delete_nitf_Reader", _wrap_delete_nitf_Reader, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_swigregister", nitf_Reader_swigregister, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_construct", _wrap_nitf_Reader_construct, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_destruct", _wrap_nitf_Reader_destruct, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_read", _wrap_nitf_Reader_read, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_readIO", _wrap_nitf_Reader_readIO, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_newImageReader", _wrap_nitf_Reader_newImageReader, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_newTextReader", _wrap_nitf_Reader_newTextReader, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_newGraphicReader", _wrap_nitf_Reader_newGraphicReader, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_newDEReader", _wrap_nitf_Reader_newDEReader, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_getNITFVersion", _wrap_nitf_Reader_getNITFVersion, METH_VARARGS, NULL},
-	 { (char *)"nitf_Reader_getNITFVersionIO", _wrap_nitf_Reader_getNITFVersionIO, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_warningList_set", _wrap_nitf_Writer_warningList_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_warningList_get", _wrap_nitf_Writer_warningList_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_imageWriters_set", _wrap_nitf_Writer_imageWriters_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_imageWriters_get", _wrap_nitf_Writer_imageWriters_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_textWriters_set", _wrap_nitf_Writer_textWriters_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_textWriters_get", _wrap_nitf_Writer_textWriters_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_graphicWriters_set", _wrap_nitf_Writer_graphicWriters_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_graphicWriters_get", _wrap_nitf_Writer_graphicWriters_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_dataExtensionWriters_set", _wrap_nitf_Writer_dataExtensionWriters_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_dataExtensionWriters_get", _wrap_nitf_Writer_dataExtensionWriters_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_output_set", _wrap_nitf_Writer_output_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_output_get", _wrap_nitf_Writer_output_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_record_set", _wrap_nitf_Writer_record_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_record_get", _wrap_nitf_Writer_record_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_numImageWriters_set", _wrap_nitf_Writer_numImageWriters_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_numImageWriters_get", _wrap_nitf_Writer_numImageWriters_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_numTextWriters_set", _wrap_nitf_Writer_numTextWriters_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_numTextWriters_get", _wrap_nitf_Writer_numTextWriters_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_numGraphicWriters_set", _wrap_nitf_Writer_numGraphicWriters_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_numGraphicWriters_get", _wrap_nitf_Writer_numGraphicWriters_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_numDataExtensionWriters_set", _wrap_nitf_Writer_numDataExtensionWriters_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_numDataExtensionWriters_get", _wrap_nitf_Writer_numDataExtensionWriters_get, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_ownOutput_set", _wrap_nitf_Writer_ownOutput_set, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_ownOutput_get", _wrap_nitf_Writer_ownOutput_get, METH_VARARGS, NULL},
-	 { (char *)"delete_nitf_Writer", _wrap_delete_nitf_Writer, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_swigregister", nitf_Writer_swigregister, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_construct", _wrap_nitf_Writer_construct, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_destruct", _wrap_nitf_Writer_destruct, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_prepare", _wrap_nitf_Writer_prepare, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_prepareIO", _wrap_nitf_Writer_prepareIO, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_setImageWriteHandler", _wrap_nitf_Writer_setImageWriteHandler, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_setGraphicWriteHandler", _wrap_nitf_Writer_setGraphicWriteHandler, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_setTextWriteHandler", _wrap_nitf_Writer_setTextWriteHandler, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_setDEWriteHandler", _wrap_nitf_Writer_setDEWriteHandler, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_newImageWriter", _wrap_nitf_Writer_newImageWriter, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_newGraphicWriter", _wrap_nitf_Writer_newGraphicWriter, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_newTextWriter", _wrap_nitf_Writer_newTextWriter, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_newDEWriter", _wrap_nitf_Writer_newDEWriter, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_write", _wrap_nitf_Writer_write, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_writeHeader", _wrap_nitf_Writer_writeHeader, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_writeImageSubheader", _wrap_nitf_Writer_writeImageSubheader, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_writeDESubheader", _wrap_nitf_Writer_writeDESubheader, METH_VARARGS, NULL},
-	 { (char *)"nitf_Writer_writeInt64Field", _wrap_nitf_Writer_writeInt64Field, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_header_set", _wrap_nitf_Record_header_set, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_header_get", _wrap_nitf_Record_header_get, METH_VARARGS, NULL},
 	 { (char *)"nitf_Record_images_set", _wrap_nitf_Record_images_set, METH_VARARGS, NULL},
@@ -32589,6 +32842,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nitf_Field_asDateTime", _wrap_nitf_Field_asDateTime, METH_VARARGS, NULL},
 	 { (char *)"nitf_Field_resetLength", _wrap_nitf_Field_resetLength, METH_VARARGS, NULL},
 	 { (char *)"nitf_Field_print", _wrap_nitf_Field_print, METH_VARARGS, NULL},
+	 { (char *)"nitf_Field_snprint", _wrap_nitf_Field_snprint, METH_VARARGS, NULL},
 	 { (char *)"nitf_Field_resizeField", _wrap_nitf_Field_resizeField, METH_VARARGS, NULL},
 	 { (char *)"nitf_FileSecurity_classificationSystem_set", _wrap_nitf_FileSecurity_classificationSystem_set, METH_VARARGS, NULL},
 	 { (char *)"nitf_FileSecurity_classificationSystem_get", _wrap_nitf_FileSecurity_classificationSystem_get, METH_VARARGS, NULL},
@@ -33308,6 +33562,69 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"nitf_BandInfo_destruct", _wrap_nitf_BandInfo_destruct, METH_VARARGS, NULL},
 	 { (char *)"nitf_BandInfo_clone", _wrap_nitf_BandInfo_clone, METH_VARARGS, NULL},
 	 { (char *)"nitf_BandInfo_init", _wrap_nitf_BandInfo_init, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_warningList_set", _wrap_nitf_Writer_warningList_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_warningList_get", _wrap_nitf_Writer_warningList_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_imageWriters_set", _wrap_nitf_Writer_imageWriters_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_imageWriters_get", _wrap_nitf_Writer_imageWriters_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_textWriters_set", _wrap_nitf_Writer_textWriters_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_textWriters_get", _wrap_nitf_Writer_textWriters_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_graphicWriters_set", _wrap_nitf_Writer_graphicWriters_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_graphicWriters_get", _wrap_nitf_Writer_graphicWriters_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_dataExtensionWriters_set", _wrap_nitf_Writer_dataExtensionWriters_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_dataExtensionWriters_get", _wrap_nitf_Writer_dataExtensionWriters_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_output_set", _wrap_nitf_Writer_output_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_output_get", _wrap_nitf_Writer_output_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_record_set", _wrap_nitf_Writer_record_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_record_get", _wrap_nitf_Writer_record_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_numImageWriters_set", _wrap_nitf_Writer_numImageWriters_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_numImageWriters_get", _wrap_nitf_Writer_numImageWriters_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_numTextWriters_set", _wrap_nitf_Writer_numTextWriters_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_numTextWriters_get", _wrap_nitf_Writer_numTextWriters_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_numGraphicWriters_set", _wrap_nitf_Writer_numGraphicWriters_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_numGraphicWriters_get", _wrap_nitf_Writer_numGraphicWriters_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_numDataExtensionWriters_set", _wrap_nitf_Writer_numDataExtensionWriters_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_numDataExtensionWriters_get", _wrap_nitf_Writer_numDataExtensionWriters_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_ownOutput_set", _wrap_nitf_Writer_ownOutput_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_ownOutput_get", _wrap_nitf_Writer_ownOutput_get, METH_VARARGS, NULL},
+	 { (char *)"delete_nitf_Writer", _wrap_delete_nitf_Writer, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_swigregister", nitf_Writer_swigregister, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_construct", _wrap_nitf_Writer_construct, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_destruct", _wrap_nitf_Writer_destruct, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_prepare", _wrap_nitf_Writer_prepare, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_prepareIO", _wrap_nitf_Writer_prepareIO, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_setImageWriteHandler", _wrap_nitf_Writer_setImageWriteHandler, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_setGraphicWriteHandler", _wrap_nitf_Writer_setGraphicWriteHandler, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_setTextWriteHandler", _wrap_nitf_Writer_setTextWriteHandler, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_setDEWriteHandler", _wrap_nitf_Writer_setDEWriteHandler, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_newImageWriter", _wrap_nitf_Writer_newImageWriter, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_newGraphicWriter", _wrap_nitf_Writer_newGraphicWriter, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_newTextWriter", _wrap_nitf_Writer_newTextWriter, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_newDEWriter", _wrap_nitf_Writer_newDEWriter, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_write", _wrap_nitf_Writer_write, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_writeHeader", _wrap_nitf_Writer_writeHeader, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_writeImageSubheader", _wrap_nitf_Writer_writeImageSubheader, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_writeDESubheader", _wrap_nitf_Writer_writeDESubheader, METH_VARARGS, NULL},
+	 { (char *)"nitf_Writer_writeInt64Field", _wrap_nitf_Writer_writeInt64Field, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_warningList_set", _wrap_nitf_Reader_warningList_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_warningList_get", _wrap_nitf_Reader_warningList_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_input_set", _wrap_nitf_Reader_input_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_input_get", _wrap_nitf_Reader_input_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_record_set", _wrap_nitf_Reader_record_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_record_get", _wrap_nitf_Reader_record_get, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_ownInput_set", _wrap_nitf_Reader_ownInput_set, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_ownInput_get", _wrap_nitf_Reader_ownInput_get, METH_VARARGS, NULL},
+	 { (char *)"delete_nitf_Reader", _wrap_delete_nitf_Reader, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_swigregister", nitf_Reader_swigregister, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_construct", _wrap_nitf_Reader_construct, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_destruct", _wrap_nitf_Reader_destruct, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_read", _wrap_nitf_Reader_read, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_readIO", _wrap_nitf_Reader_readIO, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_newImageReader", _wrap_nitf_Reader_newImageReader, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_newTextReader", _wrap_nitf_Reader_newTextReader, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_newGraphicReader", _wrap_nitf_Reader_newGraphicReader, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_newDEReader", _wrap_nitf_Reader_newDEReader, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_getNITFVersion", _wrap_nitf_Reader_getNITFVersion, METH_VARARGS, NULL},
+	 { (char *)"nitf_Reader_getNITFVersionIO", _wrap_nitf_Reader_getNITFVersionIO, METH_VARARGS, NULL},
 	 { (char *)"py_IOHandle_create", _wrap_py_IOHandle_create, METH_VARARGS, NULL},
 	 { (char *)"py_IOHandle_write", _wrap_py_IOHandle_write, METH_VARARGS, NULL},
 	 { (char *)"py_IOHandle_seek", _wrap_py_IOHandle_seek, METH_VARARGS, NULL},
@@ -33315,6 +33632,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"py_Field_getInt", _wrap_py_Field_getInt, METH_VARARGS, NULL},
 	 { (char *)"py_Field_setRawData", _wrap_py_Field_setRawData, METH_VARARGS, NULL},
 	 { (char *)"py_TRE_setField", _wrap_py_TRE_setField, METH_VARARGS, NULL},
+	 { (char *)"py_Field_getRawData", _wrap_py_Field_getRawData, METH_VARARGS, NULL},
+	 { (char *)"py_TRE_clone", _wrap_py_TRE_clone, METH_VARARGS, NULL},
 	 { (char *)"py_Record_getFileHeader", _wrap_py_Record_getFileHeader, METH_VARARGS, NULL},
 	 { (char *)"py_Record_getImage", _wrap_py_Record_getImage, METH_VARARGS, NULL},
 	 { (char *)"py_Record_getNumImages", _wrap_py_Record_getNumImages, METH_VARARGS, NULL},
@@ -33331,7 +33650,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"py_Record_destruct", _wrap_py_Record_destruct, METH_VARARGS, NULL},
 	 { (char *)"py_Record_getVersion", _wrap_py_Record_getVersion, METH_VARARGS, NULL},
 	 { (char *)"py_FileHeader_getComponentInfo", _wrap_py_FileHeader_getComponentInfo, METH_VARARGS, NULL},
+	 { (char *)"py_nitf_PluginRegistry_canRetrieveTREHandler", _wrap_py_nitf_PluginRegistry_canRetrieveTREHandler, METH_VARARGS, NULL},
 	 { (char *)"py_nitf_Reader_newImageReader", _wrap_py_nitf_Reader_newImageReader, METH_VARARGS, NULL},
+	 { (char *)"py_nitf_Writer_construct", _wrap_py_nitf_Writer_construct, METH_VARARGS, NULL},
+	 { (char *)"py_nitf_Writer_prepare", _wrap_py_nitf_Writer_prepare, METH_VARARGS, NULL},
+	 { (char *)"py_nitf_Writer_destruct", _wrap_py_nitf_Writer_destruct, METH_VARARGS, NULL},
 	 { (char *)"py_nitf_Writer_newImageWriter", _wrap_py_nitf_Writer_newImageWriter, METH_VARARGS, NULL},
 	 { (char *)"py_nitf_MemorySource_construct", _wrap_py_nitf_MemorySource_construct, METH_VARARGS, NULL},
 	 { (char *)"py_nitf_SegmentMemorySource_construct", _wrap_py_nitf_SegmentMemorySource_construct, METH_VARARGS, NULL},
@@ -33415,7 +33738,7 @@ static swig_type_info _swigt__p_f_p__nitf_TRE_p__NRT_Error__int = {"_p_f_p__nitf
 static swig_type_info _swigt__p_f_p__nitf_TRE_p__nitf_TRE_p__NRT_Error__bool = {"_p_f_p__nitf_TRE_p__nitf_TRE_p__NRT_Error__bool", "bool (*)(_nitf_TRE *,_nitf_TRE *,_NRT_Error *)|NITF_TRE_CLONE", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__bool = {"_p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__bool", "bool (*)(_nitf_TRE *,char const *,_NRT_Error *)|NITF_TRE_INIT", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__p_nrt_List = {"_p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__p_nrt_List", "nrt_List *(*)(_nitf_TRE *,char const *,_NRT_Error *)|NITF_TRE_FIND", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_f_p__nitf_TRE_p_q_const__char_p_void_size_t_p__NRT_Error__bool = {"_p_f_p__nitf_TRE_p_q_const__char_p_void_size_t_p__NRT_Error__bool", "NITF_TRE_FIELD_SET|bool (*)(_nitf_TRE *,char const *,void *,size_t,_NRT_Error *)", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_f_p__nitf_TRE_p_q_const__char_p_q_const__void_size_t_p__NRT_Error__bool = {"_p_f_p__nitf_TRE_p_q_const__char_p_q_const__void_size_t_p__NRT_Error__bool", "NITF_TRE_FIELD_SET|bool (*)(_nitf_TRE *,char const *,void const *,size_t,_NRT_Error *)", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_p_nitf_TRE_p_nitf_Error__p__nitf_TREEnumerator = {"_p_f_p_nitf_TRE_p_nitf_Error__p__nitf_TREEnumerator", "_nitf_TREEnumerator *(*)(nitf_TRE *,nitf_Error *)|NITF_TRE_ITERATOR", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_p_nitf_TRE_p_q_const__char__p__nitf_Field = {"_p_f_p_nitf_TRE_p_q_const__char__p__nitf_Field", "_nitf_Field *(*)(nitf_TRE *,char const *)|NITF_TRE_FIELD_GET", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_p_p__nitf_TREEnumerator__bool = {"_p_f_p_p__nitf_TREEnumerator__bool", "bool (*)(_nitf_TREEnumerator **)|NITF_TRE_ITERATOR_HAS_NEXT", 0, 0, (void*)0, 0};
@@ -33492,7 +33815,7 @@ static swig_type_info _swigt__p_p_f_p_void_p_q_const__void_size_t_p__NRT_Error__
 static swig_type_info _swigt__p_p_f_p_void_p_void_size_t_p__NRT_Error__bool = {"_p_p_f_p_void_p_void_size_t_p__NRT_Error__bool", "bool (**)(void *,void *,size_t,_NRT_Error *)|NITF_IO_INTERFACE_READ *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_nitf_WriteHandler = {"_p_p_nitf_WriteHandler", "nitf_WriteHandler **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_nrt_List = {"_p_p_nrt_List", "nrt_List **", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_p_uint8_t = {"_p_p_uint8_t", "uint8_t **|nitf_Uint8 **", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_p_uint8_t = {"_p_p_uint8_t", "uint8_t **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_void = {"_p_p_void", "NITF_DLL_FUNCTION_PTR *|NITF_NATIVE_DLL *|void **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "nrt_Uint16 *|nitf_Uint16 *|uint16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "uint32_t *|nrt_Uint32 *|nitf_Uint32 *", 0, 0, (void*)0, 0};
@@ -33567,7 +33890,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_f_p__nitf_TRE_p__nitf_TRE_p__NRT_Error__bool,
   &_swigt__p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__bool,
   &_swigt__p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__p_nrt_List,
-  &_swigt__p_f_p__nitf_TRE_p_q_const__char_p_void_size_t_p__NRT_Error__bool,
+  &_swigt__p_f_p__nitf_TRE_p_q_const__char_p_q_const__void_size_t_p__NRT_Error__bool,
   &_swigt__p_f_p_nitf_TRE_p_nitf_Error__p__nitf_TREEnumerator,
   &_swigt__p_f_p_nitf_TRE_p_q_const__char__p__nitf_Field,
   &_swigt__p_f_p_p__nitf_TREEnumerator__bool,
@@ -33719,7 +34042,7 @@ static swig_cast_info _swigc__p_f_p__nitf_TRE_p__NRT_Error__int[] = {  {&_swigt_
 static swig_cast_info _swigc__p_f_p__nitf_TRE_p__nitf_TRE_p__NRT_Error__bool[] = {  {&_swigt__p_f_p__nitf_TRE_p__nitf_TRE_p__NRT_Error__bool, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__bool[] = {  {&_swigt__p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__bool, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__p_nrt_List[] = {  {&_swigt__p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__p_nrt_List, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p__nitf_TRE_p_q_const__char_p_void_size_t_p__NRT_Error__bool[] = {  {&_swigt__p_f_p__nitf_TRE_p_q_const__char_p_void_size_t_p__NRT_Error__bool, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p__nitf_TRE_p_q_const__char_p_q_const__void_size_t_p__NRT_Error__bool[] = {  {&_swigt__p_f_p__nitf_TRE_p_q_const__char_p_q_const__void_size_t_p__NRT_Error__bool, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_nitf_TRE_p_nitf_Error__p__nitf_TREEnumerator[] = {  {&_swigt__p_f_p_nitf_TRE_p_nitf_Error__p__nitf_TREEnumerator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_nitf_TRE_p_q_const__char__p__nitf_Field[] = {  {&_swigt__p_f_p_nitf_TRE_p_q_const__char__p__nitf_Field, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_p__nitf_TREEnumerator__bool[] = {  {&_swigt__p_f_p_p__nitf_TREEnumerator__bool, 0, 0, 0},{0, 0, 0, 0}};
@@ -33871,7 +34194,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_f_p__nitf_TRE_p__nitf_TRE_p__NRT_Error__bool,
   _swigc__p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__bool,
   _swigc__p_f_p__nitf_TRE_p_q_const__char_p__NRT_Error__p_nrt_List,
-  _swigc__p_f_p__nitf_TRE_p_q_const__char_p_void_size_t_p__NRT_Error__bool,
+  _swigc__p_f_p__nitf_TRE_p_q_const__char_p_q_const__void_size_t_p__NRT_Error__bool,
   _swigc__p_f_p_nitf_TRE_p_nitf_Error__p__nitf_TREEnumerator,
   _swigc__p_f_p_nitf_TRE_p_q_const__char__p__nitf_Field,
   _swigc__p_f_p_p__nitf_TREEnumerator__bool,
@@ -34495,9 +34818,9 @@ extern "C" {
             char *ndoc = (char*)malloc(ldoc + lptr + 10);
             if (ndoc) {
               char *buff = ndoc;
-              strncpy(buff, methods[i].ml_doc, ldoc);
+              memcpy(buff, methods[i].ml_doc, ldoc);
               buff += ldoc;
-              strncpy(buff, "swig_ptr: ", 10);
+              memcpy(buff, "swig_ptr: ", 10);
               buff += 10;
               SWIG_PackVoidPtr(buff, ptr, ty->name, lptr);
               methods[i].ml_doc = ndoc;
@@ -34701,8 +35024,6 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NITF_COMPRESSION_HASH_SIZE",SWIG_From_int(static_cast< int >(2)));
   SWIG_Python_SetConstant(d, "NITF_DECOMPRESSION_HASH_SIZE",SWIG_From_int(static_cast< int >(2)));
   SWIG_Python_SetConstant(d, "NITF_PLUGIN_PATH",SWIG_FromCharPtr("NITF_PLUGIN_PATH"));
-  SWIG_Python_SetConstant(d, "NITF_WRITER_FILL_LEFT",SWIG_From_int(static_cast< int >(1)));
-  SWIG_Python_SetConstant(d, "NITF_WRITER_FILL_RIGHT",SWIG_From_int(static_cast< int >(2)));
   SWIG_Python_SetConstant(d, "NITF_CONV_UINT",SWIG_From_int(static_cast< int >(NITF_CONV_UINT)));
   SWIG_Python_SetConstant(d, "NITF_CONV_INT",SWIG_From_int(static_cast< int >(NITF_CONV_INT)));
   SWIG_Python_SetConstant(d, "NITF_CONV_REAL",SWIG_From_int(static_cast< int >(NITF_CONV_REAL)));
@@ -34887,6 +35208,8 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NITF_IMFLT_SZ",SWIG_From_int(static_cast< int >(3)));
   SWIG_Python_SetConstant(d, "NITF_NLUTS_SZ",SWIG_From_int(static_cast< int >(1)));
   SWIG_Python_SetConstant(d, "NITF_NELUT_SZ",SWIG_From_int(static_cast< int >(5)));
+  SWIG_Python_SetConstant(d, "NITF_WRITER_FILL_LEFT",SWIG_From_int(static_cast< int >(1)));
+  SWIG_Python_SetConstant(d, "NITF_WRITER_FILL_RIGHT",SWIG_From_int(static_cast< int >(2)));
   SWIG_Python_SetConstant(d, "PY_NITF_CREATE",SWIG_From_int(static_cast< int >(1)));
   SWIG_Python_SetConstant(d, "PY_NITF_TRUNCATE",SWIG_From_int(static_cast< int >(12)));
   SWIG_Python_SetConstant(d, "PY_NITF_OPEN_EXISTING",SWIG_From_int(static_cast< int >(13)));

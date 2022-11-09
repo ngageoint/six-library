@@ -22,9 +22,9 @@
 
 #include "nrt/System.h"
 
-NRTPROT(nrt_Uint16) nrt_System_swap16(nrt_Uint16 ins)
+NRTPROT(uint16_t) nrt_System_swap16(uint16_t ins)
 {
-    nrt_Uint16 outs;
+    uint16_t outs;
     unsigned char *ibytep = (unsigned char *) &ins;
     unsigned char *obytep = (unsigned char *) &outs;
     obytep[1] = ibytep[0];
@@ -32,9 +32,9 @@ NRTPROT(nrt_Uint16) nrt_System_swap16(nrt_Uint16 ins)
     return outs;
 }
 
-NRTPROT(nrt_Uint32) nrt_System_swap32(nrt_Uint32 inl)
+NRTPROT(uint32_t) nrt_System_swap32(uint32_t inl)
 {
-    nrt_Uint32 outl;
+    uint32_t outl;
     unsigned char *ibytep = (unsigned char *) &inl;
     unsigned char *obytep = (unsigned char *) &outl;
     obytep[3] = ibytep[0];
@@ -44,9 +44,9 @@ NRTPROT(nrt_Uint32) nrt_System_swap32(nrt_Uint32 inl)
     return outl;
 }
 
-NRTPROT(nrt_Uint64) nrt_System_swap64c(nrt_Uint64 inl)
+NRTPROT(uint64_t) nrt_System_swap64c(uint64_t inl)
 {
-    nrt_Uint64 outl;
+    uint64_t outl;
     const unsigned char* const ibytep = (const unsigned char* )&inl;
     unsigned char* const obytep = (unsigned char* )&outl;
 
@@ -64,9 +64,9 @@ NRTPROT(nrt_Uint64) nrt_System_swap64c(nrt_Uint64 inl)
     return outl;
 }
 
-NRTPROT(nrt_Uint64) nrt_System_swap64(nrt_Uint64 inl)
+NRTPROT(uint64_t) nrt_System_swap64(uint64_t inl)
 {
-    nrt_Uint64 outl;
+    uint64_t outl;
     unsigned char *ibytep = (unsigned char *) &inl;
     unsigned char *obytep = (unsigned char *) &outl;
 

@@ -20,10 +20,11 @@
  *
  */
 
-#include "sys/Conf.h"
 #include "nitf/DateTime.hpp"
 
-nitf::DateTime::DateTime()
+#include <array>
+
+nitf::DateTime::DateTime() noexcept(false)
 {
     nitf_Error error;
     mDateTime = nitf_DateTime_now(&error);
@@ -140,10 +141,10 @@ void nitf::DateTime::format(const std::string& format,
 {
     str.clear();
 
-    char raw[256];
+    std::array<char, 256> raw;
     raw[255] = '\0';
-    this->format(format, raw, 255);
-    str.assign(raw);
+    this->format(format, raw.data(), 255);
+    str.assign(raw.data());
 }
 
 std::string nitf::DateTime::format(const std::string& format) const
@@ -153,39 +154,39 @@ std::string nitf::DateTime::format(const std::string& format) const
     return str;
 }
 
-int nitf::DateTime::getYear() const
+int nitf::DateTime::getYear() const noexcept
 {
     return mDateTime->year;
 }
-int nitf::DateTime::getMonth() const
+int nitf::DateTime::getMonth() const noexcept
 {
     return mDateTime->month;
 }
-int nitf::DateTime::getDayOfMonth() const
+int nitf::DateTime::getDayOfMonth() const noexcept
 {
     return mDateTime->dayOfMonth;
 }
-int nitf::DateTime::getDayOfWeek() const
+int nitf::DateTime::getDayOfWeek() const noexcept
 {
     return mDateTime->dayOfWeek;
 }
-int nitf::DateTime::getDayOfYear() const
+int nitf::DateTime::getDayOfYear() const noexcept
 {
     return mDateTime->dayOfYear;
 }
-int nitf::DateTime::getHour() const
+int nitf::DateTime::getHour() const noexcept
 {
     return mDateTime->hour;
 }
-int nitf::DateTime::getMinute() const
+int nitf::DateTime::getMinute() const noexcept
 {
     return mDateTime->minute;
 }
-double nitf::DateTime::getSecond() const
+double nitf::DateTime::getSecond() const noexcept
 {
     return mDateTime->second;
 }
-double nitf::DateTime::getTimeInMillis() const
+double nitf::DateTime::getTimeInMillis() const noexcept
 {
     return mDateTime->timeInMillis;
 }

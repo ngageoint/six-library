@@ -24,24 +24,30 @@
 #ifndef __MT_GENERATION_THREAD_POOL_H__
 #define __MT_GENERATION_THREAD_POOL_H__
 
+#include <assert.h>
+
+#include "config/Exports.h"
+
 #if !defined(__APPLE_CC__)
 
 #include <import/sys.h>
 #include "mt/BasicThreadPool.h"
 #include "mt/CPUAffinityInitializer.h"
 #include "mt/CPUAffinityThreadInitializer.h"
+#include "mt/Runnable1D.h"
+
 
 namespace mt
 {
-    class TiedRequestHandler : public sys::Runnable
+    class CODA_OSS_API TiedRequestHandler : public sys::Runnable
     {
 	RunnableRequestQueue* mRequestQueue;
-	sys::Semaphore* mSem;
+	sys::Semaphore* mSem = nullptr;
 	CPUAffinityThreadInitializer* mAffinityInit;
 
     public:
 	TiedRequestHandler(RunnableRequestQueue* requestQueue) :
-	    mRequestQueue(requestQueue), mAffinityInit(NULL) {}
+	    mRequestQueue(requestQueue), mAffinityInit(nullptr) {}
 		
 	virtual ~TiedRequestHandler();
 
@@ -60,23 +66,27 @@ namespace mt
 	virtual void run();
     };
 
-    class GenerationThreadPool : public BasicThreadPool<TiedRequestHandler>
+    class CODA_OSS_API GenerationThreadPool : public BasicThreadPool<TiedRequestHandler>
     {
 	sys::Semaphore mGenerationSync;
-	CPUAffinityInitializer* mAffinityInit;
-	int mGenSize;
+	CPUAffinityInitializer* mAffinityInit = nullptr;
+	int mGenSize = 0;
     public:
-	GenerationThreadPool(unsigned short numThreads = 0,
-			     CPUAffinityInitializer* affinityInit = NULL) 
+        GenerationThreadPool() = default;
+	GenerationThreadPool(unsigned short numThreads,
+			     CPUAffinityInitializer* affinityInit = nullptr) 
 	    : BasicThreadPool<TiedRequestHandler>(numThreads), 
-	    mAffinityInit(affinityInit), mGenSize(0)
+	    mAffinityInit(affinityInit)
 	    {
 	    }
-	virtual ~GenerationThreadPool() {}
+	virtual ~GenerationThreadPool() = default;
+	GenerationThreadPool(const GenerationThreadPool&) = delete;
+    GenerationThreadPool& operator=(const GenerationThreadPool&) = delete;
 	
 	virtual TiedRequestHandler *newRequestHandler()
 	{
 	    TiedRequestHandler* handler = BasicThreadPool<TiedRequestHandler>::newRequestHandler();
+        assert(handler != nullptr);
 	    handler->setSemaphore(&mGenerationSync);
 		
 	    if (mAffinityInit)
@@ -98,6 +108,35 @@ namespace mt
 	    addGroup(toRun);
 	    waitGroup();
 	}
+
+    
+    /*!
+     *  \brief Runs a given operation on a sequence of numbers in parallel
+     *
+     *  \param numElements The number of elements to run - op will be called 
+     *                     with 0 through numElements-1
+     *  \param op          A function-like object taking a parameter of type
+     *                     size_t which will be called for each number in the
+     *                     given range
+     */
+    template <typename OpT>
+    void run1D(size_t numElements, const OpT& op)
+    {
+        std::vector<sys::Runnable*> runnables;
+        const ThreadPlanner planner(numElements, mNumThreads);
+ 
+        size_t threadNum(0);
+        size_t startElement(0);
+        size_t numElementsThisThread(0);
+        while(planner.getThreadInfo(threadNum++, startElement, numElementsThisThread))
+        {
+            runnables.push_back(new Runnable1D<OpT>(
+                startElement, numElementsThisThread, op));
+        }
+        addAndWaitGroup(runnables);
+        
+    }
+
 
     };
 }

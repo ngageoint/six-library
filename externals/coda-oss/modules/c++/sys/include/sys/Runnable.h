@@ -24,6 +24,7 @@
 #ifndef __SYS_RUNNABLE_H__
 #define __SYS_RUNNABLE_H__
 
+#include "config/Exports.h"
 
 namespace sys
 {
@@ -42,16 +43,10 @@ namespace sys
  *  Design Pattern.
  *
  */
-class Runnable
+struct CODA_OSS_API Runnable
 {
-public:
-    /*! Constructor  */
-    Runnable()
-    {}
-
-    //!  Destructor
-    virtual ~Runnable()
-    {}
+    Runnable() = default;
+    virtual ~Runnable() = default;
 
     /*!
      *  Overload this function in order with an action to make

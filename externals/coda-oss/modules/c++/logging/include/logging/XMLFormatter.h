@@ -52,16 +52,16 @@ namespace logging
  *  </Record>
  *  
  */
-class XMLFormatter : public logging::Formatter
+struct XMLFormatter : public logging::Formatter
 {
-public:
-
     static const char DEFAULT_FORMAT[];
 
     XMLFormatter();
     XMLFormatter(const std::string& fmt, 
                  const std::string& prologue = "<Log>",
                  const std::string& epilogue = "</Log>");
+
+    XMLFormatter& operator=(const XMLFormatter&) = delete;
 
     virtual void format(const logging::LogRecord* record, io::OutputStream& os) const;
 

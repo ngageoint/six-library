@@ -120,6 +120,7 @@ int main(int argc, char **argv)
         {
             x = 1 * 2 * 3;
         }
+        if (x > 0) { /*remove compiler warning*/ }
         std::cout << "Finish Loop 1" << std::endl;
         sw.pause();
         for (int i = 0; i < 1000000000; ++i)

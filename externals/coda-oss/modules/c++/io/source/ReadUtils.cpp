@@ -21,18 +21,28 @@
  */
 
 #include <io/FileInputStream.h>
+#include <coda_oss/span.h>
 
 namespace io
 {
-void readFileContents(const std::string& pathname,
-                      std::vector<sys::byte>& buffer)
+template<typename TPath, typename T>
+void readFileContents_(const TPath& pathname, std::vector<T>& buffer)
 {
     io::FileInputStream inStream(pathname);
     buffer.resize(inStream.available());
     if (!buffer.empty())
     {
-        inStream.read(&buffer[0], buffer.size(), true);
+        inStream.read(coda_oss::span<T>(buffer.data(), buffer.size()), true);
     }
+}
+void readFileContents(const std::string& pathname,
+                      std::vector<sys::byte>& buffer)
+{
+    readFileContents_(pathname, buffer);
+}
+void readFileContents(const coda_oss::filesystem::path& pathname, std::vector<coda_oss::byte>& buffer)
+{
+    readFileContents_(pathname, buffer);
 }
 
 void readFileContents(const std::string& pathname, std::string& str)

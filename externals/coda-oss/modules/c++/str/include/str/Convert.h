@@ -20,10 +20,10 @@
  *
  */
 
-#ifndef __STR_CONVERT_H__
-#define __STR_CONVERT_H__
+#ifndef CODA_OSS_str_Convert_h_INCLUDED_
+#define CODA_OSS_str_Convert_h_INCLUDED_
+#pragma once
 
-#include <import/except.h>
 #include <cerrno>
 #include <complex>
 #include <cstdlib>
@@ -35,6 +35,12 @@
 #include <string>
 #include <typeinfo>
 
+#include "config/Exports.h"
+#include "coda_oss/string.h"
+#include "coda_oss/optional.h"
+#include "coda_oss/cstddef.h"
+#include "import/except.h"
+
 namespace str
 {
 template <typename T>
@@ -43,25 +49,161 @@ int getPrecision(const T& type);
 template <typename T>
 int getPrecision(const std::complex<T>& type);
 
-template <typename T>
-std::string toString(const T& value)
+namespace details
 {
-    std::ostringstream buf;
-    buf.precision(getPrecision(value));
-    buf << std::boolalpha << value;
-    return buf.str();
+    // Templating (and then specializing) toString() creates all kinds of weird name-look
+    // problems; avoid trying to work-around all that by just not doing it.
+    // 
+    // The preferred approach is to make a a toString() free function.
+    template <typename T>
+    inline std::string default_toString(const T& value)
+    {
+        // Use operator<<() to generate a string value; this may not be quite
+        // 100% kosher, but it's been long-standing practice in this codebase.
+        //
+        // Note that std::to_string() doesn't necessarily generate the same
+        // output as writing to std::cout; see
+        // https://en.cppreference.com/w/cpp/string/basic_string/to_string
+        std::ostringstream buf;
+        buf.precision(getPrecision(value));
+        buf << std::boolalpha << value;
+        return buf.str();
+    }
+
+    // https://stackoverflow.com/a/73594999/19912380
+    template<int N> struct priority : priority<N - 1> {};
+    template<> struct priority<0> {};
+
+    template<typename T>
+    inline auto toString_imp(const T& obj, priority<2>) -> decltype(obj.toString(), std::string())
+    {
+        return obj.toString(); // member-function
+    }
+
+    template<typename T>
+    inline auto toString_imp(const T& obj, priority<1>) -> decltype(toString(obj), std::string())
+    {
+        return toString(obj); // free function
+    }
+
+    template<typename T>
+    inline auto toString_imp(const T& obj, priority<0>) -> decltype(default_toString(obj), std::string())
+    {
+        return details::default_toString(obj); // our default utility which uses operator<<()
+    }
+    
+    // In order, try to call 1) obj.toString() (highest priority), 2) toString(obj),
+    // and finally 3) toString_(obj) (lowest priority).
+    template<typename T>
+    inline auto toString_(const T& obj) -> decltype(toString_imp(obj, priority<2>{}), std::string())
+    {
+        return details::toString_imp(obj, priority<2>{});
+    }
+}
+template <typename T>
+inline std::string toString(const T& value) // no dectype() noise here, leave that in details::toString_()
+{
+    // This breaks the Windows-CMake build on GitHub (when building as an "external" in NITRO)
+    // ... different compilers or compile-options?
+    //return details::toString_(value);
+
+    return details::default_toString(value);
 }
 
-template <>
-std::string toString(const uint8_t& value);
+// C++11 has a bunch of overloads, do the same.
+// https://en.cppreference.com/w/cpp/string/basic_string/to_string
+inline std::string toString(int value)
+{
+    return details::default_toString(value);
+}
+inline std::string toString(long value)
+{
+    return details::default_toString(value);
+}
+inline std::string toString(long long value)
+{
+    return details::default_toString(value);
+}
+inline std::string toString(unsigned value)
+{
+    return details::default_toString(value);
+}
+inline std::string toString(unsigned long value)
+{
+    return details::default_toString(value);
+}
+inline std::string toString(unsigned long long value)
+{
+    return details::default_toString(value);
+}
+inline std::string toString(float value)
+{
+    return details::default_toString(value);
+}
+inline std::string toString(double value)
+{
+    return details::default_toString(value);
+}
+inline std::string oString(long double value)
+{
+    return details::default_toString(value);
+}
 
-template <>
-std::string toString(const int8_t& value);
+// C++ doesn't have these ...
+// https://en.cppreference.com/w/cpp/string/basic_string/to_string
+inline std::string toString(bool value)
+{
+    return details::default_toString(value);
+}
+inline std::string toString(uint8_t value)
+{
+    return toString(static_cast<unsigned int>(value));
+}
+inline std::string toString(int8_t value)
+{
+    return toString(static_cast<int>(value));
+}
+inline std::string toString(coda_oss::byte value)
+{
+    return toString(static_cast<uint8_t>(value));
+}
+
+inline std::string toString(std::nullptr_t)
+{
+    return "<nullptr>";
+}
+
+CODA_OSS_API std::string toString(const coda_oss::u8string&);
+inline std::string toString(const std::string& value)
+{
+    return value;
+}
+inline std::string toString(char value)
+{
+    return std::string(1, value);
+}
+inline std::string toString(const char* pStr)
+{
+    return std::string(pStr);
+}
 
 template <typename T>
-std::string toString(const T& real, const T& imag)
+inline std::string toString(const coda_oss::optional<T>& value)
 {
-    return toString(std::complex<T>(real, imag));
+    // TODO: handle empty/NULL optional?
+    return details::default_toString(value.value());
+}
+
+template <typename T>
+inline std::string toString(const T& real, const T& imag)
+{
+    return details::default_toString(std::complex<T>(real, imag));
+}
+
+template <typename T>
+inline std::string toString(const T* ptr)
+{
+    return details::default_toString(ptr);
 }
 
 template <typename T>
@@ -97,18 +239,18 @@ T toType(const std::string& s)
 }
 
 template <>
-bool toType<bool>(const std::string& s);
+CODA_OSS_API bool toType<bool>(const std::string& s);
 template <>
-std::string toType<std::string>(const std::string& s);
+CODA_OSS_API std::string toType<std::string>(const std::string& s);
 
 /**
  *  strtoll wrapper for msvc compatibility.
  */
-long long strtoll(const char* str, char** endptr, int base);
+CODA_OSS_API long long strtoll(const char* str, char** endptr, int base);
 /**
  *  strtoull wrapper for msvc compatibility.
  */
-unsigned long long strtoull(const char* str, char** endptr, int base);
+CODA_OSS_API unsigned long long strtoull(const char* str, char** endptr, int base);
 
 /**
  *  Convert a string containing a number in any base to a numerical type.
@@ -215,6 +357,7 @@ T generic_cast(const std::string& value)
 {
     return str::toType<T>(value);
 }
+
 }
 
-#endif
+#endif // CODA_OSS_str_Convert_h_INCLUDED_

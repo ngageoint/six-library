@@ -28,7 +28,7 @@ namespace xml
 {
 namespace lite
 {
-sys::Mutex XercesContext::mMutex;
+std::mutex XercesContext::mMutex;
 
 XercesLocalString::XercesLocalString(XMLCh* xmlStr) :
     mLocal(xmlStr)
@@ -90,6 +90,13 @@ XercesLocalString& XercesLocalString::operator=(const XercesLocalString& rhs)
 void XercesContentHandler::characters(const XMLCh* const chars,
                                       const XercesSize_T length)
 {
+    if (mLiteHandler->vcharacters(chars, length))
+    {
+        return;  // processed as void*
+    }
+
+    // Either use_wchar_t() is false (default, legacy behavior) or
+    // we couldn't process the wide-character (Windows).
     XercesLocalString xstr(chars);
     mLiteHandler->characters(xstr.str().c_str(), (int)length);
 }
@@ -163,9 +170,9 @@ void XercesErrorHandler::
 error(const SAXParseException &exception)
 {
     XercesLocalString m(exception.getMessage());
-    throw(XMLParseException(m.str(),
-                                       exception.getLineNumber(),
-                                       exception.getColumnNumber()));
+    throw XMLParseException(m.str(),
+                                       static_cast<int>(exception.getLineNumber()),
+                                       static_cast<int>(exception.getColumnNumber()));
 }
 
 void XercesErrorHandler::
@@ -173,8 +180,8 @@ fatalError(const SAXParseException &exception)
 {
     XercesLocalString m(exception.getMessage());
     XMLParseException xex(m.str(),
-                                     exception.getLineNumber(),
-                                     exception.getColumnNumber());
+                                     static_cast<int>(exception.getLineNumber()),
+                                     static_cast<int>(exception.getColumnNumber()));
 
     throw except::Error(Ctxt(xex.getMessage()));
 }
@@ -185,14 +192,14 @@ XercesContext::XercesContext() :
     //! XMLPlatformUtils::Initialize is not thread safe!
     try
     {
-        mt::CriticalSection<sys::Mutex> cs(&mMutex);
+        std::lock_guard<std::mutex> cs(mMutex);
         XMLPlatformUtils::Initialize();
     }
     catch (const ::XMLException& toCatch)
     {
         XercesLocalString local(toCatch.getMessage());
         except::Error e(Ctxt(local.str() + " (Initialization error)"));
-        throw (e);
+        throw e;
     }
 }
 
@@ -215,7 +222,7 @@ void XercesContext::destroy()
         //! XMLPlatformUtils::Terminate is not thread safe!
         try
         {
-            mt::CriticalSection<sys::Mutex> cs(&mMutex);
+            std::lock_guard<std::mutex> cs(mMutex);
             XMLPlatformUtils::Terminate();
             mIsDestroyed = true;
         }
@@ -224,7 +231,7 @@ void XercesContext::destroy()
             mIsDestroyed = false;
             XercesLocalString local(toCatch.getMessage());
             except::Error e(Ctxt(local.str() + " (Termination error)"));
-            throw (e);
+            throw e;
         }
     }
 }

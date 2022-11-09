@@ -22,19 +22,19 @@
 
 #ifndef __NITF_COMPRESSED_BYTE_PROVIDER_HPP__
 #define __NITF_COMPRESSED_BYTE_PROVIDER_HPP__
+#pragma once
 
 #include <vector>
 #include <utility>
 #include <memory>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <nitf/ByteProvider.hpp>
 #include <nitf/System.hpp>
 #include <nitf/Record.hpp>
 #include <nitf/ImageBlocker.hpp>
 #include <nitf/NITFBufferList.hpp>
 #include <nitf/ImageSegmentComputer.h>
-
 
 namespace nitf
 {
@@ -55,10 +55,8 @@ namespace nitf
  *
  * The NITF layout is described in ByteProvider.hpp
  */
-class CompressedByteProvider : public ByteProvider
+struct NITRO_NITFCPP_API CompressedByteProvider : public ByteProvider
 {
-public:
-
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
      * DES subheader information must be filled out.  Record won't be modified.
@@ -78,6 +76,10 @@ public:
                     std::vector<PtrAndLength>(),
             size_t numRowsPerBlock = 0,
             size_t numColsPerBlock = 0);
+    CompressedByteProvider(Record& record,
+        const std::vector<std::vector<size_t> >& bytesPerBlock,
+        const std::vector<PtrAndLength_t>& desData,
+        size_t numRowsPerBlock = 0, size_t numColsPerBlock = 0);
 
     /*!
      * Given a range of rows from [startRow, startRow + numRows), provide the
@@ -93,7 +95,7 @@ public:
      *
      * \return The associated number of bytes in the NITF
      */
-    virtual nitf::Off getNumBytes(size_t startRow, size_t numRows) const;
+    nitf::Off getNumBytes(size_t startRow, size_t numRows) const override;
 
     /*!
      * The caller provides an AOI of the pixel data.  This method provides back
@@ -135,11 +137,11 @@ public:
      * bytes for the NITF headers) and the lifetime of the passed-in image
      * data.
      */
-    virtual void getBytes(const void* imageData,
+    void getBytes(const void* imageData,
                           size_t startRow,
                           size_t numRows,
                           nitf::Off& fileOffset,
-                          NITFBufferList& buffers) const;
+                          NITFBufferList& buffers) const override;
 
 protected:
     /*!
@@ -147,7 +149,7 @@ protected:
      * this constructor, the inheriting class will call initialize() later in
      * its constructor.
      */
-    CompressedByteProvider();
+    CompressedByteProvider() = default;
 
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
@@ -159,12 +161,16 @@ protected:
      * \param numColsPerBlock The number of columns per block.  Defaults to no
      * blocking.
      */
-    void initialize(Record& record,
+    void initialize(const Record& record,
             const std::vector<std::vector<size_t> >& bytesPerBlock,
             const std::vector<PtrAndLength>& desData =
                     std::vector<PtrAndLength>(),
             size_t numRowsPerBlock = 0,
             size_t numColsPerBlock = 0);
+    void initialize(const Record & record,
+        const std::vector<std::vector<size_t> >&bytesPerBlock,
+        const std::vector<PtrAndLength_t>&desData,
+        size_t numRowsPerBlock = 0, size_t numColsPerBlock = 0);
 
     size_t countBytesForCompressedImageData(
             size_t seg, size_t startRow, size_t numRowsToWrite) const;
@@ -176,12 +182,24 @@ protected:
             const sys::byte* imageData,
             nitf::Off& fileOffset,
             NITFBufferList& buffers) const;
+    size_t addImageData(
+            size_t seg,
+            size_t startRow,
+            size_t numRowsToWrite,
+            const std::byte* imageData,
+            nitf::Off& fileOffset,
+            NITFBufferList& buffers) const;
 
 private:
     types::Range findBlocksToWrite(size_t seg, size_t globalStartRow,
             size_t numRowsToWrite) const;
 
 private:
+    template<typename TPtrAndLength>
+    void initialize_(const Record & record,
+        const std::vector<std::vector<size_t> >&bytesPerBlock,
+        const std::vector<TPtrAndLength>&desData,
+        size_t numRowsPerBlock = 0, size_t numColsPerBlock = 0);
     std::vector<std::vector<size_t> > mBytesInEachBlock;
 };
 }

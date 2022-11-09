@@ -22,11 +22,13 @@
 
 #ifndef __NRT_TYPES_H__
 #define __NRT_TYPES_H__
+#pragma once
 
-#include "nrt/nrt_config.h"
+#include "nrt/Config.h"
 
 #   include <assert.h>
 #   include <stdlib.h>
+#   include <stdint.h>
 #   include <string.h>
 #   include <stdio.h>
 #   include <math.h>
@@ -35,19 +37,22 @@
 #   include <ctype.h>
 #   include <time.h>
 
-#ifdef WIN32
+ // Keeping these here so that code using "nrt_Uint8" still compiles;
+ // we can't make others change to "uint8_t".
+typedef uint8_t nrt_Uint8;
+typedef uint16_t nrt_Uint16;
+typedef uint32_t nrt_Uint32;
+typedef uint64_t nrt_Uint64;
+
+typedef int8_t nrt_Int8;
+typedef int16_t nrt_Int16;
+typedef int32_t nrt_Int32;
+typedef int64_t nrt_Int64;
+
+#if defined(WIN32) || defined(_WIN32)
 #      include <windows.h>
 
 /*  Types are defined for windows here  */
-typedef unsigned char nrt_Uint8;
-typedef unsigned __int16 nrt_Uint16;
-typedef unsigned __int32 nrt_Uint32;
-typedef unsigned __int64 nrt_Uint64;
-
-typedef signed char nrt_Int8;
-typedef __int16 nrt_Int16;
-typedef __int32 nrt_Int32;
-typedef __int64 nrt_Int64;
 typedef HANDLE nrt_IOHandle;
 typedef HINSTANCE NRT_NATIVE_DLL;
 typedef FARPROC NRT_DLL_FUNCTION_PTR;
@@ -56,8 +61,8 @@ typedef DWORD nrt_CreationFlags;
 /*  Determine the maximum file path length  */
 #      define  NRT_MAX_PATH     MAX_PATH
 
-/* use nrt_Off instead of off_t, since on Windows we want nrt_Int64 used */
-typedef nrt_Int64 nrt_Off;
+/* use nrt_Off instead of off_t, since on Windows we want int64_t used */
+typedef int64_t nrt_Off;
 
 /*  IO macros  */
 #      define  NRT_INVALID_HANDLE_VALUE INVALID_HANDLE_VALUE
@@ -104,15 +109,6 @@ typedef nrt_Int64 nrt_Off;
 #      include <sys/param.h>
 
 /*  Typedefs on Unix are a different ball game */
-typedef uint8_t nrt_Uint8;
-typedef uint16_t nrt_Uint16;
-typedef uint32_t nrt_Uint32;
-typedef uint64_t nrt_Uint64;
-
-typedef int8_t nrt_Int8;
-typedef int16_t nrt_Int16;
-typedef int32_t nrt_Int32;
-typedef int64_t nrt_Int64;
 typedef int nrt_IOHandle;
 typedef off_t nrt_Off;
 
@@ -166,6 +162,14 @@ typedef int nrt_CreationFlags;
 #define NRT_TRUE     (1)
 #define NRT_FALSE    (0)
 
+
+#if defined(__cplusplus) && !defined(SWIGPYTHON)
+// "enum class" for C++ w/o SWIG
+#define NRT_DECLARE_ENUM(name, ...) enum class name { __VA_ARGS__ }
+#else
+#define NRT_DECLARE_ENUM(name, ...) typedef enum _ ## name { __VA_ARGS__ } name
+#endif
+
 typedef enum _nrt_CornersType
 {
     NRT_CORNERS_UNKNOWN = -1,
@@ -187,10 +191,10 @@ typedef enum _nrt_CornersType
 /* these functions are accessed if needed via the nrt_ntohs
    and nrt_ntohl macros defined in System.h                 */
 
-NRTPROT(nrt_Uint16) nrt_System_swap16(nrt_Uint16 ins);
-NRTPROT(nrt_Uint32) nrt_System_swap32(nrt_Uint32 inl);
-NRTPROT(nrt_Uint64) nrt_System_swap64(nrt_Uint64 inl);
-NRTPROT(nrt_Uint64) nrt_System_swap64c(nrt_Uint64 inl);
+NRTPROT(uint16_t) nrt_System_swap16(uint16_t ins);
+NRTPROT(uint32_t) nrt_System_swap32(uint32_t inl);
+NRTPROT(uint64_t) nrt_System_swap64(uint64_t inl);
+NRTPROT(uint64_t) nrt_System_swap64c(uint64_t inl);
 
 /* Configure says we are big-endian */
 #if defined(__LITTLE_ENDIAN__) || !defined(WORDS_BIGENDIAN)

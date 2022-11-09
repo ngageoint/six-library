@@ -20,13 +20,19 @@
  *
  */
 
+#include <map>
+#include <functional>
+#include <stdexcept>
+#include <cstddef>
+#include <type_traits>
+
 #include "nitf/TextSubheader.hpp"
 
 using namespace nitf;
 
 TextSubheader::TextSubheader(const TextSubheader & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 TextSubheader & TextSubheader::operator=(const TextSubheader & x)
@@ -42,53 +48,86 @@ TextSubheader::TextSubheader(nitf_TextSubheader * x)
     getNativeOrThrow();
 }
 
-TextSubheader::TextSubheader()
+TextSubheader::TextSubheader() noexcept(false) : TextSubheader(nitf_TextSubheader_construct(&error))
 {
-    setNative(nitf_TextSubheader_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
-nitf::TextSubheader TextSubheader::clone()
+nitf::TextSubheader TextSubheader::clone() const
 {
     nitf::TextSubheader dolly(nitf_TextSubheader_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
     return dolly;
 }
 
-TextSubheader::~TextSubheader(){}
+//nitf::Field TextSubheader::get(nitf_TextSubheaderFields_enum v) const
+//{
+//    using get_t = nitf::Field(TextSubheader::*)() const;
+//    static const std::map<nitf_TextSubheaderFields_enum, get_t> getFieldMap = {
+//        { filePartType, &TextSubheader::getFilePartType }
+//    };
+//
+//    auto it = getFieldMap.find(v);
+//    if (it != getFieldMap.end())
+//    {
+//        auto&& p_mf = it->second;
+//        return (this->*p_mf)();
+//    }
+//
+//    throw std::invalid_argument("member-function not in map.");
+//}
 
-nitf::Field TextSubheader::getFilePartType()
+//nitf::Field TextSubheader::get(nitf_TextSubheaderFields_enum v) const
+//{
+//    static const std::map<nitf_TextSubheaderFields_enum, size_t> offsetMap = {
+//        { filePartType, offsetof(nitf_TextSubheader, filePartType) }
+//    };
+//
+//    auto it = offsetMap.find(v);
+//    if (it != offsetMap.end())
+//    {
+//        const auto fieldOffset = it->second;
+//        return Field::fromNativeOffset(getNativeOrThrow(), fieldOffset);
+//    }
+//
+//    throw std::invalid_argument("member-function not in map.");
+//}
+
+//#define getField_(name) nitf::Field(getNativeOrThrow()->name)
+//#define getField_(name) getField(*this, offsetof(native_t, name));
+
+nitf::Field TextSubheader::getFilePartType() const
 {
+    //return getField(*this, offsetof(native_t, filePartType));
     return nitf::Field(getNativeOrThrow()->filePartType);
 }
 
-nitf::Field TextSubheader::getTextID()
+nitf::Field TextSubheader::getTextID() const
 {
     return nitf::Field(getNativeOrThrow()->textID);
 }
 
-nitf::Field TextSubheader::getAttachmentLevel()
+nitf::Field TextSubheader::getAttachmentLevel() const
 {
     return nitf::Field(getNativeOrThrow()->attachmentLevel);
 }
 
-nitf::Field TextSubheader::getDateTime()
+nitf::Field TextSubheader::getDateTime() const
 {
     return nitf::Field(getNativeOrThrow()->dateTime);
 }
 
-nitf::Field TextSubheader::getTitle()
+nitf::Field TextSubheader::getTitle() const
 {
     return nitf::Field(getNativeOrThrow()->title);
 }
 
-nitf::Field TextSubheader::getSecurityClass()
+nitf::Field TextSubheader::getSecurityClass() const
 {
     return nitf::Field(getNativeOrThrow()->securityClass);
 }
 
-nitf::FileSecurity TextSubheader::getSecurityGroup()
+nitf::FileSecurity TextSubheader::getSecurityGroup() const
 {
     return nitf::FileSecurity(getNativeOrThrow()->securityGroup);
 }
@@ -104,27 +143,27 @@ void TextSubheader::setSecurityGroup(nitf::FileSecurity value)
     value.setManaged(true);
 }
 
-nitf::Field TextSubheader::getEncrypted()
+nitf::Field TextSubheader::getEncrypted() const
 {
     return nitf::Field(getNativeOrThrow()->encrypted);
 }
 
-nitf::Field TextSubheader::getFormat()
+nitf::Field TextSubheader::getFormat() const
 {
     return nitf::Field(getNativeOrThrow()->format);
 }
 
-nitf::Field TextSubheader::getExtendedHeaderLength()
+nitf::Field TextSubheader::getExtendedHeaderLength() const
 {
     return nitf::Field(getNativeOrThrow()->extendedHeaderLength);
 }
 
-nitf::Field TextSubheader::getExtendedHeaderOverflow()
+nitf::Field TextSubheader::getExtendedHeaderOverflow() const
 {
     return nitf::Field(getNativeOrThrow()->extendedHeaderOverflow);
 }
 
-nitf::Extensions TextSubheader::getExtendedSection()
+nitf::Extensions TextSubheader::getExtendedSection() const
 {
     return nitf::Extensions(getNativeOrThrow()->extendedSection);
 }

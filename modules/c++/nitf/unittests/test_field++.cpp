@@ -20,54 +20,52 @@
  *
  */
 
-#include <config/coda_oss_config.h>
 #include <nitf/Field.hpp>
+#include <nitf/TestingTest.hpp>
+#include <nitf/FieldDescriptor.hpp>
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testCastOperator)
 {
-    nitf_Error error;
-    nitf::Field field(nitf_Field_construct(20, NITF_BCS_A, &error));
+    nitf::Field field(20, nitf::Field::BCS_A);
 
     // Test unsigned values
     field.set(123);
-    const nitf::Uint8 valUint8 = field;
-    TEST_ASSERT_EQ(valUint8, 123);
+    const uint8_t valUint8 = field;
+    TEST_ASSERT_EQ(valUint8, static_cast<uint8_t>(123));
 
     field.set(12345);
-    const nitf::Uint16 valUint16 = field;
-    TEST_ASSERT_EQ(valUint16, 12345);
+    const uint16_t valUint16 = field;
+    TEST_ASSERT_EQ(valUint16, static_cast<uint16_t>(12345));
 
     field.set(1234567890);
-    const nitf::Uint32 valUint32 = field;
-    TEST_ASSERT_EQ(valUint32, 1234567890);
+    const uint32_t valUint32 = field;
+    TEST_ASSERT_EQ(valUint32, static_cast<uint32_t>(1234567890));
 #if SIZEOF_SIZE_T == 4
     const size_t valSizeT = field;
     TEST_ASSERT_EQ(valSizeT, 1234567890);
 #endif
 
-    field.set(nitf::Uint64(1234567890987));
-    const nitf::Uint64 valUint64 = field;
-    TEST_ASSERT_EQ(valUint64, 1234567890987);
+    field.set(uint64_t(1234567890987));
+    const uint64_t valUint64 = field;
+    TEST_ASSERT_EQ(valUint64, static_cast<uint64_t>(1234567890987));
 
 #if SIZEOF_SIZE_T == 8
     const size_t valSizeT = field;
-    TEST_ASSERT_EQ(valSizeT, 1234567890987);
+    TEST_ASSERT_EQ(valSizeT, static_cast<size_t>(1234567890987));
 #endif
 
     // Test signed values
     field.set(-123);
-    const nitf::Int8 valInt8 = field;
-    TEST_ASSERT_EQ(valInt8, -123);
+    const int8_t valInt8 = field;
+    TEST_ASSERT_EQ(valInt8, gsl::narrow<int8_t>(-123));
 
     field.set(-12345);
-    const nitf::Int16 valInt16 = field;
-    TEST_ASSERT_EQ(valInt16, -12345);
+    const int16_t valInt16 = field;
+    TEST_ASSERT_EQ(valInt16, gsl::narrow<int16_t>(-12345));
 
     field.set(-1234567890);
-    const nitf::Int32 valInt32 = field;
+    const int32_t valInt32 = field;
     TEST_ASSERT_EQ(valInt32, -1234567890);
 #if SIZEOF_SIZE_T == 4
     const size_t valSSizeT = field;
@@ -77,7 +75,7 @@ TEST_CASE(testCastOperator)
     // TODO: I think the %lld isn't working, at least in VS, in
     //       nitf_Field_setInt64(), so need to do this via string
     field.set("-1234567890987");
-    const nitf::Int64 valInt64 = field;
+    const int64_t valInt64 = field;
     TEST_ASSERT_EQ(valInt64, -1234567890987);
 #if SIZEOF_SIZE_T == 8
     const size_t valSSizeT = field;
@@ -96,12 +94,27 @@ TEST_CASE(testCastOperator)
     // Test arbitrary string
     field.set("ABCxyz");
     const std::string valStr = field;
-    TEST_ASSERT_EQ(valStr, "ABCxyz              ");
+    TEST_ASSERT_EQ(valStr, std::string("ABCxyz              "));
 }
+TEST_CASE(testDescriptors)
+{
+    nitf::testing::Test1a test1a;
+    test1a.setF1("1234");
+
+    const auto descriptors = test1a.getDescriptors();
+    TEST_ASSERT_EQ(gsl::narrow<size_t>(1), descriptors.size());
+    for (const auto& descriptor : descriptors)
+    {
+        TEST_ASSERT_EQ(std::string("f1"), descriptor.name());
+        const auto field = descriptor.getField(test1a);
+        const std::string value = field; // nitf::Field will implicitly cast
+        TEST_ASSERT_EQ(std::string("1234"), value);
+    }
 }
 
-int main(int , char** )
-{
+TEST_MAIN(
+    (void)argc;
+    (void)argv;
     TEST_CHECK(testCastOperator);
-    return 0;
-}
+    TEST_CHECK(testDescriptors);
+    )

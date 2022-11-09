@@ -48,20 +48,10 @@ NITFAPI(cgm_Metafile*) cgm_Metafile_construct(const char* name,
         NITF_FREE(mf);
         return NULL;
     }
-    mf->description = NULL;
     mf->picture = NULL;
 
-    if (name)
-    {
-        mf->name = (char*)NITF_MALLOC( strlen( name ) + 1 );
-        strcpy(mf->name, name);
-    }
-
-    if (description)
-    {
-        mf->description = (char*)NITF_MALLOC( strlen( description ) + 1 );
-        strcpy(mf->description, description);
-    }
+    mf->name = nitf_strdup(name);
+    mf->description = nitf_strdup(description);
 
     return mf;
 }
@@ -133,5 +123,7 @@ NITFAPI(cgm_Picture*) cgm_Metafile_createPicture(cgm_Metafile* metafile,
 
 NITFAPI(cgm_Metafile*) cgm_Metafile_clone(cgm_Metafile* mf, nitf_Error* error)
 {
+    (void)mf;
+    (void)error;
     return NULL;
 }

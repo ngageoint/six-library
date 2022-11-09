@@ -24,16 +24,16 @@
 
 NITF_BOOL writeRectangle(cgm_Rectangle* r, nitf_IOInterface* io, nitf_Error* error)
 {
-    short s = NITF_HTONS(r->x1);
+    short s = (short) NITF_HTONS((uint16_t)r->x1);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(r->y1);
+    s = (short)NITF_HTONS((uint16_t)r->y1);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(r->x2);
+    s = (short)NITF_HTONS((uint16_t)r->x2);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(r->y2);
+    s = (short)NITF_HTONS((uint16_t)r->y2);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
     return NITF_SUCCESS;
@@ -113,18 +113,20 @@ NITF_BOOL writeVDC(cgm_Rectangle* r, nitf_IOInterface* io, nitf_Error* error)
     return writeRectangle(r, io, error);
 }
 
+static NITF_BOOL nitf_IOInterface_writeRGB(nitf_IOInterface* io, short rgb, nitf_Error* error)
+{
+    unsigned char c = (unsigned char)rgb;
+    return nitf_IOInterface_write(io, (const char*)&c, 1, error);
+}
 NITF_BOOL writeRGB(cgm_Color* color3, nitf_IOInterface* io, nitf_Error* error)
 {
-    unsigned char c = color3->r;
-    if (!nitf_IOInterface_write(io, (const char*)&c, 1, error))
+    if (!nitf_IOInterface_writeRGB(io, color3->r, error))
         return NITF_FAILURE;
 
-    c = color3->g;
-    if (!nitf_IOInterface_write(io, (const char*)&c, 1, error))
+    if (!nitf_IOInterface_writeRGB(io, color3->g, error))
         return NITF_FAILURE;
 
-    c = color3->b;
-    return nitf_IOInterface_write(io, (const char*)&c, 1, error);
+    return nitf_IOInterface_writeRGB(io, color3->b, error);
 }
 
 NITF_BOOL writeRGBPadded(cgm_Color *color3, nitf_IOInterface* io, nitf_Error* error)
@@ -182,21 +184,21 @@ NITF_BOOL writeFillAttributes(cgm_FillAttributes* atts, nitf_IOInterface* io,
     /* Write the edge vis */
     if (atts->edgeVisibility != -1)
     {
-        tmpShort = NITF_HTONS(atts->edgeVisibility);
+        tmpShort = (short)NITF_HTONS((uint16_t)atts->edgeVisibility);
         if (!writeField(5, 30, (const char*)&tmpShort, 2, io, error))
             return NITF_FAILURE;
     }
     /* Write the edge width */
     if (atts->edgeWidth != -1)
     {
-        tmpShort = NITF_HTONS(atts->edgeWidth);
+        tmpShort = (short)NITF_HTONS((uint16_t)atts->edgeWidth);
         if (!writeField(5, 28, (const char*)&tmpShort, 2, io, error))
             return NITF_FAILURE;
     }
     /* Write the edge type */
     if (atts->edgeType != CGM_TYPE_NOT_SET)
     {
-        tmpShort = NITF_HTONS(atts->edgeType);
+        tmpShort = (short)NITF_HTONS((uint16_t)atts->edgeType);
         if (!writeField(5, 27, (const char*)&tmpShort, 2, io, error))
             return NITF_FAILURE;
     }
@@ -219,14 +221,14 @@ NITF_BOOL writeLineAttributes(cgm_LineAttributes* atts, nitf_IOInterface* io,
     /* Write the edge width */
     if (atts->lineWidth != -1)
     {
-        tmpShort = NITF_HTONS(atts->lineWidth);
+        tmpShort = (short)NITF_HTONS(atts->lineWidth);
         if (!writeField(5, 3, (const char*)&tmpShort, 2, io, error))
             return NITF_FAILURE;
     }
     /* Write the edge type */
     if (atts->lineType != CGM_TYPE_NOT_SET)
     {
-        tmpShort = NITF_HTONS(atts->lineType);
+        tmpShort = (short)NITF_HTONS(atts->lineType);
         if (!writeField(5, 2, (const char*)&tmpShort, 2, io, error))
             return NITF_FAILURE;
     }
@@ -302,14 +304,14 @@ NITF_BOOL writeElements(cgm_MetafileWriter* writer, nitf_List* elements,
 NITF_BOOL writeBody(cgm_MetafileWriter* writer, cgm_PictureBody* body,
         nitf_IOInterface* io, nitf_Error* error)
 {
-    short actual, tmpShort;
+    short actual;
 
     /* Write picture body */
     if (!writeHeader(0, 4, 0, io, &actual, error))
         return NITF_FAILURE;
 
     /* Transparency */
-    tmpShort = NITF_HTONS(body->transparency);
+    short tmpShort = (short) NITF_HTONS((uint16_t)body->transparency);
     if (!writeField(3, 4, (const char*)&tmpShort, 2, io, error))
         return NITF_FAILURE;
 
@@ -329,7 +331,7 @@ NITF_BOOL writePicture(cgm_MetafileWriter* writer, cgm_Picture* picture,
 {
     short actual, tmpShort;
     /* Begin picture */
-    if (!writeField(0, 3, picture->name, strlen(picture->name), io, error))
+    if (!writeField(0, 3, picture->name, nrt_strlen16(picture->name), io, error))
         return NITF_FAILURE;
 
     /* Color selection mode */
@@ -370,7 +372,7 @@ NITF_BOOL writeFontList(nitf_List* fontList, nitf_IOInterface* io, nitf_Error* e
     {
         char *data = (char*)nitf_ListIterator_get(&it);
         /* The extra byte is for the length each time */
-        dataLen += (strlen(data) + 1);
+        dataLen += nrt_strlen16(data) + 1;
         nitf_ListIterator_increment(&it);
     }
     
@@ -382,7 +384,7 @@ NITF_BOOL writeFontList(nitf_List* fontList, nitf_IOInterface* io, nitf_Error* e
     while (nitf_ListIterator_notEqualTo(&it, &end))
     {
         char *data = (char*)nitf_ListIterator_get(&it);
-        unsigned char len = strlen(data);
+        unsigned char len = nrt_strlen8(data);
         if (!nitf_IOInterface_write(io, (const char*)&len, 1, error))
             return NITF_FAILURE;
 
@@ -420,7 +422,7 @@ NITFPRIV(NITF_BOOL) writeMetafileInfo(cgm_MetafileWriter* writer,
     }
         
     /* Begin Metafile */
-    if (!writeField(0, 1, mf->name, strlen(mf->name), io, error))
+    if (!writeField(0, 1, mf->name, nrt_strlen16(mf->name), io, error))
         return NITF_FAILURE;
 
     /* Write version */
@@ -438,7 +440,7 @@ NITFPRIV(NITF_BOOL) writeMetafileInfo(cgm_MetafileWriter* writer,
         return NITF_FAILURE;
 
     /* Metafile description */
-    if (!writeField(1, 2, mf->description, strlen(mf->description), io, error))
+    if (!writeField(1, 2, mf->description, nrt_strlen16(mf->description), io, error))
         return NITF_FAILURE;
 
     if (mf->fontList != NULL)
@@ -466,7 +468,7 @@ NITF_BOOL writeText(cgm_Element* element, nitf_IOInterface* io, nitf_Error* erro
 {
     short s;
     short actual;
-    unsigned char slen;
+    uint8_t slen;
     cgm_TextElement* textElement = (cgm_TextElement*)element->data;
     cgm_Text* text = textElement->text;
     
@@ -485,7 +487,7 @@ NITF_BOOL writeText(cgm_Element* element, nitf_IOInterface* io, nitf_Error* erro
     }
 
     /* Text length + x + y */
-    s = strlen(text->str) + 1 + 6;
+    s = nrt_strlen16(text->str) + 1 + 6;
     if (!writeHeader(4, 4, s, io, &actual, error))
         return NITF_FAILURE;
 
@@ -501,12 +503,13 @@ NITF_BOOL writeText(cgm_Element* element, nitf_IOInterface* io, nitf_Error* erro
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    slen = strlen(text->str);
+    slen = nrt_strlen8(text->str);
     if (!nitf_IOInterface_write(io, (const char*)&slen, 1, error))
         return NITF_FAILURE;
 
     /* Trick since we know it zero padded in memory */
-    if (!nitf_IOInterface_write(io, (const char*)text->str, actual - 7, error))
+    const size_t actual_ = actual >= 7 ? (size_t)actual - 7 : (size_t)0;
+    if (!nitf_IOInterface_write(io, (const char*)text->str, actual_, error))
         return NITF_FAILURE;
 
     return NITF_SUCCESS;
@@ -517,7 +520,7 @@ NITF_BOOL writePolygon(cgm_Element* element, nitf_IOInterface* io, nitf_Error* e
     nitf_ListIterator it = nitf_List_begin(polyElement->vertices);
     nitf_ListIterator end = nitf_List_end(polyElement->vertices);
     short actual;
-    short size = nitf_List_size(polyElement->vertices);
+    uint16_t size = nitf_List_size16(polyElement->vertices);
     size *= 4;
 
     if (polyElement->attributes)
@@ -555,7 +558,7 @@ NITF_BOOL writePolySet(cgm_Element* element, nitf_IOInterface* io, nitf_Error* e
     nitf_ListIterator it = nitf_List_begin(polyElement->vertices);
     nitf_ListIterator end = nitf_List_end(polyElement->vertices);
     short actual;
-    short size = nitf_List_size(polyElement->vertices);
+    uint16_t size = nitf_List_size16(polyElement->vertices);
     size *= 6;
 
     if (polyElement->attributes)
@@ -605,7 +608,7 @@ NITF_BOOL writePolyLine(cgm_Element* element, nitf_IOInterface* io,
     nitf_ListIterator it = nitf_List_begin(polyElement->vertices);
     nitf_ListIterator end = nitf_List_end(polyElement->vertices);
     short actual;
-    short size = nitf_List_size(polyElement->vertices);
+    uint16_t size = nitf_List_size16(polyElement->vertices);
     size *= 4;
 
     if (polyElement->attributes)
@@ -696,33 +699,33 @@ NITF_BOOL writeEllipticalArcCenter(cgm_Element* element, nitf_IOInterface* io,
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->centerY);
+    s = (short)NITF_HTONS(arc->centerY);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->end1X);
+    s = (short)NITF_HTONS(arc->end1X);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(arc->end1Y);
+    s = (short)NITF_HTONS(arc->end1Y);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(arc->end2X);
+    s = (short)NITF_HTONS(arc->end2X);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(arc->end2Y);
+    s = (short)NITF_HTONS(arc->end2Y);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->startVectorY);
+    s = (short)NITF_HTONS(arc->startVectorY);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(arc->startVectorY);
+    s = (short)NITF_HTONS(arc->startVectorY);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(arc->endVectorX);
+    s = (short)NITF_HTONS(arc->endVectorX);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(arc->endVectorY);
+    s = (short)NITF_HTONS(arc->endVectorY);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
@@ -745,41 +748,41 @@ NITF_BOOL writeEllipticalArcCenterClose(cgm_Element* element, nitf_IOInterface* 
     if (!writeHeader(4, 19, 22, io, &actual, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->centerX);
+    s = (short)NITF_HTONS(arc->centerX);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->centerY);
+    s = (short)NITF_HTONS(arc->centerY);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->end1X);
+    s = (short)NITF_HTONS(arc->end1X);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(arc->end1Y);
+    s = (short)NITF_HTONS(arc->end1Y);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(arc->end2X);
+    s = (short)NITF_HTONS(arc->end2X);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(arc->end2Y);
-    if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
-        return NITF_FAILURE;
-
-    s = NITF_HTONS(arc->startVectorY);
-    if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
-        return NITF_FAILURE;
-    s = NITF_HTONS(arc->startVectorY);
-    if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
-        return NITF_FAILURE;
-    s = NITF_HTONS(arc->endVectorX);
-    if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
-        return NITF_FAILURE;
-    s = NITF_HTONS(arc->endVectorY);
+    s = (short)NITF_HTONS(arc->end2Y);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->closeType);
+    s = (short)NITF_HTONS(arc->startVectorY);
+    if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
+        return NITF_FAILURE;
+    s = (short)NITF_HTONS(arc->startVectorY);
+    if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
+        return NITF_FAILURE;
+    s = (short)NITF_HTONS(arc->endVectorX);
+    if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
+        return NITF_FAILURE;
+    s = (short)NITF_HTONS(arc->endVectorY);
+    if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
+        return NITF_FAILURE;
+
+    s = (short)NITF_HTONS(arc->closeType);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
@@ -825,15 +828,15 @@ NITF_BOOL writeCircle(cgm_Element* element, nitf_IOInterface* io, nitf_Error* er
     if (!writeHeader(4, 12, 6, io, &actual, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(circle->centerX);
+    s = (short)NITF_HTONS(circle->centerX);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(circle->centerY);
+    s = (short)NITF_HTONS(circle->centerY);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(circle->radius);
+    s = (short)NITF_HTONS(circle->radius);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
@@ -855,28 +858,28 @@ NITF_BOOL writeCircularArcCenter(cgm_Element* element, nitf_IOInterface* io,
     if (!writeHeader(4, 18, 20, io, &actual, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->centerX);
+    s = (short)NITF_HTONS((uint16_t)arc->centerX);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->centerY);
+    s = (short)NITF_HTONS((uint16_t)arc->centerY);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->startX);
+    s = (short)NITF_HTONS((uint16_t)arc->startX);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(arc->startY);
+    s = (short)NITF_HTONS((uint16_t)arc->startY);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(arc->endX);
+    s = (short)NITF_HTONS((uint16_t)arc->endX);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
-    s = NITF_HTONS(arc->endY);
+    s = (short)NITF_HTONS((uint16_t)arc->endY);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->radius);
+    s = (short)NITF_HTONS((uint16_t)arc->radius);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
@@ -895,35 +898,35 @@ NITF_BOOL writeCircularArcCenterClose(cgm_Element* element, nitf_IOInterface* io
             return NITF_FAILURE;
     }
 
-    s = NITF_HTONS(arc->centerX);
+    s = (short)NITF_HTONS((uint16_t)arc->centerX);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->centerY);
+    s = (short)NITF_HTONS((uint16_t)arc->centerY);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->startX);
+    s = (short)NITF_HTONS((uint16_t)arc->startX);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->startY);
+    s = (short)NITF_HTONS((uint16_t)arc->startY);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->endX);
+    s = (short)NITF_HTONS((uint16_t)arc->endX);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->endY);
+    s = (short)NITF_HTONS((uint16_t)arc->endY);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->radius);
+    s = (short)NITF_HTONS((uint16_t)arc->radius);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 
-    s = NITF_HTONS(arc->closeType);
+    s = (short)NITF_HTONS(arc->closeType);
     if (!nitf_IOInterface_write(io, (const char*)&s, 2, error))
         return NITF_FAILURE;
 

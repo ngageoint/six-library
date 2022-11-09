@@ -26,8 +26,8 @@
 typedef struct _WriteHandlerImpl
 {
     nitf_IOInterface* ioHandle;
-    nitf_Uint64       offset;
-    nitf_Uint64       bytes;
+    uint64_t       offset;
+    uint64_t       bytes;
 } WriteHandlerImpl;
 
 
@@ -40,8 +40,8 @@ NITFPRIV(NITF_BOOL) WriteHandler_write
     (NITF_DATA * data, nitf_IOInterface* output, nitf_Error * error)
 {
     WriteHandlerImpl *impl = NULL;
-    nitf_Uint64 toWrite;
-    nitf_Uint32 bytesThisPass;
+    uint64_t toWrite;
+    uint32_t bytesThisPass;
     char *buf = NULL;
 
     /* cast it to the structure we know about */
@@ -70,7 +70,7 @@ NITFPRIV(NITF_BOOL) WriteHandler_write
     while (toWrite > 0)
     {
         bytesThisPass = toWrite >= _STREAM_CHUNK_SIZE ? _STREAM_CHUNK_SIZE :
-                (nitf_Uint32) toWrite;
+                (uint32_t) toWrite;
 
         /* read */
         if (!nitf_IOInterface_read(impl->ioHandle, buf, bytesThisPass, error))
@@ -107,8 +107,8 @@ NITFPRIV(void) WriteHandler_destruct(NITF_DATA * data)
 
 NITFAPI(nitf_WriteHandler*)
 nitf_StreamIOWriteHandler_construct(nitf_IOInterface *ioHandle,
-                                    nitf_Uint64 offset,
-                                    nitf_Uint64 bytes,
+                                    uint64_t offset,
+                                    uint64_t bytes,
                                     nitf_Error *error)
 {
     nitf_WriteHandler *writeHandler = NULL;

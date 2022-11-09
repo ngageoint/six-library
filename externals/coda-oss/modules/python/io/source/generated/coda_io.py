@@ -154,15 +154,20 @@ class OutputStream(_object):
     __swig_destroy__ = _coda_io.delete_OutputStream
     __del__ = lambda self: None
 
-    def writeln(self, str: 'std::string const &') -> "void":
-        """writeln(OutputStream self, std::string const & str)"""
-        return _coda_io.OutputStream_writeln(self, str)
+    def writeln(self, *args) -> "void":
+        """
+        writeln(OutputStream self, std::string const & str)
+        writeln(OutputStream self, coda_oss::u8string const & str)
+        """
+        return _coda_io.OutputStream_writeln(self, *args)
 
 
     def write(self, *args) -> "void":
         """
         write(OutputStream self, sys::byte b)
+        write(OutputStream self, coda_oss::byte b)
         write(OutputStream self, std::string const & str)
+        write(OutputStream self, coda_oss::u8string const & str)
         write(OutputStream self, void const * buffer, size_t len)
         """
         return _coda_io.OutputStream_write(self, *args)
@@ -213,6 +218,9 @@ class Seekable(_object):
     __repr__ = _swig_repr
     __swig_destroy__ = _coda_io.delete_Seekable
     __del__ = lambda self: None
+    Whence_CURRENT = _coda_io.Seekable_Whence_CURRENT
+    Whence_START = _coda_io.Seekable_Whence_START
+    Whence_END = _coda_io.Seekable_Whence_END
     CURRENT = _coda_io.Seekable_CURRENT
     START = _coda_io.Seekable_START
     END = _coda_io.Seekable_END
@@ -304,79 +312,6 @@ class SeekableBidirectionalStream(BidirectionalStream, Seekable):
 
 SeekableBidirectionalStream_swigregister = _coda_io.SeekableBidirectionalStream_swigregister
 SeekableBidirectionalStream_swigregister(SeekableBidirectionalStream)
-
-class StringStream(SeekableBidirectionalStream):
-    """Proxy of C++ io::StringStream class."""
-
-    __swig_setmethods__ = {}
-    for _s in [SeekableBidirectionalStream]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, StringStream, name, value)
-    __swig_getmethods__ = {}
-    for _s in [SeekableBidirectionalStream]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, StringStream, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(io::StringStream self) -> StringStream"""
-        this = _coda_io.new_StringStream()
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def tell(self) -> "sys::Off_T":
-        """tell(StringStream self) -> sys::Off_T"""
-        return _coda_io.StringStream_tell(self)
-
-
-    def seek(self, offset: 'sys::Off_T', whence: 'io::Seekable::Whence') -> "sys::Off_T":
-        """seek(StringStream self, sys::Off_T offset, io::Seekable::Whence whence) -> sys::Off_T"""
-        return _coda_io.StringStream_seek(self, offset, whence)
-
-
-    def available(self) -> "sys::Off_T":
-        """available(StringStream self) -> sys::Off_T"""
-        return _coda_io.StringStream_available(self)
-
-
-    def write(self, *args) -> "void":
-        """
-        write(StringStream self, sys::byte b)
-        write(StringStream self, std::string const & str)
-        write(StringStream self, void const * buffer, size_t len)
-        write(StringStream self, void const * buffer, sys::Size_T size)
-        """
-        return _coda_io.StringStream_write(self, *args)
-
-
-    def stream(self, *args) -> "std::stringstream &":
-        """
-        stream(StringStream self) -> std::stringstream const
-        stream(StringStream self) -> std::stringstream &
-        """
-        return _coda_io.StringStream_stream(self, *args)
-
-
-    def reset(self) -> "void":
-        """reset(StringStream self)"""
-        return _coda_io.StringStream_reset(self)
-
-
-    def str(self) -> "std::string":
-        """str(StringStream self) -> std::string"""
-        return _coda_io.StringStream_str(self)
-
-
-    def writeBytes(self, bytes: 'PyObject *') -> "void":
-        """writeBytes(StringStream self, PyObject * bytes)"""
-        return _coda_io.StringStream_writeBytes(self, bytes)
-
-    __swig_destroy__ = _coda_io.delete_StringStream
-    __del__ = lambda self: None
-StringStream_swigregister = _coda_io.StringStream_swigregister
-StringStream_swigregister(StringStream)
 
 class NullInputStream(InputStream):
     """Proxy of C++ io::NullInputStream class."""
@@ -527,6 +462,8 @@ class FileInputStream(SeekableInputStream):
         """
         FileInputStreamOS() -> FileInputStream
         FileInputStreamOS(std::string const & inputFile) -> FileInputStream
+        FileInputStreamOS(coda_oss::filesystem::path const & inputFile) -> FileInputStream
+        FileInputStreamOS(char const * inputFile) -> FileInputStream
         __init__(io::FileInputStreamOS self, sys::File const & inputFile) -> FileInputStream
         """
         this = _coda_io.new_FileInputStream(*args)
@@ -585,8 +522,8 @@ class FileOutputStream(SeekableOutputStream):
     def __init__(self, *args):
         """
         FileOutputStreamOS() -> FileOutputStream
-        FileOutputStreamOS(std::string const & outputFile, int creationFlags) -> FileOutputStream
-        __init__(io::FileOutputStreamOS self, std::string const & outputFile) -> FileOutputStream
+        FileOutputStreamOS(io::FileOutputStreamOS::path const & outputFile, int creationFlags) -> FileOutputStream
+        __init__(io::FileOutputStreamOS self, io::FileOutputStreamOS::path const & outputFile) -> FileOutputStream
         """
         this = _coda_io.new_FileOutputStream(*args)
         try:
@@ -603,8 +540,8 @@ class FileOutputStream(SeekableOutputStream):
 
     def create(self, *args) -> "void":
         """
-        create(FileOutputStream self, std::string const & str, int creationFlags)
-        create(FileOutputStream self, std::string const & str)
+        create(FileOutputStream self, io::FileOutputStreamOS::path const & str, int creationFlags)
+        create(FileOutputStream self, io::FileOutputStreamOS::path const & str)
         """
         return _coda_io.FileOutputStream_create(self, *args)
 
@@ -631,8 +568,7 @@ class FileOutputStream(SeekableOutputStream):
 
     def write(self, *args) -> "void":
         """
-        write(FileOutputStream self, sys::byte b)
-        write(FileOutputStream self, std::string const & str)
+        write(FileOutputStream self)
         write(FileOutputStream self, void const * buffer, size_t len)
         """
         return _coda_io.FileOutputStream_write(self, *args)

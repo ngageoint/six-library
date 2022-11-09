@@ -22,17 +22,36 @@
 
 #include "nitf/SubWindow.hpp"
 
+#include <gsl/gsl.h>
+
+#include "nitf/ImageSubheader.hpp"
+
 using namespace nitf;
 
 SubWindow::SubWindow(const SubWindow & x)
 {
-    setNative(x.getNative());
+    *this = x;
+}
+
+void SubWindow::updateBandList()
+{
+    assert(bandList.has_value());
+    setBandList(bandList->data());
+    setNumBands(gsl::narrow<uint32_t>(bandList->size()));
 }
 
 SubWindow & SubWindow::operator=(const SubWindow & x)
 {
     if (&x != this)
+    {
         setNative(x.getNative());
+
+        bandList = x.bandList;
+        if (bandList.has_value())
+        {
+            updateBandList();
+        }
+    }
     return *this;
 }
 
@@ -42,79 +61,106 @@ SubWindow::SubWindow(nitf_SubWindow * x)
     getNativeOrThrow();
 }
 
-SubWindow::SubWindow() : mDownSampler(NULL)
+SubWindow::SubWindow() noexcept(false) : SubWindow(nitf_SubWindow_construct(&error))
 {
-    setNative(nitf_SubWindow_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
+
+    setStartCol(0);
+    setStartRow(0);
+}
+
+SubWindow::SubWindow(uint32_t rows, uint32_t cols, uint32_t* bands, uint32_t numBands) : SubWindow()
+{
+    setNumRows(rows);
+    setNumCols(cols);
+    setBandList(bands);
+    setNumBands(numBands);
+}
+
+static inline std::vector<uint32_t> iota(size_t count, uint32_t value = 0)
+{
+    std::vector<uint32_t> retval(count);
+    std::iota(retval.begin(), retval.end(), value);
+    return retval;
+}
+SubWindow::SubWindow(const ImageSubheader& subheader) :
+    SubWindow(gsl::narrow<uint32_t>(subheader.numRows()), gsl::narrow<uint32_t>(subheader.numCols()))
+{
+    setBandList(iota(subheader.getBandCount()));
 }
 
 SubWindow::~SubWindow()
 {
-    if (isValid() && getNative()->downsampler)
+    auto downsampler = getNative()->downsampler;
+    if (downsampler)
     {
-        nitf::DownSampler ds(getNativeOrThrow()->downsampler);
+        nitf::DownSampler ds(downsampler);
         //decrement the current DownSampler
         ds.decRef();
     }
 }
 
-nitf::Uint32 SubWindow::getStartRow() const
+uint32_t SubWindow::getStartRow() const
 {
     return getNativeOrThrow()->startRow;
 }
 
-void SubWindow::setStartRow(nitf::Uint32 value)
+void SubWindow::setStartRow(uint32_t value)
 {
     getNativeOrThrow()->startRow = value;
 }
 
-nitf::Uint32 SubWindow::getNumRows() const
+uint32_t SubWindow::getNumRows() const
 {
     return getNativeOrThrow()->numRows;
 }
 
-void SubWindow::setNumRows(nitf::Uint32 value)
+void SubWindow::setNumRows(uint32_t value)
 {
     getNativeOrThrow()->numRows = value;
 }
 
-nitf::Uint32 SubWindow::getStartCol() const
+uint32_t SubWindow::getStartCol() const
 {
     return getNativeOrThrow()->startCol;
 }
 
-void SubWindow::setStartCol(nitf::Uint32 value)
+void SubWindow::setStartCol(uint32_t value)
 {
     getNativeOrThrow()->startCol = value;
 }
 
-nitf::Uint32 SubWindow::getNumCols() const
+uint32_t SubWindow::getNumCols() const
 {
     return getNativeOrThrow()->numCols;
 }
 
-void SubWindow::setNumCols(nitf::Uint32 value)
+void SubWindow::setNumCols(uint32_t value)
 {
     getNativeOrThrow()->numCols = value;
 }
 
-nitf::Uint32 SubWindow::getBandList(int i)
+uint32_t SubWindow::getBandList(int i)
 {
     return getNativeOrThrow()->bandList[i];
 }
 
-void SubWindow::setBandList(nitf::Uint32 * value)
+void SubWindow::setBandList(uint32_t * value)
 {
-    getNativeOrThrow()->bandList = (nitf_Uint32*)value;
+    getNativeOrThrow()->bandList = value;
+}
+void SubWindow::setBandList(std::vector<uint32_t>&& value)
+{
+    bandList = std::move(value);
+    updateBandList();
 }
 
-nitf::Uint32 SubWindow::getNumBands() const
+uint32_t SubWindow::getNumBands() const
 {
     return getNativeOrThrow()->numBands;
 }
 
-void SubWindow::setNumBands(nitf::Uint32 value)
+void SubWindow::setNumBands(uint32_t value)
 {
     getNativeOrThrow()->numBands = value;
 }
@@ -128,14 +174,21 @@ void SubWindow::setDownSampler(nitf::DownSampler* downSampler)
         ds.decRef();
     }
 
-    //increment the reference for this DownSampler
-    getNativeOrThrow()->downsampler = downSampler->getNative();
-    downSampler->incRef();
+    if (downSampler != nullptr)
+    {
+        //increment the reference for this DownSampler
+        getNativeOrThrow()->downsampler = downSampler->getNative();
+        downSampler->incRef();
+    }
     mDownSampler = downSampler;
 }
 
 
-nitf::DownSampler* SubWindow::getDownSampler()
+nitf::DownSampler* SubWindow::getDownSampler() noexcept
+{
+    return mDownSampler;
+}
+const nitf::DownSampler* SubWindow::getDownSampler() const noexcept
 {
     return mDownSampler;
 }

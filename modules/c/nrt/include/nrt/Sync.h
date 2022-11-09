@@ -28,8 +28,9 @@
 #include "nrt/Memory.h"
 
 NRT_CXX_GUARD
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 typedef LPCRITICAL_SECTION nrt_Mutex;
+#   define NRT_MUTEX_INIT 0
 #elif defined(__sgi)
 #   include <sys/atomic_ops.h>
 #   define NRT_MUTEX_INIT 0

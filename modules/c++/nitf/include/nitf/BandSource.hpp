@@ -25,6 +25,8 @@
 
 #include <string.h>
 #include <string>
+#include <std/span>
+#include <std/cstddef>
 
 #include "nitf/BandSource.h"
 #include "nitf/RowSource.h"
@@ -33,6 +35,7 @@
 #include "nitf/IOHandle.hpp"
 #include "nitf/System.hpp"
 #include "nitf/ImageReader.hpp"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file BandSource.hpp
@@ -56,9 +59,8 @@ typedef DataSource BandSource;
  *  times during the case of memory mapping, although it may be used
  *  to sample down or cut the image into pieces).
  */
-class MemorySource : public BandSource
+struct NITRO_NITFCPP_API MemorySource final : public BandSource
 {
-public:
     /*!
      *  Constructor
      *  \param data  The memory buffer
@@ -69,6 +71,9 @@ public:
      */
     MemorySource(const void* data, size_t size, nitf::Off start,
             int numBytesPerPixel, int pixelSkip);
+
+    MemorySource(std::span<const std::byte> span, nitf::Off start, int numBytesPerPixel, int pixelSkip)
+        : MemorySource(span.data(), span.size(), start, numBytesPerPixel, pixelSkip) {}
 };
 
 /*!
@@ -81,9 +86,8 @@ public:
  *  we allow the creator to specify a start point, and a pixel skip
  *  (this would help you create a thumbnail as well).
  */
-class FileSource : public BandSource
+struct NITRO_NITFCPP_API FileSource final : public BandSource
 {
-public:
     FileSource(const std::string& fname,
                nitf::Off start,
                int numBytesPerPixel,
@@ -102,67 +106,64 @@ public:
                int pixelSkip);
 };
 
-struct RowSourceCallback
+struct NITRO_NITFCPP_API RowSourceCallback
 {
-    virtual ~RowSourceCallback()
+    virtual ~RowSourceCallback() // can't be "noexcpet" as that breaks derived classes
     {
     }
 
-    virtual void nextRow(nitf::Uint32 band, void* buf) = 0;
+    virtual void nextRow(uint32_t band, void* buf) = 0;
 };
 
-class RowSource : public BandSource
+struct NITRO_NITFCPP_API RowSource : public BandSource
 {
-public:
-    RowSource(nitf::Uint32 band, nitf::Uint32 numRows, nitf::Uint32 numCols,
-            nitf::Uint32 pixelSize, RowSourceCallback *callback);
+    RowSource(uint32_t band, uint32_t numRows, uint32_t numCols,
+            uint32_t pixelSize, RowSourceCallback *callback);
 
 private:
     static
     NITF_BOOL nextRow(void* algorithm,
-                      nitf_Uint32 band,
+                      uint32_t band,
                       NITF_DATA* buffer,
                       nitf_Error* error);
 
 private:
-    nitf::Uint32 mBand, mNumRows, mNumCols, mPixelSize;
+    uint32_t mBand, mNumRows, mNumCols, mPixelSize;
 };
 
-class DirectBlockSource : public BandSource
+struct NITRO_NITFCPP_API DirectBlockSource : public BandSource
 {
-public:
     DirectBlockSource(nitf::ImageReader& imageReader,
-                      nitf::Uint32 numBands);
+                      uint32_t numBands);
 
 protected:
     virtual void nextBlock(void* buf,
                            const void* block,
-                           nitf::Uint32 blockNumber,
-                           nitf::Uint64 blockSize) = 0;
+                           uint32_t blockNumber,
+                           uint64_t blockSize) = 0;
 private:
     static
     NITF_BOOL nextBlock(void *algorithm,
                         void* buf,
                         const void* block,
-                        nitf_Uint32 blockNumber,
-                        nitf_Uint64 blockSize,
+                        uint32_t blockNumber,
+                        uint64_t blockSize,
                         nitf_Error * error);
 };
 
-class CopyBlockSource: public ::nitf::DirectBlockSource
+struct NITRO_NITFCPP_API CopyBlockSource: public ::nitf::DirectBlockSource
 {
-public:
-    CopyBlockSource(nitf::ImageReader& imageReader, nitf::Uint32 numBands) :
+    CopyBlockSource(nitf::ImageReader& imageReader, uint32_t numBands) :
         nitf::DirectBlockSource(imageReader, numBands)
     {}
 
-    virtual ~CopyBlockSource(){}
+    ~CopyBlockSource() = default;
 
 protected:
-    virtual void nextBlock(void* buf,
+    void nextBlock(void* buf,
                            const void* block,
-                           nitf::Uint32 /*blockNumber*/,
-                           nitf::Uint64 blockSize)
+                           uint32_t /*blockNumber*/,
+                           uint64_t blockSize) noexcept override
     {
         memcpy(buf, block, blockSize);
     }

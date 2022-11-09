@@ -22,7 +22,12 @@
 
 #ifndef __NITF_SEGMENTSOURCE_HPP__
 #define __NITF_SEGMENTSOURCE_HPP__
+#pragma once
 
+#include <string>
+#include <vector>
+
+#include "nitf/coda-oss.hpp"
 #include "nitf/DataSource.hpp"
 #include "nitf/SegmentSource.h"
 #include "nitf/SegmentReader.hpp"
@@ -30,7 +35,7 @@
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
-#include <string>
+#include "nitf/exports.hpp"
 
 /*!
  *  \file SegmentSource.hpp
@@ -55,9 +60,8 @@ typedef DataSource SegmentSource;
  *  times during the case of memory mapping, although it may be used
  *  to sample down or cut the data into pieces).
  */
-class SegmentMemorySource : public SegmentSource
+struct NITRO_NITFCPP_API SegmentMemorySource : public SegmentSource
 {
-public:
     /*!
      *  Constructor
      *  \param data     The memory buffer
@@ -67,8 +71,19 @@ public:
      *  \param copyData Whether or not to make a copy of the data.  If this is
      *  false, the data must outlive the memory source.
      */
-    SegmentMemorySource(const char* data, size_t size, nitf::Off start,
+    SegmentMemorySource(const sys::byte* data, nitf::Off size, nitf::Off start,
+        int byteSkip, bool copyData);
+
+    SegmentMemorySource(const std::span<const std::byte>& data, nitf::Off start,
                         int byteSkip, bool copyData);
+    SegmentMemorySource(const std::span<const sys::byte>& data, nitf::Off start,
+                        int byteSkip, bool copyData);
+    SegmentMemorySource(const std::vector<std::byte>& data, nitf::Off start,
+                        int byteSkip, bool copyData);
+    SegmentMemorySource(const std::vector<sys::byte>& data, nitf::Off start,
+                        int byteSkip, bool copyData);
+    SegmentMemorySource(const std::string& data, nitf::Off start,
+                    int byteSkip, bool copyData);
 };
 
 /*!
@@ -79,9 +94,8 @@ public:
  *  file descriptor or handle.  Due to any number of constraints,
  *  we allow the creator to specify a start point, and a byte skip.
  */
-class SegmentFileSource : public SegmentSource
+struct NITRO_NITFCPP_API SegmentFileSource : public SegmentSource
 {
-public:
     /*!
      *  Constructor
      *  \param handle   The handle to store
@@ -90,14 +104,11 @@ public:
      */
     SegmentFileSource(nitf::IOHandle & io, nitf::Off start, int byteSkip);
 
-    ~SegmentFileSource()
-    {
-    }
+    ~SegmentFileSource() = default;
 };
 
-class SegmentReaderSource : public SegmentSource
+struct NITRO_NITFCPP_API SegmentReaderSource : public SegmentSource
 {
-public:
     /*!
      *  Constructor
      *  \param handle   The handle to store
@@ -106,9 +117,7 @@ public:
      */
     SegmentReaderSource(nitf::SegmentReader reader);
 
-    ~SegmentReaderSource()
-    {
-    }
+    ~SegmentReaderSource() = default;
 };
 }
 #endif

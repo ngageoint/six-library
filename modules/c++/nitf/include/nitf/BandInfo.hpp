@@ -20,15 +20,20 @@
  *
  */
 
-#ifndef __NITF_BANDINFO_HPP__
-#define __NITF_BANDINFO_HPP__
+#ifndef NITF_BandInfo_hpp_INCLUDED_
+#define NITF_BandInfo_hpp_INCLUDED_
+#pragma once
+
+#include <string>
+#include <map>
 
 #include "nitf/BandInfo.h"
 #include "nitf/System.hpp"
 #include "nitf/LookupTable.hpp"
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
-#include <string>
+#include "nitf/Property.hpp"
+#include "nitf/Enum.hpp"
 
 /*!
  *  \file BandInfo.hpp
@@ -37,6 +42,19 @@
 
 namespace nitf
 {
+    //NITF_ENUM(5, Representation, R, G, B, M, LU);
+    enum class Representation { R, G, B, M, LU, None };
+    NITF_ENUM_define_string_to_enum_begin(Representation)
+        NITF_ENUM_map_entry_5(Representation, R, G, B, M, LU), { "", Representation::None },
+    NITF_ENUM_define_string_to_end
+
+    // see nitf_ImageIO_decodeBlockingMode() in ImageIO.c
+    //NITF_ENUM(4, Subcategory, I, Q, M, P);
+    enum class Subcategory { I, Q, M, P, None };
+    NITF_ENUM_define_string_to_enum_begin(Subcategory)
+        NITF_ENUM_map_entry_4(Subcategory, I, Q, M, P), { "", Subcategory::None },
+    NITF_ENUM_define_string_to_end
+
 /*!
  *  \class BandInfo
  *  \brief  The C++ wrapper for the nitf_BandInfo
@@ -55,31 +73,39 @@ public:
     BandInfo(nitf_BandInfo * x);
 
     //! Constructor
-    BandInfo();
+    BandInfo() noexcept(false);
+    ~BandInfo() = default;
 
-    //! Destructor
-    ~BandInfo();
+    explicit BandInfo(Representation);
 
     //! Get the representation
-    nitf::Field getRepresentation();
+    nitf::Field getRepresentation() const;
+    nitf::Property<Representation> representation{
+        [&]() ->Representation { return from_string<Representation>(getRepresentation()); },
+        [&](const Representation& v) -> void {  getRepresentation().set(to_string(v)); }
+    };
+
+    explicit BandInfo(Subcategory);
+    BandInfo(Representation, Subcategory, const std::string & imageFilterCondition, const std::string & imageFilterCode);
 
     //! Get the subcategory
-    nitf::Field getSubcategory();
+    nitf::Field getSubcategory() const;
+    nitf::PropertyGet<Subcategory> subcategory{ [&]() ->Subcategory { return from_string<Subcategory>(getSubcategory()); } };
 
     //! Get the imageFilterCondition
-    nitf::Field getImageFilterCondition();
+    nitf::Field getImageFilterCondition() const;
 
     //! Get the imageFilterCode
-    nitf::Field getImageFilterCode();
+    nitf::Field getImageFilterCode() const;
 
     //! Get the numLUTs
-    nitf::Field getNumLUTs();
+    nitf::Field getNumLUTs() const;
 
     //! Get the bandEntriesPerLUT
-    nitf::Field getBandEntriesPerLUT();
+    nitf::Field getBandEntriesPerLUT() const;
 
     //! Get the LookUpTable associated with this BandInfo
-    nitf::LookupTable getLookupTable();
+    nitf::LookupTable getLookupTable() const;
 
     /*!
      * Initialize the BandInfo with the given data
@@ -96,8 +122,15 @@ public:
               const std::string& subcategory,
               const std::string& imageFilterCondition,
               const std::string& imageFilterCode,
-              nitf::Uint32 numLUTs,
-              nitf::Uint32 bandEntriesPerLUT,
+              uint32_t numLUTs,
+              uint32_t bandEntriesPerLUT,
+              nitf::LookupTable& lut);
+    void init(const Representation&,
+              const Subcategory&,
+              const std::string& imageFilterCondition,
+              const std::string& imageFilterCode,
+              uint32_t numLUTs,
+              uint32_t bandEntriesPerLUT,
               nitf::LookupTable& lut);
 
     /*!
@@ -113,10 +146,14 @@ public:
               const std::string& subcategory,
               const std::string& imageFilterCondition,
               const std::string& imageFilterCode);
+    void init(const Representation&,
+              const Subcategory&,
+              const std::string& imageFilterCondition,
+              const std::string& imageFilterCode);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }
-#endif
+#endif // NITF_BandInfo_hpp_INCLUDED_

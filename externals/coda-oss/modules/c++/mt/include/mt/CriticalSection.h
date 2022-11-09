@@ -21,8 +21,9 @@
  */
 
 
-#ifndef __MT_CRITICAL_SECTION_H__
-#define __MT_CRITICAL_SECTION_H__
+#ifndef CODA_OSS_mt_CriticalSection_h_INCLUDED_
+#define CODA_OSS_mt_CriticalSection_h_INCLUDED_
+#pragma once
 
 /*!
  *  \file
@@ -51,9 +52,8 @@ namespace mt
  *  }
  *  \endcode
  */
-template <typename T> class CriticalSection
+template <typename T> struct CriticalSection
 {
-public:
     //!  Constructor.  Lock the mutex.
     CriticalSection(T* mutex) :
         mMutex(mutex),
@@ -61,6 +61,7 @@ public:
     {
         manualLock();
     }
+    CriticalSection(T& mutex) : CriticalSection(&mutex){}
 
     //!  Destructor.  Unlock the mutex (if necessary).
     ~CriticalSection()
@@ -92,10 +93,8 @@ public:
         mIsLocked = true;
     }
 
-private:
-    // Noncopyable
-    CriticalSection(const CriticalSection& );
-    const CriticalSection& operator=(const CriticalSection& );
+    CriticalSection(const CriticalSection&) = delete;
+    CriticalSection& operator=(const CriticalSection&) = delete;
 
 private:
     T* const mMutex;
@@ -103,4 +102,4 @@ private:
 
 };
 }
-#endif
+#endif // CODA_OSS_mt_CriticalSection_h_INCLUDED_

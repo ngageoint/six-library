@@ -24,13 +24,11 @@
 #define __MATH_UTILITIES_H__
 
 #include <stdlib.h>
-#include <math/math_config.h>
+#include <math.h>
+#include <cmath>
+
 #include <sys/Conf.h>
-#ifdef HAVE_STD_ISNAN
-    #include <cmath>
-#elif HAVE_ISNAN
-    #include <math.h>
-#endif
+#include "config/Exports.h"
 
 namespace math
 {
@@ -40,22 +38,19 @@ namespace math
  * \return 1 if val is positive, -1 if negative, 0 otherwise
  */
 template <typename T>
-int sign(T val)
+inline constexpr int sign(T val) noexcept
 {
-    if (val < 0)
-    {
-        return -1;
-    }
-    if (val > 0)
-    {
-        return 1;
-    }
-    return 0;
+    return val < 0 ? -1 : val > 0 ? 1 : 0;
 }
 
-inline double square(double val)
+inline constexpr double square(double val) noexcept
 {
     return val * val;
+}
+
+inline constexpr double cube(double val) noexcept
+{
+    return square(val) * val;
 }
 
 /*!
@@ -64,19 +59,15 @@ inline double square(double val)
  * \param value Argument to be checked for NaN
  * \return true if value is NaN
  */
-template <typename T> bool isNaN(T value)
+template <typename T> inline bool isNaN(T value) noexcept
 {
-#ifdef HAVE_STD_ISNAN
     return std::isnan(value);
-#elif HAVE_ISNAN
-    return isnan(value);
-#else
-    // Make sure the compiler doesn't optimize out the call below or cache the
-    // value
-    volatile T copy = value;
-    return copy != copy;
-#endif
 }
+
+// https://man7.org/linux/man-pages/man3/sincos.3.html
+CODA_OSS_API void SinCos(float angle, float& sin, float& cos) noexcept;
+CODA_OSS_API void SinCos(double angle, double& sin, double& cos) noexcept;
+CODA_OSS_API void SinCos(long double angle, long double& sin, long double& cos) noexcept;
 
 /*
  * Calculate the binomial coefficient
@@ -86,7 +77,7 @@ template <typename T> bool isNaN(T value)
  * \param k number of outcomes
  * \return n choose k
  */
-sys::Uint64_T nChooseK(size_t n, size_t k);
+CODA_OSS_API sys::Uint64_T nChooseK(size_t n, size_t k);
 }
 
 #endif
