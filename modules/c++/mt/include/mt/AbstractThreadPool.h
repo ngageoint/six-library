@@ -25,6 +25,7 @@
 #define __MT_ABSTRACT_THREAD_POOL_H__
 
 #include <vector>
+#include <memory>
 
 #include "sys/Thread.h"
 #include "mt/RequestQueue.h"
@@ -75,7 +76,7 @@ public:
     {
         for (size_t i = 0; i < mNumThreads; i++)
         {
-            mPool.push_back(mem::SharedPtr<sys::Thread>(newWorker()));
+            mPool.push_back(std::shared_ptr<sys::Thread>(newWorker()));
             mPool[i]->start();
         }
     }
@@ -132,7 +133,7 @@ protected:
     }
 
     size_t mNumThreads;
-    std::vector<mem::SharedPtr<sys::Thread> > mPool;
+    std::vector<std::shared_ptr<sys::Thread>> mPool;
     mt::RequestQueue<Request_T> mRequestQueue;
 };
 }

@@ -38,23 +38,38 @@ std::string tiff::RationalPrintStrategy::toString(const sys::Uint32_T data)
 
     return tempStream.str();
 }
+std::string tiff::RationalPrintStrategy::toString(const sys::Uint64_T data)
+{
+    return toString(static_cast<sys::Uint32_T>(data));
+}
+
+template<typename T>
+static inline void memcpy_(T* pDest, const void* pSrc)
+{
+    memcpy(pDest, pSrc, sizeof(T));
+}
 
 sys::Uint64_T tiff::combine(sys::Uint32_T numerator,
         sys::Uint32_T denominator)
 {
     sys::Uint64_T value;
-    sys::Uint32_T *ptr = (sys::Uint32_T *)&value;
 
-    memcpy(ptr, &numerator, sizeof(sys::Uint32_T));
-    ptr++;
-    memcpy(ptr, &denominator, sizeof(sys::Uint32_T));
+    //sys::Uint32_T *ptr = (sys::Uint32_T *)&value;
+    auto ptr = reinterpret_cast<sys::ubyte*>(&value);  // TODO: std::byte // reinterpret_cast<> to std::byte is allowed by the standard
+    memcpy_(ptr, &numerator);
+    memcpy_(ptr + sizeof(sys::Uint32_T), &denominator);
 
     return value;
 }
 void tiff::split(sys::Uint64_T value, sys::Uint32_T &numerator,
                  sys::Uint32_T &denominator)
 {
-    numerator = ((sys::Uint32_T *)&value)[0];
-    denominator = ((sys::Uint32_T *)&value)[1];
+    // Using casts generate a warning: dereferencing type-punned pointer will break strict-aliasing rules[-Wstrict-aliasing]
+    // Do the reverse of combine() and use memcpy().
+    //numerator = ((sys::Uint32_T*)&value)[0];
+    //denominator = ((sys::Uint32_T*)&value)[1];
+    auto ptr = reinterpret_cast<const sys::ubyte*>(&value);  // TODO: std::byte // reinterpret_cast<> to std::byte is allowed by the standard
+    memcpy_(&numerator, ptr);
+    memcpy_(&denominator, ptr + sizeof(sys::Uint32_T));
 }
 

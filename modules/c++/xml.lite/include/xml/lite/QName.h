@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __XML_LITE_QNAME_H__
-#define __XML_LITE_QNAME_H__
+#ifndef CODA_OSS_xml_lite_QName_h_INCLLUDED_
+#define CODA_OSS_xml_lite_QName_h_INCLLUDED_
+#pragma once
 
 /*!
  * \file QName.h
@@ -39,6 +40,9 @@
  */
 
 #include <string>
+#include <ostream>
+
+#include "sys/OS.h"
 
 namespace xml
 {
@@ -61,56 +65,78 @@ namespace lite
  *  to a namespace URI 
  */
 
-class QName
+struct Uri final // help prevent mixups with std::string
 {
-public:
-    //! Default constructor
-    QName()
+    Uri();
+    explicit Uri(const std::string& v); // validate=false
+    Uri(const std::string& v, bool validate);
+    std::string value;
+    bool empty() const
     {
+        return value.empty();
     }
+};
+inline bool operator==(const Uri& lhs, const Uri& rhs)
+{
+    return lhs.value == rhs.value;
+}
+inline bool operator!=(const Uri& lhs, const Uri& rhs)
+{
+    return !(lhs == rhs);
+}
+inline std::ostream& operator<<(std::ostream& os, const Uri& uri)
+{
+    os << uri.value;
+    return os;
+}
+
+class QName final
+{
+    //!  Prefix (Qualified)
+    std::string mPrefix;
+    //!  Local Part (Unqualified)
+    std::string mLocalName;
+    //!  Associated URI for Prefix
+    Uri mAssocUri;
+
+public:
+    QName() = default;
 
     /*!
      * Constructor taking the namespace prefix and the local name 
      * \param uri The uri of the object 
      * \param qname The qname of the object 
      */
-    QName(const std::string& uri, const std::string& qname)
+    QName(const xml::lite::Uri& uri, const std::string& qname)
     {
         setQName(qname);
         setAssociatedUri(uri);
     }
+    QName(const std::string& qname, const xml::lite::Uri& uri) : QName(uri, qname) { }
+    QName(const std::string& uri, const std::string& qname) : QName(Uri(uri), qname)  { }
 
     /*!
      * Constructor taking just the local name (no namespace). 
      * \param lName  Just the local name of the object. 
      */
-    QName(const std::string& lName)
+    explicit QName(const std::string& lName)
     {
         setName(lName);
     }
+    
+    QName(const xml::lite::Uri& uri)
+    {
+        setAssociatedUri(uri);
+    }
 
     //! Destructor
-    ~QName()
-    {
-    }
+    ~QName() = default;
 
-    QName(const QName & qname)
-    {
-        mPrefix = qname.mPrefix;
-        mLocalName = qname.mLocalName;
-        mAssocUri = qname.mAssocUri;
-    }
+    QName(const QName&) = default;
+    QName& operator=(const QName&) = default;
+    QName(QName&&) = default;
+    QName& operator=(QName&&) = default;
 
-    QName& operator=(const QName& qname)
-    {
-        if (this != &qname)
-        {
-            mPrefix = qname.mPrefix;
-            mLocalName = qname.mLocalName;
-            mAssocUri = qname.mAssocUri;
-        }
-        return *this;
-    }
 
     /*!
      *  Set the local part (unqualified)
@@ -152,7 +178,11 @@ public:
      *  Here you specify that URI.
      *  \param uri The URI to associate with this QName
      */
-    void setAssociatedUri(const std::string& uri);
+    void setAssociatedUri(const xml::lite::Uri&);
+    void setAssociatedUri(const std::string& str)
+    {
+        setAssociatedUri(Uri(str));
+    }
 
     /*!
      *  Get the URI associated with the QName
@@ -160,20 +190,9 @@ public:
      *
      */
     std::string getAssociatedUri() const;
-
-protected:
-    /*  Assignment operator  */
-    QName& operator=(const std::string& str);
-
-    //!  Prefix (Qualified)
-    std::string mPrefix;
-    //!  Local Part (Unqualified)
-    std::string mLocalName;
-    //!  Associated URI for Prefix
-    std::string mAssocUri;
-
+    void getAssociatedUri(xml::lite::Uri&) const;
+    const xml::lite::Uri& getUri() const;
 };
 }
 }
-
-#endif
+#endif  // CODA_OSS_xml_lite_QName_h_INCLLUDED_

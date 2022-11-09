@@ -24,11 +24,14 @@
 //  Logger.h
 ///////////////////////////////////////////////////////////
 
-#ifndef __LOGGING_LOGGER_H__
-#define __LOGGING_LOGGER_H__
+#ifndef CODA_OSS_logging_Logger_h_INCLUDED_
+#define CODA_OSS_logging_Logger_h_INCLUDED_
 
 #include <string>
 #include <vector>
+#include <memory>
+
+#include "config/Exports.h"
 #include "logging/Filterer.h"
 #include "logging/LogRecord.h"
 #include "logging/Handler.h"
@@ -43,10 +46,8 @@ namespace logging
  * Instances of the Logger class represent a single logging channel.
  * A Logger instance can log to several Handlers.
  */
-class Logger : public Filterer
+struct CODA_OSS_API Logger : public Filterer
 {
-
-public:
     /*!
      * Constructs a Logger with an optional name
      * \param name  (optional) Name of the logger
@@ -105,6 +106,7 @@ public:
      * This Logger does not own the passed-in Handler.
      */
     void addHandler(Handler* handler, bool own = false);
+    void addHandler(std::unique_ptr<Handler>&&); // own = true
 
     /*!
      * Removes the specified Handler from the list of Handlers.
@@ -130,26 +132,27 @@ public:
     //! Removes all handlers
     void reset();
 
-private:
-    // Noncopyable
     // NOTE: It isn't currently safe to copy a logger because mHandlers isn't
     //       a deep copy and you end up with a double delete (it's not using
     //       smart pointers :o( ).  If we really wanted to support a copy,
     //       would need to decide if mHandlers should be deeply or shallowly
     //       copied.
-    Logger(const Logger& );
-    Logger& operator=(const Logger& );
+    Logger(const Logger&) = delete;
+    Logger& operator=(const Logger&) = delete;
 
 protected:
     void handle(const LogRecord* record);
+    void handle(const LogRecord& record)
+    {
+        handle(&record);
+    }
 
     typedef std::pair<Handler*, bool> Handler_T;
     typedef std::vector<Handler_T> Handlers_T;
 
     std::string mName;
     Handlers_T mHandlers;
-
 };
-typedef mem::SharedPtr<Logger> LoggerPtr;
+typedef std::shared_ptr<Logger> LoggerPtr;
 }
-#endif
+#endif  // CODA_OSS_logging_Logger_h_INCLUDED_

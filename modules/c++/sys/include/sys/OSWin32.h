@@ -26,7 +26,7 @@
 
 #include "sys/AbstractOS.h"
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 
 /*!
  *  \file OSWin32.h
@@ -46,13 +46,10 @@ namespace sys
  *  This class is the abstraction layer as defined for
  *  the windows operating system.
  */
-class OSWin32 : public AbstractOS
+struct CODA_OSS_API OSWin32 final : public AbstractOS
 {
-public:
-    OSWin32()
-    {}
-    virtual ~OSWin32()
-    {}
+    OSWin32() = default;
+    virtual ~OSWin32() = default;
     virtual std::string getPlatformName() const;
 
     virtual std::string getNodeName() const;
@@ -264,26 +261,21 @@ protected:
     virtual void removeDirectory(const std::string& pathname) const;
 };
 
-
-
-class DirectoryWin32 : public AbstractDirectory
+struct DirectoryWin32 final : public AbstractDirectory
 {
-public:
-    DirectoryWin32() : mHandle(INVALID_HANDLE_VALUE)
-    {}
+    DirectoryWin32() = default;
     virtual ~DirectoryWin32()
     {
         close();
     }
-    virtual void close();
+    void close() override;
 
-    virtual std::string findFirstFile(const std::string& dir);
+    std::string findFirstFile(const std::string& dir) override;
 
-    virtual std::string findNextFile();
+    std::string findNextFile() override;
 
-    HANDLE mHandle;
-    WIN32_FIND_DATA mFileData;
-
+    HANDLE mHandle = INVALID_HANDLE_VALUE;
+    WIN32_FIND_DATA mFileData{};
 };
 
 }

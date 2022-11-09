@@ -22,6 +22,7 @@
 
 #ifndef __NET_CONNECTION_CLIENT_FACTORY_H__
 #define __NET_CONNECTION_CLIENT_FACTORY_H__
+#pragma once
 
 /*!
  *  \file NetConnectionClientFactory.h
@@ -33,6 +34,7 @@
 #include "net/Sockets.h"
 #include "net/NetConnection.h"
 #include "net/ClientSocketFactory.h"
+#include "sys/Conf.h"
 
 namespace net
 {
@@ -81,14 +83,17 @@ public:
      *
      *
      */
-    virtual NetConnection* newConnection(std::auto_ptr<Socket> toServer);
+    virtual NetConnection* newConnection(std::unique_ptr<Socket>&& toServer);
+    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
+    virtual NetConnection* newConnection(mem::auto_ptr<Socket> toServer);
+    #endif
     /*!
      * Destroy a spawned connection.
      * \param connection The connection to destroy
      */
     virtual void destroy(NetConnection * connection)
     {
-        if (connection != NULL)
+        if (connection != nullptr)
         {
             delete connection;
         }

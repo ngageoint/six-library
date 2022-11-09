@@ -22,6 +22,7 @@
 
 #ifndef __NET_SSL_CONNECTION_CLIENT_FACTORY_H__
 #define __NET_SSL_CONNECTION_CLIENT_FACTORY_H__
+#pragma once
 
 /*!
  *  \file SSLConnectionClientFactory.h
@@ -31,6 +32,8 @@
 
 #include <net/NetConnectionClientFactory.h>
 #include <net/ssl/SSLConnection.h>
+
+#include "sys/Conf.h"
 
 namespace net
 {
@@ -61,7 +64,7 @@ public:
                                const std::string& password = "password",
                                const std::string& caList = "root.pem",
                                bool serverAuth = true, 
-                               char * ciphers = NULL) : 
+                               char* ciphers = nullptr) : 
         mClientAuthentication(clientAuth),
         mKeyfile(keyfile), mPass(password),
         mCAList(caList), 
@@ -77,7 +80,7 @@ public:
     virtual ~SSLConnectionClientFactory() 
     {
 # if defined(USE_OPENSSL)	
-        if(mCtx != NULL)
+        if (mCtx != nullptr)
         {
             SSL_CTX_free(mCtx);
         }
@@ -97,7 +100,10 @@ protected:
      * \param toServer The socket for the new connection
      * \return A new SSLConnection
      */
-    virtual NetConnection * newConnection(std::auto_ptr<net::Socket> toServer);
+    virtual NetConnection* newConnection(std::unique_ptr<net::Socket>&& toServer);
+    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
+    virtual NetConnection* newConnection(mem::auto_ptr<net::Socket> toServer);
+    #endif
 
 private:
 #   if defined(USE_OPENSSL)

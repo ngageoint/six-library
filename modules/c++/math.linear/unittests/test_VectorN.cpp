@@ -33,29 +33,29 @@
 #include "TestCase.h"
 #include "math/linear/VectorN.h"
 
-using namespace math::linear;
-using namespace std;
-
-
 TEST_CASE(testDefaultConstructor)
 {
+    using namespace math::linear;
+
     // Solaris doesn't like arrays of zero size unless you use -features=zla,
     // so I've omitted this test.
     //VectorN<0, double> v0;
     //TEST_ASSERT_EQ(v0.size(), 0);
 
     VectorN<1,double> v1;
-    TEST_ASSERT_EQ(v1.size(), 1);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(1));
 
     VectorN<2,double> v2;
-    TEST_ASSERT_EQ(v2.size(), 2);
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(2));
 }
 
 
 TEST_CASE(testScalarConstructor)
 {
+    using namespace math::linear;
+
     VectorN<3,double> v(42);
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], 42);
     TEST_ASSERT_EQ(v[1], 42);
     TEST_ASSERT_EQ(v[2], 42);
@@ -64,9 +64,11 @@ TEST_CASE(testScalarConstructor)
 
 TEST_CASE(testRawConstructor)
 {
+    using namespace math::linear;
+
     double raw[] = {1,2,3};
     VectorN<3,double> v(raw);
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], 1);
     TEST_ASSERT_EQ(v[1], 2);
     TEST_ASSERT_EQ(v[2], 3);
@@ -75,12 +77,14 @@ TEST_CASE(testRawConstructor)
 
 TEST_CASE(testCopyConstructor)
 {
+    using namespace math::linear;
+
     VectorN<3,double> vsrc;
     vsrc[0] = 1;
     vsrc[1] = 2;
     vsrc[2] = 3;
     VectorN<3,double> v(vsrc);
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], vsrc[0]);
     TEST_ASSERT_EQ(v[1], vsrc[1]);
     TEST_ASSERT_EQ(v[2], vsrc[2]);
@@ -93,13 +97,12 @@ TEST_CASE(testCopyConstructor)
 
 TEST_CASE(testStdVectorConstructor)
 {
-    std::vector<double> stdvec;
-    stdvec.push_back(10);
-    stdvec.push_back(11);
-    stdvec.push_back(12);
+    using namespace math::linear;
+
+    std::vector<double> stdvec{10, 11, 12};
 
     VectorN<3,double> v(stdvec);
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], stdvec[0]);
     TEST_ASSERT_EQ(v[1], stdvec[1]);
     TEST_ASSERT_EQ(v[2], stdvec[2]);
@@ -116,12 +119,14 @@ TEST_CASE(testStdVectorConstructor)
 
 TEST_CASE(testAssignmentOperator)
 {
+    using namespace math::linear;
+
     VectorN<2,double> vsrc;
     vsrc[0] = 42;
     vsrc[1] = 99;
     VectorN<2,double> v;
     v = vsrc;
-    TEST_ASSERT_EQ(v.size(), 2);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(v[0], 42);
     TEST_ASSERT_EQ(v[1], 99);
 }
@@ -129,8 +134,10 @@ TEST_CASE(testAssignmentOperator)
 
 TEST_CASE(testScalarAssignment)
 {
+    using namespace math::linear;
+
     VectorN<5,double> v(123.456);
-    TEST_ASSERT_EQ(v.size(), 5);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(5));
     for (int i = 0; i < 5; i++)
         TEST_ASSERT_EQ(v[i], 123.456);
 
@@ -138,7 +145,7 @@ TEST_CASE(testScalarAssignment)
     // vector - that's fixed.  Instead, it sets every entry in the vector
     // to the given value.
     v = 99;
-    TEST_ASSERT_EQ(v.size(), 5);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(5));
     for (int i = 0; i < 5; i++)
         TEST_ASSERT_EQ(v[i], 99);
 }
@@ -146,14 +153,13 @@ TEST_CASE(testScalarAssignment)
 
 TEST_CASE(testStdVectorAssignment)
 {
-    std::vector<double> stdvec;
-    stdvec.push_back(10);
-    stdvec.push_back(11);
-    stdvec.push_back(12);
+    using namespace math::linear;
+
+    const std::vector<double> stdvec{10, 11, 12};
 
     VectorN<3,double> v(-1);
     v = stdvec;
-    TEST_ASSERT_EQ(v.size(), 3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], 10);
     TEST_ASSERT_EQ(v[1], 11);
     TEST_ASSERT_EQ(v[2], 12);
@@ -162,6 +168,8 @@ TEST_CASE(testStdVectorAssignment)
 
 TEST_CASE(testDotProduct)
 {
+    using namespace math::linear;
+
     VectorN<5,double> vd1(2);
     VectorN<5,double> vd2(3);
     const double dotprod(vd1.dot(vd2));
@@ -171,10 +179,10 @@ TEST_CASE(testDotProduct)
 
 TEST_CASE(testNorm)
 {
-    std::vector<double> stdvec;
-    stdvec.push_back(10);
-    stdvec.push_back(11);
-    stdvec.push_back(12);
+    using namespace math::linear;
+
+    const std::vector<double> stdvec{10, 11, 12};
+
     VectorN<3,double> vnorm1(stdvec);
     const double norm(vnorm1.norm());
     const double arg(10.*10 + 11.*11 + 12.*12);
@@ -185,6 +193,8 @@ TEST_CASE(testNorm)
 
 TEST_CASE(testNormalize)
 {
+    using namespace math::linear;
+
     VectorN<4,double> vnorm(4.0);
     vnorm.normalize();
     TEST_ASSERT_EQ(vnorm[0], 0.5);
@@ -196,6 +206,8 @@ TEST_CASE(testNormalize)
 
 TEST_CASE(testScale)
 {
+    using namespace math::linear;
+
     VectorN<2,double> vscale(4.0);
     vscale.scale(1.0 / 4.0);
     TEST_ASSERT_EQ(vscale[0], 1.0);
@@ -204,6 +216,8 @@ TEST_CASE(testScale)
 
 TEST_CASE(testUnit)
 {
+    using namespace math::linear;
+
     VectorN<4,double> v(4.0);
     VectorN<4,double> vunit = v.unit();
     TEST_ASSERT_EQ(v[0], 4.0);
@@ -218,13 +232,15 @@ TEST_CASE(testUnit)
 
 TEST_CASE(testOperatorPlusEquals)
 {
+    using namespace math::linear;
+
     VectorN<3,double> v1(1);
     VectorN<3,double> v2(-1);
 
     v2 += v1;
 
-    TEST_ASSERT_EQ(v1.size(), 3);
-    TEST_ASSERT_EQ(v2.size(), 3);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(v2[0], 0);
     TEST_ASSERT_EQ(v2[1], 0);
@@ -238,15 +254,17 @@ TEST_CASE(testOperatorPlusEquals)
 
 TEST_CASE(testOperatorPlus)
 {
+    using namespace math::linear;
+
     VectorN<3,double> v1(42);
     VectorN<3,double> v2(11);
     VectorN<3,double> v3;
 
     v3 = v1 + v2;
 
-    TEST_ASSERT_EQ(v1.size(), 3);
-    TEST_ASSERT_EQ(v2.size(), 3);
-    TEST_ASSERT_EQ(v3.size(), 3);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v3.size(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(v1[0], 42);
     TEST_ASSERT_EQ(v1[1], 42);
@@ -264,12 +282,14 @@ TEST_CASE(testOperatorPlus)
 
 TEST_CASE(testOperatorMinusEquals)
 {
+    using namespace math::linear;
+
     VectorN<5,double> v1(13);
     VectorN<5,double> v2(-5);
 
     v2 -= v1;
-    TEST_ASSERT_EQ(v1.size(), 5);
-    TEST_ASSERT_EQ(v2.size(), 5);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(5));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(5));
     for (int i = 0; i < 5; i++)
         TEST_ASSERT_EQ(v2[i], -18);
     for (int i = 0; i < 5; i++)
@@ -279,6 +299,8 @@ TEST_CASE(testOperatorMinusEquals)
 
 TEST_CASE(testNegate)
 {
+    using namespace math::linear;
+
     VectorN<3,double> X;
     VectorN<3,double> Y;
     X[0] = Y[2] =  1.;
@@ -290,14 +312,16 @@ TEST_CASE(testNegate)
 
 TEST_CASE(testAdd)
 {
+    using namespace math::linear;
+
     VectorN<3,double> v1(2.4);
     VectorN<3,double> v2(1.4);
 
     VectorN<3,double> v3(v2.add(v1));
 
-    TEST_ASSERT_EQ(v1.size(), 3);
-    TEST_ASSERT_EQ(v2.size(), 3);
-    TEST_ASSERT_EQ(v3.size(), 3);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v3.size(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(v1[0], 2.4);
     TEST_ASSERT_EQ(v1[1], 2.4);
@@ -315,14 +339,16 @@ TEST_CASE(testAdd)
 
 TEST_CASE(testSubtract)
 {
+    using namespace math::linear;
+
     VectorN<3,double> v1(2.4);
     VectorN<3,double> v2(1.4);
 
     VectorN<3,double> v3(v2.subtract(v1));
 
-    TEST_ASSERT_EQ(v1.size(), 3);
-    TEST_ASSERT_EQ(v2.size(), 3);
-    TEST_ASSERT_EQ(v3.size(), 3);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(v3.size(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(v1[0], 2.4);
     TEST_ASSERT_EQ(v1[1], 2.4);
@@ -340,6 +366,8 @@ TEST_CASE(testSubtract)
 
 TEST_CASE(testOperatorMinus)
 {
+    using namespace math::linear;
+
     VectorN<4,double> v1;
     VectorN<4,double> v2;
     for (int i = 0; i < 4; i++)
@@ -349,9 +377,9 @@ TEST_CASE(testOperatorMinus)
     }
     VectorN<4,double> v3(v2 - v1);
 
-    TEST_ASSERT_EQ(v1.size(), 4);
-    TEST_ASSERT_EQ(v2.size(), 4);
-    TEST_ASSERT_EQ(v3.size(), 4);
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(4));
+    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(4));
+    TEST_ASSERT_EQ(v3.size(), static_cast<size_t>(4));
 
     for (int i = 0; i < 4; i++)
     {
@@ -366,6 +394,8 @@ TEST_CASE(testOperatorMinus)
 
 TEST_CASE(testOperatorTimesEquals)
 {
+    using namespace math::linear;
+
     VectorN<4,double> v1;
     for (int i = 0; i < 4; i++)
         v1[i] = i;
@@ -384,6 +414,8 @@ TEST_CASE(testOperatorTimesEquals)
 
 TEST_CASE(testOperatorTimesEqualsScalar)
 {
+    using namespace math::linear;
+
     VectorN<5,double> v1;
     for (int i = 0; i < 5; i++)
         v1[i] = i;
@@ -397,6 +429,8 @@ TEST_CASE(testOperatorTimesEqualsScalar)
 
 TEST_CASE(testOperatorTimesScalar)
 {
+    using namespace math::linear;
+
     VectorN<5,double> v1;
     for (int i = 0; i < 5; i++)
         v1[i] = i;
@@ -411,6 +445,8 @@ TEST_CASE(testOperatorTimesScalar)
 
 TEST_CASE(testElementDivision)
 {
+    using namespace math::linear;
+
     VectorN<3,double> numerator;
     numerator[0] = 0;
     numerator[1] = 1;
@@ -429,6 +465,8 @@ TEST_CASE(testElementDivision)
 
 TEST_CASE(testOperatorTimes)
 {
+    using namespace math::linear;
+
     VectorN<3,double> v1, v2;
     for (int i = 0; i < 3; i++)
     {
@@ -444,6 +482,8 @@ TEST_CASE(testOperatorTimes)
 
 TEST_CASE(testOperatorDivide)
 {
+    using namespace math::linear;
+
     VectorN<3,double> v1, v2;
     for (int i = 0; i < 3; i++)
     {
@@ -456,9 +496,7 @@ TEST_CASE(testOperatorDivide)
         TEST_ASSERT_EQ(v3[i], (i + 1.) / (i + 2.));
 }
 
-
-int main()
-{
+TEST_MAIN(
     TEST_CHECK(testDefaultConstructor);
     TEST_CHECK(testScalarConstructor);
     TEST_CHECK(testRawConstructor);
@@ -484,6 +522,4 @@ int main()
     TEST_CHECK(testElementDivision);
     TEST_CHECK(testOperatorTimes);
     TEST_CHECK(testOperatorDivide);
-
-    return EXIT_SUCCESS;
-}
+    )

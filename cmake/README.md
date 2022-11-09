@@ -74,10 +74,12 @@ These options may be passed in the cmake configure step as `-DOPTION_NAME="optio
 |BUILD_SHARED_LIBS|OFF|build shared libraries if on, static if off (note: not working on Windows)|
 |STATIC_CRT|OFF|for Windows MSVC builds only, link with /MT (or /MTd for Debug builds) if on, or with /MD (or /MDd for Debug builds) if off|
 |CODA_BUILD_TESTS| ON      |build tests if on|
+|CODA_INSTALL_TESTS| ON      |install tests if on|
 |CODA_PARTIAL_INSTALL|OFF|make the install target not depend on all defined targets, only the targets which have already been built will be installed; cmake/CodaBuild.cmake for further information and caveats|
 |MT_DEFAULT_PINNING|OFF|use affinity-based CPU pinning by default in MT|
 |ENABLE_BOOST|OFF|build modules dependent on Boost if enabled|
 |ENABLE_PYTHON|ON|build Python modules if enabled|
+|ENABLE_SWIG|OFF|enable SWIG bindings generation if enabled, otherwise use previously-generated files|
 |ENABLE_JARS|ON|include jars with the install|
 |ENABLE_JPEG|ON|build libjpeg driver and modules depending on it|
 |ENABLE_J2K|ON|build openjpeg (jpeg2000) driver and modules depending on it|

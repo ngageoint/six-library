@@ -20,11 +20,18 @@
  *
  */
 
-#ifndef __IO_OUTPUT_STREAM_H__
-#define __IO_OUTPUT_STREAM_H__
+#ifndef CODA_OSS_io_OutputStream_h_INCLUDED_
+#define CODA_OSS_io_OutputStream_h_INCLUDED_
+#pragma once
 
+#include <string>
+
+#include "config/Exports.h"
 #include "sys/Dbg.h"
 #include "sys/Conf.h"
+#include "coda_oss/string.h"
+#include "coda_oss/cstddef.h"
+#include "coda_oss/span.h"
 
 /*!
  * \file OutputStream.h
@@ -44,23 +51,20 @@ namespace io
  *
  */
 
-class OutputStream
+struct CODA_OSS_API OutputStream
 {
-public:
-    //! Default constructor
-    OutputStream()
-    {
-    }
-    //! Destructor
-    virtual ~OutputStream()
-    {
-    }
+    OutputStream() = default;
+    virtual ~OutputStream() = default;
 
     /*!
      * Write one byte to the stream
      * \throw IOException
      */
     void write(sys::byte b)
+    {
+        write(&b, 1);
+    }
+    void write(coda_oss::byte b)
     {
         write(&b, 1);
     }
@@ -71,7 +75,11 @@ public:
      */
     void write(const std::string& str)
     {
-        write((sys::byte*) str.c_str(), (sys::Size_T) str.length());
+        write(coda_oss::span<const std::string::value_type>(str.data(), str.size()));
+    }
+    void write(const coda_oss::u8string& str)
+    {
+        write(coda_oss::span<const coda_oss::u8string::value_type>(str.data(), str.size()));
     }
 
     /*!
@@ -79,6 +87,11 @@ public:
      *  \param str
      */
     void writeln(const std::string& str)
+    {
+        write(str);
+        write('\n');
+    }
+    void writeln(const coda_oss::u8string& str)
     {
         write(str);
         write('\n');
@@ -93,6 +106,16 @@ public:
      * \throw IOException
      */
     virtual void write(const void* buffer, size_t len) = 0;
+    template<typename T>
+    void write(coda_oss::span<const T> buffer)
+    {
+        write(buffer.data(), buffer.size_bytes());
+    }
+    template <typename T>
+    void write(coda_oss::span<T> buffer)
+    {
+        write(coda_oss::span<const T>(buffer.data(), buffer.size()));
+    }
 
     /*!
      *  Flush the stream if needed
@@ -110,4 +133,4 @@ public:
 };
 }
 
-#endif
+#endif // CODA_OSS_io_OutputStream_h_INCLUDED_

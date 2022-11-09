@@ -24,13 +24,8 @@
 #include "import/mt.h"
 #include "TestCase.h"
 
-using namespace sys;
-using namespace mt;
-using namespace std;
-
-class MyRunTask : public Runnable
+struct MyRunTask final : public sys::Runnable
 {
-public:
     int result;
     int *state;
     int *num_deleted;
@@ -53,9 +48,9 @@ public:
     }
 };
 
-TEST_CASE(ThreadGroupTest)
+TEST_CASE(DoThreadGroupTest)
 {
-    ThreadGroup *threads = new ThreadGroup();
+    auto threads = new mt::ThreadGroup();
     int state = 1, numDeleted = 0;
     MyRunTask *tasks[3];
     
@@ -89,26 +84,24 @@ TEST_CASE(PinToCPUTest)
     defaultValue = false;
 #endif
     // Check the pinning settings for the default value
-    TEST_ASSERT_EQ(ThreadGroup::getDefaultPinToCPU(), defaultValue);
-    ThreadGroup threads1;
+    TEST_ASSERT_EQ(mt::ThreadGroup::getDefaultPinToCPU(), defaultValue);
+    mt::ThreadGroup threads1;
     TEST_ASSERT_EQ(threads1.isPinToCPUEnabled(), defaultValue);
 
     // Check the pinning settings when pinning is enabled
-    ThreadGroup::setDefaultPinToCPU(true);
-    TEST_ASSERT_EQ(ThreadGroup::getDefaultPinToCPU(), true);
-    ThreadGroup threads2;
+    mt::ThreadGroup::setDefaultPinToCPU(true);
+    TEST_ASSERT_EQ(mt::ThreadGroup::getDefaultPinToCPU(), true);
+    mt::ThreadGroup threads2;
     TEST_ASSERT_EQ(threads2.isPinToCPUEnabled(), true);
    
     // Check the pinning settings when pinning is disabled
-    ThreadGroup::setDefaultPinToCPU(false);
-    TEST_ASSERT_EQ(ThreadGroup::getDefaultPinToCPU(), false);
-    ThreadGroup threads3;
+    mt::ThreadGroup::setDefaultPinToCPU(false);
+    TEST_ASSERT_EQ(mt::ThreadGroup::getDefaultPinToCPU(), false);
+    mt::ThreadGroup threads3;
     TEST_ASSERT_EQ(threads3.isPinToCPUEnabled(), false);
 }
 
-int main(int, char**)
-{
-    TEST_CHECK(ThreadGroupTest);
+TEST_MAIN(
+    TEST_CHECK(DoThreadGroupTest);
     TEST_CHECK(PinToCPUTest);
-    return 0;
-}
+    )

@@ -73,8 +73,8 @@ int main(int argc, char **argv)
         if (v.size() < 2)
         {
 
-            NotAddableError nae(v.size());
-            throw(nae);
+            NotAddableError nae(static_cast<int>(v.size()));
+            throw nae;
         }
         int acc = 0;
         for (size_t i = 0; i < v.size(); i++)
@@ -86,13 +86,13 @@ int main(int argc, char **argv)
         {
 
             NegativeNumberEx nne(acc);
-            throw(nne);
+            throw nne;
 
         }
         else if (acc > 10)
         {
             GreaterThan10Ex gt10(acc);
-            throw(gt10);
+            throw gt10;
         }
         else
         {

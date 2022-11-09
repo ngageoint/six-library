@@ -21,15 +21,18 @@
  */
 
 
-#ifndef __SYS_WIN32_CONDITION_VARIABLE_H__
-#define __SYS_WIN32_CONDITION_VARIABLE_H__
+#ifndef CODA_OSS_sys_ConditionVarWin32_h_INCLUDED_
+#define CODA_OSS_sys_ConditionVarWin32_h_INCLUDED_
+#pragma once
 
-#if defined(WIN32)
-#if !defined(USE_NSPR_THREADS)
+#include <new>
 
+#include "config/Exports.h"
 #include "sys/ConditionVarInterface.h"
-#include "sys/MutexWin32.h"
 
+#if defined(_WIN32)
+
+#include "sys/MutexWin32.h"
 
 namespace sys
 {
@@ -37,9 +40,8 @@ namespace sys
 ///        "Strategies for Implementing POSIX Condition Variables on Win32"
 ///        article at www.cse.wustl.edu/~schmidt/win32-cv-1.html.
 ///        This is the ACE framework implementation.
-class ConditionVarDataWin32
+struct CODA_OSS_API ConditionVarDataWin32 final
 {
-public:
     ConditionVarDataWin32();
 
     ~ConditionVarDataWin32();
@@ -74,18 +76,20 @@ private:
     bool mWasBroadcast;
 };
 
-class ConditionVarWin32 : public ConditionVarInterface
-
+class CODA_OSS_API ConditionVarWin32 final : public ConditionVarInterface
 {
-public:
+    ConditionVarWin32(MutexWin32* theLock, bool isOwner, std::nullptr_t);
 
-    ConditionVarWin32();
+public:
+    ConditionVarWin32();    
+    explicit ConditionVarWin32(MutexWin32* theLock, bool isOwner = false);
+    explicit ConditionVarWin32(MutexWin32&);  // isOwner = false
     
-    ConditionVarWin32(MutexWin32 *theLock, bool isOwner = false);
+    virtual ~ConditionVarWin32() = default;
     
-    virtual ~ConditionVarWin32()
-    {}
-    
+    ConditionVarWin32(const ConditionVarWin32&) = delete;
+    ConditionVarWin32& operator=(const ConditionVarWin32&) = delete;
+
     /*!
      *  Acquire the lock
      */
@@ -145,13 +149,11 @@ public:
 
 private:
     // This is set if we own the mutex, to make sure it gets deleted.
-    std::auto_ptr<MutexWin32> mMutexOwned;
-    MutexWin32 *mMutex;
+    std::unique_ptr<MutexWin32> mMutexOwned;
+    MutexWin32* mMutex;
     ConditionVarDataWin32 mNative;
 };
 }
 #endif
 
-#endif
-
-#endif
+#endif // CODA_OSS_sys_ConditionVarWin32_h_INCLUDED_

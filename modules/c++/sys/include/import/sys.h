@@ -23,6 +23,7 @@
 
 #ifndef __IMPORT_SYS_H__
 #define __IMPORT_SYS_H__
+#pragma once
 
 #include "sys/AtomicCounter.h"
 #include "sys/ConditionVar.h"

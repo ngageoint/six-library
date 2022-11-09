@@ -26,15 +26,13 @@
 #include <types/RowCol.h>
 #include <types/PageRowCol.h>
 
-namespace
-{
 TEST_CASE(TestPageRowColSizeT)
 {
     // default constructor should initialize all to 0
     const types::PageRowCol<size_t> pageRowColDefault;
-    TEST_ASSERT_EQ(pageRowColDefault.page, 0);
-    TEST_ASSERT_EQ(pageRowColDefault.row, 0);
-    TEST_ASSERT_EQ(pageRowColDefault.col, 0);
+    TEST_ASSERT_EQ(pageRowColDefault.page, static_cast<size_t>(0));
+    TEST_ASSERT_EQ(pageRowColDefault.row, static_cast<size_t>(0));
+    TEST_ASSERT_EQ(pageRowColDefault.col, static_cast<size_t>(0));
 
 
     const types::PageRowCol<size_t> pageRowColA(3,5,11);
@@ -58,7 +56,7 @@ TEST_CASE(TestPageRowColSizeT)
     pageRowColAssign = pageRowColA;
     TEST_ASSERT(pageRowColAssign == pageRowColA);
 
-    TEST_ASSERT_EQ(pageRowColA.volume(), 3 * 5 * 11);
+    TEST_ASSERT_EQ(pageRowColA.volume(), static_cast<size_t>(3 * 5 * 11));
 
     // test arithmetic operators
     const types::PageRowCol<size_t> sum = pageRowColA + pageRowColB;
@@ -115,11 +113,8 @@ TEST_CASE(TestPageRowColDouble)
     const types::PageRowCol<double> div = pageRowColA / pageRowColB;
     TEST_ASSERT(div == types::PageRowCol<double>(3.1 / 1.1, 5.2 / 2.2, 11.3 / 3.3));
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(TestPageRowColSizeT);
     TEST_CHECK(TestPageRowColDouble);
-    return 0;
-}
+    )

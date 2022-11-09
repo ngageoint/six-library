@@ -51,7 +51,11 @@ public:
      *            is allowed to bind to
      */
     CPUAffinityThreadInitializerLinux(
-            std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu);
+            std::unique_ptr<const sys::ScopedCPUMaskUnix>&& cpu);
+#if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
+    CPUAffinityThreadInitializerLinux(
+            mem::auto_ptr<const sys::ScopedCPUMaskUnix> cpu);
+#endif
 
     /*!
      * Attempt to bind to the affinity mask given during construction
@@ -61,7 +65,7 @@ public:
     virtual void initialize();
 
 private:
-    std::auto_ptr<const sys::ScopedCPUMaskUnix> mCPU;
+    std::unique_ptr<const sys::ScopedCPUMaskUnix> mCPU;
 };
 }
 

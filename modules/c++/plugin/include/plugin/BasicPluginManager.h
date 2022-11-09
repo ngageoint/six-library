@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <map>
+#include<memory>
 
 #include <import/sys.h>
 #include <import/str.h>
@@ -83,7 +84,7 @@ namespace plugin
 template<typename T> class BasicPluginManager
 {
 public:
-    typedef mem::SharedPtr<PluginIdentity<T> > SharedPluginIdentity;
+    typedef std::shared_ptr<PluginIdentity<T>> SharedPluginIdentity;
     typedef std::map<std::string,
                      std::pair<T*, SharedPluginIdentity> >
         HandlerRegistry;
@@ -196,7 +197,7 @@ public:
             mHandlers.find( name );
         if ( it != mHandlers.end() )
             return it->second.first;
-        return NULL;
+        return nullptr;
     }
 
     /*!
@@ -253,7 +254,7 @@ public:
      *  \param identity The plugin identifier
      *  \param eh The error handler to be used if something bad happens
      */
-    virtual void addHandler(mem::SharedPtr<PluginIdentity<T> > identity,
+    virtual void addHandler(std::shared_ptr<PluginIdentity<T> > identity,
                             ErrorHandler* eh)
     {
         try
@@ -275,7 +276,7 @@ public:
             {
                 std::ostringstream oss;
 
-                for (unsigned int i = 0;  ops[i] != NULL; i++)
+                for (unsigned int i = 0; ops[i] != nullptr; i++)
                     oss << ops[i] << ":";
                 eh->onPluginVersionUnsupported(
                     FmtX("For plugin supporting ops %s version [%d.%d] not supported (%d.%d)",
@@ -286,7 +287,7 @@ public:
                 return;
             }
 
-            for (size_t i = 0; ops[i] != NULL; ++i)
+            for (size_t i = 0; ops[i] != nullptr; ++i)
             {
                 T* pluginHandler = identity->spawnHandler();
                 if (! pluginHandler )
@@ -317,7 +318,7 @@ public:
     {
         try
         {
-            sys::DLL *dso = NULL;
+            sys::DLL* dso = nullptr;
             bool loadDSO = true;
 
             std::string baseFile = sys::Path(file).getBasePath();
@@ -345,16 +346,22 @@ public:
             if (loadDSO)
             {
                 // Load the DSO
-                std::auto_ptr<sys::DLL> autoDSO(new sys::DLL(file));
+                std::unique_ptr<sys::DLL> autoDSO(new sys::DLL(file));
                 mDSOs.push_back(autoDSO.get());
                 dso = autoDSO.release();
             }
 
             // Retrieve the plugin identity and add a handler to the registry.
 
-            const void*(*ident)(void) =
-                (const void*(*)(void))
-                dso->retrieve(getPluginIdentName());
+            // Retrieve the plugin identity and add a handler to the registry.
+            #if _MSC_VER
+            __pragma(warning(push))
+            __pragma(warning(disable: 4191)) // '...': unsafe conversion from '...' to '...'
+            #endif
+            auto ident = reinterpret_cast<const void*(*)(void)>(dso->retrieve(getPluginIdentName()));
+            #if _MSC_VER
+            __pragma(warning(pop))
+            #endif
 
             const SharedPluginIdentity* const plugin =
                 static_cast<const SharedPluginIdentity*>((*ident)());

@@ -20,22 +20,24 @@
  *
  */
 
+#include <assert.h>
+#include <string.h> // strlen()
+#include <wchar.h>
+
+#include <map>
+#include <locale>
+#include <stdexcept>
+#include <iostream>
+#include <vector>
+#include <clocale>
+#include <cwchar>
+
 #include "str/Convert.h"
 #include "str/Manip.h"
 
 template<> std::string str::toType<std::string>(const std::string& s)
 {
     return s;
-}
-
-template<> std::string str::toString(const uint8_t& value)
-{
-    return str::toString(static_cast<unsigned int>(value));
-}
-
-template<> std::string str::toString(const int8_t& value)
-{
-    return str::toString(static_cast<int>(value));
 }
 
 template<> bool str::toType<bool>(const std::string& s)
@@ -86,15 +88,16 @@ unsigned long long str::strtoull(const char *str, char **endptr, int base)
 #endif
 }
 
-template<> int str::getPrecision(const float& )
+template<> CODA_OSS_API int str::getPrecision(const float&)
 {
     return std::numeric_limits<float>::max_digits10;
 }
-template<> int str::getPrecision(const double& )
+template<> CODA_OSS_API int str::getPrecision(const double& )
 {
     return std::numeric_limits<double>::max_digits10;
 }
-template<> int str::getPrecision(const long double& )
+template <> CODA_OSS_API int str::getPrecision(const long double&)
 {
     return std::numeric_limits<long double>::max_digits10;
 }
+

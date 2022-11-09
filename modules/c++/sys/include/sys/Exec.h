@@ -82,11 +82,8 @@ protected:
  *  \brief opens a child process and connects a pipe
  *         to read back the std::cout
  */
-class ExecPipe : Exec
+struct ExecPipe : Exec
 {
-
-public:
-
     /*!
     *  Constructor --
     *  Kicks off child process and connects a pipe to the std::cout
@@ -94,8 +91,7 @@ public:
     *  \param cmd           - command line string to run
     */
     ExecPipe(const std::string& cmd) : 
-        Exec(cmd),
-        mOutStream(NULL)
+        Exec(cmd)
     {
     }
 
@@ -103,7 +99,7 @@ public:
     virtual void run() 
     {
         mOutStream = openPipe(mCmd, "r");
-        if (mOutStream == NULL)
+        if (mOutStream == nullptr)
         {
             sys::Err err;
             throw except::IOException(
@@ -136,16 +132,19 @@ public:
     //  this is a blocking call until the process is complete
     int closePipe();
 
+    ExecPipe(const ExecPipe&) = delete;
+    ExecPipe& operator=(const ExecPipe&) = delete;
+
 protected:
 
 #ifdef _WIN32
-    STARTUPINFO mStartInfo;
-    PROCESS_INFORMATION mProcessInfo;
+    STARTUPINFO mStartInfo{};
+    PROCESS_INFORMATION mProcessInfo{};
 #else
-    pid_t mProcess;
+    pid_t mProcess{};
 #endif
 
-    FILE* mOutStream;
+    FILE* mOutStream = nullptr;
 
     //! popen with user access to process id
     FILE* openPipe(const std::string& command,
@@ -153,12 +152,6 @@ protected:
 
     //! forcefully kill the process and call closePipe
     int killProcess();
-
-private:
-
-    //! Noncopyable
-    ExecPipe(const ExecPipe& );
-    const ExecPipe& operator=(const ExecPipe& );
 };
 
 }

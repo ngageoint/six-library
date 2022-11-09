@@ -3,6 +3,7 @@
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2022, Maxar Technologies, Inc.
  *
  * str-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,8 +22,9 @@
  */
 
 
-#ifndef __IMPORT_STR_H__
-#define __IMPORT_STR_H__
+#ifndef CODA_OSS_str_import_str_h_INCLUDED_
+#define CODA_OSS_str_import_str_h_INCLUDED_
+#pragma once
 
 /*!
  *  \file str.h
@@ -43,8 +45,9 @@
 #include "str/Tokenizer.h"
 #include "str/Format.h"
 #include "str/Manip.h"
+#include "str/Encoding.h"
 #define STR_MAJOR_VERSION 0
 #define STR_MINOR_VERSION 1
 #define STR_MICRO_VERSION 0
 
-#endif
+#endif  // CODA_OSS_str_import_str_h_INCLUDED_
