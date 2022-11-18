@@ -1,0 +1,11 @@
+<?xml version="1.0"?> 
+<SENV:Envelope xmlns:SENC="http://schemas.xmlsoap.org/soap/encoding/" 
+               xmlns:SENV="http://schemas.xmlsoap.org/soap/envelope/" 
+               xmlns:xsd="http://www.w3.org/1999/XMLSchema" 
+               xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance">  
+<SENV:Body>  
+         <m:getStateName xmlns:m="http://soapware.org/">  
+             <param1 xsi:type="xsd:int">41</param1>  
+         </m:getStateName>  
+</SENV:Body>  
+</SENV:Envelope> 

@@ -1,0 +1,18 @@
+from os.path import join, exists
+from waflib import Options, Utils
+from build import CPPBuildContext
+
+coda_oss = 'coda-oss'
+MODULES = coda_oss + '/modules'
+
+def options(opt):
+    opt.recurse(MODULES)
+
+def configure(conf):
+    conf.recurse(MODULES)
+
+def build(bld):
+    bld.recurse(MODULES)
+
+def distclean(context):
+    context.recurse(MODULES)

@@ -1,0 +1,29 @@
+# This file contains the patch applied by the waf maintainers to work around
+#     the disabling of the md5 hash function in FIPS-enabled systems.
+# The issue was https://gitlab.com/ita1024/waf/issues/2213.
+# The commits were bd15a9dc and 1c7be35d.
+# Some form of this should be applied to the waf self-extracting package, but
+#   in the meantime, this patch can be applied after waflib extracts, which
+#   can be triggered by simply doing 'waf --help'.
+diff -Naur a/waflib/Utils.py b/waflib/Utils.py
+--- a/waflib/Utils.py
++++ b/waflib/Utils.py
+@@ -26,9 +26,17 @@
+ 	from hashlib import md5
+ except ImportError:
+ 	try:
+-		from md5 import md5
++		# never fail to enable potential fixes from another module
++		from hashlib import sha1 as md5
+ 	except ImportError:
+ 		pass
++else:
++	try:
++		md5().digest()
++	except ValueError:
++		# Fips? #2213
++		from hashlib import sha1 as md5
++
+ try:
+ 	import threading
+ except ImportError:
