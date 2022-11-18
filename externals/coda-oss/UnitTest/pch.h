@@ -57,6 +57,7 @@
 #include "import/except.h"
 #include "import/mem.h"
 #include <mem/SharedPtr.h>
+#include <mem/AutoPtr.h>
 #include "import/cli.h"
 #include "polygon/DrawPolygon.h"
 #include "polygon/PolygonMask.h"
