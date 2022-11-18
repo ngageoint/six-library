@@ -1,1 +1,0 @@
-#include "NitfWriter.h"
