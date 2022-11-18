@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="nitf_test_field++.cpp" />
+    <ClCompile Include="nitf_test_create_nitf++.cpp" />
+    <ClCompile Include="nitf_test_hash_table_1++.cpp" />
+    <ClCompile Include="nitf_test_image_blocker.cpp" />
+    <ClCompile Include="nitf_test_image_io.cpp" />
+    <ClCompile Include="nitf_test_image_segment_blank_nm_compression.cpp" />
+    <ClCompile Include="nitf_test_image_segment_computer.cpp" />
+    <ClCompile Include="nitf_test_j2k_loading++.cpp" />
+    <ClCompile Include="nitf_test_j2k_read_tile.cpp" />
+    <ClCompile Include="nitf_test_nitf_buffer_list.cpp" />
+    <ClCompile Include="nitf_test_tre_create++.cpp" />
+    <ClCompile Include="nitf_test_tre_mods++.cpp" />
+    <ClCompile Include="nitf_test_tre_read.cpp" />
+    <ClCompile Include="nitf_test_writer_3++.cpp" />
+    <ClCompile Include="nitf_test_j2k_compress_tile.cpp" />
+    <ClCompile Include="nitf_test_j2k_compressed_byte_provider.cpp" />
+    <ClCompile Include="nitf_test_tre_mods.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="nrt_Test.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Test.h" />
+    <ClInclude Include="TestCase.h" />
+    <ClInclude Include="j2k_Test.h" />
+    <ClInclude Include="nitf_Test.h" />
+  </ItemGroup>
+</Project>
