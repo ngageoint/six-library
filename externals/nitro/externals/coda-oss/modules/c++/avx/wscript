@@ -1,9 +1,0 @@
-NAME            = 'avx'
-VERSION         = '1.2'
-MODULE_DEPS     = 'config'
-UNITTEST_DEPS   = 'std sys'
-
-options = configure = distclean = lambda p: None
-
-def build(bld):
-    bld.module(**globals())
