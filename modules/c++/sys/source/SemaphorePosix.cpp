@@ -22,7 +22,7 @@
 
 #include <sys/SemaphorePosix.h>
 
-#if defined(HAVE_PTHREAD_H) && !defined(__APPLE_CC__)
+#if CODA_OSS_POSIX_SOURCE && !defined(__APPLE_CC__)
 
 #include <semaphore.h>
 

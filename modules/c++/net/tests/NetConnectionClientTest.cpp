@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     try
     {
         if (argc != 3)
-            throw(Exception(FmtX("Usage: %s <host> <port>", argv[0])));
+            throw Exception(FmtX("Usage: %s <host> <port>", argv[0]));
 
         std::string host(argv[1]);
         int port(atoi(argv[2]));
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
         // Send a block
 
 
-        unsigned int length = SEND_THIS.length();
+        const auto length = static_cast<uint32_t>(SEND_THIS.length());
         toServer->write((const char*) &length, 4);
         toServer->write(SEND_THIS.c_str(), length);
 

@@ -22,13 +22,11 @@
 #include <import/math/linear.h>
 #include "TestCase.h"
 
-using namespace math::linear;
-
-typedef MatrixMxN<2, 2> Matrix2x2;
-typedef MatrixMxN<3, 2> Matrix3x2;
-typedef MatrixMxN<3, 3> Matrix3x3;
-typedef MatrixMxN<4, 4> Matrix4x4;
-typedef MatrixMxN<5, 5> Matrix5x5;
+typedef math::linear::MatrixMxN<2, 2> Matrix2x2;
+typedef math::linear::MatrixMxN<3, 2> Matrix3x2;
+typedef math::linear::MatrixMxN<3, 3> Matrix3x3;
+typedef math::linear::MatrixMxN<4, 4> Matrix4x4;
+typedef math::linear::MatrixMxN<5, 5> Matrix5x5;
 
 #define foreach_ij(M, N) \
    for (unsigned int i = 0; i < M; ++i) \
@@ -36,6 +34,8 @@ typedef MatrixMxN<5, 5> Matrix5x5;
 
 TEST_CASE(testIdentityMxN)
 {
+    using namespace math::linear;
+
     Matrix3x3 A = identityMatrix<3, double>();
     foreach_ij(3, 3)
     {
@@ -67,6 +67,8 @@ TEST_CASE(testIdentityMxN)
 
 TEST_CASE(testScaleMultiplyMxN)
 {
+    using namespace math::linear;
+
     Matrix3x3 A = identityMatrix<3, double>();
     Matrix3x2 B = constantMatrix<3, 2, double>(1);
  
@@ -83,6 +85,8 @@ TEST_CASE(testScaleMultiplyMxN)
 
 TEST_CASE(testNegateMxN)
 {
+    using namespace math::linear;
+
     const Matrix3x3 A = identityMatrix<3, double>();
     const Matrix3x3 B = -A;
     Matrix3x3 C = A;
@@ -98,6 +102,8 @@ TEST_CASE(testNegateMxN)
 
 TEST_CASE(testNegate)
 {
+    using namespace math::linear;
+
     const Matrix2D<double> A = identityMatrix<3, double>();
     const Matrix2D<double> B = -A;
     Matrix2D<double> C = A;
@@ -113,6 +119,8 @@ TEST_CASE(testNegate)
 
 TEST_CASE(testInvert2x2Complex)
 {
+    using namespace math::linear;
+
     std::complex<double> q[4];
     q[0] = std::complex<double>(-0.326773864841957, -0.326773864841957);
     q[1] = std::complex<double>( 0.945102555946311,  0.945102555946311);
@@ -141,6 +149,8 @@ TEST_CASE(testInvert2x2Complex)
 }
 TEST_CASE(testInvert2x2)
 {
+    using namespace math::linear;
+
     double q[] = 
     {
         -0.326773864841957, 0.945102555946311,
@@ -164,6 +174,8 @@ TEST_CASE(testInvert2x2)
 }
 TEST_CASE(testInvert3x3)
 {
+    using namespace math::linear;
+
     double q[] =
     { 
         -0.8335, -0.3467, 0.4302,
@@ -193,6 +205,7 @@ TEST_CASE(testInvert3x3)
 
 TEST_CASE(testInvert4x4)
 {
+    using namespace math::linear;
 
     double q[] = 
     {
@@ -252,6 +265,8 @@ TEST_CASE(testInvert4x4)
 
 TEST_CASE(testOrthoTranspose5x5)
 {
+    using namespace math::linear;
+
     double q[] =
     {
          0.206598102328096,  -0.258732861775711, -0.366144101439697,  0.808267284061313,  0.320962653355259,
@@ -285,6 +300,8 @@ TEST_CASE(testOrthoTranspose5x5)
 
 TEST_CASE(testInvert5x5)
 {
+    using namespace math::linear;
+
     double q[] =
     {
         -0.1,  -0.0,   0.6,  -0.3,   0.6,
@@ -331,6 +348,8 @@ TEST_CASE(testInvert5x5)
 
 TEST_CASE(testSTLVectorAssign)
 {
+    using namespace math::linear;
+
     std::vector<double> v(9);
     for (unsigned int i = 0; i < 9; ++i)
         v[i] = 2 * (i+1);
@@ -370,6 +389,8 @@ TEST_CASE(testSTLVectorAssign)
 
 TEST_CASE(testPtrAssign)
 {
+    using namespace math::linear;
+
     double d[] = { 2, 4, 6, 8, 10, 12, 14, 16, 18 };
 
     Matrix2x2 A(d);
@@ -406,6 +427,8 @@ TEST_CASE(testPtrAssign)
 
 TEST_CASE(testPermuteInvert2x2)
 {
+    using namespace math::linear;
+
     std::vector<size_t> p(2);
     p[0] = 1;
     p[1] = 0;
@@ -437,6 +460,8 @@ TEST_CASE(testPermuteInvert2x2)
 
 TEST_CASE(testSetCols)
 {
+    using namespace math::linear;
+
     MatrixMxN<3, 2> A(0.0);
     Matrix2D<> A2(3, 2);
     // Make it so each column vector has the same values
@@ -458,6 +483,8 @@ TEST_CASE(testSetCols)
 
 TEST_CASE(testSetRows)
 {
+    using namespace math::linear;
+
     MatrixMxN<3, 2> A;
     Matrix2D<> A2(3, 2);
     std::vector<double> v(3, 0);
@@ -483,6 +510,8 @@ TEST_CASE(testSetRows)
 }
 TEST_CASE(testGrabCols)
 {
+    using namespace math::linear;
+
     MatrixMxN<3, 2> A;
     Matrix2D<> A2(3, 2);
     foreach_ij(3, 2)
@@ -505,6 +534,8 @@ TEST_CASE(testGrabCols)
 
 TEST_CASE(testGrabRows)
 {
+    using namespace math::linear;
+
     MatrixMxN<3, 2> A;
     Matrix2D<> A2(3, 2);
     foreach_ij(3, 2)
@@ -530,6 +561,8 @@ TEST_CASE(testGrabRows)
 
 TEST_CASE(testArithmeticMxN)
 {
+    using namespace math::linear;
+
     // 2 1
     // 1 3
     Matrix2x2 D(1);
@@ -570,9 +603,7 @@ TEST_CASE(testArithmeticMxN)
     
 }
 
-int main()
-{
-
+TEST_MAIN(
     TEST_CHECK(testIdentityMxN);
     TEST_CHECK(testScaleMultiplyMxN);
     TEST_CHECK(testSetRows);
@@ -591,6 +622,4 @@ int main()
     TEST_CHECK(testOrthoTranspose5x5);
     TEST_CHECK(testNegateMxN);
     TEST_CHECK(testNegate);
-
-    return 0;
-}
+    )

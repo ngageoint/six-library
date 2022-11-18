@@ -8,34 +8,10 @@ macro(coda_find_system_dependencies)
     # creates imported target CURL::libcurl, if found
     # see https://cmake.org/cmake/help/latest/module/FindCURL.html
     find_package(CURL)
-    if (${CMAKE_VERSION} VERSION_LESS "3.12.0")
-        #FindCurl didn't create a target until CMake 3.12
-        if(CURL_FOUND)
-            if(NOT TARGET CURL::libcurl)
-                add_library(CURL::libcurl UNKNOWN IMPORTED)
-                set_target_properties(CURL::libcurl
-                    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${CURL_INCLUDE_DIRS}")
-                set_property(TARGET CURL::libcurl
-                    APPEND PROPERTY IMPORTED_LOCATION "${CURL_LIBRARY}")
-            endif()
-        endif()
-    endif()
 
     # creates imported target Boost::serialization, if found
     # see https://cmake.org/cmake/help/latest/module/FindBoost.html
     set(ENABLE_BOOST OFF CACHE BOOL "Enable building modules dependent on Boost")
-    set(BOOST_HOME "" CACHE PATH "path to boost installation")
-    if (ENABLE_BOOST OR BOOST_HOME)
-        if (BOOST_HOME)
-            set(BOOST_ROOT ${BOOST_HOME})
-        endif()
-        find_package(Boost COMPONENTS serialization)
-        if (NOT Boost_FOUND)
-            message(FATAL_ERROR "Unable to find Boost. Set BOOST_HOME to help \
-                                 locate it, or set ENABLE_BOOST=OFF.")
-        endif()
-        set(HAVE_BOOST ${Boost_FOUND})
-    endif()
 
     # sets the following variables if Python installation found:
     #   Python_FOUND                - flag indicating system has the requested components

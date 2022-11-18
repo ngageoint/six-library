@@ -61,7 +61,7 @@ public:
         std::cout << "Received: " << buf << std::endl;
         std::cout << "returning it to client..." << std::endl;
         memcpy(&buf[length], RET_STR, strlen(RET_STR));
-        length = length + strlen(RET_STR);
+        length = length + static_cast<unsigned int>(strlen(RET_STR));
         buf[length] = 0;
         conn->write((const char*) &length, 4);
         conn->write((const char*) buf, length);
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     try
     {
         if (argc < 2)
-            throw(Exception(FmtX("Usage: %s <port> (-mt|-st|-tp)", argv[0])));
+            throw Exception(FmtX("Usage: %s <port> (-mt|-st|-tp)", argv[0]));
 
         net::AllocStrategy* strategy = NULL;
 

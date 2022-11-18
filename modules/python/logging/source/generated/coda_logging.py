@@ -182,19 +182,28 @@ class Filterer(_object):
     __swig_destroy__ = _coda_logging.delete_Filterer
     __del__ = lambda self: None
 
-    def addFilter(self, filter: 'Filter *') -> "void":
-        """addFilter(Filterer self, Filter * filter)"""
-        return _coda_logging.Filterer_addFilter(self, filter)
+    def addFilter(self, *args) -> "void":
+        """
+        addFilter(Filterer self, Filter * filter)
+        addFilter(Filterer self, Filter & arg2)
+        """
+        return _coda_logging.Filterer_addFilter(self, *args)
 
 
-    def filter(self, record: 'LogRecord const *') -> "bool":
-        """filter(Filterer self, LogRecord const * record) -> bool"""
-        return _coda_logging.Filterer_filter(self, record)
+    def filter(self, *args) -> "bool":
+        """
+        filter(Filterer self, LogRecord const * record) -> bool
+        filter(Filterer self, LogRecord const & record) -> bool
+        """
+        return _coda_logging.Filterer_filter(self, *args)
 
 
-    def removeFilter(self, filter: 'Filter *') -> "void":
-        """removeFilter(Filterer self, Filter * filter)"""
-        return _coda_logging.Filterer_removeFilter(self, filter)
+    def removeFilter(self, *args) -> "void":
+        """
+        removeFilter(Filterer self, Filter * filter)
+        removeFilter(Filterer self, Filter & arg2)
+        """
+        return _coda_logging.Filterer_removeFilter(self, *args)
 
 Filterer_swigregister = _coda_logging.Filterer_swigregister
 Filterer_swigregister(Filterer)
@@ -227,9 +236,12 @@ class Handler(Filterer):
         return _coda_logging.Handler_getLevel(self)
 
 
-    def handle(self, record: 'LogRecord const *') -> "bool":
-        """handle(Handler self, LogRecord const * record) -> bool"""
-        return _coda_logging.Handler_handle(self, record)
+    def handle(self, *args) -> "bool":
+        """
+        handle(Handler self, LogRecord const * record) -> bool
+        handle(Handler self, LogRecord const & record) -> bool
+        """
+        return _coda_logging.Handler_handle(self, *args)
 
 
     def close(self) -> "void":
@@ -263,6 +275,8 @@ class StreamHandler(Handler):
         __init__(logging::StreamHandler self) -> StreamHandler
         __init__(logging::StreamHandler self, io::OutputStream * stream, LogLevel level) -> StreamHandler
         __init__(logging::StreamHandler self, io::OutputStream * stream) -> StreamHandler
+        __init__(logging::StreamHandler self, std::unique_ptr< io::OutputStream > && stream, LogLevel level) -> StreamHandler
+        __init__(logging::StreamHandler self, std::unique_ptr< io::OutputStream > && stream) -> StreamHandler
         """
         this = _coda_logging.new_StreamHandler(*args)
         try:
@@ -294,9 +308,9 @@ class FileHandler(StreamHandler):
 
     def __init__(self, *args):
         """
-        __init__(logging::FileHandler self, std::string const & fname, LogLevel level, int creationFlags) -> FileHandler
-        __init__(logging::FileHandler self, std::string const & fname, LogLevel level) -> FileHandler
-        __init__(logging::FileHandler self, std::string const & fname) -> FileHandler
+        __init__(logging::FileHandler self, coda_oss::filesystem::path const & fname, LogLevel level, int creationFlags) -> FileHandler
+        __init__(logging::FileHandler self, coda_oss::filesystem::path const & fname, LogLevel level) -> FileHandler
+        __init__(logging::FileHandler self, coda_oss::filesystem::path const & fname) -> FileHandler
         """
         this = _coda_logging.new_FileHandler(*args)
         try:
@@ -330,9 +344,12 @@ class Filter(_object):
     __swig_destroy__ = _coda_logging.delete_Filter
     __del__ = lambda self: None
 
-    def filter(self, record: 'LogRecord const *') -> "bool":
-        """filter(Filter self, LogRecord const * record) -> bool"""
-        return _coda_logging.Filter_filter(self, record)
+    def filter(self, *args) -> "bool":
+        """
+        filter(Filter self, LogRecord const * record) -> bool
+        filter(Filter self, LogRecord const & record) -> bool
+        """
+        return _coda_logging.Filter_filter(self, *args)
 
 
     def getName(self) -> "std::string":
@@ -422,12 +439,13 @@ class Logger(Filterer):
         return _coda_logging.Logger_critical(self, *args)
 
 
-    def addHandler(self, handler: 'Handler', own: 'bool'=False) -> "void":
+    def addHandler(self, *args) -> "void":
         """
         addHandler(Logger self, Handler handler, bool own=False)
         addHandler(Logger self, Handler handler)
+        addHandler(Logger self, std::unique_ptr< logging::Handler > && arg2)
         """
-        return _coda_logging.Logger_addHandler(self, handler, own)
+        return _coda_logging.Logger_addHandler(self, *args)
 
 
     def removeHandler(self, handler: 'Handler') -> "void":
@@ -530,10 +548,10 @@ class LoggerManager(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def getLoggerSharedPtr(self, *args) -> "mem::SharedPtr< logging::Logger >":
+    def getLoggerSharedPtr(self, *args) -> "std::shared_ptr< logging::Logger >":
         """
-        getLoggerSharedPtr(LoggerManager self, std::string const & name) -> mem::SharedPtr< logging::Logger >
-        getLoggerSharedPtr(LoggerManager self) -> mem::SharedPtr< logging::Logger >
+        getLoggerSharedPtr(LoggerManager self, std::string const & name) -> std::shared_ptr< logging::Logger >
+        getLoggerSharedPtr(LoggerManager self) -> std::shared_ptr< logging::Logger >
         """
         return _coda_logging.LoggerManager_getLoggerSharedPtr(self, *args)
 
@@ -595,8 +613,8 @@ def getLogger(*args) -> "logging::Logger *":
     """getLogger() -> Logger"""
     return _coda_logging.getLogger(*args)
 
-def getLoggerSharedPtr(*args) -> "mem::SharedPtr< logging::Logger >":
-    """getLoggerSharedPtr() -> mem::SharedPtr< logging::Logger >"""
+def getLoggerSharedPtr(*args) -> "std::shared_ptr< logging::Logger >":
+    """getLoggerSharedPtr() -> std::shared_ptr< logging::Logger >"""
     return _coda_logging.getLoggerSharedPtr(*args)
 # This file is compatible with both classic and new-style classes.
 

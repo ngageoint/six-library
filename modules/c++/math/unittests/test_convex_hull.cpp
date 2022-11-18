@@ -24,8 +24,6 @@
 #include <sys/Conf.h>
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testConvexHull)
 {
     // Add in all the points
@@ -76,10 +74,7 @@ TEST_CASE(testConvexHull)
         TEST_ASSERT_EQ(convexHull[ii].col, expectedConvexHull[ii].col);
     }
 }
-}
 
-int main(int argc, char** argv)
-{
+TEST_MAIN(
     TEST_CHECK(testConvexHull);
-    return 0;
-}
+)

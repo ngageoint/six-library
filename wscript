@@ -23,6 +23,8 @@ def configure(conf):
     conf.recurse(DIRS)
 
 def build(bld):
+    if bld.options.all_tests:
+        enableWafUnitTests(bld, False)
     bld.recurse(DIRS)
     enableWafUnitTests(bld)
 

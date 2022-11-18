@@ -1003,6 +1003,13 @@ Poly1DVector_swigregister = _math_poly.Poly1DVector_swigregister
 Poly1DVector_swigregister(Poly1DVector)
 
 
+def compute_mean_value(*args) -> "double":
+    """
+    compute_mean_value(VectorDouble x) -> double
+    compute_mean_value(MatrixDouble x) -> double
+    """
+    return _math_poly.compute_mean_value(*args)
+
 def fit(*args) -> "math::poly::OneD< math::linear::VectorN< 3,double > >":
     """
     fit(size_t numObs, double const * x, double const * y, size_t order) -> Poly1D

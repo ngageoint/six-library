@@ -135,8 +135,8 @@ class UTCDateTime(_object):
         __init__(sys::UTCDateTime self, int year, int month, int day) -> UTCDateTime
         __init__(sys::UTCDateTime self, int year, int month, int day, int hour, int minute, double second) -> UTCDateTime
         __init__(sys::UTCDateTime self, double timeInMillis) -> UTCDateTime
-        __init__(sys::UTCDateTime self, std::string const & time, std::string const & format) -> UTCDateTime
         __init__(sys::UTCDateTime self, std::string const & time) -> UTCDateTime
+        __init__(sys::UTCDateTime self, std::string const & time, std::string const & format) -> UTCDateTime
         """
         this = _coda_sys.new_UTCDateTime(*args)
         try:
@@ -157,7 +157,6 @@ UTCDateTime_swigregister = _coda_sys.UTCDateTime_swigregister
 UTCDateTime_swigregister(UTCDateTime)
 cvar = _coda_sys.cvar
 SSE_INSTRUCTION_ALIGNMENT = cvar.SSE_INSTRUCTION_ALIGNMENT
-UTCDateTime.DEFAULT_DATETIME_FORMAT = _coda_sys.cvar.UTCDateTime_DEFAULT_DATETIME_FORMAT
 
 
 def __lshift__(os: 'std::ostream &', dateTime: 'UTCDateTime') -> "std::ostream &":

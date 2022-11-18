@@ -3,5 +3,5 @@ coda_add_swig_python_module(
     PACKAGE coda
     MODULE_NAME mt
     MODULE_DEPS mt-c++ sys-c++
-    PYTHON_DEPS except-python mem-python types-python
+    PYTHON_DEPS config-python except-python mem-python types-python
     INPUT "source/mt.i")

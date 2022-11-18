@@ -21,7 +21,7 @@
  */
 
 
-#if !defined(WIN32)
+#if !(defined(WIN32) || defined(_WIN32))
 
 #include "sys/DLL.h"
 
@@ -44,7 +44,7 @@ void sys::DLL::load(const std::string& libName)
 
     // Now we check the return value
     if (!mLib)
-        throw(sys::DLLException("Failed to load() DLL") );
+        throw sys::DLLException("Failed to load() DLL");
 
 }
 
@@ -55,7 +55,7 @@ void sys::DLL::unload()
     {
         // Next we unload it or raise an exception
         if (dlclose( mLib ) != 0)
-            throw(sys::DLLException("Failed to close library") );
+            throw sys::DLLException("Failed to close library");
 
         // Now we reset member data
         mLib = NULL;
@@ -73,13 +73,13 @@ sys::DLL::retrieve(const std::string& functionName)
 
         // Now we check the ptr value
         if (ptr == NULL)
-            throw(sys::DLLException("Failed to load function"));
+            throw sys::DLLException("Failed to load function");
 
         return ptr;
     }
     else
     {
-        throw(sys::DLLException("No library loaded") );
+        throw sys::DLLException("No library loaded");
     };
 }
 

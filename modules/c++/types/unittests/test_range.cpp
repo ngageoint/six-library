@@ -25,35 +25,33 @@
 
 #include <types/Range.h>
 
-namespace
-{
 TEST_CASE(TestGetNumSharedElements)
 {
     const types::Range range(100, 50);
 
     // Ends at lower bound of 'range' - will not share any elements
-    TEST_ASSERT_EQ(range.getNumSharedElements(0, 100), 0);
+    TEST_ASSERT_EQ(range.getNumSharedElements(0, 100), static_cast<size_t>(0));
 
     // Starts at upper bound of 'range' - shouldn't share any elements
-    TEST_ASSERT_EQ(range.getNumSharedElements(150, 50), 0);
+    TEST_ASSERT_EQ(range.getNumSharedElements(150, 50), static_cast<size_t>(0));
 
     // Intersects 'range' at its lower bound, but doesn't cover the
     // full extent - shares [100, 125]
-    TEST_ASSERT_EQ(range.getNumSharedElements(50, 75), 25);
+    TEST_ASSERT_EQ(range.getNumSharedElements(50, 75), static_cast<size_t>(25));
 
     // Intersects 'range' at its upper bound but doesn't cover the
     // full extent - shares [120, 150)
-    TEST_ASSERT_EQ(range.getNumSharedElements(120, 45), 30);
+    TEST_ASSERT_EQ(range.getNumSharedElements(120, 45), static_cast<size_t>(30));
 
     // Lays between the upper and lower bound of 'range' - 'range' should
     // share all elements [120, 135]
-    TEST_ASSERT_EQ(range.getNumSharedElements(120, 15), 15);
+    TEST_ASSERT_EQ(range.getNumSharedElements(120, 15), static_cast<size_t>(15));
 
     // Covers the entirety of 'range', should share [100, 150)
-    TEST_ASSERT_EQ(range.getNumSharedElements(0, 200), 50);
+    TEST_ASSERT_EQ(range.getNumSharedElements(0, 200), static_cast<size_t>(50));
 
     // Ranges are the same - should share [100, 150)
-    TEST_ASSERT_EQ(range.getNumSharedElements(100, 50), 50);
+    TEST_ASSERT_EQ(range.getNumSharedElements(100, 50), static_cast<size_t>(50));
 }
 
 TEST_CASE(TestTouches)
@@ -105,23 +103,23 @@ TEST_CASE(TestSplit)
     {
         const types::Range A(5, 10);
         const types::Range splitRange = A.split(10);
-        TEST_ASSERT_EQ(splitRange.mNumElements, 10);
-        TEST_ASSERT_EQ(splitRange.mStartElement, 5);
+        TEST_ASSERT_EQ(splitRange.mNumElements, static_cast<size_t>(10));
+        TEST_ASSERT_EQ(splitRange.mStartElement, static_cast<size_t>(5));
     }
 
     // Test splitting a portion of elements
     {
         const types::Range A(5, 10);
         const types::Range splitRange = A.split(5);
-        TEST_ASSERT_EQ(splitRange.mNumElements, 5);
-        TEST_ASSERT_EQ(splitRange.mStartElement, 10);
+        TEST_ASSERT_EQ(splitRange.mNumElements, static_cast<size_t>(5));
+        TEST_ASSERT_EQ(splitRange.mStartElement, static_cast<size_t>(10));
     }
 
     // Test splitting zero elements
     {
         const types::Range A(5, 10);
         const types::Range splitRange = A.split(0);
-        TEST_ASSERT_EQ(splitRange.mNumElements, 0);
+        TEST_ASSERT_EQ(splitRange.mNumElements, static_cast<size_t>(0));
         TEST_ASSERT_EQ(splitRange.mStartElement,
                        std::numeric_limits<size_t>::max());
     }
@@ -130,25 +128,22 @@ TEST_CASE(TestSplit)
     {
         const types::Range A(5, 10);
         const types::Range splitRange = A.split(20);
-        TEST_ASSERT_EQ(splitRange.mNumElements, 10);
-        TEST_ASSERT_EQ(splitRange.mStartElement, 5);
+        TEST_ASSERT_EQ(splitRange.mNumElements, static_cast<size_t>(10));
+        TEST_ASSERT_EQ(splitRange.mStartElement, static_cast<size_t>(5));
     }
 
     // Test splitting from an empty range
     {
         const types::Range A(0, 0);
         const types::Range splitRange = A.split(10);
-        TEST_ASSERT_EQ(splitRange.mNumElements, 0);
+        TEST_ASSERT_EQ(splitRange.mNumElements, static_cast<size_t>(0));
         TEST_ASSERT_EQ(splitRange.mStartElement,
                        std::numeric_limits<size_t>::max());
     }
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(TestGetNumSharedElements);
     TEST_CHECK(TestTouches);
     TEST_CHECK(TestSplit);
-    return 0;
-}
+    )

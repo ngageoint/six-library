@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __XML_LITE_VALIDATOR_INTERFACE_H__
-#define __XML_LITE_VALIDATOR_INTERFACE_H__
+#ifndef CODA_OSS_xml_lite_ValidatorInterface_h_INCLUDED_
+#define CODA_OSS_xml_lite_ValidatorInterface_h_INCLUDED_
+#pragma once
 
 /*!
  * \file ValidatorInterface.h
@@ -37,7 +38,11 @@
 #include <io/InputStream.h>
 #include <str/Convert.h>
 #include <logging/Logger.h>
+#include <sys/filesystem.h>
 #include <xml/lite/Element.h>
+#include <xml/lite/QName.h>
+#include <coda_oss/string.h>
+#include <str/Encoding.h>
 
 namespace xml
 {
@@ -49,9 +54,8 @@ namespace lite
  * \brief This is the information for one 
  *        schema validation error.
  */
-class ValidationInfo
+struct ValidationInfo final
 {
-public:
     ValidationInfo(const std::string& message,
                    const std::string& level,
                    const std::string& file,
@@ -112,9 +116,12 @@ public:
     ValidatorInterface(const std::vector<std::string>& /*schemaPaths*/,
                        logging::Logger* /*log*/,
                        bool /*recursive*/ = true) {}
+    ValidatorInterface(const std::vector<coda_oss::filesystem::path>&,
+                       logging::Logger* /*log*/,
+                       bool /*recursive*/ = true) { }
 
     //! Destructor.
-    virtual ~ValidatorInterface() {}
+    virtual ~ValidatorInterface() = default;
 
     /*!
      *  Validation against the internal schema pool
@@ -122,14 +129,21 @@ public:
      *  \param xmlID   Identifier for this input xml within the error log
      *  \param errors  Object for returning errors found (errors are appended)
      */
+    template <typename TStringStream>
+    bool vallidateT(io::InputStream& xml,
+                    TStringStream&& oss,
+                    const std::string& xmlID,
+                    std::vector<ValidationInfo>& errors) const
+    {
+        // convert to std::string
+        xml.streamTo(oss);
+        return validate(oss.stream().str(), xmlID, errors);
+    }
     bool validate(io::InputStream& xml,
                   const std::string& xmlID,
                   std::vector<ValidationInfo>& errors) const
     {
-        // convert to std::string
-        io::StringStream oss;
-        xml.streamTo(oss);
-        return validate(oss.stream().str(), xmlID, errors);
+        return vallidateT(xml, io::StringStream(), xmlID, errors);
     }
 
     /*!
@@ -143,11 +157,10 @@ public:
                   std::vector<ValidationInfo>& errors) const
     {
         // convert to stream
-        io::StringStream oss;
+        io::U8StringStream oss;
         xml->print(oss);
         return validate(oss.stream().str(), xmlID, errors);
     }
-
 
     /*!
      *  Validation against the internal schema pool
@@ -158,7 +171,8 @@ public:
     virtual bool validate(const std::string& xml,
                           const std::string& xmlID,
                           std::vector<ValidationInfo>& errors) const = 0;
-
+    virtual bool validate(const coda_oss::u8string&, const std::string& /*xmlID*/, std::vector<ValidationInfo>&) const = 0;
+    virtual bool validate(const str::W1252string&, const std::string& /*xmlID*/, std::vector<ValidationInfo>&) const = 0;
 };
 
 inline std::ostream& operator<< (std::ostream& out,
@@ -170,4 +184,4 @@ inline std::ostream& operator<< (std::ostream& out,
 }
 }
 
-#endif
+#endif  // CODA_OSS_xml_lite_ValidatorInterface_h_INCLUDED_

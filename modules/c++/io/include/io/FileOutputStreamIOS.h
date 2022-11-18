@@ -53,13 +53,9 @@ namespace io
  *  allowing its native type to be accessible to the developer,
  *  should he or she have the desire to modify it directly
  */
-class FileOutputStreamIOS : public OutputStream
-
+struct FileOutputStreamIOS : public OutputStream
 {
-public:
-    //!  Default constructor
-    FileOutputStreamIOS()
-    {}
+    FileOutputStreamIOS() = default;
 
 
     /*!

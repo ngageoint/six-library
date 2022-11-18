@@ -34,9 +34,8 @@ namespace mem
      *  \brief This class provides RAII for alignedAlloc() and alignedFree()
      */
     template <class T>
-    class ScopedAlignedArray
+    struct ScopedAlignedArray
     {
-    public:
         typedef T ElementType;
 
         explicit ScopedAlignedArray(
@@ -68,7 +67,7 @@ namespace mem
             if (mArray)
             {
                 sys::alignedFree(mArray);
-                mArray = NULL;
+                mArray = nullptr;
             }
 
             mArray = allocate(numElements, alignment);
@@ -87,15 +86,14 @@ namespace mem
         T* release()
         {
             T* const array = mArray;
-            mArray = NULL;
+            mArray = nullptr;
             return array;
         }
 
-    private:
-        // Noncopyable
-        ScopedAlignedArray(const ScopedAlignedArray& );
-        const ScopedAlignedArray& operator=(const ScopedAlignedArray& );
+        ScopedAlignedArray(const ScopedAlignedArray&) = delete;
+        ScopedAlignedArray& operator=(const ScopedAlignedArray&) = delete;
 
+    private:
         static
         T* allocate(size_t numElements, size_t alignment)
         {
@@ -107,7 +105,7 @@ namespace mem
             }
             else
             {
-                return NULL;
+                return nullptr;
             }
         }
 

@@ -43,5 +43,6 @@
 
 #include "mt/CPUAffinityInitializer.h"
 #include "mt/CPUAffinityThreadInitializer.h"
+#include "mt/Algorithm.h"
 
 #endif

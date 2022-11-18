@@ -4,7 +4,7 @@ from waflib import Options
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
 
-APIS = 'expat libxml xerces'
+APIS = 'xerces'
 
 def options(opt):
     opt.add_option('--disable-xml', action='store_false', dest='enable_xml', default=True,

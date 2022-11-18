@@ -42,23 +42,23 @@ void xml::lite::NamespaceStack::pop()
 
 
 void xml::lite::NamespaceStack::newMapping(const std::string& prefix,
-        const std::string& uri)
+        const Uri& uri)
 {
     ++mRefStack.top();
-    mMappingStack.push_back(xml::lite::NamespaceEntity(prefix, uri));
+    mMappingStack.push_back(xml::lite::NamespaceEntity(prefix, uri.value));
 }
 
-std::string
-xml::lite::NamespaceStack::getMapping(const std::string& prefix) const
+void xml::lite::NamespaceStack::getMapping(const std::string& prefix, Uri& result) const
 {
     for (int i = (int)mMappingStack.size() - 1; i >= 0; --i)
     {
         if (mMappingStack[i].first == prefix)
         {
-            return mMappingStack[i].second;
+            result = Uri(mMappingStack[i].second);
+            return;
         }
     }
-    return std::string("");
+    result = xml::lite::Uri();
 }
 
 void xml::lite::NamespaceStack::

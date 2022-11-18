@@ -38,7 +38,7 @@ void mt::GenericRequestHandler::run()
 
         // Run the runnable that we pulled off the queue
         // It will get deleted when it goes out of scope below
-        std::auto_ptr<sys::Runnable> scopedHandler(handler);
+        std::unique_ptr<sys::Runnable> scopedHandler(handler);
         scopedHandler->run();
     }
 }

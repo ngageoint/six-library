@@ -20,10 +20,17 @@
  *
  */
 
-#ifndef __XML_LITE_CONTENT_HANDLER_H__
-#define __XML_LITE_CONTENT_HANDLER_H__
+#ifndef CODA_OSS_xml_lite_ContentHandler_h_INCLUDED_
+#define CODA_OSS_xml_lite_ContentHandler_h_INCLUDED_
+#pragma once
+
+#include <stdint.h>
+#include <stddef.h>
 
 #include <string>
+#include <stdexcept>
+
+#include "xml/lite/QName.h" // Uri
 #include "xml/lite/Attributes.h"
 
 /*!
@@ -63,17 +70,12 @@ namespace lite
 
 class ContentHandler
 {
-public:
+protected:
     //! Constructor
-    ContentHandler()
-    {
-    }
+    ContentHandler() = default;
+    virtual ~ContentHandler() = default;
 
-    //! Destructor
-    virtual ~ContentHandler()
-    {
-    }
-
+public:
     //! Receive notification of the beginning of a document.
     virtual void startDocument()
     {
@@ -90,6 +92,7 @@ public:
      *  \param length The length of the new data
      */
     virtual void characters(const char *data, int length) = 0;
+    virtual bool vcharacters(const void/*XMLCh*/*, size_t /*length*/)  = 0; // avoid XMLCh, it's specific to Xerces
 
     /*!
      *  Receive notification of the beginning of an element.
@@ -101,7 +104,7 @@ public:
     virtual void startElement(const std::string & uri,
                               const std::string & localName,
                               const std::string & qname,
-                              const xml::lite::Attributes & attributes) = 0;
+                              const Attributes & attributes) = 0;
     /*!
      *  Receive notification of the end of an element.
      *  \param uri  The associated uri
@@ -122,5 +125,4 @@ public:
 };
 }
 }
-
-#endif
+#endif  // CODA_OSS_xml_lite_ContentHandler_h_INCLUDED_

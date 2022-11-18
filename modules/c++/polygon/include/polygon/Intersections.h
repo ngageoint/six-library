@@ -123,7 +123,7 @@ public:
 
             // If the pair of intersections lies outside of the image,
             // there is no intersection for this pair.
-            const double lastCol = mDims.col - 1;
+            const auto lastCol = static_cast<double>(mDims.col - 1);
             if ((first < 0.0 && last < 0.0) ||
                 (first > lastCol && last > lastCol))
             {

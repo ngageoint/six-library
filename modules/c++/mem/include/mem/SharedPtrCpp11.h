@@ -20,61 +20,54 @@
  *
  */
 
-#ifndef __MEM_SHARED_PTR_CPP_11_H__
-#define __MEM_SHARED_PTR_CPP_11_H__
+#ifndef CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_
+#define CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_
+#pragma once
 
 #include <memory>
+#include <type_traits>
+
+#include "coda_oss/memory.h"
+#include "sys/CPlusPlus.h"
 
 namespace mem
 {
-/*!
- *  \class SharedPtr
- *  \brief This is a derived class of std::shared_ptr. The purpose of this
- *         class is to provide backwards compatibility in systems that do
- *         not have C++11 support.
- *         Because this inherits from std::shared_ptr it can be directly
- *         passed into interfaces requiring std::shared_ptr or legacy
- *         interfaces.
- *         For future work, prefer std::shared_ptr when possible.
- *
- *         WARNING: std::shared_ptr<T>* foo = new SharedPtr<T> will leak!
- */
-template <class T>
-class SharedPtr : public std::shared_ptr<T>
+// This won't work everywhere since C++11's std::unique_ptr<> often requires
+// "&&" and std::move. But for member data and the like it can reduce some
+// boiler-plate code; note that it's often possible to just use std::unique_ptr
+// directly.  This is mostly needed to support existing interfaces.
+#if CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    #if defined(CODA_OSS_no_autoptr) && (!CODA_OSS_no_autoptr)
+        #error "std::auto_ptr was removed in C++17."
+    #endif
+    #define CODA_OSS_autoptr_is_std 0  // mem::auto_ptr != std::auto_ptr
+#else // C++11 or C++14 still have std::auto_ptr, but it's depricated
+    #ifdef CODA_OSS_no_autoptr  // don't use std::auto_ptr even if it's available
+        #define CODA_OSS_autoptr_is_std 0  // mem::auto_ptr != std::auto_ptr
+    #else
+        #define CODA_OSS_autoptr_is_std 1  // mem::auto_ptr == std::auto_ptr
+    #endif
+#endif
+ template <typename T> using auto_ptr =
+#if CODA_OSS_autoptr_is_std
+   std::auto_ptr<T>;
+#else
+    std::unique_ptr<T>;
+#endif
+
+// Pretty much give-up on mem::SharedPtr as it's too hard to get something that will
+// compile with all the different compilers; let somebody else worry about that
+// via std::shared_ptr.  The only code change is use_count() instead of getCount(),
+// and that's mostly used in unit-tests.
+template<typename T>
+using SharedPtr = std::shared_ptr<T>;
+} // namespace mem
+
+// try to make code changes a tiny bit easier?
+template<typename T>
+inline long getCount(const std::shared_ptr<T>& p) noexcept // be sure const& so that calling doesn't increment!
 {
-public:
-    SharedPtr() : std::shared_ptr<T>()
-    {
-    }
-
-    using std::shared_ptr<T>::shared_ptr;
-
-    using std::shared_ptr<T>::reset;
-
-    // The base class only handles auto_ptr<T>&&
-    explicit SharedPtr(std::auto_ptr<T> ptr) :
-        std::shared_ptr<T>(ptr.release())
-    {
-    }
-
-    // The base class only handles auto_ptr<T>&&
-    template <typename OtherT>
-    explicit SharedPtr(std::auto_ptr<OtherT> ptr) :
-        std::shared_ptr<T>(ptr.release())
-    {
-    }
-
-    void reset(std::auto_ptr<T> scopedPtr)
-    {
-        std::shared_ptr<T>::reset(scopedPtr.release());
-    }
-
-    // Implemented to support the legacy SharedPtr. Prefer use_count.
-    long getCount() const
-    {
-        return std::shared_ptr<T>::use_count();
-    }
-};
+    return p.use_count();
 }
 
-#endif
+#endif // CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_

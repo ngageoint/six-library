@@ -33,13 +33,20 @@ namespace linear
 
 template<size_t _ND, typename _T=double> class VectorN
 {
+    #if _MSC_VER
+    __pragma(warning(push))
+    __pragma(warning(disable: 26495)) // 26495: Variable '...' is uninitialized. Always initialize a member variable (type.6).
+    #endif
     MatrixMxN<_ND, 1, _T> mRaw;
+    #if _MSC_VER
+    __pragma(warning(pop))
+    #endif
     
 public:
     typedef VectorN<_ND, _T> Like_T;
 
     //!  Default constructor (no initialization)
-    VectorN() {}
+    VectorN() = default;
    
     /*!
      *  Create a vector of fixed size (_ND), each component
@@ -156,23 +163,19 @@ public:
         return *this;
     }
 
-    //!  Destructor
-    ~VectorN() {}
-
-    
+    ~VectorN() = default;    
  
-
     MatrixMxN<_ND, 1, _T>& matrix() { return mRaw; }
     const MatrixMxN<_ND, 1, _T>& matrix() const { return mRaw; }
 
-    inline _T operator[](size_t i) const
+    inline _T operator[](size_t i) const noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _ND );
 #endif
         return mRaw[i][0];
     }
-    inline _T& operator[](size_t i)
+    inline _T& operator[](size_t i) noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _ND );
@@ -181,7 +184,7 @@ public:
 
     }
 
-    inline size_t size() const { return _ND; }
+    inline size_t size() const noexcept { return _ND; }
 
     _T dot(const VectorN<_ND>& vec) const
     {
@@ -339,20 +342,15 @@ public:
         return v2;
     }
 
-    template<typename Vector_T> bool operator==(const Vector_T& v) const
+    template<typename Vector_T> bool operator_eq(const Vector_T& v) const
     {
-        size_t sz = v.size();
+        const auto sz = v.size();
         for (size_t i = 0; i < sz; ++i)
             if (!equals<_T>((*this)[i], v[i])) 
                 return false;
 
       
         return true;
-    }
-
-    template<typename Vector_T> bool operator!=(const Vector_T& v) const
-    {
-        return !(*this == v); 
     }
 
 };
@@ -399,6 +397,18 @@ template<size_t _ND, typename _T>
     }
     return os;
 }
+
+template <typename Vector_T, size_t ND, typename T = double>
+inline bool operator==(const VectorN<ND, T>& lhs, const Vector_T& rhs)
+{
+    return lhs.operator_eq(rhs);
+}
+template <typename Vector_T, size_t ND, typename T = double>
+inline bool operator!=(const VectorN<ND, T>& lhs, const Vector_T& rhs)
+{
+    return !(lhs == rhs);
+}
+
 } // linear
 } // math
 

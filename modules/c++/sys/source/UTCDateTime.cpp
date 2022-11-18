@@ -19,11 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#include <errno.h>
-
-#include <config/coda_oss_config.h>
 #include <sys/UTCDateTime.h>
+
 #include <sys/Conf.h>
 #include <except/Exception.h>
 #include <str/Convert.h>
@@ -75,10 +72,10 @@ int getNumFullDaysInYearSoFar(int year, int month, int dayOfMonth)
 }
 }
 
+static const char DEFAULT_DATETIME_FORMAT[] = "%Y-%m-%dT%H:%M:%SZ";
+
 namespace sys
 {
-const char UTCDateTime::DEFAULT_DATETIME_FORMAT[] = "%Y-%m-%dT%H:%M:%SZ";
-
 void UTCDateTime::toMillis()
 {
     if (mSecond < 0.0 || mSecond >= 60.0 ||
@@ -133,26 +130,7 @@ void UTCDateTime::toMillis()
 
 void UTCDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const
 {
-    // Would like to use the reentrant version.  If we don't have one, cross
-    // our fingers and hope the regular function actually is reentrant
-    // (supposedly this is the case on Windows).
-#ifdef HAVE_GMTIME_R
-    if (::gmtime_r(&numSecondsSinceEpoch, &t) == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("gmtime_r() failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-#else
-    tm const * const gmTimePtr = ::gmtime(&numSecondsSinceEpoch);
-    if (gmTimePtr == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("gmtime failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-    t = *gmTimePtr;
-#endif
+    DateTime::gmtime(numSecondsSinceEpoch, t);
 }
 
 UTCDateTime::UTCDateTime()
@@ -212,6 +190,9 @@ UTCDateTime::UTCDateTime(const std::string& time, const std::string& format)
     setTime(time, format);
     fromMillis();
 }
+UTCDateTime::UTCDateTime(const std::string& time) : UTCDateTime(time, DEFAULT_DATETIME_FORMAT)
+{
+}
 
 std::string UTCDateTime::format() const
 {
@@ -228,7 +209,7 @@ std::istream& operator>>(std::istream& is, UTCDateTime& dateTime)
 {
     std::string str;
     is >> str;
-    dateTime.setTime(str, UTCDateTime::DEFAULT_DATETIME_FORMAT);
+    dateTime.setTime(str, DEFAULT_DATETIME_FORMAT);
     return is;
 }
 }

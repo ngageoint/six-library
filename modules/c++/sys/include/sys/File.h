@@ -26,8 +26,9 @@
 #include "sys/Conf.h"
 #include "sys/SystemException.h"
 #include "sys/Path.h"
+#include "sys/filesystem.h"
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #    define _SYS_SEEK_CUR FILE_CURRENT
 #    define _SYS_SEEK_SET FILE_BEGIN
 #    define _SYS_SEEK_END FILE_END
@@ -67,10 +68,8 @@ typedef int _SYS_HANDLE_TYPE;
 
 namespace sys
 {
-class File
+struct File
 {
-public:
-
     enum
     {
         FROM_START = _SYS_SEEK_SET,
@@ -87,10 +86,7 @@ public:
     /*!
      *  Default constructor.  Does nothing
      */
-    File() :
-        mHandle(SYS_INVALID_HANDLE)
-    {
-    }
+    File() = default;
 
     /*!
      *  Constructor.  Initializes to a file.
@@ -116,7 +112,7 @@ public:
      *  \param accessFlags File access flags
      *  \param creationFlags File creation flags
      */
-    File(std::string str, int accessFlags = READ_ONLY, 
+    explicit File(const std::string& str, int accessFlags = READ_ONLY, 
          int creationFlags = EXISTING)
     {
         create(str, accessFlags, creationFlags);
@@ -135,7 +131,7 @@ public:
      *  Is the file open?
      *  \return true if open, false if invalid handle
      */
-    bool isOpen()
+    bool isOpen() const noexcept
     {
         return (mHandle != SYS_INVALID_HANDLE);
     }
@@ -144,7 +140,7 @@ public:
      *  Return the underlying file handle
      *
      */
-    _SYS_HANDLE_TYPE getHandle()
+    _SYS_HANDLE_TYPE getHandle() noexcept
     {
         return mHandle;
     }
@@ -236,7 +232,7 @@ public:
     void close();
 
 protected:
-    _SYS_HANDLE_TYPE mHandle;
+    _SYS_HANDLE_TYPE mHandle = SYS_INVALID_HANDLE;
     std::string mPath;
 
 };

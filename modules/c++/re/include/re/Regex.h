@@ -26,7 +26,11 @@
 #include <string>
 #include <vector>
 
+#include "config/Exports.h"
+
+#if !defined(RE_ENABLE_STD_REGEX)
 #include <re/re_config.h>
+#endif
 
 #ifdef RE_ENABLE_STD_REGEX
 #include <regex>
@@ -54,7 +58,7 @@ typedef std::vector<std::string> RegexMatch;
  *  documentation regarding the underlying PCRE library, especially for flag
  *  information, see http://www.pcre.org.
  */
-class Regex
+class CODA_OSS_API Regex
 {
 public:
     /*!

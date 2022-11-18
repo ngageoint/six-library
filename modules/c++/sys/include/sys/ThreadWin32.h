@@ -24,14 +24,18 @@
 #ifndef __SYS_THREAD_WIN32_H__
 #define __SYS_THREAD_WIN32_H__
 
-#if defined(WIN32)
+#include <sstream>
+
+#include <import/gsl.h>
+
+#include "config/Exports.h"
+
+#if defined(WIN32) || defined(_WIN32)
 
 #if !defined(USE_NSPR_THREADS)
 
 #include "sys/ThreadInterface.h"
 #include "sys/Conf.h"
-#include <sstream>
-
 
 #define sleep Sleep
 
@@ -64,13 +68,11 @@ namespace sys
 
     inline long getThreadID()
     {
-	return (long)GetCurrentThreadId();
+	return gsl::narrow<long>(GetCurrentThreadId());
     }
 
-class ThreadWin32 : public ThreadInterface
-{
-public:
-
+struct CODA_OSS_API ThreadWin32 : public ThreadInterface
+    {
     ThreadWin32(const std::string& name = "") : ThreadInterface(name)
     {}
 
@@ -86,8 +88,11 @@ public:
             ThreadInterface(target, name, level, priority)
     {}
 
-
     virtual ~ThreadWin32();
+
+    ThreadWin32(const ThreadWin32&) = delete;
+    ThreadWin32& operator=(const ThreadWin32&) = delete;
+
     virtual void start();
     static DWORD WINAPI __start(void *v)
     {
@@ -133,7 +138,7 @@ public:
     }
     
 private:
-    HANDLE mNative;
+    HANDLE mNative = INVALID_HANDLE_VALUE;
 };
 
 }
