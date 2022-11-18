@@ -10,15 +10,17 @@
 #undef TEST_CHECK
 #undef TEST_ASSERT
 #undef TEST_ASSERT_NULL 
+#undef TEST_ASSERT_NOT_NULL 
 #undef TEST_ASSERT_TRUE
 #undef TEST_ASSERT_FALSE
 #undef TEST_MAIN
 #undef TEST_CASE
 #define TEST_CHECK(X) 
 #define TEST_MAIN(X)
-#define TEST_ASSERT_NULL(X) testName, Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsNull((X))
-#define TEST_ASSERT_TRUE(X) testName, Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsTrue((X))
-#define TEST_ASSERT_FALSE(X) testName, Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsFalse((X))
+#define TEST_ASSERT_NULL(X) testName, Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsNull(X)
+#define TEST_ASSERT_NOT_NULL(X) testName, Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsNotNull(X)
+#define TEST_ASSERT_TRUE(X) testName, Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsTrue(X)
+#define TEST_ASSERT_FALSE(X) testName, Microsoft::VisualStudio::CppUnitTestFramework::Assert::IsFalse(X)
 #define TEST_ASSERT(X) TEST_ASSERT_TRUE(X)
 #define CODA_OSS_testMethod_(X)  testMethod ## _ ## X
 #define TEST_CASE(X) TEST_METHOD(X) { CODA_OSS_testMethod_(X)(#X); } void CODA_OSS_testMethod_(X)(std::string testName)

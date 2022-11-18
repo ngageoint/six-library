@@ -6,10 +6,10 @@ git remote add -m main -f nitro_remote git@github.com:mdaus/nitro.git
 # To set this up the very first time
 # This does a subtree merge and puts it in the externals/coda-oss directory.  --squash avoids copying all the history
 # You can replace 'master' with any branch of CODA-OSS you want
-# git subtree add --prefix externals/coda-oss coda-oss_remote master --squash
+# git subtree add --prefix externals/coda-oss coda-oss_remote main --squash
 
 # Same deal for NITRO
-# git subtree add --prefix externals/nitro nitro_remote master --squash
+# git subtree add --prefix externals/nitro nitro_remote main --squash
 
 # Then, let's get rid of some externals we don't care about
 # git is smart, so we only have to do this once and then future subtree pulls will never
