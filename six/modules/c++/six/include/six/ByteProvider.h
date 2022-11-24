@@ -66,11 +66,9 @@ public:
     ByteProvider(const six::NITFHeaderCreator& headerCreator,
                  const std::vector<std::string>& schemaPaths,
                  const std::vector<PtrAndLength>& desBuffers);
-#if !CODA_OSS_cpp17
-    ByteProvider(mem::auto_ptr<six::NITFHeaderCreator> headerCreator,
+    ByteProvider(const std::unique_ptr<six::NITFHeaderCreator>& headerCreator,
                  const std::vector<std::string>& schemaPaths,
                  const std::vector<PtrAndLength>& desBuffers);
-#endif
 
     /*!
      * Populates the writer Options from given parameters
@@ -147,11 +145,10 @@ public:
     void initialize(const six::NITFHeaderCreator& headerCreator,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<PtrAndLength>& desBuffers);
-#if !CODA_OSS_cpp17
-    void initialize(mem::auto_ptr<six::NITFHeaderCreator> headerCreator,
+    void initialize(const std::unique_ptr<six::NITFHeaderCreator>& headerCreator,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<PtrAndLength>& desBuffers);
-#endif
+
 protected:
     /*!
      * Default constructor. Client code must call initialize() to

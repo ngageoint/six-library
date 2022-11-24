@@ -51,16 +51,16 @@ public:
      *  This function takes in a Metadata object and converts
      *  it to a new-allocated XML DOM.
      */
-    mem::auto_ptr<xml::lite::Document> toXML(const Metadata& metadata);
+    std::unique_ptr<xml::lite::Document> toXML(const Metadata& metadata);
 
     /*!
      *  Function takes a DOM Document* node and creates a new-allocated
      *  CPHDData* populated by the DOM.
      */
-    mem::auto_ptr<Metadata> fromXML(const xml::lite::Document* doc);
+    std::unique_ptr<Metadata> fromXML(const xml::lite::Document* doc);
    Metadata fromXML(const xml::lite::Document& doc);
 
-    mem::auto_ptr<Metadata> fromXML(const std::string& xmlString);
+    std::unique_ptr<Metadata> fromXML(const std::string& xmlString);
     std::unique_ptr<Metadata> fromXML(const std::u8string& xmlString);
 
     std::string toXMLString_(const Metadata& metadata);
