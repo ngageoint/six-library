@@ -188,6 +188,9 @@ public:
      * \param headerCreator Populated NITF header creator
      */
     void setNITFHeaderCreator(std::unique_ptr<six::NITFHeaderCreator>&& headerCreator);
+#if !CODA_OSS_cpp17
+    void setNITFHeaderCreator(std::unique_ptr<six::NITFHeaderCreator> headerCreator);
+#endif
 
     virtual void initialize(const six::Options& options,
                             std::shared_ptr<Container> container);

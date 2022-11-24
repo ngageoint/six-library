@@ -29,6 +29,7 @@
 #include <type_traits>
 
 #include "coda_oss/memory.h"
+#include "mem/SharedPtr.h"
 
 namespace mem
 {
@@ -81,6 +82,18 @@ public:
         *this = std::move(p);
     }
 
+    template<typename U>
+    AutoPtr& operator=(mem::auto_ptr<U> p) noexcept
+    {
+        ptr_.reset(p.release());
+        return *this;
+    }
+    template <typename U>
+    AutoPtr(mem::auto_ptr<U> p) noexcept
+    {
+        *this = p;
+    }
+
 
     T* get() const noexcept
     {
@@ -106,6 +119,10 @@ public:
     {
         return get();
     }
+
+    operator std::unique_ptr<T>& () { return ptr_; }
+    operator const std::unique_ptr<T>& () const { return ptr_; }
+    
 };
 
 } // namespace mem
