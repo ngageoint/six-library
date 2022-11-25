@@ -30,7 +30,7 @@
 
 #include "logging/Setup.h"
 
-mem::auto_ptr<logging::Logger>
+std::unique_ptr<logging::Logger>
 logging::setupLogger(const path& program_, 
                      const std::string& logLevel, 
                      const path& logFile_,
@@ -89,5 +89,5 @@ logging::setupLogger(const path& program_,
     logHandler->setFormatter(formatter.release());
     log->addHandler(logHandler.release(), true);
 
-    return mem::auto_ptr<logging::Logger>(log.release());
+    return std::unique_ptr<logging::Logger>(log.release());
 }

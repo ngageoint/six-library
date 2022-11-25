@@ -44,9 +44,9 @@ public:
      * \returns a new thread initializer. In general, this should return
      *          a different affinity initializer each time it is called.
      */
-    mem::auto_ptr<AbstractCPUAffinityThreadInitializer> newThreadInitializer()
+    std::unique_ptr<AbstractCPUAffinityThreadInitializer> newThreadInitializer()
     {
-        return mem::auto_ptr<AbstractCPUAffinityThreadInitializer>(
+        return std::unique_ptr<AbstractCPUAffinityThreadInitializer>(
                 newThreadInitializerImpl());
     }
 

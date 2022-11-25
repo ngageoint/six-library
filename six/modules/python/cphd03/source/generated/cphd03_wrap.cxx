@@ -4800,6 +4800,7 @@ namespace swig
 }
 
 
+#include "mem/AutoPtr.h"
 #include "import/types.h"
 #include "import/cphd.h"
 #include "import/cphd03.h"
@@ -5273,7 +5274,7 @@ SWIGINTERN void cphd03_VBM_getVBMdata__SWIG_2(cphd03::VBM *self,size_t channel,s
     }
 SWIGINTERN cphd03::Metadata cphd03_CPHDXMLControl_fromXMLString(cphd03::CPHDXMLControl *self,std::string const &xmlString){
     cphd03::Metadata retv;
-    mem::auto_ptr<cphd03::Metadata> apMetadata = self->fromXML(xmlString);
+    mem::AutoPtr<cphd03::Metadata> apMetadata = self->fromXML(xmlString);
     retv = *apMetadata;
     return retv;
   }
@@ -52107,13 +52108,13 @@ SWIGINTERN PyObject *VectorAntennaParameters_swigregister(PyObject *SWIGUNUSEDPA
 
 SWIGINTERN PyObject *_wrap_new_StdAutoDwellTimeParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< cphd03::DwellTimeParameters > *result = 0 ;
+  mem::AutoPtr< cphd03::DwellTimeParameters > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoDwellTimeParameters")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< cphd03::DwellTimeParameters > *)new mem::auto_ptr< cphd03::DwellTimeParameters >();
+      result = (mem::AutoPtr< cphd03::DwellTimeParameters > *)new mem::AutoPtr< cphd03::DwellTimeParameters >();
     } 
     catch (const std::exception& e)
     {
@@ -52150,7 +52151,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoDwellTimeParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< cphd03::DwellTimeParameters > *arg1 = (mem::auto_ptr< cphd03::DwellTimeParameters > *) 0 ;
+  mem::AutoPtr< cphd03::DwellTimeParameters > *arg1 = (mem::AutoPtr< cphd03::DwellTimeParameters > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -52158,9 +52159,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoDwellTimeParameters(PyObject *SWIGUNUSE
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoDwellTimeParameters",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_cphd03__DwellTimeParameters_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoDwellTimeParameters" "', argument " "1"" of type '" "mem::auto_ptr< cphd03::DwellTimeParameters > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoDwellTimeParameters" "', argument " "1"" of type '" "mem::AutoPtr< cphd03::DwellTimeParameters > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< cphd03::DwellTimeParameters > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< cphd03::DwellTimeParameters > * >(argp1);
   {
     try
     {
@@ -54452,13 +54453,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoFxParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< cphd03::FxParameters > *result = 0 ;
+  mem::AutoPtr< cphd03::FxParameters > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoFxParameters")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< cphd03::FxParameters > *)new mem::auto_ptr< cphd03::FxParameters >();
+      result = (mem::AutoPtr< cphd03::FxParameters > *)new mem::AutoPtr< cphd03::FxParameters >();
     } 
     catch (const std::exception& e)
     {
@@ -54495,7 +54496,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoFxParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< cphd03::FxParameters > *arg1 = (mem::auto_ptr< cphd03::FxParameters > *) 0 ;
+  mem::AutoPtr< cphd03::FxParameters > *arg1 = (mem::AutoPtr< cphd03::FxParameters > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -54503,9 +54504,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoFxParameters(PyObject *SWIGUNUSEDPARM(s
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoFxParameters",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_cphd03__FxParameters_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoFxParameters" "', argument " "1"" of type '" "mem::auto_ptr< cphd03::FxParameters > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoFxParameters" "', argument " "1"" of type '" "mem::AutoPtr< cphd03::FxParameters > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< cphd03::FxParameters > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< cphd03::FxParameters > * >(argp1);
   {
     try
     {
@@ -55787,13 +55788,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoTOAParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< cphd03::TOAParameters > *result = 0 ;
+  mem::AutoPtr< cphd03::TOAParameters > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoTOAParameters")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< cphd03::TOAParameters > *)new mem::auto_ptr< cphd03::TOAParameters >();
+      result = (mem::AutoPtr< cphd03::TOAParameters > *)new mem::AutoPtr< cphd03::TOAParameters >();
     } 
     catch (const std::exception& e)
     {
@@ -55830,7 +55831,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoTOAParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< cphd03::TOAParameters > *arg1 = (mem::auto_ptr< cphd03::TOAParameters > *) 0 ;
+  mem::AutoPtr< cphd03::TOAParameters > *arg1 = (mem::AutoPtr< cphd03::TOAParameters > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -55838,9 +55839,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoTOAParameters(PyObject *SWIGUNUSEDPARM(
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoTOAParameters",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_cphd03__TOAParameters_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoTOAParameters" "', argument " "1"" of type '" "mem::auto_ptr< cphd03::TOAParameters > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoTOAParameters" "', argument " "1"" of type '" "mem::AutoPtr< cphd03::TOAParameters > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< cphd03::TOAParameters > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< cphd03::TOAParameters > * >(argp1);
   {
     try
     {
@@ -56898,13 +56899,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoCphdAntenna(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< cphd03::Antenna > *result = 0 ;
+  mem::AutoPtr< cphd03::Antenna > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoCphdAntenna")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< cphd03::Antenna > *)new mem::auto_ptr< cphd03::Antenna >();
+      result = (mem::AutoPtr< cphd03::Antenna > *)new mem::AutoPtr< cphd03::Antenna >();
     } 
     catch (const std::exception& e)
     {
@@ -56941,7 +56942,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoCphdAntenna(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< cphd03::Antenna > *arg1 = (mem::auto_ptr< cphd03::Antenna > *) 0 ;
+  mem::AutoPtr< cphd03::Antenna > *arg1 = (mem::AutoPtr< cphd03::Antenna > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -56949,9 +56950,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoCphdAntenna(PyObject *SWIGUNUSEDPARM(se
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoCphdAntenna",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_cphd03__Antenna_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCphdAntenna" "', argument " "1"" of type '" "mem::auto_ptr< cphd03::Antenna > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCphdAntenna" "', argument " "1"" of type '" "mem::AutoPtr< cphd03::Antenna > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< cphd03::Antenna > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< cphd03::Antenna > * >(argp1);
   {
     try
     {
@@ -59596,10 +59597,10 @@ static swig_type_info _swigt__p_std__allocatorT_cphd03__ArraySize_t = {"_p_std__
 static swig_type_info _swigt__p_std__allocatorT_cphd03__ChannelParameters_t = {"_p_std__allocatorT_cphd03__ChannelParameters_t", "std::vector< cphd03::ChannelParameters >::allocator_type *|std::allocator< cphd03::ChannelParameters > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_math__linear__VectorNT_3_double_t_t = {"_p_std__allocatorT_math__linear__VectorNT_3_double_t_t", "std::vector< math::linear::VectorN< 3,double > >::allocator_type *|std::allocator< math::linear::VectorN< 3,double > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_six__sicd__AntennaParameters_t = {"_p_std__allocatorT_six__sicd__AntennaParameters_t", "std::allocator< six::sicd::AntennaParameters > *|std::vector< six::sicd::AntennaParameters >::allocator_type *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_cphd03__Antenna_t = {"_p_std__auto_ptrT_cphd03__Antenna_t", "mem::auto_ptr< cphd03::Antenna > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_cphd03__DwellTimeParameters_t = {"_p_std__auto_ptrT_cphd03__DwellTimeParameters_t", "mem::auto_ptr< cphd03::DwellTimeParameters > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_cphd03__FxParameters_t = {"_p_std__auto_ptrT_cphd03__FxParameters_t", "mem::auto_ptr< cphd03::FxParameters > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_cphd03__TOAParameters_t = {"_p_std__auto_ptrT_cphd03__TOAParameters_t", "mem::auto_ptr< cphd03::TOAParameters > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_cphd03__Antenna_t = {"_p_std__auto_ptrT_cphd03__Antenna_t", "mem::AutoPtr< cphd03::Antenna > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_cphd03__DwellTimeParameters_t = {"_p_std__auto_ptrT_cphd03__DwellTimeParameters_t", "mem::AutoPtr< cphd03::DwellTimeParameters > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_cphd03__FxParameters_t = {"_p_std__auto_ptrT_cphd03__FxParameters_t", "mem::AutoPtr< cphd03::FxParameters > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_cphd03__TOAParameters_t = {"_p_std__auto_ptrT_cphd03__TOAParameters_t", "mem::AutoPtr< cphd03::TOAParameters > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__shared_ptrT_io__SeekableInputStream_t = {"_p_std__shared_ptrT_io__SeekableInputStream_t", "std::shared_ptr< io::SeekableInputStream > *", 0, 0, (void*)0, 0};
