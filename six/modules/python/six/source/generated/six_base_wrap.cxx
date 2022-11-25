@@ -64336,7 +64336,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_0(PyObject *SWIGU
   {
     try
     {
-      (arg1)->addCreator((std::string const &)*arg2,arg3);
+      (arg1)->addCreator_((std::string const &)*arg2,arg3);
     } 
     catch (const std::exception& e)
     {
@@ -64499,7 +64499,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_2(PyObject *SWIGU
   {
     try
     {
-      (arg1)->addCreator(arg2,arg3);
+      (arg1)->addCreator_(arg2,arg3);
     } 
     catch (const std::exception& e)
     {
