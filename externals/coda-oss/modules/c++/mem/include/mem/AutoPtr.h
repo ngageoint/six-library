@@ -26,7 +26,6 @@
 #pragma once
 
 #include <memory>
-#include <type_traits>
 
 #include "coda_oss/memory.h"
 #include "mem/SharedPtr.h"
@@ -83,13 +82,13 @@ public:
     }
 
     template<typename U>
-    AutoPtr& operator=(mem::auto_ptr<U> p) noexcept
+    AutoPtr& operator=(std::auto_ptr<U> p) noexcept
     {
         ptr_.reset(p.release());
         return *this;
     }
     template <typename U>
-    AutoPtr(mem::auto_ptr<U> p) noexcept
+    AutoPtr(std::auto_ptr<U> p) noexcept
     {
         *this = p;
     }

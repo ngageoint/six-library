@@ -11,4 +11,3 @@ public:
 #include "nitf/unittests/test_image_loading++.cpp"
 
 };
-std::string test_image_loading__::argv0;
