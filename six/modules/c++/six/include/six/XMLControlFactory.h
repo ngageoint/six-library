@@ -95,7 +95,13 @@ struct XMLControlRegistry
     virtual ~XMLControlRegistry();
 
     void addCreator(const std::string& identifier,
-                    mem::AutoPtr<XMLControlCreator> creator);
+        std::unique_ptr<XMLControlCreator>&& creator);
+    void addCreator(const std::string& identifier,
+        mem::AutoPtr<XMLControlCreator> creator)
+    {
+        std::unique_ptr<XMLControlCreator> scopedCreator(creator.release());
+        addCreator(identifier, std::move(scopedCreator));
+    }
 
     /*!
      * Takes ownership of creator
@@ -107,6 +113,11 @@ struct XMLControlRegistry
         addCreator(identifier, std::move(scopedCreator));
     }
 
+    void addCreator(DataType dataType,
+        std::unique_ptr<XMLControlCreator>&& creator)
+    {
+        addCreator(dataType.toString(), std::move(creator));
+    }
     void addCreator(DataType dataType,
                     mem::AutoPtr<XMLControlCreator> creator)
     {

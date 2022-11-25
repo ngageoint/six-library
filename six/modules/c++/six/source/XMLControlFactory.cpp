@@ -39,7 +39,7 @@ XMLControlRegistry::~XMLControlRegistry()
 }
 
 void XMLControlRegistry::addCreator(const std::string& identifier,
-                                    mem::AutoPtr<XMLControlCreator> creator)
+                                    std::unique_ptr<XMLControlCreator>&& creator)
 {
     const RegistryMap::iterator iter(mRegistry.lower_bound(identifier));
     if (iter == mRegistry.end() || iter->first != identifier)
