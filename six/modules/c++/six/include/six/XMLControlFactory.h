@@ -96,7 +96,7 @@ struct XMLControlRegistry
 
     void addCreator(const std::string& identifier,
         std::unique_ptr<XMLControlCreator>&& creator);
-    void addCreator(const std::string& identifier,
+    void addCreator_(const std::string& identifier,
         mem::AutoPtr<XMLControlCreator> creator)
     {
         std::unique_ptr<XMLControlCreator> scopedCreator(creator.release());
@@ -118,10 +118,11 @@ struct XMLControlRegistry
     {
         addCreator(dataType.toString(), std::move(creator));
     }
-    void addCreator(DataType dataType,
-                    mem::AutoPtr<XMLControlCreator> creator)
+    void addCreator_(DataType dataType,
+                    mem::AutoPtr<XMLControlCreator> creator_)
     {
-        addCreator(dataType.toString(), creator);
+        std::unique_ptr<XMLControlCreator> creator(creator_.release());
+        addCreator(dataType, std::move(creator));
     }
 
     /*!
