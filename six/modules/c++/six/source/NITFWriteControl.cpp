@@ -98,13 +98,6 @@ void NITFWriteControl::setNITFHeaderCreator(
 {
     mNITFHeaderCreator.reset(headerCreator.release());
 }
-#if !CODA_OSS_cpp17
-void NITFWriteControl::setNITFHeaderCreator(
-        mem::auto_ptr<six::NITFHeaderCreator> headerCreator)
-{
-    setNITFHeaderCreator(std::unique_ptr<six::NITFHeaderCreator>(headerCreator.release()));
-}
-#endif
 
 std::string NITFWriteControl::getComplexIID(size_t segmentNum,
                                             size_t numImageSegments)

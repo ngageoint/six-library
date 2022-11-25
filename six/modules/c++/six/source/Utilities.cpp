@@ -572,7 +572,7 @@ void six::loadXmlDataContentHandler()
     loadXmlDataContentHandler(stderr); // existing/legacy behavior
 }
 
-mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
@@ -587,9 +587,9 @@ std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     return parseData(xmlReg, xmlStream, DataType::NOT_SET, pSchemaPaths, log);
 }
 
-inline mem::auto_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::string>& schemaPaths)
+inline std::unique_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::string>& schemaPaths)
 {
-    return mem::auto_ptr<Data>(xmlControl.fromXML(&doc, schemaPaths));
+    return std::unique_ptr<Data>(xmlControl.fromXML(&doc, schemaPaths));
 }
 inline std::unique_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
@@ -633,13 +633,13 @@ TReturn six_parseData(const XMLControlRegistry& xmlReg,
     const std::unique_ptr<XMLControl> xmlControl(xmlReg.newXMLControl(xmlDataType, &log));
     return fromXML_(doc, *xmlControl, schemaPaths);
 }
-mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
 {
-    return six_parseData<mem::auto_ptr<Data>>(xmlReg, xmlStream, dataType, schemaPaths, log);
+    return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlStream, dataType, schemaPaths, log);
 }
 std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
@@ -650,7 +650,7 @@ std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlStream, dataType, pSchemaPaths, log);
 }
 
-mem::auto_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,
     const std::string& pathname,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
@@ -658,7 +658,7 @@ mem::auto_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,
     return parseDataFromFile(xmlReg, pathname, DataType::NOT_SET, schemaPaths, log);
 }
 
-mem::auto_ptr<Data> six::parseDataFromFile(
+std::unique_ptr<Data> six::parseDataFromFile(
         const XMLControlRegistry& xmlReg,
         const std::string& pathname,
         DataType dataType,
@@ -676,7 +676,7 @@ std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
 {
     return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, pSchemaPaths, pLogger);
 }
-mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
@@ -706,7 +706,7 @@ std::unique_ptr<Data> six::parseDataFromString(
 
     return parseData(xmlReg, inStream, dataType, schemaPaths, *pLogger_);
 }
-mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
     DataType dataType,
     const std::vector<std::string>& schemaPaths_,
@@ -718,7 +718,7 @@ mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
 
     const str::EncodedStringView view(xmlStr);
     auto result = parseDataFromString(xmlReg, view.u8string(), dataType, &schemaPaths, &log);
-    return mem::auto_ptr<Data>(result.release());
+    return std::unique_ptr<Data>(result.release());
 }
 
 std::string six::findSchemaPath(const std::string& progname)

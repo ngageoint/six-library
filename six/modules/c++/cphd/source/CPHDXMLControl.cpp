@@ -91,11 +91,11 @@ std::string CPHDXMLControl::toXMLString_(
     return str::EncodedStringView(result).native();
 }
 
-mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
+std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
         const Metadata& metadata,
         const std::vector<std::string>& schemaPaths)
 {
-    mem::auto_ptr<xml::lite::Document> doc(toXMLImpl(metadata).release());
+    std::unique_ptr<xml::lite::Document> doc(toXMLImpl(metadata).release());
     if(!schemaPaths.empty())
     {
         six::XMLControl::validate(doc.get(), schemaPaths, mLog);

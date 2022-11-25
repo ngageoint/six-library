@@ -82,7 +82,7 @@ size_t CPHDXMLControl::getXMLsize(const Metadata& metadata)
     return toXMLString(metadata).size();
 }
 
-mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
+std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadata)
 {
     auto doc = std::make_unique<xml::lite::Document>();
 
@@ -105,7 +105,7 @@ mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(const Metadata& metadat
     //set the XMLNS
     root->setNamespacePrefix("", getDefaultURI());
 
-    return mem::auto_ptr<xml::lite::Document>(doc.release());
+    return std::unique_ptr<xml::lite::Document>(doc.release());
 }
 
 XMLElem CPHDXMLControl::createLatLonAltFootprint(const std::string& name,
@@ -491,10 +491,10 @@ XMLElem CPHDXMLControl::areaSampleDirectionParametersToXML(
     return adpXML;
 }
 
-mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
+std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
 {
     auto result = fromXML(str::EncodedStringView(xmlString).u8string());
-    return mem::auto_ptr<Metadata>(result.release());
+    return std::unique_ptr<Metadata>(result.release());
 }
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::u8string& xmlString)
 {
@@ -505,7 +505,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::u8string& xmlString
     return fromXML(&parser.getDocument());
 }
 
-mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
+std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 {
     auto cphd03 = std::make_unique<Metadata>();
 
@@ -535,7 +535,7 @@ mem::auto_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc)
 
     fromXML(vectorParametersXML, cphd03->vectorParameters);
 
-    return mem::auto_ptr<Metadata>(cphd03.release());
+    return std::unique_ptr<Metadata>(cphd03.release());
 }
 Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc)
 {
