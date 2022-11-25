@@ -37,7 +37,7 @@ namespace mem
 /*!
  *  \class ScopedPtr
  *  \brief This class provides RAII for object allocations via new.  It is a
- *         light wrapper around std::auto_ptr and has the same semantics
+ *         light wrapper around std::unique_ptr and has the same semantics
  *         except that the copy constructor and assignment operator are deep
  *         copies (by using T's clone() method) rather than transferring
  *         ownership.
@@ -45,7 +45,7 @@ namespace mem
  *         This is useful for cases where you have a class which has a member
  *         variable that's dynamically allocated and you want to provide a
  *         valid copy constructor / assignment operator.  With raw pointers or
- *         std::auto_ptr's, you'll have to write the copy constructor /
+ *         std::unique_ptr's, you'll have to write the copy constructor /
  *         assignment operator for this class - this is tedious and
  *         error-prone since you need to include all the members in the class.
  *         Using ScopedCloneablePtr's instead, the compiler-generated copy
@@ -77,12 +77,6 @@ public:
     {
         reset(std::move(ptr));
     }
-#if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-    explicit ScopedPtr(mem::auto_ptr<T> ptr)
-    {
-        reset(ptr);
-    }
-#endif
 
     ScopedPtr(const ScopedPtr& rhs)
     {
@@ -161,12 +155,6 @@ public:
     {
         mPtr = std::move(ptr);
     }
-#if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-    void reset(mem::auto_ptr<T> ptr)
-    {
-        reset(std::unique_ptr<T>(ptr.release()));
-    }
-#endif
 };
 }
 
