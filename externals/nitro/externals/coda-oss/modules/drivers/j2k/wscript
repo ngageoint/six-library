@@ -1,0 +1,54 @@
+from waflib import Options
+from build import writeConfig, getDriverIncludes
+from os.path import join
+
+USELIB_CHECK = 'J2K'
+APIS = ['openjpeg', 'jasper']
+
+
+def options(opt):
+    opt.add_option('--disable-j2k', action='store_false', dest='enable_j2k',
+                   default=True,
+                   help='turn off JPEG2000 support')
+    opt.add_option('--j2k-layer', action='store', dest='j2k_layer',
+                   choices=['openjpeg', 'jasper'],
+                   default='openjpeg', metavar='LIB',
+                   help='Specify the JPEG2000 library to link with')
+
+    opt.recurse(APIS)
+
+
+def configure(conf):
+    j2kLayer = Options.options.j2k_layer
+
+    def j2k_callback(conf):
+        if j2kLayer == 'openjpeg':
+            conf.define('HAVE_OPENJPEG_H', '', quote=False)
+            conf.define('J2K_MODULE_EXPORTS', '', quote=False)
+        elif j2kLayer == 'jasper':
+            conf.define('HAVE_JASPER_H', '', quote=False)
+            conf.define('J2K_MODULE_EXPORTS', '', quote=False)
+        else:
+            conf.fatal('Do not recognize j2kLayer: {}'.format(j2kLayer))
+    writeConfig(conf, j2k_callback, 'j2k')
+
+    if Options.options.enable_j2k:
+        conf.msg('Configuring with J2K layer', Options.options.j2k_layer)
+        conf.recurse(APIS)
+
+
+def build(bld):
+    env = bld.get_env()
+
+    bld(name='j2k_config',
+        features='install_tgt',
+        files=['j2k_config.h'],
+        dir=bld.bldnode.make_node(getDriverIncludes(bld, 'j2k')),
+        install_path=join(env['install_includedir'], 'j2k'))
+
+    if 'MAKE_J2K' in env and env['MAKE_J2K']:
+        bld.recurse(APIS)
+
+
+def distclean(context):
+    context.recurse(APIS)

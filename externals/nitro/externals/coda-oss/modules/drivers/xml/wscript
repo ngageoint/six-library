@@ -1,0 +1,32 @@
+import os, sys
+from os.path import join, exists
+from waflib import Options
+from waflib.TaskGen import feature, before, task_gen
+from build import untarFile
+
+APIS = 'xerces'
+
+def options(opt):
+    opt.add_option('--disable-xml', action='store_false', dest='enable_xml', default=True,
+                   help='turn off XML')
+    opt.add_option('--xml-layer', action='store', choices=APIS.split(),
+                   dest='xml_layer', default='xerces', help='Specify the XML layer (default=xerces)')
+    opt.add_option('--with-xml-home', action='store', dest='xml_home',
+                   help='Specify the XML Home - where the XML library is installed to')
+    opt.add_option('--build-xml', action='store_true', dest='build_xml',
+                   help='force building XML layer from scratch', default=True)
+    opt.add_option('--nobuild-xml', action='store_false', dest='build_xml',
+                   help='force not building XML layer from scratch')
+        
+    opt.recurse(APIS)
+
+def configure(conf):    
+    if Options.options.enable_xml:
+        conf.msg('Configuring with XML layer', Options.options.xml_layer)
+        conf.recurse(APIS)
+
+def build(bld):
+    bld.recurse(APIS)
+
+def distclean(ctxt):
+    ctxt.recurse(APIS)

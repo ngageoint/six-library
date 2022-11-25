@@ -1,0 +1,7 @@
+NAME            = 'std'
+VERSION         = '1.0'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())

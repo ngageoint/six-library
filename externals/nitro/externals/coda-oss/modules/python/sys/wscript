@@ -1,0 +1,7 @@
+distclean = options = lambda p: None
+
+def configure(conf):
+    conf.env['prefix_sys'] = 'coda_'
+
+def build(bld):
+    bld.swigModule(name = 'sys', use = 'sys-c++ config-python', package='coda')
