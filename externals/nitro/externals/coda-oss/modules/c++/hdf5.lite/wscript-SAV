@@ -1,9 +1,0 @@
-NAME            = 'hdf5.lite'
-VERSION         = '1.0'
-MODULE_DEPS     = 'str except io logging sys coda_oss config gsl hdf5'
-USELIB_CHECK    = 'HDF5'
-
-options = configure = distclean = lambda p: None
-
-def build(bld):
-    bld.module(**globals())

@@ -1,7 +1,0 @@
-distclean = options = lambda p: None
-
-def configure(conf):
-  conf.env['prefix_config'] = 'coda_'
-
-def build(bld):
-  bld.swigModule(name = 'config', use = '', package='coda')
