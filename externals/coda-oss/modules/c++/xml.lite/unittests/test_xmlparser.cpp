@@ -257,6 +257,63 @@ TEST_CASE(testXmlConsoleOutput)
     }
 }
 
+TEST_CASE(testXmlCreateRoot)
+{
+    xml::lite::MinidomParser xmlParser;
+    auto& document = getDocument(xmlParser);
+
+    const auto pDocuments = document.createElement(xml::lite::QName(xml::lite::Uri(), "documents"), "");
+
+    io::StringStream output;
+    pDocuments->print(output);
+    auto actual = output.stream().str();
+    TEST_ASSERT_EQ("<documents/>", actual);
+
+    pDocuments->setCharacterData("test");
+    output.reset();
+    pDocuments->print(output);
+    actual = output.stream().str();
+    TEST_ASSERT_EQ("<documents>test</documents>", actual);
+}
+
+TEST_CASE(testXmlCreateNested)
+{
+    xml::lite::MinidomParser xmlParser;
+    auto& document = getDocument(xmlParser);
+
+    const auto pDocuments = document.createElement(xml::lite::QName(xml::lite::Uri(), "documents"), "");
+    xml::lite::AttributeNode a;
+    a.setQName("count");
+    a.setValue("1");
+    pDocuments->getAttributes().add(a);
+
+    auto& html = pDocuments->addChild(xml::lite::Element::create(xml::lite::QName("html")));
+    html.addChild(xml::lite::Element::create(xml::lite::QName("title"), "Title"));
+    auto& body = html.addChild(xml::lite::Element::create(xml::lite::QName("body")));
+
+    auto& p = body.addChild(xml::lite::Element::create(xml::lite::QName("p"), "paragraph"));
+    a.setQName("a");
+    a.setValue("abc");
+    p.getAttributes().add(a);
+
+    body.addChild(xml::lite::Element::create(xml::lite::QName("br")));
+
+    io::StringStream output;
+    pDocuments->print(output);
+    auto actual = output.stream().str();
+    const auto expected =
+        "<documents count=\"1\">"
+            "<html>"
+                "<title>Title</title>"
+                "<body>"
+                    "<p a=\"abc\">paragraph</p>"
+                    "<br/>"
+                "</body>"
+             "</html>"
+        "</documents>";
+    TEST_ASSERT_EQ(expected, actual);
+}
+
 TEST_CASE(testXmlParseAndPrintUtf8)
 {
     io::StringStream input;
@@ -502,6 +559,8 @@ int main(int, char**)
     TEST_CHECK(testXmlParseAndPrintUtf8);
     TEST_CHECK(testXmlPrintUtf8);
     TEST_CHECK(testXmlConsoleOutput);
+    TEST_CHECK(testXmlCreateRoot);
+    TEST_CHECK(testXmlCreateNested);
     
     TEST_CHECK(testReadEncodedXmlFiles);
     TEST_CHECK(testReadXmlFiles);
