@@ -50,7 +50,7 @@ void tiff::ImageWriter::putData(const unsigned char *buffer,
 void tiff::ImageWriter::writeIFD()
 {
     // Retain the current file offset.
-    sys::Uint32_T offset = mOutput->tell();
+    const auto offset = mOutput->tell();
 
     // Seek to the position to write the current offset to.
     mOutput->seek(mIFDOffset, io::Seekable::START);
@@ -238,7 +238,7 @@ void tiff::ImageWriter::initTiles()
     mIFD.addEntry("TileWidth", (sys::Uint32_T) tileSize);
     mIFD.addEntry("TileLength", (sys::Uint32_T) tileSize);
 
-    sys::Uint32_T fileOffset = mOutput->tell();
+    auto fileOffset = mOutput->tell();
     sys::Uint32_T tilesAcross = (mIFD.getImageWidth() + tileSize - 1)
             / tileSize;
     sys::Uint32_T tilesDown = (mIFD.getImageLength() + tileSize - 1) / tileSize;
@@ -286,7 +286,7 @@ void tiff::ImageWriter::initStrips()
             (sys::Uint32_T)floor(static_cast<double>(length + rowsPerStrip - 1)
                     / static_cast<double>(rowsPerStrip));
 
-    sys::Uint32_T offset = mOutput->tell();
+    auto offset = mOutput->tell();
 
     // Add counts and offsets for all but the last strip.
     mIFD.addEntry("StripOffsets");
@@ -320,7 +320,7 @@ void tiff::ImageWriter::putTileData(const unsigned char *buffer,
     sys::Uint32_T tileElemWidth = *(tiff::GenericType<sys::Uint32_T> *)(*mTileWidth)[0];
     sys::Uint32_T tileByteWidth = tileElemWidth * mElementSize;
 
-    unsigned short tileElemLength = *(tiff::GenericType<sys::Uint32_T> *)(*mTileLength)[0];
+    const auto tileElemLength = *(tiff::GenericType<sys::Uint32_T> *)(*mTileLength)[0];
 
     // Compute the number of tiles wide the image is.
     sys::Uint32_T tilesAcross = (imageElemWidth + tileElemWidth - 1)
@@ -451,7 +451,7 @@ void tiff::ImageWriter::putTileData(const unsigned char *buffer,
         // should probably be found.
         else
         {
-            sys::Uint32_T lastTileIndex = mTileOffsets->getValues().size() - 1;
+            auto lastTileIndex = static_cast<sys::Uint32_T>(mTileOffsets->getValues().size() - 1);
             sys::Uint32_T seekPos = *(tiff::GenericType<sys::Uint32_T> *)(*mTileOffsets)[lastTileIndex];
             seekPos += *(tiff::GenericType<sys::Uint32_T> *)(*mTileByteCounts)[lastTileIndex];
             mOutput->seek(seekPos, io::Seekable::START);

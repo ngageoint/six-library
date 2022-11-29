@@ -149,6 +149,16 @@ bool Line2D::intersection(const Line2D& rhs, Point& P) const
         P.row = rhs.mXIntercept;
         P.col = y(P.row);
     }
+    else if (mType == Line2D::HORIZONTAL)
+    {
+        P.col = mYIntercept;
+        P.row = rhs.x(P.col);
+    }
+    else if (rhs.mType == Line2D::HORIZONTAL)
+    {
+        P.col = rhs.mYIntercept;
+        P.row = x(P.col);
+    }
     else
     {
         P.row = (rhs.mYIntercept - mYIntercept) / (mSlope - rhs.mSlope);
@@ -235,6 +245,26 @@ Line2D::Point Line2D::offsetFromPoint(const Point& P, double distance) const
     ret.row += distance * std::cos(theta);
     ret.col += distance * std::sin(theta);
     return ret;
+}
+
+bool Line2D::equals(const Line2D& other) const
+{
+    if (mType == other.mType)
+    {
+        if (mType != Line2D::NORMAL)
+        {
+            return true;
+        }
+        else
+        {
+            if ((getSlope() == other.getSlope())
+                && (getYIntercept() == other.getYIntercept()))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 }
 }

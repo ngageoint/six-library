@@ -24,6 +24,7 @@
 #define __NET_SERVER_SOCKET_FACTORY_H__
 
 #include "net/Socket.h"
+#include "mem/SharedPtr.h"
 
 /*!
  *  \file
@@ -81,9 +82,9 @@ public:
      *  \param address Address to establish the socket for
      *  \return The created & bound socket
      */
-    virtual std::auto_ptr<Socket> create(const SocketAddress& address)
+    virtual std::unique_ptr<Socket> create(const SocketAddress& address)
     {
-        std::auto_ptr<Socket> s (new Socket(mProto));
+        std::unique_ptr<Socket> s(new Socket(mProto));
 
         // Bind to this address
         s->bind(address);
@@ -126,9 +127,9 @@ public:
      *
      *  \return The produced socket
      */
-    virtual std::auto_ptr<Socket> create(const SocketAddress& address)
+    virtual std::unique_ptr<Socket> create(const SocketAddress& address)
     {
-        std::auto_ptr<Socket> s (new Socket(mProto));
+        std::unique_ptr<Socket> s(new Socket(mProto));
 
         // Make sure we're set up for broadcasting if necessary
         int on = 1;
@@ -184,9 +185,9 @@ public:
      *  listen().
      *
      */
-    virtual std::auto_ptr<Socket> create(const SocketAddress& address)
+    virtual std::unique_ptr<Socket> create(const SocketAddress& address)
     {
-        std::auto_ptr<Socket> s (new Socket(mProto));
+        std::unique_ptr<Socket> s(new Socket(mProto));
 
         // Reuse socket address (important for most TCP apps)
         int on = 1;

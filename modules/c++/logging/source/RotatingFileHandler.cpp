@@ -28,11 +28,13 @@
 
 using namespace logging;
 
-RotatingFileHandler::RotatingFileHandler(const std::string& fname,
+RotatingFileHandler::RotatingFileHandler(const coda_oss::filesystem::path& fname_,
                                          long maxBytes, int backupCount,
                                          LogLevel level) :
     StreamHandler(level)
 {
+    const auto fname = fname_.string();
+
     sys::OS os;
     int creationFlags;
 

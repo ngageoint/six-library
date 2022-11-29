@@ -20,61 +20,31 @@
  *
  */
 
-#ifndef __MEM_SHARED_PTR_CPP_11_H__
-#define __MEM_SHARED_PTR_CPP_11_H__
+#ifndef CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_
+#define CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_
+#pragma once
 
 #include <memory>
+#include <type_traits>
+
+#include "coda_oss/memory.h"
+#include "sys/CPlusPlus.h"
 
 namespace mem
 {
-/*!
- *  \class SharedPtr
- *  \brief This is a derived class of std::shared_ptr. The purpose of this
- *         class is to provide backwards compatibility in systems that do
- *         not have C++11 support.
- *         Because this inherits from std::shared_ptr it can be directly
- *         passed into interfaces requiring std::shared_ptr or legacy
- *         interfaces.
- *         For future work, prefer std::shared_ptr when possible.
- *
- *         WARNING: std::shared_ptr<T>* foo = new SharedPtr<T> will leak!
- */
-template <class T>
-class SharedPtr : public std::shared_ptr<T>
+// Pretty much give-up on mem::SharedPtr as it's too hard to get something that will
+// compile with all the different compilers; let somebody else worry about that
+// via std::shared_ptr.  The only code change is use_count() instead of getCount(),
+// and that's mostly used in unit-tests.
+template<typename T>
+using SharedPtr = std::shared_ptr<T>;
+} // namespace mem
+
+// try to make code changes a tiny bit easier?
+template<typename T>
+inline long getCount(const std::shared_ptr<T>& p) noexcept // be sure const& so that calling doesn't increment!
 {
-public:
-    SharedPtr() : std::shared_ptr<T>()
-    {
-    }
-
-    using std::shared_ptr<T>::shared_ptr;
-
-    using std::shared_ptr<T>::reset;
-
-    // The base class only handles auto_ptr<T>&&
-    explicit SharedPtr(std::auto_ptr<T> ptr) :
-        std::shared_ptr<T>(ptr.release())
-    {
-    }
-
-    // The base class only handles auto_ptr<T>&&
-    template <typename OtherT>
-    explicit SharedPtr(std::auto_ptr<OtherT> ptr) :
-        std::shared_ptr<T>(ptr.release())
-    {
-    }
-
-    void reset(std::auto_ptr<T> scopedPtr)
-    {
-        std::shared_ptr<T>::reset(scopedPtr.release());
-    }
-
-    // Implemented to support the legacy SharedPtr. Prefer use_count.
-    long getCount() const
-    {
-        return std::shared_ptr<T>::use_count();
-    }
-};
+    return p.use_count();
 }
 
-#endif
+#endif // CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_

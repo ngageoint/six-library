@@ -20,39 +20,35 @@
  *
  */
 
+#include <memory>
+
 #include <mem/ScopedCopyablePtr.h>
 
 #include "TestCase.h"
 
-namespace
+struct Foo final
 {
-struct Foo
-{
-    Foo()
-    : val1(0),
-      val2(0)
-    {
-    }
-
-    size_t val1;
-    size_t val2;
+    int val1 = 0;
+    int val2 = 0;
+    
+    Foo* clone() const = delete; // be sure there is no clone()
 };
 
-struct Bar
+struct Bar final
 {
-    Bar()
-    : val3(0)
-    {
-    }
-
     mem::ScopedCopyablePtr<Foo> foo;
-    size_t                      val3;
+    int val3 = 0;
 };
 
-class AssignOnDestruct
+struct Baz final
 {
-public:
-    AssignOnDestruct(size_t &ref, size_t finalVal) :
+    std::shared_ptr<Foo> pFoo;
+    int val3 = 0;
+};
+
+struct AssignOnDestruct final
+{
+    AssignOnDestruct(int &ref, int finalVal) :
         mRef(ref),
         mFinalVal(finalVal)
     {
@@ -64,8 +60,8 @@ public:
     }
 
 private:
-    size_t&      mRef;
-    const size_t mFinalVal;
+    int&      mRef;
+    const int mFinalVal;
 };
 
 TEST_CASE(testCopyConstructor)
@@ -90,6 +86,25 @@ TEST_CASE(testCopyConstructor)
     TEST_ASSERT_EQ(bar1.foo->val1, 10);
     TEST_ASSERT_EQ(bar1.foo->val2, 20);
     TEST_ASSERT_EQ(bar1.val3, 30);
+}
+
+TEST_CASE(testSharedCopyConstructor)
+{
+    // Initialize the values
+    Baz b1;
+    b1.pFoo.reset(new Foo());
+    b1.pFoo->val1 = 10;
+    b1.pFoo->val2 = 20;
+    b1.val3 = 30;
+
+    // Show that memory is shared, not copied as with mem::ScopedCopyablePtr
+    auto b2 = b1;
+    b2.pFoo->val1 = 40;
+    b2.pFoo->val2 = 50;
+    b2.val3 = 60;
+    TEST_ASSERT_EQ(b1.pFoo->val1, 40);
+    TEST_ASSERT_EQ(b1.pFoo->val2, 50);
+    TEST_ASSERT_EQ(b1.val3, 30);
 }
 
 TEST_CASE(testAssignmentOperator)
@@ -117,12 +132,33 @@ TEST_CASE(testAssignmentOperator)
     TEST_ASSERT_EQ(bar1.val3, 30);
 }
 
+TEST_CASE(testSharedAssignmentOperator)
+{
+    // Initialize the values
+    Baz b1;
+    b1.pFoo.reset(new Foo());
+    b1.pFoo->val1 = 10;
+    b1.pFoo->val2 = 20;
+    b1.val3 = 30;
+
+    Baz b2;
+    b2 = b1;
+
+    // Show that memory is shared, not copied as with mem::ScopedCopyablePtr
+    b2.pFoo->val1 = 40;
+    b2.pFoo->val2 = 50;
+    b2.val3 = 60;
+    TEST_ASSERT_EQ(b1.pFoo->val1, 40);
+    TEST_ASSERT_EQ(b1.pFoo->val2, 50);
+    TEST_ASSERT_EQ(b1.val3, 30);
+}
+
 TEST_CASE(testDestructor)
 {
     // When the ScopedCopyablePtr goes out of scope, it should delete the
     // pointer which will cause the AssignOnDestruct destructor to assign
     // 'val'
-    size_t val(0);
+    int val(0);
     {
         const mem::ScopedCopyablePtr<AssignOnDestruct> ptr(
             new AssignOnDestruct(val, 334));
@@ -162,15 +198,13 @@ TEST_CASE(testEqualityOperator)
 
     TEST_ASSERT_FALSE(ptr1 != ptr2);
 }
-}
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testCopyConstructor);
+    TEST_CHECK(testSharedCopyConstructor);
     TEST_CHECK(testAssignmentOperator);
+    TEST_CHECK(testSharedAssignmentOperator);    
     TEST_CHECK(testDestructor);
     TEST_CHECK(testSyntax);
     TEST_CHECK(testEqualityOperator);
-
-    return 0;
-}
+    )

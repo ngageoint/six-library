@@ -23,13 +23,9 @@
 #include <math/linear/Matrix2D.h>
 #include "TestCase.h"
 
-namespace
-{
-using math::linear::Matrix2D;
-
 TEST_CASE(testLeftRealProperties)
 {
-    Matrix2D<double> matrix(4, 2);
+    math::linear::Matrix2D<double> matrix(4, 2);
     matrix(0, 0) = 2;
     matrix(0, 1) = 11.3;
     matrix(1, 0) = 1;
@@ -38,7 +34,7 @@ TEST_CASE(testLeftRealProperties)
     matrix(2, 1) = 8;
     matrix(3, 0) = 1.1;
     matrix(3, 1) = 3.4;
-    const Matrix2D<double> inverse = math::linear::leftInverse(matrix);
+    const auto inverse = math::linear::leftInverse(matrix);
 
     // Identities that should hold
     TEST_ASSERT_EQ(matrix, matrix * inverse * matrix);
@@ -46,17 +42,17 @@ TEST_CASE(testLeftRealProperties)
     TEST_ASSERT_EQ(matrix, math::linear::rightInverse(inverse));
 
     // We want this to be able to solve linear equations
-    Matrix2D<double> xx(2, 1);
+    math::linear::Matrix2D<double> xx(2, 1);
     xx(0, 0) = 1;
     xx(1, 0) = 5;
 
-    const Matrix2D<double> yy = matrix * xx;
+    const auto yy = matrix * xx;
     TEST_ASSERT_EQ(inverse * yy, xx);
 }
 
 TEST_CASE(testRightRealProperties)
 {
-    Matrix2D<double> matrix(4, 2);
+    math::linear::Matrix2D<double> matrix(4, 2);
     matrix(0, 0) = 2;
     matrix(0, 1) = 11.3;
     matrix(1, 0) = 1;
@@ -70,25 +66,22 @@ TEST_CASE(testRightRealProperties)
     matrix = matrix.transpose();
 
     // Identities that should hold
-    const Matrix2D<double> inverse = math::linear::rightInverse(matrix);
+    const auto inverse = math::linear::rightInverse(matrix);
     TEST_ASSERT_EQ(matrix, matrix * inverse * matrix);
     TEST_ASSERT_EQ(inverse, inverse * matrix * inverse);
     TEST_ASSERT_EQ(matrix, math::linear::leftInverse(inverse));
 
-    Matrix2D<double> xx(1, 2);
+     math::linear::Matrix2D<double> xx(1, 2);
     xx(0, 0) = 1;
     xx(0, 1) = 5;
 
     // We want this to be able to solve linear equations
-    const Matrix2D<double> yy = xx * matrix;
+    const auto yy = xx * matrix;
     TEST_ASSERT_EQ(yy * inverse, xx);
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(testLeftRealProperties);
     TEST_CHECK(testRightRealProperties);
-    return 0;
-}
+    )
 

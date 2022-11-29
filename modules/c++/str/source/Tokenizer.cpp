@@ -26,24 +26,21 @@
 
 str::Tokenizer::Tokenizer(const std::string& str, const std::string& delim)
 {
-    int str_l = (int)str.length();
-    int pos = 0;
-    int start, end;
+    const auto str_l = str.length();
+    size_t pos = 0;
     while (true)
     {
-        start = (int)str.find_first_not_of(delim, pos);
-        if (start == (int)std::string::npos)
+        const auto start = str.find_first_not_of(delim, pos);
+        if (start == std::string::npos)
         {
             break;
         }
-        end = (int)str.find_first_of(delim, start);
-        if (end == (int)std::string::npos)
+        auto end = str.find_first_of(delim, start);
+        if (end == std::string::npos)
         {
             end = str_l;
         }
         vec.push_back(str.substr(start, end - start));
         pos = end;
-
     }
-
 }

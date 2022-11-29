@@ -24,6 +24,7 @@
 #ifndef __SYS_READ_WRITE_MUTEX_INTERFACE_H__
 #define __SYS_READ_WRITE_MUTEX_INTERFACE_H__
 
+#include <import/gsl.h>
 
 #if !defined(__APPLE_CC__)
 
@@ -40,11 +41,10 @@ namespace sys
  *  simultaneous reads
  *
  */
-class ReadWriteMutex
+struct ReadWriteMutex
 {
-    public:
     //!  Constructor
-    ReadWriteMutex(int maxReaders) : mSem(maxReaders)
+        ReadWriteMutex(int maxReaders) : mSem(gsl::narrow<unsigned int>(maxReaders))
     {
         mMaxReaders = maxReaders;
         dbg_printf("Creating a read/write mutex\n");
@@ -55,6 +55,11 @@ class ReadWriteMutex
     {
         dbg_printf("Destroying a read/write mutex\n");
     }
+
+    ReadWriteMutex(const ReadWriteMutex&) = delete;
+    ReadWriteMutex& operator=(const ReadWriteMutex&) = delete;
+    ReadWriteMutex(ReadWriteMutex&&) = delete;
+    ReadWriteMutex& operator=(ReadWriteMutex&&) = delete;
 
     /*!
      *  Lock for reading (no writes allowed)

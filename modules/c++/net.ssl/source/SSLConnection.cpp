@@ -24,23 +24,22 @@
 #include <net/ssl/SSLExceptions.h>
 #if defined(USE_OPENSSL)
  
-net::ssl::SSLConnection::SSLConnection(std::auto_ptr<net::Socket> socket, 
-                                       SSL_CTX * ctx,
+net::ssl::SSLConnection::SSLConnection(std::unique_ptr<net::Socket>&& socket,
+                                       SSL_CTX* ctx,
                                        bool serverAuth,
                                        const std::string& host) :
-    NetConnection(socket),
-    mServerAuthentication(serverAuth)
+    NetConnection(std::move(socket)), mServerAuthentication(serverAuth)
 {
     mSSL = NULL;
-    
+
     mBioErr = BIO_new_fp(stderr, BIO_NOCLOSE);
-    
+
     mSSL = SSL_new(ctx);
-    if(mSSL == NULL)
+    if (mSSL == NULL)
     {
         throw net::ssl::SSLException(Ctxt(FmtX("SSL_new failed")));
     }
-    
+
     setupSocket(host);
 }
 
@@ -168,12 +167,10 @@ sys::SSize_T net::ssl::SSLConnection::read(sys::byte* b, sys::Size_T len)
 
 void net::ssl::SSLConnection::write(const sys::byte* b, sys::Size_T len)
 {
-    int numBytes(0);
     if (len <= 0) return;
     
-    numBytes = SSL_write(mSSL, (const char*)b, len);
-    
-    if (numBytes != len)
+    const auto numBytes = SSL_write(mSSL, (const char*)b, len);    
+    if (static_cast<sys::Size_T>(numBytes) != len)
     {
         throw net::ssl::SSLException(Ctxt(FmtX("Tried sending %d bytes, %d sent",
                                                len, numBytes)) );

@@ -20,6 +20,16 @@
  *
  */
 
+#include <stdexcept>
+#include <std/string>
+#include <utility>
+
+#include "str/Manip.h"
+#include "str/Convert.h"
+#include "str/Encoding.h"
+#include "sys/OS.h"
+#include "str/EncodedStringView.h"
+
 #include "xml/lite/MinidomHandler.h"
 
 void xml::lite::MinidomHandler::setDocument(Document *newDocument, bool own)
@@ -32,24 +42,59 @@ void xml::lite::MinidomHandler::setDocument(Document *newDocument, bool own)
     mDocument = newDocument;
     mOwnDocument = own;
 }
+void xml::lite::MinidomHandler::setDocument(std::unique_ptr<Document>&& newDocument)
+{
+    setDocument(newDocument.release(), true /*own*/);
+}
+std::unique_ptr<xml::lite::Document>& xml::lite::MinidomHandler::getDocument(std::unique_ptr<Document>& pDocument)
+{
+    pDocument.reset(getDocument(true /*steal*/));
+    return pDocument;
+}
 
 void xml::lite::MinidomHandler::clear()
 {
     mDocument->destroy();
-    currentCharacterData = "";
+    currentCharacterData.clear();
     assert(bytesForElement.empty());
     assert(nodeStack.empty());
 }
 
-void xml::lite::MinidomHandler::characters(const char *value, int length)
+void xml::lite::MinidomHandler::characters(std::u8string&& s)
 {
-    // Append new data
-    if (length)
-        currentCharacterData += std::string(value, length);
-
     // Append number of bytes added to this node's stack value
     assert(bytesForElement.size());
-    bytesForElement.top() += length;
+    bytesForElement.top() += static_cast<int>(s.length());
+
+    // Append new data
+    currentCharacterData += std::move(s);
+}
+void xml::lite::MinidomHandler::characters(const char *value, int length)
+{
+    // If we're still here despite use_char() being "false" then the
+    // wide-character routine "failed."  On Windows, that means the char* value
+    // is encoded as Windows-1252 (more-or-less ISO8859-1).
+    const str::EncodedString chars(std::string(value, length)); 
+    characters(chars.u8string());
+}
+
+bool xml::lite::MinidomHandler::vcharacters(const void /*XMLCh*/* chars_, size_t length)
+{
+    if (chars_ == nullptr)
+    {
+        throw std::invalid_argument("chars_ is NULL.");
+    }
+    if (length == 0)
+    {
+        throw std::invalid_argument("length is 0.");
+    }
+
+    static_assert(sizeof(XMLCh) == sizeof(char16_t), "XMLCh should be 16-bits.");
+    auto pChars16 = static_cast<const char16_t*>(chars_);
+
+    auto chars = str::EncodedString(std::u16string(pChars16, length)).u8string();
+    characters(std::move(chars));
+    return true; // vcharacters() processed
 }
 
 void xml::lite::MinidomHandler::startElement(const std::string & uri,
@@ -57,9 +102,7 @@ void xml::lite::MinidomHandler::startElement(const std::string & uri,
                                              const std::string & qname,
                                              const xml::lite::Attributes & atts)
 {
-    // Assign what we can now, and push rest on stack
-    // for later
-
+    // Assign what we can now, and push rest on stack for later
     xml::lite::Element * current = mDocument->createElement(qname, uri);
 
     current->setAttributes(atts);
@@ -70,14 +113,14 @@ void xml::lite::MinidomHandler::startElement(const std::string & uri,
 }
 
 // This function subtracts off the char place from the push
-std::string xml::lite::MinidomHandler::adjustCharacterData()
+std::u8string xml::lite::MinidomHandler::adjustCharacterData()
 {
     // Edit the string with regard to this node's char data
     // Get rid of what we take on char data accumulator
 
     int diff = (int) (currentCharacterData.length()) - bytesForElement.top();
 
-    std::string newCharacterData(currentCharacterData.substr(
+    auto newCharacterData(currentCharacterData.substr(
                                  diff,
                                  currentCharacterData.length())
                 );
@@ -89,25 +132,9 @@ std::string xml::lite::MinidomHandler::adjustCharacterData()
     return newCharacterData;
 }
 
-void xml::lite::MinidomHandler::trim(std::string & s)
+void xml::lite::MinidomHandler::trim(std::u8string& s)
 {
-    int i;
-
-    for (i = 0; i < (int) s.length(); i++)
-    {
-        if (!isspace(s[i]))
-            break;
-    }
-    s.erase(0, i);
-
-    for (i = (int) s.length() - 1; i >= 0; i--)
-    {
-        if (!isspace(s[i]))
-            break;
-
-    }
-    if (i + 1 < (int) s.length())
-        s.erase(i + 1);
+    str::trim(s);
 }
 
 void xml::lite::MinidomHandler::endElement(const std::string & /*uri*/,

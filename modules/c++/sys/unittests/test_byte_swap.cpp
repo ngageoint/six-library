@@ -21,10 +21,55 @@
  */
 
 #include "TestCase.h"
+
+#include <array>
+
+#include <std/bit> // std::endian
+#include <std/cstddef>
+
 #include <sys/Conf.h>
 
-namespace
+TEST_CASE(testEndianness)
 {
+    /*const*/ auto native = std::endian::native; // "const" causes "conditional expression is constant."
+
+    if (native == std::endian::big) { }
+    else if (native == std::endian::little) { }
+    else
+    {
+        TEST_FAIL_MSG("Mixed-endian not supported!");
+    }
+
+    const bool isBigEndianSystem = sys::isBigEndianSystem();
+
+    if (native == std::endian::big)
+    {
+        TEST_ASSERT(isBigEndianSystem);
+    }
+    else
+    {
+        TEST_ASSERT(!isBigEndianSystem);    
+    }
+    if (native == std::endian::little)
+    {
+        TEST_ASSERT(!isBigEndianSystem);
+    }
+    else
+    {
+        TEST_ASSERT(isBigEndianSystem);
+    }
+
+
+    if (isBigEndianSystem)
+    {
+        TEST_ASSERT(native == std::endian::big);
+    }
+    else
+    {
+        TEST_ASSERT(native == std::endian::little);    
+    }
+}
+
 TEST_CASE(testByteSwap)
 {
     ::srand(334);
@@ -33,8 +78,9 @@ TEST_CASE(testByteSwap)
     std::vector<sys::Uint64_T> origValues(NUM_PIXELS);
     for (size_t ii = 0; ii < NUM_PIXELS; ++ii)
     {
-        origValues[ii] = static_cast<float>(::rand()) / RAND_MAX *
+        const auto value = static_cast<float>(::rand()) / RAND_MAX *
                 std::numeric_limits<sys::Uint64_T>::max();
+        origValues[ii] = static_cast<sys::Uint64_T>(value);
     }
 
     // Byte swap the old-fashioned way
@@ -54,10 +100,9 @@ TEST_CASE(testByteSwap)
         TEST_ASSERT_EQ(values1[ii], swappedValues2[ii]);
     }
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+
+TEST_MAIN(
+    TEST_CHECK(testEndianness);
     TEST_CHECK(testByteSwap);
-    return 0;
-}
+    )

@@ -671,7 +671,7 @@ class Matrix1x1(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix1x1 self, size_t i, size_t j) -> double
+        __call__(Matrix1x1 self, size_t i, size_t j) -> double const
         __call__(Matrix1x1 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix1x1___call__(self, *args)
@@ -869,7 +869,7 @@ class Matrix1x2(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix1x2 self, size_t i, size_t j) -> double
+        __call__(Matrix1x2 self, size_t i, size_t j) -> double const
         __call__(Matrix1x2 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix1x2___call__(self, *args)
@@ -1067,7 +1067,7 @@ class Matrix1x3(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix1x3 self, size_t i, size_t j) -> double
+        __call__(Matrix1x3 self, size_t i, size_t j) -> double const
         __call__(Matrix1x3 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix1x3___call__(self, *args)
@@ -1265,7 +1265,7 @@ class Matrix2x1(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix2x1 self, size_t i, size_t j) -> double
+        __call__(Matrix2x1 self, size_t i, size_t j) -> double const
         __call__(Matrix2x1 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix2x1___call__(self, *args)
@@ -1463,7 +1463,7 @@ class Matrix2x2(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix2x2 self, size_t i, size_t j) -> double
+        __call__(Matrix2x2 self, size_t i, size_t j) -> double const
         __call__(Matrix2x2 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix2x2___call__(self, *args)
@@ -1661,7 +1661,7 @@ class Matrix2x3(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix2x3 self, size_t i, size_t j) -> double
+        __call__(Matrix2x3 self, size_t i, size_t j) -> double const
         __call__(Matrix2x3 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix2x3___call__(self, *args)
@@ -1859,7 +1859,7 @@ class Matrix2x7(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix2x7 self, size_t i, size_t j) -> double
+        __call__(Matrix2x7 self, size_t i, size_t j) -> double const
         __call__(Matrix2x7 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix2x7___call__(self, *args)
@@ -2057,7 +2057,7 @@ class Matrix3x1(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix3x1 self, size_t i, size_t j) -> double
+        __call__(Matrix3x1 self, size_t i, size_t j) -> double const
         __call__(Matrix3x1 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix3x1___call__(self, *args)
@@ -2255,7 +2255,7 @@ class Matrix3x2(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix3x2 self, size_t i, size_t j) -> double
+        __call__(Matrix3x2 self, size_t i, size_t j) -> double const
         __call__(Matrix3x2 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix3x2___call__(self, *args)
@@ -2453,7 +2453,7 @@ class Matrix3x3(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix3x3 self, size_t i, size_t j) -> double
+        __call__(Matrix3x3 self, size_t i, size_t j) -> double const
         __call__(Matrix3x3 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix3x3___call__(self, *args)
@@ -2651,7 +2651,7 @@ class Matrix3x7(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix3x7 self, size_t i, size_t j) -> double
+        __call__(Matrix3x7 self, size_t i, size_t j) -> double const
         __call__(Matrix3x7 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix3x7___call__(self, *args)
@@ -2849,7 +2849,7 @@ class Matrix7x2(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix7x2 self, size_t i, size_t j) -> double
+        __call__(Matrix7x2 self, size_t i, size_t j) -> double const
         __call__(Matrix7x2 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix7x2___call__(self, *args)
@@ -3047,7 +3047,7 @@ class Matrix7x3(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix7x3 self, size_t i, size_t j) -> double
+        __call__(Matrix7x3 self, size_t i, size_t j) -> double const
         __call__(Matrix7x3 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix7x3___call__(self, *args)
@@ -3245,7 +3245,7 @@ class Matrix7x7(_object):
 
     def __call__(self, *args) -> "double &":
         """
-        __call__(Matrix7x7 self, size_t i, size_t j) -> double
+        __call__(Matrix7x7 self, size_t i, size_t j) -> double const
         __call__(Matrix7x7 self, size_t i, size_t j) -> double &
         """
         return _math_linear.Matrix7x7___call__(self, *args)

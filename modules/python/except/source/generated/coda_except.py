@@ -103,10 +103,21 @@ class Context(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, Context, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_Context
+    __del__ = lambda self: None
 
-    def __init__(self, file: 'std::string const &', line: 'int', func: 'std::string const &', time: 'std::string const &', message: 'std::string const &'):
-        """__init__(except::Context self, std::string const & file, int line, std::string const & func, std::string const & time, std::string const & message) -> Context"""
-        this = _coda_except.new_Context(file, line, func, time, message)
+    def __init__(self, *args):
+        """
+        __init__(except::Context self, char const * file, int line, std::string const & func, std::string const & time, std::string const & message) -> Context
+        __init__(except::Context self, char const * file, int line, std::string const & func, std::string const & time) -> Context
+        __init__(except::Context self, std::string const & message, char const * file, int line, std::string const & func, std::string const & time) -> Context
+        __init__(except::Context self, std::string const & message, char const * file, int line, std::string const & func) -> Context
+        __init__(except::Context self, std::string const & message, char const * file, int line) -> Context
+        __init__(except::Context self, std::string const & file, int line, std::string const & func, std::string const & time, std::string const & message) -> Context
+        __init__(except::Context self, Context arg2) -> Context
+        __init__(except::Context self, Context arg2) -> Context
+        """
+        this = _coda_except.new_Context(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -156,8 +167,6 @@ class Context(_object):
     __swig_getmethods__["mLine"] = _coda_except.Context_mLine_get
     if _newclass:
         mLine = _swig_property(_coda_except.Context_mLine_get, _coda_except.Context_mLine_set)
-    __swig_destroy__ = _coda_except.delete_Context
-    __del__ = lambda self: None
 Context_swigregister = _coda_except.Context_swigregister
 Context_swigregister(Context)
 
@@ -177,9 +186,13 @@ class Throwable(_object):
     def __init__(self, *args):
         """
         __init__(except::Throwable self) -> Throwable
+        __init__(except::Throwable self, Throwable arg2) -> Throwable
+        __init__(except::Throwable self, Throwable arg2) -> Throwable
+        __init__(except::Throwable self, Throwable11 arg2) -> Throwable
         __init__(except::Throwable self, std::string const & message) -> Throwable
-        __init__(except::Throwable self, Context c) -> Throwable
-        __init__(except::Throwable self, Throwable t, Context c) -> Throwable
+        __init__(except::Throwable self, Context arg2) -> Throwable
+        __init__(except::Throwable self, Throwable arg2, Context arg3) -> Throwable
+        __init__(except::Throwable self, Throwable11 arg2, Context arg3) -> Throwable
         """
         this = _coda_except.new_Throwable(*args)
         try:
@@ -207,12 +220,101 @@ class Throwable(_object):
         return _coda_except.Throwable_getType(self)
 
 
-    def toString(self) -> "std::string":
-        """toString(Throwable self) -> std::string"""
-        return _coda_except.Throwable_toString(self)
+    def getBacktrace(self) -> "std::vector< std::string > const &":
+        """getBacktrace(Throwable self) -> std::vector< std::string > const &"""
+        return _coda_except.Throwable_getBacktrace(self)
+
+
+    def backtrace(self) -> "except::Throwable &":
+        """backtrace(Throwable self) -> Throwable"""
+        return _coda_except.Throwable_backtrace(self)
+
+
+    def toString(self, *args) -> "std::string":
+        """
+        toString(Throwable self) -> std::string
+        toString(Throwable self, bool includeBacktrace) -> std::string
+        """
+        return _coda_except.Throwable_toString(self, *args)
+
+
+    def what(self) -> "char const *":
+        """what(Throwable self) -> char const *"""
+        return _coda_except.Throwable_what(self)
 
 Throwable_swigregister = _coda_except.Throwable_swigregister
 Throwable_swigregister(Throwable)
+
+class Throwable11(_object):
+    """Proxy of C++ except::Throwable11 class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Throwable11, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Throwable11, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_Throwable11
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(except::Throwable11 self) -> Throwable11
+        __init__(except::Throwable11 self, Throwable11 arg2) -> Throwable11
+        __init__(except::Throwable11 self, Throwable11 arg2) -> Throwable11
+        __init__(except::Throwable11 self, Throwable arg2) -> Throwable11
+        __init__(except::Throwable11 self, std::string const & message) -> Throwable11
+        __init__(except::Throwable11 self, Context arg2) -> Throwable11
+        __init__(except::Throwable11 self, Throwable11 arg2, Context arg3) -> Throwable11
+        __init__(except::Throwable11 self, Throwable arg2, Context arg3) -> Throwable11
+        """
+        this = _coda_except.new_Throwable11(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getMessage(self) -> "std::string":
+        """getMessage(Throwable11 self) -> std::string"""
+        return _coda_except.Throwable11_getMessage(self)
+
+
+    def getTrace(self, *args) -> "Trace &":
+        """
+        getTrace(Throwable11 self) -> Trace const
+        getTrace(Throwable11 self) -> Trace &
+        """
+        return _coda_except.Throwable11_getTrace(self, *args)
+
+
+    def getType(self) -> "std::string":
+        """getType(Throwable11 self) -> std::string"""
+        return _coda_except.Throwable11_getType(self)
+
+
+    def getBacktrace(self) -> "std::vector< std::string > const &":
+        """getBacktrace(Throwable11 self) -> std::vector< std::string > const &"""
+        return _coda_except.Throwable11_getBacktrace(self)
+
+
+    def backtrace(self) -> "except::Throwable11 &":
+        """backtrace(Throwable11 self) -> Throwable11"""
+        return _coda_except.Throwable11_backtrace(self)
+
+
+    def toString(self, *args) -> "std::string":
+        """
+        toString(Throwable11 self) -> std::string
+        toString(Throwable11 self, bool includeBacktrace) -> std::string
+        """
+        return _coda_except.Throwable11_toString(self, *args)
+
+
+    def what(self) -> "char const *":
+        """what(Throwable11 self) -> char const *"""
+        return _coda_except.Throwable11_what(self)
+
+Throwable11_swigregister = _coda_except.Throwable11_swigregister
+Throwable11_swigregister(Throwable11)
 
 class Exception(Throwable):
     """Proxy of C++ except::Exception class."""
@@ -226,12 +328,15 @@ class Exception(Throwable):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Exception, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_Exception
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::Exception self) -> Exception
         __init__(except::Exception self, Context c) -> Exception
         __init__(except::Exception self, Throwable t, Context c) -> Exception
+        __init__(except::Exception self, Throwable11 t, Context c) -> Exception
         __init__(except::Exception self, std::string const & message) -> Exception
         """
         this = _coda_except.new_Exception(*args)
@@ -239,8 +344,6 @@ class Exception(Throwable):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_Exception
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(Exception self) -> std::string"""
@@ -248,6 +351,42 @@ class Exception(Throwable):
 
 Exception_swigregister = _coda_except.Exception_swigregister
 Exception_swigregister(Exception)
+
+class Exception11(Throwable11):
+    """Proxy of C++ except::Exception11 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Throwable11]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Exception11, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Throwable11]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, Exception11, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_Exception11
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(except::Exception11 self) -> Exception11
+        __init__(except::Exception11 self, Context c) -> Exception11
+        __init__(except::Exception11 self, Throwable11 t, Context c) -> Exception11
+        __init__(except::Exception11 self, Throwable t, Context c) -> Exception11
+        __init__(except::Exception11 self, std::string const & message) -> Exception11
+        """
+        this = _coda_except.new_Exception11(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getType(self) -> "std::string":
+        """getType(Exception11 self) -> std::string"""
+        return _coda_except.Exception11_getType(self)
+
+Exception11_swigregister = _coda_except.Exception11_swigregister
+Exception11_swigregister(Exception11)
 
 class IOException(Exception):
     """Proxy of C++ except::IOException class."""
@@ -261,21 +400,24 @@ class IOException(Exception):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, IOException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_IOException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::IOException self) -> IOException
+        __init__(except::IOException self, IOException arg2) -> IOException
+        __init__(except::IOException self, IOException arg2) -> IOException
         __init__(except::IOException self, Context c) -> IOException
         __init__(except::IOException self, std::string const & msg) -> IOException
         __init__(except::IOException self, Throwable t, Context c) -> IOException
+        __init__(except::IOException self, Throwable11 t, Context c) -> IOException
         """
         this = _coda_except.new_IOException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_IOException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(IOException self) -> std::string"""
@@ -283,6 +425,44 @@ class IOException(Exception):
 
 IOException_swigregister = _coda_except.IOException_swigregister
 IOException_swigregister(IOException)
+
+class IOException11(Exception11):
+    """Proxy of C++ except::IOException11 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Exception11]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IOException11, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Exception11]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IOException11, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_IOException11
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(except::IOException11 self) -> IOException11
+        __init__(except::IOException11 self, IOException11 arg2) -> IOException11
+        __init__(except::IOException11 self, IOException11 arg2) -> IOException11
+        __init__(except::IOException11 self, Context c) -> IOException11
+        __init__(except::IOException11 self, std::string const & msg) -> IOException11
+        __init__(except::IOException11 self, Throwable t, Context c) -> IOException11
+        __init__(except::IOException11 self, Throwable11 t, Context c) -> IOException11
+        """
+        this = _coda_except.new_IOException11(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getType(self) -> "std::string":
+        """getType(IOException11 self) -> std::string"""
+        return _coda_except.IOException11_getType(self)
+
+IOException11_swigregister = _coda_except.IOException11_swigregister
+IOException11_swigregister(IOException11)
 
 class FileNotFoundException(IOException):
     """Proxy of C++ except::FileNotFoundException class."""
@@ -296,21 +476,24 @@ class FileNotFoundException(IOException):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, FileNotFoundException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_FileNotFoundException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::FileNotFoundException self) -> FileNotFoundException
+        __init__(except::FileNotFoundException self, FileNotFoundException arg2) -> FileNotFoundException
+        __init__(except::FileNotFoundException self, FileNotFoundException arg2) -> FileNotFoundException
         __init__(except::FileNotFoundException self, Context c) -> FileNotFoundException
         __init__(except::FileNotFoundException self, std::string const & msg) -> FileNotFoundException
         __init__(except::FileNotFoundException self, Throwable t, Context c) -> FileNotFoundException
+        __init__(except::FileNotFoundException self, Throwable11 t, Context c) -> FileNotFoundException
         """
         this = _coda_except.new_FileNotFoundException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_FileNotFoundException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(FileNotFoundException self) -> std::string"""
@@ -331,21 +514,24 @@ class BadCastException(Exception):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, BadCastException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_BadCastException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::BadCastException self) -> BadCastException
+        __init__(except::BadCastException self, BadCastException arg2) -> BadCastException
+        __init__(except::BadCastException self, BadCastException arg2) -> BadCastException
         __init__(except::BadCastException self, Context c) -> BadCastException
         __init__(except::BadCastException self, std::string const & msg) -> BadCastException
         __init__(except::BadCastException self, Throwable t, Context c) -> BadCastException
+        __init__(except::BadCastException self, Throwable11 t, Context c) -> BadCastException
         """
         this = _coda_except.new_BadCastException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_BadCastException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(BadCastException self) -> std::string"""
@@ -353,6 +539,44 @@ class BadCastException(Exception):
 
 BadCastException_swigregister = _coda_except.BadCastException_swigregister
 BadCastException_swigregister(BadCastException)
+
+class BadCastException11(Exception11):
+    """Proxy of C++ except::BadCastException11 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Exception11]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, BadCastException11, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Exception11]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, BadCastException11, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_BadCastException11
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(except::BadCastException11 self) -> BadCastException11
+        __init__(except::BadCastException11 self, BadCastException11 arg2) -> BadCastException11
+        __init__(except::BadCastException11 self, BadCastException11 arg2) -> BadCastException11
+        __init__(except::BadCastException11 self, Context c) -> BadCastException11
+        __init__(except::BadCastException11 self, std::string const & msg) -> BadCastException11
+        __init__(except::BadCastException11 self, Throwable t, Context c) -> BadCastException11
+        __init__(except::BadCastException11 self, Throwable11 t, Context c) -> BadCastException11
+        """
+        this = _coda_except.new_BadCastException11(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getType(self) -> "std::string":
+        """getType(BadCastException11 self) -> std::string"""
+        return _coda_except.BadCastException11_getType(self)
+
+BadCastException11_swigregister = _coda_except.BadCastException11_swigregister
+BadCastException11_swigregister(BadCastException11)
 
 class InvalidFormatException(Exception):
     """Proxy of C++ except::InvalidFormatException class."""
@@ -366,21 +590,24 @@ class InvalidFormatException(Exception):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, InvalidFormatException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_InvalidFormatException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::InvalidFormatException self) -> InvalidFormatException
+        __init__(except::InvalidFormatException self, InvalidFormatException arg2) -> InvalidFormatException
+        __init__(except::InvalidFormatException self, InvalidFormatException arg2) -> InvalidFormatException
         __init__(except::InvalidFormatException self, Context c) -> InvalidFormatException
         __init__(except::InvalidFormatException self, std::string const & msg) -> InvalidFormatException
         __init__(except::InvalidFormatException self, Throwable t, Context c) -> InvalidFormatException
+        __init__(except::InvalidFormatException self, Throwable11 t, Context c) -> InvalidFormatException
         """
         this = _coda_except.new_InvalidFormatException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_InvalidFormatException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(InvalidFormatException self) -> std::string"""
@@ -388,6 +615,44 @@ class InvalidFormatException(Exception):
 
 InvalidFormatException_swigregister = _coda_except.InvalidFormatException_swigregister
 InvalidFormatException_swigregister(InvalidFormatException)
+
+class InvalidFormatException11(Exception11):
+    """Proxy of C++ except::InvalidFormatException11 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Exception11]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, InvalidFormatException11, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Exception11]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, InvalidFormatException11, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_InvalidFormatException11
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(except::InvalidFormatException11 self) -> InvalidFormatException11
+        __init__(except::InvalidFormatException11 self, InvalidFormatException11 arg2) -> InvalidFormatException11
+        __init__(except::InvalidFormatException11 self, InvalidFormatException11 arg2) -> InvalidFormatException11
+        __init__(except::InvalidFormatException11 self, Context c) -> InvalidFormatException11
+        __init__(except::InvalidFormatException11 self, std::string const & msg) -> InvalidFormatException11
+        __init__(except::InvalidFormatException11 self, Throwable t, Context c) -> InvalidFormatException11
+        __init__(except::InvalidFormatException11 self, Throwable11 t, Context c) -> InvalidFormatException11
+        """
+        this = _coda_except.new_InvalidFormatException11(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getType(self) -> "std::string":
+        """getType(InvalidFormatException11 self) -> std::string"""
+        return _coda_except.InvalidFormatException11_getType(self)
+
+InvalidFormatException11_swigregister = _coda_except.InvalidFormatException11_swigregister
+InvalidFormatException11_swigregister(InvalidFormatException11)
 
 class IndexOutOfRangeException(Exception):
     """Proxy of C++ except::IndexOutOfRangeException class."""
@@ -401,21 +666,24 @@ class IndexOutOfRangeException(Exception):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, IndexOutOfRangeException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_IndexOutOfRangeException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::IndexOutOfRangeException self) -> IndexOutOfRangeException
+        __init__(except::IndexOutOfRangeException self, IndexOutOfRangeException arg2) -> IndexOutOfRangeException
+        __init__(except::IndexOutOfRangeException self, IndexOutOfRangeException arg2) -> IndexOutOfRangeException
         __init__(except::IndexOutOfRangeException self, Context c) -> IndexOutOfRangeException
         __init__(except::IndexOutOfRangeException self, std::string const & msg) -> IndexOutOfRangeException
         __init__(except::IndexOutOfRangeException self, Throwable t, Context c) -> IndexOutOfRangeException
+        __init__(except::IndexOutOfRangeException self, Throwable11 t, Context c) -> IndexOutOfRangeException
         """
         this = _coda_except.new_IndexOutOfRangeException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_IndexOutOfRangeException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(IndexOutOfRangeException self) -> std::string"""
@@ -423,6 +691,44 @@ class IndexOutOfRangeException(Exception):
 
 IndexOutOfRangeException_swigregister = _coda_except.IndexOutOfRangeException_swigregister
 IndexOutOfRangeException_swigregister(IndexOutOfRangeException)
+
+class IndexOutOfRangeException11(Exception11):
+    """Proxy of C++ except::IndexOutOfRangeException11 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Exception11]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IndexOutOfRangeException11, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Exception11]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IndexOutOfRangeException11, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_IndexOutOfRangeException11
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(except::IndexOutOfRangeException11 self) -> IndexOutOfRangeException11
+        __init__(except::IndexOutOfRangeException11 self, IndexOutOfRangeException11 arg2) -> IndexOutOfRangeException11
+        __init__(except::IndexOutOfRangeException11 self, IndexOutOfRangeException11 arg2) -> IndexOutOfRangeException11
+        __init__(except::IndexOutOfRangeException11 self, Context c) -> IndexOutOfRangeException11
+        __init__(except::IndexOutOfRangeException11 self, std::string const & msg) -> IndexOutOfRangeException11
+        __init__(except::IndexOutOfRangeException11 self, Throwable t, Context c) -> IndexOutOfRangeException11
+        __init__(except::IndexOutOfRangeException11 self, Throwable11 t, Context c) -> IndexOutOfRangeException11
+        """
+        this = _coda_except.new_IndexOutOfRangeException11(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getType(self) -> "std::string":
+        """getType(IndexOutOfRangeException11 self) -> std::string"""
+        return _coda_except.IndexOutOfRangeException11_getType(self)
+
+IndexOutOfRangeException11_swigregister = _coda_except.IndexOutOfRangeException11_swigregister
+IndexOutOfRangeException11_swigregister(IndexOutOfRangeException11)
 
 class OutOfMemoryException(Exception):
     """Proxy of C++ except::OutOfMemoryException class."""
@@ -436,21 +742,24 @@ class OutOfMemoryException(Exception):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, OutOfMemoryException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_OutOfMemoryException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::OutOfMemoryException self) -> OutOfMemoryException
+        __init__(except::OutOfMemoryException self, OutOfMemoryException arg2) -> OutOfMemoryException
+        __init__(except::OutOfMemoryException self, OutOfMemoryException arg2) -> OutOfMemoryException
         __init__(except::OutOfMemoryException self, Context c) -> OutOfMemoryException
         __init__(except::OutOfMemoryException self, std::string const & msg) -> OutOfMemoryException
         __init__(except::OutOfMemoryException self, Throwable t, Context c) -> OutOfMemoryException
+        __init__(except::OutOfMemoryException self, Throwable11 t, Context c) -> OutOfMemoryException
         """
         this = _coda_except.new_OutOfMemoryException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_OutOfMemoryException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(OutOfMemoryException self) -> std::string"""
@@ -458,6 +767,44 @@ class OutOfMemoryException(Exception):
 
 OutOfMemoryException_swigregister = _coda_except.OutOfMemoryException_swigregister
 OutOfMemoryException_swigregister(OutOfMemoryException)
+
+class OutOfMemoryException11(Exception11):
+    """Proxy of C++ except::OutOfMemoryException11 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Exception11]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, OutOfMemoryException11, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Exception11]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, OutOfMemoryException11, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_OutOfMemoryException11
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(except::OutOfMemoryException11 self) -> OutOfMemoryException11
+        __init__(except::OutOfMemoryException11 self, OutOfMemoryException11 arg2) -> OutOfMemoryException11
+        __init__(except::OutOfMemoryException11 self, OutOfMemoryException11 arg2) -> OutOfMemoryException11
+        __init__(except::OutOfMemoryException11 self, Context c) -> OutOfMemoryException11
+        __init__(except::OutOfMemoryException11 self, std::string const & msg) -> OutOfMemoryException11
+        __init__(except::OutOfMemoryException11 self, Throwable t, Context c) -> OutOfMemoryException11
+        __init__(except::OutOfMemoryException11 self, Throwable11 t, Context c) -> OutOfMemoryException11
+        """
+        this = _coda_except.new_OutOfMemoryException11(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getType(self) -> "std::string":
+        """getType(OutOfMemoryException11 self) -> std::string"""
+        return _coda_except.OutOfMemoryException11_getType(self)
+
+OutOfMemoryException11_swigregister = _coda_except.OutOfMemoryException11_swigregister
+OutOfMemoryException11_swigregister(OutOfMemoryException11)
 
 class NullPointerReferenceException(Exception):
     """Proxy of C++ except::NullPointerReferenceException class."""
@@ -471,21 +818,24 @@ class NullPointerReferenceException(Exception):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, NullPointerReferenceException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_NullPointerReferenceException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::NullPointerReferenceException self) -> NullPointerReferenceException
+        __init__(except::NullPointerReferenceException self, NullPointerReferenceException arg2) -> NullPointerReferenceException
+        __init__(except::NullPointerReferenceException self, NullPointerReferenceException arg2) -> NullPointerReferenceException
         __init__(except::NullPointerReferenceException self, Context c) -> NullPointerReferenceException
         __init__(except::NullPointerReferenceException self, std::string const & msg) -> NullPointerReferenceException
         __init__(except::NullPointerReferenceException self, Throwable t, Context c) -> NullPointerReferenceException
+        __init__(except::NullPointerReferenceException self, Throwable11 t, Context c) -> NullPointerReferenceException
         """
         this = _coda_except.new_NullPointerReferenceException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_NullPointerReferenceException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(NullPointerReferenceException self) -> std::string"""
@@ -493,6 +843,44 @@ class NullPointerReferenceException(Exception):
 
 NullPointerReferenceException_swigregister = _coda_except.NullPointerReferenceException_swigregister
 NullPointerReferenceException_swigregister(NullPointerReferenceException)
+
+class NullPointerReferenceException11(Exception11):
+    """Proxy of C++ except::NullPointerReferenceException11 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Exception11]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, NullPointerReferenceException11, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Exception11]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, NullPointerReferenceException11, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_NullPointerReferenceException11
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(except::NullPointerReferenceException11 self) -> NullPointerReferenceException11
+        __init__(except::NullPointerReferenceException11 self, NullPointerReferenceException11 arg2) -> NullPointerReferenceException11
+        __init__(except::NullPointerReferenceException11 self, NullPointerReferenceException11 arg2) -> NullPointerReferenceException11
+        __init__(except::NullPointerReferenceException11 self, Context c) -> NullPointerReferenceException11
+        __init__(except::NullPointerReferenceException11 self, std::string const & msg) -> NullPointerReferenceException11
+        __init__(except::NullPointerReferenceException11 self, Throwable t, Context c) -> NullPointerReferenceException11
+        __init__(except::NullPointerReferenceException11 self, Throwable11 t, Context c) -> NullPointerReferenceException11
+        """
+        this = _coda_except.new_NullPointerReferenceException11(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getType(self) -> "std::string":
+        """getType(NullPointerReferenceException11 self) -> std::string"""
+        return _coda_except.NullPointerReferenceException11_getType(self)
+
+NullPointerReferenceException11_swigregister = _coda_except.NullPointerReferenceException11_swigregister
+NullPointerReferenceException11_swigregister(NullPointerReferenceException11)
 
 class NoSuchKeyException(Exception):
     """Proxy of C++ except::NoSuchKeyException class."""
@@ -506,21 +894,24 @@ class NoSuchKeyException(Exception):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, NoSuchKeyException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_NoSuchKeyException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::NoSuchKeyException self) -> NoSuchKeyException
+        __init__(except::NoSuchKeyException self, NoSuchKeyException arg2) -> NoSuchKeyException
+        __init__(except::NoSuchKeyException self, NoSuchKeyException arg2) -> NoSuchKeyException
         __init__(except::NoSuchKeyException self, Context c) -> NoSuchKeyException
         __init__(except::NoSuchKeyException self, std::string const & msg) -> NoSuchKeyException
         __init__(except::NoSuchKeyException self, Throwable t, Context c) -> NoSuchKeyException
+        __init__(except::NoSuchKeyException self, Throwable11 t, Context c) -> NoSuchKeyException
         """
         this = _coda_except.new_NoSuchKeyException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_NoSuchKeyException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(NoSuchKeyException self) -> std::string"""
@@ -528,6 +919,44 @@ class NoSuchKeyException(Exception):
 
 NoSuchKeyException_swigregister = _coda_except.NoSuchKeyException_swigregister
 NoSuchKeyException_swigregister(NoSuchKeyException)
+
+class NoSuchKeyException11(Exception11):
+    """Proxy of C++ except::NoSuchKeyException11 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Exception11]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, NoSuchKeyException11, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Exception11]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, NoSuchKeyException11, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_NoSuchKeyException11
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(except::NoSuchKeyException11 self) -> NoSuchKeyException11
+        __init__(except::NoSuchKeyException11 self, NoSuchKeyException11 arg2) -> NoSuchKeyException11
+        __init__(except::NoSuchKeyException11 self, NoSuchKeyException11 arg2) -> NoSuchKeyException11
+        __init__(except::NoSuchKeyException11 self, Context c) -> NoSuchKeyException11
+        __init__(except::NoSuchKeyException11 self, std::string const & msg) -> NoSuchKeyException11
+        __init__(except::NoSuchKeyException11 self, Throwable t, Context c) -> NoSuchKeyException11
+        __init__(except::NoSuchKeyException11 self, Throwable11 t, Context c) -> NoSuchKeyException11
+        """
+        this = _coda_except.new_NoSuchKeyException11(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getType(self) -> "std::string":
+        """getType(NoSuchKeyException11 self) -> std::string"""
+        return _coda_except.NoSuchKeyException11_getType(self)
+
+NoSuchKeyException11_swigregister = _coda_except.NoSuchKeyException11_swigregister
+NoSuchKeyException11_swigregister(NoSuchKeyException11)
 
 class NoSuchReferenceException(Exception):
     """Proxy of C++ except::NoSuchReferenceException class."""
@@ -541,21 +970,24 @@ class NoSuchReferenceException(Exception):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, NoSuchReferenceException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_NoSuchReferenceException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::NoSuchReferenceException self) -> NoSuchReferenceException
+        __init__(except::NoSuchReferenceException self, NoSuchReferenceException arg2) -> NoSuchReferenceException
+        __init__(except::NoSuchReferenceException self, NoSuchReferenceException arg2) -> NoSuchReferenceException
         __init__(except::NoSuchReferenceException self, Context c) -> NoSuchReferenceException
         __init__(except::NoSuchReferenceException self, std::string const & msg) -> NoSuchReferenceException
         __init__(except::NoSuchReferenceException self, Throwable t, Context c) -> NoSuchReferenceException
+        __init__(except::NoSuchReferenceException self, Throwable11 t, Context c) -> NoSuchReferenceException
         """
         this = _coda_except.new_NoSuchReferenceException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_NoSuchReferenceException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(NoSuchReferenceException self) -> std::string"""
@@ -563,6 +995,44 @@ class NoSuchReferenceException(Exception):
 
 NoSuchReferenceException_swigregister = _coda_except.NoSuchReferenceException_swigregister
 NoSuchReferenceException_swigregister(NoSuchReferenceException)
+
+class NoSuchReferenceException11(Exception11):
+    """Proxy of C++ except::NoSuchReferenceException11 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Exception11]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, NoSuchReferenceException11, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Exception11]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, NoSuchReferenceException11, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_NoSuchReferenceException11
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(except::NoSuchReferenceException11 self) -> NoSuchReferenceException11
+        __init__(except::NoSuchReferenceException11 self, NoSuchReferenceException11 arg2) -> NoSuchReferenceException11
+        __init__(except::NoSuchReferenceException11 self, NoSuchReferenceException11 arg2) -> NoSuchReferenceException11
+        __init__(except::NoSuchReferenceException11 self, Context c) -> NoSuchReferenceException11
+        __init__(except::NoSuchReferenceException11 self, std::string const & msg) -> NoSuchReferenceException11
+        __init__(except::NoSuchReferenceException11 self, Throwable t, Context c) -> NoSuchReferenceException11
+        __init__(except::NoSuchReferenceException11 self, Throwable11 t, Context c) -> NoSuchReferenceException11
+        """
+        this = _coda_except.new_NoSuchReferenceException11(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getType(self) -> "std::string":
+        """getType(NoSuchReferenceException11 self) -> std::string"""
+        return _coda_except.NoSuchReferenceException11_getType(self)
+
+NoSuchReferenceException11_swigregister = _coda_except.NoSuchReferenceException11_swigregister
+NoSuchReferenceException11_swigregister(NoSuchReferenceException11)
 
 class KeyAlreadyExistsException(Exception):
     """Proxy of C++ except::KeyAlreadyExistsException class."""
@@ -576,21 +1046,24 @@ class KeyAlreadyExistsException(Exception):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, KeyAlreadyExistsException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_KeyAlreadyExistsException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::KeyAlreadyExistsException self) -> KeyAlreadyExistsException
+        __init__(except::KeyAlreadyExistsException self, KeyAlreadyExistsException arg2) -> KeyAlreadyExistsException
+        __init__(except::KeyAlreadyExistsException self, KeyAlreadyExistsException arg2) -> KeyAlreadyExistsException
         __init__(except::KeyAlreadyExistsException self, Context c) -> KeyAlreadyExistsException
         __init__(except::KeyAlreadyExistsException self, std::string const & msg) -> KeyAlreadyExistsException
         __init__(except::KeyAlreadyExistsException self, Throwable t, Context c) -> KeyAlreadyExistsException
+        __init__(except::KeyAlreadyExistsException self, Throwable11 t, Context c) -> KeyAlreadyExistsException
         """
         this = _coda_except.new_KeyAlreadyExistsException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_KeyAlreadyExistsException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(KeyAlreadyExistsException self) -> std::string"""
@@ -598,6 +1071,44 @@ class KeyAlreadyExistsException(Exception):
 
 KeyAlreadyExistsException_swigregister = _coda_except.KeyAlreadyExistsException_swigregister
 KeyAlreadyExistsException_swigregister(KeyAlreadyExistsException)
+
+class KeyAlreadyExistsException11(Exception11):
+    """Proxy of C++ except::KeyAlreadyExistsException11 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Exception11]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, KeyAlreadyExistsException11, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Exception11]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, KeyAlreadyExistsException11, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_KeyAlreadyExistsException11
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(except::KeyAlreadyExistsException11 self) -> KeyAlreadyExistsException11
+        __init__(except::KeyAlreadyExistsException11 self, KeyAlreadyExistsException11 arg2) -> KeyAlreadyExistsException11
+        __init__(except::KeyAlreadyExistsException11 self, KeyAlreadyExistsException11 arg2) -> KeyAlreadyExistsException11
+        __init__(except::KeyAlreadyExistsException11 self, Context c) -> KeyAlreadyExistsException11
+        __init__(except::KeyAlreadyExistsException11 self, std::string const & msg) -> KeyAlreadyExistsException11
+        __init__(except::KeyAlreadyExistsException11 self, Throwable t, Context c) -> KeyAlreadyExistsException11
+        __init__(except::KeyAlreadyExistsException11 self, Throwable11 t, Context c) -> KeyAlreadyExistsException11
+        """
+        this = _coda_except.new_KeyAlreadyExistsException11(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getType(self) -> "std::string":
+        """getType(KeyAlreadyExistsException11 self) -> std::string"""
+        return _coda_except.KeyAlreadyExistsException11_getType(self)
+
+KeyAlreadyExistsException11_swigregister = _coda_except.KeyAlreadyExistsException11_swigregister
+KeyAlreadyExistsException11_swigregister(KeyAlreadyExistsException11)
 
 class NotImplementedException(Exception):
     """Proxy of C++ except::NotImplementedException class."""
@@ -611,21 +1122,24 @@ class NotImplementedException(Exception):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, NotImplementedException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_NotImplementedException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::NotImplementedException self) -> NotImplementedException
+        __init__(except::NotImplementedException self, NotImplementedException arg2) -> NotImplementedException
+        __init__(except::NotImplementedException self, NotImplementedException arg2) -> NotImplementedException
         __init__(except::NotImplementedException self, Context c) -> NotImplementedException
         __init__(except::NotImplementedException self, std::string const & msg) -> NotImplementedException
         __init__(except::NotImplementedException self, Throwable t, Context c) -> NotImplementedException
+        __init__(except::NotImplementedException self, Throwable11 t, Context c) -> NotImplementedException
         """
         this = _coda_except.new_NotImplementedException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_NotImplementedException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(NotImplementedException self) -> std::string"""
@@ -633,6 +1147,44 @@ class NotImplementedException(Exception):
 
 NotImplementedException_swigregister = _coda_except.NotImplementedException_swigregister
 NotImplementedException_swigregister(NotImplementedException)
+
+class NotImplementedException11(Exception11):
+    """Proxy of C++ except::NotImplementedException11 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Exception11]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, NotImplementedException11, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Exception11]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, NotImplementedException11, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_NotImplementedException11
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(except::NotImplementedException11 self) -> NotImplementedException11
+        __init__(except::NotImplementedException11 self, NotImplementedException11 arg2) -> NotImplementedException11
+        __init__(except::NotImplementedException11 self, NotImplementedException11 arg2) -> NotImplementedException11
+        __init__(except::NotImplementedException11 self, Context c) -> NotImplementedException11
+        __init__(except::NotImplementedException11 self, std::string const & msg) -> NotImplementedException11
+        __init__(except::NotImplementedException11 self, Throwable t, Context c) -> NotImplementedException11
+        __init__(except::NotImplementedException11 self, Throwable11 t, Context c) -> NotImplementedException11
+        """
+        this = _coda_except.new_NotImplementedException11(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getType(self) -> "std::string":
+        """getType(NotImplementedException11 self) -> std::string"""
+        return _coda_except.NotImplementedException11_getType(self)
+
+NotImplementedException11_swigregister = _coda_except.NotImplementedException11_swigregister
+NotImplementedException11_swigregister(NotImplementedException11)
 
 class InvalidArgumentException(Exception):
     """Proxy of C++ except::InvalidArgumentException class."""
@@ -646,21 +1198,24 @@ class InvalidArgumentException(Exception):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, InvalidArgumentException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_InvalidArgumentException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::InvalidArgumentException self) -> InvalidArgumentException
+        __init__(except::InvalidArgumentException self, InvalidArgumentException arg2) -> InvalidArgumentException
+        __init__(except::InvalidArgumentException self, InvalidArgumentException arg2) -> InvalidArgumentException
         __init__(except::InvalidArgumentException self, Context c) -> InvalidArgumentException
         __init__(except::InvalidArgumentException self, std::string const & msg) -> InvalidArgumentException
         __init__(except::InvalidArgumentException self, Throwable t, Context c) -> InvalidArgumentException
+        __init__(except::InvalidArgumentException self, Throwable11 t, Context c) -> InvalidArgumentException
         """
         this = _coda_except.new_InvalidArgumentException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_InvalidArgumentException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(InvalidArgumentException self) -> std::string"""
@@ -668,6 +1223,44 @@ class InvalidArgumentException(Exception):
 
 InvalidArgumentException_swigregister = _coda_except.InvalidArgumentException_swigregister
 InvalidArgumentException_swigregister(InvalidArgumentException)
+
+class InvalidArgumentException11(Exception11):
+    """Proxy of C++ except::InvalidArgumentException11 class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Exception11]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, InvalidArgumentException11, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Exception11]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, InvalidArgumentException11, name)
+    __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_InvalidArgumentException11
+    __del__ = lambda self: None
+
+    def __init__(self, *args):
+        """
+        __init__(except::InvalidArgumentException11 self) -> InvalidArgumentException11
+        __init__(except::InvalidArgumentException11 self, InvalidArgumentException11 arg2) -> InvalidArgumentException11
+        __init__(except::InvalidArgumentException11 self, InvalidArgumentException11 arg2) -> InvalidArgumentException11
+        __init__(except::InvalidArgumentException11 self, Context c) -> InvalidArgumentException11
+        __init__(except::InvalidArgumentException11 self, std::string const & msg) -> InvalidArgumentException11
+        __init__(except::InvalidArgumentException11 self, Throwable t, Context c) -> InvalidArgumentException11
+        __init__(except::InvalidArgumentException11 self, Throwable11 t, Context c) -> InvalidArgumentException11
+        """
+        this = _coda_except.new_InvalidArgumentException11(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def getType(self) -> "std::string":
+        """getType(InvalidArgumentException11 self) -> std::string"""
+        return _coda_except.InvalidArgumentException11_getType(self)
+
+InvalidArgumentException11_swigregister = _coda_except.InvalidArgumentException11_swigregister
+InvalidArgumentException11_swigregister(InvalidArgumentException11)
 
 class SerializationException(IOException):
     """Proxy of C++ except::SerializationException class."""
@@ -681,21 +1274,24 @@ class SerializationException(IOException):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SerializationException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_SerializationException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::SerializationException self) -> SerializationException
+        __init__(except::SerializationException self, SerializationException arg2) -> SerializationException
+        __init__(except::SerializationException self, SerializationException arg2) -> SerializationException
         __init__(except::SerializationException self, Context c) -> SerializationException
         __init__(except::SerializationException self, std::string const & msg) -> SerializationException
         __init__(except::SerializationException self, Throwable t, Context c) -> SerializationException
+        __init__(except::SerializationException self, Throwable11 t, Context c) -> SerializationException
         """
         this = _coda_except.new_SerializationException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_SerializationException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(SerializationException self) -> std::string"""
@@ -716,21 +1312,24 @@ class ParseException(IOException):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, ParseException, name)
     __repr__ = _swig_repr
+    __swig_destroy__ = _coda_except.delete_ParseException
+    __del__ = lambda self: None
 
     def __init__(self, *args):
         """
         __init__(except::ParseException self) -> ParseException
+        __init__(except::ParseException self, ParseException arg2) -> ParseException
+        __init__(except::ParseException self, ParseException arg2) -> ParseException
         __init__(except::ParseException self, Context c) -> ParseException
         __init__(except::ParseException self, std::string const & msg) -> ParseException
         __init__(except::ParseException self, Throwable t, Context c) -> ParseException
+        __init__(except::ParseException self, Throwable11 t, Context c) -> ParseException
         """
         this = _coda_except.new_ParseException(*args)
         try:
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-    __swig_destroy__ = _coda_except.delete_ParseException
-    __del__ = lambda self: None
 
     def getType(self) -> "std::string":
         """getType(ParseException self) -> std::string"""

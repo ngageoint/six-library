@@ -26,6 +26,7 @@
 #include <sys/SystemException.h>
 #include <except/Exception.h>
 #include <str/Manip.h>
+#include <mem/SharedPtr.h>
 
 #include "net/Sockets.h"
 #include "net/SocketAddress.h"
@@ -247,7 +248,7 @@ public:
      *  \param fromClient Client socket address returned
      *  \return A new socket connection to the client
      */
-    std::auto_ptr<Socket> accept(SocketAddress& fromClient);
+    std::unique_ptr<Socket> accept(SocketAddress& fromClient);
 
     net::Socket_T getHandle() const
     {
@@ -265,7 +266,8 @@ protected:
         if (mNative == INVALID_SOCKET)
         {
             // we got a proto so we need to create the socket
-            mNative = ::socket(AF_INET, socket, 0);
+            const auto type = static_cast<int>(socket);
+            mNative = ::socket(AF_INET, type, 0);
             if (mNative == INVALID_SOCKET)
             {
                 throw sys::SocketException(Ctxt("Socket initialization failed"));

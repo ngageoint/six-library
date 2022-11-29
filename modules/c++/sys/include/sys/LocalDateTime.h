@@ -24,6 +24,7 @@
 #ifndef __SYS_LOCAL_DATE_TIME_H__
 #define __SYS_LOCAL_DATE_TIME_H__
 
+#include "config/Exports.h"
 #include <sys/DateTime.h>
 
 namespace sys
@@ -32,7 +33,7 @@ namespace sys
 /*!
  *  Representation of a local date/time structure.
  */
-class LocalDateTime : public DateTime
+class CODA_OSS_API LocalDateTime : public DateTime
 {
 protected:
     int mDST;
@@ -49,8 +50,6 @@ protected:
     virtual void getTime(time_t numSecondsSinceEpoch, tm& t) const;
 
 public:
-    static const char DEFAULT_DATETIME_FORMAT[];
-
     /*!
      *  Construct as current date and time (localtime).
      */
@@ -75,8 +74,8 @@ public:
     /*!
      *  Construct with string/format.
      */
-    LocalDateTime(const std::string& time,
-            const std::string& format = DEFAULT_DATETIME_FORMAT);
+    LocalDateTime(const std::string& time);
+    LocalDateTime(const std::string& time, const std::string& format);
 
     //! Return the Daylight Savings Time flag (true = on, false = off)
     bool getDST() const { return mDST == 1; }

@@ -39,11 +39,14 @@ namespace logging
  * \class MemoryHandler
  * \brief Emits LogRecords to memory.
  */
-class MemoryHandler : public Handler
+struct MemoryHandler : public Handler
 {
-
-public:
     MemoryHandler(LogLevel level = LogLevel::LOG_NOTSET);
+
+    MemoryHandler(const MemoryHandler&) = delete;
+    MemoryHandler& operator=(const MemoryHandler&) = delete;
+    MemoryHandler(MemoryHandler&&) = delete;
+    MemoryHandler& operator=(MemoryHandler&&) = delete;    
 
     const std::vector<std::string>&
     getLogs(LogLevel level = LogLevel::LOG_NOTSET) const;
@@ -51,7 +54,7 @@ public:
 protected:
     virtual void write(const std::string& str);
 
-    virtual void emitRecord(const LogRecord* record);
+    void emitRecord(const LogRecord* record) override;
 
 private:
     typedef std::map<LogLevel, std::vector<std::string> > LogMap;

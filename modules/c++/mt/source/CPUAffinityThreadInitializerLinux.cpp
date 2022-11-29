@@ -30,13 +30,14 @@
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
+#include <mem/SharedPtr.h>
 #include <mt/CPUAffinityThreadInitializerLinux.h>
 
 namespace mt
 {
 CPUAffinityThreadInitializerLinux::CPUAffinityThreadInitializerLinux(
-        std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu) :
-    mCPU(cpu)
+        std::unique_ptr<const sys::ScopedCPUMaskUnix>&& cpu) :
+    mCPU(std::move(cpu))
 {
 }
 

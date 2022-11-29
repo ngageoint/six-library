@@ -4,6 +4,6 @@ if (TARGET numpyutils-c++)
         PACKAGE coda
         MODULE_NAME math_poly
         MODULE_DEPS math.poly-c++ numpyutils-c++
-        PYTHON_DEPS except-python math.linear-python types-python
+        PYTHON_DEPS config-python except-python math.linear-python types-python
         INPUT "source/math_poly.i")
 endif()

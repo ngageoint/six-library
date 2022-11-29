@@ -1,20 +1,19 @@
-The openjpeg-2.3.0_mod.tar file is a slight modification of a release of
-OpenJPEG 2.3.0. These changes allow for compressing a single tile within an
+The openjpeg-2.3.1_mod.tar file is a slight modification of a release of
+OpenJPEG 2.3.1. These changes allow for compressing a single tile within an
 image, in order to use multiple threads for compression.
 
-diff -wr openjpeg-2.3.0_mod openjpeg-2.3.0
-diff -wr openjpeg-2.3.0_mod/src/lib/openjp2/j2k.c openjpeg-2.3.0/src/lib/openjp2/j2k.c
-11352c11352,11353
-<           p_j2k->m_current_tile_number = p_tile_index;
+diff -wr openjpeg-2.3.1_mod openjpeg-2.3.1
+diff -wr openjpeg-2.3.1_mod/src/lib/openjp2/j2k.c openjpeg-2.3.1/src/lib/openjp2/j2k.c
+11368c11368,11369
+<         p_j2k->m_current_tile_number = p_tile_index;
 ---
->         opj_event_msg(p_manager, EVT_ERROR, "The given tile index does not
->         match.");
+>         opj_event_msg(p_manager, EVT_ERROR, "The given tile index does not match.");
 >         return OPJ_FALSE;
-11534a11536,11537
+11549a11551,11552
 >     ++p_j2k->m_current_tile_number;
 >
-diff -wr openjpeg-2.3.0_mod/src/lib/openjp2/openjpeg.c openjpeg-2.3.0/src/lib/openjp2/openjpeg.c
-791,798d790
+diff -wr openjpeg-2.3.1_mod/src/lib/openjp2/openjpeg.c openjpeg-2.3.1/src/lib/openjp2/openjpeg.c
+1066,1073d1065
 < OPJ_BOOL OPJ_CALLCONV opj_flush(opj_codec_t *p_codec, opj_stream_t *p_stream)
 < {
 <     opj_codec_private_t *l_codec = (opj_codec_private_t *) p_codec;
@@ -22,10 +21,7 @@ diff -wr openjpeg-2.3.0_mod/src/lib/openjp2/openjpeg.c openjpeg-2.3.0/src/lib/op
 <
 <     return opj_stream_flush(l_stream, &l_codec->m_event_mgr);
 < }
-<
-diff -wr openjpeg-2.3.0_mod/src/lib/openjp2/openjpeg.h openjpeg-2.3.0/src/lib/openjp2/openjpeg.h
-1121,1122d1120
-< OPJ_API OPJ_BOOL OPJ_CALLCONV opj_flush(opj_codec_t *p_codec, opj_stream_t
-*p_stream);
-<
+diff -wr openjpeg-2.3.1_mod/src/lib/openjp2/openjpeg.h openjpeg-2.3.1/src/lib/openjp2/openjpeg.h
+1686d1685
+< OPJ_API OPJ_BOOL OPJ_CALLCONV opj_flush(opj_codec_t *p_codec, opj_stream_t *p_stream);
 

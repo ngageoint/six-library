@@ -34,7 +34,7 @@
 #    endif
 #endif
 
-#if !defined(WIN32)
+#if !(defined(WIN32) || defined(_WIN32))
 
 #include <assert.h>
 #include <sys/types.h>

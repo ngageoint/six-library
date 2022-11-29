@@ -23,8 +23,10 @@
 #ifndef __DBG_STREAM_H__
 #define __DBG_STREAM_H__
 
-#include "io/OutputStream.h"
 #include <memory>
+
+#include "io/OutputStream.h"
+#include "mem/SharedPtr.h"
 
 
 /*!
@@ -49,12 +51,13 @@ namespace io
  *
  */
 
-class DbgStream : public OutputStream
+struct DbgStream : public OutputStream
 {
-public:
-    //!  Constructor
-    DbgStream() : mOn(false)
-    {}
+    DbgStream() = default;
+    virtual ~DbgStream() = default;
+    DbgStream(const DbgStream&) = delete;
+    DbgStream& operator=(const DbgStream&) = delete;
+
 
     /*!
      *  Alternate constructor
@@ -78,9 +81,6 @@ public:
         mOn = on;
         mStream.reset(s);
     }
-    //!  Destructor
-    virtual ~DbgStream()
-    {}
 
     /*!
      * This method uses the bound OutputStream to print,
@@ -116,9 +116,9 @@ public:
     }
 protected:
     //!  The bound stream
-    std::auto_ptr<OutputStream> mStream;
+    std::unique_ptr<OutputStream> mStream;
     //!  On or off??
-    bool mOn;
+    bool mOn = false;
 };
 }
 #endif

@@ -2,7 +2,7 @@ NAME            = 'numpyutils'
 MAINTAINER      = 'anuraag.pakanati@mdaus.com'
 VERSION         = '1.0'
 MODULE_DEPS     = 'types except sys'
-USELIB          = 'NUMPY PYEXT'
+USELIB          = 'NUMPY PYEXT PYEMBED'
 
 from waflib import Options
 
@@ -15,3 +15,4 @@ def build(bld):
     if 'PY_HAVE_NUMPY' in bld.env and bld.env['PY_HAVE_NUMPY']:
        bld.module(**globals())
        bld.recurse(['examples'])
+

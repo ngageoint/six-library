@@ -156,7 +156,7 @@ void sio::lite::StreamReader::readType2Header()
         // This is what we are storing in the hash table
         std::vector<sys::byte> udEntry;
         udEntry.reserve(udSize);
-        for (int i = 0; i < udSize; i++)
+        for (int j = 0; j < udSize; j++)
         {
             sys::byte x;
             inputStream->read(&x, 1);

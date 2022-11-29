@@ -23,6 +23,8 @@
 #ifndef __IO_PIPE_STREAM_H__
 #define __IO_PIPE_STREAM_H__
 
+#include <memory>
+
 #include <import/except.h>
 #include <str/Convert.h>
 #include <sys/Err.h>
@@ -39,11 +41,8 @@ namespace io
  *  \brief captures the standard output from a pipe
  *         and streams it to the specified location
  */
-class PipeStream : InputStream
+struct PipeStream : InputStream
 {
-
-public:
-
     /*!
     *  Constructor --
     *  Streams data from a pipe when available
@@ -55,16 +54,14 @@ public:
                size_t streamBufferSize = DEFAULT_CHUNK_SIZE) : 
         InputStream(),
         mExecPipe(cmd),
-        mCharString(new char[streamBufferSize]),
+        mCharString(std::make_unique<char[]>(streamBufferSize)),
         mBufferSize(streamBufferSize)
     {
         mExecPipe.run();
     }
 
     //! cleanup the stream if not done already
-    virtual ~PipeStream() 
-    {
-    }
+    virtual ~PipeStream() = default;
 
     //! closes the stream connected to the child process manually
     int close()
@@ -95,6 +92,9 @@ public:
     virtual sys::SSize_T streamTo(OutputStream& soi,
                                   sys::SSize_T numBytes = IS_END);
 
+    PipeStream(const PipeStream&) = delete;
+    PipeStream& operator=(const PipeStream&) = delete;
+
 protected:
     /*!
      *  \brief returns the requested size in bytes from the stream
@@ -103,14 +103,8 @@ protected:
 
 
     sys::ExecPipe mExecPipe;
-    mem::ScopedArray<char> mCharString;
-    size_t mBufferSize;
-
-private:
-
-    //! Noncopyable
-    PipeStream(const PipeStream& );
-    const PipeStream& operator=(const PipeStream& );
+    std::unique_ptr<char[]> mCharString;
+    size_t mBufferSize = DEFAULT_CHUNK_SIZE;
 };
 
 }

@@ -26,7 +26,7 @@
 
 #include <mt/AbstractCPUAffinityInitializer.h>
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 #include <mt/CPUAffinityInitializerWin32.h>
 namespace mt
 {

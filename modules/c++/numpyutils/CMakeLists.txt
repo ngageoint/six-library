@@ -5,6 +5,12 @@ if(Python_Development_FOUND AND Python_NumPy_FOUND)
     if (UNIX)
         list(APPEND MODULE_DEPS util)
     endif()
+    if (MSVC AND MSVC_VERSION LESS 1920)
+        add_compile_options(
+            /wd4505 # disable warning 'unreferenced local function has been removed'
+            /wd4551 # function call missing argument list
+        )
+    endif()
     coda_add_module(
         ${MODULE_NAME}
         VERSION 1.0

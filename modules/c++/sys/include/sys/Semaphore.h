@@ -20,53 +20,39 @@
  *
  */
 
+#ifndef CODA_OSS_sys_Semaphore_h_INCLUDED_
+#define CODA_OSS_sys_Semaphore_h_INCLUDED_
+#pragma once
 
-#ifndef __SYS_SEMAPHORE_H__
-#define __SYS_SEMAPHORE_H__ 
+#include "sys/Conf.h"
+
 /**
- *  \file 
+ *  \file
  *  \brief Include the right semaphore.
  *
  *  This file will auto-select the semaphore of choice,
- *  if one is to be defined.  
+ *  if one is to be defined.
  *  \note We need to change the windows part to check _MT
  *  because that is how it determines reentrance!
  *
  */
 
-#    if defined(USE_NSPR_THREADS)
-#        include "sys/SemaphoreNSPR.h"
+#if defined(_WIN32)
+#include "sys/SemaphoreWin32.h"
 namespace sys
 {
-typedef SemaphoreNSPR Semaphore;
+using Semaphore = SemaphoreWin32;
 }
-#    elif defined(WIN32)
-#        include "sys/SemaphoreWin32.h"
-namespace sys
-{
-typedef SemaphoreWin32 Semaphore;
-}
-#    elif defined(__sun)
-#        include "sys/SemaphoreSolaris.h"
-namespace sys
-{
-typedef SemaphoreSolaris Semaphore;
-}
-#    elif defined(__sgi)
-#        include "sys/SemaphoreIrix.h"
-namespace sys
-{
-typedef SemaphoreIrix Semaphore;
-}
-#    elif defined(__APPLE_CC__)
-typedef int Semaphore;
-// Give 'em Posix
-#    else
-#        include "sys/SemaphorePosix.h"
-namespace sys
-{
-typedef SemaphorePosix Semaphore;
-}
-#    endif // Which thread package?
 
-#endif // End of header
+#elif defined(CODA_OSS_POSIX_SOURCE)
+#include "sys/SemaphorePosix.h"
+namespace sys
+{
+using Semaphore = SemaphorePosix;
+}
+
+#else
+#error "Which thread package?"
+#endif
+
+#endif  // CODA_OSS_sys_Semaphore_h_INCLUDED_

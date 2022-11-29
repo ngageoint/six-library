@@ -20,23 +20,173 @@
  *
  */
 
+#include <assert.h>
+
 #include "except/Throwable.h"
 
-except::Throwable::Throwable(except::Context c)
-{
-    // Assign c's message to our internal one
-    mMessage = c.getMessage();
+#include "except/Backtrace.h"
 
-    // Push context onto exception stack
-    mTrace.pushContext(c);
+void except::Throwable::doGetBacktrace()
+{
+    // This could be time-consuming or generate a lot of (noisy) output; only do
+    // it if requested
+    bool supported;
+    (void)except::getBacktrace(supported, mBacktrace);
 }
 
-except::Throwable::Throwable(const except::Throwable& t, except::Context c)
+template <typename TThrowable>
+except::Throwable::Throwable(const Context* pContext, const TThrowable* pThrowable, const std::string* pMessage, bool callGetBacktrace, std::nullptr_t)
 {
-    // Copy t's exception stack and push c onto local one
-    mTrace = t.getTrace();
-    mTrace.pushContext(c);
+    if (pThrowable != nullptr)
+    {
+        // Copy t's exception stack and push c onto local one
+        mTrace = pThrowable->getTrace();
+    }
 
-    // Assign c's message as our internal one
-    mMessage = c.getMessage();
+    if (pContext != nullptr)
+    {
+        assert(pMessage == nullptr);
+
+        // Push context onto exception stack
+        mTrace.pushContext(*pContext);
+
+        // Assign c's message as our internal one
+        mMessage = pContext->getMessage();
+    }
+    
+    if (pMessage != nullptr)
+    {
+        assert(pContext == nullptr);
+        mMessage = *pMessage;
+    }
+
+    // This will record a back-trace from where the Throwable object was instantiated.
+    // That's not necessarily where the "throw" will occur, but it's often the case; Throwable
+    // instances ususally aren't passed around.  That is, hardly anybody does:
+    //    Exception e; // Throwable instance
+    //    might_throw(e);
+    // rather, the idiom is usually
+    //    throw Exception(...); // instantiate and throw
+    if (callGetBacktrace)
+    {
+        doGetBacktrace();
+    }
+}
+except::Throwable::Throwable(const Context* pContext, const Throwable* pThrowable, const std::string* pMessage, bool callGetBacktrace)
+: Throwable(pContext, pThrowable, pMessage, callGetBacktrace, nullptr)
+{
+}
+except::Throwable::Throwable(const Context* pContext, const Throwable11* pThrowable, const std::string* pMessage, bool callGetBacktrace)
+: Throwable(pContext, pThrowable, pMessage, callGetBacktrace, nullptr)
+{
+}
+
+except::Throwable::Throwable(const std::string& message) : Throwable(nullptr, static_cast<const Throwable*>(nullptr), &message)
+{
+}
+
+except::Throwable::Throwable(except::Context c) : Throwable(&c)
+{
+}
+
+except::Throwable::Throwable(const except::Throwable& t, except::Context c) : Throwable(&c, &t)
+{
+}
+except::Throwable::Throwable(const except::Throwable11& t, except::Context c) : Throwable(&c, &t)
+{
+}
+except::Throwable::Throwable(const except::Throwable11& t) : Throwable(nullptr, &t)
+{
+}
+
+//******************************************************************************
+
+void except::Throwable11::doGetBacktrace()
+{
+    // This could be time-consuming or generate a lot of (noisy) output; only do
+    // it if requested
+    bool supported;
+    (void)except::getBacktrace(supported, mBacktrace);
+}
+
+template <typename TThrowable>
+except::Throwable11::Throwable11(const Context* pContext,
+                                 const TThrowable* pThrowable,
+                                 const std::string* pMessage,
+                                 bool callGetBacktrace,
+                                 std::nullptr_t)
+{
+    if (pThrowable != nullptr)
+    {
+        // Copy t's exception stack and push c onto local one
+        mTrace = pThrowable->getTrace();
+    }
+
+    if (pContext != nullptr)
+    {
+        assert(pMessage == nullptr);
+
+        // Push context onto exception stack
+        mTrace.pushContext(*pContext);
+
+        // Assign c's message as our internal one
+        mMessage = pContext->getMessage();
+    }
+
+    if (pMessage != nullptr)
+    {
+        assert(pContext == nullptr);
+        mMessage = *pMessage;
+    }
+
+    // This will record a back-trace from where the Throwable object was
+    // instantiated. That's not necessarily where the "throw" will occur, but
+    // it's often the case; Throwable instances ususally aren't passed around.
+    // That is, hardly anybody does:
+    //    Exception e; // Throwable instance
+    //    might_throw(e);
+    // rather, the idiom is usually
+    //    throw Exception(...); // instantiate and throw
+    if (callGetBacktrace)
+    {
+        doGetBacktrace();
+    }
+}
+except::Throwable11::Throwable11(const Context* pContext,
+                             const Throwable11* pThrowable,
+                             const std::string* pMessage,
+                             bool callGetBacktrace) :
+    Throwable11(pContext, pThrowable, pMessage, callGetBacktrace, nullptr)
+{
+}
+except::Throwable11::Throwable11(const Context* pContext,
+                                 const Throwable* pThrowable,
+                                 const std::string* pMessage,
+                                 bool callGetBacktrace) :
+    Throwable11(pContext, pThrowable, pMessage, callGetBacktrace, nullptr)
+{
+}
+
+except::Throwable11::Throwable11(const std::string& message) :
+    Throwable11(nullptr, static_cast<const Throwable11*>(nullptr), &message)
+{
+}
+
+except::Throwable11::Throwable11(const except::Context& c) : Throwable11(&c)
+{
+}
+
+except::Throwable11::Throwable11(const except::Throwable11& t,
+                                 const except::Context& c) :
+    Throwable11(&c, &t)
+{
+}
+except::Throwable11::Throwable11(const except::Throwable& t,
+                                 const except::Context& c) :
+    Throwable11(&c, &t)
+{
+}
+except::Throwable11::Throwable11(const except::Throwable& t) :
+    Throwable11(nullptr, &t)
+{
 }

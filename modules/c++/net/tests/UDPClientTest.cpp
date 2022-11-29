@@ -44,6 +44,7 @@
 #include <import/net.h>
 #include <import/except.h>
 #include <import/sys.h>
+#include <import/mem.h>
 #include "my_packet.h"
 
 using namespace net;
@@ -62,7 +63,7 @@ int main(int argc, char** argv)
         int port = atoi(argv[2]);
 
         SocketAddress sa(host, port);
-        std::auto_ptr<Socket> socket = UDPClientSocketFactory().create(sa);
+        std::unique_ptr<Socket> socket = UDPClientSocketFactory().create(sa);
         my_packet_t packet;
         packet.packet_no = 1;
         packet.time_stamp = time(NULL);

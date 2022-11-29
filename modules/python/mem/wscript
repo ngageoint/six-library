@@ -1,4 +1,4 @@
 distclean = options = configure = lambda p: None
 
 def build(bld):
-  bld.swigModule(name = 'mem', use = 'mem-c++', package='coda')
+  bld.swigModule(name = 'mem', use = 'mem-c++ config-python', package='coda')

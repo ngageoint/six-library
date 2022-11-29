@@ -56,15 +56,30 @@ public:
             const sys::Uint32_T ifdOffset = 8) :
         mId(id), mIFDOffset(ifdOffset)
     {
-        bool isBigEndian = sys::isBigEndianSystem();
+        const bool isBigEndian = sys::isBigEndianSystem();
+        // The code below previously used strncpy(), but compilers are now
+        // quite aggressive about checking for potential problems.  We're only
+        // dealing with two characters, so it's easy enough to do something else.
         if (byteOrder[0] == ' ' && byteOrder[1] == ' ')
         {
             //set it based on the system
-            strncpy(mByteOrder, isBigEndian ? "MM" : "II", 2);
+            // strncpy(mByteOrder, isBigEndian ? "MM" : "II", 2);
+            if (isBigEndian)
+            {
+                mByteOrder[0] = mByteOrder[1] = 'M'; // "MM"
+            }
+            else
+            {
+                mByteOrder[0] = mByteOrder[1] = 'I';  // "II"
+            }
         }
         else
-            strncpy(mByteOrder, byteOrder, 2);
-        
+        {
+            // strncpy(mByteOrder, byteOrder, 2);
+            mByteOrder[0] = byteOrder[0];
+            mByteOrder[1] = byteOrder[1];
+        }
+
         mDifferentByteOrdering = isBigEndian ? \
                 getByteOrder() != MM : getByteOrder() != II;
     }
