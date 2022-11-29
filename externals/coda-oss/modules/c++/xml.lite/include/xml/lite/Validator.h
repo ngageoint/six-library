@@ -20,43 +20,31 @@
  *
  */
 
-#ifndef __XML_LITE_VALIDATOR_H__
-#define __XML_LITE_VALIDATOR_H__
+#ifndef CODA_OSS_xml_lite_Validator_h_INCLUDED_
+#define CODA_OSS_xml_lite_Validator_h_INCLUDED_
+#pragma once
 
 #include "xml/lite/xml_lite_config.h"
 
-#if defined(USE_XERCES)
+#if defined(USE_LIBXML)
+#error LibXML is no longer supported.
+#endif
+#if defined(USE_EXPAT)
+#error Expat is no longer supported.
+#endif
+
+#if !defined(USE_XERCES)
+#error XML parser must be set at configure time
+#endif
+
 #  include "xml/lite/ValidatorXerces.h"
 namespace xml
 {
 namespace lite
 {
+using Validator = ValidatorXerces;
+}
+}
+#endif // CODA_OSS_xml_lite_Validator_h_INCLUDED_
 
-typedef ValidatorXerces Validator;
-}
-
-}
-#elif defined(USE_LIBXML)
-#  include "xml/lite/ValidatorLibXML.h"
-namespace xml
-{
-namespace lite
-{
-typedef ValidatorLibXML Validator;
-}
-}
-#elif defined(USE_EXPAT)
-#  include "xml/lite/ValidatorExpat.h"
-namespace xml
-{
-namespace lite
-{
-typedef ValidatorExpat Validator;
-}
-}
-#else
-  #error XML parser must be set at configure time
-#endif
-
-#endif
 

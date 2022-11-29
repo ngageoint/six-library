@@ -63,7 +63,7 @@ void io::RotatingFileOutputStream::doRollover()
 
     if (mBackupCount > 0)
     {
-        for (int i = mBackupCount - 1; i > 0; --i)
+        for (size_t i = mBackupCount - 1; i > 0; --i)
         {
             std::stringstream curName;
             curName << mFilename << "." << i;

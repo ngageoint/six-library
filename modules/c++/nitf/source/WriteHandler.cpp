@@ -22,6 +22,23 @@
 
 #include "nitf/WriteHandler.hpp"
 
+nitf::WriteHandler::WriteHandler(const WriteHandler& x)
+{
+    *this = x;
+}
+nitf::WriteHandler& nitf::WriteHandler::operator=(const WriteHandler& x)
+{
+    if (&x != this)
+        setNative(x.getNative());
+    return *this;
+}
+
+nitf::WriteHandler::WriteHandler(nitf_WriteHandler* x)
+{
+    setNative(x);
+    getNativeOrThrow();
+}
+
 void nitf::WriteHandler::write(nitf::IOInterface& handle)
 {
     nitf_WriteHandler *handler = getNativeOrThrow();
@@ -36,8 +53,8 @@ void nitf::WriteHandler::write(nitf::IOInterface& handle)
 }
 
 nitf::StreamIOWriteHandler::StreamIOWriteHandler(
-        nitf::IOInterface& sourceHandle, nitf::Uint64 offset,
-        nitf::Uint64 bytes)
+        nitf::IOInterface& sourceHandle, uint64_t offset,
+        uint64_t bytes)
 {
     setNative(nitf_StreamIOWriteHandler_construct(
             sourceHandle.getNative(), offset, bytes, &error));

@@ -38,10 +38,12 @@
 #include "sys/Conf.h"
 #include <string.h>
 
+#include "config/Exports.h"
+
 namespace sys
 {
 //!  The default value for the Err object.  Maps to errno or GetLastError()
-const static int __last_err__ = 0;
+constexpr static int __last_err__ = 0;
 /*!
  *  \class Err
  *  \brief Errno like object
@@ -54,10 +56,8 @@ const static int __last_err__ = 0;
  *
  */
 
-class Err
+struct CODA_OSS_API Err
 {
-public:
-
     /*!
      * Copy constructor
      * \param err The err to take
@@ -71,10 +71,12 @@ public:
      * Constructor from int error id
      * \param errNum  The error to initialize with. Defaults to last
      */
-    Err(int errNum = __last_err__)
+    Err() = default;
+    Err(int errNum)
     {
         setThis(errNum);
     }
+    virtual ~Err() = default;
 
     /*!
      *  Assignment operator
@@ -88,9 +90,6 @@ public:
         }
         return *this;
     }
-
-    //! Destructor
-    virtual ~Err() {}
 
     /*!
      *  This is the equivalent of strerror, done in a cross-platform
@@ -120,8 +119,7 @@ public:
 
 protected:
 
-    int mErrId;
-
+    int mErrId = __last_err__;
 };
 
 /*!
@@ -131,10 +129,8 @@ protected:
  *  The same operations as in Err for sockets
  *
  */
-class SocketErr : public Err
+struct SocketErr : public Err
 {
-public:
-
     /*!
      *  Copy constructor.  Takes a right-hand-side
      *  \param err An error to initialize from
@@ -150,10 +146,12 @@ public:
      *  \param errNum  An int to initialize from
      *
      */
-    SocketErr(int errNum = __last_err__)
+    SocketErr() = default;
+    SocketErr(int errNum)
     {
         setThis(errNum);
     }
+    virtual ~SocketErr() = default;
 
     /*!
      *  Assignment operator
@@ -168,9 +166,6 @@ public:
         }
         return *this;
     }
-
-    //!  Destructor
-    virtual ~SocketErr() {}
 
     //!  Redefined for socket errors
     virtual int getLast() const;

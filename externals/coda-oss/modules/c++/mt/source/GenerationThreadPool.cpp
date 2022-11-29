@@ -74,7 +74,7 @@ void mt::GenerationThreadPool::addGroup(const std::vector<sys::Runnable*>& toRun
     if (mGenSize)
 	throw mt::ThreadPoolException(Ctxt("The previous generation has not completed!"));
     
-    mGenSize = toRun.size();
+    mGenSize = static_cast<int>(toRun.size());
     for (int i = 0; i < mGenSize; ++i)
 	addRequest(toRun[i]);
 }

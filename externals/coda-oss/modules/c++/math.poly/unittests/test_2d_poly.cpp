@@ -21,14 +21,16 @@
  */
 
 #include <stdlib.h>
+#include <tuple>
 
 #include <math/poly/TwoD.h>
 #include "TestCase.h"
 
-namespace
-{
 double getRand()
 {
+    static const auto call_srand = [](){ srand(176); return true; };
+    static auto srand_called = call_srand();
+    std::ignore = srand_called;
     return (50.0 * rand() / RAND_MAX - 25.0);
 }
 
@@ -105,7 +107,7 @@ TEST_CASE(testTruncateTo)
     {
         for (size_t jj = 0; jj <= poly.orderY(); ++jj, coeff += 10)
         {
-            poly[ii][jj] = coeff;
+            poly[ii][jj] = static_cast<double>(coeff);
         }
     }
 
@@ -127,7 +129,7 @@ TEST_CASE(testTruncateToNonZeros)
     {
         for (size_t jj = 0; jj <= poly.orderY(); ++jj, coeff += 10)
         {
-            poly[ii][jj] = coeff;
+            poly[ii][jj] = static_cast<double>(coeff);
         }
     }
 
@@ -164,7 +166,7 @@ TEST_CASE(testTruncateToNonZeros)
     }
 
     truncatedPoly = poly.truncateToNonZeros(0.0);
-    TEST_ASSERT_EQ(truncatedPoly.orderX(), 3);
+    TEST_ASSERT_EQ(truncatedPoly.orderX(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(truncatedPoly.orderY(), poly.orderY());
     for (size_t ii = 0; ii <= truncatedPoly.orderX(); ++ii)
     {
@@ -184,8 +186,8 @@ TEST_CASE(testTruncateToNonZeros)
     }
 
     truncatedPoly = poly.truncateToNonZeros(0.0);
-    TEST_ASSERT_EQ(truncatedPoly.orderX(), 3);
-    TEST_ASSERT_EQ(truncatedPoly.orderY(), 2);
+    TEST_ASSERT_EQ(truncatedPoly.orderX(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(truncatedPoly.orderY(), static_cast<size_t>(2));
     for (size_t ii = 0; ii <= truncatedPoly.orderX(); ++ii)
     {
         for (size_t jj = 0; jj <= truncatedPoly.orderY(); ++jj)
@@ -205,8 +207,8 @@ TEST_CASE(testTruncateToNonZeros)
     }
 
     truncatedPoly = poly.truncateToNonZeros(0.0);
-    TEST_ASSERT_EQ(truncatedPoly.orderX(), 0);
-    TEST_ASSERT_EQ(truncatedPoly.orderY(), 0);
+    TEST_ASSERT_EQ(truncatedPoly.orderX(), static_cast<size_t>(0));
+    TEST_ASSERT_EQ(truncatedPoly.orderY(), static_cast<size_t>(0));
     TEST_ASSERT_EQ(truncatedPoly[0][0], 0.0);
 }
 
@@ -260,7 +262,7 @@ TEST_CASE(testOperators)
     {
         for (size_t jj = 0; jj <= p1.orderY(); ++jj)
         {
-            p1[ii][jj] = ii * p1.orderY() + jj;
+            p1[ii][jj] = static_cast<double>(ii * p1.orderY() + jj);
         }
     }
 
@@ -270,7 +272,7 @@ TEST_CASE(testOperators)
     {
         for (size_t jj = 0; jj <= p2.orderY(); ++jj)
         {
-            p2[ii][jj] = ii * p2.orderY() + jj;
+            p2[ii][jj] = static_cast<double>(ii * p2.orderY() + jj);
         }
     }
 
@@ -281,10 +283,10 @@ TEST_CASE(testOperators)
     math::poly::TwoD<double> opEquals(p1);
     opEquals += p2;
 
-    TEST_ASSERT_EQ(op.orderX(), 2);
-    TEST_ASSERT_EQ(op.orderY(), 3);
-    TEST_ASSERT_EQ(opEquals.orderX(), 2);
-    TEST_ASSERT_EQ(opEquals.orderY(), 3);
+    TEST_ASSERT_EQ(op.orderX(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(op.orderY(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(opEquals.orderX(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(opEquals.orderY(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(op[0][0], 0.0);
     TEST_ASSERT_EQ(op[0][1], 2.0);
@@ -314,10 +316,10 @@ TEST_CASE(testOperators)
     opEquals = p1;
     opEquals -= p2;
 
-    TEST_ASSERT_EQ(op.orderX(), 2);
-    TEST_ASSERT_EQ(op.orderY(), 3);
-    TEST_ASSERT_EQ(opEquals.orderX(), 2);
-    TEST_ASSERT_EQ(opEquals.orderY(), 3);
+    TEST_ASSERT_EQ(op.orderX(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(op.orderY(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(opEquals.orderX(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(opEquals.orderY(), static_cast<size_t>(3));
 
     TEST_ASSERT_EQ(op[0][0], 0.0);
     TEST_ASSERT_EQ(op[0][1], 0.0);
@@ -348,10 +350,10 @@ TEST_CASE(testOperators)
     opEquals = p1;
     opEquals *= p2;
 
-    TEST_ASSERT_EQ(op.orderX(), 3);
-    TEST_ASSERT_EQ(op.orderY(), 5);
-    TEST_ASSERT_EQ(opEquals.orderX(), 3);
-    TEST_ASSERT_EQ(opEquals.orderY(), 5);
+    TEST_ASSERT_EQ(op.orderX(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(op.orderY(), static_cast<size_t>(5));
+    TEST_ASSERT_EQ(opEquals.orderX(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(opEquals.orderY(), static_cast<size_t>(5));
 
     TEST_ASSERT_EQ(op[0][0], 0.0);
     TEST_ASSERT_EQ(op[0][1], 0.0);
@@ -393,10 +395,10 @@ TEST_CASE(testOperators)
     opEquals = p1;
     opEquals /= 2.0;
 
-    TEST_ASSERT_EQ(op.orderX(), 2);
-    TEST_ASSERT_EQ(op.orderY(), 2);
-    TEST_ASSERT_EQ(opEquals.orderX(), 2);
-    TEST_ASSERT_EQ(opEquals.orderY(), 2);
+    TEST_ASSERT_EQ(op.orderX(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(op.orderY(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(opEquals.orderX(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(opEquals.orderY(), static_cast<size_t>(2));
 
     TEST_ASSERT_EQ(op[0][0], 0.0);
     TEST_ASSERT_EQ(op[0][1], 0.5);
@@ -431,27 +433,69 @@ TEST_CASE(testIsScalar)
     {
         for (size_t jj = 0; jj <= p1.orderY(); ++jj)
         {
-            p1[ii][jj] = ii * p1.orderY() + jj;
+            p1[ii][jj] = static_cast<double>(ii * p1.orderY() + jj);
         }
     }
 
-    TEST_ASSERT(!p1.isScalar());
+    TEST_ASSERT_FALSE(p1.isScalar());
 
 
     math::poly::TwoD<double> p2(1, 3);
     p2[0][0] = 1;
     TEST_ASSERT(p2.isScalar());
 }
+
+TEST_CASE(testAtY)
+{
+    math::poly::TwoD<double> p1(2, 2);
+    // x^0*(1*y^0 2*y^1 3*y^2 )
+    // x^1*(3*y^0 4*y^1 5*y^2 )
+    // x^2*(5*y^0 6*y^1 7*y^2 )
+    for (size_t ii = 0; ii <= p1.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= p1.orderY(); ++jj)
+        {
+            p1[ii][jj] = static_cast<double>(ii * p1.orderY() + jj + 1);
+        }
+    }
+    TEST_ASSERT_EQ(p1(2, 3), p1.atY(3)(2));
+
+    // 2D polynomials with one dimension having 0 order
+    math::poly::TwoD<double> p2(2, 0);
+    for (size_t ii = 0; ii <= p2.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= p2.orderY(); ++jj)
+        {
+            p2[ii][jj] = static_cast<double>(ii * p2.orderY() + jj + 1);
+        }
+    }
+    TEST_ASSERT_EQ(p2.atY(3)(2), p2(2, 3));
+    TEST_ASSERT_EQ(p2.flipXY().atY(4)(5), p2(4, 5));
+
+    math::poly::TwoD<double> p3(0, 2);
+    for (size_t ii = 0; ii <= p3.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= p3.orderY(); ++jj)
+        {
+            p3[ii][jj] = static_cast<double>(ii * p3.orderY() + jj + 1);
+        }
+    }
+    TEST_ASSERT_EQ(p3.atY(3)(2), p3(2, 3));
+    TEST_ASSERT_EQ(p3.flipXY().atY(4)(5), p3(4, 5));
+
+    // Empty polynomial object
+    math::poly::TwoD<double> p4;
+    TEST_ASSERT_EQ(p4.atY(3)(2), p4(2, 3));
+    TEST_ASSERT_EQ(p4.flipXY().atY(4)(5), p4(4, 5));
 }
 
-int main(int, char**)
-{
-    srand(176);
+TEST_MAIN(
     TEST_CHECK(testScaleVariable);
     TEST_CHECK(testTruncateTo);
     TEST_CHECK(testTruncateToNonZeros);
     TEST_CHECK(testTransformInput);
     TEST_CHECK(testOperators);
     TEST_CHECK(testIsScalar);
-}
+    TEST_CHECK(testAtY);
+    )
 

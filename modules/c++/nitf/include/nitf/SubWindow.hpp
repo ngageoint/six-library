@@ -20,13 +20,17 @@
  *
  */
 
-#ifndef __NITF_SUBWINDOW_HPP__
-#define __NITF_SUBWINDOW_HPP__
+#pragma once
+
+#include <string>
+#include <vector>
+
+#include <std/optional>
 
 #include "nitf/SubWindow.h"
 #include "nitf/DownSampler.hpp"
 #include "nitf/Object.hpp"
-#include <string>
+#include "gsl/gsl.h"
 
 /*!
  *  \file SubWindow.hpp
@@ -34,7 +38,7 @@
  */
 namespace nitf
 {
-
+    class ImageSubheader;
 /*!
  *  \class SubWindow
  *  \brief  The C++ wrapper for the nitf_SubWindow
@@ -68,24 +72,27 @@ public:
     SubWindow(nitf_SubWindow * x);
 
     //! Constructor
-    SubWindow();
+    SubWindow() noexcept(false);
+    SubWindow(const ImageSubheader&);
+    SubWindow(uint32_t rows, uint32_t cols, uint32_t* bands = nullptr, uint32_t numBands = 0);
 
     //! Destructor
-    ~SubWindow();
+    ~SubWindow() /*noexcept(false)*/;
 
-    nitf::Uint32 getStartRow() const;
-    nitf::Uint32 getNumRows() const;
-    nitf::Uint32 getStartCol() const;
-    nitf::Uint32 getNumCols() const;
-    nitf::Uint32 getBandList(int i);
-    nitf::Uint32 getNumBands() const;
+    uint32_t getStartRow() const;
+    uint32_t getNumRows() const;
+    uint32_t getStartCol() const;
+    uint32_t getNumCols() const;
+    uint32_t getBandList(int i);
+    uint32_t getNumBands() const;
 
-    void setStartRow(nitf::Uint32 value);
-    void setNumRows(nitf::Uint32 value);
-    void setStartCol(nitf::Uint32 value);
-    void setNumCols(nitf::Uint32 value);
-    void setBandList(nitf::Uint32 * value);
-    void setNumBands(nitf::Uint32 value);
+    void setStartRow(uint32_t value);
+    void setNumRows(uint32_t value);
+    void setStartCol(uint32_t value);
+    void setNumCols(uint32_t value);
+    void setBandList(uint32_t * value);
+    void setBandList(std::vector<uint32_t>&&);
+    void setNumBands(uint32_t value);
 
     /*!
      * Reference a DownSampler within the SubWindow
@@ -93,17 +100,40 @@ public:
      * \param downSampler  The down sampler to reference
      */
     void setDownSampler(nitf::DownSampler* downSampler);
+    void setDownSampler(nitf::DownSampler& downSampler) // make it clear that ownership isn't transferred.
+    {
+        setDownSampler(&downSampler);
+    }
 
     /*!
      * Return the DownSampler that is referenced by this SubWindow.
-     * If no DownSampler is referenced, a NITFException is thrown.
      */
-    nitf::DownSampler* getDownSampler();
+    nitf::DownSampler* getDownSampler() noexcept;
+    const nitf::DownSampler* getDownSampler() const noexcept;
 
 private:
-    nitf::DownSampler* mDownSampler;
-    nitf_Error error;
+    nitf::DownSampler* mDownSampler = nullptr;
+    nitf_Error error{};
+
+    void updateBandList();
+    std::optional<std::vector<uint32_t>> bandList;
 };
 
+#if CODA_OSS_cpp14
+// This template<template> syntax allows an arbitary TContainer<uint32_t> to be passed
+// rather than requiring that it be std::vector<uint32_t>.  Note that the container
+// must support data() and size().
+template<template<typename, typename...> typename TContainer, typename ...TAlloc>
+inline void setBands(SubWindow& subWindow,
+    TContainer<uint32_t, TAlloc...>& bandList) // std::vector<T> really has another template parameter
+
+#else
+// While the above is legitimate C++11 syntax, older compilers don't like it
+inline void setBands(SubWindow& subWindow, std::vector<uint32_t>& bandList)
+#endif // CODA_OSS_cpp14
+{
+    subWindow.setBandList(bandList.data());
+    subWindow.setNumBands(gsl::narrow<uint32_t>(bandList.size()));
 }
-#endif
+
+}

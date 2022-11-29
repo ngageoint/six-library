@@ -30,7 +30,7 @@
 #define NITF_PLUGIN_CONSTRUCT_SUFFIX "_construct"
 #define NITF_PLUGIN_DESTRUCT_SUFFIX "_destruct"
 
-#include "nitf/nitf_config.h"
+#include "nitf/Config.h"
 #include "nitf/System.h"
 #include "nitf/TRE.h"
 
@@ -87,10 +87,10 @@ typedef nitf_TREHandler* (*NITF_PLUGIN_TRE_HANDLER_FUNCTION)(nitf_Error * error)
 
 typedef int (*NITF_PLUGIN_COMPRESSION_HANDLER_FUNCTION)
 (
-    nitf_Uint8 *input,
-    nitf_Uint32 inputLen,
-    nitf_Uint8 **output,
-    nitf_Uint32 *outputLen,
+    uint8_t *input,
+    uint32_t inputLen,
+    uint8_t **output,
+    uint32_t *outputLen,
     nitf_Error *error
 );
 

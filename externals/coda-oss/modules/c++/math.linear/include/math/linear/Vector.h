@@ -395,7 +395,7 @@ public:
      *  comparisons of types other than just Vectors
      *  including fixed type VectorN and std::vector
      */
-    template<typename Vector_T> bool operator==(const Vector_T& v) const
+    template<typename Vector_T> bool operator_eq(const Vector_T& v) const
     {
         size_t sz = v.size();
         for (size_t i = 0; i < sz; ++i)
@@ -403,12 +403,6 @@ public:
                  return false;
              
         return true;
-    }
-
-    //!  Negate the equality operator
-    template<typename Vector_T> bool operator!=(const Vector_T& v) const
-    {
-        return !(*this == v); 
     }
 
     /*!
@@ -463,6 +457,17 @@ template<typename _T> Vector<_T>
 operator*(_T scalar, const Vector<_T>& v)
 {
     return v * scalar;
+}
+
+template<typename Vector_T, typename T = double>
+inline bool operator==(const Vector<T>& lhs, const Vector_T& rhs)
+{
+    return lhs.operator_eq(rhs);
+}
+template <typename Vector_T, typename T = double>
+inline bool operator!=(const Vector<T>& lhs, const Vector_T& rhs)
+{
+    return !(lhs == rhs);
 }
 
 /*!

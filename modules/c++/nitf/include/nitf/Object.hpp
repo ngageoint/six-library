@@ -22,8 +22,16 @@
 
 #ifndef __NITF_OBJECT_HPP__
 #define __NITF_OBJECT_HPP__
+#pragma once
 
+#include <assert.h>
+
+#include <type_traits>
+#include <std/cstddef> // std::byte
+
+#include "nitf/coda-oss.hpp"
 #include "nitf/Handle.hpp"
+#include "nitf/exports.hpp"
 #include "nitf/HandleManager.hpp"
 #include "nitf/NITFException.hpp"
 
@@ -40,7 +48,7 @@ class HashTable;
  * C core.
  */
 template <typename T, typename DestructFunctor_T = MemoryDestructor<T> >
-class Object
+class NITRO_NITFCPP_API Object
 {
 protected:
     //make the nitf containers friends
@@ -48,14 +56,19 @@ protected:
     friend class HashTable;
 
     //! The handle to the underlying memory
-    BoundHandle<T, DestructFunctor_T>* mHandle;
-
+    BoundHandle<T, DestructFunctor_T>* mHandle = nullptr;
+private:
+    bool isValidHandle() const noexcept
+    {
+        return mHandle && mHandle->get();
+    }
+protected:
     //! Release this object's hold on the handle
     void releaseHandle()
     {
-        if (mHandle && mHandle->get())
+        if (isValidHandle())
             HandleRegistry::getInstance().releaseHandle(mHandle->get());
-        mHandle = NULL;
+        mHandle = nullptr;
     }
 
     //! Set native object
@@ -86,44 +99,41 @@ protected:
     {
         if (nativeObj == nullptr)
         {
+            assert(error != nullptr);
             throw nitf::NITFException(error);
         }
         setNative(nativeObj);
     }
 
 public:
-    //! Constructor
-    Object() : mHandle(NULL) {}
-
-    //! Destructor
-    virtual ~Object() { releaseHandle(); }
+    virtual ~Object() /*noexcept(noexcept(releaseHandle()))*/ { releaseHandle(); }
 
     //! Is the object valid (native object not null)?
-    virtual bool isValid() const
+    virtual bool isValid() const noexcept
     {
-        return getNative() != NULL;
+        return getNative() != nullptr;
     }
 
     //! Equality, based on handle
-    bool operator==(const Object& obj)
+    bool operator==(const Object& obj) const noexcept
     {
         return mHandle == obj.mHandle;
     }
 
     //! Inequality, based on handle
-    bool operator!=(const Object& obj)
+    bool operator!=(const Object& obj) const noexcept
     {
         return !(operator==(obj));
     }
 
     //! Get native object
-    virtual T * getNative() const
+    virtual T * getNative() const noexcept
     {
-        return mHandle ? mHandle->get() : NULL;
+        return mHandle ? mHandle->get() : nullptr;
     }
 
     //! Get native object
-    virtual T * getNativeOrThrow() const
+    virtual T * getNativeOrThrow() const noexcept(false)
     {
         T* val = getNative();
         if (val)
@@ -144,7 +154,7 @@ public:
         return FmtX("%p", getNative());
     }
 
-    bool isManaged() const { return isValid() && mHandle->isManaged(); }
+    bool isManaged() const noexcept { return isValid() && mHandle->isManaged(); }
 
     /*!
      * Set the management of the underlying memory
@@ -152,7 +162,7 @@ public:
      * \param flag  if flag is true, the underlying library will adopt and manage the memory
      *              if flag is false, the memory can be freed when refcount == 0
      */
-    void setManaged(bool flag)
+    void setManaged(bool flag) noexcept
     {
         if (isValid())
             mHandle->setManaged(flag);
@@ -168,7 +178,7 @@ public:
         mHandle->incRef();
     }
 
-    void decRef()
+    void decRef() 
     {
         mHandle->decRef();
     }
@@ -187,7 +197,7 @@ public:
  *
  *  struct RecordDestructor : public MemoryDestructor<nitf_Record> \
  *  { \
- *      ~RecordDestructor(){} \
+ *      ~RecordDestructor() = default; \
  *      virtual void operator()(nitf_Record *nativeObject) \
  *      { nitf_Record_destruct(&nativeObject); } \
  *  }; \
@@ -198,16 +208,75 @@ public:
  * corresponding nitf_##_destruct method.
  */
 
-#define DECLARE_CLASS_IN(_Name, _Package) \
-    struct _Name##Destructor : public nitf::MemoryDestructor<_Package##_##_Name> \
-  { \
-      ~_Name##Destructor(){} \
-      virtual void operator()(_Package##_##_Name *nativeObject) \
-      { _Package##_##_Name##_destruct(&nativeObject); } \
-  }; \
-  \
-  class _Name : public nitf::Object<_Package##_##_Name, _Name##Destructor>
+#define DECLARE_CLASS_IN_operator_function_(Name_, Package_) \
+void operator()(Package_##_##Name_ * nativeObject) noexcept(false) override \
+      { Package_##_##Name_##_destruct(&nativeObject); }
+ 
+#ifdef _MSC_VER
+// https://stackoverflow.com/questions/599035/force-visual-studio-to-link-all-symbols-in-a-lib-file
+#define DECLARE_CLASS_IN_operator_function(Name_, Package_) \
+    __pragma(comment(linker,"/export:" #Package_ "_" #Name_ "_destruct")); \
+    __pragma(warning(push)) __pragma(warning(disable: 26440)) /* Function '...' can be declared '...' (f.6). */ \
+    DECLARE_CLASS_IN_operator_function_(Name_, Package_) \
+    __pragma(warning(pop))
+#else
+#define DECLARE_CLASS_IN_operator_function(Name_, Package_) \
+    DECLARE_CLASS_IN_operator_function_(Name_, Package_)
+#endif
 
-#define DECLARE_CLASS(_Name) DECLARE_CLASS_IN(_Name, nitf)
+// SWIG doesn't like "final"
+#define DECLARE_CLASS_IN(_Name, _Package) \
+    struct NITRO_NITFCPP_API _Name##Destructor /*final*/ : public nitf::MemoryDestructor<_Package##_##_Name> \
+    { DECLARE_CLASS_IN_operator_function(_Name, _Package) }; \
+    class NITRO_NITFCPP_API _Name : public nitf::Object<_Package##_##_Name, _Name##Destructor>
+
+#define NITRO_DECLARE_CLASS_NRT(_Name) DECLARE_CLASS_IN(_Name, nrt)
+#define NITRO_DECLARE_CLASS_NITF(_Name) DECLARE_CLASS_IN(_Name, nitf)
+#define NITRO_DECLARE_CLASS_J2K(Name_) DECLARE_CLASS_IN(Name_, j2k)
+#define DECLARE_CLASS(_Name) NITRO_DECLARE_CLASS_NITF(_Name)
+
+namespace nitf
+{
+    // Refer to a field in a native structure without have to explicitly name it; rather
+    // use the offset and pointer math.  Besides making it easier to refer to fields
+    // without naming them, it makes it easier to iterate over all of the fields in
+    // a struct.
+
+    // fieldOffset is  offsetof(TNative, <field>), e.g., offsetof(nitf_TextSubheader, filePartType)
+    template<typename TReturn, typename TNative>
+    inline TReturn fromNativeOffset_(const TNative& native, size_t fieldOffset) noexcept
+    {
+        // This should be a C struct
+        static_assert(std::is_standard_layout<TNative>::value, "!std::is_standard_layout<>");
+
+        const void* const pNative_ = &native;
+        auto pNativeBytes = static_cast<const std::byte*>(pNative_); // for pointer math
+        pNativeBytes += fieldOffset;
+        const void* const pAddressOfField_ = pNativeBytes;
+
+        auto pAddressOfField = static_cast<const TReturn*>(pAddressOfField_);
+        if (pAddressOfField != nullptr) // code-analysis diagnostic
+        {
+            return *pAddressOfField;
+        }
+        return nullptr;
+    }
+    template<typename TReturn, typename TObject>
+    inline TReturn fromNativeOffset(const TObject& object, size_t fieldOffset) noexcept(false)
+    {
+        auto& native = *(object.getNativeOrThrow()); // e.g., nitf_testing_Test1a&
+
+        // Be sure this is one of our wrapper objects; if it is, it will have:
+        //    using native_t = nitf_<C type>;
+        using native_object_t = typename TObject::native_t; // e.g., nitf_testing_Test1a
+        using get_native_t = typename std::remove_reference<decltype(native)>::type;
+        static_assert(std::is_same<native_object_t, get_native_t>::value, "!std::is_same<>");
+
+        using native_t = typename TReturn::native_t; // e.g., nitf_Field
+        auto const pField = fromNativeOffset_<native_t*>(native, fieldOffset);
+        return TReturn(pField); // e.g., nitf::Field(pNativeField)
+    }
+    #define nitf_offsetof(name) offsetof(native_t, name)
+}
 
 #endif

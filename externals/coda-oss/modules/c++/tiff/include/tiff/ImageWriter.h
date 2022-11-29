@@ -62,18 +62,11 @@ public:
      *   the offset to the beginning of the IFD for this image
      *****************************************************************/
     ImageWriter(io::FileOutputStream *output, const sys::Uint32_T ifdOffset) :
-        mStripByteCounts(NULL),
-                mTileOffsets(NULL),
-                mOutput(output), mIFDOffset(ifdOffset),
-                mIdealChunkSize(CHUNK_SIZE), mBytePosition(0), mElementSize(0),
-                mValidated(false), mFormat(STRIPPED)
+                mOutput(output), mIFDOffset(ifdOffset)
     {
     }
 
-    //! Destructor
-    ~ImageWriter()
-    {
-    }
+    ~ImageWriter() = default;
 
     /**
      *****************************************************************
@@ -217,40 +210,40 @@ private:
     tiff::IFD mIFD;
 
     //! A pointer to the StripByteCounts entry, prevents frequent IFD access
-    tiff::IFDEntry *mStripByteCounts;
+    tiff::IFDEntry* mStripByteCounts = nullptr;
 
     //! A pointer to the TileOffsets entry, prevents frequent IFD access
-    tiff::IFDEntry *mTileOffsets;
+    tiff::IFDEntry *mTileOffsets = nullptr;
 
     //! A pointer to the TileWidth entry, prevents frequent IFD access
-    tiff::IFDEntry *mTileWidth;
+    tiff::IFDEntry *mTileWidth = nullptr;
 
     //! A pointer to the TileLength entry, prevents frequent IFD access
-    tiff::IFDEntry *mTileLength;
+    tiff::IFDEntry *mTileLength = nullptr;
 
     //! A pointer to the TileByteCounts entry, prevents frequent IFD access
-    tiff::IFDEntry *mTileByteCounts;
+    tiff::IFDEntry *mTileByteCounts = nullptr;
 
     //! A pointer to the output stream
-    io::FileOutputStream *mOutput;
+    io::FileOutputStream *mOutput = nullptr;
 
     //! The position to write the next IFD to
     sys::Uint32_T mIFDOffset;
 
     //! The ideal size of a tile
-    sys::Uint32_T mIdealChunkSize;
+    sys::Uint32_T mIdealChunkSize = CHUNK_SIZE;
 
     //! Used to determine the position in the image
-    sys::Uint32_T mBytePosition;
+    sys::Uint32_T mBytePosition = 0;
 
     //! The image's element size.  Stored here to prevent frequent IFD access
-    unsigned short mElementSize;
+    unsigned short mElementSize = 0;
 
     //! Indicates whether or not the IFD has been validated already
-    bool mValidated;
+    bool mValidated = false;
 
     //! The format of the file, either TILED or STRIPPED
-    ImageFormat mFormat;
+    ImageFormat mFormat = STRIPPED;
 };
 
 } // End namespace.

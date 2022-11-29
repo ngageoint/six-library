@@ -27,6 +27,8 @@
 #include <stdarg.h>
 #include <string>
 
+#include "config/Exports.h"
+
 namespace str
 {
 
@@ -34,11 +36,10 @@ namespace str
  *  \param format  The format
  *  \param ... Any printf like thing
  */
-std::string format(const char *format, ...);
+CODA_OSS_API std::string format(const char* format, ...);
 
-class Format
+struct CODA_OSS_API Format final
 {
-public:
     Format(const char* format, ...);
 
     operator std::string() const

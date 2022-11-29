@@ -53,37 +53,37 @@ public:
     LabelSegment(nitf_LabelSegment * x);
 
     //! Constructor
-    LabelSegment();
+    LabelSegment() noexcept(false);
 
     LabelSegment(NITF_DATA * x);
 
     LabelSegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::LabelSegment clone();
+    nitf::LabelSegment clone() const;
 
-    ~LabelSegment();
+    ~LabelSegment() = default;
 
     //! Get the subheader
-    nitf::LabelSubheader getSubheader();
+    nitf::LabelSubheader getSubheader() const;
 
     //! Set the subheader
     void setSubheader(nitf::LabelSubheader & value);
 
     //! Get the offset
-    nitf::Uint64 getOffset() const;
+    uint64_t getOffset() const;
 
     //! Set the offset
-    void setOffset(nitf::Uint64 value);
+    void setOffset(uint64_t value);
 
     //! Get the end
-    nitf::Uint64 getEnd() const;
+    uint64_t getEnd() const;
 
     //! Set the end
-    void setEnd(nitf::Uint64 value);
+    void setEnd(uint64_t value);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

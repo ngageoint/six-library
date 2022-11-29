@@ -30,15 +30,16 @@
 
 #include "logging/Setup.h"
 
-std::auto_ptr<logging::Logger>
-logging::setupLogger(const std::string& program, 
+std::unique_ptr<logging::Logger>
+logging::setupLogger(const path& program_, 
                      const std::string& logLevel, 
-                     const std::string& logFile,
+                     const path& logFile_,
                      const std::string& logFormat,
                      size_t logCount,
                      size_t logBytes)
 {
-    std::auto_ptr<logging::Logger> log(new logging::Logger(program));
+    const auto program = program_.string();
+    std::unique_ptr<logging::Logger> log(new logging::Logger(program));
 
     // setup logging level
     std::string lev = logLevel;
@@ -48,8 +49,9 @@ logging::setupLogger(const std::string& program,
                                               logging::LogLevel(lev);
 
     // setup logging formatter
-    std::auto_ptr <logging::Formatter> formatter;
-    std::string file = logFile;
+    std::unique_ptr <logging::Formatter> formatter;
+    const auto logFile = logFile_.string();
+    auto file = logFile;
     str::lower(file);
     if (str::endsWith(file, ".xml"))
     {
@@ -62,7 +64,7 @@ logging::setupLogger(const std::string& program,
     }
     
     // setup logging handler
-    std::auto_ptr < logging::Handler > logHandler;
+    std::unique_ptr<logging::Handler> logHandler;
     if (file.empty() || file == "console")
         logHandler.reset(new logging::StreamHandler());
     else
@@ -73,8 +75,8 @@ logging::setupLogger(const std::string& program,
         if (logBytes > 0)
         {
             logHandler.reset(new logging::RotatingFileHandler(logFile,
-                                                              logBytes,
-                                                              logCount));
+                                                              static_cast<long>(logBytes),
+                                                              static_cast<int>(logCount)));
         }
         // create regular logging to one file
         else
@@ -87,6 +89,5 @@ logging::setupLogger(const std::string& program,
     logHandler->setFormatter(formatter.release());
     log->addHandler(logHandler.release(), true);
 
-    return log;
+    return std::unique_ptr<logging::Logger>(log.release());
 }
-

@@ -61,9 +61,7 @@ public:
      * The polynomial is invalid (i.e. size() will return 0 and order() will
      * throw)
      */
-    OneD()
-    {
-    }
+    OneD() = default;
 
     /*!
      *  A vector of ascending power coefficients (note that
@@ -73,7 +71,7 @@ public:
         mCoef(coef)
     {
         if (mCoef.empty())
-            mCoef.resize(1, (_T)0.0);
+            mCoef.resize(1, static_cast<_T>(0.0));
     }
 
     /*!
@@ -81,20 +79,12 @@ public:
      *  set to zero
      */
     OneD(size_t order) :
-        mCoef(order + 1, (_T)0.0)
+        mCoef(order + 1, static_cast<_T>(0.0))
     {
     }
 
     //! assignment operator
-    OneD& operator=(const OneD& o)
-    {
-        if (&o != this)
-        {
-            mCoef.clear();
-            std::copy(o.mCoef.begin(), o.mCoef.end(), std::back_inserter(mCoef));
-        }
-        return *this;
-    }
+    OneD& operator=(const OneD& o) = default;
 
     /*!
      *  This function allows you to copy the values

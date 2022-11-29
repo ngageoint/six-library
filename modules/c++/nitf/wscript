@@ -1,11 +1,10 @@
 from os.path import join, split, basename, splitext
 
 NAME            = 'nitf'
-MAINTAINER      = 'asylvest@users.sourceforge.net'
-MODULE_DEPS     = 'math mt sys mem io'
-TEST_DEPS       = 'cli'
+MODULE_DEPS     = 'j2k math sio.lite mt sys mem io gsl std'
+TEST_DEPS       = 'j2k cli'
 USELIB          = 'THREAD DL'
-USELIB_LOCAL    = 'nitf-c'
+USELIB_LOCAL    = 'nitf-c j2k-c'
 LANG            = 'c++'
 TEST_FILTER     = 'test_functional.cpp test_handles.cpp ' \
                   'test_mem_source.cpp test_static_plugin.cpp'

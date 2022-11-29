@@ -20,6 +20,9 @@
  *
  */
 
+#include <std/span>
+#include <std/cstddef>
+
 #include <import/io.h>
 #include <mem/BufferView.h>
 #include <sys/Conf.h>
@@ -77,20 +80,36 @@ TEST_CASE(testByteStream)
 
     stream.seek(2, io::Seekable::END);
     TEST_ASSERT_EQ(stream.tell(), 18);
-    TEST_ASSERT_EQ(stream.getSize(), 20);
+    TEST_ASSERT_EQ(stream.getSize(), static_cast<size_t>(20));
 
     stream.write("abcdef");
-    TEST_ASSERT_EQ(stream.getSize(), 24);
+    TEST_ASSERT_EQ(stream.getSize(), static_cast<size_t>(24));
 
-    stream.clear();
-    TEST_ASSERT_EQ(stream.available(), 0);
-    stream.write("test");
-    stream.seek(0, io::Seekable::START);
-    TEST_ASSERT_EQ(stream.available(), 4);
-    sys::byte buf[255];
-    stream.read(buf, 4);
-    buf[4] = 0;
-    TEST_ASSERT_EQ(std::string(buf), "test");
+     const std::string test("test");
+    {
+        stream.clear();
+        TEST_ASSERT_EQ(stream.available(), 0);
+        stream.write(test);
+        stream.seek(0, io::Seekable::START);
+        TEST_ASSERT_EQ(stream.available(), 4);
+        sys::byte buf[255];
+        stream.read(buf, 4);
+        buf[4] = 0;
+        TEST_ASSERT_EQ(std::string(buf), test);
+    }
+    {
+        stream.clear();
+        const std::span<const std::string::value_type> test_span(test.data(), test.size());
+        stream.write(test_span);
+        stream.seek(0, io::Seekable::START);
+        TEST_ASSERT_EQ(stream.available(), 4);
+        std::byte buf[255];
+        stream.read(std::span<std::byte>(buf, 4));
+        buf[4] = std::byte(0);
+        const void* pBuf = buf;
+        auto pStrBuf = static_cast<std::string::const_pointer>(pBuf);
+        TEST_ASSERT_EQ(pStrBuf, test);
+    }
 }
 
 TEST_CASE(testProxyOutputStream)
@@ -115,11 +134,11 @@ TEST_CASE(testCountingOutputStream)
 TEST_CASE(testBufferViewStream)
 {
     {
-        mem::BufferView<sys::ubyte> bufferView(NULL, 0);
+        mem::BufferView<sys::ubyte> bufferView(nullptr, 0);
         io::BufferViewStream<sys::ubyte> stream(bufferView);
         TEST_ASSERT_EQ(stream.tell(), 0);
         TEST_ASSERT_EQ(stream.available(), 0);
-        TEST_ASSERT_EQ(stream.get(), NULL);
+        TEST_ASSERT_NULL(stream.get());
     }
     {
         std::vector<sys::ubyte> data(4);
@@ -133,11 +152,13 @@ TEST_CASE(testBufferViewStream)
         TEST_ASSERT_EQ(stream.available(), 4);
 
         std::vector<sys::ubyte> output(3);
-        TEST_ASSERT_EQ(stream.read(&output[0], 2), 2);
+        auto result = stream.read(&output[0], 2);
+        TEST_ASSERT_EQ(result, 2);
         TEST_ASSERT_EQ(stream.tell(), 2);
         TEST_ASSERT_EQ(stream.available(), 2);
         stream.seek(1, io::Seekable::CURRENT);
-        TEST_ASSERT_EQ(stream.read(&output[2], 1), 1);
+        result = stream.read(&output[2], 1);
+        TEST_ASSERT_EQ(result, 1);
         TEST_ASSERT_EQ(output[0], 2);
         TEST_ASSERT_EQ(output[1], 4);
         TEST_ASSERT_EQ(output[2], 9);
@@ -170,11 +191,13 @@ TEST_CASE(testBufferViewIntStream)
     io::BufferViewStream<int> stream(bufferView);
     std::vector<int> output(3);
 
-    TEST_ASSERT_EQ(stream.read(&output[0], 2), 2);
-    TEST_ASSERT_EQ(stream.tell(), 2 * sizeof(int));
-    TEST_ASSERT_EQ(stream.available(), 2 * sizeof(int));
+    auto result = stream.read(&output[0], 2);
+    TEST_ASSERT_EQ(result, 2);
+    TEST_ASSERT_EQ(stream.tell(), static_cast<sys::Off_T>(2 * sizeof(int)));
+    TEST_ASSERT_EQ(stream.available(), static_cast<sys::Off_T>(2 * sizeof(int)));
     stream.seek(1 * sizeof(int), io::Seekable::CURRENT);
-    TEST_ASSERT_EQ(stream.read(&output[2], 1), 1);
+    result = stream.read(&output[2], 1);
+    TEST_ASSERT_EQ(result, 1);
     TEST_ASSERT_EQ(output[0], 2);
     TEST_ASSERT_EQ(output[1], 4);
     TEST_ASSERT_EQ(output[2], 9);
@@ -190,8 +213,9 @@ TEST_CASE(testBufferViewIntStream)
     // Truncate properly if we ask for more elements than there are
     ::memset(&output[0], 0, output.size() * sizeof(output[0]));
     stream.seek(3 * sizeof(int), io::Seekable::START);
-    TEST_ASSERT_EQ(stream.read(&output[0], 2), 1);
-    TEST_ASSERT_EQ(stream.tell(), 4 * sizeof(int));
+    result = stream.read(&output[0], 2);
+    TEST_ASSERT_EQ(result, 1);
+    TEST_ASSERT_EQ(stream.tell(), static_cast<sys::Off_T>(4 * sizeof(int)));
     TEST_ASSERT_EQ(output[0], 9);
     TEST_ASSERT_EQ(output[1], 0);
 }
@@ -287,7 +311,7 @@ TEST_CASE(testRotateReset)
     try
     {
         out.write("0");
-        TEST_FAIL("Stream is closed; should throw.");
+        TEST_FAIL_MSG("Stream is closed; should throw.");
     }
     catch(except::Exception&)
     {
@@ -296,8 +320,7 @@ TEST_CASE(testRotateReset)
     cleanupFiles( outFile);
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testStringStream);
     TEST_CHECK(testByteStream);
     TEST_CHECK(testProxyOutputStream);
@@ -307,4 +330,4 @@ int main(int, char**)
     TEST_CHECK(testRotate);
     TEST_CHECK(testNeverRotate);
     TEST_CHECK(testRotateReset);
-}
+    )

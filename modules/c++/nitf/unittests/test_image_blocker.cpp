@@ -27,8 +27,6 @@
 
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testSingleSegmentNoLeftovers)
 {
     // 4 rows of blocks and 5 cols of blocks
@@ -57,7 +55,7 @@ TEST_CASE(testSingleSegmentNoLeftovers)
                    NUM_OUTPUT_PIXELS * sizeof(size_t));
 
     std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
-    blocker.block(&input[0], 0, NUM_ROWS, &output[0]);
+    blocker.block(input.data(), 0, NUM_ROWS, output.data());
 
     for (size_t rowBlock = 0, idx = 0, rowOffset = 1;
          rowBlock < 4;
@@ -113,7 +111,7 @@ TEST_CASE(testSingleSegmentPadCols)
                    NUM_OUTPUT_PIXELS * sizeof(size_t));
 
     std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
-    blocker.block(&input[0], 0, NUM_ROWS, &output[0]);
+    blocker.block(input.data(), 0, NUM_ROWS, output.data());
 
     for (size_t rowBlock = 0, idx = 0, rowOffset = 1;
          rowBlock < 4;
@@ -169,7 +167,7 @@ TEST_CASE(testSingleSegmentPadRowsAndPadCols)
                    NUM_OUTPUT_PIXELS * sizeof(size_t));
 
     std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
-    blocker.block(&input[0], 0, NUM_ROWS, &output[0]);
+    blocker.block(input.data(), 0, NUM_ROWS, output.data());
 
     for (size_t rowBlock = 0, idx = 0, rowOffset = 1;
          rowBlock < 2;
@@ -233,7 +231,7 @@ TEST_CASE(testMultipleSegmentsNoLeftovers)
                    NUM_OUTPUT_PIXELS * sizeof(size_t));
 
     std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
-    blocker.block(&input[0], 0, NUM_ROWS, &output[0]);
+    blocker.block(input.data(), 0, NUM_ROWS, output.data());
 
     for (size_t rowBlock = 0, idx = 0, rowOffset = 1;
          rowBlock < 4;
@@ -295,7 +293,7 @@ TEST_CASE(testMultipleSegmentsPartialRowsOnSegmentBoundaries)
                    NUM_OUTPUT_PIXELS * sizeof(size_t));
 
     std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
-    blocker.block(&input[0], 0, NUM_ROWS, &output[0]);
+    blocker.block(input.data(), 0, NUM_ROWS, output.data());
 
     for (size_t rowBlock = 0, idx = 0, imageRowBase = 0;
          rowBlock < 5;
@@ -371,7 +369,7 @@ TEST_CASE(testMultipleSegmentsPartialRowsOnSegmentBoundariesWithPadCols)
                    NUM_OUTPUT_PIXELS * sizeof(size_t));
 
     std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
-    blocker.block(&input[0], 0, NUM_ROWS, &output[0]);
+    blocker.block(input.data(), 0, NUM_ROWS, output.data());
 
     for (size_t rowBlock = 0, idx = 0, imageRowBase = 0;
          rowBlock < 5;
@@ -448,7 +446,7 @@ TEST_CASE(testBlockPartialImage)
                    NUM_OUTPUT_PIXELS * sizeof(size_t));
 
     std::vector<size_t> output(NUM_OUTPUT_PIXELS, 99999);
-    blocker.block(&input[0], START_ROW, NUM_ROWS_TO_BLOCK, &output[0]);
+    blocker.block(input.data(), START_ROW, NUM_ROWS_TO_BLOCK, output.data());
 
     for (size_t rowBlock = 0, idx = 0, rowOffset = BASE_VAL;
          rowBlock < 3;
@@ -475,10 +473,11 @@ TEST_CASE(testBlockPartialImage)
         }
     }
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
+    (void)argc;
+    (void)argv;
+
     TEST_CHECK(testSingleSegmentNoLeftovers);
     TEST_CHECK(testSingleSegmentPadCols);
     TEST_CHECK(testSingleSegmentPadRowsAndPadCols);
@@ -486,6 +485,4 @@ int main(int /*argc*/, char** /*argv*/)
     TEST_CHECK(testMultipleSegmentsPartialRowsOnSegmentBoundaries);
     TEST_CHECK(testMultipleSegmentsPartialRowsOnSegmentBoundariesWithPadCols);
     TEST_CHECK(testBlockPartialImage);
-
-    return 0;
-}
+    )

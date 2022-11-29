@@ -90,7 +90,7 @@ char *makeBandName(const char *rootFile, const char* segment, int segmentNum, in
             file[pos] = '_';
         }
     }
-    strcat(file, ".man");
+    nrt_strcat_s(file, NITF_MAX_PATH, ".man");
     printf("File: %s\n", file);
     return file;
 }
@@ -435,14 +435,14 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
                              int imageNumber, nitf_Error * error)
 {
     char *file;
-    nitf_Uint32 nBits, nBands, xBands, nRows, nColumns;
+    uint32_t nBits, nBands=0, xBands, nRows, nColumns;
     size_t subimageSize;
     nitf_SubWindow *subimage;
     unsigned int i;
     int padded;
-    nitf_Uint8 **buffer = NULL;
-    nitf_Uint32 band;
-    nitf_Uint32 *bandList = NULL;
+    uint8_t **buffer = NULL;
+    uint32_t band;
+    uint32_t *bandList = NULL;
 
     NITF_TRY_GET_UINT32(segment->subheader->numBitsPerPixel, &nBits,
                         error);
@@ -454,9 +454,9 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
     NITF_TRY_GET_UINT32(segment->subheader->numCols, &nColumns, error);
     subimageSize = nRows * nColumns * NITF_NBPP_TO_BYTES(nBits);
 
-    buffer = (nitf_Uint8 **) malloc(8 * nBands);
+    buffer = (uint8_t **) malloc(8 * nBands);
     band = 0;
-    bandList = (nitf_Uint32 *) malloc(sizeof(nitf_Uint32 *) * nBands);
+    bandList = (uint32_t *) malloc(sizeof(uint32_t *) * nBands);
 
     subimage = nitf_SubWindow_construct(error);
     assert(subimage);
@@ -474,7 +474,7 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
     assert(buffer);
     for (i = 0; i < nBands; i++)
     {
-        buffer[i] = (nitf_Uint8 *) malloc(subimageSize);
+        buffer[i] = (uint8_t *) malloc(subimageSize);
         assert(buffer[i]);
     }
     if (!nitf_ImageReader_read

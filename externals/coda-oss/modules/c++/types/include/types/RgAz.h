@@ -27,6 +27,8 @@
 #include <cmath>
 #include <utility>
 
+#include "gsl/gsl.h"
+
 namespace types
 {
 
@@ -41,20 +43,27 @@ namespace types
  *  sensor independent XML formats, this will pretty much
  *  always be the case.
  */
-template<typename T> struct RgAz
+template<typename T> class RgAz
 {
-    T rg;
-    T az;
+    template <typename U, typename Other_T>
+    static U cast(const Other_T& t)
+    {
+        // return static_cast<T>(t);
+        return gsl::narrow_cast<U>(t);
+    }
 
-    RgAz() {}
+    public:
+    T rg{};
+    T az{};
 
-    RgAz(T r, T c) :
-        rg(r), az(c) {}
+    RgAz() = default;
+    RgAz(const T& r, const T& c) noexcept : rg(r), az(c) { }
+    RgAz(T&& r, T&& c) noexcept : rg(std::move(r)), az(std::move(c)) { }
 
     template<typename Other_T> RgAz(const RgAz<Other_T>& p)
     {
-        rg = (T)p.rg;
-        az = (T)p.az;
+        rg = cast<T>(p.rg);
+        az =  cast<T>(p.az);
     }
 
     RgAz(const std::pair<T, T>& p)
@@ -65,10 +74,11 @@ template<typename T> struct RgAz
 
     template<typename Other_T> RgAz& operator=(const RgAz<Other_T>& p)
     {
-        if (this != (RgAz*)&p)
+        const void* pOther = &p;
+        if (this != static_cast<const RgAz*>(pOther))
         {
-            rg = (T)p.rg;
-            az = (T)p.az;
+            rg =  cast<T>(p.rg);
+            az =  cast<T>(p.az);
         }
         return *this;
     }
@@ -83,8 +93,8 @@ template<typename T> struct RgAz
     
     template<typename Other_T> RgAz& operator+=(const RgAz<Other_T>& p)
     {
-        rg += (T)p.rg;
-        az += (T)p.az;
+        rg +=  cast<T>(p.rg);
+        az +=  cast<T>(p.az);
         return *this;
     }
 
@@ -96,8 +106,8 @@ template<typename T> struct RgAz
 
     template<typename Other_T> RgAz& operator*=(const RgAz<Other_T>& p)
     {
-        rg *= (T)p.rg;
-        az *= (T)p.az;
+        rg *=  cast<T>(p.rg);
+        az *=  cast<T>(p.az);
         return *this;
     }
 
@@ -110,8 +120,8 @@ template<typename T> struct RgAz
     
     template<typename Other_T> RgAz& operator-=(const RgAz<Other_T>& p)
     {
-        rg -= (T)p.rg;
-        az -= (T)p.az;
+        rg -=  cast<T>(p.rg);
+        az -=  cast<T>(p.az);
         return *this;
     }
     
@@ -123,8 +133,8 @@ template<typename T> struct RgAz
 
     template<typename Other_T> RgAz& operator/=(const RgAz<Other_T>& p)
     {
-        rg /= (T)p.rg;
-        az /= (T)p.az;
+        rg /=  cast<T>(p.rg);
+        az /=  cast<T>(p.az);
         return *this;
     }
     
@@ -207,14 +217,14 @@ template<typename T> struct RgAz
 template <>
 inline bool RgAz<float>::operator==(const RgAz<float>& p) const
 {
-    float eps = std::numeric_limits<float>::epsilon();
+    constexpr auto eps = std::numeric_limits<float>::epsilon();
     return std::abs(rg - p.rg) < eps &&
            std::abs(az - p.az) < eps;
 }
 template <>
 inline bool RgAz<double>::operator==(const RgAz<double>& p) const
 {
-    double eps = std::numeric_limits<double>::epsilon();
+    constexpr auto eps = std::numeric_limits<double>::epsilon();
     return std::abs(rg - p.rg) < eps &&
            std::abs(az - p.az) < eps;
 }

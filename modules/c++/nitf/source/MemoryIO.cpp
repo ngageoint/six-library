@@ -24,11 +24,15 @@
 
 namespace nitf
 {
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 26408) // Avoid malloc() and free(), prefer the nothrow version of new with delete (r.10).
+#endif
 nitf_IOInterface* MemoryIO::create(void* buffer,
                                    size_t size,
                                    bool adopt)
 {
-    nitf_Error error;
+    nitf_Error error{};
     nitf_IOInterface* const ioInterface = nitf_BufferAdapter_construct(
             static_cast<char*>(buffer), size, adopt, &error);
 
@@ -53,6 +57,10 @@ MemoryIO::MemoryIO(size_t capacity) :
     //       NRT_MALLOC().
     setManaged(false);
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 MemoryIO::MemoryIO(void* buffer, size_t size, bool adopt)
   : IOInterface(create(buffer, size, adopt))

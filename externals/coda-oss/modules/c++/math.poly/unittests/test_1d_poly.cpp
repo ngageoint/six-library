@@ -21,14 +21,16 @@
  */
 
 #include <stdlib.h>
+#include <tuple>
 
 #include <math/poly/OneD.h>
 #include "TestCase.h"
 
-namespace
-{
 double getRand()
 {
+    static const auto call_srand = [](){ srand(176); return true; };
+    static auto srand_called = call_srand();
+    std::ignore = srand_called;
     return (50.0 * rand() / RAND_MAX - 25.0);
 }
 
@@ -81,11 +83,11 @@ TEST_CASE(testTruncateTo)
     math::poly::OneD<double> poly(5);
     for (size_t ii = 0, coeff = 10; ii <= poly.order(); ++ii, coeff += 10)
     {
-        poly[ii] = coeff;
+        poly[ii] = static_cast<double>(coeff);
     }
 
     const math::poly::OneD<double> truncatedPoly = poly.truncateTo(2);
-    TEST_ASSERT_EQ(truncatedPoly.order(), 2);
+    TEST_ASSERT_EQ(truncatedPoly.order(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(truncatedPoly[0], 10.0);
     TEST_ASSERT_EQ(truncatedPoly[1], 20.0);
     TEST_ASSERT_EQ(truncatedPoly[2], 30.0);
@@ -96,15 +98,17 @@ TEST_CASE(testTruncateToNonZeros)
     math::poly::OneD<double> poly(5);
     for (size_t ii = 0, coeff = 10; ii <= poly.order(); ++ii, coeff += 10)
     {
-        poly[ii] = coeff;
+        poly[ii] = static_cast<double>(coeff);
     }
 
     // Shouldn't truncate anything
-    math::poly::OneD<double> truncatedPoly = poly.truncateToNonZeros(0.0);
-    TEST_ASSERT_EQ(truncatedPoly.order(), poly.order());
-    for (size_t ii = 0; ii <= poly.order(); ++ii)
     {
-        TEST_ASSERT_EQ(truncatedPoly[ii], poly[ii]);
+        math::poly::OneD<double> truncatedPoly = poly.truncateToNonZeros(0.0);
+        TEST_ASSERT_EQ(truncatedPoly.order(), poly.order());
+        for (size_t ii = 0; ii <= poly.order(); ++ii)
+        {
+            TEST_ASSERT_EQ(truncatedPoly[ii], poly[ii]);
+        }
     }
 
     // Truncate one piece at a time
@@ -112,13 +116,12 @@ TEST_CASE(testTruncateToNonZeros)
     {
         poly[ord] = 0.0;
         math::poly::OneD<double> truncatedPoly = poly.truncateToNonZeros(0.0);
-        TEST_ASSERT_EQ(truncatedPoly.order(), ord - 1);
+        TEST_ASSERT_EQ(truncatedPoly.order(), static_cast<size_t>(ord - 1));
         for (size_t jj = 0; jj < ord; ++jj)
         {
             TEST_ASSERT_EQ(truncatedPoly[jj], poly[jj]);
         }
     }
-
 }
 
 TEST_CASE(testTransformInput)
@@ -142,13 +145,10 @@ TEST_CASE(testTransformInput)
                                   std::abs(.01 * expectedValue));
     }
 }
-}
 
-int main(int, char**)
-{
-    srand(176);
+TEST_MAIN(
     TEST_CHECK(testScaleVariable);
     TEST_CHECK(testTruncateTo);
     TEST_CHECK(testTruncateToNonZeros);
     TEST_CHECK(testTransformInput);
-}
+    )

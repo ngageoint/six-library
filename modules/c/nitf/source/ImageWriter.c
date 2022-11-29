@@ -29,11 +29,11 @@
  */
 typedef struct _ImageWriterImpl
 {
-    nitf_Uint32 numBitsPerPixel;
-    nitf_Uint32 numImageBands;
-    nitf_Uint32 numMultispectralImageBands;
-    nitf_Uint32 numRows;
-    nitf_Uint32 numCols;
+    uint32_t numBitsPerPixel;
+    uint32_t numImageBands;
+    uint32_t numMultispectralImageBands;
+    uint32_t numRows;
+    uint32_t numCols;
     nitf_ImageSource *imageSource;
     nitf_ImageIO *imageBlocker;
     NRT_BOOL directBlockWrite;
@@ -56,28 +56,66 @@ NITFPRIV(void) ImageWriter_destruct(NITF_DATA * data)
     }
 }
 
+static void free_user_bands(uint8_t** user, size_t numImageBands)
+{
+    if (user != NULL)
+    {
+        size_t band = 0;
+        for (; band < numImageBands; band++)
+        {
+            uint8_t* userBand = user[band];
+            if (userBand != NULL)
+                NITF_FREE(userBand);
+        }
+        NITF_FREE(user);
+    }
+}
+
+static uint8_t** malloc_user_bands(size_t numImageBands, size_t rowSize)
+{
+    uint8_t** user = (uint8_t**)NITF_MALLOC(sizeof(uint8_t*) * numImageBands);
+    if (!user)
+    {
+        return NULL;
+    }
+
+    size_t band;
+    for (band = 0; band < numImageBands; band++)
+    {
+        user[band] = NULL; // initialize all to NULL for CLEANUP
+    }
+    for (band = 0; band < numImageBands; band++)
+    {
+        user[band] = (uint8_t*)NITF_MALLOC(rowSize);
+        if (!user[band])
+        {
+            free_user_bands(user, numImageBands);
+            return NULL;
+        }
+    }
+    return user;
+}
+
 
 NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
                                       nitf_IOInterface* output,
                                       nitf_Error * error)
 {
-    nitf_Uint8 **user = NULL;
-    nitf_Uint8 *userContig = NULL;
-    nitf_Uint32 row, band, block;
-    size_t rowSize, blockSize, numBlocks;
-    nitf_Uint32 numImageBands = 0;
-    nitf_Off offset;
+    uint8_t **user = NULL;
+    uint8_t *userContig = NULL;
+    uint32_t row, band, block;
     nitf_BandSource *bandSrc = NULL;
     nitf_BlockingInfo* blockInfo = NULL;
     nitf_ImageIO* imageIO = NULL;
     ImageWriterImpl *impl = (ImageWriterImpl *) data;
     NITF_BOOL rc = NITF_SUCCESS;
+    int writeComplete = 0;
 
-    numImageBands = impl->numImageBands + impl->numMultispectralImageBands;
-    rowSize = impl->numCols * NITF_NBPP_TO_BYTES(impl->numBitsPerPixel);
+    const uint32_t numImageBands = impl->numImageBands + impl->numMultispectralImageBands;
+    const size_t rowSize = impl->numCols * NITF_NBPP_TO_BYTES(impl->numBitsPerPixel);
 
 
-    offset = nitf_IOInterface_tell(output, error);
+    const nitf_Off offset = nitf_IOInterface_tell(output, error);
     if (!NITF_IO_SUCCESS(offset))
         goto CATCH_ERROR;
 
@@ -87,8 +125,8 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
     if (!nitf_ImageIO_writeSequential(impl->imageBlocker, output, error))
         goto CATCH_ERROR;
 
-    /* Direct block write mode only supported for a single band currently */
-    if(impl->directBlockWrite && numImageBands == 1)
+    /* Direct block write mode only supported for a single band or single block currently */
+    if(impl->directBlockWrite)
     {
         imageIO = impl->imageBlocker;
 
@@ -96,65 +134,59 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
         if (blockInfo == NULL)
             return NITF_FAILURE;
 
-        numBlocks = blockInfo->numBlocksPerRow * blockInfo->numBlocksPerCol;
-        blockSize = blockInfo->length * NITF_NBPP_TO_BYTES(impl->numBitsPerPixel);
+        const size_t numBlocks = ((size_t)blockInfo->numBlocksPerRow) * blockInfo->numBlocksPerCol;
+        const size_t blockSize = blockInfo->length;
 
         nitf_BlockingInfo_destruct(&blockInfo);
 
-        userContig = (nitf_Uint8 *) NITF_MALLOC(sizeof(nitf_Uint8*) * blockSize);
-        if (!userContig)
+        if (numBlocks == 1 || numImageBands == 1)
         {
-            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
-                            NITF_ERR_MEMORY);
-            goto CATCH_ERROR;
-        }
-
-        band = 0;
-
-        /* For each block, read the data and write out as-is without any re-arranging the data
-           Data should be copied into userContig as the underlying block will be discarded
-           with each read */
-        for(block = 0; block < numBlocks; ++block)
-        {
-            bandSrc = nitf_ImageSource_getBand(impl->imageSource,
-                                               band, error);
-            if (bandSrc == NULL)
-                return NITF_FAILURE;
-
-            /* Assumes this will be reading block number 'block' */
-            if (!(*(bandSrc->iface->read)) (bandSrc->data, (char *) userContig,
-                                            (size_t) blockSize, error))
-            {
-                goto CATCH_ERROR;
-
-            }
-
-            if(!nitf_ImageIO_writeBlockDirect(imageIO,
-                                              output,
-                                              userContig,
-                                              block,
-                                              error))
-                goto CATCH_ERROR;
-        }
-    }
-    else
-    {
-        user = (nitf_Uint8 **) NITF_MALLOC(sizeof(nitf_Uint8*) * numImageBands);
-        if (!user)
-        {
-            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
-                            NITF_ERR_MEMORY);
-            goto CATCH_ERROR;
-        }
-        for (band = 0; band < numImageBands; band++)
-        {
-            user[band] = (nitf_Uint8 *) NITF_MALLOC(rowSize);
-            if (!user[band])
+            userContig = (nitf_Uint8 *) NITF_MALLOC(sizeof(nitf_Uint8*) * blockSize);
+            if (!userContig)
             {
                 nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
                                 NITF_ERR_MEMORY);
                 goto CATCH_ERROR;
             }
+
+            band = 0;
+
+            /* For each block, read the data and write out as-is without any re-arranging the data
+               Data should be copied into userContig as the underlying block will be discarded
+               with each read */
+            for(block = 0; block < numBlocks; ++block)
+            {
+                bandSrc = nitf_ImageSource_getBand(impl->imageSource,
+                                                   band, error);
+                if (bandSrc == NULL)
+                    return NITF_FAILURE;
+
+                /* Assumes this will be reading block number 'block' */
+                if (!(*(bandSrc->iface->read)) (bandSrc->data, (char *) userContig,
+                                                (size_t) blockSize, error))
+                {
+                    goto CATCH_ERROR;
+
+                }
+
+                if(!nitf_ImageIO_writeBlockDirect(imageIO,
+                                                  output,
+                                                  userContig,
+                                                  block,
+                                                  error))
+                    goto CATCH_ERROR;
+            }
+            writeComplete = 1;
+        }
+    }
+    if (writeComplete == 0)
+    {
+        user = malloc_user_bands(numImageBands, rowSize);
+        if (!user)
+        {
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
+                            NITF_ERR_MEMORY);
+            goto CATCH_ERROR;
         }
 
         for (row = 0; row < impl->numRows; ++row)
@@ -187,16 +219,12 @@ CATCH_ERROR:
     rc = NITF_FAILURE;
 
 CLEANUP:
-    for (band = 0; band < numImageBands; band++)
-    {
-        if (user != NULL && user[band] != NULL)
-            NITF_FREE(user[band]);
-    }
-    NITF_FREE(user);
+    free_user_bands(user, numImageBands);
     if(userContig != NULL)
         NITF_FREE(userContig);
     return rc;
 }
+
 
 NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
     nitf_ImageSubheader *subheader,
@@ -311,7 +339,7 @@ NITFAPI(NITF_BOOL) nitf_ImageWriter_setDirectBlockWrite(nitf_ImageWriter *imageW
         nitf_Error *error)
 {
     ImageWriterImpl *impl;
-    nitf_Uint32 numImageBands;
+    uint32_t numImageBands;
 
     impl = (ImageWriterImpl*)imageWriter->data;
     numImageBands = impl->numImageBands + impl->numMultispectralImageBands;
@@ -327,8 +355,8 @@ NITFAPI(NITF_BOOL) nitf_ImageWriter_setDirectBlockWrite(nitf_ImageWriter *imageW
 }
 
 NITFAPI(NITF_BOOL) nitf_ImageWriter_setPadPixel(nitf_ImageWriter* imageWriter,
-                                                nitf_Uint8* value,
-                                                nitf_Uint32 length,
+                                                uint8_t* value,
+                                                uint32_t length,
                                                 nitf_Error* error)
 {
     ImageWriterImpl *impl = (ImageWriterImpl*)imageWriter->data;

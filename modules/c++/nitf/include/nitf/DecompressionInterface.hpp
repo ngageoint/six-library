@@ -22,7 +22,9 @@
 
 #ifndef __NITF_DECOMPRESSION_INTERFACE_HPP__
 #define __NITF_DECOMPRESSION_INTERFACE_HPP__
+#pragma once
 
+#include <nitf/coda-oss.hpp>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/IOInterface.hpp>
 #include <nitf/BlockingInfo.hpp>
@@ -42,7 +44,7 @@
 NITF_CXX_GUARD \
 static const char* _DECOMPRESSION_ID##_ident[] = \
 {\
-    NITF_PLUGIN_DECOMPRESSION_KEY, #_DECOMPRESSION_ID, NULL\
+    NITF_PLUGIN_DECOMPRESSION_KEY, #_DECOMPRESSION_ID, nullptr\
 };\
 \
 static nitf_DecompressionInterface _DECOMPRESSION_ID##_INTERFACE_TABLE = {\
@@ -70,7 +72,7 @@ NITFAPI(void*) _DECOMPRESSION_ID##_construct(char* decompressionType,\
                         "Unsupported decompression type",\
                         NITF_CTXT,\
                         NITF_ERR_DECOMPRESSION);\
-        return NULL;\
+        return nullptr;\
     }\
     return &_DECOMPRESSION_ID##_INTERFACE_TABLE;\
 }\
@@ -93,22 +95,25 @@ public:
     //  and call the nitf_DecompressionControl of your choice
     static NITF_BOOL adapterStart(nitf_DecompressionControl* object,
                                   nitf_IOInterface* io,
-                                  nitf_Uint64 offset,
-                                  nitf_Uint64 fileLength,
+                                  uint64_t offset,
+                                  uint64_t fileLength,
                                   nitf_BlockingInfo* blockingDefinition,
-                                  nitf_Uint64* blockMask, 
+                                  uint64_t* blockMask, 
                                   nitf_Error* error);
 
-    static nitf_Uint8* adapterReadBlock(nitf_DecompressionControl* object,
-                                        nitf_Uint32 blockNumber, 
-                                        nitf_Uint64* blockSize, 
+    static uint8_t* adapterReadBlock(nitf_DecompressionControl* object,
+                                        uint32_t blockNumber, 
+                                        uint64_t* blockSize, 
                                         nitf_Error* error);
 
     static NITF_BOOL adapterFreeBlock(nitf_DecompressionControl* object,
-                                      nitf_Uint8* block, 
+                                      uint8_t* block, 
+                                      nitf_Error* error);
+    static NITF_BOOL adapterFreeBlock(nitf_DecompressionControl* object,
+                                      std::byte* block, 
                                       nitf_Error* error);
 
-    static void adapterDestroy(nitf_DecompressionControl** object);
+    static void adapterDestroy(nitf_DecompressionControl** object) noexcept;
 
 };
 
@@ -116,22 +121,26 @@ public:
  *  \class Compressor
  *  \brief This is the c++ interface for nitf_CompressionControl
  */
-class Decompressor
+struct Decompressor
 {
-public:
-    Decompressor() {}
+    Decompressor() = default;
     virtual ~Decompressor() {}
 
     virtual void start(nitf::IOInterface& io,
-                       nitf::Uint64 offset,
-                       nitf::Uint64 fileLength,
+                       uint64_t offset,
+                       uint64_t fileLength,
                        nitf::BlockingInfo& blockingDefinition,
-                       nitf::Uint64* blockMask) = 0;
+                       uint64_t* blockMask) = 0;
 
-    virtual nitf_Uint8* readBlock(nitf::Uint32 blockNumber, 
-                                  nitf::Uint64* blockSize) = 0;
+    virtual uint8_t* readBlock(uint32_t blockNumber,
+                                  uint64_t* blockSize) = 0;
 
-    virtual void freeBlock(nitf::Uint8* block) = 0;
+    virtual void freeBlock(uint8_t* block) = 0;
+    virtual void freeBlock(std::byte* block)
+    {
+        void* block_ = block;
+        freeBlock(static_cast<uint8_t*>(block_));
+    }
 };
 
 }

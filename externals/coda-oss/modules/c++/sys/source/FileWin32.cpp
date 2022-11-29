@@ -20,7 +20,7 @@
  *
  */
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 
 #include <limits>
 #include <cmath>
@@ -41,13 +41,16 @@ void sys::File::create(const std::string& str,
         creationFlags = ~sys::File::TRUNCATE & creationFlags;
     }
 
+    const auto dwDesiredAccess = static_cast<DWORD>(accessFlags);
+    const auto dwCreationDisposition = static_cast<DWORD>(creationFlags);
     mHandle = CreateFile(str.c_str(),
-                         accessFlags,
-                         FILE_SHARE_READ, NULL,
-                         creationFlags,
-                         FILE_ATTRIBUTE_NORMAL, NULL);
-
-    if (mHandle == SYS_INVALID_HANDLE)
+                         dwDesiredAccess,
+                         FILE_SHARE_READ,
+                         nullptr /*lpSecurityAttributes*/,
+                         dwCreationDisposition,
+                         FILE_ATTRIBUTE_NORMAL,
+                         static_cast<HANDLE>(0) /*hTemplateFile*/);
+    if (mHandle == INVALID_HANDLE_VALUE)
     {
         throw sys::SystemException(Ctxt(FmtX("Error opening file: [%s]", str.c_str())));
     }
@@ -126,12 +129,16 @@ sys::Off_T sys::File::seekTo(sys::Off_T offset, int whence)
 {
     /* Ahhh!!! */
     LARGE_INTEGER largeInt;
-    LARGE_INTEGER toWhere;
     largeInt.QuadPart = offset;
-    if (!SetFilePointerEx(mHandle, largeInt, &toWhere, whence))
-        throw sys::SystemException(Ctxt("SetFilePointer failed"));
+    LARGE_INTEGER newFilePointer;
+    const auto dwMoveMethod = static_cast<DWORD>(whence);
+    if (SetFilePointerEx(mHandle, largeInt, &newFilePointer, dwMoveMethod) == 0)
+    {
+        const auto dwLastError = GetLastError();
+        throw sys::SystemException(Ctxt("SetFilePointer failed: GetLastError() = " + str::toString(dwLastError)));
+    }
 
-    return (sys::Off_T) toWhere.QuadPart;
+    return static_cast<sys::Off_T>(newFilePointer.QuadPart);
 }
 
 sys::Off_T sys::File::length()

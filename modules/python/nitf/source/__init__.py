@@ -485,6 +485,10 @@ class Field:
         error = Error()
         retval = nitropy.nitf_Field_setString(self.ref, str(data), error)
 
+    def getRawData(self):
+        error=  Error()
+        return nitropy.py_Field_getRawData(self.ref, error)
+
     def setRawData(self, data):
         error = Error()
         retval = nitropy.py_Field_setRawData(self.ref, data, len(data), error)
@@ -752,6 +756,9 @@ class ImageSubheader(Header):
     def getBandInfo(self, index):
         return BandInfo(nitropy.nitf_ImageSubheader_getBandInfo(self.ref, index, self.error))
 
+    def clone(self):
+        return ImageSubheader(nitropy.nitf_ImageSubheader_clone(self.ref, self.error))
+
     def __iter__(self):
         fields = []
         fields.extend([
@@ -833,12 +840,16 @@ class GraphicSubheader(Header):
         ])
         return fields.__iter__()
 
+    def clone(self):
+        return GraphicSubheader(nitropy.nitf_GraphicSubheader_clone(self.ref, self.error))
+
     def getXHD(self):
         return Extensions(self.ref.extendedSection)
 
 #NITF LabelSubheader class
 class LabelSubheader(Header):
-    pass
+    def clone(self):
+        return LabelSubheader(nitropy.nitf_LabelSubheader_clone(self.ref, self.error))
 
 
 #NITF TextSubheader class
@@ -859,6 +870,9 @@ class TextSubheader(Header):
             ('TXSOFL', self['extendedHeaderOverflow']),
         ])
         return fields.__iter__()
+
+    def clone(self):
+        return TextSubheader(nitropy.nitf_TextSubheader_clone(self.ref, self.error))
 
     def getXHD(self):
         return Extensions(self.ref.extendedSection)
@@ -893,9 +907,13 @@ class DESubheader(Header):
     def getUDHD(self):
         return Extensions(self.ref.userDefinedSection)
 
+    def clone(self):
+        return DESubheader(nitropy.nitf_DESubheader_clone(self.ref, self.error))
+
 #NITF RESubheader class
 class RESubheader(Header):
-    pass
+    def clone(self):
+        return RESubheader(nitropy.nitf_RESubheader_clone(self.ref, self.error))
 
 #NITF FileSecurity class
 class FileSecurity(FieldHeader):
@@ -1025,6 +1043,9 @@ class TRE:
                     yield pair.key, field
                     continue
             break
+
+    def clone(self):
+        return TRE(nitropy.py_TRE_clone(self.ref, self.error))
 
     def getField(self, name):
         field = nitropy.nitf_TRE_getField(self.ref, name)
@@ -1240,7 +1261,7 @@ class SegmentWriter:
 class Writer:
     def __init__(self):
         self.error = Error()
-        self.ref = nitropy.nitf_Writer_construct(self.error)
+        self.ref = nitropy.py_nitf_Writer_construct(self.error)
         if not self.ref:
             raise Exception('Unable to create Writer')
         self._imageWriters, self._graphicWriters = [], []
@@ -1249,7 +1270,7 @@ class Writer:
     def __del__(self):
         logging.debug('destruct Writer')
         if self.io: self.io.close()
-        if self.ref: nitropy.nitf_Writer_destruct(self.ref)
+        if self.ref: nitropy.py_nitf_Writer_destruct(self.ref)
 
     def newImageWriter(self, imagenum, options = None):
         writer = nitropy.nitf_Writer_newImageWriter(self.ref, imagenum, options, self.error)
@@ -1271,7 +1292,7 @@ class Writer:
 
     def prepare(self, record, handle):
         self.io = handle #must set this so it doesn't get ref-counted away
-        return nitropy.nitf_Writer_prepare(self.ref, record.ref, self.io.ref, self.error) == 1
+        return nitropy.py_nitf_Writer_prepare(self.ref, record.ref, self.io.ref, self.error) == 1
 
     def write(self):
         if not nitropy.nitf_Writer_write(self.ref, self.error) == 1:
@@ -1300,9 +1321,7 @@ class PluginRegistry:
             raise Exception('Unable to load the directory: %s (error=%s)' % (dirname, error.message))
 
     def canHandleTRE(self, tre_name):
-        has_err = 0
-        val = nitropy.nitf_PluginRegistry_retrieveTREHandler(self.ref, tre_name, has_err, self.error)
-        return val
+        return nitropy.py_nitf_PluginRegistry_canRetrieveTREHandler(self.ref, tre_name, self.error)
 
 
 def read(filename):

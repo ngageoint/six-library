@@ -37,6 +37,7 @@
 #include "nitf/FileSecurity.h"
 #include "nitf/ComponentInfo.h"
 #include "nitf/Extensions.h"
+#include "nitf/FieldDescriptor.h"
 
 #define NITF_FHDR_SZ   4
 #define NITF_FVER_SZ   5

@@ -21,11 +21,14 @@
  */
 
 
-#ifndef __SYS_MUTEX_INTERFACE_H__
-#define __SYS_MUTEX_INTERFACE_H__
+#ifndef CODA_OSS_sys_MutexInterface_h_INCLUDED_
+#define CODA_OSS_sys_MutexInterface_h_INCLUDED_
+#pragma once
 
 
 #include <typeinfo>
+
+#include "config/Exports.h"
 #include "sys/SystemException.h"
 #include "sys/Dbg.h"
 
@@ -39,7 +42,7 @@ namespace sys
  *  This class defines the interface for any mutex in any package that
  *  is wrapped herein
  */
-class MutexInterface
+class CODA_OSS_API MutexInterface
 {
 public:
     //!  Constructor
@@ -60,6 +63,9 @@ public:
 
     }
 
+    MutexInterface(const MutexInterface&) = delete;
+    MutexInterface& operator=(const MutexInterface&) = delete;
+
     /*!
      *  Lock the mutex up.
      */
@@ -74,4 +80,4 @@ public:
 
 }
 
-#endif
+#endif  // CODA_OSS_sys_MutexInterface_h_INCLUDED_

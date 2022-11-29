@@ -23,9 +23,9 @@
 #include <import/nrt.h>
 #include <import/j2k.h>
 
-NRT_BOOL writeFile(nrt_Uint32 x0, nrt_Uint32 y0,
-                   nrt_Uint32 x1, nrt_Uint32 y1, nrt_Uint8 *buf,
-                   nrt_Uint64 bufSize, nrt_Error *error)
+NRT_BOOL writeFile(uint32_t x0, uint32_t y0,
+                   uint32_t x1, uint32_t y1, uint8_t *buf,
+                   uint64_t bufSize, nrt_Error *error)
 {
     NRT_BOOL rc = NRT_SUCCESS;
     char filename[NRT_MAX_PATH];
@@ -66,12 +66,12 @@ int main(int argc, char **argv)
     nrt_Error error;
     j2k_Reader *reader = NULL;
     j2k_Container *container = NULL;
-    nrt_Uint64 bufSize;
-    nrt_Uint32 x0 = 0;
-    nrt_Uint32 y0 = 0;
-    nrt_Uint32 x1 = 0;
-    nrt_Uint32 y1 = 0;
-    nrt_Uint8 *buf = NULL;
+    uint64_t bufSize;
+    uint32_t x0 = 0;
+    uint32_t y0 = 0;
+    uint32_t x1 = 0;
+    uint32_t y1 = 0;
+    uint8_t *buf = NULL;
 
     for (argIt = 1; argIt < argc; ++argIt)
     {
@@ -111,9 +111,11 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    if (!(reader = j2k_Reader_open(fname, &error)))
+    reader = j2k_Reader_open(fname, &error);
+    if (!reader)
         goto CATCH_ERROR;
-    if (!(container = j2k_Reader_getContainer(reader, &error)))
+    container = j2k_Reader_getContainer(reader, &error);
+    if (!container)
         goto CATCH_ERROR;
 
     if (x1 == 0)

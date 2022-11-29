@@ -22,12 +22,53 @@
 
 #include "nitf/SegmentSource.hpp"
 
-nitf::SegmentMemorySource::SegmentMemorySource(const char * data, size_t size,
+#include <gsl/gsl.h>
+
+#include "nitf/System.hpp"
+
+nitf::SegmentMemorySource::SegmentMemorySource(const sys::byte* data, nitf::Off size,
         nitf::Off start, int byteSkip, bool copyData)
 {
     setNative(nitf_SegmentMemorySource_construct(data, size, start, byteSkip,
     		                                     copyData, &error));
     setManaged(false);
+}
+
+namespace nitf
+{
+SegmentMemorySource::SegmentMemorySource(const std::string& data,
+    nitf::Off start, int byteSkip, bool copyData)
+    : SegmentMemorySource(data.c_str(), gsl::narrow<nitf::Off>(data.size()), start, byteSkip, copyData)
+{
+}
+SegmentMemorySource::SegmentMemorySource(const std::span<const sys::byte>& data, nitf::Off start,
+    int byteSkip, bool copyData)
+    : SegmentMemorySource(data.data(), gsl::narrow<nitf::Off>(data.size()), start, byteSkip, copyData)
+{
+}
+
+static const sys::byte* data(const std::span<const std::byte>& data) noexcept
+{
+    const void* pData = data.data();
+    return static_cast<const sys::byte*>(pData);
+}
+SegmentMemorySource::SegmentMemorySource(const std::span<const std::byte>& s, nitf::Off start,
+    int byteSkip, bool copyData)
+    : SegmentMemorySource(data(s), gsl::narrow<nitf::Off>(s.size()), start, byteSkip, copyData)
+{
+}
+
+SegmentMemorySource::SegmentMemorySource(const std::vector<std::byte>& data,
+    nitf::Off start, int byteSkip, bool copyData)
+    : SegmentMemorySource(std::span<const std::byte>(data.data(), data.size()), start, byteSkip, copyData)
+{
+}
+
+SegmentMemorySource::SegmentMemorySource(const std::vector<sys::byte>& data,
+    nitf::Off start, int byteSkip, bool copyData)
+    : SegmentMemorySource(std::span<const sys::byte>(data.data(), data.size()), start, byteSkip, copyData)
+{
+}
 }
 
 nitf::SegmentFileSource::SegmentFileSource(nitf::IOHandle & io,

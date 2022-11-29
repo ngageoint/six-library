@@ -26,7 +26,7 @@ using namespace nitf;
 
 TextSegment::TextSegment(const TextSegment & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 TextSegment & TextSegment::operator=(const TextSegment & x)
@@ -42,27 +42,23 @@ TextSegment::TextSegment(nitf_TextSegment * x)
     getNativeOrThrow();
 }
 
-TextSegment::TextSegment()
+TextSegment::TextSegment() noexcept(false) : TextSegment(nitf_TextSegment_construct(&error))
 {
-    setNative(nitf_TextSegment_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
-TextSegment::TextSegment(NITF_DATA * x)
+TextSegment::TextSegment(NITF_DATA * x) : TextSegment(static_cast<nitf_TextSegment*>(x))
 {
-    setNative((nitf_TextSegment*)x);
-    getNativeOrThrow();
 }
 
 TextSegment & TextSegment::operator=(NITF_DATA * x)
 {
-    setNative((nitf_TextSegment*)x);
+    setNative(static_cast<nitf_TextSegment*>(x));
     getNativeOrThrow();
     return *this;
 }
 
-nitf::TextSegment TextSegment::clone()
+nitf::TextSegment TextSegment::clone() const
 {
     nitf::TextSegment dolly(
         nitf_TextSegment_clone(getNativeOrThrow(), &error));
@@ -70,9 +66,7 @@ nitf::TextSegment TextSegment::clone()
     return dolly;
 }
 
-TextSegment::~TextSegment(){}
-
-nitf::TextSubheader TextSegment::getSubheader()
+nitf::TextSubheader TextSegment::getSubheader() const
 {
     return nitf::TextSubheader(getNativeOrThrow()->subheader);
 }
@@ -88,22 +82,22 @@ void TextSegment::setSubheader(nitf::TextSubheader & value)
     value.setManaged(true);
 }
 
-nitf::Uint64 TextSegment::getOffset() const
+uint64_t TextSegment::getOffset() const
 {
     return getNativeOrThrow()->offset;
 }
 
-void TextSegment::setOffset(nitf::Uint64 value)
+void TextSegment::setOffset(uint64_t value)
 {
     getNativeOrThrow()->offset = value;
 }
 
-nitf::Uint64 TextSegment::getEnd() const
+uint64_t TextSegment::getEnd() const
 {
     return getNativeOrThrow()->end;
 }
 
-void TextSegment::setEnd(nitf::Uint64 value)
+void TextSegment::setEnd(uint64_t value)
 {
     getNativeOrThrow()->end = value;
 }

@@ -22,6 +22,7 @@
 
 #ifndef __NITF_SEGMENT_READER_HPP__
 #define __NITF_SEGMENT_READER_HPP__
+#pragma once
 
 #include "nitf/SegmentReader.h"
 #include "nitf/Object.hpp"
@@ -41,9 +42,7 @@ namespace nitf
 DECLARE_CLASS(SegmentReader)
 {
 public:
-    SegmentReader()
-    {
-    }
+    SegmentReader() = default;
 
     //! Copy constructor
     SegmentReader(const SegmentReader & x);
@@ -54,7 +53,7 @@ public:
     //! Set native object
     SegmentReader(nitf_SegmentReader * x);
 
-    ~SegmentReader();
+    ~SegmentReader() = default;
 
     /*!
      * \brief nitf_SegmentReader_read - Read segment data
@@ -96,7 +95,7 @@ public:
      *
      * \return The offset from the beginning to the current position is set.
      */
-    nitf::Off tell();
+    nitf::Off tell() const;
 
     /*!
      * \brief getSize - Determine size of the data
@@ -109,10 +108,10 @@ public:
      *
      * \return The offset from the beginning to the current position is set.
      */
-    nitf::Off getSize();
+    nitf::Off getSize() const;
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

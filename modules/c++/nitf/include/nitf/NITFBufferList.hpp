@@ -22,11 +22,16 @@
 
 #ifndef __NITF_BUFFER_LIST_HPP__
 #define __NITF_BUFFER_LIST_HPP__
+#pragma once
 
 #include <stddef.h>
 #include <vector>
+#include <std/span>
+#include <std/cstddef> // std::byte
 
-#include <sys/Conf.h>
+#include "nitf/coda-oss.hpp"
+#include "nitf/System.hpp"
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
@@ -34,12 +39,12 @@ namespace nitf
  * \class NITFBuffer
  * \brief Represents a pointer to raw NITF bytes and its length
  */
-struct NITFBuffer
+struct NITRO_NITFCPP_API NITFBuffer
 {
     /*!
      * Initializes to an empty buffer
      */
-    NITFBuffer();
+    NITFBuffer() = default;
 
     /*!
      * Initializes to the specified pointer and size.  No copy is made and
@@ -49,10 +54,15 @@ struct NITFBuffer
      * \param numBytes The number of bytes of contiguous data this
      * represents
      */
-    NITFBuffer(const void* data, size_t numBytes);
+    NITFBuffer(const void* data, size_t numBytes) noexcept;
 
-    const void* mData;
-    size_t mNumBytes;
+    const void* mData = nullptr;
+    size_t mNumBytes = 0;
+
+    std::span<const std::byte> getBytes() const noexcept
+    {
+        return std::span<const std::byte>(static_cast<const std::byte*>(mData), mNumBytes);
+    }
 };
 
 /*!
@@ -60,7 +70,7 @@ struct NITFBuffer
  * \brief Represents a sequence of buffers which appear in contiguous order
  * in the NITF (the underlying pointers are not contiguous)
  */
-struct NITFBufferList
+struct NITRO_NITFCPP_API NITFBufferList
 {
     //! The buffers
     std::vector<NITFBuffer> mBuffers;
@@ -68,12 +78,12 @@ struct NITFBufferList
     /*!
      * \return The total number of bytes across all the buffers
      */
-    size_t getTotalNumBytes() const;
+    size_t getTotalNumBytes() const noexcept;
 
     /*!
      * \return Whether or not the buffer list is empty
      */
-    bool empty() const
+    bool empty() const noexcept
     {
         return mBuffers.empty();
     }
@@ -81,7 +91,7 @@ struct NITFBufferList
     /*!
      * Clear the buffers
      */
-    void clear()
+    void clear() noexcept
     {
         mBuffers.clear();
     }
@@ -107,7 +117,7 @@ struct NITFBufferList
     template <typename DataT>
     void pushBack(const std::vector<DataT>& data)
     {
-        pushBack(data.empty() ? NULL : &data[0],
+        pushBack(data.empty() ? nullptr : data.data(),
                  data.size() * sizeof(DataT));
     }
 
@@ -162,7 +172,10 @@ struct NITFBufferList
                          size_t blockIdx,
                          std::vector<sys::byte>& scratch,
                          size_t& numBytes) const;
-};
+    const void* getBlock(size_t blockSize,
+                         size_t blockIdx,
+                         std::vector<std::byte>& scratch,
+                         size_t& numBytes) const;};
 }
 
 #endif

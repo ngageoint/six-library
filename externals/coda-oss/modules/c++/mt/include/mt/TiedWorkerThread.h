@@ -25,6 +25,7 @@
 #define __MT_TIED_WORKER_THREAD_H__
 
 #include "mt/CPUAffinityThreadInitializer.h"
+#include "mem/SharedPtr.h"
 
 
 namespace mt
@@ -39,10 +40,10 @@ class TiedWorkerThread : public mt::WorkerThread<Request_T>
 public:
     TiedWorkerThread(
             mt::RequestQueue<Request_T>* requestQueue,
-            std::auto_ptr<CPUAffinityThreadInitializer> cpuAffinityInit =
-                    std::auto_ptr<CPUAffinityThreadInitializer>(NULL)) :
+            std::unique_ptr<CPUAffinityThreadInitializer>&& cpuAffinityInit =
+                    std::unique_ptr<CPUAffinityThreadInitializer>(nullptr)) :
         mt::WorkerThread<Request_T>(requestQueue),
-        mCPUAffinityInit(cpuAffinityInit)
+        mCPUAffinityInit(std::move(cpuAffinityInit))
     {
     }
 
@@ -58,7 +59,7 @@ public:
 
 private:
     TiedWorkerThread();
-    std::auto_ptr<CPUAffinityThreadInitializer> mCPUAffinityInit;
+    std::unique_ptr<CPUAffinityThreadInitializer> mCPUAffinityInit;
 };
 
 }

@@ -63,34 +63,33 @@ public:
     BlockingInfo(nitf_BlockingInfo * x);
 
     //! Constructor
-    BlockingInfo();
+    BlockingInfo() noexcept(false);
 
-    //! Destructor
-    ~BlockingInfo();
+    ~BlockingInfo() = default;
 
     //! Get the number of blocks per row
-    nitf::Uint32 getNumBlocksPerRow() const;
+    uint32_t getNumBlocksPerRow() const;
 
     //! Set the number of blocks per row
-    void setNumBlocksPerRow(nitf::Uint32 value);
+    void setNumBlocksPerRow(uint32_t value);
 
     //! Get the number of blocks per column
-    nitf::Uint32 getNumBlocksPerCol() const;
+    uint32_t getNumBlocksPerCol() const;
 
     //! Set the number of blocks per column
-    void setNumBlocksPerCol(nitf::Uint32 value);
+    void setNumBlocksPerCol(uint32_t value);
 
     //! Get the number of rows per block
-    nitf::Uint32 getNumRowsPerBlock() const;
+    uint32_t getNumRowsPerBlock() const;
 
     //! Set the number of rows per block
-    void setNumRowsPerBlock(nitf::Uint32 value);
+    void setNumRowsPerBlock(uint32_t value);
 
     //! Get the number of columns per block
-    nitf::Uint32 getNumColsPerBlock() const;
+    uint32_t getNumColsPerBlock() const;
 
     //! Set the number of columns per block
-    void setNumColsPerBlock(nitf::Uint32 value);
+    void setNumColsPerBlock(uint32_t value);
 
     //! Get the length
     size_t getLength() const;
@@ -102,7 +101,7 @@ public:
     void print(FILE *file);
 
 private:
-    nitf_Error error;
+    nitf_Error error{};
 };
 
 }

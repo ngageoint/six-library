@@ -25,7 +25,7 @@
 NRTAPI(nrt_HashTable *) nrt_HashTable_construct(int nbuckets, nrt_Error * error)
 {
     int i;
-    int hashSize;
+    size_t hashSize;
 
     /* Create the hash table object itself */
     nrt_HashTable *ht = (nrt_HashTable *) NRT_MALLOC(sizeof(nrt_HashTable));
@@ -87,7 +87,10 @@ NRTAPI(nrt_HashTable *) nrt_HashTable_construct(int nbuckets, nrt_Error * error)
 NRTAPI(void) nrt_HashTable_setPolicy(nrt_HashTable * ht, int policy)
 {
     assert(ht);
-    ht->adopt = policy;
+    if (ht != NULL)
+    {
+        ht->adopt = policy;
+    }
 }
 
 NRTAPI(unsigned int) __NRT_HashTable_defaultHash(nrt_HashTable * ht, const char *key)
@@ -145,13 +148,13 @@ NRTAPI(void) nrt_HashTable_destruct(nrt_HashTable ** ht)
                         {
                             /* Extract the key data, which we KNOW */
                             /* That was dynamically allocated by us */
-                            char *key = pair->key;
+                            const char *key = pair->key;
 
                             /* If its there */
                             if (key)
                             {
                                 /* Free and NULL it */
-                                NRT_FREE(key);
+                                NRT_FREE((void*)key);
                             }
                             /* If the adoption policy is to adopt...  */
                             if ((*ht)->adopt)
@@ -194,7 +197,7 @@ NRTAPI(NRT_BOOL) nrt_HashTable_exists(nrt_HashTable * ht, const char *key)
 NRTAPI(NRT_DATA *) nrt_HashTable_remove(nrt_HashTable * ht, const char *key)
 {
     /* Find out which list it would be in */
-    int bucket = ht->hash(ht, key);
+    unsigned int bucket = ht->hash(ht, key);
 
     /* Get the list at this bucket */
     nrt_List *l = ht->buckets[bucket];
@@ -213,6 +216,10 @@ NRTAPI(NRT_DATA *) nrt_HashTable_remove(nrt_HashTable * ht, const char *key)
 
         /* We'll see */
         assert(pair);
+        if (pair == NULL)
+        {
+            return NULL;
+        }
 
         /* We found a match, remove and go home */
         if (strcmp(pair->key, key) == 0)
@@ -223,7 +230,7 @@ NRTAPI(NRT_DATA *) nrt_HashTable_remove(nrt_HashTable * ht, const char *key)
             nrt_List_remove(l, &iter);
 
             /* Delete the key -- that's ours */
-            NRT_FREE(pair->key);
+            NRT_FREE((void*)pair->key);
 
             /* Free the pair */
             NRT_FREE(pair);
@@ -261,11 +268,11 @@ NRTPRIV(int) printIt(nrt_HashTable * ht, nrt_Pair * pair, NRT_DATA * userData,
     return 1;
 }
 
-NRTAPI(void) nrt_HashTable_print(nrt_HashTable * ht)
+NRTAPI(void) nrt_HashTable_print(const nrt_HashTable * ht)
 {
     nrt_Error e;
     NRT_HASH_FUNCTOR fn = printIt;
-    nrt_HashTable_foreach(ht, fn, NULL, &e);
+    nrt_HashTable_foreach((nrt_HashTable* )ht, fn, NULL, &e);
 }
 
 NRTAPI(NRT_BOOL) nrt_HashTable_foreach(nrt_HashTable * ht, NRT_HASH_FUNCTOR fn,
@@ -347,7 +354,7 @@ NRTAPI(NRT_BOOL) nrt_HashTable_insert(nrt_HashTable * ht, const char *key,
                                       NRT_DATA * data, nrt_Error * error)
 {
     /* Find the bucket */
-    int bucket = ht->hash(ht, key);
+    unsigned int bucket = ht->hash(ht, key);
 
     /* Malloc the pair -- that's our container item */
     nrt_Pair *p = (nrt_Pair *) NRT_MALLOC(sizeof(nrt_Pair));
@@ -371,7 +378,7 @@ NRTAPI(NRT_BOOL) nrt_HashTable_insert(nrt_HashTable * ht, const char *key,
 NRTAPI(nrt_Pair *) nrt_HashTable_find(nrt_HashTable * ht, const char *key)
 {
     /* Retrieve the pocket */
-    int bucket = ht->hash(ht, key);
+    unsigned int bucket = ht->hash(ht, key);
 
     /* Get the list for it */
     nrt_List *l = ht->buckets[bucket];
@@ -390,6 +397,10 @@ NRTAPI(nrt_Pair *) nrt_HashTable_find(nrt_HashTable * ht, const char *key)
 
         /* Should NOT get a null pair */
         assert(pair);
+        if (pair == NULL)
+        {
+            return NULL;
+        }
 
         /* We have a match!!! */
         if (strcmp(pair->key, key) == 0)
@@ -412,7 +423,7 @@ NRTAPI(nrt_HashTableIterator) nrt_HashTable_begin(nrt_HashTable * ht)
     hash_iterator.listIter.current = NULL;
     hash_iterator.hash = ht;
 
-    if (ht->buckets)
+    if ((ht != NULL) && (ht->buckets))
     {
         int i;
         for (i = 0; i < ht->nbuckets && hash_iterator.curBucket < 0; i++)
@@ -468,7 +479,7 @@ NRTAPI(void) nrt_HashTableIterator_increment(nrt_HashTableIterator * iter)
             for (i = iter->curBucket + 1; i < iter->hash->nbuckets && !found;
                  i++)
             {
-                nrt_List *l = iter->hash->buckets[i];
+                l = iter->hash->buckets[i];
                 if (l != NULL && nrt_List_size(l) > 0)
                 {
                     iter->curBucket = i;

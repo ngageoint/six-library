@@ -29,16 +29,11 @@
 #include "TestCase.h"
 
 
-namespace
-{
-
-const size_t numBytes(16384);
-
 bool
-testAlignedAlloc(const size_t numBytes, const size_t alignment)
+testAlignedAlloc(const size_t numBytes_, const size_t alignment)
 {
     // Allocate an aligned buffer
-    void* const ptr = sys::alignedAlloc(numBytes, alignment);
+    void* const ptr = sys::alignedAlloc(numBytes_, alignment);
 
     // Confirm it's a multiple of alignment
     bool const isAligned(reinterpret_cast<size_t>(ptr) % alignment == 0);
@@ -55,34 +50,34 @@ testAlignedAlloc(const size_t numBytes, const size_t alignment)
 
 TEST_CASE(testAlignedAlloc8)
 {
+    constexpr size_t numBytes = 16384;
     TEST_ASSERT(testAlignedAlloc(numBytes, 8));
 }
 TEST_CASE(testAlignedAlloc16)
 {
+    constexpr size_t numBytes = 16384;
     TEST_ASSERT(testAlignedAlloc(numBytes, 16));
 }
 TEST_CASE(testAlignedAlloc32)
 {
+    constexpr size_t numBytes = 16384;
     TEST_ASSERT(testAlignedAlloc(numBytes, 32));
 }
 TEST_CASE(testAlignedAlloc64)
 {
+    constexpr size_t numBytes = 16384;
     TEST_ASSERT(testAlignedAlloc(numBytes, 64));
 }
 TEST_CASE(testAlignedAlloc128)
 {
+    constexpr size_t numBytes = 16384;
     TEST_ASSERT(testAlignedAlloc(numBytes, 128));
 }
 
-}
-
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testAlignedAlloc8);
     TEST_CHECK(testAlignedAlloc16);
     TEST_CHECK(testAlignedAlloc32);
     TEST_CHECK(testAlignedAlloc64);
     TEST_CHECK(testAlignedAlloc128);
-
-    return 0;
-}
+)

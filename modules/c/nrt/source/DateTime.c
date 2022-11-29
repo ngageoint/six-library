@@ -20,6 +20,10 @@
  *
  */
 
+#ifdef _MSC_VER
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
+
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
@@ -245,7 +249,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime * dateTime,
                                            int dayOfYear,
                                            nrt_Error * error)
 {
-    int month, dayOfMonth;
+    int month=0, dayOfMonth=0;
     if (nrt_DateTime_setMonthInfoFromDayOfYear(dateTime->year,
                                                dayOfYear,
                                                &month,
@@ -261,6 +265,17 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime * dateTime,
     return NRT_FAILURE;
 }
 
+static void nrt_DateTime_gmtime_s(struct tm* result, const time_t* const time)
+{
+#ifdef _WIN32
+    gmtime_s(result, time);
+#else
+    // https://linux.die.net/man/3/gmtime_r
+    gmtime_r(time, result);
+#endif
+}
+#define gmtime_s(result, time) nrt_DateTime_gmtime_s(result, time)
+
 NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime * dateTime,
                                               double timeInMillis,
                                               nrt_Error * error)
@@ -272,7 +287,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime * dateTime,
     (void)error;
 
     timeInSeconds = (time_t) (timeInMillis / 1000);
-    t = *gmtime(&timeInSeconds);
+    gmtime_s(&t, &timeInSeconds);
 
     dateTime->timeInMillis = timeInMillis;
 
@@ -286,7 +301,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime * dateTime,
     dateTime->dayOfYear = t.tm_yday + 1;
     dateTime->hour = t.tm_hour;
     dateTime->minute = t.tm_min;
-    dateTime->second = t.tm_sec + (timeInMillis / 1000.0 - timeInSeconds);
+    dateTime->second = t.tm_sec + (timeInMillis / 1000.0 - (double)timeInSeconds);
 
     return NRT_SUCCESS;
 }
@@ -359,6 +374,20 @@ NRTAPI(NRT_BOOL) nrt_DateTime_format(const nrt_DateTime * dateTime,
                                      maxSize, error);
 }
 
+static int nrt_Date_Time_formatMillis_sscanf(char const* const buffer, char const* const format,
+    int* decimalPlaces)
+{
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(push)
+#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+#endif
+    return sscanf(buffer, format, decimalPlaces);
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(pop)
+#endif
+}
+#define sscanf(buffer, format, decimalPlaces) nrt_Date_Time_formatMillis_sscanf(buffer, format, decimalPlaces)
+
 NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
                                            char *outBuf, size_t maxSize,
                                            nrt_Error * error)
@@ -375,8 +404,8 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
     NRT_BOOL found = 0;
 
     timeInSeconds = (time_t) (millis / 1000);
-    t = *gmtime(&timeInSeconds);
-    fractSeconds = (millis / 1000.0) - timeInSeconds;
+    gmtime_s(&t, &timeInSeconds);
+    fractSeconds = (millis / 1000.0) - (double)timeInSeconds;
 
     /* Search for "%...S" string */
     formatLength = strlen(format);
@@ -440,7 +469,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
             if (begStringLen > 0)
             {
                 /* do the first part of the format */
-                strncpy(newFmtString, format, begStringLen);
+                nrt_strncpy_s(newFmtString, newFmtLen, format, begStringLen);
 
                 if (strftime(outBuf, maxSize, newFmtString, &t) == 0)
                 {
@@ -462,7 +491,8 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
                 goto CATCH_ERROR;
             }
 
-            if (strlen(buf) + bufIdx + 1 > maxSize)
+            size_t result_sz = strlen(buf) + bufIdx + 1;
+            if (result_sz > maxSize)
             {
                 nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
                                 "Format string will cause buffer to overflow: [%s]",
@@ -471,12 +501,13 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
             }
 
             /* tack it on the end */
-            strcpy(outBuf + bufIdx, buf);
+            nrt_strcpy_s(outBuf + bufIdx, result_sz, buf);
             bufIdx = strlen(outBuf);
 
             memset(buf, 0, 256);
             NRT_SNPRINTF(buf, 256, "%.*f", decimalPlaces, fractSeconds);
 
+            result_sz = strlen(buf) + bufIdx + 1;
             if (strlen(buf) + bufIdx + 1 > maxSize)
             {
                 nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
@@ -486,7 +517,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
             }
 
             /* tack on the fractional seconds - spare the leading 0 */
-            strcpy(outBuf + bufIdx, buf + 1);
+            nrt_strcpy_s(outBuf + bufIdx, result_sz, buf + 1);
             bufIdx = strlen(outBuf);
 
             if (endStringLen > 0)
@@ -501,6 +532,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
                     goto CATCH_ERROR;
                 }
 
+                result_sz = strlen(buf) + bufIdx + 1;
                 if (strlen(buf) + bufIdx + 1 > maxSize)
                 {
                     nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
@@ -508,7 +540,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
                                     format);
                     goto CATCH_ERROR;
                 }
-                strcpy(outBuf + bufIdx, buf);
+                nrt_strcpy_s(outBuf + bufIdx, result_sz, buf);
             }
         }
     }
@@ -834,7 +866,8 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
                 bp++;
                 while (*bp >= '0' && *bp <= '9')
                 {
-                    double num = (double) (*bp++ - '0');
+                    const char num_ = *bp++ - '0';
+                    double num = (double) (num_);
                     decimalPlaces++;
 
                     switch (decimalPlaces)
@@ -922,7 +955,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
      * if either was provided */
     if (isYearSet && isDayOfYearSet)
     {
-        int month, dayOfMonth;
+        int month=0, dayOfMonth=0;
         if (!nrt_DateTime_setMonthInfoFromDayOfYear(tm->tm_year + 1900,
                                                     tm->tm_yday + 1,
                                                     &month,

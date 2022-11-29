@@ -22,6 +22,9 @@
 
 #ifndef __NRT_LIST_H__
 #define __NRT_LIST_H__
+
+#include <stdint.h>
+
 /*!
  *  \file
  *  \brief Contains OO-like linked-list data structure for pairs
@@ -191,7 +194,7 @@ NRTAPI(void) nrt_List_destruct(nrt_List ** this_chain);
  *  \param chain The chain to search
  *  \return An iterator to the head of the chain
  */
-NRTAPI(nrt_ListIterator) nrt_List_begin(nrt_List * chain);
+NRTAPI(nrt_ListIterator) nrt_List_begin(const nrt_List * chain);
 
 /*!
  *  Return an iterator to the position in the chain
@@ -201,7 +204,8 @@ NRTAPI(nrt_ListIterator) nrt_List_begin(nrt_List * chain);
  *  \param i the index
  *  \return An iterator to the index of the chain, as specified by i
  */
-NRTAPI(nrt_ListIterator) nrt_List_at(nrt_List * chain, int i);
+NRTAPI(nrt_ListIterator) nrt_List_at(const nrt_List * chain, int i);
+NRTAPI(nrt_ListIterator) nrt_List_atui(const nrt_List* chain, uint32_t i);
 
 /*!
  *  Check to see if two iterators point at the same thing
@@ -210,8 +214,8 @@ NRTAPI(nrt_ListIterator) nrt_List_at(nrt_List * chain, int i);
  *  \param it2  Iterator 2
  *  \return 1 if they are equal, 0 if not
  */
-NRTAPI(NRT_BOOL) nrt_ListIterator_equals(nrt_ListIterator * it1,
-                                         nrt_ListIterator * it2);
+NRTAPI(NRT_BOOL) nrt_ListIterator_equals(const nrt_ListIterator * it1,
+                                         const nrt_ListIterator * it2);
 
 /*!
  *  Check to see if two iterators are not pointing at the same thing
@@ -220,8 +224,8 @@ NRTAPI(NRT_BOOL) nrt_ListIterator_equals(nrt_ListIterator * it1,
  *  \param it2  Iterator 2
  *  \return 1 if they are not equal, 0 if so
  */
-NRTAPI(NRT_BOOL) nrt_ListIterator_notEqualTo(nrt_ListIterator * it1,
-                                             nrt_ListIterator * it2);
+NRTAPI(NRT_BOOL) nrt_ListIterator_notEqualTo(const nrt_ListIterator * it1,
+                                             const nrt_ListIterator * it2);
 
 /*!
  *  Get an iterator to the tail of the chain
@@ -229,7 +233,7 @@ NRTAPI(NRT_BOOL) nrt_ListIterator_notEqualTo(nrt_ListIterator * it1,
  *  \param this_chain
  *  \return Iterator to chain tail
  */
-NRTAPI(nrt_ListIterator) nrt_List_end(nrt_List * this_chain);
+NRTAPI(nrt_ListIterator) nrt_List_end(const nrt_List * this_chain);
 
 /*!
  *  Insert data into the chain BEFORE the iterator, and make the iterator
@@ -277,8 +281,8 @@ NRTAPI(NRT_DATA *) nrt_List_remove(nrt_List * chain, nrt_ListIterator * where);
  *  \param newIndex the index where the data item will be moved to
  *  \return NRT_SUCCESS on success, or NRT_FAILURE
  */
-NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, nrt_Uint32 oldIndex,
-                               nrt_Uint32 newIndex, nrt_Error * error);
+NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, uint32_t oldIndex,
+                               uint32_t newIndex, nrt_Error * error);
 
 /*!
  *  Return the size of the list
@@ -286,7 +290,8 @@ NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, nrt_Uint32 oldIndex,
  *  \param list The list to check
  *  \return size of the list
  */
-NRTAPI(nrt_Uint32) nrt_List_size(nrt_List * list);
+NRTAPI(uint32_t) nrt_List_size(nrt_List * list);
+NRTAPI(uint16_t) nrt_List_size16(nrt_List* list);
 
 /*!
  *  Return the element at the specified position in the list
@@ -298,6 +303,7 @@ NRTAPI(nrt_Uint32) nrt_List_size(nrt_List * list);
  *  \return the data at the specified position
  */
 NRTAPI(NRT_DATA *) nrt_List_get(nrt_List * list, int index, nrt_Error * error);
+NRTAPI(NRT_DATA*) nrt_List_getui(nrt_List* list, uint32_t index, nrt_Error* error);
 
 /*!
  *  Increment the iterator.  Eventually, this will point at NULL.

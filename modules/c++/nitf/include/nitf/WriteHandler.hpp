@@ -45,32 +45,13 @@ namespace nitf
 DECLARE_CLASS(WriteHandler)
 {
 public:
-
-    //! Copy constructor
-    WriteHandler(const WriteHandler & x)
-    {
-        setNative(x.getNative());
-    }
-
-    //! Assignment Operator
-    WriteHandler & operator=(const WriteHandler & x)
-    {
-        if (&x != this)
-            setNative(x.getNative());
-        return *this;
-    }
+    WriteHandler(const WriteHandler & x);
+    WriteHandler & operator=(const WriteHandler & x);
 
     // Set native object
-    WriteHandler(nitf_WriteHandler *x)
-    {
-        setNative(x);
-        getNativeOrThrow();
-    }
+    WriteHandler(nitf_WriteHandler* x);
 
-    //! Destructor
-    virtual ~WriteHandler()
-    {
-    }
+    ~WriteHandler() = default;
 
     /*!
      *  Write to the given output IOInterface
@@ -80,11 +61,9 @@ public:
 
 protected:
     //! Constructor
-    WriteHandler()
-    {
-    }
+    WriteHandler() = default;
 
-    nitf_Error error;
+    nitf_Error error{};
 };
 
 
@@ -96,8 +75,8 @@ class StreamIOWriteHandler : public WriteHandler
 {
 public:
     //! Constructor
-    StreamIOWriteHandler(IOInterface& sourceHandle, nitf::Uint64 offset,
-            nitf::Uint64 bytes);
+    StreamIOWriteHandler(IOInterface& sourceHandle, uint64_t offset,
+            uint64_t bytes);
     ~StreamIOWriteHandler()
     {
     }

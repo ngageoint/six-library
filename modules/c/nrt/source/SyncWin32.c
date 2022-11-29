@@ -23,7 +23,7 @@
 #include "nrt/Sync.h"
 
 NRT_CXX_GUARD
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 NRTPROT(void) nrt_Mutex_lock(nrt_Mutex * m)
 {
     LPCRITICAL_SECTION lpCriticalSection = (LPCRITICAL_SECTION) (*m);
@@ -44,10 +44,13 @@ NRTPROT(void) nrt_Mutex_init(nrt_Mutex * m)
     LPCRITICAL_SECTION lpCriticalSection =
         (LPCRITICAL_SECTION) NRT_MALLOC(sizeof(CRITICAL_SECTION));
     /* nrt_Debug_flogf("***Initializing Mutex***\n"); */
-    InitializeCriticalSection(lpCriticalSection);
-    /**m = CreateMutex(NULL, TRUE, "PluginRegistry::getMutex()");*/
-    /* if (*m && GetLastError() == ERROR_ALREADY_EXISTS)
-     * OpenMutex(MUTEX_ALL_ACCESS, FALSE, "PluginRegistry::getMutex()"); */
+    if (lpCriticalSection != NULL)
+    {
+        InitializeCriticalSection(lpCriticalSection);
+        /**m = CreateMutex(NULL, TRUE, "PluginRegistry::getMutex()");*/
+        /* if (*m && GetLastError() == ERROR_ALREADY_EXISTS)
+         * OpenMutex(MUTEX_ALL_ACCESS, FALSE, "PluginRegistry::getMutex()"); */
+    }
     *m = (nrt_Mutex) lpCriticalSection;
 }
 

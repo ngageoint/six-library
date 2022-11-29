@@ -52,13 +52,9 @@ namespace io
  * \class StandardOutStream
  * \brief Class for writing output streams to stdout
  */
-class StandardOutStream : public OutputStream
+struct StandardOutStream final : public OutputStream
 {
-
-public:
-    //! Default constructor
-    StandardOutStream()
-    {}
+    StandardOutStream() = default;
 
     /*!
      * This method defines a write to stdout.
@@ -85,13 +81,9 @@ protected:
  * \class StandardErrStream
  * \brief Class for writing output streams to stderr
  */
-class StandardErrStream : public OutputStream
+struct StandardErrStream final : public OutputStream
 {
-
-public:
-    //! Default constructor
-    StandardErrStream()
-    {}
+    StandardErrStream() = default;
 
     /*!
      * This method defines a write to stderr.

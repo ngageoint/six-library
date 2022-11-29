@@ -24,6 +24,8 @@
 #define __CLI_ARGUMENT_H__
 
 #include <import/str.h>
+#include "config/Exports.h"
+
 #include "cli/Value.h"
 
 namespace cli
@@ -42,7 +44,7 @@ class ArgumentParser;
  *
  * TODO: add support for case insensitive or standardizing choices/parsing
  */
-class Argument
+class CODA_OSS_API Argument
 {
 public:
 

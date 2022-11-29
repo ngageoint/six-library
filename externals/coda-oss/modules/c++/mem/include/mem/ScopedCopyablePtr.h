@@ -20,19 +20,18 @@
  *
  */
 
-#ifndef __MEM_SCOPED_COPYABLE_PTR_H__
-#define __MEM_SCOPED_COPYABLE_PTR_H__
+#ifndef CODA_OSS_mem_ScopedCopyablePtr_h_INCLUDED_
+#define CODA_OSS_mem_ScopedCopyablePtr_h_INCLUDED_
+#pragma once
 
-#include <memory>
-#include <cstddef>
-#include <config/coda_oss_config.h>
+#include "mem/ScopedPtr.h"
 
 namespace mem
 {
 /*!
  *  \class ScopedCopyablePtr
  *  \brief This class provides RAII for object allocations via new.  It is a
- *         light wrapper around std::auto_ptr and has the same semantics
+ *         light wrapper around std::unique_ptr and has the same semantics
  *         except that the copy constructor and assignment operator are deep
  *         copies (that is, they use T's copy constructor) rather than
  *         transferring ownership.
@@ -40,7 +39,7 @@ namespace mem
  *         This is useful for cases where you have a class which has a member
  *         variable that's dynamically allocated and you want to provide a
  *         valid copy constructor / assignment operator.  With raw pointers or
- *         std::auto_ptr's, you'll have to write the copy constructor /
+ *         std::unique_ptr's, you'll have to write the copy constructor /
  *         assignment operator for this class - this is tedious and
  *         error-prone since you need to include all the members in the class.
  *         Using ScopedCopyablePtr's instead, the compiler-generated copy
@@ -48,100 +47,9 @@ namespace mem
  *         (if all the other member variables are POD or have correct
  *         copy constructors / assignment operators).
  */
-template <class T>
-class ScopedCopyablePtr
-{
-public:
-    explicit ScopedCopyablePtr(T* ptr = NULL) :
-        mPtr(ptr)
-    {
-    }
+template <typename T>
+using ScopedCopyablePtr = ScopedPtr<T, std::false_type /*CopyIsClone*/>;
 
-    explicit ScopedCopyablePtr(std::auto_ptr<T> ptr) :
-        mPtr(ptr)
-    {
-    }
-
-    ScopedCopyablePtr(const ScopedCopyablePtr& rhs)
-    {
-        if (rhs.mPtr.get())
-        {
-            mPtr.reset(new T(*rhs.mPtr));
-        }
-    }
-
-    const ScopedCopyablePtr&
-    operator=(const ScopedCopyablePtr& rhs)
-    {
-        if (this != &rhs)
-        {
-            if (rhs.mPtr.get())
-            {
-                mPtr.reset(new T(*rhs.mPtr));
-            }
-            else
-            {
-                mPtr.reset();
-            }
-        }
-
-        return *this;
-    }
-
-    bool operator==(const ScopedCopyablePtr<T>& rhs) const
-    {
-        if (get() == NULL && rhs.get() == NULL)
-        {
-            return true;
-        }
-
-        if (get() == NULL || rhs.get() == NULL)
-        {
-            return false;
-        }
-
-        return (*(this->mPtr) == *rhs);
-    }
-
-    bool operator!=(const ScopedCopyablePtr<T>& rhs) const
-    {
-        return !(*this == rhs);
-    }
-
-    // explicit operators not supported until C++11
-    explicit operator bool() const
-    {
-        return get() == NULL ? false : true;
-    }
-
-    T* get() const
-    {
-        return mPtr.get();
-    }
-
-    T& operator*() const
-    {
-        return *mPtr;
-    }
-
-    T* operator->() const
-    {
-        return mPtr.get();
-    }
-
-    void reset(T* ptr = NULL)
-    {
-        mPtr.reset(ptr);
-    }
-
-    void reset(std::auto_ptr<T> ptr)
-    {
-        mPtr = ptr;
-    }
-
-private:
-    std::auto_ptr<T> mPtr;
-};
 }
 
-#endif
+#endif // CODA_OSS_mem_ScopedCopyablePtr_h_INCLUDED_

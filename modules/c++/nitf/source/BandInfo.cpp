@@ -22,11 +22,14 @@
 
 #include "nitf/BandInfo.hpp"
 
+#include <stdexcept>
+#include <map>
+
 using namespace nitf;
 
 BandInfo::BandInfo(const BandInfo & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 BandInfo & BandInfo::operator=(const BandInfo & x)
@@ -42,46 +45,58 @@ BandInfo::BandInfo(nitf_BandInfo * x)
     getNativeOrThrow();
 }
 
-BandInfo::BandInfo()
+BandInfo::BandInfo() noexcept(false) : BandInfo(nitf_BandInfo_construct(&error))
 {
-    setNative(nitf_BandInfo_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
-BandInfo::~BandInfo() {}
-
-nitf::Field BandInfo::getRepresentation()
+BandInfo::BandInfo(Representation representation) : BandInfo()
+{
+    this->representation = representation;
+}
+nitf::Field BandInfo::getRepresentation() const
 {
     return nitf::Field(getNativeOrThrow()->representation);
 }
 
-nitf::Field BandInfo::getSubcategory()
+BandInfo::BandInfo(Subcategory subcategory) : BandInfo(Representation::None)
+{
+    getSubcategory().set(to_string(subcategory));
+}
+nitf::Field BandInfo::getSubcategory() const
 {
     return nitf::Field(getNativeOrThrow()->subcategory);
 }
 
-nitf::Field BandInfo::getImageFilterCondition()
+BandInfo::BandInfo(Representation representation_, // C4458: declaration of '...' hides class member
+    Subcategory subcategory_, // C4458: declaration of '...' hides class member
+    const std::string& imageFilterCondition,
+    const std::string& imageFilterCode) : BandInfo(representation_)
+{
+    init(representation_, subcategory_, imageFilterCondition, imageFilterCode);
+}
+
+nitf::Field BandInfo::getImageFilterCondition() const
 {
     return nitf::Field(getNativeOrThrow()->imageFilterCondition);
 }
 
-nitf::Field BandInfo::getImageFilterCode()
+nitf::Field BandInfo::getImageFilterCode() const
 {
     return nitf::Field(getNativeOrThrow()->imageFilterCode);
 }
 
-nitf::Field BandInfo::getNumLUTs()
+nitf::Field BandInfo::getNumLUTs() const
 {
     return nitf::Field(getNativeOrThrow()->numLUTs);
 }
 
-nitf::Field BandInfo::getBandEntriesPerLUT()
+nitf::Field BandInfo::getBandEntriesPerLUT() const
 {
     return nitf::Field(getNativeOrThrow()->bandEntriesPerLUT);
 }
 
-nitf::LookupTable BandInfo::getLookupTable()
+nitf::LookupTable BandInfo::getLookupTable() const
 {
     if (!getNativeOrThrow()->lut)
     {
@@ -93,12 +108,33 @@ nitf::LookupTable BandInfo::getLookupTable()
     return nitf::LookupTable(getNativeOrThrow()->lut);
 }
 
-void BandInfo::init(const std::string& representation,
-                    const std::string& subcategory,
+static NITF_BOOL BandInfo_init(nitf_BandInfo* bandInfo,
+    const std::string& representation,
+    const std::string& subcategory,
+    const std::string& imageFilterCondition,
+    const std::string& imageFilterCode,
+    uint32_t numLUTs,
+    uint32_t bandEntriesPerLUT,
+    nitf_LookupTable* lut,
+    nitf_Error& error) noexcept
+{
+    return nitf_BandInfo_init(bandInfo,
+        representation.c_str(),
+        subcategory.c_str(),
+        imageFilterCondition.c_str(),
+        imageFilterCode.c_str(),
+        numLUTs,
+        bandEntriesPerLUT,
+        lut,
+        &error);
+}
+
+void BandInfo::init(const std::string& representation_,
+                    const std::string& subcategory_,
                     const std::string& imageFilterCondition,
                     const std::string& imageFilterCode,
-                    nitf::Uint32 numLUTs,
-                    nitf::Uint32 bandEntriesPerLUT,
+                    uint32_t numLUTs,
+                    uint32_t bandEntriesPerLUT,
                     nitf::LookupTable& lut)
 {
     if (getNativeOrThrow()->lut)
@@ -108,24 +144,34 @@ void BandInfo::init(const std::string& representation,
         oldLut.setManaged(false);
     }
 
-    if (!nitf_BandInfo_init(getNativeOrThrow(),
-                            representation.c_str(),
-                            subcategory.c_str(),
-                            imageFilterCondition.c_str(),
-                            imageFilterCode.c_str(),
+    if (!BandInfo_init(getNativeOrThrow(),
+                            representation_,
+                            subcategory_,
+                            imageFilterCondition,
+                            imageFilterCode,
                             numLUTs,
                             bandEntriesPerLUT,
-                            lut.getNative() ? lut.getNative() : NULL,
-                            &error))
+                            lut.getNative() ? lut.getNative() : nullptr,
+                            error))
         throw nitf::NITFException(&error);
 
 
     //have the library manage the new lut
     lut.setManaged(true);
 }
+void BandInfo::init(const Representation& representation_, // C4458: declaration of '...' hides class member
+                    const Subcategory& subcategory_, // C4458: declaration of '...' hides class member
+                    const std::string& imageFilterCondition,
+                    const std::string& imageFilterCode,
+                    uint32_t numLUTs,
+                    uint32_t bandEntriesPerLUT,
+                    nitf::LookupTable& lut)
+{
+    init(to_string(representation_), to_string(subcategory_), imageFilterCondition, imageFilterCode, numLUTs, bandEntriesPerLUT, lut);
+}
 
-void BandInfo::init(const std::string& representation,
-                    const std::string& subcategory,
+void BandInfo::init(const std::string& representation_, // C4458: declaration of '...' hides class member
+                    const std::string& subcategory_, // C4458: declaration of '...' hides class member
                     const std::string& imageFilterCondition,
                     const std::string& imageFilterCode)
 {
@@ -136,12 +182,19 @@ void BandInfo::init(const std::string& representation,
         oldLut.setManaged(false);
     }
 
-    if (!nitf_BandInfo_init(getNativeOrThrow(),
-                            representation.c_str(),
-                            subcategory.c_str(),
-                            imageFilterCondition.c_str(),
-                            imageFilterCode.c_str(),
-                            0, 0, NULL, &error))
+    if (!BandInfo_init(getNativeOrThrow(),
+                            representation_,
+                            subcategory_,
+                            imageFilterCondition,
+                            imageFilterCode,
+                            0, 0, nullptr, error))
         throw nitf::NITFException(&error);
+}
+void BandInfo::init(const Representation& representation_, // C4458: declaration of '...' hides class member
+                    const Subcategory& subcategory_, // C4458: declaration of '...' hides class member
+                    const std::string& imageFilterCondition,
+                    const std::string& imageFilterCode)
+{
+    init(to_string(representation_), to_string(subcategory_), imageFilterCondition, imageFilterCode);
 }
 

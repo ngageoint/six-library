@@ -24,8 +24,9 @@
 //  Filter.h
 ///////////////////////////////////////////////////////////
 
-#ifndef __LOGGING_FILTER_H__
-#define __LOGGING_FILTER_H__
+#ifndef CODA_OSS_logging_Filter_h_INCLUDED_
+#define CODA_OSS_logging_Filter_h_INCLUDED_
+#pragma once
 
 #include <string>
 #include "logging/LogRecord.h"
@@ -38,18 +39,25 @@ namespace logging
  *
  * \brief Filter instances are used to perform arbitrary filtering of LogRecords.
  */
-class Filter
+struct Filter
 {
-public:
     Filter(std::string name = "") : mName(name){}
-    virtual ~Filter(){}
+    virtual ~Filter() = default;
 
-    bool filter(const LogRecord* record) const;
-    std::string getName() const { return mName; }
+    virtual bool filter(const LogRecord* record) const;
+    virtual bool filter(const LogRecord& record) const
+    {
+        return filter(&record);
+    }
+
+    std::string getName() const
+    {
+        return mName;
+    }
 
 protected:
     std::string mName;
 };
 
 }
-#endif
+#endif  // CODA_OSS_logging_Filter_h_INCLUDED_

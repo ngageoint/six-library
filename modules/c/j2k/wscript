@@ -18,12 +18,13 @@ def build(bld):
 
         j2kSources = ('source/Container.c',
                       'source/Component.c',
+                      'source/Defines.c',
                       'source/JasPerImpl.c',
                       'source/OpenJPEGImpl.c',
-                      'source/Reader.c',
+                      'source/j2k_Reader.c',
                       'source/SimpleComponentImpl.c',
                       'source/SimpleContainerImpl.c',
-                      'source/Writer.c')
+                      'source/j2k_Writer.c')
 
         j2kInclude = getDriverIncludes(bld, 'j2k')
         j2kIncludes = ['include', j2kInclude, env['OPENJPEG_INCLUDE']]
@@ -60,3 +61,4 @@ def build(bld):
 
         bld(features='add_targets', target='j2k-tests',
             targets_to_add=j2k_only_tests + j2k_nitf_tests)
+

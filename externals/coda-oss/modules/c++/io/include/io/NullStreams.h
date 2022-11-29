@@ -25,15 +25,16 @@
 
 #include <algorithm>
 
+#include <import/gsl.h>
+
 #include <io/InputStream.h>
 #include <io/OutputStream.h>
 #include <io/SeekableStreams.h>
 
 namespace io
 {
-class NullInputStream : public InputStream
+struct NullInputStream : public InputStream
 {
-public:
     NullInputStream(sys::SSize_T size) :
         mSize(size),
         mAvailable(size)
@@ -54,7 +55,7 @@ public:
     virtual sys::SSize_T streamTo(OutputStream& soi,
                                   sys::SSize_T numBytes = IS_END)
     {
-        sys::SSize_T toProcess = (numBytes == IS_END) ? numBytes : (mAvailable
+        const sys::SSize_T toProcess = (numBytes == IS_END) ? numBytes : (mAvailable
                 >= numBytes ? numBytes : mAvailable);
         mAvailable -= toProcess;
         for (sys::SSize_T i = 0; i < toProcess; ++i)
@@ -68,7 +69,7 @@ protected:
 
     virtual sys::byte processByte() const
     {
-        return (sys::byte) 0;
+        return 0;
     }
     virtual void processBytes(void* buffer, sys::Size_T len) const
     {
@@ -78,25 +79,22 @@ protected:
 
     virtual sys::SSize_T readImpl(void* buffer, size_t len)
     {
-        size_t numToRead =
-                (mAvailable >= (sys::SSize_T) len ? len : (size_t) mAvailable);
+        const auto numToRead =
+                mAvailable >= gsl::narrow<sys::SSize_T>(len) ? len : gsl::narrow<size_t>(mAvailable);
 
-        mAvailable -= (sys::SSize_T) numToRead;
+        mAvailable -= numToRead;
 
         if (numToRead == 0)
             throw except::IOException(Ctxt("EOF - no more data to read"));
 
         processBytes(buffer, numToRead);
-        return numToRead;
+        return gsl::narrow<sys::SSize_T>(numToRead);
     }
 };
 
-class NullOutputStream : public OutputStream
+struct NullOutputStream : public OutputStream
 {
-public:
-    NullOutputStream()
-    {
-    }
+    NullOutputStream() = default;
 
     void write(sys::byte )
     {
@@ -125,26 +123,21 @@ public:
  * class hierarchy is set up, you can't just inherit from NullOutputStream and
  * Seekable to get this
  */
-class SeekableNullOutputStream : public io::SeekableOutputStream
+struct SeekableNullOutputStream final : public io::SeekableOutputStream
 {
-public:
-    SeekableNullOutputStream() :
-        mOffset(0),
-        mMaxOffset(0)
-    {
-    }
+    SeekableNullOutputStream() = default;
 
-    virtual void write(const void*, size_t numBytes)
+    void write(const void*, size_t numBytes) override
     {
         mOffset += numBytes;
         mMaxOffset = std::max(mOffset, mMaxOffset);
     }
 
-    virtual void flush()
+    void flush() override
     {
     }
 
-    virtual sys::Off_T seek(sys::Off_T offset, Whence whence)
+    sys::Off_T seek(sys::Off_T offset, Whence whence) override
     {
         switch (whence)
         {
@@ -154,6 +147,7 @@ public:
         case START:
             mOffset = offset;
             break;
+        case CURRENT:
         default:
             mOffset += offset;
             break;
@@ -164,14 +158,14 @@ public:
         return mOffset;
     }
 
-    virtual sys::Off_T tell()
+    sys::Off_T tell() override
     {
         return mOffset;
     }
 
 private:
-    sys::Off_T mOffset;
-    sys::Off_T mMaxOffset;
+    sys::Off_T mOffset = 0;
+    sys::Off_T mMaxOffset = 0;
 };
 }
 

@@ -2,6 +2,13 @@ set(MODULE_NAME nrt)
 
 coda_generate_module_config_header(${MODULE_NAME})
 
+if (BUILD_SHARED)
+    set(BUILD_SHARED_LIBS ON)
+    add_definitions(
+        -DNRT_MODULE_EXPORTS
+    )
+endif()
+
 coda_add_module(
     ${MODULE_NAME}
     DEPS ${CMAKE_DL_LIBS} config-c++

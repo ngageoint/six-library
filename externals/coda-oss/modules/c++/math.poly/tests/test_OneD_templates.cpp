@@ -43,7 +43,8 @@ TEST_CASE(testInt)
 
     poly[2] = 0;
     poly = poly.truncateToNonZeros();
-    TEST_ASSERT_EQ(poly.order(), 1);
+    const auto order = poly.order();
+    TEST_ASSERT_EQ(order, static_cast<size_t>(1));
 }
 
 TEST_CASE(testDouble)
@@ -58,11 +59,12 @@ TEST_CASE(testDouble)
 
     math::poly::OneD<double> derivative = poly.derivative();
     TEST_ASSERT_EQ(derivative[0], 4.2);
-    TEST_ASSERT_EQ(derivative[1], 10.6)
+    TEST_ASSERT_EQ(derivative[1], 10.6);
 
     poly[2] = 0;
     poly = poly.truncateToNonZeros();
-    TEST_ASSERT_EQ(poly.order(), 1);
+    const auto order = poly.order();
+    TEST_ASSERT_EQ(order, static_cast<size_t>(1));
 }
 
 TEST_CASE(testVector3)
@@ -100,7 +102,8 @@ TEST_CASE(testVector3)
     polyCoeffs2[1] = 0.0;
     polyCoeffs2[2] = 0.0;
     poly = poly.truncateToNonZeros();
-    TEST_ASSERT_EQ(poly.order(), 1);
+    const auto order = poly.order();
+    TEST_ASSERT_EQ(order, static_cast<size_t>(1));
 }
 }
 

@@ -23,10 +23,12 @@
 #ifndef __NITF_PLUGINREGISTRY_HPP__
 #define __NITF_PLUGINREGISTRY_HPP__
 
+#include <string>
+
 #include "nitf/System.hpp"
 #include "nitf/PluginRegistry.h"
 #include "nitf/NITFException.hpp"
-#include <string>
+#include "nitf/exports.hpp"
 
 /*!
  *  \file PluginRegistry.hpp
@@ -39,40 +41,38 @@ namespace nitf
  *  \class PluginRegistry
  *  \brief  The C++ wrapper for the nitf_PluginRegistry
  */
-class PluginRegistry
+namespace PluginRegistry
 {
-public:
-
     /*!
      * Load plugins from the given directory
      * \param dirName  The name of the directory to load
      */
-    static void loadDir(const std::string& dirName);
+    extern NITRO_NITFCPP_API void loadDir(const std::string& dirName);
 
-    static void loadPlugin(const std::string& path);
+    extern NITRO_NITFCPP_API void loadPlugin(const std::string& path);
 
     /*!
      *  This function allows you to register your own TRE handlers.  It
      *  will override any handlers that are currently handling the identifier.
      */
-    static void registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
+    extern NITRO_NITFCPP_API void registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
             NITF_PLUGIN_TRE_HANDLER_FUNCTION handler);
 
     /*!
      *  This function allows you to register your own compression handlers.  It
      *  will override any handlers that are currently handling the identifier.
      */
-    static void registerCompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
+    extern NITRO_NITFCPP_API void registerCompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
             NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION handler);
 
     /*!
      *  This function allows you to register your own decompression handlers.  It
      *  will override any handlers that are currently handling the identifier.
      */
-    static void registerDecompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
+    extern NITRO_NITFCPP_API void registerDecompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
             NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION handler);
 
-    static nitf_CompressionInterface* retrieveCompressionInterface(
+    extern NITRO_NITFCPP_API nitf_CompressionInterface* retrieveCompressionInterface(
             const std::string& comp);
 
     /*!
@@ -82,7 +82,8 @@ public:
      *
      * \return true if a TRE handler exists, false otherwise
      */
-    static bool treHandlerExists(const std::string& ident);
+    extern NITRO_NITFCPP_API bool treHandlerExists(const std::string& ident, FILE* log) noexcept; // legacy/default: log=stderr
+    extern NITRO_NITFCPP_API bool treHandlerExists(const std::string& ident) noexcept;
 
     /*!
      * Checks if a compression handler exists for 'ident'
@@ -91,7 +92,7 @@ public:
      *
      * \return true if a compression handler exists, false otherwise
      */
-    static bool compressionHandlerExists(const std::string& ident);
+    extern NITRO_NITFCPP_API bool compressionHandlerExists(const std::string& ident) noexcept;
 
     /*!
      * Checks if a decompression handler exists for 'ident'
@@ -100,17 +101,11 @@ public:
      *
      * \return true if a decompression handler exists, false otherwise
      */
-    static bool decompressionHandlerExists(const std::string& ident);
+    extern NITRO_NITFCPP_API bool decompressionHandlerExists(const std::string& ident) noexcept;
 
-
-
-private:
-    PluginRegistry()
-    {
-    }
-    ~PluginRegistry()
-    {
-    }
+    // For unit-testing
+    extern NITRO_NITFCPP_API nitf_PluginRegistry* getInstance(nitf_Error&) noexcept;
+    extern NITRO_NITFCPP_API nitf_TREHandler* retrieveTREHandler(nitf_PluginRegistry& reg, const std::string& treIdent, int& hadError, nitf_Error&) noexcept;
 };
 }
 #endif

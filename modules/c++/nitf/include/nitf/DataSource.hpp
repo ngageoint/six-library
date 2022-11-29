@@ -23,10 +23,11 @@
 #ifndef __NITF_DATASOURCE_HPP__
 #define __NITF_DATASOURCE_HPP__
 
+#include <string>
+
 #include "nitf/DataSource.h"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-#include <string>
 
 /*!
  *  \file DataSource.hpp
@@ -63,14 +64,8 @@ public:
         getNativeOrThrow();
     }
 
-    DataSource()
-    {
-    }
-
-    //! Destructor
-    virtual ~DataSource()
-    {
-    }
+    DataSource() = default;
+    ~DataSource() = default;
 
     // NOTE: The methods below are used just for testing - the underlying C
     //       function pointers are what need to be modified if you want to
@@ -93,7 +88,7 @@ public:
     void setSize(nitf::Off size);
 
 protected:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

@@ -8,7 +8,7 @@ APPNAME = 'nitro'
 top     = '.'
 out     = 'target'
 
-TOOLS = 'build swig javatool pythontool matlabtool'
+TOOLS = 'build swig pythontool'
 DIRS = 'externals modules'
 
 def options(opt):
@@ -20,6 +20,14 @@ def options(opt):
 def configure(conf):
     conf.env['APPNAME'] = APPNAME
     conf.load(TOOLS, tooldir='build')
+
+    if conf.env['COMPILER_CXX'] == 'msvc':
+       conf.env.CXXFLAGS += ['/std:c++14'];
+
+    if conf.env['COMPILER_CXX'] != 'msvc':
+        conf.env.CFLAGS += ['-Wall'];
+        conf.env.CXXFLAGS += ['-Wall', '-std=c++14'];
+
     conf.recurse(DIRS)
 
 def build(bld):

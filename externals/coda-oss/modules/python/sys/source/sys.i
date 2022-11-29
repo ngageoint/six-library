@@ -2,6 +2,8 @@
 
 %feature("autodoc", "1");
 
+%include "config.i"
+
 %{
     #include "sys/Conf.h"
 %}

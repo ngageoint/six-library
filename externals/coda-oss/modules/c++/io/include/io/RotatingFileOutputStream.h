@@ -23,6 +23,7 @@
 #ifndef __IO_ROTATING_FILE_STREAMS_H__
 #define __IO_ROTATING_FILE_STREAMS_H__
 
+#include "config/Exports.h"
 #include <import/sys.h>
 #include "io/CountingStreams.h"
 
@@ -32,17 +33,16 @@ namespace io
 /**
  * An OutputStream that keeps track of the number of bytes written to the stream.
  */
-class RotatingFileOutputStream: public CountingOutputStream
+struct CODA_OSS_API RotatingFileOutputStream : public CountingOutputStream
 {
-public:
     RotatingFileOutputStream(const std::string& filename,
                              unsigned long maxBytes = 0,
                              size_t backupCount = 0, int creationFlags =
                                      sys::File::CREATE | sys::File::TRUNCATE);
 
-    virtual ~RotatingFileOutputStream()
-    {
-    }
+    virtual ~RotatingFileOutputStream() = default;
+    RotatingFileOutputStream(const RotatingFileOutputStream&) = delete;
+    RotatingFileOutputStream& operator=(const RotatingFileOutputStream&) = delete;
 
     using CountingOutputStream::write;
 

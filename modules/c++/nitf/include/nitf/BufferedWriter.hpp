@@ -22,16 +22,18 @@
 
 #ifndef __NITF_BUFFERED_WRITER_HPP__
 #define __NITF_BUFFERED_WRITER_HPP__
+#pragma once
 
-#include <sys/File.h>
-#include <mem/ScopedArray.h>
+#include <memory>
+
+#include <nitf/coda-oss.hpp>
 #include <nitf/CustomIO.hpp>
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
-class BufferedWriter : public CustomIO
+struct NITRO_NITFCPP_API BufferedWriter : public CustomIO
 {
-public:
     BufferedWriter(const std::string& file, size_t bufferSize);
 
     BufferedWriter(const std::string& file,
@@ -39,59 +41,62 @@ public:
                    size_t size,
                    bool adopt = false);
 
-    virtual ~BufferedWriter();
+    ~BufferedWriter();
+
+    BufferedWriter(const BufferedWriter&) = delete;
+    BufferedWriter& operator=(const BufferedWriter&) = delete;
 
     void flushBuffer();
 
-    nitf::Uint64 getTotalWritten() const
+    uint64_t getTotalWritten() const noexcept
     {
         return mTotalWritten;
     }
 
-    nitf::Uint64 getNumBlocksWritten() const
+    uint64_t getNumBlocksWritten() const noexcept
     {
         return mBlocksWritten;
     }
 
-    nitf::Uint64 getNumPartialBlocksWritten() const
+    uint64_t getNumPartialBlocksWritten() const noexcept
     {
         return mPartialBlocks;
     }
 
     //! Time spent writing to disk in seconds
-    double getTotalWriteTime()
+    double getTotalWriteTime() const noexcept
     {
         return mElapsedTime;
     }
 
 protected:
 
-    virtual void readImpl(void* buf, size_t size);
+    void readImpl(void* buf, size_t size) override;
 
-    virtual void writeImpl(const void* buf, size_t size);
+    void writeImpl(const void* buf, size_t size) override;
 
-    virtual bool canSeekImpl() const;
+    bool canSeekImpl() const noexcept override;
 
-    virtual nitf::Off seekImpl(nitf::Off offset, int whence);
+    nitf::Off seekImpl(nitf::Off offset, int whence) override;
 
-    virtual nitf::Off tellImpl() const;
+    nitf::Off tellImpl() const override;
 
-    virtual nitf::Off getSizeImpl() const;
+    nitf::Off getSizeImpl() const override;
 
-    virtual int getModeImpl() const;
+    int getModeImpl() const noexcept override;
 
-    virtual void closeImpl();
+    void closeImpl() override;
 
 private:
     const size_t mBufferSize;
-    const mem::ScopedArray<char> mScopedBuffer;
+    const std::unique_ptr<char[]> mScopedBuffer;
     char* const mBuffer;
 
-    nitf::Uint64 mPosition;
-    nitf::Uint64 mTotalWritten;
-    nitf::Uint64 mBlocksWritten;
-    nitf::Uint64 mPartialBlocks;
-    double mElapsedTime;
+    nitf::Off mPosition;
+    uint64_t mTotalWritten;
+    uint64_t mBlocksWritten;
+    uint64_t mPartialBlocks;
+    double mElapsedTime = 0.0;
 
     // NOTE: This is at the end to give us a chance to adopt the buffer
     //       in ScopedArray in case sys::File's constructor throws

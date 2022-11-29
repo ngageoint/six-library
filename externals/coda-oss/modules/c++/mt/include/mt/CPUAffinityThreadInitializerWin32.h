@@ -24,7 +24,7 @@
 #ifndef __MT_CPU_AFFINITY_THREAD_INITIALIZER_WIN32_H__
 #define __MT_CPU_AFFINITY_THREAD_INITIALIZER_WIN32_H__
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 
 #include <mt/AbstractCPUAffinityThreadInitializer.h>
 

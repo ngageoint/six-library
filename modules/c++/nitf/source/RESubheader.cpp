@@ -42,15 +42,13 @@ RESubheader::RESubheader(nitf_RESubheader * x)
     getNativeOrThrow();
 }
 
-RESubheader::RESubheader()
+RESubheader::RESubheader() noexcept(false) : RESubheader(nitf_RESubheader_construct(&error))
 {
-    setNative(nitf_RESubheader_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
 
-nitf::RESubheader RESubheader::clone()
+nitf::RESubheader RESubheader::clone() const
 {
     nitf::RESubheader dolly(
         nitf_RESubheader_clone(getNativeOrThrow(), &error));
@@ -58,30 +56,27 @@ nitf::RESubheader RESubheader::clone()
     return dolly;
 }
 
-RESubheader::~RESubheader(){}
-
-
-nitf::Field RESubheader::getFilePartType()
+nitf::Field RESubheader::getFilePartType() const
 {
     return nitf::Field(getNativeOrThrow()->filePartType);
 }
 
-nitf::Field RESubheader::getTypeID()
+nitf::Field RESubheader::getTypeID() const
 {
     return nitf::Field(getNativeOrThrow()->typeID);
 }
 
-nitf::Field RESubheader::getVersion()
+nitf::Field RESubheader::getVersion() const
 {
     return nitf::Field(getNativeOrThrow()->version);
 }
 
-nitf::Field RESubheader::getSecurityClass()
+nitf::Field RESubheader::getSecurityClass() const
 {
     return nitf::Field(getNativeOrThrow()->securityClass);
 }
 
-nitf::FileSecurity RESubheader::getSecurityGroup()
+nitf::FileSecurity RESubheader::getSecurityGroup() const
 {
     return nitf::FileSecurity(getNativeOrThrow()->securityGroup);
 }
@@ -97,7 +92,7 @@ void RESubheader::setSecurityGroup(nitf::FileSecurity value)
     value.setManaged(true);
 }
 
-nitf::Field RESubheader::getSubheaderFieldsLength()
+nitf::Field RESubheader::getSubheaderFieldsLength() const
 {
     return nitf::Field(getNativeOrThrow()->subheaderFieldsLength);
 }
@@ -107,12 +102,12 @@ char * RESubheader::getSubheaderFields() const
     return getNativeOrThrow()->subheaderFields;
 }
 
-nitf::Uint64 RESubheader::getDataLength() const
+uint64_t RESubheader::getDataLength() const
 {
     return getNativeOrThrow()->dataLength;
 }
 
-void RESubheader::setDataLength(nitf::Uint32 value)
+void RESubheader::setDataLength(uint32_t value)
 {
     getNativeOrThrow()->dataLength = value;
 }

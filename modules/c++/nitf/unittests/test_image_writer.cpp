@@ -20,13 +20,51 @@
  *
  */
 
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
+#include <stdexcept>
+#include <std/filesystem>
+
+#include <import/nitf.hpp>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/ImageWriter.hpp>
 #include <nitf/Record.hpp>
+#include <nitf/UnitTests.hpp>
+
 #include "TestCase.h"
 
-namespace
+using path = std::filesystem::path;
+
+static void doChangeFileHeader(const std::string& inputPathname, const std::string& outputPathname)
 {
+    if (nitf::Reader::getNITFVersion(inputPathname) == nitf::Version::NITF_VER_UNKNOWN)
+    {
+        throw std::invalid_argument("Invalid NITF: " + inputPathname);
+    }
+
+    nitf::Reader reader;
+    nitf::IOHandle io(inputPathname);
+    
+    nitf::Record record = reader.read(io);
+    nitf::FileHeader fileHeader = record.getHeader();
+
+    auto fileTitle = fileHeader.getFileTitle();
+    std::string strFileTitle = fileTitle;
+    str::replaceAll(strFileTitle, " ", "*"); // field is fixed length
+    fileTitle.set(strFileTitle);
+
+    record.setHeader(fileHeader);
+
+    nitf::Writer writer;
+    nitf::IOHandle output(outputPathname, NITF_ACCESS_WRITEONLY, NITF_CREATE);
+    writer.prepare(output, record);
+    writer.setWriteHandlers(io, record);
+    writer.write();
+}
+
 TEST_CASE(imageWriterThrowsOnFailedConstruction)
 {
     nitf::ImageSubheader subheader;
@@ -39,15 +77,35 @@ TEST_CASE(constructValidImageWriter)
     nitf::ImageSegment segment = record.newImageSegment();
     nitf::ImageSubheader subheader = segment.getSubheader();
     std::vector<nitf::BandInfo> bands = {nitf::BandInfo(), nitf::BandInfo()};
-    subheader.setPixelInformation("INT", 8, 8, "R", "MONO", "VIS", bands);
-    subheader.setBlocking(100, 200, 10, 10, "P");
+    subheader.setPixelInformation(nitf::PixelValueType::Integer, 8, 8, "R", nitf::ImageRepresentation::MONO, "VIS", bands);
+    subheader.setBlocking(100, 200, 10, 10, nitf::BlockingMode::Pixel);
     nitf::ImageWriter writer(subheader);
 }
+
+TEST_CASE(changeFileHeader)
+{
+	const auto inputPathname = nitf::Test::findInputFile(path("modules") / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
+    TEST_ASSERT_TRUE(std::filesystem::is_regular_file(inputPathname));
+    constexpr auto outputPathname = "outputPathname.ntf";
+
+    doChangeFileHeader(inputPathname, outputPathname);
+
+    nitf::Reader reader;
+    nitf::IOHandle io(outputPathname);
+    nitf::Record record = reader.read(io);
+    nitf::FileHeader fileHeader = record.getHeader();
+
+    const std::string fileTitle = fileHeader.getFileTitle();
+    auto npos = fileTitle.find(" ");
+    TEST_ASSERT_EQ(npos, std::string::npos);
+    npos = fileTitle.find("*");
+    TEST_ASSERT(npos != std::string::npos);
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
+    (void)argc;
+
     TEST_CHECK(imageWriterThrowsOnFailedConstruction);
     TEST_CHECK(constructValidImageWriter);
-    return 0;
-}
+    TEST_CHECK(changeFileHeader);
+    )
