@@ -2106,13 +2106,13 @@ std::unique_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const std::string& lutS
     }
     return lut;
 }
-mem::auto_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const xml::lite::Element* elem,
+std::unique_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const xml::lite::Element* elem,
         size_t size) const
 {
     std::string lutStr = "";
     parseString(elem, lutStr);
     auto result = parseSingleLUT(lutStr, size);
-    return mem::auto_ptr<LUT>(result.release());
+    return std::unique_ptr<LUT>(result.release());
 }
 
 XMLElem DerivedXMLParser200::createLUT(const std::string& name, const LUT *lut,

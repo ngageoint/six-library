@@ -72,9 +72,9 @@ std::u8string CPHDXMLControl::toXMLString(
     return ss.stream().str();
 }
 std::u8string CPHDXMLControl::toXMLString(
-    const Metadata& metadata,
-    const std::vector<std::string>& schemaPaths_,
-    bool prettyPrint)
+        const Metadata& metadata,
+        const std::vector<std::string>& schemaPaths_,
+        bool prettyPrint)
 {
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
@@ -91,11 +91,11 @@ std::string CPHDXMLControl::toXMLString_(
     return str::EncodedStringView(result).native();
 }
 
-mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
+std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
         const Metadata& metadata,
         const std::vector<std::string>& schemaPaths)
 {
-    mem::auto_ptr<xml::lite::Document> doc(toXMLImpl(metadata).release());
+    std::unique_ptr<xml::lite::Document> doc(toXMLImpl(metadata).release());
     if(!schemaPaths.empty())
     {
         six::XMLControl::validate(doc.get(), schemaPaths, mLog);
@@ -106,9 +106,9 @@ mem::auto_ptr<xml::lite::Document> CPHDXMLControl::toXML(
 std::unordered_map<std::string, xml::lite::Uri> CPHDXMLControl::getVersionUriMap()
 {
     return {
-        {"1.0.0", xml::lite::Uri("urn:CPHD:1.0.0")}
-        , {"1.0.1", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")}
-        , {"1.1.0", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
+        {"1.0.0", xml::lite::Uri("urn:CPHD:1.0.0")},
+        {"1.0.1", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")},
+        {"1.1.0", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
     };
 }
 

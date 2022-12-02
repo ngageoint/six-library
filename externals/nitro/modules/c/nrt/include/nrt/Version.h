@@ -1,5 +1,5 @@
 #pragma once
 
 #if !defined(NRT_LIB_VERSION)
-#define NRT_LIB_VERSION "2.11.0"
+#define NRT_LIB_VERSION "2.11.1"
 #endif

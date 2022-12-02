@@ -686,8 +686,8 @@ protected:
     const csm::NoCorrelationModel mCorrelationModel;
     std::vector<std::string> mSchemaDirs;
     std::string mSensorModelState;
-    mem::auto_ptr<const scene::SceneGeometry> mGeometry;
-    mem::auto_ptr<scene::ProjectionModel> mProjection;
+    std::unique_ptr<const scene::SceneGeometry> mGeometry;
+    std::unique_ptr<scene::ProjectionModel> mProjection;
     csm::param::Type mAdjustableTypes[scene::AdjustableParams::NUM_PARAMS];
 
     // NOTE: This is computed just at the SCP once each time a new SICD is

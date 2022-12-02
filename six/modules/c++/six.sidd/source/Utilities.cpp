@@ -98,7 +98,7 @@ static six::Vector3 latLonToECEF(const six::sidd::PolynomialProjection& projecti
    return scene::Utilities::latLonToECEF(lla);
 }
 
-mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
+std::unique_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
         const DerivedData* derived)
 {
     const double centerTime = getCenterTime(*derived);
@@ -146,7 +146,7 @@ mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
     {
         // In this case there are no image plane row/col vectors, so we want
         // to use a different constructor
-        mem::auto_ptr<scene::SceneGeometry> geom(
+        std::unique_ptr<scene::SceneGeometry> geom(
                 new scene::SceneGeometry(arpVel, arpPos, refPt));
         return geom;
     }
@@ -156,12 +156,12 @@ mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
                 Ctxt("Cylindrical projection not yet supported"));
     }
 
-    mem::auto_ptr<scene::SceneGeometry> geom(
+    std::unique_ptr<scene::SceneGeometry> geom(
             new scene::SceneGeometry(arpVel, arpPos, refPt, rowVec, colVec));
     return geom;
 }
 
-mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
+std::unique_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
         const DerivedData* derived)
 {
     if (!derived->measurement->projection->isMeasurable())
@@ -175,7 +175,7 @@ mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
         dynamic_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
-    mem::auto_ptr<scene::GridECEFTransform> transform;
+    std::unique_ptr<scene::GridECEFTransform> transform;
 
     switch ((int)p->projectionType)
     {
@@ -251,7 +251,7 @@ mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
     return transform;
 }
 
-mem::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
+std::unique_ptr<scene::GridGeometry> Utilities::getGridGeometry(
         const DerivedData* derived)
 {
     if (!derived->measurement->projection->isMeasurable())
@@ -265,7 +265,7 @@ mem::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
         dynamic_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
-    mem::auto_ptr<scene::GridGeometry> geom;
+    std::unique_ptr<scene::GridGeometry> geom;
 
     // Only currently have an implementation for PGD
     switch ((int)p->projectionType)
@@ -465,19 +465,19 @@ std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType>
     return pols;
 }
 
-mem::auto_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
+std::unique_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
         const DerivedData* data)
 {
     const int lookDir = getSideOfTrack(data);
     scene::Errors errors;
     ::getErrors(*data, errors);
 
-    mem::auto_ptr<scene::SceneGeometry> geom(getSceneGeometry(data));
+    std::unique_ptr<scene::SceneGeometry> geom(getSceneGeometry(data));
 
     const six::ProjectionType gridType =
             data->measurement->projection->projectionType;
 
-    mem::auto_ptr<scene::ProjectionModel> projModel;
+    std::unique_ptr<scene::ProjectionModel> projModel;
     switch (gridType)
     {
     case six::ProjectionType::PLANE:
@@ -534,10 +534,10 @@ TReturn Utilities_parseData(::io::InputStream& xmlStream, const TSchemaPaths& sc
     auto data(six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
     return TReturn(static_cast<DerivedData*>(data.release()));
 }
-mem::auto_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
+std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
-    return Utilities_parseData<mem::auto_ptr<DerivedData>>(xmlStream, schemaPaths, log);
+    return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, schemaPaths, log);
 }
 std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
@@ -545,7 +545,7 @@ std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, pSchemaPaths, log);
 }
 
-mem::auto_ptr<DerivedData> Utilities::parseDataFromFile(const std::string& pathname,
+std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::string& pathname,
         const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
     io::FileInputStream inStream(pathname);
@@ -561,7 +561,7 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem:
     return parseData(inStream, pSchemaPaths, *logger);
 }
 
-mem::auto_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr_,
+std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr_,
         const std::vector<std::string>& schemaPaths_, logging::Logger& log)
 {
     const auto xmlStr = str::EncodedStringView(xmlStr_).u8string();
@@ -571,7 +571,7 @@ mem::auto_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xml
         [](const std::string& s) { return s; });
 
     auto result = parseDataFromString(xmlStr, &schemaPaths, &log);
-    return mem::auto_ptr<DerivedData>(result.release());
+    return std::unique_ptr<DerivedData>(result.release());
 }
 std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
@@ -1381,9 +1381,9 @@ std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string&
     }
     throw std::invalid_argument("strVersion = '" + strVersion + "' is not supported.");
 }
-mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
+std::unique_ptr<DerivedData> Utilities::createFakeDerivedData()
 {
-    return mem::auto_ptr<DerivedData>(createFakeDerivedData_("").release());
+    return std::unique_ptr<DerivedData>(createFakeDerivedData_("").release());
 }
 
 }

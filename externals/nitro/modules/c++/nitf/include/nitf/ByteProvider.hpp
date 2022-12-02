@@ -243,7 +243,7 @@ struct NITRO_NITFCPP_API ByteProvider
      * \return ImageBlocker with settings in sync with how the image will be
      * blocked in the NITF
      */
-    mem::auto_ptr<const ImageBlocker> getImageBlocker() const;
+    std::unique_ptr<const ImageBlocker> getImageBlocker() const;
 
 protected:
     /*!
