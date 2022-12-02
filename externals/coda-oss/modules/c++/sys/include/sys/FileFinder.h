@@ -192,9 +192,9 @@ namespace test // i.e., sys::test
     //
     // Once modulePath is found, the result is cached to avoid searching again.
     coda_oss::filesystem::path findModuleFile(const coda_oss::filesystem::path& root,
-            const coda_oss::filesystem::path& moduleName, const coda_oss::filesystem::path& modulePath, const coda_oss::filesystem::path& moduleFile);
+            const coda_oss::filesystem::path& externalsName, const coda_oss::filesystem::path& modulePath, const coda_oss::filesystem::path& moduleFile);
     coda_oss::filesystem::path findGITModuleFile( // use current_directory() to find_dotGITDirectory()
-            const coda_oss::filesystem::path& moduleName, const coda_oss::filesystem::path& modulePath, const coda_oss::filesystem::path& moduleFile);
+            const coda_oss::filesystem::path& externalsName, const coda_oss::filesystem::path& modulePath, const coda_oss::filesystem::path& moduleFile);
 }
 }
 #endif

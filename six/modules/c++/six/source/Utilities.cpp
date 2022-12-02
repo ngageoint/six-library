@@ -899,31 +899,16 @@ static std::filesystem::path buildRootDir_()
     return retval;
 }
 
-static std::filesystem::path getPath_(const std::filesystem::path& subdir, const  std::filesystem::path& filename)
+std::filesystem::path six::testing::getNitroPath(const std::filesystem::path& filename)
 {
-    static const auto root_dir = buildRootDir_();
-    const auto startDir = root_dir / subdir;
-    auto retval = startDir / filename;
-    // Try to avoid searching
-    if (!is_regular_file(retval))
-    {
-        const auto foundDir = sys::findFirstDirectory(startDir, subdir);
-        retval = foundDir / subdir / filename;
-    }
-
-    return retval;
-}
-
-std::filesystem::path six::testing::getNitroPath(const  std::filesystem::path& filename)
-{
-    static const auto nitf_unittests = std::filesystem::path("nitro") / "modules" / "c++" / "nitf" / "unittests";
-    return getPath_(nitf_unittests, filename);
+    static const auto unittests = std::filesystem::path("modules") / "c++" / "nitf" / "unittests";
+    return sys::test::findGITModuleFile("nitro", unittests, filename);
 }
 
 std::filesystem::path six::testing::getNitfPath(const std::filesystem::path& filename)
 {
     static const auto tests_nitf = std::filesystem::path("six") / "modules" / "c++" / "six" / "tests" / "nitf";
-    return getPath_(tests_nitf, filename);
+    return sys::test::findGITModuleFile("six", tests_nitf, filename);
 }
 
 static auto six_relative_path(const std::filesystem::path& module)
@@ -938,8 +923,8 @@ std::vector<std::filesystem::path> six::testing::getSchemaPaths()
     return std::vector<std::filesystem::path> { schemaPath };
 }
 
-std::filesystem::path six::testing::getSampleXmlPath(const std::filesystem::path& module, const  std::filesystem::path& filename)
+std::filesystem::path six::testing::getSampleXmlPath(const std::filesystem::path& moduleName, const  std::filesystem::path& filename)
 {
-    const auto subdir = six_relative_path(module) / "tests" / "sample_xml";
-    return getPath_(subdir, filename);
+    const auto modulePath = std::filesystem::path("six") / "modules" / "c++" / moduleName;
+    return sys::test::findGITModuleFile("six", modulePath, filename);
 }

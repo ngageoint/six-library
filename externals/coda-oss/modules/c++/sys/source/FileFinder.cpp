@@ -418,9 +418,14 @@ fs::path sys::test::find_dotGITDirectory(const fs::path& p)
 }
 
 fs::path sys::test::findModuleFile(const fs::path& root,
-        const fs::path& moduleName, const fs::path& modulePath, const fs::path& moduleFile)
+        const fs::path& externalsName, const fs::path& modulePath, const fs::path& moduleFile)
 {
     auto retval = root / modulePath / moduleFile;
+    if (exists(retval))
+    {
+        return retval;
+    }
+    retval = root / externalsName / modulePath / moduleFile;
     if (exists(retval))
     {
         return retval;
@@ -434,7 +439,7 @@ fs::path sys::test::findModuleFile(const fs::path& root,
     };
     for (const auto& subDir : subDirectories)
     {
-        retval = root / subDir / moduleName / modulePath / moduleFile;
+        retval = root / subDir / externalsName / modulePath / moduleFile;
         if (exists(retval))
         {
             return retval;
@@ -443,7 +448,7 @@ fs::path sys::test::findModuleFile(const fs::path& root,
 
     // Welp, we've got to try searching ... this might take a while :-(
     static std::map<std::string, std::string> module_to_path;
-    auto module_name_and_path = moduleName / modulePath;
+    auto module_name_and_path = externalsName / modulePath;
     const auto it = module_to_path.find(module_name_and_path.string());
     if (it == module_to_path.end())
     {
@@ -469,8 +474,8 @@ fs::path sys::test::findModuleFile(const fs::path& root,
 }
 
 fs::path sys::test::findGITModuleFile(
-        const fs::path& moduleName, const fs::path& modulePath, const fs::path& moduleFile)
+        const fs::path& externalsName, const fs::path& modulePath, const fs::path& moduleFile)
 {
     const auto dotGIT = find_dotGITDirectory(fs::current_path());
-    return findModuleFile(dotGIT, moduleName, modulePath, moduleFile);
+    return findModuleFile(dotGIT, externalsName, modulePath, moduleFile);
 }
