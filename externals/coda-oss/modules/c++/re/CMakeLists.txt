@@ -4,10 +4,13 @@ set(MODULE_DEPS sys-c++)
 # Enable to use std::regex instead of PCRE.
 set(RE_ENABLE_STD_REGEX OFF CACHE BOOL "use std::regex instead of pcre")
 
-if (RE_ENABLE_STD_REGEX OR TARGET pcre2)
+if (RE_ENABLE_STD_REGEX OR ENABLE_PCRE)
     coda_generate_module_config_header(${MODULE_NAME})
 
     if (NOT RE_ENABLE_STD_REGEX)
+        if (CONAN_PACKAGE_NAME)
+            find_package(coda-oss_pcre2 REQUIRED)
+        endif()
         list(APPEND MODULE_DEPS pcre2)
     endif()
 

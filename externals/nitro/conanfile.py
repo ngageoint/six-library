@@ -9,17 +9,9 @@ class NitroConan(ConanFile):
     url = "https://github.com/mdaus/nitro"
     description = "library for reading and writing the National Imagery Transmission Format (NITF)"
     settings = "os", "compiler", "build_type", "arch"
-    requires = ("coda-oss/master_67d6362bcfcf07e2", )
-    options = {"shared": [True, False],
-               "PYTHON_HOME": "ANY",
-               "PYTHON_VERSION": "ANY",
-               "ENABLE_PYTHON": [True, False],
-               }
-    default_options = {"shared": False,
-                       "PYTHON_HOME": "",
-                       "PYTHON_VERSION": "",
-                       "ENABLE_PYTHON": True,
-                       }
+    requires = ("coda-oss/master_1ac97fe4897896fd", )
+    options = {"shared": [True, False]}
+    default_options = {"shared": False}
     exports_sources = ("CMakeLists.txt",
                        "LICENSE",
                        "README.md",
@@ -40,17 +32,12 @@ class NitroConan(ConanFile):
 
     def set_version(self):
         git = tools.Git(folder=self.recipe_folder)
-        self.version = "%s_%s" % (git.get_branch(), git.get_revision()[:16])
-
-    def configure(self):
-        # Python-related options are forced to be the same for coda-oss
-        self.options["coda-oss"].PYTHON_HOME = self.options.PYTHON_HOME
-        self.options["coda-oss"].PYTHON_VERSION = self.options.PYTHON_VERSION
-        self.options["coda-oss"].ENABLE_PYTHON = self.options.ENABLE_PYTHON
+        self.version = git.get_revision()[:16]
 
     def _configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["ENABLE_STATIC_TRES"] = True # always build static TRES
+        cmake.definitions["ENABLE_J2K"] = self.options["coda-oss"].ENABLE_J2K
         cmake.configure()
         return cmake
 

@@ -35,26 +35,26 @@ static std::string testName;
 
 static path findInputFile()
 {
-    const auto inputPath = path("modules") / "c++" / "nitf" / "unittests" / "sicd_50x50.nitf";
-    return nitf::Test::findInputFile(inputPath);
+    static const auto unittests = path("modules") / "c++" / "nitf" / "unittests";
+    static const auto inputPath = nitf::Test::findInputFile(unittests, "sicd_50x50.nitf");
+    return inputPath;
 }
 static path findInputFile(bool withAmpTable)
 {
-    path inputPath;
+    path moduleFile;
     if (withAmpTable)
     {
-        inputPath = path("modules") / "c++" / "nitf" / "unittests" / "8_bit_Amp_Phs_Examples" / 
-            "With_amplitude_table" /
+        moduleFile = path("With_amplitude_table") / 
             "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
     }
     else
     {
-        inputPath = path("modules") / "c++" / "nitf" / "unittests" / "8_bit_Amp_Phs_Examples" / 
-            "No_amplitude_table" /
+        moduleFile = path("No_amplitude_table") /
             "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
-
     }
-    return nitf::Test::findInputFile(inputPath);
+
+    static const auto Amp_Phs_Examples = path("modules") / "c++" / "nitf" / "unittests" / "8_bit_Amp_Phs_Examples";
+    return nitf::Test::findInputFile(Amp_Phs_Examples, moduleFile);
 }
 
 struct expected_values final
