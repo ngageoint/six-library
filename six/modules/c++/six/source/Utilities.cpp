@@ -891,40 +891,33 @@ std::filesystem::path six::testing::buildRootDir(const std::filesystem::path& ar
     return six::testing::findRootDir(argv0);
 }
 
-static std::filesystem::path buildRootDir_()
-{
-    static const sys::OS os;
-    static const  std::filesystem::path argv0 = os.getSpecialEnv("0");
-    static const auto retval = six::testing::buildRootDir(argv0);
-    return retval;
-}
-
 std::filesystem::path six::testing::getNitroPath(const std::filesystem::path& filename)
 {
     static const auto unittests = std::filesystem::path("modules") / "c++" / "nitf" / "unittests";
     return sys::test::findGITModuleFile("nitro", unittests, filename);
 }
 
+std::filesystem::path six::testing::getModuleFile(const std::filesystem::path& modulePath, const  std::filesystem::path& filename)
+{
+    return sys::test::findGITModuleFile("six", modulePath, filename);
+}
+
 std::filesystem::path six::testing::getNitfPath(const std::filesystem::path& filename)
 {
     static const auto tests_nitf = std::filesystem::path("six") / "modules" / "c++" / "six" / "tests" / "nitf";
-    return sys::test::findGITModuleFile("six", tests_nitf, filename);
-}
-
-static auto six_relative_path(const std::filesystem::path& module)
-{
-    return std::filesystem::path("six") / "modules" / "c++" / module;
+    return getModuleFile(tests_nitf, filename);
 }
 
 std::vector<std::filesystem::path> six::testing::getSchemaPaths()
-{
-    static const auto root_dir = buildRootDir_();
-    const auto schemaPath = root_dir / six_relative_path("six.sicd") / "conf" / "schema";
+{ 
+    static const auto modulePath = std::filesystem::path("six") / "modules" / "c++" / "six.sicd" / "conf" / "schema";
+    static const auto filename = getModuleFile(modulePath, "SICD_schema_V1.3.0.xsd");
+    static const auto schemaPath = filename.parent_path();
     return std::vector<std::filesystem::path> { schemaPath };
 }
 
 std::filesystem::path six::testing::getSampleXmlPath(const std::filesystem::path& moduleName, const  std::filesystem::path& filename)
 {
     const auto modulePath = std::filesystem::path("six") / "modules" / "c++" / moduleName;
-    return sys::test::findGITModuleFile("six", modulePath, filename);
+    return getModuleFile(modulePath, filename);
 }
