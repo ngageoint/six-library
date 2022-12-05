@@ -890,7 +890,9 @@ def configureCompilerOptions(self):
             config['cxx']['linkflags_64']   = '-m64'
             config['cxx']['optz_med']       = '-O1'
             config['cxx']['optz_fast']      = '-O2'
-            config['cxx']['optz_fastest']   = '-O3'
+            # https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/x86-Options.html#x86-Options
+            # "Using -march=native enables all instruction subsets supported by the local machine ..."
+            config['cxx']['optz_fastest']   = '-O3 -march=native'.split()
 
             if not Options.options.enablecpp17:
                 gxxCompileFlags='-fPIC -std=c++14'
@@ -923,7 +925,9 @@ def configureCompilerOptions(self):
             config['cc']['linkflags_64']   = '-m64'
             config['cc']['optz_med']       = '-O1'
             config['cc']['optz_fast']      = '-O2'
-            config['cc']['optz_fastest']   = '-O3'
+            # https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/x86-Options.html#x86-Options
+            # "Using -march=native enables all instruction subsets supported by the local machine ..."
+            config['cc']['optz_fastest']   = '-O3 -march=native'.split()
 
             self.env.append_value('CFLAGS', '-fPIC'.split())
 

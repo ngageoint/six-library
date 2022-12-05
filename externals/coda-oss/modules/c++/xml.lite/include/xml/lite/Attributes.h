@@ -82,6 +82,10 @@ struct AttributeNode final
      */
     void setQName(const std::string& qname);
     void setQName(const xml::lite::QName& qname);
+    explicit AttributeNode(const xml::lite::QName& qname)
+    {
+        setQName(qname);
+    }
 
     /*!
      *  Set the local (unqualified portion) of the name
@@ -111,6 +115,10 @@ struct AttributeNode final
      *  \param value The attribute value
      */
     void setValue(const std::string& value);
+    AttributeNode(const xml::lite::QName& qname, const std::string& value) : AttributeNode(qname)
+    {
+        setValue(value);
+    }
 
     /*!
      *  Get the URI associated with the QName.  Blank string
