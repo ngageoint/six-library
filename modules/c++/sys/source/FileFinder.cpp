@@ -24,9 +24,12 @@
 #include <iterator>
 #include <stdexcept>
 #include <tuple> // std::ignore
+#include <map>
 
 #include "sys/DirectoryEntry.h"
 #include "sys/Path.h"
+
+namespace fs = coda_oss::filesystem;
 
 bool sys::ExistsPredicate::operator()(const std::string& entry) const
 {
@@ -205,7 +208,7 @@ std::vector<std::string> sys::FileFinder::search(
     return files;
 }
 
-static coda_oss::filesystem::path findFirst(const sys::FilePredicate& pred, const coda_oss::filesystem::path& startingDirectory)
+static fs::path findFirst(const sys::FilePredicate& pred, const fs::path& startingDirectory)
 {
     auto dir = startingDirectory;
     while (true)
@@ -228,41 +231,41 @@ static coda_oss::filesystem::path findFirst(const sys::FilePredicate& pred, cons
         dir = dir.parent_path();
     }
 }
-coda_oss::filesystem::path sys::findFirstFile(const coda_oss::filesystem::path& startingDirectory, const coda_oss::filesystem::path& filename)
+fs::path sys::findFirstFile(const fs::path& startingDirectory, const fs::path& filename)
 {
     struct FileExistsPredicate final : public FileOnlyPredicate
     {
-        coda_oss::filesystem::path name_;
-        FileExistsPredicate(const coda_oss::filesystem::path& name) : name_(name) { }
+        fs::path name_;
+        FileExistsPredicate(const fs::path& name) : name_(name) { }
         bool operator()(const std::string& entry) const override
         {
             const auto p =entry / name_;
-            return coda_oss::filesystem::is_regular_file(p);
+            return fs::is_regular_file(p);
         }
     };
     const FileExistsPredicate pred(filename);
     return findFirst(pred, startingDirectory);
 }
-coda_oss::filesystem::path sys::findFirstDirectory(const coda_oss::filesystem::path& startingDirectory, const coda_oss::filesystem::path& dir)
+fs::path sys::findFirstDirectory(const fs::path& startingDirectory, const fs::path& dir)
 {
     struct DirectoryExistsPredicate final : public DirectoryOnlyPredicate
     {
-        coda_oss::filesystem::path name_;
-        DirectoryExistsPredicate(const coda_oss::filesystem::path& name) : name_(name) { }
+        fs::path name_;
+        DirectoryExistsPredicate(const fs::path& name) : name_(name) { }
         bool operator()(const std::string& entry) const override
         {
             const auto p =entry / name_;
-            return coda_oss::filesystem::is_directory(p);
+            return fs::is_directory(p);
         }
     };
     const DirectoryExistsPredicate pred(dir);
     return findFirst(pred, startingDirectory);
 }
 
-coda_oss::filesystem::path sys::test::findRootDirectory(const coda_oss::filesystem::path& p, const std::string& rootName,
-        std::function<bool(const coda_oss::filesystem::path&)> isRoot)
+fs::path sys::test::findRootDirectory(const fs::path& p, const std::string& rootName,
+        std::function<bool(const fs::path&)> isRoot)
 {
-    const auto isRootDirectory = [&](const coda_oss::filesystem::path& p) { return is_directory(p) && isRoot(p); };
+    const auto isRootDirectory = [&](const fs::path& p) { return is_directory(p) && isRoot(p); };
 
     // Does the given path look good?
     if (isRootDirectory(p))
@@ -311,10 +314,10 @@ static inline std::string Platform()
     return os.getSpecialEnv("Platform");  // e.g., "x64" on Windows
 }
 
-static coda_oss::filesystem::path findCMakeRoot(const coda_oss::filesystem::path& path, const coda_oss::filesystem::path& dir)
+static fs::path findCMakeRoot(const fs::path& path, const fs::path& dir)
 {
    	static const auto platform_and_configuration = ::Platform() + "-" + ::Configuration(); // "x64-Debug"
-    const auto pred = [&](const coda_oss::filesystem::path& p)
+    const auto pred = [&](const fs::path& p)
     {
         if (p.filename() == platform_and_configuration)
         {
@@ -338,7 +341,7 @@ static coda_oss::filesystem::path findCMakeRoot(const coda_oss::filesystem::path
 	return sys::test::findRootDirectory(path, "", pred);
 }
 
-coda_oss::filesystem::path findCMake_Root(const coda_oss::filesystem::path& path,
+fs::path findCMake_Root(const fs::path& path,
     const std::string& build, const std::string& install)
 {
     // Calling these directories "build" and "install" for clarity, even though they may be
@@ -368,20 +371,20 @@ coda_oss::filesystem::path findCMake_Root(const coda_oss::filesystem::path& path
     }
     return findCMakeRoot(path, build);  // throw an exception
 }
-coda_oss::filesystem::path sys::test::findCMakeBuildRoot(const coda_oss::filesystem::path& path)
+fs::path sys::test::findCMakeBuildRoot(const fs::path& path)
 {
     auto retval = findCMake_Root(path, "build", "install");
     std::clog << "findCMakeBuildRoot(): " << retval << "\n";
     return retval;
 }
-coda_oss::filesystem::path sys::test::findCMakeInstallRoot(const coda_oss::filesystem::path& path)
+fs::path sys::test::findCMakeInstallRoot(const fs::path& path)
 {
     auto retval = findCMake_Root(path, "install", "build");
     std::clog << "findCMakeInstallRoot(): " << retval << "\n";
     return retval;
 }
 
-bool sys::test::isCMakeBuild(const coda_oss::filesystem::path& path)
+bool sys::test::isCMakeBuild(const fs::path& path)
 {
     try
     {
@@ -392,4 +395,87 @@ bool sys::test::isCMakeBuild(const coda_oss::filesystem::path& path)
     {
         return false;
     }
+}
+
+static fs::path find_dotGITDirectory_(const fs::path& p, const fs::path& initial)
+{
+    // Walk up the directory tree starting at "p" until we find a .git directory
+    if (is_directory(p / ".git"))
+    {
+        return p;
+    }
+
+    auto parent = p.parent_path();
+    if (parent.empty())
+    {
+        throw std::invalid_argument("Can't find .git/ anywhere in: " + initial.string());    
+    }
+    return find_dotGITDirectory_(parent, initial);
+}
+fs::path sys::test::find_dotGITDirectory(const fs::path& p)
+{
+    return find_dotGITDirectory_(p, p);
+}
+
+fs::path sys::test::findModuleFile(const fs::path& root,
+        const std::string& externalsName, const fs::path& modulePath, const fs::path& moduleFile)
+{
+    auto retval = root / modulePath / moduleFile;
+    if (exists(retval))
+    {
+        return retval;
+    }
+    retval = root / externalsName / modulePath / moduleFile;
+    if (exists(retval))
+    {
+        return retval;
+    }
+
+    static const std::vector<fs::path> subDirectories
+    {
+        "externals", // NITRO and SIX
+        fs::path("externals") / "coda" / "externals", // di
+        fs::path("src") / "OSS" / "di"
+    };
+    for (const auto& subDir : subDirectories)
+    {
+        retval = root / subDir / externalsName / modulePath / moduleFile;
+        if (exists(retval))
+        {
+            return retval;
+        }
+    }
+
+    // Welp, we've got to try searching ... this might take a while :-(
+    static std::map<std::string, std::string> module_to_path;
+    auto module_name_and_path = externalsName / modulePath;
+    auto it = module_to_path.find(module_name_and_path.string());
+    if (it == module_to_path.end())
+    {
+        const auto filename = module_name_and_path / moduleFile;
+        const auto dir = sys::findFirstFile(root, filename);
+        const auto path = dir / filename;
+        if (exists(path))
+        {
+            module_to_path[module_name_and_path.string()] = (dir / module_name_and_path).string();
+            it = module_to_path.find(module_name_and_path.string());
+        }
+    }
+    if (it != module_to_path.end()) // perhaps changed with successful sys::findFirstFile()
+    {
+        retval = fs::path(it->second) / moduleFile;
+        if (exists(retval))
+        {
+            return retval;
+        }
+    }
+
+    throw std::logic_error("Failed to find:" + moduleFile.string());
+}
+
+fs::path sys::test::findGITModuleFile(
+        const std::string& externalsName, const fs::path& modulePath, const fs::path& moduleFile)
+{
+    const auto dotGIT = find_dotGITDirectory(fs::current_path());
+    return findModuleFile(dotGIT, externalsName, modulePath, moduleFile);
 }
