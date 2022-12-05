@@ -891,55 +891,33 @@ std::filesystem::path six::testing::buildRootDir(const std::filesystem::path& ar
     return six::testing::findRootDir(argv0);
 }
 
-static std::filesystem::path buildRootDir_()
+std::filesystem::path six::testing::getNitroPath(const std::filesystem::path& filename)
 {
-    static const sys::OS os;
-    static const  std::filesystem::path argv0 = os.getSpecialEnv("0");
-    static const auto retval = six::testing::buildRootDir(argv0);
-    return retval;
+    static const auto unittests = std::filesystem::path("modules") / "c++" / "nitf" / "unittests";
+    return sys::test::findGITModuleFile("nitro", unittests, filename);
 }
 
-static std::filesystem::path getPath_(const std::filesystem::path& subdir, const  std::filesystem::path& filename)
+std::filesystem::path six::testing::getModuleFile(const std::filesystem::path& modulePath, const  std::filesystem::path& filename)
 {
-    static const auto root_dir = buildRootDir_();
-    const auto startDir = root_dir / subdir;
-    auto retval = startDir / filename;
-    // Try to avoid searching
-    if (!is_regular_file(retval))
-    {
-        const auto foundDir = sys::findFirstDirectory(startDir, subdir);
-        retval = foundDir / subdir / filename;
-    }
-
-    return retval;
-}
-
-std::filesystem::path six::testing::getNitroPath(const  std::filesystem::path& filename)
-{
-    static const auto nitf_unittests = std::filesystem::path("nitro") / "modules" / "c++" / "nitf" / "unittests";
-    return getPath_(nitf_unittests, filename);
+    return sys::test::findGITModuleFile("six", modulePath, filename);
 }
 
 std::filesystem::path six::testing::getNitfPath(const std::filesystem::path& filename)
 {
     static const auto tests_nitf = std::filesystem::path("six") / "modules" / "c++" / "six" / "tests" / "nitf";
-    return getPath_(tests_nitf, filename);
-}
-
-static auto six_relative_path(const std::filesystem::path& module)
-{
-    return std::filesystem::path("six") / "modules" / "c++" / module;
+    return getModuleFile(tests_nitf, filename);
 }
 
 std::vector<std::filesystem::path> six::testing::getSchemaPaths()
-{
-    static const auto root_dir = buildRootDir_();
-    const auto schemaPath = root_dir / six_relative_path("six.sicd") / "conf" / "schema";
+{ 
+    static const auto modulePath = std::filesystem::path("six") / "modules" / "c++" / "six.sicd" / "conf" / "schema";
+    static const auto filename = getModuleFile(modulePath, "SICD_schema_V1.3.0.xsd");
+    static const auto schemaPath = filename.parent_path();
     return std::vector<std::filesystem::path> { schemaPath };
 }
 
-std::filesystem::path six::testing::getSampleXmlPath(const std::filesystem::path& module, const  std::filesystem::path& filename)
+std::filesystem::path six::testing::getSampleXmlPath(const std::filesystem::path& moduleName, const  std::filesystem::path& filename)
 {
-    const auto subdir = six_relative_path(module) / "tests" / "sample_xml";
-    return getPath_(subdir, filename);
+    const auto modulePath = std::filesystem::path("six") / "modules" / "c++" / moduleName;
+    return getModuleFile(modulePath, filename);
 }

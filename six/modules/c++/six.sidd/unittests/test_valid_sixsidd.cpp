@@ -52,10 +52,6 @@ static inline std::filesystem::path six_sidd_relative_path()
 {
     return std::filesystem::path("six") / "modules" / "c++" / "six.sidd";
 }
-static std::filesystem::path sample_xml_relative_path(const std::filesystem::path& filename)
-{
-    return six_sidd_relative_path() / "tests" / "sample_xml" / filename;
-}
 static std::filesystem::path schema_relative_path()
 {
     return six_sidd_relative_path() / "conf" / "schema";
@@ -63,14 +59,15 @@ static std::filesystem::path schema_relative_path()
 
 static std::filesystem::path get_sample_xml_path(const std::filesystem::path& filename)
 {
-    const auto root_dir = six::testing::buildRootDir(argv0());
-    return root_dir / sample_xml_relative_path(filename);
+    static const auto modulePath = six_sidd_relative_path() / "tests" / "sample_xml";
+    return sys::test::findGITModuleFile("six", modulePath, filename);
 }
 
 static std::vector<std::filesystem::path> getSchemaPaths()
 {
-    const auto root_dir = six::testing::buildRootDir(argv0());
-    return std::vector<std::filesystem::path> { (root_dir / schema_relative_path()) };
+    static const auto filename = sys::test::findGITModuleFile("six", schema_relative_path(), "SIDD_schema_V3.0.0.xsd");
+    static const auto schemaPath = filename.parent_path();
+    return std::vector<std::filesystem::path> { schemaPath };
 }
 
 static std::unique_ptr<six::sidd::DerivedData> test_assert_round_trip(const std::string& testName,
