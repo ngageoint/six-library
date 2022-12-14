@@ -45,10 +45,26 @@ struct GroupInfo final
 {
 };
 
+enum class Class
+{
+    NoClass = -1, /**< error                                   */
+    Integer = 0, /**< integer types                           */
+    Float = 1, /**< floating-point types                    */
+    Time = 2, /**< date and time types                     */
+    String = 3, /**< character string types                  */
+    Bitfield = 4, /**< bit field types                         */
+    Opaque = 5, /**< opaque types                            */
+    Compound = 6, /**< compound types                          */
+    Reference = 7, /**< reference types                         */
+    Enum = 8, /**< enumeration types                       */
+    Vlen = 9, /**< variable-Length types                   */
+    Array = 10, /**< array types                             */
+};
+
 struct DatatypeInfo final
 {
     std::string name;
-    // Class
+    Class h5Class;
     // Type
     size_t size = 0;
 };
@@ -66,6 +82,7 @@ struct DatasetInfo final
 
 struct FileInfo final
 {
+    std::string filename; // could be a URL, so not std::filesystem::path
     std::string name;
     std::vector<GroupInfo> groups;
     std::vector<DatasetInfo> datasets;
