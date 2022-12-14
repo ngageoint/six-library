@@ -242,6 +242,11 @@ fs::path nitf::Test::findInputFile(const fs::path& inputFile)
 	return p / inputFile;
 }
 
+fs::path nitf::Test::findInputFile(const fs::path& modulePath, const fs::path& moduleFile)
+{
+	return sys::test::findGITModuleFile("nitro", modulePath, moduleFile);
+}
+
 static std::filesystem::path getNitfPluginPath(const std::string& pluginName)
 {
 	std::filesystem::path p;

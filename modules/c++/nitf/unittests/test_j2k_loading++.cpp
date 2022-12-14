@@ -64,8 +64,8 @@ static std::string testName;
 
 static path findInputFile(const path& fn)
 {
-    const auto inputPath = path("modules") / "c++" / "nitf" / "unittests" / fn;
-    return nitf::Test::findInputFile(inputPath);
+    static const auto unittests = path("modules") / "c++" / "nitf" / "unittests";
+    return nitf::Test::findInputFile(unittests, fn);
 }
 
 static void test_image_loading_(const std::string& input_file, bool /*optz*/)

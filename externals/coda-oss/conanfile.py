@@ -78,7 +78,7 @@ class CodaOssConan(ConanFile):
 
     def set_version(self):
         git = tools.Git(folder=self.recipe_folder)
-        self.version = "%s_%s" % (git.get_branch(), git.get_revision()[:16])
+        self.version = git.get_revision()[:16]
 
     def _get_in_tree_dependencies(self):
         # The in-tree dependencies ("drivers").
