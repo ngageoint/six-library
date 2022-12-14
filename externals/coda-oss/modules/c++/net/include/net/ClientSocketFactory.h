@@ -81,9 +81,9 @@ public:
      *
      *  \return A socket
      */
-    mem::auto_ptr<Socket> create(const SocketAddress& address)
+    std::unique_ptr<Socket> create(const SocketAddress& address)
     {
-        mem::auto_ptr<Socket> s(new Socket(mProto));
+        std::unique_ptr<Socket> s(new Socket(mProto));
 
         setOptions(*s);
 

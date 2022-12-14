@@ -717,6 +717,9 @@
     <ClInclude Include="sys\include\sys\MutexCpp11.h">
       <Filter>sys</Filter>
     </ClInclude>
+    <ClInclude Include="mem\include\mem\AutoPtr.h">
+      <Filter>mem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

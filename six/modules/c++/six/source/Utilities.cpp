@@ -572,7 +572,7 @@ void six::loadXmlDataContentHandler()
     loadXmlDataContentHandler(stderr); // existing/legacy behavior
 }
 
-mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
@@ -587,9 +587,9 @@ std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     return parseData(xmlReg, xmlStream, DataType::NOT_SET, pSchemaPaths, log);
 }
 
-inline mem::auto_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::string>& schemaPaths)
+inline std::unique_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::string>& schemaPaths)
 {
-    return mem::auto_ptr<Data>(xmlControl.fromXML(&doc, schemaPaths));
+    return std::unique_ptr<Data>(xmlControl.fromXML(&doc, schemaPaths));
 }
 inline std::unique_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
@@ -633,13 +633,13 @@ TReturn six_parseData(const XMLControlRegistry& xmlReg,
     const std::unique_ptr<XMLControl> xmlControl(xmlReg.newXMLControl(xmlDataType, &log));
     return fromXML_(doc, *xmlControl, schemaPaths);
 }
-mem::auto_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
 {
-    return six_parseData<mem::auto_ptr<Data>>(xmlReg, xmlStream, dataType, schemaPaths, log);
+    return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlStream, dataType, schemaPaths, log);
 }
 std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
@@ -650,7 +650,7 @@ std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlStream, dataType, pSchemaPaths, log);
 }
 
-mem::auto_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,
     const std::string& pathname,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
@@ -658,7 +658,7 @@ mem::auto_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,
     return parseDataFromFile(xmlReg, pathname, DataType::NOT_SET, schemaPaths, log);
 }
 
-mem::auto_ptr<Data> six::parseDataFromFile(
+std::unique_ptr<Data> six::parseDataFromFile(
         const XMLControlRegistry& xmlReg,
         const std::string& pathname,
         DataType dataType,
@@ -676,7 +676,7 @@ std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
 {
     return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, pSchemaPaths, pLogger);
 }
-mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
@@ -706,7 +706,7 @@ std::unique_ptr<Data> six::parseDataFromString(
 
     return parseData(xmlReg, inStream, dataType, schemaPaths, *pLogger_);
 }
-mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
     DataType dataType,
     const std::vector<std::string>& schemaPaths_,
@@ -718,7 +718,7 @@ mem::auto_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
 
     const str::EncodedStringView view(xmlStr);
     auto result = parseDataFromString(xmlReg, view.u8string(), dataType, &schemaPaths, &log);
-    return mem::auto_ptr<Data>(result.release());
+    return std::unique_ptr<Data>(result.release());
 }
 
 std::string six::findSchemaPath(const std::string& progname)
@@ -891,55 +891,33 @@ std::filesystem::path six::testing::buildRootDir(const std::filesystem::path& ar
     return six::testing::findRootDir(argv0);
 }
 
-static std::filesystem::path buildRootDir_()
+std::filesystem::path six::testing::getNitroPath(const std::filesystem::path& filename)
 {
-    static const sys::OS os;
-    static const  std::filesystem::path argv0 = os.getSpecialEnv("0");
-    static const auto retval = six::testing::buildRootDir(argv0);
-    return retval;
+    static const auto unittests = std::filesystem::path("modules") / "c++" / "nitf" / "unittests";
+    return sys::test::findGITModuleFile("nitro", unittests, filename);
 }
 
-static std::filesystem::path getPath_(const std::filesystem::path& subdir, const  std::filesystem::path& filename)
+std::filesystem::path six::testing::getModuleFile(const std::filesystem::path& modulePath, const  std::filesystem::path& filename)
 {
-    static const auto root_dir = buildRootDir_();
-    const auto startDir = root_dir / subdir;
-    auto retval = startDir / filename;
-    // Try to avoid searching
-    if (!is_regular_file(retval))
-    {
-        const auto foundDir = sys::findFirstDirectory(startDir, subdir);
-        retval = foundDir / subdir / filename;
-    }
-
-    return retval;
-}
-
-std::filesystem::path six::testing::getNitroPath(const  std::filesystem::path& filename)
-{
-    static const auto nitf_unittests = std::filesystem::path("nitro") / "modules" / "c++" / "nitf" / "unittests";
-    return getPath_(nitf_unittests, filename);
+    return sys::test::findGITModuleFile("six", modulePath, filename);
 }
 
 std::filesystem::path six::testing::getNitfPath(const std::filesystem::path& filename)
 {
     static const auto tests_nitf = std::filesystem::path("six") / "modules" / "c++" / "six" / "tests" / "nitf";
-    return getPath_(tests_nitf, filename);
-}
-
-static auto six_relative_path(const std::filesystem::path& module)
-{
-    return std::filesystem::path("six") / "modules" / "c++" / module;
+    return getModuleFile(tests_nitf, filename);
 }
 
 std::vector<std::filesystem::path> six::testing::getSchemaPaths()
-{
-    static const auto root_dir = buildRootDir_();
-    const auto schemaPath = root_dir / six_relative_path("six.sicd") / "conf" / "schema";
+{ 
+    static const auto modulePath = std::filesystem::path("six") / "modules" / "c++" / "six.sicd" / "conf" / "schema";
+    static const auto filename = getModuleFile(modulePath, "SICD_schema_V1.3.0.xsd");
+    static const auto schemaPath = filename.parent_path();
     return std::vector<std::filesystem::path> { schemaPath };
 }
 
-std::filesystem::path six::testing::getSampleXmlPath(const std::filesystem::path& module, const  std::filesystem::path& filename)
+std::filesystem::path six::testing::getSampleXmlPath(const std::filesystem::path& moduleName, const  std::filesystem::path& filename)
 {
-    const auto subdir = six_relative_path(module) / "tests" / "sample_xml";
-    return getPath_(subdir, filename);
+    const auto modulePath = std::filesystem::path("six") / "modules" / "c++" / moduleName;
+    return getModuleFile(modulePath, filename);
 }

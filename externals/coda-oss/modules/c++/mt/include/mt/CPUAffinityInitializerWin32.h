@@ -44,9 +44,9 @@ public:
      * \todo Not yet implemented
      * \returns NULL
      */
-    mem::auto_ptr<CPUAffinityThreadInitializerWin32> newThreadInitializer()
+    std::unique_ptr<CPUAffinityThreadInitializerWin32> newThreadInitializer()
     {
-        return mem::auto_ptr<CPUAffinityThreadInitializerWin32>(
+        return std::unique_ptr<CPUAffinityThreadInitializerWin32>(
                 newThreadInitializerImpl());
     }
 

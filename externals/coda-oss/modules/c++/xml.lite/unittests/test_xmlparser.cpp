@@ -59,16 +59,10 @@ static const std::string strUtf8Xml = str::c_str<std::string>(strUtf8Xml8);
 
 static const std::string  platfromText_ = sys::Platform == sys::PlatformType::Windows ?  pIso88591Text_ : pUtf8Text_;
 
-static std::filesystem::path findRootDirectory(const std::filesystem::path& p)
+static std::filesystem::path find_unittest_file(const std::filesystem::path& name)
 {
-    // specific to CODA-OSS
-    const auto isRoot = [](const std::filesystem::path& p) { return is_regular_file(p / "coda-oss-lite.sln") &&
-        is_regular_file(p / "LICENSE") && is_regular_file(p / "README.md") && is_regular_file(p / "CMakeLists.txt"); };
-    return sys::test::findRootDirectory(p, "coda-oss", isRoot);
-}
-inline std::filesystem::path findRoot()
-{
-    return findRootDirectory(std::filesystem::current_path());
+    static const auto unittests = std::filesystem::path("modules") / "c++" / "xml.lite" / "unittests";
+    return sys::test::findGITModuleFile("coda-oss", unittests, name);
 }
 
 static void test_a_element(const std::string& testName, const xml::lite::Element& root)
@@ -257,6 +251,63 @@ TEST_CASE(testXmlConsoleOutput)
     }
 }
 
+TEST_CASE(testXmlCreateRoot)
+{
+    xml::lite::MinidomParser xmlParser;
+    auto& document = getDocument(xmlParser);
+
+    const auto pDocuments = document.createElement(xml::lite::QName(xml::lite::Uri(), "documents"), "");
+
+    io::StringStream output;
+    pDocuments->print(output);
+    auto actual = output.stream().str();
+    TEST_ASSERT_EQ("<documents/>", actual);
+
+    pDocuments->setCharacterData("test");
+    output.reset();
+    pDocuments->print(output);
+    actual = output.stream().str();
+    TEST_ASSERT_EQ("<documents>test</documents>", actual);
+}
+
+TEST_CASE(testXmlCreateNested)
+{
+    xml::lite::MinidomParser xmlParser;
+    auto& document = getDocument(xmlParser);
+
+    const auto pDocuments = document.createElement(xml::lite::QName(xml::lite::Uri(), "documents"), "");
+    xml::lite::AttributeNode a;
+    a.setQName("count");
+    a.setValue("1");
+    pDocuments->getAttributes().add(a);
+
+    auto& html = pDocuments->addChild(xml::lite::Element::create(xml::lite::QName("html")));
+    html.addChild(xml::lite::Element::create(xml::lite::QName("title"), "Title"));
+    auto& body = html.addChild(xml::lite::Element::create(xml::lite::QName("body")));
+
+    auto& p = body.addChild(xml::lite::Element::create(xml::lite::QName("p"), "paragraph"));
+    a.setQName("a");
+    a.setValue("abc");
+    p.getAttributes().add(a);
+
+    body.addChild(xml::lite::Element::create(xml::lite::QName("br")));
+
+    io::StringStream output;
+    pDocuments->print(output);
+    auto actual = output.stream().str();
+    const auto expected =
+        "<documents count=\"1\">"
+            "<html>"
+                "<title>Title</title>"
+                "<body>"
+                    "<p a=\"abc\">paragraph</p>"
+                    "<br/>"
+                "</body>"
+             "</html>"
+        "</documents>";
+    TEST_ASSERT_EQ(expected, actual);
+}
+
 TEST_CASE(testXmlParseAndPrintUtf8)
 {
     io::StringStream input;
@@ -276,14 +327,7 @@ TEST_CASE(testXmlParseAndPrintUtf8)
 static void testReadEncodedXmlFile(const std::string& testName, const std::string& xmlFile, bool preserveCharacterData,
     const std::string& platformText, const std::u8string& text8_)
 {
-    const auto unittests = findRoot() / "modules" / "c++" / "xml.lite" / "unittests";
-
-    const auto path = unittests / xmlFile;
-    if (!exists(path))  // running in "externals" of a different project
-    {
-        std::clog << "Path does not exist: '" << path << "'\n";
-        return;
-    }
+    const auto path = find_unittest_file(xmlFile);
     io::FileInputStream input(path.string());
 
     xml::lite::MinidomParser xmlParser;
@@ -327,14 +371,7 @@ TEST_CASE(testReadEncodedXmlFiles)
 static void testReadXmlFile(const std::string& testName, const std::string& xmlFile, bool preserveCharacterData,
         const std::string& platformText, const std::u8string& text8_)
 {
-    const auto unittests =  findRoot() / "modules" / "c++" / "xml.lite" / "unittests";
-
-    const auto path = unittests / xmlFile;
-    if (!exists(path))  // running in "externals" of a different project
-    {
-        std::clog << "Path does not exist: '" << path << "'\n";
-        return;
-    }
+    const auto path = find_unittest_file(xmlFile);
     io::FileInputStream input(path.string());
 
     xml::lite::MinidomParser xmlParser;
@@ -404,14 +441,7 @@ static bool find_string(io::FileInputStream& stream, const std::string& s)
 TEST_CASE(testReadEmbeddedXml)
 {
     // This is a binary file with XML burried in it somewhere
-    const auto unittests = findRoot() / "modules" / "c++" / "xml.lite" / "unittests";
-
-    const auto path = unittests / "embedded_xml.bin";
-    if (!exists(path))  // running in "externals" of a different project
-    {
-        std::clog << "Path does not exist: '" << path << "'\n";
-        return;
-    }
+    static const auto path = find_unittest_file("embedded_xml.bin");
     io::FileInputStream input(path.string());
     const auto result = find_string(input, "<SICD ");
     TEST_ASSERT_TRUE(result);
@@ -439,15 +469,8 @@ TEST_CASE(testReadEmbeddedXml)
 template <typename TStringStream>
 static void testValidateXmlFile_(const std::string& testName, const std::string& xmlFile, TStringStream* pStringStream)
 {
-    const auto unittests = findRoot() / "modules" / "c++" / "xml.lite" / "unittests";
-
-    const auto xsd = unittests / "doc.xsd";
-    if (!exists(xsd))  // running in "externals" of a different project
-    {
-        std::clog << "Path does not exist: '" << xsd << "'\n";
-        return;
-    }
-    const auto path = unittests / xmlFile;
+    static const auto xsd = find_unittest_file("doc.xsd");
+    const auto path = find_unittest_file(xmlFile);
 
     const std::vector<std::filesystem::path> schemaPaths{xsd.parent_path()}; // fs::path -> new string-conversion code
     const xml::lite::Validator validator(schemaPaths, nullptr /*log*/);
@@ -502,6 +525,8 @@ int main(int, char**)
     TEST_CHECK(testXmlParseAndPrintUtf8);
     TEST_CHECK(testXmlPrintUtf8);
     TEST_CHECK(testXmlConsoleOutput);
+    TEST_CHECK(testXmlCreateRoot);
+    TEST_CHECK(testXmlCreateNested);
     
     TEST_CHECK(testReadEncodedXmlFiles);
     TEST_CHECK(testReadXmlFiles);

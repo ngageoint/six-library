@@ -41,13 +41,6 @@ protected:
                         std::unique_ptr<SICommonXMLParser>&& comParser,
                         logging::Logger* log = nullptr,
                         bool ownLog = false);
-#if !CODA_OSS_cpp17
-    ComplexXMLParser041(const std::string& version,
-                        bool addClassAttributes,
-                        mem::auto_ptr<SICommonXMLParser> comParser,
-                        logging::Logger* log = nullptr,
-                        bool ownLog = false);
-#endif
 
     ComplexXMLParser041(const ComplexXMLParser041&) = delete;
     ComplexXMLParser041& operator=(const ComplexXMLParser041&) = delete;
