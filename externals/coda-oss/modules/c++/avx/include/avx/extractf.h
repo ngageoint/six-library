@@ -24,11 +24,6 @@
 #define CODA_OSS_avx_extractf_h_INCLUDED_
 #pragma once
 
-// Not supported on GCC < 7.1; see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80322 (also 80323-80325)
-#if ((__GNUC__) && (GCC_VERSION < 70100))
-#pragma warning Disabling CODA AVX m256 support due to gcc compiler bug.
-#else
-
 #include <config/compiler_extensions.h>
 
 #ifndef CODA_OSS_mm256_extractf_DEFINED_
@@ -58,7 +53,5 @@
     }
 
 #endif
-
-#endif  // gcc version checking
 
 #endif  // CODA_OSS_avx_extractf_h_INCLUDED_

@@ -36,6 +36,7 @@
 
 #include "xml/lite/MinidomParser.h"
 #include "xml/lite/Validator.h"
+#include "xml/lite/QName.h"
 
 static inline std::u8string fromUtf8(const std::string& utf8)
 {
@@ -125,8 +126,7 @@ TEST_CASE(testXmlUtf8_u8string)
     xml::lite::MinidomParser xmlParser;
     const auto& a = testXmlUtf8_(xmlParser);
 
-    coda_oss::u8string actual;
-    a.getCharacterData(actual);
+    const auto actual = getCharacterData(a);
     TEST_ASSERT_EQ(actual, utf8Text8);
 }
 
@@ -144,7 +144,6 @@ TEST_CASE(testXml_setCharacterData)
 {
     xml::lite::MinidomParser xmlParser;
     auto& a = testXmlUtf8_(xmlParser);
-
     a.setCharacterData(utf8Text8);
 }
 
@@ -175,13 +174,15 @@ static std::u8string fromWindows1252(const std::string& s)
 
 TEST_CASE(testXmlPrintUtf8)
 {
+    static const xml::lite::QName root(xml::lite::Uri(), "root");
+
     const auto expected = std::string("<root>") + pUtf8Text_ + "</root>";
     {
         xml::lite::MinidomParser xmlParser;
         auto& document = getDocument(xmlParser);
 
         const auto s8_w1252 = fromWindows1252(pIso88591Text_);
-        const auto pRootElement = document.createElement(xml::lite::QName(xml::lite::Uri(), "root"), s8_w1252);
+        const auto pRootElement = document.createElement(root, s8_w1252);
 
         io::StringStream output;
         pRootElement->print(output);
@@ -192,7 +193,7 @@ TEST_CASE(testXmlPrintUtf8)
         xml::lite::MinidomParser xmlParser;
         auto& document = getDocument(xmlParser);
 
-        const auto pRootElement = document.createElement(xml::lite::QName(xml::lite::Uri(), "root"), utf8Text8);
+        const auto pRootElement = document.createElement(root, utf8Text8);
 
         io::StringStream output;
         pRootElement->print(output);
@@ -203,7 +204,7 @@ TEST_CASE(testXmlPrintUtf8)
         xml::lite::MinidomParser xmlParser;
         auto& document = getDocument(xmlParser);
 
-        const auto pRootElement = document.createElement(xml::lite::QName(xml::lite::Uri(), "root"), platfromText_);
+        const auto pRootElement = document.createElement(root, platfromText_);
 
         io::StringStream output;
         pRootElement->print(output);
@@ -214,13 +215,15 @@ TEST_CASE(testXmlPrintUtf8)
 
 TEST_CASE(testXmlConsoleOutput)
 {
+    static const xml::lite::QName root(xml::lite::Uri(), "root");
+
     const auto expected = "<root>" + platfromText_ + "</root>";
     {
         xml::lite::MinidomParser xmlParser;
         auto& document = getDocument(xmlParser);
 
         const auto s8_w1252 = fromWindows1252(pIso88591Text_);
-        const auto pRootElement = document.createElement(xml::lite::QName(xml::lite::Uri(), "root"), s8_w1252);
+        const auto pRootElement = document.createElement(root, s8_w1252);
 
         io::StringStream output;
         pRootElement->consoleOutput_(output);
@@ -231,7 +234,7 @@ TEST_CASE(testXmlConsoleOutput)
         xml::lite::MinidomParser xmlParser;
         auto& document = getDocument(xmlParser);
 
-        const auto pRootElement = document.createElement(xml::lite::QName(xml::lite::Uri(), "root"), utf8Text8);
+        const auto pRootElement = document.createElement(root, utf8Text8);
 
         io::StringStream output;
         pRootElement->consoleOutput_(output);
@@ -242,70 +245,13 @@ TEST_CASE(testXmlConsoleOutput)
         xml::lite::MinidomParser xmlParser;
         auto& document = getDocument(xmlParser);
 
-        const auto pRootElement = document.createElement(xml::lite::QName(xml::lite::Uri(), "root"), platfromText_);
+        const auto pRootElement = document.createElement(root, platfromText_);
 
         io::StringStream output;
         pRootElement->consoleOutput_(output);
         const auto actual = output.stream().str();
         TEST_ASSERT_EQ(actual, expected);
     }
-}
-
-TEST_CASE(testXmlCreateRoot)
-{
-    xml::lite::MinidomParser xmlParser;
-    auto& document = getDocument(xmlParser);
-
-    const auto pDocuments = document.createElement(xml::lite::QName(xml::lite::Uri(), "documents"), "");
-
-    io::StringStream output;
-    pDocuments->print(output);
-    auto actual = output.stream().str();
-    TEST_ASSERT_EQ("<documents/>", actual);
-
-    pDocuments->setCharacterData("test");
-    output.reset();
-    pDocuments->print(output);
-    actual = output.stream().str();
-    TEST_ASSERT_EQ("<documents>test</documents>", actual);
-}
-
-TEST_CASE(testXmlCreateNested)
-{
-    xml::lite::MinidomParser xmlParser;
-    auto& document = getDocument(xmlParser);
-
-    const auto pDocuments = document.createElement(xml::lite::QName(xml::lite::Uri(), "documents"), "");
-    xml::lite::AttributeNode a;
-    a.setQName("count");
-    a.setValue("1");
-    pDocuments->getAttributes().add(a);
-
-    auto& html = pDocuments->addChild(xml::lite::Element::create(xml::lite::QName("html")));
-    html.addChild(xml::lite::Element::create(xml::lite::QName("title"), "Title"));
-    auto& body = html.addChild(xml::lite::Element::create(xml::lite::QName("body")));
-
-    auto& p = body.addChild(xml::lite::Element::create(xml::lite::QName("p"), "paragraph"));
-    a.setQName("a");
-    a.setValue("abc");
-    p.getAttributes().add(a);
-
-    body.addChild(xml::lite::Element::create(xml::lite::QName("br")));
-
-    io::StringStream output;
-    pDocuments->print(output);
-    auto actual = output.stream().str();
-    const auto expected =
-        "<documents count=\"1\">"
-            "<html>"
-                "<title>Title</title>"
-                "<body>"
-                    "<p a=\"abc\">paragraph</p>"
-                    "<br/>"
-                "</body>"
-             "</html>"
-        "</documents>";
-    TEST_ASSERT_EQ(expected, actual);
 }
 
 TEST_CASE(testXmlParseAndPrintUtf8)
@@ -327,6 +273,8 @@ TEST_CASE(testXmlParseAndPrintUtf8)
 static void testReadEncodedXmlFile(const std::string& testName, const std::string& xmlFile, bool preserveCharacterData,
     const std::string& platformText, const std::u8string& text8_)
 {
+    using namespace xml::lite::literals;  // _q and _u for QName and Uri
+
     const auto path = find_unittest_file(xmlFile);
     io::FileInputStream input(path.string());
 
@@ -335,25 +283,24 @@ static void testReadEncodedXmlFile(const std::string& testName, const std::strin
     xmlParser.parse(input);
     const auto& root = getRootElement(getDocument(xmlParser));
 
-    const auto& a = root.getElementByTagName("a", true /*recurse*/);
+    const auto& a = root("a"_q, true /*recurse*/);
     auto characterData = a.getCharacterData();
     TEST_ASSERT_EQ(characterData, platformText);
 
-    std::u8string u8_characterData;
-    a.getCharacterData(u8_characterData);
+    const auto u8_characterData = getCharacterData(a);
     TEST_ASSERT_EQ(text8_, u8_characterData);     
 
-    const auto& textXML = root.getElementByTagName("text", true /*recurse*/);
+    const auto& textXML = root("text"_q, true /*recurse*/);
     characterData = textXML.getCharacterData();
     const auto expectedText = preserveCharacterData ? "\tt\te\tx\tt\t" : "t\te\tx\tt";
     TEST_ASSERT_EQ(characterData, expectedText);
 
-    const auto& whitespaceXML = root.getElementByTagName("whitespace", true /*recurse*/);
+    const auto& whitespaceXML = root("whitespace"_q, true /*recurse*/);
     characterData = whitespaceXML.getCharacterData();
     const auto expectedWhitespace = preserveCharacterData ? "             " : "";
     TEST_ASSERT_EQ(characterData, expectedWhitespace);
 
-    const auto& emptyXML = root.getElementByTagName("empty", true /*recurse*/);
+    const auto& emptyXML = root("empty"_q, true /*recurse*/);
     characterData = emptyXML.getCharacterData();
     TEST_ASSERT_EQ(characterData, "");
 }
@@ -371,6 +318,8 @@ TEST_CASE(testReadEncodedXmlFiles)
 static void testReadXmlFile(const std::string& testName, const std::string& xmlFile, bool preserveCharacterData,
         const std::string& platformText, const std::u8string& text8_)
 {
+    using namespace xml::lite::literals;  // _q and _u for QName and Uri
+
     const auto path = find_unittest_file(xmlFile);
     io::FileInputStream input(path.string());
 
@@ -390,17 +339,17 @@ static void testReadXmlFile(const std::string& testName, const std::string& xmlF
     a.getCharacterData(u8_characterData);
     TEST_ASSERT_EQ(text8_, u8_characterData);
 
-    const auto& textXML = root.getElementByTagName("text", true /*recurse*/);
+    const auto& textXML = root("text"_q, true /*recurse*/);
     characterData = textXML.getCharacterData();
     const auto expectedText = preserveCharacterData ? "\tt\te\tx\tt\t" : "t\te\tx\tt";
     TEST_ASSERT_EQ(characterData, expectedText);
 
-    const auto& whitespaceXML = root.getElementByTagName("whitespace", true /*recurse*/);
+    const auto& whitespaceXML = root("whitespace"_q, true /*recurse*/);
     characterData = whitespaceXML.getCharacterData();
     const auto expectedWhitespace = preserveCharacterData ? "             " : "";
     TEST_ASSERT_EQ(characterData, expectedWhitespace);
 
-    const auto& emptyXML = root.getElementByTagName("empty", true /*recurse*/);
+    const auto& emptyXML = root("empty"_q, true /*recurse*/);
     characterData = emptyXML.getCharacterData();
     TEST_ASSERT_EQ(characterData, "");
 }
@@ -525,8 +474,6 @@ int main(int, char**)
     TEST_CHECK(testXmlParseAndPrintUtf8);
     TEST_CHECK(testXmlPrintUtf8);
     TEST_CHECK(testXmlConsoleOutput);
-    TEST_CHECK(testXmlCreateRoot);
-    TEST_CHECK(testXmlCreateNested);
     
     TEST_CHECK(testReadEncodedXmlFiles);
     TEST_CHECK(testReadXmlFiles);
