@@ -506,10 +506,6 @@ void xml::lite::operator+=(Element& e, const QName& qname)
     std::ignore = addChild(e, qname);
 }
 
-xml::lite::Element& xml::lite::addChild(Element& e, const std::string& qname, const coda_oss::u8string& characterData, const Uri& uri)
-{
-    return addChild(e, qname, uri, characterData);
-}
 xml::lite::Element& xml::lite::addChild(Element& e, const std::string& qname, const coda_oss::u8string& characterData)
 {
     return addChild(e, QName(qname), characterData);
