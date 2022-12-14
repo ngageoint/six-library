@@ -2,6 +2,12 @@
 
 # SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
 
+## [Version 3.2.2](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.2); December 14, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
+* [nitro](https://github.com/mdaus/nitro) version [2.11.2](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.2)
+* [Fixed slantToImagePartials not operating in slant plane](https://github.com/ngageoint/six-library/pull/613)
+* Continued effort at getting unittests to run in other projects.
+
 ## [Version 3.2.1](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.1); November 4, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2022-11-04](https://github.com/mdaus/coda-oss/releases/tag/2022-11-04)
 * [nitro](https://github.com/mdaus/nitro) version [2.11.1](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.1)
