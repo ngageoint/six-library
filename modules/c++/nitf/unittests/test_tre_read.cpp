@@ -96,7 +96,8 @@ const char* output_file = "test_writer_3++.nitf";
 
 static std::filesystem::path findInputFile_(const std::string& name)
 {
-    return nitf::Test::findInputFile(std::filesystem::path("modules") / "c++" / "nitf" / "unittests" / name);
+    static const auto unittests = std::filesystem::path("modules") / "c++" / "nitf" / "unittests";
+    return nitf::Test::findInputFile(unittests, name);
 }
 static const char* findInputFile(const char* name)
 {
