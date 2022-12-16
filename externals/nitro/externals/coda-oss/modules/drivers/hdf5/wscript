@@ -1,8 +1,0 @@
-NAME            = 'hdf5'
-VERSION         = '1.13.2'
-LANG            = 'c'
-
-distclean = options = configure = lambda p: None
-
-def build(bld):
-    bld.module(**globals())
