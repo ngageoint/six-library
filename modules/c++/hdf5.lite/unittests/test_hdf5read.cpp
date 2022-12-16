@@ -29,23 +29,15 @@
 
 #include "hdf5/lite/Read.h"
 
-static std::filesystem::path findRootDirectory(const std::filesystem::path& p)
+static std::filesystem::path find_unittest_file(const std::filesystem::path& name)
 {
-    // specific to CODA-OSS
-    const auto isRoot = [](const std::filesystem::path& p) { return is_regular_file(p / "coda-oss-lite.sln") &&
-        is_regular_file(p / "LICENSE") && is_regular_file(p / "README.md") && is_regular_file(p / "CMakeLists.txt"); };
-    return sys::test::findRootDirectory(p, "coda-oss", isRoot);
-}
-inline std::filesystem::path findRoot()
-{
-    return findRootDirectory(std::filesystem::current_path());
+    static const auto unittests = std::filesystem::path("modules") / "c++" / "hdf5.lite" / "unittests";
+    return sys::test::findGITModuleFile("coda-oss", unittests, name);
 }
 
 TEST_CASE(test_hdf5Read)
 {
-    static const std::string file = "example.h5";
-    const auto unittests = findRoot() / "modules" / "c++" / "hdf5.lite" / "unittests";
-    const auto path = unittests / file;
+    static const auto path = find_unittest_file("example.h5");
 
     // https://www.mathworks.com/help/matlab/ref/h5read.html
     std::vector<double> data;
