@@ -45,16 +45,6 @@ ComplexXMLParser::ComplexXMLParser(const std::string& strVersion,
     mCommon(comParser.release())
 {
 }
-#if !CODA_OSS_cpp17
-ComplexXMLParser::ComplexXMLParser(const std::string& strVersion,
-                                   bool addClassAttributes,
-                                   mem::auto_ptr<six::SICommonXMLParser> comParser,
-                                   logging::Logger* log,
-                                   bool ownLog) :
-    ComplexXMLParser(strVersion, addClassAttributes, std::unique_ptr<six::SICommonXMLParser>(comParser.release()), log, ownLog)
-{
-}
-#endif
 
 ComplexData* ComplexXMLParser::fromXML(const xml::lite::Document* doc) const
 {
@@ -1285,13 +1275,12 @@ void ComplexXMLParser::parseImageFormationFromXML(
 
     for (unsigned int i = 0; i < procXML.size(); ++i)
     {
-        Processing* proc = new Processing();
+        imageFormation->processing.emplace_back();
+        Processing* proc = &imageFormation->processing.back();
 
         parseString(getFirstAndOnly(procXML[i], "Type"), proc->type);
         parseBooleanType(getFirstAndOnly(procXML[i], "Applied"), proc->applied);
         common().parseParameters(procXML[i], "Parameter", proc->parameters);
-
-        imageFormation->processing.push_back(*proc);
     }
 
     XMLElem polCalXML = getOptional(imageFormationXML,

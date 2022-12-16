@@ -54,9 +54,9 @@ TEST_CASE(test_degrees)
     TEST_ASSERT_ALMOST_EQ(0.0, cos(degrees_270));
     TEST_ASSERT_ALMOST_EQ(1.0, cos(degrees_360));
 
-    test_degrees_<float>("test_degrees");
-    test_degrees_<double>("test_degrees");
-    test_degrees_<long double>("test_degrees");
+    test_degrees_<float>(testName);
+    test_degrees_<double>(testName);
+    test_degrees_<long double>(testName);
 }
 
 TEST_CASE(test_lengths)

@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #ifdef _WIN32
 #include <direct.h>
-#include <comdef.h> // _bstr_t
 #else
 #include <unistd.h>
 #endif
@@ -17,6 +16,7 @@
 
 #include "sys/Path.h"
 #include "gsl/gsl.h"
+#include "str/EncodedString.h"
 
 namespace fs = sys::filesystem;
 
@@ -47,9 +47,9 @@ static inline std::string make_what(const char* curfile, const int lineNum, cons
 
 fs::path::string_type fs::path::to_native(const std::string& s_)
 {
+   
 #ifdef _WIN32
-    const _bstr_t s(s_.c_str());  // convert to wchar_t
-    return static_cast<const wchar_t*>(s);
+    return str::EncodedStringView(s_).wstring();
 #else
     return s_;
 #endif
@@ -104,12 +104,7 @@ fs::path::operator string_type() const
 
 std::string fs::path::string() const
 {
-#ifdef _WIN32
-    const _bstr_t p(c_str());
-    return static_cast<const char*>(p);
-#else
-    return native();
-#endif
+    return str::EncodedString(p_).native();
 }
 
 fs::path fs::path::root_path() const

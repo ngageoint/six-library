@@ -31,6 +31,7 @@
 #include <vector>
 #include <memory>
 
+#include "config/Exports.h"
 #include "logging/Filterer.h"
 #include "logging/LogRecord.h"
 #include "logging/Handler.h"
@@ -45,7 +46,7 @@ namespace logging
  * Instances of the Logger class represent a single logging channel.
  * A Logger instance can log to several Handlers.
  */
-struct Logger : public Filterer
+struct CODA_OSS_API Logger : public Filterer
 {
     /*!
      * Constructs a Logger with an optional name

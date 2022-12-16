@@ -49,32 +49,6 @@ namespace xml
 
 namespace lite
 {
- /*!
- * \class StringEncoding
- * \brief Specifies how std::string is encoded by MinidomParser.
- *
- * This is needed because our use of Xerces generates different
- * results on Windows/Linux, and changing things might break existing
- * code.
- *
- * On Windows, the UTF-16 strings (internal to Xerces) are converted
- * to std::strings with Windows-1252 (more-or-less ISO8859-1) encoding;
- * this allows Western European languages to be displayed.  On *ix,
- * UTF-8 is the norm ...
- */
-#ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
-enum class StringEncoding
-{
-    Windows1252  // more-or-less ISO5589-1, https://en.wikipedia.org/wiki/Windows-1252
-    , Utf8
-};
-constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
-        ? xml::lite::StringEncoding::Windows1252
-        : xml::lite::StringEncoding::Utf8;
-// Could do the same for std::wstring, but there isn't any code needing it right now.
-// Probably better to use std::u16string and std::u32string anyway.
-#endif
-
 /*!
  *  \class QName
  *  \brief A Qualified name (includes the namespace stuff)
@@ -83,18 +57,19 @@ constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
  *  many of us were happier that way).  Namespaces add complexity, but
  *  the also allow for name resolution in a non-conflicting manner.
  *  Unfortunately, the XML SAX readers, the event-driven parsers people
- *  tend to use, at least as underlying structures have become more 
- *  complex. At any rate, a qualified name consists of 
- *  1) the local part (that is the portion people used to use alone, 
- *  without any namespace, and 
- *  2) the prefix for the namespace, which presumably maps 
- *  to a namespace URI 
+ *  tend to use, at least as underlying structures have become more
+ *  complex. At any rate, a qualified name consists of
+ *  1) the local part (that is the portion people used to use alone,
+ *  without any namespace, and
+ *  2) the prefix for the namespace, which presumably maps
+ *  to a namespace URI
  */
 
-struct Uri final // help prevent mixups with std::string
+struct Uri final  // help prevent mixups with std::string
 {
-    Uri() = default;
-    Uri(const std::string& v);
+    Uri();
+    explicit Uri(const std::string& v);  // validate=false
+    Uri(const std::string& v, bool validate);
     std::string value;
     bool empty() const
     {
@@ -128,27 +103,27 @@ public:
     QName() = default;
 
     /*!
-     * Constructor taking the namespace prefix and the local name 
-     * \param uri The uri of the object 
-     * \param qname The qname of the object 
+     * Constructor taking the namespace prefix and the local name
+     * \param uri The uri of the object
+     * \param qname The qname of the object
      */
     QName(const xml::lite::Uri& uri, const std::string& qname)
     {
         setQName(qname);
         setAssociatedUri(uri);
     }
-    QName(const std::string& qname, const xml::lite::Uri& uri) : QName(uri, qname) { }
-    QName(const std::string& uri, const std::string& qname) : QName(Uri(uri), qname)  { }
+    QName(const std::string& qname, const xml::lite::Uri& uri) : QName(uri, qname)  { }
+    QName(const std::string& uri, const std::string& qname) : QName(Uri(uri), qname) { }
 
     /*!
-     * Constructor taking just the local name (no namespace). 
-     * \param lName  Just the local name of the object. 
+     * Constructor taking just the local name (no namespace).
+     * \param lName  Just the local name of the object.
      */
-    QName(const std::string& lName)
+    explicit QName(const std::string& lName)
     {
         setName(lName);
     }
-    
+
     QName(const xml::lite::Uri& uri)
     {
         setAssociatedUri(uri);
@@ -161,7 +136,6 @@ public:
     QName& operator=(const QName&) = default;
     QName(QName&&) = default;
     QName& operator=(QName&&) = default;
-
 
     /*!
      *  Set the local part (unqualified)
@@ -194,7 +168,7 @@ public:
     /*!
      *  Retrieve the qname as a string.  If you have no prefix/uri
      *  this returns just the local name
-     *  \return The fully qualifed qname (e.g., soap-env:SOAP-BODY) 
+     *  \return The fully qualifed qname (e.g., soap-env:SOAP-BODY)
      */
     std::string toString() const;
 
@@ -218,6 +192,27 @@ public:
     void getAssociatedUri(xml::lite::Uri&) const;
     const xml::lite::Uri& getUri() const;
 };
+
+namespace literals  // c.f. std::literals
+{
+    // This might be overkill, in part because we don't deal with a lot of literal QNames or URLs.
+    // But it's interesting example code, and hidden in a "literals" namespace; be cautious
+    // about extensive use outside of test code.
+
+    // https://en.cppreference.com/w/cpp/language/user_literal
+    inline xml::lite::Uri operator"" _u(const char* str, std::size_t len)
+    {
+        // https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s
+        return xml::lite::Uri(std::string(str, len));
+    }
+    // https://en.cppreference.com/w/cpp/language/user_literal
+    inline xml::lite::QName operator"" _q(const char* str, std::size_t len)
+    {
+        // https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s
+        return xml::lite::QName(std::string(str, len));
+    }
+}
+
 }
 }
 #endif  // CODA_OSS_xml_lite_QName_h_INCLLUDED_

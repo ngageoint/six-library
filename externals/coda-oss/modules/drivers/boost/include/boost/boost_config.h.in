@@ -1,8 +1,0 @@
-/* WARNING! All changes made to this file will be lost! */
-
-#ifndef _CODA_OSS_BOOST_CONFIG_H_
-#define _CODA_OSS_BOOST_CONFIG_H_
-
-#cmakedefine HAVE_BOOST
-
-#endif /* _CODA_OSS_BOOST_CONFIG_H_ */

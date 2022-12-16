@@ -30,6 +30,9 @@
 // "If no feature test macros are explicitly defined, then the following feature test macros
 // are defined by default: ... _POSIX_SOURCE, and _POSIX_C_SOURCE=200809L. [...] 
 // _POSIX_SOURCE Defining this obsolete macro ... is equivalent to defining _POSIX_C_SOURCE ..."
+#ifndef _WIN32
+#include <features.h>
+#endif
 #define CODA_OSS_POSIX_SOURCE (defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE >= 1))
 #define CODA_OSS_POSIX2001_SOURCE CODA_OSS_POSIX_SOURCE && (_POSIX_C_SOURCE >= 200112L)
 #define CODA_OSS_POSIX2008_SOURCE CODA_OSS_POSIX2001_SOURCE && (_POSIX_C_SOURCE >= 200809L)
@@ -201,7 +204,7 @@ namespace sys
      * On Intel systems, we are usually small-endian, and on
      * RISC architectures we are big-endian.
      */
-    bool isBigEndianSystem();
+    bool CODA_OSS_API isBigEndianSystem();
 
 
    /*!

@@ -41,8 +41,8 @@ void sys::File::create(const std::string& str,
         creationFlags = ~sys::File::TRUNCATE & creationFlags;
     }
 
-    const DWORD dwDesiredAccess = accessFlags;
-    const DWORD dwCreationDisposition = creationFlags;
+    const auto dwDesiredAccess = static_cast<DWORD>(accessFlags);
+    const auto dwCreationDisposition = static_cast<DWORD>(creationFlags);
     mHandle = CreateFile(str.c_str(),
                          dwDesiredAccess,
                          FILE_SHARE_READ,
@@ -131,7 +131,7 @@ sys::Off_T sys::File::seekTo(sys::Off_T offset, int whence)
     LARGE_INTEGER largeInt;
     largeInt.QuadPart = offset;
     LARGE_INTEGER newFilePointer;
-    const DWORD dwMoveMethod = whence;
+    const auto dwMoveMethod = static_cast<DWORD>(whence);
     if (SetFilePointerEx(mHandle, largeInt, &newFilePointer, dwMoveMethod) == 0)
     {
         const auto dwLastError = GetLastError();

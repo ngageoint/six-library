@@ -23,6 +23,7 @@
 #ifndef __IO_PROXY_STREAMS_H__
 #define __IO_PROXY_STREAMS_H__
 
+#include "config/Exports.h"
 #include "io/InputStream.h"
 #include "io/OutputStream.h"
 #include "io/NullStreams.h"
@@ -30,7 +31,7 @@
 
 namespace io
 {
-struct ProxyInputStream: public InputStream
+struct CODA_OSS_API ProxyInputStream : public InputStream
 {
     ProxyInputStream(InputStream *proxy, bool ownPtr = false) :
         mOwnPtr(ownPtr)
@@ -65,14 +66,14 @@ protected:
         return mProxy->read(buffer, len);
     }
 
-    mem::auto_ptr<InputStream> mProxy;
+    std::unique_ptr<InputStream> mProxy;
     bool mOwnPtr;
 };
 
 /**
  * Proxies to the given OutputStream.
  */
-struct ProxyOutputStream: public OutputStream
+struct CODA_OSS_API ProxyOutputStream : public OutputStream
 {
     ProxyOutputStream() = default;
     ProxyOutputStream(OutputStream *proxy, bool ownPtr = false) :
@@ -116,14 +117,14 @@ struct ProxyOutputStream: public OutputStream
     }
 
 protected:
-    mem::auto_ptr<OutputStream> mProxy;
+    std::unique_ptr<OutputStream> mProxy;
     bool mOwnPtr = false;
 };
 
 /**
  * An output stream that can be enabled/disabled (toggled).
  */
-struct ToggleOutputStream: public io::ProxyOutputStream
+struct CODA_OSS_API ToggleOutputStream : public io::ProxyOutputStream
 {
     ToggleOutputStream() = default;
     ToggleOutputStream(io::OutputStream *output, bool ownPtr = false) :

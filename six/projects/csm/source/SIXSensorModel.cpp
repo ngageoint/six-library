@@ -20,14 +20,19 @@
  *
  */
 
+#include <assert.h>
+
 #include <cmath>
 #include <limits>
-
 #include <std/filesystem>
 
 #include "Error.h"
 #include <six/NITFReadControl.h>
 #include <six/csm/SIXSensorModel.h>
+#include <six/ErrorStatistics.h>
+
+#undef min
+#undef max
 
 namespace fs = std::filesystem;
 
@@ -381,6 +386,12 @@ std::vector<double> SIXSensorModel::getUnmodeledError(
 {
     try
     {
+        auto sixUnmodeledError = getSIXUnmodeledError();
+        if (!sixUnmodeledError.empty())
+        {
+            return sixUnmodeledError;
+        }
+
         types::RowCol<double> pixelPt = fromPixel(imagePt);
         const math::linear::MatrixMxN<2, 2, double> unmodeledError =
                 mProjection->getUnmodeledErrorCovariance( pixelPt );
@@ -607,10 +618,11 @@ const csm::CorrelationModel& SIXSensorModel::getCorrelationModel() const
 }
 
 std::vector<double> SIXSensorModel::getUnmodeledCrossCovariance(
-        const csm::ImageCoord& ,
-        const csm::ImageCoord& ) const
+    const csm::ImageCoord&,
+    const csm::ImageCoord&) const
 {
-    return std::vector<double>(4, 0.0);
+    auto sixUnmodeledError = getSIXUnmodeledError();
+    return !sixUnmodeledError.empty() ? sixUnmodeledError : std::vector<double>(4, 0.0);
 }
 
 void SIXSensorModel::setReferencePoint(const csm::EcefCoord& )
@@ -942,6 +954,32 @@ csm::EcefVector SIXSensorModel::getSensorVelocity(double time) const
     }
 }
 
+static std::string getSchemaPath(std::vector<std::string>& mSchemaDirs)
+{
+    // OK, but you better have your schema path set then
+    std::string schemaPath;
+    try
+    {
+        schemaPath = six::getSchemaPath(mSchemaDirs, true /*tryToExpandIfNotFound*/);
+    }
+    catch (const except::IOException&)
+    {
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            "Must specify SICD schema path via "
+            "Plugin::getDataDirectory() or " +
+            std::string(six::SCHEMA_PATH) + " environment variable",
+            "SIXSensorModel::setSchemaDir");
+    }
+
+    if (schemaPath.empty())
+    {
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+            std::string(six::SCHEMA_PATH) +
+            " environment variable is set but is empty",
+            "SIXSensorModel::setSchemaDir");
+    }
+    return schemaPath;
+}
 void SIXSensorModel::setSchemaDir(const std::string& dataDir)
 {
     sys::OS os;
@@ -950,27 +988,8 @@ void SIXSensorModel::setSchemaDir(const std::string& dataDir)
         mSchemaDirs.clear();
 
         // OK, but you better have your schema path set then
-        std::string schemaPath;
-        try
-        {
-            schemaPath = six::getSchemaPath(mSchemaDirs);
-        }
-        catch(const except::Exception& )
-        {
-            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    "Must specify SICD schema path via "
-                    "Plugin::getDataDirectory() or " +
-                    std::string(six::SCHEMA_PATH) + " environment variable",
-                    "SIXSensorModel::setSchemaDir");
-        }
-
-        if (schemaPath.empty())
-        {
-            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    std::string(six::SCHEMA_PATH) +
-                    " environment variable is set but is empty",
-                    "SIXSensorModel::setSchemaDir");
-        }
+        std::string schemaPath = getSchemaPath(mSchemaDirs);
+        assert(!schemaPath.empty());
     }
     else
     {
@@ -1152,5 +1171,25 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
 
     return NITFReadControl::getDataType(desid, desshl, desshsi, desid);
 }
+
+std::vector<double> SIXSensorModel::getSIXUnmodeledError_(const six::ErrorStatistics* pErrorStatistics)
+{
+    if (pErrorStatistics != nullptr)
+    {
+        if (auto pUnmodeled = pErrorStatistics->Unmodeled.get())
+        {
+            // From Bill: Here is the mapping from the UnmodeledError to the 2x2 covariance matrix:
+            //    [0][0] = Xrow; [1][1] = Ycol; 
+            //    [1][0] = [0][1] = XrowYcol * Xrow * Ycol
+            const auto line_variance = pUnmodeled->Xrow;
+            const auto sample_variance = pUnmodeled->Ycol;
+            const auto linesample_covariance = pUnmodeled->XrowYcol * line_variance * sample_variance;
+            const auto sampleline_covariance = linesample_covariance;
+            return { line_variance, linesample_covariance, sampleline_covariance, sample_variance };
+        }
+    }
+    return {};
+}
+
 }
 }

@@ -26,8 +26,10 @@
 #include <TestCase.h>
 
 #include "xml/lite/MinidomParser.h"
+#include "xml/lite/QName.h"
 
-static const std::string uri = "urn:example.com";
+static const std::string strUri = "urn:example.com";
+static const xml::lite::Uri uri(strUri);
 static const std::string strXml_1_ = R"(
 <root>
     <doc name="doc">
@@ -37,7 +39,7 @@ static const std::string strXml_1_ = R"(
 static const std::string strXml_2_ = R"(" ns:int="314" />
     </doc>
 </root>)";
-static const auto strXml = strXml_1_ + uri + strXml_2_;
+static const auto strXml = strXml_1_ + strUri + strXml_2_;
 
 struct test_MinidomParser final
 {
@@ -54,6 +56,8 @@ struct test_MinidomParser final
 
 TEST_CASE(test_getAttribute)
 {
+    using namespace xml::lite::literals;  // _q and _u for QName and Uri
+
     test_MinidomParser xmlParser;
     const auto root = xmlParser.getRootElement();
 
@@ -62,6 +66,10 @@ TEST_CASE(test_getAttribute)
 
     std::string value;
     value = attributes.getValue("a");
+    TEST_ASSERT_EQ("a", value);
+    value = attributes["a"];
+    TEST_ASSERT_EQ("a", value);
+    value = attributes["a"_q];
     TEST_ASSERT_EQ("a", value);
 
     const auto result = attributes.getValue("a", value);
@@ -325,6 +333,15 @@ TEST_CASE(test_setAttributeValue)
         result = getValue(attributes, "string", value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ("xyz", value);
+
+        attributes["string"] = "abc";
+        value = attributes["string"];
+        TEST_ASSERT_EQ("abc", value);
+
+        using namespace xml::lite::literals;  // _q and _u for QName and Uri
+        attributes["string"_q] = "123";
+        value = attributes["string"_q];
+        TEST_ASSERT_EQ("123", value);
     }
     {
         auto toString = [](const bool& value) { return value ? "yes" : "no"; };

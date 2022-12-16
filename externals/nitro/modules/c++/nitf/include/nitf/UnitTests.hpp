@@ -27,15 +27,21 @@
 #include <string>
 #include <std/filesystem>
 
+#include <sys/FileFinder.h>
+
 #include "nitf/exports.hpp"
 
 namespace nitf
 {
 	namespace Test
 	{
-		NITRO_NITFCPP_API std::string buildPluginsDir();
+		NITRO_NITFCPP_API std::string buildPluginsDir(const std::string& dir = "nitf");
+		NITRO_NITFCPP_API void setNitfPluginPath(); // setenv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir("nitf"))
+		NITRO_NITFCPP_API void j2kSetNitfPluginPath(); // setenv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir("j2k"))
+
 		NITRO_NITFCPP_API std::filesystem::path buildFileDir(const std::filesystem::path& relativePath);
 		NITRO_NITFCPP_API std::filesystem::path findInputFile(const std::filesystem::path&);
+		NITRO_NITFCPP_API std::filesystem::path findInputFile(const std::filesystem::path& modulePath, const std::filesystem::path& moduleFile);
 	}
 }
 

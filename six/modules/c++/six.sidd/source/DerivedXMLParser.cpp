@@ -56,17 +56,6 @@ DerivedXMLParser::DerivedXMLParser(const std::string& strVersion,
     logging::Logger& log) : XMLParser(versionToURI(strVersion), false, log),
     mCommon(std::move(comParser)) { }
 
-#if !CODA_OSS_cpp17
-DerivedXMLParser::DerivedXMLParser(
-        const std::string& strVersion,
-        mem::auto_ptr<six::SICommonXMLParser> comParser,
-        logging::Logger* log,
-        bool ownLog) :
-    DerivedXMLParser(strVersion, std::unique_ptr<six::SICommonXMLParser>(comParser.release()), log, ownLog)
-{
-}
-#endif
-
 void DerivedXMLParser::getAttributeList(
         const xml::lite::Attributes& attributes,
         const std::string& attributeName,
@@ -163,22 +152,22 @@ void DerivedXMLParser::getAttributeIfExists(
         //So I'd think we should be able to parse that, too
         if (name == "true" || name == "1")
         {
-            boolean = BooleanType("IS_TRUE");
+            boolean = BooleanType::IS_TRUE;
         }
         else if (name == "false" || name == "0")
         {
-            boolean = BooleanType("IS_FALSE");
+            boolean = BooleanType::IS_FALSE;
         }
         else
         {
             //This allows the function to continue parsing IS_TRUE, IS_FALSE as desired,
             //as well as throwing an exception for undesired input
-            boolean = BooleanType(name);
+            boolean = BooleanType::toType(name);
         }
     }
     else
     {
-        boolean = BooleanType("NOT_SET");
+        boolean = BooleanType::NOT_SET;
     }
 }
 
@@ -482,7 +471,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
     }
 }
 
-mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const xml::lite::Element* elem) const
+std::unique_ptr<LUT> DerivedXMLParser::parseSingleLUT(const xml::lite::Element* elem) const
 {
     //get size attribute
     const auto size = str::toType<size_t>(const_cast<XMLElem>(elem)->attribute("size"));
@@ -490,7 +479,7 @@ mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const xml::lite::Element* el
     std::string lutStr = "";
     parseString(elem, lutStr);
     std::vector<std::string> lutVals = str::split(lutStr, " ");
-    mem::auto_ptr<LUT> lut(new LUT(size, sizeof(short)));
+    std::unique_ptr<LUT> lut(new LUT(size, sizeof(short)));
 
     for (size_t ii = 0; ii < lutVals.size(); ++ii)
     {
@@ -765,10 +754,10 @@ void DerivedXMLParser::parseExploitationFeaturesFromXML(
             info->polarization[jj].reset(new TxRcvPolarization());
             TxRcvPolarization* p = info->polarization[jj].get();
 
-            p->txPolarization = six::toType<PolarizationType>(
+            p->txPolarization = six::toType<PolarizationSequenceType>(
                 getFirstAndOnly(polElem, "TxPolarization")->
                 getCharacterData());
-            p->rcvPolarization = six::toType<PolarizationType>(
+            p->rcvPolarization = six::toType<PolarizationSequenceType>(
                 getFirstAndOnly(polElem, "RcvPolarization")->
                 getCharacterData());
 

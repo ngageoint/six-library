@@ -53,6 +53,7 @@
 #include <ctime>
 #include <list>
 #include <vector>
+#include <std/filesystem>
 
 // includes for CSM classes -- this code is configured by a global
 // committee -- any changes must be approved by that committe.
@@ -78,7 +79,7 @@
       {
 #define _CATCH                                                  \
       }                                                         \
-      catch (Error err)                                         \
+      catch (const Error& err)                                         \
       {                                                         \
          error_thrown = true;                                   \
          global_err = err;                                      \
@@ -1341,7 +1342,64 @@ bool processVTSCommand(int commandNumber,
 		 exitCase();
          break;
 
+         //----- CASE vtsSetEnv
+      case VTS_SET_ENV:
+      {
+          logCommand = false;
+          initCase();
+
+          if (debugFlag)
+          {
+              cout << "vts>    You requested routine " << menulist[commandNumber] << "\n";
+          }
+
+          text.clear();
+          for (i = 0; i < (int)param_array.size(); i++)
+              text += (param_array[i] + ' ');
+
+          if (debugFlag)
+          {
+              cout << "    Passing values are: \n" << "\ttext=" << text << "\n";
+          }
+
+          text = " vtsSetEnv success unknown ";
+
+          param_array_index = 1; // = (int)param_array.size() ?;
+          maxReturnValuesToCompare = 0;
+
+          const auto name = param_array[0];
+          const auto value = param_array[1];
+
+          _TRY
+              #if !_WIN32
+	    setenv(name.c_str(), value.c_str(), true /*overwrite*/); // https://man7.org/linux/man-pages/man3/setenv.3.html
+              #else
+              const auto env = name + "=" + value;
+              _putenv(env.c_str());
+              #endif
+	      text = name + "=" + getenv(name.c_str());
+          _CATCH
+              if (error_thrown)
+              {
+                  break;
+              }
+              else
+              {
+                  if (debugFlag)
+                  {
+                      cout << text;
+                  }
+              }
+          end_clock = clock();           // Record the end time for call.
+          comment.clear();
+          recordLog(logFile, comment, command, text);
+
+          exitCase();
+          break;
+      }
+
          //----- CASE getNumGeometricCorrectionSwitches NSetup
+      case VTS_last_command_: // avoid compiler warning
       default:
          command_found = false;
    }                                    // switch
@@ -1417,7 +1475,7 @@ bool processFileCommand(int commandNumber,
                end_clock = clock();
                j=0;
                // count loaded plugins
-               if (pluginList.size() == 0)
+               if (pluginList.empty())
                   cerr << "\a\n\a\n\a\t "
                      << "***** pluginList is NULL *****"
                      << "\a\n\a\n\a\n";
@@ -3768,6 +3826,8 @@ bool processSensorModelCommand(int commandNumber,
                 // note that: getUnmodeledError calls getUnmodeledCrossCovariance
 				//            passing imagePt as both ImageCoord arguments
 				//            (see getUnmodeledError in CsmRasterGM.h)
+                // getUnmodeledError() now also calls getSIXUnmodeledError() to get
+                // values from the SICD/SIDD XML.
                 _TRY
 				   covarianceErr = rasterGM->getUnmodeledError(imagePt);
                 _CATCH
@@ -5968,6 +6028,19 @@ void processCommand(int commandNumber,
 //   } 
 //} 
 
+static std::filesystem::path findRelativePath(const std::filesystem::path& start, const std::filesystem::path& search)
+{
+    if (start.parent_path() == start)
+    {
+        return search; // break infinite recursion with an "error"
+    }
+    auto retval = start / search;
+    if (is_directory(retval))
+    {
+        return retval;
+    }
+    return findRelativePath(start.parent_path(), search);
+}
 
 //*****************************************************************************
 // main
@@ -6126,6 +6199,24 @@ int main(int argc, char** argv)
    //---
 
    SMManager::instance().loadLibraries(dirName.c_str());
+
+   // This works-around having to run the "vts" executable from the share/CSM/plugins directory
+   if ((SMManager::instance().pluginCount() == 0) && Plugin::getList().empty())
+   {
+       const auto argv0 = std::filesystem::absolute(argv[0]);
+       const auto plugins = std::filesystem::path("share") / "CSM" / "plugins";
+       if (debugFlag)
+       {
+           clog << "No plugins loaded from \"" << dirName << "\"\n";
+           clog << "Trying to find " << plugins << " from " << argv0 << "\n";
+       }
+       const auto path = findRelativePath(argv0.parent_path(), plugins);
+       if (is_directory(path))
+       {
+           const auto strPath = path.string() + "/";
+           SMManager::instance().loadLibraries(strPath.c_str());
+       }
+   }
 
    // printList(logFile);
 

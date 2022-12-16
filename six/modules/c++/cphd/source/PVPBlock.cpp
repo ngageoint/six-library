@@ -57,20 +57,33 @@ template <typename T> inline void setData(const sys::byte* data,
 {
     setData(reinterpret_cast<const unsigned char*>(data), dest);
 }
+template <typename T> inline void setData(const double* data_,
+    T& dest)
+{
+    const void* pData_ = data_;
+    auto data = static_cast<const unsigned char*>(pData_);
+    setData(data, dest);
+}
 
-inline void setData(const std::byte* data,
+inline void setData(const std::byte* data_,
                     cphd::Vector3& dest)
 {
-    setData(data, dest[0]);
-    setData(data + sizeof(double), dest[1]);
-    setData(data + 2*sizeof(double), dest[2]);
+    const void* pData_ = data_;
+    auto data = static_cast<const double*>(pData_);
+    setData(&(data[0]), dest[0]);
+    setData(&(data[1]), dest[1]);
+    setData(&(data[2]), dest[2]);
 }
 
 // Get data from data struct and put into data block
 template <typename T> inline void getData(std::byte* dest,
                     T value)
 {
-    memcpy(dest, &value, sizeof(T));
+    memcpy(dest, &value, sizeof(value));
+}
+inline void getData(double* dest, double value)
+{
+    memcpy(dest, &value, sizeof(value));
 }
 
 template <typename T> inline void getData(std::byte* dest,
@@ -79,12 +92,15 @@ template <typename T> inline void getData(std::byte* dest,
     memcpy(dest, value, size);
 }
 
-inline void getData(std::byte* dest,
+inline void getData(std::byte* dest_,
                     const cphd::Vector3& value)
 {
-    getData(dest, value[0]);
-    getData(dest + sizeof(double), value[1]);
-    getData(dest + 2*sizeof(double), value[2]);
+    void* pDest_ = dest_;
+    auto dest = static_cast<double*>(pDest_);
+
+    getData(&(dest[0]), value[0]);
+    getData(&(dest[1]), value[1]);
+    getData(&(dest[2]), value[2]);
 }
 }
 
@@ -164,43 +180,117 @@ void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::
     }
     if (pvpBlock.hasSignal())
     {
-        signal.reset(new double());
+        signal.reset(new std::int64_t());
         ::setData(input + p.signal.getByteOffset(), *signal);
     }
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
-        if (it->second.getFormat() == "F4" || it->second.getFormat() == "F8")
+        if (it->second.getFormat() == "F4")
+        {
+            float val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = six::Parameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "F8")
         {
             double val;
             ::setData(input + it->second.getByteOffset(), val);
             addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "U1" || it->second.getFormat() == "U2" ||
-                 it->second.getFormat() == "U4" || it->second.getFormat() == "U8")
+        else if (it->second.getFormat() == "U1")
         {
-            unsigned int val;
+            std::uint8_t val;
             ::setData(input + it->second.getByteOffset(), val);
             addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "I1" || it->second.getFormat() == "I2" ||
-                 it->second.getFormat() == "I4" || it->second.getFormat() == "I8")
+        else if (it->second.getFormat() == "U2")
         {
-            int val;
+            std::uint16_t val;
             ::setData(input + it->second.getByteOffset(), val);
             addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "CI2" || it->second.getFormat() == "CI4" ||
-                 it->second.getFormat() == "CI8" || it->second.getFormat() == "CI16")
+        else if (it->second.getFormat() == "U4")
         {
-            std::complex<int> val;
+            std::uint32_t val;
             ::setData(input + it->second.getByteOffset(), val);
             addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
-        else if (it->second.getFormat() == "CF8" || it->second.getFormat() == "CF16")
+        else if (it->second.getFormat() == "U8")
+        {
+            std::uint64_t val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = six::Parameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "I1")
+        {
+            std::int8_t val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = six::Parameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "I2")
+        {
+            std::int16_t val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = six::Parameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "I4")
+        {
+            std::int32_t val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = six::Parameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "I8")
+        {
+            std::int64_t val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = six::Parameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "CI2")
+        {
+            std::complex<std::int8_t> val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = six::Parameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "CI4")
+        {
+            std::complex<std::int16_t> val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = six::Parameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "CI8")
+        {
+            std::complex<std::int32_t> val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = six::Parameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "CI16")
+        {
+            std::complex<std::int64_t> val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = six::Parameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "CF8")
+        {
+            std::complex<float> val;
+            ::setData(input + it->second.getByteOffset(), val);
+            addedPVP[it->first] = six::Parameter();
+            addedPVP.find(it->first)->second.setValue(val);
+        }
+        else if (it->second.getFormat() == "CF16")
         {
             std::complex<double> val;
             ::setData(input + it->second.getByteOffset(), val);
@@ -211,7 +301,8 @@ void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::
         {
             const auto pVal = input + it->second.getByteOffset();
             std::string val;
-            val.assign(reinterpret_cast<const char*>(pVal), it->second.getByteSize());
+            val.assign(reinterpret_cast<const char*>(pVal),
+                       it->second.getByteSize());
             addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
@@ -274,26 +365,67 @@ void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest_) const
     }
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
-        if (it->second.getFormat() == "F4" || it->second.getFormat() == "F8")
+        if (it->second.getFormat() == "F4")
+        {
+            ::getData(dest + it->second.getByteOffset(), static_cast<float>(addedPVP.find(it->first)->second));
+        }
+        else if (it->second.getFormat() == "F8")
         {
             ::getData(dest + it->second.getByteOffset(), static_cast<double>(addedPVP.find(it->first)->second));
         }
-        else if (it->second.getFormat() == "U1" || it->second.getFormat() == "U2" ||
-                 it->second.getFormat() == "U4" || it->second.getFormat() == "U8")
+        else if (it->second.getFormat() == "U1")
         {
-            ::getData(dest + it->second.getByteOffset(), static_cast<unsigned int>(addedPVP.find(it->first)->second));
+            ::getData(dest + it->second.getByteOffset(), static_cast<std::uint8_t>(addedPVP.find(it->first)->second));
         }
-        else if (it->second.getFormat() == "I1" || it->second.getFormat() == "I2" ||
-                 it->second.getFormat() == "I4" || it->second.getFormat() == "I8")
+        else if (it->second.getFormat() == "U2")
         {
-            ::getData(dest + it->second.getByteOffset(), static_cast<int>(addedPVP.find(it->first)->second));
+            ::getData(dest + it->second.getByteOffset(), static_cast<std::uint16_t>(addedPVP.find(it->first)->second));
         }
-        else if (it->second.getFormat() == "CI2" || it->second.getFormat() == "CI4" ||
-                 it->second.getFormat() == "CI8" || it->second.getFormat() == "CI16")
+        else if (it->second.getFormat() == "U4")
         {
-            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<int>());
+            ::getData(dest + it->second.getByteOffset(), static_cast<std::uint32_t>(addedPVP.find(it->first)->second));
         }
-        else if (it->second.getFormat() == "CF8" || it->second.getFormat() == "CF16")
+        else if (it->second.getFormat() == "U8")
+        {
+            ::getData(dest + it->second.getByteOffset(), static_cast<std::uint64_t>(addedPVP.find(it->first)->second));
+        }
+        else if (it->second.getFormat() == "I1")
+        {
+            ::getData(dest + it->second.getByteOffset(), static_cast<std::int8_t>(addedPVP.find(it->first)->second));
+        }
+        else if (it->second.getFormat() == "I2")
+        {
+            ::getData(dest + it->second.getByteOffset(), static_cast<std::int16_t>(addedPVP.find(it->first)->second));
+        }
+        else if (it->second.getFormat() == "I4")
+        {
+            ::getData(dest + it->second.getByteOffset(), static_cast<std::int32_t>(addedPVP.find(it->first)->second));
+        }
+        else if (it->second.getFormat() == "I8")
+        {
+            ::getData(dest + it->second.getByteOffset(), static_cast<std::int64_t>(addedPVP.find(it->first)->second));
+        }
+        else if (it->second.getFormat() == "CI2")
+        {
+            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<std::int8_t>());
+        }
+        else if (it->second.getFormat() == "CI4")
+        {
+            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<std::int16_t>());
+        }
+        else if (it->second.getFormat() == "CI8")
+        {
+            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<std::int32_t>());
+        }
+        else if (it->second.getFormat() == "CI16")
+        {
+            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<std::int64_t>());
+        }
+        else if (it->second.getFormat() == "CF8")
+        {
+            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<float>());
+        }
+        else if (it->second.getFormat() == "CF16")
         {
             ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<double>());
         }
@@ -689,7 +821,7 @@ double PVPBlock::getTdIonoSRP(size_t channel, size_t set) const
                     "Parameter was not set"));
 }
 
-double PVPBlock::getSignal(size_t channel, size_t set) const
+std::int64_t PVPBlock::getSignal(size_t channel, size_t set) const
 {
     verifyChannelVector(channel, set);
     if (mData[channel][set].signal.get())
@@ -874,12 +1006,12 @@ void PVPBlock::setTdIonoSRP(double value, size_t channel, size_t vector)
                             "Parameter was not specified in XML"));
 }
 
-void PVPBlock::setSignal(double value, size_t channel, size_t vector)
+void PVPBlock::setSignal(std::int64_t value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
     if (hasSignal())
     {
-        mData[channel][vector].signal.reset(new double(value));
+        mData[channel][vector].signal.reset(new std::int64_t(value));
         return;
     }
     throw except::Exception(Ctxt(

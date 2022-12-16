@@ -27,8 +27,6 @@
 #include <sys/Conf.h>
 #include <avx/extractf.h>
 
-namespace
-{
 TEST_CASE(extractf)
 {
   /*
@@ -49,14 +47,10 @@ TEST_CASE(extractf)
     val = avx::mm256_extractf(ymm, 7);
     if (val) {} // suppress compiler warning about unused "val"
   */
-  TEST_ASSERT_TRUE(true);
+    TEST_SUCCESS;
 }
     
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(extractf);
-
-    return 0;
-}
+)

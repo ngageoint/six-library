@@ -51,11 +51,11 @@ struct BaseConverter : protected six::XMLParser
      *
      * \return ComplexData corresponding to given file
      */
-    virtual mem::auto_ptr<six::sicd::ComplexData> convert() const = 0;
+    virtual std::unique_ptr<six::sicd::ComplexData> convert() const = 0;
 
 protected:
-    static mem::auto_ptr<xml::lite::Document>
-            readXML(const std::string& xmlPathname, bool storeEncoding=false);
+    static std::unique_ptr<xml::lite::Document>
+            readXML(const std::string& xmlPathname);
 
     XMLElem findUniqueElement(const xml::lite::Element* root,
             const std::string& xmlPath) const;

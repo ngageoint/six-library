@@ -24,6 +24,7 @@
 #define __SIX_BYTE_PROVIDER_H__
 
 #include <memory>
+#include <std/string>
 
 #include <scene/sys_Conf.h>
 #include <nitf/ByteProvider.hpp>
@@ -65,11 +66,9 @@ public:
     ByteProvider(const six::NITFHeaderCreator& headerCreator,
                  const std::vector<std::string>& schemaPaths,
                  const std::vector<PtrAndLength>& desBuffers);
-#if !CODA_OSS_cpp17
-    ByteProvider(mem::auto_ptr<six::NITFHeaderCreator> headerCreator,
+    ByteProvider(const std::unique_ptr<six::NITFHeaderCreator>& headerCreator,
                  const std::vector<std::string>& schemaPaths,
                  const std::vector<PtrAndLength>& desBuffers);
-#endif
 
     /*!
      * Populates the writer Options from given parameters
@@ -106,7 +105,7 @@ public:
     static void populateInitArgs(
             const NITFWriteControl& writer,
             const std::vector<std::string>& schemaPaths,
-            std::vector<std::string>& xmlStrings,
+            std::vector<std::u8string>& xmlStrings,
             std::vector<PtrAndLength>& desData,
             size_t& numRowsPerBlock,
             size_t& numColsPerBlock);
@@ -129,7 +128,7 @@ public:
     static void populateInitArgs(
             const NITFHeaderCreator& headerCreator,
             const std::vector<std::string>& schemaPaths,
-            std::vector<std::string>& xmlStrings,
+            std::vector<std::u8string>& xmlStrings,
             std::vector<PtrAndLength>& desData,
             size_t& numRowsPerBlock,
             size_t& numColsPerBlock);
@@ -146,11 +145,9 @@ public:
     void initialize(const six::NITFHeaderCreator& headerCreator,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<PtrAndLength>& desBuffers);
-#if !CODA_OSS_cpp17
-    void initialize(mem::auto_ptr<six::NITFHeaderCreator> headerCreator,
+    void initialize(const std::unique_ptr<six::NITFHeaderCreator>& headerCreator,
                     const std::vector<std::string>& schemaPaths,
                     const std::vector<PtrAndLength>& desBuffers);
-#endif
 protected:
     /*!
      * Default constructor. Client code must call initialize() to

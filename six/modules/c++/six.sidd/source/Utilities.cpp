@@ -23,6 +23,8 @@
 
 #include <stdexcept>
 
+#include <str/EncodedStringView.h>
+
 #include "six/Utilities.h"
 #include "six/sidd/DerivedXMLControl.h"
 #include "six/sidd/DerivedDataBuilder.h"
@@ -96,7 +98,7 @@ static six::Vector3 latLonToECEF(const six::sidd::PolynomialProjection& projecti
    return scene::Utilities::latLonToECEF(lla);
 }
 
-mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
+std::unique_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
         const DerivedData* derived)
 {
     const double centerTime = getCenterTime(*derived);
@@ -144,7 +146,7 @@ mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
     {
         // In this case there are no image plane row/col vectors, so we want
         // to use a different constructor
-        mem::auto_ptr<scene::SceneGeometry> geom(
+        std::unique_ptr<scene::SceneGeometry> geom(
                 new scene::SceneGeometry(arpVel, arpPos, refPt));
         return geom;
     }
@@ -154,12 +156,12 @@ mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
                 Ctxt("Cylindrical projection not yet supported"));
     }
 
-    mem::auto_ptr<scene::SceneGeometry> geom(
+    std::unique_ptr<scene::SceneGeometry> geom(
             new scene::SceneGeometry(arpVel, arpPos, refPt, rowVec, colVec));
     return geom;
 }
 
-mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
+std::unique_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
         const DerivedData* derived)
 {
     if (!derived->measurement->projection->isMeasurable())
@@ -173,7 +175,7 @@ mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
         dynamic_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
-    mem::auto_ptr<scene::GridECEFTransform> transform;
+    std::unique_ptr<scene::GridECEFTransform> transform;
 
     switch ((int)p->projectionType)
     {
@@ -249,7 +251,7 @@ mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
     return transform;
 }
 
-mem::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
+std::unique_ptr<scene::GridGeometry> Utilities::getGridGeometry(
         const DerivedData* derived)
 {
     if (!derived->measurement->projection->isMeasurable())
@@ -263,7 +265,7 @@ mem::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
         dynamic_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
-    mem::auto_ptr<scene::GridGeometry> geom;
+    std::unique_ptr<scene::GridGeometry> geom;
 
     // Only currently have an implementation for PGD
     switch ((int)p->projectionType)
@@ -463,19 +465,19 @@ std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType>
     return pols;
 }
 
-mem::auto_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
+std::unique_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
         const DerivedData* data)
 {
     const int lookDir = getSideOfTrack(data);
     scene::Errors errors;
     ::getErrors(*data, errors);
 
-    mem::auto_ptr<scene::SceneGeometry> geom(getSceneGeometry(data));
+    std::unique_ptr<scene::SceneGeometry> geom(getSceneGeometry(data));
 
     const six::ProjectionType gridType =
             data->measurement->projection->projectionType;
 
-    mem::auto_ptr<scene::ProjectionModel> projModel;
+    std::unique_ptr<scene::ProjectionModel> projModel;
     switch (gridType)
     {
     case six::ProjectionType::PLANE:
@@ -532,10 +534,10 @@ TReturn Utilities_parseData(::io::InputStream& xmlStream, const TSchemaPaths& sc
     auto data(six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
     return TReturn(static_cast<DerivedData*>(data.release()));
 }
-mem::auto_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
+std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
-    return Utilities_parseData<mem::auto_ptr<DerivedData>>(xmlStream, schemaPaths, log);
+    return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, schemaPaths, log);
 }
 std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
@@ -543,7 +545,7 @@ std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, pSchemaPaths, log);
 }
 
-mem::auto_ptr<DerivedData> Utilities::parseDataFromFile(const std::string& pathname,
+std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::string& pathname,
         const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
     io::FileInputStream inStream(pathname);
@@ -559,45 +561,49 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem:
     return parseData(inStream, pSchemaPaths, *logger);
 }
 
-mem::auto_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr,
-        const std::vector<std::string>& schemaPaths, logging::Logger& log)
+std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr_,
+        const std::vector<std::string>& schemaPaths_, logging::Logger& log)
 {
-    io::StringStream inStream;
-    inStream.write(xmlStr);
-    return parseData(inStream, schemaPaths, log);
+    const auto xmlStr = str::EncodedStringView(xmlStr_).u8string();
+
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    auto result = parseDataFromString(xmlStr, &schemaPaths, &log);
+    return std::unique_ptr<DerivedData>(result.release());
 }
-std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr,
+std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
     logging::NullLogger nullLogger;
     logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
 
-    io::StringStream inStream;
+    io::U8StringStream inStream;
     inStream.write(xmlStr);
     return parseData(inStream, pSchemaPaths, *log);
 }
 
-template<typename TSchemaPaths>
-std::string Utilities_toXMLString(const DerivedData& data,
-    const TSchemaPaths& schemaPaths, logging::Logger* pLogger)
+std::string Utilities::toXMLString(const DerivedData& data,
+                                   const std::vector<std::string>& schemaPaths_, logging::Logger* logger)
+{
+    std::vector<std::filesystem::path> schemaPaths;
+    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
+        [](const std::string& s) { return s; });
+
+    const auto result = toXMLString(data, &schemaPaths, logger);
+    return str::EncodedStringView(result).native();
+}
+std::u8string Utilities::toXMLString(const DerivedData& data,
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<DerivedXMLControl>();
 
     logging::NullLogger nullLogger;
-    logging::Logger* const logger = (pLogger == nullptr) ? &nullLogger : pLogger;
+    logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
 
-    return ::six::toValidXMLString(data, schemaPaths, logger, &xmlRegistry);
-}
-std::string Utilities::toXMLString(const DerivedData& data,
-                                   const std::vector<std::string>& schemaPaths, logging::Logger* logger)
-{
-    return Utilities_toXMLString(data, schemaPaths, logger);
-}
-std::string Utilities::toXMLString(const DerivedData& data,
-    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* logger)
-{
-    return Utilities_toXMLString(data, pSchemaPaths, logger);
+    return ::six::toValidXMLString(data, pSchemaPaths, pLogger_, &xmlRegistry);
 }
 
 static void createPredefinedFilter(six::sidd::Filter& filter)
@@ -920,12 +926,12 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
 
     mem::ScopedCopyablePtr<six::sidd::TxRcvPolarization> polarization(
         new six::sidd::TxRcvPolarization());
-    polarization->txPolarization = six::PolarizationType::V;
-    polarization->rcvPolarization = six::PolarizationType::OTHER;
+    polarization->txPolarization = six::PolarizationSequenceType::V;
+    polarization->rcvPolarization = six::PolarizationSequenceType::OTHER;
     polarization->rcvPolarizationOffset = 1.37;
     if (strVersion == "1.0.0")
     {
-        polarization->processed = six::BooleanType("IS_TRUE");
+        polarization->processed = six::BooleanType::IS_TRUE;
     }
     collection.information.polarization.push_back(polarization);
 
@@ -1060,9 +1066,9 @@ static void initRadiometric(six::Radiometric& radiometric)
     radiometric.rcsSFPoly = six::Poly2D(0, 0);
     radiometric.betaZeroSFPoly = six::Poly2D(1, 3);
     radiometric.sigmaZeroSFPoly = six::Poly2D(0, 0);
-    radiometric.sigmaZeroSFIncidenceMap = six::AppliedType("IS_TRUE");
+    radiometric.sigmaZeroSFIncidenceMap = six::AppliedType::IS_TRUE;
     radiometric.gammaZeroSFPoly = six::Poly2D(0, 0);
-    radiometric.gammaZeroSFIncidenceMap = six::AppliedType("IS_FALSE");
+    radiometric.gammaZeroSFIncidenceMap = six::AppliedType::IS_FALSE;
 }
 
 static void initAnnotations(six::sidd::Annotations& annotations)
@@ -1375,9 +1381,9 @@ std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string&
     }
     throw std::invalid_argument("strVersion = '" + strVersion + "' is not supported.");
 }
-mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
+std::unique_ptr<DerivedData> Utilities::createFakeDerivedData()
 {
-    return mem::auto_ptr<DerivedData>(createFakeDerivedData("").release());
+    return std::unique_ptr<DerivedData>(createFakeDerivedData_("").release());
 }
 
 }

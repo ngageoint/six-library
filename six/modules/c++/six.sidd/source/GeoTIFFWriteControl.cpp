@@ -27,6 +27,7 @@
 #include <stdexcept>
 
 #include "io/FileOutputStream.h"
+#include "str/EncodedStringView.h"
 #include "sys/Path.h"
 #include "gsl/gsl.h"
 #include "scene/GridECEFTransform.h"
@@ -234,12 +235,13 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     }
     tiff::IFDEntry* const xmlEntry = (*ifd)[Constants::GT_XML_TAG];
 
-    xmlEntry->addValues(six::toValidXMLString(data, schemaPaths, mLog));
+    auto xml = six::toValidXMLString(data, schemaPaths, mLog);
+    xmlEntry->addValues(str::EncodedStringView(xml).native());
 
     for (size_t jj = 0; jj < mComplexData.size(); ++jj)
     {
-        xmlEntry->addValues(six::toValidXMLString(mComplexData[jj],
-                                                  schemaPaths, mLog));
+        xml = six::toValidXMLString(mComplexData[jj], schemaPaths, mLog);
+        xmlEntry->addValues(str::EncodedStringView(xml).native());
     }
 }
 

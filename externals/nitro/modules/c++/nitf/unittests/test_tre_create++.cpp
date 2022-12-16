@@ -7,7 +7,7 @@
 
 TEST_CASE(test_tre_create_329)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     // https://github.com/mdaus/nitro/issues/329
 
@@ -21,7 +21,7 @@ TEST_CASE(test_tre_create_329)
 
 TEST_CASE(test_tre_clone_329)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     // https://github.com/mdaus/nitro/issues/329
     const std::string rd = "begin1020030004ABCDEFend";

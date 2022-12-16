@@ -25,6 +25,9 @@
 #include <memory>
 #include <vector>
 #include <std/filesystem>
+#include <std/string>
+
+#include <mem/AutoPtr.h>
 
 #include <scene/sys_Conf.h>
 
@@ -92,11 +95,13 @@ struct XMLControlRegistry
     virtual ~XMLControlRegistry();
 
     void addCreator(const std::string& identifier,
-                    std::unique_ptr<XMLControlCreator>&& creator);
-#if !CODA_OSS_cpp17
-    void addCreator(const std::string& identifier,
-                    mem::auto_ptr<XMLControlCreator> creator);
-#endif
+        std::unique_ptr<XMLControlCreator>&& creator);
+    void addCreator_(const std::string& identifier,
+        mem::AutoPtr<XMLControlCreator> creator)
+    {
+        std::unique_ptr<XMLControlCreator> scopedCreator(creator.release());
+        addCreator(identifier, std::move(scopedCreator));
+    }
 
     /*!
      * Takes ownership of creator
@@ -109,17 +114,16 @@ struct XMLControlRegistry
     }
 
     void addCreator(DataType dataType,
-                    std::unique_ptr<XMLControlCreator>&& creator)
+        std::unique_ptr<XMLControlCreator>&& creator)
     {
         addCreator(dataType.toString(), std::move(creator));
     }
-#if !CODA_OSS_cpp17
-    void addCreator(DataType dataType,
-                    mem::auto_ptr<XMLControlCreator> creator)
+    void addCreator_(DataType dataType,
+                    mem::AutoPtr<XMLControlCreator> creator_)
     {
-        addCreator(dataType.toString(), creator);
+        std::unique_ptr<XMLControlCreator> creator(creator_.release());
+        addCreator(dataType, std::move(creator));
     }
-#endif
 
     /*!
      * Takes ownership of creator
@@ -167,21 +171,23 @@ private:
  *  \return A C++ string object containing the XML
  *
  */
-std::string toXMLString(const Data* data,
+std::u8string toXMLString(const Data* data,
                         const XMLControlRegistry *xmlRegistry = nullptr);
+std::string toXMLString_(const Data* data,
+    const XMLControlRegistry* xmlRegistry = nullptr);
 
 /*!
  *  Additionally performs schema validation --
  *  This function must must receive a valid logger to print validation errors
  */
-std::string toValidXMLString(
+std::u8string toValidXMLString(
         const Data* data,
         const std::vector<std::string>& schemaPaths,
         logging::Logger* log,
         const XMLControlRegistry *xmlRegistry = nullptr);
-std::string toValidXMLString(const Data&,
+std::u8string toValidXMLString(const Data&,
     const std::vector<std::string>& schemaPaths, logging::Logger*, const XMLControlRegistry* xmlRegistry = nullptr);
-std::string toValidXMLString(const Data&,
+std::u8string toValidXMLString(const Data&,
     const std::vector<std::filesystem::path>*, logging::Logger*, const XMLControlRegistry* xmlRegistry = nullptr);
 
 //!  Singleton declaration of our XMLControlRegistry

@@ -30,6 +30,7 @@
 #include <mem/ScopedArray.h>
 #include <types/RowCol.h>
 #include <types/Range.h>
+#include "config/Exports.h"
 
 namespace polygon
 {
@@ -38,7 +39,7 @@ namespace polygon
  * \brief Acts as a mask for a convex polygon without actually allocating a
  * bool buffer to draw it.
  */
-struct PolygonMask final
+struct CODA_OSS_API PolygonMask final
 {
     enum MarkModesEnum
     {

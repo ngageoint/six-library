@@ -44,14 +44,12 @@ ByteProvider::ByteProvider(const six::NITFHeaderCreator& headerCreator,
 {
     initialize(headerCreator, schemaPaths, desBuffers);
 }
-#if !CODA_OSS_cpp17
-ByteProvider::ByteProvider(mem::auto_ptr<six::NITFHeaderCreator> headerCreator,
+ByteProvider::ByteProvider(const std::unique_ptr<six::NITFHeaderCreator>& headerCreator,
     const std::vector<std::string>& schemaPaths,
     const std::vector<PtrAndLength>& desBuffers)
     : ByteProvider(*headerCreator, schemaPaths, desBuffers)
 {
 }
-#endif
 
 void ByteProvider::populateOptions(
         std::shared_ptr<Container> container,
@@ -93,7 +91,7 @@ void ByteProvider::populateOptions(
 void ByteProvider::populateInitArgs(
         const NITFWriteControl& writer,
         const std::vector<std::string>& schemaPaths,
-        std::vector<std::string>& xmlStrings,
+        std::vector<std::u8string>& xmlStrings,
         std::vector<PtrAndLength>& desData,
         size_t& numRowsPerBlock,
         size_t& numColsPerBlock)
@@ -118,7 +116,7 @@ void ByteProvider::populateInitArgs(
 void ByteProvider::populateInitArgs(
         const NITFHeaderCreator& headerCreator,
         const std::vector<std::string>& schemaPaths,
-        std::vector<std::string>& xmlStrings,
+        std::vector<std::u8string>& xmlStrings,
         std::vector<PtrAndLength>& desData,
         size_t& numRowsPerBlock,
         size_t& numColsPerBlock)
@@ -161,7 +159,7 @@ void ByteProvider::populateInitArgs(
     desData.resize(xmlStrings.size());
     for (size_t ii = 0; ii < xmlStrings.size(); ++ii)
     {
-        std::string& xmlString(xmlStrings[ii]);
+        auto& xmlString(xmlStrings[ii]);
         xmlString = six::toValidXMLString(container->getData(ii),
                                           schemaPaths,
                                           &logger,
@@ -210,7 +208,7 @@ void ByteProvider::initialize(const NITFWriteControl& writer,
 {
     // We don't explicitly use it, but each element in desData has a pointer
     // into this vector, so we need it to stick around
-    std::vector<std::string> xmlStrings;
+    std::vector<std::u8string> xmlStrings;
     std::vector<PtrAndLength> desData;
     size_t numRowsPerBlock;
     size_t numColsPerBlock;
@@ -240,7 +238,7 @@ void ByteProvider::initialize(const six::NITFHeaderCreator& headerCreator,
 {
     // We don't explicitly use it, but each element in desData has a pointer
     // into this vector, so we need it to stick around
-    std::vector<std::string> xmlStrings;
+    std::vector<std::u8string> xmlStrings;
     std::vector<PtrAndLength> desData;
     size_t numRowsPerBlock;
     size_t numColsPerBlock;
@@ -263,14 +261,12 @@ void ByteProvider::initialize(const six::NITFHeaderCreator& headerCreator,
                                    numRowsPerBlock,
                                    numColsPerBlock);
 }
-#if !CODA_OSS_cpp17
-void ByteProvider::initialize(mem::auto_ptr<six::NITFHeaderCreator> headerCreator_,
+void ByteProvider::initialize(const std::unique_ptr<six::NITFHeaderCreator>& headerCreator_,
     const std::vector<std::string>& schemaPaths,
     const std::vector<PtrAndLength>& desBuffers)
 {
     const auto& headerCreator = *headerCreator_;
     initialize(headerCreator, schemaPaths, desBuffers);
 }
-#endif
 
 }

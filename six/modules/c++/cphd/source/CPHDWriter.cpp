@@ -151,8 +151,7 @@ void CPHDWriter::writeMetadata(size_t supportSize,
                                size_t pvpSize,
                                size_t cphdSize)
 {
-    const std::string xmlMetadata(
-            CPHDXMLControl().toXMLString(mMetadata, mSchemaPaths));
+    const auto xmlMetadata(CPHDXMLControl().toXMLString(mMetadata, mSchemaPaths));
 
     // update header version, or remains default if unset
     mHeader.setVersion(mMetadata.getVersion());
@@ -237,12 +236,14 @@ void CPHDWriter::write(const PVPBlock& pvpBlock,
 
     // Doesn't require pading because pvp block is always 8 bytes words
     // Write wideband (or signal) block
+    size_t elementsWritten = 0;  // Used to increment widebandData pointer
     for (size_t ii = 0; ii < mMetadata.data.getNumChannels(); ++ii)
     {
         size_t numElements = mMetadata.data.getNumVectors(ii) *
                 mMetadata.data.getNumSamples(ii);
         // writeCPHDData handles compressed data as well
-        writeCPHDData<T>(widebandData, numElements, ii);
+        writeCPHDData<T>(widebandData + elementsWritten, numElements, ii);
+        elementsWritten += numElements;
     }
 }
 

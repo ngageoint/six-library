@@ -54,9 +54,8 @@ namespace lite
  * \brief This is the information for one 
  *        schema validation error.
  */
-class ValidationInfo
+struct ValidationInfo final
 {
-public:
     ValidationInfo(const std::string& message,
                    const std::string& level,
                    const std::string& file,
@@ -130,18 +129,22 @@ public:
      *  \param xmlID   Identifier for this input xml within the error log
      *  \param errors  Object for returning errors found (errors are appended)
      */
+    template <typename TStringStream>
+    bool vallidateT(io::InputStream& xml,
+                    TStringStream&& oss,
+                    const std::string& xmlID,
+                    std::vector<ValidationInfo>& errors) const
+    {
+        // convert to std::string
+        xml.streamTo(oss);
+        return validate(oss.stream().str(), xmlID, errors);
+    }
     bool validate(io::InputStream& xml,
                   const std::string& xmlID,
                   std::vector<ValidationInfo>& errors) const
     {
-        // convert to std::string
-        io::StringStream oss;
-        xml.streamTo(oss);
-        return validate(oss.stream().str(), xmlID, errors);
+        return vallidateT(xml, io::StringStream(), xmlID, errors);
     }
-    bool validate(io::InputStream& xml, StringEncoding,
-                  const std::string& xmlID,
-                  std::vector<ValidationInfo>& errors) const;
 
     /*!
      *  Validation against the internal schema pool
@@ -154,7 +157,7 @@ public:
                   std::vector<ValidationInfo>& errors) const
     {
         // convert to stream
-        io::StringStream oss;
+        io::U8StringStream oss;
         xml->print(oss);
         return validate(oss.stream().str(), xmlID, errors);
     }
@@ -168,14 +171,8 @@ public:
     virtual bool validate(const std::string& xml,
                           const std::string& xmlID,
                           std::vector<ValidationInfo>& errors) const = 0;
-    virtual bool validate(const coda_oss::u8string&, const std::string& /*xmlID*/, std::vector<ValidationInfo>&) const // =0 would cause existing code to break
-    {
-        return true;  // i.e., an error 
-    }
-     virtual bool validate(const str::W1252string&, const std::string& /*xmlID*/, std::vector<ValidationInfo>&) const // =0 would cause existing code to break
-    {
-        return true;  // i.e., an error 
-    }
+    virtual bool validate(const coda_oss::u8string&, const std::string& /*xmlID*/, std::vector<ValidationInfo>&) const = 0;
+    virtual bool validate(const str::W1252string&, const std::string& /*xmlID*/, std::vector<ValidationInfo>&) const = 0;
 };
 
 inline std::ostream& operator<< (std::ostream& out,

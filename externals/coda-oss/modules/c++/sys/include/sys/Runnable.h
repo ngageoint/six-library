@@ -24,6 +24,7 @@
 #ifndef __SYS_RUNNABLE_H__
 #define __SYS_RUNNABLE_H__
 
+#include "config/Exports.h"
 
 namespace sys
 {
@@ -42,7 +43,7 @@ namespace sys
  *  Design Pattern.
  *
  */
-struct Runnable
+struct CODA_OSS_API Runnable
 {
     Runnable() = default;
     virtual ~Runnable() = default;

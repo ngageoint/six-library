@@ -8,7 +8,10 @@ _deps/
 CMakeFiles/
 CMakeCache.txt
 CMakeSettings.json
+# ignore build directories ...
 build/
+# ... but not coda-oss/build
+!/externals/coda-oss/build/
 
 externals/coda-oss/modules/c++/**/Makefile
 modules/**/Makefile

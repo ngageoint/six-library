@@ -159,7 +159,7 @@ struct /*namespace*/ TREs
 
 TEST_CASE(setFields)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     // create an ACFTA TRE
     nitf::TRE tre("ACFTA");
@@ -180,7 +180,7 @@ TEST_CASE(setFields)
 
 TEST_CASE(setBinaryFields)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     nitf::TRE tre("RPFHDR");
     const int value = 123;
@@ -193,7 +193,7 @@ TEST_CASE(setBinaryFields)
 
 TEST_CASE(cloneTRE)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     nitf::TRE tre("JITCID");
     tre.setField("FILCMT", "fyi");
@@ -208,7 +208,7 @@ TEST_CASE(cloneTRE)
 
 TEST_CASE(basicIteration)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     nitf::TRE tre("ACCPOB");
 
@@ -237,7 +237,7 @@ TEST_CASE(basicIteration)
 
 TEST_CASE(use_ENGRDA)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     nitf::TRE engrda("ENGRDA", "ENGRDA");
 
@@ -261,13 +261,13 @@ TEST_CASE(use_ENGRDA)
 
 TEST_CASE(use_ENGRDA_typed_fields)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     nitf::TRE engrda("ENGRDA", "ENGRDA");
 
     nitf::TREField_BCS_A<20> RESRC(engrda, "RESRC");
     RESRC = "HSS"; // engrda.setField("RESRC", "HSS");
-    const auto resrc_ = str::strip(RESRC);
+    const auto resrc_ = str::trim(RESRC);
     TEST_ASSERT_EQ_STR(resrc_, "HSS");
 
     nitf::TREField_BCS_N<3> RECNT(engrda, "RECNT", true /*forceUpdate*/);
@@ -289,18 +289,18 @@ TEST_CASE(use_ENGRDA_typed_fields)
 
     nitf::IndexedField<nitf::TREField_BCS_A<>> ENGDATA(engrda, "ENGDATA",  RECNT);
     ENGDATA[0] = "ABC"; // engrda.setField("ENGDATA[0]", "ABC");
-    const auto engdata_0_ = str::strip(ENGDATA[0]);
+    const auto engdata_0_ = str::trim(ENGDATA[0]);
     TEST_ASSERT_EQ_STR(engdata_0_, "ABC");
 }
 
 TEST_CASE(use_typed_ENGRDA)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     TREs::ENGRDA engrda; // nitf::TRE engrda("ENGRDA", "ENGRDA");
 
     engrda.RESRC = "HSS"; // engrda.setField("RESRC", "HSS");
-    const auto RESRC = str::strip(engrda.RESRC);
+    const auto RESRC = str::trim(engrda.RESRC);
     TEST_ASSERT_EQ_STR(RESRC, "HSS");
 
     engrda.RECNT = 1; // engrda.setField("RECNT", 1, true /*forceUpdate*/);
@@ -318,7 +318,7 @@ TEST_CASE(use_typed_ENGRDA)
     engrda.updateFields();
     engrda.ENGDATA[0] = "ABC"; // engrda.setField("ENGDATA[0]", "ABC");
     const auto& engrda_ = engrda;
-    const auto ENGDATA_0 = str::strip(engrda_.ENGDATA[0]);
+    const auto ENGDATA_0 = str::trim(engrda_.ENGDATA[0]);
     TEST_ASSERT_EQ_STR(ENGDATA_0, "ABC");
 
     try
@@ -343,9 +343,24 @@ TEST_CASE(use_typed_ENGRDA)
 
 }
 
+TEST_CASE(use_CSEXRB_typed_fields)
+{
+    nitf::Test::setNitfPluginPath();
+
+    nitf::TRE tre("CSEXRB", "CSEXRB");
+
+    constexpr auto length = 12;
+    nitf::TREField_BCS_A<length> MAX_GSD(tre, "MAX_GSD");
+    TEST_ASSERT_EQ(length, static_cast<int>(MAX_GSD.getLength()));
+
+    MAX_GSD = "0123456789ab";
+    const auto s = str::trim(MAX_GSD);
+    TEST_ASSERT_EQ_STR(s, "0123456789ab");
+}
+
 TEST_CASE(populateWhileIterating)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     nitf::TRE tre("ACCPOB");
     size_t numFields = 0;
@@ -371,7 +386,7 @@ TEST_CASE(populateWhileIterating)
 
 TEST_CASE(overflowingNumericFields)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     nitf::TRE tre("CSCRNA");
 
@@ -408,6 +423,7 @@ TEST_MAIN(
     TEST_CHECK(use_ENGRDA);
     TEST_CHECK(use_ENGRDA_typed_fields);
     TEST_CHECK(use_typed_ENGRDA);
+    TEST_CHECK(use_CSEXRB_typed_fields);
     TEST_CHECK(populateWhileIterating);
     TEST_CHECK(overflowingNumericFields);
     )

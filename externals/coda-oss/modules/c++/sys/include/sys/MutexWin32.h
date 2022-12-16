@@ -24,6 +24,8 @@
 #ifndef __SYS_MUTEX_WIN32_H__
 #define __SYS_MUTEX_WIN32_H__
 
+#include "config/Exports.h"
+
 #if defined(WIN32) || defined(_WIN32)
 #if !defined(USE_NSPR_THREADS)
 
@@ -31,12 +33,18 @@
 
 namespace sys
 {
-class MutexWin32 : public MutexInterface
+class CODA_OSS_API MutexWin32 : public MutexInterface
 {
 public:
     //! \todo Add string name option
     MutexWin32();
     virtual ~MutexWin32();
+
+    MutexWin32(const MutexWin32&) = delete;
+    MutexWin32& operator = (const MutexWin32&) = delete;
+    MutexWin32(MutexWin32&&) = delete;
+    MutexWin32& operator=(MutexWin32&&) = delete;
+
     /*!
      *  Lock the mutex.
      */

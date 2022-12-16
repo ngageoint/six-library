@@ -64,6 +64,7 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <EnablePREfast>true</EnablePREfast>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -88,6 +89,7 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -156,6 +158,7 @@
     <ClCompile Include="source\CompressedByteProvider.cpp" />
     <ClCompile Include="source\Container.cpp" />
     <ClCompile Include="source\Data.cpp" />
+    <ClCompile Include="source\Enums.cpp" />
     <ClCompile Include="source\ErrorStatistics.cpp" />
     <ClCompile Include="source\GeoDataBase.cpp" />
     <ClCompile Include="source\GeoInfo.cpp" />

@@ -82,6 +82,10 @@ struct AttributeNode final
      */
     void setQName(const std::string& qname);
     void setQName(const xml::lite::QName& qname);
+    explicit AttributeNode(const xml::lite::QName& qname)
+    {
+        setQName(qname);
+    }
 
     /*!
      *  Set the local (unqualified portion) of the name
@@ -111,6 +115,10 @@ struct AttributeNode final
      *  \param value The attribute value
      */
     void setValue(const std::string& value);
+    AttributeNode(const xml::lite::QName& qname, const std::string& value) : AttributeNode(qname)
+    {
+        setValue(value);
+    }
 
     /*!
      *  Get the URI associated with the QName.  Blank string
@@ -310,6 +318,22 @@ struct Attributes final
         return getNode(i);
     }
 
+    std::string& operator[](const xml::lite::QName& name)
+    {
+        int idx = getIndex(name);
+        if (idx < 0)
+        {
+            mAttributes.emplace_back(name);
+            idx = (int)(mAttributes.size() - 1);
+        }
+        return mAttributes[(size_t)idx].getValue();
+    }
+    std::string operator[](const xml::lite::QName& name) const
+    {
+        const size_t idx = getIndex(name);
+        return mAttributes[idx].getValue();
+    }
+
     std::string& operator[](const std::string& s)
     {
         int idx = getIndex(s);
@@ -321,6 +345,11 @@ struct Attributes final
             idx = (int)(mAttributes.size() - 1);
         }
         return mAttributes[(size_t)idx].getValue();
+    }
+    std::string operator[](const std::string& s) const
+    {
+        const size_t idx = getIndex(s);
+        return mAttributes[idx].getValue();
     }
 
     /*!

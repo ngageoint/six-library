@@ -46,7 +46,7 @@ namespace details
         const auto mid1 = first1 + len / 2;
         const auto d_mid = d_first + len / 2;
         auto handle = std::async(policy, transform_async<InputIt, OutputIt, TFunc>, mid1, last1, d_mid, f, cutoff, policy);
-        transform_async(first1, mid1, d_first, f, cutoff, policy);
+        details::transform_async(first1, mid1, d_first, f, cutoff, policy);
         return handle.get();
     }
 }

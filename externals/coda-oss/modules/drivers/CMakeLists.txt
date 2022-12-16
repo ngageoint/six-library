@@ -5,7 +5,6 @@ if (MSVC)
     add_compile_options(/wd4244) # '...': conversion from '...' to '...', possible loss of data
 endif()
 
-add_subdirectory("boost")
 #add_subdirectory("curl") # this is handled in coda_find_system_dependencies
 #add_subdirectory("numpy") # this is handled in coda_find_system_dependencies
 
@@ -65,4 +64,10 @@ if (NOT CONAN_PACKAGE_NAME)
     if (ENABLE_ZIP OR ZIP_HOME)
         add_subdirectory("zlib")
     endif()
+endif()
+
+set(CODA_ENABLE_HDF5 ON CACHE BOOL "enable hdf5")
+set(CODA_HDF5_HOME "" CACHE PATH "path to pre-existing HDF5 installation, if not provided HDF5 will be built")
+if (CODA_ENABLE_HDF5 OR CODA_HDF5_HOME)
+    add_subdirectory("hdf5")
 endif()

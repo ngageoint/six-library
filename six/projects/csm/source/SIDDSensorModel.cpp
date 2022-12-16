@@ -21,7 +21,7 @@
 */
 #include <six/csm/SIDDSensorModel.h>
 
-#include <six/csm/SIDDSensorModel.h>
+#include <assert.h>
 
 #include "Error.h"
 #include <sys/OS.h>
@@ -33,6 +33,7 @@
 #include <six/sidd/DerivedXMLControl.h>
 #include <six/sidd/Utilities.h>
 #include <six/XmlLite.h>
+#include <six/ErrorStatistics.h>
 
 namespace six
 {
@@ -139,7 +140,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         mData.reset(reinterpret_cast<six::sidd::DerivedData*>(data->clone()));
 
         // get xml as string for sensor model state
-        const std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
+        const auto xmlStr = six::toXMLString_(mData.get(), &xmlRegistry);
         mSensorModelState = NAME + std::string(" ") + xmlStr;
         reinitialize();
     }
@@ -448,6 +449,12 @@ const six::sidd::MeasurableProjection* SIDDSensorModel::getProjection() const
             reinterpret_cast<six::sidd::MeasurableProjection*>(
                     mData->measurement->projection.get());
     return projection;
+}
+
+std::vector<double>
+SIDDSensorModel::getSIXUnmodeledError() const
+{
+    return SIXSensorModel::getSIXUnmodeledError_(mData->errorStatistics.get());
 }
 
 void SIDDSensorModel::reinitialize()

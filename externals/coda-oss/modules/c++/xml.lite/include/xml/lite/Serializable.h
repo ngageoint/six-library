@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_SERIALIZABLE_H__
-#define __XML_LITE_SERIALIZABLE_H__
+#ifndef CODA_OSS_xml_lite_Serializable_h_INCLUDED_
+#define CODA_OSS_xml_lite_Serializable_h_INCLUDED_
 
 #include "io/OutputStream.h"
 #include "io/InputStream.h"
@@ -52,7 +52,7 @@ struct Serializable : public io::Serializable
 {
     Serializable() = default;
 
-    Serializable(Document* document, bool own = true)
+    explicit Serializable(Document* document, bool own = true)
     {
         setDocument(document, own);
     }
@@ -109,5 +109,4 @@ protected:
 }
 }
 
-#endif
-
+#endif  // CODA_OSS_xml_lite_Serializable_h_INCLUDED_

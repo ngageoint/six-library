@@ -41,17 +41,6 @@ ComplexXMLParser04x::ComplexXMLParser04x(
     ComplexXMLParser(strVersion, addClassAttributes, std::move(comParser), log, ownLog)
 {
 }
-#if !CODA_OSS_cpp17
-ComplexXMLParser04x::ComplexXMLParser04x(
-    const std::string& strVersion,
-    bool addClassAttributes,
-    mem::auto_ptr<SICommonXMLParser> comParser,
-    logging::Logger* log,
-    bool ownLog) :
-    ComplexXMLParser04x(strVersion, addClassAttributes, std::unique_ptr<SICommonXMLParser>(comParser.release()), log, ownLog)
-{
-}
-#endif
 
 XMLElem ComplexXMLParser04x::convertGeoInfoToXML(
     const GeoInfo *geoInfo,
@@ -115,7 +104,7 @@ XMLElem ComplexXMLParser04x::convertRadarCollectionToXML(
         // In SICD 0.4, this is not allowed to contain UNKNOWN or SEQUENCE
         createString(
                 "TxPolarization",
-                PolarizationType(radar->txPolarization.value),
+                PolarizationType::toType(radar->txPolarization.toString()),
                 radarXML);
     }
 
@@ -461,7 +450,7 @@ void ComplexXMLParser04x::parseRadarCollectionFromXML(
         //optional
         // Note that in SICD 0.4, UNKNOWN and SEQUENCE are not allowed here
         radarCollection->txPolarization
-                = six::toType<PolarizationType>(tmpElem->getCharacterData());
+                = six::toType<PolarizationSequenceType>(tmpElem->getCharacterData());
     }
 
     tmpElem = getOptional(radarCollectionXML, "PolarizationHVAnglePoly");
