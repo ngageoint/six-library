@@ -115,7 +115,7 @@ class CodaOssConan(ConanFile):
                 enable_option="ENABLE_XML",
             ),
             "zlib": dict(
-                version="1.2.12",
+                version="1.2.13",
                 user="coda",
                 channel="driver",
                 path=os.path.join("modules", "drivers", "zlib"),
