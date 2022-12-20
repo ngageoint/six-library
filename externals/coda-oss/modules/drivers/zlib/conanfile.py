@@ -5,7 +5,7 @@ from conans import ConanFile, CMake
 
 class ZlibConan(ConanFile):
     name = "zlib"
-    version = "1.2.12"
+    version = "1.2.13"
     url = "https://github.com/mdaus/coda-oss/tree/master/modules/drivers/zlib"
     homepage = "https://zlib.net"
     license = "Zlib"
