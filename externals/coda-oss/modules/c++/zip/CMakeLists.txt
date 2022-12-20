@@ -9,11 +9,16 @@ if (TARGET z AND TARGET minizip)
     coda_add_module(
         ${MODULE_NAME}
         VERSION 1.0
-        DEPS io-c++ z minizip)
+        DEPS io-c++ coda_oss-c++ z minizip)
 
     coda_add_tests(
         MODULE_NAME ${MODULE_NAME}
         DIRECTORY "tests")
+
+    coda_add_tests(
+        MODULE_NAME ${MODULE_NAME}
+        DIRECTORY "unittests"
+        UNITTEST)
 else()
     message("zip will not be build since zlib + minizip were not enabled")
 endif()
