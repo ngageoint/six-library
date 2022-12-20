@@ -81,16 +81,21 @@ public:
         *this = std::move(p);
     }
 
-    template<typename U>
-    AutoPtr& operator=(std::auto_ptr<U> p) noexcept
+    template<typename TAutoPtr> // std::auto_ptr can cause deprecated warnings
+    AutoPtr& assign(TAutoPtr p) noexcept
     {
         ptr_.reset(p.release());
         return *this;
     }
-    template <typename U>
-    AutoPtr(std::auto_ptr<U> p) noexcept
+    template<typename TAutoPtr> // std::auto_ptr can cause deprecated warnings
+    AutoPtr& operator=(TAutoPtr p) noexcept
     {
-        *this = p;
+        return assign(p);
+    }
+    template<typename TAutoPtr> // std::auto_ptr can cause deprecated warnings
+    AutoPtr(TAutoPtr p) noexcept
+    {
+        *this = assign(p);
     }
 
 
