@@ -132,8 +132,7 @@ inline void assert_almost_eq(const std::string& testName, long double X1, long d
 #undef TEST_EXCEPTION
 #undef TEST_THROWS
 #undef TEST_SPECIFIC_EXCEPTION
-#define TEST_EXCEPTION(X) (void)testName; try{ (X); TEST_FAIL(#X " should have thrown."); } \
-    catch (const except::Throwable&){ TEST_ASSERT_TRUE(true); } catch (const except::Throwable11&){ TEST_ASSERT_TRUE(true); }
+#define TEST_EXCEPTION(X) (void)testName; try{ (X); TEST_FAIL(#X " should have thrown."); } CODA_OSS_TEST_EXCEPTION_catch_
 #define TEST_THROWS(X) (void)testName; try{ (X); TEST_FAIL(#X " should have thrown."); } catch (...){ TEST_ASSERT_TRUE(true); }
 #define TEST_SPECIFIC_EXCEPTION(X, Y) testName, Microsoft::VisualStudio::CppUnitTestFramework::Assert::ExpectException<Y>([&](){(X);})
 
