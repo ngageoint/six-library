@@ -34,15 +34,74 @@ static std::filesystem::path find_unittest_file(const std::filesystem::path& nam
     static const auto unittests = std::filesystem::path("modules") / "c++" / "hdf5.lite" / "unittests";
     return sys::test::findGITModuleFile("coda-oss", unittests, name);
 }
+TEST_CASE(test_hdf5Info_IOException)
+{
+    static const std::filesystem::path path = "does not exist . h5";
+     try
+    {
+        // https://www.mathworks.com/help/matlab/ref/h5info.html
+        const auto info = hdf5::lite::fileInfo(path);
+        TEST_FAIL;
+    }
+    catch (const except::IOException&)
+    {
+        TEST_SUCCESS;
+    }
+}
 
-TEST_CASE(test_hdf5Info)
+
+TEST_CASE(test_hdf5FileInfo)
 {
     static const auto path = find_unittest_file("example.h5");
 
     // https://www.mathworks.com/help/matlab/ref/h5info.html
     const auto info = hdf5::lite::fileInfo(path);
+    TEST_ASSERT_EQ(path.string(), info.filename);
+    TEST_ASSERT_EQ("/", info.name);
+    TEST_ASSERT_EQ(info.groups.size(), 4);
+    TEST_ASSERT_TRUE(info.datasets.empty());
+    TEST_ASSERT_TRUE(info.datatypes.empty());
+    //TEST_ASSERT_TRUE(info.links.empty());
+    //TEST_ASSERT_EQ(info.attributes.size(), 2);
+}
+
+TEST_CASE(test_hdf5GroupInfo)
+{
+    static const auto path = find_unittest_file("example.h5");
+
+    // https://www.mathworks.com/help/matlab/ref/h5info.html
+    const auto info = hdf5::lite::groupInfo(path, "/g4");
+
+    TEST_ASSERT_EQ(path.string(), info.filename);
+    TEST_ASSERT_EQ("/g4", info.name);
+    TEST_ASSERT_TRUE(info.groups.empty());
+    TEST_ASSERT_EQ(info.datasets.size(), 4);
+    TEST_ASSERT_TRUE(info.datatypes.empty());
+    //TEST_ASSERT_TRUE(info.links.empty());
+    //TEST_ASSERT_TRUE(info.attributes.empty());
+}
+
+TEST_CASE(test_hdf5DatasetInfo)
+{
+    static const auto path = find_unittest_file("example.h5");
+
+    // https://www.mathworks.com/help/matlab/ref/h5info.html
+    const auto info = hdf5::lite::datasetInfo(path, "/g4/time");
+
+    TEST_ASSERT_EQ(path.string(), info.filename);
+    TEST_ASSERT_EQ("time", info.name);
+    TEST_ASSERT(info.datatype.h5Class == hdf5::lite::Class::Float);
+    //TEST_ASSERT(info.dataspace == hdf5::lite::Class::Float);
+    // TEST_ASSERT(info.chunkSize == hdf5::lite::Class::Float);
+    // TEST_ASSERT(info.fillValue == hdf5::lite::Class::Float);
+    //TEST_ASSERT_TRUE(info.filters.empty());
+    //TEST_ASSERT_EQ(info.attributes.size(), 2);
 }
 
 TEST_MAIN(
-    TEST_CHECK(test_hdf5Info);
+    TEST_CHECK(test_hdf5Info_IOException);
+
+    TEST_CHECK(test_hdf5FileInfo);
+    TEST_CHECK(test_hdf5GroupInfo);
+    TEST_CHECK(test_hdf5DatasetInfo);
 )
