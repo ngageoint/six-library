@@ -34,6 +34,7 @@
 #  include <import/sys.h>
 #  include <import/str.h>
 #  include <import/except.h>
+#  include <except/Throwable.h>
 
 #  define IS_NAN(X) X != X
 
@@ -113,7 +114,6 @@ inline void diePrintf_(const char* format, const std::string& testName, const ch
 //    if (!(X1 == X2)) { ... }
 // behaves differently when it is in the functon (X1 and X2 are arguments).  An easy example
 // is std::vector::size() (size_t) compared to a literal 1 which is an "int" not "size_t".
-
 template<typename TX1, typename TX2, typename TEPS>
 inline void assert_almost_eq_eps(const TX1& X1, const TX2& X2, const TEPS& EPS,
     const std::string& testName, const char* file, const char* func, int line)
@@ -139,7 +139,7 @@ inline void specific_exception(TFunc f,
     {
         diePrintf(format, testName, file, func, line);
     }
-    catch (const except::Throwable11&)
+    catch (const std::exception&)
     {
         diePrintf(format, testName, file, func, line);
     }
@@ -153,10 +153,12 @@ inline int main(TFunc f)
         f();
         return EXIT_SUCCESS;
     }
+    #if !CODA_OSS_except_Throwable_ISA_std_exception    
     catch (const except::Exception& ex)
     {
-        std::cerr << ex.toString() << std::endl;
+        std::cerr << ex.what() << std::endl;
     }
+    #endif
     catch (const std::exception& e)
     {
         std::cerr << e.what() << std::endl;
@@ -169,9 +171,11 @@ inline int main(TFunc f)
 }
 }
 
-#define TEST_CHECK(X) try{ X(std::string(#X)); std::cerr << #X << ": PASSED\n"; } \
-  catch(const except::Throwable& ex) { test::diePrintf("%s: FAILED: Exception thrown: %s\n", #X, ex.toString().c_str()); } \
-  catch(const except::Throwable11& ex) { test::diePrintf("%s: FAILED: Exception thrown: %s\n", #X, ex.what()); }
+#define CODA_OSS_TEST_CHECK_catch_diePrintf_(X, name_) \
+      catch(const name_& ex) { test::diePrintf("%s: FAILED: Exception thrown: %s\n", #X, ex.what()); }
+#define CODA_OSS_TEST_CHECK_catch_(X) CODA_OSS_TEST_CHECK_catch_diePrintf_(X, except::Throwable) \
+    CODA_OSS_TEST_CHECK_catch_diePrintf_(X, std::exception)
+#define TEST_CHECK(X) try{ X(std::string(#X)); std::cerr << #X << ": PASSED\n"; } CODA_OSS_TEST_CHECK_catch_(X)
 
 #define TEST_ASSERT_NULL(X) if ((X) != nullptr) { test_diePrintf0("%s (%s,%s,%d): FAILED: Value should be NULL\n"); }
 #define TEST_ASSERT_NOT_NULL(X) if ((X) == nullptr) { test_diePrintf0("%s (%s,%s,%d): FAILED: Value should *not* be NULL\n"); }
@@ -185,11 +189,15 @@ inline int main(TFunc f)
 
 #define TEST_ASSERT_ALMOST_EQ_EPS(X1, X2, EPS) test::assert_almost_eq_eps(X1, X2, EPS, testName, __FILE__, SYS_FUNC, __LINE__)
 #define TEST_ASSERT_ALMOST_EQ(X1, X2) TEST_ASSERT_ALMOST_EQ_EPS(X1, X2,  std::numeric_limits<float>::epsilon())
+
+#define CODA_OSS_TEST_EXCEPTION_catch_ \
+    catch (const except::Throwable&){ TEST_ASSERT_TRUE(true); } catch (const std::exception&){ TEST_ASSERT_TRUE(true); }
 #define TEST_EXCEPTION(X) try{ (X); test_diePrintf0("%s (%s,%s,%d): FAILED: Should have thrown exception\n"); } \
-  catch (const except::Throwable&){} catch (const except::Throwable11&){}
+  CODA_OSS_TEST_EXCEPTION_catch_
 #define TEST_THROWS(X) try{ (X); test_diePrintf0("%s (%s,%s,%d): FAILED: Should have thrown exception\n"); } catch (...){}
 # define TEST_SPECIFIC_EXCEPTION(X, Y) test::specific_exception<Y>([&](){(X);}, \
     "%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName, __FILE__, SYS_FUNC, __LINE__)
+
 #  define TEST_CASE(X) void X(std::string testName)
 #define TEST_MAIN(X) int main() { return test::main([&](){X;}); }
 #define TEST_MAIN_ARGS(X) int main(int argc, char* argv[]) { return test::main([&](){X;}); }
@@ -215,16 +223,6 @@ inline int main(TFunc f)
 #define CODA_OSS_test_lt(X1, X2) (CODA_OSS_test_lt_(X1, X2) && !CODA_OSS_test_ge_(X1, X2))
 #  define TEST_ASSERT_LESSER_EQ(X1, X2) if (!CODA_OSS_test_le((X1), (X2))) { CODA_OSS_test_diePrintf_lesser_eq_(X1, X2); }
 #  define TEST_ASSERT_LESSER(X1, X2) if (!CODA_OSS_test_lt((X1), (X2))) { CODA_OSS_test_diePrintf_lesser_(X1, X2); }
-/*
-#  define TEST_SPECIFIC_EXCEPTION(X,Y) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch(const Y&) { }  \
-    catch (const except::Throwable&){ die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__);} \
-    catch (const except::Throwable11&){ die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__);} #  define TEST_CASE(X) void X(std::string testName)
-#define TEST_MAIN(X) int main(int argc, char** argv) {  try { X;  return EXIT_SUCCESS; } \
-    catch (const except::Exception& ex) { std::cerr << ex.toString() << std::endl; } \
-    catch (const std::exception& e)  { std::cerr << e.what() << std::endl; } \
-    catch (...) { std::cerr << "Unknown exception\n"; } \
-    return EXIT_FAILURE; }
-*/
 
 #else /* C only */
 #  include <math.h>
