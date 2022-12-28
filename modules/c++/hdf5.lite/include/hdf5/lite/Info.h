@@ -41,10 +41,6 @@ namespace hdf5
 {
 namespace lite
 {
-struct GroupInfo final
-{
-};
-
 enum class Class
 {
     NoClass = -1, /**< error                                   */
@@ -61,29 +57,36 @@ enum class Class
     Array = 10, /**< array types                             */
 };
 
-struct DatatypeInfo final
+// https://docs.hdfgroup.org/hdf5/develop/_h5_d_m__u_g.html
+struct NamedObject
 {
+    std::string filename;  // could be a URL, so not std::filesystem::path
     std::string name;
+};
+
+struct DatatypeInfo final : public NamedObject
+{
     Class h5Class;
     // Type
     size_t size = 0;
 };
 
-struct DatasetInfo final
+struct DataspaceInfo final
 {
-    std::string name;
+};
+
+struct DatasetInfo final : public NamedObject
+{
     DatatypeInfo datatype;
-    // Dataspace
+    DataspaceInfo dataspace;
     // ChunkSize
     // FillValue
     // Filter
     // Attributes
 };
 
-struct FileInfo final
+struct GroupInfo : public NamedObject
 {
-    std::string filename; // could be a URL, so not std::filesystem::path
-    std::string name;
     std::vector<GroupInfo> groups;
     std::vector<DatasetInfo> datasets;
     std::vector<DatatypeInfo> datatypes;
@@ -91,9 +94,14 @@ struct FileInfo final
     // Attributes
 };
 
+struct FileInfo final : public GroupInfo
+{
+};
 
-CODA_OSS_API FileInfo fileInfo(const coda_oss::filesystem::path&);
-//CODA_OSS_API void locationRead(const std::string& loc, const std::string& datasetName); // e.g, s3://
+
+CODA_OSS_API FileInfo fileInfo(coda_oss::filesystem::path);
+CODA_OSS_API GroupInfo groupInfo(coda_oss::filesystem::path, std::string loc);
+CODA_OSS_API DatasetInfo datasetInfo(coda_oss::filesystem::path, std::string loc);
 
 }
 }

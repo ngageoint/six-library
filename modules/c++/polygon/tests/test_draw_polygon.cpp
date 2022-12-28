@@ -64,13 +64,13 @@ int main(int, char**)
 
         return 0;
     }
-    catch (const std::exception& ex)
-    {
-        std::cerr << ex.what() << std::endl;
-    }
     catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << ex.what() << std::endl;
     }
     catch (...)
     {
