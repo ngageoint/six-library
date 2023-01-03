@@ -23,6 +23,8 @@
 #pragma once
 
 #include <cstddef>
+#include "coda_oss/cstddef.h"
+#include "coda_oss/CPlusPlus.h"
 
 // Make it (too?) easy for clients to get our various std:: implementations
 #ifndef CODA_OSS_NO_std_byte
@@ -30,7 +32,6 @@
         #undef CODA_OSS_NO_std_byte
         #define CODA_OSS_NO_std_byte 1  // provided by implementation, probably C++20
     #else
-        #include "coda_oss/cstddef.h"
         #define CODA_OSS_NO_std_byte 0  // use our own
     #endif
 #endif

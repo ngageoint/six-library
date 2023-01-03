@@ -912,10 +912,11 @@ def configureCompilerOptions(self):
             # The "fastest-possible" option is new; see comments above.
             config['cxx']['optz_fastest-possible']   =  [ config['cxx']['optz_fastest'], '-march=native' ]
 
+            self.env.append_value('CXXFLAGS', '-fPIC'.split())
             if not Options.options.enablecpp17:
-                gxxCompileFlags='-fPIC -std=c++14'
+                gxxCompileFlags='-std=c++14'
             else:
-                gxxCompileFlags='-fPIC -std=c++17'
+                gxxCompileFlags='-std=c++17'
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
@@ -952,6 +953,8 @@ def configureCompilerOptions(self):
             config['cc']['optz_fastest-possible']   =  [ config['cc']['optz_fastest'], '-march=native' ]
 
             self.env.append_value('CFLAGS', '-fPIC'.split())
+            # "gnu99" enables POSIX and BSD
+            self.env.append_value('CFLAGS', '-std=gnu99'.split())
 
     elif re.match(winRegex, sys_platform):
         crtFlag = '/%s' % Options.options.crt

@@ -22,9 +22,11 @@
 #define CODA_OSS_std_bit_INCLUDED_
 #pragma once
 
+#include "coda_oss/bit.h"
+#include "coda_oss/CPlusPlus.h"
+
 // Make it (too?) easy for clients to get our various std:: implementations
 #ifndef CODA_OSS_NO_std_endian
-    #include "coda_oss/CPlusPlus.h"
     #if CODA_OSS_cpp20
         // Some implementations cliam to be C++20 w/o <bit>
         #if __has_include(<bit>) // __has_include is C++17
@@ -34,7 +36,6 @@
     #endif 
     // At this point, CODA_OSS_NO_std_endian will be set only if we were able to successfully use <bit> (above)
     #ifndef CODA_OSS_NO_std_endian
-        #include "coda_oss/bit.h"
         #define CODA_OSS_NO_std_endian 0  // <= C++17, use our own
     #endif
 #endif
