@@ -1,7 +1,6 @@
 NAME            = 'mt'
-MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '1.1'
-MODULE_DEPS     = 'sys except math mem types'
+MODULE_DEPS     = 'sys except math mem types std'
 TEST_DEPS       = 'cli'
 
 distclean = lambda p: None
