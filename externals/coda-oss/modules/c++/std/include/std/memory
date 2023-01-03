@@ -22,7 +22,24 @@
 #define CODA_OSS_std_memory_INCLUDED_
 #pragma once
 
-#include "coda_oss/CPlusPlus.h"
+#include <memory>
 #include "coda_oss/memory.h"
+#include "coda_oss/CPlusPlus.h"
+
+// Make it (too?) easy for clients to get our various std:: implementations
+#ifndef CODA_OSS_NO_std_make_unique
+    #if CODA_OSS_cpp14
+        #define CODA_OSS_NO_std_make_unique 1  // part of C++14
+    #else
+        #define CODA_OSS_NO_std_make_unique 0  // use our own
+    #endif
+#endif
+
+#if !CODA_OSS_NO_std_make_unique
+namespace std // This is slightly uncouth: we're not supposed to augment "std".
+{
+    using coda_oss::make_unique;
+}
+#endif  // !CODA_OSS_NO_std_make_unique
 
 #endif  // CODA_OSS_std_memory_INCLUDED_

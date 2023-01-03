@@ -188,13 +188,8 @@ inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::wstring>&
     pWString = std::make_unique<std::wstring>(xmlView.wstring());
 }
 #else
-#if defined(__INTEL_COMPILER) && (__INTEL_COMPILER_BUILD_DATE < 20190815)
-using XMLCh_t = uint16_t;
-static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be uint16_t");
-#else
 using XMLCh_t = char16_t;
 static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be char16_t");
-#endif
 #endif
 
 inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::u16string>& pWString)
