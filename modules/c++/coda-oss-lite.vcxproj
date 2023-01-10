@@ -116,6 +116,7 @@
     <ClInclude Include="mem\include\mem\Align.h" />
     <ClInclude Include="mem\include\mem\AutoPtr.h" />
     <ClInclude Include="mem\include\mem\BufferView.h" />
+    <ClInclude Include="mem\include\mem\ComplexView.h" />
     <ClInclude Include="mem\include\mem\ScopedAlignedArray.h" />
     <ClInclude Include="mem\include\mem\ScopedArray.h" />
     <ClInclude Include="mem\include\mem\ScopedCloneablePtr.h" />

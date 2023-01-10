@@ -45,6 +45,7 @@ namespace lite
 {
 
 CODA_OSS_API types::RowCol<size_t> readFile(coda_oss::filesystem::path, std::string datasetName, std::vector<double>&);
+CODA_OSS_API types::RowCol<size_t> readFile(coda_oss::filesystem::path, std::string datasetName, std::vector<float>&);
 
 }
 }
