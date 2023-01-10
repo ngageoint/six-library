@@ -29,6 +29,8 @@
 
 #include <string>
 #include <iostream>
+#include <std/memory>
+
 #include "logging/LogRecord.h"
 #include "logging/StreamHandler.h"
 #include <import/io.h>

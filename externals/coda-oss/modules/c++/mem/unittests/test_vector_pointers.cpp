@@ -20,7 +20,13 @@
  *
  */
 
+#include <vector>
+#include <complex>
+#include <std/span>
+#include <type_traits>
+
 #include <mem/VectorOfPointers.h>
+#include <mem/ComplexView.h>
 
 #include "TestCase.h"
 
@@ -112,10 +118,91 @@ TEST_CASE(testVecOfSharedPointers)
     {
        std::vector<std::shared_ptr<int>> myVec2 = std_vector_shared_ptr_int();  // copy
     }
+}
 
+template<typename TView>
+static void test_cx_view(const std::string& testName, const TView& view)
+{
+    TEST_ASSERT_EQ(4, view.size());
+    TEST_ASSERT_EQ(view[0].real(), 1.0f);
+    TEST_ASSERT_EQ(view[0].imag(), 2.0f);
+    TEST_ASSERT_EQ(view[1].real(), 3.0f);
+    TEST_ASSERT_EQ(view[1].imag(), 4.0f);
+    TEST_ASSERT_EQ(view[2].real(), 5.0f);
+    TEST_ASSERT_EQ(view[2].imag(), 6.0f);
+    TEST_ASSERT_EQ(view[3].real(), 7.0f);
+    TEST_ASSERT_EQ(view[3].imag(), 8.0f);
+}
+template <typename TView>
+static void test_mem_ComplexView(const std::string& testName, const TView& view)
+{
+    test_cx_view(testName, view);
+
+    TEST_ASSERT_EQ(view.real(0), 1.0f);
+    TEST_ASSERT_EQ(view.imag(0), 2.0f);
+    TEST_ASSERT_EQ(view.real(1), 3.0f);
+    TEST_ASSERT_EQ(view.imag(1), 4.0f);
+    TEST_ASSERT_EQ(view.real(2), 5.0f);
+    TEST_ASSERT_EQ(view.imag(2), 6.0f);
+    TEST_ASSERT_EQ(view.real(3), 7.0f);
+    TEST_ASSERT_EQ(view.imag(3), 8.0f);
+}
+
+using cx_float = std::complex<float>;
+static const std::vector<cx_float>& cx_data()
+{
+    static const std::vector<cx_float> retval {{1, 2}, {3, 4}, {5, 6}, {7, 8}};
+    return retval;
+}
+
+TEST_CASE(testSpanCxFloat)
+{
+    const std::span<const cx_float> view(cx_data().data(), cx_data().size());
+    TEST_ASSERT_EQ(cx_data().size(), view.size());
+    test_cx_view(testName, view);
+}
+
+TEST_CASE(testComplexViewFloat)
+{
+    {
+        const std::span<const cx_float> data(cx_data().data(), cx_data().size());
+        const auto view = mem::make_ComplexSpanView(data);
+
+        TEST_ASSERT_EQ(data.size(), view.size());
+        test_mem_ComplexView(testName, view);
+        test_cx_view(testName, copy(view));
+    }
+    {
+        const auto view = mem::make_ComplexArrayView(cx_data());
+        TEST_ASSERT_EQ(cx_data().size(), view.size());
+        test_mem_ComplexView(testName, view);
+        test_cx_view(testName, copy(view));
+    }
+
+    const std::vector<float> reals{1, 3, 5, 7};
+    const std::vector<float> imags{2, 4, 6, 8};
+    TEST_ASSERT_EQ(imags.size(), reals.size());
+    {
+        const std::span<const float> reals_(reals.data(), reals.size());
+        const std::span<const float> imags_(imags.data(), imags.size());
+        const auto view = mem::make_ComplexSpansView(reals_, imags_);
+
+        TEST_ASSERT_EQ(reals.size(), view.size());
+        test_mem_ComplexView(testName, view);
+        test_cx_view(testName, copy(view));
+    }
+    {
+        const auto view = mem::make_ComplexArraysView(reals, imags);
+        TEST_ASSERT_EQ(reals.size(), view.size());
+        test_mem_ComplexView(testName, view);
+        test_cx_view(testName, copy(view));
+    }
 }
 
 TEST_MAIN(
     TEST_CHECK(testVecOfRawPointers);
     TEST_CHECK(testVecOfSharedPointers);
+
+    TEST_CHECK(testSpanCxFloat);
+    TEST_CHECK(testComplexViewFloat);
     )
