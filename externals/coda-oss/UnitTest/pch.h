@@ -46,9 +46,12 @@
 #include <future>
 #include <cassert>
 #include <tuple>
+#include <complex>
+#include <stdexcept>
 
 #include "CppUnitTest.h"
 
+#include "coda_oss/span.h"
 #include "gsl/gsl.h"
 #include "import/sys.h"
 #include "import/math.h"
@@ -58,6 +61,7 @@
 #include "import/mem.h"
 #include <mem/SharedPtr.h>
 #include <mem/AutoPtr.h>
+#include <mem/ComplexView.h>
 #include "import/cli.h"
 #include "polygon/DrawPolygon.h"
 #include "polygon/PolygonMask.h"

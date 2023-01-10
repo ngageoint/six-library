@@ -146,7 +146,7 @@ static hdf5::lite::GroupInfo groupInfo_(coda_oss::filesystem::path filename, std
 }
 hdf5::lite::GroupInfo hdf5::lite::groupInfo(coda_oss::filesystem::path filename, std::string loc)
 {
-    return details::try_catch_H5Exceptions(groupInfo_, filename, loc);
+    return details::try_catch_H5Exceptions(groupInfo_, __FILE__, __LINE__, filename, loc);
 }
 hdf5::lite::FileInfo hdf5::lite::fileInfo(coda_oss::filesystem::path filename)
 {
@@ -208,5 +208,5 @@ static hdf5::lite::DatasetInfo datasetInfo_(coda_oss::filesystem::path filename,
 }
 hdf5::lite::DatasetInfo hdf5::lite::datasetInfo(coda_oss::filesystem::path filename, std::string loc)
 {
-    return details::try_catch_H5Exceptions(datasetInfo_, filename, loc);
+    return details::try_catch_H5Exceptions(datasetInfo_, __FILE__, __LINE__, filename, loc);
 }
