@@ -146,6 +146,19 @@ static void test_mem_ComplexView(const std::string& testName, const TView& view)
     TEST_ASSERT_EQ(view.imag(2), 6.0f);
     TEST_ASSERT_EQ(view.real(3), 7.0f);
     TEST_ASSERT_EQ(view.imag(3), 8.0f);
+
+    const auto reals_ = view.reals();
+    const auto imags_ = view.imags();
+    TEST_ASSERT_EQ(reals_.size(), imags_.size());
+    TEST_ASSERT_EQ(reals_[0], 1.0f);
+    TEST_ASSERT_EQ(reals_[1], 3.0f);
+    TEST_ASSERT_EQ(reals_[2], 5.0f);
+    TEST_ASSERT_EQ(reals_[3], 7.0f);
+
+    TEST_ASSERT_EQ(imags_[0], 2.0f);
+    TEST_ASSERT_EQ(imags_[1], 4.0f);
+    TEST_ASSERT_EQ(imags_[2], 6.0f);
+    TEST_ASSERT_EQ(imags_[3], 8.0f);
 }
 
 using cx_float = std::complex<float>;
@@ -165,37 +178,76 @@ TEST_CASE(testSpanCxFloat)
 TEST_CASE(testComplexViewFloat)
 {
     {
-        const std::span<const cx_float> data(cx_data().data(), cx_data().size());
-        const auto view = mem::make_ComplexSpanView(data);
-
-        TEST_ASSERT_EQ(data.size(), view.size());
-        test_mem_ComplexView(testName, view);
-        test_cx_view(testName, copy(view));
-    }
-    {
-        const auto view = mem::make_ComplexArrayView(cx_data());
+        const auto view = mem::make_ComplexSpanView(cx_data());
         TEST_ASSERT_EQ(cx_data().size(), view.size());
         test_mem_ComplexView(testName, view);
-        test_cx_view(testName, copy(view));
+        test_cx_view(testName, view.values());
     }
 
     const std::vector<float> reals{1, 3, 5, 7};
     const std::vector<float> imags{2, 4, 6, 8};
     TEST_ASSERT_EQ(imags.size(), reals.size());
     {
-        const std::span<const float> reals_(reals.data(), reals.size());
-        const std::span<const float> imags_(imags.data(), imags.size());
-        const auto view = mem::make_ComplexSpansView(reals_, imags_);
-
+        const auto view = mem::make_ComplexSpansView(reals, imags);
         TEST_ASSERT_EQ(reals.size(), view.size());
         test_mem_ComplexView(testName, view);
-        test_cx_view(testName, copy(view));
+        test_cx_view(testName, view.values());
     }
+}
+
+static void test_mem_ComplexViewConstIterator(const std::string& testName,
+    mem::ComplexViewConstIterator<float> begin, mem::ComplexViewConstIterator<float> end)
+{
+    TEST_ASSERT(begin != end);
+
+    const auto distance = std::distance(begin, end);
+    TEST_ASSERT_EQ(4, distance);
+
+    auto it = begin;
+    TEST_ASSERT_EQ((*it).real(), 1.0f);
+    TEST_ASSERT_EQ((*it).imag(), 2.0f);
+
+    ++it;
+    TEST_ASSERT_EQ((*it).real(), 3.0f);
+    TEST_ASSERT_EQ((*it).imag(), 4.0f);
+
+    it++;
+    TEST_ASSERT_EQ((*it).real(), 5.0f);
+    TEST_ASSERT_EQ((*it).imag(), 6.0f);
+
+    it += 1;
+    TEST_ASSERT_EQ(it->real(), 7.0f);
+    TEST_ASSERT_EQ(it->imag(), 8.0f);
+}
+template <typename TView>
+static void test_mem_ComplexViewConstIterator(const std::string& testName, TView view)
+{
+    test_mem_ComplexViewConstIterator(testName, view.begin(), view.end());
+
+    using cxvalue_t = typename decltype(view.begin())::value_type; // i.e., std::complex<float>
+    cxvalue_t cx{1.0f, 2.0f};
+    for (auto&& v : view)
     {
-        const auto view = mem::make_ComplexArraysView(reals, imags);
-        TEST_ASSERT_EQ(reals.size(), view.size());
-        test_mem_ComplexView(testName, view);
-        test_cx_view(testName, copy(view));
+        TEST_ASSERT_EQ(v.real(), cx.real());
+        TEST_ASSERT_EQ(v.imag(), cx.imag());
+
+        cx = cxvalue_t{cx.real() + 2.0f, cx.imag() + 2.0f};
+    }
+}
+
+TEST_CASE(testComplexViewFloatIterator)
+{
+    {
+        const auto view = mem::make_ComplexSpanView(cx_data());
+        test_mem_ComplexViewConstIterator(testName, view);
+    }
+
+    const std::vector<float> reals{1, 3, 5, 7};
+    const std::vector<float> imags{2, 4, 6, 8};
+    TEST_ASSERT_EQ(imags.size(), reals.size());
+    {
+        const auto view = mem::make_ComplexSpansView(reals, imags);
+        test_mem_ComplexViewConstIterator(testName, view);
     }
 }
 
@@ -205,4 +257,5 @@ TEST_MAIN(
 
     TEST_CHECK(testSpanCxFloat);
     TEST_CHECK(testComplexViewFloat);
+    TEST_CHECK(testComplexViewFloatIterator);
     )

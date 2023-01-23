@@ -21,7 +21,7 @@
  */
 
 
-#if !(defined(WIN32) || defined(_WIN32))
+#ifndef _WIN32
 
 #include <sys/wait.h>
 #include <str/Manip.h>
