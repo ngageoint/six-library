@@ -4,7 +4,7 @@ rm -r -f tmp && mkdir tmp && cd tmp
 git clone --depth 1 -b main git@github.com:mdaus/coda-oss.git
 rm -r -f coda-oss/.git
 
-git clone -b main git@github.com:mdaus/nitro.git
+git clone --depth 1 -b main git@github.com:mdaus/nitro.git
 rm -r -f nitro/.git
 rm -r -f nitro/externals
 
