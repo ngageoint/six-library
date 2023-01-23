@@ -20,6 +20,10 @@
  *
  */
 
+#ifndef CODA_OSS_hdf5_lite_hdf5_lite_h_INCLUDED_
+#define CODA_OSS_hdf5_lite_hdf5_lite_h_INCLUDED_
+#pragma once
+
 #include <functional>
 #include <stdexcept>
 #include <utility>
@@ -60,3 +64,4 @@ auto try_catch_H5Exceptions(TFunc f, const char* file, int line, TArgs&&... args
 }
 }
 }
+#endif  // CODA_OSS_hdf5_lite_hdf5_lite_h_INCLUDED_

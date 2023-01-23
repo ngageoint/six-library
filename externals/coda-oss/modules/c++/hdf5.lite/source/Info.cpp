@@ -70,18 +70,18 @@ static herr_t dataset_info(hid_t loc_id, const char *name, const H5L_info_t* /*l
     {
         H5Dclose(obj);
 
-        hdf5::lite::DatasetInfo info;
+        hdf5::lite::DataSetInfo info;
         info.name = name;
 
-        auto pRetval = static_cast<std::vector<hdf5::lite::DatasetInfo>*>(opdata);
+        auto pRetval = static_cast<std::vector<hdf5::lite::DataSetInfo>*>(opdata);
         pRetval->push_back(info);
     }
 
     return 0;
 }
-static std::vector<hdf5::lite::DatasetInfo> getDatasets(H5::Group& group)
+static std::vector<hdf5::lite::DataSetInfo> getDataSets(H5::Group& group)
  {
-    std::vector<hdf5::lite::DatasetInfo> retval;
+    std::vector<hdf5::lite::DataSetInfo> retval;
 
     const auto herr = H5Literate(group.getId(), H5_INDEX_NAME, H5_ITER_INC, nullptr /*idx*/, dataset_info,  &retval);
     if (herr != 0)
@@ -102,18 +102,18 @@ static herr_t datatype_info(hid_t loc_id, const char *name, const H5L_info_t* /*
     {
         H5Tclose(obj);
 
-        hdf5::lite::DatatypeInfo info;
+        hdf5::lite::DataTypeInfo info;
         info.name = name;
 
-        auto pRetval = static_cast<std::vector<hdf5::lite::DatatypeInfo>*>(opdata);
+        auto pRetval = static_cast<std::vector<hdf5::lite::DataTypeInfo>*>(opdata);
         pRetval->push_back(info);
     }
 
     return 0;
 }
-static std::vector<hdf5::lite::DatatypeInfo> getDatatypes(H5::Group& group)
+static std::vector<hdf5::lite::DataTypeInfo> getDataTypes(H5::Group& group)
  {
-    std::vector<hdf5::lite::DatatypeInfo> retval;
+    std::vector<hdf5::lite::DataTypeInfo> retval;
 
     const auto herr = H5Literate(group.getId(), H5_INDEX_NAME, H5_ITER_INC, nullptr /*idx*/, datatype_info,  &retval);
     if (herr != 0)
@@ -126,7 +126,7 @@ static std::vector<hdf5::lite::DatatypeInfo> getDatatypes(H5::Group& group)
  }
 
 // https://docs.hdfgroup.org/archive/support/HDF5/doc1.8/cpplus_RM/readdata_8cpp-example.html
-static hdf5::lite::GroupInfo groupInfo_(coda_oss::filesystem::path filename, std::string loc)
+static hdf5::lite::GroupInfo groupInfo_(const coda_oss::filesystem::path& filename, const std::string& loc)
 {
     hdf5::lite::GroupInfo retval;
     retval.filename = filename.string();
@@ -139,16 +139,16 @@ static hdf5::lite::GroupInfo groupInfo_(coda_oss::filesystem::path filename, std
     auto group = file.openGroup(retval.name);
 
     retval.groups = getGroups(group);
-    retval.datasets = getDatasets(group);
-    retval.datatypes = getDatatypes(group);
+    retval.dataSets = getDataSets(group);
+    retval.dataTypes = getDataTypes(group);
 
     return retval;
 }
-hdf5::lite::GroupInfo hdf5::lite::groupInfo(coda_oss::filesystem::path filename, std::string loc)
+hdf5::lite::GroupInfo hdf5::lite::groupInfo(const coda_oss::filesystem::path& filename, const std::string& loc)
 {
     return details::try_catch_H5Exceptions(groupInfo_, __FILE__, __LINE__, filename, loc);
 }
-hdf5::lite::FileInfo hdf5::lite::fileInfo(coda_oss::filesystem::path filename)
+hdf5::lite::FileInfo hdf5::lite::fileInfo(const coda_oss::filesystem::path& filename)
 {
     hdf5::lite::FileInfo retval;
     hdf5::lite::GroupInfo& retval_ = retval;
@@ -185,9 +185,9 @@ static hdf5::lite::Class H5T_class_to_Class(const H5::DataSet& dataset)
 }
 
 // https://docs.hdfgroup.org/archive/support/HDF5/doc1.8/cpplus_RM/readdata_8cpp-example.html
-static hdf5::lite::DatasetInfo datasetInfo_(coda_oss::filesystem::path filename, std::string loc)
+static hdf5::lite::DataSetInfo dataSetInfo_(const coda_oss::filesystem::path& filename, const std::string& loc)
 {
-    hdf5::lite::DatasetInfo retval;
+    hdf5::lite::DataSetInfo retval;
     retval.filename = filename.string();
 
     /*
@@ -202,11 +202,11 @@ static hdf5::lite::DatasetInfo datasetInfo_(coda_oss::filesystem::path filename,
     /*
      * Get the class of the datatype that is used by the dataset.
      */
-    retval.datatype.h5Class = H5T_class_to_Class(dataset);
+    retval.dataType.h5Class = H5T_class_to_Class(dataset);
 
     return retval;
 }
-hdf5::lite::DatasetInfo hdf5::lite::datasetInfo(coda_oss::filesystem::path filename, std::string loc)
+hdf5::lite::DataSetInfo hdf5::lite::dataSetInfo(const coda_oss::filesystem::path& filename, const std::string& loc)
 {
-    return details::try_catch_H5Exceptions(datasetInfo_, __FILE__, __LINE__, filename, loc);
+    return details::try_catch_H5Exceptions(dataSetInfo_, __FILE__, __LINE__, filename, loc);
 }

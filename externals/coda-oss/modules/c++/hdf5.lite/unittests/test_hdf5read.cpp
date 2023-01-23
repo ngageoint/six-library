@@ -22,12 +22,15 @@
 
 #include <string>
 #include <std/filesystem>
+#include <numeric>
+#include <tuple>
 
 #include <TestCase.h>
 
 #include "sys/FileFinder.h"
 
 #include "hdf5/lite/Read.h"
+#include "hdf5/lite/HDF5Exception.h"
 
 static std::filesystem::path find_unittest_file(const std::filesystem::path& name)
 {
@@ -50,16 +53,10 @@ TEST_CASE(test_hdf5Read)
 TEST_CASE(test_hdf5Read_IOException)
 {
     static const std::filesystem::path path = "does not exist . h5";
-    try
-    {
-        std::vector<double> data;
-        hdf5::lite::readFile(path, "/g4/lat", data);
-        TEST_FAIL;
-    }
-    catch (const except::IOException&)
-    {
-        TEST_SUCCESS;
-    }
+    std::vector<double> data;
+    TEST_SPECIFIC_EXCEPTION(
+        hdf5::lite::readFile(path, "/g4/lat", data),
+        except::IOException);
 }
 
 TEST_CASE(test_hdf5Read_nested)
@@ -77,15 +74,10 @@ TEST_CASE(test_hdf5Read_nested)
                     Filters:  none
                     FillValue:  0.000000
     */
-
-    // outer groups: 1, 2, 3
-    // sub groups: bar, foo
-    // sub-sub groups: cat, dog
-    // data: i (float array), r (float array)
     static const auto path = find_unittest_file("123_barfoo_catdog_cx.h5");
 
     // https://www.mathworks.com/help/matlab/ref/h5read.html
-    std::vector<double> data; // TODO: float
+    std::vector<double> data;
     auto rc = hdf5::lite::readFile(path, "/1/bar/cat/i", data);
     TEST_ASSERT_EQ(rc.area(), 10);
     TEST_ASSERT_EQ(rc.area(), data.size());
@@ -95,8 +87,45 @@ TEST_CASE(test_hdf5Read_nested)
     TEST_ASSERT_EQ(rc.area(), data.size());
 }
 
+TEST_CASE(test_hdf5Read_nested_small)
+{
+    // top group: Data
+    // outer groups: 1, 2, 3, 4, 5
+    // sub groups: bar, foo
+    // sub-sub groups: cat, dog
+    // sub-sub-sub groups: a, b, c, d
+    // data: i (float array), r (float array)
+    static const auto path = find_unittest_file("nested_complex_float32_data_small.h5");
+
+    // https://www.mathworks.com/help/matlab/ref/h5read.html
+    std::vector<float> data;
+    auto rc = hdf5::lite::readFile(path, "/Data/1/bar/cat/a/i", data);
+    TEST_ASSERT_EQ(rc.area(), 10);
+    TEST_ASSERT_EQ(rc.area(), data.size());
+    auto actual = std::accumulate(data.cbegin(), data.cend(), 0.0);
+    TEST_ASSERT_EQ(actual, 0.0);
+
+    rc = hdf5::lite::readFile(path, "/Data/5/foo/dog/d/r", data);
+    TEST_ASSERT_EQ(rc.area(), 10);
+    TEST_ASSERT_EQ(rc.area(), data.size());
+    actual = std::accumulate(data.cbegin(), data.cend(), 0.0);
+    TEST_ASSERT_EQ(actual, 10.0);
+}
+
+TEST_CASE(test_hdf5Read_nested_small_wrongType)
+{
+    static const auto path = find_unittest_file("nested_complex_float32_data_small.h5");
+
+    std::vector<double> data; 
+    TEST_SPECIFIC_EXCEPTION(
+        hdf5::lite::readFile(path, "/Data/1/bar/cat/a/r", data),
+        hdf5::lite::DataSetException);
+}
+
 TEST_MAIN(
     TEST_CHECK(test_hdf5Read);
     TEST_CHECK(test_hdf5Read_IOException);
     TEST_CHECK(test_hdf5Read_nested);
+    TEST_CHECK(test_hdf5Read_nested_small);
+    TEST_CHECK(test_hdf5Read_nested_small_wrongType);
 )

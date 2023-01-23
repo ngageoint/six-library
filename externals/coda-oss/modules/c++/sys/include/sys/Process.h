@@ -38,7 +38,7 @@
 
 #include "sys/ProcessInterface.h"
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 #  include "sys/ProcessWin32.h"
 namespace sys
 {

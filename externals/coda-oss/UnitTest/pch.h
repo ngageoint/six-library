@@ -10,9 +10,12 @@
 // add headers that you want to pre-compile here
 
 #define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
+#pragma warning(push)
+#pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
 #include <WinSock.h>
 #include <windows.h>
 #include <comdef.h>
+#pragma warning(pop)
 #undef min
 #undef max
 
@@ -108,6 +111,7 @@
 #include <logging/ExceptionLogger.h>
 #include <import/logging.h>
 #include <import/re.h>
+#include "io/StringStream.h"
 
 #include "TestCase.h"
 

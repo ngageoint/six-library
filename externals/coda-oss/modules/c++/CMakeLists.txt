@@ -4,10 +4,15 @@ set(CXX_STANDARD_REQUIRED true)
 
 # turn on warnings as errors
 if (MSVC)
-    add_compile_options(/WX)
-    add_compile_options(/W4)
+    add_compile_options(/WX /W4)
 elseif (UNIX)
-    add_compile_options(-Werror)
+    # still building with older GCC :-(
+    #add_compile_options(-Werror)
+    add_compile_options(-Wall)
+    #add_compile_options(-Wpedantic -Wextra)
+    add_compile_options(-Wno-deprecated-copy)
+    add_compile_options(-Wno-expansion-to-defined -Wno-type-limits)
+    add_compile_options(-Wno-unused-parameter)
 endif()
 
 # add an interface library for unittests
