@@ -95,12 +95,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <iostream>
-
-#if defined(__sgi) || defined(__sgi__)
-#   include <stdarg.h>
-#else
-#   include <cstdarg>
-#endif
+#include <cstdarg>
 
 namespace sys
 {

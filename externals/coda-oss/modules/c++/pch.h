@@ -10,9 +10,12 @@
 #pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
 
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
-#pragma warning(disable: 4710) // '...': function not inlined
-#pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
 #pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
+#pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
+#pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
+
+#pragma warning(push)
+#pragma warning(disable: 4710) // '...': function not inlined
 #pragma warning(disable: 5027) // '...': move assignment operator was implicitly defined as deleted
 #pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
 #pragma warning(disable: 4626) // '...': assignment operator was implicitly defined as deleted
@@ -63,6 +66,9 @@
 #include <std/optional>
 #include <std/type_traits>
 
-#pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
+#pragma warning(pop)
+
+#pragma warning(disable: 4251) // '...': class '...' needs to have dll-interface to be used by clients of class '...'
+#pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
 
 #endif //CODA_OSS_pch_h_INCLUDED_

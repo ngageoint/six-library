@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __MATH_LINEAR_MATRIX_M_X_N_H__
-#define __MATH_LINEAR_MATRIX_M_X_N_H__
+#ifndef CODA_OSS_math_linear_MatrixMxN_h_INCLUDED_
+#define CODA_OSS_math_linear_MatrixMxN_h_INCLUDED_
+#pragma once
 
 #include <cmath>
 #include <limits>
@@ -35,7 +36,7 @@ namespace linear
 {
 
 // Create a safe comparison
-template<typename _T> bool equals(const _T& e1, const _T& e2)
+template<typename _T> inline bool equals(const _T& e1, const _T& e2)
 {
     return e1 == e2;
 }
@@ -121,19 +122,8 @@ public:
     typedef MatrixMxN<_MD, _ND, _T> Like_T;
 
     //!  Public but really should be avoided
-    #if _MSC_VER
-    __pragma(warning(push))
-    __pragma(warning(disable: 26495)) // 26495: Variable '...' is uninitialized. Always initialize a member variable (type.6).
-    #endif
-    _T mRaw[_MD][_ND];
-    #if _MSC_VER
-    __pragma(warning(pop))
-    #endif
+    _T mRaw[_MD][_ND]{};
 
-    /*!
-     *  No initialization here!
-     *
-     */
     MatrixMxN() = default;
 
     /*!
@@ -149,9 +139,9 @@ public:
      */
     MatrixMxN(_T cv)
     {
-        for (size_t i = 0; i < _MD; i++)
+        for (size_t i = 0; i < rows(); i++)
         {
-            for (size_t j = 0; j < _ND; j++)
+            for (size_t j = 0; j < cols(); j++)
             {
                 mRaw[i][j] = cv;
             }
@@ -175,15 +165,22 @@ public:
      *  
      *  \param raw A raw pointer to copy internally
      */
-    MatrixMxN(const _T* raw)
+private:
+    template<typename TVectorLike>
+    void assign_from_raw(const TVectorLike& raw)
     {
-        for (size_t i = 0; i < _MD; i++)
+        for (size_t i = 0; i < rows(); i++)
         {
-            for (size_t j = 0; j < _ND; j++)
+            for (size_t j = 0; j < cols(); j++)
             {
-                mRaw[i][j] = raw[i * _ND + j];
+                mRaw[i][j] = raw[i * cols() + j];
             }
         }
+    }
+public:
+    MatrixMxN(const _T* raw)
+    {
+        assign_from_raw(raw);
     }
 
     /*!
@@ -200,14 +197,7 @@ public:
     {
         if (raw.size() < size())
             throw except::Exception(Ctxt("Invalid size exception"));
-
-        for (size_t i = 0; i < _MD; ++i)
-        {
-            for (size_t j = 0; j < _ND; ++j)
-            {
-                mRaw[i][j] = raw[i * _ND + j];
-            }
-        }
+        assign_from_raw(raw);
     }
 
     /*!
@@ -223,9 +213,9 @@ public:
      */
     MatrixMxN(const MatrixMxN& mx)
     {
-        for (size_t i = 0; i < _MD; i++)
+        for (size_t i = 0; i < rows(); i++)
         {
-            for (size_t j = 0; j < _ND; j++)
+            for (size_t j = 0; j < cols(); j++)
             {
                 mRaw[i][j] = mx.mRaw[i][j];
             }
@@ -249,13 +239,7 @@ public:
      */
     MatrixMxN& operator=(const _T* raw)
     {
-        for (size_t i = 0; i < _MD; i++)
-        {
-            for (size_t j = 0; j < _ND; j++)
-            {
-                mRaw[i][j] = raw[i * _ND + j];
-            }
-        }
+        assign_from_raw(raw);
         return *this;
     }
 
@@ -273,13 +257,7 @@ public:
     {
         if (raw.size() < size())
             throw except::Exception(Ctxt("Invalid size exception"));
-        for (size_t i = 0; i < _MD; i++)
-        {
-            for (size_t j = 0; j < _ND; j++)
-            {
-                mRaw[i][j] = raw[i * _ND + j];
-            }
-        }
+        assign_from_raw(raw);
         return *this;
     }
 
@@ -297,9 +275,9 @@ public:
     MatrixMxN& operator=(const MatrixMxN& mx)
     {
         if (this != &mx)
-        for (size_t i = 0; i < _MD; i++)
+        for (size_t i = 0; i < rows(); i++)
         {
-            for (size_t j = 0; j < _ND; j++)
+            for (size_t j = 0; j < cols(); j++)
             {
                 mRaw[i][j] = mx.mRaw[i][j];
             }
@@ -322,9 +300,9 @@ public:
      */
     MatrixMxN& operator=(const _T& sv)
     {
-        for (size_t i = 0; i < _MD; i++)
+        for (size_t i = 0; i < rows(); i++)
         {
-            for (size_t j = 0; j < _ND; j++)
+            for (size_t j = 0; j < cols(); j++)
             {
                 mRaw[i][0] = sv;
             }
@@ -347,7 +325,7 @@ public:
     inline const _T& operator()(size_t i, size_t j) const noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
-        assert( i < _MD && j < _ND );
+        assert( i < rows() && j < cols() );
 #endif
         return mRaw[i][j];
     }
@@ -365,7 +343,7 @@ public:
     inline _T& operator()(size_t i, size_t j) noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
-        assert( i < _MD && j < _ND );
+        assert( i < rows() && j < cols() );
 #endif
         return mRaw[i][j];
     }
@@ -407,7 +385,7 @@ public:
     inline const _T* row(size_t i) const noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
-        assert( i < _MD);
+        assert( i < rows());
 #endif
         return mRaw[i];
     }
@@ -420,7 +398,7 @@ public:
     inline _T* row(size_t i) noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
-        assert( i < _MD);
+        assert( i < rows());
 #endif
         return mRaw[i];
     }
@@ -440,7 +418,7 @@ public:
      */
     inline void row(size_t i, const _T* vec)
     {
-        for (size_t j = 0; j < _ND; j++)
+        for (size_t j = 0; j < cols(); j++)
         {
             mRaw[i][j] = vec[j];
         }
@@ -480,8 +458,8 @@ public:
      */
     std::vector<_T> col(size_t j) const
     {
-        std::vector<_T> jth(_MD);
-        for (size_t i = 0; i < _MD; ++i)
+        std::vector<_T> jth(rows());
+        for (size_t i = 0; i < rows(); ++i)
         {
             jth[i] = mRaw[i][j];
         }
@@ -503,7 +481,7 @@ public:
      */
     void col(size_t j, const _T* vec)
     {
-        for (size_t i = 0; i < _MD; ++i)
+        for (size_t i = 0; i < rows(); ++i)
         {
             mRaw[i][j] = vec[i];
         }
@@ -543,7 +521,7 @@ public:
      */
      void col(size_t colIdx, const MatrixMxN<_MD, 1, _T>& vec)
      {
-         for (size_t row = 0; row < _MD; ++row)
+         for (size_t row = 0; row < rows(); ++row)
          {
              mRaw[row][colIdx] = vec(row, 0);
          }
@@ -562,7 +540,7 @@ public:
      *
      *  \return _MD
      */
-    inline size_t rows() const noexcept { return _MD; }
+    constexpr size_t rows() const noexcept { return _MD; }
     
     /*!
      *  This function is not really necessary, but
@@ -574,14 +552,14 @@ public:
      *
      *  \return _ND
      */
-    inline size_t cols() const noexcept { return _ND; }
+    constexpr size_t cols() const noexcept { return _ND; }
 
     /*!
      *  Gives back the value full size of the matrix
      *
-     *  \return _MD * _ND
+     *  \return _MD * cols()
      */
-    inline size_t size() const noexcept { return rows() * cols(); }
+    constexpr size_t size() const noexcept { return rows() * cols(); }
 
 
 
@@ -606,12 +584,12 @@ public:
     template<typename Matrix_T> inline bool operator==(const Matrix_T& mx) const
     {
         
-        if (_MD != mx.rows() || _ND != mx.cols())
+        if (rows() != mx.rows() || cols() != mx.cols())
             return false;
 
-        for (size_t i = 0; i < _MD; ++i)
+        for (size_t i = 0; i < rows(); ++i)
         {
-            for (size_t j = 0; j < _ND; ++j)
+            for (size_t j = 0; j < cols(); ++j)
             {
                 if (! equals(mRaw[i][j], mx(i, j)))
                     return false;
@@ -664,9 +642,9 @@ public:
      */
     MatrixMxN& scale(_T scalar)
     {
-        for (size_t i = 0; i < _MD; i++)
+        for (size_t i = 0; i < rows(); i++)
         {
-            for (size_t j = 0; j < _ND; j++)
+            for (size_t j = 0; j < cols(); j++)
             {
                 mRaw[i][j] *= scalar;
             }
@@ -694,9 +672,9 @@ public:
     MatrixMxN<_MD, _ND> multiply(_T scalar) const
     {
         MatrixMxN<_MD, _ND> mx = *this;
-        for (size_t i = 0; i < _MD; i++)
+        for (size_t i = 0; i < rows(); i++)
         {
-            for (size_t j = 0; j < _ND; j++)
+            for (size_t j = 0; j < cols(); j++)
             {
                 mx[i][j] *= scalar;
             }
@@ -733,12 +711,12 @@ public:
     {
         MatrixMxN<_MD, _PD, _T> newM{};
 
-        for (size_t i = 0; i < _MD; i++)
+        for (size_t i = 0; i < rows(); i++)
         {
             for (size_t j = 0; j < _PD; j++)
             {
                 newM.mRaw[i][j] = 0;
-                for (size_t k = 0; k < _ND; k++)
+                for (size_t k = 0; k < cols(); k++)
                 {
                     newM.mRaw[i][j] += mRaw[i][k] * mx.mRaw[k][j];
                 }
@@ -769,9 +747,9 @@ public:
     MatrixMxN& scaleDiagonal(const MatrixMxN<_ND, _ND, _T>& mx)
     {
         size_t i, j;
-        for (i = 0; i < _MD; i++)
+        for (i = 0; i < rows(); i++)
         {
-            for (j = 0; j < _ND; j++)
+            for (j = 0; j < cols(); j++)
             {
                 mRaw[i][j] *= mx.mRaw[j][j];
             }
@@ -821,9 +799,9 @@ public:
     Like_T&
     operator+=(const Like_T& mx)
     {
-        for (size_t i = 0; i < _MD; i++)
+        for (size_t i = 0; i < rows(); i++)
         {
-            for (size_t j = 0; j < _ND; j++)
+            for (size_t j = 0; j < cols(); j++)
             {
                 mRaw[i][j] += mx.mRaw[i][j];
             }
@@ -850,9 +828,9 @@ public:
     Like_T&
     operator-=(const Like_T& mx)
     {
-        for (size_t i = 0; i < _MD; i++)
+        for (size_t i = 0; i < rows(); i++)
         {
-            for (size_t j = 0; j < _ND; j++)
+            for (size_t j = 0; j < cols(); j++)
             {
                 mRaw[i][j] -= mx(i, j);
             }
@@ -956,8 +934,8 @@ public:
     {
 
         MatrixMxN<_ND, _MD, _T> x{};
-        for (size_t i = 0; i < _MD; i++)
-            for (size_t j = 0; j < _ND; j++)
+        for (size_t i = 0; i < rows(); i++)
+            for (size_t j = 0; j < cols(); j++)
                 x.mRaw[j][i] = mRaw[i][j];
 
         return x;
@@ -982,11 +960,11 @@ public:
 
         Like_T lu;
 
-        for (size_t i = 0; i < _MD; i++)
+        for (size_t i = 0; i < rows(); i++)
         {
             // Start by making our pivots unpermuted
             pivotsM[i] = i;
-            for (size_t j = 0; j < _ND; j++)
+            for (size_t j = 0; j < cols(); j++)
             {
                 // And copying elements
                 lu(i, j) = mRaw[i][j];
@@ -996,14 +974,14 @@ public:
 
         std::vector<_T> colj(_MD);
         _T* rowi;
-        for (size_t j = 0; j < _ND; j++)
+        for (size_t j = 0; j < cols(); j++)
         {
-            for (size_t i = 0; i < _MD; i++)
+            for (size_t i = 0; i < rows(); i++)
             {
                 colj[i] = lu(i, j);
             }
 
-            for (size_t i = 0; i < _MD; i++)
+            for (size_t i = 0; i < rows(); i++)
             {
                 rowi = lu[i];
 
@@ -1018,7 +996,7 @@ public:
             }
 
             size_t p = j;
-            for (size_t i = j + 1; i < _MD; i++)
+            for (size_t i = j + 1; i < rows(); i++)
             {
                 if (std::abs(colj[i]) > std::abs(colj[p]))
                     p = i;
@@ -1027,7 +1005,7 @@ public:
             if (p != j)
             {
                 size_t k = 0;
-                for (; k < _ND; k++)
+                for (; k < cols(); k++)
                 {
                     // We are swapping
                     _T t = lu(p, k);
@@ -1038,9 +1016,9 @@ public:
                 pivotsM[p] = pivotsM[j];
                 pivotsM[j] = k;
             }
-            if (j < _MD && std::abs( lu(j, j) ))
+            if (j < rows() && std::abs( lu(j, j) ))
             {
-                for (size_t i = j + 1; i < _MD; i++)
+                for (size_t i = j + 1; i < rows(); i++)
                 {
                     // Divide out our rows
                     lu(i, j) /= lu(j, j);
@@ -1069,7 +1047,7 @@ public:
     Like_T permute(const std::vector<size_t>&  pivotsM, size_t n = _ND) const
     {
         Like_T perm;
-        for (size_t i = 0; i < _MD; i++)
+        for (size_t i = 0; i < rows(); i++)
         {
             for (size_t j = 0; j < n; j++)
             {
@@ -1086,9 +1064,9 @@ public:
     _T normSq() const
     {
         _T acc(0);
-        for (size_t i = 0; i < _MD; ++i)
+        for (size_t i = 0; i < rows(); ++i)
         {
-            for (size_t j = 0; j < _ND; ++j)
+            for (size_t j = 0; j < cols(); ++j)
             {
                 acc += mRaw[i][j] * mRaw[i][j];
             }
@@ -1204,9 +1182,9 @@ public:
     Like_T operator-() const
     {
         Like_T neg{};
-        for (size_t ii = 0; ii < _MD; ++ii)
+        for (size_t ii = 0; ii < rows(); ++ii)
         {
-            for (size_t jj = 0; jj < _ND; ++jj)
+            for (size_t jj = 0; jj < cols(); ++jj)
             {
                 neg.mRaw[ii][jj] = -mRaw[ii][jj];
             }
@@ -1566,4 +1544,4 @@ template<typename Matrix_T> Matrix_T tidy(const Matrix_T& constMatrix,
     return mx;
 }
 
-#endif
+#endif  // CODA_OSS_math_linear_MatrixMxN_h_INCLUDED_

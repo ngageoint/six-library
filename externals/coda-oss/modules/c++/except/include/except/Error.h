@@ -156,7 +156,7 @@ using Error11 = ErrorEx; // keep old name around for other projects
  * \class InvalidDerivedTypeError
  * \brief Represents an invalid derived type error.
  */
-DECLARE_ERROR(InvalidDerivedType)
+DECLARE_ERROR(InvalidDerivedType);
 
 }
 

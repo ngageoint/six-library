@@ -32,16 +32,7 @@
 //
 //    if (len <= 0) return 0;
 //
-//#if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x530)
-//    sys::SSize_T bytesRead(0);
-//    while (bytesRead < len && mData.good())
-//    {
-//        b[bytesRead++] = mData.get();
-//    }
-//    len = bytesRead;
-//#else
 //    mData.read((char *)buffer, len);
-//#endif
 //    // Could be problem if streams are broken
 //    // alternately could return gcount in else
 //    // case above

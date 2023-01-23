@@ -35,7 +35,10 @@ namespace coda_oss
 template <typename T>
 struct is_trivially_copyable final
 {
-    static_assert(CODA_OSS_cplusplus < 201402L, "C++14 must have is_trivially_copyable.");
+    // This old Intel compiler has enough C++14 for our needs; see CPlusPlus.h
+    #if !(defined(__INTEL_COMPILER) && (__INTEL_COMPILER_BUILD_DATE <= 20151021))
+        static_assert(CODA_OSS_cplusplus < 201402L, "C++14 must have is_trivially_copyable.");
+    #endif
     static constexpr bool value = __has_trivial_copy(T);
 };
 #else
