@@ -24,7 +24,7 @@
 #ifndef __SYS_PROCESS_WIN32_H__
 #define __SYS_PROCESS_WIN32_H__
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 
 #include "sys/ProcessInterface.h"
 #include "sys/Thread.h"

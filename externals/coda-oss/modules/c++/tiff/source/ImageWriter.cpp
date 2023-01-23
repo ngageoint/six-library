@@ -266,7 +266,7 @@ void tiff::ImageWriter::initTiles()
 
 void tiff::ImageWriter::initStrips()
 {
-    sys::Uint32_T bytesPerLine = mIFD.getImageWidth() * mIFD.getElementSize();
+    const sys::Uint32_T bytesPerLine = mIFD.getImageWidth() * mIFD.getElementSize();
 
     sys::Uint32_T stripByteCount = 0;
     sys::Uint32_T rowsPerStrip = 1;
@@ -281,8 +281,8 @@ void tiff::ImageWriter::initStrips()
 
     mIFD.addEntry("RowsPerStrip", rowsPerStrip);
 
-    sys::Uint32_T length = mIFD.getImageLength();
-    sys::Uint32_T stripsPerImage =
+    const sys::Uint32_T length = mIFD.getImageLength();
+    const sys::Uint32_T stripsPerImage =
             (sys::Uint32_T)floor(static_cast<double>(length + rowsPerStrip - 1)
                     / static_cast<double>(rowsPerStrip));
 
@@ -314,23 +314,22 @@ void tiff::ImageWriter::initStrips()
 void tiff::ImageWriter::putTileData(const unsigned char *buffer,
                                     sys::Uint32_T numElementsToWrite)
 {
-    sys::Uint32_T imageElemWidth = mIFD.getImageWidth();
-    sys::Uint32_T imageByteWidth = imageElemWidth * mElementSize;
+    const sys::Uint32_T imageElemWidth = mIFD.getImageWidth();
+    const sys::Uint32_T imageByteWidth = imageElemWidth * mElementSize;
 
-    sys::Uint32_T tileElemWidth = *(tiff::GenericType<sys::Uint32_T> *)(*mTileWidth)[0];
-    sys::Uint32_T tileByteWidth = tileElemWidth * mElementSize;
+    const sys::Uint32_T tileElemWidth = *(tiff::GenericType<sys::Uint32_T> *)(*mTileWidth)[0];
+    const sys::Uint32_T tileByteWidth = tileElemWidth * mElementSize;
 
     const auto tileElemLength = *(tiff::GenericType<sys::Uint32_T> *)(*mTileLength)[0];
 
     // Compute the number of tiles wide the image is.
-    sys::Uint32_T tilesAcross = (imageElemWidth + tileElemWidth - 1)
-            / tileElemWidth;
+    const sys::Uint32_T tilesAcross = (imageElemWidth + tileElemWidth - 1) / tileElemWidth;
 
     // Determine how many bytes were used to pad the right edge.
-    sys::Uint32_T widthPadding = (tileByteWidth * tilesAcross) - imageByteWidth;
+    const sys::Uint32_T widthPadding = (tileByteWidth * tilesAcross) - imageByteWidth;
     sys::Uint32_T globalReadOffset = 0;
     sys::Uint32_T tempBytePosition = mBytePosition;
-    sys::Uint32_T numBytesToWrite = numElementsToWrite * mElementSize;
+    const sys::Uint32_T numBytesToWrite = numElementsToWrite * mElementSize;
     sys::Uint32_T currentNumBytesRead = 0;
     sys::Uint32_T remainingElementsToWrite = numElementsToWrite;
     while (remainingElementsToWrite)
@@ -344,21 +343,20 @@ void tiff::ImageWriter::putTileData(const unsigned char *buffer,
         }
 
         // Compute the row and tile row.
-        sys::Uint32_T row = tempBytePosition / imageByteWidth;
-        sys::Uint32_T tileRow = row / tileElemLength;
+        const sys::Uint32_T row = tempBytePosition / imageByteWidth;
+        const sys::Uint32_T tileRow = row / tileElemLength;
 
         // Compute the column and tile column.
-        sys::Uint32_T column = tempBytePosition - (row * imageByteWidth);
-        sys::Uint32_T tileColumn = column / tileByteWidth;
+        const sys::Uint32_T column = tempBytePosition - (row * imageByteWidth);
+        const sys::Uint32_T tileColumn = column / tileByteWidth;
 
         // Compute the 1D tile index from the tile row and tile column.
-        sys::Uint32_T tileIndex = (tileRow * tilesAcross) + tileColumn;
+        const sys::Uint32_T tileIndex = (tileRow * tilesAcross) + tileColumn;
 
-        sys::Uint32_T tileByteCount = *(tiff::GenericType<sys::Uint32_T> *)(*mTileByteCounts)[tileIndex];
+        const sys::Uint32_T tileByteCount = *(tiff::GenericType<sys::Uint32_T> *)(*mTileByteCounts)[tileIndex];
 
-        sys::Uint32_T rowInTile = row % tileElemLength;
-        sys::Uint32_T paddedBytes = ((tileColumn + 1) / tilesAcross)
-                * widthPadding;
+        const sys::Uint32_T rowInTile = row % tileElemLength;
+        sys::Uint32_T paddedBytes = ((tileColumn + 1) / tilesAcross) * widthPadding;
 
         sys::Uint32_T remainingBytesInTile = tileByteCount - (tileElemLength
                 * paddedBytes) - (rowInTile * (tileByteWidth - paddedBytes)
@@ -425,11 +423,11 @@ void tiff::ImageWriter::putTileData(const unsigned char *buffer,
         sys::Uint32_T imageElemLength = mIFD.getImageLength();
         sys::Uint32_T tilesDown = (imageElemLength + tileElemLength - 1)
                 / tileElemLength;
-        sys::Uint32_T startIndex = (tilesDown - 1) * tilesAcross;
-        sys::Uint32_T paddingStartLine = imageElemLength % tileElemLength;
+        const sys::Uint32_T startIndex = (tilesDown - 1) * tilesAcross;
+        const sys::Uint32_T paddingStartLine = imageElemLength % tileElemLength;
         if (paddingStartLine)
         {
-            sys::Uint32_T paddedLines = tileElemLength - paddingStartLine;
+            const sys::Uint32_T paddedLines = tileElemLength - paddingStartLine;
 
             sys::byte *padBuffer = new sys::byte[paddedLines * tileByteWidth];
             memset(padBuffer, 0, paddedLines * tileByteWidth);

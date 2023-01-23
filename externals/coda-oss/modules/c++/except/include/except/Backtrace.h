@@ -40,7 +40,16 @@
 #endif 
 
 namespace version { namespace except {
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 5264) // '...': '...' variable is not used
+#endif // _MSC_VER
+
 constexpr auto backtrace = CODA_OSS_except_Backtrace;
+
+#if _MSC_VER
+#pragma warning(pop)
+#endif  // _MSC_VER
 } }
 
 namespace except
