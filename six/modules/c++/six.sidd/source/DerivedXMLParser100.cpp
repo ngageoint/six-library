@@ -37,6 +37,10 @@ namespace sidd
 const char DerivedXMLParser100::VERSION[] = "1.0.0";
 const char DerivedXMLParser100::SI_COMMON_URI[] = "urn:SICommon:0.1";
 const char DerivedXMLParser100::ISM_URI[] = "urn:us:gov:ic:ism";
+xml::lite::Uri DerivedXMLParser100::getISMUri() const
+{
+    return xml::lite::Uri(ISM_URI);
+}
 
 DerivedXMLParser100::DerivedXMLParser100(logging::Logger* log,
                                          bool ownLog) :

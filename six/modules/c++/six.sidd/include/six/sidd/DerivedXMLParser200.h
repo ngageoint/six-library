@@ -123,6 +123,7 @@ private:
     static const char VERSION[];
     static const char SI_COMMON_URI[];
     static const char ISM_URI[];
+    xml::lite::Uri getISMUri() const override;
 
     static xml::lite::Element& convertLookupTableToXML(const DerivedXMLParser&,
         const std::string& name, const LookupTable&, xml::lite::Element& parent);

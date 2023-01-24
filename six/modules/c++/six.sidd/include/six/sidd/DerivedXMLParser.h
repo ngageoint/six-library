@@ -57,6 +57,8 @@ struct DerivedXMLParser : public six::XMLParser
     virtual XMLElem createLUT(const std::string& name, const LUT* l,
         XMLElem parent = nullptr) const;
 
+    virtual xml::lite::Uri getISMUri() const;
+
 protected:
     DerivedXMLParser(const std::string& version,
         std::unique_ptr<six::SICommonXMLParser>&& comParser,
@@ -125,18 +127,22 @@ protected:
                           const std::vector<std::string>& values,
                           const std::string& uri = "",
                           bool setIfEmpty = false);
+    static void setAttributeList(xml::lite::Element&, const std::string& attributeName, const std::vector<std::string>& values, const xml::lite::Uri&,
+            bool setIfEmpty = false);
 
     static
     void setAttributeIfNonEmpty(XMLElem element,
                                 const std::string& name,
                                 const std::string& value,
                                 const std::string& uri = "");
+    static void setAttributeIfNonEmpty(xml::lite::Element&, const std::string& name, const std::string& value, const xml::lite::Uri&);
 
     static
     void setAttributeIfNonEmpty(XMLElem element,
                                 const std::string& name,
                                 six::BooleanType value,
                                 const std::string& uri = "");
+    static void setAttributeIfNonEmpty(xml::lite::Element&, const std::string& name, six::BooleanType value, const xml::lite::Uri&);
 
     static
     void setAttributeIfNonNull(XMLElem element,
