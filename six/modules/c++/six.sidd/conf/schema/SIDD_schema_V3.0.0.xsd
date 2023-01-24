@@ -3,7 +3,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ism="urn:us:gov:ic:ism:13" xmlns:sicommon="urn:SICommon:1.0" xmlns:sfa="urn:SFA:1.2.0" xmlns="urn:SIDD:3.0.0" targetNamespace="urn:SIDD:3.0.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
     <xs:import namespace="urn:SICommon:1.0" schemaLocation="SICommonTypes_V1.0.xsd"/>
     <xs:import namespace="urn:SFA:1.2.0" schemaLocation="SFA.xsd"/>
-    <xs:import namespace="urn:us:gov:ic:ism:13" schemaLocation="external/ISM-v13/Schema/ISM/IC-ISM.xsd"/>
+    <xs:import namespace="urn:us:gov:ic:ism" schemaLocation="external/ISM-v201609/Schema/ISM/IC-ISM.xsd"/>
     <xs:simpleType name="LUTListType">
         <xs:list itemType="xs:int"/>
     </xs:simpleType>
