@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="../../Schematron/ISM/ISM_XML.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<!-- Notices - Distribution Notice: 
+           This document has been approved for Public Release and is available for use without restriction.
+       -->
+<cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+   ism:compliesWith="USGov USIC" ism:ownerProducer="USA" ism:classification="U" 
+   ism:DESVersion="201609.201707" ism:ISMCATCESVersion="201609" ism:resourceElement="true" CVEVersion="2.1" specVersion="201705"
+   ism:createDate="2013-11-15" xsi:schemaLocation="urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd">
+
+   <cve:IRM>
+      <URN xmlns="urn:us:gov:ic:cve">urn:us:gov:ic:cvenum:mn:issue</URN>
+
+      <Title xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">CVEnumMNIssue</Title>
+
+      <Description xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">All currently identified values for Issue.</Description>
+
+      <cve:Created>2017-04-17</cve:Created>
+
+      <Source ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">IC-CIO</Source>
+
+      <PointOfContact ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">
+         <Name>Office IC CIO</Name>
+         <Email>ic-standards-support@iarpa.gov</Email>
+      </PointOfContact>
+   </cve:IRM>
+
+   <cve:Enumeration multivalue="false" ism:ownerProducer="USA" ism:classification="U">
+      <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+         <Value ism:classification="U" ism:ownerProducer="USA">CN</Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Crime and Narcotics</Description>
+      </Term>
+      <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+         <Value ism:classification="U" ism:ownerProducer="USA">CST</Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Cyber, Science, and Technology</Description>
+      </Term>
+      <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+         <Value ism:classification="U" ism:ownerProducer="USA">DI</Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Defense Issues</Description>
+      </Term>
+      <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+         <Value ism:classification="U" ism:ownerProducer="USA">ET</Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Economics, Trade, and Threat Finance</Description><!-- Changed to include Threat Finance -->
+      </Term>
+      <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+         <Value ism:classification="U" ism:ownerProducer="USA">EI</Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Environment and Infrastructure</Description>
+      </Term>
+      <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+         <Value ism:classification="U" ism:ownerProducer="USA">HND</Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Health and Natural Disasters</Description>
+      </Term>
+      <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+         <Value ism:classification="U" ism:ownerProducer="USA">IC</Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Intelligence and Counterintelligence</Description>
+      </Term>
+      <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+         <Value ism:classification="U" ism:ownerProducer="USA">PSI</Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Political and Societal Issues</Description>
+      </Term>
+      <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+         <Value ism:classification="U" ism:ownerProducer="USA">THS</Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Terrorism and Homeland Security</Description>
+      </Term>
+      <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+         <Value ism:classification="U" ism:ownerProducer="USA">WPW</Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Weapons Proliferation and WMD</Description>
+      </Term>
+   </cve:Enumeration>
+</cve:CVE>

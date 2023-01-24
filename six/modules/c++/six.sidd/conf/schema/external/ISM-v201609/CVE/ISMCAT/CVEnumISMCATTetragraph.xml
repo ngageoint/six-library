@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This is a generated file. DO NOT EDIT!--><cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns="urn:us:gov:ic:cve"
+         xmlns:ism="urn:us:gov:ic:ism"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         ism:compliesWith="USGov USIC"
+         ism:ownerProducer="USA"
+         ism:classification="U"
+         ism:DESVersion="201609.201707"
+         ism:ISMCATCESVersion="201707"
+         ism:resourceElement="true"
+         CVEVersion="2.1"
+         specVersion="201709"
+         ism:createDate="2019-12-23"
+         xsi:schemaLocation="urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd">
+	
+	  <cve:IRM>
+		    <URN>urn:us:gov:ic:cvenum:ismcat:tetragraph</URN>
+		    <Title ism:ownerProducer="USA" ism:classification="U">CVEnumISMCATTetragraph</Title>
+		    <Description ism:ownerProducer="USA" ism:classification="U">
+		    	IC Markings System Register and Manual Coalition tetragraphs in alphabetical order by tetragraph.
+		    </Description>
+		
+		    <Created>2019-12-23T16:24:53.834Z</Created>
+		
+	  	  <cve:Source ism:classification="U" ism:ownerProducer="USA">IC Markings System Register and Manual Register Appendix A</cve:Source>
+	  	  <cve:PointOfContact ism:classification="U" ism:ownerProducer="USA">
+         <cve:Name>Office IC CIO</cve:Name>
+         <cve:Email>ic-standards-support@iarpa.gov</cve:Email>
+      </cve:PointOfContact>
+	  </cve:IRM>
+	
+	  <cve:Enumeration multivalue="true" ism:ownerProducer="USA" ism:classification="U">
+	  <!--All currently valid IC Markings System Register and Manual Coalition tetragraphs in alphabetical order by tetragraph--><Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ACGU</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">FOUR EYES</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2005-12-12">
+		       <Value ism:classification="U" ism:ownerProducer="USA">AOSC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Athens Olympics Security Coalition</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">APFS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">African Peacekeeping Force Somalia</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ASEA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Association of Southeast Asian Nations (ASEAN)</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">AUSTRALIA_GROUP</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Australia Group</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2015-10-27">
+		       <Value ism:classification="U" ism:ownerProducer="USA">BHTF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Boko Haram Task Force</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">BWCS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Biological Weapons Convention States</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CFCK</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">ROK/US Combined Forces Command, Korea</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CFOD</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Coalition Forces Odyssey Dawn</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:ownerProducer="USA" ism:classification="U">CFUP</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Coalition Forces Unified Protector</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CLFC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Combined Libya Fusion Cell</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CMFC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Combined Maritime Forces Central</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CMFP</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Cooperative Maritime Forces Pacific</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CPMT</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Civilian Protection Monitoring Team for Sudan</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CTOC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Countering Transnational Organized Crime</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CWCS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Chemical Weapons Convention States</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:ownerProducer="USA" ism:classification="U">ECTF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">European Counter-Terrorism Forces</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:classification="U" ism:ownerProducer="USA">EFOR</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">European Union Stabilization Forces in Bosnia</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">EU</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">European Union</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:classification="U" ism:ownerProducer="USA">EUDA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">European Union DARFUR</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FVEY</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">FIVE EYES</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:ownerProducer="USA" ism:classification="U">GCCH</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Gulf Cooperation Council Headquarters</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:classification="U" ism:ownerProducer="USA">GCTF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Global Counter-Terrorism Forces</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">GFNX</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Global Foreign Terrorist Fighter Network Exchange</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">GMIF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Global Maritime Interception Forces</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:classification="U" ism:ownerProducer="USA">IESC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">International Events Security Coalition</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">IRKS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Inherent Resolve Kinetic Support</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ISAF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">International Security Assistance Force for Afghanistan</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ISSG</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">International Syria Support Group</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">KFOR</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Stabilization Forces in Kosovo</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:classification="U" ism:ownerProducer="USA">MCFI</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Multinational Coalition Forces-Iraq</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">MESF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Middle East Stability Force</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">MGEU</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Multinational GEOINT Europe</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:classification="U" ism:ownerProducer="USA">MIFH</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Multinational Interim Force Haiti</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">MLEC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Multi-Lateral Enduring Contingency</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA"> 
+		       <Value ism:classification="U" ism:ownerProducer="USA">MNTF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Multi-National Task Force</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:classification="U" ism:ownerProducer="USA">MPFL</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Multinational Peacekeeping Forces</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA"> 
+		       <Value ism:classification="U" ism:ownerProducer="USA">NACT</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">North African Counter-Terrorism Forces</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NATO</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">North Atlantic Treaty Organization</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+         <Value ism:classification="U" ism:ownerProducer="USA" regularExpression="true">NATO:[a-zA-Z\-_]{1,256}</Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">North Atlantic Treaty Organization Special Words</Description>
+      </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NCFE</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">NATO CFE Treaty on Conventional Armed Forces in Europe</Description>
+		
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NRDC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">NORDIC</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NSG</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Nuclear Suppliers' Group</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:classification="U" ism:ownerProducer="USA">OSAG</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Olympic Security Advisory Group</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">OSTY</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Open Skies Treaty</Description>
+		
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:classification="U" ism:ownerProducer="USA">PGMF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Persian Gulf Multinational Forces</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">RSMA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Resolute Support Mission Afghanistan</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA" deprecated="2016-03-17">
+		       <Value ism:classification="U" ism:ownerProducer="USA">SFOR</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Stabilization Force</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">SOFP</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Special Operations Forces Partners</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">SPAA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">SOF Planning Activities in Afghanistan (also called "11-Eyes")</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">TEYE</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">THREE EYES</Description>
+		
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">UNCK</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">United Nations Command, Korea</Description>
+		
+	     </Term>
+   </cve:Enumeration>
+</cve:CVE>
