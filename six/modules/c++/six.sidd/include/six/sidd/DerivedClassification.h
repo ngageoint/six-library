@@ -39,6 +39,7 @@ namespace sidd
  *
  *  SIDD 1.0 uses IC ISM v4
  *  SIDD 2.0 uses IC ISM v13
+ *  SIDD 3.0 uses IC ISM v201609
  *
  *  Compiler-generated copy constructor and assignment operator are sufficient
  */

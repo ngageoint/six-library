@@ -790,7 +790,15 @@ XMLElem DerivedXMLParser300::convertDerivedClassificationToXML(
         XMLElem parent) const
 {
     assert(parent != nullptr);
-    return & DerivedXMLParser200::convertDerivedClassificationToXML(*this, classification, *parent);
+
+    auto& classElem_ = DerivedXMLParser200::convertDerivedClassificationToXML(*this, classification, *parent);
+    auto classElem = &classElem_;
+
+    //! from ism:ISMRootNodeAttributeGroup
+    // SIDD 3.0 is tied to IC-ISM v201609
+    this->setAttribute(classElem, "DESVersion", "201609", ISM_URI);
+
+    return classElem;
 }
 
 XMLElem DerivedXMLParser300::convertMeasurementToXML(const Measurement* measurement,
