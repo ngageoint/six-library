@@ -15,6 +15,7 @@
 #pragma warning(disable: 4626) // '...': assignment operator was implicitly defined as deleted
 #pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
 #pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
+#pragma warning(disable: 5264) // '...': '...' variable is not used
 
 // TODO: get rid of these someday?
 #pragma warning(disable: 4774) // '...' : format string expected in argument 3 is not a string literal
