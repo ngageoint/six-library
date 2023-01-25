@@ -40,7 +40,7 @@ namespace sidd
 {
 static const char VERSION[] = "3.0.0";
 static const char SI_COMMON_URI[] = "urn:SICommon:1.0";
-static const char ISM_URI[] = "urn:us:gov:ic:ism";
+static const char ISM_URI[] = "urn:us:gov:ic:ism:201609";
 xml::lite::Uri DerivedXMLParser300::getISMUri() const
 {
     return xml::lite::Uri(ISM_URI);
@@ -219,7 +219,7 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     root->setNamespacePrefix("", getDefaultURI());
     root->setNamespacePrefix("si", xml::lite::Uri(SI_COMMON_URI));
     root->setNamespacePrefix("sfa", xml::lite::Uri(SFA_URI));
-    root->setNamespacePrefix("ism", xml::lite::Uri(ISM_URI));
+    root->setNamespacePrefix("ism", getISMUri());
 
     return doc;
 }
