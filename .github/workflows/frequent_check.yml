@@ -27,7 +27,7 @@ jobs:
     - name: test
       run: |
         cd build
-        ctest -C Release
+        ctest -C Release --output-on-failure
 
 
   build-linux:
@@ -53,4 +53,4 @@ jobs:
     - name: test
       run: |
         cd build
-        ctest
+        ctest --output-on-failure
