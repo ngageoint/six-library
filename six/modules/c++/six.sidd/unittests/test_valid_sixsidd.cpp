@@ -90,32 +90,35 @@ inline static const six::UnmodeledS* get_Unmodeled(const six::sidd::DerivedData&
     }
 }
 
-static void test_createFakeDerivedData_(const std::string& testName, const std::string& strVersion)
+static void test_createFakeDerivedData_(const std::string& testName, const std::string& strVersion, bool validate)
 {
     const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData(strVersion);
     auto Unmodeled = get_Unmodeled(*pFakeDerivedData, strVersion);
     TEST_ASSERT_NULL(Unmodeled); // not part of the fake data, only added in SIDD 3.0
 
     // NULL schemaPaths, no validation
-    auto pDerivedData = test_assert_round_trip(testName , *pFakeDerivedData, nullptr /*pSchemaPaths*/);
-    Unmodeled = get_Unmodeled(*pDerivedData, strVersion);
-    TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SIDD 3.0
-
-    // validate XML against schema
-    const auto schemaPaths = getSchemaPaths();
-    pDerivedData = test_assert_round_trip(testName , *pFakeDerivedData, &schemaPaths);
+    const std::vector<std::filesystem::path>* pSchemaPaths = nullptr;
+    if (validate)
+    {
+        // validate XML against schema
+        static const auto schemaPaths = getSchemaPaths();
+        pSchemaPaths = &schemaPaths;
+    }
+    auto pDerivedData = test_assert_round_trip(testName, *pFakeDerivedData, pSchemaPaths);
     Unmodeled = get_Unmodeled(*pDerivedData, strVersion);
     TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SIDD 3.0
 }
 
 TEST_CASE(test_createFakeDerivedData_200)
 {
-    test_createFakeDerivedData_(testName, "2.0.0");
+    test_createFakeDerivedData_(testName, "2.0.0", false /*validate*/);
+    test_createFakeDerivedData_(testName, "2.0.0", true /*validate*/);
 }
 
 TEST_CASE(test_createFakeDerivedData_300)
 {
-    test_createFakeDerivedData_(testName, "3.0.0");
+    test_createFakeDerivedData_(testName, "3.0.0", false /*validate*/);
+    test_createFakeDerivedData_(testName, "3.0.0", true /*validate*/);
 }
 
 static void test_assert_unmodeled_(const std::string& testName, const six::UnmodeledS& Unmodeled)
