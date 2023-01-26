@@ -108,9 +108,13 @@ static void test_createFakeDerivedData_(const std::string& testName, const std::
     TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SIDD 3.0
 }
 
-TEST_CASE(test_createFakeDerivedData)
+TEST_CASE(test_createFakeDerivedData_200)
 {
     test_createFakeDerivedData_(testName, "2.0.0");
+}
+
+TEST_CASE(test_createFakeDerivedData_300)
+{
     test_createFakeDerivedData_(testName, "3.0.0");
 }
 
@@ -172,7 +176,8 @@ TEST_CASE(test_read_sidd300_xml)
 }
 
 TEST_MAIN(
-    TEST_CHECK(test_createFakeDerivedData);
+    TEST_CHECK(test_createFakeDerivedData_200);
+    TEST_CHECK(test_createFakeDerivedData_300);
     TEST_CHECK(test_read_sidd200_xml);
     TEST_CHECK(test_read_sidd300_xml);
     )
