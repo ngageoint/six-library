@@ -43,11 +43,6 @@ namespace sidd
 {
 const char DerivedXMLParser::SFA_URI[] = "urn:SFA:1.2.0";
 
-xml::lite::Uri DerivedXMLParser::getISMUri() const
-{
-    return  xml::lite::Uri();
-}
-
 DerivedXMLParser::DerivedXMLParser(const std::string& strVersion,
     std::unique_ptr<six::SICommonXMLParser>&& comParser,
     logging::Logger* log, bool ownLog) : XMLParser(versionToURI(strVersion), false, log, ownLog),
