@@ -40,14 +40,7 @@ namespace sidd
 {
 static const char VERSION[] = "3.0.0";
 static const char SI_COMMON_URI[] = "urn:SICommon:1.0";
-inline static std::string getISMUri_()
-{
-    return "urn:us:gov:ic:ism:201609";
-}
-xml::lite::Uri DerivedXMLParser300::getISMUri() const
-{
-    return xml::lite::Uri(getISMUri_());
-}
+static const char ISM_URI[] = "urn:us:gov:ic:ism:13";
 
 //DerivedXMLParser300::DerivedXMLParser300(std::unique_ptr<logging::Logger>&& log) :
 //    DerivedXMLParser(VERSION,
@@ -222,7 +215,7 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     root->setNamespacePrefix("", getDefaultURI());
     root->setNamespacePrefix("si", xml::lite::Uri(SI_COMMON_URI));
     root->setNamespacePrefix("sfa", xml::lite::Uri(SFA_URI));
-    root->setNamespacePrefix("ism", getISMUri_());
+    root->setNamespacePrefix("ism", xml::lite::Uri(ISM_URI));
 
     return doc;
 }
@@ -797,14 +790,7 @@ XMLElem DerivedXMLParser300::convertDerivedClassificationToXML(
         XMLElem parent) const
 {
     assert(parent != nullptr);
-
-    auto& classElem = DerivedXMLParser200::convertDerivedClassificationToXML(*this, classification, *parent);
-
-    //! from ism:ISMRootNodeAttributeGroup
-    // SIDD 3.0 is tied to IC-ISM v201609
-    classElem.attribute("DESVersion") = "201609";
-
-    return &classElem;
+    return & DerivedXMLParser200::convertDerivedClassificationToXML(*this, classification, *parent);
 }
 
 XMLElem DerivedXMLParser300::convertMeasurementToXML(const Measurement* measurement,

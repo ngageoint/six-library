@@ -30,7 +30,7 @@ namespace six
 {
 namespace sidd
 {
-struct DerivedXMLParser200 final : public DerivedXMLParser
+struct DerivedXMLParser200 : public DerivedXMLParser
 {
     DerivedXMLParser200(logging::Logger* log = nullptr,
                         bool ownLog = false);
@@ -122,7 +122,7 @@ protected:
 private:
     static const char VERSION[];
     static const char SI_COMMON_URI[];
-    xml::lite::Uri getISMUri() const override;
+    static const char ISM_URI[];
 
     static xml::lite::Element& convertLookupTableToXML(const DerivedXMLParser&,
         const std::string& name, const LookupTable&, xml::lite::Element& parent);

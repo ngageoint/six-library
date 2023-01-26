@@ -81,8 +81,6 @@ private:
     void parseSharpnessEnhancementFromXML(const xml::lite::Element& sharpElem, SharpnessEnhancement&) const;
     void parseColorSpaceTransformFromXML(const xml::lite::Element& colorElem, ColorSpaceTransform&) const;
     void parseDynamicRangeAdjustmentFromXML(const xml::lite::Element& rangeElem, DynamicRangeAdjustment&) const;
-
-    xml::lite::Uri getISMUri() const override;
 };
 }
 }

@@ -36,14 +36,7 @@ namespace sidd
 {
 const char DerivedXMLParser100::VERSION[] = "1.0.0";
 const char DerivedXMLParser100::SI_COMMON_URI[] = "urn:SICommon:0.1";
-inline static std::string getISMUri_()
-{
-    return  "urn:us:gov:ic:ism";
-}
-xml::lite::Uri DerivedXMLParser100::getISMUri() const
-{
-    return xml::lite::Uri(getISMUri_());
-}
+const char DerivedXMLParser100::ISM_URI[] = "urn:us:gov:ic:ism";
 
 DerivedXMLParser100::DerivedXMLParser100(logging::Logger* log,
                                          bool ownLog) :
@@ -182,117 +175,116 @@ XMLElem DerivedXMLParser100::convertDerivedClassificationToXML(
         const DerivedClassification& classification,
         XMLElem parent) const
 {
-    XMLElem classElem_ = newElement("Classification", parent);
-    auto& classElem = *classElem_;
+    XMLElem classElem = newElement("Classification", parent);
 
     common().addParameters("SecurityExtension",
                            classification.securityExtensions,
-                           classElem_);
+                           classElem);
 
     //! from ism:ISMRootNodeAttributeGroup
     // SIDD 1.0 is tied to IC-ISM v4
-    setAttribute(classElem_, "DESVersion", "4", getISMUri_());
+    setAttribute(classElem, "DESVersion", "4", ISM_URI);
 
     //! from ism:ResourceNodeAttributeGroup
-    setAttribute(classElem, "resourceElement", "true", getISMUri());
+    setAttribute(classElem, "resourceElement", "true", ISM_URI);
     setAttribute(classElem, "createDate",
-                 classification.createDate.format("%Y-%m-%d"), getISMUri());
+                 classification.createDate.format("%Y-%m-%d"), ISM_URI);
     // optional
     setAttributeList(classElem, "compliesWith", classification.compliesWith,
-                     getISMUri());
+                     ISM_URI);
 
     //! from ism:SecurityAttributesGroup
     //  -- referenced in ism::ResourceNodeAttributeGroup
     setAttribute(classElem, "classification", classification.classification,
-                 getISMUri());
+                 ISM_URI);
     setAttributeList(classElem, "ownerProducer", classification.ownerProducer,
-                     getISMUri(), true);
+                     ISM_URI, true);
     // optional
     setAttributeList(classElem, "SCIcontrols", classification.sciControls,
-                     getISMUri());
+                     ISM_URI);
     // optional
     setAttributeList(classElem, "SARIdentifier", classification.sarIdentifier,
-                     getISMUri());
+                     ISM_URI);
     // optional
     setAttributeList(classElem,
                      "disseminationControls",
                      classification.disseminationControls,
-                     getISMUri());
+                     ISM_URI);
     // optional
     setAttributeList(classElem, "FGIsourceOpen", classification.fgiSourceOpen,
-                     getISMUri());
+                     ISM_URI);
     // optional
     setAttributeList(classElem,
                      "FGIsourceProtected",
                      classification.fgiSourceProtected,
-                     getISMUri());
+                     ISM_URI);
     // optional
     setAttributeList(classElem, "releasableTo", classification.releasableTo,
-                     getISMUri());
+                     ISM_URI);
     // optional
     setAttributeList(classElem, "nonICmarkings", classification.nonICMarkings,
-                     getISMUri());
+                     ISM_URI);
     // optional
     setAttributeIfNonEmpty(classElem,
                            "classifiedBy",
                            classification.classifiedBy,
-                           getISMUri());
+                           ISM_URI);
     // optional
     setAttributeIfNonEmpty(classElem,
                            "compilationReason",
                            classification.compilationReason,
-                           getISMUri());
+                           ISM_URI);
     // optional
     setAttributeIfNonEmpty(classElem,
                            "derivativelyClassifiedBy",
                            classification.derivativelyClassifiedBy,
-                           getISMUri());
+                           ISM_URI);
     // optional
     setAttributeIfNonEmpty(classElem,
                            "classificationReason",
                            classification.classificationReason,
-                           getISMUri());
+                           ISM_URI);
     // optional
     setAttributeList(classElem, "nonUSControls", classification.nonUSControls,
-                     getISMUri());
+                     ISM_URI);
     // optional
     setAttributeIfNonEmpty(classElem,
                            "derivedFrom",
                            classification.derivedFrom,
-                           getISMUri());
+                           ISM_URI);
     // optional
     if (classification.declassDate.get())
     {
         setAttributeIfNonEmpty(
                 classElem, "declassDate",
                 classification.declassDate->format("%Y-%m-%d"),
-                getISMUri());
+                ISM_URI);
     }
     // optional
     setAttributeIfNonEmpty(classElem,
                            "declassEvent",
                            classification.declassEvent,
-                           getISMUri());
+                           ISM_URI);
     // optional
     setAttributeIfNonEmpty(classElem,
                            "declassException",
                            classification.declassException,
-                           getISMUri());
+                           ISM_URI);
     // optional
     setAttributeIfNonEmpty(classElem,
                            "typeOfExemptedSource",
                            classification.exemptedSourceType,
-                           getISMUri());
+                           ISM_URI);
     // optional
     if (classification.exemptedSourceDate.get())
     {
         setAttributeIfNonEmpty(
                 classElem, "dateOfExemptedSource",
                 classification.exemptedSourceDate->format("%Y-%m-%d"),
-                getISMUri());
+                ISM_URI);
     }
 
-    return classElem_;
+    return classElem;
 }
 std::unique_ptr<DerivedData> DerivedXMLParser100::fromXML(const xml::lite::Document& doc) const
 {
@@ -350,7 +342,7 @@ DerivedXMLParser100::toXML(const DerivedData* derived) const
     root->setNamespacePrefix("", getDefaultURI());
     root->setNamespacePrefix("si", xml::lite::Uri(SI_COMMON_URI));
     root->setNamespacePrefix("sfa", xml::lite::Uri(SFA_URI));
-    root->setNamespacePrefix("ism", getISMUri_());
+    root->setNamespacePrefix("ism", xml::lite::Uri(ISM_URI));
 
     return doc;
 }
