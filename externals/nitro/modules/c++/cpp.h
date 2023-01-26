@@ -1,6 +1,8 @@
 #pragma once
 
 #pragma warning(push)
+#pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
+
 #pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 #pragma warning(disable: 4710) // '...': function not inlined

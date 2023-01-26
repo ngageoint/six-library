@@ -3,6 +3,7 @@
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
 
+#pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
 #pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 #pragma warning(disable: 4710) // '...': function not inlined

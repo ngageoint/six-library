@@ -10,6 +10,7 @@
 #include <std/span>
 #include <std/string>
 
+#pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
 #pragma warning(disable: 4251) // '...' : class '...' needs to have dll-interface to be used by clients of struct '...'
 #pragma warning(disable: 5264) // '...': '...' variable is not used
 
