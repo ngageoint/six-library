@@ -48,7 +48,7 @@ jobs:
     - name: make
       run: |
         cd build
-        cmake --build . -j 2
+        cmake --build . -j 3
         cmake --build . --target install
     - name: test
       run: |
