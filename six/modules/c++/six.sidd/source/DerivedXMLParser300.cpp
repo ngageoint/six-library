@@ -40,13 +40,9 @@ namespace sidd
 {
 static const char VERSION[] = "3.0.0";
 static const char SI_COMMON_URI[] = "urn:SICommon:1.0";
-inline static std::string getISMUri_()
+inline static xml::lite::Uri getISMUri()
 {
-    return "urn:us:gov:ic:ism:13";
-}
-xml::lite::Uri DerivedXMLParser300::getISMUri() const
-{
-    return xml::lite::Uri(getISMUri_());
+    return xml::lite::Uri("urn:us:gov:ic:ism:13");
 }
 
 //DerivedXMLParser300::DerivedXMLParser300(std::unique_ptr<logging::Logger>&& log) :
@@ -222,7 +218,7 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     root->setNamespacePrefix("", getDefaultURI());
     root->setNamespacePrefix("si", xml::lite::Uri(SI_COMMON_URI));
     root->setNamespacePrefix("sfa", xml::lite::Uri(SFA_URI));
-    root->setNamespacePrefix("ism", getISMUri_());
+    root->setNamespacePrefix("ism", getISMUri());
 
     return doc;
 }
@@ -798,6 +794,7 @@ XMLElem DerivedXMLParser300::convertDerivedClassificationToXML(
 {
     assert(parent != nullptr);
 
+    const auto ismUri = getISMUri();
     auto& classElem = DerivedXMLParser200::convertDerivedClassificationToXML(*this, classification, *parent);
     return &classElem;
 }

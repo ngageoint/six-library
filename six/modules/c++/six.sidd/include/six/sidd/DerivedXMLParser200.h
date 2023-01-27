@@ -120,9 +120,6 @@ protected:
         XMLElem parent = nullptr) const override;
 
 private:
-    static const char VERSION[];
-    static const char SI_COMMON_URI[];
-    static xml::lite::Uri getISMUri();
 
     static xml::lite::Element& convertLookupTableToXML(const DerivedXMLParser&,
         const std::string& name, const LookupTable&, xml::lite::Element& parent);

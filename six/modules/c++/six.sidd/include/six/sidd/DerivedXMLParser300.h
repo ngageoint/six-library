@@ -23,6 +23,7 @@
 
 #ifndef SIX_sidd_DerivedXMLParser300_h_INCLUDED_
 #define SIX_sidd_DerivedXMLParser300_h_INCLUDED_
+#pragma once
 
 #include <six/sidd/DerivedXMLParser.h>
 #include <six/GeoDataBase.h>
@@ -81,8 +82,6 @@ private:
     void parseSharpnessEnhancementFromXML(const xml::lite::Element& sharpElem, SharpnessEnhancement&) const;
     void parseColorSpaceTransformFromXML(const xml::lite::Element& colorElem, ColorSpaceTransform&) const;
     void parseDynamicRangeAdjustmentFromXML(const xml::lite::Element& rangeElem, DynamicRangeAdjustment&) const;
-
-    xml::lite::Uri getISMUri() const;
 };
 }
 }

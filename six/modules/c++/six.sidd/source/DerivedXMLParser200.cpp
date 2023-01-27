@@ -113,15 +113,11 @@ ProjectionType DerivedXMLParser200::getProjectionType(const xml::lite::Element& 
 }
 
 
-const char DerivedXMLParser200::VERSION[] = "2.0.0";
-const char DerivedXMLParser200::SI_COMMON_URI[] = "urn:SICommon:1.0";
-inline static std::string getISMUri_()
+const char VERSION[] = "2.0.0";
+const char SI_COMMON_URI[] = "urn:SICommon:1.0";
+inline static xml::lite::Uri getISMUri()
 {
-    return "urn:us:gov:ic:ism:13";
-}
-xml::lite::Uri DerivedXMLParser200::getISMUri()
-{
-    return xml::lite::Uri(getISMUri_());
+    return xml::lite::Uri("urn:us:gov:ic:ism:13");
 }
 
 DerivedXMLParser200::DerivedXMLParser200(logging::Logger* log,
@@ -308,7 +304,7 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
     root->setNamespacePrefix("", getDefaultURI());
     root->setNamespacePrefix("si", xml::lite::Uri(SI_COMMON_URI));
     root->setNamespacePrefix("sfa", xml::lite::Uri(SFA_URI));
-    root->setNamespacePrefix("ism", getISMUri_());
+    root->setNamespacePrefix("ism", getISMUri());
 
     return doc;
 }
