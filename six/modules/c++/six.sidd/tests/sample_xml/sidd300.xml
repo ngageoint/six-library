@@ -1,4 +1,4 @@
-<SIDD xmlns="urn:SIDD:3.0.0" xmlns:si="urn:SICommon:1.0" xmlns:sfa="urn:SFA:1.2.0" xmlns:ism="urn:us:gov:ic:ism:13">
+<SIDD xmlns="urn:SIDD:3.0.0" xmlns:si="urn:SICommon:1.0" xmlns:sfa="urn:SFA:1.2.0" xmlns:ism="urn:us:gov:ic:ism:201609">
 	<ProductCreation>
 		<ProcessorInformation>
 			<Application>ProcessorName</Application>
@@ -6,7 +6,7 @@
 			<Site>Ypsilanti, MI</Site>
 			<Profile>Profile</Profile>
 		</ProcessorInformation>
-		<Classification ism:DESVersion="13" ism:ISMCATCESVersion="1" ism:resourceElement="true" ism:createDate="2021-11-22" ism:compliesWith="USGov" ism:exemptFrom="IC_710_MANDATORY_FDR" ism:classification="U" ism:ownerProducer="ABW AIA" ism:joint="true" ism:SCIcontrols="HCS SI" ism:SARIdentifier="EU BC" ism:atomicEnergyMarkings="DCNI" ism:disseminationControls="FOUO IMC" ism:displayOnlyTo="AIA" ism:FGIsourceOpen="AIA ALB" ism:FGIsourceProtected="AIA AND" ism:releasableTo="ABW AFG" ism:nonICmarkings="SBU DS" ism:classifiedBy="PVT Snuffy" ism:compilationReason="Testing purposes" ism:derivativelyClassifiedBy="Anna J. Stepp" ism:classificationReason="More testing" ism:nonUSControls="BOHEMIA BALK" ism:derivedFrom="Other documents" ism:declassDate="2021-11-22" ism:declassEvent="N/A" ism:declassException="25X1" ism:noticeType="LES" ism:noticeReason="Notice reason here" ism:noticeDate="2021-11-22" ism:unregisteredNoticeType="Foo" ism:externalNotice="false">
+		<Classification ism:DESVersion="201609" ism:ISMCATCESVersion="1" ism:resourceElement="true" ism:createDate="2023-01-24" ism:compliesWith="USGov" ism:exemptFrom="IC_710_MANDATORY_FDR" ism:classification="U" ism:ownerProducer="ABW AIA" ism:joint="true" ism:SCIcontrols="HCS SI" ism:SARIdentifier="EU BC" ism:atomicEnergyMarkings="DCNI" ism:disseminationControls="FOUO IMC" ism:displayOnlyTo="AIA" ism:FGIsourceOpen="AIA ALB" ism:FGIsourceProtected="AIA AND" ism:releasableTo="ABW AFG" ism:nonICmarkings="SBU DS" ism:classifiedBy="PVT Snuffy" ism:compilationReason="Testing purposes" ism:derivativelyClassifiedBy="Anna J. Stepp" ism:classificationReason="More testing" ism:nonUSControls="BOHEMIA BALK" ism:derivedFrom="Other documents" ism:declassDate="2021-11-22" ism:declassEvent="N/A" ism:declassException="25X1" ism:noticeType="LES" ism:noticeReason="Notice reason here" ism:noticeDate="2021-11-22" ism:unregisteredNoticeType="Foo" ism:externalNotice="false">
 			<SecurityExtension name="">sample</SecurityExtension>
 		</Classification>
 		<ProductName>ProductName</ProductName>
