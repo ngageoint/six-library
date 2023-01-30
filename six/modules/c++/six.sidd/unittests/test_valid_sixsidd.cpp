@@ -65,7 +65,7 @@ static std::filesystem::path get_sample_xml_path(const std::filesystem::path& fi
 
 static std::vector<std::filesystem::path> getSchemaPaths()
 {
-    static const auto filename = sys::test::findGITModuleFile("six", schema_relative_path(), "SIDD_schema_V3.0.0.xsd");
+    static const auto filename = sys::test::findGITModuleFile("six", schema_relative_path(), "SIDD_schema_V2.0.0_2020_06_02.xsd");
     static const auto schemaPath = filename.parent_path();
     return std::vector<std::filesystem::path> { schemaPath };
 }
@@ -80,14 +80,7 @@ static std::unique_ptr<six::sidd::DerivedData> test_assert_round_trip(const std:
 
 inline static const six::UnmodeledS* get_Unmodeled(const six::sidd::DerivedData& derivedData, const std::string& strVersion)
 {
-    if (strVersion != "3.0.0") // Unmodeled added in SIDD 3.0
-    {
-        return nullptr;
-    }
-    else
-    {
-        return derivedData.errorStatistics->Unmodeled.get();
-    }
+    return nullptr; // Unmodeled added in SIDD 3.0
 }
 
 static void test_createFakeDerivedData_(const std::string& testName, const std::string& strVersion)
@@ -111,7 +104,6 @@ static void test_createFakeDerivedData_(const std::string& testName, const std::
 TEST_CASE(test_createFakeDerivedData)
 {
     test_createFakeDerivedData_(testName, "2.0.0");
-    test_createFakeDerivedData_(testName, "3.0.0");
 }
 
 static void test_assert_unmodeled_(const std::string& testName, const six::UnmodeledS& Unmodeled)
@@ -130,15 +122,8 @@ static void test_assert_unmodeled_(const std::string& testName, const six::Unmod
 static void test_assert_unmodeled(const std::string& testName, const six::sidd::DerivedData& derivedData)
 {
     auto&& errorStatistics = derivedData.errorStatistics;
-    TEST_ASSERT(errorStatistics.get() != nullptr);
-    if (derivedData.getVersion() != "3.0.0")
-    {
-        return;
-    }
-
-    auto Unmodeled = errorStatistics->Unmodeled;
-    TEST_ASSERT(Unmodeled.get() != nullptr);
-    test_assert_unmodeled_(testName, *Unmodeled);
+    TEST_ASSERT(errorStatistics.get() != nullptr); 
+    return;
 }
 
 static void test_read_sidd_xml(const std::string& testName, const std::filesystem::path& path)
@@ -166,13 +151,7 @@ TEST_CASE(test_read_sidd200_xml)
     test_read_sidd_xml(testName, "sidd200.xml");
 }
 
-TEST_CASE(test_read_sidd300_xml)
-{
-    test_read_sidd_xml(testName, "sidd300.xml");
-}
-
 TEST_MAIN(
     TEST_CHECK(test_createFakeDerivedData);
     TEST_CHECK(test_read_sidd200_xml);
-    TEST_CHECK(test_read_sidd300_xml);
     )

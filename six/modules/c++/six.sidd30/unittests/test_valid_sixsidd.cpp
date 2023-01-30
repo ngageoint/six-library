@@ -48,18 +48,18 @@ static std::filesystem::path argv0()
     return retval;
 }
 
-static inline std::filesystem::path six_sidd_relative_path()
+static inline std::filesystem::path six_sidd30_relative_path()
 {
-    return std::filesystem::path("six") / "modules" / "c++" / "six.sidd";
+    return std::filesystem::path("six") / "modules" / "c++" / "six.sidd30";
 }
 static std::filesystem::path schema_relative_path()
 {
-    return six_sidd_relative_path() / "conf" / "schema";
+    return six_sidd30_relative_path() / "conf" / "schema";
 }
 
 static std::filesystem::path get_sample_xml_path(const std::filesystem::path& filename)
 {
-    static const auto modulePath = six_sidd_relative_path() / "tests" / "sample_xml";
+    static const auto modulePath = six_sidd30_relative_path() / "tests" / "sample_xml";
     return sys::test::findGITModuleFile("six", modulePath, filename);
 }
 

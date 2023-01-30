@@ -1116,7 +1116,7 @@ static void populateData(six::sidd::DerivedData& siddData, const std::string& st
     siddData.setVersion(strVersion);
     const auto elementSize = static_cast<size_t>(lutType == "Mono" ? 2 : 3);
 
-    if ((strVersion == "2.0.0") || (strVersion == "3.0.0"))
+    if (strVersion == "2.0.0")
     {
         // This will naturally get constructed in the course of 1.0.0
         // Separate field in 2.0.0
@@ -1264,7 +1264,7 @@ static void update_for_SIDD_300(DerivedData& data) // n.b., much of this was add
     ProcTxRcvPolarization polarization{ PolarizationSequenceType::UNKNOWN, PolarizationSequenceType::UNKNOWN };
     data.exploitationFeatures->product[0].polarization.push_back(polarization); // TODO: this was added before SIDD 3.0.0
 
-    populateData(data, "3.0.0");
+    populateData(data, "2.0.0");
 }
 
 static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& strVersion)
@@ -1375,7 +1375,7 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& st
 }
 std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& strVersion)
 {
-    if ((strVersion == "2.0.0") || (strVersion == "3.0.0"))
+    if (strVersion == "2.0.0")
     {
         return createFakeDerivedData_(strVersion);
     }
