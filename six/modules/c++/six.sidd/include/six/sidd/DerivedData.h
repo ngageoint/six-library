@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_DERIVED_DATA_H__
-#define __SIX_DERIVED_DATA_H__
+#ifndef SIX_six_sidd_DerivedData_h_INCLUDED_
+#define SIX_six_sidd_DerivedData_h_INCLUDED_
+#pragma once
 
 #include <mem/ScopedCopyablePtr.h>
 #include <six/Data.h>
@@ -51,7 +52,7 @@ namespace sidd
  *  Contains the structs that are the model for SIDD products
  *
  */
-struct DerivedData: public Data
+struct DerivedData final: public Data
 {
     /*!
      *  Information related to processor, classification,
@@ -342,4 +343,4 @@ private:
 };
 }
 }
-#endif
+#endif // SIX_six_sidd_DerivedData_h_INCLUDED_

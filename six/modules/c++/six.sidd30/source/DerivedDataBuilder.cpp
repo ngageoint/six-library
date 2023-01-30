@@ -22,6 +22,7 @@
 #include "six/sidd30/DerivedDataBuilder.h"
 
 using namespace six;
+using namespace six::sidd;
 using namespace six::sidd30;
 
 DerivedDataBuilder::DerivedDataBuilder() :

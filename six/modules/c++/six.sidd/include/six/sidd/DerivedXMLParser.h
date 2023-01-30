@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_SIDD_DERIVED_XML_PARSER_H__
-#define __SIX_SIDD_DERIVED_XML_PARSER_H__
+#ifndef SIX_six_sidd_DerivedXMLParser_h_INCLUDED_
+#define SIX_six_sidd_DerivedXMLParser_h_INCLUDED_
+#pragma once
 
 #include <six/XMLControl.h>
 #include <six/sidd/DerivedData.h>
@@ -247,4 +248,4 @@ private:
 }
 }
 
-#endif
+#endif // SIX_six_sidd_DerivedXMLParser_h_INCLUDED_

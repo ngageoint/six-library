@@ -25,14 +25,18 @@
 #define SIX_sidd_DerivedXMLParser300_h_INCLUDED_
 #pragma once
 
-#include <six/sidd30/DerivedXMLParser.h>
+#include <six/sidd/DerivedXMLParser.h>
 #include <six/GeoDataBase.h>
+
+#include "six/sidd30/DerivedData.h"
 
 namespace six
 {
 namespace sidd30
 {
-struct DerivedXMLParser300 final : public DerivedXMLParser
+using DerivedXMLParser = six::sidd::DerivedXMLParser;
+
+struct DerivedXMLParser300 final : public six::sidd::DerivedXMLParser
 {
     //DerivedXMLParser300(std::unique_ptr<logging::Logger>&&);
     DerivedXMLParser300(logging::Logger&);

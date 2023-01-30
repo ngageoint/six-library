@@ -36,16 +36,10 @@
     <ClInclude Include="include\six\sidd30\DerivedClassification.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\six\sidd30\DerivedData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\six\sidd30\DerivedDataBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\six\sidd30\DerivedXMLControl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\six\sidd30\DerivedXMLParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\six\sidd30\DerivedXMLParser100.h">
@@ -105,7 +99,7 @@
     <ClInclude Include="include\six\sidd30\SIDDVersionUpdater.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\six\sidd30\Utilities.h">
+    <ClInclude Include="include\six\sidd30\DerivedData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -125,22 +119,10 @@
     <ClCompile Include="source\DerivedClassification.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\DerivedData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\DerivedDataBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\DerivedXMLControl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\DerivedXMLParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\DerivedXMLParser100.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\DerivedXMLParser200.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\DigitalElevationData.cpp">
@@ -183,9 +165,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\SIDDVersionUpdater.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Utilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\DerivedXMLParser300.cpp">

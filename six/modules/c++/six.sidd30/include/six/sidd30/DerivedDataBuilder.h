@@ -24,12 +24,15 @@
 #define SIX_six_sicd30_DerivedDataBuilder_h_INCLUDED_
 #pragma once
 
-#include "six/sidd30/DerivedData.h"
+#include "six/sidd/DerivedData.h"
 
 namespace six
 {
 namespace sidd30
 {
+
+using DerivedData = six::sidd::DerivedData;
+
 /*!
  *  \class DerivedDataBuilder
  *  \brief Incrementally builds a DerivedData object

@@ -34,6 +34,8 @@
 
 using XMLElem = xml::lite::Element*;
 
+using namespace six::sidd;
+
 namespace six
 {
 namespace sidd30
@@ -149,7 +151,7 @@ std::unique_ptr<DerivedData> DerivedXMLParser300::fromXML(const xml::lite::Docum
         data->annotations.resize(annChildren.size());
         for (size_t i = 0; i < annChildren.size(); ++i)
         {
-            data->annotations[i].reset(new Annotation());
+            data->annotations[i].reset(new six::sidd::Annotation());
             parseAnnotationFromXML(annChildren[i], data->annotations[i].get());
         }
     }
@@ -892,7 +894,7 @@ void DerivedXMLParser300::parseExploitationFeaturesFromXML(
     {
         const xml::lite::Element* const collectionElem = collectionsElem[i];
         XMLElem geometryElem = getOptional(collectionElem, "Geometry");
-        const Collection& coll = *exploitationFeatures->collections[i];
+        const auto& coll = *exploitationFeatures->collections[i];
 
         // optional
         if (geometryElem) {
