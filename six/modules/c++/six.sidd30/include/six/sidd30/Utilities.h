@@ -19,20 +19,17 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef SIX_six_sidd30_GeoTIFFWriteControl_h_INCLUDED_
-#define SIX_six_sidd30_GeoTIFFWriteControl_h_INCLUDED_
+#ifndef SIX_six_sidd30_Utilities_h_INCLUDED_
+#define SIX_six_sidd30_Utilities_h_INCLUDED_
 #pragma once
 
-#include <six/sidd/GeoTIFFWriteControl.h>
+#include <six/sidd/Utilities.h>
 
 namespace six
 {
-	namespace sidd30
-	{
-		#if !defined(SIX_TIFF_DISABLED)
-		using GeoTIFFWriteControl = six::sidd::GeoTIFFWriteControl;
-		#endif // SIX_TIFF_DISABLED
-	}
+    namespace sidd30
+    {
+        using Utilities = six::sidd::Utilities;
+    }
 }
-
-#endif // SIX_six_sidd30_GeoTIFFWriteControl_h_INCLUDED_
+#endif // SIX_six_sidd30_Utilities_h_INCLUDED_

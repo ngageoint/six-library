@@ -102,6 +102,9 @@
     <ClInclude Include="include\six\sidd30\DerivedData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\six\sidd30\Utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -111,9 +114,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\Compression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\CropUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\DerivedClassification.cpp">
@@ -144,9 +144,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\GeoTIFFReadControl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\GeoTIFFWriteControl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\LookupTable.cpp">

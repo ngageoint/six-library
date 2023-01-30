@@ -4,7 +4,6 @@ coda_add_module(
     SOURCES
         source/CompressedSIDDByteProvider.cpp
         source/Compression.cpp
-        source/CropUtils.cpp
         source/DerivedClassification.cpp
         source/DerivedData.cpp
         source/DerivedDataBuilder.cpp
@@ -16,7 +15,6 @@ coda_add_module(
         source/ExploitationFeatures.cpp
         source/Filter.cpp
         source/GeoTIFFReadControl.cpp
-        source/GeoTIFFWriteControl.cpp
         source/GeographicAndTarget.cpp
         source/LookupTable.cpp
         source/Measurement.cpp

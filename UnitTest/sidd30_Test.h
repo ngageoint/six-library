@@ -30,7 +30,10 @@
 #include <six/NITFHeaderCreator.h>
 #include <six/sidd30/SIDDByteProvider.h>
 #include <six/XMLControlFactory.h>
-#include <six/sidd30/DerivedXMLControl.h>
+#include <six/sidd30/SFA.h>
+#include <six/sidd30/Annotations.h>
+#include <six/sidd30/DownstreamReprocessing.h>
+#include <six/sidd30/GeographicAndTarget.h>
 
 #include "CppUnitTest.h"
 #include "TestCase.h"

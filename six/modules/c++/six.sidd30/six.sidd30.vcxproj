@@ -128,6 +128,7 @@
     <ClInclude Include="include\six\sidd30\SFA.h" />
     <ClInclude Include="include\six\sidd30\SIDDByteProvider.h" />
     <ClInclude Include="include\six\sidd30\SIDDVersionUpdater.h" />
+    <ClInclude Include="include\six\sidd30\Utilities.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -137,7 +138,6 @@
     </ClCompile>
     <ClCompile Include="source\CompressedSIDDByteProvider.cpp" />
     <ClCompile Include="source\Compression.cpp" />
-    <ClCompile Include="source\CropUtils.cpp" />
     <ClCompile Include="source\DerivedClassification.cpp" />
     <ClCompile Include="source\DerivedDataBuilder.cpp" />
     <ClCompile Include="source\DerivedXMLControl.cpp" />
@@ -149,7 +149,6 @@
     <ClCompile Include="source\Filter.cpp" />
     <ClCompile Include="source\GeographicAndTarget.cpp" />
     <ClCompile Include="source\GeoTIFFReadControl.cpp" />
-    <ClCompile Include="source\GeoTIFFWriteControl.cpp" />
     <ClCompile Include="source\LookupTable.cpp" />
     <ClCompile Include="source\Measurement.cpp" />
     <ClCompile Include="source\ProductCreation.cpp" />
