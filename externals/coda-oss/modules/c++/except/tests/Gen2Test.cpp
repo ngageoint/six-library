@@ -29,7 +29,7 @@
 using std::endl; using std::cout;
 using namespace except;
 
-DECLARE_EXCEPTION(DivideByZero)
+DECLARE_EXCEPTION(DivideByZero);
 typedef DivideByZeroException DivideByZero;
 
 double Divide(double x, double y);

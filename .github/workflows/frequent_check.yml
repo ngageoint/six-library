@@ -48,7 +48,7 @@ jobs:
       run: |
         cd build
         # using the default number of threads (-j) causes G++ to crash
-        cmake --build . -j 2
+        cmake --build . -j 6
         cmake --build . --target install
     - name: test
       run: |

@@ -22,7 +22,12 @@
 
 #include "hdf5.lite.h"
 
-void hdf5::lite::details::try_catch_H5Exceptions_(std::function<void(void*)> f, void* context)
+inline except::Context make_Context(const H5::Exception& error,  const char* file, int line)
+{
+    return except::Context(error.getDetailMsg(), file, line, error.getFuncName());
+}
+
+void hdf5::lite::details::try_catch_H5Exceptions_(std::function<void(void*)> f, const char* file, int line, void* context)
 {
     try
     {
@@ -34,28 +39,28 @@ void hdf5::lite::details::try_catch_H5Exceptions_(std::function<void(void*)> f, 
 
         f(context);
     }
+
     // catch failure caused by the H5File operations
     catch (const H5::FileIException& error)
     {
-        const except::Context ctx(error.getDetailMsg(), __FILE__, __LINE__, error.getFuncName());
-        throw except::IOException(ctx);
+        throw except::IOException(make_Context(error, file, line));
     }
+
     // catch failure caused by the DataSet operations
     catch (const H5::DataSetIException& error)
     {
-        const except::Context ctx(error.getDetailMsg(), __FILE__, __LINE__, error.getFuncName());
-        throw hdf5::lite::DataSetException(ctx);
+        throw hdf5::lite::DataSetException(make_Context(error, file, line));
     }
+
     // catch failure caused by the DataSpace operations
     catch (const H5::DataSpaceIException& error)
     {
-        const except::Context ctx(error.getDetailMsg(), __FILE__, __LINE__, error.getFuncName());
-        throw hdf5::lite::DataSpaceException(ctx);
+        throw hdf5::lite::DataSpaceException(make_Context(error, file, line));
     }
+
     // catch failure caused by the DataType operations
     catch (const H5::DataTypeIException& error)
     {
-        const except::Context ctx(error.getDetailMsg(), __FILE__, __LINE__, error.getFuncName());
-        throw hdf5::lite::DataTypeException(ctx);
+        throw hdf5::lite::DataTypeException(make_Context(error, file, line));
     }
 }

@@ -23,6 +23,8 @@
 #ifndef __IO_FILE_INPUT_STREAM_OS_H__
 #define __IO_FILE_INPUT_STREAM_OS_H__
 
+#include "config/Exports.h"
+
 #if !defined(USE_IO_STREAMS)
 
 #include "except/Exception.h"
@@ -51,7 +53,7 @@ namespace io
  *  method is based on the pos in the file, and the streamTo() and read()
  *  are file operations
  */
-struct FileInputStreamOS : public SeekableInputStream
+struct CODA_OSS_API FileInputStreamOS : public SeekableInputStream
 {
 protected:
     sys::File mFile;

@@ -26,7 +26,7 @@
 #include <vector>
 #include <sstream>
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 
 #include "sys/OSWin32.h"
 #include "sys/File.h"

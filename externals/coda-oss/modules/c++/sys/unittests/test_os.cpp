@@ -293,7 +293,7 @@ TEST_CASE(testBacktrace)
 
 
     size_t expected = 0;
-    size_t expected_other = 0;
+    //size_t expected_other = 0;
     auto version_sys_backtrace_ = version::sys::backtrace; // "Conditional expression is constant"
     if (version_sys_backtrace_ >= 20210216L)
     {
@@ -301,19 +301,19 @@ TEST_CASE(testBacktrace)
 
         #if _WIN32
         constexpr auto frames_size_RELEASE = 2;
-        constexpr auto frames_size_RELEASE_other = frames_size_RELEASE;
+        //constexpr auto frames_size_RELEASE_other = frames_size_RELEASE;
         constexpr auto frames_size_DEBUG = 14;
-        constexpr auto frames_size_DEBUG_other = frames_size_DEBUG + 1; // 15
+        //constexpr auto frames_size_DEBUG_other = frames_size_DEBUG + 1; // 15
         #elif defined(__GNUC__)
         constexpr auto frames_size_RELEASE = 6;
-        constexpr auto frames_size_RELEASE_other = frames_size_RELEASE + 1; // 7
+        //constexpr auto frames_size_RELEASE_other = frames_size_RELEASE + 1; // 7
         constexpr auto frames_size_DEBUG = frames_size_RELEASE + 4; // 10
-        constexpr auto frames_size_DEBUG_other = frames_size_DEBUG;
+        //constexpr auto frames_size_DEBUG_other = frames_size_DEBUG;
         #else
         #error "CODA_OSS_sys_Backtrace inconsistency."
         #endif
         expected = sys::debug_build() ? frames_size_DEBUG : frames_size_RELEASE;
-        expected_other = sys::debug_build() ? frames_size_DEBUG_other : frames_size_RELEASE_other;
+        //expected_other = sys::debug_build() ? frames_size_DEBUG_other : frames_size_RELEASE_other;
     }
     else
     {

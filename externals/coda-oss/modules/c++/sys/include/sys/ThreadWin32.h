@@ -30,7 +30,7 @@
 
 #include "config/Exports.h"
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 
 #if !defined(USE_NSPR_THREADS)
 

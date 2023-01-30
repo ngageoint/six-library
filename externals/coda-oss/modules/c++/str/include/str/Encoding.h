@@ -62,9 +62,6 @@ inline typename TBasicStringT::const_pointer c_str(const std::basic_string<TChar
 enum class Windows1252_T : unsigned char { };  // https://en.cppreference.com/w/cpp/language/types
 using W1252string = std::basic_string<Windows1252_T>;  // https://en.cppreference.com/w/cpp/string
 
-// With some older C++ compilers, uint16_t may be used instead of char16_t :-(
-using ui16string = std::basic_string<uint16_t>;  // ui = UInt16_t
-
 //////////////////////////////////////////////////////////////////////////////////////////
 
 // We'll get strange errors, possibibly at link-time, if wchar_t is not a wchar_t type.
@@ -88,9 +85,7 @@ inline coda_oss::u8string to_u8string(coda_oss::u8string::const_pointer s, size_
 CODA_OSS_API coda_oss::u8string to_u8string(std::u16string::const_pointer, size_t);
 
 CODA_OSS_API std::u16string to_u16string(coda_oss::u8string::const_pointer, size_t);
-str::ui16string to_ui16string(coda_oss::u8string::const_pointer, size_t);
 std::u16string to_u16string(str::W1252string::const_pointer, size_t);
-str::ui16string to_ui16string(str::W1252string::const_pointer, size_t);
 
 // UTF-32 is convenient because each code-point is a single 32-bit integer.
 // It's typically std::wstring::value_type on Linux, but NOT Windows.
