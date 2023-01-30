@@ -1,5 +1,5 @@
 /* =========================================================================
-* This file is part of six.sidd-c++
+* This file is part of six.sidd30-c++
 * =========================================================================
 *
 * (C) Copyright 2004 - 2016, MDA Information Systems LLC
@@ -33,7 +33,7 @@
 #include <import/sys.h>
 
 #include <six/Utilities.h>
-#include <import/six/sidd.h>
+#include <import/six/sidd30.h>
 
 #include "TestCase.h"
 

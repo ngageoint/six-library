@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2018, MDA Information Systems LLC
@@ -33,15 +33,15 @@
 
 #include "TestCase.h"
 
-#include <six/sidd/SIDDByteProvider.h>
+#include <six/sidd30/SIDDByteProvider.h>
 
 #include <io/ReadUtils.h>
 #include <math/Round.h>
 
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
-#include <six/sidd/Utilities.h>
-#include <six/sidd/DerivedXMLControl.h>
+#include <six/sidd30/Utilities.h>
+#include <six/sidd30/DerivedXMLControl.h>
 
 
 // Template specialization to get appropriate pixel type

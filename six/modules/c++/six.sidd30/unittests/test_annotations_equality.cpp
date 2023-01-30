@@ -1,5 +1,5 @@
 /* =========================================================================
-* This file is part of six.sidd-c++
+* This file is part of six.sidd30-c++
 * =========================================================================
 *
 * (C) Copyright 2004 - 2016, MDA Information Systems LLC
@@ -24,7 +24,7 @@
 
 #include "TestCase.h"
 
-#include <six/sidd/Annotations.h>
+#include <six/sidd30/Annotations.h>
 
 TEST_CASE(SFAPoint)
 {

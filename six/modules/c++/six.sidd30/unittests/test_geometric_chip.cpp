@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2016, MDA Information Systems LLC
@@ -20,7 +20,7 @@
  *
  */
 
-#include <six/sidd/DownstreamReprocessing.h>
+#include <six/sidd30/DownstreamReprocessing.h>
 #include "TestCase.h"
 
 TEST_CASE(testGeometricChip)

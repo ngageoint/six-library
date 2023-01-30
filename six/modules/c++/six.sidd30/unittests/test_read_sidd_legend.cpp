@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -30,9 +30,9 @@
 #include <except/Exception.h>
 #include <mem/ScopedArray.h>
 #include <sys/Path.h>
-#include <six/sidd/DerivedXMLControl.h>
-#include <six/sidd/DerivedData.h>
-#include <six/sidd/DerivedDataBuilder.h>
+#include <six/sidd30/DerivedXMLControl.h>
+#include <six/sidd30/DerivedData.h>
+#include <six/sidd30/DerivedDataBuilder.h>
 #include <six/NITFReadControl.h>
 #include <six/NITFWriteControl.h>
 #include <six/NITFHeaderCreator.h>
