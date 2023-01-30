@@ -97,13 +97,13 @@ const mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT() const
         }
         return display->remapInformation->remapLUT;
     }
-    else if (mVersion == "2.0.0")
+    else if ((mVersion == "2.0.0") || (mVersion == "3.0.0"))
     {
         return nitfLUT;
     }
     else
     {
-        throw except::Exception(Ctxt("Unknown version. Expected 2.0.0, or 1.0.0"));
+        throw except::Exception(Ctxt("Unknown version. Expected 3.0.0, 2.0.0, or 1.0.0"));
     }
 }
 void DerivedData::setDisplayLUT(std::unique_ptr<AmplitudeTable>&& pLUT)
