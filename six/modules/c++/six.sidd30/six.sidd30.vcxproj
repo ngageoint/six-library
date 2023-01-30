@@ -155,6 +155,7 @@
     <ClCompile Include="source\SFA.cpp" />
     <ClCompile Include="source\SIDDByteProvider.cpp" />
     <ClCompile Include="source\SIDDVersionUpdater.cpp" />
+    <ClCompile Include="source\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\scene\scene.vcxproj">
