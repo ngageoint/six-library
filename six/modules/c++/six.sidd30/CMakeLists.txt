@@ -3,23 +3,12 @@ coda_add_module(
     DEPS tiff-c++ six-c++ six.sidd-c++
     SOURCES
         source/CompressedSIDDByteProvider.cpp
-        source/Compression.cpp
         source/DerivedClassification.cpp
         source/DerivedData.cpp
         source/DerivedDataBuilder.cpp
         source/DerivedXMLControl.cpp
         source/DerivedXMLParser300.cpp
-        source/DigitalElevationData.cpp
-        source/Display.cpp
-        source/DownstreamReprocessing.cpp
-        source/ExploitationFeatures.cpp
-        source/Filter.cpp
         source/GeoTIFFReadControl.cpp
-        source/GeographicAndTarget.cpp
-        source/LookupTable.cpp
-        source/Measurement.cpp
-        source/ProductCreation.cpp
-        source/SFA.cpp
         source/SIDDByteProvider.cpp
         source/SIDDVersionUpdater.cpp
         source/Utilities.cpp)

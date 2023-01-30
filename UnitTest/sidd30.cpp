@@ -6,14 +6,6 @@
 namespace sidd30
 {
 
-TEST_CLASS(test_annotations_equality) { public:
-#include "six/modules/c++/six.sidd30/unittests/test_annotations_equality.cpp"
-};
-
-TEST_CLASS(test_geometric_chip) { public:
-#include "six/modules/c++/six.sidd30/unittests/test_geometric_chip.cpp"
-};
-
 TEST_CLASS(test_read_sidd_legend) { public:
     test_read_sidd_legend()
     {
