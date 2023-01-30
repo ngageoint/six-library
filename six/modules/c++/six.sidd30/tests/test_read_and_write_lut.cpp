@@ -26,7 +26,7 @@
 #include <std/cstddef>
 
 #include <import/six.h>
-#include <import/six/sidd.h>
+#include <import/six/sidd30.h>
 #include <import/nitf.hpp>
 
 namespace fs = std::filesystem;

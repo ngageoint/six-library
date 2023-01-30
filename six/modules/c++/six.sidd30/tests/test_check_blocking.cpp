@@ -23,7 +23,7 @@
 #include <iostream>
 #include <vector>
 
-#include <import/six/sidd.h>
+#include <import/six/sidd30.h>
 #include <cli/ArgumentParser.h>
 #include <io/TempFile.h>
 #include <math/Utilities.h>

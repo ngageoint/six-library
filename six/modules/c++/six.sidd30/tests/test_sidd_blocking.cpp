@@ -29,7 +29,7 @@
 #include <str/Manip.h>
 #include <sys/Exec.h>
 #include <sys/Path.h>
-#include <import/six/sidd.h>
+#include <import/six/sidd30.h>
 #include "six/NITFWriteControl.h"
 #include "six/Types.h"
 

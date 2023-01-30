@@ -23,7 +23,7 @@
 #include <iostream>
 #include <iterator>
 
-#include <import/six/sidd.h>
+#include <import/six/sidd30.h>
 #include "six/NITFWriteControl.h"
 #include "six/Types.h"
 
