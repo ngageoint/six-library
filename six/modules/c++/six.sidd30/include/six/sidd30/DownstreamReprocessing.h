@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_DOWNSTREAM_REPROCESSING_H__
-#define __SIX_DOWNSTREAM_REPROCESSING_H__
+#ifndef SIX_six_sicd30_DownstreamReprocessing_h_INCLUDED_
+#define SIX_six_sicd30_DownstreamReprocessing_h_INCLUDED_
+#pragma once
 
 #include <mem/ScopedCopyablePtr.h>
 #include "six/Types.h"
@@ -29,7 +30,7 @@
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 /*!
  *  \struct GeometricChip
@@ -37,7 +38,7 @@ namespace sidd
  *
  *  Contains information related to downstream chipping of the product.
  */
-struct GeometricChip
+struct GeometricChip final
 {
     //!  Size of the chipped product in pixels
     RowColInt chipSize;
@@ -82,7 +83,7 @@ struct GeometricChip
  *  Contains information related to downstream processing of
  *  the product
  */
-struct ProcessingEvent
+struct ProcessingEvent final
 {
     //!  Application which applied a modification
     std::string applicationName;
@@ -109,7 +110,7 @@ struct ProcessingEvent
  *
  *  Contains metadata related to downstream processing of the product.
  */
-struct DownstreamReprocessing
+struct DownstreamReprocessing final
 {
     /*!
      *  (Optional) chipping information
@@ -132,5 +133,4 @@ struct DownstreamReprocessing
 };
 }
 }
-#endif
-
+#endif // SIX_six_sicd30_DownstreamReprocessing_h_INCLUDED_

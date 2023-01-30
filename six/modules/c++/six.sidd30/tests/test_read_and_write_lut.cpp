@@ -77,7 +77,7 @@ std::string doRoundTrip(const std::string& siddPathname)
 {
     six::XMLControlRegistry xmlRegistry;
 
-    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
+    xmlRegistry.addCreator<six::sidd30::DerivedXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
@@ -119,7 +119,7 @@ nitf::LookupTable readLookupTable(const std::string& pathname)
 {
     six::XMLControlRegistry xmlRegistry;
 
-    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
+    xmlRegistry.addCreator<six::sidd30::DerivedXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);
@@ -172,7 +172,7 @@ mem::ScopedCopyablePtr<six::LUT> readLUT(const std::string& pathname)
 {
     six::XMLControlRegistry xmlRegistry;
 
-    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
+    xmlRegistry.addCreator<six::sidd30::DerivedXMLControl>();
 
     six::NITFReadControl reader;
     reader.setXMLControlRegistry(&xmlRegistry);

@@ -101,35 +101,35 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
-    <ClInclude Include="include\six\sidd\Annotations.h" />
-    <ClInclude Include="include\six\sidd\CompressedSIDDByteProvider.h" />
-    <ClInclude Include="include\six\sidd\Compression.h" />
-    <ClInclude Include="include\six\sidd\CropUtils.h" />
-    <ClInclude Include="include\six\sidd\DerivedClassification.h" />
-    <ClInclude Include="include\six\sidd\DerivedData.h" />
-    <ClInclude Include="include\six\sidd\DerivedDataBuilder.h" />
-    <ClInclude Include="include\six\sidd\DerivedXMLControl.h" />
-    <ClInclude Include="include\six\sidd\DerivedXMLParser.h" />
-    <ClInclude Include="include\six\sidd\DerivedXMLParser100.h" />
-    <ClInclude Include="include\six\sidd\DerivedXMLParser200.h" />
-    <ClInclude Include="include\six\sidd\DerivedXMLParser300.h" />
-    <ClInclude Include="include\six\sidd\DigitalElevationData.h" />
-    <ClInclude Include="include\six\sidd\Display.h" />
-    <ClInclude Include="include\six\sidd\DownstreamReprocessing.h" />
-    <ClInclude Include="include\six\sidd\Enums.h" />
-    <ClInclude Include="include\six\sidd\ExploitationFeatures.h" />
-    <ClInclude Include="include\six\sidd\Filter.h" />
-    <ClInclude Include="include\six\sidd\GeographicAndTarget.h" />
-    <ClInclude Include="include\six\sidd\GeoTIFFReadControl.h" />
-    <ClInclude Include="include\six\sidd\GeoTIFFWriteControl.h" />
-    <ClInclude Include="include\six\sidd\LookupTable.h" />
-    <ClInclude Include="include\six\sidd\Measurement.h" />
-    <ClInclude Include="include\six\sidd\ProductCreation.h" />
-    <ClInclude Include="include\six\sidd\ProductProcessing.h" />
-    <ClInclude Include="include\six\sidd\SFA.h" />
-    <ClInclude Include="include\six\sidd\SIDDByteProvider.h" />
-    <ClInclude Include="include\six\sidd\SIDDVersionUpdater.h" />
-    <ClInclude Include="include\six\sidd\Utilities.h" />
+    <ClInclude Include="include\six\sidd30\Annotations.h" />
+    <ClInclude Include="include\six\sidd30\CompressedSIDDByteProvider.h" />
+    <ClInclude Include="include\six\sidd30\Compression.h" />
+    <ClInclude Include="include\six\sidd30\CropUtils.h" />
+    <ClInclude Include="include\six\sidd30\DerivedClassification.h" />
+    <ClInclude Include="include\six\sidd30\DerivedData.h" />
+    <ClInclude Include="include\six\sidd30\DerivedDataBuilder.h" />
+    <ClInclude Include="include\six\sidd30\DerivedXMLControl.h" />
+    <ClInclude Include="include\six\sidd30\DerivedXMLParser.h" />
+    <ClInclude Include="include\six\sidd30\DerivedXMLParser100.h" />
+    <ClInclude Include="include\six\sidd30\DerivedXMLParser200.h" />
+    <ClInclude Include="include\six\sidd30\DerivedXMLParser300.h" />
+    <ClInclude Include="include\six\sidd30\DigitalElevationData.h" />
+    <ClInclude Include="include\six\sidd30\Display.h" />
+    <ClInclude Include="include\six\sidd30\DownstreamReprocessing.h" />
+    <ClInclude Include="include\six\sidd30\Enums.h" />
+    <ClInclude Include="include\six\sidd30\ExploitationFeatures.h" />
+    <ClInclude Include="include\six\sidd30\Filter.h" />
+    <ClInclude Include="include\six\sidd30\GeographicAndTarget.h" />
+    <ClInclude Include="include\six\sidd30\GeoTIFFReadControl.h" />
+    <ClInclude Include="include\six\sidd30\GeoTIFFWriteControl.h" />
+    <ClInclude Include="include\six\sidd30\LookupTable.h" />
+    <ClInclude Include="include\six\sidd30\Measurement.h" />
+    <ClInclude Include="include\six\sidd30\ProductCreation.h" />
+    <ClInclude Include="include\six\sidd30\ProductProcessing.h" />
+    <ClInclude Include="include\six\sidd30\SFA.h" />
+    <ClInclude Include="include\six\sidd30\SIDDByteProvider.h" />
+    <ClInclude Include="include\six\sidd30\SIDDVersionUpdater.h" />
+    <ClInclude Include="include\six\sidd30\Utilities.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +167,9 @@
   <ItemGroup>
     <ProjectReference Include="..\scene\scene.vcxproj">
       <Project>{1cfcde59-6410-4037-95eb-b37d31e10820}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\six.sidd\six.sidd.vcxproj">
+      <Project>{ddc587c2-53ba-44a9-94e7-07be52af3d0b}</Project>
     </ProjectReference>
     <ProjectReference Include="..\six\six.vcxproj">
       <Project>{62aad4dd-35ba-41a0-8263-1f4dfd755689}</Project>

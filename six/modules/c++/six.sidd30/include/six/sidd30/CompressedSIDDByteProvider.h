@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,15 +20,15 @@
  *
  */
 
-#ifndef __SIX_SIDD_COMPRESSED_SIDD_BYTE_PROVIDER_H__
-#define __SIX_SIDD_COMPRESSED_SIDD_BYTE_PROVIDER_H__
+#ifndef __SIX_SIDD30_COMPRESSED_SIDD_BYTE_PROVIDER_H__
+#define __SIX_SIDD30_COMPRESSED_SIDD_BYTE_PROVIDER_H__
 
 #include <six/CompressedByteProvider.h>
 #include <six/sidd30/DerivedData.h>
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 /*!
  * \class CompressedSIDDByteProvider

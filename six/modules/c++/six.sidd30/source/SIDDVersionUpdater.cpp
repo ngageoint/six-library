@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2020, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -28,48 +28,48 @@
 
 namespace
 {
-void populateFilter(six::sidd::Filter& filter)
+void populateFilter(six::sidd30::Filter& filter)
 {
     filter.filterName = "Placeholder";
-    filter.filterKernel.reset(new six::sidd::Filter::Kernel());
-    filter.filterKernel->custom.reset(new six::sidd::Filter::Kernel::Custom());
+    filter.filterKernel.reset(new six::sidd30::Filter::Kernel());
+    filter.filterKernel->custom.reset(new six::sidd30::Filter::Kernel::Custom());
     filter.filterKernel->custom->size = six::RowColInt(1, 1);
     filter.filterKernel->custom->filterCoef.resize(
             static_cast<size_t>(filter.filterKernel->custom->size.area()));
-    filter.operation = six::sidd::FilterOperation::CONVOLUTION;
+    filter.operation = six::sidd30::FilterOperation::CONVOLUTION;
 }
 
 void populateNoninteractiveProcessing(
-        six::sidd::NonInteractiveProcessing& processing)
+        six::sidd30::NonInteractiveProcessing& processing)
 {
     processing.rrds.downsamplingMethod =
-            six::sidd::DownsamplingMethod::DECIMATE;
+            six::sidd30::DownsamplingMethod::DECIMATE;
 
     processing.productGenerationOptions.dataRemapping.reset(
-            new six::sidd::LookupTable());
+            new six::sidd30::LookupTable());
     auto& lut = *processing.productGenerationOptions.dataRemapping;
     lut.lutName = "Placeholder";
-    lut.custom.reset(new six::sidd::LookupTable::Custom(1, 1));
+    lut.custom.reset(new six::sidd30::LookupTable::Custom(1, 1));
 }
 
-void populateInteractiveProcessing(six::sidd::InteractiveProcessing& processing)
+void populateInteractiveProcessing(six::sidd30::InteractiveProcessing& processing)
 {
     populateFilter(processing.geometricTransform.scaling.antiAlias);
     populateFilter(processing.geometricTransform.scaling.interpolation);
     processing.geometricTransform.orientation.shadowDirection =
-            six::sidd::ShadowDirection::RIGHT;
+            six::sidd30::ShadowDirection::RIGHT;
     processing.sharpnessEnhancement.modularTransferFunctionEnhancement.reset(
-            new six::sidd::Filter());
+            new six::sidd30::Filter());
     auto& mtfeFilter =
             *processing.sharpnessEnhancement.modularTransferFunctionEnhancement;
     populateFilter(mtfeFilter);
-    processing.dynamicRangeAdjustment.algorithmType = six::sidd::DRAType::NONE;
+    processing.dynamicRangeAdjustment.algorithmType = six::sidd30::DRAType::NONE;
 }
 }
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 SIDDVersionUpdater::SIDDVersionUpdater(DerivedData& derivedData,
                                        const std::string& targetVersion,
@@ -184,14 +184,14 @@ void SIDDVersionUpdater::updateSingleIncrement()
         // Display
         mData.display->nonInteractiveProcessing.resize(1);
         mData.display->nonInteractiveProcessing[0].reset(
-                new six::sidd::NonInteractiveProcessing());
+                new six::sidd30::NonInteractiveProcessing());
         populateNoninteractiveProcessing(
                 *mData.display->nonInteractiveProcessing[0]);
         emitWarning("Display.NoninteractiveProcessing");
 
         mData.display->interactiveProcessing.resize(1);
         mData.display->interactiveProcessing[0].reset(
-                new six::sidd::InteractiveProcessing());
+                new six::sidd30::InteractiveProcessing());
         populateInteractiveProcessing(*mData.display->interactiveProcessing[0]);
         emitWarning("Display.InteractiveProcessing");
     }

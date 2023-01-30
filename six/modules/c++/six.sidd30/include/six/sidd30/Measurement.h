@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -19,8 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_SIDD_MEASUREMENT_H__
-#define __SIX_SIDD_MEASUREMENT_H__
+#ifndef __SIX_SIDD30_MEASUREMENT_H__
+#define __SIX_SIDD30_MEASUREMENT_H__
 
 #include <gsl/gsl.h>
 
@@ -31,7 +31,7 @@
 namespace six
 {
 
-namespace sidd
+namespace sidd30
 {
 /*!
  *  \struct ProductPlane
@@ -40,7 +40,7 @@ namespace sidd
  *  The product plane definition for the product, defined by a row
  *  and column vector
  */
-struct ProductPlane
+struct ProductPlane final
 {
     //!  Constructor, undefined basis
     ProductPlane()
@@ -103,7 +103,7 @@ inline bool operator!=(const Projection& lhs, const Projection& rhs)
  *  Allows geo-referencing via polynomials
  *
  */
-struct PolynomialProjection : public Projection
+struct PolynomialProjection final : public Projection
 {
     //!  Initialize base class projection type
     PolynomialProjection()
@@ -179,7 +179,7 @@ private:
  *  to as GGD in the Design and Exploitation document.
  *
  */
-struct GeographicProjection : public MeasurableProjection
+struct GeographicProjection final : public MeasurableProjection
 {
     //!  Initialize base class projection type
     GeographicProjection()
@@ -211,7 +211,7 @@ private:
  *  referred to as CGD in the Design and Exploitation document.
  *
  */
-struct CylindricalProjection : public MeasurableProjection
+struct CylindricalProjection final : public MeasurableProjection
 {
 
     //!  Cylindrical projection creation (curvature is undefined)
@@ -258,7 +258,7 @@ private:
  *  Derived Projection for plane projection, PGD according to D&E
  *
  */
-struct PlaneProjection : public MeasurableProjection
+struct PlaneProjection final : public MeasurableProjection
 {
     //!  Constructor
     PlaneProjection()
@@ -292,7 +292,7 @@ private:
  *
  *  This contains information about the projection
  */
-struct Measurement
+struct Measurement final
 {
     //!  PGD, GGD or CGD according to D&E
     mem::ScopedCloneablePtr<Projection> projection;

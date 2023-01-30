@@ -70,15 +70,15 @@ static std::vector<std::filesystem::path> getSchemaPaths()
     return std::vector<std::filesystem::path> { schemaPath };
 }
 
-static std::unique_ptr<six::sidd::DerivedData> test_assert_round_trip(const std::string& testName,
-    const six::sidd::DerivedData& derivedData, const std::vector<std::filesystem::path>* pSchemaPaths)
+static std::unique_ptr<six::sidd30::DerivedData> test_assert_round_trip(const std::string& testName,
+    const six::sidd30::DerivedData& derivedData, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
-    auto strXML = six::sidd::Utilities::toXMLString(derivedData, pSchemaPaths);
+    auto strXML = six::sidd30::Utilities::toXMLString(derivedData, pSchemaPaths);
     TEST_ASSERT_FALSE(strXML.empty());
-    return six::sidd::Utilities::parseDataFromString(strXML, pSchemaPaths);
+    return six::sidd30::Utilities::parseDataFromString(strXML, pSchemaPaths);
 }
 
-inline static const six::UnmodeledS* get_Unmodeled(const six::sidd::DerivedData& derivedData, const std::string& strVersion)
+inline static const six::UnmodeledS* get_Unmodeled(const six::sidd30::DerivedData& derivedData, const std::string& strVersion)
 {
     if (strVersion != "3.0.0") // Unmodeled added in SIDD 3.0
     {
@@ -92,7 +92,7 @@ inline static const six::UnmodeledS* get_Unmodeled(const six::sidd::DerivedData&
 
 static void test_createFakeDerivedData_(const std::string& testName, const std::string& strVersion)
 {
-    const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData(strVersion);
+    const auto pFakeDerivedData = six::sidd30::Utilities::createFakeDerivedData(strVersion);
     auto Unmodeled = get_Unmodeled(*pFakeDerivedData, strVersion);
     TEST_ASSERT_NULL(Unmodeled); // not part of the fake data, only added in SIDD 3.0
 
@@ -127,7 +127,7 @@ static void test_assert_unmodeled_(const std::string& testName, const six::Unmod
     TEST_ASSERT_EQ(123.4, UnmodeledDecor->Ycol.CorrCoefZero);
     TEST_ASSERT_EQ(567.8, UnmodeledDecor->Ycol.DecorrRate);
 }
-static void test_assert_unmodeled(const std::string& testName, const six::sidd::DerivedData& derivedData)
+static void test_assert_unmodeled(const std::string& testName, const six::sidd30::DerivedData& derivedData)
 {
     auto&& errorStatistics = derivedData.errorStatistics;
     TEST_ASSERT(errorStatistics.get() != nullptr);
@@ -146,7 +146,7 @@ static void test_read_sidd_xml(const std::string& testName, const std::filesyste
     const auto pathname = get_sample_xml_path(path);
 
     // NULL schemaPaths, no validation
-    auto pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, nullptr /*pSchemaPaths*/);
+    auto pDerivedData = six::sidd30::Utilities::parseDataFromFile(pathname, nullptr /*pSchemaPaths*/);
     test_assert_unmodeled(testName, *pDerivedData);
 
     pDerivedData = test_assert_round_trip(testName , *pDerivedData, nullptr /*pSchemaPaths*/);
@@ -154,7 +154,7 @@ static void test_read_sidd_xml(const std::string& testName, const std::filesyste
 
     // validate XML against schema
     const auto schemaPaths = getSchemaPaths();
-    pDerivedData = six::sidd::Utilities::parseDataFromFile(pathname, &schemaPaths);
+    pDerivedData = six::sidd30::Utilities::parseDataFromFile(pathname, &schemaPaths);
     test_assert_unmodeled(testName, *pDerivedData);
 
     pDerivedData = test_assert_round_trip(testName, *pDerivedData, &schemaPaths);

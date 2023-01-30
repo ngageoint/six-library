@@ -4,7 +4,7 @@
 *
 * (C) Copyright 2004 - 2014, MDA Information Systems LLC
 *
-* six.sidd-c++ is free software; you can redistribute it and/or modify
+* six.sidd30-c++ is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Lesser General Public License as published by
 * the Free Software Foundation; either version 3 of the License, or
 * (at your option) any later version.
@@ -19,15 +19,15 @@
 * see <http://www.gnu.org/licenses/>.
 *
 */
-#ifndef __SIX_SIDD_ANNOTATIONS_H__
-#define __SIX_SIDD_ANNOTATIONS_H__
+#ifndef __SIX_SIDD30_ANNOTATIONS_H__
+#define __SIX_SIDD30_ANNOTATIONS_H__
 
 #include <import/six.h>
 #include "six/sidd30/SFA.h"
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 
 struct Annotation

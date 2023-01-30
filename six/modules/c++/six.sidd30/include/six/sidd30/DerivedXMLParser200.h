@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,15 +20,15 @@
  *
  */
 
-#ifndef __SIX_SIDD_DERIVED_XML_PARSER_200_H__
-#define __SIX_SIDD_DERIVED_XML_PARSER_200_H__
+#ifndef __SIX_SIDD30_DERIVED_XML_PARSER_200_H__
+#define __SIX_SIDD30_DERIVED_XML_PARSER_200_H__
 
 #include <six/sidd30/DerivedXMLParser.h>
 #include <six/GeoDataBase.h>
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 struct DerivedXMLParser200 : public DerivedXMLParser
 {
@@ -45,8 +45,8 @@ struct DerivedXMLParser200 : public DerivedXMLParser
     virtual DerivedData* fromXML(const xml::lite::Document* doc) const override;
     std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const override;
 
-    static void validateDRAFields(const six::sidd::DRAType&, bool hasDraParameters, bool hasDraOverrides);
-    static void validateDRAFields(const six::sidd::DynamicRangeAdjustment&);
+    static void validateDRAFields(const six::sidd30::DRAType&, bool hasDraParameters, bool hasDraOverrides);
+    static void validateDRAFields(const six::sidd30::DynamicRangeAdjustment&);
 
     static ProjectionType getProjectionType(const xml::lite::Element& measurementElem);
     static std::unique_ptr<LUT> parseSingleLUT(const std::string& lutStr, size_t size);

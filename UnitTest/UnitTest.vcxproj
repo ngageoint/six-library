@@ -315,6 +315,9 @@
     <ProjectReference Include="..\six\modules\c++\six.sicd\six.sicd.vcxproj">
       <Project>{34ac2314-fbd1-42ad-aaf4-0cebc6bf737e}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\six\modules\c++\six.sidd30\six.sidd30.vcxproj">
+      <Project>{09397390-b096-4961-8082-9bc3bc8a5b9b}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\six\modules\c++\six.sidd\six.sidd.vcxproj">
       <Project>{ddc587c2-53ba-44a9-94e7-07be52af3d0b}</Project>
     </ProjectReference>

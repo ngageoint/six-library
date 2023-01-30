@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is file is part of six.sidd-c++
+ * This file is file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -22,10 +22,10 @@
 #include "six/sidd30/ProductCreation.h"
 
 //using namespace six;
-//using namespace sidd;
+//using namespace sidd30;
 
 // Windows also has a ProcessorInformation in the API
-bool six::sidd::ProcessorInformation::operator==(const six::sidd::ProcessorInformation& rhs) const
+bool six::sidd30::ProcessorInformation::operator==(const six::sidd30::ProcessorInformation& rhs) const
 {
     return (application == rhs.application &&
         processingDateTime == rhs.processingDateTime &&
@@ -33,7 +33,7 @@ bool six::sidd::ProcessorInformation::operator==(const six::sidd::ProcessorInfor
         profile == rhs.profile);
 }
 
-bool six::sidd::ProductCreation::operator==(const six::sidd::ProductCreation& rhs) const
+bool six::sidd30::ProductCreation::operator==(const six::sidd30::ProductCreation& rhs) const
 {
     return (processorInformation == rhs.processorInformation &&
         classification == rhs.classification &&

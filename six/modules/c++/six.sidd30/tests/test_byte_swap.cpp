@@ -43,27 +43,27 @@ void generateData(std::unique_ptr<int16_t[]>& data)
     }
 }
 
-std::unique_ptr<six::sidd::DerivedData> createData()
+std::unique_ptr<six::sidd30::DerivedData> createData()
 {
-    std::unique_ptr<six::sidd::DerivedData> derivedData(new six::sidd::DerivedData());
-    derivedData->productCreation.reset(new six::sidd::ProductCreation());
+    std::unique_ptr<six::sidd30::DerivedData> derivedData(new six::sidd30::DerivedData());
+    derivedData->productCreation.reset(new six::sidd30::ProductCreation());
     derivedData->productCreation->classification.classification = "U";
-    derivedData->measurement.reset(new six::sidd::Measurement(six::ProjectionType::PLANE));
-    six::sidd::PlaneProjection* planeProjection =
-        (six::sidd::PlaneProjection*) derivedData->measurement->projection.get();
+    derivedData->measurement.reset(new six::sidd30::Measurement(six::ProjectionType::PLANE));
+    six::sidd30::PlaneProjection* planeProjection =
+        (six::sidd30::PlaneProjection*) derivedData->measurement->projection.get();
     planeProjection->timeCOAPoly = six::Poly2D(0, 0);
     planeProjection->timeCOAPoly[0][0] = 1;
     planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
     planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
     derivedData->measurement->arpPoly = six::PolyXYZ(0);
     derivedData->measurement->arpPoly[0] = six::Vector3(0.0);
-    derivedData->display.reset(new six::sidd::Display());
+    derivedData->display.reset(new six::sidd30::Display());
     derivedData->display->pixelType = six::PixelType::MONO16I;
     derivedData->setNumRows(10);
     derivedData->setNumCols(40);
-    derivedData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget());
+    derivedData->geographicAndTarget.reset(new six::sidd30::GeographicAndTarget());
     derivedData->geographicAndTarget->geographicCoverage.reset(
-            new six::sidd::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
+            new six::sidd30::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
     // Set image corners
     for (size_t ii = 0; ii < 4; ++ii)
     {
@@ -82,14 +82,14 @@ std::unique_ptr<six::sidd::DerivedData> createData()
             getCorner(ii).setLon(0);
     }
 
-    derivedData->exploitationFeatures.reset(new six::sidd::ExploitationFeatures());
+    derivedData->exploitationFeatures.reset(new six::sidd30::ExploitationFeatures());
     derivedData->exploitationFeatures->product.resize(1);
     derivedData->exploitationFeatures->product[0].resolution.row = 0;
     derivedData->exploitationFeatures->product[0].resolution.col = 0;
-    derivedData->exploitationFeatures->collections.push_back(mem::ScopedCopyablePtr<six::sidd::Collection>());
-    derivedData->exploitationFeatures->collections[0].reset(new six::sidd::Collection());
+    derivedData->exploitationFeatures->collections.push_back(mem::ScopedCopyablePtr<six::sidd30::Collection>());
+    derivedData->exploitationFeatures->collections[0].reset(new six::sidd30::Collection());
 
-    six::sidd::Collection* parent =
+    six::sidd30::Collection* parent =
         derivedData->exploitationFeatures->collections[0].get();
     parent->information.resolution.rg = 0;
     parent->information.resolution.az = 0;
@@ -97,7 +97,7 @@ std::unique_ptr<six::sidd::DerivedData> createData()
     parent->information.collectionDateTime = six::DateTime();
     parent->information.radarMode = six::RadarModeType::SPOTLIGHT;
     parent->information.sensorName.clear();
-    parent->geometry.reset(new six::sidd::Geometry());
+    parent->geometry.reset(new six::sidd30::Geometry());
 
     derivedData->setNumRows(DATA_LENGTH / 10);
     derivedData->setNumCols(DATA_LENGTH / derivedData->getNumRows());
@@ -174,7 +174,7 @@ int main(int /*argc*/, char** /*argv*/)
 {
     try
     {
-        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
+        six::XMLControlFactory::getInstance().addCreator<six::sidd30::DerivedXMLControl>();
 
         bool success = run(false, false) && run(true, false) &&
             run(false, true) && run(true, true);

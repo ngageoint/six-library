@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_DERIVED_XML_CONTROL_H__
-#define __SIX_DERIVED_XML_CONTROL_H__
+#ifndef SIX_six_sicd30_DerivedXMLControl_h_INCLUDED_
+#define SIX_six_sicd30_DerivedXMLControl_h_INCLUDED_
+#pragma once
 
 #include <six/XMLControl.h>
 #include <six/Enums.h>
@@ -29,7 +30,7 @@
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 /*!
  *  \class DerivedXMLControl
@@ -74,5 +75,4 @@ private:
 }
 }
 
-#endif
-
+#endif // SIX_six_sicd30_DerivedXMLControl_h_INCLUDED_

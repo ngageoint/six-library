@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -82,7 +82,7 @@ void parseXMLEntry(const tiff::IFDEntry *entry,
 }
 
 six::DataType
-six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
+six::sidd30::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
 {
     try
     {
@@ -132,7 +132,7 @@ inline std::unique_ptr<six::Data> fromXML_(six::XMLControl& xmlControl, const xm
     return xmlControl.fromXML(doc, pSchemaPaths);
 }
 template<typename TSchemaPaths, typename TCreateXmlParser>
-void six::sidd::GeoTIFFReadControl::load_(const std::string& fromFile, const TSchemaPaths& schemaPaths, TCreateXmlParser createXmlParser)
+void six::sidd30::GeoTIFFReadControl::load_(const std::string& fromFile, const TSchemaPaths& schemaPaths, TCreateXmlParser createXmlParser)
 {
     mReader.openFile(fromFile);
 
@@ -203,21 +203,21 @@ void six::sidd::GeoTIFFReadControl::load_(const std::string& fromFile, const TSc
         }
     }
 }
-void six::sidd::GeoTIFFReadControl::load(
+void six::sidd30::GeoTIFFReadControl::load(
     const std::string& fromFile,
     const std::vector<std::string>& schemaPaths)
 {
     const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(); };
     load_(fromFile, schemaPaths, createXmlParser);
 }
-void six::sidd::GeoTIFFReadControl::load(const std::filesystem::path& fromFile_, const std::vector< std::filesystem::path>* pSchemaPaths)
+void six::sidd30::GeoTIFFReadControl::load(const std::filesystem::path& fromFile_, const std::vector< std::filesystem::path>* pSchemaPaths)
 {
     const auto fromFile = fromFile_.string();
     const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(); };
     load_(fromFile, pSchemaPaths, createXmlParser);
 }
 
-six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
+six::UByte* six::sidd30::GeoTIFFReadControl::interleaved(six::Region& region,
                                                        size_t imIndex)
 {
     if (mReader.getImageCount() <= imIndex)
@@ -299,29 +299,29 @@ six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
     }
     return buffer;
 }
-void six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,
+void six::sidd30::GeoTIFFReadControl::interleaved(six::Region& region,
                                                        size_t imIndex, std::byte* &result)
 {
     result = reinterpret_cast<std::byte*>(interleaved(region, imIndex));
 }
 
-six::ReadControl* six::sidd::GeoTIFFReadControlCreator::newReadControl() const
+six::ReadControl* six::sidd30::GeoTIFFReadControlCreator::newReadControl() const
 {
     std::unique_ptr<six::ReadControl> retval;
     newReadControl(retval);
     return retval.release();
 }
-void six::sidd::GeoTIFFReadControlCreator::newReadControl(std::unique_ptr<six::ReadControl>& result) const
+void six::sidd30::GeoTIFFReadControlCreator::newReadControl(std::unique_ptr<six::ReadControl>& result) const
 {
-    result = std::unique_ptr<six::ReadControl>(new six::sidd::GeoTIFFReadControl());
+    result = std::unique_ptr<six::ReadControl>(new six::sidd30::GeoTIFFReadControl());
 }
 
 
-bool six::sidd::GeoTIFFReadControlCreator::supports(const std::string& filename) const
+bool six::sidd30::GeoTIFFReadControlCreator::supports(const std::string& filename) const
 {
     try
     {
-        six::sidd::GeoTIFFReadControl control;
+        six::sidd30::GeoTIFFReadControl control;
         return control.getDataType(filename) != DataType::NOT_SET;
     }
     catch (const except::Exception&)

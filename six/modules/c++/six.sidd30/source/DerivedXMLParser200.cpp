@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -63,35 +63,35 @@ void confirmNonNull(const SmartPtrT& ptr,
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 
-void DerivedXMLParser200::validateDRAFields(const six::sidd::DRAType& algorithmType,
+void DerivedXMLParser200::validateDRAFields(const six::sidd30::DRAType& algorithmType,
                        bool hasDraParameters,
                        bool hasDraOverrides)
 {
-    if (algorithmType == six::sidd::DRAType::AUTO &&
+    if (algorithmType == six::sidd30::DRAType::AUTO &&
         !hasDraParameters)
     {
         throw except::Exception(Ctxt(
             "DRAParameters required for algorithmType AUTO"));
     }
 
-    if (algorithmType != six::sidd::DRAType::AUTO && hasDraParameters)
+    if (algorithmType != six::sidd30::DRAType::AUTO && hasDraParameters)
     {
         throw except::Exception(Ctxt(
             "DRAParameters invalid for algorithmType " +
             algorithmType.toString()));
     }
 
-    if (algorithmType == six::sidd::DRAType::NONE && hasDraOverrides)
+    if (algorithmType == six::sidd30::DRAType::NONE && hasDraOverrides)
     {
         throw except::Exception(Ctxt(
             "DRAOverrides invalid for algorithmType " +
             algorithmType.toString()));
     }
 }
-void DerivedXMLParser200::validateDRAFields(const six::sidd::DynamicRangeAdjustment& adjust)
+void DerivedXMLParser200::validateDRAFields(const six::sidd30::DynamicRangeAdjustment& adjust)
 {
     validateDRAFields(adjust.algorithmType,
         adjust.draParameters.get() ? true : false,

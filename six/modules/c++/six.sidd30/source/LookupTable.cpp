@@ -3,7 +3,7 @@
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 LookupTable::Predefined::Predefined() :
     remapFamily(six::Init::undefined<size_t>()),

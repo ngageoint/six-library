@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -70,11 +70,11 @@ struct GetPixelType<uint16_t>
 
 // Create dummy SIDD data
 template <typename DataTypeT>
-std::unique_ptr<six::sidd::DerivedData>
+std::unique_ptr<six::sidd30::DerivedData>
 createData(const types::RowCol<size_t>& dims)
 {
-    std::unique_ptr<six::sidd::DerivedData> data =
-            six::sidd::Utilities::createFakeDerivedData();
+    std::unique_ptr<six::sidd30::DerivedData> data =
+            six::sidd30::Utilities::createFakeDerivedData();
     setExtent(*data, dims);
     data->setPixelType(GetPixelType<DataTypeT>::getPixelType());
     return data;
@@ -318,7 +318,7 @@ private:
 
     // Blocks if necessary
     const DataTypeT*
-    getImage(const six::sidd::SIDDByteProvider& siddByteProvider,
+    getImage(const six::sidd30::SIDDByteProvider& siddByteProvider,
              std::vector<DataTypeT>& blockedImage)
     {
         const DataTypeT* retImage;
@@ -351,7 +351,7 @@ private:
     const EnsureFileCleanup mNormalFileCleanup;
 
     const types::RowCol<size_t> mDims;
-    std::unique_ptr<six::sidd::DerivedData> mData;
+    std::unique_ptr<six::sidd30::DerivedData> mData;
     std::vector<DataTypeT> mImage;
     std::vector<DataTypeT> mBigEndianImage;
 
@@ -375,7 +375,7 @@ void Tester<DataTypeT>::normalWrite()
     container->addData(mData->clone());
 
     six::XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
+    xmlRegistry.addCreator<six::sidd30::DerivedXMLControl>();
 
     six::Options options;
     setWriterOptions(options);
@@ -394,7 +394,7 @@ void Tester<DataTypeT>::testSingleWrite()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
-    const six::sidd::SIDDByteProvider siddByteProvider(
+    const six::sidd30::SIDDByteProvider siddByteProvider(
             *mData,
             mSchemaPaths,
             mNumRowsPerBlock,
@@ -421,7 +421,7 @@ void Tester<DataTypeT>::testMultipleWrites()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
-    const six::sidd::SIDDByteProvider siddByteProvider(
+    const six::sidd30::SIDDByteProvider siddByteProvider(
             *mData,
             mSchemaPaths,
             mNumRowsPerBlock,
@@ -543,7 +543,7 @@ void Tester<DataTypeT>::testMultipleWritesBlocked(size_t blocksPerWrite)
 
     io::FileOutputStream outStream(mTestPathname);
 
-    const six::sidd::SIDDByteProvider siddByteProvider(
+    const six::sidd30::SIDDByteProvider siddByteProvider(
             *mData,
             mSchemaPaths,
             mNumRowsPerBlock,
@@ -633,7 +633,7 @@ void Tester<DataTypeT>::testOneWritePerRow()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
-    six::sidd::SIDDByteProvider siddByteProvider(
+    six::sidd30::SIDDByteProvider siddByteProvider(
             *mData,
             mSchemaPaths,
             mNumRowsPerBlock,

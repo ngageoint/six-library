@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __SIX_SIDD_CROP_UTILS_H__
-#define __SIX_SIDD_CROP_UTILS_H__
+#ifndef __SIX_SIDD30_CROP_UTILS_H__
+#define __SIX_SIDD30_CROP_UTILS_H__
 
 #include <string>
 #include <vector>
@@ -31,7 +31,7 @@
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 /*
  * Reads in an AOI from a SIDD and creates a cropped SIDD, updating the

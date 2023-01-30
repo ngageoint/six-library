@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_GEOGRAPHIC_AND_TARGET_H__
-#define __SIX_GEOGRAPHIC_AND_TARGET_H__
+#ifndef SIX_six_sicd30_GeographicAndTarget_h_INCLUDED_
+#define SIX_six_sicd30_GeographicAndTarget_h_INCLUDED_
+#pragma once
 
 #include <memory>
 
@@ -32,7 +33,7 @@
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 /*!
  *  \struct TargetInformation
@@ -40,7 +41,7 @@ namespace sidd
  *
  *  Provides target specific geographic information.
  */
-struct TargetInformation
+struct TargetInformation final
 {
     //! SIDD Identifier set (min occurs one, max unbounded)
     ParameterCollection identifiers;
@@ -76,7 +77,7 @@ struct TargetInformation
  *  The GeographicInformation object gives specifics about the geo-region
  *
  */
-struct GeographicInformation
+struct GeographicInformation final
 {
     //!  SIDD CountryCode Country code (1+)
     std::vector<std::string> countryCodes;
@@ -112,9 +113,8 @@ struct GeographicInformation
  *  This object contains the information associated with some geographic
  *  coverage
  */
-class GeographicCoverage
+struct GeographicCoverage final
 {
-public:
     //!  Constructor requires a RegionType to properly initialize
     GeographicCoverage(RegionType regionType);
 
@@ -154,9 +154,8 @@ public:
  *  Note: Only used by SIDD 1.0
  *
  */
-class GeographicAndTarget
+struct GeographicAndTarget final
 {
-public:
     // This section is used for SIDD 1.0
 
     //! Default constructor
@@ -187,4 +186,4 @@ public:
 }
 }
 
-#endif
+#endif // SIX_six_sicd30_GeographicAndTarget_h_INCLUDED_

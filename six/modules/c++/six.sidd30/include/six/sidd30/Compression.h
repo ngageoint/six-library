@@ -1,5 +1,5 @@
-#ifndef __SIX_SIDD_COMPRESSION_H__
-#define __SIX_SIDD_COMPRESSION_H__
+#ifndef __SIX_SIDD30_COMPRESSION_H__
+#define __SIX_SIDD30_COMPRESSION_H__
 
 #include <vector>
 
@@ -7,7 +7,7 @@
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 struct J2KCompression
 {

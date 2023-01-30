@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -22,7 +22,7 @@
 #include "six/sidd30/DerivedDataBuilder.h"
 
 using namespace six;
-using namespace six::sidd;
+using namespace six::sidd30;
 
 DerivedDataBuilder::DerivedDataBuilder() :
     mData(new DerivedData()), mAdopt(true)

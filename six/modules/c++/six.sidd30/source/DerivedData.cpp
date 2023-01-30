@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -26,7 +26,7 @@
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 const char DerivedData::VENDOR_ID[] = "MDA-IS";
 
@@ -133,8 +133,8 @@ DerivedData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
                 "Currently require a measurable projection type"));
     }
 
-    const six::sidd::MeasurableProjection* projection =
-        dynamic_cast<six::sidd::MeasurableProjection*>(
+    const six::sidd30::MeasurableProjection* projection =
+        dynamic_cast<six::sidd30::MeasurableProjection*>(
                     measurement->projection.get());
     const types::RowCol<double> ctrPt = projection->referencePoint.rowCol;
 

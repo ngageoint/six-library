@@ -4,7 +4,7 @@
 *
 * (C) Copyright 2004 - 2017, MDA Information Systems LLC
 *
-* six.sidd-c++ is free software; you can redistribute it and/or modify
+* six.sidd30-c++ is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Lesser General Public License as published by
 * the Free Software Foundation; either version 3 of the License, or
 * (at your option) any later version.
@@ -212,7 +212,7 @@ int main(int argc, char** argv)
 
         const std::string siddPathname(options->get<std::string>("sidd"));
 
-        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
+        six::XMLControlFactory::getInstance().addCreator<six::sidd30::DerivedXMLControl>();
 
         std::unique_ptr<six::Data> sidd = read(siddPathname);
 

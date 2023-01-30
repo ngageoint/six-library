@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -39,7 +39,7 @@ typedef xml::lite::Attributes XMLAttributes;
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 const char DerivedXMLParser::SFA_URI[] = "urn:SFA:1.2.0";
 
@@ -1189,7 +1189,7 @@ XMLElem DerivedXMLParser::createFootprint(const std::string& name,
 }
 
 XMLElem DerivedXMLParser::createSFADatum(const std::string& name,
-                                         const six::sidd::SFADatum& datum,
+                                         const six::sidd30::SFADatum& datum,
                                          XMLElem parent) const
 {
     XMLElem datumElem = newElement(name, SFA_URI, parent);
@@ -1432,7 +1432,7 @@ void DerivedXMLParser::parseAnnotationFromXML(
     XMLElem spatialElem = getOptional(elem, "SpatialReferenceSystem");
     if (spatialElem)
     {
-        a->spatialReferenceSystem.reset(new six::sidd::SFAReferenceSystem());
+        a->spatialReferenceSystem.reset(new six::sidd30::SFAReferenceSystem());
 
         // choice
         XMLElem tmpElem = getOptional(spatialElem,
@@ -1616,7 +1616,7 @@ XMLElem DerivedXMLParser::convertAnnotationToXML(
                                       getDefaultURI(), annElem);
 
         if (a->spatialReferenceSystem->coordinateSystem->getType()
-                == six::sidd::SFAProjectedCoordinateSystem::TYPE_NAME)
+                == six::sidd30::SFAProjectedCoordinateSystem::TYPE_NAME)
         {
             XMLElem coordElem = newElement("ProjectedCoordinateSystem", SFA_URI, spRefElem);
 
@@ -1647,14 +1647,14 @@ XMLElem DerivedXMLParser::convertAnnotationToXML(
                          coordSys->linearUnit, coordElem);
         }
         else if (a->spatialReferenceSystem->coordinateSystem->getType()
-                    == six::sidd::SFAGeographicCoordinateSystem::TYPE_NAME)
+                    == six::sidd30::SFAGeographicCoordinateSystem::TYPE_NAME)
         {
             const SFAGeographicCoordinateSystem* const coordSys
                     = dynamic_cast<SFAGeographicCoordinateSystem*>(a->spatialReferenceSystem->coordinateSystem.get());
             convertGeographicCoordinateSystemToXML(coordSys, spRefElem);
         }
         else if (a->spatialReferenceSystem->coordinateSystem->getType()
-                    == six::sidd::SFAGeocentricCoordinateSystem::TYPE_NAME)
+                    == six::sidd30::SFAGeocentricCoordinateSystem::TYPE_NAME)
         {
             XMLElem coordElem = newElement("GeocentricCoordinateSystem",
                                           SFA_URI, spRefElem);

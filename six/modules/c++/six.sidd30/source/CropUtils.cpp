@@ -60,12 +60,12 @@ private:
 
 struct ChipCoordinateToFullImageCoordinate final
 {
-    ChipCoordinateToFullImageCoordinate(const six::sidd::DerivedData& data)
+    ChipCoordinateToFullImageCoordinate(const six::sidd30::DerivedData& data)
     {
         if (data.downstreamReprocessing.get() &&
             data.downstreamReprocessing->geometricChip.get())
         {
-            mChip.reset(new six::sidd::GeometricChip(
+            mChip.reset(new six::sidd30::GeometricChip(
                     *data.downstreamReprocessing->geometricChip));
         }
     }
@@ -92,13 +92,13 @@ struct ChipCoordinateToFullImageCoordinate final
     }
 
 private:
-    std::unique_ptr<const six::sidd::GeometricChip> mChip;
+    std::unique_ptr<const six::sidd30::GeometricChip> mChip;
 };
 
 struct PixelToLatLon final
 {
-    PixelToLatLon(const six::sidd::DerivedData& data) :
-        mGridTransform(six::sidd::Utilities::getGridECEFTransform(&data)),
+    PixelToLatLon(const six::sidd30::DerivedData& data) :
+        mGridTransform(six::sidd30::Utilities::getGridECEFTransform(&data)),
         mRefPoint(data.measurement->projection->referencePoint.rowCol),
         mChipToFull(data)
     {
@@ -126,7 +126,7 @@ private:
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 void cropSIDD(const std::string& inPathname,
               const std::vector<std::string>& schemaPaths,
@@ -150,8 +150,8 @@ void cropSIDD(const std::string& inPathname,
         six::Data* const dataPtr = container->getData(ii);
         if (dataPtr->getDataType() == six::DataType::DERIVED)
         {
-            six::sidd::DerivedData* const data =
-                dynamic_cast<six::sidd::DerivedData*>(dataPtr);
+            six::sidd30::DerivedData* const data =
+                dynamic_cast<six::sidd30::DerivedData*>(dataPtr);
 
             // Make sure the AOI is in bounds
             const auto origDims = getExtent(*data);
@@ -208,12 +208,12 @@ void cropSIDD(const std::string& inPathname,
             if (data->downstreamReprocessing.get() == nullptr)
             {
                 data->downstreamReprocessing.reset(
-                        new six::sidd::DownstreamReprocessing());
+                        new six::sidd30::DownstreamReprocessing());
             }
             if (data->downstreamReprocessing->geometricChip.get() == nullptr)
             {
                 data->downstreamReprocessing->geometricChip.reset(
-                        new six::sidd::GeometricChip());
+                        new six::sidd30::GeometricChip());
             }
             *data->downstreamReprocessing->geometricChip = chip;
 

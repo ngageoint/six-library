@@ -77,13 +77,13 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
 {
     six::PixelType pixelType = six::PixelType::MONO8I;
 
-    six::sidd::DerivedDataBuilder siddBuilder;
+    six::sidd30::DerivedDataBuilder siddBuilder;
     siddBuilder.addDisplay(pixelType);
     siddBuilder.addGeographicAndTarget(six::RegionType::GEOGRAPHIC_INFO);
     siddBuilder.addMeasurement(six::ProjectionType::PLANE).
             addExploitationFeatures(1);
 
-    six::sidd::DerivedData* siddData = siddBuilder.steal();
+    six::sidd30::DerivedData* siddData = siddBuilder.steal();
     std::unique_ptr<six::Data> siddDataScoped(siddData);
 
     setExtent(*siddData, dims);
@@ -102,8 +102,8 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
             six::MagnificationMethod::NEAREST_NEIGHBOR;
 
     // We know this is PGD so this is safe
-    six::sidd::PlaneProjection* const planeProjection =
-        static_cast<six::sidd::PlaneProjection*>(
+    six::sidd30::PlaneProjection* const planeProjection =
+        static_cast<six::sidd30::PlaneProjection*>(
                 siddData->measurement->projection.get());
 
     planeProjection->timeCOAPoly = six::Poly2D(0, 0);
@@ -113,7 +113,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
     planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
 
-    six::sidd::Collection* const parent =
+    six::sidd30::Collection* const parent =
             siddData->exploitationFeatures->collections[0].get();
     parent->information.resolution.rg = 0;
     parent->information.resolution.az = 0;
@@ -127,7 +127,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     siddData->exploitationFeatures->product[0].resolution.row = 0;
     siddData->exploitationFeatures->product[0].resolution.col = 0;
     siddData->geographicAndTarget->geographicCoverage.reset(
-            new six::sidd::GeographicCoverage(
+            new six::sidd30::GeographicCoverage(
             six::RegionType::GEOGRAPHIC_INFO));
 
     six::LatLonCorners& corners =
@@ -152,7 +152,7 @@ struct TestHelper
     TestHelper() :
         mPathname("test_read_sidd_legend.nitf")
     {
-        mXmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
+        mXmlRegistry.addCreator<six::sidd30::DerivedXMLControl>();
 
         mMonoLegend.setDims(types::RowCol<size_t>(12, 34));
         mMonoLegend.mType = six::PixelType::MONO8I;
@@ -314,20 +314,20 @@ TEST_CASE(testRead)
 
 TEST_CASE(test_getParser)
 {
-    auto pParser = six::sidd::DerivedXMLControl::getParser_("1.0.0");
+    auto pParser = six::sidd30::DerivedXMLControl::getParser_("1.0.0");
     TEST_ASSERT(pParser.get() != nullptr);
 
-    pParser = six::sidd::DerivedXMLControl::getParser_("2.0.0");
+    pParser = six::sidd30::DerivedXMLControl::getParser_("2.0.0");
     TEST_ASSERT(pParser.get() != nullptr);
 
-    pParser = six::sidd::DerivedXMLControl::getParser_("3.0.0");
+    pParser = six::sidd30::DerivedXMLControl::getParser_("3.0.0");
     TEST_ASSERT(pParser.get() != nullptr);
     
-    TEST_EXCEPTION(six::sidd::DerivedXMLControl::getParser_("1.1.0"));
+    TEST_EXCEPTION(six::sidd30::DerivedXMLControl::getParser_("1.1.0"));
 
     try
     {
-        pParser = six::sidd::DerivedXMLControl::getParser_("1.2.3");
+        pParser = six::sidd30::DerivedXMLControl::getParser_("1.2.3");
         TEST_ASSERT_FALSE(true); // should never get here
     }
     catch (const except::Exception& ex)

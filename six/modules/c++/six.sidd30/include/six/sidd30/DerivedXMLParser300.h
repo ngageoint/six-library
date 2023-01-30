@@ -5,7 +5,7 @@
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
  * (C) Copyright 2021, Maxar Technologies, Inc.
  *
- * six.sidd-c++ is free software; you can redistribute it and/or modify
+ * six.sidd30-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -29,7 +29,7 @@
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 struct DerivedXMLParser300 final : public DerivedXMLParser
 {

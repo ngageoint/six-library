@@ -28,7 +28,7 @@
 #include <six/NITFReadControl.h>
 #include <six/NITFWriteControl.h>
 #include <six/NITFHeaderCreator.h>
-#include <six/sidd/SIDDByteProvider.h>
+#include <six/sidd30/SIDDByteProvider.h>
 #include <six/XMLControlFactory.h>
 #include <six/sidd30/DerivedXMLControl.h>
 

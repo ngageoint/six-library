@@ -2,7 +2,7 @@
 
 namespace six
 {
-namespace sidd
+namespace sidd30
 {
 J2KCompression::Layer::Layer() :
     bitRate(0.0)
