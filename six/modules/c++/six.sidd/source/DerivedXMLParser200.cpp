@@ -897,15 +897,13 @@ XMLElem DerivedXMLParser200::convertDerivedClassificationToXML(
         XMLElem parent) const
 {
     assert(parent != nullptr);
-    return &convertDerivedClassificationToXML(*this, classification, *parent);
+    return &convertDerivedClassificationToXML(*this, classification, getISMUri(), *parent);
 }
 xml::lite::Element& DerivedXMLParser200::convertDerivedClassificationToXML(const DerivedXMLParser& parser,
-    const DerivedClassification& classification, xml::lite::Element& parent)
+    const DerivedClassification& classification, const xml::lite::Uri& ismUri, xml::lite::Element& parent)
 {
     auto& classElem = parser.newElement("Classification", parent);
     auto classElem_ = &classElem;
-
-    const auto ismUri = getISMUri();
 
     parser.common().addParameters("SecurityExtension",
                     classification.securityExtensions,

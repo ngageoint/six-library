@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __SIX_SIDD_DERIVED_XML_PARSER_200_H__
-#define __SIX_SIDD_DERIVED_XML_PARSER_200_H__
+#ifndef SIX_six_sidd_DerivedXMLParser200_h_INCLUDED_
+#define SIX_six_sidd_DerivedXMLParser200_h_INCLUDED_
+#pragma once
 
 #include <six/sidd/DerivedXMLParser.h>
 #include <six/GeoDataBase.h>
@@ -61,7 +62,7 @@ struct DerivedXMLParser200 final : public DerivedXMLParser
         const GeoDataBase&, xml::lite::Element& parent);
 
     static xml::lite::Element& convertDerivedClassificationToXML(const DerivedXMLParser&,
-        const DerivedClassification&, xml::lite::Element& parent);
+        const DerivedClassification&, const xml::lite::Uri& ismUri, xml::lite::Element& parent);
 
     static xml::lite::Element& convertMeasurementToXML(const DerivedXMLParser&,
         const Measurement&, xml::lite::Element& parent);
@@ -197,4 +198,4 @@ private:
 }
 }
 
-#endif
+#endif // SIX_six_sidd_DerivedXMLParser200_h_INCLUDED_
