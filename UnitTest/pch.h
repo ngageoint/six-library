@@ -76,8 +76,9 @@
 
 #include <import/scene.h>
 #include <import/six.h>
-#include <import./six/sicd.h>
-#include <import./six/sidd.h>
+#include <import/six/sicd.h>
+#include <import/six/sidd.h>
+#include <import/six/sidd30.h>
 #include <import/cphd.h>
 #include <import/cphd03.h>
 
@@ -99,6 +100,7 @@
 
 #include "six_Test.h"
 #include "sidd_Test.h"
+#include "sidd30_Test.h"
 #include "sicd_Test.h"
 #include "cphd_Test.h"
 #include "cphd03_Test.h"

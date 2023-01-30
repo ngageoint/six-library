@@ -12,7 +12,6 @@ coda_add_module(
         source/DerivedXMLParser.cpp
         source/DerivedXMLParser100.cpp
         source/DerivedXMLParser200.cpp
-        source/DerivedXMLParser300.cpp
         source/DigitalElevationData.cpp
         source/Display.cpp
         source/DownstreamReprocessing.cpp
