@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2018, MDA Information Systems LLC
@@ -24,7 +24,7 @@
 #define __SIX_SIDD_COMPRESSED_SIDD_BYTE_PROVIDER_H__
 
 #include <six/CompressedByteProvider.h>
-#include <six/sidd/DerivedData.h>
+#include <six/sidd30/DerivedData.h>
 
 namespace six
 {

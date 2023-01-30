@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -30,7 +30,7 @@
 #include <import/scene.h>
 #include <types/RgAz.h>
 #include <six/Utilities.h>
-#include <six/sidd/DerivedData.h>
+#include <six/sidd30/DerivedData.h>
 
 namespace six
 {

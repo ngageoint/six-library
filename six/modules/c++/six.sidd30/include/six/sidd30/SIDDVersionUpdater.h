@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2020, MDA Information Systems LLC
@@ -23,7 +23,7 @@
 #define __SIX_SIDD_VERSION_UPDATER_H__
 
 #include <six/VersionUpdater.h>
-#include <six/sidd/DerivedData.h>
+#include <six/sidd30/DerivedData.h>
 #include <vector>
 #include <string>
 

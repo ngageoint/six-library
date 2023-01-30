@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -32,7 +32,7 @@
 #include "gsl/gsl.h"
 #include "scene/GridECEFTransform.h"
 #include "scene/Utilities.h"
-#include "six/sidd/GeoTIFFWriteControl.h"
+#include "six/sidd30/GeoTIFFWriteControl.h"
 
 namespace fs = std::filesystem;
 

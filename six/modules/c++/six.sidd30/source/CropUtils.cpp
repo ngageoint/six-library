@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <six/sidd/CropUtils.h>
+#include <six/sidd30/CropUtils.h>
 
 #include <memory>
 #include <vector>
@@ -30,8 +30,8 @@
 #include <mem/ScopedArray.h>
 #include <six/NITFReadControl.h>
 #include <six/NITFWriteControl.h>
-#include <six/sidd/Utilities.h>
-#include <six/sidd/DerivedData.h>
+#include <six/sidd30/Utilities.h>
+#include <six/sidd30/DerivedData.h>
 
 namespace
 {

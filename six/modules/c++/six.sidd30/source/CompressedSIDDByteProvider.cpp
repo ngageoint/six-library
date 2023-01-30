@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2018, MDA Information Systems LLC
@@ -20,8 +20,8 @@
  *
  */
 
-#include <six/sidd/DerivedXMLControl.h>
-#include <six/sidd/CompressedSIDDByteProvider.h>
+#include <six/sidd30/DerivedXMLControl.h>
+#include <six/sidd30/CompressedSIDDByteProvider.h>
 
 namespace six
 {

@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sidd/SFA.h"
+#include "six/sidd30/SFA.h"
 
 const char six::sidd::SFAPoint::TYPE_NAME[] = "Point";
 const char six::sidd::SFALineString::TYPE_NAME[] = "LineString";

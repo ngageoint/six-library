@@ -1,5 +1,5 @@
 /* =========================================================================
-* This file is part of six.sidd-c++
+* This file is part of six.sidd30-c++
 * =========================================================================
 *
 * (C) Copyright 2004 - 2017, MDA Information Systems LLC

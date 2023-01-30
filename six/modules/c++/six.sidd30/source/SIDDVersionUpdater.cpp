@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2020, MDA Information Systems LLC
@@ -22,8 +22,8 @@
 #include <logging/Logger.h>
 #include <scene/SceneGeometry.h>
 #include <six/VersionUpdater.h>
-#include <six/sidd/SIDDVersionUpdater.h>
-#include <six/sidd/Utilities.h>
+#include <six/sidd30/SIDDVersionUpdater.h>
+#include <six/sidd30/Utilities.h>
 #include <cassert>
 
 namespace

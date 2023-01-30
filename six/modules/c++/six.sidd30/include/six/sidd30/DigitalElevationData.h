@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
@@ -25,7 +25,7 @@
 #include <string>
 
 #include <six/Types.h>
-#include <six/sidd/Enums.h>
+#include <six/sidd30/Enums.h>
 
 namespace six
 {

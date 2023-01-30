@@ -1,4 +1,4 @@
-#include <six/sidd/Compression.h>
+#include <six/sidd30/Compression.h>
 
 namespace six
 {

@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -20,7 +20,7 @@
  *
  */
 #include "six/NITFImageInfo.h"
-#include "six/sidd/DerivedClassification.h"
+#include "six/sidd30/DerivedClassification.h"
 
 namespace six
 {

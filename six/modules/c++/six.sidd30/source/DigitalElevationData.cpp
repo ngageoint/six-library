@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
@@ -21,7 +21,7 @@
  */
 
 #include <six/Init.h>
-#include <six/sidd/DigitalElevationData.h>
+#include <six/sidd30/DigitalElevationData.h>
 
 namespace six
 {

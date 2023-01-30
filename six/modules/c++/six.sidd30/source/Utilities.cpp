@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -19,15 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sidd/Utilities.h"
+#include "six/sidd30/Utilities.h"
 
 #include <stdexcept>
 
 #include <str/EncodedStringView.h>
 
 #include "six/Utilities.h"
-#include "six/sidd/DerivedXMLControl.h"
-#include "six/sidd/DerivedDataBuilder.h"
+#include "six/sidd30/DerivedXMLControl.h"
+#include "six/sidd30/DerivedDataBuilder.h"
 
 namespace
 {

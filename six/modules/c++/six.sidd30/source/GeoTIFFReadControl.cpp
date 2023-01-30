@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -28,7 +28,7 @@
 #include <str/EncodedStringView.h>
 #include <gsl/gsl.h>
 #include <mem/ScopedArray.h>
-#include "six/sidd/GeoTIFFReadControl.h"
+#include "six/sidd30/GeoTIFFReadControl.h"
 #include "six/XMLControlFactory.h"
 #include <six/XmlLite.h>
 

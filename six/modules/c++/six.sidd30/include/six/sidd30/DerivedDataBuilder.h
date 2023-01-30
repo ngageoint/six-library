@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -23,7 +23,7 @@
 #ifndef __SIX_DERIVED_DATA_BUILDER_H__
 #define __SIX_DERIVED_DATA_BUILDER_H__
 
-#include "six/sidd/DerivedData.h"
+#include "six/sidd30/DerivedData.h"
 
 namespace six
 {

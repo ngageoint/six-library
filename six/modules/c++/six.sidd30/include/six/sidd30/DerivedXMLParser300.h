@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
@@ -24,7 +24,7 @@
 #ifndef SIX_sidd_DerivedXMLParser300_h_INCLUDED_
 #define SIX_sidd_DerivedXMLParser300_h_INCLUDED_
 
-#include <six/sidd/DerivedXMLParser.h>
+#include <six/sidd30/DerivedXMLParser.h>
 #include <six/GeoDataBase.h>
 
 namespace six

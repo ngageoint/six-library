@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
@@ -23,8 +23,8 @@
 #include <sstream>
 
 #include <six/SICommonXMLParser10x.h>
-#include <six/sidd/DerivedDataBuilder.h>
-#include <six/sidd/DerivedXMLParser200.h>
+#include <six/sidd30/DerivedDataBuilder.h>
+#include <six/sidd30/DerivedXMLParser200.h>
 
 namespace
 {

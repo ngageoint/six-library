@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include "six/sidd/ProductCreation.h"
+#include "six/sidd30/ProductCreation.h"
 
 //using namespace six;
 //using namespace sidd;

@@ -1,5 +1,5 @@
 #include <six/Init.h>
-#include <six/sidd/LookupTable.h>
+#include <six/sidd30/LookupTable.h>
 
 namespace six
 {

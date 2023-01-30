@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
@@ -22,7 +22,7 @@
 #ifndef __SIX_SIDD_FILTER_H__
 #define __SIX_SIDD_FILTER_H__
 
-#include <six/sidd/Enums.h>
+#include <six/sidd30/Enums.h>
 
 namespace six
 {

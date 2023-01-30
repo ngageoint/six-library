@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -24,22 +24,22 @@
 
 #include <import/six.h>
 
-#include "six/sidd/Annotations.h"
-#include "six/sidd/Compression.h"
-#include "six/sidd/CropUtils.h"
-#include "six/sidd/DerivedData.h"
-#include "six/sidd/DerivedDataBuilder.h"
-#include "six/sidd/DerivedXMLControl.h"
-#include "six/sidd/Display.h"
-#include "six/sidd/DownstreamReprocessing.h"
-#include "six/sidd/ExploitationFeatures.h"
-#include "six/sidd/GeographicAndTarget.h"
-#include "six/sidd/GeoTIFFReadControl.h"
-#include "six/sidd/GeoTIFFWriteControl.h"
-#include "six/sidd/ProductCreation.h"
-#include "six/sidd/ProductProcessing.h"
-#include "six/sidd/SFA.h"
-#include "six/sidd/Utilities.h"
+#include "six/sidd30/Annotations.h"
+#include "six/sidd30/Compression.h"
+#include "six/sidd30/CropUtils.h"
+#include "six/sidd30/DerivedData.h"
+#include "six/sidd30/DerivedDataBuilder.h"
+#include "six/sidd30/DerivedXMLControl.h"
+#include "six/sidd30/Display.h"
+#include "six/sidd30/DownstreamReprocessing.h"
+#include "six/sidd30/ExploitationFeatures.h"
+#include "six/sidd30/GeographicAndTarget.h"
+#include "six/sidd30/GeoTIFFReadControl.h"
+#include "six/sidd30/GeoTIFFWriteControl.h"
+#include "six/sidd30/ProductCreation.h"
+#include "six/sidd30/ProductProcessing.h"
+#include "six/sidd30/SFA.h"
+#include "six/sidd30/Utilities.h"
 
 #endif
 

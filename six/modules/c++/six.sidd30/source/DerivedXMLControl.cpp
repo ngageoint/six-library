@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -26,11 +26,11 @@
 
 #include <six/Enums.h>
 
-#include <six/sidd/DerivedXMLControl.h>
-#include <six/sidd/DerivedData.h>
-#include <six/sidd/DerivedXMLParser100.h>
-#include <six/sidd/DerivedXMLParser200.h>
-#include <six/sidd/DerivedXMLParser300.h>
+#include <six/sidd30/DerivedXMLControl.h>
+#include <six/sidd30/DerivedData.h>
+#include <six/sidd30/DerivedXMLParser100.h>
+#include <six/sidd30/DerivedXMLParser200.h>
+#include <six/sidd30/DerivedXMLParser300.h>
 
 namespace
 {

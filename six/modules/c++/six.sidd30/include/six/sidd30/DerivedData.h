@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -27,17 +27,17 @@
 #include <six/ErrorStatistics.h>
 #include <six/MatchInformation.h>
 #include <six/GeoDataBase.h>
-#include <six/sidd/ProductCreation.h>
-#include <six/sidd/Display.h>
-#include <six/sidd/GeographicAndTarget.h>
-#include <six/sidd/Measurement.h>
-#include <six/sidd/ExploitationFeatures.h>
-#include <six/sidd/ProductProcessing.h>
-#include <six/sidd/DownstreamReprocessing.h>
+#include <six/sidd30/ProductCreation.h>
+#include <six/sidd30/Display.h>
+#include <six/sidd30/GeographicAndTarget.h>
+#include <six/sidd30/Measurement.h>
+#include <six/sidd30/ExploitationFeatures.h>
+#include <six/sidd30/ProductProcessing.h>
+#include <six/sidd30/DownstreamReprocessing.h>
 #include <six/Radiometric.h>
-#include <six/sidd/Compression.h>
-#include <six/sidd/DigitalElevationData.h>
-#include <six/sidd/Annotations.h>
+#include <six/sidd30/Compression.h>
+#include <six/sidd30/DigitalElevationData.h>
+#include <six/sidd30/Annotations.h>
 
 namespace six
 {

@@ -1,5 +1,5 @@
 /* =========================================================================
- * This file is part of six.sidd-c++
+ * This file is part of six.sidd30-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
@@ -31,9 +31,9 @@
 #include <six/Init.h>
 #include <six/Parameter.h>
 #include <six/ParameterCollection.h>
-#include <six/sidd/Enums.h>
-#include <six/sidd/Filter.h>
-#include <six/sidd/LookupTable.h>
+#include <six/sidd30/Enums.h>
+#include <six/sidd30/Filter.h>
+#include <six/sidd30/LookupTable.h>
 
 namespace six
 {
