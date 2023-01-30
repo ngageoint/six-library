@@ -78,4 +78,4 @@ int main()
 
     xmlNs.pop();
     return 0;
-};
+}
