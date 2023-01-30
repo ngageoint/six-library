@@ -23,6 +23,7 @@
 
 #ifndef SIX_sidd_DerivedXMLParser300_h_INCLUDED_
 #define SIX_sidd_DerivedXMLParser300_h_INCLUDED_
+#pragma once
 
 #include <six/sidd30/DerivedXMLParser.h>
 #include <six/GeoDataBase.h>

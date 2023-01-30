@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of six.sidd30-c++
+ * This file is part of six.sidd-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
  *
- * six.sidd30-c++ is free software; you can redistribute it and/or modify
+ * six.sidd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -22,6 +22,7 @@
 
 #ifndef __SIX_SIDD30_DERIVED_XML_PARSER_200_H__
 #define __SIX_SIDD30_DERIVED_XML_PARSER_200_H__
+#pragma once
 
 #include <six/sidd30/DerivedXMLParser.h>
 #include <six/GeoDataBase.h>
@@ -30,7 +31,7 @@ namespace six
 {
 namespace sidd30
 {
-struct DerivedXMLParser200 : public DerivedXMLParser
+struct DerivedXMLParser200 final : public DerivedXMLParser
 {
     DerivedXMLParser200(logging::Logger* log = nullptr,
                         bool ownLog = false);
@@ -61,7 +62,7 @@ struct DerivedXMLParser200 : public DerivedXMLParser
         const GeoDataBase&, xml::lite::Element& parent);
 
     static xml::lite::Element& convertDerivedClassificationToXML(const DerivedXMLParser&,
-        const DerivedClassification&, xml::lite::Element& parent);
+        const DerivedClassification&, const xml::lite::Uri& ismUri, xml::lite::Element& parent);
 
     static xml::lite::Element& convertMeasurementToXML(const DerivedXMLParser&,
         const Measurement&, xml::lite::Element& parent);
@@ -120,9 +121,6 @@ protected:
         XMLElem parent = nullptr) const override;
 
 private:
-    static const char VERSION[];
-    static const char SI_COMMON_URI[];
-    static const char ISM_URI[];
 
     static xml::lite::Element& convertLookupTableToXML(const DerivedXMLParser&,
         const std::string& name, const LookupTable&, xml::lite::Element& parent);
