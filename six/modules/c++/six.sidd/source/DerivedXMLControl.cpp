@@ -30,7 +30,6 @@
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLParser100.h>
 #include <six/sidd/DerivedXMLParser200.h>
-#include <six/sidd/DerivedXMLParser300.h>
 
 namespace
 {
