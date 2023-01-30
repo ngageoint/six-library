@@ -198,6 +198,11 @@ void DerivedXMLParser::setAttributeList(
         setAttribute(element, attributeName, value, uri);
     }
 }
+void DerivedXMLParser::setAttributeList(xml::lite::Element& element, const std::string& attributeName, const std::vector<std::string>& values, const xml::lite::Uri& uri,
+    bool setIfEmpty)
+{
+    setAttributeList(&element, attributeName, values, uri.value, setIfEmpty);
+}
 
 void DerivedXMLParser::setAttributeIfNonEmpty(XMLElem element,
                                               const std::string& name,
@@ -209,11 +214,31 @@ void DerivedXMLParser::setAttributeIfNonEmpty(XMLElem element,
         setAttribute(element, name, value, uri);
     }
 }
+void DerivedXMLParser::setAttributeIfNonEmpty(xml::lite::Element& element,
+    const std::string& name,
+    const std::string& value,
+    const xml::lite::Uri& uri)
+{
+    if (!value.empty())
+    {
+        setAttribute(element, name, value, uri);
+    }
+}
 
 void DerivedXMLParser::setAttributeIfNonEmpty(XMLElem element,
                                               const std::string& name,
                                               BooleanType value,
                                               const std::string& uri)
+{
+    if (!Init::isUndefined(value))
+    {
+        setAttribute(element, name, value == BooleanType::IS_TRUE ? "true" : "false", uri);
+    }
+}
+void DerivedXMLParser::setAttributeIfNonEmpty(xml::lite::Element& element,
+    const std::string& name,
+    BooleanType value,
+    const xml::lite::Uri& uri)
 {
     if (!Init::isUndefined(value))
     {

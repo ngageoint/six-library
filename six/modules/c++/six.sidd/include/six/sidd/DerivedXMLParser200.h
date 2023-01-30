@@ -61,7 +61,7 @@ struct DerivedXMLParser200 final : public DerivedXMLParser
         const GeoDataBase&, xml::lite::Element& parent);
 
     static xml::lite::Element& convertDerivedClassificationToXML(const DerivedXMLParser&,
-        const DerivedClassification&, const xml::lite::Uri& ismUri, xml::lite::Element& parent);
+        const DerivedClassification&, xml::lite::Element& parent);
 
     static xml::lite::Element& convertMeasurementToXML(const DerivedXMLParser&,
         const Measurement&, xml::lite::Element& parent);
