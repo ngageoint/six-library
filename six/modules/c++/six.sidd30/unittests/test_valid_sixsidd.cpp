@@ -3,9 +3,9 @@
 * =========================================================================
 *
 * (C) Copyright 2004 - 2016, MDA Information Systems LLC
-* (C) Copyright 2021, Maxar Technologies, Inc.
+* (C) Copyright 2023, Maxar Technologies, Inc.
 *
-* six.sicd-c++ is free software; you can redistribute it and/or modify
+* six.sicd30-c++ is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Lesser General Public License as published by
 * the Free Software Foundation; either version 3 of the License, or
 * (at your option) any later version.
@@ -90,28 +90,35 @@ inline static const six::UnmodeledS* get_Unmodeled(const six::sidd30::DerivedDat
     }
 }
 
-static void test_createFakeDerivedData_(const std::string& testName, const std::string& strVersion)
+static void test_createFakeDerivedData_(const std::string& testName, const std::string& strVersion, bool validate)
 {
     const auto pFakeDerivedData = six::sidd30::Utilities::createFakeDerivedData(strVersion);
     auto Unmodeled = get_Unmodeled(*pFakeDerivedData, strVersion);
     TEST_ASSERT_NULL(Unmodeled); // not part of the fake data, only added in SIDD 3.0
 
     // NULL schemaPaths, no validation
-    auto pDerivedData = test_assert_round_trip(testName , *pFakeDerivedData, nullptr /*pSchemaPaths*/);
-    Unmodeled = get_Unmodeled(*pDerivedData, strVersion);
-    TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SIDD 3.0
-
-    // validate XML against schema
-    const auto schemaPaths = getSchemaPaths();
-    pDerivedData = test_assert_round_trip(testName , *pFakeDerivedData, &schemaPaths);
+    const std::vector<std::filesystem::path>* pSchemaPaths = nullptr;
+    if (validate)
+    {
+        // validate XML against schema
+        static const auto schemaPaths = getSchemaPaths();
+        pSchemaPaths = &schemaPaths;
+    }
+    auto pDerivedData = test_assert_round_trip(testName, *pFakeDerivedData, pSchemaPaths);
     Unmodeled = get_Unmodeled(*pDerivedData, strVersion);
     TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SIDD 3.0
 }
 
-TEST_CASE(test_createFakeDerivedData)
+TEST_CASE(test_createFakeDerivedData_200)
 {
-    test_createFakeDerivedData_(testName, "2.0.0");
-    test_createFakeDerivedData_(testName, "3.0.0");
+    test_createFakeDerivedData_(testName, "2.0.0", false /*validate*/);
+    test_createFakeDerivedData_(testName, "2.0.0", true /*validate*/);
+}
+
+TEST_CASE(test_createFakeDerivedData_300)
+{
+    test_createFakeDerivedData_(testName, "3.0.0", false /*validate*/);
+    test_createFakeDerivedData_(testName, "3.0.0", true /*validate*/);
 }
 
 static void test_assert_unmodeled_(const std::string& testName, const six::UnmodeledS& Unmodeled)
@@ -172,7 +179,8 @@ TEST_CASE(test_read_sidd300_xml)
 }
 
 TEST_MAIN(
-    TEST_CHECK(test_createFakeDerivedData);
+    TEST_CHECK(test_createFakeDerivedData_200);
+    TEST_CHECK(test_createFakeDerivedData_300);
     TEST_CHECK(test_read_sidd200_xml);
     TEST_CHECK(test_read_sidd300_xml);
     )
