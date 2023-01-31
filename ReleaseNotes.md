@@ -1,6 +1,11 @@
-﻿![alt tag](https://raw.github.com/ngageoint/six-library/master/docs/six_logo.png?raw=true)
+![alt tag](https://raw.github.com/ngageoint/six-library/master/docs/six_logo.png?raw=true)
 
 # SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
+
+## [Version 3.2.?](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.?); ??? ??, 2023
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2023-??-??](https://github.com/mdaus/coda-oss/releases/tag/2023-??-??)
+* [nitro](https://github.com/mdaus/nitro) version [2.11.?](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.?)
+* Integrated [ISM v201609](https://www.dni.gov/index.php/who-we-are/organizations/ic-cio/ic-cio-related-menus/ic-cio-related-links/ic-technical-specifications/information-security-marking-metadata) into SIDD 3.0.
 
 ## [Version 3.2.2](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.2); December 14, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
