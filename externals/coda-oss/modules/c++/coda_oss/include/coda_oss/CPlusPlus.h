@@ -53,16 +53,6 @@
     #endif  // __INTEL_COMPILER
 #endif // CODA_OSS_cplusplus
 
-#if CODA_OSS_cplusplus < 201402L
-    // oops ... try to fix
-    #if defined(__INTEL_COMPILER) && (__INTEL_COMPILER_BUILD_DATE >= 20151021)
-        // __cplusplus is 201300, not 201402L
-        // Enough C++14, at least with our std/ work-arounds
-        #undef CODA_OSS_cplusplus
-        #define CODA_OSS_cplusplus 201402L
-     #endif
-#endif  // CODA_OSS_cplusplus
-
 #if CODA_OSS_cplusplus < 202002L
     // oops ... try to fix
     #if defined(__GNUC__) && (__cplusplus >= 201709L)  // note > C++ 17 of 201703L
