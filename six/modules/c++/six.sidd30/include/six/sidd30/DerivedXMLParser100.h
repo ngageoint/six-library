@@ -20,75 +20,18 @@
  *
  */
 
-#ifndef __SIX_SIDD30_DERIVED_XML_PARSER_100_H__
-#define __SIX_SIDD30_DERIVED_XML_PARSER_100_H__
+#ifndef SIX_six_sidd30_DerivedXMLParser100_h_INCLUDED_
+#define SIX_six_sidd30_DerivedXMLParser100_h_INCLUDED_
+#pragma once
 
-#include <six/sidd30/DerivedXMLParser.h>
+#include <six/sidd/DerivedXMLParser100.h>
 
 namespace six
 {
-namespace sidd30
-{
-class DerivedXMLParser100 : public DerivedXMLParser
-{
-public:
-    DerivedXMLParser100(logging::Logger* log = nullptr,
-                        bool ownLog = false);
-
-    DerivedXMLParser100(const DerivedXMLParser100&) = delete;
-    DerivedXMLParser100& operator=(const DerivedXMLParser100&) = delete;
-
-    virtual xml::lite::Document* toXML(const DerivedData* data) const override;
-    std::unique_ptr<xml::lite::Document> toXML(const DerivedData&) const override;
-
-    virtual DerivedData* fromXML(const xml::lite::Document* doc) const override;
-    std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const override;
-
-protected:
-    virtual void parseDerivedClassificationFromXML(
-            const xml::lite::Element* classificationElem,
-            DerivedClassification& classification) const;
-
-    virtual XMLElem convertDerivedClassificationToXML(
-            const DerivedClassification& classification,
-            XMLElem parent = nullptr) const;
-
-    virtual XMLElem convertMeasurementToXML(
-            const Measurement* measurement,
-            XMLElem parent = nullptr) const;
-
-    virtual void parseMeasurementFromXML(
-            const xml::lite::Element* measruementElem,
-            Measurement* measurement) const;
-
-    virtual XMLElem convertExploitationFeaturesToXML(
-        const ExploitationFeatures* exploitationFeatures,
-        XMLElem parent = nullptr) const;
-
-    virtual void parseProductFromXML(
-        const xml::lite::Element* exploitationFeaturesElem,
-        ExploitationFeatures* exploitationFeatures) const;
-
-    virtual XMLElem convertDisplayToXML(const Display& display,
-                                        XMLElem parent = nullptr) const;
-
-private:
-    static const char VERSION[];
-    static const char SI_COMMON_URI[];
-    static const char ISM_URI[];
-
-    XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
-                                         XMLElem parent = nullptr) const;
-
-    void parseGeographicTargetFromXML(
-            const xml::lite::Element* elem,
-            GeographicAndTarget* geographicAndTarget) const;
-
-    void parseGeographicCoverageFromXML(
-            const xml::lite::Element* elem,
-            GeographicCoverage* geoCoverage) const;
-};
-}
+    namespace sidd30
+    {
+        using DerivedXMLParser100 = six::sidd::DerivedXMLParser100;
+    }
 }
 
-#endif
+#endif SIX_six_sidd30_DerivedXMLParser100_h_INCLUDED_

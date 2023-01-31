@@ -20,38 +20,27 @@
  *
  */
 
-#ifndef __SIX_SIDD30_CROP_UTILS_H__
-#define __SIX_SIDD30_CROP_UTILS_H__
+#ifndef SIX_six_sidd30_CropUtils_h_INCLUDED_
+#define SIX_six_sidd30_CropUtils_h_INCLUDED_
+#pragma once
 
-#include <string>
-#include <vector>
+#include <std/filesystem>
 
-#include <scene/sys_Conf.h>
-#include <types/RowCol.h>
+#include <six/sidd/CropUtils.h>
 
 namespace six
 {
-namespace sidd30
-{
-/*
- * Reads in an AOI from a SIDD and creates a cropped SIDD, updating the
- * metadata as appropriate to reflect this
- *
- * TODO: The SIDD standard supports more complicated chipping than this -
- * you can translate, rotate, and/or scale.
- *
- * \param inPathname Input SIDD pathname
- * \param schemaPaths Schema paths to use for reading and writing
- * \param aoiOffset Upper left corner of AOI
- * \param aoiDims Size of AOI
- * \param outPathname Output cropped SIDD pathname
- */
-void cropSIDD(const std::string& inPathname,
-              const std::vector<std::string>& schemaPaths,
-              const types::RowCol<size_t>& aoiOffset,
-              const types::RowCol<size_t>& aoiDims,
-              const std::string& outPathname);
-}
+    namespace sidd30
+    {
+        inline void cropSIDD(const std::filesystem::path& inPathname,
+            const std::vector<std::string>& schemaPaths,
+            const types::RowCol<size_t>& aoiOffset,
+            const types::RowCol<size_t>& aoiDims,
+            const std::filesystem::path& outPathname)
+        {
+            return six::sidd::cropSIDD(inPathname.string(), schemaPaths, aoiOffset, aoiDims, outPathname.string());
+        }
+    }
 }
 
-#endif
+#endif // SIX_six_sidd30_CropUtils_h_INCLUDED_

@@ -91,7 +91,7 @@ std::unique_ptr<xml::lite::Document> DerivedXMLControl::toXMLImpl(const Data& da
     return parser->toXML(dynamic_cast<const DerivedData&>(data));
 }
 
-std::unique_ptr<DerivedXMLParser>
+std::unique_ptr<six::sidd::DerivedXMLParser>
 DerivedXMLControl::getParser(const std::string& strVersion) const
 {
     const std::string normalizedVersion = normalizeVersion(strVersion);
@@ -124,7 +124,7 @@ DerivedXMLControl::getParser(const std::string& strVersion) const
     throw except::Exception(Ctxt("Unsupported SIDD Version: " + strVersion));
 }
 
-std::unique_ptr<DerivedXMLParser> DerivedXMLControl::getParser_(const std::string& strVersion)
+std::unique_ptr<six::sidd::DerivedXMLParser> DerivedXMLControl::getParser_(const std::string& strVersion)
 {
     return DerivedXMLControl().getParser(strVersion);
 }

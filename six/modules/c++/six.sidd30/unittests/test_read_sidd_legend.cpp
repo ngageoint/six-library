@@ -102,8 +102,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
             six::MagnificationMethod::NEAREST_NEIGHBOR;
 
     // We know this is PGD so this is safe
-    six::sidd30::PlaneProjection* const planeProjection =
-        static_cast<six::sidd30::PlaneProjection*>(
+    auto planeProjection = static_cast<six::sidd::PlaneProjection*>(
                 siddData->measurement->projection.get());
 
     planeProjection->timeCOAPoly = six::Poly2D(0, 0);
@@ -113,8 +112,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
     planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
 
-    six::sidd30::Collection* const parent =
-            siddData->exploitationFeatures->collections[0].get();
+    auto parent = siddData->exploitationFeatures->collections[0].get();
     parent->information.resolution.rg = 0;
     parent->information.resolution.az = 0;
     parent->information.collectionDuration = 0;
@@ -127,7 +125,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
     siddData->exploitationFeatures->product[0].resolution.row = 0;
     siddData->exploitationFeatures->product[0].resolution.col = 0;
     siddData->geographicAndTarget->geographicCoverage.reset(
-            new six::sidd30::GeographicCoverage(
+            new six::sidd::GeographicCoverage(
             six::RegionType::GEOGRAPHIC_INFO));
 
     six::LatLonCorners& corners =

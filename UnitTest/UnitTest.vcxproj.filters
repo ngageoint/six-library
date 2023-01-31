@@ -148,12 +148,6 @@
     <ClCompile Include="sidd30.cpp">
       <Filter>sidd30</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sidd30\unittests\test_annotations_equality.cpp">
-      <Filter>sidd30</Filter>
-    </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sidd30\unittests\test_geometric_chip.cpp">
-      <Filter>sidd30</Filter>
-    </ClCompile>
     <ClCompile Include="..\six\modules\c++\six.sidd30\unittests\test_read_sidd_legend.cpp">
       <Filter>sidd30</Filter>
     </ClCompile>

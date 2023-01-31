@@ -26,7 +26,7 @@
 #include <six/XMLControl.h>
 #include <six/Enums.h>
 
-#include <six/sidd30/DerivedXMLParser.h>
+#include <six/sidd/DerivedXMLParser.h>
 
 namespace six
 {
@@ -53,7 +53,7 @@ struct DerivedXMLControl : public XMLControl
 
     static const six::DataType dataType;
 
-    static std::unique_ptr<DerivedXMLParser> getParser_(const std::string& strVersion); // for unit-testing
+    static std::unique_ptr<six::sidd::DerivedXMLParser> getParser_(const std::string& strVersion); // for unit-testing
 
 protected:
     /*!
@@ -69,7 +69,7 @@ protected:
     virtual std::unique_ptr<Data> fromXMLImpl(const xml::lite::Document&) const override;
 
 private:
-    std::unique_ptr<DerivedXMLParser>
+    std::unique_ptr<six::sidd::DerivedXMLParser>
     getParser(const std::string& strVersion) const;
 };
 }

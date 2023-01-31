@@ -36,14 +36,14 @@ void populateFilter(six::sidd30::Filter& filter)
     filter.filterKernel->custom->size = six::RowColInt(1, 1);
     filter.filterKernel->custom->filterCoef.resize(
             static_cast<size_t>(filter.filterKernel->custom->size.area()));
-    filter.operation = six::sidd30::FilterOperation::CONVOLUTION;
+    filter.operation = six::sidd::FilterOperation::CONVOLUTION;
 }
 
 void populateNoninteractiveProcessing(
         six::sidd30::NonInteractiveProcessing& processing)
 {
     processing.rrds.downsamplingMethod =
-            six::sidd30::DownsamplingMethod::DECIMATE;
+            six::sidd::DownsamplingMethod::DECIMATE;
 
     processing.productGenerationOptions.dataRemapping.reset(
             new six::sidd30::LookupTable());
@@ -57,15 +57,17 @@ void populateInteractiveProcessing(six::sidd30::InteractiveProcessing& processin
     populateFilter(processing.geometricTransform.scaling.antiAlias);
     populateFilter(processing.geometricTransform.scaling.interpolation);
     processing.geometricTransform.orientation.shadowDirection =
-            six::sidd30::ShadowDirection::RIGHT;
+            six::sidd::ShadowDirection::RIGHT;
     processing.sharpnessEnhancement.modularTransferFunctionEnhancement.reset(
             new six::sidd30::Filter());
     auto& mtfeFilter =
             *processing.sharpnessEnhancement.modularTransferFunctionEnhancement;
     populateFilter(mtfeFilter);
-    processing.dynamicRangeAdjustment.algorithmType = six::sidd30::DRAType::NONE;
+    processing.dynamicRangeAdjustment.algorithmType = six::sidd::DRAType::NONE;
 }
 }
+
+using namespace six::sidd;
 
 namespace six
 {

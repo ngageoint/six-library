@@ -19,26 +19,22 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_SIDD30_UTILITIES_H__
-#define __SIX_SIDD30_UTILITIES_H__
+#ifndef SIX_six_sidd30_Utilities_h_INCLUDED_
+#define SIX_six_sidd30_Utilities_h_INCLUDED_
+#pragma once
 
-#include <memory>
-#include <vector>
-#include <std/filesystem>
-#include <std/string>
-
-#include <import/scene.h>
-#include <types/RgAz.h>
-#include <six/Utilities.h>
+#include <six/sidd/Utilities.h>
 #include <six/sidd30/DerivedData.h>
 
 namespace six
 {
 namespace sidd30
 {
-class Utilities
+    using Product = six::sidd::Product;
+    using Collection = six::sidd::Collection;
+
+struct Utilities final
 {
-public:
     // TODO: This is only needed because getSceneGeometry() isn't implemented
     //       for all projection types
     static scene::SideOfTrack getSideOfTrack(const DerivedData* derived);
@@ -156,4 +152,4 @@ public:
 };
 }
 }
-#endif
+#endif // SIX_six_sidd30_Utilities_h_INCLUDED_

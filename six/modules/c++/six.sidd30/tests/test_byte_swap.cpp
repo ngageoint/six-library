@@ -46,11 +46,10 @@ void generateData(std::unique_ptr<int16_t[]>& data)
 std::unique_ptr<six::sidd30::DerivedData> createData()
 {
     std::unique_ptr<six::sidd30::DerivedData> derivedData(new six::sidd30::DerivedData());
-    derivedData->productCreation.reset(new six::sidd30::ProductCreation());
+    derivedData->productCreation.reset(new six::sidd::ProductCreation());
     derivedData->productCreation->classification.classification = "U";
     derivedData->measurement.reset(new six::sidd30::Measurement(six::ProjectionType::PLANE));
-    six::sidd30::PlaneProjection* planeProjection =
-        (six::sidd30::PlaneProjection*) derivedData->measurement->projection.get();
+    auto planeProjection = (six::sidd::PlaneProjection*) derivedData->measurement->projection.get();
     planeProjection->timeCOAPoly = six::Poly2D(0, 0);
     planeProjection->timeCOAPoly[0][0] = 1;
     planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
@@ -61,9 +60,9 @@ std::unique_ptr<six::sidd30::DerivedData> createData()
     derivedData->display->pixelType = six::PixelType::MONO16I;
     derivedData->setNumRows(10);
     derivedData->setNumCols(40);
-    derivedData->geographicAndTarget.reset(new six::sidd30::GeographicAndTarget());
+    derivedData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget());
     derivedData->geographicAndTarget->geographicCoverage.reset(
-            new six::sidd30::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
+            new six::sidd::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
     // Set image corners
     for (size_t ii = 0; ii < 4; ++ii)
     {
@@ -97,7 +96,7 @@ std::unique_ptr<six::sidd30::DerivedData> createData()
     parent->information.collectionDateTime = six::DateTime();
     parent->information.radarMode = six::RadarModeType::SPOTLIGHT;
     parent->information.sensorName.clear();
-    parent->geometry.reset(new six::sidd30::Geometry());
+    parent->geometry.reset(new six::sidd::Geometry());
 
     derivedData->setNumRows(DATA_LENGTH / 10);
     derivedData->setNumCols(DATA_LENGTH / derivedData->getNumRows());

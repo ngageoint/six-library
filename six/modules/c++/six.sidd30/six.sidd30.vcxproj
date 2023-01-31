@@ -56,7 +56,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\six\include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\six.sidd\include\;$(ProjectDir)..\six\include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
@@ -82,7 +82,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\six\include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\six.sidd\include\;$(ProjectDir)..\six\include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
@@ -101,32 +101,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
-    <ClInclude Include="include\six\sidd30\Annotations.h" />
     <ClInclude Include="include\six\sidd30\CompressedSIDDByteProvider.h" />
-    <ClInclude Include="include\six\sidd30\Compression.h" />
     <ClInclude Include="include\six\sidd30\CropUtils.h" />
     <ClInclude Include="include\six\sidd30\DerivedClassification.h" />
     <ClInclude Include="include\six\sidd30\DerivedData.h" />
     <ClInclude Include="include\six\sidd30\DerivedDataBuilder.h" />
     <ClInclude Include="include\six\sidd30\DerivedXMLControl.h" />
-    <ClInclude Include="include\six\sidd30\DerivedXMLParser.h" />
     <ClInclude Include="include\six\sidd30\DerivedXMLParser100.h" />
     <ClInclude Include="include\six\sidd30\DerivedXMLParser200.h" />
     <ClInclude Include="include\six\sidd30\DerivedXMLParser300.h" />
-    <ClInclude Include="include\six\sidd30\DigitalElevationData.h" />
-    <ClInclude Include="include\six\sidd30\Display.h" />
-    <ClInclude Include="include\six\sidd30\DownstreamReprocessing.h" />
     <ClInclude Include="include\six\sidd30\Enums.h" />
-    <ClInclude Include="include\six\sidd30\ExploitationFeatures.h" />
-    <ClInclude Include="include\six\sidd30\Filter.h" />
-    <ClInclude Include="include\six\sidd30\GeographicAndTarget.h" />
     <ClInclude Include="include\six\sidd30\GeoTIFFReadControl.h" />
     <ClInclude Include="include\six\sidd30\GeoTIFFWriteControl.h" />
-    <ClInclude Include="include\six\sidd30\LookupTable.h" />
-    <ClInclude Include="include\six\sidd30\Measurement.h" />
-    <ClInclude Include="include\six\sidd30\ProductCreation.h" />
-    <ClInclude Include="include\six\sidd30\ProductProcessing.h" />
-    <ClInclude Include="include\six\sidd30\SFA.h" />
     <ClInclude Include="include\six\sidd30\SIDDByteProvider.h" />
     <ClInclude Include="include\six\sidd30\SIDDVersionUpdater.h" />
     <ClInclude Include="include\six\sidd30\Utilities.h" />
@@ -138,28 +124,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="source\CompressedSIDDByteProvider.cpp" />
-    <ClCompile Include="source\Compression.cpp" />
-    <ClCompile Include="source\CropUtils.cpp" />
     <ClCompile Include="source\DerivedClassification.cpp" />
-    <ClCompile Include="source\DerivedData.cpp" />
     <ClCompile Include="source\DerivedDataBuilder.cpp" />
     <ClCompile Include="source\DerivedXMLControl.cpp" />
-    <ClCompile Include="source\DerivedXMLParser.cpp" />
-    <ClCompile Include="source\DerivedXMLParser100.cpp" />
-    <ClCompile Include="source\DerivedXMLParser200.cpp" />
     <ClCompile Include="source\DerivedXMLParser300.cpp" />
-    <ClCompile Include="source\DigitalElevationData.cpp" />
-    <ClCompile Include="source\Display.cpp" />
-    <ClCompile Include="source\DownstreamReprocessing.cpp" />
-    <ClCompile Include="source\ExploitationFeatures.cpp" />
-    <ClCompile Include="source\Filter.cpp" />
-    <ClCompile Include="source\GeographicAndTarget.cpp" />
     <ClCompile Include="source\GeoTIFFReadControl.cpp" />
-    <ClCompile Include="source\GeoTIFFWriteControl.cpp" />
-    <ClCompile Include="source\LookupTable.cpp" />
-    <ClCompile Include="source\Measurement.cpp" />
-    <ClCompile Include="source\ProductCreation.cpp" />
-    <ClCompile Include="source\SFA.cpp" />
     <ClCompile Include="source\SIDDByteProvider.cpp" />
     <ClCompile Include="source\SIDDVersionUpdater.cpp" />
     <ClCompile Include="source\Utilities.cpp" />

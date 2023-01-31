@@ -44,12 +44,11 @@ void generateData(int16_t* data)
 std::unique_ptr<six::sidd30::DerivedData> createData()
 {
     std::unique_ptr<six::sidd30::DerivedData> derivedData(new six::sidd30::DerivedData());
-    derivedData->productCreation.reset(new six::sidd30::ProductCreation());
+    derivedData->productCreation.reset(new six::sidd::ProductCreation());
     derivedData->productCreation->classification.classification = "U";
     derivedData->measurement.reset(
             new six::sidd30::Measurement(six::ProjectionType::GEOGRAPHIC));
-    six::sidd30::GeographicProjection* geographicProjection =
-            (six::sidd30::GeographicProjection*)
+   auto geographicProjection = (six::sidd::GeographicProjection*)
             derivedData->measurement->projection.get();
     geographicProjection->timeCOAPoly = six::Poly2D(0, 0);
     geographicProjection->timeCOAPoly[0][0] = 1;
@@ -59,9 +58,9 @@ std::unique_ptr<six::sidd30::DerivedData> createData()
     derivedData->display->pixelType = six::PixelType::MONO16I;
     derivedData->setNumRows(10);
     derivedData->setNumCols(40);
-    derivedData->geographicAndTarget.reset(new six::sidd30::GeographicAndTarget());
+    derivedData->geographicAndTarget.reset(new six::sidd::GeographicAndTarget());
     derivedData->geographicAndTarget->geographicCoverage.reset(
-            new six::sidd30::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
+            new six::sidd::GeographicCoverage(six::RegionType::GEOGRAPHIC_INFO));
 
     for (size_t ii = 0; ii < 4; ++ii)
     {
@@ -86,7 +85,7 @@ std::unique_ptr<six::sidd30::DerivedData> createData()
     parent->information.collectionDateTime = six::DateTime();
     parent->information.radarMode = six::RadarModeType::SPOTLIGHT;
     parent->information.sensorName.clear();
-    parent->geometry.reset(new six::sidd30::Geometry());
+    parent->geometry.reset(new six::sidd::Geometry());
 
     derivedData->setNumRows(DATA_LENGTH / 10);
     derivedData->setNumCols(DATA_LENGTH / derivedData->getNumRows());
