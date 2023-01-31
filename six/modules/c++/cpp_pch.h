@@ -12,6 +12,11 @@
 #pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 6285) // (<non-zero constant> || <non-zero constant>) is always a non-zero constant.  Did you intend to use the bitwise-and operator?
+#pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
+#pragma warning(disable: 5264) // '...': '...' variable is not used
+
+// error 4996: '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning.
+#define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
 
 #define _USE_MATH_DEFINES
 #include <math.h>

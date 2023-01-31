@@ -29,7 +29,7 @@ namespace six
 {
 namespace sidd
 {
-class DerivedXMLParser100 : public DerivedXMLParser
+class DerivedXMLParser100 final : public DerivedXMLParser
 {
 public:
     DerivedXMLParser100(logging::Logger* log = nullptr,
@@ -73,9 +73,6 @@ protected:
                                         XMLElem parent = nullptr) const;
 
 private:
-    static const char VERSION[];
-    static const char SI_COMMON_URI[];
-    static const char ISM_URI[];
 
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
                                          XMLElem parent = nullptr) const;
