@@ -145,6 +145,18 @@
     <ClCompile Include="..\six\modules\c++\six\unittests\test_xml_control.cpp">
       <Filter>six</Filter>
     </ClCompile>
+    <ClCompile Include="sidd30.cpp">
+      <Filter>sidd30</Filter>
+    </ClCompile>
+    <ClCompile Include="..\six\modules\c++\six.sidd30\unittests\test_read_sidd_legend.cpp">
+      <Filter>sidd30</Filter>
+    </ClCompile>
+    <ClCompile Include="..\six\modules\c++\six.sidd30\unittests\test_valid_sixsidd.cpp">
+      <Filter>sidd30</Filter>
+    </ClCompile>
+    <ClCompile Include="..\six\modules\c++\six.sidd30\unittests\unittest_sidd_byte_provider.cpp">
+      <Filter>sidd30</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -165,6 +177,9 @@
     <ClInclude Include="six_Test.h">
       <Filter>six</Filter>
     </ClInclude>
+    <ClInclude Include="sidd30_Test.h">
+      <Filter>sidd30</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="cphd">
@@ -183,7 +198,7 @@
       <UniqueIdentifier>{8d8a73fb-96b1-4bdf-a055-2b34d7f94e14}</UniqueIdentifier>
     </Filter>
     <Filter Include="sidd30">
-      <UniqueIdentifier>{ad2eb6d6-d56a-42e4-944f-62fe1d8194ee}</UniqueIdentifier>
+      <UniqueIdentifier>{cf10f84a-5382-4987-bc33-b432ab1df123}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
