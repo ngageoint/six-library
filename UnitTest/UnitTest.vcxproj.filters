@@ -182,5 +182,8 @@
     <Filter Include="six">
       <UniqueIdentifier>{8d8a73fb-96b1-4bdf-a055-2b34d7f94e14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sidd30">
+      <UniqueIdentifier>{ad2eb6d6-d56a-42e4-944f-62fe1d8194ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

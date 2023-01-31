@@ -105,9 +105,6 @@
     <ClInclude Include="include\six\sidd\Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\six\sidd\DerivedXMLParser300.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -186,9 +183,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\Utilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\DerivedXMLParser300.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

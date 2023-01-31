@@ -38,6 +38,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "csm", "six\projects\csm\csm
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{F6888896-E658-414C-90CD-1208FA31A22E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "six.sidd30", "six\modules\c++\six.sidd30\six.sidd30.vcxproj", "{09397390-B096-4961-8082-9BC3BC8A5B9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -100,6 +102,10 @@ Global
 		{F6888896-E658-414C-90CD-1208FA31A22E}.Debug|x64.Build.0 = Debug|x64
 		{F6888896-E658-414C-90CD-1208FA31A22E}.Release|x64.ActiveCfg = Release|x64
 		{F6888896-E658-414C-90CD-1208FA31A22E}.Release|x64.Build.0 = Release|x64
+		{09397390-B096-4961-8082-9BC3BC8A5B9B}.Debug|x64.ActiveCfg = Debug|x64
+		{09397390-B096-4961-8082-9BC3BC8A5B9B}.Debug|x64.Build.0 = Debug|x64
+		{09397390-B096-4961-8082-9BC3BC8A5B9B}.Release|x64.ActiveCfg = Release|x64
+		{09397390-B096-4961-8082-9BC3BC8A5B9B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

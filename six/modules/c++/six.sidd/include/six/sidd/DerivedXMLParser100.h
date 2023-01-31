@@ -73,9 +73,6 @@ protected:
                                         XMLElem parent = nullptr) const;
 
 private:
-    static const char VERSION[];
-    static const char SI_COMMON_URI[];
-    xml::lite::Uri getISMUri() const override;
 
     XMLElem convertGeographicTargetToXML(const GeographicAndTarget& g,
                                          XMLElem parent = nullptr) const;

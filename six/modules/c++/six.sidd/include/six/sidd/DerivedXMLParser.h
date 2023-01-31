@@ -57,8 +57,6 @@ struct DerivedXMLParser : public six::XMLParser
     virtual XMLElem createLUT(const std::string& name, const LUT* l,
         XMLElem parent = nullptr) const;
 
-    virtual xml::lite::Uri getISMUri() const = 0;
-
 protected:
     DerivedXMLParser(const std::string& version,
         std::unique_ptr<six::SICommonXMLParser>&& comParser,

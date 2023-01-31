@@ -113,15 +113,11 @@ ProjectionType DerivedXMLParser200::getProjectionType(const xml::lite::Element& 
 }
 
 
-const char DerivedXMLParser200::VERSION[] = "2.0.0";
-const char DerivedXMLParser200::SI_COMMON_URI[] = "urn:SICommon:1.0";
-inline static std::string getISMUri_()
+const char VERSION[] = "2.0.0";
+const char SI_COMMON_URI[] = "urn:SICommon:1.0";
+inline static xml::lite::Uri getISMUri()
 {
-    return "urn:us:gov:ic:ism:13";
-}
-xml::lite::Uri DerivedXMLParser200::getISMUri() const
-{
-    return xml::lite::Uri(getISMUri_());
+    return xml::lite::Uri("urn:us:gov:ic:ism:13");
 }
 
 DerivedXMLParser200::DerivedXMLParser200(logging::Logger* log,
@@ -308,7 +304,7 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
     root->setNamespacePrefix("", getDefaultURI());
     root->setNamespacePrefix("si", xml::lite::Uri(SI_COMMON_URI));
     root->setNamespacePrefix("sfa", xml::lite::Uri(SFA_URI));
-    root->setNamespacePrefix("ism", getISMUri_());
+    root->setNamespacePrefix("ism", getISMUri());
 
     return doc;
 }
@@ -901,10 +897,10 @@ XMLElem DerivedXMLParser200::convertDerivedClassificationToXML(
         XMLElem parent) const
 {
     assert(parent != nullptr);
-    return &convertDerivedClassificationToXML(*this, classification, *parent);
+    return &convertDerivedClassificationToXML(*this, classification, getISMUri(), *parent);
 }
 xml::lite::Element& DerivedXMLParser200::convertDerivedClassificationToXML(const DerivedXMLParser& parser,
-    const DerivedClassification& classification, xml::lite::Element& parent)
+    const DerivedClassification& classification, const xml::lite::Uri& ismUri, xml::lite::Element& parent)
 {
     auto& classElem = parser.newElement("Classification", parent);
     auto classElem_ = &classElem;
@@ -912,8 +908,6 @@ xml::lite::Element& DerivedXMLParser200::convertDerivedClassificationToXML(const
     parser.common().addParameters("SecurityExtension",
                     classification.securityExtensions,
                            classElem_);
-
-    const auto ismUri = parser.getISMUri();
 
     //! from ism:ISMRootNodeAttributeGroup
     // SIDD 2.0 is tied to IC-ISM v13
