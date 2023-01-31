@@ -32,7 +32,7 @@
 
 #include "sys/Conf.h"
 
-#if !(defined(WIN32) || defined(_WIN32))
+#ifndef _WIN32
 
 #include <unistd.h>
 

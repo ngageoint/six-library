@@ -26,11 +26,11 @@
 #include "except/Exception.h"
 
 /*!
- *  \file XMLException.h
- *  \brief Contains the exceptions specific to XML
+ *  \file HDF5Exception.h
+ *  \brief Contains the exceptions specific to HDF5
  *
- *  This file contains all of the specialized XML exceptions used by
- *  the xml::lite package
+ *  This file contains all of the specialized HDF5 exceptions used by
+ *  the hdf5::lite package
  */
 namespace hdf5
 {
@@ -39,16 +39,16 @@ namespace lite
 
 /*!
  *  \class HDF5Exception
- *  \brief The base XML exception class
+ *  \brief The base HDF5 exception class
  *
- *  This is the default XML exception, for when
+ *  This is the default HDF5 exception, for when
  *  other, more specialized exception make no sense
  */
-DECLARE_EXTENDED_EXCEPTION11(HDF5, except::Exception11);
+CODA_OSS_DECLARE_EXCEPTION(HDF5);
 
-DECLARE_EXTENDED_EXCEPTION11(DataSet, hdf5::lite::HDF5Exception11)
-DECLARE_EXTENDED_EXCEPTION11(DataSpace, hdf5::lite::HDF5Exception11)
-DECLARE_EXTENDED_EXCEPTION11(DataType, hdf5::lite::HDF5Exception11)
+CODA_OSS_DECLARE_EXTENDED_EXCEPTION(DataSet, hdf5::lite::HDF5Exception);
+CODA_OSS_DECLARE_EXTENDED_EXCEPTION(DataSpace, hdf5::lite::HDF5Exception);
+CODA_OSS_DECLARE_EXTENDED_EXCEPTION(DataType, hdf5::lite::HDF5Exception);
 
 }
 }

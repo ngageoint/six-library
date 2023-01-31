@@ -39,6 +39,7 @@
 #include <assert.h>
 
 #include <utility>
+#include <std/memory>
 #include "coda_oss/string.h"
 #include "coda_oss/memory.h"
 

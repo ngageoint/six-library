@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __NITF_OBJECT_HPP__
-#define __NITF_OBJECT_HPP__
+#ifndef NITRO_nitf_Object_hpp_INCLUDED_
+#define NITRO_nitf_Object_hpp_INCLUDED_
 #pragma once
 
 #include <assert.h>
@@ -209,7 +209,7 @@ public:
  */
 
 #define DECLARE_CLASS_IN_operator_function_(Name_, Package_) \
-void operator()(Package_##_##Name_ * nativeObject) noexcept(false) override \
+void operator()(Package_##_##Name_ * nativeObject) NITRO_nitf_MemoryDestructor_noexcept_false_ override final \
       { Package_##_##Name_##_destruct(&nativeObject); }
  
 #ifdef _MSC_VER
@@ -279,4 +279,4 @@ namespace nitf
     #define nitf_offsetof(name) offsetof(native_t, name)
 }
 
-#endif
+#endif // NITRO_nitf_Object_hpp_INCLUDED_

@@ -179,8 +179,8 @@ ValidatorXerces::ValidatorXerces(
 // On Windows, this needs to be wchar_t so that various "wide character" Win32 APIs can be called.
 static_assert(sizeof(XMLCh) == 2, "XMLCh should be two bytes for UTF-16.");
 
-#if _WIN32
-// On other platforms, char16_t/uint16_t is used; only wchar_t on Windows.
+#ifdef _WIN32
+// On other platforms, char16_t is used; only wchar_t on Windows.
 using XMLCh_t = wchar_t;
 static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be wchar_t");
 inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::wstring>& pWString)
@@ -188,22 +188,13 @@ inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::wstring>&
     pWString = std::make_unique<std::wstring>(xmlView.wstring());
 }
 #else
-#if defined(__INTEL_COMPILER) && (__INTEL_COMPILER_BUILD_DATE < 20190815)
-using XMLCh_t = uint16_t;
-static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be uint16_t");
-#else
 using XMLCh_t = char16_t;
 static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be char16_t");
-#endif
 #endif
 
 inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::u16string>& pWString)
 {
     pWString = std::make_unique<std::u16string>(xmlView.u16string());
-}
-inline void reset(str::EncodedStringView xmlView, std::unique_ptr<str::ui16string>& pWString)
-{
-    pWString = std::make_unique<str::ui16string>(xmlView.ui16string_());
 }
 
 using XMLCh_string = std::basic_string<XMLCh_t>;
