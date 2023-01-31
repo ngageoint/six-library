@@ -277,11 +277,16 @@ protected:
         mXmlLite.parseDateTime(*element, value);
     }
 
+    static void setAttribute(xml::lite::Element& e, const std::string& name,
+        const std::string& s, const xml::lite::Uri& uri)
+    {
+        return XmlLite::setAttribute(e, xml::lite::QName(uri, name), s);
+    }
     static void setAttribute(XMLElem e, const std::string& name,
         const std::string& s, const std::string& uri = "")
     {
         assert(e != nullptr);
-        return XmlLite::setAttribute(*e, xml::lite::QName(xml::lite::Uri(uri), name), s);
+        return setAttribute(*e, name, s, xml::lite::Uri(uri));
     }
     static void setAttribute(XMLElem e, const std::string& name,
         size_t i, const std::string& uri = "")
