@@ -7,7 +7,6 @@ coda_add_module(
         source/DerivedDataBuilder.cpp
         source/DerivedXMLControl.cpp
         source/DerivedXMLParser300.cpp
-        source/GeoTIFFReadControl.cpp
         source/SIDDByteProvider.cpp
         source/SIDDVersionUpdater.cpp
         source/Utilities.cpp)

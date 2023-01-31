@@ -102,17 +102,11 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="include\six\sidd30\CompressedSIDDByteProvider.h" />
-    <ClInclude Include="include\six\sidd30\CropUtils.h" />
     <ClInclude Include="include\six\sidd30\DerivedClassification.h" />
     <ClInclude Include="include\six\sidd30\DerivedData.h" />
     <ClInclude Include="include\six\sidd30\DerivedDataBuilder.h" />
     <ClInclude Include="include\six\sidd30\DerivedXMLControl.h" />
-    <ClInclude Include="include\six\sidd30\DerivedXMLParser100.h" />
-    <ClInclude Include="include\six\sidd30\DerivedXMLParser200.h" />
     <ClInclude Include="include\six\sidd30\DerivedXMLParser300.h" />
-    <ClInclude Include="include\six\sidd30\Enums.h" />
-    <ClInclude Include="include\six\sidd30\GeoTIFFReadControl.h" />
-    <ClInclude Include="include\six\sidd30\GeoTIFFWriteControl.h" />
     <ClInclude Include="include\six\sidd30\SIDDByteProvider.h" />
     <ClInclude Include="include\six\sidd30\SIDDVersionUpdater.h" />
     <ClInclude Include="include\six\sidd30\Utilities.h" />
@@ -128,7 +122,6 @@
     <ClCompile Include="source\DerivedDataBuilder.cpp" />
     <ClCompile Include="source\DerivedXMLControl.cpp" />
     <ClCompile Include="source\DerivedXMLParser300.cpp" />
-    <ClCompile Include="source\GeoTIFFReadControl.cpp" />
     <ClCompile Include="source\SIDDByteProvider.cpp" />
     <ClCompile Include="source\SIDDVersionUpdater.cpp" />
     <ClCompile Include="source\Utilities.cpp" />

@@ -24,9 +24,6 @@
     <ClInclude Include="include\six\sidd30\CompressedSIDDByteProvider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\six\sidd30\CropUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\six\sidd30\DerivedClassification.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -36,22 +33,7 @@
     <ClInclude Include="include\six\sidd30\DerivedXMLControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\six\sidd30\DerivedXMLParser100.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\six\sidd30\DerivedXMLParser200.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\six\sidd30\DerivedXMLParser300.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\six\sidd30\Enums.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\six\sidd30\GeoTIFFReadControl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\six\sidd30\GeoTIFFWriteControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\six\sidd30\SIDDByteProvider.h">
@@ -81,9 +63,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\DerivedXMLControl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\GeoTIFFReadControl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\SIDDByteProvider.cpp">
