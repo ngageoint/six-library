@@ -145,13 +145,26 @@ static std::vector<TPath> check_whether_paths_exist(const std::vector<TPath>& pa
 
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
+inline static auto make_Validator(const std::vector<std::string>& paths, logging::Logger* log)
+{
+    assert(!paths.empty());
+    return xml::lite::Validator(paths, log, true /*recursive*/);
+}
+inline static auto make_Validator(const std::vector<fs::path>& paths, logging::Logger* log)
+{
+    assert(!paths.empty());
+
+    // Since the APIs using std::filesystem::path are new, it's much safer to tweak the semantics
+    // without the risk of breaking existing code.
+
+    // If there is only one path, assume it's the root of all schemas.
+    const auto recursive = paths.size() == 1;
+    return xml::lite::Validator(paths, log, recursive);
+}
 template<typename TPath>
 static void do_validate_(const xml::lite::Document& doc,
     const std::vector<TPath>& paths, logging::Logger* log)
 {
-    // validate against any specified schemas
-    xml::lite::Validator validator(paths, log, true);
-
     const auto& rootElement = doc.getRootElement();
     if (rootElement->getUri().empty())
     {
@@ -162,6 +175,8 @@ static void do_validate_(const xml::lite::Document& doc,
     io::U8StringStream xmlStream;
     rootElement->prettyPrint(xmlStream);
 
+    // validate against any specified schemas
+    auto validator = make_Validator(paths, log); // this can be expensive to create as all sub-directories might be traversed
     std::vector<xml::lite::ValidationInfo> errors;
     validator.validate(xmlStream, rootElement->getUri(), errors);
 
