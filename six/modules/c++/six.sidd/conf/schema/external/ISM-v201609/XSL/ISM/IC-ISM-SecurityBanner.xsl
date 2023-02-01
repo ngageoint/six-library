@@ -34,10 +34,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
   xmlns:ism="urn:us:gov:ic:ism">
 
-  <xsl:output method="text" encoding="UTF-8" media-type="text-plain" indent="no"/>
-  <!-- If including this xsl causes "Content is not allowed in prolog" the importing 
-  XSL is likely missing an output declaration -->
-  
   <xsl:param name="warn-missing-classif" select="'MISSING CLASSIFICATION MARKING'"/>
   <xsl:param name="warn-parse-classif" select="'UNABLE TO DETERMINE CLASSIFICATION MARKING'"/>
   <xsl:param name="warn-parse-ownerproducer"
@@ -46,30 +42,6 @@
   <xsl:param name="warn-parse-displayonly" select="'UNABLE TO DETERMINE DISPLAY ONLY'"/>
   <xsl:param name="warn-parse-eyes" select="'UNABLE TO DETERMINE EYES ONLY MARKINGS'"/>
 
-  <!--***********************************************-->
-  <!-- replace function for 1.0 -->
-  <!--***********************************************-->
-  <xsl:template name="string-replace-all">
-    <xsl:param name="text" />
-    <xsl:param name="replace" />
-    <xsl:param name="by" />
-    <xsl:choose>
-      <xsl:when test="contains($text, $replace)">
-        <xsl:value-of select="substring-before($text,$replace)" />
-        <xsl:value-of select="$by" />
-        <xsl:call-template name="string-replace-all">
-          <xsl:with-param name="text"
-            select="substring-after($text,$replace)" />
-          <xsl:with-param name="replace" select="$replace" />
-          <xsl:with-param name="by" select="$by" />
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$text" />
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  
   <!--***********************************************-->
   <!-- Mode for generating the CAPCO banner -->
   <!--***********************************************-->
@@ -198,13 +170,7 @@
     <xsl:variable name="n-atomicenergymarkings" select="normalize-space($atomicenergymarkings)"/>
     <xsl:variable name="n-fgiopen" select="normalize-space($fgiopen)"/>
     <xsl:variable name="n-fgiprotect" select="normalize-space($fgiprotect)"/>
-    <xsl:variable name="n-dissem">
-      <xsl:call-template name="string-replace-all">
-        <xsl:with-param name="text" select="normalize-space($dissem)" />
-        <xsl:with-param name="replace" select="'OC OC-USGOV'" />
-        <xsl:with-param name="by" select="'ORCON-USGOV'" />
-      </xsl:call-template>
-    </xsl:variable>
+    <xsl:variable name="n-dissem" select="normalize-space($dissem)"/>
     <xsl:variable name="n-releaseto" select="normalize-space($releaseto)"/>
     <xsl:variable name="n-displayonly" select="normalize-space($displayonly)"/>
     <xsl:variable name="n-nonic" select="normalize-space($nonic)"/>
@@ -236,46 +202,46 @@
             <xsl:when test="$n-ownerproducer = ''">
               <xsl:value-of select="$warn-parse-ownerproducer"/>
             </xsl:when>
-            <xsl:when test="contains($n-ownerproducer,' ') and $n-joint='true'">
+            <xsl:when test="contains($n-ownerproducer,' ')">
               <xsl:choose>
                 <xsl:when test="$portion and $n-fgiprotect != ''">//FGI </xsl:when>
                 <xsl:otherwise>
                   <xsl:if test="$n-fgiprotect = ''">
                     <xsl:text>//</xsl:text>
+                    <xsl:if test="$n-joint='true'">
                       <xsl:text>JOINT </xsl:text>
+                    </xsl:if>
                   </xsl:if>
                 </xsl:otherwise>
               </xsl:choose>
-              <xsl:call-template name="ism:get.classString">
-                <xsl:with-param name="source" select="$n-class"/>
-              </xsl:call-template>
+              <xsl:choose>
+                <xsl:when test="$n-class='TS'">TOP SECRET</xsl:when>
+                <xsl:when test="$n-class='S'">SECRET</xsl:when>
+                <xsl:when test="$n-class='C'">CONFIDENTIAL</xsl:when>
+                <xsl:when test="$n-class='R'">RESTRICTED</xsl:when>
+                <xsl:when test="$n-class='U'">UNCLASSIFIED</xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$warn-parse-classif"/>
+                </xsl:otherwise>
+              </xsl:choose>
               <!-- <xsl:if test="not($portion and $n-fgiprotect != '')"> -->
               <xsl:if test="not($portion) and $n-fgiprotect = ''">
                 <xsl:text> </xsl:text>
                 <xsl:value-of select="$n-ownerproducer"/>
               </xsl:if>
             </xsl:when>
-            <xsl:when test="contains($n-ownerproducer,' ') and $n-joint !='true'">
-              <xsl:choose>
-                <xsl:when test="$portion and $n-fgiprotect != ''">//FGI </xsl:when>
-                <xsl:otherwise>
-                  <xsl:if test="$n-fgiprotect = ''">
-                    <xsl:text>//</xsl:text>
-                  </xsl:if>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:value-of select="$n-ownerproducer"/>
-              <xsl:text> </xsl:text>
-              <xsl:call-template name="ism:get.classString">
-                <xsl:with-param name="source" select="$n-class"/>
-              </xsl:call-template>
-            </xsl:when>
             <xsl:when
               test="(($n-ownerproducer = 'USA') and not($portion and $n-fgiopen = 'UNKNOWN'))">
               <!-- **** When owner/producer is 'USA', unless this is a portion-level element and FGI source is 'UNKNOWN' **** -->
-              <xsl:call-template name="ism:get.classString">
-                <xsl:with-param name="source" select="$n-class"/>
-              </xsl:call-template>
+              <xsl:choose>
+                <xsl:when test="$n-class='TS'">TOP SECRET</xsl:when>
+                <xsl:when test="$n-class='S'">SECRET</xsl:when>
+                <xsl:when test="$n-class='C'">CONFIDENTIAL</xsl:when>
+                <xsl:when test="$n-class='U'">UNCLASSIFIED</xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$warn-parse-classif"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:when>
             <xsl:when test="$n-ownerproducer = 'NATO' ">
               <xsl:choose>
@@ -284,34 +250,6 @@
                 <xsl:when test="$n-class='R'">//NATO RESTRICTED</xsl:when>
                 <xsl:when test="$n-class='C'">//NATO CONFIDENTIAL</xsl:when>
                 <xsl:when test="$n-class='U'">//NATO UNCLASSIFIED</xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="$warn-parse-classif"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:if test="$n-nonuscontrls">
-                <xsl:text>//</xsl:text>
-                <xsl:value-of select="translate($n-nonuscontrls,' ','/')"/>
-              </xsl:if>
-            </xsl:when>
-            <xsl:when test="starts-with($n-ownerproducer, 'NATO:')">
-              <xsl:variable name="natoNacString">
-                <xsl:call-template name="ism:get.nato.nac">
-                  <xsl:with-param name="source" select="$n-ownerproducer"/>
-                </xsl:call-template>
-              </xsl:variable>
-              <xsl:choose>
-                <xsl:when test="$n-class='S'">
-                  <xsl:value-of select="concat('//NATO ',$natoNacString,' SECRET')"/>
-                </xsl:when>
-                <xsl:when test="$n-class='R'">
-                  <xsl:value-of select="concat('//NATO ',$natoNacString,' RESTRICTED')"/>
-                </xsl:when>
-                <xsl:when test="$n-class='C'">
-                  <xsl:value-of select="concat('//NATO ',$natoNacString,' CONFIDENTIAL')"/>
-                </xsl:when>
-                <xsl:when test="$n-class='U'">
-                  <xsl:value-of select="concat('//NATO ',$natoNacString,' UNCLASSIFIED')"/>
-                </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="$warn-parse-classif"/>
                 </xsl:otherwise>
@@ -339,9 +277,13 @@
                     </xsl:otherwise>
                   </xsl:choose>
                   <xsl:text> </xsl:text>
-                  <xsl:call-template name="ism:get.classString">
-                    <xsl:with-param name="source" select="$n-class"/>
-                  </xsl:call-template>
+                  <xsl:choose>
+                    <xsl:when test="$n-class='TS'">TOP SECRET</xsl:when>
+                    <xsl:when test="$n-class='S'">SECRET</xsl:when>
+                    <xsl:when test="$n-class='C'">CONFIDENTIAL</xsl:when>
+                    <xsl:when test="$n-class='R'">RESTRICTED</xsl:when>
+                    <xsl:when test="$n-class='U'">UNCLASSIFIED</xsl:when>
+                  </xsl:choose>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:otherwise>
@@ -362,15 +304,6 @@
           <xsl:with-param name="first" select="substring-before($n-sci, ' ')"/>
           <xsl:with-param name="rest" select="substring-after($n-sci, ' ')"/>
         </xsl:call-template>
-        
-        <xsl:if test="$n-nonuscontrls and contains($n-nonuscontrls, 'BALK')">
-          <xsl:text>/BALK</xsl:text>
-        </xsl:if>
-        
-        <xsl:if test="$n-nonuscontrls and contains($n-nonuscontrls, 'BOHEMIA')">
-          <xsl:text>/BOHEMIA</xsl:text>
-        </xsl:if>
-        
       </xsl:if>
     </xsl:variable>
 
@@ -405,10 +338,6 @@
           <xsl:with-param name="first" select="substring-before($n-atomicenergymarkings,' ')"/>
           <xsl:with-param name="rest" select="substring-after($n-atomicenergymarkings,' ')"/>
         </xsl:call-template>
-        
-        <xsl:if test="$n-nonuscontrls and contains($n-nonuscontrls, 'ATOMAL')">
-          <xsl:text>/ATOMAL</xsl:text>
-        </xsl:if>
 
       </xsl:if>
     </xsl:variable>
@@ -427,16 +356,10 @@
           <xsl:when
             test="(($n-fgiopen != '') and (not(contains($n-fgiopen,'UNKNOWN'))) and ($n-fgiprotect = ''))">
             <xsl:text>//FGI </xsl:text>
-            <xsl:value-of select="translate($n-fgiopen,':_','  ')"/>
+            <xsl:value-of select="$n-fgiopen"/>
             <xsl:if test="$n-nonuscontrls">
-              <xsl:variable name="nonatocontrls">
-                <xsl:value-of select="translate(
-                  normalize-space(translate(translate(translate($n-nonuscontrls, 'BALK', ' '), 'BOHEMIA', ' '), 'ATOMAL', ' ')),
-                  ' ','/')" />
-              </xsl:variable>
-              <xsl:if test="$nonatocontrls">
-                <xsl:value-of select="$nonatocontrls" />
-              </xsl:if>
+              <xsl:text>/</xsl:text>
+              <xsl:value-of select="translate($n-nonuscontrls,' ','/')" />
             </xsl:if>  
           </xsl:when>
           <xsl:when test="(($n-fgiprotect != '') or (contains($n-fgiopen,'UNKNOWN')))">
@@ -1034,12 +957,9 @@
                   </xsl:otherwise>
                 </xsl:choose>
                 
-                <xsl:variable name="relString">
-                  <xsl:call-template name="ism:NMTOKENS-to-CSV">
-                    <xsl:with-param name="text" select="$rel"/>
-                  </xsl:call-template>
-                </xsl:variable>
-                <xsl:value-of select="translate($relString,'_:','  ')"/>
+                <xsl:call-template name="ism:NMTOKENS-to-CSV">
+                  <xsl:with-param name="text" select="$rel"/>
+                </xsl:call-template>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:when>
@@ -1078,12 +998,9 @@
         <xsl:text>DISPLAY ONLY </xsl:text>
         <xsl:choose>
           <xsl:when test="($displayonly != '')">
-            <xsl:variable name="displayString">
-              <xsl:call-template name="ism:NMTOKENS-to-CSV">
-                <xsl:with-param name="text" select="$displayonly"/>
-              </xsl:call-template>
-            </xsl:variable>
-            <xsl:value-of select="translate($displayString,'_:','  ')"/>
+            <xsl:call-template name="ism:NMTOKENS-to-CSV">
+              <xsl:with-param name="text" select="$displayonly"/>
+            </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="$warn-parse-displayonly"/>
@@ -1205,34 +1122,7 @@
       <xsl:with-param name="replace" select="', '"/>
     </xsl:call-template>
   </xsl:template>
-  
-  <!-- ************************************************************ -->
-  <!-- Get the NATO NAC string                                      -->
-  <!-- ************************************************************ -->
-  <xsl:template name="ism:get.nato.nac">
-    <xsl:param name="source"/>
-    <xsl:value-of select="translate(substring-after($source, ':'),'_',' ')"/>
-  </xsl:template>
 
-
-  <!-- ************************************************************ -->
-  <!-- Get the Classification string                                -->
-  <!-- ************************************************************ -->
-  <xsl:template name="ism:get.classString">
-    <xsl:param name="source"/>
-    <xsl:choose>
-      <xsl:when test="$source='TS'">TOP SECRET</xsl:when>
-      <xsl:when test="$source='S'">SECRET</xsl:when>
-      <xsl:when test="$source='C'">CONFIDENTIAL</xsl:when>
-      <xsl:when test="$source='R'">RESTRICTED</xsl:when>
-      <xsl:when test="$source='U'">UNCLASSIFIED</xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$warn-parse-classif"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  
-  
 </xsl:stylesheet>
 <!-- **************************************************************** -->
 <!--                          CHANGE HISTORY                          -->
@@ -1374,12 +1264,6 @@
 -->
 <!-- 2013-02-15                                                  
   - Added logic to take the ism:joint attribute into account.
--->
-<!-- 2014-06-19                                                  
-  - Corrected "OC OC-USGOV" rendering for task #196.
--->
-<!-- 2015-11-23
-  - Corrected BALK, BOHEMIA, ATOMAL rendering for task #1100
 -->
 <!-- **************************************************************** -->
 <!-- **************************************************************** -->
