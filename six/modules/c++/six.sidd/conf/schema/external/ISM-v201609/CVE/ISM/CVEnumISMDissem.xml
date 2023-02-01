@@ -1,72 +1,103 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Notices - Distribution Notice: 
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Notices - Distribution Notice: 
            This document has been approved for Public Release and is available for use without restriction.
-       --><cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ism:compliesWith="USGov USIC" ism:ownerProducer="USA" ism:classification="U" ism:DESVersion="201609.201707" ism:ISMCATCESVersion="201609" ism:resourceElement="true" CVEVersion="2.1" specVersion="201609.201707" ism:createDate="2012-01-04" xsi:schemaLocation="urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd">
+       --><cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         ism:compliesWith="USGov USIC"
+         
+         ism:ownerProducer="USA"
+         ism:classification="U"
+         ism:DESVersion="13"
+         ism:ISMCATCESVersion="2"
+         ism:resourceElement="true"
+         CVEVersion="1"
+         ism:createDate="2012-01-04"
+         xsi:schemaLocation="urn:us:gov:ic:cve ../Schema/CVEXml.xsd">
 
 
 	  <cve:IRM>
-		    <URN xmlns="urn:us:gov:ic:cve">urn:us:gov:ic:cvenum:ism:dissem</URN>
-		    <Title xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">CVEnumISMDissem</Title>
-	  	<Description xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">All currently valid Dissemination controls from the published register. This CVE is used by @ism:disseminationControls.</Description>
+		    <ddms:identifier xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ddms:qualifier="name"
+                       ddms:value="urn:us:gov:ic:cvenum:ism:dissem"/>
+		    <ddms:title xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:ownerProducer="USA"
+                  ism:classification="U">CVEnumISMDissem</ddms:title>
+		    <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:ownerProducer="USA"
+                        ism:classification="U">All currently valid Dissemination controls from the published register</ddms:description>
 		    <cve:Created>2012-01-04T00:14:00-04:00</cve:Created>
-		    <Source ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">IC Systems Register and Manual</Source>
-		    <PointOfContact ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">
-         <Name>Office IC CIO</Name>
-         <Email>ic-standards-support@iarpa.gov</Email>
-      </PointOfContact>
+		    <ddms:source xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ddms:value="CAPCO Register"/>
+		    <ddms:pointOfContact xmlns:ddms="urn:us:mil:ces:metadata:ddms:5">
+			      <ddms:organization>
+				        <ddms:name>Office IC CIO</ddms:name>
+				        <ddms:email>ic-standards-support@intelink.gov</ddms:email>
+			      </ddms:organization>
+		    </ddms:pointOfContact>
 	  </cve:IRM>
 	
 	  <cve:Enumeration multivalue="true" ism:ownerProducer="USA" ism:classification="U">
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">RS</Value>
-			      <Description ism:classification="U" ism:ownerProducer="USA">RISK SENSITIVE</Description>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">RISK SENSITIVE</ddms:description>
 		    </Term>
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">FOUO</Value>
-			      <Description ism:classification="U" ism:ownerProducer="USA">FOR OFFICIAL USE ONLY</Description>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">FOR OFFICIAL USE ONLY</ddms:description>
 		    </Term>
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">OC</Value>
-			      <Description ism:classification="U" ism:ownerProducer="USA">ORIGINATOR CONTROLLED</Description>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">ORIGINATOR CONTROLLED</ddms:description>
 		    </Term>
 		  	<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 		  		   <Value ism:classification="U" ism:ownerProducer="USA">OC-USGOV</Value>
-		  		   <Description ism:classification="U" ism:ownerProducer="USA">ORIGINATOR CONTROLLED US GOVERNMENT</Description>
+		  		   <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">ORIGINATOR CONTROLLED US GOVERNMENT</ddms:description>
 		  	</Term>
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">IMC</Value>
-			      <Description ism:classification="U" ism:ownerProducer="USA">CONTROLLED IMAGERY</Description>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">CONTROLLED IMAGERY</ddms:description>
 		    </Term>
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">NF</Value>
-			      <Description ism:classification="U" ism:ownerProducer="USA">NOT RELEASABLE TO FOREIGN NATIONALS</Description>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">NOT RELEASABLE TO FOREIGN NATIONALS</ddms:description>
 		    </Term>
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">PR</Value>
-			      <Description ism:classification="U" ism:ownerProducer="USA">CAUTION-PROPRIETARY INFORMATION INVOLVED</Description>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">CAUTION-PROPRIETARY INFORMATION INVOLVED</ddms:description>
 		    </Term>
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">REL</Value>
-			      <Description ism:classification="U" ism:ownerProducer="USA">AUTHORIZED FOR RELEASE TO</Description>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">AUTHORIZED FOR RELEASE TO</ddms:description>
 		    </Term>
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">RELIDO</Value>
-			      <Description ism:classification="U" ism:ownerProducer="USA">RELEASABLE BY INFORMATION DISCLOSURE OFFICIAL</Description>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">RELEASABLE BY INFORMATION DISCLOSURE OFFICIAL</ddms:description>
 		    </Term>
-	  	  <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA" deprecated="2017-11-01">
+	  		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA"
+            deprecated="2014-09-11">
 			      <Value ism:classification="U" ism:ownerProducer="USA">EYES</Value>
-			      <Description ism:classification="U" ism:ownerProducer="USA">EYES ONLY</Description>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">EYES ONLY</ddms:description>
 		    </Term>
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">DSEN</Value>
-			      <Description ism:classification="U" ism:ownerProducer="USA">DEA SENSITIVE</Description>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">DEA SENSITIVE</ddms:description>
 		    </Term>
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">FISA</Value>
-			      <Description ism:classification="U" ism:ownerProducer="USA">FOREIGN INTELLIGENCE SURVEILLANCE ACT</Description>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">FOREIGN INTELLIGENCE SURVEILLANCE ACT</ddms:description>
 		    </Term>
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">DISPLAYONLY</Value>
-			      <Description ism:classification="U" ism:ownerProducer="USA">AUTHORIZED FOR DISPLAY BUT NOT RELEASE TO</Description>
+			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                           ism:ownerProducer="USA">AUTHORIZED FOR DISPLAY BUT NOT RELEASE TO</ddms:description>
 		    </Term>
 	  </cve:Enumeration>
 </cve:CVE>
