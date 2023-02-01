@@ -196,7 +196,9 @@ static void do_validate_(const xml::lite::Document& doc,
         //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
         //  and attempt to rewrite the file. Continuing in this manner is
         //  highly discouraged
-        throw six::DESValidationException(Ctxt("INVALID XML: Check both the XML being produced and the schemas available"));
+        const auto strSchemaPathSize = std::to_string(paths.size());
+        const auto ctx(Ctxt("INVALID XML: Check both the XML being produced and the schemas (#" + strSchemaPathSize + ") available"));
+        throw six::DESValidationException(ctx);
     }
 }
 template<typename TPath>
