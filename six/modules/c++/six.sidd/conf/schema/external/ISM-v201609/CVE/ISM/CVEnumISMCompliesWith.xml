@@ -1,69 +1,53 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- Notices - Distribution Notice: 
            This document has been approved for Public Release and is available for use without restriction.
-       --><cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         ism:compliesWith="USGov USIC"
-         
-         ism:ownerProducer="USA"
-         ism:classification="U"
-         ism:DESVersion="13"
-         ism:ISMCATCESVersion="2"
-         ism:resourceElement="true"
-         CVEVersion="1"
-         ism:createDate="2011-09-01"
-         xsi:schemaLocation="urn:us:gov:ic:cve ../Schema/CVEXml.xsd">
-	
-	  <cve:IRM>
-		    <ddms:identifier xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ddms:qualifier="name"
-                       ddms:value="urn:us:gov:ic:cvenum:ism:complieswith"/>
-		    <ddms:title xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:ownerProducer="USA"
-                  ism:classification="U">CVEnumISMCompliesWith</ddms:title>
-		    <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:ownerProducer="USA"
-                        ism:classification="U">ISM rule sets documents may comply
-			with.</ddms:description>
-		
-		    <cve:Created>2010-05-30T16:52:00-04:00</cve:Created>
-		
-		    <ddms:source xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ddms:value="ISM schema"/>
-		    <ddms:pointOfContact xmlns:ddms="urn:us:mil:ces:metadata:ddms:5">
-			      <ddms:organization>
-				        <ddms:name>Office IC CIO</ddms:name>
-				        <ddms:email>ic-standards-support@intelink.gov</ddms:email>
-			      </ddms:organization>
-		    </ddms:pointOfContact>
-	  </cve:IRM>
-	
-	  <cve:Enumeration multivalue="true" ism:ownerProducer="USA" ism:classification="U">
-		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
-			      <Value ism:classification="U" ism:ownerProducer="USA">USGov</Value>
-			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
-			      	ism:ownerProducer="USA">Document claims compliance with all rules encoded in ISM for
+       -->
+<cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ism:compliesWith="USGov USIC" ism:ownerProducer="USA"
+	ism:classification="U" ism:DESVersion="201609.201707" ism:ISMCATCESVersion="201609" ism:resourceElement="true"
+	CVEVersion="2.1" specVersion="201609.201707" ism:createDate="2011-09-01" xsi:schemaLocation="urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd">
+
+	<cve:IRM>
+		<URN xmlns="urn:us:gov:ic:cve">urn:us:gov:ic:cvenum:ism:complieswith</URN>
+		<Title xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">CVEnumISMCompliesWith</Title>
+		<Description xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">ISM rule sets documents may comply
+			with. This CVE is used by @ism:compliesWith.</Description>
+
+		<cve:Created>2010-05-30T16:52:00-04:00</cve:Created>
+
+		<Source ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">ISM schema</Source>
+		<PointOfContact ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">
+			<Name>Office IC CIO</Name>
+			<Email>ic-standards-support@iarpa.gov</Email>
+		</PointOfContact>
+	</cve:IRM>
+
+	<cve:Enumeration multivalue="true" ism:ownerProducer="USA" ism:classification="U">
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">USGov</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Document claims compliance with all rules encoded in ISM for
 			      	documents produced by the US Federal Government. This is the minimum set of rules
 			      	for US documents to adhere to, and all US documents should claim compliance with
 			      	USGov. For example, a US Intelligence Community document should claim
-			      	ism:compliesWith="USGov USIC".</ddms:description>
-		    </Term>
-		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
-			      <Value ism:classification="U" ism:ownerProducer="USA">USIC</Value>
-			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
-			      	ism:ownerProducer="USA">Document claims compliance with all rules encoded in ISM for
+			      	ism:compliesWith="USGov USIC".</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">USIC</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Document claims compliance with all rules encoded in ISM for
 			      	documents produced by the US Intelligence Community. Documents that claim compliance
-			      	with USIC MUST also claim compliance with USGov.</ddms:description>
-		    </Term>
-		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
-			      <Value ism:classification="U" ism:ownerProducer="USA">USDOD</Value>
-			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
-			      	ism:ownerProducer="USA">Document claims compliance with all rules encoded in ISM for
+			      	with USIC MUST also claim compliance with USGov.</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">USDOD</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Document claims compliance with all rules encoded in ISM for
 			      	documents produced by the US Department of Defense. Documents that claim compliance
-			      	with USDOD MUST also claim compliance with USGov.</ddms:description>
-		    </Term>
-		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
-			      <Value ism:classification="U" ism:ownerProducer="USA">OtherAuthority</Value>
-			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
-			      	ism:ownerProducer="USA">Document claims compliance with an authority other than the
+			      	with USDOD MUST also claim compliance with USGov.</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">OtherAuthority</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Document claims compliance with an authority other than the
 			      	USGov, USIC, or USDOD. This token is not allowed if the ism:ownerProducer contains
-			      	USA.</ddms:description>
-		    </Term>		
-	  </cve:Enumeration>
+			      	USA.</Description>
+		</Term>
+	</cve:Enumeration>
 </cve:CVE>

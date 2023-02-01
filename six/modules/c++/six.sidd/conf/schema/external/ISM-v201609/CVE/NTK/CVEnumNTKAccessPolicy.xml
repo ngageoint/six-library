@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Notices - Distribution Notice: 
+           This document has been approved for Public Release and is available for use without restriction.
+       -->
+<cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ism:compliesWith="USGov USIC" ism:ownerProducer="USA"
+	ism:classification="U" ism:DESVersion="201609.201707" ism:ISMCATCESVersion="201609" ism:resourceElement="true"
+	CVEVersion="2.1" specVersion="201508" ism:createDate="2011-09-01" xsi:schemaLocation="urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd">
+
+	<cve:IRM>
+		<URN xmlns="urn:us:gov:ic:cve">urn:us:gov:ic:cvenum:ntk:accesspolicy</URN>
+		<Title xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">CVEnumNTKAccessPolicy</Title>
+		<Description xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">NTK access policy
+			names. All NTK enterprise access policy URNs start with ‘urn:us:gov:ic:aces:ntk:’. Values in this CVE
+			correspond to the terminating portion of NTK access policy URNs.</Description>
+
+		<cve:Created>2010-05-30T16:52:00-04:00</cve:Created>
+
+		<Source ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">NTK ACES</Source>
+		
+		<PointOfContact ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">
+			<Name>Office of the IC CIO</Name>
+			<Email>ic-standards-support@iarpa.gov</Email>
+		</PointOfContact>
+	</cve:IRM>
+
+	<cve:Enumeration multivalue="false" ism:ownerProducer="USA" ism:classification="U">
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">urn:us:gov:ic:aces:ntk:xd</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Exclusive Distibution</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">urn:us:gov:ic:aces:ntk:ico</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Intelligence Community Only</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">urn:us:gov:ic:aces:ntk:license</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">License</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">urn:us:gov:ic:aces:ntk:mn</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Mission Need Profile</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">urn:us:gov:ic:aces:ntk:nd</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">No Distribution</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">urn:us:gov:ic:aces:ntk:oc</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Originator Controlled</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">urn:us:gov:ic:aces:ntk:permissive</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Permissive group/individual access</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">urn:us:gov:ic:aces:ntk:propin:1</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">PROPIN for US Government Employees</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">urn:us:gov:ic:aces:ntk:propin:2</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Explicit PROPIN</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA" regularExpression="true">urn:us:gov:ic:aces:ntk:propin:([A-Za-z][A-Za-z0-9\-_.;,():+]{1,64})</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Regex for extension of PROPIN with non-IC CIO
+				access policy URN.</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">urn:us:gov:ic:aces:ntk:restrictive</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Restrictive group access</Description>
+		</Term>
+	</cve:Enumeration>
+
+</cve:CVE>

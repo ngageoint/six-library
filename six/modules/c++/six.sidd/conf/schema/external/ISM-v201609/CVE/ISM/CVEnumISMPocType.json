@@ -1,0 +1,160 @@
+{
+    "@context": {
+        "cve": "urn:us:gov:ic:cve", 
+        "ism": "urn:us:gov:ic:ism"
+    }, 
+    "cve:CVE": {
+        "cve:Enumeration": {
+            "cve:Term": [
+                {
+                    "cve:Description": {
+                        "text": "Point-of-contact for an ICD-710 notice.", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "cve:Value": {
+                        "text": "ICD-710", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }, 
+                {
+                    "cve:Description": {
+                        "text": "DoD Distribution statement B from DoD Directive 5230.24", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "cve:Value": {
+                        "text": "DoD-Dist-B", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }, 
+                {
+                    "cve:Description": {
+                        "text": "DoD Distribution statement C from DoD Directive 5230.24", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "cve:Value": {
+                        "text": "DoD-Dist-C", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }, 
+                {
+                    "cve:Description": {
+                        "text": "DoD Distribution statement D from DoD Directive 5230.24", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "cve:Value": {
+                        "text": "DoD-Dist-D", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }, 
+                {
+                    "cve:Description": {
+                        "text": "DoD Distribution statement E from DoD Directive 5230.24", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "cve:Value": {
+                        "text": "DoD-Dist-E", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }, 
+                {
+                    "cve:Description": {
+                        "text": "DoD Distribution statement F from DoD Directive 5230.24", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "cve:Value": {
+                        "text": "DoD-Dist-F", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }, 
+                {
+                    "cve:Description": {
+                        "text": "DoD Distribution statement X from DoD Directive 5230.24", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "cve:Value": {
+                        "text": "DoD-Dist-X", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }
+            ], 
+            "multivalue": "true", 
+            "ism:ownerProducer": "USA", 
+            "ism:classification": "U"
+        }, 
+        "ism:ownerProducer": "USA", 
+        "CVEVersion": "2.1", 
+        "cve:IRM": {
+            "cve:Source": [
+                {
+                    "text": "DoD Directive 5230.24", 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }, 
+                {
+                    "text": "ICD-710", 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }, 
+                {
+                    "text": "Originator Controlled Memo, March 11, 2011", 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }
+            ], 
+            "cve:Description": {
+                "text": "All currently authorized types for ISM-related points-of-contact. This CVE is used by @ism:pocType.", 
+                "ism:ownerProducer": "USA", 
+                "ism:classification": "U"
+            }, 
+            "cve:PointOfContact": {
+                "cve:Name": "Office IC CIO", 
+                "cve:Email": "ic-standards-support@iarpa.gov", 
+                "ism:ownerProducer": "USA", 
+                "ism:classification": "U"
+            }, 
+            "cve:URN": "urn:us:gov:ic:cvenum:ism:pocType", 
+            "cve:Title": {
+                "text": "CVEnumISMPocType", 
+                "ism:ownerProducer": "USA", 
+                "ism:classification": "U"
+            }, 
+            "cve:Created": "2011-07-13T14:42:00-04:00"
+        }, 
+        "specVersion": "201609.201707", 
+        "ism:DESVersion": "201609.201707", 
+        "xsi:schemaLocation": "urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd", 
+        "ism:compliesWith": "USGov USIC", 
+        "ism:classification": "U", 
+        "ism:createDate": "2011-09-01", 
+        "ism:resourceElement": "true", 
+        "ism:ISMCATCESVersion": "201609"
+    }
+}
