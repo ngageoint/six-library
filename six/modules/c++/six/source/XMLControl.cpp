@@ -161,6 +161,30 @@ inline static auto make_Validator(const std::vector<fs::path>& paths, logging::L
     const auto recursive = paths.size() == 1;
     return xml::lite::Validator(paths, log, recursive);
 }
+
+inline std::string to_string(const std::string& s)
+{
+    return s;
+}
+inline std::string to_string(const std::filesystem::path& p)
+{
+    return p.string();
+}
+
+// Generate a detaled INVALID XML message
+template<typename TPath>
+inline static auto getInvalidXmlErrorMessage(const std::vector<TPath>& paths)
+{
+    static const std::string invalidXML = "INVALID XML: Check both the XML being produced and schemas available at ";
+    auto message = invalidXML;
+    message += (paths.size() > 1 ? "these paths:" : "this path:");
+    for (const auto& p : paths)
+    {
+        message += "\n\t" + to_string(p); // paths could be a std::filesystem::path
+    }
+    return message;
+}
+
 template<typename TPath>
 static void do_validate_(const xml::lite::Document& doc,
     const std::vector<TPath>& paths, logging::Logger* log)
@@ -196,9 +220,7 @@ static void do_validate_(const xml::lite::Document& doc,
         //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
         //  and attempt to rewrite the file. Continuing in this manner is
         //  highly discouraged
-        const auto strSchemaPathSize = std::to_string(paths.size());
-        const auto ctx(Ctxt("INVALID XML: Check both the XML being produced and the schemas (#" + strSchemaPathSize + ") available"));
-        throw six::DESValidationException(ctx);
+        throw six::DESValidationException(Ctxt(getInvalidXmlErrorMessage(paths)));
     }
 }
 template<typename TPath>
