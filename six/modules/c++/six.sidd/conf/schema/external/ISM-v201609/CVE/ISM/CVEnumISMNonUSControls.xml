@@ -1,53 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Notices - Distribution Notice: 
+<?xml version="1.0" encoding="utf-8"?><!-- Notices - Distribution Notice: 
            This document has been approved for Public Release and is available for use without restriction.
-       --><cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         ism:compliesWith="USGov USIC"
-         
-         ism:ownerProducer="USA"
-         ism:classification="U"
-         ism:DESVersion="13"
-         ism:ISMCATCESVersion="2"
-         ism:resourceElement="true"
-         CVEVersion="1"
-         ism:createDate="2011-09-01"
-         xsi:schemaLocation="urn:us:gov:ic:cve ../Schema/CVEXml.xsd">
+       --><cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ism:compliesWith="USGov USIC" ism:ownerProducer="USA" ism:classification="U" ism:DESVersion="201609.201707" ism:ISMCATCESVersion="201609" ism:resourceElement="true" CVEVersion="2.1" specVersion="201609.201707" ism:createDate="2011-09-01" xsi:schemaLocation="urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd">
 	
 	  <cve:IRM>
-		    <ddms:identifier xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ddms:qualifier="name"
-                       ddms:value="urn:us:gov:ic:cvenum:ism:nonuscontrols"/>
-		    <ddms:title xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:ownerProducer="USA"
-                  ism:classification="U">CVEnumISMNonUSControls</ddms:title>
-		    <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:ownerProducer="USA"
-                        ism:classification="U">NonUS Control markings supported by ISM</ddms:description>
+		    <URN xmlns="urn:us:gov:ic:cve">urn:us:gov:ic:cvenum:ism:nonuscontrols</URN>
+		    <Title xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">CVEnumISMNonUSControls</Title>
+	  	<Description xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">NonUS Control markings supported by ISM. This CVE is used by @ism:nonUSControls.</Description>
 		
 		    <cve:Created>2010-06-06T20:11:00-04:00</cve:Created>
 		
-		    <ddms:source xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ddms:value="ISM schema"/>
-		    <ddms:pointOfContact xmlns:ddms="urn:us:mil:ces:metadata:ddms:5">
-			      <ddms:organization>
-				        <ddms:name>Office IC CIO</ddms:name>
-				        <ddms:email>ic-standards-support@intelink.gov</ddms:email>
-			      </ddms:organization>
-		    </ddms:pointOfContact>
+		    <Source ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">ISM schema</Source>
+		    <PointOfContact ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">
+         <Name>Office IC CIO</Name>
+         <Email>ic-standards-support@iarpa.gov</Email>
+      </PointOfContact>
 	  </cve:IRM>
 	
 	  <cve:Enumeration multivalue="true" ism:ownerProducer="USA" ism:classification="U">
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">ATOMAL</Value>
-			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
-                           ism:ownerProducer="USA">NATO Atomal mark</ddms:description>
+			      <Description ism:classification="U" ism:ownerProducer="USA">NATO Atomal mark</Description>
 		    </Term>
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">BOHEMIA</Value>
-			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
-                           ism:ownerProducer="USA">NATO Bohemia mark</ddms:description>
+			      <Description ism:classification="U" ism:ownerProducer="USA">NATO Bohemia mark</Description>
 		    </Term>
 		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
 			      <Value ism:classification="U" ism:ownerProducer="USA">BALK</Value>
-			      <ddms:description xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
-                           ism:ownerProducer="USA">NATO Balk mark</ddms:description>
+			      <Description ism:classification="U" ism:ownerProducer="USA">NATO Balk mark</Description>
 		    </Term>
 	  </cve:Enumeration>
 	

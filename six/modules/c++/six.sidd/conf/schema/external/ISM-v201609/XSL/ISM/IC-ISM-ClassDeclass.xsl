@@ -34,6 +34,11 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
                 xmlns:ism="urn:us:gov:ic:ism">
 
+  <xsl:output method="text" encoding="UTF-8" media-type="text-plain" indent="no"/>
+  <!-- If including this xsl causes "Content is not allowed in prolog" the importing 
+  XSL is likely missing an output declaration -->
+  
+
   <!--***********************************************-->
   <!-- Generate the Classification Authority Block for the current element-->
   <!--***********************************************-->
