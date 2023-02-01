@@ -19,8 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_DERIVED_DATA_H__
-#define __SIX_DERIVED_DATA_H__
+#ifndef SIX_six_sidd_DerivedData_h_INCLUDED_
+#define SIX_six_sidd_DerivedData_h_INCLUDED_
+#pragma once
+
+#include <std/filesystem>
 
 #include <mem/ScopedCopyablePtr.h>
 #include <six/Data.h>
@@ -323,6 +326,11 @@ struct DerivedData: public Data
         mVersion = strVersion;
     }
 
+    // Gets a relative path to the ISM schema; e.g., ISM-v201609/Schema/ISM/IC-ISM.xsd
+    // This might be better on DerivedXMLParser, but existing codepaths don't keep instances
+    // around long enough.        
+    std::filesystem::path ismRelativePath() const;
+
     /*
      * Convert the output plane pixel location into meters from the reference
      * point
@@ -342,4 +350,4 @@ private:
 };
 }
 }
-#endif
+#endif // SIX_six_sidd_DerivedData_h_INCLUDED_

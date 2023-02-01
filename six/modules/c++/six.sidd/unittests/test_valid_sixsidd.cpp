@@ -67,10 +67,7 @@ static std::vector<std::filesystem::path> getSchemaPaths()
 {
     static const auto xsdPath = sys::test::findGITModuleFile("six", schema_relative_path(), "SIDD_schema_V3.0.0.xsd");
     static const auto rootSchemaDir = xsdPath.parent_path(); // ".../conf/Schema"
-
-    // The ISM schema is in a sub-directory
-    static const auto ismPath = rootSchemaDir / "external" / "ISM-v201609";
-    return std::vector<std::filesystem::path> { rootSchemaDir, ismPath };
+    return std::vector<std::filesystem::path> { rootSchemaDir };
 }
 
 static std::unique_ptr<six::sidd::DerivedData> test_assert_round_trip(const std::string& testName,
