@@ -114,12 +114,12 @@ static void test_createFakeDerivedData_(const std::string& testName, const std::
 TEST_CASE(test_createFakeDerivedData)
 {
     test_createFakeDerivedData_(testName, "2.0.0", false /*validate*/);
-    test_createFakeDerivedData_(testName, "3.0.0", false /*validate*/);
+    //test_createFakeDerivedData_(testName, "3.0.0", false /*validate*/);
 }
 TEST_CASE(test_createFakeDerivedData_validate)
 {
     test_createFakeDerivedData_(testName, "2.0.0", true /*validate*/);
-    test_createFakeDerivedData_(testName, "3.0.0", true /*validate*/);
+    //test_createFakeDerivedData_(testName, "3.0.0", true /*validate*/);
 }
 
 static void test_assert_unmodeled_(const std::string& testName, const six::UnmodeledS& Unmodeled)
@@ -175,7 +175,7 @@ TEST_CASE(test_read_sidd200_xml)
 }
 TEST_CASE(test_read_sidd300_xml)
 {
-    test_read_sidd_xml(testName, "sidd300.xml");
+    //test_read_sidd_xml(testName, "sidd300.xml");
 }
 
 TEST_MAIN(

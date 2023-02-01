@@ -220,7 +220,12 @@ static void do_validate_(const xml::lite::Document& doc,
         //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
         //  and attempt to rewrite the file. Continuing in this manner is
         //  highly discouraged
-        throw six::DESValidationException(Ctxt(getInvalidXmlErrorMessage(paths)));
+        auto ctx(Ctxt(getInvalidXmlErrorMessage(paths)));
+        for (const auto& e : errors)
+        {
+            ctx.mMessage += "\n" + e.toString();
+        }
+        throw six::DESValidationException(ctx);
     }
 }
 template<typename TPath>
