@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<define name="CVEnumISMExemptFrom.att">
+   <attribute name="CVEnumISMExemptFrom">
+      <list>
+         <optional>
+            <value>IC_710_MANDATORY_FDR</value>
+         </optional>
+         <optional>
+            <value>DOD_DISTRO_STATEMENT</value>
+         </optional>
+      </list>
+   </attribute>
+</define>

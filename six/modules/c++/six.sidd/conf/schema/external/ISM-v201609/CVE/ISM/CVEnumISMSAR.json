@@ -1,0 +1,49 @@
+{
+    "@context": {
+        "cve": "urn:us:gov:ic:cve", 
+        "ism": "urn:us:gov:ic:ism"
+    }, 
+    "cve:CVE": {
+        "cve:Enumeration": {
+            "text": "", 
+            "multivalue": "true", 
+            "ism:ownerProducer": "USA", 
+            "ism:classification": "U"
+        }, 
+        "ism:ownerProducer": "USA", 
+        "CVEVersion": "2.1", 
+        "cve:IRM": {
+            "cve:Source": {
+                "text": "IC Systems Register and Manual", 
+                "ism:ownerProducer": "USA", 
+                "ism:classification": "U"
+            }, 
+            "cve:Description": {
+                "text": "All currently valid SAR controls from the published register. This CVE is used by @ism:SARIdentifier.", 
+                "ism:ownerProducer": "USA", 
+                "ism:classification": "U"
+            }, 
+            "cve:PointOfContact": {
+                "cve:Name": "Office IC CIO", 
+                "cve:Email": "ic-standards-support@iarpa.gov", 
+                "ism:ownerProducer": "USA", 
+                "ism:classification": "U"
+            }, 
+            "cve:URN": "urn:us:gov:ic:cvenum:ism:sar", 
+            "cve:Title": {
+                "text": "CVEnumISMSAR", 
+                "ism:ownerProducer": "USA", 
+                "ism:classification": "U"
+            }, 
+            "cve:Created": "2010-03-12T11:29:00-04:00"
+        }, 
+        "specVersion": "201609.201707", 
+        "ism:DESVersion": "201609.201707", 
+        "xsi:schemaLocation": "urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd", 
+        "ism:compliesWith": "USGov USIC", 
+        "ism:classification": "U", 
+        "ism:createDate": "2011-09-01", 
+        "ism:resourceElement": "true", 
+        "ism:ISMCATCESVersion": "201609"
+    }
+}

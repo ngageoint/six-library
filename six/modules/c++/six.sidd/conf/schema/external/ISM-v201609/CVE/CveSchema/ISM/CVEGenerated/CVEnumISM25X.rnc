@@ -1,0 +1,1 @@
+CVEnumISM25X.att = attribute CVEnumISM25X { "AEA" | "NATO" | "NATO-AEA" | "25X1" | "25X1-EO-12951" | "25X2" | "25X3" | "25X4" | "25X5" | "25X6" | "25X7" | "25X8" | "25X9" | "50X1" | "50X1-HUM" | "50X2" | "50X2-WMD" | "50X3" | "50X4" | "50X5" | "50X6" | "50X7" | "50X8" | "50X9" } 
