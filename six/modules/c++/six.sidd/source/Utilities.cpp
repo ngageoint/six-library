@@ -1141,9 +1141,10 @@ static void initProductProcessing(six::sidd::ProductProcessing& processing)
     processing.processingModules.push_back(module);
 }
 
-static void populateData(six::sidd::DerivedData& siddData, const std::string& strVersion,
-    const std::string& lutType = "Mono")
+static void populateData(six::sidd::DerivedData& siddData, const std::string& lutType = "Mono")
 {
+    const auto strVersion = siddData.getVersion();
+
     constexpr bool smallImage = true;
 
     siddData.setVersion(strVersion);
@@ -1297,7 +1298,7 @@ static void update_for_SIDD_300(DerivedData& data) // n.b., much of this was add
     ProcTxRcvPolarization polarization{ PolarizationSequenceType::UNKNOWN, PolarizationSequenceType::UNKNOWN };
     data.exploitationFeatures->product[0].polarization.push_back(polarization); // TODO: this was added before SIDD 3.0.0
 
-    populateData(data, "3.0.0");
+    populateData(data);
 }
 
 static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& strVersion)

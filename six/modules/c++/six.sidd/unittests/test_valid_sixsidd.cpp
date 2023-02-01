@@ -73,8 +73,12 @@ static std::vector<std::filesystem::path> getSchemaPaths()
 static std::unique_ptr<six::sidd::DerivedData> test_assert_round_trip(const std::string& testName,
     const six::sidd::DerivedData& derivedData, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
-    auto strXML = six::sidd::Utilities::toXMLString(derivedData, pSchemaPaths);
+    const auto strXML = six::sidd::Utilities::toXMLString(derivedData, pSchemaPaths);
     TEST_ASSERT_FALSE(strXML.empty());
+
+    const auto xml_ = str::EncodedStringView(strXML).native(); // for debugging
+    TEST_ASSERT_FALSE(xml_.empty());
+
     return six::sidd::Utilities::parseDataFromString(strXML, pSchemaPaths);
 }
 
@@ -114,8 +118,8 @@ TEST_CASE(test_createFakeDerivedData)
 }
 TEST_CASE(test_createFakeDerivedData_validate)
 {
-    //test_createFakeDerivedData_(testName, "2.0.0", true /*validate*/);
-    //test_createFakeDerivedData_(testName, "3.0.0", true /*validate*/);
+    test_createFakeDerivedData_(testName, "2.0.0", true /*validate*/);
+    test_createFakeDerivedData_(testName, "3.0.0", true /*validate*/);
 }
 
 static void test_assert_unmodeled_(const std::string& testName, const six::UnmodeledS& Unmodeled)
