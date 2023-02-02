@@ -120,8 +120,8 @@ public:
 
     ValidatorXerces(const ValidatorXerces&) = delete;
     ValidatorXerces& operator=(const ValidatorXerces&) = delete;
-    ValidatorXerces(ValidatorXerces&&) = delete;
-    ValidatorXerces& operator=(ValidatorXerces&&) = delete;
+    ValidatorXerces(ValidatorXerces&&) = default;
+    ValidatorXerces& operator=(ValidatorXerces&&) = default;
 
     using ValidatorInterface::validate;
 
