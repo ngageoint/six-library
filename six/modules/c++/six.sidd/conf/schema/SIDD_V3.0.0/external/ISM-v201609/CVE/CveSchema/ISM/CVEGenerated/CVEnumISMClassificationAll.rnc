@@ -1,0 +1,1 @@
+CVEnumISMClassificationAll.att = attribute CVEnumISMClassificationAll { "R" | "C" | "S" | "TS" | "U" } 

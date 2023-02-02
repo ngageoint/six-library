@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:mnregion="urn:us:gov:ic:cvenum:mn:region"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified"
+            xml:lang="en"
+            targetNamespace="urn:us:gov:ic:cvenum:mn:region">
+   <xsd:annotation>
+      <xsd:documentation>
+                    The W3C XML Schema fragment encoding types for CVEnumMNRegion Version 2.1 controlled vocabulary enumerations. This file is generated, so edits should be made to the CVEnumMNRegion.xml CVE it is based on, instead of here.
+                </xsd:documentation>
+   </xsd:annotation>
+   <!--*************************************************************-->
+<!--Generated TYPE DEFINITIONS ..................................-->
+<!--*************************************************************-->
+<xsd:simpleType name="CVEnumMNRegion">
+      <xsd:annotation>
+         <xsd:documentation>(U) All 
+			currently identified values for Region. This list was originally derived from the 
+		    GIMMEE Mission Need Region list.
+                         PERMISSIBLE VALUES
+                         
+                         The permissible values for this simple type are defined in the Controlled Value Enumeration:
+                         
+                         CVEnumMNRegion.xml
+                         
+                     </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:token">
+         <xsd:enumeration value="AFce">
+            <xsd:annotation>
+               <xsd:documentation>Africa, Central</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="AFea">
+            <xsd:annotation>
+               <xsd:documentation>Africa, East</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="AFno">
+            <xsd:annotation>
+               <xsd:documentation>Africa, North</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="AFso">
+            <xsd:annotation>
+               <xsd:documentation>Africa, Southern</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="AFwe">
+            <xsd:annotation>
+               <xsd:documentation>Africa, West</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="AMca">
+            <xsd:annotation>
+               <xsd:documentation>Americas, Caribbean</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="AMce">
+            <xsd:annotation>
+               <xsd:documentation>Americas, Central</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="AMno">
+            <xsd:annotation>
+               <xsd:documentation>Americas, North</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="AMso">
+            <xsd:annotation>
+               <xsd:documentation>Americas, South</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="AMan">
+            <xsd:annotation>
+               <xsd:documentation>Americas, Antarctica</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="ASea">
+            <xsd:annotation>
+               <xsd:documentation>Asia, East</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="ASse">
+            <xsd:annotation>
+               <xsd:documentation>Asia, South East</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="ASso">
+            <xsd:annotation>
+               <xsd:documentation>Asia, South</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="EAca">
+            <xsd:annotation>
+               <xsd:documentation>Eurasia, Caucasus</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="EAce">
+            <xsd:annotation>
+               <xsd:documentation>Eurasia, Central</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="EAru">
+            <xsd:annotation>
+               <xsd:documentation>Eurasia, Russia</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="EUba">
+            <xsd:annotation>
+               <xsd:documentation>Europe, Balkans</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="EUce">
+            <xsd:annotation>
+               <xsd:documentation>Europe, Central</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="EUno">
+            <xsd:annotation>
+               <xsd:documentation>Europe, North</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="EUso">
+            <xsd:annotation>
+               <xsd:documentation>Europe, South</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="MEme">
+            <xsd:annotation>
+               <xsd:documentation>Middle East</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+         <xsd:enumeration value="OCoc">
+            <xsd:annotation>
+               <xsd:documentation>Oceania</xsd:documentation>
+            </xsd:annotation>
+         </xsd:enumeration>
+      </xsd:restriction>
+   </xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,120 @@
+{
+    "@context": {
+        "cve": "urn:us:gov:ic:cve", 
+        "ism": "urn:us:gov:ic:ism"
+    }, 
+    "cve:CVE": {
+        "cve:Enumeration": {
+            "cve:Term": [
+                {
+                    "cve:Description": {
+                        "text": "Notice element", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "cve:Value": {
+                        "text": "Notice", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }, 
+                {
+                    "cve:Description": {
+                        "text": "NoticeText element", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "cve:Value": {
+                        "text": "NoticeText", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }, 
+                {
+                    "cve:Description": {
+                        "text": "NoticeList element", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "cve:Value": {
+                        "text": "NoticeList", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }, 
+                {
+                    "cve:Description": {
+                        "text": "NoticeExternal element", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "cve:Value": {
+                        "text": "NoticeExternal", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }, 
+                {
+                    "cve:Description": {
+                        "text": "NoticeExternalList element", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "cve:Value": {
+                        "text": "NoticeExternalList", 
+                        "ism:ownerProducer": "USA", 
+                        "ism:classification": "U"
+                    }, 
+                    "ism:ownerProducer": "USA", 
+                    "ism:classification": "U"
+                }
+            ], 
+            "multivalue": "false", 
+            "ism:ownerProducer": "USA", 
+            "ism:classification": "U"
+        }, 
+        "ism:ownerProducer": "USA", 
+        "CVEVersion": "2.1", 
+        "cve:IRM": {
+            "cve:Source": {
+                "text": "ISM schema", 
+                "ism:ownerProducer": "USA", 
+                "ism:classification": "U"
+            }, 
+            "cve:Description": {
+                "text": "All currently authorized ISM element names", 
+                "ism:ownerProducer": "USA", 
+                "ism:classification": "U"
+            }, 
+            "cve:PointOfContact": {
+                "cve:Name": "Office IC CIO", 
+                "cve:Email": "ic-standards-support@iarpa.gov", 
+                "ism:ownerProducer": "USA", 
+                "ism:classification": "U"
+            }, 
+            "cve:URN": "urn:us:gov:ic:cvenum:ism:attributes", 
+            "cve:Title": {
+                "text": "CVEnumISMElements", 
+                "ism:ownerProducer": "USA", 
+                "ism:classification": "U"
+            }, 
+            "cve:Created": "2011-04-15T15:16:00-05:00"
+        }, 
+        "specVersion": "201609.201707", 
+        "ism:DESVersion": "201609.201707", 
+        "xsi:schemaLocation": "urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd", 
+        "ism:compliesWith": "USGov USIC", 
+        "ism:classification": "U", 
+        "ism:createDate": "2011-09-01", 
+        "ism:resourceElement": "true", 
+        "ism:ISMCATCESVersion": "201609"
+    }
+}
