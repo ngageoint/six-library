@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Notices - Distribution Notice: 
+           This document has been approved for Public Release and is available for use without restriction.
+       -->
+<cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ism:compliesWith="USGov USIC" ism:ownerProducer="USA"
+	ism:classification="U" ism:DESVersion="201609.201707" ism:ISMCATCESVersion="201609" ism:resourceElement="true"
+	CVEVersion="2.1" specVersion="201508" ism:createDate="2011-09-01" xsi:schemaLocation="urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd">
+
+	<cve:IRM>
+		<URN xmlns="urn:us:gov:ic:cve">urn:us:gov:ic:cvenum:ntk:profiledes</URN>
+		<Title xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">CVEnumNTKProfileDes</Title>
+		<Description xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">NTK profile des
+			names. All NTK enterprise profile des URNs start with ‘urn:us:gov:ic:ntk:profile’. Values in this CVE
+			correspond to the terminating portion of NTK profile des URNs.</Description>
+
+		<cve:Created>2015-09-04T10:54:00-04:00</cve:Created>
+
+		<Source ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">NTK DES</Source>
+		
+		<PointOfContact ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">
+			<Name>Office of the IC CIO</Name>
+			<Email>ic-standards-support@iarpa.gov</Email>
+		</PointOfContact>
+	</cve:IRM>
+
+	<cve:Enumeration multivalue="false" ism:ownerProducer="USA" ism:classification="U">
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">urn:us:gov:ic:ntk:profile:agencydissem</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Agency Dissem</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">urn:us:gov:ic:ntk:profile:datasphere</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Data Sphere</Description>
+		</Term>
+		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			<Value ism:classification="U" ism:ownerProducer="USA">urn:us:gov:ic:ntk:profile:grp-ind</Value>
+			<Description ism:classification="U" ism:ownerProducer="USA">Group and Individual</Description>
+		</Term>
+	</cve:Enumeration>
+
+</cve:CVE>
