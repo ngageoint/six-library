@@ -93,7 +93,7 @@ inline void assert_almost_eq(const std::string& testName, long double X1, long d
 
 #undef TEST_EXCEPTION
 #undef TEST_THROWS
-#define TEST_EXCEPTION(X) (void)testName; try{ (X); TEST_FAIL("Should have thrown exception"); } catch (const except::Throwable&){} catch (const except::Throwable11&){}
+#define TEST_EXCEPTION(X) (void)testName; try{ (X); TEST_FAIL("Should have thrown exception"); } catch (const except::Throwable&){}
 #define TEST_THROWS(X) (void)testName; try{ (X); TEST_FAIL("Should have thrown exception"); } catch (...){}
 
 
