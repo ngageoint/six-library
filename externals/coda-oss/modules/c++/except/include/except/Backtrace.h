@@ -42,6 +42,7 @@
 namespace version { namespace except {
 #if _MSC_VER
 #pragma warning(push)
+#pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
 #pragma warning(disable: 5264) // '...': '...' variable is not used
 #endif // _MSC_VER
 
