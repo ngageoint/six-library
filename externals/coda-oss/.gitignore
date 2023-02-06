@@ -2,8 +2,8 @@
 *~
 *.pyc
 __pycache__/
-# Build artifacts
 
+# Build artifacts
 install/
 install-*/
 target/
@@ -20,6 +20,7 @@ CMakeFiles/
 Makefile
 modules/**/Makefile
 out/
+CMakeSettings.json
 
 # Waf
 .waf-*
@@ -51,4 +52,5 @@ project.sln
 **/x64/
 *.vcxproj.user
 
-CMakeSettings.json
+# Unit-tests
+TEST_*_TMP.*
