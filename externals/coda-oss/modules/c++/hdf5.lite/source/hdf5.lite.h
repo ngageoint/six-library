@@ -60,6 +60,13 @@ auto try_catch_H5Exceptions(TFunc f, const char* file, int line, TArgs&&... args
     details::try_catch_H5Exceptions_(call_f, file, line, &retval /*context*/);
     return retval;
 }
+template<typename TFunc, typename ...TArgs>
+auto try_catch_H5ExceptionsV(TFunc f, const char* file, int line, TArgs&&... args)
+{    
+    // "Hide" the arguments inside of a lambda
+    auto call_f = [&](void*) { f(std::forward<TArgs>(args)...); };
+    details::try_catch_H5Exceptions_(call_f, file, line, nullptr /*context*/);
+}
 
 }
 }
