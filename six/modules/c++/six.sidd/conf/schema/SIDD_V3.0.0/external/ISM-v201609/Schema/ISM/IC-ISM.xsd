@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?oxygen SCHSchema="../../Schematron/ISM/ISM_XML.sch"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:us:gov:ic:ism:201609"
-	xmlns:ism="urn:us:gov:ic:ism:201609" xmlns:ismcat="urn:us:gov:ic:ismcat"
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:us:gov:ic:ism"
+	xmlns:ism="urn:us:gov:ic:ism" xmlns:ismcat="urn:us:gov:ic:ismcat"
 	xmlns:ism25x="urn:us:gov:ic:cvenum:ism:25x" xmlns:ismdissem="urn:us:gov:ic:cvenum:ism:dissem"
 	xmlns:ismcatfgio="urn:us:gov:ic:cvenum:ismcat:fgiopen"
 	xmlns:ismcatfgip="urn:us:gov:ic:cvenum:ismcat:fgiprotected"
@@ -16,7 +16,7 @@
 	xmlns:ismatomic="urn:us:gov:ic:cvenum:ism:atomicEnergyMarkings"
 	xmlns:ismpoctyp="urn:us:gov:ic:cvenum:ism:pocType" xmlns:xhtml="http://www.w3.org/1999/xhtml-StopBrowserRendering"
 	xmlns:ismexempt="urn:us:gov:ic:cvenum:ism:exemptfrom"
-	xmlns:ismcomplies="urn:us:gov:ic:cvenum:ism:complieswith" targetNamespace="urn:us:gov:ic:ism:201609"
+	xmlns:ismcomplies="urn:us:gov:ic:cvenum:ism:complieswith" targetNamespace="urn:us:gov:ic:ism"
 	elementFormDefault="qualified" attributeFormDefault="qualified" xml:lang="en"
 	ism:resourceElement="true" ism:compliesWith="USGov" ism:createDate="2011-12-01"
 	ism:DESVersion="201609" ism:classification="U" ism:ownerProducer="USA" version="201609.201707">
