@@ -110,7 +110,7 @@ public:
     std::wstring wstring() const; // UTF-16 on Windows, UTF-32 on Linux
 
     // These are for "advanced" use, most "normal" code should use the routines above.
-    std::string::const_pointer c_str() const
+    std::string::const_pointer c_str() const noexcept
     {
         return mString.data();
     }
@@ -122,7 +122,7 @@ public:
     {
         return mIsUtf8 ? nullptr : cast<str::W1252string::const_pointer>(c_str());
     }
-    size_t size() const
+    size_t size() const noexcept
     {
         return mString.size();
     }
