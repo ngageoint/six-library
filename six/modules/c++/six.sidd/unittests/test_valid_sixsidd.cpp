@@ -100,13 +100,9 @@ static void test_createFakeDerivedData_(const std::string& testName, const std::
     auto Unmodeled = get_Unmodeled(*pFakeDerivedData, strVersion);
     TEST_ASSERT_NULL(Unmodeled); // not part of the fake data, only added in SIDD 3.0
 
-    const std::vector<std::filesystem::path>* pSchemaPaths = nullptr; // NULL schemaPaths, no validation
-    if (validate)
-    {
-        // validate XML against schema
-        static const auto schemaPaths = getSchemaPaths(strVersion);
-        pSchemaPaths = &schemaPaths;
-    }
+    const auto schemaPaths = getSchemaPaths(strVersion);
+    const std::vector<std::filesystem::path>* pSchemaPaths = validate ? & schemaPaths: nullptr; // NULL schemaPaths, no validation
+
     auto pDerivedData = test_assert_round_trip(testName, *pFakeDerivedData, pSchemaPaths);
     Unmodeled = get_Unmodeled(*pDerivedData, strVersion);
     TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SIDD 3.0
