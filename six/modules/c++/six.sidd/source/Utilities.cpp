@@ -719,7 +719,14 @@ static void initProductCreation(six::sidd::ProductCreation& productCreation, con
     productCreation.productCreationExtensions.push_back(parameter);
 
     productCreation.classification.securityExtensions.push_back(parameter);
-    productCreation.classification.desVersion = 234;
+    if (strVersion != "3.0.0")
+    {
+        productCreation.classification.desVersion = 234; // existing code
+    }
+    else
+    {
+        productCreation.classification.desVersion = 201609; // SIDD 3.0
+    }
     productCreation.classification.createDate = six::DateTime();
     productCreation.classification.classification = "U";
 
@@ -735,8 +742,7 @@ static void initProductCreation(six::sidd::ProductCreation& productCreation, con
     productCreation.classification.ownerProducer.push_back("AIA");
     productCreation.classification.sciControls.push_back("HCS");
     productCreation.classification.sciControls.push_back("SI");
-    productCreation.classification.sarIdentifier.push_back("EU");
-    productCreation.classification.sarIdentifier.push_back("BC");
+    productCreation.classification.sarIdentifier.push_back("EU BC");
     productCreation.classification.disseminationControls.push_back("FOUO");
     productCreation.classification.disseminationControls.push_back("IMC");
     productCreation.classification.fgiSourceOpen.push_back("AIA");
