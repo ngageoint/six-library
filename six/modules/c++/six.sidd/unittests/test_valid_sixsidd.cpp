@@ -54,12 +54,7 @@ static inline std::filesystem::path six_sidd_relative_path()
 }
 static std::filesystem::path schema_relative_path(const std::string& strVersion)
 {
-    auto retval = six_sidd_relative_path() / "conf" / "schema"; // .../conf/schema
-    if (strVersion == "3.0.0")
-    {
-        retval = retval / "SIDD_V3.0.0"; // .../conf/schema/SIDD_V3.0.0
-    }
-    return retval;
+    return six_sidd_relative_path() / "conf" / "schema"; // .../conf/schema
 }
 
 static std::filesystem::path get_sample_xml_path(const std::filesystem::path& filename)
