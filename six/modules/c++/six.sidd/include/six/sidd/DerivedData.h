@@ -326,11 +326,6 @@ struct DerivedData: public Data
         mVersion = strVersion;
     }
 
-    // Gets a relative path to the ISM schema; e.g., ISM-v201609/Schema/ISM/IC-ISM.xsd
-    // This might be better on DerivedXMLParser, but existing codepaths don't keep instances
-    // around long enough.        
-    std::filesystem::path ismRelativePath() const;
-
     /*
      * Convert the output plane pixel location into meters from the reference
      * point

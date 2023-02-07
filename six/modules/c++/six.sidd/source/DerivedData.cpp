@@ -111,27 +111,6 @@ void DerivedData::setDisplayLUT(std::unique_ptr<AmplitudeTable>&& pLUT)
     nitfLUT.reset(pLUT.release());
 }
 
-std::filesystem::path DerivedData::ismRelativePath() const
-{
-    static const auto ic_ism_xsd  = std::filesystem::path("Schema") / "ISM" / "IC-ISM.xsd";
-    if (mVersion == "1.0.0")
-    {
-        return "ISM" / ic_ism_xsd;
-    }
-
-    if (mVersion == "2.0.0")
-    {
-        return "ISM-v13" / ic_ism_xsd;
-    }
-
-    if (mVersion == "3.0.0")
-    {
-        return "ISM-v201609" / ic_ism_xsd;
-    }
-
-    throw except::Exception(Ctxt("Unknown version. Expected 3.0.0, 2.0.0, or 1.0.0"));
-}
-
 types::RowCol<double>
 DerivedData::pixelToImagePoint(const types::RowCol<double>& pixelLoc) const
 {

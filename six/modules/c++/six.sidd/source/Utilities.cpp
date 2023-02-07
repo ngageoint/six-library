@@ -584,25 +584,6 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string&
     return parseData(inStream, pSchemaPaths, *log);
 }
 
-static void addISMSchemaPath(std::vector<std::filesystem::path>& schemaPaths, const DerivedData& data)
-{
-    assert(schemaPaths.size() == 1); // see below
-    const auto& p = schemaPaths[0];
-
-    const auto ismRelativePath = data.ismRelativePath(); // ISM-v201609/Schema/ISM/IC-ISM.xsd
-    const auto ismRelativeDir = ismRelativePath.parent_path(); // ISM-v201609/Schema/ISM
-    auto ismDir = p / ismRelativeDir;
-    if (!is_directory(ismDir))
-    {
-        // try again with "external"
-        ismDir = p / "external" / ismRelativeDir;
-    }
-    if (is_directory(ismDir))
-    {
-        schemaPaths.push_back(ismDir);
-    }
-}
-
 std::string Utilities::toXMLString(const DerivedData& data,
                                    const std::vector<std::string>& schemaPaths_, logging::Logger* logger)
 {
@@ -621,20 +602,6 @@ std::u8string Utilities::toXMLString(const DerivedData& data,
 
     logging::NullLogger nullLogger;
     logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    // Since the APIs using std::filesystem::path are new, it's much safer to tweak the semantics
-    // without the risk of breaking existing code.
-    //
-    // If we've got just one schema path, assume it's a root directory.  Add the version-specific
-    // path so that XMLControl::validate() won't resursively look through the directory
-    // structure and find wrong schemas.
-    std::vector<std::filesystem::path> schemaPaths;
-    if ((pSchemaPaths != nullptr) && (pSchemaPaths->size() == 1))
-    {
-        schemaPaths = *pSchemaPaths;
-        addISMSchemaPath(schemaPaths, data);
-        pSchemaPaths = &schemaPaths;
-    }
 
     return ::six::toValidXMLString(data, pSchemaPaths, pLogger_, &xmlRegistry);
 }
