@@ -30,7 +30,7 @@
          <xsd:simpleType>
             <xsd:list itemType="ismsar:CVEnumISMSARValues"/>
          </xsd:simpleType>
-         <xsd:maxLength value="0"/>
+         <xsd:maxLength value="1000"/>
       </xsd:restriction>
    </xsd:simpleType>
 </xsd:schema>
