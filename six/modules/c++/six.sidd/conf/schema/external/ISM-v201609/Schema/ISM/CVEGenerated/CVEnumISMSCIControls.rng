@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<define name="CVEnumISMSCIControls.att">
+   <attribute name="CVEnumISMSCIControls">
+      <list>
+         <optional>
+            <value>HCS</value>
+         </optional>
+         <optional>
+            <value>HCS-O</value>
+         </optional>
+         <optional>
+            <value>HCS-P</value>
+         </optional>
+         <optional>
+            <value>RSV</value>
+         </optional>
+         <optional>
+            <value>SI</value>
+         </optional>
+         <optional>
+            <value>SI-EU</value>
+         </optional>
+         <optional>
+            <value>SI-G</value>
+         </optional>
+         <optional>
+            <value>SI-NK</value>
+         </optional>
+         <optional>
+            <value>TK</value>
+         </optional>
+         <optional>
+            <value>TK-BLFH</value>
+         </optional>
+         <optional>
+            <value>TK-IDIT</value>
+         </optional>
+         <optional>
+            <value>TK-KAND</value>
+         </optional>
+      </list>
+   </attribute>
+</define>
