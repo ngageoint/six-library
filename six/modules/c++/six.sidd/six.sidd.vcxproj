@@ -131,6 +131,9 @@
     <ClInclude Include="include\six\sidd\SIDDVersionUpdater.h" />
     <ClInclude Include="include\six\sidd\Utilities.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="SIDD_schema_V3.0.0.h">
+      <DependentUpon>conf\schema\SIDD_schema_V3.0.0.xsd</DependentUpon>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
