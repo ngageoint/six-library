@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This is a generated file. DO NOT EDIT!--><cve:CVE xmlns="urn:us:gov:ic:cve" xmlns:cve="urn:us:gov:ic:cve"
+         xmlns:ism="urn:us:gov:ic:ism"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ism:compliesWith="USGov USIC"
+         ism:ownerProducer="USA"
+         ism:classification="U"
+         ism:DESVersion="201609.201707"
+         ism:ISMCATCESVersion="201609"
+         ism:resourceElement="true"
+         CVEVersion="2.1"
+         specVersion="201703.201802"
+         ism:createDate="2019-12-23"
+         xsi:schemaLocation="urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd">
+  <cve:IRM>
+      <URN>urn:us:gov:ic:cvenum:usagency:usgovagencyacronym</URN>
+     <Title ism:ownerProducer="USA" ism:classification="U">CVEnumUSGOVAgencyAcronym</Title>
+     <Description ism:ownerProducer="USA" ism:classification="U">All valid acronyms for use with US Government Offices. 
+         This list is only the agencies within the Executive Branches of the US Government.</Description>
+     <Created>2019-12-23T16:24:50.415Z</Created>
+     
+     <Source ism:classification="U" ism:ownerProducer="USA">IC-CIO</Source>
+     <PointOfContact ism:classification="U" ism:ownerProducer="USA">
+         <Name>Office IC CIO</Name>
+         <Email>ic-standards-support@iarpa.gov</Email>
+      </PointOfContact>
+  </cve:IRM>
+   <cve:Enumeration multivalue="false" ism:classification="U" ism:ownerProducer="USA">
+   <!--All currently valid Executive Branch Agency Acronyms ordered by value-->
+        <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ABMC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">American Battle Monuments Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ACCESS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Architectural and Transportation Barriers Compliance Board </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ACFR</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Administrative Committee of the Federal Register</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ACHP</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Advisory Council on Historic Preservation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ACUS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Administrative Conference of the United States</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ADF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">African Development Foundation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">AMICC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Arthritis and Musculoskeletal Interagency Coordinating Committee</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">AMTRAK</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Railroad Passenger Corporation </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ARC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Appalachian Regional Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ARCTIC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Arctic Research Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">BBG</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Broadcasting Board of Governors </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">BMGS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Barry M. Goldwater Scholarship and Excellence in Education Foundation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CAOC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Chief Acquisition Officers Council</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CCJJ</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Coordinating Council on Juvenile Justice and Delinquency Prevention</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CCR</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Commission on Civil Rights</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CEA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">United States Council of Economic Advisers</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CFA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Commission of Fine Arts</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CFI</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Committee on Foreign Investments in the United States</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CFOC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Chief Financial Officers Council</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CFTC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Commodity Futures Trading Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CHCOC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Chief Human Capital Officers Council</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CIA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Central Intelligence Agency </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CIOC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Chief Information Officers Council</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CIRF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Commission on International Religious Freedom</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CITA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Committee for the Implementation of Textile Agreements</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CNCS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Corporation for National and Community Service</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">COMP</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Office of Compliance</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CPSC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Consumer Product Safety Commission </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CSAC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Citizens' Stamp Advisory Committee</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CSHIB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Chemical Safety and Hazard Investigation Board</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">CSOSA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Court Services and Offender Supervision Agency for the District of Columbia</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DEA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Drug Enforcement Administration</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DENALI</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Denali Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DHS</Value>
+	  	     <Description ism:classification="U" ism:ownerProducer="USA">Department of Homeland Security </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DIA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Defense Intelligence Agency</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DNFSB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Defense Nuclear Facilities Safety Board</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DNI</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Office of the Director of National Intelligence</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DOC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Department of Commerce </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DOD</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Department of Defense </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DOE</Value>
+	  	     <Description ism:classification="U" ism:ownerProducer="USA">Department of Energy </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DOI</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Department of the Interior </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DOJ</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Department of Justice </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DOL</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Department of Labor </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DOT</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Department of Transportation </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">DRBC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Delaware River Basin Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">EAC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">United States Election Assistance Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ED</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Department of Education </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">EEOC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Equal Employment Opportunity Commission </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">EIBUS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Export-Import Bank of the United States</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">EOP</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Executive Office of the President</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">EPA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Environmental Protection Agency </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ESC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Endangered Species Committee</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FAC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Advisory Committees</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FASAB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Accounting Standards Advisory Board</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FBI</Value>
+	  	     <Description ism:classification="U" ism:ownerProducer="USA">Federal Bureau of Investigation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FCA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Farm Credit Administration</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FCC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Communications Commission </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FCIC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Financial Crisis Inquiry Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FCSIC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Farm Credit System Insurance Corporation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FDIC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Deposit Insurance Corporation </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FEB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Executive Boards</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FEC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Election Commission </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FERC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Energy Regulatory Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FFB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Financing Bank</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FFIEC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Financial Institutions Examination Council</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FGDC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Geographic Data Committee</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FHRA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Housing Finance Agency</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FICE</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Interagency Committee on Education</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FICMNEW</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Interagency Committee for the Management of Noxious and Exotic Weeds</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FICSP</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Interagency Council on Statistical Policy</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FLCTT</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Laboratory Consortium for Technology Transfer</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FLICC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Library and Information Center Committee</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FLRA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Labor Relations Authority</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FMC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Maritime Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FMCS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Mediation and Conciliation Service</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FMSHRC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Mine Safety and Health Review Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FRS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Reserve System</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FRTIB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Retirement Thrift Investment Board</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">FTC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Federal Trade Commission </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">GSA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">General Services Administration </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">HELSINKI</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Commission on Security and Cooperation in Europe </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">HHS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Department of Health and Human Services </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">HMM</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">United States Holocaust Memorial Museum</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">HSTSF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Harry S. Truman Scholarship Foundation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">HUD</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Department of Housing and Urban Development </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">IACB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Indian Arts and Crafts Board</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">IADRWG</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Interagency Alternative Dispute Resolution Working Group</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">IAF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Inter-American Foundation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">IBB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">International Broadcasting Bureau </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ICH</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Interagency Council on Homelessness</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ICPRB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Interstate Commission on the Potomac River Basin</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">IMCNHCC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Illinois and Michigan Canal National Heritage Corridor Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">IMLS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Institute of Museum and Library Services</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ITC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">United States International Trade Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">JBEA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Joint Board for the Enrollment of Actuaries</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">JFSP</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Joint Fire Science Program</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">JMMFF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">James Madison Memorial Fellowship Foundation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">JUSFC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Japan-United States Friendship Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">JWFFSB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">J. William Fulbright Foreign Scholarship Board</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">LSC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Legal Services Corporation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">MBCC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Migratory Bird Conservation Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">MCC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Millennium Challenge Corporation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">MKUF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Morris K. Udall Foundation: Scholarship and Excellence in National Environmental Policy</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">MMC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Marine Mammal Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">MRC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Mississippi River Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">MSPB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Merit Systems Protection Board</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NARA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Archives and Records Administration </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NASA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Aeronautics and Space Administration </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NBCFM</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Bipartisan Commission on the Future of Medicare</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NCD</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Council on Disability</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NCFRR</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Commission on Fiscal Responsibility and Reform</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NCPC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Capital Planning Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NCUA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Credit Union Administration </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NEA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Endowment for the Arts</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NEH</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Endowment for the Humanities</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NGA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Geospatial-Intelligence Agency</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NIGC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Indian Gaming Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NLRB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Labor Relations Board </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NMB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Mediation Board</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NPF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Park Foundation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NPPC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Northwest Power Planning Council</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NRC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Nuclear Regulatory Commission </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NRO</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Reconnaissance Office</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NSA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Security Agency</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NSF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Science Foundation </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NTSB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">National Transportation Safety Board</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">NWTRB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Nuclear Waste Technical Review Board</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">OGE</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Office of Government Ethics</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">OMB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Office of Management and Budget</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">ONCIX</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Office of the National Counterintelligence Executive</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">OPIC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Overseas Private Investment Corporation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">OPM</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Office of Personnel Management</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">OSC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Office of Special Counsel</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">OSHRC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Occupational Safety and Health Review Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">OVP</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Office of the Vice President</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">PBGC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Pension Benefit Guaranty Corporation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">PCC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Panama Canal Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">PEACE</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Peace Corps</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">PRC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Postal Regulatory Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">PRESIDIO</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Presidio Trust</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">RISC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Regulatory Information Service Center</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">RRB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Railroad Retirement Board</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">SBA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Small Business Administration </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">SEC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Securities and Exchange Commission </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">SJI</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">State Justice Institute</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">SMITH</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Smithsonian Institution</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">SRBC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Susquehanna River Basin Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">SSA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Social Security Administration </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">SSAB</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Social Security Advisory Board</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">SSS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Selective Service System</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">STATE</Value>
+	  	     <Description ism:classification="U" ism:ownerProducer="USA">Department of State </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">TAP</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Taxpayer Advocacy Panel</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">TDA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">U.S. Trade and Development Agency</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">TREAS</Value>
+	  	     <Description ism:classification="U" ism:ownerProducer="USA">Department of the Treasury</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">TVA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Tennessee Valley Authority</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">USA</Value>
+	  	     <Description ism:classification="U" ism:ownerProducer="USA">US Army</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">USAF</Value>
+	  	     <Description ism:classification="U" ism:ownerProducer="USA">US Air Force</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">USAID</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">United States Agency for International Development</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">USAOC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">U.S. AbilityOne Commission</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">USCG</Value>
+	  	     <Description ism:classification="U" ism:ownerProducer="USA">US Coast Guard</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">USDA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Department of Agriculture </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">USIP</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">United States Institute of Peace</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">USMC</Value>
+	  	     <Description ism:classification="U" ism:ownerProducer="USA">US Marine Corps</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">USN</Value>
+	  	     <Description ism:classification="U" ism:ownerProducer="USA">US Navy</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">USPS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">United States Postal Service </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">USTR</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">United States Office of the Trade Representative</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">USUN</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">United States Mission to the United Nations</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">VA</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Department of Veterans Affairs </Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">VDNC</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Veterans Day National Committee</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">VEF</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">Vietnam Educational Foundation</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">WHCPS</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">White House Commission on Presidential Scholars: Presidential Scholars Program</Description>
+	     </Term>
+      <Term ism:classification="U" ism:ownerProducer="USA">
+		       <Value ism:classification="U" ism:ownerProducer="USA">WHMO</Value>
+		       <Description ism:classification="U" ism:ownerProducer="USA">White House Military Office</Description>
+	     </Term>
+   </cve:Enumeration>
+</cve:CVE>

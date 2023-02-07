@@ -1,0 +1,1 @@
+CVEnumISMSCIControls.att = attribute CVEnumISMSCIControls { list { "HCS"?, "HCS-O"?, "HCS-P"?, "RSV"?, "SI"?, "SI-EU"?, "SI-G"?, "SI-NK"?, "TK"?, "TK-BLFH"?, "TK-IDIT"?, "TK-KAND"? }  } 
