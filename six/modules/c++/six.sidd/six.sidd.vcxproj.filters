@@ -194,7 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <Xsd Include="conf\schema\SIDD_schema_V3.0.0.xsd">
-      <Filter>Header Files</Filter>
+      <Filter>Resource Files</Filter>
     </Xsd>
   </ItemGroup>
 </Project>
