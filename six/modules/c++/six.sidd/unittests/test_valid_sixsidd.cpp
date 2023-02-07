@@ -70,8 +70,8 @@ static std::filesystem::path get_sample_xml_path(const std::filesystem::path& fi
 
 static std::vector<std::filesystem::path> getSchemaPaths(const std::string& strVersion)
 {
-    static const auto xsdPath = sys::test::findGITModuleFile("six", schema_relative_path(strVersion), "SIDD_schema_V3.0.0.xsd");
-    static const auto rootSchemaDir = xsdPath.parent_path(); // ".../conf/Schema"
+    const auto xsdPath = sys::test::findGITModuleFile("six", schema_relative_path(strVersion), "SIDD_schema_V3.0.0.xsd");
+    const auto rootSchemaDir = xsdPath.parent_path(); // ".../conf/Schema"
     return std::vector<std::filesystem::path> { rootSchemaDir };
 }
 
@@ -105,13 +105,9 @@ static void test_createFakeDerivedData_(const std::string& testName, const std::
     auto Unmodeled = get_Unmodeled(*pFakeDerivedData, strVersion);
     TEST_ASSERT_NULL(Unmodeled); // not part of the fake data, only added in SIDD 3.0
 
-    const std::vector<std::filesystem::path>* pSchemaPaths = nullptr; // NULL schemaPaths, no validation
-    if (validate)
-    {
-        // validate XML against schema
-        static const auto schemaPaths = getSchemaPaths(strVersion);
-        pSchemaPaths = &schemaPaths;
-    }
+    const auto schemaPaths = getSchemaPaths(strVersion);
+    const std::vector<std::filesystem::path>* pSchemaPaths = validate ? & schemaPaths: nullptr; // NULL schemaPaths, no validation
+
     auto pDerivedData = test_assert_round_trip(testName, *pFakeDerivedData, pSchemaPaths);
     Unmodeled = get_Unmodeled(*pDerivedData, strVersion);
     TEST_ASSERT_NULL(Unmodeled);  // not part of the fake data, only added in SIDD 3.0

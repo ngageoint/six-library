@@ -1,4 +1,4 @@
-<SIDD xmlns="urn:SIDD:3.0.0" xmlns:si="urn:SICommon:1.0" xmlns:sfa="urn:SFA:1.2.0" xmlns:ism="urn:us:gov:ic:ism:13">
+<SIDD xmlns="urn:SIDD:3.0.0" xmlns:si="urn:SICommon:1.0" xmlns:sfa="urn:SFA:1.2.0" xmlns:ism="urn:us:gov:ic:ism:201609">
 	<ProductCreation>
 		<ProcessorInformation>
 			<Application>ProcessorName</Application>

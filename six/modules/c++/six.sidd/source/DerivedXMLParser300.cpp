@@ -42,7 +42,7 @@ static const char VERSION[] = "3.0.0";
 static const char SI_COMMON_URI[] = "urn:SICommon:1.0";
 inline static xml::lite::Uri getISMUri()
 {
-    return xml::lite::Uri("urn:us:gov:ic:ism:13");
+    return xml::lite::Uri("urn:us:gov:ic:ism:201609");
 }
 
 //DerivedXMLParser300::DerivedXMLParser300(std::unique_ptr<logging::Logger>&& log) :
