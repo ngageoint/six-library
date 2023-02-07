@@ -1,0 +1,1 @@
+CVEnumISMPocType.att = attribute CVEnumISMPocType { list { "ICD-710"?, "DoD-Dist-B"?, "DoD-Dist-C"?, "DoD-Dist-D"?, "DoD-Dist-E"?, "DoD-Dist-F"?, "DoD-Dist-X"? }  } 
