@@ -105,8 +105,8 @@ struct SpanRC final
     }
 
     private:
-    types::RowCol<size_t> rc_;
     coda_oss::span<T> s_;
+    types::RowCol<size_t> rc_;
 };
 
 }
