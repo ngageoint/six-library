@@ -43,6 +43,7 @@ struct SOAP final : public xml::lite::Document
                                       std::string characterData = "") override {
         const xml::lite::QName asQName(uri, qname);
         xml::lite::Element*  elem = new SOAPBody(asQName);
+        elem->setCharacterData(characterData); // avoid unused parameter warning
         elem->setCharacterData(test_text);
         return elem;
     }

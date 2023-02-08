@@ -121,7 +121,8 @@ TEST_CASE(testExceptionWithBacktrace)
     }
     catch (const except::Throwable& t)
     {
-        TEST_ASSERT_GREATER(t.getBacktrace().size(), static_cast<size_t>(0));
+        const auto backtraceSize = static_cast<int64_t>(t.getBacktrace().size());
+        TEST_ASSERT_GREATER(backtraceSize, 0);
         s = t.toString(true /*includeBacktrace*/);
         what = t.what();
     }
