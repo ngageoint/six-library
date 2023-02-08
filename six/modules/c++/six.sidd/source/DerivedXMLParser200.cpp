@@ -919,7 +919,7 @@ xml::lite::Element& DerivedXMLParser200::convertDerivedClassificationToXML(const
     //! from ism:ResourceNodeAttributeGroup
     parser.setAttribute(classElem, "resourceElement", "true", ismUri);
     parser.setAttribute(classElem, "createDate",
-                 classification.createDate.format("%Y-%m-%d"), ismUri);
+                 classification.createDate.format("%Y-%m-%d"), ismUri); // note that timezone is explicitly prohibited
     // required (was optional in SIDD 1.0)
     parser.setAttributeList(classElem, "compliesWith", classification.compliesWith, ismUri);
 
@@ -999,7 +999,7 @@ xml::lite::Element& DerivedXMLParser200::convertDerivedClassificationToXML(const
     {
         parser.setAttributeIfNonEmpty(
                 classElem, "declassDate",
-                classification.declassDate->format("%Y-%m-%d"),
+                classification.declassDate->format("%Y-%m-%d"), // note: timezone is explicitly excluded in ISM-201609
                 ismUri);
     }
     // optional
