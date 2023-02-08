@@ -34,6 +34,7 @@
 
 #include "config/Exports.h"
 #include "config/compiler_extensions.h"
+#include "config/disable_compiler_warnings.h"
 #include "except/Trace.h"
 
 /* Determine whether except::Throwable derives from std::exception.
