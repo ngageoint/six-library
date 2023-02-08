@@ -87,6 +87,20 @@ public:
 #if defined(_MSC_VER) && _PREFAST_
     __pragma(warning(pop))
 #endif
+    optional& operator=(const optional& other)
+    {
+      if (has_value() && !other.has_value())
+      {
+	reset();
+      }
+      else if (other.has_value())
+      {
+	  value_ = other.value_;
+	  has_value_ = true;
+      }
+
+      return *this;
+    }
 
     template <typename... Args>  // https://en.cppreference.com/w/cpp/utility/Optional/emplace
     T& emplace(Args&&... args)
@@ -115,6 +129,7 @@ public:
 
     void reset() noexcept
     {
+        value_ = T{};
         has_value_ = false;
     }
 
