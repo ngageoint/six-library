@@ -799,7 +799,7 @@ XMLElem DerivedXMLParser300::convertDerivedClassificationToXML(
 
     //! from ism:ISMRootNodeAttributeGroup
     // SIDD 3.0 is tied to IC-ISM v201609
-    classElem.attribute("DESVersion") = "201609";
+    classElem.attribute("DESVersion") = "201609"; // note that the specification also allows for "201609-<custom>"
 
     return &classElem;
 }
