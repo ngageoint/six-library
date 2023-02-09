@@ -412,6 +412,7 @@ NITF_BOOL metafileList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
     (void)classType;
     (void)shortCode;
     (void)error;
+    (void)len;
 
     DBG_TRACE();
     assert(len == 6);

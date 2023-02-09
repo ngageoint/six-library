@@ -15,8 +15,6 @@
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
 
 #pragma warning(push)
-#pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
-
 #pragma warning(disable: 4710) // '...': function not inlined
 #pragma warning(disable: 5027) // '...': move assignment operator was implicitly defined as deleted
 #pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
