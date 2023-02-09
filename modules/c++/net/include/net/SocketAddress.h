@@ -25,7 +25,7 @@
 
 #include "net/Sockets.h"
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 #   include <winsock2.h>
 #else
 #   include <arpa/inet.h>

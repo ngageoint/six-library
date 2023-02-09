@@ -27,6 +27,7 @@
 #pragma once
 
 #include "config/Exports.h"
+#include "config/disable_compiler_warnings.h"
 
 // A "debug" build has debugging symbols, detailed call stacks, minimal optimization, STL validation, etc.
 // A "release" build is likely to "run fast" and be "shipped;" it might lack much of what is in a "debug" build.
@@ -95,12 +96,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <iostream>
-
-#if defined(__sgi) || defined(__sgi__)
-#   include <stdarg.h>
-#else
-#   include <cstdarg>
-#endif
+#include <cstdarg>
 
 namespace sys
 {

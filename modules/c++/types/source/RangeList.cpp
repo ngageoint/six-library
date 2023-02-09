@@ -73,7 +73,7 @@ RangeList::RangeList(const std::vector<types::Range>& ranges) :
     }
 }
 
-size_t RangeList::getTotalNumElements() const
+size_t RangeList::getTotalNumElements() const noexcept
 {
     size_t count = 0;
     for (const auto& range : mRangeList)

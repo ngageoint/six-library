@@ -891,12 +891,6 @@ def configureCompilerOptions(self):
         #       If you want the plugins to not depend on Intel libraries,
         #       configure with:
         #       --with-cflags=-static-intel --with-cxxflags=-static-intel --with-linkflags=-static-intel
-        if cxxCompiler == 'gcc':
-            config['cxx']['debug']          = '-ggdb3'
-            config['cxx']['optz_debug']     = '-Og'
-        elif cxxCompiler == 'icpc':
-            config['cxx']['debug']          = '-g'
-            config['cxx']['optz_debug']     = ''
         if cxxCompiler == 'g++' or cxxCompiler == 'icpc':
             config['cxx']['warn']           = warningFlags.split()
             config['cxx']['verbose']        = '-v'
@@ -912,10 +906,11 @@ def configureCompilerOptions(self):
             # The "fastest-possible" option is new; see comments above.
             config['cxx']['optz_fastest-possible']   =  [ config['cxx']['optz_fastest'], '-march=native' ]
 
+            self.env.append_value('CXXFLAGS', '-fPIC'.split())
             if not Options.options.enablecpp17:
-                gxxCompileFlags='-fPIC -std=c++14'
+                gxxCompileFlags='-std=c++14'
             else:
-                gxxCompileFlags='-fPIC -std=c++17'
+                gxxCompileFlags='-std=c++17'
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
@@ -930,12 +925,21 @@ def configureCompilerOptions(self):
 
             self.env.append_value('LINKFLAGS', linkFlags.split())
 
-        if ccCompiler == 'gcc':
-            config['cc']['debug']          = '-ggdb3'
-            config['cc']['optz_debug']     = '-Og'
-        elif ccCompiler == 'icc':
-            config['cc']['debug']          = '-g'
-            config['cc']['optz_debug']     = ''
+        if Options.options.debugging:
+            if cxxCompiler == 'g++':
+                config['cxx']['debug'] = '-ggdb3'
+                config['cxx']['optz_debug'] = '-Og'
+            elif cxxCompiler == 'icpc':
+                config['cxx']['debug'] = '-g'
+                config['cxx']['optz_debug'] = ''
+
+            if ccCompiler == 'gcc':
+                config['cc']['debug'] = '-ggdb3'
+                config['cc']['optz_debug'] = '-Og'
+            elif ccCompiler == 'icc':
+                config['cc']['debug'] = '-g'
+                config['cc']['optz_debug'] = ''
+
         if ccCompiler == 'gcc' or ccCompiler == 'icc':
             config['cc']['warn']           = warningFlags.split()
             config['cc']['verbose']        = '-v'
@@ -952,6 +956,8 @@ def configureCompilerOptions(self):
             config['cc']['optz_fastest-possible']   =  [ config['cc']['optz_fastest'], '-march=native' ]
 
             self.env.append_value('CFLAGS', '-fPIC'.split())
+            # "gnu99" enables POSIX and BSD
+            self.env.append_value('CFLAGS', '-std=gnu99'.split())
 
     elif re.match(winRegex, sys_platform):
         crtFlag = '/%s' % Options.options.crt

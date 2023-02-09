@@ -145,6 +145,7 @@ TEST_CASE(testXml_setCharacterData)
     xml::lite::MinidomParser xmlParser;
     auto& a = testXmlUtf8_(xmlParser);
     a.setCharacterData(utf8Text8);
+    TEST_ASSERT_TRUE(true); // need to use hidden "testName" parameter
 }
 
 static std::string testXmlPrint_(std::string& expected, const std::string& characterData)

@@ -362,6 +362,8 @@ static void test_wide_(const std::string& testName, const char* pStr, std::u16st
     const std::string std_str(static_cast<const char*>(wide_str)); //  UTF-16 -> Windows-1252
     TEST_ASSERT_EQ(encoded.native(), std_str);
     TEST_ASSERT_EQ(std_str, pStr);
+    #else
+    pUtf16 = pUtf16; // avoid unused-parameter warning
     #endif
 }
 
@@ -436,6 +438,8 @@ TEST_CASE(test_Windows1252_WIN32)
     constexpr auto w1252_unassigned = "\x81\x8d\x8f\x90\x9d";
     constexpr auto u16_w1252_unassigned = u"\x81\x8d\x8f\x90\x9d";
     test_Windows1252_(testName, w1252_unassigned, u16_w1252_unassigned);
+    #else
+    TEST_ASSERT_TRUE(true); // need to use hidden "testName" parameter
     #endif
 }
 

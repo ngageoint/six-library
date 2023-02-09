@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef CODA_OSS_hdf5_lite_Read_h_INCLUDED_
-#define CODA_OSS_hdf5_lite_Read_h_INCLUDED_
+#ifndef CODA_OSS_hdf5_lite_Info_h_INCLUDED_
+#define CODA_OSS_hdf5_lite_Info_h_INCLUDED_
 #pragma once
 
 #include <string>
@@ -64,21 +64,21 @@ struct NamedObject
     std::string name;
 };
 
-struct DatatypeInfo final : public NamedObject
+struct DataTypeInfo final : public NamedObject
 {
     Class h5Class;
     // Type
     size_t size = 0;
 };
 
-struct DataspaceInfo final
+struct DataSpaceInfo final
 {
 };
 
-struct DatasetInfo final : public NamedObject
+struct DataSetInfo final : public NamedObject
 {
-    DatatypeInfo datatype;
-    DataspaceInfo dataspace;
+    DataTypeInfo dataType;
+    DataSpaceInfo dataSpace;
     // ChunkSize
     // FillValue
     // Filter
@@ -88,8 +88,8 @@ struct DatasetInfo final : public NamedObject
 struct GroupInfo : public NamedObject
 {
     std::vector<GroupInfo> groups;
-    std::vector<DatasetInfo> datasets;
-    std::vector<DatatypeInfo> datatypes;
+    std::vector<DataSetInfo> dataSets;
+    std::vector<DataTypeInfo> dataTypes;
     // Links
     // Attributes
 };
@@ -99,12 +99,11 @@ struct FileInfo final : public GroupInfo
 };
 
 
-CODA_OSS_API FileInfo fileInfo(coda_oss::filesystem::path);
-CODA_OSS_API GroupInfo groupInfo(coda_oss::filesystem::path, std::string loc);
-CODA_OSS_API DatasetInfo datasetInfo(coda_oss::filesystem::path, std::string loc);
+CODA_OSS_API FileInfo fileInfo(const coda_oss::filesystem::path&);
+CODA_OSS_API GroupInfo groupInfo(const coda_oss::filesystem::path&, const std::string& loc);
+CODA_OSS_API DataSetInfo dataSetInfo(const coda_oss::filesystem::path&, const std::string& loc);
 
 }
 }
 
-#endif // CODA_OSS_hdf5_lite_Read_h_INCLUDED_
-
+#endif // CODA_OSS_hdf5_lite_Info_h_INCLUDED_
