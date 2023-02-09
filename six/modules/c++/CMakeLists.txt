@@ -7,6 +7,11 @@ if (MSVC)
     #add_compile_options(/W4) # /Wall
     string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}") # /Wall
 
+    add_compile_options(/wd4996) # '...': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+    add_compile_options(/wd4127) # conditional expression is constant
+    add_compile_options(/wd4244) # '...': conversion from '...' to '...', possible loss of data
+    add_compile_options(/wd4267) # '...': conversion from '...' to '...', possible loss of data
+    
 elseif (UNIX)
     add_compile_options(-std=c++14)
 
