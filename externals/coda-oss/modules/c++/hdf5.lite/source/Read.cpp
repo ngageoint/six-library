@@ -56,7 +56,7 @@ static void read(const H5::DataSet& dataset, std::vector<float>& result)
     dataset.read(result.data(), mem_type);
 }
 template<typename T>
-static types::RowCol<size_t> readDatasetT(const H5::DataSet& dataset, std::vector<T>& result)
+static hdf5::lite::SpanRC<T> readDatasetT(const H5::DataSet& dataset, std::vector<T>& result)
 {
     if (dataset.getTypeClass() != H5T_FLOAT)
     {
@@ -64,8 +64,9 @@ static types::RowCol<size_t> readDatasetT(const H5::DataSet& dataset, std::vecto
         throw hdf5::lite::DataSetException(context);
     }    
 
-    const auto retval = hdf5::lite::details::getSimpleExtentSize(dataset);
-    result.resize(retval.area());
+    const auto dims = hdf5::lite::details::getSimpleExtentSize(dataset);
+    result.resize(dims.area());
+    hdf5::lite::SpanRC<T> retval(result.data(), dims);
     
     // dataset.read() doesn't care about the buffer type ... that's because H5Dread() also
     // uses void*.  However, the LT API has H5LTread_dataset_double() and  H5LTread_dataset_float(),
@@ -74,16 +75,16 @@ static types::RowCol<size_t> readDatasetT(const H5::DataSet& dataset, std::vecto
     return retval;
 }
 
-inline types::RowCol<size_t> readDataset_(const H5::DataSet& dataset, std::vector<float>& result)
+inline hdf5::lite::SpanRC<float> readDataset_(const H5::DataSet& dataset, std::vector<float>& result)
 {
     return readDatasetT(dataset, result);
 }
-inline types::RowCol<size_t> readDataset_(const H5::DataSet& dataset, std::vector<double>& result)
+inline hdf5::lite::SpanRC<double> readDataset_(const H5::DataSet& dataset, std::vector<double>& result)
 {
     return readDatasetT(dataset, result);
 }
 template<typename T>
-static types::RowCol<size_t> readFile_(const coda_oss::filesystem::path& fileName, const std::string& datasetName,
+static hdf5::lite::SpanRC<T> readFile_(const coda_oss::filesystem::path& fileName, const std::string& datasetName,
                                 std::vector<T>& result)
 {
     /*
@@ -94,12 +95,12 @@ static types::RowCol<size_t> readFile_(const coda_oss::filesystem::path& fileNam
     return readDataset_(dataset, result);
 }
 
-types::RowCol<size_t> hdf5::lite::readFile(const coda_oss::filesystem::path& fileName, const std::string& loc,
+hdf5::lite::SpanRC<double> hdf5::lite::readFile(const coda_oss::filesystem::path& fileName, const std::string& loc,
     std::vector<double>& result)
 {
     return details::try_catch_H5Exceptions(readFile_<double>, __FILE__, __LINE__, fileName, loc, result); 
 }
-types::RowCol<size_t> hdf5::lite::readFile(const coda_oss::filesystem::path& fileName, const std::string& loc,
+hdf5::lite::SpanRC<float> hdf5::lite::readFile(const coda_oss::filesystem::path& fileName, const std::string& loc,
     std::vector<float>& result)
 {
     return details::try_catch_H5Exceptions(readFile_<float>, __FILE__, __LINE__, fileName, loc, result); 

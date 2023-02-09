@@ -28,7 +28,7 @@
  * \file  Read.h
  * \brief HDF File-reading API
  *
- * These are simple routines to read HDF5 files; they're loosly modeled after the MATLab API
+ * These are simple routines to read HDF5 files; they're loosely modeled after the MATLab API
  * https://www.mathworks.com/help/matlab/import_export/import-hdf5-files.html
  */
 
@@ -39,16 +39,17 @@
 #include "sys/filesystem.h"
 #include "types/RowCol.h"
 
+#include "SpanRC.h"
+
 namespace hdf5
 {
 namespace lite
 {
 
-CODA_OSS_API types::RowCol<size_t> readFile(const coda_oss::filesystem::path&, const std::string& loc, std::vector<double>&);
-CODA_OSS_API types::RowCol<size_t> readFile(const coda_oss::filesystem::path&, const std::string& loc, std::vector<float>&);
+CODA_OSS_API SpanRC<double> readFile(const coda_oss::filesystem::path&, const std::string& loc, std::vector<double>&);
+CODA_OSS_API SpanRC<float> readFile(const coda_oss::filesystem::path&, const std::string& loc, std::vector<float>&);
 
 }
 }
 
 #endif // CODA_OSS_hdf5_lite_Read_h_INCLUDED_
-

@@ -38,7 +38,7 @@
 namespace six
 {
 
-DECLARE_EXCEPTION(UninitializedValue)
+DECLARE_EXCEPTION(UninitializedValue);
 
 /*!
  *  \struct Init

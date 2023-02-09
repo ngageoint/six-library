@@ -5,7 +5,7 @@
 rm -r -f out && mkdir out && cd out
 cmake -DCMAKE_INSTALL_PREFIX=install-autobuild -DENABLE_PYTHON=false ..
 
-cmake --build . -j 8
+cmake --build . -j 6
 exec cmake --build . --target install
 
 

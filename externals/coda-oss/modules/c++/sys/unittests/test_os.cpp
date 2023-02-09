@@ -162,7 +162,7 @@ TEST_CASE(testSplitEnv)
     std::vector<std::string> paths;
     bool result = os.splitEnv(pathEnvVar, paths);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_GREATER(paths.size(), static_cast<size_t>(0));
+    TEST_ASSERT_FALSE(paths.empty());
     for (const auto& path : paths)
     {
         TEST_ASSERT_TRUE(std::filesystem::exists(path));
@@ -183,7 +183,7 @@ TEST_CASE(testSplitEnv)
     paths.clear();
     result = os.splitEnv(pathEnvVar, paths, std::filesystem::file_type::directory);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_GREATER(paths.size(), static_cast<size_t>(0));
+    TEST_ASSERT_FALSE(paths.empty());
     paths.clear();
     result = os.splitEnv(pathEnvVar, paths, std::filesystem::file_type::regular);
     TEST_ASSERT_FALSE(result);
@@ -389,14 +389,14 @@ TEST_CASE(testFsFileSize)
     const sys::OS os;
     {
         const std::filesystem::path argv0(os.getSpecialEnv("ARGV0"));
-        const auto size = file_size(argv0);
-        TEST_ASSERT_GREATER(size, static_cast<size_t>(0));
+	const int64_t size = static_cast<int64_t>(file_size(argv0));
+        TEST_ASSERT_GREATER(size, 0);
     }
     {
         // We always have  sys::filesystem, even if it's not used.
         const sys::filesystem::path argv0(os.getSpecialEnv("ARGV0"));
-        const auto size = file_size(argv0);
-        TEST_ASSERT_GREATER(size, static_cast<size_t>(0));
+        const int64_t size = static_cast<int64_t>(file_size(argv0));
+        TEST_ASSERT_GREATER(size, 0);
     }
 }
 

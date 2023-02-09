@@ -143,15 +143,35 @@ static std::vector<TPath> check_whether_paths_exist(const std::vector<TPath>& pa
     return exist_paths;
 }
 
+static inline std::string to_string(const std::string& s)
+{
+    return s;
+}
+static inline std::string to_string(const std::filesystem::path& p)
+{
+    return p.string();
+}
+
+// Generate a detaled INVALID XML message
+template<typename TPath>
+inline static auto getInvalidXmlErrorMessage(const std::vector<TPath>& paths)
+{
+    static const std::string invalidXML = "INVALID XML: Check both the XML being produced and schemas available at ";
+    auto message = invalidXML;
+    message += (paths.size() > 1 ? "these paths:" : "this path:");
+    for (const auto& p : paths)
+    {
+        message += "\n\t" + to_string(p); // paths could be a std::filesystem::path
+    }
+    return message;
+}
+
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
 template<typename TPath>
 static void do_validate_(const xml::lite::Document& doc,
     const std::vector<TPath>& paths, logging::Logger* log)
 {
-    // validate against any specified schemas
-    xml::lite::Validator validator(paths, log, true);
-
     const auto& rootElement = doc.getRootElement();
     if (rootElement->getUri().empty())
     {
@@ -161,6 +181,9 @@ static void do_validate_(const xml::lite::Document& doc,
     // Pretty-print so that lines numbers are useful
     io::U8StringStream xmlStream;
     rootElement->prettyPrint(xmlStream);
+
+    // validate against any specified schemas
+    xml::lite::Validator validator(paths, log, true); // this can be expensive to create as all sub - directories might be traversed
 
     std::vector<xml::lite::ValidationInfo> errors;
     validator.validate(xmlStream, rootElement->getUri(), errors);
@@ -181,7 +204,12 @@ static void do_validate_(const xml::lite::Document& doc,
         //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
         //  and attempt to rewrite the file. Continuing in this manner is
         //  highly discouraged
-        throw six::DESValidationException(Ctxt("INVALID XML: Check both the XML being produced and the schemas available"));
+        auto ctx(Ctxt(getInvalidXmlErrorMessage(paths)));
+        for (const auto& e : errors)
+        {
+            ctx.mMessage += "\n" + e.toString();
+        }
+        throw six::DESValidationException(ctx);
     }
 }
 template<typename TPath>

@@ -46,13 +46,13 @@
       _Name##Error_(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
       _Name##Error_(const except::ThrowableEx& t, const except::Context& c) : _Base(t, c){} \
       std::string getType() const noexcept override { return #_Name; } \
-  };
+  }
 #define DECLARE_EXTENDED_ERROR(_Name, _Base) DECLARE_EXTENDED_ERROR_(_Name, Error, _Base)
 #define DECLARE_EXTENDED_ERROREX(_Name, _Base) DECLARE_EXTENDED_ERROR_(_Name, ErrorEx, _Base)
 
 // Need to keep this around for existing code
 #define DECLARE_ERROR(_Name) \
-    DECLARE_EXTENDED_ERROR(_Name, except::Error); \
+    DECLARE_EXTENDED_ERROR(_Name, except::Error);		\
     DECLARE_EXTENDED_ERROREX(_Name, except::ErrorEx)
 
 namespace except
