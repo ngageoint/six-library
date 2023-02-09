@@ -11,6 +11,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
     # we'll dial-back warnings as necessary.
     if (MSVC)
        add_compile_options(/WX) # warnings as errors
+       add_compile_options(/MP) # multi-processor build
     elseif (UNIX)
        add_compile_options(-Werror) # warnings as errors
     endif()
