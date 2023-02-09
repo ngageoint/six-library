@@ -23,7 +23,7 @@
 #ifndef __IO_PIPE_STREAM_H__
 #define __IO_PIPE_STREAM_H__
 
-#include <memory>
+#include <std/memory>
 
 #include <import/except.h>
 #include <str/Convert.h>

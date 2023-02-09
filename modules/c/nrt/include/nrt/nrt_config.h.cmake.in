@@ -3,6 +3,8 @@
 
 #include <config/coda_oss_config.h>
 
+#ifndef NRT_LIB_VERSION
 #define NRT_LIB_VERSION "@NITRO_VERSION@"
+#endif
 
 #endif

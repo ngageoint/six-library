@@ -162,7 +162,7 @@ TEST_CASE(testSplitEnv)
     std::vector<std::string> paths;
     bool result = os.splitEnv(pathEnvVar, paths);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_GREATER(paths.size(), static_cast<size_t>(0));
+    TEST_ASSERT_FALSE(paths.empty());
     for (const auto& path : paths)
     {
         TEST_ASSERT_TRUE(std::filesystem::exists(path));
@@ -183,7 +183,7 @@ TEST_CASE(testSplitEnv)
     paths.clear();
     result = os.splitEnv(pathEnvVar, paths, std::filesystem::file_type::directory);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_GREATER(paths.size(), static_cast<size_t>(0));
+    TEST_ASSERT_FALSE(paths.empty());
     paths.clear();
     result = os.splitEnv(pathEnvVar, paths, std::filesystem::file_type::regular);
     TEST_ASSERT_FALSE(result);
@@ -293,7 +293,7 @@ TEST_CASE(testBacktrace)
 
 
     size_t expected = 0;
-    size_t expected_other = 0;
+    //size_t expected_other = 0;
     auto version_sys_backtrace_ = version::sys::backtrace; // "Conditional expression is constant"
     if (version_sys_backtrace_ >= 20210216L)
     {
@@ -301,19 +301,19 @@ TEST_CASE(testBacktrace)
 
         #if _WIN32
         constexpr auto frames_size_RELEASE = 2;
-        constexpr auto frames_size_RELEASE_other = frames_size_RELEASE;
+        //constexpr auto frames_size_RELEASE_other = frames_size_RELEASE;
         constexpr auto frames_size_DEBUG = 14;
-        constexpr auto frames_size_DEBUG_other = frames_size_DEBUG + 1; // 15
+        //constexpr auto frames_size_DEBUG_other = frames_size_DEBUG + 1; // 15
         #elif defined(__GNUC__)
         constexpr auto frames_size_RELEASE = 6;
-        constexpr auto frames_size_RELEASE_other = frames_size_RELEASE + 1; // 7
+        //constexpr auto frames_size_RELEASE_other = frames_size_RELEASE + 1; // 7
         constexpr auto frames_size_DEBUG = frames_size_RELEASE + 4; // 10
-        constexpr auto frames_size_DEBUG_other = frames_size_DEBUG;
+        //constexpr auto frames_size_DEBUG_other = frames_size_DEBUG;
         #else
         #error "CODA_OSS_sys_Backtrace inconsistency."
         #endif
         expected = sys::debug_build() ? frames_size_DEBUG : frames_size_RELEASE;
-        expected_other = sys::debug_build() ? frames_size_DEBUG_other : frames_size_RELEASE_other;
+        //expected_other = sys::debug_build() ? frames_size_DEBUG_other : frames_size_RELEASE_other;
     }
     else
     {
@@ -389,14 +389,14 @@ TEST_CASE(testFsFileSize)
     const sys::OS os;
     {
         const std::filesystem::path argv0(os.getSpecialEnv("ARGV0"));
-        const auto size = file_size(argv0);
-        TEST_ASSERT_GREATER(size, static_cast<size_t>(0));
+	const int64_t size = static_cast<int64_t>(file_size(argv0));
+        TEST_ASSERT_GREATER(size, 0);
     }
     {
         // We always have  sys::filesystem, even if it's not used.
         const sys::filesystem::path argv0(os.getSpecialEnv("ARGV0"));
-        const auto size = file_size(argv0);
-        TEST_ASSERT_GREATER(size, static_cast<size_t>(0));
+        const int64_t size = static_cast<int64_t>(file_size(argv0));
+        TEST_ASSERT_GREATER(size, 0);
     }
 }
 

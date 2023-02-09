@@ -26,7 +26,7 @@
 #pragma once
 
 #include <cstddef>
-#include <memory>
+#include <std/memory>
 #include <type_traits>
 
 #include "sys/Conf.h"

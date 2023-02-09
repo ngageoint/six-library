@@ -332,7 +332,7 @@ NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal, int *degrees,
 NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,
                                              double seconds)
 {
-    double decimal = fabs(degrees);
+    double decimal = fabs((double)degrees);
     decimal += fabs(minutes / 60.0);
     decimal += fabs(seconds / 3600.0);
 
@@ -703,12 +703,12 @@ NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8)
  * Older versions of Visual Studio do not support `inline` for C
  * Using `__inline` for Windows instead
  */
-NRTPRIV(void)
 #if defined(WIN32) || defined(_WIN32)
 __inline
 #else
 inline
 #endif
+NRTPRIV(void)
 nrt_Utils_swap(uint8_t* value, size_t indexOne,
         size_t indexTwo)
 {

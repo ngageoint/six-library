@@ -375,7 +375,7 @@ void showFileHeader(const nitf::FileHeader& header)
     {
         std::cout << "\t<ExtendedHeader>\n";
     }
-    showExtensions(udExts);
+    showExtensions(exExts);
     if (format_as_xml)
     {
         std::cout << "\t</ExtendedHeader>\n";

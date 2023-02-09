@@ -81,6 +81,7 @@ TEST_CASE(testSTLVectorAssign)
 TEST_CASE(testEmptyDim)
 {
     math::linear::Matrix2D<double> AScale(3, 0);
+    TEST_ASSERT_TRUE(true); // need to use hidden "testName" parameter
 }
 
 TEST_CASE(testPtrDecorator)
@@ -100,6 +101,7 @@ TEST_CASE(testPtrAdopt)
 {
     // valgrind to ensure that we don't have a leak
     math::linear::Matrix2D<double> AScale(3, 3, new double[9], true);
+    TEST_ASSERT_TRUE(true); // need to use hidden "testName" parameter
 }
 
 TEST_CASE(testArithmetic)

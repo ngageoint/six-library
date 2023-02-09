@@ -23,7 +23,9 @@
 #ifdef HAVE_J2K_H
 
 #if _MSC_VER
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#endif
 #pragma warning(push)
 #pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' 
 #include <windows.h>

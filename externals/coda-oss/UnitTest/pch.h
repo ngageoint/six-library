@@ -10,9 +10,12 @@
 // add headers that you want to pre-compile here
 
 #define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
+#pragma warning(push)
+#pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
 #include <WinSock.h>
 #include <windows.h>
 #include <comdef.h>
+#pragma warning(pop)
 #undef min
 #undef max
 
@@ -46,9 +49,12 @@
 #include <future>
 #include <cassert>
 #include <tuple>
+#include <complex>
+#include <stdexcept>
 
 #include "CppUnitTest.h"
 
+#include "coda_oss/span.h"
 #include "gsl/gsl.h"
 #include "import/sys.h"
 #include "import/math.h"
@@ -58,6 +64,7 @@
 #include "import/mem.h"
 #include <mem/SharedPtr.h>
 #include <mem/AutoPtr.h>
+#include <mem/ComplexView.h>
 #include "import/cli.h"
 #include "polygon/DrawPolygon.h"
 #include "polygon/PolygonMask.h"
@@ -104,6 +111,7 @@
 #include <logging/ExceptionLogger.h>
 #include <import/logging.h>
 #include <import/re.h>
+#include "io/StringStream.h"
 
 #include "TestCase.h"
 

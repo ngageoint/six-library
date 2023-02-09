@@ -25,7 +25,7 @@
 
 #include <config/coda_oss_config.h>
 
-#if !(defined(WIN32) || defined(_WIN32))
+#ifndef _WIN32
 
 #include <memory>
 #include <sched.h>

@@ -65,7 +65,9 @@ sys::SSize_T InputStream::streamTo(OutputStream& soi, sys::SSize_T bytesToPipe)
     sys::SSize_T bytesRead = 0;
     sys::SSize_T totalBytesTransferred = 0;
 
-    sys::SSize_T sizeOfVec = (bytesToPipe <= DEFAULT_CHUNK_SIZE) ? (bytesToPipe) : (DEFAULT_CHUNK_SIZE);
+    constexpr auto defaultChunkSize = static_cast<sys::SSize_T>(DEFAULT_CHUNK_SIZE);
+
+    sys::SSize_T sizeOfVec = (bytesToPipe <= defaultChunkSize) ? bytesToPipe : defaultChunkSize;
     sys::byte vec[DEFAULT_CHUNK_SIZE];
     memset(vec, 0, DEFAULT_CHUNK_SIZE);
 
@@ -79,8 +81,8 @@ sys::SSize_T InputStream::streamTo(OutputStream& soi, sys::SSize_T bytesToPipe)
         soi.write(vec, bytesRead);
         totalBytesTransferred += bytesRead;
         memset(vec, 0, DEFAULT_CHUNK_SIZE);
-        sizeOfVec = (bytesToPipe - totalBytesTransferred <= DEFAULT_CHUNK_SIZE) ?
-                    (bytesToPipe - totalBytesTransferred) : (DEFAULT_CHUNK_SIZE);
+        sizeOfVec = (bytesToPipe - totalBytesTransferred <= defaultChunkSize) ?
+                    (bytesToPipe - totalBytesTransferred) : defaultChunkSize;
     }
     // Return the number of bytes we piped
     return totalBytesTransferred;

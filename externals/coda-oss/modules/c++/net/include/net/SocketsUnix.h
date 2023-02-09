@@ -56,31 +56,10 @@ typedef struct hostent     HostEnt_T;
 typedef int                Socket_T;
 typedef struct sockaddr    SockAddr_T;
 typedef struct sockaddr_in SockAddrIn_T;
-#if defined(__sun) || defined(__sun__) || defined(__sparc) || defined(__sparc__)
-typedef SockAddr_T       ConnParam2_T;
-#else
 typedef const SockAddr_T ConnParam2_T;
-#endif
 
 #if defined(__linux) || defined(__linux__)
 typedef socklen_t SockLen_T;
-#elif defined(__sun) || defined(__sun__) || defined(__sparc) || defined(__sparc__)
-#   if defined(__SunOS_5_6)
-typedef int SockLen_T;
-#   elif defined(__sparcv9) && defined(__arch64__) && defined(__GNUC__)
-typedef socklen_t SockLen_T;
-#   else
-typedef size_t SockLen_T;
-#   endif
-#elif defined(_AIX) || defined(__aix) || defined(__aix__)
-#   if defined(__GNUC__)
-typedef socklen_t SockLen_T;
-#   else
-//  64-bit AIX uses socklen_t but I don't know the flags
-//       typedef unsigned int SockLen_T;
-//  The new(er) AIX machine uses socklen_t...
-typedef socklen_t SockLen_T;
-#   endif
 #elif defined(__APPLE_CC__)
 typedef socklen_t SockLen_T;
 #else
