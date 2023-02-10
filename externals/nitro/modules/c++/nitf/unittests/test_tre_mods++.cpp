@@ -257,6 +257,8 @@ TEST_CASE(use_ENGRDA)
     engrda.setField("ENGDATC[0]", 1); // count
     engrda.updateFields();
     engrda.setField("ENGDATA[0]", "ABC");
+
+    TEST_ASSERT_TRUE(true); // need to reference hidden "testName" parameter
 }
 
 TEST_CASE(use_ENGRDA_typed_fields)
@@ -416,6 +418,8 @@ TEST_CASE(overflowingNumericFields)
 }
 
 TEST_MAIN(
+    (void)argv; (void)argc;
+
     TEST_CHECK(setFields);
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);

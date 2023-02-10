@@ -53,7 +53,7 @@ void updateMinMax(double val, double& curMin, double& curMax)
     }
 }
 
-six::sicd::ComplexData* const updateMetadata(
+six::sicd::ComplexData* updateMetadata(
         const six::sicd::ComplexData& data,
         const scene::SceneGeometry& geom,
         const scene::ProjectionModel& projection,

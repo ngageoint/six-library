@@ -53,8 +53,8 @@ int main(int argc, char** argv)
             complexData->radarCollection->area->plane->referencePoint.rowCol.col);
 
         const types::RowCol<double> slantCenter(
-            complexData->imageData->scpPixel.row,
-            complexData->imageData->scpPixel.col);
+            static_cast<double>(complexData->imageData->scpPixel.row),
+            static_cast<double>(complexData->imageData->scpPixel.col));
 
         std::cout << "outputRowColToSlantRow(outputCenter): " <<
             outputRowColToSlantRow(outputCenter.row, outputCenter.col) << 

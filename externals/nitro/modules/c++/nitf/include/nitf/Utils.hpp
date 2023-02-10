@@ -50,7 +50,7 @@ namespace Utils
         const char* file, int line, const char* func, int level);
     extern NITRO_NITFCPP_API void error_init(nrt_Error* error, const std::exception&,
         const char* file, int line, const char* func, int level);
-};
+}
 
 }
 

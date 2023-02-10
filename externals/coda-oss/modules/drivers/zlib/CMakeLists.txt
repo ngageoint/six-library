@@ -80,10 +80,6 @@ elseif(ENABLE_ZIP)
         ARCHIVE "zlib-1.2.13.tar"
         HASH "SHA256=A47CDCD8863424356B893B259CB57081EFDCC7FA3C2EB56CA1E881324958A2A9")
 
-    if (MSVC)
-        add_compile_options(/wd4996) # '...': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: .... See online help for details.
-    endif()
-
     set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
     # remove crypt.h due to name clash with glibc
     file(REMOVE "${SOURCE_DIR}/contrib/minizip/crypt.h")
