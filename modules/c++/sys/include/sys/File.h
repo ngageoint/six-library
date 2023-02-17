@@ -20,8 +20,17 @@
  *
  */
 
-#ifndef __SYS_FILE_H__
-#define __SYS_FILE_H__
+#ifndef CODA_OSS_sys_File_h_INCLUDED_
+#define CODA_OSS_sys_File_h_INCLUDED_
+#pragma once
+
+#include <stdio.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+#include <memory>
+#include <fstream>
 
 #include "sys/Conf.h"
 #include "sys/SystemException.h"
@@ -100,11 +109,21 @@ struct CODA_OSS_API File
     {
         create(path.getPath(), accessFlags, creationFlags);
     }
+    File(std::nothrow_t, const coda_oss::filesystem::path& path,
+         int accessFlags = READ_ONLY, int creationFlags = EXISTING) noexcept // caller MUST check isOpen()
+    {
+        create(std::nothrow, path, accessFlags, creationFlags);
+    }
 
     File(const Path& parent, std::string name, int accessFlags = READ_ONLY,
          int creationFlags = EXISTING)
     {
         create(parent.join(name).getPath(), accessFlags, creationFlags);
+    }
+    File(std::nothrow_t, const coda_oss::filesystem::path& parent, const coda_oss::filesystem::path& name,
+         int accessFlags = READ_ONLY, int creationFlags = EXISTING) noexcept // caller MUST check isOpen()
+    {
+        create(std::nothrow, parent / name, accessFlags, creationFlags);
     }
 
     /*!
@@ -127,6 +146,11 @@ struct CODA_OSS_API File
         if (isOpen())
             close();
     }
+
+    File(const File&) = default;
+    File& operator=(const File&) = default;
+    File(File&&) = default;
+    File& operator=(File&&) = default;
 
     /*!
      *  Is the file open?
@@ -162,8 +186,13 @@ struct CODA_OSS_API File
      *  \param accessFlags File access flags
      *  \param creationFlags File creation flags
      */
-    void create(const std::string& str, int accessFlags, 
-                int creationFlags);
+    void create(const std::string& str, int accessFlags, int creationFlags);
+    void create(std::nothrow_t, const coda_oss::filesystem::path& path,
+                           int accessFlags, int creationFlags) // caller MUST check isOpen()
+    {
+        mHandle = createFile(path, accessFlags, creationFlags);
+        mPath = path.string();
+    }
 
     /*!
      *  Read from the File into a buffer 'size' bytes.
@@ -235,10 +264,35 @@ struct CODA_OSS_API File
 protected:
     _SYS_HANDLE_TYPE mHandle = SYS_INVALID_HANDLE;
     std::string mPath;
+    
+    static _SYS_HANDLE_TYPE createFile(const coda_oss::filesystem::path&, int accessFlags, int creationFlags) noexcept;
 
 };
 
+// These routines use sys::expandEnvironmentVariables() if the initial open attempt fails.
+CODA_OSS_API File make_File(const coda_oss::filesystem::path&, int accessFlags = File::READ_ONLY, int creationFlags =  File::EXISTING);
+CODA_OSS_API File make_File(const coda_oss::filesystem::path& parent, const coda_oss::filesystem::path& name,
+        int accessFlags =  File::READ_ONLY, int creationFlags =  File::EXISTING);
+
+
+// Call  sys::expandEnvironmentVariables() if the initial fopen() fails.
+CODA_OSS_API FILE* fopen(const coda_oss::filesystem::path&, const std::string& mode);
+CODA_OSS_API int open(const coda_oss::filesystem::path&, int flags);
+CODA_OSS_API int open(const coda_oss::filesystem::path&, int flags, int mode);
+CODA_OSS_API int close(int fd); // needed to close a FD from open()
+
+#ifdef _WIN32
+#define CODA_OSS_stat _stat
+#else
+#define CODA_OSS_stat stat
+#endif
+// Call  sys::expandEnvironmentVariables() if the initial stat() attempt fails.
+CODA_OSS_API int stat(const coda_oss::filesystem::path&, struct CODA_OSS_stat &buffer);
+
+// Call  sys::expandEnvironmentVariables() if the initial open attempt fails.
+CODA_OSS_API std::ifstream make_ifstream(const coda_oss::filesystem::path&, std::ios_base::openmode mode = std::ios_base::in); // https://en.cppreference.com/w/cpp/io/basic_ifstream/basic_ifstream
+CODA_OSS_API void open(std::ifstream&, const coda_oss::filesystem::path&, std::ios_base::openmode mode = std::ios_base::in); // https://en.cppreference.com/w/cpp/io/basic_ifstream/open
+
 }
 
-#endif
-
+#endif  // CODA_OSS_sys_File_h_INCLUDED_

@@ -51,7 +51,7 @@ public:
     {
     }
 
-    void run()
+    void run() override
     {
         while (true)
         {
@@ -101,7 +101,7 @@ public:
     virtual ~Thespian()
     {
     }
-    void run()
+    void run() override
     {
         //__debugln__(FmtX("[%s]:", mName.c_str()));
         doLines();
@@ -122,7 +122,7 @@ public:
     {
     }
 
-    void doLines()
+    void doLines() override
     {
         //__warning__("Beware the ides of March.");
     }

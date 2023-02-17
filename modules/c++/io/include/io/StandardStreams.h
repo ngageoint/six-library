@@ -62,12 +62,12 @@ struct StandardOutStream final : public OutputStream
      * \param len the length of bytes to read
      * \throw except::IOException
      */
-    virtual void write(const void* buffer, size_t len);
+    virtual void write(const void* buffer, size_t len) override;
 
     /*!
      *  Flushes stdout
      */
-    virtual void flush();
+    virtual void flush() override;
 
     using OutputStream::write;
     using OutputStream::writeln;
@@ -91,12 +91,12 @@ struct StandardErrStream final : public OutputStream
      * \param len the length of bytes to read
      * \throw except::IOException
      */
-    virtual void write(const void* buffer, sys::Size_T len);
+    virtual void write(const void* buffer, sys::Size_T len) override;
 
     /*!
      *  Flushes stderr
      */
-    virtual void flush();
+    virtual void flush() override;
 
 protected:
     _STDSTREAM_DECLARE_MUTEX_SEMICOLON_

@@ -41,19 +41,19 @@ struct NullInputStream : public InputStream
     {
     }
 
-    virtual sys::Off_T available()
+    virtual sys::Off_T available() override
     {
         return mAvailable;
     }
 
     virtual sys::SSize_T readln(sys::byte *cStr,
-                                const sys::Size_T strLenPlusNullByte)
+                                const sys::Size_T strLenPlusNullByte) override
     {
         return read(cStr, strLenPlusNullByte);
     }
 
     virtual sys::SSize_T streamTo(OutputStream& soi,
-                                  sys::SSize_T numBytes = IS_END)
+                                  sys::SSize_T numBytes = IS_END) override
     {
         const sys::SSize_T toProcess = (numBytes == IS_END) ? numBytes : (mAvailable
                 >= numBytes ? numBytes : mAvailable);
@@ -77,7 +77,7 @@ protected:
         memset(buffer, 0, len);
     }
 
-    virtual sys::SSize_T readImpl(void* buffer, size_t len)
+    virtual sys::SSize_T readImpl(void* buffer, size_t len) override
     {
         const auto numToRead =
                 mAvailable >= gsl::narrow<sys::SSize_T>(len) ? len : gsl::narrow<size_t>(mAvailable);
@@ -108,11 +108,11 @@ struct NullOutputStream : public OutputStream
     {
     }
 
-    virtual void write(const void* , size_t )
+    virtual void write(const void* , size_t ) override
     {
     }
 
-    virtual void flush()
+    virtual void flush() override
     {
     }
 };

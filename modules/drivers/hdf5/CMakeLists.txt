@@ -1,4 +1,5 @@
 set(MODULE_NAME hdf5)
+set(TARGET_LANGUAGE c++)
 
 if(CODA_ENABLE_HDF5)
     # set up warnings

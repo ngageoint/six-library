@@ -76,7 +76,7 @@ struct PipeStream : InputStream
      *         (default 0 means read until max or newline)
      */
     virtual sys::SSize_T readln(sys::byte *cStr,
-                                const sys::Size_T strLenPlusNullByte = 0);
+                                const sys::Size_T strLenPlusNullByte = 0) override;
 
     /*!
      * The streaming occurs as follows: If the numBytes is IS_END, 
@@ -90,7 +90,7 @@ struct PipeStream : InputStream
      * input stream to the output stream
      */
     virtual sys::SSize_T streamTo(OutputStream& soi,
-                                  sys::SSize_T numBytes = IS_END);
+                                  sys::SSize_T numBytes = IS_END) override;
 
     PipeStream(const PipeStream&) = delete;
     PipeStream& operator=(const PipeStream&) = delete;
@@ -99,7 +99,7 @@ protected:
     /*!
      *  \brief returns the requested size in bytes from the stream
      */
-    virtual sys::SSize_T readImpl(void* buffer, size_t len);
+    virtual sys::SSize_T readImpl(void* buffer, size_t len) override;
 
 
     sys::ExecPipe mExecPipe;
