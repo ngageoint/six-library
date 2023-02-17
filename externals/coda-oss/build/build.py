@@ -21,6 +21,12 @@ from dumpconfig import dumpconfig
 from makewheel import makewheel
 from package import package
 
+try:
+    import hashlib
+    hashlib.md5()
+except ValueError:
+    Logs.error('MD5 error - you are likely trying to use an old python on a new machine to run waf. '
+               'If you run into a fatal FIPS error try finding a newer version of python.')
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
@@ -29,8 +35,8 @@ COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.spl
 for ext in COMMON_EXCLUDES_EXT:
     TaskGen.extension(ext)(Utils.nada)
 
-if sys.version_info < (2,6,0):
-    raise Errors.WafError('Build system requires at least Python 2.6')
+if sys.version_info < (3,7,0):
+    raise Errors.WafError('Build system requires at least Python 3.7')
 
 # provide a partial function if we don't have one
 try:

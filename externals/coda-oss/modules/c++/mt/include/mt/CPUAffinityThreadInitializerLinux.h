@@ -58,7 +58,7 @@ public:
      *
      * \throws if setting the thread affinity fails
      */
-    virtual void initialize();
+    virtual void initialize() override;
 
 private:
     std::unique_ptr<const sys::ScopedCPUMaskUnix> mCPU;

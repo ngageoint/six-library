@@ -254,7 +254,7 @@ struct Operation
 
 TEST_CASE(testReleaseConcurrentKeys)
 {
-    srand((unsigned)time(0));
+    srand((unsigned)time(nullptr));
     mem::ScratchMemory scratch;
     std::vector<Operation> operations;
 
@@ -344,7 +344,7 @@ TEST_CASE(testReleaseConcurrentKeys)
 
 TEST_CASE(testReleaseConnectedKeys)
 {
-    srand((unsigned)time(0));
+    srand((unsigned)time(nullptr));
     mem::ScratchMemory scratch;
     std::vector<Operation> operations;
 
@@ -434,7 +434,7 @@ TEST_CASE(testReleaseConnectedKeys)
 
 TEST_CASE(testGenerateBuffersForRelease)
 {
-    srand((unsigned)time(0));
+    srand((unsigned)time(nullptr));
 
     for (unsigned int run = 0; run < 50; ++run)
     {

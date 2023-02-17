@@ -62,7 +62,7 @@ public:
     /*!
      *  Execute a command
      */
-    virtual void run() 
+    virtual void run() override
     { 
         if (::system(mCmd.c_str()) == -1)
         {
@@ -96,7 +96,7 @@ struct ExecPipe : Exec
     }
 
     //! start the child process and connect the pipe
-    virtual void run() 
+    virtual void run() override
     {
         mOutStream = openPipe(mCmd, "r");
         if (mOutStream == nullptr)

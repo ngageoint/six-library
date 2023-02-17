@@ -28,19 +28,23 @@
 #include <string.h>
 #include <errno.h>
 
+_SYS_HANDLE_TYPE sys::File::createFile(const coda_oss::filesystem::path& str_, int accessFlags, int creationFlags) noexcept
+{
+    const auto str = str_.string();
+
+    if (accessFlags & sys::File::WRITE_ONLY)
+        creationFlags |= sys::File::TRUNCATE;
+    return open(str.c_str(), accessFlags | creationFlags, _SYS_DEFAULT_PERM);
+}
 void sys::File::create(const std::string& str, int accessFlags,
         int creationFlags)
 {
-    if (accessFlags & sys::File::WRITE_ONLY)
-        creationFlags |= sys::File::TRUNCATE;
-    mHandle = open(str.c_str(), accessFlags | creationFlags, _SYS_DEFAULT_PERM);
-
+    create(std::nothrow, str, accessFlags, creationFlags);
     if (mHandle < 0)
     {
-        throw sys::SystemException(Ctxt(FmtX("Error opening file [%d]: [%s]",
-                                             mHandle, str.c_str())));
+        throw sys::SystemException(Ctxt(
+                FmtX("Error opening file [%d]: [%s]", mHandle, str.c_str())));
     }
-    mPath = str;
 }
 
 void sys::File::readInto(void* buffer, Size_T size)
