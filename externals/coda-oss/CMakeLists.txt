@@ -23,6 +23,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     # we'll dial-back warnings as necessary.
     if (MSVC)
        add_compile_options(/WX) # warnings as errors
+       add_compile_options(/MP) # multi-processor compile
     elseif (UNIX)
        add_compile_options(-Werror) # warnings as errors
     endif()

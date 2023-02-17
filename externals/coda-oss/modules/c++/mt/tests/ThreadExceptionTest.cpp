@@ -29,7 +29,7 @@ public:
     {
     }
 
-    virtual void run()
+    virtual void run() override
     {
         print(a);
     }
@@ -61,7 +61,7 @@ public:
     {
     }
 
-    virtual void run()
+    virtual void run() override
     {
         add(x,y);
     }
@@ -88,7 +88,7 @@ public:
     {
     }
 
-    virtual void run()
+    virtual void run() override
     {
     	printConcat(x,y);
     }

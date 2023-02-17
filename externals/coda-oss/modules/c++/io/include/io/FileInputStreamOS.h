@@ -99,7 +99,7 @@ public:
      * \return number of bytes which are readable
      *
      */
-    virtual sys::Off_T available();
+    virtual sys::Off_T available() override;
 
     /*!
      *  Report whether or not the file is open
@@ -130,7 +130,7 @@ public:
      *  Go to the offset at the location specified.
      *  \return The number of bytes between off and our origin.
      */
-    virtual sys::Off_T seek(sys::Off_T off, Whence whence)
+    virtual sys::Off_T seek(sys::Off_T off, Whence whence) override
     {
         int from = sys::File::FROM_CURRENT;
         switch (whence)
@@ -154,7 +154,7 @@ public:
      *  Tell the current offset
      *  \return The byte offset
      */
-    virtual sys::Off_T tell()
+    virtual sys::Off_T tell() override
     {
         return mFile.getCurrentOffset();
     }
@@ -175,7 +175,7 @@ protected:
      * \return  The number of bytes read
      *
      */
-    virtual sys::SSize_T readImpl(void* buffer, size_t len);
+    virtual sys::SSize_T readImpl(void* buffer, size_t len) override;
 };
 }
 
