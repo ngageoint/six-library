@@ -1062,6 +1062,9 @@
     <ClCompile Include="sys\source\MutexCpp11.cpp">
       <Filter>sys</Filter>
     </ClCompile>
+    <ClCompile Include="sys\source\File.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="config">

@@ -51,7 +51,7 @@ struct FilePredicate
 struct ExistsPredicate : FilePredicate
 {
     virtual ~ExistsPredicate() = default;
-    virtual bool operator()(const std::string& entry) const;
+    virtual bool operator()(const std::string& entry) const override;
 };
 
 /**
@@ -60,7 +60,7 @@ struct ExistsPredicate : FilePredicate
 struct FileOnlyPredicate: public FilePredicate
 {
     virtual ~FileOnlyPredicate() = default;
-    virtual bool operator()(const std::string& entry) const;
+    virtual bool operator()(const std::string& entry) const override;
 };
 
 /**
@@ -69,7 +69,7 @@ struct FileOnlyPredicate: public FilePredicate
 struct DirectoryOnlyPredicate: public FilePredicate
 {
     virtual ~DirectoryOnlyPredicate() = default;
-    virtual bool operator()(const std::string& entry) const;
+    virtual bool operator()(const std::string& entry) const override;
 };
 
 /**
@@ -78,7 +78,7 @@ struct DirectoryOnlyPredicate: public FilePredicate
 struct FragmentPredicate : public FilePredicate
 {
     FragmentPredicate(const std::string& fragment, bool ignoreCase = true);
-    bool operator()(const std::string& entry) const;
+    bool operator()(const std::string& entry) const override;
 
 private:
     std::string mFragment;
@@ -96,7 +96,7 @@ private:
 struct ExtensionPredicate: public FileOnlyPredicate
 {
     ExtensionPredicate(const std::string& ext, bool ignoreCase = true);
-    bool operator()(const std::string& filename) const;
+    bool operator()(const std::string& filename) const override;
 
 private:
     std::string mExt;
@@ -111,7 +111,7 @@ struct NotPredicate : public FilePredicate
     NotPredicate(FilePredicate* filter, bool ownIt = false);
     virtual ~NotPredicate();
 
-    virtual bool operator()(const std::string& entry) const;
+    virtual bool operator()(const std::string& entry) const override;
 
 protected:
     typedef std::pair<FilePredicate*, bool> PredicatePair;
@@ -132,7 +132,7 @@ struct LogicalPredicate : public FilePredicate
     sys::LogicalPredicate& addPredicate(FilePredicate* filter, 
                                         bool ownIt = false);
 
-    virtual bool operator()(const std::string& entry) const;
+    virtual bool operator()(const std::string& entry) const override;
 
 protected:
     bool mOrOperator = true;

@@ -1,6 +1,10 @@
 set(MODULE_NAME xml.lite)
 
 if(ENABLE_XML)
+    if (UNIX)
+       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-zero-as-null-pointer-constant")
+    endif()
+
     if(CONAN_PACKAGE_NAME)
         # import targets from xerces-c conan package
         find_package(coda-oss_xerces-c REQUIRED)

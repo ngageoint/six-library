@@ -168,7 +168,7 @@ private:
         /*!
          *  Call run() on the Runnable passed to createThread
          */
-        virtual void run();
+        virtual void run() override;
 
     private:
         std::unique_ptr<sys::Runnable> mRunnable;
