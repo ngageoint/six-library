@@ -80,6 +80,8 @@ TEST_CASE(constructValidImageWriter)
     subheader.setPixelInformation(nitf::PixelValueType::Integer, 8, 8, "R", nitf::ImageRepresentation::MONO, "VIS", bands);
     subheader.setBlocking(100, 200, 10, 10, nitf::BlockingMode::Pixel);
     nitf::ImageWriter writer(subheader);
+
+    TEST_ASSERT_TRUE(true); // need to reference hidden "testName" parameter
 }
 
 TEST_CASE(changeFileHeader)
@@ -105,7 +107,7 @@ TEST_CASE(changeFileHeader)
 }
 
 TEST_MAIN(
-    (void)argc;
+    (void)argc;(void)argv;
 
     TEST_CHECK(imageWriterThrowsOnFailedConstruction);
     TEST_CHECK(constructValidImageWriter);

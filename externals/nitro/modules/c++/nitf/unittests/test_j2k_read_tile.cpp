@@ -27,6 +27,7 @@
 TEST_CASE(j2k_read_tile)
 {
     /* placeholder */
+    TEST_ASSERT_TRUE(true);
 }
 
 TEST_MAIN(
