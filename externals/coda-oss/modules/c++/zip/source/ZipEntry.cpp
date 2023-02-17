@@ -21,6 +21,8 @@
  */
 
 #include "zip/ZipEntry.h"
+#undef Z_NULL
+#define Z_NULL nullptr
 
 const static char* sZipFileMadeByStr[] = {
         "MS-DOS and OS/2 (FAT / VFAT / FAT32 file systems)", "Amiga",

@@ -29,10 +29,12 @@
 #include <mutex>
 #include <type_traits>
 
+#include "config/compiler_extensions.h"
 #include "xml/lite/xml_lite_config.h"
 
 #if defined(USE_XERCES)
 
+CODA_OSS_disable_warning_system_header_push
 #include <xercesc/util/TransService.hpp>
 #include <xercesc/sax2/XMLReaderFactory.hpp>
 #include <xercesc/sax2/Attributes.hpp>
@@ -52,10 +54,10 @@
 #include <xercesc/validators/common/ContentSpecNode.hpp>
 #include <xercesc/validators/schema/SchemaSymbols.hpp>
 
-#include <string>
-
 #include <xercesc/util/XercesDefs.hpp>
 #include <xercesc/sax/ErrorHandler.hpp>
+
+CODA_OSS_disable_warning_pop
 
 #include <sys/Mutex.h>
 #include <mt/CriticalSection.h>

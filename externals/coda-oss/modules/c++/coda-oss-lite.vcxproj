@@ -345,6 +345,7 @@
     <ClCompile Include="sys\source\ErrWin32.cpp" />
     <ClCompile Include="sys\source\ExecUnix.cpp" />
     <ClCompile Include="sys\source\ExecWin32.cpp" />
+    <ClCompile Include="sys\source\File.cpp" />
     <ClCompile Include="sys\source\FileFinder.cpp" />
     <ClCompile Include="sys\source\FileUnix.cpp" />
     <ClCompile Include="sys\source\FileWin32.cpp" />

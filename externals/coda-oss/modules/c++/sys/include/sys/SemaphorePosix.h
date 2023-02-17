@@ -44,8 +44,8 @@ class SemaphorePosix : public SemaphoreInterface
 public:
     SemaphorePosix(unsigned int count = 0);
     virtual ~SemaphorePosix();
-    void wait();
-    void signal();
+    void wait() override;
+    void signal() override;
     sem_t& getNative();
 
     /*!
