@@ -1,0 +1,10 @@
+NAME            = 'highfive'
+VERSION         = '2.6.2'
+MODULE_DEPS     = 'hdf5 hdf5cpp config'
+USELIB_LOCAL    = 'hdf5-c hdf5cpp-c'
+UNITTEST_DEPS       = 'sys'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())
