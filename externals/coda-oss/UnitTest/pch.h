@@ -23,34 +23,15 @@
 #include <math.h>
 #include <assert.h>
 
-#include <typeinfo>
-#include <locale>
-#include <limits>
-#include <iterator>
-#include <array>
-#include <vector>
-#include <string>
-#include <set>
-#include <map>
-#include <queue>
-#include <iostream>
-#include <fstream>
-#include <sstream>
+#include "import/std.h"
+
 #include <std/string>
 #include <std/span>
 #include <std/optional>
 #include <std/cstddef>
 #include <std/bit>
-#include <algorithm>
-#include <std/bit> // std::endian
-#include <std/cstddef>
-#include <numeric> // std::accumulate
 #include <std/filesystem>
-#include <future>
-#include <cassert>
-#include <tuple>
-#include <complex>
-#include <stdexcept>
+#include <std/bit> // std::endian
 
 #include "CppUnitTest.h"
 

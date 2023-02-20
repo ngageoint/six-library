@@ -35,8 +35,8 @@ COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.spl
 for ext in COMMON_EXCLUDES_EXT:
     TaskGen.extension(ext)(Utils.nada)
 
-if sys.version_info < (3,7,0):
-    raise Errors.WafError('Build system requires at least Python 3.7')
+if sys.version_info < (3,6,0):
+    raise Errors.WafError('Build system requires at least Python 3.6')
 
 # provide a partial function if we don't have one
 try:
