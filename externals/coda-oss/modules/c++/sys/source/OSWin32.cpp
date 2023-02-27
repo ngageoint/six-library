@@ -148,10 +148,14 @@ bool sys::OSWin32::isFile(const std::string& path) const
     //  2) Not Directory
     //  3) Not Archive - we aren't doing that...
     const DWORD what = GetFileAttributes(path.c_str());
-    return (what != INVALID_FILE_ATTRIBUTES &&
-            !(what & FILE_ATTRIBUTE_DIRECTORY));
+    if (what == INVALID_FILE_ATTRIBUTES) // "if the function fails, the return value is INVALID_FILE_ATTRIBUTES."
+    {
+        //const auto dwError = GetLastError();
+        return false;
+    }
+    const auto fileAttributeDirectory = (what & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY;
+    return !fileAttributeDirectory;
 }
-
 
 bool sys::OSWin32::isDirectory(const std::string& path) const
 {
@@ -183,7 +187,7 @@ bool sys::OSWin32::changeDirectory(const std::string& path) const
 std::string sys::OSWin32::getTempName(const std::string& path,
                                       const std::string& prefix) const
 {
-    char buffer[MAX_PATH];
+    char buffer[MAX_PATH]{};
     if (GetTempFileName(path.c_str(),
                         prefix.c_str(),
                         0, buffer) == 0)

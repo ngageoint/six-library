@@ -68,7 +68,7 @@ public:
      *  Overloaded run method for handling a connection.
      * 
      */
-    void run()
+    void run() override
     {
         (*mRequestHandler)(mConnection);
         delete mRequestHandler;
@@ -94,7 +94,7 @@ public:
     ~PerRequestThreadAllocStrategy()
     {}
 
-    void initialize()
+    void initialize() override
     {
     }
 
@@ -103,7 +103,7 @@ public:
      * 
      *  \param conn The network connection
      */
-    void handleConnection(NetConnection* conn);
+    void handleConnection(NetConnection* conn) override;
 };
 
 /*     class ThreadPoolAllocStrategy : public AllocStrategy */

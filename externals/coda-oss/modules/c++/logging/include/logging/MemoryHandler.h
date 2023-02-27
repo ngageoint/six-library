@@ -52,7 +52,7 @@ struct MemoryHandler : public Handler
     getLogs(LogLevel level = LogLevel::LOG_NOTSET) const;
 
 protected:
-    virtual void write(const std::string& str);
+    virtual void write(const std::string& str) override;
 
     void emitRecord(const LogRecord* record) override;
 

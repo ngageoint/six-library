@@ -41,7 +41,8 @@ TEST_CASE(testFileDestroyed)
     {
         const io::TempFile tempFile;
         pathname = tempFile.pathname();
-        std::ofstream out(pathname.c_str());
+        std::ofstream out(pathname);
+        TEST_ASSERT_TRUE(static_cast<bool>(out));
         out << "Test text";
     }
     // File should be destroyed on destruction

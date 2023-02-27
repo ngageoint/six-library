@@ -82,7 +82,7 @@ public:
      *  This method returns a reference to the content handler.
      *  \return content handler
      */
-    xml::lite::ContentHandler *getContentHandler()
+    xml::lite::ContentHandler *getContentHandler() override
     {
         return mDriverContentHandler->retrieveXMLLiteContentHandler();
     }
@@ -92,7 +92,7 @@ public:
      *  It will set this internally.
      *  \param handler  The content handler to pass
      */
-    void setContentHandler(xml::lite::ContentHandler* handler)
+    void setContentHandler(xml::lite::ContentHandler* handler) override
     {
         mDriverContentHandler->setXMLLiteContentHandler(handler);
     }
@@ -104,12 +104,12 @@ public:
         int size = io::InputStream::IS_END);
     
     //! Method to create an xml reader
-    void create();
+    void create() override;
 
     //! Method to destroy an xml reader
-    void destroy();
+    void destroy() override;
 
-    std::string getDriverName() const { return "xerces"; }
+    std::string getDriverName() const override { return "xerces"; }
 
     static const void* getWindows1252Encoding();
 

@@ -57,6 +57,10 @@ struct BacktraceHelper final
     BacktraceHelper(char** stackSymbols)
         : mStackSymbols(stackSymbols)
     {}
+    BacktraceHelper(const BacktraceHelper&) = delete;
+    BacktraceHelper& operator=(const BacktraceHelper&) = delete;
+    BacktraceHelper(BacktraceHelper&&) = default;
+    BacktraceHelper& operator=(BacktraceHelper&&) = default;
 
     ~BacktraceHelper()
     {
