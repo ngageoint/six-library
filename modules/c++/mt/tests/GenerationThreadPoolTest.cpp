@@ -50,7 +50,7 @@ public:
     {
     }
 
-    void run()
+    void run() override
     {
         sleep(TO_SLEEP);
 

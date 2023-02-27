@@ -127,7 +127,7 @@ public:
      *
      *  \return The produced socket
      */
-    virtual std::unique_ptr<Socket> create(const SocketAddress& address)
+    virtual std::unique_ptr<Socket> create(const SocketAddress& address) override
     {
         std::unique_ptr<Socket> s(new Socket(mProto));
 
@@ -185,7 +185,7 @@ public:
      *  listen().
      *
      */
-    virtual std::unique_ptr<Socket> create(const SocketAddress& address)
+    virtual std::unique_ptr<Socket> create(const SocketAddress& address) override
     {
         std::unique_ptr<Socket> s(new Socket(mProto));
 

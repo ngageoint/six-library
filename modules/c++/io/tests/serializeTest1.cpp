@@ -44,7 +44,7 @@ public:
 	vec[2] = 0.0;
     }
     virtual ~A() {}
-    virtual void serialize(OutputStream& os)
+    virtual void serialize(OutputStream& os) override
     {
 	os.writeln("Class A");
 	os.writeln(FmtX("%f", vec[0]));
@@ -52,7 +52,7 @@ public:
 	os.writeln(FmtX("%f", vec[2]));
 
     }
-    virtual void deserialize(InputStream& is)
+    virtual void deserialize(InputStream& is) override
     {
 	string classType = fillString(is);
 	string vec_0 = fillString(is);
