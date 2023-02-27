@@ -57,10 +57,10 @@ struct CODA_OSS_API StreamHandler : public Handler
 
     //! adds the need to write epilogue before deleting formatter
     //  and then writing the prologue with the new formatter
-    virtual void setFormatter(Formatter* formatter);
-    virtual void setFormatter(std::unique_ptr<Formatter>&&);
+    virtual void setFormatter(Formatter* formatter) override;
+    virtual void setFormatter(std::unique_ptr<Formatter>&&) override;
 
-    virtual void close();
+    virtual void close() override;
 
 protected:
     // This is necessary so this class and an inherited class can call a
@@ -68,7 +68,7 @@ protected:
     void closeImpl();
 
     //! for general string write
-    virtual void write(const std::string&);
+    virtual void write(const std::string&) override;
 
     //! for writing directly to stream,
     // used for the bulk of the logging for speed

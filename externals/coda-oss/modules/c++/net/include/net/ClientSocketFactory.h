@@ -134,7 +134,7 @@ public:
      * Sets SO_BROADCAST socket option.
      * \param s The socket
      */
-    virtual void setOptions(Socket& s)
+    virtual void setOptions(Socket& s) override
     {
         // Make sure we're set up for broadcasting if necessary
         int on = 1;

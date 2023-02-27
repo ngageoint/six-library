@@ -85,7 +85,7 @@ TEST_CASE(test_hdf5Write)
     for (size_t i = 0; i < result.size(); i++)
     {
         const auto expected = static_cast<double>(i);
-        TEST_ASSERT_ALMOST_EQ(result[i], expected);
+        TEST_ASSERT_EQ(result[i], expected);
     }
 }
 

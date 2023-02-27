@@ -198,7 +198,7 @@ std::u16string str::to_u16string(str::W1252string::const_pointer p, size_t sz)
 {
     auto retval = to_Tstring<std::u16string>(p, sz);
     #if defined(_WIN32) && (!defined(_NDEBUG) || defined(DEBUG))
-    const _bstr_t bstr(str::cast<const char*>(p));
+    const _bstr_t bstr(std::string(str::cast<const char*>(p), sz).c_str()); // no _bstr_t ctor taking sz
     const std::wstring wstr(static_cast<const wchar_t*>(bstr));
     assert(retval == str::cast<std::u16string::const_pointer>(wstr.c_str()));
     #endif
