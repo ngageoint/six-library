@@ -58,7 +58,7 @@ protected:
      *  This is a little tricky since we do not know the
      *  length of the read.
      */
-    virtual sys::SSize_T readImpl(void* buffer, size_t len);
+    virtual sys::SSize_T readImpl(void* buffer, size_t len) override;
 
 };
 }
