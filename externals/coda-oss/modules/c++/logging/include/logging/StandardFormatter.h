@@ -67,7 +67,7 @@ public:
 
     StandardFormatter& operator=(const StandardFormatter&) = delete;
 
-    virtual void format(const LogRecord* record, io::OutputStream& os) const;
+    virtual void format(const LogRecord* record, io::OutputStream& os) const override;
 
 };
 

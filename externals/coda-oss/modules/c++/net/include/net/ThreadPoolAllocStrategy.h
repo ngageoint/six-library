@@ -44,7 +44,7 @@ public:
     /*!
      *  Do this in a loop forever.
      */
-    void performTask(net::NetConnection*& request)
+    void performTask(net::NetConnection*& request) override
     {
         (*mHandler)(request);
     }
@@ -78,7 +78,7 @@ public:
         delete mFactory;
     }
 
-    mt::WorkerThread<net::NetConnection*>* newWorker()
+    mt::WorkerThread<net::NetConnection*>* newWorker() override
     {
         return new ConnectionThread(&mRequestQueue, mFactory->create());
     }
@@ -127,9 +127,9 @@ public:
 
     // AllocStrategy guarantees that mRequestHandlerFactory is initialized
     // by the time this function is called
-    void initialize();
+    void initialize() override;
 
-    void handleConnection(net::NetConnection* conn);
+    void handleConnection(net::NetConnection* conn) override;
 
 };
 }

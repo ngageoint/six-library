@@ -100,7 +100,7 @@ protected:
      * \param toServer The socket for the new connection
      * \return A new SSLConnection
      */
-    virtual NetConnection* newConnection(std::unique_ptr<net::Socket>&& toServer);
+    virtual NetConnection* newConnection(std::unique_ptr<net::Socket>&& toServer) override;
 
 private:
 #   if defined(USE_OPENSSL)

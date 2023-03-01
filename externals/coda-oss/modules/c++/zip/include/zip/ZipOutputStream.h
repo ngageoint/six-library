@@ -76,9 +76,9 @@ public:
     void write(const std::string& inputPathname,
                const std::string& zipPathname);
 
-    virtual void write(const void* buffer, size_t len);
+    virtual void write(const void* buffer, size_t len) override;
 
-    virtual void close();
+    virtual void close() override;
 
 private:
     zipFile mZip;
