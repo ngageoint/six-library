@@ -73,7 +73,7 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
         if (!envPath.empty())
         {
             // SIX_SCHEMA_PATH might be a search path
-	        if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, std::filesystem::file_type::directory))
+            if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, std::filesystem::file_type::directory))
             {
                 // Nope; assume the caller can figure things out (existing behavior).
                 schemaPaths.push_back(envPath);
@@ -152,7 +152,7 @@ static inline std::string to_string(const std::filesystem::path& p)
     return p.string();
 }
 
-// Generate a detaled INVALID XML message
+// Generate a detailed INVALID XML message
 template<typename TPath>
 inline static auto getInvalidXmlErrorMessage(const std::vector<TPath>& paths)
 {
@@ -166,14 +166,11 @@ inline static auto getInvalidXmlErrorMessage(const std::vector<TPath>& paths)
     return message;
 }
 
-//  NOTE: Errors are treated as detriments to valid processing
-//        and fail accordingly
-template<typename TPath>
-static void do_validate_(const xml::lite::Document& doc,
-    const std::vector<TPath>& paths, logging::Logger* log)
+static std::vector<xml::lite::ValidationInfo> validate_(xml::lite::Validator& validator, const xml::lite::Document& doc)
 {
     const auto& rootElement = doc.getRootElement();
-    if (rootElement->getUri().empty())
+    const auto strUri = rootElement->getUri();
+    if (strUri.empty())
     {
         throw six::DESValidationException(Ctxt("INVALID XML: URI is empty so document version cannot be determined to use for validation"));
     }
@@ -182,71 +179,75 @@ static void do_validate_(const xml::lite::Document& doc,
     io::U8StringStream xmlStream;
     rootElement->prettyPrint(xmlStream);
 
-    // validate against any specified schemas
-    xml::lite::Validator validator(paths, log, true); // this can be expensive to create as all sub - directories might be traversed
-
     std::vector<xml::lite::ValidationInfo> errors;
-    validator.validate(xmlStream, rootElement->getUri(), errors);
-
-    // log any error found and throw
-    if (!errors.empty())
-    {
-        if (log)
-        {
-            for (size_t i = 0; i < errors.size(); ++i)
-            {
-                log->critical(errors[i].toString());
-            }
-        }
-
-        //! this is a unique error thrown only in this location --
-        //  if the user wants a file written regardless of the consequences
-        //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
-        //  and attempt to rewrite the file. Continuing in this manner is
-        //  highly discouraged
-        auto ctx(Ctxt(getInvalidXmlErrorMessage(paths)));
-        for (const auto& e : errors)
-        {
-            ctx.mMessage += "\n" + e.toString();
-        }
-        throw six::DESValidationException(ctx);
-    }
+    validator.validate(xmlStream, strUri, errors);
+    return errors;
 }
+
 template<typename TPath>
-static void validate_(const xml::lite::Document& doc,
-    std::vector<TPath> paths, logging::Logger* log)
+static void log_validation_errors(const std::vector<xml::lite::ValidationInfo>& errors,
+    const std::vector<TPath>& paths, logging::Logger* log)
 {
-    // If the paths we have don't exist, throw
-    paths = check_whether_paths_exist(paths);
-
-    // validate against any specified schemas
-    if (!paths.empty())
+    // log any error found and throw
+    if (errors.empty())
     {
-        do_validate_(doc, paths, log);
+        return;
     }
+
+    if (log)
+    {
+        for (size_t i = 0; i < errors.size(); ++i)
+        {
+            log->critical(errors[i].toString());
+        }
+    }
+
+    //! this is a unique error thrown only in this location --
+    //  if the user wants a file written regardless of the consequences
+    //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
+    //  and attempt to rewrite the file. Continuing in this manner is
+    //  highly discouraged
+    auto ctx(Ctxt(getInvalidXmlErrorMessage(paths)));
+    for (const auto& e : errors)
+    {
+        ctx.mMessage += "\n" + e.toString();
+    }
+    throw six::DESValidationException(ctx);
 }
+
+
+//  NOTE: Errors are treated as detriments to valid processing
+//        and fail accordingly
 void XMLControl::validate(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths,
                           logging::Logger* log)
 {
     assert(doc != nullptr);
 
-    // attempt to get the schema location from the
-    // environment if nothing is specified
+    // attempt to get the schema location from the environment if nothing is specified
     std::vector<std::string> paths(schemaPaths);
     loadSchemaPaths(paths);
 
     if ((log != nullptr) && schemaPaths.empty())
     {
         std::ostringstream oss;
-        oss << "Coudn't validate XML - no schemas paths provided "
-            << " and " << six::SCHEMA_PATH << " not set.";
+        oss << "Coudn't validate XML - no schemas paths provided and " << six::SCHEMA_PATH << " not set.";
 
         log->warn(oss.str());
     }
 
+    // If the paths we have don't exist, throw
+    paths = check_whether_paths_exist(paths);
+
     // validate against any specified schemas
-    validate_(*doc, paths, log);
+    if (!paths.empty())
+    {
+        xml::lite::Validator validator(paths, log, true); // this can be expensive to create as all sub-directories might be traversed
+        const auto errors = validate_(validator, *doc);
+
+        // log any error found and throw
+        log_validation_errors(errors, paths, log);
+    }
 }
 void XMLControl::validate(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>* pSchemaPaths,
@@ -257,14 +258,23 @@ void XMLControl::validate(const xml::lite::Document& doc,
     if ((log != nullptr) && (pSchemaPaths != nullptr) && paths.empty())
     {
         std::ostringstream oss;
-        oss << "Coudn't validate XML - no schemas paths provided "
-            << " and " << six::SCHEMA_PATH << " not set.";
+        oss << "Coudn't validate XML - no schemas paths provided and " << six::SCHEMA_PATH << " not set.";
 
         log->warn(oss.str());
     }
 
+    // If the paths we have don't exist, throw
+    paths = check_whether_paths_exist(paths);
+
     // validate against any specified schemas
-    validate_(doc, paths, log);
+    if (!paths.empty())
+    {
+        xml::lite::Validator validator(paths, log, true); // this can be expensive to create as all sub-directories might be traversed
+        const auto errors = validate_(validator, doc);
+
+        // log any error found and throw
+        log_validation_errors(errors, paths, log);
+    }
 }
 
 std::string XMLControl::getDefaultURI(const Data& data)
