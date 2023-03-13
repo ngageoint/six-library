@@ -42,11 +42,11 @@
 * XML is now always written as UTF-8; the code will still try to read Windows-1252.
 * `Uri`s are no longer validated by default.
 * Minor tweaks from other projects.
-* Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/mdaus/coda-oss/tree/main).
+* ~~Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/mdaus/coda-oss/tree/main).~~
 
 ## [Release 2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)
 * remove *Expat* and *libXML* modules and support in **xml.lite**; only *Xerces* was actively used.
-* fix `waf` to work-around FIPS warning because of insecure *md5* hashing.
+* ~~fix `waf` to work-around FIPS warning because of insecure *md5* hashing.~~
 * tweak `str::EncodedStringView` and `str::EncodedString` for
   [future XML changes](https://github.com/mdaus/coda-oss/tree/feature/always-write-xml-as-utf8).
 
