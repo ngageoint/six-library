@@ -2,6 +2,13 @@
 
 # SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
 
+## [Version 3.1.15](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.15); March 13, 2023
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2023-03-10](https://github.com/mdaus/coda-oss/releases/tag/2023-03-10)
+* [nitro](https://github.com/mdaus/nitro) version [2.10.13](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.13)
+* CPHD 1.1.0 fixes.
+* Fixed `slantToImagePartials()` not operating in slant plane.
+* Final C++11 🤞🏻 release; future releases will be C++14 from [main](https://github.com/ngageoint/six-library/tree/main).
+
 ## [Version 3.1.14](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.14); August 30, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30)
 * [nitro](https://github.com/mdaus/nitro) version [2.10.12](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.12)
@@ -9,7 +16,7 @@
   `std::u8string` (actually `coda_oss::u8string`) instead of `std::string`.
 * Fixed memory leak in `ComplexXMLParser`.
 * Files in **six/projects/csm/external/csm-3.0.4** are unchanged (almost!) from [CSM 3.0.4](https://github.com/ngageoint/csm/releases/tag/v3.0.4).
-* Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/ngageoint/six-library/tree/main).
+* ~~Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/ngageoint/six-library/tree/main).~~
 
 ## [Version 3.1.13](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.13); August 2, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)
