@@ -27,7 +27,8 @@
 #include "config/Version.h"
 #include "nitf/Version.h"
 
- // 2.10.12	August 30, 2022
+// 2.10.13	March 13, 2023
+// 2.10.12	August 30, 2022
 // 2.10.11	August 2, 2022
 // 2.10.10	June 29, 2022
 // 2.10.9	May 3, 2022
@@ -35,7 +36,7 @@
 // 2.10.7	December 13, 2021
 #define NITF_VERSION_MAJOR	2
 #define NITF_VERSION_MINOR	10
-#define NITF_VERSION_PATCH	12
+#define NITF_VERSION_PATCH	13
 #define NITF_VERSION_BUILD		0
 #define NITF_VERSION CODA_OSS_MAKE_VERSION_MMPB(NITF_VERSION_MAJOR, NITF_VERSION_MINOR, NITF_VERSION_PATCH, NITF_VERSION_BUILD)
 
