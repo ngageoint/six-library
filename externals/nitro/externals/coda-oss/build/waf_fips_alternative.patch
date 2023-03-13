@@ -1,0 +1,60 @@
+# This file contains an alternative patch to work around
+#     the disabling of the md5 hash function in FIPS-enabled systems.
+# The waf maintainers came up with their own workaround, but this
+#     seems more elegant.
+# The issue was https://gitlab.com/ita1024/waf/issues/2213.
+# The waf maintainer's commits were bd15a9dc and 1c7be35d.
+# Some form of this should be applied to the waf self-extracting package, but
+#   in the meantime, this patch can be applied after waflib extracts, which
+#   can be triggered by simply doing 'waf --help'.
+diff -Naur a/waflib/Task.py b/waflib/Task.py
+--- a/waflib/Task.py
++++ b/waflib/Task.py
+@@ -250,7 +250,7 @@
+ 		try:
+ 			return self.uid_
+ 		except AttributeError:
+-			m=Utils.md5()
++			m=Utils.md5(usedforsecurity=False)
+ 			up=m.update
+ 			up(self.__class__.__name__)
+ 			for x in self.inputs+self.outputs:
+@@ -269,7 +269,7 @@
+ 	def signature(self):
+ 		try:return self.cache_sig
+ 		except AttributeError:pass
+-		self.m=Utils.md5()
++		self.m=Utils.md5(usedforsecurity=False)
+ 		self.m.update(self.hcode)
+ 		self.sig_explicit_deps()
+ 		self.sig_vars()
+diff -Naur waflib/Utils.py b/waflib/Utils.py
+--- a/waflib/Utils.py
++++ b/waflib/Utils.py
+@@ -100,7 +100,7 @@
+ 		f.close()
+ def h_file(fname):
+ 	f=open(fname,'rb')
+-	m=md5()
++	m=md5(usedforsecurity=False)
+ 	try:
+ 		while fname:
+ 			fname=f.read(200000)
+@@ -158,7 +158,7 @@
+ 		except OSError:
+ 			raise IOError('Cannot read from %r'%fname)
+ 		f=os.fdopen(fd,'rb')
+-		m=md5()
++		m=md5(usedforsecurity=False)
+ 		try:
+ 			while fname:
+ 				fname=f.read(200000)
+@@ -284,7 +284,7 @@
+ 	fu=fu.upper()
+ 	return fu
+ def h_list(lst):
+-	m=md5()
++	m=md5(usedforsecurity=False)
+ 	m.update(str(lst))
+ 	return m.digest()
+ def h_fun(fun):

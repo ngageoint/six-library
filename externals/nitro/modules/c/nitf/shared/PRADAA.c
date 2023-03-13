@@ -2,7 +2,12 @@
  * This file is part of NITRO
  * =========================================================================
  *
+<<<<<<<< HEAD:externals/nitro/modules/c/nitf/shared/PRADAA.c
  * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
+========
+ * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2017, MDA Information Systems LLC
+>>>>>>>> 2c7b84b5157cb36063ccdf447b621b14e1b2cb6c:externals/nitro/modules/c++/nitf/source/J2KStream.cpp
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,6 +25,7 @@
  *
  */
 
+<<<<<<<< HEAD:externals/nitro/modules/c/nitf/shared/PRADAA.c
 #include <import/nitf.h>
 
 NITF_CXX_GUARD
@@ -38,3 +44,29 @@ static nitf_TREDescription description[] = {
 NITF_DECLARE_SINGLE_PLUGIN(PRADAA, description)
 
 NITF_CXX_ENDGUARD
+========
+#include "nitf/J2KStream.hpp"
+
+#include <sstream>
+#include <stdexcept>
+
+#include "nitf/NITFException.hpp"
+
+j2k::Stream::Stream(j2k::StreamType streamType, size_t chunkSize)
+{
+    const auto isInputStream = streamType == j2k::StreamType::INPUT;
+
+    mStream = j2k_stream_create(chunkSize, isInputStream);
+    if (!mStream)
+    {
+        std::ostringstream os;
+        os << "Failed creating an openjpeg stream with a chunk size of " << chunkSize << " bytes.";
+        throw except::Exception(Ctxt(os.str()));
+    }
+}
+
+j2k::Stream::~Stream()
+{
+    j2k_stream_destroy(mStream);
+}
+>>>>>>>> 2c7b84b5157cb36063ccdf447b621b14e1b2cb6c:externals/nitro/modules/c++/nitf/source/J2KStream.cpp

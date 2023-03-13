@@ -3,7 +3,11 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+<<<<<<<< HEAD:externals/nitro/modules/c++/nitf/source/J2KStream.cpp
  * (C) Copyright 2017, MDA Information Systems LLC
+========
+ * (C) Copyright 2022, Maxar Technologies, Inc.
+>>>>>>>> 2c7b84b5157cb36063ccdf447b621b14e1b2cb6c:externals/nitro/modules/c++/nitf/source/FieldDescriptor.cpp
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +25,7 @@
  *
  */
 
+<<<<<<<< HEAD:externals/nitro/modules/c++/nitf/source/J2KStream.cpp
 #include "nitf/J2KStream.hpp"
 
 #include <sstream>
@@ -45,3 +50,18 @@ j2k::Stream::~Stream()
 {
     j2k_stream_destroy(mStream);
 }
+========
+#include <type_traits>
+
+#include "nitf/FieldDescriptor.hpp"
+
+std::vector<nitf::FieldDescriptor> nitf::getFieldDescriptors(std::span<const nitf_StructFieldDescriptor> descriptors)
+{
+    std::vector<nitf::FieldDescriptor> retval;
+    for (size_t i = 0; i < descriptors.size(); i++) // no iterators for our home-brew span<>
+    {
+        retval.emplace_back(descriptors[i]);
+    }
+    return retval;
+}
+>>>>>>>> 2c7b84b5157cb36063ccdf447b621b14e1b2cb6c:externals/nitro/modules/c++/nitf/source/FieldDescriptor.cpp
