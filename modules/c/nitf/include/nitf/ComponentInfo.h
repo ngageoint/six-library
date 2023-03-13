@@ -44,6 +44,8 @@ typedef struct _nitf_ComponentInfo
 }
 nitf_ComponentInfo;
 
+typedef nitf_ComponentInfo* nitf_PComponentInfo;
+
 /*!
  *  Construct the component info object.  We allocate a new object,
  *  and initialize the subheader and data sizes to zero.
@@ -54,8 +56,8 @@ nitf_ComponentInfo;
  *  \return Return the newly created object.
  */
 NITFAPI(nitf_ComponentInfo *)
-nitf_ComponentInfo_construct(nitf_Uint32 subheaderFieldWidth,
-                             nitf_Uint32 dataFieldWidth,
+nitf_ComponentInfo_construct(uint32_t subheaderFieldWidth,
+                             uint32_t dataFieldWidth,
                              nitf_Error * error);
 
 /*!

@@ -20,22 +20,23 @@
  *
  */
 
+#include "nitf/BufferedWriter.hpp"
 
 #include <stdio.h>
+#include <chrono>
 
-#include "nitf/BufferedWriter.hpp"
+#include "gsl/gsl.h"
 
 namespace nitf
 {
 BufferedWriter::BufferedWriter(const std::string& file, size_t bufferSize) :
     mBufferSize(bufferSize),
-    mScopedBuffer(new char[bufferSize]),
+    mScopedBuffer(std::make_unique<char[]>(bufferSize)),
     mBuffer(mScopedBuffer.get()),
     mPosition(0),
     mTotalWritten(0),
     mBlocksWritten(0),
     mPartialBlocks(0),
-    mElapsedTime(0),
     mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE | sys::File::TRUNCATE)
 {
     if (mBufferSize == 0)
@@ -50,13 +51,12 @@ BufferedWriter::BufferedWriter(const std::string& file,
                                size_t size,
                                bool adopt) :
     mBufferSize(size),
-    mScopedBuffer(adopt ? buffer : NULL),
+    mScopedBuffer(adopt ? buffer : nullptr),
     mBuffer(buffer),
     mPosition(0),
     mTotalWritten(0),
     mBlocksWritten(0),
     mPartialBlocks(0),
-    mElapsedTime(0),
     mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE)
 {
     if (mBufferSize == 0)
@@ -95,16 +95,18 @@ void BufferedWriter::flushBuffer(const char* buf)
 {
     if (mPosition > 0)
     {
-        sys::RealTimeStopWatch sw;
-        sw.start();
-        mFile.writeFrom(buf, mPosition);
-        mElapsedTime += (sw.stop() / 1000.);
+        const auto mPosition_ = gsl::narrow<size_t>(mPosition);
+        const auto start = std::chrono::steady_clock::now();
+        mFile.writeFrom(buf, mPosition_);
+        const auto end = std::chrono::steady_clock::now();
+        const std::chrono::duration<double> diff = end - start; // in seconds
+        mElapsedTime += diff.count();
 
         mTotalWritten += mPosition;
 
         ++mBlocksWritten;
 
-        if (mPosition != mBufferSize)
+        if (mPosition_ != mBufferSize)
         {
             ++mPartialBlocks;
         }
@@ -146,7 +148,7 @@ void BufferedWriter::writeImpl(const void* buf, size_t size)
             from += bytes;
 
             // check the internal buffer
-            if (mPosition == mBufferSize)
+            if (gsl::narrow<size_t>(mPosition) == mBufferSize)
             {
                 flushBuffer();
             }
@@ -165,7 +167,7 @@ void BufferedWriter::writeImpl(const void* buf, size_t size)
     }
 }
 
-bool BufferedWriter::canSeekImpl() const
+bool BufferedWriter::canSeekImpl() const noexcept
 {
     return true;
 }
@@ -188,7 +190,7 @@ nitf::Off BufferedWriter::getSizeImpl() const
     return (mFile.length() + mPosition);
 }
 
-int BufferedWriter::getModeImpl() const
+int BufferedWriter::getModeImpl() const noexcept
 {
     return NITF_ACCESS_WRITEONLY;
 }
@@ -201,10 +203,12 @@ void BufferedWriter::closeImpl()
     // just cached it)
     flushBuffer();
 
-    sys::RealTimeStopWatch sw;
-    sw.start();
+
+    const auto start = std::chrono::steady_clock::now();
     mFile.flush();
-    mElapsedTime += (sw.stop() / 1000.);
+    const auto end = std::chrono::steady_clock::now();
+    const std::chrono::duration<double> diff = end - start; // in seconds
+    mElapsedTime += diff.count();
 
     mFile.close();
 }

@@ -20,25 +20,22 @@
  *
  */
 
+#include "nitf/CompressedByteProvider.hpp"
+
 #include <string.h>
 #include <sstream>
 #include <algorithm>
 #include <limits>
 
 #include <except/Exception.h>
-#include <math/Round.h>
 #include <nitf/Writer.hpp>
-#include <nitf/CompressedByteProvider.hpp>
 #include <nitf/IOStreamWriter.hpp>
 #include <io/ByteStream.h>
 
+#include "gsl/gsl.h"
 
 namespace nitf
 {
-CompressedByteProvider::CompressedByteProvider() :
-    ByteProvider()
-{
-}
 
 CompressedByteProvider::CompressedByteProvider(Record& record,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
@@ -50,10 +47,20 @@ CompressedByteProvider::CompressedByteProvider(Record& record,
     initialize(record, bytesPerBlock, desData,
                numRowsPerBlock, numColsPerBlock);
 }
+CompressedByteProvider::CompressedByteProvider(Record& record,
+    const std::vector<std::vector<size_t> >& bytesPerBlock,
+    const std::vector<PtrAndLength_t>& desData,
+    size_t numRowsPerBlock,
+    size_t numColsPerBlock) :
+    ByteProvider()
+{
+    initialize(record, bytesPerBlock, desData, numRowsPerBlock, numColsPerBlock);
+}
 
-void CompressedByteProvider::initialize(Record& record,
+template<typename TPtrAndLength>
+void CompressedByteProvider::initialize_(const Record& record,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
-        const std::vector<PtrAndLength>& desData,
+        const std::vector<TPtrAndLength>& desData,
         size_t numRowsPerBlock,
         size_t numColsPerBlock)
 {
@@ -79,6 +86,22 @@ void CompressedByteProvider::initialize(Record& record,
     }
     mBytesInEachBlock = bytesPerBlock;
     initializeImpl(record, desData, numRowsPerBlock, numColsPerBlock);
+}
+void CompressedByteProvider::initialize(const Record& record,
+        const std::vector<std::vector<size_t> >& bytesPerBlock,
+        const std::vector<PtrAndLength>& desData,
+        size_t numRowsPerBlock,
+        size_t numColsPerBlock)
+{
+    initialize_(record, bytesPerBlock, desData, numRowsPerBlock, numColsPerBlock);
+}
+void CompressedByteProvider::initialize(const Record& record,
+    const std::vector<std::vector<size_t> >& bytesPerBlock,
+    const std::vector<PtrAndLength_t>& desData,
+    size_t numRowsPerBlock,
+    size_t numColsPerBlock)
+{
+    initialize_(record, bytesPerBlock, desData, numRowsPerBlock, numColsPerBlock);
 }
 
 size_t CompressedByteProvider::countBytesForCompressedImageData(
@@ -108,6 +131,15 @@ size_t CompressedByteProvider::countBytesForCompressedImageData(
     return numBytes;
 }
 
+static size_t ceilingDivide(size_t numerator, size_t denominator)
+{
+    if (denominator == 0)
+    {
+        throw except::Exception(Ctxt("Attempted division by 0"));
+    }
+    return (numerator / denominator) + (numerator % denominator != 0);
+}
+
 types::Range CompressedByteProvider::findBlocksToWrite(
         size_t seg, size_t globalStartRow, size_t numRowsToWrite) const
 {
@@ -126,31 +158,30 @@ types::Range CompressedByteProvider::findBlocksToWrite(
     const size_t startRow = globalStartRow - segmentInfo.firstRow;
     const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
 
-    const size_t numHorizontalBlocks = math::ceilingDivide(mNumCols,
-                                                           mNumColsPerBlock);
-    const size_t firstRowOfBlocks = math::ceilingDivide(startRow,
-                                                        numRowsPerBlock);
-    const size_t numRowsOfBlocks = math::ceilingDivide(numRowsToWrite,
-                                                       numRowsPerBlock);
+    const size_t numHorizontalBlocks = ceilingDivide(mNumCols, mNumColsPerBlock);
+    const size_t firstRowOfBlocks = ceilingDivide(startRow, numRowsPerBlock);
+    const size_t numRowsOfBlocks = ceilingDivide(numRowsToWrite, numRowsPerBlock);
     const size_t numBlocks = numRowsOfBlocks * numHorizontalBlocks;
     const size_t firstBlock = firstRowOfBlocks * numHorizontalBlocks;
 
     return types::Range(firstBlock, numBlocks);
 }
 
-size_t CompressedByteProvider::addImageData(
+#undef max
+template<typename T>
+static size_t addImageData_(const std::vector<std::vector<size_t> > mBytesInEachBlock,
+    const std::vector<std::vector<sys::byte> >& mImageSubheaders,
+    const std::vector<nitf::Off>& mImageSubheaderFileOffsets,
+    const types::Range& blockRange,
         size_t seg,
-        size_t startRow,
-        size_t numRowsToWrite,
-        const sys::byte* imageData,
+        const T* imageData,
         nitf::Off& fileOffset,
-        NITFBufferList& buffers) const
+        NITFBufferList& buffers)
 {
     // If we've already compressed, we don't care about padding.
     // We just need to figure out -which- blocks we're writing, and then grab
     // that from the member vector
     const std::vector<size_t>& bytesPerBlock = mBytesInEachBlock[seg];
-    types::Range blockRange = findBlocksToWrite(seg, startRow, numRowsToWrite);
 
     // If the file offset hasn't been set yet,
     // advance it to our starting position
@@ -164,7 +195,7 @@ size_t CompressedByteProvider::addImageData(
             throw except::Exception(Ctxt(error.str()));
         }
 
-        fileOffset = mImageSubheaderFileOffsets[seg] + mImageSubheaders[seg].size();
+        fileOffset = mImageSubheaderFileOffsets[seg] + gsl::narrow<nitf::Off>(mImageSubheaders[seg].size());
         for (size_t block = 0; block < blockRange.mStartElement; ++block)
         {
             fileOffset += mBytesInEachBlock[seg][block];
@@ -174,15 +205,40 @@ size_t CompressedByteProvider::addImageData(
     // Copy the image data into the buffer
     // Since we have it in contiguous memory, this can be added as one buffer
     size_t numBufferBytes(0);
-    for (size_t ii = blockRange.mStartElement, end = blockRange.endElement();
-         ii < end;
-         ++ii)
+    const size_t end = blockRange.endElement();
+    for (size_t ii = blockRange.mStartElement; ii < end; ++ii)
     {
         numBufferBytes += bytesPerBlock[ii];
     }
     buffers.pushBack(imageData, numBufferBytes);
 
     return numBufferBytes;
+}
+size_t CompressedByteProvider::addImageData(
+        size_t seg,
+        size_t startRow,
+        size_t numRowsToWrite,
+        const sys::byte* imageData,
+        nitf::Off& fileOffset,
+        NITFBufferList& buffers) const
+{
+    const types::Range blockRange = findBlocksToWrite(seg, startRow, numRowsToWrite);
+    return addImageData_(mBytesInEachBlock, mImageSubheaders, mImageSubheaderFileOffsets,
+        blockRange,
+        seg, imageData, fileOffset, buffers);
+}
+size_t CompressedByteProvider::addImageData(
+        size_t seg,
+        size_t startRow,
+        size_t numRowsToWrite,
+        const std::byte* imageData,
+        nitf::Off& fileOffset,
+        NITFBufferList& buffers) const
+{
+    const types::Range blockRange = findBlocksToWrite(seg, startRow, numRowsToWrite);
+    return addImageData_(mBytesInEachBlock, mImageSubheaders, mImageSubheaderFileOffsets,
+        blockRange,
+        seg, imageData, fileOffset, buffers);
 }
 
 nitf::Off CompressedByteProvider::getNumBytes(size_t startRow, size_t numRows) const
@@ -220,7 +276,7 @@ void CompressedByteProvider::getBytes(
         nitf::Off& fileOffset,
         NITFBufferList& buffers) const
 {
-    const sys::byte* imageDataPtr = static_cast<const sys::byte*>(imageData);
+    auto imageDataPtr = static_cast<const std::byte*>(imageData);
     fileOffset = std::numeric_limits<nitf::Off>::max();
     buffers.clear();
 

@@ -21,6 +21,7 @@ from dumpconfig import dumpconfig
 from makewheel import makewheel
 from package import package
 
+
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
 
@@ -672,11 +673,11 @@ def getPlatform(pwd=None, default=None):
         for loc in locs:
             if not exists(loc): continue
             try:
-                out = subprocess.Popen('chmod +x %s' % loc, shell=True)
+                out = subprocess.Popen('chmod +x %s' % loc, shell=True, universal_newlines=True)
                 out.close()
             except:{}
             try:
-                out = subprocess.Popen(loc, shell=True, stdout=PIPE).stdout
+                out = subprocess.Popen(loc, shell=True, stdout=subprocess.PIPE, universal_newlines=True).stdout
                 platform = out.readline()
                 platform = platform.strip('\n')
                 out.close()
@@ -749,11 +750,9 @@ def options(opt):
     opt.add_option('--enable-debugging', action='store_true', dest='debugging',
                    help='Enable debugging')
     opt.add_option('--enable-cpp11', action='callback', callback=deprecated_callback)
-    #TODO - get rid of enable64 - it's useless now
-    opt.add_option('--enable-64bit', action='store_true', dest='enable64',
-                   help='Enable 64bit builds')
-    opt.add_option('--enable-32bit', action='store_true', dest='enable32',
-                   help='Enable 32bit builds')
+    opt.add_option('--enable-cpp17', action='store_true', dest='enablecpp17')
+    opt.add_option('--enable-64bit', action='callback', callback=deprecated_callback)
+    opt.add_option('--enable-32bit', action='callback', callback=deprecated_callback)
     opt.add_option('--with-cflags', action='store', nargs=1, dest='cflags',
                    help='Set non-standard CFLAGS', metavar='FLAGS')
     opt.add_option('--with-cxxflags', action='store', nargs=1, dest='cxxflags',
@@ -792,6 +791,9 @@ def options(opt):
                    help='Specify a prebuilt modules config file (created from dumpconfig)')
     opt.add_option('--disable-swig-silent-leak', action='store_false', dest='swig_silent_leak',
                    default=True, help='Allow swig to print memory leaks it detects')
+    opt.add_option('--junit-report', action='store', default=None,
+                    help='Generates a junit formmated report file for unit test'
+                    'results. NOOP if junit_xml cannot be imported')
 
 
 def ensureCpp11Support(self):
@@ -846,7 +848,7 @@ def configureCompilerOptions(self):
         config['cxx']['warn']           = '-Wall'
         config['cxx']['verbose']        = '-v'
         config['cxx']['64']             = '-m64'
-        config['cxx']['32']             = '-m32'
+        config['cxx']['optz_debug']     = ''
         config['cxx']['optz_med']       = '-O1'
         config['cxx']['optz_fast']      = '-O2'
         config['cxx']['optz_fastest']   = '-O3'
@@ -859,6 +861,7 @@ def configureCompilerOptions(self):
         config['cc']['warn']           = config['cxx']['warn']
         config['cc']['verbose']        = config['cxx']['verbose']
         config['cc']['64']             = config['cxx']['64']
+        config['cc']['optz_debug']     = config['cxx']['optz_debug']
         config['cc']['optz_med']       = config['cxx']['optz_med']
         config['cc']['optz_fast']      = config['cxx']['optz_fast']
         config['cc']['optz_fastest']   = config['cxx']['optz_fastest']
@@ -881,6 +884,7 @@ def configureCompilerOptions(self):
 
         warningFlags = '-Wall'
         if ccCompiler == 'gcc':
+            #warningFlags += ' -Wno-deprecated-declarations -Wold-style-cast'
             warningFlags += ' -Wno-deprecated-declarations'
         else:
             warningFlags += ' -Wno-deprecated'
@@ -894,18 +898,18 @@ def configureCompilerOptions(self):
         #       configure with:
         #       --with-cflags=-static-intel --with-cxxflags=-static-intel --with-linkflags=-static-intel
         if cxxCompiler == 'g++' or cxxCompiler == 'icpc':
-            config['cxx']['debug']          = '-g'
             config['cxx']['warn']           = warningFlags.split()
             config['cxx']['verbose']        = '-v'
             config['cxx']['64']             = '-m64'
-            config['cxx']['32']             = '-m32'
             config['cxx']['linkflags_64']   = '-m64'
-            config['cxx']['linkflags_32']   = '-m32'
             config['cxx']['optz_med']       = '-O1'
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
 
-            gxxCompileFlags='-fPIC -std=c++11'
+            if not Options.options.enablecpp17:
+                gxxCompileFlags='-fPIC -std=c++11'
+            else:
+                gxxCompileFlags='-fPIC -std=c++17'
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
@@ -920,14 +924,26 @@ def configureCompilerOptions(self):
 
             self.env.append_value('LINKFLAGS', linkFlags.split())
 
+        if Options.options.debugging:
+            if cxxCompiler == 'g++':
+                config['cxx']['debug'] = '-ggdb3'
+                config['cxx']['optz_debug'] = '-Og'
+            elif cxxCompiler == 'icpc':
+                config['cxx']['debug'] = '-g'
+                config['cxx']['optz_debug'] = ''
+
+            if ccCompiler == 'gcc':
+                config['cc']['debug'] = '-ggdb3'
+                config['cc']['optz_debug'] = '-Og'
+            elif ccCompiler == 'icc':
+                config['cc']['debug'] = '-g'
+                config['cc']['optz_debug'] = ''
+
         if ccCompiler == 'gcc' or ccCompiler == 'icc':
-            config['cc']['debug']          = '-g'
             config['cc']['warn']           = warningFlags.split()
             config['cc']['verbose']        = '-v'
             config['cc']['64']             = '-m64'
-            config['cc']['32']             = '-m32'
             config['cc']['linkflags_64']   = '-m64'
-            config['cc']['linkflags_32']   = '-m32'
             config['cc']['optz_med']       = '-O1'
             config['cc']['optz_fast']      = '-O2'
             config['cc']['optz_fastest']   = '-O3'
@@ -950,15 +966,13 @@ def configureCompilerOptions(self):
             warningFlags = '-errwarn=%all'
 
         if cxxCompiler == 'sunc++':
-            (bitFlag32, bitFlag64) = getSolarisFlags(self.env['CXX'][0])
+            bitFlag64 = getSolarisFlags(self.env['CXX'][0])
             config['cxx']['debug']          = '-g'
             config['cxx']['warn']           = warningFlags.split()
             config['cxx']['nowarn']         = '-erroff=%all'
             config['cxx']['verbose']        = '-v'
             config['cxx']['64']             = bitFlag64
-            config['cxx']['32']             = bitFlag32
-            config['cxx']['linkflags_32']   = bitFlag32
-            config['cxx']['linkflags_64']   = bitFlag64
+            config['cxx']['optz_debug']     = ''
             config['cxx']['optz_med']       = '-xO3'
             config['cxx']['optz_fast']      = '-xO4'
             config['cxx']['optz_fastest']   = '-xO5'
@@ -970,15 +984,14 @@ def configureCompilerOptions(self):
             self.env.append_value('CXXFLAGS_THREAD', '-mt')
 
         if ccCompiler == 'suncc':
-            (bitFlag32, bitFlag64) = getSolarisFlags(self.env['CC'][0])
+            bitFlag64 = getSolarisFlags(self.env['CC'][0])
             config['cc']['debug']          = '-g'
             config['cc']['warn']           = warningFlags.split()
             config['cc']['nowarn']         = '-erroff=%all'
             config['cc']['verbose']        = '-v'
             config['cc']['64']             = bitFlag64
             config['cc']['linkflags_64']   = bitFlag64
-            config['cc']['linkflags_32']   = bitFlag32
-            config['cc']['32']             = bitFlag32
+            config['cc']['optz_debug']     = ''
             config['cc']['optz_med']       = '-xO3'
             config['cc']['optz_fast']      = '-xO4'
             config['cc']['optz_fastest']   = '-xO5'
@@ -1015,6 +1028,7 @@ def configureCompilerOptions(self):
         vars['warn']           = warningFlags.split()
         vars['nowarn']         = '/w'
         vars['verbose']        = ''
+        vars['optz_debug']     = ['', crtFlag]
         vars['optz_med']       = ['-O2', crtFlag]
         vars['optz_fast']      = ['-O2', crtFlag]
         vars['optz_fastest']   = ['-Ox', crtFlag]
@@ -1022,13 +1036,11 @@ def configureCompilerOptions(self):
         # The linker should be able to infer it from the object files
         # But doing this just to make sure we're really building 32/64 bit
         # applications
-        vars['linkflags_32'] = [stackFlag, '/MACHINE:X86']
         vars['linkflags_64'] = [stackFlag, '/MACHINE:X64']
 
         if Options.options.debugging:
             # In order to generate a .pdb file, we need both the /Zi
             # compilation flag and the /DEBUG linker flag
-            vars['linkflags_32'].append('/DEBUG')
             vars['linkflags_64'].append('/DEBUG')
         else:
             # Forcing the linker to not link incrementally.  Hoping this will
@@ -1036,7 +1048,6 @@ def configureCompilerOptions(self):
             # generation fails.
             # Incremental is implied with /DEBUG so no reason to bother
             # setting it there
-            vars['linkflags_32'].append('/INCREMENTAL:NO')
             vars['linkflags_64'].append('/INCREMENTAL:NO')
 
         # choose the runtime to link against
@@ -1045,9 +1056,13 @@ def configureCompilerOptions(self):
         config['cxx'].update(vars)
         config['cc'].update(vars)
 
-        defines = '_CRT_SECURE_NO_WARNINGS _SCL_SECURE_NO_WARNINGS _FILE_OFFSET_BITS=64 ' \
+        defines = '_FILE_OFFSET_BITS=64 ' \
                   '_LARGEFILE_SOURCE WIN32 _USE_MATH_DEFINES NOMINMAX WIN32_LEAN_AND_MEAN'.split()
         flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
+
+        #If building with cpp17 add flags/defines to enable auto_ptr
+        if Options.options.enablecpp17:
+            flags.append('/std:c++17')
 
         self.env.append_value('DEFINES', defines)
         self.env.append_value('CXXFLAGS', flags)
@@ -1078,6 +1093,9 @@ def configureCompilerOptions(self):
         variantName = '%s-debug' % sys_platform
         variant.append_value('CXXFLAGS', config['cxx'].get('debug', ''))
         variant.append_value('CFLAGS', config['cc'].get('debug', ''))
+        optz = 'debug'
+        variant.append_value('CXXFLAGS', config['cxx'].get('optz_%s' % optz, ''))
+        variant.append_value('CFLAGS', config['cc'].get('optz_%s' % optz, ''))
     else:
         variantName = '%s-release' % sys_platform
         optz = Options.options.with_optz
@@ -1085,46 +1103,14 @@ def configureCompilerOptions(self):
         variant.append_value('CFLAGS', config['cc'].get('optz_%s' % optz, ''))
 
     # Check if the system is 64-bit capable
+    is64Bit = True
     if re.match(winRegex, sys_platform):
-        # For Windows, this is a function of what VS compiler we ended up
-        # finding above (regardless of if we asked for 32 vs. 64 bit on the
-        # configure line)
-        frag64 = '''
-#include <stdio.h>
-int main() {
-#ifdef _WIN64
-    printf("1");
-#else
-    printf("0");
-#endif
-    return 0; }
-'''
-        output = self.check(fragment=frag64, define_ret=True,
-                            execute=1, msg='Checking for 64-bit system')
-        is64Bit = bool(int(output))
-    elif Options.options.enable32 or not '64' in config['cxx']:
-        is64Bit = False
+        variantName = variantName.replace('32', '64')
     else:
-        is64Bit = self.check_cxx(cxxflags=config['cxx']['64'],
-                                 linkflags=config['cc'].get('linkflags_64', ''),
-                                 mandatory=False) and \
-                  self.check_cc(cflags=config['cc']['64'],
-                                linkflags=config['cc'].get('linkflags_64', ''),
-                                mandatory=False)
-    self.msg('System size', '64-bit' if is64Bit else '32-bit')
-
-    if is64Bit:
-        if re.match(winRegex, sys_platform):
-            variantName = variantName.replace('32', '64')
-        else:
-            variantName = '%s-64' % variantName
-        variant.append_value('CXXFLAGS', config['cxx'].get('64', ''))
-        variant.append_value('CFLAGS', config['cc'].get('64', ''))
-        variant.append_value('LINKFLAGS', config['cc'].get('linkflags_64', ''))
-    else:
-        variant.append_value('CXXFLAGS', config['cxx'].get('32', ''))
-        variant.append_value('CFLAGS', config['cc'].get('32', ''))
-        variant.append_value('LINKFLAGS', config['cc'].get('linkflags_32', ''))
+        variantName = '%s-64' % variantName
+    variant.append_value('CXXFLAGS', config['cxx'].get('64', ''))
+    variant.append_value('CFLAGS', config['cc'].get('64', ''))
+    variant.append_value('LINKFLAGS', config['cc'].get('linkflags_64', ''))
 
     self.env['IS64BIT'] = is64Bit
     self.all_envs[variantName] = variant
@@ -1178,12 +1164,12 @@ def writeConfig(conf, callback, guardTag, infile=None, outfile=None, path=None, 
         defs = tuple[0]
         undefs = tuple[1]
 
-        if feature is 'handleDefs':
+        if feature == 'handleDefs':
             handleDefsFile(input=infile, output=outfile, path=path, defs=defs, conf=conf)
-        elif feature is 'makeHeader':
+        elif feature == 'makeHeader':
             makeHeaderFile(bldpath, output=outfile, path=path, defs=defs, undefs=undefs, chmod=None,
                            guard='_%s_CONFIG_H_'%guardTag.upper().replace('.', '_'))
-        elif feature is 'm4subst':
+        elif feature == 'm4subst':
             m4substFile(input=infile, output=outfile, path=path,
                         dict=substDict, env=conf.env.derive(), chmod=None)
 
@@ -1256,26 +1242,22 @@ def configure(self):
         env_cl = os.environ.get('CL', None)
         if 'CL' in os.environ: del os.environ['CL']
 
-        if Options.options.enable64 or ('64' in platform.machine() and not Options.options.enable32):
-            # x64 is the native 64-bit compiler, so prefer this one.  If we
-            # just have VS Express though, we won't have it, so fall back on
-            # x86_amd64 - this is a 32-bit compiler that cross-compiles to
-            # 64-bit.  VS 2012 Express ships with this one, and earlier VS
-            # Express versions can get this via the Windows SDK.
-            self.env['MSVC_TARGETS'] = ['x64', 'x86_amd64']
+        # x64 is the native 64-bit compiler, so prefer this one.  If we
+        # just have VS Express though, we won't have it, so fall back on
+        # x86_amd64 - this is a 32-bit compiler that cross-compiles to
+        # 64-bit.  VS 2012 Express ships with this one, and earlier VS
+        # Express versions can get this via the Windows SDK.
+        self.env['MSVC_TARGETS'] = ['x64', 'x86_amd64']
 
-            # Look for 32-bit msvc if we don't find 64-bit.
-            if not Options.options.enable64:
-                self.options.check_c_compiler = self.options.check_cxx_compiler = 'msvc'
-                try:
-                    self.load('compiler_c')
-                except self.errors.ConfigurationError:
-                    self.env['MSVC_TARGETS'] = None
-                    self.tool_cache.remove(('msvc',id(self.env),None))
-                    self.tool_cache.remove(('compiler_c',id(self.env),None))
-                    self.msg('Checking for \'msvc\'', 'Warning: cound not find x64 msvc, looking for others', color='RED')
-        else:
-            self.env['MSVC_TARGETS'] = ['x86']
+        # Look for 32-bit msvc if we don't find 64-bit.
+        self.options.check_c_compiler = self.options.check_cxx_compiler = 'msvc'
+        try:
+            self.load('compiler_c')
+        except self.errors.ConfigurationError:
+            self.env['MSVC_TARGETS'] = None
+            self.tool_cache.remove(('msvc',id(self.env),None))
+            self.tool_cache.remove(('compiler_c',id(self.env),None))
+            self.msg('Checking for \'msvc\'', 'Warning: cound not find x64 msvc, looking for others', color='RED')
 
     self.load('compiler_c')
     self.load('compiler_cxx')
@@ -1720,17 +1702,14 @@ def getSolarisFlags(compilerName):
     # Newer Solaris compilers use -m32 and -m64, so check to see if these flags exist
     # If they don't, default to the old -xtarget flags
     # TODO: Is there a cleaner way to do this with check_cc() instead?
-    bitFlag32 = '-xtarget=generic'
     bitFlag64 = '-xtarget=generic64'
-    (out, err) = subprocess.Popen([compilerName, '-flags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+    (out, err) = subprocess.Popen([compilerName, '-flags'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True).communicate()
 
     for line in out.split('\n'):
-        if re.match(r'-m32.*', line):
-            bitFlag32 = '-m32'
-        elif re.match(r'-m64.*', line):
+        if re.match(r'-m64.*', line):
             bitFlag64 = '-m64'
 
-    return (bitFlag32, bitFlag64)
+    return bitFlag64
 
 
 def getWscriptTargets(bld, env, path):
@@ -1796,6 +1775,41 @@ def addSourceTargets(bld, env, path, target):
 
         target.targets_to_add += wscriptTargets
 
+def junitUnitTestResults(bld):
+    '''
+    Summary calback function to generate JUnit formatted XML
+    '''
+    import junit_xml
+
+    # we also want a logged summary still
+    waf_unit_test.summary(bld)
+
+    # now generate a report
+    lst = getattr(bld,'utest_results',[])
+    test_cases = []
+    for name, retcode, stdout, stderr in lst:
+        so = stdout.decode()
+        se = stderr.decode()
+        tc = junit_xml.TestCase(name=name,
+                                status=retcode,
+                                stdout=so,
+                                stderr=se)
+        if retcode:
+            messages = []
+            lines = se.split('\n')
+            for line in lines:
+                if 'FAILED' in line:
+                    messages.append(line)
+            if len(messages) == 0:
+                messages = ['Unknown error occured that caused non-zero return code']
+
+            tc.add_failure_info('\n'.join(messages))
+        test_cases.append(tc)
+    ts = junit_xml.TestSuite('unit tests', test_cases)
+    with open(bld.options.junit_report, 'w') as fh:
+        fh.write(junit_xml.TestSuite.to_xml_string([ts]))
+
+
 def enableWafUnitTests(bld, set_exit_code=True):
     """
     If called, run all C++ unit tests after building
@@ -1804,7 +1818,16 @@ def enableWafUnitTests(bld, set_exit_code=True):
     # TODO: This does not work for Python files.
     # The "nice" way to handle this is possibly not
     # supported in this version of Waf.
-    bld.add_post_fun(waf_unit_test.summary)
+    if bld.options.junit_report is not None:
+        try:
+            import junit_xml
+            bld.add_post_fun(junitUnitTestResults)
+        except ImportError:
+            Logs.pprint('RED', 'Cannot generate requested junit report because we can\'t import junit-xml')
+            bld.add_post_fun(waf_unit_test.summary)
+    else:
+        bld.add_post_fun(waf_unit_test.summary)
+
     if set_exit_code:
         bld.add_post_fun(waf_unit_test.set_exit_code)
 

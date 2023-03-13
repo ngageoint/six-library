@@ -22,10 +22,14 @@
 
 #ifndef __NITF_IO_INTERFACE_HPP__
 #define __NITF_IO_INTERFACE_HPP__
+#pragma once
 
+#include <string>
+
+#include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-#include <string>
+#include "nitf/exports.hpp"
 
 /*!
  *  \file IOInterface.hpp
@@ -33,44 +37,38 @@
 namespace nitf
 {
 
-struct IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
+struct NITRO_NITFCPP_API IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
 {
-    ~IOInterfaceDestructor()
-    {
-    }
-    void operator()(nitf_IOInterface *io);
+    ~IOInterfaceDestructor() = default;
+    void operator()(nitf_IOInterface *io) noexcept override;
 };
 
 /*!
  *  \class IOInterface
  *  \brief  The C++ wrapper for the nitf_IOInterface
  */
-class IOInterface : public nitf::Object<nitf_IOInterface, IOInterfaceDestructor>
+class NITRO_NITFCPP_API IOInterface : public nitf::Object<nitf_IOInterface, IOInterfaceDestructor>
 {
-public:
-    // Set native object
-    IOInterface(nitf_IOInterface * x)
+protected:
+    IOInterface() = default;
+    void set_native_object(nitf_IOInterface* x)
     {
         setNative(x);
         getNativeOrThrow();
     }
 
-    //! Copy constructor
-    IOInterface(const IOInterface& lhs)
+
+public:
+    IOInterface(nitf_IOInterface * x)
     {
-        setNative(lhs.getNative());
+        set_native_object(x);
     }
 
-    //! Destructor
-    virtual ~IOInterface() { }
+    IOInterface(const IOInterface& lhs);
 
-    //! Assignment Operator
-    IOInterface & operator=(const IOInterface & x)
-    {
-        if (&x != this)
-            setNative(x.getNative());
-        return *this;
-    }
+    ~IOInterface() = default;
+
+    IOInterface & operator=(const IOInterface & x);
 
     void read(void* buf, size_t size);
 
@@ -89,7 +87,7 @@ public:
     void close();
 
 protected:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

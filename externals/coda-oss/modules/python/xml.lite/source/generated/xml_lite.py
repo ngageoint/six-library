@@ -114,10 +114,12 @@ class Element(_object):
     def __init__(self, *args):
         """
         __init__(xml::lite::Element self) -> Element
-        __init__(xml::lite::Element self, std::string const & qname, std::string const & uri, std::string characterData) -> Element
+        __init__(xml::lite::Element self, std::string const & qname, std::string const & uri, std::string const & characterData) -> Element
         __init__(xml::lite::Element self, std::string const & qname, std::string const & uri) -> Element
         __init__(xml::lite::Element self, std::string const & qname) -> Element
-        __init__(xml::lite::Element self, Element element) -> Element
+        __init__(xml::lite::Element self, xml::lite::QName const & qname, coda_oss::u8string const & characterData) -> Element
+        __init__(xml::lite::Element self, Element arg2) -> Element
+        __init__(xml::lite::Element self, Element arg2) -> Element
         """
         this = _xml_lite.new_Element(*args)
         try:
@@ -135,6 +137,16 @@ class Element(_object):
         return _xml_lite.Element_attribute(self, s)
 
 
+    def getElementByTagNameNS(self, *args) -> "xml::lite::Element &":
+        """
+        getElementByTagNameNS(Element self, std::nothrow_t arg2, std::string const & qname, bool recurse=False) -> Element
+        getElementByTagNameNS(Element self, std::nothrow_t arg2, std::string const & qname) -> Element
+        getElementByTagNameNS(Element self, std::string const & qname, bool recurse=False) -> Element
+        getElementByTagNameNS(Element self, std::string const & qname) -> Element
+        """
+        return _xml_lite.Element_getElementByTagNameNS(self, *args)
+
+
     def getElementsByTagNameNS(self, *args) -> "std::vector< xml::lite::Element * >":
         """
         getElementsByTagNameNS(Element self, std::string const & qname, std::vector< xml::lite::Element * > & elements, bool recurse=False)
@@ -145,26 +157,56 @@ class Element(_object):
         return _xml_lite.Element_getElementsByTagNameNS(self, *args)
 
 
-    def getElementsByTagName(self, *args) -> "void":
+    def getElementByTagName(self, *args) -> "xml::lite::Element &":
+        """
+        getElementByTagName(Element self, std::nothrow_t arg2, std::string const & localName, bool recurse=False) -> Element
+        getElementByTagName(Element self, std::nothrow_t arg2, std::string const & localName) -> Element
+        getElementByTagName(Element self, std::string const & localName, bool recurse=False) -> Element
+        getElementByTagName(Element self, std::string const & localName) -> Element
+        getElementByTagName(Element self, std::nothrow_t arg2, xml::lite::QName const & arg3, bool recurse=False) -> Element
+        getElementByTagName(Element self, std::nothrow_t arg2, xml::lite::QName const & arg3) -> Element
+        getElementByTagName(Element self, std::nothrow_t t, std::string const & uri, std::string const & localName, bool recurse=False) -> Element
+        getElementByTagName(Element self, std::nothrow_t t, std::string const & uri, std::string const & localName) -> Element
+        getElementByTagName(Element self, xml::lite::QName const & arg2, bool recurse=False) -> Element
+        getElementByTagName(Element self, xml::lite::QName const & arg2) -> Element
+        getElementByTagName(Element self, std::string const & uri, std::string const & localName, bool recurse=False) -> Element
+        getElementByTagName(Element self, std::string const & uri, std::string const & localName) -> Element
+        """
+        return _xml_lite.Element_getElementByTagName(self, *args)
+
+
+    def getElementsByTagName(self, *args) -> "std::vector< xml::lite::Element * >":
         """
         getElementsByTagName(Element self, std::string const & localName, std::vector< xml::lite::Element * > & elements, bool recurse=False)
         getElementsByTagName(Element self, std::string const & localName, std::vector< xml::lite::Element * > & elements)
         getElementsByTagName(Element self, std::string const & localName, bool recurse=False) -> std::vector< xml::lite::Element * >
         getElementsByTagName(Element self, std::string const & localName) -> std::vector< xml::lite::Element * >
+        getElementsByTagName(Element self, xml::lite::QName const & name, std::vector< xml::lite::Element * > & elements, bool recurse=False)
+        getElementsByTagName(Element self, xml::lite::QName const & name, std::vector< xml::lite::Element * > & elements)
         getElementsByTagName(Element self, std::string const & uri, std::string const & localName, std::vector< xml::lite::Element * > & elements, bool recurse=False)
         getElementsByTagName(Element self, std::string const & uri, std::string const & localName, std::vector< xml::lite::Element * > & elements)
+        getElementsByTagName(Element self, xml::lite::QName const & name, bool recurse=False) -> std::vector< xml::lite::Element * >
+        getElementsByTagName(Element self, xml::lite::QName const & name) -> std::vector< xml::lite::Element * >
+        getElementsByTagName(Element self, std::string const & uri, std::string const & localName, bool recurse=False) -> std::vector< xml::lite::Element * >
+        getElementsByTagName(Element self, std::string const & uri, std::string const & localName) -> std::vector< xml::lite::Element * >
         """
         return _xml_lite.Element_getElementsByTagName(self, *args)
 
 
-    def setNamespacePrefix(self, prefix: 'std::string', uri: 'std::string') -> "void":
-        """setNamespacePrefix(Element self, std::string prefix, std::string uri)"""
-        return _xml_lite.Element_setNamespacePrefix(self, prefix, uri)
+    def setNamespacePrefix(self, *args) -> "void":
+        """
+        setNamespacePrefix(Element self, std::string prefix, xml::lite::Uri const & arg3)
+        setNamespacePrefix(Element self, std::string prefix, std::string uri)
+        """
+        return _xml_lite.Element_setNamespacePrefix(self, *args)
 
 
-    def setNamespaceURI(self, prefix: 'std::string', uri: 'std::string') -> "void":
-        """setNamespaceURI(Element self, std::string prefix, std::string uri)"""
-        return _xml_lite.Element_setNamespaceURI(self, prefix, uri)
+    def setNamespaceURI(self, *args) -> "void":
+        """
+        setNamespaceURI(Element self, std::string prefix, xml::lite::Uri const & arg3)
+        setNamespaceURI(Element self, std::string prefix, std::string uri)
+        """
+        return _xml_lite.Element_setNamespaceURI(self, *args)
 
 
     def _print(self, stream: 'io::OutputStream &') -> "void":
@@ -180,22 +222,42 @@ class Element(_object):
         return _xml_lite.Element_prettyPrint(self, *args)
 
 
+    def consoleOutput_(self, stream: 'io::OutputStream &') -> "void":
+        """consoleOutput_(Element self, io::OutputStream & stream)"""
+        return _xml_lite.Element_consoleOutput_(self, stream)
+
+
+    def prettyConsoleOutput_(self, *args) -> "void":
+        """
+        prettyConsoleOutput_(Element self, io::OutputStream & stream, std::string const & formatter)
+        prettyConsoleOutput_(Element self, io::OutputStream & stream)
+        """
+        return _xml_lite.Element_prettyConsoleOutput_(self, *args)
+
+
     def hasElement(self, *args) -> "bool":
         """
         hasElement(Element self, std::string const & localName) -> bool
+        hasElement(Element self, xml::lite::QName const & arg2) -> bool
         hasElement(Element self, std::string const & uri, std::string const & localName) -> bool
         """
         return _xml_lite.Element_hasElement(self, *args)
 
 
-    def getCharacterData(self) -> "std::string":
-        """getCharacterData(Element self) -> std::string"""
-        return _xml_lite.Element_getCharacterData(self)
+    def getCharacterData(self, *args) -> "coda_oss::u8string &":
+        """
+        getCharacterData(Element self) -> std::string
+        getCharacterData(Element self, coda_oss::u8string & result) -> coda_oss::u8string &
+        """
+        return _xml_lite.Element_getCharacterData(self, *args)
 
 
-    def setCharacterData(self, characters: 'std::string const &') -> "void":
-        """setCharacterData(Element self, std::string const & characters)"""
-        return _xml_lite.Element_setCharacterData(self, characters)
+    def setCharacterData(self, *args) -> "void":
+        """
+        setCharacterData(Element self, std::string const & arg2)
+        setCharacterData(Element self, coda_oss::u8string s)
+        """
+        return _xml_lite.Element_setCharacterData(self, *args)
 
 
     def setLocalName(self, localName: 'std::string const &') -> "void":
@@ -208,24 +270,41 @@ class Element(_object):
         return _xml_lite.Element_getLocalName(self)
 
 
-    def setQName(self, qname: 'std::string const &') -> "void":
-        """setQName(Element self, std::string const & qname)"""
-        return _xml_lite.Element_setQName(self, qname)
+    def setQName(self, *args) -> "void":
+        """
+        setQName(Element self, std::string const & qname)
+        setQName(Element self, xml::lite::QName const & qname)
+        """
+        return _xml_lite.Element_setQName(self, *args)
 
 
-    def getQName(self) -> "std::string":
-        """getQName(Element self) -> std::string"""
-        return _xml_lite.Element_getQName(self)
+    def getQName(self, *args) -> "void":
+        """
+        getQName(Element self) -> std::string
+        getQName(Element self, xml::lite::QName & result)
+        """
+        return _xml_lite.Element_getQName(self, *args)
 
 
-    def setUri(self, uri: 'std::string const &') -> "void":
-        """setUri(Element self, std::string const & uri)"""
-        return _xml_lite.Element_setUri(self, uri)
+    def setUri(self, *args) -> "void":
+        """
+        setUri(Element self, xml::lite::Uri const & uri)
+        setUri(Element self, std::string const & uri)
+        """
+        return _xml_lite.Element_setUri(self, *args)
 
 
-    def getUri(self) -> "std::string":
-        """getUri(Element self) -> std::string"""
-        return _xml_lite.Element_getUri(self)
+    def getUri(self, *args) -> "void":
+        """
+        getUri(Element self) -> std::string
+        getUri(Element self, xml::lite::Uri & result)
+        """
+        return _xml_lite.Element_getUri(self, *args)
+
+
+    def setPrefix(self, prefix: 'std::string const &') -> "void":
+        """setPrefix(Element self, std::string const & prefix)"""
+        return _xml_lite.Element_setPrefix(self, prefix)
 
 
     def getChildren(self, *args) -> "std::vector< xml::lite::Element * > const &":
@@ -234,6 +313,11 @@ class Element(_object):
         getChildren(Element self) -> std::vector< xml::lite::Element * > const &
         """
         return _xml_lite.Element_getChildren(self, *args)
+
+
+    def clearChildren(self) -> "void":
+        """clearChildren(Element self)"""
+        return _xml_lite.Element_clearChildren(self)
 
 
     def getParent(self) -> "xml::lite::Element *":
@@ -248,6 +332,10 @@ class Element(_object):
 Element_swigregister = _xml_lite.Element_swigregister
 Element_swigregister(Element)
 
+
+def add(arg1: 'xml::lite::QName const &', value: 'std::string const &', parent: 'Element') -> "xml::lite::Element &":
+    """add(xml::lite::QName const & arg1, std::string const & value, Element parent) -> Element"""
+    return _xml_lite.add(arg1, value, parent)
 class Document(_object):
     """Proxy of C++ xml::lite::Document class."""
 
@@ -270,11 +358,6 @@ class Document(_object):
             self.this = this
     __swig_destroy__ = _xml_lite.delete_Document
     __del__ = lambda self: None
-
-    def clone(self) -> "xml::lite::Document *":
-        """clone(Document self) -> Document"""
-        return _xml_lite.Document_clone(self)
-
 
     def createElement(self, *args) -> "xml::lite::Element *":
         """
@@ -321,6 +404,15 @@ class Document(_object):
 Document_swigregister = _xml_lite.Document_swigregister
 Document_swigregister(Document)
 
+
+def getRootElement(*args) -> "xml::lite::Element const &":
+    """
+    getRootElement(Document doc) -> Element
+    getRootElement(Document doc) -> Element
+    getRootElement(Document pDoc) -> Element
+    getRootElement(Document pDoc) -> Element
+    """
+    return _xml_lite.getRootElement(*args)
 class MinidomParser(_object):
     """Proxy of C++ xml::lite::MinidomParser class."""
 
@@ -330,9 +422,12 @@ class MinidomParser(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, MinidomParser, name)
     __repr__ = _swig_repr
 
-    def __init__(self):
-        """__init__(xml::lite::MinidomParser self) -> MinidomParser"""
-        this = _xml_lite.new_MinidomParser()
+    def __init__(self, storeEncoding: 'bool'=True):
+        """
+        __init__(xml::lite::MinidomParser self, bool storeEncoding=True) -> MinidomParser
+        __init__(xml::lite::MinidomParser self) -> MinidomParser
+        """
+        this = _xml_lite.new_MinidomParser(storeEncoding)
         try:
             self.this.append(this)
         except __builtin__.Exception:
@@ -344,6 +439,8 @@ class MinidomParser(_object):
         """
         parse(MinidomParser self, io::InputStream & arg2, int size)
         parse(MinidomParser self, io::InputStream & arg2)
+        parse(MinidomParser self, io::InputStream & arg2, void const * pInitialEncoding, void const * pFallbackEncoding, int size)
+        parse(MinidomParser self, io::InputStream & arg2, void const * pInitialEncoding, void const * pFallbackEncoding)
         """
         return _xml_lite.MinidomParser_parse(self, *args)
 
@@ -353,11 +450,12 @@ class MinidomParser(_object):
         return _xml_lite.MinidomParser_clear(self)
 
 
-    def getDocument(self, *args) -> "xml::lite::Document *":
+    def getDocument(self, *args) -> "std::unique_ptr< xml::lite::Document > &":
         """
         getDocument(MinidomParser self) -> Document
         getDocument(MinidomParser self, bool steal=False) -> Document
         getDocument(MinidomParser self) -> Document
+        getDocument(MinidomParser self, std::unique_ptr< xml::lite::Document > & arg2) -> std::unique_ptr< xml::lite::Document > &
         """
         return _xml_lite.MinidomParser_getDocument(self, *args)
 
@@ -370,12 +468,18 @@ class MinidomParser(_object):
         return _xml_lite.MinidomParser_getReader(self, *args)
 
 
-    def setDocument(self, newDocument: 'Document', own: 'bool'=True) -> "void":
+    def getHandler(self) -> "MinidomHandler &":
+        """getHandler(MinidomParser self) -> MinidomHandler &"""
+        return _xml_lite.MinidomParser_getHandler(self)
+
+
+    def setDocument(self, *args) -> "void":
         """
         setDocument(MinidomParser self, Document newDocument, bool own=True)
         setDocument(MinidomParser self, Document newDocument)
+        setDocument(MinidomParser self, std::unique_ptr< xml::lite::Document > && arg2)
         """
-        return _xml_lite.MinidomParser_setDocument(self, newDocument, own)
+        return _xml_lite.MinidomParser_setDocument(self, *args)
 
 
     def preserveCharacterData(self, preserve: 'bool') -> "void":
@@ -385,6 +489,10 @@ class MinidomParser(_object):
 MinidomParser_swigregister = _xml_lite.MinidomParser_swigregister
 MinidomParser_swigregister(MinidomParser)
 
+
+def getDocument(xmlParser: 'MinidomParser') -> "xml::lite::Document &":
+    """getDocument(MinidomParser xmlParser) -> Document"""
+    return _xml_lite.getDocument(xmlParser)
 # This file is compatible with both classic and new-style classes.
 
 

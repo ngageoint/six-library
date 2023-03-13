@@ -26,7 +26,7 @@ using namespace nitf;
 
 ImageSegment::ImageSegment(const ImageSegment & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 ImageSegment & ImageSegment::operator=(const ImageSegment & x)
@@ -42,38 +42,32 @@ ImageSegment::ImageSegment(nitf_ImageSegment * x)
     getNativeOrThrow();
 }
 
-ImageSegment::ImageSegment()
+ImageSegment::ImageSegment() noexcept(false) : ImageSegment(nitf_ImageSegment_construct(&error))
 {
-    setNative(nitf_ImageSegment_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
-ImageSegment::ImageSegment(NITF_DATA * x)
+ImageSegment::ImageSegment(NITF_DATA * x) : ImageSegment(static_cast<nitf_ImageSegment*>(x))
 {
-    setNative((nitf_ImageSegment*)x);
-    getNativeOrThrow();
 }
 
 ImageSegment & ImageSegment::operator=(NITF_DATA * x)
 {
-    setNative((nitf_ImageSegment*)x);
+    setNative(static_cast<nitf_ImageSegment*>(x));
     getNativeOrThrow();
     return *this;
 }
 
 
-nitf::ImageSegment ImageSegment::clone()
+nitf::ImageSegment ImageSegment::clone() const
 {
     nitf::ImageSegment dolly(nitf_ImageSegment_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
     return dolly;
 }
 
-ImageSegment::~ImageSegment(){}
 
-
-nitf::ImageSubheader ImageSegment::getSubheader()
+nitf::ImageSubheader ImageSegment::getSubheader() const
 {
     return nitf::ImageSubheader(getNativeOrThrow()->subheader);
 }
@@ -90,22 +84,22 @@ void ImageSegment::setSubheader(nitf::ImageSubheader & value)
     value.setManaged(true);
 }
 
-nitf::Uint64 ImageSegment::getImageOffset() const
+uint64_t ImageSegment::getImageOffset() const
 {
     return getNativeOrThrow()->imageOffset;
 }
 
-void ImageSegment::setImageOffset(nitf::Uint64 value)
+void ImageSegment::setImageOffset(uint64_t value)
 {
     getNativeOrThrow()->imageOffset = value;
 }
 
-nitf::Uint64 ImageSegment::getImageEnd() const
+uint64_t ImageSegment::getImageEnd() const
 {
     return getNativeOrThrow()->imageEnd;
 }
 
-void ImageSegment::setImageEnd(nitf::Uint64 value)
+void ImageSegment::setImageEnd(uint64_t value)
 {
     getNativeOrThrow()->imageEnd = value;
 }

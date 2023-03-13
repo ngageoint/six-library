@@ -20,14 +20,17 @@
  *
  */
 
-#ifndef __XML_LITE_ATTRIBUTES_H__
-#define __XML_LITE_ATTRIBUTES_H__
+#ifndef CODA_OSS_xml_lite_Attributes_h_INCLUDED_
+#define CODA_OSS_xml_lite_Attributes_h_INCLUDED_
+#pragma once
+
+#include <string>
+#include <vector>
 
 #include "sys/Conf.h"
 #include "except/Exception.h"
 #include "xml/lite/QName.h"
-#include <string>
-#include <vector>
+#include "str/Convert.h"
 
 /*!
  *  \file Attributes.h
@@ -51,14 +54,9 @@ namespace lite
  *  internal organs.  We have a URI, a QName, and a local part
  *  as well.  We also need a value, of course.
  */
-class AttributeNode
+struct AttributeNode final
 {
-public:
-
-    //! Constructor
-    AttributeNode()
-    {
-    }
+    AttributeNode() = default;
 
     /*!
      *  Copy constructor
@@ -74,10 +72,7 @@ public:
      */
     AttributeNode& operator=(const AttributeNode& attributeNode);
 
-    //! Destructor
-    ~AttributeNode()
-    {
-    }
+    ~AttributeNode() = default;
 
     /*!
      *  This function takes a fully qualified name.
@@ -86,6 +81,7 @@ public:
      *  \param qname The fully qualified name
      */
     void setQName(const std::string& qname);
+    void setQName(const xml::lite::QName& qname);
 
     /*!
      *  Set the local (unqualified portion) of the name
@@ -104,7 +100,11 @@ public:
      *  Set the URI association in the QName
      *  \param uri The new uri
      */
-    void setUri(const std::string& uri);
+    void setUri(const Uri&);
+    void setUri(const std::string& uri)
+    {
+        setUri(Uri(uri));
+    }
 
     /*!
      *  Set the attribute value
@@ -118,6 +118,7 @@ public:
      *  \return The uri
      */
     std::string getUri() const;
+    void getUri(Uri&) const;
     std::string getLocalName() const;
     std::string getPrefix() const;
     std::string getValue() const;
@@ -126,6 +127,7 @@ public:
         return mValue;
     }
     std::string getQName() const;
+    void getQName(xml::lite::QName&) const;
 
 protected:
 
@@ -147,15 +149,11 @@ protected:
  *  this data structure everywhere.  That also allows us to
  *  simplify future dom classes
  */
-class Attributes
+struct Attributes final
 {
-public:
-
     typedef std::vector<AttributeNode> Attributes_T;
     //! Default constructor
-    Attributes()
-    {
-    }
+    Attributes() = default;
 
     //! Copy constructor
     Attributes(const Attributes & attributes);
@@ -164,15 +162,20 @@ public:
     Attributes & operator=(const Attributes & attributes);
 
     //! Destructor
-    ~Attributes()
-    {
-    }
+    ~Attributes() = default;
 
     /*!
      *  Adds an attribute to the list of attributes.
      *  \param attribute the attribute to add
      */
-    void add(const AttributeNode & attribute);
+    AttributeNode& add(const AttributeNode& attribute);
+
+    /*!
+     * Look up the index of an index.
+     * \param i  The index of the attribute
+     * \return the index or -1 if none found
+     */
+    int getIndex(int i) const;
 
     /*!
      * Look up the index of an attribute by XML 1.0 qualified name.
@@ -187,15 +190,23 @@ public:
      * \param localName  The local name of the attribute
      * \return the index or -1 if none found
      */
-    int getIndex(const std::string & uri, const std::string & localName) const;
+    int getIndex(const xml::lite::QName& name) const;
+    int getIndex(const std::string& uri, const std::string& localName) const
+    {
+        return getIndex(QName(uri, localName));
+    }
 
     /*!
      * Return the number of attributes in the list.
      * \return The number of attributes contained herein
      */
+    size_t size() const
+    {
+        return mAttributes.size();
+    }
     int getLength() const
     {
-        return (int) mAttributes.size();
+        return static_cast<int>(size());
     }
 
     /*!
@@ -207,6 +218,7 @@ public:
     std::string getLocalName(int i) const;
 
     std::string getQName(int i) const;
+    void getQName(int i, xml::lite::QName&) const;
 
     /*!
      * Look up an attribute's Namespace URI by index.
@@ -215,6 +227,7 @@ public:
      * \throw IndexOutOfRangeException if the index is out of range
      */
     std::string getUri(int i) const;
+    void getUri(int i, xml::lite::Uri&) const;
 
     /*!
      * Look up an attribute's value by index.
@@ -223,6 +236,13 @@ public:
      * \throw IndexOutOfRangeException if the index is out of range
      */
     std::string getValue(int i) const;
+    /*!
+     * Look up an attribute's value by index.
+     * \param i  The index for the attribute we want
+     * \param result The value, if found
+     * \return If the index is out of range or not
+     */
+    bool getValue(int i, std::string& result) const;
 
     /*!
      * Look up an attribute's value by XML 1.0 qualified name.
@@ -231,16 +251,40 @@ public:
      * \throw NoSuchKeyException If the qname is not found
      */
     std::string getValue(const std::string & qname) const;
+    /*!
+     * Look up an attribute's value by XML 1.0 qualified name.
+     * \param qname The qualified name
+     * \param result The value, if found
+     * \return If the qname is not found or not
+     */
+    bool getValue(const std::string& qname, std::string& result) const;
 
     /*!
      * Look up an attribute's value by Namespace name.
      * \param uri The uri association
      * \param localName the local name of the object
      * \return The value
-     * \throw NoSuchKeyException If the qname is not found
+     * \throw NoSuchKeyException If the uri/localName is not found
      */
-    std::string getValue(const std::string & uri,
-                         const std::string & localName) const;
+    std::string getValue(const xml::lite::QName&) const;
+    std::string getValue(const std::string & uri, const std::string & localName) const
+    {
+        return getValue(QName(uri, localName));
+    }
+
+    /*!
+     * Look up an attribute's value by Namespace name.
+     * \param uri The uri association
+     * \param localName the local name of the object
+     * \param result The value, if found
+     * \return If the uri/localName is not found or not
+     */
+    bool getValue(const xml::lite::QName&, std::string& result) const;
+    bool getValue(const std::string& uri, const std::string& localName, std::string& result) const
+    {
+        return getValue(QName(uri, localName), result);
+    }
+
     /*!
      * Get an attribute note based on the index as a const ref
      * \param i The node index
@@ -266,7 +310,7 @@ public:
         return getNode(i);
     }
 
-    std::string& operator[](std::string s)
+    std::string& operator[](const std::string& s)
     {
         int idx = getIndex(s);
         if (idx < 0)
@@ -301,15 +345,8 @@ public:
 
     bool contains(const std::string& qname) const
     {
-        try
-        {
-            getValue(qname);
-            return true;
-        }
-        catch(const except::NoSuchKeyException&)
-        {
-            return false;
-        }
+        std::string unused;
+        return getValue(qname, unused);
     }
 
     /**
@@ -333,7 +370,214 @@ private:
     //! Underlying representation
     Attributes_T mAttributes;
 };
+
+#ifndef SWIG
+// The (old) version of SWIG we're using doesn't like certain C++11 features.
+
+/*!
+ * Look up an attribute's value by an arbitrary key.
+ * \param key  The key for the attribute we want
+ * \param result The value after calling str::toType(), if found
+ * \return If an attribute with the key is found or not
+ */
+template <typename K, typename ToType>
+inline auto castValue_(const Attributes& attributes, const K& key, ToType toType)
+  -> decltype(toType(std::string())) 
+{
+    const auto value = attributes.getValue(key);
+    if (value.empty())
+    {
+        throw except::BadCastException(Ctxt("call Attributes::getValue() directly to get an empty string"));
+    }
+    return toType(value);
+}
+template <typename T, typename K, typename ToType>
+inline bool castValue_(const Attributes& attributes, const K& key, T& result, ToType toType)
+{
+    try
+    {
+        result = castValue_(attributes, key, toType);
+    }
+    catch (const except::NoSuchKeyException&)
+    {
+        return false;
+    }
+    catch (const except::BadCastException&)
+    {
+        return false;
+    }
+    return true;
+}
+namespace details
+{
+template <typename T>
+inline T toType(const std::string& value)
+{
+    return str::toType<T>(value);
 }
 }
 
-#endif
+/*!
+ * Look up an attribute's value by index.
+ * \param i  The index for the attribute we want
+ * \param result The value after calling str::toType(), if found
+ * \return If the index is out of range or not
+ */
+/*!
+ * Look up an attribute's value by XML 1.0 qualified name.
+ * \param qname The qualified name
+ * \param result The value after calling str::toType(), if found
+ * \return If the qname is not found or not
+ */
+template <typename ToType, typename TKey>
+inline auto castValue(const Attributes& attributes, const TKey& k, ToType toType)
+  -> decltype(toType(std::string()))
+{
+    return castValue_(attributes, k, toType);
+}
+template <typename T, typename TKey>
+inline T getValue(const Attributes& attributes, const TKey& k)
+{
+    return castValue(attributes, k, details::toType<T>);
+}
+
+template <typename T, typename ToType, typename TKey>
+inline bool castValue(const Attributes& attributes, const TKey& k, T& result, ToType toType)
+{
+    return castValue_(attributes, k, result, toType);
+}
+template <typename T, typename TKey>
+inline bool getValue(const Attributes& attributes, const TKey& k, T& result)
+{
+    return castValue(attributes, k, result, details::toType<T>);
+}
+
+/*!
+ * Look up an attribute's value by Namespace name.
+ * \param uri The uri association
+ * \param localName the local name of the object
+ * \param result The value after calling str::toType(), if found
+ * \return If the uri/localName is not found or not
+ */
+template <typename ToType>
+inline auto castValue(const Attributes& attributes, const Uri & uri, const std::string & localName, ToType toType)
+-> decltype(toType(std::string()))
+{
+    return castValue(attributes, QName(uri, localName), toType);
+}
+template <typename T>
+inline T getValue(const Attributes& attributes, const Uri & uri, const std::string & localName)
+{
+    return getValue<T>(attributes, QName(uri, localName));
+}
+
+template <typename T, typename ToType>
+inline bool castValue(const Attributes& attributes, const Uri & uri, const std::string & localName, T& result, ToType toType)
+{
+    return getValue(attributes, QName(uri, localName), result, toType);
+}
+template <typename T>
+inline bool getValue(const Attributes& attributes, const Uri & uri, const std::string & localName, T& result)
+{
+    return getValue(attributes, QName(uri, localName), result);
+}
+
+/*!
+ * Set an attribute's value with an arbitrary key.
+ * \param key  The key for the attribute we want
+ * \param value The value to be converted by calling str::toString
+ * \return If an attribute with the key is found or not
+ */
+template <typename T, typename K, typename ToString>
+inline bool setValue_(Attributes& attributes, const K& key, const T& value,
+    ToString toString)
+{
+    int index = attributes.getIndex(key);
+    if (index < 0)
+    {
+        return false; // not found
+    }
+
+    auto& node = attributes.getNode(index);
+    node.setValue(toString(value));
+    return true;
+}
+namespace details
+{
+template <typename T>
+inline std::string toString(const T& value)
+{
+    return str::toString(value);
+}
+}
+
+/*!
+ * Look up an attribute's value by index.
+ * \param i  The index for the attribute we want
+ * \param result The value after calling str::toType(), if found
+ * \return If the index is out of range or not
+ */
+template <typename T, typename ToString>
+inline bool setValue(Attributes& attributes, int i, const T& value, ToString toString)
+{
+    return setValue_(attributes, i, value, toString);
+}
+template <typename T>
+inline bool setValue(Attributes& attributes, int i, const T& value)
+{
+    return setValue_(attributes, i, value, details::toString<T>);
+}
+
+/*!
+ * Look up an attribute's value by XML 1.0 qualified name.
+ * \param qname The qualified name
+ * \param result The value after calling str::toType(), if found
+ * \return If the qname is not found or not
+ */
+template <typename T, typename ToString>
+inline bool setValue(Attributes& attributes, const std::string& qname, const T& value,
+    ToString toString)
+{
+    return setValue_(attributes, qname, value, toString);
+}
+template <typename T>
+inline bool setValue(Attributes& attributes, const std::string& qname, const T& value)
+{
+    return setValue_(attributes, qname, value, details::toString<T>);
+}
+
+/*!
+ * Look up an attribute's value by Namespace name.
+ * \param uri The uri association
+ * \param localName the local name of the object
+ * \param result The value after calling str::toType(), if found
+ * \return If the uri/localName is not found or not
+ */
+template <typename T, typename ToString>
+inline bool setValue(Attributes& attributes, const xml::lite::QName& name, const T& value, ToString toString)
+{
+    return setValue_(attributes, name, value, toString);
+}
+template <typename T>
+inline bool setValue(Attributes& attributes, const xml::lite::QName& name, const T& value)
+{
+    return setValue_(attributes, name, value, details::toString<T>);
+}
+template <typename T, typename ToString>
+inline bool setValue(Attributes& attributes, const Uri & uri, const std::string & localName, const T& value,
+     ToString toString)
+{
+    return setValue(attributes, QName(uri, localName), value, toString);
+}
+template <typename T>
+inline bool setValue(Attributes& attributes, const Uri & uri, const std::string & localName, const T& value)
+{
+    return setValue(attributes, uri, localName, value, details::toString<T>);
+}
+#endif // SWIG
+
+}
+}
+
+#endif // CODA_OSS_xml_lite_Attributes_h_INCLUDED_
+

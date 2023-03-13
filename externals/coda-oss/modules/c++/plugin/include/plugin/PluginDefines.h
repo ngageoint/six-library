@@ -24,13 +24,14 @@
 #ifndef __PLUGIN_DEFINES_H__
 #define __PLUGIN_DEFINES_H__
 
+#include <memory>
 #include <mem/SharedPtr.h>
 
 /* #define PLUGIN_CONSTRUCTOR_NAME "SpawnPlugin" */
 /* #define PLUGIN_DESTRUCTOR_NAME "DestroyPlugin" */
 #define GET_PLUGIN_IDENT "GetPluginIdentity"
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #    define PLUGIN_DSO_EXTENSION ".dll"
 #else
 #    define PLUGIN_DSO_EXTENSION ".so"
@@ -47,7 +48,7 @@
 #define PLUGIN_API_MINOR_VERSION 0
 
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #      if defined(PLUGIN_MODULE_EXPORTS)
 #          define PLUGIN_HOOK extern "C" __declspec(dllexport)
 #      else
@@ -72,14 +73,14 @@
  */
 #define PLUGIN_EXPOSE_IDENT(IDENT, BASE) \
     PLUGIN_HOOK const void* GetPluginIdentity() { \
-        static const mem::SharedPtr<BASE > ident(new IDENT()); \
+        static const std::shared_ptr<BASE > ident(new IDENT()); \
         return &ident;  \
     }
 
 
 #define PLUGIN_EXPOSE_IDENT_PRE(IDENT, PRE, BASE) \
     PLUGIN_HOOK const void* PRE##GetPluginIdentity() { \
-        static const mem::SharedPtr<BASE > ident(new IDENT()); \
+        static const std::shared_ptr<BASE > ident(new IDENT()); \
         return &ident;  \
     }
 

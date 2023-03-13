@@ -26,13 +26,15 @@ NITF_CXX_GUARD
 
 static int numopg(nitf_TRE* tre, char idx[10][10], int depth, nitf_Error* error)
 {
-    nitf_Field* field;
-    int numopg, x;
-    char fname[64];
-    strcpy(fname, "NUMOPG");
-    x = strlen(idx[0]);
+    (void)depth;
 
-    strcat(fname, idx[0]);
+    nitf_Field* field;
+    int numopg;
+    char fname[64];
+    nrt_strcpy_s(fname, 64, "NUMOPG");
+    (void) strlen(idx[0]);
+
+    nrt_strcat_s(fname, 64,  idx[0]);
 
     field = nitf_TRE_getField(tre, fname);
     nitf_Field_get(field, &numopg, NITF_CONV_INT, sizeof(numopg), error);
@@ -43,6 +45,9 @@ static int numopg(nitf_TRE* tre, char idx[10][10], int depth, nitf_Error* error)
 
 static int mapped(nitf_TRE* tre, char idx[10][10], int depth, nitf_Error* error)
 {
+    (void)idx;
+    (void)depth;
+
     int npar, npar0;
     nitf_Field* field = nitf_TRE_getField(tre, "NPAR");
     nitf_Field_get(field, &npar, NITF_CONV_INT, sizeof(npar), error);

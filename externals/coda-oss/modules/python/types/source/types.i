@@ -26,8 +26,10 @@
 
 %feature("autodoc", "1");
 
-%include "std_vector.i"
-%include "std_string.i"
+%include "config.i"
+
+%include <std_vector.i>
+%include <std_string.i>
 
 %import "sys.i"
 

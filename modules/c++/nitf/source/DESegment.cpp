@@ -26,7 +26,7 @@ using namespace nitf;
 
 DESegment::DESegment(const DESegment & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 DESegment & DESegment::operator=(const DESegment & x)
@@ -42,7 +42,7 @@ DESegment::DESegment(nitf_DESegment * x)
     getNativeOrThrow();
 }
 
-DESegment::DESegment()
+DESegment::DESegment() noexcept(false)
 {
     auto* deSegment = nitf_DESegment_construct(&error);
     setNativeOrThrow(deSegment, &error);
@@ -51,27 +51,25 @@ DESegment::DESegment()
 
 DESegment::DESegment(NITF_DATA * x)
 {
-    setNative((nitf_DESegment*)x);
+    setNative(static_cast<nitf_DESegment*>(x));
     getNativeOrThrow();
 }
 
 DESegment & DESegment::operator=(NITF_DATA * x)
 {
-    setNative((nitf_DESegment*)x);
+    setNative(static_cast<nitf_DESegment*>(x));
     getNativeOrThrow();
     return *this;
 }
 
-nitf::DESegment DESegment::clone()
+nitf::DESegment DESegment::clone() const
 {
     nitf::DESegment dolly(nitf_DESegment_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
     return dolly;
 }
 
-DESegment::~DESegment(){}
-
-nitf::DESubheader DESegment::getSubheader()
+nitf::DESubheader DESegment::getSubheader() const
 {
     return nitf::DESubheader(getNativeOrThrow()->subheader);
 }
@@ -87,22 +85,22 @@ void DESegment::setSubheader(nitf::DESubheader & value)
     value.setManaged(true);
 }
 
-nitf::Uint64 DESegment::getOffset() const
+uint64_t DESegment::getOffset() const
 {
     return getNativeOrThrow()->offset;
 }
 
-void DESegment::setOffset(nitf::Uint64 value)
+void DESegment::setOffset(uint64_t value)
 {
     getNativeOrThrow()->offset = value;
 }
 
-nitf::Uint64 DESegment::getEnd() const
+uint64_t DESegment::getEnd() const
 {
     return getNativeOrThrow()->end;
 }
 
-void DESegment::setEnd(nitf::Uint64 value)
+void DESegment::setEnd(uint64_t value)
 {
     getNativeOrThrow()->end = value;
 }

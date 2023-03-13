@@ -3012,38 +3012,36 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_int64_t swig_types[5]
 #define SWIGTYPE_p_int8_t swig_types[6]
 #define SWIGTYPE_p_io__BidirectionalStream swig_types[7]
-#define SWIGTYPE_p_io__FileInputStream swig_types[8]
-#define SWIGTYPE_p_io__FileInputStreamOS swig_types[9]
-#define SWIGTYPE_p_io__FileOutputStreamOS swig_types[10]
-#define SWIGTYPE_p_io__InputStream swig_types[11]
-#define SWIGTYPE_p_io__NullInputStream swig_types[12]
-#define SWIGTYPE_p_io__NullOutputStream swig_types[13]
-#define SWIGTYPE_p_io__OutputStream swig_types[14]
-#define SWIGTYPE_p_io__Seekable swig_types[15]
-#define SWIGTYPE_p_io__SeekableBidirectionalStream swig_types[16]
-#define SWIGTYPE_p_io__SeekableInputStream swig_types[17]
-#define SWIGTYPE_p_io__SeekableNullOutputStream swig_types[18]
-#define SWIGTYPE_p_io__SeekableOutputStream swig_types[19]
-#define SWIGTYPE_p_io__StringStream swig_types[20]
+#define SWIGTYPE_p_io__FileInputStreamOS swig_types[8]
+#define SWIGTYPE_p_io__FileOutputStreamOS swig_types[9]
+#define SWIGTYPE_p_io__InputStream swig_types[10]
+#define SWIGTYPE_p_io__NullInputStream swig_types[11]
+#define SWIGTYPE_p_io__NullOutputStream swig_types[12]
+#define SWIGTYPE_p_io__OutputStream swig_types[13]
+#define SWIGTYPE_p_io__SeekableBidirectionalStream swig_types[14]
+#define SWIGTYPE_p_io__SeekableInputStream swig_types[15]
+#define SWIGTYPE_p_io__SeekableNullOutputStream swig_types[16]
+#define SWIGTYPE_p_io__SeekableOutputStream swig_types[17]
+#define SWIGTYPE_p_io__StringStreamTT_coda_oss__u8string__value_type_t swig_types[18]
+#define SWIGTYPE_p_io__StringStreamTT_std__string__value_type_t swig_types[19]
+#define SWIGTYPE_p_io__StringStreamTT_str__W1252string__value_type_t swig_types[20]
 #define SWIGTYPE_p_off_t swig_types[21]
-#define SWIGTYPE_p_pid_t swig_types[22]
-#define SWIGTYPE_p_sio__lite__FileHeader swig_types[23]
-#define SWIGTYPE_p_sio__lite__FileReader swig_types[24]
-#define SWIGTYPE_p_sio__lite__FileWriter swig_types[25]
-#define SWIGTYPE_p_sio__lite__StreamReader swig_types[26]
-#define SWIGTYPE_p_sio__lite__UserDataDictionary swig_types[27]
-#define SWIGTYPE_p_size_t swig_types[28]
-#define SWIGTYPE_p_ssize_t swig_types[29]
-#define SWIGTYPE_p_std__vectorT_char_t swig_types[30]
-#define SWIGTYPE_p_std__vectorT_io__InputStream_p_t swig_types[31]
-#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[32]
-#define SWIGTYPE_p_uint16_t swig_types[33]
-#define SWIGTYPE_p_uint32_t swig_types[34]
-#define SWIGTYPE_p_uint64_t swig_types[35]
-#define SWIGTYPE_p_uint8_t swig_types[36]
-#define SWIGTYPE_p_unsigned_char swig_types[37]
-static swig_type_info *swig_types[39];
-static swig_module_info swig_module = {swig_types, 38, 0, 0, 0, 0};
+#define SWIGTYPE_p_path swig_types[22]
+#define SWIGTYPE_p_pid_t swig_types[23]
+#define SWIGTYPE_p_sio__lite__FileHeader swig_types[24]
+#define SWIGTYPE_p_sio__lite__StreamReader swig_types[25]
+#define SWIGTYPE_p_sio__lite__UserDataDictionary swig_types[26]
+#define SWIGTYPE_p_size_t swig_types[27]
+#define SWIGTYPE_p_ssize_t swig_types[28]
+#define SWIGTYPE_p_std__vectorT_char_t swig_types[29]
+#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[30]
+#define SWIGTYPE_p_uint16_t swig_types[31]
+#define SWIGTYPE_p_uint32_t swig_types[32]
+#define SWIGTYPE_p_uint64_t swig_types[33]
+#define SWIGTYPE_p_uint8_t swig_types[34]
+#define SWIGTYPE_p_unsigned_char swig_types[35]
+static swig_type_info *swig_types[37];
+static swig_module_info swig_module = {swig_types, 36, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3678,9 +3676,6 @@ SWIG_AsVal_size_t (PyObject * obj, size_t *val)
 }
 
 
-
-
-
 #ifdef SWIG_LONG_LONG_AVAILABLE
 SWIGINTERN int
 SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
@@ -3722,10 +3717,6 @@ SWIG_AsVal_long_SS_long (PyObject *obj, long long *val)
 }
 #endif
 
-SWIGINTERN void sio_lite_FileWriter_write__SWIG_6(sio::lite::FileWriter *self,sio::lite::FileHeader *header,long long data){
-        const void* buffer = reinterpret_cast<const void*>(data);
-        self->write(header, buffer);
-    }
 SWIGINTERN sys::SSize_T sio_lite_StreamReader_read(sio::lite::StreamReader *self,long long data,long long size){
         sys::byte* buffer = reinterpret_cast<sys::byte*>(data);
         return self->read(buffer, size);
@@ -3787,7 +3778,7 @@ SWIGINTERN PyObject *_wrap_new_FileHeader__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileHeader *)new sio::lite::FileHeader(arg1,arg2,arg3,arg4,arg5);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3866,7 +3857,7 @@ SWIGINTERN PyObject *_wrap_new_FileHeader__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileHeader *)new sio::lite::FileHeader(arg1,arg2,arg3,arg4);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3909,7 +3900,7 @@ SWIGINTERN PyObject *_wrap_new_FileHeader__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileHeader *)new sio::lite::FileHeader();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4048,7 +4039,7 @@ SWIGINTERN PyObject *_wrap_delete_FileHeader(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4100,7 +4091,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getLength(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = (long)((sio::lite::FileHeader const *)arg1)->getLength();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4152,7 +4143,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getNumLines(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (int)((sio::lite::FileHeader const *)arg1)->getNumLines();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4212,7 +4203,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setNumLines(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       (arg1)->setNumLines(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4264,7 +4255,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getNumElements(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = (int)((sio::lite::FileHeader const *)arg1)->getNumElements();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4324,7 +4315,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setNumElements(PyObject *SWIGUNUSEDPARM(se
     try
     {
       (arg1)->setNumElements(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4376,7 +4367,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getElementSize(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = (int)((sio::lite::FileHeader const *)arg1)->getElementSize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4436,7 +4427,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setElementSize(PyObject *SWIGUNUSEDPARM(se
     try
     {
       (arg1)->setElementSize(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4488,7 +4479,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getElementType(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = (int)((sio::lite::FileHeader const *)arg1)->getElementType();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4548,7 +4539,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setElementType(PyObject *SWIGUNUSEDPARM(se
     try
     {
       (arg1)->setElementType(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4600,7 +4591,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getElementTypeAsString(PyObject *SWIGUNUSE
     try
     {
       result = ((sio::lite::FileHeader const *)arg1)->getElementTypeAsString();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4652,7 +4643,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getVersion(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (int)((sio::lite::FileHeader const *)arg1)->getVersion();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4712,7 +4703,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setVersion(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->setVersion(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4764,7 +4755,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_idsAreNullTerminated(PyObject *SWIGUNUSEDP
     try
     {
       result = (bool)((sio::lite::FileHeader const *)arg1)->idsAreNullTerminated();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4824,7 +4815,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setNullTerminationFlag(PyObject *SWIGUNUSE
     try
     {
       (arg1)->setNullTerminationFlag(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4876,7 +4867,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_isDifferentByteOrdering(PyObject *SWIGUNUS
     try
     {
       result = (bool)((sio::lite::FileHeader const *)arg1)->isDifferentByteOrdering();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4936,7 +4927,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setIsDifferentByteOrdering(PyObject *SWIGU
     try
     {
       (arg1)->setIsDifferentByteOrdering(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5002,7 +4993,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_userDataFieldExists(PyObject *SWIGUNUSEDPA
     try
     {
       result = (bool)((sio::lite::FileHeader const *)arg1)->userDataFieldExists((std::string const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5067,7 +5058,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getAllUserDataFields(PyObject *SWIGUNUSEDP
     try
     {
       ((sio::lite::FileHeader const *)arg1)->getAllUserDataFields(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5119,7 +5110,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getNumUserDataFields(PyObject *SWIGUNUSEDP
     try
     {
       result = ((sio::lite::FileHeader const *)arg1)->getNumUserDataFields();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5185,7 +5176,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getUserData(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (std::vector< sys::byte > *) &(arg1)->getUserData((std::string const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5239,7 +5230,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getUserDataSection__SWIG_0(PyObject *SWIGU
     try
     {
       result = (sio::lite::UserDataDictionary *) &((sio::lite::FileHeader const *)arg1)->getUserDataSection();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5291,7 +5282,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getUserDataSection__SWIG_1(PyObject *SWIGU
     try
     {
       result = (sio::lite::UserDataDictionary *) &(arg1)->getUserDataSection();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5410,7 +5401,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_addUserData__SWIG_0(PyObject *SWIGUNUSEDPA
     try
     {
       (arg1)->addUserData((std::string const &)*arg2,(std::string const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5491,7 +5482,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_addUserData__SWIG_1(PyObject *SWIGUNUSEDPA
     try
     {
       (arg1)->addUserData((std::string const &)*arg2,(std::vector< sys::byte > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5567,7 +5558,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_addUserData__SWIG_2(PyObject *SWIGUNUSEDPA
     try
     {
       (arg1)->addUserData((std::string const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5717,7 +5708,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_to(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       (arg1)->to(arg2,*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5758,1173 +5749,6 @@ SWIGINTERN PyObject *FileHeader_swigregister(PyObject *SWIGUNUSEDPARM(self), PyO
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_new_FileWriter__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  sio::lite::FileWriter *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_FileWriter",&obj0)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileWriter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileWriter" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  {
-    try
-    {
-      result = (sio::lite::FileWriter *)new sio::lite::FileWriter((std::string const &)*arg1);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_sio__lite__FileWriter, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_FileWriter__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  char *arg1 = (char *) 0 ;
-  int res1 ;
-  char *buf1 = 0 ;
-  int alloc1 = 0 ;
-  PyObject * obj0 = 0 ;
-  sio::lite::FileWriter *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_FileWriter",&obj0)) SWIG_fail;
-  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileWriter" "', argument " "1"" of type '" "char const *""'");
-  }
-  arg1 = reinterpret_cast< char * >(buf1);
-  {
-    try
-    {
-      result = (sio::lite::FileWriter *)new sio::lite::FileWriter((char const *)arg1);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_sio__lite__FileWriter, SWIG_POINTER_NEW |  0 );
-  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
-  return resultobj;
-fail:
-  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_FileWriter__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  io::OutputStream *arg1 = (io::OutputStream *) 0 ;
-  bool arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  bool val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  sio::lite::FileWriter *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:new_FileWriter",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__OutputStream, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileWriter" "', argument " "1"" of type '" "io::OutputStream *""'"); 
-  }
-  arg1 = reinterpret_cast< io::OutputStream * >(argp1);
-  ecode2 = SWIG_AsVal_bool(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_FileWriter" "', argument " "2"" of type '" "bool""'");
-  } 
-  arg2 = static_cast< bool >(val2);
-  {
-    try
-    {
-      result = (sio::lite::FileWriter *)new sio::lite::FileWriter(arg1,arg2);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_sio__lite__FileWriter, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_FileWriter__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  io::OutputStream *arg1 = (io::OutputStream *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  sio::lite::FileWriter *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_FileWriter",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__OutputStream, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileWriter" "', argument " "1"" of type '" "io::OutputStream *""'"); 
-  }
-  arg1 = reinterpret_cast< io::OutputStream * >(argp1);
-  {
-    try
-    {
-      result = (sio::lite::FileWriter *)new sio::lite::FileWriter(arg1);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_sio__lite__FileWriter, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_FileWriter(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[3] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_io__OutputStream, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_FileWriter__SWIG_3(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_FileWriter__SWIG_0(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_AsCharPtrAndSize(argv[0], 0, NULL, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_FileWriter__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_io__OutputStream, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_bool(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_new_FileWriter__SWIG_2(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_FileWriter'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    sio::lite::FileWriter::FileWriter(std::string const &)\n"
-    "    sio::lite::FileWriter::FileWriter(char const *)\n"
-    "    sio::lite::FileWriter::FileWriter(io::OutputStream *,bool)\n"
-    "    sio::lite::FileWriter::FileWriter(io::OutputStream *)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_FileWriter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::FileWriter *arg1 = (sio::lite::FileWriter *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_FileWriter",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sio__lite__FileWriter, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_FileWriter" "', argument " "1"" of type '" "sio::lite::FileWriter *""'"); 
-  }
-  arg1 = reinterpret_cast< sio::lite::FileWriter * >(argp1);
-  {
-    try
-    {
-      delete arg1;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::FileWriter *arg1 = (sio::lite::FileWriter *) 0 ;
-  sio::lite::FileHeader *arg2 = (sio::lite::FileHeader *) 0 ;
-  SwigValueWrapper< std::vector< io::InputStream * > > arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  void *argp3 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:FileWriter_write",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sio__lite__FileWriter, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileWriter_write" "', argument " "1"" of type '" "sio::lite::FileWriter *""'"); 
-  }
-  arg1 = reinterpret_cast< sio::lite::FileWriter * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_sio__lite__FileHeader, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileWriter_write" "', argument " "2"" of type '" "sio::lite::FileHeader *""'"); 
-  }
-  arg2 = reinterpret_cast< sio::lite::FileHeader * >(argp2);
-  {
-    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_io__InputStream_p_t,  0  | 0);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "FileWriter_write" "', argument " "3"" of type '" "std::vector< io::InputStream * >""'"); 
-    }  
-    if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileWriter_write" "', argument " "3"" of type '" "std::vector< io::InputStream * >""'");
-    } else {
-      std::vector< io::InputStream * > * temp = reinterpret_cast< std::vector< io::InputStream * > * >(argp3);
-      arg3 = *temp;
-      if (SWIG_IsNewObj(res3)) delete temp;
-    }
-  }
-  {
-    try
-    {
-      (arg1)->write(arg2,arg3);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::FileWriter *arg1 = (sio::lite::FileWriter *) 0 ;
-  int arg2 ;
-  int arg3 ;
-  int arg4 ;
-  int arg5 ;
-  SwigValueWrapper< std::vector< io::InputStream * > > arg6 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  int val4 ;
-  int ecode4 = 0 ;
-  int val5 ;
-  int ecode5 = 0 ;
-  void *argp6 ;
-  int res6 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:FileWriter_write",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sio__lite__FileWriter, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileWriter_write" "', argument " "1"" of type '" "sio::lite::FileWriter *""'"); 
-  }
-  arg1 = reinterpret_cast< sio::lite::FileWriter * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "FileWriter_write" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "FileWriter_write" "', argument " "3"" of type '" "int""'");
-  } 
-  arg3 = static_cast< int >(val3);
-  ecode4 = SWIG_AsVal_int(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "FileWriter_write" "', argument " "4"" of type '" "int""'");
-  } 
-  arg4 = static_cast< int >(val4);
-  ecode5 = SWIG_AsVal_int(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "FileWriter_write" "', argument " "5"" of type '" "int""'");
-  } 
-  arg5 = static_cast< int >(val5);
-  {
-    res6 = SWIG_ConvertPtr(obj5, &argp6, SWIGTYPE_p_std__vectorT_io__InputStream_p_t,  0  | 0);
-    if (!SWIG_IsOK(res6)) {
-      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "FileWriter_write" "', argument " "6"" of type '" "std::vector< io::InputStream * >""'"); 
-    }  
-    if (!argp6) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileWriter_write" "', argument " "6"" of type '" "std::vector< io::InputStream * >""'");
-    } else {
-      std::vector< io::InputStream * > * temp = reinterpret_cast< std::vector< io::InputStream * > * >(argp6);
-      arg6 = *temp;
-      if (SWIG_IsNewObj(res6)) delete temp;
-    }
-  }
-  {
-    try
-    {
-      (arg1)->write(arg2,arg3,arg4,arg5,arg6);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::FileWriter *arg1 = (sio::lite::FileWriter *) 0 ;
-  sio::lite::FileHeader *arg2 = (sio::lite::FileHeader *) 0 ;
-  void *arg3 = (void *) 0 ;
-  int arg4 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int res3 ;
-  int val4 ;
-  int ecode4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:FileWriter_write",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sio__lite__FileWriter, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileWriter_write" "', argument " "1"" of type '" "sio::lite::FileWriter *""'"); 
-  }
-  arg1 = reinterpret_cast< sio::lite::FileWriter * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_sio__lite__FileHeader, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileWriter_write" "', argument " "2"" of type '" "sio::lite::FileHeader *""'"); 
-  }
-  arg2 = reinterpret_cast< sio::lite::FileHeader * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2,SWIG_as_voidptrptr(&arg3), 0, 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "FileWriter_write" "', argument " "3"" of type '" "void const *""'"); 
-  }
-  ecode4 = SWIG_AsVal_int(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "FileWriter_write" "', argument " "4"" of type '" "int""'");
-  } 
-  arg4 = static_cast< int >(val4);
-  {
-    try
-    {
-      (arg1)->write(arg2,(void const *)arg3,arg4);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::FileWriter *arg1 = (sio::lite::FileWriter *) 0 ;
-  sio::lite::FileHeader *arg2 = (sio::lite::FileHeader *) 0 ;
-  void *arg3 = (void *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int res3 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:FileWriter_write",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sio__lite__FileWriter, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileWriter_write" "', argument " "1"" of type '" "sio::lite::FileWriter *""'"); 
-  }
-  arg1 = reinterpret_cast< sio::lite::FileWriter * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_sio__lite__FileHeader, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileWriter_write" "', argument " "2"" of type '" "sio::lite::FileHeader *""'"); 
-  }
-  arg2 = reinterpret_cast< sio::lite::FileHeader * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2,SWIG_as_voidptrptr(&arg3), 0, 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "FileWriter_write" "', argument " "3"" of type '" "void const *""'"); 
-  }
-  {
-    try
-    {
-      (arg1)->write(arg2,(void const *)arg3);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::FileWriter *arg1 = (sio::lite::FileWriter *) 0 ;
-  int arg2 ;
-  int arg3 ;
-  int arg4 ;
-  int arg5 ;
-  void *arg6 = (void *) 0 ;
-  int arg7 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  int val4 ;
-  int ecode4 = 0 ;
-  int val5 ;
-  int ecode5 = 0 ;
-  int res6 ;
-  int val7 ;
-  int ecode7 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  PyObject * obj6 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOO:FileWriter_write",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sio__lite__FileWriter, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileWriter_write" "', argument " "1"" of type '" "sio::lite::FileWriter *""'"); 
-  }
-  arg1 = reinterpret_cast< sio::lite::FileWriter * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "FileWriter_write" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "FileWriter_write" "', argument " "3"" of type '" "int""'");
-  } 
-  arg3 = static_cast< int >(val3);
-  ecode4 = SWIG_AsVal_int(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "FileWriter_write" "', argument " "4"" of type '" "int""'");
-  } 
-  arg4 = static_cast< int >(val4);
-  ecode5 = SWIG_AsVal_int(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "FileWriter_write" "', argument " "5"" of type '" "int""'");
-  } 
-  arg5 = static_cast< int >(val5);
-  res6 = SWIG_ConvertPtr(obj5,SWIG_as_voidptrptr(&arg6), 0, 0);
-  if (!SWIG_IsOK(res6)) {
-    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "FileWriter_write" "', argument " "6"" of type '" "void const *""'"); 
-  }
-  ecode7 = SWIG_AsVal_int(obj6, &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "FileWriter_write" "', argument " "7"" of type '" "int""'");
-  } 
-  arg7 = static_cast< int >(val7);
-  {
-    try
-    {
-      (arg1)->write(arg2,arg3,arg4,arg5,(void const *)arg6,arg7);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::FileWriter *arg1 = (sio::lite::FileWriter *) 0 ;
-  int arg2 ;
-  int arg3 ;
-  int arg4 ;
-  int arg5 ;
-  void *arg6 = (void *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  int val4 ;
-  int ecode4 = 0 ;
-  int val5 ;
-  int ecode5 = 0 ;
-  int res6 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:FileWriter_write",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sio__lite__FileWriter, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileWriter_write" "', argument " "1"" of type '" "sio::lite::FileWriter *""'"); 
-  }
-  arg1 = reinterpret_cast< sio::lite::FileWriter * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "FileWriter_write" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "FileWriter_write" "', argument " "3"" of type '" "int""'");
-  } 
-  arg3 = static_cast< int >(val3);
-  ecode4 = SWIG_AsVal_int(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "FileWriter_write" "', argument " "4"" of type '" "int""'");
-  } 
-  arg4 = static_cast< int >(val4);
-  ecode5 = SWIG_AsVal_int(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "FileWriter_write" "', argument " "5"" of type '" "int""'");
-  } 
-  arg5 = static_cast< int >(val5);
-  res6 = SWIG_ConvertPtr(obj5,SWIG_as_voidptrptr(&arg6), 0, 0);
-  if (!SWIG_IsOK(res6)) {
-    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "FileWriter_write" "', argument " "6"" of type '" "void const *""'"); 
-  }
-  {
-    try
-    {
-      (arg1)->write(arg2,arg3,arg4,arg5,(void const *)arg6);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::FileWriter *arg1 = (sio::lite::FileWriter *) 0 ;
-  sio::lite::FileHeader *arg2 = (sio::lite::FileHeader *) 0 ;
-  long long arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  long long val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:FileWriter_write",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sio__lite__FileWriter, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileWriter_write" "', argument " "1"" of type '" "sio::lite::FileWriter *""'"); 
-  }
-  arg1 = reinterpret_cast< sio::lite::FileWriter * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_sio__lite__FileHeader, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileWriter_write" "', argument " "2"" of type '" "sio::lite::FileHeader *""'"); 
-  }
-  arg2 = reinterpret_cast< sio::lite::FileHeader * >(argp2);
-  ecode3 = SWIG_AsVal_long_SS_long(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "FileWriter_write" "', argument " "3"" of type '" "long long""'");
-  } 
-  arg3 = static_cast< long long >(val3);
-  {
-    try
-    {
-      sio_lite_FileWriter_write__SWIG_6(arg1,arg2,arg3);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileWriter_write(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[8] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 7) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_sio__lite__FileWriter, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_sio__lite__FileHeader, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_std__vectorT_io__InputStream_p_t, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          return _wrap_FileWriter_write__SWIG_0(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_sio__lite__FileWriter, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_sio__lite__FileHeader, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        void *ptr = 0;
-        int res = SWIG_ConvertPtr(argv[2], &ptr, 0, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          return _wrap_FileWriter_write__SWIG_3(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_sio__lite__FileWriter, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_sio__lite__FileHeader, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        {
-          int res = SWIG_AsVal_long_SS_long(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          return _wrap_FileWriter_write__SWIG_6(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 4) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_sio__lite__FileWriter, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_sio__lite__FileHeader, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        void *ptr = 0;
-        int res = SWIG_ConvertPtr(argv[2], &ptr, 0, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          {
-            int res = SWIG_AsVal_int(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            return _wrap_FileWriter_write__SWIG_2(self, args);
-          }
-        }
-      }
-    }
-  }
-  if (argc == 6) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_sio__lite__FileWriter, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_int(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_int(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_int(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_int(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              int res = SWIG_ConvertPtr(argv[5], 0, SWIGTYPE_p_std__vectorT_io__InputStream_p_t, 0);
-              _v = SWIG_CheckState(res);
-              if (_v) {
-                return _wrap_FileWriter_write__SWIG_1(self, args);
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  if (argc == 6) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_sio__lite__FileWriter, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_int(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_int(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_int(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_int(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              void *ptr = 0;
-              int res = SWIG_ConvertPtr(argv[5], &ptr, 0, 0);
-              _v = SWIG_CheckState(res);
-              if (_v) {
-                return _wrap_FileWriter_write__SWIG_5(self, args);
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  if (argc == 7) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_sio__lite__FileWriter, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_int(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        {
-          int res = SWIG_AsVal_int(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_int(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_int(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              void *ptr = 0;
-              int res = SWIG_ConvertPtr(argv[5], &ptr, 0, 0);
-              _v = SWIG_CheckState(res);
-              if (_v) {
-                {
-                  int res = SWIG_AsVal_int(argv[6], NULL);
-                  _v = SWIG_CheckState(res);
-                }
-                if (_v) {
-                  return _wrap_FileWriter_write__SWIG_4(self, args);
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'FileWriter_write'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    sio::lite::FileWriter::write(sio::lite::FileHeader *,std::vector< io::InputStream * >)\n"
-    "    sio::lite::FileWriter::write(int,int,int,int,std::vector< io::InputStream * >)\n"
-    "    sio::lite::FileWriter::write(sio::lite::FileHeader *,void const *,int)\n"
-    "    sio::lite::FileWriter::write(sio::lite::FileHeader *,void const *)\n"
-    "    sio::lite::FileWriter::write(int,int,int,int,void const *,int)\n"
-    "    sio::lite::FileWriter::write(int,int,int,int,void const *)\n"
-    "    sio::lite::FileWriter::write(sio::lite::FileHeader *,long long)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *FileWriter_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_sio__lite__FileWriter, SWIG_NewClientData(obj));
-  return SWIG_Py_Void();
-}
-
 SWIGINTERN PyObject *_wrap_new_StreamReader__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   sio::lite::StreamReader *result = 0 ;
@@ -6934,7 +5758,7 @@ SWIGINTERN PyObject *_wrap_new_StreamReader__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (sio::lite::StreamReader *)new sio::lite::StreamReader();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6985,7 +5809,7 @@ SWIGINTERN PyObject *_wrap_delete_StreamReader(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7046,7 +5870,7 @@ SWIGINTERN PyObject *_wrap_new_StreamReader__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (sio::lite::StreamReader *)new sio::lite::StreamReader(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7098,7 +5922,7 @@ SWIGINTERN PyObject *_wrap_new_StreamReader__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (sio::lite::StreamReader *)new sio::lite::StreamReader(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7217,7 +6041,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_setInputStream__SWIG_0(PyObject *SWIGUNU
     try
     {
       (arg1)->setInputStream(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7277,7 +6101,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_setInputStream__SWIG_1(PyObject *SWIGUNU
     try
     {
       (arg1)->setInputStream(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7385,7 +6209,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_getInputStream(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = (io::InputStream *)(arg1)->getInputStream();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7437,7 +6261,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_getHeader__SWIG_0(PyObject *SWIGUNUSEDPA
     try
     {
       result = (sio::lite::FileHeader *)(arg1)->getHeader();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7489,7 +6313,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_getHeader__SWIG_1(PyObject *SWIGUNUSEDPA
     try
     {
       result = (sio::lite::FileHeader *)((sio::lite::StreamReader const *)arg1)->getHeader();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7581,7 +6405,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_readHeader(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (sio::lite::FileHeader *)(arg1)->readHeader();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7633,7 +6457,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_available(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (arg1)->available();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7709,7 +6533,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_read(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = sio_lite_StreamReader_read(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7756,523 +6580,6 @@ SWIGINTERN PyObject *StreamReader_swigregister(PyObject *SWIGUNUSEDPARM(self), P
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_new_FileReader__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::FileReader *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":new_FileReader")) SWIG_fail;
-  {
-    try
-    {
-      result = (sio::lite::FileReader *)new sio::lite::FileReader();
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_sio__lite__FileReader, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_delete_FileReader(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::FileReader *arg1 = (sio::lite::FileReader *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:delete_FileReader",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sio__lite__FileReader, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_FileReader" "', argument " "1"" of type '" "sio::lite::FileReader *""'"); 
-  }
-  arg1 = reinterpret_cast< sio::lite::FileReader * >(argp1);
-  {
-    try
-    {
-      delete arg1;
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_FileReader__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  int res1 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  sio::lite::FileReader *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_FileReader",&obj0)) SWIG_fail;
-  {
-    std::string *ptr = (std::string *)0;
-    res1 = SWIG_AsPtr_std_string(obj0, &ptr);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileReader" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileReader" "', argument " "1"" of type '" "std::string const &""'"); 
-    }
-    arg1 = ptr;
-  }
-  {
-    try
-    {
-      result = (sio::lite::FileReader *)new sio::lite::FileReader((std::string const &)*arg1);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_sio__lite__FileReader, SWIG_POINTER_NEW |  0 );
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res1)) delete arg1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_FileReader__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  io::FileInputStream *arg1 = (io::FileInputStream *) 0 ;
-  bool arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  bool val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  sio::lite::FileReader *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:new_FileReader",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__FileInputStream, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileReader" "', argument " "1"" of type '" "io::FileInputStream *""'"); 
-  }
-  arg1 = reinterpret_cast< io::FileInputStream * >(argp1);
-  ecode2 = SWIG_AsVal_bool(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_FileReader" "', argument " "2"" of type '" "bool""'");
-  } 
-  arg2 = static_cast< bool >(val2);
-  {
-    try
-    {
-      result = (sio::lite::FileReader *)new sio::lite::FileReader(arg1,arg2);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_sio__lite__FileReader, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_FileReader__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  io::FileInputStream *arg1 = (io::FileInputStream *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  sio::lite::FileReader *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_FileReader",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_io__FileInputStream, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileReader" "', argument " "1"" of type '" "io::FileInputStream *""'"); 
-  }
-  arg1 = reinterpret_cast< io::FileInputStream * >(argp1);
-  {
-    try
-    {
-      result = (sio::lite::FileReader *)new sio::lite::FileReader(arg1);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_sio__lite__FileReader, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_FileReader(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[3] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 0) {
-    return _wrap_new_FileReader__SWIG_0(self, args);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_io__FileInputStream, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_FileReader__SWIG_3(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_FileReader__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_io__FileInputStream, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_bool(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_new_FileReader__SWIG_2(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_FileReader'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    sio::lite::FileReader::FileReader()\n"
-    "    sio::lite::FileReader::FileReader(std::string const &)\n"
-    "    sio::lite::FileReader::FileReader(io::FileInputStream *,bool)\n"
-    "    sio::lite::FileReader::FileReader(io::FileInputStream *)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileReader_seek(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::FileReader *arg1 = (sio::lite::FileReader *) 0 ;
-  sys::Off_T arg2 ;
-  io::Seekable::Whence arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  sys::Off_T result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:FileReader_seek",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sio__lite__FileReader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileReader_seek" "', argument " "1"" of type '" "sio::lite::FileReader *""'"); 
-  }
-  arg1 = reinterpret_cast< sio::lite::FileReader * >(argp1);
-  {
-#if PY_VERSION_HEX >= 0x03000000
-    arg2 = PyLong_AsSsize_t(obj1);
-#else
-    arg2 = PyInt_AsSsize_t(obj1);
-#endif
-  }
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "FileReader_seek" "', argument " "3"" of type '" "io::Seekable::Whence""'");
-  } 
-  arg3 = static_cast< io::Seekable::Whence >(val3);
-  {
-    try
-    {
-      result = (arg1)->seek(arg2,arg3);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  {
-#if PY_VERSION_HEX >= 0x03000000
-    resultobj = PyLong_FromSsize_t(result);
-#else
-    resultobj = PyInt_FromSsize_t(result);
-#endif
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileReader_tell(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::FileReader *arg1 = (sio::lite::FileReader *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  sys::Off_T result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:FileReader_tell",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sio__lite__FileReader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileReader_tell" "', argument " "1"" of type '" "sio::lite::FileReader *""'"); 
-  }
-  arg1 = reinterpret_cast< sio::lite::FileReader * >(argp1);
-  {
-    try
-    {
-      result = (arg1)->tell();
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  {
-#if PY_VERSION_HEX >= 0x03000000
-    resultobj = PyLong_FromSsize_t(result);
-#else
-    resultobj = PyInt_FromSsize_t(result);
-#endif
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileReader_killStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  sio::lite::FileReader *arg1 = (sio::lite::FileReader *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:FileReader_killStream",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_sio__lite__FileReader, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileReader_killStream" "', argument " "1"" of type '" "sio::lite::FileReader *""'"); 
-  }
-  arg1 = reinterpret_cast< sio::lite::FileReader * >(argp1);
-  {
-    try
-    {
-      (arg1)->killStream();
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *FileReader_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *obj;
-  if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_sio__lite__FileReader, SWIG_NewClientData(obj));
-  return SWIG_Py_Void();
-}
-
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
 	 { (char *)"new_FileHeader", _wrap_new_FileHeader, METH_VARARGS, (char *)"\n"
@@ -8312,23 +6619,6 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"FileHeader_to", _wrap_FileHeader_to, METH_VARARGS, (char *)"FileHeader_to(FileHeader self, size_t numBands, OutputStream os)"},
 	 { (char *)"FileHeader_swigregister", FileHeader_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_FileWriter", _wrap_new_FileWriter, METH_VARARGS, (char *)"\n"
-		"FileWriter(std::string const & outputFile)\n"
-		"FileWriter(char const * outputFile)\n"
-		"FileWriter(OutputStream stream, bool adopt=True)\n"
-		"new_FileWriter(OutputStream stream) -> FileWriter\n"
-		""},
-	 { (char *)"delete_FileWriter", _wrap_delete_FileWriter, METH_VARARGS, (char *)"delete_FileWriter(FileWriter self)"},
-	 { (char *)"FileWriter_write", _wrap_FileWriter_write, METH_VARARGS, (char *)"\n"
-		"write(FileHeader header, std::vector< io::InputStream * > bandStreams)\n"
-		"write(int numLines, int numElements, int elementSize, int elementType, std::vector< io::InputStream * > bandStreams)\n"
-		"write(FileHeader header, void const * data, int numBands=1)\n"
-		"write(FileHeader header, void const * data)\n"
-		"write(int numLines, int numElements, int elementSize, int elementType, void const * data, int numBands=1)\n"
-		"write(int numLines, int numElements, int elementSize, int elementType, void const * data)\n"
-		"FileWriter_write(FileWriter self, FileHeader header, long long data)\n"
-		""},
-	 { (char *)"FileWriter_swigregister", FileWriter_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_StreamReader", _wrap_delete_StreamReader, METH_VARARGS, (char *)"delete_StreamReader(StreamReader self)"},
 	 { (char *)"new_StreamReader", _wrap_new_StreamReader, METH_VARARGS, (char *)"\n"
 		"StreamReader()\n"
@@ -8348,34 +6638,17 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StreamReader_available", _wrap_StreamReader_available, METH_VARARGS, (char *)"StreamReader_available(StreamReader self) -> sys::Off_T"},
 	 { (char *)"StreamReader_read", _wrap_StreamReader_read, METH_VARARGS, (char *)"StreamReader_read(StreamReader self, long long data, long long size) -> sys::SSize_T"},
 	 { (char *)"StreamReader_swigregister", StreamReader_swigregister, METH_VARARGS, NULL},
-	 { (char *)"delete_FileReader", _wrap_delete_FileReader, METH_VARARGS, (char *)"delete_FileReader(FileReader self)"},
-	 { (char *)"new_FileReader", _wrap_new_FileReader, METH_VARARGS, (char *)"\n"
-		"FileReader()\n"
-		"FileReader(std::string const & file)\n"
-		"FileReader(io::FileInputStream * arg2, bool adopt=False)\n"
-		"new_FileReader(io::FileInputStream * arg2) -> FileReader\n"
-		""},
-	 { (char *)"FileReader_seek", _wrap_FileReader_seek, METH_VARARGS, (char *)"FileReader_seek(FileReader self, sys::Off_T offset, io::Seekable::Whence whence) -> sys::Off_T"},
-	 { (char *)"FileReader_tell", _wrap_FileReader_tell, METH_VARARGS, (char *)"FileReader_tell(FileReader self) -> sys::Off_T"},
-	 { (char *)"FileReader_killStream", _wrap_FileReader_killStream, METH_VARARGS, (char *)"FileReader_killStream(FileReader self)"},
-	 { (char *)"FileReader_swigregister", FileReader_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
-static void *_p_io__StringStreamTo_p_io__InputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((io::InputStream *) (io::BidirectionalStream *)(io::SeekableBidirectionalStream *) ((io::StringStream *) x));
-}
 static void *_p_io__FileInputStreamOSTo_p_io__InputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::InputStream *) (io::SeekableInputStream *) ((io::FileInputStreamOS *) x));
 }
 static void *_p_sio__lite__StreamReaderTo_p_io__InputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::InputStream *)  ((sio::lite::StreamReader *) x));
-}
-static void *_p_sio__lite__FileReaderTo_p_io__InputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((io::InputStream *) (sio::lite::StreamReader *) ((sio::lite::FileReader *) x));
 }
 static void *_p_io__BidirectionalStreamTo_p_io__InputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::InputStream *)  ((io::BidirectionalStream *) x));
@@ -8388,9 +6661,6 @@ static void *_p_io__SeekableBidirectionalStreamTo_p_io__InputStream(void *x, int
 }
 static void *_p_io__NullInputStreamTo_p_io__InputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::InputStream *)  ((io::NullInputStream *) x));
-}
-static void *_p_io__StringStreamTo_p_io__OutputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((io::OutputStream *) (io::BidirectionalStream *)(io::SeekableBidirectionalStream *) ((io::StringStream *) x));
 }
 static void *_p_io__FileOutputStreamOSTo_p_io__OutputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::OutputStream *) (io::SeekableOutputStream *) ((io::FileOutputStreamOS *) x));
@@ -8410,33 +6680,6 @@ static void *_p_io__NullOutputStreamTo_p_io__OutputStream(void *x, int *SWIGUNUS
 static void *_p_io__SeekableNullOutputStreamTo_p_io__OutputStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::OutputStream *) (io::SeekableOutputStream *) ((io::SeekableNullOutputStream *) x));
 }
-static void *_p_sio__lite__FileReaderTo_p_sio__lite__StreamReader(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((sio::lite::StreamReader *)  ((sio::lite::FileReader *) x));
-}
-static void *_p_io__StringStreamTo_p_io__Seekable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((io::Seekable *) (io::SeekableBidirectionalStream *) ((io::StringStream *) x));
-}
-static void *_p_io__FileInputStreamOSTo_p_io__Seekable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((io::Seekable *) (io::SeekableInputStream *) ((io::FileInputStreamOS *) x));
-}
-static void *_p_io__FileOutputStreamOSTo_p_io__Seekable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((io::Seekable *) (io::SeekableOutputStream *) ((io::FileOutputStreamOS *) x));
-}
-static void *_p_sio__lite__FileReaderTo_p_io__Seekable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((io::Seekable *)  ((sio::lite::FileReader *) x));
-}
-static void *_p_io__SeekableInputStreamTo_p_io__Seekable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((io::Seekable *)  ((io::SeekableInputStream *) x));
-}
-static void *_p_io__SeekableOutputStreamTo_p_io__Seekable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((io::Seekable *)  ((io::SeekableOutputStream *) x));
-}
-static void *_p_io__SeekableBidirectionalStreamTo_p_io__Seekable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((io::Seekable *)  ((io::SeekableBidirectionalStream *) x));
-}
-static void *_p_io__SeekableNullOutputStreamTo_p_io__Seekable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((io::Seekable *) (io::SeekableOutputStream *) ((io::SeekableNullOutputStream *) x));
-}
 static swig_type_info _swigt__p_char = {"_p_char", "char *|sys::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__NullPointerReferenceException = {"_p_except__NullPointerReferenceException", "except::NullPointerReferenceException *|except::NullPointerReference *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *|sys::Handle_T *", 0, 0, (void*)0, 0};
@@ -8444,9 +6687,7 @@ static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "sys::Int16_T *|int16_t
 static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "sys::Int32_T *|int32_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|int64_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "sys::Int8_T *|int8_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_io__FileInputStream = {"_p_io__FileInputStream", "io::FileInputStream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__InputStream = {"_p_io__InputStream", "io::InputStream *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_io__StringStream = {"_p_io__StringStream", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_io__FileInputStreamOS = {"_p_io__FileInputStreamOS", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_io__BidirectionalStream = {"_p_io__BidirectionalStream", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_io__SeekableInputStream = {"_p_io__SeekableInputStream", 0, 0, 0, 0, 0};
@@ -8457,18 +6698,18 @@ static swig_type_info _swigt__p_io__FileOutputStreamOS = {"_p_io__FileOutputStre
 static swig_type_info _swigt__p_io__SeekableOutputStream = {"_p_io__SeekableOutputStream", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_io__NullOutputStream = {"_p_io__NullOutputStream", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_io__SeekableNullOutputStream = {"_p_io__SeekableNullOutputStream", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_io__Seekable = {"_p_io__Seekable", "io::Seekable *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_io__StringStreamTT_coda_oss__u8string__value_type_t = {"_p_io__StringStreamTT_coda_oss__u8string__value_type_t", "io::U8StringStream *|io::StringStreamT< coda_oss::u8string::value_type > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_io__StringStreamTT_std__string__value_type_t = {"_p_io__StringStreamTT_std__string__value_type_t", "io::StringStream *|io::StringStreamT< std::string::value_type > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_io__StringStreamTT_str__W1252string__value_type_t = {"_p_io__StringStreamTT_str__W1252string__value_type_t", "io::W1252StringStream *|io::StringStreamT< str::W1252string::value_type > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|sys::Off_T *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_path = {"_p_path", "path *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_pid_t = {"_p_pid_t", "sys::Pid_T *|pid_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sio__lite__FileHeader = {"_p_sio__lite__FileHeader", "sio::lite::FileHeader *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_sio__lite__FileReader = {"_p_sio__lite__FileReader", "sio::lite::FileReader *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_sio__lite__FileWriter = {"_p_sio__lite__FileWriter", "sio::lite::FileWriter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sio__lite__StreamReader = {"_p_sio__lite__StreamReader", "sio::lite::StreamReader *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sio__lite__UserDataDictionary = {"_p_sio__lite__UserDataDictionary", "sio::lite::UserDataDictionary *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_char_t = {"_p_std__vectorT_char_t", "std::vector< sys::byte > *|std::vector< char > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_io__InputStream_p_t = {"_p_std__vectorT_io__InputStream_p_t", "std::vector< io::InputStream * > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_std__string_t = {"_p_std__vectorT_std__string_t", "std::vector< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "sys::Uint16_T *|uint16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "sys::Uint32_T *|uint32_t *", 0, 0, (void*)0, 0};
@@ -8485,30 +6726,28 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_int64_t,
   &_swigt__p_int8_t,
   &_swigt__p_io__BidirectionalStream,
-  &_swigt__p_io__FileInputStream,
   &_swigt__p_io__FileInputStreamOS,
   &_swigt__p_io__FileOutputStreamOS,
   &_swigt__p_io__InputStream,
   &_swigt__p_io__NullInputStream,
   &_swigt__p_io__NullOutputStream,
   &_swigt__p_io__OutputStream,
-  &_swigt__p_io__Seekable,
   &_swigt__p_io__SeekableBidirectionalStream,
   &_swigt__p_io__SeekableInputStream,
   &_swigt__p_io__SeekableNullOutputStream,
   &_swigt__p_io__SeekableOutputStream,
-  &_swigt__p_io__StringStream,
+  &_swigt__p_io__StringStreamTT_coda_oss__u8string__value_type_t,
+  &_swigt__p_io__StringStreamTT_std__string__value_type_t,
+  &_swigt__p_io__StringStreamTT_str__W1252string__value_type_t,
   &_swigt__p_off_t,
+  &_swigt__p_path,
   &_swigt__p_pid_t,
   &_swigt__p_sio__lite__FileHeader,
-  &_swigt__p_sio__lite__FileReader,
-  &_swigt__p_sio__lite__FileWriter,
   &_swigt__p_sio__lite__StreamReader,
   &_swigt__p_sio__lite__UserDataDictionary,
   &_swigt__p_size_t,
   &_swigt__p_ssize_t,
   &_swigt__p_std__vectorT_char_t,
-  &_swigt__p_std__vectorT_io__InputStream_p_t,
   &_swigt__p_std__vectorT_std__string_t,
   &_swigt__p_uint16_t,
   &_swigt__p_uint32_t,
@@ -8524,31 +6763,29 @@ static swig_cast_info _swigc__p_int16_t[] = {  {&_swigt__p_int16_t, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_int32_t[] = {  {&_swigt__p_int32_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int64_t[] = {  {&_swigt__p_int64_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int8_t[] = {  {&_swigt__p_int8_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_io__FileInputStream[] = {  {&_swigt__p_io__FileInputStream, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_io__StringStream[] = {{&_swigt__p_io__StringStream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__FileInputStreamOS[] = {{&_swigt__p_io__FileInputStreamOS, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__BidirectionalStream[] = {{&_swigt__p_io__BidirectionalStream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__SeekableInputStream[] = {{&_swigt__p_io__SeekableInputStream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__SeekableBidirectionalStream[] = {{&_swigt__p_io__SeekableBidirectionalStream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__NullInputStream[] = {{&_swigt__p_io__NullInputStream, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_io__InputStream[] = {  {&_swigt__p_io__StringStream, _p_io__StringStreamTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__FileInputStreamOS, _p_io__FileInputStreamOSTo_p_io__InputStream, 0, 0},  {&_swigt__p_sio__lite__StreamReader, _p_sio__lite__StreamReaderTo_p_io__InputStream, 0, 0},  {&_swigt__p_sio__lite__FileReader, _p_sio__lite__FileReaderTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__InputStream, 0, 0, 0},  {&_swigt__p_io__BidirectionalStream, _p_io__BidirectionalStreamTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__SeekableInputStream, _p_io__SeekableInputStreamTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__SeekableBidirectionalStream, _p_io__SeekableBidirectionalStreamTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__NullInputStream, _p_io__NullInputStreamTo_p_io__InputStream, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_io__InputStream[] = {  {&_swigt__p_io__FileInputStreamOS, _p_io__FileInputStreamOSTo_p_io__InputStream, 0, 0},  {&_swigt__p_sio__lite__StreamReader, _p_sio__lite__StreamReaderTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__InputStream, 0, 0, 0},  {&_swigt__p_io__BidirectionalStream, _p_io__BidirectionalStreamTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__SeekableInputStream, _p_io__SeekableInputStreamTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__SeekableBidirectionalStream, _p_io__SeekableBidirectionalStreamTo_p_io__InputStream, 0, 0},  {&_swigt__p_io__NullInputStream, _p_io__NullInputStreamTo_p_io__InputStream, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__FileOutputStreamOS[] = {{&_swigt__p_io__FileOutputStreamOS, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__SeekableOutputStream[] = {{&_swigt__p_io__SeekableOutputStream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__NullOutputStream[] = {{&_swigt__p_io__NullOutputStream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__SeekableNullOutputStream[] = {{&_swigt__p_io__SeekableNullOutputStream, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_io__OutputStream[] = {  {&_swigt__p_io__StringStream, _p_io__StringStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__FileOutputStreamOS, _p_io__FileOutputStreamOSTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__OutputStream, 0, 0, 0},  {&_swigt__p_io__BidirectionalStream, _p_io__BidirectionalStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableOutputStream, _p_io__SeekableOutputStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableBidirectionalStream, _p_io__SeekableBidirectionalStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__NullOutputStream, _p_io__NullOutputStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableNullOutputStream, _p_io__SeekableNullOutputStreamTo_p_io__OutputStream, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_io__Seekable[] = {  {&_swigt__p_io__StringStream, _p_io__StringStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__FileInputStreamOS, _p_io__FileInputStreamOSTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__FileOutputStreamOS, _p_io__FileOutputStreamOSTo_p_io__Seekable, 0, 0},  {&_swigt__p_sio__lite__FileReader, _p_sio__lite__FileReaderTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__Seekable, 0, 0, 0},  {&_swigt__p_io__SeekableInputStream, _p_io__SeekableInputStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__SeekableOutputStream, _p_io__SeekableOutputStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__SeekableBidirectionalStream, _p_io__SeekableBidirectionalStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__SeekableNullOutputStream, _p_io__SeekableNullOutputStreamTo_p_io__Seekable, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_io__OutputStream[] = {  {&_swigt__p_io__FileOutputStreamOS, _p_io__FileOutputStreamOSTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__OutputStream, 0, 0, 0},  {&_swigt__p_io__BidirectionalStream, _p_io__BidirectionalStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableOutputStream, _p_io__SeekableOutputStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableBidirectionalStream, _p_io__SeekableBidirectionalStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__NullOutputStream, _p_io__NullOutputStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableNullOutputStream, _p_io__SeekableNullOutputStreamTo_p_io__OutputStream, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_io__StringStreamTT_coda_oss__u8string__value_type_t[] = {  {&_swigt__p_io__StringStreamTT_coda_oss__u8string__value_type_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_io__StringStreamTT_std__string__value_type_t[] = {  {&_swigt__p_io__StringStreamTT_std__string__value_type_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_io__StringStreamTT_str__W1252string__value_type_t[] = {  {&_swigt__p_io__StringStreamTT_str__W1252string__value_type_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_off_t[] = {  {&_swigt__p_off_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_path[] = {  {&_swigt__p_path, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_pid_t[] = {  {&_swigt__p_pid_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sio__lite__FileHeader[] = {  {&_swigt__p_sio__lite__FileHeader, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_sio__lite__FileReader[] = {  {&_swigt__p_sio__lite__FileReader, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_sio__lite__FileWriter[] = {  {&_swigt__p_sio__lite__FileWriter, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_sio__lite__StreamReader[] = {  {&_swigt__p_sio__lite__StreamReader, 0, 0, 0},  {&_swigt__p_sio__lite__FileReader, _p_sio__lite__FileReaderTo_p_sio__lite__StreamReader, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_sio__lite__StreamReader[] = {  {&_swigt__p_sio__lite__StreamReader, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sio__lite__UserDataDictionary[] = {  {&_swigt__p_sio__lite__UserDataDictionary, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_char_t[] = {  {&_swigt__p_std__vectorT_char_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_io__InputStream_p_t[] = {  {&_swigt__p_std__vectorT_io__InputStream_p_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_std__string_t[] = {  {&_swigt__p_std__vectorT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_uint16_t[] = {  {&_swigt__p_uint16_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_uint32_t[] = {  {&_swigt__p_uint32_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -8565,30 +6802,28 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_int64_t,
   _swigc__p_int8_t,
   _swigc__p_io__BidirectionalStream,
-  _swigc__p_io__FileInputStream,
   _swigc__p_io__FileInputStreamOS,
   _swigc__p_io__FileOutputStreamOS,
   _swigc__p_io__InputStream,
   _swigc__p_io__NullInputStream,
   _swigc__p_io__NullOutputStream,
   _swigc__p_io__OutputStream,
-  _swigc__p_io__Seekable,
   _swigc__p_io__SeekableBidirectionalStream,
   _swigc__p_io__SeekableInputStream,
   _swigc__p_io__SeekableNullOutputStream,
   _swigc__p_io__SeekableOutputStream,
-  _swigc__p_io__StringStream,
+  _swigc__p_io__StringStreamTT_coda_oss__u8string__value_type_t,
+  _swigc__p_io__StringStreamTT_std__string__value_type_t,
+  _swigc__p_io__StringStreamTT_str__W1252string__value_type_t,
   _swigc__p_off_t,
+  _swigc__p_path,
   _swigc__p_pid_t,
   _swigc__p_sio__lite__FileHeader,
-  _swigc__p_sio__lite__FileReader,
-  _swigc__p_sio__lite__FileWriter,
   _swigc__p_sio__lite__StreamReader,
   _swigc__p_sio__lite__UserDataDictionary,
   _swigc__p_size_t,
   _swigc__p_ssize_t,
   _swigc__p_std__vectorT_char_t,
-  _swigc__p_std__vectorT_io__InputStream_p_t,
   _swigc__p_std__vectorT_std__string_t,
   _swigc__p_uint16_t,
   _swigc__p_uint32_t,
@@ -9294,7 +7529,6 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "FileHeader_N_BYTE_UNSIGNED",SWIG_From_int(static_cast< int >(sio::lite::FileHeader::N_BYTE_UNSIGNED)));
   SWIG_Python_SetConstant(d, "FileHeader_N_BYTE_SIGNED",SWIG_From_int(static_cast< int >(sio::lite::FileHeader::N_BYTE_SIGNED)));
   SWIG_Python_SetConstant(d, "FileHeader_BASIC_HEADER_LENGTH",SWIG_From_size_t(static_cast< size_t >(sio::lite::FileHeader::BASIC_HEADER_LENGTH)));
-  SWIG_Python_SetConstant(d, "AUTO",SWIG_From_int(static_cast< int >(sio::lite::AUTO)));
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else

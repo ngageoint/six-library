@@ -22,8 +22,8 @@
 
 #include "nitf/LookupTable.h"
 
-NITFAPI(nitf_LookupTable *) nitf_LookupTable_construct(nitf_Uint32 tables,
-        nitf_Uint32 entries,
+NITFAPI(nitf_LookupTable *) nitf_LookupTable_construct(uint32_t tables,
+        uint32_t entries,
         nitf_Error * error)
 {
     nitf_LookupTable *lt = NULL;
@@ -49,6 +49,11 @@ NITFAPI(nitf_LookupTable *) nitf_LookupTable_construct(nitf_Uint32 tables,
     return lt;
 }
 
+static size_t nitf_LookupTable_size(uint32_t numTables, uint32_t numEntries)
+{
+    const size_t sz = ((size_t)numTables) * numEntries;
+    return sz;
+}
 
 NITFAPI(nitf_LookupTable *) nitf_LookupTable_clone(nitf_LookupTable *
         donor,
@@ -64,7 +69,7 @@ NITFAPI(nitf_LookupTable *) nitf_LookupTable_clone(nitf_LookupTable *
                          "Trying to clone NULL pointer");
         return NULL;
     }
-    if (!(donor->tables * donor->entries))
+    if (!(donor->tables && donor->entries))
     {
         nitf_Error_initf(error,
                          NITF_CTXT,
@@ -83,7 +88,7 @@ NITFAPI(nitf_LookupTable *) nitf_LookupTable_clone(nitf_LookupTable *
     lt = nitf_LookupTable_construct(donor->tables, donor->entries, error);
     if (lt)
     {
-        memcpy(lt->table, donor->table, (donor->tables * donor->entries));
+        memcpy(lt->table, donor->table, nitf_LookupTable_size(donor->tables, donor->entries));
     }
     return lt;
 }
@@ -102,10 +107,9 @@ NITFAPI(void) nitf_LookupTable_destruct(nitf_LookupTable ** lt)
     }
 }
 
-
 NITFAPI(NITF_BOOL) nitf_LookupTable_init(nitf_LookupTable * lut,
-        nitf_Uint32 numTables,
-        nitf_Uint32 numEntries,
+        uint32_t numTables,
+        uint32_t numEntries,
         const NITF_DATA * tables,
         nitf_Error * error)
 {
@@ -125,7 +129,7 @@ NITFAPI(NITF_BOOL) nitf_LookupTable_init(nitf_LookupTable * lut,
     {
         if (!lut->table)
         {
-            lut->table = (nitf_Uint8 *) NITF_MALLOC(numTables * numEntries);
+            lut->table = (uint8_t *) NITF_MALLOC(nitf_LookupTable_size(numTables, numEntries));
             if (!lut->table)
             {
                 nitf_Error_initf(error, NITF_CTXT,
@@ -138,7 +142,7 @@ NITFAPI(NITF_BOOL) nitf_LookupTable_init(nitf_LookupTable * lut,
         /* only copy if one existed */
         if (tables)
         {
-            memcpy(lut->table, tables, numTables * numEntries);
+            memcpy(lut->table, tables, nitf_LookupTable_size(numTables, numEntries));
         }
     }
     else

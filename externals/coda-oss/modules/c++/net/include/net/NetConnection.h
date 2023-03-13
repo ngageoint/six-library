@@ -22,6 +22,9 @@
 
 #ifndef __NET_CONNECTION_H__
 #define __NET_CONNECTION_H__
+#pragma once
+
+#include <memory>
 
 #include "net/Socket.h"
 #include "io/BidirectionalStream.h"
@@ -59,8 +62,12 @@ public:
     {}
 
     //! we own the ptr after this transaction
-    NetConnection(std::auto_ptr<net::Socket> socket) : mSocket(socket)
+    NetConnection(std::unique_ptr<net::Socket>&& socket) : mSocket(socket.release())
     {}
+    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
+    NetConnection(mem::auto_ptr<net::Socket> socket) : mSocket(socket.release())
+    {}
+    #endif
 
     /*!
      *  Copy constructor
@@ -122,7 +129,7 @@ public:
      *  Get the socket by constant reference
      *  \return The socket
      */
-    mem::SharedPtr<net::Socket> getSocket() const
+    std::shared_ptr<net::Socket> getSocket() const
     {
         return mSocket;
     }
@@ -151,7 +158,7 @@ protected:
     virtual sys::SSize_T readImpl(void* buffer, size_t len);
 
     //! The socket
-    mem::SharedPtr<net::Socket> mSocket;
+    std::shared_ptr<net::Socket> mSocket;
 };
 
 }

@@ -51,9 +51,8 @@ namespace mt
  *  }
  *  \endcode
  */
-template <typename T> class CriticalSection
+template <typename T> struct CriticalSection
 {
-public:
     //!  Constructor.  Lock the mutex.
     CriticalSection(T* mutex) :
         mMutex(mutex),
@@ -92,10 +91,8 @@ public:
         mIsLocked = true;
     }
 
-private:
-    // Noncopyable
-    CriticalSection(const CriticalSection& );
-    const CriticalSection& operator=(const CriticalSection& );
+    CriticalSection(const CriticalSection&) = delete;
+    CriticalSection& operator=(const CriticalSection&) = delete;
 
 private:
     T* const mMutex;

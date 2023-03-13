@@ -22,6 +22,7 @@
 
 #ifndef __NITF_RESUBHEADER_HPP__
 #define __NITF_RESUBHEADER_HPP__
+#pragma once
 
 #include "nitf/RESubheader.h"
 #include "nitf/Object.hpp"
@@ -56,45 +57,45 @@ public:
     RESubheader(nitf_RESubheader * x);
 
      //! Constructor
-    RESubheader();
+    RESubheader() noexcept(false);
 
     //! Clone
-    nitf::RESubheader clone();
+    nitf::RESubheader clone() const;
 
-    ~RESubheader();
+    ~RESubheader() = default;
 
     //! Get the filePartType
-    nitf::Field getFilePartType();
+    nitf::Field getFilePartType() const;
 
     //! Get the typeID
-    nitf::Field getTypeID();
+    nitf::Field getTypeID() const;
 
     //! Get the version
-    nitf::Field getVersion();
+    nitf::Field getVersion() const;
 
     //! Get the securityClass
-    nitf::Field getSecurityClass();
+    nitf::Field getSecurityClass() const;
 
     //! Get the securityGroup
-    nitf::FileSecurity getSecurityGroup();
+    nitf::FileSecurity getSecurityGroup() const;
 
     //! Set the securityGroup
     void setSecurityGroup(nitf::FileSecurity value);
 
     //! Get the subheaderFieldsLength
-    nitf::Field getSubheaderFieldsLength();
+    nitf::Field getSubheaderFieldsLength() const;
 
     //! Get the subheaderFields
     char * getSubheaderFields() const;
 
     //! Get the dataLength
-    nitf::Uint64 getDataLength() const;
+    uint64_t getDataLength() const;
 
     //! Set the dataLength
-    void setDataLength(nitf::Uint32 value);
+    void setDataLength(uint32_t value);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

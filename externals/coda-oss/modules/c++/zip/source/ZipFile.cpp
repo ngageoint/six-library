@@ -87,7 +87,6 @@ void ZipFile::readCentralDir()
         throw except::IOException(Ctxt(
                 "stream source too small to be a zip stream"));
     sys::ubyte* start;
-    sys::ubyte* eocd;
 
     if (mCompressedLength > MAX_EOCD_SEARCH)
     {
@@ -99,7 +98,8 @@ void ZipFile::readCentralDir()
     }
     sys::ubyte* p = mCompressed + mCompressedLength - 4;
 
-    int i = mCompressedLength - 4;
+    sys::ubyte* eocd = nullptr;
+    auto i = mCompressedLength - 4;
     while (p >= start)
     {
         if (*p == 0x50)
@@ -121,10 +121,10 @@ void ZipFile::readCentralDir()
     readCentralDirValues(eocd, (mCompressed + mCompressedLength) - eocd);
 
     p = mCompressed + mCentralDirOffset;
-    sys::SSize_T len = (mCompressed + mCompressedLength) - p;
-    for (unsigned int i = 0; i < mEntries.size(); ++i)
+    const sys::SSize_T len = (mCompressed + mCompressedLength) - p;
+    for (auto& entry : mEntries)
     {
-        mEntries[i] = newCentralDirEntry(&p, len);
+        entry = newCentralDirEntry(&p, len);
     }
 
 }
@@ -157,7 +157,7 @@ ZipEntry* ZipFile::newCentralDirEntry(sys::ubyte** buf, sys::SSize_T len)
     sys::Uint16_T fileCommentLength = Z_READ_SHORT_INC(p, off);
     Z_READ_SHORT_INC(p, off); // skipping diskNumberStart
     sys::Uint16_T internalAttrs = Z_READ_SHORT_INC(p, off);
-    sys::Uint16_T externalAttrs = Z_READ_INT_INC(p, off);
+    auto externalAttrs = Z_READ_INT_INC(p, off);
     sys::Uint32_T localHeaderRelOffset = readInt(&p[off]);
     p += ENTRY_LEN;
 

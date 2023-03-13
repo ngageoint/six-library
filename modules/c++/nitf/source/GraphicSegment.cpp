@@ -26,7 +26,7 @@ using namespace nitf;
 
 GraphicSegment::GraphicSegment(const GraphicSegment & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 GraphicSegment & GraphicSegment::operator=(const GraphicSegment & x)
@@ -44,38 +44,33 @@ GraphicSegment::GraphicSegment(nitf_GraphicSegment * x)
 }
 
 
-GraphicSegment::GraphicSegment()
+GraphicSegment::GraphicSegment() noexcept(false)  : GraphicSegment(nitf_GraphicSegment_construct(&error))
 {
-    setNative(nitf_GraphicSegment_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
 GraphicSegment::GraphicSegment(NITF_DATA * x)
 {
-    setNative((nitf_GraphicSegment*)x);
-    getNativeOrThrow();
+    *this = x;
 }
 
 GraphicSegment & GraphicSegment::operator=(NITF_DATA * x)
 {
-    setNative((nitf_GraphicSegment*)x);
+    setNative(static_cast<nitf_GraphicSegment*>(x));
     getNativeOrThrow();
     return *this;
 }
 
 
-nitf::GraphicSegment GraphicSegment::clone()
+nitf::GraphicSegment GraphicSegment::clone() const
 {
     nitf::GraphicSegment dolly(nitf_GraphicSegment_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
     return dolly;
 }
 
-GraphicSegment::~GraphicSegment(){}
 
-
-nitf::GraphicSubheader GraphicSegment::getSubheader()
+nitf::GraphicSubheader GraphicSegment::getSubheader() const
 {
     return nitf::GraphicSubheader(getNativeOrThrow()->subheader);
 }
@@ -91,22 +86,22 @@ void GraphicSegment::setSubheader(nitf::GraphicSubheader & value)
     value.setManaged(true);
 }
 
-nitf::Uint64 GraphicSegment::getOffset() const
+uint64_t GraphicSegment::getOffset() const
 {
     return getNativeOrThrow()->offset;
 }
 
-void GraphicSegment::setOffset(nitf::Uint64 value)
+void GraphicSegment::setOffset(uint64_t value)
 {
     getNativeOrThrow()->offset = value;
 }
 
-nitf::Uint64 GraphicSegment::getEnd() const
+uint64_t GraphicSegment::getEnd() const
 {
     return getNativeOrThrow()->end;
 }
 
-void GraphicSegment::setEnd(nitf::Uint64 value)
+void GraphicSegment::setEnd(uint64_t value)
 {
     getNativeOrThrow()->end = value;
 }

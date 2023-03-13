@@ -22,13 +22,24 @@
 
 #ifndef __IMPORT_NITF_HPP__
 #define __IMPORT_NITF_HPP__
+#pragma once
+
+#include "nitf/exports.hpp"
+#if NITRO_NITFCPP_EXPORTS
+	// use the files in nitf/ directly
+	#pragma error "Do not #include this file when building a DLL/so."
+#endif
+
+#include "nitf/coda-oss.hpp"
 
 #include "nitf/BandInfo.hpp"
 #include "nitf/BandSource.hpp"
 #include "nitf/BlockingInfo.hpp"
 #include "nitf/BufferedReader.hpp"
 #include "nitf/BufferedWriter.hpp"
+#include "nitf/ByteProvider.hpp"
 #include "nitf/ComponentInfo.hpp"
+#include "nitf/CompressedByteProvider.hpp"
 #include "nitf/DataSource.hpp"
 #include "nitf/DateTime.hpp"
 #include "nitf/DESegment.hpp"
@@ -47,8 +58,10 @@
 #include "nitf/IOInterface.hpp"
 #include "nitf/IOHandle.hpp"
 #include "nitf/IOStreamReader.hpp"
+#include "nitf/ImageBlocker.hpp"
 #include "nitf/ImageReader.hpp"
 #include "nitf/ImageSegment.hpp"
+#include "nitf/ImageSegmentComputer.h"
 #include "nitf/ImageSource.hpp"
 #include "nitf/ImageSubheader.hpp"
 #include "nitf/ImageWriter.hpp"
@@ -57,6 +70,7 @@
 #include "nitf/List.hpp"
 #include "nitf/LookupTable.hpp"
 #include "nitf/MemoryIO.hpp"
+#include "nitf/NITFBufferList.hpp"
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/Pair.hpp"
@@ -77,5 +91,6 @@
 #include "nitf/WriteHandler.hpp"
 #include "nitf/Writer.hpp"
 #include "nitf/WriterOptions.hpp"
+#include "nitf/Version.hpp"
 
 #endif

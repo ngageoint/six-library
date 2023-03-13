@@ -62,23 +62,17 @@ Reader::Reader(nitf_Reader * x)
     getNativeOrThrow();
 }
 
-Reader::Reader()
+Reader::Reader() noexcept(false) : Reader(nitf_Reader_construct(&error))
 {
-    setNative(nitf_Reader_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
-Reader::~Reader()
-{
-}
-
-nitf::Version Reader::getNITFVersion(const std::string& fileName)
+nitf::Version Reader::getNITFVersion(const std::string& fileName) noexcept
 {
     return nitf_Reader_getNITFVersion(fileName.c_str());
 }
 
-nitf::Version Reader::getNITFVersion(IOInterface& io)
+nitf::Version Reader::getNITFVersion(const IOInterface& io)
 {
     return nitf_Reader_getNITFVersionIO(io.getNativeOrThrow());
 }
@@ -125,7 +119,7 @@ nitf::ImageReader Reader::newImageReader(int imageSegmentNumber)
 {
     nitf_ImageReader * x = nitf_Reader_newImageReader(getNativeOrThrow(),
                                                       imageSegmentNumber,
-                                                      NULL, &error);
+                                                      nullptr, &error);
     if (!x)
         throw nitf::NITFException(&error);
 
@@ -140,7 +134,7 @@ nitf::ImageReader Reader::newImageReader(int imageSegmentNumber,
                                          const std::map<std::string, void*>& options)
 {
     nitf::HashTable userOptions;
-    nrt_HashTable* userOptionsNative = NULL;
+    nrt_HashTable* userOptionsNative = nullptr;
 
     if (!options.empty())
     {

@@ -43,30 +43,30 @@
 
 /*! \def NITF_IMAGE_IO_NO_OFFSET - No block/mask offset */
 
-#define NITF_IMAGE_IO_NO_OFFSET      ((nitf_Uint32) 0xffffffff)
+#define NITF_IMAGE_IO_NO_OFFSET      ((uint32_t) 0xffffffff)
 
 /*! \def NITF_NBPP_TO_BYTES  - Compute bytes per pixel from NBPP field */
 
-#define NITF_NBPP_TO_BYTES(nbpp) ((((int) (nbpp)) - 1)/8 + 1)
+#define NITF_NBPP_TO_BYTES(nbpp) ((((int64_t) (nbpp)) - 1)/8 + 1)
 
 /*! \def NITF_IMAGE_IO_PIXEL_TYPE_INT - Integer */
-#define NITF_IMAGE_IO_PIXEL_TYPE_INT ((nitf_Uint32) 0x00080000)
+#define NITF_IMAGE_IO_PIXEL_TYPE_INT ((uint32_t) 0x00080000)
 
 /*! \def NITF_IMAGE_IO_PIXEL_TYPE_B - Bi-valued */
-#define NITF_IMAGE_IO_PIXEL_TYPE_B ((nitf_Uint32) 0x00100000)
+#define NITF_IMAGE_IO_PIXEL_TYPE_B ((uint32_t) 0x00100000)
 
 /*! \def NITF_IMAGE_IO_PIXEL_TYPE_SI - Two's complement signed integer */
-#define NITF_IMAGE_IO_PIXEL_TYPE_SI ((nitf_Uint32) 0x00200000)
+#define NITF_IMAGE_IO_PIXEL_TYPE_SI ((uint32_t) 0x00200000)
 
 /*! \def NITF_IMAGE_IO_PIXEL_TYPE_R - Floating point */
-#define NITF_IMAGE_IO_PIXEL_TYPE_R ((nitf_Uint32) 0x00400000)
+#define NITF_IMAGE_IO_PIXEL_TYPE_R ((uint32_t) 0x00400000)
 
 /*! \def NITF_IMAGE_IO_PIXEL_TYPE_C - Complex floating point */
-#define NITF_IMAGE_IO_PIXEL_TYPE_C ((nitf_Uint32) 0x00800000)
+#define NITF_IMAGE_IO_PIXEL_TYPE_C ((uint32_t) 0x00800000)
 
 /* Psuedo type for 12 bit integer (NBPP == 12 and ABPP = 12) */
 /*! \def NITF_IMAGE_IO_PIXEL_TYPE_12 - 12 bit integer signed or unsigned */
-#define NITF_IMAGE_IO_PIXEL_TYPE_12 ((nitf_Uint32) 0x01000000)
+#define NITF_IMAGE_IO_PIXEL_TYPE_12 ((uint32_t) 0x01000000)
 
 NITF_CXX_GUARD
 
@@ -92,10 +92,10 @@ typedef void nitf_ImageIO;
 
 typedef struct _nitf_BlockingInfo
 {
-    nitf_Uint32 numBlocksPerRow;        /*!< Number of blocks per row */
-    nitf_Uint32 numBlocksPerCol;        /*!< Number of blocks per column */
-    nitf_Uint32 numRowsPerBlock;        /*!< Number of rows per block */
-    nitf_Uint32 numColsPerBlock;        /*!< Number of columns per block */
+    uint32_t numBlocksPerRow;        /*!< Number of blocks per row */
+    uint32_t numBlocksPerCol;        /*!< Number of blocks per column */
+    uint32_t numRowsPerBlock;        /*!< Number of rows per block */
+    uint32_t numColsPerBlock;        /*!< Number of columns per block */
     size_t length;                      /*!< Total block length in bytes */
 }
 nitf_BlockingInfo;
@@ -227,8 +227,8 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeDone(nitf_ImageIO * object,
 
 NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,
                                            nitf_IOInterface* io,
-                                           nitf_Uint32 numRows,
-                                           nitf_Uint8 ** data,
+                                           uint32_t numRows,
+                                           uint8_t ** data,
                                            nitf_Error * error
                                           );
 
@@ -277,8 +277,8 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_flush(nitf_ImageIO * object,
 
 NITFPROT(NITF_BOOL)
 nitf_ImageIO_setPadPixel(nitf_ImageIO * object,
-                         nitf_Uint8 * value,
-                         nitf_Uint32 length,
+                         uint8_t * value,
+                         uint32_t length,
                          nitf_Error* error
     );
 
@@ -357,9 +357,9 @@ typedef nitf_CompressionControl *
 typedef NITF_BOOL
 (*NITF_COMPRESSION_INTERFACE_START_FUNCTION)
 (nitf_CompressionControl *object,
- nitf_Uint64 offset,nitf_Uint64 dataLength,
- nitf_Uint64 * blockMask,
- nitf_Uint64 * padMask, nitf_Error * error);
+ uint64_t offset,uint64_t dataLength,
+ uint64_t * blockMask,
+ uint64_t * padMask, nitf_Error * error);
 
 /*!
     \brief NITF_COMPRESSION_INTERFACE_WRITE_BLOCK_FUNCTION - Image
@@ -385,7 +385,7 @@ typedef NITF_BOOL
 */
 
 typedef NITF_BOOL (*NITF_COMPRESSION_INTERFACE_WRITE_BLOCK_FUNCTION)
-(nitf_CompressionControl * object, nitf_IOInterface* io,const nitf_Uint8 *data,
+(nitf_CompressionControl * object, nitf_IOInterface* io,const uint8_t *data,
     NITF_BOOL pad,NITF_BOOL noData,nitf_Error *error);
 
 /*!
@@ -482,10 +482,10 @@ typedef NITF_BOOL
 (*NITF_DECOMPRESSION_INTERFACE_START_FUNCTION)
 (nitf_DecompressionControl *object,
  nitf_IOInterface* io,
- nitf_Uint64 offset,
- nitf_Uint64 fileLength,
+ uint64_t offset,
+ uint64_t fileLength,
  nitf_BlockingInfo * blockingDefinition,
- nitf_Uint64 * blockMask, nitf_Error * error);
+ uint64_t * blockMask, nitf_Error * error);
 
  /*!
     \brief NITF_DECOMPRESSION_INTERFACE_READ_BLOCK_FUNCTION - Image
@@ -507,9 +507,9 @@ typedef NITF_BOOL
   On error, the error object is set
 */
 
-typedef nitf_Uint8 *(*NITF_DECOMPRESSION_INTERFACE_READ_BLOCK_FUNCTION)
+typedef uint8_t *(*NITF_DECOMPRESSION_INTERFACE_READ_BLOCK_FUNCTION)
 (nitf_DecompressionControl * object,
- nitf_Uint32 blockNumber, nitf_Uint64* blockSize, nitf_Error * error);
+ uint32_t blockNumber, uint64_t* blockSize, nitf_Error * error);
 
 /*!
     \brief NITF_DECOMPRESSION_INTERFACE_FREE_BLOCK_FUNCTION - Image
@@ -530,7 +530,7 @@ typedef nitf_Uint8 *(*NITF_DECOMPRESSION_INTERFACE_READ_BLOCK_FUNCTION)
 
 typedef NITF_BOOL(*NITF_DECOMPRESSION_INTERFACE_FREE_BLOCK_FUNCTION)
 (nitf_DecompressionControl * object,
- nitf_Uint8 * block, nitf_Error * error);
+ uint8_t * block, nitf_Error * error);
 
 /*!
     \brief NITF_DECOMPRESSION_CONTROL_DESTROY_FUNCTION - Image decompression
@@ -636,13 +636,13 @@ nitf_DecompressionInterface;
 typedef int (*NITF_DOWN_SAMPLE_FUNCTION) (void *input,
                                           void *output,
                                           void *parameters,
-                                          nitf_Uint32 numWindowRows,
-                                          nitf_Uint32 numWindowCols,
+                                          uint32_t numWindowRows,
+                                          uint32_t numWindowCols,
                                           nitf_SubWindow * subWindow,
-                                          nitf_Uint32 pixelType,
-                                          nitf_Uint32 pixelSize,
-                                          nitf_Uint32 rowsInLastWindow,
-                                          nitf_Uint32 colsInLastWindow,
+                                          uint32_t pixelType,
+                                          uint32_t pixelSize,
+                                          uint32_t rowsInLastWindow,
+                                          uint32_t colsInLastWindow,
                                           nitf_Error * error);
 /*!
   \brief Constructor for the nitf_ImageIO object
@@ -688,8 +688,8 @@ typedef int (*NITF_DOWN_SAMPLE_FUNCTION) (void *input,
 
 NITFPROT(nitf_ImageIO *)
 nitf_ImageIO_construct(nitf_ImageSubheader * subheader,
-                       nitf_Uint64 offset,
-                       nitf_Uint64 length,
+                       uint64_t offset,
+                       uint64_t length,
                        nitf_CompressionInterface * compressor,
                        nitf_DecompressionInterface * decompressor,
                        nrt_HashTable* options,
@@ -768,7 +768,7 @@ NITFPROT(void) nitf_ImageIO_destruct(nitf_ImageIO ** nitf);
 NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,
                                       nitf_IOInterface* io,
                                       nitf_SubWindow * subWindow,
-                                      nitf_Uint8 ** user,
+                                      uint8_t ** user,
                                       int *padded,
                                       nitf_Error * error
                                      );
@@ -782,7 +782,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,
   \return Returns pixel size in bytes
 */
 
-NITFPROT(nitf_Uint32) nitf_ImageIO_pixelSize(nitf_ImageIO * nitf);
+NITFPROT(uint32_t) nitf_ImageIO_pixelSize(nitf_ImageIO * nitf);
 
 /*!
   \brief  nitf_ImageIO_setFileOffset
@@ -803,7 +803,7 @@ NITFPROT(nitf_Uint32) nitf_ImageIO_pixelSize(nitf_ImageIO * nitf);
 */
 
 NITFPROT(NITF_BOOL) nitf_ImageIO_setFileOffset(nitf_ImageIO * nitf,
-                                               nitf_Uint64 offset,
+                                               uint64_t offset,
                                                nitf_Error * error
                                               );
 
@@ -888,7 +888,7 @@ NITFPROT(void) nitf_BlockingInfo_print(nitf_BlockingInfo * info,  /*!< The struc
  */
 NITFPROT(NITF_BOOL) nitf_ImageIO_setupDirectBlockRead(nitf_ImageIO *nitf,
                                                       nitf_IOInterface *io,
-                                                      nitf_Uint32 numBands,
+                                                      uint32_t numBands,
                                                       nitf_Error *error);
 
 /*!
@@ -903,10 +903,10 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_setupDirectBlockRead(nitf_ImageIO *nitf,
   \param blockSize    The block size read
   \param error        Error object
  */
-NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
+NITFPROT(uint8_t*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
                                                    nitf_IOInterface* io,
-                                                   nitf_Uint32 blockNumber,
-                                                   nitf_Uint64* blockSize,
+                                                   uint32_t blockNumber,
+                                                   uint64_t* blockSize,
                                                    nitf_Error * error);
 
 /*!
@@ -921,7 +921,7 @@ NITFPROT(nitf_Uint8*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
 NITFPROT(NRT_BOOL) nitf_ImageIO_writeBlockDirect(nitf_ImageIO* object,
                                                  nitf_IOInterface* io,
                                                  const void* buffer,
-                                                 nitf_Uint32 blockNumber,
+                                                 uint32_t blockNumber,
                                                  nitf_Error * error);
 
 NITF_CXX_ENDGUARD

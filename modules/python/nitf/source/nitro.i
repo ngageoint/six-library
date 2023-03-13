@@ -56,8 +56,8 @@
     }
 
 
-%typemap(out) nitf_Uint32, nitf_Int32{$result = PyInt_FromLong($1);}
-%typemap(in) nitf_Uint32{$1 = (nitf_Uint32)PyInt_AsLong($input);}
+%typemap(out) uint32_t, int32_t{$result = PyInt_FromLong($1);}
+%typemap(in) uint32_t{$1 = (uint32_t)PyInt_AsLong($input);}
 %typemap(out) nitf_Off{$result = PyLong_FromLong($1);}
 %typemap(in) nitf_Off{$1 = (nitf_Off)PyLong_AsLong($input);}
 
@@ -189,7 +189,7 @@
 }
 
 
-%typemap(out) nitf_Uint8 {$result = SWIG_From_char((char)($1));}
+%typemap(out) uint8_t {$result = SWIG_From_char((char)($1));}
 
 /* NRT_FILE is supposed to expand to the current source file during
  * preprocessing (and similar with the other ignored values below).
@@ -231,6 +231,7 @@
 %include "nitf/PluginRegistry.h"
 /* warning list */
 %typemap(out) nitf_List* {	NITF_LIST_TO_PYTHON_LIST(nitf_FieldWarning) }
+// for whatever reason, Reader and Writer don't expand properly?
 %include "nitf/Reader.h"
 %include "nitf/Writer.h"
 %include "nitf/Record.h"
@@ -274,6 +275,9 @@
 %include "nitf/DownSampler.h"
 %include "nitf/SegmentSource.h"
 %include "nitf/BandInfo.h"
+
+%include "nitf/NitfWriter.h"
+%include "nitf/NitfReader.h"
 
 %clearnodefaultctor;   // Re-enable default constructors
 
@@ -350,7 +354,18 @@
 
 %}
 
-
+%typemap(in) (char* pfsrd_buf) {
+    if ($input)
+    {
+        char *buffer;
+        Py_ssize_t outlength;
+        if(PyBytes_AsStringAndSize($input,&buffer,&outlength) == -1) {
+            SWIG_fail;
+        }
+        $1 = buffer;
+        //$2 = outlength;
+    }
+}
 // Field
 %inline %{
 
@@ -364,9 +379,9 @@
         return buf;
     }
 
-    nitf_Uint32 py_Field_getInt(nitf_Field *field, nitf_Error *error)
+    uint32_t py_Field_getInt(nitf_Field *field, nitf_Error *error)
     {
-        nitf_Uint32 intVal;
+        uint32_t intVal;
         NITF_TRY_GET_UINT32(field, &intVal, error);
         return intVal;
 
@@ -375,14 +390,24 @@
         return 0;
     }
 
-    void py_Field_setRawData(nitf_Field *field, char* buf, int length,  nitf_Error *error)
+    void py_Field_setRawData(nitf_Field *field, char* pfsrd_buf, int length,  nitf_Error *error)
     {
-        nitf_Field_setRawData(field, (NITF_DATA*)buf, length, error);
+        nitf_Field_setRawData(field, (NITF_DATA*)pfsrd_buf, length, error);
     }
 
     void py_TRE_setField(nitf_TRE *tre, const char* tag, char* buf, int length, nitf_Error *error)
     {
         nitf_TRE_setField(tre, tag, (NITF_DATA*)buf, length, error);
+    }
+
+    PyObject* py_Field_getRawData(nitf_Field *field, nitf_Error *error)
+    {
+        return PyBytes_FromStringAndSize(field->raw, field->length);
+    }
+
+    nitf_TRE *py_TRE_clone(nitf_TRE *tre, nitf_Error *error)
+    {
+        return nitf_TRE_clone(tre, error);
     }
 
 %}
@@ -470,6 +495,7 @@
     {
         return nitf_Record_getVersion(record);
     }
+
 %}
 
 
@@ -478,7 +504,7 @@
 
     nitf_ComponentInfo* py_FileHeader_getComponentInfo(nitf_FileHeader* header, int index, char* type, nitf_Error* error)
     {
-        nitf_Uint32 num;
+        uint32_t num;
 
         if (!type)
         	goto CATCH_ERROR;
@@ -525,6 +551,17 @@
     }
 %}
 
+// PluginRegistry wrapper functions
+%inline %{
+
+    bool py_nitf_PluginRegistry_canRetrieveTREHandler(nitf_PluginRegistry * reg, const char *ident, nitf_Error * error)
+    {
+        int had_error;
+        nitf_TREHandler *result = nitf_PluginRegistry_retrieveTREHandler(reg, ident, &had_error, error);
+        if (had_error) { return false; }
+        else { return (result != NULL); }
+    }
+%}
 
 
 %inline %{
@@ -533,6 +570,21 @@
         /* TODO: Support taking in options here and converting it */
         nrt_HashTable* nullOptions = NULL;
         return nitf_Reader_newImageReader(reader, imageSegmentNumber, nullOptions, error);
+    }
+
+    nitf_Writer* py_nitf_Writer_construct(nitf_Error *error)
+    {
+        return nitf_Writer_construct(error);
+    }
+
+    bool py_nitf_Writer_prepare(nitf_Writer *writer, nitf_Record *record, nitf_IOHandle ioHandle, nitf_Error *error)
+    {
+        return nitf_Writer_prepare(writer, record, ioHandle, error);
+    }
+
+    void py_nitf_Writer_destruct(nitf_Writer ** writer)
+    {
+        nitf_Writer_destruct(writer);
     }
 
     nitf_ImageWriter* py_nitf_Writer_newImageWriter(nitf_Writer* writer, int index, PyObject* options, nitf_Error* error)
@@ -579,14 +631,14 @@
 
         window->numBands = PySequence_Length(bandList);
         if (window->numBands < 0) window->numBands = 0;
-        window->bandList = (nitf_Uint32*)NITF_MALLOC(sizeof(nitf_Uint32) * window->numBands);
+        window->bandList = (uint32_t*)NITF_MALLOC(sizeof(uint32_t) * window->numBands);
         if (!window->bandList)
         {
             PyErr_NoMemory();
             return NULL;
         }
 
-      for (i = 0; i < window->numBands; i++) {
+      for (decltype(window->numBands) i = 0; i < window->numBands; i++) {
         PyObject *o = PySequence_GetItem(bandList,i);
         if (PyNumber_Check(o)) {
           window->bandList[i] = (int) PyInt_AsLong(o);
@@ -605,17 +657,17 @@
     PyObject* py_ImageReader_read(nitf_ImageReader* reader, nitf_SubWindow* window, int nbpp, nitf_Error* error)
     {
         /* TODO somehow get the NUMBITSPERPIXEL in the future */
-        nitf_Uint8 **buf = NULL;
-        nitf_Uint8 *pyArrayBuffer = NULL;
+        uint8_t **buf = NULL;
+        uint8_t *pyArrayBuffer = NULL;
         PyObject* result = Py_None;
         int padded, rowSkip, colSkip;
-        nitf_Uint64 subimageSize;
-        nitf_Uint32 i;
+        uint64_t subimageSize;
+        uint32_t i;
         types::RowCol<size_t> dims;
 
         rowSkip = window->downsampler ? window->downsampler->rowSkip : 1;
         colSkip = window->downsampler ? window->downsampler->colSkip : 1;
-        subimageSize = static_cast<nitf_Uint64>(window->numRows/rowSkip) *
+        subimageSize = static_cast<uint64_t>(window->numRows/rowSkip) *
                 (window->numCols/colSkip) *
                 nitf_ImageIO_pixelSize(reader->imageDeblocker);
         if (subimageSize > std::numeric_limits<size_t>::max())
@@ -631,18 +683,18 @@
 
         numpyutils::createOrVerify(result, NPY_UINT8, dims);
 
-        buf = (nitf_Uint8**) NITF_MALLOC(sizeof(nitf_Uint8*) * window->numBands);
+        buf = (uint8_t**) NITF_MALLOC(sizeof(uint8_t*) * window->numBands);
         if (!buf)
         {
             PyErr_NoMemory();
             goto CATCH_ERROR;
         }
 
-        memset(buf, 0, sizeof(nitf_Uint8*) * window->numBands);
+        memset(buf, 0, sizeof(uint8_t*) * window->numBands);
 
         for (i = 0; i < window->numBands; ++i)
         {
-            buf[i] = (nitf_Uint8*) NITF_MALLOC(sizeof(nitf_Uint8) * subimageSize);
+            buf[i] = (uint8_t*) NITF_MALLOC(sizeof(uint8_t) * subimageSize);
             if (!buf[i])
             {
                 PyErr_NoMemory();
@@ -659,11 +711,11 @@
         }
 
         // Copy to output numpy array
-        pyArrayBuffer = numpyutils::getBuffer<nitf_Uint8>(result);
+        pyArrayBuffer = numpyutils::getBuffer<uint8_t>(result);
         for (i = 0; i < window->numBands; ++i)
         {
             memcpy(pyArrayBuffer + i * subimageSize,
-                   buf[i], sizeof(nitf_Uint8) * subimageSize);
+                   buf[i], sizeof(uint8_t) * subimageSize);
         }
 
         for (i = 0; i < window->numBands; ++i)

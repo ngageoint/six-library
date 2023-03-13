@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="root">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="doc" type="DocType" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="DocType">
+		<xs:sequence>
+			<xs:element name="a" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<xs:element name="text" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<xs:element name="whitespace" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<xs:element name="empty" type="xs:string" nillable="true"/>
+		</xs:sequence>
+	</xs:complexType>	
+</xs:schema>

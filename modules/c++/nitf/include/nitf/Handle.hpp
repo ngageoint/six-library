@@ -20,17 +20,20 @@
  *
  */
 
-#ifndef __NITF_HANDLE_HPP__
-#define __NITF_HANDLE_HPP__
+#ifndef NITRO_nitf_Handle_hpp_INCLUDED_
+#define NITRO_nitf_Handle_hpp_INCLUDED_
+#pragma once
+
+#include <iostream>
+#include <mutex>
+#include <memory>
 
 /*!
  *  \file Handle.hpp
  *  \brief Contains handle wrapper to manage shared native objects
  */
-
-#include <import/sys.h>
 #include "nitf/System.hpp"
-#include <iostream>
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
@@ -39,37 +42,28 @@ namespace nitf
  *  \class Handle
  *  \brief  This class is the base definition of a Handle
  */
-class Handle
+class NITRO_NITFCPP_API Handle
 {
+    class Impl;
+    std::unique_ptr<Impl> mPimpl;
+
 public:
-    Handle() : refCount(0) {}
-    virtual ~Handle() {}
+    Handle() noexcept(false);
+    virtual ~Handle()  /*noexcept(false)*/;
+
+    Handle(const Handle&) = delete;
+    Handle& operator=(const Handle&) = delete;
+    Handle(Handle&&) noexcept;
+    Handle& operator=(Handle&&) noexcept;
 
     //! Get the ref count
-    int getRef() { return refCount; }
+    int getRef() const noexcept;
 
     //! Increment the ref count
-    int incRef()
-    {
-        mutex.lock();
-        refCount++;
-        mutex.unlock();
-        return refCount;
-    }
+    int incRef();
 
     //! Decrement the ref count
-    int decRef()
-    {
-        mutex.lock();
-        if (refCount > 0)
-            refCount--;
-        mutex.unlock();
-        return refCount;
-    }
-
-protected:
-    static sys::Mutex mutex;
-    int refCount;
+    int decRef();
 };
 
 
@@ -79,9 +73,9 @@ protected:
  *          in handles. Extend this class to custom-destruct objects.
  */
 template <typename T>
-struct MemoryDestructor
+struct NITRO_NITFCPP_API MemoryDestructor
 {
-    virtual void operator()(T* /*nativeObject*/) {}
+    virtual void operator() (T* /*nativeObject*/) noexcept(false) {}
     virtual ~MemoryDestructor() {}
 };
 
@@ -93,29 +87,32 @@ struct MemoryDestructor
  *  and decRef functions.
  */
 template <typename Class_T, typename DestructFunctor_T = MemoryDestructor<Class_T> >
-class BoundHandle : public Handle
+class NITRO_NITFCPP_API BoundHandle : public Handle  // no "final", SWIG doesn't like it
 {
-private:
-    Class_T* handle;
-    int managed;
+    Class_T* handle = nullptr;
+    int managed = 1;
 
 public:
     //! Create handle from native object
-    BoundHandle(Class_T* h = NULL) : handle(h), managed(1) {}
+    BoundHandle() = delete;
+    BoundHandle(Class_T* h) : handle(h) {}
 
-    //! Destructor
-    virtual ~BoundHandle()
+    ~BoundHandle() /*noexcept(false)*/
     {
         //call the destructor, to destroy the object
-        if(handle && managed <= 0)
+        if(handle && !isManaged())
         {
             DestructFunctor_T functor;
             functor(handle);
         }
-    }
+    }    
+    BoundHandle(const BoundHandle&) = delete;
+    BoundHandle(BoundHandle&&) = default;
+    BoundHandle& operator=(const BoundHandle&) = delete;
+    BoundHandle& operator=(BoundHandle&&) = default;
 
     //! Assign from native object
-    Handle& operator=(Class_T* h)
+    Handle& operator=(Class_T* h) noexcept
     {
         if (h != handle)
             handle = h;
@@ -123,10 +120,11 @@ public:
     }
 
     //! Get the native object
-    Class_T* get() { return handle; }
+    Class_T* get() noexcept { return handle; }
+    const Class_T* get() const noexcept { return handle; }
 
     //! Get the address of then native object
-    Class_T** getAddress() { return &handle; }
+    Class_T** getAddress() noexcept { return &handle; }
 
     /*!
      * Sets whether or not the native object is "managed" by the underlying
@@ -135,12 +133,12 @@ public:
      * be passed to the DestructFunctor_T functor, and most likely destroyed,
      * depending on what the functor does.
      */
-    void setManaged(bool flag) { managed += flag ? 1 : (managed == 0 ? 0 : -1); }
+    void setManaged(bool flag) noexcept { managed += flag ? 1 : (managed == 0 ? 0 : -1); }
 
     //! Is the native object managed?
-    bool isManaged() { return managed > 0; }
+    bool isManaged() const noexcept { return managed > 0; }
 
 };
 
 }
-#endif
+#endif // NITRO_nitf_Handle_hpp_INCLUDED_

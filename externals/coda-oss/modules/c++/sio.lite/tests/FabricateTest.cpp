@@ -47,7 +47,7 @@ int main(int argc, char** argv)
         for (int i = 0; i < numBands; ++i)
             rawData[i] = new float[bufSize];
 
-        float base = 6.73457834987;
+        float base = 6.73457834987f;
 
         //fill with trash data
         for (int i = 0; i < numBands; ++i)

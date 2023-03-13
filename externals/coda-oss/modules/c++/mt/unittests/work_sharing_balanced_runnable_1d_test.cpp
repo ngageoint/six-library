@@ -22,11 +22,8 @@
 #include <mt/WorkSharingBalancedRunnable1D.h>
 #include "TestCase.h"
 
-namespace
+struct IncOp final
 {
-class IncOp
-{
-public:
     IncOp(std::vector<size_t>& globalWorkDone) :
         mGlobalWorkDone(globalWorkDone)
     {
@@ -56,9 +53,8 @@ TEST_CASE(WorkSharingBalancedRunnable1DTestWorkDone)
         TEST_ASSERT_EQ(workVec.size(), numElements);
 
         const size_t targetValue = 1;
-        for (size_t ii = 0; ii < numElements; ++ii)
+        for (const auto& value : workVec)
         {
-            const size_t value = workVec[ii];
             TEST_ASSERT_EQ(value, targetValue);
         }
     }
@@ -79,18 +75,14 @@ TEST_CASE(WorkSharingBalancedRunnable1DTestWorkDoneLessWorkThanThreads)
         TEST_ASSERT_EQ(workVec.size(), numElements);
 
         const size_t targetValue = 1;
-        for (size_t ii = 0; ii < numElements; ++ii)
+        for (const auto& value : workVec)
         {
-            const size_t value = workVec[ii];
             TEST_ASSERT_EQ(value, targetValue);
         }
     }
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(WorkSharingBalancedRunnable1DTestWorkDone);
     TEST_CHECK(WorkSharingBalancedRunnable1DTestWorkDoneLessWorkThanThreads);
-    return 0;
-}
+)

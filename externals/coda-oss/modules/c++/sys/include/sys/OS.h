@@ -26,7 +26,7 @@
 
 #include "sys/AbstractOS.h"
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 #  include "sys/OSWin32.h"
 namespace sys
 {
@@ -41,6 +41,25 @@ typedef OSUnix OS;
 typedef DirectoryUnix Directory;
 }
 #endif
+
+// This can be useful for code that will compile on all platforms, but needs different
+// platform-specific behavior.  This avoids the use of more #ifdefs (no preprocessor)
+// and also squelches compiler-warnings about unused local functions.
+namespace sys
+{
+	enum class PlatformType
+	{
+		Windows,
+		Linux,
+		//MacOS
+	};
+
+	#if _WIN32
+	constexpr auto Platform = PlatformType::Windows;
+	#else
+    constexpr auto Platform = PlatformType::Linux;
+	#endif
+}
 
 #endif
 

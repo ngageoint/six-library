@@ -20,15 +20,22 @@
  *
  */
 
-#ifndef __NITF_TRE_HPP__
-#define __NITF_TRE_HPP__
+#ifndef NITRO_nitf_TRE_hpp_INCLUDED_
+#define NITRO_nitf_TRE_hpp_INCLUDED_
+#pragma once
 
 #include <string>
+#include <cstddef>
+#include <std/type_traits>
+#include <stdexcept>
+#include <utility>
+
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/Pair.hpp"
 #include "nitf/System.hpp"
 #include "nitf/TRE.h"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file TRE.hpp
@@ -40,22 +47,20 @@ namespace nitf
  *  \class FieldIterator
  *  \brief  The C++ wrapper for the nitf_TREEnumerator
  */
-class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
+struct NITRO_NITFCPP_API TREFieldIterator : public nitf::Object<nitf_TREEnumerator> // no "final", SWIG doesn't like it
 {
-    public:
-    TREFieldIterator() : mPair(NULL)
+    TREFieldIterator() noexcept(false)
     {
-        setNative(NULL);
+        setNative(nullptr);
     }
 
-    ~TREFieldIterator()
-    {
-    }
+    ~TREFieldIterator() = default;
+
 
     //! Copy constructor
     TREFieldIterator(const TREFieldIterator& x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
 
     //! Assignment Operator
@@ -70,7 +75,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
     }
 
     //! Set native object
-    TREFieldIterator(nitf_TREEnumerator* x) : mPair(NULL)
+    TREFieldIterator(nitf_TREEnumerator* x) : mPair(nullptr)
     {
         setNative(x);
         getNativeOrThrow();
@@ -79,14 +84,11 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
 
     TREFieldIterator(NITF_DATA* x)
     {
-        setNative((nitf_TREEnumerator*)x);
-        getNativeOrThrow();
-        increment();
+        *this = x;
     }
-
     TREFieldIterator& operator=(NITF_DATA* x)
     {
-        setNative((nitf_TREEnumerator*)x);
+        setNative(static_cast<nitf_TREEnumerator*>(x));
         getNativeOrThrow();
         increment();
         return *this;
@@ -97,7 +99,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
      *  \param it2  The iterator to compare with
      *  \return  True if so, and False otherwise
      */
-    bool operator==(const nitf::TREFieldIterator& it2)
+    bool operator==(const nitf::TREFieldIterator& it2) const noexcept
     {
         // need to do this double-check so that the last iteration of an
         // iterator doesn't get skipped
@@ -106,7 +108,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
         return false;
     }
 
-    bool operator!=(const nitf::TREFieldIterator& it2)
+    bool operator!=(const nitf::TREFieldIterator& it2) const noexcept
     {
         return !this->operator==((nitf::TREFieldIterator&)it2);
     }
@@ -117,10 +119,13 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
     void increment()
     {
         nitf_TREEnumerator* enumerator = getNative();
-        if (isValid() && enumerator->hasNext(&enumerator))
-            mPair = enumerator->next(enumerator, &error);
-        else
-            mPair = NULL;
+        if (enumerator != nullptr)
+        {
+            if (isValid() && enumerator->hasNext(&enumerator))
+                mPair = enumerator->next(enumerator, &error);
+            else
+                mPair = nullptr;
+        }
         setNative(enumerator);  // always reset, in case it got destroyed
     }
 
@@ -144,7 +149,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
         return nitf::Pair(mPair);
     }
 
-    std::string getFieldDescription()
+    std::string getFieldDescription() const
     {
         nitf_TREEnumerator* enumerator = getNative();
         if (enumerator && isValid())
@@ -152,14 +157,14 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
             const char* desc =
                     enumerator->getFieldDescription(enumerator, &error);
             if (desc)
-                return std::string(desc);
+                return desc;
         }
         return "";
     }
 
     private:
-    nitf_Error error;
-    nitf_Pair* mPair;
+    mutable nitf_Error error{};
+    nitf_Pair* mPair = nullptr;
 };
 
 /*!
@@ -168,7 +173,10 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
  */
 DECLARE_CLASS(TRE)
 {
-    public:
+    nitf_Field& nitf_TRE_getField(const std::string&) const;
+    void setFieldValue(const nitf_Field&, const std::string & tag, const std::string & data, bool forceUpdate);
+
+public:
     typedef nitf::TREFieldIterator Iterator;
 
     //! Copy constructor
@@ -193,37 +201,45 @@ DECLARE_CLASS(TRE)
 
     TRE(const std::string& tag);
 
-    TRE(const std::string& tag, const std::string& id);
+    TRE(const std::string& tag, const std::string& id, std::nullptr_t = nullptr);
+
+    // for unit-tests
+    static nitf_TRE* create(const std::string & tag, const std::string & id, nitf_Error& error) noexcept;
+    static bool setFieldValue(nitf_TRE*, const std::string & tag, const std::string& data, nitf_Error&) noexcept;
+    static bool setField(nitf_TRE* tre, const std::string & tag, const std::string & data, nitf_Error & error) noexcept
+    {
+        return setFieldValue(tre, tag, data, error);
+    }
 
     //! Clone
-    nitf::TRE clone();
+    nitf::TRE clone() const;
 
-    ~TRE();
+    ~TRE() = default;
 
     /*!
      *  Get a begin TRE field iterator
      *  \return  A field iterator pointing at the first field in the TRE
      */
-    Iterator begin();
+    Iterator begin() const;
 
     /*!
      *  Get an end TRE field iterator
      *  \return  A field iterator pointing PAST the last field in the TRE
      */
-    Iterator end();
+    Iterator end() const noexcept;
 
     /*!
      * Get the field specified by the key. Throws an exception if the field
      * does not exist.
      */
-    nitf::Field getField(const std::string& key);
+    nitf::Field getField(const std::string& key) const;
 
     nitf::Field operator[](const std::string& key);
 
     /*!
      * Returns a List of Fields that match the given pattern.
      */
-    nitf::List find(const std::string& pattern);
+    nitf::List find(const std::string& pattern) const;
 
     /*!
      * Recalculate the field counts and positions for the TRE.
@@ -263,54 +279,78 @@ DECLARE_CLASS(TRE)
      * \param forceUpdate If true, recalculate the number and positions
      *                    of the TRE fields. See `updateFields()`
      */
-    template <typename T>
-    void setField(std::string key, T value, bool forceUpdate = false)
-    {
-        nitf_Field* field = nitf_TRE_getField(getNative(), key.c_str());
-        if (!field)
+
+    // TRE fields use some of the "field" infrastructure, but have their own API.
+
+    void setFieldValue(const std::string& tag, const std::string& value, bool forceUpdate);
+    void setFieldValue(const std::string & tag, const char* value, bool forceUpdate);
+    void setFieldValue(const std::string& tag, const void* data, size_t dataLength, bool forceUpdate);
+    // Can't do anything with just a pointer, need the size too.
+    template<typename T> void setFieldValue(const std::string&, const T*, bool forceUpdate) = delete;
+
+    // This is wrong when T is "const char*" and the field is NITF_BINARY; sizeof(T) won't make sense.
+    // That's why there is a "const char*" overload above.
+    private:
+        // This is far from a 100% solid check; it will catch many simple mistakes.
+        template<typename T> struct can_call_setFieldValue : std::integral_constant<bool,
+            std::is_trivially_copyable<T>::value &&
+            !std::is_pointer<T>::value && !std::is_array<T>::value> {};
+    public:
+        template <typename T>
+        void setFieldValue(const std::string& tag, const T& value, bool forceUpdate)
         {
-            std::ostringstream msg;
-            msg << key << " is not a recognized field for this TRE";
-            throw except::Exception(Ctxt(msg.str()));
-        }
-        if (field->type == NITF_BINARY)
-        {
-            if (!nitf_TRE_setField(getNative(),
-                                   key.c_str(),
-                                   &value,
-                                   sizeof(value),
-                                   &error))
+            const auto& field = nitf_TRE_getField(tag);
+            if (field.type == NITF_BINARY)
             {
-                throw NITFException(&error);
+                // In the C code, this is a call to memcpy(). be sure that is OK for T.
+                static_assert(can_call_setFieldValue<T>::value, "Can't call setFieldValue() with T.");
+                setFieldValue(tag, &value, sizeof(value), forceUpdate);
             }
-        }
-        else
-        {
-            std::string s = truncate(str::toString(value), field->length);
-            if (!nitf_TRE_setField(getNative(),
-                                   key.c_str(),
-                                   (NITF_DATA*)s.c_str(),
-                                   s.size(),
-                                   &error))
+            else
             {
-                throw NITFException(&error);
+                setFieldValue(field, tag, str::toString(value), forceUpdate);
             }
         }
 
-        if (forceUpdate)
-        {
-            updateFields();
-        }
+    template <typename T>
+    void setField(const std::string& tag, T&& value, bool forceUpdate = false)
+    {
+        setFieldValue(tag, std::forward<T>(value), forceUpdate);
     }
+
+    void setField(const std::string& tag, const void* data, size_t dataLength, bool forceUpdate = false)
+    {
+        setFieldValue(tag, data, dataLength, forceUpdate);
+    }
+
+    template<typename T>
+    const T& getFieldValue(const std::string& tag, T& value) const
+    {
+        value = static_cast<T>(getField(tag));
+        return value;
+    }
+    const std::string& getFieldValue(const std::string& tag, std::string& value, bool trim = false) const
+    {
+        value = getField(tag).toString(trim);
+        return value;
+    }
+    template<typename T>
+    const T getFieldValue(const std::string& tag) const
+    {
+        T retval;
+        getFieldValue(tag, retval);
+        return retval;
+    }
+
 
     /*!
      *  Does the field exist?
      *  \param key  The field name in which to check
      */
-    bool exists(const std::string& key);
+    bool exists(const std::string& key) const;
 
     //! Get the total length of the TRE data
-    size_t getCurrentSize();
+    size_t getCurrentSize() const;
 
     //! Get the tag
     std::string getTag() const;
@@ -327,9 +367,9 @@ DECLARE_CLASS(TRE)
     std::string getID() const;
 
     private:
-    std::string truncate(const std::string& value, size_t maxDigits);
+    std::string truncate(const std::string& value, size_t maxDigits) const;
 
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 }
-#endif
+#endif // NITRO_nitf_TRE_hpp_INCLUDED_

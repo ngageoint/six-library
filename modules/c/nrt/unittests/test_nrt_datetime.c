@@ -27,6 +27,7 @@
 #define NRT_DATE_FORMAT_21  "%Y%j%m%d%H%M%S"
 #define NRT_FDT_SZ 17
 
+/*
 NRTPRIV(void) printDate(nrt_DateTime * date)
 {
     printf("Year: %d\n", date->year);
@@ -39,6 +40,7 @@ NRTPRIV(void) printDate(nrt_DateTime * date)
     printf("Second: %f\n", date->second);
     printf("Millis: %f\n", date->timeInMillis);
 }
+*/
 
 TEST_CASE(testNow)
 {
@@ -46,7 +48,7 @@ TEST_CASE(testNow)
     nrt_Error e;
 
     date = nrt_DateTime_now(&e);
-    TEST_ASSERT(date);
+    TEST_ASSERT(date != NULL);
 
     nrt_DateTime_destruct(&date);
     TEST_ASSERT_NULL(date);
@@ -58,10 +60,10 @@ TEST_CASE(testFromMillis)
     nrt_Error e;
 
     date = nrt_DateTime_now(&e);
-    TEST_ASSERT(date);
+    TEST_ASSERT(date != NULL);
 
     date2 = nrt_DateTime_fromMillis(date->timeInMillis, &e);
-    TEST_ASSERT(date2);
+    TEST_ASSERT(date2 != NULL);
 
     TEST_ASSERT((date->timeInMillis == date2->timeInMillis));
 
@@ -89,7 +91,7 @@ TEST_CASE(testParseDayOfYearTimeStr)
 
     /* Test without month and day of month information */
     date = nrt_DateTime_fromString(timeStr, "%Y-%jT%H:%M:%SZ", &e);
-    TEST_ASSERT(date);
+    TEST_ASSERT(date != NULL);
 
     TEST_ASSERT_EQ_INT(date->month, 10);
     TEST_ASSERT_EQ_INT(date->dayOfMonth, 31);
@@ -98,7 +100,7 @@ TEST_CASE(testParseDayOfYearTimeStr)
 
     /* Test input with correct month and day of month information */
     date2 = nrt_DateTime_fromString(timeStr2, "%Y-%j-%m-%dT%H:%M:%SZ", &e);
-    TEST_ASSERT(date2);
+    TEST_ASSERT(date2 != NULL);
 
     TEST_ASSERT_EQ_INT(date2->month, 10);
     TEST_ASSERT_EQ_INT(date2->dayOfMonth, 31);
@@ -107,7 +109,7 @@ TEST_CASE(testParseDayOfYearTimeStr)
 
     /* Test input with incorrect month and day of month information */
     date3 = nrt_DateTime_fromString(timeStr3, "%Y-%j-%m-%dT%H:%M:%SZ", &e);
-    TEST_ASSERT(date3);
+    TEST_ASSERT(date3 != NULL);
 
     TEST_ASSERT_EQ_INT(date3->month, 10);
     TEST_ASSERT_EQ_INT(date3->dayOfMonth, 31);
@@ -130,7 +132,7 @@ TEST_CASE(testRoundTrip)
     nrt_Error e;
 
     date = nrt_DateTime_now(&e);
-    TEST_ASSERT(date);
+    TEST_ASSERT(date != NULL);
     /* printDate(date); */
 
     TEST_ASSERT((nrt_DateTime_format
@@ -138,7 +140,7 @@ TEST_CASE(testRoundTrip)
     /* printf("Date: %s\n", buf); */
 
     date2 = nrt_DateTime_fromString(buf, NRT_DATE_FORMAT_21, &e);
-    TEST_ASSERT(date2);
+    TEST_ASSERT(date2 != NULL);
 
     TEST_ASSERT((nrt_DateTime_format
                  (date2, NRT_DATE_FORMAT_21, buf2, NRT_FDT_SZ + 1, &e)));
@@ -166,7 +168,7 @@ TEST_CASE(testSetIdentity)
     nrt_Error e;
 
     date = nrt_DateTime_now(&e);
-    TEST_ASSERT(date);
+    TEST_ASSERT(date != NULL);
 
     TEST_ASSERT((nrt_DateTime_format
                  (date, NRT_DATE_FORMAT_21, buf, NRT_FDT_SZ + 1, &e)));
@@ -219,7 +221,7 @@ TEST_CASE(testMillis)
     nrt_DateTime *date = NULL;
 
     date = nrt_DateTime_fromString(timeStr, "%Y-%m-%dT%H:%M:%SZ", &e);
-    TEST_ASSERT(date);
+    TEST_ASSERT(date != NULL);
 
     TEST_ASSERT_EQ_INT((int) (1000 * (date->second - (int) date->second)), 123);
 
@@ -239,13 +241,16 @@ TEST_CASE(testMillis)
     TEST_ASSERT_NULL(date);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN
+(
+    (void)argc;
+    (void)argv;
+
     CHECK(testNow);
     CHECK(testFromMillis);
     CHECK(testRoundTrip);
     CHECK(testSetIdentity);
     CHECK(testMillis);
     CHECK(testParseDayOfYearTimeStr)
-    return 0;
-}
+)
+

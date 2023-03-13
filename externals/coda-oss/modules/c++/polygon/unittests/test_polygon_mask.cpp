@@ -29,23 +29,21 @@
 #include <polygon/DrawPolygon.h>
 #include <polygon/PolygonMask.h>
 
-namespace
-{
 TEST_CASE(testMarkAllTrue)
 {
     const polygon::PolygonMask mask(polygon::PolygonMask::MARK_ALL_TRUE,
                                     types::RowCol<size_t>(100, 200));
 
     types::Range range = mask.getRange(50);
-    TEST_ASSERT_EQ(range.mStartElement, 0);
-    TEST_ASSERT_EQ(range.mNumElements, 200);
+    TEST_ASSERT_EQ(range.mStartElement, static_cast<size_t>(0));
+    TEST_ASSERT_EQ(range.mNumElements, static_cast<size_t>(200));
     TEST_ASSERT(mask.isInPolygon(50, 0));
     TEST_ASSERT(mask.isInPolygon(50, 199));
     TEST_ASSERT(!mask.isInPolygon(50, 200));
 
     range = mask.getRange(100);
     TEST_ASSERT_EQ(range.mStartElement, std::numeric_limits<size_t>::max());
-    TEST_ASSERT_EQ(range.mNumElements, 0);
+    TEST_ASSERT_EQ(range.mNumElements, static_cast<size_t>(0));
     TEST_ASSERT(!mask.isInPolygon(100, 0));
     TEST_ASSERT(!mask.isInPolygon(100, 199));
     TEST_ASSERT(!mask.isInPolygon(100, 200));
@@ -58,14 +56,14 @@ TEST_CASE(testMarkAllFalse)
 
     types::Range range = mask.getRange(50);
     TEST_ASSERT_EQ(range.mStartElement, std::numeric_limits<size_t>::max());
-    TEST_ASSERT_EQ(range.mNumElements, 0);
+    TEST_ASSERT_EQ(range.mNumElements, static_cast<size_t>(0));
     TEST_ASSERT(!mask.isInPolygon(50, 0));
     TEST_ASSERT(!mask.isInPolygon(50, 199));
     TEST_ASSERT(!mask.isInPolygon(50, 200));
 
     range = mask.getRange(100);
     TEST_ASSERT_EQ(range.mStartElement, std::numeric_limits<size_t>::max());
-    TEST_ASSERT_EQ(range.mNumElements, 0);
+    TEST_ASSERT_EQ(range.mNumElements, static_cast<size_t>(0));
     TEST_ASSERT(!mask.isInPolygon(100, 0));
     TEST_ASSERT(!mask.isInPolygon(100, 199));
     TEST_ASSERT(!mask.isInPolygon(100, 200));
@@ -94,15 +92,9 @@ TEST_CASE(testWithPoints)
     // Each point should match between the two masks
     for (size_t row = 0, idx = 0; row < dims.row; ++row)
     {
-        std::ostringstream ostr;
-        ostr << "row = " << row;
-
         for (size_t col = 0; col < dims.col; ++col, ++idx)
         {
-            ostr << ", col = " << col;
-
-            TEST_ASSERT_EQ_MSG(ostr.str(),
-                               maskArray[idx], mask.isInPolygon(row, col));
+            TEST_ASSERT_EQ(maskArray[idx], mask.isInPolygon(row, col));
         }
     }
 }
@@ -130,15 +122,9 @@ TEST_CASE(testWithMask)
     // Each point should match between the two masks
     for (size_t row = 0, idx = 0; row < dims.row; ++row)
     {
-        std::ostringstream ostr;
-        ostr << "row = " << row;
-
         for (size_t col = 0; col < dims.col; ++col, ++idx)
         {
-            ostr << ", col = " << col;
-
-            TEST_ASSERT_EQ_MSG(ostr.str(),
-                               maskArray[idx], mask.isInPolygon(row, col));
+            TEST_ASSERT_EQ(maskArray[idx], mask.isInPolygon(row, col));
         }
     }
 }
@@ -195,17 +181,17 @@ TEST_CASE(testWithPartialCutBotomLeft)
     TEST_ASSERT_TRUE(mask.getRange(1).empty());
 
     // Remaining rows have non-empty column masks
-    TEST_ASSERT_EQ(mask.getRange(2).mStartElement, 0)
-    TEST_ASSERT_EQ(mask.getRange(2).mNumElements, 1)
+    TEST_ASSERT_EQ(mask.getRange(2).mStartElement, static_cast<size_t>(0));
+    TEST_ASSERT_EQ(mask.getRange(2).mNumElements, static_cast<size_t>(1));
 
-    TEST_ASSERT_EQ(mask.getRange(3).mStartElement, 0)
-    TEST_ASSERT_EQ(mask.getRange(3).mNumElements, 2)
+    TEST_ASSERT_EQ(mask.getRange(3).mStartElement, static_cast<size_t>(0));
+    TEST_ASSERT_EQ(mask.getRange(3).mNumElements, static_cast<size_t>(2));
 
-    TEST_ASSERT_EQ(mask.getRange(4).mStartElement, 0)
-    TEST_ASSERT_EQ(mask.getRange(4).mNumElements, 3)
+    TEST_ASSERT_EQ(mask.getRange(4).mStartElement, static_cast<size_t>(0));
+    TEST_ASSERT_EQ(mask.getRange(4).mNumElements, static_cast<size_t>(3));
 
-    TEST_ASSERT_EQ(mask.getRange(5).mStartElement, 0)
-    TEST_ASSERT_EQ(mask.getRange(5).mNumElements, 4)
+    TEST_ASSERT_EQ(mask.getRange(5).mStartElement, static_cast<size_t>(0));
+    TEST_ASSERT_EQ(mask.getRange(5).mNumElements, static_cast<size_t>(4));
 }
 
 TEST_CASE(testWithPartialCutTopRight)
@@ -224,17 +210,17 @@ TEST_CASE(testWithPartialCutTopRight)
     const polygon::PolygonMask mask(points, dims);
 
     // First 4 rows have non-empty column masks
-    TEST_ASSERT_EQ(mask.getRange(0).mStartElement, 2)
-    TEST_ASSERT_EQ(mask.getRange(0).mNumElements, 5)
+    TEST_ASSERT_EQ(mask.getRange(0).mStartElement, static_cast<size_t>(2));
+    TEST_ASSERT_EQ(mask.getRange(0).mNumElements, static_cast<size_t>(5));
 
-    TEST_ASSERT_EQ(mask.getRange(1).mStartElement, 3)
-    TEST_ASSERT_EQ(mask.getRange(1).mNumElements, 4)
+    TEST_ASSERT_EQ(mask.getRange(1).mStartElement, static_cast<size_t>(3));
+    TEST_ASSERT_EQ(mask.getRange(1).mNumElements, static_cast<size_t>(4));
 
-    TEST_ASSERT_EQ(mask.getRange(2).mStartElement, 5)
-    TEST_ASSERT_EQ(mask.getRange(2).mNumElements, 2)
+    TEST_ASSERT_EQ(mask.getRange(2).mStartElement, static_cast<size_t>(5));
+    TEST_ASSERT_EQ(mask.getRange(2).mNumElements, static_cast<size_t>(2));
 
-    TEST_ASSERT_EQ(mask.getRange(3).mStartElement, 6)
-    TEST_ASSERT_EQ(mask.getRange(3).mNumElements, 1)
+    TEST_ASSERT_EQ(mask.getRange(3).mStartElement, static_cast<size_t>(6));
+    TEST_ASSERT_EQ(mask.getRange(3).mNumElements, static_cast<size_t>(1));
 
     // Last two rows of the image have no masked columns
     TEST_ASSERT_TRUE(mask.getRange(4).empty());
@@ -267,25 +253,23 @@ TEST_CASE(testWithNarrowPassthrough)
     TEST_ASSERT_TRUE(mask.getRange(0).empty());
 
     // Row 1 has columns on the left side of the chip
-    TEST_ASSERT_EQ(mask.getRange(1).mStartElement, 0)
-    TEST_ASSERT_EQ(mask.getRange(1).mNumElements, 3)
+    TEST_ASSERT_EQ(mask.getRange(1).mStartElement, static_cast<size_t>(0));
+    TEST_ASSERT_EQ(mask.getRange(1).mNumElements, static_cast<size_t>(3));
 
     // Row 2 has all columns
-    TEST_ASSERT_EQ(mask.getRange(2).mStartElement, 0)
-    TEST_ASSERT_EQ(mask.getRange(2).mNumElements, 7)
+    TEST_ASSERT_EQ(mask.getRange(2).mStartElement, static_cast<size_t>(0));
+    TEST_ASSERT_EQ(mask.getRange(2).mNumElements, static_cast<size_t>(7));
 
     // Row 3 has columns on the right side of the chip
-    TEST_ASSERT_EQ(mask.getRange(3).mStartElement, 3)
-    TEST_ASSERT_EQ(mask.getRange(3).mNumElements, 4)
+    TEST_ASSERT_EQ(mask.getRange(3).mStartElement, static_cast<size_t>(3));
+    TEST_ASSERT_EQ(mask.getRange(3).mNumElements, static_cast<size_t>(4));
 
     // Last two rows are empty
     TEST_ASSERT_TRUE(mask.getRange(4).empty());
     TEST_ASSERT_TRUE(mask.getRange(5).empty());
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(testMarkAllTrue);
     TEST_CHECK(testMarkAllFalse);
     TEST_CHECK(testWithPoints);
@@ -295,5 +279,4 @@ int main(int /*argc*/, char** /*argv*/)
     TEST_CHECK(testWithPartialCutBotomLeft);
     TEST_CHECK(testWithPartialCutTopRight);
     TEST_CHECK(testWithNarrowPassthrough);
-    return 0;
-}
+)

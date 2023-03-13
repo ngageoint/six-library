@@ -22,6 +22,7 @@
 
 #ifndef __NRT_UTILS_H__
 #define __NRT_UTILS_H__
+#pragma once
 
 #include "nrt/System.h"
 #include "nrt/List.h"
@@ -83,7 +84,7 @@ NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
 NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char* d, double *decimal,
                                               nrt_Error * error);
 
-NRTAPI(double) nrt_Utils_getCurrentTimeMillis();
+NRTAPI(double) nrt_Utils_getCurrentTimeMillis(void);
 
 NRTAPI(int) nrt_Utils_strncasecmp(const char *s1, const char *s2, size_t n);
 
@@ -145,6 +146,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
  */
 NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
                                                  double seconds, char *buffer7);
+NRTAPI(NRT_BOOL) nrt_Utils_isGeographicLat(int degrees, int minutes, double seconds);
 
 /*!
  *  Turn the geographic value into a string.  You must have a buffer
@@ -153,6 +155,7 @@ NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
  */
 NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
                                                  double seconds, char *buffer8);
+NRTAPI(NRT_BOOL) nrt_Utils_isGeographicLon(int degrees, int minutes, double seconds);
 
 /*!
  *  Turn the decimal value into a string +-dd.ddd.  You must have a buffer
@@ -185,33 +188,6 @@ NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8);
  */
 NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type);
 
-
-/*!
- * Helper function to actually perform a byte-swap.
- *
- * \param value Pointer to value being swapped
- * \param indexOne Index of first byte to be swapped
- * \param indexTwo Index of second byte to be swapped
- */
-/*
- * Older versions of Visual Studio do not support `inline` for C
- * Using `__inline` for Windows instead
- */
-NRTPRIV(void)
-#ifdef WIN32
-__inline
-#else
-inline
-#endif
-nrt_Utils_swap(nrt_Uint8* value, size_t indexOne,
-        size_t indexTwo)
-{
-    nrt_Uint8 temp;
-    temp = value[indexOne];
-    value[indexOne] = value[indexTwo];
-    value[indexTwo] = temp;
-}
-
 /*!
  *  Byte-swap a given value of length `size` bytes in-place.
  *  Sizes of length 2, 4, and 8 are supported.
@@ -219,7 +195,17 @@ nrt_Utils_swap(nrt_Uint8* value, size_t indexOne,
  *  \param value Pointer to value to be swapped
  *  \param size The size, in bytes, of each buffer element
  */
-NRTAPI(void) nrt_Utils_byteSwap(nrt_Uint8* value, size_t size);
+NRTAPI(void) nrt_Utils_byteSwap(uint8_t* value, size_t size);
+
+NRTAPI(void) nrt_strcpy_s(char* dest, size_t sz, const char* src);
+NRTAPI(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t src_chars);
+NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src);
+NRTAPI(char*) nrt_strdup(const char* src);
+
+NRTAPI(size_t) nrt_strlen(const char* src); // aka strlen()
+NRTAPI(uint32_t) nrt_strlen32(const char* src);
+NRTAPI(uint16_t) nrt_strlen16(const char* src);
+NRTAPI(uint8_t) nrt_strlen8(const char* src);
 
 NRT_CXX_ENDGUARD
 #endif

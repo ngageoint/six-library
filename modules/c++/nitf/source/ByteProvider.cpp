@@ -20,6 +20,8 @@
  *
  */
 
+#include "nitf/ByteProvider.hpp"
+
 #include <string.h>
 #include <sstream>
 #include <algorithm>
@@ -27,20 +29,16 @@
 
 #include <except/Exception.h>
 #include <nitf/Writer.hpp>
-#include <nitf/ByteProvider.hpp>
 #include <nitf/IOStreamWriter.hpp>
 #include <io/ByteStream.h>
 
+#include "gsl/gsl.h"
+
+#undef min
+#undef max
+
 namespace nitf
 {
-ByteProvider::ByteProvider() :
-    mNumCols(0),
-    mOverallNumRowsPerBlock(0),
-    mNumColsPerBlock(0),
-    mNumBytesPerRow(0),
-    mNumBytesPerPixel(0)
-{
-}
 
 ByteProvider::ByteProvider(Record& record,
                            const std::vector<PtrAndLength>& desData,
@@ -54,25 +52,45 @@ ByteProvider::ByteProvider(Record& record,
 {
     initialize(record, desData, numRowsPerBlock, numColsPerBlock);
 }
-
-ByteProvider::~ByteProvider()
+ByteProvider::ByteProvider(Record& record,
+                           const std::vector<PtrAndLength_t>& desData,
+                           size_t numRowsPerBlock,
+                           size_t numColsPerBlock) :
+    mNumCols(0),
+    mOverallNumRowsPerBlock(0),
+    mNumColsPerBlock(0),
+    mNumBytesPerRow(0),
+    mNumBytesPerPixel(0)
 {
+    initialize(record, desData, numRowsPerBlock, numColsPerBlock);
 }
 
-void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
-                                          std::vector<sys::byte>& rawBytes)
+template<typename T>
+static void copyFromStreamAndClear_(io::ByteStream& stream,
+                                          std::vector<T>& rawBytes)
 {
     rawBytes.resize(stream.getSize());
     if (!rawBytes.empty())
     {
-        ::memcpy(&rawBytes[0], stream.get(), stream.getSize());
+        ::memcpy(rawBytes.data(), stream.get(), stream.getSize());
     }
 
     stream.clear();
 }
+void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
+                                          std::vector<sys::byte>& rawBytes)
+{
+    copyFromStreamAndClear_(stream, rawBytes);
+}
+void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
+                                          std::vector<std::byte>& rawBytes)
+{
+    copyFromStreamAndClear_(stream, rawBytes);
+}
 
-void ByteProvider::initializeImpl(Record& record,
-                                  const std::vector<PtrAndLength>& desData,
+template<typename TPtrAndLength>
+void ByteProvider::initializeImpl_(const Record& record,
+                                  const std::vector<TPtrAndLength>& desData,
                                   size_t numRowsPerBlock,
                                   size_t numColsPerBlock)
 {
@@ -80,7 +98,7 @@ void ByteProvider::initializeImpl(Record& record,
     getFileLayout(record, desData);
     mOverallNumRowsPerBlock = numRowsPerBlock;
 
-    size_t numColsWithPad;
+    size_t numColsWithPad = 0;
     if (numColsPerBlock != 0)
     {
         mNumColsPerBlock = numColsPerBlock;
@@ -108,7 +126,22 @@ void ByteProvider::initializeImpl(Record& record,
     }
 }
 
-void ByteProvider::initialize(Record& record,
+void ByteProvider::initializeImpl(const Record& record,
+                                  const std::vector<PtrAndLength>& desData,
+                                  size_t numRowsPerBlock,
+                                  size_t numColsPerBlock)
+{
+    initializeImpl_(record, desData, numRowsPerBlock, numColsPerBlock);
+}
+void ByteProvider::initializeImpl(const Record& record,
+    const std::vector<PtrAndLength_t>& desData,
+    size_t numRowsPerBlock,
+    size_t numColsPerBlock)
+{
+    initializeImpl_(record, desData, numRowsPerBlock, numColsPerBlock);
+}
+
+void ByteProvider::initialize(const Record& record,
                               const std::vector<PtrAndLength>& desData,
                               size_t numRowsPerBlock,
                               size_t numColsPerBlock)
@@ -124,11 +157,42 @@ void ByteProvider::initialize(Record& record,
     }
     initializeImpl(record, desData, numRowsPerBlock, numColsPerBlock);
 }
-
-void ByteProvider::getFileLayout(nitf::Record& inRecord,
-                                 const std::vector<PtrAndLength>& desData)
+void ByteProvider::initialize(const Record& record,
+    const std::vector<PtrAndLength_t>& desData,
+    size_t numRowsPerBlock,
+    size_t numColsPerBlock)
 {
-    mem::SharedPtr<io::ByteStream> byteStream(new io::ByteStream());
+    // Set image lengths
+    const size_t numImages = record.getNumImages();
+    mImageDataLengths.resize(numImages);
+    for (size_t ii = 0; ii < numImages; ++ii)
+    {
+        nitf::ImageSegment imageSegment = record.getImages()[ii];
+        nitf::ImageSubheader subheader = imageSegment.getSubheader();
+        mImageDataLengths[ii] = subheader.getNumBytesOfImageData();
+    }
+    initializeImpl(record, desData, numRowsPerBlock, numColsPerBlock);
+}
+
+static void Write_data(io::ByteStream& byteStream, const ByteProvider::PtrAndLength& curData,
+    size_t& desDataLengths_ii)
+{
+    // Write data
+    byteStream.write(curData.first, curData.second);
+    desDataLengths_ii = curData.second;
+}
+static void Write_data(io::ByteStream& byteStream, const ByteProvider::PtrAndLength_t& curData,
+    size_t& desDataLengths_ii)
+{
+    // Write data
+    byteStream.write(curData);
+    desDataLengths_ii = curData.size();
+}
+template<typename TPtrAndLength>
+void  ByteProvider::getFileLayout_(const nitf::Record& inRecord,
+    const std::vector<TPtrAndLength>& desData)
+{
+   auto byteStream = std::make_shared<io::ByteStream>();
 
     nitf::IOStreamWriter io(byteStream);
 
@@ -232,15 +296,12 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     {
         nitf::DESegment deSegment = record.getDataExtensions()[ii];
         nitf::DESubheader subheader = deSegment.getSubheader();
-        nitf::Uint32 userSublen;
         const size_t prevSize = byteStream->getSize();
+        uint32_t userSublen;
         writer.writeDESubheader(subheader, userSublen, record.getVersion());
         desSubheaderLengths[ii] = byteStream->getSize() - prevSize;
 
-        // Write data
-        const PtrAndLength& curData(desData[ii]);
-        byteStream->write(curData.first, curData.second);
-        desDataLengths[ii] = curData.second;
+        Write_data(*byteStream, desData[ii], desDataLengths[ii]);
     }
 
     copyFromStreamAndClear(*byteStream, mDesSubheaderAndData);
@@ -252,18 +313,18 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     // This initial write won't set a number of the lengths, so we'll seek
     // around to set those ourselves
     nitf_Off fileLenOff;
-    nitf_Uint32 hdrLen;
+    uint32_t hdrLen;
     record.setComplexityLevelIfUnset();
     writer.writeHeader(fileLenOff, hdrLen);
-    const nitf::Off fileHeaderNumBytes = byteStream->getSize();
+    const nitf::Off fileHeaderNumBytes = gsl::narrow<nitf::Off>(byteStream->getSize());
 
     // Overall file length and header length
     mFileNumBytes =
             fileHeaderNumBytes + imageSegmentsTotalNumBytes +
-            mDesSubheaderAndData.size();
+            gsl::narrow<nitf::Off>(mDesSubheaderAndData.size());
 
     byteStream->seek(fileLenOff, io::Seekable::START);
-    writer.writeInt64Field(mFileNumBytes, NITF_FL_SZ, '0', NITF_WRITER_FILL_LEFT);
+    writer.writeInt64Field(gsl::narrow<uint64_t>(mFileNumBytes), NITF_FL_SZ, '0', NITF_WRITER_FILL_LEFT);
     writer.writeInt64Field(hdrLen, NITF_HL_SZ, '0', NITF_WRITER_FILL_LEFT);
 
     // Image segments
@@ -297,19 +358,29 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
 
     // Figure out where the image subheader offsets are
     mImageSubheaderFileOffsets.resize(numImages);
-    nitf::Off offset = mFileHeader.size();
+    nitf::Off offset = gsl::narrow<nitf::Off>(mFileHeader.size());
     for (size_t ii = 0; ii < numImages; ++ii)
     {
          mImageSubheaderFileOffsets[ii] = offset;
-         offset += static_cast<nitf::Off>(mImageSubheaders[ii].size()) +
+         offset += gsl::narrow<nitf::Off>(mImageSubheaders[ii].size()) +
                  mImageDataLengths[ii];
     }
 
     // DES is right after that
     mDesSubheaderFileOffset = offset;
 }
+void ByteProvider::getFileLayout(const nitf::Record& inRecord,
+                                 const std::vector<PtrAndLength>& desData)
+{
+    getFileLayout_(inRecord, desData);
+}
+void ByteProvider::getFileLayout(const nitf::Record& inRecord,
+    const std::vector<PtrAndLength_t>& desData)
+{
+    getFileLayout_(inRecord, desData);
+}
 
-std::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
+mem::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
 {
     std::vector<size_t> numRowsPerSegment(mImageSegmentInfo.size());
     for (size_t ii = 0; ii < mImageSegmentInfo.size(); ++ii)
@@ -317,13 +388,12 @@ std::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
         numRowsPerSegment[ii] = mImageSegmentInfo[ii].numRows;
     }
 
-    std::auto_ptr<const ImageBlocker> blocker(new ImageBlocker(
+    auto blocker = std::make_unique<ImageBlocker>(
             numRowsPerSegment,
             mNumCols,
             mOverallNumRowsPerBlock,
-            mNumColsPerBlock));
-
-    return blocker;
+            mNumColsPerBlock);
+    return mem::auto_ptr<const ImageBlocker>(blocker.release());
 }
 
 void ByteProvider::checkBlocking(size_t seg,
@@ -365,7 +435,7 @@ void ByteProvider::checkBlocking(size_t seg,
 }
 
 size_t ByteProvider::countPadRows(
-        size_t seg, size_t numRowsToWrite, size_t imageDataEndRow) const
+        size_t seg, size_t /*numRowsToWrite*/, size_t imageDataEndRow) const noexcept
 {
     const SegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
     const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
@@ -403,7 +473,7 @@ void ByteProvider::addImageData(
     // Figure out what offset of 'imageData' we're writing from
     const size_t startLocalRowToWrite =
             startGlobalRowToWrite - startRow + numPadRowsSoFar;
-    const sys::byte* imageDataPtr =
+    const auto imageDataPtr =
             static_cast<const sys::byte*>(imageData) +
             startLocalRowToWrite * mNumBytesPerRow;
 
@@ -412,9 +482,9 @@ void ByteProvider::addImageData(
         const size_t rowsInSegmentSkipped =
                 startRow - segStartRow;
 
-        fileOffset = mImageSubheaderFileOffsets[seg] +
+        fileOffset = gsl::narrow<nitf::Off>(mImageSubheaderFileOffsets[seg] +
                 mImageSubheaders[seg].size() +
-                rowsInSegmentSkipped * mNumBytesPerRow;
+                rowsInSegmentSkipped * mNumBytesPerRow);
     }
 
     const size_t numPadRows = countPadRows(seg, numRowsToWrite, imageDataEndRow);
@@ -424,7 +494,7 @@ void ByteProvider::addImageData(
     buffers.pushBack(imageDataPtr, numRowsToWrite * mNumBytesPerRow);
 }
 
-size_t ByteProvider::countBytesForHeaders(size_t seg, size_t startRow) const
+size_t ByteProvider::countBytesForHeaders(size_t seg, size_t startRow) const noexcept
 {
     size_t numBytes = 0;
     if (shouldAddHeader(seg, startRow))
@@ -438,12 +508,12 @@ size_t ByteProvider::countBytesForHeaders(size_t seg, size_t startRow) const
     return numBytes;
 }
 
-bool ByteProvider::shouldAddHeader(size_t seg, size_t startRow) const
+bool ByteProvider::shouldAddHeader(size_t seg, size_t startRow) const noexcept
 {
     return seg == 0 && startRow == 0;
 }
 
-bool ByteProvider::shouldAddSubheader(size_t seg, size_t startRow) const
+bool ByteProvider::shouldAddSubheader(size_t seg, size_t startRow) const noexcept
 {
     const size_t segStartRow = mImageSegmentInfo[seg].firstRow;
     return startRow <= segStartRow;
@@ -470,7 +540,7 @@ void ByteProvider::addHeaders(size_t seg,
     }
 }
 
-bool ByteProvider::shouldAddDES(size_t seg, size_t imageDataEndRow) const
+bool ByteProvider::shouldAddDES(size_t seg, size_t imageDataEndRow) const noexcept
 {
     // When we write out the last row of the last image segment, we
     // tack on the DES(s)
@@ -478,7 +548,7 @@ bool ByteProvider::shouldAddDES(size_t seg, size_t imageDataEndRow) const
             mImageSegmentInfo[seg].endRow() == imageDataEndRow);
 }
 
-size_t ByteProvider::countBytesForDES(size_t seg, size_t imageDataEndRow) const
+size_t ByteProvider::countBytesForDES(size_t seg, size_t imageDataEndRow) const noexcept
 {
     return shouldAddDES(seg, imageDataEndRow) ? mDesSubheaderAndData.size() : 0;
 }
@@ -559,4 +629,29 @@ void ByteProvider::getBytes(const void* imageData,
         }
     }
 }
+}
+
+static std::span<const std::byte> make_span(const std::vector<sys::byte>& v) noexcept
+{
+    const void* const pData = v.data();
+    return std::span<const std::byte>(static_cast<const std::byte*>(pData), v.size());
+}
+
+void nitf::ByteProvider::getFileHeader(std::span<const std::byte>& result) const noexcept
+{
+    result = make_span(getFileHeader());
+}
+
+void nitf::ByteProvider::getImageSubheaders(std::vector<std::span<const std::byte>>& result) const
+{
+    auto& headers = getImageSubheaders();
+    for (auto& header : headers)
+    {
+        result.emplace_back(make_span(header));
+    }
+}
+
+void nitf::ByteProvider::getDesSubheaderAndData(std::span<const std::byte>& result) const noexcept
+{
+    result = make_span(getDesSubheaderAndData());
 }

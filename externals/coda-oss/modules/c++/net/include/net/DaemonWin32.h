@@ -1,7 +1,7 @@
 #ifndef __NET_DAEMON_WIN32_H__
 #define __NET_DAEMON_WIN32_H__
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 
 #include "net/DaemonInterface.h"
 #include <import/except.h>

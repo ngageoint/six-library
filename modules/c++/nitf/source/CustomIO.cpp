@@ -22,12 +22,14 @@
 
 #include <string.h>
 #include <nitf/CustomIO.hpp>
+#include <nitf/Utils.hpp>
 
 namespace nitf
 {
-CustomIO::CustomIO() :
-    IOInterface(createInterface(this))
+CustomIO::CustomIO() noexcept(false)
 {
+    set_native_object(createInterface(this));
+
     setManaged(false);
 }
 
@@ -39,15 +41,15 @@ CustomIO::~CustomIO()
     // in turn try to call nitf_IOInterface_close() followed by
     // nitf_IOInterface_destruct().  But at that point CustomIO no longer
     // exists, so the data variable passed into these functions is invalid.
-    // By NULL'ing it out here, and by supporting a passthrough when data
-    // comes in NULL in adapterClose() below, we make the close call safe.
+    // By nullptr'ing it out here, and by supporting a passthrough when data
+    // comes in nullptr in adapterClose() below, we make the close call safe.
     // Additionally, the nitf_IOInterface_destruct call would try to free our
     // 'data' member via NRT_FREE() if we didn't do this - that would also
     // be exceptionally bad.
-    mHandle->get()->data = NULL;
+    mHandle->get()->data = nullptr;
 }
 
-nitf_IOInterface* CustomIO::createInterface(CustomIO* me)
+nitf_IOInterface* CustomIO::createInterface(CustomIO* me) noexcept
 {
     static nrt_IIOInterface iIOHandle = {
         &CustomIO::adapterRead,
@@ -61,11 +63,17 @@ nitf_IOInterface* CustomIO::createInterface(CustomIO* me)
         &CustomIO::adapterDestruct
     };
 
-    nitf_IOInterface* const impl =
-            (nitf_IOInterface *)NITF_MALLOC(sizeof(nitf_IOInterface));
-    if (impl == NULL)
+    #ifdef _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 26408) // Avoid malloc() and free(), prefer the nothrow version of new with delete (r.10).
+    #endif
+    auto const impl = static_cast<nitf_IOInterface*>(NITF_MALLOC(sizeof(nitf_IOInterface)));
+    #ifdef _MSC_VER
+    #pragma warning(pop)
+    #endif
+    if (impl == nullptr)
     {
-        return NULL;
+        return nullptr;
     }
     memset(impl, 0, sizeof(nitf_IOInterface));
 
@@ -74,34 +82,50 @@ nitf_IOInterface* CustomIO::createInterface(CustomIO* me)
     return impl;
 }
 
+template<typename TTry>
+static auto try_catch(TTry f,
+    decltype(f()) error_retval, nrt_Error* error, const char* file, int line, const char* func, int level) -> decltype(f())
+{
+    try
+    {
+        return f();
+    }
+    catch (const except::Exception& ex)
+    {
+        Utils::error_init(error, ex.getMessage(), file, line, func, level);
+    }
+    catch (const std::exception& ex)
+    {
+        Utils::error_init(error, ex, file, line, func, level);
+    }
+    catch (...)
+    {
+        nrt_Error_init(error, "Unknown error", file, line, func, level);
+    }
+    return error_retval;
+}
+template<typename TTry>
+static NRT_BOOL try_catch(TTry f,
+    nrt_Error* error, const char* file, int line, const char* func, int level)
+{
+    const auto retval = try_catch([&]()
+        {
+            f();
+            return NRT_SUCCESS;
+        },
+        NRT_FAILURE, error, file, line, func, level);
+    return retval ? true : false;
+}
+
 NRT_BOOL CustomIO::adapterRead(NRT_DATA* data,
                                void* buf,
                                size_t size,
                                nrt_Error* error)
 {
-    try
-    {
-        reinterpret_cast<CustomIO*>(data)->readImpl(buf, size);
-        return NRT_SUCCESS;
-    }
-    catch (const except::Exception& ex)
-    {
-        nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
-                       NRT_ERR_READING_FROM_FILE);
-        return NRT_FAILURE;
-    }
-    catch (const std::exception& ex)
-    {
-        nrt_Error_init(error, ex.what(), NRT_CTXT,
-                       NRT_ERR_READING_FROM_FILE);
-        return NRT_FAILURE;
-    }
-    catch (...)
-    {
-        nrt_Error_init(error, "Unknown error", NRT_CTXT,
-                       NRT_ERR_READING_FROM_FILE);
-        return NRT_FAILURE;
-    }
+    return try_catch([&]()
+        {
+        static_cast<CustomIO*>(data)->readImpl(buf, size);
+        }, error, NRT_CTXT, NRT_ERR_READING_FROM_FILE);
 }
 
 NRT_BOOL CustomIO::adapterWrite(NRT_DATA* data,
@@ -109,57 +133,19 @@ NRT_BOOL CustomIO::adapterWrite(NRT_DATA* data,
                                 size_t size,
                                 nrt_Error* error)
 {
-    try
-    {
-        reinterpret_cast<CustomIO*>(data)->writeImpl(buf, size);
-        return NRT_SUCCESS;
-    }
-    catch (const except::Exception& ex)
-    {
-        nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
-                       NRT_ERR_WRITING_TO_FILE);
-        return NRT_FAILURE;
-    }
-    catch (const std::exception& ex)
-    {
-        nrt_Error_init(error, ex.what(), NRT_CTXT,
-                       NRT_ERR_WRITING_TO_FILE);
-        return NRT_FAILURE;
-    }
-    catch (...)
-    {
-        nrt_Error_init(error, "Unknown error", NRT_CTXT,
-                       NRT_ERR_WRITING_TO_FILE);
-        return NRT_FAILURE;
-    }
+    return try_catch([&]()
+        {
+        static_cast<CustomIO*>(data)->writeImpl(buf, size);
+        }, error, NRT_CTXT, NRT_ERR_WRITING_TO_FILE);
 }
 
 NRT_BOOL CustomIO::adapterCanSeek(NRT_DATA* data,
                                   nrt_Error* error)
 {
-    try
-    {
-        reinterpret_cast<CustomIO*>(data)->canSeekImpl();
-        return NRT_SUCCESS;
-    }
-    catch (const except::Exception& ex)
-    {
-        nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
-                       NRT_ERR_SEEKING_IN_FILE);
-        return NRT_FAILURE;
-    }
-    catch (const std::exception& ex)
-    {
-        nrt_Error_init(error, ex.what(), NRT_CTXT,
-                       NRT_ERR_SEEKING_IN_FILE);
-        return NRT_FAILURE;
-    }
-    catch (...)
-    {
-        nrt_Error_init(error, "Unknown error", NRT_CTXT,
-                       NRT_ERR_SEEKING_IN_FILE);
-        return NRT_FAILURE;
-    }
+    return try_catch([&]()
+        {
+        static_cast<CustomIO*>(data)->canSeekImpl();
+        }, error, NRT_CTXT, NRT_ERR_SEEKING_IN_FILE);
 }
 
 nrt_Off CustomIO::adapterSeek(NRT_DATA* data,
@@ -167,109 +153,45 @@ nrt_Off CustomIO::adapterSeek(NRT_DATA* data,
                               int whence,
                               nrt_Error* error)
 {
-    try
-    {
-        return reinterpret_cast<CustomIO*>(data)->seekImpl(offset, whence);
-    }
-    catch (const except::Exception& ex)
-    {
-        nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
-                       NRT_ERR_SEEKING_IN_FILE);
-        return -1;
-    }
-    catch (const std::exception& ex)
-    {
-        nrt_Error_init(error, ex.what(), NRT_CTXT,
-                       NRT_ERR_SEEKING_IN_FILE);
-        return -1;
-    }
-    catch (...)
-    {
-        nrt_Error_init(error, "Unknown error", NRT_CTXT,
-                       NRT_ERR_SEEKING_IN_FILE);
-        return -1;
-    }
+    return try_catch([&]()
+        {
+            return static_cast<CustomIO*>(data)->seekImpl(offset, whence);
+        }, -1, error, NRT_CTXT, NRT_ERR_SEEKING_IN_FILE);
 }
 
 nrt_Off CustomIO::adapterTell(NRT_DATA* data,
                               nrt_Error* error)
 {
-    try
-    {
-        return reinterpret_cast<CustomIO*>(data)->tellImpl();
-    }
-    catch (const except::Exception& ex)
-    {
-        nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
-                       NRT_ERR_SEEKING_IN_FILE);
-        return -1;
-    }
-    catch (const std::exception& ex)
-    {
-        nrt_Error_init(error, ex.what(), NRT_CTXT,
-                       NRT_ERR_SEEKING_IN_FILE);
-        return -1;
-    }
-    catch (...)
-    {
-        nrt_Error_init(error, "Unknown error", NRT_CTXT,
-                       NRT_ERR_SEEKING_IN_FILE);
-        return -1;
-    }
+    return try_catch([&]()
+        {
+            return static_cast<CustomIO*>(data)->tellImpl();
+        }, -1, error, NRT_CTXT, NRT_ERR_SEEKING_IN_FILE);
 }
 
 nrt_Off CustomIO::adapterGetSize(NRT_DATA* data,
                                  nrt_Error* error)
 {
-    try
-    {
-        return reinterpret_cast<CustomIO*>(data)->getSizeImpl();
-    }
-    catch (const except::Exception& ex)
-    {
-        nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
-                       NRT_ERR_UNK);
-        return -1;
-    }
-    catch (const std::exception& ex)
-    {
-        nrt_Error_init(error, ex.what(), NRT_CTXT,
-                       NRT_ERR_UNK);
-        return -1;
-    }
-    catch (...)
-    {
-        nrt_Error_init(error, "Unknown error", NRT_CTXT,
-                       NRT_ERR_UNK);
-        return -1;
-    }
+    return try_catch([&]()
+        {
+            return static_cast<CustomIO*>(data)->getSizeImpl();
+        }, -1, error, NRT_CTXT, NRT_ERR_UNK);
 }
 
 int CustomIO::adapterGetMode(NRT_DATA* data,
                              nrt_Error* error)
 {
-    try
+    if (data == nullptr)
     {
-        return reinterpret_cast<CustomIO*>(data)->getMode();
-    }
-    catch (const except::Exception& ex)
-    {
-        nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
-                       NRT_ERR_UNK);
+        nrt_Error_init(error, "Null pointer reference", NITF_CTXT,
+            NITF_ERR_INVALID_OBJECT);
         return -1;
     }
-    catch (const std::exception& ex)
-    {
-        nrt_Error_init(error, ex.what(), NRT_CTXT,
-                       NRT_ERR_UNK);
-        return -1;
-    }
-    catch (...)
-    {
-        nrt_Error_init(error, "Unknown error", NRT_CTXT,
-                       NRT_ERR_UNK);
-        return -1;
-    }
+
+    return try_catch([&]()
+        {
+            return static_cast<CustomIO*>(data)->getMode();
+        }, -1, error, NRT_CTXT, NRT_ERR_UNK);
+
 }
 
 NRT_BOOL CustomIO::adapterClose(NRT_DATA* data,
@@ -277,40 +199,21 @@ NRT_BOOL CustomIO::adapterClose(NRT_DATA* data,
 {
     if (data)
     {
-        try
-        {
-            reinterpret_cast<CustomIO*>(data)->closeImpl();
-            return NRT_SUCCESS;
-        }
-        catch (const except::Exception& ex)
-        {
-            nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
-                           NRT_ERR_UNK);
-            return NRT_FAILURE;
-        }
-        catch (const std::exception& ex)
-        {
-            nrt_Error_init(error, ex.what(), NRT_CTXT,
-                           NRT_ERR_UNK);
-            return NRT_FAILURE;
-        }
-        catch (...)
-        {
-            nrt_Error_init(error, "Unknown error", NRT_CTXT,
-                           NRT_ERR_UNK);
-            return NRT_FAILURE;
-        }
+        return try_catch([&]()
+            {
+            static_cast<CustomIO*>(data)->closeImpl();
+            }, error, NRT_CTXT, NRT_ERR_UNK);
     }
     else
     {
         // See destructor for why this is needed
-        nrt_Error_init(error, "Handle is NULL", NRT_CTXT,
+        nrt_Error_init(error, "Handle is nullptr", NRT_CTXT,
                        NRT_ERR_INVALID_OBJECT);
         return NRT_FAILURE;
     }
 }
 
-void CustomIO::adapterDestruct(NRT_DATA* data)
+void CustomIO::adapterDestruct(NRT_DATA*) noexcept
 {
 }
 }

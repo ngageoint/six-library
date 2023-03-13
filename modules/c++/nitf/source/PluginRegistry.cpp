@@ -72,7 +72,7 @@ nitf_CompressionInterface* PluginRegistry::retrieveCompressionInterface(
     nitf_Error error;
     nitf_CompressionInterface* const compIface =
             nitf_PluginRegistry_retrieveCompInterface(comp.c_str(), &error);
-    if (compIface == NULL)
+    if (compIface == nullptr)
     {
         throw NITFException(&error);
     }
@@ -80,18 +80,36 @@ nitf_CompressionInterface* PluginRegistry::retrieveCompressionInterface(
     return compIface;
 }
 
-bool PluginRegistry::treHandlerExists(const std::string& ident)
+bool PluginRegistry::treHandlerExists(const std::string& ident, FILE* log) noexcept
 {
-    return nitf_PluginRegistry_TREHandlerExists(ident.c_str());
+    // This can generate output from implicitConstruct() complaining about NITF_PLUGIN_PATH
+    // not being set; often the warning is benign and is just confusing.  Provide a way to turn
+    // it off (FILE* log = NULL) without upsetting existing code.
+    return nitf_PluginRegistry_TREHandlerExistsLog(ident.c_str(), log);
+}
+bool PluginRegistry::treHandlerExists(const std::string& ident) noexcept
+{
+    return treHandlerExists(ident, stderr); // legacy/default: log=stderr
 }
 
-bool PluginRegistry::compressionHandlerExists(const std::string& ident)
+bool PluginRegistry::compressionHandlerExists(const std::string& ident) noexcept
 {
     return nitf_PluginRegistry_compressionHandlerExists(ident.c_str());
 }
 
-bool PluginRegistry::decompressionHandlerExists(const std::string& ident)
+bool PluginRegistry::decompressionHandlerExists(const std::string& ident) noexcept
 {
     return nitf_PluginRegistry_decompressionHandlerExists(ident.c_str());
 }
+
+nitf_PluginRegistry* PluginRegistry::getInstance(nitf_Error& error) noexcept
+{
+    return nitf_PluginRegistry_getInstance(&error);
+}
+
+nitf_TREHandler* PluginRegistry::retrieveTREHandler(nitf_PluginRegistry& reg, const std::string& treIdent, int& hadError, nitf_Error& error) noexcept
+{
+    return nitf_PluginRegistry_retrieveTREHandler(&reg, treIdent.c_str(), &hadError, &error);
+}
+
 }

@@ -33,19 +33,18 @@
         line   = result[1];
 
  */
-using namespace math::linear;
 
-typedef MatrixMxN<2, 2> Matrix2x2;
-typedef MatrixMxN<3, 2> Matrix3x2;
-typedef MatrixMxN<3, 3> Matrix3x3;
-typedef MatrixMxN<4, 4> Matrix4x4;
-typedef VectorN<3> Vector3;
-typedef VectorN<2> Vector2;
+typedef math::linear::MatrixMxN<2, 2> Matrix2x2;
+typedef math::linear::MatrixMxN<3, 2> Matrix3x2;
+typedef math::linear::MatrixMxN<3, 3> Matrix3x3;
+typedef math::linear::MatrixMxN<4, 4> Matrix4x4;
+typedef math::linear::VectorN<3> Vector3;
+typedef math::linear::VectorN<2> Vector2;
 
 TEST_CASE(testEquality)
 {
     std::vector<double> v1(3, 3);
-    Vector<> v2(3, 3);
+    math::linear::Vector<> v2(3, 3);
     Vector3 v3(3);
    
     if (v2 != v1)
@@ -60,7 +59,7 @@ TEST_CASE(testEquality)
 TEST_CASE(testPtrAssign)
 {
     std::vector<double> v1(3, 42);
-    Vector<> v2(v1.size(), &v1[0]);
+    math::linear::Vector<> v2(v1.size(), &v1[0]);
     Vector3 v3(&v1[0]);
 
     if (v2 != v1)
@@ -71,7 +70,7 @@ TEST_CASE(testPtrAssign)
 TEST_CASE(testSTLVectorAssign)
 {
     std::vector<double> v1(3, 42);
-    Vector<> v2(v1);
+    math::linear::Vector<> v2(v1);
     Vector3 v3(&v1[0]);
 
     if (v2 != v1)
@@ -81,13 +80,13 @@ TEST_CASE(testSTLVectorAssign)
 
 TEST_CASE(testEmptyDim)
 {
-    Matrix2D<double> AScale(3, 0);
+    math::linear::Matrix2D<double> AScale(3, 0);
 }
 
 TEST_CASE(testPtrDecorator)
 {
     std::vector<double> v1(9, 1);
-    Matrix2D<double> AScale(3, 3, &v1[0], false);
+    math::linear::Matrix2D<double> AScale(3, 3, &v1[0], false);
 
     AScale.scale(5);
     std::vector<double> v5(9, 5);
@@ -100,15 +99,15 @@ TEST_CASE(testPtrDecorator)
 TEST_CASE(testPtrAdopt)
 {
     // valgrind to ensure that we don't have a leak
-    Matrix2D<double> AScale(3, 3, new double[9], true);
+    math::linear::Matrix2D<double> AScale(3, 3, new double[9], true);
 }
 
 TEST_CASE(testArithmetic)
 {
-    Matrix2D<double> A = identityMatrix<double>(3);
+    auto A = math::linear::identityMatrix<double>(3);
     Matrix3x3 A2( &(A.get())[0] );
 
-    Vector<double> x = constantVector<double>(3, 1.2);
+    auto x = math::linear::constantVector<double>(3, 1.2);
     x[2] = 2;
     Vector3 x2(x.matrix().row(0));
     
@@ -117,7 +116,7 @@ TEST_CASE(testArithmetic)
     TEST_ASSERT_EQ(x, x2);
     TEST_ASSERT_EQ(A2, A);
 
-    Vector<double> b = A * x;
+    math::linear::Vector<double> b = A * x;
     TEST_ASSERT_EQ(b, x);
 }
 
@@ -130,7 +129,7 @@ TEST_CASE(testLinear)
         0.547728758202852, -0.181368192064663,  0.816761156241381
     };
 
-    Matrix2D<> mx1(3, 3, q);
+    math::linear::Matrix2D<> mx1(3, 3, q);
     Matrix3x3 mx2(q);
 
 
@@ -138,7 +137,7 @@ TEST_CASE(testLinear)
     Vector3 u1(mx2.row(0));
 
     // This one doesnt know how big it is unless you tell it
-    Vector<>  u2(3, mx1.row(0));
+    math::linear::Vector<> u2(3, mx1.row(0));
     TEST_ASSERT_EQ(u1, u2);
 
     // Notice that it doesnt matter which matrix the row came
@@ -150,7 +149,7 @@ TEST_CASE(testLinear)
     Vector3 v1(mx1.row(1));
 
     Vector3 w1 = mx2.row(2);
-    Vector3 w2 = cross<double>(u1, v1);
+    Vector3 w2 = math::linear::cross<double>(u1, v1);
     TEST_ASSERT_EQ(w2, w1);
 
     Vector3 w3 = u1.dot(v1);
@@ -167,7 +166,7 @@ TEST_CASE(testNormalize)
     Vector3 v1(d);
     v1.normalize();
     
-    Vector<> v2(3, d);
+    math::linear::Vector<> v2(3, d);
     v2.normalize();
 
     
@@ -181,8 +180,7 @@ TEST_CASE(testNormalize)
     TEST_ASSERT_ALMOST_EQ(v1[2], truth[2]);
 }
 
-int main()
-{
+TEST_MAIN(
     TEST_CHECK(testEquality);
     TEST_CHECK(testNormalize);
     TEST_CHECK(testPtrAssign);
@@ -218,4 +216,4 @@ int main()
 
     std::cout << cross(v3, y) << std::endl;
 */
-}
+)

@@ -22,6 +22,9 @@
 
 #ifndef __NITF_TYPES_H__
 #define __NITF_TYPES_H__
+#pragma once
+
+#include <stddef.h>
 
 /* Enum for the supported version types */
 typedef enum _nitf_Version
@@ -37,4 +40,5 @@ typedef enum _nitf_Version
 
 
 typedef void NITF_DATA;
+
 #endif

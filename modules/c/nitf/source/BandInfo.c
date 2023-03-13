@@ -133,8 +133,8 @@ NITFAPI(NITF_BOOL) nitf_BandInfo_init(nitf_BandInfo * bandInfo,
                                       const char *subcategory,
                                       const char *imageFilterCondition,
                                       const char *imageFilterCode,
-                                      nitf_Uint32 numLUTs,
-                                      nitf_Uint32 bandEntriesPerLUT,
+                                      uint32_t numLUTs,
+                                      uint32_t bandEntriesPerLUT,
                                       nitf_LookupTable * lut,
                                       nitf_Error * error)
 {

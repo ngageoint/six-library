@@ -26,9 +26,9 @@
     if (OWNER->ID) nitf_Field_destruct(OWNER->ID);
 
 /*  Create the image info structure */
-NITFAPI(nitf_ComponentInfo *) nitf_ComponentInfo_construct(nitf_Uint32
+NITFAPI(nitf_ComponentInfo *) nitf_ComponentInfo_construct(uint32_t
         subheaderFieldWidth,
-        nitf_Uint32
+        uint32_t
         dataFieldWidth,
         nitf_Error *
         error)
@@ -67,8 +67,8 @@ nitf_ComponentInfo_clone(nitf_ComponentInfo * source, nitf_Error * error)
     if (source)
     {
         info =
-            nitf_ComponentInfo_construct(source->lengthSubheader->length,
-                                         source->lengthData->length,
+            nitf_ComponentInfo_construct((uint32_t)source->lengthSubheader->length,
+                                         (uint32_t)source->lengthData->length,
                                          error);
         if (!info)
             goto CATCH_ERROR;

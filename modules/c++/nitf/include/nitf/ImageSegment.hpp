@@ -55,37 +55,37 @@ public:
     ImageSegment(nitf_ImageSegment * x);
 
     //! Constructor
-    ImageSegment();
+    ImageSegment() noexcept(false);
 
     ImageSegment(NITF_DATA * x);
 
     ImageSegment & operator=(NITF_DATA * x);
 
      //! Clone
-    nitf::ImageSegment clone();
+    nitf::ImageSegment clone() const;
 
-    ~ImageSegment();
+    ~ImageSegment() = default;
 
     //! Get the subheader
-    nitf::ImageSubheader getSubheader();
+    nitf::ImageSubheader getSubheader() const;
 
     //! Set the subheader
     void setSubheader(nitf::ImageSubheader & value);
 
     //! Get the imageOffset
-    nitf::Uint64 getImageOffset() const;
+    uint64_t getImageOffset() const;
 
     //! Set the imageOffset
-    void setImageOffset(nitf::Uint64 value);
+    void setImageOffset(uint64_t value);
 
     //! Get the imageEnd
-    nitf::Uint64 getImageEnd() const;
+    uint64_t getImageEnd() const;
 
     //! Set the imageEnd
-    void setImageEnd(nitf::Uint64 value);
+    void setImageEnd(uint64_t value);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

@@ -28,9 +28,11 @@
 #include <map>
 #include <string>
 #include <memory>
+
 #include "except/Exception.h"
 #include "str/Convert.h"
 #include "sys/Conf.h"
+#include "mem/SharedPtr.h"
 
 /*!
  * \file DatabaseConnection.h
@@ -259,7 +261,7 @@ protected:
     std::vector< Field > mData;
 };
 
-//typedef std::auto_ptr< Row > pRow;
+//typedef mem::auto_ptr< Row > pRow;
 
 /*!
  *  \class ResultSet
@@ -301,7 +303,7 @@ protected:
     Row mCurrentRow;
 };
 
-typedef std::auto_ptr< ResultSet > pResultSet;
+typedef mem::auto_ptr< ResultSet > pResultSet;
 
 /*!
  * \class DatabaseConnection

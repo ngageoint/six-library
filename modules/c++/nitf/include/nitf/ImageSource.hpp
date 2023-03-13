@@ -57,7 +57,7 @@ public:
     /*!
      *  Constructor
      */
-    ImageSource();
+    ImageSource() noexcept(false);
 
     ~ImageSource();
 
@@ -68,7 +68,7 @@ public:
     nitf::BandSource getBand(int n);
 
 private:
-    nitf_Error error;
+    nitf_Error error{};
     // keep a list of the bands
     std::vector<nitf::BandSource*> mBands;
 }

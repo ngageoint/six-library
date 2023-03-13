@@ -43,15 +43,13 @@ GraphicSubheader::GraphicSubheader(nitf_GraphicSubheader * x)
     getNativeOrThrow();
 }
 
-GraphicSubheader::GraphicSubheader()
+GraphicSubheader::GraphicSubheader() noexcept(false) : GraphicSubheader(nitf_GraphicSubheader_construct(&error))
 {
-    setNative(nitf_GraphicSubheader_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
 
-nitf::GraphicSubheader GraphicSubheader::clone()
+nitf::GraphicSubheader GraphicSubheader::clone() const
 {
     nitf::GraphicSubheader dolly(
         nitf_GraphicSubheader_clone(getNativeOrThrow(), &error));
@@ -59,29 +57,27 @@ nitf::GraphicSubheader GraphicSubheader::clone()
     return dolly;
 }
 
-GraphicSubheader::~GraphicSubheader(){}
-
-nitf::Field GraphicSubheader::getFilePartType()
+nitf::Field GraphicSubheader::getFilePartType() const
 {
     return nitf::Field(getNativeOrThrow()->filePartType);
 }
 
-nitf::Field GraphicSubheader::getGraphicID()
+nitf::Field GraphicSubheader::getGraphicID() const
 {
     return nitf::Field(getNativeOrThrow()->graphicID);
 }
 
-nitf::Field GraphicSubheader::getName()
+nitf::Field GraphicSubheader::getName() const
 {
     return nitf::Field(getNativeOrThrow()->name);
 }
 
-nitf::Field GraphicSubheader::getSecurityClass()
+nitf::Field GraphicSubheader::getSecurityClass() const
 {
     return nitf::Field(getNativeOrThrow()->securityClass);
 }
 
-nitf::FileSecurity GraphicSubheader::getSecurityGroup()
+nitf::FileSecurity GraphicSubheader::getSecurityGroup() const
 {
     return nitf::FileSecurity(getNativeOrThrow()->securityGroup);
 }
@@ -98,67 +94,67 @@ void GraphicSubheader::setSecurityGroup(nitf::FileSecurity value)
 }
 
 
-nitf::Field GraphicSubheader::getEncrypted()
+nitf::Field GraphicSubheader::getEncrypted() const
 {
     return nitf::Field(getNativeOrThrow()->encrypted);
 }
 
-nitf::Field GraphicSubheader::getStype()
+nitf::Field GraphicSubheader::getStype() const
 {
     return nitf::Field(getNativeOrThrow()->stype);
 }
 
-nitf::Field GraphicSubheader::getRes1()
+nitf::Field GraphicSubheader::getRes1() const
 {
     return nitf::Field(getNativeOrThrow()->res1);
 }
 
-nitf::Field GraphicSubheader::getDisplayLevel()
+nitf::Field GraphicSubheader::getDisplayLevel() const
 {
     return nitf::Field(getNativeOrThrow()->displayLevel);
 }
 
-nitf::Field GraphicSubheader::getAttachmentLevel()
+nitf::Field GraphicSubheader::getAttachmentLevel() const
 {
     return nitf::Field(getNativeOrThrow()->attachmentLevel);
 }
 
-nitf::Field GraphicSubheader::getLocation()
+nitf::Field GraphicSubheader::getLocation() const
 {
     return nitf::Field(getNativeOrThrow()->location);
 }
 
-nitf::Field GraphicSubheader::getBound1Loc()
+nitf::Field GraphicSubheader::getBound1Loc() const
 {
     return nitf::Field(getNativeOrThrow()->bound1Loc);
 }
 
-nitf::Field GraphicSubheader::getColor()
+nitf::Field GraphicSubheader::getColor() const
 {
     return nitf::Field(getNativeOrThrow()->color);
 }
 
-nitf::Field GraphicSubheader::getBound2Loc()
+nitf::Field GraphicSubheader::getBound2Loc() const
 {
     return nitf::Field(getNativeOrThrow()->bound2Loc);
 }
 
-nitf::Field GraphicSubheader::getRes2()
+nitf::Field GraphicSubheader::getRes2() const
 {
     return nitf::Field(getNativeOrThrow()->res2);
 }
 
-nitf::Field GraphicSubheader::getExtendedHeaderLength()
+nitf::Field GraphicSubheader::getExtendedHeaderLength() const
 {
     return nitf::Field(getNativeOrThrow()->extendedHeaderLength);
 }
 
-nitf::Field GraphicSubheader::getExtendedHeaderOverflow()
+nitf::Field GraphicSubheader::getExtendedHeaderOverflow() const
 {
     return nitf::Field(getNativeOrThrow()->extendedHeaderOverflow);
 }
 
-nitf::Extensions GraphicSubheader::getExtendedSection()
+nitf::Extensions GraphicSubheader::getExtendedSection() const
 {
     return nitf::Extensions(getNativeOrThrow()->extendedSection);
 }

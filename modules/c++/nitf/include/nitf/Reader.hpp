@@ -23,6 +23,8 @@
 #ifndef __NITF_READER_HPP__
 #define __NITF_READER_HPP__
 
+#include <string>
+
 #include "nitf/Reader.h"
 #include "nitf/IOHandle.hpp"
 #include "nitf/IOInterface.hpp"
@@ -30,7 +32,7 @@
 #include "nitf/ImageReader.hpp"
 #include "nitf/SegmentReader.hpp"
 #include "nitf/Object.hpp"
-#include <string>
+#include "nitf/exports.hpp"
 
 /*!
  *  \file Reader.hpp
@@ -40,21 +42,18 @@
 namespace nitf
 {
 
-struct ReaderDestructor : public nitf::MemoryDestructor<nitf_Reader>
+struct NITRO_NITFCPP_API ReaderDestructor : public nitf::MemoryDestructor<nitf_Reader>
 {
-    ~ReaderDestructor()
-    {
-    }
-    void operator()(nitf_Reader *reader);
+    ~ReaderDestructor() = default;
+    void operator()(nitf_Reader *reader) override;
 };
 
 /*!
  *  \class Reader
  *  \brief  The C++ wrapper for the nitf_Reader
  */
-class Reader : public nitf::Object<nitf_Reader, ReaderDestructor>
+struct NITRO_NITFCPP_API Reader : public nitf::Object<nitf_Reader, ReaderDestructor>
 {
-public:
     //! Copy constructor
     Reader(const Reader & x);
 
@@ -65,16 +64,16 @@ public:
     Reader(nitf_Reader * x);
 
     //! Default Constructor
-    Reader();
+    Reader() noexcept(false);
 
-    ~Reader();
+    ~Reader() = default;
 
     /*!
      * Return the Version of the file passed in by its file name.
      * \param fileName Pathname of file to read
      * \return NITF_VER_20, NITF_VER_21, or NITF_VER_UNKNOWN
      */
-    static nitf::Version getNITFVersion(const std::string& fileName);
+    static nitf::Version getNITFVersion(const std::string& fileName) noexcept;
 
     /*!
      * Return the Version of the file
@@ -86,7 +85,7 @@ public:
      *       will be reset to wherever it began after reading the neccesary
      *       bytes.
      */
-    static nitf::Version getNITFVersion(nitf::IOInterface& io);
+    static nitf::Version getNITFVersion(const nitf::IOInterface& io);
 
     /*!
      *  This is the preferred method for reading a NITF 2.1 file.
@@ -149,7 +148,7 @@ public:
     nitf::IOInterface getInput() const;
 
 private:
-    nitf_Error error;
+    nitf_Error error{};
 };
 
 }

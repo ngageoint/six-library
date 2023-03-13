@@ -254,46 +254,6 @@ class FileHeader(_object):
 FileHeader_swigregister = _sio_lite.FileHeader_swigregister
 FileHeader_swigregister(FileHeader)
 
-class FileWriter(_object):
-    """Proxy of C++ sio::lite::FileWriter class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, FileWriter, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, FileWriter, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(sio::lite::FileWriter self, std::string const & outputFile) -> FileWriter
-        __init__(sio::lite::FileWriter self, char const * outputFile) -> FileWriter
-        __init__(sio::lite::FileWriter self, OutputStream stream, bool adopt=True) -> FileWriter
-        __init__(sio::lite::FileWriter self, OutputStream stream) -> FileWriter
-        """
-        this = _sio_lite.new_FileWriter(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _sio_lite.delete_FileWriter
-    __del__ = lambda self: None
-
-    def write(self, *args) -> "void":
-        """
-        write(FileWriter self, FileHeader header, std::vector< io::InputStream * > bandStreams)
-        write(FileWriter self, int numLines, int numElements, int elementSize, int elementType, std::vector< io::InputStream * > bandStreams)
-        write(FileWriter self, FileHeader header, void const * data, int numBands=1)
-        write(FileWriter self, FileHeader header, void const * data)
-        write(FileWriter self, int numLines, int numElements, int elementSize, int elementType, void const * data, int numBands=1)
-        write(FileWriter self, int numLines, int numElements, int elementSize, int elementType, void const * data)
-        write(FileWriter self, FileHeader header, long long data)
-        """
-        return _sio_lite.FileWriter_write(self, *args)
-
-FileWriter_swigregister = _sio_lite.FileWriter_swigregister
-FileWriter_swigregister(FileWriter)
-
-AUTO = _sio_lite.AUTO
 class StreamReader(coda.coda_io.InputStream):
     """Proxy of C++ sio::lite::StreamReader class."""
 
@@ -358,51 +318,6 @@ class StreamReader(coda.coda_io.InputStream):
 
 StreamReader_swigregister = _sio_lite.StreamReader_swigregister
 StreamReader_swigregister(StreamReader)
-
-class FileReader(StreamReader, coda.coda_io.Seekable):
-    """Proxy of C++ sio::lite::FileReader class."""
-
-    __swig_setmethods__ = {}
-    for _s in [StreamReader, coda.coda_io.Seekable]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, FileReader, name, value)
-    __swig_getmethods__ = {}
-    for _s in [StreamReader, coda.coda_io.Seekable]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, FileReader, name)
-    __repr__ = _swig_repr
-    __swig_destroy__ = _sio_lite.delete_FileReader
-    __del__ = lambda self: None
-
-    def __init__(self, *args):
-        """
-        __init__(sio::lite::FileReader self) -> FileReader
-        __init__(sio::lite::FileReader self, std::string const & file) -> FileReader
-        __init__(sio::lite::FileReader self, io::FileInputStream * arg2, bool adopt=False) -> FileReader
-        __init__(sio::lite::FileReader self, io::FileInputStream * arg2) -> FileReader
-        """
-        this = _sio_lite.new_FileReader(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def seek(self, offset: 'sys::Off_T', whence: 'io::Seekable::Whence') -> "sys::Off_T":
-        """seek(FileReader self, sys::Off_T offset, io::Seekable::Whence whence) -> sys::Off_T"""
-        return _sio_lite.FileReader_seek(self, offset, whence)
-
-
-    def tell(self) -> "sys::Off_T":
-        """tell(FileReader self) -> sys::Off_T"""
-        return _sio_lite.FileReader_tell(self)
-
-
-    def killStream(self) -> "void":
-        """killStream(FileReader self)"""
-        return _sio_lite.FileReader_killStream(self)
-
-FileReader_swigregister = _sio_lite.FileReader_swigregister
-FileReader_swigregister(FileReader)
 
 
 import numpy

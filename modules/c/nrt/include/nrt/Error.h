@@ -22,6 +22,7 @@
 
 #ifndef __NRT_ERROR_H__
 #define __NRT_ERROR_H__
+#pragma once
 
 #include "nrt/Defines.h"
 #include "nrt/Types.h"
@@ -29,13 +30,12 @@
 #define  NRT_MAX_EMESSAGE 1024
 #define  NRT_CTXT NRT_FILE, NRT_LINE, NRT_FUNC
 
-#ifdef WIN32
-#   define NRT_ERRNO GetLastError()
-#   define NRT_STRERROR(E) strerror(E)
+#if defined(WIN32) || defined(_WIN32)
+#   define NRT_ERRNO ((int) GetLastError())
 #else
 #   define  NRT_ERRNO errno
-#   define  NRT_STRERROR(E) strerror(E)
 #endif
+#   define  NRT_STRERROR(E) nrt_strerror(E)
 
 NRT_CXX_GUARD
 /*
@@ -72,6 +72,10 @@ enum
  *
  *  The important components of an error are stored here
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _NRT_Error
 {
     char message[NRT_MAX_EMESSAGE + 1];
@@ -80,6 +84,9 @@ typedef struct _NRT_Error
     char func[NRT_MAX_PATH + 1];
     int level;
 } nrt_Error;
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*!
  *  \fn nrt_Error_init
@@ -145,6 +152,12 @@ NRTPROT(void) nrt_Error_initf(nrt_Error * error, const char *file, int line,
  */
 NRTAPI(void) nrt_Error_print(nrt_Error * error, FILE * file,
                              const char *userMessage);
+
+/*!
+ *  \fn nrt_strerror
+ *  \brief Our own version of C's strerror() (to avoid warnings about using strerror())
+ */
+NRTAPI(char*) nrt_strerror(int errnum);
 
 NRT_CXX_ENDGUARD
 #endif

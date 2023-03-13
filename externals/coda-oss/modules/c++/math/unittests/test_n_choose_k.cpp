@@ -23,14 +23,12 @@
 #include <TestCase.h>
 #include <math/Utilities.h>
 
-namespace
-{
 TEST_CASE(testNChooseK)
 {
-    TEST_ASSERT_EQ(math::nChooseK(0, 0), 1);
-    TEST_ASSERT_EQ(math::nChooseK(1, 1), 1);
-    TEST_ASSERT_EQ(math::nChooseK(3, 2), 3);
-    TEST_ASSERT_EQ(math::nChooseK(10, 3), 120);
+  TEST_ASSERT_EQ(math::nChooseK(0, 0), static_cast<size_t>(1));
+  TEST_ASSERT_EQ(math::nChooseK(1, 1), static_cast<size_t>(1));
+  TEST_ASSERT_EQ(math::nChooseK(3, 2), static_cast<size_t>(3));
+  TEST_ASSERT_EQ(math::nChooseK(10, 3), static_cast<size_t>(120));
 }
 
 TEST_CASE(testNLessThanK)
@@ -46,12 +44,9 @@ TEST_CASE(testNLessThanK)
     }
     TEST_ASSERT(exceptionCaught);
 }
-}
 
-int main()
-{
+TEST_MAIN(
     TEST_CHECK(testNChooseK);
     TEST_CHECK(testNLessThanK);
-    return 0;
-}
+    )
 

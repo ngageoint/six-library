@@ -23,35 +23,35 @@
 #include "j2k/Container.h"
 
 
-J2KAPI(nrt_Uint32) j2k_Container_getGridWidth(j2k_Container *container,
+J2KAPI(uint32_t) j2k_Container_getGridWidth(j2k_Container *container,
                                           nrt_Error *error)
 {
     return container->iface->getGridWidth(container->data, error);
 }
 
-J2KAPI(nrt_Uint32) j2k_Container_getGridHeight(j2k_Container *container,
+J2KAPI(uint32_t) j2k_Container_getGridHeight(j2k_Container *container,
                                            nrt_Error *error)
 {
     return container->iface->getGridHeight(container->data, error);
 }
 
-J2KAPI(nrt_Uint32) j2k_Container_getNumComponents(j2k_Container *container,
+J2KAPI(uint32_t) j2k_Container_getNumComponents(j2k_Container *container,
                                                   nrt_Error *error)
 {
     return container->iface->getNumComponents(container->data, error);
 }
 
 J2KAPI(j2k_Component*) j2k_Container_getComponent(j2k_Container *container,
-                                                  nrt_Uint32 idx,
+                                                  uint32_t idx,
                                                   nrt_Error *error)
 {
     return container->iface->getComponent(container->data, idx, error);
 }
 
-J2KAPI(nrt_Uint32) j2k_Container_getWidth(j2k_Container *container,
+J2KAPI(uint32_t) j2k_Container_getWidth(j2k_Container *container,
                                           nrt_Error *error)
 {
-    nrt_Uint32 nComponents, i, width, cWidth;
+    uint32_t nComponents, i, width, cWidth;
     nComponents = j2k_Container_getNumComponents(container, error);
     width = 0;
     for(i = 0; i < nComponents; ++i)
@@ -64,10 +64,10 @@ J2KAPI(nrt_Uint32) j2k_Container_getWidth(j2k_Container *container,
     return width;
 }
 
-J2KAPI(nrt_Uint32) j2k_Container_getHeight(j2k_Container *container,
+J2KAPI(uint32_t) j2k_Container_getHeight(j2k_Container *container,
                                            nrt_Error *error)
 {
-    nrt_Uint32 nComponents, i, height, cHeight;
+    uint32_t nComponents, i, height, cHeight;
     nComponents = j2k_Container_getNumComponents(container, error);
     height = 0;
     for(i = 0; i < nComponents; ++i)
@@ -80,10 +80,10 @@ J2KAPI(nrt_Uint32) j2k_Container_getHeight(j2k_Container *container,
     return height;
 }
 
-J2KAPI(nrt_Uint32) j2k_Container_getPrecision(j2k_Container *container,
+J2KAPI(uint32_t) j2k_Container_getPrecision(j2k_Container *container,
                                               nrt_Error *error)
 {
-    nrt_Uint32 nComponents, i, precision, cPrecision;
+    uint32_t nComponents, i, precision, cPrecision;
     nComponents = j2k_Container_getNumComponents(container, error);
     precision = 0;
     for(i = 0; i < nComponents; ++i)
@@ -96,22 +96,22 @@ J2KAPI(nrt_Uint32) j2k_Container_getPrecision(j2k_Container *container,
     return precision;
 }
 
-J2KAPI(nrt_Uint32) j2k_Container_getTilesX(j2k_Container *container, nrt_Error *error)
+J2KAPI(uint32_t) j2k_Container_getTilesX(j2k_Container *container, nrt_Error *error)
 {
     return container->iface->getTilesX(container->data, error);
 }
 
-J2KAPI(nrt_Uint32) j2k_Container_getTilesY(j2k_Container *container, nrt_Error *error)
+J2KAPI(uint32_t) j2k_Container_getTilesY(j2k_Container *container, nrt_Error *error)
 {
     return container->iface->getTilesY(container->data, error);
 }
 
-J2KAPI(nrt_Uint32) j2k_Container_getTileWidth(j2k_Container *container, nrt_Error *error)
+J2KAPI(uint32_t) j2k_Container_getTileWidth(j2k_Container *container, nrt_Error *error)
 {
     return container->iface->getTileWidth(container->data, error);
 }
 
-J2KAPI(nrt_Uint32) j2k_Container_getTileHeight(j2k_Container *container, nrt_Error *error)
+J2KAPI(uint32_t) j2k_Container_getTileHeight(j2k_Container *container, nrt_Error *error)
 {
     return container->iface->getTileHeight(container->data, error);
 }

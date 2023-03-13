@@ -19,20 +19,23 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __NITF_BYTE_PROVIDER_HPP__
-#define __NITF_BYTE_PROVIDER_HPP__
+#ifndef NITF_ByteProvider_hpp_INCLUDED_
+#define NITF_ByteProvider_hpp_INCLUDED_
+#pragma once
 
 #include <vector>
 #include <utility>
 #include <memory>
+#include <std/span>
+#include <std/cstddef>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <nitf/System.hpp>
 #include <nitf/Record.hpp>
 #include <nitf/ImageBlocker.hpp>
 #include <nitf/NITFBufferList.hpp>
 #include <nitf/ImageSegmentComputer.h>
-#include <io/ByteStream.h>
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
@@ -93,10 +96,10 @@ namespace nitf
  * desSubheaderAndData
  *
  */
-class ByteProvider
+struct NITRO_NITFCPP_API ByteProvider
 {
-public:
     typedef std::pair<const void*, size_t> PtrAndLength;
+    using PtrAndLength_t = std::span<const std::byte>;
 
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
@@ -113,48 +116,55 @@ public:
                             std::vector<PtrAndLength>(),
                     size_t numRowsPerBlock = 0,
                     size_t numColsPerBlock = 0);
+    ByteProvider(Record& record,
+        const std::vector<PtrAndLength_t>& desData,
+        size_t numRowsPerBlock = 0,
+        size_t numColsPerBlock = 0);
 
     /*!
      * Destructor.  No virtual methods but this is virtual in case it's useful
      * to inherit from this class and use it polymorphically.
      */
-    virtual ~ByteProvider();
+    virtual ~ByteProvider() = default;
 
     //! \return The total number of bytes in the NITF
-    nitf::Off getFileNumBytes() const
+    nitf::Off getFileNumBytes() const noexcept
     {
         return mFileNumBytes;
     }
 
     //! \return The raw file header bytes
-    const std::vector<sys::byte>& getFileHeader() const
+    const std::vector<sys::byte>& getFileHeader() const noexcept
     {
         return mFileHeader;
     }
+    void getFileHeader(std::span<const std::byte>&) const noexcept;
 
     /*!
      * \return The raw bytes for each image subheader.  Vector size matches the
      * number of image segments.
      */
-    const std::vector<std::vector<sys::byte> >& getImageSubheaders() const
+    const std::vector<std::vector<sys::byte> >& getImageSubheaders() const noexcept
     {
         return mImageSubheaders;
     }
+    void getImageSubheaders(std::vector<std::span<const std::byte>>&) const;
 
     /*!
      * \return The raw bytes for each DES (subheader immediately followed by
      * raw DES data).  Vector size matches the number of data extension segments.
      */
-    const std::vector<sys::byte>& getDesSubheaderAndData() const
+    const std::vector<sys::byte>& getDesSubheaderAndData() const noexcept
     {
         return mDesSubheaderAndData;
     }
+    void getDesSubheaderAndData(std::span<const std::byte>&) const noexcept;
 
     /*!
      * \return The file offset for each image subheader.  Vector size matches
      * the number of image segments.
      */
-    const std::vector<nitf::Off>& getImageSubheaderFileOffsets() const
+    const std::vector<nitf::Off>& getImageSubheaderFileOffsets() const noexcept
     {
         return mImageSubheaderFileOffsets;
     }
@@ -162,7 +172,7 @@ public:
     /*!
      * \return The file offset for the first DES subheader.
      */
-    nitf::Off getDesSubheaderFileOffset() const
+    nitf::Off getDesSubheaderFileOffset() const noexcept
     {
         return mDesSubheaderFileOffset;
     }
@@ -233,7 +243,7 @@ public:
      * \return ImageBlocker with settings in sync with how the image will be
      * blocked in the NITF
      */
-    std::auto_ptr<const ImageBlocker> getImageBlocker() const;
+    mem::auto_ptr<const ImageBlocker> getImageBlocker() const;
 
 protected:
     /*!
@@ -241,7 +251,7 @@ protected:
      * this constructor, the inheriting class will call initialize() later in
      * its constructor.
      */
-    ByteProvider();
+    ByteProvider() = default;
 
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
@@ -253,18 +263,23 @@ protected:
      * \param numColsPerBlock The number of columns per block.  Defaults to no
      * blocking.
      */
-    void initialize(Record& record,
+    void initialize(const Record& record,
                     const std::vector<PtrAndLength>& desData =
                             std::vector<PtrAndLength>(),
                     size_t numRowsPerBlock = 0,
                     size_t numColsPerBlock = 0);
+    void initialize(const Record& record,
+        const std::vector<PtrAndLength_t>& desData,
+        size_t numRowsPerBlock = 0, size_t numColsPerBlock = 0);
 
     static void copyFromStreamAndClear(io::ByteStream& stream,
                                        std::vector<sys::byte>& rawBytes);
+    static void copyFromStreamAndClear(io::ByteStream& stream,
+                                       std::vector<std::byte>& rawBytes);
 
     size_t countPadRows(
             size_t seg, size_t numRowsToWrite,
-            size_t imageDataEndRow) const;
+            size_t imageDataEndRow) const noexcept;
 
     void addImageData(
             size_t seg,
@@ -277,8 +292,8 @@ protected:
             nitf::Off& fileOffset,
             NITFBufferList& buffers) const;
 
-    size_t countBytesForHeaders(size_t seg, size_t startRow) const;
-    size_t countBytesForDES(size_t seg, size_t imageDataEndRow) const;
+    size_t countBytesForHeaders(size_t seg, size_t startRow) const noexcept;
+    size_t countBytesForDES(size_t seg, size_t imageDataEndRow) const noexcept;
 
     void addHeaders(size_t seg, size_t startRow,
             nitf::Off& fileOffset,
@@ -288,15 +303,17 @@ protected:
      * These functions assume that we've already checked
      * we're writing in a range which includes seg
      */
-    bool shouldAddHeader(size_t seg, size_t startRow) const;
-    bool shouldAddSubheader(size_t seg, size_t startRow) const;
-    bool shouldAddDES(size_t seg, size_t imageDataEndRow) const;
+    bool shouldAddHeader(size_t seg, size_t startRow) const noexcept;
+    bool shouldAddSubheader(size_t seg, size_t startRow) const noexcept;
+    bool shouldAddDES(size_t seg, size_t imageDataEndRow) const noexcept;
 
     void addDES(size_t seg, size_t imageDataEndRow,
                 NITFBufferList& buffers) const;
 
-    void getFileLayout(nitf::Record& inRecord,
+    void getFileLayout(const nitf::Record& inRecord,
                        const std::vector<PtrAndLength>& desData);
+    void getFileLayout(const nitf::Record & inRecord,
+        const std::vector<PtrAndLength_t>&desData);
 
     std::vector<size_t> mImageDataLengths;
 
@@ -305,21 +322,22 @@ protected:
                        size_t numRowsToWrite) const;
 
     void initializeImpl(
-            Record& record,
+            const Record& record,
             const std::vector<PtrAndLength>& desData,
             size_t numRowsPerBlock,
             size_t numColsPerBlock);
+    void initializeImpl(
+        const Record & record,
+        const std::vector<PtrAndLength_t>&desData,
+        size_t numRowsPerBlock,
+        size_t numColsPerBlock);
 
     // Represents the row information for a NITF image segment
     struct SegmentInfo
     {
-        SegmentInfo() :
-            firstRow(0),
-            numRows(0)
-        {
-        }
+        SegmentInfo() = default;
 
-        size_t endRow() const
+        size_t endRow() const noexcept
         {
             return (firstRow + numRows);
         }
@@ -327,24 +345,24 @@ protected:
         bool isInRange(size_t rangeStartRow,
                        size_t rangeNumRows,
                        size_t& firstGlobalRowInThisSegment,
-                       size_t& numRowsInThisSegment) const
+                       size_t& numRowsInThisSegment) const noexcept
         {
             return ImageSegmentComputer::Segment::isInRange(
                     firstRow, endRow(), rangeStartRow, rangeNumRows,
                     firstGlobalRowInThisSegment, numRowsInThisSegment);
         }
 
-        size_t firstRow;
-        size_t numRows;
+        size_t firstRow = 0;
+        size_t numRows = 0;
     };
 
-    size_t mNumCols;
-    size_t mOverallNumRowsPerBlock;
+    size_t mNumCols = 0;
+    size_t mOverallNumRowsPerBlock = 0;
 
     std::vector<size_t> mNumRowsPerBlock; // Per segment
-    size_t mNumColsPerBlock;
-    size_t mNumBytesPerRow;
-    size_t mNumBytesPerPixel;
+    size_t mNumColsPerBlock = 0;
+    size_t mNumBytesPerRow = 0;
+    size_t mNumBytesPerPixel = 0;
 
     std::vector<SegmentInfo> mImageSegmentInfo; // Per segment
 
@@ -355,9 +373,21 @@ protected:
     std::vector<sys::byte> mDesSubheaderAndData;
 
     std::vector<nitf::Off> mImageSubheaderFileOffsets; // Per segment
-    nitf::Off mDesSubheaderFileOffset;
-    nitf::Off mFileNumBytes;
+    nitf::Off mDesSubheaderFileOffset = 0;
+    nitf::Off mFileNumBytes = 0;
+
+    private:
+        template<typename TPtrAndLength>
+        void getFileLayout_(const nitf::Record& inRecord,
+            const std::vector<TPtrAndLength>& desData);
+
+        template<typename TPtrAndLength>
+        void initializeImpl_(
+            const Record& record,
+            const std::vector<TPtrAndLength>& desData,
+            size_t numRowsPerBlock,
+            size_t numColsPerBlock);
 };
 }
 
-#endif
+#endif // NITF_ByteProvider_hpp_INCLUDED_
