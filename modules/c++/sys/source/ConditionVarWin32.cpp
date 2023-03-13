@@ -21,7 +21,7 @@
  */
 
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 
 #if !defined(USE_NSPR_THREADS)
 
@@ -182,7 +182,7 @@ void sys::ConditionVarDataWin32::broadcast()
         {
             mWasBroadcast = true;
             haveWaiters = true;
-            ReleaseSemaphore(mSemaphore, mNumWaiters, 0);
+            ReleaseSemaphore(mSemaphore, static_cast<LONG>(mNumWaiters), 0);
         }
         else
         {

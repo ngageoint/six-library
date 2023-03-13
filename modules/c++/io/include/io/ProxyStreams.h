@@ -23,20 +23,23 @@
 #ifndef __IO_PROXY_STREAMS_H__
 #define __IO_PROXY_STREAMS_H__
 
+#include "config/Exports.h"
 #include "io/InputStream.h"
 #include "io/OutputStream.h"
 #include "io/NullStreams.h"
+#include "mem/SharedPtr.h"
 
 namespace io
 {
-class ProxyInputStream: public InputStream
+struct CODA_OSS_API ProxyInputStream : public InputStream
 {
-public:
     ProxyInputStream(InputStream *proxy, bool ownPtr = false) :
         mOwnPtr(ownPtr)
     {
         mProxy.reset(proxy);
     }
+    ProxyInputStream(const ProxyInputStream&) = delete;
+    ProxyInputStream& operator=(const ProxyInputStream&) = delete;
 
     virtual ~ProxyInputStream()
     {
@@ -63,16 +66,16 @@ protected:
         return mProxy->read(buffer, len);
     }
 
-    std::auto_ptr<InputStream> mProxy;
+    mem::auto_ptr<InputStream> mProxy;
     bool mOwnPtr;
 };
 
 /**
  * Proxies to the given OutputStream.
  */
-class ProxyOutputStream: public OutputStream
+struct CODA_OSS_API ProxyOutputStream : public OutputStream
 {
-public:
+    ProxyOutputStream() = default;
     ProxyOutputStream(OutputStream *proxy, bool ownPtr = false) :
         mOwnPtr(ownPtr)
     {
@@ -83,6 +86,10 @@ public:
         if (!mOwnPtr)
             mProxy.release();
     }
+    ProxyOutputStream(const ProxyOutputStream&) = delete;
+    ProxyOutputStream& operator=(const ProxyOutputStream&) = delete;
+    ProxyOutputStream(ProxyOutputStream&&) = default;
+    ProxyOutputStream& operator=(ProxyOutputStream&&) = default;
 
     using OutputStream::write;
 
@@ -110,35 +117,34 @@ public:
     }
 
 protected:
-    std::auto_ptr<OutputStream> mProxy;
-    bool mOwnPtr;
+    mem::auto_ptr<OutputStream> mProxy;
+    bool mOwnPtr = false;
 };
 
 /**
  * An output stream that can be enabled/disabled (toggled).
  */
-class ToggleOutputStream: public io::ProxyOutputStream
+struct CODA_OSS_API ToggleOutputStream : public io::ProxyOutputStream
 {
-public:
-    ToggleOutputStream(io::OutputStream *output = NULL, bool ownPtr = false) :
-        io::ProxyOutputStream(NULL), mPtr(output),
-                mNullStream(new io::NullOutputStream), mOwnPtr(ownPtr)
+    ToggleOutputStream() = default;
+    ToggleOutputStream(io::OutputStream *output, bool ownPtr = false) :
+        io::ProxyOutputStream(nullptr), mPtr(output), mOwnPtr(ownPtr)
     {
-        setEnabled(mPtr != NULL);
     }
-
     virtual ~ToggleOutputStream()
     {
         if (mOwnPtr && mPtr)
             delete mPtr;
-        if (mNullStream)
-            delete mNullStream;
     }
+    ToggleOutputStream(const ToggleOutputStream&) = delete;
+    ToggleOutputStream& operator=(const ToggleOutputStream&) = delete;
+    ToggleOutputStream(ToggleOutputStream&&) = default;
+    ToggleOutputStream& operator=(ToggleOutputStream&&) = default;
 
     void setEnabled(bool flag)
     {
         mEnabled = flag && mPtr;
-        setProxy(mEnabled ? mPtr : mNullStream, false);
+        setProxy(mEnabled ? mPtr : &mNullStream, false);
     }
 
     inline bool isEnabled() const
@@ -154,8 +160,9 @@ public:
     }
 
 protected:
-    io::OutputStream *mPtr, *mNullStream;
-    bool mOwnPtr, mEnabled;
+    io::OutputStream* mPtr = nullptr;
+    io::NullOutputStream mNullStream;
+    bool mOwnPtr = false, mEnabled = false;
 };
 
 }

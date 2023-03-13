@@ -40,7 +40,7 @@
 void copyPermissions(const std::string& src, 
                      const std::string& dest)
 {
-#ifndef WIN32
+#if !(defined(WIN32) || defined(_WIN32))
     // set up permissions on unix --
     // copy the source's permissions
     struct stat statBuf;
@@ -68,6 +68,9 @@ void copyPermissions(const std::string& src,
         throw except::Exception(Ctxt(
             "Copy Failed: Could not set the ownership of the output"));
     }
+#else
+    UNREFERENCED_PARAMETER(src);
+    UNREFERENCED_PARAMETER(dest);
 #endif
 }
 

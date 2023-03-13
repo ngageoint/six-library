@@ -24,7 +24,9 @@
 #ifndef __SYS_SEMAPHORE_WIN32_H__
 #define __SYS_SEMAPHORE_WIN32_H__
 
-#if defined(WIN32)
+#include "config/Exports.h"
+
+#if defined(WIN32) || defined(_WIN32)
 
 #if !defined(USE_NSPR_THREADS)
 
@@ -34,7 +36,7 @@
 namespace sys
 {
 
-class SemaphoreWin32 : public SemaphoreInterface
+class CODA_OSS_API SemaphoreWin32 : public SemaphoreInterface
 {
 public:
     SemaphoreWin32(unsigned int count = 0, size_t maxCount = std::numeric_limits<size_t>::max());

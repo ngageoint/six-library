@@ -22,6 +22,7 @@
 
 #ifndef __IMPORT_MEM_H__
 #define __IMPORT_MEM_H__
+#pragma once
 
 #include <mem/BufferView.h>
 #include <mem/ScopedAlignedArray.h>
@@ -31,5 +32,6 @@
 #include <mem/SharedPtr.h>
 #include <mem/SwapBuffer.h>
 #include <mem/VectorOfPointers.h>
+#include <mem/Span.h>
 
 #endif

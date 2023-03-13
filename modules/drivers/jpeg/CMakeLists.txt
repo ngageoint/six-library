@@ -1,5 +1,16 @@
 set(TARGET_NAME jpeg)
 
+if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    # use this CMakeLists.txt to build and package libjpeg with conan
+    project(coda-oss_jpeg)
+    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    conan_basic_setup()
+    set(CODA_SKIP_SYSTEM_DEPENDENCIES ON)
+    include(CodaBuild.cmake)
+    coda_initialize_build()
+    coda_generate_package_config()
+endif()
+
 if (JPEG_HOME)
     find_library(${TARGET_NAME}_PATH
                  ${TARGET_NAME}
@@ -38,8 +49,8 @@ else()
 
     coda_fetch_driver(
         NAME ${TARGET_NAME}
-        ARCHIVE "jpegsrc.v9.tar"
-        HASH "SHA256=650de9b9c73b627c365c2c1617436bfdef47decddc1c6f7e006bd7655c4f8111"
+        ARCHIVE "jpegsrc.v9d.tar"
+        HASH "SHA256=898C46BFE9152D51220C6679E905DE4DF75D2A67DCF315BF80459673AB1EB797"
     )
     set(HAVE_PROTOTYPES 1)
     check_cxx_source_compiles("int main() { unsigned short; return 0; }"

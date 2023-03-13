@@ -127,13 +127,13 @@ int main(int argc, char** argv)
                   << std::setw(20) << std::right << std::fixed << std::setprecision(0) << swtime1 << " "
                   << std::setw(15) << std::right << numIterations << std::endl;
     }
-    catch (except::Exception ex)
+    catch (const except::Exception& ex)
     {
         std::cerr << "An exception occurred!" << std::endl;
         std::cerr << ex.toString() << std::endl;
         return 1;
     }
-    catch (std::exception ex)
+    catch (const std::exception& ex)
     {
         std::cerr << "An exception occurred!" << std::endl;
         std::cerr << ex.what() << std::endl;

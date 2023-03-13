@@ -28,6 +28,7 @@
 #include "net/ServerSocketFactory.h"
 #include "sys/SystemException.h"
 #include "net/SingleThreadedAllocStrategy.h"
+#include "mem/SharedPtr.h"
 
 
 /*! \file
@@ -73,7 +74,7 @@ public:
      *
      */
     void initialize(net::RequestHandlerFactory* requestHandlerFactory,
-		    net::AllocStrategy* allocStrategy = NULL);
+		    net::AllocStrategy* allocStrategy = nullptr);
     //virtual void handleConnection(NetConnection* connection) = 0;
 
     /*!
@@ -103,9 +104,9 @@ protected:
     //! The amount of backlog
     int mBacklog;
     //! The socket we are listening on
-    std::auto_ptr<net::Socket> mSocket;
+    mem::auto_ptr<net::Socket> mSocket;
 
-    std::auto_ptr<net::AllocStrategy> mAllocStrategy;
+    mem::auto_ptr<net::AllocStrategy> mAllocStrategy;
 };
 }
 

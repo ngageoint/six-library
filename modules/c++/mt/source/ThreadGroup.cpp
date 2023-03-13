@@ -53,24 +53,30 @@ ThreadGroup::~ThreadGroup()
 
 void ThreadGroup::createThread(sys::Runnable *runnable)
 {
-    createThread(std::auto_ptr<sys::Runnable>(runnable));
+    createThread(std::unique_ptr<sys::Runnable>(runnable));
 }
 
-void ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
+void ThreadGroup::createThread(std::unique_ptr<sys::Runnable>&& runnable)
 {
     // Note: If getNextInitializer throws, any previously created
     //       threads may never finish if cross-thread communication is used.
-    std::auto_ptr<sys::Runnable> internalRunnable(
+    std::unique_ptr<sys::Runnable> internalRunnable(
             new ThreadGroupRunnable(
-                    runnable,
+                    std::move(runnable),
                     *this,
                     getNextInitializer()));
 
-    mem::SharedPtr<sys::Thread> thread(new sys::Thread(internalRunnable.get()));
+    auto thread(std::make_shared<sys::Thread>(internalRunnable.get()));
     internalRunnable.release();
     mThreads.push_back(thread);
     thread->start();
 }
+#if CODA_OSS_autoptr_is_std
+void ThreadGroup::createThread(mem::auto_ptr<sys::Runnable> runnable)
+{
+    createThread(std::unique_ptr<sys::Runnable>(runnable.release()));
+}
+#endif
 
 void ThreadGroup::joinAll()
 {
@@ -115,26 +121,37 @@ void ThreadGroup::addException(const except::Exception& ex)
     }
 }
 
-std::auto_ptr<CPUAffinityThreadInitializer> ThreadGroup::getNextInitializer()
+mem::auto_ptr<CPUAffinityThreadInitializer> ThreadGroup::getNextInitializer()
 {
-    std::auto_ptr<CPUAffinityThreadInitializer> threadInit(NULL);
+    std::unique_ptr<CPUAffinityThreadInitializer> threadInit;
     if (mAffinityInit.get())
     {
         threadInit = mAffinityInit->newThreadInitializer();
     }
 
-    return threadInit;
+    return mem::auto_ptr<CPUAffinityThreadInitializer>(threadInit.release());
 }
 
 ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
-        std::auto_ptr<sys::Runnable> runnable,
+        std::unique_ptr<sys::Runnable>&& runnable,
         ThreadGroup& parentThreadGroup,
-        std::auto_ptr<CPUAffinityThreadInitializer> threadInit) :
-        mRunnable(runnable),
+        std::unique_ptr<CPUAffinityThreadInitializer>&& threadInit) :
+        mRunnable(std::move(runnable)),
         mParentThreadGroup(parentThreadGroup),
-        mCPUInit(threadInit)
+        mCPUInit(std::move(threadInit))
 {
 }
+#if CODA_OSS_autoptr_is_std
+ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
+        mem::auto_ptr<sys::Runnable> runnable,
+        ThreadGroup& parentThreadGroup,
+        mem::auto_ptr<CPUAffinityThreadInitializer> threadInit) :
+        ThreadGroupRunnable(std::unique_ptr<sys::Runnable>(runnable.release()),
+        parentThreadGroup,
+         std::unique_ptr<CPUAffinityThreadInitializer>(threadInit.release()))
+{
+}
+#endif
 
 void ThreadGroup::ThreadGroupRunnable::run()
 {

@@ -118,7 +118,6 @@ const npy_intp* const getDimensions(PyObject* pyArrayObject)
     {
         throw except::Exception(Ctxt(
                     "Numpy array has dimensions different than 2"));
-        return 0;
     }
     return PyArray_DIMS(reinterpret_cast<PyArrayObject*>(pyArrayObject));
 }
@@ -200,7 +199,7 @@ PyObject* toNumpyArray(size_t numColumns, int typenum,
     verifyNewPyObject(list);
     for (size_t ii = 0; ii < numRows; ++ii)
     {
-        npy_intp dimensions[] = { numColumns };
+        npy_intp dimensions[] = {static_cast <npy_intp>(numColumns)};
         PyObject* row =
                 PyArray_SimpleNewFromData(1, dimensions, typenum, data[ii]);
         verifyNewPyObject(row);

@@ -26,9 +26,8 @@
 namespace sys
 {
 // Implemented from boost/smart_ptr/detail/atomic_count_gcc_x86.hpp
-class AtomicCounterImpl
+struct AtomicCounterImpl
 {
-public:
     typedef int ValueType;
 
     explicit
@@ -52,6 +51,9 @@ public:
         return atomicExchangeAndAdd(&mValue, 0);
     }
 
+    AtomicCounterImpl(const AtomicCounterImpl&) = delete;
+    AtomicCounterImpl& operator=(const AtomicCounterImpl&) = delete;
+
 private:
     static
     ValueType atomicExchangeAndAdd(ValueType* pw, ValueType dv)
@@ -73,11 +75,6 @@ private:
 
         return r;
     }
-
-private:
-    // Noncopyable
-    AtomicCounterImpl(const AtomicCounterImpl& );
-    const AtomicCounterImpl& operator=(const AtomicCounterImpl& );
 
 private:
     mutable ValueType mValue;

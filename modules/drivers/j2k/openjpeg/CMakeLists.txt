@@ -1,5 +1,16 @@
 set(TARGET_NAME openjpeg)
 
+if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    # use this CMakeLists.txt to build and package openjpeg with conan
+    project(coda-oss_openjpeg)
+    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    conan_basic_setup()
+    set(CODA_SKIP_SYSTEM_DEPENDENCIES ON)
+    include(CodaBuild.cmake)
+    coda_initialize_build()
+    coda_generate_package_config()
+endif()
+
 if (J2K_HOME)
     find_library(${TARGET_NAME}_PATH
                  ${TARGET_NAME}
@@ -42,8 +53,8 @@ if (J2K_HOME)
 else()
     coda_fetch_driver(
         NAME ${TARGET_NAME}
-        ARCHIVE "openjpeg-2.3.0_mod.tar"
-        HASH "SHA256=1ddcff11ac2522fffd51693002bab5ddc690adf735d86a5e4c60eade4468bd19"
+        ARCHIVE "openjpeg-2.3.1_mod.tar"
+        HASH "SHA256=d25ed5ecbed03e3e1a058317d067dedb6d596277284072912ee434d25d1f58a6"
     )
 
     set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
@@ -51,10 +62,10 @@ else()
     check_include_file("stdint.h" OPJ_HAVE_STDINT_H)
     set(OPENJPEG_VERSION_MAJOR 2)
     set(OPENJPEG_VERSION_MINOR 3)
-    set(OPENJPEG_VERSION_BUILD 0)
+    set(OPENJPEG_VERSION_BUILD 1)
 
     check_include_file("inttypes.h" OPJ_HAVE_INTTYPES_H)
-    set(PACKAGE_VERSION 2.3.0)
+    set(PACKAGE_VERSION 2.3.1)
     set(_FILE_OFFSET_BITS 64)
     set(_LARGEFILE_SOURCE 1)
     set(_LARGE_FILES 1)

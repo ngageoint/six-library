@@ -34,11 +34,11 @@ namespace io
 class MMapInputStream : public SeekableInputStream
 {
 public:
-    MMapInputStream() : mFile(NULL), mLength(0), mData(NULL), mMark(0)
+    MMapInputStream() : mFile(nullptr), mLength(0), mData(nullptr), mMark(0)
     {}
     MMapInputStream(const std::string& inputFile,
                     char* flags = "r+b") :
-            mFile(NULL), mLength(0), mData(NULL), mMark(0)
+            mFile(nullptr), mLength(0), mData(nullptr), mMark(0)
     {
         open(inputFile, flags);
 

@@ -26,19 +26,14 @@
 
 #include <typeinfo>
 #include "sys/SystemException.h"
+#include "config/Exports.h"
 
 namespace sys
 {
-class SemaphoreInterface
+struct CODA_OSS_API SemaphoreInterface
 {
-
-public:
-
-    SemaphoreInterface()
-    {}
-
-    virtual ~SemaphoreInterface()
-    {}
+    SemaphoreInterface() = default;
+    virtual ~SemaphoreInterface() = default;
 
     virtual void signal() = 0;
 

@@ -24,7 +24,9 @@
 #ifndef __SYS_WIN32_CONDITION_VARIABLE_H__
 #define __SYS_WIN32_CONDITION_VARIABLE_H__
 
-#if defined(WIN32)
+#include "config/Exports.h"
+
+#if defined(WIN32) || defined(_WIN32)
 #if !defined(USE_NSPR_THREADS)
 
 #include "sys/ConditionVarInterface.h"
@@ -37,7 +39,7 @@ namespace sys
 ///        "Strategies for Implementing POSIX Condition Variables on Win32"
 ///        article at www.cse.wustl.edu/~schmidt/win32-cv-1.html.
 ///        This is the ACE framework implementation.
-class ConditionVarDataWin32
+class CODA_OSS_API ConditionVarDataWin32
 {
 public:
     ConditionVarDataWin32();
@@ -74,11 +76,9 @@ private:
     bool mWasBroadcast;
 };
 
-class ConditionVarWin32 : public ConditionVarInterface
+struct CODA_OSS_API ConditionVarWin32 final : public ConditionVarInterface
 
 {
-public:
-
     ConditionVarWin32();
     
     ConditionVarWin32(MutexWin32 *theLock, bool isOwner = false);
@@ -86,6 +86,9 @@ public:
     virtual ~ConditionVarWin32()
     {}
     
+    ConditionVarWin32(const ConditionVarWin32&) = delete;
+    ConditionVarWin32& operator=(const ConditionVarWin32&) = delete;
+
     /*!
      *  Acquire the lock
      */
@@ -145,7 +148,7 @@ public:
 
 private:
     // This is set if we own the mutex, to make sure it gets deleted.
-    std::auto_ptr<MutexWin32> mMutexOwned;
+    std::unique_ptr<MutexWin32> mMutexOwned;
     MutexWin32 *mMutex;
     ConditionVarDataWin32 mNative;
 };

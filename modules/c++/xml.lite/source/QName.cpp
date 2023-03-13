@@ -20,9 +20,10 @@
  *
  */
 
+#include <stdexcept>
+
 #include "xml/lite/QName.h"
-
-
+#include "str/Manip.h"
 
 std::string xml::lite::QName::getName() const
 {
@@ -70,12 +71,78 @@ void xml::lite::QName::setQName(const std::string& str)
     }
 }
 
-void xml::lite::QName::setAssociatedUri( const std::string& str )
+void xml::lite::QName::setAssociatedUri(const Uri& v)
 {
-    mAssocUri = str;
+    mAssocUri = v;
 }
 
+void xml::lite::QName::getAssociatedUri(Uri& v) const
+{
+    v = getUri();
+}
 std::string xml::lite::QName::getAssociatedUri() const
+{
+    return getUri().value;
+}
+const xml::lite::Uri& xml::lite::QName::getUri() const
 {
     return mAssocUri;
 }
+
+static std::string flatten(const std::vector<std::string>& strs, size_t start = 0)
+{
+    std::string retval;
+    for (size_t i = start; i < strs.size(); i++)
+    {
+        retval += strs[i];
+    }
+    return retval;
+}
+
+static const std::string& validate_uri(const std::string& uri, bool validate)
+{
+    if (!validate)
+    {
+        return uri;
+    }
+
+    // Do some very simple sanity-checking on a URI; this could be (much?) more sophisticated.
+    // https://en.wikipedia.org/wiki/Uniform_Resource_Identifier
+    if (uri.length() <= 6) // "ab:CDEF"
+    {
+        // There's nothing that says we can't have short URIs, but does it
+        // make sense in actual use cases?
+        throw std::invalid_argument("string value '" + uri + "' is (too?) short.");
+    }
+
+    const auto r = str::split(uri, ":");
+    if (r.size() < 2)
+    {
+        throw std::invalid_argument("string value '" + uri + "' is not a URI.");
+    }
+
+    if (r[0].length() <= 1)
+    {
+        // Is "a:" a real-world scheme?
+        throw std::invalid_argument("string value '" + r[0] + "' is not a URI scheme.");
+    }
+
+    const auto path = flatten(r, 1); // don't care about other ':'s
+    if (path.length() <= 6)
+    {
+        // does it make sense to have a really short path?
+        // in SIX we have "urn:us:gov"
+        throw std::invalid_argument("string value '" +  path + "' is (too?) short for a URI path.");        
+    }
+
+    return uri;
+}
+xml::lite::Uri::Uri(const std::string& uri, bool validate)
+{
+    value = validate_uri(uri, validate);
+}
+
+// Some projects have bogus? URIs ... do don't validate unless explicitly asked
+xml::lite::Uri::Uri(const std::string& uri) : Uri(uri, false /*validate*/) { }
+
+xml::lite::Uri::Uri() : Uri("") { } // default constructor; empty URI is OK

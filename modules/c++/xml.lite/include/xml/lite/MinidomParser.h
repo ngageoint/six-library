@@ -20,8 +20,12 @@
  *
  */
 
-#ifndef __XML_LITE_MINIDOM_PARSER_H__
-#define __XML_LITE_MINIDOM_PARSER_H__
+#ifndef CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_
+#define CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_
+#pragma once
+
+#include <memory>
+
 
 #include "xml/lite/XMLReader.h"
 #include "xml/lite/Document.h"
@@ -52,18 +56,19 @@ namespace lite
  * bloat of the spec.  It was inspired by python's xml.dom.minidom
  * module.
  */
-class MinidomParser
+struct MinidomParser // SOAPParser inherits :-(
 {
-public:
     /*!
      *  Constructor.  Set our SAX ContentHandler.
      */
-    MinidomParser();
+    explicit MinidomParser(bool storeEncoding = true);
 
     //! Destructor.
-    virtual ~MinidomParser()
-    {
-    }
+    virtual ~MinidomParser() = default;
+
+    MinidomParser(const MinidomParser&) = delete;
+    MinidomParser& operator=(const MinidomParser&) = delete;
+
 
     /*!
      *  Present our parsing interface.  Similar to DOM, the input
@@ -73,23 +78,24 @@ public:
      *  \param size  This is the size of the stream to feed the parser
      */
     virtual void parse(io::InputStream& is, int size = io::InputStream::IS_END);
-    
+    void parse(io::InputStream& is, const void*pInitialEncoding, const void* pFallbackEncoding,
+        int size = io::InputStream::IS_END);
 
     /*!
      *  This clears the MinidomHandler, killing its underlying Document
      *  tree.  The Document node is preserved, however -- it must
      *  be explicitly reset to another document to change element type.
      */
-    virtual void clear();
+    void clear();
 
     /*!
      *  Return a pointer to the document.  Note that its a reference
      *  so you dont get to keep it.
      *  \return Pointer to document.
      */
-    virtual Document *getDocument() const;
-
-    virtual Document *getDocument(bool steal = false);
+    Document *getDocument() const;
+    Document *getDocument(bool steal = false);
+    std::unique_ptr<Document>& getDocument(std::unique_ptr<Document>&); // steal = true
 
     /*!
      *  Reader accessor
@@ -110,24 +116,42 @@ public:
     }
 
     /*!
+     * Handler accessor
+     * \return The handler by reference
+     */
+    MinidomHandler& getHandler()
+    {
+        return mHandler;
+    }
+
+    /*!
      *  This is the public interface for resetting the
      *  XML document.  This will call the handler version of this
      *  function, which will delete the old document.
      *
      *  \param newDocument The new document.
      */
-    virtual void setDocument(Document * newDocument, bool own = true);
+    void setDocument(Document * newDocument, bool own = true);
+    void setDocument(std::unique_ptr<Document>&&);  // own = true
 
     /*!
      * @see MinidomHandler::preserveCharacterData
      */
-    virtual void preserveCharacterData(bool preserve);
+    void preserveCharacterData(bool preserve);
 
-protected:
+private:
     MinidomHandler mHandler;
     XMLReader mReader;
 };
+
+inline Document& getDocument(MinidomParser& xmlParser)
+{
+    auto retval = xmlParser.getDocument(false /*steal*/);
+    assert(retval != nullptr);
+    return *retval;
+}
+
 }
 }
 
-#endif
+#endif  // CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_

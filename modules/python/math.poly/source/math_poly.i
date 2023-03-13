@@ -2,6 +2,8 @@
 
 %feature("autodoc", "1");
 
+%include "config.i"
+
 %ignore math::poly::OneD<Vector3>::truncateToNonZeros;
 %ignore math::poly::OneD<Vector3>::transformInput;
 %ignore math::poly::OneD<Vector3>::integrate;
@@ -36,13 +38,13 @@ typedef math::linear::Vector<double> VectorDouble;
 %import "math_linear.i"
 %import "except.i"
 
-%include "std_string.i"
-%include "std_vector.i"
-%include "carrays.i"
+%include <std_string.i>
+%include <std_vector.i>
+%include <carrays.i>
 %array_functions(double, doubleArray);
 
 // Pickle utilities
-%import <types.i> // for std::vector pickling
+%import "types.i" // for std::vector pickling
 %pythoncode
 %{
     from coda.coda_types import pickle

@@ -21,6 +21,7 @@
  */
 
 #include <TestCase.h>
+#include <config/compiler_extensions.h>
 #include <numpyutils/numpyutils.h>
 
 namespace
@@ -36,7 +37,7 @@ TEST_CASE(testGetNumElements)
     // so we don't have anyone to do the cleanup work.
     std::vector<int> data(50);
     PyObject* pyArrayObject = numpyutils::toNumpyArray(5, 10, NPY_INT, data.data());
-    TEST_ASSERT_EQ(50, numpyutils::getNumElements(pyArrayObject));
+    TEST_ASSERT_EQ(static_cast<size_t>(50), numpyutils::getNumElements(pyArrayObject));
 
     PyObject* nonArrayObject = PyLong_FromLong(123L);
     TEST_THROWS(numpyutils::getNumElements(nonArrayObject));
@@ -46,5 +47,7 @@ TEST_CASE(testGetNumElements)
 int main(int /*argc*/, char** /*argv*/)
 {
     TEST_CHECK(testGetNumElements);
+    // wreaks havoc from the bowels of <numpy/arrayobject.h>
+    CODA_OSS_mark_symbol_unused(_import_array);
     return 0;
 }

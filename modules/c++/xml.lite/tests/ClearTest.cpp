@@ -44,7 +44,8 @@ int main()
     ss.write(xmldata, strlen(xmldata));
     xml::lite::MinidomParser p;
     p.parse(ss);
-    xml::lite::Element* elem = p.getDocument()->getRootElement();
+    auto& elem_ = getRootElement(getDocument(p));
+    auto elem = &elem_;
 
     std::vector<xml::lite::Element*> vec;
     elem->getElementsByTagName("A", vec);

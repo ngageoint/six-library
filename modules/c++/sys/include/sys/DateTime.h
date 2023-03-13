@@ -21,11 +21,16 @@
  */
 
 
-#ifndef __SYS_DATE_TIME_H__
-#define __SYS_DATE_TIME_H__
+#ifndef CODA_OSS_sys_DateTime_h_INCLUDED_
+#define CODA_OSS_sys_DateTime_h_INCLUDED_
+#pragma once
+
+#include <time.h>
+#include <stdint.h>
 
 #include <string>
-#include <time.h>
+
+#include "config/Exports.h"
 
 namespace sys
 {
@@ -33,18 +38,18 @@ namespace sys
 /*!
  *  Representation of a date/time structure.
  */
-class DateTime
+class CODA_OSS_API DateTime
 {
 protected:
-    int mYear;
-    int mMonth;
-    int mDayOfMonth;
-    int mDayOfWeek;
-    int mDayOfYear;
-    int mHour;
-    int mMinute;
-    double mSecond;
-    double mTimeInMillis;
+    int mYear = 0;
+    int mMonth = 0;
+    int mDayOfMonth = 0;
+    int mDayOfWeek = 0;
+    int mDayOfYear = 0;
+    int mHour = 0;
+    int mMinute = 0;
+    double mSecond = 0.0;
+    double mTimeInMillis = 0.0;
 
     // Turn a tm struct into a double
     double toMillis(tm t) const;
@@ -71,28 +76,34 @@ protected:
     //! @brief Given seconds since the epoch, provides the time
     virtual void getTime(time_t numSecondsSinceEpoch, tm& t) const = 0;
 
+public: // for unit-testing
+    static void localtime(time_t numSecondsSinceEpoch, tm& t);
+    static void gmtime(time_t numSecondsSinceEpoch, tm& t);
+
 public:
-    DateTime();
-    virtual ~DateTime();
+    DateTime() = default;
+    virtual ~DateTime() = default;
 
     //! Return month {1,12}
-    int getMonth() const { return mMonth; }
+    int getMonth() const noexcept { return mMonth; }
     //! Return day of month {1,31}
-    int getDayOfMonth() const { return mDayOfMonth; }
+    int getDayOfMonth() const noexcept { return mDayOfMonth; }
     //! Return day of week {1,7}
-    int getDayOfWeek() const { return mDayOfWeek; }
+    int getDayOfWeek() const noexcept { return mDayOfWeek; }
     //! Return day of year {1,366}
-    int getDayOfYear() const { return mDayOfYear; }
+    int getDayOfYear() const noexcept { return mDayOfYear; }
     //! Return hour {0,23}
-    int getHour() const { return mHour; }
+    int getHour() const noexcept { return mHour; }
     //! Return minute {0,59}
-    int getMinute() const { return mMinute; }
+    int getMinute() const noexcept { return mMinute; }
     //! Return second {0,59}
-    double getSecond() const { return mSecond; }
+    double getSecond() const noexcept { return mSecond; }
     //! Return millis since 1 Jan 1970
-    double getTimeInMillis() const { return mTimeInMillis; }
+    double getTimeInMillis() const noexcept { return mTimeInMillis; }
     //! Return the current year
-    int getYear() const { return mYear; }
+    int getYear() const noexcept { return mYear; }
+    //! Return the number of seconds since the time epoch
+    static int64_t getEpochSeconds() noexcept;
 
     // ! Given the {1,12} month return the alphabetic equivalent
     static std::string monthToString(int month);
@@ -174,7 +185,6 @@ public:
     }
     //@}
 };
-
 }
 
-#endif//__SYS_DATE_TIME_H__
+#endif//CODA_OSS_sys_DateTime_h_INCLUDED_

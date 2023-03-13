@@ -4,4 +4,4 @@ def configure(conf):
     conf.env['prefix_io'] = 'coda_'
 
 def build(bld):
-  bld.swigModule(name = 'io', use = 'io-c++', package='coda')
+  bld.swigModule(name = 'io', use = 'io-c++ config-python', package='coda')

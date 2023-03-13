@@ -24,9 +24,9 @@
 #ifndef __SYS_THREAD_PTHREAD_CONDITION_VARIABLE_H__
 #define __SYS_THREAD_PTHREAD_CONDITION_VARIABLE_H__
 
-#include <config/coda_oss_config.h>
+#include <sys/Conf.h>
 
-#if defined(HAVE_PTHREAD_H)
+#if CODA_OSS_POSIX_SOURCE
 
 #include "sys/MutexPosix.h"
 #include "sys/ConditionVarInterface.h"
@@ -42,10 +42,8 @@ namespace sys
  *  This class is the wrapper implementation for a pthread_cond_t
  *  (Pthread condition variable)
  */
-class ConditionVarPosix : public ConditionVarInterface
+struct ConditionVarPosix final : public ConditionVarInterface
 {
-public:
-
     ConditionVarPosix();
 
     //!  Constructor
@@ -53,6 +51,9 @@ public:
 
     //!  Destructor
     virtual ~ConditionVarPosix();
+
+    ConditionVarPosix(const ConditionVarPosix&) = delete;
+    ConditionVarPosix& operator=(const ConditionVarPosix&) = delete;
 
     /*!
      *  Acquire the lock
@@ -113,7 +114,7 @@ public:
 
 private:
     // This is set if we own the mutex, to make sure it gets deleted.
-    std::auto_ptr<MutexPosix> mMutexOwned;
+    std::unique_ptr<MutexPosix> mMutexOwned;
     MutexPosix *mMutex;
     pthread_cond_t mNative;
 };

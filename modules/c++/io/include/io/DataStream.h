@@ -44,17 +44,17 @@ namespace io
  *  is also considered to be Serializable, meaning that it conforms to
  *  the interface for a SerializableConnection
  */
-class DataStream: public io::Serializable
+struct DataStream: public io::Serializable
 {
-public:
-    //! Default constructor
-    DataStream()
-    {
-    }
+    DataStream() = default;
+
     //! Deconstructor
     virtual ~DataStream()
     {
     }
+
+    DataStream(const DataStream&) = delete;
+    DataStream& operator=(const DataStream&) = delete;
 
     //! Returns the number of bytes available to read.
     virtual sys::Off_T available()

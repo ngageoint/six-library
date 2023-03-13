@@ -40,13 +40,13 @@ size_t getAvailableMem(size_t systemMemBytes,
                        size_t reservedBytes,
                        double margin)
 {
-    const size_t relativeAvailable = systemMemBytes * margin;
+    const auto relativeAvailable = static_cast<size_t>(systemMemBytes * margin);
     if (reservedBytes > systemMemBytes)
     {
         return 0;
     }
 
-    const size_t absAvailable = systemMemBytes - reservedBytes;
+    const auto absAvailable = systemMemBytes - reservedBytes;
     return std::min(relativeAvailable, absAvailable);
 }
 

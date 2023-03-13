@@ -31,11 +31,10 @@
 
 namespace sys
 {
-class DirectoryEntry
+struct DirectoryEntry
 {
-public:
-    class Iterator;
-    friend class Iterator;
+    struct Iterator;
+    friend struct Iterator;
 
     DirectoryEntry(const Path& path)
     {
@@ -44,7 +43,7 @@ public:
 
         mCurrent = mDir.findFirstFile(path.getPath());
         mFirst.reset(this);
-        mLast.reset(NULL);
+        mLast.reset(nullptr);
 
     }
 
@@ -56,7 +55,7 @@ public:
 
         mCurrent = mDir.findFirstFile(path.getPath());
         mFirst.reset(this);
-        mLast.reset(NULL);
+        mLast.reset(nullptr);
         return *this;
     }
     */
@@ -66,10 +65,9 @@ public:
     {
         mCurrent = mDir.findFirstFile(dirName);
         mFirst.reset(this);
-        mLast.reset(NULL);
+        mLast.reset(nullptr);
     }
-    virtual ~DirectoryEntry()
-    {}
+    virtual ~DirectoryEntry() = default;
     virtual void next()
     {
         mCurrent = mDir.findNextFile();
@@ -83,11 +81,9 @@ public:
         return mDirName;
     }
 
-    class Iterator
+    struct Iterator final
     {
-    public:
-        Iterator() : mEntry(NULL)
-        {}
+        Iterator() = default;
         explicit Iterator(DirectoryEntry* dirEntry) : mEntry(dirEntry)
         {}
 
@@ -100,7 +96,7 @@ public:
         {
             mEntry->next();
             if (mEntry->mCurrent.empty()) 
-                mEntry = NULL;
+                mEntry = nullptr;
             return *this;
         }
         std::string operator*() const
@@ -121,8 +117,7 @@ public:
         }
 
     private:
-        DirectoryEntry* mEntry;
-
+        DirectoryEntry* mEntry = nullptr;
     };
 
     const Iterator& begin() const

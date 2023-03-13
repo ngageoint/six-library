@@ -22,7 +22,7 @@
 
 #include "sys/File.h"
 
-#ifndef WIN32
+#if !(defined(WIN32) || defined(_WIN32))
 
 #include <unistd.h>
 #include <string.h>
@@ -31,7 +31,6 @@
 void sys::File::create(const std::string& str, int accessFlags,
         int creationFlags)
 {
-
     if (accessFlags & sys::File::WRITE_ONLY)
         creationFlags |= sys::File::TRUNCATE;
     mHandle = open(str.c_str(), accessFlags | creationFlags, _SYS_DEFAULT_PERM);

@@ -71,6 +71,17 @@ void StreamHandler::setFormatter(Formatter* formatter)
     // start log with formatter injection
     write(mFormatter->getPrologue());
 }
+void StreamHandler::setFormatter(std::unique_ptr<Formatter>&& formatter)
+{
+    // end log with formatter injection
+    write(mFormatter->getEpilogue());
+
+    // delete old and reset to new
+    Handler::setFormatter(std::move(formatter));
+
+    // start log with formatter injection
+    write(mFormatter->getPrologue());
+}
 
 void StreamHandler::close()
 {

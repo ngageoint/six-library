@@ -5566,7 +5566,7 @@ SWIGINTERN PyObject *_wrap_elementDoubleTest__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = (PyObject *)elementDoubleTest(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5612,7 +5612,7 @@ SWIGINTERN PyObject *_wrap_elementDoubleTest__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = (PyObject *)elementDoubleTest(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())

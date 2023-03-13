@@ -3807,20 +3807,6 @@ fail:
 }
 
 
-SWIGINTERN int Swig_var_UTCDateTime_DEFAULT_DATETIME_FORMAT_set(PyObject *) {
-  SWIG_Error(SWIG_AttributeError,"Variable UTCDateTime_DEFAULT_DATETIME_FORMAT is read-only.");
-  return 1;
-}
-
-
-SWIGINTERN PyObject *Swig_var_UTCDateTime_DEFAULT_DATETIME_FORMAT_get(void) {
-  PyObject *pyobj = 0;
-  
-  pyobj = SWIG_FromCharPtr(sys::UTCDateTime::DEFAULT_DATETIME_FORMAT);
-  return pyobj;
-}
-
-
 SWIGINTERN PyObject *_wrap_new_UTCDateTime__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   sys::UTCDateTime *result = 0 ;
@@ -4006,6 +3992,31 @@ fail:
 SWIGINTERN PyObject *_wrap_new_UTCDateTime__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::string *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  sys::UTCDateTime *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_UTCDateTime",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__string,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_UTCDateTime" "', argument " "1"" of type '" "std::string const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_UTCDateTime" "', argument " "1"" of type '" "std::string const &""'"); 
+  }
+  arg1 = reinterpret_cast< std::string * >(argp1);
+  result = (sys::UTCDateTime *)new sys::UTCDateTime((std::string const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_sys__UTCDateTime, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_UTCDateTime__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
   std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -4040,31 +4051,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_UTCDateTime__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  std::string *arg1 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  sys::UTCDateTime *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_UTCDateTime",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__string,  0  | 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_UTCDateTime" "', argument " "1"" of type '" "std::string const &""'"); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_UTCDateTime" "', argument " "1"" of type '" "std::string const &""'"); 
-  }
-  arg1 = reinterpret_cast< std::string * >(argp1);
-  result = (sys::UTCDateTime *)new sys::UTCDateTime((std::string const &)*arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_sys__UTCDateTime, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_new_UTCDateTime(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
   PyObject *argv[7] = {
@@ -4085,7 +4071,7 @@ SWIGINTERN PyObject *_wrap_new_UTCDateTime(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      return _wrap_new_UTCDateTime__SWIG_6(self, args);
+      return _wrap_new_UTCDateTime__SWIG_5(self, args);
     }
   }
   if (argc == 1) {
@@ -4106,7 +4092,7 @@ SWIGINTERN PyObject *_wrap_new_UTCDateTime(PyObject *self, PyObject *args) {
       int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_std__string, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        return _wrap_new_UTCDateTime__SWIG_5(self, args);
+        return _wrap_new_UTCDateTime__SWIG_6(self, args);
       }
     }
   }
@@ -4203,8 +4189,8 @@ fail:
     "    sys::UTCDateTime::UTCDateTime(int,int,int)\n"
     "    sys::UTCDateTime::UTCDateTime(int,int,int,int,int,double)\n"
     "    sys::UTCDateTime::UTCDateTime(double)\n"
-    "    sys::UTCDateTime::UTCDateTime(std::string const &,std::string const &)\n"
-    "    sys::UTCDateTime::UTCDateTime(std::string const &)\n");
+    "    sys::UTCDateTime::UTCDateTime(std::string const &)\n"
+    "    sys::UTCDateTime::UTCDateTime(std::string const &,std::string const &)\n");
   return 0;
 }
 
@@ -4382,8 +4368,8 @@ static PyMethodDef SwigMethods[] = {
 		"UTCDateTime(int year, int month, int day)\n"
 		"UTCDateTime(int year, int month, int day, int hour, int minute, double second)\n"
 		"UTCDateTime(double timeInMillis)\n"
-		"UTCDateTime(std::string const & time, std::string const & format)\n"
-		"new_UTCDateTime(std::string const & time) -> UTCDateTime\n"
+		"UTCDateTime(std::string const & time)\n"
+		"new_UTCDateTime(std::string const & time, std::string const & format) -> UTCDateTime\n"
 		""},
 	 { (char *)"UTCDateTime_format", _wrap_UTCDateTime_format, METH_VARARGS, (char *)"\n"
 		"format()\n"
@@ -5179,7 +5165,6 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "SYS_FUNC",SWIG_FromCharPtr(""));
   PyDict_SetItemString(md,(char *)"cvar", SWIG_globals());
   SWIG_addvarlink(SWIG_globals(),(char *)"SSE_INSTRUCTION_ALIGNMENT",Swig_var_SSE_INSTRUCTION_ALIGNMENT_get, Swig_var_SSE_INSTRUCTION_ALIGNMENT_set);
-  SWIG_addvarlink(SWIG_globals(),(char *)"UTCDateTime_DEFAULT_DATETIME_FORMAT",Swig_var_UTCDateTime_DEFAULT_DATETIME_FORMAT_get, Swig_var_UTCDateTime_DEFAULT_DATETIME_FORMAT_set);
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else

@@ -1,5 +1,16 @@
 set(TARGET_NAME xerces-c)
 
+if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    # use this CMakeLists.txt to build and package zlib with conan
+    project(coda-oss_xerces-c)
+    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    conan_basic_setup()
+    set(CODA_SKIP_SYSTEM_DEPENDENCIES ON)
+    include(CodaBuild.cmake)
+    coda_initialize_build()
+    coda_generate_package_config()
+endif()
+
 if (WIN32)
     set(EXTERNAL_DEPS ws2_32 advapi32)
 elseif (UNIX)
@@ -48,8 +59,8 @@ else()
     message("XML_HOME not specified, so XercesC will be built")
     coda_fetch_driver(
         NAME ${TARGET_NAME}
-        ARCHIVE "xerces-c-3.1.1.tar"
-        HASH "SHA256=1F57A27DD1B3806DF42D5AE638C362358CD16519578D7D395FC77FFD35F4DBCB"
+        ARCHIVE "xerces-c-3.2.3.tar"
+        HASH "SHA256=61981c7a464e33913a093e0dfe7daf8a45f21e46b1924eb97f92bdbb746e2e6e"
     )
 
     check_include_file("inttypes.h" HAVE_INTTYPES_H)
@@ -154,28 +165,6 @@ else()
         set(XERCES_USE_TRANSCODER_WINDOWS 1)
         set(XERCES_PATH_DELIMITER_BACKSLASH 1)
 
-        set(XERCES_S16BIT_INT "__int16")
-        set(XERCES_S32BIT_INT "__int32")
-        set(XERCES_S64BIT_INT "__int32")
-        set(XERCES_U16BIT_INT "unsigned __int16")
-        set(XERCES_U32BIT_INT "unsigned __int32")
-        set(XERCES_U64BIT_INT "unsigned __int64")
-        set(XERCES_SIZE_T "size_t")
-        if (HAVE_WCHAR_H)
-            set(XERCES_XMLCH_T "wchar_t")
-        else()
-            set(XERCES_XMLCH_T "unsigned __int16")
-        endif()
-        if (HAVE_SSIZE_T)
-            set(XERCES_SSIZE_T "ssize_t")
-        else()
-            if (SIZEOF_SIZE_T STREQUAL 8)
-                set(XERCES_SSIZE_T "__int64")
-            else()
-                set(XERCES_SSIZE_T "__int32")
-            endif()
-        endif()
-
     # -- please note -- we diverge from the xerces-c make
     # system and treat all unix platforms similarly. Solaris
     # was make configured to use ICU and Linux the GNUICONV,
@@ -187,27 +176,41 @@ else()
         set(XERCES_USE_FILEMGR_POSIX 1)
         set(XERCES_USE_MUTEXMGR_POSIX 1)
         set(XERCES_USE_TRANSCODER_ICONV 1)
-
-        set(XERCES_S16BIT_INT "int16_t")
-        set(XERCES_S32BIT_INT "int32_t")
-        set(XERCES_S64BIT_INT "int64_t")
-        set(XERCES_U16BIT_INT "uint16_t")
-        set(XERCES_U32BIT_INT "uint32_t")
-        set(XERCES_U64BIT_INT "uint64_t")
-        set(XERCES_XMLCH_T "uint16_t")
-        set(XERCES_SIZE_T "size_t")
-        set(XERCES_SSIZE_T "ssize_t")
     endif()
+
+    set(XERCES_S16BIT_INT "int16_t")
+    set(XERCES_S32BIT_INT "int32_t")
+    set(XERCES_S64BIT_INT "int64_t")
+    set(XERCES_U16BIT_INT "uint16_t")
+    set(XERCES_U32BIT_INT "uint32_t")
+    set(XERCES_U64BIT_INT "uint64_t")
+    set(XERCES_SIZE_T "size_t")
+    # This is for a UTF-16 value, 16 bits
+    if (WIN32)
+        set(XERCES_XMLCH_T "wchar_t")
+    else()
+        set(XERCES_XMLCH_T "char16_t")
+    endif()
+    if (HAVE_SSIZE_T)
+        set(XERCES_SSIZE_T "ssize_t")
+    else()
+        if (SIZEOF_SIZE_T STREQUAL 8)
+            set(XERCES_SSIZE_T "int64_t")
+        else()
+            set(XERCES_SSIZE_T "int32_t")
+        endif()
+    endif()
+    set(XERCES_SIZE_MAX "SIZE_MAX")
 
     set(LT_OBJDIR .libs/)
     set(PACKAGE xerces-c)
     set(PACKAGE_BUGREPORT "")
     set(PACKAGE_NAME "xerces-c")
-    set(PACKAGE_STRING "xerces-c 3.1.1")
+    set(PACKAGE_STRING "xerces-c 3.2.3")
     set(PACKAGE_TARNAME "xerces-c")
     set(PACKAGE_URL "")
-    set(PACKAGE_VERSION "3.1.1")
-    set(VERSION "3.1.1")
+    set(PACKAGE_VERSION "3.2.3")
+    set(VERSION "3.2.3")
 
     # extra defines for Xerces_autoconf_config.hpp
     set(XERCES_USE_MSGLOADER_INMEMORY 1)
@@ -223,6 +226,7 @@ else()
         set(XERCES_PLATFORM_EXPORT "__declspec(dllexport)")
     endif()
     set(XERCES_PLATFORM_IMPORT "")
+    set(XERCES_TEMPLATE_EXTERN "extern")
     set(XERCES_HAS_CPP_NAMESPACE 1)
     set(XERCES_STD_NAMESPACE 1)
     set(XERCES_NEW_IOSTREAMS 1)
@@ -289,14 +293,11 @@ else()
     target_include_directories(${TARGET_NAME}
         PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
                "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
-               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
+               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>"
+               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/config>")
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/config.h"
-            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
+            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/config"
             ${CODA_INSTALL_OPTION})
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xercesc/util/Xerces_autoconf_config.hpp"
-            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/util"
-            ${CODA_INSTALL_OPTION})
-    configure_file("Xerces_autoconf_config.hpp.in" "")
     install(DIRECTORY "${SOURCE_DIR}/src/xercesc"
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
             ${CODA_INSTALL_OPTION}
@@ -304,6 +305,9 @@ else()
                 PATTERN "*.h"
                 PATTERN "*.hpp"
                 PATTERN "*.c")
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xercesc/util/Xerces_autoconf_config.hpp"
+            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/util"
+            ${CODA_INSTALL_OPTION})
 endif()
 install(TARGETS ${TARGET_NAME}
         EXPORT ${CODA_EXPORT_SET_NAME}

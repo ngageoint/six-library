@@ -20,8 +20,14 @@
  *
  */
 
-#ifndef __XML_LITE_UTILITIES_XERCES_H__
-#define __XML_LITE_UTILITIES_XERCES_H__
+#ifndef CODA_OSS_xml_lite_UtilitiesXerces_h_INCLUDED_
+#define CODA_OSS_xml_lite_UtilitiesXerces_h_INCLUDED_
+
+#include <stdint.h>
+
+#include <string>
+#include <mutex>
+#include <type_traits>
 
 #include "xml/lite/xml_lite_config.h"
 
@@ -51,18 +57,18 @@
 #include <xercesc/util/XercesDefs.hpp>
 #include <xercesc/sax/ErrorHandler.hpp>
 
+#include <sys/Mutex.h>
+#include <mt/CriticalSection.h>
+#include <except/Error.h>
 #include <io/StringStream.h>
 #include <io/OutputStream.h>
 #include <io/InputStream.h>
-#include <sys/Mutex.h>
-#include <mt/CriticalSection.h>
+
 #include "xml/lite/XMLException.h"
 #include "xml/lite/ContentHandler.h"
 #include "xml/lite/Attributes.h"
 #include "xml/lite/NamespaceStack.h"
 #include "xml/lite/XMLReaderInterface.h"
-#include <except/Error.h>
-
 
 #if defined(XERCES_VERSION_MAJOR)
 #   if XERCES_VERSION_MAJOR == 2
@@ -105,6 +111,7 @@ typedef xml::lite::AttributeNode  LiteAttributesNode_T;
  *  non-const it takes ownership, and for const memory (assumed
  *  to be owned elsewhere) it makes a deep copy for its own use.
  */
+
 class XercesLocalString
 {
 public:
@@ -214,12 +221,12 @@ public:
 
     static void destroyXMLCh(XMLCh** a)
     {
-        if (a != NULL && *a != NULL)
+        if (a != nullptr && *a != nullptr)
         {
             try 
             {
                 XMLString::release(a);
-                *a = NULL;
+                *a = nullptr;
             }
             catch (...)
             {
@@ -231,12 +238,12 @@ public:
 
     static void destroyChArray(char** a)
     {
-        if (a != NULL && *a != NULL)
+        if (a != nullptr && *a != nullptr)
         {
             try 
             {
                 XMLString::release(a);
-                *a = NULL;
+                *a = nullptr;
             }
             catch (...)
             {
@@ -275,21 +282,23 @@ private:
  *  Xerces use as well as Expat (and ultimately MSXML as well)
  *
  */
-class XercesContentHandler : public XercesContentHandlerInterface_T
+struct XercesContentHandler : public XercesContentHandlerInterface_T
 {
-public:
     /*!
      *  Our constructor will use an underlying LiteContentHandler
      *  We will only bind to this, not free it.
      *  \param ch  The handler to bind
      */
-    XercesContentHandler(xml::lite::ContentHandler* ch = NULL)
+    XercesContentHandler(xml::lite::ContentHandler* ch = nullptr)
     {
         mLiteHandler = ch;
     }
 
     ~XercesContentHandler()
     {}
+
+    XercesContentHandler(const XercesContentHandler&) = delete;
+    XercesContentHandler& operator=(const XercesContentHandler&) = delete;
 
     virtual void ignorableWhitespace(const XMLCh* const /*chars*/,
                                      const XercesSize_T /*length*/)
@@ -391,32 +400,35 @@ protected:
 *  Our error handler implementation, then, simply calls the raise,
 *  and warning macros in the factory.
 */
-class XercesErrorHandler : public XercesErrorHandlerInterface_T
+struct XercesErrorHandler final : public XercesErrorHandlerInterface_T
 {
-public:
+    XercesErrorHandler() = default;
+    XercesErrorHandler(const XercesErrorHandler&) = delete;
+    XercesErrorHandler& operator=(const XercesErrorHandler&) = delete;
+    XercesErrorHandler(XercesErrorHandler&&) = delete;
+    XercesErrorHandler& operator=(XercesErrorHandler&&) = delete;
+
     /*!
      *  Receive notification of a warning. We want to call
      *  __warning__(message);
      *  \param exception  The exception
      */
-    virtual void warning(const SAXParseException &exception);
+    void warning(const SAXParseException &exception) override;
 
-    virtual void error (const SAXParseException &exception);
+    void error(const SAXParseException& exception) override;
 
-    virtual void fatalError (const SAXParseException &exception);
+    void fatalError(const SAXParseException& exception) override;
 
     // Useless??
-    virtual void resetErrors() {}
+    void resetErrors() override {}
 };
 
 /*!
  *  \class XercesContext
  *  \brief This class safely creates and destroys Xerces
  */
-class XercesContext
+struct XercesContext final
 {
-public:
-
     //! Constructor
     XercesContext();
     
@@ -426,8 +438,7 @@ public:
     void destroy();
     
 private:
-
-    static sys::Mutex mMutex;
+    static std::mutex mMutex;
     bool mIsDestroyed;
 };
 }
@@ -435,4 +446,4 @@ private:
 
 #endif
 
-#endif
+#endif  // CODA_OSS_xml_lite_UtilitiesXerces_h_INCLUDED_

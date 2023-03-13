@@ -25,6 +25,7 @@
 #include <sstream>
 #include <import/io.h>
 #include <import/except.h>
+#include <import/mem.h>
 
 #include "tiff/Common.h"
 #include "tiff/GenericType.h"
@@ -49,7 +50,7 @@ void tiff::IFDEntry::serialize(io::OutputStream& output)
     if (size > 4)
     {
         // Keep the current position and jump to the write position.
-        sys::Uint32_T current = seekable->tell();
+        const auto current = seekable->tell();
         seekable->seek(mOffset, io::Seekable::START);
 
         // Write the values out at the current cursor position
@@ -69,9 +70,9 @@ void tiff::IFDEntry::serialize(io::OutputStream& output)
         {
             // The value must take up four bytes.  If the number of bytes is
             // less than four, duplicate the value until you hit 4 bytes in length.
-            unsigned short iterations = (4 / mCount) / mValues[i]->size();
+            const auto iterations = (4 / mCount) / mValues[i]->size();
 
-            for (int j = 0; j < iterations; ++j)
+            for (size_t j = 0; j < iterations; ++j)
                 output.write((sys::byte *)mValues[i]->data(),
                         mValues[i]->size());
         }
@@ -108,7 +109,7 @@ void tiff::IFDEntry::deserialize(io::InputStream& input, const bool reverseBytes
     if (size > 4)
     {
         // Keep the current position and jump to the read position.
-        sys::Uint32_T current = seekable->tell();
+        const auto current = seekable->tell();
         seekable->seek(mOffset, io::Seekable::START);
 
         // Read in the value(s);
@@ -117,7 +118,7 @@ void tiff::IFDEntry::deserialize(io::InputStream& input, const bool reverseBytes
         input.read(buffer, size);
         if (reverseBytes)
         {
-            sys::Uint32_T elementSize = tiff::Const::sizeOf(mType);
+            auto elementSize = tiff::Const::sizeOf(mType);
             sys::Uint32_T numElements = mCount;
             if (mType == tiff::Const::Type::RATIONAL && mType
                     == tiff::Const::Type::SRATIONAL)
@@ -126,7 +127,7 @@ void tiff::IFDEntry::deserialize(io::InputStream& input, const bool reverseBytes
                 numElements = mCount * 2;
             }
             if (elementSize > 1)
-                sys::byteSwap(buffer, elementSize, numElements);
+                sys::byteSwap(buffer, static_cast<unsigned short>(elementSize), numElements);
         }
 
         parseValues((const unsigned char *)buffer);
@@ -141,9 +142,8 @@ void tiff::IFDEntry::deserialize(io::InputStream& input, const bool reverseBytes
         {
             // Re-reverse because a value may be less than 4 bytes.
             mOffset = sys::byteSwap(mOffset);
-            unsigned short elementSize = tiff::Const::sizeOf(mType);
-            sys::byteSwap((sys::byte*)&mOffset, elementSize, sizeof(mOffset)
-              / elementSize);
+            const auto elementSize = tiff::Const::sizeOf(mType);
+            sys::byteSwap((sys::byte*)&mOffset, elementSize, sizeof(mOffset) / elementSize);
         }
         parseValues((unsigned char *)&mOffset);
     }
@@ -200,9 +200,9 @@ void tiff::IFDEntry::addValues(const char* str, int tiffType)
 
     for (size_t ii = 0, len = ::strlen(str) + 1; ii < len; ++ii)
     {
-        std::auto_ptr<tiff::TypeInterface>
-            value(tiff::TypeFactory::create(strPtr + ii, tiffType));
-        addValue(value);
+        std::unique_ptr<tiff::TypeInterface>
+            value(tiff::TypeFactory::create(strPtr + ii, static_cast<unsigned short>(tiffType)));
+        addValue(value.release());
     }
 }
 
@@ -221,7 +221,7 @@ void tiff::IFDEntry::parseValues(const unsigned char *buffer)
 
 sys::Uint32_T tiff::IFDEntry::finalize(const sys::Uint32_T offset)
 {
-    mCount = mValues.size();
+    mCount = static_cast<sys::Uint32_T>(mValues.size());
 
     sys::Uint32_T size = mCount * tiff::Const::sizeOf(mType);
     if (size > 4)

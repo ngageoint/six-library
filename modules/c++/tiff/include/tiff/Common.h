@@ -239,6 +239,7 @@ public:
      *   the string form of the rational number
      *************************************************************/
     static std::string toString(const sys::Uint32_T data);
+    static std::string toString(const sys::Uint64_T data);
 
 };
 

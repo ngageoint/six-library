@@ -58,7 +58,7 @@
 #include <str/Convert.h>
 
 const size_t NUM_TRIALS = 4;
-const size_t MAX_SIZE = 10E9;
+const size_t MAX_SIZE = SIZE_MAX;
 
 //Limits num so that it is less than 100
 template<typename T>
@@ -95,7 +95,7 @@ void getMultWComplex(sys::RealTimeStopWatch& wtch,
     //declare starting point
     std::vector<std::complex<float> > out (sze, 0);
     double dblFactor = 1.23486;
-    float factor = dblFactor;
+    float factor = static_cast<float>(dblFactor);
     double incFact = .0000001;
     //start the watch
     wtch.start();
@@ -107,7 +107,7 @@ void getMultWComplex(sys::RealTimeStopWatch& wtch,
         {
             out[i] = in[i] *  factor;
             dblFactor += incFact;
-            factor = dblFactor;
+            factor = static_cast<float>(dblFactor);
         }
     }
 
@@ -142,7 +142,7 @@ void getMultWDouble(sys::RealTimeStopWatch& wtch,
     float Q = 0.0;
     std::vector<std::complex<float> > out (sze, 0);
     double dblFactor = 1.23486;
-    float factor = dblFactor;
+    float factor = static_cast<float>(dblFactor);
     double incFact = .0000001;
 
     //start the watch
@@ -158,7 +158,7 @@ void getMultWDouble(sys::RealTimeStopWatch& wtch,
 
             out[i] = std::complex<float>(I, Q);
             dblFactor += incFact;
-            factor = dblFactor;
+            factor = static_cast<float>(dblFactor);
         }
     }
 
@@ -171,7 +171,7 @@ void getMultWDouble(sys::RealTimeStopWatch& wtch,
 //Prints out the results in a table format
 void print(std::ostream& out, size_t sze, double durOne, double durTwo)
 {
-    std::cout << std::setw(15) << sze
+    out << std::setw(15) << sze
         << std::setw(15) << durOne/1000
         << std::setw(25) << durTwo/1000 << std::endl;
 }
@@ -199,10 +199,10 @@ void loopingBenchmark(size_t size,
     std::vector<std::complex<float> > arr(size);
 
     //fill the vector based on a random number
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(NULL)));
 
-    float real = rand() % 100 + 1;
-    float imag = rand() % 100 + 1;
+    auto real = static_cast<float>(rand() % 100 + 1);
+    auto imag = static_cast<float>(rand() % 100 + 1);
 
     arr[0] = std::complex<float>(real, imag);
     for (size_t i = 0; i < size; ++i)
@@ -255,9 +255,9 @@ size_t decideSize(size_t initSize, size_t growthFactor, size_t numGrowths)
 {
     //setup size calculation variables
     const size_t MAX_SZE = MAX_SIZE / (sizeof( std::complex<float>));
-    size_t largestPosGrowth =
+    auto largestPosGrowth = static_cast<size_t>(
         initSize * std::pow(static_cast<double>(growthFactor),
-                            static_cast<double>(numGrowths));
+                            static_cast<double>(numGrowths)));
     size_t largestPosSize = std::min(largestPosGrowth, MAX_SZE);
 
     //if growth is too high, find last growth less than MaxSize
@@ -297,10 +297,10 @@ void singlePassBenchmark(size_t size,
     std::vector<std::complex<float> > arr;
     arr.reserve(endSize);
 
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(NULL)));
 
-    float real =  rand() % 100 + 1;
-    float imag =  rand() % 100 + 1;
+    auto real =  static_cast<float>(rand() % 100 + 1);
+    auto imag =  static_cast<float>(rand() % 100 + 1);
 
     arr.push_back(std::complex<float>(real, imag));
 
