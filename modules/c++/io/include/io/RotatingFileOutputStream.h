@@ -46,7 +46,7 @@ struct CODA_OSS_API RotatingFileOutputStream : public CountingOutputStream
 
     using CountingOutputStream::write;
 
-    virtual void write(const void* buffer, size_t len);
+    virtual void write(const void* buffer, size_t len) override;
 
 protected:
     std::string mFilename;

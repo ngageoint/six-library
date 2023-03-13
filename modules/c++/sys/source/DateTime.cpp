@@ -350,7 +350,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
 
     // LINTED functional specification
     return ((char *) bp);
-};
+}
 }
 
 void sys::DateTime::fromMillis()

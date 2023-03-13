@@ -51,7 +51,7 @@ public:
     {
     }
 
-    virtual void run()
+    virtual void run() override
     {
         sleep(TO_SLEEP);
         mSem.signal();

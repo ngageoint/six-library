@@ -25,7 +25,7 @@ public:
     {
     }
 
-    virtual void run()
+    virtual void run() override
     {
         for (size_t ii = mStartElement; ii < mEndElement; ++ii)
         {

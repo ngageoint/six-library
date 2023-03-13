@@ -40,7 +40,7 @@
 void copyPermissions(const std::string& src, 
                      const std::string& dest)
 {
-#if !(defined(WIN32) || defined(_WIN32))
+#ifndef _WIN32
     // set up permissions on unix --
     // copy the source's permissions
     struct stat statBuf;

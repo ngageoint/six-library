@@ -1,8 +1,8 @@
 set(MODULE_NAME hdf5.lite)
 
 if(CODA_ENABLE_HDF5)
-    set(MODULE_DEPS str-c++ except-c++ types-c++ io-c++ logging-c++ str-c++ coda_oss-c++ config-c++ gsl-c++)
-    list(APPEND MODULE_DEPS hdf5-c++)
+    set(MODULE_DEPS highfive-c++ hdf5-c++)
+    list(APPEND MODULE_DEPS except-c++ types-c++ io-c++ coda_oss-c++)
 
     coda_add_module(
         ${MODULE_NAME}

@@ -39,6 +39,7 @@
 #include <assert.h>
 
 #include <utility>
+#include <std/memory>
 #include "coda_oss/string.h"
 #include "coda_oss/memory.h"
 
@@ -103,7 +104,7 @@ struct Document // SOAPDocument derives :-(
      * \param characterData The character data (if any)
      * \return A new element
      */
-    Element *createElement(const std::string & qname, const std::string & uri, std::string characterData = "");
+    virtual Element *createElement(const std::string & qname, const std::string & uri, std::string characterData = "");
     #ifndef SWIG // SWIG doesn't like std::unique_ptr
     std::unique_ptr<Element> createElement(const xml::lite::QName&, const std::string& characterData) const;
     std::unique_ptr<Element> createElement(const xml::lite::QName&, const coda_oss::u8string& characterData) const;

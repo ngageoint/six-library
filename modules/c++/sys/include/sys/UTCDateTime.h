@@ -41,10 +41,10 @@ protected:
     /**
      * @brief Set the millis value from the members
      */
-    virtual void toMillis();
+    virtual void toMillis() override;
 
     //! Given seconds since the epoch, provides the UTC time
-    virtual void getTime(time_t numSecondsSinceEpoch, tm& t) const;
+    virtual void getTime(time_t numSecondsSinceEpoch, tm& t) const override;
 
 public:
     /*!

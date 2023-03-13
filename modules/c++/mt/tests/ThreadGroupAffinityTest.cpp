@@ -43,7 +43,7 @@ public:
     {
     }
 
-    virtual void run()
+    virtual void run() override
     {
         // Print diagnostics from inside the thread
         while(true)

@@ -125,7 +125,7 @@ public:
      *  For simplicity, the final position is reported in the return value relative
      *  to header start (always).  This is done by calling tell().
      */
-    sys::Off_T seek( sys::Off_T offset, Whence whence );
+    sys::Off_T seek( sys::Off_T offset, Whence whence ) override;
 
     /*!
      *  Overloaded method, only works if this is a FileInputStream.
@@ -134,10 +134,10 @@ public:
      *  yield 0 as a return value.
      *
      */
-    sys::Off_T tell();
+    sys::Off_T tell() override;
 
 
-    void killStream();
+    void killStream() override;
 protected:
 };
 }

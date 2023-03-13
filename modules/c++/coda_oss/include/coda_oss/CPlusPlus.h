@@ -48,14 +48,18 @@
 
     #if defined(__GNUC__)
     #endif // __GNUC__
+
+    #if defined(__INTEL_COMPILER)
+    #endif  // __INTEL_COMPILER
 #endif // CODA_OSS_cplusplus
+
 #if CODA_OSS_cplusplus < 202002L
     // oops ... try to fix
-    #if defined(__GNUC__) && (__cplusplus >= 201709L) // note > C++ 17 of 201703L
+    #if defined(__GNUC__) && (__cplusplus >= 201709L)  // note > C++ 17 of 201703L
         // Enough C++20 for our needs
         #undef CODA_OSS_cplusplus
         #define CODA_OSS_cplusplus 202002L
-     #endif
+    #endif
 #endif  // CODA_OSS_cplusplus
 
 // Define a few macros as that's less verbose than testing against a version number

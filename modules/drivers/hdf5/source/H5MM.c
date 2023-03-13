@@ -658,7 +658,9 @@ H5MM_memcpy(void *dest, const void *src, size_t n)
     HDassert(src);
 
     /* Check for buffer overlap */
-    HDassert((char *)dest >= (const char *)src + n || (const char *)src >= (char *)dest + n);
+    const char* src_n = (const char*)src + n;
+    const char* dest_n = (const char*)dest + n;
+    HDassert((const char *)dest >= src_n || (const char *)src >= dest_n);
 
     /* Copy */
     ret = HDmemcpy(dest, src, n);

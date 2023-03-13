@@ -1,7 +1,7 @@
 #ifndef __NET_DAEMON_UNIX_H__
 #define __NET_DAEMON_UNIX_H__
 
-#if !(defined(WIN32) || defined(_WIN32))
+#ifndef _WIN32
 
 #include "net/DaemonInterface.h"
 #include <import/sys.h>
@@ -21,29 +21,29 @@ public:
     virtual ~DaemonUnix();
 
     //! Start the daemon
-    void start();
+    void start() override;
 
     //! Stop the daemon specified in pidfile
-    void stop();
+    void stop() override;
 
     //! Stop the daemon specified in pidfile and start a new one
-    void restart();
+    void restart() override;
 
     //! Parse and execute command line option (start/stop/restart)
-    void daemonize(int& argc, char**& argv);
+    void daemonize(int& argc, char**& argv) override;
 
 
     //! Set pidfile (file for locking application to single occurance).
-    void setPidfile(const std::string& pidfile);
+    void setPidfile(const std::string& pidfile) override;
 
     //! Get pidfile.
-    std::string getPidfile() const { return mPidfile; }
+    std::string getPidfile() const override { return mPidfile; }
 
     //! Set tracefile (file to redirect stdout and stderr).
-    void setTracefile(const std::string& tracefile);
+    void setTracefile(const std::string& tracefile) override;
 
     //! Get tracefile.
-    std::string getTracefile() const { return mTracefile; }
+    std::string getTracefile() const override { return mTracefile; }
 
 protected:
     std::string mPidfile;

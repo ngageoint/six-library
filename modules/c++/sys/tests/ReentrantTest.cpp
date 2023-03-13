@@ -29,7 +29,7 @@ class NoteThread : public Thread
 public:
     NoteThread()
     {   std::cout << "Constructed a thread" << std::endl;}
-    void run()
+    void run() override
     {   std::cout << "Running a thread" << std::endl;}
 
     ~NoteThread()

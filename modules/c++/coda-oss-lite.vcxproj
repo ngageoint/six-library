@@ -28,6 +28,7 @@
     <ClInclude Include="coda_oss\include\coda_oss\string.h" />
     <ClInclude Include="coda_oss\include\coda_oss\type_traits.h" />
     <ClInclude Include="config\include\config\compiler_extensions.h" />
+    <ClInclude Include="config\include\config\disable_compiler_warnings.h" />
     <ClInclude Include="config\include\config\Exports.h" />
     <ClInclude Include="config\include\config\Version.h" />
     <ClInclude Include="except\include\except\Backtrace.h" />
@@ -116,6 +117,7 @@
     <ClInclude Include="mem\include\mem\Align.h" />
     <ClInclude Include="mem\include\mem\AutoPtr.h" />
     <ClInclude Include="mem\include\mem\BufferView.h" />
+    <ClInclude Include="mem\include\mem\ComplexView.h" />
     <ClInclude Include="mem\include\mem\ScopedAlignedArray.h" />
     <ClInclude Include="mem\include\mem\ScopedArray.h" />
     <ClInclude Include="mem\include\mem\ScopedCloneablePtr.h" />
@@ -174,6 +176,9 @@
     <ClInclude Include="sio.lite\include\sio\lite\StreamReader.h" />
     <ClInclude Include="sio.lite\include\sio\lite\UnsupportedDataTypeException.h" />
     <ClInclude Include="sio.lite\include\sio\lite\UserDataDictionary.h" />
+    <ClInclude Include="std\include\import\cpp14.h" />
+    <ClInclude Include="std\include\import\cpp17.h" />
+    <ClInclude Include="std\include\import\std.h" />
     <ClInclude Include="str\include\str\Convert.h" />
     <ClInclude Include="str\include\str\EncodedString.h" />
     <ClInclude Include="str\include\str\EncodedStringView.h" />
@@ -344,6 +349,7 @@
     <ClCompile Include="sys\source\ErrWin32.cpp" />
     <ClCompile Include="sys\source\ExecUnix.cpp" />
     <ClCompile Include="sys\source\ExecWin32.cpp" />
+    <ClCompile Include="sys\source\File.cpp" />
     <ClCompile Include="sys\source\FileFinder.cpp" />
     <ClCompile Include="sys\source\FileUnix.cpp" />
     <ClCompile Include="sys\source\FileWin32.cpp" />
@@ -415,12 +421,14 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
+    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -436,6 +444,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -445,16 +455,20 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL;MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;except\include\;gsl\include\;io\include\;logging\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;mt\include\;plugin\include\;polygon\include\;re\include\;sio.lite\include\;std\include\;str\include\;sys\include\;tiff\include;types\include\;units\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <TranslateIncludes>true</TranslateIncludes>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <EnablePREfast>true</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -469,15 +483,18 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL;MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;except\include\;gsl\include\;io\include\;logging\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;mt\include\;plugin\include\;polygon\include\;re\include\;sio.lite\include\;std\include\;str\include\;sys\include\;tiff\include;types\include\;units\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <TranslateIncludes>true</TranslateIncludes>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>
