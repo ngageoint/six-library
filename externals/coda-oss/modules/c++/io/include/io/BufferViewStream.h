@@ -61,7 +61,7 @@ struct BufferViewStream: public SeekableInputStream, public SeekableOutputStream
     BufferViewStream& operator=(BufferViewStream&&) = delete;
 
     //! Returns current location in buffer in bytes
-    virtual sys::Off_T tell()
+    virtual sys::Off_T tell() override
     {
         return gsl::narrow<sys::Off_T>(mPosition * sizeof(T));
     }
@@ -73,12 +73,12 @@ struct BufferViewStream: public SeekableInputStream, public SeekableOutputStream
      * \param whence Location to seek from
      * \return new position
      */
-    virtual sys::Off_T seek(sys::Off_T offset, Whence whence);
+    virtual sys::Off_T seek(sys::Off_T offset, Whence whence) override;
 
     /*
      * \return The available bytes to read from the stream
      */
-    virtual sys::Off_T available()
+    virtual sys::Off_T available() override
     {
         return gsl::narrow<sys::Off_T>((mBufferView.size - mPosition) * sizeof(T));
     }
@@ -92,7 +92,7 @@ struct BufferViewStream: public SeekableInputStream, public SeekableOutputStream
      * \param buffer The data to write to the stream
      * \param size The number of bytes to write to the stream
      */
-    virtual void write(const void* buffer, size_t size);
+    virtual void write(const void* buffer, size_t size) override;
 
     /*!
      * Get a pointer to the internal buffer.
@@ -139,7 +139,7 @@ protected:
      * \param len The length to read
      * \return  The number of bytes read
      */
-    virtual sys::SSize_T readImpl(void* buffer, size_t len);
+    virtual sys::SSize_T readImpl(void* buffer, size_t len) override;
 
 
 private:

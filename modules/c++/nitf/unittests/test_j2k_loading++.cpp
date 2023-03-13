@@ -109,6 +109,8 @@ TEST_CASE(test_j2k_loading)
     //test_image_loading_(input_file, false /*optz*/);
     //input_file = findInputFile("xxxx_MSI.nitf").string();
     //test_image_loading_(input_file, false /*optz*/);
+
+    TEST_ASSERT_TRUE(true); // be sure hidden "testName" parameter is used
 }
 
 static void test_j2k_nitf_(const std::string& fname)
@@ -281,15 +283,17 @@ TEST_CASE(test_j2k_nitf_read_region)
     // This is a JP2 file, not J2K; see OpenJPEG_setup_()
     const auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf");
     test_j2k_nitf_read_region_(input_file);
+
+    TEST_ASSERT_TRUE(true); // be sure hidden "testName" parameter is used
 }
 
 static std::vector<std::byte> readImage(nitf::ImageReader& imageReader, const nitf::ImageSubheader& imageSubheader)
 {
-    const auto numBlocks = imageSubheader.numBlocksPerRow() * imageSubheader.numBlocksPerCol();
-    TEST_ASSERT_GREATER(numBlocks, static_cast<size_t>(0));
+    const int64_t numBlocks = imageSubheader.numBlocksPerRow() * imageSubheader.numBlocksPerCol();
+    TEST_ASSERT_GREATER(numBlocks, 0);
 
-    const auto imageLength = imageSubheader.getNumBytesOfImageData();
-    TEST_ASSERT_GREATER(imageLength, static_cast<size_t>(0));
+    const int64_t imageLength = imageSubheader.getNumBytesOfImageData();
+    TEST_ASSERT_GREATER(imageLength, 0);
 
     // This assumes vertical blocking.
     // Interleaving would be required for horizontal blocks
@@ -326,6 +330,8 @@ TEST_CASE(test_j2k_decompress_nitf_to_sio)
 
     const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
     test_decompress_nitf_to_sio_(inputPathname, "test_decompress_nitf.sio");
+
+    TEST_ASSERT_TRUE(true); // be sure hidden "testName" parameter is used
 }
 
 TEST_CASE(test_j2k_compress_raw_image)

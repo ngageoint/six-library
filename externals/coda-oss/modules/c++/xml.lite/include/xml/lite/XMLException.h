@@ -44,7 +44,7 @@ namespace lite
  *  This is the default XML exception, for when
  *  other, more specialized exception make no sense
  */
-DECLARE_EXCEPTION(XML)
+DECLARE_EXCEPTION(XML);
 
 /*!
  *  \class XMLNotRecognizedException
@@ -53,7 +53,7 @@ DECLARE_EXCEPTION(XML)
  *  Provides the derived implementation for bad formatting or
  *  for incorrect processing
  */
-DECLARE_EXTENDED_EXCEPTION(XMLNotRecognized, xml::lite::XMLException)
+DECLARE_EXTENDED_EXCEPTION(XMLNotRecognized, xml::lite::XMLException);
 
 /*!
  *  \class XMLNotSupportedException
@@ -64,7 +64,7 @@ DECLARE_EXTENDED_EXCEPTION(XMLNotRecognized, xml::lite::XMLException)
  *  systems that are not supported by the SAX/DOM standard
  *
  */
-DECLARE_EXTENDED_EXCEPTION(XMLNotSupported, xml::lite::XMLException)
+DECLARE_EXTENDED_EXCEPTION(XMLNotSupported, xml::lite::XMLException);
 
 /*!
  *  \class XMLParseException

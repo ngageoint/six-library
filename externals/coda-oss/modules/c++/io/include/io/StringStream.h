@@ -63,12 +63,12 @@ struct StringStreamT final : public SeekableBidirectionalStream
         return mData;
     }
 
-    sys::Off_T tell()
+    sys::Off_T tell() override
     {
         return mData.tellg();
     }
 
-    sys::Off_T seek(sys::Off_T offset, Whence whence)
+    sys::Off_T seek(sys::Off_T offset, Whence whence) override
     {
         std::ios::seekdir flags = std::ios::cur;
         switch (whence)
@@ -94,7 +94,7 @@ struct StringStreamT final : public SeekableBidirectionalStream
      *  Returns the available bytes to read from the stream
      *  \return the available bytes to read
      */
-    sys::Off_T available()
+    sys::Off_T available() override
     {
         const auto where = tell();
 
@@ -112,7 +112,7 @@ struct StringStreamT final : public SeekableBidirectionalStream
      *  \param buffer the data to write to the stream
      *  \param size the number of bytes to write to the stream
      */
-    void write(const void* buffer, sys::Size_T size)
+    void write(const void* buffer, sys::Size_T size) override
     {
         auto buffer_ = static_cast<const CharT*>(buffer);
         mData.write(buffer_, gsl::narrow<std::streamsize>(size));

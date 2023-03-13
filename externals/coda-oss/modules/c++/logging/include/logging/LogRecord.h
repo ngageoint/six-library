@@ -50,7 +50,7 @@ public:
               std::string file, std::string function, int lineNum, std::string timestamp) :
             mName(name), mMsg(msg), mLevel(level), mFile(file), mFunction(function),
             mLineNum(lineNum), mTimestamp(timestamp){}
-    virtual ~LogRecord(){}
+    virtual ~LogRecord() = default;
 
     LogLevel getLevel() const { return mLevel; }
     std::string getLevelName() const;

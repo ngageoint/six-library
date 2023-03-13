@@ -34,5 +34,4 @@ logging::LogRecord::LogRecord(std::string name, std::string msg, logging::LogLev
 }
 
 
-std::string logging::LogRecord::getLevelName() const { return mLevel.toString(); };
-
+std::string logging::LogRecord::getLevelName() const { return mLevel.toString(); }

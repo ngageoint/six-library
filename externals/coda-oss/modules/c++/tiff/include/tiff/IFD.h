@@ -195,7 +195,7 @@ public:
      * @param output
      *   the output stream to write the IFD to
      *****************************************************************/
-    void serialize(io::OutputStream& output);
+    void serialize(io::OutputStream& output) override;
 
     /**
      *****************************************************************
@@ -204,7 +204,7 @@ public:
      * @param input
      *   the input stream to read the IFD from
      *****************************************************************/
-    void deserialize(io::InputStream& input);
+    void deserialize(io::InputStream& input) override;
     void deserialize(io::InputStream& input, const bool reverseBytes);
 
     /**

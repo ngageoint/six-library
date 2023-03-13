@@ -180,7 +180,7 @@ public:
     /*!
      * \returns the number ranges in the list
      */
-    size_t getNumRanges() const
+    size_t getNumRanges() const noexcept
     {
         return mRangeList.size();
     }
@@ -189,12 +189,12 @@ public:
      * \returns the total number elements as the sum(R.mNumElements) for
      *          all ranges R in the list
      */
-    size_t getTotalNumElements() const;
+    size_t getTotalNumElements() const noexcept;
 
     /*!
      * \returns true if getTotalNumElements() == 0
      */
-    bool empty() const
+    bool empty() const noexcept
     {
         return getTotalNumElements() == 0;
     }
@@ -207,7 +207,7 @@ public:
      *
      * \return the vector of ranges composing the range list
      */
-    const std::vector<types::Range>& getRanges() const
+    const std::vector<types::Range>& getRanges() const noexcept
     {
         return mRangeList;
     }

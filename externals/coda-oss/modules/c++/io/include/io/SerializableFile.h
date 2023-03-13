@@ -55,13 +55,13 @@ public:
     /*!
      * Transfer this object into a byte stream
      */
-    void serialize(io::OutputStream& os);
+    void serialize(io::OutputStream& os) override;
 
     /*!
      * Unpack this input stream to the object
      * \param is  Stream to read object from
      */
-    void deserialize(io::InputStream& is);
+    void deserialize(io::InputStream& is) override;
 
 protected:
     std::string mFilename;

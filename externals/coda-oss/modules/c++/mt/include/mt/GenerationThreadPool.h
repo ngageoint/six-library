@@ -63,7 +63,7 @@ namespace mt
 	// If we have a thread initializer, tie down our handler to a CPU
 	virtual void initialize();
 
-	virtual void run();
+	virtual void run() override;
     };
 
     class CODA_OSS_API GenerationThreadPool : public BasicThreadPool<TiedRequestHandler>
@@ -83,7 +83,7 @@ namespace mt
 	GenerationThreadPool(const GenerationThreadPool&) = delete;
     GenerationThreadPool& operator=(const GenerationThreadPool&) = delete;
 	
-	virtual TiedRequestHandler *newRequestHandler()
+	virtual TiedRequestHandler *newRequestHandler() override
 	{
 	    TiedRequestHandler* handler = BasicThreadPool<TiedRequestHandler>::newRequestHandler();
         assert(handler != nullptr);

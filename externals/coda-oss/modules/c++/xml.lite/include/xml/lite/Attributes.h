@@ -31,6 +31,7 @@
 #include "except/Exception.h"
 #include "xml/lite/QName.h"
 #include "str/Convert.h"
+#include "gsl/gsl.h"
 
 /*!
  *  \file Attributes.h
@@ -330,7 +331,7 @@ struct Attributes final
     }
     std::string operator[](const xml::lite::QName& name) const
     {
-        const size_t idx = getIndex(name);
+        const auto idx = gsl::narrow<size_t>(getIndex(name));
         return mAttributes[idx].getValue();
     }
 
@@ -348,7 +349,7 @@ struct Attributes final
     }
     std::string operator[](const std::string& s) const
     {
-        const size_t idx = getIndex(s);
+        const auto idx = gsl::narrow<size_t>(getIndex(s));
         return mAttributes[idx].getValue();
     }
 

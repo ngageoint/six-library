@@ -41,7 +41,7 @@ struct MyRunTask final : public sys::Runnable
         (*num_deleted)++;
     }
 
-    virtual void run()
+    virtual void run() override
     {
 		while (result == 1)
             result = *state;

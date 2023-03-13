@@ -28,6 +28,8 @@
 #include <cstdlib>
 #include <sstream>
 
+#include "config/disable_compiler_warnings.h"
+
 #if !CODA_OSS_except_Backtrace
 
 static std::string getBacktrace_(bool& supported, std::vector<std::string>&)
@@ -55,6 +57,10 @@ struct BacktraceHelper final
     BacktraceHelper(char** stackSymbols)
         : mStackSymbols(stackSymbols)
     {}
+    BacktraceHelper(const BacktraceHelper&) = delete;
+    BacktraceHelper& operator=(const BacktraceHelper&) = delete;
+    BacktraceHelper(BacktraceHelper&&) = default;
+    BacktraceHelper& operator=(BacktraceHelper&&) = default;
 
     ~BacktraceHelper()
     {

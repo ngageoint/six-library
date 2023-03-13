@@ -21,7 +21,7 @@
  */
 
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 
 #include "sys/Process.h"
 #include "sys/Thread.h"
