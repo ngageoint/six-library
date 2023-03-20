@@ -35,7 +35,7 @@ public:
 
     CODA_OSS_disable_warning_push
     CODA_OSS_DISABLE_UNREACHABLE_CODE
-    virtual void run()
+    virtual void run() override
     {
         for (int i = 0; i < 250; i++)
         {
@@ -71,7 +71,7 @@ public:
 
     CODA_OSS_disable_warning_push
     CODA_OSS_DISABLE_UNREACHABLE_CODE
-    virtual void run()
+    virtual void run() override
     {
 
         std::cout << "Putter::run: " << std::endl;
@@ -145,4 +145,4 @@ int main()
         cout << "Unknown exception" << endl;
     }
     return 0;
-};
+}

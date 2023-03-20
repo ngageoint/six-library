@@ -8,7 +8,7 @@ struct test_tre_read : public ::testing::Test {
 	test_tre_read() {
 		// initialization code here
 		//const std::string NITF_PLUGIN_PATH = R"(C:\Users\jdsmith\source\repos\nitro\x64\Debug\share\nitf\plugins)";
-		sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+		nitf::Test::setNitfPluginPath();
 	}
 
 	void SetUp() {

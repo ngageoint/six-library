@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<nacs>
+    <nac name="ISAF" portion="I"/>
+    <nac name="Partnership_For_Peace" portion="PfP"/>
+    <nac name="Stabilization_Forces_In_Kosovo" portion="KFOR"/>
+    <nac name="Operation_Unified_Protector" portion="OUP"/>
+</nacs>

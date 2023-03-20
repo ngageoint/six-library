@@ -141,7 +141,7 @@ public:
             // capture the error
             sys::SocketErr err; 
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 
             /* Wrapper for setsockopt dealing with Windows specific issues :-
              *
@@ -248,7 +248,7 @@ public:
      *  \param fromClient Client socket address returned
      *  \return A new socket connection to the client
      */
-    mem::auto_ptr<Socket> accept(SocketAddress& fromClient);
+    std::unique_ptr<Socket> accept(SocketAddress& fromClient);
 
     net::Socket_T getHandle() const
     {

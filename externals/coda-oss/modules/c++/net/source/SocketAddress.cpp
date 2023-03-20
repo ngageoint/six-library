@@ -65,7 +65,7 @@ void SocketAddress::setHost(const std::string& host)
     }
     else
     {
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
         struct sockaddr saddr;
         int slen = sizeof(saddr);
         struct sockaddr_in *paddr = (struct sockaddr_in *)&saddr;

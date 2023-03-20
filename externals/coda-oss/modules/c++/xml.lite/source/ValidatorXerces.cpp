@@ -134,7 +134,7 @@ ValidatorXerces::ValidatorXerces(
     config->setParameter(xercesc::XMLUni::fgXercesSchema, true);
     config->setParameter(xercesc::XMLUni::fgXercesSchemaFullChecking, false); // this affects performance
 
-    // definitely use cache grammer -- this is the cached schema
+    // definitely use cache grammar -- this is the cached schema
     config->setParameter(xercesc::XMLUni::fgXercesUseCachedGrammarInParse, true);
 
     // explicitly skip loading schema referenced in the xml docs
@@ -179,31 +179,22 @@ ValidatorXerces::ValidatorXerces(
 // On Windows, this needs to be wchar_t so that various "wide character" Win32 APIs can be called.
 static_assert(sizeof(XMLCh) == 2, "XMLCh should be two bytes for UTF-16.");
 
-#if _WIN32
-// On other platforms, char16_t/uint16_t is used; only wchar_t on Windows.
+#ifdef _WIN32
+// On other platforms, char16_t is used; only wchar_t on Windows.
 using XMLCh_t = wchar_t;
 static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be wchar_t");
 inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::wstring>& pWString)
 {
-    pWString.reset(new std::wstring(xmlView.wstring())); // std::make_unique fails with older compilers
+    pWString = std::make_unique<std::wstring>(xmlView.wstring());
 }
-#else
-#if defined(__INTEL_COMPILER) && (__INTEL_COMPILER_BUILD_DATE < 20190815)
-using XMLCh_t = uint16_t;
-static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be uint16_t");
 #else
 using XMLCh_t = char16_t;
 static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be char16_t");
 #endif
-#endif
 
 inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::u16string>& pWString)
 {
-    pWString.reset(new std::u16string(xmlView.u16string())); // std::make_unique fails with older compilers
-}
-inline void reset(str::EncodedStringView xmlView, std::unique_ptr<str::ui16string>& pWString)
-{
-    pWString.reset(new str::ui16string(xmlView.ui16string_())); // std::make_unique fails with older compilers
+    pWString = std::make_unique<std::u16string>(xmlView.u16string());
 }
 
 using XMLCh_string = std::basic_string<XMLCh_t>;
@@ -252,7 +243,7 @@ bool ValidatorXerces::validate_(const std::u8string& xml,
 
 static str::EncodedStringView encodeXml(const std::string& xml)
 {
-    // The XML might contain contain a specific encoding, if it does;
+    // The XML might contain a specific encoding, if it does;
     // we want to use it, otherwise we'll corrupt the data.
 
     // UTF-8 is the normal case, so check it first
@@ -263,7 +254,7 @@ static str::EncodedStringView encodeXml(const std::string& xml)
         return str::EncodedStringView::fromUtf8(xml);
     }
 
-    // Maybe this is is poor XML with Windows-1252 encoding :-(
+    // Maybe this is poor XML with Windows-1252 encoding :-(
     const std::regex reWindows1252("<\?.*encoding=.*['\"]?.*windows-1252.*['\"]?.*\?>", std::regex::icase);
     if (std::regex_search(xml.c_str(), m, reWindows1252))
     {

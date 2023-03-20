@@ -91,14 +91,14 @@ int main(int argc, char** argv)
 
         return 0;
     }
-    catch (const std::exception& ex)
-    {
-        std::cerr << ex.what() << std::endl;
-        return 1;
-    }
     catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
+        return 1;
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << ex.what() << std::endl;
         return 1;
     }
     catch (...)

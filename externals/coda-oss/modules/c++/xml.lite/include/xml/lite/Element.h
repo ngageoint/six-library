@@ -28,6 +28,7 @@
 #include <string>
 #include <new> // std::nothrow_t
 #include <coda_oss/string.h>
+#include <tuple>
 
 #include <io/InputStream.h>
 #include <io/OutputStream.h>
@@ -53,6 +54,8 @@ namespace xml
 {
 namespace lite
 {
+struct AttributeNode;
+
 /*!
  * \class Element
  * \brief The class defining one element of an XML document
@@ -75,8 +78,7 @@ struct Element // SOAPElement derives :-(
     {
         setCharacterData(characterData);
     }
-    Element(const xml::lite::QName& qname, const coda_oss::u8string& characterData) :
-        mName(qname.getName(), qname.getUri().value)
+    Element(const xml::lite::QName& qname, const coda_oss::u8string& characterData) : mName(qname)
     {
         setCharacterData(characterData);
     }
@@ -109,6 +111,9 @@ struct Element // SOAPElement derives :-(
     Element(Element&&) = default;
     Element& operator=(Element&&) = default;
 
+    Element& operator=(std::unique_ptr<Element>&&);  // setChild()
+
+
     /*!
      *  Clone function performs deep copy
      *  of element
@@ -127,7 +132,7 @@ struct Element // SOAPElement derives :-(
 
     std::string& attribute(const std::string& s)
     {
-        return mAttributes[s];
+        return getAttributes()[s];
     }
 
     /*!
@@ -221,11 +226,19 @@ struct Element // SOAPElement derives :-(
      * returns NULL if none
      */
     Element* getElementByTagName(std::nothrow_t, const xml::lite::QName&, bool recurse = false) const;
+    Element* operator()(std::nothrow_t, const xml::lite::QName& name, bool recurse = false) const
+    {
+        return getElementByTagName(std::nothrow, name, recurse);
+    }
     Element* getElementByTagName(std::nothrow_t t, const std::string& uri, const std::string& localName, bool recurse = false) const 
     {
         return getElementByTagName(t, QName(uri, localName), recurse);
     }
     Element& getElementByTagName(const xml::lite::QName&, bool recurse = false) const;
+    Element& operator()(const xml::lite::QName& name, bool recurse = false) const
+    {
+        return getElementByTagName(name, recurse);
+    }
     Element& getElementByTagName(const std::string& uri, const std::string& localName, bool recurse = false) const 
     {
         return getElementByTagName(QName(uri, localName), recurse);
@@ -306,12 +319,20 @@ struct Element // SOAPElement derives :-(
      */
     std::string getCharacterData() const;
     coda_oss::u8string& getCharacterData(coda_oss::u8string& result) const;
+    //explicit operator coda_oss::u8string() const
+    //{
+    //    coda_oss::u8string result;
+    //    std::ignore = getCharacterData(result); // result will be copy-elided
+    //    return result;
+    //}
 
     /*!
      *  Sets the character data for this element.
      *  \param characters The data to add to this element
      */
     void setCharacterData(const std::string&);
+    Element& operator=(const std::string&);  // setCharacterData()
+    Element& operator=(const char*);  // setCharacterData()
     void setCharacterData(coda_oss::u8string s)
     {
         // See Item #41 in "Effective Modern C++" by Scott Meyers.
@@ -349,6 +370,11 @@ struct Element // SOAPElement derives :-(
     void setQName(const xml::lite::QName& qname)
     {
         mName = qname;
+    }
+    Element& operator=(const QName& qname)
+    {
+        setQName(qname);
+        return *this;
     }
 
     /*!
@@ -413,9 +439,6 @@ struct Element // SOAPElement derives :-(
     #ifndef SWIG // SWIG doesn't like std::unique_ptr
     virtual Element& addChild(std::unique_ptr<Element>&& node);
     #endif // SWIG
-    #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-    virtual Element& addChild(mem::auto_ptr<Element> node);
-    #endif
 
     /*!
      *  Returns all of the children of this element
@@ -572,6 +595,31 @@ inline Element* addNewOptionalElement(const xml::lite::QName& name, const coda_o
 }
 
 #endif // SWIG
+
+
+Element& setChild(Element&, std::unique_ptr<Element>&&);  // destroyChildren() + addChild()
+
+void operator+=(Element&, std::unique_ptr<Element>&&);  // addChild()
+
+Element& addChild(Element&, const std::string& qname);
+void operator+=(Element&, const std::string& qname);  // addChild()
+Element& addChild(Element&, const xml::lite::QName&); // there is also a QName in the xerces namespace
+void operator+=(Element&, const xml::lite::QName&);  // addChild()
+Element& addChild(Element&, const std::string& qname, const coda_oss::u8string& characterData);
+Element& addChild(Element&, const std::string&, const std::string&) = delete; // NO, order matters!
+Element& addChild(Element&, const xml::lite::QName&, const coda_oss::u8string& characterData);
+Element& addChild(Element&, const xml::lite::QName&, const std::string& characterData);
+Element& addChild(Element&, const std::string& qname, const xml::lite::Uri&);
+Element& addChild(Element&, const std::string& qname, const xml::lite::Uri&, const coda_oss::u8string& characterData);
+
+coda_oss::u8string getCharacterData(const Element&);
+
+xml::lite::AttributeNode& addAttribute(Element&, const xml::lite::AttributeNode&);
+void operator+=(Element&, const xml::lite::AttributeNode&);  // addAttribute()
+xml::lite::AttributeNode& addAttribute(Element&, const std::string& qname);
+xml::lite::AttributeNode& addAttribute(Element&, const xml::lite::QName&);
+xml::lite::AttributeNode& addAttribute(Element&, const xml::lite::QName&, const std::string& value);
+xml::lite::AttributeNode& addAttribute(Element&, const std::string&, const std::string&) = delete; // NO, order matters!
 
 }
 }

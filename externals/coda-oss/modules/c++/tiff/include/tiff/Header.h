@@ -96,7 +96,7 @@ public:
      * @param output
      *   the stream to write the header to
      *****************************************************************/
-    void serialize(io::OutputStream& output);
+    void serialize(io::OutputStream& output) override;
 
     /**
      *****************************************************************
@@ -105,7 +105,7 @@ public:
      * @param input
      *   the stream to read the header from
      *****************************************************************/
-    void deserialize(io::InputStream& input);
+    void deserialize(io::InputStream& input) override;
 
     /**
      *****************************************************************

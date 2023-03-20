@@ -25,6 +25,7 @@
 #define __MT_SINGLETON_H__
 
 #include <mutex>
+#include <std/memory>
 
 #include <import/sys.h>
 #include <config/compiler_extensions.h>
@@ -139,7 +140,7 @@ T& Singleton<T, AutoDestroy>::getInstance()
         std::lock_guard<std::mutex> obtainLock(mMutex);
         if (mInstance == nullptr)
         {
-            mInstance = coda_oss::make_unique<T>().release(); //create the instance
+            mInstance = std::make_unique<T>().release(); //create the instance
             SingletonAutoDestroyer<AutoDestroy>::registerAtExit(destroy);
         }
     }

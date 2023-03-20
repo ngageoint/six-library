@@ -184,9 +184,10 @@ public:
      *
      * @param m      The WGS84EllipsoidModel to copy attribute values from
      */
-    WGS84EllipsoidModel(const WGS84EllipsoidModel & m);
+    WGS84EllipsoidModel(const WGS84EllipsoidModel&);
+    WGS84EllipsoidModel& operator=(const WGS84EllipsoidModel&);
 
-    virtual ~WGS84EllipsoidModel(){}
+    virtual ~WGS84EllipsoidModel() = default;
 
     /**
      * This function sets the radius values to those specified by the WGS84

@@ -64,10 +64,6 @@ public:
     //! we own the ptr after this transaction
     NetConnection(std::unique_ptr<net::Socket>&& socket) : mSocket(socket.release())
     {}
-    #if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
-    NetConnection(mem::auto_ptr<net::Socket> socket) : mSocket(socket.release())
-    {}
-    #endif
 
     /*!
      *  Copy constructor
@@ -120,7 +116,7 @@ public:
      *  Close a connection.  This releases the writers/readers and closes
      *  the handle.
      */
-    void close()
+    void close() override
     {
         mSocket->close();
     }
@@ -142,7 +138,7 @@ public:
      *  \param len The length of the byte array to write to the stream
      *  \throw IOException
      */
-    virtual void write(const void* buffer, size_t len);
+    virtual void write(const void* buffer, size_t len) override;
 
     using io::BidirectionalStream::read;
     using io::BidirectionalStream::write;
@@ -155,7 +151,7 @@ protected:
      *  \throw IOException
      *  \return  The number of bytes read, or -1 if eof
      */
-    virtual sys::SSize_T readImpl(void* buffer, size_t len);
+    virtual sys::SSize_T readImpl(void* buffer, size_t len) override;
 
     //! The socket
     std::shared_ptr<net::Socket> mSocket;

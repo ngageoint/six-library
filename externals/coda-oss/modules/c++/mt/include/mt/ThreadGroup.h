@@ -84,9 +84,6 @@ struct CODA_OSS_API ThreadGroup
     *  \param runnable auto_ptr to sys::Runnable
     */
     void createThread(std::unique_ptr<sys::Runnable>&& runnable);
-    #if CODA_OSS_autoptr_is_std
-    void createThread(mem::auto_ptr<sys::Runnable> runnable);
-    #endif
 
     /*!
      * Waits for all threads to complete.
@@ -138,7 +135,7 @@ private:
      *          the internal CPUAffinityInitializer. If no initializer
      *          was created, will return NULL.
      */
-    mem::auto_ptr<CPUAffinityThreadInitializer> getNextInitializer();
+    std::unique_ptr<CPUAffinityThreadInitializer> getNextInitializer();
 
     /*!
      * \class ThreadGroupRunnable
@@ -164,13 +161,6 @@ private:
                 mt::ThreadGroup& parentThreadGroup,
                 std::unique_ptr<CPUAffinityThreadInitializer>&& threadInit =
                         std::unique_ptr<CPUAffinityThreadInitializer>(nullptr));
-        #if CODA_OSS_autoptr_is_std
-        ThreadGroupRunnable(
-                mem::auto_ptr<sys::Runnable> runnable,
-                mt::ThreadGroup& parentThreadGroup,
-                mem::auto_ptr<CPUAffinityThreadInitializer> threadInit =
-                        mem::auto_ptr<CPUAffinityThreadInitializer>(nullptr));
-        #endif
 
         ThreadGroupRunnable(const ThreadGroupRunnable&) = delete;
         ThreadGroupRunnable& operator=(const ThreadGroupRunnable&) = delete;
@@ -178,7 +168,7 @@ private:
         /*!
          *  Call run() on the Runnable passed to createThread
          */
-        virtual void run();
+        virtual void run() override;
 
     private:
         std::unique_ptr<sys::Runnable> mRunnable;

@@ -20,22 +20,26 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef SIX_Version_h_INCLUDED_
-#define SIX_Version_h_INCLUDED_
+#ifndef SIX_six_Version_h_INCLUDED_
+#define SIX_six_Version_h_INCLUDED_
 #pragma once
 
 #include "config/Version.h"
 #include "nitf/Version.hpp"
 
-// SIX 3.1.14	2022-Aug-30 
-// SIX 3.1.13	2022-Aug-02
-// SIX 3.1.12	2022-Jun-29
-// SIX 3.1.11	2022-May-13
-// SIX 3.1.10	2022-May-03
 // SIX 3.1.9	2022-Feb-02
+// SIX 3.1.10	2022-May-03
+// SIX 3.1.11	2022-May-13
+// SIX 3.1.12	2022-Jun-29
+// SIX 3.1.13	2022-Aug-02
+// SIX 3.1.14	2022-Aug-30 
+// SIX 3.2.0	2022-Aug-30 (C++14)
+// SIX 3.2.1	2022-Nov-04
+// SIX 3.2.2	2022-Dec-14
+
 #define SIX_VERSION_MAJOR	3
-#define SIX_VERSION_MINOR	1
-#define SIX_VERSION_PATCH	14
+#define SIX_VERSION_MINOR	2
+#define SIX_VERSION_PATCH	2
 //#define SIX_VERSION_BUILD	0
 //#define SIX_VERSION CODA_OSS_MAKE_VERSION_MMPB(SIX_VERSION_MAJOR, SIX_VERSION_MINOR, SIX_VERSION_PATCH, SIX_VERSION_BUILD)
 #define SIX_VERSION CODA_OSS_MAKE_VERSION_MMP(SIX_VERSION_MAJOR, SIX_VERSION_MINOR, SIX_VERSION_PATCH)
@@ -49,4 +53,4 @@ namespace six
 	//constexpr auto version_build = CODA_OSS_GET_VERSION_BUILD(SIX_VERSION);
 }
 
-#endif // SIX_Version_h_INCLUDED_
+#endif // SIX_six_Version_h_INCLUDED_

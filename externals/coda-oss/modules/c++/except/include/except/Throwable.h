@@ -34,7 +34,28 @@
 
 #include "config/Exports.h"
 #include "config/compiler_extensions.h"
+#include "config/disable_compiler_warnings.h"
 #include "except/Trace.h"
+
+/* Determine whether except::Throwable derives from std::exception.
+ *
+ * It can be quite convenient to derive from std::exception as often one less
+ * "catch" will be needed and we'll have standard what().  But doing so could
+ * break existing code as "catch (const std::exception&)" will catch
+ * except::Throwable when it didn't before.
+ *
+ * A lot of existing code has "catch (std::exception)" BEFORE "catch (except::Throwable)" 
+ * making it difficult to change without the risk of breaking something. :-(
+ */
+#ifdef CODA_OSS_THROWABLE_ISA_STD_EXCEPTION  // -DCODA_OSS_THROWABLE_ISA_STD_EXCEPTION
+#ifdef CODA_OSS_except_Throwable_ISA_std_exception
+#error "CODA_OSS_except_Throwable_ISA_std_exception is already #define'd."
+#endif
+#define CODA_OSS_except_Throwable_ISA_std_exception 1
+#endif
+#ifndef CODA_OSS_except_Throwable_ISA_std_exception // or, -DCODA_OSS_except_Throwable_ISA_std_exception=1
+#define CODA_OSS_except_Throwable_ISA_std_exception 0
+#endif
 
 /*!
  * \file Throwable.h
@@ -53,14 +74,18 @@ namespace except
  * This class provides the base interface for exceptions and errors.
  */
 
-class Throwable11;
+class ThrowableEx;
 class CODA_OSS_API Throwable
+#if CODA_OSS_except_Throwable_ISA_std_exception    
+    : public std::exception
+#endif
 {
     void doGetBacktrace();
     template<typename TThrowable>
     Throwable(const Context*, const TThrowable* pT, const std::string* pMessage, bool callGetBacktrace, std::nullptr_t);
+protected:
     Throwable(const Context*, const Throwable* pT = nullptr, const std::string* pMessage = nullptr, bool callGetBacktrace = false);
-    Throwable(const Context*, const Throwable11* pT, const std::string* pMessage = nullptr, bool callGetBacktrace = false);
+    Throwable(const Context*, const ThrowableEx* pT, const std::string* pMessage = nullptr, bool callGetBacktrace = false);
 
 public:
     Throwable() = default;
@@ -69,7 +94,7 @@ public:
     Throwable(Throwable&&) = default;
     Throwable& operator=(Throwable&&) = default;
 
-    Throwable(const Throwable11&);
+    Throwable(const ThrowableEx&);
 
     /*!
      * Constructor.  Takes a message
@@ -89,7 +114,7 @@ public:
      * \param c The Context
      */
     Throwable(const Throwable&, Context);
-    Throwable(const Throwable11&, Context);
+    Throwable(const ThrowableEx&, Context);
 
     /*!
      * Destructor
@@ -169,6 +194,10 @@ public:
     }
 
     const char* what() const noexcept
+    #if CODA_OSS_except_Throwable_ISA_std_exception    
+    // can't use "final" unless what() is virtual
+    final  // derived classes override toString()
+    #endif
     {
         // adding this to toString() output could (significantly) alter existing display
         mWhat = toString(true /*includeBacktrace*/); // call any derived toString()
@@ -187,7 +216,7 @@ private:
 };
 
 /*!
- * \class Throwable11
+ * \class ThrowableEx
  * \brief The interface for exceptions and errors
  *
  * This class provides the base interface for exceptions and errors.
@@ -199,146 +228,51 @@ private:
  * break existing code as "catch (const std::exception&)" will catch
  * except::Throwable when it didn't before.
  */
-class Throwable11 : public std::exception
+// Use multiple-inheritance :-( to reduce duplicated boilerplate code.
+class ThrowableEx : public Throwable // "ThrowableEx" = "Throwable exception"
+#if !CODA_OSS_except_Throwable_ISA_std_exception
+    , public std::exception
+#endif
 {
-    void doGetBacktrace();
-    template <typename TThrowable>
-    Throwable11(const Context*,
-              const TThrowable* pT,
-              const std::string* pMessage,
-              bool callGetBacktrace,
-              std::nullptr_t);
-    Throwable11(const Context*,
-                const Throwable11* pT = nullptr,
-                const std::string* pMessage = nullptr,
-                bool callGetBacktrace = false);
-    Throwable11(const Context*,
-                const Throwable* pT,
-                const std::string* pMessage = nullptr,
-                bool callGetBacktrace = false);
-
 public:
-    Throwable11() = default;
-    virtual ~Throwable11() = default;
-    Throwable11(const Throwable11&) = default;
-    Throwable11& operator=(const Throwable11&) = default;
-    Throwable11(Throwable11&&) = default;
-    Throwable11& operator=(Throwable11&&) = default;
+    ThrowableEx() = default;
+    virtual ~ThrowableEx() = default;
+    ThrowableEx(const ThrowableEx&) = default;
+    ThrowableEx& operator=(const ThrowableEx&) = default;
+    ThrowableEx(ThrowableEx&&) = default;
+    ThrowableEx& operator=(ThrowableEx&&) = default;
 
-    Throwable11(const Throwable&);
+    ThrowableEx(const Throwable& t) : Throwable(t){}
 
     /*!
      * Constructor.  Takes a message
      * \param message The message
      */
-    Throwable11(const std::string& message);
+    ThrowableEx(const std::string& message) : Throwable(message) {}
 
     /*!
      * Constructor.  Takes a Context.
      * \param c The Context
      */
-    Throwable11(const Context&);
+    ThrowableEx(const Context& ctx) : Throwable(ctx) {}
 
     /*!
      * Constructor. Takes a Throwable and a Context
      * \param t The throwable
      * \param c The Context
      */
-    Throwable11(const Throwable11&, const Context&);
-    Throwable11(const Throwable&, const Context&);
+    ThrowableEx(const ThrowableEx& t, const Context& ctx) : Throwable(t, ctx) {}
+    ThrowableEx(const Throwable& t, const Context& ctx) : Throwable(t, ctx) {}
 
-    /*!
-     * Get the message
-     * \return The message
-     */
-    std::string getMessage() const
-    {
-        return mMessage;
-    }
-
-    /*!
-     * Get the trace
-     * \return The trace (const)
-     */
-    const Trace& getTrace() const noexcept
-    {
-        return mTrace;
-    }
-
-    /*!
-     * Get the trace
-     * \return The trace (non-const)
-     */
-    Trace& getTrace() noexcept
-    {
-        return mTrace;
-    }
-
-    /*!
-     * Get the type id
-     * \return The type
-     */
-    virtual std::string getType() const noexcept
-    {
-        return "Throwable11";
-    }
-
-    virtual std::string toString() const
-    {
-        std::ostringstream s;
-        s << getType() << ": " << getMessage();
-
-        const Trace& t = getTrace();
-        if (t.getSize() > 0)
-            s << ": " << t;
-        return s.str();
-    }
-
-    const std::vector<std::string>& getBacktrace() const noexcept
-    {
-        return mBacktrace;
-    }
-
-    // It seems that overloading constructors creates ambiguities ... so allow
-    // for a "fluent" way of doing this.: throw Exception(...).backtrace()
-    Throwable11& backtrace()
-    {
-        doGetBacktrace();
-        return *this;
-    }
-
-    virtual std::string toString(bool includeBacktrace) const
-    {
-        // Adding the backtrace to existing toString() output could substantally
-        // alter existing strings.
-        std::string backtrace;
-        if (includeBacktrace)
-        {
-            backtrace = "***** getBacktrace() *****\n";
-            backtrace += std::accumulate(mBacktrace.begin(),
-                                         mBacktrace.end(),
-                                         std::string());
-        }
-        return toString() + backtrace;
-    }
-
+    #if !CODA_OSS_except_Throwable_ISA_std_exception
     const char* what() const noexcept final  // derived classes override toString()
     {
-        // adding this to toString() output could (significantly) alter existing display
-        mWhat = toString(true /*includeBacktrace*/);  // call any derived toString()
-        return mWhat.c_str();
+        const Throwable* pThrowable = this;
+        return pThrowable->what();
     }
-
-protected:
-    //! The name of exception trace
-    Trace mTrace;
-    //! The name of the message the exception was thrown
-    std::string mMessage;
-
-private:
-    mutable std::string mWhat;
-    std::vector<std::string> mBacktrace;
+    #endif
 };
+using Throwable11 = ThrowableEx; // keep old name around for other projects
 }
 
 #endif // CODA_OSS_except_Throwable_h_INCLUDED_

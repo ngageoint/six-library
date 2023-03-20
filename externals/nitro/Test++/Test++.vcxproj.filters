@@ -13,11 +13,12 @@
     <ClCompile Include="nitf_test_j2k_read_tile.cpp" />
     <ClCompile Include="nitf_test_nitf_buffer_list.cpp" />
     <ClCompile Include="nitf_test_tre_create++.cpp" />
-    <ClCompile Include="nitf_test_tre_mods.cpp" />
+    <ClCompile Include="nitf_test_tre_mods++.cpp" />
     <ClCompile Include="nitf_test_tre_read.cpp" />
     <ClCompile Include="nitf_test_writer_3++.cpp" />
     <ClCompile Include="nitf_test_j2k_compress_tile.cpp" />
     <ClCompile Include="nitf_test_j2k_compressed_byte_provider.cpp" />
+    <ClCompile Include="nitf_test_tre_mods.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nrt_Test.h" />

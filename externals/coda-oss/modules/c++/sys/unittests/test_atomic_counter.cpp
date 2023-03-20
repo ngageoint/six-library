@@ -123,7 +123,7 @@ struct IncrementAtomicCounterT final : public sys::Runnable
     {
     }
 
-    virtual void run()
+    virtual void run() override
     {
         for (size_t ii = 0; ii < mNumIncrements; ++ii)
         {
@@ -210,7 +210,7 @@ struct DecrementAtomicCounterT final : public sys::Runnable
     {
     }
 
-    virtual void run()
+    virtual void run() override
     {
         for (size_t ii = 0; ii < mNumDecrements; ++ii)
         {

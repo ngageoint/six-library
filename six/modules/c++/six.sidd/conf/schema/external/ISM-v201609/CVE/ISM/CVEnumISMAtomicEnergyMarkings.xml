@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Notices - Distribution Notice: 
+           This document has been approved for Public Release and is available for use without restriction.
+       --><cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ism:compliesWith="USGov USIC" ism:ownerProducer="USA" ism:classification="U" ism:DESVersion="201609.201707" ism:ISMCATCESVersion="201609" ism:resourceElement="true" CVEVersion="2.1" specVersion="201609.201707" ism:createDate="2011-09-01" xsi:schemaLocation="urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd">
+    
+    <cve:IRM>
+        <URN xmlns="urn:us:gov:ic:cve">urn:us:gov:ic:cvenum:ism:atomicEnergyMarkings</URN>
+        <Title xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">CVEnumISMatomicEnergyMarkings</Title>
+        <Description xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">All currently valid Atomic Energy information markings from the published register. This CVE is used by @ism:atomicEnergyMarkings.</Description>
+        
+        <cve:Created>2011-02-04T00:22:00-04:00</cve:Created>
+        
+        <Source ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">IC Systems Register and Manual</Source>
+        <PointOfContact ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">
+         <Name>Office IC CIO</Name>
+         <Email>ic-standards-support@iarpa.gov</Email>
+      </PointOfContact>
+    </cve:IRM>
+    
+    <cve:Enumeration multivalue="true" ism:ownerProducer="USA" ism:classification="U">
+        
+        <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">RD</Value>
+            <Description ism:classification="U" ism:ownerProducer="USA">RESTRICTED DATA</Description>
+        </Term>
+        <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">RD-CNWDI</Value>
+            <Description ism:classification="U" ism:ownerProducer="USA">RD-CRITICAL NUCLEAR WEAPON DESIGN INFORMATION</Description>
+        </Term>
+        <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA" regularExpression="true">RD-SG-((14)|(15)|(18)|(20))</Value>
+            <Description ism:classification="U" ism:ownerProducer="USA">RD-SIGMA-#, # represents the SIGMA number which may be 14, 15, 18, or 20.</Description>
+        </Term>
+        <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">FRD</Value>
+            <Description ism:classification="U" ism:ownerProducer="USA">FORMERLY RESTRICTED DATA</Description>
+        </Term>
+        <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA" regularExpression="true">FRD-SG-((14)|(15)|(18)|(20))</Value>
+            <Description ism:classification="U" ism:ownerProducer="USA">FRD-SIGMA-#, # represents the SIGMA number which may be 14, 15, 18, or 20.</Description>
+        </Term>
+        <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">DCNI</Value>
+            <Description ism:classification="U" ism:ownerProducer="USA">DoD CONTROLLED NUCLEAR INFORMATION</Description>
+        </Term>
+        <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">UCNI</Value>
+            <Description ism:classification="U" ism:ownerProducer="USA">DoE CONTROLLED NUCLEAR INFORMATION</Description>
+        </Term>
+        <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+            <Value ism:classification="U" ism:ownerProducer="USA">TFNI</Value>
+            <Description ism:classification="U" ism:ownerProducer="USA">TRANSCLASSIFIED FOREIGN NUCLEAR INFORMATION</Description>
+        </Term>
+    </cve:Enumeration>
+    
+</cve:CVE>

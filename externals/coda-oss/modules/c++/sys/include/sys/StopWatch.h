@@ -66,13 +66,13 @@ public:
 
     ~RealTimeStopWatch();
 
-    double start();
+    double start() override;
 
-    double stop();
+    double stop() override;
 
-    double pause();
+    double pause() override;
 
-    void clear();
+    void clear() override;
 };
 
 class CPUStopWatch : public StopWatch
@@ -88,13 +88,13 @@ public:
 
     ~CPUStopWatch();
 
-    double start();
+    double start() override;
 
-    double stop();
+    double stop() override;
 
-    double pause();
+    double pause() override;
 
-    void clear();
+    void clear() override;
 };
 
 }

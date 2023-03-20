@@ -84,10 +84,14 @@ public:
      *  Calls toXML
      *  \return XML String
      */
-    virtual std::string toXMLString(
+    virtual std::u8string toXMLString(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             bool prettyPrint = false);
+    std::string toXMLString_(
+        const Metadata& metadata,
+        const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
+        bool prettyPrint = false);
     virtual std::u8string toXMLString(
         const Metadata& metadata,
         const std::vector<std::filesystem::path>* pSchemaPaths,
@@ -102,7 +106,7 @@ public:
      *  \param schemaPaths Vector of XML Schema for validation
      *  \return pointer to xml Document object
      */
-    virtual mem::auto_ptr<xml::lite::Document> toXML(
+    virtual std::unique_ptr<xml::lite::Document> toXML(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 

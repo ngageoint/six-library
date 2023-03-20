@@ -122,7 +122,7 @@ public:
      * @param output
      *   the output stream to write the entry to
      *****************************************************************/
-    void serialize(io::OutputStream& output);
+    void serialize(io::OutputStream& output) override;
 
     /**
      *****************************************************************
@@ -131,7 +131,7 @@ public:
      * @param input
      *   the input stream to read the entry from
      *****************************************************************/
-    void deserialize(io::InputStream& input);
+    void deserialize(io::InputStream& input) override;
     void deserialize(io::InputStream& input, const bool reverseBytes);
 
     /**
@@ -268,12 +268,6 @@ public:
         ++mCount;
         value.release();
     }
-    #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-    void addValue(mem::auto_ptr<tiff::TypeInterface> value)
-    {
-        addValue(std::unique_ptr<tiff::TypeInterface>(value.release()));
-    }
-    #endif
     /**
      *****************************************************************
      * Adds a double value to the IFD entry.

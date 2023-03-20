@@ -21,15 +21,19 @@
  */
 
 
-#ifndef __SYS_THREAD_PTHREAD_CONDITION_VARIABLE_H__
-#define __SYS_THREAD_PTHREAD_CONDITION_VARIABLE_H__
+#ifndef CODA_OSS_sys_ConditionVarPosix_h_INCLUDED_
+#define CODA_OSS_sys_ConditionVarPosix_h_INCLUDED_
+#pragma once
+
+#include <new>
 
 #include <sys/Conf.h>
+#include "sys/ConditionVarInterface.h"
 
 #if CODA_OSS_POSIX_SOURCE
 
 #include "sys/MutexPosix.h"
-#include "sys/ConditionVarInterface.h"
+
 #include <pthread.h>
 
 namespace sys
@@ -42,12 +46,16 @@ namespace sys
  *  This class is the wrapper implementation for a pthread_cond_t
  *  (Pthread condition variable)
  */
-struct ConditionVarPosix final : public ConditionVarInterface
+class ConditionVarPosix final : public ConditionVarInterface
 {
+    ConditionVarPosix(MutexPosix* theLock, bool isOwner, std::nullptr_t);
+
+public:
     ConditionVarPosix();
 
     //!  Constructor
-    ConditionVarPosix(MutexPosix* theLock, bool isOwner = false);
+    explicit ConditionVarPosix(MutexPosix* theLock, bool isOwner = false);
+    explicit ConditionVarPosix(MutexPosix&);  // isOwner = false
 
     //!  Destructor
     virtual ~ConditionVarPosix();
@@ -58,17 +66,17 @@ struct ConditionVarPosix final : public ConditionVarInterface
     /*!
      *  Acquire the lock
      */
-    virtual void acquireLock();
+    virtual void acquireLock() override;
 
     /*!
      *  Drop (release) the lock
      */
-    virtual void dropLock();
+    virtual void dropLock() override;
 
     /*!
      *  Signal using pthread_cond_signal
      */
-    virtual void signal();
+    virtual void signal() override;
 
     /*!
      *  Wait using pthread_cond_wait
@@ -78,7 +86,7 @@ struct ConditionVarPosix final : public ConditionVarInterface
      *           certain systems, undefined/unfavorable behavior may
      *           result.
      */
-    virtual void wait();
+    virtual void wait() override;
 
     /*!
      *  Wait using pthread_cond_timed_wait.  I kept this and the above
@@ -91,12 +99,12 @@ struct ConditionVarPosix final : public ConditionVarInterface
      *           certain systems, undefined/unfavorable behavior may
      *           result.
      */
-    virtual void wait(double seconds);
+    virtual void wait(double seconds) override;
 
     /*!
      *  Broadcast (notify all)
      */
-    virtual void broadcast();
+    virtual void broadcast() override;
 
     /*!
      *  Returns the native type.
@@ -121,4 +129,4 @@ private:
 }
 
 #endif
-#endif
+#endif  // CODA_OSS_sys_ConditionVarPosix_h_INCLUDED_

@@ -53,17 +53,18 @@ TEST_CASE(testRotate)
     {
         logging::Logger log("test");
 
-        auto logHandler = coda_oss::make_unique<logging::RotatingFileHandler>(outFile, 10, maxFiles);
+        auto logHandler = std::make_unique<logging::RotatingFileHandler>(outFile, 10, maxFiles);
         logHandler->setLevel(logging::LogLevel::LOG_DEBUG);
-        logHandler->setFormatter(coda_oss::make_unique<logging::StandardFormatter>("%m"));
+        logHandler->setFormatter(std::make_unique<logging::StandardFormatter>("%m"));
         log.addHandler(std::move(logHandler));
 
         log.debug("0123456789");
         TEST_ASSERT(os.exists(outFile));
-        TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
+        const auto outFile1 = outFile + ".1";
+        TEST_ASSERT_FALSE(os.isFile(outFile1));
 
         log.debug("1");
-        TEST_ASSERT(os.isFile(outFile + ".1"));
+        TEST_ASSERT(os.isFile(outFile1));
     }
 
     cleanupFiles( outFile);

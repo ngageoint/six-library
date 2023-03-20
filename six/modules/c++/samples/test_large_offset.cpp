@@ -44,7 +44,7 @@ static const size_t SIDD_ROWS_TO_SKIP = NUM_ROWS_IN_FIRST_SIDD_SEGMENT - 1000;
 
 size_t calculateEdgeLength(size_t elementSize)
 {
-    const float desiredImageSize = 11e9;
+    const float desiredImageSize = 11e9f;
     const float elementsPerImage = desiredImageSize / elementSize;
     return static_cast<size_t>(std::sqrt(elementsPerImage));
 }

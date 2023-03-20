@@ -11,39 +11,12 @@
 #include "six/sicd/ComplexData.h"
 #include "six/sicd/Utilities.h"
 
-std::filesystem::path findSixHome(const std::filesystem::path& exePath)
-{
-    std::filesystem::path sixHome = exePath;
-    do
-    {
-        const auto croppedNitfs = sixHome / "croppedNitfs";
-        if (is_directory(absolute(croppedNitfs)))
-        {
-            return sixHome;
-        }
-        sixHome = sixHome.parent_path();
-    } while (absolute(sixHome) != absolute(sixHome.parent_path()));
-    return "";
-}
-
 std::unique_ptr<scene::ProjectionPolynomialFitter>
-loadPolynomialFitter(const std::filesystem::path& exePath)
+loadPolynomialFitter()
 {
-    const auto sixHome = findSixHome(exePath);
-    if (sixHome.empty())
-    {
-        std::ostringstream oss;
-        oss << "Environment error: Cannot determine source tree root";
-        throw except::Exception(Ctxt(oss.str()));
-    }
-
-    const auto sicdPathname = absolute(sixHome / "croppedNitfs" / "SICD"/ "cropped_sicd_110.nitf");
-    if (!is_regular_file(sicdPathname))
-    {
-        std::ostringstream oss;
-        oss << "Environment error: Cannot find SICD file: " << sicdPathname;
-        throw except::Exception(Ctxt(oss.str()));
-    }
+  static const auto modulePath = std::filesystem::path("croppedNitfs") / "SICD";
+    static const auto sicdPathname = six::testing::getModuleFile(modulePath, "cropped_sicd_110.nitf");
+    std::clog << sicdPathname << "\n";
 
     std::vector<std::string> schemaPaths;
     std::unique_ptr<six::sicd::ComplexData> complexData;
@@ -90,18 +63,11 @@ inline const double* output_plane_points(size_t i)
     return OUTPUT_PLANE_POINTS[i];
 }
 
-static std::filesystem::path argv0()
-{
-    static const sys::OS os;
-    static const std::filesystem::path retval = os.getSpecialEnv("0");
-    return retval;
-}
-
 TEST_CASE(testProjectOutputToSlant)
 {
     if (globalFitter == nullptr)
     {
-        globalFitter = loadPolynomialFitter(six::testing::buildRootDir(argv0()));
+        globalFitter = loadPolynomialFitter();
     }
 
     math::poly::TwoD<double> outputToSlantRow;
@@ -132,7 +98,7 @@ TEST_CASE(testProjectSlantToOutput)
 {
     if (globalFitter == nullptr)
     {
-        globalFitter = loadPolynomialFitter(six::testing::buildRootDir(argv0()));
+        globalFitter = loadPolynomialFitter();
     }
 
     math::poly::TwoD<double> slantToOutputRow;

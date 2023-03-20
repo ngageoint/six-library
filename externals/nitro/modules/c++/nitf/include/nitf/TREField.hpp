@@ -55,6 +55,11 @@ namespace nitf
             {
                 return tre_.getFieldValue<T>(tag_);
             }
+
+            size_t getLength() const
+            {
+                return tre_.getField(tag_).getLength();
+            }
         };
         template<typename T>
         struct field final
@@ -76,6 +81,11 @@ namespace nitf
             const T getFieldValue() const 
             {
                 return field_.getFieldValue();
+            }
+
+            size_t getLength() const
+            {
+                return field_.getLength();
             }
         };
     }
@@ -107,6 +117,13 @@ namespace nitf
         operator const value_type() const
         {
             return value();
+        }
+
+        size_t getLength() const
+        {
+            auto retval = field_.getLength();
+            assert(retval == size);
+            return retval;
         }
     };
 

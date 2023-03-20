@@ -115,18 +115,8 @@ sys::SSize_T io::FileInputStreamIOS::readImpl(void* buffer, size_t len)
     if (avail > 0)
     {
         sys::SSize_T bytesRead(0);
-        // There is a 'huge-gantic' bug in Forte 6.2
-        // in which 'read()' reads the first character twice
-#if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x530)
-
-        while (bytesRead < avail && mFStream.good())
-        {
-            bufferPtr[bytesRead++] = mFStream.get();
-        }
-#else
         mFStream.read(bufferPtr, avail);
         bytesRead = mFStream.gcount();
-#endif
         return bytesRead;
     }
 

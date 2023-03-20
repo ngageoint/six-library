@@ -42,7 +42,7 @@ std::string itos (int arg) {
 class DemoThread : public Thread
 {
 protected:
-   void run() {
+   void run() override {
       for (int i = 0 ; i < THREAD_LOOPS ; i++ ) {
          mutexCout.lock();
          std::cout << getName() + " is running" << std::endl;

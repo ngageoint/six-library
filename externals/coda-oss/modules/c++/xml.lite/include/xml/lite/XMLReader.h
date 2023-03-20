@@ -38,6 +38,7 @@
 #endif
 
 #  include "xml/lite/XMLReaderXerces.h"
+
 namespace xml
 {
 namespace lite

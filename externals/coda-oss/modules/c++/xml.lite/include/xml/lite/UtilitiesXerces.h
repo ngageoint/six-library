@@ -29,10 +29,12 @@
 #include <mutex>
 #include <type_traits>
 
+#include "config/compiler_extensions.h"
 #include "xml/lite/xml_lite_config.h"
 
 #if defined(USE_XERCES)
 
+CODA_OSS_disable_warning_system_header_push
 #include <xercesc/util/TransService.hpp>
 #include <xercesc/sax2/XMLReaderFactory.hpp>
 #include <xercesc/sax2/Attributes.hpp>
@@ -52,10 +54,10 @@
 #include <xercesc/validators/common/ContentSpecNode.hpp>
 #include <xercesc/validators/schema/SchemaSymbols.hpp>
 
-#include <string>
-
 #include <xercesc/util/XercesDefs.hpp>
 #include <xercesc/sax/ErrorHandler.hpp>
+
+CODA_OSS_disable_warning_pop
 
 #include <sys/Mutex.h>
 #include <mt/CriticalSection.h>
@@ -301,12 +303,12 @@ struct XercesContentHandler : public XercesContentHandlerInterface_T
     XercesContentHandler& operator=(const XercesContentHandler&) = delete;
 
     virtual void ignorableWhitespace(const XMLCh* const /*chars*/,
-                                     const XercesSize_T /*length*/)
+                                     const XercesSize_T /*length*/) override
     {}
     virtual void  processingInstruction(const XMLCh* const /*target*/,
-                                        const XMLCh* const /*data*/)
+                                        const XMLCh* const /*data*/) override
     {}
-    virtual void  setDocumentLocator(const Locator* const /*locator*/)
+    virtual void  setDocumentLocator(const Locator* const /*locator*/) override
     {}
 
     /*!
@@ -317,12 +319,12 @@ struct XercesContentHandler : public XercesContentHandlerInterface_T
      *  \param length   The length
      */
     virtual void characters(const XMLCh* const chars,
-                            const XercesSize_T length);
+                            const XercesSize_T length) override;
 
     /*!
      *  Fire off the end document notification
      */
-    virtual void endDocument();
+    virtual void endDocument() override;
 
     /*!
      *  Map input string types to output string types
@@ -333,13 +335,13 @@ struct XercesContentHandler : public XercesContentHandlerInterface_T
      */
     virtual void endElement(const XMLCh* const uri,
                             const XMLCh* const localName,
-                            const XMLCh* const qname);
+                            const XMLCh* const qname) override;
 
-    virtual void skippedEntity (const XMLCh* const /*name*/)
+    virtual void skippedEntity (const XMLCh* const /*name*/) override
     {}
 
     //! Fire off the start document notification
-    virtual void startDocument();
+    virtual void startDocument() override;
 
     /*!
      *  Map input string types to output string types
@@ -353,7 +355,7 @@ struct XercesContentHandler : public XercesContentHandlerInterface_T
     virtual void startElement(const XMLCh* const uri,
                               const XMLCh* const localName,
                               const XMLCh* const qname,
-                              const XercesAttributesInterface_T &attrs);
+                              const XercesAttributesInterface_T &attrs) override;
 
     /*!
      *  Begin prefix mapping.  Transfer string types
@@ -361,7 +363,7 @@ struct XercesContentHandler : public XercesContentHandlerInterface_T
      *  \param uri The corresponding uri
      */
     virtual void startPrefixMapping (const XMLCh* const /*prefix*/,
-                                     const XMLCh* const /*uri*/)
+                                     const XMLCh* const /*uri*/) override
     {
     }
 
@@ -369,7 +371,7 @@ struct XercesContentHandler : public XercesContentHandlerInterface_T
      *  End prefix mapping.  Transfer string types
      *  \param prefix The prefix to stop mapping
      */
-    virtual void endPrefixMapping (const XMLCh* const /*prefix*/)
+    virtual void endPrefixMapping (const XMLCh* const /*prefix*/) override
     {
     }
 

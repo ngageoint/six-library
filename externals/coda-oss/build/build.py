@@ -21,6 +21,12 @@ from dumpconfig import dumpconfig
 from makewheel import makewheel
 from package import package
 
+try:
+    import hashlib
+    hashlib.md5()
+except ValueError:
+    Logs.error('MD5 error - you are likely trying to use an old python on a new machine to run waf. '
+               'If you run into a fatal FIPS error try finding a newer version of python.')
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
@@ -29,8 +35,8 @@ COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.spl
 for ext in COMMON_EXCLUDES_EXT:
     TaskGen.extension(ext)(Utils.nada)
 
-if sys.version_info < (2,6,0):
-    raise Errors.WafError('Build system requires at least Python 2.6')
+if sys.version_info < (3,6,0):
+    raise Errors.WafError('Build system requires at least Python 3.6')
 
 # provide a partial function if we don't have one
 try:
@@ -761,10 +767,20 @@ def options(opt):
                    help='Set non-standard LINKFLAGS (C/C++)', metavar='FLAGS')
     opt.add_option('--with-defs', action='store', nargs=1, dest='_defs',
                    help='Use DEFS as macro definitions', metavar='DEFS')
+
+    # This approach might not be sustainable as users might want (much) better control
+    # over the optimation flags.  The "problem" is that different optimzation levels
+    # can, in particular, cause slight floating-point differences which can break
+    # e.g., existing regression tests.
+    #
+    # For example, GCC has a -Ofast flag which generates "even faster" code at the risk
+    # of violating C/C++ standards. There is also on-going research into faster floating-point
+    # math, those efforts are slowly making their way into language standards and compilers.
     opt.add_option('--with-optz', action='store',
-                   choices=['med', 'fast', 'fastest'],
-                   default='fastest', metavar='OPTZ',
+                   choices=['med', 'fast', 'faster', 'fastest', 'fastest-possible'],
+                   default='faster', metavar='OPTZ',
                    help='Specify the optimization level for optimized/release builds')
+
     opt.add_option('--libs-only', action='store_true', dest='libs_only',
                    help='Only build the libs (skip building the tests, etc.)')
     opt.add_option('--shared', action='store_true', dest='shared_libs',
@@ -796,23 +812,7 @@ def options(opt):
                     'results. NOOP if junit_xml cannot be imported')
 
 
-def ensureCpp11Support(self):
-    # Visual Studio 2013 has nullptr but not constexpr.  Need to check for
-    # both in here to make sure we have full C++11 support... otherwise,
-    # long-term we may need multiple separate configure checks and
-    # corresponding defines
-
-    cpp11_str = '''
-            int main()
-            {
-                constexpr void* FOO = nullptr;
-            }
-            '''
-    self.check_cxx(fragment=cpp11_str,
-                   execute=0,
-                   msg='Checking for C++11 support',
-                   mandatory=True)
-
+def ensureCpp14Support(self):
     # DEPRECATED.
     # Keeping for now in case downstream code is still looking for it
     self.env['cpp11support'] = True
@@ -822,7 +822,6 @@ def configureCompilerOptions(self):
     sys_platform = getPlatform(default=Options.platform)
     appleRegex = r'i.86-apple-.*'
     linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
-    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
     winRegex = r'win32'
     osxRegex = r'darwin'
 
@@ -851,7 +850,9 @@ def configureCompilerOptions(self):
         config['cxx']['optz_debug']     = ''
         config['cxx']['optz_med']       = '-O1'
         config['cxx']['optz_fast']      = '-O2'
-        config['cxx']['optz_fastest']   = '-O3'
+        config['cxx']['optz_faster']   = '-O3'
+        config['cxx']['optz_fastest']   = config['cxx']['optz_faster']
+        config['cxx']['optz_fastest-possible']   = config['cxx']['optz_fastest'] # TODO: -march=native ?
 
         #self.env.append_value('LINKFLAGS', '-fPIC -dynamiclib'.split())
         self.env.append_value('LINKFLAGS', '-fPIC'.split())
@@ -864,7 +865,9 @@ def configureCompilerOptions(self):
         config['cc']['optz_debug']     = config['cxx']['optz_debug']
         config['cc']['optz_med']       = config['cxx']['optz_med']
         config['cc']['optz_fast']      = config['cxx']['optz_fast']
+        config['cc']['optz_faster']   = config['cxx']['optz_faster'] 
         config['cc']['optz_fastest']   = config['cxx']['optz_fastest']
+        config['cc']['optz_fastest-possible']   = config['cxx']['optz_fastest-possible']
 
         self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
         self.env.append_value('CFLAGS', '-fPIC -dynamiclib'.split())
@@ -878,9 +881,6 @@ def configureCompilerOptions(self):
         self.env.append_value('LIB_MATH', 'm')
         self.env.append_value('LINKFLAGS_THREAD', '-pthread')
         self.check_cc(lib='pthread', mandatory=True)
-
-        if re.match(solarisRegex, sys_platform):
-            self.env.append_value('LIB_SOCKET', 'socket')
 
         warningFlags = '-Wall'
         if ccCompiler == 'gcc':
@@ -904,12 +904,19 @@ def configureCompilerOptions(self):
             config['cxx']['linkflags_64']   = '-m64'
             config['cxx']['optz_med']       = '-O1'
             config['cxx']['optz_fast']      = '-O2'
-            config['cxx']['optz_fastest']   = '-O3'
+            # https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/x86-Options.html#x86-Options
+            # "Using -march=native enables all instruction subsets supported by the local machine ..."
+            config['cxx']['optz_faster']      = '-O3' # no -march=native
+            config['cxx']['optz_fastest']   =  config['cxx']['optz_faster'] # TODO: add -march=native ?
+            # This "should" be part of fastest, but that could cause unexpected floating point differences.
+            # The "fastest-possible" option is new; see comments above.
+            config['cxx']['optz_fastest-possible']   =  [ config['cxx']['optz_fastest'], '-march=native' ]
 
+            self.env.append_value('CXXFLAGS', '-fPIC'.split())
             if not Options.options.enablecpp17:
-                gxxCompileFlags='-fPIC -std=c++11'
+                gxxCompileFlags='-std=c++14'
             else:
-                gxxCompileFlags='-fPIC -std=c++17'
+                gxxCompileFlags='-std=c++17'
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
@@ -919,7 +926,7 @@ def configureCompilerOptions(self):
             #       Is there an equivalent to get the same functionality or
             #       is this an OS limitation?
             linkFlags = '-fPIC'
-            if (not re.match(osxRegex, sys_platform)) and (not re.match(solarisRegex, sys_platform)):
+            if (not re.match(osxRegex, sys_platform)):
                 linkFlags += ' -Wl,-E'
 
             self.env.append_value('LINKFLAGS', linkFlags.split())
@@ -946,61 +953,17 @@ def configureCompilerOptions(self):
             config['cc']['linkflags_64']   = '-m64'
             config['cc']['optz_med']       = '-O1'
             config['cc']['optz_fast']      = '-O2'
-            config['cc']['optz_fastest']   = '-O3'
+            # https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/x86-Options.html#x86-Options
+            # "Using -march=native enables all instruction subsets supported by the local machine ..."
+            config['cc']['optz_faster']      = '-O3' # no -march=native
+            config['cc']['optz_fastest']   =  config['cc']['optz_faster'] # TODO: add -march=native ?
+            # This "should" be part of fastest, but that could cause unexpected floating point differences.
+            # The "fastest-possible" option is new; see comments above.
+            config['cc']['optz_fastest-possible']   =  [ config['cc']['optz_fastest'], '-march=native' ]
 
             self.env.append_value('CFLAGS', '-fPIC'.split())
-
-    # Solaris (Studio compiler)
-    elif re.match(solarisRegex, sys_platform):
-        self.env.append_value('LIB_DL', 'dl')
-        self.env.append_value('LIB_NSL', 'nsl')
-        self.env.append_value('LIB_SOCKET', 'socket')
-        self.env.append_value('LIB_THREAD', 'thread')
-        self.env.append_value('LIB_MATH', 'm')
-        self.env.append_value('LIB_CRUN', 'Crun')
-        self.env.append_value('LIB_CSTD', 'Cstd')
-        self.check_cc(lib='thread', mandatory=True)
-
-        warningFlags = ''
-        if Options.options.warningsAsErrors:
-            warningFlags = '-errwarn=%all'
-
-        if cxxCompiler == 'sunc++':
-            bitFlag64 = getSolarisFlags(self.env['CXX'][0])
-            config['cxx']['debug']          = '-g'
-            config['cxx']['warn']           = warningFlags.split()
-            config['cxx']['nowarn']         = '-erroff=%all'
-            config['cxx']['verbose']        = '-v'
-            config['cxx']['64']             = bitFlag64
-            config['cxx']['optz_debug']     = ''
-            config['cxx']['optz_med']       = '-xO3'
-            config['cxx']['optz_fast']      = '-xO4'
-            config['cxx']['optz_fastest']   = '-xO5'
-            self.env['CXXFLAGS_cxxshlib']        = ['-KPIC', '-DPIC']
-
-            # DEFINES apply to both suncc and sunc++
-            self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
-            self.env.append_value('CXXFLAGS', '-KPIC -instances=global'.split())
-            self.env.append_value('CXXFLAGS_THREAD', '-mt')
-
-        if ccCompiler == 'suncc':
-            bitFlag64 = getSolarisFlags(self.env['CC'][0])
-            config['cc']['debug']          = '-g'
-            config['cc']['warn']           = warningFlags.split()
-            config['cc']['nowarn']         = '-erroff=%all'
-            config['cc']['verbose']        = '-v'
-            config['cc']['64']             = bitFlag64
-            config['cc']['linkflags_64']   = bitFlag64
-            config['cc']['optz_debug']     = ''
-            config['cc']['optz_med']       = '-xO3'
-            config['cc']['optz_fast']      = '-xO4'
-            config['cc']['optz_fastest']   = '-xO5'
-            self.env['CFLAGS_cshlib']           = ['-KPIC', '-DPIC']
-
-            # C99 is required for Solaris to be compatible with
-            # macros that openjpeg sets
-            self.env.append_value('CFLAGS', ['-KPIC', '-xc99=all'])
-            self.env.append_value('CFLAGS_THREAD', '-mt')
+            # "gnu99" enables POSIX and BSD
+            self.env.append_value('CFLAGS', '-std=gnu99'.split())
 
     elif re.match(winRegex, sys_platform):
         crtFlag = '/%s' % Options.options.crt
@@ -1031,7 +994,9 @@ def configureCompilerOptions(self):
         vars['optz_debug']     = ['', crtFlag]
         vars['optz_med']       = ['-O2', crtFlag]
         vars['optz_fast']      = ['-O2', crtFlag]
+        vars['optz_faster']      = vars['optz_fast']
         vars['optz_fastest']   = ['-Ox', crtFlag]
+        vars['optz_fastest-possible']   = vars['optz_fastest']
         # The MACHINE flag is is probably not actually necessary
         # The linker should be able to infer it from the object files
         # But doing this just to make sure we're really building 32/64 bit
@@ -1063,6 +1028,8 @@ def configureCompilerOptions(self):
         #If building with cpp17 add flags/defines to enable auto_ptr
         if Options.options.enablecpp17:
             flags.append('/std:c++17')
+        else:
+            flags.append('/std:c++14')
 
         self.env.append_value('DEFINES', defines)
         self.env.append_value('CXXFLAGS', flags)
@@ -1283,7 +1250,7 @@ def configure(self):
     if Options.options._defs:
         env.append_unique('DEFINES', Options.options._defs.split(','))
     configureCompilerOptions(self)
-    ensureCpp11Support(self)
+    ensureCpp14Support(self)
 
     env['PLATFORM'] = sys_platform
 
@@ -1332,7 +1299,6 @@ def process_swig_linkage(tsk):
     # options for specifying soname and passing linker
     # flags
 
-    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
     darwinRegex = r'i.86-apple-.*'
     osxRegex = r'darwin'
 
@@ -1354,12 +1320,6 @@ def process_swig_linkage(tsk):
     linkarg_pattern = '-Wl,%s'
     rpath_pattern = '-Wl,-rpath=%s'
     soname_pattern = '-soname=%s'
-
-    # overrides for solaris's cc and ld
-    if re.match(solarisRegex,platform) and compiler != 'g++' and compiler != 'icpc':
-        linkarg_pattern = '%s'
-        soname_pattern = '-h%s'
-        rpath_pattern = '-Rpath%s'
 
     # overrides for osx
     if re.match(darwinRegex,platform) or re.match(osxRegex,platform):

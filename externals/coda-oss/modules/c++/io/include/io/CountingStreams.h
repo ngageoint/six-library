@@ -48,7 +48,7 @@ struct CODA_OSS_API CountingOutputStream : public ProxyOutputStream
      * \param buffer The byte array to write to the stream
      * \param len The length of the byte array to write to the stream
      */
-    virtual void write(const void* buffer, size_t len)
+    virtual void write(const void* buffer, size_t len) override
     {
         ProxyOutputStream::write(buffer, len);
         mByteCount += len;
