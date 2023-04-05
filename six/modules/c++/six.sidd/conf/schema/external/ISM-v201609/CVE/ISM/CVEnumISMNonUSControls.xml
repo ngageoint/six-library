@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Notices - Distribution Notice: 
+           This document has been approved for Public Release and is available for use without restriction.
+       --><cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ism:compliesWith="USGov USIC" ism:ownerProducer="USA" ism:classification="U" ism:DESVersion="201609.201707" ism:ISMCATCESVersion="201609" ism:resourceElement="true" CVEVersion="2.1" specVersion="201609.201707" ism:createDate="2011-09-01" xsi:schemaLocation="urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd">
+	
+	  <cve:IRM>
+		    <URN xmlns="urn:us:gov:ic:cve">urn:us:gov:ic:cvenum:ism:nonuscontrols</URN>
+		    <Title xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">CVEnumISMNonUSControls</Title>
+	  	<Description xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">NonUS Control markings supported by ISM. This CVE is used by @ism:nonUSControls.</Description>
+		
+		    <cve:Created>2010-06-06T20:11:00-04:00</cve:Created>
+		
+		    <Source ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">ISM schema</Source>
+		    <PointOfContact ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">
+         <Name>Office IC CIO</Name>
+         <Email>ic-standards-support@iarpa.gov</Email>
+      </PointOfContact>
+	  </cve:IRM>
+	
+	  <cve:Enumeration multivalue="true" ism:ownerProducer="USA" ism:classification="U">
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">ATOMAL</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">NATO Atomal mark</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">BOHEMIA</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">NATO Bohemia mark</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">BALK</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">NATO Balk mark</Description>
+		    </Term>
+	  </cve:Enumeration>
+	
+</cve:CVE>

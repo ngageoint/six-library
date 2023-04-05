@@ -42,10 +42,10 @@ TEST_CASE(testDefaultConstructor)
     //VectorN<0, double> v0;
     //TEST_ASSERT_EQ(v0.size(), 0);
 
-    VectorN<1,double> v1;
+    VectorN<1,double> v1{};
     TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(1));
 
-    VectorN<2,double> v2;
+    VectorN<2,double> v2{};
     TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(2));
 }
 

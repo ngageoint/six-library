@@ -21,7 +21,7 @@
  */
 
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 #if !defined(USE_NSPR_THREADS)
 #include "sys/ThreadWin32.h"
 

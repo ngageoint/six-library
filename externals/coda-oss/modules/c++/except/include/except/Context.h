@@ -29,6 +29,7 @@
 #include <ostream>
 
 #include "config/Exports.h"
+#include "config/disable_compiler_warnings.h"
 
 /*!
  * \file

@@ -76,7 +76,7 @@ struct DataStream: public io::Serializable
      *  Outputs this object into an output stream.
      *  \param os the OutputStream to write to
      */
-    virtual void serialize(io::OutputStream& os)
+    virtual void serialize(io::OutputStream& os) override
     {
         mStringStream.streamTo(os);
     }
@@ -85,7 +85,7 @@ struct DataStream: public io::Serializable
      * Unpack this input stream to the object
      * \param is Stream to read object from
      */
-    virtual void deserialize(io::InputStream& is)
+    virtual void deserialize(io::InputStream& is) override
     {
         is.streamTo(mStringStream);
     }

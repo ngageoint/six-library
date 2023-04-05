@@ -47,7 +47,7 @@ struct CODA_OSS_API ProxyInputStream : public InputStream
             mProxy.release();
     }
 
-    virtual sys::Off_T available()
+    virtual sys::Off_T available() override
     {
         return mProxy->available();
     }
@@ -61,12 +61,12 @@ struct CODA_OSS_API ProxyInputStream : public InputStream
     }
 
 protected:
-    virtual sys::SSize_T readImpl(void* buffer, size_t len)
+    virtual sys::SSize_T readImpl(void* buffer, size_t len) override
     {
         return mProxy->read(buffer, len);
     }
 
-    mem::auto_ptr<InputStream> mProxy;
+    std::unique_ptr<InputStream> mProxy;
     bool mOwnPtr;
 };
 
@@ -93,17 +93,17 @@ struct CODA_OSS_API ProxyOutputStream : public OutputStream
 
     using OutputStream::write;
 
-    virtual void write(const void* buffer, size_t len)
+    virtual void write(const void* buffer, size_t len) override
     {
         mProxy->write(buffer, len);
     }
 
-    virtual void flush()
+    virtual void flush() override
     {
         mProxy->flush();
     }
 
-    virtual void close()
+    virtual void close() override
     {
         mProxy->close();
     }
@@ -117,7 +117,7 @@ struct CODA_OSS_API ProxyOutputStream : public OutputStream
     }
 
 protected:
-    mem::auto_ptr<OutputStream> mProxy;
+    std::unique_ptr<OutputStream> mProxy;
     bool mOwnPtr = false;
 };
 
@@ -152,7 +152,7 @@ struct CODA_OSS_API ToggleOutputStream : public io::ProxyOutputStream
         return mEnabled;
     }
 
-    void close()
+    void close() override
     {
         if (mEnabled && mPtr)
             mPtr->close();

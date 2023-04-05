@@ -717,6 +717,24 @@
     <ClInclude Include="sys\include\sys\MutexCpp11.h">
       <Filter>sys</Filter>
     </ClInclude>
+    <ClInclude Include="mem\include\mem\AutoPtr.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\ComplexView.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="std\include\import\cpp14.h">
+      <Filter>std</Filter>
+    </ClInclude>
+    <ClInclude Include="std\include\import\cpp17.h">
+      <Filter>std</Filter>
+    </ClInclude>
+    <ClInclude Include="std\include\import\std.h">
+      <Filter>std</Filter>
+    </ClInclude>
+    <ClInclude Include="config\include\config\disable_compiler_warnings.h">
+      <Filter>config</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -1054,6 +1072,9 @@
       <Filter>plugin</Filter>
     </ClCompile>
     <ClCompile Include="sys\source\MutexCpp11.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\File.cpp">
       <Filter>sys</Filter>
     </ClCompile>
   </ItemGroup>

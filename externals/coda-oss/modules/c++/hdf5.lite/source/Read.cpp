@@ -22,122 +22,86 @@
 
 #include "hdf5/lite/Read.h"
 
-#include <stdexcept>
 #include <tuple> // std::ignore
 #include <vector>
 
-#include "except/Exception.h"
 #include "coda_oss/cstddef.h" // byte
 
 #include "hdf5/lite/HDF5Exception.h"
+#include "H5.h"
+#include "hdf5.lite.h"
 
-// see https://docs.hdfgroup.org/archive/support/HDF5/doc1.8/cpplus_RM/readdata_8cpp-example.html
-#include <H5Cpp.h>
-
-static types::RowCol<size_t> getSimpleExtentSize(const H5::DataSet& dataset)
-{
-    /*
-     * Get dataspace of the dataset.
-     */
-    const auto dataspace = dataset.getSpace();
-
-    /*
-     * Get the number of dimensions in the dataspace.
-     */
-    const auto rank = dataspace.getSimpleExtentNdims();
-    // we only support 1- and 2-D data
-    if ((rank != 1) && (rank != 2))
-    {
-        throw std::invalid_argument("'rank' must be 1 or 2.");
-    }
-
-    /*
-     * Get the dimension size of each dimension in the dataspace.
-     */
-    std::vector<hsize_t> dims_out(rank);
-    dims_out.resize(rank);
-    const auto ndims = dataspace.getSimpleExtentDims(dims_out.data(), nullptr);
-    dims_out.resize(ndims);
-    if (dims_out.empty() || (dims_out.size() > 2))
-    {
-        throw std::invalid_argument("dims_out.size() must be 1 or 2.");
-    }
-
-    // Does it matter whether it's 1-row and n-cols or n-cols and 1-row?
-    types::RowCol<size_t> retval;
-    retval.row = dims_out[0];
-    retval.col = dims_out.size() == 2 ? dims_out[1] : 1;
-    return retval;
-}
-
-template<typename T>
-static types::RowCol<size_t> readFileT(const H5::DataSet& dataset, H5T_class_t type_class, const H5::DataType& mem_type,
-    std::vector<T>& result)
-{
-    if (type_class != dataset.getTypeClass())
-    {
-        throw std::invalid_argument("getTypeClass() returned wrong value.");
-    }
-
-    const auto retval = getSimpleExtentSize(dataset);
-    result.resize(retval.area());
-    dataset.read(result.data(), mem_type);
-
-    return retval;
-}
-
-inline types::RowCol<size_t> readFile_(const H5::DataSet& dataset, std::vector<float>& result)
-{
-    static_assert(sizeof(float) * 8 == 32, "'float' should be 32-bits"); // IEEE_F32LE
-    return readFileT(dataset, H5T_FLOAT, H5::PredType::IEEE_F32LE, result);
-}
-
-inline types::RowCol<size_t> readFile_(const H5::DataSet& dataset, std::vector<double>& result)
+static void read(const H5::DataSet& dataset, std::vector<double>& result)
 {
     static_assert(sizeof(double) * 8 == 64, "'double' should be 64-bits"); // IEEE_F64LE
-    return readFileT(dataset, H5T_FLOAT, H5::PredType::IEEE_F64LE, result);
+
+    const auto mem_type = dataset.getDataType();
+    if (mem_type != H5::PredType::IEEE_F64LE)
+    {
+        const except::Context context("getDataType() != IEEE_F64LE", __FILE__, __LINE__, "read");
+        throw hdf5::lite::DataSetException(context);
+    }
+    dataset.read(result.data(), mem_type);
+}
+static void read(const H5::DataSet& dataset, std::vector<float>& result)
+{
+    static_assert(sizeof(float) * 8 == 32, "'float' should be 32-bits"); // IEEE_F32LE
+
+    const auto mem_type = dataset.getDataType();
+    if (mem_type != H5::PredType::IEEE_F32LE)
+    {
+        const except::Context context("getDataType() != IEEE_F32LE", __FILE__, __LINE__, "read");
+        throw hdf5::lite::DataSetException(context);
+    }
+    dataset.read(result.data(), mem_type);
+}
+template<typename T>
+static hdf5::lite::SpanRC<T> readDatasetT(const H5::DataSet& dataset, std::vector<T>& result)
+{
+    if (dataset.getTypeClass() != H5T_FLOAT)
+    {
+        const except::Context context("getTypeClass() != H5T_FLOAT", __FILE__, __LINE__, "readDatasetT");
+        throw hdf5::lite::DataSetException(context);
+    }    
+
+    const auto dims = hdf5::lite::details::getSimpleExtentSize(dataset);
+    result.resize(dims.area());
+    hdf5::lite::SpanRC<T> retval(result.data(), dims);
+    
+    // dataset.read() doesn't care about the buffer type ... that's because H5Dread() also
+    // uses void*.  However, the LT API has H5LTread_dataset_double() and  H5LTread_dataset_float(),
+    read(dataset, result); // data.read(result.data(), mem_type);
+
+    return retval;
 }
 
-types::RowCol<size_t> hdf5::lite::readFile(const coda_oss::filesystem::path& fileName, const std::string& datasetName,
+inline hdf5::lite::SpanRC<float> readDataset_(const H5::DataSet& dataset, std::vector<float>& result)
+{
+    return readDatasetT(dataset, result);
+}
+inline hdf5::lite::SpanRC<double> readDataset_(const H5::DataSet& dataset, std::vector<double>& result)
+{
+    return readDatasetT(dataset, result);
+}
+template<typename T>
+static hdf5::lite::SpanRC<T> readFile_(const coda_oss::filesystem::path& fileName, const std::string& datasetName,
+                                std::vector<T>& result)
+{
+    /*
+     * Open the specified file and the specified dataset in the file.
+     */
+    H5::H5File file(fileName.string(), H5F_ACC_RDONLY);
+    const auto dataset = file.openDataSet(datasetName);
+    return readDataset_(dataset, result);
+}
+
+hdf5::lite::SpanRC<double> hdf5::lite::readFile(const coda_oss::filesystem::path& fileName, const std::string& loc,
     std::vector<double>& result)
 {
-    try
-    {
-        /*
-         * Turn off the auto-printing when failure occurs so that we can
-         * handle the errors appropriately
-         */
-        H5::Exception::dontPrint();
-
-        /*
-         * Open the specified file and the specified dataset in the file.
-         */
-        H5::H5File file(fileName.string(), H5F_ACC_RDONLY);
-        const auto dataset = file.openDataSet(datasetName);
-        return readFile_(dataset, result);
-    }
-    // catch failure caused by the H5File operations
-    catch (const H5::FileIException& error)
-    {
-        const except::Context ctx(error.getDetailMsg(), __FILE__, __LINE__, error.getFuncName());
-        throw except::IOException(ctx);
-    }
-    // catch failure caused by the DataSet operations
-    catch (const H5::DataSetIException& error)
-    {
-        const except::Context ctx(error.getDetailMsg(), __FILE__, __LINE__, error.getFuncName());
-        throw DataSetException11(ctx);
-    }
-    // catch failure caused by the DataSpace operations
-    catch (const H5::DataSpaceIException& error)
-    {
-        const except::Context ctx(error.getDetailMsg(), __FILE__, __LINE__, error.getFuncName());
-        throw DataSpaceException11(ctx);
-    }
-    // catch failure caused by the DataType operations
-    catch (const H5::DataTypeIException& error)
-    {
-        const except::Context ctx(error.getDetailMsg(), __FILE__, __LINE__, error.getFuncName());
-        throw DataTypeException11(ctx);
-    }
+    return details::try_catch_H5Exceptions(readFile_<double>, __FILE__, __LINE__, fileName, loc, result); 
+}
+hdf5::lite::SpanRC<float> hdf5::lite::readFile(const coda_oss::filesystem::path& fileName, const std::string& loc,
+    std::vector<float>& result)
+{
+    return details::try_catch_H5Exceptions(readFile_<float>, __FILE__, __LINE__, fileName, loc, result); 
 }

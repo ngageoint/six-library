@@ -127,7 +127,7 @@ public:
      * @param output
      *   the output stream to write the member to
      *****************************************************************/
-    virtual void serialize(io::OutputStream& output)
+    virtual void serialize(io::OutputStream& output) override
     {
         output.write((char *)&mData, sizeof(Data_T));
     }
@@ -139,22 +139,22 @@ public:
      * @param input
      *   the input stream to read the member from
      *****************************************************************/
-    virtual void deserialize(io::InputStream& input)
+    virtual void deserialize(io::InputStream& input) override
     {
         input.read((char *)&mData, sizeof(Data_T));
     }
 
-    virtual unsigned char *data() const
+    virtual unsigned char *data() const override
     {
         return (unsigned char *)&mData;
     }
 
-    virtual unsigned short size() const
+    virtual unsigned short size() const override
     {
         return sizeof(mData);
     }
 
-    virtual std::string toString() const
+    virtual std::string toString() const override
     {
         return Strategy_T::toString(mData);
     }

@@ -52,15 +52,15 @@ class DefaultErrorHandler : public ErrorHandler
 public:
     DefaultErrorHandler(logging::LoggerPtr logger = logging::LoggerPtr());
 
-    void onPluginDirectoryNotFound(const std::string& dir);
+    void onPluginDirectoryNotFound(const std::string& dir) override;
 
-    void onPluginLoadedAlready(const std::string& file);
+    void onPluginLoadedAlready(const std::string& file) override;
 
-    void onPluginLoadFailed(const std::string& file);
+    void onPluginLoadFailed(const std::string& file) override;
 
-    void onPluginVersionUnsupported(const std::string& message);
+    void onPluginVersionUnsupported(const std::string& message) override;
 
-    void onPluginError(except::Context& c);
+    void onPluginError(except::Context& c) override;
 
 protected:
     logging::LoggerPtr mLogger;

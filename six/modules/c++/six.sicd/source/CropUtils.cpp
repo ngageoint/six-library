@@ -53,7 +53,7 @@ void updateMinMax(double val, double& curMin, double& curMax)
     }
 }
 
-six::sicd::ComplexData* const updateMetadata(
+six::sicd::ComplexData* updateMetadata(
         const six::sicd::ComplexData& data,
         const scene::SceneGeometry& geom,
         const scene::ProjectionModel& projection,
@@ -138,7 +138,7 @@ namespace six
 namespace sicd
 {
 
-mem::auto_ptr<six::sicd::ComplexData> cropMetaData(
+std::unique_ptr<six::sicd::ComplexData> cropMetaData(
         const six::sicd::ComplexData& complexData,
         const types::RowCol<size_t>& aoiOffset,
         const types::RowCol<size_t>& aoiDims)
@@ -157,7 +157,7 @@ mem::auto_ptr<six::sicd::ComplexData> cropMetaData(
             aoiOffset,
             aoiDims);
 
-    return mem::auto_ptr<six::sicd::ComplexData>(aoiData);
+    return std::unique_ptr<six::sicd::ComplexData>(aoiData);
 }
 
 void cropSICD(const std::string& inPathname,

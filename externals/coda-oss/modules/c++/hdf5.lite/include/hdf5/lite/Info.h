@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef CODA_OSS_hdf5_lite_Read_h_INCLUDED_
-#define CODA_OSS_hdf5_lite_Read_h_INCLUDED_
+#ifndef CODA_OSS_hdf5_lite_Info_h_INCLUDED_
+#define CODA_OSS_hdf5_lite_Info_h_INCLUDED_
 #pragma once
 
 #include <string>
@@ -41,45 +41,69 @@ namespace hdf5
 {
 namespace lite
 {
-struct GroupInfo final
+enum class Class
 {
+    NoClass = -1, /**< error                                   */
+    Integer = 0, /**< integer types                           */
+    Float = 1, /**< floating-point types                    */
+    Time = 2, /**< date and time types                     */
+    String = 3, /**< character string types                  */
+    Bitfield = 4, /**< bit field types                         */
+    Opaque = 5, /**< opaque types                            */
+    Compound = 6, /**< compound types                          */
+    Reference = 7, /**< reference types                         */
+    Enum = 8, /**< enumeration types                       */
+    Vlen = 9, /**< variable-Length types                   */
+    Array = 10, /**< array types                             */
 };
 
-struct DatatypeInfo final
+// https://docs.hdfgroup.org/hdf5/develop/_h5_d_m__u_g.html
+struct NamedObject
 {
+    std::string filename;  // could be a URL, so not std::filesystem::path
     std::string name;
-    // Class
+};
+
+struct DataTypeInfo final : public NamedObject
+{
+    Class h5Class;
     // Type
     size_t size = 0;
 };
 
-struct DatasetInfo final
+struct DataSpaceInfo final
 {
-    std::string name;
-    DatatypeInfo datatype;
-    // Dataspace
+};
+
+struct DataSetInfo final : public NamedObject
+{
+    DataTypeInfo dataType;
+    DataSpaceInfo dataSpace;
     // ChunkSize
     // FillValue
     // Filter
     // Attributes
 };
 
-struct FileInfo final
+struct GroupInfo : public NamedObject
 {
-    std::string name;
     std::vector<GroupInfo> groups;
-    std::vector<DatasetInfo> datasets;
-    std::vector<DatatypeInfo> datatypes;
+    std::vector<DataSetInfo> dataSets;
+    std::vector<DataTypeInfo> dataTypes;
     // Links
     // Attributes
 };
 
+struct FileInfo final : public GroupInfo
+{
+};
+
 
 CODA_OSS_API FileInfo fileInfo(const coda_oss::filesystem::path&);
-//CODA_OSS_API void locationRead(const std::string& loc, const std::string& datasetName); // e.g, s3://
+CODA_OSS_API GroupInfo groupInfo(const coda_oss::filesystem::path&, const std::string& loc);
+CODA_OSS_API DataSetInfo dataSetInfo(const coda_oss::filesystem::path&, const std::string& loc);
 
 }
 }
 
-#endif // CODA_OSS_hdf5_lite_Read_h_INCLUDED_
-
+#endif // CODA_OSS_hdf5_lite_Info_h_INCLUDED_

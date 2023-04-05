@@ -90,7 +90,7 @@ void DerivedClassification::setSecurity(const std::string& prefix,
         if (declassDate.get() != nullptr)
         {
             std::string declassDateStr;
-            declassDate->format("%Y%m%d", declassDateStr);
+            declassDate->format("%Y%m%d", declassDateStr); // note: timezone is explicitly excluded in ISM-201609
             str::trim(declassDateStr);
             security.getDeclassificationDate().set(declassDateStr);
 

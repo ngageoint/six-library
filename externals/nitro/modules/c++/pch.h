@@ -1,9 +1,11 @@
 #pragma once
 
+#pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 #pragma warning(disable: 4710) // '...': function not inlined
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
 #pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
+#pragma warning(disable: 5264) // '...': '...' variable is not used
 // TODO: get rid of these someday?
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
 #pragma warning(disable: 26823) // Dereferencing a possibly null pointer '...' (lifetime.1).

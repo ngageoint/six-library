@@ -636,7 +636,7 @@ void Grid::fillDerivedFields(const RgAzComp& rgAzComp,
     {
         imagePlane = ComplexImagePlaneType::SLANT;
     }
-    if (imagePlane == ComplexImageGridType::NOT_SET)
+    if (type == ComplexImageGridType::NOT_SET)
     {
         type = ComplexImageGridType::RGAZIM;
     }

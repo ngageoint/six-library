@@ -58,7 +58,7 @@ public:
      *  Set the auto ptr.
      *
      */
-    void initialize()
+    void initialize() override
     {
         mHandler = mRequestHandlerFactory->create();
     }
@@ -68,7 +68,7 @@ public:
      *
      *  \param conn The network connection
      */
-    void handleConnection(net::NetConnection* conn)
+    void handleConnection(net::NetConnection* conn) override
     {
         (*mHandler)(conn);
     }

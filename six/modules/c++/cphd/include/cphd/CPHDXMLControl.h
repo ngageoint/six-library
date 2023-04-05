@@ -106,7 +106,7 @@ public:
      *  \param schemaPaths Vector of XML Schema for validation
      *  \return pointer to xml Document object
      */
-    virtual mem::auto_ptr<xml::lite::Document> toXML(
+    virtual std::unique_ptr<xml::lite::Document> toXML(
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>());
 
@@ -143,6 +143,8 @@ public:
     virtual Metadata fromXML(const xml::lite::Document& doc,
         const std::vector<std::filesystem::path>& schemaPaths = std::vector<std::filesystem::path>());
 
+    //! \return Suported version to uri mapping
+    static std::unordered_map<std::string, xml::lite::Uri> getVersionUriMap();
 
 protected:
     logging::Logger *mLog = nullptr;
@@ -150,9 +152,6 @@ protected:
     six::Logger mLogger;
 
 private:
-    //! \return Hardcoded version to uri mapping
-    static std::unordered_map<std::string, xml::lite::Uri> getVersionUriMap();
-
     /*!
      *  This function takes in a Metadata object and converts
      *  it to a new-allocated XML DOM.

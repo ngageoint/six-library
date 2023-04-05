@@ -63,7 +63,7 @@ void verifyArrayType(PyObject *pyObject, int typeNum);
  * \returns read only pointer to the dimensions of array
  * \throws except::Exception if not a 2D array
  */
-const npy_intp* const getDimensions(PyObject* pyArrayObject);
+const npy_intp* getDimensions(PyObject* pyArrayObject);
 
 /*! Variant returning types::RowCol<size_t> version of dimensions
  * \param pyArrayObject array object to inspect

@@ -8,8 +8,11 @@
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #define NOMINMAX // no min()/max() macros
+#pragma warning(push)
+#pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
 #include <windows.h>
 #include <Winsock2.h>
 #include <comdef.h>
+#pragma warning(pop)
 #pragma comment(lib, "Ws2_32")
 #pragma warning(pop)

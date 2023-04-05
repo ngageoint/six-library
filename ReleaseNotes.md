@@ -1,6 +1,23 @@
-﻿![alt tag](https://raw.github.com/ngageoint/six-library/master/docs/six_logo.png?raw=true)
+![alt tag](https://raw.github.com/ngageoint/six-library/master/docs/six_logo.png?raw=true)
 
 # SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
+
+## [Version 3.2.?](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.?); ??? ??, 2023
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2023-??-??](https://github.com/mdaus/coda-oss/releases/tag/2023-??-??)
+* [nitro](https://github.com/mdaus/nitro) version [2.11.?](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.?)
+* Integrated [ISM v201609](https://www.dni.gov/index.php/who-we-are/organizations/ic-cio/ic-cio-related-menus/ic-cio-related-links/ic-technical-specifications/information-security-marking-metadata) into SIDD 3.0.
+
+## [Version 3.2.2](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.2); December 14, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
+* [nitro](https://github.com/mdaus/nitro) version [2.11.2](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.2)
+* [Fixed slantToImagePartials not operating in slant plane](https://github.com/ngageoint/six-library/pull/613)
+* Continued effort at getting unittests to run in other projects.
+
+## [Version 3.2.1](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.1); November 4, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-11-04](https://github.com/mdaus/coda-oss/releases/tag/2022-11-04)
+* [nitro](https://github.com/mdaus/nitro) version [2.11.1](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.1)
+* cphd::PhaseSGN accepts both `1` and `+1`, toString() is now `"1"` instead of `"+1"`.
+* CPHD XML parser handles URI's for versions 1.0.0, 1.0.1, and 1.1.0; unit test updated to test metadata parsing extensions
 
 ## [Version 3.2.0](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.0); August 30, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-30_cpp14](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30_cpp14)

@@ -46,7 +46,7 @@
  */
 
 #include <stack>
-#include <memory>
+#include <std/memory>
 #include "coda_oss/string.h"
 #include "coda_oss/memory.h"
 

@@ -29,7 +29,7 @@ public:
     {
     }
 
-    virtual void run()
+    virtual void run() override
     {
         print(a);
     }
@@ -38,7 +38,7 @@ public:
 /*-- std::exception --*/
 struct stdExcept: std::exception
 {
-	const char* what() const noexcept { return "std::exception in add"; }
+	const char* what() const noexcept override { return "std::exception in add"; }
 };
 
 void add(sys::Uint32_T x, sys::Uint32_T y)
@@ -61,7 +61,7 @@ public:
     {
     }
 
-    virtual void run()
+    virtual void run() override
     {
         add(x,y);
     }
@@ -88,7 +88,7 @@ public:
     {
     }
 
-    virtual void run()
+    virtual void run() override
     {
     	printConcat(x,y);
     }

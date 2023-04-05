@@ -90,14 +90,6 @@ struct VectorOfPointers
         mValues.resize(mValues.size() + 1);
         mValues.back() = value.release();
     }
-    #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-    template <typename OtherT>
-        void push_back(mem::auto_ptr<OtherT> value)
-    {
-        std::unique_ptr<OtherT> scopedValue(value.release());
-        push_back(std::move(scopedValue));
-    }
-    #endif
 
     typedef typename std::vector<T*>::iterator iterator;
     typedef typename std::vector<T*>::const_iterator const_iterator;
@@ -199,14 +191,6 @@ template <typename T>
         mValues.resize(mValues.size() + 1);
         mValues.back().reset(value.release());
     }
-   #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-    template <typename OtherT>
-        void push_back(mem::auto_ptr<OtherT> value)
-    {
-        std::unique_ptr<OtherT> scopedValue(value.release());
-        push_back(std::move(scopedValue));
-    }
-    #endif
 
     template <typename OtherT>
         void push_back(std::shared_ptr<OtherT> value)

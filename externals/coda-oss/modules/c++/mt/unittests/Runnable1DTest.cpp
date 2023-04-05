@@ -69,6 +69,7 @@ TEST_CASE(DoRunnable1DTest)
     const AddOp op;
     std::cout << "Calling run1D\n";
     mt::run1D(10, 16, op);
+    TEST_ASSERT_TRUE(true); // need to use hidden "testName" parameter
 }
 
 TEST_CASE(Runnable1DWithCopiesTest)
@@ -79,6 +80,7 @@ TEST_CASE(Runnable1DWithCopiesTest)
     const LocalStorage op;
     std::cout << "Calling run1D\n";
     mt::run1DWithCopies(47, 16, op);
+    TEST_ASSERT_TRUE(true); // need to use hidden "testName" parameter
 }
 
 TEST_CASE(transform_async_test)

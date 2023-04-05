@@ -35,13 +35,6 @@ struct ComplexXMLParser04x : public ComplexXMLParser
                         std::unique_ptr<SICommonXMLParser>&& comParser,
                         logging::Logger* log = nullptr,
                         bool ownLog = false);
-#if !CODA_OSS_cpp17
-    ComplexXMLParser04x(const std::string& version,
-                        bool addClassAttributes,
-                        mem::auto_ptr<SICommonXMLParser> comParser,
-                        logging::Logger* log = nullptr,
-                        bool ownLog = false);
-#endif
 
     ComplexXMLParser04x(const ComplexXMLParser04x&) = delete;
     ComplexXMLParser04x& operator=(const ComplexXMLParser04x&) = delete;

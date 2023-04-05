@@ -72,7 +72,7 @@ static six::LatLonCorners makeUpCornersFromDMS()
     return corners;
 }
 
-static mem::auto_ptr<six::Data>
+static std::unique_ptr<six::Data>
 mockupDerivedData(const types::RowCol<size_t>& dims)
 {
     six::PixelType pixelType = six::PixelType::MONO8I;
@@ -84,7 +84,7 @@ mockupDerivedData(const types::RowCol<size_t>& dims)
             addExploitationFeatures(1);
 
     six::sidd::DerivedData* siddData = siddBuilder.steal();
-    mem::auto_ptr<six::Data> siddDataScoped(siddData);
+    std::unique_ptr<six::Data> siddDataScoped(siddData);
 
     setExtent(*siddData, dims);
     siddData->setImageCorners(makeUpCornersFromDMS());

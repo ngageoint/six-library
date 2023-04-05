@@ -46,13 +46,13 @@ public:
      *  the call returns.
      *
      */
-    virtual void write(const void* buffer, size_t len);
+    virtual void write(const void* buffer, size_t len) override;
 
     /*!
      *  Close the gzip stream.  You must call this
      *  afterward (it is not done automatically).
      */
-    virtual void close();
+    virtual void close() override;
 };
 }
 

@@ -300,6 +300,10 @@
       <Project>{62aad4dd-35ba-41a0-8263-1f4dfd755689}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\six\modules\c++\six.sidd\tests\sample_xml\sidd200.xml" />
+    <Xml Include="..\six\modules\c++\six.sidd\tests\sample_xml\sidd300.xml" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

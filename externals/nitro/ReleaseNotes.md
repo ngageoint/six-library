@@ -1,5 +1,16 @@
 ﻿# NITRO (NITF i/o) Release Notes
 
+## [Version 2.11.2](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.2); December 14, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) release [2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
+* Further work at getting unittests to work better when included elsewhere (e.g., SIX) as **externals**.
+
+## [Version 2.11.1](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.1); November 4, 2022
+* [coda-oss](https://github.com/mdaus/coda-oss) release [2022-11-04](https://github.com/mdaus/coda-oss/releases/tag/2022-11-04)
+* fixed incorrect field sizes in the CSEXRB TRE.
+* make unittests work better when included elsewhere (e.g., SIX) as **externals**.
+* remove exception specifications
+* `tarfile.extractall()` sanitization
+
 ## [Version 2.11.0](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.0); August 30, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) release [2022-08-30_cpp14](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30_cpp14)
 * Cut from [main](https://github.com/mdaus/nitro/tree/main); identical to [Version 2.10.12](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.12)

@@ -22,30 +22,25 @@
 
 #include <string>
 #include <std/filesystem>
+#include <numeric>
+#include <tuple>
 
 #include <TestCase.h>
 
 #include "sys/FileFinder.h"
 
 #include "hdf5/lite/Read.h"
+#include "hdf5/lite/HDF5Exception.h"
 
-static std::filesystem::path findRootDirectory(const std::filesystem::path& p)
+static std::filesystem::path find_unittest_file(const std::filesystem::path& name)
 {
-    // specific to CODA-OSS
-    const auto isRoot = [](const std::filesystem::path& p) { return is_regular_file(p / "coda-oss-lite.sln") &&
-        is_regular_file(p / "LICENSE") && is_regular_file(p / "README.md") && is_regular_file(p / "CMakeLists.txt"); };
-    return sys::test::findRootDirectory(p, "coda-oss", isRoot);
-}
-inline std::filesystem::path findRoot()
-{
-    return findRootDirectory(std::filesystem::current_path());
+    static const auto unittests = std::filesystem::path("modules") / "c++" / "hdf5.lite" / "unittests";
+    return sys::test::findGITModuleFile("coda-oss", unittests, name);
 }
 
 TEST_CASE(test_hdf5Read)
 {
-    static const std::string file = "example.h5";
-    const auto unittests = findRoot() / "modules" / "c++" / "hdf5.lite" / "unittests";
-    const auto path = unittests / file;
+    static const auto path = find_unittest_file("example.h5");
 
     // https://www.mathworks.com/help/matlab/ref/h5read.html
     std::vector<double> data;
@@ -58,19 +53,79 @@ TEST_CASE(test_hdf5Read)
 TEST_CASE(test_hdf5Read_IOException)
 {
     static const std::filesystem::path path = "does not exist . h5";
-    try
-    {
-        std::vector<double> data;
-        hdf5::lite::readFile(path, "/g4/lat", data);
-        TEST_FAIL;
-    }
-    catch (const except::IOException&)
-    {
-        TEST_SUCCESS;
-    }
+    std::vector<double> data;
+    TEST_SPECIFIC_EXCEPTION(
+        hdf5::lite::readFile(path, "/g4/lat", data),
+        except::IOException);
+}
+
+TEST_CASE(test_hdf5Read_nested)
+{
+    /*
+    Group '/' 
+    Group '/1' 
+        Group '/1/bar' 
+            Group '/1/bar/cat' 
+                Dataset 'i' 
+                    Size:  10x1
+                    MaxSize:  10x1
+                    Datatype:   H5T_IEEE_F64LE (double)
+                    ChunkSize:  []
+                    Filters:  none
+                    FillValue:  0.000000
+    */
+    static const auto path = find_unittest_file("123_barfoo_catdog_cx.h5");
+
+    // https://www.mathworks.com/help/matlab/ref/h5read.html
+    std::vector<double> data;
+    auto rc = hdf5::lite::readFile(path, "/1/bar/cat/i", data);
+    TEST_ASSERT_EQ(rc.area(), 10);
+    TEST_ASSERT_EQ(rc.area(), data.size());
+
+    rc = hdf5::lite::readFile(path, "/3/foo/dog/r", data);
+    TEST_ASSERT_EQ(rc.area(), 10);
+    TEST_ASSERT_EQ(rc.area(), data.size());
+}
+
+TEST_CASE(test_hdf5Read_nested_small)
+{
+    // top group: Data
+    // outer groups: 1, 2, 3, 4, 5
+    // sub groups: bar, foo
+    // sub-sub groups: cat, dog
+    // sub-sub-sub groups: a, b, c, d
+    // data: i (float array), r (float array)
+    static const auto path = find_unittest_file("nested_complex_float32_data_small.h5");
+
+    // https://www.mathworks.com/help/matlab/ref/h5read.html
+    std::vector<float> data;
+    auto rc = hdf5::lite::readFile(path, "/Data/1/bar/cat/a/i", data);
+    TEST_ASSERT_EQ(rc.area(), 10);
+    TEST_ASSERT_EQ(rc.area(), data.size());
+    auto actual = std::accumulate(data.cbegin(), data.cend(), 0.0);
+    TEST_ASSERT_EQ(actual, 0.0);
+
+    rc = hdf5::lite::readFile(path, "/Data/5/foo/dog/d/r", data);
+    TEST_ASSERT_EQ(rc.area(), 10);
+    TEST_ASSERT_EQ(rc.area(), data.size());
+    actual = std::accumulate(data.cbegin(), data.cend(), 0.0);
+    TEST_ASSERT_EQ(actual, 10.0);
+}
+
+TEST_CASE(test_hdf5Read_nested_small_wrongType)
+{
+    static const auto path = find_unittest_file("nested_complex_float32_data_small.h5");
+
+    std::vector<double> data; 
+    TEST_SPECIFIC_EXCEPTION(
+        hdf5::lite::readFile(path, "/Data/1/bar/cat/a/r", data),
+        hdf5::lite::DataSetException);
 }
 
 TEST_MAIN(
     TEST_CHECK(test_hdf5Read);
     TEST_CHECK(test_hdf5Read_IOException);
+    TEST_CHECK(test_hdf5Read_nested);
+    TEST_CHECK(test_hdf5Read_nested_small);
+    TEST_CHECK(test_hdf5Read_nested_small_wrongType);
 )

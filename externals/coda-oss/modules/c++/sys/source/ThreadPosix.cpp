@@ -24,7 +24,7 @@
 
 #if CODA_OSS_POSIX_SOURCE
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 #   define SIGKILL 0
 #endif
 void sys::ThreadPosix::start()

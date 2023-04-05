@@ -97,18 +97,17 @@ namespace scene
         }
 
 
-        LatLon(const LatLon& lla)
+        LatLon(const LatLon& ll)
         {
-            mLat = lla.mLat;
-            mLon = lla.mLon;
+	    *this = ll;
         }
 
-        LatLon& operator=(const LatLon& lla)
+        LatLon& operator=(const LatLon& ll)
         {
-            if (this != &lla)
+            if (this != &ll)
             {
-                mLat = lla.mLat;
-                mLon = lla.mLon;
+                mLat = ll.mLat;
+                mLon = ll.mLon;
             }
             return *this;
         }
@@ -194,13 +193,10 @@ namespace scene
         {
         }
 
-        LatLonAlt(const LatLonAlt& lla)
+        LatLonAlt(const LatLonAlt& lla) : LatLon(lla)
         {
-            mLat = lla.mLat;
-            mLon = lla.mLon;
             mAlt = lla.mAlt;
         }
-
         LatLonAlt& operator=(const LatLonAlt& lla)
         {
             if (this != &lla)

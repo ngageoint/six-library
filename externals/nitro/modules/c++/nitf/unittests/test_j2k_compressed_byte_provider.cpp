@@ -590,7 +590,7 @@ static Tester<uint8_t> make_Tester(bool setBlocking, std::optional<size_t> maxRo
 
 TEST_CASE(j2k_compressed_byte_provider_maxRowsPerSegment0)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
     {
         auto tester = make_Tester(true /*setBlocking*/);
         tester.testMultipleWritesBlocked();
@@ -607,7 +607,7 @@ TEST_CASE(j2k_compressed_byte_provider_maxRowsPerSegment0)
 
 TEST_CASE(j2k_compressed_byte_provider)
 {
-    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+    nitf::Test::setNitfPluginPath();
 
     // Run tests forcing various numbers of segments
     // Blocking is set at 40 rows / block so can't go less than this

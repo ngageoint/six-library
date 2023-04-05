@@ -25,7 +25,7 @@
 
 
 #  include "sys/Conf.h"
-#    if defined(WIN32) || defined(_WIN32)
+#    ifdef _WIN32
 #      include "net/SocketsWin32.h"
 #    else
 #      include "net/SocketsUnix.h"

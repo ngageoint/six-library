@@ -57,7 +57,8 @@ template<typename T> class RgAz
     T az{};
 
     RgAz() = default;
-    RgAz(T r, T c) noexcept : rg(r), az(c) { }
+    RgAz(const T& r, const T& c) noexcept : rg(r), az(c) { }
+    RgAz(T&& r, T&& c) noexcept : rg(std::move(r)), az(std::move(c)) { }
 
     template<typename Other_T> RgAz(const RgAz<Other_T>& p)
     {

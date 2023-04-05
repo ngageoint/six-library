@@ -56,17 +56,6 @@ DerivedXMLParser::DerivedXMLParser(const std::string& strVersion,
     logging::Logger& log) : XMLParser(versionToURI(strVersion), false, log),
     mCommon(std::move(comParser)) { }
 
-#if !CODA_OSS_cpp17
-DerivedXMLParser::DerivedXMLParser(
-        const std::string& strVersion,
-        mem::auto_ptr<six::SICommonXMLParser> comParser,
-        logging::Logger* log,
-        bool ownLog) :
-    DerivedXMLParser(strVersion, std::unique_ptr<six::SICommonXMLParser>(comParser.release()), log, ownLog)
-{
-}
-#endif
-
 void DerivedXMLParser::getAttributeList(
         const xml::lite::Attributes& attributes,
         const std::string& attributeName,
@@ -209,6 +198,11 @@ void DerivedXMLParser::setAttributeList(
         setAttribute(element, attributeName, value, uri);
     }
 }
+void DerivedXMLParser::setAttributeList(xml::lite::Element& element, const std::string& attributeName, const std::vector<std::string>& values, const xml::lite::Uri& uri,
+    bool setIfEmpty)
+{
+    setAttributeList(&element, attributeName, values, uri.value, setIfEmpty);
+}
 
 void DerivedXMLParser::setAttributeIfNonEmpty(XMLElem element,
                                               const std::string& name,
@@ -220,11 +214,31 @@ void DerivedXMLParser::setAttributeIfNonEmpty(XMLElem element,
         setAttribute(element, name, value, uri);
     }
 }
+void DerivedXMLParser::setAttributeIfNonEmpty(xml::lite::Element& element,
+    const std::string& name,
+    const std::string& value,
+    const xml::lite::Uri& uri)
+{
+    if (!value.empty())
+    {
+        setAttribute(element, name, value, uri);
+    }
+}
 
 void DerivedXMLParser::setAttributeIfNonEmpty(XMLElem element,
                                               const std::string& name,
                                               BooleanType value,
                                               const std::string& uri)
+{
+    if (!Init::isUndefined(value))
+    {
+        setAttribute(element, name, value == BooleanType::IS_TRUE ? "true" : "false", uri);
+    }
+}
+void DerivedXMLParser::setAttributeIfNonEmpty(xml::lite::Element& element,
+    const std::string& name,
+    BooleanType value,
+    const xml::lite::Uri& uri)
 {
     if (!Init::isUndefined(value))
     {
@@ -482,7 +496,7 @@ Remap* DerivedXMLParser::parseRemapChoiceFromXML(
     }
 }
 
-mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const xml::lite::Element* elem) const
+std::unique_ptr<LUT> DerivedXMLParser::parseSingleLUT(const xml::lite::Element* elem) const
 {
     //get size attribute
     const auto size = str::toType<size_t>(const_cast<XMLElem>(elem)->attribute("size"));
@@ -490,7 +504,7 @@ mem::auto_ptr<LUT> DerivedXMLParser::parseSingleLUT(const xml::lite::Element* el
     std::string lutStr = "";
     parseString(elem, lutStr);
     std::vector<std::string> lutVals = str::split(lutStr, " ");
-    mem::auto_ptr<LUT> lut(new LUT(size, sizeof(short)));
+    std::unique_ptr<LUT> lut(new LUT(size, sizeof(short)));
 
     for (size_t ii = 0; ii < lutVals.size(); ++ii)
     {
