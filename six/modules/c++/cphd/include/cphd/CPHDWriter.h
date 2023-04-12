@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __CPHD_CPHD_WRITER_H__
-#define __CPHD_CPHD_WRITER_H__
+#ifndef SIX_cphd_CPHDWriter_h_INCLUDED_
+#define SIX_cphd_CPHDWriter_h_INCLUDED_
 #pragma once
 
 #include <string>
@@ -35,142 +35,10 @@
 #include <cphd/Metadata.h>
 #include <cphd/PVP.h>
 #include <cphd/PVPBlock.h>
+#include <cphd/DataWriter.h>
 
 namespace cphd
 {
-
-/*
- *  \class DataWriter
- *
- *  \brief Class to handle writing to file and byte swapping
- */
-struct DataWriter
-{
-    /*
-     *  \func DataWriter
-     *  \brief Constructor
-     *
-     *  \param stream The seekable output stream to be written
-     *  \param numThreads Number of threads for parallel processing
-     */
-    DataWriter(std::shared_ptr<io::SeekableOutputStream> stream,
-               size_t numThreads);
-
-    /*
-     *  Destructor
-     */
-    virtual ~DataWriter();
-
-    /*
-     *  \func operator()
-     *  \brief Overload operator performs write and endian swap
-     *
-     *  \param data Pointer to the data that will be written to the filestream
-     *  \param numElements Total number of elements in array
-     *  \param elementSize Size of each element
-     */
-    virtual void operator()(const sys::ubyte* data,
-                            size_t numElements,
-                            size_t elementSize) = 0;
-    virtual void operator()(const std::byte* data,
-                            size_t numElements,
-                            size_t elementSize)
-    {
-        (*this)(reinterpret_cast<const sys::ubyte*>(data), numElements, elementSize);
-    }
-
-protected:
-    //! Output stream of CPHD
-    std::shared_ptr<io::SeekableOutputStream> mStream;
-    //! Number of threads for parallelism
-    const size_t mNumThreads;
-};
-
-/*
- *  \class DataWriterLittleEndian
- *
- *  \brief Class to handle writing to output stream and byte swapping
- *
- *  For little endian to big endian storage
- */
-struct DataWriterLittleEndian final : public DataWriter
-{
-    /*
-     *  \func DataWriterLittleEndian
-     *  \brief Constructor
-     *
-     *  \param stream The seekable output stream to be written
-     *  \param numThreads Number of threads for parallel processing
-     *  \param scratchSize Size of buffer to be used for scratch space
-     */
-    DataWriterLittleEndian(std::shared_ptr<io::SeekableOutputStream> stream,
-                           size_t numThreads,
-                           size_t scratchSize);
-
-    /*
-     *  \func operator()
-     *  \brief Overload operator performs write and endian swap
-     *
-     *  \param data Pointer to the data that will be written to the filestream
-     *  \param numElements Total number of elements in array
-     *  \param elementSize Size of each element
-     */
-    void operator()(const sys::ubyte* data,
-                            size_t numElements,
-                            size_t elementSize) override;
-    void operator()(const std::byte* data,
-                            size_t numElements,
-                            size_t elementSize) override
-    {
-        (*this)(reinterpret_cast<const sys::ubyte*>(data), numElements, elementSize);
-    }
-
-
-private:
-    // Scratch space buffer
-    std::vector<std::byte> mScratch;
-};
-
-/*
- *  \class DataWriterBigEndian
- *
- *  \brief Class to handle writing to file
- *
- *  No byte swap. Already big endian.
- */
-struct DataWriterBigEndian final : public DataWriter
-{
-    /*
-     *  \func DataWriter
-     *  \brief Constructor
-     *
-     *  \param stream The seekable output stream to be written
-     *  \param numThreads Number of threads for parallel processing
-     */
-    DataWriterBigEndian(std::shared_ptr<io::SeekableOutputStream> stream,
-                        size_t numThreads);
-
-    /*
-     *  \func operator()
-     *  \brief Overload operator performs write
-     *
-     *  No endian swapping is necessary. Already Big Endian.
-     *
-     *  \param data Pointer to the data that will be written to the filestream
-     *  \param numElements Total number of elements in array
-     *  \param elementSize Size of each element
-     */
-    void operator()(const sys::ubyte* data,
-                            size_t numElements,
-                            size_t elementSize) override;
-    void operator()(const std::byte* data,
-                            size_t numElements,
-                            size_t elementSize) override
-    {
-        (*this)(reinterpret_cast<const sys::ubyte*>(data), numElements, elementSize);
-    }
-};
-
 
 /*
  *  \class CPHDWriter
@@ -407,4 +275,4 @@ private:
 };
 }
 
-#endif
+#endif // SIX_cphd_CPHDWriter_h_INCLUDED_

@@ -38,15 +38,7 @@ void CPHDWriter::initializeDataWriter()
 {
     //! Get the correct dataWriter.
     //  The CPHD file needs to be big endian.
-    auto endianness = std::endian::native; // "conditional expression is constant"
-    if (endianness == std::endian::big)
-    {
-        mDataWriter = std::make_unique<cphd::DataWriterBigEndian>(mStream, mNumThreads);
-    }
-    else
-    {
-        mDataWriter = std::make_unique<cphd::DataWriterLittleEndian>(mStream, mNumThreads, mScratchSpaceSize);
-    }
+    mDataWriter = cphd::make_DataWriter(*mStream, mNumThreads, mScratchSpaceSize);
 }
 
 

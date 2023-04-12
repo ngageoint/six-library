@@ -39,81 +39,13 @@
 
 namespace cphd
 {
-DataWriter::DataWriter(std::shared_ptr<io::SeekableOutputStream> stream,
-                       size_t numThreads) :
-    mStream(stream),
-    mNumThreads(numThreads == 0 ? std::thread::hardware_concurrency() : numThreads)
-{
-}
-
-DataWriter::~DataWriter()
-{
-}
-
-DataWriterLittleEndian::DataWriterLittleEndian(
-        std::shared_ptr<io::SeekableOutputStream> stream,
-        size_t numThreads,
-        size_t scratchSize) :
-    DataWriter(stream, numThreads),
-    mScratch(scratchSize)
-{
-}
-
-void DataWriterLittleEndian::operator()(const sys::ubyte* data,
-                                        size_t numElements,
-                                        size_t elementSize)
-{
-    size_t dataProcessed = 0;
-    const size_t dataSize = numElements * elementSize;
-    while (dataProcessed < dataSize)
-    {
-        const size_t dataToProcess =
-                std::min(mScratch.size(), dataSize - dataProcessed);
-
-        memcpy(mScratch.data(), data + dataProcessed, dataToProcess);
-
-        cphd::byteSwap(mScratch.data(),
-                       elementSize,
-                       dataToProcess / elementSize,
-                       mNumThreads);
-
-        mStream->write(mScratch.data(), dataToProcess);
-
-        dataProcessed += dataToProcess;
-    }
-}
-
-DataWriterBigEndian::DataWriterBigEndian(
-        std::shared_ptr<io::SeekableOutputStream> stream, size_t numThreads) :
-    DataWriter(stream, numThreads)
-{
-}
-
-void DataWriterBigEndian::operator()(const sys::ubyte* data,
-                                     size_t numElements,
-                                     size_t elementSize)
-{
-    mStream->write(data,
-                   numElements * elementSize);
-}
 
 void CPHDWriter::initializeDataWriter()
 {
     // Get the correct dataWriter.
     // The CPHD file needs to be big endian.
-    auto endianness = std::endian::native; // "conditional expression is constant"
-    if (endianness == std::endian::big)
-    {
-        mDataWriter = std::make_unique<DataWriterBigEndian>(mStream, mNumThreads);
-    }
-    else
-    {
-        mDataWriter = std::make_unique<DataWriterLittleEndian>(mStream,
-            mNumThreads,
-            mScratchSpaceSize);
-    }
+    mDataWriter = make_DataWriter(*mStream, mNumThreads, mScratchSpaceSize);
 }
-
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        std::shared_ptr<io::SeekableOutputStream> outStream,

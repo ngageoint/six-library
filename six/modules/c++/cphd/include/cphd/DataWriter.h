@@ -26,6 +26,7 @@
 
 #include <vector>
 #include <std/bit>
+#include <std/cstddef> // std::byte
 
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
