@@ -40,13 +40,6 @@
 namespace cphd
 {
 
-void CPHDWriter::initializeDataWriter()
-{
-    // Get the correct dataWriter.
-    // The CPHD file needs to be big endian.
-    mDataWriter = make_DataWriter(*mStream, mNumThreads, mScratchSpaceSize);
-}
-
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        std::shared_ptr<io::SeekableOutputStream> outStream,
                        const std::vector<std::string>& schemaPaths,
@@ -59,7 +52,9 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mSchemaPaths(schemaPaths),
     mStream(outStream)
 {
-    initializeDataWriter();
+    // Get the correct dataWriter.
+    // The CPHD file needs to be big endian.
+    mDataWriter = make_DataWriter(*mStream, mNumThreads, mScratchSpaceSize);
 }
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
@@ -67,16 +62,12 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
                        const std::vector<std::string>& schemaPaths,
                        size_t numThreads,
                        size_t scratchSpaceSize) :
-    mMetadata(metadata),
-    mElementSize(metadata.data.getNumBytesPerSample()),
-    mScratchSpaceSize(scratchSpaceSize),
-    mNumThreads(numThreads),
-    mSchemaPaths(schemaPaths)
+    CPHDWriter(metadata,
+        std::make_shared<io::FileOutputStream>(pathname), // Initialize output stream
+        schemaPaths,
+        numThreads,
+        scratchSpaceSize)
 {
-    // Initialize output stream
-    mStream = std::make_shared<io::FileOutputStream>(pathname);
-
-    initializeDataWriter();
 }
 
 void CPHDWriter::writeMetadata(size_t supportSize,

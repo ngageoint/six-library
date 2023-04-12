@@ -47,7 +47,7 @@ namespace cphd
  *  Used to write a CPHD file. You must be able to provide the
  *  appropriate metadata and vector based metadata.
  */
-struct CPHDWriter
+struct CPHDWriter final
 {
     /*
      *  \func Constructor
@@ -100,6 +100,13 @@ struct CPHDWriter
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             size_t numThreads = 0,
             size_t scratchSpaceSize = 4 * 1024 * 1024);
+
+    CPHDWriter() = delete;
+    CPHDWriter(const CPHDWriter&) = delete;
+    CPHDWriter& operator=(const CPHDWriter&) = delete;
+    CPHDWriter(CPHDWriter&&) = delete;
+    CPHDWriter& operator=(CPHDWriter&&) = delete;
+    ~CPHDWriter() = default;
 
     /*
      *  \func write
@@ -219,6 +226,10 @@ struct CPHDWriter
     {
         mStream->close();
     }
+    std::shared_ptr<io::SeekableOutputStream> getStream() const
+    {
+        return mStream;
+    }
 
 private:
     /*
@@ -255,7 +266,6 @@ private:
 
     //! DataWriter object
     std::unique_ptr<DataWriter> mDataWriter;
-    void initializeDataWriter();
 
     // Book-keeping element
     //! metadata information
