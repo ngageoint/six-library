@@ -34,22 +34,6 @@
 
 namespace cphd03
 {
-void CPHDWriter::initializeDataWriter()
-{
-    //! Get the correct dataWriter.
-    //  The CPHD file needs to be big endian.
-    auto endianness = std::endian::native; // "conditional expression is constant"
-    if (endianness == std::endian::big)
-    {
-        mDataWriter = std::make_unique<cphd::DataWriterBigEndian>(mStream, mNumThreads);
-    }
-    else
-    {
-        mDataWriter = std::make_unique<cphd::DataWriterLittleEndian>(mStream, mNumThreads, mScratchSpaceSize);
-    }
-}
-
-
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        std::shared_ptr<io::SeekableOutputStream> stream,
                        size_t numThreads,
@@ -58,28 +42,22 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mElementSize(metadata.data.getNumBytesPerSample()),
     mScratchSpaceSize(scratchSpaceSize),
     mNumThreads(numThreads),
-    mStream(stream),
-    mCPHDSize(0),
-    mVBMSize(0)
+    mStream(stream)
 {
-    initializeDataWriter();
+    //! Get the correct dataWriter.
+    //  The CPHD file needs to be big endian.
+    mDataWriter = cphd::make_DataWriter(*mStream, mNumThreads, mScratchSpaceSize);
 }
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        const std::string& pathname,
                        size_t numThreads,
                        size_t scratchSpaceSize) :
-    mMetadata(metadata),
-    mElementSize(metadata.data.getNumBytesPerSample()),
-    mScratchSpaceSize(scratchSpaceSize),
-    mNumThreads(numThreads),
-    mCPHDSize(0),
-    mVBMSize(0)
-{
-    // Create file stream to write
-    mStream = std::make_shared<io::FileOutputStream>(pathname);
-
-    initializeDataWriter();
+    CPHDWriter(metadata,
+        std::make_shared<io::FileOutputStream>(pathname),  // Create file stream to write
+        numThreads,
+        scratchSpaceSize)
+{   
 }
 
 template <typename T>

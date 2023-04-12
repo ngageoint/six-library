@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __CPHD_CPHD_READER_H__
-#define __CPHD_CPHD_READER_H__
+#ifndef SIX_cphd_CPHDReader_h_INCLUDED_
+#define SIX_cphd_CPHDReader_h_INCLUDED_
+#pragma once
 
 #include <memory>
 
@@ -162,4 +163,4 @@ private:
 };
 }
 
-#endif
+#endif // SIX_cphd_CPHDReader_h_INCLUDED_
