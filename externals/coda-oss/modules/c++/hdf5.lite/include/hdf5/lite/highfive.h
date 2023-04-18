@@ -99,6 +99,45 @@ inline SpanRC<T> loadDataSet(const H5Easy::File& file, const std::string& datase
     return readDataSet(dataSet, result);
 }
 
+// Wrapper around HighFive::Attribute::read() to fix problems bug with reading strings
+template <typename T>
+inline void read(const HighFive::Attribute& attribute, T& array)
+{
+    attribute.read(array);
+}
+template <>
+inline void read(const HighFive::Attribute& attribute, std::string& array)
+{
+    // Attribute::read() doesn't seem to work for fixed length strings
+    const auto dataType = attribute.getDataType();
+    if (!dataType.isFixedLenStr())
+    {
+        return attribute.read(array); // let HighFive deal with it
+    }
+
+    // https://stackoverflow.com/questions/31344648/c-c-hdf5-read-string-attribute
+    std::vector<char> buf(attribute.getStorageSize() + 1, '\0');
+    const auto err = H5Aread(attribute.getId(), dataType.getId(), buf.data());
+    if (err < 0)
+    {
+        throw std::runtime_error("H5Aread() failed.");
+    }
+    array = buf.data();
+}
+
+template<typename T>
+inline T read(const HighFive::Attribute& a)
+{
+    return a.read<T>();
+}
+template<>
+inline std::string read(const HighFive::Attribute& a)
+{
+    std::string retval;
+    read(a, retval);
+    return retval;
+}
+
 }
 }
 
