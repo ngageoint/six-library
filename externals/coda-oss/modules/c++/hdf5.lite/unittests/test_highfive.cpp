@@ -460,6 +460,97 @@ TEST_CASE(test_highfive_write)
     }
 }
 
+TEST_CASE(test_highfive_getDataType)
+{
+    static const auto path = find_unittest_file("example.h5");
+    const H5Easy::File file(path.string(), H5Easy::File::ReadOnly);
+    
+    const auto time = file.getDataSet("/g4/time");
+    TEST_ASSERT(time.getType() == HighFive::ObjectType::Dataset);
+    TEST_ASSERT_EQ(time.getElementCount(), 10);
+    const auto dims = time.getDimensions();
+    TEST_ASSERT_EQ(dims.size(), 1);
+    TEST_ASSERT_EQ(dims[0], 10);
+
+    const auto dataType = time.getDataType();
+    TEST_ASSERT(dataType.getClass() == HighFive::DataTypeClass::Float);
+    TEST_ASSERT_EQ(dataType.string(), "Float64");
+    TEST_ASSERT_EQ(dataType.getSize(), sizeof(double));
+    const auto doubleDataType = HighFive::create_and_check_datatype<double>();
+    TEST_ASSERT(doubleDataType == dataType);
+
+    TEST_ASSERT_FALSE(dataType.isVariableStr());
+    TEST_ASSERT_FALSE(dataType.isFixedLenStr());
+    TEST_ASSERT_FALSE(dataType.isReference());
+}
+
+template <typename THighFive>
+static auto getAttribute(const std::string& testName,
+                         const THighFive& obj, const std::string& name,
+                         HighFive::DataTypeClass typeClass, const std::string& typeName)
+{
+    auto attribute = obj.getAttribute(name);
+    TEST_ASSERT_EQ(attribute.getName(), name);
+    TEST_ASSERT(attribute.getType() == HighFive::ObjectType::Attribute);
+    TEST_ASSERT(attribute.getDataType().getClass() == typeClass);
+    TEST_ASSERT_EQ(attribute.getDataType().string(), typeName);
+    return attribute;
+}
+TEST_CASE(test_highfive_getAttribute)
+{
+    static const auto path = find_unittest_file("example.h5");
+    const H5Easy::File file(path.string(), H5Easy::File::ReadOnly);
+
+    {
+        const auto attribute = getAttribute(testName, file, "attr1", HighFive::DataTypeClass::Integer, "Integer8");
+        const auto memSpace = attribute.getMemSpace();
+        const auto elements = memSpace.getElementCount();
+        TEST_ASSERT_EQ(elements, 10);
+        std::vector<int8_t> v;
+        attribute.read(v);
+        TEST_ASSERT_EQ(v.size(), elements);
+    }
+    {
+        const auto attribute = getAttribute(testName, file, "attr2", HighFive::DataTypeClass::Integer, "Integer32");
+        const auto memSpace = attribute.getMemSpace();
+        const auto elements = memSpace.getElementCount();
+        TEST_ASSERT_EQ(elements, 4);
+        std::vector<std::vector<int32_t>> v;
+        attribute.read(v);
+        TEST_ASSERT_EQ(v[0][0], 0);
+        TEST_ASSERT_EQ(v[0][1], 1);
+        TEST_ASSERT_EQ(v[1][0], 2);
+        TEST_ASSERT_EQ(v[1][1], 3);        
+    }
+
+    const auto time = file.getDataSet("/g4/time");
+    {
+        const auto attribute = getAttribute(testName, time, "NAME", HighFive::DataTypeClass::String, "String40");
+        // throw DataSetException("Can't output std::string as fixed-length. Use raw arrays or FixedLenStringArray");
+        // std::string value;
+        // attribute.read(value);
+        // HighFive::FixedLenStringArray<16> arr;
+        // attribute.read(arr);
+        const auto value = hdf5::lite::read<std::string>(attribute);
+        TEST_ASSERT_EQ(value, "time");
+    }
+    {
+        const auto attribute = getAttribute(testName, time, "CLASS", HighFive::DataTypeClass::String, "String128");
+        // attribute.read(value);
+        const auto value = hdf5::lite::read<std::string>(attribute);
+        TEST_ASSERT_EQ(value, "DIMENSION_SCALE");
+    }
+
+     const auto lat = file.getDataSet("/g4/lat");
+    {
+        const auto attribute = getAttribute(testName, lat, "units", HighFive::DataTypeClass::String, "String104");
+        //HighFive::FixedLenStringArray<104> value;
+        //attribute.read(value);
+        const auto value = hdf5::lite::read<std::string>(attribute);
+        TEST_ASSERT_EQ(value, "degrees_north");
+    }
+}
+
 TEST_MAIN(
     TEST_CHECK(test_highfive_load);
     TEST_CHECK(test_highfive_FileException);
@@ -474,4 +565,7 @@ TEST_MAIN(
 
     TEST_CHECK(test_highfive_dump);
     //TEST_CHECK(test_highfive_write);
-)
+
+    TEST_CHECK(test_highfive_getDataType);
+    TEST_CHECK(test_highfive_getAttribute);
+ )
