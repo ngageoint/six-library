@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2020, Maxar Technologies, Inc.
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * coda_oss-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -63,27 +63,21 @@ public:
     using value_type = T;
 
 #if defined(_MSC_VER) && _PREFAST_  // Visual Studio /analyze
-    __pragma(warning(push)) __pragma(warning(
-            disable : 26495))  // Variable '...' is uninitialized. Always
-                               // initialize a member variable(type.6).
+    __pragma(warning(push)) __pragma(warning(disable : 26495))  // Variable '...' is uninitialized. Always initialize a member variable(type.6).
 #endif
-            optional() noexcept
+    optional() noexcept
     {
     }
 #if defined(_MSC_VER) && _PREFAST_
     __pragma(warning(pop))
 #endif
-            optional(const value_type& v) :
-        value_(v), has_value_(true)
+    optional(const value_type& v) : value_(v), has_value_(true)
     {
     }
 #if defined(_MSC_VER) && _PREFAST_  // Visual Studio /analyze
-    __pragma(warning(push)) __pragma(warning(
-            disable : 26495))  // Variable '...' is uninitialized. Always
-                               // initialize a member variable(type.6).
+    __pragma(warning(push)) __pragma(warning(disable : 26495))  // Variable '...' is uninitialized. Always initialize a member variable(type.6).
 #endif
-            optional(const optional& other) :
-        has_value_(other.has_value_)
+    optional(const optional& other) : has_value_(other.has_value_)
     {
         if (has_value())
         {
@@ -93,19 +87,30 @@ public:
 #if defined(_MSC_VER) && _PREFAST_
     __pragma(warning(pop))
 #endif
+    optional& operator=(const optional& other)
+    {
+      if (has_value() && !other.has_value())
+      {
+	reset();
+      }
+      else if (other.has_value())
+      {
+	  value_ = other.value_;
+	  has_value_ = true;
+      }
 
-            template <
-                    typename... Args>  // https://en.cppreference.com/w/cpp/utility/Optional/emplace
-            T& emplace(Args&&... args)
+      return *this;
+    }
+
+    template <typename... Args>  // https://en.cppreference.com/w/cpp/utility/Optional/emplace
+    T& emplace(Args&&... args)
     {
         value_ = value_type(std::forward<Args>(args)...);
         has_value_ = true;
         return value_;
     }
 
-    template <
-            typename U =
-                    T>  // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
+    template <typename U = T>  // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
     optional& operator=(U&& value) noexcept
     {
         value_ = std::forward<U>(value);
@@ -124,6 +129,7 @@ public:
 
     void reset() noexcept
     {
+        value_ = T{};
         has_value_ = false;
     }
 
@@ -163,11 +169,10 @@ public:
                          // contains a value!"
     }
 
-    const T& operator*() const&
+    const T& operator*() const& noexcept
     {
         assert(has_value());
-        return value_;  // "This operator does not check whether the optional
-                        // contains a value!"
+        return value_;  // "This operator does not check whether the optional contains a value!"
     }
     T& operator*() &
     {

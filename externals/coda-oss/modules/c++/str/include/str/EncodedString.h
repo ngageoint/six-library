@@ -5,7 +5,7 @@
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  * (C) Copyright 2022, Maxar Technologies, Inc.
  *
- * xml.lite-c++ is free software; you can redistribute it and/or modify
+ * str-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -28,6 +28,7 @@
 #include <string>
 #include <ostream>
 
+#include "config/Exports.h"
  #include "str/EncodedStringView.h"
 
 /*!
@@ -45,55 +46,49 @@
 
 namespace str
 {
-class EncodedString final
+class CODA_OSS_API EncodedString final
 {
     std::string s_;
     // We can do most everything through the view, so keep one around.
     EncodedStringView v_;
 
-    const std::string& string() const
-    {
-        return s_;
-    }
-
+    // No "public" operator=() for these; this class is mostly for storage and/or conversion,
+    // not extensive manipulation.  Create a new instance and assign/move that.
+    
 public:
-    EncodedString() = default;
+    EncodedString();
     ~EncodedString() = default;
-    EncodedString(const EncodedString&) = default;
-    EncodedString& operator=(const EncodedString&) = default;
-    EncodedString(EncodedString&&) = default;
-    EncodedString& operator=(EncodedString&&) = default;
+    EncodedString(const EncodedString&);
+    EncodedString& operator=(const EncodedString&);
+    EncodedString(EncodedString&&);
+    EncodedString& operator=(EncodedString&&);
 
-    explicit EncodedString(const coda_oss::u8string& s);
+    EncodedString(coda_oss::u8string::const_pointer, coda_oss::u8string::size_type);
     explicit EncodedString(coda_oss::u8string::const_pointer);
-    explicit EncodedString(const str::W1252string&);
+    explicit EncodedString(const coda_oss::u8string& s);
+
+    EncodedString(str::W1252string::const_pointer, str::W1252string::size_type);
     explicit EncodedString(str::W1252string::const_pointer);
-    explicit EncodedString(const std::string&);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
+    explicit EncodedString(const str::W1252string&);
+
+    EncodedString(std::string::const_pointer, std::string::size_type);
     explicit EncodedString(std::string::const_pointer);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
+    explicit EncodedString(const std::string&);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
+
     explicit EncodedString(const std::u16string&); // converted to UTF-8 for storage
     explicit EncodedString(const std::u32string&); // converted to UTF-8 for storage
+    explicit EncodedString(const std::wstring&);  // Assume platform native encoding: UTF-32 on Linux, UTF-16 on Windows
+    explicit EncodedString(std::wstring::const_pointer);  // can call wcslen()
 
     // create from a view
     EncodedString(const EncodedStringView&);
     EncodedString& operator=(const EncodedStringView&);
     
     // Input is encoded as specified on all platforms.
-    static EncodedString fromUtf8(const std::string&);
-    static EncodedString fromWindows1252(const std::string&);
-    static EncodedString fromUtf16(const std::wstring&); // not currently implemetned, no need
-    static EncodedString fromUtf32(const std::wstring&); // not currently implemetned, no need
-
-    void assign(coda_oss::u8string::const_pointer);
-    void assign(str::W1252string::const_pointer);
-    void assign(std::string::const_pointer);
-    template <typename CharT>
-    void assign(const std::basic_string<CharT>& s)
-    {
-        assign(s.c_str());
-    }
+    //static EncodedString fromUtf16(const std::wstring&); // not currently implemetned, no need
+    //static EncodedString fromUtf32(const std::wstring&); // not currently implemetned, no need
     
-    // For "complex" operatations, use the view.  While creating a new one
-    // is cheap, there's not really any need that.
+    // For "complex" operatations, use the view.
     const EncodedStringView& view() const
     {
         return v_;
@@ -115,11 +110,30 @@ public:
     //std::string& toUtf8(std::string&) const; // std::string is encoded as UTF-8, always.
     //str::W1252string w1252string() const;  // c.f. std::filesystem::path::u8string()
 
+    // Convert whatever we're looking at to UTF-16 or UTF-32
+    std::u16string u16string() const  // c.f. std::filesystem::path::u8string()
+    {
+        return view().u16string();
+    }
+    std::u32string u32string() const  // c.f. std::filesystem::path::u8string()
+    {
+        return view().u32string();
+    }
+    std::wstring wstring() const // UTF-16 on Windows, UTF-32 on Linux
+    {
+        return view().wstring();
+    }
+
+    bool empty() const
+    {
+        return s_.empty();
+    }
+
     struct details final
     {
         static const std::string& string(const EncodedString& es) // for unit-testing
         {
-            return es.string();
+            return es.s_;
         }
     };
 };
@@ -142,9 +156,14 @@ inline bool operator!=(const EncodedString& lhs, const EncodedString& rhs)
     return !(lhs == rhs);
 }
 
+inline std::string toString(const EncodedString& es)
+{
+    return es.native();
+}
+
 inline std::ostream& operator<<(std::ostream& os, const EncodedString& es)
 {
-    os << es.native();
+    os << toString(es);
     return os;
 }
 

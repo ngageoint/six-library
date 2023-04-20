@@ -1,6 +1,7 @@
 coda_add_module(
     six.sicd
-    DEPS six-c++ units-c++
+    DEPS six-c++ sys-c++ str-c++ units-c++ 
+        except-c++ types-c++ config-c++ gsl-c++ std-c++ 
     SOURCES
         source/Antenna.cpp
         source/AreaPlaneUtility.cpp
@@ -23,7 +24,6 @@ coda_add_module(
         source/Grid.cpp
         source/ImageData.cpp
         source/ImageFormation.cpp
-        source/KDTree.cpp
         source/NITFReadComplexXMLControl.cpp
         source/PFA.cpp
         source/Position.cpp
@@ -79,7 +79,8 @@ coda_add_tests(
         test_update_sicd_version.cpp
         test_valid_six.cpp
         test_AMP8I_PHS8I.cpp
-        test_utilities.cpp)
+        test_utilities.cpp
+        test_valid_sixsicd.cpp)
 
 # Install the schemas
 install(DIRECTORY "conf/schema/"

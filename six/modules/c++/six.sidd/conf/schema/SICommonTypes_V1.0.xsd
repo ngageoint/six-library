@@ -230,14 +230,29 @@
 	</xsd:simpleType>
 
 	<xsd:simpleType name="Polarization2Type">
-		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="V"/>
-			<xsd:enumeration value="H"/>
-			<xsd:enumeration value="RHC"/>
-			<xsd:enumeration value="LHC"/>
-			<xsd:enumeration value="OTHER"/>
-		</xsd:restriction>
+		<xsd:union>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="V"/>
+					<xsd:enumeration value="H"/>
+					<xsd:enumeration value="X"/>
+					<xsd:enumeration value="Y"/>
+					<xsd:enumeration value="S"/>
+					<xsd:enumeration value="E"/>
+					<xsd:enumeration value="RHC"/>
+					<xsd:enumeration value="LHC"/>
+					<xsd:enumeration value="OTHER"/>
+					<xsd:enumeration value="UNKNOWN"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="OTHER.*"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:union>
 	</xsd:simpleType>
+	
 	<xsd:simpleType name="ModeIdentifierType">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="SPOTLIGHT"/>
@@ -253,17 +268,110 @@
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:simpleType name="DualPolarizationType">
-		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="V:V"/>
-			<xsd:enumeration value="V:H"/>
-			<xsd:enumeration value="H:V"/>
-			<xsd:enumeration value="H:H"/>
-			<xsd:enumeration value="RHC:RHC"/>
-			<xsd:enumeration value="RHC:LHC"/>
-			<xsd:enumeration value="LHC:RHC"/>
-			<xsd:enumeration value="LHC:LHC"/>
-			<xsd:enumeration value="OTHER"/>
-		</xsd:restriction>
+		<xsd:union>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="V:V"/>
+					<xsd:enumeration value="V:H"/>
+					<xsd:enumeration value="V:X"/>
+					<xsd:enumeration value="V:Y"/>
+					<xsd:enumeration value="V:S"/>
+					<xsd:enumeration value="V:E"/>
+					<xsd:enumeration value="V:RHC"/>
+					<xsd:enumeration value="V:LHC"/>
+					<xsd:enumeration value="V:OTHER"/>
+
+					<xsd:enumeration value="H:V"/>
+					<xsd:enumeration value="H:H"/>
+					<xsd:enumeration value="H:X"/>
+					<xsd:enumeration value="H:Y"/>
+					<xsd:enumeration value="H:S"/>
+					<xsd:enumeration value="H:E"/>
+					<xsd:enumeration value="H:RHC"/>
+					<xsd:enumeration value="H:LHC"/>
+					<xsd:enumeration value="H:OTHER"/>
+
+					<xsd:enumeration value="X:V"/>
+					<xsd:enumeration value="X:H"/>
+					<xsd:enumeration value="X:X"/>
+					<xsd:enumeration value="X:Y"/>
+					<xsd:enumeration value="X:S"/>
+					<xsd:enumeration value="X:E"/>
+					<xsd:enumeration value="X:RHC"/>
+					<xsd:enumeration value="X:LHC"/>
+					<xsd:enumeration value="X:OTHER"/>
+
+
+					<xsd:enumeration value="Y:V"/>
+					<xsd:enumeration value="Y:H"/>
+					<xsd:enumeration value="Y:X"/>
+					<xsd:enumeration value="Y:Y"/>
+					<xsd:enumeration value="Y:S"/>
+					<xsd:enumeration value="Y:E"/>
+					<xsd:enumeration value="Y:RHC"/>
+					<xsd:enumeration value="Y:LHC"/>
+					<xsd:enumeration value="Y:OTHER"/>
+
+					<xsd:enumeration value="S:V"/>
+					<xsd:enumeration value="S:H"/>
+					<xsd:enumeration value="S:X"/>
+					<xsd:enumeration value="S:Y"/>
+					<xsd:enumeration value="S:S"/>
+					<xsd:enumeration value="S:E"/>
+					<xsd:enumeration value="S:RHC"/>
+					<xsd:enumeration value="S:LHC"/>
+					<xsd:enumeration value="S:OTHER"/>
+
+					<xsd:enumeration value="E:V"/>
+					<xsd:enumeration value="E:H"/>
+					<xsd:enumeration value="E:X"/>
+					<xsd:enumeration value="E:Y"/>
+					<xsd:enumeration value="E:S"/>
+					<xsd:enumeration value="E:E"/>
+					<xsd:enumeration value="E:RHC"/>
+					<xsd:enumeration value="E:LHC"/>
+					<xsd:enumeration value="E:OTHER"/>
+
+					<xsd:enumeration value="RHC:V"/>
+					<xsd:enumeration value="RHC:H"/>
+					<xsd:enumeration value="RHC:X"/>
+					<xsd:enumeration value="RHC:Y"/>
+					<xsd:enumeration value="RHC:S"/>
+					<xsd:enumeration value="RHC:E"/>
+					<xsd:enumeration value="RHC:RHC"/>
+					<xsd:enumeration value="RHC:LHC"/>
+					<xsd:enumeration value="RHC:OTHER"/>
+
+					<xsd:enumeration value="LHC:V"/>
+					<xsd:enumeration value="LHC:H"/>
+					<xsd:enumeration value="LHC:X"/>
+					<xsd:enumeration value="LHC:Y"/>
+					<xsd:enumeration value="LHC:S"/>
+					<xsd:enumeration value="LHC:E"/>
+					<xsd:enumeration value="LHC:RHC"/>
+					<xsd:enumeration value="LHC:LHC"/>
+					<xsd:enumeration value="LHC:OTHER"/>
+
+					<xsd:enumeration value="OTHER:V"/>
+					<xsd:enumeration value="OTHER:H"/>
+					<xsd:enumeration value="OTHER:X"/>
+					<xsd:enumeration value="OTHER:Y"/>
+					<xsd:enumeration value="OTHER:S"/>
+					<xsd:enumeration value="OTHER:E"/>
+					<xsd:enumeration value="OTHER:RHC"/>
+					<xsd:enumeration value="OTHER:LHC"/>
+					<xsd:enumeration value="OTHER:OTHER"/>
+
+					<xsd:enumeration value="OTHER"/>
+					<xsd:enumeration value="UNKNOWN"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="OTHER.*:OTHER.*"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:union>
 	</xsd:simpleType>
 	<xsd:simpleType name="ZeroTo90Type">
 		<xsd:restriction base="xsd:double">
@@ -528,10 +636,19 @@
 			<xsd:documentation/>
 		</xsd:annotation>
 		<xsd:sequence>
-			<xsd:element name="Angle" type="ZeroToExclusive360Type"/>
+			<xsd:element name="Angle" type="Neg180To180Type"/>
 			<xsd:element name="Magnitude" type="xsd:double"/>
 		</xsd:sequence>
 	</xsd:complexType>
+	<xsd:complexType name="AngleZeroToExclusive360MagnitudeType">
+		<xsd:annotation>
+			<xsd:documentation/>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Angle" type="ZeroToExclusive360Type"/>
+			<xsd:element name="Magnitude" type="xsd:double"/>
+		</xsd:sequence>
+	</xsd:complexType>	
 	<xsd:complexType name="RangeAzimuthType">
 		<xsd:annotation>
 			<xsd:documentation>Represents range and azimuth</xsd:documentation>

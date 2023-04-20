@@ -30,7 +30,6 @@
 
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Utilities.h"
-#include "six/sicd/KDTree.h"
 #include "six/sicd/ComplexToAMP8IPHS8I.h"
 
 using namespace six;
@@ -128,14 +127,39 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
-using input_values_t = std::array<std::complex<float>, UINT8_MAX + 1>;
-using input_amplitudes_t = std::array<input_values_t, UINT8_MAX + 1>;
+struct KDNode_t final
+{
+    cx_float result;
+    AMP8I_PHS8I_t amp_and_value;
+};
+static std::vector<KDNode_t> make_nodes(const six::AmplitudeTable* pAmplitudeTable)
+{
+    // For all possible amp/phase values (there are "only" 256*256), get and save the
+    // complex<float> value.
+    //
+    // Be careful with indexing so that we don't wrap-around in the loops.
+    std::vector<KDNode_t> retval;
+    retval.reserve(UINT8_MAX * UINT8_MAX);
+    for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
+    {
+        KDNode_t v;
+        v.amp_and_value.first = gsl::narrow<uint8_t>(input_amplitude);
+
+        for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
+        {
+            v.amp_and_value.second = gsl::narrow<uint8_t>(input_value);
+            v.result = six::sicd::Utilities::from_AMP8I_PHS8I(v.amp_and_value.first, v.amp_and_value.second, pAmplitudeTable);
+            retval.push_back(v);
+        }
+    }
+    return retval;
+}
 
 // input_amplitudes_t is too big for the stack
 static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
 {
-    // This is an easy way to get all 256x256 values for the AmplitudeTable
-    auto nodes = six::sicd::details::KDTree::make_nodes(pAmplitudeTable);
+    // Get all 256x256 values for the AmplitudeTable
+    auto nodes = make_nodes(pAmplitudeTable);
 
     auto retval = std::make_unique<input_amplitudes_t>();
     auto& values = *retval;
@@ -148,7 +172,7 @@ static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six
 }
 
 // This is a non-templatized function so that there is copy of the "static" data with a NULL AmplutdeTable.
-static const input_amplitudes_t* get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable)
+static const input_amplitudes_t* get_cached_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
     {
@@ -166,19 +190,23 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
     }
 
     auto const pAmplitudeTable = amplitudeTable.get();
-    auto const pValues = get_RE32F_IM32F_values(pAmplitudeTable);
+    auto const pValues = get_cached_RE32F_IM32F_values(pAmplitudeTable);
 
     // Do we have a cahced result to use (no amplitude table)?
     // Or must it be recomputed (have an amplutude table)?
-    return pValues != nullptr ? (*pValues)[input.first][input.second] :
-        Utilities::from_AMP8I_PHS8I(input.first, input.second, pAmplitudeTable);
+    if (pValues != nullptr)
+    {
+        return (*pValues)[input.first][input.second];
+    }
+
+    const auto S = Utilities::from_AMP8I_PHS8I(input.first, input.second, pAmplitudeTable);
+    return std::complex<float>(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
 }
 
-static const input_amplitudes_t& get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
+const input_amplitudes_t& ImageData::get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
     std::unique_ptr<input_amplitudes_t>& pValues_)
-
 {
-    const input_amplitudes_t* pValues = get_RE32F_IM32F_values(pAmplitudeTable);
+    const input_amplitudes_t* pValues = get_cached_RE32F_IM32F_values(pAmplitudeTable);
     if (pValues == nullptr)
     {
         assert(pAmplitudeTable != nullptr);
@@ -199,18 +227,21 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
 
     std::unique_ptr<input_amplitudes_t> pValues_;
     const auto& values = get_RE32F_IM32F_values(amplitudeTable.get(), pValues_);
+    from_AMP8I_PHS8I(values, inputs, results, cutoff_);
+}
+
+void ImageData::from_AMP8I_PHS8I(const input_amplitudes_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results,
+    ptrdiff_t cutoff_)
+{
     const auto get_RE32F_IM32F_value_f = [&values](const six::sicd::AMP8I_PHS8I_t& v)
     {
         return values[v.first][v.second];
     };
 
-    const auto begin = inputs.data(); // no iterators with our homebrew span<>
-    const auto end = begin + inputs.size();
-    const auto out = results.data(); // no iterators with our homebrew span<>
-
     if (cutoff_ < 0)
     {
-        (void) std::transform(begin,end, out, get_RE32F_IM32F_value_f);
+        (void) std::transform(inputs.begin(), inputs.end(), results.begin(),
+            get_RE32F_IM32F_value_f);
     }
     else
     {
@@ -218,7 +249,8 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
         constexpr auto dimension = 128 * 8;
         constexpr auto default_cutoff = dimension * dimension;
         const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-        (void) mt::transform_async(begin, end, out, get_RE32F_IM32F_value_f, cutoff, std::launch::async);
+        (void) mt::transform_async(inputs.begin(), inputs.end(), results.begin(),
+            get_RE32F_IM32F_value_f, cutoff, std::launch::async);
     }
 }
 
@@ -231,12 +263,10 @@ static void to_AMP8I_PHS8I_(std::span<const cx_float> inputs, std::span<AMP8I_PH
         return tree.nearest_neighbor(v);
     };
 
-    const auto begin = inputs.data(); // no iterators with our homebrew span<>
-    const auto end = begin + inputs.size();
-    const auto out = results.data(); // no iterators with our homebrew span<>
     if (cutoff_ < 0)
     {
-        (void) std::transform(begin, end, out, nearest_neighbor_f);
+        (void) std::transform(inputs.begin(), inputs.end(), results.begin(),
+            nearest_neighbor_f);
     }
     else
     {
@@ -244,7 +274,8 @@ static void to_AMP8I_PHS8I_(std::span<const cx_float> inputs, std::span<AMP8I_PH
         constexpr auto dimension = 128 * 8;
         constexpr auto default_cutoff = dimension * dimension;
         const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-        (void) mt::transform_async(begin, end, out, nearest_neighbor_f, cutoff, std::launch::async);
+        (void) mt::transform_async(inputs.begin(), inputs.end(), results.begin(),
+            nearest_neighbor_f, cutoff, std::launch::async);
     }
 }
 void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
@@ -255,13 +286,8 @@ void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I
 void  ImageData::to_AMP8I_PHS8I(const AmplitudeTable* pAmplitudeTable,
     std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results, ptrdiff_t cutoff)
 {
-    // make the KDTree to quickly find the nearest neighbor
-    std::unique_ptr<six::sicd::details::KDTree> pTree; // not-cached, non-NULL amplitudeTable
-    const auto& tree = *(six::sicd::details::KDTree::make(pAmplitudeTable, pTree));
-
     // make a structure to quickly find the nearest neighbor
-    //std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pConvert; // not-cached, non-NULL amplitudeTable
-    //const auto& converter = *(six::sicd::details::ComplexToAMP8IPHS8I::make(pAmplitudeTable, pConvert));
-
-    to_AMP8I_PHS8I_(inputs, results, tree, cutoff);
+    std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pConvert; // not-cached, non-NULL amplitudeTable
+    const auto& converter = *(six::sicd::details::ComplexToAMP8IPHS8I::make(pAmplitudeTable, pConvert));
+    to_AMP8I_PHS8I_(inputs, results, converter, cutoff);
 }

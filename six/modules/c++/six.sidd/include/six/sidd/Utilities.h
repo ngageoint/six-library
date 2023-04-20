@@ -25,9 +25,11 @@
 #include <memory>
 #include <vector>
 #include <std/filesystem>
+#include <std/string>
 
 #include <import/scene.h>
 #include <types/RgAz.h>
+#include <six/Utilities.h>
 #include <six/sidd/DerivedData.h>
 
 namespace six
@@ -41,13 +43,13 @@ public:
     //       for all projection types
     static scene::SideOfTrack getSideOfTrack(const DerivedData* derived);
 
-    static mem::auto_ptr<scene::SceneGeometry>
+    static std::unique_ptr<scene::SceneGeometry>
     getSceneGeometry(const DerivedData* derived);
 
-    static mem::auto_ptr<scene::GridGeometry>
+    static std::unique_ptr<scene::GridGeometry>
     getGridGeometry(const DerivedData* derived);
 
-    static mem::auto_ptr<scene::GridECEFTransform>
+    static std::unique_ptr<scene::GridECEFTransform>
     getGridECEFTransform(const DerivedData* derived);
 
     static void setProductValues(Poly2D timeCOAPoly, PolyXYZ arpPoly,
@@ -69,7 +71,7 @@ public:
     static std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType>
             convertDualPolarization(six::DualPolarizationType pol);
 
-    static mem::auto_ptr<scene::ProjectionModel>
+    static std::unique_ptr<scene::ProjectionModel>
     getProjectionModel(const DerivedData* data);
 
 
@@ -79,7 +81,7 @@ public:
      *
      * \return mock DerivedData object
      */
-    static mem::auto_ptr<DerivedData> createFakeDerivedData();
+    static std::unique_ptr<DerivedData> createFakeDerivedData();
     static std::unique_ptr<DerivedData> createFakeDerivedData(const std::string& strVersion);
 
 
@@ -93,7 +95,7 @@ public:
     *
     * \return Data representation of 'xmlStr'
     */
-    static mem::auto_ptr<DerivedData> parseData(
+    static std::unique_ptr<DerivedData> parseData(
         ::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
@@ -110,7 +112,7 @@ public:
     *
     * \return Data representation of the contents of 'pathname'
     */
-    static mem::auto_ptr<DerivedData> parseDataFromFile(
+    static std::unique_ptr<DerivedData> parseDataFromFile(
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
@@ -126,12 +128,12 @@ public:
     *
     * \return Data representation of 'xmlStr'
     */
-    static mem::auto_ptr<DerivedData> parseDataFromString(
+    static std::unique_ptr<DerivedData> parseDataFromString(
         const std::string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
     static std::unique_ptr<DerivedData> parseDataFromString(
-        const std::string& xmlStr,
+        const std::u8string& xmlStr,
         const std::vector<std::filesystem::path>* pSchemaPaths,
         logging::Logger* pLogger=nullptr);
 
@@ -149,7 +151,7 @@ public:
     static std::string toXMLString(const DerivedData& data,
             const std::vector<std::string>& schemaPaths,
             logging::Logger* logger);
-    static std::string toXMLString(const DerivedData&,
+    static std::u8string toXMLString(const DerivedData&,
         const std::vector<std::filesystem::path>*, logging::Logger* pLogger = nullptr);
 };
 }

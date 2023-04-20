@@ -20,43 +20,31 @@
  *
  */
 
-#ifndef __XML_LITE_XML_READER_H__
-#define __XML_LITE_XML_READER_H__
+#ifndef CODA_OSS_xml_lite_XMLReader_h_INCLUDED_
+#define CODA_OSS_xml_lite_XMLReader_h_INCLUDED_
+#pragma once
 
 #include "xml/lite/xml_lite_config.h"
 
-#if defined(USE_XERCES)
+#if defined(USE_LIBXML)
+#error LibXML is no longer supported.
+#endif
+#if defined(USE_EXPAT)
+#error Expat is no longer supported.
+#endif
+
+#if !defined(USE_XERCES)
+#error XML parser must be set at configure time
+#endif
+
 #  include "xml/lite/XMLReaderXerces.h"
+
 namespace xml
 {
 namespace lite
 {
+using  XMLReader = XMLReaderXerces;
+}
+}
 
-typedef XMLReaderXerces XMLReader;
-}
-
-}
-#elif defined(USE_LIBXML)
-#  include "xml/lite/XMLReaderLibXML.h"
-namespace xml
-{
-namespace lite
-{
-typedef XMLReaderLibXML XMLReader;
-}
-}
-#elif defined(USE_EXPAT)
-#  include "xml/lite/XMLReaderExpat.h"
-namespace xml
-{
-namespace lite
-{
-typedef XMLReaderExpat XMLReader;
-}
-}
-#else
-  #error XML parser must be set at configure time
-#endif
-
-#endif
-
+#endif // CODA_OSS_xml_lite_XMLReader_h_INCLUDED_

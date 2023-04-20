@@ -56,7 +56,7 @@ namespace lite
  *  the Expat C Parser underneath, and wiring it to
  *  generic event calls, via the content handler.
  */
-class XMLReaderXerces : public XMLReaderInterface
+class XMLReaderXerces final : public XMLReaderInterface
 {
     XercesContext mCtxt;    //! this must be the first member listed
     std::unique_ptr<SAX2XMLReader>        mNative;
@@ -69,10 +69,7 @@ public:
     XMLReaderXerces();
 
     //! Destructor.
-    ~XMLReaderXerces()
-    {
-    }
-
+    ~XMLReaderXerces() = default;
     XMLReaderXerces(const XMLReaderXerces&) = delete;
     XMLReaderXerces& operator=(const XMLReaderXerces&) = delete;
 
@@ -85,7 +82,7 @@ public:
      *  This method returns a reference to the content handler.
      *  \return content handler
      */
-    xml::lite::ContentHandler *getContentHandler()
+    xml::lite::ContentHandler *getContentHandler() override
     {
         return mDriverContentHandler->retrieveXMLLiteContentHandler();
     }
@@ -95,7 +92,7 @@ public:
      *  It will set this internally.
      *  \param handler  The content handler to pass
      */
-    void setContentHandler(xml::lite::ContentHandler* handler)
+    void setContentHandler(xml::lite::ContentHandler* handler) override
     {
         mDriverContentHandler->setXMLLiteContentHandler(handler);
     }
@@ -103,22 +100,20 @@ public:
     void parse(io::InputStream& is, int size = io::InputStream::IS_END);
 
     void parse(bool storeEncoding, io::InputStream& is, int size = io::InputStream::IS_END);
-    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
-    void parse(bool storeEncoding, io::InputStream& is, StringEncoding, int size = io::InputStream::IS_END);
-    #endif  // SWIG
+    void parse(io::InputStream& is, const void*pInitialEncoding, const void* pFallbackEncoding,
+        int size = io::InputStream::IS_END);
     
     //! Method to create an xml reader
-    void create();
+    void create() override;
 
     //! Method to destroy an xml reader
-    void destroy();
+    void destroy() override;
 
-    std::string getDriverName() const { return "xerces"; }
+    std::string getDriverName() const override { return "xerces"; }
+
+    static const void* getWindows1252Encoding();
 
 private:
-    void parse(bool storeEncoding, io::InputStream& is, const StringEncoding*, int size);
-    void parse(bool storeEncoding, const std::vector<sys::byte>&, const StringEncoding* pEncoding);
-
     void write(const void*, size_t) override
     {
         throw xml::lite::XMLException(Ctxt("I'm not sure how you got here!"));

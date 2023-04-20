@@ -64,7 +64,6 @@ NRTAPI(nrt_List *) nrt_Utils_splitString(const char *str, unsigned int max,
         while (op < end)
         {
             char *val = NULL;
-            size_t sz;
             /* skip past white space */
             while (isspace(*op) && op < end)
                 ++op;
@@ -76,7 +75,7 @@ NRTAPI(nrt_List *) nrt_Utils_splitString(const char *str, unsigned int max,
             if (cur == op)
                 break;
 
-            sz = op - cur;
+            size_t sz = (size_t)(op - cur);
             val = (char* )NRT_MALLOC(sz + 1);
             if (!val)
             {
@@ -98,7 +97,7 @@ NRTAPI(nrt_List *) nrt_Utils_splitString(const char *str, unsigned int max,
 
                 if (op < end)
                 {
-                    sz = end - op;
+                    sz = (size_t)(end - op);
                     val = (char* )NRT_MALLOC(sz + 1);
                     if (!val)
                     {
@@ -190,7 +189,7 @@ NRTAPI(void) nrt_Utils_trimString(char *str)
         strp++;
     if (strp != str)
     {
-        len = str + len - strp;
+        len = (size_t)(str + len - strp);
         memmove(str, strp, len);
         str[len] = '\0';
     }
@@ -333,7 +332,7 @@ NRTAPI(void) nrt_Utils_decimalToGeographic(double decimal, int *degrees,
 NRTAPI(double) nrt_Utils_geographicToDecimal(int degrees, int minutes,
                                              double seconds)
 {
-    double decimal = fabs(degrees);
+    double decimal = fabs((double)degrees);
     decimal += fabs(minutes / 60.0);
     decimal += fabs(seconds / 3600.0);
 
@@ -356,7 +355,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
         return NRT_FAILURE;
     }
 
-    int degreeOffset = 0;
+    size_t degreeOffset = 0;
     const size_t len = strlen(dms);
 
     char d[4];
@@ -704,12 +703,12 @@ NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8)
  * Older versions of Visual Studio do not support `inline` for C
  * Using `__inline` for Windows instead
  */
-NRTPRIV(void)
 #if defined(WIN32) || defined(_WIN32)
 __inline
 #else
 inline
 #endif
+NRTPRIV(void)
 nrt_Utils_swap(uint8_t* value, size_t indexOne,
         size_t indexTwo)
 {
@@ -780,7 +779,7 @@ NRTAPI(char*) nrt_strdup(const char* src)
     if (src != NULL)
     {
         const size_t len = strlen(src);
-        char* retval = NRT_MALLOC(len + 1);
+        char* retval = (char*) NRT_MALLOC(len + 1);
         if (retval != NULL)
         {
             nrt_strcpy_s(retval, len + 1, src);

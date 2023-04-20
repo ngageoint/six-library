@@ -10,17 +10,7 @@ options = distclean = lambda p: None
 
 def configure(conf):
     def math_callback(conf):
-        conf.check_cc(function_name='isnan', header_name='math.h',
-                      mandatory=False)
-        # The auto-generated code would be ambiguous and not compile
-        # Formatted for consistency with waf's output
-        conf.check_cxx(fragment="#include <cmath>\n"
-                       "int main(int argc, char **argv) {\n"
-                       "        (void)argc; (void)argv;\n"
-                       "        return std::isnan(0);\n"
-                       "}",
-                       msg='Checking for function std::isnan',
-                       mandatory=False, define_name='HAVE_STD_ISNAN')
+        print("math_callback");
 
     writeConfig(conf, math_callback, NAME)
 

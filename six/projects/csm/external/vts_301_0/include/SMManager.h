@@ -47,6 +47,8 @@ public:
       //    true if successful, false otherwise.
       // Note: For now, we assume the plugin name is unique in the list.
 
+   size_t pluginCount() const;
+
 private:
 
    //---

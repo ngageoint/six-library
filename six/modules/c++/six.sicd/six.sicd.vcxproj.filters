@@ -126,10 +126,10 @@
     <ClInclude Include="include\six\sicd\Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\six\sicd\KDTree.h">
+    <ClInclude Include="include\six\sicd\NITFReadComplexXMLControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\six\sicd\NITFReadComplexXMLControl.h">
+    <ClInclude Include="include\six\sicd\ComplexToAMP8IPHS8I.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\six\sicd\ComplexToAMP8IPHS8I.h">
@@ -239,10 +239,10 @@
     <ClCompile Include="source\Utilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\KDTree.cpp">
+    <ClCompile Include="source\NITFReadComplexXMLControl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\NITFReadComplexXMLControl.cpp">
+    <ClCompile Include="source\ComplexToAMP8IPHS8I.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\ComplexToAMP8IPHS8I.cpp">

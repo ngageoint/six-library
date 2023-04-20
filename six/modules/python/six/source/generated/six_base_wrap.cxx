@@ -61995,161 +61995,6 @@ fail:
   return nullptr;
 }
 
-
-SWIGINTERN PyObject *_wrap_XMLControl_toXML(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::XMLControl *arg1 = (six::XMLControl *) 0 ;
-  six::Data *arg2 = (six::Data *) 0 ;
-  std::vector< std::string,std::allocator< std::string > > *arg3 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int res3 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  xml::lite::Document *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:XMLControl_toXML",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__XMLControl, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLControl_toXML" "', argument " "1"" of type '" "six::XMLControl *""'"); 
-  }
-  arg1 = reinterpret_cast< six::XMLControl * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__Data, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLControl_toXML" "', argument " "2"" of type '" "six::Data const *""'"); 
-  }
-  arg2 = reinterpret_cast< six::Data * >(argp2);
-  {
-    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
-    res3 = swig::asptr(obj2, &ptr);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControl_toXML" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControl_toXML" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-    }
-    arg3 = ptr;
-  }
-  {
-    try
-    {
-      result = (xml::lite::Document *)(arg1)->toXML((six::Data const *)arg2,(std::vector< std::string,std::allocator< std::string > > const &)*arg3);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_xml__lite__Document, 0 |  0 );
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  return nullptr;
-}
-
-
-SWIGINTERN PyObject *_wrap_XMLControl_fromXML(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::XMLControl *arg1 = (six::XMLControl *) 0 ;
-  xml::lite::Document *arg2 = (xml::lite::Document *) 0 ;
-  std::vector< std::string,std::allocator< std::string > > *arg3 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int res3 = SWIG_OLDOBJ ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  six::Data *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:XMLControl_fromXML",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__XMLControl, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLControl_fromXML" "', argument " "1"" of type '" "six::XMLControl *""'"); 
-  }
-  arg1 = reinterpret_cast< six::XMLControl * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_xml__lite__Document, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLControl_fromXML" "', argument " "2"" of type '" "xml::lite::Document const *""'"); 
-  }
-  arg2 = reinterpret_cast< xml::lite::Document * >(argp2);
-  {
-    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
-    res3 = swig::asptr(obj2, &ptr);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControl_fromXML" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControl_fromXML" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-    }
-    arg3 = ptr;
-  }
-  {
-    try
-    {
-      result = (six::Data *)(arg1)->fromXML((xml::lite::Document const *)arg2,(std::vector< std::string,std::allocator< std::string > > const &)*arg3);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_six__Data, 0 |  0 );
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res3)) delete arg3;
-  return nullptr;
-}
-
-
 SWIGINTERN PyObject *_wrap_XMLControl_dataTypeToString__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   six::DataType arg1 ;
@@ -62573,7 +62418,7 @@ SWIGINTERN PyObject *_wrap_parseData__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
-  mem::auto_ptr< six::Data > result;
+  mem::AutoPtr< six::Data > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOO:parseData",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_XMLControlRegistry,  0  | 0);
@@ -62683,7 +62528,7 @@ SWIGINTERN PyObject *_wrap_parseData__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  mem::auto_ptr< six::Data > result;
+  mem::AutoPtr< six::Data > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:parseData",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_XMLControlRegistry,  0  | 0);
@@ -62853,7 +62698,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile__SWIG_0(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
-  mem::auto_ptr< six::Data > result;
+  mem::AutoPtr< six::Data > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOO:parseDataFromFile",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_XMLControlRegistry,  0  | 0);
@@ -62967,7 +62812,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromFile__SWIG_1(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  mem::auto_ptr< six::Data > result;
+  mem::AutoPtr< six::Data > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:parseDataFromFile",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_XMLControlRegistry,  0  | 0);
@@ -63140,7 +62985,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromString__SWIG_0(PyObject *SWIGUNUSEDPARM(
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
-  mem::auto_ptr< six::Data > result;
+  mem::AutoPtr< six::Data > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOOO:parseDataFromString",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_XMLControlRegistry,  0  | 0);
@@ -63254,7 +63099,7 @@ SWIGINTERN PyObject *_wrap_parseDataFromString__SWIG_1(PyObject *SWIGUNUSEDPARM(
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
-  mem::auto_ptr< six::Data > result;
+  mem::AutoPtr< six::Data > result;
   
   if (!PyArg_ParseTuple(args,(char *)"OOOO:parseDataFromString",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_XMLControlRegistry,  0  | 0);
@@ -64448,7 +64293,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_0(PyObject *SWIGU
   PyObject *resultobj = 0;
   six::XMLControlRegistry *arg1 = (six::XMLControlRegistry *) 0 ;
   std::string *arg2 = 0 ;
-  mem::auto_ptr< six::XMLControlCreator > arg3 ;
+  mem::AutoPtr< six::XMLControlCreator > arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -64478,12 +64323,12 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_0(PyObject *SWIGU
   {
     res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__auto_ptrT_six__XMLControlCreator_t,  0  | 0);
     if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "mem::auto_ptr< six::XMLControlCreator >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "mem::AutoPtr< six::XMLControlCreator >""'"); 
     }  
     if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "mem::auto_ptr< six::XMLControlCreator >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "mem::AutoPtr< six::XMLControlCreator >""'");
     } else {
-      mem::auto_ptr< six::XMLControlCreator > * temp = reinterpret_cast< mem::auto_ptr< six::XMLControlCreator > * >(argp3);
+      mem::AutoPtr< six::XMLControlCreator > * temp = reinterpret_cast< mem::AutoPtr< six::XMLControlCreator > * >(argp3);
       arg3 = *temp;
       if (SWIG_IsNewObj(res3)) delete temp;
     }
@@ -64491,7 +64336,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_0(PyObject *SWIGU
   {
     try
     {
-      (arg1)->addCreator((std::string const &)*arg2,arg3);
+      (arg1)->addCreator_((std::string const &)*arg2,arg3);
     } 
     catch (const std::exception& e)
     {
@@ -64608,7 +64453,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_2(PyObject *SWIGU
   PyObject *resultobj = 0;
   six::XMLControlRegistry *arg1 = (six::XMLControlRegistry *) 0 ;
   six::DataType arg2 ;
-  mem::auto_ptr< six::XMLControlCreator > arg3 ;
+  mem::AutoPtr< six::XMLControlCreator > arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -64641,12 +64486,12 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_2(PyObject *SWIGU
   {
     res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__auto_ptrT_six__XMLControlCreator_t,  0  | 0);
     if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "mem::auto_ptr< six::XMLControlCreator >""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "mem::AutoPtr< six::XMLControlCreator >""'"); 
     }  
     if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "mem::auto_ptr< six::XMLControlCreator >""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLControlRegistry_addCreator" "', argument " "3"" of type '" "mem::AutoPtr< six::XMLControlCreator >""'");
     } else {
-      mem::auto_ptr< six::XMLControlCreator > * temp = reinterpret_cast< mem::auto_ptr< six::XMLControlCreator > * >(argp3);
+      mem::AutoPtr< six::XMLControlCreator > * temp = reinterpret_cast< mem::AutoPtr< six::XMLControlCreator > * >(argp3);
       arg3 = *temp;
       if (SWIG_IsNewObj(res3)) delete temp;
     }
@@ -64654,7 +64499,7 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator__SWIG_2(PyObject *SWIGU
   {
     try
     {
-      (arg1)->addCreator(arg2,arg3);
+      (arg1)->addCreator_(arg2,arg3);
     } 
     catch (const std::exception& e)
     {
@@ -64852,9 +64697,9 @@ SWIGINTERN PyObject *_wrap_XMLControlRegistry_addCreator(PyObject *self, PyObjec
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'XMLControlRegistry_addCreator'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    six::XMLControlRegistry::addCreator(std::string const &,mem::auto_ptr< six::XMLControlCreator >)\n"
+    "    six::XMLControlRegistry::addCreator(std::string const &,mem::AutoPtr< six::XMLControlCreator >)\n"
     "    six::XMLControlRegistry::addCreator(std::string const &,six::XMLControlCreator *)\n"
-    "    six::XMLControlRegistry::addCreator(six::DataType,mem::auto_ptr< six::XMLControlCreator >)\n"
+    "    six::XMLControlRegistry::addCreator(six::DataType,mem::AutoPtr< six::XMLControlCreator >)\n"
     "    six::XMLControlRegistry::addCreator(six::DataType,six::XMLControlCreator *)\n");
   return 0;
 }
@@ -65079,390 +64924,6 @@ SWIGINTERN PyObject *XMLControlRegistry_swigregister(PyObject *SWIGUNUSEDPARM(se
   SWIG_TypeNewClientData(SWIGTYPE_p_six__XMLControlRegistry, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
-
-SWIGINTERN PyObject *_wrap_toXMLString__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Data *arg1 = (six::Data *) 0 ;
-  six::XMLControlRegistry *arg2 = (six::XMLControlRegistry *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  std::string result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:toXMLString",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Data, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "toXMLString" "', argument " "1"" of type '" "six::Data const *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Data * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_six__XMLControlRegistry, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "toXMLString" "', argument " "2"" of type '" "six::XMLControlRegistry const *""'"); 
-  }
-  arg2 = reinterpret_cast< six::XMLControlRegistry * >(argp2);
-  {
-    try
-    {
-      result = six::toXMLString((six::Data const *)arg1,(six::XMLControlRegistry const *)arg2);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
-  return resultobj;
-fail:
-  return nullptr;
-}
-
-
-SWIGINTERN PyObject *_wrap_toXMLString__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Data *arg1 = (six::Data *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  std::string result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:toXMLString",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Data, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "toXMLString" "', argument " "1"" of type '" "six::Data const *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Data * >(argp1);
-  {
-    try
-    {
-      result = six::toXMLString((six::Data const *)arg1);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
-  return resultobj;
-fail:
-  return nullptr;
-}
-
-
-SWIGINTERN PyObject *_wrap_toXMLString(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[3] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_six__Data, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_toXMLString__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_six__Data, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_six__XMLControlRegistry, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_toXMLString__SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'toXMLString'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    six::toXMLString(six::Data const *,six::XMLControlRegistry const *)\n"
-    "    six::toXMLString(six::Data const *)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_toValidXMLString__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Data *arg1 = (six::Data *) 0 ;
-  std::vector< std::string,std::allocator< std::string > > *arg2 = 0 ;
-  logging::Logger *arg3 = (logging::Logger *) 0 ;
-  six::XMLControlRegistry *arg4 = (six::XMLControlRegistry *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  std::string result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOO:toValidXMLString",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Data, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "toValidXMLString" "', argument " "1"" of type '" "six::Data const *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Data * >(argp1);
-  {
-    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
-    res2 = swig::asptr(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "toValidXMLString" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "toValidXMLString" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_logging__Logger, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "toValidXMLString" "', argument " "3"" of type '" "logging::Logger *""'"); 
-  }
-  arg3 = reinterpret_cast< logging::Logger * >(argp3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_six__XMLControlRegistry, 0 |  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "toValidXMLString" "', argument " "4"" of type '" "six::XMLControlRegistry const *""'"); 
-  }
-  arg4 = reinterpret_cast< six::XMLControlRegistry * >(argp4);
-  {
-    try
-    {
-      result = six::toValidXMLString((six::Data const *)arg1,(std::vector< std::string,std::allocator< std::string > > const &)*arg2,arg3,(six::XMLControlRegistry const *)arg4);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return nullptr;
-}
-
-
-SWIGINTERN PyObject *_wrap_toValidXMLString__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  six::Data *arg1 = (six::Data *) 0 ;
-  std::vector< std::string,std::allocator< std::string > > *arg2 = 0 ;
-  logging::Logger *arg3 = (logging::Logger *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  std::string result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:toValidXMLString",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_six__Data, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "toValidXMLString" "', argument " "1"" of type '" "six::Data const *""'"); 
-  }
-  arg1 = reinterpret_cast< six::Data * >(argp1);
-  {
-    std::vector< std::string,std::allocator< std::string > > *ptr = (std::vector< std::string,std::allocator< std::string > > *)0;
-    res2 = swig::asptr(obj1, &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "toValidXMLString" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "toValidXMLString" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_logging__Logger, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "toValidXMLString" "', argument " "3"" of type '" "logging::Logger *""'"); 
-  }
-  arg3 = reinterpret_cast< logging::Logger * >(argp3);
-  {
-    try
-    {
-      result = six::toValidXMLString((six::Data const *)arg1,(std::vector< std::string,std::allocator< std::string > > const &)*arg2,arg3);
-    } 
-    catch (const std::exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.what());
-      }
-    }
-    catch (const except::Exception& e)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-      }
-    }
-    catch (...)
-    {
-      if (!PyErr_Occurred())
-      {
-        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-      }
-    }
-    if (PyErr_Occurred())
-    {
-      SWIG_fail;
-    }
-  }
-  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return resultobj;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return nullptr;
-}
-
-
-SWIGINTERN PyObject *_wrap_toValidXMLString(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[5] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_six__Data, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = swig::asptr(argv[1], (std::vector< std::string,std::allocator< std::string > >**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        void *vptr = 0;
-        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_logging__Logger, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          return _wrap_toValidXMLString__SWIG_1(self, args);
-        }
-      }
-    }
-  }
-  if (argc == 4) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_six__Data, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = swig::asptr(argv[1], (std::vector< std::string,std::allocator< std::string > >**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        void *vptr = 0;
-        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_logging__Logger, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          void *vptr = 0;
-          int res = SWIG_ConvertPtr(argv[3], &vptr, SWIGTYPE_p_six__XMLControlRegistry, 0);
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            return _wrap_toValidXMLString__SWIG_0(self, args);
-          }
-        }
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'toValidXMLString'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    six::toValidXMLString(six::Data const *,std::vector< std::string,std::allocator< std::string > > const &,logging::Logger *,six::XMLControlRegistry const *)\n"
-    "    six::toValidXMLString(six::Data const *,std::vector< std::string,std::allocator< std::string > > const &,logging::Logger *)\n");
-  return 0;
-}
-
 
 SWIGINTERN PyObject *_wrap_new_GeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -81540,13 +81001,13 @@ SWIGINTERN PyObject *VectorScopedCopyableGeoInfo_swigregister(PyObject *SWIGUNUS
 
 SWIGINTERN PyObject *_wrap_new_StdAutoRadiometric(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::Radiometric > *result = 0 ;
+  mem::AutoPtr< six::Radiometric > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoRadiometric")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::Radiometric > *)new mem::auto_ptr< six::Radiometric >();
+      result = (mem::AutoPtr< six::Radiometric > *)new mem::AutoPtr< six::Radiometric >();
     } 
     catch (const std::exception& e)
     {
@@ -81583,7 +81044,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoRadiometric(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::Radiometric > *arg1 = (mem::auto_ptr< six::Radiometric > *) 0 ;
+  mem::AutoPtr< six::Radiometric > *arg1 = (mem::AutoPtr< six::Radiometric > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -81591,9 +81052,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoRadiometric(PyObject *SWIGUNUSEDPARM(se
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoRadiometric",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__Radiometric_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoRadiometric" "', argument " "1"" of type '" "mem::auto_ptr< six::Radiometric > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoRadiometric" "', argument " "1"" of type '" "mem::AutoPtr< six::Radiometric > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::Radiometric > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::Radiometric > * >(argp1);
   {
     try
     {
@@ -83315,13 +82776,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoErrorStatistics(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::ErrorStatistics > *result = 0 ;
+  mem::AutoPtr< six::ErrorStatistics > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoErrorStatistics")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::ErrorStatistics > *)new mem::auto_ptr< six::ErrorStatistics >();
+      result = (mem::AutoPtr< six::ErrorStatistics > *)new mem::AutoPtr< six::ErrorStatistics >();
     } 
     catch (const std::exception& e)
     {
@@ -83358,7 +82819,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoErrorStatistics(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::ErrorStatistics > *arg1 = (mem::auto_ptr< six::ErrorStatistics > *) 0 ;
+  mem::AutoPtr< six::ErrorStatistics > *arg1 = (mem::AutoPtr< six::ErrorStatistics > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -83366,9 +82827,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoErrorStatistics(PyObject *SWIGUNUSEDPAR
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoErrorStatistics",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__ErrorStatistics_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoErrorStatistics" "', argument " "1"" of type '" "mem::auto_ptr< six::ErrorStatistics > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoErrorStatistics" "', argument " "1"" of type '" "mem::AutoPtr< six::ErrorStatistics > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::ErrorStatistics > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::ErrorStatistics > * >(argp1);
   {
     try
     {
@@ -84538,13 +83999,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoComponents(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::Components > *result = 0 ;
+  mem::AutoPtr< six::Components > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoComponents")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::Components > *)new mem::auto_ptr< six::Components >();
+      result = (mem::AutoPtr< six::Components > *)new mem::AutoPtr< six::Components >();
     } 
     catch (const std::exception& e)
     {
@@ -84581,7 +84042,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoComponents(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::Components > *arg1 = (mem::auto_ptr< six::Components > *) 0 ;
+  mem::AutoPtr< six::Components > *arg1 = (mem::AutoPtr< six::Components > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -84589,9 +84050,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoComponents(PyObject *SWIGUNUSEDPARM(sel
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoComponents",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__Components_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoComponents" "', argument " "1"" of type '" "mem::auto_ptr< six::Components > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoComponents" "', argument " "1"" of type '" "mem::AutoPtr< six::Components > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::Components > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::Components > * >(argp1);
   {
     try
     {
@@ -85873,13 +85334,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoCorrCoefs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::CorrCoefs > *result = 0 ;
+  mem::AutoPtr< six::CorrCoefs > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoCorrCoefs")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::CorrCoefs > *)new mem::auto_ptr< six::CorrCoefs >();
+      result = (mem::AutoPtr< six::CorrCoefs > *)new mem::AutoPtr< six::CorrCoefs >();
     } 
     catch (const std::exception& e)
     {
@@ -85916,7 +85377,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoCorrCoefs(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::CorrCoefs > *arg1 = (mem::auto_ptr< six::CorrCoefs > *) 0 ;
+  mem::AutoPtr< six::CorrCoefs > *arg1 = (mem::AutoPtr< six::CorrCoefs > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -85924,9 +85385,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoCorrCoefs(PyObject *SWIGUNUSEDPARM(self
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoCorrCoefs",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__CorrCoefs_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCorrCoefs" "', argument " "1"" of type '" "mem::auto_ptr< six::CorrCoefs > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCorrCoefs" "', argument " "1"" of type '" "mem::AutoPtr< six::CorrCoefs > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::CorrCoefs > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::CorrCoefs > * >(argp1);
   {
     try
     {
@@ -88440,13 +87901,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoPosVelError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::PosVelError > *result = 0 ;
+  mem::AutoPtr< six::PosVelError > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoPosVelError")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::PosVelError > *)new mem::auto_ptr< six::PosVelError >();
+      result = (mem::AutoPtr< six::PosVelError > *)new mem::AutoPtr< six::PosVelError >();
     } 
     catch (const std::exception& e)
     {
@@ -88483,7 +87944,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoPosVelError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::PosVelError > *arg1 = (mem::auto_ptr< six::PosVelError > *) 0 ;
+  mem::AutoPtr< six::PosVelError > *arg1 = (mem::AutoPtr< six::PosVelError > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -88491,9 +87952,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoPosVelError(PyObject *SWIGUNUSEDPARM(se
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoPosVelError",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__PosVelError_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoPosVelError" "', argument " "1"" of type '" "mem::auto_ptr< six::PosVelError > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoPosVelError" "', argument " "1"" of type '" "mem::AutoPtr< six::PosVelError > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::PosVelError > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::PosVelError > * >(argp1);
   {
     try
     {
@@ -90335,13 +89796,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoGeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::GeoInfo > *result = 0 ;
+  mem::AutoPtr< six::GeoInfo > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoGeoInfo")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::GeoInfo > *)new mem::auto_ptr< six::GeoInfo >();
+      result = (mem::AutoPtr< six::GeoInfo > *)new mem::AutoPtr< six::GeoInfo >();
     } 
     catch (const std::exception& e)
     {
@@ -90378,7 +89839,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoGeoInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::GeoInfo > *arg1 = (mem::auto_ptr< six::GeoInfo > *) 0 ;
+  mem::AutoPtr< six::GeoInfo > *arg1 = (mem::AutoPtr< six::GeoInfo > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -90386,9 +89847,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoGeoInfo(PyObject *SWIGUNUSEDPARM(self),
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoGeoInfo",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__GeoInfo_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoGeoInfo" "', argument " "1"" of type '" "mem::auto_ptr< six::GeoInfo > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoGeoInfo" "', argument " "1"" of type '" "mem::AutoPtr< six::GeoInfo > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::GeoInfo > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::GeoInfo > * >(argp1);
   {
     try
     {
@@ -91677,13 +91138,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoRadarSensor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::RadarSensor > *result = 0 ;
+  mem::AutoPtr< six::RadarSensor > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoRadarSensor")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::RadarSensor > *)new mem::auto_ptr< six::RadarSensor >();
+      result = (mem::AutoPtr< six::RadarSensor > *)new mem::AutoPtr< six::RadarSensor >();
     } 
     catch (const std::exception& e)
     {
@@ -91720,7 +91181,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoRadarSensor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::RadarSensor > *arg1 = (mem::auto_ptr< six::RadarSensor > *) 0 ;
+  mem::AutoPtr< six::RadarSensor > *arg1 = (mem::AutoPtr< six::RadarSensor > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -91728,9 +91189,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoRadarSensor(PyObject *SWIGUNUSEDPARM(se
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoRadarSensor",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__RadarSensor_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoRadarSensor" "', argument " "1"" of type '" "mem::auto_ptr< six::RadarSensor > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoRadarSensor" "', argument " "1"" of type '" "mem::AutoPtr< six::RadarSensor > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::RadarSensor > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::RadarSensor > * >(argp1);
   {
     try
     {
@@ -93012,13 +92473,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoTropoError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::TropoError > *result = 0 ;
+  mem::AutoPtr< six::TropoError > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoTropoError")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::TropoError > *)new mem::auto_ptr< six::TropoError >();
+      result = (mem::AutoPtr< six::TropoError > *)new mem::AutoPtr< six::TropoError >();
     } 
     catch (const std::exception& e)
     {
@@ -93055,7 +92516,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoTropoError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::TropoError > *arg1 = (mem::auto_ptr< six::TropoError > *) 0 ;
+  mem::AutoPtr< six::TropoError > *arg1 = (mem::AutoPtr< six::TropoError > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -93063,9 +92524,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoTropoError(PyObject *SWIGUNUSEDPARM(sel
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoTropoError",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__TropoError_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoTropoError" "', argument " "1"" of type '" "mem::auto_ptr< six::TropoError > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoTropoError" "', argument " "1"" of type '" "mem::AutoPtr< six::TropoError > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::TropoError > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::TropoError > * >(argp1);
   {
     try
     {
@@ -94235,13 +93696,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoIonoError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::IonoError > *result = 0 ;
+  mem::AutoPtr< six::IonoError > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoIonoError")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::IonoError > *)new mem::auto_ptr< six::IonoError >();
+      result = (mem::AutoPtr< six::IonoError > *)new mem::AutoPtr< six::IonoError >();
     } 
     catch (const std::exception& e)
     {
@@ -94278,7 +93739,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoIonoError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::IonoError > *arg1 = (mem::auto_ptr< six::IonoError > *) 0 ;
+  mem::AutoPtr< six::IonoError > *arg1 = (mem::AutoPtr< six::IonoError > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -94286,9 +93747,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoIonoError(PyObject *SWIGUNUSEDPARM(self
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoIonoError",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__IonoError_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoIonoError" "', argument " "1"" of type '" "mem::auto_ptr< six::IonoError > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoIonoError" "', argument " "1"" of type '" "mem::AutoPtr< six::IonoError > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::IonoError > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::IonoError > * >(argp1);
   {
     try
     {
@@ -95570,13 +95031,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoCompositeSCP(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::CompositeSCP > *result = 0 ;
+  mem::AutoPtr< six::CompositeSCP > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoCompositeSCP")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::CompositeSCP > *)new mem::auto_ptr< six::CompositeSCP >();
+      result = (mem::AutoPtr< six::CompositeSCP > *)new mem::AutoPtr< six::CompositeSCP >();
     } 
     catch (const std::exception& e)
     {
@@ -95613,7 +95074,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoCompositeSCP(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::CompositeSCP > *arg1 = (mem::auto_ptr< six::CompositeSCP > *) 0 ;
+  mem::AutoPtr< six::CompositeSCP > *arg1 = (mem::AutoPtr< six::CompositeSCP > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -95621,9 +95082,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoCompositeSCP(PyObject *SWIGUNUSEDPARM(s
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoCompositeSCP",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__CompositeSCP_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCompositeSCP" "', argument " "1"" of type '" "mem::auto_ptr< six::CompositeSCP > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCompositeSCP" "', argument " "1"" of type '" "mem::AutoPtr< six::CompositeSCP > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::CompositeSCP > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::CompositeSCP > * >(argp1);
   {
     try
     {
@@ -96905,13 +96366,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoMatchInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::MatchInformation > *result = 0 ;
+  mem::AutoPtr< six::MatchInformation > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoMatchInformation")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::MatchInformation > *)new mem::auto_ptr< six::MatchInformation >();
+      result = (mem::AutoPtr< six::MatchInformation > *)new mem::AutoPtr< six::MatchInformation >();
     } 
     catch (const std::exception& e)
     {
@@ -96948,7 +96409,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoMatchInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::MatchInformation > *arg1 = (mem::auto_ptr< six::MatchInformation > *) 0 ;
+  mem::AutoPtr< six::MatchInformation > *arg1 = (mem::AutoPtr< six::MatchInformation > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -96956,9 +96417,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoMatchInformation(PyObject *SWIGUNUSEDPA
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoMatchInformation",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__MatchInformation_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoMatchInformation" "', argument " "1"" of type '" "mem::auto_ptr< six::MatchInformation > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoMatchInformation" "', argument " "1"" of type '" "mem::AutoPtr< six::MatchInformation > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::MatchInformation > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::MatchInformation > * >(argp1);
   {
     try
     {
@@ -97904,13 +97365,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoMatchType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::MatchType > *result = 0 ;
+  mem::AutoPtr< six::MatchType > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoMatchType")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::MatchType > *)new mem::auto_ptr< six::MatchType >();
+      result = (mem::AutoPtr< six::MatchType > *)new mem::AutoPtr< six::MatchType >();
     } 
     catch (const std::exception& e)
     {
@@ -97947,7 +97408,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoMatchType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::MatchType > *arg1 = (mem::auto_ptr< six::MatchType > *) 0 ;
+  mem::AutoPtr< six::MatchType > *arg1 = (mem::AutoPtr< six::MatchType > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -97955,9 +97416,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoMatchType(PyObject *SWIGUNUSEDPARM(self
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoMatchType",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__MatchType_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoMatchType" "', argument " "1"" of type '" "mem::auto_ptr< six::MatchType > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoMatchType" "', argument " "1"" of type '" "mem::AutoPtr< six::MatchType > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::MatchType > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::MatchType > * >(argp1);
   {
     try
     {
@@ -99484,13 +98945,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoAmplitudeTable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::AmplitudeTable > *result = 0 ;
+  mem::AutoPtr< six::AmplitudeTable > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoAmplitudeTable")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::AmplitudeTable > *)new mem::auto_ptr< six::AmplitudeTable >();
+      result = (mem::AutoPtr< six::AmplitudeTable > *)new mem::AutoPtr< six::AmplitudeTable >();
     } 
     catch (const std::exception& e)
     {
@@ -99527,7 +98988,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoAmplitudeTable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::AmplitudeTable > *arg1 = (mem::auto_ptr< six::AmplitudeTable > *) 0 ;
+  mem::AutoPtr< six::AmplitudeTable > *arg1 = (mem::AutoPtr< six::AmplitudeTable > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -99535,9 +98996,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoAmplitudeTable(PyObject *SWIGUNUSEDPARM
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoAmplitudeTable",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__AmplitudeTable_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoAmplitudeTable" "', argument " "1"" of type '" "mem::auto_ptr< six::AmplitudeTable > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoAmplitudeTable" "', argument " "1"" of type '" "mem::AutoPtr< six::AmplitudeTable > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::AmplitudeTable > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::AmplitudeTable > * >(argp1);
   {
     try
     {
@@ -100981,13 +100442,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_StdAutoCollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::CollectionInformation > *result = 0 ;
+  mem::AutoPtr< six::CollectionInformation > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_StdAutoCollectionInformation")) SWIG_fail;
   {
     try
     {
-      result = (mem::auto_ptr< six::CollectionInformation > *)new mem::auto_ptr< six::CollectionInformation >();
+      result = (mem::AutoPtr< six::CollectionInformation > *)new mem::AutoPtr< six::CollectionInformation >();
     } 
     catch (const std::exception& e)
     {
@@ -101024,7 +100485,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_delete_StdAutoCollectionInformation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  mem::auto_ptr< six::CollectionInformation > *arg1 = (mem::auto_ptr< six::CollectionInformation > *) 0 ;
+  mem::AutoPtr< six::CollectionInformation > *arg1 = (mem::AutoPtr< six::CollectionInformation > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -101032,9 +100493,9 @@ SWIGINTERN PyObject *_wrap_delete_StdAutoCollectionInformation(PyObject *SWIGUNU
   if (!PyArg_ParseTuple(args,(char *)"O:delete_StdAutoCollectionInformation",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_std__auto_ptrT_six__CollectionInformation_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCollectionInformation" "', argument " "1"" of type '" "mem::auto_ptr< six::CollectionInformation > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_StdAutoCollectionInformation" "', argument " "1"" of type '" "mem::AutoPtr< six::CollectionInformation > *""'"); 
   }
-  arg1 = reinterpret_cast< mem::auto_ptr< six::CollectionInformation > * >(argp1);
+  arg1 = reinterpret_cast< mem::AutoPtr< six::CollectionInformation > * >(argp1);
   {
     try
     {
@@ -104182,8 +103643,6 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"XMLControl_validate", _wrap_XMLControl_validate, METH_VARARGS, (char *)"XMLControl_validate(xml::lite::Document const * doc, VectorString schemaPaths, logging::Logger * log)"},
 	 { (char *)"XMLControl_loadSchemaPaths", _wrap_XMLControl_loadSchemaPaths, METH_VARARGS, (char *)"XMLControl_loadSchemaPaths(VectorString schemaPaths)"},
-	 { (char *)"XMLControl_toXML", _wrap_XMLControl_toXML, METH_VARARGS, (char *)"XMLControl_toXML(XMLControl self, Data data, VectorString schemaPaths) -> xml::lite::Document *"},
-	 { (char *)"XMLControl_fromXML", _wrap_XMLControl_fromXML, METH_VARARGS, (char *)"XMLControl_fromXML(XMLControl self, xml::lite::Document const * doc, VectorString schemaPaths) -> Data"},
 	 { (char *)"XMLControl_dataTypeToString", _wrap_XMLControl_dataTypeToString, METH_VARARGS, (char *)"\n"
 		"dataTypeToString(DataType dataType, bool appendXML=True) -> std::string\n"
 		"XMLControl_dataTypeToString(DataType dataType) -> std::string\n"
@@ -104194,16 +103653,16 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"loadPluginDir", _wrap_loadPluginDir, METH_VARARGS, (char *)"loadPluginDir(std::string const & pluginDir)"},
 	 { (char *)"loadXmlDataContentHandler", _wrap_loadXmlDataContentHandler, METH_VARARGS, (char *)"loadXmlDataContentHandler()"},
 	 { (char *)"parseData", _wrap_parseData, METH_VARARGS, (char *)"\n"
-		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >\n"
-		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >\n"
+		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> mem::AutoPtr< six::Data >\n"
+		"parseData(XMLControlRegistry const & xmlReg, ::io::InputStream & xmlStream, VectorString schemaPaths, logging::Logger & log) -> mem::AutoPtr< six::Data >\n"
 		""},
 	 { (char *)"parseDataFromFile", _wrap_parseDataFromFile, METH_VARARGS, (char *)"\n"
-		"parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >\n"
-		"parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >\n"
+		"parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> mem::AutoPtr< six::Data >\n"
+		"parseDataFromFile(XMLControlRegistry const & xmlReg, std::string const & pathname, VectorString schemaPaths, logging::Logger & log) -> mem::AutoPtr< six::Data >\n"
 		""},
 	 { (char *)"parseDataFromString", _wrap_parseDataFromString, METH_VARARGS, (char *)"\n"
-		"parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >\n"
-		"parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> mem::auto_ptr< six::Data >\n"
+		"parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, DataType dataType, VectorString schemaPaths, logging::Logger & log) -> mem::AutoPtr< six::Data >\n"
+		"parseDataFromString(XMLControlRegistry const & xmlReg, std::string const & xmlStr, VectorString schemaPaths, logging::Logger & log) -> mem::AutoPtr< six::Data >\n"
 		""},
 	 { (char *)"getErrors", _wrap_getErrors, METH_VARARGS, (char *)"getErrors(ErrorStatistics errorStats, RgAzDouble sampleSpacing, Errors errors)"},
 	 { (char *)"findSchemaPath", _wrap_findSchemaPath, METH_VARARGS, (char *)"findSchemaPath(std::string const & progname) -> std::string"},
@@ -104226,9 +103685,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_XMLControlRegistry", _wrap_new_XMLControlRegistry, METH_VARARGS, (char *)"new_XMLControlRegistry() -> XMLControlRegistry"},
 	 { (char *)"delete_XMLControlRegistry", _wrap_delete_XMLControlRegistry, METH_VARARGS, (char *)"delete_XMLControlRegistry(XMLControlRegistry self)"},
 	 { (char *)"XMLControlRegistry_addCreator", _wrap_XMLControlRegistry_addCreator, METH_VARARGS, (char *)"\n"
-		"addCreator(std::string const & identifier, mem::auto_ptr< six::XMLControlCreator > creator)\n"
+		"addCreator(std::string const & identifier, mem::AutoPtr< six::XMLControlCreator > creator)\n"
 		"addCreator(std::string const & identifier, XMLControlCreator creator)\n"
-		"addCreator(DataType dataType, mem::auto_ptr< six::XMLControlCreator > creator)\n"
+		"addCreator(DataType dataType, mem::AutoPtr< six::XMLControlCreator > creator)\n"
 		"XMLControlRegistry_addCreator(XMLControlRegistry self, DataType dataType, XMLControlCreator creator)\n"
 		""},
 	 { (char *)"XMLControlRegistry_newXMLControl", _wrap_XMLControlRegistry_newXMLControl, METH_VARARGS, (char *)"\n"
@@ -104236,14 +103695,6 @@ static PyMethodDef SwigMethods[] = {
 		"XMLControlRegistry_newXMLControl(XMLControlRegistry self, DataType dataType, logging::Logger * log) -> XMLControl\n"
 		""},
 	 { (char *)"XMLControlRegistry_swigregister", XMLControlRegistry_swigregister, METH_VARARGS, nullptr},
-	 { (char *)"toXMLString", _wrap_toXMLString, METH_VARARGS, (char *)"\n"
-		"toXMLString(Data data, XMLControlRegistry xmlRegistry=None) -> std::string\n"
-		"toXMLString(Data data) -> std::string\n"
-		""},
-	 { (char *)"toValidXMLString", _wrap_toValidXMLString, METH_VARARGS, (char *)"\n"
-		"toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log, XMLControlRegistry xmlRegistry=None) -> std::string\n"
-		"toValidXMLString(Data data, VectorString schemaPaths, logging::Logger * log) -> std::string\n"
-		""},
 	 { (char *)"new_GeoInfo", _wrap_new_GeoInfo, METH_VARARGS, (char *)"new_GeoInfo() -> GeoInfo"},
 	 { (char *)"delete_GeoInfo", _wrap_delete_GeoInfo, METH_VARARGS, (char *)"delete_GeoInfo(GeoInfo self)"},
 	 { (char *)"GeoInfo_name_set", _wrap_GeoInfo_name_set, METH_VARARGS, (char *)"GeoInfo_name_set(GeoInfo self, std::string const & name)"},
@@ -105263,21 +104714,21 @@ static swig_type_info _swigt__p_std__allocatorT_mem__ScopedCopyablePtrT_six__Geo
 static swig_type_info _swigt__p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t = {"_p_std__allocatorT_mem__ScopedCopyablePtrT_six__MatchType_t_t", "std::allocator< mem::ScopedCopyablePtr< six::MatchType > > *|std::vector< mem::ScopedCopyablePtr< six::MatchType > >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_six__MatchCollect_t = {"_p_std__allocatorT_six__MatchCollect_t", "std::vector< six::MatchCollect >::allocator_type *|std::allocator< six::MatchCollect > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_six__MatchType_t = {"_p_std__allocatorT_six__MatchType_t", "std::vector< six::MatchType >::allocator_type *|std::allocator< six::MatchType > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__AmplitudeTable_t = {"_p_std__auto_ptrT_six__AmplitudeTable_t", "mem::auto_ptr< six::AmplitudeTable > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__CollectionInformation_t = {"_p_std__auto_ptrT_six__CollectionInformation_t", "mem::auto_ptr< six::CollectionInformation > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__Components_t = {"_p_std__auto_ptrT_six__Components_t", "mem::auto_ptr< six::Components > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__CompositeSCP_t = {"_p_std__auto_ptrT_six__CompositeSCP_t", "mem::auto_ptr< six::CompositeSCP > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__CorrCoefs_t = {"_p_std__auto_ptrT_six__CorrCoefs_t", "mem::auto_ptr< six::CorrCoefs > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__ErrorStatistics_t = {"_p_std__auto_ptrT_six__ErrorStatistics_t", "mem::auto_ptr< six::ErrorStatistics > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__GeoInfo_t = {"_p_std__auto_ptrT_six__GeoInfo_t", "mem::auto_ptr< six::GeoInfo > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__IonoError_t = {"_p_std__auto_ptrT_six__IonoError_t", "mem::auto_ptr< six::IonoError > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__MatchInformation_t = {"_p_std__auto_ptrT_six__MatchInformation_t", "mem::auto_ptr< six::MatchInformation > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__MatchType_t = {"_p_std__auto_ptrT_six__MatchType_t", "mem::auto_ptr< six::MatchType > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__PosVelError_t = {"_p_std__auto_ptrT_six__PosVelError_t", "mem::auto_ptr< six::PosVelError > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__RadarSensor_t = {"_p_std__auto_ptrT_six__RadarSensor_t", "mem::auto_ptr< six::RadarSensor > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__Radiometric_t = {"_p_std__auto_ptrT_six__Radiometric_t", "mem::auto_ptr< six::Radiometric > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__TropoError_t = {"_p_std__auto_ptrT_six__TropoError_t", "mem::auto_ptr< six::TropoError > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__auto_ptrT_six__XMLControlCreator_t = {"_p_std__auto_ptrT_six__XMLControlCreator_t", "mem::auto_ptr< six::XMLControlCreator > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__AmplitudeTable_t = {"_p_std__auto_ptrT_six__AmplitudeTable_t", "mem::AutoPtr< six::AmplitudeTable > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__CollectionInformation_t = {"_p_std__auto_ptrT_six__CollectionInformation_t", "mem::AutoPtr< six::CollectionInformation > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__Components_t = {"_p_std__auto_ptrT_six__Components_t", "mem::AutoPtr< six::Components > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__CompositeSCP_t = {"_p_std__auto_ptrT_six__CompositeSCP_t", "mem::AutoPtr< six::CompositeSCP > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__CorrCoefs_t = {"_p_std__auto_ptrT_six__CorrCoefs_t", "mem::AutoPtr< six::CorrCoefs > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__ErrorStatistics_t = {"_p_std__auto_ptrT_six__ErrorStatistics_t", "mem::AutoPtr< six::ErrorStatistics > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__GeoInfo_t = {"_p_std__auto_ptrT_six__GeoInfo_t", "mem::AutoPtr< six::GeoInfo > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__IonoError_t = {"_p_std__auto_ptrT_six__IonoError_t", "mem::AutoPtr< six::IonoError > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__MatchInformation_t = {"_p_std__auto_ptrT_six__MatchInformation_t", "mem::AutoPtr< six::MatchInformation > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__MatchType_t = {"_p_std__auto_ptrT_six__MatchType_t", "mem::AutoPtr< six::MatchType > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__PosVelError_t = {"_p_std__auto_ptrT_six__PosVelError_t", "mem::AutoPtr< six::PosVelError > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__RadarSensor_t = {"_p_std__auto_ptrT_six__RadarSensor_t", "mem::AutoPtr< six::RadarSensor > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__Radiometric_t = {"_p_std__auto_ptrT_six__Radiometric_t", "mem::AutoPtr< six::Radiometric > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__TropoError_t = {"_p_std__auto_ptrT_six__TropoError_t", "mem::AutoPtr< six::TropoError > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__auto_ptrT_six__XMLControlCreator_t = {"_p_std__auto_ptrT_six__XMLControlCreator_t", "mem::AutoPtr< six::XMLControlCreator > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__mapT_std__string_six__Parameter_t__const_iterator = {"_p_std__mapT_std__string_six__Parameter_t__const_iterator", "std::map< std::string,six::Parameter >::const_iterator *|six::Options::ParameterIter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};

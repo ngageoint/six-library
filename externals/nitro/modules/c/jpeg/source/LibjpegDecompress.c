@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #if defined(WIN32) || defined(_WIN32)
+    #undef BIGENDIAN
     #include <Winsock2.h>
 #else
     #include <netinet/in.h>
@@ -219,7 +220,7 @@ NITFPRIV(void) JPEGMarkerItem_printList(
  *  will be populated
  *  \return One on success, zero on failure
  */
-NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
+NITFPRIV(NITF_BOOL) implFreeBlock(nitf_DecompressionControl* control,
                             uint8_t* block,
                             nitf_Error* error);
 
@@ -491,7 +492,7 @@ static nitf_DecompressionInterface interfaceTable =
     NULL
 };
 
-NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
+NITFPRIV(NITF_BOOL) implFreeBlock(nitf_DecompressionControl* control,
                             uint8_t* block,
                             nitf_Error* error)
 {
@@ -826,7 +827,7 @@ NITFPRIV(NITF_BOOL) scanOffsets(nitf_IOInterface* io,
     /*  Book keeping block  */
     const nitf_Off origin_ = nitf_IOInterface_tell(io, error);
     assert(NITF_IO_SUCCESS(origin_));
-    uint64_t origin = origin_;
+    const uint64_t origin = origin_;
     /*  End book keeping block  */
     DPRINTA1("File length: %ld\n",  fileLength);
     while (bytesRead < fileLength)
@@ -862,9 +863,11 @@ NITFPRIV(NITF_BOOL) scanOffsets(nitf_IOInterface* io,
             {
                 off_t where = (off_t)nitf_IOInterface_tell(io, error);
 
-                uint64_t totalBytes = (fileLength - bytesRead) +
-                    (where - origin);
+                (void)origin;
+                #ifndef NDEBUG // i.e., debug
+                const uint64_t totalBytes = (fileLength - bytesRead) +  (where - origin);
                 assert( fileLength == totalBytes);
+                #endif
                 switch (tokenType)
                 {
                 case JPEG_MARKER_EOI:
@@ -1061,7 +1064,7 @@ NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
         while (nitf_ListIterator_notEqualTo(&x, &e))
 
         {
-            JPEGMarkerItem *item = nitf_ListIterator_get(&x);
+            JPEGMarkerItem *item = (JPEGMarkerItem*) nitf_ListIterator_get(&x);
             DPRINTA2("[%s:%d]", item->name, item->off );
 
             if (strcmp(item->name, "SOI") == 0)
@@ -1335,7 +1338,7 @@ NITFPRIV(uint8_t*) implReadBlock(nitf_DecompressionControl* control,
     JPEGBlock* block;
     NITF_DATA *uncompressed;
 
-    if (!findBlockSOI(control, blockNumber, &soi, error))
+    if (!findBlockSOI((JPEGImplControl*)control, blockNumber, &soi, error))
 #ifdef ZERO_BLOCK
     {
         uint8_t *zeros; /* Buffer of zeros */
@@ -1485,12 +1488,12 @@ NITFPRIV(uint8_t*) implReadBlock(nitf_DecompressionControl* control,
         JPEGBlock_reorder(block);
     }
 
-    uncompressed = (uint8_t*)(block->uncompressed);
+    uncompressed = (block->uncompressed);
     block->uncompressed = NULL;
     *blockSize = block_size(block);
     JPEGBlock_destruct(&block);
 
-    return uncompressed;
+    return (uint8_t*)uncompressed;
 }
 
 
@@ -1668,3 +1671,5 @@ NITFPRIV(void) hexDump(char *buffer, int size)
 }
 
 */
+
+NRT_ENDGUARD

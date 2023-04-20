@@ -20,38 +20,31 @@
  *
  */
 
+#include <assert.h>
+
 #include <stdexcept>
 #include <tuple>
+#include <std/string>
 
 #include "xml/lite/Element.h"
 #include <import/str.h>
 #include <import/mem.h>
 #include <sys/OS.h>
+#include <str/Encoding.h>
 #include <str/EncodedStringView.h>
-
-constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
-        ? xml::lite::StringEncoding::Windows1252
-        : xml::lite::StringEncoding::Utf8;
+#include "xml/lite/Attributes.h"
 
 std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const std::string& qname, const std::string& uri, const std::string& characterData)
 {
-    return coda_oss::make_unique<Element>(qname, uri, characterData, PlatformEncoding);
-}
-std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const std::string& qname, const Uri& uri, const std::string& characterData)
-{
-    return create(qname, uri.value, characterData);
+    return std::make_unique<Element>(qname, uri, characterData);
 }
 std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const QName& qname, const std::string& characterData)
 {
-    return create(qname.getName(), qname.getUri(), characterData);
+    return create(qname.getName(), qname.getUri().value, characterData);
 }
 std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const QName& qname, const coda_oss::u8string& characterData)
 {
-    return coda_oss::make_unique<Element>(qname.getName(), qname.getUri().value,  characterData);
-}
-std::unique_ptr<xml::lite::Element> xml::lite::Element::createU8(const QName& qname, const std::string& characterData)
-{
-    return create(qname,  str::to_u8string(characterData));
+    return std::make_unique<Element>(qname,  characterData);
 }
 
 xml::lite::Element::Element(const xml::lite::Element& node)
@@ -64,11 +57,9 @@ xml::lite::Element& xml::lite::Element::operator=(const xml::lite::Element& node
     {
         mName = node.mName;
         mCharacterData = node.mCharacterData;
-        mEncoding = node.mEncoding;
         mAttributes = node.mAttributes;
         mChildren = node.mChildren;
         mParent = node.mParent;
-        mEncoding = node.mEncoding;
     }
     return *this;
 }
@@ -244,10 +235,6 @@ void xml::lite::Element::print(io::OutputStream& stream) const
 {
     depthPrint(stream, 0, "");
 }
-void xml::lite::Element::print(io::OutputStream& stream, StringEncoding encoding) const
-{
-    depthPrint(stream, encoding, 0, "");
-}
 
 void xml::lite::Element::prettyPrint(io::OutputStream& stream,
                                      const std::string& formatter) const
@@ -255,150 +242,108 @@ void xml::lite::Element::prettyPrint(io::OutputStream& stream,
     depthPrint(stream, 0, formatter);
     stream.writeln("");
 }
-void xml::lite::Element::prettyPrint(io::OutputStream& stream, StringEncoding encoding,
+
+void xml::lite::Element::consoleOutput_(io::OutputStream& stream) const
+{
+    depthPrint(stream, 0, "", true /*isConsoleOutput*/);
+}
+void xml::lite::Element::prettyConsoleOutput_(io::OutputStream& stream,
                                      const std::string& formatter) const
 {
-    depthPrint(stream, encoding, 0, formatter);
+    depthPrint(stream, 0, formatter, true /*isConsoleOutput*/);
     stream.writeln("");
 }
 
-static xml::lite::StringEncoding getEncoding_(const coda_oss::optional<xml::lite::StringEncoding>& encoding)
-{
-    if (encoding.has_value())
-    {
-        if (encoding == xml::lite::StringEncoding::Utf8) { }
-        else if (encoding == xml::lite::StringEncoding::Windows1252) { }
-        else
-        {
-            throw std::logic_error("Unknown encoding.");
-        }
-        return *encoding;
-    }
 
-    // don't know the encoding ... assume a default based on the platform
-    return PlatformEncoding;
+std::string xml::lite::Element::getCharacterData() const
+{
+    return str::EncodedStringView(mCharacterData).native();
+}
+coda_oss::u8string& xml::lite::Element::getCharacterData(coda_oss::u8string& result) const
+{
+    result = mCharacterData;
+    return result;
+}
+coda_oss::u8string xml::lite::getCharacterData(const Element& e)
+{
+    coda_oss::u8string retval;
+    return e.getCharacterData(retval);
 }
 
-void xml::lite::Element::getCharacterData(coda_oss::u8string& result) const
+static void writeCharacterData_utf8(io::OutputStream& stream, const std::u8string& characterData)
 {
-    const auto encoding = ::getEncoding_(this->getEncoding());
-
-    str::EncodedStringView view;
-    if (encoding == xml::lite::StringEncoding::Utf8)
-    {
-        view = str::EncodedStringView::fromUtf8(mCharacterData);
-    }
-    else if (encoding == xml::lite::StringEncoding::Windows1252)
-    {
-        view = str::EncodedStringView::fromWindows1252(mCharacterData);
-    }
-    else
-    {
-        throw std::logic_error("getCharacterData(): unknown encoding");
-    }
-
-    result = view.u8string(); // copy or conversion
+    stream.write(characterData);  // call UTF-8 overload
+}
+static void writeCharacterData_native(io::OutputStream& stream, const std::u8string& characterData)
+{
+    stream.write(str::EncodedStringView(characterData).native());
 }
 
-static void writeCharacterData(io::OutputStream& stream,
-    const std::string& characterData, const coda_oss::optional<xml::lite::StringEncoding>& encoding_)
+static void depthPrint_(const xml::lite::Element& element,
+    io::OutputStream& stream, int depth, const std::string& formatter,
+    void(*writeCharacterData)(io::OutputStream&, const std::u8string&))
 {
-    const auto encoding = getEncoding_(encoding_);
-    if (encoding == xml::lite::StringEncoding::Windows1252)
-    {
-        // need to convert before writing
-        const auto view = str::EncodedStringView::fromWindows1252(characterData);
-        stream.write(view.u8string());
-    }
-    else if (encoding == xml::lite::StringEncoding::Utf8)
-    {
-        // already in UTF-8, no converstion necessary
-        auto pUtf8 = str::c_str<coda_oss::u8string::const_pointer>(characterData);
-        stream.write(pUtf8, characterData.length()); // call UTF-8 overload
-    }
-    else
-    {
-        throw std::logic_error("writeCharacterData(): unknown encoding");
-    }
-}
+    // XML must be stored in UTF-8 (or UTF-16/32), in particular, not Windows-1252. 
+    //
+    // Except for a special exception for writing to the console: UTF-8 won't display well on Windows
+    // and Windows-1252 won't display nicely on Linux.  Of course, "console output" is a bit
+    // iffy since both Windows and Linux support redirection ... so the user could still generate
+    // a bad XML file.
 
-void xml::lite::Element::depthPrint(io::OutputStream& stream,
-                                    int depth,
-                                    const std::string& formatter) const
-{
-    // XML must be stored in UTF-8 (or UTF-16/32), in particular, not
-    // Windows-1252. However, existing code did this, so preserve current behavior.
-    depthPrint(stream, false /*utf8*/, depth, formatter);
-}
-void xml::lite::Element::depthPrint(io::OutputStream& stream, StringEncoding encoding,
-                                    int depth,
-                                    const std::string& formatter) const
-{
-    if (encoding != StringEncoding::Utf8)
-    {
-        throw std::invalid_argument("'encoding' must be UTF-8");
-    }
-    // THIS IS CORRECT, but may break existing code; so it must be explicitly requested.
-    depthPrint(stream, true /*utf8*/, depth, formatter);
-}
-void xml::lite::Element::depthPrint(io::OutputStream& stream, bool utf8,
-                                    int depth,
-                                    const std::string& formatter) const
-{
     std::string prefix = "";
     for (int i = 0; i < depth; ++i)
         prefix += formatter;
 
     // Printing in XML form, recursively
     std::string lBrack = "<";
-    std::string rBrack = ">";
+    static const std::string rBrack = ">";
 
-    std::string acc = prefix + lBrack + mName.toString();
+    const auto name = element.getQName();
+    std::string acc = prefix + lBrack + name;
 
-    for (int i = 0; i < mAttributes.getLength(); i++)
+    auto&& attributes = element.getAttributes();
+    for (int i = 0; i < attributes.getLength(); i++)
     {
         acc += std::string(" ");
-        acc += mAttributes.getQName(i);
+        acc += attributes.getQName(i);
         acc += std::string("=\"");
-        acc += mAttributes.getValue(i);
+        acc += attributes.getValue(i);
         acc += std::string("\"");
     }
 
-    if (mCharacterData.empty()&& mChildren.empty())
+    const auto characterData = getCharacterData(element);
+    auto&& children = element.getChildren();
+    if (characterData.empty() && children.empty())
     {
         //simple type - just end it here
         stream.write(acc + "/" + rBrack);
     }
     else
     {
-        stream.write(acc + rBrack);
-        if (utf8)
-        {
-            // Correct behavior, but may break existing code.
-            writeCharacterData(stream, mCharacterData, getEncoding());
-        }
-        else
-        {
-            // Legacy behavior, will generate incorrect XML output if there are western European
-            // characters in "mCharacterData".
-            stream.write(mCharacterData);
-        }
+        stream.write(acc + rBrack);            
+        writeCharacterData(stream, characterData);
 
-        for (unsigned int i = 0; i < mChildren.size(); i++)
+        for (auto&& child: children)
         {
             if (!formatter.empty())
                 stream.write("\n");
-            mChildren[i]->depthPrint(stream, utf8, depth + 1, formatter);
+            depthPrint_(*child, stream, depth + 1, formatter, writeCharacterData);
         }
 
-        if (!mChildren.empty() && !formatter.empty())
+        if (!children.empty() && !formatter.empty())
         {
             stream.write("\n" + prefix);
         }
 
         lBrack += "/";
-        stream.write(lBrack + mName.toString() + rBrack);
+        stream.write(lBrack + name + rBrack);
     }
+}
+void xml::lite::Element::depthPrint(io::OutputStream& stream, int depth, const std::string& formatter, bool isConsoleOutput) const
+{
+    const auto f = isConsoleOutput ? writeCharacterData_native // write to the console using the platform native encoding
+        : writeCharacterData_utf8;
+    depthPrint_(*this, stream, depth, formatter, f);
 }
 
 void xml::lite::Element::addChild(xml::lite::Element * node)
@@ -413,12 +358,6 @@ xml::lite::Element& xml::lite::Element::addChild(std::unique_ptr<xml::lite::Elem
     addChild(node.release());
     return *retval;
 }
-#if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-xml::lite::Element& xml::lite::Element::addChild(mem::auto_ptr<xml::lite::Element> node)
-{
-    return addChild(std::unique_ptr<xml::lite::Element>(node.release()));
-}
-#endif
 
 void xml::lite::Element::changePrefix(Element* element,
     const std::string& prefix, const std::string& uri)
@@ -522,29 +461,19 @@ void xml::lite::Element::setNamespaceURI(
     attr[std::string("xmlns:") + prefix] = uri;
 }
 
-void xml::lite::Element::setCharacterData_(const std::string& characters, const StringEncoding* pEncoding)
-{
-    mCharacterData = characters;
-    if (pEncoding != nullptr)
-    {
-        mEncoding = *pEncoding;
-    }
-    else
-    {
-        mEncoding.reset();
-    }
-}
 void xml::lite::Element::setCharacterData(const std::string& characters)
 {
-    setCharacterData_(characters, nullptr /*pEncoding*/);
+    mCharacterData = str::EncodedStringView(characters).u8string();
 }
-void xml::lite::Element::setCharacterData(const std::string& characters, StringEncoding encoding)
+xml::lite::Element& xml::lite::Element::operator=(const std::string& characterData)
 {
-    setCharacterData_(characters, &encoding);
+    setCharacterData(characterData);
+    return *this;
 }
-void xml::lite::Element::setCharacterData(const coda_oss::u8string& characters)
+xml::lite::Element& xml::lite::Element::operator=(const char* characterData)
 {
-    setCharacterData(str::c_str<std::string::const_pointer>(characters), StringEncoding::Utf8);
+    *this = std::string(characterData);
+    return *this;
 }
 
 xml::lite::Element& xml::lite::add(const QName& qname,
@@ -555,3 +484,78 @@ xml::lite::Element& xml::lite::add(const QName& qname,
     return parent.addChild(std::move(elem));
 }
 
+void xml::lite::operator+=(Element& e, std::unique_ptr<xml::lite::Element>&& child)
+{
+    std::ignore = e.addChild(std::move(child));
+}
+
+xml::lite::Element& xml::lite::addChild(Element& e, const std::string& qname, const Uri& uri, const coda_oss::u8string& characterData)
+{
+    return e.addChild(Element::create(QName(qname, uri), characterData));
+}
+xml::lite::Element& xml::lite::addChild(Element& e, const std::string& qname, const Uri& uri)
+{
+    return e.addChild(Element::create(QName(qname, uri)));
+}
+
+xml::lite::Element& xml::lite::addChild(Element& e, const QName& qname, const coda_oss::u8string& characterData)
+{
+    return e.addChild(Element::create(qname, characterData));
+}
+xml::lite::Element& xml::lite::addChild(Element& e, const QName& qname, const std::string& characterData)
+{
+    return addChild(e, qname, str::EncodedStringView(characterData).u8string());
+}
+xml::lite::Element& xml::lite::addChild(Element& e, const QName& qname)
+{
+    return e.addChild(Element::create(qname));
+}
+void xml::lite::operator+=(Element& e, const QName& qname)
+{
+    std::ignore = addChild(e, qname);
+}
+
+xml::lite::Element& xml::lite::addChild(Element& e, const std::string& qname, const coda_oss::u8string& characterData)
+{
+    return addChild(e, QName(qname), characterData);
+}
+xml::lite::Element& xml::lite::addChild(Element& e, const std::string& qname)
+{
+    return addChild(e, QName(qname));
+}
+void xml::lite::operator+=(Element& e, const std::string& qname)
+{
+    std::ignore = addChild(e, qname);
+}
+
+xml::lite::Element& xml::lite::setChild(Element& e, std::unique_ptr<Element>&& child)
+{
+    e.destroyChildren();
+    return e.addChild(std::move(child));
+}
+xml::lite::Element& xml::lite::Element::operator=(std::unique_ptr<Element>&& child)
+{
+    std::ignore = setChild(*this, std::move(child));
+    return *this;
+}
+
+xml::lite::AttributeNode& xml::lite::addAttribute(Element& e, const AttributeNode& a)
+{
+    return e.getAttributes().add(a);
+}
+void xml::lite::operator+=(Element& e, const AttributeNode& a)
+{
+    std::ignore = addAttribute(e, a);
+}
+xml::lite::AttributeNode& xml::lite::addAttribute(Element& e, const QName& name, const std::string& value)
+{
+    return addAttribute(e, AttributeNode(name, value));
+}
+xml::lite::AttributeNode& xml::lite::addAttribute(Element& e, const QName& name)
+{
+    return addAttribute(e, AttributeNode(name));
+}
+xml::lite::AttributeNode& xml::lite::addAttribute(Element& e, const std::string& name)
+{
+    return addAttribute(e, QName(name));
+}

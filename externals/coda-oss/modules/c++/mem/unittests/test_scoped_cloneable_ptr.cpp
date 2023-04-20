@@ -27,8 +27,6 @@
 
 #include "TestCase.h"
 
-namespace
-{
 struct Foo final
 {
     int val1 = 0;
@@ -209,10 +207,8 @@ TEST_CASE(testEqualityOperator)
 
     TEST_ASSERT_FALSE(ptr1 != ptr2);
 }
-}
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testCopyConstructor);
     TEST_CHECK(testSharedCopyConstructor);
     TEST_CHECK(testAssignmentOperator);
@@ -220,6 +216,4 @@ int main(int, char**)
     TEST_CHECK(testDestructor);
     TEST_CHECK(testSyntax);
     TEST_CHECK(testEqualityOperator);
-
-    return 0;
-}
+    )

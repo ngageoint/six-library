@@ -1,6 +1,11 @@
 set(MODULE_NAME xml.lite)
 
 if(ENABLE_XML)
+    if (UNIX)
+       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-zero-as-null-pointer-constant")
+       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-suggest-override")
+    endif()
+
     if(CONAN_PACKAGE_NAME)
         # import targets from xerces-c conan package
         find_package(coda-oss_xerces-c REQUIRED)
@@ -17,8 +22,7 @@ if(ENABLE_XML)
     coda_add_module(
         ${MODULE_NAME}
         VERSION 1.2
-        DEPS ${MODULE_DEPS}
-        SOURCE_FILTER "XMLReaderExpat.cpp" "XMLReaderLibXML.cpp")
+        DEPS ${MODULE_DEPS})
 
     coda_add_tests(
         MODULE_NAME ${MODULE_NAME}

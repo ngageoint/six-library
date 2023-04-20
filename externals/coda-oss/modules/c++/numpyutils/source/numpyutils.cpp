@@ -110,7 +110,7 @@ void verifyArrayType(PyObject *pyObject, int typeNum)
     verifyType(pyObject, typeNum);
 }
 
-const npy_intp* const getDimensions(PyObject* pyArrayObject)
+const npy_intp* getDimensions(PyObject* pyArrayObject)
 {
     verifyArray(pyArrayObject);
     int ndims = PyArray_NDIM(reinterpret_cast<PyArrayObject*>(pyArrayObject));

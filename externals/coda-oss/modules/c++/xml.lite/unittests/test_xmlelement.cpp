@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of io-c++
+ * This file is part of xml.lite-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
- * io-c++ is free software; you can redistribute it and/or modify
+ * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,12 +20,22 @@
  *
  */
 
-#include <string>
-
+#include <std/string>
+#include "coda_oss/CPlusPlus.h"
 #include "io/StringStream.h"
 #include <TestCase.h>
 
 #include "xml/lite/MinidomParser.h"
+
+// It seems that a macro is better than a utility routine, see https://github.com/tahonermann/char8_t-remediation
+// C++20 changed the type of u8 to char8_t* https://en.cppreference.com/w/cpp/language/string_literal
+// Not putting this everywhere because (1) well, it's a macro, and (2) it's mostly
+// only test code that uses string literals.
+#if CODA_OSS_cpp20
+#define U8(s) u8##s
+#else
+#define U8(s) static_cast<const std::char8_t*>(static_cast<const void*>(s))
+#endif
 
 static const std::string text = "TEXT";
 static const std::string strXml1_ = R"(
@@ -64,64 +74,6 @@ struct test_MinidomParser final
     }
 };
 
-TEST_CASE(test_CloneCopy_root_encoding)
-{
-    {
-        test_MinidomParser xmlParser;
-        auto& root_ = xmlParser.getRootElement();
-        root_.setCharacterData("abc", xml::lite::StringEncoding::Utf8);
-        const auto& root = root_;
-        TEST_ASSERT_TRUE(root.getEncoding().has_value());
-
-        xml::lite::Element copy;
-        copy.clone(root);
-        copy.clearChildren();
-        TEST_ASSERT_TRUE(copy.getEncoding().has_value());
-        copy.setCharacterData("xyz");
-        TEST_ASSERT_FALSE(copy.getEncoding().has_value());
-        TEST_ASSERT_TRUE(root.getEncoding().has_value());
-
-        root_.setCharacterData("123");
-        TEST_ASSERT_FALSE(root.getEncoding().has_value());
-    }
-    {
-        test_MinidomParser xmlParser;
-        auto& root_ = xmlParser.getRootElement();
-        root_.setCharacterData("abc", xml::lite::StringEncoding::Utf8);
-        const auto& root = root_;
-
-        xml::lite::Element copy;
-        copy.clone(root);
-        copy.clearChildren();
-        TEST_ASSERT_TRUE(copy.getEncoding().has_value());
-        copy.setCharacterData("xyz", xml::lite::StringEncoding::Windows1252);
-        TEST_ASSERT_TRUE(copy.getEncoding().has_value());
-        TEST_ASSERT_TRUE(root.getEncoding().has_value());
-        TEST_ASSERT(*root.getEncoding() != *copy.getEncoding());
-
-        root_.setCharacterData("123");
-        TEST_ASSERT_FALSE(root.getEncoding().has_value());
-        TEST_ASSERT_TRUE(copy.getEncoding().has_value());
-    }
-}
-
-TEST_CASE(test_CloneCopy_copy_encoding)
-{
-    test_MinidomParser xmlParser;
-    auto& root_ = xmlParser.getRootElement();
-    root_.setCharacterData("abc");
-    const auto& root = root_;
-    TEST_ASSERT_FALSE(root.getEncoding().has_value());
-
-    xml::lite::Element copy;
-    copy.clone(root);
-    copy.clearChildren();
-    TEST_ASSERT_FALSE(copy.getEncoding().has_value());
-    copy.setCharacterData("xyz", xml::lite::StringEncoding::Utf8);
-    TEST_ASSERT_TRUE(copy.getEncoding().has_value());
-    TEST_ASSERT_FALSE(root.getEncoding().has_value());
-}
-
 TEST_CASE(test_getRootElement)
 {
     io::StringStream ss;
@@ -158,8 +110,6 @@ TEST_CASE(test_getElementsByTagName)
 
         const auto characterData = a.getCharacterData();
         TEST_ASSERT_EQ(characterData, text);
-        const auto encoding = a.getEncoding();
-        TEST_ASSERT_FALSE(encoding.has_value());
     }
 }
 
@@ -283,7 +233,7 @@ TEST_CASE(test_getValue)
         const auto& e = root.getElementByTagName("bool", true /*recurse*/);
         auto toType = [](const std::string& value) { return value == "yes"; };
 
-        bool value;
+        bool value = false;
         auto result = castValue(e, value, toType);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(true, value);
@@ -385,7 +335,7 @@ TEST_CASE(test_setValue)
         setValue(e, true, toString);
         
         auto toType = [](const std::string& value) { return value == "yes"; };
-        bool value;
+        bool value = false;
         auto result = castValue(e, value, toType);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(true, value);
@@ -398,9 +348,6 @@ TEST_CASE(test_setValue)
 
 int main(int, char**)
 {
-    TEST_CHECK(test_CloneCopy_root_encoding);
-    TEST_CHECK(test_CloneCopy_copy_encoding);
-
     TEST_CHECK(test_getRootElement);
     TEST_CHECK(test_getElementsByTagName);
     TEST_CHECK(test_getElementsByTagName_duplicate);

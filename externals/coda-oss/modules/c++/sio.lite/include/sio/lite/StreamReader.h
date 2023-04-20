@@ -140,7 +140,7 @@ public:
     sio::lite::FileHeader* readHeader() { return header; }
 
 
-    sys::Off_T available()
+    sys::Off_T available() override
     {
         return inputStream->available();
     }
@@ -156,7 +156,7 @@ protected:
      *  @param size the Number of bytes to read
      *  @return The number of bytes read
      */
-    virtual sys::SSize_T readImpl(void* buffer, size_t size)
+    virtual sys::SSize_T readImpl(void* buffer, size_t size) override
     {
         return inputStream->read(buffer, size);
     }

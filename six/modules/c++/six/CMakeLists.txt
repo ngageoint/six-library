@@ -1,7 +1,8 @@
 coda_add_module(
     six
     DEPS XML_DATA_CONTENT-static-c nitf-c++
-         scene-c++ logging-c++ xml.lite-c++
+         scene-c++ logging-c++ xml.lite-c++ sys-c++ str-c++
+         except-c++ types-c++ config-c++ gsl-c++ std-c++
          ${CMAKE_DL_LIBS}
     SOURCES
         source/Adapters.cpp
@@ -11,6 +12,7 @@ coda_add_module(
         source/CompressedByteProvider.cpp
         source/Container.cpp
         source/Data.cpp
+        source/Enums.cpp
         source/ErrorStatistics.cpp
         source/GeoDataBase.cpp
         source/GeoInfo.cpp

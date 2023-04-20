@@ -24,7 +24,7 @@
 #define __MT_BASIC_THREAD_POOL_H__
 
 #include <vector>
-#include <memory>
+#include <std/memory>
 
 #include "except/Exception.h"
 #include "sys/Mutex.h"
@@ -139,7 +139,7 @@ protected:
     // For instance, you may want an IterativeRequestHandler
     virtual RequestHandler_T *newRequestHandler()
     {
-        return coda_oss::make_unique<RequestHandler_T>(&mHandlerQueue).release();
+        return std::make_unique<RequestHandler_T>(&mHandlerQueue).release();
     }
 
     void destroy()

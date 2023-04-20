@@ -36,6 +36,10 @@ NITF_CXX_GUARD
  *  out of the public realm.
  */
 #define NITF_TRECursor_tag_str_LEN 256
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_TRECursor
 {
     /* DO NOT TOUCH THESE! */
@@ -58,7 +62,9 @@ typedef struct _nitf_TRECursor
                                      * actual, possibly computed length. */
 }
 nitf_TRECursor;
-
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*!
  *  Initializes the cursor

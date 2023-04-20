@@ -26,7 +26,7 @@
 
 #include "sys/AbstractOS.h"
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 
 /*!
  *  \file OSWin32.h
@@ -46,7 +46,7 @@ namespace sys
  *  This class is the abstraction layer as defined for
  *  the windows operating system.
  */
-struct OSWin32 final : public AbstractOS
+struct CODA_OSS_API OSWin32 final : public AbstractOS
 {
     OSWin32() = default;
     virtual ~OSWin32() = default;

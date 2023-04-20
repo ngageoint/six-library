@@ -26,8 +26,6 @@
 #include <io/TempFile.h>
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testTempFileCreation)
 {
     const sys::OS os;
@@ -43,20 +41,17 @@ TEST_CASE(testFileDestroyed)
     {
         const io::TempFile tempFile;
         pathname = tempFile.pathname();
-        std::ofstream out(pathname.c_str());
+        std::ofstream out(pathname);
+        TEST_ASSERT_TRUE(static_cast<bool>(out));
         out << "Test text";
     }
     // File should be destroyed on destruction
     TEST_ASSERT(!os.exists(pathname));
 }
 
-}
-
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testTempFileCreation);
     TEST_CHECK(testFileDestroyed);
-    return 0;
-}
+    )
 
 

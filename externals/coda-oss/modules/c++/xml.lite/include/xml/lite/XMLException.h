@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_XML_EXCEPTION_H__
-#define __XML_LITE_XML_EXCEPTION_H__
+#ifndef CODA_OSS_xml_lite_XMLException_h_INCLUDED_
+#define CODA_OSS_xml_lite_XMLException_h_INCLUDED_
 
 #include "except/Exception.h"
 
@@ -44,7 +44,7 @@ namespace lite
  *  This is the default XML exception, for when
  *  other, more specialized exception make no sense
  */
-DECLARE_EXCEPTION(XML)
+DECLARE_EXCEPTION(XML);
 
 /*!
  *  \class XMLNotRecognizedException
@@ -53,7 +53,7 @@ DECLARE_EXCEPTION(XML)
  *  Provides the derived implementation for bad formatting or
  *  for incorrect processing
  */
-DECLARE_EXTENDED_EXCEPTION(XMLNotRecognized, xml::lite::XMLException)
+DECLARE_EXTENDED_EXCEPTION(XMLNotRecognized, xml::lite::XMLException);
 
 /*!
  *  \class XMLNotSupportedException
@@ -64,7 +64,7 @@ DECLARE_EXTENDED_EXCEPTION(XMLNotRecognized, xml::lite::XMLException)
  *  systems that are not supported by the SAX/DOM standard
  *
  */
-DECLARE_EXTENDED_EXCEPTION(XMLNotSupported, xml::lite::XMLException)
+DECLARE_EXTENDED_EXCEPTION(XMLNotSupported, xml::lite::XMLException);
 
 /*!
  *  \class XMLParseException
@@ -74,16 +74,15 @@ DECLARE_EXTENDED_EXCEPTION(XMLNotSupported, xml::lite::XMLException)
  *  XML exception while processing documents
  *
  */
-class XMLParseException : public XMLException
+struct XMLParseException final : public XMLException
 {
-public:
     /*!
      *  Construct a parse exception
      *  \param message A message as presented by the parser
      *  \param row As reported by the parser
      *  \param column As reported by the parser
      */
-    XMLParseException(const char *message, int row = 0, int column = 0) :
+    explicit XMLParseException(const char *message, int row = 0, int column = 0) :
         XMLException(message)
     {
         form(row, column);
@@ -96,7 +95,7 @@ public:
      *  \param column As reported by the parser
      *  \param errNum An error number given by the parser
      */
-    XMLParseException(const std::string & message, int row = 0, int column = 0,
+    explicit XMLParseException(const std::string & message, int row = 0, int column = 0,
             int errNum = 0) :
         XMLException(message)
     {
@@ -133,9 +132,7 @@ public:
     }
 
     //! Destructor
-    virtual ~ XMLParseException()
-    {
-    }
+    virtual ~XMLParseException() = default;
 
 private:
 
@@ -160,4 +157,4 @@ private:
 };
 }
 }
-#endif
+#endif  // CODA_OSS_xml_lite_XMLException_h_INCLUDED_

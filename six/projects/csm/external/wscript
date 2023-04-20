@@ -33,9 +33,9 @@ def configure(conf):
             #       source files that were needed
             conf.env['HAVE_CSM'] = True
 
-            if Options.options.csm_version == '3.0.3.3':
-                conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-3.0.3.3')
-                conf.env['CSM_DIR'] = 'csm-3.0.3.3'
+            if Options.options.csm_version == '3.0.4':
+                conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-3.0.4')
+                conf.env['CSM_DIR'] = 'csm-3.0.4'
             else:
                 conf.env['INCLUDES_CSM'] = os.path.join(conf.path.abspath(), 'csm-master')
                 conf.env['CSM_DIR'] = 'csm-master'
@@ -56,17 +56,13 @@ def build(bld):
         #       dependency, we could recompile in the CSM source code that we
         #       need to use.
         vtsDir = 'vts_301_0'
-        six_root = '../../../../../..'
-        install = six_root + '/install'
-        coda_oss = six_root + '/externals/coda-oss/modules/c++'
         bld.program(target='vts', name='vts',
-                    includes=['include',
-                        install + '/include',
-                        coda_oss + '/sys/include', coda_oss + '/str/include', coda_oss + '/except/include'],
-                    source=bld.path.find_dir(os.path.join(vtsDir, 'source')).ant_glob('*.cpp'),
-                    use='sys-c++ CSMAPI THREAD DL',
-                    path=bld.path.find_dir(vtsDir),
-                    install_path=bld.env['install_bindir'])
+		module_deps=['sys', 'str', 'std', 'coda_oss', 'gsl', 'except'],
+		includes=['include'],
+		source=bld.path.find_dir(os.path.join(vtsDir, 'source')).ant_glob('*.cpp'),
+		use='sys-c++ std-c++ CSMAPI THREAD DL',
+		path=bld.path.find_dir(vtsDir),
+		install_path=bld.env['install_bindir'])
 
 def distclean(context):
     # remove the unzipped directory

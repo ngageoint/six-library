@@ -61,9 +61,9 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
 // Don't want to set a dummy schema path to a directory that exists as that causes
 // the code to check for valid schemas and validate.
 #if defined(_WIN32)
-#define SIX_DEFAULT_SCHEMA_PATH R"(C:\s 0 m e\p at h)" // just to compile ...
+#define SIX_DEFAULT_SCHEMA_PATH "Z:\\s 0 m e\\p at h" // just to compile ...
 #else
-#define SIX_DEFAULT_SCHEMA_PATH R"(/s 0 m e/p at h)" // just to compile ...
+#define SIX_DEFAULT_SCHEMA_PATH "/s 0 m e/p at h" // just to compile ...
 #endif
 #endif
 
@@ -73,7 +73,7 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
         if (!envPath.empty())
         {
             // SIX_SCHEMA_PATH might be a search path
-	  if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, std::filesystem::file_type::directory))
+	        if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, std::filesystem::file_type::directory))
             {
                 // Nope; assume the caller can figure things out (existing behavior).
                 schemaPaths.push_back(envPath);
@@ -92,28 +92,32 @@ void XMLControl::loadSchemaPaths(std::vector<std::string>& schemaPaths)
         loadDefaultSchemaPath(schemaPaths);
     }
 }
-std::vector<std::string> XMLControl::loadSchemaPaths(const std::vector<std::filesystem::path>* pSchemaPaths)
+std::vector<std::filesystem::path> XMLControl::loadSchemaPaths(const std::vector<std::filesystem::path>* pSchemaPaths)
 {
-    std::vector<std::string> retval;
+    std::vector<std::filesystem::path> retval;
 
     // a NULL pointer indicates that we don't want to validate against a schema
     if (pSchemaPaths != nullptr)
     {
-        std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(retval),
+        std::vector<std::string> paths;
+        std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(paths),
             [&](const std::filesystem::path& p) { return p.string();  });
 
         // If *pSchemaPaths is empty, this will use a default value.  To avoid all validation against a schema,
         // pass NULL for pSchemaPaths.
-        loadSchemaPaths(retval);
+        loadSchemaPaths(paths);
+
+        std::transform(paths.begin(), paths.end(), std::back_inserter(retval), [&](const std::string& s) { return s; });
     }
     return retval;
 }
 
-static std::vector<std::string> check_whether_paths_exist(const std::vector<std::string>& paths)
+template<typename TPath>
+static std::vector<TPath> check_whether_paths_exist(const std::vector<TPath>& paths)
 {
     // If the paths we have don't exist, throw
-    std::string does_not_exist_path;
-    std::vector<std::string> exist_paths;
+    typename std::vector<TPath>::value_type does_not_exist_path;
+    std::vector<TPath> exist_paths;
     for (const auto& path : paths)
     {
         if (!fs::exists(path))
@@ -139,14 +143,35 @@ static std::vector<std::string> check_whether_paths_exist(const std::vector<std:
     return exist_paths;
 }
 
+static inline std::string to_string(const std::string& s)
+{
+    return s;
+}
+static inline std::string to_string(const std::filesystem::path& p)
+{
+    return p.string();
+}
+
+// Generate a detaled INVALID XML message
+template<typename TPath>
+inline static auto getInvalidXmlErrorMessage(const std::vector<TPath>& paths)
+{
+    static const std::string invalidXML = "INVALID XML: Check both the XML being produced and schemas available at ";
+    auto message = invalidXML;
+    message += (paths.size() > 1 ? "these paths:" : "this path:");
+    for (const auto& p : paths)
+    {
+        message += "\n\t" + to_string(p); // paths could be a std::filesystem::path
+    }
+    return message;
+}
+
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
+template<typename TPath>
 static void do_validate_(const xml::lite::Document& doc,
-    const std::vector<std::string>& paths, logging::Logger* log)
+    const std::vector<TPath>& paths, logging::Logger* log)
 {
-    // validate against any specified schemas
-    xml::lite::Validator validator(paths, log, true);
-
     const auto& rootElement = doc.getRootElement();
     if (rootElement->getUri().empty())
     {
@@ -154,8 +179,11 @@ static void do_validate_(const xml::lite::Document& doc,
     }
 
     // Pretty-print so that lines numbers are useful
-    io::StringStream xmlStream;
-    rootElement->prettyPrint(xmlStream, xml::lite::StringEncoding::Utf8);
+    io::U8StringStream xmlStream;
+    rootElement->prettyPrint(xmlStream);
+
+    // validate against any specified schemas
+    xml::lite::Validator validator(paths, log, true); // this can be expensive to create as all sub - directories might be traversed
 
     std::vector<xml::lite::ValidationInfo> errors;
     validator.validate(xmlStream, rootElement->getUri(), errors);
@@ -176,11 +204,17 @@ static void do_validate_(const xml::lite::Document& doc,
         //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
         //  and attempt to rewrite the file. Continuing in this manner is
         //  highly discouraged
-        throw six::DESValidationException(Ctxt("INVALID XML: Check both the XML being produced and the schemas available"));
+        auto ctx(Ctxt(getInvalidXmlErrorMessage(paths)));
+        for (const auto& e : errors)
+        {
+            ctx.mMessage += "\n" + e.toString();
+        }
+        throw six::DESValidationException(ctx);
     }
 }
+template<typename TPath>
 static void validate_(const xml::lite::Document& doc,
-    std::vector<std::string> paths, logging::Logger* log)
+    std::vector<TPath> paths, logging::Logger* log)
 {
     // If the paths we have don't exist, throw
     paths = check_whether_paths_exist(paths);
@@ -329,7 +363,20 @@ std::unique_ptr<Data> XMLControl::fromXML(const xml::lite::Document& doc,
 
 std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
 {
-    std::string str = dataType;
+    std::string str;
+    switch (dataType)
+    {
+    case DataType::COMPLEX:
+        str = "SICD";
+        break;
+    case DataType::DERIVED:
+        str = "SIDD";
+        break;
+    default:
+        throw except::Exception(
+            Ctxt("Invalid data type " + str::toString(dataType)));
+    }
+
     if (appendXML)
     {
         str += "_XML";
@@ -339,13 +386,29 @@ std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
 }
 }
 
-std::string six::getSchemaPath(std::vector<std::string>& schemaPaths)
+std::string six::getSchemaPath(std::vector<std::string>& schemaPaths, bool tryToExpandIfNotFound)
 {
     loadDefaultSchemaPath(schemaPaths);
-    auto schemaPath = schemaPaths.empty() ? "" : schemaPaths[0];
-    if (!fs::is_directory(schemaPath))
+
+    // This is hacky; the whole point of having "schemaPaths" be a vector is that there could
+    // be MULTIPLE valid directories, not just one.
+    auto schemaPath = schemaPaths.empty() ? "" : schemaPaths[0]; // TODO: use all directories in schemaPaths
+    if (fs::is_directory(schemaPath))
     {
-        throw except::IOException(Ctxt(FmtX("Directory does not exist: '%s'", schemaPath.c_str())));
+        return schemaPath;
     }
-    return schemaPath;
+
+    if (tryToExpandIfNotFound)
+    {
+        // schemaPath might contain special enviroment variables
+        schemaPath = sys::Path::expandEnvironmentVariables(schemaPath, fs::file_type::directory);
+        if (fs::is_directory(schemaPath))
+        {
+            schemaPath = fs::absolute(schemaPath).string(); // get rid of embedded ".."
+            schemaPaths[0] = schemaPath;
+            return schemaPath;
+        }
+    }
+
+    throw except::IOException(Ctxt(FmtX("Directory does not exist: '%s'", schemaPath.c_str())));
 }

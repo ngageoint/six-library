@@ -21,14 +21,14 @@
  */
 
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 
 #include <WinSock.h>
 #include "sys/Err.h"
 
 int sys::Err::getLast() const
 {
-    return GetLastError();
+    return static_cast<int>(GetLastError());
 }
 
 std::string sys::Err::toString() const
@@ -36,7 +36,7 @@ std::string sys::Err::toString() const
     LPTSTR buffer;
     if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                       FORMAT_MESSAGE_FROM_SYSTEM, NULL,
-                      mErrId, 0,
+                      static_cast<DWORD>(mErrId), 0,
                       (LPTSTR)&buffer, 0, NULL) == 0)
     {
         return std::string("Unknown error code");

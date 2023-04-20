@@ -34,13 +34,13 @@ typedef xml::lite::Attributes XMLAttributes;
 template <typename T>
 bool isDefined(const T& enumVal)
 {
-    return six::Init::isDefined(enumVal.value);
+    return six::Init::isDefined(enumVal);
 }
 
 template <typename T>
 bool isUndefined(const T& enumVal)
 {
-    return six::Init::isUndefined(enumVal.value);
+    return six::Init::isUndefined(enumVal);
 }
 
 template <typename SmartPtrT>
@@ -113,9 +113,12 @@ ProjectionType DerivedXMLParser200::getProjectionType(const xml::lite::Element& 
 }
 
 
-const char DerivedXMLParser200::VERSION[] = "2.0.0";
-const char DerivedXMLParser200::SI_COMMON_URI[] = "urn:SICommon:1.0";
-const char DerivedXMLParser200::ISM_URI[] = "urn:us:gov:ic:ism:13";
+const char VERSION[] = "2.0.0";
+const char SI_COMMON_URI[] = "urn:SICommon:1.0";
+inline static xml::lite::Uri getISMUri()
+{
+    return xml::lite::Uri("urn:us:gov:ic:ism:13");
+}
 
 DerivedXMLParser200::DerivedXMLParser200(logging::Logger* log,
                                          bool ownLog) :
@@ -301,7 +304,7 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
     root->setNamespacePrefix("", getDefaultURI());
     root->setNamespacePrefix("si", xml::lite::Uri(SI_COMMON_URI));
     root->setNamespacePrefix("sfa", xml::lite::Uri(SFA_URI));
-    root->setNamespacePrefix("ism", xml::lite::Uri(ISM_URI));
+    root->setNamespacePrefix("ism", getISMUri());
 
     return doc;
 }
@@ -569,11 +572,11 @@ void DerivedXMLParser200::parseBandEqualizationFromXML(const xml::lite::Element*
 
     if (bandAlgo == "1DLUT")
     {
-        band.algorithm = BandEqualizationAlgorithm("LUT 1D");
+        band.algorithm = BandEqualizationAlgorithm::LUT_1D;
     }
     else
     {
-        band.algorithm = BandEqualizationAlgorithm(bandAlgo);
+        band.algorithm = BandEqualizationAlgorithm::toType(bandAlgo);
     }
 
     std::vector<XMLElem> lutElems;
@@ -849,7 +852,7 @@ void DerivedXMLParser200::parseColorSpaceTransformFromXML(
     }
     else
     {
-        transform.colorManagementModule.renderingIntent = RenderingIntent(renderIntentStr);
+        transform.colorManagementModule.renderingIntent = RenderingIntent::toType(renderIntentStr);
     }
     parseString(getFirstAndOnly(manageElem, "SourceProfile"),
                 transform.colorManagementModule.sourceProfile);
@@ -894,162 +897,153 @@ XMLElem DerivedXMLParser200::convertDerivedClassificationToXML(
         XMLElem parent) const
 {
     assert(parent != nullptr);
-    return &convertDerivedClassificationToXML(*this, classification, *parent);
+    return &convertDerivedClassificationToXML(*this, classification, getISMUri(), *parent);
 }
 xml::lite::Element& DerivedXMLParser200::convertDerivedClassificationToXML(const DerivedXMLParser& parser,
-    const DerivedClassification& classification, xml::lite::Element& parent)
+    const DerivedClassification& classification, const xml::lite::Uri& ismUri, xml::lite::Element& parent)
 {
-    auto& classElem_ = parser.newElement("Classification", parent);
-    auto classElem = &classElem_;
+    auto& classElem = parser.newElement("Classification", parent);
+    auto classElem_ = &classElem;
 
     parser.common().addParameters("SecurityExtension",
                     classification.securityExtensions,
-                           classElem);
+                           classElem_);
 
     //! from ism:ISMRootNodeAttributeGroup
     // SIDD 2.0 is tied to IC-ISM v13
-    parser.setAttribute(classElem, "DESVersion", "13", ISM_URI);
+    parser.setAttribute(classElem, "DESVersion", "13", ismUri);
 
     // So far as I can tell this should just be 1
-    parser.setAttribute(classElem, "ISMCATCESVersion", "1", ISM_URI);
+    parser.setAttribute(classElem, "ISMCATCESVersion", "1", ismUri);
 
     //! from ism:ResourceNodeAttributeGroup
-    parser.setAttribute(classElem, "resourceElement", "true", ISM_URI);
+    parser.setAttribute(classElem, "resourceElement", "true", ismUri);
     parser.setAttribute(classElem, "createDate",
-                 classification.createDate.format("%Y-%m-%d"), ISM_URI);
+                 classification.createDate.format("%Y-%m-%d"), ismUri); // note that timezone is explicitly prohibited
     // required (was optional in SIDD 1.0)
-    parser.setAttributeList(classElem, "compliesWith", classification.compliesWith,
-                     ISM_URI);
+    parser.setAttributeList(classElem, "compliesWith", classification.compliesWith, ismUri);
 
     // optional
     parser.setAttributeIfNonEmpty(classElem,
                            "exemptFrom",
                            classification.exemptFrom,
-                           ISM_URI);
+                           ismUri);
 
     //! from ism:SecurityAttributesGroup
     //  -- referenced in ism::ResourceNodeAttributeGroup
-    parser.setAttribute(classElem, "classification", classification.classification,
-                 ISM_URI);
-    parser.setAttributeList(classElem, "ownerProducer", classification.ownerProducer,
-                     ISM_URI, true);
+    parser.setAttribute(classElem, "classification", classification.classification, ismUri);
+    parser.setAttributeList(classElem, "ownerProducer", classification.ownerProducer, ismUri, true);
 
     // optional
-    parser.setAttributeIfNonEmpty(classElem, "joint", classification.joint, ISM_URI);
+    parser.setAttributeIfNonEmpty(classElem, "joint", classification.joint, ismUri);
 
     // optional
-    parser.setAttributeList(classElem, "SCIcontrols", classification.sciControls,
-                     ISM_URI);
+    parser.setAttributeList(classElem, "SCIcontrols", classification.sciControls, ismUri);
     // optional
-    parser.setAttributeList(classElem, "SARIdentifier", classification.sarIdentifier,
-                     ISM_URI);
+    parser.setAttributeList(classElem, "SARIdentifier", classification.sarIdentifier, ismUri);
     // optional
     parser.setAttributeList(classElem,
                      "atomicEnergyMarkings",
                      classification.atomicEnergyMarkings,
-                     ISM_URI);
+                     ismUri);
     // optional
     parser.setAttributeList(classElem,
                      "disseminationControls",
                      classification.disseminationControls,
-                     ISM_URI);
+                     ismUri);
     // optional
     parser.setAttributeList(classElem,
                      "displayOnlyTo",
                      classification.displayOnlyTo,
-                     ISM_URI);
+                     ismUri);
     // optional
-    parser.setAttributeList(classElem, "FGIsourceOpen", classification.fgiSourceOpen,
-                     ISM_URI);
+    parser.setAttributeList(classElem, "FGIsourceOpen", classification.fgiSourceOpen, ismUri);
     // optional
     parser.setAttributeList(classElem,
                      "FGIsourceProtected",
                      classification.fgiSourceProtected,
-                     ISM_URI);
+                     ismUri);
     // optional
-    parser.setAttributeList(classElem, "releasableTo", classification.releasableTo,
-                     ISM_URI);
+    parser.setAttributeList(classElem, "releasableTo", classification.releasableTo, ismUri);
     // optional
-    parser.setAttributeList(classElem, "nonICmarkings", classification.nonICMarkings,
-                     ISM_URI);
+    parser.setAttributeList(classElem, "nonICmarkings", classification.nonICMarkings, ismUri);
     // optional
     parser.setAttributeIfNonEmpty(classElem,
                            "classifiedBy",
                            classification.classifiedBy,
-                           ISM_URI);
+                           ismUri);
     // optional
     parser.setAttributeIfNonEmpty(classElem,
                            "compilationReason",
                            classification.compilationReason,
-                           ISM_URI);
+                           ismUri);
     // optional
     parser.setAttributeIfNonEmpty(classElem,
                            "derivativelyClassifiedBy",
                            classification.derivativelyClassifiedBy,
-                           ISM_URI);
+                           ismUri);
     // optional
     parser.setAttributeIfNonEmpty(classElem,
                            "classificationReason",
                            classification.classificationReason,
-                           ISM_URI);
+                           ismUri);
     // optional
-    parser.setAttributeList(classElem, "nonUSControls", classification.nonUSControls,
-                     ISM_URI);
+    parser.setAttributeList(classElem, "nonUSControls", classification.nonUSControls, ismUri);
     // optional
     parser.setAttributeIfNonEmpty(classElem,
                            "derivedFrom",
                            classification.derivedFrom,
-                           ISM_URI);
+                           ismUri);
     // optional
     if (classification.declassDate.get())
     {
         parser.setAttributeIfNonEmpty(
                 classElem, "declassDate",
-                classification.declassDate->format("%Y-%m-%d"),
-                ISM_URI);
+                classification.declassDate->format("%Y-%m-%d"), // note: timezone is explicitly excluded in ISM-201609
+                ismUri);
     }
     // optional
     parser.setAttributeIfNonEmpty(classElem,
                            "declassEvent",
                            classification.declassEvent,
-                           ISM_URI);
+                           ismUri);
     // optional
     parser.setAttributeIfNonEmpty(classElem,
                            "declassException",
                            classification.declassException,
-                           ISM_URI);
+                           ismUri);
 
     //! from ism:NoticeAttributesGroup
     // optional
     parser.setAttributeIfNonEmpty(classElem,
                            "noticeType",
                            classification.noticeType,
-                           ISM_URI);
+                           ismUri);
     // optional
     parser.setAttributeIfNonEmpty(classElem,
                            "noticeReason",
                            classification.noticeReason,
-                           ISM_URI);
+                           ismUri);
     // optional
     if (classification.noticeDate.get())
     {
         parser.setAttributeIfNonEmpty(
                 classElem, "noticeDate",
                 classification.noticeDate->format("%Y-%m-%d"),
-                ISM_URI);
+                ismUri);
     }
     // optional
     parser.setAttributeIfNonEmpty(classElem,
                            "unregisteredNoticeType",
                            classification.unregisteredNoticeType,
-                           ISM_URI);
+                           ismUri);
     // optional
     parser.setAttributeIfNonEmpty(classElem,
                            "externalNotice",
                            classification.externalNotice,
-                           ISM_URI);
+                           ismUri);
 
-    return classElem_;
+    return classElem;
 }
 
 xml::lite::Element& DerivedXMLParser200::convertLookupTableToXML(const DerivedXMLParser& parser,
@@ -1613,8 +1607,7 @@ xml::lite::Element& DerivedXMLParser200::convertExploitationFeaturesToXML(const 
             collection->information.radarMode,
             &radarModeElem);
         // optional
-        if (collection->information.radarModeID
-            != Init::undefined<std::string>())
+        if (!collection->information.radarModeID.empty())
             parser.createString("ModeID",
                 parser.common().getSICommonURI(),
                 collection->information.radarModeID,
@@ -2078,7 +2071,7 @@ void DerivedXMLParser200::parseDigitalElevationDataFromXML(
     XMLElem posElem = getFirstAndOnly(elem, "Geopositioning");
     std::string coordSystemType;
     parseString(getFirstAndOnly(posElem, "CoordinateSystemType"), coordSystemType);
-    ded.geopositioning.coordinateSystemType = CoordinateSystemType(coordSystemType);
+    ded.geopositioning.coordinateSystemType = CoordinateSystemType::toType(coordSystemType);
     parseUInt(getFirstAndOnly(posElem, "FalseOrigin"), ded.geopositioning.falseOrigin);
     if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
     {
@@ -2107,13 +2100,13 @@ std::unique_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const std::string& lutS
     }
     return lut;
 }
-mem::auto_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const xml::lite::Element* elem,
+std::unique_ptr<LUT> DerivedXMLParser200::parseSingleLUT(const xml::lite::Element* elem,
         size_t size) const
 {
     std::string lutStr = "";
     parseString(elem, lutStr);
     auto result = parseSingleLUT(lutStr, size);
-    return mem::auto_ptr<LUT>(result.release());
+    return std::unique_ptr<LUT>(result.release());
 }
 
 XMLElem DerivedXMLParser200::createLUT(const std::string& name, const LUT *lut,

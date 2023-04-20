@@ -23,6 +23,9 @@
 #ifndef __IO_INPUT_STREAM_H__
 #define __IO_INPUT_STREAM_H__
 
+#include "coda_oss/span.h"
+
+#include "config/Exports.h"
 #include "sys/Dbg.h"
 #include "io/OutputStream.h"
 
@@ -51,7 +54,7 @@ namespace io
  * of large streams of bytes.
  *
  */
-struct InputStream
+struct CODA_OSS_API InputStream
 {
     enum
     {
@@ -85,6 +88,11 @@ struct InputStream
     sys::SSize_T read(void* buffer,
                       size_t len,
                       bool verifyFullRead = false);
+    template<typename T>
+    sys::SSize_T read(coda_oss::span<T> buffer, bool verifyFullRead = false)
+    {
+        return read(buffer.data(), buffer.size_bytes(), verifyFullRead);
+    }
 
     /*!
      * Read either a buffer of len size, or up until a newline,

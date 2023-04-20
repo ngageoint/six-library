@@ -23,7 +23,7 @@
 #define __SIX_SICD_UTILITIES_H__
 
 #include <memory>
-#include <string>
+#include <std/string>
 #include <vector>
 #include <utility>
 #include <std/span>
@@ -31,6 +31,7 @@
 
 #include <scene/SceneGeometry.h>
 #include <scene/ProjectionModel.h>
+#include <six/Utilities.h>
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/SICDMesh.h>
 #include <six/NITFReadControl.h>
@@ -62,13 +63,6 @@ public:
     /*!
      * Get information in or deriveable from the ComplexData.
      */
-#if !CODA_OSS_cpp17
-    static void getModelComponents(
-        const ComplexData& complexData,
-        mem::auto_ptr<scene::SceneGeometry>& geometry,
-        mem::auto_ptr<scene::ProjectionModel>& projectionModel,
-        six::sicd::AreaPlane& areaPlane);
-#endif
     static void getModelComponents(
         const ComplexData& complexData,
         std::unique_ptr<scene::SceneGeometry>& geometry,
@@ -85,7 +79,7 @@ public:
      * with the valid data polygon.
      * \return ProjectionPolynomialFitter from ComplexData
      */
-    static mem::auto_ptr<scene::ProjectionPolynomialFitter>
+    static std::unique_ptr<scene::ProjectionPolynomialFitter>
     getPolynomialFitter(const ComplexData& complexData,
                         size_t numPoints1D =
                          scene::ProjectionPolynomialFitter::DEFAULTS_POINTS_1D,
@@ -118,12 +112,6 @@ public:
      *           six::sicd::Utilities::getWidebandData
      *
      */
-#if !CODA_OSS_cpp17
-    static void readSicd(const std::string& sicdPathname,
-                         const std::vector<std::string>& schemaPaths,
-                         mem::auto_ptr<ComplexData>& complexData,
-                         std::vector<std::complex<float> >& widebandData);
-#endif
     static void readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
@@ -169,18 +157,6 @@ public:
      *           six::sicd::Utilities::getWidebandData
      *
      */
-#if !CODA_OSS_cpp17
-    static void readSicd(const std::string& sicdPathname,
-                         const std::vector<std::string>& schemaPaths,
-                         size_t orderX,
-                         size_t orderY,
-                         mem::auto_ptr<ComplexData>& complexData,
-                         std::vector<std::complex<float> >& widebandData,
-                         six::Poly2D& outputRowColToSlantRow,
-                         six::Poly2D& outputRowColToSlantCol,
-                         mem::auto_ptr<NoiseMesh>& noiseMesh,
-                         mem::auto_ptr<ScalarMesh>& scalarMesh);
-#endif
     static void readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          size_t orderX,
@@ -205,7 +181,7 @@ public:
      * \throws except::Exception if file is not a SICD or Complex XML
      */
     static
-    mem::auto_ptr<ComplexData> getComplexData(
+    std::unique_ptr<ComplexData> getComplexData(
             const std::string& pathname,
             const std::vector<std::string>& schemaPaths);
 
@@ -220,7 +196,7 @@ public:
      * \throws except::Exception if the provided reader is not a SICD
      *
      */
-    static mem::auto_ptr<ComplexData> getComplexData(NITFReadControl& reader);
+    static std::unique_ptr<ComplexData> getComplexData(NITFReadControl& reader);
 
     /*
      * Given a loaded NITFReadControl and a ComplexData object, this
@@ -400,10 +376,12 @@ public:
      *
      * \return Data representation of 'xmlStr'
      */
-    static mem::auto_ptr<ComplexData> parseData(
+    static std::unique_ptr<ComplexData> parseData(
             ::io::InputStream& xmlStream,
             const std::vector<std::string>& schemaPaths,
             logging::Logger& log);
+    static std::unique_ptr<ComplexData> parseData(::io::InputStream& xmlStream,
+        const std::vector<std::filesystem::path>*, logging::Logger&);
 
     /*
      * Parses the XML in 'pathname' and converts it into a ComplexData object.
@@ -415,10 +393,12 @@ public:
      *
      * \return Data representation of the contents of 'pathname'
      */
-    static mem::auto_ptr<ComplexData> parseDataFromFile(
+    static std::unique_ptr<ComplexData> parseDataFromFile(
             const std::string& pathname,
             const std::vector<std::string>& schemaPaths,
             logging::Logger& log);
+    static std::unique_ptr<ComplexData> parseDataFromFile(const std::filesystem::path&,
+        const std::vector<std::filesystem::path>*, logging::Logger* pLogger = nullptr);
 
     /*
      * Parses the XML in 'xmlStr' and converts it into a ComplexData object.
@@ -429,10 +409,14 @@ public:
      *
      * \return Data representation of 'xmlStr'
      */
-    static mem::auto_ptr<ComplexData> parseDataFromString(
+    static std::unique_ptr<ComplexData> parseDataFromString(
         const std::string& xmlStr,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log);
+    static std::unique_ptr<ComplexData> parseDataFromString(
+        const std::u8string& xmlStr,
+        const std::vector<std::filesystem::path>* pSchemaPaths,
+        logging::Logger* pLogger = nullptr);
 
     /*
      * Converts 'data' back into a formatted XML string
@@ -448,15 +432,17 @@ public:
             const ComplexData& data,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             logging::Logger* logger = nullptr);
-
+    static std::u8string toXMLString(const ComplexData&,
+        const std::vector<std::filesystem::path>*, logging::Logger* pLogger = nullptr);
     /*!
      * Create a fake SICD that's populated enough for
      * general testing code to run without throwing exceptions
      *
      * \return mock ComplexData object
      */
-    static mem::auto_ptr<ComplexData> createFakeComplexData(const types::RowCol<size_t>* pDims = nullptr);
-    static std::unique_ptr<ComplexData> createFakeComplexData(PixelType, bool makeAmplitudeTable, const types::RowCol<size_t>* pDims = nullptr);
+    static std::unique_ptr<ComplexData> createFakeComplexData(const types::RowCol<size_t>* pDims = nullptr);
+    static std::unique_ptr<ComplexData> createFakeComplexData(const std::string& strVersion,
+        PixelType, bool makeAmplitudeTable, const types::RowCol<size_t>* pDims = nullptr);
 
     /*
      * Given a reference to a loaded NITFReadControl, this function
@@ -466,7 +452,7 @@ public:
      * \throws except::Exception if the provided reader is not a SICD
      *
      */
-    static mem::auto_ptr<NoiseMesh> getNoiseMesh(const NITFReadControl& reader);
+    static std::unique_ptr<NoiseMesh> getNoiseMesh(const NITFReadControl& reader);
 
     /*
      * Given a reference to a loaded NITFReadControl, this function
@@ -479,7 +465,7 @@ public:
      *
      * \return Scalar Mesh associated with the SICD NITF
      */
-    static mem::auto_ptr<ScalarMesh> getScalarMesh(const NITFReadControl& reader);
+    static std::unique_ptr<ScalarMesh> getScalarMesh(const NITFReadControl& reader);
 
     /*
      * Given a reference to a loaded NITFReadControl, this function
@@ -500,15 +486,6 @@ public:
      * \throws except::Exception if the provided reader is not a SICD or
      *  projection polynomials can't be computed.
      */
-#if !CODA_OSS_cpp17
-    static void getProjectionPolys(
-        const NITFReadControl& reader,
-        size_t orderX,
-        size_t orderY,
-        mem::auto_ptr<ComplexData>& complexData,
-        six::Poly2D& outputRowColToSlantRow,
-        six::Poly2D& outputRowColToSlantCol);
-#endif
     static void getProjectionPolys(
         const NITFReadControl& reader,
         size_t orderX,
@@ -651,8 +628,7 @@ public:
         const std::vector<types::RowCol<double> >& opPixels,
         std::vector<types::RowCol<double> >& spPixels);
 
-    // for unit-testing
-    static std::complex<float> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable*);
+    static std::complex<long double> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable*);
 };
 
 

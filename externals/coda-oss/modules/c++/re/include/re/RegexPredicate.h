@@ -37,7 +37,7 @@ public:
         mRegex.compile(match);
     }
     
-    bool operator()(const std::string& filename) const
+    bool operator()(const std::string& filename) const override
     {
         return mRegex.matches(filename);
     }

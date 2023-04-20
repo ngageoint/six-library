@@ -22,8 +22,8 @@
 
 #include <io/TempFile.h>
 
+ static const sys::OS mOS;
 io::TempFile::TempFile(const std::string& dirname) :
-    mOS(sys::OS()),
     mPathname(mOS.getTempName(dirname))
 {
 }

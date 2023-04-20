@@ -177,7 +177,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint32(nitf_Field * field,
 
     /*  Convert the number to a string */
 
-    NITF_SNPRINTF(numberBuffer, 20, "%"PRIu32, number);
+    NITF_SNPRINTF(numberBuffer, 20, "%" PRIu32, number);
     numberLen = nrt_strlen32(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
@@ -225,7 +225,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint64(nitf_Field * field,
 
     /*  Convert thte number to a string */
 
-    NITF_SNPRINTF(numberBuffer, 20, "%"PRIu64"", number);
+    NITF_SNPRINTF(numberBuffer, 20, "%" PRIu64 "", number);
     numberLen = nrt_strlen32(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
@@ -377,7 +377,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
     if (strLen > field->length)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                        "Value %s is too long for field of length %"PRIu64"",
+                        "Value %s is too long for field of length %" PRIu64 "",
                         str, field->length);
         return (NITF_FAILURE);
     }
@@ -1100,9 +1100,9 @@ static void nitf_Field_snprint_(char* buffer, size_t buf_size, nitf_Field* field
         /* avoid printing binary */
         uint64_t field_length = (uint64_t)field->length;
         if ((buffer == NULL) || (buf_size == 0))
-            printf("<binary data, length %"PRIu64">", field_length);
+            printf("<binary data, length %" PRIu64 ">", field_length);
         else
-            snprintf(buffer, buf_size, "<binary data, length %"PRIu64">", field_length);
+            snprintf(buffer, buf_size, "<binary data, length %" PRIu64 ">", field_length);
         break;
     }
 

@@ -146,7 +146,7 @@ private:
     static
     sys::SSize_T direction(const RowCol& p0,
                            const RowCol& p1,
-                           const RowCol& p2)
+                           const RowCol& p2) noexcept
     {
         const T firstTerm = (p0.col - p1.col) * (p2.row - p1.row);
         const T secondTerm = (p2.col - p1.col) * (p0.row - p1.row);

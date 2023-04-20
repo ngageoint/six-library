@@ -20,16 +20,16 @@
  *
  */
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 
 #include <limits>
 #include <cmath>
 #include "sys/File.h"
 
-void sys::File::create(const std::string& str,
-                       int accessFlags,
-                       int creationFlags)
+_SYS_HANDLE_TYPE sys::File::createFile(const coda_oss::filesystem::path& str_, int accessFlags, int creationFlags) noexcept
 {
+    const auto str = str_.string();
+
     // If the truncate bit is on AND the file does exist,
     // we need to set the mode to TRUNCATE_EXISTING
     if ((creationFlags & sys::File::TRUNCATE) && sys::OS().exists(str) )
@@ -41,20 +41,26 @@ void sys::File::create(const std::string& str,
         creationFlags = ~sys::File::TRUNCATE & creationFlags;
     }
 
-    const DWORD dwDesiredAccess = accessFlags;
-    const DWORD dwCreationDisposition = creationFlags;
-    mHandle = CreateFile(str.c_str(),
+    const auto dwDesiredAccess = static_cast<DWORD>(accessFlags);
+    const auto dwCreationDisposition = static_cast<DWORD>(creationFlags);
+    return CreateFile(str.c_str(),
                          dwDesiredAccess,
                          FILE_SHARE_READ,
                          nullptr /*lpSecurityAttributes*/,
                          dwCreationDisposition,
                          FILE_ATTRIBUTE_NORMAL,
                          static_cast<HANDLE>(0) /*hTemplateFile*/);
+}
+void sys::File::create(const std::string& str,
+                       int accessFlags,
+                       int creationFlags)
+{
+    create(std::nothrow, str, accessFlags, creationFlags);
     if (mHandle == INVALID_HANDLE_VALUE)
     {
-        throw sys::SystemException(Ctxt(FmtX("Error opening file: [%s]", str.c_str())));
+        throw sys::SystemException(
+                Ctxt(FmtX("Error opening file: [%s]", str.c_str())));
     }
-    mPath = str;
 }
 
 void sys::File::readInto(void* buffer, size_t size)
@@ -131,7 +137,7 @@ sys::Off_T sys::File::seekTo(sys::Off_T offset, int whence)
     LARGE_INTEGER largeInt;
     largeInt.QuadPart = offset;
     LARGE_INTEGER newFilePointer;
-    const DWORD dwMoveMethod = whence;
+    const auto dwMoveMethod = static_cast<DWORD>(whence);
     if (SetFilePointerEx(mHandle, largeInt, &newFilePointer, dwMoveMethod) == 0)
     {
         const auto dwLastError = GetLastError();

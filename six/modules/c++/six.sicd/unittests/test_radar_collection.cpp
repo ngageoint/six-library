@@ -37,7 +37,7 @@ TEST_CASE(demodTypeFromFmRate)
     six::sicd::WaveformParameters params;
     params.rcvFMRate = 0;
     params.fillDerivedFields();
-    TEST_ASSERT(params.rcvDemodType == "CHIRP");
+    TEST_ASSERT(params.rcvDemodType.toString() == "CHIRP");
     TEST_ASSERT_EQ(params.rcvDemodType, six::DemodType::CHIRP);
 }
 
@@ -79,7 +79,7 @@ TEST_CASE(wfParamTxFrequencies)
     TEST_ASSERT_EQ(radarCollection.waveform[0]->txRFBandwidth, 4);
 }
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(fmRateFromDemodType);
     TEST_CHECK(demodTypeFromFmRate);
     TEST_CHECK(pulseLength);

@@ -43,12 +43,19 @@ typedef struct _j2k_IWriter
     J2K_IWRITER_DESTRUCT        destruct;
 } j2k_IWriter;
 
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _j2k_WriterOptions
 {
     /* TODO add more options as we see fit */
-    double compressionRatio;
+    float compressionRatio;
     uint32_t numResolutions;
 } j2k_WriterOptions;
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 typedef struct _j2k_Writer
 {

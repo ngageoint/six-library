@@ -1,6 +1,8 @@
 #pragma once
 
 #pragma warning(push)
+#pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
+
 #pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 #pragma warning(disable: 4710) // '...': function not inlined
@@ -16,6 +18,7 @@
 #pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 6285) // (<non-zero constant> || <non-zero constant>) is always a non-zero constant.  Did you intend to use the bitwise-and operator?
+#pragma warning(disable: 5264) // '...': '...' variable is not used
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -26,6 +29,7 @@
 #include <time.h>
 #include <stdint.h>
 #include <stddef.h>
+#include <inttypes.h>
 
 #include <string>
 #include <numeric>
@@ -35,9 +39,11 @@
 #include <sstream>
 #include <ostream>
 #include <iostream>
+#include <fstream>
 #include <ios>
 #include <iomanip>
 #include <vector>
+#include <array>
 #include <map>
 #include <utility>
 #include <functional>

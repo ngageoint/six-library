@@ -22,54 +22,39 @@
 
 #include <vector>
 #include <string>
+#include <std/filesystem>
 
 #include <import/nitf.hpp>
+#include <nitf/UnitTests.hpp>
 
-namespace fs = std::filesystem;
+using path = std::filesystem::path;
 
 #include "TestCase.h"
 
 static std::string testName;
 
-static std::string argv0;
-static fs::path findInputFile(const fs::path& inputFile)
+static path findInputFile()
 {
-    fs::path root;
-    if (argv0.empty())
-    {
-        // running in Visual Studio
-        root = fs::current_path().parent_path().parent_path();
-    }
-    else
-    {
-        root = fs::absolute(argv0).parent_path().parent_path().parent_path().parent_path();
-        root = root.parent_path().parent_path();
-    }
-
-    return root / inputFile;
+    static const auto unittests = path("modules") / "c++" / "nitf" / "unittests";
+    static const auto inputPath = nitf::Test::findInputFile(unittests, "sicd_50x50.nitf");
+    return inputPath;
 }
-static fs::path findInputFile()
+static path findInputFile(bool withAmpTable)
 {
-    const auto inputPath = fs::path("modules") / "c++" / "nitf" / "unittests" / "sicd_50x50.nitf";
-    return findInputFile(inputPath);
-}
-static fs::path findInputFile(bool withAmpTable)
-{
-    fs::path inputPath;
+    path moduleFile;
     if (withAmpTable)
     {
-        inputPath = fs::path("modules") / "c++" / "nitf" / "unittests" / "8_bit_Amp_Phs_Examples" / 
-            "With_amplitude_table" /
+        moduleFile = path("With_amplitude_table") / 
             "sicd_example_1_PFA_AMP8I_PHS8I_VV_with_amplitude_table_SICD.nitf";
     }
     else
     {
-        inputPath = fs::path("modules") / "c++" / "nitf" / "unittests" / "8_bit_Amp_Phs_Examples" / 
-            "No_amplitude_table" /
+        moduleFile = path("No_amplitude_table") /
             "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
-
     }
-    return findInputFile(inputPath);
+
+    static const auto Amp_Phs_Examples = path("modules") / "c++" / "nitf" / "unittests" / "8_bit_Amp_Phs_Examples";
+    return nitf::Test::findInputFile(Amp_Phs_Examples, moduleFile);
 }
 
 struct expected_values final
@@ -77,10 +62,10 @@ struct expected_values final
     uint32_t nRows = 50;
     uint32_t nCols = 50;
     nitf::PixelValueType pixelValueType = nitf::PixelValueType::Floating; // "R"
-    uint32_t bitsPerPixel = 32;
+    size_t bitsPerPixel = 32;
     std::string actualBitsPerPixel = "32";
-    uint32_t pixelsPerHorizBlock = 50;
-    uint32_t pixelsPerVertBlock = 50;
+    size_t pixelsPerHorizBlock = 50;
+    size_t pixelsPerVertBlock = 50;
     int luts = 0;
 };
 
@@ -114,7 +99,7 @@ static void writeImage(nitf::ImageSegment &segment,
     {
         const auto irep = segment.getSubheader().imageRepresentation();
         const auto irepStartsWithRGB = (irep == nitf::ImageRepresentation::RGB) || (irep == nitf::ImageRepresentation::RGB_LUT);
-        const auto ic = segment.getSubheader().imageCompression();
+        const auto ic = segment.getSubheader().imageCompressionString();
 
         const auto imageMode = segment.getSubheader().imageBlockingMode();
         if ((nBands == 3) && (imageMode == nitf::BlockingMode::Pixel) && irepStartsWithRGB
@@ -139,14 +124,14 @@ static void writeImage(nitf::ImageSegment &segment,
     TEST_ASSERT_EQ(expected.pixelValueType, subheader.pixelValueType()); 
     TEST_ASSERT_EQ(expected.bitsPerPixel, subheader.numBitsPerPixel());
     TEST_ASSERT_EQ(expected.actualBitsPerPixel, subheader.getActualBitsPerPixel().toString());
-    TEST_ASSERT_EQ("R", subheader.getPixelJustification().toString());
+    TEST_ASSERT_EQ_STR("R", subheader.getPixelJustification().toString());
     TEST_ASSERT_EQ(nitf::BlockingMode::Pixel, subheader.imageBlockingMode()); // "P"
     TEST_ASSERT_EQ(static_cast<size_t>(1), subheader.numBlocksPerRow());
     TEST_ASSERT_EQ(static_cast<size_t>(1), subheader.numBlocksPerCol());
     TEST_ASSERT_EQ(expected.pixelsPerHorizBlock, subheader.numPixelsPerHorizBlock());
     TEST_ASSERT_EQ(expected.pixelsPerVertBlock, subheader.numPixelsPerVertBlock());
-    TEST_ASSERT_EQ("NC", subheader.imageCompression());
-    TEST_ASSERT_EQ("    ", subheader.getCompressionRate().toString());
+    TEST_ASSERT_EQ(nitf::ImageCompression::NC, subheader.imageCompression());
+    TEST_ASSERT_EQ_STR("    ", subheader.getCompressionRate().toString());
 
     nitf::BufferList<std::byte> buffer(nBands);
     std::vector<uint32_t> bandList(nBands);
@@ -172,7 +157,7 @@ static void writeImage(nitf::ImageSegment &segment,
 
     for (unsigned int i = 0; i < nBands; i++)
     {
-        std::string base = fs::path(imageName).filename().string();
+        auto base = path(imageName).filename().string();
 
         size_t where = 0;
         while ((where = base.find(".")) != (size_t)std::string::npos)
@@ -222,8 +207,6 @@ static void test_image_loading_(const std::string& input_file, bool optz, const 
 
 TEST_CASE(test_image_loading)
 {
-    ::testName = testName;
-
     /*  If you didnt give us a nitf file, we're croaking  */
     const auto input_file = findInputFile().string();
     expected_values expected; // braced-initialization cause CodeQL to fail?
@@ -240,8 +223,6 @@ TEST_CASE(test_image_loading)
 
 TEST_CASE(test_8bit_image_loading)
 {
-    ::testName = testName;
-
     auto input_file = findInputFile(true /*withAmpTable*/).string();
     expected_values expected; // braced-initialization cause CodeQL to fail?
     expected.nRows = 3975;
@@ -261,8 +242,6 @@ TEST_CASE(test_8bit_image_loading)
 }
 
 TEST_MAIN(
-    (void)argc;
-    argv0 = argv[0];
     TEST_CHECK(test_image_loading);
     TEST_CHECK(test_8bit_image_loading);
 )

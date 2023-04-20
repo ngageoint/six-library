@@ -23,6 +23,7 @@
 
 #include <algorithm>
 
+#include <sys/filesystem.h>
 namespace fs = coda_oss::filesystem;
 
 namespace sys
@@ -176,7 +177,7 @@ std::string Path::absolutePath(const std::string& path)
 
 bool Path::isAbsolutePath(const std::string& path)
 {
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
     return !Path::splitDrive(path).first.empty();
 #else
     return (!path.empty() && path[0] == Path::delimiter()[0]);
@@ -231,7 +232,7 @@ std::string Path::basename(const std::string& path, bool removeExt)
 
 Path::StringPair Path::splitDrive(const std::string& path)
 {
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
     std::string::size_type pos = path.find(":");
 #else
     std::string::size_type pos = std::string::npos;
@@ -244,7 +245,7 @@ Path::StringPair Path::splitDrive(const std::string& path)
 
 const char* Path::delimiter()
 {
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
     return "\\";
 #else
     return "/";
@@ -253,7 +254,7 @@ const char* Path::delimiter()
 
 const char* Path::separator()
 {
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
     return ";";
 #else
     return ":";
@@ -662,8 +663,7 @@ static std::vector<expanded_component> expand_components(const separated_path& c
     std::vector<expanded_component> retval;
     for (const auto& component : components.components())
     {
-        expanded_component e{component};
-        e.value = expandEnvironmentVariable(component);
+        expanded_component e{component, expandEnvironmentVariable(component)};
         assert(e.value.size() >= 1);  // the component itself should always be there
 
         retval.push_back(std::move(e));
@@ -769,13 +769,14 @@ std::vector<std::string> Path::expandedEnvironmentVariables(const std::string& p
     return expandedEnvironmentVariables_(path, unused_specialPath);
 }
 
-static bool path_matches_type(const std::string &path, fs::file_type type)
+static bool path_matches_type(const std::string &path_, fs::file_type type)
 {
-    if ((type == fs::file_type::regular) && fs::is_regular_file(path))
+    const fs::path path(path_);
+    if ((type == fs::file_type::regular) && is_regular_file(path))
     {
         return true;
     }
-    if ((type== fs::file_type::directory) && fs::is_directory(path))
+    if ((type== fs::file_type::directory) && is_directory(path))
     {
         return true;
     }

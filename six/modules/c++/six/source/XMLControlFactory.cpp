@@ -25,6 +25,7 @@
 #include "six/XMLControlFactory.h"
 #include <str/Convert.h>
 #include <logging/NullLogger.h>
+#include <str/EncodedStringView.h>
 #include "six/Data.h"
 
 using namespace six;
@@ -57,13 +58,6 @@ void XMLControlRegistry::addCreator(const std::string& identifier,
     // At this point we've taken ownership
     creator.release();
 }
-#if !CODA_OSS_cpp17
-void XMLControlRegistry::addCreator(const std::string& identifier,
-                                    mem::auto_ptr<XMLControlCreator> creator)
-{
-    addCreator(identifier, std::unique_ptr<XMLControlCreator>(creator.release()));
-}
-#endif
 
 XMLControl*
 XMLControlRegistry::newXMLControl(const std::string& identifier,
@@ -78,16 +72,22 @@ XMLControlRegistry::newXMLControl(const std::string& identifier,
     return iter->second->newXMLControl(log);
 }
 
-std::string six::toXMLString(const Data* data,
+std::u8string six::toXMLString(const Data* data,
                              const six::XMLControlRegistry *xmlRegistry)
 {
     logging::NullLogger log;
     return toValidXMLString(data, std::vector<std::string>(),
                             &log, xmlRegistry);
 }
+std::string six::toXMLString_(const Data* data,
+    const six::XMLControlRegistry* xmlRegistry)
+{
+    const auto result = toXMLString(data, xmlRegistry);
+    return str::EncodedStringView(result).native();
+}
 
 template<typename TSchemaPaths>
-std::string six_toValidXMLString(const Data& data,
+std::u8string six_toValidXMLString(const Data& data,
     const TSchemaPaths& schemaPaths,
     logging::Logger* log, const six::XMLControlRegistry* xmlRegistry)
 {
@@ -103,12 +103,12 @@ std::string six_toValidXMLString(const Data& data,
     const std::unique_ptr<xml::lite::Document> doc(
         xmlControl->toXML(data, schemaPaths));
 
-    io::StringStream oss;
-    getRootElement(*doc).print(oss, xml::lite::StringEncoding::Utf8);
+    io::U8StringStream oss;
+    getRootElement(*doc).print(oss);
 
     return oss.stream().str();
 }
-std::string six::toValidXMLString(const Data* data,
+std::u8string six::toValidXMLString(const Data* data,
                                   const std::vector<std::string>& schemaPaths,
                                   logging::Logger* log,
                                   const six::XMLControlRegistry *xmlRegistry)
@@ -116,13 +116,13 @@ std::string six::toValidXMLString(const Data* data,
     assert(data != nullptr);
     return toValidXMLString(*data, schemaPaths, log, xmlRegistry);
 }
-std::string six::toValidXMLString(const Data& data,
+std::u8string six::toValidXMLString(const Data& data,
     const std::vector<std::string>& schemaPaths,
     logging::Logger* log, const six::XMLControlRegistry* xmlRegistry)
 {
     return six_toValidXMLString(data, schemaPaths, log, xmlRegistry);
 }
-std::string six::toValidXMLString(const Data& data,
+std::u8string six::toValidXMLString(const Data& data,
     const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger* log, const six::XMLControlRegistry* xmlRegistry)
 {

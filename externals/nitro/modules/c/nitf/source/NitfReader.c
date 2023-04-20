@@ -815,6 +815,7 @@ readDESubheader(nitf_Reader* reader,
     /* What the header says the length ought to be */
     uint32_t expectedSubheaderLength = 0;
     char desID[NITF_DESTAG_SZ + 1]; /* DES ID string */
+    nitf_Off offset = 0;
 
     nitf_ListIterator listIter =
             nitf_List_begin(reader->record->dataExtensions);
@@ -878,7 +879,7 @@ readDESubheader(nitf_Reader* reader,
             error);
 
     /* set the offset and end of the segment */
-    const nitf_Off offset = nitf_IOInterface_tell(reader->input, error);
+    offset = nitf_IOInterface_tell(reader->input, error);
     if (!NITF_IO_SUCCESS(offset))
         goto CATCH_ERROR;
     segment->offset = offset;
@@ -950,6 +951,7 @@ readRESubheader(nitf_Reader* reader,
     /* List iterator pointing to the reserved extension segment */
     nitf_ListIterator listIter =
             nitf_List_begin(reader->record->reservedExtensions);
+    nitf_Off offset = 0;
 
     for (i = 0; i < resIndex; i++)
         nitf_ListIterator_increment(&listIter);
@@ -977,7 +979,7 @@ readRESubheader(nitf_Reader* reader,
             nitf_Error_init(error, "uint32_t+1 overflow", NITF_CTXT, NITF_ERR_MEMORY);
             goto CATCH_ERROR;
         }
-        subhdr->subheaderFields = NITF_MALLOC(subLen + 1);
+        subhdr->subheaderFields = (char*) NITF_MALLOC(subLen + 1);
         if (!subhdr->subheaderFields)
             goto CATCH_ERROR;
 
@@ -993,7 +995,7 @@ readRESubheader(nitf_Reader* reader,
             error);
 
     /* set the offset and end of the segment */
-    const nitf_Off offset = nitf_IOInterface_tell(reader->input, error);
+    offset = nitf_IOInterface_tell(reader->input, error);
     if (!NITF_IO_SUCCESS(offset))
         goto CATCH_ERROR;
     segment->offset = offset;

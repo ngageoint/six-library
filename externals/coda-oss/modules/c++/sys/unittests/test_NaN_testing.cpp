@@ -23,8 +23,6 @@
 #include <limits>
 #include "TestCase.h"
 
-namespace
-{
 TEST_CASE(testNaNsAreNotEqual)
 {
     // This test exists mainly to document behavior
@@ -49,6 +47,7 @@ TEST_CASE(testNaNIsNotAlmostEqualToNumber)
     TEST_ASSERT_ALMOST_EQ_EPS(std::numeric_limits<float>::quiet_NaN(),
                 5, 3);
     */
+    TEST_ASSERT_TRUE(true); // need to use hidden "testName" parameter
 }
 
 TEST_CASE(testIsNaN)
@@ -58,12 +57,10 @@ TEST_CASE(testIsNaN)
     TEST_ASSERT_FALSE(IS_NAN(five));
     TEST_ASSERT_FALSE(IS_NAN(std::string("test string")));
 }
-}
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(testNaNsAreNotEqual);
     TEST_CHECK(testNaNIsNotAlmostEqualToNumber);
     TEST_CHECK(testIsNaN);
-}
+)
 

@@ -40,7 +40,10 @@ namespace sidd
 {
 static const char VERSION[] = "3.0.0";
 static const char SI_COMMON_URI[] = "urn:SICommon:1.0";
-static const char ISM_URI[] = "urn:us:gov:ic:ism:13";
+inline static xml::lite::Uri getISMUri()
+{
+    return xml::lite::Uri("urn:us:gov:ic:ism:201609");
+}
 
 //DerivedXMLParser300::DerivedXMLParser300(std::unique_ptr<logging::Logger>&& log) :
 //    DerivedXMLParser(VERSION,
@@ -215,7 +218,7 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     root->setNamespacePrefix("", getDefaultURI());
     root->setNamespacePrefix("si", xml::lite::Uri(SI_COMMON_URI));
     root->setNamespacePrefix("sfa", xml::lite::Uri(SFA_URI));
-    root->setNamespacePrefix("ism", xml::lite::Uri(ISM_URI));
+    root->setNamespacePrefix("ism", getISMUri());
 
     return doc;
 }
@@ -469,11 +472,11 @@ void DerivedXMLParser300::parseBandEqualizationFromXML(const xml::lite::Element&
 
     if (bandAlgo == "1DLUT")
     {
-        band.algorithm = BandEqualizationAlgorithm("LUT 1D");
+        band.algorithm = BandEqualizationAlgorithm::LUT_1D;
     }
     else
     {
-        band.algorithm = BandEqualizationAlgorithm(bandAlgo);
+        band.algorithm = BandEqualizationAlgorithm::toType(bandAlgo);
     }
 
     std::vector<XMLElem> lutElems;
@@ -747,7 +750,7 @@ void DerivedXMLParser300::parseColorSpaceTransformFromXML(
     }
     else
     {
-        transform.colorManagementModule.renderingIntent = RenderingIntent(renderIntentStr);
+        transform.colorManagementModule.renderingIntent = RenderingIntent::toType(renderIntentStr);
     }
     parseString(getFirstAndOnly(manageElem, "SourceProfile"),
                 transform.colorManagementModule.sourceProfile);
@@ -790,7 +793,15 @@ XMLElem DerivedXMLParser300::convertDerivedClassificationToXML(
         XMLElem parent) const
 {
     assert(parent != nullptr);
-    return & DerivedXMLParser200::convertDerivedClassificationToXML(*this, classification, *parent);
+
+    const auto ismUri = getISMUri();
+    auto& classElem = DerivedXMLParser200::convertDerivedClassificationToXML(*this, classification, ismUri, *parent);
+
+    //! from ism:ISMRootNodeAttributeGroup
+    // SIDD 3.0 is tied to IC-ISM v201609
+    classElem.attribute("DESVersion") = "201609"; // note that the specification also allows for "201609-<custom>"
+
+    return &classElem;
 }
 
 XMLElem DerivedXMLParser300::convertMeasurementToXML(const Measurement* measurement,
@@ -946,7 +957,7 @@ void DerivedXMLParser300::parseDigitalElevationDataFromXML(const xml::lite::Elem
     auto& posElem = getFirstAndOnly(elem, "Geopositioning");
     std::string coordSystemType;
     parseString(getFirstAndOnly(posElem, "CoordinateSystemType"), coordSystemType);
-    ded.geopositioning.coordinateSystemType = CoordinateSystemType(coordSystemType);
+    ded.geopositioning.coordinateSystemType = CoordinateSystemType::toType(coordSystemType);
     parseUInt(getFirstAndOnly(posElem, "FalseOrigin"), ded.geopositioning.falseOrigin);
     if (ded.geopositioning.coordinateSystemType == CoordinateSystemType::UTM)
     {

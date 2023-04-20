@@ -3,7 +3,7 @@ from waflib import Options
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
 
-ZLIB_VERSION = 'zlib-1.2.11'
+ZLIB_VERSION = 'zlib-1.2.13'
 
 def options(opt):
     opt.add_option('--with-zip-home', action='store', dest='zip_home',

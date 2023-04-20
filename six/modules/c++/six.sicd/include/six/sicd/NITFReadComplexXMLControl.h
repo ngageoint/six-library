@@ -65,12 +65,9 @@ namespace six
 			six::NITFReadControl& NITFReadControl() { return reader; }
 
 			void load(const std::string& fromFile, const std::vector<std::string>* pSchemaPaths);
-			void load(const std::string& fromFile, const std::vector<std::string>& schemaPaths)
-			{
-				load(fromFile, &schemaPaths);
-			}
 			void load(const std::filesystem::path& fromFile, const std::vector<std::filesystem::path>* pSchemaPaths);
-			void load(const std::filesystem::path& fromFile, const std::vector<std::filesystem::path>& schemaPaths)
+			template<typename TPath>
+			void load(const TPath& fromFile, const std::vector<TPath>& schemaPaths)
 			{
 				load(fromFile, &schemaPaths);
 			}
@@ -78,8 +75,11 @@ namespace six
 			{
 				load(fromFile, nullptr /*schemaPaths*/);
 			}
+
 			void load(io::FileInputStream&, const std::vector<std::string>* pSchemaPaths);
-			void load(io::FileInputStream& fis, const std::vector<std::string>& schemaPaths)
+			void load(io::FileInputStream&, const std::vector<std::filesystem::path>* pSchemaPaths);
+			template<typename TSchemaPath>
+			void load(io::FileInputStream& fis, const std::vector<TSchemaPath>& schemaPaths)
 			{
 				load(fis, &schemaPaths);
 			}

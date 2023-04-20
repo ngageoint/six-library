@@ -77,12 +77,8 @@ elseif(ENABLE_ZIP)
     message("ZIP_HOME not specified, so zlib and minizip will be built")
     coda_fetch_driver(
         NAME ${TARGET_NAME}
-        ARCHIVE "zlib-1.2.11.tar"
-        HASH "SHA256=FAC54AC78F4DED16C64AEC1A9C7D73BC082305306AF849A16787D7828FABA783")
-
-    if (MSVC)
-        add_compile_options(/wd4996) # '...': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: .... See online help for details.
-    endif()
+        ARCHIVE "zlib-1.2.13.tar"
+        HASH "SHA256=A47CDCD8863424356B893B259CB57081EFDCC7FA3C2EB56CA1E881324958A2A9")
 
     set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
     # remove crypt.h due to name clash with glibc

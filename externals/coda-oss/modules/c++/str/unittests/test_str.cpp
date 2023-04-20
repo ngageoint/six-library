@@ -20,11 +20,17 @@
  *
  */
 
+#include <tuple> // std::ignore
+
+#include <config/compiler_extensions.h>
 #include <import/str.h>
 #include "TestCase.h"
 
-namespace
+inline std::string to_string(const std::string& value)
 {
+    return value;
+}
+
 TEST_CASE(testTrim)
 {
     std::string s = "  test   ";
@@ -32,21 +38,23 @@ TEST_CASE(testTrim)
     TEST_ASSERT_EQ(s, "test");
 }
 
-TEST_CASE(testStrip)
+TEST_CASE(testData)
 {
-    std::string s = "  test   ";
-    str::strip(s);
-    TEST_ASSERT_EQ(s, "test");
+    std::string s;
+    // https://en.cppreference.com/w/cpp/string/basic_string/resize
+    s.resize(3); // "Resizes the string to contain count characters." 
+    
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable : 4996)  // '...': This function or variable may be unsafe. ...
+    #endif
 
-    const auto s2 = str::strip(s);
-    TEST_ASSERT_EQ(s2, "test");
-
-    const auto s3 = str::strip("  test   ");
-    TEST_ASSERT_EQ(s3, "test");
-
-    const auto s4 = s;
-    const auto s5 = str::strip(s4);
-    TEST_ASSERT_EQ(s5, "test");
+    // https://en.cppreference.com/w/cpp/string/basic_string/data
+    // "Modifying the past-the-end null terminator stored at data()+size() to any value other than CharT() has undefined behavior."
+    std::ignore = strcpy(str::data(s), "abc"); 
+    
+    CODA_OSS_disable_warning_pop
+    TEST_ASSERT_EQ(s, "abc");
 }
 
 TEST_CASE(testUpper)
@@ -196,12 +204,10 @@ TEST_CASE(testEscapeForXMLKitchenSink)
     str::escapeForXML(message);
     TEST_ASSERT_EQ(message, expectedMessage);
 }
-}
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testTrim);
-    TEST_CHECK(testStrip);
+    TEST_CHECK(testData);
     TEST_CHECK(testUpper);
     TEST_CHECK(testLower);
     TEST_CHECK(testReplace);
@@ -220,5 +226,4 @@ int main(int, char**)
     TEST_CHECK(testRoundDouble);
     TEST_CHECK(testEscapeForXMLNoReplace);
     TEST_CHECK(testEscapeForXMLKitchenSink);
-    return 0;
-}
+    )

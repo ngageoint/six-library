@@ -96,7 +96,7 @@ TEST_CASE(test_hash_table_1)
             }
             catch (const except::NoSuchKeyException& t)
             {
-                TEST_ASSERT_EQ("NOT FOUND", keyBuf);
+                TEST_ASSERT_EQ_STR("NOT FOUND", keyBuf);
                 const auto message = t.getMessage();
                 TEST_ASSERT_EQ(message, keyBuf);
             }
@@ -140,12 +140,12 @@ TEST_CASE(test_hash_table_iterator)
         const std::string key = where.getKey();
         TEST_ASSERT_EQ(static_cast<size_t>(2), key.length());
         TEST_ASSERT_EQ('k', key[0]);
-        TEST_ASSERT(isdigit(key[1]));
+        TEST_ASSERT(isdigit(key[1]) != 0);
 
         const std::string data = static_cast<const char*>(where.getData());
         TEST_ASSERT_EQ(static_cast<size_t>(2), data.length());
         TEST_ASSERT_EQ('v', data[0]);
-        TEST_ASSERT(isdigit(data[1]));
+        TEST_ASSERT(isdigit(data[1]) != 0);
         TEST_ASSERT_EQ(key[1], data[1]);
     }
 }

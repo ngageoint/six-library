@@ -92,7 +92,7 @@ NITF_BOOL unmergeTREs(nitf_Record *record, nitf_Error *error)
 }
 
 
-TEST_CASE_ARGS(testUnmerge)
+TEST_CASE(testUnmerge)
 {
     nitf_Version version = NITF_VER_21;
     nitf_Record *record = NULL;
@@ -122,9 +122,9 @@ TEST_CASE_ARGS(testUnmerge)
     nitf_Record_destruct(&record);
 }
 
-int main(int argc, char **argv)
+int main() // int argc, char **argv
 {
-    CHECK_ARGS(testUnmerge);
+    CHECK(testUnmerge);
     return 0;
 }
 

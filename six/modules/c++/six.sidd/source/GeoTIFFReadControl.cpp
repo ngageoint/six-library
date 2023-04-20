@@ -20,10 +20,12 @@
  *
  */
 
-#include <string>
+#include <std/string>
 #include <vector>
+#include <std/memory>
 
 #include <str/Convert.h>
+#include <str/EncodedStringView.h>
 #include <gsl/gsl.h>
 #include <mem/ScopedArray.h>
 #include "six/sidd/GeoTIFFReadControl.h"
@@ -35,7 +37,7 @@ namespace
 // This entry should contain XML entries as strings.  Each separate entry is
 // nullptr-terminated, so we split on this.
 void parseXMLEntry(const tiff::IFDEntry *entry,
-                   std::vector<std::string> &entries)
+                   std::vector<std::u8string> &entries)
 {
     entries.clear();
 
@@ -44,15 +46,10 @@ void parseXMLEntry(const tiff::IFDEntry *entry,
         const std::vector<tiff::TypeInterface *> values(entry->getValues());
 
         std::string curStr;
-        for (std::vector<tiff::TypeInterface *>::const_iterator iter =
-                 values.begin();
-             iter != values.end();
-             ++iter)
+        for (auto&& value : values)
         {
-            const tiff::TypeInterface * const value = *iter;
-            const char * const data =
-                reinterpret_cast<const char *>(value->data());
-            const size_t size(value->size());
+            const auto data = reinterpret_cast<const char *>(value->data());
+            const auto size(value->size());
 
             for (size_t ii = 0; ii < size; ++ii)
             {
@@ -62,7 +59,7 @@ void parseXMLEntry(const tiff::IFDEntry *entry,
                     str::trim(curStr);
                     if (!curStr.empty())
                     {
-                        entries.push_back(curStr);
+                        entries.emplace_back(str::EncodedStringView(curStr).u8string());
                         curStr.clear();
                     }
                 }
@@ -78,7 +75,7 @@ void parseXMLEntry(const tiff::IFDEntry *entry,
         str::trim(curStr);
         if (!curStr.empty())
         {
-           entries.push_back(curStr);
+           entries.emplace_back(str::EncodedStringView(curStr).u8string());
         }
     }
 }
@@ -94,7 +91,7 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
         {
             if (reader[0]->getIFD()->exists(six::Constants::GT_XML_KEY))
             {
-                std::vector<std::string> xmlStrs;
+                std::vector<std::u8string> xmlStrs;
                 parseXMLEntry(
                     (*(reader[0]->getIFD()))[six::Constants::GT_XML_KEY],
                     xmlStrs);
@@ -104,7 +101,7 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
                 for (size_t ii = 0; ii < xmlStrs.size(); ++ii)
                 {
                     // Parse it into an XML document
-                    io::StringStream stream;
+                    io::U8StringStream stream;
                     stream.write(xmlStrs[ii]);
                     stream.seek(0, io::Seekable::START);
                     six::MinidomParser xmlParser;
@@ -126,9 +123,16 @@ six::sidd::GeoTIFFReadControl::getDataType(const std::string& fromFile) const
     return six::DataType::NOT_SET;
 }
 
-void six::sidd::GeoTIFFReadControl::load(
-        const std::string& fromFile,
-        const std::vector<std::string>& schemaPaths)
+inline std::unique_ptr<six::Data> fromXML_(six::XMLControl& xmlControl, const xml::lite::Document& doc, const std::vector<std::string>& schemaPaths)
+{
+    return std::unique_ptr<six::Data>(xmlControl.fromXML(&doc, schemaPaths));
+}
+inline std::unique_ptr<six::Data> fromXML_(six::XMLControl& xmlControl, const xml::lite::Document& doc, const std::vector< std::filesystem::path>* pSchemaPaths)
+{
+    return xmlControl.fromXML(doc, pSchemaPaths);
+}
+template<typename TSchemaPaths, typename TCreateXmlParser>
+void six::sidd::GeoTIFFReadControl::load_(const std::string& fromFile, const TSchemaPaths& schemaPaths, TCreateXmlParser createXmlParser)
 {
     mReader.openFile(fromFile);
 
@@ -138,7 +142,7 @@ void six::sidd::GeoTIFFReadControl::load(
         throw except::Exception(Ctxt(fromFile + ": unexpected file type"));
     }
 
-    std::vector<std::string> xmlStrs;
+    std::vector<std::u8string> xmlStrs;
     parseXMLEntry((*(mReader[0]->getIFD()))[six::Constants::GT_XML_KEY],
                   xmlStrs);
 
@@ -150,10 +154,11 @@ void six::sidd::GeoTIFFReadControl::load(
     for (const auto& xmlStr : xmlStrs)
     {
         // Parse it into an XML document
-        io::StringStream stream;
+        io::U8StringStream stream;
         stream.write(xmlStr);
         stream.seek(0, io::Seekable::START);
-        six::MinidomParser xmlParser;
+        auto pXmlParser = createXmlParser();
+	    auto& xmlParser = *pXmlParser;
         xmlParser.preserveCharacterData(true);
         xmlParser.parse(stream);
         const auto& doc = xmlParser.getDocument();
@@ -187,8 +192,7 @@ void six::sidd::GeoTIFFReadControl::load(
 
         if (xmlControl)
         {
-            std::unique_ptr<six::Data> data(xmlControl->fromXML(&doc,
-                                                              schemaPaths));
+            auto data = fromXML_(*xmlControl, doc, schemaPaths);
 
             if (!data.get())
             {
@@ -198,6 +202,19 @@ void six::sidd::GeoTIFFReadControl::load(
             mContainer->addData(std::move(data));
         }
     }
+}
+void six::sidd::GeoTIFFReadControl::load(
+    const std::string& fromFile,
+    const std::vector<std::string>& schemaPaths)
+{
+    const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(); };
+    load_(fromFile, schemaPaths, createXmlParser);
+}
+void six::sidd::GeoTIFFReadControl::load(const std::filesystem::path& fromFile_, const std::vector< std::filesystem::path>* pSchemaPaths)
+{
+    const auto fromFile = fromFile_.string();
+    const auto createXmlParser = []() { return std::make_unique<six::MinidomParser>(); };
+    load_(fromFile, pSchemaPaths, createXmlParser);
 }
 
 six::UByte* six::sidd::GeoTIFFReadControl::interleaved(six::Region& region,

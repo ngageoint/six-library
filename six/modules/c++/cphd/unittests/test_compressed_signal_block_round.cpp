@@ -48,8 +48,6 @@
  * Tests write and read of Signal Block with compressed data
  * Fails if values don't match
  */
-namespace
-{
 std::vector<std::byte> generateCompressedData(size_t length)
 {
     std::vector<std::byte> data(length);
@@ -146,9 +144,8 @@ TEST_CASE(testCompressed)
             generateCompressedData(dims.area());
     TEST_ASSERT_TRUE(runTest(writeData));
 }
-}
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
         TEST_CHECK(testCompressed);
 )
 

@@ -20,13 +20,10 @@
  *
  */
 
-#include <assert.h>
-
 #include <fstream>
 #include <sstream>
 #include <numeric> // std::accumulate
 #include <string>
-
 #include <std/filesystem>
 
 #include <sys/OS.h>
@@ -34,12 +31,10 @@
 #include <sys/Backtrace.h>
 #include <sys/Dbg.h>
 #include <sys/DateTime.h>
+#include <sys/sys_filesystem.h>
+#include <sys/File.h>
 #include "TestCase.h"
 
-namespace fs = coda_oss::filesystem;
-
-namespace
-{
 void createFile(const std::string& pathname)
 {
     std::ofstream oss(pathname.c_str());
@@ -168,10 +163,10 @@ TEST_CASE(testSplitEnv)
     std::vector<std::string> paths;
     bool result = os.splitEnv(pathEnvVar, paths);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_GREATER(paths.size(), 0);
+    TEST_ASSERT_FALSE(paths.empty());
     for (const auto& path : paths)
     {
-        TEST_ASSERT_TRUE(fs::exists(path));
+        TEST_ASSERT_TRUE(std::filesystem::exists(path));
     }
 
     // create an environemnt variable with a known bogus path
@@ -187,11 +182,11 @@ TEST_CASE(testSplitEnv)
 
     // PATHs are directories, not files
     paths.clear();
-    result = os.splitEnv(pathEnvVar, paths, fs::file_type::directory);
+    result = os.splitEnv(pathEnvVar, paths, std::filesystem::file_type::directory);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_GREATER(paths.size(), static_cast<size_t>(0));
+    TEST_ASSERT_FALSE(paths.empty());
     paths.clear();
-    result = os.splitEnv(pathEnvVar, paths, fs::file_type::regular);
+    result = os.splitEnv(pathEnvVar, paths, std::filesystem::file_type::regular);
     TEST_ASSERT_FALSE(result);
     TEST_ASSERT_TRUE(paths.empty());
 
@@ -243,7 +238,7 @@ static void testFsExtension_(const std::string& testName)
 }
 TEST_CASE(testFsExtension)
 {
-    testFsExtension_<fs::path>(testName);
+    testFsExtension_<std::filesystem::path>(testName);
     testFsExtension_<std::filesystem::path>(testName);
     #if CODA_OSS_lib_filesystem
     testFsExtension_<std::filesystem::path>(testName);
@@ -265,7 +260,7 @@ static void testFsOutput_(const std::string& testName)
 }
 TEST_CASE(testFsOutput)
 {
-    testFsOutput_<fs::path>(testName);
+    testFsOutput_<std::filesystem::path>(testName);
     testFsOutput_<std::filesystem::path>(testName);
     #if CODA_OSS_lib_filesystem
     testFsOutput_<std::filesystem::path>(testName);
@@ -299,7 +294,7 @@ TEST_CASE(testBacktrace)
 
 
     size_t expected = 0;
-    size_t expected_other = 0;
+    //size_t expected_other = 0;
     auto version_sys_backtrace_ = version::sys::backtrace; // "Conditional expression is constant"
     if (version_sys_backtrace_ >= 20210216L)
     {
@@ -307,23 +302,25 @@ TEST_CASE(testBacktrace)
 
         #if _WIN32
         constexpr auto frames_size_RELEASE = 2;
-        constexpr auto frames_size_RELEASE_other = frames_size_RELEASE;
+        //constexpr auto frames_size_RELEASE_other = frames_size_RELEASE;
         constexpr auto frames_size_DEBUG = 14;
+        //constexpr auto frames_size_DEBUG_other = frames_size_DEBUG + 1; // 15
         #elif defined(__GNUC__)
         constexpr auto frames_size_RELEASE = 6;
-        constexpr auto frames_size_RELEASE_other = 7;
-        constexpr auto frames_size_DEBUG = 10;
+        //constexpr auto frames_size_RELEASE_other = frames_size_RELEASE + 1; // 7
+        constexpr auto frames_size_DEBUG = frames_size_RELEASE + 4; // 10
+        //constexpr auto frames_size_DEBUG_other = frames_size_DEBUG;
         #else
         #error "CODA_OSS_sys_Backtrace inconsistency."
         #endif
         expected = sys::debug_build() ? frames_size_DEBUG : frames_size_RELEASE;
-        expected_other = sys::debug_build() ? frames_size_DEBUG : frames_size_RELEASE_other;
+        //expected_other = sys::debug_build() ? frames_size_DEBUG_other : frames_size_RELEASE_other;
     }
     else
     {
         TEST_ASSERT_FALSE(supported);
     }
-    TEST_ASSERT( (frames.size() == expected) || (frames.size() == expected_other) );
+    TEST_ASSERT_GREATER_EQ(frames.size(), expected);
 
     const auto msg = std::accumulate(frames.begin(), frames.end(), std::string());
     if (supported)
@@ -344,9 +341,9 @@ TEST_CASE(testSpecialEnvVars)
     auto result = os.getSpecialEnv("0"); // i.e., ${0)
     TEST_ASSERT_FALSE(result.empty());
     TEST_ASSERT_EQ(result, argv0);
-    const fs::path fsresult(result);
-    const fs::path this_file(__FILE__);
-    TEST_ASSERT_EQ(fsresult.stem(), this_file.stem());
+    //const std::filesystem::path fsresult(result);
+    //const std::filesystem::path this_file(__FILE__);
+    //TEST_ASSERT_EQ(fsresult.stem(), this_file.stem());
 
     const auto pid = os.getSpecialEnv("PID");
     TEST_ASSERT_FALSE(pid.empty());
@@ -388,12 +385,134 @@ TEST_CASE(testSpecialEnvVars)
     TEST_ASSERT_FALSE(result.empty());
 }
 
+TEST_CASE(testFsFileSize)
+{
+    const sys::OS os;
+    {
+        const std::filesystem::path argv0(os.getSpecialEnv("ARGV0"));
+	const int64_t size = static_cast<int64_t>(file_size(argv0));
+        TEST_ASSERT_GREATER(size, 0);
+    }
+    {
+        // We always have  sys::filesystem, even if it's not used.
+        const sys::filesystem::path argv0(os.getSpecialEnv("ARGV0"));
+        const int64_t size = static_cast<int64_t>(file_size(argv0));
+        TEST_ASSERT_GREATER(size, 0);
+    }
 }
 
-int main(int, char** argv)
+static sys::File makeFile_()
 {
-    sys::AbstractOS::setArgvPathname(argv[0]);
+#ifdef _WIN32
+    static const std::filesystem::path name("explorer.exe");
+    return sys::make_File("%SystemRoot%" / name);
 
+#else
+    static const std::filesystem::path dot_cshrc(".cshrc");
+    try
+    {
+        return sys::make_File("$HOME" / dot_cshrc);
+    }
+    catch (const sys::SystemException&) { }  // no .cshrc; try .bashrc
+
+    static const std::filesystem::path dot_bashrc(".bashrc");
+    return sys::make_File("$HOME" / dot_bashrc);
+#endif
+}
+TEST_CASE(test_makeFile)
+{
+  auto file = makeFile_();
+  TEST_ASSERT_TRUE(file.isOpen());
+}
+
+static FILE* sys_fopen()
+{
+    static const std::string mode("r");
+
+#ifdef _WIN32
+    static const std::filesystem::path name("explorer.exe");
+    return sys::fopen("%SystemRoot%" / name, mode);
+
+#else
+    static const std::filesystem::path dot_cshrc(".cshrc");
+    auto retval = sys::fopen("$HOME" / dot_cshrc, mode);
+    if (retval != nullptr)
+    {
+	    return retval;
+    }
+    // no .cshrc; try .bashrc
+    static const std::filesystem::path dot_bashrc(".bashrc");
+    return sys::fopen("$HOME" / dot_bashrc, mode);
+#endif
+}
+TEST_CASE(test_sys_fopen)
+{
+    auto fp = sys_fopen();
+    TEST_ASSERT_NOT_NULL(fp);
+    fclose(fp);
+}
+
+TEST_CASE(test_sys_fopen_failure)
+{
+    static const std::string mode("r");
+    static const std::filesystem::path name("does not exist . txt");
+    const auto fp = sys::fopen("$ENV_VAR_NOT_SET" / name, mode);
+    TEST_ASSERT_NULL(fp);
+}
+
+static int sys_open()
+{
+    constexpr int flags = 0;
+
+#ifdef _WIN32
+    static const std::filesystem::path name("explorer.exe");
+    return sys::open("%SystemRoot%" / name, flags);
+
+#else
+    static const std::filesystem::path dot_cshrc(".cshrc");
+    auto retval = sys::open("$HOME" / dot_cshrc, flags);
+    if (retval > -1)
+    {
+	    return retval;
+    }
+    // no .cshrc; try .bashrc
+    static const std::filesystem::path dot_bashrc(".bashrc");
+    return sys::open("$HOME" / dot_bashrc, flags);
+#endif
+}
+TEST_CASE(test_sys_open)
+{
+    auto fd = sys_open();
+    TEST_ASSERT(fd > -1);
+    sys::close(fd);
+}
+
+static std::ifstream make_ifstream_()
+{
+#ifdef _WIN32
+    static const std::filesystem::path name("explorer.exe");
+    return sys::make_ifstream("%SystemRoot%" / name);
+
+#else
+    static const std::filesystem::path dot_cshrc(".cshrc");
+    auto retval = sys::make_ifstream("$HOME" / dot_cshrc);
+    if (retval)
+    {
+        return retval;
+    }
+    // no .cshrc; try .bashrc
+    static const std::filesystem::path dot_bashrc(".bashrc");
+    return sys::make_ifstream("$HOME" / dot_bashrc);
+#endif
+}
+TEST_CASE(test_make_ifstream)
+{
+    const auto ifs = make_ifstream_();
+    TEST_ASSERT_TRUE(ifs.is_open());
+}
+
+TEST_MAIN(
+    //sys::AbstractOS::setArgvPathname(argv[0]);
     TEST_CHECK(testRecursiveRemove);
     TEST_CHECK(testForcefulMove);
     TEST_CHECK(testEnvVariables);
@@ -402,7 +521,10 @@ int main(int, char** argv)
     TEST_CHECK(testFsOutput);
     TEST_CHECK(testBacktrace);
     TEST_CHECK(testSpecialEnvVars);
-
-    return 0;
-}
-
+    TEST_CHECK(testFsFileSize);
+    TEST_CHECK(test_makeFile);
+    TEST_CHECK(test_sys_fopen);
+    TEST_CHECK(test_sys_fopen_failure);
+    TEST_CHECK(test_sys_open);
+    TEST_CHECK(test_make_ifstream);
+    )

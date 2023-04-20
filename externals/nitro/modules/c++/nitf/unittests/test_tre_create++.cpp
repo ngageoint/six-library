@@ -1,9 +1,14 @@
+#include <sys/OS.h>
+
 #include <import/nitf.hpp>
+#include <nitf/UnitTests.hpp>
 
 #include "TestCase.h"
 
 TEST_CASE(test_tre_create_329)
 {
+    nitf::Test::setNitfPluginPath();
+
     // https://github.com/mdaus/nitro/issues/329
 
     nitf::TRE tre("HISTOA", "HISTOA"); // allocates fields SYSTEM .. NEVENTS
@@ -16,6 +21,8 @@ TEST_CASE(test_tre_create_329)
 
 TEST_CASE(test_tre_clone_329)
 {
+    nitf::Test::setNitfPluginPath();
+
     // https://github.com/mdaus/nitro/issues/329
     const std::string rd = "begin1020030004ABCDEFend";
 
@@ -23,7 +30,7 @@ TEST_CASE(test_tre_clone_329)
     {
         nitf_Error error;
         rawTre = nitf::TRE::create("TESTxyz", NITF_TRE_RAW, error);
-        TEST_ASSERT_NOT_EQ(nullptr, rawTre);
+        TEST_ASSERT_NOT_NULL(rawTre);
 
         nitf::TRE::setField(rawTre, "raw_data", rd, error);
         TEST_ASSERT_TRUE(true);
@@ -36,6 +43,7 @@ TEST_CASE(test_tre_clone_329)
 }
 
 TEST_MAIN(
+    (void)argv; (void)argc;
     TEST_CHECK(test_tre_create_329);
     TEST_CHECK(test_tre_clone_329);
     )

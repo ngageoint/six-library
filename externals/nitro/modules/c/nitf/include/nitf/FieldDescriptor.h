@@ -41,12 +41,19 @@ typedef enum nitf_StructFieldType_
 } nitf_StructFieldType;
 
 // A "descriptor" of a field
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct nitf_StructFieldDescriptor_
 {
     nitf_StructFieldType type;
     const char* name;
     size_t offset;
 } nitf_StructFieldDescriptor;
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 // A bunch of ugly macros to generate two things: the struct itself and a list of descriptors the fields.
 // The end result of NITF_DECLARE_struct_1_(Test, Field, f) is:

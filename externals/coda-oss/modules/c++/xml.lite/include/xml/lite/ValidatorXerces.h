@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_VALIDATOR_XERCES_H__
-#define __XML_LITE_VALIDATOR_XERCES_H__
+#ifndef CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
+#define CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
 
 #include <xml/lite/xml_lite_config.h>
 
@@ -29,6 +29,7 @@
 
 #include <memory>
 #include <vector>
+#include <coda_oss/string.h>
 
 #include <xml/lite/UtilitiesXerces.h>
 #include <xml/lite/ValidatorInterface.h>
@@ -51,7 +52,7 @@ namespace lite
 
 typedef xercesc::DOMError ValidationError;
 
-struct ValidationErrorHandler : public xercesc::DOMErrorHandler
+struct ValidationErrorHandler final : public xercesc::DOMErrorHandler
 {
     ValidationErrorHandler() = default;
 
@@ -61,7 +62,7 @@ struct ValidationErrorHandler : public xercesc::DOMErrorHandler
     ValidationErrorHandler& operator=(ValidationErrorHandler&&) = delete;
 
     //! handle the errors during validation
-    virtual bool handleError (const ValidationError& err);
+    bool handleError (const ValidationError& err) override;
 
     //! get the raw information
     const std::vector<ValidationInfo>& getErrorLog() const
@@ -113,14 +114,14 @@ public:
     ValidatorXerces(const std::vector<std::string>& schemaPaths, 
                     logging::Logger* log,
                     bool recursive = true);
-    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&,
+    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, // fs::path -> mLegacyStringConversion = false
                     logging::Logger* log,
                     bool recursive = true);
 
     ValidatorXerces(const ValidatorXerces&) = delete;
     ValidatorXerces& operator=(const ValidatorXerces&) = delete;
-    ValidatorXerces(ValidatorXerces&&) = delete;
-    ValidatorXerces& operator=(ValidatorXerces&&) = delete;
+    ValidatorXerces(ValidatorXerces&&) = default;
+    ValidatorXerces& operator=(ValidatorXerces&&) = default;
 
     using ValidatorInterface::validate;
 
@@ -133,8 +134,13 @@ public:
     virtual bool validate(const std::string& xml,
                           const std::string& xmlID,
                           std::vector<ValidationInfo>& errors) const override;
+    bool validate(const coda_oss::u8string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
+    bool validate(const str::W1252string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
 
 private:
+    bool validate_(const coda_oss::u8string& xml, 
+                   const std::string& xmlID,
+                   std::vector<ValidationInfo>& errors) const;
 
     std::unique_ptr<xercesc::XMLGrammarPool> mSchemaPool;
     std::unique_ptr<xml::lite::ValidationErrorHandler> mErrorHandler;
@@ -150,4 +156,4 @@ std::ostream& operator<< (std::ostream& out,
 
 #endif
 
-#endif
+#endif  // CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_

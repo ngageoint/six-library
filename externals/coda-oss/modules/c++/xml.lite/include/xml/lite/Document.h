@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_DOM_DOCUMENT_H__
-#define __XML_LITE_DOM_DOCUMENT_H__
+#ifndef CODA_OSS_xml_lite_Doocument_h_INCLUDED_
+#define CODA_OSS_xml_lite_Doocument_h_INCLUDED_
 #pragma once
 
 /*!
@@ -38,6 +38,11 @@
 
 #include <assert.h>
 
+#include <utility>
+#include <std/memory>
+#include "coda_oss/string.h"
+#include "coda_oss/memory.h"
+
 #include "xml/lite/Element.h"
 #include "xml/lite/QName.h"
 
@@ -52,33 +57,45 @@ namespace lite
  * Use the Document to access the Element nodes contained within.
  * The DocumentParser will build a tree that you can use.
  */
-class Document
+struct Document // SOAPDocument derives :-(
 {
-public:
     //! Constructor
     Document(Element* rootNode = nullptr, bool own = true) :
         mRootNode(rootNode), mOwnRoot(own)
     {
     }
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
+    explicit Document(std::unique_ptr<Element>&& rootNode) : // implicitly own=true
+        Document(rootNode.release(), true /*own*/)
+    {
+    }
+    #endif // SWIG
 
     /*!
      * Destroy the xml tree.  This deletes the nodes if they exist
      * Careful, this may delete your copy if you are not careful
      */
-    virtual ~Document()
+    virtual ~Document() noexcept(false)
     {
         destroy();
     }
 
-    virtual Document* clone() const
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
+    std::unique_ptr<Document>& clone(std::unique_ptr<Document>& doc) const
     {
-        Document* doc = new Document();
+        doc = std::make_unique<Document>();
 
-        Element* cloneRoot = new Element();
+        auto cloneRoot = std::make_unique<Element>();
         cloneRoot->clone(*mRootNode);
-        doc->setRootElement(cloneRoot);
+        doc->setRootElement(std::move(cloneRoot));
         return doc;
     }
+    Document* clone() const
+    {
+        std::unique_ptr<Document> doc;
+        return clone(doc).release();
+    }
+    #endif // SWIG
 
     /*!
      * Factory-type method for creating a new Element
@@ -87,21 +104,11 @@ public:
      * \param characterData The character data (if any)
      * \return A new element
      */
-    virtual Element *createElement(const std::string & qname,
-                                   const std::string & uri,
-                                   std::string characterData = "");
-    #ifndef SWIG  // SWIG doesn't like unique_ptr or StringEncoding
-    virtual Element* createElement(const std::string& qname,
-                                   const std::string & uri,
-                                   const std::string& characterData, StringEncoding);
-    virtual Element* createElement(const std::string& qname,
-                                   const std::string& uri,
-                                   const coda_oss::u8string& characterData);
-    std::unique_ptr<Element> createElement(const xml::lite::QName& qname, const std::string& characterData) const;
-    std::unique_ptr<Element> createElement(const xml::lite::QName& qname,
-                                   const std::string& characterData, StringEncoding) const;
+    virtual Element *createElement(const std::string & qname, const std::string & uri, std::string characterData = "");
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
+    std::unique_ptr<Element> createElement(const xml::lite::QName&, const std::string& characterData) const;
+    std::unique_ptr<Element> createElement(const xml::lite::QName&, const coda_oss::u8string& characterData) const;
     #endif // SWIG
-
 
     /*!
      * Blanket destructor.  This thing deletes everything
@@ -116,13 +123,13 @@ public:
      * \param element Element to add
      * \param underThis Element to add element to
      */
-    virtual void insert(Element * element, Element * underThis);
+    void insert(Element * element, Element * underThis);
 
     /*!
      * Remove an element from the tree, starting at the root
      * \param toDelete The node to delete (This DOES do deletion)
      */
-    virtual void remove(Element * toDelete);
+    void remove(Element * toDelete);
 
     /*!
      * Remove an element from the tree, starting at the second param
@@ -131,13 +138,19 @@ public:
      * be an optimization depending on the task, so I allow it to remain
      * public
      */
-    virtual void remove(Element * toDelete, Element * fromHere);
+    void remove(Element * toDelete, Element * fromHere);
 
     /*!
      * Sets the internal root element
      * \param element The node to set.
      */
     void setRootElement(Element * element, bool own = true);
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
+    void setRootElement(std::unique_ptr<Element>&& element) // implicitly own=true
+    {
+        setRootElement(element.release(), true /*own*/);
+    }
+    #endif // SWIG
 
     /*!
      * Retrieves the internal root element
@@ -149,17 +162,20 @@ public:
             mOwnRoot = false;
         return mRootNode;
     }
-
+    #ifndef SWIG // SWIG doesn't like std::unique_ptr
+    std::unique_ptr<Element>& getRootElement(std::unique_ptr<Element>& rootNode) // implicitly steal=true
+    {
+        rootNode.reset(getRootElement(true /*steal*/));
+        return rootNode;
+    }
+    #endif // SWIG
     Element *getRootElement() const
     {
         return mRootNode;
     }
 
-protected:
-    //! Copy constructor
+private:
     Document(const Document&);
-
-    //! Assignment operator
     Document& operator=(const Document&);
 
     //! The root node element
@@ -193,4 +209,5 @@ inline const Element& getRootElement(const Document* pDoc)
 }
 }
 
-#endif
+#endif // CODA_OSS_xml_lite_Doocument_h_INCLUDED_
+

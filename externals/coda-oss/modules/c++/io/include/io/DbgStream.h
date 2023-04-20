@@ -89,7 +89,7 @@ struct DbgStream : public OutputStream
      * \param len The length
      * \throw IOException
      */
-    virtual void write(const void* buffer, sys::Size_T len)
+    virtual void write(const void* buffer, sys::Size_T len) override
     {
         if (mOn)
         {
@@ -116,7 +116,7 @@ struct DbgStream : public OutputStream
     }
 protected:
     //!  The bound stream
-    mem::auto_ptr<OutputStream> mStream;
+    std::unique_ptr<OutputStream> mStream;
     //!  On or off??
     bool mOn = false;
 };

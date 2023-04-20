@@ -41,10 +41,9 @@ TEST_CASE(differentSignsNe)
     TEST_ASSERT(!math::linear::equals(std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity()));
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(positiveInfinityEq);
     TEST_CHECK(negativeInfinityEq);
     TEST_CHECK(differentSignsNe);
-}
+    )
 

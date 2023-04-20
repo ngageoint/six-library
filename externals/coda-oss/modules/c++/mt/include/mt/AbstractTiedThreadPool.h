@@ -48,10 +48,10 @@ public:
         mAffinityInit = affinityInit;
     }
 
-    virtual mem::auto_ptr<CPUAffinityThreadInitializer>
+    virtual std::unique_ptr<CPUAffinityThreadInitializer>
     getCPUAffinityThreadInitializer()
     {
-        mem::auto_ptr<CPUAffinityThreadInitializer> threadInit(nullptr);
+        std::unique_ptr<CPUAffinityThreadInitializer> threadInit(nullptr);
 
         // If we were passed a schematic
         // for initializing thread affinity...
@@ -71,18 +71,7 @@ public:
  protected:
     virtual mt::TiedWorkerThread<Request_T>*
     newTiedWorker(mt::RequestQueue<Request_T>* q,
-#if CODA_OSS_cpp17
                   std::unique_ptr<CPUAffinityThreadInitializer>&& init) = 0;
-#else
-                  mem::auto_ptr<CPUAffinityThreadInitializer> init) = 0;
-    virtual mt::TiedWorkerThread<Request_T>*
-    newTiedWorker(mt::RequestQueue<Request_T>* q,
-                  std::unique_ptr<CPUAffinityThreadInitializer>&& init) {
-        mem::auto_ptr<CPUAffinityThreadInitializer> init_(init.release());
-        return newTiedWorker(q, init_);
-    }
-#endif
-
 
 private:
     CPUAffinityInitializer* mAffinityInit;

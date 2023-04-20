@@ -29,18 +29,19 @@
 
 #include "TestCase.h"
 
-namespace
-{
-
-
  template<typename TContainer, typename TSpan>
  static void testSpanBuffer_(const std::string& testName,
      const TContainer& ints, const TSpan& span)
 {
+     (void)testName;
     TEST_ASSERT_EQ(ints.size(), span.size());
     TEST_ASSERT_EQ(ints.data(), span.data());
 
+    const size_t dist = std::distance(span.begin(), span.end());
+    TEST_ASSERT_EQ(span.size(), dist);
+
     TEST_ASSERT_EQ(1, span[0]);
+    TEST_ASSERT_EQ(1, *(span.begin()));
     TEST_ASSERT_EQ(5, span[4]);
 
     span[0] = span[4];
@@ -60,10 +61,15 @@ static void testSpanVector_(const std::string& testName,
                             const TContainer& ints,
                             const TSpan& span)
 {
+     (void)testName;
     TEST_ASSERT_EQ(ints.size(), span.size());
     TEST_ASSERT_EQ(ints.data(), span.data());
 
+    const size_t dist = std::distance(span.begin(), span.end());
+    TEST_ASSERT_EQ(span.size(), dist);
+
     TEST_ASSERT_EQ(1, span[0]);
+    TEST_ASSERT_EQ(1, *(span.begin()));
     TEST_ASSERT_EQ(5, span[4]);
 }
 TEST_CASE(testSpanVector)
@@ -87,12 +93,9 @@ TEST_CASE(testGslNarrow)
 
     TEST_THROWS(gsl::narrow<int>(d));
 }
-}
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testSpanBuffer);
     TEST_CHECK(testSpanVector);
     TEST_CHECK(testGslNarrow);
-    return 0;
-}
+    )

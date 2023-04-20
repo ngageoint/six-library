@@ -3,14 +3,12 @@
 #include <six/sicd/Utilities.h>
 #include "TestCase.h"
 
-namespace
-{
 void setupData(six::sicd::ComplexData& data)
 {
     data.grid->row.reset(new six::sicd::DirectionParameters());
-    data.grid->row->sign = -1;
+    data.grid->row->sign = six::FFTSign::NEG;
     data.grid->col.reset(new six::sicd::DirectionParameters());
-    data.grid->col->sign = -1;
+    data.grid->col->sign = six::FFTSign::NEG;
     data.setNumRows(100);
     data.setNumCols(100);
 }
@@ -174,9 +172,9 @@ TEST_CASE(testRotatePlane)
     TEST_ASSERT_EQ(plane.xDirection->spacing, 5);
     TEST_ASSERT_EQ(plane.yDirection->spacing, 7);
 
-    TEST_ASSERT_EQ(plane.segmentList[0]->startLine, 0);
+    TEST_ASSERT_EQ(plane.segmentList[0]->startLine, 1);
     TEST_ASSERT_EQ(plane.segmentList[0]->startSample, 1);
-    TEST_ASSERT_EQ(plane.segmentList[0]->endLine, -8);
+    TEST_ASSERT_EQ(plane.segmentList[0]->endLine, 9);
     TEST_ASSERT_EQ(plane.segmentList[0]->endSample, 4);
 
     TEST_ASSERT_EQ(originalNumLines, plane.segmentList[0]->getNumSamples());
@@ -188,11 +186,28 @@ TEST_CASE(testRotatePlane)
 TEST_CASE(testCanRotateFourTimes)
 {
     six::sicd::AreaPlane plane;
-    scene::ECEFToLLATransform transformer;
     plane.orientation = six::OrientationType::LEFT;
     plane.yDirection->elements = 10;
     plane.xDirection->elements = 20;
     plane.referencePoint.rowCol = six::RowColDouble(1, 2);
+
+    plane.yDirection->spacing = 5;
+    plane.xDirection->spacing = 7;
+
+    plane.yDirection->unitVector[0] = 0;
+    plane.yDirection->unitVector[1] = 1;
+    plane.yDirection->unitVector[2] = 0;
+
+    plane.xDirection->unitVector[0] = 1;
+    plane.xDirection->unitVector[1] = 0;
+    plane.xDirection->unitVector[2] = 0;
+
+    plane.segmentList.resize(1);
+    plane.segmentList[0].reset(new six::sicd::Segment());
+    plane.segmentList[0]->startLine = 1;
+    plane.segmentList[0]->startSample = 0;
+    plane.segmentList[0]->endLine = 4;
+    plane.segmentList[0]->endSample = 8;
 
     std::unique_ptr<six::sicd::AreaPlane> originalPlane(plane.clone());
     plane.rotateCCW();
@@ -201,9 +216,8 @@ TEST_CASE(testCanRotateFourTimes)
     plane.rotateCCW();
     TEST_ASSERT(plane == *originalPlane);
 }
-}
 
-TEST_MAIN((void)argv; (void)argc;
+TEST_MAIN(
     TEST_CHECK(testAreaPlane);
     TEST_CHECK(testBothMethodsGiveSamePlane);
     TEST_CHECK(testRotatePlane);

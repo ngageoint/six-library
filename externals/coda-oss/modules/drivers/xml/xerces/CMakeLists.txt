@@ -185,10 +185,11 @@ else()
     set(XERCES_U32BIT_INT "uint32_t")
     set(XERCES_U64BIT_INT "uint64_t")
     set(XERCES_SIZE_T "size_t")
-    if (HAVE_WCHAR_H)
+    # This is for a UTF-16 value, 16 bits
+    if (WIN32)
         set(XERCES_XMLCH_T "wchar_t")
     else()
-        set(XERCES_XMLCH_T "uint16_t")
+        set(XERCES_XMLCH_T "char16_t")
     endif()
     if (HAVE_SSIZE_T)
         set(XERCES_SSIZE_T "ssize_t")
@@ -208,8 +209,8 @@ else()
     set(PACKAGE_STRING "xerces-c 3.2.3")
     set(PACKAGE_TARNAME "xerces-c")
     set(PACKAGE_URL "")
-    set(PACKAGE_VERSION "3.1.1")
-    set(VERSION "3.1.1")
+    set(PACKAGE_VERSION "3.2.3")
+    set(VERSION "3.2.3")
 
     # extra defines for Xerces_autoconf_config.hpp
     set(XERCES_USE_MSGLOADER_INMEMORY 1)
@@ -262,6 +263,9 @@ else()
     # MacOS could be supported here as well
     if (WIN32)
         list(APPEND EXCLUDES ${UNIX_SPECIFIC})
+        add_definitions(
+            -DWIN32
+        )
     else()
         list(APPEND EXCLUDES ${WIN_SPECIFIC})
     endif()
@@ -292,9 +296,10 @@ else()
     target_include_directories(${TARGET_NAME}
         PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
                "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
-               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xercesc/util/Xerces_autoconf_config.hpp"
-            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/util"
+               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>"
+               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/config>")
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/config.h"
+            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/config"
             ${CODA_INSTALL_OPTION})
     install(DIRECTORY "${SOURCE_DIR}/src/xercesc"
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
@@ -303,6 +308,9 @@ else()
                 PATTERN "*.h"
                 PATTERN "*.hpp"
                 PATTERN "*.c")
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xercesc/util/Xerces_autoconf_config.hpp"
+            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/util"
+            ${CODA_INSTALL_OPTION})
 endif()
 install(TARGETS ${TARGET_NAME}
         EXPORT ${CODA_EXPORT_SET_NAME}

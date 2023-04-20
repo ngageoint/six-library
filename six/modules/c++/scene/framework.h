@@ -3,12 +3,15 @@
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
 
+#pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
 #pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 #pragma warning(disable: 4710) // '...': function not inlined
-#pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
+#pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
+#pragma warning(disable: 5264) // '...': '...' variable is not used
 
+// changing this breaks SWIG
 #pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
@@ -28,10 +31,7 @@
 #pragma warning(disable: 26823) // Dereferencing a possibly null pointer '...' (lifetime.1).
 #pragma warning(disable: 26822) // Dereferencing a null pointer 'me' (lifetime.1).
 
-#pragma warning(push)
-#pragma warning(disable: 4464) // relative include path contains '..'
-#include "../../nitro_pch.h"
-#pragma warning(pop)
+#include "nitro_pch.h"
 
 #pragma warning(disable: 26400) // Do not assign the result of an allocation or a function call with an owner<T> return value to a raw pointer, use owner<T> instead(i.11).
 #pragma warning(disable: 26052) // Potentially unconstrained access using expression '...' ...

@@ -78,7 +78,7 @@ class CodaOssConan(ConanFile):
 
     def set_version(self):
         git = tools.Git(folder=self.recipe_folder)
-        self.version = "%s_%s" % (git.get_branch(), git.get_revision()[:16])
+        self.version = git.get_revision()[:16]
 
     def _get_in_tree_dependencies(self):
         # The in-tree dependencies ("drivers").
@@ -115,7 +115,7 @@ class CodaOssConan(ConanFile):
                 enable_option="ENABLE_XML",
             ),
             "zlib": dict(
-                version="1.2.11",
+                version="1.2.13",
                 user="coda",
                 channel="driver",
                 path=os.path.join("modules", "drivers", "zlib"),

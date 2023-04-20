@@ -348,6 +348,24 @@ nitf::Field ImageSubheader::getCompressionRate() const
     return nitf::Field(getNativeOrThrow()->compressionRate);
 }
 
+void ImageSubheader::getCompression(std::string& imageCompression, std::string& compressionRate) const
+{
+    imageCompression.resize(NITF_IC_SZ + 1); // "... char array with at least NITF_IC_SZ+1 bytes"
+    compressionRate.resize(NITF_COMRAT_SZ + 1); // "... char array with at least NITF_COMRAT_SZ+1 bytes"
+    const auto result = nitf_ImageSubheader_getCompression(getNativeOrThrow(),
+        str::data(imageCompression), str::data(compressionRate), &error);
+    if (result != NITF_SUCCESS)
+    {
+        throw nitf::NITFException(&error);
+    }
+}
+void  ImageSubheader::getCompression(ImageCompression& imageCompression, std::string& compressionRate) const
+{
+    std::string strImageCompression;
+    getCompression(strImageCompression, compressionRate);
+    imageCompression = from_string<ImageCompression>(strImageCompression);
+}
+
 nitf::Field ImageSubheader::getNumImageBands() const 
 {
     return nitf::Field(getNativeOrThrow()->numImageBands);

@@ -22,7 +22,7 @@
 
 #include "tiff/Utils.h"
 
-bool tiff::Utils::hasGeoTiffIFD(tiff::IFD* ifd)
+bool tiff::Utils::hasGeoTiffIFD(const tiff::IFD* ifd)
 {
     return ifd->exists("GeoKeyDirectoryTag");
 }
@@ -119,7 +119,7 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
             str::toType<unsigned short>(geoVals[idx++]->toString());
         const std::string valueStr(geoVals[idx++]->toString());
 
-        unsigned short entryType;
+        unsigned short entryType = tiff::Const::Type::NOTYPE;
         switch (tiffTagLoc)
         {
         case 34736: // GeoDoubleParamsTag

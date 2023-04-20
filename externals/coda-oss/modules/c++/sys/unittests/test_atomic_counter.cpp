@@ -30,8 +30,6 @@
 
 #include "TestCase.h"
 
-namespace
-{
 template <typename TAtomicCounter>
 static void testConstructor_(const std::string& testName)
 {
@@ -125,7 +123,7 @@ struct IncrementAtomicCounterT final : public sys::Runnable
     {
     }
 
-    virtual void run()
+    virtual void run() override
     {
         for (size_t ii = 0; ii < mNumIncrements; ++ii)
         {
@@ -212,7 +210,7 @@ struct DecrementAtomicCounterT final : public sys::Runnable
     {
     }
 
-    virtual void run()
+    virtual void run() override
     {
         for (size_t ii = 0; ii < mNumDecrements; ++ii)
         {
@@ -286,15 +284,11 @@ TEST_CASE(testThreadedDecrement)
     testThreadedDecrement_<sys::AtomicCounterCpp11>(testName);
     testThreadedDecrement_<sys::AtomicCounter>(testName);
 }
-}
 
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testConstructor);
     TEST_CHECK(testIncrement);
     TEST_CHECK(testDecrement);
     TEST_CHECK(testThreadedIncrement);
     TEST_CHECK(testThreadedDecrement);
-
-    return 0;
-}
+    )

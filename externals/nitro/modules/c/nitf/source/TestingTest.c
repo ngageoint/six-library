@@ -37,7 +37,7 @@
 
 NITFAPI(nitf_testing_Test1a*) nitf_testing_Test1a_construct(nitf_Error * error)
 {
-    NITF_NEW(retval, nitf_testing_Test1a, error, CATCH_ERROR);
+    NITF_NEW_goto(retval, nitf_testing_Test1a, error, CATCH_ERROR);
 
     /*  First, we initialize all of our sections to NULL */
     /*  This will prevent problems when we allocate them */
@@ -73,7 +73,7 @@ NITFAPI(void) nitf_testing_Test1a_destruct(nitf_testing_Test1a** obj)
 
 NITFAPI(nitf_testing_Test1b*) nitf_testing_Test1b_construct(nitf_Error* error)
 {
-    NITF_NEW(retval, nitf_testing_Test1b, error, CATCH_ERROR);
+    NITF_NEW_goto(retval, nitf_testing_Test1b, error, CATCH_ERROR);
 
     /*  First, we initialize all of our sections to NULL */
     /*  This will prevent problems when we allocate them */

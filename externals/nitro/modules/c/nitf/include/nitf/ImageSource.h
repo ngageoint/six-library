@@ -38,12 +38,19 @@ NITF_CXX_GUARD
  *  to keep the bands separate, without require them to live in core.
  *
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_ImageSource
 {
     nitf_List *bandSources;
     int size;
 }
 nitf_ImageSource;
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*  ImageSources cannot be cloned!!  */
 

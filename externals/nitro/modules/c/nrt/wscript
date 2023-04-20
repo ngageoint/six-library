@@ -35,11 +35,11 @@ def build(bld):
         except:{}
 
     # Convenience target
-    # We do this mainly so that from the top-level wscript we can choose what to build
-    tests = bld.path.ant_glob(os.path.join('unittests', '*.c'))
-    test_targets = []
-    for test in tests:
-        test_targets.append(os.path.splitext(str(test))[0])
-
-    bld(features='add_targets', target='nrt-unittests',
-        targets_to_add=test_targets)
+    if not Options.options.libs_only: # We do this mainly so that from the top-level wscript we can choose what to build
+        tests = bld.path.ant_glob(os.path.join('unittests', '*.c'))
+        test_targets = []
+        for test in tests:
+            test_targets.append(os.path.splitext(str(test))[0])
+    
+        bld(features='add_targets', target='nrt-unittests',
+            targets_to_add=test_targets)

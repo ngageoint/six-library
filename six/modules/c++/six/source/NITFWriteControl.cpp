@@ -34,6 +34,7 @@
 #include <math/Round.h>
 #include <mem/ScopedArray.h>
 #include <gsl/gsl.h>
+#include <str/EncodedStringView.h>
 
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
@@ -97,13 +98,6 @@ void NITFWriteControl::setNITFHeaderCreator(
 {
     mNITFHeaderCreator.reset(headerCreator.release());
 }
-#if !CODA_OSS_cpp17
-void NITFWriteControl::setNITFHeaderCreator(
-        mem::auto_ptr<six::NITFHeaderCreator> headerCreator)
-{
-    setNITFHeaderCreator(std::unique_ptr<six::NITFHeaderCreator>(headerCreator.release()));
-}
-#endif
 
 std::string NITFWriteControl::getComplexIID(size_t segmentNum,
                                             size_t numImageSegments)
@@ -410,7 +404,9 @@ static const Legend* getLegend(const six::Container* container, size_t i)
 void NITFWriteControl::addLegend(const Legend& legend, int imageNumber)
 {
     nitf::ImageSource iSource;
-    nitf::MemorySource memSource(legend.mImage, 0 /*start*/, 0 /*pixelSkip*/);
+    const void* pImage = legend.mImage.data();
+    const std::span<const std::byte> image(static_cast<const std::byte*>(pImage), legend.mImage.size());
+    nitf::MemorySource memSource(image, 0 /*start*/, 1 /*numBytesPerPixel*/, 0 /*pixelSkip*/);
     iSource.addBand(memSource);
 
     nitf::ImageWriter iWriter = mWriter.newImageWriter(imageNumber);
@@ -588,7 +584,8 @@ void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPat
     {
         const Data* data = getContainer()->getData(ii);
 
-        desStrs[ii] = six::toValidXMLString(data, schemaPaths, mLog, mXMLRegistry);
+        const auto xml = six::toValidXMLString(data, schemaPaths, mLog, mXMLRegistry);
+        desStrs[ii] = str::EncodedStringView(xml).native();
         nitf::SegmentWriter deWriter = mWriter.newDEWriter(gsl::narrow<int>(ii));
         nitf::SegmentMemorySource segSource(desStrs[ii], 0, 0, false);
         deWriter.attachSource(segSource);

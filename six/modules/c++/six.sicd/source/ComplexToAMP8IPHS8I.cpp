@@ -29,15 +29,38 @@
 #include <gsl/gsl.h>
 #include <six/sicd/Utilities.h>
 #include <math/Utilities.h>
+#include <units/Angles.h>
+
+// https://github.com/ngageoint/six-library/pull/537#issuecomment-1026453353
+/*
+I can add more detail, but be warned that my powerpoint skills aren't amazing and this is best drawn on a whiteboard or graph paper.
+The 8-bit amplitude and phase values that we're mapping to have a systematic distribution in the complex domain. Here's what I mean
+by systematic distribution:
+![radial_plot](https://user-images.githubusercontent.com/16496326/151909984-f0b0cd4f-6607-4c05-9d98-038e54118daf.png)
+
+A couple things to point out:
+- The graph only shows 16 phase angles and 7 magnitudes per angle. A more realistic plot would have 256 phase angles and 256 magnitudes per angle.
+- The `phase_direction[]` array contains a unit vector for each possible phase direction. Just the second vector is labeled in the plot.
+- The `phase_delta` is the angular difference between each `phase_direction`.
+- The `magnitudes` are the ordered set of possible magnitudes and they're identical for each phase angle.
+
+Given any complex value `V`, we can determine the nearest phase angle by computing `round(phase(V) / phase_delta)`.
+Determining the nearest magnitude value for `V` is slighly more complex:
+![dot_product](https://user-images.githubusercontent.com/16496326/151910329-bede78ff-e4cb-4d6f-93f8-fb72b66cb361.png)
+
+The complex value `V` is projected onto the nearest `phase_direction` via the dot product.
+The resulting green point is then what's used to find the nearest magnitude via binary search (`std::lower_bound`).
+*/
+
 
 /*!
     * Get the phase of a complex value.
     * @param v complex value
     * @return phase between [0, 2PI]
     */
-inline long double GetPhase(const std::complex<float>& v)
+inline long double GetPhase(const std::complex<long double>& v)
 {
-    long double phase = std::arg(v);
+    auto phase = std::arg(v);
     if (phase < 0.0) phase += M_PI * 2.0; // Wrap from [0, 2PI]
     return phase;
 }
@@ -49,9 +72,9 @@ static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmpl
     {
         static_assert(sizeof(size_t) > sizeof(uint8_t), "size_t can't hold UINT8_MAX!");
         // AmpPhase -> Complex
-        six::sicd::AMP8I_PHS8I_t v;
-        v.first = v.second = gsl::narrow<uint8_t>(i);
-        const auto complex = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, pAmplitudeTable);
+        const auto amplitude = gsl::narrow<uint8_t>(i);
+        const auto value = amplitude;
+        const auto complex = six::sicd::Utilities::from_AMP8I_PHS8I(amplitude, value, pAmplitudeTable);
         retval[i] = std::abs(complex);
     }
 
@@ -81,14 +104,15 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
 {
     const auto p0 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 0, pAmplitudeTable));
     const auto p1 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 1, pAmplitudeTable));
-    assert(p0 == 0);
+    assert(p0 == 0.0);
     assert(p1 > p0);
     phase_delta = p1 - p0;
     for(size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
     {
         static_assert(sizeof(size_t) > sizeof(uint8_t), "size_t can't hold UINT8_MAX!");
+        const units::Radians<long double> angle{ p0 + gsl::narrow_cast<long double>(i) * phase_delta };
         long double y, x;
-        math::SinCos(p0 + gsl::narrow_cast<long double>(i) * phase_delta, y, x);
+        SinCos(angle, y, x);
         phase_directions[i] = { x, y };
     }
 }

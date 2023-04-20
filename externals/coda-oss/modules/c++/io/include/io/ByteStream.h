@@ -24,6 +24,8 @@
 #define __IO_BYTE_STREAM_H__
 
 #include <vector>
+
+#include "config/Exports.h"
 #include "sys/Conf.h"
 #include "except/Error.h"
 #include "except/Exception.h"
@@ -56,7 +58,7 @@ namespace io
  *  0's can be anywhere (Null-bytes) making it impossible to use
  *  strings as containers.  
  */
-struct ByteStream : public SeekableInputStream, public SeekableOutputStream
+struct CODA_OSS_API ByteStream : public SeekableInputStream, public SeekableOutputStream
 {
     ByteStream() = default;
     virtual ~ByteStream() = default;
@@ -66,20 +68,20 @@ struct ByteStream : public SeekableInputStream, public SeekableOutputStream
     }
 
     virtual
-    sys::Off_T tell()
+    sys::Off_T tell() override
     {
         return mPosition;
     }
 
     virtual
-    sys::Off_T seek(sys::Off_T offset, Whence whence);
+    sys::Off_T seek(sys::Off_T offset, Whence whence) override;
 
     /*!
      *  Returns the available bytes to read from the stream
      *  \return the available bytes to read
      */
     virtual
-    sys::Off_T available();
+    sys::Off_T available() override;
 
     using OutputStream::write;
     using InputStream::streamTo;
@@ -90,7 +92,7 @@ struct ByteStream : public SeekableInputStream, public SeekableOutputStream
      *  \param size the number of bytes to write to the stream
      */
     virtual
-    void write(const void* buffer, size_t size);
+    void write(const void* buffer, size_t size) override;
 
     void reset()
     {
@@ -130,7 +132,7 @@ protected:
      * \throw IoException
      * \return  The number of bytes read
      */
-    virtual sys::SSize_T readImpl(void* buffer, size_t len);
+    virtual sys::SSize_T readImpl(void* buffer, size_t len) override;
 
 private:
     std::vector<sys::ubyte> mData;

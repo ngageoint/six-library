@@ -25,8 +25,10 @@
 #define __MT_SINGLETON_H__
 
 #include <mutex>
+#include <std/memory>
 
 #include <import/sys.h>
+#include <config/compiler_extensions.h>
 #include <mem/SharedPtr.h>
 #include "mt/CriticalSection.h"
 
@@ -84,17 +86,14 @@ template <> struct SingletonAutoDestroyer<true>
 {
     static void registerAtExit(void (*function)(void))
     {
-#if defined(__SunOS_5_10)
-/*
- * Fix for Solaris bug where atexit is not extern C++
- * http://bugs.opensolaris.org/bugdatabase/view_bug.do;jsessionid=9c8c03419fb896b730de20cd53ae?bug_id=6455603
- */
-#   if !defined(ELIMINATE_BROKEN_LINKAGE)
-        atexit(function);
-#   endif
-#else
+        CODA_OSS_disable_warning_push
+        #if _MSC_VER
+        #pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' function under -EHc. Undefined behavior may occur if this function throws an exception.
+        #endif
+        
         std::atexit(function);
-#endif
+
+        CODA_OSS_disable_warning_pop
     }
 };
 
@@ -141,7 +140,7 @@ T& Singleton<T, AutoDestroy>::getInstance()
         std::lock_guard<std::mutex> obtainLock(mMutex);
         if (mInstance == nullptr)
         {
-            mInstance = coda_oss::make_unique<T>().release(); //create the instance
+            mInstance = std::make_unique<T>().release(); //create the instance
             SingletonAutoDestroyer<AutoDestroy>::registerAtExit(destroy);
         }
     }

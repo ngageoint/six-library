@@ -24,28 +24,31 @@
 #define __MATH_BESSEL_H
 
 #include <cstddef>
+
+#include "config/Exports.h"
+
 namespace math
 {
 /*!
  * Modified Bessel function of the first kind
  * This function wraps the following order-specific functions
  */
-double besselI(size_t order, double x);
+CODA_OSS_API double besselI(size_t order, double x);
 
 /*!
  * Modified Bessel function of the first kind, order 0
  */
-double besselIOrderZero(double x);
+CODA_OSS_API double besselIOrderZero(double x);
 
 /*!
  * Modified Bessel function of the first kind, order 1
  */
-double besselIOrderOne(double x);
+CODA_OSS_API double besselIOrderOne(double x);
 
 /*!
  * Modified Bessel function of the first kind, order n > 1
  */
-double besselIOrderN(size_t order, double x);
+CODA_OSS_API double besselIOrderN(size_t order, double x);
 }
 
 #endif

@@ -21,16 +21,20 @@
 */
 #include <six/csm/SICDSensorModel.h>
 
+#include <assert.h>
+
 #include "Error.h"
 #include <sys/OS.h>
 #include <sys/Path.h>
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
+#include <str/EncodedStringView.h>
 #include <six/XMLControlFactory.h>
 #include <six/NITFReadControl.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
 #include <six/XmlLite.h>
+#include <six/ErrorStatistics.h>
 
 namespace six
 {
@@ -104,7 +108,7 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
                 container->getData(0)->clone()));
 
         // get xml as string for sensor model state
-        const std::string xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
+        const auto xmlStr = six::toXMLString_(mData.get(), &xmlRegistry);
         mSensorModelState = NAME + std::string(" ") + xmlStr;
         reinitialize();
     }
@@ -391,6 +395,12 @@ csm::ImageCoord SICDSensorModel::getImageStart() const
 {
     return csm::ImageCoord(mData->imageData->firstRow,
                            mData->imageData->firstCol);
+}
+
+std::vector<double>
+SICDSensorModel::getSIXUnmodeledError() const
+{
+    return SIXSensorModel::getSIXUnmodeledError_(mData->errorStatistics.get());
 }
 
 void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)

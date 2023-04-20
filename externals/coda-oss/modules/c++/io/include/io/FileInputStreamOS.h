@@ -23,10 +23,13 @@
 #ifndef __IO_FILE_INPUT_STREAM_OS_H__
 #define __IO_FILE_INPUT_STREAM_OS_H__
 
+#include "config/Exports.h"
+
 #if !defined(USE_IO_STREAMS)
 
 #include "except/Exception.h"
 #include "sys/File.h"
+#include "sys/filesystem.h"
 #include "io/InputStream.h"
 #include "io/SeekableStreams.h"
 
@@ -50,7 +53,7 @@ namespace io
  *  method is based on the pos in the file, and the streamTo() and read()
  *  are file operations
  */
-struct FileInputStreamOS : public SeekableInputStream
+struct CODA_OSS_API FileInputStreamOS : public SeekableInputStream
 {
 protected:
     sys::File mFile;
@@ -70,6 +73,10 @@ public:
                      sys::File::READ_ONLY,
                      sys::File::EXISTING);
     }
+    explicit FileInputStreamOS(const coda_oss::filesystem::path& inputFile) :
+        FileInputStreamOS(inputFile.string()) { }
+    FileInputStreamOS(const char* inputFile) : // "file.txt" could be either std::string or std::filesystem::path
+        FileInputStreamOS(std::string(inputFile))  {  }
 
     FileInputStreamOS(const sys::File& inputFile)
     {
@@ -92,7 +99,7 @@ public:
      * \return number of bytes which are readable
      *
      */
-    virtual sys::Off_T available();
+    virtual sys::Off_T available() override;
 
     /*!
      *  Report whether or not the file is open
@@ -123,7 +130,7 @@ public:
      *  Go to the offset at the location specified.
      *  \return The number of bytes between off and our origin.
      */
-    virtual sys::Off_T seek(sys::Off_T off, Whence whence)
+    virtual sys::Off_T seek(sys::Off_T off, Whence whence) override
     {
         int from = sys::File::FROM_CURRENT;
         switch (whence)
@@ -147,7 +154,7 @@ public:
      *  Tell the current offset
      *  \return The byte offset
      */
-    virtual sys::Off_T tell()
+    virtual sys::Off_T tell() override
     {
         return mFile.getCurrentOffset();
     }
@@ -168,7 +175,7 @@ protected:
      * \return  The number of bytes read
      *
      */
-    virtual sys::SSize_T readImpl(void* buffer, size_t len);
+    virtual sys::SSize_T readImpl(void* buffer, size_t len) override;
 };
 }
 

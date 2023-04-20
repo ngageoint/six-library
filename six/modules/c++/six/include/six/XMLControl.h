@@ -29,8 +29,7 @@
 #include <scene/sys_Conf.h>
 
 #include <logging/Logger.h>
-#include <xml/lite/Document.h>
-#include <xml/lite/Validator.h>
+#include <import/xml/lite.h>
 
 #include "six/Types.h"
 #include "six/Logger.h"
@@ -121,7 +120,7 @@ class XMLControl
      *                Otherwise, we can just use what's already there.
      */
     static void loadSchemaPaths(std::vector<std::string>& schemaPaths);
-    static std::vector<std::string> loadSchemaPaths(const std::vector<std::filesystem::path>*);
+    static std::vector<std::filesystem::path> loadSchemaPaths(const std::vector<std::filesystem::path>*);
 
     /*!
      *  Convert the Data model into an XML DOM.

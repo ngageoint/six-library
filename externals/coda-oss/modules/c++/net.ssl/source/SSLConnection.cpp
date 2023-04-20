@@ -42,15 +42,6 @@ net::ssl::SSLConnection::SSLConnection(std::unique_ptr<net::Socket>&& socket,
 
     setupSocket(host);
 }
-#if CODA_OSS_autoptr_is_std // std::auto_ptr removed in C++17
-net::ssl::SSLConnection::SSLConnection(mem::auto_ptr<net::Socket> socket, 
-                                       SSL_CTX * ctx,
-                                       bool serverAuth,
-                                       const std::string& host) :
-    SSLConnection(std::unique_ptr<net::Socket>(socket.release()), ctx, serverAuth, host)
-{
-}
-#endif
 
 net::ssl::SSLConnection::~SSLConnection()
 {

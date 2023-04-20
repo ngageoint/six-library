@@ -25,36 +25,47 @@
 
 #include "TestCase.h"
 
-namespace
-{
-
 typedef mt::CriticalSection<sys::Mutex> CriticalSection;
 
 TEST_CASE(testDefaultConstructor)
 {
     sys::ConditionVar cond;
+    TEST_SUCCESS;
 
     cond.acquireLock();
+    TEST_SUCCESS;
+
     cond.dropLock();
+    TEST_SUCCESS;
 }
 
 TEST_CASE(testParameterizedConstructor)
 {
     sys::Mutex mutex;
-    sys::ConditionVar cond(&mutex, false);
+    TEST_SUCCESS;
+
+    sys::ConditionVar cond(mutex);
+    TEST_SUCCESS;
 
     cond.acquireLock();
+    TEST_SUCCESS;
+
     cond.dropLock();
+    TEST_SUCCESS;
 }
 
 TEST_CASE(testMultipleTimeouts)
 {
     sys::Mutex mutex;
-    sys::ConditionVar cond(&mutex, false);
+    TEST_SUCCESS;
+
+    sys::ConditionVar cond(mutex);
+    TEST_SUCCESS;
 
     for (size_t ii = 0; ii < 5; ++ii)
     {
-        CriticalSection scopedLock(&mutex);
+        CriticalSection scopedLock(mutex);
+        TEST_SUCCESS;
         try
         {
             cond.wait(0.001);
@@ -64,19 +75,17 @@ TEST_CASE(testMultipleTimeouts)
         }
     }
     {
-        CriticalSection scopedLock(&mutex);
+        CriticalSection scopedLock(mutex);
+        TEST_SUCCESS;
+
         cond.broadcast();
+        TEST_SUCCESS;
     }
 }
 
-}
-
-int main(int, char**)
-{
+TEST_MAIN(
     TEST_CHECK(testDefaultConstructor);
     TEST_CHECK(testParameterizedConstructor);
     TEST_CHECK(testMultipleTimeouts);
-
-    return 0;
-}
+    )
 

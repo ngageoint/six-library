@@ -27,7 +27,7 @@ jobs:
     - name: test
       run: |
         cd build
-        ctest -C Release
+        ctest -C Release --output-on-failure
 
 
   build-linux:
@@ -48,9 +48,9 @@ jobs:
     - name: make
       run: |
         cd build
-        cmake --build . -j1
+        cmake --build . -j 8
         cmake --build . --target install
     - name: test
       run: |
         cd build
-        ctest
+        ctest --output-on-failure

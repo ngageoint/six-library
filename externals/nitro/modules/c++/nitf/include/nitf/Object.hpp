@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __NITF_OBJECT_HPP__
-#define __NITF_OBJECT_HPP__
+#ifndef NITRO_nitf_Object_hpp_INCLUDED_
+#define NITRO_nitf_Object_hpp_INCLUDED_
 #pragma once
 
 #include <assert.h>
@@ -106,7 +106,7 @@ protected:
     }
 
 public:
-    virtual ~Object() /*noexcept(false)*/ { releaseHandle(); }
+    virtual ~Object() /*noexcept(noexcept(releaseHandle()))*/ { releaseHandle(); }
 
     //! Is the object valid (native object not null)?
     virtual bool isValid() const noexcept
@@ -208,8 +208,9 @@ public:
  * corresponding nitf_##_destruct method.
  */
 
+// Don't need both "override" and "final": https://learn.microsoft.com/en-us/cpp/code-quality/c26435?view=msvc-170 
 #define DECLARE_CLASS_IN_operator_function_(Name_, Package_) \
-void operator()(Package_##_##Name_ * nativeObject) noexcept(false) override \
+void operator()(Package_##_##Name_ * nativeObject) NITRO_nitf_MemoryDestructor_noexcept_false_ final \
       { Package_##_##Name_##_destruct(&nativeObject); }
  
 #ifdef _MSC_VER
@@ -232,6 +233,7 @@ void operator()(Package_##_##Name_ * nativeObject) noexcept(false) override \
 
 #define NITRO_DECLARE_CLASS_NRT(_Name) DECLARE_CLASS_IN(_Name, nrt)
 #define NITRO_DECLARE_CLASS_NITF(_Name) DECLARE_CLASS_IN(_Name, nitf)
+#define NITRO_DECLARE_CLASS_J2K(Name_) DECLARE_CLASS_IN(Name_, j2k)
 #define DECLARE_CLASS(_Name) NITRO_DECLARE_CLASS_NITF(_Name)
 
 namespace nitf
@@ -278,4 +280,4 @@ namespace nitf
     #define nitf_offsetof(name) offsetof(native_t, name)
 }
 
-#endif
+#endif // NITRO_nitf_Object_hpp_INCLUDED_

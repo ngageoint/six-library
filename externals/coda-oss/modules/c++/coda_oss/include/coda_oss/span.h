@@ -4,7 +4,7 @@
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * mem-c++ is free software; you can redistribute it and/or modify
+ * coda_oss-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -23,9 +23,6 @@
 #define CODA_OSS_coda_oss_span_h_INCLUDED_
 #pragma once
 
-#include <assert.h>
-#include <stddef.h>
-
 #include "coda_oss/namespace_.h"
 #include "coda_oss/span_.h"
 
@@ -36,14 +33,10 @@
 namespace coda_oss
 {
 #if defined(GSL_SPAN_H) // the above #include'd gsl/span
-	template <typename T>
-	using span = gsl::span<T>;
+	using gsl::span;
 #else // no gsl::span, use our own
-	template <typename T>
-	using span = details::span<T>;
+	using details::span;
 #endif  // GSL_SPAN_H
 }
-
-#define CODA_OSS_coda_oss_span 202002L  // c.f., __cpp_lib_span
 
 #endif  // CODA_OSS_coda_oss_span_h_INCLUDED_

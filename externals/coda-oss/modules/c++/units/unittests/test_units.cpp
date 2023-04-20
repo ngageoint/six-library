@@ -24,16 +24,15 @@
 #include <units/Angles.h>
 #include <units/Lengths.h>
 
-namespace
-{
 template <typename T>
 static void test_degrees_(const std::string& testName)
 {
+    (void)testName;
     T sin, cos;
     constexpr units::Degrees<T> degrees_180 = 180;
     SinCos(degrees_180, sin, cos);
-    TEST_ASSERT_ALMOST_EQ(0.0, sin);
-    TEST_ASSERT_ALMOST_EQ(-1.0, cos);
+    TEST_ASSERT_ALMOST_EQ(static_cast<T>(0.0), sin);
+    TEST_ASSERT_ALMOST_EQ(static_cast<T>(-1.0), cos);
 }
 TEST_CASE(test_degrees)
 {
@@ -62,23 +61,32 @@ TEST_CASE(test_degrees)
 
 TEST_CASE(test_lengths)
 {
-    constexpr units::Feet<double> feet_3 = 3;
-    units::Meters<double> meters { 0 };
-    convert(feet_3, meters);
-    TEST_ASSERT_ALMOST_EQ(meters.value(), 0.9144);
+    {
+        constexpr units::Feet<double> feet_3 = 3;
+        const auto same = feet_3.to();
+        TEST_ASSERT_EQ(same.value(), feet_3.value());
 
-    constexpr units::Meters<double> meters_1 = 1;
-    units::Feet<double> feet { 0 };
-    convert(meters_1, feet);
-    TEST_ASSERT_ALMOST_EQ(feet.value(), 3.2808398);
+        units::Meters<double> meters{0};
+        convert(feet_3, meters);  // convert ...
+        TEST_ASSERT_ALMOST_EQ(meters.value(), 0.9144);
+        const auto feet = meters.to<units::tags::Feet>();  // ...and back
+        TEST_ASSERT_ALMOST_EQ(feet.value(), feet_3.value());
+    }
+    {
+        constexpr auto meters_1 = units::make_Unit<units::tags::Meters>(1.0);
+        const auto same = meters_1.to();
+        TEST_ASSERT_EQ(same.value(), meters_1.value());
+
+        units::Feet<double> feet{0};
+        convert(meters_1, feet);  // convert ...
+        TEST_ASSERT_ALMOST_EQ(feet.value(), 3.2808398);
+        const auto meters = feet.to<units::tags::Meters>();  // ...and back
+        TEST_ASSERT_ALMOST_EQ(meters.value(), meters_1.value());
+    }
 }
 
-}
-
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(test_degrees);
     TEST_CHECK(test_lengths);
-    return 0;
-}
+)
 

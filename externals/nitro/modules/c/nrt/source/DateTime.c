@@ -301,7 +301,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime * dateTime,
     dateTime->dayOfYear = t.tm_yday + 1;
     dateTime->hour = t.tm_hour;
     dateTime->minute = t.tm_min;
-    dateTime->second = t.tm_sec + (timeInMillis / 1000.0 - timeInSeconds);
+    dateTime->second = t.tm_sec + (timeInMillis / 1000.0 - (double)timeInSeconds);
 
     return NRT_SUCCESS;
 }
@@ -405,7 +405,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
 
     timeInSeconds = (time_t) (millis / 1000);
     gmtime_s(&t, &timeInSeconds);
-    fractSeconds = (millis / 1000.0) - timeInSeconds;
+    fractSeconds = (millis / 1000.0) - (double)timeInSeconds;
 
     /* Search for "%...S" string */
     formatLength = strlen(format);

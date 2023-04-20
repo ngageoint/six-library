@@ -4,7 +4,6 @@ from os.path import splitext, dirname, join
 from build import writeConfig
 
 NAME            = 'nitf'
-MAINTAINER      = 'dan.smith@maxar.com'
 MODULE_DEPS     = 'nrt'
 LANG            = 'c'
 DEFINES         = 'NITF_MODULE_EXPORTS'

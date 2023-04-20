@@ -67,10 +67,11 @@ SIX_Enum_BEGIN_DEFINE(PhaseSGN)
         PLUS_1 = 1,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_int
+    SIX_Enum_BEGIN_string_to_value
     { "-1", MINUS_1 },
     { "+1", PLUS_1 },
-    SIX_Enum_END_string_to_int
+    { "1", PLUS_1 },
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(PhaseSGN);
 
 /*!
@@ -134,7 +135,7 @@ SIX_Enum_BEGIN_DEFINE(PolarizationType)
         UNSPECIFIED = 7,
     SIX_Enum_END_enum
 
-    SIX_Enum_BEGIN_string_to_int
+    SIX_Enum_BEGIN_string_to_value
         SIX_Enum_map_entry_(X),
         SIX_Enum_map_entry_(Y),
         SIX_Enum_map_entry_(V),
@@ -142,7 +143,7 @@ SIX_Enum_BEGIN_DEFINE(PolarizationType)
         SIX_Enum_map_entry_(RHC),
         SIX_Enum_map_entry_(LHC),
         SIX_Enum_map_entry_(UNSPECIFIED),
-    SIX_Enum_END_string_to_int
+    SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(PolarizationType);
 }
 #endif

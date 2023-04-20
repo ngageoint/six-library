@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __SIX_SIDD_DERIVED_XML_PARSER_200_H__
-#define __SIX_SIDD_DERIVED_XML_PARSER_200_H__
+#ifndef SIX_six_sidd_DerivedXMLParser200_h_INCLUDED_
+#define SIX_six_sidd_DerivedXMLParser200_h_INCLUDED_
+#pragma once
 
 #include <six/sidd/DerivedXMLParser.h>
 #include <six/GeoDataBase.h>
@@ -30,7 +31,7 @@ namespace six
 {
 namespace sidd
 {
-struct DerivedXMLParser200 : public DerivedXMLParser
+struct DerivedXMLParser200 final : public DerivedXMLParser
 {
     DerivedXMLParser200(logging::Logger* log = nullptr,
                         bool ownLog = false);
@@ -61,7 +62,7 @@ struct DerivedXMLParser200 : public DerivedXMLParser
         const GeoDataBase&, xml::lite::Element& parent);
 
     static xml::lite::Element& convertDerivedClassificationToXML(const DerivedXMLParser&,
-        const DerivedClassification&, xml::lite::Element& parent);
+        const DerivedClassification&, const xml::lite::Uri& ismUri, xml::lite::Element& parent);
 
     static xml::lite::Element& convertMeasurementToXML(const DerivedXMLParser&,
         const Measurement&, xml::lite::Element& parent);
@@ -120,9 +121,6 @@ protected:
         XMLElem parent = nullptr) const override;
 
 private:
-    static const char VERSION[];
-    static const char SI_COMMON_URI[];
-    static const char ISM_URI[];
 
     static xml::lite::Element& convertLookupTableToXML(const DerivedXMLParser&,
         const std::string& name, const LookupTable&, xml::lite::Element& parent);
@@ -194,10 +192,10 @@ private:
     void parseLookupTableFromXML(const xml::lite::Element* lookupElem,
           LookupTable& lookupTable) const;
 
-    mem::auto_ptr<LUT> parseSingleLUT(const xml::lite::Element* elem,
+    std::unique_ptr<LUT> parseSingleLUT(const xml::lite::Element* elem,
             size_t size) const;
 };
 }
 }
 
-#endif
+#endif // SIX_six_sidd_DerivedXMLParser200_h_INCLUDED_

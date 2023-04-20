@@ -81,9 +81,9 @@ public:
      *
      *  \return A socket
      */
-    mem::auto_ptr<Socket> create(const SocketAddress& address)
+    std::unique_ptr<Socket> create(const SocketAddress& address)
     {
-        mem::auto_ptr<Socket> s(new Socket(mProto));
+        std::unique_ptr<Socket> s(new Socket(mProto));
 
         setOptions(*s);
 
@@ -134,7 +134,7 @@ public:
      * Sets SO_BROADCAST socket option.
      * \param s The socket
      */
-    virtual void setOptions(Socket& s)
+    virtual void setOptions(Socket& s) override
     {
         // Make sure we're set up for broadcasting if necessary
         int on = 1;
