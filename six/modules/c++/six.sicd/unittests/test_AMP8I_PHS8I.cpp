@@ -512,34 +512,6 @@ static void test_assert_image_(const std::string& testName,
     }
 }
 
-static void test_assert_image_(const std::vector<std::complex<float>>& image, const six::sicd::ComplexData& complexData)
-{
-    static const std::vector<std::complex<float>> expected_cxfloat{
-        std::complex<float>(46.7833481f, 78.0533066f),
-        std::complex<float>(21.5923157f, 36.0246010f),
-        std::complex<float>(21.5923157f, 36.0246010f),
-        std::complex<float>(-27.4332600f, 31.8027706f) };
-    TEST_ASSERT_EQ(image.size(), expected_cxfloat.size());
-    for (size_t i = 0; i < image.size(); i++)
-    {
-        TEST_ASSERT_ALMOST_EQ(image[i].real(), expected_cxfloat[i].real());
-        TEST_ASSERT_ALMOST_EQ(image[i].imag(), expected_cxfloat[i].imag());
-    }
-
-    const std::span<const std::complex<float>> input(image.data(), image.size());
-    std::vector<AMP8I_PHS8I_t> result(input.size());
-    std::span< AMP8I_PHS8I_t> result_(result.data(), result.size());
-    complexData.imageData->to_AMP8I_PHS8I(input, result_);
-
-    static const std::vector<AMP8I_PHS8I_t> expected_amp8i_phs8i{
-        AMP8I_PHS8I_t(91, 42), AMP8I_PHS8I_t(42, 42), AMP8I_PHS8I_t(42, 42), AMP8I_PHS8I_t(42, 93) }; // "[******]"
-    for (size_t i = 0; i < result.size(); i++)
-    {
-        TEST_ASSERT_EQ(result[i].first, expected_amp8i_phs8i[i].first);
-        TEST_ASSERT_EQ(result[i].second, expected_amp8i_phs8i[i].second);
-    }
-}
-
 template<typename TSave>
 static void test_create_sicd_from_mem_(const std::string& testName,
     const std::filesystem::path& outputName, six::PixelType pixelType, bool makeAmplitudeTable,
