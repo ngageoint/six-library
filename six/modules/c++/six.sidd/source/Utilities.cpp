@@ -1123,7 +1123,7 @@ static void populateData(six::sidd::DerivedData& siddData, const std::string& lu
     siddData.setVersion(strVersion);
     const auto elementSize = static_cast<size_t>(lutType == "Mono" ? 2 : 3);
 
-    if (strVersion == "2.0.0")
+    if ((strVersion == "2.0.0") || (strVersion == "3.0.0"))
     {
         // This will naturally get constructed in the course of 1.0.0
         // Separate field in 2.0.0
@@ -1214,17 +1214,17 @@ static void populateData(six::sidd::DerivedData& siddData, const std::string& lu
     initAnnotations(siddData.annotations);
 }
 
-static void update_for_SIDD_200(DerivedData& data)
+static void update_for_SIDD_300(DerivedData& data) // n.b., much of this was added before SIDD 3.0
 {
     auto& display = *(data.display);
-    data.display->pixelType = six::PixelType::RGB24I;
+    data.display->pixelType = six::PixelType::RGB24I; // TODO: this was added before SIDD 3.0.0
     data.display->numBands = 3;
 
-    data.display->nonInteractiveProcessing.resize(1);
+    data.display->nonInteractiveProcessing.resize(1); // TODO: this was added before SIDD 3.0.0
     data.display->nonInteractiveProcessing[0].reset(new NonInteractiveProcessing());
     data.display->nonInteractiveProcessing[0]->rrds.downsamplingMethod = DownsamplingMethod::MAX_PIXEL;
 
-    data.display->interactiveProcessing.resize(1);
+    data.display->interactiveProcessing.resize(1); // TODO: this was added before SIDD 3.0.0
     data.display->interactiveProcessing[0].reset(new InteractiveProcessing());
 
     data.display->interactiveProcessing[0]->sharpnessEnhancement.modularTransferFunctionCompensation.reset(createCustomFilter());
@@ -1256,20 +1256,20 @@ static void update_for_SIDD_200(DerivedData& data)
     display.interactiveProcessing[0]->tonalTransferCurve->predefined->databaseName = "TTC DB";
 
 
-    data.measurement->pixelFootprint.row = data.measurement->pixelFootprint.col = 0;
-    data.measurement->validData.emplace_back(1, 2);
+    data.measurement->pixelFootprint.row = data.measurement->pixelFootprint.col = 0; // TODO: this was added before SIDD 3.0.0
+    data.measurement->validData.emplace_back(1, 2); // TODO: this was added before SIDD 3.0.0
     data.measurement->validData.emplace_back(3, 4);
     data.measurement->validData.emplace_back(5, 6);
 
-    data.geoData.reset(new six::GeoDataBase());
+    data.geoData.reset(new six::GeoDataBase()); // TODO: this was added before SIDD 3.0.0
     data.geoData->imageCorners.lowerLeft.clearLatLon();
     data.geoData->imageCorners.upperLeft.clearLatLon();
     data.geoData->imageCorners.lowerRight.clearLatLon();
     data.geoData->imageCorners.upperRight.clearLatLon();
 
-    data.exploitationFeatures->product[0].ellipticity = 0.0;
+    data.exploitationFeatures->product[0].ellipticity = 0.0; // TODO: this was added before SIDD 3.0.0
     ProcTxRcvPolarization polarization{ PolarizationSequenceType::UNKNOWN, PolarizationSequenceType::UNKNOWN };
-    data.exploitationFeatures->product[0].polarization.push_back(polarization);
+    data.exploitationFeatures->product[0].polarization.push_back(polarization); // TODO: this was added before SIDD 3.0.0
 
     populateData(data);
 }
@@ -1375,14 +1375,14 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& st
 
     if (!strVersion.empty()) // TODO: better check for version; this avoid changing any existing test code
     {
-        update_for_SIDD_200(*data);
+        update_for_SIDD_300(*data);
     }
 
     return data;
 }
 std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& strVersion)
 {
-    if (strVersion == "2.0.0")
+    if ((strVersion == "2.0.0") || (strVersion == "3.0.0"))
     {
         return createFakeDerivedData_(strVersion);
     }

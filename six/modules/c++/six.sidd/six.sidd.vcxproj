@@ -112,6 +112,7 @@
     <ClInclude Include="include\six\sidd\DerivedXMLParser.h" />
     <ClInclude Include="include\six\sidd\DerivedXMLParser100.h" />
     <ClInclude Include="include\six\sidd\DerivedXMLParser200.h" />
+    <ClInclude Include="include\six\sidd\DerivedXMLParser300.h" />
     <ClInclude Include="include\six\sidd\DigitalElevationData.h" />
     <ClInclude Include="include\six\sidd\Display.h" />
     <ClInclude Include="include\six\sidd\DownstreamReprocessing.h" />
@@ -149,6 +150,7 @@
     <ClCompile Include="source\DerivedXMLParser.cpp" />
     <ClCompile Include="source\DerivedXMLParser100.cpp" />
     <ClCompile Include="source\DerivedXMLParser200.cpp" />
+    <ClCompile Include="source\DerivedXMLParser300.cpp" />
     <ClCompile Include="source\DigitalElevationData.cpp" />
     <ClCompile Include="source\Display.cpp" />
     <ClCompile Include="source\DownstreamReprocessing.cpp" />

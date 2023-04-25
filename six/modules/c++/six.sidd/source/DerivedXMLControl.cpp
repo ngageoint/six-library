@@ -30,6 +30,7 @@
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLParser100.h>
 #include <six/sidd/DerivedXMLParser200.h>
+#include <six/sidd/DerivedXMLParser300.h>
 
 namespace
 {
@@ -98,6 +99,7 @@ DerivedXMLControl::getParser(const std::string& strVersion) const
     // six.sidd only currently supports --
     //   SIDD 1.0.0
     //   SIDD 2.0.0
+    //   SIDD 3.0.0
     if (normalizedVersion == "100")
     {
         return std::make_unique<DerivedXMLParser100>(mLog);
@@ -105,6 +107,10 @@ DerivedXMLControl::getParser(const std::string& strVersion) const
     if (normalizedVersion == "200")
     {
         return std::make_unique<DerivedXMLParser200>(mLog);
+    }
+    if (normalizedVersion == "300")
+    {
+        return std::make_unique<DerivedXMLParser300>(getLogger());
     }
 
     if (normalizedVersion == "110")
