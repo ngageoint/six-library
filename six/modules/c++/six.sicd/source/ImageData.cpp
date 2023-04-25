@@ -24,6 +24,10 @@
 #include <stdexcept>
 #include <array>
 #include <std/memory>
+#include <tuple> // std::ignore
+#include <algorithm>
+#include <iterator>
+#include <future>
 
 #include <gsl/gsl.h>
 #include <mt/Algorithm.h>
@@ -31,6 +35,50 @@
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Utilities.h"
 #include "six/sicd/ComplexToAMP8IPHS8I.h"
+
+ // There was in coda-oss, but I removed it.
+ //
+ // First of all, C++11's std::async() is now (in 2023) thought of as maybe a
+ // bit "half baked," and perhaps shouldn't be emulated.  Then, C++17 added
+ // parallel algorithms which might be a better way of satisfying our immediate
+ // needs (below) ... although we're still at C++14.
+namespace
+{
+    namespace details
+    {
+        template <typename InputIt, typename OutputIt, typename TFunc>
+        inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
+            typename std::iterator_traits<InputIt>::difference_type cutoff, std::launch policy)
+        {
+            // https://en.cppreference.com/w/cpp/thread/async
+            const auto len = std::distance(first1, last1);
+            if (len < cutoff)
+            {
+                return std::transform(first1, last1, d_first, f);
+            }
+
+            const auto mid1 = first1 + len / 2;
+            const auto d_mid = d_first + len / 2;
+            auto handle = std::async(policy, transform_async<InputIt, OutputIt, TFunc>, mid1, last1, d_mid, f, cutoff, policy);
+            details::transform_async(first1, mid1, d_first, f, cutoff, policy);
+            return handle.get();
+        }
+    }
+    template <typename InputIt, typename OutputIt, typename TFunc>
+    inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
+        typename std::iterator_traits<InputIt>::difference_type cutoff, std::launch policy)
+    {
+        // details::... eliminates the overload
+        return details::transform_async(first1, last1, d_first, f, cutoff, policy);
+    }
+    template <typename InputIt, typename OutputIt, typename TFunc>
+    inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
+        typename std::iterator_traits<InputIt>::difference_type cutoff)
+    {
+        const std::launch policy = std::launch::deferred | std::launch::async;
+        return transform_async(first1, last1, d_first, f, cutoff, policy);
+    }
+}
 
 using namespace six;
 using namespace six::sicd;
@@ -240,7 +288,7 @@ void ImageData::from_AMP8I_PHS8I(const input_amplitudes_t& values, std::span<con
 
     if (cutoff_ < 0)
     {
-        (void) std::transform(inputs.begin(), inputs.end(), results.begin(),
+        std::ignore = std::transform(inputs.begin(), inputs.end(), results.begin(),
             get_RE32F_IM32F_value_f);
     }
     else
@@ -249,7 +297,7 @@ void ImageData::from_AMP8I_PHS8I(const input_amplitudes_t& values, std::span<con
         constexpr auto dimension = 128 * 8;
         constexpr auto default_cutoff = dimension * dimension;
         const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-        (void) mt::transform_async(inputs.begin(), inputs.end(), results.begin(),
+        std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(),
             get_RE32F_IM32F_value_f, cutoff, std::launch::async);
     }
 }
@@ -265,7 +313,7 @@ static void to_AMP8I_PHS8I_(std::span<const cx_float> inputs, std::span<AMP8I_PH
 
     if (cutoff_ < 0)
     {
-        (void) std::transform(inputs.begin(), inputs.end(), results.begin(),
+        std::ignore = std::transform(inputs.begin(), inputs.end(), results.begin(),
             nearest_neighbor_f);
     }
     else
@@ -274,7 +322,7 @@ static void to_AMP8I_PHS8I_(std::span<const cx_float> inputs, std::span<AMP8I_PH
         constexpr auto dimension = 128 * 8;
         constexpr auto default_cutoff = dimension * dimension;
         const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-        (void) mt::transform_async(inputs.begin(), inputs.end(), results.begin(),
+        std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(),
             nearest_neighbor_f, cutoff, std::launch::async);
     }
 }
