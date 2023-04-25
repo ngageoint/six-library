@@ -48,7 +48,7 @@ struct DataWriter
      *  \param stream The seekable output stream to be written
      *  \param numThreads Number of threads for parallel processing
      */
-    DataWriter(io::OutputStream& stream, size_t numThreads);
+    DataWriter(io::OutputStream&, size_t numThreads);
     
     DataWriter() = delete;
     DataWriter(const DataWriter&) = delete;
@@ -96,6 +96,7 @@ struct DataWriterLittleEndian final : public DataWriter
      *  \param scratchSize Size of buffer to be used for scratch space
      */
     DataWriterLittleEndian(io::OutputStream&, size_t numThreads, size_t scratchSize);
+    DataWriterLittleEndian(std::shared_ptr<io::SeekableOutputStream>&, size_t numThreads, size_t scratchSize); // for SWIG
     DataWriterLittleEndian() = delete;
     DataWriterLittleEndian(const DataWriterLittleEndian&) = delete;
     DataWriterLittleEndian& operator=(const DataWriterLittleEndian&) = delete;
@@ -135,6 +136,7 @@ struct DataWriterBigEndian final : public DataWriter
      *  \param numThreads Number of threads for parallel processing
      */
     DataWriterBigEndian(io::OutputStream&, size_t numThreads);
+    DataWriterBigEndian(std::shared_ptr<io::SeekableOutputStream>&, size_t numThreads); // for SWIG
     DataWriterBigEndian() = delete;
     DataWriterBigEndian(const DataWriterBigEndian&) = delete;
     DataWriterBigEndian& operator=(const DataWriterBigEndian&) = delete;

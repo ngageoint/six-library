@@ -47,6 +47,12 @@ DataWriterLittleEndian::DataWriterLittleEndian(
     mScratch(scratchSize)
 {
 }
+DataWriterLittleEndian::DataWriterLittleEndian(
+	std::shared_ptr<io::SeekableOutputStream>& stream,
+        size_t numThreads,
+        size_t scratchSize) : DataWriterLittleEndian(*stream, numThreads, scratchSize)
+{
+}
 void DataWriterLittleEndian::operator()(const void* pData, size_t numElements, size_t elementSize)
 {
     const auto data = static_cast<const sys::ubyte*>(pData);
@@ -73,6 +79,11 @@ void DataWriterLittleEndian::operator()(const void* pData, size_t numElements, s
 
 DataWriterBigEndian::DataWriterBigEndian(io::OutputStream& stream, size_t numThreads) :
     DataWriter(stream, numThreads)
+{
+}
+DataWriterBigEndian::DataWriterBigEndian(
+	std::shared_ptr<io::SeekableOutputStream>& stream,
+        size_t numThreads) : DataWriterBigEndian(*stream, numThreads)
 {
 }
 void DataWriterBigEndian::operator()(const void* data, size_t numElements, size_t elementSize)
