@@ -38,9 +38,21 @@
 #ifndef _WIN32
 #include <features.h>
 #endif
-#define CODA_OSS_POSIX_SOURCE (defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE >= 1))
-#define CODA_OSS_POSIX2001_SOURCE CODA_OSS_POSIX_SOURCE && (_POSIX_C_SOURCE >= 200112L)
-#define CODA_OSS_POSIX2008_SOURCE CODA_OSS_POSIX2001_SOURCE && (_POSIX_C_SOURCE >= 200809L)
+
+#undef CODA_OSS_POSIX_SOURCE
+#if defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE >= 1)
+#define CODA_OSS_POSIX_SOURCE _POSIX_C_SOURCE
+#endif
+
+#undef CODA_OSS_POSIX2001_SOURCE
+#if defined(CODA_OSS_POSIX_SOURCE) && (_POSIX_C_SOURCE >= 200112L)
+#define CODA_OSS_POSIX2001_SOURCE _POSIX_C_SOURCE
+#endif
+
+#undef CODA_OSS_POSIX2008_SOURCE
+#if defined(CODA_OSS_POSIX2001_SOURCE) && (_POSIX_C_SOURCE >= 200809L)
+#define CODA_OSS_POSIX2008_SOURCE _POSIX_C_SOURCE
+#endif
 
 #include <config/Version.h>
 #include <config/Exports.h>
@@ -312,13 +324,13 @@ namespace sys
         void* p = nullptr;
 #ifdef _WIN32
         p = _aligned_malloc(size, alignment);
-#elif CODA_OSS_POSIX2001_SOURCE
+#elif defined(CODA_OSS_POSIX2001_SOURCE)
         // https://linux.die.net/man/3/posix_memalign
         if (posix_memalign(&p, alignment, size) != 0)
         {
             p = nullptr;
         }
-#elif CODA_OSS_POSIX_SOURCE
+#elif defined(CODA_OSS_POSIX_SOURCE)
         // https://linux.die.net/man/3/posix_memalign
         // "The functions memalign(), ... have been available in all Linux libc libraries."
         p = memalign(alignment, size);

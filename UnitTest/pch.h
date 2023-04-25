@@ -78,7 +78,6 @@
 #include <import/six.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
-#include <import/six/sidd30.h>
 #include <import/cphd.h>
 #include <import/cphd03.h>
 

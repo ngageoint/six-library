@@ -11,8 +11,15 @@
  ```
 # coda-oss Release Notes
 
+## [Release 2023-??-??](https://github.com/mdaus/coda-oss/releases/tag/2023-??-??)
+* *zlib* updated to [1.2.13](https://github.com/madler/zlib/releases/tag/v1.2.13).
+* new `mem::ComplexView` class to make it easier to process complex data stored in parallel. 
+* adjust compiler flags for clean *CMake* builds.
+* wrap common "file open" routines (e.g., `fopen()`) to support `sys::expandEnvironmentVariables()`.
+* add header-only [HighFive](https://github.com/BlueBrain/HighFive) HDF5-wrapper library.
+
 ## [Release 2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
-* removed remaining vestigates of `std::auto_ptr`, provide `mem::AutoPtr` for the tiny handful of
+* removed remaining vestiges of `std::auto_ptr`, provide `mem::AutoPtr` for the tiny handful of
   places (e.g., SWIG bindings) that still need copying.
 * `xml::lite::Element` overloads to make creting new XML documents easier; see unittests for examples.
 * try even harder to find unittest files in various scenarios.
@@ -30,16 +37,16 @@
 * Utilitiy routines for finding various files when unit-testing.
 * Removed C++14 work-arounds needed in C++11. Legacy C++ exception specificatons removed.
 * Rebuild `waf` for FIPS error; added more debug options.
-
+ 
 ## [Release 2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30)
 * XML is now always written as UTF-8; the code will still try to read Windows-1252.
 * `Uri`s are no longer validated by default.
 * Minor tweaks from other projects.
-* Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/mdaus/coda-oss/tree/main).
+* ~~Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/mdaus/coda-oss/tree/main).~~
 
 ## [Release 2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)
 * remove *Expat* and *libXML* modules and support in **xml.lite**; only *Xerces* was actively used.
-* fix `waf` to work-around FIPS warning because of insecure *md5* hashing.
+* ~~fix `waf` to work-around FIPS warning because of insecure *md5* hashing.~~
 * tweak `str::EncodedStringView` and `str::EncodedString` for
   [future XML changes](https://github.com/mdaus/coda-oss/tree/feature/always-write-xml-as-utf8).
 

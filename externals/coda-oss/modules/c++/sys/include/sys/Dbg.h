@@ -27,6 +27,7 @@
 #pragma once
 
 #include "config/Exports.h"
+#include "config/disable_compiler_warnings.h"
 
 // A "debug" build has debugging symbols, detailed call stacks, minimal optimization, STL validation, etc.
 // A "release" build is likely to "run fast" and be "shipped;" it might lack much of what is in a "debug" build.

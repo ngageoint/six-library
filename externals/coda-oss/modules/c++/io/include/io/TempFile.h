@@ -33,7 +33,7 @@ namespace io
  * RAII object for a temporary file that gets deleted
  * upon object destruction
  */
-struct CODA_OSS_API TempFile
+struct CODA_OSS_API TempFile final
 {
     /*!
      * Constructor for TempFile object. Provided a directory,
@@ -49,7 +49,7 @@ struct CODA_OSS_API TempFile
      *
      * \return The pathname of the created file
      */
-    inline std::string pathname() const
+    const std::string& pathname() const
     {
         return mPathname;
     }
@@ -58,7 +58,6 @@ struct CODA_OSS_API TempFile
     TempFile& operator=(const TempFile&) = delete;
 
 private:
-    const sys::OS mOS;
     const std::string mPathname;
 };
 }

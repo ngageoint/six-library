@@ -146,7 +146,8 @@ size_t replace(std::string& str,
 
     if (index != std::string::npos)
     {
-        str.replace(index, search.length(), replace);
+        // ASAN error: str.replace(index, search.length(), replace);
+        str = str.substr(0, index) + replace + str.substr(index + search.length());
         start = index;
     }
     else

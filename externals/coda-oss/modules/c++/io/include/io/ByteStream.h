@@ -68,20 +68,20 @@ struct CODA_OSS_API ByteStream : public SeekableInputStream, public SeekableOutp
     }
 
     virtual
-    sys::Off_T tell()
+    sys::Off_T tell() override
     {
         return mPosition;
     }
 
     virtual
-    sys::Off_T seek(sys::Off_T offset, Whence whence);
+    sys::Off_T seek(sys::Off_T offset, Whence whence) override;
 
     /*!
      *  Returns the available bytes to read from the stream
      *  \return the available bytes to read
      */
     virtual
-    sys::Off_T available();
+    sys::Off_T available() override;
 
     using OutputStream::write;
     using InputStream::streamTo;
@@ -92,7 +92,7 @@ struct CODA_OSS_API ByteStream : public SeekableInputStream, public SeekableOutp
      *  \param size the number of bytes to write to the stream
      */
     virtual
-    void write(const void* buffer, size_t size);
+    void write(const void* buffer, size_t size) override;
 
     void reset()
     {
@@ -132,7 +132,7 @@ protected:
      * \throw IoException
      * \return  The number of bytes read
      */
-    virtual sys::SSize_T readImpl(void* buffer, size_t len);
+    virtual sys::SSize_T readImpl(void* buffer, size_t len) override;
 
 private:
     std::vector<sys::ubyte> mData;

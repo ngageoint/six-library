@@ -28,6 +28,7 @@
     <ClInclude Include="coda_oss\include\coda_oss\string.h" />
     <ClInclude Include="coda_oss\include\coda_oss\type_traits.h" />
     <ClInclude Include="config\include\config\compiler_extensions.h" />
+    <ClInclude Include="config\include\config\disable_compiler_warnings.h" />
     <ClInclude Include="config\include\config\Exports.h" />
     <ClInclude Include="config\include\config\Version.h" />
     <ClInclude Include="except\include\except\Backtrace.h" />
@@ -175,6 +176,9 @@
     <ClInclude Include="sio.lite\include\sio\lite\StreamReader.h" />
     <ClInclude Include="sio.lite\include\sio\lite\UnsupportedDataTypeException.h" />
     <ClInclude Include="sio.lite\include\sio\lite\UserDataDictionary.h" />
+    <ClInclude Include="std\include\import\cpp14.h" />
+    <ClInclude Include="std\include\import\cpp17.h" />
+    <ClInclude Include="std\include\import\std.h" />
     <ClInclude Include="str\include\str\Convert.h" />
     <ClInclude Include="str\include\str\EncodedString.h" />
     <ClInclude Include="str\include\str\EncodedStringView.h" />
@@ -345,6 +349,7 @@
     <ClCompile Include="sys\source\ErrWin32.cpp" />
     <ClCompile Include="sys\source\ExecUnix.cpp" />
     <ClCompile Include="sys\source\ExecWin32.cpp" />
+    <ClCompile Include="sys\source\File.cpp" />
     <ClCompile Include="sys\source\FileFinder.cpp" />
     <ClCompile Include="sys\source\FileUnix.cpp" />
     <ClCompile Include="sys\source\FileWin32.cpp" />
@@ -416,12 +421,14 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
+    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

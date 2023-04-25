@@ -48,8 +48,8 @@ public:
     {}
     virtual ~ProcessUnix()
     {}
-    void start();
-    void waitFor();
+    void start() override;
+    void waitFor() override;
 };
 }
 

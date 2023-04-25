@@ -329,7 +329,7 @@ int main(int argc, char** argv)
     const cli::Results* options(parser.parse(argc, argv));
     const std::string testType(options->get<std::string>("test"));
 
-    srand((unsigned)time(0));
+    srand((unsigned)time(nullptr));
 
     std::ofstream htmlFile;
     htmlFile.open("scratch_release.html");

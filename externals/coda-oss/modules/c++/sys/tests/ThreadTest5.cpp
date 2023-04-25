@@ -39,7 +39,7 @@ public:
         delete mVal;
     }
 
-    void run()
+    void run() override
     {
         cout << "mVal: " << *mVal << endl;
     }

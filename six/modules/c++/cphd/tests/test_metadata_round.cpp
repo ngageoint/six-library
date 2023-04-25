@@ -53,7 +53,7 @@ void parseXMLFile(xml::lite::MinidomParser& xmlParser, std::string pathname)
 }
 
 bool testEqual(const std::string& inPathname, const std::string& outPathname,
-          size_t numThreads, const std::vector<std::string>& schemas)
+          size_t /*numThreads*/, const std::vector<std::string>& schemas)
 {
     // Read in first XML file
     xml::lite::MinidomParser xmlParser;

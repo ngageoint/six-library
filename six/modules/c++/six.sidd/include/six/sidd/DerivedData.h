@@ -19,8 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_DERIVED_DATA_H__
-#define __SIX_DERIVED_DATA_H__
+#ifndef SIX_six_sidd_DerivedData_h_INCLUDED_
+#define SIX_six_sidd_DerivedData_h_INCLUDED_
+#pragma once
+
+#include <std/filesystem>
 
 #include <mem/ScopedCopyablePtr.h>
 #include <six/Data.h>
@@ -342,4 +345,4 @@ private:
 };
 }
 }
-#endif
+#endif // SIX_six_sidd_DerivedData_h_INCLUDED_

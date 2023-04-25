@@ -185,6 +185,12 @@ TEST_CASE(j2k_compress_tile)
 
     const size_t numThreads = sys::OS().getNumCPUs() - 1;
 
+    {
+      // be sure equals() is used to avoid compiler warnings
+      static const std::vector<std::byte> lhs, rhs;
+      TEST_ASSERT_TRUE(equals(lhs, rhs));
+    }
+
     Image source;
     generateTestImage(source);
 

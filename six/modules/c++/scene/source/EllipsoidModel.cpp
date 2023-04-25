@@ -165,11 +165,21 @@ WGS84EllipsoidModel::WGS84EllipsoidModel(Units unitsVal,
     initRadiusValues();
 }
 
-WGS84EllipsoidModel::WGS84EllipsoidModel(
-        const WGS84EllipsoidModel & m)
+WGS84EllipsoidModel::WGS84EllipsoidModel(const WGS84EllipsoidModel & m) : EllipsoidModel(m)
 {
     *this = m;
-    initRadiusValues();
+}
+WGS84EllipsoidModel& WGS84EllipsoidModel::operator=(const WGS84EllipsoidModel & m)
+{
+    if (this != &m)
+    {
+        units = m.units;
+	angularUnits = m.angularUnits;
+	equatorialRadius = m.equatorialRadius;
+	polarRadius = m.polarRadius;
+	initRadiusValues();
+    }
+    return *this;
 }
 
 void WGS84EllipsoidModel::initRadiusValues()

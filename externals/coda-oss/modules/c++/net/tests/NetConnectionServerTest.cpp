@@ -50,7 +50,7 @@ public:
     ~EchoHandler()
     {
     }
-    void operator()(net::NetConnection* conn)
+    void operator()(net::NetConnection* conn) override
     {
         char buf[MAX_BUF_SIZE];
         unsigned int length;

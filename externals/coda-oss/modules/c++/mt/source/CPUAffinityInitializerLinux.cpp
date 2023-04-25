@@ -60,7 +60,7 @@ public:
     {
     }
 
-    virtual std::unique_ptr<const sys::ScopedCPUMaskUnix> nextCPU()
+    virtual std::unique_ptr<const sys::ScopedCPUMaskUnix> nextCPU() override
     {
         if (mNextCPUIndex >= mCPUs.size())
         {
@@ -87,7 +87,7 @@ public:
     {
     }
 
-    virtual std::unique_ptr<const sys::ScopedCPUMaskUnix> nextCPU()
+    virtual std::unique_ptr<const sys::ScopedCPUMaskUnix> nextCPU() override
     {
         std::unique_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
         CPU_SET_S(mNextCPU++, mask->getSize(), mask->getMask());

@@ -89,7 +89,7 @@ struct DbgStream : public OutputStream
      * \param len The length
      * \throw IOException
      */
-    virtual void write(const void* buffer, sys::Size_T len)
+    virtual void write(const void* buffer, sys::Size_T len) override
     {
         if (mOn)
         {

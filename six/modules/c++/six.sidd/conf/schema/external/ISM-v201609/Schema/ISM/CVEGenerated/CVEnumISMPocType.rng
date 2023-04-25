@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<define name="CVEnumISMPocType.att">
+   <attribute name="CVEnumISMPocType">
+      <list>
+         <optional>
+            <value>ICD-710</value>
+         </optional>
+         <optional>
+            <value>DoD-Dist-B</value>
+         </optional>
+         <optional>
+            <value>DoD-Dist-C</value>
+         </optional>
+         <optional>
+            <value>DoD-Dist-D</value>
+         </optional>
+         <optional>
+            <value>DoD-Dist-E</value>
+         </optional>
+         <optional>
+            <value>DoD-Dist-F</value>
+         </optional>
+         <optional>
+            <value>DoD-Dist-X</value>
+         </optional>
+      </list>
+   </attribute>
+</define>

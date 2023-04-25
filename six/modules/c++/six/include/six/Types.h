@@ -56,7 +56,7 @@ extern std::string getSchemaPath(std::vector<std::string>&, bool tryToExpandIfNo
  * \class DESValidationException
  * \brief Throwable related to Six schema validation problems.
  */
-DECLARE_EXCEPTION(DESValidation)
+DECLARE_EXCEPTION(DESValidation);
 
 //! Vector types
 typedef math::linear::VectorN<3> Vector3;
@@ -575,7 +575,7 @@ ImageMode getImageMode(RadarModeType radarMode);
  *  \brief Throwable related to a required element being null,
  *         undefined, etc.
  */
-DECLARE_EXCEPTION(MissingRequired)
+DECLARE_EXCEPTION(MissingRequired);
 }
 
 #endif

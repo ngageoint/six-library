@@ -168,7 +168,7 @@ struct SocketErr : public Err
     }
 
     //!  Redefined for socket errors
-    virtual int getLast() const;
+    virtual int getLast() const override;
 
 };
 

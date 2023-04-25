@@ -201,4 +201,12 @@
       <UniqueIdentifier>{cf10f84a-5382-4987-bc33-b432ab1df123}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\six\modules\c++\six.sidd\tests\sample_xml\sidd200.xml">
+      <Filter>sidd</Filter>
+    </Xml>
+    <Xml Include="..\six\modules\c++\six.sidd\tests\sample_xml\sidd300.xml">
+      <Filter>sidd</Filter>
+    </Xml>
+  </ItemGroup>
 </Project>

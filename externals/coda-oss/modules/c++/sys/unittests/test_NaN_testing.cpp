@@ -47,6 +47,7 @@ TEST_CASE(testNaNIsNotAlmostEqualToNumber)
     TEST_ASSERT_ALMOST_EQ_EPS(std::numeric_limits<float>::quiet_NaN(),
                 5, 3);
     */
+    TEST_ASSERT_TRUE(true); // need to use hidden "testName" parameter
 }
 
 TEST_CASE(testIsNaN)
