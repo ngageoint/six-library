@@ -7,21 +7,13 @@ set(CXX_STANDARD_REQUIRED true)
 if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
     # we are the top-level project and are responsible for configuration
 
-    # set up warnings
+    # Always turn on "warnings as errors" to avoid lots of (meaningless?) build output;
+    # we'll dial-back warnings as necessary.
     if (MSVC)
-        # set warning level to /W3
-        string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-        string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-        add_compile_options(/W3 /wd4290 /wd4512)
-        add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
-	add_compile_options(/std:c++14)
+       add_compile_options(/WX) # warnings as errors
+       add_compile_options(/MP) # multi-processor build
     elseif (UNIX)
-        add_compile_options(
-            -Wno-deprecated
-            -Wno-unused-value
-            -Wno-unused-but-set-variable
-        )
-	add_compile_options(-std=c++14)
+       add_compile_options(-Werror) # warnings as errors
     endif()
 
     if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")

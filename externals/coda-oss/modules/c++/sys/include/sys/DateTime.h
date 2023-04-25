@@ -31,6 +31,7 @@
 #include <string>
 
 #include "config/Exports.h"
+#include "config/disable_compiler_warnings.h"
 
 namespace sys
 {

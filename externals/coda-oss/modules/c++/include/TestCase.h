@@ -135,10 +135,12 @@ inline void specific_exception(TFunc f,
         diePrintf(format, testName, file, func, line);
     }
     catch (const TException&) {  }
+    #if !CODA_OSS_except_Throwable_ISA_std_exception
     catch (const except::Throwable&)
     {
         diePrintf(format, testName, file, func, line);
     }
+    #endif
     catch (const std::exception&)
     {
         diePrintf(format, testName, file, func, line);

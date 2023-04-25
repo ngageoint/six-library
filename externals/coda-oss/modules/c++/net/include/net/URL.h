@@ -46,7 +46,7 @@ public:
     typedef std::list<std::string> ParamValues;
     typedef std::map<std::string, ParamValues> Params;
 
-    URLParams(const std::string paramString = "");
+    URLParams(std::string paramString = "");
 
     bool contains(std::string key) const;
     ParamValues& get(std::string key);
@@ -68,17 +68,18 @@ class URL
 {
 public:
 
-    URL(const std::string url = "");
+    URL(std::string url = "");
 
     /*!
      *  Copy constructor.
      *  \param url A right-hand-side URL
      */
-    URL(const URL& url);
+    URL(const URL&);
+    URL& operator=(const URL&);
+    URL(URL&&) = default;
+    URL& operator=(URL&&) = default;
 
-    virtual ~URL()
-    {
-    }
+    virtual ~URL() = default;
 
     void set(std::string url);
 
@@ -106,7 +107,7 @@ protected:
     friend class URLBuilder;
     std::string mProtocol;
     std::string mHost;
-    int mPort;
+    int mPort = -1;
     std::string mPath;
     URLParams mParams;
     std::string mFragment;

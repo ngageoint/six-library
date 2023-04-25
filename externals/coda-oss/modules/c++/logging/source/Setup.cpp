@@ -19,6 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "logging/Setup.h"
+
+#include <stdint.h>
+#include <limits>
  
 #include <str/Manip.h>
 
@@ -27,8 +31,6 @@
 #include "logging/RotatingFileHandler.h"
 #include "logging/StandardFormatter.h"
 #include "logging/XMLFormatter.h"
-
-#include "logging/Setup.h"
 
 std::unique_ptr<logging::Logger>
 logging::setupLogger(const path& program_, 
@@ -69,9 +71,14 @@ logging::setupLogger(const path& program_,
         logHandler.reset(new logging::StreamHandler());
     else
     {
+        // Existing code was checking whether a 'size_t' was <0; that of course can't
+        // ever happen because 'size_t' is an unsigned type.  But, in the spirit of 
+        // the existing code, assume that somebody thought such a check was meaningful
+        // ... using the value of a 32-bit integer (we now only build on 64-bit platforms).
+
         // create a rotating logger
-        logCount = (logCount < 0) ? 0 : logCount;
-        logBytes = (logBytes < 0) ? 0 : logBytes;
+        logCount = logCount > std::numeric_limits<uint32_t>::max() ? 0 : logCount; // logCount = (logCount < 0) ? 0 : logCount;
+        logBytes = logBytes > std::numeric_limits<uint32_t>::max() ? 0 : logBytes; // logBytes = (logBytes < 0) ? 0 : logBytes;
         if (logBytes > 0)
         {
             logHandler.reset(new logging::RotatingFileHandler(logFile,

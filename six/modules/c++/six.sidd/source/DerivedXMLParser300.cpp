@@ -42,7 +42,7 @@ static const char VERSION[] = "3.0.0";
 static const char SI_COMMON_URI[] = "urn:SICommon:1.0";
 inline static xml::lite::Uri getISMUri()
 {
-    return xml::lite::Uri("urn:us:gov:ic:ism:13");
+    return xml::lite::Uri("urn:us:gov:ic:ism:201609");
 }
 
 //DerivedXMLParser300::DerivedXMLParser300(std::unique_ptr<logging::Logger>&& log) :
@@ -795,8 +795,13 @@ XMLElem DerivedXMLParser300::convertDerivedClassificationToXML(
     assert(parent != nullptr);
 
     const auto ismUri = getISMUri();
+    auto& classElem = DerivedXMLParser200::convertDerivedClassificationToXML(*this, classification, ismUri, *parent);
 
-    return & DerivedXMLParser200::convertDerivedClassificationToXML(*this, classification, ismUri, *parent);
+    //! from ism:ISMRootNodeAttributeGroup
+    // SIDD 3.0 is tied to IC-ISM v201609
+    classElem.attribute("DESVersion") = "201609"; // note that the specification also allows for "201609-<custom>"
+
+    return &classElem;
 }
 
 XMLElem DerivedXMLParser300::convertMeasurementToXML(const Measurement* measurement,

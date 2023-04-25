@@ -15,8 +15,6 @@
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
 
 #pragma warning(push)
-#pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
-
 #pragma warning(disable: 4710) // '...': function not inlined
 #pragma warning(disable: 5027) // '...': move assignment operator was implicitly defined as deleted
 #pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
@@ -39,27 +37,7 @@
 #include <stdint.h>
 #include <time.h>
 
-#include <limits>
-#include <complex>
-#include <memory>
-#include <new>
-#include <utility>
-#include <type_traits>
-#include <typeinfo>
-#include <array>
-#include <string>
-#include <vector>
-#include <map>
-#include <set>
-#include <numeric>
-#include <algorithm>
-#include <iterator>
-#include <iomanip>
-#include <iostream>
-#include <ostream>
-#include <sstream>
-#include <future>
-#include <functional>
+#include "import/std.h"
 #include <std/span>
 #include <std/string>
 #include <std/filesystem>

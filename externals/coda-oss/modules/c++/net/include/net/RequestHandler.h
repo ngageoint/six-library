@@ -79,7 +79,7 @@ public:
     virtual ~DefaultRequestHandlerFactory()
     {
     }
-    net::RequestHandler* create()
+    net::RequestHandler* create() override
     {
         return new ReqHandler_T();
     }

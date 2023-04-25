@@ -99,7 +99,7 @@ namespace nitf
        M3, /*! \def NITF_IMAGE_IO_COMPRESSION_M3 - JPEG compression, blocking */
        M4, /*! \def NITF_IMAGE_IO_COMPRESSION_M4 - Vector quantization  compression, blocking */
        M5, /*! \def NITF_IMAGE_IO_COMPRESSION_M5 - Lossless JPEG compression, blocking */
-       M8); /*! \def NITF_IMAGE_IO_COMPRESSION_M8 - JPEG 2000 */
+       M8) /*! \def NITF_IMAGE_IO_COMPRESSION_M8 - JPEG 2000 */
 
 /*!
  *  \class ImageSubheader

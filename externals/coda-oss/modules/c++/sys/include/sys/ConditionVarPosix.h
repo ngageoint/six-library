@@ -66,17 +66,17 @@ public:
     /*!
      *  Acquire the lock
      */
-    virtual void acquireLock();
+    virtual void acquireLock() override;
 
     /*!
      *  Drop (release) the lock
      */
-    virtual void dropLock();
+    virtual void dropLock() override;
 
     /*!
      *  Signal using pthread_cond_signal
      */
-    virtual void signal();
+    virtual void signal() override;
 
     /*!
      *  Wait using pthread_cond_wait
@@ -86,7 +86,7 @@ public:
      *           certain systems, undefined/unfavorable behavior may
      *           result.
      */
-    virtual void wait();
+    virtual void wait() override;
 
     /*!
      *  Wait using pthread_cond_timed_wait.  I kept this and the above
@@ -99,12 +99,12 @@ public:
      *           certain systems, undefined/unfavorable behavior may
      *           result.
      */
-    virtual void wait(double seconds);
+    virtual void wait(double seconds) override;
 
     /*!
      *  Broadcast (notify all)
      */
-    virtual void broadcast();
+    virtual void broadcast() override;
 
     /*!
      *  Returns the native type.

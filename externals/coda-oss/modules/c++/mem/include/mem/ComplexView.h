@@ -35,6 +35,7 @@
 #include <iterator>
 
 #include "coda_oss/span.h"
+#include "config/disable_compiler_warnings.h"
 
 namespace mem
 {

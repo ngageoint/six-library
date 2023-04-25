@@ -55,7 +55,7 @@ public:
     /*!
      *  Dequeue and run requests in a non-terminating loop
      */
-    virtual void run();
+    virtual void run() override;
 
 protected:
     RunnableRequestQueue *mRequest;

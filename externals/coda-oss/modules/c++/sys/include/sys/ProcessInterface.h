@@ -60,7 +60,7 @@ public:
 
     virtual void start() = 0;
     virtual void waitFor() = 0;
-    virtual void run() = 0;
+    virtual void run() override = 0;
 
 protected:
     Pid_T mChildProcessID;

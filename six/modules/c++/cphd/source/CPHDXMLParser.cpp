@@ -1634,7 +1634,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* errParamXML, ErrorParamete
             mCommon.parseDecorrType(rangeBiasDecorrXML, *(errParam.monostatic->radarSensor.rangeBiasDecorr));
         }
 
-        XMLElem tropoErrorXML = getFirstAndOnly(monostaticXML, "TropoError");
+        XMLElem tropoErrorXML = getOptional(monostaticXML, "TropoError");
         if(tropoErrorXML)
         {
             errParam.monostatic->tropoError.reset(new six::TropoError());
@@ -1643,7 +1643,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* errParamXML, ErrorParamete
             mCommon.parseOptionalDecorrType(tropoErrorXML, "TropoRangeDecorr", errParam.monostatic->tropoError->tropoRangeDecorr);
         }
 
-        XMLElem ionoErrorXML = getFirstAndOnly(monostaticXML, "IonoError");
+        XMLElem ionoErrorXML = getOptional(monostaticXML, "IonoError");
         if(ionoErrorXML)
         {
             errParam.monostatic->ionoError.reset(new six::IonoError());

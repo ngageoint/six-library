@@ -50,12 +50,12 @@ struct MutexCpp11 final : public MutexInterface
     /*!
      *  Lock the mutex.
      */
-    virtual void lock();
+    virtual void lock() override;
 
     /*!
      *  Unlock the mutex.
      */
-    virtual void unlock();
+    virtual void unlock() override;
 
     /*!
      *  Returns the native type.

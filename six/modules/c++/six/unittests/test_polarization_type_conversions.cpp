@@ -368,6 +368,8 @@ TEST_CASE(NotSet)
     test_NotSet<six::DualPolarizationType>("NotSet");
     test_NotSet<six::PolarizationType>("NotSet");
     test_NotSet<six::PolarizationSequenceType>("NotSet");
+
+    TEST_ASSERT_TRUE(true);
 }
 
 template<typename TSixEnum>
