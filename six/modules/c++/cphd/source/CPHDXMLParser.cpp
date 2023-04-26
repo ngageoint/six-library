@@ -1076,13 +1076,15 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
     }
 
     // IonoParameters
-    const xml::lite::Element* ionoXML = getOptional(globalXML, "IonoParameters");
-    if (ionoXML)
+    if (const auto ionoXML = getOptional(globalXML, "IonoParameters"))
     {
         // Optional
         global.ionoParameters.reset(new IonoParameters());
         parseDouble(getFirstAndOnly(ionoXML, "TECV"), global.ionoParameters->tecv);
-        parseDouble(getFirstAndOnly(ionoXML, "F2Height"), global.ionoParameters->f2Height);
+        if (const auto f2HeightXML = getOptional(ionoXML, "F2Height"))
+        {
+            parseDouble(f2HeightXML, global.ionoParameters->f2Height);
+        }        
     }
 }
 
