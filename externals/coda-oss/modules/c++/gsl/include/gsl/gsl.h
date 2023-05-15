@@ -32,7 +32,7 @@
 // always compile Gsl (not "gsl") code--our own simple implementation
 #include "gsl/Gsl_.h"  // our own "fake" GSL
 
-#if CODA_OSS_gsl_use_real_gsl_
+#if CODA_OSS_use_real_gsl_
      CODA_OSS_disable_warning_push
 	#if _MSC_VER
 	#pragma warning(disable: 4626) // '...' : assignment operator was implicitly defined as deleted
