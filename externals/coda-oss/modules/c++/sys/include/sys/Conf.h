@@ -66,12 +66,20 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
+#ifdef __GNUC__
+#include <byteswap.h> // "These functions are GNU extensions."
+#endif
 
 #include <iostream>
 #include <algorithm>
 #include <cstdarg>
 #include <cstdlib>
 #include <memory>
+#include <type_traits>
+#include <stdexcept>
+#include "coda_oss/span.h"
+#include <complex>
 
 #include "str/Format.h"
 #include "sys/TimeStamp.h"
@@ -208,29 +216,38 @@ namespace sys
      *  \param elemSize
      *  \param numElems
      */
-    inline void byteSwap(void* buffer,
-                         unsigned short elemSize,
-                         size_t numElems)
+    void CODA_OSS_API byteSwap_(void* buffer, size_t elemSize, size_t numElems);
+    template<typename T>
+    inline void byteSwap(T* buffer, size_t elemSize, size_t numElems)
     {
-        sys::byte* bufferPtr = static_cast<sys::byte*>(buffer);
-        if (!bufferPtr || elemSize < 2 || !numElems)
-            return;
-
-        const auto half = elemSize >> 1;
-        size_t offset = 0, innerOff = 0, innerSwap = 0;
-
-        for(size_t i = 0; i < numElems; ++i, offset += elemSize)
+        // Trying to byte-swap structs can result in garbage because of padding.
+        static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value, "can only byte-swap numbers.");
+        if (elemSize != sizeof(T))
         {
-            for(unsigned short j = 0; j < half; ++j)
-            {
-                innerOff = offset + j;
-                innerSwap = offset + elemSize - 1 - j;
-
-                std::swap(bufferPtr[innerOff], bufferPtr[innerSwap]);
-            }
+            throw std::invalid_argument("sizeof(T) != elemSize");
         }
+        byteSwap_(buffer, elemSize, numElems);
+    }
+    template <typename T>
+    inline void byteSwap(coda_oss::span<T> buffer)
+    {
+        constexpr auto elemSize = sizeof(T);
+        const auto numElems = buffer.size();
+        byteSwap(buffer.data(), elemSize, numElems);
+    }
+    template <typename T>
+    inline void byteSwap(coda_oss::span<std::complex<T>> buffer)
+    {
+        void* pBuffer = buffer.data();
+        const coda_oss::span<T> buffer_(static_cast<T*>(pBuffer), buffer.size() * 2);  // real and imag
+        byteSwap(buffer_);
     }
 
+    inline void byteSwapV(void* buffer, unsigned short elemSize, size_t numElems) // existing API
+    {
+        byteSwap_(buffer, elemSize, numElems);
+    }
+   
     /*!
      *  Swap bytes into output buffer.  Note that a complex pixel
      *  is equivalent to two floats so elemSize and numElems
@@ -241,33 +258,47 @@ namespace sys
      *  \param numElems
      *  \param[out] outputBuffer buffer to write swapped elements to
      */
-    inline void  byteSwap(const void* buffer,
-                          unsigned short elemSize,
-                          size_t numElems,
-                          void* outputBuffer)
+    void CODA_OSS_API byteSwap_(const void* buffer, size_t elemSize, size_t numElems, void* outputBuffer);
+    template <typename T, typename U = T>
+    inline void byteSwap(const T* buffer, size_t elemSize, size_t numElems,
+                         U* outputBuffer) // e.g., "unsigned int" && "int"
     {
-        const sys::byte* bufferPtr = static_cast<const sys::byte*>(buffer);
-        sys::byte* outputBufferPtr = static_cast<sys::byte*>(outputBuffer);
-
-        if (!numElems || !bufferPtr || !outputBufferPtr)
+        // Trying to byte-swap structs can result in garbage because of padding.
+        static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value, "can only byte-swap numbers.");
+        static_assert(std::is_arithmetic<U>::value || std::is_enum<U>::value, "can only byte-swap numbers.");
+        static_assert(sizeof(T) > 1, "byte-swapping a single-byte value makes no sense.");
+        //static_assert(sizeof(T) == sizeof(U), "sizeof(T) != sizeof(U)."); // outputBuffer could be std::byte
+        if (elemSize != sizeof(T))
         {
-            return;
+            throw std::invalid_argument("sizeof(T) != elemSize");
         }
-
-        const auto half = elemSize >> 1;
-        size_t offset = 0;
-
-        for (size_t ii = 0; ii < numElems; ++ii, offset += elemSize)
+        byteSwap_(buffer, elemSize, numElems, outputBuffer);
+    }
+    template <typename T, typename U = T>
+    inline void byteSwap(coda_oss::span<const T> buffer, coda_oss::span<U> outputBuffer) // e.g., "unsigned int" && "int"
+    {
+        const auto numElems = buffer.size();
+        if (numElems != outputBuffer.size())
         {
-            for (unsigned short jj = 0; jj < half; ++jj)
-            {
-                const size_t innerOff = offset + jj;
-                const size_t innerSwap = offset + elemSize - 1 - jj;
-
-                outputBufferPtr[innerOff] = bufferPtr[innerSwap];
-                outputBufferPtr[innerSwap] = bufferPtr[innerOff];
-            }
+            throw std::invalid_argument("buffer.size() != outputBuffer.size()");
         }
+        constexpr auto elemSize = sizeof(T);
+        byteSwap(buffer.data(), elemSize, numElems, outputBuffer.data());
+    }
+    template <typename T>
+    inline void byteSwap(coda_oss::span<const std::complex<T>> buffer, coda_oss::span<std::complex<T>> outputBuffer)
+    {
+        const void* pBuffer = buffer.data();
+        const coda_oss::span<const T> buffer_(static_cast<const T*>(pBuffer), buffer.size() * 2);  // real and imag
+        void* pOutputBuffer = outputBuffer.data();
+        const coda_oss::span<T> outputBuffer_(static_cast<T*>(pOutputBuffer), outputBuffer.size() * 2);  // real and imag
+
+        byteSwap(buffer_, outputBuffer_);
+    }
+
+    inline void byteSwapV(const void* buffer, unsigned short elemSize, size_t numElems, void* outputBuffer) // existing API
+    {
+        byteSwap_(buffer, elemSize, numElems, outputBuffer);
     }
 
     /*!
@@ -290,9 +321,12 @@ namespace sys
      *  \endcode
      *
      */
-    template <typename T> T byteSwap(T val)
+    template <typename T> inline T byteSwap_(T val)
     {
-        size_t size = sizeof(T);
+        // Trying to byte-swap structs can result in garbage because of padding.
+        static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value, "can only byte-swap numbers");
+
+        constexpr auto size = sizeof(T);
         T out;
 
         unsigned char* cOut = reinterpret_cast<unsigned char*>(&out);
@@ -304,7 +338,71 @@ namespace sys
         }
         return out;
     }
+    template <typename T> inline T byteSwap(T val)
+    {
+        return byteSwap_(val);
+    }
+    inline uint8_t byteSwap(uint8_t val)
+    {
+        return val;  // no-op
+    }
+#if defined(_MSC_VER)
+    // These routines should geneerate a single instruction; see https://devblogs.microsoft.com/cppblog/a-tour-of-4-msvc-backend-improvements/
+    inline uint16_t byteSwap(uint16_t val)
+    {
+        return _byteswap_ushort(val);
+    }
+    inline uint32_t byteSwap(uint32_t val)
+    {
+        return _byteswap_ulong(val);
+    }
+    inline uint64_t byteSwap(uint64_t val)
+    {
+        return _byteswap_uint64(val);
+    }
+#elif defined(__GNUC__)
+    inline uint16_t byteSwap(uint16_t val)
+    {
+        return bswap_16(val);
+    }
+    inline uint32_t byteSwap(uint32_t val)
+    {
+        return bswap_32(val);
+    }
+    inline uint64_t byteSwap(uint64_t val)
+    {
+        return bswap_64(val);
+    }
+#endif
+    template <typename TUInt, typename T>
+    inline T byteSwapValue_(T val)
+    { 
+        static_assert(sizeof(T) > 1, "byte-swapping a single-byte value makes no sense.");
+        static_assert(sizeof(T) == sizeof(TUInt), "sizeof(T) != sizeof(<TUInt>)");
+        static_assert(std::is_unsigned<TUInt>::value, "TUInt must be 'unsigned'");
 
+        const void* pVal = &val;
+        const auto pUInt = static_cast<const TUInt*>(pVal);
+        const auto result = byteSwap(*pUInt);
+        
+        const void* pResult = &result;
+        const auto pRetval = static_cast<const T*>(pResult);
+        return *pRetval;
+    }
+    inline float byteSwap(float val)
+    {
+        return byteSwapValue_<uint32_t>(val);
+    }
+    inline double byteSwap(double val)
+    {
+        return byteSwapValue_<uint64_t>(val);
+    }
+    template<typename T>
+    inline std::complex<T> byteSwap(std::complex<T> v)
+    {
+        std::complex<T> retval{byteSwap(v.real()), byteSwap(v.imag())};
+        return retval;
+    }
 
     /*!
      *  Method to create a block of memory on an alignment

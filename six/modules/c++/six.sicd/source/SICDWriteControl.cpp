@@ -116,7 +116,7 @@ void SICDWriteControl::save(void* imageData,
     // Byte swap if needed
     if (doByteSwap)
     {
-        sys::byteSwap(imageData,
+        sys::byteSwapV(imageData,
                       static_cast<unsigned short>(numBytesPerPixel),
                       numPixelsTotal);
     }
@@ -181,7 +181,7 @@ void SICDWriteControl::save(void* imageData,
     // Byte swap back if needed
     if (doByteSwap && restoreData)
     {
-        sys::byteSwap(imageData,
+        sys::byteSwapV(imageData,
                       static_cast<unsigned short>(numBytesPerPixel),
                       numPixelsTotal);
     }
