@@ -261,7 +261,7 @@ void byteSwap(void* buffer,
 {
     if (numThreads <= 1)
     {
-        sys::byteSwap(buffer,
+        sys::byteSwapV(buffer,
                       static_cast<unsigned short>(elemSize),
                       numElements);
     }
