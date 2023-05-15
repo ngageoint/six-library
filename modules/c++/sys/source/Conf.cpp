@@ -25,6 +25,7 @@
 #include <stdexcept>
 #include <type_traits>
 #include <algorithm>
+#include <tuple>
 
 #include "sys/Conf.h"
 #include "coda_oss/bit.h"
@@ -99,6 +100,7 @@ inline void byteSwap_n(const void *buffer_, size_t elemSize, size_t numElems, vo
     static_assert(std::is_unsigned<TUInt>::value, "TUInt must be 'unsigned'");
     using value_type = TUInt;
     assert(sizeof(value_type) == elemSize);
+    std::ignore = elemSize;
 
     const coda_oss::span<const value_type> buffer(static_cast<const value_type*>(buffer_), numElems);
     assert(buffer.size_bytes() == elemSize * numElems);
