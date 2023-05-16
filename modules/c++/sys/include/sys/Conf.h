@@ -266,7 +266,8 @@ namespace sys
         // Trying to byte-swap structs can result in garbage because of padding.
         static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value, "can only byte-swap numbers.");
         static_assert(std::is_arithmetic<U>::value || std::is_enum<U>::value, "can only byte-swap numbers.");
-        static_assert(sizeof(T) == sizeof(U), "sizeof(T) != sizeof(U).");
+        static_assert(sizeof(T) > 1, "byte-swapping a single-byte value makes no sense.");
+        //static_assert(sizeof(T) == sizeof(U), "sizeof(T) != sizeof(U)."); // outputBuffer could be std::byte
         if (elemSize != sizeof(T))
         {
             throw std::invalid_argument("sizeof(T) != elemSize");
@@ -276,13 +277,12 @@ namespace sys
     template <typename T, typename U = T>
     inline void byteSwap(coda_oss::span<const T> buffer, coda_oss::span<U> outputBuffer) // e.g., "unsigned int" && "int"
     {
-        const auto numElems = buffer.size();
-        if (numElems != outputBuffer.size())
+        // outputBuffer could be std::byte
+        if (buffer.size_bytes() != outputBuffer.size_bytes())
         {
-            throw std::invalid_argument("buffer.size() != outputBuffer.size()");
+            throw std::invalid_argument("buffer.size_bytes() != outputBuffer.size_bytes()");
         }
-        constexpr auto elemSize = sizeof(T);
-        byteSwap(buffer.data(), elemSize, numElems, outputBuffer.data());
+        byteSwap(buffer.data(), sizeof(T), buffer.size(), outputBuffer.data());
     }
     template <typename T>
     inline void byteSwap(coda_oss::span<const std::complex<T>> buffer, coda_oss::span<std::complex<T>> outputBuffer)
@@ -341,6 +341,10 @@ namespace sys
     {
         return byteSwap_(val);
     }
+    inline uint8_t byteSwap(uint8_t val)
+    {
+        return val;  // no-op
+    }
 #if defined(_MSC_VER)
     // These routines should geneerate a single instruction; see https://devblogs.microsoft.com/cppblog/a-tour-of-4-msvc-backend-improvements/
     inline uint16_t byteSwap(uint16_t val)
@@ -372,6 +376,7 @@ namespace sys
     template <typename TUInt, typename T>
     inline T byteSwapValue_(T val)
     { 
+        static_assert(sizeof(T) > 1, "byte-swapping a single-byte value makes no sense.");
         static_assert(sizeof(T) == sizeof(TUInt), "sizeof(T) != sizeof(<TUInt>)");
         static_assert(std::is_unsigned<TUInt>::value, "TUInt must be 'unsigned'");
 

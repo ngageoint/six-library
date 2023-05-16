@@ -75,6 +75,7 @@
 #include <sys/Thread.h>
 #include <sys/Mutex.h>
 #include <sys/FileFinder.h>
+#include <sys/ByteSwap.h>
 #include <import/sys.h>
 #include <import/math/linear.h>
 #include <import/math/poly.h>
@@ -87,6 +88,7 @@
 #include <mt/RequestQueue.h>
 #include <mt/ThreadPoolException.h>
 #include <mt/GenerationThreadPool.h>
+#include <mt/ByteSwap.h>
 #include <import/mt.h>
 #include <avx/extractf.h>
 #include <logging/ExceptionLogger.h>

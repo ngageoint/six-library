@@ -137,6 +137,7 @@
     <ClInclude Include="mt\include\mt\Algorithm.h" />
     <ClInclude Include="mt\include\mt\BalancedRunnable1D.h" />
     <ClInclude Include="mt\include\mt\BasicThreadPool.h" />
+    <ClInclude Include="mt\include\mt\ByteSwap.h" />
     <ClInclude Include="mt\include\mt\CPUAffinityInitializer.h" />
     <ClInclude Include="mt\include\mt\CPUAffinityInitializerLinux.h" />
     <ClInclude Include="mt\include\mt\CPUAffinityInitializerWin32.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="sys\include\sys\AtomicCounter.h" />
     <ClInclude Include="sys\include\sys\AtomicCounterCpp11.h" />
     <ClInclude Include="sys\include\sys\Backtrace.h" />
+    <ClInclude Include="sys\include\sys\ByteSwap.h" />
     <ClInclude Include="sys\include\sys\ConditionVar.h" />
     <ClInclude Include="sys\include\sys\ConditionVarInterface.h" />
     <ClInclude Include="sys\include\sys\ConditionVarPosix.h" />
