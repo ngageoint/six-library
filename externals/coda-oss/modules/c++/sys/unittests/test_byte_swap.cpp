@@ -30,6 +30,7 @@
 #include <std/span>
 
 #include <sys/Conf.h>
+#include <sys/ByteSwap.h>
 
 TEST_CASE(testEndianness)
 {
@@ -72,29 +73,77 @@ TEST_CASE(testEndianness)
     }
 }
 
-TEST_CASE(testByteSwap)
+static std::vector<uint64_t> make_origValues(size_t NUM_PIXELS)
 {
     ::srand(334);
 
-    static const size_t NUM_PIXELS = 10000;
-    std::vector<sys::Uint64_T> origValues(NUM_PIXELS);
+    std::vector<uint64_t> retval(NUM_PIXELS);
     for (size_t ii = 0; ii < NUM_PIXELS; ++ii)
     {
         const auto value = static_cast<float>(::rand()) / RAND_MAX *
-                std::numeric_limits<sys::Uint64_T>::max();
-        origValues[ii] = static_cast<sys::Uint64_T>(value);
+                std::numeric_limits<uint64_t>::max();
+        retval[ii] = static_cast<uint64_t>(value);
     }
+    return retval;
+}
+
+TEST_CASE(testByteSwapV)
+{
+    constexpr size_t NUM_PIXELS = 10000;
+    const auto origValues = make_origValues(NUM_PIXELS);
 
     // Byte swap the old-fashioned way
-    std::vector<sys::Uint64_T> values1(origValues);
-    sys::byteSwap(&values1[0], sizeof(sys::Uint64_T), NUM_PIXELS);
-
+    auto values1(origValues);
+    sys::byteSwapV(values1.data(), sizeof(uint64_t), NUM_PIXELS);
 
     // Byte swap into output buffer
-    const std::vector<sys::Uint64_T> values2(origValues);
-    std::vector<sys::Uint64_T> swappedValues2(values2.size());
-    sys::byteSwap(&values2[0], sizeof(sys::Uint64_T), NUM_PIXELS,
-                  &swappedValues2[0]);
+    std::vector<uint64_t> swappedValues2(origValues.size());
+    sys::byteSwapV(origValues.data(), sizeof(uint64_t), NUM_PIXELS, 
+                  swappedValues2.data());
+
+    // Everything should match
+    for (size_t ii = 0; ii < NUM_PIXELS; ++ii)
+    {
+        TEST_ASSERT_EQ(values1[ii], swappedValues2[ii]);
+    }
+}
+
+TEST_CASE(testOldByteSwap)
+{
+    constexpr size_t NUM_PIXELS = 10000;
+    const auto origValues = make_origValues(NUM_PIXELS);
+
+    // Byte swap the old-fashioned way
+    auto values1(origValues);
+    sys::byteSwap(values1.data(), sizeof(uint64_t), NUM_PIXELS);
+
+    // Byte swap into output buffer
+    std::vector<uint64_t> swappedValues2(origValues.size());
+    sys::byteSwap(origValues.data(), sizeof(uint64_t), NUM_PIXELS, 
+                  swappedValues2.data());
+
+    // Everything should match
+    for (size_t ii = 0; ii < NUM_PIXELS; ++ii)
+    {
+        TEST_ASSERT_EQ(values1[ii], swappedValues2[ii]);
+    }
+}
+
+TEST_CASE(testByteSwap)
+{
+    constexpr size_t NUM_PIXELS = 10000;
+    const auto origValues = make_origValues(NUM_PIXELS);
+    const std::span<const uint64_t> origValues_(origValues.data(), origValues.size());
+
+    // Byte swap the old-fashioned way
+    auto values1(origValues);
+    const std::span<uint64_t> values1_(values1.data(), values1.size());
+    sys::byteSwap(values1_);
+
+    // Byte swap into output buffer
+    std::vector<uint64_t> swappedValues2(origValues.size());
+    const std::span<uint64_t> swappedValues2_(swappedValues2.data(), swappedValues2.size());
+    sys::byteSwap(origValues_, swappedValues2_);
 
     // Everything should match
     for (size_t ii = 0; ii < NUM_PIXELS; ++ii)
@@ -378,6 +427,8 @@ TEST_CASE(testByteSwapCxFloat)
 
 TEST_MAIN(
     TEST_CHECK(testEndianness);
+    TEST_CHECK(testByteSwapV);
+    TEST_CHECK(testOldByteSwap);
     TEST_CHECK(testByteSwap);
     TEST_CHECK(testByteSwapUInt16);
     TEST_CHECK(testByteSwapUInt32);
