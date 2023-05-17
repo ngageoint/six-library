@@ -218,22 +218,25 @@ namespace sys
      */
     void CODA_OSS_API byteSwap_(void* buffer, size_t elemSize, size_t numElems);
     template<typename T>
-    inline void byteSwap(T* buffer, size_t elemSize, size_t numElems)
+    inline void byteSwap(T* buffer, size_t numElems)
     {
         // Trying to byte-swap structs can result in garbage because of padding.
         static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value, "can only byte-swap numbers.");
+        byteSwap_(buffer, sizeof(T), numElems);
+    }
+    template<typename T>
+    inline void byteSwap(T* buffer, size_t elemSize, size_t numElems)
+    {
         if (elemSize != sizeof(T))
         {
             throw std::invalid_argument("sizeof(T) != elemSize");
         }
-        byteSwap_(buffer, elemSize, numElems);
+        byteSwap(buffer, numElems);
     }
     template <typename T>
     inline void byteSwap(coda_oss::span<T> buffer)
     {
-        constexpr auto elemSize = sizeof(T);
-        const auto numElems = buffer.size();
-        byteSwap(buffer.data(), elemSize, numElems);
+        byteSwap(buffer.data(), buffer.size());
     }
     template <typename T>
     inline void byteSwap(coda_oss::span<std::complex<T>> buffer)
@@ -260,7 +263,7 @@ namespace sys
      */
     void CODA_OSS_API byteSwap_(const void* buffer, size_t elemSize, size_t numElems, void* outputBuffer);
     template <typename T, typename U = T>
-    inline void byteSwap(const T* buffer, size_t elemSize, size_t numElems,
+    inline void byteSwap(const T* buffer, size_t numElems,
                          U* outputBuffer) // e.g., "unsigned int" && "int"
     {
         // Trying to byte-swap structs can result in garbage because of padding.
@@ -268,21 +271,26 @@ namespace sys
         static_assert(std::is_arithmetic<U>::value || std::is_enum<U>::value, "can only byte-swap numbers.");
         static_assert(sizeof(T) > 1, "byte-swapping a single-byte value makes no sense.");
         //static_assert(sizeof(T) == sizeof(U), "sizeof(T) != sizeof(U)."); // outputBuffer could be std::byte
+        byteSwap_(buffer, sizeof(T), numElems, outputBuffer);
+    }
+    template <typename T, typename U = T>
+    inline void byteSwap(const T* buffer, size_t elemSize, size_t numElems,
+                         U* outputBuffer) // e.g., "unsigned int" && "int"
+    {
         if (elemSize != sizeof(T))
         {
             throw std::invalid_argument("sizeof(T) != elemSize");
         }
-        byteSwap_(buffer, elemSize, numElems, outputBuffer);
+        byteSwap(buffer, numElems, outputBuffer);
     }
     template <typename T, typename U = T>
     inline void byteSwap(coda_oss::span<const T> buffer, coda_oss::span<U> outputBuffer) // e.g., "unsigned int" && "int"
     {
-        // outputBuffer could be std::byte
-        if (buffer.size_bytes() != outputBuffer.size_bytes())
+        if (buffer.size_bytes() != outputBuffer.size_bytes()) // outputBuffer could be std::byte
         {
             throw std::invalid_argument("buffer.size_bytes() != outputBuffer.size_bytes()");
         }
-        byteSwap(buffer.data(), sizeof(T), buffer.size(), outputBuffer.data());
+        byteSwap(buffer.data(), buffer.size(), outputBuffer.data());
     }
     template <typename T>
     inline void byteSwap(coda_oss::span<const std::complex<T>> buffer, coda_oss::span<std::complex<T>> outputBuffer)
@@ -301,24 +309,7 @@ namespace sys
     }
 
     /*!
-     *  Function to swap one element irrespective of size.  The inplace
-     *  buffer function should be preferred.
-     *
-     *  To specialize complex float, first include the complex library
-     *  \code
-        #include <complex>
-     *  \endcode
-     *
-     *  Then put an overload in as specified below:
-     *  \code
-        template <typename T> std::complex<T> byteSwap(std::complex<T> val)
-        {
-            std::complex<T> out(byteSwap<T>(val.real()),
-                                byteSwap<T>(val.imag()));
-            return out;
-        }
-     *  \endcode
-     *
+     *  Function to swap one element irrespective of size.
      */
     template <typename T> inline T byteSwap_(T val)
     {
