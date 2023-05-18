@@ -61,10 +61,8 @@ struct Serializer
             const size_t prevLength = buffer.size();
             buffer.resize(prevLength + length);
             auto data = static_cast<const T*>(pVal);
-            sys::byteSwapV(data,
-                          static_cast<unsigned short>(length),
-                          1,
-                          &buffer[prevLength]);
+            constexpr auto numElems = 1;
+            sys::byteSwap(data, length, numElems, &buffer[prevLength]);
         }
         else
         {
