@@ -58,7 +58,7 @@ static inline void nitf_free(NITF_DATA* data)
 static inline void byteSwap(std::vector<std::byte>& buffer, size_t elemSize, size_t numElems)
 {
     assert(buffer.size() == elemSize * numElems);
-    sys::byteSwapV(buffer.data(), gsl::narrow<unsigned short>(elemSize), numElems);
+    sys::byteSwap(buffer.data(), elemSize, numElems);
 }
 template<typename TImpl, typename TWriteFunc>
 static NITF_BOOL write(const TImpl* impl, nitf_IOInterface* io, nitf_Error* error, TWriteFunc write_f)
