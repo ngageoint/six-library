@@ -68,8 +68,10 @@ struct Tester final
         mBigEndianImage = mImage;
         if (std::endian::native == std::endian::little)
         {
-	    const std::span<std::complex<DataTypeT>> buffer(mBigEndianImage.data(), mBigEndianImage.size());
-            sys::byteSwap(buffer);
+            void* const buffer = mBigEndianImage.data();
+            constexpr auto elemSize = sizeof(DataTypeT);
+            const auto numElems = mBigEndianImage.size() * 2; // real and imag
+            sys::byteSwap(buffer, elemSize, numElems);
         }
 
         normalWrite();
