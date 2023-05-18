@@ -152,6 +152,13 @@ static void testByteSwapValues_(const std::string& testName, const void* pBytes)
     TEST_ASSERT_NOT_EQ(*pUInt, swap);
     sys::byteSwap(&swap, sizeof(TUInt), 1); // swap back
     TEST_ASSERT_EQ(*pUInt, swap);
+
+    const auto resultBytes = sys::swapBytes(*pUInt);
+    TEST_ASSERT_EQ(resultBytes.size(), sizeof(TUInt));
+    for (size_t i = 0, j = sizeof(TUInt); i < sizeof(TUInt) && j > 0; i++, j--)
+    {
+        TEST_ASSERT(resultBytes[i] == pValueBytes[j - 1]);
+    }
 }
 TEST_CASE(testByteSwapValues)
 {
@@ -169,7 +176,7 @@ TEST_CASE(testByteSwap12)
     const auto pValueBytes = &(twelve_bytes[0]);
 
     std::array<std::byte, 12> swappedValues;
-    const auto pResultBytes = swappedValues.data();
+    coda_oss::span<coda_oss::byte> pResultBytes(swappedValues.data(), swappedValues.size());
 
     auto elemSize = 12;
     auto numElements = swappedValues.size() / elemSize;
@@ -186,6 +193,22 @@ TEST_CASE(testByteSwap12)
     TEST_ASSERT(pResultBytes[9] == pValueBytes[2]);
     TEST_ASSERT(pResultBytes[10] == pValueBytes[1]);
     TEST_ASSERT(pResultBytes[11] == pValueBytes[0]);
+
+    // swap as a SINGLE 12-byte value
+    const auto result = sys::details::swapBytes<swappedValues.size()>(twelve_bytes, pResultBytes);
+    TEST_ASSERT(result[0] == pValueBytes[11]);
+    TEST_ASSERT(result[1] == pValueBytes[10]);
+    TEST_ASSERT(result[2] == pValueBytes[9]);
+    TEST_ASSERT(result[3] == pValueBytes[8]);
+    TEST_ASSERT(result[4] == pValueBytes[7]);
+    TEST_ASSERT(result[5] == pValueBytes[6]);
+    TEST_ASSERT(result[6] == pValueBytes[5]);
+    TEST_ASSERT(result[7] == pValueBytes[4]);
+    TEST_ASSERT(result[8] == pValueBytes[3]);
+    TEST_ASSERT(result[9] == pValueBytes[2]);
+    TEST_ASSERT(result[10] == pValueBytes[1]);
+    TEST_ASSERT(result[11] == pValueBytes[0]);
+
 
     elemSize = 6; // note that an ODD size doesn't work correctly
     numElements = swappedValues.size() / elemSize;
