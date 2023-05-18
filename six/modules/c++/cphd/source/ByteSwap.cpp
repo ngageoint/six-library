@@ -21,8 +21,14 @@
  */
 #include <cphd/ByteSwap.h>
 
+#include <stdint.h>
+
 #include <string>
 #include <memory>
+#include <type_traits>
+#include <std/span>
+#include <std/cstddef>
+#include <tuple>
 
 #include <sys/Conf.h>
 #include <sys/ByteSwap.h>
@@ -35,24 +41,69 @@
 
 namespace
 {
+template<typename TUInt>
+inline auto swapIntBytes(const void* pIn_, void* pOut_)
+{
+    static_assert(std::is_unsigned<TUInt>::value, "TUInt must be 'unsigned'");
+    auto const pIn = static_cast<const TUInt*>(pIn_);
+    auto const pOut = static_cast<TUInt*>(pOut_);
+    *pOut = sys::byteSwap(*pIn);
+
+    // Give the raw byte-swapped bytes back to the caller for easy serialization
+    return std::span<const std::byte>(static_cast<std::byte*>(pOut_), sizeof(TUInt));
+}
+
 // TODO: Maybe this should go in sys/Conf.h
 //       It's more flexible in that it properly handles float's - you can't
 //       just call sys::byteSwap(floatVal) because the compiler may change the
 //       byte-swapped float value into a valid IEEE value beforehand.
-// TODO: If we're really looking to optimize this, could specialize it for
-//       sizes of 2, 4, and 8 to eliminate the for loop
-template <typename T>
-inline
-void byteSwap(const void* in, T& out)
+template <size_t elemSize>
+inline auto swapBytes(const void* pIn, void* pOut)
 {
-    const std::byte* const inPtr = static_cast<const std::byte*>(in);
-    std::byte* const outPtr = reinterpret_cast<std::byte*>(&out);
-
-    for (size_t ii = 0, jj = sizeof(T) - 1; ii < jj; ++ii, --jj)
+    auto const inPtr = static_cast<const std::byte*>(pIn);
+    auto const outPtr = static_cast<std::byte*>(pOut);
+    for (size_t ii = 0, jj = elemSize - 1; ii < jj; ++ii, --jj)
     {
         outPtr[ii] = inPtr[jj];
         outPtr[jj] = inPtr[ii];
     }
+
+    // Give the raw byte-swapped bytes back to the caller for easy serialization
+    return std::span<const std::byte>(outPtr, elemSize);
+}
+template<>
+inline auto swapBytes<sizeof(uint8_t)>(const void* pIn, void* pOut)
+{
+    return swapIntBytes<uint8_t>(pIn, pOut);
+}
+template<>
+inline auto swapBytes<sizeof(uint16_t)>(const void* pIn, void* pOut)
+{
+    return swapIntBytes<uint16_t>(pIn, pOut);
+}
+template<>
+inline auto swapBytes<sizeof(uint32_t)>(const void* pIn, void* pOut)
+{
+    return swapIntBytes<uint32_t>(pIn, pOut);
+}
+template<>
+inline auto swapBytes<sizeof(uint64_t)>(const void* pIn, void* pOut)
+{
+    return swapIntBytes<uint64_t>(pIn, pOut);
+}
+template <typename T>
+inline auto swapBytes(const void* pIn, T* pOut)
+{
+    // Byte-swapping a `struct` as a single object is unlikely to give the desired results;
+    // instead, member should be individually byte-swapped.
+    static_assert(!std::is_compound<T>::value, "T should not be a 'struct'");
+    return swapBytes<sizeof(T)>(pIn, static_cast<void*>(pOut));
+}
+
+template <typename T>
+inline void byteSwap(const void* in, T& out)
+{
+    std::ignore = swapBytes(in, &out);
 }
 
 inline const std::byte* calc_offset(const void* input_, size_t offset)
