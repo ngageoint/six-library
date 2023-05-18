@@ -116,9 +116,7 @@ void SICDWriteControl::save(void* imageData,
     // Byte swap if needed
     if (doByteSwap)
     {
-        sys::byteSwapV(imageData,
-                      static_cast<unsigned short>(numBytesPerPixel),
-                      numPixelsTotal);
+        sys::byteSwap(imageData, numBytesPerPixel, numPixelsTotal);
     }
 
     const size_t globalNumCols = data->getNumCols();
@@ -181,9 +179,7 @@ void SICDWriteControl::save(void* imageData,
     // Byte swap back if needed
     if (doByteSwap && restoreData)
     {
-        sys::byteSwapV(imageData,
-                      static_cast<unsigned short>(numBytesPerPixel),
-                      numPixelsTotal);
+        sys::byteSwap(imageData, numBytesPerPixel, numPixelsTotal);
     }
 }
 
