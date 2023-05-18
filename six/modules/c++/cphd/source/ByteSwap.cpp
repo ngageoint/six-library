@@ -22,11 +22,15 @@
 #include <cphd/ByteSwap.h>
 
 #include <string>
-#include <std/memory>
+#include <memory>
 
 #include <sys/Conf.h>
+#include <sys/ByteSwap.h>
+#include <sys/ByteSwapValue.h>
+#include <sys/Runnable.h>
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>
+#include <mt/ThreadedByteSwap.h>
 #include <nitf/coda-oss.hpp>
 
 namespace
@@ -51,29 +55,6 @@ void byteSwap(const void* in, T& out)
     }
 }
 
-struct ByteSwapRunnable final : public sys::Runnable
-{
-    ByteSwapRunnable(void* buffer,
-                     size_t elemSize,
-                     size_t startElement,
-                     size_t numElements) :
-        mBuffer(static_cast<std::byte*>(buffer) + startElement * elemSize),
-        mElemSize(static_cast<unsigned short>(elemSize)),
-        mNumElements(numElements)
-    {
-    }
-
-    virtual void run()
-    {
-        sys::byteSwapV(mBuffer, mElemSize, mNumElements);
-    }
-
-private:
-    std::byte* const mBuffer;
-    const unsigned short mElemSize;
-    const size_t mNumElements;
-};
-
 inline const std::byte* calc_offset(const void* input_, size_t offset)
 {
     auto input = static_cast<const std::byte*>(input_);
@@ -94,7 +75,7 @@ struct ByteSwapAndPromoteRunnable final : public sys::Runnable
     {
     }
 
-    virtual void run()
+    void run() override
     {
         InT real(0);
         InT imag(0);
@@ -123,9 +104,8 @@ private:
 
 
 template <typename InT>
-class ByteSwapAndScaleRunnable : public sys::Runnable
+struct ByteSwapAndScaleRunnable final : public sys::Runnable
 {
-public:
     ByteSwapAndScaleRunnable(const void* input,
                              size_t startRow,
                              size_t numRows,
@@ -139,7 +119,7 @@ public:
     {
     }
 
-    virtual void run()
+    void run() override
     {
         InT real(0);
         InT imag(0);
@@ -249,38 +229,9 @@ void byteSwapAndScale(const void* input,
 
 namespace cphd
 {
-void byteSwap(void* buffer,
-              size_t elemSize,
-              size_t numElements,
-              size_t numThreads)
+void byteSwap(void* buffer, size_t elemSize, size_t numElements, size_t numThreads)
 {
-    if (numThreads <= 1)
-    {
-        sys::byteSwapV(buffer,
-                      static_cast<unsigned short>(elemSize),
-                      numElements);
-    }
-    else
-    {
-        mt::ThreadGroup threads;
-        const mt::ThreadPlanner planner(numElements, numThreads);
-
-        size_t threadNum(0);
-        size_t startElement(0);
-        size_t numElementsThisThread(0);
-        while (planner.getThreadInfo(threadNum++,
-                                     startElement,
-                                     numElementsThisThread))
-        {
-            auto thread = std::make_unique<ByteSwapRunnable>(
-                    buffer,
-                    elemSize,
-                    startElement,
-                    numElementsThisThread);
-            threads.createThread(std::move(thread));
-        }
-        threads.joinAll();
-    }
+    return mt::threadedByteSwap(buffer, elemSize, numElements, numThreads);
 }
 
 void byteSwapAndPromote(const void* input,
