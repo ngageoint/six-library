@@ -168,11 +168,17 @@ namespace sys
         return swapBytes(&in, pOut);
     }
     template <typename T>
+    inline auto swapBytes(T in, std::vector<coda_oss::byte>& out)
+    {
+        out.resize(sizeof(T));
+        const coda_oss::span<coda_oss::byte> pOut(out.data(), out.size());
+        return swapBytes(&in, pOut);
+    }
+    template <typename T>
     inline auto swapBytes(T in)
     {
-        std::vector<coda_oss::byte> retval(sizeof(T));
-        const coda_oss::span<coda_oss::byte> retval_(retval.data(), retval.size());
-        std::ignore = swapBytes(&in, retval_);
+        std::vector<coda_oss::byte> retval;
+        std::ignore = swapBytes(in, retval);
         return retval;
     }
 
