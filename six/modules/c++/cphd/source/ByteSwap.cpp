@@ -44,10 +44,7 @@ namespace
 template <typename T>
 inline void byteSwap(const void* in, T& out)
 {
-    auto const pIn = static_cast<const T*>(in);
-    void* pOut = &out;
-    const std::span<std::byte> pBytes(static_cast<std::byte*>(pOut), sizeof(T));
-    std::ignore = sys::swapBytes(pIn, pBytes);
+    out = sys::swapBytes(sys::as_bytes<T>(in));
 }
 
 inline const std::byte* calc_offset(const void* input_, size_t offset)
