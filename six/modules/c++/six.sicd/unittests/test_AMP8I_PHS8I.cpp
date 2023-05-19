@@ -368,7 +368,7 @@ template<typename TImage>
 static void adjust_image(TImage& image)
 {
     // Make it easier to know what we're looking at when examining a binary dump of the SICD
-    const auto pImageBytes = six::as_bytes(image);
+    const auto pImageBytes = six::as_writable_bytes(image);
 
     pImageBytes[0] = static_cast<std::byte>('[');
     for (size_t i = 1; i < pImageBytes.size() - 1; i++)
