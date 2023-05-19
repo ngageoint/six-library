@@ -31,6 +31,7 @@
 #include <byteswap.h>  // "These functions are GNU extensions."
 #endif
 
+#include <new>
 #include <type_traits>
 #include <coda_oss/span.h>
 #include <coda_oss/cstddef.h>
@@ -38,6 +39,8 @@
 #include <vector>
 #include <array>
 #include <stdexcept>
+
+#include "config/Exports.h"
 
 #include "Span.h"
 
@@ -97,23 +100,23 @@ namespace sys
         return as_bytes(pOut);
     }
 
+    /*!
+     *  Swap bytes for a single value into output buffer. 
+     *
+     *  \param buffer to transform
+     *  \param[out] outputBuffer buffer to write swapped elements to
+     */
+    coda_oss::span<const coda_oss::byte> CODA_OSS_API swapValueBytes(
+        coda_oss::span<const coda_oss::byte> pIn, coda_oss::span<coda_oss::byte> outPtr, std::nothrow_t) noexcept;
+    coda_oss::span<const coda_oss::byte> CODA_OSS_API swapValueBytes(
+        coda_oss::span<const coda_oss::byte> pIn, coda_oss::span<coda_oss::byte> outPtr);
+
+    // This is a template so that we can have specializations for different sizes
     template <size_t elemSize>
     inline auto swapBytes(const void* pIn, coda_oss::span<coda_oss::byte> outPtr)
     {
-        if (elemSize != outPtr.size())
-        {
-            throw std::invalid_argument("'outPtr.size() != elemSize");
-        }
-
-        auto const inPtr = static_cast<const coda_oss::byte*>(pIn);
-        for (size_t ii = 0, jj = elemSize - 1; ii < jj; ++ii, --jj)
-        {
-            outPtr[ii] = inPtr[jj];
-            outPtr[jj] = inPtr[ii];
-        }
-
-        // Give the raw byte-swapped bytes back to the caller for easy serialization
-        return make_const_span(outPtr);
+        auto const inPtr = make_span<coda_oss::byte>(pIn, elemSize);
+        return swapValueBytes(inPtr, outPtr);
     }
     template <>
     inline auto swapBytes<sizeof(uint8_t)>(const void* pIn, coda_oss::span<coda_oss::byte> pOut)
@@ -135,6 +138,17 @@ namespace sys
     {
         return swapIntBytes<uint64_t>(pIn, pOut);
     }
+
+    template<typename T>
+    inline constexpr bool is_byte_swappable() noexcept
+    {
+        // Trying to byte-swap anything other than integers is likely to cause
+        // problems (or at least confusion):
+        // * `struct`s have padding that should be ignored.
+        // * each individual member of a `struct` should be byte-swaped
+        // * byte-swaped `float` or `double` bits are nonsense
+        return std::is_enum<T>::value || std::is_integral<T>::value;
+    }
     }
 
     /*!
@@ -148,13 +162,7 @@ namespace sys
         {
             throw std::invalid_argument("'pOut.size() != sizeof(T)");
         }
-
-        // Trying to byte-swap anything other than integers is likely to cause
-        // problems (or at least confusion):
-        // * `struct`s have padding that should be ignored.
-        // * each individual member of a `struct` should be byte-swaped
-        // * byte-swaped `float` or `double` bits are nonsense
-        static_assert(!std::is_compound<T>::value, "T should not be a 'struct'");
+        static_assert(details::is_byte_swappable<T>(), "T should not be a 'struct'");
         return details::swapBytes<sizeof(T)>(pIn, pOut);
     }
     template <typename T>
@@ -190,7 +198,7 @@ namespace sys
         {
             throw std::invalid_argument("'in.size() != sizeof(T)");
         }
-        static_assert(!std::is_compound<T>::value, "T should not be a 'struct'"); // see above
+        static_assert(details::is_byte_swappable<T>(), "T should not be a 'struct'"); // see above
 
         // Don't want to cast the swapped bytes in `in` to T* as they might not be valid;
         // e.g., a byte-swapped `float` could be garbage.
@@ -201,12 +209,12 @@ namespace sys
     template <typename T>
     inline auto swapBytes(const std::array<coda_oss::byte, sizeof(T)>& in)
     {
-        return swapBytes(make_span(in));
+        return swapBytes<T>(make_span(in));
     }
     template <typename T>
     inline auto swapBytes(const std::vector<coda_oss::byte>& in)
     {
-        return swapBytes(make_span(in));
+        return swapBytes<T>(make_span(in));
     }
 
     /*!

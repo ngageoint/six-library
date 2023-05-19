@@ -131,7 +131,7 @@ inline void byteSwap_n(void *buffer, size_t elemSize, size_t numElems)
     }
     byteSwap_n_<TUInt>(buffer, numElems);
 }
-void sys::byteSwap_(void* buffer, size_t elemSize, size_t numElems)
+void sys::byteSwap(void* buffer, size_t elemSize, size_t numElems)
 {
     if ((buffer == nullptr) || (elemSize < 2) || (numElems == 0))
         return;
@@ -190,7 +190,7 @@ inline void byteSwap_n(const void *buffer, size_t elemSize, size_t numElems, voi
     }
     byteSwap_n_<TUInt>(buffer, numElems, outputBuffer);
 }
-void sys::byteSwap_(const void* buffer, size_t elemSize, size_t numElems, void* outputBuffer)
+void sys::byteSwap(const void* buffer, size_t elemSize, size_t numElems, void* outputBuffer)
 {
     if ((numElems == 0) || (buffer == nullptr) || (outputBuffer == nullptr))
     {
@@ -222,4 +222,32 @@ void sys::byteSwap_(const void* buffer, size_t elemSize, size_t numElems, void* 
             outputBufferPtr[innerSwap] = bufferPtr[innerOff];
         }
     }
+}
+
+ coda_oss::span<const coda_oss::byte> sys::details::swapValueBytes(
+        coda_oss::span<const coda_oss::byte> inPtr,
+        coda_oss::span<coda_oss::byte> outPtr,
+        std::nothrow_t) noexcept
+{
+    assert(inPtr.size() == outPtr.size());
+    const auto elemSize = inPtr.size();
+    for (size_t ii = 0, jj = elemSize - 1; ii < jj; ++ii, --jj)
+    {
+        outPtr[ii] = inPtr[jj];
+        outPtr[jj] = inPtr[ii];
+    }
+
+    // Give the raw byte-swapped bytes back to the caller for easy serialization
+    return make_const_span(outPtr);
+}
+
+ coda_oss::span<const coda_oss::byte> sys::details::swapValueBytes(
+        coda_oss::span<const coda_oss::byte> inPtr,
+        coda_oss::span<coda_oss::byte> outPtr)
+{
+    if (inPtr.size() != outPtr.size())
+    {
+        throw std::invalid_argument("'size of byte buffers must match");
+    }
+    return swapValueBytes(inPtr, outPtr, std::nothrow);
 }

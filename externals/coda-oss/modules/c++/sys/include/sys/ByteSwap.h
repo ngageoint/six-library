@@ -45,12 +45,7 @@ namespace sys
  *  \param elemSize
  *  \param numElems
  */
-void CODA_OSS_API byteSwap_(void* buffer, size_t elemSize, size_t numElems);
-template <typename T>  // existing API is `unsigned short`, should be `size_t`
-inline void byteSwap(void* buffer, T elemSize, size_t numElems)
-{
-    byteSwap_(buffer, elemSize, numElems);
-}
+void CODA_OSS_API byteSwap(void* buffer, size_t elemSize, size_t numElems);
 
 /*!
  *  Swap bytes into output buffer.  Note that a complex pixel
@@ -62,12 +57,7 @@ inline void byteSwap(void* buffer, T elemSize, size_t numElems)
  *  \param numElems
  *  \param[out] outputBuffer buffer to write swapped elements to
  */
-void CODA_OSS_API byteSwap_(const void* buffer, size_t elemSize, size_t numElems, void* outputBuffer);
-template<typename T> // existing API is `unsigned short`, should be `size_t`
-inline void byteSwap(const void* buffer, T elemSize, size_t numElems, void* outputBuffer)
-{
-    byteSwap_(buffer, elemSize, numElems, outputBuffer);
-}
+void CODA_OSS_API byteSwap(const void* buffer, size_t elemSize, size_t numElems, void* outputBuffer);
 
 struct ByteSwapRunnable final : public sys::Runnable
 {
