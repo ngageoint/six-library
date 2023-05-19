@@ -29,6 +29,7 @@
 #include <std/span>
 
 #include <sys/Conf.h>
+#include <sys/Span.h>
 
 TEST_CASE(testEndianness)
 {
@@ -177,7 +178,7 @@ TEST_CASE(testByteSwap12)
     const auto pValueBytes = &(twelve_bytes[0]);
 
     std::vector<std::byte> swappedValues(12);
-    std::span<std::byte> pResultBytes(swappedValues.data(), swappedValues.size());
+    auto pResultBytes = sys::make_span(swappedValues);
 
     auto elemSize = 12;
     auto numElements = swappedValues.size() / elemSize;

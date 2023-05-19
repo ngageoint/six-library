@@ -744,6 +744,9 @@
     <ClInclude Include="mt\include\mt\ThreadedByteSwap.h">
       <Filter>mt</Filter>
     </ClInclude>
+    <ClInclude Include="sys\include\sys\Span.h">
+      <Filter>sys</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
