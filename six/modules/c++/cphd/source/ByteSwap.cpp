@@ -33,6 +33,7 @@
 #include <sys/Conf.h>
 #include <sys/ByteSwap.h>
 #include <sys/ByteSwapValue.h>
+#include <sys/Span.h>
 #include <sys/Runnable.h>
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>
@@ -44,7 +45,8 @@ namespace
 template <typename T>
 inline void byteSwap(const void* in, T& out)
 {
-    out = sys::swapBytes(sys::as_bytes<T>(in));
+    auto const pBytes = sys::make_span(static_cast<const std::byte*>(in), sizeof(T));
+    out = sys::swapBytes<T>(pBytes);
 }
 
 inline const std::byte* calc_offset(const void* input_, size_t offset)
