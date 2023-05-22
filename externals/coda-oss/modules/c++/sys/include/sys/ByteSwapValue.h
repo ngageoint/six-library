@@ -42,6 +42,14 @@
 
 #include "Span.h"
 
+#include <type_traits>
+#include <coda_oss/span.h>
+#include <coda_oss/cstddef.h>
+#include <tuple>
+#include <vector>
+#include <array>
+#include <stdexcept>
+
 namespace sys
 {
     /*!
