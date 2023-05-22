@@ -25,6 +25,7 @@
 
 #include "coda_oss/namespace_.h"
 #include "coda_oss/span_.h"
+#include "coda_oss/cstddef.h" // byte
 
 // Need a fairly decent C++ compiler to use the real GSL.  This brings in more than 
 // we really need for span (e.g., gsl::narrow()), but it keeps things simple.
@@ -37,6 +38,26 @@ namespace coda_oss
 #else // no gsl::span, use our own
 	using details::span;
 #endif  // GSL_SPAN_H
+
+// https://en.cppreference.com/w/cpp/container/span/as_bytes
+template <typename T>
+span<const byte> as_bytes(span<const T> s) noexcept
+{
+    const void* const p = s.data();
+    return span<const byte>(static_cast<const byte*>(p), s.size_bytes());
+}
+template <typename T>
+span<const byte> as_bytes(span<T> s) noexcept
+{
+    return as_bytes(span<const T>(s.data(), s.size()));
+}
+template <typename T>
+span<byte> as_writable_bytes(span<T> s) noexcept
+{
+    void* const p = s.data();
+    return span<byte>(static_cast<byte*>(p), s.size_bytes());
+}
+
 }
 
 #endif  // CODA_OSS_coda_oss_span_h_INCLUDED_
