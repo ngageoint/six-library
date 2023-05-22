@@ -31,6 +31,13 @@ namespace six
 {
 namespace sidd
 {
+    // We have to support two ISM versions with SIDD 3.0 :-(
+    enum class ISMVersion
+    {
+        v201609, // the "newer" version; default
+        v13, // the "original" version
+    };
+
 /*!
  *  \class DerivedXMLControl
  *  \brief Turns an DerivedData object into XML and vice versa

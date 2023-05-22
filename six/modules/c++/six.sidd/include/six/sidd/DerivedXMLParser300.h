@@ -26,6 +26,7 @@
 
 #include <six/sidd/DerivedXMLParser.h>
 #include <six/GeoDataBase.h>
+#include <six/sidd/DerivedXMLControl.h>
 
 namespace six
 {
@@ -33,16 +34,8 @@ namespace sidd
 {
 struct DerivedXMLParser300 final : public DerivedXMLParser
 {
-    // We have to support two ISM versions with SIDD 3.0 :-(
-    enum class ISMVersion
-    {
-        v201609, // the "newer" version; default
-        v13, // the "original" version
-    };
-
-
     //DerivedXMLParser300(std::unique_ptr<logging::Logger>&&);
-    DerivedXMLParser300(logging::Logger&);
+    DerivedXMLParser300(logging::Logger&, six::sidd::ISMVersion=six::sidd::ISMVersion::v201609);
     DerivedXMLParser300(const DerivedXMLParser300&) = delete;
     DerivedXMLParser300& operator=(const DerivedXMLParser300&) = delete;
     DerivedXMLParser300(DerivedXMLParser300&&) = delete;
@@ -55,7 +48,7 @@ struct DerivedXMLParser300 final : public DerivedXMLParser
     std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const override;
 
 private:
-    ISMVersion mISMVersion = ISMVersion::v201609;
+    six::sidd::ISMVersion mISMVersion = six::sidd::ISMVersion::v201609;
 
     XMLElem convertDerivedClassificationToXML(const DerivedClassification&, XMLElem parent = nullptr) const override;
     void parseDerivedClassificationFromXML(const xml::lite::Element* classificationElem, DerivedClassification&) const override;
