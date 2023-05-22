@@ -29,6 +29,7 @@
 #include <std/span>
 
 #include <sys/Conf.h>
+#include <sys/Span.h>
 
 TEST_CASE(testEndianness)
 {
@@ -174,10 +175,10 @@ TEST_CASE(testByteSwap12)
     static constexpr std::byte twelve_bytes[]{
         x00, x11, x22, x33, x44, x55,
         x99, xAA, xBB, xDD, xEE, xFF};
-    const auto pValueBytes = &(twelve_bytes[0]);
+    const auto pValueBytes = sys::as_bytes(twelve_bytes);
 
     std::vector<std::byte> swappedValues(12);
-    std::span<std::byte> pResultBytes(swappedValues.data(), swappedValues.size());
+    auto pResultBytes = sys::make_span(swappedValues);
 
     auto elemSize = 12;
     auto numElements = swappedValues.size() / elemSize;
@@ -196,7 +197,7 @@ TEST_CASE(testByteSwap12)
     TEST_ASSERT(pResultBytes[11] == pValueBytes[0]);
 
     // swap as a SINGLE 12-byte value
-    const auto result = sys::details::swapBytes<12>(twelve_bytes, pResultBytes);
+    const auto result = sys::details::swapBytes<12>(pValueBytes, pResultBytes);
     TEST_ASSERT(result[0] == pValueBytes[11]);
     TEST_ASSERT(result[1] == pValueBytes[10]);
     TEST_ASSERT(result[2] == pValueBytes[9]);
@@ -235,9 +236,28 @@ TEST_CASE(testByteSwap12)
     }
 }
 
+template <typename T>
+static inline void six_byteSwap(const void* in, T& out)
+{
+    auto const inBytes = sys::make_span<std::byte>(in, sizeof(T));
+    out = sys::swapBytes<T>(inBytes);
+}
+TEST_CASE(testSixByteSwap)
+{
+    const int i = 123;
+    int i_swapped;
+    six_byteSwap(&i, i_swapped);
+    TEST_ASSERT_NOT_EQ(i, i_swapped);
+
+    int result;
+    six_byteSwap(&i_swapped, result);
+    TEST_ASSERT_EQ(i, result);
+}
+
 TEST_MAIN(
     TEST_CHECK(testEndianness);
     TEST_CHECK(testByteSwap);
     TEST_CHECK(testByteSwapValues);
     TEST_CHECK(testByteSwap12);
+    TEST_CHECK(testSixByteSwap);
     )

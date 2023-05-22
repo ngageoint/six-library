@@ -137,7 +137,6 @@
     <ClInclude Include="mt\include\mt\Algorithm.h" />
     <ClInclude Include="mt\include\mt\BalancedRunnable1D.h" />
     <ClInclude Include="mt\include\mt\BasicThreadPool.h" />
-    <ClInclude Include="mt\include\mt\ByteSwap.h" />
     <ClInclude Include="mt\include\mt\CPUAffinityInitializer.h" />
     <ClInclude Include="mt\include\mt\CPUAffinityInitializerLinux.h" />
     <ClInclude Include="mt\include\mt\CPUAffinityInitializerWin32.h" />
@@ -232,6 +231,7 @@
     <ClInclude Include="sys\include\sys\SemaphoreInterface.h" />
     <ClInclude Include="sys\include\sys\SemaphorePosix.h" />
     <ClInclude Include="sys\include\sys\SemaphoreWin32.h" />
+    <ClInclude Include="sys\include\sys\Span.h" />
     <ClInclude Include="sys\include\sys\StopWatch.h" />
     <ClInclude Include="sys\include\sys\String.h" />
     <ClInclude Include="sys\include\sys\SystemException.h" />
@@ -425,14 +425,12 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
