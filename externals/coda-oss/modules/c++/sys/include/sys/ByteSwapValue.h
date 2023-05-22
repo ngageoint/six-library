@@ -27,14 +27,12 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#ifdef __GNUC__
-#include <byteswap.h>  // "These functions are GNU extensions."
-#endif
+#include <assert.h>
 
-#include <new>
 #include <type_traits>
 #include <coda_oss/span.h>
 #include <coda_oss/cstddef.h>
+#include <coda_oss/bit.h>
 #include <tuple>
 #include <vector>
 #include <array>
@@ -46,98 +44,72 @@
 
 namespace sys
 {
-    // Overloads for common types
-    inline constexpr uint8_t byteSwap(uint8_t val)
-    {
-        return val;  // no-op
-    }
-    #if defined(_MSC_VER)
-    // These routines should generate a single instruction; see https://devblogs.microsoft.com/cppblog/a-tour-of-4-msvc-backend-improvements/
-    inline uint16_t byteSwap(uint16_t val)
-    {
-        return _byteswap_ushort(val);
-    }
-    inline uint32_t byteSwap(uint32_t val)
-    {
-        return _byteswap_ulong(val);
-    }
-    inline uint64_t byteSwap(uint64_t val)
-    {
-        return _byteswap_uint64(val);
-    }
-    #elif defined(__GNUC__)
-    inline uint16_t byteSwap(uint16_t val)
-    {
-        return bswap_16(val);
-    }
-    inline uint32_t byteSwap(uint32_t val)
-    {
-        return bswap_32(val);
-    }
-    inline uint64_t byteSwap(uint64_t val)
-    {
-        return bswap_64(val);
-    }
-    #endif
-
-    namespace details
-    {
-    template <typename TUInt>
-    inline auto swapIntBytes(const void* pIn_, coda_oss::span<coda_oss::byte> pBytes)
-    {
-        static_assert(std::is_unsigned<TUInt>::value, "TUInt must be 'unsigned'");
-        if (sizeof(TUInt) != pBytes.size())
-        {
-            throw std::invalid_argument("'pBytes.size() != sizeof(TUInt)");
-        }
-
-        auto const pIn = static_cast<const TUInt*>(pIn_);
-        void* pOut_ = pBytes.data();
-        auto const pOut = static_cast<TUInt*>(pOut_);
-        *pOut = byteSwap(*pIn);
-
-        // Give the raw byte-swapped bytes back to the caller for easy serialization
-        return as_bytes(pOut);
-    }
-
     /*!
-     *  Swap bytes for a single value into output buffer. 
+     * Swap bytes for a single value into output buffer.  API is `span<byte>` rather than `void*` since
+     * for a single value we know the size.  These "low level" routines may be less efficient than
+     * the templates since it's not possible to specialize on a specific size.
      *
      *  \param buffer to transform
      *  \param[out] outputBuffer buffer to write swapped elements to
      */
-    coda_oss::span<const coda_oss::byte> CODA_OSS_API swapValueBytes(
-        coda_oss::span<const coda_oss::byte> pIn, coda_oss::span<coda_oss::byte> outPtr, std::nothrow_t) noexcept;
-    coda_oss::span<const coda_oss::byte> CODA_OSS_API swapValueBytes(
+    coda_oss::span<const coda_oss::byte> CODA_OSS_API byteSwap(
         coda_oss::span<const coda_oss::byte> pIn, coda_oss::span<coda_oss::byte> outPtr);
 
-    // This is a template so that we can have specializations for different sizes
+    namespace details
+    {
+    template <typename TUInt>
+    inline auto swapUIntBytes(coda_oss::span<const coda_oss::byte> inBytes, coda_oss::span<coda_oss::byte> outBytes,
+        std::nothrow_t) noexcept
+    {
+        static_assert(std::is_unsigned<TUInt>::value, "TUInt must be 'unsigned'");
+        assert(sizeof(TUInt) == inBytes.size());
+        assert(inBytes.size() == outBytes.size());
+
+        const void* const pIn_ = inBytes.data();
+        auto const pIn = static_cast<const TUInt*>(pIn_);
+        void* const pOut_ = outBytes.data();
+        auto const pOut = static_cast<TUInt*>(pOut_);
+        
+        *pOut = coda_oss::byteswap(*pIn); // at long last, swap the bytes
+
+        // Give the raw byte-swapped bytes back to the caller for easy serialization
+        return as_bytes(pOut);
+    }
+    template <typename TUInt>
+    inline auto swapUIntBytes(coda_oss::span<const coda_oss::byte> inBytes, coda_oss::span<coda_oss::byte> outBytes)
+    {
+        if (sizeof(TUInt) != inBytes.size())
+        {
+            throw std::invalid_argument("'inBytes.size() != sizeof(TUInt)");
+        }
+        if (inBytes.size() != outBytes.size())
+        {
+            throw std::invalid_argument("'inBytes.size() != outBytes.size()");
+        }
+        return swapUIntBytes<TUInt>(inBytes, outBytes, std::nothrow);
+    }
+
+    // This is a template so that we can have specializations for different sizes.
+    // By specializing on `size_t`, a `float` can be "cast" to `uint32_t` (via
+    // `std::byte`) for byte-swapping.
     template <size_t elemSize>
-    inline auto swapBytes(const void* pIn, coda_oss::span<coda_oss::byte> outPtr)
+    inline auto swapBytes(coda_oss::span<const coda_oss::byte> inBytes, coda_oss::span<coda_oss::byte> outBytes)
     {
-        auto const inPtr = make_span<coda_oss::byte>(pIn, elemSize);
-        return swapValueBytes(inPtr, outPtr);
+        if (elemSize != inBytes.size())
+        {
+            throw std::invalid_argument("'inBytes.size() != elemSize");
+        }
+        return sys::byteSwap(inBytes, outBytes);  // size that wasn't specialized
     }
-    template <>
-    inline auto swapBytes<sizeof(uint8_t)>(const void* pIn, coda_oss::span<coda_oss::byte> pOut)
-    {
-        return swapIntBytes<uint8_t>(pIn, pOut);
-    }
-    template <>
-    inline auto swapBytes<sizeof(uint16_t)>(const void* pIn, coda_oss::span<coda_oss::byte> pOut)
-    {
-        return swapIntBytes<uint16_t>(pIn, pOut);
-    }
-    template <>
-    inline auto swapBytes<sizeof(uint32_t)>(const void* pIn, coda_oss::span<coda_oss::byte> pOut)
-    {
-        return swapIntBytes<uint32_t>(pIn, pOut);
-    }
-    template <>
-    inline auto swapBytes<sizeof(uint64_t)>(const void* pIn, coda_oss::span<coda_oss::byte> pOut)
-    {
-        return swapIntBytes<uint64_t>(pIn, pOut);
-    }
+
+    // avoid copy-paste errors
+    #define CODA_OSS_define_swapBytes_specialization_(T) template <> inline auto swapBytes<sizeof(T)> \
+        (coda_oss::span<const coda_oss::byte> inBytes, coda_oss::span<coda_oss::byte> outBytes) { return swapUIntBytes<T>(inBytes, outBytes); }
+    CODA_OSS_define_swapBytes_specialization_(uint8_t);
+    CODA_OSS_define_swapBytes_specialization_(uint16_t);
+    CODA_OSS_define_swapBytes_specialization_(uint32_t);
+    CODA_OSS_define_swapBytes_specialization_(uint64_t);
+    #undef CODA_OSS_define_swapBytes_specialization_
 
     template<typename T>
     inline constexpr bool is_byte_swappable() noexcept
@@ -147,7 +119,7 @@ namespace sys
         // * `struct`s have padding that should be ignored.
         // * each individual member of a `struct` should be byte-swaped
         // * byte-swaped `float` or `double` bits are nonsense
-        return std::is_enum<T>::value || std::is_integral<T>::value;
+        return !std::is_compound<T>::value;
     }
     }
 
@@ -156,37 +128,22 @@ namespace sys
     * Returns the raw byte-swapped bytes for easy serialization.
     */
     template <typename T>
-    inline auto swapBytes(const T* pIn, coda_oss::span<coda_oss::byte> pOut)
+    inline auto swapBytes(coda_oss::span<const coda_oss::byte> inBytes, coda_oss::span<coda_oss::byte> outBytes)
     {
-        if (sizeof(T) != pOut.size())
-        {
-            throw std::invalid_argument("'pOut.size() != sizeof(T)");
-        }
         static_assert(details::is_byte_swappable<T>(), "T should not be a 'struct'");
-        return details::swapBytes<sizeof(T)>(pIn, pOut);
+        return details::swapBytes<sizeof(T)>(inBytes, outBytes);
     }
     template <typename T>
-    inline coda_oss::span<const coda_oss::byte> swapBytes(const T* pIn, void* pOut)
+    inline auto swapBytes(T in, coda_oss::span<coda_oss::byte> outBytes)
     {
-        auto const pBytes = make_span<coda_oss::byte*>(pOut, sizeof(T));
-        return swapBytes(pIn, pBytes);
-    }
-    template <typename T>
-    inline auto swapBytes(T in, std::array<coda_oss::byte, sizeof(T)>& out)
-    {
-        return swapBytes(&in, make_span(out));
-    }
-    template <typename T>
-    inline auto swapBytes(T in, std::vector<coda_oss::byte>& out)
-    {
-        out.resize(sizeof(T));
-        return swapBytes(&in, make_span(out));
+        return swapBytes<T>(as_bytes(in), outBytes);
     }
     template <typename T>
     inline auto swapBytes(T in)
     {
         std::vector<coda_oss::byte> retval;
-        std::ignore = swapBytes(in, retval);
+        retval.resize(sizeof(T));
+        std::ignore = swapBytes(in, make_span(retval));
         return retval;
     }
 
@@ -194,27 +151,11 @@ namespace sys
     template <typename T>
     inline auto swapBytes(coda_oss::span<const coda_oss::byte> in)
     {
-        if (sizeof(T) != in.size())
-        {
-            throw std::invalid_argument("'in.size() != sizeof(T)");
-        }
-        static_assert(details::is_byte_swappable<T>(), "T should not be a 'struct'"); // see above
-
         // Don't want to cast the swapped bytes in `in` to T* as they might not be valid;
         // e.g., a byte-swapped `float` could be garbage.
         T retval;
-        details::swapBytes<sizeof(T)>(in, as_bytes(retval));
+        swapBytes<T>(in, as_writable_bytes(retval));
         return retval;
-    }
-    template <typename T>
-    inline auto swapBytes(const std::array<coda_oss::byte, sizeof(T)>& in)
-    {
-        return swapBytes<T>(make_span(in));
-    }
-    template <typename T>
-    inline auto swapBytes(const std::vector<coda_oss::byte>& in)
-    {
-        return swapBytes<T>(make_span(in));
     }
 
     /*!
@@ -240,7 +181,7 @@ namespace sys
     template <typename T> inline T byteSwap(T val)
     {
         T out;
-        std::ignore = swapBytes(&val, &out);
+        std::ignore = swapBytes(val, as_writable_bytes(out));
         return out;
     }
 }
