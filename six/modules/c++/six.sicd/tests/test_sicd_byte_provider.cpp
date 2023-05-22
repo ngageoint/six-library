@@ -66,7 +66,7 @@ struct Tester final
         }
 
         mBigEndianImage = mImage;
-        if (std::endian::native == std::endian::little)
+        if (sys::isLittleEndianSystem())
         {
             void* const buffer = mBigEndianImage.data();
             constexpr auto elemSize = sizeof(DataTypeT);

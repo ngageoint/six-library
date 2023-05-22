@@ -198,6 +198,7 @@ namespace sys
      * RISC architectures we are big-endian.
      */
     bool CODA_OSS_API isBigEndianSystem();
+    bool CODA_OSS_API isLittleEndianSystem();
 
 
     /*!

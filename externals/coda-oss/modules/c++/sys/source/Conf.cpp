@@ -82,24 +82,45 @@ constexpr inline bool is_big_or_little_endian()
     return is_big_endian() || is_little_endian();
 }
 
-inline bool isBigEndianSystem()
+inline bool testIsBigEndianSystem()
 {
     // This is an endian test
     int intVal = 1;
     unsigned char* endianTest = (unsigned char*)&intVal;
     return endianTest[0] != 1;
 }
-bool sys::isBigEndianSystem()
+inline auto isBigEndianSystem_()
 {
     static_assert(is_big_or_little_endian(), "Mixed-endian not supported.");
-    const auto retval = ::isBigEndianSystem();
+    const auto retval = testIsBigEndianSystem();
     if (retval != is_big_endian())
     {
         throw std::logic_error("endian values don't agree!");
     }
     return retval;
 }
-
+inline auto isLittleEndianSystem_()
+{
+    static_assert(is_big_or_little_endian(), "Mixed-endian not supported.");
+    const auto retval = !testIsBigEndianSystem();
+    if (retval != is_little_endian())
+    {
+        throw std::logic_error("endian values don't agree!");
+    }
+    return retval;
+}
+bool sys::isBigEndianSystem()
+{
+    auto const retval = isBigEndianSystem_();
+    assert(!retval == isLittleEndianSystem_());
+    return retval;
+}
+bool sys::isLittleEndianSystem()
+{
+    auto const retval = isLittleEndianSystem_();
+    assert(!retval == isBigEndianSystem_());
+    return retval;
+}
 
    /*!
  *  Swap bytes in-place.  Note that a complex pixel
