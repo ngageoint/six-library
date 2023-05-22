@@ -48,7 +48,7 @@ struct DerivedXMLParser300 final : public DerivedXMLParser
     std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const override;
 
 private:
-    six::sidd::ISMVersion mISMVersion = six::sidd::ISMVersion::v201609;
+    ISMVersion mISMVersion = ISMVersion::current;
 
     XMLElem convertDerivedClassificationToXML(const DerivedClassification&, XMLElem parent = nullptr) const override;
     void parseDerivedClassificationFromXML(const xml::lite::Element* classificationElem, DerivedClassification&) const override;

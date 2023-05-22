@@ -36,6 +36,8 @@ namespace sidd
     {
         v201609, // the "newer" version; default
         v13, // the "original" version
+
+        current = v201609
     };
 
 /*!
@@ -61,6 +63,13 @@ struct DerivedXMLControl : public XMLControl
 
     static std::unique_ptr<DerivedXMLParser> getParser_(const std::string& strVersion); // for unit-testing
 
+    // Percolating ISMVersion everywhere is a nusiance as several APIs will be touched, even if it is
+    // to add a default parameter.  Doing that doesn't make much sense for an arbitrary
+    // `XMLControl` class (our base), and even here (in SIDD) it only makes sense for 
+    // SIDD 3.0. Yes, this is a bit messy too; but it stops (or slows) ISMVersion from spreading.
+    ISMVersion getISMVersion() const;
+    void setISMVersion(ISMVersion);
+
 protected:
     /*!
      *  Returns a new allocated DOM document, created from the DerivedData*
@@ -76,7 +85,10 @@ protected:
 
 private:
     std::unique_ptr<DerivedXMLParser>
-    getParser(const std::string& strVersion, ISMVersion ismVersion = ISMVersion::v201609) const;
+    getParser(const std::string& strVersion) const;
+
+    // Keep this "private" ... pass the value to DerivedXMLParser300
+    ISMVersion mISMVersion = ISMVersion::current; // only for SIDD 3.0
 };
 }
 }
