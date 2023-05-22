@@ -135,15 +135,15 @@ void sys::byteSwap(void* buffer, size_t elemSize, size_t numElems)
 {
     if ((buffer == nullptr) || (elemSize < 2) || (numElems == 0))
         return;
-    
+
     switch (elemSize)
     {
-        case 2: return byteSwap_n<uint16_t>(buffer, elemSize, numElems);
-        case 4: return byteSwap_n<uint32_t>(buffer, elemSize, numElems);
-        case 8: return byteSwap_n<uint64_t>(buffer, elemSize, numElems);
+        case sizeof(uint16_t): return byteSwap_n<uint16_t>(buffer, elemSize, numElems);
+        case sizeof(uint32_t): return byteSwap_n<uint32_t>(buffer, elemSize, numElems);
+        case sizeof(uint64_t): return byteSwap_n<uint64_t>(buffer, elemSize, numElems);
         default: break;
     }
-
+    
     auto const bufferPtr = static_cast<coda_oss::byte*>(buffer);
     const auto half = elemSize >> 1;
     size_t offset = 0, innerOff = 0, innerSwap = 0;
@@ -157,6 +157,20 @@ void sys::byteSwap(void* buffer, size_t elemSize, size_t numElems)
             std::swap(bufferPtr[innerOff], bufferPtr[innerSwap]);
         }
     }
+}
+coda_oss::span<const coda_oss::byte> sys::byteSwap(coda_oss::span<coda_oss::byte> buffer, size_t elemSize)
+{
+    if ((buffer.size() == 0) || (elemSize < 2))
+        return sys::make_const_span(buffer);
+
+    size_t const numElems = buffer.size() / elemSize;
+    if ((numElems * elemSize) != buffer.size())
+    {
+        throw std::invalid_argument("'buffer' is not a multiple of 'elemSize'");
+    }
+    
+    byteSwap(buffer.data(), elemSize, numElems);
+    return sys::make_const_span(buffer);
 }
 
     /*!
@@ -223,14 +237,47 @@ void sys::byteSwap(const void* buffer, size_t elemSize, size_t numElems, void* o
         }
     }
 }
-
- coda_oss::span<const coda_oss::byte> sys::details::swapValueBytes(
-        coda_oss::span<const coda_oss::byte> inPtr,
-        coda_oss::span<coda_oss::byte> outPtr,
-        std::nothrow_t) noexcept
+coda_oss::span<const coda_oss::byte> sys::byteSwap(coda_oss::span<const coda_oss::byte> buffer,
+         size_t elemSize, coda_oss::span<coda_oss::byte> outputBuffer)
 {
-    assert(inPtr.size() == outPtr.size());
+    if ((buffer.size() == 0) || (outputBuffer.size() == 0))
+    {
+        return sys::make_const_span(outputBuffer);
+    }
+
+    size_t const numElems = buffer.size() / elemSize;
+    if ((numElems * elemSize) != buffer.size())
+    {
+        throw std::invalid_argument("'buffer' is not a multiple of 'elemSize'");
+    }
+    if (buffer.size() != outputBuffer.size())
+    {
+        throw std::invalid_argument("'buffer' and 'outputBuffer' are different sizes'");
+    }
+    
+    byteSwap(buffer.data(), elemSize, numElems, outputBuffer.data());
+    return sys::make_const_span(outputBuffer);
+}
+
+ coda_oss::span<const coda_oss::byte> sys::byteSwap(
+        coda_oss::span<const coda_oss::byte> inPtr,
+        coda_oss::span<coda_oss::byte> outPtr)
+{
+    if (inPtr.size() != outPtr.size())
+    {
+        throw std::invalid_argument("'size of byte buffers must match");
+    }
+
     const auto elemSize = inPtr.size();
+    switch (elemSize)
+    {
+        case sizeof(uint8_t): return details::swapUIntBytes<uint8_t>(inPtr, outPtr, std::nothrow);
+        case sizeof(uint16_t): return details::swapUIntBytes<uint16_t>(inPtr, outPtr, std::nothrow);
+        case sizeof(uint32_t): return details::swapUIntBytes<uint32_t>(inPtr, outPtr, std::nothrow);
+        case sizeof(uint64_t): return details::swapUIntBytes<uint64_t>(inPtr, outPtr, std::nothrow);
+        default: break;
+    }
+
     for (size_t ii = 0, jj = elemSize - 1; ii < jj; ++ii, --jj)
     {
         outPtr[ii] = inPtr[jj];
@@ -239,15 +286,4 @@ void sys::byteSwap(const void* buffer, size_t elemSize, size_t numElems, void* o
 
     // Give the raw byte-swapped bytes back to the caller for easy serialization
     return make_const_span(outPtr);
-}
-
- coda_oss::span<const coda_oss::byte> sys::details::swapValueBytes(
-        coda_oss::span<const coda_oss::byte> inPtr,
-        coda_oss::span<coda_oss::byte> outPtr)
-{
-    if (inPtr.size() != outPtr.size())
-    {
-        throw std::invalid_argument("'size of byte buffers must match");
-    }
-    return swapValueBytes(inPtr, outPtr, std::nothrow);
 }
