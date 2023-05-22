@@ -76,7 +76,7 @@ protected:
 
 private:
     std::unique_ptr<DerivedXMLParser>
-    getParser(const std::string& strVersion) const;
+    getParser(const std::string& strVersion, ISMVersion ismVersion = ISMVersion::v201609) const;
 };
 }
 }

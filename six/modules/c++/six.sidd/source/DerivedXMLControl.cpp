@@ -92,7 +92,7 @@ std::unique_ptr<xml::lite::Document> DerivedXMLControl::toXMLImpl(const Data& da
 }
 
 std::unique_ptr<DerivedXMLParser>
-DerivedXMLControl::getParser(const std::string& strVersion) const
+DerivedXMLControl::getParser(const std::string& strVersion, ISMVersion ismVersion) const
 {
     const std::string normalizedVersion = normalizeVersion(strVersion);
 
@@ -110,7 +110,7 @@ DerivedXMLControl::getParser(const std::string& strVersion) const
     }
     if (normalizedVersion == "300")
     {
-        return std::make_unique<DerivedXMLParser300>(getLogger());
+        return std::make_unique<DerivedXMLParser300>(getLogger(), ismVersion);
     }
 
     if (normalizedVersion == "110")
