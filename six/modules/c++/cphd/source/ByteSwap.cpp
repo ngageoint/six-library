@@ -65,7 +65,7 @@ struct ByteSwapRunnable final : public sys::Runnable
 
     virtual void run()
     {
-        sys::byteSwapV(mBuffer, mElemSize, mNumElements);
+        sys::byteSwap(mBuffer, mElemSize, mNumElements);
     }
 
 private:
@@ -256,9 +256,7 @@ void byteSwap(void* buffer,
 {
     if (numThreads <= 1)
     {
-        sys::byteSwapV(buffer,
-                      static_cast<unsigned short>(elemSize),
-                      numElements);
+        sys::byteSwap(buffer, elemSize, numElements);
     }
     else
     {
