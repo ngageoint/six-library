@@ -166,6 +166,29 @@ inline static auto getInvalidXmlErrorMessage(const std::vector<TPath>& paths)
     return message;
 }
 
+template<typename TPath>
+class XmlLiteValidator final
+{
+    xml::lite::Validator validator;
+public:
+    XmlLiteValidator(const std::vector<TPath>& paths, logging::Logger* log)
+        : validator(paths, log, true) // this can be expensive to create as all sub - directories might be traversed
+    {
+    }
+
+    auto validate(const xml::lite::Element& rootElement) const
+    {
+        // Pretty-print so that lines numbers are useful
+        io::U8StringStream xmlStream;
+        rootElement.prettyPrint(xmlStream);
+
+        // validate against any specified schemas
+        std::vector<xml::lite::ValidationInfo> errors;
+        validator.validate(xmlStream, rootElement.getUri(), errors);
+        return errors;
+    }
+};
+
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
 template<typename TPath>
@@ -178,15 +201,9 @@ static void do_validate_(const xml::lite::Document& doc,
         throw six::DESValidationException(Ctxt("INVALID XML: URI is empty so document version cannot be determined to use for validation"));
     }
 
-    // Pretty-print so that lines numbers are useful
-    io::U8StringStream xmlStream;
-    rootElement->prettyPrint(xmlStream);
-
     // validate against any specified schemas
-    xml::lite::Validator validator(paths, log, true); // this can be expensive to create as all sub - directories might be traversed
-
-    std::vector<xml::lite::ValidationInfo> errors;
-    validator.validate(xmlStream, rootElement->getUri(), errors);
+    XmlLiteValidator<TPath> validator(paths, log);
+    const auto errors = validator.validate(*rootElement);
 
     // log any error found and throw
     if (!errors.empty())
