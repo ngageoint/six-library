@@ -127,7 +127,7 @@ void tiff::IFDEntry::deserialize(io::InputStream& input, const bool reverseBytes
                 numElements = mCount * 2;
             }
             if (elementSize > 1)
-                sys::byteSwap(buffer, static_cast<unsigned short>(elementSize), numElements);
+                sys::byteSwap(buffer, elementSize, numElements);
         }
 
         parseValues((const unsigned char *)buffer);

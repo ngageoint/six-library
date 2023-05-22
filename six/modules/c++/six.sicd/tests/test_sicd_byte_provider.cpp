@@ -69,8 +69,8 @@ struct Tester final
         if (std::endian::native == std::endian::little)
         {
             sys::byteSwap(mBigEndianImage.data(),
-                          sizeof(DataTypeT),
-                          mBigEndianImage.size() * 2);
+                sizeof(DataTypeT),
+                mBigEndianImage.size() * 2);
         }
 
         normalWrite();

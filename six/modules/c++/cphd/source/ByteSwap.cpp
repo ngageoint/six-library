@@ -51,9 +51,8 @@ void byteSwap(const void* in, T& out)
     }
 }
 
-class ByteSwapRunnable : public sys::Runnable
+struct ByteSwapRunnable final : public sys::Runnable
 {
-public:
     ByteSwapRunnable(void* buffer,
                      size_t elemSize,
                      size_t startElement,
@@ -82,9 +81,8 @@ inline const std::byte* calc_offset(const void* input_, size_t offset)
 }
 
 template <typename InT>
-class ByteSwapAndPromoteRunnable : public sys::Runnable
+struct ByteSwapAndPromoteRunnable final : public sys::Runnable
 {
-public:
     ByteSwapAndPromoteRunnable(const void* input,
                              size_t startRow,
                              size_t numRows,
@@ -103,9 +101,7 @@ public:
 
         for (size_t row = 0, inIdx = 0, outIdx = 0; row < mDims.row; ++row)
         {
-            for (size_t col = 0;
-                 col < mDims.col;
-                 ++col, inIdx += sizeof(std::complex<InT>), ++outIdx)
+            for (size_t col = 0; col < mDims.col; ++col, inIdx += sizeof(std::complex<InT>), ++outIdx)
             {
                 // Have to be careful here - can't treat mInput as a
                 // std::complex<InT> directly in case InT is a float (see
@@ -114,8 +110,7 @@ public:
                 byteSwap(input, real);
                 byteSwap(calc_offset(input, sizeof(InT)), imag);
 
-                mOutput[outIdx] = std::complex<float>(real,
-                                                      imag);
+                mOutput[outIdx] = std::complex<float>(real, imag);
             }
         }
     }
@@ -261,9 +256,7 @@ void byteSwap(void* buffer,
 {
     if (numThreads <= 1)
     {
-        sys::byteSwap(buffer,
-                      static_cast<unsigned short>(elemSize),
-                      numElements);
+        sys::byteSwap(buffer, elemSize, numElements);
     }
     else
     {
