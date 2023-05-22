@@ -171,8 +171,10 @@ class XmlLiteValidator final
 {
     xml::lite::Validator validator;
 public:
-    XmlLiteValidator(const std::vector<TPath>& paths, logging::Logger* log)
-        : validator(paths, log, true) // this can be expensive to create as all sub - directories might be traversed
+    const std::vector<TPath>& paths;
+    XmlLiteValidator(const std::vector<TPath>& v, logging::Logger* log)
+        : validator(v, log, true), // this can be expensive to create as all sub - directories might be traversed
+        paths(v)
     {
     }
 
@@ -193,7 +195,7 @@ public:
 //        and fail accordingly
 template<typename TPath>
 static void do_validate_(const xml::lite::Document& doc,
-    const std::vector<TPath>& paths, logging::Logger* log)
+    const XmlLiteValidator<TPath>& validator, logging::Logger* log)
 {
     const auto& rootElement = doc.getRootElement();
     if (rootElement->getUri().empty())
@@ -202,7 +204,6 @@ static void do_validate_(const xml::lite::Document& doc,
     }
 
     // validate against any specified schemas
-    XmlLiteValidator<TPath> validator(paths, log);
     const auto errors = validator.validate(*rootElement);
 
     // log any error found and throw
@@ -221,7 +222,7 @@ static void do_validate_(const xml::lite::Document& doc,
         //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
         //  and attempt to rewrite the file. Continuing in this manner is
         //  highly discouraged
-        auto ctx(Ctxt(getInvalidXmlErrorMessage(paths)));
+        auto ctx(Ctxt(getInvalidXmlErrorMessage(validator.paths)));
         for (const auto& e : errors)
         {
             ctx.mMessage += "\n" + e.toString();
@@ -229,6 +230,17 @@ static void do_validate_(const xml::lite::Document& doc,
         throw six::DESValidationException(ctx);
     }
 }
+
+inline auto make_XmlLiteValidator(const std::vector<std::string>& paths, logging::Logger* log)
+{
+    return XmlLiteValidator<std::string>(paths, log);
+}
+
+inline auto make_XmlLiteValidator(const std::vector<std::filesystem::path>& paths, logging::Logger* log)
+{
+    return XmlLiteValidator<std::filesystem::path>(paths, log);
+}
+
 template<typename TPath>
 static void validate_(const xml::lite::Document& doc,
     std::vector<TPath> paths, logging::Logger* log)
@@ -239,7 +251,8 @@ static void validate_(const xml::lite::Document& doc,
     // validate against any specified schemas
     if (!paths.empty())
     {
-        do_validate_(doc, paths, log);
+        const auto validator = make_XmlLiteValidator(paths, log);
+        do_validate_(doc, validator, log);
     }
 }
 void XMLControl::validate(const xml::lite::Document* doc,
