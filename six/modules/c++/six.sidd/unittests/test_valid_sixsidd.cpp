@@ -58,9 +58,11 @@ static std::filesystem::path get_sample_xml_path(const std::filesystem::path& fi
 
 static std::vector<std::filesystem::path> getSchemaPaths()
 {
-    //static const auto xsdPath = sys::test::findGITModuleFile("six", schema_relative_path(), "SIDD_V3.0.0_ISM-v13/SIDD_schema_V3.0.0.xsd");
-    static const auto xsdPath = sys::test::findGITModuleFile("six", schema_relative_path(), "SIDD_schema_V3.0.0.xsd");
-    static const auto rootSchemaDir = xsdPath.parent_path(); // ".../conf/Schema"
+    static const auto xsdPath_v13 = sys::test::findGITModuleFile("six", schema_relative_path(), "SIDD_V3.0.0_ISM-v13/SIDD_schema_V3.0.0.xsd");
+    static const auto xsdPath_ = sys::test::findGITModuleFile("six", schema_relative_path(), "SIDD_schema_V3.0.0.xsd");
+    // TODO: this needs to work outside of unittests!
+    const auto& xsdPath = six::sidd300::getISMVersion() == six::sidd300::ISMVersion::v13 ? xsdPath_v13 : xsdPath_;
+    const auto rootSchemaDir = xsdPath.parent_path(); // ".../conf/Schema"
     return std::vector<std::filesystem::path> { rootSchemaDir };
 }
 
@@ -165,13 +167,30 @@ TEST_CASE(test_read_sidd200_xml)
 }
 TEST_CASE(test_read_sidd300_xml)
 {
-    //TEST_SUCCESS;
     test_read_sidd_xml(testName, "sidd300.xml");
 }
+
+class ScoppedISMVersion final
+{
+    std::optional<six::sidd300::ISMVersion> m_save;
+public:
+    ScoppedISMVersion(six::sidd300::ISMVersion v)
+        : m_save(six::sidd300::setISMVersion(v))
+    {
+    }
+    ~ScoppedISMVersion()
+    {
+        if (m_save.has_value())
+            six::sidd300::setISMVersion(*m_save);
+        else
+            six::sidd300::clearISMVersion();
+    }
+};
+
 TEST_CASE(test_read_sidd300_v13_xml)
 {
-    TEST_SUCCESS;
-    //test_read_sidd_xml(testName, "sidd300_ISM-v13.xml");
+    const ScoppedISMVersion ismVersion(six::sidd300::ISMVersion::v13);
+    test_read_sidd_xml(testName, "sidd300_ISM-v13.xml");
 }
 
 TEST_MAIN(
