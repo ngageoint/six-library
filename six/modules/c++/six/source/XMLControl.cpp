@@ -166,36 +166,11 @@ inline static auto getInvalidXmlErrorMessage(const std::vector<TPath>& paths)
     return message;
 }
 
-template<typename TPath>
-class XmlLiteValidator final
-{
-    xml::lite::Validator validator;
-public:
-    const std::vector<TPath>& paths;
-    XmlLiteValidator(const std::vector<TPath>& v, logging::Logger& log)
-        : validator(v, &log, true), // this can be expensive to create as all sub - directories might be traversed
-        paths(v)
-    {
-    }
-
-    auto validate(const xml::lite::Element& rootElement) const
-    {
-        // Pretty-print so that lines numbers are useful
-        io::U8StringStream xmlStream;
-        rootElement.prettyPrint(xmlStream);
-
-        // validate against any specified schemas
-        std::vector<xml::lite::ValidationInfo> errors;
-        validator.validate(xmlStream, rootElement.getUri(), errors);
-        return errors;
-    }
-};
-
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
 template<typename TPath>
-static void do_validate_(const xml::lite::Document& doc,
-    const XmlLiteValidator<TPath>& validator, logging::Logger& log)
+static void do_validate_(const xml::lite::Validator& validator, const xml::lite::Document& doc,
+    const std::vector<TPath>& paths, logging::Logger& log)
 {
     const auto& rootElement = doc.getRootElement();
     if (rootElement->getUri().empty())
@@ -203,13 +178,18 @@ static void do_validate_(const xml::lite::Document& doc,
         throw six::DESValidationException(Ctxt("INVALID XML: URI is empty so document version cannot be determined to use for validation"));
     }
 
+    // Pretty-print so that lines numbers are useful
+    io::U8StringStream xmlStream;
+    rootElement->prettyPrint(xmlStream);
+
     // validate against any specified schemas
-    const auto errors = validator.validate(*rootElement);
+    std::vector<xml::lite::ValidationInfo> errors;
+    validator.validate(xmlStream, rootElement->getUri(), errors);
 
     // log any error found and throw
     if (!errors.empty())
     {
-        auto ctx(Ctxt(getInvalidXmlErrorMessage(validator.paths)));
+        auto ctx(Ctxt(getInvalidXmlErrorMessage(paths)));
 
         for (auto&& e : errors)
         {
@@ -229,12 +209,16 @@ static void do_validate_(const xml::lite::Document& doc,
 
 inline auto make_XmlLiteValidator(const std::vector<std::string>& paths, logging::Logger& log)
 {
-    return XmlLiteValidator<std::string>(paths, log);
+    return xml::lite::ValidatorXerces(paths, &log, true); // this can be expensive to create as all sub-directories might be traversed
 }
 
 inline auto make_XmlLiteValidator(const std::vector<std::filesystem::path>& paths, logging::Logger& log)
 {
-    return XmlLiteValidator<std::filesystem::path>(paths, log);
+    // We're eventually going to want to do something different here to deal with two different versions
+    // of ISM with SIDD 3.0.  For now, get things ready for changes ...
+    const auto xsdPaths = xml::lite::ValidatorXerces::loadSchemas(paths, true /*recursive*/);  // this can be expensive to create as all sub-directories might be traversed
+    // TODO: remove certain XSD files from xsdPaths
+    return xml::lite::ValidatorXerces::make(xsdPaths, log);
 }
 
 template<typename TPath>
@@ -248,7 +232,7 @@ static void validate_(const xml::lite::Document& doc,
     if (!paths.empty())
     {
         const auto validator = make_XmlLiteValidator(paths, log);
-        do_validate_(doc, validator, log);
+        do_validate_(validator, doc, paths, log);
     }
 }
 void XMLControl::validate(const xml::lite::Document* doc,
