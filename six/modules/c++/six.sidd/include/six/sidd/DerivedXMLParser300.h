@@ -35,7 +35,7 @@ namespace sidd
 struct DerivedXMLParser300 final : public DerivedXMLParser
 {
     //DerivedXMLParser300(std::unique_ptr<logging::Logger>&&);
-    DerivedXMLParser300(logging::Logger&, six::sidd::ISMVersion);
+    DerivedXMLParser300(logging::Logger&, six::sidd300::ISMVersion);
     DerivedXMLParser300(const DerivedXMLParser300&) = delete;
     DerivedXMLParser300& operator=(const DerivedXMLParser300&) = delete;
     DerivedXMLParser300(DerivedXMLParser300&&) = delete;
@@ -48,7 +48,7 @@ struct DerivedXMLParser300 final : public DerivedXMLParser
     std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const override;
 
 private:
-    ISMVersion mISMVersion = ISMVersion::current;
+    six::sidd300::ISMVersion mISMVersion = six::sidd300::ISMVersion::current;
 
     XMLElem convertDerivedClassificationToXML(const DerivedClassification&, XMLElem parent = nullptr) const override;
     void parseDerivedClassificationFromXML(const xml::lite::Element* classificationElem, DerivedClassification&) const override;

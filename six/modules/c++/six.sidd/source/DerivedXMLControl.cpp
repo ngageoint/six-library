@@ -24,6 +24,8 @@
 
 #include <std/memory>
 
+#include <sys/OS.h>
+
 #include <six/Enums.h>
 
 #include <six/sidd/DerivedXMLControl.h>
@@ -61,9 +63,18 @@ namespace sidd
 {
     const six::DataType DerivedXMLControl::dataType = six::DataType::DERIVED;
 
-DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) : XMLControl(log, ownLog) { }
-DerivedXMLControl::DerivedXMLControl(std::unique_ptr<logging::Logger>&& log) : XMLControl(std::move(log)) { }
-DerivedXMLControl::DerivedXMLControl(logging::Logger& log) : XMLControl(log) { }
+DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) : XMLControl(log, ownLog)
+{
+    mISMVersion = six::sidd300::getISMVersion();
+}
+DerivedXMLControl::DerivedXMLControl(std::unique_ptr<logging::Logger>&& log) : XMLControl(std::move(log))
+{
+    mISMVersion = six::sidd300::getISMVersion();
+}
+DerivedXMLControl::DerivedXMLControl(logging::Logger& log) : XMLControl(log)
+{
+    mISMVersion = six::sidd300::getISMVersion();
+}
 
 Data* DerivedXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
@@ -129,15 +140,77 @@ std::unique_ptr<DerivedXMLParser> DerivedXMLControl::getParser_(const std::strin
     return DerivedXMLControl().getParser(strVersion);
 }
 
-ISMVersion DerivedXMLControl::getISMVersion() const
+six::sidd300::ISMVersion DerivedXMLControl::getISMVersion() const
 {
     return mISMVersion;
 }
-void DerivedXMLControl::setISMVersion(ISMVersion ismVersion)
+void DerivedXMLControl::setISMVersion(six::sidd300::ISMVersion ismVersion)
 {
     mISMVersion = ismVersion;
 }
 
-
 }
+}
+
+// Percolating ISMVersion everywhere is a nusiance as several APIs will be touched, even if it is
+// to add a default parameter.  Doing that doesn't make much sense for an arbitrary
+// `XMLControl` class (the base class for `DerivedXMLControl`)), and even here (in SIDD) it
+// only makes sense for  SIDD 3.0. Yes, this is a bit messy too; but it stops (or slows)
+// ISMVersion from spreading too much.
+//
+// Try to make this easy for clients by providing several ways to access this functionality ...
+// while trying not to make things messier than they already are.
+
+static std::optional<six::sidd300::ISMVersion> getISMVersionFromEnv()
+{
+    static const std::string envName = "SIX_SIDD300_ISM_VERSION"; // set to `201609` or `13`
+    static const sys::OS os;
+
+    // Don't cache this result; it could change while running.
+    if (os.isEnvSet(envName))
+    {
+        const auto result = os.getEnv(envName);
+        if (result == "13")
+        {
+            return six::sidd300::ISMVersion::v13;
+        }
+        if (result == "201609")
+        {
+            return six::sidd300::ISMVersion::v201609;
+        }
+    }
+
+    return std::optional<six::sidd300::ISMVersion>{};
+}
+
+static std::optional<six::sidd300::ISMVersion> s_setISMVersion;
+six::sidd300::ISMVersion six::sidd300::getISMVersion(six::sidd300::ISMVersion defaultIfNotSet)
+{
+    // Try the environment variable first as that can be managed outside of C++
+    const auto ismVersionFromEnv = getISMVersionFromEnv();
+    if (ismVersionFromEnv.has_value())
+    {
+        return *ismVersionFromEnv;
+    }
+
+    // Then our global (static) variable; normally this won't be set
+    if (s_setISMVersion.has_value())
+    {
+        return *s_setISMVersion;
+    }
+
+    // Finally, the default value
+    return defaultIfNotSet;
+}
+std::optional<six::sidd300::ISMVersion> six::sidd300::setISMVersion(six::sidd300::ISMVersion value) // returns previous value, if any
+{
+    auto retval = s_setISMVersion;
+    s_setISMVersion = value;
+    return retval;
+}
+std::optional<six::sidd300::ISMVersion> six::sidd300::clearISMVersion() // returns previous value, if any
+{
+    auto retval = s_setISMVersion;
+    s_setISMVersion.reset();
+    return retval;
 }

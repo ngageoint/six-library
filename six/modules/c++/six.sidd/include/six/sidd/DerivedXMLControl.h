@@ -22,6 +22,8 @@
 #ifndef __SIX_DERIVED_XML_CONTROL_H__
 #define __SIX_DERIVED_XML_CONTROL_H__
 
+#include <std/optional>
+
 #include <six/XMLControl.h>
 #include <six/Enums.h>
 
@@ -29,7 +31,9 @@
 
 namespace six
 {
-namespace sidd
+
+// Emphasize that this is for SIDD 3.0.0
+namespace sidd300
 {
     // We have to support two ISM versions with SIDD 3.0 :-(
     enum class ISMVersion
@@ -39,7 +43,13 @@ namespace sidd
 
         current = v201609
     };
+    ISMVersion getISMVersion(ISMVersion defaultIfNotSet = ISMVersion::current);
+    std::optional<ISMVersion> setISMVersion(ISMVersion); // returns previous value, if any
+    std::optional<ISMVersion> clearISMVersion(); // returns previous value, if any
+}
 
+namespace sidd
+{
 /*!
  *  \class DerivedXMLControl
  *  \brief Turns an DerivedData object into XML and vice versa
@@ -63,12 +73,8 @@ struct DerivedXMLControl : public XMLControl
 
     static std::unique_ptr<DerivedXMLParser> getParser_(const std::string& strVersion); // for unit-testing
 
-    // Percolating ISMVersion everywhere is a nusiance as several APIs will be touched, even if it is
-    // to add a default parameter.  Doing that doesn't make much sense for an arbitrary
-    // `XMLControl` class (our base), and even here (in SIDD) it only makes sense for 
-    // SIDD 3.0. Yes, this is a bit messy too; but it stops (or slows) ISMVersion from spreading.
-    ISMVersion getISMVersion() const;
-    void setISMVersion(ISMVersion);
+    six::sidd300::ISMVersion getISMVersion() const;
+    void setISMVersion(six::sidd300::ISMVersion);
 
 protected:
     /*!
@@ -88,7 +94,7 @@ private:
     getParser(const std::string& strVersion) const;
 
     // Keep this "private" ... pass the value to DerivedXMLParser300
-    ISMVersion mISMVersion = ISMVersion::current; // only for SIDD 3.0
+    six::sidd300::ISMVersion mISMVersion = six::sidd300::ISMVersion::current;
 };
 }
 }

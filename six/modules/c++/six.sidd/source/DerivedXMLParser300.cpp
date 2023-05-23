@@ -51,30 +51,30 @@ inline static auto getISM_13_Uri()
 {
     return xml::lite::Uri("urn:us:gov:ic:ism:13");
 }
-inline static xml::lite::Uri getISMUri(six::sidd::ISMVersion ismVersion)
+inline static xml::lite::Uri getISMUri(six::sidd300::ISMVersion ismVersion)
 {
     switch (ismVersion)
     {
-    case six::sidd::ISMVersion::v201609: return getISM_201609_Uri();
-    case six::sidd::ISMVersion::v13: return getISM_13_Uri();
+    case six::sidd300::ISMVersion::v201609: return getISM_201609_Uri();
+    case six::sidd300::ISMVersion::v13: return getISM_13_Uri();
     default: break;
     }
 
     throw std::logic_error("Unhandled 'six::sidd::ISMVersion' case.");
 }
 
-inline static auto getDESVersion(six::sidd::ISMVersion ismVersion) // TODO: should this value be fixed?
+inline static auto getDESVersion(six::sidd300::ISMVersion ismVersion) // TODO: should this value be fixed?
 {
     // SIDD 3.0 is tied to IC-ISM v201609 ... well, except that we need to support v13 too.
     switch (ismVersion)
     {
-    case six::sidd::ISMVersion::v201609: return "201609"; // note that the specification also allows for "201609-<custom>"
-    case six::sidd::ISMVersion::v13: return "13";
+    case six::sidd300::ISMVersion::v201609: return "201609"; // note that the specification also allows for "201609-<custom>"
+    case six::sidd300::ISMVersion::v13: return "13";
     default: break;
     }
-    throw std::logic_error("Unhandled 'six::sidd::ISMVersion' case.");
+    throw std::logic_error("Unhandled 'ISMVersion' case.");
 }
-static void setDESVersion(xml::lite::Element& classElem, six::sidd::ISMVersion ismVersion)
+static void setDESVersion(xml::lite::Element& classElem, six::sidd300::ISMVersion ismVersion)
 {
     //! from ism:ISMRootNodeAttributeGroup
     classElem.attribute("DESVersion") = getDESVersion(ismVersion);
@@ -84,7 +84,7 @@ static void setDESVersion(xml::lite::Element& classElem, six::sidd::ISMVersion i
 //    DerivedXMLParser(VERSION,
 //        std::make_unique<six::SICommonXMLParser10x>(versionToURI(VERSION), false, SI_COMMON_URI, *log),
 //        std::move(log)) {  }
-DerivedXMLParser300::DerivedXMLParser300(logging::Logger& log, six::sidd::ISMVersion ismVersion) :
+DerivedXMLParser300::DerivedXMLParser300(logging::Logger& log, six::sidd300::ISMVersion ismVersion) :
     DerivedXMLParser(VERSION,
         std::make_unique<six::SICommonXMLParser10x>(versionToURI(VERSION), false, SI_COMMON_URI, log),
         log)
