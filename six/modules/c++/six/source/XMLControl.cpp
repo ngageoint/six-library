@@ -214,11 +214,7 @@ inline auto make_XmlLiteValidator(const std::vector<std::string>& paths, logging
 
 inline auto make_XmlLiteValidator(const std::vector<std::filesystem::path>& paths, logging::Logger& log)
 {
-    // We're eventually going to want to do something different here to deal with two different versions
-    // of ISM with SIDD 3.0.  For now, get things ready for changes ...
-    const auto xsdPaths = xml::lite::ValidatorXerces::loadSchemas(paths, true /*recursive*/);  // this can be expensive to create as all sub-directories might be traversed
-    // TODO: remove certain XSD files from xsdPaths
-    return xml::lite::ValidatorXerces::make(xsdPaths, log);
+    return xml::lite::ValidatorXerces(paths, &log, true); // this can be expensive to create as all sub-directories might be traversed
 }
 
 template<typename TPath>
