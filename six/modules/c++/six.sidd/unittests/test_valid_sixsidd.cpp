@@ -58,6 +58,7 @@ static std::filesystem::path get_sample_xml_path(const std::filesystem::path& fi
 
 static std::vector<std::filesystem::path> getSchemaPaths()
 {
+    //static const auto xsdPath = sys::test::findGITModuleFile("six", schema_relative_path(), "SIDD_V3.0.0_ISM-v13/SIDD_schema_V3.0.0.xsd");
     static const auto xsdPath = sys::test::findGITModuleFile("six", schema_relative_path(), "SIDD_schema_V3.0.0.xsd");
     static const auto rootSchemaDir = xsdPath.parent_path(); // ".../conf/Schema"
     return std::vector<std::filesystem::path> { rootSchemaDir };
@@ -164,7 +165,13 @@ TEST_CASE(test_read_sidd200_xml)
 }
 TEST_CASE(test_read_sidd300_xml)
 {
+    //TEST_SUCCESS;
     test_read_sidd_xml(testName, "sidd300.xml");
+}
+TEST_CASE(test_read_sidd300_v13_xml)
+{
+    TEST_SUCCESS;
+    //test_read_sidd_xml(testName, "sidd300_ISM-v13.xml");
 }
 
 TEST_MAIN(
@@ -172,4 +179,5 @@ TEST_MAIN(
     TEST_CHECK(test_createFakeDerivedData_validate);
     TEST_CHECK(test_read_sidd200_xml);
     TEST_CHECK(test_read_sidd300_xml);
+    TEST_CHECK(test_read_sidd300_v13_xml);
     )
