@@ -166,6 +166,26 @@ inline static auto getInvalidXmlErrorMessage(const std::vector<TPath>& paths)
     return message;
 }
 
+template<typename TPath>
+static void log_errors_and_throw(const std::vector<xml::lite::ValidationInfo>& errors,
+    const std::vector<TPath>& paths, logging::Logger& log)
+{
+    auto ctx(Ctxt(getInvalidXmlErrorMessage(paths)));
+    for (auto&& e : errors)
+    {
+        log.critical(e.toString());
+
+        ctx.mMessage += "\n" + e.toString();
+    }
+
+    //! this is a unique error thrown only in this location --
+    //  if the user wants a file written regardless of the consequences
+    //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
+    //  and attempt to rewrite the file. Continuing in this manner is
+    //  highly discouraged
+    throw six::DESValidationException(ctx);
+}
+
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
 template<typename TPath>
@@ -189,21 +209,7 @@ static void do_validate_(const xml::lite::Validator& validator, const xml::lite:
     // log any error found and throw
     if (!errors.empty())
     {
-        auto ctx(Ctxt(getInvalidXmlErrorMessage(paths)));
-
-        for (auto&& e : errors)
-        {
-            log.critical(e.toString());
-
-            ctx.mMessage += "\n" + e.toString();
-        }
-
-        //! this is a unique error thrown only in this location --
-        //  if the user wants a file written regardless of the consequences
-        //  they can catch this error, clear the vector and SIX_SCHEMA_PATH
-        //  and attempt to rewrite the file. Continuing in this manner is
-        //  highly discouraged
-        throw six::DESValidationException(ctx);
+        log_errors_and_throw(errors, paths, log);
     }
 }
 
