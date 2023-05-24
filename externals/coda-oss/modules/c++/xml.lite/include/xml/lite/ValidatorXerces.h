@@ -101,8 +101,6 @@ class ValidatorXerces : public ValidatorInterface
 {
     XercesContext mCtxt;    //! this must be the first member listed
 
-    ValidatorXerces(); // use make()
-
 public:
 
     /*! 
@@ -116,14 +114,9 @@ public:
     ValidatorXerces(const std::vector<std::string>& schemaPaths, 
                     logging::Logger* log,
                     bool recursive = true);
-    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&,
+    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, // fs::path -> mLegacyStringConversion = false
                     logging::Logger* log,
                     bool recursive = true);
-
-    // This is intentonally a static "make" function rather than another overload.  That's to avoid
-    // confusion about the `std::vector<coda_oss::filesystem::path>` argument.  In THIS case,
-    // it is a collecton of XSD files, NOT directories to search.
-    static ValidatorXerces make(const std::vector<coda_oss::filesystem::path>& xsdFiles, logging::Logger&);
 
     ValidatorXerces(const ValidatorXerces&) = delete;
     ValidatorXerces& operator=(const ValidatorXerces&) = delete;
@@ -147,10 +140,10 @@ public:
     // Search each directory for XSD files
     static std::vector<coda_oss::filesystem::path> loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive=true);
 
-private:
     // Calls loadGrammar() for each XSD
-    void addSchemasToValidator(const std::vector<coda_oss::filesystem::path>& xsdFiles, logging::Logger&);
+    void addSchemasToValidator(const std::vector<coda_oss::filesystem::path> xsdFiles,  logging::Logger&);
 
+private:
     bool validate_(const coda_oss::u8string& xml, 
                    const std::string& xmlID,
                    std::vector<ValidationInfo>& errors) const;

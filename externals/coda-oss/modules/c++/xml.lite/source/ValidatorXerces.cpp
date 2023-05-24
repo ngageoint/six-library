@@ -27,7 +27,6 @@
 #include <std/string>
 #include <regex>
 #include <tuple> // std::ignore
-#include <stdexcept>
 
 #include <sys/OS.h>
 #include <io/StringStream.h>
@@ -106,7 +105,11 @@ ValidatorXerces::ValidatorXerces(
     ValidatorXerces(convert(schemaPaths), log, recursive)
 {
 }
-ValidatorXerces::ValidatorXerces() : ValidatorInterface()
+ValidatorXerces::ValidatorXerces(
+    const std::vector<std::string>& schemaPaths, 
+    logging::Logger* log,
+    bool recursive) :
+    ValidatorInterface(schemaPaths, log, recursive)
 {
     // add each schema into a grammar pool --
     // this allows reuse
@@ -157,34 +160,13 @@ ValidatorXerces::ValidatorXerces() : ValidatorInterface()
             new ValidationErrorHandler());
     config->setParameter(xercesc::XMLUni::fgDOMErrorHandler, 
                          mErrorHandler.get());
-}
-ValidatorXerces::ValidatorXerces(const std::vector<std::string>& schemaPaths,
-                                 logging::Logger* log,
-                                 bool recursive) : ValidatorXerces()
-{
+
     // load our schemas --
     // search each directory for schemas
     const auto schemas = loadSchemas(convert(schemaPaths), recursive);
 
     //  add the schema to the validator
     addSchemasToValidator(schemas, *log);
-}
-
-ValidatorXerces ValidatorXerces::make(const std::vector<coda_oss::filesystem::path>& xsdFiles, logging::Logger& log)
-{
-    // `xsdFiles` are FILES, not directories.  XML validation already takes a while, so a sanity-check shouldn't
-    // cause much harm.
-    for (auto&& xsdFile : xsdFiles)
-    {
-        if (!is_regular_file(xsdFile))
-        {
-            throw std::invalid_argument("'xsdFiles' must be paths to regular files.");
-        }
-    }
-
-    ValidatorXerces retval;
-    retval.addSchemasToValidator(xsdFiles, log);
-    return retval;
 }
 
 std::vector<coda_oss::filesystem::path> ValidatorXerces::loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive)
@@ -195,7 +177,7 @@ std::vector<coda_oss::filesystem::path> ValidatorXerces::loadSchemas(const std::
     return os.search(schemaPaths, "", ".xsd", recursive);
 }
 
-void ValidatorXerces::addSchemasToValidator(const std::vector<coda_oss::filesystem::path>& schemas, logging::Logger& log)
+void ValidatorXerces::addSchemasToValidator(const std::vector<coda_oss::filesystem::path> schemas, logging::Logger& log)
 {
     //  add the schema to the validator
     for (auto&& schema : schemas)

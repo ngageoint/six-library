@@ -35,6 +35,8 @@
 
 #include <string>
 #include <vector>
+#include <stdexcept>
+
 #include <io/InputStream.h>
 #include <str/Convert.h>
 #include <logging/Logger.h>
@@ -96,9 +98,6 @@ private:
  */
 class ValidatorInterface
 {
-protected:
-    ValidatorInterface() = default;
-
 public:
 
     enum ValidationErrorType
@@ -107,6 +106,21 @@ public:
         VALIDATION_ERROR,
         VALIDATION_FATAL
     };
+
+    /*! 
+     *  Constructor
+     *  \param schemaPaths  Vector of both paths and singular schemas
+     *                      Note: All schemas must end in *.xsd
+     *  \param log          Logger for reporting errors
+     *  \param recursive    Do a recursive search for schemas on directory 
+     *                      input
+     */
+    ValidatorInterface(const std::vector<std::string>& /*schemaPaths*/,
+                       logging::Logger* /*log*/,
+                       bool /*recursive*/ = true) {}
+    ValidatorInterface(const std::vector<coda_oss::filesystem::path>&,
+                       logging::Logger* /*log*/,
+                       bool /*recursive*/ = true) { }
 
     //! Destructor.
     virtual ~ValidatorInterface() = default;
@@ -161,6 +175,24 @@ public:
                           std::vector<ValidationInfo>& errors) const = 0;
     virtual bool validate(const coda_oss::u8string&, const std::string& /*xmlID*/, std::vector<ValidationInfo>&) const = 0;
     virtual bool validate(const str::W1252string&, const std::string& /*xmlID*/, std::vector<ValidationInfo>&) const = 0;
+
+    std::vector<ValidationInfo> validate(const coda_oss::u8string& strXml, const Uri& xmlID) const
+    {
+        std::vector<ValidationInfo> retval;
+        const auto success = validate(strXml, xmlID.value, retval);
+
+        // Be sure success and retval are in-sync.
+        if (success && !retval.empty())
+        {
+            throw std::logic_error("validate() succeeded, but errors were returned.");
+        }      
+        if (!success && retval.empty())
+        {
+            throw std::logic_error("validate() failed but no errors were returned.");    
+        }
+
+        return retval;
+    }
 };
 
 inline std::ostream& operator<< (std::ostream& out,
