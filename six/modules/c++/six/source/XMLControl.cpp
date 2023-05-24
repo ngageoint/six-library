@@ -167,9 +167,14 @@ inline static auto getInvalidXmlErrorMessage(const std::vector<TPath>& paths)
 }
 
 template<typename TPath>
-static void log_errors_and_throw(const std::vector<xml::lite::ValidationInfo>& errors,
+static void log_any_errors_and_throw(const std::vector<xml::lite::ValidationInfo>& errors,
     const std::vector<TPath>& paths, logging::Logger& log)
 {
+    if (errors.empty())
+    {
+        return; // no errors, nothing to do
+    }
+
     auto ctx(Ctxt(getInvalidXmlErrorMessage(paths)));
     for (auto&& e : errors)
     {
@@ -188,29 +193,17 @@ static void log_errors_and_throw(const std::vector<xml::lite::ValidationInfo>& e
 
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
-template<typename TPath>
-static void validate_against_schema(const xml::lite::ValidatorXerces& validator,
-    const std::u8string& strPrettyXml, const xml::lite::Uri& uri,
-    const std::vector<TPath>& paths, logging::Logger& log)
-{
-    // validate against any specified schemas
-    std::vector<xml::lite::ValidationInfo> errors;
-    validator.validate(strPrettyXml, uri.value, errors);
-
-    // log any error found and throw
-    if (!errors.empty())
-    {
-        log_errors_and_throw(errors, paths, log);
-    }
-}
-
 static void validate_(const std::u8string& strPrettyXml, const xml::lite::Uri& uri,
     const std::vector<std::string>& paths, logging::Logger& log)
 {
     const xml::lite::ValidatorXerces validator(paths, &log, true); // this can be expensive to create as all sub-directories might be traversed
 
     // validate against any specified schemas
-    validate_against_schema(validator, strPrettyXml, uri, paths, log);
+    std::vector<xml::lite::ValidationInfo> errors;
+    validator.validate(strPrettyXml, uri.value, errors);
+
+    // log any error found and throw
+    log_any_errors_and_throw(errors, paths, log);
 }
 static void validate_(const std::u8string& strPrettyXml, const xml::lite::Uri& uri,
     const std::vector<std::filesystem::path>& paths, logging::Logger& log)
@@ -220,14 +213,31 @@ static void validate_(const std::u8string& strPrettyXml, const xml::lite::Uri& u
     //
     // Note this is ONLY for "new" code (that using std::filesystem::path) to reduce the risk
     // of breaking any existing code.
+    std::vector<xml::lite::ValidationInfo> errors;
     for (auto&& path : paths)
     {
         const std::vector<std::filesystem::path> schemaPaths{ path }; // use one path at a time
         const xml::lite::ValidatorXerces validator(schemaPaths, &log, true); // this can be expensive to create as all sub-directories might be traversed
 
         // validate against any specified schemas
-        validate_against_schema(validator, strPrettyXml, uri, paths, log);
+        std::vector<xml::lite::ValidationInfo> my_errors;
+        validator.validate(strPrettyXml, uri.value, my_errors);
+
+        // Looks like we validated; be sure there aren't any errors
+        if (my_errors.empty())
+        {
+            return; // success!
+        }
+
+        // This schema path failed; save away my errors in case none of them work
+        for (auto&& error : my_errors)
+        {
+            errors.push_back(std::move(error));
+        }
     }
+
+    // log any error found and throw
+    log_any_errors_and_throw(errors, paths, log);
 }
 template<typename TPath>
 static void validate_(const xml::lite::Document& doc,

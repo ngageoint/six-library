@@ -540,7 +540,7 @@ std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, schemaPaths, log);
 }
 
-void prependISMSchemaPaths(const std::vector<std::filesystem::path>& schemaPaths,
+static void prependISMSchemaPaths_(const std::vector<std::filesystem::path>& schemaPaths,
     six::sidd300::ISMVersion ismVersion, std::vector<std::filesystem::path>& adjustedSchemaPaths)
 {
     const std::string ismDirectoryName("SIDD_V3.0.0_ISM-" + to_string(ismVersion)); // i.e., "SIDD_V3.0.0_ISM-v13"
@@ -561,21 +561,28 @@ void prependISMSchemaPaths(const std::vector<std::filesystem::path>& schemaPaths
         adjustedSchemaPaths.push_back(schemaPath);
     }
 }
-
-std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
-    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
+static void prependISMSchemaPaths(const std::vector<std::filesystem::path>* &pSchemaPaths,
+    std::vector<std::filesystem::path>& adjustedSchemaPaths)
 {
     // If the user has went to the effort of setting ISMVersion (either via code or env. var.)
     // then assume we need to prepend additional schema paths.  Note this is only
     // "new" code, i.e., that using `std::filesystem::path`.
-    std::vector<std::filesystem::path> adjustedSchemaPaths; // keep in-scope
-    const auto ismVersion = six::sidd300::getISMVersion();
-    if ((pSchemaPaths != nullptr) && ismVersion.has_value())
+    if (pSchemaPaths != nullptr)
     {
-        prependISMSchemaPaths(*pSchemaPaths, *ismVersion, adjustedSchemaPaths);
-        pSchemaPaths = &adjustedSchemaPaths;
+        const auto ismVersion = six::sidd300::getISMVersion();
+        if (ismVersion.has_value())
+        {
+            prependISMSchemaPaths_(*pSchemaPaths, *ismVersion, adjustedSchemaPaths);
+            pSchemaPaths = &adjustedSchemaPaths;
+        }
     }
+}
 
+std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
+{
+    std::vector<std::filesystem::path> adjustedSchemaPaths; // keep in-scope
+    prependISMSchemaPaths(pSchemaPaths, adjustedSchemaPaths);
     return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, pSchemaPaths, log);
 }
 
@@ -636,6 +643,9 @@ std::u8string Utilities::toXMLString(const DerivedData& data,
 
     logging::NullLogger nullLogger;
     logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
+
+    std::vector<std::filesystem::path> adjustedSchemaPaths; // keep in-scope
+    prependISMSchemaPaths(pSchemaPaths, adjustedSchemaPaths);
 
     return ::six::toValidXMLString(data, pSchemaPaths, pLogger_, &xmlRegistry);
 }
