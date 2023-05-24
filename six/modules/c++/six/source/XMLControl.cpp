@@ -189,22 +189,16 @@ static void log_errors_and_throw(const std::vector<xml::lite::ValidationInfo>& e
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
 template<typename TPath>
-static void do_validate_(const xml::lite::Validator& validator, const xml::lite::Document& doc,
+static void do_validate_(const xml::lite::Validator& validator, const xml::lite::Element& rootElement,
     const std::vector<TPath>& paths, logging::Logger& log)
 {
-    const auto& rootElement = doc.getRootElement();
-    if (rootElement->getUri().empty())
-    {
-        throw six::DESValidationException(Ctxt("INVALID XML: URI is empty so document version cannot be determined to use for validation"));
-    }
-
     // Pretty-print so that lines numbers are useful
     io::U8StringStream xmlStream;
-    rootElement->prettyPrint(xmlStream);
+    rootElement.prettyPrint(xmlStream);
 
     // validate against any specified schemas
     std::vector<xml::lite::ValidationInfo> errors;
-    validator.validate(xmlStream, rootElement->getUri(), errors);
+    validator.validate(xmlStream, rootElement.getUri(), errors);
 
     // log any error found and throw
     if (!errors.empty())
@@ -221,11 +215,19 @@ static void validate_(const xml::lite::Document& doc,
     paths = check_whether_paths_exist(paths);
 
     // validate against any specified schemas
-    if (!paths.empty())
+    if (paths.empty())
     {
-        const xml::lite::ValidatorXerces validator(paths, &log, true); // this can be expensive to create as all sub-directories might be traversed
-        do_validate_(validator, doc, paths, log);
+        return; // no schemas, no validation
     }
+
+    const auto& rootElement = doc.getRootElement();
+    if (rootElement->getUri().empty())
+    {
+        throw six::DESValidationException(Ctxt("INVALID XML: URI is empty so document version cannot be determined to use for validation"));
+    }
+
+    const xml::lite::ValidatorXerces validator(paths, &log, true); // this can be expensive to create as all sub-directories might be traversed
+    do_validate_(validator, *rootElement, paths, log);
 }
 void XMLControl::validate(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths,
