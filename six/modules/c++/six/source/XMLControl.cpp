@@ -51,7 +51,7 @@ namespace six
 
 static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
 {
-        const sys::OS os;
+        static const sys::OS os;
 
 // prefer SIX_DEFAULT_SCHEMA_PATH, existing scripts use DEFAULT_SCHEMA_PATH
 #if defined(DEFAULT_SCHEMA_PATH) && !defined(SIX_DEFAULT_SCHEMA_PATH)
@@ -207,16 +207,6 @@ static void do_validate_(const xml::lite::Validator& validator, const xml::lite:
     }
 }
 
-inline auto make_XmlLiteValidator(const std::vector<std::string>& paths, logging::Logger& log)
-{
-    return xml::lite::ValidatorXerces(paths, &log, true); // this can be expensive to create as all sub-directories might be traversed
-}
-
-inline auto make_XmlLiteValidator(const std::vector<std::filesystem::path>& paths, logging::Logger& log)
-{
-    return xml::lite::ValidatorXerces(paths, &log, true); // this can be expensive to create as all sub-directories might be traversed
-}
-
 template<typename TPath>
 static void validate_(const xml::lite::Document& doc,
     std::vector<TPath> paths, logging::Logger& log)
@@ -227,7 +217,7 @@ static void validate_(const xml::lite::Document& doc,
     // validate against any specified schemas
     if (!paths.empty())
     {
-        const auto validator = make_XmlLiteValidator(paths, log);
+        const xml::lite::ValidatorXerces validator(paths, &log, true); // this can be expensive to create as all sub-directories might be traversed
         do_validate_(validator, doc, paths, log);
     }
 }
