@@ -75,9 +75,6 @@ struct DerivedXMLControl : public XMLControl
 
     static std::unique_ptr<DerivedXMLParser> getParser_(const std::string& strVersion); // for unit-testing
 
-    six::sidd300::ISMVersion getISMVersion() const;
-    void setISMVersion(six::sidd300::ISMVersion);
-
 protected:
     /*!
      *  Returns a new allocated DOM document, created from the DerivedData*
@@ -94,9 +91,6 @@ protected:
 private:
     std::unique_ptr<DerivedXMLParser>
     getParser(const std::string& strVersion) const;
-
-    // Keep this "private" ... pass the value to DerivedXMLParser300
-    six::sidd300::ISMVersion mISMVersion = six::sidd300::ISMVersion::current;
 };
 }
 }

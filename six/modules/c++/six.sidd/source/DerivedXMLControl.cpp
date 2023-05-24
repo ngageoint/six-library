@@ -64,18 +64,9 @@ namespace sidd
 {
     const six::DataType DerivedXMLControl::dataType = six::DataType::DERIVED;
 
-DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) : XMLControl(log, ownLog)
-{
-    mISMVersion = six::sidd300::get(six::sidd300::ISMVersion::current);
-}
-DerivedXMLControl::DerivedXMLControl(std::unique_ptr<logging::Logger>&& log) : XMLControl(std::move(log))
-{
-    mISMVersion = six::sidd300::get(six::sidd300::ISMVersion::current);
-}
-DerivedXMLControl::DerivedXMLControl(logging::Logger& log) : XMLControl(log)
-{
-    mISMVersion = six::sidd300::get(six::sidd300::ISMVersion::current);
-}
+DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) : XMLControl(log, ownLog) {}
+DerivedXMLControl::DerivedXMLControl(std::unique_ptr<logging::Logger>&& log) : XMLControl(std::move(log)) {}
+DerivedXMLControl::DerivedXMLControl(logging::Logger& log) : XMLControl(log) {}
 
 Data* DerivedXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
@@ -122,7 +113,8 @@ DerivedXMLControl::getParser(const std::string& strVersion) const
     }
     if (normalizedVersion == "300")
     {
-        return std::make_unique<DerivedXMLParser300>(getLogger(), getISMVersion());
+        const auto ismVersion = six::sidd300::get(six::sidd300::ISMVersion::current);
+        return std::make_unique<DerivedXMLParser300>(getLogger(), ismVersion);
     }
 
     if (normalizedVersion == "110")
@@ -139,15 +131,6 @@ DerivedXMLControl::getParser(const std::string& strVersion) const
 std::unique_ptr<DerivedXMLParser> DerivedXMLControl::getParser_(const std::string& strVersion)
 {
     return DerivedXMLControl().getParser(strVersion);
-}
-
-six::sidd300::ISMVersion DerivedXMLControl::getISMVersion() const
-{
-    return mISMVersion;
-}
-void DerivedXMLControl::setISMVersion(six::sidd300::ISMVersion ismVersion)
-{
-    mISMVersion = ismVersion;
 }
 
 }

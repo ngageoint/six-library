@@ -47,6 +47,15 @@ struct DerivedXMLParser300 final : public DerivedXMLParser
     DerivedData* fromXML(const xml::lite::Document* doc) const override;
     std::unique_ptr<DerivedData> fromXML(const xml::lite::Document&) const override;
 
+    six::sidd300::ISMVersion getISMVersion() const
+    {
+        return mISMVersion;
+    }
+    void setISMVersion(six::sidd300::ISMVersion value)
+    {
+        mISMVersion = value;
+    }
+
 private:
     six::sidd300::ISMVersion mISMVersion = six::sidd300::ISMVersion::current;
 
