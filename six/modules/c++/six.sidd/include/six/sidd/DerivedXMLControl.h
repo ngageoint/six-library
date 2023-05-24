@@ -43,9 +43,11 @@ namespace sidd300
 
         current = v201609
     };
-    ISMVersion getISMVersion(ISMVersion defaultIfNotSet = ISMVersion::current);
-    std::optional<ISMVersion> setISMVersion(ISMVersion); // returns previous value, if any
+    ISMVersion get(ISMVersion defaultIfNotSet); // overloaded on ISMVersion
+    std::optional<ISMVersion> set(ISMVersion); // returns previous value, if any
+    std::optional<ISMVersion> getISMVersion();
     std::optional<ISMVersion> clearISMVersion(); // returns previous value, if any
+    std::string to_string(ISMVersion); // "v201609" or "v13"
 }
 
 namespace sidd

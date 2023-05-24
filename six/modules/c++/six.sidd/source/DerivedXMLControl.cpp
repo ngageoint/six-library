@@ -23,6 +23,7 @@
 #include <assert.h>
 
 #include <std/memory>
+#include <stdexcept>
 
 #include <sys/OS.h>
 
@@ -65,15 +66,15 @@ namespace sidd
 
 DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) : XMLControl(log, ownLog)
 {
-    mISMVersion = six::sidd300::getISMVersion();
+    mISMVersion = six::sidd300::get(six::sidd300::ISMVersion::current);
 }
 DerivedXMLControl::DerivedXMLControl(std::unique_ptr<logging::Logger>&& log) : XMLControl(std::move(log))
 {
-    mISMVersion = six::sidd300::getISMVersion();
+    mISMVersion = six::sidd300::get(six::sidd300::ISMVersion::current);
 }
 DerivedXMLControl::DerivedXMLControl(logging::Logger& log) : XMLControl(log)
 {
-    mISMVersion = six::sidd300::getISMVersion();
+    mISMVersion = six::sidd300::get(six::sidd300::ISMVersion::current);
 }
 
 Data* DerivedXMLControl::fromXMLImpl(const xml::lite::Document* doc)
@@ -184,7 +185,7 @@ static std::optional<six::sidd300::ISMVersion> getISMVersionFromEnv()
 }
 
 static std::optional<six::sidd300::ISMVersion> s_setISMVersion;
-six::sidd300::ISMVersion six::sidd300::getISMVersion(six::sidd300::ISMVersion defaultIfNotSet)
+std::optional<six::sidd300::ISMVersion> six::sidd300::getISMVersion()
 {
     // Try the environment variable first as that can be managed outside of C++
     const auto ismVersionFromEnv = getISMVersionFromEnv();
@@ -194,15 +195,21 @@ six::sidd300::ISMVersion six::sidd300::getISMVersion(six::sidd300::ISMVersion de
     }
 
     // Then our global (static) variable; normally this won't be set
-    if (s_setISMVersion.has_value())
+    return s_setISMVersion;
+}
+six::sidd300::ISMVersion six::sidd300::get(ISMVersion defaultIfNotSet)
+{
+    // Try getting something from the runtime enviroment ...
+    const auto ismVersion = getISMVersion();
+    if (ismVersion.has_value())
     {
-        return *s_setISMVersion;
+        return *ismVersion;
     }
 
-    // Finally, the default value
+    // ... nothing; use the the default value
     return defaultIfNotSet;
 }
-std::optional<six::sidd300::ISMVersion> six::sidd300::setISMVersion(six::sidd300::ISMVersion value) // returns previous value, if any
+std::optional<six::sidd300::ISMVersion> six::sidd300::set(ISMVersion value) // returns previous value, if any
 {
     auto retval = s_setISMVersion;
     s_setISMVersion = value;
@@ -214,3 +221,14 @@ std::optional<six::sidd300::ISMVersion> six::sidd300::clearISMVersion() // retur
     s_setISMVersion.reset();
     return retval;
 }
+
+std::string six::sidd300::to_string(ISMVersion value)
+{
+    switch (value)
+    {
+    case ISMVersion::v201609: return "v201609";
+    case ISMVersion::v13: return "v13";
+    default: break;
+    }
+    throw std::invalid_argument("Unknown 'ISMVersion' value.");
+};

@@ -539,9 +539,43 @@ std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
 {
     return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, schemaPaths, log);
 }
+
+void prependISMSchemaPaths(const std::vector<std::filesystem::path>& schemaPaths,
+    six::sidd300::ISMVersion ismVersion, std::vector<std::filesystem::path>& adjustedSchemaPaths)
+{
+    const std::string ismDirectoryName("SIDD_V3.0.0_ISM-" + to_string(ismVersion)); // i.e., "SIDD_V3.0.0_ISM-v13"
+
+    // If there is a ismDirectoryName, use THAT directory first
+    for (auto schemaPath : schemaPaths)
+    {
+        schemaPath = schemaPath / ismDirectoryName;
+        if (is_directory(schemaPath))
+        {
+            adjustedSchemaPaths.push_back(schemaPath);
+        }
+    }
+
+    // Include all the original schema paths; these will be AFTER the adjusted paths, above
+    for (auto&& schemaPath : schemaPaths)
+    {
+        adjustedSchemaPaths.push_back(schemaPath);
+    }
+}
+
 std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
 {
+    // If the user has went to the effort of setting ISMVersion (either via code or env. var.)
+    // then assume we need to prepend additional schema paths.  Note this is only
+    // "new" code, i.e., that using `std::filesystem::path`.
+    std::vector<std::filesystem::path> adjustedSchemaPaths; // keep in-scope
+    const auto ismVersion = six::sidd300::getISMVersion();
+    if ((pSchemaPaths != nullptr) && ismVersion.has_value())
+    {
+        prependISMSchemaPaths(*pSchemaPaths, *ismVersion, adjustedSchemaPaths);
+        pSchemaPaths = &adjustedSchemaPaths;
+    }
+
     return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, pSchemaPaths, log);
 }
 
