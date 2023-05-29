@@ -78,6 +78,14 @@ std::unique_ptr<Data> DerivedXMLControl::fromXMLImpl(const xml::lite::Document& 
     return getParser(getVersionFromURI(&doc))->fromXML(doc);
 }
 
+std::unique_ptr<Data> DerivedXMLControl::validateXMLImpl(const xml::lite::Document& doc,
+    const std::vector<std::filesystem::path>& schemaPaths, logging::Logger& log) const
+{
+    validate(doc, &schemaPaths, &log);
+    return fromXMLImpl(doc);
+}
+
+
 xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
 {
     assert(data != nullptr);

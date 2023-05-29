@@ -403,10 +403,25 @@ Data* XMLControl::fromXML(const xml::lite::Document* doc,
 std::unique_ptr<Data> XMLControl::fromXML(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>* pSchemaPaths)
 {
-    validate(doc, pSchemaPaths, mLog);
-    auto data = fromXMLImpl(doc);
+    std::unique_ptr<Data> data;
+    if ((pSchemaPaths != nullptr) && (mLog != nullptr))
+    {
+        data = validateXMLImpl(doc, *pSchemaPaths, *mLog);
+    }
+    else
+    {
+        validate(doc, pSchemaPaths, mLog);
+        data = fromXMLImpl(doc);
+    }
     data->setVersion(getVersionFromURI(&doc));
     return data;
+}
+
+std::unique_ptr<Data> XMLControl::validateXMLImpl(const xml::lite::Document& doc,
+    const std::vector<std::filesystem::path>& schemaPaths, logging::Logger& log) const
+{
+    validate(doc, &schemaPaths, &log);
+    return fromXMLImpl(doc);
 }
 
 std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)

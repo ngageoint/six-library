@@ -88,6 +88,9 @@ protected:
     virtual Data* fromXMLImpl(const xml::lite::Document* doc);
     virtual std::unique_ptr<Data> fromXMLImpl(const xml::lite::Document&) const override;
 
+    virtual std::unique_ptr<Data> validateXMLImpl(const xml::lite::Document&,
+        const std::vector<std::filesystem::path>&, logging::Logger&) const override;
+
 private:
     std::unique_ptr<DerivedXMLParser>
     getParser(const std::string& strVersion) const;

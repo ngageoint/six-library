@@ -171,6 +171,9 @@ class XMLControl
     virtual Data* fromXMLImpl(const xml::lite::Document* doc) = 0;
     virtual std::unique_ptr<Data> fromXMLImpl(const xml::lite::Document&) const; // = 0;, would break existing code
 
+    virtual std::unique_ptr<Data> validateXMLImpl(const xml::lite::Document&,
+        const std::vector<std::filesystem::path>&, logging::Logger&) const; // = 0;, would break existing code
+
     /*!
      *  Convert the Data model into an XML DOM.
      *  \param data the Data model
