@@ -96,9 +96,6 @@ private:
  */
 class ValidatorInterface
 {
-protected:
-    ValidatorInterface() = default;
-
 public:
 
     enum ValidationErrorType
@@ -107,6 +104,21 @@ public:
         VALIDATION_ERROR,
         VALIDATION_FATAL
     };
+
+    /*! 
+     *  Constructor
+     *  \param schemaPaths  Vector of both paths and singular schemas
+     *                      Note: All schemas must end in *.xsd
+     *  \param log          Logger for reporting errors
+     *  \param recursive    Do a recursive search for schemas on directory 
+     *                      input
+     */
+    ValidatorInterface(const std::vector<std::string>& /*schemaPaths*/,
+                       logging::Logger* /*log*/,
+                       bool /*recursive*/ = true) {}
+    ValidatorInterface(const std::vector<coda_oss::filesystem::path>&,
+                       logging::Logger* /*log*/,
+                       bool /*recursive*/ = true) { }
 
     //! Destructor.
     virtual ~ValidatorInterface() = default;
