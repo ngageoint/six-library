@@ -24,6 +24,8 @@
 
 #include <std/memory>
 #include <stdexcept>
+#include <tuple>
+#include <algorithm>
 
 #include <sys/OS.h>
 
@@ -78,9 +80,127 @@ std::unique_ptr<Data> DerivedXMLControl::fromXMLImpl(const xml::lite::Document& 
     return getParser(getVersionFromURI(&doc))->fromXML(doc);
 }
 
+static auto loadSchemas(const std::vector<std::filesystem::path>& schemaPaths)
+{
+    return xml::lite::Validator::loadSchemas(schemaPaths);
+}
+inline auto convert(const std::vector<std::filesystem::path>& schemaPaths)
+{
+    std::vector<std::string> retval;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
+        [](const std::filesystem::path& p) { return p.string(); });
+    return retval;
+}
+inline auto convert(const std::vector<std::string>& schemaPaths)
+{
+    std::vector<std::filesystem::path> retval;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
+        [](const std::string& s) { return s; });
+    return retval;
+}
+static std::vector<std::string> loadSchemas(const std::vector<std::string>& schemaPaths)
+{
+    const auto schemaPaths_ = convert(schemaPaths);
+    return convert(loadSchemas(schemaPaths_));
+}
+
+// Is this SIDD 3.0 XML?
+static bool has_sidd300_attribute(const xml::lite::Element& rootElement)
+{
+    static const xml::lite::Uri sidd300("urn:SIDD:3.0.0");
+    const auto predicate = [&](const auto& attribute) {
+        const xml::lite::Uri uriValue(attribute.getValue());
+        return (uriValue == sidd300) && (attribute.getLocalName() == "xmlns");
+    };
+    auto&& attributes = rootElement.getAttributes();
+    return std::any_of(attributes.begin(), attributes.end(), predicate);
+}
+
+static const xml::lite::Uri xmlns("http://www.w3.org/2000/xmlns/");
+
+// Return the ISM Uri, if any
+static const xml::lite::Uri ism_201609("urn:us:gov:ic:ism:201609");
+static const xml::lite::Uri ism_13("urn:us:gov:ic:ism:13");
+static auto has_ism_attribute(const xml::lite::Element& rootElement)
+{
+    xml::lite::Uri retval;
+    const auto predicate = [&](const auto& attribute) {
+        xml::lite::Uri uri;
+        attribute.getUri(uri);
+        if (uri != xmlns)
+            return false;
+
+        const xml::lite::Uri uriValue(attribute.getValue());
+        if ((uriValue == ism_201609) || (uriValue == ism_13))
+        {
+            retval = uriValue;
+            return true;
+        }
+        return false;
+    };
+
+    auto&& attributes = rootElement.getAttributes();
+    std::ignore = std::any_of(attributes.begin(), attributes.end(), predicate); // using `retval`, not the result of any_of()
+    return retval;
+}
+
+template<typename TSchemaPaths>
+static auto get_SIDD300_schema_path(const xml::lite::Document& doc, const TSchemaPaths& schemaPaths)
+{
+    using retval_t = typename TSchemaPaths::value_type;
+
+    auto&& rootElement = getRootElement(doc);
+    if (!has_sidd300_attribute(rootElement))
+    {
+        return retval_t{};
+    }
+
+    const auto xml_ism = has_ism_attribute(rootElement);
+    if (xml_ism.empty())
+    {
+        return retval_t{};
+    }
+
+    const auto xsd_files = loadSchemas(schemaPaths);
+    for (auto&& xsd : xsd_files)
+    {
+        io::FileInputStream xsdStream(xsd);
+        six::MinidomParser xsdParser;
+        xsdParser.parse(xsdStream);
+
+        const auto& doc = getDocument(xsdParser);
+        const auto& root = getRootElement(doc);
+        if (!has_sidd300_attribute(root))
+        {
+            continue;
+        }
+
+        const auto predicate = [&](const auto& attribute) {
+            xml::lite::Uri uri;
+            attribute.getUri(uri);
+            if (uri != xmlns)
+                return false;
+
+            const xml::lite::Uri uriValue(attribute.getValue());
+            return (uriValue == xml_ism) && (attribute.getLocalName() == "ism");
+        };
+
+        auto&& attributes = root.getAttributes();
+        if (std::any_of(attributes.begin(), attributes.end(), predicate))
+        {
+            return xsd;
+        }
+    }
+
+    return retval_t{};
+}
+
+
 std::unique_ptr<Data> DerivedXMLControl::validateXMLImpl(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>& schemaPaths, logging::Logger& log) const
 {
+    const auto path = get_SIDD300_schema_path(doc, schemaPaths);
+
     return validateXMLImpl_(doc, schemaPaths, log);
 }
 
