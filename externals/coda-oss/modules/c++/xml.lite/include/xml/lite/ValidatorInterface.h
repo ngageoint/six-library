@@ -35,8 +35,6 @@
 
 #include <string>
 #include <vector>
-#include <stdexcept>
-
 #include <io/InputStream.h>
 #include <str/Convert.h>
 #include <logging/Logger.h>
@@ -175,24 +173,6 @@ public:
                           std::vector<ValidationInfo>& errors) const = 0;
     virtual bool validate(const coda_oss::u8string&, const std::string& /*xmlID*/, std::vector<ValidationInfo>&) const = 0;
     virtual bool validate(const str::W1252string&, const std::string& /*xmlID*/, std::vector<ValidationInfo>&) const = 0;
-
-    std::vector<ValidationInfo> validate(const coda_oss::u8string& strXml, const Uri& xmlID) const
-    {
-        std::vector<ValidationInfo> retval;
-        const auto success = validate(strXml, xmlID.value, retval);
-
-        // Be sure success and retval are in-sync.
-        if (success && !retval.empty())
-        {
-            throw std::logic_error("validate() succeeded, but errors were returned.");
-        }      
-        if (!success && retval.empty())
-        {
-            throw std::logic_error("validate() failed but no errors were returned.");    
-        }
-
-        return retval;
-    }
 };
 
 inline std::ostream& operator<< (std::ostream& out,

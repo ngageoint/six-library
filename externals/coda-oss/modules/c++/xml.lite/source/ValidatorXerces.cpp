@@ -165,8 +165,6 @@ ValidatorXerces::ValidatorXerces(
     // search each directory for schemas
     const auto schemas = loadSchemas(convert(schemaPaths), recursive);
 
-void ValidatorXerces::addSchemasToValidator(const std::vector<coda_oss::filesystem::path> schemas, logging::Logger& log)
-{
     //  add the schema to the validator
     //  add the schema to the validator
     for (auto&& schema : schemas)
