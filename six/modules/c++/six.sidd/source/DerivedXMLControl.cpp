@@ -80,30 +80,6 @@ std::unique_ptr<Data> DerivedXMLControl::fromXMLImpl(const xml::lite::Document& 
     return getParser(getVersionFromURI(&doc))->fromXML(doc);
 }
 
-static auto loadSchemas(const std::vector<std::filesystem::path>& schemaPaths)
-{
-    return xml::lite::Validator::loadSchemas(schemaPaths);
-}
-inline auto convert(const std::vector<std::filesystem::path>& schemaPaths)
-{
-    std::vector<std::string> retval;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
-        [](const std::filesystem::path& p) { return p.string(); });
-    return retval;
-}
-inline auto convert(const std::vector<std::string>& schemaPaths)
-{
-    std::vector<std::filesystem::path> retval;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
-        [](const std::string& s) { return s; });
-    return retval;
-}
-static std::vector<std::string> loadSchemas(const std::vector<std::string>& schemaPaths)
-{
-    const auto schemaPaths_ = convert(schemaPaths);
-    return convert(loadSchemas(schemaPaths_));
-}
-
 // Is this SIDD 3.0 XML?
 static bool has_sidd300_attribute(const xml::lite::Element& rootElement)
 {
@@ -144,10 +120,9 @@ static auto has_ism_attribute(const xml::lite::Element& rootElement)
     return retval;
 }
 
-template<typename TSchemaPaths>
-static auto get_SIDD300_schema_path(const xml::lite::Document& doc, const TSchemaPaths& schemaPaths)
+static auto get_SIDD300_schema_path(const xml::lite::Document& doc, const std::vector<std::filesystem::path>& schemaPaths)
 {
-    using retval_t = typename TSchemaPaths::value_type;
+    using retval_t = std::filesystem::path;
 
     auto&& rootElement = getRootElement(doc);
     if (!has_sidd300_attribute(rootElement))
@@ -161,7 +136,7 @@ static auto get_SIDD300_schema_path(const xml::lite::Document& doc, const TSchem
         return retval_t{};
     }
 
-    const auto xsd_files = loadSchemas(schemaPaths);
+    const auto xsd_files = xml::lite::Validator::loadSchemas(schemaPaths);
     for (auto&& xsd : xsd_files)
     {
         io::FileInputStream xsdStream(xsd);

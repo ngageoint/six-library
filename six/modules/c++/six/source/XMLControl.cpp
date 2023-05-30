@@ -397,6 +397,7 @@ Data* XMLControl::fromXML(const xml::lite::Document* doc,
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
+    assert(doc != nullptr);
     auto data = fromXML(*doc, &schemaPaths);
     return data.release();
 }
@@ -410,6 +411,7 @@ std::unique_ptr<Data> XMLControl::fromXML(const xml::lite::Document& doc,
     }
     else
     {
+        // existing code, let validate() handle NULLs
         validate(doc, pSchemaPaths, mLog);
         data = fromXMLImpl(doc);
     }
