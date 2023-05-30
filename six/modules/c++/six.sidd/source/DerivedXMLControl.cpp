@@ -120,10 +120,45 @@ static auto has_ism_attribute(const xml::lite::Element& rootElement)
     return retval;
 }
 
+// Is this the XSD for the ISM of interest?
+static auto xsd_has_ism(std::filesystem::path xsd, const xml::lite::Uri& xml_ism)
+{
+    io::FileInputStream xsdStream(xsd);
+    six::MinidomParser xsdParser;
+    xsdParser.parse(xsdStream);
+
+    const auto& doc = getDocument(xsdParser);
+    const auto& root = getRootElement(doc);
+    if (!has_sidd300_attribute(root))
+    {
+        return false;
+    }
+
+    const auto predicate = [&](const auto& attribute) {
+        xml::lite::Uri uri;
+        attribute.getUri(uri);
+        if (uri != xmlns)
+            return false;
+
+        const xml::lite::Uri uriValue(attribute.getValue());
+        return (uriValue == xml_ism) && (attribute.getLocalName() == "ism");
+    };
+
+    auto&& attributes = root.getAttributes();
+    if (std::any_of(attributes.begin(), attributes.end(), predicate))
+    {
+        return true;
+    }
+    return false;
+}
+
+// For SIDD 3.0, try to match-up the ISM with the schema.  This is necessary
+// because we have to support two versions of ISM in SIDD 3.0.
 static auto get_SIDD300_schema_path(const xml::lite::Document& doc, const std::vector<std::filesystem::path>& schemaPaths)
 {
     using retval_t = std::filesystem::path;
 
+    // Before SIDD 3.0, there was only one ISM.
     auto&& rootElement = getRootElement(doc);
     if (!has_sidd300_attribute(rootElement))
     {
@@ -136,45 +171,34 @@ static auto get_SIDD300_schema_path(const xml::lite::Document& doc, const std::v
         return retval_t{};
     }
 
-    const auto xsd_files = xml::lite::Validator::loadSchemas(schemaPaths);
-    for (auto&& xsd : xsd_files)
+    // Process the schemaPaths one at a time to avoid traversing so many directories at once.
+    for (auto&& schemaPath : schemaPaths)
     {
-        io::FileInputStream xsdStream(xsd);
-        six::MinidomParser xsdParser;
-        xsdParser.parse(xsdStream);
-
-        const auto& doc = getDocument(xsdParser);
-        const auto& root = getRootElement(doc);
-        if (!has_sidd300_attribute(root))
+        const std::vector<std::filesystem::path> schemaPaths_{ schemaPath };
+        const auto xsd_files = xml::lite::Validator::loadSchemas(schemaPaths_);
+        for (auto&& xsd : xsd_files)
         {
-            continue;
-        }
-
-        const auto predicate = [&](const auto& attribute) {
-            xml::lite::Uri uri;
-            attribute.getUri(uri);
-            if (uri != xmlns)
-                return false;
-
-            const xml::lite::Uri uriValue(attribute.getValue());
-            return (uriValue == xml_ism) && (attribute.getLocalName() == "ism");
-        };
-
-        auto&& attributes = root.getAttributes();
-        if (std::any_of(attributes.begin(), attributes.end(), predicate))
-        {
-            return xsd;
+            if (xsd_has_ism(xsd, xml_ism))
+            {
+                return xsd;
+            }
         }
     }
 
     return retval_t{};
 }
 
-
 std::unique_ptr<Data> DerivedXMLControl::validateXMLImpl(const xml::lite::Document& doc,
-    const std::vector<std::filesystem::path>& schemaPaths, logging::Logger& log) const
+    const std::vector<std::filesystem::path>& schemaPaths_, logging::Logger& log) const
 {
-    const auto path = get_SIDD300_schema_path(doc, schemaPaths);
+    const auto path = get_SIDD300_schema_path(doc, schemaPaths_);
+    std::vector<std::filesystem::path> schemaPaths = schemaPaths_;
+    if (!path.empty())
+    {
+        // We now know this is a good path, so put it at the beginning of the search path so that
+        // subsequent validation will use it first.
+        schemaPaths.insert(schemaPaths.begin(), path.parent_path());
+    }
 
     return validateXMLImpl_(doc, schemaPaths, log);
 }
