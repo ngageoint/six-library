@@ -127,7 +127,7 @@ namespace sys
         // * `struct`s have padding that should be ignored.
         // * each individual member of a `struct` should be byte-swaped
         // * byte-swaped `float` or `double` bits are nonsense
-        return !std::is_compound<T>::value;
+      return (std::is_integral<T>::value || std::is_enum<T>::value) || !std::is_compound<T>::value;
     }
     }
 
