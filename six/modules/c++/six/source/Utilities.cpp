@@ -595,129 +595,6 @@ inline std::unique_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl
 {
     return xmlControl.fromXML(doc, pSchemaPaths);
 }
-
-static std::vector<std::filesystem::path> loadSchemas(const std::vector<std::filesystem::path>* pSchemaPaths)
-{
-    std::vector<std::filesystem::path> retval;
-    if (pSchemaPaths != nullptr)
-    {
-        retval = xml::lite::Validator::loadSchemas(*pSchemaPaths);
-    }
-    return retval;
-}
-inline auto convert(const std::vector<std::filesystem::path>& schemaPaths)
-{
-    std::vector<std::string> retval;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
-        [](const std::filesystem::path& p) { return p.string(); });
-    return retval;
-}
-inline auto convert(const std::vector<std::string>& schemaPaths)
-{
-    std::vector<std::filesystem::path> retval;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
-        [](const std::string& s) { return s; });
-    return retval;
-}
-static std::vector<std::string> loadSchemas(const std::vector<std::string>& schemaPaths)
-{
-    const auto schemaPaths_ = convert(schemaPaths);
-    return convert(loadSchemas(&schemaPaths_));
-}
-
-static bool has_sidd300_attribute(const xml::lite::Element& rootElement)
-{
-    auto& attributes = rootElement.getAttributes();
-    for (size_t i = 0; i < attributes.size(); i++)
-    {
-        auto&& attrib = attributes[i];
-
-        static const xml::lite::Uri sidd300("urn:SIDD:3.0.0");
-        const xml::lite::Uri uriValue(attrib.getValue());
-        if ((uriValue == sidd300) && (attrib.getLocalName() == "xmlns"))
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-static std::string has_ism_attribute(const xml::lite::Element& rootElement)
-{
-    auto& attributes = rootElement.getAttributes();
-    for (size_t i = 0; i < attributes.size(); i++)
-    {
-        auto&& attrib = attributes[i];
-        static const xml::lite::Uri xmlns("http://www.w3.org/2000/xmlns/");
-        xml::lite::Uri uri;
-        attrib.getUri(uri);
-        if (uri != xmlns)
-            continue;
-
-        const xml::lite::Uri uriValue(attrib.getValue());
-        static const xml::lite::Uri ism_201609("urn:us:gov:ic:ism:201609");
-        static const xml::lite::Uri ism_13("urn:us:gov:ic:ism:13");
-        if ((uriValue == ism_201609) || (uriValue == ism_13))
-        {
-            return uriValue.value;
-        }
-    }
-    return "";
-}
-
-template<typename TSchemaPaths>
-static void check_SIDD300_ism(const xml::lite::Element& rootElement, const TSchemaPaths& schemaPaths)
-{
-    if (!has_sidd300_attribute(rootElement))
-    {
-        return;
-    }
-
-    const auto ism_value = has_ism_attribute(rootElement);
-    if (ism_value.empty())
-    {
-        return;
-    }
-
-    const auto xsd_files = loadSchemas(schemaPaths);
-    for (auto&& xsd : xsd_files)
-    {
-        io::FileInputStream xsdStream(xsd);
-        six::MinidomParser xsdParser;
-        xsdParser.parse(xsdStream);
-
-        const auto& doc = getDocument(xsdParser);
-        const auto& root = getRootElement(doc);
-        if (!has_sidd300_attribute(root))
-        {
-            continue;
-        }
-
-        auto& attributes = root.getAttributes();
-        for (size_t i = 0; i < attributes.size(); i++)
-        {
-            auto&& attrib = attributes[i];
-            xml::lite::Uri uri;
-            attrib.getUri(uri);
-
-            static const xml::lite::Uri xmlns("http://www.w3.org/2000/xmlns/");
-            if (uri != xmlns)
-                continue;
-
-            const xml::lite::Uri uriValue(attrib.getValue());
-            static const xml::lite::Uri ism_201609("urn:us:gov:ic:ism:201609");
-            static const xml::lite::Uri ism_13("urn:us:gov:ic:ism:13");
-            if ((uriValue == ism_201609) || (uriValue == ism_13))
-            {
-                if ((uriValue.value == ism_value) && (attrib.getLocalName() == "ism"))
-                {                            
-                    return;
-                }
-            }
-        }
-    }
-}
-
 template<typename TReturn, typename TSchemaPaths>
 TReturn six_parseData(const XMLControlRegistry& xmlReg,
                                    ::io::InputStream& xmlStream,
@@ -737,8 +614,7 @@ TReturn six_parseData(const XMLControlRegistry& xmlReg,
     const auto& doc = getDocument(xmlParser);
 
     //! Check the root localName for the XML type
-    auto& rootElement = getRootElement(doc);
-    const std::string xmlType = rootElement.getLocalName();
+    std::string xmlType = doc.getRootElement()->getLocalName();
     DataType xmlDataType;
     if (str::startsWith(xmlType, "SICD"))
         xmlDataType = DataType::COMPLEX;
@@ -751,10 +627,6 @@ TReturn six_parseData(const XMLControlRegistry& xmlReg,
     if (dataType == DataType::COMPLEX && dataType != xmlDataType)
     {
         throw except::Exception(Ctxt("Unexpected SIDD DES in SICD"));
-    }
-    if (xmlDataType == DataType::DERIVED)
-    {
-        check_SIDD300_ism(rootElement, schemaPaths);
     }
 
     //! Create the correct type of XMLControl
