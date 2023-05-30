@@ -26,6 +26,7 @@
 #include <std/memory>
 #include <std/string>
 #include <regex>
+#include <tuple> // std::ignore
 
 #include <sys/OS.h>
 #include <io/StringStream.h>
@@ -89,6 +90,14 @@ inline std::vector<std::string> convert(const std::vector<fs::path>& schemaPaths
                    [](const fs::path& p) { return p.string(); });
     return retval;
 }
+inline auto convert(const std::vector<std::string>& paths)
+{
+    std::vector<fs::path> retval;
+    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
+                   [](const auto& p) { return p; });
+    return retval;
+}
+
 ValidatorXerces::ValidatorXerces(
         const std::vector<fs::path>& schemaPaths,
         logging::Logger* log,
@@ -154,25 +163,32 @@ ValidatorXerces::ValidatorXerces(
 
     // load our schemas --
     // search each directory for schemas
-    sys::OS os;
-    std::vector<std::string> schemas = 
-        os.search(schemaPaths, "", ".xsd", recursive);
+    const auto schemas = loadSchemas(convert(schemaPaths), recursive);
 
     //  add the schema to the validator
-    for (size_t i = 0; i < schemas.size(); ++i)
+    //  add the schema to the validator
+    for (auto&& schema : schemas)
     {
-        if (!mValidator->loadGrammar(schemas[i].c_str(), 
+        if (!mValidator->loadGrammar(schema.c_str(),
                                      xercesc::Grammar::SchemaGrammarType,
                                      true))
         {
             std::ostringstream oss;
-            oss << "Error: Failure to load schema " << schemas[i];
+            oss << "Error: Failure to load schema " << schema;
             log->warn(Ctxt(oss.str()));
         }
     }
 
     //! no additional schemas will be loaded after this point!
     mSchemaPool->lockPool();
+}
+
+std::vector<coda_oss::filesystem::path> ValidatorXerces::loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive)
+{
+    // load our schemas --
+    // search each directory for schemas
+    sys::OS os;
+    return os.search(schemaPaths, "", ".xsd", recursive);
 }
 
 // From config.h.in: Define to the 16 bit type used to represent Xerces UTF-16 characters
