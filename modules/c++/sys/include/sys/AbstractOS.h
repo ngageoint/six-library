@@ -99,6 +99,11 @@ struct CODA_OSS_API AbstractOS
            const std::string& fragment = "",
            const std::string& extension = "",
            bool recursive = true) const;
+    std::vector<coda_oss::filesystem::path> search(
+            const std::vector<coda_oss::filesystem::path>& searchPaths,
+            const std::string& fragment = "",
+            const std::string& extension = "",
+            bool recursive = true) const;
 
     /*!
      *  Does this path exist?
