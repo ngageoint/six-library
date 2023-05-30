@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="urn:us:gov:ic:cvenum:ntk:accesspolicy"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified"
+            xml:lang="en"
+            targetNamespace="urn:us:gov:ic:cvenum:ntk:accesspolicy">
+   <xsd:annotation>
+      <xsd:documentation>
+                    The W3C XML Schema fragment encoding types for CVEnumNTKAccessPolicy Version 2.1 controlled vocabulary enumerations. This file is generated, so edits should be made to the CVEnumNTKAccessPolicy.xml CVE it is based on, instead of here.
+                </xsd:documentation>
+   </xsd:annotation>
+   <!--*************************************************************-->
+<!--Generated TYPE DEFINITIONS ..................................-->
+<!--*************************************************************-->
+<xsd:simpleType name="CVEnumNTKAccessPolicy">
+      <xsd:annotation>
+         <xsd:documentation>(U) NTK access policy
+			names. All NTK enterprise access policy URNs start with ‘urn:us:gov:ic:aces:ntk:’. Values in this CVE
+			correspond to the terminating portion of NTK access policy URNs.
+                         PERMISSIBLE VALUES
+                         
+                         The permissible values for this simple type are defined in the Controlled Value Enumeration:
+                         
+                         CVEnumNTKAccessPolicy.xml
+                         
+                     </xsd:documentation>
+      </xsd:annotation>
+      <xsd:union>
+         <xsd:simpleType>
+            <xsd:restriction base="xsd:token">
+               <xsd:pattern value="urn:us:gov:ic:aces:ntk:propin:([A-Za-z][A-Za-z0-9\-_.;,():+]{1,64})">
+                  <xsd:annotation>
+                     <xsd:documentation>Regex for extension of PROPIN with non-IC CIO
+				access policy URN.</xsd:documentation>
+                  </xsd:annotation>
+               </xsd:pattern>
+            </xsd:restriction>
+         </xsd:simpleType>
+         <xsd:simpleType>
+            <xsd:restriction base="xsd:token">
+               <xsd:enumeration value="urn:us:gov:ic:aces:ntk:xd">
+                  <xsd:annotation>
+                     <xsd:documentation>Exclusive Distibution</xsd:documentation>
+                  </xsd:annotation>
+               </xsd:enumeration>
+               <xsd:enumeration value="urn:us:gov:ic:aces:ntk:ico">
+                  <xsd:annotation>
+                     <xsd:documentation>Intelligence Community Only</xsd:documentation>
+                  </xsd:annotation>
+               </xsd:enumeration>
+               <xsd:enumeration value="urn:us:gov:ic:aces:ntk:license">
+                  <xsd:annotation>
+                     <xsd:documentation>License</xsd:documentation>
+                  </xsd:annotation>
+               </xsd:enumeration>
+               <xsd:enumeration value="urn:us:gov:ic:aces:ntk:mn">
+                  <xsd:annotation>
+                     <xsd:documentation>Mission Need Profile</xsd:documentation>
+                  </xsd:annotation>
+               </xsd:enumeration>
+               <xsd:enumeration value="urn:us:gov:ic:aces:ntk:nd">
+                  <xsd:annotation>
+                     <xsd:documentation>No Distribution</xsd:documentation>
+                  </xsd:annotation>
+               </xsd:enumeration>
+               <xsd:enumeration value="urn:us:gov:ic:aces:ntk:oc">
+                  <xsd:annotation>
+                     <xsd:documentation>Originator Controlled</xsd:documentation>
+                  </xsd:annotation>
+               </xsd:enumeration>
+               <xsd:enumeration value="urn:us:gov:ic:aces:ntk:permissive">
+                  <xsd:annotation>
+                     <xsd:documentation>Permissive group/individual access</xsd:documentation>
+                  </xsd:annotation>
+               </xsd:enumeration>
+               <xsd:enumeration value="urn:us:gov:ic:aces:ntk:propin:1">
+                  <xsd:annotation>
+                     <xsd:documentation>PROPIN for US Government Employees</xsd:documentation>
+                  </xsd:annotation>
+               </xsd:enumeration>
+               <xsd:enumeration value="urn:us:gov:ic:aces:ntk:propin:2">
+                  <xsd:annotation>
+                     <xsd:documentation>Explicit PROPIN</xsd:documentation>
+                  </xsd:annotation>
+               </xsd:enumeration>
+               <xsd:enumeration value="urn:us:gov:ic:aces:ntk:restrictive">
+                  <xsd:annotation>
+                     <xsd:documentation>Restrictive group access</xsd:documentation>
+                  </xsd:annotation>
+               </xsd:enumeration>
+            </xsd:restriction>
+         </xsd:simpleType>
+      </xsd:union>
+   </xsd:simpleType>
+</xsd:schema>

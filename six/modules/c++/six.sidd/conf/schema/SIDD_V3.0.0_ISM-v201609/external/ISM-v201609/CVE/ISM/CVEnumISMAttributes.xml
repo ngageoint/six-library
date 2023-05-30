@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Notices - Distribution Notice: 
+           This document has been approved for Public Release and is available for use without restriction.
+       --><cve:CVE xmlns:cve="urn:us:gov:ic:cve" xmlns:ism="urn:us:gov:ic:ism" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ism:compliesWith="USGov USIC" ism:ownerProducer="USA" ism:classification="U" ism:DESVersion="201609.201707" ism:ISMCATCESVersion="201609" ism:resourceElement="true" CVEVersion="2.1" specVersion="201609.201707" ism:createDate="2011-09-01" xsi:schemaLocation="urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd">
+
+	  <cve:IRM>
+		    <URN xmlns="urn:us:gov:ic:cve">urn:us:gov:ic:cvenum:ism:attributes</URN>
+		    <Title xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">CVEnumISMAttributes</Title>
+	  	<Description xmlns="urn:us:gov:ic:cve" ism:ownerProducer="USA" ism:classification="U">All currently authorized ISM attribute names. 
+	  		This file is not imported by the schema. </Description>
+
+		    <cve:Created>2010-05-30T16:52:00-04:00</cve:Created>
+
+		    <Source ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">ISM schema</Source>
+		    <PointOfContact ism:classification="U" ism:ownerProducer="USA" xmlns="urn:us:gov:ic:cve">
+         <Name>Office IC CIO</Name>
+         <Email>ic-standards-support@iarpa.gov</Email>
+      </PointOfContact>
+	  </cve:IRM>
+
+	  <cve:Enumeration multivalue="true" ism:ownerProducer="USA" ism:classification="U">
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">compliesWith</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">compliesWith attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">classification</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">classification attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">ownerProducer</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">ownerProducer attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">SCIcontrols</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">SCIcontrols attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">SARIdentifier</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">SARIdentifier attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">atomicEnergyMarkings</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">atomicEnergyMarkings attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">disseminationControls</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">disseminationControls attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">FGIsourceOpen</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">FGIsourceOpen attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">FGIsourceProtected</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">FGIsourceProtected attribute</Description>
+		    </Term>
+	  		<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+	  			  <Value ism:classification="U" ism:ownerProducer="USA">hasApproximateMarkings</Value>
+	  			  <Description ism:classification="U" ism:ownerProducer="USA">hasApproximateMarkings attribute</Description>
+	  		</Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">releasableTo</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">releasableTo attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">displayOnlyTo</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">displayOnlyTo attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">nonICmarkings</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">nonICmarkings attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">classifiedBy</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">classifiedBy attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">derivativelyClassifiedBy</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">derivativelyClassifiedBy attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">classificationReason</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">classificationReason attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">nonUSControls</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">nonUSControls attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">derivedFrom</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">derivedFrom attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">declassDate</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">declassDate attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">declassEvent</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">declassEvent attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">declassException</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">declassException attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">resourceElement</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">resourceElement attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">excludeFromRollup</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">excludeFromRollup attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">createDate</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">createDate attribute</Description>
+		    </Term>
+		  	<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+		  		<Value ism:classification="U" ism:ownerProducer="USA">compilationReason</Value>
+		  		<Description ism:classification="U" ism:ownerProducer="USA">compilationReason attribute</Description>
+		  	</Term>
+		  	<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+		  		<Value ism:classification="U" ism:ownerProducer="USA">noAggregation</Value>
+		  		<Description ism:classification="U" ism:ownerProducer="USA">noAggregation attribute</Description>
+		  	</Term>
+		  	<Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">noticeType</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">noticeType attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">externalNotice</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">externalNotice attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">DESVersion</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">DESVersion attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">ISMCATCESVersion</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">ISMCATCESVersion attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">noticeDate</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">notice date attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">noticeReason</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">notice Reason attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">exemptFrom</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">exemptFrom attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">unregisteredNoticeType</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">unregisteredNoticeType attribute</Description>
+		    </Term>
+		    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+			      <Value ism:classification="U" ism:ownerProducer="USA">pocType</Value>
+			      <Description ism:classification="U" ism:ownerProducer="USA">Specifies a point-of contact for a security-related
+				requirement.</Description>
+		    </Term>
+	  	    <Term xmlns="urn:us:gov:ic:cve" ism:classification="U" ism:ownerProducer="USA">
+	  		<Value ism:classification="U" ism:ownerProducer="USA">joint</Value>
+	  		<Description ism:classification="U" ism:ownerProducer="USA">Indicator that multiple ownerProducers should be interpreted
+	  			as JOINT.</Description>
+	  	    </Term>
+	  </cve:Enumeration>
+
+</cve:CVE>

@@ -1,0 +1,1713 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This is a generated file. DO NOT EDIT!--><cve:CVE xmlns="urn:us:gov:ic:cve" xmlns:cve="urn:us:gov:ic:cve"
+         xmlns:ism="urn:us:gov:ic:ism"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         ism:compliesWith="USGov USIC"
+         ism:ownerProducer="USA"
+         ism:classification="U"
+         ism:DESVersion="201609.201707"
+         ism:ISMCATCESVersion="201707"
+         ism:resourceElement="true"
+         CVEVersion="2.1"
+         specVersion="201709"
+         ism:createDate="2019-12-23"
+         xsi:schemaLocation="urn:us:gov:ic:cve ../CveSchema/CVEXml.xsd">
+	  <cve:IRM>
+	  		<URN>urn:us:gov:ic:cvenum:ismcat:responsibleentity</URN>
+		    <Title ism:ownerProducer="USA" ism:classification="U">CVEnumISMCATResponsibleEntity</Title>
+		    <Description ism:ownerProducer="USA" ism:classification="U">
+		    	GENC trigraphs in alphabetical order by trigraph, plus the NATO tetragraph.
+		    </Description>
+		
+		    <Created>2019-12-23T16:24:53.406Z</Created>
+
+	  		<cve:Source ism:classification="U" ism:ownerProducer="USA">IC Markings System Register and Manual Register Appendix A</cve:Source>	
+		  	<cve:Source ism:classification="U" ism:ownerProducer="USA">GENC http://geo.aitcnet.org/NSGREG/genc</cve:Source>
+		  	<cve:PointOfContact ism:classification="U" ism:ownerProducer="USA">
+         <cve:Name>Office IC CIO</cve:Name>
+         <cve:Email>ic-standards-support@iarpa.gov</cve:Email>
+      </cve:PointOfContact>
+	  </cve:IRM>
+	
+	  <cve:Enumeration multivalue="true" ism:ownerProducer="USA" ism:classification="U"><!--All currently valid GENC trigraphs except AX1 in alphabetical order by trigraph--><cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ABW</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Aruba</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">AFG</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Islamic Republic of Afghanistan</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">AGO</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Angola</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">AIA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Anguilla</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ALB</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Albania</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">AND</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Principality of Andorra</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ARE</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">United Arab Emirates</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ARG</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Argentine Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ARM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Armenia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ASM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Territory of American Samoa</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ATA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Antarctica</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ATF</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">French Southern and Antarctic Lands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ATG</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Antigua and Barbuda</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">AUS</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Commonwealth of Australia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">AUT</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Austria</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">AX2</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Guantanamo Bay Naval Base</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">AX3</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Entity 6</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">AZE</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Azerbaijan</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BDI</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Burundi</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BEL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Belgium</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BEN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Benin</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BES</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Bonaire, Sint Eustatius, and Saba</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BFA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Burkina Faso</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BGD</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">People’s Republic of Bangladesh</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BGR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Bulgaria</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BHR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Bahrain</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BHS</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Commonwealth of The Bahamas</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BIH</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Bosnia and Herzegovina</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BLM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Saint Barthelemy</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BLR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Belarus</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BLZ</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Belize</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BMU</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Bermuda</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BOL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Plurinational State of Bolivia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BRA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Federative Republic of Brazil</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BRB</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Barbados</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BRN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Brunei Darussalam</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BTN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Bhutan</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BVT</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Bouvet Island</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">BWA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Botswana</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CAF</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Central African Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CAN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Canada</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CCK</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Territory of Cocos (Keeling) Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CHE</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Swiss Confederation</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CHL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Chile</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CHN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">People’s Republic of China</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CIV</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Côte d’Ivoire</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CMR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Cameroon</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">COD</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Democratic Republic of the Congo</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">COG</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of the Congo</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">COK</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Cook Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">COL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Colombia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">COM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Union of the Comoros</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CPT</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Clipperton Island</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CPV</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Cabo Verde</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CRI</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Costa Rica</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CUB</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Cuba</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CUW</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Curaçao</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CXR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Territory of Christmas Island</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CYM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Cayman Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CYP</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Cyprus</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">CZE</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Czech Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">DEU</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Federal Republic of Germany</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">DGA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Diego Garcia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">DJI</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Djibouti</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">DMA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Commonwealth of Dominica</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">DNK</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Denmark</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">DOM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Dominican Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">DZA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">People’s Democratic Republic of Algeria</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ECU</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Ecuador</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">EGY</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Arab Republic of Egypt</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ERI</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">State of Eritrea</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ESH</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Western Sahara</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ESP</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Spain</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">EST</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Estonia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ETH</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Federal Democratic Republic of Ethiopia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">FIN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Finland</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">FJI</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Fiji</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">FLK</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Falkland Islands (Islas Malvinas)</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">FRA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">French Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">FRO</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Faroe Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">FSM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Federated States of Micronesia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GAB</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Gabonese Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GBR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">United Kingdom of Great Britain and Northern Ireland</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GEO</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Georgia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GGY</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Bailiwick of Guernsey</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GHA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Ghana</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GIB</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Gibraltar</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GIN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Guinea</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GLP</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Region of Guadeloupe</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GMB</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of The Gambia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GNB</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Guinea-Bissau</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GNQ</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Equatorial Guinea</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GRC</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Hellenic Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GRD</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Grenada</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GRL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Greenland</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GTM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Guatemala</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GUF</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Territorial Collectivity of Guiana</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GUM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Territory of Guam</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">GUY</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Co-operative Republic of Guyana</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">HKG</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Hong Kong Special Administrative Region</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">HMD</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Territory of Heard Island and McDonald Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">HND</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Honduras</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">HRV</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Croatia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">HTI</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Haiti</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">HUN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Hungary</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">IDN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Indonesia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">IMN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Isle of Man</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">IND</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of India</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">IOT</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">British Indian Ocean Territory</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">IRL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Ireland</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">IRN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Islamic Republic of Iran</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">IRQ</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Iraq</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ISL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Iceland</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ISR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">State of Israel</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ITA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Italian Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">JAM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Jamaica</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">JEY</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Bailiwick of Jersey</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">JOR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Hashemite Kingdom of Jordan</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">JPN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Japan</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">KAZ</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Kazakhstan</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">KEN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Kenya</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">KGZ</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kyrgyz Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">KHM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Cambodia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">KIR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Kiribati</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">KNA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Federation of Saint Kitts and Nevis</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">KOR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Korea</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">KWT</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">State of Kuwait</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">LAO</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Lao People’s Democratic Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">LBN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Lebanese Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">LBR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Liberia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">LBY</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Libya</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">LCA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Saint Lucia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">LIE</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Principality of Liechtenstein</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">LKA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Democratic Socialist Republic of Sri Lanka</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">LSO</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Lesotho</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">LTU</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Lithuania</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">LUX</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Grand Duchy of Luxembourg</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">LVA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Latvia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MAC</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Macau Special Administrative Region</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MAF</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Saint Martin</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MAR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Morocco</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MCO</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Principality of Monaco</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MDA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Moldova</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MDG</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Madagascar</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MDV</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Maldives</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MEX</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">United Mexican States</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MHL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of the Marshall Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MKD</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Macedonia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MLI</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Mali</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MLT</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Malta</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MMR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Union of Burma</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MNE</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Montenegro</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MNG</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Mongolia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MNP</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Commonwealth of the Northern Mariana Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MOZ</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Mozambique</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MRT</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Islamic Republic of Mauritania</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MSR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Montserrat</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MTQ</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Territorial Collectivity of Martinique</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MUS</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Mauritius</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MWI</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Malawi</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MYS</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Malaysia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">MYT</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Department of Mayotte</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">NAM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Namibia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">NCL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">New Caledonia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">NER</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Niger</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">NFK</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Territory of Norfolk Island</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">NGA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Federal Republic of Nigeria</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">NIC</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Nicaragua</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">NIU</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Niue</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">NLD</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of the Netherlands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">NOR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Norway</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">NPL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Federal Democratic Republic of Nepal</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">NRU</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Nauru</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">NZL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">New Zealand</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">OMN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Sultanate of Oman</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">PAK</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Islamic Republic of Pakistan</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">PAN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Panama</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">PCN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Pitcairn, Henderson, Ducie, and Oeno Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">PER</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Peru</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">PHL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of the Philippines</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">PLW</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Palau</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">PNG</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Independent State of Papua New Guinea</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">POL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Poland</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">PRI</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Commonwealth of Puerto Rico</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">PRK</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Democratic People’s Republic of Korea</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">PRT</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Portuguese Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">PRY</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Paraguay</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">PYF</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">French Polynesia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">QAT</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">State of Qatar</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">REU</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Region of Reunion</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ROU</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Romania</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">RUS</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Russian Federation</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">RWA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Rwanda</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SAU</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Saudi Arabia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SDN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of the Sudan</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SEN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Senegal</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SGP</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Singapore</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SGS</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">South Georgia and the South Sandwich Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SHN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Saint Helena, Ascension, and Tristan da Cunha</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SLB</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Solomon Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SLE</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Sierra Leone</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SLV</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of El Salvador</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SMR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of San Marino</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SOM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Federal Republic of Somalia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SPM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Territorial Collectivity of Saint Pierre and Miquelon</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SRB</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Serbia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SSD</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of South Sudan</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">STP</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Democratic Republic of Sao Tome and Principe</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SUR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Suriname</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SVK</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Slovak Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SVN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Slovenia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SWE</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Sweden</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SWZ</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Swaziland</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SXM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Sint Maarten</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SYC</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Seychelles</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">SYR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Syrian Arab Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TCA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Turks and Caicos Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TCD</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Chad</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TGO</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Togolese Republic</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">THA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Thailand</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TJK</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Tajikistan</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TKL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Tokelau</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TKM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Turkmenistan</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TLS</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Democratic Republic of Timor-Leste</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TON</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingdom of Tonga</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TTO</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Trinidad and Tobago</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TUN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Tunisia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TUR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Turkey</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TUV</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Tuvalu</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TWN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Taiwan</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">TZA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">United Republic of Tanzania</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">UGA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Uganda</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">UKR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Ukraine</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">URY</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Oriental Republic of Uruguay</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">USA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">United States of America</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">UZB</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Uzbekistan</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">VAT</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">State of the Vatican City</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">VCT</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Saint Vincent and the Grenadines</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">VEN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Bolivarian Republic of Venezuela</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">VGB</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Virgin Islands, British</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">VIR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">United States Virgin Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">VNM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Socialist Republic of Vietnam</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">VUT</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Vanuatu</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">WLF</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Wallis and Futuna</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">WSM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Independent State of Samoa</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XAC</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Territory of Ashmore and Cartier Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XAZ</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Entity 1</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XBI</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Bassas da India</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XBK</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Baker Island</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XCR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Entity 2</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XCS</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Coral Sea Islands Territory</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XCY</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Entity 3</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XEU</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Europa Island</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XGL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Glorioso Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XGZ</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Gaza Strip</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XHO</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Howland Island</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XJA</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Johnston Atoll</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XJM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Jan Mayen</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XJN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Juan de Nova Island</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XJV</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Jarvis Island</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XKM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Entity 4</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XKN</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Entity 5</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XKR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Kingman Reef</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XKS</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Kosovo</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XMW</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Midway Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XNV</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Navassa Island</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XPL</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Palmyra Atoll</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XPR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Paracel Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XQZ</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Akrotiri</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XSP</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Spratly Islands</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XSV</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Svalbard</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XTR</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Tromelin Island</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XWB</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">West Bank</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XWK</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Wake Island</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">XXD</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Dhekelia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">YEM</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Yemen</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ZAF</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of South Africa</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ZMB</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Zambia</Description>
+      </cve:Term>
+      <cve:Term xmlns:ddms="urn:us:mil:ces:metadata:ddms:5" ism:classification="U"
+                ism:ownerProducer="USA"
+                cve:codespace="ge:GENC:3:3-7">
+         <cve:Value ism:classification="U" ism:ownerProducer="USA">ZWE</cve:Value>
+         <Description ism:classification="U" ism:ownerProducer="USA">Republic of Zimbabwe</Description>
+      </cve:Term>
+	  		
+	  	  <!-- NATO -->
+	  	  <Term ism:classification="U" ism:ownerProducer="USA">
+	  		    <Value ism:classification="U" ism:ownerProducer="USA">NATO</Value>
+	  		    <Description ism:classification="U" ism:ownerProducer="USA">North Atlantic Treaty Organization</Description>
+	  	  </Term>
+	  </cve:Enumeration>
+</cve:CVE>

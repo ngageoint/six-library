@@ -1,0 +1,1 @@
+CVEnumISMCompliesWith.att = attribute CVEnumISMCompliesWith { list { "USGov"?, "USIC"?, "USDOD"?, "OtherAuthority"? }  } 

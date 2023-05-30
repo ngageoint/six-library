@@ -1,0 +1,1 @@
+CVEnumISMDissem.att = attribute CVEnumISMDissem { list { "RS"?, "FOUO"?, "OC"?, "OC-USGOV"?, "IMC"?, "NF"?, "PR"?, "REL"?, "RELIDO"?, "EYES"?, "DSEN"?, "FISA"?, "DISPLAYONLY"? }  } 
