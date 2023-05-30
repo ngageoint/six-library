@@ -164,6 +164,23 @@ static auto xsd_has_ism(const std::filesystem::path& xsd, const xml::lite::Uri& 
     return false;
 }
 
+auto find_SIDD_xsd_files(const std::vector<std::filesystem::path>& xsdFiles)
+{
+    // Parsing each XSD can be time-consuming; use a few heuristics to try to minmize.
+    std::vector<std::filesystem::path> retval;
+    for (auto&& xsd : xsdFiles)
+    {
+        static const std::string SIDD_schema_prefix = "SIDD_schema_V"; // e.g., "SIDD_schema_V3.0.0"
+        if (str::starts_with(xsd.stem().string(), SIDD_schema_prefix))
+        {
+            // We could remove this entry from `xsdFiles` too, but 1) it's an added complication, and
+            // 2) make this routine less thread-friendly. <shrug>
+            retval.push_back(xsd);
+        }
+    }
+    return retval;
+}
+
 // Try to find a XSD which can validate this XML; this is needed for SIDD 3.0
 // because we have to support two versions of ISM.
 static auto find_xsd_path(const xml::lite::Element& rootElement, const std::vector<std::filesystem::path>& schemaPaths)
@@ -179,6 +196,19 @@ static auto find_xsd_path(const xml::lite::Element& rootElement, const std::vect
     {
         const std::vector<std::filesystem::path> schemaPaths_{ schemaPath }; // use one path at a time
         const auto xsd_files = xml::lite::Validator::loadSchemas(schemaPaths_);
+        
+        // Try anything that looks like a SIDD schema first; this is to avoid
+        // loading XSDs that "obviously" won't work.
+        const auto sidd_xsd_files = find_SIDD_xsd_files(xsd_files);
+        for (auto&& xsd : sidd_xsd_files)
+        {
+            if (xsd_has_ism(xsd, xml_ism))
+            {
+                return xsd;
+            }
+        }
+
+        // Yeah, this will do some of the above over again ... does it matter?
         for (auto&& xsd : xsd_files)
         {
             if (xsd_has_ism(xsd, xml_ism))
