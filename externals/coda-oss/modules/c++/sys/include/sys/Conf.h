@@ -75,6 +75,7 @@
 
 #include "str/Format.h"
 #include "sys/TimeStamp.h"
+#include "sys/ByteSwap.h"
 
 
 /*  Dance around the compiler to figure out  */
@@ -197,113 +198,7 @@ namespace sys
      * RISC architectures we are big-endian.
      */
     bool CODA_OSS_API isBigEndianSystem();
-
-
-   /*!
-     *  Swap bytes in-place.  Note that a complex pixel
-     *  is equivalent to two floats so elemSize and numElems
-     *  must be adjusted accordingly.
-     *
-     *  \param [inout] buffer to transform
-     *  \param elemSize
-     *  \param numElems
-     */
-    inline void byteSwap(void* buffer,
-                         unsigned short elemSize,
-                         size_t numElems)
-    {
-        sys::byte* bufferPtr = static_cast<sys::byte*>(buffer);
-        if (!bufferPtr || elemSize < 2 || !numElems)
-            return;
-
-        const auto half = elemSize >> 1;
-        size_t offset = 0, innerOff = 0, innerSwap = 0;
-
-        for(size_t i = 0; i < numElems; ++i, offset += elemSize)
-        {
-            for(unsigned short j = 0; j < half; ++j)
-            {
-                innerOff = offset + j;
-                innerSwap = offset + elemSize - 1 - j;
-
-                std::swap(bufferPtr[innerOff], bufferPtr[innerSwap]);
-            }
-        }
-    }
-
-    /*!
-     *  Swap bytes into output buffer.  Note that a complex pixel
-     *  is equivalent to two floats so elemSize and numElems
-     *  must be adjusted accordingly.
-     *
-     *  \param buffer to transform
-     *  \param elemSize
-     *  \param numElems
-     *  \param[out] outputBuffer buffer to write swapped elements to
-     */
-    inline void  byteSwap(const void* buffer,
-                          unsigned short elemSize,
-                          size_t numElems,
-                          void* outputBuffer)
-    {
-        const sys::byte* bufferPtr = static_cast<const sys::byte*>(buffer);
-        sys::byte* outputBufferPtr = static_cast<sys::byte*>(outputBuffer);
-
-        if (!numElems || !bufferPtr || !outputBufferPtr)
-        {
-            return;
-        }
-
-        const auto half = elemSize >> 1;
-        size_t offset = 0;
-
-        for (size_t ii = 0; ii < numElems; ++ii, offset += elemSize)
-        {
-            for (unsigned short jj = 0; jj < half; ++jj)
-            {
-                const size_t innerOff = offset + jj;
-                const size_t innerSwap = offset + elemSize - 1 - jj;
-
-                outputBufferPtr[innerOff] = bufferPtr[innerSwap];
-                outputBufferPtr[innerSwap] = bufferPtr[innerOff];
-            }
-        }
-    }
-
-    /*!
-     *  Function to swap one element irrespective of size.  The inplace
-     *  buffer function should be preferred.
-     *
-     *  To specialize complex float, first include the complex library
-     *  \code
-        #include <complex>
-     *  \endcode
-     *
-     *  Then put an overload in as specified below:
-     *  \code
-        template <typename T> std::complex<T> byteSwap(std::complex<T> val)
-        {
-            std::complex<T> out(byteSwap<T>(val.real()),
-                                byteSwap<T>(val.imag()));
-            return out;
-        }
-     *  \endcode
-     *
-     */
-    template <typename T> T byteSwap(T val)
-    {
-        size_t size = sizeof(T);
-        T out;
-
-        unsigned char* cOut = reinterpret_cast<unsigned char*>(&out);
-        unsigned char* cIn = reinterpret_cast<unsigned char*>(&val);
-        for (size_t i = 0, j = size - 1; i < j; ++i, --j)
-        {
-            cOut[i] = cIn[j];
-            cOut[j] = cIn[i];
-        }
-        return out;
-    }
+    bool CODA_OSS_API isLittleEndianSystem();
 
 
     /*!
@@ -360,7 +255,6 @@ namespace sys
         free(p);
 #endif
     }
-
 
 }
 
