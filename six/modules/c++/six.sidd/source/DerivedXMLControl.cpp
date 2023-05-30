@@ -58,6 +58,18 @@ std::string normalizeVersion(const std::string& strVersion)
     #pragma warning(pop)
     #endif
 }
+
+bool getEnv(const std::string& envName, std::string& result)
+{
+    static const sys::OS os;
+    if (!os.isEnvSet(envName))
+    {
+        return false;
+    }
+
+    result = os.getEnv(envName);
+    return true;
+}
 }
 
 namespace six
@@ -121,7 +133,7 @@ static auto has_ism_attribute(const xml::lite::Element& rootElement)
 }
 
 // Is this the XSD for the ISM of interest?
-static auto xsd_has_ism(std::filesystem::path xsd, const xml::lite::Uri& xml_ism)
+static auto xsd_has_ism(const std::filesystem::path& xsd, const xml::lite::Uri& xml_ism)
 {
     io::FileInputStream xsdStream(xsd);
     six::MinidomParser xsdParser;
@@ -152,29 +164,20 @@ static auto xsd_has_ism(std::filesystem::path xsd, const xml::lite::Uri& xml_ism
     return false;
 }
 
-// For SIDD 3.0, try to match-up the ISM with the schema.  This is necessary
-// because we have to support two versions of ISM in SIDD 3.0.
-static auto get_SIDD300_schema_path(const xml::lite::Document& doc, const std::vector<std::filesystem::path>& schemaPaths)
+// Try to find a XSD which can validate this XML; this is needed for SIDD 3.0
+// because we have to support two versions of ISM.
+static auto find_xsd_path(const xml::lite::Element& rootElement, const std::vector<std::filesystem::path>& schemaPaths)
 {
-    using retval_t = std::filesystem::path;
-
-    // Before SIDD 3.0, there was only one ISM.
-    auto&& rootElement = getRootElement(doc);
-    if (!has_sidd300_attribute(rootElement))
-    {
-        return retval_t{};
-    }
-
     const auto xml_ism = has_ism_attribute(rootElement);
     if (xml_ism.empty())
     {
-        return retval_t{};
+        return std::filesystem::path{};
     }
 
     // Process the schemaPaths one at a time to avoid traversing so many directories at once.
     for (auto&& schemaPath : schemaPaths)
     {
-        const std::vector<std::filesystem::path> schemaPaths_{ schemaPath };
+        const std::vector<std::filesystem::path> schemaPaths_{ schemaPath }; // use one path at a time
         const auto xsd_files = xml::lite::Validator::loadSchemas(schemaPaths_);
         for (auto&& xsd : xsd_files)
         {
@@ -185,22 +188,39 @@ static auto get_SIDD300_schema_path(const xml::lite::Document& doc, const std::v
         }
     }
 
-    return retval_t{};
+    return std::filesystem::path{};
 }
 
 std::unique_ptr<Data> DerivedXMLControl::validateXMLImpl(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>& schemaPaths_, logging::Logger& log) const
 {
-    const auto path = get_SIDD300_schema_path(doc, schemaPaths_);
     std::vector<std::filesystem::path> schemaPaths = schemaPaths_;
+    auto&& rootElement = getRootElement(doc);
+
+    // If this enviroment variable is set, assume the caller as worked everything out.
+    static const std::string envName = "SIX_SIDD300_SCHEMA_DIR"; // a single directory, not a search path
+    
+    std::string result;
+    if (getEnv(envName, result)) // Don't cache this result; it could change while running.
+    {
+        // ... but only for SIDD 3.0 XML
+        if (has_sidd300_attribute(rootElement))
+        {
+            schemaPaths.clear();
+            schemaPaths.emplace_back(result);
+            return validateXMLImpl_(doc, schemaPaths, log);
+        }
+    }
+
+    // Otherwise (not very special SIDD 3.0 case, above), try to find the XSD which will vallidate this XML.
+    const auto path = find_xsd_path(rootElement, schemaPaths_);
     if (!path.empty())
     {
-        // We now know this is a good path, so put it at the beginning of the search path so that
+        // We now know this is a good path, put it at the beginning of the search path so that
         // subsequent validation will use it first.
         schemaPaths.insert(schemaPaths.begin(), path.parent_path());
     }
-
-    return validateXMLImpl_(doc, schemaPaths, log);
+    return validateXMLImpl_(doc, schemaPaths, log);    
 }
 
 xml::lite::Document* DerivedXMLControl::toXMLImpl(const Data* data)
@@ -273,12 +293,11 @@ std::unique_ptr<DerivedXMLParser> DerivedXMLControl::getParser_(const std::strin
 static std::optional<six::sidd300::ISMVersion> getISMVersionFromEnv()
 {
     static const std::string envName = "SIX_SIDD300_ISM_VERSION"; // set to `201609` or `13`
-    static const sys::OS os;
 
     // Don't cache this result; it could change while running.
-    if (os.isEnvSet(envName))
+    std::string result;
+    if (getEnv(envName, result))
     {
-        const auto result = os.getEnv(envName);
         if (result == "13")
         {
             return six::sidd300::ISMVersion::v13;

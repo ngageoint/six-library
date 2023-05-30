@@ -193,51 +193,42 @@ static void log_any_errors_and_throw(const std::vector<xml::lite::ValidationInfo
 
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
-static void validate_(const std::u8string& strPrettyXml, const xml::lite::Uri& uri,
-    const std::vector<std::string>& paths, logging::Logger& log)
+template<typename TPath>
+static void validate_(const xml::lite::Element& rootElement,
+    const std::vector<TPath>& schemaPaths, logging::Logger& log)
 {
-    const xml::lite::ValidatorXerces validator(paths, &log, true); // this can be expensive to create as all sub-directories might be traversed
+    xml::lite::Uri uri;
+    rootElement.getUri(uri);
 
-    // validate against any specified schemas
-    std::vector<xml::lite::ValidationInfo> errors;
-    validator.validate(strPrettyXml, uri.value, errors);
+    // Pretty-print so that lines numbers are useful
+    io::U8StringStream xmlStream;
+    rootElement.prettyPrint(xmlStream);
+    const auto strPrettyXml = xmlStream.stream().str();
 
-    // log any error found and throw
-    log_any_errors_and_throw(errors, paths, log);
-}
-static void validate_(const std::u8string& strPrettyXml, const xml::lite::Uri& uri,
-    const std::vector<std::filesystem::path>& paths, logging::Logger& log)
-{
     // Process schema paths one at a time.  This will reduce the "noise" from XML validation failures
     // and could also make instantiating an xml::lite::ValidatorXerces faster.
-    //
-    // Note this is ONLY for "new" code (that using std::filesystem::path) to reduce the risk
-    // of breaking any existing code.
-    std::vector<xml::lite::ValidationInfo> errors;
-    for (auto&& path : paths)
+    std::vector<xml::lite::ValidationInfo> all_errors;
+    for (auto&& schemaPath : schemaPaths)
     {
-        const std::vector<std::filesystem::path> schemaPaths{ path }; // use one path at a time
-        const xml::lite::ValidatorXerces validator(schemaPaths, &log, true); // this can be expensive to create as all sub-directories might be traversed
+        const std::vector<std::filesystem::path> schemaPaths_{ schemaPath }; // use one path at a time
+        const xml::lite::ValidatorXerces validator(schemaPaths_, &log, true); // this can be expensive to create as all sub-directories might be traversed
 
         // validate against any specified schemas
-        std::vector<xml::lite::ValidationInfo> my_errors;
-        validator.validate(strPrettyXml, uri.value, my_errors);
+        std::vector<xml::lite::ValidationInfo> errors;
+        validator.validate(strPrettyXml, uri.value, errors);
 
         // Looks like we validated; be sure there aren't any errors
-        if (my_errors.empty())
+        if (errors.empty())
         {
             return; // success!
         }
 
         // This schema path failed; save away my errors in case none of them work
-        for (auto&& error : my_errors)
-        {
-            errors.push_back(std::move(error));
-        }
+        all_errors.insert(all_errors.end(), errors.begin(), errors.end());
     }
 
     // log any error found and throw
-    log_any_errors_and_throw(errors, paths, log);
+    log_any_errors_and_throw(all_errors, schemaPaths, log);
 }
 template<typename TPath>
 static void validate_(const xml::lite::Document& doc,
@@ -246,26 +237,14 @@ static void validate_(const xml::lite::Document& doc,
     // If the paths we have don't exist, throw
     paths = check_whether_paths_exist(paths);
 
-    // validate against any specified schemas
-    if (paths.empty())
-    {
-        return; // no schemas, no validation
-    }
-
-    const auto& rootElement = doc.getRootElement();
+    auto rootElement = doc.getRootElement();
     if (rootElement->getUri().empty())
     {
         throw six::DESValidationException(Ctxt("INVALID XML: URI is empty so document version cannot be determined to use for validation"));
     }
 
-    // Pretty-print so that lines numbers are useful
-    io::U8StringStream xmlStream;
-    rootElement->prettyPrint(xmlStream);
-    const auto strPrettyXml = xmlStream.stream().str();
-
-    xml::lite::Uri uri;
-    rootElement->getUri(uri);
-    validate_(strPrettyXml, uri, paths, log);
+    // validate against any specified schemas
+    validate_(*rootElement, paths, log);
 }
 void XMLControl::validate(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths,
