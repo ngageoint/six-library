@@ -59,17 +59,6 @@ std::string normalizeVersion(const std::string& strVersion)
     #endif
 }
 
-bool getEnv(const std::string& envName, std::string& result)
-{
-    static const sys::OS os;
-    if (!os.isEnvSet(envName))
-    {
-        return false;
-    }
-
-    result = os.getEnv(envName);
-    return true;
-}
 }
 
 namespace six
@@ -230,8 +219,9 @@ std::unique_ptr<Data> DerivedXMLControl::validateXMLImpl(const xml::lite::Docume
     // If this enviroment variable is set, assume the caller as worked everything out.
     static const std::string envName = "SIX_SIDD300_SCHEMA_DIR"; // a single directory, not a search path
     
+    static const sys::OS os;
     std::string result;
-    if (getEnv(envName, result)) // Don't cache this result; it could change while running.
+    if (os.getEnvIfSet(envName, result)) // Don't cache this result; it could change while running.
     {
         // ... but only for SIDD 3.0 XML
         if (has_sidd300_attribute(rootElement))
@@ -324,9 +314,9 @@ static std::optional<six::sidd300::ISMVersion> getISMVersionFromEnv()
 {
     static const std::string envName = "SIX_SIDD300_ISM_VERSION"; // set to `201609` or `13`
 
-    // Don't cache this result; it could change while running.
+    static const sys::OS os;
     std::string result;
-    if (getEnv(envName, result))
+    if (os.getEnvIfSet(envName, result)) // Don't cache this result; it could change while running.
     {
         if (result == "13")
         {
