@@ -1,1 +1,0 @@
-CVEnumISMExemptFrom.att = attribute CVEnumISMExemptFrom { list { "IC_710_MANDATORY_FDR"?, "DOD_DISTRO_STATEMENT"? }  } 
