@@ -22,6 +22,7 @@
 #include "six/sidd/Utilities.h"
 
 #include <stdexcept>
+#include <set>
 
 #include <str/EncodedStringView.h>
 
@@ -540,41 +541,34 @@ std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, schemaPaths, log);
 }
 
-static void prependISMSchemaPaths_(const std::vector<std::filesystem::path>& schemaPaths,
-    six::sidd300::ISMVersion ismVersion, std::vector<std::filesystem::path>& adjustedSchemaPaths)
-{
-    const std::string ismDirectoryName("SIDD_V3.0.0_ISM-" + to_string(ismVersion)); // i.e., "SIDD_V3.0.0_ISM-v13"
-
-    // If there is a ismDirectoryName, use THAT directory first
-    for (auto schemaPath : schemaPaths)
-    {
-        schemaPath = schemaPath / ismDirectoryName;
-        if (is_directory(schemaPath))
-        {
-            adjustedSchemaPaths.push_back(schemaPath);
-        }
-    }
-
-    // Include all the original schema paths; these will be AFTER the adjusted paths, above
-    for (auto&& schemaPath : schemaPaths)
-    {
-        adjustedSchemaPaths.push_back(schemaPath);
-    }
-}
 static void prependISMSchemaPaths(const std::vector<std::filesystem::path>* &pSchemaPaths,
     std::vector<std::filesystem::path>& adjustedSchemaPaths)
 {
-    // If the user has went to the effort of setting ISMVersion (either via code or env. var.)
-    // then assume we need to prepend additional schema paths.
-    if (pSchemaPaths != nullptr)
+    if (pSchemaPaths == nullptr)
     {
-        const auto ismVersion = six::sidd300::getISMVersion();
-        if (ismVersion.has_value())
-        {
-            prependISMSchemaPaths_(*pSchemaPaths, *ismVersion, adjustedSchemaPaths);
-            pSchemaPaths = &adjustedSchemaPaths;
-        }
+        return;
     }
+
+    // Get directories for XSDs that appear to be SIDD schemas
+    const auto xsd_files = six::sidd300::find_SIDD_schema_V_files(*pSchemaPaths);
+    std::set<std::string> xsd_dirs;
+    for (auto&& xsd : xsd_files)
+    {
+        xsd_dirs.insert(xsd.parent_path().string());
+    }
+
+    for (const auto& dir : xsd_dirs)
+    {
+        adjustedSchemaPaths.push_back(dir);
+    }
+
+    // Include all the original schema paths; these will be AFTER the adjusted paths, above
+    for (auto&& schemaPath : *pSchemaPaths)
+    {
+        adjustedSchemaPaths.push_back(schemaPath);
+    }
+
+    pSchemaPaths = &adjustedSchemaPaths;
 }
 
 std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
