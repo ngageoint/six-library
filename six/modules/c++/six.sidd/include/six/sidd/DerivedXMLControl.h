@@ -22,6 +22,9 @@
 #ifndef __SIX_DERIVED_XML_CONTROL_H__
 #define __SIX_DERIVED_XML_CONTROL_H__
 
+#include <std/optional>
+#include <std/filesystem>
+
 #include <six/XMLControl.h>
 #include <six/Enums.h>
 
@@ -29,6 +32,27 @@
 
 namespace six
 {
+
+// Emphasize that this is for SIDD 3.0.0
+namespace sidd300
+{
+    // We have to support two ISM versions with SIDD 3.0 :-(
+    enum class ISMVersion
+    {
+        v201609, // the "newer" version; default
+        v13, // the "original" version
+
+        current = v201609
+    };
+    ISMVersion get(ISMVersion defaultIfNotSet); // overloaded on ISMVersion
+    std::optional<ISMVersion> set(ISMVersion); // returns previous value, if any
+    std::optional<ISMVersion> getISMVersion();
+    std::optional<ISMVersion> clearISMVersion(); // returns previous value, if any
+    std::string to_string(ISMVersion); // "v201609" or "v13"
+
+    std::vector<std::filesystem::path> find_SIDD_schema_V_files(const std::vector<std::filesystem::path>& schemaPaths);
+}
+
 namespace sidd
 {
 /*!
@@ -66,6 +90,9 @@ protected:
      */
     virtual Data* fromXMLImpl(const xml::lite::Document* doc);
     virtual std::unique_ptr<Data> fromXMLImpl(const xml::lite::Document&) const override;
+
+    virtual std::unique_ptr<Data> validateXMLImpl(const xml::lite::Document&,
+        const std::vector<std::filesystem::path>&, logging::Logger&) const override;
 
 private:
     std::unique_ptr<DerivedXMLParser>
