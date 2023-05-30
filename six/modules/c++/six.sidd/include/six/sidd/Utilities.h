@@ -153,9 +153,6 @@ public:
             logging::Logger* logger);
     static std::u8string toXMLString(const DerivedData&,
         const std::vector<std::filesystem::path>*, logging::Logger* pLogger = nullptr);
-
-    // For ISM-v13 support in SIDD 3.0
-    static std::string setISMDirectoryNamePrefix(const std::string&); // i.e., "SIDD_V3.0.0_ISM-"
 };
 }
 }

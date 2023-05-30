@@ -540,94 +540,18 @@ std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, schemaPaths, log);
 }
 
-static std::string ismDirectoryNamePrefix = "SIDD_V3.0.0_ISM-";
-std::string Utilities::setISMDirectoryNamePrefix(const std::string& value)
-{
-    auto retval = ismDirectoryNamePrefix;
-    ismDirectoryNamePrefix = value;
-    return retval;
-}
-
-static inline bool getEnv(const std::string& envName, std::string& result)
-{
-    static const sys::OS os;
-    if (!os.isEnvSet(envName))
-    {
-        return false;
-    }
-
-    result = os.getEnv(envName);
-    return true;
-}
-
-// Allow callers to change the hard-coded name "SIDD_V3.0.0_ISM-v13" (above)
-static std::filesystem::path getSIDD300ISMDirectoryFromEnv(six::sidd300::ISMVersion ismVersion)
-{
-    // These enviroment variables DO NOT have a _PATH suffix; they should be single names, not a search path.
-    static const std::string six_sidd300_ism = "SIX_SIDD300_ISM";
-
-    // First, the most specific: an environment variable with the ISM version number in it
-    std::string result;
-    auto envVar = six_sidd300_ism + to_string(ismVersion) + "_SCHEMA_DIR"; // e.g., SIX_SIDD300_ISMv13_SCHEMA_DIR
-    if (getEnv(envVar, result))
-    {
-        return result; // e.g., "SIDD_V3.0.0_ISM-v13"
-    }
-
-    // Next, without the version number
-    envVar = six_sidd300_ism + "_SCHEMA_DIR"; // e.g., SIX_SIDD300_ISM_SCHEMA_DIR
-    if (getEnv(envVar, result))
-    {
-        return result; // e.g., "SIDD_V3.0.0_ISM-v13"
-    }
-
-    // Finally, the prefix to which we'll append the version
-    envVar = six_sidd300_ism + "_SCHEMA_DIR_PREFIX "; // e.g., SIX_SIDD300_ISM_SCHEMA_DIR_PREFIX
-    if (getEnv(envVar, result))
-    {
-        return result + to_string(ismVersion); // e.g., "SIDD_V3.0.0_ISM-v13"
-    }
-
-    return "";
-}
-
-static std::filesystem::path getISMDirectory(six::sidd300::ISMVersion ismVersion)
-{
-    auto envResult = getSIDD300ISMDirectoryFromEnv(ismVersion);
-    if (!envResult.empty())
-    {
-        return envResult;
-    }
-
-    return ismDirectoryNamePrefix + to_string(ismVersion); // e.g., "SIDD_V3.0.0_ISM-v13"
-}
-
 static void prependISMSchemaPaths_(const std::vector<std::filesystem::path>& schemaPaths,
     six::sidd300::ISMVersion ismVersion, std::vector<std::filesystem::path>& adjustedSchemaPaths)
 {
-    const auto ismDirectory = getISMDirectory(ismVersion); // e.g., "SIDD_V3.0.0_ISM-v13"
+    const std::string ismDirectoryName("SIDD_V3.0.0_ISM-" + to_string(ismVersion)); // i.e., "SIDD_V3.0.0_ISM-v13"
 
-    // If this is a full path, try that first
-    if (is_directory(ismDirectory)) // TODO: is_absolute()?
+    // If there is a ismDirectoryName, use THAT directory first
+    for (auto schemaPath : schemaPaths)
     {
-        adjustedSchemaPaths.push_back(ismDirectory);
-    }
-    else
-    {
-        // Otherwise, assume it is a name that should be appended to existing schema paths
-        const auto ismDirectoryName = ismDirectory.filename();
-        for (auto&& schemaPath : schemaPaths)
+        schemaPath = schemaPath / ismDirectoryName;
+        if (is_directory(schemaPath))
         {
-            auto path = schemaPath / ismDirectory;            
-            if (is_directory(path)) // Downstream code will complain about schema-path directories that don't exist
-            {
-                adjustedSchemaPaths.push_back(path);
-            }
-            path = schemaPath / ismDirectoryName;
-            if (is_directory(path)) // Downstream code will complain about schema-path directories that don't exist
-            {
-                adjustedSchemaPaths.push_back(path);
-            }
+            adjustedSchemaPaths.push_back(schemaPath);
         }
     }
 
