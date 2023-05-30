@@ -565,8 +565,7 @@ static void prependISMSchemaPaths(const std::vector<std::filesystem::path>* &pSc
     std::vector<std::filesystem::path>& adjustedSchemaPaths)
 {
     // If the user has went to the effort of setting ISMVersion (either via code or env. var.)
-    // then assume we need to prepend additional schema paths.  Note this is only
-    // "new" code, i.e., that using `std::filesystem::path`.
+    // then assume we need to prepend additional schema paths.
     if (pSchemaPaths != nullptr)
     {
         const auto ismVersion = six::sidd300::getISMVersion();

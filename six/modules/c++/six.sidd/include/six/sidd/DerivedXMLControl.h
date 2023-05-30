@@ -23,6 +23,7 @@
 #define __SIX_DERIVED_XML_CONTROL_H__
 
 #include <std/optional>
+#include <std/filesystem>
 
 #include <six/XMLControl.h>
 #include <six/Enums.h>
@@ -48,6 +49,8 @@ namespace sidd300
     std::optional<ISMVersion> getISMVersion();
     std::optional<ISMVersion> clearISMVersion(); // returns previous value, if any
     std::string to_string(ISMVersion); // "v201609" or "v13"
+
+    std::vector<std::filesystem::path> find_SIDD_schema_V_files(const std::vector<std::filesystem::path>& schemaPaths);
 }
 
 namespace sidd
