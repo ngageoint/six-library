@@ -58,7 +58,7 @@ static std::filesystem::path get_sample_xml_path(const std::filesystem::path& fi
 
 static std::vector<std::filesystem::path> getSchemaPaths()
 {
-    static const auto xsdPath = sys::test::findGITModuleFile("six", schema_relative_path(), "SIDD_schema_V3.0.0.xsd");
+    static const auto xsdPath = sys::test::findGITModuleFile("six", schema_relative_path(), "SICommonTypes_V1.0.xsd");
     static const auto rootSchemaDir = xsdPath.parent_path(); // ".../conf/Schema"
     return std::vector<std::filesystem::path> { rootSchemaDir };
 }
