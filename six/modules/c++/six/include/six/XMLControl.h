@@ -173,6 +173,9 @@ class XMLControl
 
     virtual std::unique_ptr<Data> validateXMLImpl(const xml::lite::Document&,
         const std::vector<std::filesystem::path>&, logging::Logger&) const; // = 0;, would break existing code
+    std::unique_ptr<Data> validateXMLImpl_(const xml::lite::Document&,
+        const std::vector<std::filesystem::path>&, logging::Logger&) const;
+
 
     /*!
      *  Convert the Data model into an XML DOM.

@@ -417,11 +417,16 @@ std::unique_ptr<Data> XMLControl::fromXML(const xml::lite::Document& doc,
     return data;
 }
 
-std::unique_ptr<Data> XMLControl::validateXMLImpl(const xml::lite::Document& doc,
+std::unique_ptr<Data> XMLControl::validateXMLImpl_(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>& schemaPaths, logging::Logger& log) const
 {
     validate(doc, &schemaPaths, &log);
     return fromXMLImpl(doc);
+}
+std::unique_ptr<Data> XMLControl::validateXMLImpl(const xml::lite::Document& doc,
+    const std::vector<std::filesystem::path>& schemaPaths, logging::Logger& log) const
+{
+    return validateXMLImpl_(doc, schemaPaths, log);
 }
 
 std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
