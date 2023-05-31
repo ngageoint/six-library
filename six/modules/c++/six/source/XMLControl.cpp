@@ -356,18 +356,9 @@ std::unique_ptr<xml::lite::Document> XMLControl::toXML(
 std::unique_ptr<xml::lite::Document> XMLControl::toXML(
     const Data& data, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
-    return toXMLImplValidate(data, pSchemaPaths);
-}
-
-std::unique_ptr<xml::lite::Document> XMLControl::toXMLImplValidate_(const Data& data, const std::vector<std::filesystem::path>* pSchemaPaths) const
-{
     auto doc = toXMLImpl(data);
     validate(*doc, pSchemaPaths, mLog);
     return doc;
-}
-std::unique_ptr<xml::lite::Document> XMLControl::toXMLImplValidate(const Data& data, const std::vector<std::filesystem::path>* pSchemaPaths) const
-{
-    return toXMLImplValidate_(data, pSchemaPaths);
 }
 
 std::unique_ptr<Data> XMLControl::fromXMLImpl(const xml::lite::Document& doc) const
