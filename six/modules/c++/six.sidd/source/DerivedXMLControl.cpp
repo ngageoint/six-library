@@ -98,8 +98,9 @@ static const xml::lite::Uri xmlns("http://www.w3.org/2000/xmlns/");
 // Return the ISM Uri, if any
 static const xml::lite::Uri ism_201609("urn:us:gov:ic:ism:201609");
 static const xml::lite::Uri ism_13("urn:us:gov:ic:ism:13");
-static auto has_ism_attribute(const xml::lite::Element& rootElement)
+static auto has_ism_attribute(const xml::lite::Element& element)
 {
+    // In the XML (SIDD or XSD): <SIDD xmlns="urn:SIDD:3.0.0" ... xmlns:ism="urn:us:gov:ic:ism:201609">
     xml::lite::Uri retval;
     const auto predicate = [&](const auto& attribute) {
         xml::lite::Uri uri;
@@ -116,7 +117,7 @@ static auto has_ism_attribute(const xml::lite::Element& rootElement)
         return false;
     };
 
-    auto&& attributes = rootElement.getAttributes();
+    auto&& attributes = element.getAttributes();
     std::ignore = std::any_of(attributes.begin(), attributes.end(), predicate); // using `retval`, not the result of any_of()
     return retval;
 }
@@ -124,33 +125,25 @@ static auto has_ism_attribute(const xml::lite::Element& rootElement)
 // Is this the XSD for the ISM of interest?
 static auto xsd_has_ism(const std::filesystem::path& xsd, const xml::lite::Uri& xml_ism)
 {
+    if (xml_ism.empty())
+    {
+        throw std::invalid_argument("'xml_ism' is empty()");
+    }
+
     io::FileInputStream xsdStream(xsd);
     six::MinidomParser xsdParser;
     xsdParser.parse(xsdStream);
+    const auto& root = getRootElement(getDocument(xsdParser));
 
-    const auto& doc = getDocument(xsdParser);
-    const auto& root = getRootElement(doc);
+    // In the XSD: <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" ... xmlns="urn:SIDD:3.0.0" ... >
     if (!has_sidd300_attribute(root))
     {
         return false;
     }
 
-    const auto predicate = [&](const auto& attribute) {
-        xml::lite::Uri uri;
-        attribute.getUri(uri);
-        if (uri != xmlns)
-            return false;
-
-        const xml::lite::Uri uriValue(attribute.getValue());
-        return (uriValue == xml_ism) && (attribute.getLocalName() == "ism");
-    };
-
-    auto&& attributes = root.getAttributes();
-    if (std::any_of(attributes.begin(), attributes.end(), predicate))
-    {
-        return true;
-    }
-    return false;
+    // In the XSD: <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ism="urn:us:gov:ic:ism:201609" ...>
+    const auto uriValue = has_ism_attribute(root);
+    return uriValue == xml_ism;
 }
 
 static auto find_SIDD_xsd_files(const std::vector<std::filesystem::path>& xsdFiles)
@@ -185,6 +178,7 @@ static auto get_SIX_SIDD300_schema_dir()
 // because we have to support two versions of ISM.
 static auto find_xsd_path(const xml::lite::Element& rootElement, const std::vector<std::filesystem::path>& schemaPaths)
 {
+    // In the XML: <SIDD xmlns="urn:SIDD:3.0.0" ... xmlns:ism="urn:us:gov:ic:ism:201609">
     const auto xml_ism = has_ism_attribute(rootElement);
     if (xml_ism.empty())
     {
@@ -385,6 +379,7 @@ std::string six::sidd300::to_string(ISMVersion value)
     throw std::invalid_argument("Unknown 'ISMVersion' value.");
 };
 
+// Find all the XSDs that look like they may be SIDD schemas, e.g., SIDD_schema_V3.0.0.xsd
 std::vector<std::filesystem::path> six::sidd300::find_SIDD_schema_V_files(const std::vector<std::filesystem::path>& schemaPaths_)
 {
     auto schemaPaths = schemaPaths_;
