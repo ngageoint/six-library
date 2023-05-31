@@ -106,13 +106,13 @@ static bool is_sidd300(const xml::lite::Document& doc)
     return has_sidd300_attribute(rootElement);
 }
 
-static const xml::lite::Uri xmlns("http://www.w3.org/2000/xmlns/");
-
 // Return the ISM Uri, if any
-static const xml::lite::Uri ism_201609("urn:us:gov:ic:ism:201609");
-static const xml::lite::Uri ism_13("urn:us:gov:ic:ism:13");
 static auto has_ism_attribute(const xml::lite::Element& element)
 {
+    static const xml::lite::Uri xmlns("http://www.w3.org/2000/xmlns/");
+    static const xml::lite::Uri ism_201609("urn:us:gov:ic:ism:201609");
+    static const xml::lite::Uri ism_13("urn:us:gov:ic:ism:13");
+
     // In the XML (SIDD or XSD): <... xmlns:ism="urn:us:gov:ic:ism:201609" ...>
     xml::lite::Uri retval;
     const auto predicate = [&](const auto& attribute) {

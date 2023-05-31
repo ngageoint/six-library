@@ -551,22 +551,18 @@ static void prependISMSchemaPaths(const std::vector<std::filesystem::path>* &pSc
 
     // Get directories for XSDs that appear to be SIDD schemas
     const auto xsd_files = six::sidd300::find_SIDD_schema_V_files(*pSchemaPaths);
-    std::set<std::string> xsd_dirs;
+    std::set<std::string> xsd_dirs; // easy way to make directories unique
     for (auto&& xsd : xsd_files)
     {
         xsd_dirs.insert(xsd.parent_path().string());
     }
-
     for (const auto& dir : xsd_dirs)
     {
         adjustedSchemaPaths.push_back(dir);
     }
 
     // Include all the original schema paths; these will be AFTER the adjusted paths, above
-    for (auto&& schemaPath : *pSchemaPaths)
-    {
-        adjustedSchemaPaths.push_back(schemaPath);
-    }
+    adjustedSchemaPaths.insert(adjustedSchemaPaths.end(), pSchemaPaths->begin(), pSchemaPaths->end());
 
     pSchemaPaths = &adjustedSchemaPaths;
 }
