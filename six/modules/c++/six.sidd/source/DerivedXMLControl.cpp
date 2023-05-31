@@ -39,7 +39,7 @@
 
 namespace
 {
-std::string normalizeVersion(const std::string& strVersion)
+six::sidd::Version normalizeVersion(const std::string& strVersion)
 {
     std::vector<std::string> versionParts;
     six::XMLControl::splitVersion(strVersion, versionParts);
@@ -53,18 +53,55 @@ std::string normalizeVersion(const std::string& strVersion)
     #pragma warning(push)
     #pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed/unsigned mismatch
     #endif
-    return str::join(versionParts, "");
+    const auto normalizedVersion = str::join(versionParts, "");
     #if _MSC_VER
     #pragma warning(pop)
     #endif
-}
 
+    // six.sidd only currently supports --
+    //   SIDD 1.0.0
+    //   SIDD 2.0.0
+    //   SIDD 3.0.0
+    if (normalizedVersion == "100")
+    {
+        return six::sidd::Version::v100;
+    }
+    if (normalizedVersion == "200")
+    {
+        return six::sidd::Version::v200;
+    }
+    if (normalizedVersion == "300")
+    {
+        return six::sidd::Version::v300;
+    }
+
+    if (normalizedVersion == "110")
+    {
+        throw except::Exception(Ctxt(
+            "SIDD Version 1.1.0 does not exist. Did you mean 2.0.0 instead?"
+        ));
+    }
+
+    throw except::Exception(Ctxt("Unsupported SIDD Version: " + strVersion));
+}
 }
 
 namespace six
 {
 namespace sidd
 {
+    std::string to_string(Version version)
+    {
+        switch (version)
+        {
+        case Version::v100: return "v100";
+        case Version::v200: return "v200";
+        case Version::v300: return "v300";
+        default: break;
+        }
+        throw std::logic_error("Unkown 'Version' value.");
+    }
+
     const six::DataType DerivedXMLControl::dataType = six::DataType::DERIVED;
 
 DerivedXMLControl::DerivedXMLControl(logging::Logger* log, bool ownLog) : XMLControl(log, ownLog) {}
@@ -78,7 +115,8 @@ Data* DerivedXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 }
 std::unique_ptr<Data> DerivedXMLControl::fromXMLImpl(const xml::lite::Document& doc) const
 {
-    return getParser(getVersionFromURI(&doc))->fromXML(doc);
+    const auto version = normalizeVersion(getVersionFromURI(&doc));
+    return getParser(version)->fromXML(doc);
 }
 
 // Is this SIDD 3.0 XML?
@@ -270,47 +308,43 @@ std::unique_ptr<xml::lite::Document> DerivedXMLControl::toXMLImpl(const Data& da
         throw except::Exception(Ctxt("Data must be SIDD"));
     }
 
-    auto parser = getParser(data.getVersion());
+    const auto version = normalizeVersion(data.getVersion());
+    auto parser = getParser(version);
     return parser->toXML(dynamic_cast<const DerivedData&>(data));
 }
 
 std::unique_ptr<DerivedXMLParser>
-DerivedXMLControl::getParser(const std::string& strVersion) const
-{
-    const std::string normalizedVersion = normalizeVersion(strVersion);
-
+DerivedXMLControl::getParser(Version normalizedVersion/*, std::optional<six::sidd300::ISMVersion> ismVersion*/) const
+{   
     // six.sidd only currently supports --
     //   SIDD 1.0.0
     //   SIDD 2.0.0
     //   SIDD 3.0.0
-    if (normalizedVersion == "100")
+    if (normalizedVersion == Version::v100)
     {
         return std::make_unique<DerivedXMLParser100>(mLog);
     }
-    if (normalizedVersion == "200")
+    if (normalizedVersion == Version::v200)
     {
         return std::make_unique<DerivedXMLParser200>(mLog);
     }
-    if (normalizedVersion == "300")
+    if (normalizedVersion == Version::v300)
     {
+        //if (!ismVersion.has_value())
+        //{
+        //    throw except::Exception(Ctxt("Must specify ISMVersion for SIDD 3.0.0"));
+        //}
         const auto ismVersion = six::sidd300::get(six::sidd300::ISMVersion::current);
         return std::make_unique<DerivedXMLParser300>(getLogger(), ismVersion);
     }
 
-    if (normalizedVersion == "110")
-    {
-        throw except::Exception(Ctxt(
-            "SIDD Version 1.1.0 does not exist. "
-            "Did you mean 2.0.0 instead?"
-        ));
-    }
-
-    throw except::Exception(Ctxt("Unsupported SIDD Version: " + strVersion));
+    throw except::Exception(Ctxt("Unsupported SIDD Version: " + to_string(normalizedVersion)));
 }
 
 std::unique_ptr<DerivedXMLParser> DerivedXMLControl::getParser_(const std::string& strVersion)
 {
-    return DerivedXMLControl().getParser(strVersion);
+    const auto version = normalizeVersion(strVersion);
+    return DerivedXMLControl().getParser(version);
 }
 
 }
