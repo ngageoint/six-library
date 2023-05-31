@@ -82,15 +82,28 @@ std::unique_ptr<Data> DerivedXMLControl::fromXMLImpl(const xml::lite::Document& 
 }
 
 // Is this SIDD 3.0 XML?
-static bool has_sidd300_attribute(const xml::lite::Element& rootElement)
+static bool has_sidd300_attribute(const xml::lite::Element& element)
 {
     static const xml::lite::Uri sidd300("urn:SIDD:3.0.0");
     const auto predicate = [&](const auto& attribute) {
         const xml::lite::Uri uriValue(attribute.getValue());
         return (uriValue == sidd300) && (attribute.getLocalName() == "xmlns");
     };
-    auto&& attributes = rootElement.getAttributes();
+    auto&& attributes = element.getAttributes();
     return std::any_of(attributes.begin(), attributes.end(), predicate);
+}
+
+static bool is_sidd300(const xml::lite::Document& doc)
+{
+    auto&& rootElement = getRootElement(doc);
+
+    // In the XML: <SIDD xmlns="urn:SIDD:3.0.0" ... >
+    if (rootElement.getLocalName() != "SIDD")
+    {
+        return false;
+    }
+
+    return has_sidd300_attribute(rootElement);
 }
 
 static const xml::lite::Uri xmlns("http://www.w3.org/2000/xmlns/");
@@ -100,7 +113,7 @@ static const xml::lite::Uri ism_201609("urn:us:gov:ic:ism:201609");
 static const xml::lite::Uri ism_13("urn:us:gov:ic:ism:13");
 static auto has_ism_attribute(const xml::lite::Element& element)
 {
-    // In the XML (SIDD or XSD): <SIDD xmlns="urn:SIDD:3.0.0" ... xmlns:ism="urn:us:gov:ic:ism:201609">
+    // In the XML (SIDD or XSD): <... xmlns:ism="urn:us:gov:ic:ism:201609" ...>
     xml::lite::Uri retval;
     const auto predicate = [&](const auto& attribute) {
         xml::lite::Uri uri;
@@ -133,16 +146,16 @@ static auto xsd_has_ism(const std::filesystem::path& xsd, const xml::lite::Uri& 
     io::FileInputStream xsdStream(xsd);
     six::MinidomParser xsdParser;
     xsdParser.parse(xsdStream);
-    const auto& root = getRootElement(getDocument(xsdParser));
+    auto&& rootElement = getRootElement(getDocument(xsdParser));
 
     // In the XSD: <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" ... xmlns="urn:SIDD:3.0.0" ... >
-    if (!has_sidd300_attribute(root))
+    if (!has_sidd300_attribute(rootElement))
     {
         return false;
     }
 
     // In the XSD: <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ism="urn:us:gov:ic:ism:201609" ...>
-    const auto uriValue = has_ism_attribute(root);
+    const auto uriValue = has_ism_attribute(rootElement);
     return uriValue == xml_ism;
 }
 
@@ -219,11 +232,10 @@ std::unique_ptr<Data> DerivedXMLControl::validateXMLImpl(const xml::lite::Docume
     const std::vector<std::filesystem::path>& schemaPaths_, logging::Logger& log) const
 {
     auto schemaPaths = schemaPaths_;
-    auto&& rootElement = getRootElement(doc);
 
     // If this enviroment variable is set, assume the caller as worked everything out ...
     auto result = get_SIX_SIDD300_schema_dir();
-    if (!result.empty() && has_sidd300_attribute(rootElement))
+    if (!result.empty() && is_sidd300(doc))
     {
         // ... but only for SIDD 3.0 XML
         schemaPaths.clear();
@@ -231,8 +243,12 @@ std::unique_ptr<Data> DerivedXMLControl::validateXMLImpl(const xml::lite::Docume
         return validateXMLImpl_(doc, schemaPaths, log);
     }
 
-    // Otherwise (not very special SIDD 3.0 case, above), try to find the XSD which will vallidate this XML.
-    const auto path = find_xsd_path(rootElement, schemaPaths_);
+    // Otherwise (i.e., not very special SIDD 3.0 case, above), try to find the XSD which will vallidate this XML.
+    // This is needed because downstream code finds all the XSDs in the schemaPaths; that normally wouldn't
+    // be a problem but there are now two SIDD 3.0 XSDs: one for ISM-v13 and another for ISM-v201609.
+    // Both claim to be SIDD 3.0, but that "can't" be the case; by finding a corresponding XSD up-front
+    // errors from validateXMLImpl_() are (hopefully) eliminated (other than real validation errors, of course).
+    const auto path = find_xsd_path(getRootElement(doc), schemaPaths_);
     if (!path.empty())
     {
         // We now know this is a good path, put it at the beginning of the search path so that
