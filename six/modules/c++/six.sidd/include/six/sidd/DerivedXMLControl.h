@@ -91,6 +91,9 @@ struct DerivedXMLControl : public XMLControl
 
     static std::unique_ptr<DerivedXMLParser> getParser_(const std::string& strVersion); // for unit-testing
 
+    std::unique_ptr<Data> fromXML(const xml::lite::Document&, std::optional<six::sidd300::ISMVersion>) const;
+    std::unique_ptr<xml::lite::Document> toXML(const Data&, std::optional<six::sidd300::ISMVersion>) const;
+
 protected:
     /*!
      *  Returns a new allocated DOM document, created from the DerivedData*
@@ -109,7 +112,7 @@ protected:
 
 private:
     std::unique_ptr<DerivedXMLParser>
-    getParser(Version version/*, std::optional<six::sidd300::ISMVersion>*/) const;
+    getParser(Version version, std::optional<six::sidd300::ISMVersion>) const;
 };
 }
 }
