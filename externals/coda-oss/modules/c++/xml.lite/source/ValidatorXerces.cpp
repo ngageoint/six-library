@@ -111,7 +111,36 @@ ValidatorXerces::ValidatorXerces(
     bool recursive) :
     ValidatorInterface(schemaPaths, log, recursive)
 {
-    // add each schema into a grammar pool --
+    initialize();
+
+    // load our schemas --
+    // search each directory for schemas
+    const auto schemas = loadSchemas(convert(schemaPaths), recursive);
+
+    //  add the schema to the validator
+    for (auto&& schema : schemas)
+    {
+        loadGrammar(schema, *log);
+    }
+
+    //! no additional schemas will be loaded after this point!
+    mSchemaPool->lockPool();
+}
+ValidatorXerces::ValidatorXerces(const coda_oss::filesystem::path& schema, logging::Logger& log) :
+    ValidatorXerces(std::vector<fs::path>{schema}, &log, false /*recursive*/)
+{
+    initialize();
+
+    //  add the schema to the validator
+    loadGrammar(schema, log);
+
+    //! no additional schemas will be loaded after this point!
+    mSchemaPool->lockPool();
+}
+
+void ValidatorXerces::initialize()
+ {
+     // add each schema into a grammar pool --
     // this allows reuse
     mSchemaPool.reset(
         new xercesc::XMLGrammarPoolImpl(
@@ -160,28 +189,20 @@ ValidatorXerces::ValidatorXerces(
             new ValidationErrorHandler());
     config->setParameter(xercesc::XMLUni::fgDOMErrorHandler, 
                          mErrorHandler.get());
-
-    // load our schemas --
-    // search each directory for schemas
-    const auto schemas = loadSchemas(convert(schemaPaths), recursive);
-
-    //  add the schema to the validator
-    //  add the schema to the validator
-    for (auto&& schema : schemas)
-    {
-        if (!mValidator->loadGrammar(schema.c_str(),
-                                     xercesc::Grammar::SchemaGrammarType,
-                                     true))
-        {
-            std::ostringstream oss;
-            oss << "Error: Failure to load schema " << schema;
-            log->warn(Ctxt(oss.str()));
-        }
-    }
-
-    //! no additional schemas will be loaded after this point!
-    mSchemaPool->lockPool();
 }
+
+ void ValidatorXerces::loadGrammar(const coda_oss::filesystem::path& schema, logging::Logger& log)
+{
+     //  add the schema to the validator
+     if (!mValidator->loadGrammar(schema.c_str(),
+                                  xercesc::Grammar::SchemaGrammarType,
+                                  true))
+     {
+         std::ostringstream oss;
+         oss << "Error: Failure to load schema " << schema;
+         log.warn(Ctxt(oss.str()));
+     }
+ }
 
 std::vector<coda_oss::filesystem::path> ValidatorXerces::loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive)
 {
