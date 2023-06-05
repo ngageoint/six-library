@@ -27,6 +27,7 @@
 #include <cmath>
 
 #include <types/RowCol.h>
+#include <gsl/gsl.h>
 
 namespace polygon
 {
@@ -47,14 +48,13 @@ namespace polygon
  * square will have 1 pixel of its top edge missing.
  */
 template <typename PointT>
-class Intersections
+struct Intersections final
 {
-public:
     /*!
      * \class Intersection
      * \brief Represents an intersection
      */
-    struct Intersection
+    struct Intersection final
     {
         //! First (inclusive) column
         size_t first;
@@ -63,7 +63,7 @@ public:
         size_t last;
 
         //! \return Number of columns
-        size_t length() const
+        size_t length() const noexcept
         {
             return last - first + 1;
         }
@@ -172,11 +172,10 @@ private:
             types::RowCol<sys::SSize_T> offset)
     {
         std::vector<types::RowCol<PointT> > shiftedPoints(points);
-        for (size_t ii = 0; ii < shiftedPoints.size(); ++ii)
+        for (auto&& shiftedPoint : shiftedPoints)
         {
             // Get the polygon points with respect to the offset
-            shiftedPoints[ii].row -= offset.row;
-            shiftedPoints[ii].col -= offset.col;
+            shiftedPoint -= offset;
 
             // TODO: The original implementation did this (plus subtracted 0.5
             //       from each row and col which we're not doing here).
@@ -184,7 +183,7 @@ private:
             //       right on a row, we skip drawing some rows
             //       (test_draw_polygon will illustrate this). I wonder if we
             //       could tweak the sl0 and sl1 logic to avoid this.
-            PointT& rowPoint(shiftedPoints[ii].row);
+            PointT& rowPoint(shiftedPoint.row);
             if (std::floor(rowPoint) == rowPoint)
             {
                 // Add small amount to move it off the scan line
@@ -195,7 +194,7 @@ private:
         // We need to get all scanline intersections of polygon edges
         mIntersections.resize(dims.row);
 
-        const sys::SSize_T lastRow = static_cast<sys::SSize_T>(dims.row) - 1;
+        const auto lastRow = gsl::narrow<sys::SSize_T>(dims.row) - 1;
 
         for (size_t ii = 0; ii < shiftedPoints.size(); ++ii)
         {
@@ -256,9 +255,9 @@ private:
             // that situation.
             for (sys::SSize_T row = sl0; row <= sl1; ++row)
             {
-                const PointT delt = row - r0;
-                const PointT sli = c0 + delt * dcdr;
-                mIntersections[row].push_back(sli);
+                const auto delt = static_cast<PointT>(row) - r0;
+                const auto sli = c0 + delt * dcdr;
+                mIntersections[gsl::narrow<size_t>(row)].push_back(sli);
             }
         }
 
@@ -273,6 +272,12 @@ private:
             }
         }
     }
+    
+    // `const` member data means copy/move must be implemented
+    Intersections(const Intersections&) = delete;
+    Intersections& operator=(const Intersections&) = delete;
+    Intersections(Intersections&&) = delete;
+    Intersections& operator=(Intersections&&) = delete;
 
 private:
     const types::RowCol<size_t> mDims;
