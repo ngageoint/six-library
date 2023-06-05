@@ -132,7 +132,7 @@ static void test_assert_eq(const std::string& testName,
     for (size_t i = 0; i < actuals.size(); i++)
     {
         const auto& v = amp8i_phs8i[i];
-        const auto S = six::sicd::Utilities::toComplex(v.amplitude, v.phase, nullptr);
+        const auto S = six::sicd::Utilities::toComplex(v.amplitude, v.phase);
         const std::complex<float> result(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
         const auto& expected = actuals[i];
         TEST_ASSERT_EQ(expected, result);
@@ -167,7 +167,7 @@ TEST_CASE(test_8bit_ampphs)
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
             AMP8I_PHS8I_t input{ static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value) };
-            const auto S = six::sicd::Utilities::toComplex(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value), nullptr);
+            const auto S = six::sicd::Utilities::toComplex(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value));
 
             inputs.push_back(std::move(input));
             expecteds.emplace_back(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
@@ -624,7 +624,7 @@ TEST_CASE(test_verify_phase_uint8_ordering)
     // If this fails, then a core assumption of the ComplexToAmpPhase8I structure is wrong.
 
     auto to_phase = [](int v) {
-        double p = std::arg(six::sicd::Utilities::toComplex(1, v, nullptr));
+        double p = std::arg(six::sicd::Utilities::toComplex(1, v));
         if(p < 0) p += 2.0 * M_PI;
         return p;
     };
@@ -715,7 +715,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
         for(int j = 0; j < 256; j++) {
             Pairs p;
             p.integral = { gsl::narrow<uint8_t>(i), gsl::narrow<uint8_t>(j) };
-            p.floating = six::sicd::Utilities::toComplex(i, j, &amplitudeTable);
+            p.floating = six::sicd::Utilities::toComplex(i, j, amplitudeTable);
             candidates.push_back(p);
         }
     }
