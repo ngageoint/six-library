@@ -66,7 +66,7 @@ struct MutexCpp11 final : public MutexInterface
      *  Return the type name.  This function is essentially free,
      *  because it is static RTTI.
      */
-    const char* getNativeType() const
+    const char* getNativeType() const noexcept
     {
         return typeid(mNative).name();
     }

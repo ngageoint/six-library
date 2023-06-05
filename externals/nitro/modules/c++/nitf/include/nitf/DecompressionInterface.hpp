@@ -24,6 +24,8 @@
 #define __NITF_DECOMPRESSION_INTERFACE_HPP__
 #pragma once
 
+#include <stdint.h>
+
 #include <nitf/coda-oss.hpp>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/IOInterface.hpp>
@@ -87,10 +89,8 @@ namespace nitf
  *         during decompression, and gives a c++ api for getting
  *         things done.
  */
-class DecompressionInterface
+struct DecompressionInterface final
 {
-public:
-
     //! These are canned methods which turn around 
     //  and call the nitf_DecompressionControl of your choice
     static NITF_BOOL adapterStart(nitf_DecompressionControl* object,
@@ -121,7 +121,7 @@ public:
  *  \class Compressor
  *  \brief This is the c++ interface for nitf_CompressionControl
  */
-struct Decompressor
+struct Decompressor final
 {
     Decompressor() = default;
     virtual ~Decompressor() {}

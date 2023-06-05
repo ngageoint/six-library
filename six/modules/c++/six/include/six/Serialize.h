@@ -55,19 +55,18 @@ struct Serializer
     {
         constexpr size_t length = sizeof(T);
         const void* pVal = &val;
-        auto data = static_cast<typename std::vector<U>::const_pointer>(pVal);
 
         if (swapBytes)
         {
             const size_t prevLength = buffer.size();
             buffer.resize(prevLength + length);
-            sys::byteSwap(data,
-                          static_cast<unsigned short>(length),
-                          1,
-                          &buffer[prevLength]);
+            auto data = static_cast<const T*>(pVal);
+            constexpr auto numElems = 1;
+            sys::byteSwap(data, length, numElems, &buffer[prevLength]);
         }
         else
         {
+            auto data = static_cast<typename std::vector<U>::const_pointer>(pVal);
             std::copy(data, data + length, std::back_inserter(buffer));
         }
     }
@@ -99,15 +98,20 @@ struct Serializer
         std::copy(buffer, buffer + length, data);
         if (swapBytes)
         {
-            sys::byteSwap(data, static_cast<unsigned short>(length), 1);
+            sys::byteSwap(static_cast<T*>(pVal), static_cast<unsigned short>(length), 1);
         }
 
         buffer += length;
     }
     static void deserializeImpl(const std::byte*& buffer, bool swapBytes, T& val)
     {
-        auto& buffer_ = reinterpret_cast<const sys::byte*&>(buffer);
+        const void* pBuffer = buffer;
+        auto buffer_ = static_cast<const sys::byte*>(pBuffer);
+
         deserializeImpl(buffer_, swapBytes, val);
+
+        pBuffer = buffer_;
+        buffer = static_cast<const std::byte*>(pBuffer);
     }
 };
 
