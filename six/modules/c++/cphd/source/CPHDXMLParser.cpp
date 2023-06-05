@@ -1076,13 +1076,15 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
     }
 
     // IonoParameters
-    const xml::lite::Element* ionoXML = getOptional(globalXML, "IonoParameters");
-    if (ionoXML)
+    if (const auto ionoXML = getOptional(globalXML, "IonoParameters"))
     {
         // Optional
         global.ionoParameters.reset(new IonoParameters());
         parseDouble(getFirstAndOnly(ionoXML, "TECV"), global.ionoParameters->tecv);
-        parseDouble(getFirstAndOnly(ionoXML, "F2Height"), global.ionoParameters->f2Height);
+        if (const auto f2HeightXML = getOptional(ionoXML, "F2Height"))
+        {
+            parseDouble(f2HeightXML, global.ionoParameters->f2Height);
+        }        
     }
 }
 
@@ -1634,7 +1636,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* errParamXML, ErrorParamete
             mCommon.parseDecorrType(rangeBiasDecorrXML, *(errParam.monostatic->radarSensor.rangeBiasDecorr));
         }
 
-        XMLElem tropoErrorXML = getFirstAndOnly(monostaticXML, "TropoError");
+        XMLElem tropoErrorXML = getOptional(monostaticXML, "TropoError");
         if(tropoErrorXML)
         {
             errParam.monostatic->tropoError.reset(new six::TropoError());
@@ -1643,7 +1645,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* errParamXML, ErrorParamete
             mCommon.parseOptionalDecorrType(tropoErrorXML, "TropoRangeDecorr", errParam.monostatic->tropoError->tropoRangeDecorr);
         }
 
-        XMLElem ionoErrorXML = getFirstAndOnly(monostaticXML, "IonoError");
+        XMLElem ionoErrorXML = getOptional(monostaticXML, "IonoError");
         if(ionoErrorXML)
         {
             errParam.monostatic->ionoError.reset(new six::IonoError());

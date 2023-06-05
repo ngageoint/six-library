@@ -26,6 +26,7 @@
 #include <std/memory>
 #include <std/string>
 #include <regex>
+#include <tuple> // std::ignore
 
 #include <sys/OS.h>
 #include <io/StringStream.h>
@@ -89,6 +90,14 @@ inline std::vector<std::string> convert(const std::vector<fs::path>& schemaPaths
                    [](const fs::path& p) { return p.string(); });
     return retval;
 }
+inline auto convert(const std::vector<std::string>& paths)
+{
+    std::vector<fs::path> retval;
+    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
+                   [](const auto& p) { return p; });
+    return retval;
+}
+
 ValidatorXerces::ValidatorXerces(
         const std::vector<fs::path>& schemaPaths,
         logging::Logger* log,
@@ -102,7 +111,36 @@ ValidatorXerces::ValidatorXerces(
     bool recursive) :
     ValidatorInterface(schemaPaths, log, recursive)
 {
-    // add each schema into a grammar pool --
+    initialize();
+
+    // load our schemas --
+    // search each directory for schemas
+    const auto schemas = loadSchemas(convert(schemaPaths), recursive);
+
+    //  add the schema to the validator
+    for (auto&& schema : schemas)
+    {
+        loadGrammar(schema, *log);
+    }
+
+    //! no additional schemas will be loaded after this point!
+    mSchemaPool->lockPool();
+}
+ValidatorXerces::ValidatorXerces(const coda_oss::filesystem::path& schema, logging::Logger& log) :
+    ValidatorXerces(std::vector<fs::path>{schema}, &log, false /*recursive*/)
+{
+    initialize();
+
+    //  add the schema to the validator
+    loadGrammar(schema, log);
+
+    //! no additional schemas will be loaded after this point!
+    mSchemaPool->lockPool();
+}
+
+void ValidatorXerces::initialize()
+ {
+     // add each schema into a grammar pool --
     // this allows reuse
     mSchemaPool.reset(
         new xercesc::XMLGrammarPoolImpl(
@@ -134,7 +172,7 @@ ValidatorXerces::ValidatorXerces(
     config->setParameter(xercesc::XMLUni::fgXercesSchema, true);
     config->setParameter(xercesc::XMLUni::fgXercesSchemaFullChecking, false); // this affects performance
 
-    // definitely use cache grammer -- this is the cached schema
+    // definitely use cache grammar -- this is the cached schema
     config->setParameter(xercesc::XMLUni::fgXercesUseCachedGrammarInParse, true);
 
     // explicitly skip loading schema referenced in the xml docs
@@ -151,59 +189,49 @@ ValidatorXerces::ValidatorXerces(
             new ValidationErrorHandler());
     config->setParameter(xercesc::XMLUni::fgDOMErrorHandler, 
                          mErrorHandler.get());
+}
 
+ void ValidatorXerces::loadGrammar(const coda_oss::filesystem::path& schema, logging::Logger& log)
+{
+     //  add the schema to the validator
+     if (!mValidator->loadGrammar(schema.c_str(),
+                                  xercesc::Grammar::SchemaGrammarType,
+                                  true))
+     {
+         std::ostringstream oss;
+         oss << "Error: Failure to load schema " << schema;
+         log.warn(Ctxt(oss.str()));
+     }
+ }
+
+std::vector<coda_oss::filesystem::path> ValidatorXerces::loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive)
+{
     // load our schemas --
     // search each directory for schemas
     sys::OS os;
-    std::vector<std::string> schemas = 
-        os.search(schemaPaths, "", ".xsd", recursive);
-
-    //  add the schema to the validator
-    for (size_t i = 0; i < schemas.size(); ++i)
-    {
-        if (!mValidator->loadGrammar(schemas[i].c_str(), 
-                                     xercesc::Grammar::SchemaGrammarType,
-                                     true))
-        {
-            std::ostringstream oss;
-            oss << "Error: Failure to load schema " << schemas[i];
-            log->warn(Ctxt(oss.str()));
-        }
-    }
-
-    //! no additional schemas will be loaded after this point!
-    mSchemaPool->lockPool();
+    return os.search(schemaPaths, "", ".xsd", recursive);
 }
 
 // From config.h.in: Define to the 16 bit type used to represent Xerces UTF-16 characters
 // On Windows, this needs to be wchar_t so that various "wide character" Win32 APIs can be called.
 static_assert(sizeof(XMLCh) == 2, "XMLCh should be two bytes for UTF-16.");
 
-#if _WIN32
-// On other platforms, char16_t/uint16_t is used; only wchar_t on Windows.
+#ifdef _WIN32
+// On other platforms, char16_t is used; only wchar_t on Windows.
 using XMLCh_t = wchar_t;
 static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be wchar_t");
 inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::wstring>& pWString)
 {
-    pWString.reset(new std::wstring(xmlView.wstring())); // std::make_unique fails with older compilers
+    pWString = std::make_unique<std::wstring>(xmlView.wstring());
 }
-#else
-#if defined(__INTEL_COMPILER) && (__INTEL_COMPILER_BUILD_DATE < 20190815)
-using XMLCh_t = uint16_t;
-static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be uint16_t");
 #else
 using XMLCh_t = char16_t;
 static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be char16_t");
 #endif
-#endif
 
 inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::u16string>& pWString)
 {
-    pWString.reset(new std::u16string(xmlView.u16string())); // std::make_unique fails with older compilers
-}
-inline void reset(str::EncodedStringView xmlView, std::unique_ptr<str::ui16string>& pWString)
-{
-    pWString.reset(new str::ui16string(xmlView.ui16string_())); // std::make_unique fails with older compilers
+    pWString = std::make_unique<std::u16string>(xmlView.u16string());
 }
 
 using XMLCh_string = std::basic_string<XMLCh_t>;
@@ -252,7 +280,7 @@ bool ValidatorXerces::validate_(const std::u8string& xml,
 
 static str::EncodedStringView encodeXml(const std::string& xml)
 {
-    // The XML might contain contain a specific encoding, if it does;
+    // The XML might contain a specific encoding, if it does;
     // we want to use it, otherwise we'll corrupt the data.
 
     // UTF-8 is the normal case, so check it first
@@ -263,7 +291,7 @@ static str::EncodedStringView encodeXml(const std::string& xml)
         return str::EncodedStringView::fromUtf8(xml);
     }
 
-    // Maybe this is is poor XML with Windows-1252 encoding :-(
+    // Maybe this is poor XML with Windows-1252 encoding :-(
     const std::regex reWindows1252("<\?.*encoding=.*['\"]?.*windows-1252.*['\"]?.*\?>", std::regex::icase);
     if (std::regex_search(xml.c_str(), m, reWindows1252))
     {

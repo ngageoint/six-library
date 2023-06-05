@@ -37,7 +37,7 @@ BaseConverter::BaseConverter() :
 {
 }
 
-mem::auto_ptr<xml::lite::Document>
+std::unique_ptr<xml::lite::Document>
 BaseConverter::readXML(const std::string& xmlPathname)
 {
     six::MinidomParser parser;
@@ -45,7 +45,7 @@ BaseConverter::readXML(const std::string& xmlPathname)
     parser.parse(xmlInputStream);
     std::unique_ptr<xml::lite::Document> pDocument;
     parser.getDocument(pDocument);
-    return mem::auto_ptr<xml::lite::Document>(pDocument.release());
+    return std::unique_ptr<xml::lite::Document>(pDocument.release());
 }
 
 BaseConverter::XMLElem BaseConverter::findUniqueElement(

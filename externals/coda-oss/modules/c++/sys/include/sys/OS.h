@@ -26,7 +26,7 @@
 
 #include "sys/AbstractOS.h"
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 #  include "sys/OSWin32.h"
 namespace sys
 {
@@ -54,7 +54,7 @@ namespace sys
 		//MacOS
 	};
 
-	#if _WIN32
+	#ifdef _WIN32
 	constexpr auto Platform = PlatformType::Windows;
 	#else
     constexpr auto Platform = PlatformType::Linux;

@@ -71,6 +71,26 @@ TEST_CASE(testLower)
     TEST_ASSERT_EQ(s, "test1");
 }
 
+TEST_CASE(test_eq_ne)
+{
+    const auto s1 = "TEST1";
+    const auto s2 = "test1";
+    const auto s3 = "T2";
+
+    TEST_ASSERT_TRUE(str::eq(s1, s1));
+    TEST_ASSERT_FALSE(str::ne(s1, s1));
+
+    TEST_ASSERT_TRUE(str::eq(s1, s2));
+    TEST_ASSERT_FALSE(str::ne(s1, s2));
+    TEST_ASSERT_TRUE(str::eq(s2, s1));
+    TEST_ASSERT_FALSE(str::ne(s2, s1));
+
+    TEST_ASSERT_FALSE(str::eq(s1, s3));
+    TEST_ASSERT_TRUE(str::ne(s1, s3));
+    TEST_ASSERT_FALSE(str::eq(s3, s1));
+    TEST_ASSERT_TRUE(str::ne(s3, s1));
+}
+
 TEST_CASE(testReplace)
 {
     std::string s = "helo world";
@@ -210,6 +230,7 @@ TEST_MAIN(
     TEST_CHECK(testData);
     TEST_CHECK(testUpper);
     TEST_CHECK(testLower);
+    TEST_CHECK(test_eq_ne);
     TEST_CHECK(testReplace);
     TEST_CHECK(testReplaceAllInfinite);
     TEST_CHECK(testReplaceAllRecurse);

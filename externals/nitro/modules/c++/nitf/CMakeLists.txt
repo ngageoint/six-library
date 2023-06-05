@@ -2,6 +2,9 @@ set(MODULE_NAME nitf)
 set(MODULE_DEPS nitf-c j2k-c except-c++ sio.lite-c++ io-c++ mt-c++ sys-c++ str-c++ gsl-c++ std-c++)
 if (MSVC)
     list(APPEND MODULE_DEPS wsock32 ws2_32)
+
+    add_compile_options(/wd4996) # '...': This function or variable may be unsafe.
+    add_compile_options(/wd4459) # declaration of '...' hides global declaration
 endif()
 
 coda_add_module(
@@ -105,6 +108,7 @@ coda_add_tests(
         test_image_segment_computer.cpp
         test_image_writer.cpp
         test_nitf_buffer_list.cpp
+        test_tre_mods.cpp
         test_tre_mods++.cpp
         test_tre_create++.cpp
         test_j2k_loading++.cpp

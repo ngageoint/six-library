@@ -2127,7 +2127,7 @@ void initGeoData(six::GeoDataBase& geoData)
 }
 
 void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures,
-                              const std::string& version)
+                              const std::string& strVersion)
 {
     // The first collection is corresponds to the parent image
     six::sidd::Collection& collection = *exFeatures.collections[0];
@@ -2161,7 +2161,7 @@ void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures,
     polarization->txPolarization = six::PolarizationSequenceType::V;
     polarization->rcvPolarization = six::PolarizationSequenceType::OTHER;
     polarization->rcvPolarizationOffset = 1.37;
-    if (version == "1.0.0")
+    if (strVersion == "1.0.0")
     {
         polarization->processed = six::BooleanType::IS_TRUE;
     }
@@ -2191,7 +2191,7 @@ void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures,
     exFeatures.product[0].north = 58.332;
     exFeatures.product[0].extensions.push_back(param);
 
-    if (version == "2.0.0")
+    if (strVersion == "2.0.0")
     {
         exFeatures.product[0].ellipticity = 12.0;
         exFeatures.product[0].polarization.resize(1);

@@ -19,11 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __MATH_LINEAR_VECTOR_N_H__
-#define __MATH_LINEAR_VECTOR_N_H__
+#ifndef CODA_OSS_math_linear_VectorN_h_INCLUDED_
+#define CODA_OSS_math_linear_VectorN_h_INCLUDED_
+#pragma once
+
+#include <cmath>
 
 #include <math/linear/MatrixMxN.h>
-#include <cmath>
 
 namespace math
 {
@@ -33,19 +35,11 @@ namespace linear
 
 template<size_t _ND, typename _T=double> class VectorN
 {
-    #if _MSC_VER
-    __pragma(warning(push))
-    __pragma(warning(disable: 26495)) // 26495: Variable '...' is uninitialized. Always initialize a member variable (type.6).
-    #endif
-    MatrixMxN<_ND, 1, _T> mRaw;
-    #if _MSC_VER
-    __pragma(warning(pop))
-    #endif
+    MatrixMxN<_ND, 1, _T> mRaw{};
     
 public:
     typedef VectorN<_ND, _T> Like_T;
 
-    //!  Default constructor (no initialization)
     VectorN() = default;
    
     /*!
@@ -96,10 +90,7 @@ public:
      */
     VectorN(const std::vector<_T>& raw)
     {
-        if (raw.size() < _ND)
-            throw except::Exception(Ctxt("Not enough elements"));
-
-        mRaw = raw;
+        *this = raw;
     }
 
     /*!
@@ -111,7 +102,7 @@ public:
      */
     VectorN& operator=(const std::vector<_T>& raw)
     {
-        if (raw.size() < _ND)
+        if (raw.size() < size())
             throw except::Exception(Ctxt("Not enough elements"));
 
         mRaw = raw;
@@ -171,25 +162,25 @@ public:
     inline _T operator[](size_t i) const noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
-        assert( i < _ND );
+        assert( i < size() );
 #endif
         return mRaw[i][0];
     }
     inline _T& operator[](size_t i) noexcept
     {
 #if defined(MATH_LINEAR_BOUNDS)
-        assert( i < _ND );
+        assert( i < size() );
 #endif
         return mRaw[i][0];
 
     }
 
-    inline size_t size() const noexcept { return _ND; }
+    constexpr size_t size() const noexcept { return _ND; }
 
     _T dot(const VectorN<_ND>& vec) const
     {
         _T acc(0);
-        for (size_t i = 0; i < _ND; ++i)
+        for (size_t i = 0; i < size(); ++i)
         {
             acc += (*this)[i] * vec[i];
         }
@@ -294,7 +285,7 @@ public:
 
     Like_T& operator *=(const Like_T& v)
     {
-        for (size_t i = 0; i < _ND; i++)
+        for (size_t i = 0; i < size(); i++)
         {
             mRaw(i, 0) *= v[i];
         }
@@ -321,7 +312,7 @@ public:
 
     Like_T& operator /=(const Like_T& v)
     {
-        for (size_t i = 0; i < _ND; i++)
+        for (size_t i = 0; i < size(); i++)
         {
             mRaw(i, 0) /= v[i];
         }
@@ -412,4 +403,4 @@ inline bool operator!=(const VectorN<ND, T>& lhs, const Vector_T& rhs)
 } // linear
 } // math
 
-#endif
+#endif  // CODA_OSS_math_linear_VectorN_h_INCLUDED_

@@ -45,7 +45,7 @@ class RunNothing final : public sys::Runnable
 public:
     RunNothing(size_t& c, logging::ExceptionLogger* el, bool getBacktrace=false) : counter(c), exLog(el), getBacktrace(getBacktrace) {}
 
-    virtual void run()
+    virtual void run() override
     {
         if(exLog->hasLogged())
             return;
@@ -98,7 +98,7 @@ TEST_CASE(testExceptionWithBacktrace)
     try
     {
         throw except::Exception("Bad run");
-        TEST_FAIL("Should not get here");
+        TEST_FAIL;
     }
     catch (const except::Throwable& t)
     {
@@ -117,11 +117,12 @@ TEST_CASE(testExceptionWithBacktrace)
     try
     {
         throw except::Exception("Bad run").backtrace();
-        TEST_FAIL("Should not get here");
+        TEST_FAIL;
     }
     catch (const except::Throwable& t)
     {
-        TEST_ASSERT_GREATER(t.getBacktrace().size(), static_cast<size_t>(0));
+        const auto backtraceSize = static_cast<int64_t>(t.getBacktrace().size());
+        TEST_ASSERT_GREATER(backtraceSize, 0);
         s = t.toString(true /*includeBacktrace*/);
         what = t.what();
     }

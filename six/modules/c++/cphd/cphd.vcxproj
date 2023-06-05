@@ -15,6 +15,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{01BE4480-9620-4DED-B34F-D2E3AB4B7C8B}</ProjectGuid>
     <RootNamespace>six</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -63,6 +64,7 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -87,6 +89,7 @@
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -118,6 +121,7 @@
     <ClInclude Include="include\cphd\CPHDXMLControl.h" />
     <ClInclude Include="include\cphd\CPHDXMLParser.h" />
     <ClInclude Include="include\cphd\Data.h" />
+    <ClInclude Include="include\cphd\DataWriter.h" />
     <ClInclude Include="include\cphd\Dwell.h" />
     <ClInclude Include="include\cphd\Enums.h" />
     <ClInclude Include="include\cphd\ErrorParameters.h" />
@@ -153,6 +157,7 @@
     <ClCompile Include="source\CPHDXMLControl.cpp" />
     <ClCompile Include="source\CPHDXMLParser.cpp" />
     <ClCompile Include="source\Data.cpp" />
+    <ClCompile Include="source\DataWriter.cpp" />
     <ClCompile Include="source\Dwell.cpp" />
     <ClCompile Include="source\ErrorParameters.cpp" />
     <ClCompile Include="source\FileHeader.cpp" />

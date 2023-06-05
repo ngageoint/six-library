@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #if defined(WIN32) || defined(_WIN32)
+    #undef BIGENDIAN
     #include <Winsock2.h>
 #else
     #include <netinet/in.h>
@@ -826,7 +827,7 @@ NITFPRIV(NITF_BOOL) scanOffsets(nitf_IOInterface* io,
     /*  Book keeping block  */
     const nitf_Off origin_ = nitf_IOInterface_tell(io, error);
     assert(NITF_IO_SUCCESS(origin_));
-    uint64_t origin = origin_;
+    const uint64_t origin = origin_;
     /*  End book keeping block  */
     DPRINTA1("File length: %ld\n",  fileLength);
     while (bytesRead < fileLength)
@@ -862,9 +863,11 @@ NITFPRIV(NITF_BOOL) scanOffsets(nitf_IOInterface* io,
             {
                 off_t where = (off_t)nitf_IOInterface_tell(io, error);
 
-                uint64_t totalBytes = (fileLength - bytesRead) +
-                    (where - origin);
+                (void)origin;
+                #ifndef NDEBUG // i.e., debug
+                const uint64_t totalBytes = (fileLength - bytesRead) +  (where - origin);
                 assert( fileLength == totalBytes);
+                #endif
                 switch (tokenType)
                 {
                 case JPEG_MARKER_EOI:

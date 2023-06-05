@@ -22,6 +22,7 @@
 #include "six/sidd/Utilities.h"
 
 #include <stdexcept>
+#include <set>
 
 #include <str/EncodedStringView.h>
 
@@ -98,7 +99,7 @@ static six::Vector3 latLonToECEF(const six::sidd::PolynomialProjection& projecti
    return scene::Utilities::latLonToECEF(lla);
 }
 
-mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
+std::unique_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
         const DerivedData* derived)
 {
     const double centerTime = getCenterTime(*derived);
@@ -146,7 +147,7 @@ mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
     {
         // In this case there are no image plane row/col vectors, so we want
         // to use a different constructor
-        mem::auto_ptr<scene::SceneGeometry> geom(
+        std::unique_ptr<scene::SceneGeometry> geom(
                 new scene::SceneGeometry(arpVel, arpPos, refPt));
         return geom;
     }
@@ -156,12 +157,12 @@ mem::auto_ptr<scene::SceneGeometry> Utilities::getSceneGeometry(
                 Ctxt("Cylindrical projection not yet supported"));
     }
 
-    mem::auto_ptr<scene::SceneGeometry> geom(
+    std::unique_ptr<scene::SceneGeometry> geom(
             new scene::SceneGeometry(arpVel, arpPos, refPt, rowVec, colVec));
     return geom;
 }
 
-mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
+std::unique_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
         const DerivedData* derived)
 {
     if (!derived->measurement->projection->isMeasurable())
@@ -175,7 +176,7 @@ mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
         dynamic_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
-    mem::auto_ptr<scene::GridECEFTransform> transform;
+    std::unique_ptr<scene::GridECEFTransform> transform;
 
     switch ((int)p->projectionType)
     {
@@ -251,7 +252,7 @@ mem::auto_ptr<scene::GridECEFTransform> Utilities::getGridECEFTransform(
     return transform;
 }
 
-mem::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
+std::unique_ptr<scene::GridGeometry> Utilities::getGridGeometry(
         const DerivedData* derived)
 {
     if (!derived->measurement->projection->isMeasurable())
@@ -265,7 +266,7 @@ mem::auto_ptr<scene::GridGeometry> Utilities::getGridGeometry(
         dynamic_cast<const six::sidd::MeasurableProjection*>(
                     derived->measurement->projection.get());
 
-    mem::auto_ptr<scene::GridGeometry> geom;
+    std::unique_ptr<scene::GridGeometry> geom;
 
     // Only currently have an implementation for PGD
     switch ((int)p->projectionType)
@@ -465,19 +466,19 @@ std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType>
     return pols;
 }
 
-mem::auto_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
+std::unique_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
         const DerivedData* data)
 {
     const int lookDir = getSideOfTrack(data);
     scene::Errors errors;
     ::getErrors(*data, errors);
 
-    mem::auto_ptr<scene::SceneGeometry> geom(getSceneGeometry(data));
+    std::unique_ptr<scene::SceneGeometry> geom(getSceneGeometry(data));
 
     const six::ProjectionType gridType =
             data->measurement->projection->projectionType;
 
-    mem::auto_ptr<scene::ProjectionModel> projModel;
+    std::unique_ptr<scene::ProjectionModel> projModel;
     switch (gridType)
     {
     case six::ProjectionType::PLANE:
@@ -534,18 +535,47 @@ TReturn Utilities_parseData(::io::InputStream& xmlStream, const TSchemaPaths& sc
     auto data(six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
     return TReturn(static_cast<DerivedData*>(data.release()));
 }
-mem::auto_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
+std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
-    return Utilities_parseData<mem::auto_ptr<DerivedData>>(xmlStream, schemaPaths, log);
+    return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, schemaPaths, log);
 }
+
+static void prependISMSchemaPaths(const std::vector<std::filesystem::path>* &pSchemaPaths,
+    std::vector<std::filesystem::path>& adjustedSchemaPaths)
+{
+    if (pSchemaPaths == nullptr)
+    {
+        return;
+    }
+
+    // Get directories for XSDs that appear to be SIDD schemas
+    const auto xsd_files = six::sidd300::find_SIDD_schema_V_files(*pSchemaPaths);
+    std::set<std::string> xsd_dirs; // easy way to make directories unique
+    for (auto&& xsd : xsd_files)
+    {
+        xsd_dirs.insert(xsd.parent_path().string());
+    }
+    for (const auto& dir : xsd_dirs)
+    {
+        adjustedSchemaPaths.push_back(dir);
+    }
+
+    // Include all the original schema paths; these will be AFTER the adjusted paths, above
+    adjustedSchemaPaths.insert(adjustedSchemaPaths.end(), pSchemaPaths->begin(), pSchemaPaths->end());
+
+    pSchemaPaths = &adjustedSchemaPaths;
+}
+
 std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
 {
+    std::vector<std::filesystem::path> adjustedSchemaPaths; // keep in-scope
+    prependISMSchemaPaths(pSchemaPaths, adjustedSchemaPaths);
     return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, pSchemaPaths, log);
 }
 
-mem::auto_ptr<DerivedData> Utilities::parseDataFromFile(const std::string& pathname,
+std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::string& pathname,
         const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
     io::FileInputStream inStream(pathname);
@@ -561,7 +591,7 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem:
     return parseData(inStream, pSchemaPaths, *logger);
 }
 
-mem::auto_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr_,
+std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr_,
         const std::vector<std::string>& schemaPaths_, logging::Logger& log)
 {
     const auto xmlStr = str::EncodedStringView(xmlStr_).u8string();
@@ -571,7 +601,7 @@ mem::auto_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xml
         [](const std::string& s) { return s; });
 
     auto result = parseDataFromString(xmlStr, &schemaPaths, &log);
-    return mem::auto_ptr<DerivedData>(result.release());
+    return std::unique_ptr<DerivedData>(result.release());
 }
 std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
@@ -602,6 +632,9 @@ std::u8string Utilities::toXMLString(const DerivedData& data,
 
     logging::NullLogger nullLogger;
     logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
+
+    std::vector<std::filesystem::path> adjustedSchemaPaths; // keep in-scope
+    prependISMSchemaPaths(pSchemaPaths, adjustedSchemaPaths);
 
     return ::six::toValidXMLString(data, pSchemaPaths, pLogger_, &xmlRegistry);
 }
@@ -686,7 +719,14 @@ static void initProductCreation(six::sidd::ProductCreation& productCreation, con
     productCreation.productCreationExtensions.push_back(parameter);
 
     productCreation.classification.securityExtensions.push_back(parameter);
-    productCreation.classification.desVersion = 234;
+    if (strVersion != "3.0.0")
+    {
+        productCreation.classification.desVersion = 234; // existing code
+    }
+    else
+    {
+        productCreation.classification.desVersion = 201609; // SIDD 3.0
+    }
     productCreation.classification.createDate = six::DateTime();
     productCreation.classification.classification = "U";
 
@@ -702,8 +742,7 @@ static void initProductCreation(six::sidd::ProductCreation& productCreation, con
     productCreation.classification.ownerProducer.push_back("AIA");
     productCreation.classification.sciControls.push_back("HCS");
     productCreation.classification.sciControls.push_back("SI");
-    productCreation.classification.sarIdentifier.push_back("EU");
-    productCreation.classification.sarIdentifier.push_back("BC");
+    productCreation.classification.sarIdentifier.push_back("EU BC");
     productCreation.classification.disseminationControls.push_back("FOUO");
     productCreation.classification.disseminationControls.push_back("IMC");
     productCreation.classification.fgiSourceOpen.push_back("AIA");
@@ -1108,9 +1147,10 @@ static void initProductProcessing(six::sidd::ProductProcessing& processing)
     processing.processingModules.push_back(module);
 }
 
-static void populateData(six::sidd::DerivedData& siddData, const std::string& strVersion,
-    const std::string& lutType = "Mono")
+static void populateData(six::sidd::DerivedData& siddData, const std::string& lutType = "Mono")
 {
+    const auto strVersion = siddData.getVersion();
+
     constexpr bool smallImage = true;
 
     siddData.setVersion(strVersion);
@@ -1264,7 +1304,7 @@ static void update_for_SIDD_300(DerivedData& data) // n.b., much of this was add
     ProcTxRcvPolarization polarization{ PolarizationSequenceType::UNKNOWN, PolarizationSequenceType::UNKNOWN };
     data.exploitationFeatures->product[0].polarization.push_back(polarization); // TODO: this was added before SIDD 3.0.0
 
-    populateData(data, "3.0.0");
+    populateData(data);
 }
 
 static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& strVersion)
@@ -1381,9 +1421,9 @@ std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string&
     }
     throw std::invalid_argument("strVersion = '" + strVersion + "' is not supported.");
 }
-mem::auto_ptr<DerivedData> Utilities::createFakeDerivedData()
+std::unique_ptr<DerivedData> Utilities::createFakeDerivedData()
 {
-    return mem::auto_ptr<DerivedData>(createFakeDerivedData_("").release());
+    return std::unique_ptr<DerivedData>(createFakeDerivedData_("").release());
 }
 
 }

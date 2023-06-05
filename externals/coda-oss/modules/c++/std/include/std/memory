@@ -23,14 +23,14 @@
 #pragma once
 
 #include <memory>
+#include "coda_oss/memory.h"
+#include "coda_oss/CPlusPlus.h"
 
 // Make it (too?) easy for clients to get our various std:: implementations
 #ifndef CODA_OSS_NO_std_make_unique
-    #include "coda_oss/CPlusPlus.h"
     #if CODA_OSS_cpp14
         #define CODA_OSS_NO_std_make_unique 1  // part of C++14
     #else
-        #include "coda_oss/memory.h"
         #define CODA_OSS_NO_std_make_unique 0  // use our own
     #endif
 #endif

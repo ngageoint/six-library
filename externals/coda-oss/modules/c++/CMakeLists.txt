@@ -1,11 +1,25 @@
 set(TARGET_LANGUAGE c++)
 
-# turn on warnings as errors
+# turn on maximum warnings
 if (MSVC)
-    add_compile_options(/WX)
-    add_compile_options(/W4)
+    add_compile_options(/std:c++14)
+
+    # By default, there is a /W3 on the command-line from somewhere (?); adding
+    # /Wn results in a compiler warning.
+    #add_compile_options(/W4) # /Wall
+    string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}") # /Wall
+
 elseif (UNIX)
-    add_compile_options(-Werror)
+    add_compile_options(-std=c++14)
+
+    add_compile_options(-Wall -pedantic -Wextra)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wregister") # -Wvolatile
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Weffc++")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wzero-as-null-pointer-constant")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Woverloaded-virtual")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wold-style-cast")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsuggest-final-types -Wsuggest-final-methods")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsuggest-override")
 endif()
 
 # add an interface library for unittests
@@ -18,34 +32,7 @@ install(FILES "include/TestCase.h" DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
 install(TARGETS TestCase EXPORT ${CODA_EXPORT_SET_NAME})
 
 # common configuration checks, used by config and sys modules
-check_include_file("pthread.h" HAVE_PTHREAD_H)
-check_include_file("execinfo.h" HAVE_EXECINFO_H)
-check_symbol_exists("clock_gettime" "time.h" HAVE_CLOCK_GETTIME)
-if (NOT HAVE_CLOCK_GETTIME) # On old systems this was in librt, not libc
-    unset("HAVE_CLOCK_GETTIME" CACHE) # check_xxx_exists set CACHE variables, which cannot be re-used without being unset.
-    find_library(RT_LIB rt)
-    if (RT_LIB)
-        check_library_exists(rt clock_gettime ${RT_LIB} HAVE_CLOCK_GETTIME)
-        if (HAVE_CLOCK_GETTIME) # Record the necessary extra link library
-            set(CLOCK_GETTIME_EXTRALIBS "rt" CACHE INTERNAL "")
-        endif()
-    endif()
-endif()
-check_include_file("atomic.h" HAVE_ATOMIC_H)
-check_include_file("sys/time.h" HAVE_SYS_TIME_H)
-check_symbol_exists("localtime_r" "time.h" HAVE_LOCALTIME_R)
-check_symbol_exists("gmtime_r" "time.h" HAVE_GMTIME_R)
-check_symbol_exists("setenv" "stdlib.h" HAVE_SETENV)
-check_symbol_exists("posix_memalign" "stdlib.h" HAVE_POSIX_MEMALIGN)
-check_symbol_exists("memalign" "stdlib.h" HAVE_MEMALIGN)
 test_big_endian(BIGENDIAN)
-check_type_size("size_t" SIZEOF_SIZE_T)
-check_cxx_source_compiles(
-    "int __attribute__((noinline)) fn() { return 0; } int main() { return fn(); }"
-    HAVE_ATTRIBUTE_NOINLINE)
-check_cxx_source_compiles(
-    "int main() { int var __attribute__((aligned (32))); return var; }"
-    HAVE_ATTRIBUTE_ALIGNED)
 
 add_subdirectory("config")
 add_subdirectory("coda_oss")
@@ -75,5 +62,7 @@ add_subdirectory("polygon")
 add_subdirectory("math.linear")
 add_subdirectory("math.poly")
 add_subdirectory("numpyutils")
+add_subdirectory("hdf5.lite")
 add_subdirectory("gsl")
 add_subdirectory("std")
+

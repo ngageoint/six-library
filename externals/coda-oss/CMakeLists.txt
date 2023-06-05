@@ -3,10 +3,9 @@
 # Author:  Scott A. Colcord
 
 cmake_minimum_required(VERSION 3.14)
-
 project(coda-oss)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CXX_STANDARD_REQUIRED true)
 
 if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
@@ -20,17 +19,23 @@ endif()
 if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     # this is the top level project
 
-    # set up warnings
+    # Always turn on "warnings as errors" to avoid lots of (meaningless?) build output;
+    # we'll dial-back warnings as necessary.
     if (MSVC)
-        # set warning level to /W3
-        string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-        string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+       add_compile_options(/WX) # warnings as errors
+       add_compile_options(/MP) # multi-processor compile
+
+       if (ENABLE_ASAN)
+            # https://docs.microsoft.com/en-us/cpp/sanitizers/asan?view=msvc-160
+            add_compile_options(/fsanitize=address)
+       endif()
     elseif (UNIX)
-        add_compile_options(
-            -Wno-deprecated
-            -Wno-unused-value
-            -Wno-unused-but-set-variable
-        )
+       add_compile_options(-Werror) # warnings as errors
+       if (ENABLE_ASAN)
+            # https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
+            add_compile_options(-fsanitize=address)
+            add_link_options(-fsanitize=address)
+       endif()
     endif()
 
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

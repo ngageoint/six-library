@@ -31,9 +31,7 @@
 #include <xml/lite/MinidomParser.h>
 #include "TestCase.h"
 
-namespace
-{
-std::string testCPHDXMLBody()
+static std::string testCPHDXMLBody()
 {
     const char* xmlBody =
 "    <CollectionID>\n"
@@ -1151,7 +1149,6 @@ void runTest(const std::string& testName, const std::string& version)
     TEST_ASSERT_EQ(ref.monostatic->layoverAngle, 30.0);
     TEST_ASSERT_EQ(ref.monostatic->dopplerConeAngle, 30.0);
 }
-}
 
 TEST_CASE(testVersions)
 {
@@ -1172,7 +1169,26 @@ TEST_CASE(testReadXML)
     }
 }
 
+TEST_CASE(testPhaseSGN)
+{
+    auto v = cphd::PhaseSGN::toType("-1");
+    TEST_ASSERT_EQ(v, -1);
+    auto s = v.toString();
+    TEST_ASSERT_EQ("-1", s);
+
+    v = cphd::PhaseSGN::toType("+1");
+    TEST_ASSERT_EQ(v, +1);
+    s = v.toString();
+    TEST_ASSERT_EQ("1", s);
+
+    v = cphd::PhaseSGN::toType("1");
+    TEST_ASSERT_EQ(v, 1);
+    s = v.toString();
+    TEST_ASSERT_EQ("1", s);
+}
+
 TEST_MAIN(
     TEST_CHECK(testVersions);
     TEST_CHECK(testReadXML);
+    TEST_CHECK(testPhaseSGN);
 )

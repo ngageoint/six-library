@@ -263,6 +263,9 @@ else()
     # MacOS could be supported here as well
     if (WIN32)
         list(APPEND EXCLUDES ${UNIX_SPECIFIC})
+        add_definitions(
+            -DWIN32
+        )
     else()
         list(APPEND EXCLUDES ${WIN_SPECIFIC})
     endif()

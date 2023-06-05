@@ -13,6 +13,7 @@ coda_add_module(
         source/CPHDXMLParser.cpp
         source/Channel.cpp
         source/Data.cpp
+        source/DataWriter.cpp
         source/Dwell.cpp
         source/ErrorParameters.cpp
         source/FileHeader.cpp

@@ -261,12 +261,12 @@ static void getDesBuffer(const six::NITFReadControl& reader,
 }
 
 template <typename MeshTypeT>
-mem::auto_ptr<MeshTypeT> extractMesh(const std::string& meshID,
+std::unique_ptr<MeshTypeT> extractMesh(const std::string& meshID,
                                      size_t desIndex,
                                      const six::NITFReadControl& reader)
 {
     // Extract the mesh
-    mem::auto_ptr<MeshTypeT> mesh(new MeshTypeT(meshID));
+    std::unique_ptr<MeshTypeT> mesh(new MeshTypeT(meshID));
     mem::ScopedAlignedArray<std::byte> buffer;
     getDesBuffer(reader, desIndex, buffer);
 
@@ -386,15 +386,6 @@ static void getModelComponents_(const ComplexData& complexData,
         AreaPlaneUtility::deriveAreaPlane(complexData, areaPlane);
     }
 }
-#if !CODA_OSS_cpp17
-void Utilities::getModelComponents(const ComplexData& complexData,
-        mem::auto_ptr<scene::SceneGeometry>& geometry,
-        mem::auto_ptr<scene::ProjectionModel>& projectionModel,
-        AreaPlane& areaPlane)
-{
-    getModelComponents_(complexData, geometry, projectionModel, areaPlane);
-}
-#endif
 void Utilities::getModelComponents(const ComplexData& complexData,
         std::unique_ptr<scene::SceneGeometry>& geometry,
         std::unique_ptr<scene::ProjectionModel>& projectionModel,
@@ -403,7 +394,7 @@ void Utilities::getModelComponents(const ComplexData& complexData,
     getModelComponents_(complexData, geometry, projectionModel, areaPlane);
 }
 
-mem::auto_ptr<scene::ProjectionPolynomialFitter> Utilities::getPolynomialFitter(const ComplexData& complexData,
+std::unique_ptr<scene::ProjectionPolynomialFitter> Utilities::getPolynomialFitter(const ComplexData& complexData,
         size_t numPoints1D,
         bool sampleWithinValidDataPolygon)
 {
@@ -431,7 +422,7 @@ mem::auto_ptr<scene::ProjectionPolynomialFitter> Utilities::getPolynomialFitter(
 
     if (!sampleWithinValidDataPolygon)
     {
-        return mem::auto_ptr<scene::ProjectionPolynomialFitter>(
+        return std::unique_ptr<scene::ProjectionPolynomialFitter>(
                 new scene::ProjectionPolynomialFitter(*projectionModel,
                                                       ecefTransform,
                                                       offset,
@@ -447,7 +438,7 @@ mem::auto_ptr<scene::ProjectionPolynomialFitter> Utilities::getPolynomialFitter(
     std::vector<types::RowCol<double>> polygon;
     Utilities::projectValidDataPolygonToOutputPlane(complexData, polygon);
 
-    return mem::auto_ptr<scene::ProjectionPolynomialFitter>(
+    return std::unique_ptr<scene::ProjectionPolynomialFitter>(
             new scene::ProjectionPolynomialFitter(*projectionModel,
                                                   ecefTransform,
                                                   fullExtent,
@@ -595,15 +586,6 @@ static void readSicd_(const std::string& sicdPathname,
     // own an XMLControlRegistry
     reader.setXMLControlRegistry();
 }
-#if !CODA_OSS_cpp17
-void Utilities::readSicd(const std::string& sicdPathname,
-                         const std::vector<std::string>& schemaPaths,
-                         mem::auto_ptr<ComplexData>& complexData,
-                         std::vector<std::complex<float>>& widebandData)
-{
-    readSicd_(sicdPathname, schemaPaths, complexData, widebandData);
-}
-#endif
 void Utilities::readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
@@ -660,22 +642,7 @@ static void readSicd_(const std::string& sicdPathname,
 
     reader.setXMLControlRegistry();
 }
-#if !CODA_OSS_cpp17
-void Utilities::readSicd(const std::string& sicdPathname,
-                         const std::vector<std::string>& schemaPaths,
-                         size_t orderX,
-                         size_t orderY,
-                         mem::auto_ptr<ComplexData>& complexData,
-                         std::vector<std::complex<float>>& widebandData,
-                         six::Poly2D& outputRowColToSlantRow,
-                         six::Poly2D& outputRowColToSlantCol,
-                         mem::auto_ptr<NoiseMesh>& noiseMesh,
-                         mem::auto_ptr<ScalarMesh>& scalarMesh)
-{
-    readSicd_(sicdPathname, schemaPaths, orderX, orderY, complexData, widebandData,
-        outputRowColToSlantRow, outputRowColToSlantCol, noiseMesh, scalarMesh);
-}
-#endif
+
 void Utilities::readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          size_t orderX,
@@ -691,7 +658,7 @@ void Utilities::readSicd(const std::string& sicdPathname,
         outputRowColToSlantRow, outputRowColToSlantCol, noiseMesh, scalarMesh);
 }
 
-mem::auto_ptr<ComplexData> Utilities::getComplexData(NITFReadControl& reader)
+std::unique_ptr<ComplexData> Utilities::getComplexData(NITFReadControl& reader)
 {
     const six::Data* data = reader.getContainer()->getData(0);
 
@@ -707,12 +674,12 @@ mem::auto_ptr<ComplexData> Utilities::getComplexData(NITFReadControl& reader)
     // Note that you don't have to do this yourself if in your usage the
     // reader stays in scope.
     // TODO: If the container held shared pointers we wouldn't need to do this
-    mem::auto_ptr<ComplexData> complexData(
+    std::unique_ptr<ComplexData> complexData(
         static_cast<ComplexData*>(data->clone()));
     return complexData;
 }
 
-mem::auto_ptr<ComplexData> Utilities::getComplexData(
+std::unique_ptr<ComplexData> Utilities::getComplexData(
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths)
 {
@@ -731,7 +698,7 @@ mem::auto_ptr<ComplexData> Utilities::getComplexData(
         reader.load(pathname, &schemaPaths);
 
         auto pComplexData = reader.getComplexData();
-        return mem::auto_ptr<ComplexData>(pComplexData.release());
+        return std::unique_ptr<ComplexData>(pComplexData.release());
     }
 }
 
@@ -993,12 +960,12 @@ TReturn Utilities_parseData(::io::InputStream& xmlStream, const TSchemaPaths& sc
     auto data(six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
     return TReturn(static_cast<ComplexData*>(data.release()));
 }
-mem::auto_ptr<ComplexData> Utilities::parseData(
+std::unique_ptr<ComplexData> Utilities::parseData(
         ::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
 {
-    return Utilities_parseData<mem::auto_ptr<ComplexData>>(xmlStream, schemaPaths, log);
+    return Utilities_parseData<std::unique_ptr<ComplexData>>(xmlStream, schemaPaths, log);
 }
 std::unique_ptr<ComplexData> Utilities::parseData(::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
@@ -1006,7 +973,7 @@ std::unique_ptr<ComplexData> Utilities::parseData(::io::InputStream& xmlStream,
     return Utilities_parseData<std::unique_ptr<ComplexData>>(xmlStream, pSchemaPaths, log);
 }
 
-mem::auto_ptr<ComplexData> Utilities::parseDataFromFile(
+std::unique_ptr<ComplexData> Utilities::parseDataFromFile(
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
@@ -1024,7 +991,7 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromFile(const std::filesystem:
     return parseData(inStream, pSchemaPaths, *logger);
 }
 
-mem::auto_ptr<ComplexData> Utilities::parseDataFromString(
+std::unique_ptr<ComplexData> Utilities::parseDataFromString(
         const std::string& xmlStr_,
         const std::vector<std::string>& schemaPaths_,
         logging::Logger& log)
@@ -1036,7 +1003,7 @@ mem::auto_ptr<ComplexData> Utilities::parseDataFromString(
         [](const std::string& s) { return s; });
 
     auto result = parseDataFromString(xmlStr, &schemaPaths, &log);
-    return mem::auto_ptr<ComplexData>(result.release());
+    return std::unique_ptr<ComplexData>(result.release());
 }
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
@@ -1243,14 +1210,14 @@ std::unique_ptr<ComplexData> Utilities::createFakeComplexData(const std::string&
     }
     throw std::invalid_argument("strVersion = '" + strVersion + "' is not supported.");
 }
-mem::auto_ptr<ComplexData> Utilities::createFakeComplexData(const types::RowCol<size_t>* pDims)
+std::unique_ptr<ComplexData> Utilities::createFakeComplexData(const types::RowCol<size_t>* pDims)
 {
     auto result = createFakeComplexData_("" /*strVersion*/,
         PixelType::RE32F_IM32F, false /*makeAmplitudeTable*/, pDims);
-    return mem::auto_ptr<ComplexData>(result.release());
+    return std::unique_ptr<ComplexData>(result.release());
 }
 
-mem::auto_ptr<NoiseMesh> Utilities::getNoiseMesh(const NITFReadControl& reader)
+std::unique_ptr<NoiseMesh> Utilities::getNoiseMesh(const NITFReadControl& reader)
 {
     const std::map<std::string, size_t> nameToDesIndex =
             getAdditionalDesMap(reader);
@@ -1270,7 +1237,7 @@ mem::auto_ptr<NoiseMesh> Utilities::getNoiseMesh(const NITFReadControl& reader)
                                   reader);
 }
 
-mem::auto_ptr<ScalarMesh> Utilities::getScalarMesh(const NITFReadControl& reader)
+std::unique_ptr<ScalarMesh> Utilities::getScalarMesh(const NITFReadControl& reader)
 {
     const std::map<std::string, size_t> nameToDesIndex =
             getAdditionalDesMap(reader);
@@ -1281,7 +1248,7 @@ mem::auto_ptr<ScalarMesh> Utilities::getScalarMesh(const NITFReadControl& reader
     // Scalar mesh is optional - return null if the ID is not present in the DES
     if (it == nameToDesIndex.end())
     {
-        return mem::auto_ptr<ScalarMesh>();
+        return std::unique_ptr<ScalarMesh>();
     }
 
     // Extract the scalar mesh
@@ -1381,17 +1348,6 @@ static void getProjectionPolys_(const NITFReadControl& reader,
                                outputRowColToSlantRow,
                                outputRowColToSlantCol);
 }
-#if !CODA_OSS_cpp17
-void Utilities::getProjectionPolys(const NITFReadControl& reader,
-                                   size_t orderX,
-                                   size_t orderY,
-                                   mem::auto_ptr<ComplexData>& complexData,
-                                   six::Poly2D& outputRowColToSlantRow,
-                                   six::Poly2D& outputRowColToSlantCol)
-{
-    getProjectionPolys_(reader, orderX, orderY, complexData, outputRowColToSlantRow, outputRowColToSlantCol);
-}
-#endif
 void Utilities::getProjectionPolys(const NITFReadControl& reader,
                                    size_t orderX,
                                    size_t orderY,

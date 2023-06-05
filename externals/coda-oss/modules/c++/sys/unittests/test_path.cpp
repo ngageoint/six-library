@@ -53,7 +53,7 @@ TEST_CASE(testPathMerge)
     std::vector<std::string> paths;
     const auto splitResult = os.splitEnv("PATH", paths);
     TEST_ASSERT_TRUE(splitResult);
-    TEST_ASSERT_GREATER(paths.size(), static_cast<size_t>(0));
+    TEST_ASSERT_FALSE(paths.empty());
 
     auto path = find_directory(paths);
     TEST_ASSERT_TRUE(coda_oss::filesystem::is_directory(path));
@@ -65,7 +65,7 @@ TEST_CASE(testPathMerge)
 
     bool isAbsolute;
     auto components = sys::Path::separate(path, isAbsolute);
-    TEST_ASSERT_GREATER(components.size(), static_cast<size_t>(0));
+    TEST_ASSERT_FALSE(components.empty());
     auto result = sys::Path::merge(components, isAbsolute);
     TEST_ASSERT_EQ(result, path);
     TEST_ASSERT_TRUE(coda_oss::filesystem::is_directory(result));

@@ -103,16 +103,16 @@ public:
                         int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
 
     //!  Close the file
-    void close()
+    void close() override
     {
         mFile.close();
     }
 
-    virtual void flush();
+    virtual void flush() override;
 
-    sys::Off_T seek(sys::Off_T offset, io::Seekable::Whence whence);
+    sys::Off_T seek(sys::Off_T offset, io::Seekable::Whence whence) override;
 
-    sys::Off_T tell();
+    sys::Off_T tell() override;
 
     using OutputStream::write;
 
@@ -124,7 +124,7 @@ public:
      * \param len the length of bytes to write
      * \throw IoException
      */
-    virtual void write(const void* buffer, size_t len);
+    virtual void write(const void* buffer, size_t len) override;
 };
 }
 

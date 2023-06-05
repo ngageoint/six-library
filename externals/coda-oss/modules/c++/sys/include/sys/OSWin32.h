@@ -26,7 +26,7 @@
 
 #include "sys/AbstractOS.h"
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 
 /*!
  *  \file OSWin32.h

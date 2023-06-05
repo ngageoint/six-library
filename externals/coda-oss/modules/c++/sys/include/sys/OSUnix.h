@@ -24,7 +24,7 @@
 #ifndef __SYS_OS_UNIX_H__
 #define __SYS_OS_UNIX_H__
 
-#if !(defined(WIN32) || defined(_WIN32))
+#ifndef _WIN32
 
 #include "sys/AbstractOS.h"
 #include "sys/Conf.h"
@@ -38,9 +38,9 @@ struct OSUnix final : public AbstractOS
     OSUnix() = default;
     virtual ~OSUnix() = default;
 
-    virtual std::string getPlatformName() const;
+    virtual std::string getPlatformName() const override;
 
-    virtual std::string getNodeName() const;
+    virtual std::string getNodeName() const override;
 
     /*!
      *  Get the path delimiter for this operating system.
@@ -48,7 +48,7 @@ struct OSUnix final : public AbstractOS
      *  For unix it will be one slash /
      *  \return The path delimiter
      */
-    virtual const char* getDelimiter() const
+    virtual const char* getDelimiter() const override
     {
         return "/";
     }
@@ -64,64 +64,64 @@ struct OSUnix final : public AbstractOS
      *  \param path The path to check for
      *  \return True if it does, false otherwise
      */
-    virtual bool exists(const std::string& path) const;
+    virtual bool exists(const std::string& path) const override;
 
     /*!
      *  Move file with this path name to the newPath
      *  \return True upon success, false if failure
      */
     virtual bool move(const std::string& path,
-                      const std::string& newPath) const;
+                      const std::string& newPath) const override;
 
     /*!
      *  Does this path resolve to a file?
      *  \param path The path
      *  \return True if it does, false if not
      */
-    virtual bool isFile(const std::string& path) const;
+    virtual bool isFile(const std::string& path) const override;
 
     /*!
      *  Does this path resolve to a directory?
      *  \param path The path
      *  \return True if it does, false if not
      */
-    virtual bool isDirectory(const std::string& path) const;
+    virtual bool isDirectory(const std::string& path) const override;
 
-    virtual bool makeDirectory(const std::string& path) const;
+    virtual bool makeDirectory(const std::string& path) const override;
 
 
-    virtual Pid_T getProcessId() const;
+    virtual Pid_T getProcessId() const override;
 
 
     /*!
      *  Retrieve the current working directory.
      *  \return The current working directory
      */
-    virtual std::string getCurrentWorkingDirectory() const;
+    virtual std::string getCurrentWorkingDirectory() const override;
 
     /*!
      *  Change the current working directory.
      *  \return true if the directory was changed, otherwise false.
      */
-    virtual bool changeDirectory(const std::string& path) const;
+    virtual bool changeDirectory(const std::string& path) const override;
 
     /*!
      *  Get a suitable temporary file name
      *  \return The file name
      */
     virtual std::string getTempName(const std::string& path = ".",
-                                    const std::string& prefix = "TMP") const;
+                                    const std::string& prefix = "TMP") const override;
 
     /*!
      *  Return the size in bytes of a file
      *  \return The file size
      */
-    virtual sys::Off_T getSize(const std::string& path) const;
+    virtual sys::Off_T getSize(const std::string& path) const override;
 
     /**
      * Returns the last modified time of the file/directory
      */
-    virtual sys::Off_T getLastModifiedTime(const std::string& path) const;
+    virtual sys::Off_T getLastModifiedTime(const std::string& path) const override;
 
     /*!
      *  This is a system independent sleep function.
@@ -130,59 +130,59 @@ struct OSUnix final : public AbstractOS
      *  use nanosleep
      *  \param milliseconds The params
      */
-    virtual void millisleep(int milliseconds) const;
+    virtual void millisleep(int milliseconds) const override;
 
-    virtual std::string operator[](const std::string& s) const;
+    virtual std::string operator[](const std::string& s) const override;
 
     /*!
      *  Get an environment variable
      */
-    virtual std::string getEnv(const std::string& s) const;
+    virtual std::string getEnv(const std::string& s) const override;
 
     /*!
      * Returns true if environment variable is set, false otherwise
      */
-    virtual bool isEnvSet(const std::string& s) const;
+    virtual bool isEnvSet(const std::string& s) const override;
 
     /*!
      *  Set an environment variable
      */
     virtual void setEnv(const std::string& var,
                         const std::string& val,
-                        bool overwrite);
+                        bool overwrite) override;
 
     /*!
      * Unset an environment variable
      */
-    virtual void unsetEnv(const std::string& var);
+    virtual void unsetEnv(const std::string& var) override;
 
-    virtual std::string getDSOSuffix() const;
+    virtual std::string getDSOSuffix() const override;
 
     /*!
      * \return the number of logical CPUs present on the machine
      *         (includes hyperthreading)
      */
-    virtual size_t getNumCPUs() const;
+    virtual size_t getNumCPUs() const override;
 
     /*!
      * \return the number of logical CPUs available. This will be
      *         affected by pinning (e.g. numactl/taskset), and will
      *         always be <= getNumCPUs.
      */
-    virtual size_t getNumCPUsAvailable() const;
+    virtual size_t getNumCPUsAvailable() const override;
 
     /*!
      * \return the number of physical CPUs present on the machine
      *         (excludes hyperthreading)
      */
-    virtual size_t getNumPhysicalCPUs() const;
+    virtual size_t getNumPhysicalCPUs() const override;
 
     /*!
      * \return the number of physical CPUs available. This will be
      *         affected by pinning (e.g. numactl/taskset), and will
      *         always be <= getNumPhysicalCPUs.
      */
-    virtual size_t getNumPhysicalCPUsAvailable() const;
+    virtual size_t getNumPhysicalCPUsAvailable() const override;
 
     /*!
      * Divide the available CPUs (pinned with numactl/taskset) into
@@ -199,41 +199,41 @@ struct OSUnix final : public AbstractOS
      *                    getNumCPUsAvailable() - getNumPhysicalCPUsAvailable().
      */
     virtual void getAvailableCPUs(std::vector<int>& physicalCPUs,
-                                  std::vector<int>& htCPUs) const;
+                                  std::vector<int>& htCPUs) const override;
 
     /*!
      *  Create a symlink, pathnames can be either absolute or relative
      */
     virtual void createSymlink(const std::string& origPathname,
-                               const std::string& symlinkPathname) const;
+                               const std::string& symlinkPathname) const override;
 
     /*!
      * Remove a symlink, pathname can be absolute or relative
      */
-    virtual void removeSymlink(const std::string& symlinkPathname) const;
+    virtual void removeSymlink(const std::string& symlinkPathname) const override;
 
     /*!
      *  Get the total RAM and available RAM on the system in megabytes
      */
-    virtual void getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const;
+    virtual void getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const override;
 
     /*!
      *  Get the absolute path to the current executable
      */
     virtual std::string getCurrentExecutable(
-            const std::string& argvPathname="") const;
+            const std::string& argvPathname="") const override;
 
 protected:
     /*!
      *  Remove file with this pathname
      */
-    virtual void removeFile(const std::string& pathname) const;
+    virtual void removeFile(const std::string& pathname) const override;
 
     /*!
      *  Remove directory with this pathname
      *  NOTE: This will throw if the directory is not empty
      */
-    virtual void removeDirectory(const std::string& pathname) const;
+    virtual void removeDirectory(const std::string& pathname) const override;
 };
 
 struct DirectoryUnix final : public AbstractDirectory

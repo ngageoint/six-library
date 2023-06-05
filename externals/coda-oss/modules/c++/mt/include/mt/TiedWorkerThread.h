@@ -46,15 +46,6 @@ public:
         mCPUAffinityInit(std::move(cpuAffinityInit))
     {
     }
-#if !CODA_OSS_cpp17
-    TiedWorkerThread(
-            mt::RequestQueue<Request_T>* requestQueue,
-            mem::auto_ptr<CPUAffinityThreadInitializer> cpuAffinityInit =
-                    mem::auto_ptr<CPUAffinityThreadInitializer>(nullptr)) :
-        TiedWorkerThread(requestQueue, std::unique_ptr<CPUAffinityThreadInitializer>(cpuAffinityInit.release()))
-    {
-    }
-#endif
 
     virtual void initialize()
     {

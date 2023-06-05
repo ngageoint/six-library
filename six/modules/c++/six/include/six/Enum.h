@@ -95,7 +95,8 @@ namespace details
         const auto result = nitf::details::index(map, v);
         if (!result.has_value())
         {
-            return std::optional<T>();
+            std::optional<T> retval; // some compilers think this is uninitialized
+            return retval;
         }
         // TValues will be "int" when used from the "Enum" base class
         return std::optional<T>(six::Enum::cast<T>(*result));

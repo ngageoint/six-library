@@ -6,14 +6,14 @@ jobs:
   build-cmake-windows:
     strategy:
       matrix:
-        os: [windows-2019]
+        os: [windows-latest]
         python-version: ['3.7']
     name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install python dependencies
@@ -46,10 +46,10 @@ jobs:
     - name: test
       run: |
         cd target-Release
-        ctest -C Release
+        ctest -C Release --output-on-failure
         cd ..
         cd target-Debug
-        ctest -C Debug
+        ctest -C Debug --output-on-failure
 
   build-linux-cmake:
     strategy:
@@ -59,9 +59,9 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install python dependencies
@@ -77,7 +77,8 @@ jobs:
     - name: build
       run: |
         cd target
-        cmake --build . -j
+        # "-j" spawns too many processes causing GCC to crash
+        cmake --build . -j 12
     - name: install
       run: |
         cd target
@@ -85,7 +86,7 @@ jobs:
     - name: test
       run: |
         cd target
-        ctest   
+        ctest --output-on-failure
 
   build-waf:
     strategy:
@@ -96,9 +97,9 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.python-version }}-waf
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
     - name: configure_with_swig

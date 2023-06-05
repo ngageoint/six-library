@@ -48,25 +48,30 @@
 
     #if defined(__GNUC__)
     #endif // __GNUC__
+
+    #if defined(__INTEL_COMPILER)
+    #endif  // __INTEL_COMPILER
 #endif // CODA_OSS_cplusplus
+
 #if CODA_OSS_cplusplus < 202002L
     // oops ... try to fix
-    #if defined(__GNUC__) && (__cplusplus >= 201709L) // note > C++ 17 of 201703L
+    #if defined(__GNUC__) && (__cplusplus >= 201709L)  // note > C++ 17 of 201703L
         // Enough C++20 for our needs
         #undef CODA_OSS_cplusplus
         #define CODA_OSS_cplusplus 202002L
-     #endif
+    #endif
 #endif  // CODA_OSS_cplusplus
 
 // Define a few macros as that's less verbose than testing against a version number
+// https://en.cppreference.com/w/cpp/preprocessor/replace#Predefined_macros
 #define CODA_OSS_cpp11 (CODA_OSS_cplusplus >= 201103L)
 #define CODA_OSS_cpp14 (CODA_OSS_cplusplus >= 201402L)
 #define CODA_OSS_cpp17 (CODA_OSS_cplusplus >= 201703L)
 #define CODA_OSS_cpp20 (CODA_OSS_cplusplus >= 202002L)
-#define CODA_OSS_cpp23 0
+#define CODA_OSS_cpp23 (CODA_OSS_cplusplus >= 202302L)
 
-#if !CODA_OSS_cpp11
-#error "Must compile with C++11 or greater."
+#if !CODA_OSS_cpp14
+#error "Must compile with C++14 or greater."
 #endif
 
 #endif // CODA_OSS_coda_oss_CPlusPlus_h_INCLUDED_

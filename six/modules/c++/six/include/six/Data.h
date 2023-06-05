@@ -84,7 +84,7 @@ struct Data
     template<typename T, typename U>
     bool convertPixels(std::span<const T> from, std::span<U> to, ptrdiff_t cutoff = -1) const
     {
-        return convertPixels_(as_bytes(from), as_bytes(to), cutoff);
+        return convertPixels_(std::as_bytes(from), std::as_writable_bytes(to), cutoff);
     }
 
     /*!

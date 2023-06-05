@@ -44,7 +44,7 @@
 inline coda_oss::u8string utf8_(std::u32string::value_type ch)
 {
     return str::to_u8string(std::u32string{ch});
-};
+}
 static const std::map<std::u32string::value_type, coda_oss::u8string> Windows1252_x80_x9F_to_u8string{
     {0x80, utf8_(0x20AC) } // EURO SIGN
     // , {0x81, replacement_character } // UNDEFINED
@@ -198,15 +198,11 @@ std::u16string str::to_u16string(str::W1252string::const_pointer p, size_t sz)
 {
     auto retval = to_Tstring<std::u16string>(p, sz);
     #if defined(_WIN32) && (!defined(_NDEBUG) || defined(DEBUG))
-    const _bstr_t bstr(str::cast<const char*>(p));
+    const _bstr_t bstr(std::string(str::cast<const char*>(p), sz).c_str()); // no _bstr_t ctor taking sz
     const std::wstring wstr(static_cast<const wchar_t*>(bstr));
     assert(retval == str::cast<std::u16string::const_pointer>(wstr.c_str()));
     #endif
     return retval;
-}
-str::ui16string str::to_ui16string(str::W1252string::const_pointer p, size_t sz)
-{
-    return to_Tstring<str::ui16string>(p, sz);
 }
 std::u32string str::to_u32string(str::W1252string::const_pointer p, size_t sz)
 {
@@ -352,13 +348,6 @@ std::u16string str::to_u16string(coda_oss::u8string::const_pointer p_, size_t sz
     utf8::utf8to16(p, p + sz, std::back_inserter(retval));
     return retval;
 }
-str::ui16string str::to_ui16string(coda_oss::u8string::const_pointer p_, size_t sz)
-{
-    auto p = str::cast<std::string::const_pointer>(p_);
-    str::ui16string retval;
-    utf8::utf8to16(p, p + sz, std::back_inserter(retval));
-    return retval;
-}
 
 std::u32string str::to_u32string(coda_oss::u8string::const_pointer p_, size_t sz)
 {
@@ -382,7 +371,6 @@ coda_oss::u8string str::to_u8string(W1252string::const_pointer p, size_t sz)
     return retval;
 }
 
-template <>
 std::string str::toString(const coda_oss::u8string& utf8)
 {
     return str::EncodedStringView(utf8).native();

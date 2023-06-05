@@ -25,14 +25,34 @@
 #define CODA_OSS_sys_Conf_h_INCLUDED_
 #pragma once
 
+// In case there is still a WIN32 (should be "_WIN32" with a leading '_') someplace.
+#if defined(_WIN32) && !defined(WIN32)
+#define WIN32 _WIN32
+#endif
+
 // POSIX is more-or-less "Unix"
 // https://linux.die.net/man/7/feature_test_macros
 // "If no feature test macros are explicitly defined, then the following feature test macros
 // are defined by default: ... _POSIX_SOURCE, and _POSIX_C_SOURCE=200809L. [...] 
 // _POSIX_SOURCE Defining this obsolete macro ... is equivalent to defining _POSIX_C_SOURCE ..."
-#define CODA_OSS_POSIX_SOURCE (defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE >= 1))
-#define CODA_OSS_POSIX2001_SOURCE CODA_OSS_POSIX_SOURCE && (_POSIX_C_SOURCE >= 200112L)
-#define CODA_OSS_POSIX2008_SOURCE CODA_OSS_POSIX2001_SOURCE && (_POSIX_C_SOURCE >= 200809L)
+#ifndef _WIN32
+#include <features.h>
+#endif
+
+#undef CODA_OSS_POSIX_SOURCE
+#if defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE >= 1)
+#define CODA_OSS_POSIX_SOURCE _POSIX_C_SOURCE
+#endif
+
+#undef CODA_OSS_POSIX2001_SOURCE
+#if defined(CODA_OSS_POSIX_SOURCE) && (_POSIX_C_SOURCE >= 200112L)
+#define CODA_OSS_POSIX2001_SOURCE _POSIX_C_SOURCE
+#endif
+
+#undef CODA_OSS_POSIX2008_SOURCE
+#if defined(CODA_OSS_POSIX2001_SOURCE) && (_POSIX_C_SOURCE >= 200809L)
+#define CODA_OSS_POSIX2008_SOURCE _POSIX_C_SOURCE
+#endif
 
 #include <config/Version.h>
 #include <config/Exports.h>
@@ -44,23 +64,18 @@
 #endif
 
 #include <assert.h>
-#include <iostream>
 #include <stdio.h>
 #include <stdint.h>
+
+#include <iostream>
 #include <algorithm>
-
-#if defined(__sgi) || defined(__sgi__)
-#   include <stdarg.h>
-#   include <stdlib.h>
-#else
-#   include <cstdarg>
-#   include <cstdlib>
-#endif
-
+#include <cstdarg>
+#include <cstdlib>
 #include <memory>
+
 #include "str/Format.h"
 #include "sys/TimeStamp.h"
-
+#include "sys/ByteSwap.h"
 
 
 /*  Dance around the compiler to figure out  */
@@ -70,7 +85,7 @@
 #if defined(__GNUC__)
     /*  We get a really nice function macro  */
 #   define NativeLayer_func__ __PRETTY_FUNCTION__
-#elif (defined(WIN32) || defined(_WIN32)) && (_MSC_VER >= 1300)
+#elif defined(_WIN32) && (_MSC_VER >= 1300)
 #   define NativeLayer_func__ __FUNCSIG__
 /*  Otherwise, lets look for C99 compatibility  */
 #elif defined (__STDC_VERSION__)
@@ -106,7 +121,7 @@ namespace sys
     typedef int64_t            Int64_T;
 }
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 #  include <malloc.h>
 #  include <windows.h>
 #  include <process.h>
@@ -128,21 +143,6 @@ namespace sys
 }
 #else // !windows
 #   include <sys/types.h>
-#   if defined(__sgi) || defined(__sgi__)
-#       if defined(__GNUC__)
-#           ifdef _FIX_BROKEN_HEADERS
-                typedef __int64_t jid_t;
-#           endif
-#       endif
-#   endif
-#   if defined(__sun) || defined(__sun__) || defined(__sparc) || defined(__sparc) || defined(__sparc__)
-#       if !defined(__SunOS_5_6) && !defined(__SunOS_5_7) && !defined(__SunOS_5_8) && defined(__GNUC__)
-#           ifdef _FIX_BROKEN_HEADERS
-                typedef id_t projid_t;
-#           endif
-#       endif
-#       include <sys/stream.h>
-#  endif
 #  include <signal.h>
 #  include <errno.h>
 #  include <sys/stat.h>
@@ -150,11 +150,7 @@ namespace sys
 #  include <unistd.h>
 #  include <fcntl.h>
 #  include <dirent.h>
-#  if defined(_USE_STDINT)
-#      include <stdint.h>
-#  else
-#      include <inttypes.h>
-#  endif
+#  include <stdint.h>
 //#  include <sys/mman.h>
 
 namespace sys
@@ -202,113 +198,7 @@ namespace sys
      * RISC architectures we are big-endian.
      */
     bool CODA_OSS_API isBigEndianSystem();
-
-
-   /*!
-     *  Swap bytes in-place.  Note that a complex pixel
-     *  is equivalent to two floats so elemSize and numElems
-     *  must be adjusted accordingly.
-     *
-     *  \param [inout] buffer to transform
-     *  \param elemSize
-     *  \param numElems
-     */
-    inline void byteSwap(void* buffer,
-                         unsigned short elemSize,
-                         size_t numElems)
-    {
-        sys::byte* bufferPtr = static_cast<sys::byte*>(buffer);
-        if (!bufferPtr || elemSize < 2 || !numElems)
-            return;
-
-        const auto half = elemSize >> 1;
-        size_t offset = 0, innerOff = 0, innerSwap = 0;
-
-        for(size_t i = 0; i < numElems; ++i, offset += elemSize)
-        {
-            for(unsigned short j = 0; j < half; ++j)
-            {
-                innerOff = offset + j;
-                innerSwap = offset + elemSize - 1 - j;
-
-                std::swap(bufferPtr[innerOff], bufferPtr[innerSwap]);
-            }
-        }
-    }
-
-    /*!
-     *  Swap bytes into output buffer.  Note that a complex pixel
-     *  is equivalent to two floats so elemSize and numElems
-     *  must be adjusted accordingly.
-     *
-     *  \param buffer to transform
-     *  \param elemSize
-     *  \param numElems
-     *  \param[out] outputBuffer buffer to write swapped elements to
-     */
-    inline void  byteSwap(const void* buffer,
-                          unsigned short elemSize,
-                          size_t numElems,
-                          void* outputBuffer)
-    {
-        const sys::byte* bufferPtr = static_cast<const sys::byte*>(buffer);
-        sys::byte* outputBufferPtr = static_cast<sys::byte*>(outputBuffer);
-
-        if (!numElems || !bufferPtr || !outputBufferPtr)
-        {
-            return;
-        }
-
-        const auto half = elemSize >> 1;
-        size_t offset = 0;
-
-        for (size_t ii = 0; ii < numElems; ++ii, offset += elemSize)
-        {
-            for (unsigned short jj = 0; jj < half; ++jj)
-            {
-                const size_t innerOff = offset + jj;
-                const size_t innerSwap = offset + elemSize - 1 - jj;
-
-                outputBufferPtr[innerOff] = bufferPtr[innerSwap];
-                outputBufferPtr[innerSwap] = bufferPtr[innerOff];
-            }
-        }
-    }
-
-    /*!
-     *  Function to swap one element irrespective of size.  The inplace
-     *  buffer function should be preferred.
-     *
-     *  To specialize complex float, first include the complex library
-     *  \code
-        #include <complex>
-     *  \endcode
-     *
-     *  Then put an overload in as specified below:
-     *  \code
-        template <typename T> std::complex<T> byteSwap(std::complex<T> val)
-        {
-            std::complex<T> out(byteSwap<T>(val.real()),
-                                byteSwap<T>(val.imag()));
-            return out;
-        }
-     *  \endcode
-     *
-     */
-    template <typename T> T byteSwap(T val)
-    {
-        size_t size = sizeof(T);
-        T out;
-
-        unsigned char* cOut = reinterpret_cast<unsigned char*>(&out);
-        unsigned char* cIn = reinterpret_cast<unsigned char*>(&val);
-        for (size_t i = 0, j = size - 1; i < j; ++i, --j)
-        {
-            cOut[i] = cIn[j];
-            cOut[j] = cIn[i];
-        }
-        return out;
-    }
+    bool CODA_OSS_API isLittleEndianSystem();
 
 
     /*!
@@ -327,15 +217,15 @@ namespace sys
                               size_t alignment = SSE_INSTRUCTION_ALIGNMENT)
     {
         void* p = nullptr;
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
         p = _aligned_malloc(size, alignment);
-#elif CODA_OSS_POSIX2001_SOURCE
+#elif defined(CODA_OSS_POSIX2001_SOURCE)
         // https://linux.die.net/man/3/posix_memalign
         if (posix_memalign(&p, alignment, size) != 0)
         {
             p = nullptr;
         }
-#elif CODA_OSS_POSIX_SOURCE
+#elif defined(CODA_OSS_POSIX_SOURCE)
         // https://linux.die.net/man/3/posix_memalign
         // "The functions memalign(), ... have been available in all Linux libc libraries."
         p = memalign(alignment, size);
@@ -359,13 +249,12 @@ namespace sys
      */
     inline void alignedFree(void* p)
     {
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
         _aligned_free(p);
 #else
         free(p);
 #endif
     }
-
 
 }
 

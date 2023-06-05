@@ -42,7 +42,7 @@ namespace cphd03
  *  \brief Used to write a CPHD file. You must be able to provide the
  *         appropriate metadata and vector based metadata.
  */
-struct CPHDWriter
+struct CPHDWriter final
 {
     /*
      *  \func Constructor
@@ -89,6 +89,13 @@ struct CPHDWriter
                const std::string& pathname,
                size_t numThreads = 0,
                size_t scratchSpaceSize = 4 * 1024 * 1024);
+
+    CPHDWriter() = delete;
+    CPHDWriter(const CPHDWriter&) = delete;
+    CPHDWriter& operator=(const CPHDWriter&) = delete;
+    CPHDWriter(CPHDWriter&&) = delete;
+    CPHDWriter& operator=(CPHDWriter&&) = delete;
+    ~CPHDWriter() = default;
 
     /*
      *  \func addImage
@@ -168,10 +175,11 @@ struct CPHDWriter
 
     void close()
     {
-        if (mStream.get())
-        {
-            mStream->close();
-        }
+        mStream->close();
+    }
+    std::shared_ptr<io::SeekableOutputStream> getStream() const
+    {
+        return mStream;
     }
 
 private:
@@ -187,7 +195,6 @@ private:
                            size_t size);
 
     std::unique_ptr<cphd::DataWriter> mDataWriter;
-    void initializeDataWriter();
 
     Metadata mMetadata;
     const size_t mElementSize;
@@ -199,8 +206,8 @@ private:
     std::vector<const std::byte*> mCPHDData;
     std::vector<const std::byte*> mVBMData;
 
-    size_t mCPHDSize;
-    size_t mVBMSize;
+    size_t mCPHDSize = 0;
+    size_t mVBMSize = 0;
 };
 }
 

@@ -114,14 +114,15 @@ public:
     ValidatorXerces(const std::vector<std::string>& schemaPaths, 
                     logging::Logger* log,
                     bool recursive = true);
-    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, // fs::path -> mLegacyStringConversion = false
+    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&,
                     logging::Logger* log,
                     bool recursive = true);
+    ValidatorXerces(const coda_oss::filesystem::path&, logging::Logger&);
 
     ValidatorXerces(const ValidatorXerces&) = delete;
     ValidatorXerces& operator=(const ValidatorXerces&) = delete;
-    ValidatorXerces(ValidatorXerces&&) = delete;
-    ValidatorXerces& operator=(ValidatorXerces&&) = delete;
+    ValidatorXerces(ValidatorXerces&&) = default;
+    ValidatorXerces& operator=(ValidatorXerces&&) = default;
 
     using ValidatorInterface::validate;
 
@@ -137,12 +138,19 @@ public:
     bool validate(const coda_oss::u8string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
     bool validate(const str::W1252string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
 
+    // Search each directory for XSD files
+    static std::vector<coda_oss::filesystem::path> loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive=true);
+
 private:
+    void initialize(); // easier than chaining constructors w/existing code
+
     bool validate_(const coda_oss::u8string& xml, 
                    const std::string& xmlID,
                    std::vector<ValidationInfo>& errors) const;
 
+    void loadGrammar(const coda_oss::filesystem::path&, logging::Logger&);
     std::unique_ptr<xercesc::XMLGrammarPool> mSchemaPool;
+
     std::unique_ptr<xml::lite::ValidationErrorHandler> mErrorHandler;
     std::unique_ptr<xercesc::DOMLSParser> mValidator;
 

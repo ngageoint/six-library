@@ -54,7 +54,7 @@ std::string BUFFER[1];
 class ReadWriteThread : public Thread
 {
 protected:
-   void run() {
+   void run() override {
         
          for(int i=0; i < 5; ++i)
          {

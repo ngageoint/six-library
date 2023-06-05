@@ -41,7 +41,7 @@ enum class PlatformType
     // MacOS
 };
 
-#if _WIN32
+#ifdef _WIN32
 static auto Platform = PlatformType::Windows;
 #else
 static auto Platform = PlatformType::Linux;
@@ -55,14 +55,6 @@ inline std::u16string to_u16string(std::string::const_pointer s, size_t sz, bool
     }
     return str::to_u16string(str::cast<str::W1252string::const_pointer>(s), sz);
 }
-inline str::ui16string to_ui16string(std::string::const_pointer s, size_t sz, bool is_utf8 /* is 's' UTF-8? */)
-{
-    if (is_utf8)
-    {
-        return str::to_ui16string(str::cast<coda_oss::u8string::const_pointer>(s), sz);
-    }
-    return str::to_ui16string(str::cast<str::W1252string::const_pointer>(s), sz);
-}
 
 static std::string to_native(coda_oss::u8string::const_pointer p, size_t sz)
 {
@@ -74,7 +66,7 @@ static std::string to_native(coda_oss::u8string::const_pointer p, size_t sz)
     }
     if (Platform == PlatformType::Linux)
     {
-        return str::cast<std::string::const_pointer>(p); // copy
+        return std::string(str::cast<std::string::const_pointer>(p), sz);
     }
     throw std::logic_error("Unknown platform.");
 }
@@ -83,7 +75,7 @@ static std::string to_native(str::W1252string::const_pointer p, size_t sz)
 {
     if (Platform == PlatformType::Windows)
     {    
-        return str::cast<std::string::const_pointer>(p); // copy
+        return std::string(str::cast<std::string::const_pointer>(p), sz);
     }
     if (Platform == PlatformType::Linux)
     {
@@ -155,10 +147,6 @@ std::u16string str::EncodedStringView::u16string() const
 {
     return ::to_u16string(mString.data(), mString.size(), mIsUtf8);
 }
-str::ui16string str::EncodedStringView::ui16string_() const
-{
-    return ::to_ui16string(mString.data(), mString.size(), mIsUtf8);
-}
 
 inline std::u32string to_u32string(std::string::const_pointer s, size_t sz, bool is_utf8 /* is 's' UTF-8? */)
 {
@@ -179,10 +167,9 @@ std::wstring str::EncodedStringView::wstring() const  // UTF-16 on Windows, UTF-
     const auto sz = mString.size();
     const auto s =
     // Need to use #ifdef's because str::cast() checks to be sure the sizes are correct.
-    #if _WIN32
+    #ifdef _WIN32
     ::to_u16string(p, sz, mIsUtf8);  // std::wstring is UTF-16 on Windows
-    #endif
-    #if !_WIN32
+    #else
     ::to_u32string(p, sz, mIsUtf8);  // std::wstring is UTF-32 on Linux
     #endif    
     return str::c_str<std::wstring>(s); // copy
@@ -208,11 +195,13 @@ bool str::EncodedStringView::operator_eq(const EncodedStringView& rhs) const
     if (lhs.mIsUtf8 == rhs.mIsUtf8) // both are UTF-8 or both are Windows-1252
     {
         // But we can avoid that call if the pointers are the same
-        if ((lhs.mString.data() == rhs.mString.data()) && (rhs.mString.size() == rhs.mString.size()))
+        const auto pLhs = lhs.mString.data();
+        const auto pRhs = rhs.mString.data();
+        if ((pLhs == pRhs) && (rhs.mString.size() == rhs.mString.size()))
         {
             return true;
         }
-        return strcmp(lhs.mString.data(), rhs.mString.data()) == 0;
+        return strcmp(pLhs, pRhs) == 0;
     }
 
     // LHS and RHS have different encodings, but one must be UTF-8

@@ -90,7 +90,7 @@ TEST_CASE(testChoices)
     try
     {
         results.reset(parser.parse(str::split("-t type2 -t type1", " ")));
-        TEST_FAIL("Shouldn't allow multiple types");
+        TEST_FAIL_MSG("Shouldn't allow multiple types");
     }
     catch(except::Exception&)
     {
@@ -171,10 +171,10 @@ TEST_CASE(testRequired)
     parser.addArgument("-v --verbose", "Toggle verbose", cli::STORE_TRUE);
     parser.addArgument("-c --config", "Specify a config file", cli::STORE)->setRequired(true);
 
-    std::unique_ptr<cli::Results> results;
-    TEST_EXCEPTION(results.reset(parser.parse(str::split(""))));
-    TEST_EXCEPTION(results.reset(parser.parse(str::split("-c"))));
-    results.reset(parser.parse(str::split("-c configFile")));
+    const std::string program(testName);
+    TEST_EXCEPTION(parser.parse(program, str::split("")));
+    TEST_EXCEPTION(parser.parse(program, str::split("-c")));
+    const auto results = parser.parse(program, str::split("-c configFile"));
     TEST_ASSERT_EQ(results->get<std::string>("config"), "configFile");
 }
 

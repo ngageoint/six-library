@@ -11,15 +11,33 @@
  ```
 # coda-oss Release Notes
 
-## [Release 2023-03-10](https://github.com/mdaus/coda-oss/releases/tag/2023-01-10)
-* Final 🤞🏻 **C++11 release  from [master](https://github.com/mdaus/coda-oss/tree/master)
-  not [main](https://github.com/mdaus/coda-oss/tree/main)/C++14** (as releases since
-  [2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30) have been).
-* [HDF5](https://www.hdfgroup.org/) [source code](https://github.com/HDFGroup/hdf5) added (not built).
-* *waf* self-extractor rebuilt to fix FIPS warning because of insecure *md5* hashing.
-* Better debug/release configurations for *waf* builds.
-* Minor tweaks from other projects.
+## [Release 2023-??-??](https://github.com/mdaus/coda-oss/releases/tag/2023-??-??)
+* *zlib* updated to [1.2.13](https://github.com/madler/zlib/releases/tag/v1.2.13).
+* new `mem::ComplexView` class to make it easier to process complex data stored in parallel. 
+* adjust compiler flags for clean *CMake* builds.
+* wrap common "file open" routines (e.g., `fopen()`) to support `sys::expandEnvironmentVariables()`.
+* add header-only [HighFive](https://github.com/BlueBrain/HighFive) HDF5-wrapper library.
 
+## [Release 2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
+* removed remaining vestiges of `std::auto_ptr`, provide `mem::AutoPtr` for the tiny handful of
+  places (e.g., SWIG bindings) that still need copying.
+* `xml::lite::Element` overloads to make creting new XML documents easier; see unittests for examples.
+* try even harder to find unittest files in various scenarios.
+* build *hdf5.lite* with **waf**.
+* New `--optz=fastest-possible` (**waf** only) which adds
+  [`-march=native`](https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/x86-Options.html#x86-Options)
+  to *fastest* for **waf** builds.  There is a new *faster* option (the default) which is currently
+  the same as *fastest* (i.e., no `-march=native`).
+
+## [Release 2022-11-04](https://github.com/mdaus/coda-oss/releases/tag/2022-11-04)
+* "Cut" from [main](https://github.com/mdaus/coda-oss/tree/main), not *master*.
+* The [HDFGroup](https://hdfgroup.org/)s [HDF5 library](https://github.com/HDFGroup/hdf5) is built
+   and installed; a simple (and very incomplete!) wrapper is provided, this is at the "hello world!" stage.
+* A few **cli** routines have been tweaked to make unit-testing easier.
+* Utilitiy routines for finding various files when unit-testing.
+* Removed C++14 work-arounds needed in C++11. Legacy C++ exception specificatons removed.
+* Rebuild `waf` for FIPS error; added more debug options.
+ 
 ## [Release 2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30)
 * XML is now always written as UTF-8; the code will still try to read Windows-1252.
 * `Uri`s are no longer validated by default.

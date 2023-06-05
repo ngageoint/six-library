@@ -20,29 +20,11 @@
  *
  */
 
-#ifndef __SYS_ATOMIC_COUNTER_H__
-#define __SYS_ATOMIC_COUNTER_H__
+#ifndef CODA_OSS_sys_AtomicCounter_h_INCLUDED_
+#define CODA_OSS_sys_AtomicCounter_h_INCLUDED_
 #pragma once
 
-#include <sys/Conf.h>
 #include <sys/AtomicCounterCpp11.h>
-
-#if defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
-#include <sys/AtomicCounterX86.h>
-#elif (defined(WIN32) || defined(_WIN32))
-#include <sys/AtomicCounterWin32.h>
-#elif defined(__sun) //&& defined(HAVE_ATOMIC_H)
-// atomic.h is available in Solaris 10+
-// TODO: For Solaris 9 and older, we currently use the mutex implementation
-//       http://blogs.oracle.com/d/entry/atomic_operations
-//       provides a snippet of assembly code for atomic incrementing in
-//       Solaris 9 - this would be a starting point if a faster implementation
-//       is needed
-#include <sys/AtomicCounterSolaris.h>
-#else
-// Bummer - need to fall back on a slow mutex implementation
-#include <sys/AtomicCounterMutex.h>
-#endif
 
 namespace sys
 {
@@ -50,15 +32,6 @@ namespace sys
  *  \class AtomicCounter
  *  \brief This class provides atomic incrementing, decrementing, and setting
  *         of an unsigned integer.  All operations are thread-safe.
- *
- *  TODO: Currently, we use the ValueType typedef for whatever the underlying
- *        integer type is.  Should we instead provide implementations that are
- *        explicitly for 32 bit and 64 bit integers?  For Solaris and Windows,
- *        there are equivalent instructions so this would be simple.  For X86,
- *        would need to research the assembly instructions to find the
- *        equivalent 64-bit instruction.
- *
- *  TODO: Provide other operations such as getThenSet() and compareThenSet().
  */
 template<typename TAtomicCounterImpl>
 struct AtomicCounterT final
@@ -155,17 +128,11 @@ private:
     TAtomicCounterImpl mImpl;
 };
 
-// platform-specific
-using AtomicCounterOS = AtomicCounterT<AtomicCounterImpl>;
-// built on <atomic>
-using AtomicCounterCpp11 = AtomicCounterT<AtomicCounterImplCpp11>;
 
-#if !CODA_OSS_cpp17
-using AtomicCounter = AtomicCounterOS; // TODO: AtomicCounterCpp11
-#else
+using AtomicCounterCpp11 = AtomicCounterT<AtomicCounterImplCpp11>;
 using AtomicCounter = AtomicCounterCpp11;
-#endif
+using AtomicCounterOS = AtomicCounterCpp11;
 
 }
 
-#endif
+#endif  // CODA_OSS_sys_AtomicCounter_h_INCLUDED_

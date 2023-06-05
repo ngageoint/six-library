@@ -34,6 +34,7 @@
 #include <import/str.h>
 #include <except/Exception.h>
 #include "logging/Logger.h"
+#include <sys/Span.h>
 
 #include <scene/sys_Conf.h>
 #include "six/Types.h"
@@ -199,7 +200,7 @@ void loadXmlDataContentHandler(FILE* log);
  *
  * \return Data representation of 'xmlStream'
  */
-mem::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg, 
+std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg, 
                               ::io::InputStream& xmlStream, 
                               DataType dataType,
                               const std::vector<std::string>& schemaPaths,
@@ -219,7 +220,7 @@ std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of 'xmlStream'
  */
-mem::auto_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               ::io::InputStream& xmlStream,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger& log);
@@ -238,7 +239,7 @@ std::unique_ptr<Data> parseData(const XMLControlRegistry&, ::io::InputStream&,
  *
  * \return Data representation of the contents of 'pathname'
  */
-mem::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
     const std::string& pathname,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
@@ -255,7 +256,7 @@ mem::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of the contents of 'pathname'
  */
-mem::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
     const std::string& pathname,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log);
@@ -272,7 +273,7 @@ mem::auto_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of 'xmlStr'
  */
-mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
@@ -294,7 +295,7 @@ std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of 'xmlStr'
  */
-mem::auto_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
+std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log);
@@ -316,72 +317,39 @@ void getErrors(const ErrorStatistics* errorStats,
  */
 std::string findSchemaPath(const std::string& progname);
 
-namespace details
-{
-    template<typename T>
-    inline std::span<const std::byte> as_bytes(std::span<const T> buffer)
-    {
-        const void* pBuffer = buffer.data();
-        const auto size = buffer.size() * sizeof(buffer[0]);
-        return std::span<const std::byte>(static_cast<const std::byte*>(pBuffer), size);
-    }
-    template<typename T>
-    inline std::span<const std::byte> as_cbytes(std::span<const T> buffer)
-    {
-        return as_bytes(buffer);
-    }
-
-    template<typename T>
-    inline std::span<std::byte> as_bytes(std::span<T> buffer_)
-    {
-        const std::span<const T> buffer(buffer_.data(), buffer_.size());
-        const auto result = as_bytes(buffer);
-        return std::span<std::byte>(const_cast<std::byte*>(result.data()), result.size());
-    }
-    template<typename T>
-    inline std::span<const std::byte> as_cbytes(std::span<T> buffer)
-    {
-        return as_bytes(std::span<const T>(buffer.data(), buffer.size()));
-    }
-}
-
 template<typename T>
 inline std::span<const std::byte> as_bytes(std::span<const T> buffer)
 {
-    return details::as_bytes(buffer);
+    return std::as_bytes(buffer);
 }
 template<typename T>
 inline std::span<const std::byte> as_bytes(const std::vector<T>& buffer)
 {
-    return as_bytes(std::span<const T>(buffer.data(), buffer.size()));
-}
-template<typename T>
-inline std::span<const std::byte> as_cbytes(std::span<T> buffer)
-{
-    return details::as_cbytes(buffer);
-}
-template<typename T>
-inline std::span<const std::byte> as_cbytes(std::vector<T>& buffer_)
-{
-    const std::vector<T>& buffer = buffer_;
-    return as_bytes(buffer);
+    return sys::as_bytes(buffer);
 }
 
 template<typename T>
-inline std::span<std::byte> as_bytes(std::span<T> buffer)
+inline std::span<std::byte> as_writable_bytes(std::vector<T>& buffer)
 {
-    return details::as_bytes(buffer);
+    return sys::as_writable_bytes(buffer);
 }
 template<typename T>
-inline std::span<std::byte> as_bytes(std::vector<T>& buffer)
+inline std::span<std::byte> as_writable_bytes(std::span<T>& buffer)
 {
-    return as_bytes(std::span<T>(buffer.data(), buffer.size()));
+    return std::as_writable_bytes(buffer);
 }
 
 namespace testing
 {
-    extern std::filesystem::path findRootDir(const std::filesystem::path& dir);
-    extern std::filesystem::path buildRootDir(const std::filesystem::path& argv0);
+    std::filesystem::path findRootDir(const std::filesystem::path& dir);
+    std::filesystem::path buildRootDir(const std::filesystem::path& argv0);
+
+    std::filesystem::path getNitfPath(const  std::filesystem::path& filename);
+    std::filesystem::path getNitroPath(const  std::filesystem::path& filename);
+
+    std::vector<std::filesystem::path> getSchemaPaths();
+    std::filesystem::path getModuleFile(const std::filesystem::path& modulePath, const  std::filesystem::path& filename);
+    std::filesystem::path getSampleXmlPath(const std::filesystem::path& module /*"six.sicd"*/, const  std::filesystem::path& filename);
 }
 
 }
