@@ -18,9 +18,9 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
+#pragma once 
 #ifndef CODA_OSS_coda_oss_bit_h_INCLUDED_
 #define CODA_OSS_coda_oss_bit_h_INCLUDED_
-#pragma once
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -58,28 +58,28 @@ namespace coda_oss
     #if defined(_MSC_VER)
     // These routines should generate a single instruction; see
     // https://devblogs.microsoft.com/cppblog/a-tour-of-4-msvc-backend-improvements/
-    inline uint16_t byteswap(uint16_t val)
+    inline uint16_t byteswap(uint16_t val) noexcept
     {
         return _byteswap_ushort(val);
     }
-    inline uint32_t byteswap(uint32_t val)
+    inline uint32_t byteswap(uint32_t val) noexcept
     {
         return _byteswap_ulong(val);
     }
-    inline uint64_t byteswap(uint64_t val)
+    inline uint64_t byteswap(uint64_t val) noexcept
     {
         return _byteswap_uint64(val);
     }
     #elif defined(__GNUC__)
-    inline uint16_t byteswap(uint16_t val)
+    inline uint16_t byteswap(uint16_t val) noexcept
     {
         return bswap_16(val);
     }
-    inline uint32_t byteswap(uint32_t val)
+    inline uint32_t byteswap(uint32_t val) noexcept
     {
         return bswap_32(val);
     }
-    inline uint64_t byteswap(uint64_t val)
+    inline uint64_t byteswap(uint64_t val) noexcept
     {
         return bswap_64(val);
     }

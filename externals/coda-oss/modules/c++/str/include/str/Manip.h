@@ -194,9 +194,9 @@ inline std::string join(const std::vector<T>& toks, const std::string& with)
     if (toks.empty())
         return "";
 
-    const auto len = static_cast<int>(toks.size());
+    const auto len = toks.size();
     std::ostringstream oss;
-    int i = 0;
+    size_t i = 0;
     for (; i < len - 1; i++)
     {
         oss << str::toString(toks[i]) << with;

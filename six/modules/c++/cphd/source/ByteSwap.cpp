@@ -46,7 +46,7 @@ template <typename T>
 inline void byteSwap(const void* in, T& out)
 {
     auto const inBytes = sys::make_span<std::byte>(in, sizeof(T));
-    out = sys::swapBytes<T>(inBytes);
+    out = sys::byteSwapValue<T>(inBytes);
 }
 
 inline const std::byte* calc_offset(const void* input_, size_t offset)
