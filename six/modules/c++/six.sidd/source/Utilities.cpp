@@ -22,6 +22,7 @@
 #include "six/sidd/Utilities.h"
 
 #include <stdexcept>
+#include <set>
 
 #include <str/EncodedStringView.h>
 
@@ -539,9 +540,38 @@ std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
 {
     return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, schemaPaths, log);
 }
+
+static void prependISMSchemaPaths(const std::vector<std::filesystem::path>* &pSchemaPaths,
+    std::vector<std::filesystem::path>& adjustedSchemaPaths)
+{
+    if (pSchemaPaths == nullptr)
+    {
+        return;
+    }
+
+    // Get directories for XSDs that appear to be SIDD schemas
+    const auto xsd_files = six::sidd300::find_SIDD_schema_V_files(*pSchemaPaths);
+    std::set<std::string> xsd_dirs; // easy way to make directories unique
+    for (auto&& xsd : xsd_files)
+    {
+        xsd_dirs.insert(xsd.parent_path().string());
+    }
+    for (const auto& dir : xsd_dirs)
+    {
+        adjustedSchemaPaths.push_back(dir);
+    }
+
+    // Include all the original schema paths; these will be AFTER the adjusted paths, above
+    adjustedSchemaPaths.insert(adjustedSchemaPaths.end(), pSchemaPaths->begin(), pSchemaPaths->end());
+
+    pSchemaPaths = &adjustedSchemaPaths;
+}
+
 std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
 {
+    std::vector<std::filesystem::path> adjustedSchemaPaths; // keep in-scope
+    prependISMSchemaPaths(pSchemaPaths, adjustedSchemaPaths);
     return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, pSchemaPaths, log);
 }
 
@@ -602,6 +632,9 @@ std::u8string Utilities::toXMLString(const DerivedData& data,
 
     logging::NullLogger nullLogger;
     logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
+
+    std::vector<std::filesystem::path> adjustedSchemaPaths; // keep in-scope
+    prependISMSchemaPaths(pSchemaPaths, adjustedSchemaPaths);
 
     return ::six::toValidXMLString(data, pSchemaPaths, pLogger_, &xmlRegistry);
 }
