@@ -170,12 +170,12 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
 
 struct AMP8I_PHS8I_Node final
 {
-    cx_float result;
-    AMP8I_PHS8I_t amp_and_value;
+    AMP8I_PHS8I_t value;
+    cx_float result; // six::sicd::Utilities::from_AMP8I_PHS8I(value.amplitude, value.phase)
 };
 static auto make_nodes(const six::AmplitudeTable* pAmplitudeTable)
 {
-    // For all possible amp/phase values (there are "only" 256*256), get and save the
+    // For all possible amp/phase values (there are "only" 256*256=65536), get and save the
     // complex<float> value.
     //
     // Be careful with indexing so that we don't wrap-around in the loops.
@@ -184,12 +184,12 @@ static auto make_nodes(const six::AmplitudeTable* pAmplitudeTable)
     for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
     {
         AMP8I_PHS8I_Node v;
-        v.amp_and_value.amplitude = gsl::narrow<uint8_t>(input_amplitude);
+        v.value.amplitude = gsl::narrow<uint8_t>(input_amplitude);
 
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
-            v.amp_and_value.phase = gsl::narrow<uint8_t>(input_value);
-            v.result = six::sicd::Utilities::from_AMP8I_PHS8I(v.amp_and_value.amplitude, v.amp_and_value.phase, pAmplitudeTable);
+            v.value.phase = gsl::narrow<uint8_t>(input_value);
+            v.result = six::sicd::Utilities::toComplex(v.value.amplitude, v.value.phase, pAmplitudeTable);
             retval.push_back(v);
         }
     }
@@ -197,7 +197,7 @@ static auto make_nodes(const six::AmplitudeTable* pAmplitudeTable)
 }
 
 // input_amplitudes_t is too big for the stack
-static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
+static auto AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
 {
     // Get all 256x256 values for the AmplitudeTable
     auto nodes = make_nodes(pAmplitudeTable);
@@ -206,7 +206,7 @@ static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six
     auto& values = *retval;
     for (auto&& n : nodes)
     {
-        values[n.amp_and_value.amplitude][n.amp_and_value.phase] = std::move(n.result);
+        values[n.value.amplitude][n.value.phase] = std::move(n.result);
     }
 
     return retval;
@@ -240,7 +240,7 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
         return (*pValues)[input.amplitude][input.phase];
     }
 
-    const auto S = Utilities::from_AMP8I_PHS8I(input.amplitude, input.phase, pAmplitudeTable);
+    const auto S = Utilities::toComplex(input.amplitude, input.phase, pAmplitudeTable);
     return std::complex<float>(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
 }
 

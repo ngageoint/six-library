@@ -415,7 +415,7 @@ struct AmplitudeTable final : public LUT
         }
     }
 
-    size_t size() const
+    size_t size() const noexcept
     {
         return numEntries;
     }

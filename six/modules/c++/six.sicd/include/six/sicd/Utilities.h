@@ -628,7 +628,8 @@ public:
         const std::vector<types::RowCol<double> >& opPixels,
         std::vector<types::RowCol<double> >& spPixels);
 
-    static std::complex<long double> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable*);
+    // Convert the amp/phase to a complex value using the given AmplitudeTable, if any.
+    static std::complex<long double> toComplex(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable*);
 };
 
 

@@ -79,7 +79,7 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
 }
 }
 
-std::complex<long double> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
+std::complex<long double> six::sicd::Utilities::toComplex(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
 {
     long double A = 0.0;
     if (pAmplitudeTable != nullptr)

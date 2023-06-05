@@ -74,7 +74,7 @@ static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmpl
         // AmpPhase -> Complex
         const auto amplitude = gsl::narrow<uint8_t>(i);
         const auto value = amplitude;
-        const auto complex = six::sicd::Utilities::from_AMP8I_PHS8I(amplitude, value, pAmplitudeTable);
+        const auto complex = six::sicd::Utilities::toComplex(amplitude, value, pAmplitudeTable);
         retval[i] = std::abs(complex);
     }
 
@@ -102,8 +102,8 @@ static const std::vector<long double>& get_magnitudes(const six::AmplitudeTable*
 six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
     : magnitudes(get_magnitudes(pAmplitudeTable, uncached_magnitudes))
 {
-    const auto p0 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 0, pAmplitudeTable));
-    const auto p1 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 1, pAmplitudeTable));
+    const auto p0 = GetPhase(Utilities::toComplex(1, 0, pAmplitudeTable));
+    const auto p1 = GetPhase(Utilities::toComplex(1, 1, pAmplitudeTable));
     assert(p0 == 0.0);
     assert(p1 > p0);
     phase_delta = p1 - p0;
