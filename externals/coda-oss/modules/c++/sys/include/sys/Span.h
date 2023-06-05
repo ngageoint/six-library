@@ -21,14 +21,15 @@
  *
  */
 
+#pragma once 
 #ifndef CODA_OSS_sys_Span_h_INCLUDED_
 #define CODA_OSS_sys_Span_h_INCLUDED_
-#pragma once
 
 #include <coda_oss/span.h>
 #include <coda_oss/cstddef.h>
 #include <vector>
 #include <array>
+#include <type_traits>
 
 namespace sys // not "mem", it depends on sys.
 {
@@ -129,6 +130,22 @@ inline auto make_span(T (&a)[N]) noexcept
 // Calling as_bytes() or as_writable_bytes() requires a span, which as
 // noted above is a nuisance to create w/o C++17
 template <typename T>
+inline auto as_bytes(coda_oss::span<const T> s) noexcept
+{
+    return coda_oss::as_bytes(s);
+}
+template <typename T>
+inline auto as_bytes(coda_oss::span<T> s) noexcept
+{
+    return coda_oss::as_bytes(s);
+}
+template <typename T>
+inline auto as_writable_bytes(coda_oss::span<T> s) noexcept
+{
+    return coda_oss::as_writable_bytes(s);
+}
+
+template <typename T>
 inline auto as_bytes(const T* ptr, size_t sz) noexcept
 {
     return coda_oss::as_bytes(make_span(ptr, sz));
@@ -136,6 +153,7 @@ inline auto as_bytes(const T* ptr, size_t sz) noexcept
 template <typename T>
 inline auto as_writable_bytes(T* ptr, size_t sz) noexcept
 {
+    static_assert(!std::is_const<T>::value, "T cannot be 'const'");
     return coda_oss::as_writable_bytes(make_writable_span(ptr, sz));
 }
 
@@ -170,18 +188,6 @@ template <typename T, size_t N>
 inline auto as_writable_bytes(T (&a)[N]) noexcept
 {
     return as_writable_bytes(a, N);
-}
-
-// "cast" a single value to bytes
-template <typename T>
-inline auto as_bytes(const T& v) noexcept
-{
-    return as_bytes(&v, 1);
-}
-template <typename T>
-inline auto as_writable_bytes(T& v) noexcept
-{
-    return as_writable_bytes(&v, 1);
 }
 
 }
