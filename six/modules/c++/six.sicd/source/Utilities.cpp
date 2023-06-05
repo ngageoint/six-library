@@ -79,21 +79,8 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
 }
 }
 
-std::complex<long double> six::sicd::Utilities::toComplex(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
+static std::complex<long double> toComplex_(long double A, uint8_t input_value)
 {
-    long double A = 0.0;
-    if (pAmplitudeTable != nullptr)
-    {
-        // A = AmpTable( input_amplitude )
-        auto& AmpTable = *(pAmplitudeTable);
-        A = AmpTable.index(input_amplitude);
-    }
-    else
-    {
-        // A = input_amplitude(i.e. 0 to 255)
-        A = input_amplitude;
-    }
-
     // The phase values should be read in (values 0 to 255) and converted to float by doing:
     // P = (1 / 256) * input_value
     const long double P = (1.0 / 256.0) * input_value;
@@ -105,6 +92,28 @@ std::complex<long double> six::sicd::Utilities::toComplex(uint8_t input_amplitud
     SinCos(angle, sin_angle, cos_angle);
     std::complex<long double> S(A * cos_angle, A * sin_angle);
     return S;
+}
+std::complex<long double> six::sicd::Utilities::toComplex(uint8_t input_amplitude, uint8_t input_value)
+{   
+    // A = input_amplitude(i.e. 0 to 255)
+    const long double A = input_amplitude;
+    return toComplex_(A, input_value);
+}
+std::complex<long double> six::sicd::Utilities::toComplex(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable& amplitudeTable)
+{
+    const long double A = amplitudeTable.index(input_amplitude);
+    return toComplex_(A, input_value);
+}
+std::complex<long double> six::sicd::Utilities::toComplex(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
+{
+    if (pAmplitudeTable != nullptr)
+    {
+        return toComplex(input_amplitude, input_value, *pAmplitudeTable);
+    }
+    else
+    {
+        return toComplex(input_amplitude, input_value);
+    }
 }
 
 namespace
