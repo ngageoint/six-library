@@ -145,16 +145,16 @@ six::sicd::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighb
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
-    retval.second = gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
+    retval.phase = gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
 
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of
     // the complex value onto the ray of candidate magnitudes at the selected phase.
     // i.e. dot product.
-    auto&& phase_direction = phase_directions[retval.second];
+    auto&& phase_direction = phase_directions[retval.phase];
     const auto projection = phase_direction.real() * v.real() + phase_direction.imag() * v.imag();
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
-    retval.first = nearest(magnitudes.begin(), magnitudes.end(), projection);
+    retval.amplitude = nearest(magnitudes.begin(), magnitudes.end(), projection);
     return retval;
 }
 

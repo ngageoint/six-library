@@ -71,13 +71,6 @@ namespace
         // details::... eliminates the overload
         return details::transform_async(first1, last1, d_first, f, cutoff, policy);
     }
-    template <typename InputIt, typename OutputIt, typename TFunc>
-    inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-        typename std::iterator_traits<InputIt>::difference_type cutoff)
-    {
-        const std::launch policy = std::launch::deferred | std::launch::async;
-        return transform_async(first1, last1, d_first, f, cutoff, policy);
-    }
 }
 
 using namespace six;
@@ -175,28 +168,28 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
-struct KDNode_t final
+struct AMP8I_PHS8I_Node final
 {
     cx_float result;
     AMP8I_PHS8I_t amp_and_value;
 };
-static std::vector<KDNode_t> make_nodes(const six::AmplitudeTable* pAmplitudeTable)
+static auto make_nodes(const six::AmplitudeTable* pAmplitudeTable)
 {
     // For all possible amp/phase values (there are "only" 256*256), get and save the
     // complex<float> value.
     //
     // Be careful with indexing so that we don't wrap-around in the loops.
-    std::vector<KDNode_t> retval;
+    std::vector<AMP8I_PHS8I_Node> retval;
     retval.reserve(UINT8_MAX * UINT8_MAX);
     for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
     {
-        KDNode_t v;
-        v.amp_and_value.first = gsl::narrow<uint8_t>(input_amplitude);
+        AMP8I_PHS8I_Node v;
+        v.amp_and_value.amplitude = gsl::narrow<uint8_t>(input_amplitude);
 
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
-            v.amp_and_value.second = gsl::narrow<uint8_t>(input_value);
-            v.result = six::sicd::Utilities::from_AMP8I_PHS8I(v.amp_and_value.first, v.amp_and_value.second, pAmplitudeTable);
+            v.amp_and_value.phase = gsl::narrow<uint8_t>(input_value);
+            v.result = six::sicd::Utilities::from_AMP8I_PHS8I(v.amp_and_value.amplitude, v.amp_and_value.phase, pAmplitudeTable);
             retval.push_back(v);
         }
     }
@@ -213,7 +206,7 @@ static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six
     auto& values = *retval;
     for (auto&& n : nodes)
     {
-        values[n.amp_and_value.first][n.amp_and_value.second] = std::move(n.result);
+        values[n.amp_and_value.amplitude][n.amp_and_value.phase] = std::move(n.result);
     }
 
     return retval;
@@ -244,10 +237,10 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
     // Or must it be recomputed (have an amplutude table)?
     if (pValues != nullptr)
     {
-        return (*pValues)[input.first][input.second];
+        return (*pValues)[input.amplitude][input.phase];
     }
 
-    const auto S = Utilities::from_AMP8I_PHS8I(input.first, input.second, pAmplitudeTable);
+    const auto S = Utilities::from_AMP8I_PHS8I(input.amplitude, input.phase, pAmplitudeTable);
     return std::complex<float>(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
 }
 
@@ -283,7 +276,7 @@ void ImageData::from_AMP8I_PHS8I(const input_amplitudes_t& values, std::span<con
 {
     const auto get_RE32F_IM32F_value_f = [&values](const six::sicd::AMP8I_PHS8I_t& v)
     {
-        return values[v.first][v.second];
+        return values[v.amplitude][v.phase];
     };
 
     if (cutoff_ < 0)

@@ -132,7 +132,7 @@ static void test_assert_eq(const std::string& testName,
     for (size_t i = 0; i < actuals.size(); i++)
     {
         const auto& v = amp8i_phs8i[i];
-        const auto S = six::sicd::Utilities::from_AMP8I_PHS8I(v.first, v.second, nullptr);
+        const auto S = six::sicd::Utilities::from_AMP8I_PHS8I(v.amplitude, v.phase, nullptr);
         const std::complex<float> result(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
         const auto& expected = actuals[i];
         TEST_ASSERT_EQ(expected, result);
@@ -166,7 +166,7 @@ TEST_CASE(test_8bit_ampphs)
     {
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
-            AMP8I_PHS8I_t input(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value));
+            AMP8I_PHS8I_t input{ static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value) };
             const auto S = six::sicd::Utilities::from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value), nullptr);
 
             inputs.push_back(std::move(input));
@@ -243,8 +243,8 @@ static std::pair<uint64_t, uint64_t> to_AMP8I_PHS8I(const six::sicd::ImageData& 
     std::pair<uint64_t, uint64_t> retval(0, 0);
     for (const auto& r : results)
     {
-        retval.first += r.first;
-        retval.second += r.second;
+        retval.first += r.amplitude;
+        retval.second += r.phase;
     }
     return retval;
 }
@@ -504,11 +504,11 @@ static void test_assert_image_(const std::string& testName,
     complexData.imageData->to_AMP8I_PHS8I(input, result_);
 
     static const std::vector<AMP8I_PHS8I_t> expected_amp8i_phs8i{
-        AMP8I_PHS8I_t(91, 42), AMP8I_PHS8I_t(42, 42), AMP8I_PHS8I_t(42, 42), AMP8I_PHS8I_t(42, 93) }; // "[******]"
+        AMP8I_PHS8I_t{91, 42}, AMP8I_PHS8I_t{42, 42}, AMP8I_PHS8I_t{42, 42}, AMP8I_PHS8I_t{42, 93} }; // "[******]"
     for (size_t i = 0; i < result.size(); i++)
     {
-        TEST_ASSERT_EQ(result[i].first, expected_amp8i_phs8i[i].first);
-        TEST_ASSERT_EQ(result[i].second, expected_amp8i_phs8i[i].second);
+        TEST_ASSERT_EQ(result[i].amplitude, expected_amp8i_phs8i[i].amplitude);
+        TEST_ASSERT_EQ(result[i].phase, expected_amp8i_phs8i[i].phase);
     }
 }
 
@@ -560,8 +560,8 @@ static void test_adjusted_values(const std::string& testName, const std::vector<
     six::sicd::ImageData::to_AMP8I_PHS8I(nullptr /*pAmplitudeTable*/, values_, actual_);
     for (size_t i = 0; i < expected.size(); i++)
     {
-        TEST_ASSERT_EQ(expected[i].first, actual[i].first);
-        TEST_ASSERT_EQ(expected[i].second, actual[i].second);
+        TEST_ASSERT_EQ(expected[i].amplitude, actual[i].amplitude);
+        TEST_ASSERT_EQ(expected[i].phase, actual[i].phase);
     }
 }
 
@@ -584,8 +584,8 @@ TEST_CASE(test_nearest_neighbor)
 
     for (size_t i = 0; i < expected.size(); i++)
     {
-        TEST_ASSERT_EQ(expected[i].first, actual[i].first);
-        TEST_ASSERT_EQ(expected[i].second, actual[i].second);
+        TEST_ASSERT_EQ(expected[i].amplitude, actual[i].amplitude);
+        TEST_ASSERT_EQ(expected[i].phase, actual[i].phase);
     }
 
     auto other_expected = expected;
@@ -593,29 +593,29 @@ TEST_CASE(test_nearest_neighbor)
     constexpr auto delta = 0.0122f;
     test_adjusted_values(testName, values, other_expected,  std::complex<float>(delta, 0.0f));
 
-    other_expected[0].second = 32;
+    other_expected[0].phase = 32;
     test_adjusted_values(testName, values, other_expected, std::complex<float>(delta, delta));
 
-    other_expected[0].second += 32;
+    other_expected[0].phase += 32;
     test_adjusted_values(testName, values, other_expected, std::complex<float>(0.0f, delta));
 
-    other_expected[0].second += 32;
+    other_expected[0].phase += 32;
     test_adjusted_values(testName, values, other_expected, std::complex<float>(-delta, delta));
 
-    other_expected[0].second += 32;
+    other_expected[0].phase += 32;
     test_adjusted_values(testName, values, other_expected, std::complex<float>(-delta, 0.0f));
 
-    other_expected[0].second += 32;
+    other_expected[0].phase += 32;
     test_adjusted_values(testName, values, other_expected, std::complex<float>(-delta, -delta));
 
-    other_expected[0].second += 32;
+    other_expected[0].phase += 32;
     test_adjusted_values(testName, values, other_expected, std::complex<float>(0.0f, -delta));
 
-    other_expected[0].second += 32;
+    other_expected[0].phase += 32;
     test_adjusted_values(testName, values, other_expected, std::complex<float>(delta, -delta));
 
-    other_expected[0].second += 32;
-    TEST_ASSERT_EQ(other_expected[0].second, expected[0].second);
+    other_expected[0].phase += 32;
+    TEST_ASSERT_EQ(other_expected[0].phase, expected[0].phase);
 }
 
 TEST_CASE(test_verify_phase_uint8_ordering)
@@ -666,8 +666,8 @@ static void do_test_ComplexToAMP8IPHS8I_(const std::string& testName,
             best = i;
         }
     }
-    TEST_ASSERT_EQ(test_integral.first, best.integral.first);
-    TEST_ASSERT_EQ(test_integral.second, best.integral.second);
+    TEST_ASSERT_EQ(test_integral.amplitude, best.integral.amplitude);
+    TEST_ASSERT_EQ(test_integral.phase, best.integral.phase);
 }
 using it_t = std::vector<std::complex<float>>::const_iterator;
 static void test_ComplexToAMP8IPHS8I_(const std::string& testName,
@@ -714,7 +714,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     for(int i = 0; i < 256; i++) {
         for(int j = 0; j < 256; j++) {
             Pairs p;
-            p.integral = {i, j};
+            p.integral = { gsl::narrow<uint8_t>(i), gsl::narrow<uint8_t>(j) };
             p.floating = six::sicd::Utilities::from_AMP8I_PHS8I(i, j, &amplitudeTable);
             candidates.push_back(p);
         }
@@ -725,8 +725,8 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     for(auto& i : candidates) {
         auto truth = i.integral;
         auto test = item.nearest_neighbor(std::complex<float>(i.floating.real(), i.floating.imag()));
-        TEST_ASSERT_EQ(truth.first, test.first);
-        TEST_ASSERT_EQ(truth.second, test.second);
+        TEST_ASSERT_EQ(truth.amplitude, test.amplitude);
+        TEST_ASSERT_EQ(truth.phase, test.phase);
     }
 
     // Run an edge case that's very close to a phase of 2PI.
@@ -734,7 +734,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     std::complex<float> problem {
         1.0f, -1e-4f
     };
-    TEST_ASSERT_EQ(item.nearest_neighbor(problem).second, 0);
+    TEST_ASSERT_EQ(item.nearest_neighbor(problem).phase, 0);
 
     // Verify the nearest neighbor property via random search through the possible space.
     // For each sampled point we check that we found the true nearest neighbor.
