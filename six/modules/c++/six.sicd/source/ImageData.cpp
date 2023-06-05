@@ -168,11 +168,24 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
-// input_amplitudes_t is too big for the stack
 static auto AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
 {
+    // input_amplitudes_t is too big for the stack
     auto retval = std::make_unique<input_amplitudes_t>();
     auto& values = *retval;
+
+    // avoid checking pAmplitudeTable inside the loop
+    std::function<std::complex<long double>(uint8_t, uint8_t)> toComplex = [&](auto amplitude, auto phase)
+    {
+        return six::sicd::Utilities::toComplex(amplitude, phase, *pAmplitudeTable);
+    };
+    if (pAmplitudeTable == nullptr)
+    {
+        toComplex = [](auto amplitude, auto phase)
+        {
+            return six::sicd::Utilities::toComplex(amplitude, phase);
+        };
+    }
 
     // For all possible amp/phase values (there are "only" 256*256=65536), get and save the
     // complex<float> value.
@@ -185,7 +198,7 @@ static auto AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTab
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
             const auto phase = gsl::narrow<uint8_t>(input_value);
-            values[amplitude][phase] = six::sicd::Utilities::toComplex(amplitude, phase, pAmplitudeTable);
+            values[amplitude][phase] = toComplex(amplitude, phase);
         }
     }
 
