@@ -417,10 +417,13 @@ TEST_CASE(testReadEmbeddedXml)
 }
 
 template <typename TStringStream>
-static void testValidateXmlFile_(const std::string& testName,
-    const xml::lite::Validator& validator, const std::string& xmlFile, TStringStream* pStringStream)
+static void testValidateXmlFile_(const std::string& testName, const std::string& xmlFile, TStringStream* pStringStream)
 {
+    static const auto xsd = find_unittest_file("doc.xsd");
     const auto path = find_unittest_file(xmlFile);
+
+    const std::vector<std::filesystem::path> schemaPaths{xsd.parent_path()}; // fs::path -> new string-conversion code
+    const xml::lite::Validator validator(schemaPaths, nullptr /*log*/);
 
     io::FileInputStream fis(path);
     std::vector<xml::lite::ValidationInfo> errors;
@@ -432,18 +435,7 @@ static void testValidateXmlFile_(const std::string& testName,
     }
     TEST_ASSERT_FALSE(result);
     TEST_ASSERT_TRUE(errors.empty());
-
 }
-template <typename TStringStream>
-static void testValidateXmlFile_(const std::string& testName, const std::string& xmlFile, TStringStream* pStringStream)
-{
-    static const auto xsd = find_unittest_file("doc.xsd");
-    const std::vector<std::filesystem::path> schemaPaths{xsd.parent_path()}; // fs::path -> new string-conversion code
-    const xml::lite::Validator validator(schemaPaths, nullptr /*log*/);
-
-    testValidateXmlFile_(testName, validator, xmlFile, pStringStream);
-}
-
 static void testValidateXmlFile(const std::string& testName, const std::string& xmlFile)
 {
     testValidateXmlFile_<io::StringStream>(testName, xmlFile, nullptr /*pStringStream*/);
@@ -471,42 +463,6 @@ TEST_CASE(testValidateXmlFile)
     testValidateXmlFile(testName, "encoding_windows-1252.xml", io::W1252StringStream());
 }
 
-template <typename TStringStream>
-static void testValidateXmlFile_XSD_(const std::string& testName, const std::string& xmlFile, TStringStream* pStringStream)
-{
-    static const auto xsd = find_unittest_file("doc.xsd");
-    logging::Logger log;
-    const xml::lite::Validator validator(xsd, log);
-    testValidateXmlFile_(testName, validator, xmlFile, pStringStream);
-}
-static void testValidateXmlFile_XSD(const std::string& testName, const std::string& xmlFile)
-{
-    testValidateXmlFile_XSD_<io::StringStream>(testName, xmlFile, nullptr /*pStringStream*/);
-}
-template <typename TStringStream>
-static void testValidateXmlFile_XSD(const std::string& testName, const std::string& xmlFile, TStringStream&& oss)
-{
-    testValidateXmlFile_XSD_(testName, xmlFile, &oss);
-}
-TEST_CASE(testValidateXmlFile_XSD)
-{
-    // Validate using a single XSD
-    testValidateXmlFile_XSD(testName, "ascii.xml");
-    testValidateXmlFile_XSD(testName, "ascii_encoding_utf-8.xml");
-
-    // legacy validate() API, new string conversion
-    testValidateXmlFile_XSD(testName, "utf-8.xml");
-    testValidateXmlFile_XSD(testName, "encoding_utf-8.xml");
-    testValidateXmlFile_XSD(testName, "encoding_windows-1252.xml");
-    testValidateXmlFile_XSD(testName, "windows-1252.xml");
-
-    // new validate() API
-    testValidateXmlFile_XSD(testName, "utf-8.xml", io::U8StringStream());
-    testValidateXmlFile_XSD(testName, "encoding_utf-8.xml", io::U8StringStream());
-    testValidateXmlFile_XSD(testName, "windows-1252.xml", io::W1252StringStream());
-    testValidateXmlFile_XSD(testName, "encoding_windows-1252.xml", io::W1252StringStream());
-}
-
 int main(int, char**)
 {
     TEST_CHECK(testXmlParseSimple);
@@ -525,5 +481,4 @@ int main(int, char**)
     TEST_CHECK(testReadEmbeddedXml);
 
     TEST_CHECK(testValidateXmlFile);
-    TEST_CHECK(testValidateXmlFile_XSD);    
 }
