@@ -44,17 +44,30 @@ namespace sidd300
 
         current = v201609
     };
+    std::string to_string(ISMVersion); // "v201609" or "v13"
+
     ISMVersion get(ISMVersion defaultIfNotSet); // overloaded on ISMVersion
     std::optional<ISMVersion> set(ISMVersion); // returns previous value, if any
     std::optional<ISMVersion> getISMVersion();
     std::optional<ISMVersion> clearISMVersion(); // returns previous value, if any
-    std::string to_string(ISMVersion); // "v201609" or "v13"
 
     std::vector<std::filesystem::path> find_SIDD_schema_V_files(const std::vector<std::filesystem::path>& schemaPaths);
 }
 
 namespace sidd
 {
+    // six.sidd only currently supports --
+    //   SIDD 1.0.0
+    //   SIDD 2.0.0
+    //   SIDD 3.0.0
+    enum class Version
+    {
+        v100,
+        v200,
+        v300,
+    };
+    std::string to_string(Version); // "v100", "v200", "v300"
+
 /*!
  *  \class DerivedXMLControl
  *  \brief Turns an DerivedData object into XML and vice versa
@@ -78,6 +91,9 @@ struct DerivedXMLControl : public XMLControl
 
     static std::unique_ptr<DerivedXMLParser> getParser_(const std::string& strVersion); // for unit-testing
 
+    std::unique_ptr<Data> fromXML(const xml::lite::Document&, std::optional<six::sidd300::ISMVersion>) const;
+    std::unique_ptr<xml::lite::Document> toXML(const Data&, std::optional<six::sidd300::ISMVersion>) const;
+
 protected:
     /*!
      *  Returns a new allocated DOM document, created from the DerivedData*
@@ -96,7 +112,7 @@ protected:
 
 private:
     std::unique_ptr<DerivedXMLParser>
-    getParser(const std::string& strVersion) const;
+    getParser(Version version, std::optional<six::sidd300::ISMVersion>) const;
 };
 }
 }

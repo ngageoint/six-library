@@ -112,12 +112,11 @@ std::vector<std::filesystem::path> XMLControl::loadSchemaPaths(const std::vector
     return retval;
 }
 
-template<typename TPath>
-static std::vector<TPath> check_whether_paths_exist(const std::vector<TPath>& paths)
+static auto check_whether_paths_exist(const std::vector<std::filesystem::path>& paths)
 {
     // If the paths we have don't exist, throw
-    typename std::vector<TPath>::value_type does_not_exist_path;
-    std::vector<TPath> exist_paths;
+    std::filesystem::path does_not_exist_path;
+    std::vector<std::filesystem::path> exist_paths;
     for (const auto& path : paths)
     {
         if (!fs::exists(path))
@@ -143,32 +142,21 @@ static std::vector<TPath> check_whether_paths_exist(const std::vector<TPath>& pa
     return exist_paths;
 }
 
-static inline std::string to_string(const std::string& s)
-{
-    return s;
-}
-static inline std::string to_string(const std::filesystem::path& p)
-{
-    return p.string();
-}
-
 // Generate a detaled INVALID XML message
-template<typename TPath>
-inline static auto getInvalidXmlErrorMessage(const std::vector<TPath>& paths)
+static auto getInvalidXmlErrorMessage(const std::vector<std::filesystem::path>& paths)
 {
     static const std::string invalidXML = "INVALID XML: Check both the XML being produced and schemas available at ";
     auto message = invalidXML;
     message += (paths.size() > 1 ? "these paths:" : "this path:");
     for (const auto& p : paths)
     {
-        message += "\n\t" + to_string(p); // paths could be a std::filesystem::path
+        message += "\n\t" + p.string();
     }
     return message;
 }
 
-template<typename TPath>
 static void log_any_errors_and_throw(const std::vector<xml::lite::ValidationInfo>& errors,
-    const std::vector<TPath>& paths, logging::Logger& log)
+    const std::vector<std::filesystem::path>& paths, logging::Logger& log)
 {
     if (errors.empty())
     {
@@ -193,9 +181,8 @@ static void log_any_errors_and_throw(const std::vector<xml::lite::ValidationInfo
 
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
-template<typename TPath>
 static void validate_(const xml::lite::Element& rootElement,
-    const std::vector<TPath>& schemaPaths, logging::Logger& log)
+    const std::vector<std::filesystem::path>& schemaPaths, logging::Logger& log)
 {
     xml::lite::Uri uri;
     rootElement.getUri(uri);
@@ -230,12 +217,11 @@ static void validate_(const xml::lite::Element& rootElement,
     // log any error found and throw
     log_any_errors_and_throw(all_errors, schemaPaths, log);
 }
-template<typename TPath>
 static void validate_(const xml::lite::Document& doc,
-    std::vector<TPath> paths, logging::Logger& log)
+    const std::vector<std::filesystem::path>& paths_, logging::Logger& log)
 {
     // If the paths we have don't exist, throw
-    paths = check_whether_paths_exist(paths);
+    const auto paths = check_whether_paths_exist(paths_);
 
     auto rootElement = doc.getRootElement();
     if (rootElement->getUri().empty())
@@ -259,8 +245,7 @@ void XMLControl::validate(const xml::lite::Document* doc,
     // environment if nothing is specified
     std::vector<std::string> paths(schemaPaths);
     loadSchemaPaths(paths);
-
-    if (schemaPaths.empty())
+    if (paths.empty())
     {
         std::ostringstream oss;
         oss << "Coudn't validate XML - no schemas paths provided "
@@ -269,8 +254,11 @@ void XMLControl::validate(const xml::lite::Document* doc,
         log->warn(oss.str());
     }
 
+    std::vector<std::filesystem::path> schemaPaths_;
+    std::transform(paths.begin(), paths.end(), std::back_inserter(schemaPaths_), [&](const std::string& s) { return s; });
+
     // validate against any specified schemas
-    validate_(*doc, paths, *log);
+    validate_(*doc, schemaPaths_, *log);
 }
 void XMLControl::validate(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>* pSchemaPaths,
@@ -356,18 +344,9 @@ std::unique_ptr<xml::lite::Document> XMLControl::toXML(
 std::unique_ptr<xml::lite::Document> XMLControl::toXML(
     const Data& data, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
-    return toXMLImplValidate(data, pSchemaPaths);
-}
-
-std::unique_ptr<xml::lite::Document> XMLControl::toXMLImplValidate_(const Data& data, const std::vector<std::filesystem::path>* pSchemaPaths) const
-{
     auto doc = toXMLImpl(data);
     validate(*doc, pSchemaPaths, mLog);
     return doc;
-}
-std::unique_ptr<xml::lite::Document> XMLControl::toXMLImplValidate(const Data& data, const std::vector<std::filesystem::path>* pSchemaPaths) const
-{
-    return toXMLImplValidate_(data, pSchemaPaths);
 }
 
 std::unique_ptr<Data> XMLControl::fromXMLImpl(const xml::lite::Document& doc) const

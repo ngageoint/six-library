@@ -185,9 +185,6 @@ class XMLControl
     virtual xml::lite::Document* toXMLImpl(const Data* data) = 0;
     virtual std::unique_ptr<xml::lite::Document> toXMLImpl(const Data&) const; // = 0;, would break existing code
 
-    std::unique_ptr<xml::lite::Document> toXMLImplValidate_(const Data&, const std::vector<std::filesystem::path>* pSchemaPaths = nullptr) const;
-    virtual std::unique_ptr<xml::lite::Document> toXMLImplValidate(const Data&, const std::vector<std::filesystem::path>* pSchemaPaths = nullptr) const; // = 0;, would break existing code
-
     static std::string getDefaultURI(const Data& data);
 
     static std::string getVersionFromURI(const xml::lite::Document* doc);

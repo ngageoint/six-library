@@ -167,26 +167,8 @@ TEST_CASE(test_read_sidd300_xml)
     test_read_sidd_xml(testName, "sidd300.xml");
 }
 
-class ScoppedISMVersion final
-{
-    std::optional<six::sidd300::ISMVersion> m_save;
-public:
-    ScoppedISMVersion(six::sidd300::ISMVersion v)
-        : m_save(six::sidd300::set(v))
-    {
-    }
-    ~ScoppedISMVersion()
-    {
-        if (m_save.has_value())
-            six::sidd300::set(*m_save);
-        else
-            six::sidd300::clearISMVersion();
-    }
-};
-
 TEST_CASE(test_read_sidd300_v13_xml)
 {
-    const ScoppedISMVersion ismVersion(six::sidd300::ISMVersion::v13);
     test_read_sidd_xml(testName, "sidd300_ISM-v13.xml");
 }
 
