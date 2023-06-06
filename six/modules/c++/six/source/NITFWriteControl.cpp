@@ -222,23 +222,20 @@ static auto asBytes(BufferList::value_type pImageData,
 // this bypasses the normal NITF ImageWriter and streams directly to the output
 template<typename T>
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(const NITFSegmentInfo& segmentInfo,
-    std::span<const T> imageData, const Data& data, bool doByteSwap,
-    ptrdiff_t cutoff) // for eventual use by to_AMP8I_PHS8I()
+    std::span<const T> imageData, const Data& data, bool doByteSwap)
 {
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
-        imageData, segmentInfo.getFirstRow(), data, doByteSwap,
-        cutoff);
+        imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(const NITFSegmentInfo& segmentInfo,
-    BufferList::value_type pImageData, const Data& data, bool doByteSwap,
-    ptrdiff_t cutoff) // for eventual use by to_AMP8I_PHS8I()
+    BufferList::value_type pImageData, const Data& data, bool doByteSwap)
 {
     const auto pImageData_ = asBytes(pImageData, segmentInfo, data);
-    return makeWriteHandler(segmentInfo, pImageData_, data, doByteSwap, cutoff);
+    return makeWriteHandler(segmentInfo, pImageData_, data, doByteSwap);
 }
 
 inline std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-io::InputStream* imageData, const Data& data, bool doByteSwap, ptrdiff_t)
+io::InputStream* imageData, const Data& data, bool doByteSwap)
 {
 //! TODO: This section of code (unlike the memory section above)
 //        does not account for blocked writing or J2K compression.
@@ -248,12 +245,11 @@ return std::make_shared<StreamWriteHandler>(segmentInfo, imageData, data, doByte
 
 template<typename TImageData>
 void writeWithoutNitro(nitf::Writer& mWriter, const TImageData& imageData,
-    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap,
-    ptrdiff_t cutoff) // for eventual use by to_AMP8I_PHS8I()
+    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap)
 {
     for (size_t j = 0; j < imageSegments.size(); ++j)
     {
-        auto writeHandler = makeWriteHandler(imageSegments[j], imageData, data, doByteSwap, cutoff);
+        auto writeHandler = makeWriteHandler(imageSegments[j], imageData, data, doByteSwap);
         mWriter.setImageWriteHandler(static_cast<int>(startIndex + j), writeHandler);
     }
 }
@@ -273,13 +269,6 @@ bool NITFWriteControl::do_prepareIO(size_t imageDataSize, nitf::IOInterface& out
     return shouldByteSwap();
 }
 
-ptrdiff_t NITFWriteControl::AMP8I_PHS8I_cutoff() const
-{
-    static const Parameter default_cutoff_parameter(WriteControl::AMP8I_PHS8I_DEFAULT_CUTOFF);
-    const ptrdiff_t cutoff = getOptions().getParameter(WriteControl::AMP8I_PHS8I_CUTOFF, default_cutoff_parameter);
-    return cutoff;
-}
-
 void NITFWriteControl::save(const SourceList& imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::string>& schemaPaths)
@@ -297,7 +286,7 @@ void NITFWriteControl::save(const SourceList& imageData,
         const auto startIndex = info.getStartIndex();
         const six::Data* const pData = info.getData();
 
-        writeWithoutNitro(mWriter, imageData[i], imageSegments, startIndex, *pData, doByteSwap, AMP8I_PHS8I_cutoff());
+        writeWithoutNitro(mWriter, imageData[i], imageSegments, startIndex, *pData, doByteSwap);
     }
 
     addDataAndWrite(schemaPaths);
@@ -457,7 +446,7 @@ void NITFWriteControl::write_imageData(const T& imageData, const NITFImageInfo& 
     }
     else
     {
-        writeWithoutNitro(mWriter, imageData, imageSegments, startIndex, *pData, doByteSwap, AMP8I_PHS8I_cutoff());
+        writeWithoutNitro(mWriter, imageData, imageSegments, startIndex, *pData, doByteSwap);
     }
 
     if (legend)

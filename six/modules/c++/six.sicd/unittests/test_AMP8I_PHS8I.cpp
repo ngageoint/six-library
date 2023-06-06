@@ -141,19 +141,19 @@ static void test_assert_eq(const std::string& testName,
 }
 
 static void from_AMP8I_PHS8I(const six::sicd::ImageData& imageData,
-    const std::vector<AMP8I_PHS8I_t>& inputs_, std::vector<std::complex<float>>& results_, ptrdiff_t cutoff = -1)
+    const std::vector<AMP8I_PHS8I_t>& inputs_, std::vector<std::complex<float>>& results_)
 {
     const std::span<const AMP8I_PHS8I_t> inputs(inputs_.data(), inputs_.size());
     const std::span<std::complex<float>> results(results_.data(), results_.size());
-    imageData.from_AMP8I_PHS8I(inputs, results, cutoff);
+    imageData.from_AMP8I_PHS8I(inputs, results);
 }
 
 static void to_AMP8I_PHS8I(const six::sicd::ImageData& imageData,
-    const std::vector<std::complex<float>>& inputs_, std::vector<AMP8I_PHS8I_t>& results_, ptrdiff_t cutoff = -1)
+    const std::vector<std::complex<float>>& inputs_, std::vector<AMP8I_PHS8I_t>& results_)
 {
     const std::span<const std::complex<float>> inputs(inputs_.data(), inputs_.size());
     const std::span<AMP8I_PHS8I_t> results(results_.data(), results_.size());
-    imageData.to_AMP8I_PHS8I(inputs, results, cutoff);
+    imageData.to_AMP8I_PHS8I(inputs, results);
 }
 
 TEST_CASE(test_8bit_ampphs)
@@ -186,8 +186,7 @@ TEST_CASE(test_8bit_ampphs)
     test_assert_eq(testName, actuals, amp8i_phs8i);
 
     // ... and again, async
-    const auto cutoff = actuals.size() / 10; // be sure std::async is called
-    to_AMP8I_PHS8I(imageData, actuals, amp8i_phs8i, cutoff);
+    to_AMP8I_PHS8I(imageData, actuals, amp8i_phs8i);
     test_assert_eq(testName, actuals, amp8i_phs8i);
 }
 
@@ -246,7 +245,7 @@ static Pair<uint64_t> to_AMP8I_PHS8I(const six::sicd::ImageData& imageData, cons
     const auto size = sys::debug ? widebandData.size() / 200 : widebandData.size();
     const std::span<const std::complex<float>> widebandData_(widebandData.data(), size);
     std::vector<AMP8I_PHS8I_t> results(widebandData_.size());
-    imageData.to_AMP8I_PHS8I(widebandData_, std::span< AMP8I_PHS8I_t>(results.data(), results.size()), 0);
+    imageData.to_AMP8I_PHS8I(widebandData_, std::span< AMP8I_PHS8I_t>(results.data(), results.size()));
 
     Pair<uint64_t> retval{ 0, 0 };
     for (const auto& r : results)

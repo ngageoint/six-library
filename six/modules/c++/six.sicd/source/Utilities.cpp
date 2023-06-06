@@ -207,11 +207,10 @@ class SICD_readerAndConverter final
         auto packed = reinterpret_cast<const six::sicd::AMP8I_PHS8I_t*>(tempVector.data());
 
         // Reuse image data's conversion to complex.
-        static const ptrdiff_t kDefaultCutoff = 0;
         size_t count = (elementsPerRow * rowsToRead) / 2;
         std::span<const six::sicd::AMP8I_PHS8I_t> input(packed, count);
         std::span<std::complex<float>> output(bufferPtr, input.size());
-        six::sicd::ImageData::from_AMP8I_PHS8I(lookup, input, output, kDefaultCutoff);
+        six::sicd::ImageData::from_AMP8I_PHS8I(lookup, input, output);
     }
     const types::RowCol<size_t>& offset;
     std::complex<float>* buffer;
@@ -1669,7 +1668,7 @@ std::vector<std::complex<float>> six::sicd::testing::make_complex_image(const ty
     return image;
 }
 
-std::vector<std::byte> six::sicd::testing::toBytes(const ComplexImageResult& result, ptrdiff_t cutoff)
+std::vector<std::byte> six::sicd::testing::toBytes(const ComplexImageResult& result)
 {
     const auto& image = result.widebandData;
     const auto bytes = sys::as_bytes(image);
@@ -1679,7 +1678,7 @@ std::vector<std::byte> six::sicd::testing::toBytes(const ComplexImageResult& res
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
         retval.resize(image.size() * data.getNumBytesPerPixel());
-        data.convertPixels(bytes, sys::make_span(retval), cutoff);
+        data.convertPixels(bytes, sys::make_span(retval));
     }
     else
     {
