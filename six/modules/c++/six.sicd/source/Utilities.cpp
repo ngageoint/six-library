@@ -38,6 +38,8 @@
 #include <math/Utilities.h>
 #include <math/poly/Fit.h>
 #include <mem/ScopedAlignedArray.h>
+#include <sys/Span.h>
+
 #include <six/NITFReadControl.h>
 #include <six/sicd/SICDWriteControl.h>
 #include <six/Utilities.h>
@@ -1641,20 +1643,18 @@ std::vector<std::complex<float>> six::sicd::testing::make_complex_image(const ty
 std::vector<std::byte> six::sicd::testing::toBytes(const ComplexImageResult& result, ptrdiff_t cutoff)
 {
     const auto& image = result.widebandData;
-    const auto bytes = six::as_bytes(image);
+    const auto bytes = sys::as_bytes(image);
 
     std::vector<std::byte> retval;
     const auto& data = *(result.pComplexData);
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
         retval.resize(image.size() * data.getNumBytesPerPixel());
-        const std::span<std::byte> pRetval(retval.data(), retval.size());
-        data.convertPixels(bytes, pRetval, cutoff);
+        data.convertPixels(bytes, sys::make_span(retval), cutoff);
     }
     else
     {
-        auto pBytes = bytes.data();
-        retval.insert(retval.begin(), pBytes, pBytes + bytes.size());
+        retval.insert(retval.begin(), bytes.begin(), bytes.end());
     }
 
     return retval;

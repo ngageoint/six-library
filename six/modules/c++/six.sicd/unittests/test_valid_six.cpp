@@ -36,6 +36,7 @@
 #include <logging/NullLogger.h>
 #include <import/sys.h>
 #include <str/EncodedStringView.h>
+#include <sys/Span.h>
 
 #include <import/six.h>
 #include <import/six/sicd.h>
@@ -323,7 +324,7 @@ static void test_assert_eq(std::span<const std::byte> bytes, const std::vector<T
     const auto rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
     TEST_ASSERT_EQ(bytes.size(), rawDataSizeInBytes);
 
-    const auto rawDataBytes = six::as_bytes(rawData);
+    const auto rawDataBytes = sys::as_bytes(rawData);
     TEST_ASSERT_EQ(bytes.size(), rawDataBytes.size());
     for (size_t i = 0; i < bytes.size(); i++)
     {

@@ -37,6 +37,7 @@
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
 #include <import/sys.h>
+#include <sys/Span.h>
 
 #include <import/six.h>
 #include <import/six/sicd.h>
@@ -368,7 +369,7 @@ template<typename TImage>
 static void adjust_image(TImage& image)
 {
     // Make it easier to know what we're looking at when examining a binary dump of the SICD
-    const auto pImageBytes = six::as_writable_bytes(image);
+    const auto pImageBytes = sys::as_writable_bytes(image);
 
     pImageBytes[0] = static_cast<std::byte>('[');
     for (size_t i = 1; i < pImageBytes.size() - 1; i++)
@@ -413,7 +414,7 @@ static void test_assert_eq(std::span<const std::byte> bytes, const std::vector<T
     const auto rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
     TEST_ASSERT_EQ(bytes.size(), rawDataSizeInBytes);
 
-    const auto rawDataBytes = six::as_bytes(rawData);
+    const auto rawDataBytes = sys::as_bytes(rawData);
     TEST_ASSERT_EQ(bytes.size(), rawDataBytes.size());
     for (size_t i = 0; i < bytes.size(); i++)
     {
