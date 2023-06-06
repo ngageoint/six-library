@@ -541,12 +541,6 @@ void NITFWriteControl::save_image(std::span<const std::complex<short>> imageData
 {
     do_save(imageData, outputFile, convert_paths(schemaPaths));
 }
-void NITFWriteControl::save_image(std::span<const std::pair<uint8_t, uint8_t>> imageData,
-    nitf::IOInterface& outputFile,
-    const std::vector<std::filesystem::path>& schemaPaths)
-{
-    do_save(imageData, outputFile, convert_paths(schemaPaths));
-}
 void NITFWriteControl::save_image(std::span<const uint8_t> imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::filesystem::path>& schemaPaths)
