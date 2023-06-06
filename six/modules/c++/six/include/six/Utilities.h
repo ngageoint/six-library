@@ -317,40 +317,6 @@ void getErrors(const ErrorStatistics* errorStats,
  */
 std::string findSchemaPath(const std::string& progname);
 
-template<typename T>
-inline std::span<const std::byte> as_bytes(std::span<const T> buffer)
-{
-    // coda-oss checks to be sure T is trivially_copyable.  While this is
-    // correct (converting something else to bytes doesn't make sense), existing
-    // code didn't have that check.
-    const void* const pData = buffer.data();
-    auto const pBytes = static_cast<const std::byte*>(pData);
-    return std::span<const std::byte>(pBytes, buffer.size_bytes()); // TODO: use std::as_bytes
-}
-template<typename T>
-inline std::span<const std::byte> as_bytes(const std::vector<T>& buffer)
-{
-    const auto s = sys::make_span(buffer);
-    return six::as_bytes(s);
-}
-
-template<typename T>
-inline std::span<std::byte> as_writable_bytes(std::span<T>& buffer)
-{
-    // coda-oss checks to be sure T is trivially_copyable.  While this is
-    // correct (converting something else to bytes doesn't make sense), existing
-    // code didn't have that check.
-    void* const pData = buffer.data();
-    auto const pBytes = static_cast<std::byte*>(pData);
-    return std::span<std::byte>(pBytes, buffer.size_bytes()); // TODO: use std::as_writable_bytes
-}
-template<typename T>
-inline std::span<std::byte> as_writable_bytes(std::vector<T>& buffer)
-{
-    const auto s = sys::make_span(buffer);
-    return as_writable_bytes(s);
-}
-
 namespace testing
 {
     std::filesystem::path findRootDir(const std::filesystem::path& dir);
