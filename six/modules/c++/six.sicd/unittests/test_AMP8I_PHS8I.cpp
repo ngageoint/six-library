@@ -167,7 +167,7 @@ TEST_CASE(test_8bit_ampphs)
     {
         for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
         {
-            AMP8I_PHS8I_t input(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value));
+            AMP8I_PHS8I_t input{ static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value) };
             const auto S = six::sicd::Utilities::from_AMP8I_PHS8I(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value), nullptr);
 
             inputs.push_back(std::move(input));
@@ -505,7 +505,7 @@ static void test_assert_image_(const std::string& testName,
     complexData.imageData->to_AMP8I_PHS8I(input, result_);
 
     static const std::vector<AMP8I_PHS8I_t> expected_amp8i_phs8i{
-        AMP8I_PHS8I_t(91, 42), AMP8I_PHS8I_t(42, 42), AMP8I_PHS8I_t(42, 42), AMP8I_PHS8I_t(42, 93) }; // "[******]"
+        AMP8I_PHS8I_t{91, 42}, AMP8I_PHS8I_t{42, 42}, AMP8I_PHS8I_t{42, 42}, AMP8I_PHS8I_t{42, 93} }; // "[******]"
     for (size_t i = 0; i < result.size(); i++)
     {
         TEST_ASSERT_EQ(result[i].first, expected_amp8i_phs8i[i].first);
@@ -715,7 +715,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     for(int i = 0; i < 256; i++) {
         for(int j = 0; j < 256; j++) {
             Pairs p;
-            p.integral = {i, j};
+            p.integral = {gsl::narrow<uint8_t>(i), gsl::narrow<uint8_t>(j)};
             p.floating = six::sicd::Utilities::from_AMP8I_PHS8I(i, j, &amplitudeTable);
             candidates.push_back(p);
         }
