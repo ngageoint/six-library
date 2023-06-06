@@ -327,7 +327,7 @@ static nitf::ImageSource do_make_ImageSource(std::span<const T> pImageData_, con
     const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
 
     const auto bandSize = getBandSize(segmentInfo, data);
-    const auto pImageData = six::as_bytes(pImageData_);
+    const auto pImageData = sys::as_bytes(pImageData_);
     if ((pImageData.size() / numChannels) != bandSize)
     {
         throw std::invalid_argument("bandSize mis-match!");

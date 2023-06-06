@@ -317,17 +317,6 @@ void getErrors(const ErrorStatistics* errorStats,
  */
 std::string findSchemaPath(const std::string& progname);
 
-template<typename T>
-inline std::span<const std::byte> as_bytes(std::span<const T> buffer)
-{
-    // coda-oss checks to be sure T is trivially_copyable.  While this is
-    // correct (converting something else to bytes doesn't make sense), existing
-    // code didn't have that check.
-    const void* const pData = buffer.data();
-    auto const pBytes = static_cast<const std::byte*>(pData);
-    return std::span<const std::byte>(pBytes, buffer.size_bytes()); // TODO: use std::as_bytes
-}
-
 namespace testing
 {
     std::filesystem::path findRootDir(const std::filesystem::path& dir);
