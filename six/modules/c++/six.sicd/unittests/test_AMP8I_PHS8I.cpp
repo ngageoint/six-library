@@ -462,7 +462,7 @@ static void read_nitf(const std::string& testName,
     const auto result = readSicd_(path, pixelType, expectedNumBytesPerPixel);
     TEST_ASSERT(result.widebandData == image);
 
-    const auto bytes = six::sicd::testing::to_bytes(result);
+    const auto bytes = six::sicd::testing::toBytes(result);
     read_raw_data(path, pixelType, std::span<const std::byte>(bytes.data(), bytes.size()));
 }
 
