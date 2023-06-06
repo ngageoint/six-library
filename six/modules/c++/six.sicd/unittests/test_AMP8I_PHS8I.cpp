@@ -37,6 +37,7 @@
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
 #include <import/sys.h>
+#include <sys/Span.h>
 
 #include <import/six.h>
 #include <import/six/sicd.h>
@@ -232,7 +233,14 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const std::string& tes
     return retval;
 }
 
-static std::pair<uint64_t, uint64_t> to_AMP8I_PHS8I(const six::sicd::ImageData& imageData, const std::vector<std::complex<float>>& widebandData)
+template <typename T>
+struct Pair final // std::pair<T, U> is not trivial copyable
+{
+    T first;
+    T second;
+};
+
+static Pair<uint64_t> to_AMP8I_PHS8I(const six::sicd::ImageData& imageData, const std::vector<std::complex<float>>& widebandData)
 {
     // image is far too big to call to_AMP8I_PHS8I() with DEBUG code
     const auto size = sys::debug ? widebandData.size() / 200 : widebandData.size();
@@ -240,7 +248,7 @@ static std::pair<uint64_t, uint64_t> to_AMP8I_PHS8I(const six::sicd::ImageData& 
     std::vector<AMP8I_PHS8I_t> results(widebandData_.size());
     imageData.to_AMP8I_PHS8I(widebandData_, std::span< AMP8I_PHS8I_t>(results.data(), results.size()), 0);
 
-    std::pair<uint64_t, uint64_t> retval(0, 0);
+    Pair<uint64_t> retval{ 0, 0 };
     for (const auto& r : results)
     {
         retval.first += r.amplitude;
@@ -271,7 +279,7 @@ TEST_CASE(read_8bit_ampphs_with_table)
     imageData.amplitudeTable.reset(std::make_unique< six::AmplitudeTable>(AmpTable));
     const auto actual = to_AMP8I_PHS8I(imageData, widebandData);
     const auto expected(sys::debug ? 
-        std::pair<uint64_t, uint64_t>(12647523, 16973148) : std::pair<uint64_t, uint64_t>(3044868397, 3394353166));
+        Pair<uint64_t>{12647523, 16973148} : Pair<uint64_t>{ 3044868397, 3394353166 });
     //TEST_ASSERT_EQ(actual.first, expected.first); // TODO
     TEST_ASSERT_EQ(actual.second, expected.second);
 }
@@ -290,7 +298,7 @@ TEST_CASE(read_8bit_ampphs_no_table)
     six::sicd::ImageData imageData;
     const auto actual = to_AMP8I_PHS8I(imageData, widebandData);
     const auto expected(sys::debug ?
-        std::pair<uint64_t, uint64_t>(12647654, 16973148) : std::pair<uint64_t, uint64_t>(3044873160, 3394353122));
+        Pair<uint64_t>{12647654, 16973148} : Pair<uint64_t>{ 3044873160, 3394353122 });
     TEST_ASSERT_EQ(actual.first, expected.first);
     TEST_ASSERT_EQ(actual.second, expected.second);
 }
@@ -368,7 +376,7 @@ template<typename TImage>
 static void adjust_image(TImage& image)
 {
     // Make it easier to know what we're looking at when examining a binary dump of the SICD
-    const auto pImageBytes = six::as_writable_bytes(image);
+    const auto pImageBytes = sys::as_writable_bytes(image);
 
     pImageBytes[0] = static_cast<std::byte>('[');
     for (size_t i = 1; i < pImageBytes.size() - 1; i++)
@@ -413,7 +421,7 @@ static void test_assert_eq(std::span<const std::byte> bytes, const std::vector<T
     const auto rawDataSizeInBytes = rawData.size() * sizeof(rawData[0]);
     TEST_ASSERT_EQ(bytes.size(), rawDataSizeInBytes);
 
-    const auto rawDataBytes = six::as_bytes(rawData);
+    const auto rawDataBytes = sys::as_bytes(rawData);
     TEST_ASSERT_EQ(bytes.size(), rawDataBytes.size());
     for (size_t i = 0; i < bytes.size(); i++)
     {
@@ -462,7 +470,7 @@ static void read_nitf(const std::string& testName,
     const auto result = readSicd_(path, pixelType, expectedNumBytesPerPixel);
     TEST_ASSERT(result.widebandData == image);
 
-    const auto bytes = six::sicd::testing::to_bytes(result);
+    const auto bytes = six::sicd::testing::toBytes(result);
     read_raw_data(path, pixelType, std::span<const std::byte>(bytes.data(), bytes.size()));
 }
 
