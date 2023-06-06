@@ -702,12 +702,12 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
 {
     // Set up a converter that has a fake amplitude table.
     six::AmplitudeTable amplitudeTable; // "amp" is a (somewhat) reserved with MSVC
-    for(size_t i = 0; i < 256; i++)
+    for(const auto i : six::sicd::Utilities::iota_0_256())
     {
         amplitudeTable.index(i) = static_cast<double>(i) + 10.0;
     }    
     std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pTree; // not-cached, non-NULL amplitudeTable
-    const auto& item = *(six::sicd::details::ComplexToAMP8IPHS8I::make(&amplitudeTable, pTree));
+    const auto& item = six::sicd::details::ComplexToAMP8IPHS8I::make(&amplitudeTable, pTree);
 
     // Generate the full 256x256 matrix of possible AMP8I_PHS8I values.
     std::vector<Pairs> candidates;

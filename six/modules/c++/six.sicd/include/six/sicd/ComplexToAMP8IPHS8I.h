@@ -48,8 +48,9 @@ class ComplexToAMP8IPHS8I final
      * @param pAmplitudeTable optional amplitude table.
      */
     explicit ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable = nullptr);
+
 public:
-    static const ComplexToAMP8IPHS8I* make(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<ComplexToAMP8IPHS8I>&);
+    static const ComplexToAMP8IPHS8I& make(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<ComplexToAMP8IPHS8I>&);
 
     ~ComplexToAMP8IPHS8I() = default;
     ComplexToAMP8IPHS8I(const ComplexToAMP8IPHS8I&) = delete;

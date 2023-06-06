@@ -317,6 +317,6 @@ void  ImageData::to_AMP8I_PHS8I(const AmplitudeTable* pAmplitudeTable,
 {
     // make a structure to quickly find the nearest neighbor
     std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pConvert; // not-cached, non-NULL amplitudeTable
-    const auto& converter = *(six::sicd::details::ComplexToAMP8IPHS8I::make(pAmplitudeTable, pConvert));
+    auto& converter = six::sicd::details::ComplexToAMP8IPHS8I::make(pAmplitudeTable, pConvert);
     to_AMP8I_PHS8I_(inputs, results, converter, cutoff);
 }

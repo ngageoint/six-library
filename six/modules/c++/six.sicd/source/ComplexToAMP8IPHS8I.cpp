@@ -69,13 +69,26 @@ inline long double GetPhase(const std::complex<long double>& v)
 
 static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmplitudeTable)
 {
+    // avoid checking pAmplitudeTable inside the loop
+    std::function<std::complex<long double>(uint8_t, uint8_t)> toComplex = [&](auto amplitude, auto phase)
+    {
+        return six::sicd::Utilities::toComplex(amplitude, phase, *pAmplitudeTable);
+    };
+    if (pAmplitudeTable == nullptr)
+    {
+        toComplex = [](auto amplitude, auto phase)
+        {
+            return six::sicd::Utilities::toComplex(amplitude, phase);
+        };
+    }
+
     std::vector<long double> retval;
     retval.reserve(UINT8_MAX + 1);
     for (const auto amplitude : six::sicd::Utilities::iota_0_256())
     {
         // AmpPhase -> Complex
-        const auto value = amplitude;
-        const auto complex = six::sicd::Utilities::toComplex(amplitude, value, pAmplitudeTable);
+        const auto phase = amplitude;
+        const auto complex = toComplex(amplitude, phase);
         retval.push_back(std::abs(complex));
     }
 
@@ -87,6 +100,7 @@ static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmpl
     }
     return retval;
 }
+
 static const std::vector<long double>& get_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
     std::vector<long double>& uncached_magnitudes)
 {
@@ -160,18 +174,18 @@ six::sicd::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighb
     return retval;
 }
 
-const six::sicd::details::ComplexToAMP8IPHS8I* six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable,
+const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable,
     std::unique_ptr<ComplexToAMP8IPHS8I>& pTree)
 {
     if (pAmplitudeTable == nullptr)
     {
         // this won't change, so OK to cache
         static const six::sicd::details::ComplexToAMP8IPHS8I tree;
-        return &tree;
+        return tree;
     }
     else
     {
         pTree.reset(new six::sicd::details::ComplexToAMP8IPHS8I(pAmplitudeTable));
-        return pTree.get();
+        return *pTree;
     }
 }
