@@ -35,6 +35,7 @@
 #include <mem/ScopedArray.h>
 #include <gsl/gsl.h>
 #include <str/EncodedStringView.h>
+#include <sys/Span.h>
 
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
@@ -200,11 +201,10 @@ inline size_t getBandSize(const NITFSegmentInfo& segmentInfo, const Data& data)
     return bandSize;
 }
 
-inline std::span<const std::byte> as_bytes(BufferList::value_type pImageData,
+static auto asBytes(BufferList::value_type pImageData,
     const NITFSegmentInfo& segmentInfo, const Data& data)
 {
     const auto bandSize = getBandSize(segmentInfo, data);
-    const void* pImageData_ = pImageData;
     auto size_in_bytes = bandSize * data.getNumChannels();
 
     // At this point, we've lost information about the ACTUAL size of the buffer. Normally, the computation above will be correct.
@@ -215,7 +215,8 @@ inline std::span<const std::byte> as_bytes(BufferList::value_type pImageData,
         size_in_bytes *= sizeof(float);
     }
 
-    return std::span<const std::byte>(static_cast<const std::byte*>(pImageData_), size_in_bytes);
+    const void* const pImageData_ = pImageData;
+    return sys::make_span(static_cast<const std::byte*>(pImageData_), size_in_bytes);
 }
 
 // this bypasses the normal NITF ImageWriter and streams directly to the output
@@ -232,7 +233,7 @@ inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(const NITFSegment
     BufferList::value_type pImageData, const Data& data, bool doByteSwap,
     ptrdiff_t cutoff) // for eventual use by to_AMP8I_PHS8I()
 {
-    const auto pImageData_ = as_bytes(pImageData, segmentInfo, data);
+    const auto pImageData_ = asBytes(pImageData, segmentInfo, data);
     return makeWriteHandler(segmentInfo, pImageData_, data, doByteSwap, cutoff);
 }
 
@@ -360,7 +361,7 @@ inline nitf::ImageSource make_ImageSource_from_BufferList(std::span<const std::b
 }
 static nitf::ImageSource make_ImageSource(const BufferList::value_type pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
 {
-    const auto pImageData_ = as_bytes(pImageData, segmentInfo, data);
+    const auto pImageData_ = asBytes(pImageData, segmentInfo, data);
     return make_ImageSource_from_BufferList(pImageData_, segmentInfo, data);
 }
 
