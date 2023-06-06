@@ -84,7 +84,21 @@ struct Data
     template<typename T, typename U>
     bool convertPixels(std::span<const T> from, std::span<U> to, ptrdiff_t cutoff = -1) const
     {
-        return convertPixels_(std::as_bytes(from), std::as_writable_bytes(to), cutoff);
+        // coda-oss checks to be sure T and U are trivially_copyable.  While this is
+        // correct (converting something else to bytes doesn't make sense), existing
+        // code didn't have that check.
+        //
+        // TODO: use std::as_bytes() directly
+
+        const void* const pFrom = from.data();
+	auto const pFromBytes = static_cast<const std::byte*>(pFrom);
+	const std::span<const std::byte> fromBytes(pFromBytes, from.size_bytes());
+
+	void* const pTo = to.data();
+	auto const pToBytes = static_cast<std::byte*>(pTo);
+	const std::span<std::byte> toBytes(pToBytes, to.size_bytes());
+
+        return convertPixels_(fromBytes, toBytes, cutoff);
     }
 
     /*!

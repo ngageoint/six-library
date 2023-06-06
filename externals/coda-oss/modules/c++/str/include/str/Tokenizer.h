@@ -65,7 +65,7 @@ public:
      * Method to return the resultant vector 
      * \return The vector that was created by the tokenizer
      */
-    operator Tokenizer::Tokens& ()
+    operator Tokenizer::Tokens& () noexcept
     {
         return vec;
     }

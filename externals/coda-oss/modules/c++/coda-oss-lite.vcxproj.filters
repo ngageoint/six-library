@@ -747,6 +747,9 @@
     <ClInclude Include="sys\include\sys\Span.h">
       <Filter>sys</Filter>
     </ClInclude>
+    <ClInclude Include="sys\include\sys\SysInt.h">
+      <Filter>sys</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
