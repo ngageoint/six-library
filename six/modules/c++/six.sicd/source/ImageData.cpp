@@ -189,15 +189,10 @@ static auto AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTab
 
     // For all possible amp/phase values (there are "only" 256*256=65536), get and save the
     // complex<float> value.
-    //
-    // Be careful with indexing so that we don't wrap-around in the loops.
-    for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
+    for (const auto amplitude : Utilities::iota_0_256())
     {
-        const auto amplitude = gsl::narrow<uint8_t>(input_amplitude);
-
-        for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
+        for (const auto phase : Utilities::iota_0_256())
         {
-            const auto phase = gsl::narrow<uint8_t>(input_value);
             values[amplitude][phase] = toComplex(amplitude, phase);
         }
     }

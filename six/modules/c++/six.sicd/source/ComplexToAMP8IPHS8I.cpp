@@ -31,6 +31,8 @@
 #include <math/Utilities.h>
 #include <units/Angles.h>
 
+#include "six/sicd/Utilities.h"
+
 // https://github.com/ngageoint/six-library/pull/537#issuecomment-1026453353
 /*
 I can add more detail, but be warned that my powerpoint skills aren't amazing and this is best drawn on a whiteboard or graph paper.
@@ -67,15 +69,14 @@ inline long double GetPhase(const std::complex<long double>& v)
 
 static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmplitudeTable)
 {
-    std::vector<long double> retval(UINT8_MAX + 1);
-    for (size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
+    std::vector<long double> retval;
+    retval.reserve(UINT8_MAX + 1);
+    for (const auto amplitude : six::sicd::Utilities::iota_0_256())
     {
-        static_assert(sizeof(size_t) > sizeof(uint8_t), "size_t can't hold UINT8_MAX!");
         // AmpPhase -> Complex
-        const auto amplitude = gsl::narrow<uint8_t>(i);
         const auto value = amplitude;
         const auto complex = six::sicd::Utilities::toComplex(amplitude, value, pAmplitudeTable);
-        retval[i] = std::abs(complex);
+        retval.push_back(std::abs(complex));
     }
 
     // I don't know if we can guarantee that the amplitude table is non-decreasing.
@@ -107,13 +108,14 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
     assert(p0 == 0.0);
     assert(p1 > p0);
     phase_delta = p1 - p0;
-    for(size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
+    size_t i = 0;
+    for(const auto value : six::sicd::Utilities::iota_0_256())
     {
-        static_assert(sizeof(size_t) > sizeof(uint8_t), "size_t can't hold UINT8_MAX!");
-        const units::Radians<long double> angle{ p0 + gsl::narrow_cast<long double>(i) * phase_delta };
+        const units::Radians<long double> angle{ p0 + value * phase_delta };
         long double y, x;
         SinCos(angle, y, x);
         phase_directions[i] = { x, y };
+        i++;
     }
 }
 

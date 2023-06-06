@@ -32,22 +32,25 @@
 #include <iterator>
 #include <utility>
 #include <stdexcept>
+#include <numeric>
 
 #include <except/Exception.h>
 #include <io/StringStream.h>
 #include <math/Utilities.h>
 #include <math/poly/Fit.h>
 #include <mem/ScopedAlignedArray.h>
-#include <six/NITFReadControl.h>
-#include <six/sicd/SICDWriteControl.h>
-#include <six/Utilities.h>
-#include <six/sicd/ComplexXMLControl.h>
-#include <six/sicd/SICDMesh.h>
+#include <gsl/gsl.h>
 #include <str/Manip.h>
 #include <str/EncodedStringView.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
 #include <units/Angles.h>
+
+#include <six/NITFReadControl.h>
+#include <six/sicd/SICDWriteControl.h>
+#include <six/Utilities.h>
+#include <six/sicd/ComplexXMLControl.h>
+#include <six/sicd/SICDMesh.h>
 #include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/GeoLocator.h>
 #include <six/sicd/ImageData.h>
@@ -114,6 +117,25 @@ std::complex<long double> six::sicd::Utilities::toComplex(uint8_t input_amplitud
     {
         return toComplex(input_amplitude, input_value);
     }
+}
+
+static auto iota_0_256_()
+{
+    static_assert(sizeof(size_t) > sizeof(uint8_t), "size_t can't hold UINT8_MAX!");
+
+    std::vector<uint8_t> retval;
+    retval.reserve(UINT8_MAX + 1);
+    for (size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loop.
+    {
+        retval.push_back(gsl::narrow<uint8_t>(i));
+    }
+    assert(retval.size() == UINT8_MAX + 1);
+    return retval;
+}
+std::vector<uint8_t> six::sicd::Utilities::iota_0_256()
+{
+    static const auto retval = iota_0_256_();
+    return retval;
 }
 
 namespace

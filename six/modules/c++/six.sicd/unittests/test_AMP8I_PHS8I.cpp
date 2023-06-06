@@ -162,12 +162,12 @@ TEST_CASE(test_8bit_ampphs)
 
     std::vector<AMP8I_PHS8I_t> inputs;
     std::vector<std::complex<float>> expecteds;
-    for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
+    for (const auto amplitude : six::sicd::Utilities::iota_0_256())
     {
-        for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
+        for (const auto phase : six::sicd::Utilities::iota_0_256())
         {
-            AMP8I_PHS8I_t input{ static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value) };
-            const auto S = six::sicd::Utilities::toComplex(static_cast<uint8_t>(input_amplitude), static_cast<uint8_t>(input_value));
+            AMP8I_PHS8I_t input{ amplitude, phase };
+            const auto S = six::sicd::Utilities::toComplex(amplitude, phase);
 
             inputs.push_back(std::move(input));
             expecteds.emplace_back(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
@@ -711,11 +711,11 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
 
     // Generate the full 256x256 matrix of possible AMP8I_PHS8I values.
     std::vector<Pairs> candidates;
-    for(int i = 0; i < 256; i++) {
-        for(int j = 0; j < 256; j++) {
+    for(const auto amplitude : six::sicd::Utilities::iota_0_256()) {
+        for(const auto phase : six::sicd::Utilities::iota_0_256()) {
             Pairs p;
-            p.integral = { gsl::narrow<uint8_t>(i), gsl::narrow<uint8_t>(j) };
-            p.floating = six::sicd::Utilities::toComplex(i, j, amplitudeTable);
+            p.integral = { amplitude, phase };
+            p.floating = six::sicd::Utilities::toComplex(amplitude, phase, amplitudeTable);
             candidates.push_back(p);
         }
     }
