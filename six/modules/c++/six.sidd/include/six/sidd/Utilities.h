@@ -32,6 +32,7 @@
 #include <types/RgAz.h>
 #include <six/Utilities.h>
 #include <six/sidd/DerivedData.h>
+#include <six/sidd/DerivedXMLControl.h>
 
 namespace six
 {
@@ -84,7 +85,7 @@ public:
      */
     static std::unique_ptr<DerivedData> createFakeDerivedData();
     static std::unique_ptr<DerivedData> createFakeDerivedData(Version);
-
+    static std::unique_ptr<DerivedData> createFakeDerivedData(Version, six::sidd300::ISMVersion); // for SIDD 3.0.0
 
     /*
     * Parses the XML in 'xmlStream' and converts it into a DerivedData object.

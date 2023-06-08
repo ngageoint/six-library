@@ -87,9 +87,10 @@ inline static const six::UnmodeledS* get_Unmodeled(const six::sidd::DerivedData&
     }
 }
 
-static void test_createFakeDerivedData_(const std::string& testName, six::sidd::Version siddVersion, bool validate)
+static void test_createFakeDerivedData_(const std::string& testName, bool validate,
+    six::sidd::Version siddVersion, six::sidd300::ISMVersion ismVersion)
 {
-    const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData(siddVersion);
+    const auto pFakeDerivedData = six::sidd::Utilities::createFakeDerivedData(siddVersion, ismVersion);
     auto Unmodeled = get_Unmodeled(*pFakeDerivedData, siddVersion);
     TEST_ASSERT_NULL(Unmodeled); // not part of the fake data, only added in SIDD 3.0
 
@@ -102,13 +103,17 @@ static void test_createFakeDerivedData_(const std::string& testName, six::sidd::
 }
 TEST_CASE(test_createFakeDerivedData)
 {
-    test_createFakeDerivedData_(testName, six::sidd::Version::v200, false /*validate*/);
-    test_createFakeDerivedData_(testName, six::sidd::Version::v300, false /*validate*/);
+    test_createFakeDerivedData_(testName, false /*validate*/, six::sidd::Version::v200, six::sidd300::ISMVersion::current);
+
+    test_createFakeDerivedData_(testName, false /*validate*/, six::sidd::Version::v300, six::sidd300::ISMVersion::v13);
+    test_createFakeDerivedData_(testName, false /*validate*/, six::sidd::Version::v300, six::sidd300::ISMVersion::v201609);
 }
 TEST_CASE(test_createFakeDerivedData_validate)
 {
-    test_createFakeDerivedData_(testName, six::sidd::Version::v200, true /*validate*/);
-    test_createFakeDerivedData_(testName, six::sidd::Version::v300, true /*validate*/);
+    test_createFakeDerivedData_(testName, true /*validate*/, six::sidd::Version::v200, six::sidd300::ISMVersion::current);
+
+    test_createFakeDerivedData_(testName, true /*validate*/, six::sidd::Version::v300, six::sidd300::ISMVersion::v13);
+    test_createFakeDerivedData_(testName, true /*validate*/, six::sidd::Version::v300, six::sidd300::ISMVersion::v201609);
 }
 
 static void test_assert_unmodeled_(const std::string& testName, const six::UnmodeledS& Unmodeled)

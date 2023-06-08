@@ -1307,7 +1307,7 @@ static void update_for_SIDD_300(DerivedData& data) // n.b., much of this was add
     populateData(data);
 }
 
-static std::unique_ptr<DerivedData> createFakeDerivedData_(Version* pSiddVersion = nullptr)
+static std::unique_ptr<DerivedData> createFakeDerivedData_(const Version* pSiddVersion, const six::sidd300::ISMVersion* pISMVersion = nullptr)
 {
     std::unique_ptr<DerivedData> data;
     if (pSiddVersion != nullptr) // preserve behavior of existing code
@@ -1415,11 +1415,23 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(Version* pSiddVersion
 }
 std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersion)
 {
-    if ((siddVersion == Version::v200) || (siddVersion == Version::v300))
+    if (siddVersion == Version::v300)
+    {
+        throw std::invalid_argument("Must use ISMVersion overload.");
+    }
+    if (siddVersion == Version::v200)
     {
         return createFakeDerivedData_(&siddVersion);
     }
     throw std::invalid_argument("SIDD version = '" + to_string(siddVersion) + "' is not supported.");
+}
+std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersion, six::sidd300::ISMVersion ismVersion)
+{
+    if (siddVersion != Version::v300)
+    {
+        return createFakeDerivedData(siddVersion);
+    }
+    return createFakeDerivedData_(&siddVersion, &ismVersion);
 }
 std::unique_ptr<DerivedData> Utilities::createFakeDerivedData()
 {
