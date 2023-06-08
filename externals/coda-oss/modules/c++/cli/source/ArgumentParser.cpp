@@ -294,6 +294,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
     std::map<std::string, Argument*> longOptionsFlags;
     std::vector<Argument*> positionalArgs;
 
+    positionalArgs.reserve(mArgs.size());
     for (auto& arg_ : mArgs)
     {
         cli::Argument* arg = arg_.get();
@@ -336,6 +337,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
     }
 
     std::vector < std::string > explodedArgs;
+    explodedArgs.reserve(args.size());
     // next, check for combined short options
     for (size_t i = 0, s = args.size(); i < s; ++i)
     {
