@@ -114,10 +114,9 @@ public:
     ValidatorXerces(const std::vector<std::string>& schemaPaths, 
                     logging::Logger* log,
                     bool recursive = true);
-    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&,
+    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, // fs::path -> mLegacyStringConversion = false
                     logging::Logger* log,
                     bool recursive = true);
-    ValidatorXerces(const coda_oss::filesystem::path&, logging::Logger&);
 
     ValidatorXerces(const ValidatorXerces&) = delete;
     ValidatorXerces& operator=(const ValidatorXerces&) = delete;
@@ -142,15 +141,11 @@ public:
     static std::vector<coda_oss::filesystem::path> loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive=true);
 
 private:
-    void initialize(); // easier than chaining constructors w/existing code
-
     bool validate_(const coda_oss::u8string& xml, 
                    const std::string& xmlID,
                    std::vector<ValidationInfo>& errors) const;
 
-    void loadGrammar(const coda_oss::filesystem::path&, logging::Logger&);
     std::unique_ptr<xercesc::XMLGrammarPool> mSchemaPool;
-
     std::unique_ptr<xml::lite::ValidationErrorHandler> mErrorHandler;
     std::unique_ptr<xercesc::DOMLSParser> mValidator;
 
