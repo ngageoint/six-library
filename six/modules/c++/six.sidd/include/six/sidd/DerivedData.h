@@ -44,6 +44,27 @@
 
 namespace six
 {
+// Emphasize that this is for SIDD 3.0.0
+namespace sidd300
+{
+    // We have to support two ISM versions with SIDD 3.0 :-(
+    enum class ISMVersion
+    {
+        v201609, // the "newer" version; default
+        v13, // the "original" version
+
+        current = v201609
+    };
+    std::string to_string(ISMVersion); // "v201609" or "v13"
+
+    ISMVersion get(ISMVersion defaultIfNotSet); // overloaded on ISMVersion
+    std::optional<ISMVersion> set(ISMVersion); // returns previous value, if any
+    std::optional<ISMVersion> getISMVersion();
+    std::optional<ISMVersion> clearISMVersion(); // returns previous value, if any
+
+    std::vector<std::filesystem::path> find_SIDD_schema_V_files(const std::vector<std::filesystem::path>& schemaPaths);
+}
+    
 namespace sidd
 {
 // six.sidd only currently supports --
@@ -57,6 +78,7 @@ enum class Version
     v300,
 };
 std::string to_string(Version); // "v100", "v200", "v300"
+Version normalizeVersion(const std::string&);
 
 /*!
  *  \class DerivedData
@@ -154,6 +176,8 @@ struct DerivedData: public Data
      *  rather than invoking this object directly.
      */
     DerivedData();
+    DerivedData(Version);
+    DerivedData(Version, six::sidd300::ISMVersion); // SIDD 3.0.0 must use this overload
 
     /*!
      *  We are dealing with derived data
@@ -328,15 +352,8 @@ struct DerivedData: public Data
         return std::string(VENDOR_ID);
     }
 
-    virtual std::string getVersion() const
-    {
-        return mVersion;
-    }
-
-    virtual void setVersion(const std::string& strVersion)
-    {
-        mVersion = strVersion;
-    }
+    virtual std::string getVersion() const;
+    virtual void setVersion(const std::string&);
 
     /*
      * Convert the output plane pixel location into meters from the reference
@@ -353,7 +370,9 @@ private:
     bool operator_eq(const DerivedData& rhs) const;
     static const char VENDOR_ID[];
     bool equalTo(const Data& rhs) const override;
-    std::string mVersion;
+
+    Version mVersion = Version::v100; // existing code
+    six::sidd300::ISMVersion ismVersion = six::sidd300::ISMVersion::current; // only for SIDD 3.0.0
 };
 }
 }

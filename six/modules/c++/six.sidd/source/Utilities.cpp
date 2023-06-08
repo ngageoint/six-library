@@ -1307,7 +1307,7 @@ static void update_for_SIDD_300(DerivedData& data) // n.b., much of this was add
     populateData(data);
 }
 
-static std::unique_ptr<DerivedData> createFakeDerivedData_(const Version* pSiddVersion, const six::sidd300::ISMVersion* pISMVersion = nullptr)
+static std::unique_ptr<DerivedData> createFakeDerivedData_(const Version* pSiddVersion, const six::sidd300::ISMVersion* = nullptr)
 {
     std::unique_ptr<DerivedData> data;
     if (pSiddVersion != nullptr) // preserve behavior of existing code

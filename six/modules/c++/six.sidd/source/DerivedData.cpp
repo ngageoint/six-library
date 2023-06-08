@@ -30,9 +30,19 @@ namespace sidd
 {
 const char DerivedData::VENDOR_ID[] = "MDA-IS";
 
-DerivedData::DerivedData() :
+DerivedData::DerivedData(Version siddVersion, six::sidd300::ISMVersion) :
     productCreation(new ProductCreation),
-    mVersion("1.0.0")
+    mVersion(siddVersion)
+{
+}
+DerivedData::DerivedData(Version siddVersion) : DerivedData(siddVersion, six::sidd300::ISMVersion::current)
+{
+    if (siddVersion == Version::v300)
+    {
+        throw std::invalid_argument("Must use ISMVersion overload.");
+    }
+}
+DerivedData::DerivedData() : DerivedData(Version::v100) // existing code
 {
 }
 
@@ -89,7 +99,7 @@ DateTime DerivedData::getCollectionStartDateTime() const
 
 const mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT() const
 {
-    if (mVersion == "1.0.0")
+    if (mVersion == Version::v100)
     {
         if (display->remapInformation.get() == nullptr)
         {
@@ -97,14 +107,12 @@ const mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT() const
         }
         return display->remapInformation->remapLUT;
     }
-    else if ((mVersion == "2.0.0") || (mVersion == "3.0.0"))
+    else if ((mVersion == Version::v200) || (mVersion == Version::v300))
     {
         return nitfLUT;
     }
-    else
-    {
-        throw except::Exception(Ctxt("Unknown version. Expected 3.0.0, 2.0.0, or 1.0.0"));
-    }
+    
+    throw except::Exception(Ctxt("Unknown version. Expected 3.0.0, 2.0.0, or 1.0.0"));
 }
 void DerivedData::setDisplayLUT(std::unique_ptr<AmplitudeTable>&& pLUT)
 {
@@ -166,5 +174,16 @@ bool DerivedData::equalTo(const Data& rhs) const
     }
     return false;
 }
+
+std::string DerivedData::getVersion() const
+{
+    return to_string(mVersion);
+}
+
+void DerivedData::setVersion(const std::string& strVersion)
+{
+    mVersion = normalizeVersion(strVersion);
+}
+
 }
 }
