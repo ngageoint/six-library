@@ -88,7 +88,7 @@ Version normalizeVersion(const std::string&);
  *  Contains the structs that are the model for SIDD products
  *
  */
-struct DerivedData: public Data
+struct DerivedData : public Data
 {
     /*!
      *  Information related to processor, classification,
@@ -354,6 +354,12 @@ struct DerivedData: public Data
 
     virtual std::string getVersion() const;
     virtual void setVersion(const std::string&);
+    void setVersion(const std::string&, six::sidd300::ISMVersion); // SIDD 3.0.0 must use this overload
+
+    Version getSIDDVersion() const;
+    void setSIDDVersion(Version);
+    void setSIDDVersion(Version, six::sidd300::ISMVersion); // SIDD 3.0.0 must use this overload
+    six::sidd300::ISMVersion getISMVersion() const;
 
     /*
      * Convert the output plane pixel location into meters from the reference
@@ -372,7 +378,7 @@ private:
     bool equalTo(const Data& rhs) const override;
 
     Version mVersion = Version::v100; // existing code
-    six::sidd300::ISMVersion ismVersion = six::sidd300::ISMVersion::current; // only for SIDD 3.0.0
+    six::sidd300::ISMVersion mISMVersion = six::sidd300::ISMVersion::current; // only for SIDD 3.0.0
 };
 }
 }

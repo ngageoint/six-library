@@ -30,9 +30,9 @@ namespace sidd
 {
 const char DerivedData::VENDOR_ID[] = "MDA-IS";
 
-DerivedData::DerivedData(Version siddVersion, six::sidd300::ISMVersion) :
+DerivedData::DerivedData(Version siddVersion, six::sidd300::ISMVersion ismVersion) :
     productCreation(new ProductCreation),
-    mVersion(siddVersion)
+    mVersion(siddVersion), mISMVersion(ismVersion)
 {
 }
 DerivedData::DerivedData(Version siddVersion) : DerivedData(siddVersion, six::sidd300::ISMVersion::current)
@@ -175,14 +175,43 @@ bool DerivedData::equalTo(const Data& rhs) const
     return false;
 }
 
+Version DerivedData::getSIDDVersion() const
+{
+    return mVersion;
+}
 std::string DerivedData::getVersion() const
 {
-    return to_string(mVersion);
+    return to_string(getSIDDVersion());
+}
+
+void DerivedData::setSIDDVersion(Version siddVersion, six::sidd300::ISMVersion ismVersion)
+{
+    mVersion = siddVersion;
+    mISMVersion = ismVersion;
+}
+void DerivedData::setSIDDVersion(Version siddVersion)
+{
+    if (siddVersion == Version::v300)
+    {
+        throw std::invalid_argument("Must use ISMVersion overload."); // TODO
+    }
+    mVersion = siddVersion;
 }
 
 void DerivedData::setVersion(const std::string& strVersion)
 {
-    mVersion = normalizeVersion(strVersion);
+    // This is an `override` of `six::Data` so there's no way to pass
+    // as six::sidd300::ISMVersion for SIDD 3.0.0.
+    setVersion(strVersion, six::sidd300::ISMVersion::current);
+}
+void DerivedData::setVersion(const std::string& strVersion, six::sidd300::ISMVersion ismVersion)
+{
+    setSIDDVersion(normalizeVersion(strVersion), ismVersion);
+}
+
+six::sidd300::ISMVersion DerivedData::getISMVersion() const
+{
+    return mISMVersion;
 }
 
 }

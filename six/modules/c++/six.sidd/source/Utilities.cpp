@@ -1149,14 +1149,12 @@ static void initProductProcessing(six::sidd::ProductProcessing& processing)
 
 static void populateData(six::sidd::DerivedData& siddData, const std::string& lutType = "Mono")
 {
-    const auto strVersion = siddData.getVersion();
+    const auto siddVersion = siddData.getSIDDVersion();
 
     constexpr bool smallImage = true;
-
-    siddData.setVersion(strVersion);
     const auto elementSize = static_cast<size_t>(lutType == "Mono" ? 2 : 3);
 
-    if ((strVersion == "2.0.0") || (strVersion == "3.0.0"))
+    if ((siddVersion == Version::v200) || (siddVersion == Version::v300))
     {
         // This will naturally get constructed in the course of 1.0.0
         // Separate field in 2.0.0
@@ -1181,7 +1179,7 @@ static void populateData(six::sidd::DerivedData& siddData, const std::string& lu
     //siddData.setImageCorners(makeUpCornersFromDMS());
 
     // Can certainly be init'ed in a function
-    initProductCreation(*siddData.productCreation, strVersion);
+    initProductCreation(*siddData.productCreation, to_string(siddVersion));
 
     // Or directly if preferred
     siddData.display->decimationMethod = DecimationMethod::BRIGHTEST_PIXEL;
@@ -1238,7 +1236,7 @@ static void populateData(six::sidd::DerivedData& siddData, const std::string& lu
     planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
     planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
 
-    initExploitationFeatures(*siddData.exploitationFeatures, strVersion);
+    initExploitationFeatures(*siddData.exploitationFeatures, to_string(siddVersion));
     initDED(siddData.digitalElevationData);
     initProductProcessing(*siddData.productProcessing);
     initDownstreamReprocessing(*siddData.downstreamReprocessing);
@@ -1307,7 +1305,7 @@ static void update_for_SIDD_300(DerivedData& data) // n.b., much of this was add
     populateData(data);
 }
 
-static std::unique_ptr<DerivedData> createFakeDerivedData_(const Version* pSiddVersion, const six::sidd300::ISMVersion* = nullptr)
+static std::unique_ptr<DerivedData> createFakeDerivedData_(const Version* pSiddVersion, const six::sidd300::ISMVersion* pISMVersion = nullptr)
 {
     std::unique_ptr<DerivedData> data;
     if (pSiddVersion != nullptr) // preserve behavior of existing code
@@ -1348,9 +1346,16 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(const Version* pSiddV
 
     if (pSiddVersion != nullptr)
     {
-        data->setVersion(to_string(*pSiddVersion));
+        if (pISMVersion != nullptr)
+        {
+            data->setSIDDVersion(*pSiddVersion, *pISMVersion);
+        }
+        else
+        {
+            data->setSIDDVersion(*pSiddVersion);
+        }       
     }
-    data->productCreation.reset(new ProductCreation());
+
     data->productCreation->classification.classification = "U";
     data->display.reset(new Display());
     data->geographicAndTarget.reset(new GeographicAndTarget());
