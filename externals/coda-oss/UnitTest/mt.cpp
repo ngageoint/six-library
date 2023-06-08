@@ -24,4 +24,8 @@ TEST_CLASS(work_sharing_balanced_runnable_1d_test){ public:
 #include "mt/unittests/work_sharing_balanced_runnable_1d_test.cpp"
 };
 
+TEST_CLASS(test_mt_byte_swap){ public:
+#include "mt/unittests/test_mt_byte_swap.cpp"
+};
+
 }
