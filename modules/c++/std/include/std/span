@@ -39,6 +39,9 @@
 namespace std // This is slightly uncouth: we're not supposed to augment "std".
 {
     using coda_oss::span;
+    
+    using coda_oss::as_bytes;
+    using coda_oss::as_writable_bytes;
 }
 #endif  // CODA_OSS_DEFINE_std_span_
 
