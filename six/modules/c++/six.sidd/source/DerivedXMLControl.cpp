@@ -92,11 +92,12 @@ namespace sidd
 {
     std::string to_string(Version siddVersion)
     {
+        // Match "incoming" SIDD version strings; this is also what the XML expects, see normalizeVersion()
         switch (siddVersion)
         {
-        case Version::v100: return "v100";
-        case Version::v200: return "v200";
-        case Version::v300: return "v300";
+        case Version::v100: return "1.0.0";
+        case Version::v200: return "2.0.0";
+        case Version::v300: return "3.0.0";
         default: break;
         }
         throw std::logic_error("Unkown 'Version' value.");

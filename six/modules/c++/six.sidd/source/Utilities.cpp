@@ -1307,10 +1307,10 @@ static void update_for_SIDD_300(DerivedData& data) // n.b., much of this was add
     populateData(data);
 }
 
-static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& strVersion)
+static std::unique_ptr<DerivedData> createFakeDerivedData_(Version* pSiddVersion = nullptr)
 {
     std::unique_ptr<DerivedData> data;
-    if (!strVersion.empty()) // preserve behavior of existing code
+    if (pSiddVersion != nullptr) // preserve behavior of existing code
     {
         //-----------------------------------------------------------
         // Make the object.  You could do this directly, but this way
@@ -1346,9 +1346,9 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& st
         data = std::make_unique<DerivedData>();
     }
 
-    if (!strVersion.empty())
+    if (pSiddVersion != nullptr)
     {
-        data->setVersion(strVersion);
+        data->setVersion(to_string(*pSiddVersion));
     }
     data->productCreation.reset(new ProductCreation());
     data->productCreation->classification.classification = "U";
@@ -1406,24 +1406,24 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& st
     data->exploitationFeatures->product[0].resolution.row = 0;
     data->exploitationFeatures->product[0].resolution.col = 0;
 
-    if (!strVersion.empty()) // TODO: better check for version; this avoid changing any existing test code
+    if (pSiddVersion != nullptr) // TODO: better check for version; this avoid changing any existing test code
     {
         update_for_SIDD_300(*data);
     }
 
     return data;
 }
-std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& strVersion)
+std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersion)
 {
-    if ((strVersion == "2.0.0") || (strVersion == "3.0.0"))
+    if ((siddVersion == Version::v200) || (siddVersion == Version::v300))
     {
-        return createFakeDerivedData_(strVersion);
+        return createFakeDerivedData_(&siddVersion);
     }
-    throw std::invalid_argument("strVersion = '" + strVersion + "' is not supported.");
+    throw std::invalid_argument("SIDD version = '" + to_string(siddVersion) + "' is not supported.");
 }
 std::unique_ptr<DerivedData> Utilities::createFakeDerivedData()
 {
-    return std::unique_ptr<DerivedData>(createFakeDerivedData_("").release());
+    return createFakeDerivedData_(nullptr);
 }
 
 }

@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_SIDD_UTILITIES_H__
-#define __SIX_SIDD_UTILITIES_H__
+#pragma once
+#ifndef SIX_six_sidd_Utilities_h_INCLUDED_
+#define SIX_six_sidd_Utilities_h_INCLUDED_
 
 #include <memory>
 #include <vector>
@@ -82,7 +83,7 @@ public:
      * \return mock DerivedData object
      */
     static std::unique_ptr<DerivedData> createFakeDerivedData();
-    static std::unique_ptr<DerivedData> createFakeDerivedData(const std::string& strVersion);
+    static std::unique_ptr<DerivedData> createFakeDerivedData(Version);
 
 
     /*
@@ -156,4 +157,4 @@ public:
 };
 }
 }
-#endif
+#endif // SIX_six_sidd_Utilities_h_INCLUDED_

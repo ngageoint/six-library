@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_six_sidd_DerivedData_h_INCLUDED_
 #define SIX_six_sidd_DerivedData_h_INCLUDED_
-#pragma once
 
 #include <std/filesystem>
 
@@ -46,6 +46,18 @@ namespace six
 {
 namespace sidd
 {
+// six.sidd only currently supports --
+//   SIDD 1.0.0
+//   SIDD 2.0.0
+//   SIDD 3.0.0
+enum class Version
+{
+    v100,
+    v200,
+    v300,
+};
+std::string to_string(Version); // "v100", "v200", "v300"
+
 /*!
  *  \class DerivedData
  *  \brief The implementation of Data for derived products

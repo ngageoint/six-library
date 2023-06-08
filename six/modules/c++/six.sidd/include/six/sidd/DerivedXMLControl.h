@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_DERIVED_XML_CONTROL_H__
-#define __SIX_DERIVED_XML_CONTROL_H__
+#pragma once
+#ifndef SIX_six_sidd_DerivedXMLControl_h_INCLUDED_
+#define SIX_six_sidd_DerivedXMLControl_h_INCLUDED_
 
 #include <std/optional>
 #include <std/filesystem>
@@ -56,18 +57,6 @@ namespace sidd300
 
 namespace sidd
 {
-    // six.sidd only currently supports --
-    //   SIDD 1.0.0
-    //   SIDD 2.0.0
-    //   SIDD 3.0.0
-    enum class Version
-    {
-        v100,
-        v200,
-        v300,
-    };
-    std::string to_string(Version); // "v100", "v200", "v300"
-
 /*!
  *  \class DerivedXMLControl
  *  \brief Turns an DerivedData object into XML and vice versa
@@ -117,5 +106,4 @@ private:
 }
 }
 
-#endif
-
+#endif // SIX_six_sidd_DerivedXMLControl_h_INCLUDED_
