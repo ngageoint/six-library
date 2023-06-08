@@ -312,6 +312,8 @@ void escapeForXML(std::string& str)
 // https://en.cppreference.com/w/cpp/string/char_traits
 class ci_char_traits final : public std::char_traits<char>
 {
+    // Use our own routine rather than strcasecmp() so that the same
+    // toupperCheck() is used as when calling upper().
     static auto to_upper(char ch) noexcept
     {
         return toupperCheck(ch);

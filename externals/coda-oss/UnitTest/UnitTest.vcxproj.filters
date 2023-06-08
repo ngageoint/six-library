@@ -222,6 +222,9 @@
     <ClCompile Include="..\modules\c++\mt\unittests\test_mt_byte_swap.cpp">
       <Filter>mt</Filter>
     </ClCompile>
+    <ClCompile Include="..\modules\c++\types\unittests\test_complex_short.cpp">
+      <Filter>types</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

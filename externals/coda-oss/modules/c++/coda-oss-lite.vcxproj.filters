@@ -750,6 +750,9 @@
     <ClInclude Include="sys\include\sys\SysInt.h">
       <Filter>sys</Filter>
     </ClInclude>
+    <ClInclude Include="types\include\types\complex_short.h">
+      <Filter>types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

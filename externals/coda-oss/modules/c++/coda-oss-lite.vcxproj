@@ -257,6 +257,7 @@
     <ClInclude Include="tiff\include\tiff\KnownTags.h" />
     <ClInclude Include="tiff\include\tiff\TypeFactory.h" />
     <ClInclude Include="tiff\include\tiff\Utils.h" />
+    <ClInclude Include="types\include\types\complex_short.h" />
     <ClInclude Include="types\include\types\PageRowCol.h" />
     <ClInclude Include="types\include\types\Range.h" />
     <ClInclude Include="types\include\types\RangeList.h" />
