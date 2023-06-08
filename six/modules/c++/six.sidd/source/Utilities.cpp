@@ -710,7 +710,20 @@ static void initDED(mem::ScopedCopyablePtr<six::sidd::DigitalElevationData>& ded
     ded->nullValue = -32768;
 }
 
-static void initProductCreation(six::sidd::ProductCreation& productCreation, const std::string& strVersion)
+static int32_t getDESVersion(six::sidd300::ISMVersion ismVersion)
+{
+    if (ismVersion == six::sidd300::ISMVersion::v13)
+    {
+        return 13;
+    }
+    if (ismVersion == six::sidd300::ISMVersion::v201609)
+    {
+        return 201609;
+    }
+    throw std::invalid_argument("Unknown 'ISMVersion' value.");
+}
+
+static void initProductCreation(six::sidd::ProductCreation& productCreation, Version siddVersion, six::sidd300::ISMVersion ismVersion)
 {
     productCreation.productName = "ProductName";
     productCreation.productClass = "Unclassified";
@@ -719,18 +732,18 @@ static void initProductCreation(six::sidd::ProductCreation& productCreation, con
     productCreation.productCreationExtensions.push_back(parameter);
 
     productCreation.classification.securityExtensions.push_back(parameter);
-    if (strVersion != "3.0.0")
+    if (siddVersion != Version::v300)
     {
         productCreation.classification.desVersion = 234; // existing code
     }
     else
     {
-        productCreation.classification.desVersion = 201609; // SIDD 3.0
+        productCreation.classification.desVersion = getDESVersion(ismVersion);        
     }
     productCreation.classification.createDate = six::DateTime();
     productCreation.classification.classification = "U";
 
-    if (strVersion == "1.0.0")
+    if (siddVersion == Version::v100)
     {
         productCreation.classification.compliesWith.push_back("ICD-710");
     }
@@ -1179,7 +1192,7 @@ static void populateData(six::sidd::DerivedData& siddData, const std::string& lu
     //siddData.setImageCorners(makeUpCornersFromDMS());
 
     // Can certainly be init'ed in a function
-    initProductCreation(*siddData.productCreation, to_string(siddVersion));
+    initProductCreation(*siddData.productCreation, siddVersion, siddData.getISMVersion());
 
     // Or directly if preferred
     siddData.display->decimationMethod = DecimationMethod::BRIGHTEST_PIXEL;
