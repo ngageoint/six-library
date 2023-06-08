@@ -35,7 +35,7 @@ DerivedData::DerivedData(Version siddVersion, six::sidd300::ISMVersion ismVersio
     mVersion(siddVersion), mISMVersion(ismVersion)
 {
 }
-DerivedData::DerivedData(Version siddVersion) : DerivedData(siddVersion, six::sidd300::ISMVersion::current)
+DerivedData::DerivedData(Version siddVersion) : DerivedData(siddVersion, six::sidd300::get(six::sidd300::ISMVersion::current))
 {
     if (siddVersion == Version::v300)
     {
@@ -195,14 +195,14 @@ void DerivedData::setSIDDVersion(Version siddVersion)
     {
         throw std::invalid_argument("Must use ISMVersion overload."); // TODO
     }
-    mVersion = siddVersion;
+    setSIDDVersion(siddVersion, six::sidd300::get(six::sidd300::ISMVersion::current));
 }
 
 void DerivedData::setVersion(const std::string& strVersion)
 {
     // This is an `override` of `six::Data` so there's no way to pass
     // as six::sidd300::ISMVersion for SIDD 3.0.0.
-    setVersion(strVersion, six::sidd300::ISMVersion::current);
+    setVersion(strVersion, six::sidd300::get(six::sidd300::ISMVersion::current));
 }
 void DerivedData::setVersion(const std::string& strVersion, six::sidd300::ISMVersion ismVersion)
 {

@@ -103,14 +103,14 @@ static void test_createFakeDerivedData_(const std::string& testName, bool valida
 }
 TEST_CASE(test_createFakeDerivedData)
 {
-    test_createFakeDerivedData_(testName, false /*validate*/, six::sidd::Version::v200, six::sidd300::ISMVersion::current);
+    test_createFakeDerivedData_(testName, false /*validate*/, six::sidd::Version::v200, six::sidd300::get(six::sidd300::ISMVersion::current));
 
     test_createFakeDerivedData_(testName, false /*validate*/, six::sidd::Version::v300, six::sidd300::ISMVersion::v13);
     test_createFakeDerivedData_(testName, false /*validate*/, six::sidd::Version::v300, six::sidd300::ISMVersion::v201609);
 }
 TEST_CASE(test_createFakeDerivedData_validate)
 {
-    test_createFakeDerivedData_(testName, true /*validate*/, six::sidd::Version::v200, six::sidd300::ISMVersion::current);
+    test_createFakeDerivedData_(testName, true /*validate*/, six::sidd::Version::v200, six::sidd300::get(six::sidd300::ISMVersion::current));
 
     test_createFakeDerivedData_(testName, true /*validate*/, six::sidd::Version::v300, six::sidd300::ISMVersion::v13);
     test_createFakeDerivedData_(testName, true /*validate*/, six::sidd::Version::v300, six::sidd300::ISMVersion::v201609);
