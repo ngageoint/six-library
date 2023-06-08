@@ -30,9 +30,19 @@ namespace sidd
 {
 const char DerivedData::VENDOR_ID[] = "MDA-IS";
 
-DerivedData::DerivedData() :
+DerivedData::DerivedData(Version siddVersion, six::sidd300::ISMVersion ismVersion) :
     productCreation(new ProductCreation),
-    mVersion("1.0.0")
+    mVersion(siddVersion), mISMVersion(ismVersion)
+{
+}
+DerivedData::DerivedData(Version siddVersion) : DerivedData(siddVersion, six::sidd300::get(six::sidd300::ISMVersion::current))
+{
+    if (siddVersion == Version::v300)
+    {
+        throw std::invalid_argument("Must use ISMVersion overload.");
+    }
+}
+DerivedData::DerivedData() : DerivedData(Version::v100) // existing code
 {
 }
 
@@ -89,7 +99,7 @@ DateTime DerivedData::getCollectionStartDateTime() const
 
 const mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT() const
 {
-    if (mVersion == "1.0.0")
+    if (mVersion == Version::v100)
     {
         if (display->remapInformation.get() == nullptr)
         {
@@ -97,14 +107,12 @@ const mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT() const
         }
         return display->remapInformation->remapLUT;
     }
-    else if ((mVersion == "2.0.0") || (mVersion == "3.0.0"))
+    else if ((mVersion == Version::v200) || (mVersion == Version::v300))
     {
         return nitfLUT;
     }
-    else
-    {
-        throw except::Exception(Ctxt("Unknown version. Expected 3.0.0, 2.0.0, or 1.0.0"));
-    }
+    
+    throw except::Exception(Ctxt("Unknown version. Expected 3.0.0, 2.0.0, or 1.0.0"));
 }
 void DerivedData::setDisplayLUT(std::unique_ptr<AmplitudeTable>&& pLUT)
 {
@@ -166,5 +174,45 @@ bool DerivedData::equalTo(const Data& rhs) const
     }
     return false;
 }
+
+Version DerivedData::getSIDDVersion() const
+{
+    return mVersion;
+}
+std::string DerivedData::getVersion() const
+{
+    return to_string(getSIDDVersion());
+}
+
+void DerivedData::setSIDDVersion(Version siddVersion, six::sidd300::ISMVersion ismVersion)
+{
+    mVersion = siddVersion;
+    mISMVersion = ismVersion;
+}
+void DerivedData::setSIDDVersion(Version siddVersion)
+{
+    if (siddVersion == Version::v300)
+    {
+        throw std::invalid_argument("Must use ISMVersion overload."); // TODO
+    }
+    setSIDDVersion(siddVersion, six::sidd300::get(six::sidd300::ISMVersion::current));
+}
+
+void DerivedData::setVersion(const std::string& strVersion)
+{
+    // This is an `override` of `six::Data` so there's no way to pass
+    // as six::sidd300::ISMVersion for SIDD 3.0.0.
+    setVersion(strVersion, six::sidd300::get(six::sidd300::ISMVersion::current));
+}
+void DerivedData::setVersion(const std::string& strVersion, six::sidd300::ISMVersion ismVersion)
+{
+    setSIDDVersion(normalizeVersion(strVersion), ismVersion);
+}
+
+six::sidd300::ISMVersion DerivedData::getISMVersion() const
+{
+    return mISMVersion;
+}
+
 }
 }

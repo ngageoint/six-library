@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_DERIVED_XML_CONTROL_H__
-#define __SIX_DERIVED_XML_CONTROL_H__
+#pragma once
+#ifndef SIX_six_sidd_DerivedXMLControl_h_INCLUDED_
+#define SIX_six_sidd_DerivedXMLControl_h_INCLUDED_
 
 #include <std/optional>
 #include <std/filesystem>
@@ -28,46 +29,13 @@
 #include <six/XMLControl.h>
 #include <six/Enums.h>
 
+#include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLParser.h>
 
 namespace six
 {
-
-// Emphasize that this is for SIDD 3.0.0
-namespace sidd300
-{
-    // We have to support two ISM versions with SIDD 3.0 :-(
-    enum class ISMVersion
-    {
-        v201609, // the "newer" version; default
-        v13, // the "original" version
-
-        current = v201609
-    };
-    std::string to_string(ISMVersion); // "v201609" or "v13"
-
-    ISMVersion get(ISMVersion defaultIfNotSet); // overloaded on ISMVersion
-    std::optional<ISMVersion> set(ISMVersion); // returns previous value, if any
-    std::optional<ISMVersion> getISMVersion();
-    std::optional<ISMVersion> clearISMVersion(); // returns previous value, if any
-
-    std::vector<std::filesystem::path> find_SIDD_schema_V_files(const std::vector<std::filesystem::path>& schemaPaths);
-}
-
 namespace sidd
 {
-    // six.sidd only currently supports --
-    //   SIDD 1.0.0
-    //   SIDD 2.0.0
-    //   SIDD 3.0.0
-    enum class Version
-    {
-        v100,
-        v200,
-        v300,
-    };
-    std::string to_string(Version); // "v100", "v200", "v300"
-
 /*!
  *  \class DerivedXMLControl
  *  \brief Turns an DerivedData object into XML and vice versa
@@ -117,5 +85,4 @@ private:
 }
 }
 
-#endif
-
+#endif // SIX_six_sidd_DerivedXMLControl_h_INCLUDED_

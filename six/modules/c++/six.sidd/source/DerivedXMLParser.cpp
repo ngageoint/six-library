@@ -43,17 +43,14 @@ namespace sidd
 {
 const char DerivedXMLParser::SFA_URI[] = "urn:SFA:1.2.0";
 
-DerivedXMLParser::DerivedXMLParser(const std::string& strVersion,
-    std::unique_ptr<six::SICommonXMLParser>&& comParser,
-    logging::Logger* log, bool ownLog) : XMLParser(versionToURI(strVersion), false, log, ownLog),
+DerivedXMLParser::DerivedXMLParser(Version siddVersion, std::unique_ptr<six::SICommonXMLParser>&& comParser,
+    logging::Logger* log, bool ownLog) : XMLParser(versionToURI(siddVersion), false, log, ownLog),
     mCommon(std::move(comParser)) { }
-DerivedXMLParser::DerivedXMLParser(const std::string& strVersion,
-    std::unique_ptr<six::SICommonXMLParser>&& comParser,
-    std::unique_ptr<logging::Logger>&& log) : XMLParser(versionToURI(strVersion), false, std::move(log)),
+DerivedXMLParser::DerivedXMLParser(Version siddVersion, std::unique_ptr<six::SICommonXMLParser>&& comParser,
+    std::unique_ptr<logging::Logger>&& log) : XMLParser(versionToURI(siddVersion), false, std::move(log)),
     mCommon(std::move(comParser)) { }
-DerivedXMLParser::DerivedXMLParser(const std::string& strVersion,
-    std::unique_ptr<six::SICommonXMLParser>&& comParser,
-    logging::Logger& log) : XMLParser(versionToURI(strVersion), false, log),
+DerivedXMLParser::DerivedXMLParser(Version siddVersion, std::unique_ptr<six::SICommonXMLParser>&& comParser,
+    logging::Logger& log) : XMLParser(versionToURI(siddVersion), false, log),
     mCommon(std::move(comParser)) { }
 
 void DerivedXMLParser::getAttributeList(
