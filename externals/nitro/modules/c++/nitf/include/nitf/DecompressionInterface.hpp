@@ -121,7 +121,7 @@ struct DecompressionInterface final
  *  \class Compressor
  *  \brief This is the c++ interface for nitf_CompressionControl
  */
-struct Decompressor final
+struct Decompressor
 {
     Decompressor() = default;
     virtual ~Decompressor() {}
