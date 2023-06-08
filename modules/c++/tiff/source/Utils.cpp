@@ -83,10 +83,10 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
     tiff::IFD* geoIFD = new tiff::IFD;
 
     tiff::IFDEntry *geoDir = (*ifd)["GeoKeyDirectoryTag"];
-    tiff::IFDEntry *doubleParams =
+    tiff::IFDEntry* const doubleParams =
             ifd->exists("GeoDoubleParamsTag") ? (*ifd)["GeoDoubleParamsTag"]
                                               : NULL;
-    tiff::IFDEntry *asciiParams =
+    tiff::IFDEntry* const asciiParams =
             ifd->exists("GeoAsciiParamsTag") ? (*ifd)["GeoAsciiParamsTag"]
                                              : NULL;
 

@@ -194,9 +194,9 @@ inline std::string join(const std::vector<T>& toks, const std::string& with)
     if (toks.empty())
         return "";
 
-    const auto len = static_cast<int>(toks.size());
+    const auto len = toks.size();
     std::ostringstream oss;
-    int i = 0;
+    size_t i = 0;
     for (; i < len - 1; i++)
     {
         oss << str::toString(toks[i]) << with;
@@ -205,6 +205,11 @@ inline std::string join(const std::vector<T>& toks, const std::string& with)
     return oss.str();
 }
 
+// CASE INSENSTIVE string comparision routines.
+// Short names w/o a "case insenstive" indicator would seem OK as
+// normal (i.e., case sensitive) comparisons will use `==` and `!=` operators.
+CODA_OSS_API bool eq(const std::string& lhs, const std::string& rhs) noexcept;
+CODA_OSS_API bool ne(const std::string& lhs, const std::string& rhs) noexcept;
 
 }
 

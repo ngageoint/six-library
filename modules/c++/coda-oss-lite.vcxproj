@@ -19,7 +19,6 @@
     <ClInclude Include="coda_oss\include\coda_oss\bit.h" />
     <ClInclude Include="coda_oss\include\coda_oss\CPlusPlus.h" />
     <ClInclude Include="coda_oss\include\coda_oss\cstddef.h" />
-    <ClInclude Include="coda_oss\include\coda_oss\memory.h" />
     <ClInclude Include="coda_oss\include\coda_oss\namespace_.h" />
     <ClInclude Include="coda_oss\include\coda_oss\optional.h" />
     <ClInclude Include="coda_oss\include\coda_oss\optional_.h" />
@@ -232,6 +231,7 @@
     <ClInclude Include="sys\include\sys\SemaphorePosix.h" />
     <ClInclude Include="sys\include\sys\SemaphoreWin32.h" />
     <ClInclude Include="sys\include\sys\Span.h" />
+    <ClInclude Include="sys\include\sys\SysInt.h" />
     <ClInclude Include="sys\include\sys\StopWatch.h" />
     <ClInclude Include="sys\include\sys\String.h" />
     <ClInclude Include="sys\include\sys\SystemException.h" />
@@ -256,6 +256,7 @@
     <ClInclude Include="tiff\include\tiff\KnownTags.h" />
     <ClInclude Include="tiff\include\tiff\TypeFactory.h" />
     <ClInclude Include="tiff\include\tiff\Utils.h" />
+    <ClInclude Include="types\include\types\complex_short.h" />
     <ClInclude Include="types\include\types\PageRowCol.h" />
     <ClInclude Include="types\include\types\Range.h" />
     <ClInclude Include="types\include\types\RangeList.h" />

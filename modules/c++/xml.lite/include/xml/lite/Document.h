@@ -39,9 +39,8 @@
 #include <assert.h>
 
 #include <utility>
-#include <std/memory>
+#include <memory>
 #include "coda_oss/string.h"
-#include "coda_oss/memory.h"
 
 #include "xml/lite/Element.h"
 #include "xml/lite/QName.h"
