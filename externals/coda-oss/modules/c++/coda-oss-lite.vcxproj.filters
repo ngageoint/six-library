@@ -30,9 +30,6 @@
     <ClInclude Include="coda_oss\include\coda_oss\cstddef.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
-    <ClInclude Include="coda_oss\include\coda_oss\memory.h">
-      <Filter>coda_oss</Filter>
-    </ClInclude>
     <ClInclude Include="coda_oss\include\coda_oss\namespace_.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
