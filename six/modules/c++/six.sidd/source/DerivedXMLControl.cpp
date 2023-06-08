@@ -37,9 +37,7 @@
 #include <six/sidd/DerivedXMLParser200.h>
 #include <six/sidd/DerivedXMLParser300.h>
 
-namespace
-{
-six::sidd::Version normalizeVersion(const std::string& strVersion)
+six::sidd::Version six::sidd::normalizeVersion(const std::string& strVersion)
 {
     std::vector<std::string> versionParts;
     six::XMLControl::splitVersion(strVersion, versionParts);
@@ -84,7 +82,6 @@ six::sidd::Version normalizeVersion(const std::string& strVersion)
 
     throw except::Exception(Ctxt("Unsupported SIDD Version: " + strVersion));
 }
-}
 
 namespace six
 {
@@ -92,11 +89,12 @@ namespace sidd
 {
     std::string to_string(Version siddVersion)
     {
+        // Match "incoming" SIDD version strings; this is also what the XML expects, see normalizeVersion()
         switch (siddVersion)
         {
-        case Version::v100: return "v100";
-        case Version::v200: return "v200";
-        case Version::v300: return "v300";
+        case Version::v100: return "1.0.0";
+        case Version::v200: return "2.0.0";
+        case Version::v300: return "3.0.0";
         default: break;
         }
         throw std::logic_error("Unkown 'Version' value.");

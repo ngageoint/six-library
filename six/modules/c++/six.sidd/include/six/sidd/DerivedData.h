@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_six_sidd_DerivedData_h_INCLUDED_
 #define SIX_six_sidd_DerivedData_h_INCLUDED_
-#pragma once
 
 #include <std/filesystem>
 
@@ -44,8 +44,42 @@
 
 namespace six
 {
+// Emphasize that this is for SIDD 3.0.0
+namespace sidd300
+{
+    // We have to support two ISM versions with SIDD 3.0 :-(
+    enum class ISMVersion
+    {
+        v201609, // the "newer" version; default
+        v13, // the "original" version
+
+        current = v201609
+    };
+    std::string to_string(ISMVersion); // "v201609" or "v13"
+
+    ISMVersion get(ISMVersion defaultIfNotSet); // overloaded on ISMVersion
+    std::optional<ISMVersion> set(ISMVersion); // returns previous value, if any
+    std::optional<ISMVersion> getISMVersion();
+    std::optional<ISMVersion> clearISMVersion(); // returns previous value, if any
+
+    std::vector<std::filesystem::path> find_SIDD_schema_V_files(const std::vector<std::filesystem::path>& schemaPaths);
+}
+    
 namespace sidd
 {
+// six.sidd only currently supports --
+//   SIDD 1.0.0
+//   SIDD 2.0.0
+//   SIDD 3.0.0
+enum class Version
+{
+    v100,
+    v200,
+    v300,
+};
+std::string to_string(Version); // "1.0.0", "2.0.0", "3.0.0"
+Version normalizeVersion(const std::string&);
+
 /*!
  *  \class DerivedData
  *  \brief The implementation of Data for derived products
@@ -54,7 +88,7 @@ namespace sidd
  *  Contains the structs that are the model for SIDD products
  *
  */
-struct DerivedData: public Data
+struct DerivedData : public Data
 {
     /*!
      *  Information related to processor, classification,
@@ -142,6 +176,8 @@ struct DerivedData: public Data
      *  rather than invoking this object directly.
      */
     DerivedData();
+    DerivedData(Version);
+    DerivedData(Version, six::sidd300::ISMVersion); // SIDD 3.0.0 must use this overload
 
     /*!
      *  We are dealing with derived data
@@ -316,15 +352,14 @@ struct DerivedData: public Data
         return std::string(VENDOR_ID);
     }
 
-    virtual std::string getVersion() const
-    {
-        return mVersion;
-    }
+    virtual std::string getVersion() const;
+    virtual void setVersion(const std::string&);
+    void setVersion(const std::string&, six::sidd300::ISMVersion); // SIDD 3.0.0 must use this overload
 
-    virtual void setVersion(const std::string& strVersion)
-    {
-        mVersion = strVersion;
-    }
+    Version getSIDDVersion() const;
+    void setSIDDVersion(Version);
+    void setSIDDVersion(Version, six::sidd300::ISMVersion); // SIDD 3.0.0 must use this overload
+    six::sidd300::ISMVersion getISMVersion() const;
 
     /*
      * Convert the output plane pixel location into meters from the reference
@@ -341,7 +376,9 @@ private:
     bool operator_eq(const DerivedData& rhs) const;
     static const char VENDOR_ID[];
     bool equalTo(const Data& rhs) const override;
-    std::string mVersion;
+
+    Version mVersion = Version::v100; // existing code
+    six::sidd300::ISMVersion mISMVersion = six::sidd300::ISMVersion::current; // only for SIDD 3.0.0
 };
 }
 }
