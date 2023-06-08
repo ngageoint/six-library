@@ -77,7 +77,7 @@ enum class Version
     v200,
     v300,
 };
-std::string to_string(Version); // "v100", "v200", "v300"
+std::string to_string(Version); // "1.0.0", "2.0.0", "3.0.0"
 Version normalizeVersion(const std::string&);
 
 /*!
