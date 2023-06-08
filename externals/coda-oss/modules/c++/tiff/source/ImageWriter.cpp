@@ -230,20 +230,20 @@ void tiff::ImageWriter::validate()
 
 void tiff::ImageWriter::initTiles()
 {
-    sys::Uint32_T root = (sys::Uint32_T)sqrt((double)mIdealChunkSize
+    const sys::Uint32_T root = (sys::Uint32_T)sqrt((double)mIdealChunkSize
             / (double)mIFD.getElementSize());
-    sys::Uint32_T ceiling = (sys::Uint32_T)ceil(((double)root) / 16);
-    sys::Uint32_T tileSize = ceiling * 16;
+    const sys::Uint32_T ceiling = (sys::Uint32_T)ceil(((double)root) / 16);
+    const sys::Uint32_T tileSize = ceiling * 16;
 
     mIFD.addEntry("TileWidth", (sys::Uint32_T) tileSize);
     mIFD.addEntry("TileLength", (sys::Uint32_T) tileSize);
 
     auto fileOffset = mOutput->tell();
-    sys::Uint32_T tilesAcross = (mIFD.getImageWidth() + tileSize - 1)
+    const sys::Uint32_T tilesAcross = (mIFD.getImageWidth() + tileSize - 1)
             / tileSize;
-    sys::Uint32_T tilesDown = (mIFD.getImageLength() + tileSize - 1) / tileSize;
+    const sys::Uint32_T tilesDown = (mIFD.getImageLength() + tileSize - 1) / tileSize;
 
-    unsigned short elementSize = mIFD.getElementSize();
+    const unsigned short elementSize = mIFD.getElementSize();
 
     mIFD.addEntry("TileByteCounts");
     mIFD.addEntry("TileOffsets");
@@ -251,7 +251,7 @@ void tiff::ImageWriter::initTiles()
     {
         for (sys::Uint32_T x = 0; x < tilesAcross; ++x)
         {
-            sys::Uint32_T byteCount = tileSize * tileSize * elementSize;
+            const sys::Uint32_T byteCount = tileSize * tileSize * elementSize;
             mIFD.addEntryValue("TileOffsets", (sys::Uint32_T) fileOffset);
             mIFD.addEntryValue("TileByteCounts", (sys::Uint32_T) byteCount);
             fileOffset += byteCount;

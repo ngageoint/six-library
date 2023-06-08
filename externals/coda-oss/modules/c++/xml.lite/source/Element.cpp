@@ -111,6 +111,7 @@ void xml::lite::Element::getElementsByTagName(const QName& n, std::vector<Elemen
     const auto uri = n.getUri().value;
     const auto localName = n.getName();
 
+    elements.reserve(mChildren.size());
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
         if (mChildren[i]->getUri() == uri && mChildren[i]->getLocalName()
@@ -163,6 +164,7 @@ void xml::lite::Element::getElementsByTagName(const std::string& localName,
                                               std::vector<Element*>& elements,
                                               bool recurse) const 
 {
+    elements.reserve(mChildren.size());
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
         if (mChildren[i]->getLocalName() == localName)
@@ -192,6 +194,7 @@ void xml::lite::Element::getElementsByTagNameNS(const std::string& qname,
                                                 std::vector<Element*>& elements,
                                                 bool recurse) const
 {
+    elements.reserve(mChildren.size());
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
         if (mChildren[i]->mName.toString() == qname)

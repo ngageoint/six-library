@@ -1,5 +1,11 @@
 ﻿# NITRO (NITF i/o) Release Notes
 
+## [Version 2.11.3](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.3); June 5, 2023
+* [coda-oss](https://github.com/mdaus/coda-oss) release [2023-06-05](https://github.com/mdaus/coda-oss/releases/tag/2023-06-05)
+* Fix display of [certain TREs](https://github.com/mdaus/nitro/issues/529).
+* Adjust compiler flags for clean *CMake* builds.
+* Implement `DecompressionInterface::adapterFreeBlock()` to fix decompression.
+
 ## [Version 2.11.2](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.2); December 14, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) release [2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
 * Further work at getting unittests to work better when included elsewhere (e.g., SIX) as **externals**.
@@ -20,7 +26,7 @@ except that C++14 is now required.  [master](https://github.com/mdaus/nitro/tree
 * [coda-oss](https://github.com/mdaus/coda-oss) release [2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30)
 * Build JPEG decompression as a plug-in.
 * tweak unittests so they run in SIX.
-* Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/mdaus/nitro/tree/main).
+* ~~Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/mdaus/nitro/tree/main).~~
 
 ## [Version 2.10.11](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.11); August 2, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) release [2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)

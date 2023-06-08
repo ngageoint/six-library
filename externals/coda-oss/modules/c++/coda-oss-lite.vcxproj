@@ -232,6 +232,7 @@
     <ClInclude Include="sys\include\sys\SemaphorePosix.h" />
     <ClInclude Include="sys\include\sys\SemaphoreWin32.h" />
     <ClInclude Include="sys\include\sys\Span.h" />
+    <ClInclude Include="sys\include\sys\SysInt.h" />
     <ClInclude Include="sys\include\sys\StopWatch.h" />
     <ClInclude Include="sys\include\sys\String.h" />
     <ClInclude Include="sys\include\sys\SystemException.h" />

@@ -317,28 +317,6 @@ void getErrors(const ErrorStatistics* errorStats,
  */
 std::string findSchemaPath(const std::string& progname);
 
-template<typename T>
-inline std::span<const std::byte> as_bytes(std::span<const T> buffer)
-{
-    return std::as_bytes(buffer);
-}
-template<typename T>
-inline std::span<const std::byte> as_bytes(const std::vector<T>& buffer)
-{
-    return sys::as_bytes(buffer);
-}
-
-template<typename T>
-inline std::span<std::byte> as_writable_bytes(std::vector<T>& buffer)
-{
-    return sys::as_writable_bytes(buffer);
-}
-template<typename T>
-inline std::span<std::byte> as_writable_bytes(std::span<T>& buffer)
-{
-    return std::as_writable_bytes(buffer);
-}
-
 namespace testing
 {
     std::filesystem::path findRootDir(const std::filesystem::path& dir);

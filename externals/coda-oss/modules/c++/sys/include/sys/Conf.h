@@ -76,7 +76,7 @@
 #include "str/Format.h"
 #include "sys/TimeStamp.h"
 #include "sys/ByteSwap.h"
-
+#include "sys/SysInt.h"
 
 /*  Dance around the compiler to figure out  */
 /*  if we have access to function macro...   */
@@ -104,22 +104,6 @@
 /*  lets make sure its still okay                        */
 #   define NativeLayer_func__ ""
 #endif
-
-
-namespace sys
-{
-    typedef char              byte;
-    typedef unsigned char     ubyte;
-    typedef uint8_t            Uint8_T;
-    typedef uint16_t           Uint16_T;
-    typedef uint32_t           Uint32_T;
-    typedef uint64_t           Uint64_T;
-    typedef size_t             Size_T;
-    typedef int8_t             Int8_T;
-    typedef int16_t            Int16_T;
-    typedef int32_t            Int32_T;
-    typedef int64_t            Int64_T;
-}
 
 #ifdef _WIN32
 #  include <malloc.h>
@@ -247,7 +231,7 @@ namespace sys
      *
      *  \param p A pointer to the data allocated using alignedAlloc
      */
-    inline void alignedFree(void* p)
+    inline void alignedFree(void* p) noexcept
     {
 #ifdef _WIN32
         _aligned_free(p);

@@ -2,10 +2,14 @@
 
 # SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
 
-## [Version 3.2.?](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.?); ??? ??, 2023
-* [coda-oss](https://github.com/mdaus/coda-oss) version [2023-??-??](https://github.com/mdaus/coda-oss/releases/tag/2023-??-??)
-* [nitro](https://github.com/mdaus/nitro) version [2.11.?](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.?)
+## [Version 3.2.3](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.3); June 5, 2023
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2023-06-05](https://github.com/mdaus/coda-oss/releases/tag/2023-06-05)
+* [nitro](https://github.com/mdaus/nitro) version [2.11.3](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.3)
 * Integrated [ISM v201609](https://www.dni.gov/index.php/who-we-are/organizations/ic-cio/ic-cio-related-menus/ic-cio-related-links/ic-technical-specifications/information-security-marking-metadata) into SIDD 3.0.
+* Retain "legacy" support for ISM-v13 with SIDD 3.0.
+* Tweak `DataWriter` implementation in preperation for future changes.
+* CPHD wasn't parsing all optional fields correctly.
+* Adjust compiler flags for clean *CMake* builds.
 
 ## [Version 3.2.2](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.2); December 14, 2022
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
