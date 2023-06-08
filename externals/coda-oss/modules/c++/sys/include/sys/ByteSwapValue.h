@@ -62,13 +62,11 @@ namespace sys
     template <typename T>
     inline auto as_bytes(const T& v) noexcept
     {
-        static_assert(!std::is_compound<T>::value, "T cannot be a 'struct'");
         return sys::as_bytes(&v, 1);
     }
     template <typename T>
     inline auto as_writable_bytes(T& v) noexcept
     {
-        static_assert(!std::is_compound<T>::value, "T cannot be a 'struct'");
         return sys::as_writable_bytes(&v, 1);
     }
 

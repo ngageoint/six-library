@@ -21,10 +21,9 @@
  *
  */
 
-
+#pragma once 
 #ifndef CODA_OSS_import_cpp14_h_INCLUDED_
 #define CODA_OSS_import_cpp14_h_INCLUDED_
-#pragma once
 
 // Common C++14 headers
 #include <limits>

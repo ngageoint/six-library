@@ -27,7 +27,6 @@
 #include <string.h>
 
 #include <stdexcept>
-#include "coda_oss/memory.h"
 #include "coda_oss/span.h"
 
 #include "str/Convert.h"

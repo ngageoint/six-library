@@ -208,9 +208,6 @@ inline std::string join(const std::vector<T>& toks, const std::string& with)
 // CASE INSENSTIVE string comparision routines.
 // Short names w/o a "case insenstive" indicator would seem OK as
 // normal (i.e., case sensitive) comparisons will use `==` and `!=` operators.
-// 
-// Note that calling ne() directly can be faster than !eq() because the 
-// comparison can stop as soon as a mis-match is found.
 CODA_OSS_API bool eq(const std::string& lhs, const std::string& rhs) noexcept;
 CODA_OSS_API bool ne(const std::string& lhs, const std::string& rhs) noexcept;
 
