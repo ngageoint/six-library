@@ -168,24 +168,12 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
-static auto AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
+template<typename TToComplexFunc>
+static auto createLookup(TToComplexFunc toComplex)
 {
     // input_amplitudes_t is too big for the stack
     auto retval = std::make_unique<six::Amp8iPhs8iLookup_t>();
     auto& values = *retval;
-
-    // avoid checking pAmplitudeTable inside the loop
-    std::function<std::complex<long double>(uint8_t, uint8_t)> toComplex = [&](auto amplitude, auto phase)
-    {
-        return six::sicd::Utilities::toComplex(amplitude, phase, *pAmplitudeTable);
-    };
-    if (pAmplitudeTable == nullptr)
-    {
-        toComplex = [](auto amplitude, auto phase)
-        {
-            return six::sicd::Utilities::toComplex(amplitude, phase);
-        };
-    }
 
     // For all possible amp/phase values (there are "only" 256*256=65536), get and save the
     // complex<float> value.
@@ -199,13 +187,27 @@ static auto AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTab
 
     return retval;
 }
+static auto createLookup(const six::AmplitudeTable& amplitudeTable)
+{
+    const auto toComplex = [&](auto amplitude, auto phase) {
+        return six::sicd::Utilities::toComplex(amplitude, phase, amplitudeTable);
+    };
+    return createLookup(toComplex);
+}
+static auto createLookup()
+{
+    static const auto toComplex = [](auto amplitude, auto phase) {
+        return six::sicd::Utilities::toComplex(amplitude, phase);
+    };
+    return createLookup(toComplex);
+}
 
 // This is a non-templatized function so that there is copy of the "static" data with a NULL AmplutdeTable.
 static const six::Amp8iPhs8iLookup_t* get_cached_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
     {
-        static const auto RE32F_IM32F_values_no_amp = AMP8I_PHS8I_to_RE32F_IM32F_(nullptr);
+        static const auto RE32F_IM32F_values_no_amp = createLookup();
         return RE32F_IM32F_values_no_amp.get();
     }
     return nullptr;
@@ -239,7 +241,7 @@ const six::Amp8iPhs8iLookup_t& ImageData::get_RE32F_IM32F_values(const six::Ampl
     if (pValues == nullptr)
     {
         assert(pAmplitudeTable != nullptr);
-        pValues_ = AMP8I_PHS8I_to_RE32F_IM32F_(pAmplitudeTable);
+        pValues_ = createLookup(*pAmplitudeTable);
         pValues = pValues_.get();
     }
     assert(pValues != nullptr);

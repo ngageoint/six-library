@@ -220,6 +220,8 @@ struct AmplitudeTable final : public LUT
             void* const ret_ii = (*ret)[ii];
             *static_cast<double*>(ret_ii) = index(ii);
         }
+
+        // Don't copy the lookup table; it will be re-created if needed.
     }
     void clone(std::unique_ptr<LUT>& ret) const override
     {
@@ -232,6 +234,15 @@ struct AmplitudeTable final : public LUT
         std::unique_ptr<AmplitudeTable> ret;
         clone(ret);
         return ret.release();
+    }
+
+    void setLookup(std::unique_ptr<Amp8iPhs8iLookup_t>&& lookup)
+    {
+        pLookup = std::move(lookup);
+    }
+    const Amp8iPhs8iLookup_t* getLookup() const
+    {
+        return pLookup.get();
     }
 
 private:
