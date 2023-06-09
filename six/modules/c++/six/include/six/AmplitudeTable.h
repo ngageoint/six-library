@@ -160,7 +160,7 @@ struct LUT
  //! Fixed size 256 element array of complex values.
 using phase_values_t = std::array<std::complex<float>, UINT8_MAX + 1>;
 //! Fixed size 256 x 256 matrix of complex values.
-using Amp8iPhs8i_t = std::array<phase_values_t, UINT8_MAX + 1>;
+using Amp8iPhs8iLookup_t = std::array<phase_values_t, UINT8_MAX + 1>;
 
 struct AmplitudeTable final : public LUT
 {
@@ -235,7 +235,7 @@ struct AmplitudeTable final : public LUT
     }
 
 private:
-    std::unique_ptr<Amp8iPhs8i_t> mAmp8iPhs8i;
+    std::unique_ptr<Amp8iPhs8iLookup_t> pLookup;
 };
 
 }

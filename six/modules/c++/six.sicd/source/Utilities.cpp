@@ -214,8 +214,8 @@ class SICD_readerAndConverter final
     }
     const types::RowCol<size_t>& offset;
     std::complex<float>* buffer;
-    std::unique_ptr<six::sicd::input_amplitudes_t> lookupScope;
-    const six::sicd::input_amplitudes_t& lookup;
+    std::unique_ptr<six::Amp8iPhs8iLookup_t> lookupScope;
+    const six::Amp8iPhs8iLookup_t& lookup;
     
 public:
     SICD_readerAndConverter(six::NITFReadControl& reader, size_t imageNumber,
