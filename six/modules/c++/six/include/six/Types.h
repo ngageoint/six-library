@@ -359,31 +359,37 @@ struct LUT
     }
 
     //!  Gives back a pointer at table[i * elementSize]
-    unsigned char* operator[](size_t i)
+    unsigned char* operator[](size_t i) noexcept
     {
         return &(table[i * elementSize]);
     }
 
     //!  Gives back a pointer at table[i * elementSize]
-    const unsigned char* operator[](size_t i) const
+    const unsigned char* operator[](size_t i) const noexcept
     {
         return &(table[i * elementSize]);
     }
 
-    unsigned char* getTable()
+    unsigned char* getTable() noexcept
     {
         return table.empty() ? nullptr : table.data();
     }
 
-    const unsigned char* getTable() const
+    const unsigned char* getTable() const noexcept
     {
 
         return table.empty() ? nullptr : table.data();
     }
 
+    virtual void clone(std::unique_ptr<LUT>& result) const
+    {
+        result = std::make_unique<LUT>(getTable(), numEntries, elementSize);
+    }
     virtual LUT* clone() const
     {
-        return std::make_unique<LUT>(getTable(), numEntries, elementSize).release();
+        std::unique_ptr<LUT> result;
+        clone(result);
+        return result.release();
     }
 };
 
@@ -415,6 +421,11 @@ struct AmplitudeTable final : public LUT
         }
     }
 
+    AmplitudeTable(const AmplitudeTable&) = delete; // use clone()
+    AmplitudeTable& operator=(const AmplitudeTable&) = delete; // use clone()
+    AmplitudeTable(AmplitudeTable&&) = default;
+    AmplitudeTable& operator=(AmplitudeTable&&) = default;
+
     size_t size() const noexcept
     {
         return numEntries;
@@ -431,25 +442,36 @@ struct AmplitudeTable final : public LUT
         return !(*this == rhs);
     }
 
-    const double& index(size_t ii) const
+    const double& index(size_t ii) const noexcept
     {
-        const void* this_ii = (*this)[ii];
+        const void* const this_ii = (*this)[ii];
         return *static_cast<const double*>(this_ii);
     }
-    double& index(size_t ii)
+    double& index(size_t ii) noexcept
     {
-        void* this_ii = (*this)[ii];
+        void* const this_ii = (*this)[ii];
         return *static_cast<double*>(this_ii);
     }
 
-    AmplitudeTable* clone() const
+    void clone(std::unique_ptr<AmplitudeTable>& ret) const
     {
-        auto ret = std::make_unique<AmplitudeTable>();
+        ret = std::make_unique<AmplitudeTable>();
         for (size_t ii = 0; ii < numEntries; ++ii)
         {
-            void* ret_ii = (*ret)[ii];
+            void* const ret_ii = (*ret)[ii];
             *static_cast<double*>(ret_ii) = index(ii);
         }
+    }
+    void clone(std::unique_ptr<LUT>& ret) const override
+    {
+        std::unique_ptr<AmplitudeTable> result;
+        clone(result);
+        ret.reset(result.release());
+    }
+    AmplitudeTable* clone() const override
+    {
+        std::unique_ptr<AmplitudeTable> ret;
+        clone(ret);
         return ret.release();
     }
 };
