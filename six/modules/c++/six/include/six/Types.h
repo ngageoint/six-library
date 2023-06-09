@@ -19,17 +19,20 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_TYPES_H__
-#define __SIX_TYPES_H__
 #pragma once
+#ifndef SIX_six_Types_h_INCLUDED_
+#define SIX_six_Types_h_INCLUDED_
 
 #include <stdint.h>
+#include <limits.h>
 
 #include <vector>
 #include <limits>
 #include <string>
 #include <stdexcept>
-#include <std/memory>
+#include <complex>
+#include <memory>
+#include <array>
 
 #include <scene/sys_Conf.h>
 #include <import/except.h>
@@ -359,31 +362,37 @@ struct LUT
     }
 
     //!  Gives back a pointer at table[i * elementSize]
-    unsigned char* operator[](size_t i)
+    unsigned char* operator[](size_t i) noexcept
     {
         return &(table[i * elementSize]);
     }
 
     //!  Gives back a pointer at table[i * elementSize]
-    const unsigned char* operator[](size_t i) const
+    const unsigned char* operator[](size_t i) const noexcept
     {
         return &(table[i * elementSize]);
     }
 
-    unsigned char* getTable()
+    unsigned char* getTable() noexcept
     {
         return table.empty() ? nullptr : table.data();
     }
 
-    const unsigned char* getTable() const
+    const unsigned char* getTable() const noexcept
     {
 
         return table.empty() ? nullptr : table.data();
     }
 
+    virtual void clone(std::unique_ptr<LUT>& result) const
+    {
+        result = std::make_unique<LUT>(getTable(), numEntries, elementSize);
+    }
     virtual LUT* clone() const
     {
-        return std::make_unique<LUT>(getTable(), numEntries, elementSize).release();
+        std::unique_ptr<LUT> result;
+        clone(result);
+        return result.release();
     }
 };
 
@@ -397,6 +406,14 @@ struct LUT
  *  interpreted as an index into the AmpTable, ultimately yielding the
  *  double precision amplitude value
  */
+
+// Store the computed `std::complex<float>` for every possible 
+// amp/phs pair, a total of 256*256 values.
+ //! Fixed size 256 element array of complex values.
+using phase_values_t = std::array<std::complex<float>, UINT8_MAX + 1>;
+//! Fixed size 256 x 256 matrix of complex values.
+using Amp8iPhs8i_t = std::array<phase_values_t, UINT8_MAX + 1>;
+
 struct AmplitudeTable final : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
@@ -415,6 +432,11 @@ struct AmplitudeTable final : public LUT
         }
     }
 
+    AmplitudeTable(const AmplitudeTable&) = delete; // use clone()
+    AmplitudeTable& operator=(const AmplitudeTable&) = delete; // use clone()
+    AmplitudeTable(AmplitudeTable&&) = default;
+    AmplitudeTable& operator=(AmplitudeTable&&) = default;
+
     size_t size() const noexcept
     {
         return numEntries;
@@ -431,27 +453,41 @@ struct AmplitudeTable final : public LUT
         return !(*this == rhs);
     }
 
-    const double& index(size_t ii) const
+    const double& index(size_t ii) const noexcept
     {
-        const void* this_ii = (*this)[ii];
+        const void* const this_ii = (*this)[ii];
         return *static_cast<const double*>(this_ii);
     }
-    double& index(size_t ii)
+    double& index(size_t ii) noexcept
     {
-        void* this_ii = (*this)[ii];
+        void* const this_ii = (*this)[ii];
         return *static_cast<double*>(this_ii);
     }
 
-    AmplitudeTable* clone() const
+    void clone(std::unique_ptr<AmplitudeTable>& ret) const
     {
-        auto ret = std::make_unique<AmplitudeTable>();
+        ret = std::make_unique<AmplitudeTable>();
         for (size_t ii = 0; ii < numEntries; ++ii)
         {
-            void* ret_ii = (*ret)[ii];
+            void* const ret_ii = (*ret)[ii];
             *static_cast<double*>(ret_ii) = index(ii);
         }
+    }
+    void clone(std::unique_ptr<LUT>& ret) const override
+    {
+        std::unique_ptr<AmplitudeTable> result;
+        clone(result);
+        ret.reset(result.release());
+    }
+    AmplitudeTable* clone() const override
+    {
+        std::unique_ptr<AmplitudeTable> ret;
+        clone(ret);
         return ret.release();
     }
+
+private:
+    std::unique_ptr<Amp8iPhs8i_t> mAmp8iPhs8i;
 };
 
 /*!
@@ -578,4 +614,4 @@ ImageMode getImageMode(RadarModeType radarMode);
 DECLARE_EXCEPTION(MissingRequired);
 }
 
-#endif
+#endif // SIX_six_Types_h_INCLUDED_

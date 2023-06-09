@@ -218,7 +218,7 @@ static std::vector <std::complex<float>> read_8bit_ampphs(const std::string& tes
     const auto pAmplitudeTable = imageData.amplitudeTable.get();
     if (pAmplitudeTable != nullptr)
     {
-        amplitudeTable = *pAmplitudeTable;
+        amplitudeTable = std::move(*pAmplitudeTable);
     }
 
     const auto numBytesPerPixel = complexData.getNumBytesPerPixel();
@@ -267,7 +267,7 @@ TEST_CASE(read_8bit_ampphs_with_table)
     const auto widebandData = read_8bit_ampphs(testName, inputPathname, amplitudeTable, pComplexData, expected_sum);
 
     TEST_ASSERT_TRUE(amplitudeTable.has_value());
-    const auto& AmpTable = amplitudeTable.value();
+    auto& AmpTable = amplitudeTable.value();
     for (size_t i = 0; i < AmpTable.size(); i++)
     {
         // be sure we don't have garbage data
@@ -275,7 +275,7 @@ TEST_CASE(read_8bit_ampphs_with_table)
     }
 
     six::sicd::ImageData imageData;
-    imageData.amplitudeTable.reset(std::make_unique< six::AmplitudeTable>(AmpTable));
+    imageData.amplitudeTable.reset(std::make_unique< six::AmplitudeTable>(std::move(AmpTable)));
     const auto actual = to_AMP8I_PHS8I(imageData, widebandData);
     const auto expected(sys::debug ? 
         Pair<uint64_t>{12647523, 16973148} : Pair<uint64_t>{ 3044868397, 3394353166 });
