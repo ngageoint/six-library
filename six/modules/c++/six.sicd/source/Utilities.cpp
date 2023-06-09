@@ -214,7 +214,6 @@ class SICD_readerAndConverter final
     }
     const types::RowCol<size_t>& offset;
     std::complex<float>* buffer;
-    std::unique_ptr<six::Amp8iPhs8iLookup_t> lookupScope;
     const six::Amp8iPhs8iLookup_t& lookup;
     
 public:
@@ -222,7 +221,7 @@ public:
 			    const types::RowCol<size_t>& offset, const types::RowCol<size_t>& extent,
                 size_t elementsPerRow,
 			    std::complex<float>* buffer,  const six::AmplitudeTable* pAmplitudeTable = nullptr)
-      : offset(offset), buffer(buffer), lookupScope(nullptr), lookup(six::sicd::ImageData::get_RE32F_IM32F_values(pAmplitudeTable, lookupScope))
+      : offset(offset), buffer(buffer), lookup(six::sicd::ImageData::getLookup(pAmplitudeTable))
     {
         SICDreader<T>(reader, imageNumber, offset, extent, elementsPerRow,
             [&](size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<T>& tempVector)

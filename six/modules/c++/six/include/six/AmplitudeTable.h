@@ -236,7 +236,7 @@ struct AmplitudeTable final : public LUT
         return ret.release();
     }
 
-    void setLookup(std::unique_ptr<Amp8iPhs8iLookup_t>&& lookup)
+    void cacheLookup_(std::unique_ptr<Amp8iPhs8iLookup_t>&& lookup) const
     {
         pLookup = std::move(lookup);
     }
@@ -246,7 +246,7 @@ struct AmplitudeTable final : public LUT
     }
 
 private:
-    std::unique_ptr<Amp8iPhs8iLookup_t> pLookup;
+    mutable std::unique_ptr<Amp8iPhs8iLookup_t> pLookup;
 };
 
 }

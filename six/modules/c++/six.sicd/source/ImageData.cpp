@@ -202,15 +202,16 @@ static auto createLookup()
     return createLookup(toComplex);
 }
 
-// This is a non-templatized function so that there is copy of the "static" data with a NULL AmplutdeTable.
-static const six::Amp8iPhs8iLookup_t* get_cached_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable)
+static const six::Amp8iPhs8iLookup_t* getCachedLookup(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
     {
-        static const auto RE32F_IM32F_values_no_amp = createLookup();
-        return RE32F_IM32F_values_no_amp.get();
+        static const auto lookup_no_amp = createLookup();
+        return lookup_no_amp.get();
     }
-    return nullptr;
+
+    // Maybe one has already been created and stored on the table?
+    return pAmplitudeTable->getLookup();
 }
 
 std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) const
@@ -221,7 +222,7 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
     }
 
     auto const pAmplitudeTable = amplitudeTable.get();
-    auto const pValues = get_cached_RE32F_IM32F_values(pAmplitudeTable);
+    auto const pValues = getCachedLookup(pAmplitudeTable);
 
     // Do we have a cahced result to use (no amplitude table)?
     // Or must it be recomputed (have an amplutude table)?
@@ -234,18 +235,19 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
     return std::complex<float>(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
 }
 
-const six::Amp8iPhs8iLookup_t& ImageData::get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
-    std::unique_ptr<six::Amp8iPhs8iLookup_t>& pValues_)
+const six::Amp8iPhs8iLookup_t& ImageData::getLookup(const six::AmplitudeTable* pAmplitudeTable)
 {
-    auto pValues = get_cached_RE32F_IM32F_values(pAmplitudeTable);
-    if (pValues == nullptr)
+    auto pLookup = getCachedLookup(pAmplitudeTable);
+    if (pLookup == nullptr)
     {
         assert(pAmplitudeTable != nullptr);
-        pValues_ = createLookup(*pAmplitudeTable);
-        pValues = pValues_.get();
+        auto& amplitudeTable = *pAmplitudeTable;
+        auto lookup = createLookup(amplitudeTable);
+        amplitudeTable.cacheLookup_(std::move(lookup));
+        pLookup = amplitudeTable.getLookup();
     }
-    assert(pValues != nullptr);
-    return *pValues;
+    assert(pLookup != nullptr);
+    return *pLookup;
 }
 
 void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results) const
@@ -255,8 +257,7 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
         throw std::runtime_error("pxielType must be AMP8I_PHS8I");
     }
 
-    std::unique_ptr<six::Amp8iPhs8iLookup_t> pValues_;
-    const auto& values = get_RE32F_IM32F_values(amplitudeTable.get(), pValues_);
+    const auto& values = getLookup(amplitudeTable.get());
     from_AMP8I_PHS8I(values, inputs, results);
 }
 

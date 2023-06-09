@@ -116,8 +116,7 @@ struct ImageData
      * @param pValues_ Output table's scope to keep it around past the function call. May be empty if there was no input amplitude table.
      * @return reference to the output lookup table.
      */
-    static const six::Amp8iPhs8iLookup_t& get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
-                                                            std::unique_ptr<six::Amp8iPhs8iLookup_t>& pValues_);
+    static const six::Amp8iPhs8iLookup_t& getLookup(const six::AmplitudeTable* pAmplitudeTable);
 };
 
 }
