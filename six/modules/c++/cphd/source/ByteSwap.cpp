@@ -30,6 +30,7 @@
 #include <std/cstddef>
 #include <tuple>
 
+#include <types/complex.h>
 #include <sys/Conf.h>
 #include <sys/ByteSwap.h>
 #include <sys/ByteSwapValue.h>
@@ -63,7 +64,7 @@ struct ByteSwapAndPromoteRunnable final : public sys::Runnable
                              size_t numRows,
                              size_t numCols,
                              cphd::zfloat* output) :
-        mInput(calc_offset(input, startRow * numCols * sizeof(std::complex<InT>))),
+        mInput(calc_offset(input, startRow * numCols * sizeof(types::complex<InT>))),
         mDims(numRows, numCols),
         mOutput(output + startRow * numCols)
     {
@@ -76,10 +77,10 @@ struct ByteSwapAndPromoteRunnable final : public sys::Runnable
 
         for (size_t row = 0, inIdx = 0, outIdx = 0; row < mDims.row; ++row)
         {
-            for (size_t col = 0; col < mDims.col; ++col, inIdx += sizeof(std::complex<InT>), ++outIdx)
+            for (size_t col = 0; col < mDims.col; ++col, inIdx += sizeof(types::complex<InT>), ++outIdx)
             {
                 // Have to be careful here - can't treat mInput as a
-                // std::complex<InT> directly in case InT is a float (see
+                // types::complex<InT> directly in case InT is a float (see
                 // explanation in byteSwap() comments)
                 const auto input = calc_offset(mInput, inIdx);
                 byteSwap(input, real);
@@ -106,7 +107,7 @@ struct ByteSwapAndScaleRunnable final : public sys::Runnable
                              size_t numCols,
                              const double* scaleFactors,
                              cphd::zfloat* output) :
-        mInput(calc_offset(input, startRow * numCols * sizeof(std::complex<InT>))),
+        mInput(calc_offset(input, startRow * numCols * sizeof(types::complex<InT>))),
         mDims(numRows, numCols),
         mScaleFactors(scaleFactors + startRow),
         mOutput(output + startRow * numCols)
@@ -124,10 +125,10 @@ struct ByteSwapAndScaleRunnable final : public sys::Runnable
 
             for (size_t col = 0;
                  col < mDims.col;
-                 ++col, inIdx += sizeof(std::complex<InT>), ++outIdx)
+                 ++col, inIdx += sizeof(types::complex<InT>), ++outIdx)
             {
                 // Have to be careful here - can't treat mInput as a
-                // std::complex<InT> directly in case InT is a float (see
+                // types::complex<InT> directly in case InT is a float (see
                 // explanation in byteSwap() comments)
                 const auto input = calc_offset(mInput, inIdx);
                 byteSwap(input, real);
