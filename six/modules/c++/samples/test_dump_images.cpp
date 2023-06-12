@@ -48,7 +48,7 @@ void writeSIOFileHeader(size_t numRows,
     switch (pixelType)
     {
     case six::PixelType::RE32F_IM32F:
-        elementSize = sizeof(std::complex<float>);
+        elementSize = sizeof(six::zfloat);
         elementType = sio::lite::FileHeader::COMPLEX_FLOAT;
         break;
     case six::PixelType::RE16I_IM16I:

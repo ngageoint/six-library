@@ -99,12 +99,12 @@ void expandComplex(size_t numPixels, std::byte* buffer)
             reinterpret_cast<std::complex<short>*>(
                     buffer + numPixels * sizeof(std::complex<short>));
 
-    std::complex<float>* const output =
-            reinterpret_cast<std::complex<float>*>(buffer);
+    six::zfloat* const output =
+            reinterpret_cast<six::zfloat*>(buffer);
 
     for (size_t ii = 0; ii < numPixels; ++ii)
     {
-        output[ii] = std::complex<float>(input[ii].real(), input[ii].imag());
+        output[ii] = six::zfloat(input[ii].real(), input[ii].imag());
     }
 }
 
@@ -135,8 +135,8 @@ void compressInteger(size_t numPixels, std::byte* buffer)
         }
     }
 
-    const std::complex<float>* const input =
-            reinterpret_cast<std::complex<float>*>(buffer);
+    const six::zfloat* const input =
+            reinterpret_cast<six::zfloat*>(buffer);
 
     std::complex<int16_t>* const output =
             reinterpret_cast<std::complex<int16_t>*>(buffer);
