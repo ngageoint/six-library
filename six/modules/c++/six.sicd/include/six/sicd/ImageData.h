@@ -102,16 +102,15 @@ struct ImageData
 
     bool validate(const GeoData& geoData, logging::Logger& log) const;
 
-    static void to_AMP8I_PHS8I(const AmplitudeTable*, std::span<const cx_float>, std::span<AMP8I_PHS8I_t>); // for unit-tests
+    static void fromComplex(const AmplitudeTable*, std::span<const cx_float>, std::span<AMP8I_PHS8I_t>); // for unit-tests
 
-    static void from_AMP8I_PHS8I(const six::Amp8iPhs8iLookup_t& lookup, std::span<const AMP8I_PHS8I_t>, std::span<cx_float>);
-    void from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t>, std::span<cx_float>) const;
-    void to_AMP8I_PHS8I(std::span<const cx_float>, std::span<AMP8I_PHS8I_t>) const;
+    static void toComplex(const six::Amp8iPhs8iLookup_t& lookup, std::span<const AMP8I_PHS8I_t>, std::span<cx_float>);
+    void toComplex(std::span<const AMP8I_PHS8I_t>, std::span<cx_float>) const;
+    void fromComplex(std::span<const cx_float>, std::span<AMP8I_PHS8I_t>) const;
 
     /*!
      * Create a lookup table for converting from AMP8I_PHS8I to complex.
      * @param pAmplitudeTable Input amplitude table. May be nullptr if no amplitude table is defined.
-     * @param pValues_ Output table's scope to keep it around past the function call. May be empty if there was no input amplitude table.
      * @return reference to the output lookup table.
      */
     static const six::Amp8iPhs8iLookup_t& getLookup(const six::AmplitudeTable* pAmplitudeTable);

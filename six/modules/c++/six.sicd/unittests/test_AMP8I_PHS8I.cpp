@@ -145,7 +145,7 @@ static void from_AMP8I_PHS8I(const six::sicd::ImageData& imageData,
 {
     const std::span<const AMP8I_PHS8I_t> inputs(inputs_.data(), inputs_.size());
     const std::span<std::complex<float>> results(results_.data(), results_.size());
-    imageData.from_AMP8I_PHS8I(inputs, results);
+    imageData.toComplex(inputs, results);
 }
 
 static void to_AMP8I_PHS8I(const six::sicd::ImageData& imageData,
@@ -153,7 +153,7 @@ static void to_AMP8I_PHS8I(const six::sicd::ImageData& imageData,
 {
     const std::span<const std::complex<float>> inputs(inputs_.data(), inputs_.size());
     const std::span<AMP8I_PHS8I_t> results(results_.data(), results_.size());
-    imageData.to_AMP8I_PHS8I(inputs, results);
+    imageData.fromComplex(inputs, results);
 }
 
 TEST_CASE(test_8bit_ampphs)
@@ -245,7 +245,7 @@ static Pair<uint64_t> to_AMP8I_PHS8I(const six::sicd::ImageData& imageData, cons
     const auto size = sys::debug ? widebandData.size() / 200 : widebandData.size();
     const std::span<const std::complex<float>> widebandData_(widebandData.data(), size);
     std::vector<AMP8I_PHS8I_t> results(widebandData_.size());
-    imageData.to_AMP8I_PHS8I(widebandData_, std::span< AMP8I_PHS8I_t>(results.data(), results.size()));
+    imageData.fromComplex(widebandData_, std::span< AMP8I_PHS8I_t>(results.data(), results.size()));
 
     Pair<uint64_t> retval{ 0, 0 };
     for (const auto& r : results)
@@ -401,7 +401,7 @@ static std::vector<std::complex<float>> adjust_image(const six::sicd::ComplexDat
 
     std::span<const AMP8I_PHS8I_t> from(from_.data(), from_.size());
     std::vector<std::complex<float>> retval(from.size());
-    complexData.imageData->from_AMP8I_PHS8I(from, std::span<std::complex<float>>(retval.data(), retval.size()));
+    complexData.imageData->toComplex(from, std::span<std::complex<float>>(retval.data(), retval.size()));
     return retval;
 }
 static std::vector<std::complex<float>> make_complex_image(const six::sicd::ComplexData& complexData, const types::RowCol<size_t>& dims)
@@ -508,7 +508,7 @@ static void test_assert_image_(const std::string& testName,
     const std::span<const std::complex<float>> input(image.data(), image.size());
     std::vector<AMP8I_PHS8I_t> result(input.size());
     std::span< AMP8I_PHS8I_t> result_(result.data(), result.size());
-    complexData.imageData->to_AMP8I_PHS8I(input, result_);
+    complexData.imageData->fromComplex(input, result_);
 
     static const std::vector<AMP8I_PHS8I_t> expected_amp8i_phs8i{
         AMP8I_PHS8I_t{91, 42}, AMP8I_PHS8I_t{42, 42}, AMP8I_PHS8I_t{42, 42}, AMP8I_PHS8I_t{42, 93} }; // "[******]"
@@ -564,7 +564,7 @@ static void test_adjusted_values(const std::string& testName, const std::vector<
     std::vector<AMP8I_PHS8I_t> actual(expected.size());
     std::span<AMP8I_PHS8I_t> actual_(actual.data(), actual.size());
     std::span<const std::complex<float>> values_(adjusted_values.data(), adjusted_values.size());
-    six::sicd::ImageData::to_AMP8I_PHS8I(nullptr /*pAmplitudeTable*/, values_, actual_);
+    six::sicd::ImageData::fromComplex(nullptr /*pAmplitudeTable*/, values_, actual_);
     for (size_t i = 0; i < expected.size(); i++)
     {
         TEST_ASSERT_EQ(expected[i].amplitude, actual[i].amplitude);
@@ -587,7 +587,7 @@ TEST_CASE(test_nearest_neighbor)
     std::vector<AMP8I_PHS8I_t> actual(expected.size());
     std::span<AMP8I_PHS8I_t> actual_(actual.data(), actual.size());
     std::span<const std::complex<float>> values_(values.data(), values.size());
-    six::sicd::ImageData::to_AMP8I_PHS8I(nullptr /*pAmplitudeTable*/, values_, actual_);
+    six::sicd::ImageData::fromComplex(nullptr /*pAmplitudeTable*/, values_, actual_);
 
     for (size_t i = 0; i < expected.size(); i++)
     {

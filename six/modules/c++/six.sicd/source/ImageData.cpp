@@ -229,7 +229,7 @@ const six::Amp8iPhs8iLookup_t& ImageData::getLookup(const six::AmplitudeTable* p
     return *pLookup;
 }
 
-void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results) const
+void ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
     {
@@ -237,10 +237,10 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
     }
 
     const auto& values = getLookup(amplitudeTable.get());
-    from_AMP8I_PHS8I(values, inputs, results);
+    toComplex(values, inputs, results);
 }
 
-void ImageData::from_AMP8I_PHS8I(const six::Amp8iPhs8iLookup_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results)
+void ImageData::toComplex(const six::Amp8iPhs8iLookup_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results)
 {
     const auto get_RE32F_IM32F_value_f = [&values](const six::sicd::AMP8I_PHS8I_t& v)
     {
@@ -264,9 +264,8 @@ void ImageData::from_AMP8I_PHS8I(const six::Amp8iPhs8iLookup_t& values, std::spa
     }
 }
 
-template<typename TConverter>
-static void to_AMP8I_PHS8I_(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
-    const TConverter& tree)
+static void fromComplex_(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
+    const six::sicd::details::ComplexToAMP8IPHS8I& tree)
 {
     const auto nearest_neighbor_f = [&](const std::complex<float>& v)
     {
@@ -289,15 +288,15 @@ static void to_AMP8I_PHS8I_(std::span<const cx_float> inputs, std::span<AMP8I_PH
             nearest_neighbor_f, cutoff, std::launch::async);
     }
 }
-void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results) const
+void ImageData::fromComplex(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
-    to_AMP8I_PHS8I(amplitudeTable.get(), inputs, results);
+    fromComplex(amplitudeTable.get(), inputs, results);
 }
-void  ImageData::to_AMP8I_PHS8I(const AmplitudeTable* pAmplitudeTable,
+void  ImageData::fromComplex(const AmplitudeTable* pAmplitudeTable,
     std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results)
 {
     // make a structure to quickly find the nearest neighbor
     std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pConvert; // not-cached, non-NULL amplitudeTable
     auto& converter = six::sicd::details::ComplexToAMP8IPHS8I::make(pAmplitudeTable, pConvert);
-    to_AMP8I_PHS8I_(inputs, results, converter);
+    fromComplex_(inputs, results, converter);
 }

@@ -43,6 +43,7 @@
 #include <str/Manip.h>
 #include <str/EncodedStringView.h>
 #include <sys/Conf.h>
+#include <sys/Span.h>
 #include <types/RowCol.h>
 #include <units/Angles.h>
 
@@ -208,9 +209,9 @@ class SICD_readerAndConverter final
 
         // Reuse image data's conversion to complex.
         size_t count = (elementsPerRow * rowsToRead) / 2;
-        std::span<const six::sicd::AMP8I_PHS8I_t> input(packed, count);
-        std::span<std::complex<float>> output(bufferPtr, input.size());
-        six::sicd::ImageData::from_AMP8I_PHS8I(lookup, input, output);
+        auto const input = sys::make_span(packed, count);
+        auto const output = sys::make_span(bufferPtr, input.size());
+        six::sicd::ImageData::toComplex(lookup, input, output);
     }
     const types::RowCol<size_t>& offset;
     std::complex<float>* buffer;
