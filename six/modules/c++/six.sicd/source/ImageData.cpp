@@ -178,8 +178,7 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
 template<typename TToComplexFunc>
 static auto createLookup(TToComplexFunc toComplex)
 {
-    // input_amplitudes_t is too big for the stack
-    auto retval = std::make_unique<six::Amp8iPhs8iLookup_t>();
+    auto retval = std::make_unique<six::Amp8iPhs8iLookup_t>(); // too big for the stack
     auto& values = *retval;
 
     // For all possible amp/phase values (there are "only" 256*256=65536), get and save the
@@ -196,7 +195,7 @@ static auto createLookup(TToComplexFunc toComplex)
 }
 static auto createLookup(const six::AmplitudeTable& amplitudeTable)
 {
-    const auto toComplex = [&](auto amplitude, auto phase) {
+    const auto toComplex = [&amplitudeTable](auto amplitude, auto phase) {
         return six::sicd::Utilities::toComplex(amplitude, phase, amplitudeTable);
     };
     return createLookup(toComplex);
@@ -236,6 +235,14 @@ const six::Amp8iPhs8iLookup_t& ImageData::getLookup(const six::AmplitudeTable* p
     return *pLookup;
 }
 
+void ImageData::toComplex(const six::Amp8iPhs8iLookup_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results)
+{
+    const auto toComplex_ = [&values](const auto& v)
+    {
+        return values[v.amplitude][v.phase];
+    };
+    transform(inputs, results, toComplex_);
+}
 void ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
@@ -247,33 +254,19 @@ void ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs, std::span<std::
     toComplex(values, inputs, results);
 }
 
-void ImageData::toComplex(const six::Amp8iPhs8iLookup_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results)
-{
-    const auto get_RE32F_IM32F_value_f = [&values](const six::AMP8I_PHS8I_t& v)
-    {
-        return values[v.amplitude][v.phase];
-    };
-
-    transform(inputs, results, get_RE32F_IM32F_value_f);
-}
-
-static void fromComplex_(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
-    const six::sicd::details::ComplexToAMP8IPHS8I& tree)
-{
-    const auto nearest_neighbor_f = [&](const std::complex<float>& v)
-    {
-        return tree.nearest_neighbor(v);
-    };
-    transform(inputs, results, nearest_neighbor_f);
-}
 void ImageData::fromComplex(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
     // make a structure to quickly find the nearest neighbor
     auto& converter = six::sicd::details::ComplexToAMP8IPHS8I::make(amplitudeTable.get());
-    fromComplex_(inputs, results, converter);
+    const auto fromComplex_ = [&converter](const auto& v)
+    {
+        return converter.nearest_neighbor(v);
+    };
+    transform(inputs, results, fromComplex_);
 }
 void ImageData::testing_fromComplex_(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results)
 {
-    static const ImageData imageData; // amplitudeTable.get() == NULL
+    static const ImageData imageData;
+    assert(imageData.amplitudeTable.get() == nullptr);
     imageData.fromComplex(inputs, results);
 }
