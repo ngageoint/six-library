@@ -95,9 +95,9 @@ private:
 // We'll expand to complex<float> starting in the first half of the buffer
 void expandComplex(size_t numPixels, std::byte* buffer)
 {
-    const types::complex<short>* const input =
-            reinterpret_cast<types::complex<short>*>(
-                    buffer + numPixels * sizeof(types::complex<short>));
+    const types::zint16_t* const input =
+            reinterpret_cast<types::zint16_t*>(
+                    buffer + numPixels * sizeof(types::zint16_t));
 
     six::zfloat* const output =
             reinterpret_cast<six::zfloat*>(buffer);

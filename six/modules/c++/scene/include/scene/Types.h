@@ -39,9 +39,8 @@
 #ifndef SIX_scene_zfloat_DEFINED_
 namespace scene
 {
-    using zfloat = std::complex<float>;
-    using zdouble = std::complex<double>;
-    //using complex128 = std::complex<long double>;
+    using zfloat = types::zfloat;
+    using zdouble = types::zdouble;
 }
 #define SIX_scene_zfloat_DEFINED_
 #endif

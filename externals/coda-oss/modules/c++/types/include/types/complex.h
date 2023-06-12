@@ -25,6 +25,8 @@
 #ifndef CODA_OSS_types_complex_h_INCLUDED_
 #define CODA_OSS_types_complex_h_INCLUDED_
 
+#include <stdint.h>
+
 #include <complex>
 #include <type_traits>
 
@@ -113,6 +115,17 @@ template<typename T>
 using complex = std::conditional_t<std::is_floating_point<T>::value, std::complex<T>, details::complex<T>>;
 
 static_assert(sizeof(std::complex<short>) == sizeof(complex<short>), "sizeof(sizeof(std::complex<short>) != sizeof(complex<short>)");
+
+// Convenient aliases
+using zfloat = complex<float>; // std::complex<float>
+using zdouble = complex<double>; // std::complex<double>
+//using zlong_double = complex<long double>; // std::complex<long double>
+
+// Intentionally using somewhat cumbersome names
+using zint8_t = complex<int8_t>;  // details:complex<int8_t>
+using zint16_t = complex<int16_t>;  // details:complex<int16_t>
+using zint32_t = complex<int32_t>;  // details::complex<int32_t>
+using zint64_t = complex<int64_t>;  // details::complex<int64_t>
 
 }
 
