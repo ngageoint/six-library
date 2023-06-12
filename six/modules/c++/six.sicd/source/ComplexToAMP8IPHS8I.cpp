@@ -67,21 +67,9 @@ inline long double GetPhase(const std::complex<long double>& v)
     return phase;
 }
 
-static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmplitudeTable)
+template<typename TToComplexFunc>
+static std::vector<long double> make_magnitudes_(TToComplexFunc toComplex)
 {
-    // avoid checking pAmplitudeTable inside the loop
-    std::function<std::complex<long double>(uint8_t, uint8_t)> toComplex = [&](auto amplitude, auto phase)
-    {
-        return six::sicd::Utilities::toComplex(amplitude, phase, *pAmplitudeTable);
-    };
-    if (pAmplitudeTable == nullptr)
-    {
-        toComplex = [](auto amplitude, auto phase)
-        {
-            return six::sicd::Utilities::toComplex(amplitude, phase);
-        };
-    }
-
     std::vector<long double> retval;
     retval.reserve(UINT8_MAX + 1);
     for (const auto amplitude : six::sicd::Utilities::iota_0_256())
@@ -100,17 +88,33 @@ static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmpl
     }
     return retval;
 }
+static inline auto make_magnitudes(const six::AmplitudeTable& amplitudeTable)
+{
+    const auto toComplex = [&](auto amplitude, auto phase)
+    {
+        return six::sicd::Utilities::toComplex(amplitude, phase, amplitudeTable);
+    };
+    return make_magnitudes_(toComplex);
+}
+static inline auto make_magnitudes()
+{
+    static const auto toComplex = [](auto amplitude, auto phase)
+    {
+        return six::sicd::Utilities::toComplex(amplitude, phase);
+    };
+    return make_magnitudes_(toComplex);
+}
 
 static const std::vector<long double>& get_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
     std::vector<long double>& uncached_magnitudes)
 {
     if (pAmplitudeTable == nullptr)
     {
-        static const auto magnitudes = make_magnitudes(nullptr); // OK to cache, won't change
+        static const auto magnitudes = make_magnitudes(); // OK to cache, won't change
         return magnitudes;
     }
     
-    uncached_magnitudes = make_magnitudes(pAmplitudeTable);
+    uncached_magnitudes = make_magnitudes(*pAmplitudeTable);
     return uncached_magnitudes;
 }
 
