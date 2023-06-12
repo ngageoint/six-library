@@ -59,7 +59,7 @@ struct CODA_OSS_API OSWin32 final : public AbstractOS
      *  For unix it will be one slash /
      *  \return The path delimiter
      */
-    virtual const char* getDelimiter() const
+    const char* getDelimiter() const noexcept override
     {
         return "\\";
     }

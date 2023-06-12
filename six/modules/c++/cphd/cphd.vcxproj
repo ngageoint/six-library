@@ -122,6 +122,7 @@
     <ClInclude Include="include\cphd\CPHDXMLControl.h" />
     <ClInclude Include="include\cphd\CPHDXMLParser.h" />
     <ClInclude Include="include\cphd\Data.h" />
+    <ClInclude Include="include\cphd\DataWriter.h" />
     <ClInclude Include="include\cphd\Dwell.h" />
     <ClInclude Include="include\cphd\Enums.h" />
     <ClInclude Include="include\cphd\ErrorParameters.h" />
@@ -157,6 +158,7 @@
     <ClCompile Include="source\CPHDXMLControl.cpp" />
     <ClCompile Include="source\CPHDXMLParser.cpp" />
     <ClCompile Include="source\Data.cpp" />
+    <ClCompile Include="source\DataWriter.cpp" />
     <ClCompile Include="source\Dwell.cpp" />
     <ClCompile Include="source\ErrorParameters.cpp" />
     <ClCompile Include="source\FileHeader.cpp" />

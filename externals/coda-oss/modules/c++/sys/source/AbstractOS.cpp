@@ -28,6 +28,8 @@
 #include <map>
 #include <stdexcept>
 #include <string>
+#include <iterator>
+#include <algorithm>
 
 #include <import/str.h>
 #include <sys/Path.h>
@@ -81,6 +83,31 @@ AbstractOS::search(const std::vector<std::string>& searchPaths,
                                                 recursive);
     }
     return elementsFound;
+}
+
+inline auto convert(const std::vector<fs::path>& paths)
+{
+    std::vector<std::string> retval;
+    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
+                   [](const fs::path& p) { return p.string(); });
+    return retval;
+}
+inline auto convert(const std::vector<std::string>& paths)
+{
+    std::vector<fs::path> retval;
+    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
+                   [](const auto& p) { return p; });
+    return retval;
+}
+
+std::vector<coda_oss::filesystem::path> AbstractOS::search(
+        const std::vector<coda_oss::filesystem::path>& searchPaths,
+        const std::string& fragment,
+        const std::string& extension,
+        bool recursive) const
+{
+    const auto results = search(convert(searchPaths), fragment, extension, recursive);
+    return convert(results);
 }
 
 void AbstractOS::remove(const std::string& path) const

@@ -11,12 +11,18 @@
  ```
 # coda-oss Release Notes
 
-## [Release 2023-??-??](https://github.com/mdaus/coda-oss/releases/tag/2023-??-??)
+## [Release 2023-06-05](https://github.com/mdaus/coda-oss/releases/tag/2023-06-05)
 * *zlib* updated to [1.2.13](https://github.com/madler/zlib/releases/tag/v1.2.13).
 * new `mem::ComplexView` class to make it easier to process complex data stored in parallel. 
 * adjust compiler flags for clean *CMake* builds.
 * wrap common "file open" routines (e.g., `fopen()`) to support `sys::expandEnvironmentVariables()`.
 * add header-only [HighFive](https://github.com/BlueBrain/HighFive) HDF5-wrapper library.
+* Added a handful of [HighFive](https://github.com/BlueBrain/HighFive) utility routines.
+* `mt::transform_async()` removed, it doesn't match C++17 techniques.'
+* Revamp `sys::byteSwap()` for improved type-safety and
+  [better performance](https://devblogs.microsoft.com/cppblog/a-tour-of-4-msvc-backend-improvements/).
+ * Added case-insensitive string comparison utilties: `str::eq()` and `str::ne()`;
+   `xml::lite::Uri`s compare case-insensitive.
 
 ## [Release 2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
 * removed remaining vestiges of `std::auto_ptr`, provide `mem::AutoPtr` for the tiny handful of
@@ -42,11 +48,11 @@
 * XML is now always written as UTF-8; the code will still try to read Windows-1252.
 * `Uri`s are no longer validated by default.
 * Minor tweaks from other projects.
-* Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/mdaus/coda-oss/tree/main).
+* ~~Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/mdaus/coda-oss/tree/main).~~
 
 ## [Release 2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)
 * remove *Expat* and *libXML* modules and support in **xml.lite**; only *Xerces* was actively used.
-* fix `waf` to work-around FIPS warning because of insecure *md5* hashing.
+* ~~fix `waf` to work-around FIPS warning because of insecure *md5* hashing.~~
 * tweak `str::EncodedStringView` and `str::EncodedString` for
   [future XML changes](https://github.com/mdaus/coda-oss/tree/feature/always-write-xml-as-utf8).
 

@@ -15,4 +15,8 @@ TEST_CLASS(test_range_list){ public:
 #include "types/unittests/test_range_list.cpp"
 };
 
+TEST_CLASS(test_complex_short){ public:
+#include "types/unittests/test_complex_short.cpp"
+};
+
 }

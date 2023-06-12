@@ -46,9 +46,8 @@
  */
 
 #include <stack>
-#include <std/memory>
+#include <memory>
 #include "coda_oss/string.h"
-#include "coda_oss/memory.h"
 
 #include "str/EncodedString.h"
 #include "str/EncodedStringView.h"

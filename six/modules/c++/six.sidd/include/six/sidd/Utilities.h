@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_SIDD_UTILITIES_H__
-#define __SIX_SIDD_UTILITIES_H__
+#pragma once
+#ifndef SIX_six_sidd_Utilities_h_INCLUDED_
+#define SIX_six_sidd_Utilities_h_INCLUDED_
 
 #include <memory>
 #include <vector>
@@ -31,6 +32,7 @@
 #include <types/RgAz.h>
 #include <six/Utilities.h>
 #include <six/sidd/DerivedData.h>
+#include <six/sidd/DerivedXMLControl.h>
 
 namespace six
 {
@@ -82,8 +84,8 @@ public:
      * \return mock DerivedData object
      */
     static std::unique_ptr<DerivedData> createFakeDerivedData();
-    static std::unique_ptr<DerivedData> createFakeDerivedData(const std::string& strVersion);
-
+    static std::unique_ptr<DerivedData> createFakeDerivedData(Version);
+    static std::unique_ptr<DerivedData> createFakeDerivedData(Version, six::sidd300::ISMVersion); // for SIDD 3.0.0
 
     /*
     * Parses the XML in 'xmlStream' and converts it into a DerivedData object.
@@ -156,4 +158,4 @@ public:
 };
 }
 }
-#endif
+#endif // SIX_six_sidd_Utilities_h_INCLUDED_
