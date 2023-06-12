@@ -50,7 +50,7 @@ template<typename T>
 struct complex final
 {
     using value_type = T;
-    static_assert(std::is_integral<T>::value, "Use std::complex<T> for floating-point.");
+    static_assert(!std::is_floating_point<T>::value, "Use std::complex<T> for floating-point.");
     static_assert(std::is_signed<T>::value, "T should be a signed integer.");
 
     complex(value_type re = 0, value_type im = 0) : z{re, im} {}
@@ -108,16 +108,12 @@ inline auto abs(const complex<T>& z)
 
 }
 
-#if CODA_OSS_cpp23
-    using details::complex;
-#else
-    // No macro to turn this on/off, want to implement what we need in details::complex.
-    // But keep in `details` in case somebody wants to uncomment.
-    //using complex_short = std::complex<short>; // not valid in C++23
-    using details::complex;
+// Have the compiler pick between std::complex and details::complex
+template<typename T>
+using complex = std::conditional_t<std::is_floating_point<T>::value, std::complex<T>, details::complex<T>>;
 
-    static_assert(sizeof(std::complex<short>) == sizeof(complex<short>), "sizeof(sizeof(std::complex<short>) != sizeof(complex<short>)");
-#endif
+static_assert(sizeof(std::complex<short>) == sizeof(complex<short>), "sizeof(sizeof(std::complex<short>) != sizeof(complex<short>)");
+
 }
 
 #endif  // CODA_OSS_types_complex_h_INCLUDED_

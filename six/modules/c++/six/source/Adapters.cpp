@@ -297,7 +297,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
 }
 
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    std::span<const std::complex<short>> buffer, size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t)
+    std::span<const types::complex<short>> buffer, size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
     // Each pixel is stored as a pair of numbers that represent the real and imaginary 
