@@ -635,9 +635,9 @@ struct Utilities final
     // Convert the amp/phase to a complex value using the given AmplitudeTable, if any.
     // This call could be in a tight loop where the value of six::AmplitudeTable* is known outside of the loop;
     // the overloads allow clients to avoid an inner `if`-check.
-    static std::complex<long double> toComplex(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable);
-    static std::complex<long double> toComplex(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable&);
-    static std::complex<long double> toComplex(uint8_t input_amplitude, uint8_t input_value);
+    static std::complex<long double> toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable* pAmplitudeTable);
+    static std::complex<long double> toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable&);
+    static std::complex<long double> toComplex(uint8_t amplitude, uint8_t phase);
 };
 
 

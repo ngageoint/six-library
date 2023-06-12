@@ -102,8 +102,6 @@ struct ImageData
 
     bool validate(const GeoData& geoData, logging::Logger& log) const;
 
-    // It would be nice to cache the results, but amplitudeTable could change at any time.
-    cx_float from_AMP8I_PHS8I(const AMP8I_PHS8I_t&) const; // for unit-tests
     static void to_AMP8I_PHS8I(const AmplitudeTable*, std::span<const cx_float>, std::span<AMP8I_PHS8I_t>); // for unit-tests
 
     static void from_AMP8I_PHS8I(const six::Amp8iPhs8iLookup_t& lookup, std::span<const AMP8I_PHS8I_t>, std::span<cx_float>);

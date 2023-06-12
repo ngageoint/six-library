@@ -206,33 +206,12 @@ static const six::Amp8iPhs8iLookup_t* getCachedLookup(const six::AmplitudeTable*
 {
     if (pAmplitudeTable == nullptr)
     {
-        static const auto lookup_no_amp = createLookup();
-        return lookup_no_amp.get();
+        static const auto lookup_no_table = createLookup();
+        return lookup_no_table.get();
     }
 
     // Maybe one has already been created and stored on the table?
     return pAmplitudeTable->getLookup();
-}
-
-std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) const
-{
-    if (pixelType != PixelType::AMP8I_PHS8I)
-    {
-        throw std::runtime_error("pxielType must be AMP8I_PHS8I");
-    }
-
-    auto const pAmplitudeTable = amplitudeTable.get();
-    auto const pValues = getCachedLookup(pAmplitudeTable);
-
-    // Do we have a cahced result to use (no amplitude table)?
-    // Or must it be recomputed (have an amplutude table)?
-    if (pValues != nullptr)
-    {
-        return (*pValues)[input.amplitude][input.phase];
-    }
-
-    const auto S = Utilities::toComplex(input.amplitude, input.phase, pAmplitudeTable);
-    return std::complex<float>(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
 }
 
 const six::Amp8iPhs8iLookup_t& ImageData::getLookup(const six::AmplitudeTable* pAmplitudeTable)

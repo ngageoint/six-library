@@ -82,11 +82,11 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
 }
 }
 
-static std::complex<long double> toComplex_(long double A, uint8_t input_value)
+static std::complex<long double> toComplex_(long double A, uint8_t phase)
 {
     // The phase values should be read in (values 0 to 255) and converted to float by doing:
     // P = (1 / 256) * input_value
-    const long double P = (1.0 / 256.0) * input_value;
+    const long double P = (1.0 / 256.0) * phase;
 
     // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
     // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
@@ -96,26 +96,26 @@ static std::complex<long double> toComplex_(long double A, uint8_t input_value)
     std::complex<long double> S(A * cos_angle, A * sin_angle);
     return S;
 }
-std::complex<long double> six::sicd::Utilities::toComplex(uint8_t input_amplitude, uint8_t input_value)
+std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase)
 {   
     // A = input_amplitude(i.e. 0 to 255)
-    const long double A = input_amplitude;
-    return toComplex_(A, input_value);
+    const long double A = amplitude;
+    return toComplex_(A, phase);
 }
-std::complex<long double> six::sicd::Utilities::toComplex(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable& amplitudeTable)
+std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable& amplitudeTable)
 {
-    const long double A = amplitudeTable.index(input_amplitude);
-    return toComplex_(A, input_value);
+    const long double A = amplitudeTable.index(amplitude);
+    return toComplex_(A, phase);
 }
-std::complex<long double> six::sicd::Utilities::toComplex(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
+std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable != nullptr)
     {
-        return toComplex(input_amplitude, input_value, *pAmplitudeTable);
+        return toComplex(amplitude, phase, *pAmplitudeTable);
     }
     else
     {
-        return toComplex(input_amplitude, input_value);
+        return toComplex(amplitude, phase);
     }
 }
 

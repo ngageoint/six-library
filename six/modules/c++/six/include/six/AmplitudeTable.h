@@ -236,6 +236,9 @@ struct AmplitudeTable final : public LUT
         return ret.release();
     }
 
+    // This is a "cache" mostly because this is a convenient place to store the data; it
+    // doesn't take that long to generate the lookup table.  Note that existing code wants
+    // to work with a `const AmplitudeTable &`, thus `mutable` ... <shrug>.
     void cacheLookup_(std::unique_ptr<Amp8iPhs8iLookup_t>&& lookup) const
     {
         pLookup = std::move(lookup);
@@ -246,7 +249,7 @@ struct AmplitudeTable final : public LUT
     }
 
 private:
-    mutable std::unique_ptr<Amp8iPhs8iLookup_t> pLookup;
+    mutable std::unique_ptr<Amp8iPhs8iLookup_t> pLookup; // to big for the stack
 };
 
 }
