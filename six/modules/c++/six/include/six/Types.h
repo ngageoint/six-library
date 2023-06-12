@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_TYPES_H__
-#define __SIX_TYPES_H__
 #pragma once
+#ifndef SIX_six_Types_h_INCLUDED_
+#define SIX_six_Types_h_INCLUDED_
 
 #include <stdint.h>
 
@@ -31,19 +31,31 @@
 #include <stdexcept>
 #include <std/memory>
 
-#include <scene/sys_Conf.h>
+#include <types/complex.h>
 #include <import/except.h>
 #include <import/mem.h>
 #include <import/str.h>
 #include <import/sys.h>
 #include <import/math/linear.h>
 #include <import/math/poly.h>
-#include <import/nitf.hpp>
 #include <import/io.h>
 
+#include <import/nitf.hpp>
+
+#include <scene/sys_Conf.h>
 #include "scene/Types.h"
 #include "scene/FrameType.h"
 #include "six/Enums.h"
+
+#ifndef SIX_six_zfloat_DEFINED_
+namespace six
+{
+    using zfloat = scene::zfloat;
+    using zdouble = scene::zdouble;
+    //using complex128 = scene::complex128;
+}
+#define SIX_six_zfloat_DEFINED_
+#endif
 
 namespace six
 {
@@ -578,4 +590,4 @@ ImageMode getImageMode(RadarModeType radarMode);
 DECLARE_EXCEPTION(MissingRequired);
 }
 
-#endif
+#endif // SIX_six_Types_h_INCLUDED_

@@ -19,20 +19,32 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SCENE_COORDINATE_TYPES_H__
-#define __SCENE_COORDINATE_TYPES_H__
+#pragma once
+#ifndef SIX_scene_Types_h_INCLUDED_
+#define SIX_scene_Types_h_INCLUDED_
 
 #include <cmath>
 
-#include "scene/sys_Conf.h"
+#include <types/complex.h>
 #include <import/except.h>
 #include <import/str.h>
 #include <import/sys.h>
 #include <types/RowCol.h>
 #include <math/Constants.h>
-
 #include "math/linear/MatrixMxN.h"
 #include "math/linear/VectorN.h"
+
+#include "scene/sys_Conf.h"
+
+#ifndef SIX_scene_zfloat_DEFINED_
+namespace scene
+{
+    using zfloat = std::complex<float>;
+    using zdouble = std::complex<double>;
+    //using complex128 = std::complex<long double>;
+}
+#define SIX_scene_zfloat_DEFINED_
+#endif
 
 namespace scene
 {
@@ -251,5 +263,4 @@ template<>
 template<>
     std::string toString(const scene::SideOfTrack& value);
 }
-#endif
-
+#endif // SIX_scene_Types_h_INCLUDED_

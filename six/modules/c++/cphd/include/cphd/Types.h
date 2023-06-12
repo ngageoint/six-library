@@ -19,11 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __CPHD_TYPES_H__
-#define __CPHD_TYPES_H__
 #pragma once
+#ifndef SIX_cphd_Types_h_INCLUDED_
+#define SIX_cphd_Types_h_INCLUDED_
 
 #include <ostream>
+
+#include <types/complex.h>
 
 #include <six/Types.h>
 #include <six/Enums.h>
@@ -31,6 +33,16 @@
 #include <six/MatchInformation.h>
 #include <six/Utilities.h>
 #include <six/sicd/GeoData.h>
+
+#ifndef SIX_cphd_zfloat_DEFINED_
+namespace cphd
+{
+    using zfloat = six::zfloat;
+    using zdouble = six::zdouble;
+    //using complex128 = six::complex128;
+}
+#define SIX_cphd_zfloat_DEFINED_
+#endif
 
 namespace cphd
 {
@@ -86,4 +98,4 @@ typedef six::MatchInformation MatchInformation;
 }
 
 
-#endif
+#endif // SIX_cphd_Types_h_INCLUDED_
