@@ -73,7 +73,7 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
         if (!envPath.empty())
         {
             // SIX_SCHEMA_PATH might be a search path
-            if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, std::filesystem::file_type::directory))
+	        if (!os.splitEnv(six::SCHEMA_PATH, schemaPaths, std::filesystem::file_type::directory))
             {
                 // Nope; assume the caller can figure things out (existing behavior).
                 schemaPaths.push_back(envPath);
@@ -232,6 +232,11 @@ static void validate_(const xml::lite::Document& doc,
     // validate against any specified schemas
     validate_(*rootElement, paths, log);
 }
+void XMLControl::validate(const xml::lite::Document* doc,
+                          const std::vector<std::string>& schemaPaths,
+                          logging::Logger* log)
+{
+    assert(doc != nullptr);
 
     // Existing code in xml::lite requires that the Logger be non-NULL
     assert(log != nullptr);
@@ -243,7 +248,8 @@ static void validate_(const xml::lite::Document& doc,
     if (paths.empty())
     {
         std::ostringstream oss;
-        oss << "Couldn't validate XML - no schema paths provided and " << six::SCHEMA_PATH << " not set.";
+        oss << "Coudn't validate XML - no schemas paths provided "
+            << " and " << six::SCHEMA_PATH << " not set.";
 
         log->warn(oss.str());
     }
@@ -254,8 +260,9 @@ static void validate_(const xml::lite::Document& doc,
     // validate against any specified schemas
     validate_(*doc, schemaPaths_, *log);
 }
-
-static auto loadSchemaPaths_(const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* log)
+void XMLControl::validate(const xml::lite::Document& doc,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger* log)
 {
     // Existing code in xml::lite requires that the Logger be non-NULL
     assert(log != nullptr);
@@ -265,20 +272,11 @@ static auto loadSchemaPaths_(const std::vector<std::filesystem::path>* pSchemaPa
     if ((pSchemaPaths != nullptr) && paths.empty())
     {
         std::ostringstream oss;
-        oss << "Couldn't validate XML - no schema paths provided and " << six::SCHEMA_PATH << " not set.";
+        oss << "Coudn't validate XML - no schemas paths provided "
+            << " and " << six::SCHEMA_PATH << " not set.";
 
         log->warn(oss.str());
     }
-    return paths;
-}
-
-//  NOTE: Errors are treated as detriments to valid processing
-//        and fail accordingly
-template<typename TSchemaPaths>
-void validate_(const xml::lite::Document& doc, const TSchemaPaths& schemaPaths, logging::Logger* log)
-{
-    // attempt to get the schema location from the environment if nothing is specified
-    const auto paths = loadSchemaPaths_(schemaPaths, log);
 
     // validate against any specified schemas
     validate_(doc, paths, *log);
