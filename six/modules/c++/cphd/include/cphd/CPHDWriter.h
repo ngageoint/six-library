@@ -27,10 +27,13 @@
 #include <string>
 #include <vector>
 
-#include <scene/sys_Conf.h>
+#include <types/complex.h>
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
+
+#include <scene/sys_Conf.h>
+
 #include <cphd/FileHeader.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVP.h>

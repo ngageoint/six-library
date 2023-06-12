@@ -29,8 +29,9 @@
 #include <cstdint>
 #include <stddef.h>
 #include <unordered_map>
-
 #include <std/optional>
+
+#include <types/complex.h>
 
 #include <scene/sys_Conf.h>
 #include <cphd/Types.h>
@@ -60,9 +61,9 @@ struct AddedPVP
     }
 };
 template<typename T>
-struct AddedPVP<std::complex<T> >
+struct AddedPVP<types::complex<T> >
 {
-    std::complex<T> getAddedPVP(const six::Parameter& val) const
+    types::complex<T> getAddedPVP(const six::Parameter& val) const
     {
         return val.getComplex<T>();
     }

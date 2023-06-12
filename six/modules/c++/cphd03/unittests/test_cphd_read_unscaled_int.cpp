@@ -38,15 +38,15 @@
 #include "TestCase.h"
 
 template<typename T>
-std::vector<std::complex<T> > generateData(size_t length)
+std::vector<types::complex<T> > generateData(size_t length)
 {
-    std::vector<std::complex<T> > data(length);
+    std::vector<types::complex<T> > data(length);
     srand(0);
     for (size_t ii = 0; ii < data.size(); ++ii)
     {
         float real = static_cast<T>(rand() / 100);
         float imag = static_cast<T>(rand() / 100);
-        data[ii] = std::complex<T>(real, imag);
+        data[ii] = types::complex<T>(real, imag);
     }
     return data;
 }
@@ -166,7 +166,7 @@ std::vector<std::complex<float> > checkData(const std::string& pathname,
 
 template<typename T>
 bool compareVectors(const std::vector<std::complex<float> >& readData,
-                    const std::vector<std::complex<T> >& writeData,
+                    const std::vector<types::complex<T> >& writeData,
                     const std::vector<double>& scaleFactors,
                     bool scale)
 {
@@ -189,7 +189,7 @@ bool compareVectors(const std::vector<std::complex<float> >& readData,
 }
 
 template<typename T>
-bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
+bool runTest(bool scale, const std::vector<types::complex<T> >& writeData)
 {
     io::TempFile tempfile;
     const size_t numThreads = std::thread::hardware_concurrency();
@@ -206,7 +206,7 @@ bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
 TEST_CASE(testUnscaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<int8_t> > writeData =
+    const std::vector<types::complex<int8_t> > writeData =
             generateData<int8_t>(dims.area());
     const bool scale = false;
     TEST_ASSERT(runTest(scale, writeData));
@@ -215,7 +215,7 @@ TEST_CASE(testUnscaledInt8)
 TEST_CASE(testScaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<int8_t> > writeData =
+    const std::vector<types::complex<int8_t> > writeData =
             generateData<int8_t>(dims.area());
     const bool scale = true;
     TEST_ASSERT(runTest(scale, writeData));
@@ -223,7 +223,7 @@ TEST_CASE(testScaledInt8)
 TEST_CASE(testUnscaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<int16_t> > writeData =
+    const std::vector<types::complex<int16_t> > writeData =
             generateData<int16_t>(dims.area());
     const bool scale = false;
     TEST_ASSERT(runTest(scale, writeData));
@@ -232,7 +232,7 @@ TEST_CASE(testUnscaledInt16)
 TEST_CASE(testScaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<int16_t> > writeData =
+    const std::vector<types::complex<int16_t> > writeData =
             generateData<int16_t>(dims.area());
     const bool scale = true;
     TEST_ASSERT(runTest(scale, writeData));

@@ -24,8 +24,10 @@
 #include <std/bit>
 #include <std/memory>
 
-#include <scene/sys_Conf.h>
+#include <types/complex.h>
 #include <except/Exception.h>
+
+#include <scene/sys_Conf.h>
 
 #include <cphd03/CPHDXMLControl.h>
 #include <cphd03/Utilities.h>
@@ -90,14 +92,14 @@ void CPHDWriter::addImage(const T* image,
 }
 
 template
-void CPHDWriter::addImage<std::complex<int8_t> >(
-    const std::complex<int8_t>* image,
+void CPHDWriter::addImage<types::complex<int8_t> >(
+    const types::complex<int8_t>* image,
     const types::RowCol<size_t>& dims,
     const sys::ubyte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<int16_t> >(
-    const std::complex<int16_t>* image,
+void CPHDWriter::addImage<types::complex<int16_t> >(
+    const types::complex<int16_t>* image,
     const types::RowCol<size_t>& dims,
     const sys::ubyte* vbmData);
 
@@ -108,14 +110,14 @@ void CPHDWriter::addImage<std::complex<float> >(
     const sys::ubyte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<int8_t> >(
-        const std::complex<int8_t>* image,
+void CPHDWriter::addImage<types::complex<int8_t> >(
+        const types::complex<int8_t>* image,
         const types::RowCol<size_t>& dims,
         const std::byte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<int16_t> >(
-        const std::complex<int16_t>* image,
+void CPHDWriter::addImage<types::complex<int16_t> >(
+        const types::complex<int16_t>* image,
         const types::RowCol<size_t>& dims,
         const std::byte* vbmData);
 
@@ -219,13 +221,13 @@ void CPHDWriter::writeCPHDData(const T* data,
 }
 
 template
-void CPHDWriter::writeCPHDData<std::complex<int8_t> >(
-        const std::complex<int8_t>* data,
+void CPHDWriter::writeCPHDData<types::complex<int8_t> >(
+        const types::complex<int8_t>* data,
         size_t numElements);
 
 template
-void CPHDWriter::writeCPHDData<std::complex<int16_t> >(
-        const std::complex<int16_t>* data,
+void CPHDWriter::writeCPHDData<types::complex<int16_t> >(
+        const types::complex<int16_t>* data,
         size_t numElements);
 
 template

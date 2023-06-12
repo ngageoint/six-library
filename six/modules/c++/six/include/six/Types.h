@@ -31,16 +31,18 @@
 #include <stdexcept>
 #include <std/memory>
 
-#include <scene/sys_Conf.h>
+#include <types/complex.h>
+#include <import/io.h>
 #include <import/except.h>
 #include <import/mem.h>
 #include <import/str.h>
 #include <import/sys.h>
 #include <import/math/linear.h>
 #include <import/math/poly.h>
-#include <import/nitf.hpp>
-#include <import/io.h>
 
+#include <import/nitf.hpp>
+
+#include <scene/sys_Conf.h>
 #include "scene/Types.h"
 #include "scene/FrameType.h"
 #include "six/Enums.h"
@@ -188,7 +190,7 @@ struct Constants
             // Each pixel is stored as a pair of numbers that represent the real and imaginary 
             // components. Each component is stored in a 16-bit signed integer in 2's 
             // complement format (2 bytes per component, 4 bytes per pixel). 
-            static_assert(sizeof(std::complex<int16_t>) == 4, "RE16I_IM16I should be two 16-bit integers");
+            static_assert(sizeof(types::complex<int16_t>) == 4, "RE16I_IM16I should be two 16-bit integers");
             return 4;
         }
 

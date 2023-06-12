@@ -27,10 +27,12 @@
 #include <vector>
 #include <std/span>
 
-#include <import/six.h>
+#include <types/complex.h>
 #include <import/cli.h>
 #include <import/io.h>
 #include <import/mem.h>
+
+#include <import/six.h>
 #include <import/six/convert.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
@@ -95,9 +97,9 @@ private:
 // We'll expand to complex<float> starting in the first half of the buffer
 void expandComplex(size_t numPixels, std::byte* buffer)
 {
-    const std::complex<short>* const input =
-            reinterpret_cast<std::complex<short>*>(
-                    buffer + numPixels * sizeof(std::complex<short>));
+    const types::complex<short>* const input =
+            reinterpret_cast<types::complex<short>*>(
+                    buffer + numPixels * sizeof(types::complex<short>));
 
     std::complex<float>* const output =
             reinterpret_cast<std::complex<float>*>(buffer);
@@ -138,8 +140,8 @@ void compressInteger(size_t numPixels, std::byte* buffer)
     const std::complex<float>* const input =
             reinterpret_cast<std::complex<float>*>(buffer);
 
-    std::complex<int16_t>* const output =
-            reinterpret_cast<std::complex<int16_t>*>(buffer);
+    types::complex<int16_t>* const output =
+            reinterpret_cast<types::complex<int16_t>*>(buffer);
     const float diff = max - min;
 
     // If diff ends up being zero, we will get a division by 0 error.
@@ -147,14 +149,14 @@ void compressInteger(size_t numPixels, std::byte* buffer)
     // fill it with 0s.
     if (diff == 0.0f)
     {
-        std::fill_n(output, numPixels, std::complex<int16_t>(0, 0));
+        std::fill_n(output, numPixels, types::complex<int16_t>(0, 0));
         return;
     }
 
     const CompressFloat compressFloat(min, diff);
     for (size_t ii = 0; ii < numPixels; ++ii)
     {
-        output[ii] = std::complex<int16_t>(
+        output[ii] = types::complex<int16_t>(
                 compressFloat(input[ii].real()),
                 compressFloat(input[ii].imag()));
     }

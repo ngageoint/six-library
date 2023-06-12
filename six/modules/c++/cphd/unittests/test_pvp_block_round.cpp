@@ -20,9 +20,22 @@
  *
  */
 
-#include <thread>
+#include <stdlib.h>
 
+#include <thread>
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
+
+#include <types/complex.h>
+#include <io/FileInputStream.h>
+#include <io/FileOutputStream.h>
+#include <io/TempFile.h>
+#include <types/RowCol.h>
 #include <TestCase.h>
+
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDWriter.h>
 #include <cphd/Metadata.h>
@@ -31,27 +44,17 @@
 #include <cphd/ReferenceGeometry.h>
 #include <cphd/TestDataGenerator.h>
 #include <cphd/Wideband.h>
-#include <io/FileInputStream.h>
-#include <io/FileOutputStream.h>
-#include <io/TempFile.h>
-#include <stdlib.h>
-#include <types/RowCol.h>
-#include <cstdio>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
-#include <string>
 
 template <typename T>
-std::vector<std::complex<T>> generateComplexData(size_t length)
+std::vector<types::complex<T>> generateComplexData(size_t length)
 {
-    std::vector<std::complex<T>> data(length);
+    std::vector<types::complex<T>> data(length);
     srand(0);
     for (size_t ii = 0; ii < data.size(); ++ii)
     {
         float real = static_cast<T>(rand() / 100);
         float imag = static_cast<T>(rand() / 100);
-        data[ii] = std::complex<T>(real, imag);
+        data[ii] = types::complex<T>(real, imag);
     }
     return data;
 }
@@ -119,7 +122,7 @@ template <typename T>
 void writeCPHD(const std::string& outPathname,
                size_t numThreads,
                const types::RowCol<size_t> dims,
-               const std::vector<std::complex<T>>& writeData,
+               const std::vector<types::complex<T>>& writeData,
                cphd::Metadata& metadata,
                cphd::PVPBlock& pvpBlock)
 {
@@ -157,7 +160,7 @@ bool checkData(const std::string& pathname,
 
 template <typename T>
 bool runTest(bool /*scale*/,
-             const std::vector<std::complex<T>>& writeData,
+             const std::vector<types::complex<T>>& writeData,
              cphd::Metadata& meta,
              cphd::PVPBlock& pvpBlock,
              const types::RowCol<size_t> dims)
@@ -171,7 +174,7 @@ bool runTest(bool /*scale*/,
 TEST_CASE(testPVPBlockSimple)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<int16_t>> writeData =
+    const std::vector<types::complex<int16_t>> writeData =
             generateComplexData<int16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
@@ -195,7 +198,7 @@ TEST_CASE(testPVPBlockSimple)
 TEST_CASE(testPVPBlockOptional)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<int16_t>> writeData =
+    const std::vector<types::complex<int16_t>> writeData =
             generateComplexData<int16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
@@ -222,7 +225,7 @@ TEST_CASE(testPVPBlockOptional)
 TEST_CASE(testPVPBlockAdditional)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<std::complex<int16_t>> writeData =
+    const std::vector<types::complex<int16_t>> writeData =
             generateComplexData<int16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();

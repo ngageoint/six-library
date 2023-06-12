@@ -25,16 +25,19 @@
 #include <memory>
 #include <thread>
 
-#include <scene/sys_Conf.h>
+#include <types/complex.h>
 #include <logging/NullLogger.h>
 #include <cli/Value.h>
 #include <cli/ArgumentParser.h>
 #include <io/FileInputStream.h>
 #include <io/FileOutputStream.h>
+#include <str/Convert.h>
+
+#include <scene/sys_Conf.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVPBlock.h>
 #include <cphd/CPHDReader.h>
-#include <str/Convert.h>
+
 
 /*!
  * Compares two CPHD files
@@ -116,7 +119,7 @@ bool compareWideband(cphd::CPHDReader& reader1,
             switch (reader1.getMetadata().data.getSampleType())
             {
             case cphd::SampleType::RE08I_IM08I:
-                if (!compareCPHDData<std::complex<int8_t> >(
+                if (!compareCPHDData<types::complex<int8_t> >(
                         cphdData1.get(),
                         cphdData2.get(),
                         dims1.area(),
@@ -126,7 +129,7 @@ bool compareWideband(cphd::CPHDReader& reader1,
                 }
                 break;
             case cphd::SampleType::RE16I_IM16I:
-                if (!compareCPHDData<std::complex<int16_t> >(
+                if (!compareCPHDData<types::complex<int16_t> >(
                         cphdData1.get(),
                         cphdData2.get(),
                         dims1.area(),

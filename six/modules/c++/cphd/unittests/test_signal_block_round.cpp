@@ -28,9 +28,13 @@
 #include <memory>
 #include <thread>
 
-#include <nitf/coda-oss.hpp>
+#include <types/complex.h>
 #include <types/RowCol.h>
 #include <io/TempFile.h>
+#include <TestCase.h>
+
+#include <nitf/coda-oss.hpp>
+
 #include <cphd/CPHDWriter.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/Wideband.h>
@@ -39,7 +43,6 @@
 #include <cphd/PVPBlock.h>
 #include <cphd/ReferenceGeometry.h>
 #include <cphd/TestDataGenerator.h>
-#include <TestCase.h>
 
 /*!
  * Tests write and read of Signal Block
@@ -47,15 +50,15 @@
  */
 
 template<typename T>
-std::vector<std::complex<T> > generateData(size_t length)
+std::vector<types::complex<T> > generateData(size_t length)
 {
-    std::vector<std::complex<T> > data(length);
+    std::vector<types::complex<T> > data(length);
     srand(0);
     for (size_t ii = 0; ii < data.size(); ++ii)
     {
         auto real = static_cast<T>(rand() / 100);
         auto imag = static_cast<T>(rand() / 100);
-        data[ii] = std::complex<T>(real, imag);
+        data[ii] = types::complex<T>(real, imag);
     }
     return data;
 }
@@ -76,7 +79,7 @@ inline std::vector<double> generateScaleFactors(size_t length, bool scale)
 template<typename T>
 void writeCPHD(const std::string& outPathname, size_t /*numThreads*/,
         const types::RowCol<size_t> dims,
-        const std::vector<std::complex<T> >& writeData,
+        const std::vector<types::complex<T> >& writeData,
         cphd::Metadata& metadata,
         cphd::PVPBlock& pvpBlock)
 {
@@ -122,7 +125,7 @@ std::vector<std::complex<float> > checkData(const std::string& pathname,
 
 template<typename T>
 bool compareVectors(const std::vector<std::complex<float> >& readData,
-                    const std::vector<std::complex<T> >& writeData,
+                    const std::vector<types::complex<T> >& writeData,
                     const std::vector<double>& scaleFactors,
                     bool scale)
 {
@@ -145,7 +148,7 @@ bool compareVectors(const std::vector<std::complex<float> >& readData,
 }
 
 template<typename T>
-bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
+bool runTest(bool scale, const std::vector<types::complex<T> >& writeData)
 {
     io::TempFile tempfile;
     const size_t numThreads = std::thread::hardware_concurrency();
@@ -168,7 +171,7 @@ bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
 TEST_CASE(testUnscaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<int8_t> > writeData =
+    const std::vector<types::complex<int8_t> > writeData =
             generateData<int8_t>(dims.area());
     const bool scale = false;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
@@ -177,7 +180,7 @@ TEST_CASE(testUnscaledInt8)
 TEST_CASE(testScaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<int8_t> > writeData =
+    const std::vector<types::complex<int8_t> > writeData =
             generateData<int8_t>(dims.area());
     const bool scale = true;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
@@ -186,7 +189,7 @@ TEST_CASE(testScaledInt8)
 TEST_CASE(testUnscaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<int16_t> > writeData =
+    const std::vector<types::complex<int16_t> > writeData =
             generateData<int16_t>(dims.area());
     const bool scale = false;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
@@ -195,7 +198,7 @@ TEST_CASE(testUnscaledInt16)
 TEST_CASE(testScaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<int16_t> > writeData =
+    const std::vector<types::complex<int16_t> > writeData =
             generateData<int16_t>(dims.area());
     const bool scale = true;
     TEST_ASSERT_TRUE(runTest(scale, writeData));

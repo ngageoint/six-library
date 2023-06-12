@@ -26,9 +26,7 @@
 #include <thread>
 #include <std/span>
 
-#include <cphd/CPHDReader.h>
-#include <cphd/CPHDWriter.h>
-
+#include <types/complex.h>
 #include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
 #include <str/Convert.h>
@@ -37,6 +35,9 @@
 #include <cli/ArgumentParser.h>
 #include <io/FileInputStream.h>
 #include <io/FileOutputStream.h>
+
+#include <cphd/CPHDReader.h>
+#include <cphd/CPHDWriter.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVPBlock.h>
 
@@ -111,13 +112,13 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
         case cphd::SignalArrayFormat::CI2:
             writer.write(
                     pvpBlock,
-                    reinterpret_cast<const std::complex<int8_t>* >(data.get()),
+                    reinterpret_cast<const types::complex<int8_t>* >(data.get()),
                     readPtr.get());
             break;
         case cphd::SignalArrayFormat::CI4:
             writer.write(
                     pvpBlock,
-                    reinterpret_cast<const std::complex<int16_t>* >(data.get()),
+                    reinterpret_cast<const types::complex<int16_t>* >(data.get()),
                     readPtr.get());
             break;
         case cphd::SignalArrayFormat::CF8:

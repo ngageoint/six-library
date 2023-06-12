@@ -59,9 +59,9 @@ public:
     }
 
     template<typename T>
-    Parameter(std::complex<T> value)
+    Parameter(types::complex<T> value)
     {
-        mValue = str::toString<std::complex<T> >(mValue);
+        mValue = str::toString<types::complex<T> >(mValue);
     }
 
      /*!
@@ -88,9 +88,9 @@ public:
 
     //! Get complex parameter
     template<typename T>
-    inline std::complex<T> getComplex() const
+    inline types::complex<T> getComplex() const
     {
-        return str::toType<std::complex<T> >(mValue);
+        return str::toType<types::complex<T> >(mValue);
     }
 
     //!  Set the parameters' name
@@ -108,9 +108,9 @@ public:
 
     //! Overload templated setValue function
     template<typename T>
-    void setValue(const std::complex<T>& value)
+    void setValue(const types::complex<T>& value)
     {
-        mValue = str::toString<std::complex<T> >(value);
+        mValue = str::toString<types::complex<T> >(value);
     }
 
     //!  Get back const char*

@@ -25,6 +25,7 @@
 #include <std/bit>
 #include <std/memory>
 
+#include <types/complex.h>
 #include <except/Exception.h>
 
 #include <cphd/ByteSwap.h>
@@ -178,14 +179,14 @@ template void CPHDWriter::write<std::byte>(const PVPBlock& pvpBlock,
                                             const std::byte* widebandData,
                                             const std::byte* supportData);
 
-template void CPHDWriter::write<std::complex<int8_t>>(
+template void CPHDWriter::write<types::complex<int8_t>>(
     const PVPBlock& pvpBlock,
-    const std::complex<int8_t>* widebandData,
+    const types::complex<int8_t>* widebandData,
     const sys::ubyte* supportData);
 
-template void CPHDWriter::write<std::complex<int16_t>>(
+template void CPHDWriter::write<types::complex<int16_t>>(
     const PVPBlock& pvpBlock,
-    const std::complex<int16_t>* widebandData,
+    const types::complex<int16_t>* widebandData,
     const sys::ubyte* supportData);
 
 template void CPHDWriter::write<std::complex<float>>(
@@ -193,14 +194,14 @@ template void CPHDWriter::write<std::complex<float>>(
     const std::complex<float>* widebandData,
     const sys::ubyte* supportData);
 
-template void CPHDWriter::write<std::complex<int8_t>>(
+template void CPHDWriter::write<types::complex<int8_t>>(
         const PVPBlock& pvpBlock,
-        const std::complex<int8_t>* widebandData,
+        const types::complex<int8_t>* widebandData,
         const std::byte* supportData);
 
-template void CPHDWriter::write<std::complex<int16_t>>(
+template void CPHDWriter::write<types::complex<int16_t>>(
         const PVPBlock& pvpBlock,
-        const std::complex<int16_t>* widebandData,
+        const types::complex<int16_t>* widebandData,
         const std::byte* supportData);
 
 template void CPHDWriter::write<std::complex<float>>(
@@ -298,13 +299,13 @@ template void CPHDWriter::writeCPHDData(const std::byte* data,
                                         size_t numElements,
                                         size_t channel);
 
-template void CPHDWriter::writeCPHDData<std::complex<int8_t>>(
-        const std::complex<int8_t>* data,
+template void CPHDWriter::writeCPHDData<types::complex<int8_t>>(
+        const types::complex<int8_t>* data,
         size_t numElements,
         size_t channel);
 
-template void CPHDWriter::writeCPHDData<std::complex<int16_t>>(
-        const std::complex<int16_t>* data,
+template void CPHDWriter::writeCPHDData<types::complex<int16_t>>(
+        const types::complex<int16_t>* data,
         size_t numElements,
         size_t channel);
 
