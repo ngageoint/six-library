@@ -35,6 +35,7 @@
 #include <algorithm>
 
 #include <nitf/BufferedWriter.hpp>
+#include <types/complex.h>
 
 #include "six/Types.h"
 #include "six/Container.h"
@@ -300,7 +301,7 @@ public:
 
     // Be explicit about the types of images that can be saved; templates are provided below.
     void save_image(std::span<const std::complex<float>>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
-    void save_image(std::span<const std::complex<short>>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
+    void save_image(std::span<const types::complex<short>>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
     void save_image(std::span<const std::pair<uint8_t, uint8_t>>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
     void save_image(std::span<const uint8_t>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
     void save_image(std::span<const uint16_t>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);

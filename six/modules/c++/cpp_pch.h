@@ -1,7 +1,7 @@
 #pragma once
 
 #pragma warning(push)
-#pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
+#pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc.Undefined behavior may occur if this function throws an exception.
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 4355) // '...': used in base member initializer list
 #pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies
@@ -14,9 +14,6 @@
 #pragma warning(disable: 6285) // (<non-zero constant> || <non-zero constant>) is always a non-zero constant.  Did you intend to use the bitwise-and operator?
 #pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
 #pragma warning(disable: 5264) // '...': '...' variable is not used
-
-// error 4996: '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning.
-#define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -45,11 +42,12 @@
 #include <mutex>
 #include <atomic>
 #include <future>
-#include <complex>
-
+//#include <complex>
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #define NOMINMAX
 #include <windows.h>
+
+#include <types/complex.h>
 
 #pragma warning(pop)
