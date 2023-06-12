@@ -102,8 +102,8 @@ struct CPHDWriter final
      *  \brief Pushes a new image to the file for writing. This only works with
      *         valid CPHDWriter data types:
      *              cphd::zfloat
-     *              std::complex<int16_t>
-     *              std::complex<int8_t>
+     *              cphd::zint16_t
+     *              cphd::zint8_t
      *
      *  \param image The image to be added. This should be sized to match the
      *         dims parameter.
@@ -148,8 +148,8 @@ struct CPHDWriter final
      *         you may instead use addImage and write. This only works with
      *         valid CPHDWriter data types:
      *              cphd::zfloat
-     *              std::complex<int16_t>
-     *              std::complex<int8_t>
+     *              cphd::zint16_t
+     *              cphd::zint8_t
      *
      *  \param data The data to write to disk.
      *  \param numElements The number of elements in data. Treat the data

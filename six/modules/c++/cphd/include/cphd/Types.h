@@ -23,6 +23,8 @@
 #ifndef SIX_cphd_Types_h_INCLUDED_
 #define SIX_cphd_Types_h_INCLUDED_
 
+#include <stdint.h>
+
 #include <ostream>
 
 #include <types/complex.h>
@@ -34,19 +36,17 @@
 #include <six/Utilities.h>
 #include <six/sicd/GeoData.h>
 
-#ifndef SIX_cphd_zfloat_DEFINED_
-namespace cphd
-{
-    using zfloat = six::zfloat;
-    using zdouble = six::zdouble;
-    //using complex128 = six::complex128;
-}
-#define SIX_cphd_zfloat_DEFINED_
-#endif
-
 namespace cphd
 {
 // Use the same types that SIX uses
+
+using zfloat = six::zfloat;
+using zdouble = six::zdouble;
+
+using zint8_t = std::complex<int8_t>; // TODO: types::zint8_t
+using zint16_t = std::complex<int16_t>; // TODO: types::zint16_t
+using zint32_t = std::complex<int32_t>; // TODO: types::zint32_t
+using zint64_t = std::complex<int64_t>; // TODO: types::zint64_t
 
 typedef six::Vector2 Vector2;
 

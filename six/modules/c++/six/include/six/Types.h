@@ -47,15 +47,11 @@
 #include "scene/FrameType.h"
 #include "six/Enums.h"
 
-#ifndef SIX_six_zfloat_DEFINED_
 namespace six
 {
     using zfloat = scene::zfloat;
     using zdouble = scene::zdouble;
-    //using complex128 = scene::complex128;
 }
-#define SIX_six_zfloat_DEFINED_
-#endif
 
 namespace six
 {
@@ -200,7 +196,7 @@ struct Constants
             // Each pixel is stored as a pair of numbers that represent the real and imaginary 
             // components. Each component is stored in a 16-bit signed integer in 2's 
             // complement format (2 bytes per component, 4 bytes per pixel). 
-            static_assert(sizeof(std::complex<int16_t>) == 4, "RE16I_IM16I should be two 16-bit integers");
+            static_assert(sizeof(types::zint16_t) == 4, "RE16I_IM16I should be two 16-bit integers");
             return 4;
         }
 

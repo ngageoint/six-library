@@ -36,14 +36,11 @@
 
 #include "scene/sys_Conf.h"
 
-#ifndef SIX_scene_zfloat_DEFINED_
 namespace scene
 {
     using zfloat = types::zfloat;
     using zdouble = types::zdouble;
 }
-#define SIX_scene_zfloat_DEFINED_
-#endif
 
 namespace scene
 {

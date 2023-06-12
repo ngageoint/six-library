@@ -257,28 +257,28 @@ void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::
         }
         else if (it->second.getFormat() == "CI2")
         {
-            std::complex<std::int8_t> val;
+            cphd::zint8_t val;
             ::setData(input + it->second.getByteOffset(), val);
             addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
         else if (it->second.getFormat() == "CI4")
         {
-            std::complex<std::int16_t> val;
+            cphd::zint16_t val;
             ::setData(input + it->second.getByteOffset(), val);
             addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
         else if (it->second.getFormat() == "CI8")
         {
-            std::complex<std::int32_t> val;
+            cphd::zint32_t val;
             ::setData(input + it->second.getByteOffset(), val);
             addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
         else if (it->second.getFormat() == "CI16")
         {
-            std::complex<std::int64_t> val;
+            cphd::zint64_t val;
             ::setData(input + it->second.getByteOffset(), val);
             addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);

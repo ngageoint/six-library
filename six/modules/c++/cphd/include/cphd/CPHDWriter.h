@@ -27,10 +27,14 @@
 #include <string>
 #include <vector>
 
-#include <scene/sys_Conf.h>
+#include <types/complex.h>
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
+
+#include <scene/sys_Conf.h>
+
+#include <cphd/Types.h>
 #include <cphd/FileHeader.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVP.h>
@@ -115,8 +119,8 @@ struct CPHDWriter final
      *  This only works with valid CPHDWriter data types:
      *      std:: ubyte*  (for compressed data)
      *      cphd::zfloat
-     *      std::complex<int16_t>
-     *      std::complex<int8_t>
+     *      chpd::zint16_t
+     *      cphd::zint8_t
      *
      *  \param pvpBlock The vector based metadata to write.
      *  \param widebandData .The wideband data to write to disk
@@ -208,8 +212,8 @@ struct CPHDWriter final
      *  valid CPHDWriter data types:
      *      std:: ubyte*  (for compressed data)
      *      cphd::zfloat
-     *      std::complex<int16_t>
-     *      std::complex<int8_t>
+     *      chpd::zint16_t
+     *      cphd::zint8_t
      *
      *  \param data The data to write to disk.
      *  \param numElements The number of elements in data. Treat the data

@@ -118,7 +118,7 @@ void expandComplex(size_t numPixels, std::byte* buffer)
 // [-32K, 32K].
 void compressInteger(size_t numPixels, std::byte* buffer)
 {
-    const float* const floatValues = reinterpret_cast<float*>(buffer);
+    auto const floatValues = reinterpret_cast<const float*>(buffer);
 
     // Find the min and max values of either real or imag
     float min = floatValues[0];
@@ -135,11 +135,8 @@ void compressInteger(size_t numPixels, std::byte* buffer)
         }
     }
 
-    const six::zfloat* const input =
-            reinterpret_cast<six::zfloat*>(buffer);
-
-    std::complex<int16_t>* const output =
-            reinterpret_cast<std::complex<int16_t>*>(buffer);
+    auto const input = reinterpret_cast<const six::zfloat*>(buffer);
+    auto const output = reinterpret_cast<std::complex<int16_t>*>(buffer);
     const float diff = max - min;
 
     // If diff ends up being zero, we will get a division by 0 error.
