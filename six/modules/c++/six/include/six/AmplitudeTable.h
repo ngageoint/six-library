@@ -33,6 +33,7 @@
 #include <memory>
 #include <array>
 
+#include <nitf/LookupTable.hpp>
 #include <scene/sys_Conf.h>
 #include <import/except.h>
 
