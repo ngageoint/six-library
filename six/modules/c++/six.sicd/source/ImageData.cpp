@@ -296,7 +296,6 @@ void  ImageData::fromComplex(const AmplitudeTable* pAmplitudeTable,
     std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results)
 {
     // make a structure to quickly find the nearest neighbor
-    std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pConvert; // not-cached, non-NULL amplitudeTable
-    auto& converter = six::sicd::details::ComplexToAMP8IPHS8I::make(pAmplitudeTable, pConvert);
+    auto& converter = six::sicd::details::ComplexToAMP8IPHS8I::make(pAmplitudeTable);
     fromComplex_(inputs, results, converter);
 }

@@ -174,8 +174,7 @@ six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(con
     return retval;
 }
 
-const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable,
-    std::unique_ptr<ComplexToAMP8IPHS8I>& pTree)
+const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
     {
@@ -185,7 +184,15 @@ const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8
     }
     else
     {
-        pTree.reset(new six::sicd::details::ComplexToAMP8IPHS8I(pAmplitudeTable));
-        return *pTree;
+        auto pFromComplex = pAmplitudeTable->getFromComplex();
+        if (pFromComplex != nullptr)
+        {
+            return *pFromComplex;
+        }
+
+        // constructor is private, can't use make_unique
+        std::unique_ptr<sicd::details::ComplexToAMP8IPHS8I> pTree(new six::sicd::details::ComplexToAMP8IPHS8I(pAmplitudeTable));
+        pAmplitudeTable->cacheFromComplex_(std::move(pTree));
+        return *(pAmplitudeTable->getFromComplex());
     }
 }

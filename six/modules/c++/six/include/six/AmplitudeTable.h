@@ -188,7 +188,7 @@ class ComplexToAMP8IPHS8I final
     explicit ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable = nullptr);
 
 public:
-    static const ComplexToAMP8IPHS8I& make(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<ComplexToAMP8IPHS8I>&);
+    static const ComplexToAMP8IPHS8I& make(const six::AmplitudeTable* pAmplitudeTable);
 
     ~ComplexToAMP8IPHS8I() = default;
     ComplexToAMP8IPHS8I(const ComplexToAMP8IPHS8I&) = delete;
@@ -302,8 +302,19 @@ struct AmplitudeTable final : public LUT
         return pLookup.get();
     }
 
+    // Again, this is a convenient place to store the data as it depends on an AmplitudeTable instance.
+    void cacheFromComplex_(std::unique_ptr<sicd::details::ComplexToAMP8IPHS8I>&& fromComplex) const
+    {
+        pFromComplex = std::move(fromComplex);
+    }
+    const sicd::details::ComplexToAMP8IPHS8I* getFromComplex() const
+    {
+        return pFromComplex.get();
+    }
+
 private:
     mutable std::unique_ptr<Amp8iPhs8iLookup_t> pLookup; // to big for the stack
+    mutable std::unique_ptr<sicd::details::ComplexToAMP8IPHS8I> pFromComplex;    
 };
 
 }
