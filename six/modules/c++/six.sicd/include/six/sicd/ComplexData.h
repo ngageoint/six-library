@@ -400,7 +400,7 @@ private:
 struct ComplexImageResult final
 {
     std::unique_ptr<ComplexData> pComplexData;
-    std::vector<std::complex<float>> widebandData;
+    std::vector<six::zfloat> widebandData;
     ComplexImageResult() = default;
     ComplexImageResult(const ComplexImageResult&) = delete;
     ComplexImageResult& operator=(const ComplexImageResult&) = delete;
@@ -410,10 +410,10 @@ struct ComplexImageResult final
 struct ComplexImage final
 {
     const ComplexData& data;
-    std::span<const std::complex<float>> image;
-    ComplexImage(const ComplexData& d, std::span<const std::complex<float>> i) : data(d), image(i) {}
+    std::span<const six::zfloat> image;
+    ComplexImage(const ComplexData& d, std::span<const six::zfloat> i) : data(d), image(i) {}
     ComplexImage(const ComplexImageResult& r) 
-        : ComplexImage(*(r.pComplexData), std::span<const std::complex<float>>(r.widebandData.data(), r.widebandData.size())) {}
+        : ComplexImage(*(r.pComplexData), std::span<const six::zfloat>(r.widebandData.data(), r.widebandData.size())) {}
     ComplexImage(const ComplexImage&) = delete;
     ComplexImage& operator=(const ComplexImage&) = delete;
 };

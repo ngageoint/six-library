@@ -191,7 +191,7 @@ struct Constants
             // Each pixel is stored as a pair of numbers that represent the realand imaginary
             // components. Each component is stored in a 32-bit IEEE floating point format (4
             // bytes per component, 8 bytes per pixel).
-            static_assert(sizeof(std::complex<float>) == 8, "RE32F_IM32F should be two floats");
+            static_assert(sizeof(six::zfloat) == 8, "RE32F_IM32F should be two floats");
             return 8;
         }
 

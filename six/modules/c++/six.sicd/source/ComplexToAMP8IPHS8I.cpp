@@ -138,7 +138,7 @@ static uint8_t nearest(const TIter& begin, const TIter& end, long double value)
     return gsl::narrow<uint8_t>(distance);
 }
 
-six::sicd::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const std::complex<float> &v) const
+six::sicd::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const six::zfloat &v) const
 {
     six::sicd::AMP8I_PHS8I_t retval;
 

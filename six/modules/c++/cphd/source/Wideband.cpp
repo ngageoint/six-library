@@ -50,7 +50,7 @@ public:
                     size_t startRow,
                     size_t numRows,
                     size_t numCols,
-                    std::complex<float>* output) :
+                    cphd::zfloat* output) :
         mInput(input + startRow * numCols),
         mDims(numRows, numCols),
         mOutput(output + startRow * numCols)
@@ -64,7 +64,7 @@ public:
             for (size_t col = 0; col < mDims.col; ++col, ++idx)
             {
                 const std::complex<InT>& input(mInput[idx]);
-                mOutput[idx] = std::complex<float>(input.real(), input.imag());
+                mOutput[idx] = cphd::zfloat(input.real(), input.imag());
             }
         }
     }
@@ -72,7 +72,7 @@ public:
 private:
     const std::complex<InT>* const mInput;
     const types::RowCol<size_t> mDims;
-    std::complex<float>* const mOutput;
+    cphd::zfloat* const mOutput;
 };
 
 template <typename InT>
@@ -84,7 +84,7 @@ public:
                   size_t numRows,
                   size_t numCols,
                   const double* scaleFactors,
-                  std::complex<float>* output) :
+                  cphd::zfloat* output) :
         mInput(input + startRow * numCols),
         mDims(numRows, numCols),
         mScaleFactors(scaleFactors + startRow),
@@ -100,7 +100,7 @@ public:
             for (size_t col = 0; col < mDims.col; ++col, ++idx)
             {
                 const std::complex<InT>& input(mInput[idx]);
-                mOutput[idx] = std::complex<float>(static_cast<float>(input.real() * scaleFactor),
+                mOutput[idx] = cphd::zfloat(static_cast<float>(input.real() * scaleFactor),
                                                    static_cast<float>(input.imag() * scaleFactor));
             }
         }
@@ -110,14 +110,14 @@ private:
     const std::complex<InT>* const mInput;
     const types::RowCol<size_t> mDims;
     const double* const mScaleFactors;
-    std::complex<float>* const mOutput;
+    cphd::zfloat* const mOutput;
 };
 
 template <typename InT>
 void promote(const void* input,
              const types::RowCol<size_t>& dims,
              size_t numThreads,
-             std::complex<float>* output)
+             cphd::zfloat* output)
 {
     if (numThreads <= 1)
     {
@@ -155,7 +155,7 @@ void promote(const void* input,
              size_t elementSize,
              const types::RowCol<size_t>& dims,
              size_t numThreads,
-             std::complex<float>* output)
+             cphd::zfloat* output)
 {
     switch (elementSize)
     {
@@ -178,7 +178,7 @@ void scale(const void* input,
            const types::RowCol<size_t>& dims,
            const double* scaleFactors,
            size_t numThreads,
-           std::complex<float>* output)
+           cphd::zfloat* output)
 {
     if (numThreads <= 1)
     {
@@ -219,7 +219,7 @@ void scale(const void* input,
            const types::RowCol<size_t>& dims,
            const double* scaleFactors,
            size_t numThreads,
-           std::complex<float>* output)
+           cphd::zfloat* output)
 {
     switch (elementSize)
     {
@@ -602,7 +602,7 @@ void Wideband::read(size_t channel,
                     const std::vector<double>& vectorScaleFactors,
                     size_t numThreads,
                     const mem::BufferView<sys::ubyte>& scratch,
-                    const mem::BufferView<std::complex<float>>& data) const
+                    const mem::BufferView<cphd::zfloat>& data) const
 {
     // Sanity checks
     types::RowCol<size_t> dims;

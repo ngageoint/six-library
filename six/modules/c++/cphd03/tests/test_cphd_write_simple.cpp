@@ -76,8 +76,8 @@ int main(int argc, char** argv)
 
         const std::string outPathname(options->get<std::string>("output"));
         const size_t numThreads(options->get<size_t>("threads"));
-        const std::vector<std::complex<float> > data(
-                dims.area(), std::complex<float>(0.0f, 0.0f));
+        const std::vector<cphd::zfloat > data(
+                dims.area(), cphd::zfloat(0.0f, 0.0f));
 
         cphd03::Metadata metadata;
 

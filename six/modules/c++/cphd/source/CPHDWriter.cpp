@@ -188,9 +188,9 @@ template void CPHDWriter::write<std::complex<int16_t>>(
     const std::complex<int16_t>* widebandData,
     const sys::ubyte* supportData);
 
-template void CPHDWriter::write<std::complex<float>>(
+template void CPHDWriter::write<cphd::zfloat>(
     const PVPBlock& pvpBlock,
-    const std::complex<float>* widebandData,
+    const cphd::zfloat* widebandData,
     const sys::ubyte* supportData);
 
 template void CPHDWriter::write<std::complex<int8_t>>(
@@ -203,9 +203,9 @@ template void CPHDWriter::write<std::complex<int16_t>>(
         const std::complex<int16_t>* widebandData,
         const std::byte* supportData);
 
-template void CPHDWriter::write<std::complex<float>>(
+template void CPHDWriter::write<cphd::zfloat>(
         const PVPBlock& pvpBlock,
-        const std::complex<float>* widebandData,
+        const cphd::zfloat* widebandData,
         const std::byte* supportData);
 
 void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
@@ -308,6 +308,6 @@ template void CPHDWriter::writeCPHDData<std::complex<int16_t>>(
         size_t numElements,
         size_t channel);
 
-template void CPHDWriter::writeCPHDData<std::complex<float>>(
-        const std::complex<float>* data, size_t numElements, size_t channel);
+template void CPHDWriter::writeCPHDData<cphd::zfloat>(
+        const cphd::zfloat* data, size_t numElements, size_t channel);
 }

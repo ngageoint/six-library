@@ -401,14 +401,14 @@ bool XmlLite::parseOptionalDouble(const xml::lite::Element& parent, const std::s
     return false;
 }
 
-void XmlLite::parseComplex(const xml::lite::Element& element, std::complex<double>& value) const
+void XmlLite::parseComplex(const xml::lite::Element& element, six::zdouble& value) const
 {
     double r, i;
 
     parseDouble(getFirstAndOnly(element, "Real"), r);
     parseDouble(getFirstAndOnly(element, "Imag"), i);
 
-    value = std::complex<double>(r, i);
+    value = six::zdouble(r, i);
 }
 
 void XmlLite::parseString(const xml::lite::Element& element, std::string& value) const

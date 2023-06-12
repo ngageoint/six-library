@@ -230,7 +230,7 @@ static const input_amplitudes_t* get_cached_RE32F_IM32F_values(const six::Amplit
     return nullptr;
 }
 
-std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) const
+six::zfloat ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
     {
@@ -248,7 +248,7 @@ std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) cons
     }
 
     const auto S = Utilities::from_AMP8I_PHS8I(input.first, input.second, pAmplitudeTable);
-    return std::complex<float>(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
+    return six::zfloat(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
 }
 
 const input_amplitudes_t& ImageData::get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
@@ -265,7 +265,7 @@ const input_amplitudes_t& ImageData::get_RE32F_IM32F_values(const six::Amplitude
     return *pValues;
 }
 
-void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results,
+void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::span<six::zfloat> results,
     ptrdiff_t cutoff_) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
@@ -278,7 +278,7 @@ void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::spa
     from_AMP8I_PHS8I(values, inputs, results, cutoff_);
 }
 
-void ImageData::from_AMP8I_PHS8I(const input_amplitudes_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results,
+void ImageData::from_AMP8I_PHS8I(const input_amplitudes_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<six::zfloat> results,
     ptrdiff_t cutoff_)
 {
     const auto get_RE32F_IM32F_value_f = [&values](const six::sicd::AMP8I_PHS8I_t& v)
@@ -306,7 +306,7 @@ template<typename TConverter>
 static void to_AMP8I_PHS8I_(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
     const TConverter& tree, ptrdiff_t cutoff_)
 {
-    const auto nearest_neighbor_f = [&](const std::complex<float>& v)
+    const auto nearest_neighbor_f = [&](const six::zfloat& v)
     {
         return tree.nearest_neighbor(v);
     };

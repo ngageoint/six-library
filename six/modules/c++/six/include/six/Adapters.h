@@ -164,7 +164,7 @@ public:
 			  std::span<const uint16_t> buffer,
 			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t);
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
-			  std::span<const std::complex<float>> buffer,
+			  std::span<const six::zfloat> buffer,
 			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t cutoff);
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
 			  std::span<const std::complex<short>> buffer,

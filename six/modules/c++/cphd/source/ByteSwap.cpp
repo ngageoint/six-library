@@ -62,7 +62,7 @@ struct ByteSwapAndPromoteRunnable final : public sys::Runnable
                              size_t startRow,
                              size_t numRows,
                              size_t numCols,
-                             std::complex<float>* output) :
+                             cphd::zfloat* output) :
         mInput(calc_offset(input, startRow * numCols * sizeof(std::complex<InT>))),
         mDims(numRows, numCols),
         mOutput(output + startRow * numCols)
@@ -85,7 +85,7 @@ struct ByteSwapAndPromoteRunnable final : public sys::Runnable
                 byteSwap(input, real);
                 byteSwap(calc_offset(input, sizeof(InT)), imag);
 
-                mOutput[outIdx] = std::complex<float>(real, imag);
+                mOutput[outIdx] = cphd::zfloat(real, imag);
             }
         }
     }
@@ -93,7 +93,7 @@ struct ByteSwapAndPromoteRunnable final : public sys::Runnable
 private:
     const std::byte* const mInput;
     const types::RowCol<size_t> mDims;
-    std::complex<float>* const mOutput;
+    cphd::zfloat* const mOutput;
 };
 
 
@@ -105,7 +105,7 @@ struct ByteSwapAndScaleRunnable final : public sys::Runnable
                              size_t numRows,
                              size_t numCols,
                              const double* scaleFactors,
-                             std::complex<float>* output) :
+                             cphd::zfloat* output) :
         mInput(calc_offset(input, startRow * numCols * sizeof(std::complex<InT>))),
         mDims(numRows, numCols),
         mScaleFactors(scaleFactors + startRow),
@@ -133,7 +133,7 @@ struct ByteSwapAndScaleRunnable final : public sys::Runnable
                 byteSwap(input, real);
                 byteSwap(calc_offset(input, sizeof(InT)), imag);
 
-                mOutput[outIdx] = std::complex<float>(
+                mOutput[outIdx] = cphd::zfloat(
                         static_cast<float>(real * scaleFactor),
                         static_cast<float>(imag * scaleFactor));
             }
@@ -144,14 +144,14 @@ private:
     const std::byte* const mInput;
     const types::RowCol<size_t> mDims;
     const double* const mScaleFactors;
-    std::complex<float>* const mOutput;
+    cphd::zfloat* const mOutput;
 };
 
 template <typename InT>
 void byteSwapAndPromote(const void* input,
                       const types::RowCol<size_t>& dims,
                       size_t numThreads,
-                      std::complex<float>* output)
+                      cphd::zfloat* output)
 {
     if (numThreads <= 1)
     {
@@ -187,7 +187,7 @@ void byteSwapAndScale(const void* input,
                       const types::RowCol<size_t>& dims,
                       const double* scaleFactors,
                       size_t numThreads,
-                      std::complex<float>* output)
+                      cphd::zfloat* output)
 {
     if (numThreads <= 1)
     {
@@ -232,7 +232,7 @@ void byteSwapAndPromote(const void* input,
                       size_t elementSize,
                       const types::RowCol<size_t>& dims,
                       size_t numThreads,
-                      std::complex<float>* output)
+                      cphd::zfloat* output)
 {
     switch (elementSize)
     {
@@ -256,7 +256,7 @@ void byteSwapAndScale(const void* input,
                       const types::RowCol<size_t>& dims,
                       const double* scaleFactors,
                       size_t numThreads,
-                      std::complex<float>* output)
+                      cphd::zfloat* output)
 {
     switch (elementSize)
     {

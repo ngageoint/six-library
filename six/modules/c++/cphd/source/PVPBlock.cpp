@@ -285,14 +285,14 @@ void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::
         }
         else if (it->second.getFormat() == "CF8")
         {
-            std::complex<float> val;
+            cphd::zfloat val;
             ::setData(input + it->second.getByteOffset(), val);
             addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);
         }
         else if (it->second.getFormat() == "CF16")
         {
-            std::complex<double> val;
+            cphd::zdouble val;
             ::setData(input + it->second.getByteOffset(), val);
             addedPVP[it->first] = six::Parameter();
             addedPVP.find(it->first)->second.setValue(val);

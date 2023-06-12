@@ -101,7 +101,7 @@ struct CPHDWriter final
      *  \func addImage
      *  \brief Pushes a new image to the file for writing. This only works with
      *         valid CPHDWriter data types:
-     *              std::complex<float>
+     *              cphd::zfloat
      *              std::complex<int16_t>
      *              std::complex<int8_t>
      *
@@ -147,7 +147,7 @@ struct CPHDWriter final
      *         method. If you do not need to write the data in chunks,
      *         you may instead use addImage and write. This only works with
      *         valid CPHDWriter data types:
-     *              std::complex<float>
+     *              cphd::zfloat
      *              std::complex<int16_t>
      *              std::complex<int8_t>
      *

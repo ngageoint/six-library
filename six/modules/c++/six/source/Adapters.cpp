@@ -174,7 +174,7 @@ inline void validate_bandSize(std::span<T> buffer, const NITFSegmentInfo& info, 
     if (buffer.size() * sizeof(buffer[0]) != size_in_bytes)
     {
         // This is not always correct: the sizes are computed using the values in NITFSegmentInfo/Data
-        // but we may be working with other data.  This is the case when we have std::complex<float>
+        // but we may be working with other data.  This is the case when we have six::zfloat
         // data that will be converted to AMP8I_PHS8I when written to disk.
         //throw std::invalid_argument("buffer.size()!");    }
     }
@@ -197,7 +197,7 @@ struct NewMemoryWriteHandler::Impl final
     // This needs to persist beyhond the constructor
     std::vector<std::pair<uint8_t, uint8_t>> ampi8i_phs8i;
 
-    void convertPixels(NewMemoryWriteHandler& instance, const NITFSegmentInfo& info, std::span<const std::complex<float>> buffer, const Data& data,
+    void convertPixels(NewMemoryWriteHandler& instance, const NITFSegmentInfo& info, std::span<const six::zfloat> buffer, const Data& data,
         ptrdiff_t cutoff = -1)
     {
         ampi8i_phs8i.resize(buffer.size());
@@ -254,19 +254,19 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
 
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
-        // Assume that buffer is really std::complex<float>.  If it is something else
+        // Assume that buffer is really six::zfloat.  If it is something else
         // (e.g., std::pair<uint8_t, uint8_t> -- already converted) a different
         // overload should be used.  Since we've lost the actual buffer type,
         // there not much else to do except hope for the best.
         const void* pBuffer_ = buffer.data();
-        const auto pBuffer = static_cast<const std::complex<float>*>(pBuffer_);
-        const std::span<const std::complex<float>> buffer_(pBuffer, buffer.size() / sizeof(std::complex<float>));
+        const auto pBuffer = static_cast<const six::zfloat*>(pBuffer_);
+        const std::span<const six::zfloat> buffer_(pBuffer, buffer.size() / sizeof(six::zfloat));
         m_pImpl->convertPixels(*this, info, buffer_, data, cutoff);
     }
 }
 
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    std::span<const std::complex<float>> buffer, size_t firstRow, const Data& data, bool doByteSwap,
+    std::span<const six::zfloat> buffer, size_t firstRow, const Data& data, bool doByteSwap,
     ptrdiff_t cutoff)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
@@ -288,7 +288,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     std::span<const std::pair<uint8_t, uint8_t>> buffer, size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
-    // This is for the uncommon case where the data is already in this format; normally, it is std::complex<float>.
+    // This is for the uncommon case where the data is already in this format; normally, it is six::zfloat.
     if (data.getPixelType() != six::PixelType::AMP8I_PHS8I)
     {
         throw std::invalid_argument("pixelType is wrong.");

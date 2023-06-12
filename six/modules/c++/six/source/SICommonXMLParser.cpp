@@ -423,7 +423,7 @@ XMLElem SICommonXMLParser::createPoly2D(const std::string& name,
 
 
 XMLElem SICommonXMLParser::createComplex(const std::string& name,
-        std::complex<double> c, XMLElem parent) const
+        six::zdouble c, XMLElem parent) const
 {
     XMLElem e = newElement(name, getDefaultURI(), parent);
     createDouble("Real", getSICommonURI(), c.real(), e);

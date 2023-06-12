@@ -177,7 +177,7 @@ public:
         void* buffer_ = buffer;
         mBuffer = static_cast<UByte*>(buffer_);
     }
-    void setComplexBuffer(std::complex<float>* buffer) noexcept
+    void setComplexBuffer(six::zfloat* buffer) noexcept
     {
         assert(buffer != nullptr);
         void* buffer_ = buffer;
@@ -195,11 +195,11 @@ public:
         setBuffer(retval.get());
         return retval;
     }
-    std::unique_ptr<std::complex<float>[]> setComplexBuffer(size_t size)
+    std::unique_ptr<six::zfloat[]> setComplexBuffer(size_t size)
     {
         assert(getBuffer() == nullptr);
 
-        auto retval = std::make_unique<std::complex<float>[]>(size);
+        auto retval = std::make_unique<six::zfloat[]>(size);
         setComplexBuffer(retval.get());
         return retval;
     }

@@ -114,7 +114,7 @@ struct CPHDWriter final
      *
      *  This only works with valid CPHDWriter data types:
      *      std:: ubyte*  (for compressed data)
-     *      std::complex<float>
+     *      cphd::zfloat
      *      std::complex<int16_t>
      *      std::complex<int8_t>
      *
@@ -207,7 +207,7 @@ struct CPHDWriter final
      *  using this method. This only works with
      *  valid CPHDWriter data types:
      *      std:: ubyte*  (for compressed data)
-     *      std::complex<float>
+     *      cphd::zfloat
      *      std::complex<int16_t>
      *      std::complex<int8_t>
      *

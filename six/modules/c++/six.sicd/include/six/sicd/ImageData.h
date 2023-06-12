@@ -39,14 +39,14 @@ namespace six
 {
 namespace sicd
 {
-using cx_float = std::complex<float>;
+using cx_float = six::zfloat;
 struct AMP8I_PHS8I_t final // std::pair<T, U> isn't trivial_copyable()
 {
     uint8_t first; // amplitude
     uint8_t second; // phase
 };
 //! Fixed size 256 element array of complex values.
-using input_values_t = std::array<std::complex<float>, UINT8_MAX + 1>;
+using input_values_t = std::array<six::zfloat, UINT8_MAX + 1>;
 //! Fixed size 256 x 256 matrix of complex values.
 using input_amplitudes_t = std::array<input_values_t, UINT8_MAX + 1>;
 

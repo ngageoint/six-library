@@ -91,8 +91,8 @@ int main(int argc, char** argv)
                     dims.area());
                 break;
             case cphd::SampleType::RE32F_IM32F:
-                writer.writeCPHDData<std::complex<float> >(
-                    reinterpret_cast<const std::complex<float>* >(data.get()),
+                writer.writeCPHDData<cphd::zfloat >(
+                    reinterpret_cast<const cphd::zfloat* >(data.get()),
                     dims.area());
                 break;
             }

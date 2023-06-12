@@ -123,7 +123,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
         case cphd::SignalArrayFormat::CF8:
             writer.write(
                     pvpBlock,
-                    reinterpret_cast<const std::complex<float>* >(data.get()),
+                    reinterpret_cast<const cphd::zfloat* >(data.get()),
                     readPtr.get());
             break;
         }

@@ -299,7 +299,7 @@ public:
     }
 
     // Be explicit about the types of images that can be saved; templates are provided below.
-    void save_image(std::span<const std::complex<float>>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
+    void save_image(std::span<const six::zfloat>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
     void save_image(std::span<const std::complex<short>>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
     void save_image(std::span<const std::pair<uint8_t, uint8_t>>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
     void save_image(std::span<const uint8_t>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
@@ -560,7 +560,7 @@ private:
 };
 
 // Help out the compiler with overloads, and keep the class smaller.
-extern void save(NITFWriteControl&, const std::complex<float>*, const std::string&, const std::vector<std::string>&);
+extern void save(NITFWriteControl&, const six::zfloat*, const std::string&, const std::vector<std::string>&);
 
 template<typename T>
 inline void save(NITFWriteControl& writeControl, 

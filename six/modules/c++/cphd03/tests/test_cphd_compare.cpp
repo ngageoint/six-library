@@ -112,7 +112,7 @@ bool compareWideband(cphd03::CPHDReader& reader1,
                 }
                 break;
             case cphd::SampleType::RE32F_IM32F:
-                if (!compareCPHDData<std::complex<float> >(
+                if (!compareCPHDData<cphd::zfloat >(
                         cphd03Data1.get(),
                         cphd03Data2.get(),
                         dims1.area(),

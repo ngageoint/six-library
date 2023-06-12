@@ -102,8 +102,8 @@ void CPHDWriter::addImage<std::complex<int16_t> >(
     const sys::ubyte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<float> >(
-    const std::complex<float>* image,
+void CPHDWriter::addImage<cphd::zfloat >(
+    const cphd::zfloat* image,
     const types::RowCol<size_t>& dims,
     const sys::ubyte* vbmData);
 
@@ -120,8 +120,8 @@ void CPHDWriter::addImage<std::complex<int16_t> >(
         const std::byte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<float> >(
-        const std::complex<float>* image,
+void CPHDWriter::addImage<cphd::zfloat >(
+        const cphd::zfloat* image,
         const types::RowCol<size_t>& dims,
         const std::byte* vbmData);
 
@@ -229,8 +229,8 @@ void CPHDWriter::writeCPHDData<std::complex<int16_t> >(
         size_t numElements);
 
 template
-void CPHDWriter::writeCPHDData<std::complex<float> >(
-        const std::complex<float>* data,
+void CPHDWriter::writeCPHDData<cphd::zfloat >(
+        const cphd::zfloat* data,
         size_t numElements);
 
 void CPHDWriter::write(const std::string& classification,
