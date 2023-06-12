@@ -44,7 +44,7 @@
 #include <six/sicd/SICDByteProvider.h>
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>
-#include <six/sicd/ComplexToAMP8IPHS8I.h>
+#include <six/AmplitudeTable.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/NITFReadComplexXMLControl.h>
 #include <six/sicd/Utilities.h>
@@ -56,7 +56,7 @@
 #pragma warning(disable: 4459) //  declaration of '...' hides global declaration
 #endif
 
-using AMP8I_PHS8I_t = six::sicd::AMP8I_PHS8I_t;
+using AMP8I_PHS8I_t = six::AMP8I_PHS8I_t;
 
 static std::shared_ptr<six::Container> getContainer(six::sicd::NITFReadComplexXMLControl& reader)
 {

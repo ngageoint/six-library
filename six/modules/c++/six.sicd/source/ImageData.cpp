@@ -32,9 +32,9 @@
 #include <gsl/gsl.h>
 #include <mt/Algorithm.h>
 
+#include "six/AmplitudeTable.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Utilities.h"
-#include "six/sicd/ComplexToAMP8IPHS8I.h"
 
  // There was in coda-oss, but I removed it.
  //
@@ -242,7 +242,7 @@ void ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs, std::span<std::
 
 void ImageData::toComplex(const six::Amp8iPhs8iLookup_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results)
 {
-    const auto get_RE32F_IM32F_value_f = [&values](const six::sicd::AMP8I_PHS8I_t& v)
+    const auto get_RE32F_IM32F_value_f = [&values](const six::AMP8I_PHS8I_t& v)
     {
         return values[v.amplitude][v.phase];
     };

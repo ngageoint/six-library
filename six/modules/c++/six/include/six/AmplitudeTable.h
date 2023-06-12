@@ -162,6 +162,60 @@ using phase_values_t = std::array<std::complex<float>, UINT8_MAX + 1>;
 //! Fixed size 256 x 256 matrix of complex values.
 using Amp8iPhs8iLookup_t = std::array<phase_values_t, UINT8_MAX + 1>;
 
+// More descriptive than std::pair<uint8_t, uint8_t>
+struct AMP8I_PHS8I_t final
+{
+    uint8_t amplitude;
+    uint8_t phase;
+};
+
+struct AmplitudeTable; // forward
+namespace sicd
+{
+namespace details
+{
+/*!
+ * \brief A utility that's used to convert complex values into 8-bit amplitude and phase values.
+ * 
+ * *** Implemetned in SIX.SICD ***
+ */
+class ComplexToAMP8IPHS8I final
+{
+    /*!
+     * Create a lookup structure that converts from complex to amplitude and phase.
+     * @param pAmplitudeTable optional amplitude table.
+     */
+    explicit ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable = nullptr);
+
+public:
+    static const ComplexToAMP8IPHS8I& make(const six::AmplitudeTable* pAmplitudeTable, std::unique_ptr<ComplexToAMP8IPHS8I>&);
+
+    ~ComplexToAMP8IPHS8I() = default;
+    ComplexToAMP8IPHS8I(const ComplexToAMP8IPHS8I&) = delete;
+    ComplexToAMP8IPHS8I& operator=(const ComplexToAMP8IPHS8I&) = delete;
+    ComplexToAMP8IPHS8I(ComplexToAMP8IPHS8I&&) = delete;
+    ComplexToAMP8IPHS8I& operator=(ComplexToAMP8IPHS8I&&) = delete;
+
+    /*!
+     * Get the nearest amplitude and phase value given a complex value
+     * @param v complex value to query with
+     * @return nearest amplitude and phase value
+     */
+    AMP8I_PHS8I_t nearest_neighbor(const std::complex<float>& v) const;
+
+private:
+    //! The sorted set of possible magnitudes order from small to large.
+    std::vector<long double> uncached_magnitudes; // Order is important! This must be ...
+    const std::vector<long double>& magnitudes; // ... before this.
+
+    //! The difference in phase angle between two UINT phase values.
+    long double phase_delta;
+    //! Unit vector rays that represent each direction that phase can point.
+    std::array<std::complex<long double>, UINT8_MAX + 1> phase_directions;
+};
+}
+}
+
 struct AmplitudeTable final : public LUT
 {
     //!  Constructor.  Creates a 256-entry table

@@ -204,8 +204,8 @@ class SICD_readerAndConverter final
 
         // There's type mangling going on here.
         // We're taking std::vector<uint8_t> and saying it's packed with std::pair<uint8_t, uint8_t>.
-        static_assert(sizeof(uint8_t) * 2 == sizeof(six::sicd::AMP8I_PHS8I_t), "expected packed layout in pair");
-        auto packed = reinterpret_cast<const six::sicd::AMP8I_PHS8I_t*>(tempVector.data());
+        static_assert(sizeof(uint8_t) * 2 == sizeof(six::AMP8I_PHS8I_t), "expected packed layout in pair");
+        auto packed = reinterpret_cast<const six::AMP8I_PHS8I_t*>(tempVector.data());
 
         // Reuse image data's conversion to complex.
         size_t count = (elementsPerRow * rowsToRead) / 2;

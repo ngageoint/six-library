@@ -40,11 +40,6 @@ namespace six
 namespace sicd
 {
 using cx_float = std::complex<float>;
-struct AMP8I_PHS8I_t final
-{
-    uint8_t amplitude;
-    uint8_t phase;
-};
 
 class GeoData;
 /*!

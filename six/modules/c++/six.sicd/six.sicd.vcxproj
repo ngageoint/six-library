@@ -107,7 +107,6 @@
     <ClInclude Include="include\six\sicd\ComplexClassification.h" />
     <ClInclude Include="include\six\sicd\ComplexData.h" />
     <ClInclude Include="include\six\sicd\ComplexDataBuilder.h" />
-    <ClInclude Include="include\six\sicd\ComplexToAMP8IPHS8I.h" />
     <ClInclude Include="include\six\sicd\ComplexXMLControl.h" />
     <ClInclude Include="include\six\sicd\ComplexXMLParser.h" />
     <ClInclude Include="include\six\sicd\ComplexXMLParser040.h" />

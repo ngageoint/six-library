@@ -19,7 +19,7 @@
 * see <http://www.gnu.org/licenses/>.
 *
 */
-#include "six/sicd/ComplexToAMP8IPHS8I.h"
+#include "six/AmplitudeTable.h"
 
 #include <math.h>
 
@@ -154,9 +154,9 @@ static uint8_t nearest(const TIter& begin, const TIter& end, long double value)
     return gsl::narrow<uint8_t>(distance);
 }
 
-six::sicd::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const std::complex<float> &v) const
+six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const std::complex<float> &v) const
 {
-    six::sicd::AMP8I_PHS8I_t retval;
+    six::AMP8I_PHS8I_t retval;
 
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
