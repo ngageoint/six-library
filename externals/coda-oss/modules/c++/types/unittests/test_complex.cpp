@@ -22,7 +22,7 @@
 
 #include "TestCase.h"
 
-#include <types/complex_short.h>
+#include <types/complex.h>
 
 TEST_CASE(TestCxShort_abs)
 {
@@ -37,9 +37,13 @@ TEST_CASE(TestCxShort_abs)
     CODA_OSS_disable_warning_pop
     const auto expected = abs(cx_short);
 
-    const types::complex_short types_cx_short(real, imag);
+    const types::complex<short> types_cx_short(real, imag);
     const auto actual = abs(types_cx_short);
     TEST_ASSERT_EQ(actual, expected);
+
+    // These INTENTIONALLY don't compile
+    //const types::complex<float> types_cx_float;
+    //const types::complex<unsigned int> types_cx_uint;
 }
 
 TEST_MAIN(

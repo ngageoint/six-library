@@ -53,7 +53,7 @@
 #include <types/PageRowCol.h>
 #include <types/RangeList.h>
 #include <types/Range.h>
-#include <types/complex_short.h>
+#include <types/complex.h>
 #include <sys/Conf.h>
 #include <sys/Path.h>
 #include <except/Exception.h>
