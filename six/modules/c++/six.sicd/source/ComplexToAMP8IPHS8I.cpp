@@ -22,6 +22,7 @@
 #include "six/AmplitudeTable.h"
 
 #include <math.h>
+#include <assert.h>
 
 #include <cassert>
 #include <std/memory>
@@ -139,21 +140,21 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
 
 /*!
  * Find the nearest element given an iterator range.
- * @tparam TIter type of iterator
- * @param begin beginning of search range
- * @param end end of search range
  * @param value query value
  * @return index of nearest value within the iterator range.
  */
-template<typename TIter>
-static uint8_t nearest(const TIter& begin, const TIter& end, long double value)
+static inline uint8_t nearest(const std::vector<long double>& magnitudes, long double value)
 {
+    const auto begin = magnitudes.begin();
+    const auto end = magnitudes.end();
+
     const auto it = std::lower_bound(begin, end, value);
-    if(it == begin) return 0;
+    if (it == begin) return 0;
 
     const auto prev_it = std::prev(it);
-    const auto nearest = (it == end || value - *prev_it <= *it - value) ? prev_it : it;
-    const auto distance = std::distance(begin, nearest);
+    const auto nearest_it = it == end ? prev_it  :
+        (value - *prev_it <= *it - value ? prev_it : it);
+    const auto distance = std::distance(begin, nearest_it);
     assert(distance <= std::numeric_limits<uint8_t>::max());
     return gsl::narrow<uint8_t>(distance);
 }
@@ -174,7 +175,7 @@ six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(con
     auto&& phase_direction = phase_directions[retval.phase];
     const auto projection = phase_direction.real() * v.real() + phase_direction.imag() * v.imag();
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
-    retval.amplitude = nearest(magnitudes.begin(), magnitudes.end(), projection);
+    retval.amplitude = nearest(magnitudes, projection);
     return retval;
 }
 

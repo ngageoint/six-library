@@ -564,7 +564,7 @@ static void test_adjusted_values(const std::string& testName, const std::vector<
     std::vector<AMP8I_PHS8I_t> actual(expected.size());
     std::span<AMP8I_PHS8I_t> actual_(actual.data(), actual.size());
     std::span<const std::complex<float>> values_(adjusted_values.data(), adjusted_values.size());
-    six::sicd::ImageData::fromComplex(nullptr /*pAmplitudeTable*/, values_, actual_);
+    six::sicd::ImageData::testing_fromComplex_(values_, actual_);
     for (size_t i = 0; i < expected.size(); i++)
     {
         TEST_ASSERT_EQ(expected[i].amplitude, actual[i].amplitude);
@@ -587,7 +587,7 @@ TEST_CASE(test_nearest_neighbor)
     std::vector<AMP8I_PHS8I_t> actual(expected.size());
     std::span<AMP8I_PHS8I_t> actual_(actual.data(), actual.size());
     std::span<const std::complex<float>> values_(values.data(), values.size());
-    six::sicd::ImageData::fromComplex(nullptr /*pAmplitudeTable*/, values_, actual_);
+    six::sicd::ImageData::testing_fromComplex_(values_, actual_);
 
     for (size_t i = 0; i < expected.size(); i++)
     {

@@ -36,45 +36,52 @@
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Utilities.h"
 
+using namespace six;
+using namespace six::sicd;
+
  // There was in coda-oss, but I removed it.
  //
  // First of all, C++11's std::async() is now (in 2023) thought of as maybe a
  // bit "half baked," and perhaps shouldn't be emulated.  Then, C++17 added
  // parallel algorithms which might be a better way of satisfying our immediate
  // needs (below) ... although we're still at C++14.
-namespace
+template <typename InputIt, typename OutputIt, typename TFunc>
+static inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
+    typename std::iterator_traits<InputIt>::difference_type cutoff)
 {
-    namespace details
+    // https://en.cppreference.com/w/cpp/thread/async
+    const auto len = std::distance(first1, last1);
+    if (len < cutoff)
     {
-        template <typename InputIt, typename OutputIt, typename TFunc>
-        inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-            typename std::iterator_traits<InputIt>::difference_type cutoff, std::launch policy)
-        {
-            // https://en.cppreference.com/w/cpp/thread/async
-            const auto len = std::distance(first1, last1);
-            if (len < cutoff)
-            {
-                return std::transform(first1, last1, d_first, f);
-            }
-
-            const auto mid1 = first1 + len / 2;
-            const auto d_mid = d_first + len / 2;
-            auto handle = std::async(policy, transform_async<InputIt, OutputIt, TFunc>, mid1, last1, d_mid, f, cutoff, policy);
-            details::transform_async(first1, mid1, d_first, f, cutoff, policy);
-            return handle.get();
-        }
+        return std::transform(first1, last1, d_first, f);
     }
-    template <typename InputIt, typename OutputIt, typename TFunc>
-    inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-        typename std::iterator_traits<InputIt>::difference_type cutoff, std::launch policy)
+
+    constexpr auto policy = std::launch::async;
+
+    const auto mid1 = first1 + len / 2;
+    const auto d_mid = d_first + len / 2;
+    auto handle = std::async(policy, transform_async<InputIt, OutputIt, TFunc>, mid1, last1, d_mid, f, cutoff);
+    transform_async(first1, mid1, d_first, f, cutoff);
+    return handle.get();
+}
+template <typename TInputs, typename TResults, typename TFunc>
+static inline void transform(std::span<const TInputs> inputs, std::span<TResults> results, TFunc f)
+{
+    constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
+    if (cutoff_ < 0)
     {
-        // details::... eliminates the overload
-        return details::transform_async(first1, last1, d_first, f, cutoff, policy);
+        std::ignore = std::transform(inputs.begin(), inputs.end(), results.begin(), f);
+    }
+    else
+    {
+        // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
+        constexpr auto dimension = 128 * 8;
+        constexpr auto default_cutoff = dimension * dimension;
+        const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
+        
+        std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(), f, cutoff);
     }
 }
-
-using namespace six;
-using namespace six::sicd;
 
 bool ImageData::operator==(const ImageData& rhs) const
 {
@@ -247,21 +254,7 @@ void ImageData::toComplex(const six::Amp8iPhs8iLookup_t& values, std::span<const
         return values[v.amplitude][v.phase];
     };
 
-    constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
-    if (cutoff_ < 0)
-    {
-        std::ignore = std::transform(inputs.begin(), inputs.end(), results.begin(),
-            get_RE32F_IM32F_value_f);
-    }
-    else
-    {
-        // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
-        constexpr auto dimension = 128 * 8;
-        constexpr auto default_cutoff = dimension * dimension;
-        const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-        std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(),
-            get_RE32F_IM32F_value_f, cutoff, std::launch::async);
-    }
+    transform(inputs, results, get_RE32F_IM32F_value_f);
 }
 
 static void fromComplex_(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
@@ -271,31 +264,16 @@ static void fromComplex_(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I
     {
         return tree.nearest_neighbor(v);
     };
-
-    constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
-    if (cutoff_ < 0)
-    {
-        std::ignore = std::transform(inputs.begin(), inputs.end(), results.begin(),
-            nearest_neighbor_f);
-    }
-    else
-    {
-        // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
-        constexpr auto dimension = 128 * 8;
-        constexpr auto default_cutoff = dimension * dimension;
-        const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-        std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(),
-            nearest_neighbor_f, cutoff, std::launch::async);
-    }
+    transform(inputs, results, nearest_neighbor_f);
 }
 void ImageData::fromComplex(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
-    fromComplex(amplitudeTable.get(), inputs, results);
-}
-void  ImageData::fromComplex(const AmplitudeTable* pAmplitudeTable,
-    std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results)
-{
     // make a structure to quickly find the nearest neighbor
-    auto& converter = six::sicd::details::ComplexToAMP8IPHS8I::make(pAmplitudeTable);
+    auto& converter = six::sicd::details::ComplexToAMP8IPHS8I::make(amplitudeTable.get());
     fromComplex_(inputs, results, converter);
+}
+void ImageData::testing_fromComplex_(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results)
+{
+    static const ImageData imageData; // amplitudeTable.get() == NULL
+    imageData.fromComplex(inputs, results);
 }

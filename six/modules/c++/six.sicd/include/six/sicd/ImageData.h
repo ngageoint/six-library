@@ -97,7 +97,7 @@ struct ImageData
 
     bool validate(const GeoData& geoData, logging::Logger& log) const;
 
-    static void fromComplex(const AmplitudeTable*, std::span<const cx_float>, std::span<AMP8I_PHS8I_t>); // for unit-tests
+    static void testing_fromComplex_(std::span<const cx_float>, std::span<AMP8I_PHS8I_t>); // for unit-tests
 
     static void toComplex(const six::Amp8iPhs8iLookup_t& lookup, std::span<const AMP8I_PHS8I_t>, std::span<cx_float>);
     void toComplex(std::span<const AMP8I_PHS8I_t>, std::span<cx_float>) const;
