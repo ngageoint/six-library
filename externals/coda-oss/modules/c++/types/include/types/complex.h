@@ -22,10 +22,11 @@
  */
 
 #pragma once
-#ifndef CODA_OSS_types_complex_short_h_INCLUDED_
-#define CODA_OSS_types_complex_short_h_INCLUDED_
+#ifndef CODA_OSS_types_complex_h_INCLUDED_
+#define CODA_OSS_types_complex_h_INCLUDED_
 
 #include <complex>
+#include <type_traits>
 
 #include "config/disable_compiler_warnings.h"
 #include "coda_oss/CPlusPlus.h"
@@ -35,22 +36,29 @@ namespace types
 namespace details
 {
 /*!
- *  \class complex_short
- *  \brief std::complex<short>
+ *  \class complex
+ *  \brief Our own implementation of std::complex<T> for SIX and friends.
  *
- * `std::complex<short>` is no longer valid C++; provide a (partial) work-around.
+ * `std::complex<TInt>` is no longer valid C++; provide a (partial) work-around.
  * See https://en.cppreference.com/w/cpp/numeric/complex for detals.
+ * 
+ * SIX (and others) mostly use `std::complex<short>` as a 
+ * convenient package for two values; very little "complex math" is done
+ * using integers.
  */
-struct complex_short final
+template<typename T>
+struct complex final
 {
-    using value_type = short;
+    using value_type = T;
+    static_assert(std::is_integral<T>::value, "Use std::complex<T> for floating-point.");
+    static_assert(std::is_signed<T>::value, "T should be a signed integer.");
 
-    complex_short(value_type re = 0, value_type im = 0) : z{re, im} {}
-    complex_short(const complex_short&) = default;
-    complex_short& operator=(const complex_short&) = default;
-    complex_short(complex_short&&) = default;
-    complex_short& operator=(complex_short&&) = default;
-    ~complex_short() = default;
+    complex(value_type re = 0, value_type im = 0) : z{re, im} {}
+    complex(const complex&) = default;
+    complex& operator=(const complex&) = default;
+    complex(complex&&) = default;
+    complex& operator=(complex&&) = default;
+    ~complex() = default;
 
     value_type real() const
     {
@@ -73,26 +81,27 @@ struct complex_short final
 private:
     value_type z[2]{0, 0};
 };
-static_assert(sizeof(complex_short) == sizeof(float), "sizeof(complex_short) != sizeof(float)");
 
 CODA_OSS_disable_warning_push
 #ifdef _MSC_VER
 #pragma warning(disable: 4996) // '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning.
 #endif
 
-inline const std::complex<short>& cast(const complex_short& z)
+template<typename T>
+inline const std::complex<T>& cast(const complex<T>& z)
 {
     // Getting different results with GCC vs MSVC :-(  So just use
     // std::complex<short> Assume by the time we're actually using C++23 with a
     // compiler that enforces this restriction, "something" will be different.
     const void* const pZ_ = &z;
-    return *static_cast<const std::complex<short>*>(pZ_);
+    return *static_cast<const std::complex<T>*>(pZ_);
 }
 
 CODA_OSS_disable_warning_pop
 
 // https://en.cppreference.com/w/cpp/numeric/complex/abs
-inline auto abs(const complex_short& z)
+template<typename T>
+inline auto abs(const complex<T>& z)
 {
     return abs(cast(z));
 }
@@ -100,15 +109,15 @@ inline auto abs(const complex_short& z)
 }
 
 #if CODA_OSS_cpp23
-    using details::complex_short;
+    using details::complex;
 #else
-    // No macro to turn this on/off, want to implement what we need in details::complex_short.
+    // No macro to turn this on/off, want to implement what we need in details::complex.
     // But keep in `details` in case somebody wants to uncomment.
     //using complex_short = std::complex<short>; // not valid in C++23
-    using details::complex_short;
+    using details::complex;
 
-    static_assert(sizeof(std::complex<short>) == sizeof(complex_short), "sizeof(sizeof(std::complex<short>) != sizeof(complex_short)");
+    static_assert(sizeof(std::complex<short>) == sizeof(complex<short>), "sizeof(sizeof(std::complex<short>) != sizeof(complex<short>)");
 #endif
 }
 
-#endif  // CODA_OSS_types_complex_short_h_INCLUDED_
+#endif  // CODA_OSS_types_complex_h_INCLUDED_
