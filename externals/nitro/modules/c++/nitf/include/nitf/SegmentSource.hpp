@@ -74,9 +74,9 @@ struct NITRO_NITFCPP_API SegmentMemorySource : public SegmentSource
     SegmentMemorySource(const sys::byte* data, nitf::Off size, nitf::Off start,
         int byteSkip, bool copyData);
 
-    SegmentMemorySource(const std::span<const std::byte>& data, nitf::Off start,
+    SegmentMemorySource(std::span<const std::byte> data, nitf::Off start,
                         int byteSkip, bool copyData);
-    SegmentMemorySource(const std::span<const sys::byte>& data, nitf::Off start,
+    SegmentMemorySource(std::span<const sys::byte> data, nitf::Off start,
                         int byteSkip, bool copyData);
     SegmentMemorySource(const std::vector<std::byte>& data, nitf::Off start,
                         int byteSkip, bool copyData);
