@@ -27,6 +27,12 @@
 
 #include <stdint.h>
 
+// TODO: remove this once TIntergers are switched to types::details::complex<TInteger>
+// '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning.
+#ifndef _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
+#define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
+#endif
+
 #include <complex>
 #include <type_traits>
 
@@ -44,7 +50,7 @@ namespace details
  * `std::complex<TInt>` is no longer valid C++; provide a (partial) work-around.
  * See https://en.cppreference.com/w/cpp/numeric/complex for detals.
  * 
- * SIX (and others) mostly use `std::complex<short>` as a 
+ * SIX (and others) mostly use `std::complex<TInt>` as a 
  * convenient package for two values; very little "complex math" is done
  * using integers.
  */
@@ -61,6 +67,9 @@ struct complex final
     complex(complex&&) = default;
     complex& operator=(complex&&) = default;
     ~complex() = default;
+
+    // If someone already has a std::complex<TInt>, is there any harm in creating ours?
+    complex(const std::complex<value_type>& z_) : complex(z_.real(), z_.imag()) {}
 
     value_type real() const
     {
@@ -114,6 +123,8 @@ inline auto abs(const complex<T>& z)
 template<typename T>
 using complex = std::conditional_t<std::is_floating_point<T>::value, std::complex<T>, details::complex<T>>;
 
+static_assert(std::is_same<std::complex<float>, complex<float>>::value, "should be std::complex<float>");
+static_assert(std::is_same<details::complex<int>, complex<int>>::value, "should be details::complex<int>");
 static_assert(sizeof(std::complex<short>) == sizeof(complex<short>), "sizeof(sizeof(std::complex<short>) != sizeof(complex<short>)");
 
 // Convenient aliases
@@ -122,11 +133,11 @@ using zdouble = complex<double>; // std::complex<double>
 //using zlong_double = complex<long double>; // std::complex<long double>
 
 // Intentionally using somewhat cumbersome names
-using zint8_t = complex<int8_t>;  // details:complex<int8_t>
-using zint16_t = complex<int16_t>;  // details:complex<int16_t>
-using zint32_t = complex<int32_t>;  // details::complex<int32_t>
-using zint64_t = complex<int64_t>;  // details::complex<int64_t>
-
+// TODO: switch TIntergers to types::details::complex<TInteger>
+using zint8_t = complex<int8_t>; // TODO: complex<int8_t>;  // details:complex<int8_t>
+using zint16_t = complex<int16_t>; // TODO: complex<int16_t>;  // details:complex<int16_t>
+using zint32_t = complex<int32_t>; // TODO: complex<int32_t>;  // details::complex<int32_t>
+using zint64_t = complex<int64_t>; // TODO: complex<int64_t>;  // details::complex<int64_t>
 }
 
 #endif  // CODA_OSS_types_complex_h_INCLUDED_

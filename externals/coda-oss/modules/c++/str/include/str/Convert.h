@@ -194,25 +194,10 @@ inline std::string toString(const coda_oss::optional<T>& value)
     return details::default_toString(value.value());
 }
 
-namespace details
-{
 template <typename T>
-inline std::string toString_(const T& real, const T& imag)
+inline std::string toString(const T& real, const T& imag)
 {
     return details::default_toString(std::complex<T>(real, imag));
-}
-}
-inline std::string toString(float real, float imag)
-{
-    return details::toString_(real, imag);
-}
-inline std::string toString(double real, double imag)
-{
-    return details::toString_(real, imag);
-}
-inline std::string toString(long double real, long double imag)
-{
-    return details::toString_(real, imag);
 }
 
 template <typename T>
@@ -343,15 +328,21 @@ int getPrecision(const T&)
 {
     return 0;
 }
-template <> int getPrecision(const float& type);
-template <> int getPrecision(const double& type);
-template <> int getPrecision(const long double& type);
 
 template <typename T>
-inline int getPrecision(const std::complex<T>& type)
+int getPrecision(const std::complex<T>& type)
 {
     return getPrecision(type.real());
 }
+
+template <>
+int getPrecision(const float& type);
+
+template <>
+int getPrecision(const double& type);
+
+template <>
+int getPrecision(const long double& type);
 
 /** Generic casting routine; used by explicitly overloaded
  conversion operators.
