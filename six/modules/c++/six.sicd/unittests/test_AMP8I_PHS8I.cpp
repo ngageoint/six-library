@@ -134,22 +134,22 @@ static void test_assert_eq(const std::string& testName,
     {
         const auto& v = amp8i_phs8i[i];
         const auto S = six::sicd::Utilities::toComplex(v.amplitude, v.phase);
-        const std::complex<float> result(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
+        const six::zfloat result(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
         const auto& expected = actuals[i];
         TEST_ASSERT_EQ(expected, result);
     }
 }
 
 static void from_AMP8I_PHS8I(const six::sicd::ImageData& imageData,
-    const std::vector<AMP8I_PHS8I_t>& inputs_, std::vector<std::complex<float>>& results_)
+    const std::vector<AMP8I_PHS8I_t>& inputs_, std::vector<six::zfloat>& results_)
 {
     const std::span<const AMP8I_PHS8I_t> inputs(inputs_.data(), inputs_.size());
-    const std::span<std::complex<float>> results(results_.data(), results_.size());
+    const std::span<six::zfloat> results(results_.data(), results_.size());
     imageData.toComplex(inputs, results);
 }
 
 static void to_AMP8I_PHS8I(const six::sicd::ImageData& imageData,
-    const std::vector<std::complex<float>>& inputs_, std::vector<AMP8I_PHS8I_t>& results_)
+    const std::vector<six::zfloat>& inputs_, std::vector<AMP8I_PHS8I_t>& results_)
 {
     const std::span<const six::zfloat> inputs(inputs_.data(), inputs_.size());
     const std::span<AMP8I_PHS8I_t> results(results_.data(), results_.size());
@@ -162,7 +162,7 @@ TEST_CASE(test_8bit_ampphs)
     imageData.pixelType = six::PixelType::AMP8I_PHS8I;
 
     std::vector<AMP8I_PHS8I_t> inputs;
-    std::vector<std::complex<float>> expecteds;
+    std::vector<six::zfloat> expecteds;
     for (const auto amplitude : six::sicd::Utilities::iota_0_256())
     {
         for (const auto phase : six::sicd::Utilities::iota_0_256())
@@ -400,8 +400,8 @@ static std::vector<six::zfloat> adjust_image(const six::sicd::ComplexData& compl
     adjust_image(from_);
 
     std::span<const AMP8I_PHS8I_t> from(from_.data(), from_.size());
-    std::vector<std::complex<float>> retval(from.size());
-    complexData.imageData->toComplex(from, std::span<std::complex<float>>(retval.data(), retval.size()));
+    std::vector<six::zfloat> retval(from.size());
+    complexData.imageData->toComplex(from, std::span<six::zfloat>(retval.data(), retval.size()));
     return retval;
 }
 static std::vector<six::zfloat> make_complex_image(const six::sicd::ComplexData& complexData, const types::RowCol<size_t>& dims)
@@ -563,7 +563,7 @@ static void test_adjusted_values(const std::string& testName, const std::vector<
     }
     std::vector<AMP8I_PHS8I_t> actual(expected.size());
     std::span<AMP8I_PHS8I_t> actual_(actual.data(), actual.size());
-    std::span<const std::complex<float>> values_(adjusted_values.data(), adjusted_values.size());
+    std::span<const six::zfloat> values_(adjusted_values.data(), adjusted_values.size());
     six::sicd::ImageData::testing_fromComplex_(values_, actual_);
     for (size_t i = 0; i < expected.size(); i++)
     {
@@ -586,7 +586,7 @@ TEST_CASE(test_nearest_neighbor)
 
     std::vector<AMP8I_PHS8I_t> actual(expected.size());
     std::span<AMP8I_PHS8I_t> actual_(actual.data(), actual.size());
-    std::span<const std::complex<float>> values_(values.data(), values.size());
+    std::span<const six::zfloat> values_(values.data(), values.size());
     six::sicd::ImageData::testing_fromComplex_(values_, actual_);
 
     for (size_t i = 0; i < expected.size(); i++)
@@ -601,25 +601,25 @@ TEST_CASE(test_nearest_neighbor)
     test_adjusted_values(testName, values, other_expected,  six::zfloat(delta, 0.0f));
 
     other_expected[0].phase = 32;
-    test_adjusted_values(testName, values, other_expected, std::complex<float>(delta, delta));
+    test_adjusted_values(testName, values, other_expected, six::zfloat(delta, delta));
 
     other_expected[0].phase += 32;
-    test_adjusted_values(testName, values, other_expected, std::complex<float>(0.0f, delta));
+    test_adjusted_values(testName, values, other_expected, six::zfloat(0.0f, delta));
 
     other_expected[0].phase += 32;
-    test_adjusted_values(testName, values, other_expected, std::complex<float>(-delta, delta));
+    test_adjusted_values(testName, values, other_expected, six::zfloat(-delta, delta));
 
     other_expected[0].phase += 32;
-    test_adjusted_values(testName, values, other_expected, std::complex<float>(-delta, 0.0f));
+    test_adjusted_values(testName, values, other_expected, six::zfloat(-delta, 0.0f));
 
     other_expected[0].phase += 32;
-    test_adjusted_values(testName, values, other_expected, std::complex<float>(-delta, -delta));
+    test_adjusted_values(testName, values, other_expected, six::zfloat(-delta, -delta));
 
     other_expected[0].phase += 32;
-    test_adjusted_values(testName, values, other_expected, std::complex<float>(0.0f, -delta));
+    test_adjusted_values(testName, values, other_expected, six::zfloat(0.0f, -delta));
 
     other_expected[0].phase += 32;
-    test_adjusted_values(testName, values, other_expected, std::complex<float>(delta, -delta));
+    test_adjusted_values(testName, values, other_expected, six::zfloat(delta, -delta));
 
     other_expected[0].phase += 32;
     TEST_ASSERT_EQ(other_expected[0].phase, expected[0].phase);
@@ -730,7 +730,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     // These are simple cases that don't necessarily exercise the nearest neighbor property.
     for(auto& i : candidates) {
         auto truth = i.integral;
-        auto test = item.nearest_neighbor(std::complex<float>(i.floating.real(), i.floating.imag()));
+        auto test = item.nearest_neighbor(six::zfloat(i.floating.real(), i.floating.imag()));
         TEST_ASSERT_EQ(truth.amplitude, test.amplitude);
         TEST_ASSERT_EQ(truth.phase, test.phase);
     }

@@ -662,7 +662,7 @@ extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::fil
 
 namespace testing
 {
-    extern std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>&);
+    extern std::vector<six::zfloat> make_complex_image(const types::RowCol<size_t>&);
     extern std::vector<std::byte> toBytes(const ComplexImageResult&);
 }
 

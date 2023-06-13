@@ -47,13 +47,13 @@
 #include "scene/Types.h"
 #include "scene/FrameType.h"
 #include "six/Enums.h"
-#include "six/AmplitudeTable.h"
 
 namespace six
 {
     using zfloat = scene::zfloat;
     using zdouble = scene::zdouble;
 }
+#include "six/AmplitudeTable.h"
 
 namespace six
 {

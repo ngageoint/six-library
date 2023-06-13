@@ -197,7 +197,7 @@ struct NewMemoryWriteHandler::Impl final
     // This needs to persist beyhond the constructor
     std::vector<std::pair<uint8_t, uint8_t>> ampi8i_phs8i;
 
-    void convertPixels(NewMemoryWriteHandler& instance, const NITFSegmentInfo& info, std::span<const std::complex<float>> buffer, const Data& data)
+    void convertPixels(NewMemoryWriteHandler& instance, const NITFSegmentInfo& info, std::span<const six::zfloat> buffer, const Data& data)
     {
         ampi8i_phs8i.resize(buffer.size());
         const std::span<std::pair<uint8_t, uint8_t>> ampi8i_phs8i_(ampi8i_phs8i.data(), ampi8i_phs8i.size());
@@ -257,14 +257,14 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
         // overload should be used.  Since we've lost the actual buffer type,
         // there not much else to do except hope for the best.
         const void* pBuffer_ = buffer.data();
-        const auto pBuffer = static_cast<const std::complex<float>*>(pBuffer_);
-        const std::span<const std::complex<float>> buffer_(pBuffer, buffer.size() / sizeof(std::complex<float>));
+        const auto pBuffer = static_cast<const six::zfloat*>(pBuffer_);
+        const std::span<const six::zfloat> buffer_(pBuffer, buffer.size() / sizeof(six::zfloat));
         m_pImpl->convertPixels(*this, info, buffer_, data);
     }
 }
 
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    std::span<const std::complex<float>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    std::span<const six::zfloat> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
@@ -294,7 +294,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
 }
 
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    std::span<const std::complex<short>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    std::span<const types::zint16_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
     // Each pixel is stored as a pair of numbers that represent the real and imaginary 

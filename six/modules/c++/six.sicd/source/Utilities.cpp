@@ -214,14 +214,14 @@ class SICD_readerAndConverter final
         six::sicd::ImageData::toComplex(lookup, input, output);
     }
     const types::RowCol<size_t>& offset;
-    std::complex<float>* buffer;
+    six::zfloat* buffer;
     const six::Amp8iPhs8iLookup_t& lookup;
     
 public:
     SICD_readerAndConverter(six::NITFReadControl& reader, size_t imageNumber,
 			    const types::RowCol<size_t>& offset, const types::RowCol<size_t>& extent,
                 size_t elementsPerRow,
-			    std::complex<float>* buffer,  const six::AmplitudeTable* pAmplitudeTable = nullptr)
+			    six::zfloat* buffer,  const six::AmplitudeTable* pAmplitudeTable = nullptr)
       : offset(offset), buffer(buffer), lookup(six::sicd::ImageData::getLookup(pAmplitudeTable))
     {
         SICDreader<T>(reader, imageNumber, offset, extent, elementsPerRow,
