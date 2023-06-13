@@ -217,6 +217,10 @@ struct Attributes final
     {
         return static_cast<int>(size());
     }
+    bool empty() const
+    {
+        return mAttributes.empty();
+    }
 
     /*!
      * Look up an attribute's local name by index.
@@ -396,6 +400,16 @@ struct Attributes final
     {
         mAttributes.clear();
     }
+
+    auto begin() const
+    {
+        return mAttributes.begin();
+    }
+    auto end() const
+    {
+        return mAttributes.end();
+    }
+
 private:
     //! Underlying representation
     Attributes_T mAttributes;

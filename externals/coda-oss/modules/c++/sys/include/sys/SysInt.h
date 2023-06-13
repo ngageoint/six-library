@@ -1,11 +1,11 @@
 /* =========================================================================
- * This file is part of gsl-c++
+ * This file is part of sys-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
- * (C) Copyright 2021, Maxar Technologies, Inc.
+ * (C) Copyright 2023, Maxar Technologies, Inc.
  *
- * gsl-c++ is free software; you can redistribute it and/or modify
+ * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,31 +20,26 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef CODA_OSS_gsl_Gsl__h_INCLUDED_
-#define CODA_OSS_gsl_Gsl__h_INCLUDED_
+
 #pragma once
+#ifndef CODA_OSS_sys_SysInt_h_INCLUDED_
+#define CODA_OSS_sys_SysInt_h_INCLUDED_
 
-#include <utility>
+#include <stdint.h>
 
-#include "gsl/Gsl_narrow.h"
-
-#include "gsl/use_gsl.h" // Can't compile all of GSL with older versions of GCC/MSVC
-#if !CODA_OSS_use_real_gsl_
-// Add to "gsl" if we're not using the real thing
-namespace gsl
+namespace sys
 {
-    template <class T, class U>
-    constexpr T narrow_cast(U&& u) noexcept
-    {
-        return Gsl::narrow_cast<T>(std::forward<U>(u));
-    }
+    typedef char              byte;
+    typedef unsigned char     ubyte;
+    typedef uint8_t            Uint8_T;
+    typedef uint16_t           Uint16_T;
+    typedef uint32_t           Uint32_T;
+    typedef uint64_t           Uint64_T;
+    typedef size_t             Size_T;
+    typedef int8_t             Int8_T;
+    typedef int16_t            Int16_T;
+    typedef int32_t            Int32_T;
+    typedef int64_t            Int64_T;
+}
 
-   template <class T, class U>
-   constexpr T narrow(U u) noexcept(false)
-    {
-        return Gsl::narrow<T>(u);
-    }
- }
-#endif // CODA_OSS_coda_oss_use_real_gsl_
-
-#endif  // CODA_OSS_gsl_Gsl__h_INCLUDED_
+#endif // CODA_OSS_sys_SysInt_h_INCLUDED_

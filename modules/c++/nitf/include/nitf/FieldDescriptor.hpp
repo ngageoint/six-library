@@ -21,14 +21,16 @@
  *
  */
 
+#pragma once
 #ifndef NITRO_nitf_FieldDescriptor_hpp_INCLUDED_
 #define NITRO_nitf_FieldDescriptor_hpp_INCLUDED_
-#pragma once
 
 #include <string>
 #include <vector>
 #include <std/span>
 #include <stdexcept>
+
+#include <sys/Span.h>
 
 #include "nitf/FieldDescriptor.h"
 #include "nitf/Field.hpp"
@@ -84,8 +86,7 @@ namespace nitf
     template<size_t N>
     inline std::vector<FieldDescriptor> getFieldDescriptors(const nitf_StructFieldDescriptor(&descriptors)[N])
     {
-        // constexpr auto extent = std::extent<decltype(nitf_testing_Test1b_fields)>::value;
-        const std::span<const nitf_StructFieldDescriptor> s(descriptors, N);
+        const auto s = sys::make_span(descriptors, N);
         return getFieldDescriptors(s);
     }
 }
