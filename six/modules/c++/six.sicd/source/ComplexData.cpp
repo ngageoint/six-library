@@ -369,15 +369,16 @@ inline std::span<T> make_span(std::span<U> bytes)
     return std::span<T>(static_cast<T*>(cast_to_pvoid(bytes)), size);
 }
 
-bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, std::span<std::byte> to_, ptrdiff_t cutoff) const
+bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, std::span<std::byte> to_) const
 {
     if (getPixelType() != PixelType::AMP8I_PHS8I)
     {
         return false; // no conversion done as there is nothing to convert
     }
 
+    // Convert the pixels from a complex<float> to AMP8I_PHS8I.
     const auto from = make_span<const six::sicd::cx_float>(from_);
-    const auto to = make_span<six::sicd::AMP8I_PHS8I_t>(to_);
-    imageData->to_AMP8I_PHS8I(from, to, cutoff);
+    const auto to = make_span<six::AMP8I_PHS8I_t>(to_);
+    imageData->fromComplex(from, to);
     return true; // converted
 }

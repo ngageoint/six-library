@@ -162,7 +162,7 @@ struct ComplexData: public Data
     {
         imageData->pixelType = pixelType;
     }
-    bool convertPixels_(std::span<const std::byte>, std::span<std::byte>, ptrdiff_t cutoff) const override;
+    bool convertPixels_(std::span<const std::byte>, std::span<std::byte>) const override;
 
     /*!
      *  Maps to: /SICD/ImageData/NumRows,

@@ -28,8 +28,8 @@
 #include <six/NITFWriteControl.h>
 #include <six/NITFHeaderCreator.h>
 #include <six/XMLControlFactory.h>
+#include <six/AmplitudeTable.h>
 #include <six/sicd/SICDByteProvider.h>
-#include <six/sicd/ComplexToAMP8IPHS8I.h>
 #include <six/VersionUpdater.h>
 #include <six/sicd/SICDVersionUpdater.h>
 
