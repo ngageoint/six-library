@@ -59,13 +59,11 @@
 
 #include <TestCase.h>
 
-using path = std::filesystem::path;
-
 static std::string testName;
 
-static path findInputFile(const path& fn)
+static auto findInputFile(const std::filesystem::path& fn)
 {
-    static const auto unittests = path("modules") / "c++" / "nitf" / "unittests";
+    static const auto unittests = std::filesystem::path("modules") / "c++" / "nitf" / "unittests";
     return nitf::Test::findInputFile(unittests, fn);
 }
 
@@ -208,7 +206,7 @@ void writeJ2K(uint32_t x0, uint32_t y0,
     writer.write(outIO);
     //printf("Wrote file: %s\n", outName.c_str());
 }
-void test_j2k_nitf_read_region_(const path& fname)
+void test_j2k_nitf_read_region_(const std::filesystem::path& fname)
 {
     nitf::IOHandle io(fname.string(), NRT_ACCESS_READONLY, NRT_OPEN_EXISTING);
     nitf::Reader reader;
@@ -310,7 +308,7 @@ static std::vector<std::byte> readImage(nitf::ImageReader& imageReader, const ni
     }
     return retval;
 }
-static void test_decompress_nitf_to_sio_(const path& inputPathname, const path& outputPathname)
+static void test_decompress_nitf_to_sio_(const std::filesystem::path& inputPathname, const std::filesystem::path& outputPathname)
 {
     // Take a J2K-compressed NITF, decompress the image and save to an SIO.
     nitf::Reader reader;
@@ -323,7 +321,8 @@ static void test_decompress_nitf_to_sio_(const path& inputPathname, const path& 
     auto imageReader = reader.newImageReader(0 /*imageSegmentNumber*/);
     const auto imageData = readImage(imageReader, imageSubheader);
 
-    sio::lite::writeSIO(imageData.data(), imageSubheader.dims(), outputPathname);
+    const sys::filesystem::path outputPathname_ = outputPathname.string();
+    sio::lite::writeSIO(imageData.data(), imageSubheader.dims(), outputPathname_);
 }
 TEST_CASE(test_j2k_decompress_nitf_to_sio)
 {
@@ -340,7 +339,7 @@ TEST_CASE(test_j2k_compress_raw_image)
     nitf::Test::j2kSetNitfPluginPath();
 
     const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
-    const path outputPathname = "test_j2k_compress_raw_image.sio";
+    const std::filesystem::path outputPathname = "test_j2k_compress_raw_image.sio";
     test_decompress_nitf_to_sio_(inputPathname, outputPathname);
     // ---------------------------------------------------------------------------------------
 
