@@ -189,13 +189,13 @@ class ComplexToAMP8IPHS8I final
     explicit ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable = nullptr);
 
 public:
-    static const ComplexToAMP8IPHS8I& make(const six::AmplitudeTable* pAmplitudeTable);
+    static const ComplexToAMP8IPHS8I& make(const six::AmplitudeTable* pAmplitudeTable); // AmplitudeTable* = NULL is cached
 
     ~ComplexToAMP8IPHS8I() = default;
     ComplexToAMP8IPHS8I(const ComplexToAMP8IPHS8I&) = delete;
     ComplexToAMP8IPHS8I& operator=(const ComplexToAMP8IPHS8I&) = delete;
-    ComplexToAMP8IPHS8I(ComplexToAMP8IPHS8I&&) = delete;
-    ComplexToAMP8IPHS8I& operator=(ComplexToAMP8IPHS8I&&) = delete;
+    ComplexToAMP8IPHS8I(ComplexToAMP8IPHS8I&&) = default;
+    ComplexToAMP8IPHS8I& operator=(ComplexToAMP8IPHS8I&&) = default;
 
     /*!
      * Get the nearest amplitude and phase value given a complex value
