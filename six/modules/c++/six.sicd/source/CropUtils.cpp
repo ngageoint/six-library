@@ -125,7 +125,7 @@ void cropSICD(six::NITFReadControl& reader,
 
     // Write the AOI SICD out
     six::NITFWriteControl writer(std::move(aoiData));
-    const std::span<const std::complex<float>> image(buffer.get(), origDims.area());
+    const std::span<const six::zfloat> image(buffer.get(), origDims.area());
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
     writer.save_image(image, outPathname, schemaPaths);

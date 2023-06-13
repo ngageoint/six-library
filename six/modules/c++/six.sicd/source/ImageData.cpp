@@ -235,7 +235,7 @@ const six::Amp8iPhs8iLookup_t& ImageData::getLookup(const six::AmplitudeTable* p
     return *pLookup;
 }
 
-void ImageData::toComplex(const six::Amp8iPhs8iLookup_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results)
+void ImageData::toComplex(const six::Amp8iPhs8iLookup_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<six::zfloat> results)
 {
     const auto toComplex_ = [&values](const auto& v)
     {
@@ -243,7 +243,7 @@ void ImageData::toComplex(const six::Amp8iPhs8iLookup_t& values, std::span<const
     };
     transform(inputs, results, toComplex_);
 }
-void ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results) const
+void ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs, std::span<six::zfloat> results) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
     {

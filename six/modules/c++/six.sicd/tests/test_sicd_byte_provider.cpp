@@ -60,7 +60,7 @@ struct Tester final
     {
         for (size_t ii = 0; ii < mImage.size(); ++ii)
         {
-            mImage[ii] = std::complex<DataTypeT>(
+            mImage[ii] = types::complex<DataTypeT>(
                     static_cast<DataTypeT>(ii),
                     static_cast<DataTypeT>(ii * 10));
         }
@@ -148,8 +148,8 @@ private:
 
     const types::RowCol<size_t> mDims;
     std::unique_ptr<six::sicd::ComplexData> mData;
-    std::vector<std::complex<DataTypeT> > mImage;
-    std::vector<std::complex<DataTypeT> > mBigEndianImage;
+    std::vector<types::complex<DataTypeT> > mImage;
+    std::vector<types::complex<DataTypeT> > mBigEndianImage;
 
     std::unique_ptr<const CompareFiles> mCompareFiles;
     const std::string mTestPathname;
@@ -334,7 +334,7 @@ bool doTests(const std::vector<std::string>& schemaPaths,
     //       It would be better to get the logic fixed that forces
     //       segmentation on the number of rows via OPT_MAX_ILOC_ROWS
     static const size_t APPROX_HEADER_SIZE = 2 * 1024;
-    const size_t numBytesPerRow = 456 * sizeof(std::complex<DataTypeT>);
+    const size_t numBytesPerRow = 456 * sizeof(types::complex<DataTypeT>);
     const size_t maxProductSize = numRowsPerSeg * numBytesPerRow +
             APPROX_HEADER_SIZE;
 

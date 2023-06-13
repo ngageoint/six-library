@@ -115,11 +115,11 @@ struct Utilities final
     static void readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
-                         std::vector<std::complex<float>>& widebandData);
+                         std::vector<six::zfloat>& widebandData);
     static void readSicd(const std::filesystem::path& sicdPathname,
                          const std::vector<std::filesystem::path>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
-                         std::vector<std::complex<float>>& widebandData);
+                         std::vector<six::zfloat>& widebandData);
     static ComplexImageResult readSicd(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths);
     static ComplexImageResult readSicd(const std::filesystem::path& path)
     {
@@ -162,7 +162,7 @@ struct Utilities final
                          size_t orderX,
                          size_t orderY,
                          std::unique_ptr<ComplexData>& complexData,
-                         std::vector<std::complex<float> >& widebandData,
+                         std::vector<six::zfloat >& widebandData,
                          six::Poly2D& outputRowColToSlantRow,
                          six::Poly2D& outputRowColToSlantCol,
                          std::unique_ptr<NoiseMesh>& noiseMesh,
@@ -216,7 +216,7 @@ struct Utilities final
      */
     static void getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,    
-                                std::complex<float>* buffer);
+                                six::zfloat* buffer);
 
     /*
      * Given a loaded NITFReadControl and a ComplexData object, this
@@ -240,7 +240,7 @@ struct Utilities final
                                 const ComplexData& complexData,
                                 const types::RowCol<size_t>& offset,
                                 const types::RowCol<size_t>& extent,
-                                std::complex<float>* buffer);
+                                six::zfloat* buffer);
 
     /*
      * Given a loaded NITFReadControl and a ComplexData object, this
@@ -259,7 +259,7 @@ struct Utilities final
      */
     static void getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
-                                std::vector<std::complex<float> >& buffer);
+                                std::vector<six::zfloat >& buffer);
 
     /*
      * Given a loaded NITFReadControl, a ComplexData object, and an
@@ -282,7 +282,7 @@ struct Utilities final
                                 const ComplexData& complexData,
                                 const types::RowCol<size_t>& offset,
                                 const types::RowCol<size_t>& extent,
-                                std::vector<std::complex<float> >& buffer);
+                                std::vector<six::zfloat >& buffer);
      template<typename T> 
      static void getRawData(NITFReadControl& reader,
                                 const ComplexData& complexData,
@@ -309,7 +309,7 @@ struct Utilities final
             const std::string& sicdPathname,
             const std::vector<std::string>& schemaPaths,
             const ComplexData& complexData,
-            std::complex<float>* buffer);
+            six::zfloat* buffer);
 
      /*
      * Given a SICD pathname, list of schemas, complexData, and a region of interest,
@@ -335,7 +335,7 @@ struct Utilities final
             const ComplexData& complexData,
             const types::RowCol<size_t>& offset,
             const types::RowCol<size_t>& extent,
-            std::complex<float>* buffer);
+            six::zfloat* buffer);
 
     /*
     * Return the unit vector normal to the ground plane.
@@ -655,14 +655,14 @@ inline std::vector<std::byte> readFromNITF(const std::filesystem::path& pathname
 }
 
 // c.f. six_sicd.i
-extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::string>& schemaPaths, const ComplexData&, std::span<const std::complex<float>> image);
-extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexData&, std::span<const std::complex<float>> image);
+extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::string>& schemaPaths, const ComplexData&, std::span<const six::zfloat> image);
+extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexData&, std::span<const six::zfloat> image);
 extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexImage&);
 
 
 namespace testing
 {
-    extern std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>&);
+    extern std::vector<six::zfloat> make_complex_image(const types::RowCol<size_t>&);
     extern std::vector<std::byte> toBytes(const ComplexImageResult&);
 }
 

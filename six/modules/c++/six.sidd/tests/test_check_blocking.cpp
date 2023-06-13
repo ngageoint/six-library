@@ -33,12 +33,12 @@
 
 namespace
 {
-void generateData(const six::Data& data, std::vector<std::complex<float>>& buffer)
+void generateData(const six::Data& data, std::vector<six::zfloat>& buffer)
 {
     buffer.resize(getExtent(data).area());
     for (size_t ii = 0; ii < buffer.size(); ++ii)
     {
-        buffer[ii] = std::complex<float>(ii % 100);
+        buffer[ii] = six::zfloat(ii % 100);
     }
 }
 
@@ -73,7 +73,7 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
     workingData->setNumRows(imageSideSize);
     workingData->setNumCols(imageSideSize);
 
-    std::vector<std::complex<float>> buffer;
+    std::vector<six::zfloat> buffer;
     generateData(*workingData, buffer);
 
     mem::SharedPtr<six::Container> container(new six::Container(
@@ -93,7 +93,7 @@ void writeSingleImage(const six::Data& data, const std::string& pathname,
 
 }
 
-inline const six::UByte* cast(const std::vector<std::complex<float>>& buffer)
+inline const six::UByte* cast(const std::vector<six::zfloat>& buffer)
 {
     const void* pBuffer = buffer.data();
     return static_cast<const six::UByte*>(pBuffer);
@@ -115,8 +115,8 @@ void writeTwoImages(const six::Data& data, const std::string& pathname,
     const std::string productSize = computeProductSize(blockSize,
         largeImageSize, data.getNumBytesPerPixel());
 
-    std::vector<std::complex<float>> firstBuffer;
-    std::vector<std::complex<float>> secondBuffer;
+    std::vector<six::zfloat> firstBuffer;
+    std::vector<six::zfloat> secondBuffer;
     generateData(*firstData, firstBuffer);
     generateData(*secondData, secondBuffer);
 

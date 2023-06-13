@@ -21,16 +21,17 @@
  */
 #include <sstream>
 #include <limits>
-
 #include <std/filesystem>
 
-#include <import/six.h>
-
+#include <types/complex.h>
 #include <mem/ScopedArray.h>
 #include <import/cli.h>
 #include <import/six/sicd.h>
 #include <import/six/sidd.h>
 #include <import/sio/lite.h>
+
+#include <import/six.h>
+
 #include "utils.h"
 
 namespace fs = std::filesystem;
@@ -48,11 +49,11 @@ void writeSIOFileHeader(size_t numRows,
     switch (pixelType)
     {
     case six::PixelType::RE32F_IM32F:
-        elementSize = sizeof(std::complex<float>);
+        elementSize = sizeof(six::zfloat);
         elementType = sio::lite::FileHeader::COMPLEX_FLOAT;
         break;
     case six::PixelType::RE16I_IM16I:
-        elementSize = sizeof(std::complex<int16_t>);
+        elementSize = sizeof(types::zint16_t);
         elementType = sio::lite::FileHeader::COMPLEX_SIGNED;
         break;
     case six::PixelType::MONO8I:

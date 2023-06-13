@@ -249,7 +249,7 @@ protected:
     void parseDouble(const xml::lite::Element* element, std::optional<double>& value) const;
     bool parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, double& value) const;
     bool parseOptionalDouble(const xml::lite::Element* parent, const std::string& tag, std::optional<double>& value) const;
-    void parseComplex(const xml::lite::Element* element, std::complex<double>& value) const;
+    void parseComplex(const xml::lite::Element* element, six::zdouble& value) const;
     void parseString(const xml::lite::Element* element, std::string& value) const;
     void parseString(const xml::lite::Element&, std::string&) const;
     bool parseString(const xml::lite::Element&, std::u8string&) const;
