@@ -112,7 +112,8 @@ public:
      *****************************************************************/
     GenericType(const unsigned char *data)
     {
-        mData = *((Data_T *)data);
+        const void* const pData = data;
+        mData = *(static_cast<const Data_T*>(pData));
     }
 
     //! Deconstructor

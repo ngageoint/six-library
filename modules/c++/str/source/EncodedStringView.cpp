@@ -27,7 +27,6 @@
 #include <string.h>
 
 #include <stdexcept>
-#include "coda_oss/memory.h"
 #include "coda_oss/span.h"
 
 #include "str/Convert.h"
@@ -66,7 +65,7 @@ static std::string to_native(coda_oss::u8string::const_pointer p, size_t sz)
     }
     if (Platform == PlatformType::Linux)
     {
-        return str::cast<std::string::const_pointer>(p); // copy
+        return std::string(str::cast<std::string::const_pointer>(p), sz);
     }
     throw std::logic_error("Unknown platform.");
 }
@@ -75,7 +74,7 @@ static std::string to_native(str::W1252string::const_pointer p, size_t sz)
 {
     if (Platform == PlatformType::Windows)
     {    
-        return str::cast<std::string::const_pointer>(p); // copy
+        return std::string(str::cast<std::string::const_pointer>(p), sz);
     }
     if (Platform == PlatformType::Linux)
     {

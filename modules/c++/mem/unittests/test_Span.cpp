@@ -26,6 +26,7 @@
 #include <string>
 
 #include <coda_oss/span.h>
+#include <sys/Span.h>
 
 #include "TestCase.h"
 
@@ -94,8 +95,43 @@ TEST_CASE(testGslNarrow)
     TEST_THROWS(gsl::narrow<int>(d));
 }
 
+TEST_CASE(test_sys_make_span)
+{
+    int i = 314;
+    int* const p = &i;
+    auto s = sys::make_span(p, 1);
+    TEST_ASSERT(s.data() == p);
+    TEST_ASSERT_EQ(s[0], i);
+    s[0] = 123;
+    TEST_ASSERT_EQ(i, 123);
+    s[0] = 314;
+
+    const int* const q = &i;
+    auto cs = sys::make_span(q, 1);
+    TEST_ASSERT(cs.data() == q);
+    TEST_ASSERT_EQ(cs[0], i);
+    //cs[0] = 123; // cs = span<const>
+    TEST_ASSERT_EQ(i, 314);
+
+    std::vector<int> v{314};
+    s = sys::make_span(v);
+    TEST_ASSERT(s.data() == v.data());
+    TEST_ASSERT_EQ(s[0], v[0]);
+    s[0] = 123;
+    TEST_ASSERT_EQ(v[0], 123);
+    s[0] = 314;
+
+    const std::vector<int>& u = v;
+    cs = sys::make_span(u);
+    TEST_ASSERT(cs.data() == u.data());
+    TEST_ASSERT_EQ(cs[0], u[0]);
+    // cs[0] = 123; // cs = span<const>
+    TEST_ASSERT_EQ(u[0], 314);
+}
+
 TEST_MAIN(
     TEST_CHECK(testSpanBuffer);
     TEST_CHECK(testSpanVector);
     TEST_CHECK(testGslNarrow);
+    TEST_CHECK(test_sys_make_span);
     )
