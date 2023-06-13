@@ -47,7 +47,7 @@ struct CODA_OSS_API Format final
         return mString;
     }
 
-    operator std::string& ()
+    operator std::string& () noexcept
     {
         return mString;
     }

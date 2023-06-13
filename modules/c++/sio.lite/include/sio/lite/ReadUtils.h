@@ -36,6 +36,7 @@
 #include <sio/lite/FileHeader.h>
 #include <sio/lite/ElementType.h>
 #include <sys/filesystem.h>
+#include <sys/Span.h>
 
 namespace sio
 {
@@ -70,7 +71,7 @@ void readSIO(const std::string& pathname,
     reader.read(image.get(), numPixels * sizeof(InputT), true);
 }
 template <typename InputT>
-void readSIO(const sys::filesystem::path& pathname,
+void readSIO(const coda_oss::filesystem::path& pathname,
              types::RowCol<size_t>& dims,
              std::vector<InputT>& image)
 {
@@ -86,7 +87,7 @@ void readSIO(const sys::filesystem::path& pathname,
     }
 
     image.resize(dims.area());
-    reader.read(coda_oss::span<InputT>(image.data(), image.size()), true /*verifyFullRead*/);
+    reader.read(sys::make_span(image), true /*verifyFullRead*/);
 }
 
 /*
