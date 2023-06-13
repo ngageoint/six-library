@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 
         six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
-        std::vector<std::complex<float> > image(dims.row * dims.col);
+        std::vector<six::zfloat > image(dims.row * dims.col);
 
         std::unique_ptr<six::Data> data(
                 six::sicd::Utilities::createFakeComplexData().release());

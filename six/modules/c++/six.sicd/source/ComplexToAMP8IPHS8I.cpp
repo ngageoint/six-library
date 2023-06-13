@@ -159,7 +159,7 @@ static inline uint8_t nearest(const std::vector<long double>& magnitudes, long d
     return gsl::narrow<uint8_t>(distance);
 }
 
-six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const std::complex<float> &v) const
+six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const six::zfloat &v) const
 {
     six::AMP8I_PHS8I_t retval;
 

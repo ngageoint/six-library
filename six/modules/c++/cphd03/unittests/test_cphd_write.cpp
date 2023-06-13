@@ -332,7 +332,7 @@ void addTwoWayParams(cphd03::Metadata& metadata)
 void writeCPHD(
         cphd03::VBM& vbm,
         cphd03::Metadata& metadata,
-        std::vector<std::vector<std::complex<float> > >& data,
+        std::vector<std::vector<cphd::zfloat > >& data,
         std::vector<types::RowCol<size_t> >& dims)
 {
     cphd03::CPHDWriter writer(metadata, FILE_NAME, NUM_THREADS);
@@ -348,7 +348,7 @@ void writeCPHD(
         data[ii].resize(dims[ii].area());
         for (size_t jj = 0; jj < data[ii].size(); ++jj)
         {
-            data[ii][jj] = std::complex<float>(
+            data[ii][jj] = cphd::zfloat(
                     getRandomReal(), getRandomReal());
         }
 
@@ -402,7 +402,7 @@ void runCPHDTest(const std::string& testName_,
     }
 
     //std::vector<std::vector<std::byte> >vbm(NUM_IMAGES);
-    std::vector<std::vector<std::complex<float> > >data(NUM_IMAGES);
+    std::vector<std::vector<cphd::zfloat > >data(NUM_IMAGES);
     std::vector<types::RowCol<size_t> > dims(NUM_IMAGES);
 
     writeCPHD(vbm, metadata, data, dims);
@@ -424,8 +424,8 @@ void runCPHDTest(const std::string& testName_,
                       0, cphd::Wideband::ALL,
                       NUM_THREADS);
 
-        const std::complex<float>* readBuffer =
-                reinterpret_cast<std::complex<float>* >(readData.get());
+        const cphd::zfloat* readBuffer =
+                reinterpret_cast<cphd::zfloat* >(readData.get());
 
         for (size_t jj = 0; jj < dims[ii].area(); ++jj)
         {

@@ -24,10 +24,13 @@
 #define __CPHD_BYTE_SWAP_H__
 
 #include <stddef.h>
-#include <complex>
+
+#include <types/complex.h>
+#include <types/RowCol.h>
 
 #include <scene/sys_Conf.h>
-#include <types/RowCol.h>
+
+#include "cphd/Types.h"
 
 namespace cphd
 {
@@ -66,7 +69,7 @@ void byteSwapAndPromote(const void* input,
                         size_t elementSize,
                         const types::RowCol<size_t>& dims,
                         size_t numThreads,
-                        std::complex<float>* output);
+                        cphd::zfloat* output);
 
 /*
  *  \func byteSwapAndScale
@@ -92,7 +95,7 @@ void byteSwapAndScale(const void* input,
                       const types::RowCol<size_t>& dims,
                       const double* scaleFactors,
                       size_t numThreads,
-                      std::complex<float>* output);
+                      cphd::zfloat* output);
 }
 
 #endif

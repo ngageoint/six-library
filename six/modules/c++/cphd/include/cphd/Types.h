@@ -19,11 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __CPHD_TYPES_H__
-#define __CPHD_TYPES_H__
 #pragma once
+#ifndef SIX_cphd_Types_h_INCLUDED_
+#define SIX_cphd_Types_h_INCLUDED_
+
+#include <stdint.h>
 
 #include <ostream>
+
+#include <types/complex.h>
 
 #include <six/Types.h>
 #include <six/Enums.h>
@@ -35,6 +39,14 @@
 namespace cphd
 {
 // Use the same types that SIX uses
+
+using zfloat = six::zfloat;
+using zdouble = six::zdouble;
+
+using zint8_t = types::zint8_t;
+using zint16_t = types::zint16_t;
+using zint32_t = types::zint32_t;
+using zint64_t = types::zint64_t;
 
 typedef six::Vector2 Vector2;
 
@@ -86,4 +98,4 @@ typedef six::MatchInformation MatchInformation;
 }
 
 
-#endif
+#endif // SIX_cphd_Types_h_INCLUDED_

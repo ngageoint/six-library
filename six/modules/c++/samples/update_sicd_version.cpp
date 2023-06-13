@@ -37,7 +37,7 @@
 namespace
 {
 void writeSicd(std::unique_ptr<six::Data>&& complexData,
-               const std::vector<std::complex<float>>& widebandData,
+               const std::vector<six::zfloat>& widebandData,
                const std::vector<std::string>& schemaPaths_,
                const std::string& pathname)
 {
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
         }
 
         std::unique_ptr<six::sicd::ComplexData> complexData;
-        std::vector<std::complex<float>> widebandData;
+        std::vector<six::zfloat> widebandData;
         six::sicd::Utilities::readSicd(pathname, schemaPaths,
                                        complexData, widebandData);
 

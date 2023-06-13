@@ -32,19 +32,27 @@
 #include <complex>
 #include <memory>
 
-#include <scene/sys_Conf.h>
+#include <types/complex.h>
 #include <import/except.h>
 #include <import/mem.h>
 #include <import/str.h>
 #include <import/sys.h>
 #include <import/math/linear.h>
 #include <import/math/poly.h>
-#include <import/nitf.hpp>
 #include <import/io.h>
 
+#include <import/nitf.hpp>
+
+#include <scene/sys_Conf.h>
 #include "scene/Types.h"
 #include "scene/FrameType.h"
 #include "six/Enums.h"
+
+namespace six
+{
+    using zfloat = scene::zfloat;
+    using zdouble = scene::zdouble;
+}
 #include "six/AmplitudeTable.h"
 
 namespace six
@@ -181,7 +189,7 @@ struct Constants
             // Each pixel is stored as a pair of numbers that represent the realand imaginary
             // components. Each component is stored in a 32-bit IEEE floating point format (4
             // bytes per component, 8 bytes per pixel).
-            static_assert(sizeof(std::complex<float>) == 8, "RE32F_IM32F should be two floats");
+            static_assert(sizeof(six::zfloat) == 8, "RE32F_IM32F should be two floats");
             return 8;
         }
 
@@ -190,7 +198,7 @@ struct Constants
             // Each pixel is stored as a pair of numbers that represent the real and imaginary 
             // components. Each component is stored in a 16-bit signed integer in 2's 
             // complement format (2 bytes per component, 4 bytes per pixel). 
-            static_assert(sizeof(std::complex<int16_t>) == 4, "RE16I_IM16I should be two 16-bit integers");
+            static_assert(sizeof(types::zint16_t) == 4, "RE16I_IM16I should be two 16-bit integers");
             return 4;
         }
 
