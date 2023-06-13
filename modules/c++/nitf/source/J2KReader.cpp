@@ -50,12 +50,12 @@ std::span<uint8_t> j2k::Reader::readRegion(uint32_t x0, uint32_t y0, uint32_t x1
     uint8_t* pBuf = nullptr;
     const auto bufSize = impl_.callNativeOrThrow<uint64_t>(j2k_Reader_readRegion, x0, y0, x1, y1, &pBuf);
     buf = make_Buffer(pBuf); // turn over ownership (and test our utility routine)
-    return std::span<uint8_t>(buf.get(), bufSize);
+    return sys::make_span(buf.get(), bufSize);
 }
 std::span<uint8_t> j2k::Reader::readRegion(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1, std::span<uint8_t> buf)
 {
     // "buf" is already allocated, maybe from a previous call
     auto buf_ = buf.data();
     const auto bufSize = impl_.callNativeOrThrow<uint64_t>(j2k_Reader_readRegion, x0, y0, x1, y1, &buf_);
-    return std::span<uint8_t>(buf_, bufSize); // "bufSize" may have changed
+    return sys::make_span(buf_, bufSize); // "bufSize" may have changed
 }

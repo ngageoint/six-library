@@ -22,7 +22,10 @@
 #define CODA_OSS_std_cstddef_INCLUDED_
 #pragma once
 
+#include <stdint.h>
+
 #include <cstddef>
+#include <type_traits>
 #include "coda_oss/cstddef.h"
 #include "coda_oss/CPlusPlus.h"
 
@@ -41,6 +44,7 @@ namespace std // This is slightly uncouth: we're not supposed to augment "std".
 {
     using coda_oss::byte;
 }
+static_assert(!std::is_same<std::byte, uint8_t>::value, "'std::byte' should be a unique type.");
 #endif  // !CODA_OSS_NO_std_byte
 
 #endif  // CODA_OSS_std_cstddef_INCLUDED_
