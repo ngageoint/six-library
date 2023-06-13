@@ -119,12 +119,14 @@ inline auto abs(const complex<T>& z)
 
 }
 
-// Have the compiler pick between std::complex and details::complex
+//// Have the compiler pick between std::complex and details::complex
+//template<typename T>
+//using complex = std::conditional_t<std::is_floating_point<T>::value, std::complex<T>, details::complex<T>>;
+//static_assert(std::is_same<details::complex<int>, complex<int>>::value, "should be details::complex<int>");
 template<typename T>
-using complex = std::conditional_t<std::is_floating_point<T>::value, std::complex<T>, details::complex<T>>;
+using complex = std::complex<T>;
 
 static_assert(std::is_same<std::complex<float>, complex<float>>::value, "should be std::complex<float>");
-static_assert(std::is_same<details::complex<int>, complex<int>>::value, "should be details::complex<int>");
 static_assert(sizeof(std::complex<short>) == sizeof(complex<short>), "sizeof(sizeof(std::complex<short>) != sizeof(complex<short>)");
 
 // Convenient aliases
@@ -134,10 +136,10 @@ using zdouble = complex<double>; // std::complex<double>
 
 // Intentionally using somewhat cumbersome names
 // TODO: switch TIntergers to types::details::complex<TInteger>
-using zint8_t = complex<int8_t>; // TODO: complex<int8_t>;  // details:complex<int8_t>
-using zint16_t = complex<int16_t>; // TODO: complex<int16_t>;  // details:complex<int16_t>
-using zint32_t = complex<int32_t>; // TODO: complex<int32_t>;  // details::complex<int32_t>
-using zint64_t = complex<int64_t>; // TODO: complex<int64_t>;  // details::complex<int64_t>
+using zint8_t = complex<int8_t>;  // details:complex<int8_t>
+using zint16_t = complex<int16_t>;  // details:complex<int16_t>
+using zint32_t = complex<int32_t>;  // details::complex<int32_t>
+using zint64_t = complex<int64_t>;  // details::complex<int64_t>
 }
 
 #endif  // CODA_OSS_types_complex_h_INCLUDED_

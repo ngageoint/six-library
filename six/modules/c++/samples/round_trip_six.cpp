@@ -27,6 +27,7 @@
 #include <vector>
 #include <std/span>
 
+#include <types/complex.h>
 #include <import/six.h>
 #include <import/cli.h>
 #include <import/io.h>
@@ -136,7 +137,7 @@ void compressInteger(size_t numPixels, std::byte* buffer)
     }
 
     auto const input = reinterpret_cast<const six::zfloat*>(buffer);
-    auto const output = reinterpret_cast<std::complex<int16_t>*>(buffer);
+    auto const output = reinterpret_cast<types::zint16_t*>(buffer);
     const float diff = max - min;
 
     // If diff ends up being zero, we will get a division by 0 error.
@@ -144,14 +145,14 @@ void compressInteger(size_t numPixels, std::byte* buffer)
     // fill it with 0s.
     if (diff == 0.0f)
     {
-        std::fill_n(output, numPixels, std::complex<int16_t>(0, 0));
+        std::fill_n(output, numPixels, types::zint16_t(0, 0));
         return;
     }
 
     const CompressFloat compressFloat(min, diff);
     for (size_t ii = 0; ii < numPixels; ++ii)
     {
-        output[ii] = std::complex<int16_t>(
+        output[ii] = types::zint16_t(
                 compressFloat(input[ii].real()),
                 compressFloat(input[ii].imag()));
     }
