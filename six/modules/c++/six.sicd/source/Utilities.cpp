@@ -32,24 +32,26 @@
 #include <iterator>
 #include <utility>
 #include <stdexcept>
+#include <numeric>
 
 #include <except/Exception.h>
 #include <io/StringStream.h>
 #include <math/Utilities.h>
 #include <math/poly/Fit.h>
 #include <mem/ScopedAlignedArray.h>
+#include <gsl/gsl.h>
+#include <str/Manip.h>
+#include <str/EncodedStringView.h>
+#include <sys/Conf.h>
 #include <sys/Span.h>
+#include <types/RowCol.h>
+#include <units/Angles.h>
 
 #include <six/NITFReadControl.h>
 #include <six/sicd/SICDWriteControl.h>
 #include <six/Utilities.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDMesh.h>
-#include <str/Manip.h>
-#include <str/EncodedStringView.h>
-#include <sys/Conf.h>
-#include <types/RowCol.h>
-#include <units/Angles.h>
 #include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/GeoLocator.h>
 #include <six/sicd/ImageData.h>
@@ -81,24 +83,11 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
 }
 }
 
-std::complex<long double> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
+static std::complex<long double> toComplex_(long double A, uint8_t phase)
 {
-    long double A = 0.0;
-    if (pAmplitudeTable != nullptr)
-    {
-        // A = AmpTable( input_amplitude )
-        auto& AmpTable = *(pAmplitudeTable);
-        A = AmpTable.index(input_amplitude);
-    }
-    else
-    {
-        // A = input_amplitude(i.e. 0 to 255)
-        A = input_amplitude;
-    }
-
     // The phase values should be read in (values 0 to 255) and converted to float by doing:
     // P = (1 / 256) * input_value
-    const long double P = (1.0 / 256.0) * input_value;
+    const long double P = (1.0 / 256.0) * phase;
 
     // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
     // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
@@ -107,6 +96,47 @@ std::complex<long double> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_a
     SinCos(angle, sin_angle, cos_angle);
     std::complex<long double> S(A * cos_angle, A * sin_angle);
     return S;
+}
+std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase)
+{   
+    // A = input_amplitude(i.e. 0 to 255)
+    const long double A = amplitude;
+    return toComplex_(A, phase);
+}
+std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable& amplitudeTable)
+{
+    const long double A = amplitudeTable.index(amplitude);
+    return toComplex_(A, phase);
+}
+std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable* pAmplitudeTable)
+{
+    if (pAmplitudeTable != nullptr)
+    {
+        return toComplex(amplitude, phase, *pAmplitudeTable);
+    }
+    else
+    {
+        return toComplex(amplitude, phase);
+    }
+}
+
+static auto iota_0_256_()
+{
+    static_assert(sizeof(size_t) > sizeof(uint8_t), "size_t can't hold UINT8_MAX!");
+
+    std::vector<uint8_t> retval;
+    retval.reserve(UINT8_MAX + 1);
+    for (size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loop.
+    {
+        retval.push_back(gsl::narrow<uint8_t>(i));
+    }
+    assert(retval.size() == UINT8_MAX + 1);
+    return retval;
+}
+std::vector<uint8_t> six::sicd::Utilities::iota_0_256()
+{
+    static const auto retval = iota_0_256_();
+    return retval;
 }
 
 namespace
@@ -174,27 +204,25 @@ class SICD_readerAndConverter final
 
         // There's type mangling going on here.
         // We're taking std::vector<uint8_t> and saying it's packed with std::pair<uint8_t, uint8_t>.
-        static_assert(sizeof(uint8_t) * 2 == sizeof(six::sicd::AMP8I_PHS8I_t), "expected packed layout in pair");
-        auto packed = reinterpret_cast<const six::sicd::AMP8I_PHS8I_t*>(tempVector.data());
+        static_assert(sizeof(uint8_t) * 2 == sizeof(six::AMP8I_PHS8I_t), "expected packed layout in pair");
+        auto packed = reinterpret_cast<const six::AMP8I_PHS8I_t*>(tempVector.data());
 
         // Reuse image data's conversion to complex.
-        static const ptrdiff_t kDefaultCutoff = 0;
         size_t count = (elementsPerRow * rowsToRead) / 2;
-        std::span<const six::sicd::AMP8I_PHS8I_t> input(packed, count);
-        std::span<std::complex<float>> output(bufferPtr, input.size());
-        six::sicd::ImageData::from_AMP8I_PHS8I(lookup, input, output, kDefaultCutoff);
+        auto const input = sys::make_span(packed, count);
+        auto const output = sys::make_span(bufferPtr, input.size());
+        six::sicd::ImageData::toComplex(lookup, input, output);
     }
     const types::RowCol<size_t>& offset;
     std::complex<float>* buffer;
-    std::unique_ptr<six::sicd::input_amplitudes_t> lookupScope;
-    const six::sicd::input_amplitudes_t& lookup;
+    const six::Amp8iPhs8iLookup_t& lookup;
     
 public:
     SICD_readerAndConverter(six::NITFReadControl& reader, size_t imageNumber,
 			    const types::RowCol<size_t>& offset, const types::RowCol<size_t>& extent,
                 size_t elementsPerRow,
 			    std::complex<float>* buffer,  const six::AmplitudeTable* pAmplitudeTable = nullptr)
-      : offset(offset), buffer(buffer), lookupScope(nullptr), lookup(six::sicd::ImageData::get_RE32F_IM32F_values(pAmplitudeTable, lookupScope))
+      : offset(offset), buffer(buffer), lookup(six::sicd::ImageData::getLookup(pAmplitudeTable))
     {
         SICDreader<T>(reader, imageNumber, offset, extent, elementsPerRow,
             [&](size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<T>& tempVector)
@@ -1640,7 +1668,7 @@ std::vector<std::complex<float>> six::sicd::testing::make_complex_image(const ty
     return image;
 }
 
-std::vector<std::byte> six::sicd::testing::toBytes(const ComplexImageResult& result, ptrdiff_t cutoff)
+std::vector<std::byte> six::sicd::testing::toBytes(const ComplexImageResult& result)
 {
     const auto& image = result.widebandData;
     const auto bytes = sys::as_bytes(image);
@@ -1650,7 +1678,7 @@ std::vector<std::byte> six::sicd::testing::toBytes(const ComplexImageResult& res
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
         retval.resize(image.size() * data.getNumBytesPerPixel());
-        data.convertPixels(bytes, sys::make_span(retval), cutoff);
+        data.convertPixels(bytes, sys::make_span(retval));
     }
     else
     {

@@ -104,6 +104,7 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="include\six\Adapters.h" />
+    <ClInclude Include="include\six\AmplitudeTable.h" />
     <ClInclude Include="include\six\ByteProvider.h" />
     <ClInclude Include="include\six\Classification.h" />
     <ClInclude Include="include\six\CollectionInformation.h" />

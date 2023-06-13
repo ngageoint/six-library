@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_SICD_UTILITIES_H__
-#define __SIX_SICD_UTILITIES_H__
+#pragma once
+#ifndef SIX_six_sicd_Utilities_h_INCLUDED_
+#define SIX_six_sicd_Utilities_h_INCLUDED_
 
 #include <memory>
 #include <std/string>
@@ -41,9 +42,8 @@ namespace six
 {
 namespace sicd
 {
-class Utilities
+struct Utilities final
 {
-public:
     /*!
      * Build SceneGeometry from ComplexData members
      * \param data ComplexData from which to construct Geometry
@@ -628,7 +628,16 @@ public:
         const std::vector<types::RowCol<double> >& opPixels,
         std::vector<types::RowCol<double> >& spPixels);
 
-    static std::complex<long double> from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable*);
+    // https://en.cppreference.com/w/cpp/algorithm/iota
+    // Generating all `uint8_t` values is slightly tricky because wrap-around/overflow must be avoided.
+    static std::vector<uint8_t> iota_0_256(); // [0, 256), i.e., [0x00, 0xff]
+
+    // Convert the amp/phase to a complex value using the given AmplitudeTable, if any.
+    // This call could be in a tight loop where the value of six::AmplitudeTable* is known outside of the loop;
+    // the overloads allow clients to avoid an inner `if`-check.
+    static std::complex<long double> toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable* pAmplitudeTable);
+    static std::complex<long double> toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable&);
+    static std::complex<long double> toComplex(uint8_t amplitude, uint8_t phase);
 };
 
 
@@ -654,9 +663,9 @@ extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::fil
 namespace testing
 {
     extern std::vector<std::complex<float>> make_complex_image(const types::RowCol<size_t>&);
-    extern std::vector<std::byte> toBytes(const ComplexImageResult&, ptrdiff_t cutoff=-1);
+    extern std::vector<std::byte> toBytes(const ComplexImageResult&);
 }
 
 }
 }
-#endif
+#endif // SIX_six_sicd_Utilities_h_INCLUDED_
