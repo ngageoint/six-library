@@ -47,15 +47,15 @@
  */
 
 template<typename T>
-std::vector<std::complex<T> > generateData(size_t length)
+std::vector<types::complex<T> > generateData(size_t length)
 {
-    std::vector<std::complex<T> > data(length);
+    std::vector<types::complex<T> > data(length);
     srand(0);
     for (size_t ii = 0; ii < data.size(); ++ii)
     {
         auto real = static_cast<T>(rand() / 100);
         auto imag = static_cast<T>(rand() / 100);
-        data[ii] = std::complex<T>(real, imag);
+        data[ii] = types::complex<T>(real, imag);
     }
     return data;
 }
@@ -76,7 +76,7 @@ inline std::vector<double> generateScaleFactors(size_t length, bool scale)
 template<typename T>
 void writeCPHD(const std::string& outPathname, size_t /*numThreads*/,
         const types::RowCol<size_t> dims,
-        const std::vector<std::complex<T> >& writeData,
+        const std::vector<types::complex<T> >& writeData,
         cphd::Metadata& metadata,
         cphd::PVPBlock& pvpBlock)
 {
@@ -122,7 +122,7 @@ std::vector<cphd::zfloat > checkData(const std::string& pathname,
 
 template<typename T>
 bool compareVectors(const std::vector<cphd::zfloat >& readData,
-                    const std::vector<std::complex<T> >& writeData,
+                    const std::vector<types::complex<T> >& writeData,
                     const std::vector<double>& scaleFactors,
                     bool scale)
 {
@@ -145,7 +145,7 @@ bool compareVectors(const std::vector<cphd::zfloat >& readData,
 }
 
 template<typename T>
-bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
+bool runTest(bool scale, const std::vector<types::complex<T> >& writeData)
 {
     io::TempFile tempfile;
     const size_t numThreads = std::thread::hardware_concurrency();
