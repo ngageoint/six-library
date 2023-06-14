@@ -197,8 +197,8 @@ public:
     ~ComplexToAMP8IPHS8I() = default;
     ComplexToAMP8IPHS8I(const ComplexToAMP8IPHS8I&) = delete;
     ComplexToAMP8IPHS8I& operator=(const ComplexToAMP8IPHS8I&) = delete;
-    ComplexToAMP8IPHS8I(ComplexToAMP8IPHS8I&&) = default;
-    ComplexToAMP8IPHS8I& operator=(ComplexToAMP8IPHS8I&&) = default;
+    ComplexToAMP8IPHS8I(ComplexToAMP8IPHS8I&&) = delete; // move is implicitly deleted because of =delete for copy
+    ComplexToAMP8IPHS8I& operator=(ComplexToAMP8IPHS8I&&) = delete; // move is implicitly deleted becuase of =delete for copy
 
     /*!
      * Get the nearest amplitude and phase value given a complex value
