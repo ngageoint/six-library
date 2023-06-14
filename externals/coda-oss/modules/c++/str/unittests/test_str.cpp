@@ -22,8 +22,17 @@
 
 #include <tuple> // std::ignore
 
+// TODO: remove this once TIntergers are switched to types::details::complex<TInteger>
+// '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning.
+#ifndef _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
+#define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
+#endif
+#include <complex>
+
 #include <config/compiler_extensions.h>
 #include <import/str.h>
+#include <types/complex.h>
+
 #include "TestCase.h"
 
 inline std::string to_string(const std::string& value)
@@ -225,6 +234,44 @@ TEST_CASE(testEscapeForXMLKitchenSink)
     TEST_ASSERT_EQ(message, expectedMessage);
 }
 
+TEST_CASE(test_toStringComplexFloat)
+{
+    const std::string expected("(1,-2)");
+
+    const std::complex<float> std_cx_float(1.0f, -2.0f);
+    auto actual = str::toString(std_cx_float);
+    TEST_ASSERT_EQ(actual, expected);
+
+    const types::complex<float> types_cx_float(1.0f, -2.0f);
+    actual = str::toString(types_cx_float);
+    TEST_ASSERT_EQ(actual, expected);
+
+    const types::zfloat zfloat(1.0f, -2.0f);
+    actual = str::toString(zfloat);
+    TEST_ASSERT_EQ(actual, expected);
+}
+
+TEST_CASE(test_toStringComplexShort)
+{
+    const std::string expected("(1,-2)");
+
+    #if _MSC_VER
+    #pragma warning(disable: 4996) // '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning
+    #endif
+    const std::complex<short> std_cx_short(1, -2);
+    auto actual = str::toString(std_cx_short);
+    TEST_ASSERT_EQ(actual, expected);
+
+    const types::complex<short> types_cx_short(1, -2);
+    actual = str::toString(types_cx_short);
+    TEST_ASSERT_EQ(actual, expected);
+
+    const types::zint16_t zint16(1, -2);
+    actual = str::toString(zint16);
+    TEST_ASSERT_EQ(actual, expected);
+}
+
+
 TEST_MAIN(
     TEST_CHECK(testTrim);
     TEST_CHECK(testData);
@@ -247,4 +294,6 @@ TEST_MAIN(
     TEST_CHECK(testRoundDouble);
     TEST_CHECK(testEscapeForXMLNoReplace);
     TEST_CHECK(testEscapeForXMLKitchenSink);
+    TEST_CHECK(test_toStringComplexFloat);
+    TEST_CHECK(test_toStringComplexShort);
     )

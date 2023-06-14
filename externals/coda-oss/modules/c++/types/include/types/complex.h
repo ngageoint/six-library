@@ -27,14 +27,9 @@
 
 #include <stdint.h>
 
-// TODO: remove this once TIntergers are switched to types::details::complex<TInteger>
-// '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning.
-#ifndef _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
-#define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
-#endif
-
 #include <complex>
 #include <type_traits>
+#include <iostream>
 
 #include "config/disable_compiler_warnings.h"
 #include "coda_oss/CPlusPlus.h"
@@ -107,6 +102,15 @@ inline const std::complex<T>& cast(const complex<T>& z)
     const void* const pZ_ = &z;
     return *static_cast<const std::complex<T>*>(pZ_);
 }
+template <typename T>
+inline std::complex<T>& cast(complex<T>& z)
+{
+    // Getting different results with GCC vs MSVC :-(  So just use
+    // std::complex<short> Assume by the time we're actually using C++23 with a
+    // compiler that enforces this restriction, "something" will be different.
+    void* const pZ_ = &z;
+    return *static_cast<std::complex<T>*>(pZ_);
+}
 
 CODA_OSS_disable_warning_pop
 
@@ -117,29 +121,57 @@ inline auto abs(const complex<T>& z)
     return abs(cast(z));
 }
 
+// https://en.cppreference.com/w/cpp/numeric/complex/operator_ltltgtgt
+template <typename T, typename CharT, typename Traits>
+inline auto& operator<<(std::basic_ostream<CharT, Traits>& o, const complex<T>& z)
+{
+    return o << cast(z);
+}
+template <typename T, typename CharT, typename Traits>
+inline auto& operator>>(std::basic_istream<CharT, Traits>& o, complex<T>& z)
+{
+    return o >> cast(z);
 }
 
-//// Have the compiler pick between std::complex and details::complex
-//template<typename T>
-//using complex = std::conditional_t<std::is_floating_point<T>::value, std::complex<T>, details::complex<T>>;
-//static_assert(std::is_same<details::complex<int>, complex<int>>::value, "should be details::complex<int>");
-template<typename T>
-using complex = std::complex<T>;
+// https://en.cppreference.com/w/cpp/numeric/complex/operator_cmp
+template <typename T>
+inline bool operator==(const complex<T>& lhs, const complex<T>& rhs)
+{
+    return (lhs.real() == rhs.real()) && (lhs.imag() == rhs.imag());
+}
+template <typename T>
+inline bool operator!=(const complex<T>& lhs, const complex<T>& rhs)
+{
+    return !(lhs == rhs);
+}
 
-static_assert(std::is_same<std::complex<float>, complex<float>>::value, "should be std::complex<float>");
+} // namespace details
+
+// Clients shouldn't "know about" details::, but sometimes they know that
+// they want a complex for integers.
+template<typename T>
+using zinteger_t = details::complex<T>;
+
+template<typename T>
+using zreal_t = std::complex<T>;
+
+// Have the compiler pick between std::complex and details::complex
+template<typename T>
+using complex = std::conditional_t<std::is_floating_point<T>::value, zreal_t<T>, zinteger_t<T>>;
+static_assert(std::is_same<zinteger_t<int>, complex<int>>::value, "should be details::complex<int>");
+static_assert(std::is_same<zreal_t<float>, complex<float>>::value, "should be std::complex<float>");
 static_assert(sizeof(std::complex<short>) == sizeof(complex<short>), "sizeof(sizeof(std::complex<short>) != sizeof(complex<short>)");
 
 // Convenient aliases
-using zfloat = complex<float>; // std::complex<float>
-using zdouble = complex<double>; // std::complex<double>
-//using zlong_double = complex<long double>; // std::complex<long double>
+using zfloat = zreal_t<float>; // std::complex<float>
+using zdouble = zreal_t<double>; // std::complex<double>
+//using zlong_double = zreal_t<long double>; // std::complex<long double>
 
 // Intentionally using somewhat cumbersome names
-// TODO: switch TIntergers to types::details::complex<TInteger>
-using zint8_t = complex<int8_t>;  // details:complex<int8_t>
-using zint16_t = complex<int16_t>;  // details:complex<int16_t>
-using zint32_t = complex<int32_t>;  // details::complex<int32_t>
-using zint64_t = complex<int64_t>;  // details::complex<int64_t>
+using zint8_t = zinteger_t<int8_t>;  // details:complex<int8_t>
+using zint16_t = zinteger_t<int16_t>;  // details:complex<int16_t>
+using zint32_t = zinteger_t<int32_t>;  // details::complex<int32_t>
+using zint64_t = zinteger_t<int64_t>;  // details::complex<int64_t>
 }
 
 #endif  // CODA_OSS_types_complex_h_INCLUDED_

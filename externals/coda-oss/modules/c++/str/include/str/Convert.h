@@ -20,12 +20,11 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_str_Convert_h_INCLUDED_
 #define CODA_OSS_str_Convert_h_INCLUDED_
-#pragma once
 
 #include <cerrno>
-#include <complex>
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
@@ -34,11 +33,13 @@
 #include <sstream>
 #include <string>
 #include <typeinfo>
+#include <type_traits>
 
 #include "config/Exports.h"
 #include "coda_oss/string.h"
 #include "coda_oss/optional.h"
 #include "coda_oss/cstddef.h"
+#include "types/complex.h"
 #include "import/except.h"
 
 namespace str
@@ -47,7 +48,7 @@ template <typename T>
 int getPrecision(const T& type);
 
 template <typename T>
-int getPrecision(const std::complex<T>& type);
+int getPrecision(const types::complex<T>& type);
 
 namespace details
 {
@@ -197,6 +198,7 @@ inline std::string toString(const coda_oss::optional<T>& value)
 template <typename T>
 inline std::string toString(const T& real, const T& imag)
 {
+    static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
     return details::default_toString(std::complex<T>(real, imag));
 }
 
@@ -330,7 +332,7 @@ int getPrecision(const T&)
 }
 
 template <typename T>
-int getPrecision(const std::complex<T>& type)
+int getPrecision(const types::complex<T>& type)
 {
     return getPrecision(type.real());
 }
