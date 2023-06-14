@@ -542,7 +542,7 @@ XMLElem SICommonXMLParser::createLatLonAlt(const std::string& name,
 void SICommonXMLParser::parseParameter(const xml::lite::Element* element, Parameter& p) const
 {
     p.setName(element->getAttributes().getValue("name"));
-    p.setValue<std::string>(element->getCharacterData());
+    p.setValue(element->getCharacterData());
 }
 
 void SICommonXMLParser::parseParameters(const xml::lite::Element* paramXML,

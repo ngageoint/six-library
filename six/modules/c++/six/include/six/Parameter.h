@@ -103,9 +103,13 @@ public:
 
     //!  Set the parameters' value
     template<typename T>
-    void setValue(T value)
+    void setValue(const T& value)
     {
         mValue = str::toString<T>(value);
+    }
+    inline void setValue(const char* value)
+    {
+        setValue(std::string(value));
     }
 
     //! Overload templated setValue function

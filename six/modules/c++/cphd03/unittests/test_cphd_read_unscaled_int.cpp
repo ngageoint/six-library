@@ -38,7 +38,7 @@
 #include "TestCase.h"
 
 template<typename T>
-std::vector<types::complex<T> > generateData(size_t length)
+auto generateData(size_t length)
 {
     std::vector<types::complex<T> > data(length);
     srand(0);
@@ -194,20 +194,17 @@ bool runTest(bool scale, const std::vector<types::complex<T> >& writeData)
     io::TempFile tempfile;
     const size_t numThreads = std::thread::hardware_concurrency();
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<double> scaleFactors =
-            generateScaleFactors(dims.row, scale);
     writeCPHD(tempfile.pathname(), numThreads, dims, writeData);
-    const std::vector<cphd::zfloat > readData =
-            checkData(tempfile.pathname(), numThreads, scaleFactors,
-            scale, dims);
+
+    const auto scaleFactors = generateScaleFactors(dims.row, scale);
+    const auto readData = checkData(tempfile.pathname(), numThreads, scaleFactors, scale, dims);
     return compareVectors(readData, writeData, scaleFactors, scale);
 }
 
 TEST_CASE(testUnscaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<cphd::zint8_t > writeData =
-            generateData<int8_t>(dims.area());
+    const auto writeData = generateData<int8_t>(dims.area());
     const bool scale = false;
     TEST_ASSERT(runTest(scale, writeData));
 }
@@ -215,16 +212,14 @@ TEST_CASE(testUnscaledInt8)
 TEST_CASE(testScaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<cphd::zint8_t > writeData =
-            generateData<int8_t>(dims.area());
+    const auto writeData = generateData<int8_t>(dims.area());
     const bool scale = true;
     TEST_ASSERT(runTest(scale, writeData));
 }
 TEST_CASE(testUnscaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<cphd::zint16_t > writeData =
-            generateData<int16_t>(dims.area());
+    const auto writeData = generateData<int16_t>(dims.area());
     const bool scale = false;
     TEST_ASSERT(runTest(scale, writeData));
 }
@@ -232,8 +227,7 @@ TEST_CASE(testUnscaledInt16)
 TEST_CASE(testScaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<cphd::zint16_t > writeData =
-            generateData<int16_t>(dims.area());
+    const auto writeData = generateData<int16_t>(dims.area());
     const bool scale = true;
     TEST_ASSERT(runTest(scale, writeData));
 }
@@ -241,8 +235,7 @@ TEST_CASE(testScaledInt16)
 TEST_CASE(testUnscaledFloat)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<cphd::zfloat > writeData =
-            generateData<float>(dims.area());
+    const auto writeData = generateData<float>(dims.area());
     const bool scale = false;
     TEST_ASSERT(runTest(scale, writeData));
 }
@@ -250,8 +243,7 @@ TEST_CASE(testUnscaledFloat)
 TEST_CASE(testScaledFloat)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<cphd::zfloat > writeData =
-            generateData<float>(dims.area());
+    const auto writeData = generateData<float>(dims.area());
     const bool scale = true;
     TEST_ASSERT(runTest(scale, writeData));
 }
