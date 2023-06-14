@@ -84,10 +84,10 @@ inline cphd::SampleType getSampleType(size_t writeDataSize)
     throw std::invalid_argument("Unespced writeDataSize");
 }
 
-template<typename T>
+template<typename TCxVector>
 void writeCPHD(const std::string& outPathname, size_t numThreads,
         const types::RowCol<size_t> dims,
-        const std::vector<types::complex<T> >& writeData)
+        const TCxVector& writeData)
 {
     const size_t numChannels = 1;
     const std::vector<size_t> numVectors(numChannels, dims.row);
@@ -164,9 +164,9 @@ std::vector<cphd::zfloat > checkData(const std::string& pathname,
     return readData;
 }
 
-template<typename T>
+template<typename TCxVector>
 bool compareVectors(const std::vector<cphd::zfloat >& readData,
-                    const std::vector<types::complex<T> >& writeData,
+                    const TCxVector& writeData,
                     const std::vector<double>& scaleFactors,
                     bool scale)
 {
@@ -188,8 +188,8 @@ bool compareVectors(const std::vector<cphd::zfloat >& readData,
     return true;
 }
 
-template<typename T>
-bool runTest(bool scale, const std::vector<types::complex<T> >& writeData)
+template<typename TCxVector>
+bool runTest(bool scale, const TCxVector& writeData)
 {
     io::TempFile tempfile;
     const size_t numThreads = std::thread::hardware_concurrency();

@@ -61,9 +61,17 @@ struct AddedPVP
     }
 };
 template<typename T>
-struct AddedPVP<types::complex<T> >
+struct AddedPVP<std::complex<T> >
 {
-    types::complex<T> getAddedPVP(const six::Parameter& val) const
+    auto getAddedPVP(const six::Parameter& val) const
+    {
+        return val.getComplex<T>();
+    }
+};
+template<typename T>
+struct AddedPVP<types::zinteger_t<T> >
+{
+    auto getAddedPVP(const six::Parameter& val) const
     {
         return val.getComplex<T>();
     }
