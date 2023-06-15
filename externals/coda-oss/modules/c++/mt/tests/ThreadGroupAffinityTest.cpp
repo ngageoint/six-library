@@ -20,8 +20,6 @@
  *
  */
 
-#include <atomic>
-
 #if !defined(__APPLE_CC__) && (defined(__linux) || defined(__linux__))
 #include <iostream>
 
@@ -66,8 +64,8 @@ public:
         // assigned to
         for (size_t trials = 0; trials < 10; ++trials)
         {
-            constexpr size_t count = 10000000000;
-            std::atomic<size_t> sum{0};
+            volatile size_t count = 10000000000;
+            volatile size_t sum = 0;
             for (size_t ii = 0; ii < count; ++ii)
             {
                 sum++;
