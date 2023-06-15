@@ -46,7 +46,7 @@ TEST_CASE(TestCxShort_abs)
     auto actual = abs(types_zint16);
     TEST_ASSERT_EQ(actual, expected);
 
-    const types::complex<int16_t> types_cx_int16(cx_short);
+    const types::zinteger<int16_t> types_cx_int16(cx_short);
     actual = abs(types_cx_int16);
     TEST_ASSERT_EQ(actual, expected);
 }
