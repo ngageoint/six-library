@@ -60,22 +60,15 @@ struct AddedPVP
         return static_cast<T>(val);
     }
 };
-template<>
-struct AddedPVP<types::zfloat>
+template<typename T>
+struct AddedPVP<std::complex<T>>
 {
     auto getAddedPVP(const six::Parameter& val) const
     {
-        return val.getComplex<float>();
+        return val.getComplex<T>();
     }
 };
-template<>
-struct AddedPVP<types::zdouble>
-{
-    auto getAddedPVP(const six::Parameter& val) const
-    {
-        return val.getComplex<double> ();
-    }
-};
+#if CODA_OSS_types_unique_zinteger 
 template<typename T>
 struct AddedPVP<types::zinteger<T> >
 {
@@ -84,6 +77,7 @@ struct AddedPVP<types::zinteger<T> >
         return val.getComplex<T>();
     }
 };
+#endif
 template<>
 struct AddedPVP<std::string>
 {
