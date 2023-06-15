@@ -27,6 +27,12 @@
 
 #include <stdint.h>
 
+// TODO: remove this once TIntergers are switched to types::details::complex<TInteger>
+// '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning.
+#ifndef _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
+#define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
+#endif
+
 #include <complex>
 #include <type_traits>
 #include <iostream>
@@ -162,7 +168,6 @@ template<> struct zreal<long double> final
     using type = std::complex<long double>;
 };
 
-
 } // namespace details
 
 
@@ -181,17 +186,13 @@ using zreal = typename details::zreal<T>::type;
 //Have the compiler pick between std::complex and details::complex
 //template<typename T>
 //using complex = std::conditional_t<std::is_floating_point<T>::value, zreal_t<T>, zinteger_t<T>>;
-
-static_assert(std::is_same<details::complex<int>, zinteger<int>>::value, "should be details::complex<int>");
+static_assert(sizeof(std::complex<short>) == sizeof(zinteger<short>), "sizeof(sizeof(std::complex<short>) != sizeof(zinteger<short>)");
 static_assert(std::is_same<std::complex<float>, zreal<float>>::value, "should be std::complex<float>");
-static_assert(sizeof(std::complex<short>) == sizeof(zinteger<short>), "sizeof(sizeof(std::complex<short>) != sizeof(complex<short>)");
 
 // Convenient aliases
 using zfloat = zreal<float>; // std::complex<float>
 using zdouble = zreal<double>; // std::complex<double>
 //using zlong_double = zreal_t<long double>; // std::complex<long double>
-
-// Intentionally using somewhat cumbersome names
 using zint8_t = zinteger<int8_t>;  // details:complex<int8_t>
 using zint16_t = zinteger<int16_t>;  // details:complex<int16_t>
 using zint32_t = zinteger<int32_t>;  // details::complex<int32_t>

@@ -250,15 +250,33 @@ TEST_CASE(test_toStringComplexFloat)
     actual = str::toString(zfloat);
     TEST_ASSERT_EQ(actual, expected);
 }
+TEST_CASE(test_toTypeComplexFloat)
+{
+    const std::string strValue("(1,-2)");
+
+    auto actual = str::toType<std::complex<float>>(strValue);
+    auto strActual = str::toString(actual);
+    TEST_ASSERT_EQ(strActual, strValue);
+
+    actual = str::toType<types::zreal<float>>(strValue);
+    strActual = str::toString(actual);
+    TEST_ASSERT_EQ(strActual, strValue);
+
+    actual = str::toType<types::zfloat>(strValue);
+    strActual = str::toString(actual);
+    TEST_ASSERT_EQ(strActual, strValue);
+}
 
 TEST_CASE(test_toStringComplexShort)
 {
     const std::string expected("(1,-2)");
 
+    CODA_OSS_disable_warning_push
     #if _MSC_VER
     #pragma warning(disable: 4996) // '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning
     #endif
     const std::complex<short> std_cx_short(1, -2);
+    CODA_OSS_disable_warning_pop
     auto actual = str::toString(std_cx_short);
     TEST_ASSERT_EQ(actual, expected);
 
@@ -269,6 +287,27 @@ TEST_CASE(test_toStringComplexShort)
     const types::zint16_t zint16(1, -2);
     actual = str::toString(zint16);
     TEST_ASSERT_EQ(actual, expected);
+}
+TEST_CASE(test_toTypeComplexShort)
+{
+    const std::string strValue("(1,-2)");
+
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable: 4996) // '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning
+    #endif
+    const auto cx_actual = str::toType<std::complex<short>>(strValue);
+    CODA_OSS_disable_warning_pop
+    auto strActual = str::toString(cx_actual);
+    TEST_ASSERT_EQ(strActual, strValue);
+
+    auto zactual = str::toType<types::zinteger<short>>(strValue);
+    strActual = str::toString(zactual);
+    TEST_ASSERT_EQ(strActual, strValue);
+
+    zactual = str::toType<types::zint16_t>(strValue);
+    strActual = str::toString(zactual);
+    TEST_ASSERT_EQ(strActual, strValue);
 }
 
 
@@ -295,5 +334,7 @@ TEST_MAIN(
     TEST_CHECK(testEscapeForXMLNoReplace);
     TEST_CHECK(testEscapeForXMLKitchenSink);
     TEST_CHECK(test_toStringComplexFloat);
+    TEST_CHECK(test_toTypeComplexFloat);
     TEST_CHECK(test_toStringComplexShort);
+    TEST_CHECK(test_toTypeComplexShort);
     )
