@@ -44,9 +44,15 @@ using zfloat = six::zfloat;
 using zdouble = six::zdouble;
 using zint16_t = six::zint16_t;
 
+#if CODA_OSS_types_unique_zinteger
 using zint8_t = std::complex<int8_t>; // TODO: types::zint8_t;
 using zint32_t = std::complex<int32_t>; // TODO: types::zint32_t;
 using zint64_t = std::complex<int64_t>; // TODO: types::zint64_t;
+#else
+using zint8_t = types::zint8_t;
+using zint32_t = types::zint32_t;
+using zint64_t = types::zint64_t;
+#endif
 
 typedef six::Vector2 Vector2;
 
