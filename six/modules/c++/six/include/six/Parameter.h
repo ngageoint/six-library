@@ -60,9 +60,14 @@ struct Parameter final
     }
 
     template<typename T>
-    Parameter(const types::complex<T>& value)
+    Parameter(const types::zreal<T>& value)
     {
-        mValue = str::toString<types::complex<T> >(mValue);
+        mValue = str::toString<types::zreal<T> >(mValue);
+    }
+    template<typename T>
+    Parameter(const types::zinteger<T>& value)
+    {
+        mValue = str::toString<types::zinteger<T> >(mValue);
     }
 
      /*!
@@ -89,14 +94,19 @@ struct Parameter final
 
     //! Get complex parameter
     template<typename T>
-    types::complex<T> getComplex() const
+    std::complex<T> getComplex() const
     {
-        return str::toType<types::complex<T> >(mValue);
+        return str::toType<std::complex<T> >(mValue);
     }
     template<typename T>
-    void getComplex(types::complex<T>& result) const
+    void getComplex(types::zreal<T>& result) const
     {
-        result = str::toType<types::complex<T> >(mValue);
+        result = str::toType<types::zreal<T> >(mValue);
+    }
+    template<typename T>
+    void getComplex(types::zinteger<T>& result) const
+    {
+        result = str::toType<types::zinteger<T> >(mValue);
     }
 
     //!  Set the parameters' name
@@ -118,9 +128,14 @@ struct Parameter final
 
     //! Overload templated setValue function
     template<typename T>
-    void setValue(const types::complex<T>& value)
+    void setValue(const types::zreal<T>& value)
     {
-        mValue = str::toString<types::complex<T> >(value);
+        mValue = str::toString<types::zreal<T> >(value);
+    }
+    template<typename T>
+    void setValue(const types::zinteger<T>& value)
+    {
+        mValue = str::toString<types::zinteger<T> >(value);
     }
 
     //!  Get back const char*
