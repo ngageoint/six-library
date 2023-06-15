@@ -20,12 +20,11 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_str_Convert_h_INCLUDED_
 #define CODA_OSS_str_Convert_h_INCLUDED_
-#pragma once
 
 #include <cerrno>
-#include <complex>
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
@@ -34,20 +33,22 @@
 #include <sstream>
 #include <string>
 #include <typeinfo>
+#include <type_traits>
 
 #include "config/Exports.h"
 #include "coda_oss/string.h"
 #include "coda_oss/optional.h"
 #include "coda_oss/cstddef.h"
+#include "types/complex.h"
 #include "import/except.h"
 
 namespace str
 {
-template <typename T>
-int getPrecision(const T& type);
-
-template <typename T>
-int getPrecision(const std::complex<T>& type);
+template <typename T> int getPrecision(const T& type);
+template <typename T> int getPrecision(const std::complex<T>&);
+#if CODA_OSS_types_unique_zinteger
+template <typename T> int getPrecision(const types::zinteger<T>&);
+#endif
 
 namespace details
 {
@@ -334,6 +335,13 @@ int getPrecision(const std::complex<T>& type)
 {
     return getPrecision(type.real());
 }
+#if CODA_OSS_types_unique_zinteger
+template <typename T>
+int getPrecision(const types::zinteger<T>& type)
+{
+    return getPrecision(type.real());
+}
+#endif
 
 template <>
 int getPrecision(const float& type);
