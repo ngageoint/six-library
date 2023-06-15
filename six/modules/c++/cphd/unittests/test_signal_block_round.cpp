@@ -74,10 +74,10 @@ inline std::vector<double> generateScaleFactors(size_t length, bool scale)
     return scaleFactors;
 }
 
-template<typename T>
+template<typename TCxVector>
 void writeCPHD(const std::string& outPathname, size_t /*numThreads*/,
         const types::RowCol<size_t> dims,
-        const std::vector<std::complex<T> >& writeData,
+        const TCxVector& writeData,
         cphd::Metadata& metadata,
         cphd::PVPBlock& pvpBlock)
 {
@@ -121,9 +121,9 @@ std::vector<cphd::zfloat > checkData(const std::string& pathname,
     return readData;
 }
 
-template<typename T>
+template<typename TCxVector>
 bool compareVectors(const std::vector<cphd::zfloat >& readData,
-                    const std::vector<std::complex<T> >& writeData,
+                    const TCxVector& writeData,
                     const std::vector<double>& scaleFactors,
                     bool scale)
 {
@@ -145,8 +145,8 @@ bool compareVectors(const std::vector<cphd::zfloat >& readData,
     return true;
 }
 
-template<typename T>
-bool runTest(bool scale, const std::vector<std::complex<T> >& writeData)
+template<typename TCxVector>
+bool runTest(bool scale, const TCxVector& writeData)
 {
     io::TempFile tempfile;
     const size_t numThreads = std::thread::hardware_concurrency();

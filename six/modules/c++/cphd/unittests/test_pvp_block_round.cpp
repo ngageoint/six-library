@@ -116,11 +116,11 @@ void setPVPBlock(const types::RowCol<size_t> dims,
     }
 }
 
-template <typename T>
+template <typename TCxVector>
 void writeCPHD(const std::string& outPathname,
                size_t numThreads,
                const types::RowCol<size_t> dims,
-               const std::vector<std::complex<T>>& writeData,
+               const TCxVector& writeData,
                cphd::Metadata& metadata,
                cphd::PVPBlock& pvpBlock)
 {
@@ -156,9 +156,9 @@ bool checkData(const std::string& pathname,
     return true;
 }
 
-template <typename T>
+template <typename TCxVector>
 bool runTest(bool /*scale*/,
-             const std::vector<std::complex<T>>& writeData,
+             const TCxVector& writeData,
              cphd::Metadata& meta,
              cphd::PVPBlock& pvpBlock,
              const types::RowCol<size_t> dims)
