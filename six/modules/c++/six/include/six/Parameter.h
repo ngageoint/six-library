@@ -60,15 +60,17 @@ struct Parameter final
     }
 
     template<typename T>
-    Parameter(const types::zreal<T>& value)
+    Parameter(const std::complex<T>& value)
     {
-        mValue = str::toString<types::zreal<T> >(mValue);
+        mValue = str::toString<std::complex<T> >(mValue);
     }
+    #if CODA_OSS_types_unique_zinteger
     template<typename T>
     Parameter(const types::zinteger<T>& value)
     {
         mValue = str::toString<types::zinteger<T> >(mValue);
     }
+    #endif
 
      /*!
      * \tparam T Desired (presumably numeric) type to convert to
@@ -99,15 +101,17 @@ struct Parameter final
         return str::toType<std::complex<T> >(mValue);
     }
     template<typename T>
-    void getComplex(types::zreal<T>& result) const
+    void getComplex(std::complex<T>& result) const
     {
-        result = str::toType<types::zreal<T> >(mValue);
+        result = str::toType<std::complex<T> >(mValue);
     }
+    #if CODA_OSS_types_unique_zinteger
     template<typename T>
     void getComplex(types::zinteger<T>& result) const
     {
         result = str::toType<types::zinteger<T> >(mValue);
     }
+    #endif
 
     //!  Set the parameters' name
     void setName(std::string name)
@@ -128,15 +132,17 @@ struct Parameter final
 
     //! Overload templated setValue function
     template<typename T>
-    void setValue(const types::zreal<T>& value)
+    void setValue(const std::complex<T>& value)
     {
-        mValue = str::toString<types::zreal<T> >(value);
+        mValue = str::toString<std::complex<T> >(value);
     }
+    #if CODA_OSS_types_unique_zinteger 
     template<typename T>
     void setValue(const types::zinteger<T>& value)
     {
         mValue = str::toString<types::zinteger<T> >(value);
     }
+    #endif
 
     //!  Get back const char*
     operator const char*() const
