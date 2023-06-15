@@ -61,13 +61,23 @@ struct AddedPVP
     }
 };
 template<typename T>
-struct AddedPVP<types::complex<T> >
+struct AddedPVP<std::complex<T>>
 {
-    types::complex<T> getAddedPVP(const six::Parameter& val) const
+    auto getAddedPVP(const six::Parameter& val) const
     {
         return val.getComplex<T>();
     }
 };
+//#if CODA_OSS_types_unique_zinteger 
+//template<typename T>
+//struct AddedPVP<types::zinteger<T> >
+//{
+//    auto getAddedPVP(const six::Parameter& val) const
+//    {
+//        return val.getComplex<T>();
+//    }
+//};
+//#endif
 template<>
 struct AddedPVP<std::string>
 {
