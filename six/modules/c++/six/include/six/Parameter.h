@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_PARAMETER_H__
-#define __SIX_PARAMETER_H__
+#pragma once
+#ifndef SIX_six_Parameter_h_INCLUDED_
+#define SIX_six_Parameter_h_INCLUDED_
 
 #include <type_traits>
 
@@ -40,14 +41,10 @@ namespace six
  *  and get parameters directly from native types without string
  *  conversion.
  */
-class Parameter
+struct Parameter final
 {
-public:
     Parameter() = default;
-    //!  Destructor
-    ~Parameter()
-    {
-    }
+    ~Parameter() = default;
 
     Parameter(const Parameter & other)
       : mValue(other.mValue),
@@ -95,32 +92,21 @@ public:
         return mName;
     }
 
-    struct details final
-    {
-        template<typename T>
-        struct complex_ final
-        {
-            using type = types::zinteger<T>;
-        };
-        template<>
-        struct complex_<float> final
-        {
-            using type = types::zfloat;
-        };
-        template<>
-        struct complex_<double> final
-        {
-            using type = types::zdouble;
-        };
-        template<typename T>
-        using complex = typename complex_<T>::type;
-    };
-
     //! Get complex parameter
     template<typename T>
-    inline auto getComplex() const
+    auto getComplex() const
     {
-        return str::toType<details::complex<T>>(mValue);
+        return str::toType<std::complex<T> >(mValue);
+    }
+    template<typename T>
+    void getComplex(const types::zreal<T>& result) const
+    {
+        result = str::toType<types::zreal<T>>(mValue);
+    }
+    template<typename T>
+    void getComplex(const types::zinteger<T>& result) const
+    {
+        result = str::toType<types::zinteger<T>>(mValue);
     }
 
     //!  Set the parameters' name
@@ -135,7 +121,7 @@ public:
     {
         mValue = str::toString<T>(value);
     }
-    inline void setValue(const char* value)
+    void setValue(const char* value)
     {
         setValue(std::string(value));
     }
@@ -162,7 +148,6 @@ public:
     {
         return mName == o.mName && mValue == o.mValue;
     }
-
     bool operator!=(const Parameter& o) const
     {
         return !((*this) == o);
@@ -171,10 +156,8 @@ public:
 protected:
     std::string mValue;
     std::string mName;
-
 };
 
 }
 
-#endif
-
+#endif // SIX_six_Parameter_h_INCLUDED_
