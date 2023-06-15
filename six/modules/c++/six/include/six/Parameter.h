@@ -23,8 +23,6 @@
 #ifndef SIX_six_Parameter_h_INCLUDED_
 #define SIX_six_Parameter_h_INCLUDED_
 
-#include <type_traits>
-
 #include <types/complex.h>
 #include <import/str.h>
 
@@ -46,28 +44,25 @@ struct Parameter final
     Parameter() = default;
     ~Parameter() = default;
 
-    Parameter(const Parameter & other)
-      : mValue(other.mValue),
-        mName(other.mName)
-    {
-    }
+    Parameter(const Parameter&) = default;
+    Parameter& operator=(const Parameter&) = default;
+    Parameter(Parameter&&) = default;
+    Parameter& operator=(Parameter&&) = default;
 
     //!  Templated constructor, constructs from given value
     template<typename T>
-    Parameter(T value)
+    Parameter(const T& value)
     {
         mValue = str::toString<T>(value);
     }
+    Parameter(const char* value) : Parameter(std::string(value))
+    {
+    }
 
     template<typename T>
-    Parameter(types::zreal<T> value)
+    Parameter(const types::complex<T>& value)
     {
-        mValue = str::toString<types::zreal<T> >(mValue);
-    }
-    template<typename T>
-    Parameter(types::zinteger<T> value)
-    {
-        mValue = str::toString<types::zinteger<T> >(mValue);
+        mValue = str::toString<types::complex<T> >(mValue);
     }
 
      /*!
@@ -76,37 +71,32 @@ struct Parameter final
      * \return Value as a T type
      */
     template<typename T>
-    inline operator T() const
+    operator T() const
     {
         return str::toType<T>(mValue);
     }
 
     //!  Get a string as a string
-    inline std::string str() const
+    std::string str() const
     {
         return mValue;
     }
     //!  Get the parameter's name
-    inline std::string getName() const
+    std::string getName() const
     {
         return mName;
     }
 
     //! Get complex parameter
     template<typename T>
-    auto getComplex() const
+    types::complex<T> getComplex() const
     {
-        return str::toType<std::complex<T> >(mValue);
+        return str::toType<types::complex<T> >(mValue);
     }
     template<typename T>
-    void getComplex(const types::zreal<T>& result) const
+    void getComplex(types::complex<T>& result) const
     {
-        result = str::toType<types::zreal<T>>(mValue);
-    }
-    template<typename T>
-    void getComplex(const types::zinteger<T>& result) const
-    {
-        result = str::toType<types::zinteger<T>>(mValue);
+        result = str::toType<types::complex<T> >(mValue);
     }
 
     //!  Set the parameters' name
@@ -128,14 +118,9 @@ struct Parameter final
 
     //! Overload templated setValue function
     template<typename T>
-    void setValue(const types::zreal<T>& value)
+    void setValue(const types::complex<T>& value)
     {
-        mValue = str::toString<types::zreal<T> >(value);
-    }
-    template<typename T>
-    void setValue(const types::zinteger<T>& value)
-    {
-        mValue = str::toString<types::zinteger<T> >(value);
+        mValue = str::toString<types::complex<T> >(value);
     }
 
     //!  Get back const char*
@@ -144,19 +129,19 @@ struct Parameter final
         return mValue.c_str();
     }
 
-    bool operator==(const Parameter& o) const
-    {
-        return mName == o.mName && mValue == o.mValue;
-    }
-    bool operator!=(const Parameter& o) const
-    {
-        return !((*this) == o);
-    }
-
-protected:
+private:
     std::string mValue;
     std::string mName;
 };
+
+inline bool operator==(const Parameter& lhs, const Parameter& rhs)
+{
+    return (lhs.getName() == rhs.getName()) && (lhs.str() == rhs.str());
+}
+inline bool operator!=(const Parameter& lhs, const Parameter& rhs)
+{
+    return !(lhs == rhs);
+}
 
 }
 
