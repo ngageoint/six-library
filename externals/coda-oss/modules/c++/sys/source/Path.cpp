@@ -178,17 +178,7 @@ std::string Path::absolutePath(const std::string& path)
 bool Path::isAbsolutePath(const std::string& path)
 {
 #ifdef _WIN32
-    const auto split = Path::splitDrive(path);
-    const auto drive = split.first;
-
-    // a URL such as "http://example.com" should NOT be an absolute path
-    // according to std::filesystem::path::is_absolute().
-    if (drive.length() > 2) // "C:"
-    {
-        return false; // drive letters are single characters, e.g., "C:\Windows"
-    }
-
-    return !drive.empty();
+    return !Path::splitDrive(path).first.empty();
 #else
     return (!path.empty() && path[0] == Path::delimiter()[0]);
 #endif
