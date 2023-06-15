@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_PARAMETER_H__
-#define __SIX_PARAMETER_H__
+#pragma once
+#ifndef SIX_six_Parameter_h_INCLUDED_
+#define SIX_six_Parameter_h_INCLUDED_
 
 #include <types/complex.h>
 #include <import/str.h>
@@ -38,30 +39,28 @@ namespace six
  *  and get parameters directly from native types without string
  *  conversion.
  */
-class Parameter
+struct Parameter final
 {
-public:
     Parameter() = default;
-    //!  Destructor
-    ~Parameter()
-    {
-    }
+    ~Parameter() = default;
 
-    Parameter(const Parameter & other)
-      : mValue(other.mValue),
-        mName(other.mName)
-    {
-    }
+    Parameter(const Parameter&) = default;
+    Parameter& operator=(const Parameter&) = default;
+    Parameter(Parameter&&) = default;
+    Parameter& operator=(Parameter&&) = default;
 
     //!  Templated constructor, constructs from given value
     template<typename T>
-    Parameter(T value)
+    Parameter(const T& value)
     {
         mValue = str::toString<T>(value);
     }
+    Parameter(const char* value) : Parameter(std::string(value))
+    {
+    }
 
     template<typename T>
-    Parameter(types::complex<T> value)
+    Parameter(const types::complex<T>& value)
     {
         mValue = str::toString<types::complex<T> >(mValue);
     }
@@ -72,27 +71,32 @@ public:
      * \return Value as a T type
      */
     template<typename T>
-    inline operator T() const
+    operator T() const
     {
         return str::toType<T>(mValue);
     }
 
     //!  Get a string as a string
-    inline std::string str() const
+    std::string str() const
     {
         return mValue;
     }
     //!  Get the parameter's name
-    inline std::string getName() const
+    std::string getName() const
     {
         return mName;
     }
 
     //! Get complex parameter
     template<typename T>
-    inline types::complex<T> getComplex() const
+    types::complex<T> getComplex() const
     {
         return str::toType<types::complex<T> >(mValue);
+    }
+    template<typename T>
+    void getComplex(types::complex<T>& result) const
+    {
+        result = str::toType<types::complex<T> >(mValue);
     }
 
     //!  Set the parameters' name
@@ -103,9 +107,13 @@ public:
 
     //!  Set the parameters' value
     template<typename T>
-    void setValue(T value)
+    void setValue(const T& value)
     {
         mValue = str::toString<T>(value);
+    }
+    void setValue(const char* value)
+    {
+        setValue(std::string(value));
     }
 
     //! Overload templated setValue function
@@ -121,23 +129,20 @@ public:
         return mValue.c_str();
     }
 
-    bool operator==(const Parameter& o) const
-    {
-        return mName == o.mName && mValue == o.mValue;
-    }
-
-    bool operator!=(const Parameter& o) const
-    {
-        return !((*this) == o);
-    }
-
-protected:
+private:
     std::string mValue;
     std::string mName;
-
 };
+
+inline bool operator==(const Parameter& lhs, const Parameter& rhs)
+{
+    return (lhs.getName() == rhs.getName()) && (lhs.str() == rhs.str());
+}
+inline bool operator!=(const Parameter& lhs, const Parameter& rhs)
+{
+    return !(lhs == rhs);
+}
 
 }
 
-#endif
-
+#endif // SIX_six_Parameter_h_INCLUDED_
