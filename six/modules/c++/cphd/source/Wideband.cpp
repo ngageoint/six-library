@@ -25,6 +25,7 @@
 #include <thread>
 #include <string>
 #include <memory>
+#include <type_traits>
 
 #include <types/complex.h>
 #include <except/Exception.h>
@@ -42,13 +43,26 @@
 #undef min
 #undef max
 
+template<typename T>
+struct complex_ final
+{
+    using type = types::zinteger<T>;
+};
+template<>
+struct complex_<float> final
+{
+    using type = types::zfloat;
+};
+template<typename T>
+using complex = typename complex_<T>::type;
+
 namespace
 {
 template <typename InT>
 class PromoteRunnable : public sys::Runnable
 {
 public:
-    PromoteRunnable(const types::complex<InT>* input,
+    PromoteRunnable(const complex<InT>* input,
                     size_t startRow,
                     size_t numRows,
                     size_t numCols,
@@ -65,14 +79,14 @@ public:
         {
             for (size_t col = 0; col < mDims.col; ++col, ++idx)
             {
-                const types::complex<InT>& input(mInput[idx]);
+                const complex<InT>& input(mInput[idx]);
                 mOutput[idx] = cphd::zfloat(input.real(), input.imag());
             }
         }
     }
 
 private:
-    const types::complex<InT>* const mInput;
+    const complex<InT>* const mInput;
     const types::RowCol<size_t> mDims;
     cphd::zfloat* const mOutput;
 };
@@ -81,7 +95,7 @@ template <typename InT>
 class ScaleRunnable : public sys::Runnable
 {
 public:
-    ScaleRunnable(const types::complex<InT>* input,
+    ScaleRunnable(const complex<InT>* input,
                   size_t startRow,
                   size_t numRows,
                   size_t numCols,
@@ -101,7 +115,7 @@ public:
             const double scaleFactor(mScaleFactors[row]);
             for (size_t col = 0; col < mDims.col; ++col, ++idx)
             {
-                const types::complex<InT>& input(mInput[idx]);
+                auto&& input(mInput[idx]);
                 mOutput[idx] = cphd::zfloat(static_cast<float>(input.real() * scaleFactor),
                                                    static_cast<float>(input.imag() * scaleFactor));
             }
@@ -109,7 +123,7 @@ public:
     }
 
 private:
-    const types::complex<InT>* const mInput;
+    const complex<InT>* const mInput;
     const types::RowCol<size_t> mDims;
     const double* const mScaleFactors;
     cphd::zfloat* const mOutput;
@@ -123,7 +137,7 @@ void promote(const void* input,
 {
     if (numThreads <= 1)
     {
-        PromoteRunnable<InT>(static_cast<const types::complex<InT>*>(input),
+        PromoteRunnable<InT>(static_cast<const complex<InT>*>(input),
                              0,
                              dims.row,
                              dims.col,
@@ -141,7 +155,7 @@ void promote(const void* input,
         while (planner.getThreadInfo(threadNum++, startRow, numRowsThisThread))
         {
            auto scaler = std::make_unique<PromoteRunnable<InT>>(
-                    static_cast<const types::complex<InT>*>(input),
+                    static_cast<const complex<InT>*>(input),
                     startRow,
                     numRowsThisThread,
                     dims.col,
@@ -184,7 +198,7 @@ void scale(const void* input,
 {
     if (numThreads <= 1)
     {
-        ScaleRunnable<InT>(static_cast<const types::complex<InT>*>(input),
+        ScaleRunnable<InT>(static_cast<const complex<InT>*>(input),
                            0,
                            dims.row,
                            dims.col,
@@ -203,7 +217,7 @@ void scale(const void* input,
         while (planner.getThreadInfo(threadNum++, startRow, numRowsThisThread))
         {
            auto scaler = std::make_unique<ScaleRunnable<InT>>(
-                    static_cast<const types::complex<InT>*>(input),
+                    static_cast<const complex<InT>*>(input),
                     startRow,
                     numRowsThisThread,
                     dims.col,

@@ -44,11 +44,9 @@
 
 namespace str
 {
-template <typename T>
-int getPrecision(const T& type);
-
-template <typename T>
-int getPrecision(const types::complex<T>& type);
+template <typename T> int getPrecision(const T& type);
+template <typename T> int getPrecision(const types::zreal<T>&);
+template <typename T> int getPrecision(const types::zinteger<T>&);
 
 namespace details
 {
@@ -332,7 +330,12 @@ int getPrecision(const T&)
 }
 
 template <typename T>
-int getPrecision(const types::complex<T>& type)
+int getPrecision(const types::zreal<T>& type)
+{
+    return getPrecision(type.real());
+}
+template <typename T>
+int getPrecision(const types::zinteger<T>& type)
 {
     return getPrecision(type.real());
 }

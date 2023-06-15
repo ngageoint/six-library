@@ -407,19 +407,19 @@ void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest_) const
         }
         else if (it->second.getFormat() == "CI2")
         {
-            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<std::int8_t>());
+            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<int8_t>());
         }
         else if (it->second.getFormat() == "CI4")
         {
-            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<std::int16_t>());
+            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<int16_t>());
         }
         else if (it->second.getFormat() == "CI8")
         {
-            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<std::int32_t>());
+            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<int32_t>());
         }
         else if (it->second.getFormat() == "CI16")
         {
-            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<std::int64_t>());
+            ::getData(dest + it->second.getByteOffset(), addedPVP.find(it->first)->second.getComplex<int64_t>());
         }
         else if (it->second.getFormat() == "CF8")
         {

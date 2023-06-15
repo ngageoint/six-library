@@ -242,7 +242,7 @@ TEST_CASE(test_toStringComplexFloat)
     auto actual = str::toString(std_cx_float);
     TEST_ASSERT_EQ(actual, expected);
 
-    const types::complex<float> types_cx_float(1.0f, -2.0f);
+    const types::zreal<float> types_cx_float(1.0f, -2.0f);
     actual = str::toString(types_cx_float);
     TEST_ASSERT_EQ(actual, expected);
 
@@ -262,7 +262,7 @@ TEST_CASE(test_toStringComplexShort)
     auto actual = str::toString(std_cx_short);
     TEST_ASSERT_EQ(actual, expected);
 
-    const types::complex<short> types_cx_short(1, -2);
+    const types::zinteger<short> types_cx_short(1, -2);
     actual = str::toString(types_cx_short);
     TEST_ASSERT_EQ(actual, expected);
 

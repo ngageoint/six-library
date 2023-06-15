@@ -60,16 +60,24 @@ struct AddedPVP
         return static_cast<T>(val);
     }
 };
-template<typename T>
-struct AddedPVP<std::complex<T> >
+template<>
+struct AddedPVP<types::zfloat>
 {
     auto getAddedPVP(const six::Parameter& val) const
     {
-        return val.getComplex<T>();
+        return val.getComplex<float>();
+    }
+};
+template<>
+struct AddedPVP<types::zdouble>
+{
+    auto getAddedPVP(const six::Parameter& val) const
+    {
+        return val.getComplex<double> ();
     }
 };
 template<typename T>
-struct AddedPVP<types::zinteger_t<T> >
+struct AddedPVP<types::zinteger<T> >
 {
     auto getAddedPVP(const six::Parameter& val) const
     {

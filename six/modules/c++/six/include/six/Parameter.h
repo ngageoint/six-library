@@ -22,6 +22,8 @@
 #ifndef __SIX_PARAMETER_H__
 #define __SIX_PARAMETER_H__
 
+#include <type_traits>
+
 #include <types/complex.h>
 #include <import/str.h>
 
@@ -61,9 +63,14 @@ public:
     }
 
     template<typename T>
-    Parameter(types::complex<T> value)
+    Parameter(types::zreal<T> value)
     {
-        mValue = str::toString<types::complex<T> >(mValue);
+        mValue = str::toString<types::zreal<T> >(mValue);
+    }
+    template<typename T>
+    Parameter(types::zinteger<T> value)
+    {
+        mValue = str::toString<types::zinteger<T> >(mValue);
     }
 
      /*!
@@ -88,11 +95,32 @@ public:
         return mName;
     }
 
+    struct details final
+    {
+        template<typename T>
+        struct complex_ final
+        {
+            using type = types::zinteger<T>;
+        };
+        template<>
+        struct complex_<float> final
+        {
+            using type = types::zfloat;
+        };
+        template<>
+        struct complex_<double> final
+        {
+            using type = types::zdouble;
+        };
+        template<typename T>
+        using complex = typename complex_<T>::type;
+    };
+
     //! Get complex parameter
     template<typename T>
-    inline types::complex<T> getComplex() const
+    inline auto getComplex() const
     {
-        return str::toType<types::complex<T> >(mValue);
+        return str::toType<details::complex<T>>(mValue);
     }
 
     //!  Set the parameters' name
@@ -114,9 +142,14 @@ public:
 
     //! Overload templated setValue function
     template<typename T>
-    void setValue(const types::complex<T>& value)
+    void setValue(const types::zreal<T>& value)
     {
-        mValue = str::toString<types::complex<T> >(value);
+        mValue = str::toString<types::zreal<T> >(value);
+    }
+    template<typename T>
+    void setValue(const types::zinteger<T>& value)
+    {
+        mValue = str::toString<types::zinteger<T> >(value);
     }
 
     //!  Get back const char*
