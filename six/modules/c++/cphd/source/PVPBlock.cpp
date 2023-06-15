@@ -312,7 +312,7 @@ void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::
 template<typename T>
 auto findComplex(const std::unordered_map<std::string, six::Parameter>& addedPVP, std::map<std::string, APVPType>::const_iterator it)
 {
-    types::complex<T> retval;
+    std::complex<T> retval;
     addedPVP.find(it->first)->second.getComplex(retval);
     return retval;
 }

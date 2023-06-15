@@ -60,9 +60,9 @@ struct Parameter final
     }
 
     template<typename T>
-    Parameter(const types::complex<T>& value)
+    Parameter(const std::complex<T>& value)
     {
-        mValue = str::toString<types::complex<T> >(mValue);
+        mValue = str::toString<std::complex<T> >(mValue);
     }
 
      /*!
@@ -89,14 +89,14 @@ struct Parameter final
 
     //! Get complex parameter
     template<typename T>
-    types::complex<T> getComplex() const
+    std::complex<T> getComplex() const
     {
-        return str::toType<types::complex<T> >(mValue);
+        return str::toType<std::complex<T> >(mValue);
     }
     template<typename T>
-    void getComplex(types::complex<T>& result) const
+    void getComplex(std::complex<T>& result) const
     {
-        result = str::toType<types::complex<T> >(mValue);
+        result = str::toType<std::complex<T> >(mValue);
     }
 
     //!  Set the parameters' name
@@ -118,9 +118,9 @@ struct Parameter final
 
     //! Overload templated setValue function
     template<typename T>
-    void setValue(const types::complex<T>& value)
+    void setValue(const std::complex<T>& value)
     {
-        mValue = str::toString<types::complex<T> >(value);
+        mValue = str::toString<std::complex<T> >(value);
     }
 
     //!  Get back const char*

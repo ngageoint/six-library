@@ -120,7 +120,7 @@ template <typename T>
 void writeCPHD(const std::string& outPathname,
                size_t numThreads,
                const types::RowCol<size_t> dims,
-               const std::vector<types::complex<T>>& writeData,
+               const std::vector<std::complex<T>>& writeData,
                cphd::Metadata& metadata,
                cphd::PVPBlock& pvpBlock)
 {
@@ -158,7 +158,7 @@ bool checkData(const std::string& pathname,
 
 template <typename T>
 bool runTest(bool /*scale*/,
-             const std::vector<types::complex<T>>& writeData,
+             const std::vector<std::complex<T>>& writeData,
              cphd::Metadata& meta,
              cphd::PVPBlock& pvpBlock,
              const types::RowCol<size_t> dims)
