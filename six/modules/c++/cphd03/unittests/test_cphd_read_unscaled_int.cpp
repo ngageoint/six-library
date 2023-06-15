@@ -205,7 +205,7 @@ bool runTest(bool scale, const TCxVector& writeData)
 TEST_CASE(testUnscaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const auto writeData = generateData<types::zint8_t>(dims.area());
+    const auto writeData = generateData<cphd::zint8_t>(dims.area());
     const bool scale = false;
     TEST_ASSERT(runTest(scale, writeData));
 }
@@ -213,14 +213,14 @@ TEST_CASE(testUnscaledInt8)
 TEST_CASE(testScaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const auto writeData = generateData<types::zint8_t>(dims.area());
+    const auto writeData = generateData<cphd::zint8_t>(dims.area());
     const bool scale = true;
     TEST_ASSERT(runTest(scale, writeData));
 }
 TEST_CASE(testUnscaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const auto writeData = generateData<types::zint16_t>(dims.area());
+    const auto writeData = generateData<cphd::zint16_t>(dims.area());
     const bool scale = false;
     TEST_ASSERT(runTest(scale, writeData));
 }
@@ -228,7 +228,7 @@ TEST_CASE(testUnscaledInt16)
 TEST_CASE(testScaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const auto writeData = generateData<types::zint16_t>(dims.area());
+    const auto writeData = generateData<cphd::zint16_t>(dims.area());
     const bool scale = true;
     TEST_ASSERT(runTest(scale, writeData));
 }
@@ -236,7 +236,7 @@ TEST_CASE(testScaledInt16)
 TEST_CASE(testUnscaledFloat)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const auto writeData = generateData<types::zfloat>(dims.area());
+    const auto writeData = generateData<cphd::zfloat>(dims.area());
     const bool scale = false;
     TEST_ASSERT(runTest(scale, writeData));
 }
@@ -244,7 +244,7 @@ TEST_CASE(testUnscaledFloat)
 TEST_CASE(testScaledFloat)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const auto writeData = generateData<types::zfloat>(dims.area());
+    const auto writeData = generateData<cphd::zfloat>(dims.area());
     const bool scale = true;
     TEST_ASSERT(runTest(scale, writeData));
 }

@@ -416,27 +416,27 @@ void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest_) const
         }
         else if (it->second.getFormat() == "CI2")
         {
-            ::getData(dest + it->second.getByteOffset(), findComplex<types::zint8_t>(addedPVP, it));
+            ::getData(dest + it->second.getByteOffset(), findComplex<cphd::zint8_t>(addedPVP, it));
         }
         else if (it->second.getFormat() == "CI4")
         {
-            ::getData(dest + it->second.getByteOffset(), findComplex<types::zint16_t>(addedPVP, it));
+            ::getData(dest + it->second.getByteOffset(), findComplex<cphd::zint16_t>(addedPVP, it));
         }
         else if (it->second.getFormat() == "CI8")
         {
-            ::getData(dest + it->second.getByteOffset(), findComplex<types::zint32_t>(addedPVP, it));
+            ::getData(dest + it->second.getByteOffset(), findComplex<cphd::zint32_t>(addedPVP, it));
         }
         else if (it->second.getFormat() == "CI16")
         {
-            ::getData(dest + it->second.getByteOffset(), findComplex<types::zint64_t>(addedPVP, it));
+            ::getData(dest + it->second.getByteOffset(), findComplex<cphd::zint64_t>(addedPVP, it));
         }
         else if (it->second.getFormat() == "CF8")
         {
-            ::getData(dest + it->second.getByteOffset(), findComplex<types::zfloat>(addedPVP, it));
+            ::getData(dest + it->second.getByteOffset(), findComplex<cphd::zfloat>(addedPVP, it));
         }
         else if (it->second.getFormat() == "CF16")
         {
-            ::getData(dest + it->second.getByteOffset(), findComplex<types::zdouble>(addedPVP, it));
+            ::getData(dest + it->second.getByteOffset(), findComplex<cphd::zdouble>(addedPVP, it));
         }
         else
         {

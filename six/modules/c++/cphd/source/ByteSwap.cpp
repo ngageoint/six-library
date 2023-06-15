@@ -42,6 +42,8 @@
 #include <mt/ThreadedByteSwap.h>
 #include <nitf/coda-oss.hpp>
 
+#include <cphd/Types.h>
+
 namespace
 {
 template <typename T>
@@ -241,13 +243,13 @@ void byteSwapAndPromote(const void* input,
     switch (elementSize)
     {
     case 2:
-        ::byteSwapAndPromote<types::zint8_t>(input, dims, numThreads, output);
+        ::byteSwapAndPromote<cphd::zint8_t>(input, dims, numThreads, output);
         break;
     case 4:
-        ::byteSwapAndPromote<types::zint16_t>(input, dims, numThreads, output);
+        ::byteSwapAndPromote<cphd::zint16_t>(input, dims, numThreads, output);
         break;
     case 8:
-        ::byteSwapAndPromote<types::zfloat>(input, dims, numThreads, output);
+        ::byteSwapAndPromote<cphd::zfloat>(input, dims, numThreads, output);
         break;
     default:
         throw except::Exception(Ctxt(
@@ -265,15 +267,15 @@ void byteSwapAndScale(const void* input,
     switch (elementSize)
     {
     case 2:
-        ::byteSwapAndScale<types::zint8_t>(input, dims, scaleFactors, numThreads,
+        ::byteSwapAndScale<cphd::zint8_t>(input, dims, scaleFactors, numThreads,
                                         output);
         break;
     case 4:
-        ::byteSwapAndScale<types::zint16_t>(input, dims, scaleFactors, numThreads,
+        ::byteSwapAndScale<cphd::zint16_t>(input, dims, scaleFactors, numThreads,
                                          output);
         break;
     case 8:
-        ::byteSwapAndScale<types::zfloat>(input, dims, scaleFactors, numThreads,
+        ::byteSwapAndScale<cphd::zfloat>(input, dims, scaleFactors, numThreads,
                                   output);
         break;
     default:

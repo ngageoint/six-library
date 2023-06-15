@@ -172,7 +172,7 @@ bool runTest(bool /*scale*/,
 TEST_CASE(testPVPBlockSimple)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const auto writeData = generateComplexData<types::zint16_t>(dims.area());
+    const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
@@ -195,7 +195,7 @@ TEST_CASE(testPVPBlockSimple)
 TEST_CASE(testPVPBlockOptional)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const auto writeData = generateComplexData<types::zint16_t>(dims.area());
+    const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
@@ -221,7 +221,7 @@ TEST_CASE(testPVPBlockOptional)
 TEST_CASE(testPVPBlockAdditional)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const auto writeData = generateComplexData<types::zint16_t>(dims.area());
+    const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);

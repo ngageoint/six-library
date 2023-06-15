@@ -352,12 +352,12 @@ bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
                           size_t numRowsPerSeg = 0)
 {
     bool success = true;
-    if (!doTests<types::zfloat>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    if (!doTests<six::zfloat>(schemaPaths, setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
 
-    if (!doTests<types::zint16_t>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    if (!doTests<six::zint16_t>(schemaPaths, setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }

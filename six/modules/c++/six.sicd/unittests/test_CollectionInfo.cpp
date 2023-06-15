@@ -49,7 +49,7 @@
 
 TEST_CASE(DummyData)
 {
-    const auto data = createData<types::zfloat>(types::RowCol<size_t>(10, 10));
+    const auto data = createData<six::zfloat>(types::RowCol<size_t>(10, 10));
 
     const std::vector<std::string> schemaPaths;
     const auto result = six::sicd::Utilities::toXMLString(*data, schemaPaths);
@@ -69,7 +69,7 @@ TEST_CASE(Classification)
 {
     const std::string classificationText("UNCLASSIFIED");
 
-    auto data = createData<types::zfloat>(types::RowCol<size_t>(10, 10));
+    auto data = createData<six::zfloat>(types::RowCol<size_t>(10, 10));
     data->collectionInformation->setClassificationLevel(classificationText);
     TEST_ASSERT_TRUE(data->getClassification().isUnclassified());
 
@@ -98,7 +98,7 @@ TEST_CASE(ClassificationCanada)
     const std::string classificationText("NON CLASSIFI\xc3\x89 / UNCLASSIFIED"); // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
 #endif
 
-    auto data = createData<types::zfloat>(types::RowCol<size_t>(10, 10));
+    auto data = createData<six::zfloat>(types::RowCol<size_t>(10, 10));
     data->collectionInformation->setClassificationLevel(classificationText);
     TEST_ASSERT_TRUE(data->getClassification().isUnclassified());
 

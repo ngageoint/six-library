@@ -39,6 +39,7 @@
 #include <cphd/ByteSwap.h>
 #include <cphd/Wideband.h>
 #include <cphd/FileHeader.h>
+#include <cphd/Types.h>
 
 #undef min
 #undef max
@@ -161,13 +162,13 @@ void promote(const void* input,
     switch (elementSize)
     {
     case 2:
-        promote<types::zint8_t>(input, dims, numThreads, output);
+        promote<cphd::zint8_t>(input, dims, numThreads, output);
         break;
     case 4:
-        promote<types::zint16_t>(input, dims, numThreads, output);
+        promote<cphd::zint16_t>(input, dims, numThreads, output);
         break;
     case 8:
-        promote<types::zfloat>(input, dims, numThreads, output);
+        promote<cphd::zfloat>(input, dims, numThreads, output);
         break;
     default:
         throw except::Exception(
@@ -225,13 +226,13 @@ void scale(const void* input,
     switch (elementSize)
     {
     case 2:
-        scale<types::zint8_t>(input, dims, scaleFactors, numThreads, output);
+        scale<cphd::zint8_t>(input, dims, scaleFactors, numThreads, output);
         break;
     case 4:
-        scale<types::zint16_t>(input, dims, scaleFactors, numThreads, output);
+        scale<cphd::zint16_t>(input, dims, scaleFactors, numThreads, output);
         break;
     case 8:
-        scale<types::zfloat>(input, dims, scaleFactors, numThreads, output);
+        scale<cphd::zfloat>(input, dims, scaleFactors, numThreads, output);
         break;
     default:
         throw except::Exception(

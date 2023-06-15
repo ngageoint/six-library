@@ -52,6 +52,7 @@ namespace six
 {
     using zfloat = scene::zfloat;
     using zdouble = scene::zdouble;
+    using zint16_t = std::complex<int16_t>; // TODO: types::zint16_t;
 }
 #include "six/AmplitudeTable.h"
 
@@ -198,7 +199,7 @@ struct Constants
             // Each pixel is stored as a pair of numbers that represent the real and imaginary 
             // components. Each component is stored in a 16-bit signed integer in 2's 
             // complement format (2 bytes per component, 4 bytes per pixel). 
-            static_assert(sizeof(types::zint16_t) == 4, "RE16I_IM16I should be two 16-bit integers");
+            static_assert(sizeof(six::zint16_t) == 4, "RE16I_IM16I should be two 16-bit integers");
             return 4;
         }
 

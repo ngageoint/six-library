@@ -96,9 +96,9 @@ private:
 // We'll expand to complex<float> starting in the first half of the buffer
 void expandComplex(size_t numPixels, std::byte* buffer)
 {
-    const types::zint16_t* const input =
-            reinterpret_cast<types::zint16_t*>(
-                    buffer + numPixels * sizeof(types::zint16_t));
+    const six::zint16_t* const input =
+            reinterpret_cast<six::zint16_t*>(
+                    buffer + numPixels * sizeof(six::zint16_t));
 
     six::zfloat* const output =
             reinterpret_cast<six::zfloat*>(buffer);
@@ -137,7 +137,7 @@ void compressInteger(size_t numPixels, std::byte* buffer)
     }
 
     auto const input = reinterpret_cast<const six::zfloat*>(buffer);
-    auto const output = reinterpret_cast<types::zint16_t*>(buffer);
+    auto const output = reinterpret_cast<six::zint16_t*>(buffer);
     const float diff = max - min;
 
     // If diff ends up being zero, we will get a division by 0 error.
@@ -145,14 +145,14 @@ void compressInteger(size_t numPixels, std::byte* buffer)
     // fill it with 0s.
     if (diff == 0.0f)
     {
-        std::fill_n(output, numPixels, types::zint16_t(0, 0));
+        std::fill_n(output, numPixels, six::zint16_t(0, 0));
         return;
     }
 
     const CompressFloat compressFloat(min, diff);
     for (size_t ii = 0; ii < numPixels; ++ii)
     {
-        output[ii] = types::zint16_t(
+        output[ii] = six::zint16_t(
                 compressFloat(input[ii].real()),
                 compressFloat(input[ii].imag()));
     }
