@@ -300,7 +300,7 @@ public:
 
     // Be explicit about the types of images that can be saved; templates are provided below.
     void save_image(std::span<const six::zfloat>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
-    void save_image(std::span<const types::zint16_t>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
+    void save_image(std::span<const six::zint16_t>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
     void save_image(std::span<const std::pair<uint8_t, uint8_t>>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
     void save_image(std::span<const uint8_t>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);
     void save_image(std::span<const uint16_t>, nitf::IOInterface&, const std::vector<std::filesystem::path>&);

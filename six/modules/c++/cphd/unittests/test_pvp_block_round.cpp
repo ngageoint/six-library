@@ -42,16 +42,17 @@
 #include <stdexcept>
 #include <string>
 
-template <typename T>
-std::vector<types::complex<T>> generateComplexData(size_t length)
+template <typename TComplex>
+auto generateComplexData(size_t length)
 {
-    std::vector<types::complex<T>> data(length);
+    using value_type = typename TComplex::value_type;
+    std::vector<TComplex> data(length);
     srand(0);
     for (size_t ii = 0; ii < data.size(); ++ii)
     {
-        float real = static_cast<T>(rand() / 100);
-        float imag = static_cast<T>(rand() / 100);
-        data[ii] = types::complex<T>(real, imag);
+        auto real = static_cast<value_type>(rand() / 100);
+        auto imag = static_cast<value_type>(rand() / 100);
+        data[ii] = TComplex(real, imag);
     }
     return data;
 }
@@ -115,11 +116,11 @@ void setPVPBlock(const types::RowCol<size_t> dims,
     }
 }
 
-template <typename T>
+template <typename TCxVector>
 void writeCPHD(const std::string& outPathname,
                size_t numThreads,
                const types::RowCol<size_t> dims,
-               const std::vector<types::complex<T>>& writeData,
+               const TCxVector& writeData,
                cphd::Metadata& metadata,
                cphd::PVPBlock& pvpBlock)
 {
@@ -155,9 +156,9 @@ bool checkData(const std::string& pathname,
     return true;
 }
 
-template <typename T>
+template <typename TCxVector>
 bool runTest(bool /*scale*/,
-             const std::vector<types::complex<T>>& writeData,
+             const TCxVector& writeData,
              cphd::Metadata& meta,
              cphd::PVPBlock& pvpBlock,
              const types::RowCol<size_t> dims)
@@ -171,8 +172,7 @@ bool runTest(bool /*scale*/,
 TEST_CASE(testPVPBlockSimple)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<cphd::zint16_t> writeData =
-            generateComplexData<int16_t>(dims.area());
+    const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
@@ -195,8 +195,7 @@ TEST_CASE(testPVPBlockSimple)
 TEST_CASE(testPVPBlockOptional)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<cphd::zint16_t> writeData =
-            generateComplexData<int16_t>(dims.area());
+    const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
@@ -222,8 +221,7 @@ TEST_CASE(testPVPBlockOptional)
 TEST_CASE(testPVPBlockAdditional)
 {
     const types::RowCol<size_t> dims(128, 256);
-    const std::vector<cphd::zint16_t> writeData =
-            generateComplexData<int16_t>(dims.area());
+    const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
     cphd::Metadata meta = cphd::Metadata();
     cphd::setUpData(meta, dims, writeData);
