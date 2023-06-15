@@ -235,7 +235,7 @@ struct Tester final
     {
         for (size_t ii = 0; ii < mImage.size(); ++ii)
         {
-            mImage[ii] = types::complex<DataTypeT>(
+            mImage[ii] = std::complex<DataTypeT>(
                     static_cast<DataTypeT>(ii),
                     static_cast<DataTypeT>(ii * 10));
         }
@@ -291,8 +291,8 @@ private:
 
     mem::SharedPtr<six::Container> mContainer;
     const types::RowCol<size_t> mDims;
-    std::vector<types::complex<DataTypeT> > mImage;
-    types::complex<DataTypeT>* const mImagePtr;
+    std::vector<std::complex<DataTypeT> > mImage;
+    std::complex<DataTypeT>* const mImagePtr;
 
     std::unique_ptr<const CompareFiles> mCompareFiles;
     const std::string mTestPathname;
@@ -402,7 +402,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
     // Rows [40, 60)
     // Cols [400, 456)
     types::RowCol<size_t> offset(40, 400);
-    std::vector<types::complex<DataTypeT> > subset;
+    std::vector<std::complex<DataTypeT> > subset;
     types::RowCol<size_t> subsetDims(20, 56);
     subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
     sicdWriter.save(subset.data(), offset, subsetDims);
@@ -457,7 +457,7 @@ bool doTests(const std::vector<std::string>& schemaPaths,
     //       It would be better to get the logic fixed that forces
     //       segmentation on the number of rows via OPT_MAX_ILOC_ROWS
     static const size_t APPROX_HEADER_SIZE = 2 * 1024;
-    const size_t numBytesPerRow = 456 * sizeof(types::complex<DataTypeT>);
+    const size_t numBytesPerRow = 456 * sizeof(std::complex<DataTypeT>);
     const size_t maxProductSize = numRowsPerSeg * numBytesPerRow +
             APPROX_HEADER_SIZE;
 
