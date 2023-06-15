@@ -45,8 +45,10 @@
 namespace str
 {
 template <typename T> int getPrecision(const T& type);
-template <typename T> int getPrecision(const types::zreal<T>&);
+template <typename T> int getPrecision(const std::complex<T>&);
+#if CODA_OSS_types_unique_zinteger
 template <typename T> int getPrecision(const types::zinteger<T>&);
+#endif
 
 namespace details
 {
@@ -330,15 +332,17 @@ int getPrecision(const T&)
 }
 
 template <typename T>
-int getPrecision(const types::zreal<T>& type)
+int getPrecision(const std::complex<T>& type)
 {
     return getPrecision(type.real());
 }
+#if CODA_OSS_types_unique_zinteger
 template <typename T>
 int getPrecision(const types::zinteger<T>& type)
 {
     return getPrecision(type.real());
 }
+#endif
 
 template <>
 int getPrecision(const float& type);
