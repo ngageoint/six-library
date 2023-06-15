@@ -309,11 +309,12 @@ void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::
     }
 }
 
-template<typename T>
+template<typename TComplex>
 auto findComplex(const std::unordered_map<std::string, six::Parameter>& addedPVP, std::map<std::string, APVPType>::const_iterator it)
 {
-    types::complex<T> retval;
-    addedPVP.find(it->first)->second.getComplex(retval);
+    using value_type = typename TComplex::value_type; // help the compiler find the right overload
+    TComplex retval;
+    addedPVP.find(it->first)->second.getComplex<value_type>(retval);
     return retval;
 }
 
@@ -415,27 +416,27 @@ void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest_) const
         }
         else if (it->second.getFormat() == "CI2")
         {
-            ::getData(dest + it->second.getByteOffset(), findComplex<std::int8_t>(addedPVP, it));
+            ::getData(dest + it->second.getByteOffset(), findComplex<types::zint8_t>(addedPVP, it));
         }
         else if (it->second.getFormat() == "CI4")
         {
-            ::getData(dest + it->second.getByteOffset(), findComplex<std::int16_t>(addedPVP, it));
+            ::getData(dest + it->second.getByteOffset(), findComplex<types::zint16_t>(addedPVP, it));
         }
         else if (it->second.getFormat() == "CI8")
         {
-            ::getData(dest + it->second.getByteOffset(), findComplex<std::int32_t>(addedPVP, it));
+            ::getData(dest + it->second.getByteOffset(), findComplex<types::zint32_t>(addedPVP, it));
         }
         else if (it->second.getFormat() == "CI16")
         {
-            ::getData(dest + it->second.getByteOffset(), findComplex<std::int64_t>(addedPVP, it));
+            ::getData(dest + it->second.getByteOffset(), findComplex<types::zint64_t>(addedPVP, it));
         }
         else if (it->second.getFormat() == "CF8")
         {
-            ::getData(dest + it->second.getByteOffset(), findComplex<float>(addedPVP, it));
+            ::getData(dest + it->second.getByteOffset(), findComplex<types::zfloat>(addedPVP, it));
         }
         else if (it->second.getFormat() == "CF16")
         {
-            ::getData(dest + it->second.getByteOffset(), findComplex<double>(addedPVP, it));
+            ::getData(dest + it->second.getByteOffset(), findComplex<types::zdouble>(addedPVP, it));
         }
         else
         {
