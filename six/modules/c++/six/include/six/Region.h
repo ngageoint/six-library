@@ -29,7 +29,7 @@
 
 #include <std/memory>
 #include <gsl/gsl.h>
-#include <types/complex.h>
+#include <types/Complex.h>
 
 #include <scene/sys_Conf.h>
 

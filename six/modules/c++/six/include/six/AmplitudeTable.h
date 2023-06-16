@@ -33,7 +33,7 @@
 #include <memory>
 #include <array>
 
-#include <types/complex.h>
+#include <types/Complex.h>
 #include <import/except.h>
 
 #include <nitf/LookupTable.hpp>

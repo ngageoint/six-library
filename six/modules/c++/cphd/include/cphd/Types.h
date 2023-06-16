@@ -27,7 +27,7 @@
 
 #include <ostream>
 
-#include <types/complex.h>
+#include <types/Complex.h>
 
 #include <six/Types.h>
 #include <six/Enums.h>

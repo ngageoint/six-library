@@ -23,7 +23,7 @@
 #ifndef SIX_six_Parameter_h_INCLUDED_
 #define SIX_six_Parameter_h_INCLUDED_
 
-#include <types/complex.h>
+#include <types/Complex.h>
 #include <import/str.h>
 
 #include "six/Types.h"

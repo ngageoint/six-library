@@ -747,7 +747,7 @@
     <ClInclude Include="sys\include\sys\SysInt.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="types\include\types\complex.h">
+    <ClInclude Include="types\include\types\Complex.h">
       <Filter>types</Filter>
     </ClInclude>
   </ItemGroup>
