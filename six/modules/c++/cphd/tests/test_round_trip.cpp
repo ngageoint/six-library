@@ -111,19 +111,19 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
         case cphd::SignalArrayFormat::CI2:
             writer.write(
                     pvpBlock,
-                    reinterpret_cast<const std::complex<int8_t>* >(data.get()),
+                    reinterpret_cast<const cphd::zint8_t* >(data.get()),
                     readPtr.get());
             break;
         case cphd::SignalArrayFormat::CI4:
             writer.write(
                     pvpBlock,
-                    reinterpret_cast<const std::complex<int16_t>* >(data.get()),
+                    reinterpret_cast<const cphd::zint16_t* >(data.get()),
                     readPtr.get());
             break;
         case cphd::SignalArrayFormat::CF8:
             writer.write(
                     pvpBlock,
-                    reinterpret_cast<const std::complex<float>* >(data.get()),
+                    reinterpret_cast<const cphd::zfloat* >(data.get()),
                     readPtr.get());
             break;
         }

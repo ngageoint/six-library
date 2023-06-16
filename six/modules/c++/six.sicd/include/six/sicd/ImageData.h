@@ -31,6 +31,8 @@
 #include <future>
 
 #include "logging/Logger.h"
+#include "types/complex.h"
+
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
@@ -39,7 +41,7 @@ namespace six
 {
 namespace sicd
 {
-using cx_float = std::complex<float>;
+using cx_float = six::zfloat;
 
 class GeoData;
 /*!

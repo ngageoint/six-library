@@ -24,33 +24,36 @@
 #include <sstream>
 #include <thread>
 #include <string>
-#include <std/memory>
+#include <memory>
+#include <type_traits>
 
-#include <nitf/coda-oss.hpp>
+#include <types/complex.h>
 #include <except/Exception.h>
 #include <io/FileInputStream.h>
 #include <mt/ThreadGroup.h>
 #include <mt/ThreadPlanner.h>
 
+#include <nitf/coda-oss.hpp>
+
 #include <six/Init.h>
 #include <cphd/ByteSwap.h>
 #include <cphd/Wideband.h>
 #include <cphd/FileHeader.h>
+#include <cphd/Types.h>
 
 #undef min
 #undef max
 
 namespace
 {
-template <typename InT>
-class PromoteRunnable : public sys::Runnable
+template <typename ComplexInT>
+struct PromoteRunnable final : public sys::Runnable
 {
-public:
-    PromoteRunnable(const std::complex<InT>* input,
+    PromoteRunnable(const ComplexInT* input,
                     size_t startRow,
                     size_t numRows,
                     size_t numCols,
-                    std::complex<float>* output) :
+                    cphd::zfloat* output) :
         mInput(input + startRow * numCols),
         mDims(numRows, numCols),
         mOutput(output + startRow * numCols)
@@ -63,28 +66,27 @@ public:
         {
             for (size_t col = 0; col < mDims.col; ++col, ++idx)
             {
-                const std::complex<InT>& input(mInput[idx]);
-                mOutput[idx] = std::complex<float>(input.real(), input.imag());
+                const ComplexInT& input(mInput[idx]);
+                mOutput[idx] = cphd::zfloat(input.real(), input.imag());
             }
         }
     }
 
 private:
-    const std::complex<InT>* const mInput;
+    const ComplexInT* const mInput;
     const types::RowCol<size_t> mDims;
-    std::complex<float>* const mOutput;
+    cphd::zfloat* const mOutput;
 };
 
-template <typename InT>
-class ScaleRunnable : public sys::Runnable
+template <typename ComplexInT>
+struct ScaleRunnable final : public sys::Runnable
 {
-public:
-    ScaleRunnable(const std::complex<InT>* input,
+    ScaleRunnable(const ComplexInT* input,
                   size_t startRow,
                   size_t numRows,
                   size_t numCols,
                   const double* scaleFactors,
-                  std::complex<float>* output) :
+                  cphd::zfloat* output) :
         mInput(input + startRow * numCols),
         mDims(numRows, numCols),
         mScaleFactors(scaleFactors + startRow),
@@ -99,29 +101,29 @@ public:
             const double scaleFactor(mScaleFactors[row]);
             for (size_t col = 0; col < mDims.col; ++col, ++idx)
             {
-                const std::complex<InT>& input(mInput[idx]);
-                mOutput[idx] = std::complex<float>(static_cast<float>(input.real() * scaleFactor),
+                auto&& input(mInput[idx]);
+                mOutput[idx] = cphd::zfloat(static_cast<float>(input.real() * scaleFactor),
                                                    static_cast<float>(input.imag() * scaleFactor));
             }
         }
     }
 
 private:
-    const std::complex<InT>* const mInput;
+    const ComplexInT* const mInput;
     const types::RowCol<size_t> mDims;
     const double* const mScaleFactors;
-    std::complex<float>* const mOutput;
+    cphd::zfloat* const mOutput;
 };
 
-template <typename InT>
+template <typename ComplexInT>
 void promote(const void* input,
              const types::RowCol<size_t>& dims,
              size_t numThreads,
-             std::complex<float>* output)
+             cphd::zfloat* output)
 {
     if (numThreads <= 1)
     {
-        PromoteRunnable<InT>(static_cast<const std::complex<InT>*>(input),
+        PromoteRunnable<ComplexInT>(static_cast<const ComplexInT*>(input),
                              0,
                              dims.row,
                              dims.col,
@@ -138,8 +140,8 @@ void promote(const void* input,
         size_t numRowsThisThread(0);
         while (planner.getThreadInfo(threadNum++, startRow, numRowsThisThread))
         {
-           auto scaler = std::make_unique<PromoteRunnable<InT>>(
-                    static_cast<const std::complex<InT>*>(input),
+           auto scaler = std::make_unique<PromoteRunnable<ComplexInT>>(
+                    static_cast<const ComplexInT*>(input),
                     startRow,
                     numRowsThisThread,
                     dims.col,
@@ -155,34 +157,34 @@ void promote(const void* input,
              size_t elementSize,
              const types::RowCol<size_t>& dims,
              size_t numThreads,
-             std::complex<float>* output)
+             cphd::zfloat* output)
 {
     switch (elementSize)
     {
     case 2:
-        promote<int8_t>(input, dims, numThreads, output);
+        promote<cphd::zint8_t>(input, dims, numThreads, output);
         break;
     case 4:
-        promote<int16_t>(input, dims, numThreads, output);
+        promote<cphd::zint16_t>(input, dims, numThreads, output);
         break;
     case 8:
-        promote<float>(input, dims, numThreads, output);
+        promote<cphd::zfloat>(input, dims, numThreads, output);
         break;
     default:
         throw except::Exception(
                 Ctxt("Unexpected element size " + std::to_string(elementSize)));
     }
 }
-template <typename InT>
+template <typename ComplexInT>
 void scale(const void* input,
            const types::RowCol<size_t>& dims,
            const double* scaleFactors,
            size_t numThreads,
-           std::complex<float>* output)
+           cphd::zfloat* output)
 {
     if (numThreads <= 1)
     {
-        ScaleRunnable<InT>(static_cast<const std::complex<InT>*>(input),
+        ScaleRunnable<ComplexInT>(static_cast<const ComplexInT*>(input),
                            0,
                            dims.row,
                            dims.col,
@@ -200,8 +202,8 @@ void scale(const void* input,
         size_t numRowsThisThread(0);
         while (planner.getThreadInfo(threadNum++, startRow, numRowsThisThread))
         {
-           auto scaler = std::make_unique<ScaleRunnable<InT>>(
-                    static_cast<const std::complex<InT>*>(input),
+           auto scaler = std::make_unique<ScaleRunnable<ComplexInT>>(
+                    static_cast<const ComplexInT*>(input),
                     startRow,
                     numRowsThisThread,
                     dims.col,
@@ -219,18 +221,18 @@ void scale(const void* input,
            const types::RowCol<size_t>& dims,
            const double* scaleFactors,
            size_t numThreads,
-           std::complex<float>* output)
+           cphd::zfloat* output)
 {
     switch (elementSize)
     {
     case 2:
-        scale<int8_t>(input, dims, scaleFactors, numThreads, output);
+        scale<cphd::zint8_t>(input, dims, scaleFactors, numThreads, output);
         break;
     case 4:
-        scale<int16_t>(input, dims, scaleFactors, numThreads, output);
+        scale<cphd::zint16_t>(input, dims, scaleFactors, numThreads, output);
         break;
     case 8:
-        scale<float>(input, dims, scaleFactors, numThreads, output);
+        scale<cphd::zfloat>(input, dims, scaleFactors, numThreads, output);
         break;
     default:
         throw except::Exception(
@@ -602,7 +604,7 @@ void Wideband::read(size_t channel,
                     const std::vector<double>& vectorScaleFactors,
                     size_t numThreads,
                     const mem::BufferView<sys::ubyte>& scratch,
-                    const mem::BufferView<std::complex<float>>& data) const
+                    const mem::BufferView<cphd::zfloat>& data) const
 {
     // Sanity checks
     types::RowCol<size_t> dims;

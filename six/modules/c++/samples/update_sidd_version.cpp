@@ -70,9 +70,9 @@ void writeSidd(std::unique_ptr<six::Data>&& derivedData,
     six::NITFWriteControl writer(container);
 
     const void* pWidebandData_ = widebandData_.data();
-    auto pWidebandData = static_cast<const std::complex<float>*>(pWidebandData_);
-    auto size = widebandData_.size() / sizeof(std::complex<float>);
-    const std::span<const std::complex<float>> widebandData(pWidebandData, size);
+    auto pWidebandData = static_cast<const six::zfloat*>(pWidebandData_);
+    auto size = widebandData_.size() / sizeof(six::zfloat);
+    const std::span<const six::zfloat> widebandData(pWidebandData, size);
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
     writer.save_image(widebandData, pathname, schemaPaths);

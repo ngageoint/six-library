@@ -33,11 +33,14 @@
 #include <memory>
 #include <array>
 
-#include <nitf/LookupTable.hpp>
-#include <scene/sys_Conf.h>
+#include <types/complex.h>
 #include <import/except.h>
 
+#include <nitf/LookupTable.hpp>
+#include <scene/sys_Conf.h>
+
 #include "six/Enums.h"
+#include "six/Types.h"
 
 namespace six
 {
@@ -156,10 +159,10 @@ struct LUT
  *  double precision amplitude value
  */
 
-// Store the computed `std::complex<float>` for every possible 
+// Store the computed `six::zfloat` for every possible 
 // amp/phs pair, a total of 256*256 values.
  //! Fixed size 256 element array of complex values.
-using phase_values_t = std::array<std::complex<float>, UINT8_MAX + 1>;
+using phase_values_t = std::array<six::zfloat, UINT8_MAX + 1>;
 //! Fixed size 256 x 256 matrix of complex values.
 using Amp8iPhs8iLookup_t = std::array<phase_values_t, UINT8_MAX + 1>;
 
@@ -194,15 +197,15 @@ public:
     ~ComplexToAMP8IPHS8I() = default;
     ComplexToAMP8IPHS8I(const ComplexToAMP8IPHS8I&) = delete;
     ComplexToAMP8IPHS8I& operator=(const ComplexToAMP8IPHS8I&) = delete;
-    ComplexToAMP8IPHS8I(ComplexToAMP8IPHS8I&&) = default;
-    ComplexToAMP8IPHS8I& operator=(ComplexToAMP8IPHS8I&&) = default;
+    ComplexToAMP8IPHS8I(ComplexToAMP8IPHS8I&&) = delete; // implicitly deleted because of =delete for copy
+    ComplexToAMP8IPHS8I& operator=(ComplexToAMP8IPHS8I&&) = delete; // implicitly deleted because of =delete for copy
 
     /*!
      * Get the nearest amplitude and phase value given a complex value
      * @param v complex value to query with
      * @return nearest amplitude and phase value
      */
-    AMP8I_PHS8I_t nearest_neighbor(const std::complex<float>& v) const;
+    AMP8I_PHS8I_t nearest_neighbor(const six::zfloat& v) const;
 
 private:
     //! The sorted set of possible magnitudes order from small to large.

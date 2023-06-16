@@ -73,6 +73,8 @@
 #include <import/mem.h>
 #include <gsl/gsl.h>
 
+#include <sys/Span.h>
+
 #if _MSC_VER
 #pragma warning(pop)
 #endif // _MSC_VER

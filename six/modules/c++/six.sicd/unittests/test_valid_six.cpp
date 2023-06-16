@@ -271,7 +271,7 @@ static std::vector<std::byte> readFromNITF(const std::filesystem::path& inputPat
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
     auto image = six::sicd::readFromNITF(inputPathname, pComplexData);
 
-    test_assert(*pComplexData, six::PixelType::RE32F_IM32F, sizeof(std::complex<float>));
+    test_assert(*pComplexData, six::PixelType::RE32F_IM32F, sizeof(six::zfloat));
 
     return image;
 
@@ -298,9 +298,9 @@ static six::sicd::ComplexImageResult readSicd_(const std::filesystem::path& sicd
     test_assert(*(result.pComplexData), expectedPixelType, expectedNumBytesPerPixel);
     return result;
 }
-static std::vector<std::complex<float>> readSicd(const std::filesystem::path& inputPathname)
+static std::vector<six::zfloat> readSicd(const std::filesystem::path& inputPathname)
 {
-    return readSicd_(inputPathname, six::PixelType::RE32F_IM32F, sizeof(std::complex<float>)).widebandData;
+    return readSicd_(inputPathname, six::PixelType::RE32F_IM32F, sizeof(six::zfloat)).widebandData;
 }
 TEST_CASE(test_read_sicd_50x50)
 {
@@ -308,7 +308,7 @@ TEST_CASE(test_read_sicd_50x50)
     auto widebandData = readSicd(inputPathname);
 }
 
-static std::vector<std::complex<float>> make_complex_image(const six::sicd::ComplexData& complexData, const types::RowCol<size_t>& dims)
+static std::vector<six::zfloat> make_complex_image(const six::sicd::ComplexData& complexData, const types::RowCol<size_t>& dims)
 {
     if (complexData.getPixelType() == six::PixelType::RE32F_IM32F)
     {
@@ -360,7 +360,7 @@ static void read_raw_data(const std::filesystem::path& path, six::PixelType pixe
 
     if (pixelType == six::PixelType::RE32F_IM32F)
     {
-        std::vector<std::complex<float>> rawData;
+        std::vector<six::zfloat> rawData;
         six::sicd::Utilities::getRawData(reader.NITFReadControl(), complexData, offset, extent, rawData);
         test_assert_eq(bytes, rawData);
         test_assert_eq(expectedBytes, rawData);
@@ -368,7 +368,7 @@ static void read_raw_data(const std::filesystem::path& path, six::PixelType pixe
 }
 
 static void read_nitf(const std::string& testName,
-    const std::filesystem::path& path, six::PixelType pixelType, const std::vector<std::complex<float>>& image)
+    const std::filesystem::path& path, six::PixelType pixelType, const std::vector<six::zfloat>& image)
 {
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
     const auto result = readSicd_(path, pixelType, expectedNumBytesPerPixel);
@@ -378,7 +378,7 @@ static void read_nitf(const std::string& testName,
     read_raw_data(path, pixelType, std::span<const std::byte>(bytes.data(), bytes.size()));
 }
 
-static void buffer_list_save(const std::filesystem::path& outputName, const std::vector<std::complex<float>>& image,
+static void buffer_list_save(const std::filesystem::path& outputName, const std::vector<six::zfloat>& image,
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
@@ -388,11 +388,11 @@ static void buffer_list_save(const std::filesystem::path& outputName, const std:
     six::save(writer, image.data(), outputName.string(), schemaPaths); // API for Python; it uses six::BufferList
 }
 
-static void save(const std::filesystem::path& outputName, const std::vector<std::complex<float>>& image,
+static void save(const std::filesystem::path& outputName, const std::vector<six::zfloat>& image,
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
     static const std::vector<std::filesystem::path> fs_schemaPaths;
-    six::sicd::writeAsNITF(outputName, fs_schemaPaths, *pComplexData, std::span<const std::complex<float>>(image.data(), image.size()));
+    six::sicd::writeAsNITF(outputName, fs_schemaPaths, *pComplexData, std::span<const six::zfloat>(image.data(), image.size()));
 }
 
 template<typename TSave>

@@ -55,7 +55,7 @@ struct SICommonXMLParser : public XMLParser
         return mSICommonURI;
     }
 
-    XMLElem createComplex(const std::string& name, std::complex<double> c,
+    XMLElem createComplex(const std::string& name, six::zdouble c,
             XMLElem parent = nullptr) const;
     XMLElem createVector2D(const std::string& name, const std::string& uri,
             Vector2 p = 0.0, XMLElem parent = nullptr) const;

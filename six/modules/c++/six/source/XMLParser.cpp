@@ -232,7 +232,7 @@ bool XMLParser::parseOptionalDouble(const xml::lite::Element* parent, const std:
     return mXmlLite.parseOptionalDouble(*parent, tag, value);
 }
 
-void XMLParser::parseComplex(const xml::lite::Element* element, std::complex<double>& value) const
+void XMLParser::parseComplex(const xml::lite::Element* element, six::zdouble& value) const
 {
     assert(element != nullptr);
     mXmlLite.parseComplex(*element, value);
