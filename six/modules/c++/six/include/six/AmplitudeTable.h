@@ -29,18 +29,15 @@
 #include <vector>
 #include <limits>
 #include <string>
-#include <complex>
 #include <memory>
 #include <array>
 
-#include <types/complex.h>
 #include <import/except.h>
 
 #include <nitf/LookupTable.hpp>
 #include <scene/sys_Conf.h>
 
-#include "six/Enums.h"
-#include "six/Types.h"
+#include "six/Complex.h"
 
 namespace six
 {

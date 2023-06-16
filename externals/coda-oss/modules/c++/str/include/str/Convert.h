@@ -39,7 +39,7 @@
 #include "coda_oss/string.h"
 #include "coda_oss/optional.h"
 #include "coda_oss/cstddef.h"
-#include "types/complex.h"
+#include "types/Complex.h"
 #include "import/except.h"
 
 namespace str

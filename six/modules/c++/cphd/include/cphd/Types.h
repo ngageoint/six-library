@@ -27,8 +27,6 @@
 
 #include <ostream>
 
-#include <types/complex.h>
-
 #include <six/Types.h>
 #include <six/Enums.h>
 #include <six/CollectionInformation.h>
@@ -39,14 +37,12 @@
 namespace cphd
 {
 // Use the same types that SIX uses
-
 using zfloat = six::zfloat;
 using zdouble = six::zdouble;
 using zint16_t = six::zint16_t;
-
-using zint8_t = std::complex<int8_t>; // TODO: types::zint8_t;
-using zint32_t = std::complex<int32_t>; // TODO: types::zint32_t;
-using zint64_t = std::complex<int64_t>; // TODO: types::zint64_t;
+using zint8_t = six::ComplexInteger<int8_t>; // TODO: types::zint8_t;
+using zint32_t = six::ComplexInteger<int32_t>; // TODO: types::zint32_t;
+using zint64_t = six::ComplexInteger<int64_t>; // TODO: types::zint64_t;
 
 typedef six::Vector2 Vector2;
 

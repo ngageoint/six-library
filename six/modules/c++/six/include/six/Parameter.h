@@ -23,7 +23,6 @@
 #ifndef SIX_six_Parameter_h_INCLUDED_
 #define SIX_six_Parameter_h_INCLUDED_
 
-#include <types/complex.h>
 #include <import/str.h>
 
 #include "six/Types.h"
@@ -64,13 +63,13 @@ struct Parameter final
     {
         mValue = str::toString<std::complex<T> >(mValue);
     }
-    //#if CODA_OSS_types_unique_zinteger
-    //template<typename T>
-    //Parameter(const types::zinteger<T>& value)
-    //{
-    //    mValue = str::toString<types::zinteger<T> >(mValue);
-    //}
-    //#endif
+    #if SIX_six_unique_ComplexInteger
+    template<typename T>
+    Parameter(const six::ComplexInteger<T>& value)
+    {
+        mValue = str::toString<six::ComplexInteger<T> >(mValue);
+    }
+    #endif
 
      /*!
      * \tparam T Desired (presumably numeric) type to convert to
@@ -105,13 +104,13 @@ struct Parameter final
     {
         result = str::toType<std::complex<T> >(mValue);
     }
-    //#if CODA_OSS_types_unique_zinteger
-    //template<typename T>
-    //void getComplex(types::zinteger<T>& result) const
-    //{
-    //    result = str::toType<types::zinteger<T> >(mValue);
-    //}
-    //#endif
+    #if SIX_six_unique_ComplexInteger
+    template<typename T>
+    void getComplex(six::ComplexInteger<T>& result) const
+    {
+        result = str::toType<six::ComplexInteger<T> >(mValue);
+    }
+    #endif
 
     //!  Set the parameters' name
     void setName(std::string name)
@@ -136,13 +135,13 @@ struct Parameter final
     {
         mValue = str::toString<std::complex<T> >(value);
     }
-    //#if CODA_OSS_types_unique_zinteger 
-    //template<typename T>
-    //void setValue(const types::zinteger<T>& value)
-    //{
-    //    mValue = str::toString<types::zinteger<T> >(value);
-    //}
-    //#endif
+    #if SIX_six_unique_ComplexInteger 
+    template<typename T>
+    void setValue(const six::ComplexInteger<T>& value)
+    {
+        mValue = str::toString<six::ComplexInteger<T> >(value);
+    }
+    #endif
 
     //!  Get back const char*
     operator const char*() const
@@ -150,19 +149,20 @@ struct Parameter final
         return mValue.c_str();
     }
 
+    // Must be member functions for existing SWIG bindings
+    bool operator==(const Parameter& rhs) const
+    {
+        return (getName() == rhs.getName()) && (str() == rhs.str());
+    }
+    bool operator!=(const Parameter& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 private:
     std::string mValue;
     std::string mName;
 };
-
-inline bool operator==(const Parameter& lhs, const Parameter& rhs)
-{
-    return (lhs.getName() == rhs.getName()) && (lhs.str() == rhs.str());
-}
-inline bool operator!=(const Parameter& lhs, const Parameter& rhs)
-{
-    return !(lhs == rhs);
-}
 
 }
 
