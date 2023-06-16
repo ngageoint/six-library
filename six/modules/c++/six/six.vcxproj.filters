@@ -153,6 +153,9 @@
     <ClInclude Include="include\six\AmplitudeTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\six\Complex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

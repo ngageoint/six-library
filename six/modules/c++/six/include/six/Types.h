@@ -46,17 +46,7 @@
 #include "scene/Types.h"
 #include "scene/FrameType.h"
 #include "six/Enums.h"
-
-namespace six
-{
-    using zfloat = scene::zfloat;
-    using zdouble = scene::zdouble;
-    #if CODA_OSS_types_unique_ComplexInteger
-    using zint16_t = std::complex<int16_t>; // TODO: types::zint16_t;
-    #else
-    using zint16_t = types::zint16_t;
-    #endif
-}
+#include "six/Complex.h"
 #include "six/AmplitudeTable.h"
 
 namespace six

@@ -108,6 +108,7 @@
     <ClInclude Include="include\six\ByteProvider.h" />
     <ClInclude Include="include\six\Classification.h" />
     <ClInclude Include="include\six\CollectionInformation.h" />
+    <ClInclude Include="include\six\Complex.h" />
     <ClInclude Include="include\six\CompressedByteProvider.h" />
     <ClInclude Include="include\six\Container.h" />
     <ClInclude Include="include\six\Data.h" />
