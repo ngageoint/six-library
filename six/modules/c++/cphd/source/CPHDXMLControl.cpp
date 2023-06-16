@@ -24,8 +24,9 @@
 #include <set>
 #include <unordered_map>
 #include <algorithm>
-#include <std/memory>
+#include <memory>
 #include <iterator>
+#include <stdexcept>
 
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
@@ -197,4 +198,17 @@ std::string CPHDXMLControl::uriToVersion(const xml::lite::Uri& uri) const
     throw except::Exception(Ctxt(ostr.str()));
 }
 
+}
+
+std::string cphd::to_string(Version siddVersion)
+{
+    // Match existing version strings, see CPHDXMLControl::getVersionUriMap
+    switch (siddVersion)
+    {
+    case Version::v100: return "1.0.0";
+    case Version::v101: return "1.0.1";
+    case Version::v110: return "1.1.0";
+    default: break;
+    }
+    throw std::logic_error("Unkown 'Version' value.");
 }

@@ -27,10 +27,11 @@
 #include <except/Exception.h>
 #include <str/Manip.h>
 #include <cphd/FileHeader.h>
+#include <cphd/Types.h>
 
 namespace cphd
 {
-const char FileHeader::DEFAULT_VERSION[] = "1.0.1";
+const std::string FileHeader::DEFAULT_VERSION = to_string(Version::v101);
 
 FileHeader::FileHeader() :
     mVersion(DEFAULT_VERSION),

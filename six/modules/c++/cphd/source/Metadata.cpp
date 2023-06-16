@@ -21,13 +21,15 @@
  */
 #include <cphd/Metadata.h>
 
+#include <stdexcept>
+
 namespace cphd
 {
 
 Metadata::Metadata()
 {
   // Default version defined in cphd::FileHeader
-  mVersion = FileHeader::DEFAULT_VERSION;
+  setVersion(FileHeader::DEFAULT_VERSION);
 }
 
 size_t Metadata::getNumChannels() const
@@ -67,9 +69,28 @@ DomainType Metadata::getDomainType() const
 
 std::string Metadata::getVersion() const
 {
-    return mVersion;
+    return to_string(mVersion);
 }
 void Metadata::setVersion(const std::string& version)
+{
+    if (version == "1.0.0")
+    {
+        setVersion(Version::v100);
+    }
+    else if (version == "1.0.1")
+    {
+        setVersion(Version::v101);
+    }
+    else if (version == "1.1.0")
+    {
+        setVersion(Version::v110);
+    }
+    else
+    {
+        throw std::invalid_argument("Unknown version string: " + version);
+    }
+}
+void Metadata::setVersion(Version version)
 {
     mVersion = version;
 }

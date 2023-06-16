@@ -36,10 +36,10 @@ namespace cphd
  *
  *  \brief Stores CPHD file header information
  */
-class FileHeader : public BaseFileHeader
+class FileHeader final : public BaseFileHeader
 {
 public:
-    static const char DEFAULT_VERSION[];
+    static const std::string DEFAULT_VERSION;
 
     /*
      *  \func FileHeader
