@@ -31,8 +31,6 @@
 #include <unordered_map>
 #include <std/optional>
 
-#include <types/complex.h>
-
 #include <scene/sys_Conf.h>
 #include <cphd/Types.h>
 #include <cphd/Data.h>
@@ -68,16 +66,16 @@ struct AddedPVP<std::complex<T>>
         return val.getComplex<T>();
     }
 };
-//#if CODA_OSS_types_unique_zinteger 
-//template<typename T>
-//struct AddedPVP<types::zinteger<T> >
-//{
-//    auto getAddedPVP(const six::Parameter& val) const
-//    {
-//        return val.getComplex<T>();
-//    }
-//};
-//#endif
+#if SIX_six_unique_ComplexInteger 
+template<typename T>
+struct AddedPVP<six::ComplexInteger<T> >
+{
+    auto getAddedPVP(const six::Parameter& val) const
+    {
+        return val.getComplex<T>();
+    }
+};
+#endif
 template<>
 struct AddedPVP<std::string>
 {

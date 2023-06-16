@@ -39,7 +39,7 @@
 #pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
 #pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 
-#include <types/complex.h>
+#include <types/Complex.h>
 
 #pragma warning(push)
 #pragma warning(disable: 4464) // relative include path contains '..'

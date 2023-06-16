@@ -47,6 +47,6 @@
 #define NOMINMAX
 #include <windows.h>
 
-#include <types/complex.h>
+#include <types/Complex.h>
 
 #pragma warning(pop)
