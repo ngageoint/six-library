@@ -149,19 +149,20 @@ struct Parameter final
         return mValue.c_str();
     }
 
+    // Must be member functions for existing SWIG bindings
+    bool operator==(const Parameter& rhs) const
+    {
+        return (getName() == rhs.getName()) && (str() == rhs.str());
+    }
+    bool operator!=(const Parameter& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
 private:
     std::string mValue;
     std::string mName;
 };
-
-inline bool operator==(const Parameter& lhs, const Parameter& rhs)
-{
-    return (lhs.getName() == rhs.getName()) && (lhs.str() == rhs.str());
-}
-inline bool operator!=(const Parameter& lhs, const Parameter& rhs)
-{
-    return !(lhs == rhs);
-}
 
 }
 
