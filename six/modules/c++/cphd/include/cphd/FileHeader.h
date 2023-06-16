@@ -28,6 +28,7 @@
 
 #include <io/SeekableStreams.h>
 #include <cphd/BaseFileHeader.h>
+#include <cphd/Types.h>
 
 namespace cphd
 {
@@ -96,6 +97,7 @@ public:
      *
      */
     void setVersion(const std::string& version);
+    void setVersion(Version);
 
     /*
      *  \func set

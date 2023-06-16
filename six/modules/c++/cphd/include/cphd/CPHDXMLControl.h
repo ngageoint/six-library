@@ -181,7 +181,7 @@ private:
     getParser(const xml::lite::Uri&) const;
 
     // Given the URI get associated version
-    std::string uriToVersion(const xml::lite::Uri&) const;
+    Version uriToVersion(const xml::lite::Uri&) const;
 };
 }
 

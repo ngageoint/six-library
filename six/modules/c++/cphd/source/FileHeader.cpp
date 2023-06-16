@@ -182,6 +182,10 @@ void FileHeader::setVersion(const std::string& version)
 {
     mVersion = version;
 }
+void FileHeader::setVersion(Version version)
+{
+    setVersion(to_string(version));
+}
 
 size_t FileHeader::set(int64_t xmlBlockSize,
                        int64_t supportBlockSize,

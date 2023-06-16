@@ -71,6 +71,11 @@ std::string Metadata::getVersion() const
 {
     return to_string(mVersion);
 }
+void Metadata::getVersion(Version& version) const
+{
+    version = mVersion;
+}
+
 void Metadata::setVersion(const std::string& version)
 {
     if (version == "1.0.0")

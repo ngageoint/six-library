@@ -121,22 +121,30 @@ std::unordered_map<std::string, xml::lite::Uri> CPHDXMLControl::getVersionUriMap
     static const auto retval = makeVersionUriMap_();
     return retval;
 }
-void CPHDXMLControl::getVersionUriMap(std::map<Version, xml::lite::Uri>& result)
+static std::map<Version, xml::lite::Uri> getVersionUriMap_()
 {
-    static const std::map<Version, xml::lite::Uri> map = {
+    static const std::map<Version, xml::lite::Uri> retval = {
         {Version::v100, xml::lite::Uri("urn:CPHD:1.0.0")},
         {Version::v101, xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")},
         {Version::v110, xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
     };
-    result = map;
+    return retval;
+}
+void CPHDXMLControl::getVersionUriMap(std::map<Version, xml::lite::Uri>& result)
+{
+    result = getVersionUriMap_();
 }
 
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& metadata)
 {
-    const auto versionUriMap = getVersionUriMap();
-    if (versionUriMap.find(metadata.getVersion()) != versionUriMap.end())
+    Version cphdVersion;
+    metadata.getVersion(cphdVersion);
+
+    static const auto versionUriMap = getVersionUriMap_();
+    const auto it = versionUriMap.find(cphdVersion);
+    if (it != versionUriMap.end())
     {
-      return getParser(versionUriMap.find(metadata.getVersion())->second)->toXML(metadata);
+      return getParser(it->second)->toXML(metadata);
     }
     std::ostringstream ostr;
     ostr << "The version " << metadata.getVersion() << " is invalid. "
@@ -199,9 +207,9 @@ CPHDXMLControl::getParser(const xml::lite::Uri& uri) const
     return std::make_unique<CPHDXMLParser>(uri.value, false, mLog);
 }
 
-std::string CPHDXMLControl::uriToVersion(const xml::lite::Uri& uri) const
+Version CPHDXMLControl::uriToVersion(const xml::lite::Uri& uri) const
 {
-    const auto versionUriMap = getVersionUriMap();
+    static const auto versionUriMap = getVersionUriMap_();
     for (const auto& p : versionUriMap)
     {
         if (p.second == uri)

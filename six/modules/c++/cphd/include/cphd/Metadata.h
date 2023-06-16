@@ -80,6 +80,7 @@ struct Metadata final : MetadataBase
 
     //! Get CPHD version
     std::string getVersion() const;
+    void getVersion(Version&) const;
 
     //! Set CPHD version
     void setVersion(const std::string& version);
