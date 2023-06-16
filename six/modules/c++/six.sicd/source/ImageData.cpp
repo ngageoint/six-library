@@ -31,6 +31,10 @@
 
 #include <gsl/gsl.h>
 #include <mt/Algorithm.h>
+#include <coda_oss/CPlusPlus.h>
+#if CODA_OSS_cpp17
+#include <execution>
+#endif
 
 #include "six/AmplitudeTable.h"
 #include "six/sicd/GeoData.h"
@@ -67,12 +71,15 @@ static inline OutputIt transform_async(const InputIt first1, const InputIt last1
 template <typename TInputs, typename TResults, typename TFunc>
 static inline void transform(std::span<const TInputs> inputs, std::span<TResults> results, TFunc f)
 {
+#if CODA_OSS_cpp17
+    std::ignore = std::transform(std::execution::par, inputs.begin(), inputs.end(), results.begin(), f);
+#else
     constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
-    if (cutoff_ < 0)
-    {
-        std::ignore = std::transform(inputs.begin(), inputs.end(), results.begin(), f);
-    }
-    else
+    //if (cutoff_ < 0)
+    //{
+    //    std::ignore = std::transform(inputs.begin(), inputs.end(), results.begin(), f);
+    //}
+    //else
     {
         // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
         constexpr auto dimension = 128 * 8;
@@ -81,6 +88,7 @@ static inline void transform(std::span<const TInputs> inputs, std::span<TResults
         
         std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(), f, cutoff);
     }
+#endif // CODA_OSS_cpp17
 }
 
 bool ImageData::operator==(const ImageData& rhs) const
