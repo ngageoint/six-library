@@ -64,11 +64,11 @@ struct Parameter final
     {
         mValue = str::toString<std::complex<T> >(mValue);
     }
-    #if CODA_OSS_types_unique_zinteger
+    #if CODA_OSS_types_unique_ComplexInteger
     template<typename T>
-    Parameter(const types::zinteger<T>& value)
+    Parameter(const types::ComplexInteger<T>& value)
     {
-        mValue = str::toString<types::zinteger<T> >(mValue);
+        mValue = str::toString<types::ComplexInteger<T> >(mValue);
     }
     #endif
 
@@ -105,11 +105,11 @@ struct Parameter final
     {
         result = str::toType<std::complex<T> >(mValue);
     }
-    #if CODA_OSS_types_unique_zinteger
+    #if CODA_OSS_types_unique_ComplexInteger
     template<typename T>
-    void getComplex(types::zinteger<T>& result) const
+    void getComplex(types::ComplexInteger<T>& result) const
     {
-        result = str::toType<types::zinteger<T> >(mValue);
+        result = str::toType<types::ComplexInteger<T> >(mValue);
     }
     #endif
 
@@ -136,11 +136,11 @@ struct Parameter final
     {
         mValue = str::toString<std::complex<T> >(value);
     }
-    #if CODA_OSS_types_unique_zinteger 
+    #if CODA_OSS_types_unique_ComplexInteger 
     template<typename T>
-    void setValue(const types::zinteger<T>& value)
+    void setValue(const types::ComplexInteger<T>& value)
     {
-        mValue = str::toString<types::zinteger<T> >(value);
+        mValue = str::toString<types::ComplexInteger<T> >(value);
     }
     #endif
 
