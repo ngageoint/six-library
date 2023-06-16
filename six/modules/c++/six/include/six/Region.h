@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_H__
-#define __SIX_H__
 #pragma once
+#ifndef SIX_six_Region_h_INCLUDED_
+#define SIX_six_Region_h_INCLUDED_
 
 #include <assert.h>
 
@@ -29,7 +29,6 @@
 
 #include <std/memory>
 #include <gsl/gsl.h>
-#include <types/Complex.h>
 
 #include <scene/sys_Conf.h>
 
@@ -225,4 +224,4 @@ inline void setOffset(Region& r, const types::RowCol<size_t>& aoiOffset) noexcep
 
 }
 
-#endif
+#endif // SIX_six_Region_h_INCLUDED_

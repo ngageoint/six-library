@@ -27,8 +27,6 @@
 
 #include <ostream>
 
-#include <types/Complex.h>
-
 #include <six/Types.h>
 #include <six/Enums.h>
 #include <six/CollectionInformation.h>

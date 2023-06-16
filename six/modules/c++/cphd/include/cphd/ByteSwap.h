@@ -25,7 +25,6 @@
 
 #include <stddef.h>
 
-#include <types/Complex.h>
 #include <types/RowCol.h>
 
 #include <scene/sys_Conf.h>

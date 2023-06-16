@@ -30,7 +30,6 @@
 #include <std/cstddef>
 #include <memory>
 
-#include <types/Complex.h>
 #include <import/sys.h>
 #include <import/io.h>
 #include <import/nitf.hpp>

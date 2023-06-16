@@ -29,7 +29,6 @@
 #include <limits>
 #include <string>
 #include <stdexcept>
-#include <complex>
 #include <memory>
 
 #include <types/Complex.h>

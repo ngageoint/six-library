@@ -27,7 +27,6 @@
 #include <string>
 #include <vector>
 
-#include <types/Complex.h>
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
