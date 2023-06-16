@@ -66,9 +66,9 @@ struct AddedPVP<std::complex<T>>
         return val.getComplex<T>();
     }
 };
-#if CODA_OSS_types_unique_ComplexInteger 
+#if SIX_six_unique_ComplexInteger 
 template<typename T>
-struct AddedPVP<types::ComplexInteger<T> >
+struct AddedPVP<six::ComplexInteger<T> >
 {
     auto getAddedPVP(const six::Parameter& val) const
     {

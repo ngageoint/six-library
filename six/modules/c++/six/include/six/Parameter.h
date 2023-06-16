@@ -63,11 +63,11 @@ struct Parameter final
     {
         mValue = str::toString<std::complex<T> >(mValue);
     }
-    #if CODA_OSS_types_unique_ComplexInteger
+    #if SIX_six_unique_ComplexInteger
     template<typename T>
-    Parameter(const types::ComplexInteger<T>& value)
+    Parameter(const six::ComplexInteger<T>& value)
     {
-        mValue = str::toString<types::ComplexInteger<T> >(mValue);
+        mValue = str::toString<six::ComplexInteger<T> >(mValue);
     }
     #endif
 
@@ -104,11 +104,11 @@ struct Parameter final
     {
         result = str::toType<std::complex<T> >(mValue);
     }
-    #if CODA_OSS_types_unique_ComplexInteger
+    #if SIX_six_unique_ComplexInteger
     template<typename T>
-    void getComplex(types::ComplexInteger<T>& result) const
+    void getComplex(six::ComplexInteger<T>& result) const
     {
-        result = str::toType<types::ComplexInteger<T> >(mValue);
+        result = str::toType<six::ComplexInteger<T> >(mValue);
     }
     #endif
 
@@ -135,11 +135,11 @@ struct Parameter final
     {
         mValue = str::toString<std::complex<T> >(value);
     }
-    #if CODA_OSS_types_unique_ComplexInteger 
+    #if SIX_six_unique_ComplexInteger 
     template<typename T>
-    void setValue(const types::ComplexInteger<T>& value)
+    void setValue(const six::ComplexInteger<T>& value)
     {
-        mValue = str::toString<types::ComplexInteger<T> >(value);
+        mValue = str::toString<six::ComplexInteger<T> >(value);
     }
     #endif
 

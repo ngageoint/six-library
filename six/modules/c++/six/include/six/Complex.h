@@ -32,11 +32,22 @@ namespace six
 {
     using zfloat = scene::zfloat;
     using zdouble = scene::zdouble;
-    #if CODA_OSS_types_unique_ComplexInteger
-    using zint16_t = std::complex<int16_t>; // TODO: types::zint16_t;
-    #else
-    using zint16_t = types::zint16_t;
+
+    // `std::complex<short>` is (no longer) valid C++, some compilers issue warnings.
+    // Since SIX is the primary "culprit," let it sort things out using infrastrcture from CODA-OSS.
+
+    #ifndef SIX_six_unique_ComplexInteger
+    // Preserve existing behavior where `std::complex<short>` is used.
+    #define SIX_six_unique_ComplexInteger 0 // TODO: set to 1 or CODA_OSS_types_unique_ComplexInteger
     #endif
+    template<typename T>
+    #if SIX_six_unique_ComplexInteger
+    using ComplexInteger = types::Complex<T>;
+    #else
+    using ComplexInteger = std::complex<T>;
+    #endif
+
+    using zint16_t = ComplexInteger<int16_t>; // TODO: types::zint16_t;
 }
 
 #endif // SIX_six_Complex_h_INCLUDED_
