@@ -19,7 +19,6 @@
     <ClInclude Include="coda_oss\include\coda_oss\bit.h" />
     <ClInclude Include="coda_oss\include\coda_oss\CPlusPlus.h" />
     <ClInclude Include="coda_oss\include\coda_oss\cstddef.h" />
-    <ClInclude Include="coda_oss\include\coda_oss\memory.h" />
     <ClInclude Include="coda_oss\include\coda_oss\namespace_.h" />
     <ClInclude Include="coda_oss\include\coda_oss\optional.h" />
     <ClInclude Include="coda_oss\include\coda_oss\optional_.h" />
@@ -149,6 +148,7 @@
     <ClInclude Include="mt\include\mt\RequestQueue.h" />
     <ClInclude Include="mt\include\mt\Runnable1D.h" />
     <ClInclude Include="mt\include\mt\Singleton.h" />
+    <ClInclude Include="mt\include\mt\ThreadedByteSwap.h" />
     <ClInclude Include="mt\include\mt\ThreadGroup.h" />
     <ClInclude Include="mt\include\mt\ThreadPlanner.h" />
     <ClInclude Include="mt\include\mt\ThreadPoolException.h" />
@@ -191,6 +191,8 @@
     <ClInclude Include="sys\include\sys\AtomicCounter.h" />
     <ClInclude Include="sys\include\sys\AtomicCounterCpp11.h" />
     <ClInclude Include="sys\include\sys\Backtrace.h" />
+    <ClInclude Include="sys\include\sys\ByteSwap.h" />
+    <ClInclude Include="sys\include\sys\ByteSwapValue.h" />
     <ClInclude Include="sys\include\sys\ConditionVar.h" />
     <ClInclude Include="sys\include\sys\ConditionVarInterface.h" />
     <ClInclude Include="sys\include\sys\ConditionVarPosix.h" />
@@ -228,6 +230,8 @@
     <ClInclude Include="sys\include\sys\SemaphoreInterface.h" />
     <ClInclude Include="sys\include\sys\SemaphorePosix.h" />
     <ClInclude Include="sys\include\sys\SemaphoreWin32.h" />
+    <ClInclude Include="sys\include\sys\Span.h" />
+    <ClInclude Include="sys\include\sys\SysInt.h" />
     <ClInclude Include="sys\include\sys\StopWatch.h" />
     <ClInclude Include="sys\include\sys\String.h" />
     <ClInclude Include="sys\include\sys\SystemException.h" />
@@ -252,6 +256,7 @@
     <ClInclude Include="tiff\include\tiff\KnownTags.h" />
     <ClInclude Include="tiff\include\tiff\TypeFactory.h" />
     <ClInclude Include="tiff\include\tiff\Utils.h" />
+    <ClInclude Include="types\include\types\complex.h" />
     <ClInclude Include="types\include\types\PageRowCol.h" />
     <ClInclude Include="types\include\types\Range.h" />
     <ClInclude Include="types\include\types\RangeList.h" />
@@ -421,14 +426,12 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

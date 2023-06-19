@@ -61,7 +61,7 @@ struct NITRO_NITFCPP_API NITFBuffer
 
     std::span<const std::byte> getBytes() const noexcept
     {
-        return std::span<const std::byte>(static_cast<const std::byte*>(mData), mNumBytes);
+        return sys::make_span(static_cast<const std::byte*>(mData), mNumBytes);
     }
 };
 

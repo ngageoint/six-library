@@ -27,7 +27,6 @@
 
 #include <std/memory>
 
-#include "coda_oss/memory.h"
 #include "mem/SharedPtr.h"
 
 namespace mem

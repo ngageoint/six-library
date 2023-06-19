@@ -97,13 +97,13 @@ struct RequestQueue
     }
 
     // Check to see if its empty
-    inline bool isEmpty()
+    bool isEmpty() const
     {
-        return (mRequestQueue.size() == 0);
+        return mRequestQueue.empty();
     }
 
     // Check the length
-    inline int length()
+    int length() const
     {
         return mRequestQueue.size();
     }
