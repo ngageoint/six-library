@@ -32,6 +32,7 @@
 #include <std/bit>
 #include <std/filesystem>
 #include <std/bit> // std::endian
+#include <std/numbers>
 
 #include "CppUnitTest.h"
 
@@ -53,6 +54,7 @@
 #include <types/PageRowCol.h>
 #include <types/RangeList.h>
 #include <types/Range.h>
+#include <types/Complex.h>
 #include <sys/Conf.h>
 #include <sys/Path.h>
 #include <except/Exception.h>
@@ -75,6 +77,7 @@
 #include <sys/Thread.h>
 #include <sys/Mutex.h>
 #include <sys/FileFinder.h>
+#include <sys/ByteSwap.h>
 #include <import/sys.h>
 #include <import/math/linear.h>
 #include <import/math/poly.h>
@@ -87,6 +90,7 @@
 #include <mt/RequestQueue.h>
 #include <mt/ThreadPoolException.h>
 #include <mt/GenerationThreadPool.h>
+#include <mt/ThreadedByteSwap.h>
 #include <import/mt.h>
 #include <avx/extractf.h>
 #include <logging/ExceptionLogger.h>

@@ -30,9 +30,6 @@
     <ClInclude Include="coda_oss\include\coda_oss\cstddef.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
-    <ClInclude Include="coda_oss\include\coda_oss\memory.h">
-      <Filter>coda_oss</Filter>
-    </ClInclude>
     <ClInclude Include="coda_oss\include\coda_oss\namespace_.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
@@ -735,6 +732,27 @@
     <ClInclude Include="config\include\config\disable_compiler_warnings.h">
       <Filter>config</Filter>
     </ClInclude>
+    <ClInclude Include="sys\include\sys\ByteSwap.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ByteSwapValue.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="mt\include\mt\ThreadedByteSwap.h">
+      <Filter>mt</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\Span.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\SysInt.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="types\include\types\Complex.h">
+      <Filter>types</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\numbers.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -1209,6 +1227,9 @@
     </None>
     <None Include="sys\include\sys\sys_config.h.cmake.in">
       <Filter>sys</Filter>
+    </None>
+    <None Include="std\include\std\numbers">
+      <Filter>std</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -43,6 +43,7 @@
 #include <ostream>
 
 #include "sys/OS.h"
+#include "str/Manip.h"
 
 namespace xml
 {
@@ -78,11 +79,13 @@ struct Uri final  // help prevent mixups with std::string
 };
 inline bool operator==(const Uri& lhs, const Uri& rhs)
 {
-    return lhs.value == rhs.value;
+    // URIs are "supposed to be" case-insenstive
+    return str::eq(lhs.value, rhs.value);
 }
 inline bool operator!=(const Uri& lhs, const Uri& rhs)
 {
-    return !(lhs == rhs);
+    // URIs are "supposed to be" case-insenstive
+    return str::ne(lhs.value, rhs.value);
 }
 inline std::ostream& operator<<(std::ostream& os, const Uri& uri)
 {

@@ -63,11 +63,12 @@
 #endif  // CODA_OSS_cplusplus
 
 // Define a few macros as that's less verbose than testing against a version number
+// https://en.cppreference.com/w/cpp/preprocessor/replace#Predefined_macros
 #define CODA_OSS_cpp11 (CODA_OSS_cplusplus >= 201103L)
 #define CODA_OSS_cpp14 (CODA_OSS_cplusplus >= 201402L)
 #define CODA_OSS_cpp17 (CODA_OSS_cplusplus >= 201703L)
 #define CODA_OSS_cpp20 (CODA_OSS_cplusplus >= 202002L)
-#define CODA_OSS_cpp23 0
+#define CODA_OSS_cpp23 (CODA_OSS_cplusplus >= 202302L)
 
 #if !CODA_OSS_cpp14
 #error "Must compile with C++14 or greater."
