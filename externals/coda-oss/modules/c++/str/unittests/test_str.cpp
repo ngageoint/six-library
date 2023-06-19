@@ -22,7 +22,7 @@
 
 #include <tuple> // std::ignore
 
-#include <types/complex.h>
+#include <types/Complex.h>
 #include <config/compiler_extensions.h>
 #include <import/str.h>
 
@@ -235,7 +235,7 @@ TEST_CASE(test_toStringComplexFloat)
     auto actual = str::toString(std_cx_float);
     TEST_ASSERT_EQ(actual, expected);
 
-    const types::zreal<float> types_cx_float(1.0f, -2.0f);
+    const types::ComplexReal<float> types_cx_float(1.0f, -2.0f);
     actual = str::toString(types_cx_float);
     TEST_ASSERT_EQ(actual, expected);
 
@@ -251,7 +251,7 @@ TEST_CASE(test_toTypeComplexFloat)
     auto strActual = str::toString(actual);
     TEST_ASSERT_EQ(strActual, strValue);
 
-    actual = str::toType<types::zreal<float>>(strValue);
+    actual = str::toType<types::ComplexReal<float>>(strValue);
     strActual = str::toString(actual);
     TEST_ASSERT_EQ(strActual, strValue);
 
@@ -273,7 +273,7 @@ TEST_CASE(test_toStringComplexShort)
     auto actual = str::toString(std_cx_short);
     TEST_ASSERT_EQ(actual, expected);
 
-    const types::zinteger<short> types_cx_short(std_cx_short); // "copy constructor" or overload
+    const types::ComplexInteger<short> types_cx_short(std_cx_short);  // "copy constructor" or overload
     actual = str::toString(types_cx_short);
     TEST_ASSERT_EQ(actual, expected);
 
@@ -298,7 +298,7 @@ TEST_CASE(test_toTypeComplexShort)
     #if _MSC_VER
     #pragma warning(disable: 4996) // '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning
     #endif
-    auto zactual = str::toType<types::zinteger<short>>(strValue);
+    auto zactual = str::toType<types::ComplexInteger<short>>(strValue);
     CODA_OSS_disable_warning_pop
     strActual = str::toString(zactual);
     TEST_ASSERT_EQ(strActual, strValue);

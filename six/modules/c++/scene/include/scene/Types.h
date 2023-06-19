@@ -25,7 +25,7 @@
 
 #include <cmath>
 
-#include <types/complex.h>
+#include <types/Complex.h>
 #include <import/except.h>
 #include <import/str.h>
 #include <import/sys.h>

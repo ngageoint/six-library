@@ -29,10 +29,9 @@
 #include <limits>
 #include <string>
 #include <stdexcept>
-#include <complex>
 #include <memory>
 
-#include <types/complex.h>
+#include <types/Complex.h>
 #include <import/except.h>
 #include <import/mem.h>
 #include <import/str.h>
@@ -47,13 +46,7 @@
 #include "scene/Types.h"
 #include "scene/FrameType.h"
 #include "six/Enums.h"
-
-namespace six
-{
-    using zfloat = scene::zfloat;
-    using zdouble = scene::zdouble;
-    using zint16_t = std::complex<int16_t>; // TODO: types::zint16_t;
-}
+#include "six/Complex.h"
 #include "six/AmplitudeTable.h"
 
 namespace six

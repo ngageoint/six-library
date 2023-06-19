@@ -31,7 +31,7 @@
 #include <future>
 
 #include "logging/Logger.h"
-#include "types/complex.h"
+#include "types/Complex.h"
 
 #include "six/Types.h"
 #include "six/Init.h"
