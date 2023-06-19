@@ -203,16 +203,17 @@ public:
      * @return nearest amplitude and phase value
      */
     AMP8I_PHS8I_t nearest_neighbor(const six::zfloat& v) const;
+    static void nearest_neighbors(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results, const six::AmplitudeTable*);
 
 private:
     //! The sorted set of possible magnitudes order from small to large.
-    std::vector<long double> uncached_magnitudes; // Order is important! This must be ...
-    const std::vector<long double>& magnitudes; // ... before this.
+    std::vector<float> uncached_magnitudes; // Order is important! This must be ...
+    const std::vector<float>& magnitudes; // ... before this.
 
     //! The difference in phase angle between two UINT phase values.
-    long double phase_delta;
+    float phase_delta;
     //! Unit vector rays that represent each direction that phase can point.
-    std::array<std::complex<long double>, UINT8_MAX + 1> phase_directions;
+    std::array<six::zfloat, UINT8_MAX + 1> phase_directions;
 };
 }
 }
