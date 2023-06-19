@@ -46,8 +46,8 @@ namespace str
 {
 template <typename T> int getPrecision(const T& type);
 template <typename T> int getPrecision(const std::complex<T>&);
-#if CODA_OSS_types_unique_zinteger
-template <typename T> int getPrecision(const types::zinteger<T>&);
+#if CODA_OSS_types_unique_ComplexInteger
+template <typename T> int getPrecision(const types::ComplexInteger<T>&);
 #endif
 
 namespace details
@@ -335,9 +335,9 @@ int getPrecision(const std::complex<T>& type)
 {
     return getPrecision(type.real());
 }
-#if CODA_OSS_types_unique_zinteger
+#if CODA_OSS_types_unique_ComplexInteger
 template <typename T>
-int getPrecision(const types::zinteger<T>& type)
+int getPrecision(const types::ComplexInteger<T>& type)
 {
     return getPrecision(type.real());
 }

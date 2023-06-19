@@ -32,6 +32,7 @@
 #include <std/bit>
 #include <std/filesystem>
 #include <std/bit> // std::endian
+#include <std/numbers>
 
 #include "CppUnitTest.h"
 
