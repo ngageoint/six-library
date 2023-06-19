@@ -27,9 +27,14 @@
 #include <cassert>
 #include <memory>
 #include <std/numbers>
+#include <algorithm>
+
+#include <coda_oss/CPlusPlus.h>
+#if CODA_OSS_cpp17
+#include <execution>
+#endif
 
 #include <gsl/gsl.h>
-#include <six/sicd/Utilities.h>
 #include <math/Utilities.h>
 #include <units/Angles.h>
 
