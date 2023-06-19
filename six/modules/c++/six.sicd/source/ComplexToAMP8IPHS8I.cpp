@@ -25,7 +25,8 @@
 #include <assert.h>
 
 #include <cassert>
-#include <std/memory>
+#include <memory>
+#include <std/numbers>
 
 #include <gsl/gsl.h>
 #include <six/sicd/Utilities.h>
@@ -61,10 +62,10 @@ The resulting green point is then what's used to find the nearest magnitude via 
     * @param v complex value
     * @return phase between [0, 2PI]
     */
-inline long double GetPhase(const std::complex<long double>& v)
+inline auto GetPhase(const std::complex<long double>& v)
 {
-    auto phase = std::arg(v);
-    if (phase < 0.0) phase += M_PI * 2.0; // Wrap from [0, 2PI]
+    double phase = std::arg(v);
+    if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
     return phase;
 }
 

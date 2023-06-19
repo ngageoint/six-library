@@ -27,12 +27,13 @@
 #include <map>
 #include <string>
 #include <functional>
-#include <std/memory>
+#include <memory>
 #include <algorithm>
 #include <iterator>
 #include <utility>
 #include <stdexcept>
 #include <numeric>
+#include <std/numbers>
 
 #include <except/Exception.h>
 #include <io/StringStream.h>
@@ -83,16 +84,16 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
 }
 }
 
-static std::complex<long double> toComplex_(long double A, uint8_t phase)
+static auto toComplex_(double A, uint8_t phase)
 {
     // The phase values should be read in (values 0 to 255) and converted to float by doing:
     // P = (1 / 256) * input_value
-    const long double P = (1.0 / 256.0) * phase;
+    const double P = (1.0 / 256.0) * phase;
 
     // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
     // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
-    const auto angle = units::Radians<long double>{ 2 * M_PI * P };
-    long double sin_angle, cos_angle;
+    const auto angle = units::Radians<double>{ 2 * std::numbers::pi * P };
+    double sin_angle, cos_angle;
     SinCos(angle, sin_angle, cos_angle);
     std::complex<long double> S(A * cos_angle, A * sin_angle);
     return S;
@@ -100,12 +101,12 @@ static std::complex<long double> toComplex_(long double A, uint8_t phase)
 std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase)
 {   
     // A = input_amplitude(i.e. 0 to 255)
-    const long double A = amplitude;
+    const double A = amplitude;
     return toComplex_(A, phase);
 }
 std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable& amplitudeTable)
 {
-    const long double A = amplitudeTable.index(amplitude);
+    const double A = amplitudeTable.index(amplitude);
     return toComplex_(A, phase);
 }
 std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable* pAmplitudeTable)
