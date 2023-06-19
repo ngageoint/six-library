@@ -70,9 +70,9 @@ inline auto GetPhase(const std::complex<long double>& v)
 }
 
 template<typename TToComplexFunc>
-static std::vector<long double> make_magnitudes_(TToComplexFunc toComplex)
+static std::vector<float> make_magnitudes_(TToComplexFunc toComplex)
 {
-    std::vector<long double> retval;
+    std::vector<float> retval;
     retval.reserve(UINT8_MAX + 1);
     for (const auto amplitude : six::sicd::Utilities::iota_0_256())
     {
@@ -107,8 +107,8 @@ static inline auto make_magnitudes()
     return make_magnitudes_(toComplex);
 }
 
-static const std::vector<long double>& get_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
-    std::vector<long double>& uncached_magnitudes)
+static const std::vector<float>& get_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
+    std::vector<float>& uncached_magnitudes)
 {
     if (pAmplitudeTable == nullptr)
     {
@@ -131,8 +131,8 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
     size_t i = 0;
     for(const auto value : six::sicd::Utilities::iota_0_256())
     {
-        const units::Radians<long double> angle{ p0 + value * phase_delta };
-        long double y, x;
+        const units::Radians<float> angle{ static_cast<float>(p0) + value * phase_delta };
+        float y, x;
         SinCos(angle, y, x);
         phase_directions[i] = { x, y };
         i++;
@@ -144,7 +144,7 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
  * @param value query value
  * @return index of nearest value within the iterator range.
  */
-static inline uint8_t nearest(const std::vector<long double>& magnitudes, long double value)
+static inline uint8_t nearest(const std::vector<float>& magnitudes, float value)
 {
     const auto begin = magnitudes.begin();
     const auto end = magnitudes.end();
