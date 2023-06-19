@@ -20,24 +20,26 @@
  *
  */
 
-#ifndef __MATH_CONSTANTS_H__
-#define __MATH_CONSTANTS_H__
+#pragma once
+#ifndef CODA_OSS_math_Constants_h_INCLUDED_
+#define CODA_OSS_math_Constants_h_INCLUDED_
 
-#include <math.h>
+#include "coda_oss/numbers.h"
+
 namespace math
 {
-struct Constants
+struct Constants final
 {
     static constexpr double FEET_TO_METERS = 0.3048;
     static constexpr double METERS_TO_FEET = 1.0 / FEET_TO_METERS;
 
-    static constexpr double RADIANS_TO_DEGREES = 180.0 / M_PI;
+    static constexpr double RADIANS_TO_DEGREES = 180.0 / coda_oss::numbers::pi;
     template <typename T>
     static constexpr T radians_to_degrees() noexcept
     {
         return static_cast<T>(RADIANS_TO_DEGREES);
     }
-    static constexpr double DEGREES_TO_RADIANS = M_PI / 180.0;
+    static constexpr double DEGREES_TO_RADIANS = coda_oss::numbers::pi / 180.0;
     template<typename T>
     static constexpr T degrees_to_radians() noexcept
     {
@@ -55,4 +57,4 @@ struct Constants
             SPEED_OF_LIGHT_METERS_PER_SEC * METERS_TO_FEET;
 };
 }
-#endif
+#endif  // CODA_OSS_math_Constants_h_INCLUDED_
