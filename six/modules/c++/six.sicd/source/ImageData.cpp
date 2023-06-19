@@ -31,6 +31,10 @@
 
 #include <gsl/gsl.h>
 #include <mt/Algorithm.h>
+#include <coda_oss/CPlusPlus.h>
+#if CODA_OSS_cpp17
+#include <execution>
+#endif
 
 #include "six/AmplitudeTable.h"
 #include "six/sicd/GeoData.h"
@@ -39,7 +43,7 @@
 using namespace six;
 using namespace six::sicd;
 
- // There was in coda-oss, but I removed it.
+ // This was in coda-oss, but I removed it.
  //
  // First of all, C++11's std::async() is now (in 2023) thought of as maybe a
  // bit "half baked," and perhaps shouldn't be emulated.  Then, C++17 added
@@ -67,12 +71,15 @@ static inline OutputIt transform_async(const InputIt first1, const InputIt last1
 template <typename TInputs, typename TResults, typename TFunc>
 static inline void transform(std::span<const TInputs> inputs, std::span<TResults> results, TFunc f)
 {
+#if CODA_OSS_cpp17
+    std::ignore = std::transform(std::execution::par, inputs.begin(), inputs.end(), results.begin(), f);
+#else
     constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
-    if (cutoff_ < 0)
-    {
-        std::ignore = std::transform(inputs.begin(), inputs.end(), results.begin(), f);
-    }
-    else
+    //if (cutoff_ < 0)
+    //{
+    //    std::ignore = std::transform(inputs.begin(), inputs.end(), results.begin(), f);
+    //}
+    //else
     {
         // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
         constexpr auto dimension = 128 * 8;
@@ -81,6 +88,7 @@ static inline void transform(std::span<const TInputs> inputs, std::span<TResults
         
         std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(), f, cutoff);
     }
+#endif // CODA_OSS_cpp17
 }
 
 bool ImageData::operator==(const ImageData& rhs) const
@@ -254,17 +262,11 @@ void ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs, std::span<six::
     toComplex(values, inputs, results);
 }
 
-void ImageData::fromComplex(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results) const
+void ImageData::fromComplex(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
-    // make a structure to quickly find the nearest neighbor
-    auto& converter = six::sicd::details::ComplexToAMP8IPHS8I::make(amplitudeTable.get());
-    const auto fromComplex_ = [&converter](const auto& v)
-    {
-        return converter.nearest_neighbor(v);
-    };
-    transform(inputs, results, fromComplex_);
+    six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(inputs, results, amplitudeTable.get());
 }
-void ImageData::testing_fromComplex_(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results)
+void ImageData::testing_fromComplex_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results)
 {
     static const ImageData imageData;
     assert(imageData.amplitudeTable.get() == nullptr);
