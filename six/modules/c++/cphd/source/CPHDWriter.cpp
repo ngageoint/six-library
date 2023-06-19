@@ -76,8 +76,9 @@ void CPHDWriter::writeMetadata(size_t supportSize,
 {
     const auto xmlMetadata(CPHDXMLControl().toXMLString(mMetadata, mSchemaPaths));
 
-    // update header version, or remains default if unset
-    mHeader.setVersion(mMetadata.getVersion());
+    Version cphdVersion;
+    mMetadata.getVersion(cphdVersion);
+    mHeader.setVersion(cphdVersion);
 
     // update classification and release info
     if (!six::Init::isUndefined(

@@ -28,6 +28,7 @@
 
 #include <io/SeekableStreams.h>
 #include <cphd/BaseFileHeader.h>
+#include <cphd/Types.h>
 
 namespace cphd
 {
@@ -36,10 +37,10 @@ namespace cphd
  *
  *  \brief Stores CPHD file header information
  */
-class FileHeader : public BaseFileHeader
+class FileHeader final : public BaseFileHeader
 {
 public:
-    static const char DEFAULT_VERSION[];
+    static const std::string DEFAULT_VERSION;
 
     /*
      *  \func FileHeader
@@ -96,6 +97,7 @@ public:
      *
      */
     void setVersion(const std::string& version);
+    void setVersion(Version);
 
     /*
      *  \func set
