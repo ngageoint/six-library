@@ -179,6 +179,59 @@ six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(con
     return retval;
 }
 
+ // Yes, this is duplicated code :-(  1) hopefully it will go away someday "soon,"
+ // that is, we'll be at C++17; 2) the cutoff/dimension values may be different.
+ //
+ // First of all, C++11's std::async() is now (in 2023) thought of as maybe a
+ // bit "half baked," and perhaps shouldn't be emulated.  Then, C++17 added
+ // parallel algorithms which might be a better way of satisfying our immediate
+ // needs (below) ... although we're still at C++14.
+template <typename InputIt, typename OutputIt, typename TFunc>
+static inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
+    typename std::iterator_traits<InputIt>::difference_type cutoff)
+{
+    // https://en.cppreference.com/w/cpp/thread/async
+    const auto len = std::distance(first1, last1);
+    if (len < cutoff)
+    {
+        return std::transform(first1, last1, d_first, f);
+    }
+
+    constexpr auto policy = std::launch::async;
+
+    const auto mid1 = first1 + len / 2;
+    const auto d_mid = d_first + len / 2;
+    auto handle = std::async(policy, transform_async<InputIt, OutputIt, TFunc>, mid1, last1, d_mid, f, cutoff);
+    transform_async(first1, mid1, d_first, f, cutoff);
+    return handle.get();
+}
+template <typename TInputs, typename TResults, typename TFunc>
+static inline void transform(std::span<const TInputs> inputs, std::span<TResults> results, TFunc f)
+{
+#if CODA_OSS_cpp17
+    std::ignore = std::transform(std::execution::par, inputs.begin(), inputs.end(), results.begin(), f);
+#else
+    constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
+    // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
+    constexpr auto dimension = 128 * 8;
+    constexpr auto default_cutoff = dimension * dimension;
+    const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;        
+    std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(), f, cutoff);
+#endif // CODA_OSS_cpp17
+}
+
+void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
+    const six::AmplitudeTable* pAmplitudeTable)
+{
+    // make a structure to quickly find the nearest neighbor
+    auto& converter = make(pAmplitudeTable);
+    const auto fromComplex_ = [&converter](const auto& v)
+    {
+        return converter.nearest_neighbor(v);
+    };
+    transform(inputs, results, fromComplex_);
+}
+
 const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
@@ -189,6 +242,7 @@ const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8
     }
     else
     {
+        // Might have already "cached" this on the AmplitudeTable instance.
         auto pFromComplex = pAmplitudeTable->getFromComplex();
         if (pFromComplex != nullptr)
         {

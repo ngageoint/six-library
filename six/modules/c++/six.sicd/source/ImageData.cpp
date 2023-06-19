@@ -43,7 +43,7 @@
 using namespace six;
 using namespace six::sicd;
 
- // There was in coda-oss, but I removed it.
+ // This was in coda-oss, but I removed it.
  //
  // First of all, C++11's std::async() is now (in 2023) thought of as maybe a
  // bit "half baked," and perhaps shouldn't be emulated.  Then, C++17 added
@@ -262,17 +262,11 @@ void ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs, std::span<six::
     toComplex(values, inputs, results);
 }
 
-void ImageData::fromComplex(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results) const
+void ImageData::fromComplex(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
-    // make a structure to quickly find the nearest neighbor
-    auto& converter = six::sicd::details::ComplexToAMP8IPHS8I::make(amplitudeTable.get());
-    const auto fromComplex_ = [&converter](const auto& v)
-    {
-        return converter.nearest_neighbor(v);
-    };
-    transform(inputs, results, fromComplex_);
+    six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(inputs, results, amplitudeTable.get());
 }
-void ImageData::testing_fromComplex_(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results)
+void ImageData::testing_fromComplex_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results)
 {
     static const ImageData imageData;
     assert(imageData.amplitudeTable.get() == nullptr);
