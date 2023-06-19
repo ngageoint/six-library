@@ -747,8 +747,11 @@
     <ClInclude Include="sys\include\sys\SysInt.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="types\include\types\complex.h">
+    <ClInclude Include="types\include\types\Complex.h">
       <Filter>types</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\numbers.h">
+      <Filter>coda_oss</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1224,6 +1227,9 @@
     </None>
     <None Include="sys\include\sys\sys_config.h.cmake.in">
       <Filter>sys</Filter>
+    </None>
+    <None Include="std\include\std\numbers">
+      <Filter>std</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -20,6 +20,7 @@
     <ClInclude Include="coda_oss\include\coda_oss\CPlusPlus.h" />
     <ClInclude Include="coda_oss\include\coda_oss\cstddef.h" />
     <ClInclude Include="coda_oss\include\coda_oss\namespace_.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\numbers.h" />
     <ClInclude Include="coda_oss\include\coda_oss\optional.h" />
     <ClInclude Include="coda_oss\include\coda_oss\optional_.h" />
     <ClInclude Include="coda_oss\include\coda_oss\span.h" />
@@ -256,7 +257,7 @@
     <ClInclude Include="tiff\include\tiff\KnownTags.h" />
     <ClInclude Include="tiff\include\tiff\TypeFactory.h" />
     <ClInclude Include="tiff\include\tiff\Utils.h" />
-    <ClInclude Include="types\include\types\complex.h" />
+    <ClInclude Include="types\include\types\Complex.h" />
     <ClInclude Include="types\include\types\PageRowCol.h" />
     <ClInclude Include="types\include\types\Range.h" />
     <ClInclude Include="types\include\types\RangeList.h" />
@@ -407,6 +408,7 @@
     <None Include="std\include\std\cstddef" />
     <None Include="std\include\std\filesystem" />
     <None Include="std\include\std\memory" />
+    <None Include="std\include\std\numbers" />
     <None Include="std\include\std\optional" />
     <None Include="std\include\std\span" />
     <None Include="std\include\std\string" />

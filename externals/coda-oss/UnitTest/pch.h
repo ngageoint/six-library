@@ -32,6 +32,7 @@
 #include <std/bit>
 #include <std/filesystem>
 #include <std/bit> // std::endian
+#include <std/numbers>
 
 #include "CppUnitTest.h"
 
@@ -53,7 +54,7 @@
 #include <types/PageRowCol.h>
 #include <types/RangeList.h>
 #include <types/Range.h>
-#include <types/complex.h>
+#include <types/Complex.h>
 #include <sys/Conf.h>
 #include <sys/Path.h>
 #include <except/Exception.h>
