@@ -40,7 +40,7 @@ namespace cphd
 class FileHeader final : public BaseFileHeader
 {
 public:
-    static const std::string DEFAULT_VERSION;
+    static const char* DEFAULT_VERSION; // `const char*` for existing Python bindings
 
     /*
      *  \func FileHeader

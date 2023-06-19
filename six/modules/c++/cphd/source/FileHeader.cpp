@@ -31,7 +31,13 @@
 
 namespace cphd
 {
-const std::string FileHeader::DEFAULT_VERSION = to_string(Version::v101);
+
+static const char* getDefaultVersion()
+{
+    static const auto defaultVersion = to_string(Version::v101);
+    return defaultVersion.c_str();
+}
+const char* FileHeader::DEFAULT_VERSION = getDefaultVersion();
 
 FileHeader::FileHeader() :
     mVersion(DEFAULT_VERSION),
