@@ -582,9 +582,9 @@ std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
 std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths,
-    logging::Logger& log)
+    logging::Logger& log, bool preserveCharacterData)
 {
-    return parseData(xmlReg, xmlStream, DataType::NOT_SET, pSchemaPaths, log);
+    return parseData(xmlReg, xmlStream, DataType::NOT_SET, pSchemaPaths, log, preserveCharacterData);
 }
 
 inline std::unique_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::string>& schemaPaths)
@@ -595,14 +595,11 @@ inline std::unique_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl
 {
     return xmlControl.fromXML(doc, pSchemaPaths);
 }
-template<typename TReturn, typename TSchemaPaths>
-TReturn six_parseData(const XMLControlRegistry& xmlReg,
-                                   ::io::InputStream& xmlStream,
-                                   DataType dataType,
-                                   const TSchemaPaths& schemaPaths,
-                                   logging::Logger& log)
+
+static auto parseInputStream(::io::InputStream& xmlStream, bool preserveCharacterData = false)
 {
     six::MinidomParser xmlParser;
+    xmlParser.preserveCharacterData(preserveCharacterData);
     try
     {
         xmlParser.parse(xmlStream);
@@ -611,6 +608,16 @@ TReturn six_parseData(const XMLControlRegistry& xmlReg,
     {
         throw except::Exception(ex, Ctxt("Invalid XML data"));
     }
+    return xmlParser;
+}
+
+template<typename TReturn, typename TSchemaPaths>
+TReturn six_parseData(const XMLControlRegistry& xmlReg,
+                                   six::MinidomParser& xmlParser,
+                                   DataType dataType,
+                                   const TSchemaPaths& schemaPaths,
+                                   logging::Logger& log)
+{
     const auto& doc = getDocument(xmlParser);
 
     //! Check the root localName for the XML type
@@ -639,15 +646,17 @@ std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log)
 {
-    return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlStream, dataType, schemaPaths, log);
+    auto xmlParser = parseInputStream(xmlStream);
+    return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlParser, dataType, schemaPaths, log);
 }
 std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream,
     DataType dataType,
     const std::vector<std::filesystem::path>* pSchemaPaths,
-    logging::Logger& log)
+    logging::Logger& log, bool preserveCharacterData)
 {
-    return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlStream, dataType, pSchemaPaths, log);
+    auto xmlParser = parseInputStream(xmlStream, preserveCharacterData);
+    return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlParser, dataType, pSchemaPaths, log);
 }
 
 std::unique_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,

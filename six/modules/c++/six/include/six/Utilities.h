@@ -207,7 +207,8 @@ std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               logging::Logger& log);
 std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream, DataType dataType,
-    const std::vector<std::filesystem::path>*, logging::Logger&);
+    const std::vector<std::filesystem::path>*, logging::Logger&,
+    bool preserveCharacterData = false);
 
 /*
  * Parses the XML in 'xmlStream' and converts it into a Data object.  Same as
@@ -225,7 +226,8 @@ std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger& log);
 std::unique_ptr<Data> parseData(const XMLControlRegistry&, ::io::InputStream&,
-    const std::vector<std::filesystem::path>*, logging::Logger&);
+    const std::vector<std::filesystem::path>*, logging::Logger&,
+    bool preserveCharacterData = false);
 
 /*
  * Parses the XML in 'pathname' and converts it into a Data object.
