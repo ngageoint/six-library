@@ -57,6 +57,7 @@
 #include <six/sicd/GeoLocator.h>
 #include <six/sicd/ImageData.h>
 #include <six/sicd/NITFReadComplexXMLControl.h>
+#include <six/sicd/DataParser.h>
 
 namespace fs = std::filesystem;
 
@@ -996,11 +997,8 @@ std::unique_ptr<ComplexData> Utilities::parseData(
 std::unique_ptr<ComplexData> Utilities::parseData(::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log, bool preserveCharacterData)
 {
-    XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<ComplexXMLControl>();
-
-    auto pData = six::parseData(xmlRegistry, xmlStream, pSchemaPaths, log, preserveCharacterData);
-    return std::unique_ptr<ComplexData>(static_cast<ComplexData*>(pData.release()));
+    DataParser parser(pSchemaPaths, &log, preserveCharacterData);
+    return parser.parseData(xmlStream);
 }
 
 std::unique_ptr<ComplexData> Utilities::parseDataFromFile(
@@ -1014,11 +1012,8 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromFile(
 std::unique_ptr<ComplexData> Utilities::parseDataFromFile(const std::filesystem::path& pathname,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    logging::NullLogger nullLogger;
-    logging::Logger* const logger = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    io::FileInputStream inStream(pathname.string());
-    return parseData(inStream, pSchemaPaths, *logger);
+    DataParser parser(pSchemaPaths, pLogger);
+    return parser.parseData(pathname);
 }
 
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(
@@ -1037,12 +1032,8 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    logging::NullLogger nullLogger;
-    logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    io::U8StringStream inStream;
-    inStream.write(xmlStr);
-    return parseData(inStream, pSchemaPaths, *log);
+    DataParser parser(pSchemaPaths, pLogger);
+    return parser.parseData(xmlStr);
 }
 
 std::string Utilities::toXMLString(const ComplexData& data,

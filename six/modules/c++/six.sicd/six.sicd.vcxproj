@@ -117,6 +117,7 @@
     <ClInclude Include="include\six\sicd\ComplexXMLParser101.h" />
     <ClInclude Include="include\six\sicd\ComplexXMLParser10x.h" />
     <ClInclude Include="include\six\sicd\CropUtils.h" />
+    <ClInclude Include="include\six\sicd\DataParser.h" />
     <ClInclude Include="include\six\sicd\Functor.h" />
     <ClInclude Include="include\six\sicd\GeoData.h" />
     <ClInclude Include="include\six\sicd\GeoLocator.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="source\ComplexXMLParser101.cpp" />
     <ClCompile Include="source\ComplexXMLParser10x.cpp" />
     <ClCompile Include="source\CropUtils.cpp" />
+    <ClCompile Include="source\DataParser.cpp" />
     <ClCompile Include="source\Functor.cpp" />
     <ClCompile Include="source\GeoData.cpp" />
     <ClCompile Include="source\GeoLocator.cpp" />
