@@ -51,8 +51,18 @@ TEST_CASE(DummyData)
 {
     const auto data = createData<six::zfloat>(types::RowCol<size_t>(10, 10));
 
-    const std::vector<std::string> schemaPaths;
-    const auto result = six::sicd::Utilities::toXMLString(*data, schemaPaths);
+    const auto& parameters = data->collectionInformation->parameters;
+    // <Parameter name="TestParameter">setValue() for TestParameter</Parameter>
+    const auto& testParameter = parameters.findParameter("TestParameter");
+    TEST_ASSERT_EQ(testParameter.str(), "setValue() for TestParameter");
+
+    // Check whitepspace in parameters
+    const auto& emptyParameter = parameters.findParameter("TestParameterEmpty");
+    TEST_ASSERT_EQ(emptyParameter.str(), "");
+    const auto& threeSpacesParameter = parameters.findParameter("TestParameterThreeSpaces");
+    TEST_ASSERT_EQ(threeSpacesParameter.str(), "   ");
+
+    const auto result = six::sicd::Utilities::toXMLString(*data);
     TEST_ASSERT_FALSE(result.empty());
 }
 

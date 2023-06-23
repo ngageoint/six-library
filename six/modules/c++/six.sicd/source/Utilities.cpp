@@ -1225,6 +1225,20 @@ static std::unique_ptr<ComplexData> createFakeComplexData_(const std::string& st
     data->collectionInformation->setClassificationLevel("UNCLASSIFIED");
     data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
 
+    auto& parameters = data->collectionInformation->parameters;
+    six::Parameter param;
+    param.setName("TestParameter");
+    param.setValue("setValue() for TestParameter");
+    parameters.push_back(param);
+
+    // By default, XML parsing in CODA-OSS trims whitespace, see preserveCharacterData
+    param.setName("TestParameterEmpty");
+    param.setValue("");
+    parameters.push_back(param);
+    param.setName("TestParameterThreeSpaces");
+    param.setValue("   ");
+    parameters.push_back(param);
+
     if (!strVersion.empty()) // TODO: better check for version; this avoid changing any existing test code
     {
         update_for_SICD_130(*data);
