@@ -982,26 +982,25 @@ bool Utilities::isClockwise(const std::vector<RowColInt>& vertices,
     return (area > 0);
 }
 
-template<typename TReturn, typename TSchemaPaths>
-TReturn Utilities_parseData(::io::InputStream& xmlStream, const TSchemaPaths& schemaPaths, logging::Logger& log)
-{
-    XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<ComplexXMLControl>();
-
-    auto data(six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
-    return TReturn(static_cast<ComplexData*>(data.release()));
-}
 std::unique_ptr<ComplexData> Utilities::parseData(
         ::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
 {
-    return Utilities_parseData<std::unique_ptr<ComplexData>>(xmlStream, schemaPaths, log);
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator<ComplexXMLControl>();
+
+    auto pData = six::parseData(xmlRegistry, xmlStream, schemaPaths, log);
+    return std::unique_ptr<ComplexData>(static_cast<ComplexData*>(pData.release()));
 }
 std::unique_ptr<ComplexData> Utilities::parseData(::io::InputStream& xmlStream,
-    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log, bool preserveCharacterData)
 {
-    return Utilities_parseData<std::unique_ptr<ComplexData>>(xmlStream, pSchemaPaths, log);
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator<ComplexXMLControl>();
+
+    auto pData = six::parseData(xmlRegistry, xmlStream, pSchemaPaths, log, preserveCharacterData);
+    return std::unique_ptr<ComplexData>(static_cast<ComplexData*>(pData.release()));
 }
 
 std::unique_ptr<ComplexData> Utilities::parseDataFromFile(
@@ -1033,8 +1032,7 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    auto result = parseDataFromString(xmlStr, &schemaPaths, &log);
-    return std::unique_ptr<ComplexData>(result.release());
+    return parseDataFromString(xmlStr, &schemaPaths, &log);
 }
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
