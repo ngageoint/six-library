@@ -21,6 +21,7 @@
 
 #include <string>
 #include <vector>
+#include <std/optional>
 
 #include <xml/lite/MinidomParser.h>
 #include <xml/lite/Document.h>
@@ -29,6 +30,7 @@
 
 #include <import/six/sicd.h>
 #include <six/XmlLite.h>
+#include <six/sicd/DataParser.h>
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4464) // relative include path contains '..'
@@ -47,7 +49,8 @@
 #define U8(s) static_cast<const std::char8_t*>(static_cast<const void*>(s))
 #endif
 
-static void test_DummyData_parameters(const std::string& testName, const six::ParameterCollection& parameters)
+static void test_DummyData_parameters(const std::string& testName, const six::ParameterCollection& parameters,
+    std::optional<bool> preserveCharacterData = std::optional<bool>())
 {
     const auto& testParameter = parameters.findParameter("TestParameter");
     TEST_ASSERT_EQ(testParameter.str(), "setValue() for TestParameter");
@@ -55,8 +58,17 @@ static void test_DummyData_parameters(const std::string& testName, const six::Pa
     // Check whitepspace in parameters
     const auto& emptyParameter = parameters.findParameter("TestParameterEmpty");
     TEST_ASSERT_EQ(emptyParameter.str(), "");
-    //const auto& threeSpacesParameter = parameters.findParameter("TestParameterThreeSpaces");
-    //TEST_ASSERT_EQ(threeSpacesParameter.str(), "   "); // TODO
+
+    const auto& threeSpacesParameter = parameters.findParameter("TestParameterThreeSpaces");
+    std::string expected("   ");
+    if (preserveCharacterData.has_value()) // only has a value when parsing XML
+    {
+        if (!(*preserveCharacterData))
+        {
+            expected.clear(); // result of trim() is empty string
+        }
+    }
+    TEST_ASSERT_EQ(threeSpacesParameter.str(), expected);
 }
 TEST_CASE(DummyData)
 {
@@ -69,8 +81,18 @@ TEST_CASE(DummyData)
     TEST_ASSERT_FALSE(xmlStr.empty());
 
     // Parse the XML we just made.
-    const auto pComplexData = six::sicd::Utilities::parseDataFromString(xmlStr, pSchemaPaths);
-    test_DummyData_parameters(testName, pComplexData->collectionInformation->parameters);
+    bool preserveCharacterData = false;
+    {
+        six::sicd::DataParser parser(preserveCharacterData);
+        const auto pComplexData = parser.parseData(xmlStr);
+        test_DummyData_parameters(testName, pComplexData->collectionInformation->parameters, preserveCharacterData);
+    }
+    preserveCharacterData = true;
+    {
+        six::sicd::DataParser parser(preserveCharacterData);
+        const auto pComplexData = parser.parseData(xmlStr);
+        test_DummyData_parameters(testName, pComplexData->collectionInformation->parameters, preserveCharacterData);
+    }
 }
 
 TEST_CASE(FakeComplexData)

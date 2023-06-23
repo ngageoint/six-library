@@ -59,13 +59,14 @@ public:
         : DataParser(&schemaPaths, pLog, preserveCharacterData) { }
     DataParser(const std::vector<std::filesystem::path>& schemaPaths, logging::Logger& log, bool preserveCharacterData = false)
         : DataParser(schemaPaths, &log, preserveCharacterData) { }
+    explicit DataParser(bool preserveCharacterData) : DataParser(nullptr, nullptr, preserveCharacterData) { }
 
     ~DataParser() = default;
 
     DataParser(const DataParser&) = delete;
     DataParser& operator=(const DataParser&) = delete;
-    DataParser(DataParser&&) = default;
-    DataParser& operator=(DataParser&&) = default;
+    DataParser(DataParser&&) = delete;
+    DataParser& operator=(DataParser&&) = delete;
 
     /* Parses the XML in 'xmlStream'.
     *
