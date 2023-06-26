@@ -50,7 +50,10 @@ std::unique_ptr<six::sicd::ComplexData> six::sicd::DataParser::DataParser::fromX
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<ComplexXMLControl>();
 
-    auto pData = six::parseData(xmlRegistry, xmlStream, mpSchemaPaths, mLog, mPreserveCharacterData);
+    six::DataParser dataParser(xmlRegistry, mpSchemaPaths, &mLog);
+    dataParser.preserveCharacterData(mPreserveCharacterData);
+
+    auto pData = dataParser.fromXML(xmlStream, DataType::NOT_SET);
     return std::unique_ptr<ComplexData>(static_cast<ComplexData*>(pData.release()));
 }
 

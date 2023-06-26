@@ -207,8 +207,7 @@ std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               logging::Logger& log);
 std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream, DataType dataType,
-    const std::vector<std::filesystem::path>*, logging::Logger&,
-    bool preserveCharacterData = false);
+    const std::vector<std::filesystem::path>*, logging::Logger&);
 
 /*
  * Parses the XML in 'xmlStream' and converts it into a Data object.  Same as
@@ -226,8 +225,7 @@ std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger& log);
 std::unique_ptr<Data> parseData(const XMLControlRegistry&, ::io::InputStream&,
-    const std::vector<std::filesystem::path>*, logging::Logger&,
-    bool preserveCharacterData = false);
+    const std::vector<std::filesystem::path>*, logging::Logger&);
 
 /*
  * Parses the XML in 'pathname' and converts it into a Data object.
@@ -318,6 +316,70 @@ void getErrors(const ErrorStatistics* errorStats,
  * \return path to schema directory, or empty string
  */
 std::string findSchemaPath(const std::string& progname);
+
+class DataParser final
+{
+    const XMLControlRegistry& mXmlReg;
+    const std::vector<std::filesystem::path>* mpSchemaPaths = nullptr;
+    logging::NullLogger mNullLogger;
+    logging::Logger& mLog;
+
+    // The default is `true` because:
+    // * many (most?) other parts of SIX unconditionally set `preserveCharacterData(true)`.
+    // * this is new code; if you're using it, you likely want different behavior than that
+    //   of existing code; otherwise, why change?
+    bool mPreserveCharacterData = true;
+
+public:
+
+    /* Parses the XML and converts it into a ComplexData object.
+    * Throws if the underlying type is not complex.
+    *
+    * \param xmlStream Input stream containing XML
+    * \param schemaPaths Schema path(s)
+    * \param log Logger
+    */
+    DataParser(const XMLControlRegistry&, 
+        const std::vector<std::filesystem::path>* pSchemaPaths = nullptr, logging::Logger* pLog = nullptr);
+    ~DataParser() = default;
+
+    DataParser(const DataParser&) = delete;
+    DataParser& operator=(const DataParser&) = delete;
+    DataParser(DataParser&&) = delete;
+    DataParser& operator=(DataParser&&) = delete;
+
+    /*!
+        * If set to true, whitespaces will be preserved in the parsed
+        * character data. Otherwise, it will be trimmed.
+        */
+    void preserveCharacterData(bool preserve);
+
+    /* Parses the XML in 'xmlStream'.
+    *
+    * \param xmlStream Input stream containing XML
+    *
+    * \return Data representation of 'xmlStr'
+    */
+    std::unique_ptr<Data> fromXML(::io::InputStream& xmlStream, DataType dataType);
+
+    /*
+        * Parses the XML in 'pathname'.
+        *
+        * \param pathname File containing plain text XML (not a NITF)
+        *
+        * \return Data representation of the contents of 'pathname'
+        */
+    std::unique_ptr<Data> fromXML(const std::filesystem::path&, DataType dataType);
+
+    /*
+        * Parses the XML in 'xmlStr'.
+        *
+        * \param xmlStr XML document as a string
+        *
+        * \return Data representation of 'xmlStr'
+        */
+    std::unique_ptr<Data> fromXML(const std::u8string& xmlStr, DataType dataType);
+};
 
 namespace testing
 {
