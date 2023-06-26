@@ -995,10 +995,11 @@ std::unique_ptr<ComplexData> Utilities::parseData(
     return std::unique_ptr<ComplexData>(static_cast<ComplexData*>(pData.release()));
 }
 std::unique_ptr<ComplexData> Utilities::parseData(::io::InputStream& xmlStream,
-    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log, bool preserveCharacterData)
+    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
 {
-    DataParser parser(pSchemaPaths, &log, preserveCharacterData);
-    return parser.parseData(xmlStream);
+    DataParser parser(pSchemaPaths, &log);
+    parser.preserveCharacterData(false); // existing behavior
+    return parser.fromXML(xmlStream);
 }
 
 std::unique_ptr<ComplexData> Utilities::parseDataFromFile(
@@ -1013,7 +1014,8 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromFile(const std::filesystem:
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
     DataParser parser(pSchemaPaths, pLogger);
-    return parser.parseData(pathname);
+    parser.preserveCharacterData(false); // existing behavior
+    return parser.fromXML(pathname);
 }
 
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(
@@ -1033,7 +1035,8 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string&
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
     DataParser parser(pSchemaPaths, pLogger);
-    return parser.parseData(xmlStr);
+    parser.preserveCharacterData(false); // existing behavior
+    return parser.fromXML(xmlStr);
 }
 
 std::string Utilities::toXMLString(const ComplexData& data,

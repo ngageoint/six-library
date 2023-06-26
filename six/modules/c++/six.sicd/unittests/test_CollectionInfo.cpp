@@ -83,14 +83,16 @@ TEST_CASE(DummyData)
     // Parse the XML we just made.
     bool preserveCharacterData = false;
     {
-        six::sicd::DataParser parser(preserveCharacterData);
-        const auto pComplexData = parser.parseData(xmlStr);
+        six::sicd::DataParser parser;
+        parser.preserveCharacterData(preserveCharacterData);
+        const auto pComplexData = parser.fromXML(xmlStr);
         test_DummyData_parameters(testName, pComplexData->collectionInformation->parameters, preserveCharacterData);
     }
     preserveCharacterData = true;
     {
-        six::sicd::DataParser parser(preserveCharacterData);
-        const auto pComplexData = parser.parseData(xmlStr);
+        six::sicd::DataParser parser;
+        parser.preserveCharacterData(preserveCharacterData);
+        const auto pComplexData = parser.fromXML(xmlStr);
         test_DummyData_parameters(testName, pComplexData->collectionInformation->parameters, preserveCharacterData);
     }
 }

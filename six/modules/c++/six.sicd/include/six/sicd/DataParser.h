@@ -43,7 +43,12 @@ class DataParser final
     const std::vector<std::filesystem::path>* mpSchemaPaths = nullptr;
     logging::NullLogger mNullLogger;
     logging::Logger& mLog;
-    bool mPreserveCharacterData = false;
+
+    // The default is `true` because:
+    // * many (most?) other parts of SIX unconditionally set `preserveCharacterData(true)`.
+    // * this is new code; if you're using it, you likely want different behavior than that
+    //   of existing code; otherwise, why change?
+    bool mPreserveCharacterData = true;
 
 public:
 
@@ -54,12 +59,13 @@ public:
     * \param schemaPaths Schema path(s)
     * \param log Logger
     */
-    DataParser(const std::vector<std::filesystem::path>* pSchemaPaths = nullptr, logging::Logger* pLog = nullptr, bool preserveCharacterData = false);
-    DataParser(const std::vector<std::filesystem::path>& schemaPaths, logging::Logger* pLog = nullptr, bool preserveCharacterData = false)
-        : DataParser(&schemaPaths, pLog, preserveCharacterData) { }
-    DataParser(const std::vector<std::filesystem::path>& schemaPaths, logging::Logger& log, bool preserveCharacterData = false)
-        : DataParser(schemaPaths, &log, preserveCharacterData) { }
-    explicit DataParser(bool preserveCharacterData) : DataParser(nullptr, nullptr, preserveCharacterData) { }
+    DataParser(const std::vector<std::filesystem::path>* pSchemaPaths = nullptr, logging::Logger* pLog = nullptr);
+    DataParser(const std::vector<std::filesystem::path>& schemaPaths, logging::Logger* pLog = nullptr)
+        : DataParser(&schemaPaths, pLog) { }
+    DataParser(logging::Logger& log, const std::vector<std::filesystem::path>* pSchemaPaths = nullptr)
+        : DataParser(pSchemaPaths, &log) { }
+    DataParser(const std::vector<std::filesystem::path>& schemaPaths, logging::Logger& log)
+        : DataParser(schemaPaths, &log) { }
 
     ~DataParser() = default;
 
@@ -68,13 +74,19 @@ public:
     DataParser(DataParser&&) = delete;
     DataParser& operator=(DataParser&&) = delete;
 
+    /*!
+     * If set to true, whitespaces will be preserved in the parsed
+     * character data. Otherwise, it will be trimmed.
+     */
+    void preserveCharacterData(bool preserve);
+
     /* Parses the XML in 'xmlStream'.
     *
     * \param xmlStream Input stream containing XML
     *
     * \return Data representation of 'xmlStr'
     */
-    std::unique_ptr<ComplexData> parseData(::io::InputStream& xmlStream);
+    std::unique_ptr<ComplexData> fromXML(::io::InputStream& xmlStream);
 
     /*
      * Parses the XML in 'pathname'.
@@ -83,7 +95,7 @@ public:
      *
      * \return Data representation of the contents of 'pathname'
      */
-    std::unique_ptr<ComplexData> parseData(const std::filesystem::path&);
+    std::unique_ptr<ComplexData> fromXML(const std::filesystem::path&);
 
     /*
      * Parses the XML in 'xmlStr'.
@@ -92,7 +104,7 @@ public:
      *
      * \return Data representation of 'xmlStr'
      */
-    std::unique_ptr<ComplexData> parseData(const std::u8string& xmlStr);
+    std::unique_ptr<ComplexData> fromXML(const std::u8string& xmlStr);
 };
 }
 }

@@ -381,8 +381,7 @@ struct Utilities final
             const std::vector<std::string>& schemaPaths,
             logging::Logger& log);
     static std::unique_ptr<ComplexData> parseData(::io::InputStream& xmlStream,
-        const std::vector<std::filesystem::path>*, logging::Logger&,
-        bool preserveCharacterData = false);
+        const std::vector<std::filesystem::path>*, logging::Logger&);
 
     /*
      * Parses the XML in 'pathname' and converts it into a ComplexData object.
