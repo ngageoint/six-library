@@ -584,9 +584,9 @@ std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger& log)
 {
-    DataParser dataParser(xmlReg, pSchemaPaths, &log);
+    DataParser dataParser(pSchemaPaths, &log);
     dataParser.preserveCharacterData(false); // existing behavior
-    return dataParser.fromXML(xmlStream, DataType::NOT_SET);
+    return dataParser.fromXML(xmlStream, xmlReg, DataType::NOT_SET);
 }
 
 inline std::unique_ptr<Data> fromXML_(const xml::lite::Document& doc, XMLControl& xmlControl, const std::vector<std::string>& schemaPaths)
@@ -657,9 +657,9 @@ std::unique_ptr<Data> six::parseData(const XMLControlRegistry& xmlReg,
     const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger& log)
 {
-    DataParser dataParser(xmlReg, pSchemaPaths, &log);
+    DataParser dataParser(pSchemaPaths, &log);
     dataParser.preserveCharacterData(false); // existing behavior
-    return dataParser.fromXML(xmlStream, dataType);
+    return dataParser.fromXML(xmlStream, xmlReg, dataType);
 }
 
 std::unique_ptr<Data>  six::parseDataFromFile(const XMLControlRegistry& xmlReg,
@@ -685,9 +685,9 @@ std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger* pLogger)
 {
-    DataParser dataParser(xmlReg, pSchemaPaths, pLogger);
+    DataParser dataParser(pSchemaPaths, pLogger);
     dataParser.preserveCharacterData(false); // existing behavior
-    return dataParser.fromXML(xmlStr, DataType::NOT_SET);
+    return dataParser.fromXML(xmlStr, xmlReg, DataType::NOT_SET);
 }
 std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
@@ -704,9 +704,9 @@ std::unique_ptr<Data> six::parseDataFromString(
         const std::vector<std::filesystem::path>* pSchemaPaths,
         logging::Logger* pLogger)
 {
-    DataParser dataParser(xmlReg, pSchemaPaths, pLogger);
+    DataParser dataParser(pSchemaPaths, pLogger);
     dataParser.preserveCharacterData(false); // existing behavior
-    return dataParser.fromXML(xmlStr, dataType);
+    return dataParser.fromXML(xmlStr, xmlReg, dataType);
 }
 std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::string& xmlStr,
@@ -924,31 +924,32 @@ std::filesystem::path six::testing::getSampleXmlPath(const std::filesystem::path
     return getModuleFile(modulePath, filename);
 }
 
-six::DataParser::DataParser(const XMLControlRegistry& xmlReg,
-    const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLog)
-    : mXmlReg(xmlReg), 
-    mpSchemaPaths(pSchemaPaths),
+six::DataParser::DataParser(const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLog)
+    : mpSchemaPaths(pSchemaPaths),
     mLog(pLog == nullptr ? mNullLogger : *pLog)
 {
 }
 
-std::unique_ptr<six::Data> six::DataParser::DataParser::fromXML(::io::InputStream& xmlStream, DataType dataType)
+std::unique_ptr<six::Data> six::DataParser::DataParser::fromXML(::io::InputStream& xmlStream,
+    const XMLControlRegistry& xmlReg, DataType dataType)
 {
     auto xmlParser = parseInputStream(xmlStream, mPreserveCharacterData);
-    return six_parseData<std::unique_ptr<Data>>(mXmlReg, xmlParser, dataType, mpSchemaPaths, mLog);
+    return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlParser, dataType, mpSchemaPaths, mLog);
 }
 
-std::unique_ptr<six::Data> six::DataParser::DataParser::fromXML(const std::filesystem::path& pathname, DataType dataType)
+std::unique_ptr<six::Data> six::DataParser::DataParser::fromXML(const std::filesystem::path& pathname, 
+    const XMLControlRegistry& xmlReg, DataType dataType)
 {
     io::FileInputStream inStream(pathname.string());
-    return fromXML(inStream, dataType);
+    return fromXML(inStream, xmlReg, dataType);
 }
 
-std::unique_ptr<six::Data> six::DataParser::DataParser::fromXML(const std::u8string& xmlStr, DataType dataType)
+std::unique_ptr<six::Data> six::DataParser::DataParser::fromXML(const std::u8string& xmlStr,
+    const XMLControlRegistry& xmlReg, DataType dataType)
 {
     io::U8StringStream inStream;
     inStream.write(xmlStr);
-    return fromXML(inStream, dataType);
+    return fromXML(inStream, xmlReg, dataType);
 }
 
 void six::DataParser::DataParser::preserveCharacterData(bool preserve)

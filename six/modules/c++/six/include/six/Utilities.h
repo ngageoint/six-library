@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_UTILITIES_H__
-#define __SIX_UTILITIES_H__
+#pragma once
+#ifndef SIX_six_Utilities_h_INCLUDED_
+#define SIX_six_Utilities_h_INCLUDED_
 
 #include <vector>
 #include <memory>
@@ -319,7 +320,6 @@ std::string findSchemaPath(const std::string& progname);
 
 class DataParser final
 {
-    const XMLControlRegistry& mXmlReg;
     const std::vector<std::filesystem::path>* mpSchemaPaths = nullptr;
     logging::NullLogger mNullLogger;
     logging::Logger& mLog;
@@ -339,8 +339,7 @@ public:
     * \param schemaPaths Schema path(s)
     * \param log Logger
     */
-    DataParser(const XMLControlRegistry&, 
-        const std::vector<std::filesystem::path>* pSchemaPaths = nullptr, logging::Logger* pLog = nullptr);
+    DataParser(const std::vector<std::filesystem::path>* pSchemaPaths = nullptr, logging::Logger* pLog = nullptr);
     ~DataParser() = default;
 
     DataParser(const DataParser&) = delete;
@@ -360,7 +359,7 @@ public:
     *
     * \return Data representation of 'xmlStr'
     */
-    std::unique_ptr<Data> fromXML(::io::InputStream& xmlStream, DataType dataType);
+    std::unique_ptr<Data> fromXML(::io::InputStream& xmlStream, const XMLControlRegistry&, DataType dataType);
 
     /*
         * Parses the XML in 'pathname'.
@@ -369,7 +368,7 @@ public:
         *
         * \return Data representation of the contents of 'pathname'
         */
-    std::unique_ptr<Data> fromXML(const std::filesystem::path&, DataType dataType);
+    std::unique_ptr<Data> fromXML(const std::filesystem::path&, const XMLControlRegistry&, DataType dataType);
 
     /*
         * Parses the XML in 'xmlStr'.
@@ -378,7 +377,7 @@ public:
         *
         * \return Data representation of 'xmlStr'
         */
-    std::unique_ptr<Data> fromXML(const std::u8string& xmlStr, DataType dataType);
+    std::unique_ptr<Data> fromXML(const std::u8string& xmlStr, const XMLControlRegistry&, DataType dataType);
 };
 
 namespace testing
@@ -396,4 +395,4 @@ namespace testing
 
 }
 
-#endif
+#endif // SIX_six_Utilities_h_INCLUDED_

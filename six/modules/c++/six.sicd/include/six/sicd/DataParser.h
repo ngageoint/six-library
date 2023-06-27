@@ -32,6 +32,7 @@
 #include <io/InputStream.h>
 #include <logging/NullLogger.h>
 
+#include "six/Utilities.h"
 #include "six/sicd/ComplexData.h"
 
 namespace six
@@ -40,15 +41,7 @@ namespace sicd
 {
 class DataParser final
 {
-    const std::vector<std::filesystem::path>* mpSchemaPaths = nullptr;
-    logging::NullLogger mNullLogger;
-    logging::Logger& mLog;
-
-    // The default is `true` because:
-    // * many (most?) other parts of SIX unconditionally set `preserveCharacterData(true)`.
-    // * this is new code; if you're using it, you likely want different behavior than that
-    //   of existing code; otherwise, why change?
-    bool mPreserveCharacterData = true;
+    six::DataParser mDataParser;
 
 public:
 
@@ -59,7 +52,8 @@ public:
     * \param schemaPaths Schema path(s)
     * \param log Logger
     */
-    DataParser(const std::vector<std::filesystem::path>* pSchemaPaths = nullptr, logging::Logger* pLog = nullptr);
+    DataParser(const std::vector<std::filesystem::path>* pSchemaPaths = nullptr, logging::Logger* pLog = nullptr)
+        : mDataParser(pSchemaPaths, pLog) {}
     DataParser(const std::vector<std::filesystem::path>& schemaPaths, logging::Logger* pLog = nullptr)
         : DataParser(&schemaPaths, pLog) { }
     DataParser(logging::Logger& log, const std::vector<std::filesystem::path>* pSchemaPaths = nullptr)
