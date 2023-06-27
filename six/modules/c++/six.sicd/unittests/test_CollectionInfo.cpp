@@ -77,20 +77,20 @@ TEST_CASE(DummyData)
     test_DummyData_parameters(testName, data->collectionInformation->parameters);
 
     const std::vector<std::filesystem::path>* pSchemaPaths = nullptr;
-    const auto xmlStr = six::sicd::Utilities::toXMLString(*data, pSchemaPaths);
+    six::sicd::DataParser parser(pSchemaPaths);
+
+    const auto xmlStr = parser.toXML(*data);
     TEST_ASSERT_FALSE(xmlStr.empty());
 
     // Parse the XML we just made.
-    bool preserveCharacterData = false;
     {
-        six::sicd::DataParser parser;
+        constexpr bool preserveCharacterData = false;
         parser.preserveCharacterData(preserveCharacterData);
         const auto pComplexData = parser.fromXML(xmlStr);
         test_DummyData_parameters(testName, pComplexData->collectionInformation->parameters, preserveCharacterData);
     }
-    preserveCharacterData = true;
     {
-        six::sicd::DataParser parser;
+        constexpr bool preserveCharacterData = true;
         parser.preserveCharacterData(preserveCharacterData);
         const auto pComplexData = parser.fromXML(xmlStr);
         test_DummyData_parameters(testName, pComplexData->collectionInformation->parameters, preserveCharacterData);

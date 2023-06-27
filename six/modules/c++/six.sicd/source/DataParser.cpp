@@ -61,6 +61,16 @@ std::unique_ptr<six::sicd::ComplexData> six::sicd::DataParser::DataParser::fromX
     return fromXML(inStream);
 }
 
+std::u8string six::sicd::DataParser::DataParser::toXML(const six::sicd::ComplexData& data)
+{
+    auto& log = mDataParser.log();
+
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator<ComplexXMLControl>();
+
+    return ::six::toValidXMLString(data, mDataParser.schemaPaths(), &log, &xmlRegistry);
+}
+
 void six::sicd::DataParser::DataParser::preserveCharacterData(bool preserve)
 {
     mDataParser.preserveCharacterData(preserve);

@@ -99,6 +99,16 @@ public:
      * \return Data representation of 'xmlStr'
      */
     std::unique_ptr<ComplexData> fromXML(const std::u8string& xmlStr);
+
+    /*
+     * Converts 'data' back into a formatted XML string
+     *
+     * \param data Representation of SICD data
+     *
+     * \return XML string representation of 'data'
+     */
+    std::u8string toXML(const ComplexData&);
+
 };
 }
 }

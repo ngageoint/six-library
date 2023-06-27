@@ -1053,13 +1053,8 @@ std::string Utilities::toXMLString(const ComplexData& data,
 std::u8string Utilities::toXMLString(const ComplexData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<ComplexXMLControl>();
-
-    logging::NullLogger nullLogger;
-    logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    return ::six::toValidXMLString(data, pSchemaPaths, pLogger_, &xmlRegistry);
+    DataParser dataParser(pSchemaPaths, pLogger);
+    return dataParser.toXML(data);
 }
 
 static void update_for_SICD_130(ComplexData& data)

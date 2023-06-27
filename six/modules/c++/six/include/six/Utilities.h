@@ -378,6 +378,9 @@ public:
         * \return Data representation of 'xmlStr'
         */
     std::unique_ptr<Data> fromXML(const std::u8string& xmlStr, const XMLControlRegistry&, DataType dataType);
+
+    const std::vector<std::filesystem::path>* schemaPaths() const { return mpSchemaPaths; }
+    logging::Logger& log() const { return mLog; }
 };
 
 namespace testing
