@@ -348,9 +348,9 @@ public:
     DataParser& operator=(DataParser&&) = delete;
 
     /*!
-        * If set to true, whitespaces will be preserved in the parsed
-        * character data. Otherwise, it will be trimmed.
-        */
+    * If set to true, whitespaces will be preserved in the parsed
+    * character data. Otherwise, it will be trimmed.
+    */
     void preserveCharacterData(bool preserve);
 
     /* Parses the XML in 'xmlStream'.
@@ -359,28 +359,30 @@ public:
     *
     * \return Data representation of 'xmlStr'
     */
-    std::unique_ptr<Data> fromXML(::io::InputStream& xmlStream, const XMLControlRegistry&, DataType dataType) const;
+    std::unique_ptr<Data> fromXML(::io::InputStream& xmlStream, const XMLControlRegistry&, DataType) const;
 
     /*
-        * Parses the XML in 'pathname'.
-        *
-        * \param pathname File containing plain text XML (not a NITF)
-        *
-        * \return Data representation of the contents of 'pathname'
-        */
-    std::unique_ptr<Data> fromXML(const std::filesystem::path&, const XMLControlRegistry&, DataType dataType) const;
+    * Parses the XML in 'pathname'.
+    *
+    * \param pathname File containing plain text XML (not a NITF)
+    *
+    * \return Data representation of the contents of 'pathname'
+    */
+    std::unique_ptr<Data> fromXML(const std::filesystem::path&, const XMLControlRegistry&, DataType) const;
 
     /*
-        * Parses the XML in 'xmlStr'.
-        *
-        * \param xmlStr XML document as a string
-        *
-        * \return Data representation of 'xmlStr'
-        */
-    std::unique_ptr<Data> fromXML(const std::u8string& xmlStr, const XMLControlRegistry&, DataType dataType) const;
+    * Parses the XML in 'xmlStr'.
+    *
+    * \param xmlStr XML document as a string
+    *
+    * \return Data representation of 'xmlStr'
+    */
+    std::unique_ptr<Data> fromXML(const std::u8string& xmlStr, const XMLControlRegistry&, DataType) const;
 
-    const std::vector<std::filesystem::path>* schemaPaths() const { return mpSchemaPaths; }
-    logging::Logger& log() const { return mLog; }
+    /*!
+     *  Additionally performs schema validation --
+     */
+    std::u8string toXML(const Data&, const XMLControlRegistry&) const;
 };
 
 namespace testing

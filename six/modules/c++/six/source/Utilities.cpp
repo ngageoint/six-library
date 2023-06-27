@@ -952,6 +952,11 @@ std::unique_ptr<six::Data> six::DataParser::DataParser::fromXML(const std::u8str
     return fromXML(inStream, xmlReg, dataType);
 }
 
+std::u8string  six::DataParser::DataParser::toXML(const Data& data, const XMLControlRegistry& xmlReg) const
+{
+    return ::six::toValidXMLString(data, mpSchemaPaths, &mLog, &xmlReg);
+}
+
 void six::DataParser::DataParser::preserveCharacterData(bool preserve)
 {
     mPreserveCharacterData = preserve;
