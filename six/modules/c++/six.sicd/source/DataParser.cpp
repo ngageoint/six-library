@@ -39,7 +39,7 @@
 
 namespace fs = std::filesystem;
 
-std::unique_ptr<six::sicd::ComplexData> six::sicd::DataParser::DataParser::fromXML(::io::InputStream& xmlStream)
+std::unique_ptr<six::sicd::ComplexData> six::sicd::DataParser::DataParser::fromXML(::io::InputStream& xmlStream) const
 {
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<ComplexXMLControl>();
@@ -48,20 +48,20 @@ std::unique_ptr<six::sicd::ComplexData> six::sicd::DataParser::DataParser::fromX
     return std::unique_ptr<ComplexData>(static_cast<ComplexData*>(pData.release()));
 }
 
-std::unique_ptr<six::sicd::ComplexData> six::sicd::DataParser::DataParser::fromXML(const std::filesystem::path& pathname)
+std::unique_ptr<six::sicd::ComplexData> six::sicd::DataParser::DataParser::fromXML(const std::filesystem::path& pathname) const
 {
     io::FileInputStream inStream(pathname.string());
     return fromXML(inStream);
 }
 
-std::unique_ptr<six::sicd::ComplexData> six::sicd::DataParser::DataParser::fromXML(const std::u8string& xmlStr)
+std::unique_ptr<six::sicd::ComplexData> six::sicd::DataParser::DataParser::fromXML(const std::u8string& xmlStr) const
 {
     io::U8StringStream inStream;
     inStream.write(xmlStr);
     return fromXML(inStream);
 }
 
-std::u8string six::sicd::DataParser::DataParser::toXML(const six::sicd::ComplexData& data)
+std::u8string six::sicd::DataParser::DataParser::toXML(const six::sicd::ComplexData& data) const
 {
     auto& log = mDataParser.log();
 

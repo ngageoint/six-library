@@ -359,7 +359,7 @@ public:
     *
     * \return Data representation of 'xmlStr'
     */
-    std::unique_ptr<Data> fromXML(::io::InputStream& xmlStream, const XMLControlRegistry&, DataType dataType);
+    std::unique_ptr<Data> fromXML(::io::InputStream& xmlStream, const XMLControlRegistry&, DataType dataType) const;
 
     /*
         * Parses the XML in 'pathname'.
@@ -368,7 +368,7 @@ public:
         *
         * \return Data representation of the contents of 'pathname'
         */
-    std::unique_ptr<Data> fromXML(const std::filesystem::path&, const XMLControlRegistry&, DataType dataType);
+    std::unique_ptr<Data> fromXML(const std::filesystem::path&, const XMLControlRegistry&, DataType dataType) const;
 
     /*
         * Parses the XML in 'xmlStr'.
@@ -377,7 +377,7 @@ public:
         *
         * \return Data representation of 'xmlStr'
         */
-    std::unique_ptr<Data> fromXML(const std::u8string& xmlStr, const XMLControlRegistry&, DataType dataType);
+    std::unique_ptr<Data> fromXML(const std::u8string& xmlStr, const XMLControlRegistry&, DataType dataType) const;
 
     const std::vector<std::filesystem::path>* schemaPaths() const { return mpSchemaPaths; }
     logging::Logger& log() const { return mLog; }

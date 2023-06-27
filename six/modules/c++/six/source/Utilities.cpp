@@ -931,21 +931,21 @@ six::DataParser::DataParser(const std::vector<std::filesystem::path>* pSchemaPat
 }
 
 std::unique_ptr<six::Data> six::DataParser::DataParser::fromXML(::io::InputStream& xmlStream,
-    const XMLControlRegistry& xmlReg, DataType dataType)
+    const XMLControlRegistry& xmlReg, DataType dataType) const
 {
     auto xmlParser = parseInputStream(xmlStream, mPreserveCharacterData);
     return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlParser, dataType, mpSchemaPaths, mLog);
 }
 
 std::unique_ptr<six::Data> six::DataParser::DataParser::fromXML(const std::filesystem::path& pathname, 
-    const XMLControlRegistry& xmlReg, DataType dataType)
+    const XMLControlRegistry& xmlReg, DataType dataType) const
 {
     io::FileInputStream inStream(pathname.string());
     return fromXML(inStream, xmlReg, dataType);
 }
 
 std::unique_ptr<six::Data> six::DataParser::DataParser::fromXML(const std::u8string& xmlStr,
-    const XMLControlRegistry& xmlReg, DataType dataType)
+    const XMLControlRegistry& xmlReg, DataType dataType) const
 {
     io::U8StringStream inStream;
     inStream.write(xmlStr);

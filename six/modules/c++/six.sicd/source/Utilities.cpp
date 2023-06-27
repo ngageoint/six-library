@@ -1053,7 +1053,7 @@ std::string Utilities::toXMLString(const ComplexData& data,
 std::u8string Utilities::toXMLString(const ComplexData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    DataParser dataParser(pSchemaPaths, pLogger);
+    const DataParser dataParser(pSchemaPaths, pLogger);
     return dataParser.toXML(data);
 }
 

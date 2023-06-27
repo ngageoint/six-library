@@ -80,7 +80,7 @@ public:
     *
     * \return Data representation of 'xmlStr'
     */
-    std::unique_ptr<ComplexData> fromXML(::io::InputStream& xmlStream);
+    std::unique_ptr<ComplexData> fromXML(::io::InputStream& xmlStream) const;
 
     /*
      * Parses the XML in 'pathname'.
@@ -89,7 +89,7 @@ public:
      *
      * \return Data representation of the contents of 'pathname'
      */
-    std::unique_ptr<ComplexData> fromXML(const std::filesystem::path&);
+    std::unique_ptr<ComplexData> fromXML(const std::filesystem::path&) const;
 
     /*
      * Parses the XML in 'xmlStr'.
@@ -98,7 +98,7 @@ public:
      *
      * \return Data representation of 'xmlStr'
      */
-    std::unique_ptr<ComplexData> fromXML(const std::u8string& xmlStr);
+    std::unique_ptr<ComplexData> fromXML(const std::u8string& xmlStr) const;
 
     /*
      * Converts 'data' back into a formatted XML string
@@ -107,7 +107,7 @@ public:
      *
      * \return XML string representation of 'data'
      */
-    std::u8string toXML(const ComplexData&);
+    std::u8string toXML(const ComplexData&) const;
 
 };
 }
