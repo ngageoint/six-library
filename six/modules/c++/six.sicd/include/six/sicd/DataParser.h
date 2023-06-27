@@ -33,6 +33,7 @@
 #include <logging/NullLogger.h>
 
 #include "six/Utilities.h"
+#include "six/XMLControlFactory.h"
 #include "six/sicd/ComplexData.h"
 
 namespace six
@@ -42,6 +43,7 @@ namespace sicd
 class DataParser final
 {
     six::DataParser mDataParser;
+    XMLControlRegistry mXmlRegistry;
 
 public:
 
@@ -52,8 +54,7 @@ public:
     * \param schemaPaths Schema path(s)
     * \param log Logger
     */
-    DataParser(const std::vector<std::filesystem::path>* pSchemaPaths = nullptr, logging::Logger* pLog = nullptr)
-        : mDataParser(pSchemaPaths, pLog) {}
+    DataParser(const std::vector<std::filesystem::path>* pSchemaPaths = nullptr, logging::Logger* pLog = nullptr);
     DataParser(const std::vector<std::filesystem::path>& schemaPaths, logging::Logger* pLog = nullptr)
         : DataParser(&schemaPaths, pLog) { }
     DataParser(logging::Logger& log, const std::vector<std::filesystem::path>* pSchemaPaths = nullptr)
