@@ -22,20 +22,16 @@
  */
 #include "six/sicd/DataParser.h"
 
-#include <assert.h>
-
 #include <string>
 #include <memory>
 
 #include <io/StringStream.h>
-#include <gsl/gsl.h>
 
 #include "six/Utilities.h"
 #include "six/XMLControlFactory.h"
 
 #include "six/sicd/ComplexXMLControl.h"
 #include "six/sicd/ImageData.h"
-#include "six/sicd/NITFReadComplexXMLControl.h"
 
 namespace fs = std::filesystem;
 

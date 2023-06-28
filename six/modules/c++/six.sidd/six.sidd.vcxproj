@@ -106,6 +106,7 @@
     <ClInclude Include="include\six\sidd\CompressedSIDDByteProvider.h" />
     <ClInclude Include="include\six\sidd\Compression.h" />
     <ClInclude Include="include\six\sidd\CropUtils.h" />
+    <ClInclude Include="include\six\sidd\DataParser.h" />
     <ClInclude Include="include\six\sidd\DerivedClassification.h" />
     <ClInclude Include="include\six\sidd\DerivedData.h" />
     <ClInclude Include="include\six\sidd\DerivedDataBuilder.h" />
@@ -144,6 +145,7 @@
     <ClCompile Include="source\CompressedSIDDByteProvider.cpp" />
     <ClCompile Include="source\Compression.cpp" />
     <ClCompile Include="source\CropUtils.cpp" />
+    <ClCompile Include="source\DataParser.cpp" />
     <ClCompile Include="source\DerivedClassification.cpp" />
     <ClCompile Include="source\DerivedData.cpp" />
     <ClCompile Include="source\DerivedDataBuilder.cpp" />
