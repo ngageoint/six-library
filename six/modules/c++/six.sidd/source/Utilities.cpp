@@ -541,6 +541,7 @@ std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
 {
     DataParser dataParser(log, pSchemaPaths);
+    dataParser.preserveCharacterData(false); // existing behavior
     return dataParser.fromXML(xmlStream);
 }
 
@@ -554,6 +555,7 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem:
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
     DataParser dataParser(pSchemaPaths, pLogger);
+    dataParser.preserveCharacterData(false); // existing behavior
     return dataParser.fromXML(pathname);
 }
 
@@ -573,6 +575,7 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string&
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
     DataParser dataParser(pSchemaPaths, pLogger);
+    dataParser.preserveCharacterData(false); // existing behavior
     return dataParser.fromXML(xmlStr);
 }
 
@@ -590,6 +593,7 @@ std::u8string Utilities::toXMLString(const DerivedData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
     DataParser dataParser(pSchemaPaths, pLogger);
+    dataParser.preserveCharacterData(false); // existing behavior
     return dataParser.toXML(data);
 }
 

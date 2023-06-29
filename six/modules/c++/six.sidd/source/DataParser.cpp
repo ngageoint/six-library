@@ -96,3 +96,8 @@ std::u8string six::sidd::DataParser::DataParser::toXML(const six::sidd::DerivedD
 {
     return mDataParser.toXML(data, mXmlRegistry);
 }
+
+void six::sidd::DataParser::DataParser::preserveCharacterData(bool preserve)
+{
+    mDataParser.preserveCharacterData(preserve);
+}

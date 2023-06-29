@@ -70,6 +70,12 @@ public:
     DataParser(DataParser&&) = delete;
     DataParser& operator=(DataParser&&) = delete;
 
+    /*!
+     * If set to true, whitespaces will be preserved in the parsed
+     * character data. Otherwise, it will be trimmed.
+     */
+    void preserveCharacterData(bool preserve);
+
     /* Parses the XML in 'xmlStream'.
     *
     * \param xmlStream Input stream containing XML
