@@ -32,6 +32,7 @@
 #include <six/sicd/SICDByteProvider.h>
 #include <six/VersionUpdater.h>
 #include <six/sicd/SICDVersionUpdater.h>
+#include <six/sicd/DataParser.h>
 
 #include "CppUnitTest.h"
 #include "TestCase.h"

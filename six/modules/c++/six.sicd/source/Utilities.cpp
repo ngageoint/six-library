@@ -57,6 +57,7 @@
 #include <six/sicd/GeoLocator.h>
 #include <six/sicd/ImageData.h>
 #include <six/sicd/NITFReadComplexXMLControl.h>
+#include <six/sicd/DataParser.h>
 
 namespace fs = std::filesystem;
 
@@ -982,26 +983,23 @@ bool Utilities::isClockwise(const std::vector<RowColInt>& vertices,
     return (area > 0);
 }
 
-template<typename TReturn, typename TSchemaPaths>
-TReturn Utilities_parseData(::io::InputStream& xmlStream, const TSchemaPaths& schemaPaths, logging::Logger& log)
-{
-    XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<ComplexXMLControl>();
-
-    auto data(six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
-    return TReturn(static_cast<ComplexData*>(data.release()));
-}
 std::unique_ptr<ComplexData> Utilities::parseData(
         ::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
 {
-    return Utilities_parseData<std::unique_ptr<ComplexData>>(xmlStream, schemaPaths, log);
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator<ComplexXMLControl>();
+
+    auto pData = six::parseData(xmlRegistry, xmlStream, schemaPaths, log);
+    return std::unique_ptr<ComplexData>(static_cast<ComplexData*>(pData.release()));
 }
 std::unique_ptr<ComplexData> Utilities::parseData(::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
 {
-    return Utilities_parseData<std::unique_ptr<ComplexData>>(xmlStream, pSchemaPaths, log);
+    DataParser parser(pSchemaPaths, &log);
+    parser.preserveCharacterData(false); // existing behavior
+    return parser.fromXML(xmlStream);
 }
 
 std::unique_ptr<ComplexData> Utilities::parseDataFromFile(
@@ -1015,11 +1013,9 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromFile(
 std::unique_ptr<ComplexData> Utilities::parseDataFromFile(const std::filesystem::path& pathname,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    logging::NullLogger nullLogger;
-    logging::Logger* const logger = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    io::FileInputStream inStream(pathname.string());
-    return parseData(inStream, pSchemaPaths, *logger);
+    DataParser parser(pSchemaPaths, pLogger);
+    parser.preserveCharacterData(false); // existing behavior
+    return parser.fromXML(pathname);
 }
 
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(
@@ -1033,18 +1029,14 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    auto result = parseDataFromString(xmlStr, &schemaPaths, &log);
-    return std::unique_ptr<ComplexData>(result.release());
+    return parseDataFromString(xmlStr, &schemaPaths, &log);
 }
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    logging::NullLogger nullLogger;
-    logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    io::U8StringStream inStream;
-    inStream.write(xmlStr);
-    return parseData(inStream, pSchemaPaths, *log);
+    DataParser parser(pSchemaPaths, pLogger);
+    parser.preserveCharacterData(false); // existing behavior
+    return parser.fromXML(xmlStr);
 }
 
 std::string Utilities::toXMLString(const ComplexData& data,
@@ -1061,13 +1053,8 @@ std::string Utilities::toXMLString(const ComplexData& data,
 std::u8string Utilities::toXMLString(const ComplexData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<ComplexXMLControl>();
-
-    logging::NullLogger nullLogger;
-    logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    return ::six::toValidXMLString(data, pSchemaPaths, pLogger_, &xmlRegistry);
+    const DataParser dataParser(pSchemaPaths, pLogger);
+    return dataParser.toXML(data);
 }
 
 static void update_for_SICD_130(ComplexData& data)
@@ -1224,6 +1211,20 @@ static std::unique_ptr<ComplexData> createFakeComplexData_(const std::string& st
     data->collectionInformation.reset(new CollectionInformation());
     data->collectionInformation->setClassificationLevel("UNCLASSIFIED");
     data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
+
+    auto& parameters = data->collectionInformation->parameters;
+    six::Parameter param;
+    param.setName("TestParameter");
+    param.setValue("setValue() for TestParameter");
+    parameters.push_back(param);
+
+    // By default, XML parsing in CODA-OSS trims whitespace, see preserveCharacterData
+    param.setName("TestParameterEmpty");
+    param.setValue("");
+    parameters.push_back(param);
+    param.setName("TestParameterThreeSpaces");
+    param.setValue("   ");
+    parameters.push_back(param);
 
     if (!strVersion.empty()) // TODO: better check for version; this avoid changing any existing test code
     {

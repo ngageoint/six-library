@@ -29,6 +29,7 @@
 #include "six/Utilities.h"
 #include "six/sidd/DerivedXMLControl.h"
 #include "six/sidd/DerivedDataBuilder.h"
+#include "six/sidd/DataParser.h"
 
 namespace
 {
@@ -526,53 +527,22 @@ std::unique_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
     return projModel;
 }
 
-template<typename TReturn, typename TSchemaPaths>
-TReturn Utilities_parseData(::io::InputStream& xmlStream, const TSchemaPaths& schemaPaths, logging::Logger& log)
+std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
+        const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<DerivedXMLControl>();
 
     auto data(six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
-    return TReturn(static_cast<DerivedData*>(data.release()));
-}
-std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
-        const std::vector<std::string>& schemaPaths, logging::Logger& log)
-{
-    return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, schemaPaths, log);
-}
-
-static void prependISMSchemaPaths(const std::vector<std::filesystem::path>* &pSchemaPaths,
-    std::vector<std::filesystem::path>& adjustedSchemaPaths)
-{
-    if (pSchemaPaths == nullptr)
-    {
-        return;
-    }
-
-    // Get directories for XSDs that appear to be SIDD schemas
-    const auto xsd_files = six::sidd300::find_SIDD_schema_V_files(*pSchemaPaths);
-    std::set<std::string> xsd_dirs; // easy way to make directories unique
-    for (auto&& xsd : xsd_files)
-    {
-        xsd_dirs.insert(xsd.parent_path().string());
-    }
-    for (const auto& dir : xsd_dirs)
-    {
-        adjustedSchemaPaths.push_back(dir);
-    }
-
-    // Include all the original schema paths; these will be AFTER the adjusted paths, above
-    adjustedSchemaPaths.insert(adjustedSchemaPaths.end(), pSchemaPaths->begin(), pSchemaPaths->end());
-
-    pSchemaPaths = &adjustedSchemaPaths;
+    return std::unique_ptr<DerivedData>(static_cast<DerivedData*>(data.release()));
 }
 
 std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
 {
-    std::vector<std::filesystem::path> adjustedSchemaPaths; // keep in-scope
-    prependISMSchemaPaths(pSchemaPaths, adjustedSchemaPaths);
-    return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, pSchemaPaths, log);
+    DataParser dataParser(log, pSchemaPaths);
+    dataParser.preserveCharacterData(false); // existing behavior
+    return dataParser.fromXML(xmlStream);
 }
 
 std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::string& pathname,
@@ -584,11 +554,9 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::string& pat
 std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem::path& pathname,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    logging::NullLogger nullLogger;
-    logging::Logger* const logger = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    io::FileInputStream inStream(pathname.string());
-    return parseData(inStream, pSchemaPaths, *logger);
+    DataParser dataParser(pSchemaPaths, pLogger);
+    dataParser.preserveCharacterData(false); // existing behavior
+    return dataParser.fromXML(pathname);
 }
 
 std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr_,
@@ -606,12 +574,9 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& x
 std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    logging::NullLogger nullLogger;
-    logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    io::U8StringStream inStream;
-    inStream.write(xmlStr);
-    return parseData(inStream, pSchemaPaths, *log);
+    DataParser dataParser(pSchemaPaths, pLogger);
+    dataParser.preserveCharacterData(false); // existing behavior
+    return dataParser.fromXML(xmlStr);
 }
 
 std::string Utilities::toXMLString(const DerivedData& data,
@@ -627,16 +592,9 @@ std::string Utilities::toXMLString(const DerivedData& data,
 std::u8string Utilities::toXMLString(const DerivedData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<DerivedXMLControl>();
-
-    logging::NullLogger nullLogger;
-    logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    std::vector<std::filesystem::path> adjustedSchemaPaths; // keep in-scope
-    prependISMSchemaPaths(pSchemaPaths, adjustedSchemaPaths);
-
-    return ::six::toValidXMLString(data, pSchemaPaths, pLogger_, &xmlRegistry);
+    DataParser dataParser(pSchemaPaths, pLogger);
+    dataParser.preserveCharacterData(false); // existing behavior
+    return dataParser.toXML(data);
 }
 
 static void createPredefinedFilter(six::sidd::Filter& filter)

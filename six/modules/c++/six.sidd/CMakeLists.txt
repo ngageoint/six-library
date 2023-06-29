@@ -5,6 +5,7 @@ coda_add_module(
         source/CompressedSIDDByteProvider.cpp
         source/Compression.cpp
         source/CropUtils.cpp
+        source/DataParser.cpp
         source/DerivedClassification.cpp
         source/DerivedData.cpp
         source/DerivedDataBuilder.cpp

@@ -21,6 +21,7 @@
 
 #include <string>
 #include <vector>
+#include <std/optional>
 
 #include <xml/lite/MinidomParser.h>
 #include <xml/lite/Document.h>
@@ -29,6 +30,7 @@
 
 #include <import/six/sicd.h>
 #include <six/XmlLite.h>
+#include <six/sicd/DataParser.h>
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4464) // relative include path contains '..'
@@ -47,13 +49,52 @@
 #define U8(s) static_cast<const std::char8_t*>(static_cast<const void*>(s))
 #endif
 
+static void test_DummyData_parameters(const std::string& testName, const six::ParameterCollection& parameters,
+    std::optional<bool> preserveCharacterData = std::optional<bool>())
+{
+    const auto& testParameter = parameters.findParameter("TestParameter");
+    TEST_ASSERT_EQ(testParameter.str(), "setValue() for TestParameter");
+
+    // Check whitepspace in parameters
+    const auto& emptyParameter = parameters.findParameter("TestParameterEmpty");
+    TEST_ASSERT_EQ(emptyParameter.str(), "");
+
+    const auto& threeSpacesParameter = parameters.findParameter("TestParameterThreeSpaces");
+    std::string expected("   ");
+    if (preserveCharacterData.has_value()) // only has a value when parsing XML
+    {
+        if (!(*preserveCharacterData))
+        {
+            expected.clear(); // result of trim() is empty string
+        }
+    }
+    TEST_ASSERT_EQ(threeSpacesParameter.str(), expected);
+}
 TEST_CASE(DummyData)
 {
     const auto data = createData<six::zfloat>(types::RowCol<size_t>(10, 10));
 
-    const std::vector<std::string> schemaPaths;
-    const auto result = six::sicd::Utilities::toXMLString(*data, schemaPaths);
-    TEST_ASSERT_FALSE(result.empty());
+    test_DummyData_parameters(testName, data->collectionInformation->parameters);
+
+    const std::vector<std::filesystem::path>* pSchemaPaths = nullptr;
+    six::sicd::DataParser parser(pSchemaPaths);
+
+    const auto xmlStr = parser.toXML(*data);
+    TEST_ASSERT_FALSE(xmlStr.empty());
+
+    // Parse the XML we just made.
+    {
+        constexpr bool preserveCharacterData = false;
+        parser.preserveCharacterData(preserveCharacterData);
+        const auto pComplexData = parser.fromXML(xmlStr);
+        test_DummyData_parameters(testName, pComplexData->collectionInformation->parameters, preserveCharacterData);
+    }
+    {
+        constexpr bool preserveCharacterData = true;
+        parser.preserveCharacterData(preserveCharacterData);
+        const auto pComplexData = parser.fromXML(xmlStr);
+        test_DummyData_parameters(testName, pComplexData->collectionInformation->parameters, preserveCharacterData);
+    }
 }
 
 TEST_CASE(FakeComplexData)
