@@ -43,7 +43,6 @@ namespace sicd
 class DataParser final
 {
     six::DataParser mDataParser;
-    XMLControlRegistry mXmlRegistry;
 
 public:
 

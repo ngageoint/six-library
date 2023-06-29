@@ -44,7 +44,6 @@ class DataParser final
 {
     std::vector<std::filesystem::path> mAdjustedSchemaPaths; // used to initialized six::DataParser
     six::DataParser mDataParser;
-    XMLControlRegistry mXmlRegistry;
 
 public:
 

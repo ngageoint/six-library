@@ -70,13 +70,12 @@ static auto adjustSchemaPaths(const std::vector<std::filesystem::path>* pSchemaP
 six::sidd::DataParser::DataParser(const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLog)
     : mDataParser(adjustSchemaPaths(pSchemaPaths, mAdjustedSchemaPaths), pLog)
 {
-    mXmlRegistry.addCreator<DerivedXMLControl>();
+    mDataParser.addCreator<DerivedXMLControl>();
 }
 
 std::unique_ptr<six::sidd::DerivedData> six::sidd::DataParser::DataParser::fromXML(::io::InputStream& xmlStream) const
 {
-    auto pData = mDataParser.fromXML(xmlStream, mXmlRegistry, DataType::NOT_SET);
-    return std::unique_ptr<DerivedData>(static_cast<DerivedData*>(pData.release()));
+    return mDataParser.fromXML<DerivedData>(xmlStream);
 }
 
 std::unique_ptr<six::sidd::DerivedData> six::sidd::DataParser::DataParser::fromXML(const std::filesystem::path& pathname) const
@@ -94,7 +93,7 @@ std::unique_ptr<six::sidd::DerivedData> six::sidd::DataParser::DataParser::fromX
 
 std::u8string six::sidd::DataParser::DataParser::toXML(const six::sidd::DerivedData& data) const
 {
-    return mDataParser.toXML(data, mXmlRegistry);
+    return mDataParser.toXML(data);
 }
 
 void six::sidd::DataParser::DataParser::preserveCharacterData(bool preserve)

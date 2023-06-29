@@ -38,13 +38,12 @@ namespace fs = std::filesystem;
 six::sicd::DataParser::DataParser(const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLog)
     : mDataParser(pSchemaPaths, pLog)
 {
-    mXmlRegistry.addCreator<ComplexXMLControl>();
+    mDataParser.addCreator<ComplexXMLControl>();
 }
 
 std::unique_ptr<six::sicd::ComplexData> six::sicd::DataParser::DataParser::fromXML(::io::InputStream& xmlStream) const
 {
-    auto pData = mDataParser.fromXML(xmlStream, mXmlRegistry, DataType::NOT_SET);
-    return std::unique_ptr<ComplexData>(static_cast<ComplexData*>(pData.release()));
+    return mDataParser.fromXML<ComplexData>(xmlStream);
 }
 
 std::unique_ptr<six::sicd::ComplexData> six::sicd::DataParser::DataParser::fromXML(const std::filesystem::path& pathname) const
@@ -62,7 +61,7 @@ std::unique_ptr<six::sicd::ComplexData> six::sicd::DataParser::DataParser::fromX
 
 std::u8string six::sicd::DataParser::DataParser::toXML(const six::sicd::ComplexData& data) const
 {
-    return mDataParser.toXML(data, mXmlRegistry);
+    return mDataParser.toXML(data);
 }
 
 void six::sicd::DataParser::DataParser::preserveCharacterData(bool preserve)

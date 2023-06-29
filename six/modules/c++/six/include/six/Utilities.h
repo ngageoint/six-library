@@ -323,6 +323,7 @@ class DataParser final
     const std::vector<std::filesystem::path>* mpSchemaPaths = nullptr;
     logging::NullLogger mNullLogger;
     logging::Logger& mLog;
+    XMLControlRegistry mXmlRegistry;
 
     // The default is `true` because:
     // * many (most?) other parts of SIX unconditionally set `preserveCharacterData(true)`.
@@ -353,6 +354,12 @@ public:
     */
     void preserveCharacterData(bool preserve);
 
+    template<typename TXMLControlCreator>
+    void addCreator()
+    {
+        mXmlRegistry.addCreator<TXMLControlCreator>();
+    }
+
     /* Parses the XML in 'xmlStream'.
     *
     * \param xmlStream Input stream containing XML
@@ -360,6 +367,12 @@ public:
     * \return Data representation of 'xmlStr'
     */
     std::unique_ptr<Data> fromXML(::io::InputStream& xmlStream, const XMLControlRegistry&, DataType) const;
+    template<typename TData>
+    std::unique_ptr<TData> fromXML(::io::InputStream& xmlStream) const
+    {
+        auto pData = fromXML(xmlStream, mXmlRegistry, DataType::NOT_SET);
+        return std::unique_ptr<TData>(static_cast<TData*>(pData.release()));
+    }
 
     /*
     * Parses the XML in 'pathname'.
@@ -383,6 +396,7 @@ public:
      *  Additionally performs schema validation --
      */
     std::u8string toXML(const Data&, const XMLControlRegistry&) const;
+    std::u8string toXML(const Data&) const;
 };
 
 namespace testing

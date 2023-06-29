@@ -956,6 +956,10 @@ std::u8string  six::DataParser::DataParser::toXML(const Data& data, const XMLCon
 {
     return ::six::toValidXMLString(data, mpSchemaPaths, &mLog, &xmlReg);
 }
+std::u8string  six::DataParser::DataParser::toXML(const Data& data) const
+{
+    return toXML(data, mXmlRegistry);
+}
 
 void six::DataParser::DataParser::preserveCharacterData(bool preserve)
 {
