@@ -20,9 +20,9 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_hdf5_lite_Read_h_INCLUDED_
 #define CODA_OSS_hdf5_lite_Read_h_INCLUDED_
-#pragma once
 
 /*!
  * \file  Read.h
