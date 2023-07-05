@@ -128,6 +128,19 @@ void FileHeader::read(io::SeekableInputStream& inStream)
         }
     }
 
+    /*
+    "... we found that the six library does a check when reading a CPHD file to ensure that the Release Info field not only exists,
+    but that it is not an empty string. The CPHD spec does require that the field exists, but does not seem to prohibit it from being
+    an empty string.
+    
+    We have gotten some vendor CPHDs with an empty field here and have failed reading the file due to this.
+    I checked and SARPY is able to read (it must not implement the same check)."
+    */
+    //if (mReleaseInfo.empty())
+    //{
+    //    throw except::Exception(Ctxt("CPHD header information is incomplete"));
+    //}
+
     // check for any required values that are uninitialized
     if (mXmlBlockSize == 0  ||
         mXmlBlockByteOffset == 0  ||
@@ -135,8 +148,7 @@ void FileHeader::read(io::SeekableInputStream& inStream)
         mPvpBlockByteOffset == 0  ||
         mSignalBlockSize == 0  ||
         mSignalBlockByteOffset == 0 ||
-        mClassification.empty() ||
-        mReleaseInfo.empty())
+        mClassification.empty())
     {
         throw except::Exception(Ctxt("CPHD header information is incomplete"));
     }
