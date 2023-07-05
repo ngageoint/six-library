@@ -29,6 +29,7 @@
 #include <vector>
 #include <set>
 #include <fstream>
+#include <stdexcept>
 
 #include "sys/Conf.h"
 
@@ -418,6 +419,27 @@ void sys::OSUnix::getAvailableCPUs(std::vector<int>& physicalCPUs,
             }
         }
     }
+}
+
+sys::SIMDInstructionSet sys::OSUnix::getSIMDInstructionSet() const
+{
+    // https://gcc.gnu.org/onlinedocs/gcc-4.8.2/gcc/X86-Built-in-Functions.html
+    __builtin_cpu_init();
+
+    if (__builtin_cpu_supports("avx512f"))
+    {
+        return SIMDInstructionSet::AVX512F;
+    }
+    if (__builtin_cpu_supports("avx2"))
+    {
+        return SIMDInstructionSet::AVX2;
+    }
+    if (__builtin_cpu_supports("sse2"))
+    {
+        return SIMDInstructionSet::SSE2;
+    }
+
+    throw std::runtime_error("SSE2 support is required.");
 }
 
 void sys::OSUnix::createSymlink(const std::string& origPathname,
