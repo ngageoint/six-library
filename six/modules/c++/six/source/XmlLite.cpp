@@ -50,6 +50,8 @@ namespace six
     {
     }
     MinidomParser::~MinidomParser() = default;
+    MinidomParser::MinidomParser(MinidomParser&&) = default;
+    MinidomParser& MinidomParser::operator=(MinidomParser&&) = default;
 
     void MinidomParser::parse(io::InputStream& is, int size)
     {

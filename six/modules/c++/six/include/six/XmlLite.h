@@ -49,8 +49,8 @@ struct MinidomParser final
     ~MinidomParser();
     MinidomParser(const MinidomParser&) = delete;
     MinidomParser& operator=(const MinidomParser&) = delete;
-    MinidomParser(MinidomParser&&) = default;
-    MinidomParser& operator=(MinidomParser&&) = default;
+    MinidomParser(MinidomParser&&);
+    MinidomParser& operator=(MinidomParser&&);
 
      /*!
      *  Present our parsing interface.  Similar to DOM, the input
