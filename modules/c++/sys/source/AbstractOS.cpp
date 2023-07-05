@@ -360,6 +360,34 @@ static std::string getSpecialEnv_Platform(const AbstractOS&, const std::string& 
     #endif
 }
 
+// https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
+static std::string getSpecialEnv_PlatformToolset(const AbstractOS&, const std::string& envVar)
+{
+    assert(envVar == "PlatformToolset");
+    #if _MSC_VER
+    UNREFERENCED_PARAMETER(envVar);
+    #endif
+
+#ifdef _WIN32
+	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
+	// https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
+	#if _MSC_VER >= 1930
+		return "v143"; // Visual Studio 2022
+	#elif _MSC_VER >= 1920
+		return "v142"; // Visual Studio 2019
+    #elif _MSC_VER >= 1910
+        return "v141";  // Visual Studio 2017
+    #elif _MSC_VER >= 1900
+        return "v140";  // Visual Studio 2015
+	#else
+		#error "Don't know $(PlatformToolset) value.'"
+	#endif
+#else 
+	// Linux
+	return "";
+#endif
+}
+
 static std::string getSpecialEnv_SECONDS_()
 {
     // https://en.cppreference.com/w/cpp/chrono/c/difftime
@@ -399,6 +427,7 @@ static const std::map<std::string, get_env_fp> s_get_env{
                                                     // c.f., Visual Studio
                                                     {"Configuration", getSpecialEnv_Configuration},
                                                     {"Platform", getSpecialEnv_Platform},
+                                                    {"PlatformToolset", getSpecialEnv_PlatformToolset},
 };
 bool AbstractOS::isSpecialEnv(const std::string& envVar) const
 {
