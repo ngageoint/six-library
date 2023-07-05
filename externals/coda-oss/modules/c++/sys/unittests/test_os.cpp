@@ -511,6 +511,17 @@ TEST_CASE(test_make_ifstream)
     TEST_ASSERT_TRUE(ifs.is_open());
 }
 
+TEST_CASE(test_SIMD_Instructions)
+{
+    const sys::OS os;
+    const auto simdInstructionSet = os.getSIMDInstructionSet();
+
+    const auto isSSE2 = simdInstructionSet == sys::SIMDInstructionSet::SSE2;
+    const auto isAVX2 = simdInstructionSet == sys::SIMDInstructionSet::AVX2;
+    const auto isAVX512F = simdInstructionSet == sys::SIMDInstructionSet::AVX512F;
+    TEST_ASSERT(isSSE2 || isAVX2 || isAVX512F);
+}
+
 TEST_MAIN(
     //sys::AbstractOS::setArgvPathname(argv[0]);
     TEST_CHECK(testRecursiveRemove);
@@ -527,4 +538,5 @@ TEST_MAIN(
     TEST_CHECK(test_sys_fopen_failure);
     TEST_CHECK(test_sys_open);
     TEST_CHECK(test_make_ifstream);
+    TEST_CHECK(test_SIMD_Instructions);
     )

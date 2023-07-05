@@ -97,6 +97,8 @@
 #include <import/logging.h>
 #include <import/re.h>
 #include "io/StringStream.h"
+#include <sys/FileFinder.h>
+#include <io/ReadUtils.h>
 
 #include "TestCase.h"
 
