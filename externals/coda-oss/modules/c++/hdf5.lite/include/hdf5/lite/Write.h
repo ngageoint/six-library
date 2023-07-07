@@ -20,11 +20,11 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_hdf5_lite_Write_h_INCLUDED_
 #define CODA_OSS_hdf5_lite_Write_h_INCLUDED_
-#pragma once
 
-/*!
+ /*!
  * \file  Write.h
  * \brief HDF File-writing API
  *
@@ -48,6 +48,9 @@ namespace lite
 {
 template<typename TDataSet> // currently implemented for float and double
 CODA_OSS_API void createFile(const coda_oss::filesystem::path&, const std::string& ds, const types::RowCol<size_t>&);
+template<> CODA_OSS_API void createFile<float>(const coda_oss::filesystem::path&, const std::string& ds, const types::RowCol<size_t>&);
+template<> CODA_OSS_API void createFile<double>(const coda_oss::filesystem::path&, const std::string& ds, const types::RowCol<size_t>&);
+
 CODA_OSS_API void createFile(const coda_oss::filesystem::path&, const std::string& ds, SpanRC<const double>);
 inline void createFile(const coda_oss::filesystem::path& path, const std::string& ds, SpanRC<double> data_)
 {
