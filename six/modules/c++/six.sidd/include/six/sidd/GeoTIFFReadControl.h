@@ -36,7 +36,7 @@ struct GeoTIFFReadControl : public ReadControl
 {
     GeoTIFFReadControl() noexcept(false) {}
 
-    virtual ~GeoTIFFReadControl() noexcept = default;
+    virtual ~GeoTIFFReadControl() noexcept {}
 
     GeoTIFFReadControl(const GeoTIFFReadControl&) = delete;
     GeoTIFFReadControl operator=(const GeoTIFFReadControl&) = delete;
