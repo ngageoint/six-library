@@ -174,8 +174,9 @@ TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
     nitf_Writer* writer = nitf_Writer_construct(&error);
     TEST_ASSERT_NOT_NULL(writer);
     (void)nitf_Writer_prepare(writer, record, output, &error);
-
+    
     nitf_IOHandle_close(io);
+    nitf_Writer_destruct(&writer);
     nitf_Record_destruct(&record);
     nitf_Reader_destruct(&reader);
 
@@ -200,6 +201,10 @@ TEST_CASE(test_defaultRead_crash)
 
     /*  This parses all header data within the NITF  */
     (void)nitf_Reader_read(reader, io, &error);
+    TEST_ASSERT_TRUE(true);
+
+    nitf_IOHandle_close(io);
+    nitf_Reader_destruct(&reader);
     TEST_ASSERT_TRUE(true);
 }
 
