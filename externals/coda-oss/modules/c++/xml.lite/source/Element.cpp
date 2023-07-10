@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "xml/lite/Element.h"
 
 #include <assert.h>
 
@@ -26,7 +27,6 @@
 #include <tuple>
 #include <std/string>
 
-#include "xml/lite/Element.h"
 #include <import/str.h>
 #include <import/mem.h>
 #include <sys/OS.h>
@@ -69,7 +69,7 @@ void xml::lite::Element::clone(const xml::lite::Element& node)
     *this = node;
 
     clearChildren();
-    mParent = NULL;
+    mParent = nullptr;
 
     std::vector<xml::lite::Element *>::const_iterator iter;
     iter = node.getChildren().begin();

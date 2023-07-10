@@ -66,6 +66,11 @@ public:
         join();//destroy();
     }
 
+    AbstractThreadPool(const AbstractThreadPool&) = delete;
+    AbstractThreadPool& operator=(const AbstractThreadPool&) = delete;
+    AbstractThreadPool(AbstractThreadPool&&) = delete;
+    AbstractThreadPool& operator=(AbstractThreadPool&&) = delete;
+
     /*!
     *  Intialize and start each thread running.
     *  Typically the caller will either join at this point

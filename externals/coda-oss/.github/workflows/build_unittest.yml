@@ -36,6 +36,14 @@ jobs:
         cd ..
         cd target-Debug
         cmake --build . --config Debug -j
+    - name: test
+    # should run w/o install
+      run: |
+        cd target-Release
+        ctest -C Release --output-on-failure
+        cd ..
+        cd target-Debug
+        ctest -C Debug --output-on-failure
     - name: install
       run: |
         cd target-Release
@@ -43,13 +51,18 @@ jobs:
         cd ..
         cd target-Debug
         cmake --build . --config Debug --target install
-    - name: test
-      run: |
-        cd target-Release
-        ctest -C Release --output-on-failure
         cd ..
-        cd target-Debug
-        ctest -C Debug --output-on-failure
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        msbuild-architecture: x64
+    - name: msbuild
+      run: |
+        msbuild coda-oss.sln /p:configuration=Release
+        msbuild coda-oss.sln /p:configuration=Debug
+    #- name: mstest
+    #  run: |
+        # mstest /testcontainer:${RUNNER_WORKSPACE}\coda-oss\x64\Debug\UnitTest.dll
 
   build-linux-cmake:
     strategy:
@@ -79,14 +92,15 @@ jobs:
         cd target
         # "-j" spawns too many processes causing GCC to crash
         cmake --build . -j 12
+    - name: test
+    # should run w/o install
+      run: |
+        cd target
+        ctest --output-on-failure
     - name: install
       run: |
         cd target
         cmake --build . --target install
-    - name: test
-      run: |
-        cd target
-        ctest --output-on-failure
 
   build-waf:
     strategy:
@@ -94,7 +108,7 @@ jobs:
         os: [ubuntu-latest, windows-2019]
         python-version: ['3.7']
         debugging: ['--enable-debugging', '']
-    name: ${{ matrix.os }}-${{ matrix.python-version }}-waf
+    name: ${{ matrix.os }}-${{ matrix.python-version }}-waf${{ matrix.debugging }}
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3

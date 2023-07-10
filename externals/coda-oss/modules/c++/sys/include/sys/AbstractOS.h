@@ -352,10 +352,8 @@ protected:
 class AbstractDirectory
 {
 public:
-    AbstractDirectory()
-    {
-    }
-    virtual ~AbstractDirectory()
+    AbstractDirectory() = default;
+    virtual ~AbstractDirectory() noexcept(false)
     {
     }
     virtual void close() = 0;

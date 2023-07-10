@@ -58,7 +58,7 @@ void sys::DLL::unload()
             throw sys::DLLException("Failed to close library");
 
         // Now we reset member data
-        mLib = NULL;
+        mLib = nullptr;
         mLibName.clear();
     }
 }
@@ -72,7 +72,7 @@ sys::DLL::retrieve(const std::string& functionName)
         DLL_FUNCTION_PTR ptr = dlsym( mLib , functionName.c_str());
 
         // Now we check the ptr value
-        if (ptr == NULL)
+        if (ptr == nullptr)
             throw sys::DLLException("Failed to load function");
 
         return ptr;
