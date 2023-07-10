@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 
         DLL dso(dsoPath);
 
-        HOOK_FN theHook = (HOOK_FN) dso.retrieve(hook);
+        auto theHook = reinterpret_cast<HOOK_FN>(dso.retrieve(hook));
 
         // Call the hook
         if (!theHook())

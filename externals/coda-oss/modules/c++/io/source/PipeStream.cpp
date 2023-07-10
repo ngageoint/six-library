@@ -63,7 +63,7 @@ sys::SSize_T io::PipeStream::readln(sys::byte *cStr,
     while (!feof(pipe))
     {
         // get the next line or return null
-        if (fgets(cStr, static_cast<int>(strLenPlusNullByte), pipe) != NULL)
+        if (fgets(cStr, static_cast<int>(strLenPlusNullByte), pipe) != nullptr)
         {
             return gsl::narrow<sys::SSize_T>(strlen(cStr));
         }

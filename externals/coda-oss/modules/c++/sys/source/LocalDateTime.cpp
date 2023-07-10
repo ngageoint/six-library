@@ -47,7 +47,7 @@ void LocalDateTime::toMillis()
     t.tm_yday = mDayOfYear - 1;
     t.tm_hour = mHour;
     t.tm_min = mMinute;
-    t.tm_sec = (int)mSecond;
+    t.tm_sec = static_cast<int>(mSecond);
     t.tm_isdst = mDST;
 
     mTimeInMillis = DateTime::toMillis(t);

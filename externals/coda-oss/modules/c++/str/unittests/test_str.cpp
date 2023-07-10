@@ -199,9 +199,9 @@ TEST_CASE(testRoundDouble)
     nv *= denom;
     TEST_ASSERT_ALMOST_EQ_EPS(nv, numerator, eps);
     std::cout << nv << std::endl;
-    std::cout << (nv - (int)nv) << std::endl;
+    std::cout << (nv - static_cast<int>(nv)) << std::endl;
     std::cout << std::numeric_limits<double>::epsilon() << std::endl;
-    TEST_ASSERT_EQ((int)std::ceil(nv), (int)numerator);
+    TEST_ASSERT_EQ(static_cast<int>(std::ceil(nv)), static_cast<int>(numerator));
 }
 
 TEST_CASE(testEscapeForXMLNoReplace)

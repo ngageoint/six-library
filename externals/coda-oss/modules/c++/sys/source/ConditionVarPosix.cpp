@@ -22,6 +22,8 @@
 
 #include <sys/ConditionVarPosix.h>
 
+#include "gsl/gsl.h"
+
 #if CODA_OSS_POSIX_SOURCE
 
 #include <pthread.h>
@@ -85,8 +87,8 @@ void sys::ConditionVarPosix::wait(double seconds)
     if ( seconds > 0 )
     {
         timespec tout;
-        tout.tv_sec = time(NULL) + (int)seconds;
-        tout.tv_nsec = (int)((seconds - (int)(seconds)) * 1e9);
+        tout.tv_sec = time(NULL) + gsl::narrow_cast<int>(seconds);
+        tout.tv_nsec = gsl::narrow_cast<int>((seconds - gsl::narrow_cast<int>(seconds)) * 1e9);
         if (::pthread_cond_timedwait(&mNative,
                                      &(mMutex->getNative()),
                                      &tout) != 0)
