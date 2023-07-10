@@ -4,9 +4,12 @@ on: [push]
 
 
 jobs:
-  build-windows:
-    name: Windows
-    runs-on: [windows-latest]
+  build-cmake-windows:
+    strategy:
+      matrix:
+        os: [windows-latest]
+    name: ${{ matrix.os }}-CMake
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v2
@@ -16,22 +19,36 @@ jobs:
         python-version: '3.7'
     - name: configure
       run: |
-        mkdir build
-        cd build
-        cmake -DCMAKE_INSTALL_PREFIX=installWindows-Github -DPYTHON_VERSION="3.7" ..
+        mkdir target-Release
+        cd target-Release
+        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION="3.7" ..
     - name: make
       run: |
-        cd build
+        cd target-Release
         cmake --build . --config Release -j
         cmake --build . --config Release --target install
     - name: test
       run: |
-        cd build
+        cd target-Release
         ctest -C Release --output-on-failure
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        msbuild-architecture: x64
+    - name: msbuild
+      run: |
+        msbuild nitro.sln /p:configuration=Release
+    #- name: mstest
+    #  run: |
+        # mstest /testcontainer:${RUNNER_WORKSPACE}\coda-oss\x64\Releast\Test.dll
+        # mstest /testcontainer:${RUNNER_WORKSPACE}\coda-oss\x64\Releast\Test++.dll
 
-  build-linux:
-    name: Linux
-    runs-on: [ubuntu-latest]
+  build-linux-cmake:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    name: ${{ matrix.os }}-CMake
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v2
@@ -41,16 +58,16 @@ jobs:
         python-version: '3.7'
     - name: configure
       run: |
-        mkdir build
-        cd build
-        cmake -DCMAKE_INSTALL_PREFIX=installLinux-Github -DPYTHON_VERSION=3.7 ..
+        mkdir target-Release
+        cd target-Release
+        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=3.7 ..
     - name: make
       run: |
-        cd build
+        cd target-Release
         # using the default number of threads (-j) causes G++ to crash
         cmake --build . -j 6
         cmake --build . --target install
     - name: test
       run: |
-        cd build
+        cd target-Release
         ctest --output-on-failure

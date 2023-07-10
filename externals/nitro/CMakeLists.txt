@@ -36,12 +36,6 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
         coda_initialize_build()
     else()
         # build coda-oss ourselves
-
-        # disable some unneeded drivers from coda-oss
-        set(ENABLE_PCRE OFF CACHE BOOL "enable PCRE library" FORCE)
-        set(ENABLE_UUID OFF CACHE BOOL "enable uuid library" FORCE)
-        set(ENABLE_ZIP OFF CACHE BOOL "enable ZIP library" FORCE)
-
         set(CODA_OSS_DIR "coda-oss")
         list(APPEND CMAKE_MODULE_PATH
              "${CMAKE_CURRENT_SOURCE_DIR}/externals/${CODA_OSS_DIR}/cmake")

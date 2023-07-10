@@ -36,9 +36,11 @@ namespace math
  *  \param value A number to evaluate
  *  \return The 'fixed' number
  */
-template<typename T> inline T fix(T value)
+template<typename T> inline T fix(T value_)
 {
-    return (value > 0.0 ? std::floor(value) : std::ceil(value));
+    const double value = value_;
+    const auto result = value > 0.0 ? std::floor(value) : std::ceil(value);
+    return static_cast<T>(result);
 }
 
 /*!
@@ -48,9 +50,11 @@ template<typename T> inline T fix(T value)
  *  \param value A number to evaluate
  *  \return The rounded number
  */
-template<typename T> inline T round(T value)
+template<typename T> inline T round(T value_)
 {
-    return static_cast<T>(value > 0.0 ? std::floor(value + 0.5) : std::ceil(value - 0.5));
+    const double value = value_;
+    const auto result = value > 0.0 ? std::floor(value + 0.5) : std::ceil(value - 0.5);
+    return static_cast<T>(result);
 }
 
 /*!
@@ -60,7 +64,7 @@ template<typename T> inline T round(T value)
  *  \param fractionalDigits Number of fractional digits to round to
  *  \return The rounded number
  */
-template<typename T> inline T round(T value, size_t fractionalDigits)
+template<typename T> inline T round(T value_, size_t fractionalDigits)
 {
     double power10 = 1.0;
     for (size_t i = 0; i < fractionalDigits; ++i)
@@ -68,8 +72,10 @@ template<typename T> inline T round(T value, size_t fractionalDigits)
         power10 *= 10.0;
     }
 
-    return static_cast<T>(value > 0.0 ? std::floor(value * power10 + 0.5) / power10
-                        : std::ceil(value * power10 - 0.5) / power10);
+    const double value = value_;
+    const auto result = value > 0.0 ? std::floor(value * power10 + 0.5) / power10
+                        : std::ceil(value * power10 - 0.5) / power10;
+    return static_cast<T>(result);
 }
 
 /*!

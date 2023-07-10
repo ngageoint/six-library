@@ -27,8 +27,6 @@
 #include <memory>
 #include <type_traits>
 
-#include "sys/CPlusPlus.h"
-
 namespace mem
 {
 // Pretty much give-up on mem::SharedPtr as it's too hard to get something that will

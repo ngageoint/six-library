@@ -20,6 +20,12 @@
  *
  */
 
+
+#include "config/compiler_extensions.h"
+
+#ifndef _MSC_VER
+CODA_OSS_disable_warning(-Wold-style-cast)
+#endif
 #include <numpyutils/numpyutils.h>
 #include <except/Exception.h>
 #include <sys/Conf.h>
