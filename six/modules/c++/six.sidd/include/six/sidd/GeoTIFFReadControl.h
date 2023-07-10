@@ -34,7 +34,9 @@ namespace sidd
 
 struct GeoTIFFReadControl : public ReadControl
 {
-    GeoTIFFReadControl() = default;
+    GeoTIFFReadControl() noexcept(false) {}
+
+    virtual ~GeoTIFFReadControl() noexcept = default;
 
     GeoTIFFReadControl(const GeoTIFFReadControl&) = delete;
     GeoTIFFReadControl operator=(const GeoTIFFReadControl&) = delete;
