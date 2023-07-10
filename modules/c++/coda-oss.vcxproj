@@ -31,6 +31,12 @@
     <ClInclude Include="config\include\config\disable_compiler_warnings.h" />
     <ClInclude Include="config\include\config\Exports.h" />
     <ClInclude Include="config\include\config\Version.h" />
+    <ClInclude Include="dbi\include\dbi\DatabaseClientFactory.h" />
+    <ClInclude Include="dbi\include\dbi\DatabaseConnection.h" />
+    <ClInclude Include="dbi\include\dbi\MySQLConnection.h" />
+    <ClInclude Include="dbi\include\dbi\OracleConnection.h" />
+    <ClInclude Include="dbi\include\dbi\PgSQLConnection.h" />
+    <ClInclude Include="dbi\include\import\dbi.h" />
     <ClInclude Include="except\include\except\Backtrace.h" />
     <ClInclude Include="except\include\except\Context.h" />
     <ClInclude Include="except\include\except\Error.h" />
@@ -43,12 +49,14 @@
     <ClInclude Include="gsl\include\gsl\Gsl_.h" />
     <ClInclude Include="gsl\include\gsl\Gsl_narrow.h" />
     <ClInclude Include="gsl\include\gsl\use_gsl.h" />
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\H5_.h" />
     <ClInclude Include="hdf5.lite\include\hdf5\lite\HDF5Exception.h" />
     <ClInclude Include="hdf5.lite\include\hdf5\lite\highfive.h" />
     <ClInclude Include="hdf5.lite\include\hdf5\lite\Info.h" />
     <ClInclude Include="hdf5.lite\include\hdf5\lite\Read.h" />
     <ClInclude Include="hdf5.lite\include\hdf5\lite\SpanRC.h" />
     <ClInclude Include="hdf5.lite\include\hdf5\lite\Write.h" />
+    <ClInclude Include="hdf5.lite\include\import\hdf5\lite.h" />
     <ClInclude Include="hdf5.lite\source\H5.h" />
     <ClInclude Include="hdf5.lite\source\hdf5.lite.h" />
     <ClInclude Include="include\TestCase.h" />
@@ -164,6 +172,37 @@
     <ClInclude Include="mt\include\mt\TiedWorkerThread.h" />
     <ClInclude Include="mt\include\mt\WorkerThread.h" />
     <ClInclude Include="mt\include\mt\WorkSharingBalancedRunnable1D.h" />
+    <ClInclude Include="net.ssl\include\import\net\ssl.h" />
+    <ClInclude Include="net.ssl\include\net\ssl\SSLConnection.h" />
+    <ClInclude Include="net.ssl\include\net\ssl\SSLConnectionClientFactory.h" />
+    <ClInclude Include="net.ssl\include\net\ssl\SSLExceptions.h" />
+    <ClInclude Include="net\include\import\net.h" />
+    <ClInclude Include="net\include\net\AllocStrategy.h" />
+    <ClInclude Include="net\include\net\ClientSocketFactory.h" />
+    <ClInclude Include="net\include\net\CurlHandle.h" />
+    <ClInclude Include="net\include\net\CurlInit.h" />
+    <ClInclude Include="net\include\net\Daemon.h" />
+    <ClInclude Include="net\include\net\DaemonInterface.h" />
+    <ClInclude Include="net\include\net\DaemonUnix.h" />
+    <ClInclude Include="net\include\net\DaemonWin32.h" />
+    <ClInclude Include="net\include\net\NetConnection.h" />
+    <ClInclude Include="net\include\net\NetConnectionClientFactory.h" />
+    <ClInclude Include="net\include\net\NetConnectionServer.h" />
+    <ClInclude Include="net\include\net\NetExceptions.h" />
+    <ClInclude Include="net\include\net\NetUtils.h" />
+    <ClInclude Include="net\include\net\PerRequestThreadAllocStrategy.h" />
+    <ClInclude Include="net\include\net\RequestHandler.h" />
+    <ClInclude Include="net\include\net\SerializableConnection.h" />
+    <ClInclude Include="net\include\net\ServerSocketFactory.h" />
+    <ClInclude Include="net\include\net\SingleThreadedAllocStrategy.h" />
+    <ClInclude Include="net\include\net\Socket.h" />
+    <ClInclude Include="net\include\net\SocketAddress.h" />
+    <ClInclude Include="net\include\net\Sockets.h" />
+    <ClInclude Include="net\include\net\SocketsUnix.h" />
+    <ClInclude Include="net\include\net\SocketsWin32.h" />
+    <ClInclude Include="net\include\net\ThreadPoolAllocStrategy.h" />
+    <ClInclude Include="net\include\net\URL.h" />
+    <ClInclude Include="net\include\net\URLBuilder.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="plugin\include\plugin\BasicPluginManager.h" />
     <ClInclude Include="plugin\include\plugin\ErrorHandler.h" />
@@ -185,8 +224,6 @@
     <ClInclude Include="sio.lite\include\sio\lite\StreamReader.h" />
     <ClInclude Include="sio.lite\include\sio\lite\UnsupportedDataTypeException.h" />
     <ClInclude Include="sio.lite\include\sio\lite\UserDataDictionary.h" />
-    <ClInclude Include="std\include\import\cpp14.h" />
-    <ClInclude Include="std\include\import\cpp17.h" />
     <ClInclude Include="std\include\import\std.h" />
     <ClInclude Include="str\include\str\Convert.h" />
     <ClInclude Include="str\include\str\EncodedString.h" />
@@ -242,7 +279,6 @@
     <ClInclude Include="sys\include\sys\Span.h" />
     <ClInclude Include="sys\include\sys\SysInt.h" />
     <ClInclude Include="sys\include\sys\StopWatch.h" />
-    <ClInclude Include="sys\include\sys\String.h" />
     <ClInclude Include="sys\include\sys\SystemException.h" />
     <ClInclude Include="sys\include\sys\sys_filesystem.h" />
     <ClInclude Include="sys\include\sys\Thread.h" />
@@ -271,9 +307,29 @@
     <ClInclude Include="types\include\types\RangeList.h" />
     <ClInclude Include="types\include\types\RgAz.h" />
     <ClInclude Include="types\include\types\RowCol.h" />
+    <ClInclude Include="unique\include\import\unique.h" />
+    <ClInclude Include="unique\include\unique\UUID.hpp" />
     <ClInclude Include="units\include\units\Angles.h" />
     <ClInclude Include="units\include\units\Lengths.h" />
     <ClInclude Include="units\include\units\Unit.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\Attributes.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\ContentHandler.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\Document.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\Element.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\MinidomHandler.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\MinidomParser.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\NamespaceStack.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\QName.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\Serializable.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\UtilitiesXerces.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\Validator.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\ValidatorInterface.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\ValidatorXerces.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\xerces_.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\XMLException.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\XMLReader.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\XMLReaderInterface.h" />
+    <ClInclude Include="xml.lite\include\xml\lite\XMLReaderXerces.h" />
     <ClInclude Include="zip\include\zip\GZipInputStream.h" />
     <ClInclude Include="zip\include\zip\GZipOutputStream.h" />
     <ClInclude Include="zip\include\zip\Types.h" />
@@ -284,6 +340,10 @@
   <ItemGroup>
     <ClCompile Include="cli\source\Argument.cpp" />
     <ClCompile Include="cli\source\ArgumentParser.cpp" />
+    <ClCompile Include="dbi\source\DatabaseClientFactory.cpp" />
+    <ClCompile Include="dbi\source\MySQLConnection.cpp" />
+    <ClCompile Include="dbi\source\OracleConnection.cpp" />
+    <ClCompile Include="dbi\source\PgSQLConnection.cpp" />
     <ClCompile Include="except\source\Backtrace.cpp" />
     <ClCompile Include="except\source\Context.cpp" />
     <ClCompile Include="except\source\Throwable.cpp" />
@@ -338,6 +398,20 @@
     <ClCompile Include="mt\source\GenericRequestHandler.cpp" />
     <ClCompile Include="mt\source\ThreadGroup.cpp" />
     <ClCompile Include="mt\source\ThreadPlanner.cpp" />
+    <ClCompile Include="net.ssl\source\SSLConnection.cpp" />
+    <ClCompile Include="net.ssl\source\SSLConnectionClientFactory.cpp" />
+    <ClCompile Include="net\source\CurlHandle.cpp" />
+    <ClCompile Include="net\source\CurlInit.cpp" />
+    <ClCompile Include="net\source\DaemonUnix.cpp" />
+    <ClCompile Include="net\source\NetConnection.cpp" />
+    <ClCompile Include="net\source\NetConnectionClientFactory.cpp" />
+    <ClCompile Include="net\source\NetConnectionServer.cpp" />
+    <ClCompile Include="net\source\NetUtils.cpp" />
+    <ClCompile Include="net\source\PerRequestThreadAllocStrategy.cpp" />
+    <ClCompile Include="net\source\Socket.cpp" />
+    <ClCompile Include="net\source\SocketAddress.cpp" />
+    <ClCompile Include="net\source\ThreadPoolAllocStrategy.cpp" />
+    <ClCompile Include="net\source\URL.cpp" />
     <ClCompile Include="pch.cpp">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ForcedIncludeFiles>
@@ -411,6 +485,19 @@
     <ClCompile Include="tiff\source\Utils.cpp" />
     <ClCompile Include="types\source\Range.cpp" />
     <ClCompile Include="types\source\RangeList.cpp" />
+    <ClCompile Include="unique\source\UUID.cpp" />
+    <ClCompile Include="xml.lite\source\Attributes.cpp" />
+    <ClCompile Include="xml.lite\source\Document.cpp" />
+    <ClCompile Include="xml.lite\source\Element.cpp" />
+    <ClCompile Include="xml.lite\source\MinidomHandler.cpp" />
+    <ClCompile Include="xml.lite\source\MinidomParser.cpp" />
+    <ClCompile Include="xml.lite\source\NamespaceStack.cpp" />
+    <ClCompile Include="xml.lite\source\QName.cpp" />
+    <ClCompile Include="xml.lite\source\Serializable.cpp" />
+    <ClCompile Include="xml.lite\source\UtilitiesXerces.cpp" />
+    <ClCompile Include="xml.lite\source\ValidatorInterface.cpp" />
+    <ClCompile Include="xml.lite\source\ValidatorXerces.cpp" />
+    <ClCompile Include="xml.lite\source\XMLReaderXerces.cpp" />
     <ClCompile Include="zip\source\GZipInputStream.cpp" />
     <ClCompile Include="zip\source\GZipOutputStream.cpp" />
     <ClCompile Include="zip\source\ZipEntry.cpp" />
@@ -418,6 +505,7 @@
     <ClCompile Include="zip\source\ZipOutputStream.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="coda-oss.ruleset" />
     <None Include="gsl\include\gsl\algorithm" />
     <None Include="gsl\include\gsl\assert" />
     <None Include="gsl\include\gsl\byte" />
@@ -445,7 +533,7 @@
     <ProjectGuid>{9997e895-5161-4ddf-8f3f-099894cb2f21}</ProjectGuid>
     <RootNamespace>codaoss</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>coda-oss-lite</ProjectName>
+    <ProjectName>coda-oss</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -474,10 +562,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>coda-oss.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <CodeAnalysisRuleSet>coda-oss.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -485,13 +574,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL;MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1</PreprocessorDefinitions>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;except\include\;gsl\include\;hdf5.lite\include\;io\include\;logging\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;mt\include\;plugin\include\;polygon\include\;re\include\;sio.lite\include\;std\include\;str\include\;sys\include\;tiff\include;types\include\;units\include\;zip\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;dbi\include\;except\include\;gsl\include\;hdf5.lite\include\;io\include\;logging\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;mt\include\;net\include\;net.ssl\include\;plugin\include\;polygon\include\;re\include\;sio.lite\include\;std\include\;str\include\;sys\include\;tiff\include;types\include\;unique\include\;units\include\;xml.lite\include\;zip\include\;$(ProjectDir)..\..\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <TranslateIncludes>true</TranslateIncludes>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -499,13 +587,14 @@
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnablePREfast>true</EnablePREfast>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>
       </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\out\install\$(Platform)-$(Configuration)\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>hdf5-c++.lib;z.lib;minizip.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>hdf5-c++.lib;z.lib;minizip.lib;xerces-c.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -516,12 +605,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL;MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1</PreprocessorDefinitions>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;except\include\;gsl\include\;hdf5.lite\include\;io\include\;logging\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;mt\include\;plugin\include\;polygon\include\;re\include\;sio.lite\include\;std\include\;str\include\;sys\include\;tiff\include;types\include\;units\include\;zip\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;dbi\include\;except\include\;gsl\include\;hdf5.lite\include\;io\include\;logging\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;mt\include\;net\include\;net.ssl\include\;plugin\include\;polygon\include\;re\include\;sio.lite\include\;std\include\;str\include\;sys\include\;tiff\include;types\include\;unique\include\;units\include\;xml.lite\include\;zip\include\;$(ProjectDir)..\..\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <TranslateIncludes>true</TranslateIncludes>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -535,8 +623,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\out\install\$(Platform)-$(Configuration)\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>hdf5-c++.lib;z.lib;minizip.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>hdf5-c++.lib;z.lib;minizip.lib;xerces-c.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

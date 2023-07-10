@@ -349,7 +349,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
     }
 
     // LINTED functional specification
-    return ((char *) bp);
+    return const_cast<char*>(bp);
 }
 }
 
@@ -371,14 +371,14 @@ void sys::DateTime::fromMillis(const tm& t)
     mHour = t.tm_hour;
     mMinute = t.tm_min;
 
-    const size_t timeInSeconds = (size_t)(mTimeInMillis / 1000);
-    const double timediff = ((double)mTimeInMillis / 1000.0) - timeInSeconds;
+    const auto timeInSeconds = gsl::narrow_cast<size_t>(mTimeInMillis / 1000);
+    const auto timediff = (gsl::narrow_cast<double>(mTimeInMillis) / 1000.0) - gsl::narrow_cast<double>(timeInSeconds);
     mSecond = t.tm_sec + timediff;
 }
 
 double sys::DateTime::toMillis(tm t) const
 {
-    time_t timeInSeconds = mktime(&t);
+    const auto timeInSeconds = gsl::narrow_cast<double>(mktime(&t));
     double timediff = mSecond - t.tm_sec;
     return (timeInSeconds + timediff) * 1000.0;
 }
@@ -404,9 +404,9 @@ static double getNowInMillis()
     // does not need millisecond accuracy
     SYSTEMTIME now;
     GetLocalTime(&now);
-    return (double)time(NULL) * 1000 + now.wMilliseconds;
+    return (double)time(nullptr) * 1000 + now.wMilliseconds;
 #else
-    return (double)time(NULL) * 1000;
+    return (double)time(nullptr) * 1000;
 #endif
 }
 void sys::DateTime::setNow()
@@ -634,7 +634,7 @@ void sys::DateTime::localtime(time_t numSecondsSinceEpoch, tm& t)
     // our fingers and hope the regular function actually is reentrant
     // (supposedly this is the case on Windows).
 #if CODA_OSS_POSIX_SOURCE
-    if (::localtime_r(&numSecondsSinceEpoch, &t) == NULL)
+    if (::localtime_r(&numSecondsSinceEpoch, &t) == nullptr)
     {
         int const errnum = errno;
         throw except::Exception(Ctxt("localtime_r() failed (" +
@@ -664,7 +664,7 @@ void sys::DateTime::gmtime(time_t numSecondsSinceEpoch, tm& t)
     // our fingers and hope the regular function actually is reentrant
     // (supposedly this is the case on Windows).
 #if CODA_OSS_POSIX_SOURCE
-    if (::gmtime_r(&numSecondsSinceEpoch, &t) == NULL)
+    if (::gmtime_r(&numSecondsSinceEpoch, &t) == nullptr)
     {
         int const errnum = errno;
         throw except::Exception(Ctxt("gmtime_r() failed (" +

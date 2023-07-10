@@ -102,7 +102,7 @@ sys::NotPredicate::~NotPredicate()
     if (mPredicate.second && mPredicate.first)
     {
         FilePredicate* tmp = mPredicate.first;
-        mPredicate.first = NULL;
+        mPredicate.first = nullptr;
         delete tmp;
     }
 }
@@ -125,7 +125,7 @@ sys::LogicalPredicate::~LogicalPredicate()
         if (p.first && p.second)
         {
             sys::FilePredicate* tmp = p.first;
-            p.first = NULL;
+            p.first = nullptr;
             delete tmp;
         }
     }
@@ -265,7 +265,7 @@ fs::path sys::findFirstDirectory(const fs::path& startingDirectory, const fs::pa
 fs::path sys::test::findRootDirectory(const fs::path& p, const std::string& rootName,
         std::function<bool(const fs::path&)> isRoot)
 {
-    const auto isRootDirectory = [&](const fs::path& p) { return is_directory(p) && isRoot(p); };
+    const auto isRootDirectory = [&](const fs::path& v) { return is_directory(v) && isRoot(v); };
 
     // Does the given path look good?
     if (isRootDirectory(p))

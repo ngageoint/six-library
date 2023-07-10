@@ -32,12 +32,12 @@ namespace
 {
 struct Operation
 {
-    Operation(const std::string& op,
-              const std::string& name,
-              const size_t bytes) :
-        op(op),
-        name(name),
-        bytes(bytes)
+    Operation(const std::string& op_,
+              const std::string& name_,
+              const size_t bytes_) :
+        op(op_),
+        name(name_),
+        bytes(bytes_)
     {
     }
 

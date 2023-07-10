@@ -28,11 +28,18 @@
 #include <regex>
 #include <tuple> // std::ignore
 
+#include <config/compiler_extensions.h>
+#include <str/EncodedStringView.h>
+CODA_OSS_disable_warning_push
+#ifndef _MSC_VER
+CODA_OSS_disable_warning(-Wshadow)
+#endif
+#include <str/utf8.h>
+CODA_OSS_disable_warning_pop
+
 #include <sys/OS.h>
 #include <io/StringStream.h>
 #include <mem/ScopedArray.h>
-#include <str/EncodedStringView.h>
-#include <str/utf8.h>
 
 namespace fs = std::filesystem;
 
@@ -126,7 +133,7 @@ ValidatorXerces::ValidatorXerces(
         xercesc::DOMImplementationRegistry::
             getDOMImplementation (ls_id)->createLSParser(
                 xercesc::DOMImplementationLS::MODE_SYNCHRONOUS,
-                0, 
+                nullptr, 
                 xercesc::XMLPlatformUtils::fgMemoryManager,
                 mSchemaPool.get()));
 

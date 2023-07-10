@@ -196,14 +196,14 @@ namespace sys
  *  \param format
  *  \param ...  Put in any format value here
  */
-CODA_OSS_API void dbgPrintf(const char *format, ...);
+CODA_OSS_API void dbgPrintf(const char *format, ...) noexcept;
 
 /*!
  *  Prints to DEBUG_STREAM and kills the program
  *  \param format
  *  \param ...  Put in any format value here
  */
-void diePrintf(const char *format, ...);
+void diePrintf(const char* format, ...) noexcept;
 }
 
 #define dbg_printf sys::dbgPrintf

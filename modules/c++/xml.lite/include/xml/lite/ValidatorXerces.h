@@ -20,30 +20,22 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
 #define CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
-
-#include <xml/lite/xml_lite_config.h>
-
-#ifdef USE_XERCES
 
 #include <memory>
 #include <vector>
 #include <coda_oss/string.h>
 
+#include "config/Exports.h"
+
+#include <xml/lite/xml_lite_config.h>
+#ifdef USE_XERCES
+#include "xerces_.h"
+
 #include <xml/lite/UtilitiesXerces.h>
 #include <xml/lite/ValidatorInterface.h>
-
-#include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/parsers/DOMLSParserImpl.hpp>
-#include <xercesc/framework/XMLGrammarPool.hpp>
-#include <xercesc/framework/XMLGrammarPoolImpl.hpp>
-#include <xercesc/dom/DOM.hpp>
-#include <xercesc/dom/impl/DOMLSInputImpl.hpp>
-
-#include <xercesc/framework/MemBufInputSource.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
-#include <xercesc/util/XMLString.hpp>
 
 namespace xml
 {
@@ -97,7 +89,7 @@ private:
  *
  * This class is the Xercesc schema validator
  */
-class ValidatorXerces : public ValidatorInterface
+class CODA_OSS_API ValidatorXerces : public ValidatorInterface
 {
     XercesContext mCtxt;    //! this must be the first member listed
 

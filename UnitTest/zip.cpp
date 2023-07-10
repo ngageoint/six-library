@@ -2,6 +2,7 @@
 #include "CppUnitTest.h"
 
 #include <import/zip.h>
+#include <io/ReadUtils.h>
 
 namespace zip
 {
