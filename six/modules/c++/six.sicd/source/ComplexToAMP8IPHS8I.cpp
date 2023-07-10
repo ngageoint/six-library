@@ -31,7 +31,11 @@
 
 #include <coda_oss/CPlusPlus.h>
 #if CODA_OSS_cpp17
-#include <execution>
+    // <execution> is broken with the older version of GCC we're using
+    #if (__GNUC__ >= 10) || _MSC_VER
+    #include <execution>
+    #define SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution 1
+    #endif
 #endif
 
 #include <gsl/gsl.h>
@@ -214,7 +218,7 @@ static inline OutputIt transform_async(const InputIt first1, const InputIt last1
 template <typename TInputs, typename TResults, typename TFunc>
 static inline void transform(std::span<const TInputs> inputs, std::span<TResults> results, TFunc f)
 {
-#if CODA_OSS_cpp17
+#if SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution
     std::ignore = std::transform(std::execution::par, inputs.begin(), inputs.end(), results.begin(), f);
 #else
     constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
