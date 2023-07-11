@@ -38,6 +38,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "csm", "six\projects\csm\csm
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{F6888896-E658-414C-90CD-1208FA31A22E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "externals", "externals", "{F033066A-4172-4AC0-96AD-BF5090F713C2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "coda-oss", "externals\coda-oss\modules\c++\coda-oss.vcxproj", "{9997E895-5161-4DDF-8F3F-099894CB2F21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -100,9 +104,18 @@ Global
 		{F6888896-E658-414C-90CD-1208FA31A22E}.Debug|x64.Build.0 = Debug|x64
 		{F6888896-E658-414C-90CD-1208FA31A22E}.Release|x64.ActiveCfg = Release|x64
 		{F6888896-E658-414C-90CD-1208FA31A22E}.Release|x64.Build.0 = Release|x64
+		{9997E895-5161-4DDF-8F3F-099894CB2F21}.Debug|x64.ActiveCfg = Debug|x64
+		{9997E895-5161-4DDF-8F3F-099894CB2F21}.Debug|x64.Build.0 = Debug|x64
+		{9997E895-5161-4DDF-8F3F-099894CB2F21}.Release|x64.ActiveCfg = Release|x64
+		{9997E895-5161-4DDF-8F3F-099894CB2F21}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F06550AD-CFC7-40B8-8727-6C82C69A8982} = {F033066A-4172-4AC0-96AD-BF5090F713C2}
+		{8F357A19-799E-4971-850E-3F28485C130B} = {F033066A-4172-4AC0-96AD-BF5090F713C2}
+		{9997E895-5161-4DDF-8F3F-099894CB2F21} = {F033066A-4172-4AC0-96AD-BF5090F713C2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E20E9FC7-D138-4517-8597-79C1FAC3E28D}
