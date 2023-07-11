@@ -28,13 +28,9 @@
 #include <memory>
 #include <thread>
 
-#include <types/complex.h>
+#include <nitf/coda-oss.hpp>
 #include <types/RowCol.h>
 #include <io/TempFile.h>
-#include <TestCase.h>
-
-#include <nitf/coda-oss.hpp>
-
 #include <cphd/CPHDWriter.h>
 #include <cphd/CPHDReader.h>
 #include <cphd/Wideband.h>
@@ -43,6 +39,7 @@
 #include <cphd/PVPBlock.h>
 #include <cphd/ReferenceGeometry.h>
 #include <cphd/TestDataGenerator.h>
+#include <TestCase.h>
 
 /*!
  * Tests write and read of Signal Block

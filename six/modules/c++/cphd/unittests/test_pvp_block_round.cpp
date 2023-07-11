@@ -20,22 +20,9 @@
  *
  */
 
-#include <stdlib.h>
-
 #include <thread>
-#include <cstdio>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
-#include <string>
 
-#include <types/complex.h>
-#include <io/FileInputStream.h>
-#include <io/FileOutputStream.h>
-#include <io/TempFile.h>
-#include <types/RowCol.h>
 #include <TestCase.h>
-
 #include <cphd/CPHDReader.h>
 #include <cphd/CPHDWriter.h>
 #include <cphd/Metadata.h>
@@ -44,6 +31,16 @@
 #include <cphd/ReferenceGeometry.h>
 #include <cphd/TestDataGenerator.h>
 #include <cphd/Wideband.h>
+#include <io/FileInputStream.h>
+#include <io/FileOutputStream.h>
+#include <io/TempFile.h>
+#include <stdlib.h>
+#include <types/RowCol.h>
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
 
 template <typename TComplex>
 auto generateComplexData(size_t length)

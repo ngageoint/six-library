@@ -35,7 +35,6 @@
 #include <algorithm>
 
 #include <nitf/BufferedWriter.hpp>
-#include <types/complex.h>
 
 #include "six/Types.h"
 #include "six/Container.h"

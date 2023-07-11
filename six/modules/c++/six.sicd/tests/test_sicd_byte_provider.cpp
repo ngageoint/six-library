@@ -29,8 +29,6 @@
 #include <iostream>
 #include <string>
 
-#include <types/complex.h>
-
 #include <six/sicd/SICDByteProvider.h>
 #include <six/NITFWriteControl.h>
 #include <six/XMLControlFactory.h>

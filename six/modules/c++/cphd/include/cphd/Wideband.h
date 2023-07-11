@@ -27,16 +27,16 @@
 #include <string>
 #include <memory>
 
+#include <scene/sys_Conf.h>
+#include <cphd/MetadataBase.h>
+#include <cphd/Utilities.h>
+
 #include <io/SeekableStreams.h>
 #include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
 #include <sys/Conf.h>
 #include <gsl/gsl.h>
 #include <types/RowCol.h>
-
-#include <scene/sys_Conf.h>
-#include <cphd/MetadataBase.h>
-#include <cphd/Utilities.h>
 
 namespace cphd
 {

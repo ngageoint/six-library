@@ -26,7 +26,9 @@
 #include <thread>
 #include <std/span>
 
-#include <types/complex.h>
+#include <cphd/CPHDReader.h>
+#include <cphd/CPHDWriter.h>
+
 #include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
 #include <str/Convert.h>
@@ -35,9 +37,6 @@
 #include <cli/ArgumentParser.h>
 #include <io/FileInputStream.h>
 #include <io/FileOutputStream.h>
-
-#include <cphd/CPHDReader.h>
-#include <cphd/CPHDWriter.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVPBlock.h>
 

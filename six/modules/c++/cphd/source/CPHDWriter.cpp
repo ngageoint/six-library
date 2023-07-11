@@ -25,7 +25,6 @@
 #include <std/bit>
 #include <std/memory>
 
-#include <types/complex.h>
 #include <except/Exception.h>
 
 #include <cphd/ByteSwap.h>

@@ -20,10 +20,9 @@
  *
  */
 
+#include <complex>
 #include <thread>
 #include <tuple>
-
-#include <types/complex.h>
 
 #include <cphd/PVP.h>
 #include <cphd/PVPBlock.h>

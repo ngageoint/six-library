@@ -61,7 +61,7 @@ struct Parameter final
     template<typename T>
     Parameter(const std::complex<T>& value)
     {
-        mValue = str::toString<types::complex<T> >(mValue);
+        mValue = str::toString<std::complex<T> >(mValue);
     }
     #if SIX_six_unique_ComplexInteger
     template<typename T>
@@ -97,7 +97,7 @@ struct Parameter final
     template<typename T>
     std::complex<T> getComplex() const
     {
-        return str::toType<types::complex<T> >(mValue);
+        return str::toType<std::complex<T> >(mValue);
     }
     template<typename T>
     void getComplex(std::complex<T>& result) const
@@ -131,9 +131,9 @@ struct Parameter final
 
     //! Overload templated setValue function
     template<typename T>
-    void setValue(const types::complex<T>& value)
+    void setValue(const std::complex<T>& value)
     {
-        mValue = str::toString<types::complex<T> >(value);
+        mValue = str::toString<std::complex<T> >(value);
     }
     #if SIX_six_unique_ComplexInteger 
     template<typename T>

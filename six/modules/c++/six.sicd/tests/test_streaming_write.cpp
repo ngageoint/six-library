@@ -29,12 +29,11 @@
 
 #include "TestUtilities.h"
 
-#include <types/complex.h>
+#include <import/six.h>
 #include <import/io.h>
 #include <logging/Setup.h>
-
 #include <scene/Utilities.h>
-#include <import/six.h>
+
 #include <import/six/sicd.h>
 #include <six/sicd/SICDWriteControl.h>
 

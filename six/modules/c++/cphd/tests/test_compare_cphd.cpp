@@ -25,19 +25,16 @@
 #include <memory>
 #include <thread>
 
-#include <types/complex.h>
+#include <scene/sys_Conf.h>
 #include <logging/NullLogger.h>
 #include <cli/Value.h>
 #include <cli/ArgumentParser.h>
 #include <io/FileInputStream.h>
 #include <io/FileOutputStream.h>
-#include <str/Convert.h>
-
-#include <scene/sys_Conf.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVPBlock.h>
 #include <cphd/CPHDReader.h>
-
+#include <str/Convert.h>
 
 /*!
  * Compares two CPHD files

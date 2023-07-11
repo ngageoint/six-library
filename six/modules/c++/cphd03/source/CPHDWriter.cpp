@@ -24,10 +24,8 @@
 #include <std/bit>
 #include <std/memory>
 
-#include <types/complex.h>
-#include <except/Exception.h>
-
 #include <scene/sys_Conf.h>
+#include <except/Exception.h>
 
 #include <cphd03/CPHDXMLControl.h>
 #include <cphd03/Utilities.h>
