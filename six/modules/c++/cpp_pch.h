@@ -42,12 +42,11 @@
 #include <mutex>
 #include <atomic>
 #include <future>
-//#include <complex>
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #define NOMINMAX
 #include <windows.h>
 
-#include <types/complex.h>
+#include <types/Complex.h>
 
 #pragma warning(pop)

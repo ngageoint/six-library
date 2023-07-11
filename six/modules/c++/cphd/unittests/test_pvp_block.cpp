@@ -164,7 +164,7 @@ TEST_CASE(testPvpOptional)
             pvpBlock.setAddedPVP(addedParam1, channel, vector, "Param1");
             const std::string addedParam2 = "Parameter2";
             pvpBlock.setAddedPVP(addedParam2, channel, vector, "Param2");
-            const types::complex<int> addedParam3(3,4);
+            const cphd::zint32_t addedParam3(3,4);
             pvpBlock.setAddedPVP(addedParam3, channel, vector, "Param3");
 
             TEST_ASSERT_EQ(ampSF, pvpBlock.getAmpSF(channel, vector));
@@ -172,7 +172,7 @@ TEST_CASE(testPvpOptional)
             TEST_ASSERT_EQ(fxN2, pvpBlock.getFxN2(channel, vector));
             TEST_ASSERT_EQ(addedParam1, pvpBlock.getAddedPVP<double>(channel, vector, "Param1"));
             TEST_ASSERT_EQ(addedParam2, pvpBlock.getAddedPVP<std::string>(channel, vector, "Param2"));
-            TEST_ASSERT_EQ(addedParam3, pvpBlock.getAddedPVP<types::complex<int> >(channel, vector, "Param3"));
+            TEST_ASSERT_EQ(addedParam3, pvpBlock.getAddedPVP<cphd::zint32_t >(channel, vector, "Param3"));
         }
     }
 }
@@ -298,7 +298,7 @@ TEST_CASE(testPvpEquality)
             pvpBlock1.setAddedPVP(addedParam1, channel, vector, "Param1");
             pvpBlock2.setAddedPVP(addedParam1, channel, vector, "Param1");
 
-            const types::complex<int> addedParam2(3,4);
+            const cphd::zint32_t addedParam2(3,4);
             pvpBlock1.setAddedPVP(addedParam2, channel, vector, "Param2");
             pvpBlock2.setAddedPVP(addedParam2, channel, vector, "Param2");
         }

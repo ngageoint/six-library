@@ -104,13 +104,15 @@ struct GetPixelType<int16_t>
 };
 
 // Create dummy SICD data
-template <typename DataTypeT>
+template <typename CxDataTypeT>
 std::unique_ptr<six::Data>
 createData(const types::RowCol<size_t>& dims)
 {
+    using value_type = typename CxDataTypeT::value_type;
+
     six::sicd::ComplexData* data(new six::sicd::ComplexData());
     std::unique_ptr<six::Data> scopedData(data);
-    data->setPixelType(GetPixelType<DataTypeT>::getPixelType());
+    data->setPixelType(GetPixelType<value_type>::getPixelType());
     setExtent(*data, dims);
     data->setName("corename");
     data->setSource("sensorname");
@@ -216,7 +218,7 @@ void subsetData(const T* orig,
 }
 
 // Main test class
-template <typename DataTypeT>
+template <typename CxDataTypeT>
 struct Tester final
 {
     Tester(const std::vector<std::string>& schemaPaths,
@@ -234,11 +236,13 @@ struct Tester final
         mMaxProductSize(maxProductSize),
         mSuccess(true)
     {
+        using value_type = typename CxDataTypeT::value_type;
+
         for (size_t ii = 0; ii < mImage.size(); ++ii)
         {
-            mImage[ii] = types::complex<DataTypeT>(
-                    static_cast<DataTypeT>(ii),
-                    static_cast<DataTypeT>(ii * 10));
+            mImage[ii] = CxDataTypeT(
+                    static_cast<value_type>(ii),
+                    static_cast<value_type>(ii * 10));
         }
 
         normalWrite();
@@ -292,8 +296,8 @@ private:
 
     mem::SharedPtr<six::Container> mContainer;
     const types::RowCol<size_t> mDims;
-    std::vector<types::complex<DataTypeT> > mImage;
-    types::complex<DataTypeT>* const mImagePtr;
+    std::vector<CxDataTypeT > mImage;
+    CxDataTypeT* const mImagePtr;
 
     std::unique_ptr<const CompareFiles> mCompareFiles;
     const std::string mTestPathname;
@@ -389,8 +393,8 @@ void Tester<DataTypeT>::testMultipleWritesOfFullRows()
     compare("Multiple writes of full rows");
 }
 
-template <typename DataTypeT>
-void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
+template <typename CxDataTypeT>
+void Tester<CxDataTypeT>::testMultipleWritesOfPartialRows()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
@@ -403,7 +407,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
     // Rows [40, 60)
     // Cols [400, 456)
     types::RowCol<size_t> offset(40, 400);
-    std::vector<types::complex<DataTypeT> > subset;
+    std::vector<CxDataTypeT > subset;
     types::RowCol<size_t> subsetDims(20, 56);
     subsetData(mImagePtr, mDims.col, offset, subsetDims, subset);
     sicdWriter.save(subset.data(), offset, subsetDims);
@@ -447,7 +451,7 @@ void Tester<DataTypeT>::testMultipleWritesOfPartialRows()
     compare("Multiple writes of partial rows");
 }
 
-template <typename DataTypeT>
+template <typename CxDataTypeT>
 bool doTests(const std::vector<std::string>& schemaPaths,
              bool setMaxProductSize,
              size_t numRowsPerSeg)
@@ -458,11 +462,11 @@ bool doTests(const std::vector<std::string>& schemaPaths,
     //       It would be better to get the logic fixed that forces
     //       segmentation on the number of rows via OPT_MAX_ILOC_ROWS
     static const size_t APPROX_HEADER_SIZE = 2 * 1024;
-    const size_t numBytesPerRow = 456 * sizeof(types::complex<DataTypeT>);
+    const size_t numBytesPerRow = 456 * sizeof(CxDataTypeT);
     const size_t maxProductSize = numRowsPerSeg * numBytesPerRow +
             APPROX_HEADER_SIZE;
 
-    Tester<DataTypeT> tester(schemaPaths, setMaxProductSize, maxProductSize);
+    Tester<CxDataTypeT> tester(schemaPaths, setMaxProductSize, maxProductSize);
     tester.testSingleWrite();
     tester.testMultipleWritesOfFullRows();
     tester.testMultipleWritesOfPartialRows();
@@ -475,12 +479,12 @@ bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
                           size_t numRowsPerSeg = 0)
 {
     bool success = true;
-    if (!doTests<float>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    if (!doTests<six::zfloat>(schemaPaths, setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
 
-    if (!doTests<int16_t>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    if (!doTests<six::zint16_t>(schemaPaths, setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }

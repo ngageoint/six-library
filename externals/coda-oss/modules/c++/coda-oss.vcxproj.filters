@@ -219,9 +219,6 @@
     <ClInclude Include="sys\include\sys\StopWatch.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="sys\include\sys\String.h">
-      <Filter>sys</Filter>
-    </ClInclude>
     <ClInclude Include="sys\include\sys\sys_filesystem.h">
       <Filter>sys</Filter>
     </ClInclude>
@@ -720,12 +717,6 @@
     <ClInclude Include="mem\include\mem\ComplexView.h">
       <Filter>mem</Filter>
     </ClInclude>
-    <ClInclude Include="std\include\import\cpp14.h">
-      <Filter>std</Filter>
-    </ClInclude>
-    <ClInclude Include="std\include\import\cpp17.h">
-      <Filter>std</Filter>
-    </ClInclude>
     <ClInclude Include="std\include\import\std.h">
       <Filter>std</Filter>
     </ClInclude>
@@ -747,8 +738,230 @@
     <ClInclude Include="sys\include\sys\SysInt.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="types\include\types\complex.h">
+    <ClInclude Include="types\include\types\Complex.h">
       <Filter>types</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\numbers.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\source\H5.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\source\hdf5.lite.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\HDF5Exception.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\highfive.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\Info.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\Read.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\SpanRC.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\Write.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="zip\include\zip\GZipInputStream.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="zip\include\zip\GZipOutputStream.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="zip\include\zip\Types.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="zip\include\zip\ZipEntry.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="zip\include\zip\ZipFile.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="zip\include\zip\ZipOutputStream.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\Attributes.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\ContentHandler.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\Document.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\Element.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\MinidomHandler.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\MinidomParser.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\NamespaceStack.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\QName.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\Serializable.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\UtilitiesXerces.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\Validator.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\ValidatorInterface.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\ValidatorXerces.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\XMLException.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\XMLReader.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\XMLReaderInterface.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\XMLReaderXerces.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="dbi\include\dbi\DatabaseClientFactory.h">
+      <Filter>dbi</Filter>
+    </ClInclude>
+    <ClInclude Include="dbi\include\dbi\DatabaseConnection.h">
+      <Filter>dbi</Filter>
+    </ClInclude>
+    <ClInclude Include="dbi\include\dbi\MySQLConnection.h">
+      <Filter>dbi</Filter>
+    </ClInclude>
+    <ClInclude Include="dbi\include\dbi\OracleConnection.h">
+      <Filter>dbi</Filter>
+    </ClInclude>
+    <ClInclude Include="dbi\include\dbi\PgSQLConnection.h">
+      <Filter>dbi</Filter>
+    </ClInclude>
+    <ClInclude Include="dbi\include\import\dbi.h">
+      <Filter>dbi</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\AllocStrategy.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\ClientSocketFactory.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\CurlHandle.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\CurlInit.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\Daemon.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\DaemonInterface.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\DaemonUnix.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\DaemonWin32.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\NetConnection.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\NetConnectionClientFactory.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\NetConnectionServer.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\NetExceptions.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\NetUtils.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\PerRequestThreadAllocStrategy.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\RequestHandler.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\SerializableConnection.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\ServerSocketFactory.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\SingleThreadedAllocStrategy.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\Socket.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\SocketAddress.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\Sockets.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\SocketsUnix.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\SocketsWin32.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\ThreadPoolAllocStrategy.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\URL.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\net\URLBuilder.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\include\import\net.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net.ssl\include\net\ssl\SSLConnection.h">
+      <Filter>net.ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="net.ssl\include\net\ssl\SSLConnectionClientFactory.h">
+      <Filter>net.ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="net.ssl\include\net\ssl\SSLExceptions.h">
+      <Filter>net.ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="net.ssl\include\import\net\ssl.h">
+      <Filter>net.ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="unique\include\unique\UUID.hpp">
+      <Filter>unique</Filter>
+    </ClInclude>
+    <ClInclude Include="unique\include\import\unique.h">
+      <Filter>unique</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\import\hdf5\lite.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="xml.lite\include\xml\lite\xerces_.h">
+      <Filter>xml.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\H5_.h">
+      <Filter>hdf5.lite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1092,6 +1305,129 @@
     <ClCompile Include="sys\source\File.cpp">
       <Filter>sys</Filter>
     </ClCompile>
+    <ClCompile Include="hdf5.lite\source\H5.cpp">
+      <Filter>hdf5.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="hdf5.lite\source\hdf5.lite.cpp">
+      <Filter>hdf5.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="hdf5.lite\source\Info.cpp">
+      <Filter>hdf5.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="hdf5.lite\source\Read.cpp">
+      <Filter>hdf5.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="hdf5.lite\source\Write.cpp">
+      <Filter>hdf5.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="zip\source\GZipInputStream.cpp">
+      <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="zip\source\GZipOutputStream.cpp">
+      <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="zip\source\ZipEntry.cpp">
+      <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="zip\source\ZipFile.cpp">
+      <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="zip\source\ZipOutputStream.cpp">
+      <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="xml.lite\source\Attributes.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="xml.lite\source\Document.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="xml.lite\source\Element.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="xml.lite\source\MinidomHandler.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="xml.lite\source\MinidomParser.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="xml.lite\source\NamespaceStack.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="xml.lite\source\QName.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="xml.lite\source\Serializable.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="xml.lite\source\UtilitiesXerces.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="xml.lite\source\ValidatorInterface.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="xml.lite\source\ValidatorXerces.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="xml.lite\source\XMLReaderXerces.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="dbi\source\DatabaseClientFactory.cpp">
+      <Filter>dbi</Filter>
+    </ClCompile>
+    <ClCompile Include="dbi\source\MySQLConnection.cpp">
+      <Filter>dbi</Filter>
+    </ClCompile>
+    <ClCompile Include="dbi\source\OracleConnection.cpp">
+      <Filter>dbi</Filter>
+    </ClCompile>
+    <ClCompile Include="dbi\source\PgSQLConnection.cpp">
+      <Filter>dbi</Filter>
+    </ClCompile>
+    <ClCompile Include="net\source\CurlHandle.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\source\CurlInit.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\source\DaemonUnix.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\source\NetConnection.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\source\NetConnectionClientFactory.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\source\NetConnectionServer.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\source\NetUtils.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\source\PerRequestThreadAllocStrategy.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\source\Socket.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\source\SocketAddress.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\source\ThreadPoolAllocStrategy.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\source\URL.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="net.ssl\source\SSLConnection.cpp">
+      <Filter>net.ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="net.ssl\source\SSLConnectionClientFactory.cpp">
+      <Filter>net.ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="unique\source\UUID.cpp">
+      <Filter>unique</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="config">
@@ -1166,6 +1502,27 @@
     <Filter Include="plugin">
       <UniqueIdentifier>{387bc6cb-323a-42b3-8502-4fac72586d12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hdf5.lite">
+      <UniqueIdentifier>{e4db8b19-0870-4cb2-af64-14b928c68725}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zip">
+      <UniqueIdentifier>{a2682912-3963-489a-9cf0-c5224b27eb84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="xml.lite">
+      <UniqueIdentifier>{1bb6daf3-40dd-44d8-8680-0e77e2c3bd17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dbi">
+      <UniqueIdentifier>{13c98009-f1f9-4297-a2b3-bde23f3bea55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{6575592b-9b28-49eb-be76-27f40825475e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net.ssl">
+      <UniqueIdentifier>{21ddb4b6-54a2-4618-81ed-4fbbf37b30de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="unique">
+      <UniqueIdentifier>{79aa73a7-ed0d-4826-b7ed-c8d91d96998a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="gsl\include\gsl\algorithm">
@@ -1225,5 +1582,9 @@
     <None Include="sys\include\sys\sys_config.h.cmake.in">
       <Filter>sys</Filter>
     </None>
+    <None Include="std\include\std\numbers">
+      <Filter>std</Filter>
+    </None>
+    <None Include="coda-oss.ruleset" />
   </ItemGroup>
 </Project>

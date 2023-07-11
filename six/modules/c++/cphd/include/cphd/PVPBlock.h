@@ -23,11 +23,11 @@
 #ifndef __CPHD_PVP_BLOCK_H__
 #define __CPHD_PVP_BLOCK_H__
 
+#include <stddef.h>
+
 #include <ostream>
 #include <vector>
-#include <complex>
 #include <cstdint>
-#include <stddef.h>
 #include <unordered_map>
 #include <std/optional>
 
@@ -61,13 +61,23 @@ struct AddedPVP
     }
 };
 template<typename T>
-struct AddedPVP<types::complex<T> >
+struct AddedPVP<std::complex<T>>
 {
-    types::complex<T> getAddedPVP(const six::Parameter& val) const
+    auto getAddedPVP(const six::Parameter& val) const
     {
         return val.getComplex<T>();
     }
 };
+#if SIX_six_unique_ComplexInteger 
+template<typename T>
+struct AddedPVP<six::ComplexInteger<T> >
+{
+    auto getAddedPVP(const six::Parameter& val) const
+    {
+        return val.getComplex<T>();
+    }
+};
+#endif
 template<>
 struct AddedPVP<std::string>
 {

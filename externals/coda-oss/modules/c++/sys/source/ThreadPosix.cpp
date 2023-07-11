@@ -52,7 +52,7 @@ void sys::ThreadPosix::start()
 
         if (::pthread_create(&mNative,
                              &attr,
-                             (void *(*)(void *))this->__start,
+                             static_cast<void *(*)(void *)>(this->__start),
                              this) != 0)
             throw sys::SystemException("pthread_create()");
         pthread_attr_destroy(&attr);
@@ -60,8 +60,8 @@ void sys::ThreadPosix::start()
     else
     {
         if (::pthread_create(&mNative,
-                             NULL,
-                             (void *(*)(void *))this->__start,
+                             nullptr,
+                             static_cast<void *(*)(void *)>(this->__start),
                              this) != 0)
             throw sys::SystemException("pthread_create()");
     }
@@ -81,7 +81,7 @@ void *sys::ThreadPosix::__start(void *v)
     */
 
     pthread_exit(NULL);
-    return NULL;
+    return nullptr;
 }
 
 void sys::ThreadPosix::kill()

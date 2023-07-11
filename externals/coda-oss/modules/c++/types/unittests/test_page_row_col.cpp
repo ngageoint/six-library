@@ -97,8 +97,8 @@ TEST_CASE(TestPageRowColDouble)
     pageRowColAssign.page += std::numeric_limits<double>::epsilon() * 2.0;
     TEST_ASSERT(pageRowColAssign != pageRowColA);
 
-    TEST_ASSERT_EQ(pageRowColA.volume(), 3.1 * 5.2 * 11.3);
-    TEST_ASSERT_EQ(pageRowColA.normL2(), std::sqrt(3.1 * 3.1 +  5.2 * 5.2 + 11.3 * 11.3));
+    TEST_ASSERT_ALMOST_EQ(pageRowColA.volume(), 3.1 * 5.2 * 11.3);
+    TEST_ASSERT_ALMOST_EQ(pageRowColA.normL2(), std::sqrt(3.1 * 3.1 +  5.2 * 5.2 + 11.3 * 11.3));
 
     // test arithmetic operators
     const types::PageRowCol<double> sum = pageRowColA + pageRowColB;

@@ -1,5 +1,4 @@
 NAME            = 'unique'
-MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '1.0'
 MODULE_DEPS     = 'except'
 USELIB          = 'RPC'

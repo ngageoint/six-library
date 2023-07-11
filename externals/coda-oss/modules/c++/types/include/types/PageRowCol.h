@@ -52,7 +52,7 @@ struct PageRowCol
     // especially when doing scalar operations that might otherwise
     // create ambiguities
     PageRowCol() :
-        page((T)0.0), row((T)0.0), col((T)0.0) {}
+        page(static_cast<T>(0.0)), row(static_cast<T>(0.0)), col(static_cast<T>(0.0)) {}
 
 
     PageRowCol(T p, T r, T c) :
@@ -61,17 +61,17 @@ struct PageRowCol
     template<typename Other_T>
     explicit PageRowCol(const PageRowCol<Other_T>& p)
     {
-        page = (T)p.page;
-        row = (T)p.row;
-        col = (T)p.col;
+        page = static_cast<T>(p.page);
+        row = static_cast<T>(p.row);
+        col = static_cast<T>(p.col);
     }
 
     template<typename Other_T1, typename Other_T2>
     PageRowCol(Other_T1 p, const RowCol<Other_T2>& rc)
     {
-        page = (T)p;
-        row = (T)rc.row;
-        col = (T)rc.col;
+        page = static_cast<T>(p);
+        row = static_cast<T>(rc.row);
+        col = static_cast<T>(rc.col);
     }
 
     template<typename Other_T>
@@ -79,9 +79,9 @@ struct PageRowCol
     {
         if (this != (PageRowCol*)&p)
         {
-            page = (T)p.page;
-            row = (T)p.row;
-            col = (T)p.col;
+	    page = static_cast<T>(p.page);
+	    row = static_cast<T>(p.row);
+	    col = static_cast<T>(p.col);
         }
         return *this;
     }
@@ -89,9 +89,9 @@ struct PageRowCol
     template<typename Other_T>
     PageRowCol& operator+=(const PageRowCol<Other_T>& p)
     {
-        page += (T)p.page;
-        row += (T)p.row;
-        col += (T)p.col;
+        page += static_cast<T>(p.page);
+        row += static_cast<T>(p.row);
+        col += static_cast<T>(p.col);
         return *this;
     }
 
@@ -105,9 +105,9 @@ struct PageRowCol
     template<typename Other_T>
     PageRowCol& operator*=(const PageRowCol<Other_T>& p)
     {
-        page *= (T)p.page;
-        row *= (T)p.row;
-        col *= (T)p.col;
+        page *= static_cast<T>(p.page);
+        row *= static_cast<T>(p.row);
+        col *= static_cast<T>(p.col);
         return *this;
     }
 
@@ -121,9 +121,9 @@ struct PageRowCol
     template<typename Other_T>
     PageRowCol& operator-=(const PageRowCol<Other_T>& p)
     {
-        page -= (T)p.page;
-        row -= (T)p.row;
-        col -= (T)p.col;
+        page -= static_cast<T>(p.page);
+        row -= static_cast<T>(p.row);
+        col -= static_cast<T>(p.col);
         return *this;
     }
 
@@ -137,9 +137,9 @@ struct PageRowCol
     template<typename Other_T>
     PageRowCol& operator/=(const PageRowCol<Other_T>& p)
     {
-        page /= (T)p.page;
-        row /= (T)p.row;
-        col /= (T)p.col;
+        page /= static_cast<T>(p.page);
+        row /= static_cast<T>(p.row);
+        col /= static_cast<T>(p.col);
         return *this;
     }
 

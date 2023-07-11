@@ -80,7 +80,7 @@ int main(int argc, char** argv)
 
 
         std::unique_ptr<six::sicd::ComplexData> complexData;
-        std::vector<std::complex<float> > widebandData;
+        std::vector<six::zfloat > widebandData;
         six::sicd::Utilities::readSicd(sicdPathname, schemaPaths, complexData,
                 widebandData);
 

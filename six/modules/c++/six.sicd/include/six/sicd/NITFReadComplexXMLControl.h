@@ -89,9 +89,9 @@ namespace six
 
 			std::unique_ptr<ComplexData> getComplexData();
 
-			std::vector<std::complex<float>> getWidebandData(const ComplexData&);
+			std::vector<six::zfloat> getWidebandData(const ComplexData&);
 			void getWidebandData(const ComplexData&, const types::RowCol<size_t>& offset, const types::RowCol<size_t>& extent,
-				std::complex<float>* buffer);
+				six::zfloat* buffer);
 
 			void getMeshes(std::unique_ptr<NoiseMesh>&, std::unique_ptr<ScalarMesh>&) const;
 

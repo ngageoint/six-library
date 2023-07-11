@@ -87,12 +87,12 @@ void createNITF(const std::string& outputPathname,
     std::unique_ptr<std::byte[]> imageData(new std::byte[imageSize]);
     if (container->getDataType() == six::DataType::COMPLEX)
     {
-        std::complex<float>* complexData =
-                reinterpret_cast<std::complex<float>* >(imageData.get());
+        six::zfloat* complexData =
+                reinterpret_cast<six::zfloat* >(imageData.get());
 
         for (size_t ii = 0; ii < elementsInImage; ++ii)
         {
-            complexData[ii] = std::complex<float>(
+            complexData[ii] = six::zfloat(
                     static_cast<float>(ii),
                     static_cast<float>(ii) * -1);
         }
@@ -133,10 +133,10 @@ bool checkNITF(const std::string& pathname)
 
     if (data->getDataType() == six::DataType::COMPLEX)
     {
-        auto complexBuffer = reinterpret_cast<std::complex<float>* >(buffer);
+        auto complexBuffer = reinterpret_cast<six::zfloat* >(buffer);
         for (size_t ii = skipSize; ii < imageSize; ++ii)
         {
-            const std::complex<float> currentElement =
+            const six::zfloat currentElement =
                     complexBuffer[ii - skipSize];
             if (currentElement.real() != static_cast<float>(ii))
             {

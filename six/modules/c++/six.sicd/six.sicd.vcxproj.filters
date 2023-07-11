@@ -129,7 +129,7 @@
     <ClInclude Include="include\six\sicd\NITFReadComplexXMLControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\six\sicd\ComplexToAMP8IPHS8I.h">
+    <ClInclude Include="include\six\sicd\DataParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -240,6 +240,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\ComplexToAMP8IPHS8I.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DataParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

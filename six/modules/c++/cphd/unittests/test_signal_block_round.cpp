@@ -49,16 +49,17 @@
  * Fails if values don't match
  */
 
-template<typename T>
-std::vector<types::complex<T> > generateData(size_t length)
+template<typename TComplex>
+auto generateData(size_t length)
 {
-    std::vector<types::complex<T> > data(length);
+    using value_type = typename TComplex::value_type;
+    std::vector<TComplex> data(length);
     srand(0);
     for (size_t ii = 0; ii < data.size(); ++ii)
     {
-        auto real = static_cast<T>(rand() / 100);
-        auto imag = static_cast<T>(rand() / 100);
-        data[ii] = types::complex<T>(real, imag);
+        auto real = static_cast<value_type>(rand() / 100);
+        auto imag = static_cast<value_type>(rand() / 100);
+        data[ii] = TComplex(real, imag);
     }
     return data;
 }
@@ -76,10 +77,10 @@ inline std::vector<double> generateScaleFactors(size_t length, bool scale)
     return scaleFactors;
 }
 
-template<typename T>
+template<typename TCxVector>
 void writeCPHD(const std::string& outPathname, size_t /*numThreads*/,
         const types::RowCol<size_t> dims,
-        const std::vector<types::complex<T> >& writeData,
+        const TCxVector& writeData,
         cphd::Metadata& metadata,
         cphd::PVPBlock& pvpBlock)
 {
@@ -103,19 +104,19 @@ void writeCPHD(const std::string& outPathname, size_t /*numThreads*/,
     }
 }
 
-std::vector<std::complex<float> > checkData(const std::string& pathname,
+std::vector<cphd::zfloat > checkData(const std::string& pathname,
         size_t numThreads,
         const std::vector<double>& scaleFactors,
         const types::RowCol<size_t> dims)
 {
     cphd::CPHDReader reader(pathname, numThreads);
     const cphd::Wideband& wideband = reader.getWideband();
-    std::vector<std::complex<float> > readData(dims.area());
+    std::vector<cphd::zfloat > readData(dims.area());
 
     size_t sizeInBytes = readData.size() * sizeof(readData[0]);
     std::vector<std::byte> scratchData(sizeInBytes);
     std::span<std::byte> scratch(scratchData.data(), scratchData.size());
-    std::span<std::complex<float>> data(readData.data(), readData.size());
+    std::span<cphd::zfloat> data(readData.data(), readData.size());
 
     wideband.read(0, 0, cphd::Wideband::ALL, 0, cphd::Wideband::ALL,
                   scaleFactors, numThreads, scratch, data);
@@ -123,16 +124,16 @@ std::vector<std::complex<float> > checkData(const std::string& pathname,
     return readData;
 }
 
-template<typename T>
-bool compareVectors(const std::vector<std::complex<float> >& readData,
-                    const std::vector<types::complex<T> >& writeData,
+template<typename TCxVector>
+bool compareVectors(const std::vector<cphd::zfloat >& readData,
+                    const TCxVector& writeData,
                     const std::vector<double>& scaleFactors,
                     bool scale)
 {
     size_t pointsPerScale = readData.size() / scaleFactors.size();
     for (size_t ii = 0; ii < readData.size(); ++ii)
     {
-        std::complex<float> val(writeData[ii].real(), writeData[ii].imag());
+        cphd::zfloat val(writeData[ii].real(), writeData[ii].imag());
         if (scale)
         {
             val *= scaleFactors[ii / pointsPerScale];
@@ -147,8 +148,8 @@ bool compareVectors(const std::vector<std::complex<float> >& readData,
     return true;
 }
 
-template<typename T>
-bool runTest(bool scale, const std::vector<types::complex<T> >& writeData)
+template<typename TCxVector>
+bool runTest(bool scale, const TCxVector& writeData)
 {
     io::TempFile tempfile;
     const size_t numThreads = std::thread::hardware_concurrency();
@@ -161,7 +162,7 @@ bool runTest(bool scale, const std::vector<types::complex<T> >& writeData)
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
 
     writeCPHD(tempfile.pathname(), numThreads, dims, writeData, meta, pvpBlock);
-    const std::vector<std::complex<float> > readData =
+    const std::vector<cphd::zfloat > readData =
             checkData(tempfile.pathname(), numThreads,
                       scaleFactors, dims);
     return compareVectors(readData, writeData, scaleFactors, scale);
@@ -171,8 +172,7 @@ bool runTest(bool scale, const std::vector<types::complex<T> >& writeData)
 TEST_CASE(testUnscaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<types::complex<int8_t> > writeData =
-            generateData<int8_t>(dims.area());
+    const auto writeData = generateData<cphd::zint8_t>(dims.area());
     const bool scale = false;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
@@ -180,8 +180,7 @@ TEST_CASE(testUnscaledInt8)
 TEST_CASE(testScaledInt8)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<types::complex<int8_t> > writeData =
-            generateData<int8_t>(dims.area());
+    const auto writeData = generateData<cphd::zint8_t>(dims.area());
     const bool scale = true;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
@@ -189,8 +188,7 @@ TEST_CASE(testScaledInt8)
 TEST_CASE(testUnscaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<types::complex<int16_t> > writeData =
-            generateData<int16_t>(dims.area());
+    const auto writeData = generateData<cphd::zint16_t>(dims.area());
     const bool scale = false;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
@@ -198,8 +196,7 @@ TEST_CASE(testUnscaledInt16)
 TEST_CASE(testScaledInt16)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<types::complex<int16_t> > writeData =
-            generateData<int16_t>(dims.area());
+    const auto writeData =  generateData<cphd::zint16_t>(dims.area());
     const bool scale = true;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
@@ -207,8 +204,7 @@ TEST_CASE(testScaledInt16)
 TEST_CASE(testUnscaledFloat)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<float> > writeData =
-            generateData<float>(dims.area());
+    const auto writeData = generateData<cphd::zfloat>(dims.area());
     const bool scale = false;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
 }
@@ -216,8 +212,7 @@ TEST_CASE(testUnscaledFloat)
 TEST_CASE(testScaledFloat)
 {
     const types::RowCol<size_t> dims(128, 128);
-    const std::vector<std::complex<float> > writeData =
-            generateData<float>(dims.area());
+    const auto writeData = generateData<cphd::zfloat>(dims.area());
     const bool scale = true;
     TEST_ASSERT_TRUE(runTest(scale, writeData));
 }

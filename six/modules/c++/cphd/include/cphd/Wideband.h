@@ -285,7 +285,7 @@ struct Wideband final
               const std::vector<double>& vectorScaleFactors,
               size_t numThreads,
               const mem::BufferView<sys::ubyte>& scratch,
-              const mem::BufferView<std::complex<float>>& data) const;
+              const mem::BufferView<cphd::zfloat>& data) const;
     void read(size_t channel,
               size_t firstVector,
               size_t lastVector,
@@ -294,10 +294,10 @@ struct Wideband final
               const std::vector<double>& vectorScaleFactors,
               size_t numThreads,
               std::span<std::byte> scratch,
-              std::span<std::complex<float>> data) const
+              std::span<cphd::zfloat> data) const
     {
         mem::BufferView<sys::ubyte> scratch_(reinterpret_cast<sys::ubyte*>(scratch.data()), scratch.size());
-        mem::BufferView<std::complex<float>> data_(data.data(), data.size());
+        mem::BufferView<cphd::zfloat> data_(data.data(), data.size());
         read(channel, firstVector, lastVector, firstSample, lastSample, vectorScaleFactors, numThreads,
             scratch_, data_);
     }

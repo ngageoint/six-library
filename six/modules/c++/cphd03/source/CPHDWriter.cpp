@@ -92,38 +92,38 @@ void CPHDWriter::addImage(const T* image,
 }
 
 template
-void CPHDWriter::addImage<types::complex<int8_t> >(
-    const types::complex<int8_t>* image,
+void CPHDWriter::addImage<cphd::zint8_t >(
+    const cphd::zint8_t* image,
     const types::RowCol<size_t>& dims,
     const sys::ubyte* vbmData);
 
 template
-void CPHDWriter::addImage<types::complex<int16_t> >(
-    const types::complex<int16_t>* image,
+void CPHDWriter::addImage<cphd::zint16_t >(
+    const cphd::zint16_t* image,
     const types::RowCol<size_t>& dims,
     const sys::ubyte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<float> >(
-    const std::complex<float>* image,
+void CPHDWriter::addImage<cphd::zfloat >(
+    const cphd::zfloat* image,
     const types::RowCol<size_t>& dims,
     const sys::ubyte* vbmData);
 
 template
-void CPHDWriter::addImage<types::complex<int8_t> >(
-        const types::complex<int8_t>* image,
+void CPHDWriter::addImage<cphd::zint8_t >(
+        const cphd::zint8_t* image,
         const types::RowCol<size_t>& dims,
         const std::byte* vbmData);
 
 template
-void CPHDWriter::addImage<types::complex<int16_t> >(
-        const types::complex<int16_t>* image,
+void CPHDWriter::addImage<cphd::zint16_t >(
+        const cphd::zint16_t* image,
         const types::RowCol<size_t>& dims,
         const std::byte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<float> >(
-        const std::complex<float>* image,
+void CPHDWriter::addImage<cphd::zfloat >(
+        const cphd::zfloat* image,
         const types::RowCol<size_t>& dims,
         const std::byte* vbmData);
 
@@ -221,18 +221,18 @@ void CPHDWriter::writeCPHDData(const T* data,
 }
 
 template
-void CPHDWriter::writeCPHDData<types::complex<int8_t> >(
-        const types::complex<int8_t>* data,
+void CPHDWriter::writeCPHDData<cphd::zint8_t >(
+        const cphd::zint8_t* data,
         size_t numElements);
 
 template
-void CPHDWriter::writeCPHDData<types::complex<int16_t> >(
-        const types::complex<int16_t>* data,
+void CPHDWriter::writeCPHDData<cphd::zint16_t >(
+        const cphd::zint16_t* data,
         size_t numElements);
 
 template
-void CPHDWriter::writeCPHDData<std::complex<float> >(
-        const std::complex<float>* data,
+void CPHDWriter::writeCPHDData<cphd::zfloat >(
+        const cphd::zfloat* data,
         size_t numElements);
 
 void CPHDWriter::write(const std::string& classification,

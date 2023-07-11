@@ -5,6 +5,7 @@
 
 #include <import/str.h>
 #include <str/EncodedString.h>
+#include <str/EncodedStringView.h>
 
 namespace str
 {

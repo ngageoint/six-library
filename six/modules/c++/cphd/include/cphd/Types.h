@@ -19,9 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __CPHD_TYPES_H__
-#define __CPHD_TYPES_H__
 #pragma once
+#ifndef SIX_cphd_Types_h_INCLUDED_
+#define SIX_cphd_Types_h_INCLUDED_
+
+#include <stdint.h>
 
 #include <ostream>
 
@@ -35,6 +37,12 @@
 namespace cphd
 {
 // Use the same types that SIX uses
+using zfloat = six::zfloat;
+using zdouble = six::zdouble;
+using zint16_t = six::zint16_t;
+using zint8_t = six::ComplexInteger<int8_t>; // TODO: types::zint8_t;
+using zint32_t = six::ComplexInteger<int32_t>; // TODO: types::zint32_t;
+using zint64_t = six::ComplexInteger<int64_t>; // TODO: types::zint64_t;
 
 typedef six::Vector2 Vector2;
 
@@ -83,7 +91,16 @@ typedef six::CollectionInformation CollectionInformation;
 typedef six::GeoInfo GeoInfo;
 
 typedef six::MatchInformation MatchInformation;
+
+enum class Version
+{
+    v100, //  {"1.0.0", xml::lite::Uri("urn:CPHD:1.0.0")},
+    v101, // {"1.0.1", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")},
+    v110, // {"1.1.0", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
+};
+std::string to_string(Version); // "1.0.0", "1.0.1", "1.1.0"
+
 }
 
 
-#endif
+#endif // SIX_cphd_Types_h_INCLUDED_

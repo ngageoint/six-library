@@ -205,10 +205,6 @@ private:
     //! The regex object
     std::regex mRegex;
 
-    static const std::regex badDotRegex;
-    static const std::regex invalidCaret;
-    static const std::regex invalidDollar;
-
 #else
     // Internal function for passing flags to pcre2_match()
     std::string search(const std::string& matchString,

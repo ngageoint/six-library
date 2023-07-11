@@ -22,7 +22,7 @@
 
 #include "TestCase.h"
 
-#include <types/complex.h>
+#include <types/Complex.h>
 
 TEST_CASE(TestCxShort_abs)
 {
@@ -37,13 +37,21 @@ TEST_CASE(TestCxShort_abs)
     CODA_OSS_disable_warning_pop
     const auto expected = abs(cx_short);
 
-    const types::complex<short> types_cx_short(real, imag);
-    const auto actual = abs(types_cx_short);
+    CODA_OSS_disable_warning_push
+    #ifdef _MSC_VER
+    #pragma warning(disable: 4996) // '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning.
+    #endif
+    const types::zint16_t types_zint16(cx_short);
+    CODA_OSS_disable_warning_pop
+    auto actual = abs(types_zint16);
     TEST_ASSERT_EQ(actual, expected);
 
-    // These INTENTIONALLY don't compile
-    //const types::complex<float> types_cx_float;
-    //const types::complex<unsigned int> types_cx_uint;
+    const types::ComplexInteger<int16_t> types_cx_int16(cx_short);
+    actual = abs(types_cx_int16);
+    TEST_ASSERT_EQ(actual, expected);
+
+    // This intentionally doesn't compile.
+    //const auto types::ComplexReal<short> ComplexReal_short;
 }
 
 TEST_MAIN(

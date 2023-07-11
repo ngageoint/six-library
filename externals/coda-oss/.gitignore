@@ -53,4 +53,4 @@ project.sln
 *.vcxproj.user
 
 # Unit-tests
-TEST_*_TMP.*
+TEST_*_TMP*.*

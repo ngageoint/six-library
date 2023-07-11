@@ -26,6 +26,8 @@
 
 #include <string>
 
+#include "config/Exports.h"
+
 #if !defined(USE_IO_STREAMS)
 
 #include "io/SeekableStreams.h"
@@ -55,8 +57,7 @@ namespace io
  *  This class corresponds closely to its java namesake.
  *  It uses native file handles to make writes.
  */
-class FileOutputStreamOS : public SeekableOutputStream
-
+class CODA_OSS_API FileOutputStreamOS : public SeekableOutputStream
 {
 protected:
     sys::File mFile;

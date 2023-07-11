@@ -30,11 +30,12 @@
 #include <std/cstddef>
 #include <memory>
 
-#include <scene/sys_Conf.h>
+#include <import/sys.h>
 #include <import/io.h>
 #include <import/nitf.hpp>
-#include <import/sys.h>
-#include <types/complex.h>
+
+#include <scene/sys_Conf.h>
+
 #include "six/Types.h"
 #include "six/NITFSegmentInfo.h"
 #include "six/Utilities.h"
@@ -157,22 +158,22 @@ public:
 
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
 			  std::span<const std::byte> buffer,
-			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t cutoff);
+			  size_t firstRow, const Data& data, bool doByteSwap);
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
 			  std::span<const uint8_t> buffer,
-			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t);
+			  size_t firstRow, const Data& data, bool doByteSwap);
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
 			  std::span<const uint16_t> buffer,
-			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t);
+			  size_t firstRow, const Data& data, bool doByteSwap);
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
-			  std::span<const std::complex<float>> buffer,
-			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t cutoff);
+			  std::span<const six::zfloat> buffer,
+			  size_t firstRow, const Data& data, bool doByteSwap);
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
-			  std::span<const types::complex<short>> buffer,
-			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t);
+			  std::span<const six::zint16_t> buffer,
+			  size_t firstRow, const Data& data, bool doByteSwap);
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
 			  std::span<const std::pair<uint8_t, uint8_t>> buffer,
-			  size_t firstRow, const Data& data, bool doByteSwap, ptrdiff_t);
+			  size_t firstRow, const Data& data, bool doByteSwap);
 };
 
 

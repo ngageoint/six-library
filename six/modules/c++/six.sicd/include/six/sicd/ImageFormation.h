@@ -110,22 +110,22 @@ struct Distortion
     double a;
 
     //! Recv distortion element (2,2)
-    std::complex<double> f1;
+    six::zdouble f1;
 
     //! Recv distortion element (1,2)
-    std::complex<double> q1;
+    six::zdouble q1;
 
     //! Recv distortion element (2,1)
-    std::complex<double> q2;
+    six::zdouble q2;
 
     //! Transmit distortion element (2,2)
-    std::complex<double> f2;
+    six::zdouble f2;
 
     //! Transmit distortion element (2,1)
-    std::complex<double> q3;
+    six::zdouble q3;
 
     //! Transmit distortion element (1,2)
-    std::complex<double> q4;
+    six::zdouble q4;
 
     /*!
      *  (Optional) Gain estimation error standard deviation (in dB) for

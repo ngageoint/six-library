@@ -119,7 +119,8 @@ inline void assert_almost_eq_eps(const TX1& X1, const TX2& X2, const TEPS& EPS,
     const std::string& testName, const char* file, const char* func, int line)
 {
     const auto abs_difference = std::abs(X1 - X2);
-    if (abs_difference > EPS || IS_NAN(abs_difference))
+    using abs_difference_t = decltype(abs_difference);
+    if (abs_difference > static_cast<abs_difference_t>(EPS) || IS_NAN(abs_difference))
     {
         diePrintf_("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName, file, func, line, X1, X2);
     }
