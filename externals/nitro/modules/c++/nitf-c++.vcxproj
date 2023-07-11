@@ -219,7 +219,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(ProjectDir)..\c\j2k\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(ProjectDir)..\c\j2k\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)target-$(Configuration)\installwindows-latestCMake-Github\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
@@ -252,7 +252,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(ProjectDir)..\c\j2k\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(ProjectDir)..\c\j2k\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)target-$(Configuration)\installwindows-latestCMake-Github\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
