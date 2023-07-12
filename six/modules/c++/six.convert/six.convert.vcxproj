@@ -63,7 +63,6 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <WarningLevel>EnableAllWarnings</WarningLevel>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -88,8 +87,8 @@
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
     </ClCompile>
     <Link>
       <SubSystem>
