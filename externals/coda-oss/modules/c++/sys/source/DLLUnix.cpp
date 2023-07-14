@@ -66,7 +66,7 @@ DLL_FUNCTION_PTR
 sys::DLL::retrieve(const std::string& functionName)
 {
     // Check to make sure we have a library
-    if ( mLib != NULL )
+    if ( mLib != nullptr )
     {
         // Now we get a ptr
         DLL_FUNCTION_PTR ptr = dlsym( mLib , functionName.c_str());

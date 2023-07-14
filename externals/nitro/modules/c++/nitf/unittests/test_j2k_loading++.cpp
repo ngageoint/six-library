@@ -59,8 +59,6 @@
 
 #include <TestCase.h>
 
-static std::string testName;
-
 static auto findInputFile(const std::filesystem::path& fn)
 {
     static const auto unittests = std::filesystem::path("modules") / "c++" / "nitf" / "unittests";
@@ -112,7 +110,8 @@ TEST_CASE(test_j2k_loading)
     TEST_ASSERT_TRUE(true); // be sure hidden "testName" parameter is used
 }
 
-static void test_j2k_nitf_(const std::string& fname)
+static void test_j2k_nitf_(const std::string& testName,
+    const std::string& fname)
 {
     nitf::IOHandle io(fname);
     nitf::Reader reader;
@@ -163,7 +162,7 @@ TEST_CASE(test_j2k_nitf)
 
     // This is a JP2 file, not J2K; see OpenJPEG_setup_()
     const auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf").string();
-    test_j2k_nitf_(input_file);
+    test_j2k_nitf_(testName, input_file);
 }
 
 void writeFile(uint32_t x0, uint32_t y0,
@@ -206,7 +205,8 @@ void writeJ2K(uint32_t x0, uint32_t y0,
     writer.write(outIO);
     //printf("Wrote file: %s\n", outName.c_str());
 }
-void test_j2k_nitf_read_region_(const std::filesystem::path& fname)
+void test_j2k_nitf_read_region_(const std::string& testName,
+    const std::filesystem::path& fname)
 {
     nitf::IOHandle io(fname.string(), NRT_ACCESS_READONLY, NRT_OPEN_EXISTING);
     nitf::Reader reader;
@@ -281,12 +281,13 @@ TEST_CASE(test_j2k_nitf_read_region)
 {
     // This is a JP2 file, not J2K; see OpenJPEG_setup_()
     const auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf");
-    test_j2k_nitf_read_region_(input_file);
+    test_j2k_nitf_read_region_(testName, input_file);
 
     TEST_ASSERT_TRUE(true); // be sure hidden "testName" parameter is used
 }
 
-static std::vector<std::byte> readImage(nitf::ImageReader& imageReader, const nitf::ImageSubheader& imageSubheader)
+static std::vector<std::byte> readImage(const std::string& testName,
+    nitf::ImageReader& imageReader, const nitf::ImageSubheader& imageSubheader)
 {
     const auto numBlocks = imageSubheader.numBlocksPerRow() * imageSubheader.numBlocksPerCol();
     TEST_ASSERT_GREATER(static_cast<int64_t>(numBlocks), 0);
@@ -308,7 +309,8 @@ static std::vector<std::byte> readImage(nitf::ImageReader& imageReader, const ni
     }
     return retval;
 }
-static void test_decompress_nitf_to_sio_(const std::filesystem::path& inputPathname, const std::filesystem::path& outputPathname)
+static void test_decompress_nitf_to_sio_(const std::string& testName,
+    const std::filesystem::path& inputPathname, const std::filesystem::path& outputPathname)
 {
     // Take a J2K-compressed NITF, decompress the image and save to an SIO.
     nitf::Reader reader;
@@ -319,7 +321,7 @@ static void test_decompress_nitf_to_sio_(const std::filesystem::path& inputPathn
     const auto imageSubheader = imageSegment.getSubheader();
 
     auto imageReader = reader.newImageReader(0 /*imageSegmentNumber*/);
-    const auto imageData = readImage(imageReader, imageSubheader);
+    const auto imageData = readImage(testName, imageReader, imageSubheader);
 
     const sys::filesystem::path outputPathname_ = outputPathname.string();
     sio::lite::writeSIO(imageData.data(), imageSubheader.dims(), outputPathname_);
@@ -329,7 +331,7 @@ TEST_CASE(test_j2k_decompress_nitf_to_sio)
     nitf::Test::j2kSetNitfPluginPath();
 
     const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
-    test_decompress_nitf_to_sio_(inputPathname, "test_decompress_nitf.sio");
+    test_decompress_nitf_to_sio_(testName, inputPathname, "test_decompress_nitf.sio");
 
     TEST_ASSERT_TRUE(true); // be sure hidden "testName" parameter is used
 }
@@ -340,7 +342,7 @@ TEST_CASE(test_j2k_compress_raw_image)
 
     const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
     const std::filesystem::path outputPathname = "test_j2k_compress_raw_image.sio";
-    test_decompress_nitf_to_sio_(inputPathname, outputPathname);
+    test_decompress_nitf_to_sio_(testName, inputPathname, outputPathname);
     // ---------------------------------------------------------------------------------------
 
     // J2K compresses the raw image data of an SIO file

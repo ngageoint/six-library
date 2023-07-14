@@ -97,7 +97,7 @@ dbi::pResultSet dbi::PgSQLConnection::query(const std::string& q)
         throw dbi::SQLException(Ctxt(errorMessage));
     }
 
-    return dbi::pResultSet(new PgSQLResultSet(NULL));
+    return dbi::pResultSet(new PgSQLResultSet(nullptr));
 }
 
 dbi::Row dbi::PgSQLResultSet::fetchRow()

@@ -43,7 +43,6 @@ TEST_CASE(test_tre_clone_329)
 }
 
 TEST_MAIN(
-    (void)argv; (void)argc;
     TEST_CHECK(test_tre_create_329);
     TEST_CHECK(test_tre_clone_329);
     )

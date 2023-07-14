@@ -80,7 +80,7 @@ const std::string dbi::OracleConnection::getLastErrorMessage()
     char errbuf[100];
     memset(errbuf, 0, 100);
     int errcode;
-    OCIErrorGet((dvoid *)mErrorHandle, (ub4) 1, (text *) NULL, &errcode,
+    OCIErrorGet((dvoid *)mErrorHandle, (ub4) 1, (text *) nullptr, &errcode,
                 (OraText*)errbuf, (ub4) sizeof(errbuf), OCI_HTYPE_ERROR);
     if (strlen(errbuf) > 0)
         return std::string(errbuf);
@@ -117,7 +117,7 @@ dbi::pResultSet dbi::OracleConnection::query(const std::string& q)
         OCIStmtPrepare(countHandle, mErrorHandle, (const OraText*)countq.c_str(),
                        (ub4)countq.length(), (ub4) OCI_NTV_SYNTAX, (ub4) OCI_DEFAULT);
         OCIStmtExecute(mContextHandle, countHandle, mErrorHandle, (ub4)val, (ub4)0,
-                       (CONST OCISnapshot *) NULL, (OCISnapshot *) NULL, OCI_DEFAULT);
+                       (CONST OCISnapshot *) nullptr, (OCISnapshot *) nullptr, OCI_DEFAULT);
         OCIDefine * defineHandle = nullptr;
         OCIDefineByPos(countHandle, &defineHandle, mErrorHandle, 1,
                        &rowCount, sizeof(rowCount), SQLT_UIN, 0, 0, 0, OCI_DEFAULT);
@@ -126,7 +126,7 @@ dbi::pResultSet dbi::OracleConnection::query(const std::string& q)
 
     /* Execute the SQL statment */
     OCIStmtExecute(mContextHandle, sqlHandle, mErrorHandle, (ub4) val, (ub4) 0,
-                   (CONST OCISnapshot *) NULL, (OCISnapshot *) NULL, OCI_DEFAULT);
+                   (CONST OCISnapshot *) nullptr, (OCISnapshot *) nullptr, OCI_DEFAULT);
 
     return dbi::pResultSet(new dbi::OracleResultSet(sqlHandle, mErrorHandle, rowCount));
 }
@@ -229,8 +229,8 @@ dbi::Row dbi::OracleResultSet::fetchRow()
                     ub4 bufferSize = 9;
 
                     OCIDateToText(mErrorHandle, (const OCIDate*)fields[i].value,
-                                  NULL, 0,
-                                  NULL, 0, &bufferSize, (text*)buffer);
+                                  nullptr, 0,
+                                  nullptr, 0, &bufferSize, (text*)buffer);
                     memset(fields[i].value, '\0', sizeof(OCIDate));
                     strncpy(fields[i].value, buffer, bufferSize);
                 }

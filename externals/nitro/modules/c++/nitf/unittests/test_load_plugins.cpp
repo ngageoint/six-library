@@ -29,8 +29,6 @@
 
 #include "TestCase.h"
 
-static std::string testName;
-
 static void load_plugin(const char* tre)
 {
     nitf_Error error;
@@ -103,8 +101,6 @@ TEST_CASE(test_load_all_plugins)
 }
 
 TEST_MAIN(
-    (void)argc;
-    (void)argv;
     TEST_CHECK(test_load_PTPRAA);
     TEST_CHECK(test_load_ENGRDA);
     TEST_CHECK(test_load_all_plugins_C);

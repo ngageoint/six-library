@@ -31,8 +31,6 @@ using path = std::filesystem::path;
 
 #include "TestCase.h"
 
-static std::string testName;
-
 static path findInputFile()
 {
     static const auto unittests = path("modules") / "c++" / "nitf" / "unittests";

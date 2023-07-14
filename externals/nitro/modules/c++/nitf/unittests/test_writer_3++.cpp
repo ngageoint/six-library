@@ -31,29 +31,15 @@
 
 #include "TestCase.h"
 
-static std::string testName;
 const std::string output_file = "test_writer_3++.nitf";
 
 using path = std::filesystem::path;
 
-static std::string argv0;
 static path findInputFile()
 {
-    const auto inputFile = path("modules") / "c++" / "nitf" / "unittests" / "sicd_50x50.nitf";
- 
-    path root;
-    if (argv0.empty())
-    {
-        // running in Visual Studio
-        root = std::filesystem::current_path().parent_path().parent_path();
-    }
-    else
-    {
-        root = absolute(path(argv0)).parent_path().parent_path().parent_path().parent_path();
-        root = root.parent_path().parent_path();
-    }
-
-    return root / inputFile;
+    static const auto unittests = path("modules") / "c++" / "nitf" / "unittests";
+    static const auto inputPath = nitf::Test::findInputFile(unittests, "sicd_50x50.nitf");
+    return inputPath;
 }
 
 static std::string makeBandName(const std::string& rootFile, int imageNum, int bandNum)
@@ -112,10 +98,8 @@ static void doWrite(const nitf::Record& record_, nitf::Reader& reader, const std
     writer.write();
 }
 
-static void manuallyWriteImageBands(nitf::ImageSegment & segment,
-                             const std::string& imageName,
-                             nitf::ImageReader& deserializer,
-                             int imageNumber)
+static void manuallyWriteImageBands(const std::string& testName,
+    nitf::ImageSegment& segment, const std::string& imageName, nitf::ImageReader& deserializer, int imageNumber)
 {
     int padded;
 
@@ -188,7 +172,8 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
         handles[i].close();
 }
 
-static nitf::Record doRead(const std::string& inFile, nitf::Reader& reader)
+static nitf::Record doRead(const std::string& testName,
+    const std::string& inFile, nitf::Reader& reader)
 {
     // Check that wew have a valid NITF
     const auto version = nitf::Reader::getNITFVersion(inFile);
@@ -207,7 +192,7 @@ static nitf::Record doRead(const std::string& inFile, nitf::Reader& reader)
         nitf::ImageReader deserializer = reader.newImageReader(count);
 
         /*  Write the thing out  */
-        manuallyWriteImageBands(imageSegment, inFile, deserializer, count);
+        manuallyWriteImageBands(testName, imageSegment, inFile, deserializer, count);
     }
 
     return record;
@@ -234,7 +219,7 @@ TEST_CASE(test_writer_3_)
     const auto input_file = findInputFile().string();
 
     nitf::Reader reader;
-    nitf::Record record = doRead(input_file, reader);
+    nitf::Record record = doRead(testName, input_file, reader);
     test_writer_3__doWrite(record, reader, input_file, output_file);
 }
 
@@ -249,7 +234,8 @@ TEST_CASE(test_writer_3_)
     * if the data does not fill the block.
     *
     */
-static void test_buffered_write__doWrite(nitf::Record record, nitf::Reader& reader,
+static void test_buffered_write__doWrite(const std::string& testName,
+    nitf::Record record, nitf::Reader& reader,
     const std::string& inRootFile,
     const std::string& outFile,
     size_t bufferSize)
@@ -273,14 +259,13 @@ TEST_CASE(test_buffered_write_)
     size_t blockSize = 8192;
 
     nitf::Reader reader;
-    nitf::Record record = doRead(input_file, reader);
-    test_buffered_write__doWrite(record, reader, input_file, output_file, blockSize);
+    nitf::Record record = doRead(testName, input_file, reader);
+    test_buffered_write__doWrite(testName,
+        record, reader, input_file, output_file, blockSize);
 
 }
 
 TEST_MAIN(
-    (void)argc;
-    argv0 = argv[0];
     TEST_CHECK(test_writer_3_);
     TEST_CHECK(test_buffered_write_);
     )
