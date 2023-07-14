@@ -166,8 +166,6 @@ TEST_CASE(test_decimalToGeographic_normal)
 }
 
 TEST_MAIN(
-    (void)argc;
-    (void)argv;
     CHECK(test_geo_utils);
     CHECK(test_decimalToGeographic_normal);
     )

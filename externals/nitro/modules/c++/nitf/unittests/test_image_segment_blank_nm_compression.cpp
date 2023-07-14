@@ -279,7 +279,5 @@ TEST_CASE(testBlankSegmentsValid)
 }
 
 TEST_MAIN(
-    (void)argc;
-    (void)argv;
 TEST_CHECK(testBlankSegmentsValid);
 )

@@ -60,6 +60,7 @@
     <ClInclude Include="hdf5.lite\source\H5.h" />
     <ClInclude Include="hdf5.lite\source\hdf5.lite.h" />
     <ClInclude Include="include\TestCase.h" />
+    <ClInclude Include="include\UnitTest.h" />
     <ClInclude Include="io\include\io\BidirectionalStream.h" />
     <ClInclude Include="io\include\io\BufferViewStream.h" />
     <ClInclude Include="io\include\io\ByteStream.h" />
@@ -146,6 +147,7 @@
     <ClInclude Include="mem\include\mem\Span.h" />
     <ClInclude Include="mem\include\mem\SwapBuffer.h" />
     <ClInclude Include="mem\include\mem\VectorOfPointers.h" />
+    <ClInclude Include="mt\include\import\mt.h" />
     <ClInclude Include="mt\include\mt\AbstractCPUAffinityInitializer.h" />
     <ClInclude Include="mt\include\mt\AbstractCPUAffinityThreadInitializer.h" />
     <ClInclude Include="mt\include\mt\AbstractThreadPool.h" />
@@ -526,6 +528,10 @@
     <None Include="std\include\std\string" />
     <None Include="std\include\std\type_traits" />
     <None Include="sys\include\sys\sys_config.h.cmake.in" />
+    <None Include="sys\source\CppUnitTestAssert_.cpp_">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -574,27 +580,27 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL;MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1</PreprocessorDefinitions>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;dbi\include\;except\include\;gsl\include\;hdf5.lite\include\;io\include\;logging\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;mt\include\;net\include\;net.ssl\include\;plugin\include\;polygon\include\;re\include\;sio.lite\include\;std\include\;str\include\;sys\include\;tiff\include;types\include\;unique\include\;units\include\;xml.lite\include\;zip\include\;$(ProjectDir)..\..\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>cli\include;coda_oss\include;config\include;dbi\include;except\include;gsl\include;hdf5.lite\include;io\include;logging\include;math\include;math.linear\include;math.poly\include;mem\include;mt\include;net\include;net.ssl\include;plugin\include;polygon\include;re\include;sio.lite\include;std\include;str\include;sys\include;tiff\include;types\include;unique\include;units\include;xml.lite\include;zip\include;$(ProjectDir)include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\$(ProjectName)\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnablePREfast>true</EnablePREfast>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>
       </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>hdf5-c++.lib;z.lib;minizip.lib;xerces-c.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\out\install\$(Platform)-$(Configuration)\lib;$(SolutionDir)\externals\$(ProjectName)\out\install\$(Platform)-$(Configuration)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -605,12 +611,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL;MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1</PreprocessorDefinitions>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;dbi\include\;except\include\;gsl\include\;hdf5.lite\include\;io\include\;logging\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;mt\include\;net\include\;net.ssl\include\;plugin\include\;polygon\include\;re\include\;sio.lite\include\;std\include\;str\include\;sys\include\;tiff\include;types\include\;unique\include\;units\include\;xml.lite\include\;zip\include\;$(ProjectDir)..\..\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>cli\include;coda_oss\include;config\include;dbi\include;except\include;gsl\include;hdf5.lite\include;io\include;logging\include;math\include;math.linear\include;math.poly\include;mem\include;mt\include;net\include;net.ssl\include;plugin\include;polygon\include;re\include;sio.lite\include;std\include;str\include;sys\include;tiff\include;types\include;unique\include;units\include;xml.lite\include;zip\include;$(ProjectDir)include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\$(ProjectName)\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ConformanceMode>true</ConformanceMode>
@@ -623,8 +628,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>hdf5-c++.lib;z.lib;minizip.lib;xerces-c.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\out\install\$(Platform)-$(Configuration)\lib;$(SolutionDir)\externals\$(ProjectName)\out\install\$(Platform)-$(Configuration)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

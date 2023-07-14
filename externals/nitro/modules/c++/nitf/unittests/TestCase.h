@@ -62,7 +62,7 @@
     catch (const std::exception&){ die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__);}
 #  define TEST_CASE(X) void X(std::string testName)
 
-#define TEST_MAIN(X) int main(int argc, char** argv) {  try { X;  return EXIT_SUCCESS; } \
+#define TEST_MAIN(X) int main() {  try { X;  return EXIT_SUCCESS; } \
     catch (const except::Exception& ex) { std::cerr << ex.toString() << std::endl; } \
     catch (const std::exception& e)  { std::cerr << e.what() << std::endl; } \
     catch (...) { std::cerr << "Unknown exception\n"; } \

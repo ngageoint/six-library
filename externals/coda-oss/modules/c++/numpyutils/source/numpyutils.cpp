@@ -25,6 +25,9 @@
 
 #ifndef _MSC_VER
 CODA_OSS_disable_warning(-Wold-style-cast)
+CODA_OSS_disable_warning(-Wshadow)
+CODA_OSS_disable_warning(-Wsuggest-override)
+CODA_OSS_disable_warning(-Wzero-as-null-pointer-constant)
 #endif
 #include <numpyutils/numpyutils.h>
 #include <except/Exception.h>
@@ -36,18 +39,12 @@ CODA_OSS_disable_warning(-Wold-style-cast)
  * https://mail.scipy.org/pipermail/numpy-discussion/2010-December/054350.html
  * for the source and some discussion
  */
-#if PY_MAJOR_VERSION >= 3
+static_assert(PY_MAJOR_VERSION >= 3, "Python 3.x required");
 void* init_numpy()
 {
     import_array();
     return nullptr;
 }
-#else
-void init_numpy()
-{
-    import_array();
-}
-#endif
 
 /* Numpy uses some static variables which are per-compilation
  * unit and if import_arrays is not called, will segfault on using any of

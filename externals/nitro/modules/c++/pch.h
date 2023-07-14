@@ -1,5 +1,36 @@
 #pragma once
 
+#include "coda_oss/CPlusPlus.h"
+#include "config/disable_compiler_warnings.h"
+
+CODA_OSS_disable_warning_system_header_push
+
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <assert.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <time.h>
+#include <stdarg.h>
+
+CODA_OSS_disable_warning_pop
+
+#include "import/std.h"
+#include <std/bit>
+#include <std/cstddef>
+#include <std/filesystem>
+#include <std/span>
+#include <std/optional>
+
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#define NOMINMAX
+#pragma warning(push)
+#pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
+#include <windows.h>
+#pragma warning(pop)
+
 #pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 #pragma warning(disable: 4710) // '...': function not inlined
@@ -10,27 +41,17 @@
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
 #pragma warning(disable: 26823) // Dereferencing a possibly null pointer '...' (lifetime.1).
 
-#include "cpp.h"
-#pragma comment(lib, "ws2_32")
-
 #pragma warning(disable: 26822) // Dereferencing a null pointer '...' (lifetime.1).
 #pragma warning(disable: 26467) // Converting from floating point to unsigned integral types results in non-portable code if the double/float has a negative value. Use gsl::narrow_cast or gsl::narrow instead to guard against undefined behavior and potential data loss(es.46).
 
 // changing this breaks SWIG
 #pragma warning (disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...'
 
-#include "nitf/coda-oss.hpp"
-
-#pragma comment(lib, "io-c++")
-#pragma comment(lib, "except-c++")
-#pragma comment(lib, "sys-c++")
-#pragma comment(lib, "str-c++")
-#pragma comment(lib, "mt-c++")
-#pragma comment(lib, "math-c++")
-
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
 
+// Yes, these are our files ... but they don't change very often, and if they do
+// change we want to rebuild everything anyway.
 #include "import/nitf.h"
 #include "nitf/ImageIO.h"
 #include "nitf/System.h"
@@ -49,4 +70,15 @@
 #pragma warning(disable: 26486) // Don't pass a pointer that may be invalid to a function. Parameter '...' in call to '...' may be invalid (lifetime.3).
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid(lifetime.4).
 
+// Yes, these are our files ... but they don't change very often, and if they do
+// change we want to rebuild everything anyway.
 #include "nitf/Object.hpp"
+#include "nitf/Handle.hpp"
+
+#include "nitf/coda-oss.hpp"
+#pragma comment(lib, "io-c++")
+#pragma comment(lib, "except-c++")
+#pragma comment(lib, "sys-c++")
+#pragma comment(lib, "str-c++")
+#pragma comment(lib, "mt-c++")
+#pragma comment(lib, "math-c++")

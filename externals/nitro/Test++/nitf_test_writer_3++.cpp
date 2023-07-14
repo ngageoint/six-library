@@ -20,4 +20,3 @@ public:
 #include "nitf/unittests/test_writer_3++.cpp"
 
 };
-std::string nitf_test_writer_3__::argv0;

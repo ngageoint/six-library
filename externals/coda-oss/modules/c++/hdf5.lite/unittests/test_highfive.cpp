@@ -29,12 +29,8 @@
 #include "types/RowCol.h"
 #include "mem/ComplexView.h"
 
-#include "highfive/H5Easy.hpp"
-#include "highfive/H5DataSet.hpp"
-#include "highfive/H5File.hpp"
-
-#include "hdf5/lite/SpanRC.h"
 #include "hdf5/lite/highfive.h"
+#include "hdf5/lite/SpanRC.h"
 
 static std::filesystem::path find_unittest_file(const std::filesystem::path& name)
 {

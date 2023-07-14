@@ -12,4 +12,3 @@ public:
 
 };
 
-std::string test_j2k_compressed_byte_provider::testName;

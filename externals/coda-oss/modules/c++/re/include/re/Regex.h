@@ -214,7 +214,7 @@ private:
                        size_t& end);
 
     //! The pcre object
-    pcre2_code* mPCRE;
+    pcre2_code* mPCRE = nullptr;
 #endif
 };
 }

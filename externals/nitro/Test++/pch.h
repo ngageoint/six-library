@@ -8,6 +8,14 @@
 #define PCH_H
 #pragma once
 
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#define NOMINMAX
+#pragma warning(push)
+#pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
+#include <windows.h>
+#pragma warning(pop)
+#pragma comment(lib, "ws2_32")
+
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 #pragma warning(disable: 4710) // '...': function not inlined
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
@@ -15,12 +23,6 @@
 // TODO: get rid of these someday?
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
-
-#pragma warning(push)
-#pragma warning(disable: 4464) // relative include path contains '..'
-#include "../modules/c++/cpp.h"
-#pragma warning(pop)
-#pragma comment(lib, "ws2_32")
 
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
