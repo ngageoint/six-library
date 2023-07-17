@@ -42,6 +42,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "externals", "externals", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "coda-oss", "externals\coda-oss\modules\c++\coda-oss.vcxproj", "{9997E895-5161-4DDF-8F3F-099894CB2F21}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github-workflows", ".github-workflows", "{DB2B94ED-952C-4794-A692-E6B64AA9EE5A}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\codeql.yml = .github\workflows\codeql.yml
+		.github\workflows\frequent_check.yml = .github\workflows\frequent_check.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -117,6 +123,7 @@ Global
 		{8F357A19-799E-4971-850E-3F28485C130B} = {F033066A-4172-4AC0-96AD-BF5090F713C2}
 		{78849481-D356-4CC7-B182-31C21F857ED1} = {F033066A-4172-4AC0-96AD-BF5090F713C2}
 		{9997E895-5161-4DDF-8F3F-099894CB2F21} = {F033066A-4172-4AC0-96AD-BF5090F713C2}
+		{DB2B94ED-952C-4794-A692-E6B64AA9EE5A} = {3AD152C2-1F3D-4108-826C-79BA5011874F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E20E9FC7-D138-4517-8597-79C1FAC3E28D}
