@@ -41,6 +41,7 @@
 
 #include <import/nitf.hpp>
 #include <nitf/CompressedByteProvider.hpp>
+#include <nitf/UnitTests.hpp>
 
 CODA_OSS_disable_warning_push
 #if _MSC_VER
@@ -234,6 +235,8 @@ static bool test_create_nitf_with_byte_provider__testRead(const std::string& pat
 
 TEST_CASE(test_create_nitf_with_byte_provider_test)
 {
+    nitf::Test::setNitfPluginPath();
+
     // We can't actually compress. This is just for illustration.
     const bool shouldCompress = false;
     const std::string outname("test_create.nitf");
@@ -394,6 +397,8 @@ static bool test_create_nitf__testRead(const std::string& pathname, bool isMono 
 
 TEST_CASE(test_create_nitf_test)
 {
+    nitf::Test::setNitfPluginPath();
+
     const std::string outname("test_create.nitf");
 
 
@@ -428,7 +433,7 @@ TEST_CASE(test_create_nitf_test)
     }
     else
     {
-        TEST_ASSERT_TRUE(true);
+        TEST_FAIL_MSG("NITF_PLUGIN_PATH not set");
     }
 }
 
@@ -469,7 +474,9 @@ static void RecordThread_run()
 
 TEST_CASE(test_mt_record)
 {
-    const int NTHR = 2;
+    nitf::Test::setNitfPluginPath();
+
+    constexpr int NTHR = 2;
     
     std::array<std::thread, NTHR> thrs;
     try

@@ -65,6 +65,7 @@
       <SupportJustMyCode>true</SupportJustMyCode>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -89,6 +90,7 @@
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <WarningLevel>Level3</WarningLevel>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

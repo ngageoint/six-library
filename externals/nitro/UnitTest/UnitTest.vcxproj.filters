@@ -125,6 +125,7 @@
     <ClCompile Include="..\modules\c++\nitf\unittests\test_writer_3++.cpp">
       <Filter>nitf-c++</Filter>
     </ClCompile>
+    <ClCompile Include="UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
