@@ -18,16 +18,16 @@
 * wrap common "file open" routines (e.g., `fopen()`) to support `sys::expandEnvironmentVariables()`.
 * add header-only [HighFive](https://github.com/BlueBrain/HighFive) HDF5-wrapper library.
 * Added a handful of [HighFive](https://github.com/BlueBrain/HighFive) utility routines.
-* `mt::transform_async()` removed, it doesn't match C++17 techniques.'
+* `mt::transform_async()` removed, it doesn't match C++17 techniques.
 * Revamp `sys::byteSwap()` for improved type-safety and
   [better performance](https://devblogs.microsoft.com/cppblog/a-tour-of-4-msvc-backend-improvements/).
- * Added case-insensitive string comparison utilties: `str::eq()` and `str::ne()`;
+ * Added case-insensitive string comparison utilities: `str::eq()` and `str::ne()`;
    `xml::lite::Uri`s compare case-insensitive.
 
 ## [Release 2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
 * removed remaining vestiges of `std::auto_ptr`, provide `mem::AutoPtr` for the tiny handful of
   places (e.g., SWIG bindings) that still need copying.
-* `xml::lite::Element` overloads to make creting new XML documents easier; see unittests for examples.
+* `xml::lite::Element` overloads to make creating new XML documents easier; see unittests for examples.
 * try even harder to find unittest files in various scenarios.
 * build *hdf5.lite* with **waf**.
 * New `--optz=fastest-possible` (**waf** only) which adds
@@ -40,8 +40,8 @@
 * The [HDFGroup](https://hdfgroup.org/)s [HDF5 library](https://github.com/HDFGroup/hdf5) is built
    and installed; a simple (and very incomplete!) wrapper is provided, this is at the "hello world!" stage.
 * A few **cli** routines have been tweaked to make unit-testing easier.
-* Utilitiy routines for finding various files when unit-testing.
-* Removed C++14 work-arounds needed in C++11. Legacy C++ exception specificatons removed.
+* Utility routines for finding various files when unit-testing.
+* Removed C++14 work-arounds needed in C++11. Legacy C++ exception specifications removed.
 * Rebuild `waf` for FIPS error; added more debug options.
  
 ## [Release 2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30)

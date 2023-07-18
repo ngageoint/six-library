@@ -221,9 +221,9 @@ static_assert(sizeof(std::complex<short>) == sizeof(Complex<short>), "sizeof(siz
 static_assert(std::is_same<std::complex<float>, ComplexReal<float>>::value, "should be std::complex<float>");
 
 // Convenient aliases
-using zfloat = ComplexReal<float>; // std::complex<float>
-using zdouble = ComplexReal<double>; // std::complex<double>
-//using zlong_double = ComplexReal<long double>; // std::complex<long double>
+using zfloat = ComplexReal<float>; // i.e., std::complex<float>
+using zdouble = ComplexReal<double>; // i.e., std::complex<double>
+//using zlong_double = ComplexReal<long double>; // i.e., std::complex<long double>
 using zint8_t = ComplexInteger<int8_t>;  // Complex<int8_t>
 using zint16_t = ComplexInteger<int16_t>;  // Complex<int16_t>
 using zint32_t = ComplexInteger<int32_t>;  // Complex<int32_t>

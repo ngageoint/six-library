@@ -120,8 +120,7 @@ void tiff::IFDEntry::deserialize(io::InputStream& input, const bool reverseBytes
         {
             auto elementSize = tiff::Const::sizeOf(mType);
             sys::Uint32_T numElements = mCount;
-            if (mType == tiff::Const::Type::RATIONAL && mType
-                    == tiff::Const::Type::SRATIONAL)
+            if ((mType == tiff::Const::Type::RATIONAL) || (mType == tiff::Const::Type::SRATIONAL))
             {
                 elementSize = tiff::Const::sizeOf(mType) / 2;
                 numElements = mCount * 2;

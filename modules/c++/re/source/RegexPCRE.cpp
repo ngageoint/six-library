@@ -55,9 +55,9 @@ public:
     //       to do.
     ScopedMatchData(const pcre2_code* code) :
         mCode(code),
-        mMatchData(pcre2_match_data_create_from_pattern(code, NULL))
+        mMatchData(pcre2_match_data_create_from_pattern(code, nullptr))
     {
-        if (mMatchData == NULL)
+        if (mMatchData == nullptr)
         {
             throw re::RegexException(Ctxt(
                     "pcre2_match_data_create_from_pattern() failed to "
@@ -95,7 +95,7 @@ public:
                             startOffset,
                             options,
                             mMatchData,
-                            NULL); // Match context
+                            nullptr); // Match context
 
         if (returnCode == PCRE2_ERROR_NOMATCH)
         {
@@ -156,7 +156,7 @@ private:
 namespace re
 {
 Regex::Regex(const std::string& pattern) :
-    mPattern(pattern), mPCRE(NULL)
+    mPattern(pattern), mPCRE(nullptr)
 {
     if (!mPattern.empty())
     {
@@ -166,10 +166,10 @@ Regex::Regex(const std::string& pattern) :
 
 void Regex::destroy()
 {
-    if (mPCRE != NULL)
+    if (mPCRE != nullptr)
     {
         pcre2_code_free(mPCRE);
-        mPCRE = NULL;
+        mPCRE = nullptr;
     }
 }
 
@@ -179,7 +179,7 @@ Regex::~Regex()
 }
 
 Regex::Regex(const Regex& rhs) :
-    mPattern(rhs.mPattern), mPCRE(NULL)
+    mPattern(rhs.mPattern), mPCRE(nullptr)
 {
     compile(mPattern);
 }
@@ -218,9 +218,9 @@ Regex& Regex::compile(const std::string& pattern)
                           FLAGS,
                           &errorCode,
                           &errorOffset,
-                          NULL); // Use default compile context
+                          nullptr); // Use default compile context
 
-    if (mPCRE == NULL)
+    if (mPCRE == nullptr)
     {
         std::ostringstream ostr;
         ostr << "PCRE compilation failed at offset " << errorOffset

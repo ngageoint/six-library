@@ -143,8 +143,8 @@ public:
             //FD_SET(mAckChannel->getHandle(), &writers);
             assert(FD_ISSET(mAckChannel->getHandle(), &readers));
             //int rv = 1;
-            int rv = ::select(mAckChannel->getHandle() + 1, &readers, NULL,
-                              NULL, &tv);
+            int rv = ::select(mAckChannel->getHandle() + 1, &readers, nullptr,
+                              nullptr, &tv);
             if (rv < 0)
             {
                 throw sys::SocketException(Ctxt("Select failed"));

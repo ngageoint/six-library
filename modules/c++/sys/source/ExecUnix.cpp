@@ -104,7 +104,7 @@ FILE* ExecPipe::openPipe(const std::string& command,
             //  command the user specified
             execl("/bin/sh", "sh", "-c",
                   command.c_str(),
-                  static_cast<char*>(NULL));
+                  static_cast<char*>(nullptr));
 
             //! exit the subprocess once it has completed
             exit(127);
