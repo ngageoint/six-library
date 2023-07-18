@@ -85,26 +85,29 @@ static std::string to_native(str::W1252string::const_pointer p, size_t sz)
     throw std::logic_error("Unknown platform.");
 }
 
-template <typename CharT>
-inline coda_oss::span<const CharT> make_span(const CharT* s, size_t c)
+template <typename Char8T>
+inline auto make_span(const Char8T* s, size_t c)
 {
-    return coda_oss::span<const CharT>(s, c);
+    static_assert(sizeof(Char8T) == sizeof(char), "sizeof(Char8T) != sizeof(char)"); 
+    return coda_oss::span<const Char8T>(s, c);
 }
-template <typename CharT>
-inline coda_oss::span<const CharT> make_span(const CharT* s)
+template <typename Char8T>
+inline auto make_span(const Char8T* s)
 {
-    auto s_ = str::cast<const char*>(s);
+    auto const s_ = str::cast<const char*>(s);
     return make_span(s, strlen(s_));
 }
-template<typename CharT>
-inline coda_oss::span<const CharT> make_span(const std::basic_string<CharT>& s)
+template <typename Char8T>
+inline auto make_span(const std::basic_string<Char8T>& s)
 {
-    return make_span(s.c_str(), s.size());
+    assert(strlen(str::c_str<std::string>(s)) == s.length());
+    return make_span(s.c_str(), s.length());
 }
-template <typename CharT>
-inline coda_oss::span<const char> make_span(coda_oss::span<const CharT> s)
+template <typename Char8T>
+inline auto make_span(coda_oss::span<const Char8T> s)
 {
-    auto s_ = str::cast<const char*>(s.data());
+    auto const s_ = str::cast<const char*>(s.data());
+    assert(strlen(s_) == s.size());
     return coda_oss::span<const char>(s_, s.size());
 }
 

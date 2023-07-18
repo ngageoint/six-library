@@ -91,7 +91,6 @@ files, this bug may allow an attacker to cause a denial of service.
 
 */
 
-static std::string testName;
 const char* output_file = "test_writer_3++.nitf";
 
 static std::filesystem::path findInputFile_(const std::string& name)
@@ -277,8 +276,6 @@ TEST_CASE(test_nitf_CSEXRB_bugfix)
 }
 
 TEST_MAIN(
-    (void)argc; (void)argv;
-
 TEST_CHECK(test_nitf_Record_unmergeTREs_crash); // 2
 TEST_CHECK(test_defaultRead_crash); // 3
 TEST_CHECK(test_readBandInfo_crash); // 4

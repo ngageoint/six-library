@@ -247,9 +247,6 @@ TEST_CASE(populateWhileIterating)
 }
 
 TEST_MAIN(
-    (void) argc;
-    (void) argv;
-
     TEST_CHECK(testClone);
     TEST_CHECK(testSize);
     TEST_CHECK(testBasicMod);

@@ -211,6 +211,7 @@ inline int main(TFunc f)
 #define CODA_OSS_test_eq(X1, X2) (CODA_OSS_test_eq_(X1, X2) && !CODA_OSS_test_ne_(X1, X2))
 #define TEST_ASSERT_EQ(X1, X2) if (!CODA_OSS_test_eq((X1), (X2))) { CODA_OSS_test_diePrintf_eq_(X1, X2); }
 #define TEST_ASSERT_EQ_MSG(msg, X1, X2) if (!CODA_OSS_test_eq((X1), (X2))) { CODA_OSS_test_diePrintf_eq_msg_(msg, X1, X2); }
+#define TEST_ASSERT_EQ_STR(X1, X2) TEST_ASSERT_EQ(std::string(X1), std::string(X2))
 #define TEST_ASSERT_NOT_EQ(X1, X2) if (!CODA_OSS_test_ne((X1), (X2))) { CODA_OSS_test_diePrintf_not_eq_(X1, X2); }
 #define TEST_ASSERT_NOT_EQ_MSG(msg, X1, X2) if (!CODA_OSS_test_ne((X1), (X2))) { CODA_OSS_test_diePrintf_not_eq_msg_(msg, X1, X2); }
 

@@ -394,7 +394,7 @@ static double getNowInMillis()
     return (now.tv_sec + 1.0e-9 * now.tv_nsec) * 1000;
 #elif CODA_OSS_POSIX_SOURCE
     struct timeval now;
-    gettimeofday(&now,NULL);
+    gettimeofday(&now,nullptr);
     return (now.tv_sec + 1.0e-6 * now.tv_usec) * 1000;
 #elif _WIN32
     // Getting time twice may be inefficient but is quicker

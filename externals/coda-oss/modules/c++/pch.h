@@ -33,32 +33,29 @@ CODA_OSS_disable_warning_pop
 
 #include <net/net_config.h>
 #include <zlib.h>
+#pragma comment(lib, "z.lib")
+#pragma comment(lib, "minizip.lib")
+
 #include <xml/lite/xml_lite_config.h>
 
 #pragma warning(disable: 4251) // '...': class '...' needs to have dll-interface to be used by clients of class '...'
 #pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed/unsigned mismatch
 #pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' function under -EHc. Undefined behavior may occur if this function throws an exception.
-#pragma warning(disable: 6326) // Potential comparison of a constant with another constant.
 #pragma warning(disable: 6054) // String '...' might not be zero-terminated.
 #pragma warning(disable: 6387) // '...' could be '...'.
 #pragma warning(disable: 6305) // Potential mismatch between sizeof and countof quantities. Use sizeof() to scale byte sizes.
-#pragma warning(disable: 6288) // Incorrect operator.  Did you intend to use || instead?
-#pragma warning(disable: 6011) // Dereferencing NULL pointer '...'. 
-#pragma warning(disable: 6313) // Incorrect operator.  Use an equality test to check for zero-valued flags.
 #pragma warning(disable: 6389) // Move '...' to anonymous namespace or put a forward declaration in a common header included in this file.
 
+#pragma warning(disable: 26822) // Dereferencing a null pointer '...' (lifetime.1).
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all (c.21).
 #pragma warning(disable: 26429) // Symbol '...' is never tested for nullness, it can be marked as not_null (f.23).
 #pragma warning(disable: 26455) // Default constructor should not throw. Declare it '...' (f.6).
 #pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
 #pragma warning(disable: 26447) // The function is declared '...' but calls function '...' which may throw exceptions (f.6).
-#pragma warning(disable: 26446) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
-#pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
 #pragma warning(disable: 26496) // The variable '...' does not change after construction, mark it as const (con.4).
 #pragma warning(disable: 26462) // The value pointed to by '...' is assigned only once, mark it as a pointer to const (con.4).
 #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r.11).
 #pragma warning(disable: 26401) // Do not delete a raw pointer that is not an owner<T> (i.11).
-#pragma warning(disable: 26482) // Only index into arrays using constant expressions (bounds.2).
 #pragma warning(disable: 26472) // Don't use a static_cast for arithmetic conversions. Use brace initialization, gsl::narrow_cast or gsl::narrow (type.1).
 #pragma warning(disable: 26485) // Expression '...': No array to pointer decay (bounds.3).
 #pragma warning(disable: 26493) // Don't use C-style casts (type.4).
@@ -96,8 +93,10 @@ CODA_OSS_disable_warning_pop
 #pragma warning(disable: 26823) // Dereferencing a possibly null pointer '...' (lifetime.1).
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid (lifetime.4).
 #pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
-#pragma warning(disable: 26822) // Dereferencing a null pointer '...' (lifetime.1).
+#pragma warning(disable: 26446) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
 #pragma warning(disable: 26458) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
+#pragma warning(disable: 26482) // Only index into arrays using constant expressions (bounds.2).
+#pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
 
 // Yes, these are our files ... but they don't change very often, and if they do
 // change we want to rebuild everything anyway.
@@ -107,7 +106,11 @@ CODA_OSS_disable_warning_pop
 #include "sys/Conf.h"
 #include "sys/filesystem.h"
 #include "mem/SharedPtr.h"
+
 #include "xml/lite/xerces_.h"
+#pragma comment(lib, "xerces-c")
+
 #include "hdf5/lite/H5_.h"
+#pragma comment(lib, "hdf5-c++.lib")
 
 #endif //CODA_OSS_pch_h_INCLUDED_

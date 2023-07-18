@@ -80,7 +80,7 @@ void *sys::ThreadPosix::__start(void *v)
     delete runnable;
     */
 
-    pthread_exit(NULL);
+    pthread_exit(nullptr);
     return nullptr;
 }
 
@@ -94,7 +94,7 @@ void sys::ThreadPosix::kill()
 }
 void sys::ThreadPosix::join()
 {
-    if (::pthread_join(mNative, NULL) != 0)
+    if (::pthread_join(mNative, nullptr) != 0)
         throw sys::SystemException("pthread_join()");
 }
 void sys::ThreadPosix::yield()

@@ -64,7 +64,7 @@ void ScopedCPUMaskUnix::initialize(int numCPUs)
 
 ScopedCPUMaskUnix::~ScopedCPUMaskUnix()
 {
-    if (mMask != NULL)
+    if (mMask != nullptr)
     {
         CPU_FREE(mMask);
     }
