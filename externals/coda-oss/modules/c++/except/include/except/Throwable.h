@@ -166,8 +166,7 @@ public:
         if (t.getSize() > 0)
             s << ": " << t;
 
-        std::string retval(s.str().c_str()); // truncate to first '\0'
-        return retval;
+        return s.str();
     }
 
     const std::vector<std::string>& getBacktrace() const noexcept
