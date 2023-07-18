@@ -25,10 +25,20 @@
 #include <nitf/TestingTest.h>
 
 #include <nitf/coda-oss.hpp>
+#pragma comment(lib, "io-c++")
+#pragma comment(lib, "io-c++")
+#pragma comment(lib, "except-c++")
+#pragma comment(lib, "sys-c++")
+#pragma comment(lib, "str-c++")
+#pragma comment(lib, "sio.lite-c++.lib")
+#pragma comment(lib, "math-c++")
+#pragma comment(lib, "mt-c++")
+
 #include <import/nitf.hpp>
 #include <nitf/UnitTests.hpp>
 #include <nitf/TREField.hpp>
 #include <nitf/TestingTest.hpp>
+#include <nitf/UnitTests.hpp>
 
 #include "Test.h"
 

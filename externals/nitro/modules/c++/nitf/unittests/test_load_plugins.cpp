@@ -26,10 +26,11 @@
 
 #include <import/nitf.h>
 #include <import/nitf.hpp>
+#include <nitf/UnitTests.hpp>
 
 #include "TestCase.h"
 
-static void load_plugin(const char* tre)
+static void load_plugin(const std::string& testName, const char* tre)
 {
     nitf_Error error;
 
@@ -73,29 +74,47 @@ static const std::vector<std::string>& all_plugins()
 
 TEST_CASE(test_load_all_plugins_C)
 {
+    nitf::Test::setNitfPluginPath();
+
     for (const auto& tre : all_plugins())
     {
-        load_plugin(tre.c_str());
+        load_plugin(testName, tre.c_str());
     }
 }
 
 TEST_CASE(test_load_PTPRAA)
 {
-    load_plugin("PTPRAA");
+    nitf::Test::setNitfPluginPath();
+    load_plugin(testName, "PTPRAA");
 }
 TEST_CASE(test_load_ENGRDA)
 {
-    load_plugin("ENGRDA");
+    nitf::Test::setNitfPluginPath();
+    load_plugin(testName, "ENGRDA");
 }
 
-TEST_CASE(test_load_all_plugins)
+static void loadPlugin(const std::string& testName, const std::string& path)
 {
-    for (const auto& tre : all_plugins())
+    try
     {
 #ifdef _WIN32
         // need the full path to load on Linux
-        nitf::PluginRegistry::loadPlugin(tre);
+        nitf::PluginRegistry::loadPlugin(path);
 #endif
+        TEST_SUCCESS;
+    }
+    catch (const nitf::NITFException& ex)
+    {
+        TEST_FAIL_MSG(ex.toString());
+    }
+}
+TEST_CASE(test_load_all_plugins)
+{
+    nitf::Test::setNitfPluginPath();
+
+    for (const auto& tre : all_plugins())
+    {
+        loadPlugin(testName, tre);
         TEST_ASSERT(nitf::PluginRegistry::treHandlerExists(tre));
     }
 }
