@@ -46,7 +46,7 @@ namespace nitf
         static std::string to_string(const char(&s)[sz])
         {
             // avoid array -> pointer decay; code-analysis diagnostic
-            return std::string(s, sz);
+            return std::string(s);
         }
     public:
         Error(const nitf_Error* error) noexcept : pError(error) { assert(pError != nullptr);  }

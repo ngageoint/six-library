@@ -1,10 +1,5 @@
 # disable some unneeded coda-oss components
 set(ENABLE_JARS OFF CACHE BOOL "" FORCE)
-set(ENABLE_JPEG OFF CACHE BOOL "" FORCE)
-set(ENABLE_PCRE OFF CACHE BOOL "" FORCE)
-set(ENABLE_UUID OFF CACHE BOOL "" FORCE)
-set(ENABLE_ZIP OFF CACHE BOOL "" FORCE)
-
 add_subdirectory("${CODA_OSS_DIR}")
 
 # six requires some static TREs from nitro, so we force enable them
