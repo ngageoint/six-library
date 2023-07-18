@@ -72,7 +72,7 @@ public:
         mHTMLFile(htmlFile),
         mCSSFile(cssFile)
     {
-        mStartPtr = NULL;
+        mStartPtr = nullptr;
         mColors.push_back("lightgrey");
         mColors.push_back("lightblue");
         mColors.push_back("lightcyan");

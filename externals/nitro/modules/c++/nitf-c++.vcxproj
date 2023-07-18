@@ -86,7 +86,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cpp.h" />
     <ClInclude Include="nitf\include\nitf\BandInfo.hpp" />
     <ClInclude Include="nitf\include\nitf\BandSource.hpp" />
     <ClInclude Include="nitf\include\nitf\BlockingInfo.hpp" />
@@ -219,7 +218,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(ProjectDir)..\c\j2k\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include;$(ProjectDir)..\c\nrt\include;$(ProjectDir)..\c\nitf\include;$(ProjectDir)..\c\j2k\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
@@ -230,10 +229,11 @@
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <SupportJustMyCode>true</SupportJustMyCode>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -252,7 +252,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(ProjectDir)..\c\j2k\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include;$(ProjectDir)..\c\nrt\include;$(ProjectDir)..\c\nitf\include;$(ProjectDir)..\c\j2k\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
@@ -262,6 +262,7 @@
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <WarningLevel>Level3</WarningLevel>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>

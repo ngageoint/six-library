@@ -308,7 +308,7 @@ std::string sys::OSUnix::getEnv(const std::string& s) const
 bool sys::OSUnix::isEnvSet(const std::string& s) const
 {
     const char* envVal = getenv(s.c_str());
-    return (envVal != NULL);
+    return envVal != nullptr;
 }
 
 void sys::OSUnix::setEnv(const std::string& var,

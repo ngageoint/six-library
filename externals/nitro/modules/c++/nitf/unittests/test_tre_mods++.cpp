@@ -418,8 +418,6 @@ TEST_CASE(overflowingNumericFields)
 }
 
 TEST_MAIN(
-    (void)argv; (void)argc;
-
     TEST_CHECK(setFields);
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
