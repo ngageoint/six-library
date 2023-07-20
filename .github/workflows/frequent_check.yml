@@ -40,6 +40,7 @@ jobs:
     - name: msbuild
       run: |
         msbuild six.sln /p:configuration=${{ matrix.configuration }}
+        msbuild six.sln /p:configuration=${{ matrix.configuration }} /t:Clean
 
   build-msbuild-windows:
     strategy:
@@ -69,6 +70,7 @@ jobs:
     - name: msbuild
       run: |
         msbuild six.sln /p:configuration=${{ matrix.configuration }}
+        msbuild six.sln /p:configuration=${{ matrix.configuration }} /t:Clean
     #- name: vstest 
     #  uses: microsoft/vstest-action@v1.0.0 # https://github.com/marketplace/actions/vstest-action
     #  with:
