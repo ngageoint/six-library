@@ -11,6 +11,12 @@
  ```
 # coda-oss Release Notes
 
+## [Release 202?-??-??](https://github.com/mdaus/coda-oss/releases/tag/202?-??-??)
+* New `sys::OS::getSIMDInstructionSet()` utility routine; SSE2 is required (default with 64-bit builds).
+* `types::ComplexInteger` to work-around `std::complex<short>` no longer being [valid C++](https://en.cppreference.com/w/cpp/numeric/complex).
+* Another round of reducing various compiler warnings (of note: `NULL` -> `nullptr`).
+* Some suport for [`std::numbers`](https://en.cppreference.com/w/cpp/header/numbers) from C++20.
+
 ## [Release 2023-06-05](https://github.com/mdaus/coda-oss/releases/tag/2023-06-05)
 * *zlib* updated to [1.2.13](https://github.com/madler/zlib/releases/tag/v1.2.13).
 * new `mem::ComplexView` class to make it easier to process complex data stored in parallel. 

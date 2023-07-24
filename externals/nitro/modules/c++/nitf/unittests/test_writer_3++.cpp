@@ -28,6 +28,7 @@
 #include <gsl/gsl.h>
 
 #include <import/nitf.hpp>
+#include <nitf/UnitTests.hpp>
 
 #include "TestCase.h"
 

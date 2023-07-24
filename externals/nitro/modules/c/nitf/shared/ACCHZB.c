@@ -20,12 +20,6 @@
  *
  */
 
-#if _MSC_VER
-#pragma warning(disable: 4820) // '...' : '...' bytes padding added after data member '...'
-#pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
-#pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' function under -EHc. Undefined behavior may occur if this function throws an exception.
-#endif
-
 #include <import/nitf.h>
 
 NITF_CXX_GUARD
