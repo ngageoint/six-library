@@ -243,6 +243,24 @@
     <ClCompile Include="..\modules\c++\zip\unittests\unittest_GZip.cpp">
       <Filter>zip</Filter>
     </ClCompile>
+    <ClCompile Include="xml.lite.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\xml.lite\unittests\test_soapelements.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\xml.lite\unittests\test_xmlattribute.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\xml.lite\unittests\test_xmlcreate.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\xml.lite\unittests\test_xmlelement.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\xml.lite\unittests\test_xmlparser.cpp">
+      <Filter>xml.lite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -299,6 +317,9 @@
     </Filter>
     <Filter Include="zip">
       <UniqueIdentifier>{223c163f-0321-4935-8e20-0e05f048adf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="xml.lite">
+      <UniqueIdentifier>{f4dfc761-e468-4305-84dc-f3579e46107e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

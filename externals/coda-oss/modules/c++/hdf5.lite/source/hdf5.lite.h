@@ -20,18 +20,17 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_hdf5_lite_hdf5_lite_h_INCLUDED_
 #define CODA_OSS_hdf5_lite_hdf5_lite_h_INCLUDED_
-#pragma once
 
 #include <functional>
 #include <stdexcept>
 #include <utility>
 
-// see https://docs.hdfgroup.org/archive/support/HDF5/doc1.8/cpplus_RM/readdata_8cpp-example.html
-#include <H5Cpp.h>
-
 #include "except/Exception.h"
+
+#include "hdf5/lite/H5_.h"
 #include "hdf5/lite/HDF5Exception.h"
 
 // Utility routines for INTERNAL use!

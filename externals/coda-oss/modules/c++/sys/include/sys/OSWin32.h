@@ -270,7 +270,7 @@ protected:
 struct DirectoryWin32 final : public AbstractDirectory
 {
     DirectoryWin32() = default;
-    virtual ~DirectoryWin32()
+    virtual ~DirectoryWin32() noexcept(false)
     {
         close();
     }

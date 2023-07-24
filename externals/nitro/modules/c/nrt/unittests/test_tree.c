@@ -109,7 +109,8 @@ TEST_CASE(testTree)
     nrt_Tree *tc = NULL;
     TEST_ASSERT(t != NULL);
 
-    makeTree(t, testName);
+    const char* testName_ = "testTree";
+    makeTree(t, testName_);
     printf("Pre-order traversal:\n");
     printf("=======================================================\n");
     TEST_ASSERT(nrt_Tree_walk(t, &printElement, NRT_PRE_ORDER, NULL, &e));

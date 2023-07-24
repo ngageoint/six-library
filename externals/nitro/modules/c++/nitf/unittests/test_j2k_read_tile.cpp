@@ -31,8 +31,6 @@ TEST_CASE(j2k_read_tile)
 }
 
 TEST_MAIN(
-    (void)argc;
-    (void)argv;
     TEST_CHECK(j2k_read_tile);
     )
 

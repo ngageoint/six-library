@@ -226,7 +226,7 @@ TEST_CASE(j2k_compress_tile)
     }
 }
 
-TEST_MAIN((void)argc; (void)argv;
+TEST_MAIN(
     TEST_CHECK(j2k_compress_tile);
     )
 

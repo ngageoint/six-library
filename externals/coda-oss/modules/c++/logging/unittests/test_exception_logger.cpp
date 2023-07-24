@@ -43,7 +43,7 @@ class RunNothing final : public sys::Runnable
     }
 
 public:
-    RunNothing(size_t& c, logging::ExceptionLogger* el, bool getBacktrace=false) : counter(c), exLog(el), getBacktrace(getBacktrace) {}
+    RunNothing(size_t& c, logging::ExceptionLogger* el, bool getBacktrace_=false) : counter(c), exLog(el), getBacktrace(getBacktrace_) {}
 
     virtual void run() override
     {
