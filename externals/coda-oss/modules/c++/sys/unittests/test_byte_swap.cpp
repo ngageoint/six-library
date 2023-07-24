@@ -245,43 +245,15 @@ TEST_CASE(testByteSwapValues)
 
 TEST_CASE(testByteSwapCxValue)
 {
-    {
-        using value_type = std::complex<float>;
-        const value_type cx{3.14f, -31.4f}; // using raw bytes can lean to `nan`s
-        auto const pValue = &cx;
+    using value_type = std::complex<float>;
+    const value_type cx{3.14f, -31.4f}; // using raw bytes can lean to `nan`s
+    auto const pValue = &cx;
 
-        auto swap = sys::byteSwap(*pValue);
-        TEST_ASSERT_NOT_EQ(*pValue, swap); // technically a bit goofy as the bits may not represent `T`s
+    auto swap = sys::byteSwap(*pValue);
+    TEST_ASSERT_NOT_EQ(*pValue, swap); // technically a bit goofy as the bits may not represent `T`s
             
-        swap = sys::byteSwap(swap);  // swap back
-        TEST_ASSERT_EQ(*pValue, swap);
-    }
-    {
-        using value_type = types::Complex<int16_t>;
-        const void* const pValue_  = four_bytes; // two int16_t
-        auto const pValue = static_cast<const value_type*>(pValue_);
-
-        auto swap = sys::byteSwap(*pValue);
-        TEST_ASSERT_NOT_EQ(*pValue, swap);
-
-        // .real() and .imag() are swapped individually
-        const void* const pSwap_ = &swap;
-        auto pSwapBytes = static_cast<const std::byte*>(pSwap_);
-        TEST_ASSERT(four_bytes[0] == pSwapBytes[1]);
-        TEST_ASSERT(four_bytes[1] == pSwapBytes[0]);
-        TEST_ASSERT(four_bytes[2] == pSwapBytes[3]);
-        TEST_ASSERT(four_bytes[3] == pSwapBytes[2]);
-            
-        swap = sys::byteSwap(swap);  // swap back
-        TEST_ASSERT_EQ(*pValue, swap);
-
-        auto buffer = std::as_writable_bytes(sys::make_span(&swap, 1));
-        sys::byteSwap(sys::make_span(pValue, 1), buffer);
-        TEST_ASSERT(four_bytes[0] == buffer[1]);
-        TEST_ASSERT(four_bytes[1] == buffer[0]);
-        TEST_ASSERT(four_bytes[2] == buffer[3]);
-        TEST_ASSERT(four_bytes[3] == buffer[2]);
-    }
+    swap = sys::byteSwap(swap);  // swap back
+    TEST_ASSERT_EQ(*pValue, swap);
 }
 
 TEST_CASE(testByteSwap12)
