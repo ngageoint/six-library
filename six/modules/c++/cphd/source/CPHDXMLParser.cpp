@@ -69,12 +69,13 @@ std::unique_ptr<xml::lite::Document> CPHDXMLParser::toXML(
     toXML(metadata.data, root);
     toXML(metadata.channel, root);
     toXML(metadata.pvp, root);
+    toXML(metadata.dwell, root);
+    toXML(metadata.referenceGeometry, root);
+
     if (metadata.supportArray.get())
     {
         toXML(*(metadata.supportArray), root);
     }
-    toXML(metadata.dwell, root);
-    toXML(metadata.referenceGeometry, root);
     if (metadata.antenna.get())
     {
         toXML(*(metadata.antenna), root);
@@ -99,6 +100,7 @@ std::unique_ptr<xml::lite::Document> CPHDXMLParser::toXML(
     {
         toXML(*(metadata.matchInfo), root);
     }
+
     //set the XMLNS
     root->setNamespacePrefix("", getDefaultURI());
 
@@ -907,16 +909,16 @@ std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
     XMLElem pvpXML            = getFirstAndOnly(root, "PVP");
     XMLElem dwellXML          = getFirstAndOnly(root, "Dwell");
     XMLElem refGeoXML         = getFirstAndOnly(root, "ReferenceGeometry");
+
     XMLElem supportArrayXML   = getOptional(root, "SupportArray");
     XMLElem antennaXML        = getOptional(root, "Antenna");
     XMLElem txRcvXML          = getOptional(root, "TxRcv");
     XMLElem errParamXML       = getOptional(root, "ErrorParameters");
     XMLElem productInfoXML    = getOptional(root, "ProductInfo");
-    XMLElem matchInfoXML      = getOptional(root, "MatchInfo");
-
     std::vector<XMLElem> geoInfoXMLVec;
     root->getElementsByTagName("GeoInfo", geoInfoXMLVec);
     cphd->geoInfo.resize(geoInfoXMLVec.size());
+    XMLElem matchInfoXML = getOptional(root, "MatchInfo");
 
     // Parse XML for each section
     fromXML(collectionIDXML, cphd->collectionID);
@@ -927,6 +929,7 @@ std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
     fromXML(pvpXML, cphd->pvp);
     fromXML(dwellXML, cphd->dwell);
     fromXML(refGeoXML, cphd->referenceGeometry);
+
     if(supportArrayXML)
     {
         cphd->supportArray.reset(new SupportArray());
@@ -952,14 +955,14 @@ std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
         cphd->productInfo.reset(new ProductInfo());
         fromXML(productInfoXML, *(cphd->productInfo));
     }
-    if(matchInfoXML)
-    {
-        cphd->matchInfo.reset(new MatchInformation());
-        fromXML(matchInfoXML, *(cphd->matchInfo));
-    }
     for (size_t ii = 0; ii < geoInfoXMLVec.size(); ++ii)
     {
         fromXML(geoInfoXMLVec[ii], cphd->geoInfo[ii]);
+    }
+    if (matchInfoXML)
+    {
+        cphd->matchInfo.reset(new MatchInformation());
+        fromXML(matchInfoXML, *(cphd->matchInfo));
     }
 
     return cphd;
