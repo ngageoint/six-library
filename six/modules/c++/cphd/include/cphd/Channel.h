@@ -31,6 +31,10 @@
 namespace cphd
 {
 
+// Existing code handles this via XML validation, not C++.
+using ZeroToOneType = double;
+using NegHalfToHalfType = double;
+
 /*
 *  \struct PolRefType
 *
@@ -39,18 +43,14 @@ namespace cphd
 */
 struct PolRefType final
 {
-    // Existing code handles this via XML validation, not C++.
-    using ZeroToOneType = double;
-    using NegHalfToHalfType = double;
-
     //! E-field relative amplitude in H direction
-    ZeroToOneType / ampH;
+    ZeroToOneType ampH = 0.0;
 
     //! E-field relative amplitude in V direction
-    ZeroToOneType ampV;
+    ZeroToOneType ampV = 0.0;
 
     //! Relative phase of the V E-field relative to the H E-field
-    NegHalfToHalfType phaseV;
+    NegHalfToHalfType phaseV = 0.0;
 };
 
 /*
