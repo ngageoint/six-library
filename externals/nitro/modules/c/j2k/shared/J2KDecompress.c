@@ -20,23 +20,14 @@
  *
  */
 
+#include <import/nitf.h>
+
 #ifdef HAVE_J2K_H
 
 #if _MSC_VER
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
-#endif
-#pragma warning(push)
-#pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' 
-#include <windows.h>
-#pragma warning(pop)
-#undef min
-#undef max
-
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
 #endif // _MSC_VER
 
-#include <import/nitf.h>
 #include <import/j2k.h>
 
 NITF_CXX_GUARD
