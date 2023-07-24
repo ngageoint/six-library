@@ -133,6 +133,10 @@ SIX_Enum_BEGIN_DEFINE(PolarizationType)
         RHC = 5,
         LHC = 6,
         UNSPECIFIED = 7,
+        // Making these new values larger than RHC, LHC, and UNSPECIFIED in case
+        // somebody is using the integeral values (5, 6, and 6).
+        S = 8, // CPHD 1.1.0
+        E = 9, // CPHD 1.1.0
     SIX_Enum_END_enum
 
     SIX_Enum_BEGIN_string_to_value

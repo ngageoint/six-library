@@ -32,6 +32,28 @@ namespace cphd
 {
 
 /*
+*  \struct PolRefType
+*
+*  \brief Polarization parameters for the pulse for the reference signal vector.
+* (New in CPHD 1.1.0)
+*/
+struct PolRefType final
+{
+    // Existing code handles this via XML validation, not C++.
+    using ZeroToOneType = double;
+    using NegHalfToHalfType = double;
+
+    //! E-field relative amplitude in H direction
+    ZeroToOneType / ampH;
+
+    //! E-field relative amplitude in V direction
+    ZeroToOneType ampV;
+
+    //! Relative phase of the V E-field relative to the H E-field
+    NegHalfToHalfType phaseV;
+};
+
+/*
  *  \struct Polarization
  *
  *  \brief Polarization of the signals that formed the signal array.
@@ -54,6 +76,14 @@ struct Polarization
 
     //! Receive polarization for the channel.
     PolarizationType rcvPol;
+
+    //! Transmit polarization parameters for the transmit pulse for the reference signal vector  (v_CH_REF). See Section 7.2.5.
+    //! (New in CPHD 1.1.0)
+    mem::ScopedCopyablePtr<PolRefType> txPolRef;
+
+    //! Receive polarization parameters for the received signals for the reference signal vector (v_CH_REF). See Section 7.2.5.
+    //! (New in CPHD 1.1.0)
+    mem::ScopedCopyablePtr<PolRefType> rcvPolRef;
 };
 
 /*
