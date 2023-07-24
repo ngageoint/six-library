@@ -165,37 +165,8 @@ inline auto abs(const Complex<T>& z) // https://en.cppreference.com/w/cpp/numeri
     return abs(details::cast(z));
 }
 
-// Control whether ComplexInteger is std::complex or Complex.
-// If it is std::complex, then a types::ComplexInteger overload normally can't be
-// used as it will be the same as std::complex
-#ifdef CODA_OSS_types_FORCE_unique_ComplexInteger // bypass checks below
-#define CODA_OSS_types_unique_ComplexInteger 1
-#endif
-#ifdef CODA_OSS_types_NO_unique_ComplexInteger
-#ifdef CODA_OSS_types_unique_ComplexInteger
-#error "CODA_OSS_types_unique_ComplexInteger already #define'd"
-#endif
-#define CODA_OSS_types_unique_ComplexInteger 0
-#endif
-
-#ifndef CODA_OSS_types_unique_ComplexInteger
-// If the warning about using std::complex<short> has been turned off, we might
-// as well use std:complex<short>.
-#ifdef _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
-#define CODA_OSS_types_unique_ComplexInteger 0
-#endif
-#endif
-
-#ifndef CODA_OSS_types_unique_ComplexInteger
-#define CODA_OSS_types_unique_ComplexInteger 1
-#endif
-
 template<typename T>
-#if CODA_OSS_types_unique_ComplexInteger
 using ComplexInteger = Complex<T>;
-#else
-using ComplexInteger = std::complex<T>;
-#endif
 
 namespace details
 {
