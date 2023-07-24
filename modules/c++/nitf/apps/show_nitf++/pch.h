@@ -41,6 +41,7 @@
 #pragma warning(disable: 5204) // '...': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
 #pragma warning(disable: 5220) // '...': a non-static data member with a volatile qualified type no longer implies
 #pragma warning(disable: 4355) // '...': used in base member initializer list
+#pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #include <windows.h>

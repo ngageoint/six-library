@@ -28,6 +28,7 @@ CODA_OSS_disable_warning_pop
 #define NOMINMAX
 #pragma warning(push)
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
+#pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
 #include <windows.h>
 #pragma warning(pop)
 

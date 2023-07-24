@@ -35,6 +35,7 @@
 #include <complex>
 
 #include "config/Exports.h"
+#include "types/Complex.h"
 
 #include "ByteSwapValue.h"
 #include "Runnable.h"
@@ -88,21 +89,48 @@ inline void check_elemSize(size_t elemSize)
 
 // Repackage into a span<T>; the size is 2* because for byte-swapping
 // we want to look at this as an array of `T`, not `std::complex<T>`.
+template <typename TComplex>
+inline auto make_cx_span(coda_oss::span<const TComplex> s)
+{
+    using value_type = typename TComplex::value_type; // i.e., T from std::complex<T>
+    const void* const p_ = s.data();
+    auto const p = static_cast<const value_type*>(p_);
+    const auto sz = s.size() * 2;  // real and imag
+    return sys::make_span(p, sz);
+}
+template <typename TComplex>
+inline auto make_cx_span(coda_oss::span<TComplex> s)
+{
+    using value_type = typename TComplex::value_type; // i.e., T from std::complex<T>
+    void* const p_ = s.data();
+    auto const p = static_cast<value_type*>(p_);
+    const auto sz = s.size() * 2;  // real and imag
+    return sys::make_span(p, sz);
+}
+
 template <typename T>
 inline auto make_span(coda_oss::span<const std::complex<T>> s)
 {
-    const void* const p_ = s.data();
-    auto const p = static_cast<const T*>(p_);
-    const auto sz = s.size() * 2;  // real and imag
-    return sys::make_span(p, sz);
+    static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
+    return make_cx_span(s);
 }
 template<typename T>
 inline auto make_span(coda_oss::span<std::complex<T>> s)
 {
-    void* const p_ = s.data();
-    auto const p = static_cast<T*>(p_);
-    const auto sz = s.size() * 2;  // real and imag
-    return sys::make_span(p, sz);
+    static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
+    return make_cx_span(s);
+}
+
+// Support our own complex type too :-(; it's used (too much) in SIX.
+template <typename T>
+inline auto make_span(coda_oss::span<const types::Complex<T>> s)
+{
+    return make_cx_span(s);
+}
+template<typename T>
+inline auto make_span(coda_oss::span<types::Complex<T>> s)
+{
+    return make_cx_span(s);
 }
 
 }
@@ -115,12 +143,27 @@ inline void byteSwap(T* buffer, size_t elemSize, size_t numElems)
     void* const buffer_ = buffer;
     byteSwap(buffer_, elemSize, numElems);
 }
+namespace details
+{
+template <typename TComplex>
+inline void byteSwapCx(TComplex* buffer, size_t elemSize, size_t numElems) // dont't want `T` as `std::complex<...>`
+{
+    using value_type = typename TComplex::value_type; // i.e., T from std::complex<T>
+    check_elemSize<value_type>(elemSize);
+    void* const buffer_ = buffer;
+    byteSwap(buffer_, elemSize, numElems);
+}
+}
 template <typename T>
 inline void byteSwap(std::complex<T>* buffer, size_t elemSize, size_t numElems) // dont't want `T` as `std::complex<...>`
 {
-    details::check_elemSize<T>(elemSize);
-    void* const buffer_ = buffer;
-    byteSwap(buffer_, elemSize, numElems);
+    static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
+    details::byteSwapCx(buffer, elemSize, numElems);
+}
+template <typename T>
+inline void byteSwap(types::Complex<T>* buffer, size_t elemSize, size_t numElems) // dont't want `T` as `std::complex<...>`
+{
+    details::byteSwapCx(buffer, elemSize, numElems);
 }
 
 template <typename T>
@@ -134,6 +177,11 @@ inline auto byteSwap(coda_oss::span<T> buffer)
 // Take care of treating std::complex<T> as T[]
 template <typename T>
 inline auto byteSwap(coda_oss::span<std::complex<T>> buffer)
+{
+    return byteSwap(details::make_span(buffer));
+}
+template <typename T>
+inline auto byteSwap(coda_oss::span<types::Complex<T>> buffer)
 {
     return byteSwap(details::make_span(buffer));
 }
@@ -185,13 +233,28 @@ inline void byteSwap(const T* buffer, size_t elemSize, size_t numElems, U* outpu
     void* const outputBuffer_ = outputBuffer;
     byteSwap(buffer_, elemSize, numElems, outputBuffer_);
 }
-template <typename T, typename U>
-inline void byteSwap(const std::complex<T>* buffer, size_t elemSize, size_t numElems, U* outputBuffer) // dont't want `T` as `std::complex<...>`
+namespace details
 {
-    details::check_elemSize<T>(elemSize);
+template <typename TComplex, typename U>
+inline void byteSwapCx(const TComplex* buffer, size_t elemSize, size_t numElems, U* outputBuffer) // dont't want `T` as `std::complex<...>`
+{
+    using value_type = typename TComplex::value_type; // i.e., T from std::complex<T>
+    check_elemSize<value_type>(elemSize);
     const void* const buffer_ = buffer;
     void* const outputBuffer_ = outputBuffer;
     byteSwap(buffer_, elemSize, numElems, outputBuffer_);
+}
+}
+template <typename T, typename U>
+inline void byteSwap(const std::complex<T>* buffer, size_t elemSize, size_t numElems, U* outputBuffer) // dont't want `T` as `std::complex<...>`
+{
+    static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
+    details::byteSwapCx(buffer, elemSize, numElems, outputBuffer);
+}
+template <typename T, typename U>
+inline void byteSwap(const types::Complex<T>* buffer, size_t elemSize, size_t numElems, U* outputBuffer) // dont't want `T` as `std::complex<...>`
+{
+    details::byteSwapCx(buffer, elemSize, numElems, outputBuffer);
 }
 
 template <typename T>
@@ -203,6 +266,11 @@ inline auto byteSwap(coda_oss::span<const T> buffer, coda_oss::span<coda_oss::by
 // Take care of treating std::complex<T> as T[]
 template <typename T>
 inline auto byteSwap(coda_oss::span<const std::complex<T>> buffer, coda_oss::span<coda_oss::byte> outputBuffer)
+{
+    return byteSwap(details::make_span(buffer), outputBuffer);
+}
+template <typename T>
+inline auto byteSwap(coda_oss::span<const types::Complex<T>> buffer, coda_oss::span<coda_oss::byte> outputBuffer)
 {
     return byteSwap(details::make_span(buffer), outputBuffer);
 }
@@ -220,27 +288,62 @@ inline auto byteSwap(coda_oss::span<const std::complex<T>> buffer)
 {
     return byteSwap(details::make_span(buffer));
 }
+template <typename T>
+inline auto byteSwap(coda_oss::span<const types::Complex<T>> buffer)
+{
+    return byteSwap(details::make_span(buffer));
+}
 
 // With buffer byte-swap now in place, we can safely byte-swap std::complex<T>.
 // This signature is from ByteSwapValue.h
+namespace details
+{
+template <typename TComplex>
+inline auto byteSwapCxValue(TComplex z)
+{
+    using value_type = typename TComplex::value_type; // i.e., T from std::complex<T>
+
+    // C++ mandates that `std::complex<T>` be the same as `T cx[2]`; that is
+    // the structure is contiguous. https://en.cppreference.com/w/cpp/numeric/complex
+    const auto& z_ = reinterpret_cast<value_type(&)[2]>(z);    
+    return byteSwap(sys::make_span(z_));
+}
+}
 template <typename T>
 inline auto byteSwapValue(std::complex<T> z)
 {
-    // C++ mandates that `std::complex<T>` be the same as `T cx[2]`; that is
-    // the structure is contiguous. https://en.cppreference.com/w/cpp/numeric/complex
-    const auto& z_ = reinterpret_cast<T(&)[2]>(z);    
-    return byteSwap(make_span(z_));
+    static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
+    return details::byteSwapCxValue(z);
 }
-template<typename T>
-inline auto byteSwap(std::complex<T> val)
+template <typename T>
+inline auto byteSwapValue(types::Complex<T> z)
+{
+    return details::byteSwapCxValue(z);
+}
+namespace details
+{
+template <typename TComplex>
+inline auto byteSwapCx(TComplex val)
 {
     const auto bytes = byteSwapValue(val);
     assert(bytes.size() == sizeof(val));
 
     const void* const pBytes = bytes.data();
-    auto const pRetVal = static_cast<const std::complex<T>*>(pBytes);
+    auto const pRetVal = static_cast<const TComplex*>(pBytes);
     return *pRetVal;
 }
+}
+template<typename T>
+inline auto byteSwap(std::complex<T> val)
+{
+    return details::byteSwapCx(val);
+}
+template <typename T>
+inline auto byteSwap(types::Complex<T> val)
+{
+    return details::byteSwapCx(val);
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
