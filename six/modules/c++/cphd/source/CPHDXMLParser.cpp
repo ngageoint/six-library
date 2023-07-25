@@ -833,6 +833,7 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
         XMLElem txPlatXML = newElement("TxPlatform", biXML);
         createErrorParamPlatform("TxPlatform", errParams.bistatic->txPlatform, txPlatXML);
         XMLElem radarTxXML = newElement("RadarSensor", txPlatXML);
+        createOptionalDouble("DelayBias", errParams.bistatic->txPlatform.radarSensor.delayBias, radarTxXML);
         createOptionalDouble("ClockFreqSF", errParams.bistatic->txPlatform.radarSensor.clockFreqSF, radarTxXML);
         createDouble("CollectionStartTime", errParams.bistatic->txPlatform.radarSensor.collectionStartTime, radarTxXML);
 
@@ -2220,6 +2221,7 @@ void CPHDXMLParser::parsePlatform(const xml::lite::Element* platXML, ErrorParame
 {
     parsePosVelErr(getFirstAndOnly(platXML, "PosVelErr"), plat.posVelErr);
     XMLElem radarSensorXML = getFirstAndOnly(platXML, "RadarSensor");
+    parseOptionalDouble(radarSensorXML, "DelayBias", plat.radarSensor.delayBias);
     parseOptionalDouble(radarSensorXML, "ClockFreqSF", plat.radarSensor.clockFreqSF);
     parseDouble(getFirstAndOnly(radarSensorXML, "CollectionStartTime"), plat.radarSensor.collectionStartTime);
 }

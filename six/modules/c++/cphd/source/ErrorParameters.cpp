@@ -112,6 +112,18 @@ std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
         return unchecked(os, p.positionDecorr);
 }
 
+static std::ostream& operator<< (std::ostream& os, const ErrorParameters::Bistatic::RadarSensor& v)
+{
+    os << "    RadarSensor:: \n";
+    if (v.delayBias)
+    {
+        os << "    DelayBias      : " << *v.delayBias << "\n";
+    }
+    os << "    ClockFreqSF      : " << v.clockFreqSF << "\n"
+        << "    CollectionStartTime : " <<v.collectionStartTime << "\n";
+    return os;
+}
+
 std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
 {
     os << "Error Parameters:: \n";
@@ -161,15 +173,11 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
         os << "  Bistatic:: \n"
             << "    TxPlatform:: \n"
             << e.bistatic->txPlatform.posVelErr << "\n"
-            << "    RadarSensor:: \n"
-            << "    ClockFreqSF      : " << e.bistatic->txPlatform.radarSensor.clockFreqSF << "\n"
-            << "    CollectionStartTime : " << e.bistatic->txPlatform.radarSensor.collectionStartTime << "\n"
+            << e.bistatic->txPlatform.radarSensor
             << "\n"
             << "    RcvPlatform:: \n"
             << e.bistatic->rcvPlatform.posVelErr << "\n"
-            << "    RadarSensor:: \n"
-            << "    ClockFreqSF      : " << e.bistatic->rcvPlatform.radarSensor.clockFreqSF << "\n"
-            << "    CollectionStartTime : " << e.bistatic->rcvPlatform.radarSensor.collectionStartTime << "\n";
+            << e.bistatic->rcvPlatform.radarSensor;
         for (const auto& parameter : e.bistatic->parameter)
         {
             os << "    Parameter Name   : " << parameter.getName() << "\n"
