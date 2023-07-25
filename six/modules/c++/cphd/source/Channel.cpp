@@ -83,10 +83,28 @@ Channel::Channel() :
 {
 }
 
+std::ostream& operator<< (std::ostream& os, const PolRefType& v)
+{
+    os << "      AmpH        : " << v.ampH << "\n"
+        << "      AmpV       : " << v.ampV << "\n"
+        << "      PhaseV       : " << v.phaseV << "\n";
+    return os;
+}
+
 std::ostream& operator<< (std::ostream& os, const Polarization& p)
 {
     os << "      TxPol        : " << p.txPol << "\n"
         << "      RcvPol       : " << p.rcvPol << "\n";
+
+    if (p.txPolRef)
+    {
+        os << *p.txPolRef << "\n";
+    }
+    if (p.rcvPolRef)
+    {
+        os << *p.rcvPolRef << "\n";
+    }
+
     return os;
 }
 

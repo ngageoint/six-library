@@ -19,11 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __CPHD_CHANNEL_H__
-#define __CPHD_CHANNEL_H__
+
+#pragma once
+#ifndef SIX_cphd_Channel_h_INCLUDED_
+#define SIX_cphd_Channel_h_INCLUDED_
 
 #include <string>
 #include <vector>
+#include <std/optional>
+
 #include <cphd/Types.h>
 #include <cphd/Enums.h>
 #include <cphd/SceneCoordinates.h>
@@ -33,7 +37,7 @@ namespace cphd
 
 // Existing code handles this via XML validation, not C++.
 using ZeroToOneType = double;
-using NegHalfToHalfType = double;
+using NegHalfToHalfType = double;  // [-0.5–0.5]
 
 /*
 *  \struct PolRefType
@@ -43,6 +47,17 @@ using NegHalfToHalfType = double;
 */
 struct PolRefType final
 {
+    bool operator==(const PolRefType& other) const
+    {
+        return (ampH == other.ampH)
+            && (ampV == other.ampV)
+            && (phaseV == other.phaseV);
+    }
+    bool operator!=(const PolRefType& other) const
+    {
+        return !(*this == other);
+    }
+
     //! E-field relative amplitude in H direction
     ZeroToOneType ampH = 0.0;
 
@@ -63,8 +78,18 @@ struct Polarization
     //! Equality operator
     bool operator==(const Polarization& other) const
     {
-        return txPol == other.txPol &&
-               rcvPol == other.rcvPol;
+        if ((txPol != other.txPol) || (rcvPol != other.rcvPol))
+        {
+            return false;
+        }
+
+        // The are optional: new in CPHD 1.1.0
+        if ((txPolRef != other.txPolRef) || (rcvPolRef != other.rcvPolRef))
+        {
+            return false;
+        }
+
+        return true;
     }
     bool operator!=(const Polarization& other) const
     {
@@ -79,11 +104,11 @@ struct Polarization
 
     //! Transmit polarization parameters for the transmit pulse for the reference signal vector  (v_CH_REF). See Section 7.2.5.
     //! (New in CPHD 1.1.0)
-    mem::ScopedCopyablePtr<PolRefType> txPolRef;
+    std::optional<PolRefType> txPolRef;
 
     //! Receive polarization parameters for the received signals for the reference signal vector (v_CH_REF). See Section 7.2.5.
     //! (New in CPHD 1.1.0)
-    mem::ScopedCopyablePtr<PolRefType> rcvPolRef;
+    std::optional<PolRefType> rcvPolRef;
 };
 
 /*
@@ -550,6 +575,7 @@ struct Channel
 };
 
 //! Ostream operators
+std::ostream& operator<< (std::ostream& os, const PolRefType& p);
 std::ostream& operator<< (std::ostream& os, const Polarization& p);
 std::ostream& operator<< (std::ostream& os, const TOAExtended& t);
 std::ostream& operator<< (std::ostream& os, const DwellTimes& d);
@@ -561,4 +587,4 @@ std::ostream& operator<< (std::ostream& os, const ChannelParameter& c);
 std::ostream& operator<< (std::ostream& os, const Channel& c);
 }
 
-#endif
+#endif // SIX_cphd_Channel_h_INCLUDED_
