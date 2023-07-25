@@ -1,4 +1,4 @@
-<?xml version="1.0"?><CPHD xmlns="urn:CPHD:1.0.0">
+<?xml version="1.0"?><CPHD xmlns="urn:CPHD:1.1.0">
     <CollectionID>
         <CollectorName>Collector</CollectorName>
         <CoreName>Core</CoreName>
@@ -534,6 +534,7 @@
                     <Coef exponent1="1">2.000000000000000E00</Coef>
                 </Z>
             </YAxisPoly>
+			<UseACFPVP>true</UseACFPVP>
         </AntCoordFrame>
         <AntCoordFrame>
             <Identifier>ACF2</Identifier>
@@ -565,6 +566,7 @@
                     <Coef exponent1="1">2.000000000000000E00</Coef>
                 </Z>
             </YAxisPoly>
+			<UseACFPVP>false</UseACFPVP>
         </AntCoordFrame>
         <AntPhaseCenter>
             <Identifier>APC</Identifier>

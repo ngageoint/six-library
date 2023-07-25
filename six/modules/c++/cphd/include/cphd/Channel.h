@@ -103,12 +103,10 @@ struct Polarization final
     PolarizationType rcvPol;
 
     //! Transmit polarization parameters for the transmit pulse for the reference signal vector  (v_CH_REF). See Section 7.2.5.
-    //! (New in CPHD 1.1.0)
-    std::optional<PolRefType> txPolRef;
+    std::optional<PolRefType> txPolRef; // new in CPHD 1.1.0
 
     //! Receive polarization parameters for the received signals for the reference signal vector (v_CH_REF). See Section 7.2.5.
-    //! (New in CPHD 1.1.0)
-    std::optional<PolRefType> rcvPolRef;
+    std::optional<PolRefType> rcvPolRef; // new in CPHD 1.1.0
 };
 
 /*

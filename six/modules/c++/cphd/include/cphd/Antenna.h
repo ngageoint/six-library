@@ -20,12 +20,15 @@
  *
  */
 
-#ifndef __CPHD_ANTENNA_H__
-#define __CPHD_ANTENNA_H__
+#pragma once
+#ifndef SIX_cphd_Antenna_h_INCLUDED_
+#define SIX_cphd_Antenna_h_INCLUDED_
+
+#include <stddef.h>
 
 #include <ostream>
 #include <vector>
-#include <stddef.h>
+#include <std/optional>
 
 #include <six/sicd/Antenna.h>
 
@@ -51,9 +54,10 @@ struct AntCoordFrame
     //! Equality operators
     bool operator==(const AntCoordFrame& other) const
     {
-        return identifier == other.identifier &&
-                xAxisPoly == other.xAxisPoly &&
-                yAxisPoly == other.yAxisPoly;
+        return (identifier == other.identifier)
+            && (xAxisPoly == other.xAxisPoly)
+            && (yAxisPoly == other.yAxisPoly)
+            && (useACFPVP == other.useACFPVP);
     }
     bool operator!=(const AntCoordFrame& other) const
     {
@@ -71,6 +75,9 @@ struct AntCoordFrame
     //!Antenna coordinate frame Y-Axis unit vector in
     //! ECF coordinates as a function time (sec).
     PolyXYZ yAxisPoly;
+
+    //!Indicates the provided ACF PVP arrays provide a more accurate description the ACF orientation vs.time.
+    std::optional<bool> useACFPVP; // new in CPHD 1.1.0
 };
 
 /*
@@ -269,4 +276,4 @@ std::ostream& operator<< (std::ostream& os, const AntPattern& a);
 std::ostream& operator<< (std::ostream& os, const Antenna& a);
 }
 
-#endif
+#endif // SIX_cphd_Antenna_h_INCLUDED_

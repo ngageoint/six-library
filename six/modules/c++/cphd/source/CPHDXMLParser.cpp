@@ -679,6 +679,7 @@ XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
         createString("Identifier", antenna.antCoordFrame[ii].identifier, antCoordFrameXML);
         mCommon.createPolyXYZ("XAxisPoly", antenna.antCoordFrame[ii].xAxisPoly, antCoordFrameXML);
         mCommon.createPolyXYZ("YAxisPoly", antenna.antCoordFrame[ii].yAxisPoly, antCoordFrameXML);
+        createOptional("UseACFPVP", antenna.antCoordFrame[ii].useACFPVP, *antCoordFrameXML);
     }
     for (size_t ii = 0; ii < antenna.antPhaseCenter.size(); ++ii)
     {
@@ -1525,6 +1526,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         parseString(getFirstAndOnly(antCoordFrameXMLVec[ii], "Identifier"), antenna.antCoordFrame[ii].identifier);
         mCommon.parsePolyXYZ(getFirstAndOnly(antCoordFrameXMLVec[ii], "XAxisPoly"), antenna.antCoordFrame[ii].xAxisPoly);
         mCommon.parsePolyXYZ(getFirstAndOnly(antCoordFrameXMLVec[ii], "YAxisPoly"), antenna.antCoordFrame[ii].yAxisPoly);
+        parseOptional(*antCoordFrameXMLVec[ii], "UseACFPVP", antenna.antCoordFrame[ii].useACFPVP);
     }
 
     // Parse AntPhaseCenter
