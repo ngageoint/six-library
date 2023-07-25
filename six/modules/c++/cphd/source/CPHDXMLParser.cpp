@@ -333,7 +333,7 @@ XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
     return dataXML;
 }
 
-XMLElem CPHDXMLParser::toXML(const std::optional<PolRefType>& pPolRef, const std::string& name, xml::lite::Element& parent)
+XMLElem CPHDXMLParser::toXML(const std::optional<PolRef>& pPolRef, const std::string& name, xml::lite::Element& parent)
 {
     XMLElem polRefXML = nullptr;
     if (pPolRef)
@@ -2079,11 +2079,11 @@ void CPHDXMLParser::parseChannelParameters(
     parsePolarization(*paramXML, param.polarization);
 }
 
-void CPHDXMLParser::parsePolRef(const xml::lite::Element& polarizationXML, const std::string& tag, std::optional<PolRefType>& polRef) const
+void CPHDXMLParser::parsePolRef(const xml::lite::Element& polarizationXML, const std::string& tag, std::optional<PolRef>& polRef) const
 {
     if (const auto pPolRefXML = getOptional(polarizationXML, tag))
     {
-        polRef = PolRefType{};
+        polRef = PolRef{};
 
         getFirstAndOnly(*pPolRefXML, "AmpH", polRef->ampH);
         getFirstAndOnly(*pPolRefXML, "AmpV", polRef->ampV);

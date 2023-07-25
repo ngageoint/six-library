@@ -83,7 +83,7 @@ Channel::Channel() :
 {
 }
 
-std::ostream& operator<< (std::ostream& os, const PolRefType& v)
+std::ostream& operator<< (std::ostream& os, const PolRef& v)
 {
     os << "      AmpH        : " << v.ampH << "\n"
         << "      AmpV       : " << v.ampV << "\n"

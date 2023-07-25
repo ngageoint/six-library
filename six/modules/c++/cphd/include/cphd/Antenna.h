@@ -46,7 +46,7 @@ namespace cphd
  *  AntCoordFrame used by CPHD, representing the tag
  *  <AntCoordFrame>.
  */
-struct AntCoordFrame
+struct AntCoordFrame final
 {
     //! Constructor
     AntCoordFrame();

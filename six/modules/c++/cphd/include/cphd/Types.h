@@ -40,9 +40,9 @@ namespace cphd
 using zfloat = six::zfloat;
 using zdouble = six::zdouble;
 using zint16_t = six::zint16_t;
-using zint8_t = six::ComplexInteger<int8_t>; // TODO: types::zint8_t;
-using zint32_t = six::ComplexInteger<int32_t>; // TODO: types::zint32_t;
-using zint64_t = six::ComplexInteger<int64_t>; // TODO: types::zint64_t;
+using zint8_t = six::ComplexInteger<int8_t>;
+using zint32_t = six::ComplexInteger<int32_t>;
+using zint64_t = six::ComplexInteger<int64_t>;
 
 typedef six::Vector2 Vector2;
 
@@ -99,6 +99,10 @@ enum class Version
     v110, // {"1.1.0", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
 };
 std::string to_string(Version); // "1.0.0", "1.0.1", "1.1.0"
+
+// Existing code handles this via XML validation, not C++.
+using ZeroToOne = double;
+using NegHalfToHalf = double;  // [-0.5–0.5]
 
 }
 

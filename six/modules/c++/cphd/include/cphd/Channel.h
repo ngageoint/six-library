@@ -34,38 +34,33 @@
 
 namespace cphd
 {
-
-// Existing code handles this via XML validation, not C++.
-using ZeroToOneType = double;
-using NegHalfToHalfType = double;  // [-0.5–0.5]
-
 /*
 *  \struct PolRefType
 *
 *  \brief Polarization parameters for the pulse for the reference signal vector.
 * (New in CPHD 1.1.0)
 */
-struct PolRefType final
+struct PolRef final
 {
-    bool operator==(const PolRefType& other) const
+    bool operator==(const PolRef& other) const
     {
         return (ampH == other.ampH)
             && (ampV == other.ampV)
             && (phaseV == other.phaseV);
     }
-    bool operator!=(const PolRefType& other) const
+    bool operator!=(const PolRef& other) const
     {
         return !(*this == other);
     }
 
     //! E-field relative amplitude in H direction
-    ZeroToOneType ampH = 0.0;
+    ZeroToOne ampH = 0.0;
 
     //! E-field relative amplitude in V direction
-    ZeroToOneType ampV = 0.0;
+    ZeroToOne ampV = 0.0;
 
     //! Relative phase of the V E-field relative to the H E-field
-    NegHalfToHalfType phaseV = 0.0;
+    NegHalfToHalf phaseV = 0.0;
 };
 
 /*
@@ -103,10 +98,10 @@ struct Polarization final
     PolarizationType rcvPol;
 
     //! Transmit polarization parameters for the transmit pulse for the reference signal vector  (v_CH_REF). See Section 7.2.5.
-    std::optional<PolRefType> txPolRef; // new in CPHD 1.1.0
+    std::optional<PolRef> txPolRef; // new in CPHD 1.1.0
 
     //! Receive polarization parameters for the received signals for the reference signal vector (v_CH_REF). See Section 7.2.5.
-    std::optional<PolRefType> rcvPolRef; // new in CPHD 1.1.0
+    std::optional<PolRef> rcvPolRef; // new in CPHD 1.1.0
 };
 
 /*
@@ -573,7 +568,7 @@ struct Channel
 };
 
 //! Ostream operators
-std::ostream& operator<< (std::ostream& os, const PolRefType& p);
+std::ostream& operator<< (std::ostream& os, const PolRef& p);
 std::ostream& operator<< (std::ostream& os, const Polarization& p);
 std::ostream& operator<< (std::ostream& os, const TOAExtended& t);
 std::ostream& operator<< (std::ostream& os, const DwellTimes& d);
