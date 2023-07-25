@@ -203,6 +203,8 @@ struct XmlLite final
     xml::lite::Element& createDateTime(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
     xml::lite::Element& createDate(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
 
+    xml::lite::Element* createOptional(const std::string& name, const std::optional<bool>&, xml::lite::Element& parent) const;
+
     template <typename T>
     void parseInt(const xml::lite::Element& element, T& value) const
     {
@@ -231,7 +233,11 @@ struct XmlLite final
     void parseComplex(const xml::lite::Element& element, six::zdouble& value) const;
     void parseString(const xml::lite::Element* element, std::string& value) const;
     void parseString(const xml::lite::Element&, std::string&) const;
+
     void parseBooleanType(const xml::lite::Element& element, BooleanType& value) const;
+    BooleanType parseBooleanType(const xml::lite::Element& element) const;
+    bool parseBoolean(const xml::lite::Element& element) const;
+    bool parseOptional(const xml::lite::Element& parent, const std::string& tag, std::optional<bool>& value) const;
 
     bool parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const;
 

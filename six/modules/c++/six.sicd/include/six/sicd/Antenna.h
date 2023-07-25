@@ -19,10 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_ANTENNA_H__
-#define __SIX_ANTENNA_H__
+
+#pragma once
+#ifndef SIX_six_sicd_Antenna_h_INCLUDED_
+#define SIX_six_sicd_Antenna_h_INCLUDED_
 
 #include <ostream>
+#include <std/optional>
 
 #include "six/Types.h"
 #include "six/Init.h"
@@ -42,15 +45,16 @@ namespace sicd
  *  the DCXPoly is the EB sterring x-axis direction
  *  cosine (DCX) as a function of slow time
  */
-struct ElectricalBoresight
+struct ElectricalBoresight final
 {
     //! Constructor
     ElectricalBoresight();
 
     bool operator==(const ElectricalBoresight& other) const
     {
-        return dcxPoly == other.dcxPoly &&
-               dcyPoly == other.dcyPoly;
+        return (dcxPoly == other.dcxPoly)
+            && (dcyPoly == other.dcyPoly)
+            && (useEBPVP == other.useEBPVP);
     }
 
     bool operator!=(const ElectricalBoresight& other) const
@@ -63,6 +67,10 @@ struct ElectricalBoresight
 
     //! SICD DCYPoly
     Poly1D dcyPoly;
+
+    //! CPHD 1.1.0 UseEBPVP
+    //! Indicates the provided EB PVP arrays provide a more accurate description the EB Steering vector vs. time.
+    std::optional<bool> useEBPVP;
 };
 
 std::ostream& operator<< (std::ostream& os, const ElectricalBoresight& d);
@@ -251,5 +259,4 @@ struct Antenna
 
 }
 }
-#endif
-
+#endif // SIX_six_sicd_Antenna_h_INCLUDED_

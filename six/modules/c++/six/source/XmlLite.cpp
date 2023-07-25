@@ -25,6 +25,7 @@
 #include <assert.h>
 
 #include <string>
+#include <stdexcept>
 
 #include <nitf/coda-oss.hpp>
 #include <except/Exception.h>
@@ -298,6 +299,16 @@ xml::lite::Element* XmlLite::createBooleanType(const std::string& name, BooleanT
 {
     return createBooleanType(makeQName(name), p, parent);
 }
+xml::lite::Element* XmlLite::createOptional(const std::string& name, const std::optional<bool>& v, xml::lite::Element& parent) const
+{
+    if (!v.has_value())
+    {
+        return nullptr;
+    }
+    const auto p = *v ? BooleanType::IS_TRUE : BooleanType::IS_FALSE;
+    return createBooleanType(name, p, parent);
+}
+
 
 xml::lite::Element& XmlLite::createDateTime(const xml::lite::QName& name, const DateTime& p, xml::lite::Element& parent) const
 {
@@ -438,6 +449,32 @@ void XmlLite::parseBooleanType(const xml::lite::Element& element, BooleanType& v
     parseValue(mLogger.get(), [&]() {
         value = castValue(element, six::toType<BooleanType>);
         });
+}
+BooleanType XmlLite::parseBooleanType(const xml::lite::Element& element) const
+{
+    BooleanType retval;
+    parseBooleanType(element, retval);
+    return retval;
+}
+bool XmlLite::parseBoolean(const xml::lite::Element& element) const
+{
+    switch (parseBooleanType(element))
+    {
+        case BooleanType::IS_TRUE: return true;
+        case BooleanType::IS_FALSE: return false;
+        default: break;
+    }
+    throw std::logic_error("Unknown 'BooleanType' value.");
+}
+
+bool XmlLite::parseOptional(const xml::lite::Element& parent, const std::string& tag, std::optional<bool>& value) const
+{
+    if (const xml::lite::Element* const element = getOptional(parent, tag))
+    {
+        value = parseBoolean(*element);
+        return true;
+    }
+    return false;
 }
 
 void XmlLite::parseDateTime(const xml::lite::Element& element, DateTime& value) const

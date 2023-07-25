@@ -705,9 +705,12 @@ XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
         {
             mCommon.createPoly1D("GainBSPoly", antenna.antPattern[ii].gainBSPoly, antPatternXML);
         }
+
         XMLElem ebXML = newElement("EB", antPatternXML);
         mCommon.createPoly1D("DCXPoly", antenna.antPattern[ii].eb.dcxPoly, ebXML);
         mCommon.createPoly1D("DCYPoly", antenna.antPattern[ii].eb.dcyPoly, ebXML);
+        createOptional("UseEBPVP", antenna.antPattern[ii].eb.useEBPVP, *ebXML);
+
         XMLElem arrayXML = newElement("Array", antPatternXML);
         mCommon.createPoly2D("GainPoly", antenna.antPattern[ii].array.gainPoly, arrayXML);
         mCommon.createPoly2D("PhasePoly", antenna.antPattern[ii].array.phasePoly, arrayXML);
@@ -1571,6 +1574,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         XMLElem ebXML = getFirstAndOnly(antPatternXMLVec[ii], "EB");
         mCommon.parsePoly1D(getFirstAndOnly(ebXML, "DCXPoly"), antenna.antPattern[ii].eb.dcxPoly);
         mCommon.parsePoly1D(getFirstAndOnly(ebXML, "DCYPoly"), antenna.antPattern[ii].eb.dcyPoly);
+        parseOptional(*ebXML, "UseEBPVP", antenna.antPattern[ii].eb.useEBPVP);
 
         // Parse Array
         XMLElem arrayXML = getFirstAndOnly(antPatternXMLVec[ii], "Array");

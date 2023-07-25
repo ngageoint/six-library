@@ -37,6 +37,10 @@ std::ostream& operator<< (std::ostream& os, const ElectricalBoresight& d)
     os << "ElectricalBoresight::" << "\n"
        << "  dcxPoly: " << d.dcxPoly << "\n"
        << "  dcyPoly: " << d.dcyPoly << "\n";
+    if (d.useEBPVP)
+    {
+        os << "  useEBPVP: " << *d.useEBPVP << "\n";
+    }
     return os;
 }
 
