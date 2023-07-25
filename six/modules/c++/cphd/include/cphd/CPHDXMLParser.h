@@ -98,6 +98,7 @@ private:
     XMLElem toXML(const Global& obj, XMLElem parent);
     XMLElem toXML(const SceneCoordinates& obj, XMLElem parent);
     XMLElem toXML(const Data& obj, XMLElem parent);
+    XMLElem toXML(const std::optional<PolRefType>&, const std::string& name, xml::lite::Element& parent);
     XMLElem toXML(const Polarization&, xml::lite::Element& parent);
     XMLElem toXML(const Channel& obj, XMLElem parent);
     XMLElem toXML(const Pvp& obj, XMLElem parent);
@@ -166,6 +167,7 @@ private:
     void parseSupportArrayParameter(const xml::lite::Element* paramXML, SupportArrayParameter& param,
                                     bool additionalFlag) const;
     void parseTxRcvParameter(const xml::lite::Element* paramXML, ParameterType& param) const;
+    void parsePolRef(const xml::lite::Element& polarizationXML, const std::string& tag, std::optional<PolRefType>&) const;
     void parsePolarization(const xml::lite::Element& polarizationXML, Polarization&) const;
 
 private:

@@ -333,11 +333,29 @@ XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
     return dataXML;
 }
 
+XMLElem CPHDXMLParser::toXML(const std::optional<PolRefType>& pPolRef, const std::string& name, xml::lite::Element& parent)
+{
+    XMLElem polRefXML = nullptr;
+    if (pPolRef)
+    {
+        polRefXML = newElement(name, &parent);
+        createDouble("AmpH", pPolRef->ampH, polRefXML);
+        createDouble("AmpV", pPolRef->ampV, polRefXML);
+        createDouble("PhaseV", pPolRef->phaseV, polRefXML);
+    }
+
+    return polRefXML;
+}
+
 XMLElem CPHDXMLParser::toXML(const Polarization& obj, xml::lite::Element& parent)
 {
-    XMLElem polXML = newElement("Polarization", &parent);
+    auto polXML = newElement("Polarization", &parent);
     createString("TxPol", obj.txPol, polXML);
     createString("RcvPol", obj.rcvPol, polXML);
+
+    toXML(obj.txPolRef, "TxPolRef", *polXML); // added in CPHD 1.1.0
+    toXML(obj.rcvPolRef, "RcvPolRef", *polXML); // added in CPHD 1.1.0
+
     return polXML;
 }
 
@@ -2054,6 +2072,18 @@ void CPHDXMLParser::parseChannelParameters(
     parsePolarization(*paramXML, param.polarization);
 }
 
+void CPHDXMLParser::parsePolRef(const xml::lite::Element& polarizationXML, const std::string& tag, std::optional<PolRefType>& polRef) const
+{
+    if (const auto pPolRefXML = getOptional(polarizationXML, tag))
+    {
+        polRef = PolRefType{};
+
+        getFirstAndOnly(*pPolRefXML, "AmpH", polRef->ampH);
+        getFirstAndOnly(*pPolRefXML, "AmpV", polRef->ampV);
+        getFirstAndOnly(*pPolRefXML, "PhaseV", polRef->phaseV);
+    }
+}
+
 void CPHDXMLParser::parsePolarization(const xml::lite::Element& paramXML, Polarization& polarization) const
 {
     std::vector<XMLElem> PolarizationXML;
@@ -2065,6 +2095,9 @@ void CPHDXMLParser::parsePolarization(const xml::lite::Element& paramXML, Polari
 
         const xml::lite::Element* RcvPolXML = getFirstAndOnly(PolarizationXML[ii], "RcvPol");
         polarization.rcvPol = PolarizationType::toType(RcvPolXML->getCharacterData());
+
+        parsePolRef(*(PolarizationXML[ii]), "TxPolRef", polarization.txPolRef); // added in CPHD 1.1.0
+        parsePolRef(*(PolarizationXML[ii]), "RcvPolRef", polarization.rcvPolRef); // added in CPHD 1.1.0
     }
 }
 

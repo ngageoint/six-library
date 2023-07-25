@@ -312,6 +312,9 @@ protected:
     static XMLElem getFirstAndOnly(const xml::lite::Element* parent, const std::string& tag);
     static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag);
 
+    void getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag, double&) const;
+
+
     /*!
      * Require an element to be not nullptr
      * @throw throws an Exception if the element is nullptr
