@@ -73,7 +73,7 @@ struct PolRefType final
  *
  *  \brief Polarization of the signals that formed the signal array.
  */
-struct Polarization
+struct Polarization final
 {
     //! Equality operator
     bool operator==(const Polarization& other) const

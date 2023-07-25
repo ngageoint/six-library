@@ -19,14 +19,17 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/CPHDXMLParser.h>
+
 #include <set>
+#include <tuple>
+
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <str/Convert.h>
 #include <six/Utilities.h>
 #include <six/SICommonXMLParser.h>
-#include <cphd/CPHDXMLParser.h>
 #include <cphd/Enums.h>
 #include <cphd/Metadata.h>
 #include <cphd/Types.h>
@@ -330,6 +333,14 @@ XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
     return dataXML;
 }
 
+XMLElem CPHDXMLParser::toXML(const Polarization& obj, xml::lite::Element& parent)
+{
+    XMLElem polXML = newElement("Polarization", &parent);
+    createString("TxPol", obj.txPol, polXML);
+    createString("RcvPol", obj.rcvPol, polXML);
+    return polXML;
+}
+
 XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
 {
     XMLElem channelXML = newElement("Channel", parent);
@@ -350,9 +361,8 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
         {
             createBooleanType("SignalNormal", channel.parameters[ii].signalNormal, parametersXML);
         }
-        XMLElem polXML = newElement("Polarization", parametersXML);
-        createString("TxPol", channel.parameters[ii].polarization.txPol, polXML);
-        createString("RcvPol", channel.parameters[ii].polarization.rcvPol, polXML);
+        std::ignore = toXML(channel.parameters[ii].polarization, *parametersXML);
+
         createDouble("FxC", channel.parameters[ii].fxC, parametersXML);
         createDouble("FxBW", channel.parameters[ii].fxBW, parametersXML);
         createOptionalDouble("FxBWNoise", channel.parameters[ii].fxBWNoise, parametersXML);
@@ -1293,12 +1303,9 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* dataXML, Data& data)
 void CPHDXMLParser::fromXML(const xml::lite::Element* channelXML, Channel& channel)
 {
     parseString(getFirstAndOnly(channelXML, "RefChId"), channel.refChId);
-    parseBooleanType(getFirstAndOnly(channelXML, "FXFixedCPHD"),
-                     channel.fxFixedCphd);
-    parseBooleanType(getFirstAndOnly(channelXML, "TOAFixedCPHD"),
-                     channel.toaFixedCphd);
-    parseBooleanType(getFirstAndOnly(channelXML, "SRPFixedCPHD"),
-                     channel.srpFixedCphd);
+    parseBooleanType(getFirstAndOnly(channelXML, "FXFixedCPHD"), channel.fxFixedCphd);
+    parseBooleanType(getFirstAndOnly(channelXML, "TOAFixedCPHD"), channel.toaFixedCphd);
+    parseBooleanType(getFirstAndOnly(channelXML, "SRPFixedCPHD"), channel.srpFixedCphd);
 
     std::vector<XMLElem> parametersXML;
     channelXML->getElementsByTagName("Parameters", parametersXML);
@@ -2044,17 +2051,21 @@ void CPHDXMLParser::parseChannelParameters(
     }
 
     // Polarization
+    parsePolarization(*paramXML, param.polarization);
+}
+
+void CPHDXMLParser::parsePolarization(const xml::lite::Element& paramXML, Polarization& polarization) const
+{
     std::vector<XMLElem> PolarizationXML;
-    paramXML->getElementsByTagName("Polarization", PolarizationXML);
+    paramXML.getElementsByTagName("Polarization", PolarizationXML);
     for (size_t ii = 0; ii < PolarizationXML.size(); ++ii)
     {
         const xml::lite::Element* TxPolXML = getFirstAndOnly(PolarizationXML[ii], "TxPol");
-        param.polarization.txPol = PolarizationType::toType(TxPolXML->getCharacterData());
+        polarization.txPol = PolarizationType::toType(TxPolXML->getCharacterData());
 
         const xml::lite::Element* RcvPolXML = getFirstAndOnly(PolarizationXML[ii], "RcvPol");
-        param.polarization.rcvPol = PolarizationType::toType(RcvPolXML->getCharacterData());
+        polarization.rcvPol = PolarizationType::toType(RcvPolXML->getCharacterData());
     }
-
 }
 
 void CPHDXMLParser::parsePVPType(Pvp& pvp, const xml::lite::Element* paramXML, PVPType& param) const
