@@ -204,6 +204,7 @@ struct XmlLite final
     xml::lite::Element& createDate(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
 
     xml::lite::Element* createOptional(const std::string& name, const std::optional<bool>&, xml::lite::Element& parent) const;
+    xml::lite::Element* createOptional(const std::string& name, const std::optional<std::string>&, xml::lite::Element& parent) const;
 
     template <typename T>
     void parseInt(const xml::lite::Element& element, T& value) const
@@ -240,6 +241,7 @@ struct XmlLite final
     bool parseOptional(const xml::lite::Element& parent, const std::string& tag, std::optional<bool>& value) const;
 
     bool parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const;
+    bool parseOptional(const xml::lite::Element& parent, const std::string& tag, std::optional<std::string>& value) const;
 
     template <typename T>
     bool parseOptionalInt(const xml::lite::Element& parent, const std::string& tag, T& value) const

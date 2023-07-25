@@ -68,6 +68,10 @@ std::ostream& operator<< (std::ostream& os, const GainAndPhasePolys& d)
 {
     os << "  gainPoly:\n" << d.gainPoly << "\n"
        << "  phasePoly:\n" << d.phasePoly << "\n";
+    if (d.antGPId)
+    {
+        os << "  antGPId:\n" << *d.antGPId << "\n";
+    }
     return os;
 }
 AntennaParameters::AntennaParameters() : 

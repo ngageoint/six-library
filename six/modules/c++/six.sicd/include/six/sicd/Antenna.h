@@ -117,15 +117,16 @@ std::ostream& operator<< (std::ostream& os, const HalfPowerBeamwidths& d);
  *  electronically steered arrays, the EB is steered to
  *  DCX = 0, DCY = 0.
  */
-struct GainAndPhasePolys
+struct GainAndPhasePolys final
 {
     //! No init right now, could do that and set const coef to zero
     GainAndPhasePolys();
 
     bool operator==(const GainAndPhasePolys& other) const
     {
-        return gainPoly == other.gainPoly &&
-               phasePoly == other.phasePoly;
+        return (gainPoly == other.gainPoly)
+            && (phasePoly == other.phasePoly)
+            && (antGPId == other.antGPId);
     }
 
     bool operator!=(const GainAndPhasePolys& other) const
@@ -140,6 +141,9 @@ struct GainAndPhasePolys
     //! One way signal phase (in cycles) as a function of DCX and DCY.
     //! Phase relative to phase at DCX = 0, DCY = 0. Const coeff = 0 always
     Poly2D phasePoly;
+
+    //! Identifier of the Antenna Gain/Phase support array that specifies the one-way array pattern 
+    std::optional<std::string> antGPId;  // new in CPHD 1.1.0
 };
 
 std::ostream& operator<< (std::ostream& os, const GainAndPhasePolys& d);

@@ -715,6 +715,8 @@ XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
         XMLElem arrayXML = newElement("Array", antPatternXML);
         mCommon.createPoly2D("GainPoly", antenna.antPattern[ii].array.gainPoly, arrayXML);
         mCommon.createPoly2D("PhasePoly", antenna.antPattern[ii].array.phasePoly, arrayXML);
+        createOptional("AntGPId", antenna.antPattern[ii].array.antGPId, *arrayXML);
+
         XMLElem elementXML = newElement("Element", antPatternXML);
         mCommon.createPoly2D("GainPoly", antenna.antPattern[ii].element.gainPoly, elementXML);
         mCommon.createPoly2D("PhasePoly", antenna.antPattern[ii].element.phasePoly, elementXML);
@@ -1587,6 +1589,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         XMLElem elementXML = getFirstAndOnly(antPatternXMLVec[ii], "Element");
         mCommon.parsePoly2D(getFirstAndOnly(elementXML, "GainPoly"), antenna.antPattern[ii].element.gainPoly);
         mCommon.parsePoly2D(getFirstAndOnly(elementXML, "PhasePoly"), antenna.antPattern[ii].element.phasePoly);
+        parseOptional(*elementXML, "AntGPId", antenna.antPattern[ii].element.antGPId);
 
         // Parse GainPhaseArray
         std::vector<XMLElem> gainPhaseArrayXMLVec;

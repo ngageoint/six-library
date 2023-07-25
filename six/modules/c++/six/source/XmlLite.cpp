@@ -309,6 +309,10 @@ xml::lite::Element* XmlLite::createOptional(const std::string& name, const std::
     return createBooleanType(name, p, parent);
 }
 
+xml::lite::Element* XmlLite::createOptional(const std::string& name, const std::optional<std::string>& v, xml::lite::Element& parent) const
+{
+    return createOptionalValue(makeQName(name), v, parent, mAddClassAttributes, "xs:string", getDefaultURI());
+}
 
 xml::lite::Element& XmlLite::createDateTime(const xml::lite::QName& name, const DateTime& p, xml::lite::Element& parent) const
 {
@@ -439,6 +443,16 @@ bool  XmlLite::parseOptionalString(const xml::lite::Element& parent, const std::
     if (const xml::lite::Element* const element = getOptional(parent, tag))
     {
         parseString(element, value);
+        return true;
+    }
+    return false;
+}
+bool  XmlLite::parseOptional(const xml::lite::Element& parent, const std::string& tag, std::optional<std::string>& value) const
+{
+    std::string result;
+    if (parseOptionalString(parent, tag, result))
+    {
+        value = result;
         return true;
     }
     return false;
