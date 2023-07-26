@@ -39,11 +39,8 @@ std::ostream& operator<< (std::ostream& os, const ElectricalBoresight& d)
 {
     os << "ElectricalBoresight::" << "\n"
        << "  dcxPoly: " << d.dcxPoly << "\n"
-       << "  dcyPoly: " << d.dcyPoly << "\n";
-    if (d.useEBPVP)
-    {
-        os << "  useEBPVP: " << *d.useEBPVP << "\n";
-    }
+       << "  dcyPoly: " << d.dcyPoly << "\n"
+       << d.useEBPVP;
     return os;
 }
 
@@ -70,11 +67,8 @@ GainAndPhasePolys::GainAndPhasePolys() :
 std::ostream& operator<< (std::ostream& os, const GainAndPhasePolys& d)
 {
     os << "  gainPoly:\n" << d.gainPoly << "\n"
-       << "  phasePoly:\n" << d.phasePoly << "\n";
-    if (d.antGPId)
-    {
-        os << "  antGPId:\n" << str::EncodedStringView(*d.antGPId).native() << "\n";
-    }
+       << "  phasePoly:\n" << d.phasePoly << "\n"
+       << d.antGPId;
     return os;
 }
 AntennaParameters::AntennaParameters() : 

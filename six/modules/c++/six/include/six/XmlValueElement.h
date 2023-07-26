@@ -34,6 +34,7 @@
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/Utilities.h>
+#include <six/XmlLite.h>
 
 namespace six
 {

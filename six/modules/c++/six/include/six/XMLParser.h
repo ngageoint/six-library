@@ -214,9 +214,6 @@ protected:
     XMLElem createBooleanType(const std::string& name, BooleanType b, XMLElem parent) const;
     XMLElem createDate(const std::string& name, const DateTime& p, XMLElem parent) const;
 
-    XMLElem createOptional(const std::string& name, const std::optional<bool>&, xml::lite::Element&) const;
-    XMLElem createOptional(const std::string& name, const std::optional<std::u8string>&, xml::lite::Element&) const;
-
     template <typename T>
     void parseInt(const xml::lite::Element& element, T& value) const
     {
@@ -262,7 +259,6 @@ protected:
         assert(element != nullptr);
         mXmlLite.parseBooleanType(*element, value);
     }
-    bool parseOptional(const xml::lite::Element&, const std::string& tag, std::optional<bool>&) const;
 
     bool parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const;
     bool parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const
@@ -270,7 +266,6 @@ protected:
         assert(parent != nullptr);
         return parseOptionalString(*parent, tag, value);
     }
-    bool parseOptional(const xml::lite::Element&, const std::string& tag, std::optional<std::u8string>&) const;
 
     template <typename T>
     bool parseOptionalInt(const xml::lite::Element* parent, const std::string& tag, T& value) const

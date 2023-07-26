@@ -713,12 +713,12 @@ XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
         XMLElem ebXML = newElement("EB", antPatternXML);
         mCommon.createPoly1D("DCXPoly", antenna.antPattern[ii].eb.dcxPoly, ebXML);
         mCommon.createPoly1D("DCYPoly", antenna.antPattern[ii].eb.dcyPoly, ebXML);
-        createOptional("UseEBPVP", antenna.antPattern[ii].eb.useEBPVP, *ebXML);
+        create(parser(), antenna.antPattern[ii].eb.useEBPVP, *ebXML);
 
         XMLElem arrayXML = newElement("Array", antPatternXML);
         mCommon.createPoly2D("GainPoly", antenna.antPattern[ii].array.gainPoly, arrayXML);
         mCommon.createPoly2D("PhasePoly", antenna.antPattern[ii].array.phasePoly, arrayXML);
-        createOptional("AntGPId", antenna.antPattern[ii].array.antGPId, *arrayXML);
+        create(parser(), antenna.antPattern[ii].array.antGPId, *arrayXML);
 
         XMLElem elementXML = newElement("Element", antPatternXML);
         mCommon.createPoly2D("GainPoly", antenna.antPattern[ii].element.gainPoly, elementXML);
@@ -1581,7 +1581,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         XMLElem ebXML = getFirstAndOnly(antPatternXMLVec[ii], "EB");
         mCommon.parsePoly1D(getFirstAndOnly(ebXML, "DCXPoly"), antenna.antPattern[ii].eb.dcxPoly);
         mCommon.parsePoly1D(getFirstAndOnly(ebXML, "DCYPoly"), antenna.antPattern[ii].eb.dcyPoly);
-        parseOptional(*ebXML, "UseEBPVP", antenna.antPattern[ii].eb.useEBPVP);
+        std::ignore = six::parseOptional(parser(), *ebXML, antenna.antPattern[ii].eb.useEBPVP);
 
         // Parse Array
         XMLElem arrayXML = getFirstAndOnly(antPatternXMLVec[ii], "Array");
@@ -1592,7 +1592,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         XMLElem elementXML = getFirstAndOnly(antPatternXMLVec[ii], "Element");
         mCommon.parsePoly2D(getFirstAndOnly(elementXML, "GainPoly"), antenna.antPattern[ii].element.gainPoly);
         mCommon.parsePoly2D(getFirstAndOnly(elementXML, "PhasePoly"), antenna.antPattern[ii].element.phasePoly);
-        parseOptional(*elementXML, "AntGPId", antenna.antPattern[ii].element.antGPId);
+        std::ignore = six::parseOptional(parser(), *elementXML, antenna.antPattern[ii].element.antGPId);
 
         // Parse GainPhaseArray
         std::vector<XMLElem> gainPhaseArrayXMLVec;
