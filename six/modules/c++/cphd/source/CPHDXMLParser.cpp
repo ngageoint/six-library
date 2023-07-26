@@ -402,6 +402,9 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
         XMLElem dwellTimesXML = newElement("DwellTimes", parametersXML);
         createString("CODId", channel.parameters[ii].dwellTimes.codId, dwellTimesXML);
         createString("DwellId", channel.parameters[ii].dwellTimes.dwellId, dwellTimesXML);
+        createOptional("DTAId", channel.parameters[ii].dwellTimes.dtaId, *dwellTimesXML);
+        createOptional("UseDTA", channel.parameters[ii].dwellTimes.useDTA, *dwellTimesXML);
+
         if(!six::Init::isUndefined(channel.parameters[ii].imageArea))
         {
             XMLElem imageAreaXML = newElement("ImageArea", parametersXML);
@@ -1991,6 +1994,8 @@ void CPHDXMLParser::parseChannelParameters(
     XMLElem dwellTimesXML = getFirstAndOnly(paramXML, "DwellTimes");
     parseString(getFirstAndOnly(dwellTimesXML, "CODId"), param.dwellTimes.codId);
     parseString(getFirstAndOnly(dwellTimesXML, "DwellId"), param.dwellTimes.dwellId);
+    parseOptional(*dwellTimesXML, "DTAId", param.dwellTimes.dtaId);
+    parseOptional(*dwellTimesXML, "UseDTA", param.dwellTimes.useDTA);
 
     XMLElem imageAreaXML = getOptional(paramXML, "ImageArea");
     if(imageAreaXML)

@@ -245,6 +245,8 @@
             <DwellTimes>
                 <CODId>CODPolynomial</CODId>
                 <DwellId>DwellPolynomial</DwellId>
+				<DTAId>DTAId</DTAId>
+				<UseDTA>true</UseDTA>
             </DwellTimes>
             <ImageArea>
                 <X1Y1>

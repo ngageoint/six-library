@@ -20,6 +20,9 @@
  *
  */
 #include <cphd/Channel.h>
+
+#include <str/EncodedStringView.h>
+
 #include <six/Init.h>
 
 namespace cphd
@@ -125,7 +128,16 @@ std::ostream& operator<< (std::ostream& os, const DwellTimes& d)
     os << "      DwellTimes:: \n"
         << "      CODId        : " << d.codId << "\n"
         << "      DwellId        : " << d.dwellId << "\n";
-        return os;
+    if (d.dtaId)
+    {
+        os << "      DTAId        : " << str::EncodedStringView(*d.dtaId).native() << "\n";
+    }
+    if (d.useDTA)
+    {
+        os << "      UseDTA        : " << *d.useDTA << "\n";
+    }
+    
+    return os;
 }
 
 std::ostream& operator<< (std::ostream& os, const TgtRefLevel& t)

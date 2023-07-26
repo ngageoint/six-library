@@ -24,7 +24,7 @@
 #ifndef SIX_cphd_Channel_h_INCLUDED_
 #define SIX_cphd_Channel_h_INCLUDED_
 
-#include <string>
+#include <std/string>
 #include <vector>
 #include <std/optional>
 
@@ -195,8 +195,10 @@ struct DwellTimes
     // Equality operator
     bool operator==(const DwellTimes& other) const
     {
-        return codId == other.codId &&
-                dwellId == other.dwellId;
+        return (codId == other.codId)
+            && (dwellId == other.dwellId)
+            && (dtaId == other.dtaId)
+            && (useDTA == other.useDTA);
     }
     bool operator!=(const DwellTimes& other) const
     {
@@ -210,6 +212,14 @@ struct DwellTimes
     //! Identifier of the dwell Time polynomial that
     //! maps reference surface position to dwell time
     std::string dwellId;
+
+    //! Identifier of the Dwell Time support array that specifies COD times and
+    //! Dwell Times for a grid of points on the reference surface
+    std::optional<std::u8string> dtaId; // new in CPHD 1.1.0
+
+    //! Indicates the provided Dwell Time array provides a more
+    //! accurate description dwell times for the channel.
+    std::optional<bool> useDTA; // new in CPHD 1.1.0
 };
 
 /*
