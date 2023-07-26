@@ -60,8 +60,7 @@ namespace six
 
 		const T& operator*() const { return *value_; }
 		T& operator*() { return *value_; }
-		template<typename U>
-		XmlOptionalElement& operator=(const U& v) {
+		XmlOptionalElement& operator=(const T& v) {
 			value_ = v;
 			return *this;
 		}

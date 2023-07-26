@@ -62,8 +62,7 @@ namespace six
 		const std::string& tag() const { return tag_; }
 
 		const T& value() const { return value_; }
-		template<typename U>
-		XmlValueElement& operator=(const U& v) {
+		XmlValueElement& operator=(const T& v) {
 			value_ = v;
 			return *this;
 		}
