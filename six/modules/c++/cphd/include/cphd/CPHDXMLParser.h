@@ -170,9 +170,9 @@ private:
     void parseSupportArrayParameter(const xml::lite::Element* paramXML, SupportArrayParameter& param,
                                     bool additionalFlag) const;
     void parseTxRcvParameter(const xml::lite::Element* paramXML, ParameterType& param) const;
-    void parsePolRef(const xml::lite::Element& polarizationXML, six::XmlOptionalElement<PolRef>&) const;
     void parsePolarization(const xml::lite::Element& polarizationXML, Polarization&) const;
 
+    void parse(const xml::lite::Element&, six::XmlOptionalElement<PolRef>&) const;
     void parse(const xml::lite::Element&, six::XmlOptionalElement<AntPattern::EBFreqShiftSF>&) const;
     void parse(const xml::lite::Element&, six::XmlOptionalElement<AntPattern::MLFreqDilationSF>&) const;
     void parse(const xml::lite::Element&, six::XmlOptionalElement<AntPattern::AntPolRef>&) const;

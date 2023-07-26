@@ -333,17 +333,17 @@ XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
     return dataXML;
 }
 
-XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<PolRef>& pPolRef, xml::lite::Element& parent)
+XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<PolRef>& o, xml::lite::Element& parent)
 {
     XMLElem polRefXML = nullptr;
-    if (pPolRef.has_value())
+    if (o.has_value())
     {
-        polRefXML = newElement(pPolRef.tag(), &parent);
+        polRefXML = newElement(o.tag(), &parent);
 
-        auto& optional = pPolRef.value();
-        std::ignore = create(parser(), optional->ampH, *polRefXML);
-        std::ignore = create(parser(), optional->ampV, *polRefXML);
-        std::ignore = create(parser(), optional->phaseV, *polRefXML);
+        const auto& v = *(o.value());
+        std::ignore = create(parser(), v.ampH, *polRefXML);
+        std::ignore = create(parser(), v.ampV, *polRefXML);
+        std::ignore = create(parser(), v.phaseV, *polRefXML);
     }
 
     return polRefXML;
@@ -680,9 +680,9 @@ XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<AntPattern::EBFreqShi
     {
         retval = newElement(o.tag(), &parent);
 
-        auto& optional = o.value();
-        std::ignore = create(parser(), optional->dcxsf, *retval);
-        std::ignore = create(parser(), optional->dcysf, *retval);
+        const auto& v = *(o.value());
+        std::ignore = create(parser(), v.dcxsf, *retval);
+        std::ignore = create(parser(), v.dcysf, *retval);
     }
 
     return retval;
@@ -695,9 +695,9 @@ XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<AntPattern::MLFreqDil
     {
         retval = newElement(o.tag(), &parent);
 
-        auto& optional = o.value();
-        std::ignore = create(parser(), optional->dcxsf, *retval);
-        std::ignore = create(parser(), optional->dcysf, *retval);
+        const auto& v = *(o.value());
+        std::ignore = create(parser(), v.dcxsf, *retval);
+        std::ignore = create(parser(), v.dcysf, *retval);
     }
 
     return retval;
@@ -710,10 +710,10 @@ XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<AntPattern::AntPolRef
     {
         retval = newElement(o.tag(), &parent);
 
-        auto& optional = o.value();
-        std::ignore = create(parser(), optional->ampX, *retval);
-        std::ignore = create(parser(), optional->ampY, *retval);
-        std::ignore = create(parser(), optional->phaseY, *retval);
+        const auto& v = *(o.value());
+        std::ignore = create(parser(), v.ampX, *retval);
+        std::ignore = create(parser(), v.ampY, *retval);
+        std::ignore = create(parser(), v.phaseY, *retval);
     }
 
     return retval;
@@ -1565,10 +1565,8 @@ void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XmlOptionalElem
     if (const auto pXML = getOptional(parent, o.tag()))
     {
         o = AntPattern::EBFreqShiftSF{};
-        auto& optional = o.value();
-
-        six::getFirstAndOnly(parser(), *pXML, optional->dcxsf);
-        six::getFirstAndOnly(parser(), *pXML, optional->dcysf);
+        six::getFirstAndOnly(parser(), *pXML, (*o).dcxsf);
+        six::getFirstAndOnly(parser(), *pXML, (*o).dcysf);
     }
 }
 
@@ -1577,10 +1575,8 @@ void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XmlOptionalElem
     if (const auto pXML = getOptional(parent, o.tag()))
     {
         o = AntPattern::MLFreqDilationSF{};
-        auto& optional = o.value();
-
-        six::getFirstAndOnly(parser(), *pXML, optional->dcxsf);
-        six::getFirstAndOnly(parser(), *pXML, optional->dcysf);
+        six::getFirstAndOnly(parser(), *pXML, (*o).dcxsf);
+        six::getFirstAndOnly(parser(), *pXML, (*o).dcysf);
     }
 }
 
@@ -1589,11 +1585,9 @@ void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XmlOptionalElem
     if (const auto pXML = getOptional(parent, o.tag()))
     {
         o = AntPattern::AntPolRef{};
-        auto& optional = o.value();
-
-        six::getFirstAndOnly(parser(), *pXML, optional->ampX);
-        six::getFirstAndOnly(parser(), *pXML, optional->ampY);
-        six::getFirstAndOnly(parser(), *pXML, optional->phaseY);
+        six::getFirstAndOnly(parser(), *pXML, (*o).ampX);
+        six::getFirstAndOnly(parser(), *pXML, (*o).ampY);
+        six::getFirstAndOnly(parser(), *pXML, (*o).phaseY);
     }
 }
 
@@ -2185,16 +2179,14 @@ void CPHDXMLParser::parseChannelParameters(
     parsePolarization(*paramXML, param.polarization);
 }
 
-void CPHDXMLParser::parsePolRef(const xml::lite::Element& polarizationXML, six::XmlOptionalElement<PolRef>& o) const
+void CPHDXMLParser::parse(const xml::lite::Element& polarizationXML, six::XmlOptionalElement<PolRef>& o) const
 {
     if (const auto pXML = getOptional(polarizationXML, o.tag()))
     {
         o = PolRef{};
-        auto& optional = o.value();
-
-        six::getFirstAndOnly(parser(), *pXML, optional->ampH);
-        six::getFirstAndOnly(parser(), *pXML, optional->ampV);
-        six::getFirstAndOnly(parser(), *pXML, optional->phaseV);
+        six::getFirstAndOnly(parser(), *pXML, (*o).ampH);
+        six::getFirstAndOnly(parser(), *pXML, (*o).ampV);
+        six::getFirstAndOnly(parser(), *pXML, (*o).phaseV);
     }
 }
 
@@ -2211,8 +2203,8 @@ void CPHDXMLParser::parsePolarization(const xml::lite::Element& paramXML, Polari
         const xml::lite::Element* RcvPolXML = getFirstAndOnly(PolarizationXML[ii], "RcvPol");
         polarization.rcvPol = PolarizationType::toType(RcvPolXML->getCharacterData());
 
-        parsePolRef(*(PolarizationXML[ii]), polarization.txPolRef); // added in CPHD 1.1.0
-        parsePolRef(*(PolarizationXML[ii]), polarization.rcvPolRef); // added in CPHD 1.1.0
+        parse(*(PolarizationXML[ii]), polarization.txPolRef); // added in CPHD 1.1.0
+        parse(*(PolarizationXML[ii]), polarization.rcvPolRef); // added in CPHD 1.1.0
     }
 }
 
