@@ -88,9 +88,7 @@ Channel::Channel() :
 
 std::ostream& operator<< (std::ostream& os, const PolRef& v)
 {
-    os << "      AmpH        : " << v.ampH << "\n"
-        << "      AmpV       : " << v.ampV << "\n"
-        << "      PhaseV       : " << v.phaseV << "\n";
+    os << v.ampH << v.ampV << v.phaseV << "\n";
     return os;
 }
 
@@ -132,11 +130,7 @@ std::ostream& operator<< (std::ostream& os, const DwellTimes& d)
     {
         os << "      DTAId        : " << str::EncodedStringView(*d.dtaId).native() << "\n";
     }
-    if (d.useDTA)
-    {
-        os << "      UseDTA        : " << *d.useDTA << "\n";
-    }
-    
+    os << d.useDTA;   
     return os;
 }
 

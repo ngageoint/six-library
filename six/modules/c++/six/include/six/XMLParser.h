@@ -330,6 +330,9 @@ protected:
      */
     static XMLElem require(XMLElem element, const std::string& name);
 
+    const XmlLite& parser() const { return mXmlLite; }
+    XmlLite& parser() { return mXmlLite; }
+
 private:
     XmlLite mXmlLite;
 };

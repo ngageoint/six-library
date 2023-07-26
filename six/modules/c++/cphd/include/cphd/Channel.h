@@ -28,6 +28,9 @@
 #include <vector>
 #include <std/optional>
 
+#include <six/XmlValueElement.h>
+#include <six/XmlOptionalElement.h>
+
 #include <cphd/Types.h>
 #include <cphd/Enums.h>
 #include <cphd/SceneCoordinates.h>
@@ -54,13 +57,13 @@ struct PolRef final
     }
 
     //! E-field relative amplitude in H direction
-    ZeroToOne ampH = 0.0;
+    six::XmlValueElement<ZeroToOne> ampH{ "AmpH" };
 
     //! E-field relative amplitude in V direction
-    ZeroToOne ampV = 0.0;
+    six::XmlValueElement<ZeroToOne> ampV{ "AmpV" };
 
     //! Relative phase of the V E-field relative to the H E-field
-    NegHalfToHalf phaseV = 0.0;
+    six::XmlValueElement<NegHalfToHalf> phaseV{ "PhaseV" };
 };
 
 /*
@@ -219,7 +222,7 @@ struct DwellTimes
 
     //! Indicates the provided Dwell Time array provides a more
     //! accurate description dwell times for the channel.
-    std::optional<bool> useDTA; // new in CPHD 1.1.0
+    six::XmlOptionalElement<bool> useDTA { "UseDTA" }; // new in CPHD 1.1.0
 };
 
 /*

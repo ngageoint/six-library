@@ -339,9 +339,9 @@ XMLElem CPHDXMLParser::toXML(const std::optional<PolRef>& pPolRef, const std::st
     if (pPolRef)
     {
         polRefXML = newElement(name, &parent);
-        createDouble("AmpH", pPolRef->ampH, polRefXML);
-        createDouble("AmpV", pPolRef->ampV, polRefXML);
-        createDouble("PhaseV", pPolRef->phaseV, polRefXML);
+        std::ignore = create(parser(), pPolRef->ampH, *polRefXML);
+        std::ignore = create(parser(), pPolRef->ampV, *polRefXML);
+        std::ignore = create(parser(), pPolRef->phaseV, *polRefXML);
     }
 
     return polRefXML;
@@ -403,7 +403,7 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
         createString("CODId", channel.parameters[ii].dwellTimes.codId, dwellTimesXML);
         createString("DwellId", channel.parameters[ii].dwellTimes.dwellId, dwellTimesXML);
         createOptional("DTAId", channel.parameters[ii].dwellTimes.dtaId, *dwellTimesXML);
-        createOptional("UseDTA", channel.parameters[ii].dwellTimes.useDTA, *dwellTimesXML);
+        std::ignore = create(parser(), channel.parameters[ii].dwellTimes.useDTA, *dwellTimesXML);
 
         if(!six::Init::isUndefined(channel.parameters[ii].imageArea))
         {
@@ -1995,7 +1995,7 @@ void CPHDXMLParser::parseChannelParameters(
     parseString(getFirstAndOnly(dwellTimesXML, "CODId"), param.dwellTimes.codId);
     parseString(getFirstAndOnly(dwellTimesXML, "DwellId"), param.dwellTimes.dwellId);
     parseOptional(*dwellTimesXML, "DTAId", param.dwellTimes.dtaId);
-    parseOptional(*dwellTimesXML, "UseDTA", param.dwellTimes.useDTA);
+    std::ignore = six::parseOptional(parser(), *dwellTimesXML, param.dwellTimes.useDTA);
 
     XMLElem imageAreaXML = getOptional(paramXML, "ImageArea");
     if(imageAreaXML)
@@ -2093,9 +2093,9 @@ void CPHDXMLParser::parsePolRef(const xml::lite::Element& polarizationXML, const
     {
         polRef = PolRef{};
 
-        getFirstAndOnly(*pPolRefXML, "AmpH", polRef->ampH);
-        getFirstAndOnly(*pPolRefXML, "AmpV", polRef->ampV);
-        getFirstAndOnly(*pPolRefXML, "PhaseV", polRef->phaseV);
+        six::getFirstAndOnly(parser(), *pPolRefXML, polRef->ampH);
+        six::getFirstAndOnly(parser(), *pPolRefXML, polRef->ampV);
+        six::getFirstAndOnly(parser(), *pPolRefXML, polRef->phaseV);
     }
 }
 
