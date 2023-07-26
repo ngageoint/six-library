@@ -85,13 +85,13 @@ namespace six
 	template<typename T>
 	inline std::ostream& operator<<(std::ostream& os, const XmlValueElement<T>& v)
 	{
-		os << "\t" << v.tag() << "\t: " << v.value() << "\n";
+		os << "\t" << v.tag() << "\t: " << v.value();
 		return os;
 	}
 	template<>
 	inline std::ostream& operator<<(std::ostream& os, const XmlValueElement<std::u8string>& v)
 	{
-		os << "\t" << v.tag() << "\t: " << str::EncodedStringView(v.value()).native() << "\n";
+		os << "\t" << v.tag() << "\t: " << str::EncodedStringView(v.value()).native();
 		return os;
 	}
 

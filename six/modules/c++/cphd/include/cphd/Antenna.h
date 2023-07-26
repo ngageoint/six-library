@@ -129,6 +129,58 @@ struct AntPhaseCenter
 struct AntPattern final
 {
     /*
+     *  \struct EBFreqShiftSF
+     *  \brief Scale factors used compute the EB shift vs. frequency
+     *
+     *  (Optional) Scale factors used compute the EB shift vs. frequency in DCX and DCY.
+     *
+     */
+    struct EBFreqShiftSF final
+    {
+        bool operator==(const EBFreqShiftSF& other) const
+        {
+            return (dcxsf == other.dcxsf)
+                && (dcysf == other.dcysf);
+        }
+        bool operator!=(const EBFreqShiftSF& other) const
+        {
+            return !((*this) == other);
+        }
+
+        //! Scale factor used to compute the ML dilation factor in DCX vs. frequency.
+        six::XmlValueElement<ZeroToOne> dcxsf{ "DCXSF" };
+
+        //! Scale factor used to compute the ML dilation factor in DCY vs. frequency.
+        six::XmlValueElement<ZeroToOne> dcysf{ "DCYSF" };
+    };
+
+    /*
+     *  \struct MLFreqDilationSF
+     *  \brief Scale factors used to compute the array pattern
+     *
+     *  (Optional) Scale factors used to compute the array pattern mainlobe dilation vs. frequency in DCX and DCY. 
+     *
+     */
+    struct MLFreqDilationSF final
+    {
+        bool operator==(const MLFreqDilationSF& other) const
+        {
+            return (dcxsf == other.dcxsf)
+                && (dcysf == other.dcysf);
+        }
+        bool operator!=(const MLFreqDilationSF& other) const
+        {
+            return !((*this) == other);
+        }
+
+        //! Scale factor used to compute the ML dilation factor in DCX vs. frequency.
+        six::XmlValueElement<ZeroToOne> dcxsf{ "DCXSF" };
+
+        //! Scale factor used to compute the ML dilation factor in DCY vs. frequency.
+        six::XmlValueElement<ZeroToOne> dcysf{ "DCYSF" };
+    };
+
+    /*
      *  \struct AntPolRef
      *  \brief Polarization parameters
      *
@@ -240,6 +292,12 @@ struct AntPattern final
     //! Poly1D gainBSPoly;
     Poly1D gainBSPoly;
 
+    //! (Optional) Scale factors used compute the EB shift vs. frequency
+    six::XmlOptionalElement<EBFreqShiftSF> ebFreqShiftSF{ "EBFreqShiftSF" }; // new in CPHD 1.1.0
+
+    //! (Optional) Scale factors used to compute the array pattern
+    six::XmlOptionalElement<MLFreqDilationSF> mlFreqDilationSF{ "MLFreqDilationSF" }; // new in CPHD 1.1.0
+
     //! (Optional) Polarization parameters for the EB steered to mechanical boresight
     six::XmlOptionalElement<AntPolRef> antPolRef{ "AntPolRef" }; // new in CPHD 1.1.0
 
@@ -305,7 +363,9 @@ struct Antenna
 //! Ostream operators
 std::ostream& operator<< (std::ostream& os, const AntCoordFrame& a);
 std::ostream& operator<< (std::ostream& os, const AntPhaseCenter& a);
+std::ostream& operator<< (std::ostream& os, const AntPattern::EBFreqShiftSF&);
 std::ostream& operator<< (std::ostream& os, const AntPattern::AntPolRef&);
+std::ostream& operator<< (std::ostream& os, const AntPattern::MLFreqDilationSF&);
 std::ostream& operator<< (std::ostream& os, const AntPattern::GainPhaseArray& g);
 std::ostream& operator<< (std::ostream& os, const AntPattern& a);
 std::ostream& operator<< (std::ostream& os, const Antenna& a);

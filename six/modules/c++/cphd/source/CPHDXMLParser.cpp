@@ -673,6 +673,36 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
     return refGeoXML;
 }
 
+XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<AntPattern::EBFreqShiftSF>& o, xml::lite::Element& parent)
+{
+    XMLElem retval = nullptr;
+    if (o.has_value())
+    {
+        retval = newElement(o.tag(), &parent);
+
+        auto& optional = o.value();
+        std::ignore = create(parser(), optional->dcxsf, *retval);
+        std::ignore = create(parser(), optional->dcysf, *retval);
+    }
+
+    return retval;
+}
+
+XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<AntPattern::MLFreqDilationSF>& o, xml::lite::Element& parent)
+{
+    XMLElem retval = nullptr;
+    if (o.has_value())
+    {
+        retval = newElement(o.tag(), &parent);
+
+        auto& optional = o.value();
+        std::ignore = create(parser(), optional->dcxsf, *retval);
+        std::ignore = create(parser(), optional->dcysf, *retval);
+    }
+
+    return retval;
+}
+
 XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<AntPattern::AntPolRef>& o, xml::lite::Element& parent)
 {
     XMLElem retval = nullptr;
@@ -720,10 +750,14 @@ XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
         {
             createBooleanType("EBFreqShift", antenna.antPattern[ii].ebFreqShift, antPatternXML);
         }
+        std::ignore = toXML(antenna.antPattern[ii].ebFreqShiftSF, *antPatternXML);
+
         if (!six::Init::isUndefined(antenna.antPattern[ii].mlFreqDilation))
         {
             createBooleanType("MLFreqDilation", antenna.antPattern[ii].mlFreqDilation, antPatternXML);
         }
+        std::ignore = toXML(antenna.antPattern[ii].mlFreqDilationSF, *antPatternXML);
+
         if (!six::Init::isUndefined(antenna.antPattern[ii].gainBSPoly))
         {
             mCommon.createPoly1D("GainBSPoly", antenna.antPattern[ii].gainBSPoly, antPatternXML);
@@ -1526,7 +1560,31 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* supportArrayXML, SupportAr
     }
 }
 
-void CPHDXMLParser::parseAntPolRef(const xml::lite::Element& parent, six::XmlOptionalElement<AntPattern::AntPolRef>& o) const
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XmlOptionalElement<AntPattern::EBFreqShiftSF>& o) const
+{
+    if (const auto pXML = getOptional(parent, o.tag()))
+    {
+        o.value(AntPattern::EBFreqShiftSF{});
+        auto& optional = o.value();
+
+        six::getFirstAndOnly(parser(), *pXML, optional->dcxsf);
+        six::getFirstAndOnly(parser(), *pXML, optional->dcysf);
+    }
+}
+
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XmlOptionalElement<AntPattern::MLFreqDilationSF>& o) const
+{
+    if (const auto pXML = getOptional(parent, o.tag()))
+    {
+        o.value(AntPattern::MLFreqDilationSF{});
+        auto& optional = o.value();
+
+        six::getFirstAndOnly(parser(), *pXML, optional->dcxsf);
+        six::getFirstAndOnly(parser(), *pXML, optional->dcysf);
+    }
+}
+
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XmlOptionalElement<AntPattern::AntPolRef>& o) const
 {
     if (const auto pXML = getOptional(parent, o.tag()))
     {
@@ -1594,23 +1652,28 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         parseString(getFirstAndOnly(antPatternXMLVec[ii], "Identifier"), antenna.antPattern[ii].identifier);
         parseDouble(getFirstAndOnly(antPatternXMLVec[ii], "FreqZero"), antenna.antPattern[ii].freqZero);
         parseOptionalDouble(antPatternXMLVec[ii], "GainZero", antenna.antPattern[ii].gainZero);
+
         XMLElem ebFreqShiftXML = getOptional(antPatternXMLVec[ii], "EBFreqShift");
         if(ebFreqShiftXML)
         {
             parseBooleanType(ebFreqShiftXML, antenna.antPattern[ii].ebFreqShift);
         }
+        parse(*antPatternXMLVec[ii], antenna.antPattern[ii].ebFreqShiftSF);
+
         XMLElem mlFreqDilationXML = getOptional(antPatternXMLVec[ii], "MLFreqDilation");
         if(mlFreqDilationXML)
         {
             parseBooleanType(mlFreqDilationXML, antenna.antPattern[ii].mlFreqDilation);
         }
+        parse(*antPatternXMLVec[ii], antenna.antPattern[ii].mlFreqDilationSF);
+
         XMLElem gainBSPoly = getOptional(antPatternXMLVec[ii], "GainBSPoly");
         if(gainBSPoly)
         {
             mCommon.parsePoly1D(gainBSPoly, antenna.antPattern[ii].gainBSPoly);
         }
 
-        parseAntPolRef(*antPatternXMLVec[ii], antenna.antPattern[ii].antPolRef);
+        parse(*antPatternXMLVec[ii], antenna.antPattern[ii].antPolRef);
 
         // Parse EB
         XMLElem ebXML = getFirstAndOnly(antPatternXMLVec[ii], "EB");

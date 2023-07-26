@@ -91,7 +91,7 @@ namespace six
 		}
 		else
 		{
-			os << "\t[ " << o.tag() << "\t: --- ]\n";
+			os << "\t[ " << o.tag() << "\t: --- ]";
 		}
 		return os;
 	}
