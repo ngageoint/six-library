@@ -20,6 +20,9 @@
  *
  */
 #include <six/sicd/Antenna.h>
+
+#include <str/EncodedStringView.h>
+
 #include <six/Utilities.h>
 
 namespace six
@@ -70,7 +73,7 @@ std::ostream& operator<< (std::ostream& os, const GainAndPhasePolys& d)
        << "  phasePoly:\n" << d.phasePoly << "\n";
     if (d.antGPId)
     {
-        os << "  antGPId:\n" << *d.antGPId << "\n";
+        os << "  antGPId:\n" << str::EncodedStringView(*d.antGPId).native() << "\n";
     }
     return os;
 }

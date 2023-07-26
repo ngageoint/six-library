@@ -94,7 +94,7 @@ XMLElem XMLParser::createString(const std::string& name,
     assert(parent != nullptr);
     return &mXmlLite.createString(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
 }
-XMLElem XMLParser::createOptional(const std::string& name, const std::optional<std::string>& v, xml::lite::Element& parent) const
+XMLElem XMLParser::createOptional(const std::string& name, const std::optional<std::u8string>& v, xml::lite::Element& parent) const
 {
     return mXmlLite.createOptional(name, v, parent);
 }
@@ -271,7 +271,7 @@ bool XMLParser::parseOptionalString(const xml::lite::Element& parent, const std:
 {
     return mXmlLite.parseOptionalString(parent, tag, value);
 }
-bool XMLParser::parseOptional(const xml::lite::Element& parent, const std::string& tag, std::optional<std::string>& value) const
+bool XMLParser::parseOptional(const xml::lite::Element& parent, const std::string& tag, std::optional<std::u8string>& value) const
 {
     return mXmlLite.parseOptional(parent, tag, value);
 }

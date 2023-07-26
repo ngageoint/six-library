@@ -26,6 +26,7 @@
 
 #include <ostream>
 #include <std/optional>
+#include <std/string>
 
 #include "six/Types.h"
 #include "six/Init.h"
@@ -143,7 +144,7 @@ struct GainAndPhasePolys final
     Poly2D phasePoly;
 
     //! Identifier of the Antenna Gain/Phase support array that specifies the one-way array pattern 
-    std::optional<std::string> antGPId;  // new in CPHD 1.1.0
+    std::optional<std::u8string> antGPId;  // new in CPHD 1.1.0
 };
 
 std::ostream& operator<< (std::ostream& os, const GainAndPhasePolys& d);

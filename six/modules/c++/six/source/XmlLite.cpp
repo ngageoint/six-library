@@ -309,7 +309,7 @@ xml::lite::Element* XmlLite::createOptional(const std::string& name, const std::
     return createBooleanType(name, p, parent);
 }
 
-xml::lite::Element* XmlLite::createOptional(const std::string& name, const std::optional<std::string>& v, xml::lite::Element& parent) const
+xml::lite::Element* XmlLite::createOptional(const std::string& name, const std::optional<std::u8string>& v, xml::lite::Element& parent) const
 {
     return createOptionalValue(makeQName(name), v, parent, mAddClassAttributes, "xs:string", getDefaultURI());
 }
@@ -447,12 +447,11 @@ bool  XmlLite::parseOptionalString(const xml::lite::Element& parent, const std::
     }
     return false;
 }
-bool  XmlLite::parseOptional(const xml::lite::Element& parent, const std::string& tag, std::optional<std::string>& value) const
+bool  XmlLite::parseOptional(const xml::lite::Element& parent, const std::string& tag, std::optional<std::u8string>& value) const
 {
-    std::string result;
-    if (parseOptionalString(parent, tag, result))
+    if (const xml::lite::Element* const element = getOptional(parent, tag))
     {
-        value = result;
+        value = getCharacterData(*element);
         return true;
     }
     return false;
