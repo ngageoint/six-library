@@ -218,7 +218,7 @@ struct DwellTimes
 
     //! Identifier of the Dwell Time support array that specifies COD times and
     //! Dwell Times for a grid of points on the reference surface
-    std::optional<std::u8string> dtaId; // new in CPHD 1.1.0
+    six::XmlOptionalElement<std::u8string> dtaId { "DTAId" }; // new in CPHD 1.1.0
 
     //! Indicates the provided Dwell Time array provides a more
     //! accurate description dwell times for the channel.

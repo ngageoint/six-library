@@ -125,12 +125,9 @@ std::ostream& operator<< (std::ostream& os, const DwellTimes& d)
 {
     os << "      DwellTimes:: \n"
         << "      CODId        : " << d.codId << "\n"
-        << "      DwellId        : " << d.dwellId << "\n";
-    if (d.dtaId)
-    {
-        os << "      DTAId        : " << str::EncodedStringView(*d.dtaId).native() << "\n";
-    }
-    os << d.useDTA;   
+        << "      DwellId        : " << d.dwellId << "\n"
+        << d.dtaId
+        << d.useDTA;
     return os;
 }
 

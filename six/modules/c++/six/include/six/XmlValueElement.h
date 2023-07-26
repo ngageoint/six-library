@@ -27,6 +27,7 @@
 #include <std/string>
 #include <ostream>
 
+#include <str/EncodedStringView.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/QName.h>
 
@@ -83,6 +84,12 @@ namespace six
 	inline std::ostream& operator<<(std::ostream& os, const XmlValueElement<T>& v)
 	{
 		os << "\t" << v.name() << "\t: " << v.value() << "\n";
+		return os;
+	}
+	template<>
+	inline std::ostream& operator<<(std::ostream& os, const XmlValueElement<std::u8string>& v)
+	{
+		os << "\t" << v.name() << "\t: " << str::EncodedStringView(v.value()).native() << "\n";
 		return os;
 	}
 

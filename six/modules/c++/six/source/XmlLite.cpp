@@ -520,6 +520,10 @@ xml::lite::Element* create(XmlLite& parser, const XmlOptionalElement<double>& v,
 {
     return parser.createOptionalDouble(v.name(), v.value(), parent);
 }
+xml::lite::Element* create(XmlLite& parser, const XmlOptionalElement<std::u8string>& v, xml::lite::Element& parent)
+{
+    return parser.createOptional(v.name(), v.value(), parent);
+}
 
 bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XmlOptionalElement<bool>& v)
 {
@@ -528,6 +532,10 @@ bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XmlO
 bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XmlOptionalElement<double>& v)
 {
     return parser.parseOptionalDouble(parent, v.name(), v.value());
+}
+bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XmlOptionalElement<std::u8string>& v)
+{
+    return parser.parseOptional(parent, v.name(), v.value());
 }
 
 }

@@ -82,25 +82,26 @@ namespace six
 	}
 
 	template<typename T>
-	inline std::ostream& operator<<(std::ostream& os, const XmlOptionalElement<T>& v)
+	inline std::ostream& operator<<(std::ostream& os, const XmlOptionalElement<T>& o)
 	{
-		os << "\t";
-		if (v.has_value())
+		if (o.has_value())
 		{
-			os << v.name() << "\t: " << *v << "\n";
+			os << XmlValueElement<T>(o.name(), *o); // use operator<<() for XmlValueElement
 		}
 		else
 		{
-			os << "[ " << v.name() << "\t: <not set> ]\n";
+			os << "\t[ " << o.name() << "\t: <not set> ]\n";
 		}
 		return os;
 	}
 
 	xml::lite::Element* create(XmlLite&, const XmlOptionalElement<bool>&, xml::lite::Element& parent);
 	xml::lite::Element* create(XmlLite&, const XmlOptionalElement<double>&, xml::lite::Element& parent);
+	xml::lite::Element* create(XmlLite&, const XmlOptionalElement<std::u8string>&, xml::lite::Element& parent);
 
 	bool parseOptional(const XmlLite&, const xml::lite::Element&, XmlOptionalElement<bool>&);
 	bool parseOptional(const XmlLite&, const xml::lite::Element&, XmlOptionalElement<double>&);
+	bool parseOptional(const XmlLite&, const xml::lite::Element&, XmlOptionalElement<std::u8string>&);
 }
 
 #endif // SIX_six_XmlOptionalElement_h_INCLUDED_
