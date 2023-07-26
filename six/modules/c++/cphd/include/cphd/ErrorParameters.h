@@ -32,6 +32,7 @@
 
 #include <scene/FrameType.h>
 #include <six/ErrorStatistics.h>
+#include <six/XmlOptionalElement.h>
 
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
@@ -156,8 +157,7 @@ struct ErrorParameters
             }
 
              //! Transmit time delay bias error standard deviation
-             //! (New in CPHD 1.1.0)
-            std::optional<double> delayBias;
+            six::XmlOptionalElement<double> delayBias{ "DelayBias" }; // new in CPHD 1.1.0
 
             //! (Optional) Payload clock frequency scale factor standard deviation
             double clockFreqSF;

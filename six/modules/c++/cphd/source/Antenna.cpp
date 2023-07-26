@@ -56,11 +56,8 @@ std::ostream& operator<< (std::ostream& os, const AntCoordFrame& a)
     os << "  AntCoordFrame:: \n"
         << "    Identifier     : " << a.identifier << "\n"
         << "    XAxisPoly      : " << a.xAxisPoly << "\n"
-        << "    YAxisPoly      : " << a.yAxisPoly << "\n";
-    if (a.useACFPVP)
-    {
-        os << "    UseACFPVP      : " << *a.useACFPVP << "\n";
-    }
+        << "    YAxisPoly      : " << a.yAxisPoly << "\n"
+        << a.useACFPVP;
     return os;
 }
 

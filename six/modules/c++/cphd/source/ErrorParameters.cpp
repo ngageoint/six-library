@@ -114,12 +114,9 @@ std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
 
 static std::ostream& operator<< (std::ostream& os, const ErrorParameters::Bistatic::RadarSensor& v)
 {
-    os << "    RadarSensor:: \n";
-    if (v.delayBias)
-    {
-        os << "    DelayBias      : " << *v.delayBias << "\n";
-    }
-    os << "    ClockFreqSF      : " << v.clockFreqSF << "\n"
+    os << "    RadarSensor:: \n"
+        << v.delayBias 
+        << "    ClockFreqSF      : " << v.clockFreqSF << "\n"
         << "    CollectionStartTime : " <<v.collectionStartTime << "\n";
     return os;
 }

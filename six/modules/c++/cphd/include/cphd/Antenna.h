@@ -31,6 +31,7 @@
 #include <std/optional>
 
 #include <six/sicd/Antenna.h>
+#include <six/XmlOptionalElement.h>
 
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
@@ -77,7 +78,7 @@ struct AntCoordFrame final
     PolyXYZ yAxisPoly;
 
     //!Indicates the provided ACF PVP arrays provide a more accurate description the ACF orientation vs.time.
-    std::optional<bool> useACFPVP; // new in CPHD 1.1.0
+    six::XmlOptionalElement<bool> useACFPVP{ "UseACFPVP" }; // new in CPHD 1.1.0
 };
 
 /*

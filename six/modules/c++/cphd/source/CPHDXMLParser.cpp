@@ -682,7 +682,7 @@ XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
         createString("Identifier", antenna.antCoordFrame[ii].identifier, antCoordFrameXML);
         mCommon.createPolyXYZ("XAxisPoly", antenna.antCoordFrame[ii].xAxisPoly, antCoordFrameXML);
         mCommon.createPolyXYZ("YAxisPoly", antenna.antCoordFrame[ii].yAxisPoly, antCoordFrameXML);
-        createOptional("UseACFPVP", antenna.antCoordFrame[ii].useACFPVP, *antCoordFrameXML);
+        create(parser(), antenna.antCoordFrame[ii].useACFPVP, *antCoordFrameXML);
     }
     for (size_t ii = 0; ii < antenna.antPhaseCenter.size(); ++ii)
     {
@@ -842,7 +842,7 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
         XMLElem txPlatXML = newElement("TxPlatform", biXML);
         createErrorParamPlatform("TxPlatform", errParams.bistatic->txPlatform, txPlatXML);
         XMLElem radarTxXML = newElement("RadarSensor", txPlatXML);
-        createOptionalDouble("DelayBias", errParams.bistatic->txPlatform.radarSensor.delayBias, radarTxXML);
+        create(parser(), errParams.bistatic->txPlatform.radarSensor.delayBias, *radarTxXML);
         createOptionalDouble("ClockFreqSF", errParams.bistatic->txPlatform.radarSensor.clockFreqSF, radarTxXML);
         createDouble("CollectionStartTime", errParams.bistatic->txPlatform.radarSensor.collectionStartTime, radarTxXML);
 
@@ -1531,7 +1531,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         parseString(getFirstAndOnly(antCoordFrameXMLVec[ii], "Identifier"), antenna.antCoordFrame[ii].identifier);
         mCommon.parsePolyXYZ(getFirstAndOnly(antCoordFrameXMLVec[ii], "XAxisPoly"), antenna.antCoordFrame[ii].xAxisPoly);
         mCommon.parsePolyXYZ(getFirstAndOnly(antCoordFrameXMLVec[ii], "YAxisPoly"), antenna.antCoordFrame[ii].yAxisPoly);
-        parseOptional(*antCoordFrameXMLVec[ii], "UseACFPVP", antenna.antCoordFrame[ii].useACFPVP);
+        std::ignore = six::parseOptional(parser(), *antCoordFrameXMLVec[ii], antenna.antCoordFrame[ii].useACFPVP);
     }
 
     // Parse AntPhaseCenter
@@ -2235,7 +2235,7 @@ void CPHDXMLParser::parsePlatform(const xml::lite::Element* platXML, ErrorParame
 {
     parsePosVelErr(getFirstAndOnly(platXML, "PosVelErr"), plat.posVelErr);
     XMLElem radarSensorXML = getFirstAndOnly(platXML, "RadarSensor");
-    parseOptionalDouble(radarSensorXML, "DelayBias", plat.radarSensor.delayBias);
+    six::parseOptional(parser(), *radarSensorXML, plat.radarSensor.delayBias);
     parseOptionalDouble(radarSensorXML, "ClockFreqSF", plat.radarSensor.clockFreqSF);
     parseDouble(getFirstAndOnly(radarSensorXML, "CollectionStartTime"), plat.radarSensor.collectionStartTime);
 }
