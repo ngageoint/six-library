@@ -34,10 +34,11 @@
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/Utilities.h>
-#include <six/XmlLite.h>
 
 namespace six
 {
+	struct XmlLite; // forward
+
 	// Make it easier to manipulate a Xml Element
 	// ```
 	// struct Foo final
@@ -46,14 +47,14 @@ namespace six
 	template<typename T>
 	class XmlValueElement final
 	{
-		std::string name_;
+		std::string tag_;
 		T value_{};
 
 	public:
-		explicit XmlValueElement(const std::string& name) : name_(name) {}
-		XmlValueElement(const std::string& name, const T& value) : name_(name), value_(value) {}
+		explicit XmlValueElement(const std::string& tag) : tag_(tag) {}
+		XmlValueElement(const std::string& tag, const T& value) : tag_(tag), value_(value) {}
 
-		const std::string& name() const { return name_; }
+		const std::string& tag() const { return tag_; }
 
 		const T& value() const { return value_; }
 		void value(const T& value) { value_ = value; }
@@ -73,7 +74,7 @@ namespace six
 	template<typename T, typename U = T>
 	inline bool operator==(const XmlValueElement<T>& lhs, const XmlValueElement<U>& rhs)
 	{
-		return (lhs.name() == rhs.name()) && (lhs == rhs.value());
+		return (lhs.tag() == rhs.tag()) && (lhs == rhs.value());
 	}
 	template<typename T, typename U = T>
 	inline bool operator!=(const XmlValueElement<T>& lhs, const XmlValueElement<U>& rhs)
@@ -84,13 +85,13 @@ namespace six
 	template<typename T>
 	inline std::ostream& operator<<(std::ostream& os, const XmlValueElement<T>& v)
 	{
-		os << "\t" << v.name() << "\t: " << v.value() << "\n";
+		os << "\t" << v.tag() << "\t: " << v.value() << "\n";
 		return os;
 	}
 	template<>
 	inline std::ostream& operator<<(std::ostream& os, const XmlValueElement<std::u8string>& v)
 	{
-		os << "\t" << v.name() << "\t: " << str::EncodedStringView(v.value()).native() << "\n";
+		os << "\t" << v.tag() << "\t: " << str::EncodedStringView(v.value()).native() << "\n";
 		return os;
 	}
 

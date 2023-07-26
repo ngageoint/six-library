@@ -504,38 +504,38 @@ xml::lite::QName XmlLite::makeQName(const std::string& name) const
 
 xml::lite::Element& create(XmlLite& parser, const XmlValueElement<double>& v, xml::lite::Element& parent)
 {
-    return parser.createDouble(v.name(), v.value(), parent);
+    return parser.createDouble(v.tag(), v.value(), parent);
 }
 void getFirstAndOnly(const XmlLite& parser, const xml::lite::Element& parent, XmlValueElement<double>& v)
 {
-    auto& element = parser.getFirstAndOnly(parent, v.name());
+    auto& element = parser.getFirstAndOnly(parent, v.tag());
     v.value(xml::lite::getValue<double>(element)); // throws except::BadCastException on failure, see parseDouble()
 }
 
 xml::lite::Element* create(XmlLite& parser, const XmlOptionalElement<bool>& v, xml::lite::Element& parent)
 {
-    return parser.createOptional(v.name(), v.value(), parent);
+    return parser.createOptional(v.tag(), v.value(), parent);
 }
 xml::lite::Element* create(XmlLite& parser, const XmlOptionalElement<double>& v, xml::lite::Element& parent)
 {
-    return parser.createOptionalDouble(v.name(), v.value(), parent);
+    return parser.createOptionalDouble(v.tag(), v.value(), parent);
 }
 xml::lite::Element* create(XmlLite& parser, const XmlOptionalElement<std::u8string>& v, xml::lite::Element& parent)
 {
-    return parser.createOptional(v.name(), v.value(), parent);
+    return parser.createOptional(v.tag(), v.value(), parent);
 }
 
 bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XmlOptionalElement<bool>& v)
 {
-    return parser.parseOptional(parent, v.name(), v.value());
+    return parser.parseOptional(parent, v.tag(), v.value());
 }
 bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XmlOptionalElement<double>& v)
 {
-    return parser.parseOptionalDouble(parent, v.name(), v.value());
+    return parser.parseOptionalDouble(parent, v.tag(), v.value());
 }
 bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XmlOptionalElement<std::u8string>& v)
 {
-    return parser.parseOptional(parent, v.name(), v.value());
+    return parser.parseOptional(parent, v.tag(), v.value());
 }
 
 }

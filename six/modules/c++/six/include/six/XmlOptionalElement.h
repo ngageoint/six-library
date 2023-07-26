@@ -40,20 +40,21 @@ namespace six
 	template<typename T>
 	class XmlOptionalElement final
 	{
-		std::string name_;
+		std::string tag_;
 		std::optional<T> value_;
 
 	public:
-		explicit XmlOptionalElement(const std::string& name) : name_(name) {}
-		XmlOptionalElement(const std::string& name, const T& value) : name_(name), value_(value) {}
+		explicit XmlOptionalElement(const std::string& tag) : tag_(tag) {}
+		XmlOptionalElement(const std::string& tag, const T& value) : tag_(tag), value_(value) {}
 
-		const std::string& name() const { return name_; }
+		const std::string& tag() const { return tag_; }
 
 		const std::optional<T>& value() const { return value_; }
 		std::optional<T>& value() { return value_; }
 
 		bool has_value() const { return value_.has_value(); }
 		const T& operator*() const { return *value_; }
+		T& operator*() { return *value_; }
 		void value(const T& value) { value_ = value; }
 
 		void reset() { value_.reset(); }
@@ -73,7 +74,7 @@ namespace six
 	template<typename T, typename U = T>
 	inline bool operator==(const XmlOptionalElement<T>& lhs, const XmlOptionalElement<U>& rhs)
 	{
-		return (lhs.name() == rhs.name()) && (lhs.value() == rhs.value());
+		return (lhs.tag() == rhs.tag()) && (lhs.value() == rhs.value());
 	}
 	template<typename T, typename U = T>
 	inline bool operator!=(const XmlOptionalElement<T>& lhs, const XmlOptionalElement<U>& rhs)
@@ -86,11 +87,11 @@ namespace six
 	{
 		if (o.has_value())
 		{
-			os << XmlValueElement<T>(o.name(), *o); // use operator<<() for XmlValueElement
+			os << XmlValueElement<T>(o.tag(), *o); // use operator<<() for XmlValueElement
 		}
 		else
 		{
-			os << "\t[ " << o.name() << "\t: <not set> ]\n";
+			os << "\t[ " << o.tag() << "\t: --- ]\n";
 		}
 		return os;
 	}
