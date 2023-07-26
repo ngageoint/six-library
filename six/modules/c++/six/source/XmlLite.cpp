@@ -509,7 +509,7 @@ xml::lite::Element& create(XmlLite& parser, const XmlValueElement<double>& v, xm
 void getFirstAndOnly(const XmlLite& parser, const xml::lite::Element& parent, XmlValueElement<double>& v)
 {
     auto& element = parser.getFirstAndOnly(parent, v.tag());
-    v.value(xml::lite::getValue<double>(element)); // throws except::BadCastException on failure, see parseDouble()
+    v = xml::lite::getValue<double>(element); // throws except::BadCastException on failure, see parseDouble()
 }
 
 xml::lite::Element* create(XmlLite& parser, const XmlOptionalElement<bool>& v, xml::lite::Element& parent)

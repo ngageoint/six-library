@@ -1564,7 +1564,7 @@ void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XmlOptionalElem
 {
     if (const auto pXML = getOptional(parent, o.tag()))
     {
-        o.value(AntPattern::EBFreqShiftSF{});
+        o = AntPattern::EBFreqShiftSF{};
         auto& optional = o.value();
 
         six::getFirstAndOnly(parser(), *pXML, optional->dcxsf);
@@ -1576,7 +1576,7 @@ void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XmlOptionalElem
 {
     if (const auto pXML = getOptional(parent, o.tag()))
     {
-        o.value(AntPattern::MLFreqDilationSF{});
+        o = AntPattern::MLFreqDilationSF{};
         auto& optional = o.value();
 
         six::getFirstAndOnly(parser(), *pXML, optional->dcxsf);
@@ -1588,7 +1588,7 @@ void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XmlOptionalElem
 {
     if (const auto pXML = getOptional(parent, o.tag()))
     {
-        o.value(AntPattern::AntPolRef{});
+        o = AntPattern::AntPolRef{};
         auto& optional = o.value();
 
         six::getFirstAndOnly(parser(), *pXML, optional->ampX);
@@ -2185,16 +2185,16 @@ void CPHDXMLParser::parseChannelParameters(
     parsePolarization(*paramXML, param.polarization);
 }
 
-void CPHDXMLParser::parsePolRef(const xml::lite::Element& polarizationXML, six::XmlOptionalElement<PolRef>& polRef) const
+void CPHDXMLParser::parsePolRef(const xml::lite::Element& polarizationXML, six::XmlOptionalElement<PolRef>& o) const
 {
-    if (const auto pPolRefXML = getOptional(polarizationXML, polRef.tag()))
+    if (const auto pXML = getOptional(polarizationXML, o.tag()))
     {
-        polRef.value(PolRef{});
-        auto& optional = polRef.value();
+        o = PolRef{};
+        auto& optional = o.value();
 
-        six::getFirstAndOnly(parser(), *pPolRefXML, optional->ampH);
-        six::getFirstAndOnly(parser(), *pPolRefXML, optional->ampV);
-        six::getFirstAndOnly(parser(), *pPolRefXML, optional->phaseV);
+        six::getFirstAndOnly(parser(), *pXML, optional->ampH);
+        six::getFirstAndOnly(parser(), *pXML, optional->ampV);
+        six::getFirstAndOnly(parser(), *pXML, optional->phaseV);
     }
 }
 

@@ -46,16 +46,25 @@ namespace six
 	public:
 		explicit XmlOptionalElement(const std::string& tag) : tag_(tag) {}
 		XmlOptionalElement(const std::string& tag, const T& value) : tag_(tag), value_(value) {}
+		~XmlOptionalElement() = default;
+		XmlOptionalElement(const XmlOptionalElement&) = default;
+		XmlOptionalElement& operator=(const XmlOptionalElement&) = default;
+		XmlOptionalElement(XmlOptionalElement&&) = default;
+		XmlOptionalElement& operator=(XmlOptionalElement&&) = default;
 
 		const std::string& tag() const { return tag_; }
 
 		const std::optional<T>& value() const { return value_; }
 		std::optional<T>& value() { return value_; }
-
 		bool has_value() const { return value_.has_value(); }
+
 		const T& operator*() const { return *value_; }
 		T& operator*() { return *value_; }
-		void value(const T& value) { value_ = value; }
+		template<typename U>
+		XmlOptionalElement& operator=(const U& v) {
+			value_ = v;
+			return *this;
+		}
 
 		void reset() { value_.reset(); }
 	};

@@ -53,11 +53,20 @@ namespace six
 	public:
 		explicit XmlValueElement(const std::string& tag) : tag_(tag) {}
 		XmlValueElement(const std::string& tag, const T& value) : tag_(tag), value_(value) {}
+		~XmlValueElement() = default;
+		XmlValueElement(const XmlValueElement&) = default;
+		XmlValueElement& operator=(const XmlValueElement&) = default;
+		XmlValueElement(XmlValueElement&&) = default;
+		XmlValueElement& operator=(XmlValueElement&&) = default;
 
 		const std::string& tag() const { return tag_; }
 
 		const T& value() const { return value_; }
-		void value(const T& value) { value_ = value; }
+		template<typename U>
+		XmlValueElement& operator=(const U& v) {
+			value_ = v;
+			return *this;
+		}
 	};
 
 	template<typename T, typename U = T>
