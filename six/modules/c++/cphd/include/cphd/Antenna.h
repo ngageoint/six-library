@@ -126,8 +126,38 @@ struct AntPhaseCenter
  *  AntPattern used by CPHD, representing the tag
  *  <AntPattern>.
  */
-struct AntPattern
+struct AntPattern final
 {
+    /*
+     *  \struct AntPolRef
+     *  \brief Polarization parameters
+     *
+     *  (Optional) Polarization parameters for the EB steered to mechanical boresight
+     *
+     */
+    struct AntPolRef final
+    {
+        bool operator==(const AntPolRef& other) const
+        {
+            return (ampX == other.ampX)
+                && (ampY == other.ampY)
+                && (phaseY == other.phaseY);
+        }
+        bool operator!=(const AntPolRef& other) const
+        {
+            return !((*this) == other);
+        }
+
+        //! E-field relative amplitude in ACF X direction at f = f_0.
+        six::XmlValueElement<ZeroToOne> ampX{ "AmpX" };
+
+        //! E-field relative amplitude in ACY direction at f = f_0.
+        six::XmlValueElement<ZeroToOne> ampY{ "AmpY" };
+
+        //! Relative phase of the Y E-field relative to the X E-field at f = f_0.
+        six::XmlValueElement<NegHalfToHalf> phaseY{ "PhaseY" };
+    };
+
     /*
      *  \struct GainPhaseArray
      *  \brief Gain Phase Array parameter
@@ -210,6 +240,9 @@ struct AntPattern
     //! Poly1D gainBSPoly;
     Poly1D gainBSPoly;
 
+    //! (Optional) Polarization parameters for the EB steered to mechanical boresight
+    six::XmlOptionalElement<AntPolRef> antPolRef{ "AntPolRef" }; // new in CPHD 1.1.0
+
     //! The Electrical Boresight steering direction versus
     //! time. Defines array pattern pointing direction
     six::sicd::ElectricalBoresight eb;
@@ -272,6 +305,7 @@ struct Antenna
 //! Ostream operators
 std::ostream& operator<< (std::ostream& os, const AntCoordFrame& a);
 std::ostream& operator<< (std::ostream& os, const AntPhaseCenter& a);
+std::ostream& operator<< (std::ostream& os, const AntPattern::AntPolRef&);
 std::ostream& operator<< (std::ostream& os, const AntPattern::GainPhaseArray& g);
 std::ostream& operator<< (std::ostream& os, const AntPattern& a);
 std::ostream& operator<< (std::ostream& os, const Antenna& a);

@@ -673,6 +673,22 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
     return refGeoXML;
 }
 
+XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<AntPattern::AntPolRef>& o, xml::lite::Element& parent)
+{
+    XMLElem retval = nullptr;
+    if (o.has_value())
+    {
+        retval = newElement(o.tag(), &parent);
+
+        auto& optional = o.value();
+        std::ignore = create(parser(), optional->ampX, *retval);
+        std::ignore = create(parser(), optional->ampY, *retval);
+        std::ignore = create(parser(), optional->phaseY, *retval);
+    }
+
+    return retval;
+}
+
 XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
 {
     XMLElem antennaXML = newElement("Antenna", parent);
@@ -712,6 +728,8 @@ XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
         {
             mCommon.createPoly1D("GainBSPoly", antenna.antPattern[ii].gainBSPoly, antPatternXML);
         }
+
+        std::ignore = toXML(antenna.antPattern[ii].antPolRef, *antPatternXML);
 
         XMLElem ebXML = newElement("EB", antPatternXML);
         mCommon.createPoly1D("DCXPoly", antenna.antPattern[ii].eb.dcxPoly, ebXML);
@@ -1508,6 +1526,18 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* supportArrayXML, SupportAr
     }
 }
 
+void CPHDXMLParser::parseAntPolRef(const xml::lite::Element& parent, six::XmlOptionalElement<AntPattern::AntPolRef>& o) const
+{
+    if (const auto pXML = getOptional(parent, o.tag()))
+    {
+        o.value(AntPattern::AntPolRef{});
+        auto& optional = o.value();
+
+        six::getFirstAndOnly(parser(), *pXML, optional->ampX);
+        six::getFirstAndOnly(parser(), *pXML, optional->ampY);
+        six::getFirstAndOnly(parser(), *pXML, optional->phaseY);
+    }
+}
 
 void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& antenna)
 {
@@ -1579,6 +1609,8 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         {
             mCommon.parsePoly1D(gainBSPoly, antenna.antPattern[ii].gainBSPoly);
         }
+
+        parseAntPolRef(*antPatternXMLVec[ii], antenna.antPattern[ii].antPolRef);
 
         // Parse EB
         XMLElem ebXML = getFirstAndOnly(antPatternXMLVec[ii], "EB");

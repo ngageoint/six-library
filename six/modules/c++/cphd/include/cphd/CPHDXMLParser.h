@@ -105,6 +105,7 @@ private:
     XMLElem toXML(const SupportArray& obj, XMLElem parent);
     XMLElem toXML(const Dwell& obj, XMLElem parent);
     XMLElem toXML(const ReferenceGeometry& obj, XMLElem parent);
+    XMLElem toXML(const six::XmlOptionalElement<AntPattern::AntPolRef>&, xml::lite::Element& parent);
     XMLElem toXML(const Antenna& obj, XMLElem parent);
     XMLElem toXML(const TxRcv& obj, XMLElem parent);
     XMLElem toXML(const ErrorParameters& obj, XMLElem parent);
@@ -169,6 +170,7 @@ private:
     void parseTxRcvParameter(const xml::lite::Element* paramXML, ParameterType& param) const;
     void parsePolRef(const xml::lite::Element& polarizationXML, six::XmlOptionalElement<PolRef>&) const;
     void parsePolarization(const xml::lite::Element& polarizationXML, Polarization&) const;
+    void parseAntPolRef(const xml::lite::Element&, six::XmlOptionalElement<AntPattern::AntPolRef>&) const;
 
 private:
     six::SICommonXMLParser10x mCommon;

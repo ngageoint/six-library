@@ -70,6 +70,13 @@ std::ostream& operator<< (std::ostream& os, const AntPhaseCenter& a)
     return os;
 }
 
+std::ostream& operator<< (std::ostream& os, const AntPattern::AntPolRef& v)
+{
+    os << "  AntPolRef:: \n"
+        << v.ampX << v.ampY << v.phaseY;
+    return os;
+}
+
 std::ostream& operator<< (std::ostream& os, const AntPattern::GainPhaseArray& g)
 {
     os << "    GainPhaseArray:: \n"
@@ -88,6 +95,7 @@ std::ostream& operator<< (std::ostream& os, const AntPattern& a)
         << "    EBFreqShift    : " << a.ebFreqShift << "\n"
         << "    MLFreqDilation : " << a.mlFreqDilation << "\n"
         << "    GainBSPoly     : " << a.gainBSPoly << "\n"
+        << a.antPolRef
         << a.eb << "\n"
         << "    Array:: \n"
         << a.array << "\n"
