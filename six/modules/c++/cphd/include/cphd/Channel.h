@@ -76,18 +76,10 @@ struct Polarization final
     //! Equality operator
     bool operator==(const Polarization& other) const
     {
-        if ((txPol != other.txPol) || (rcvPol != other.rcvPol))
-        {
-            return false;
-        }
-
-        // The are optional: new in CPHD 1.1.0
-        if ((txPolRef != other.txPolRef) || (rcvPolRef != other.rcvPolRef))
-        {
-            return false;
-        }
-
-        return true;
+        return (txPol == other.txPol)
+            && (rcvPol == other.rcvPol)
+            && (txPolRef == other.txPolRef)
+            && (rcvPolRef == other.rcvPolRef);
     }
     bool operator!=(const Polarization& other) const
     {
@@ -101,10 +93,10 @@ struct Polarization final
     PolarizationType rcvPol;
 
     //! Transmit polarization parameters for the transmit pulse for the reference signal vector  (v_CH_REF). See Section 7.2.5.
-    std::optional<PolRef> txPolRef; // new in CPHD 1.1.0
+    six::XmlOptionalElement<PolRef> txPolRef { "TxPolRef" }; // new in CPHD 1.1.0
 
     //! Receive polarization parameters for the received signals for the reference signal vector (v_CH_REF). See Section 7.2.5.
-    std::optional<PolRef> rcvPolRef; // new in CPHD 1.1.0
+    six::XmlOptionalElement<PolRef> rcvPolRef { "RcvPolRef" }; // new in CPHD 1.1.0
 };
 
 /*

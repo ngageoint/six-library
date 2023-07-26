@@ -95,17 +95,8 @@ std::ostream& operator<< (std::ostream& os, const PolRef& v)
 std::ostream& operator<< (std::ostream& os, const Polarization& p)
 {
     os << "      TxPol        : " << p.txPol << "\n"
-        << "      RcvPol       : " << p.rcvPol << "\n";
-
-    if (p.txPolRef)
-    {
-        os << *p.txPolRef << "\n";
-    }
-    if (p.rcvPolRef)
-    {
-        os << *p.rcvPolRef << "\n";
-    }
-
+        << "      RcvPol       : " << p.rcvPol << "\n"
+        << p.txPolRef << p.rcvPolRef;
     return os;
 }
 
