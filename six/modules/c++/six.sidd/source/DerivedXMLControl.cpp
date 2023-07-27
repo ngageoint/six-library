@@ -397,7 +397,7 @@ std::optional<six::sidd300::ISMVersion> six::sidd300::getISMVersion()
     const auto ismVersionFromEnv = getISMVersionFromEnv();
     if (ismVersionFromEnv.has_value())
     {
-        return *ismVersionFromEnv;
+        return ismVersionFromEnv;
     }
 
     // Then our global (static) variable; normally this won't be set

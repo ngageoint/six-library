@@ -41,8 +41,7 @@ namespace details
 {
 inline void throw_bad_optional_access()
 {
-    throw std::logic_error(
-            "No value for optional<>.");  // TODO: std::bad_optional_access
+    throw std::logic_error("No value for optional<>.");  // TODO: std::bad_optional_access
 }
 
 template <typename T>
@@ -77,29 +76,65 @@ public:
 #if defined(_MSC_VER) && _PREFAST_  // Visual Studio /analyze
     __pragma(warning(push)) __pragma(warning(disable : 26495))  // Variable '...' is uninitialized. Always initialize a member variable(type.6).
 #endif
-    optional(const optional& other) : has_value_(other.has_value_)
+    optional(const optional& other)
     {
-        if (has_value())
-        {
-            value_ = other.value_;
-        }
+        *this = other;
     }
+    optional(optional&& other) noexcept
+    {
+        *this = std::move(other);
+    }
+    template <typename U>
+    explicit optional(const optional<U>& other)
+    {
+        *this = other;
+    }
+    template <typename U>
+    explicit optional(optional<U>&& other)
+    {
+        *this = std::move(other);
+    }
+    template <typename U = T>
+    explicit optional(U&& value)
+    {
+        *this = std::forward<U>(value);
+    }
+
 #if defined(_MSC_VER) && _PREFAST_
     __pragma(warning(pop))
 #endif
     optional& operator=(const optional& other)
     {
-      if (has_value() && !other.has_value())
-      {
-	reset();
-      }
-      else if (other.has_value())
-      {
-	  value_ = other.value_;
-	  has_value_ = true;
-      }
-
-      return *this;
+        value_ = other.value_;
+        has_value_ = other.has_value_;
+        return *this;
+    }
+    optional& operator=(optional&& other) noexcept // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
+    {
+        value_ = std::move(other.value_);
+        has_value_ = std::move(other.has_value_);
+        return *this;
+    }
+    template <typename U = T>  // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
+    optional& operator=(U&& value) noexcept
+    {
+        value_ = std::forward<U>(value);
+        has_value_ = true;
+        return *this;
+    }
+    template <typename U> // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
+    optional& operator=(const optional<U>& other)
+    {
+        value_ = other.value_;
+        has_value_ = other.has_value_;
+        return *this;
+    }
+    template <typename U> // // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
+    optional& operator=(optional<U>&& other)
+    {
+        value_ = std::move(other.value_);
+        has_value_ = std::move(other.has_value_);
+        return *this;
     }
 
     template <typename... Args>  // https://en.cppreference.com/w/cpp/utility/Optional/emplace
@@ -108,14 +143,6 @@ public:
         value_ = value_type(std::forward<Args>(args)...);
         has_value_ = true;
         return value_;
-    }
-
-    template <typename U = T>  // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
-    optional& operator=(U&& value) noexcept
-    {
-        value_ = std::forward<U>(value);
-        has_value_ = true;
-        return *this;
     }
 
     bool has_value() const noexcept
@@ -159,14 +186,12 @@ public:
     const T* operator->() const
     {
         assert(has_value());
-        return &value_;  // "This operator does not check whether the optional
-                         // contains a value!"
+        return &value_;  // "This operator does not check whether the optional contains a value!"
     }
     T* operator->() noexcept
     {
         assert(has_value());
-        return &value_;  // "This operator does not check whether the optional
-                         // contains a value!"
+        return &value_;  // "This operator does not check whether the optional contains a value!"
     }
 
     const T& operator*() const& noexcept
@@ -177,20 +202,17 @@ public:
     T& operator*() &
     {
         assert(has_value());
-        return value_;  // "This operator does not check whether the optional
-                        // contains a value!"
+        return value_;  // "This operator does not check whether the optional contains a value!"
     }
     const T&& operator*() const&&
     {
         assert(has_value());
-        return value_;  // "This operator does not check whether the optional
-                        // contains a value!"
+        return value_;  // "This operator does not check whether the optional contains a value!"
     }
     T&& operator*() &&
     {
         assert(has_value());
-        return value_;  // "This operator does not check whether the optional
-                        // contains a value!"
+        return value_;  // "This operator does not check whether the optional contains a value!"
     }
 
     // https://en.cppreference.com/w/cpp/utility/optional/value_or

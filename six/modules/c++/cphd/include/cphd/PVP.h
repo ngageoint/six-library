@@ -439,8 +439,8 @@ struct Pvp
     //! (Optional) Parameters included that specify the Transmit Antenna ACF orientation and the EB Steering vector
     //six::XmlOptionalElement<TxAntenna> txAntenna{ "TxAntenna" }; // new in CPHD 1.1.0
 
-    //! (Optional) Parameters included that specify the Receive Antenna ACF orientationand the EB Steering vector
-    //six::XmlOptionalElement<RcvAntenna> rcvAntenna{ "RcvAntenna" }; // new in CPHD 1.1.0
+    //! (Optional) Parameters included that specify the Receive Antenna ACF orientation and the EB Steering vector
+    six::XmlOptionalElement<RcvAntenna> rcvAntenna{ "RcvAntenna" }; // new in CPHD 1.1.0
 
     /*
      *  (Optional) User defined PV parameters
