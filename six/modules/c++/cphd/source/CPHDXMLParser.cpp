@@ -349,7 +349,6 @@ XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<PolRef>& o, xml::li
     return polRefXML;
 }
 
-
 XMLElem CPHDXMLParser::toXML(const Polarization& obj, xml::lite::Element& parent)
 {
     auto polXML = newElement("Polarization", &parent);
@@ -474,6 +473,43 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
     return channelXML;
 }
 
+XMLElem CPHDXMLParser::toXML(const six::XsElement<PerVectorParameterXYZ>&, xml::lite::Element&)
+{
+    return nullptr; // TODO
+}
+XMLElem CPHDXMLParser::toXML(const six::XsElement<PerVectorParameterEB>&, xml::lite::Element&)
+{
+    return nullptr; // TODO
+}
+
+XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<TxAntenna>& o, xml::lite::Element& parent)
+{
+    XMLElem pXML = nullptr;
+    if (has_value(o))
+    {
+        pXML = newElement(o.tag(), &parent);
+        std::ignore = toXML(value(o).txACX, *pXML);
+        std::ignore = toXML(value(o).txACY, *pXML);
+        std::ignore = toXML(value(o).txEB, *pXML);
+    }
+
+    return pXML;
+}
+
+XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<RcvAntenna>& o, xml::lite::Element& parent)
+{
+    XMLElem pXML = nullptr;
+    if (has_value(o))
+    {
+        pXML = newElement(o.tag(), &parent);
+        std::ignore = toXML(value(o).rcvACX, *pXML);
+        std::ignore = toXML(value(o).rcvACY, *pXML);
+        std::ignore = toXML(value(o).rcvEB, *pXML);
+    }
+
+    return pXML;
+}
+
 XMLElem CPHDXMLParser::toXML(const Pvp& pvp, XMLElem parent)
 {
     XMLElem pvpXML = newElement("PVP", parent);
@@ -522,6 +558,10 @@ XMLElem CPHDXMLParser::toXML(const Pvp& pvp, XMLElem parent)
     {
         createPVPType("SIGNAL", pvp.signal, pvpXML);
     }
+
+    std::ignore = toXML(pvp.txAntenna, *pvpXML);
+    std::ignore = toXML(pvp.rcvAntenna, *pvpXML);
+
     for (auto it = pvp.addedPVP.begin(); it != pvp.addedPVP.end(); ++it)
     {
         createAPVPType("AddedPVP", it->second, pvpXML);
@@ -1405,6 +1445,36 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* channelXML, Channel& chann
     }
 }
 
+void CPHDXMLParser::parse(const xml::lite::Element&, six::XsElement<PerVectorParameterXYZ>&) const
+{
+    // TODO
+}
+void CPHDXMLParser::parse(const xml::lite::Element&, six::XsElement<PerVectorParameterEB>&) const
+{
+    // TODO
+}
+
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOccurs0<TxAntenna>& o) const
+{
+    if (const auto pXML = getOptional(parent, o.tag()))
+    {
+        o = TxAntenna{};
+        parse(*pXML, value(o).txACX);
+        parse(*pXML, value(o).txACY);
+        parse(*pXML, value(o).txEB);
+    }
+}
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOccurs0<RcvAntenna>& o) const
+{
+    if (const auto pXML = getOptional(parent, o.tag()))
+    {
+        o = RcvAntenna{};
+        parse(*pXML, value(o).rcvACX);
+        parse(*pXML, value(o).rcvACY);
+        parse(*pXML, value(o).rcvEB);
+    }
+}
+
 void CPHDXMLParser::fromXML(const xml::lite::Element* pvpXML, Pvp& pvp)
 {
     parsePVPType(pvp, getFirstAndOnly(pvpXML, "TxTime"), pvp.txTime);
@@ -1432,6 +1502,9 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* pvpXML, Pvp& pvp)
     parseOptionalPVPType(pvpXML, "TOAE2", pvp, pvp.toaE2);
     parseOptionalPVPType(pvpXML, "TDIonoSRP", pvp, pvp.tdIonoSRP);
     parseOptionalPVPType(pvpXML, "SIGNAL", pvp, pvp.signal);
+
+    parse(*pvpXML, pvp.txAntenna);
+    parse(*pvpXML, pvp.rcvAntenna);
 
     std::vector<XMLElem> addedParamsXML;
     const std::string str = "AddedPVP";

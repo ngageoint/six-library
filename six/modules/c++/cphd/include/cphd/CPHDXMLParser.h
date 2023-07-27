@@ -101,6 +101,10 @@ private:
     XMLElem toXML(const six::XsElement_minOccurs0<PolRef>&, xml::lite::Element& parent);
     XMLElem toXML(const Polarization&, xml::lite::Element& parent);
     XMLElem toXML(const Channel& obj, XMLElem parent);
+    XMLElem toXML(const six::XsElement<PerVectorParameterXYZ>&, xml::lite::Element& parent);
+    XMLElem toXML(const six::XsElement<PerVectorParameterEB>&, xml::lite::Element& parent);
+    XMLElem toXML(const six::XsElement_minOccurs0<TxAntenna>&, xml::lite::Element& parent);
+    XMLElem toXML(const six::XsElement_minOccurs0<RcvAntenna>&, xml::lite::Element& parent);
     XMLElem toXML(const Pvp& obj, XMLElem parent);
     XMLElem toXML(const SupportArray& obj, XMLElem parent);
     XMLElem toXML(const Dwell& obj, XMLElem parent);
@@ -176,6 +180,10 @@ private:
     void parse(const xml::lite::Element&, six::XsElement_minOccurs0<AntPattern::EBFreqShiftSF>&) const;
     void parse(const xml::lite::Element&, six::XsElement_minOccurs0<AntPattern::MLFreqDilationSF>&) const;
     void parse(const xml::lite::Element&, six::XsElement_minOccurs0<AntPattern::AntPolRef>&) const;
+    void parse(const xml::lite::Element&, six::XsElement<PerVectorParameterXYZ>&) const;
+    void parse(const xml::lite::Element&, six::XsElement<PerVectorParameterEB>&) const;
+    void parse(const xml::lite::Element&, six::XsElement_minOccurs0<TxAntenna>&) const;
+    void parse(const xml::lite::Element&, six::XsElement_minOccurs0<RcvAntenna>&) const;
 
 private:
     six::SICommonXMLParser10x mCommon;

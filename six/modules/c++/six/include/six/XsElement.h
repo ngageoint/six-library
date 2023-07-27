@@ -40,13 +40,13 @@ namespace six
 {
 	struct XmlLite; // forward
 
-	// Make it easier to manipulate a Xml Element:
-	// XSD of `<xs:element name="Foo" type="xs:string" />`
+	// Make it easier to manipulate a Xml Element: XSD of `<xs:element name="Foo" type="xs:string" />`
 	// Can be represented in C++ as
 	// ```
 	// struct Foo final
 	// { XsElement<std::string> foo {"Foo"}; };
 	// ```
+	// This is `xs::element` as opposed to `xs:comlexType`, `xs::sequence`, `xs:enumeration`, etc.
 	template<typename T>
 	class XsElement final
 	{
