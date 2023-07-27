@@ -74,6 +74,14 @@ CODA_OSS_API void trim(coda_oss::u8string& s);
 CODA_OSS_API coda_oss::u8string trim(const coda_oss::u8string& s);
 
 /**
+ * "Trim" the whitepsace by replacing it with "&#xA0;" which is
+*  the Unicode character for "non-breaking white-space."
+* Calling this "trim" because the same algorithm as an trim(), above
+* is used.
+ */
+CODA_OSS_API void trimToNBSP(coda_oss::u8string& s);
+
+/**
  *  Checks the end of s with match
  *  @param  s  String to check
  *  @param  match  String to compare with
