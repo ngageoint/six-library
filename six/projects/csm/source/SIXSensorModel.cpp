@@ -1178,12 +1178,16 @@ std::vector<double> SIXSensorModel::getSIXUnmodeledError_(const six::ErrorStatis
     {
         if (auto pUnmodeled = pErrorStatistics->Unmodeled.get())
         {
+            auto&& Xrow = pUnmodeled->Xrow.value();
+            auto&& Ycol = pUnmodeled->Ycol.value();
+            auto&& XrowYcol = pUnmodeled->XrowYcol.value();
+
             // From Bill: Here is the mapping from the UnmodeledError to the 2x2 covariance matrix:
             //    [0][0] = Xrow; [1][1] = Ycol; 
             //    [1][0] = [0][1] = XrowYcol * Xrow * Ycol
-            const auto line_variance = pUnmodeled->Xrow;
-            const auto sample_variance = pUnmodeled->Ycol;
-            const auto linesample_covariance = pUnmodeled->XrowYcol * line_variance * sample_variance;
+            const auto line_variance = Xrow;
+            const auto sample_variance = Ycol;
+            const auto linesample_covariance = XrowYcol * line_variance * sample_variance;
             const auto sampleline_covariance = linesample_covariance;
             return { line_variance, linesample_covariance, sampleline_covariance, sample_variance };
         }

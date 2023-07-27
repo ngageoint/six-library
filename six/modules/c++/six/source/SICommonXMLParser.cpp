@@ -31,6 +31,7 @@
 #include <six/CollectionInformation.h>
 #include <six/SICommonXMLParser.h>
 #include <six/ParameterCollection.h>
+#include <six/XmlLite.h>
 
 namespace
 {
@@ -940,16 +941,19 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
     xmlNewElement(Unmodeled, getSICommonURI(), errorStatsXML);
     if (UnmodeledXML != nullptr)
     {
-        #define xmlCreateDouble_(name, value, elem) createDouble(#name, getSICommonURI(), (value).name, elem)
-        #define xmlCreateDouble(name, elem) xmlCreateDouble_(name, *elem, elem ## XML)
-        xmlCreateDouble(Xrow, Unmodeled);
-        xmlCreateDouble(Ycol, Unmodeled);
-        xmlCreateDouble(XrowYcol, Unmodeled);
+        #define xmlCreateElement_(name, xml) createDouble((name).tag(), getSICommonURI(), (name).value(), xml)
+        #define xmlCreateElement(name, elem) xmlCreateElement_(elem->name, elem ## XML);
+        xmlCreateElement(Xrow, Unmodeled);
+        xmlCreateElement(Ycol, Unmodeled);
+        xmlCreateElement(XrowYcol, Unmodeled);
 
         const auto UnmodeledDecorr = Unmodeled->UnmodeledDecorr.get();
         xmlNewElement(UnmodeledDecorr, getSICommonURI(), UnmodeledXML);
         if (UnmodeledDecorrXML != nullptr)
         {
+            #define xmlCreateDouble_(name, value, elem) createDouble(#name, getSICommonURI(), (value).name, elem)
+            #define xmlCreateDouble(name, elem) xmlCreateDouble_(name, *elem, elem ## XML)
+
             const auto& Xrow = &(UnmodeledDecorr->Xrow);
             xmlNewElement(Xrow, getSICommonURI(), UnmodeledDecorrXML);
             xmlCreateDouble(CorrCoefZero, Xrow);
@@ -1033,9 +1037,9 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         // macro to avoid copy/paste errors
         #define parseDouble_getFirstAndOnly(elem, name, storage) parseDouble(getFirstAndOnly(elem, #name), (storage).name)
 
-        parseDouble_getFirstAndOnly(tmpElem, Xrow, Unmodeled);
-        parseDouble_getFirstAndOnly(tmpElem, Ycol, Unmodeled);
-        parseDouble_getFirstAndOnly(tmpElem, XrowYcol, Unmodeled);
+        six::getFirstAndOnly(parser(), *tmpElem, Unmodeled.Xrow);
+        six::getFirstAndOnly(parser(), *tmpElem, Unmodeled.Ycol);
+        six::getFirstAndOnly(parser(), *tmpElem, Unmodeled.XrowYcol);
 
         auto unmodeledDecorrXML = xml_getOptional_reset(*tmpElem, Unmodeled, UnmodeledDecorr);
         if (unmodeledDecorrXML != nullptr)
@@ -1060,9 +1064,9 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         // macro to avoid copy/paste errors
         #define parseDouble_getFirstAndOnly(elem, name, storage) parseDouble(getFirstAndOnly(elem, #name), (storage).name)
 
-        parseDouble_getFirstAndOnly(tmpElem, Xrow, Unmodeled);
-        parseDouble_getFirstAndOnly(tmpElem, Ycol, Unmodeled);
-        parseDouble_getFirstAndOnly(tmpElem, XrowYcol, Unmodeled);
+        six::getFirstAndOnly(parser(), *tmpElem, Unmodeled.Xrow);
+        six::getFirstAndOnly(parser(), *tmpElem, Unmodeled.Ycol);
+        six::getFirstAndOnly(parser(), *tmpElem, Unmodeled.XrowYcol);
 
         auto unmodeledDecorrXML = xml_getOptional_reset(tmpElem, Unmodeled, UnmodeledDecorr);
         if (unmodeledDecorrXML != nullptr)

@@ -33,6 +33,7 @@
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
+#include "six/XsElement.h"
 
 namespace six
 {
@@ -256,11 +257,9 @@ struct IonoError
  */
 struct UnmodeledS final
 {
-    // By making member names match XML element names, macros can
-    // help generate boilerplate code.
-    double Xrow = 0.0;
-    double Ycol = 0.0;
-    double XrowYcol = 0.0;
+    XsElement<double> Xrow{ "Xrow" };
+    XsElement<double> Ycol{ "Ycol" };
+    XsElement<double> XrowYcol{ "XrowYcol" };
 
     struct Decorr final
     {
