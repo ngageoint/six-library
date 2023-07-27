@@ -18,9 +18,10 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
+
+#pragma once
 #ifndef CODA_OSS_coda_oss_optional__h_INCLUDED_
 #define CODA_OSS_coda_oss_optional__h_INCLUDED_
-#pragma once
 
 #include <assert.h>
 
@@ -28,13 +29,8 @@
 #include <stdexcept>
 
 // Simple version of std::optional since that doesn't exist until C++17.
-//
-// This doesn't even TRY to match the actual C++17 specification,
-// it only tries to minimize code changes.
-//
 // http://en.cppreference.com/w/cpp/utility/Optional
 
-#include "coda_oss/namespace_.h"
 namespace coda_oss
 {
 namespace details
@@ -47,7 +43,7 @@ inline void throw_bad_optional_access()
 template <typename T>
 class optional final
 {
-    T value_;
+    T value_{};
     bool has_value_ = false;
 
     void check_has_value() const
@@ -61,21 +57,15 @@ class optional final
 public:
     using value_type = T;
 
-#if defined(_MSC_VER) && _PREFAST_  // Visual Studio /analyze
-    __pragma(warning(push)) __pragma(warning(disable : 26495))  // Variable '...' is uninitialized. Always initialize a member variable(type.6).
-#endif
     optional() noexcept
     {
     }
-#if defined(_MSC_VER) && _PREFAST_
-    __pragma(warning(pop))
-#endif
     optional(const value_type& v) : value_(v), has_value_(true)
     {
     }
-#if defined(_MSC_VER) && _PREFAST_  // Visual Studio /analyze
-    __pragma(warning(push)) __pragma(warning(disable : 26495))  // Variable '...' is uninitialized. Always initialize a member variable(type.6).
-#endif
+    optional(value_type&& v) : value_(std::move(v)), has_value_(true)
+    {
+    }
     optional(const optional& other)
     {
         *this = other;
@@ -92,7 +82,7 @@ public:
     template <typename U>
     explicit optional(optional<U>&& other)
     {
-        *this = std::move(other);
+        *this = std::forward<optional<U>>(other);
     }
     template <typename U = T>
     explicit optional(U&& value)
@@ -100,40 +90,38 @@ public:
         *this = std::forward<U>(value);
     }
 
-#if defined(_MSC_VER) && _PREFAST_
-    __pragma(warning(pop))
-#endif
-    optional& operator=(const optional& other)
+    // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
+    optional& operator=(const optional& other) 
     {
         value_ = other.value_;
         has_value_ = other.has_value_;
         return *this;
     }
-    optional& operator=(optional&& other) noexcept // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
+    optional& operator=(optional&& other) noexcept 
     {
         value_ = std::move(other.value_);
         has_value_ = std::move(other.has_value_);
         return *this;
     }
-    template <typename U = T>  // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
+    template <typename U = T> 
     optional& operator=(U&& value) noexcept
     {
         value_ = std::forward<U>(value);
         has_value_ = true;
         return *this;
     }
-    template <typename U> // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
+    template <typename U>
     optional& operator=(const optional<U>& other)
     {
         value_ = other.value_;
         has_value_ = other.has_value_;
         return *this;
     }
-    template <typename U> // // https://en.cppreference.com/w/cpp/utility/optional/operator%3D
+    template <typename U>
     optional& operator=(optional<U>&& other)
     {
-        value_ = std::move(other.value_);
-        has_value_ = std::move(other.has_value_);
+        value_ = std::forward<optional<U>>(other.value_);
+        has_value_ = other.has_value_;
         return *this;
     }
 
@@ -193,7 +181,6 @@ public:
         assert(has_value());
         return &value_;  // "This operator does not check whether the optional contains a value!"
     }
-
     const T& operator*() const& noexcept
     {
         assert(has_value());
@@ -245,26 +232,23 @@ inline optional<T> make_optional(TArgs&&... args)
 // Compares two optional objects, lhs and rhs. The contained values are compared
 // (using the corresponding operator of T) only if both lhs and rhs contain
 // values. Otherwise,
-// * lhs is considered equal to rhs if, and only if, both lhs and rhs do not
-// contain a value.
-// * lhs is considered less than rhs if, and only if, rhs contains a value and
-// lhs does not.
+// * lhs is considered equal to rhs if, and only if, both lhs and rhs do not contain a value.
+// * lhs is considered less than rhs if, and only if, rhs contains a value and lhs does not.
 template <typename T, typename U>
 inline bool operator==(const optional<T>& lhs, const optional<U>& rhs)
 {
-    // If bool(lhs) != bool(rhs), returns false
-    if (bool(lhs) != bool(rhs))
+    // "If bool(lhs) != bool(rhs), returns false."
+    if (lhs.has_value() != rhs.has_value())
     {
         return false;
     }
-    // Otherwise, if bool(lhs) == false (and so bool(rhs) == false as well),
-    // returns true
+    // "Otherwise, if bool(lhs) == false (and so bool(rhs) == false as well), returns true."
     if (!lhs.has_value())
     {
         assert(!rhs.has_value());
         return true;
     }
-    // Otherwise, returns *lhs == *rhs.
+    // "Otherwise, returns *lhs == *rhs."
     return *lhs == *rhs;
 }
 template <typename T, typename U>
@@ -297,17 +281,17 @@ inline bool operator!=(const optional<T>& opt, const U& value)
 template <typename T, typename U>
 inline bool operator<(const optional<T>& lhs, const optional<U>& rhs)
 {
-    // If bool(rhs) == false returns false
+    // "If bool(rhs) == false returns false."
     if (!rhs.has_value())
     {
         return false;
     }
-    // Otherwise, if bool(lhs) == false, returns true
+    // "Otherwise, if bool(lhs) == false, returns true."
     if (!lhs.has_value())
     {
         return true;
     }
-    // Otherwise returns *lhs < *rhs
+    // "Otherwise returns *lhs < *rhs."
     return *lhs < *rhs;
 }
 template <typename T, typename U>
@@ -324,17 +308,17 @@ inline bool operator<(const optional<T>& opt, const U& value)
 template <typename T, typename U>
 inline bool operator<=(const optional<T>& lhs, const optional<U>& rhs)
 {
-    // If bool(lhs) == false returns true
+    // "If bool(lhs) == false returns true."
     if (!lhs.has_value())
     {
         return true;
     }
-    // Otherwise, if bool(rhs) == false, returns false
+    // "Otherwise, if bool(rhs) == false, returns false."
     if (!rhs.has_value())
     {
         return false;
     }
-    // Otherwise returns *lhs <= *rhs
+    // "Otherwise returns *lhs <= *rhs."
     return *lhs <= *rhs;
 }
 template <typename T, typename U>
@@ -351,17 +335,17 @@ inline bool operator<=(const optional<T>& opt, const U& value)
 template <typename T, typename U>
 inline bool operator>(const optional<T>& lhs, const optional<U>& rhs)
 {
-    // If bool(lhs) == false returns false
+    // "If bool(lhs) == false returns false."
     if (!lhs.has_value())
     {
         return false;
     }
-    // Otherwise, if bool(rhs) == false, returns true
+    // "Otherwise, if bool(rhs) == false, returns true."
     if (!rhs.has_value())
     {
         return true;
     }
-    // Otherwise returns *lhs > *rhs
+    // "Otherwise returns *lhs > *rhs."
     return *lhs > *rhs;
 }
 template <typename T, typename U>
@@ -378,17 +362,17 @@ inline bool operator>(const optional<T>& opt, const U& value)
 template <typename T, typename U>
 inline bool operator>=(const optional<T>& lhs, const optional<U>& rhs)
 {
-    // If bool(rhs) == false returns true
+    // "If bool(rhs) == false returns true."
     if (!rhs.has_value())
     {
         return true;
     }
-    // Otherwise, if bool(lhs) == false, returns false
+    // "Otherwise, if bool(lhs) == false, returns false."
     if (!lhs.has_value())
     {
         return false;
     }
-    // Otherwise returns *lhs >= *rhs
+    // "Otherwise returns *lhs >= *rhs."
     return *lhs >= *rhs;
 }
 template <typename T, typename U>
