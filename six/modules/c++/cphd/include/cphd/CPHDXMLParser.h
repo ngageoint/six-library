@@ -164,6 +164,7 @@ private:
     void parseIAExtent(const xml::lite::Element* extentXML, ImageAreaYExtent& extent) const;
     void parseChannelParameters(const xml::lite::Element* paramXML,
                                 ChannelParameter& param) const;
+    size_t parsePVPType(const xml::lite::Element&, PVPType&) const;
     void parsePVPType(Pvp& p, const xml::lite::Element* paramXML, PVPType& param) const;
     void parsePVPType(Pvp& p, const xml::lite::Element* paramXML) const;
     bool parseOptionalPVPType(const xml::lite::Element* parent, const std::string& tag, Pvp& p, PVPType& param) const;

@@ -473,13 +473,13 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
     return channelXML;
 }
 
-XMLElem CPHDXMLParser::toXML(const six::XsElement<PerVectorParameterXYZ>&, xml::lite::Element&)
+XMLElem CPHDXMLParser::toXML(const six::XsElement<PerVectorParameterXYZ>& v, xml::lite::Element& parent)
 {
-    return nullptr; // TODO
+    return createPVPType(v.tag(), v.value().param, &parent);
 }
-XMLElem CPHDXMLParser::toXML(const six::XsElement<PerVectorParameterEB>&, xml::lite::Element&)
+XMLElem CPHDXMLParser::toXML(const six::XsElement<PerVectorParameterEB>& v, xml::lite::Element& parent)
 {
-    return nullptr; // TODO
+    return createPVPType(v.tag(), v.value().param, &parent);
 }
 
 XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<TxAntenna>& o, xml::lite::Element& parent)
@@ -1445,13 +1445,17 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* channelXML, Channel& chann
     }
 }
 
-void CPHDXMLParser::parse(const xml::lite::Element&, six::XsElement<PerVectorParameterXYZ>&) const
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement<PerVectorParameterXYZ>& v) const
 {
-    // TODO
+    auto& param = v.value().param;
+    const auto offset = parsePVPType(parent, param);
+    setOffset(param, offset);
 }
-void CPHDXMLParser::parse(const xml::lite::Element&, six::XsElement<PerVectorParameterEB>&) const
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement<PerVectorParameterEB>& v) const
 {
-    // TODO
+    auto& param = v.value().param;
+    const auto offset = parsePVPType(parent, param);
+    setOffset(param, offset);
 }
 
 void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOccurs0<TxAntenna>& o) const
@@ -2263,7 +2267,6 @@ void CPHDXMLParser::parse(const xml::lite::Element& polarizationXML, six::XsElem
     }
 }
 
-
 void CPHDXMLParser::parsePolarization(const xml::lite::Element& paramXML, Polarization& polarization) const
 {
     std::vector<XMLElem> PolarizationXML;
@@ -2281,7 +2284,7 @@ void CPHDXMLParser::parsePolarization(const xml::lite::Element& paramXML, Polari
     }
 }
 
-void CPHDXMLParser::parsePVPType(Pvp& pvp, const xml::lite::Element* paramXML, PVPType& param) const
+size_t CPHDXMLParser::parsePVPType(const xml::lite::Element& paramXML, PVPType& param) const
 {
     size_t size;
     size_t offset;
@@ -2292,19 +2295,20 @@ void CPHDXMLParser::parsePVPType(Pvp& pvp, const xml::lite::Element* paramXML, P
     if (param.getSize() != size)
     {
         std::ostringstream ostr;
-        ostr << "Specified size: " << size
-             << " does not match default size: "
-             << param.getSize();
+        ostr << "Specified size: " << size << " does not match default size: " << param.getSize();
         throw except::Exception(Ctxt(ostr.str()));
     }
     if (param.getFormat() != format)
     {
         std::ostringstream ostr;
-        ostr << "Specified format: " << format
-             << " does not match default format: "
-             << param.getFormat();
+        ostr << "Specified format: " << format << " does not match default format: " << param.getFormat();
         throw except::Exception(Ctxt(ostr.str()));
     }
+    return offset;
+}
+void CPHDXMLParser::parsePVPType(Pvp& pvp, const xml::lite::Element* paramXML, PVPType& param) const
+{
+    const auto offset = parsePVPType(*paramXML, param);
     pvp.setOffset(offset, param);
 }
 
@@ -2330,7 +2334,6 @@ bool CPHDXMLParser::parseOptionalPVPType(const xml::lite::Element* parent, const
     }
     return false;
 }
-
 
 void CPHDXMLParser::parsePlatformParams(const xml::lite::Element* platXML, Bistatic::PlatformParams& plat) const
 {

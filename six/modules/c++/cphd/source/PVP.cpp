@@ -88,8 +88,7 @@ void Pvp::validate(size_t size, size_t offset)
     {
         if(mParamLocations.at(offset + ii) == true)
         {
-            throw except::Exception(Ctxt(
-                                    "This byte block is occupied"));
+            throw except::Exception(Ctxt("This byte block is occupied"));
         }
     }
 
@@ -100,11 +99,16 @@ void Pvp::validate(size_t size, size_t offset)
     }
 }
 
+void setOffset(PVPType& param, size_t offset)
+{
+    validateFormat(param.getFormat());
+    param.setOffset(offset);
+}
+
 void Pvp::setOffset(size_t offset, PVPType& param)
 {
     validate(param.getSize(), offset);
-    validateFormat(param.getFormat());
-    param.setOffset(offset);
+    cphd::setOffset(param, offset);
 }
 
 void Pvp::append(PVPType& param)

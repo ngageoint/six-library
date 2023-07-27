@@ -121,6 +121,8 @@ protected:
     //! Format of parameter
     std::string mFormat;
 };
+void setOffset(PVPType&, size_t offset);
+
 
 /*!
  *  \struct APVPType
