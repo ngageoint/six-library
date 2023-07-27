@@ -32,6 +32,13 @@
 #include "xml/lite/Element.h"
 #include "xml/lite/QName.h"
 
+static std::string print(const xml::lite::Element& element)
+{
+    io::StringStream output;
+    element.print(output);
+    return output.stream().str();
+}
+
 TEST_CASE(testXmlCreateRoot)
 {
     using namespace xml::lite::literals;  // _q and _u for QName and Uri
@@ -41,17 +48,12 @@ TEST_CASE(testXmlCreateRoot)
 
     auto documents_ = document.createElement(xml::lite::QName(""_u, "abc"), "abc");
     auto& documents = *documents_;
-    io::StringStream output;
-    documents.print(output);
-    auto actual = output.stream().str();
+    auto actual = print(documents);
     TEST_ASSERT_EQ("<abc>abc</abc>", actual);
 
     documents = "test"; // setCharacterData()
     documents = xml::lite::QName(""_u, "documents"); // setChild()
-
-    output.reset();
-    documents.print(output);
-    actual = output.stream().str();
+    actual = print(documents);
     TEST_ASSERT_EQ("<documents>test</documents>", actual);
 }
 
@@ -65,9 +67,7 @@ TEST_CASE(testXmlCreateNested)
     auto documents_ = document.createElement(xml::lite::QName(""_u, "documents"), "");
     auto& documents = *documents_;
     std::ignore = addChild(documents, "html");
-    io::StringStream output;
-    documents.print(output);
-    auto actual = output.stream().str();
+    auto actual = print(documents);
     const auto expected0 = "<documents><html/></documents>";
     TEST_ASSERT_EQ(expected0, actual);
 
@@ -81,9 +81,7 @@ TEST_CASE(testXmlCreateNested)
     std::ignore = addAttribute(p, "a"_q, "abc");
     body += "br"; // addChild()
 
-    output.reset();
-    documents.print(output);
-    actual = output.stream().str();
+    actual = print(documents);
     const auto expected1 = // can't use a "raw" string because a string comparision is done, not a "XML comparision"
         "<documents count=\"1\">"
             "<html>"
@@ -98,8 +96,60 @@ TEST_CASE(testXmlCreateNested)
     TEST_ASSERT_EQ(expected1, actual);
 }
 
+TEST_CASE(testXmlCreateEmpty)
+{
+    using namespace xml::lite::literals;  // _q and _u for QName and Uri
+
+    xml::lite::MinidomParser xmlParser;
+    auto& document = getDocument(xmlParser);
+
+    auto documents_ = document.createElement(xml::lite::QName(""_u, "empty"), "");
+    auto& documents = *documents_;
+    auto actual = print(documents);
+    TEST_ASSERT_EQ("<empty/>", actual);
+}
+
+TEST_CASE(testXmlCreateWhitespace)
+{
+    using namespace xml::lite::literals;  // _q and _u for QName and Uri
+
+    xml::lite::MinidomParser xmlParser;
+    auto& document = getDocument(xmlParser);
+
+    const auto text = str::EncodedStringView("     ").u8string();
+    auto documents_ = document.createElement(xml::lite::QName(""_u, "text"), text);
+    auto& documents = *documents_;
+    auto strXml = str::EncodedStringView(print(documents)).u8string();
+    const auto expected = str::EncodedStringView("<text>").u8string() + text + str::EncodedStringView("</text>").u8string();
+    TEST_ASSERT(strXml == expected);
+
+    {
+        io::U8StringStream input;
+        input.stream() << strXml;
+        xmlParser.preserveCharacterData(false);
+        xmlParser.parse(input);
+        const auto& root = getRootElement(getDocument(xmlParser));
+        std::u8string actual;
+        root.getCharacterData(actual);
+        static const auto blank = str::EncodedStringView("").u8string();
+        TEST_ASSERT(actual == blank); // preserveCharacterData == false
+    }
+    {
+        io::U8StringStream input;
+        input.stream() << strXml;
+        xmlParser.preserveCharacterData(true);
+        xmlParser.parse(input);
+        const auto& root = getRootElement(getDocument(xmlParser));
+        std::u8string actual;
+        root.getCharacterData(actual);
+        TEST_ASSERT(actual == text); // preserveCharacterData == true
+    }
+}
+
 int main(int, char**)
 {
     TEST_CHECK(testXmlCreateRoot);
     TEST_CHECK(testXmlCreateNested);
+    TEST_CHECK(testXmlCreateEmpty);
+    TEST_CHECK(testXmlCreateWhitespace);
 }

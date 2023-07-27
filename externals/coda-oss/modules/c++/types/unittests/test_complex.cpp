@@ -41,7 +41,7 @@ TEST_CASE(TestCxShort_abs)
     #ifdef _MSC_VER
     #pragma warning(disable: 4996) // '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning.
     #endif
-    const types::zint16_t types_zint16(cx_short);
+    const types::Complex<int16_t> types_zint16(cx_short);
     CODA_OSS_disable_warning_pop
     auto actual = abs(types_zint16);
     TEST_ASSERT_EQ(actual, expected);

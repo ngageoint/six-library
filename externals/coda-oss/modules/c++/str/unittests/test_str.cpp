@@ -25,6 +25,7 @@
 #include <types/Complex.h>
 #include <config/compiler_extensions.h>
 #include <import/str.h>
+#include <str/EncodedStringView.h>
 
 #include "TestCase.h"
 
@@ -36,8 +37,18 @@ inline std::string to_string(const std::string& value)
 TEST_CASE(testTrim)
 {
     std::string s = "  test   ";
-    str::trim( s);
+    str::trim(s);
     TEST_ASSERT_EQ(s, "test");
+
+}
+
+TEST_CASE(testTrimToNBSP)
+{
+    auto s = str::EncodedStringView("  test   ").u8string();
+    str::trimToNBSP(s);
+
+    const auto expected = str::EncodedStringView("&#xA0;&#xA0;test&#xA0;&#xA0;&#xA0;").u8string();
+    TEST_ASSERT(s == expected);
 }
 
 TEST_CASE(testData)
@@ -277,7 +288,7 @@ TEST_CASE(test_toStringComplexShort)
     actual = str::toString(types_cx_short);
     TEST_ASSERT_EQ(actual, expected);
 
-    const types::zint16_t zint16(1, -2);
+    const types::Complex<int16_t> zint16(1, -2);
     actual = str::toString(zint16);
     TEST_ASSERT_EQ(actual, expected);
 }
@@ -303,7 +314,7 @@ TEST_CASE(test_toTypeComplexShort)
     strActual = str::toString(zactual);
     TEST_ASSERT_EQ(strActual, strValue);
 
-    zactual = str::toType<types::zint16_t>(strValue);
+    zactual = str::toType<types::Complex<int16_t>>(strValue);
     strActual = str::toString(zactual);
     TEST_ASSERT_EQ(strActual, strValue);
 }
@@ -311,6 +322,7 @@ TEST_CASE(test_toTypeComplexShort)
 
 TEST_MAIN(
     TEST_CHECK(testTrim);
+    TEST_CHECK(testTrimToNBSP);
     TEST_CHECK(testData);
     TEST_CHECK(testUpper);
     TEST_CHECK(testLower);
