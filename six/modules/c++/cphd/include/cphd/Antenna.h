@@ -31,7 +31,7 @@
 #include <std/optional>
 
 #include <six/sicd/Antenna.h>
-#include <six/XmlOptionalElement.h>
+#include <six/XsElement.h>
 
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
@@ -78,7 +78,7 @@ struct AntCoordFrame final
     PolyXYZ yAxisPoly;
 
     //!Indicates the provided ACF PVP arrays provide a more accurate description the ACF orientation vs.time.
-    six::XmlOptionalElement<bool> useACFPVP{ "UseACFPVP" }; // new in CPHD 1.1.0
+    six::XsElement_minOccurs0<bool> useACFPVP{ "UseACFPVP" }; // new in CPHD 1.1.0
 };
 
 /*
@@ -293,13 +293,13 @@ struct AntPattern final
     Poly1D gainBSPoly;
 
     //! (Optional) Scale factors used compute the EB shift vs. frequency
-    six::XmlOptionalElement<EBFreqShiftSF> ebFreqShiftSF{ "EBFreqShiftSF" }; // new in CPHD 1.1.0
+    six::XsElement_minOccurs0<EBFreqShiftSF> ebFreqShiftSF{ "EBFreqShiftSF" }; // new in CPHD 1.1.0
 
     //! (Optional) Scale factors used to compute the array pattern
-    six::XmlOptionalElement<MLFreqDilationSF> mlFreqDilationSF{ "MLFreqDilationSF" }; // new in CPHD 1.1.0
+    six::XsElement_minOccurs0<MLFreqDilationSF> mlFreqDilationSF{ "MLFreqDilationSF" }; // new in CPHD 1.1.0
 
     //! (Optional) Polarization parameters for the EB steered to mechanical boresight
-    six::XmlOptionalElement<AntPolRef> antPolRef{ "AntPolRef" }; // new in CPHD 1.1.0
+    six::XsElement_minOccurs0<AntPolRef> antPolRef{ "AntPolRef" }; // new in CPHD 1.1.0
 
     //! The Electrical Boresight steering direction versus
     //! time. Defines array pattern pointing direction

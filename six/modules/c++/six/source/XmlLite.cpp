@@ -34,7 +34,6 @@
 #include <six/Utilities.h>
 #include <six/Init.h>
 #include <six/XsElement.h>
-#include <six/XmlOptionalElement.h>
 
 namespace six
 {
@@ -512,28 +511,28 @@ void getFirstAndOnly(const XmlLite& parser, const xml::lite::Element& parent, Xs
     v = xml::lite::getValue<double>(element); // throws except::BadCastException on failure, see parseDouble()
 }
 
-xml::lite::Element* create(XmlLite& parser, const XmlOptionalElement<bool>& v, xml::lite::Element& parent)
+xml::lite::Element* create(XmlLite& parser, const XsElement_minOccurs0<bool>& v, xml::lite::Element& parent)
 {
     return parser.createOptional(v.tag(), v.value(), parent);
 }
-xml::lite::Element* create(XmlLite& parser, const XmlOptionalElement<double>& v, xml::lite::Element& parent)
+xml::lite::Element* create(XmlLite& parser, const XsElement_minOccurs0<double>& v, xml::lite::Element& parent)
 {
     return parser.createOptionalDouble(v.tag(), v.value(), parent);
 }
-xml::lite::Element* create(XmlLite& parser, const XmlOptionalElement<std::u8string>& v, xml::lite::Element& parent)
+xml::lite::Element* create(XmlLite& parser, const XsElement_minOccurs0<std::u8string>& v, xml::lite::Element& parent)
 {
     return parser.createOptional(v.tag(), v.value(), parent);
 }
 
-bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XmlOptionalElement<bool>& v)
+bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XsElement_minOccurs0<bool>& v)
 {
     return parser.parseOptional(parent, v.tag(), v.value());
 }
-bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XmlOptionalElement<double>& v)
+bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XsElement_minOccurs0<double>& v)
 {
     return parser.parseOptionalDouble(parent, v.tag(), v.value());
 }
-bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XmlOptionalElement<std::u8string>& v)
+bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XsElement_minOccurs0<std::u8string>& v)
 {
     return parser.parseOptional(parent, v.tag(), v.value());
 }

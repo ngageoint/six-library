@@ -333,10 +333,10 @@ XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
     return dataXML;
 }
 
-XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<PolRef>& o, xml::lite::Element& parent)
+XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<PolRef>& o, xml::lite::Element& parent)
 {
     XMLElem polRefXML = nullptr;
-    if (o.has_value())
+    if (o.value().has_value())
     {
         polRefXML = newElement(o.tag(), &parent);
 
@@ -673,10 +673,10 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
     return refGeoXML;
 }
 
-XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<AntPattern::EBFreqShiftSF>& o, xml::lite::Element& parent)
+XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<AntPattern::EBFreqShiftSF>& o, xml::lite::Element& parent)
 {
     XMLElem retval = nullptr;
-    if (o.has_value())
+    if (has_value(o))
     {
         retval = newElement(o.tag(), &parent);
 
@@ -688,10 +688,10 @@ XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<AntPattern::EBFreqShi
     return retval;
 }
 
-XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<AntPattern::MLFreqDilationSF>& o, xml::lite::Element& parent)
+XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<AntPattern::MLFreqDilationSF>& o, xml::lite::Element& parent)
 {
     XMLElem retval = nullptr;
-    if (o.has_value())
+    if (has_value(o))
     {
         retval = newElement(o.tag(), &parent);
 
@@ -703,10 +703,10 @@ XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<AntPattern::MLFreqDil
     return retval;
 }
 
-XMLElem CPHDXMLParser::toXML(const six::XmlOptionalElement<AntPattern::AntPolRef>& o, xml::lite::Element& parent)
+XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<AntPattern::AntPolRef>& o, xml::lite::Element& parent)
 {
     XMLElem retval = nullptr;
-    if (o.has_value())
+    if (has_value(o))
     {
         retval = newElement(o.tag(), &parent);
 
@@ -1560,34 +1560,34 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* supportArrayXML, SupportAr
     }
 }
 
-void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XmlOptionalElement<AntPattern::EBFreqShiftSF>& o) const
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOccurs0<AntPattern::EBFreqShiftSF>& o) const
 {
     if (const auto pXML = getOptional(parent, o.tag()))
     {
         o = AntPattern::EBFreqShiftSF{};
-        six::getFirstAndOnly(parser(), *pXML, (*o).dcxsf);
-        six::getFirstAndOnly(parser(), *pXML, (*o).dcysf);
+        six::getFirstAndOnly(parser(), *pXML, value(o).dcxsf);
+        six::getFirstAndOnly(parser(), *pXML, value(o).dcysf);
     }
 }
 
-void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XmlOptionalElement<AntPattern::MLFreqDilationSF>& o) const
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOccurs0<AntPattern::MLFreqDilationSF>& o) const
 {
     if (const auto pXML = getOptional(parent, o.tag()))
     {
         o = AntPattern::MLFreqDilationSF{};
-        six::getFirstAndOnly(parser(), *pXML, (*o).dcxsf);
-        six::getFirstAndOnly(parser(), *pXML, (*o).dcysf);
+        six::getFirstAndOnly(parser(), *pXML, value(o).dcxsf);
+        six::getFirstAndOnly(parser(), *pXML, value(o).dcysf);
     }
 }
 
-void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XmlOptionalElement<AntPattern::AntPolRef>& o) const
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOccurs0<AntPattern::AntPolRef>& o) const
 {
     if (const auto pXML = getOptional(parent, o.tag()))
     {
         o = AntPattern::AntPolRef{};
-        six::getFirstAndOnly(parser(), *pXML, (*o).ampX);
-        six::getFirstAndOnly(parser(), *pXML, (*o).ampY);
-        six::getFirstAndOnly(parser(), *pXML, (*o).phaseY);
+        six::getFirstAndOnly(parser(), *pXML, value(o).ampX);
+        six::getFirstAndOnly(parser(), *pXML, value(o).ampY);
+        six::getFirstAndOnly(parser(), *pXML, value(o).phaseY);
     }
 }
 
@@ -2179,14 +2179,14 @@ void CPHDXMLParser::parseChannelParameters(
     parsePolarization(*paramXML, param.polarization);
 }
 
-void CPHDXMLParser::parse(const xml::lite::Element& polarizationXML, six::XmlOptionalElement<PolRef>& o) const
+void CPHDXMLParser::parse(const xml::lite::Element& polarizationXML, six::XsElement_minOccurs0<PolRef>& o) const
 {
     if (const auto pXML = getOptional(polarizationXML, o.tag()))
     {
         o = PolRef{};
-        six::getFirstAndOnly(parser(), *pXML, (*o).ampH);
-        six::getFirstAndOnly(parser(), *pXML, (*o).ampV);
-        six::getFirstAndOnly(parser(), *pXML, (*o).phaseV);
+        six::getFirstAndOnly(parser(), *pXML, value(o).ampH);
+        six::getFirstAndOnly(parser(), *pXML, value(o).ampV);
+        six::getFirstAndOnly(parser(), *pXML, value(o).phaseV);
     }
 }
 

@@ -31,7 +31,7 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
-#include "six/XmlOptionalElement.h"
+#include "six/XsElement.h"
 
 #include <mem/ScopedCopyablePtr.h>
 
@@ -72,7 +72,7 @@ struct ElectricalBoresight final
 
     //! CPHD 1.1.0 UseEBPVP
     //! Indicates the provided EB PVP arrays provide a more accurate description the EB Steering vector vs. time.
-    six::XmlOptionalElement<bool> useEBPVP{ "UseEBPVP" };
+    six::XsElement_minOccurs0<bool> useEBPVP{ "UseEBPVP" };
 };
 
 std::ostream& operator<< (std::ostream& os, const ElectricalBoresight& d);
@@ -145,7 +145,7 @@ struct GainAndPhasePolys final
     Poly2D phasePoly;
 
     //! Identifier of the Antenna Gain/Phase support array that specifies the one-way array pattern 
-    six::XmlOptionalElement<std::u8string> antGPId {"AntGPId"};  // new in CPHD 1.1.0
+    six::XsElement_minOccurs0<std::u8string> antGPId {"AntGPId"};  // new in CPHD 1.1.0
 };
 
 std::ostream& operator<< (std::ostream& os, const GainAndPhasePolys& d);

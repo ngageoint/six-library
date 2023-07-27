@@ -29,7 +29,6 @@
 #include <std/optional>
 
 #include <six/XsElement.h>
-#include <six/XmlOptionalElement.h>
 
 #include <cphd/Types.h>
 #include <cphd/Enums.h>
@@ -93,10 +92,10 @@ struct Polarization final
     PolarizationType rcvPol;
 
     //! Transmit polarization parameters for the transmit pulse for the reference signal vector  (v_CH_REF). See Section 7.2.5.
-    six::XmlOptionalElement<PolRef> txPolRef { "TxPolRef" }; // new in CPHD 1.1.0
+    six::XsElement_minOccurs0<PolRef> txPolRef { "TxPolRef" }; // new in CPHD 1.1.0
 
     //! Receive polarization parameters for the received signals for the reference signal vector (v_CH_REF). See Section 7.2.5.
-    six::XmlOptionalElement<PolRef> rcvPolRef { "RcvPolRef" }; // new in CPHD 1.1.0
+    six::XsElement_minOccurs0<PolRef> rcvPolRef { "RcvPolRef" }; // new in CPHD 1.1.0
 };
 
 /*
@@ -210,11 +209,11 @@ struct DwellTimes
 
     //! Identifier of the Dwell Time support array that specifies COD times and
     //! Dwell Times for a grid of points on the reference surface
-    six::XmlOptionalElement<std::u8string> dtaId { "DTAId" }; // new in CPHD 1.1.0
+    six::XsElement_minOccurs0<std::u8string> dtaId { "DTAId" }; // new in CPHD 1.1.0
 
     //! Indicates the provided Dwell Time array provides a more
     //! accurate description dwell times for the channel.
-    six::XmlOptionalElement<bool> useDTA { "UseDTA" }; // new in CPHD 1.1.0
+    six::XsElement_minOccurs0<bool> useDTA { "UseDTA" }; // new in CPHD 1.1.0
 };
 
 /*

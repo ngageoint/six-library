@@ -98,16 +98,16 @@ private:
     XMLElem toXML(const Global& obj, XMLElem parent);
     XMLElem toXML(const SceneCoordinates& obj, XMLElem parent);
     XMLElem toXML(const Data& obj, XMLElem parent);
-    XMLElem toXML(const six::XmlOptionalElement<PolRef>&, xml::lite::Element& parent);
+    XMLElem toXML(const six::XsElement_minOccurs0<PolRef>&, xml::lite::Element& parent);
     XMLElem toXML(const Polarization&, xml::lite::Element& parent);
     XMLElem toXML(const Channel& obj, XMLElem parent);
     XMLElem toXML(const Pvp& obj, XMLElem parent);
     XMLElem toXML(const SupportArray& obj, XMLElem parent);
     XMLElem toXML(const Dwell& obj, XMLElem parent);
     XMLElem toXML(const ReferenceGeometry& obj, XMLElem parent);
-    XMLElem toXML(const six::XmlOptionalElement<AntPattern::EBFreqShiftSF>&, xml::lite::Element& parent);
-    XMLElem toXML(const six::XmlOptionalElement<AntPattern::MLFreqDilationSF>&, xml::lite::Element& parent);
-    XMLElem toXML(const six::XmlOptionalElement<AntPattern::AntPolRef>&, xml::lite::Element& parent);
+    XMLElem toXML(const six::XsElement_minOccurs0<AntPattern::EBFreqShiftSF>&, xml::lite::Element& parent);
+    XMLElem toXML(const six::XsElement_minOccurs0<AntPattern::MLFreqDilationSF>&, xml::lite::Element& parent);
+    XMLElem toXML(const six::XsElement_minOccurs0<AntPattern::AntPolRef>&, xml::lite::Element& parent);
     XMLElem toXML(const Antenna& obj, XMLElem parent);
     XMLElem toXML(const TxRcv& obj, XMLElem parent);
     XMLElem toXML(const ErrorParameters& obj, XMLElem parent);
@@ -172,10 +172,10 @@ private:
     void parseTxRcvParameter(const xml::lite::Element* paramXML, ParameterType& param) const;
     void parsePolarization(const xml::lite::Element& polarizationXML, Polarization&) const;
 
-    void parse(const xml::lite::Element&, six::XmlOptionalElement<PolRef>&) const;
-    void parse(const xml::lite::Element&, six::XmlOptionalElement<AntPattern::EBFreqShiftSF>&) const;
-    void parse(const xml::lite::Element&, six::XmlOptionalElement<AntPattern::MLFreqDilationSF>&) const;
-    void parse(const xml::lite::Element&, six::XmlOptionalElement<AntPattern::AntPolRef>&) const;
+    void parse(const xml::lite::Element&, six::XsElement_minOccurs0<PolRef>&) const;
+    void parse(const xml::lite::Element&, six::XsElement_minOccurs0<AntPattern::EBFreqShiftSF>&) const;
+    void parse(const xml::lite::Element&, six::XsElement_minOccurs0<AntPattern::MLFreqDilationSF>&) const;
+    void parse(const xml::lite::Element&, six::XsElement_minOccurs0<AntPattern::AntPolRef>&) const;
 
 private:
     six::SICommonXMLParser10x mCommon;
