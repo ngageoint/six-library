@@ -271,7 +271,7 @@ struct UnmodeledS final
         Xrow_Ycol Xrow;
         Xrow_Ycol Ycol;
     };
-    mem::ScopedCopyablePtr<Decorr> UnmodeledDecorr;
+    XsElement_minOccurs0<Decorr> unmodeledDecorr{ "UnmodeledDecorr" };
 };
 inline bool operator==(const UnmodeledS::Decorr& lhs, const UnmodeledS::Decorr& rhs)
 {
@@ -290,7 +290,7 @@ inline bool operator==(const UnmodeledS& lhs, const UnmodeledS& rhs)
     return (lhs.Xrow == rhs.Xrow)
         && (lhs.Ycol == rhs.Ycol)
         && (lhs.XrowYcol == rhs.XrowYcol)
-        && (lhs.UnmodeledDecorr == rhs.UnmodeledDecorr)
+        && (lhs.unmodeledDecorr == rhs.unmodeledDecorr)
         ;
 }
 inline bool operator!=(const UnmodeledS& lhs, const UnmodeledS& rhs)

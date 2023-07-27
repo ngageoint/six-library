@@ -32,10 +32,6 @@
 #include <xml/lite/Element.h>
 #include <xml/lite/QName.h>
 
-#include <six/Types.h>
-#include <six/Init.h>
-#include <six/Utilities.h>
-
 namespace six
 {
 	struct XmlLite; // forward

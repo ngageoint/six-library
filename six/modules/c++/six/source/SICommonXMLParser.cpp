@@ -824,6 +824,17 @@ void SICommonXMLParser::parseRowColInts(
     }
 }
 
+inline const UnmodeledS::Decorr* get(const UnmodeledS& unmodeledS)
+{
+    auto&& o = unmodeledS.unmodeledDecorr;
+    return has_value(o) ? &(value(o)) : nullptr;
+}
+inline UnmodeledS::Decorr* get(UnmodeledS& unmodeledS)
+{
+    auto&& o = unmodeledS.unmodeledDecorr;
+    return has_value(o) ? &(value(o)) : nullptr;
+}
+
 XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
     const ErrorStatistics* errorStatistics,
     XMLElem parent) const
@@ -947,19 +958,19 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
         xmlCreateElement(Ycol, Unmodeled);
         xmlCreateElement(XrowYcol, Unmodeled);
 
-        const auto UnmodeledDecorr = Unmodeled->UnmodeledDecorr.get();
-        xmlNewElement(UnmodeledDecorr, getSICommonURI(), UnmodeledXML);
+        const auto pUnmodeledDecorr = get(*Unmodeled);
+        auto UnmodeledDecorrXML = newElement(pUnmodeledDecorr, "UnmodeledDecorr", getSICommonURI(), UnmodeledXML);
         if (UnmodeledDecorrXML != nullptr)
         {
             #define xmlCreateDouble_(name, value, elem) createDouble(#name, getSICommonURI(), (value).name, elem)
             #define xmlCreateDouble(name, elem) xmlCreateDouble_(name, *elem, elem ## XML)
 
-            const auto& Xrow = &(UnmodeledDecorr->Xrow);
+            const auto& Xrow = &(pUnmodeledDecorr->Xrow);
             xmlNewElement(Xrow, getSICommonURI(), UnmodeledDecorrXML);
             xmlCreateDouble(CorrCoefZero, Xrow);
             xmlCreateDouble(DecorrRate, Xrow);
 
-            const auto& Ycol = &(UnmodeledDecorr->Ycol);
+            const auto& Ycol = &(pUnmodeledDecorr->Ycol);
             xmlNewElement(Ycol, getSICommonURI(), UnmodeledDecorrXML);
             xmlCreateDouble(CorrCoefZero, Ycol);
             xmlCreateDouble(DecorrRate, Ycol);
@@ -976,6 +987,17 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
     }
 
     return errorStatsXML;
+}
+
+inline static XMLElem getOptionalUnmodeledDecorr(const xml::lite::Element& parent,
+    XsElement_minOccurs0<UnmodeledS::Decorr>& unmodeledDecorr)
+{
+    auto retval = XmlLite::getOptional(parent, unmodeledDecorr.tag());
+    if (retval != nullptr)
+    {
+        unmodeledDecorr.value() = UnmodeledS::Decorr{};
+    }
+    return retval;
 }
 
 void SICommonXMLParser::parseErrorStatisticsFromXML(
@@ -1041,10 +1063,10 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         six::getFirstAndOnly(parser(), *tmpElem, Unmodeled.Ycol);
         six::getFirstAndOnly(parser(), *tmpElem, Unmodeled.XrowYcol);
 
-        auto unmodeledDecorrXML = xml_getOptional_reset(*tmpElem, Unmodeled, UnmodeledDecorr);
+        auto unmodeledDecorrXML = getOptionalUnmodeledDecorr(*tmpElem, Unmodeled.unmodeledDecorr);
         if (unmodeledDecorrXML != nullptr)
         {
-            auto& UnmodeledDecorr = *(errorStatistics.Unmodeled->UnmodeledDecorr);
+            auto& UnmodeledDecorr = *get(*errorStatistics.Unmodeled);
 
             auto xrowXML = getFirstAndOnly(unmodeledDecorrXML, "Xrow");
             parseDouble_getFirstAndOnly(xrowXML, CorrCoefZero, UnmodeledDecorr.Xrow);
@@ -1068,10 +1090,10 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         six::getFirstAndOnly(parser(), *tmpElem, Unmodeled.Ycol);
         six::getFirstAndOnly(parser(), *tmpElem, Unmodeled.XrowYcol);
 
-        auto unmodeledDecorrXML = xml_getOptional_reset(tmpElem, Unmodeled, UnmodeledDecorr);
+        auto unmodeledDecorrXML = getOptionalUnmodeledDecorr(*tmpElem, Unmodeled.unmodeledDecorr);
         if (unmodeledDecorrXML != nullptr)
         {
-            auto& UnmodeledDecorr = *(errorStatistics.Unmodeled->UnmodeledDecorr);
+            auto& UnmodeledDecorr = *get(*errorStatistics.Unmodeled);
 
             auto xrowXML = getFirstAndOnly(unmodeledDecorrXML, "Xrow");
             parseDouble_getFirstAndOnly(xrowXML, CorrCoefZero, UnmodeledDecorr.Xrow);

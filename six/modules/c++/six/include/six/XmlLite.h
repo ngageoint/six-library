@@ -264,7 +264,7 @@ struct XmlLite final
     static xml::lite::Element* getOptional(const xml::lite::Element& parent, const std::string& tag);
 
     template<typename T>
-    static xml::lite::Element* getOptional_reset(const xml::lite::Element& parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)
+    inline static xml::lite::Element* getOptional_reset(const xml::lite::Element& parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)
     {
         auto retval = getOptional(parent, tag);
         if (retval != nullptr)
