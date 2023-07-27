@@ -335,18 +335,16 @@ XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
 
 XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<PolRef>& o, xml::lite::Element& parent)
 {
-    XMLElem polRefXML = nullptr;
-    if (o.value().has_value())
+    XMLElem pXML = nullptr;
+    if (has_value(o))
     {
-        polRefXML = newElement(o.tag(), &parent);
-
-        const auto& v = *(o.value());
-        std::ignore = create(parser(), v.ampH, *polRefXML);
-        std::ignore = create(parser(), v.ampV, *polRefXML);
-        std::ignore = create(parser(), v.phaseV, *polRefXML);
+        pXML = newElement(o.tag(), &parent);
+        std::ignore = create(parser(), value(o).ampH, *pXML);
+        std::ignore = create(parser(), value(o).ampV, *pXML);
+        std::ignore = create(parser(), value(o).phaseV, *pXML);
     }
 
-    return polRefXML;
+    return pXML;
 }
 
 XMLElem CPHDXMLParser::toXML(const Polarization& obj, xml::lite::Element& parent)
@@ -719,10 +717,8 @@ XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<AntPattern::EBFreqS
     if (has_value(o))
     {
         retval = newElement(o.tag(), &parent);
-
-        const auto& v = *(o.value());
-        std::ignore = create(parser(), v.dcxsf, *retval);
-        std::ignore = create(parser(), v.dcysf, *retval);
+        std::ignore = create(parser(), value(o).dcxsf, *retval);
+        std::ignore = create(parser(), value(o).dcysf, *retval);
     }
 
     return retval;
@@ -734,10 +730,8 @@ XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<AntPattern::MLFreqD
     if (has_value(o))
     {
         retval = newElement(o.tag(), &parent);
-
-        const auto& v = *(o.value());
-        std::ignore = create(parser(), v.dcxsf, *retval);
-        std::ignore = create(parser(), v.dcysf, *retval);
+        std::ignore = create(parser(), value(o).dcxsf, *retval);
+        std::ignore = create(parser(), value(o).dcysf, *retval);
     }
 
     return retval;
@@ -749,11 +743,9 @@ XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<AntPattern::AntPolR
     if (has_value(o))
     {
         retval = newElement(o.tag(), &parent);
-
-        const auto& v = *(o.value());
-        std::ignore = create(parser(), v.ampX, *retval);
-        std::ignore = create(parser(), v.ampY, *retval);
-        std::ignore = create(parser(), v.phaseY, *retval);
+        std::ignore = create(parser(), value(o).ampX, *retval);
+        std::ignore = create(parser(), value(o).ampY, *retval);
+        std::ignore = create(parser(), value(o).phaseY, *retval);
     }
 
     return retval;

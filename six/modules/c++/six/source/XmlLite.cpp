@@ -501,7 +501,7 @@ xml::lite::QName XmlLite::makeQName(const std::string& name) const
     return xml::lite::QName(getDefaultURI(), name);
 }
 
-xml::lite::Element& create(XmlLite& parser, const XsElement<double>& v, xml::lite::Element& parent)
+xml::lite::Element& create(const XmlLite& parser, const XsElement<double>& v, xml::lite::Element& parent)
 {
     return parser.createDouble(v.tag(), v.value(), parent);
 }
@@ -511,15 +511,15 @@ void getFirstAndOnly(const XmlLite& parser, const xml::lite::Element& parent, Xs
     v = xml::lite::getValue<double>(element); // throws except::BadCastException on failure, see parseDouble()
 }
 
-xml::lite::Element* create(XmlLite& parser, const XsElement_minOccurs0<bool>& v, xml::lite::Element& parent)
+xml::lite::Element* create(const XmlLite& parser, const XsElement_minOccurs0<bool>& v, xml::lite::Element& parent)
 {
     return parser.createOptional(v.tag(), v.value(), parent);
 }
-xml::lite::Element* create(XmlLite& parser, const XsElement_minOccurs0<double>& v, xml::lite::Element& parent)
+xml::lite::Element* create(const XmlLite& parser, const XsElement_minOccurs0<double>& v, xml::lite::Element& parent)
 {
     return parser.createOptionalDouble(v.tag(), v.value(), parent);
 }
-xml::lite::Element* create(XmlLite& parser, const XsElement_minOccurs0<std::u8string>& v, xml::lite::Element& parent)
+xml::lite::Element* create(const XmlLite& parser, const XsElement_minOccurs0<std::u8string>& v, xml::lite::Element& parent)
 {
     return parser.createOptional(v.tag(), v.value(), parent);
 }
