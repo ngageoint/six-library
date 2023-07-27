@@ -28,7 +28,7 @@
 #include <std/optional>
 #include <ostream>
 
-#include <six/XmlValueElement.h>
+#include <six/XsElement.h>
 
 namespace six
 {
@@ -95,7 +95,7 @@ namespace six
 	{
 		if (o.has_value())
 		{
-			os << XmlValueElement<T>(o.tag(), *o); // use operator<<() for XmlValueElement
+			os << XsElement<T>(o.tag(), *o); // use operator<<() for XsElement
 		}
 		else
 		{

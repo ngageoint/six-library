@@ -28,7 +28,7 @@
 #include <vector>
 #include <std/optional>
 
-#include <six/XmlValueElement.h>
+#include <six/XsElement.h>
 #include <six/XmlOptionalElement.h>
 
 #include <cphd/Types.h>
@@ -57,13 +57,13 @@ struct PolRef final
     }
 
     //! E-field relative amplitude in H direction
-    six::XmlValueElement<ZeroToOne> ampH{ "AmpH" };
+    six::XsElement<ZeroToOne> ampH{ "AmpH" };
 
     //! E-field relative amplitude in V direction
-    six::XmlValueElement<ZeroToOne> ampV{ "AmpV" };
+    six::XsElement<ZeroToOne> ampV{ "AmpV" };
 
     //! Relative phase of the V E-field relative to the H E-field
-    six::XmlValueElement<NegHalfToHalf> phaseV{ "PhaseV" };
+    six::XsElement<NegHalfToHalf> phaseV{ "PhaseV" };
 };
 
 /*

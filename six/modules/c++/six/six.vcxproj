@@ -151,7 +151,7 @@
     <ClInclude Include="include\six\XmlLite.h" />
     <ClInclude Include="include\six\XmlOptionalElement.h" />
     <ClInclude Include="include\six\XMLParser.h" />
-    <ClInclude Include="include\six\XmlValueElement.h" />
+    <ClInclude Include="include\six\XsElement.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

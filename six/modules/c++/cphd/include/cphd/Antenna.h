@@ -148,10 +148,10 @@ struct AntPattern final
         }
 
         //! Scale factor used to compute the ML dilation factor in DCX vs. frequency.
-        six::XmlValueElement<ZeroToOne> dcxsf{ "DCXSF" };
+        six::XsElement<ZeroToOne> dcxsf{ "DCXSF" };
 
         //! Scale factor used to compute the ML dilation factor in DCY vs. frequency.
-        six::XmlValueElement<ZeroToOne> dcysf{ "DCYSF" };
+        six::XsElement<ZeroToOne> dcysf{ "DCYSF" };
     };
 
     /*
@@ -174,10 +174,10 @@ struct AntPattern final
         }
 
         //! Scale factor used to compute the ML dilation factor in DCX vs. frequency.
-        six::XmlValueElement<ZeroToOne> dcxsf{ "DCXSF" };
+        six::XsElement<ZeroToOne> dcxsf{ "DCXSF" };
 
         //! Scale factor used to compute the ML dilation factor in DCY vs. frequency.
-        six::XmlValueElement<ZeroToOne> dcysf{ "DCYSF" };
+        six::XsElement<ZeroToOne> dcysf{ "DCYSF" };
     };
 
     /*
@@ -201,13 +201,13 @@ struct AntPattern final
         }
 
         //! E-field relative amplitude in ACF X direction at f = f_0.
-        six::XmlValueElement<ZeroToOne> ampX{ "AmpX" };
+        six::XsElement<ZeroToOne> ampX{ "AmpX" };
 
         //! E-field relative amplitude in ACY direction at f = f_0.
-        six::XmlValueElement<ZeroToOne> ampY{ "AmpY" };
+        six::XsElement<ZeroToOne> ampY{ "AmpY" };
 
         //! Relative phase of the Y E-field relative to the X E-field at f = f_0.
-        six::XmlValueElement<NegHalfToHalf> phaseY{ "PhaseY" };
+        six::XsElement<NegHalfToHalf> phaseY{ "PhaseY" };
     };
 
     /*

@@ -156,7 +156,7 @@
     <ClInclude Include="include\six\Complex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\six\XmlValueElement.h">
+    <ClInclude Include="include\six\XsElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\six\XmlOptionalElement.h">

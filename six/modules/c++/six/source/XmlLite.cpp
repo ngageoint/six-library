@@ -33,7 +33,7 @@
 #include <logging/NullLogger.h>
 #include <six/Utilities.h>
 #include <six/Init.h>
-#include <six/XmlValueElement.h>
+#include <six/XsElement.h>
 #include <six/XmlOptionalElement.h>
 
 namespace six
@@ -502,11 +502,11 @@ xml::lite::QName XmlLite::makeQName(const std::string& name) const
     return xml::lite::QName(getDefaultURI(), name);
 }
 
-xml::lite::Element& create(XmlLite& parser, const XmlValueElement<double>& v, xml::lite::Element& parent)
+xml::lite::Element& create(XmlLite& parser, const XsElement<double>& v, xml::lite::Element& parent)
 {
     return parser.createDouble(v.tag(), v.value(), parent);
 }
-void getFirstAndOnly(const XmlLite& parser, const xml::lite::Element& parent, XmlValueElement<double>& v)
+void getFirstAndOnly(const XmlLite& parser, const xml::lite::Element& parent, XsElement<double>& v)
 {
     auto& element = parser.getFirstAndOnly(parent, v.tag());
     v = xml::lite::getValue<double>(element); // throws except::BadCastException on failure, see parseDouble()

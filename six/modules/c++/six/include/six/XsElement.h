@@ -21,8 +21,8 @@
  *
  */
 #pragma once
-#ifndef SIX_six_XmlValueElement_h_INCLUDED_
-#define SIX_six_XmlValueElement_h_INCLUDED_
+#ifndef SIX_six_XsElement_h_INCLUDED_
+#define SIX_six_XsElement_h_INCLUDED_
 
 #include <std/string>
 #include <ostream>
@@ -39,72 +39,74 @@ namespace six
 {
 	struct XmlLite; // forward
 
-	// Make it easier to manipulate a Xml Element
+	// Make it easier to manipulate a Xml Element:
+	// XSD of `<xs:element name="Foo" type="xs:string" />`
+	// Can be represented in C++ as
 	// ```
 	// struct Foo final
-	// { XmlValueElement<int> myInt {"MyInt"}; };
+	// { XsElement<std::string> foo {"Foo"}; };
 	// ```
 	template<typename T>
-	class XmlValueElement final
+	class XsElement final
 	{
 		std::string tag_;
 		T value_{};
 
 	public:
-		explicit XmlValueElement(const std::string& tag) : tag_(tag) {}
-		XmlValueElement(const std::string& tag, const T& value) : tag_(tag), value_(value) {}
-		~XmlValueElement() = default;
-		XmlValueElement(const XmlValueElement&) = default;
-		XmlValueElement& operator=(const XmlValueElement&) = default;
-		XmlValueElement(XmlValueElement&&) = default;
-		XmlValueElement& operator=(XmlValueElement&&) = default;
+		explicit XsElement(const std::string& tag) : tag_(tag) {}
+		XsElement(const std::string& tag, const T& value) : tag_(tag), value_(value) {}
+		~XsElement() = default;
+		XsElement(const XsElement&) = default;
+		XsElement& operator=(const XsElement&) = default;
+		XsElement(XsElement&&) = default;
+		XsElement& operator=(XsElement&&) = default;
 
 		const std::string& tag() const { return tag_; }
 
 		const T& value() const { return value_; }
-		XmlValueElement& operator=(const T& v) {
+		XsElement& operator=(const T& v) {
 			value_ = v;
 			return *this;
 		}
 	};
 
 	template<typename T, typename U = T>
-	inline bool operator==(const XmlValueElement<T>& lhs, const U& rhs)
+	inline bool operator==(const XsElement<T>& lhs, const U& rhs)
 	{
 		return lhs.value() == rhs;
 	}
 	template<typename T, typename U = T>
-	inline bool operator!=(const XmlValueElement<T>& lhs, const U& rhs)
+	inline bool operator!=(const XsElement<T>& lhs, const U& rhs)
 	{
 		return !(lhs == rhs);
 	}
 
 	template<typename T, typename U = T>
-	inline bool operator==(const XmlValueElement<T>& lhs, const XmlValueElement<U>& rhs)
+	inline bool operator==(const XsElement<T>& lhs, const XsElement<U>& rhs)
 	{
 		return (lhs.tag() == rhs.tag()) && (lhs == rhs.value());
 	}
 	template<typename T, typename U = T>
-	inline bool operator!=(const XmlValueElement<T>& lhs, const XmlValueElement<U>& rhs)
+	inline bool operator!=(const XsElement<T>& lhs, const XsElement<U>& rhs)
 	{
 		return !(lhs == rhs);
 	}
 
 	template<typename T>
-	inline std::ostream& operator<<(std::ostream& os, const XmlValueElement<T>& v)
+	inline std::ostream& operator<<(std::ostream& os, const XsElement<T>& v)
 	{
 		os << "\t" << v.tag() << "\t: " << v.value();
 		return os;
 	}
 	template<>
-	inline std::ostream& operator<<(std::ostream& os, const XmlValueElement<std::u8string>& v)
+	inline std::ostream& operator<<(std::ostream& os, const XsElement<std::u8string>& v)
 	{
 		os << "\t" << v.tag() << "\t: " << str::EncodedStringView(v.value()).native();
 		return os;
 	}
 
-	xml::lite::Element& create(XmlLite&, const XmlValueElement<double>&, xml::lite::Element& parent);
-	void getFirstAndOnly(const XmlLite&, const xml::lite::Element&, XmlValueElement<double>&);
+	xml::lite::Element& create(XmlLite&, const XsElement<double>&, xml::lite::Element& parent);
+	void getFirstAndOnly(const XmlLite&, const xml::lite::Element&, XsElement<double>&);
 }
 
-#endif // SIX_six_XmlValueElement_h_INCLUDED_
+#endif // SIX_six_XsElement_h_INCLUDED_

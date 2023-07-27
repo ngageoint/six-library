@@ -34,7 +34,7 @@
 #include <six/Init.h>
 #include <six/Parameter.h>
 #include <six/ParameterCollection.h>
-#include <six/XmlValueElement.h>
+#include <six/XsElement.h>
 #include <six/XmlOptionalElement.h>
 
 namespace cphd
@@ -246,13 +246,13 @@ struct RcvAntenna final
     }
 
     //! RcvACX PVP Structure
-    six::XmlValueElement<PerVectorParameterXYZ> rcvACX{ "RcvACX" };
+    six::XsElement<PerVectorParameterXYZ> rcvACX{ "RcvACX" };
 
     //! RcvACY PVP Structure
-    six::XmlValueElement<PerVectorParameterXYZ> rcvACY{ "RcvACY" };
+    six::XsElement<PerVectorParameterXYZ> rcvACY{ "RcvACY" };
 
     //! RcvEB PVP Structure
-    six::XmlValueElement<PerVectorParameterEB> rcvEB{ "RcvEB" };
+    six::XsElement<PerVectorParameterEB> rcvEB{ "RcvEB" };
 };
 
 /*!
