@@ -503,7 +503,7 @@ xml::lite::QName XmlLite::makeQName(const std::string& name) const
 
 xml::lite::Element& create(const XmlLite& parser, const XsElement<double>& v, xml::lite::Element& parent)
 {
-    return parser.createDouble(v.tag(), v.value(), parent);
+    return parser.createDouble(v.name(), v.value(), parent);
 }
 void getFirstAndOnly(const XmlLite& parser, const xml::lite::Element& parent, XsElement<double>& v)
 {
