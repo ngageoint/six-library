@@ -81,7 +81,7 @@ public:
     {
         return name().getPrefix();
     }
-    const std::string& tag() const
+    std::string tag() const
     {
         return name().getName();
     }
