@@ -824,17 +824,6 @@ void SICommonXMLParser::parseRowColInts(
     }
 }
 
-inline const UnmodeledS::Decorr* get(const UnmodeledS& unmodeledS)
-{
-    auto&& o = unmodeledS.unmodeledDecorr;
-    return has_value(o) ? &(value(o)) : nullptr;
-}
-inline UnmodeledS::Decorr* get(UnmodeledS& unmodeledS)
-{
-    auto&& o = unmodeledS.unmodeledDecorr;
-    return has_value(o) ? &(value(o)) : nullptr;
-}
-
 XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
     const ErrorStatistics* errorStatistics,
     XMLElem parent) const
@@ -958,7 +947,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
         xmlCreateElement(Ycol, Unmodeled);
         xmlCreateElement(XrowYcol, Unmodeled);
 
-        const auto pUnmodeledDecorr = get(*Unmodeled);
+        const auto pUnmodeledDecorr = get(Unmodeled->unmodeledDecorr);
         auto UnmodeledDecorrXML = newElement(pUnmodeledDecorr, "UnmodeledDecorr", getSICommonURI(), UnmodeledXML);
         if (UnmodeledDecorrXML != nullptr)
         {
@@ -1066,7 +1055,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         auto unmodeledDecorrXML = getOptionalUnmodeledDecorr(*tmpElem, Unmodeled.unmodeledDecorr);
         if (unmodeledDecorrXML != nullptr)
         {
-            auto& UnmodeledDecorr = *get(*errorStatistics.Unmodeled);
+            auto& UnmodeledDecorr = *get(errorStatistics.Unmodeled->unmodeledDecorr);
 
             auto xrowXML = getFirstAndOnly(unmodeledDecorrXML, "Xrow");
             parseDouble_getFirstAndOnly(xrowXML, CorrCoefZero, UnmodeledDecorr.Xrow);
@@ -1093,7 +1082,7 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         auto unmodeledDecorrXML = getOptionalUnmodeledDecorr(*tmpElem, Unmodeled.unmodeledDecorr);
         if (unmodeledDecorrXML != nullptr)
         {
-            auto& UnmodeledDecorr = *get(*errorStatistics.Unmodeled);
+            auto& UnmodeledDecorr = *get(errorStatistics.Unmodeled->unmodeledDecorr);
 
             auto xrowXML = getFirstAndOnly(unmodeledDecorrXML, "Xrow");
             parseDouble_getFirstAndOnly(xrowXML, CorrCoefZero, UnmodeledDecorr.Xrow);
