@@ -108,17 +108,6 @@ public:
     }
 };
 
-template <typename T>
-inline auto make_XsElement(const std::string& tag)
-{
-    return XsElement<T>(tag);
-}
-template <typename T>
-inline auto make_XsElement(const std::string& tag, const T& value)
-{
-    return XsElement<T>(tag, value);
-}
-
 template <typename T, typename U = T>
 inline bool operator==(const XsElement<T>& lhs, const U& rhs)
 {
@@ -220,7 +209,7 @@ inline std::ostream& operator<<(std::ostream& os, const XsElement_minOccurs0<T>&
 {
     if (o.value().has_value())
     {
-        os << make_XsElement(o.tag(), *(o.value()));
+        os << XsElement<T>(o.name(), value(o));
     }
     else
     {
