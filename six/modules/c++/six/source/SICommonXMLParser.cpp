@@ -984,7 +984,7 @@ inline static XMLElem getOptionalUnmodeledDecorr(const xml::lite::Element& paren
     auto retval = XmlLite::getOptional(parent, unmodeledDecorr.tag());
     if (retval != nullptr)
     {
-        unmodeledDecorr.value() = UnmodeledS::Decorr{};
+        unmodeledDecorr = UnmodeledS::Decorr{};
     }
     return retval;
 }

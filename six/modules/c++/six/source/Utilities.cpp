@@ -840,9 +840,9 @@ void six::getErrors(const ErrorStatistics* errorStats,
         else if (const auto unmodeled = errorStats->Unmodeled.get())
         {
             auto& unmodeledErrorCovar = errors.mUnmodeledErrorCovar;
-            auto&& Xrow = unmodeled->Xrow.value();
-            auto&& Ycol = unmodeled->Ycol.value();
-            auto&& XrowYcol = unmodeled->XrowYcol.value();
+            auto&& Xrow = unmodeled->Xrow;
+            auto&& Ycol = unmodeled->Ycol;
+            auto&& XrowYcol = unmodeled->XrowYcol;
 
             // From Bill: Here is the mapping from the UnmodeledError to the 2x2 covariance matrix:
             //    [0][0] = Xrow; [1][1] = Ycol; 
