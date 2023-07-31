@@ -204,8 +204,8 @@ struct XmlLite final
     xml::lite::Element& createDateTime(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
     xml::lite::Element& createDate(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
 
-    xml::lite::Element* createOptional(const std::string& name, const std::optional<bool>&, xml::lite::Element& parent) const;
-    xml::lite::Element* createOptional(const std::string& name, const std::optional<std::u8string>&, xml::lite::Element& parent) const;
+    xml::lite::Element* createOptional(const xml::lite::QName&, const std::optional<bool>&, xml::lite::Element& parent) const;
+    xml::lite::Element* createOptional(const xml::lite::QName&, const std::optional<std::u8string>&, xml::lite::Element& parent) const;
 
     template <typename T>
     void parseInt(const xml::lite::Element& element, T& value) const
@@ -276,6 +276,7 @@ struct XmlLite final
     }
 
     static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag);
+    static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const xml::lite::QName&);
 
     /*!
      * Require an element to be not nullptr

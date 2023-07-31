@@ -300,7 +300,7 @@ xml::lite::Element* XmlLite::createBooleanType(const std::string& name, BooleanT
 {
     return createBooleanType(makeQName(name), p, parent);
 }
-xml::lite::Element* XmlLite::createOptional(const std::string& name, const std::optional<bool>& v, xml::lite::Element& parent) const
+xml::lite::Element* XmlLite::createOptional(const xml::lite::QName& name, const std::optional<bool>& v, xml::lite::Element& parent) const
 {
     if (!v.has_value())
     {
@@ -309,10 +309,9 @@ xml::lite::Element* XmlLite::createOptional(const std::string& name, const std::
     const auto p = *v ? BooleanType::IS_TRUE : BooleanType::IS_FALSE;
     return createBooleanType(name, p, parent);
 }
-
-xml::lite::Element* XmlLite::createOptional(const std::string& name, const std::optional<std::u8string>& v, xml::lite::Element& parent) const
+xml::lite::Element* XmlLite::createOptional(const xml::lite::QName& name, const std::optional<std::u8string>& v, xml::lite::Element& parent) const
 {
-    return createOptionalValue(makeQName(name), v, parent, mAddClassAttributes, "xs:string", getDefaultURI());
+    return createOptionalValue(name, v, parent, mAddClassAttributes, "xs:string", getDefaultURI());
 }
 
 xml::lite::Element& XmlLite::createDateTime(const xml::lite::QName& name, const DateTime& p, xml::lite::Element& parent) const
@@ -342,6 +341,10 @@ xml::lite::Element& XmlLite::getFirstAndOnly(const xml::lite::Element& parent, c
 {
     return parent.getElementByTagName(tag);
 }
+xml::lite::Element& XmlLite::getFirstAndOnly(const xml::lite::Element& parent, const xml::lite::QName& name)
+{
+    return parent.getElementByTagNameNS(name.toString());
+}
 
 xml::lite::Element* XmlLite::getOptional(const xml::lite::Element& parent, const std::string& tag)
 {
@@ -349,7 +352,7 @@ xml::lite::Element* XmlLite::getOptional(const xml::lite::Element& parent, const
 }
 xml::lite::Element* XmlLite::getOptional(const xml::lite::Element& parent, const xml::lite::QName& name)
 {
-    return parent.getElementByTagName(std::nothrow, name.toString());
+    return parent.getElementByTagNameNS(std::nothrow, name.toString());
 }
 
 xml::lite::Element& XmlLite::require(xml::lite::Element* element, const std::string& name)
@@ -498,15 +501,15 @@ void getFirstAndOnly(const XmlLite& parser, const xml::lite::Element& parent, Xs
 
 xml::lite::Element* create(const XmlLite& parser, const XsElement_minOccurs0<bool>& v, xml::lite::Element& parent)
 {
-    return parser.createOptional(v.tag(), v.value(), parent);
+    return parser.createOptional(v.name(), v, parent);
 }
 xml::lite::Element* create(const XmlLite& parser, const XsElement_minOccurs0<double>& v, xml::lite::Element& parent)
 {
-    return parser.createOptionalDouble(v.tag(), v.value(), parent);
+    return parser.createOptionalDouble(v.name(), v, parent);
 }
 xml::lite::Element* create(const XmlLite& parser, const XsElement_minOccurs0<std::u8string>& v, xml::lite::Element& parent)
 {
-    return parser.createOptional(v.tag(), v.value(), parent);
+    return parser.createOptional(v.name(), v, parent);
 }
 
 bool parse(const XmlLite& parser, const xml::lite::Element& parent, XsElement_minOccurs0<bool>& v)
