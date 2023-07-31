@@ -1685,7 +1685,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         parseString(getFirstAndOnly(antCoordFrameXMLVec[ii], "Identifier"), antenna.antCoordFrame[ii].identifier);
         mCommon.parsePolyXYZ(getFirstAndOnly(antCoordFrameXMLVec[ii], "XAxisPoly"), antenna.antCoordFrame[ii].xAxisPoly);
         mCommon.parsePolyXYZ(getFirstAndOnly(antCoordFrameXMLVec[ii], "YAxisPoly"), antenna.antCoordFrame[ii].yAxisPoly);
-        std::ignore = six::parseOptional(parser(), *antCoordFrameXMLVec[ii], antenna.antCoordFrame[ii].useACFPVP);
+        std::ignore = six::parse(parser(), *antCoordFrameXMLVec[ii], antenna.antCoordFrame[ii].useACFPVP);
     }
 
     // Parse AntPhaseCenter
@@ -1742,7 +1742,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         XMLElem ebXML = getFirstAndOnly(antPatternXMLVec[ii], "EB");
         mCommon.parsePoly1D(getFirstAndOnly(ebXML, "DCXPoly"), antenna.antPattern[ii].eb.dcxPoly);
         mCommon.parsePoly1D(getFirstAndOnly(ebXML, "DCYPoly"), antenna.antPattern[ii].eb.dcyPoly);
-        std::ignore = six::parseOptional(parser(), *ebXML, antenna.antPattern[ii].eb.useEBPVP);
+        std::ignore = six::parse(parser(), *ebXML, antenna.antPattern[ii].eb.useEBPVP);
 
         // Parse Array
         XMLElem arrayXML = getFirstAndOnly(antPatternXMLVec[ii], "Array");
@@ -1753,7 +1753,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         XMLElem elementXML = getFirstAndOnly(antPatternXMLVec[ii], "Element");
         mCommon.parsePoly2D(getFirstAndOnly(elementXML, "GainPoly"), antenna.antPattern[ii].element.gainPoly);
         mCommon.parsePoly2D(getFirstAndOnly(elementXML, "PhasePoly"), antenna.antPattern[ii].element.phasePoly);
-        std::ignore = six::parseOptional(parser(), *elementXML, antenna.antPattern[ii].element.antGPId);
+        std::ignore = six::parse(parser(), *elementXML, antenna.antPattern[ii].element.antGPId);
 
         // Parse GainPhaseArray
         std::vector<XMLElem> gainPhaseArrayXMLVec;
@@ -2155,8 +2155,8 @@ void CPHDXMLParser::parseChannelParameters(
     XMLElem dwellTimesXML = getFirstAndOnly(paramXML, "DwellTimes");
     parseString(getFirstAndOnly(dwellTimesXML, "CODId"), param.dwellTimes.codId);
     parseString(getFirstAndOnly(dwellTimesXML, "DwellId"), param.dwellTimes.dwellId);
-    std::ignore = six::parseOptional(parser(), *dwellTimesXML, param.dwellTimes.dtaId);
-    std::ignore = six::parseOptional(parser(), *dwellTimesXML, param.dwellTimes.useDTA);
+    std::ignore = six::parse(parser(), *dwellTimesXML, param.dwellTimes.dtaId);
+    std::ignore = six::parse(parser(), *dwellTimesXML, param.dwellTimes.useDTA);
 
     XMLElem imageAreaXML = getOptional(paramXML, "ImageArea");
     if(imageAreaXML)
@@ -2395,7 +2395,7 @@ void CPHDXMLParser::parsePlatform(const xml::lite::Element* platXML, ErrorParame
 {
     parsePosVelErr(getFirstAndOnly(platXML, "PosVelErr"), plat.posVelErr);
     XMLElem radarSensorXML = getFirstAndOnly(platXML, "RadarSensor");
-    six::parseOptional(parser(), *radarSensorXML, plat.radarSensor.delayBias);
+    six::parse(parser(), *radarSensorXML, plat.radarSensor.delayBias);
     parseOptionalDouble(radarSensorXML, "ClockFreqSF", plat.radarSensor.clockFreqSF);
     parseDouble(getFirstAndOnly(radarSensorXML, "CollectionStartTime"), plat.radarSensor.collectionStartTime);
 }

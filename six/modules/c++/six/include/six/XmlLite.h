@@ -232,7 +232,6 @@ struct XmlLite final
     void parseDouble(const xml::lite::Element& element, std::optional<double>& value) const;
     bool parseOptionalDouble(const xml::lite::Element& parent, const std::string& tag, double& value) const;
     bool parseOptionalDouble(const xml::lite::Element& parent, const std::string& tag, std::optional<double>& value) const;
-    bool parse(const xml::lite::Element& parent, const xml::lite::QName&, std::optional<double>&) const;
     void parseComplex(const xml::lite::Element& element, six::zdouble& value) const;
     void parseString(const xml::lite::Element* element, std::string& value) const;
     void parseString(const xml::lite::Element&, std::string&) const;
@@ -240,10 +239,8 @@ struct XmlLite final
     void parseBooleanType(const xml::lite::Element& element, BooleanType& value) const;
     BooleanType parseBooleanType(const xml::lite::Element& element) const;
     bool parseBoolean(const xml::lite::Element& element) const;
-    bool parseOptional(const xml::lite::Element& parent, const std::string& tag, std::optional<bool>& value) const;
 
     bool parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const;
-    bool parseOptional(const xml::lite::Element& parent, const std::string& tag, std::optional<std::u8string>& value) const;
 
     template <typename T>
     bool parseOptionalInt(const xml::lite::Element& parent, const std::string& tag, T& value) const
@@ -313,9 +310,9 @@ private:
  xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<double>&, xml::lite::Element& parent);
  xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<std::u8string>&, xml::lite::Element& parent);
 
- bool parseOptional(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<bool>&);
- bool parseOptional(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<double>&);
- bool parseOptional(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<std::u8string>&);
+ bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<bool>&);
+ bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<double>&);
+ bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<std::u8string>&);
 
 }
 
