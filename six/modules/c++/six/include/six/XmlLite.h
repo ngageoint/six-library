@@ -232,6 +232,7 @@ struct XmlLite final
     void parseDouble(const xml::lite::Element& element, std::optional<double>& value) const;
     bool parseOptionalDouble(const xml::lite::Element& parent, const std::string& tag, double& value) const;
     bool parseOptionalDouble(const xml::lite::Element& parent, const std::string& tag, std::optional<double>& value) const;
+    bool parse(const xml::lite::Element& parent, const xml::lite::QName&, std::optional<double>&) const;
     void parseComplex(const xml::lite::Element& element, six::zdouble& value) const;
     void parseString(const xml::lite::Element* element, std::string& value) const;
     void parseString(const xml::lite::Element&, std::string&) const;
@@ -263,6 +264,7 @@ struct XmlLite final
     }
 
     static xml::lite::Element* getOptional(const xml::lite::Element& parent, const std::string& tag);
+    static xml::lite::Element* getOptional(const xml::lite::Element& parent, const xml::lite::QName& tag);
 
     template<typename T>
     inline static xml::lite::Element* getOptional_reset(const xml::lite::Element& parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)

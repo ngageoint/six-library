@@ -347,6 +347,10 @@ xml::lite::Element* XmlLite::getOptional(const xml::lite::Element& parent, const
 {
     return parent.getElementByTagName(std::nothrow, tag);
 }
+xml::lite::Element* XmlLite::getOptional(const xml::lite::Element& parent, const xml::lite::QName& name)
+{
+    return parent.getElementByTagName(std::nothrow, name.toString());
+}
 
 xml::lite::Element& XmlLite::require(xml::lite::Element* element, const std::string& name)
 {
@@ -412,6 +416,15 @@ bool XmlLite::parseOptionalDouble(const xml::lite::Element& parent, const std::s
 bool XmlLite::parseOptionalDouble(const xml::lite::Element& parent, const std::string& tag, std::optional<double>& value) const
 {
     if (const xml::lite::Element* const element = getOptional(parent, tag))
+    {
+        parseDouble(*element, value);
+        return true;
+    }
+    return false;
+}
+bool XmlLite::parse(const xml::lite::Element& parent, const xml::lite::QName& name, std::optional<double>& value) const
+{
+    if (auto element = getOptional(parent, name))
     {
         parseDouble(*element, value);
         return true;
