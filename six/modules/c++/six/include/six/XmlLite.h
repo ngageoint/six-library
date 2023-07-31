@@ -39,6 +39,7 @@
 #include <six/Init.h>
 #include <six/Utilities.h>
 #include <six/Logger.h>
+#include <six/XsElement.h>
 
 namespace six
 {
@@ -302,6 +303,18 @@ private:
   {
     return createString_(name, p, parent);
   }
+
+ xml::lite::Element& create(const XmlLite&, const XsElement<double>&, xml::lite::Element& parent);
+ void getFirstAndOnly(const XmlLite&, const xml::lite::Element&, XsElement<double>&);
+
+ xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<bool>&, xml::lite::Element& parent);
+ xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<double>&, xml::lite::Element& parent);
+ xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<std::u8string>&, xml::lite::Element& parent);
+
+ bool parseOptional(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<bool>&);
+ bool parseOptional(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<double>&);
+ bool parseOptional(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<std::u8string>&);
+
 }
 
 #endif // SIX_six_XmlLite_h_INCLUDED_

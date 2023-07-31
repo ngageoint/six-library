@@ -526,15 +526,15 @@ xml::lite::Element* create(const XmlLite& parser, const XsElement_minOccurs0<std
 
 bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XsElement_minOccurs0<bool>& v)
 {
-    return parser.parseOptional(parent, v.tag(), v.value());
+    return parser.parseOptional(parent, v.tag(), v);
 }
 bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XsElement_minOccurs0<double>& v)
 {
-    return parser.parseOptionalDouble(parent, v.tag(), v.value());
+    return parser.parseOptionalDouble(parent, v.tag(), v);
 }
 bool parseOptional(const XmlLite& parser, const xml::lite::Element& parent, XsElement_minOccurs0<std::u8string>& v)
 {
-    return parser.parseOptional(parent, v.tag(), v.value());
+    return parser.parseOptional(parent, v.tag(), v);
 }
 
 }
