@@ -131,12 +131,12 @@ inline bool operator!=(const XsElement<T>& lhs, const XsElement<U>& rhs)
 }
 
 template <typename T>
-inline const auto& value(const XsElement<T>& o)
+inline auto&& value(const XsElement<T>& o)
 {
     return o.value();
 }
 template <typename T>
-inline auto& value(XsElement<T>& o)
+inline auto&& value(XsElement<T>& o)
 {
     return o.value();
 }
@@ -164,10 +164,43 @@ inline std::ostream& operator<<(std::ostream& os, const XsElement<std::u8string>
 template <typename T>
 using XsElement_minOccurs0 = XsElement<std::optional<T>>;
 
+
+// A few convenience routines; this avoids the need for XsElement_minOccurs0
+// to be a seperate class.
+namespace details
+{
+    // make it clear that o.value() is a std::optional<>
+    template <typename T>
+    inline auto&& optional(const XsElement_minOccurs0<T>& o)
+    {
+        return o.value();
+    }
+    template <typename T>
+    inline auto&& optional(XsElement_minOccurs0<T>& o)
+    {
+        return o.value();
+    }
+}
+template <typename T>
+inline bool has_value(const XsElement_minOccurs0<T>& o)
+{
+    return details::optional(o).has_value();
+}
+template <typename T>
+inline auto&& value(const XsElement_minOccurs0<T>& o)
+{
+    return details::optional(o).value();
+}
+template <typename T>
+inline auto&& value(XsElement_minOccurs0<T>& o)
+{
+    return details::optional(o).value();
+}
+
 template <typename T, typename U = T>
 inline bool operator==(const XsElement_minOccurs0<T>& lhs, const std::optional<U>& rhs)
 {
-    return lhs.value() == rhs; // compare two optionals
+    return details::optional(lhs) == rhs;
 }
 template <typename T, typename U = T>
 inline bool operator!=(const XsElement_minOccurs0<T>& lhs, const std::optional<U>& rhs)
@@ -178,7 +211,7 @@ inline bool operator!=(const XsElement_minOccurs0<T>& lhs, const std::optional<U
 template <typename T, typename U = T>
 inline bool operator==(const XsElement_minOccurs0<T>& lhs, const XsElement_minOccurs0<U>& rhs)
 {
-    return (lhs.name() == rhs.name()) && (lhs == rhs.value()); // compare two optionals
+    return (lhs.name() == rhs.name()) && (lhs == details::optional(rhs));
 }
 template <typename T, typename U = T>
 inline bool operator!=(const XsElement_minOccurs0<T>& lhs, const XsElement_minOccurs0<U>& rhs)
@@ -186,28 +219,10 @@ inline bool operator!=(const XsElement_minOccurs0<T>& lhs, const XsElement_minOc
     return !(lhs == rhs);
 }
 
-// A few convenience routines; this avoids the need for XsElement_minOccurs0
-// to be a seperate class.
-template <typename T>
-inline bool has_value(const XsElement_minOccurs0<T>& o)
-{
-    return o.value().has_value();
-}
-template <typename T>
-inline const auto& value(const XsElement_minOccurs0<T>& o)
-{
-    return o.value().value();
-}
-template <typename T>
-inline auto& value(XsElement_minOccurs0<T>& o)
-{
-    return o.value().value();
-}
-
 template <typename T>
 inline std::ostream& operator<<(std::ostream& os, const XsElement_minOccurs0<T>& o)
 {
-    if (o.value().has_value())
+    if (has_value(o))
     {
         os << XsElement<T>(o.name(), value(o));
     }
