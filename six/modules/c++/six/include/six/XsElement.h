@@ -122,7 +122,7 @@ inline bool operator!=(const XsElement<T>& lhs, const U& rhs)
 template <typename T, typename U = T>
 inline bool operator==(const XsElement<T>& lhs, const XsElement<U>& rhs)
 {
-    return (lhs.tag() == rhs.tag()) && (lhs == rhs.value());
+    return (lhs.name() == rhs.name()) && (lhs == value(rhs));
 }
 template <typename T, typename U = T>
 inline bool operator!=(const XsElement<T>& lhs, const XsElement<U>& rhs)
@@ -144,13 +144,13 @@ inline auto& value(XsElement<T>& o)
 template <typename T>
 inline std::ostream& operator<<(std::ostream& os, const XsElement<T>& v)
 {
-    os << "\t" << v.tag() << "\t: " << v.value();
+    os << "\t" << v.tag() << "\t: " << value(v);
     return os;
 }
 template <>
 inline std::ostream& operator<<(std::ostream& os, const XsElement<std::u8string>& v)
 {
-    os << "\t" << v.tag() << "\t: " << str::EncodedStringView(v.value()).native();
+    os << "\t" << v.tag() << "\t: " << str::EncodedStringView(v).native();
     return os;
 }
 
@@ -167,7 +167,7 @@ using XsElement_minOccurs0 = XsElement<std::optional<T>>;
 template <typename T, typename U = T>
 inline bool operator==(const XsElement_minOccurs0<T>& lhs, const std::optional<U>& rhs)
 {
-    return lhs.value() == rhs;
+    return lhs.value() == rhs; // compare two optionals
 }
 template <typename T, typename U = T>
 inline bool operator!=(const XsElement_minOccurs0<T>& lhs, const std::optional<U>& rhs)
@@ -178,7 +178,7 @@ inline bool operator!=(const XsElement_minOccurs0<T>& lhs, const std::optional<U
 template <typename T, typename U = T>
 inline bool operator==(const XsElement_minOccurs0<T>& lhs, const XsElement_minOccurs0<U>& rhs)
 {
-    return (lhs.tag() == rhs.tag()) && (lhs == rhs.value());
+    return (lhs.name() == rhs.name()) && (lhs == rhs.value()); // compare two optionals
 }
 template <typename T, typename U = T>
 inline bool operator!=(const XsElement_minOccurs0<T>& lhs, const XsElement_minOccurs0<U>& rhs)

@@ -117,8 +117,14 @@ public:
         setQName(qname);
         setAssociatedUri(uri);
     }
-    QName(const std::string& qname, const xml::lite::Uri& uri) : QName(uri, qname)  { }
-    QName(const std::string& uri, const std::string& qname) : QName(Uri(uri), qname) { }
+    QName(const std::string& qname, const xml::lite::Uri& uri) :
+        QName(uri, qname)
+    {
+    }
+    QName(const std::string& uri, const std::string& qname) :
+        QName(Uri(uri), qname)
+    {
+    }
 
     /*!
      * Constructor taking just the local name (no namespace).
@@ -197,6 +203,16 @@ public:
     void getAssociatedUri(xml::lite::Uri&) const;
     const xml::lite::Uri& getUri() const;
 };
+inline bool operator==(const QName& lhs, const QName& rhs)
+{
+    return (lhs.getName() == rhs.getName())
+        && (lhs.getAssociatedUri() == rhs.getAssociatedUri())
+        && (lhs.getPrefix() == rhs.getPrefix());
+}
+inline bool operator!=(const QName& lhs, const QName& rhs)
+{
+    return !(lhs == rhs);
+}
 
 namespace literals  // c.f. std::literals
 {
