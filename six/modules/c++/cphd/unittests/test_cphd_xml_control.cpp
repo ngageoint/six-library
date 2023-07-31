@@ -1050,9 +1050,9 @@ void runTest(const std::string& testName, const std::string& version)
     // these are new in CPHD 1.1.0
     TEST_ASSERT_TRUE(has_value(channel.parameters[0].polarization.txPolRef));
     const auto& txPolRef = value(channel.parameters[0].polarization.txPolRef);
-    TEST_ASSERT_EQ(txPolRef.ampH.value(), 0.1);
-    TEST_ASSERT_EQ(txPolRef.ampV.value(), 0.2);
-    TEST_ASSERT_EQ(txPolRef.phaseV.value(), 0.3);
+    TEST_ASSERT_EQ(txPolRef.ampH, 0.1);
+    TEST_ASSERT_EQ(txPolRef.ampV, 0.2);
+    TEST_ASSERT_EQ(txPolRef.phaseV, 0.3);
     TEST_ASSERT_FALSE(has_value(channel.parameters[0].polarization.rcvPolRef));
 
     TEST_ASSERT_EQ(channel.parameters[0].fxC, 1.3);

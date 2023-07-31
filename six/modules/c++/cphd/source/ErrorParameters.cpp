@@ -48,7 +48,7 @@ static std::ostream& unchecked(std::ostream& os, const six::DecorrType& decorr_)
 }
 std::ostream& unchecked(std::ostream& os, const std::optional<six::DecorrType>& decorr)
 {
-    return unchecked(os, decorr.value());
+    return unchecked(os, *decorr);
 }
 
 static std::ostream& checked(std::ostream& os, const std::string& s, const six::DecorrType& decorr)

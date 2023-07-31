@@ -1439,13 +1439,13 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* channelXML, Channel& chann
 
 void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement<PerVectorParameterXYZ>& v) const
 {
-    auto& param = v.value().param;
+    auto& param = value(v).param;
     const auto offset = parsePVPType(parent, param);
     setOffset(param, offset);
 }
 void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement<PerVectorParameterEB>& v) const
 {
-    auto& param = v.value().param;
+    auto& param = value(v).param;
     const auto offset = parsePVPType(parent, param);
     setOffset(param, offset);
 }

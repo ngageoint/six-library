@@ -118,9 +118,9 @@ TEST_CASE(test_createFakeDerivedData_validate)
 
 static void test_assert_unmodeled_(const std::string& testName, const six::UnmodeledS& Unmodeled)
 {
-    TEST_ASSERT_EQ(1.23, Unmodeled.Xrow.value());
-    TEST_ASSERT_EQ(4.56, Unmodeled.Ycol.value());
-    TEST_ASSERT_EQ(7.89, Unmodeled.XrowYcol.value());
+    TEST_ASSERT_EQ(1.23, Unmodeled.Xrow);
+    TEST_ASSERT_EQ(4.56, Unmodeled.Ycol);
+    TEST_ASSERT_EQ(7.89, Unmodeled.XrowYcol);
 
     const auto& unmodeledDecor = Unmodeled.unmodeledDecorr;
     TEST_ASSERT_TRUE(has_value(unmodeledDecor));
