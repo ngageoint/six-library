@@ -68,8 +68,8 @@ struct CODA_OSS_API ConditionVarInterface
      *  a lock, but this class will STILL delete it.
      *
      */
-    explicit ConditionVarInterface(Mutex *, bool = false) {}
-    explicit ConditionVarInterface(Mutex&) { }
+    explicit ConditionVarInterface(Mutex *, bool = false) noexcept {}
+    explicit ConditionVarInterface(Mutex&) noexcept { }
 
     virtual ~ConditionVarInterface() = default;
 

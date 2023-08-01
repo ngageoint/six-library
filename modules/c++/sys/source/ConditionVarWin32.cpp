@@ -41,6 +41,11 @@ namespace
             LeaveCriticalSection(&mCriticalSection);
         }
 
+        ScopedCriticalSection(const ScopedCriticalSection&) = delete;
+        ScopedCriticalSection& operator=(const ScopedCriticalSection&) = delete;
+        ScopedCriticalSection(ScopedCriticalSection&&) = delete;
+        ScopedCriticalSection& operator=(ScopedCriticalSection&&) = delete;
+
     private:
         CRITICAL_SECTION& mCriticalSection;
     };
@@ -48,12 +53,12 @@ namespace
 
 sys::ConditionVarDataWin32::ConditionVarDataWin32():
     mNumWaiters(0),
-    mSemaphore(CreateSemaphore(NULL, 0, 0x7FFFFFFF, NULL)),
-    mWaitersAreDone(CreateEvent(NULL, FALSE, FALSE, NULL)),
+    mSemaphore(CreateSemaphore(nullptr, 0, 0x7FFFFFFF, nullptr)),
+    mWaitersAreDone(CreateEvent(nullptr, FALSE, FALSE, nullptr)),
     mWasBroadcast(false)
 {
     InitializeCriticalSection(&mNumWaitersCS);
-    if (mSemaphore == NULL || mWaitersAreDone == NULL)
+    if (mSemaphore == nullptr || mWaitersAreDone == nullptr)
     {
         throw sys::SystemException(
             "ConditionVarDataWin32 Initializer failed");
@@ -163,7 +168,7 @@ void sys::ConditionVarDataWin32::signal()
     // If there are waiters, increment the semaphore by 1 to wake one up
     if (haveWaiters)
     {
-        ReleaseSemaphore(mSemaphore, 1, NULL);
+        ReleaseSemaphore(mSemaphore, 1, nullptr);
     }
 }
 
@@ -179,7 +184,7 @@ void sys::ConditionVarDataWin32::broadcast()
         {
             mWasBroadcast = true;
             haveWaiters = true;
-            ReleaseSemaphore(mSemaphore, static_cast<LONG>(mNumWaiters), 0);
+            ReleaseSemaphore(mSemaphore, static_cast<LONG>(mNumWaiters), nullptr);
         }
         else
         {

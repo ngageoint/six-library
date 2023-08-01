@@ -294,6 +294,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
     std::map<std::string, Argument*> longOptionsFlags;
     std::vector<Argument*> positionalArgs;
 
+    positionalArgs.reserve(mArgs.size());
     for (auto& arg_ : mArgs)
     {
         cli::Argument* arg = arg_.get();
@@ -336,6 +337,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
     }
 
     std::vector < std::string > explodedArgs;
+    explodedArgs.reserve(args.size());
     // next, check for combined short options
     for (size_t i = 0, s = args.size(); i < s; ++i)
     {
@@ -413,12 +415,12 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
     }
 
     auto results = std::make_unique<cli::Results>();
-    cli::Results *currentResults = NULL;
+    cli::Results* currentResults = nullptr;
     for (size_t i = 0, s = explodedArgs.size(); i < s; ++i)
     {
         currentResults = results.get(); // set the pointer
         std::string argStr = explodedArgs[i];
-        cli::Argument *arg = NULL;
+        cli::Argument* arg = nullptr;
         std::string optionsStr("");
         if (argStr.size() > 2 && argStr[0] == mPrefixChar && argStr[1]
                 == mPrefixChar)
@@ -507,7 +509,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
         }
 
 
-        if (arg != NULL)
+        if (arg != nullptr)
         {
             std::string argVar = arg->getVariable();
             switch (arg->getAction())
@@ -564,7 +566,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
             case cli::STORE_CONST:
             {
                 const Value* constVal = arg->getConst();
-                currentResults->put(argVar, constVal ? constVal->clone() : NULL);
+                currentResults->put(argVar, constVal ? constVal->clone() : nullptr);
                 break;
             }
             case cli::SUB_OPTIONS:
@@ -605,7 +607,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
         else
         {
             // it's a positional argument
-            cli::Value *lastPosVal = NULL;
+            cli::Value* lastPosVal = nullptr;
             for (std::vector<cli::Argument*>::iterator it =
                     positionalArgs.begin(); it != positionalArgs.end(); ++it)
             {
@@ -653,7 +655,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
         if (!results->hasValue(argVar))
         {
             const Value* defaultVal = arg->getDefault();
-            if (defaultVal != NULL)
+            if (defaultVal != nullptr)
                 results->put(argVar, defaultVal->clone());
             else if (arg->getAction() == cli::STORE_FALSE)
                 results->put(argVar, new cli::Value(true));

@@ -33,56 +33,74 @@
 #include <vector>
 #include <iterator>
 
+#include "gsl/gsl.h"
+#include "config/compiler_extensions.h"
+
 #include "str/Encoding.h"
 #include "str/Manip.h"
 #include "str/Convert.h"
-#include "str/utf8.h"
 #include "str/EncodedStringView.h"
+
+
+CODA_OSS_disable_warning_push
+#if _MSC_VER
+#pragma warning(disable: 26818) // Switch statement does not cover all cases. Consider adding a '...' label (es.79).
+#else
+CODA_OSS_disable_warning(-Wshadow)
+#endif
+#include "str/utf8.h"
+CODA_OSS_disable_warning_pop
 
 // Need to look up characters from \x80 (EURO SIGN) to \x9F (LATIN CAPITAL LETTER Y WITH DIAERESIS)
 // in a map: http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT
-inline coda_oss::u8string utf8_(std::u32string::value_type ch)
+inline coda_oss::u8string utf8_(uint32_t i)
 {
+    const auto ch = gsl::narrow<std::u32string::value_type>(i);
     return str::to_u8string(std::u32string{ch});
 }
-static const std::map<std::u32string::value_type, coda_oss::u8string> Windows1252_x80_x9F_to_u8string{
-    {0x80, utf8_(0x20AC) } // EURO SIGN
-    // , {0x81, replacement_character } // UNDEFINED
-    , {0x82, utf8_(0x201A) } // SINGLE LOW-9 QUOTATION MARK
-    , {0x83, utf8_(0x0192)  } // LATIN SMALL LETTER F WITH HOOK
-    , {0x84, utf8_(0x201E)  } // DOUBLE LOW-9 QUOTATION MARK
-    , {0x85, utf8_(0x2026)  } // HORIZONTAL ELLIPSIS
-    , {0x86, utf8_(0x2020)  } // DAGGER
-    , {0x87, utf8_(0x2021)  } // DOUBLE DAGGER
-    , {0x88, utf8_(0x02C6)  } // MODIFIER LETTER CIRCUMFLEX ACCENT
-    , {0x89, utf8_(0x2030)  } // PER MILLE SIGN
-    , {0x8A, utf8_(0x0160)  } // LATIN CAPITAL LETTER S WITH CARON
-    , {0x8B, utf8_(0x2039)  } // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-    , {0x8C, utf8_(0x0152)  } // LATIN CAPITAL LIGATURE OE
-    //, {0x8D, replacement_character } // UNDEFINED
-    , {0x8E, utf8_(0x017D)  } // LATIN CAPITAL LETTER Z WITH CARON
-    //, {0x8F, replacement_character } // UNDEFINED
-    //, {0x90, replacement_character } // UNDEFINED
-    , {0x91, utf8_(0x2018)  } // LEFT SINGLE QUOTATION MARK
-    , {0x92, utf8_(0x2019)  } // RIGHT SINGLE QUOTATION MARK
-    , {0x93, utf8_(0x201C)  } // LEFT DOUBLE QUOTATION MARK
-    , {0x94, utf8_(0x201D)  } // RIGHT DOUBLE QUOTATION MARK
-    , {0x95, utf8_(0x2022)  } // BULLET
-    , {0x96, utf8_(0x2013)  } // EN DASH
-    , {0x97, utf8_(0x2014)  } // EM DASH
-    , {0x98, utf8_(0x02DC)  } // SMALL TILDE
-    , {0x99, utf8_(0x2122)  } // TRADE MARK SIGN
-    , {0x9A, utf8_(0x0161)  } // LATIN SMALL LETTER S WITH CARON
-    , {0x9B, utf8_(0x203A)  } // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-    , {0x9C, utf8_(0x0153)  } // LATIN SMALL LIGATURE OE
-    //, {0x9D, replacement_character } // UNDEFINED
-    , {0x9E, utf8_(0x017E)  } // LATIN SMALL LETTER Z WITH CARON
-    , {0x9F, utf8_(0x0178)  } // LATIN CAPITAL LETTER Y WITH DIAERESIS
-};
 
-static std::map<std::u32string::value_type, coda_oss::u8string> Windows1252_to_u8string()
+static const auto& Windows1252_x80_x9F_to_u8string()
 {
-    auto retval = Windows1252_x80_x9F_to_u8string;
+    static const std::map<uint32_t, coda_oss::u8string> retval {
+        {0x80, utf8_(0x20AC) } // EURO SIGN
+        // , {0x81, replacement_character } // UNDEFINED
+        , {0x82, utf8_(0x201A) } // SINGLE LOW-9 QUOTATION MARK
+        , {0x83, utf8_(0x0192)  } // LATIN SMALL LETTER F WITH HOOK
+        , {0x84, utf8_(0x201E)  } // DOUBLE LOW-9 QUOTATION MARK
+        , {0x85, utf8_(0x2026)  } // HORIZONTAL ELLIPSIS
+        , {0x86, utf8_(0x2020)  } // DAGGER
+        , {0x87, utf8_(0x2021)  } // DOUBLE DAGGER
+        , {0x88, utf8_(0x02C6)  } // MODIFIER LETTER CIRCUMFLEX ACCENT
+        , {0x89, utf8_(0x2030)  } // PER MILLE SIGN
+        , {0x8A, utf8_(0x0160)  } // LATIN CAPITAL LETTER S WITH CARON
+        , {0x8B, utf8_(0x2039)  } // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+        , {0x8C, utf8_(0x0152)  } // LATIN CAPITAL LIGATURE OE
+        //, {0x8D, replacement_character } // UNDEFINED
+        , {0x8E, utf8_(0x017D)  } // LATIN CAPITAL LETTER Z WITH CARON
+        //, {0x8F, replacement_character } // UNDEFINED
+        //, {0x90, replacement_character } // UNDEFINED
+        , {0x91, utf8_(0x2018)  } // LEFT SINGLE QUOTATION MARK
+        , {0x92, utf8_(0x2019)  } // RIGHT SINGLE QUOTATION MARK
+        , {0x93, utf8_(0x201C)  } // LEFT DOUBLE QUOTATION MARK
+        , {0x94, utf8_(0x201D)  } // RIGHT DOUBLE QUOTATION MARK
+        , {0x95, utf8_(0x2022)  } // BULLET
+        , {0x96, utf8_(0x2013)  } // EN DASH
+        , {0x97, utf8_(0x2014)  } // EM DASH
+        , {0x98, utf8_(0x02DC)  } // SMALL TILDE
+        , {0x99, utf8_(0x2122)  } // TRADE MARK SIGN
+        , {0x9A, utf8_(0x0161)  } // LATIN SMALL LETTER S WITH CARON
+        , {0x9B, utf8_(0x203A)  } // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+        , {0x9C, utf8_(0x0153)  } // LATIN SMALL LIGATURE OE
+        //, {0x9D, replacement_character } // UNDEFINED
+        , {0x9E, utf8_(0x017E)  } // LATIN SMALL LETTER Z WITH CARON
+        , {0x9F, utf8_(0x0178)  } // LATIN CAPITAL LETTER Y WITH DIAERESIS
+    };
+    return retval;
+}
+
+static auto Windows1252_to_u8string()
+{
+    auto retval = Windows1252_x80_x9F_to_u8string();
 
     // Add the ISO8859-1 values to the map too.  1) We're already looking
     // in the map anyway for Windows-1252 characters. 2) Need map

@@ -47,7 +47,7 @@ else()
 
         set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
 
-        check_include_file("inttypes.h" HAVE_INTTYPES_H)
+        set(HAVE_INTTYPES_H true)
         check_type_size("int" SIZEOF_INT)
         check_type_size("short" SIZEOF_SHORT)
         check_type_size("long" SIZEOF_LONG)

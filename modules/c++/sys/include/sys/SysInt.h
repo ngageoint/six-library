@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2023, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,10 +21,25 @@
  *
  */
 
-#ifndef CODA_OSS_sys_String_h_INCLUDED_
-#define CODA_OSS_sys_String_h_INCLUDED_
 #pragma once
+#ifndef CODA_OSS_sys_SysInt_h_INCLUDED_
+#define CODA_OSS_sys_SysInt_h_INCLUDED_
 
-#include "str/String_.h"
+#include <stdint.h>
 
-#endif  // CODA_OSS_sys_String_h_INCLUDED_
+namespace sys
+{
+    typedef char              byte;
+    typedef unsigned char     ubyte;
+    typedef uint8_t            Uint8_T;
+    typedef uint16_t           Uint16_T;
+    typedef uint32_t           Uint32_T;
+    typedef uint64_t           Uint64_T;
+    typedef size_t             Size_T;
+    typedef int8_t             Int8_T;
+    typedef int16_t            Int16_T;
+    typedef int32_t            Int32_T;
+    typedef int64_t            Int64_T;
+}
+
+#endif // CODA_OSS_sys_SysInt_h_INCLUDED_

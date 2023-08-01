@@ -1298,7 +1298,7 @@ template<size_t _MD, size_t _ND, size_t _PD, typename _T>
 template<size_t _ND, typename _T> inline
     MatrixMxN<_ND, _ND, _T> inverseLU(const MatrixMxN<_ND, _ND, _T>& mx)
 {
-    MatrixMxN<_ND, _ND, _T> a((_T)0);
+    MatrixMxN<_ND, _ND, _T> a(static_cast<_T>(0));
 
     // Identity
     for (size_t i = 0; i < _ND; i++)

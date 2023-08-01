@@ -202,6 +202,12 @@ struct OSUnix final : public AbstractOS
                                   std::vector<int>& htCPUs) const override;
 
     /*!
+     * Figure out what SIMD instrunctions are available.  Keep in mind these
+     * are RUN-TIME, not compile-time, checks.
+     */
+    SIMDInstructionSet getSIMDInstructionSet() const override;
+
+    /*!
      *  Create a symlink, pathnames can be either absolute or relative
      */
     virtual void createSymlink(const std::string& origPathname,

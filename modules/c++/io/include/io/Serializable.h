@@ -49,7 +49,7 @@ namespace io
 struct Serializable
 {
     Serializable() = default;
-    virtual ~Serializable() = default;
+    virtual ~Serializable() noexcept(false) {}
 
     /*!
      * Transfer this object into a byte stream

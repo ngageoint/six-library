@@ -56,7 +56,8 @@ def dumpLibImpl(context, raw):
 
     # We need a source file here so it doesn't think it is headers only
     topDir = context.top_dir
-    buildDir = os.path.dirname(os.path.realpath(__file__))
+    buildDir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                            '__pycache__')
     modArgs['SOURCE_DIR'] = os.path.relpath(buildDir, topDir)
     modArgs['SOURCE_EXT'] = 'pyc'
     context.module(**modArgs)

@@ -61,8 +61,12 @@ public:
     {}
 
     //!  Destructor
-    ~RequestHandlerThread()
-    {}
+    ~RequestHandlerThread() = default;
+   
+    RequestHandlerThread(const RequestHandlerThread&) = delete;
+    RequestHandlerThread& operator=(const RequestHandlerThread&) = delete;
+    RequestHandlerThread(RequestHandlerThread&&) = delete;
+    RequestHandlerThread& operator=(RequestHandlerThread&&) = delete;
 
     /*!
      *  Overloaded run method for handling a connection.

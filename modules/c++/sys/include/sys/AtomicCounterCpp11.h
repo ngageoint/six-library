@@ -39,24 +39,24 @@ struct AtomicCounterImplCpp11 final
 {
     using ValueType = size_t ;
 
-    explicit AtomicCounterImplCpp11(ValueType initialValue) :
+    explicit AtomicCounterImplCpp11(ValueType initialValue) noexcept :
         mValue(initialValue)
     {
     }
 
-    ValueType getThenIncrement()
+    ValueType getThenIncrement() noexcept
     {
         // https://en.cppreference.com/w/cpp/atomic/atomic/fetch_add
         return mValue.fetch_add(1);
     }
 
-    ValueType getThenDecrement()
+    ValueType getThenDecrement() noexcept
     {
         // https://en.cppreference.com/w/cpp/atomic/atomic/fetch_sub
         return mValue.fetch_sub(1);
     }
 
-    ValueType get() const
+    ValueType get() const noexcept
     {
         // https://en.cppreference.com/w/cpp/atomic/atomic/load
         return mValue.load();
