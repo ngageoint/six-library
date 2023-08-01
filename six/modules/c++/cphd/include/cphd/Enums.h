@@ -147,6 +147,8 @@ SIX_Enum_BEGIN_DEFINE(PolarizationType)
         SIX_Enum_map_entry_(RHC),
         SIX_Enum_map_entry_(LHC),
         SIX_Enum_map_entry_(UNSPECIFIED),
+        SIX_Enum_map_entry_(S),
+        SIX_Enum_map_entry_(E),
     SIX_Enum_END_string_to_value
 SIX_Enum_END_DEFINE(PolarizationType);
 }
