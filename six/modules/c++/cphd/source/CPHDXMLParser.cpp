@@ -568,36 +568,30 @@ XMLElem CPHDXMLParser::toXML(const Pvp& pvp, XMLElem parent)
     return pvpXML;
 }
 
+void CPHDXMLParser::createSupportArray(const std::vector<SupportArrayParameter>& supportArray,
+    const std::string& tag, xml::lite::Element& parent)
+{
+    for (auto&& param : supportArray)
+    {
+        XMLElem pXML = newElement(tag, &parent);
+        createInt("Identifier", param.getIdentifier(), pXML);
+        createString("ElementFormat", param.elementFormat, pXML);
+        createDouble("X0", param.x0, pXML);
+        createDouble("Y0", param.y0, pXML);
+        createDouble("XSS", param.xSS, pXML);
+        createDouble("YSS", param.ySS, pXML);
+
+    }
+}
+
 //Assumes optional handled by caller
 XMLElem CPHDXMLParser::toXML(const SupportArray& supports, XMLElem parent)
 {
     XMLElem supportsXML = newElement("SupportArray", parent);
-    if (!supports.iazArray.empty())
-    {
-        for (size_t ii = 0; ii < supports.iazArray.size(); ++ii)
-        {
-            XMLElem iazArrayXML = newElement("IAZArray", supportsXML);
-            createInt("Identifier", supports.iazArray[ii].getIdentifier(), iazArrayXML);
-            createString("ElementFormat", supports.iazArray[ii].elementFormat, iazArrayXML);
-            createDouble("X0", supports.iazArray[ii].x0, iazArrayXML);
-            createDouble("Y0", supports.iazArray[ii].y0, iazArrayXML);
-            createDouble("XSS", supports.iazArray[ii].xSS, iazArrayXML);
-            createDouble("YSS", supports.iazArray[ii].ySS, iazArrayXML);
-        }
-    }
-    if (!supports.antGainPhase.empty())
-    {
-        for (size_t ii = 0; ii < supports.antGainPhase.size(); ++ii)
-        {
-            XMLElem antGainPhaseXML = newElement("AntGainPhase", supportsXML);
-            createInt("Identifier", supports.antGainPhase[ii].getIdentifier(), antGainPhaseXML);
-            createString("ElementFormat", supports.antGainPhase[ii].elementFormat, antGainPhaseXML);
-            createDouble("X0", supports.antGainPhase[ii].x0, antGainPhaseXML);
-            createDouble("Y0", supports.antGainPhase[ii].y0, antGainPhaseXML);
-            createDouble("XSS", supports.antGainPhase[ii].xSS, antGainPhaseXML);
-            createDouble("YSS", supports.antGainPhase[ii].ySS, antGainPhaseXML);
-        }
-    }
+    createSupportArray(supports.iazArray, "IAZArray", *supportsXML);
+    createSupportArray(supports.antGainPhase, "AntGainPhase", *supportsXML);
+    createSupportArray(supports.dwellTimeArray, "DwellTimeArray", *supportsXML);
+
     if (!supports.addedSupportArray.empty())
     {
         for (auto it = supports.addedSupportArray.begin(); it != supports.addedSupportArray.end(); ++it)
@@ -1589,23 +1583,26 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* refGeoXML, ReferenceGeomet
     }
 }
 
+std::vector<SupportArrayParameter> CPHDXMLParser::parseSupportArray(const std::string& tag, const xml::lite::Element& parent) const
+{
+    std::vector<XMLElem> elements;
+    parent.getElementsByTagName(tag, elements);
+    std::vector<SupportArrayParameter> supportArray;
+    supportArray.reserve(elements.size());
+    for (const auto& element : elements)
+    {
+        SupportArrayParameter param;
+        parseSupportArrayParameter(element, param, false /*additionalFlag*/);
+        supportArray.push_back(std::move(param));
+    }
+    return supportArray;
+}
+
 void CPHDXMLParser::fromXML(const xml::lite::Element* supportArrayXML, SupportArray& supportArray)
 {
-    std::vector<XMLElem> iazArrayXMLVec;
-    supportArrayXML->getElementsByTagName("IAZArray", iazArrayXMLVec);
-    supportArray.iazArray.resize(iazArrayXMLVec.size());
-    for (size_t ii = 0; ii < iazArrayXMLVec.size(); ++ii)
-    {
-        parseSupportArrayParameter(iazArrayXMLVec[ii], supportArray.iazArray[ii], false);
-    }
-
-    std::vector<XMLElem> antGainPhaseXMLVec;
-    supportArrayXML->getElementsByTagName("AntGainPhase", antGainPhaseXMLVec);
-    supportArray.antGainPhase.resize(antGainPhaseXMLVec.size());
-    for (size_t ii = 0; ii < antGainPhaseXMLVec.size(); ++ii)
-    {
-        parseSupportArrayParameter(antGainPhaseXMLVec[ii], supportArray.antGainPhase[ii], false);
-    }
+    supportArray.iazArray = parseSupportArray("IAZArray", *supportArrayXML);
+    supportArray.antGainPhase = parseSupportArray("AntGainPhase", *supportArrayXML);
+    supportArray.dwellTimeArray = parseSupportArray("DwellTimeArray", *supportArrayXML);
 
     std::vector<XMLElem> addedSupportArrayXMLVec;
     supportArrayXML->getElementsByTagName("AddedSupportArray", addedSupportArrayXMLVec);

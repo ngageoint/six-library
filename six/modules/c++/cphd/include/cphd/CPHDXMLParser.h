@@ -106,6 +106,7 @@ private:
     XMLElem toXML(const six::XsElement_minOccurs0<TxAntenna>&, xml::lite::Element& parent);
     XMLElem toXML(const six::XsElement_minOccurs0<RcvAntenna>&, xml::lite::Element& parent);
     XMLElem toXML(const Pvp& obj, XMLElem parent);
+    void createSupportArray(const std::vector<SupportArrayParameter>&, const std::string& tag, xml::lite::Element& parent);
     XMLElem toXML(const SupportArray& obj, XMLElem parent);
     XMLElem toXML(const Dwell& obj, XMLElem parent);
     XMLElem toXML(const ReferenceGeometry& obj, XMLElem parent);
@@ -174,6 +175,7 @@ private:
     void parsePlatform(const xml::lite::Element* platXML,  ErrorParameters::Bistatic::Platform& plat) const;
     void parseSupportArrayParameter(const xml::lite::Element* paramXML, SupportArrayParameter& param,
                                     bool additionalFlag) const;
+    std::vector<SupportArrayParameter> parseSupportArray(const std::string& tag, const xml::lite::Element&) const;
     void parseTxRcvParameter(const xml::lite::Element* paramXML, ParameterType& param) const;
     void parsePolarization(const xml::lite::Element& polarizationXML, Polarization&) const;
 

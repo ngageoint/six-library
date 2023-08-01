@@ -223,6 +223,9 @@ struct SupportArray final
     //! Get AGP support array by unique id
     SupportArrayParameter getAGPSupportArray(const std::string& key) const;
 
+    //! Get Dwell Time array by unique id
+    SupportArrayParameter getDWTSupportArray(const std::string& key) const;
+
     //! Get AGP support array by unique id
     AdditionalSupportArray getAddedSupportArray(const std::string& key) const;
 
