@@ -236,7 +236,7 @@ struct SupportArray final
     std::vector<SupportArrayParameter> antGainPhase;
 
     //! Dwell Time Array
-    std::vector<DwellTimeArray> dwellTimeArray;
+    std::vector<DwellTimeArray> dwellTimeArray; // new in CPHD 1.1.0
 
     //! Map of additonally defined support arrays
     std::unordered_map<std::string, AdditionalSupportArray> addedSupportArray;

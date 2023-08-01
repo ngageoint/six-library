@@ -2,6 +2,13 @@
 
 # SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
 
+## [Version 3.?.?](https://github.com/ngageoint/six-library/releases/tag/SIX-3.?.?); ??? ?, 202?
+* [coda-oss](https://github.com/mdaus/coda-oss) version [202?-??-??](https://github.com/mdaus/coda-oss/releases/tag/2023-??-??)
+* [nitro](https://github.com/mdaus/nitro) version [2.?.?](https://github.com/mdaus/nitro/releases/tag/NITRO-2.?.?)
+* Prepare for deprecating [`std::complex<short>`](https://en.cppreference.com/w/cpp/numeric/complex), et. al.
+* Allow XML metadata to be parsed with `preserveCharacterData(true)` to keep white-space.
+* Added support for [CPHD 1.1.0](https://nsgreg.nga.mil/doc/view?i=5388) XML metadata.
+
 ## [Version 3.2.3](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.3); June 5, 2023
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2023-06-05](https://github.com/mdaus/coda-oss/releases/tag/2023-06-05)
 * [nitro](https://github.com/mdaus/nitro) version [2.11.3](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.3)

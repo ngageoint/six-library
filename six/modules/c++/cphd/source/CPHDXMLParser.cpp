@@ -590,7 +590,7 @@ XMLElem CPHDXMLParser::toXML(const SupportArray& supports, XMLElem parent)
     XMLElem supportsXML = newElement("SupportArray", parent);
     createSupportArray(supports.iazArray, "IAZArray", *supportsXML);
     createSupportArray(supports.antGainPhase, "AntGainPhase", *supportsXML);
-    createSupportArray(supports.dwellTimeArray, "DwellTimeArray", *supportsXML);
+    createSupportArray(supports.dwellTimeArray, "DwellTimeArray", *supportsXML); // added in CPHD 1.1.0
 
     if (!supports.addedSupportArray.empty())
     {
