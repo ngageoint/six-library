@@ -116,6 +116,14 @@ private:
 };
 
 /*!
+ *  \struct DwellTimeArray
+ *
+ *  DTA(m,n) Array of COD times(sec) and Dwell Times(sec) for points
+ *  on reference surface. Array coordinates are image area coordinates(IAX, IAY).
+ */
+using DwellTimeArray = SupportArrayParameter;
+
+/*!
  *  \struct AdditionalSupportArray
  *
  *  \brief Addiitonal support array custom parameters
@@ -183,31 +191,6 @@ struct AdditionalSupportArray : SupportArrayParameter
     //! (Optional) Text field that can be used to further
     //! describe the added Support Array
     six::ParameterCollection parameter;
-};
-
-/*!
- *  \struct DwellTimeArray
- *
- *  DTA(m,n) Array of COD times(sec) and Dwell Times(sec) for points
- *  on reference surface. Array coordinates are image area coordinates(IAX, IAY).
- */
-struct DwellTimeArray final
-{
-    bool operator==(const DwellTimeArray& other) const
-    {
-        return (identifier == other.identifier)
-            && (elementFormat == other.elementFormat);
-    }
-    bool operator!=(const DwellTimeArray& other) const
-    {
-        return !((*this) == other);
-    }
-
-    //! The dwell time array identifier (DTA_ID). Array size is specified in the CPHD/Data branch.
-    six::XsElement<std::u8string> identifier{ "Identifier" };
-
-    //! Data element format. Each element is one COD time and one Dwell Time, both formatted as F4.
-    six::XsElement<std::string> elementFormat{ "ElementFormat", "COD=F4;DT=F4;" };
 };
 
 /*
