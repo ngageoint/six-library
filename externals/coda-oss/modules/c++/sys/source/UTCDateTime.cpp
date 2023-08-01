@@ -49,7 +49,7 @@ const int DAYS_PER_YEAR[2] = {365, 366};
 
 // Returns the appropriate index into CUMULATIVE_DAYS_PER_MONTH based on
 // whether 'year' is a leap year or not
-int yearIndex(int year)
+constexpr int yearIndex(int year)
 {
     return (!(year % 4) && ((year % 100) || !(year % 400)));
 }

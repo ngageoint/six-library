@@ -204,6 +204,7 @@ void sio::lite::FileHeader::addUserData(const std::string& field,
 void sio::lite::FileHeader::addUserData(const std::string& field, int data)
 {
     std::vector<sys::byte> vec;
+    vec.reserve(sizeof(int));
     char* cData = (char*)&data;
     for (int i = 0, size = sizeof(int); i < size; ++i)
         vec.push_back((sys::byte)cData[i]);

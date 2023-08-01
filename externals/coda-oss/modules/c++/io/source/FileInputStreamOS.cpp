@@ -39,7 +39,7 @@ sys::Off_T io::FileInputStreamOS::available()
     sys::Off_T until = mFile.getCurrentOffset();
     mFile.seekTo(where, sys::File::FROM_START);
 
-    return (until - where);
+    return until - where;
 }
 
 
@@ -49,8 +49,8 @@ sys::SSize_T io::FileInputStreamOS::readImpl(void* buffer, size_t len)
     sys::Off_T avail = available();
     if (!avail)
         return io::InputStream::IS_EOF;
-    if (len > (sys::Size_T)avail)
-        len = (sys::Size_T)avail;
+    if (len > static_cast<sys::Size_T>(avail))
+        len = static_cast<sys::Size_T>(avail);
 
     mFile.readInto(buffer, len);
     return static_cast<sys::SSize_T>(len);

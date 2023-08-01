@@ -41,6 +41,11 @@ public:
         delete mHandler;
     }
 
+    ConnectionThread(const ConnectionThread&) = delete;
+    ConnectionThread& operator=(const ConnectionThread&) = delete;
+    ConnectionThread(ConnectionThread&&) = delete;
+    ConnectionThread& operator=(ConnectionThread&&) = delete;
+
     /*!
      *  Do this in a loop forever.
      */
@@ -77,6 +82,11 @@ public:
     {
         delete mFactory;
     }
+
+    ConnectionThreadPool(const ConnectionThreadPool&) = delete;
+    ConnectionThreadPool& operator=(const ConnectionThreadPool&) = delete;
+    ConnectionThreadPool(ConnectionThreadPool&&) = delete;
+    ConnectionThreadPool& operator=(ConnectionThreadPool&&) = delete;
 
     mt::WorkerThread<net::NetConnection*>* newWorker() override
     {

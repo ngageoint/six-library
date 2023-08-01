@@ -35,9 +35,9 @@ std::string sys::Err::toString() const
 {
     LPTSTR buffer;
     if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                      FORMAT_MESSAGE_FROM_SYSTEM, NULL,
+                      FORMAT_MESSAGE_FROM_SYSTEM, nullptr,
                       static_cast<DWORD>(mErrId), 0,
-                      (LPTSTR)&buffer, 0, NULL) == 0)
+                      (LPTSTR)&buffer, 0, nullptr) == 0)
     {
         return std::string("Unknown error code");
     }

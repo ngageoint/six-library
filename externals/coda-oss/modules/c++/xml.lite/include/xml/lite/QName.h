@@ -20,11 +20,11 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_xml_lite_QName_h_INCLLUDED_
 #define CODA_OSS_xml_lite_QName_h_INCLLUDED_
-#pragma once
 
-/*!
+ /*!
  * \file QName.h
  * \brief A Qualified name (includes the namespace stuff)
  *
@@ -42,7 +42,10 @@
 #include <string>
 #include <ostream>
 
+#include <config/Exports.h>
+
 #include "sys/OS.h"
+#include "str/Manip.h"
 
 namespace xml
 {
@@ -65,7 +68,7 @@ namespace lite
  *  to a namespace URI
  */
 
-struct Uri final  // help prevent mixups with std::string
+struct CODA_OSS_API Uri final  // help prevent mixups with std::string
 {
     Uri();
     explicit Uri(const std::string& v);  // validate=false
@@ -78,11 +81,13 @@ struct Uri final  // help prevent mixups with std::string
 };
 inline bool operator==(const Uri& lhs, const Uri& rhs)
 {
-    return lhs.value == rhs.value;
+    // URIs are "supposed to be" case-insenstive
+    return str::eq(lhs.value, rhs.value);
 }
 inline bool operator!=(const Uri& lhs, const Uri& rhs)
 {
-    return !(lhs == rhs);
+    // URIs are "supposed to be" case-insenstive
+    return str::ne(lhs.value, rhs.value);
 }
 inline std::ostream& operator<<(std::ostream& os, const Uri& uri)
 {
@@ -90,7 +95,7 @@ inline std::ostream& operator<<(std::ostream& os, const Uri& uri)
     return os;
 }
 
-class QName final
+class CODA_OSS_API QName final
 {
     //!  Prefix (Qualified)
     std::string mPrefix;

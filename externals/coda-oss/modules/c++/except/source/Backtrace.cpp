@@ -111,7 +111,7 @@ public:
     bool result;
     SymInitialize_RAII(HANDLE process) : process_(process)
     {
-        result = SymInitialize(process_, NULL, TRUE) == TRUE ? true : false;  // https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-syminitialize
+        result = SymInitialize(process_, nullptr, TRUE) == TRUE ? true : false;  // https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-syminitialize
     }
 
     ~SymInitialize_RAII()
@@ -134,7 +134,7 @@ static std::string getBacktrace_(bool& supported, std::vector<std::string>& symb
     }
 
      PVOID stack[100];
-     const auto frames = CaptureStackBackTrace(0, 100, stack, NULL);
+     const auto frames = CaptureStackBackTrace(0, 100, stack, nullptr);
      auto symbol = reinterpret_cast<PSYMBOL_INFO>(calloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char), 1));
      if (symbol == nullptr)
      {
@@ -147,7 +147,7 @@ static std::string getBacktrace_(bool& supported, std::vector<std::string>& symb
     for (unsigned int i = 0; i < frames; i++)
     {
         const auto address = reinterpret_cast<DWORD64>(stack[i]);
-        const auto result = SymFromAddr(process, address, 0, symbol) == TRUE ? true : false;
+        const auto result = SymFromAddr(process, address, nullptr, symbol) == TRUE ? true : false;
         if (!result)
         {
             continue;

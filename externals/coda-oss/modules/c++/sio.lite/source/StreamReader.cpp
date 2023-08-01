@@ -30,7 +30,7 @@ union _IntBuffer
 
 int sio::lite::StreamReader::getNextInteger()
 {
-    if (header == NULL)
+    if (header == nullptr)
         throw
         sio::lite::InvalidHeaderException(
             Ctxt("Header == null")
@@ -94,7 +94,7 @@ void sio::lite::StreamReader::killHeader()
 {
     if (header)
         delete header;
-    header = NULL;
+    header = nullptr;
     // Reset length so we always have a correct value
     headerLength = 0;
 }
