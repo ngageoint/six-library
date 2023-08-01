@@ -277,7 +277,7 @@ TEST_CASE(test_toStringComplexShort)
     actual = str::toString(types_cx_short);
     TEST_ASSERT_EQ(actual, expected);
 
-    const types::zint16_t zint16(1, -2);
+    const types::Complex<int16_t> zint16(1, -2);
     actual = str::toString(zint16);
     TEST_ASSERT_EQ(actual, expected);
 }
@@ -303,7 +303,7 @@ TEST_CASE(test_toTypeComplexShort)
     strActual = str::toString(zactual);
     TEST_ASSERT_EQ(strActual, strValue);
 
-    zactual = str::toType<types::zint16_t>(strValue);
+    zactual = str::toType<types::Complex<int16_t>>(strValue);
     strActual = str::toString(zactual);
     TEST_ASSERT_EQ(strActual, strValue);
 }

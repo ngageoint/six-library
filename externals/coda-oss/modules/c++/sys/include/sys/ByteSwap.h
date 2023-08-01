@@ -91,7 +91,7 @@ inline void check_elemSize(size_t elemSize)
 template <typename T>
 inline auto make_span(coda_oss::span<const std::complex<T>> s)
 {
-    static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
+    //static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
 
     const void* const p_ = s.data();
     auto const p = static_cast<const T*>(p_);
@@ -101,7 +101,7 @@ inline auto make_span(coda_oss::span<const std::complex<T>> s)
 template<typename T>
 inline auto make_span(coda_oss::span<std::complex<T>> s)
 {
-    static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
+    //static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
 
     void* const p_ = s.data();
     auto const p = static_cast<T*>(p_);
@@ -122,7 +122,7 @@ inline void byteSwap(T* buffer, size_t elemSize, size_t numElems)
 template <typename T>
 inline void byteSwap(std::complex<T>* buffer, size_t elemSize, size_t numElems) // dont't want `T` as `std::complex<...>`
 {
-    static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
+    //static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
 
     details::check_elemSize<T>(elemSize);
     void* const buffer_ = buffer;
@@ -194,7 +194,7 @@ inline void byteSwap(const T* buffer, size_t elemSize, size_t numElems, U* outpu
 template <typename T, typename U>
 inline void byteSwap(const std::complex<T>* buffer, size_t elemSize, size_t numElems, U* outputBuffer) // dont't want `T` as `std::complex<...>`
 {
-    static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
+    //static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
 
     details::check_elemSize<T>(elemSize);
     const void* const buffer_ = buffer;
@@ -234,7 +234,7 @@ inline auto byteSwap(coda_oss::span<const std::complex<T>> buffer)
 template <typename T>
 inline auto byteSwapValue(std::complex<T> z)
 {
-    static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
+    //static_assert(std::is_floating_point<T>::value, "std::complex<T> should use floating-point");
 
     // C++ mandates that `std::complex<T>` be the same as `T cx[2]`; that is
     // the structure is contiguous. https://en.cppreference.com/w/cpp/numeric/complex

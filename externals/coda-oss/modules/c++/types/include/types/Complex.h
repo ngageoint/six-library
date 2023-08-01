@@ -195,10 +195,7 @@ static_assert(std::is_same<std::complex<float>, ComplexReal<float>>::value, "sho
 using zfloat = ComplexReal<float>; // i.e., std::complex<float>
 using zdouble = ComplexReal<double>; // i.e., std::complex<double>
 //using zlong_double = ComplexReal<long double>; // i.e., std::complex<long double>
-using zint8_t = ComplexInteger<int8_t>;  // Complex<int8_t>
-using zint16_t = ComplexInteger<int16_t>;  // Complex<int16_t>
-using zint32_t = ComplexInteger<int32_t>;  // Complex<int32_t>
-using zint64_t = ComplexInteger<int64_t>;  // Complex<int64_t>
+// No `zint8_t`, etc.; don't want to encourage the use of `types::Complex`.
 }
 
 #endif  // CODA_OSS_types_Complex_h_INCLUDED_
