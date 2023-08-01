@@ -969,12 +969,15 @@
     <ClInclude Include="include\UnitTest.h">
       <Filter>include</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="xml.lite\include\import\xml\lite.h">
       <Filter>xml.lite</Filter>
     </ClInclude>
     <ClInclude Include="xml.lite\include\xml\lite\XsElement.h">
       <Filter>xml.lite</Filter>
     </ClInclude>
+=======
+>>>>>>> 65dc997bffdbdd848637387fb855f282b8b06fab
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

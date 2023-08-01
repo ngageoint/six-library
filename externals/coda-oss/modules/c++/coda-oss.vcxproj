@@ -314,7 +314,10 @@
     <ClInclude Include="units\include\units\Angles.h" />
     <ClInclude Include="units\include\units\Lengths.h" />
     <ClInclude Include="units\include\units\Unit.h" />
+<<<<<<< HEAD
     <ClInclude Include="xml.lite\include\import\xml\lite.h" />
+=======
+>>>>>>> 65dc997bffdbdd848637387fb855f282b8b06fab
     <ClInclude Include="xml.lite\include\xml\lite\Attributes.h" />
     <ClInclude Include="xml.lite\include\xml\lite\ContentHandler.h" />
     <ClInclude Include="xml.lite\include\xml\lite\Document.h" />
@@ -333,7 +336,10 @@
     <ClInclude Include="xml.lite\include\xml\lite\XMLReader.h" />
     <ClInclude Include="xml.lite\include\xml\lite\XMLReaderInterface.h" />
     <ClInclude Include="xml.lite\include\xml\lite\XMLReaderXerces.h" />
+<<<<<<< HEAD
     <ClInclude Include="xml.lite\include\xml\lite\XsElement.h" />
+=======
+>>>>>>> 65dc997bffdbdd848637387fb855f282b8b06fab
     <ClInclude Include="zip\include\zip\GZipInputStream.h" />
     <ClInclude Include="zip\include\zip\GZipOutputStream.h" />
     <ClInclude Include="zip\include\zip\Types.h" />

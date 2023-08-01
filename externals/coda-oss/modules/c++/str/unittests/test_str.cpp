@@ -25,7 +25,10 @@
 #include <types/Complex.h>
 #include <config/compiler_extensions.h>
 #include <import/str.h>
+<<<<<<< HEAD
 #include <str/EncodedStringView.h>
+=======
+>>>>>>> 65dc997bffdbdd848637387fb855f282b8b06fab
 
 #include "TestCase.h"
 
