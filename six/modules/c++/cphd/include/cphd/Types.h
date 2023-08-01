@@ -103,6 +103,8 @@ std::string to_string(Version); // "1.0.0", "1.0.1", "1.1.0"
 // Existing code handles this via XML validation, not C++.
 using ZeroToOne = double;
 using NegHalfToHalf = double;  // [-0.5–0.5]
+using XsNonNegativeInteger = size_t; // type="xs:nonNegativeInteger"/>
+using XsPositiveInteger_fixed2 = size_t; // type="xs:positiveInteger" fixed="2"/>
 
 }
 

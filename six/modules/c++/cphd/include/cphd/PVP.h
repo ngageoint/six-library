@@ -36,6 +36,8 @@
 #include <six/ParameterCollection.h>
 #include <six/XsElement.h>
 
+#include "cphd/Types.h"
+
 namespace cphd
 {
 
@@ -115,9 +117,9 @@ struct PVPType
 
 protected:
     //! Size of parameter
-    size_t mSize;
+    XsPositiveInteger_fixed2 mSize; // <xs:element name="Size"
     //! Offset of parameter
-    size_t mOffset;
+    XsNonNegativeInteger mOffset; // xs:element name="Offset"
     //! Format of parameter
     std::string mFormat;
 };
