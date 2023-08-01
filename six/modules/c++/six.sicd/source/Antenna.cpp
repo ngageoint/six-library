@@ -20,6 +20,9 @@
  *
  */
 #include <six/sicd/Antenna.h>
+
+#include <str/EncodedStringView.h>
+
 #include <six/Utilities.h>
 
 namespace six
@@ -36,7 +39,8 @@ std::ostream& operator<< (std::ostream& os, const ElectricalBoresight& d)
 {
     os << "ElectricalBoresight::" << "\n"
        << "  dcxPoly: " << d.dcxPoly << "\n"
-       << "  dcyPoly: " << d.dcyPoly << "\n";
+       << "  dcyPoly: " << d.dcyPoly << "\n"
+       << d.useEBPVP;
     return os;
 }
 
@@ -63,7 +67,8 @@ GainAndPhasePolys::GainAndPhasePolys() :
 std::ostream& operator<< (std::ostream& os, const GainAndPhasePolys& d)
 {
     os << "  gainPoly:\n" << d.gainPoly << "\n"
-       << "  phasePoly:\n" << d.phasePoly << "\n";
+       << "  phasePoly:\n" << d.phasePoly << "\n"
+       << d.antGPId;
     return os;
 }
 AntennaParameters::AntennaParameters() : 

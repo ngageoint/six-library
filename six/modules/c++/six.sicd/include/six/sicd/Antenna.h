@@ -19,14 +19,19 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_ANTENNA_H__
-#define __SIX_ANTENNA_H__
+
+#pragma once
+#ifndef SIX_six_sicd_Antenna_h_INCLUDED_
+#define SIX_six_sicd_Antenna_h_INCLUDED_
 
 #include <ostream>
+#include <std/optional>
+#include <std/string>
 
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include "six/XsElement.h"
 
 #include <mem/ScopedCopyablePtr.h>
 
@@ -42,15 +47,16 @@ namespace sicd
  *  the DCXPoly is the EB sterring x-axis direction
  *  cosine (DCX) as a function of slow time
  */
-struct ElectricalBoresight
+struct ElectricalBoresight final
 {
     //! Constructor
     ElectricalBoresight();
 
     bool operator==(const ElectricalBoresight& other) const
     {
-        return dcxPoly == other.dcxPoly &&
-               dcyPoly == other.dcyPoly;
+        return (dcxPoly == other.dcxPoly)
+            && (dcyPoly == other.dcyPoly)
+            && (useEBPVP == other.useEBPVP);
     }
 
     bool operator!=(const ElectricalBoresight& other) const
@@ -63,6 +69,10 @@ struct ElectricalBoresight
 
     //! SICD DCYPoly
     Poly1D dcyPoly;
+
+    //! CPHD 1.1.0 UseEBPVP
+    //! Indicates the provided EB PVP arrays provide a more accurate description the EB Steering vector vs. time.
+    six::XsElement_minOccurs0<bool> useEBPVP{ "UseEBPVP" };
 };
 
 std::ostream& operator<< (std::ostream& os, const ElectricalBoresight& d);
@@ -109,15 +119,16 @@ std::ostream& operator<< (std::ostream& os, const HalfPowerBeamwidths& d);
  *  electronically steered arrays, the EB is steered to
  *  DCX = 0, DCY = 0.
  */
-struct GainAndPhasePolys
+struct GainAndPhasePolys final
 {
     //! No init right now, could do that and set const coef to zero
     GainAndPhasePolys();
 
     bool operator==(const GainAndPhasePolys& other) const
     {
-        return gainPoly == other.gainPoly &&
-               phasePoly == other.phasePoly;
+        return (gainPoly == other.gainPoly)
+            && (phasePoly == other.phasePoly)
+            && (antGPId == other.antGPId);
     }
 
     bool operator!=(const GainAndPhasePolys& other) const
@@ -132,6 +143,9 @@ struct GainAndPhasePolys
     //! One way signal phase (in cycles) as a function of DCX and DCY.
     //! Phase relative to phase at DCX = 0, DCY = 0. Const coeff = 0 always
     Poly2D phasePoly;
+
+    //! Identifier of the Antenna Gain/Phase support array that specifies the one-way array pattern 
+    six::XsElement_minOccurs0<std::u8string> antGPId {"AntGPId"};  // new in CPHD 1.1.0
 };
 
 std::ostream& operator<< (std::ostream& os, const GainAndPhasePolys& d);
@@ -251,5 +265,4 @@ struct Antenna
 
 }
 }
-#endif
-
+#endif // SIX_six_sicd_Antenna_h_INCLUDED_

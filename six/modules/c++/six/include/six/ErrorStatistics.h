@@ -33,6 +33,7 @@
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
+#include "six/XsElement.h"
 
 namespace six
 {
@@ -256,11 +257,9 @@ struct IonoError
  */
 struct UnmodeledS final
 {
-    // By making member names match XML element names, macros can
-    // help generate boilerplate code.
-    double Xrow = 0.0;
-    double Ycol = 0.0;
-    double XrowYcol = 0.0;
+    XsElement<double> Xrow{ "Xrow" };
+    XsElement<double> Ycol{ "Ycol" };
+    XsElement<double> XrowYcol{ "XrowYcol" };
 
     struct Decorr final
     {
@@ -272,7 +271,7 @@ struct UnmodeledS final
         Xrow_Ycol Xrow;
         Xrow_Ycol Ycol;
     };
-    mem::ScopedCopyablePtr<Decorr> UnmodeledDecorr;
+    XsElement_minOccurs0<Decorr> unmodeledDecorr{ "UnmodeledDecorr" };
 };
 inline bool operator==(const UnmodeledS::Decorr& lhs, const UnmodeledS::Decorr& rhs)
 {
@@ -291,7 +290,7 @@ inline bool operator==(const UnmodeledS& lhs, const UnmodeledS& rhs)
     return (lhs.Xrow == rhs.Xrow)
         && (lhs.Ycol == rhs.Ycol)
         && (lhs.XrowYcol == rhs.XrowYcol)
-        && (lhs.UnmodeledDecorr == rhs.UnmodeledDecorr)
+        && (lhs.unmodeledDecorr == rhs.unmodeledDecorr)
         ;
 }
 inline bool operator!=(const UnmodeledS& lhs, const UnmodeledS& rhs)

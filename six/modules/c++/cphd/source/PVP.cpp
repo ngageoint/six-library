@@ -88,8 +88,7 @@ void Pvp::validate(size_t size, size_t offset)
     {
         if(mParamLocations.at(offset + ii) == true)
         {
-            throw except::Exception(Ctxt(
-                                    "This byte block is occupied"));
+            throw except::Exception(Ctxt("This byte block is occupied"));
         }
     }
 
@@ -100,11 +99,16 @@ void Pvp::validate(size_t size, size_t offset)
     }
 }
 
+void setOffset(PVPType& param, size_t offset)
+{
+    validateFormat(param.getFormat());
+    param.setOffset(offset);
+}
+
 void Pvp::setOffset(size_t offset, PVPType& param)
 {
     validate(param.getSize(), offset);
-    validateFormat(param.getFormat());
-    param.setOffset(offset);
+    cphd::setOffset(param, offset);
 }
 
 void Pvp::append(PVPType& param)
@@ -258,4 +262,19 @@ std::ostream& operator<< (std::ostream& os, const Pvp& p)
     }
     return os;
 }
+
+PerVectorParameterXYZ::PerVectorParameterXYZ()
+{
+    // setDefaultValues(3,"X=F8;Y=F8;Z=F8;", rcvPos);
+    param.setSize(3); // <xs:element name="Size" type="xs:positiveInteger" fixed="3"/>
+    param.setFormat("X=F8;Y=F8;Z=F8;"); //  <xs:enumeration value="X=F8;Y=F8;Z=F8;"/>
+}
+
+PerVectorParameterEB::PerVectorParameterEB()
+{
+    // setDefaultValues(3,"X=F8;Y=F8;Z=F8;", rcvPos);
+    param.setSize(2); // <xs:element name="Size" type="xs:positiveInteger" fixed="2"/>
+    param.setFormat("DCX=F8;DCY=F8;"); //  <xs:enumeration value="DCX=F8;DCY=F8;"/>
+}
+
 }

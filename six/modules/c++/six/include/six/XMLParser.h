@@ -25,7 +25,7 @@
 
 #include <assert.h>
 
-#include <string>
+#include <std/string>
 #include <type_traits>
 #include <std/optional>
 #include <memory>
@@ -253,17 +253,20 @@ protected:
     void parseString(const xml::lite::Element* element, std::string& value) const;
     void parseString(const xml::lite::Element&, std::string&) const;
     bool parseString(const xml::lite::Element&, std::u8string&) const;
+
     void parseBooleanType(const xml::lite::Element* element, BooleanType& value) const
     {
         assert(element != nullptr);
         mXmlLite.parseBooleanType(*element, value);
     }
+
     bool parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const;
     bool parseOptionalString(const xml::lite::Element* parent, const std::string& tag, std::string& value) const
     {
         assert(parent != nullptr);
         return parseOptionalString(*parent, tag, value);
     }
+
     template <typename T>
     bool parseOptionalInt(const xml::lite::Element* parent, const std::string& tag, T& value) const
     {
@@ -312,12 +315,18 @@ protected:
     static XMLElem getFirstAndOnly(const xml::lite::Element* parent, const std::string& tag);
     static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag);
 
+    void getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag, double&) const;
+
+
     /*!
      * Require an element to be not nullptr
      * @throw throws an Exception if the element is nullptr
      * @return returns the input Element
      */
     static XMLElem require(XMLElem element, const std::string& name);
+
+    const XmlLite& parser() const { return mXmlLite; }
+    XmlLite& parser() { return mXmlLite; }
 
 private:
     XmlLite mXmlLite;

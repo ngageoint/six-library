@@ -20,6 +20,9 @@
  *
  */
 #include <cphd/Channel.h>
+
+#include <str/EncodedStringView.h>
+
 #include <six/Init.h>
 
 namespace cphd
@@ -83,10 +86,17 @@ Channel::Channel() :
 {
 }
 
+std::ostream& operator<< (std::ostream& os, const PolRef& v)
+{
+    os << v.ampH << v.ampV << v.phaseV << "\n";
+    return os;
+}
+
 std::ostream& operator<< (std::ostream& os, const Polarization& p)
 {
     os << "      TxPol        : " << p.txPol << "\n"
-        << "      RcvPol       : " << p.rcvPol << "\n";
+        << "      RcvPol       : " << p.rcvPol << "\n"
+        << p.txPolRef << p.rcvPolRef;
     return os;
 }
 
@@ -106,8 +116,10 @@ std::ostream& operator<< (std::ostream& os, const DwellTimes& d)
 {
     os << "      DwellTimes:: \n"
         << "      CODId        : " << d.codId << "\n"
-        << "      DwellId        : " << d.dwellId << "\n";
-        return os;
+        << "      DwellId        : " << d.dwellId << "\n"
+        << d.dtaId
+        << d.useDTA;
+    return os;
 }
 
 std::ostream& operator<< (std::ostream& os, const TgtRefLevel& t)
