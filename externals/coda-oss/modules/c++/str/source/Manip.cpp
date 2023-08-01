@@ -37,7 +37,6 @@
 
 #include "str/Convert.h"
 #include "str/Encoding.h"
-#include "str/EncodedStringView.h"
 
 namespace
 {
@@ -112,41 +111,6 @@ coda_oss::u8string trim(const coda_oss::u8string& str)
     auto retval = str;
     trim(retval);
     return retval;
-}
-
-void trimToNBSP(coda_oss::u8string& s)
-{
-    static const auto nbsp = str::EncodedStringView("&#xA0;").u8string();
-
-    size_t i;
-    for (i = 0; i < s.length(); i++)
-    {
-        if (!iswspace(static_cast<wint_t>(s[i])))
-            break;
-    }
-    s.erase(0, i);
-
-    auto count = i;
-    while (count-- != 0)
-    {
-        s.insert(0, nbsp);
-    }
-
-    for (i = s.length() - 1; (int)i >= 0; i--)
-    {
-        if (!iswspace(static_cast<wint_t>(s[i])))
-            break;
-    }
-    if (i + 1 < s.length())
-    {
-        count = s.length() - (i + 1);
-
-        s.erase(i + 1);
-        while (count-- != 0)
-        {
-            s.insert(s.length(), nbsp);
-        }
-    }
 }
 
 bool ends_with(const std::string& s, const std::string& match) noexcept
