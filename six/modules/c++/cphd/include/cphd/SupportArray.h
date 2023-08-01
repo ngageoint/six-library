@@ -20,16 +20,20 @@
  *
  */
 
-#ifndef __CPHD_SUPPORT_ARRAY_H__
-#define __CPHD_SUPPORT_ARRAY_H__
+#pragma once
+#ifndef SIX_cphd_SupportArray_h_INCLUDED_
+#define SIX_cphd_SupportArray_h_INCLUDED_
+
+#include <stddef.h>
 
 #include <ostream>
 #include <vector>
 #include <unordered_map>
-#include <stddef.h>
+
+#include <six/XsElement.h>
+
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
-
 
 namespace cphd
 {
@@ -181,6 +185,31 @@ struct AdditionalSupportArray : SupportArrayParameter
     six::ParameterCollection parameter;
 };
 
+/*!
+ *  \struct DwellTimeArray
+ *
+ *  DTA(m,n) Array of COD times(sec) and Dwell Times(sec) for points
+ *  on reference surface. Array coordinates are image area coordinates(IAX, IAY).
+ */
+struct DwellTimeArray final
+{
+    bool operator==(const DwellTimeArray& other) const
+    {
+        return (identifier == other.identifier)
+            && (elementFormat == other.elementFormat);
+    }
+    bool operator!=(const DwellTimeArray& other) const
+    {
+        return !((*this) == other);
+    }
+
+    //! The dwell time array identifier (DTA_ID). Array size is specified in the CPHD/Data branch.
+    six::XsElement<std::u8string> identifier{ "Identifier" };
+
+    //! Data element format. Each element is one COD time and one Dwell Time, both formatted as F4.
+    six::XsElement<std::string> elementFormat{ "ElementFormat", "COD=F4;DT=F4;" };
+};
+
 /*
  *  \struct SupportArray
  *
@@ -190,14 +219,15 @@ struct AdditionalSupportArray : SupportArrayParameter
  *  array(s) content and grid coordinates.
  *  See section 2.3
  */
-struct SupportArray
+struct SupportArray final
 {
     //! Equality operators
     bool operator==(const SupportArray& other) const
     {
-        return iazArray == other.iazArray &&
-                antGainPhase == other.antGainPhase &&
-                addedSupportArray == other.addedSupportArray;
+        return (iazArray == other.iazArray)
+            && (antGainPhase == other.antGainPhase)
+            && (dwellTimeArray == other.dwellTimeArray)
+            && (addedSupportArray == other.addedSupportArray);
     }
     bool operator!=(const SupportArray& other) const
     {
@@ -219,6 +249,9 @@ struct SupportArray
     //! Vector of AGP type arrays
     std::vector<SupportArrayParameter> antGainPhase;
 
+    //! Dwell Time Array
+    std::vector<DwellTimeArray> dwellTimeArray;
+
     //! Map of additonally defined support arrays
     std::unordered_map<std::string, AdditionalSupportArray> addedSupportArray;
 };
@@ -229,4 +262,4 @@ std::ostream& operator<< (std::ostream& os, const AdditionalSupportArray& a);
 std::ostream& operator<< (std::ostream& os, const SupportArray& s);
 }
 
-#endif
+#endif // SIX_cphd_SupportArray_h_INCLUDED_
