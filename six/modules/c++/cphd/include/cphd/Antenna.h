@@ -20,14 +20,18 @@
  *
  */
 
-#ifndef __CPHD_ANTENNA_H__
-#define __CPHD_ANTENNA_H__
+#pragma once
+#ifndef SIX_cphd_Antenna_h_INCLUDED_
+#define SIX_cphd_Antenna_h_INCLUDED_
+
+#include <stddef.h>
 
 #include <ostream>
 #include <vector>
-#include <stddef.h>
+#include <std/optional>
 
 #include <six/sicd/Antenna.h>
+#include <six/XsElement.h>
 
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
@@ -43,7 +47,7 @@ namespace cphd
  *  AntCoordFrame used by CPHD, representing the tag
  *  <AntCoordFrame>.
  */
-struct AntCoordFrame
+struct AntCoordFrame final
 {
     //! Constructor
     AntCoordFrame();
@@ -51,9 +55,10 @@ struct AntCoordFrame
     //! Equality operators
     bool operator==(const AntCoordFrame& other) const
     {
-        return identifier == other.identifier &&
-                xAxisPoly == other.xAxisPoly &&
-                yAxisPoly == other.yAxisPoly;
+        return (identifier == other.identifier)
+            && (xAxisPoly == other.xAxisPoly)
+            && (yAxisPoly == other.yAxisPoly)
+            && (useACFPVP == other.useACFPVP);
     }
     bool operator!=(const AntCoordFrame& other) const
     {
@@ -71,6 +76,9 @@ struct AntCoordFrame
     //!Antenna coordinate frame Y-Axis unit vector in
     //! ECF coordinates as a function time (sec).
     PolyXYZ yAxisPoly;
+
+    //!Indicates the provided ACF PVP arrays provide a more accurate description the ACF orientation vs.time.
+    six::XsElement_minOccurs0<bool> useACFPVP{ "UseACFPVP" }; // new in CPHD 1.1.0
 };
 
 /*
@@ -118,8 +126,90 @@ struct AntPhaseCenter
  *  AntPattern used by CPHD, representing the tag
  *  <AntPattern>.
  */
-struct AntPattern
+struct AntPattern final
 {
+    /*
+     *  \struct EBFreqShiftSF
+     *  \brief Scale factors used compute the EB shift vs. frequency
+     *
+     *  (Optional) Scale factors used compute the EB shift vs. frequency in DCX and DCY.
+     *
+     */
+    struct EBFreqShiftSF final
+    {
+        bool operator==(const EBFreqShiftSF& other) const
+        {
+            return (dcxsf == other.dcxsf)
+                && (dcysf == other.dcysf);
+        }
+        bool operator!=(const EBFreqShiftSF& other) const
+        {
+            return !((*this) == other);
+        }
+
+        //! Scale factor used to compute the ML dilation factor in DCX vs. frequency.
+        six::XsElement<ZeroToOne> dcxsf{ "DCXSF" };
+
+        //! Scale factor used to compute the ML dilation factor in DCY vs. frequency.
+        six::XsElement<ZeroToOne> dcysf{ "DCYSF" };
+    };
+
+    /*
+     *  \struct MLFreqDilationSF
+     *  \brief Scale factors used to compute the array pattern
+     *
+     *  (Optional) Scale factors used to compute the array pattern mainlobe dilation vs. frequency in DCX and DCY. 
+     *
+     */
+    struct MLFreqDilationSF final
+    {
+        bool operator==(const MLFreqDilationSF& other) const
+        {
+            return (dcxsf == other.dcxsf)
+                && (dcysf == other.dcysf);
+        }
+        bool operator!=(const MLFreqDilationSF& other) const
+        {
+            return !((*this) == other);
+        }
+
+        //! Scale factor used to compute the ML dilation factor in DCX vs. frequency.
+        six::XsElement<ZeroToOne> dcxsf{ "DCXSF" };
+
+        //! Scale factor used to compute the ML dilation factor in DCY vs. frequency.
+        six::XsElement<ZeroToOne> dcysf{ "DCYSF" };
+    };
+
+    /*
+     *  \struct AntPolRef
+     *  \brief Polarization parameters
+     *
+     *  (Optional) Polarization parameters for the EB steered to mechanical boresight
+     *
+     */
+    struct AntPolRef final
+    {
+        bool operator==(const AntPolRef& other) const
+        {
+            return (ampX == other.ampX)
+                && (ampY == other.ampY)
+                && (phaseY == other.phaseY);
+        }
+        bool operator!=(const AntPolRef& other) const
+        {
+            return !((*this) == other);
+        }
+
+        //! E-field relative amplitude in ACF X direction at f = f_0.
+        six::XsElement<ZeroToOne> ampX{ "AmpX" };
+
+        //! E-field relative amplitude in ACY direction at f = f_0.
+        six::XsElement<ZeroToOne> ampY{ "AmpY" };
+
+        //! Relative phase of the Y E-field relative to the X E-field at f = f_0.
+        six::XsElement<NegHalfToHalf> phaseY{ "PhaseY" };
+    };
+
     /*
      *  \struct GainPhaseArray
      *  \brief Gain Phase Array parameter
@@ -202,6 +292,15 @@ struct AntPattern
     //! Poly1D gainBSPoly;
     Poly1D gainBSPoly;
 
+    //! (Optional) Scale factors used compute the EB shift vs. frequency
+    six::XsElement_minOccurs0<EBFreqShiftSF> ebFreqShiftSF{ "EBFreqShiftSF" }; // new in CPHD 1.1.0
+
+    //! (Optional) Scale factors used to compute the array pattern
+    six::XsElement_minOccurs0<MLFreqDilationSF> mlFreqDilationSF{ "MLFreqDilationSF" }; // new in CPHD 1.1.0
+
+    //! (Optional) Polarization parameters for the EB steered to mechanical boresight
+    six::XsElement_minOccurs0<AntPolRef> antPolRef{ "AntPolRef" }; // new in CPHD 1.1.0
+
     //! The Electrical Boresight steering direction versus
     //! time. Defines array pattern pointing direction
     six::sicd::ElectricalBoresight eb;
@@ -264,9 +363,12 @@ struct Antenna
 //! Ostream operators
 std::ostream& operator<< (std::ostream& os, const AntCoordFrame& a);
 std::ostream& operator<< (std::ostream& os, const AntPhaseCenter& a);
+std::ostream& operator<< (std::ostream& os, const AntPattern::EBFreqShiftSF&);
+std::ostream& operator<< (std::ostream& os, const AntPattern::AntPolRef&);
+std::ostream& operator<< (std::ostream& os, const AntPattern::MLFreqDilationSF&);
 std::ostream& operator<< (std::ostream& os, const AntPattern::GainPhaseArray& g);
 std::ostream& operator<< (std::ostream& os, const AntPattern& a);
 std::ostream& operator<< (std::ostream& os, const Antenna& a);
 }
 
-#endif
+#endif // SIX_cphd_Antenna_h_INCLUDED_

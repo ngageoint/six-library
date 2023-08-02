@@ -263,6 +263,7 @@ static std::string testCPHDXMLBody()
 "            <Polarization>\n"
 "                <TxPol>X</TxPol>\n"
 "                <RcvPol>RHC</RcvPol>\n"
+"                <TxPolRef><AmpH>0.1</AmpH><AmpV>0.2</AmpV><PhaseV>0.3</PhaseV></TxPolRef>\n"
 "            </Polarization>\n"
 "            <FxC>1.300000000000000E00</FxC>\n"
 "            <FxBW>8.000000000000000E-01</FxBW>\n"
@@ -1045,6 +1046,14 @@ void runTest(const std::string& testName, const std::string& version)
                    cphd::PolarizationType::X);
     TEST_ASSERT_EQ(channel.parameters[0].polarization.rcvPol,
                    cphd::PolarizationType::RHC);
+
+    // these are new in CPHD 1.1.0
+    TEST_ASSERT_TRUE(has_value(channel.parameters[0].polarization.txPolRef));
+    const auto& txPolRef = value(channel.parameters[0].polarization.txPolRef);
+    TEST_ASSERT_EQ(txPolRef.ampH, 0.1);
+    TEST_ASSERT_EQ(txPolRef.ampV, 0.2);
+    TEST_ASSERT_EQ(txPolRef.phaseV, 0.3);
+    TEST_ASSERT_FALSE(has_value(channel.parameters[0].polarization.rcvPolRef));
 
     TEST_ASSERT_EQ(channel.parameters[0].fxC, 1.3);
     TEST_ASSERT_EQ(channel.parameters[0].fxBW, 0.8);

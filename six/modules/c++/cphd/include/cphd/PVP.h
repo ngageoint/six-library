@@ -20,17 +20,23 @@
  *
  */
 
-#ifndef __CPHD_PVP_H__
-#define __CPHD_PVP_H__
+#pragma once
+#ifndef SIX_cphd_PVP_h_INCLUDED_
+#define SIX_cphd_PVP_h_INCLUDED_
+
+#include <stddef.h>
 
 #include <ostream>
 #include <vector>
 #include <map>
-#include <stddef.h>
+
 #include <six/Types.h>
 #include <six/Init.h>
 #include <six/Parameter.h>
 #include <six/ParameterCollection.h>
+#include <six/XsElement.h>
+
+#include "cphd/Types.h"
 
 namespace cphd
 {
@@ -111,12 +117,14 @@ struct PVPType
 
 protected:
     //! Size of parameter
-    size_t mSize;
+    XsPositiveInteger_fixed2 mSize; // <xs:element name="Size"
     //! Offset of parameter
-    size_t mOffset;
+    XsNonNegativeInteger mOffset; // xs:element name="Offset"
     //! Format of parameter
     std::string mFormat;
 };
+void setOffset(PVPType&, size_t offset);
+
 
 /*!
  *  \struct APVPType
@@ -181,6 +189,116 @@ private:
 };
 
 /*!
+ *  \struct PerVectorParameterXYZ
+ */
+struct PerVectorParameterXYZ final
+{
+    PerVectorParameterXYZ();
+    ~PerVectorParameterXYZ() = default;
+    PerVectorParameterXYZ(const PerVectorParameterXYZ&) = default;
+    PerVectorParameterXYZ& operator=(const PerVectorParameterXYZ&) = default;
+    PerVectorParameterXYZ(PerVectorParameterXYZ&&) = default;
+    PerVectorParameterXYZ& operator=(PerVectorParameterXYZ&&) = default;
+
+    bool operator==(const PerVectorParameterXYZ& other) const
+    {
+        return (param == other.param);
+    }
+    bool operator!=(const PerVectorParameterXYZ& other) const
+    {
+        return !((*this) == other);
+    }
+
+    PVPType param;
+};
+
+/*!
+ *  \struct PerVectorParameterEB
+ *
+ *  \brief Per vector parameters for Electrical Boresight
+ */
+struct PerVectorParameterEB final
+{
+    PerVectorParameterEB();
+    ~PerVectorParameterEB() = default;
+    PerVectorParameterEB(const PerVectorParameterEB&) = default;
+    PerVectorParameterEB& operator=(const PerVectorParameterEB&) = default;
+    PerVectorParameterEB(PerVectorParameterEB&&) = default;
+    PerVectorParameterEB& operator=(PerVectorParameterEB&&) = default;
+
+    bool operator==(const PerVectorParameterEB& other) const
+    {
+        return (param == other.param);
+    }
+    bool operator!=(const PerVectorParameterEB& other) const
+    {
+        return !((*this) == other);
+    }
+
+    PVPType param;
+};
+
+/*!
+ *  \struct TxAntenna
+ *  \brief Specify the Transmit Antenna ACF orientation and the EB Steering vector
+ *
+ * Parameters included that specify the Transmit Antenna ACF orientation and the EB Steering vector.
+ * (New in CPHD 1.1.0)
+ */
+struct TxAntenna final
+{
+    bool operator==(const TxAntenna& other) const
+    {
+        return (txACX == other.txACX)
+            && (txACY == other.txACY)
+            && (txEB == other.txEB);
+    }
+    bool operator!=(const TxAntenna& other) const
+    {
+        return !((*this) == other);
+    }
+
+    //! TxACX PVP Structure
+    six::XsElement<PerVectorParameterXYZ> txACX{ "TxACX" };
+
+    //! TxACY PVP Structure
+    six::XsElement<PerVectorParameterXYZ> txACY{ "TxACY" };
+
+    //! TxEB PVP Structure
+    six::XsElement<PerVectorParameterEB> txEB{ "TxEB" };
+};
+
+/*!
+ *  \struct RcvAntenna
+ *  \brief Specify the Receive Antenna orientation and the Steering vector.
+ *
+ * Parameters included that specify the Receive Antenna ACF orientation and the EB Steering vector.
+ * (New in CPHD 1.1.0)
+ */
+struct RcvAntenna final
+{
+    bool operator==(const RcvAntenna& other) const
+    {
+        return (rcvACX == other.rcvACX)
+            && (rcvACY == other.rcvACY)
+            && (rcvEB == other.rcvEB);
+    }
+    bool operator!=(const RcvAntenna& other) const
+    {
+        return !((*this) == other);
+    }
+
+    //! RcvACX PVP Structure
+    six::XsElement<PerVectorParameterXYZ> rcvACX{ "RcvACX" };
+
+    //! RcvACY PVP Structure
+    six::XsElement<PerVectorParameterXYZ> rcvACY{ "RcvACY" };
+
+    //! RcvEB PVP Structure
+    six::XsElement<PerVectorParameterEB> rcvEB{ "RcvEB" };
+};
+
+/*!
  *  \struct Pvp
  *
  *  \brief Structure used to specify the Per Vector
@@ -188,7 +306,7 @@ private:
  *
  *  Provided for each channel of a given product.
  */
-struct Pvp
+struct Pvp final
 {
     /*!
      *  Transmit time for the center of the transmitted pulse relative to the
@@ -361,6 +479,12 @@ struct Pvp
      */
     PVPType signal;
 
+    //! (Optional) Parameters included that specify the Transmit Antenna ACF orientation and the EB Steering vector
+    six::XsElement_minOccurs0<TxAntenna> txAntenna{ "TxAntenna" }; // new in CPHD 1.1.0
+
+    //! (Optional) Parameters included that specify the Receive Antenna ACF orientation and the EB Steering vector
+    six::XsElement_minOccurs0<RcvAntenna> rcvAntenna{ "RcvAntenna" }; // new in CPHD 1.1.0
+
     /*
      *  (Optional) User defined PV parameters
      */
@@ -388,7 +512,10 @@ struct Pvp
                 ampSF == other.ampSF && fxN1 == other. fxN1 &&
                 fxN2 == other.fxN2 && toaE1 == other.toaE1 &&
                 toaE2 == other.toaE2 && tdIonoSRP == other.tdIonoSRP &&
-                signal == other.signal && addedPVP == other.addedPVP;
+                signal == other.signal
+                && txAntenna == other.txAntenna
+                && rcvAntenna == other.rcvAntenna
+                && addedPVP == other.addedPVP;
     }
     bool operator!=(const Pvp& other) const
     {
@@ -482,4 +609,4 @@ std::ostream& operator<< (std::ostream& os, const PVPType& p);
 std::ostream& operator<< (std::ostream& os, const APVPType& a);
 std::ostream& operator<< (std::ostream& os, const Pvp& p);
 }
-#endif
+#endif // SIX_cphd_PVP_h_INCLUDED_
