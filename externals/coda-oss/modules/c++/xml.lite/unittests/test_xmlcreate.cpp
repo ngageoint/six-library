@@ -23,7 +23,6 @@
 #include <tuple>
 #include <std/string>
 #include <std/filesystem>
-#include <std/optional>
 
 #include "io/StringStream.h"
 #include <TestCase.h>
