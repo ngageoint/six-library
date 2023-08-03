@@ -265,11 +265,11 @@ struct UnmodeledS final
     {
         struct Xrow_Ycol final
         {
-            double CorrCoefZero = 0.0;
+	    double CorrCoefZero = 0.0;
             double DecorrRate = 0.0;
         };
-        Xrow_Ycol Xrow;
-        Xrow_Ycol Ycol;
+        Xrow_Ycol Xrow{};
+        Xrow_Ycol Ycol{};
     };
     XsElement_minOccurs0<Decorr> unmodeledDecorr{ "UnmodeledDecorr" };
 };
