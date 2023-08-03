@@ -30,7 +30,7 @@
     #define CODA_OSS_HAVE_std_optional_ 0  // assume no <optional>
 #endif
 #if CODA_OSS_cpp17 // C++17 for `__has_include()`
-    #if __has_include(<optional>) && __cpp_lib_optional
+    #if __has_include(<optional>) // __cpp_lib_optional not until C++20
         #include <optional>
         #undef CODA_OSS_HAVE_std_optional_
         #define CODA_OSS_HAVE_std_optional_ 1  // provided by the implementation, probably C++17
