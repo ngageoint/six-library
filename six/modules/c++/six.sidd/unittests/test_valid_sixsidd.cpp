@@ -75,7 +75,7 @@ static std::unique_ptr<six::sidd::DerivedData> test_assert_round_trip(const std:
     return six::sidd::Utilities::parseDataFromString(strXML, pSchemaPaths);
 }
 
-inline static const six::UnmodeledS* get_Unmodeled(const six::sidd::DerivedData& derivedData, six::sidd::Version siddVersion)
+inline static const six::Unmodeled* get_Unmodeled(const six::sidd::DerivedData& derivedData, six::sidd::Version siddVersion)
 {
     if (siddVersion != six::sidd::Version::v3_0_0) // Unmodeled added in SIDD 3.0
     {
@@ -83,7 +83,7 @@ inline static const six::UnmodeledS* get_Unmodeled(const six::sidd::DerivedData&
     }
     else
     {
-        return derivedData.errorStatistics->Unmodeled.get();
+        return derivedData.errorStatistics->unmodeled.get();
     }
 }
 
@@ -116,13 +116,13 @@ TEST_CASE(test_createFakeDerivedData_validate)
     test_createFakeDerivedData_(testName, true /*validate*/, six::sidd::Version::v3_0_0, six::sidd300::ISMVersion::v201609);
 }
 
-static void test_assert_unmodeled_(const std::string& testName, const six::UnmodeledS& Unmodeled)
+static void test_assert_unmodeled_(const std::string& testName, const six::Unmodeled& unmodeled)
 {
-    TEST_ASSERT_EQ(1.23, Unmodeled.Xrow);
-    TEST_ASSERT_EQ(4.56, Unmodeled.Ycol);
-    TEST_ASSERT_EQ(7.89, Unmodeled.XrowYcol);
+    TEST_ASSERT_EQ(1.23, unmodeled.Xrow);
+    TEST_ASSERT_EQ(4.56, unmodeled.Ycol);
+    TEST_ASSERT_EQ(7.89, unmodeled.XrowYcol);
 
-    const auto& unmodeledDecor = Unmodeled.unmodeledDecorr;
+    const auto& unmodeledDecor = unmodeled.unmodeledDecorr;
     TEST_ASSERT_TRUE(has_value(unmodeledDecor));
     TEST_ASSERT_EQ(12.34, value(unmodeledDecor).Xrow.CorrCoefZero);
     TEST_ASSERT_EQ(56.78, value(unmodeledDecor).Xrow.DecorrRate);
@@ -138,9 +138,9 @@ static void test_assert_unmodeled(const std::string& testName, const six::sidd::
         return;
     }
 
-    auto Unmodeled = errorStatistics->Unmodeled;
-    TEST_ASSERT(Unmodeled.get() != nullptr);
-    test_assert_unmodeled_(testName, *Unmodeled);
+    auto unmodeled = errorStatistics->unmodeled;
+    TEST_ASSERT(unmodeled.get() != nullptr);
+    test_assert_unmodeled_(testName, *unmodeled);
 }
 
 static void test_read_sidd_xml(const std::string& testName, const std::filesystem::path& path,

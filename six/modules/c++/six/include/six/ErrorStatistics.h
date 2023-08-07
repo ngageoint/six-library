@@ -255,7 +255,7 @@ struct IonoError
  *
  *  Contains Unmodeled error statistics 
  */
-struct UnmodeledS final
+struct Unmodeled final
 {
     XsElement<double> Xrow{ "Xrow" };
     XsElement<double> Ycol{ "Ycol" };
@@ -273,7 +273,7 @@ struct UnmodeledS final
     };
     XsElement_minOccurs0<Decorr> unmodeledDecorr{ "UnmodeledDecorr" };
 };
-inline bool operator==(const UnmodeledS::Decorr& lhs, const UnmodeledS::Decorr& rhs)
+inline bool operator==(const Unmodeled::Decorr& lhs, const Unmodeled::Decorr& rhs)
 {
     return (lhs.Xrow.CorrCoefZero == rhs.Xrow.CorrCoefZero)
         && (lhs.Xrow.DecorrRate == rhs.Xrow.DecorrRate)
@@ -281,11 +281,11 @@ inline bool operator==(const UnmodeledS::Decorr& lhs, const UnmodeledS::Decorr& 
         && (lhs.Ycol.DecorrRate == rhs.Ycol.DecorrRate)
         ;
 }
-inline bool operator!=(const UnmodeledS::Decorr& lhs, const UnmodeledS::Decorr& rhs)
+inline bool operator!=(const Unmodeled::Decorr& lhs, const Unmodeled::Decorr& rhs)
 {
     return !(lhs == rhs);
 }
-inline bool operator==(const UnmodeledS& lhs, const UnmodeledS& rhs)
+inline bool operator==(const Unmodeled& lhs, const Unmodeled& rhs)
 {
     return (lhs.Xrow == rhs.Xrow)
         && (lhs.Ycol == rhs.Ycol)
@@ -293,7 +293,7 @@ inline bool operator==(const UnmodeledS& lhs, const UnmodeledS& rhs)
         && (lhs.unmodeledDecorr == rhs.unmodeledDecorr)
         ;
 }
-inline bool operator!=(const UnmodeledS& lhs, const UnmodeledS& rhs)
+inline bool operator!=(const Unmodeled& lhs, const Unmodeled& rhs)
 {
     return !(lhs == rhs);
 }
@@ -406,7 +406,7 @@ struct ErrorStatistics
      *  (Optional) Unmodeled
      *
      */
-    mem::ScopedCopyablePtr<UnmodeledS> Unmodeled;
+    mem::ScopedCopyablePtr<Unmodeled> unmodeled;
 
     /*!
      *  Additional parameters
@@ -420,7 +420,7 @@ struct ErrorStatistics
         return (compositeSCP == rhs.compositeSCP)
             && (components == rhs.components)
             && (additionalParameters == rhs.additionalParameters)
-            && (Unmodeled == rhs.Unmodeled)
+            && (unmodeled == rhs.unmodeled)
             ;
     }
     bool operator!=(const ErrorStatistics& rhs) const

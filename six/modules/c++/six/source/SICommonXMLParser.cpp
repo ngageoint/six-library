@@ -936,14 +936,14 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
         }
     }
 
-    const auto Unmodeled = errorStatistics->Unmodeled.get();   
-    if (auto UnmodeledXML = newElement(Unmodeled, "Unmodeled", getSICommonURI(), errorStatsXML))
+    const auto unmodeled = errorStatistics->unmodeled.get();
+    if (auto UnmodeledXML = newElement(unmodeled, "Unmodeled", getSICommonURI(), errorStatsXML))
     {
-        createDouble((Unmodeled->Xrow).tag(), getSICommonURI(), (Unmodeled->Xrow).value(), UnmodeledXML);
-        createDouble((Unmodeled->Ycol).tag(), getSICommonURI(), (Unmodeled->Ycol).value(), UnmodeledXML);
-        createDouble((Unmodeled->XrowYcol).tag(), getSICommonURI(), (Unmodeled->XrowYcol).value(), UnmodeledXML);
+        createDouble((unmodeled->Xrow).tag(), getSICommonURI(), (unmodeled->Xrow).value(), UnmodeledXML);
+        createDouble((unmodeled->Ycol).tag(), getSICommonURI(), (unmodeled->Ycol).value(), UnmodeledXML);
+        createDouble((unmodeled->XrowYcol).tag(), getSICommonURI(), (unmodeled->XrowYcol).value(), UnmodeledXML);
 
-        const auto pUnmodeledDecorr = get(Unmodeled->unmodeledDecorr);
+        const auto pUnmodeledDecorr = get(unmodeled->unmodeledDecorr);
         auto UnmodeledDecorrXML = newElement(pUnmodeledDecorr, "UnmodeledDecorr", getSICommonURI(), UnmodeledXML);
         if (UnmodeledDecorrXML != nullptr)
         {
@@ -976,12 +976,12 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
 }
 
 inline static XMLElem getOptionalUnmodeledDecorr(const xml::lite::Element& parent,
-    XsElement_minOccurs0<UnmodeledS::Decorr>& unmodeledDecorr)
+    XsElement_minOccurs0<Unmodeled::Decorr>& unmodeledDecorr)
 {
     auto retval = XmlLite::getOptional(parent, unmodeledDecorr.tag());
     if (retval != nullptr)
     {
-        unmodeledDecorr = UnmodeledS::Decorr{};
+        unmodeledDecorr = Unmodeled::Decorr{};
     }
     return retval;
 }
@@ -1036,10 +1036,10 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         }
     }
 
-    tmpElem = getOptional_reset(errorStatsXML, "Unmodeled", (errorStatistics).Unmodeled); // SIDD 3.0
+    tmpElem = getOptional_reset(errorStatsXML, "Unmodeled", (errorStatistics).unmodeled); // SIDD 3.0
     if (tmpElem != nullptr)
     {
-        auto& unmodeled = *(errorStatistics.Unmodeled);
+        auto& unmodeled = *(errorStatistics.unmodeled);
 
         six::getFirstAndOnly(parser(), *tmpElem, unmodeled.Xrow);
         six::getFirstAndOnly(parser(), *tmpElem, unmodeled.Ycol);
@@ -1059,10 +1059,10 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         }
     }
 
-    tmpElem = getOptional_reset(errorStatsXML, "Unmodeled", (errorStatistics).Unmodeled); // SIDD 3.0
+    tmpElem = getOptional_reset(errorStatsXML, "Unmodeled", (errorStatistics).unmodeled); // SIDD 3.0
     if (tmpElem != nullptr)
     {
-        auto& unmodeled = *(errorStatistics.Unmodeled);
+        auto& unmodeled = *(errorStatistics.unmodeled);
 
         six::getFirstAndOnly(parser(), *tmpElem, unmodeled.Xrow);
         six::getFirstAndOnly(parser(), *tmpElem, unmodeled.Ycol);

@@ -837,7 +837,7 @@ void six::getErrors(const ErrorStatistics* errorStats,
                 unmodeledErrorCovar(0, 1) = unmodeledErrorCovar(1, 0) = corr * (composite.rg * composite.az);
             }
         }
-        else if (const auto unmodeled = errorStats->Unmodeled.get())
+        else if (const auto unmodeled = errorStats->unmodeled.get())
         {
             auto& unmodeledErrorCovar = errors.mUnmodeledErrorCovar;
             auto&& Xrow = unmodeled->Xrow;
