@@ -149,5 +149,5 @@ TEST_CASE(test_read_sicd130_xml)
 TEST_MAIN(
     TEST_CHECK(test_createFakeComplexData);
     TEST_CHECK(test_read_sicd110_xml);
-    TEST_CHECK(test_read_sicd110_xml);
+    TEST_CHECK(test_read_sicd130_xml);
     )

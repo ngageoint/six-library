@@ -455,16 +455,34 @@ void NITFReadControl::load_(std::shared_ptr<nitf::IOInterface> ioInterface, cons
             }
         }
 
-        // SIDD 2.0 needs to read LUT directly from NITF
-        const auto pData = currentInfo->getData();
-        if (pData->getDataType() == DataType::DERIVED && pData->getVersion() == "2.0.0")
-        {
-            const auto nitfLut = subheader.getBandInfo(0).getLookupTable();
-            currentInfo->getData_()->setDisplayLUT(std::make_unique<AmplitudeTable>(nitfLut));
-        }
+        setDisplayLUT(*currentInfo, subheader);
+
         currentInfo->addSegment(si);
     }
 }
+void NITFReadControl::setDisplayLUT(six::NITFImageInfo& currentInfo, const nitf::ImageSubheader& subheader)
+{
+    // SIDD 2.0 needs to read LUT directly from NITF
+    const auto pData = currentInfo.getData();
+    if (pData->getDataType() != DataType::DERIVED)
+    {
+        // LUT processing only for SIDDs
+        return;
+    }
+
+    // There's no requirement for SIDD 2.0 to have a LUT
+    const auto bandInfo0 = subheader.getBandInfo(0);
+    const int numLUTs = bandInfo0.getNumLUTs();
+    if (numLUTs > 0) // avoid getLookupTable() creating an empty nitf::LookupTable
+    {
+        const auto nitfLut = bandInfo0.getLookupTable();
+        if (nitfLut.getEntries() > 0)
+        {
+            currentInfo.getData_()->setDisplayLUT(std::make_unique<AmplitudeTable>(nitfLut));
+        }
+    }
+}
+
 void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface, const std::vector<std::string>* pSchemaPaths_)
 {
     const std::vector<std::string> schemaPaths;
