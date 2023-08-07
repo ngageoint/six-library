@@ -824,6 +824,20 @@ void SICommonXMLParser::parseRowColInts(
     }
 }
 
+XMLElem SICommonXMLParser::createFromElement(const six::XsElement<double>& elem, xml::lite::Element& parent) const
+{
+    return createDouble(elem.tag(), getSICommonURI(), elem.value(), &parent);
+}
+
+XMLElem SICommonXMLParser::newFromElement(const six::XsElement_minOccurs0<Unmodeled::Decorr>& elem, xml::lite::Element& parent) const
+{
+    if (!has_value(elem))
+    {
+        return nullptr;
+    }
+    return newElement(get(elem), elem.tag(), getSICommonURI(), &parent);
+}
+
 XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
     const ErrorStatistics* errorStatistics,
     XMLElem parent) const
@@ -937,25 +951,24 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
     }
 
     const auto unmodeled = errorStatistics->unmodeled.get();
-    if (auto UnmodeledXML = newElement(unmodeled, "Unmodeled", getSICommonURI(), errorStatsXML))
+    if (auto unmodeledXML = newElement(unmodeled, "Unmodeled", getSICommonURI(), errorStatsXML))
     {
-        createDouble((unmodeled->Xrow).tag(), getSICommonURI(), (unmodeled->Xrow).value(), UnmodeledXML);
-        createDouble((unmodeled->Ycol).tag(), getSICommonURI(), (unmodeled->Ycol).value(), UnmodeledXML);
-        createDouble((unmodeled->XrowYcol).tag(), getSICommonURI(), (unmodeled->XrowYcol).value(), UnmodeledXML);
+        createFromElement(unmodeled->Xrow, *unmodeledXML);
+        createFromElement(unmodeled->Ycol, *unmodeledXML);
+        createFromElement(unmodeled->XrowYcol, *unmodeledXML);
 
         const auto pUnmodeledDecorr = get(unmodeled->unmodeledDecorr);
-        auto UnmodeledDecorrXML = newElement(pUnmodeledDecorr, "UnmodeledDecorr", getSICommonURI(), UnmodeledXML);
-        if (UnmodeledDecorrXML != nullptr)
+        if (auto unmodeledDecorrXML = newFromElement(unmodeled->unmodeledDecorr, *unmodeledXML))
         {
             const auto& Xrow = &(pUnmodeledDecorr->Xrow);
-            if (auto XrowXML = newElement(Xrow, "Xrow", getSICommonURI(), UnmodeledDecorrXML))
+            if (auto XrowXML = newElement(Xrow, "Xrow", getSICommonURI(), unmodeledDecorrXML))
             {
                 createDouble("CorrCoefZero", getSICommonURI(), (*Xrow).CorrCoefZero, XrowXML);
                 createDouble("DecorrRate", getSICommonURI(), (*Xrow).DecorrRate, XrowXML);
             }
 
             const auto& Ycol = &(pUnmodeledDecorr->Ycol);
-            if (auto YcolXML = newElement(Ycol, "Ycol", getSICommonURI(), UnmodeledDecorrXML))
+            if (auto YcolXML = newElement(Ycol, "Ycol", getSICommonURI(), unmodeledDecorrXML))
             {
                 createDouble("CorrCoefZero", getSICommonURI(), (*Ycol).CorrCoefZero, YcolXML);
                 createDouble("DecorrRate", getSICommonURI(), (*Ycol).DecorrRate, YcolXML);

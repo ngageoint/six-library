@@ -265,7 +265,7 @@ struct Unmodeled final
     {
         struct Xrow_Ycol final
         {
-	    double CorrCoefZero = 0.0;
+    	    double CorrCoefZero = 0.0;
             double DecorrRate = 0.0;
         };
         Xrow_Ycol Xrow{};

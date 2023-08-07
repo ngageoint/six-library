@@ -224,6 +224,10 @@ private:
     // TODO: Can we combine this with parsePoly1D()?
     void parsePoly(const xml::lite::Element* polyXML, size_t xyzIdx, PolyXYZ& polyXYZ) const;
 
+    XMLElem createFromElement(const six::XsElement<double>&, xml::lite::Element&) const;
+    XMLElem newFromElement(const six::XsElement_minOccurs0<Unmodeled::Decorr>&, xml::lite::Element&) const;
+    //void parseDouble();
+
 private:
     const std::string mSICommonURI;
 };
