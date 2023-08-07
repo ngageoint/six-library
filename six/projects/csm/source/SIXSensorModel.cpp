@@ -1176,7 +1176,7 @@ std::vector<double> SIXSensorModel::getSIXUnmodeledError_(const six::ErrorStatis
 {
     if (pErrorStatistics != nullptr)
     {
-        if (auto pUnmodeled = pErrorStatistics->unmodeled.get())
+        if (auto pUnmodeled = get(pErrorStatistics->unmodeled))
         {
             auto&& Xrow = pUnmodeled->Xrow;
             auto&& Ycol = pUnmodeled->Ycol;

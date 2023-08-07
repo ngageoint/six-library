@@ -406,7 +406,7 @@ struct ErrorStatistics
      *  (Optional) Unmodeled
      *
      */
-    mem::ScopedCopyablePtr<Unmodeled> unmodeled;
+    XsElement_minOccurs0<Unmodeled> unmodeled{ "Unmodeled" };
 
     /*!
      *  Additional parameters

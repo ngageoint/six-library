@@ -950,7 +950,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
         }
     }
 
-    const auto unmodeled = errorStatistics->unmodeled.get();
+    const auto unmodeled = get(errorStatistics->unmodeled);
     if (auto unmodeledXML = newElement(unmodeled, "Unmodeled", getSICommonURI(), errorStatsXML))
     {
         createFromElement(unmodeled->Xrow, *unmodeledXML);
@@ -1049,10 +1049,10 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         }
     }
 
-    tmpElem = getOptional_reset(errorStatsXML, "Unmodeled", (errorStatistics).unmodeled); // SIDD 3.0
+    tmpElem = getOptional_reset(errorStatsXML, (errorStatistics).unmodeled); // SIDD 3.0
     if (tmpElem != nullptr)
     {
-        auto& unmodeled = *(errorStatistics.unmodeled);
+        auto& unmodeled = *get(errorStatistics.unmodeled);
 
         six::getFirstAndOnly(parser(), *tmpElem, unmodeled.Xrow);
         six::getFirstAndOnly(parser(), *tmpElem, unmodeled.Ycol);
@@ -1074,10 +1074,10 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         }
     }
 
-    tmpElem = getOptional_reset(errorStatsXML, "Unmodeled", (errorStatistics).unmodeled); // SIDD 3.0
+    tmpElem = getOptional_reset(errorStatsXML, (errorStatistics).unmodeled); // SIDD 3.0
     if (tmpElem != nullptr)
     {
-        auto& unmodeled = *(errorStatistics.unmodeled);
+        auto& unmodeled = *get(errorStatistics.unmodeled);
 
         six::getFirstAndOnly(parser(), *tmpElem, unmodeled.Xrow);
         six::getFirstAndOnly(parser(), *tmpElem, unmodeled.Ycol);

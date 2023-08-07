@@ -83,7 +83,7 @@ inline static const six::Unmodeled* get_Unmodeled(const six::sidd::DerivedData& 
     }
     else
     {
-        return derivedData.errorStatistics->unmodeled.get();
+        return get(derivedData.errorStatistics->unmodeled);
     }
 }
 
@@ -139,8 +139,8 @@ static void test_assert_unmodeled(const std::string& testName, const six::sidd::
     }
 
     auto unmodeled = errorStatistics->unmodeled;
-    TEST_ASSERT(unmodeled.get() != nullptr);
-    test_assert_unmodeled_(testName, *unmodeled);
+    TEST_ASSERT(get(unmodeled) != nullptr);
+    test_assert_unmodeled_(testName, *get(unmodeled));
 }
 
 static void test_read_sidd_xml(const std::string& testName, const std::filesystem::path& path,

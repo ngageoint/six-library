@@ -274,6 +274,16 @@ struct XmlLite final
         }
         return retval;
     }
+    template<typename T>
+    inline static xml::lite::Element* getOptional_reset(const xml::lite::Element& parent, XsElement_minOccurs0<T>& obj)
+    {
+        auto retval = getOptional(parent, obj.tag());
+        if (retval != nullptr)
+        {
+            obj = T{};
+        }
+        return retval;
+    }
 
     static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag);
     static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const xml::lite::QName&);
