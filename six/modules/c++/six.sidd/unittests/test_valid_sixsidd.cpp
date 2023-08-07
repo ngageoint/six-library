@@ -124,10 +124,10 @@ static void test_assert_unmodeled_(const std::string& testName, const six::Unmod
 
     const auto& unmodeledDecor = unmodeled.unmodeledDecorr;
     TEST_ASSERT_TRUE(has_value(unmodeledDecor));
-    TEST_ASSERT_EQ(12.34, value(unmodeledDecor).Xrow.CorrCoefZero);
-    TEST_ASSERT_EQ(56.78, value(unmodeledDecor).Xrow.DecorrRate);
-    TEST_ASSERT_EQ(123.4, value(unmodeledDecor).Ycol.CorrCoefZero);
-    TEST_ASSERT_EQ(567.8, value(unmodeledDecor).Ycol.DecorrRate);
+    TEST_ASSERT_EQ(12.34, value(unmodeledDecor).Xrow.corrCoefZero);
+    TEST_ASSERT_EQ(56.78, value(unmodeledDecor).Xrow.decorrRate);
+    TEST_ASSERT_EQ(123.4, value(unmodeledDecor).Ycol.corrCoefZero);
+    TEST_ASSERT_EQ(567.8, value(unmodeledDecor).Ycol.decorrRate);
 }
 static void test_assert_unmodeled(const std::string& testName, const six::sidd::DerivedData& derivedData)
 {

@@ -265,8 +265,8 @@ struct Unmodeled final
     {
         struct Xrow_Ycol final
         {
-    	    double CorrCoefZero = 0.0;
-            double DecorrRate = 0.0;
+            XsElement<double> corrCoefZero{ "CorrCoefZero" };
+            XsElement<double> decorrRate{ "DecorrRate" };
         };
         Xrow_Ycol Xrow{};
         Xrow_Ycol Ycol{};
@@ -275,10 +275,10 @@ struct Unmodeled final
 };
 inline bool operator==(const Unmodeled::Decorr& lhs, const Unmodeled::Decorr& rhs)
 {
-    return (lhs.Xrow.CorrCoefZero == rhs.Xrow.CorrCoefZero)
-        && (lhs.Xrow.DecorrRate == rhs.Xrow.DecorrRate)
-        && (lhs.Ycol.CorrCoefZero == rhs.Ycol.CorrCoefZero)
-        && (lhs.Ycol.DecorrRate == rhs.Ycol.DecorrRate)
+    return (lhs.Xrow.corrCoefZero == rhs.Xrow.corrCoefZero)
+        && (lhs.Xrow.decorrRate == rhs.Xrow.decorrRate)
+        && (lhs.Ycol.corrCoefZero == rhs.Ycol.corrCoefZero)
+        && (lhs.Ycol.decorrRate == rhs.Ycol.decorrRate)
         ;
 }
 inline bool operator!=(const Unmodeled::Decorr& lhs, const Unmodeled::Decorr& rhs)

@@ -963,15 +963,15 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
             const auto& Xrow = &(pUnmodeledDecorr->Xrow);
             if (auto XrowXML = newElement(Xrow, "Xrow", getSICommonURI(), unmodeledDecorrXML))
             {
-                createDouble("CorrCoefZero", getSICommonURI(), (*Xrow).CorrCoefZero, XrowXML);
-                createDouble("DecorrRate", getSICommonURI(), (*Xrow).DecorrRate, XrowXML);
+                createFromElement(Xrow->corrCoefZero, *XrowXML);
+                createFromElement(Xrow->decorrRate, *XrowXML);
             }
 
             const auto& Ycol = &(pUnmodeledDecorr->Ycol);
             if (auto YcolXML = newElement(Ycol, "Ycol", getSICommonURI(), unmodeledDecorrXML))
             {
-                createDouble("CorrCoefZero", getSICommonURI(), (*Ycol).CorrCoefZero, YcolXML);
-                createDouble("DecorrRate", getSICommonURI(), (*Ycol).DecorrRate, YcolXML);
+                createFromElement(Ycol->corrCoefZero, *YcolXML);
+                createFromElement(Ycol->decorrRate, *YcolXML);
             }
         }
     }
@@ -1061,14 +1061,16 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         if (auto unmodeledDecorrXML = getOptionalUnmodeledDecorr(*tmpElem, unmodeled.unmodeledDecorr))
         {
             auto& unmodeledDecorr = *get(unmodeled.unmodeledDecorr);
-
-            auto xrowXML = getFirstAndOnly(unmodeledDecorrXML, "Xrow");
-            parseDouble(getFirstAndOnly(xrowXML, "CorrCoefZero"), (unmodeledDecorr.Xrow).CorrCoefZero);
-            parseDouble(getFirstAndOnly(xrowXML, "DecorrRate"), (unmodeledDecorr.Xrow).DecorrRate);
-
-            auto ycolXML = getFirstAndOnly(unmodeledDecorrXML, "Ycol");
-            parseDouble(getFirstAndOnly(ycolXML, "CorrCoefZero"), (unmodeledDecorr.Ycol).CorrCoefZero);
-            parseDouble(getFirstAndOnly(ycolXML, "DecorrRate"), (unmodeledDecorr.Ycol).DecorrRate);
+            if (auto xrowXML = getFirstAndOnly(unmodeledDecorrXML, "Xrow"))
+            {
+                six::getFirstAndOnly(parser(), *xrowXML, (unmodeledDecorr.Xrow).corrCoefZero);
+                six::getFirstAndOnly(parser(), *xrowXML, (unmodeledDecorr.Xrow).decorrRate);
+            }
+            if (auto ycolXML = getFirstAndOnly(unmodeledDecorrXML, "Ycol"))
+            {
+                six::getFirstAndOnly(parser(), *ycolXML, (unmodeledDecorr.Ycol).corrCoefZero);
+                six::getFirstAndOnly(parser(), *ycolXML, (unmodeledDecorr.Ycol).decorrRate);
+            }
         }
     }
 
@@ -1084,14 +1086,16 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         if (auto unmodeledDecorrXML = getOptionalUnmodeledDecorr(*tmpElem, unmodeled.unmodeledDecorr))
         {
             auto& unmodeledDecorr = *get(unmodeled.unmodeledDecorr);
-
-            auto xrowXML = getFirstAndOnly(unmodeledDecorrXML, "Xrow");
-            parseDouble(getFirstAndOnly(xrowXML, "CorrCoefZero"), (unmodeledDecorr.Xrow).CorrCoefZero);
-            parseDouble(getFirstAndOnly(xrowXML, "DecorrRate"), (unmodeledDecorr.Xrow).DecorrRate);
-
-            auto ycolXML = getFirstAndOnly(unmodeledDecorrXML, "Ycol");
-            parseDouble(getFirstAndOnly(ycolXML, "CorrCoefZero"), (unmodeledDecorr.Ycol).CorrCoefZero);
-            parseDouble(getFirstAndOnly(ycolXML, "DecorrRate"), (unmodeledDecorr.Ycol).DecorrRate);
+            if (auto xrowXML = getFirstAndOnly(unmodeledDecorrXML, "Xrow"))
+            {
+                six::getFirstAndOnly(parser(), *xrowXML, (unmodeledDecorr.Xrow).corrCoefZero);
+                six::getFirstAndOnly(parser(), *xrowXML, (unmodeledDecorr.Xrow).decorrRate);
+            }
+            if (auto ycolXML = getFirstAndOnly(unmodeledDecorrXML, "Ycol"))
+            {
+                six::getFirstAndOnly(parser(), *ycolXML, (unmodeledDecorr.Ycol).corrCoefZero);
+                six::getFirstAndOnly(parser(), *ycolXML, (unmodeledDecorr.Ycol).decorrRate);
+            }
         }
     }
 
