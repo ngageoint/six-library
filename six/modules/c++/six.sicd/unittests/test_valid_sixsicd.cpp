@@ -24,7 +24,6 @@
 #include <stdlib.h>
 
 #include <string>
-#include <string>
 #include <std/filesystem>
 #include <std/span>
 
@@ -37,10 +36,8 @@
 
 #include "TestCase.h"
 
-namespace fs = std::filesystem;
-
 static std::unique_ptr<six::sicd::ComplexData> test_assert_round_trip(const std::string& testName,
-    const six::sicd::ComplexData& complexData, const std::vector<fs::path>* pSchemaPaths)
+    const six::sicd::ComplexData& complexData, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
     auto strXML = six::sicd::Utilities::toXMLString(complexData, pSchemaPaths);
     TEST_ASSERT_FALSE(strXML.empty());
@@ -119,9 +116,9 @@ static void test_assert(const std::string& testName, const six::sicd::ComplexDat
     TEST_ASSERT_EQ(strTxRcvPolarizationProc,"OTHER_TxRcvPolarizationProc:OTHER_TxRcvPolarizationProc");
 }
 
-static void test_read_sicd_xml(const std::string& testName, const fs::path& path)
+static void test_read_sicd_xml(const std::string& testName, const std::filesystem::path& path)
 {
-    const auto pathname = six::testing::getSampleXmlPath(fs::path("six.sicd") / "tests" / "sample_xml", path);
+    const auto pathname = six::testing::getSampleXmlPath(std::filesystem::path("six.sicd") / "tests" / "sample_xml", path);
 
     // NULL schemaPaths, no validation
     auto pComplexData = six::sicd::Utilities::parseDataFromFile(pathname, nullptr /*pSchemaPaths*/);
