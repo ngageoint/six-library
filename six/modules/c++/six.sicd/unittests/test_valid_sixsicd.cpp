@@ -47,7 +47,7 @@ static std::unique_ptr<six::sicd::ComplexData> test_assert_round_trip(const std:
     return six::sicd::Utilities::parseDataFromString(strXML, pSchemaPaths);
 }
 
-inline static const six::UnmodeledS* get_Unmodeled(const six::sicd::ComplexData& complexData, const std::string& strVersion)
+inline static const six::Unmodeled* get_Unmodeled(const six::sicd::ComplexData& complexData, const std::string& strVersion)
 {
     if (strVersion != "1.3.0") // Unmodeled added in SICD 1.3
     {
@@ -55,7 +55,7 @@ inline static const six::UnmodeledS* get_Unmodeled(const six::sicd::ComplexData&
     }
     else
     {
-        return complexData.errorStatistics->Unmodeled.get();
+        return get(complexData.errorStatistics->unmodeled);
     }
 }
 
@@ -83,18 +83,18 @@ TEST_CASE(test_createFakeComplexData)
     test_createFakeComplexData_(testName, "1.3.0");
 }
 
-static void test_assert_unmodeled_(const std::string& testName, const six::UnmodeledS& Unmodeled)
+static void test_assert_unmodeled_(const std::string& testName, const six::Unmodeled& unmodeled)
 {
-    TEST_ASSERT_EQ(1.23, Unmodeled.Xrow);
-    TEST_ASSERT_EQ(4.56, Unmodeled.Ycol);
-    TEST_ASSERT_EQ(7.89, Unmodeled.XrowYcol);
+    TEST_ASSERT_EQ(1.23, unmodeled.Xrow);
+    TEST_ASSERT_EQ(4.56, unmodeled.Ycol);
+    TEST_ASSERT_EQ(7.89, unmodeled.XrowYcol);
 
-    const auto& unmodeledDecor = Unmodeled.unmodeledDecorr;
+    const auto& unmodeledDecor = unmodeled.unmodeledDecorr;
     TEST_ASSERT(has_value(unmodeledDecor));
-    TEST_ASSERT_EQ(12.34, value(unmodeledDecor).Xrow.CorrCoefZero);
-    TEST_ASSERT_EQ(56.78, value(unmodeledDecor).Xrow.DecorrRate);
-    TEST_ASSERT_EQ(123.4, value(unmodeledDecor).Ycol.CorrCoefZero);
-    TEST_ASSERT_EQ(567.8, value(unmodeledDecor).Ycol.DecorrRate);
+    TEST_ASSERT_EQ(12.34, value(unmodeledDecor).Xrow.corrCoefZero);
+    TEST_ASSERT_EQ(56.78, value(unmodeledDecor).Xrow.decorrRate);
+    TEST_ASSERT_EQ(123.4, value(unmodeledDecor).Ycol.corrCoefZero);
+    TEST_ASSERT_EQ(567.8, value(unmodeledDecor).Ycol.decorrRate);
 }
 static void test_assert(const std::string& testName, const six::sicd::ComplexData& complexData)
 {
@@ -105,9 +105,9 @@ static void test_assert(const std::string& testName, const six::sicd::ComplexDat
         return;
     }
     TEST_ASSERT(errorStatistics.get() != nullptr);
-    auto Unmodeled = errorStatistics->Unmodeled;
-    TEST_ASSERT(Unmodeled.get() != nullptr);
-    test_assert_unmodeled_(testName, *Unmodeled);
+    auto unmodeled = errorStatistics->unmodeled;
+    TEST_ASSERT(get(unmodeled) != nullptr);
+    test_assert_unmodeled_(testName, value(unmodeled));
 
     // for SICD 1.3, also check the polarization type; this is set either in the fake data or scid130.xml
     const auto txRcvPolarizationProc = complexData.imageFormation->txRcvPolarizationProc;
