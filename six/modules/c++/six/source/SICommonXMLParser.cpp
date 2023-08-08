@@ -829,13 +829,21 @@ XMLElem SICommonXMLParser::createFromElement(const six::XsElement<double>& elem,
     return createDouble(elem.tag(), getSICommonURI(), elem.value(), &parent);
 }
 
+XMLElem SICommonXMLParser::newFromElement(const six::XsElement_minOccurs0<Unmodeled>& elem, xml::lite::Element& parent) const
+{
+    if (!has_value(elem))
+    {
+        return nullptr;
+    }
+    return newElement(&value(elem), elem.tag(), getSICommonURI(), &parent);
+}
 XMLElem SICommonXMLParser::newFromElement(const six::XsElement_minOccurs0<Unmodeled::Decorr>& elem, xml::lite::Element& parent) const
 {
     if (!has_value(elem))
     {
         return nullptr;
     }
-    return newElement(get(elem), elem.tag(), getSICommonURI(), &parent);
+    return newElement(&value(elem), elem.tag(), getSICommonURI(), &parent);
 }
 
 XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
@@ -950,29 +958,27 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
         }
     }
 
-    const auto unmodeled = get(errorStatistics->unmodeled);
-    if (auto unmodeledXML = newElement(unmodeled, "Unmodeled", getSICommonURI(), errorStatsXML))
+    if (auto unmodeledXML = newFromElement(errorStatistics->unmodeled, *errorStatsXML))
     {
-        createFromElement(unmodeled->Xrow, *unmodeledXML);
-        createFromElement(unmodeled->Ycol, *unmodeledXML);
-        createFromElement(unmodeled->XrowYcol, *unmodeledXML);
+        const auto& unmodeled = value(errorStatistics->unmodeled);
+        createFromElement(unmodeled.Xrow, *unmodeledXML);
+        createFromElement(unmodeled.Ycol, *unmodeledXML);
+        createFromElement(unmodeled.XrowYcol, *unmodeledXML);
 
-        const auto pUnmodeledDecorr = get(unmodeled->unmodeledDecorr);
-        if (auto unmodeledDecorrXML = newFromElement(unmodeled->unmodeledDecorr, *unmodeledXML))
+        if (auto unmodeledDecorrXML = newFromElement(unmodeled.unmodeledDecorr, *unmodeledXML))
         {
-            const auto& Xrow = &(pUnmodeledDecorr->Xrow);
-            if (auto XrowXML = newElement(Xrow, "Xrow", getSICommonURI(), unmodeledDecorrXML))
+            const auto new_Xrow_Ycol = [&](const Unmodeled::Decorr::Xrow_Ycol& elem, const std::string& name)
             {
-                createFromElement(Xrow->corrCoefZero, *XrowXML);
-                createFromElement(Xrow->decorrRate, *XrowXML);
-            }
+                if (auto pXML = newElement(&elem, name, getSICommonURI(), unmodeledDecorrXML))
+                {
+                    createFromElement(elem.corrCoefZero, *pXML);
+                    createFromElement(elem.decorrRate, *pXML);
+                }
+            };
 
-            const auto& Ycol = &(pUnmodeledDecorr->Ycol);
-            if (auto YcolXML = newElement(Ycol, "Ycol", getSICommonURI(), unmodeledDecorrXML))
-            {
-                createFromElement(Ycol->corrCoefZero, *YcolXML);
-                createFromElement(Ycol->decorrRate, *YcolXML);
-            }
+            const auto& unmodeledDecorr = value(unmodeled.unmodeledDecorr);
+            new_Xrow_Ycol(unmodeledDecorr.Xrow, "Xrow");
+            new_Xrow_Ycol(unmodeledDecorr.Ycol, "Ycol");
         }
     }
 
@@ -1049,53 +1055,29 @@ void SICommonXMLParser::parseErrorStatisticsFromXML(
         }
     }
 
-    tmpElem = getOptional_reset(errorStatsXML, (errorStatistics).unmodeled); // SIDD 3.0
-    if (tmpElem != nullptr)
+    if (const auto pUnmodeledXML = getOptional_reset(errorStatsXML, (errorStatistics).unmodeled)) // SIDD 3.0
     {
-        auto& unmodeled = *get(errorStatistics.unmodeled);
+        auto&& unmodeledXML = *pUnmodeledXML;
 
-        six::getFirstAndOnly(parser(), *tmpElem, unmodeled.Xrow);
-        six::getFirstAndOnly(parser(), *tmpElem, unmodeled.Ycol);
-        six::getFirstAndOnly(parser(), *tmpElem, unmodeled.XrowYcol);
+        auto& unmodeled = value(errorStatistics.unmodeled);
+        six::getFirstAndOnly(parser(), unmodeledXML, unmodeled.Xrow);
+        six::getFirstAndOnly(parser(), unmodeledXML, unmodeled.Ycol);
+        six::getFirstAndOnly(parser(), unmodeledXML, unmodeled.XrowYcol);
        
-        if (auto unmodeledDecorrXML = getOptionalUnmodeledDecorr(*tmpElem, unmodeled.unmodeledDecorr))
+        if (auto pUnmodeledDecorrXML = getOptionalUnmodeledDecorr(unmodeledXML, unmodeled.unmodeledDecorr))
         {
-            auto& unmodeledDecorr = *get(unmodeled.unmodeledDecorr);
-            if (auto xrowXML = getFirstAndOnly(unmodeledDecorrXML, "Xrow"))
+            const auto getFirstAndOnly_Xrow_Ycol = [&](Unmodeled::Decorr::Xrow_Ycol& rc, const std::string& tag)
             {
-                six::getFirstAndOnly(parser(), *xrowXML, (unmodeledDecorr.Xrow).corrCoefZero);
-                six::getFirstAndOnly(parser(), *xrowXML, (unmodeledDecorr.Xrow).decorrRate);
-            }
-            if (auto ycolXML = getFirstAndOnly(unmodeledDecorrXML, "Ycol"))
-            {
-                six::getFirstAndOnly(parser(), *ycolXML, (unmodeledDecorr.Ycol).corrCoefZero);
-                six::getFirstAndOnly(parser(), *ycolXML, (unmodeledDecorr.Ycol).decorrRate);
-            }
-        }
-    }
+                if (auto pXML = getFirstAndOnly(pUnmodeledDecorrXML, tag))
+                {
+                    six::getFirstAndOnly(parser(), *pXML, rc.corrCoefZero);
+                    six::getFirstAndOnly(parser(), *pXML, rc.decorrRate);
+                }
+            };
 
-    tmpElem = getOptional_reset(errorStatsXML, (errorStatistics).unmodeled); // SIDD 3.0
-    if (tmpElem != nullptr)
-    {
-        auto& unmodeled = *get(errorStatistics.unmodeled);
-
-        six::getFirstAndOnly(parser(), *tmpElem, unmodeled.Xrow);
-        six::getFirstAndOnly(parser(), *tmpElem, unmodeled.Ycol);
-        six::getFirstAndOnly(parser(), *tmpElem, unmodeled.XrowYcol);
-        
-        if (auto unmodeledDecorrXML = getOptionalUnmodeledDecorr(*tmpElem, unmodeled.unmodeledDecorr))
-        {
-            auto& unmodeledDecorr = *get(unmodeled.unmodeledDecorr);
-            if (auto xrowXML = getFirstAndOnly(unmodeledDecorrXML, "Xrow"))
-            {
-                six::getFirstAndOnly(parser(), *xrowXML, (unmodeledDecorr.Xrow).corrCoefZero);
-                six::getFirstAndOnly(parser(), *xrowXML, (unmodeledDecorr.Xrow).decorrRate);
-            }
-            if (auto ycolXML = getFirstAndOnly(unmodeledDecorrXML, "Ycol"))
-            {
-                six::getFirstAndOnly(parser(), *ycolXML, (unmodeledDecorr.Ycol).corrCoefZero);
-                six::getFirstAndOnly(parser(), *ycolXML, (unmodeledDecorr.Ycol).decorrRate);
-            }
+            auto& unmodeledDecorr = value(unmodeled.unmodeledDecorr);
+            getFirstAndOnly_Xrow_Ycol(unmodeledDecorr.Xrow, "Xrow");
+            getFirstAndOnly_Xrow_Ycol(unmodeledDecorr.Ycol, "Ycol");
         }
     }
 

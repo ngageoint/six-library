@@ -837,12 +837,14 @@ void six::getErrors(const ErrorStatistics* errorStats,
                 unmodeledErrorCovar(0, 1) = unmodeledErrorCovar(1, 0) = corr * (composite.rg * composite.az);
             }
         }
-        else if (const auto unmodeled = get(errorStats->unmodeled))
+        else if (has_value(errorStats->unmodeled))
         {
+            const auto& unmodeled = value(errorStats->unmodeled);
+
             auto& unmodeledErrorCovar = errors.mUnmodeledErrorCovar;
-            auto&& Xrow = unmodeled->Xrow;
-            auto&& Ycol = unmodeled->Ycol;
-            auto&& XrowYcol = unmodeled->XrowYcol;
+            auto&& Xrow = unmodeled.Xrow;
+            auto&& Ycol = unmodeled.Ycol;
+            auto&& XrowYcol = unmodeled.XrowYcol;
 
             // From Bill: Here is the mapping from the UnmodeledError to the 2x2 covariance matrix:
             //    [0][0] = Xrow; [1][1] = Ycol; 

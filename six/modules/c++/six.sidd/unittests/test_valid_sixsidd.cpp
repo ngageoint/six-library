@@ -86,10 +86,13 @@ inline static const six::Unmodeled* get_Unmodeled(const six::sidd::DerivedData& 
     {
         return nullptr;
     }
-    else
+
+    if (has_value(derivedData.errorStatistics->unmodeled))
     {
-        return get(derivedData.errorStatistics->unmodeled);
+        return &value(derivedData.errorStatistics->unmodeled);
     }
+
+    return nullptr;
 }
 
 static void test_createFakeDerivedData_(const std::string& testName, bool validate,
@@ -157,7 +160,7 @@ static void test_assert_unmodeled(const std::string& testName, const six::sidd::
     }
 
     auto unmodeled = errorStatistics->unmodeled;
-    TEST_ASSERT(get(unmodeled) != nullptr);
+    TEST_ASSERT(has_value(unmodeled));
     test_assert_unmodeled_(testName, value(unmodeled));
 }
 
