@@ -278,6 +278,8 @@ private:
         return (iCat == "DED");
     }
 
+    void setDisplayLUT(six::NITFImageInfo&, const nitf::ImageSubheader&); // LUT processing for SIDDs
+
     // We need this for one of the load overloadings
     // to prevent data from being deleted prematurely
     // The issue occurs from the explicit destructor of
