@@ -53,10 +53,13 @@ inline static const six::Unmodeled* get_Unmodeled(const six::sicd::ComplexData& 
     {
         return nullptr;
     }
-    else
+
+    if (has_value(complexData.errorStatistics->unmodeled))
     {
-        return get(complexData.errorStatistics->unmodeled);
+        return &value(complexData.errorStatistics->unmodeled);
     }
+
+    return nullptr;
 }
 
 static void test_createFakeComplexData_(const std::string& testName, const std::string& strVersion)
@@ -89,12 +92,12 @@ static void test_assert_unmodeled_(const std::string& testName, const six::Unmod
     TEST_ASSERT_EQ(4.56, unmodeled.Ycol);
     TEST_ASSERT_EQ(7.89, unmodeled.XrowYcol);
 
-    const auto& unmodeledDecor = unmodeled.unmodeledDecorr;
-    TEST_ASSERT(has_value(unmodeledDecor));
-    TEST_ASSERT_EQ(12.34, value(unmodeledDecor).Xrow.corrCoefZero);
-    TEST_ASSERT_EQ(56.78, value(unmodeledDecor).Xrow.decorrRate);
-    TEST_ASSERT_EQ(123.4, value(unmodeledDecor).Ycol.corrCoefZero);
-    TEST_ASSERT_EQ(567.8, value(unmodeledDecor).Ycol.decorrRate);
+    TEST_ASSERT(has_value(unmodeled.unmodeledDecorr));
+    auto&& unmodeledDecor = value(unmodeled.unmodeledDecorr);
+    TEST_ASSERT_EQ(12.34, value(unmodeledDecor.Xrow).corrCoefZero);
+    TEST_ASSERT_EQ(56.78, value(unmodeledDecor.Xrow).decorrRate);
+    TEST_ASSERT_EQ(123.4, value(unmodeledDecor.Ycol).corrCoefZero);
+    TEST_ASSERT_EQ(567.8, value(unmodeledDecor.Ycol).decorrRate);
 }
 static void test_assert(const std::string& testName, const six::sicd::ComplexData& complexData)
 {
@@ -105,8 +108,8 @@ static void test_assert(const std::string& testName, const six::sicd::ComplexDat
         return;
     }
     TEST_ASSERT(errorStatistics.get() != nullptr);
-    auto unmodeled = errorStatistics->unmodeled;
-    TEST_ASSERT(get(unmodeled) != nullptr);
+    auto&& unmodeled = errorStatistics->unmodeled;
+    TEST_ASSERT(has_value(unmodeled));
     test_assert_unmodeled_(testName, value(unmodeled));
 
     // for SICD 1.3, also check the polarization type; this is set either in the fake data or scid130.xml

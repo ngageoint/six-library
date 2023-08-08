@@ -829,15 +829,8 @@ XMLElem SICommonXMLParser::createFromElement(const six::XsElement<double>& elem,
     return createDouble(elem.tag(), getSICommonURI(), elem.value(), &parent);
 }
 
-XMLElem SICommonXMLParser::newFromElement(const six::XsElement_minOccurs0<Unmodeled>& elem, xml::lite::Element& parent) const
-{
-    if (!has_value(elem))
-    {
-        return nullptr;
-    }
-    return newElement(&value(elem), elem.tag(), getSICommonURI(), &parent);
-}
-XMLElem SICommonXMLParser::newFromElement(const six::XsElement_minOccurs0<Unmodeled::Decorr>& elem, xml::lite::Element& parent) const
+template<typename T>
+XMLElem SICommonXMLParser::newFromElement(const XsElement_minOccurs0<T>& elem, xml::lite::Element& parent) const
 {
     if (!has_value(elem))
     {
