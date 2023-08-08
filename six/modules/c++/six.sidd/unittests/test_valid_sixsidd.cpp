@@ -50,6 +50,11 @@ static std::filesystem::path schema_relative_path()
     return six_sidd_relative_path() / "conf" / "schema"; // .../conf/schema
 }
 
+static std::filesystem::path get_sample_nitf_path(const std::filesystem::path& filename)
+{
+    static const auto modulePath = six_sidd_relative_path() / "tests" / "sample_nitf";
+    return sys::test::findGITModuleFile("six", modulePath, filename);
+}
 static std::filesystem::path get_sample_xml_path(const std::filesystem::path& filename)
 {
     static const auto modulePath = six_sidd_relative_path() / "tests" / "sample_xml";
@@ -116,6 +121,19 @@ TEST_CASE(test_createFakeDerivedData_validate)
     test_createFakeDerivedData_(testName, true /*validate*/, six::sidd::Version::v300, six::sidd300::ISMVersion::v201609);
 }
 
+TEST_CASE(test_read_sidd200_no_LUT)
+{
+    static const auto pathname = get_sample_nitf_path("2023-07-26-11-37-27_UMBRA-04_SIDD.nitf");
+
+    six::XMLControlRegistry& xml_registry = six::XMLControlFactory::getInstance();
+    xml_registry.addCreator(six::DataType::DERIVED,
+        new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
+
+    six::NITFReadControl reader;
+    reader.setXMLControlRegistry(xml_registry);
+    reader.load(pathname.string());
+}
+
 static void test_assert_unmodeled_(const std::string& testName, const six::UnmodeledS& Unmodeled)
 {
     TEST_ASSERT_EQ(1.23, Unmodeled.Xrow);
@@ -180,6 +198,7 @@ TEST_CASE(test_read_sidd300_v13_xml)
 TEST_MAIN(
     TEST_CHECK(test_createFakeDerivedData);
     TEST_CHECK(test_createFakeDerivedData_validate);
+    TEST_CHECK(test_read_sidd200_no_LUT);
     TEST_CHECK(test_read_sidd200_xml);
     TEST_CHECK(test_read_sidd300_xml);
     TEST_CHECK(test_read_sidd300_v13_xml);
