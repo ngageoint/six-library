@@ -268,17 +268,21 @@ struct Unmodeled final
             XsElement<double> corrCoefZero{ "CorrCoefZero" };
             XsElement<double> decorrRate{ "DecorrRate" };
         };
-        Xrow_Ycol Xrow{};
-        Xrow_Ycol Ycol{};
+        XsElement<Xrow_Ycol> Xrow{ "Xrow" };
+        XsElement<Xrow_Ycol> Ycol{ "Ycol" };
     };
     XsElement_minOccurs0<Decorr> unmodeledDecorr{ "UnmodeledDecorr" };
 };
 inline bool operator==(const Unmodeled::Decorr& lhs, const Unmodeled::Decorr& rhs)
 {
-    return (lhs.Xrow.corrCoefZero == rhs.Xrow.corrCoefZero)
-        && (lhs.Xrow.decorrRate == rhs.Xrow.decorrRate)
-        && (lhs.Ycol.corrCoefZero == rhs.Ycol.corrCoefZero)
-        && (lhs.Ycol.decorrRate == rhs.Ycol.decorrRate)
+    auto&& lhs_Xrow = value(lhs.Xrow);
+    auto&& rhs_Xrow = value(rhs.Xrow);
+    auto&& lhs_Ycol = value(lhs.Ycol);
+    auto&& rhs_Ycol = value(rhs.Ycol);
+    return (lhs_Xrow.corrCoefZero == rhs_Xrow.corrCoefZero)
+        && (lhs_Xrow.decorrRate == rhs_Xrow.decorrRate)
+        && (lhs_Ycol.corrCoefZero == rhs_Ycol.corrCoefZero)
+        && (lhs_Ycol.decorrRate == rhs_Ycol.decorrRate)
         ;
 }
 inline bool operator!=(const Unmodeled::Decorr& lhs, const Unmodeled::Decorr& rhs)
