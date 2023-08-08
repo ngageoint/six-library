@@ -470,6 +470,13 @@ void NITFReadControl::setDisplayLUT(six::NITFImageInfo& currentInfo, const nitf:
         return;
     }
 
+    const auto version = pData->getVersion();
+    if (version == "1.0.0") // TODO: remove this hard-coded SIDD version check
+    {
+        // LUTs only with SIDD 2.0 and later
+        return;
+    }
+
     // There's no requirement for SIDD 2.0 to have a LUT
     const auto bandInfo0 = subheader.getBandInfo(0);
     const int numLUTs = bandInfo0.getNumLUTs();
