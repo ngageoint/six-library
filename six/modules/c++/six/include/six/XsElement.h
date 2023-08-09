@@ -233,17 +233,5 @@ inline std::ostream& operator<<(std::ostream& os, const XsElement_minOccurs0<T>&
     return os;
 }
 
-// Existing code uses mem::ScopedCopyablePtr rather than std::optional
-template<typename T>
-inline auto get(const XsElement_minOccurs0<T>& o)
-{
-    return has_value(o) ? &(value(o)) : nullptr;
-}
-template<typename T>
-inline auto get(XsElement_minOccurs0<T>& o)
-{
-    return has_value(o) ? &(value(o)) : nullptr;
-}
-
 }
 #endif // SIX_six_XsElement_h_INCLUDED_

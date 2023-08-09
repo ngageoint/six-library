@@ -34,7 +34,7 @@ namespace cphd
 
 static const char* getDefaultVersion()
 {
-    static const auto defaultVersion = to_string(Version::v101);
+    static const auto defaultVersion = to_string(Version::v1_0_1);
     return defaultVersion.c_str();
 }
 const char* FileHeader::DEFAULT_VERSION = getDefaultVersion();

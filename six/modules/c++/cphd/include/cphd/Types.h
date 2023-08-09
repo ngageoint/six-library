@@ -94,9 +94,9 @@ typedef six::MatchInformation MatchInformation;
 
 enum class Version
 {
-    v100, //  {"1.0.0", xml::lite::Uri("urn:CPHD:1.0.0")},
-    v101, // {"1.0.1", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")},
-    v110, // {"1.1.0", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
+    v1_0_0, //  {"1.0.0", xml::lite::Uri("urn:CPHD:1.0.0")},
+    v1_0_1, // {"1.0.1", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")},
+    v1_1_0, // {"1.1.0", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
 };
 std::string to_string(Version); // "1.0.0", "1.0.1", "1.1.0"
 

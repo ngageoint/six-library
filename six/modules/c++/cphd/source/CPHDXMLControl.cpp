@@ -124,9 +124,9 @@ std::unordered_map<std::string, xml::lite::Uri> CPHDXMLControl::getVersionUriMap
 static std::map<Version, xml::lite::Uri> getVersionUriMap_()
 {
     static const std::map<Version, xml::lite::Uri> retval = {
-        {Version::v100, xml::lite::Uri("urn:CPHD:1.0.0")},
-        {Version::v101, xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")},
-        {Version::v110, xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
+        {Version::v1_0_0, xml::lite::Uri("urn:CPHD:1.0.0")},
+        {Version::v1_0_1, xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")},
+        {Version::v1_1_0, xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
     };
     return retval;
 }
@@ -231,9 +231,9 @@ std::string cphd::to_string(Version siddVersion)
     // Match existing version strings, see CPHDXMLControl::getVersionUriMap
     switch (siddVersion)
     {
-    case Version::v100: return "1.0.0";
-    case Version::v101: return "1.0.1";
-    case Version::v110: return "1.1.0";
+    case Version::v1_0_0: return "1.0.0";
+    case Version::v1_0_1: return "1.0.1";
+    case Version::v1_1_0: return "1.1.0";
     default: break;
     }
     throw std::logic_error("Unkown 'Version' value.");

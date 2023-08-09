@@ -62,15 +62,15 @@ six::sidd::Version six::sidd::normalizeVersion(const std::string& strVersion)
     //   SIDD 3.0.0
     if (normalizedVersion == "100")
     {
-        return six::sidd::Version::v100;
+        return six::sidd::Version::v1_0_0;
     }
     if (normalizedVersion == "200")
     {
-        return six::sidd::Version::v200;
+        return six::sidd::Version::v2_0_0;
     }
     if (normalizedVersion == "300")
     {
-        return six::sidd::Version::v300;
+        return six::sidd::Version::v3_0_0;
     }
 
     if (normalizedVersion == "110")
@@ -92,9 +92,9 @@ namespace sidd
         // Match "incoming" SIDD version strings; this is also what the XML expects, see normalizeVersion()
         switch (siddVersion)
         {
-        case Version::v100: return "1.0.0";
-        case Version::v200: return "2.0.0";
-        case Version::v300: return "3.0.0";
+        case Version::v1_0_0: return "1.0.0";
+        case Version::v2_0_0: return "2.0.0";
+        case Version::v3_0_0: return "3.0.0";
         default: break;
         }
         throw std::logic_error("Unkown 'Version' value.");
@@ -330,15 +330,15 @@ DerivedXMLControl::getParser(Version normalizedVersion, std::optional<six::sidd3
     //   SIDD 1.0.0
     //   SIDD 2.0.0
     //   SIDD 3.0.0
-    if (normalizedVersion == Version::v100)
+    if (normalizedVersion == Version::v1_0_0)
     {
         return std::make_unique<DerivedXMLParser100>(mLog);
     }
-    if (normalizedVersion == Version::v200)
+    if (normalizedVersion == Version::v2_0_0)
     {
         return std::make_unique<DerivedXMLParser200>(mLog);
     }
-    if (normalizedVersion == Version::v300)
+    if (normalizedVersion == Version::v3_0_0)
     {
         if (!ismVersion.has_value())
         {

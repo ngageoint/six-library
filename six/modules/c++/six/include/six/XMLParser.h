@@ -311,6 +311,12 @@ protected:
     {
         return getOptional_reset(*parent, tag, obj);
     }
+    template<typename T>
+    static XMLElem getOptional_reset(const xml::lite::Element& parent, XsElement_minOccurs0<T>& obj)
+    {
+        return XmlLite::getOptional_reset(parent, obj);
+    }
+
 
     static XMLElem getFirstAndOnly(const xml::lite::Element* parent, const std::string& tag);
     static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag);
