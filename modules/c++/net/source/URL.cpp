@@ -206,7 +206,11 @@ std::string net::URLParams::toString() const
         {
             if (!firstParam)
                 s << "&";
-            s << net::quote(key) << "=" << net::quote(*it2);
+            auto quotedKey = net::quote(key);
+            s << quotedKey;
+            s << "=";
+            quotedKey = net::quote(*it2);
+            s << quotedKey;
             firstParam = false;
         }
     }

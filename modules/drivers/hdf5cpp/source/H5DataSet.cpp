@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -730,7 +729,7 @@ DataSet::p_read_fixed_len(const hid_t mem_type_id, const hid_t mem_space_id, con
         }
 
         // Get string from the C char* and release resource allocated locally
-        strg = strg_C;
+        strg = H5std_string(strg_C, data_size);
         delete[] strg_C;
     }
 }

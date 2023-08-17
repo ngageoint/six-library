@@ -228,15 +228,6 @@
     <ClCompile Include="hdf5.lite.cpp">
       <Filter>hdf5.lite</Filter>
     </ClCompile>
-    <ClCompile Include="..\modules\c++\hdf5.lite\unittests\test_hdf5info.cpp">
-      <Filter>hdf5.lite</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\c++\hdf5.lite\unittests\test_hdf5read.cpp">
-      <Filter>hdf5.lite</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modules\c++\hdf5.lite\unittests\test_hdf5write.cpp">
-      <Filter>hdf5.lite</Filter>
-    </ClCompile>
     <ClCompile Include="zip.cpp">
       <Filter>zip</Filter>
     </ClCompile>
@@ -260,6 +251,12 @@
     </ClCompile>
     <ClCompile Include="..\modules\c++\xml.lite\unittests\test_xmlparser.cpp">
       <Filter>xml.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\hdf5.lite\unittests\test_highfive.cpp">
+      <Filter>hdf5.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\drivers\highfive\unittests\tests_high_five_base.cpp">
+      <Filter>hdf5.lite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

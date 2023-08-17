@@ -45,6 +45,7 @@ CODA_OSS_disable_warning_pop
 #pragma warning(disable: 6387) // '...' could be '...'.
 #pragma warning(disable: 6305) // Potential mismatch between sizeof and countof quantities. Use sizeof() to scale byte sizes.
 #pragma warning(disable: 6389) // Move '...' to anonymous namespace or put a forward declaration in a common header included in this file.
+#pragma warning(disable: 5267) // definition of implicit copy constructor for '...' is deprecated because it has a user-provided destructor
 
 #pragma warning(disable: 26822) // Dereferencing a null pointer '...' (lifetime.1).
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all (c.21).

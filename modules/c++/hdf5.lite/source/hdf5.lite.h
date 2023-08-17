@@ -30,44 +30,12 @@
 
 #include "except/Exception.h"
 
-#include "hdf5/lite/H5_.h"
-#include "hdf5/lite/HDF5Exception.h"
-
 // Utility routines for INTERNAL use!
 
 namespace hdf5
 {
 namespace lite
 {
-namespace details
-{
-// Call the given function, converting H5 exceptions to our own.
-void try_catch_H5Exceptions_(std::function<void(void*)> f, const char* file, int line, void* context = nullptr);
-
-template <typename R, typename... Args>
-R return_type_of(R (*)(Args...));
-
-template<typename TFunc, typename ...TArgs>
-auto try_catch_H5Exceptions(TFunc f, const char* file, int line, TArgs&&... args)
-{
-    // Figure out return type by "calling" the function at compile-time
-    // https://stackoverflow.com/a/53673522/8877
-    decltype(return_type_of(f)) retval; 
-    
-    // "Hide" the arguments inside of a lambda
-    auto call_f = [&](void*) { retval = f(std::forward<TArgs>(args)...); };
-    details::try_catch_H5Exceptions_(call_f, file, line, &retval /*context*/);
-    return retval;
-}
-template<typename TFunc, typename ...TArgs>
-auto try_catch_H5ExceptionsV(TFunc f, const char* file, int line, TArgs&&... args)
-{    
-    // "Hide" the arguments inside of a lambda
-    auto call_f = [&](void*) { f(std::forward<TArgs>(args)...); };
-    details::try_catch_H5Exceptions_(call_f, file, line, nullptr /*context*/);
-}
-
-}
 }
 }
 #endif  // CODA_OSS_hdf5_lite_hdf5_lite_h_INCLUDED_
