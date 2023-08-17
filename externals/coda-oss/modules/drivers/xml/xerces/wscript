@@ -4,7 +4,7 @@ from waflib import Options, Utils
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile, writeConfig
 
-SOURCE         = 'xerces-c-3.2.3'
+SOURCE         = 'xerces-c-3.2.4'
 XERCES_USELIBS = 'THREAD SOCKET'
 
 options = lambda x : None
@@ -17,6 +17,7 @@ def configure(conf):
 
         xercesUselibs = XERCES_USELIBS
         if sys.platform == 'win32':
+            conf.define('WIN32', 1)
             # Xerces requires this standard Windows library
             conf.check_cc(lib='advapi32', uselib_store='ADVAPI32')
             xercesUselibs += ' ADVAPI32'
@@ -183,11 +184,11 @@ def configure(conf):
                 conf.define('PACKAGE', 'xerces-c', quote=False)
                 conf.define('PACKAGE_BUGREPORT', '', quote=False)
                 conf.define('PACKAGE_NAME', 'xerces-c', quote=False)
-                conf.define('PACKAGE_STRING', 'xerces-c 3.2.3', quote=False)
+                conf.define('PACKAGE_STRING', 'xerces-c 3.2.4', quote=False)
                 conf.define('PACKAGE_TARNAME', 'xerces-c', quote=False)
                 conf.define('PACKAGE_URL', '', quote=False)
-                conf.define('PACKAGE_VERSION', '3.2.3', quote=False)
-                conf.define('VERSION', '3.2.3', quote=False)
+                conf.define('PACKAGE_VERSION', '3.2.4', quote=False)
+                conf.define('VERSION', '3.2.4', quote=False)
 
                 # extra defines for Xerces_autoconf_config.hpp
                 conf.define('XERCES_USE_MSGLOADER_INMEMORY', 1)
@@ -253,6 +254,7 @@ def build(bld):
         xercesUselibs = XERCES_USELIBS
         if sys.platform == 'win32':
             # Xerces requires this standard Windows library
+            bld.define('WIN32', 1)
             xercesUselibs += ' ADVAPI32'
 
         # setup some known excludes per platform --
@@ -351,7 +353,7 @@ def distclean(context):
     # remove the untarred directories
     import shutil
     dirs = filter(lambda x: exists(join(context.path.abspath(), x)),
-                  ['xerces-c-3.2.3'])
+                  ['xerces-c-3.2.4'])
     for d in dirs:
         try:
             shutil.rmtree(join(context.path.abspath(), d), ignore_errors=True)

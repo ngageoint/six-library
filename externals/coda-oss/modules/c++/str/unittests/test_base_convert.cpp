@@ -35,6 +35,7 @@
 #include <str/EncodedStringView.h>
 #include <str/Encoding.h>
 #include <gsl/gsl.h>
+#include <sys/OS.h>
 
 #include "TestCase.h"
 
