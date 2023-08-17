@@ -4,7 +4,6 @@
 #include <import/mem.h>
 #include <mem/ScratchMemory.h>
 #include <mem/SharedPtr.h>
-#include <mem/AutoPtr.h>
 #include <mem/ComplexView.h>
 
 namespace mem

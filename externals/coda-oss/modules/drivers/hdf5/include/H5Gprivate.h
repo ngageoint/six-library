@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -14,8 +13,6 @@
 /*-------------------------------------------------------------------------
  *
  * Created:             H5Gprivate.h
- *                      Jul 11 1997
- *                      Robb Matzke
  *
  * Purpose:             Library-visible declarations.
  *
@@ -249,7 +246,7 @@ H5_DLL herr_t H5G_node_debug(H5F_t *f, haddr_t addr, FILE *stream, int indent, i
  * These functions operate on group object locations.
  */
 H5_DLL herr_t H5G_ent_encode(const H5F_t *f, uint8_t **pp, const H5G_entry_t *ent);
-H5_DLL herr_t H5G_ent_decode(const H5F_t *f, const uint8_t **pp, H5G_entry_t *ent);
+H5_DLL herr_t H5G_ent_decode(const H5F_t *f, const uint8_t **pp, H5G_entry_t *ent, const uint8_t *p_end);
 
 /*
  * These functions operate on group hierarchy names.
