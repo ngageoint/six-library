@@ -27,7 +27,7 @@
 #include <std/filesystem>
 #include <std/string>
 
-#include <mem/AutoPtr.h>
+#include <numpyutils/AutoPtr.h>
 
 #include <scene/sys_Conf.h>
 
@@ -97,7 +97,7 @@ struct XMLControlRegistry
     void addCreator(const std::string& identifier,
         std::unique_ptr<XMLControlCreator>&& creator);
     void addCreator_(const std::string& identifier,
-        mem::AutoPtr<XMLControlCreator> creator)
+        numpyutils::AutoPtr<XMLControlCreator> creator)
     {
         std::unique_ptr<XMLControlCreator> scopedCreator(creator.release());
         addCreator(identifier, std::move(scopedCreator));
@@ -119,7 +119,7 @@ struct XMLControlRegistry
         addCreator(dataType.toString(), std::move(creator));
     }
     void addCreator_(DataType dataType,
-                    mem::AutoPtr<XMLControlCreator> creator_)
+                    numpyutils::AutoPtr<XMLControlCreator> creator_)
     {
         std::unique_ptr<XMLControlCreator> creator(creator_.release());
         addCreator(dataType, std::move(creator));

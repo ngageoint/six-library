@@ -1,5 +1,5 @@
 NAME            = 'six'
-MODULE_DEPS     = 'scene nitf xml.lite logging math.poly mem sys str units except types config gsl std'
+MODULE_DEPS     = 'scene nitf xml.lite logging math.poly numpyutils mem sys str units except types config gsl std'
 USE             = 'XML_DATA_CONTENT-static-c'
 
 options = configure = distclean = lambda p: None
