@@ -37,12 +37,12 @@ DerivedData::DerivedData(Version siddVersion, six::sidd300::ISMVersion ismVersio
 }
 DerivedData::DerivedData(Version siddVersion) : DerivedData(siddVersion, six::sidd300::get(six::sidd300::ISMVersion::current))
 {
-    if (siddVersion == Version::v300)
+    if (siddVersion == Version::v3_0_0)
     {
         throw std::invalid_argument("Must use ISMVersion overload.");
     }
 }
-DerivedData::DerivedData() : DerivedData(Version::v100) // existing code
+DerivedData::DerivedData() : DerivedData(Version::v1_0_0) // existing code
 {
 }
 
@@ -99,7 +99,7 @@ DateTime DerivedData::getCollectionStartDateTime() const
 
 const mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT() const
 {
-    if (mVersion == Version::v100)
+    if (mVersion == Version::v1_0_0)
     {
         if (display->remapInformation.get() == nullptr)
         {
@@ -107,7 +107,7 @@ const mem::ScopedCopyablePtr<LUT>& DerivedData::getDisplayLUT() const
         }
         return display->remapInformation->remapLUT;
     }
-    else if ((mVersion == Version::v200) || (mVersion == Version::v300))
+    else if ((mVersion == Version::v2_0_0) || (mVersion == Version::v3_0_0))
     {
         return nitfLUT;
     }
@@ -191,7 +191,7 @@ void DerivedData::setSIDDVersion(Version siddVersion, six::sidd300::ISMVersion i
 }
 void DerivedData::setSIDDVersion(Version siddVersion)
 {
-    if (siddVersion == Version::v300)
+    if (siddVersion == Version::v3_0_0)
     {
         throw std::invalid_argument("Must use ISMVersion overload."); // TODO
     }

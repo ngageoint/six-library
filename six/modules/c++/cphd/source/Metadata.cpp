@@ -80,15 +80,15 @@ void Metadata::setVersion(const std::string& version)
 {
     if (version == "1.0.0")
     {
-        setVersion(Version::v100);
+        setVersion(Version::v1_0_0);
     }
     else if (version == "1.0.1")
     {
-        setVersion(Version::v101);
+        setVersion(Version::v1_0_1);
     }
     else if (version == "1.1.0")
     {
-        setVersion(Version::v110);
+        setVersion(Version::v1_1_0);
     }
     else
     {

@@ -690,7 +690,7 @@ static void initProductCreation(six::sidd::ProductCreation& productCreation, Ver
     productCreation.productCreationExtensions.push_back(parameter);
 
     productCreation.classification.securityExtensions.push_back(parameter);
-    if (siddVersion != Version::v300)
+    if (siddVersion != Version::v3_0_0)
     {
         productCreation.classification.desVersion = 234; // existing code
     }
@@ -701,7 +701,7 @@ static void initProductCreation(six::sidd::ProductCreation& productCreation, Ver
     productCreation.classification.createDate = six::DateTime();
     productCreation.classification.classification = "U";
 
-    if (siddVersion == Version::v100)
+    if (siddVersion == Version::v1_0_0)
     {
         productCreation.classification.compliesWith.push_back("ICD-710");
     }
@@ -939,7 +939,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     polarization->txPolarization = six::PolarizationSequenceType::V;
     polarization->rcvPolarization = six::PolarizationSequenceType::OTHER;
     polarization->rcvPolarizationOffset = 1.37;
-    if (siddVersion == Version::v100)
+    if (siddVersion == Version::v1_0_0)
     {
         polarization->processed = six::BooleanType::IS_TRUE;
     }
@@ -957,7 +957,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     collection.geometry->extensions.push_back(param);
 
     collection.phenomenology.reset(new six::sidd::Phenomenology());
-    if (siddVersion != Version::v300)
+    if (siddVersion != Version::v3_0_0)
     {
         // [-180, 180) before SIDD 3.0
         collection.phenomenology->shadow = six::AngleMagnitude(-1.5, 3.7);
@@ -979,7 +979,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     exFeatures.product[0].north = 58.332;
     exFeatures.product[0].extensions.push_back(param);
 
-    if (siddVersion == Version::v200)
+    if (siddVersion == Version::v2_0_0)
     {
         exFeatures.product[0].ellipticity = 12.0;
         exFeatures.product[0].polarization.resize(1);
@@ -1125,7 +1125,7 @@ static void populateData(six::sidd::DerivedData& siddData, const std::string& lu
     constexpr bool smallImage = true;
     const auto elementSize = static_cast<size_t>(lutType == "Mono" ? 2 : 3);
 
-    if ((siddVersion == Version::v200) || (siddVersion == Version::v300))
+    if ((siddVersion == Version::v2_0_0) || (siddVersion == Version::v3_0_0))
     {
         // This will naturally get constructed in the course of 1.0.0
         // Separate field in 2.0.0
@@ -1391,11 +1391,11 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(const Version* pSiddV
 }
 std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersion)
 {
-    if (siddVersion == Version::v300)
+    if (siddVersion == Version::v3_0_0)
     {
         throw std::invalid_argument("Must use ISMVersion overload.");
     }
-    if (siddVersion == Version::v200)
+    if (siddVersion == Version::v2_0_0)
     {
         return createFakeDerivedData_(&siddVersion);
     }
@@ -1403,7 +1403,7 @@ std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersio
 }
 std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersion, six::sidd300::ISMVersion ismVersion)
 {
-    if (siddVersion != Version::v300)
+    if (siddVersion != Version::v3_0_0)
     {
         return createFakeDerivedData(siddVersion);
     }
