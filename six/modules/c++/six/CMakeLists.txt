@@ -1,7 +1,7 @@
 coda_add_module(
     six
     DEPS XML_DATA_CONTENT-static-c nitf-c++
-         scene-c++ logging-c++ xml.lite-c++ sys-c++ str-c++
+         scene-c++ logging-c++ xml.lite-c++ mem-c++ sys-c++ str-c++
          except-c++ types-c++ config-c++ gsl-c++ std-c++
          ${CMAKE_DL_LIBS}
     SOURCES

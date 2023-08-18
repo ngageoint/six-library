@@ -7,7 +7,7 @@ if(CODA_ENABLE_HDF5)
 
     coda_add_module(
         ${MODULE_NAME}
-        VERSION 2.6.2
+        VERSION 2.7.1
         DEPS ${MODULE_DEPS})
 
     coda_add_tests(

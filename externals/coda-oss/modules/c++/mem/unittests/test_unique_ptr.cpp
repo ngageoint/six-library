@@ -20,7 +20,7 @@
  *
  */
 
-#include <std/memory>
+#include <memory>
 
 #include <mem/SharedPtr.h>
 #include <mem/AutoPtr.h>

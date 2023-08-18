@@ -711,9 +711,6 @@
     <ClInclude Include="sys\include\sys\MutexCpp11.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="mem\include\mem\AutoPtr.h">
-      <Filter>mem</Filter>
-    </ClInclude>
     <ClInclude Include="mem\include\mem\ComplexView.h">
       <Filter>mem</Filter>
     </ClInclude>
@@ -744,28 +741,13 @@
     <ClInclude Include="coda_oss\include\coda_oss\numbers.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
-    <ClInclude Include="hdf5.lite\source\H5.h">
-      <Filter>hdf5.lite</Filter>
-    </ClInclude>
     <ClInclude Include="hdf5.lite\source\hdf5.lite.h">
-      <Filter>hdf5.lite</Filter>
-    </ClInclude>
-    <ClInclude Include="hdf5.lite\include\hdf5\lite\HDF5Exception.h">
       <Filter>hdf5.lite</Filter>
     </ClInclude>
     <ClInclude Include="hdf5.lite\include\hdf5\lite\highfive.h">
       <Filter>hdf5.lite</Filter>
     </ClInclude>
-    <ClInclude Include="hdf5.lite\include\hdf5\lite\Info.h">
-      <Filter>hdf5.lite</Filter>
-    </ClInclude>
-    <ClInclude Include="hdf5.lite\include\hdf5\lite\Read.h">
-      <Filter>hdf5.lite</Filter>
-    </ClInclude>
     <ClInclude Include="hdf5.lite\include\hdf5\lite\SpanRC.h">
-      <Filter>hdf5.lite</Filter>
-    </ClInclude>
-    <ClInclude Include="hdf5.lite\include\hdf5\lite\Write.h">
       <Filter>hdf5.lite</Filter>
     </ClInclude>
     <ClInclude Include="zip\include\zip\GZipInputStream.h">
@@ -960,14 +942,14 @@
     <ClInclude Include="xml.lite\include\xml\lite\xerces_.h">
       <Filter>xml.lite</Filter>
     </ClInclude>
-    <ClInclude Include="hdf5.lite\include\hdf5\lite\H5_.h">
-      <Filter>hdf5.lite</Filter>
-    </ClInclude>
     <ClInclude Include="mt\include\import\mt.h">
       <Filter>mt</Filter>
     </ClInclude>
     <ClInclude Include="include\UnitTest.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\H5_.h">
+      <Filter>hdf5.lite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1311,19 +1293,7 @@
     <ClCompile Include="sys\source\File.cpp">
       <Filter>sys</Filter>
     </ClCompile>
-    <ClCompile Include="hdf5.lite\source\H5.cpp">
-      <Filter>hdf5.lite</Filter>
-    </ClCompile>
     <ClCompile Include="hdf5.lite\source\hdf5.lite.cpp">
-      <Filter>hdf5.lite</Filter>
-    </ClCompile>
-    <ClCompile Include="hdf5.lite\source\Info.cpp">
-      <Filter>hdf5.lite</Filter>
-    </ClCompile>
-    <ClCompile Include="hdf5.lite\source\Read.cpp">
-      <Filter>hdf5.lite</Filter>
-    </ClCompile>
-    <ClCompile Include="hdf5.lite\source\Write.cpp">
       <Filter>hdf5.lite</Filter>
     </ClCompile>
     <ClCompile Include="zip\source\GZipInputStream.cpp">

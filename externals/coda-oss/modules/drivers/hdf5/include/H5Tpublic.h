@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -17,9 +16,8 @@
 #ifndef H5Tpublic_H
 #define H5Tpublic_H
 
-/* Public headers needed by this file */
-#include "H5public.h"
-#include "H5Ipublic.h"
+#include "H5public.h"  /* Generic Functions                        */
+#include "H5Ipublic.h" /* Identifiers                              */
 
 #define HOFFSET(S, M) (offsetof(S, M))
 
@@ -730,8 +728,7 @@ H5_DLLVAR hid_t H5T_VAX_F32_g;
 H5_DLLVAR hid_t H5T_VAX_F64_g;
 
 /*
- * The predefined native types. These are the types detected by H5detect and
- * they violate the naming scheme a little.  Instead of a class name,
+ * The predefined native types for this platform. Instead of a class name,
  * precision and byte order as the last component, they have a C-like type
  * name.  If the type begins with `U' then it is the unsigned version of the
  * integer type; other integer types are signed.  The type LLONG corresponds
@@ -1036,7 +1033,7 @@ H5_DLLVAR hid_t H5T_NATIVE_UINT_FAST64_g;
  *          When creating a fixed-length string datatype, \p size will
  *          be the length of the string in bytes. The length of the
  *          string in characters will depend on i the encoding used; see
- *          H5Pset_char_encoding().
+ *          #H5Pset_char_encoding.
  *
  *          ENUMs created with this function have a signed native integer
  *          base datatype.  Use H5Tenum_create() if a different integer base
@@ -1070,7 +1067,7 @@ H5_DLL hid_t H5Tcreate(H5T_class_t type, size_t size);
  *          dataset's datatype.
  *
  *          The returned datatype identifier should be released with H5Tclose()
- *          to prevent resource leak.
+ *          to prevent resource leaks.
  *
  */
 H5_DLL hid_t H5Tcopy(hid_t type_id);
@@ -1095,8 +1092,12 @@ H5_DLL herr_t H5Tclose(hid_t type_id);
  * \brief Asynchronous version of H5Tclose().
  *
  */
+#ifndef H5_DOXYGEN
 H5_DLL herr_t H5Tclose_async(const char *app_file, const char *app_func, unsigned app_line, hid_t type_id,
                              hid_t es_id);
+#else
+H5_DLL herr_t H5Tclose_async(hid_t type_id, hid_t es_id);
+#endif
 /**
  * \ingroup H5T
  *
@@ -1139,7 +1140,7 @@ H5_DLL herr_t H5Tlock(hid_t type_id);
  *
  * \fg_loc_id
  * \param[in] name Name given to committed datatype
- * \type_id Identifier of datatype to be committed and, upon function’s
+ * \type_id Identifier of datatype to be committed and, upon function's
  *          return, identifier for the committed datatype
  * \lcpl_id
  * \tcpl_id
@@ -1155,7 +1156,7 @@ H5_DLL herr_t H5Tlock(hid_t type_id);
  *
  *          \p loc_id may be a file identifier, or a group identifier within
  *          that file. \p name may be either an absolute path in the file or
- *          a relative path from \p loc_id naming the newly-commited datatype.
+ *          a relative path from \p loc_id naming the newly-committed datatype.
  *
  *          The link creation property list, \p lcpl_id, governs creation of
  *          the link(s) by which the new committed datatype is accessed and
@@ -1185,9 +1186,14 @@ H5_DLL herr_t H5Tcommit2(hid_t loc_id, const char *name, hid_t type_id, hid_t lc
  * \brief Asynchronous version of H5Tcommit2().
  *
  */
+#ifndef H5_DOXYGEN
 H5_DLL herr_t H5Tcommit_async(const char *app_file, const char *app_func, unsigned app_line, hid_t loc_id,
                               const char *name, hid_t type_id, hid_t lcpl_id, hid_t tcpl_id, hid_t tapl_id,
                               hid_t es_id);
+#else
+H5_DLL herr_t H5Tcommit_async(hid_t loc_id, const char *name, hid_t type_id, hid_t lcpl_id, hid_t tcpl_id,
+                              hid_t tapl_id, hid_t es_id);
+#endif
 /**
  * --------------------------------------------------------------------------
  * \ingroup H5T
@@ -1218,12 +1224,16 @@ H5_DLL hid_t H5Topen2(hid_t loc_id, const char *name, hid_t tapl_id);
  * \brief Asynchronous version of H5Topen2().
  *
  */
+#ifndef H5_DOXYGEN
 H5_DLL hid_t H5Topen_async(const char *app_file, const char *app_func, unsigned app_line, hid_t loc_id,
                            const char *name, hid_t tapl_id, hid_t es_id);
+#else
+H5_DLL hid_t  H5Topen_async(hid_t loc_id, const char *name, hid_t tapl_id, hid_t es_id);
+#endif
 /**
  * \ingroup H5T
  *
- * \brief Commits a transient datatype to a file, creating a new named
+ * \brief Commits a transient datatype to a file, creating a newly named
  *        datatype, but does not link it into the file structure
  *
  * \fg_loc_id
@@ -1256,7 +1266,7 @@ H5_DLL hid_t H5Topen_async(const char *app_file, const char *app_func, unsigned 
  *              which provides for greater control of the creation process
  *              and of the properties of the new named datatype. H5Tcommit()
  *              always uses default properties.
- *          \li H5Tcommit_anon() neither provides the new named datatype’s
+ *          \li H5Tcommit_anon() neither provides the new named datatype's
  *              name nor links it into the HDF5 file structure; those actions
  *              must be performed separately through a call to H5Olink(),
  *              which offers greater control over linking.
@@ -1353,7 +1363,7 @@ H5_DLL herr_t H5Tencode(hid_t obj_id, void *buf, size_t *nalloc);
 /**
  * \ingroup H5T
  *
- * \brief Decodes a binary object description of datatype and return a new
+ * \brief Decodes a binary object description of datatype and returns a new
  *        object handle
  *
  * \param[in] buf Buffer for the datatype object to be decoded
@@ -1425,7 +1435,7 @@ H5_DLL herr_t H5Tflush(hid_t type_id);
  *          contents from disk.
  *
  *          This function essentially closes the datatype, evicts all
- *          metadata associated with it from the cache, and then re-opens the
+ *          metadata associated with it from the cache, and then reopens the
  *          datatype. The reopened datatype is automatically re-registered
  *          with the same identifier.
  *
@@ -1575,7 +1585,7 @@ H5_DLL herr_t H5Tenum_nameof(hid_t type, const void *value, char *name /*out*/, 
  * \details H5Tenum_valueof() finds the value that corresponds to the
  *          specified name of the enumeration datatype \p dtype_id.
  *
- *          Values returned in \p value will be of the enumerated type’s
+ *          Values returned in \p value will be of the enumerated type's
  *          base type, that is, the datatype used by H5Tenum_create() when
  *          the enumerated type was created.
  *
@@ -2186,7 +2196,7 @@ H5_DLL hid_t H5Tget_member_type(hid_t type_id, unsigned membno);
  *
  *          The member value is returned in a user-supplied buffer pointed to
  *          by \p value. Values returned in \p value will be of the enumerated
- *          type’s base type, that is, the datatype used by H5Tenum_create()
+ *          type's base type, that is, the datatype used by H5Tenum_create()
  *          when the enumerated type was created.
  *
  *          The value buffer must be at least large enough to hold a value
@@ -2251,7 +2261,7 @@ H5_DLL htri_t H5Tis_variable_str(hid_t type_id);
  * \details H5Tget_native_type() returns the equivalent native datatype
  *          identifier for the datatype specified by \p type_id.
  *
- *          H5Tget_native_type() is designed primarily to facilitate use of
+ *          H5Tget_native_type() is designed primarily to facilitate the use of
  *          the H5Dread() function, for which users otherwise must undertake a
  *          multi-step process to determine the native datatype of a dataset
  *          prior to reading it into memory. This function can be used for
@@ -2309,7 +2319,7 @@ H5_DLL htri_t H5Tis_variable_str(hid_t type_id);
  *
  *          \note Please note that a datatype is actually an object
  *          identifier or handle returned from opening the datatype. It
- *          is not persistent and its value can be different from one HDF5
+ *          is not persistent, and its value can be different from one HDF5
  *          session to the next.
  *
  *          \note H5Tequal() can be used to compare datatypes.
@@ -2330,14 +2340,14 @@ H5_DLL hid_t H5Tget_native_type(hid_t type_id, H5T_direction_t direction);
  * \brief Sets size for a datatype.
  *
  * \type_id
- * \param[in] size New datatype size is bytes or #H5T_VARIABLE
+ * \param[in] size New datatype size in bytes or #H5T_VARIABLE
  *
  * \return \herr_t
  *
  * \details H5Tset_size() sets the total size, \p size, in bytes, for a
  *          datatype.
  *
- *          \p size must have a positive value, unless it is passed in as
+ *          \p size must have a positive value unless it is passed in as
  *          #H5T_VARIABLE and the datatype is a string datatype.
  *
  *          \li Numeric datatypes: If the datatype is atomic and the size
@@ -2349,7 +2359,7 @@ H5_DLL hid_t H5Tget_native_type(hid_t type_id, H5T_direction_t direction);
  *
  *          \li String or character datatypes: The size set for a string
  *          datatype should include space for the null-terminator character,
- *          otherwise it will not be stored on (or retrieved from)
+ *          otherwise it will not be stored on (or retrieved from) the
  *          disk. Adjusting the size of a string automatically sets the
  *          precision to \p 8*size.
  *
@@ -2755,7 +2765,7 @@ H5_DLL herr_t H5Treclaim(hid_t type_id, hid_t space_id, hid_t plist_id, void *bu
 /**
  * \ingroup H5T
  *
- * \brief Commits a transient datatype to a file, creating a new named datatype
+ * \brief Commits a transient datatype to a file, creating a newly named datatype
  *
  * \fg_loc_id
  * \param[in] name Name given to committed datatype
