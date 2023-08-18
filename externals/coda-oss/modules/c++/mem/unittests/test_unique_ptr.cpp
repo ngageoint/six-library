@@ -20,9 +20,10 @@
  *
  */
 
-#include <std/memory>
+#include <memory>
 
 #include <mem/SharedPtr.h>
+#include <mem/AutoPtr.h>
 
 #include "TestCase.h"
 
@@ -87,8 +88,47 @@ TEST_CASE(test_make_unique)
     }
 }
 
+static void f(const std::string& testName, mem::AutoPtr<Foo> p)
+{
+    TEST_ASSERT_NOT_NULL(p.get());
+    TEST_ASSERT_EQ(123, p->mVal);
+}
+TEST_CASE(memAutoPtr)
+{
+    {
+        mem::AutoPtr<Foo> fooCtor;
+        TEST_ASSERT_NULL(fooCtor.get());
+
+        fooCtor.reset(new Foo(123));
+        TEST_ASSERT_NOT_NULL(fooCtor.get());
+        TEST_ASSERT_EQ(123, fooCtor->mVal);
+    }
+    {
+        mem::AutoPtr<Foo> fooCtor(new Foo(123));
+        TEST_ASSERT_NOT_NULL(fooCtor.get());
+        TEST_ASSERT_EQ(123, fooCtor->mVal);
+    }
+    {
+        mem::AutoPtr<Foo> fooCtor(new Foo(123));
+        mem::AutoPtr<Foo> other(fooCtor);
+        TEST_ASSERT_NOT_NULL(other.get());
+        TEST_ASSERT_EQ(123, other->mVal);
+    }
+    {
+        mem::AutoPtr<Foo> fooCtor(new Foo(123));
+        f(testName, fooCtor);
+        TEST_ASSERT_NULL(fooCtor.get());
+    }
+    {
+        std::unique_ptr<Foo> fooCtor(new Foo(123));
+        f(testName, std::move(fooCtor));
+        TEST_ASSERT_NULL(fooCtor.get());
+    }
+}
+
 
 TEST_MAIN(
    TEST_CHECK(testStdUniquePtr);
    TEST_CHECK(test_make_unique);
+   TEST_CHECK(memAutoPtr);
    )
