@@ -1,14 +1,9 @@
-set(SIX_six_MODULE_DEPS XML_DATA_CONTENT-static-c nitf-c++
-         scene-c++ logging-c++ xml.lite-c++ sys-c++ str-c++
-         except-c++ types-c++ config-c++ gsl-c++ std-c++)
-
-if(Python_Development_FOUND AND Python_NumPy_FOUND)
-    list(APPEND SIX_six_MODULE_DEPS numpyutils-c++)
-endif()
-
 coda_add_module(
     six
-    DEPS ${SIX_six_MODULE_DEPS} ${CMAKE_DL_LIBS}
+    DEPS XML_DATA_CONTENT-static-c nitf-c++
+         scene-c++ logging-c++ xml.lite-c++ numpyutils-c++ sys-c++ str-c++
+         except-c++ types-c++ config-c++ gsl-c++ std-c++
+         ${CMAKE_DL_LIBS}
     SOURCES
         source/Adapters.cpp
         source/ByteProvider.cpp
