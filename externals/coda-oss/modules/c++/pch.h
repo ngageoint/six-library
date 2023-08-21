@@ -98,6 +98,7 @@ CODA_OSS_disable_warning_pop
 #pragma warning(disable: 26458) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
 #pragma warning(disable: 26482) // Only index into arrays using constant expressions (bounds.2).
 #pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
+#pragma warning(disable: 26821) // For '...', consider using gsl::span instead of std::span to guarantee runtime bounds safety (gsl.view).
 
 // Yes, these are our files ... but they don't change very often, and if they do
 // change we want to rebuild everything anyway.

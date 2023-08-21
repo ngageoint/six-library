@@ -18,9 +18,9 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
+#pragma once
 #ifndef CODA_OSS_coda_oss_namespace__h_INCLUDED_
 #define CODA_OSS_coda_oss_namespace__h_INCLUDED_
-#pragma once
 
 namespace coda_oss
 {

@@ -39,9 +39,6 @@
     <ClInclude Include="coda_oss\include\coda_oss\span.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
-    <ClInclude Include="coda_oss\include\coda_oss\span_.h">
-      <Filter>coda_oss</Filter>
-    </ClInclude>
     <ClInclude Include="coda_oss\include\coda_oss\string.h">
       <Filter>coda_oss</Filter>
     </ClInclude>

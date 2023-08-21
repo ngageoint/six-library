@@ -24,7 +24,6 @@
     <ClInclude Include="coda_oss\include\coda_oss\optional.h" />
     <ClInclude Include="coda_oss\include\coda_oss\optional_.h" />
     <ClInclude Include="coda_oss\include\coda_oss\span.h" />
-    <ClInclude Include="coda_oss\include\coda_oss\span_.h" />
     <ClInclude Include="coda_oss\include\coda_oss\string.h" />
     <ClInclude Include="coda_oss\include\coda_oss\type_traits.h" />
     <ClInclude Include="config\include\config\compiler_extensions.h" />
@@ -585,8 +584,8 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
@@ -615,8 +614,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
