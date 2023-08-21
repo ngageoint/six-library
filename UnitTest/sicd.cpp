@@ -79,4 +79,8 @@ TEST_CLASS(test_valid_six) { public:
 #include "six/modules/c++/six.sicd/unittests/test_valid_six.cpp"
 };
 
+TEST_CLASS(test_valid_sixsicd) { public:
+#include "six/modules/c++/six.sicd/unittests/test_valid_sixsicd.cpp"
+};
+
 }

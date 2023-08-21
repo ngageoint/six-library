@@ -29,12 +29,8 @@
 #include "types/RowCol.h"
 #include "mem/ComplexView.h"
 
-#include "highfive/H5Easy.hpp"
-#include "highfive/H5DataSet.hpp"
-#include "highfive/H5File.hpp"
-
-#include "hdf5/lite/SpanRC.h"
 #include "hdf5/lite/highfive.h"
+#include "hdf5/lite/SpanRC.h"
 
 static std::filesystem::path find_unittest_file(const std::filesystem::path& name)
 {
@@ -151,7 +147,7 @@ TEST_CASE(test_highfive_nested_small)
     TEST_ASSERT_EQ(actual, 10.0f);
 
     const auto a = load_complex<float>(file, "/Data/1/bar/cat/a/r",  "/Data/1/bar/cat/a/i");
-    const auto cx_view = mem::make_ComplexSpansView(a.first, a.second);
+    const auto cx_view = mem::make_ComplexParallelView(a.first, a.second);
     const auto cx_actual = std::accumulate(cx_view.begin(), cx_view.end(), std::complex<float>(0.0));
     TEST_ASSERT_EQ(cx_actual.real(), 10.0f);
     TEST_ASSERT_EQ(cx_actual.imag(), 0.0f);

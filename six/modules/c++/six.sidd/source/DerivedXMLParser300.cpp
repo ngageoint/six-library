@@ -39,24 +39,16 @@ namespace six
 {
 namespace sidd
 {
-static const char VERSION[] = "3.0.0";
+constexpr Version VERSION = Version::v3_0_0;
 static const char SI_COMMON_URI[] = "urn:SICommon:1.0";
 
 // There is a need to support two different versions of ISM with SIDD 3.0 :-(
-inline static auto getISM_201609_Uri()
-{
-    return xml::lite::Uri("urn:us:gov:ic:ism:201609");
-}
-inline static auto getISM_13_Uri()
-{
-    return xml::lite::Uri("urn:us:gov:ic:ism:13");
-}
 inline static xml::lite::Uri getISMUri(six::sidd300::ISMVersion ismVersion)
 {
     switch (ismVersion)
     {
-    case six::sidd300::ISMVersion::v201609: return getISM_201609_Uri();
-    case six::sidd300::ISMVersion::v13: return getISM_13_Uri();
+    case six::sidd300::ISMVersion::v201609: return xml::lite::Uri("urn:us:gov:ic:ism:201609");
+    case six::sidd300::ISMVersion::v13: return xml::lite::Uri("urn:us:gov:ic:ism:13");
     default: break;
     }
 

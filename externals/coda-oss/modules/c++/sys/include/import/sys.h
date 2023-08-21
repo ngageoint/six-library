@@ -20,10 +20,9 @@
  *
  */
 
-
-#ifndef __IMPORT_SYS_H__
-#define __IMPORT_SYS_H__
 #pragma once
+#ifndef CODA_OSS_import_sys_h_INCLUDED_
+#define CODA_OSS_import_sys_h_INCLUDED_
 
 #include "sys/AtomicCounter.h"
 #include "sys/ConditionVar.h"
@@ -54,12 +53,11 @@
 
 \file sys.h
 
-The sys library servers the purpose of creating a common, system-indepenent
+The sys library servers the purpose of creating a common, system-independent
 interface layer for cross-platform applications.  It currently supports
 UNIX and Windows, and provides interfaces for sockets, threads, 
 synchronization, conditions, time and operating system-specific function calls.
 
 */
 
-#endif
-
+#endif  // CODA_OSS_import_sys_h_INCLUDED_

@@ -4800,7 +4800,7 @@ namespace swig
 }
 
 
-#include "mem/AutoPtr.h"
+#include "numpyutils/AutoPtr.h"
 #include "import/types.h"
 #include "import/cphd.h"
 #include "import/cphd03.h"

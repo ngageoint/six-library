@@ -32,7 +32,7 @@ std::string unique::generateUUID()
 {
 #ifdef _WIN32
     GUID uuid;
-    unsigned char *cResult = NULL;
+    unsigned char* cResult = nullptr;
     
     if ((UuidCreateSequential (&uuid) != RPC_S_OK)
         || (UuidToString(&uuid, &cResult) != RPC_S_OK))

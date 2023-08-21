@@ -134,7 +134,7 @@ static void test_cx_view(const std::string& testName, const TView& view)
     TEST_ASSERT_EQ(view[3].imag(), 8.0f);
 }
 template <typename TView>
-static void test_mem_ComplexView(const std::string& testName, const TView& view)
+static void test_mem_ComplexParallelView(const std::string& testName, const TView& view)
 {
     test_cx_view(testName, view);
 
@@ -175,12 +175,12 @@ TEST_CASE(testSpanCxFloat)
     test_cx_view(testName, view);
 }
 
-TEST_CASE(testComplexViewFloat)
+TEST_CASE(testComplexParallelViewFloat)
 {
     {
-        const auto view = mem::make_ComplexSpanView(cx_data());
+        const auto view = mem::make_ComplexInterleavedView(cx_data());
         TEST_ASSERT_EQ(cx_data().size(), view.size());
-        test_mem_ComplexView(testName, view);
+        test_mem_ComplexParallelView(testName, view);
         test_cx_view(testName, view.values());
     }
 
@@ -188,9 +188,9 @@ TEST_CASE(testComplexViewFloat)
     const std::vector<float> imags{2, 4, 6, 8};
     TEST_ASSERT_EQ(imags.size(), reals.size());
     {
-        const auto view = mem::make_ComplexSpansView(reals, imags);
+        const auto view = mem::make_ComplexParallelView(reals, imags);
         TEST_ASSERT_EQ(reals.size(), view.size());
-        test_mem_ComplexView(testName, view);
+        test_mem_ComplexParallelView(testName, view);
         test_cx_view(testName, view.values());
     }
 }
@@ -235,10 +235,10 @@ static void test_mem_ComplexViewConstIterator(const std::string& testName, TView
     }
 }
 
-TEST_CASE(testComplexViewFloatIterator)
+TEST_CASE(testComplexParallelViewFloatIterator)
 {
     {
-        const auto view = mem::make_ComplexSpanView(cx_data());
+        const auto view = mem::make_ComplexInterleavedView(cx_data());
         test_mem_ComplexViewConstIterator(testName, view);
     }
 
@@ -246,7 +246,7 @@ TEST_CASE(testComplexViewFloatIterator)
     const std::vector<float> imags{2, 4, 6, 8};
     TEST_ASSERT_EQ(imags.size(), reals.size());
     {
-        const auto view = mem::make_ComplexSpansView(reals, imags);
+        const auto view = mem::make_ComplexParallelView(reals, imags);
         test_mem_ComplexViewConstIterator(testName, view);
     }
 }
@@ -256,6 +256,6 @@ TEST_MAIN(
     TEST_CHECK(testVecOfSharedPointers);
 
     TEST_CHECK(testSpanCxFloat);
-    TEST_CHECK(testComplexViewFloat);
-    TEST_CHECK(testComplexViewFloatIterator);
+    TEST_CHECK(testComplexParallelViewFloat);
+    TEST_CHECK(testComplexParallelViewFloatIterator);
     )

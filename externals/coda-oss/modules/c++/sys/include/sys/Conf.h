@@ -21,9 +21,9 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_sys_Conf_h_INCLUDED_
 #define CODA_OSS_sys_Conf_h_INCLUDED_
-#pragma once
 
 // In case there is still a WIN32 (should be "_WIN32" with a leading '_') someplace.
 #if defined(_WIN32) && !defined(WIN32)

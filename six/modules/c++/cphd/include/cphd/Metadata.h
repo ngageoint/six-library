@@ -80,9 +80,11 @@ struct Metadata final : MetadataBase
 
     //! Get CPHD version
     std::string getVersion() const;
+    void getVersion(Version&) const;
 
     //! Set CPHD version
     void setVersion(const std::string& version);
+    void setVersion(Version);
 
     //!  CollectionInfo block.  Contains the general collection information
     //!  CPHD can use the SICD Collection Information block directly
@@ -152,7 +154,7 @@ struct Metadata final : MetadataBase
 private:
 
     //! Stores file Version
-    std::string mVersion;
+    Version mVersion;
 };
 
 //! Ostream operator

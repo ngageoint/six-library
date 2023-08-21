@@ -20,11 +20,13 @@
  *
  */
 
-#ifndef __SIX_BASE_CONVERTER_H__
-#define __SIX_BASE_CONVERTER_H__
+#pragma once
+#ifndef SIX_six_convert_BaseConverter_h_INCLUDED_
+#define SIX_six_convert_BaseConverter_h_INCLUDED_
 
 #include <string>
 #include <memory>
+#include <std/filesystem>
 
 #include <six/sicd/ComplexData.h>
 #include <six/XMLParser.h>
@@ -56,6 +58,7 @@ struct BaseConverter : protected six::XMLParser
 protected:
     static std::unique_ptr<xml::lite::Document>
             readXML(const std::string& xmlPathname);
+    static std::unique_ptr<xml::lite::Document> readXML(const std::filesystem::path&, bool preserveCharacterData = false);
 
     XMLElem findUniqueElement(const xml::lite::Element* root,
             const std::string& xmlPath) const;
@@ -84,5 +87,4 @@ protected:
 
 }
 }
-#endif
-
+#endif // SIX_six_convert_BaseConverter_h_INCLUDED_

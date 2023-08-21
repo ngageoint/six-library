@@ -23,4 +23,4 @@
 
 const char six::WriteControl::OPT_BYTE_SWAP[] = "ByteSwap";
 const char six::WriteControl::OPT_BUFFER_SIZE[] = "BufferSize";
-const std::string six::WriteControl::AMP8I_PHS8I_CUTOFF("AMP8I_PHS8I_cutoff");
+

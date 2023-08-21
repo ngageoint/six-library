@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_UTILITIES_H__
-#define __SIX_UTILITIES_H__
+#pragma once
+#ifndef SIX_six_Utilities_h_INCLUDED_
+#define SIX_six_Utilities_h_INCLUDED_
 
 #include <vector>
 #include <memory>
@@ -49,6 +50,7 @@
 namespace six
 {
     struct Data; // forward
+    struct ErrorStatistics;
 
 /*!
  *  Remaps angles into [0:360]
@@ -317,39 +319,86 @@ void getErrors(const ErrorStatistics* errorStats,
  */
 std::string findSchemaPath(const std::string& progname);
 
-template<typename T>
-inline std::span<const std::byte> as_bytes(std::span<const T> buffer)
+class DataParser final
 {
-    // coda-oss checks to be sure T is trivially_copyable.  While this is
-    // correct (converting something else to bytes doesn't make sense), existing
-    // code didn't have that check.
-    const void* const pData = buffer.data();
-    auto const pBytes = static_cast<const std::byte*>(pData);
-    return std::span<const std::byte>(pBytes, buffer.size_bytes()); // TODO: use std::as_bytes
-}
-template<typename T>
-inline std::span<const std::byte> as_bytes(const std::vector<T>& buffer)
-{
-    const auto s = sys::make_span(buffer);
-    return six::as_bytes(s);
-}
+    const std::vector<std::filesystem::path>* mpSchemaPaths = nullptr;
+    logging::NullLogger mNullLogger;
+    logging::Logger& mLog;
+    XMLControlRegistry mXmlRegistry;
 
-template<typename T>
-inline std::span<std::byte> as_writable_bytes(std::span<T>& buffer)
-{
-    // coda-oss checks to be sure T is trivially_copyable.  While this is
-    // correct (converting something else to bytes doesn't make sense), existing
-    // code didn't have that check.
-    void* const pData = buffer.data();
-    auto const pBytes = static_cast<std::byte*>(pData);
-    return std::span<std::byte>(pBytes, buffer.size_bytes()); // TODO: use std::as_writable_bytes
-}
-template<typename T>
-inline std::span<std::byte> as_writable_bytes(std::vector<T>& buffer)
-{
-    const auto s = sys::make_span(buffer);
-    return as_writable_bytes(s);
-}
+    // The default is `true` because:
+    // * many (most?) other parts of SIX unconditionally set `preserveCharacterData(true)`.
+    // * this is new code; if you're using it, you likely want different behavior than that
+    //   of existing code; otherwise, why change?
+    bool mPreserveCharacterData = true;
+
+public:
+
+    /* Parses the XML and converts it into a ComplexData object.
+    * Throws if the underlying type is not complex.
+    *
+    * \param xmlStream Input stream containing XML
+    * \param schemaPaths Schema path(s)
+    * \param log Logger
+    */
+    DataParser(const std::vector<std::filesystem::path>* pSchemaPaths = nullptr, logging::Logger* pLog = nullptr);
+    ~DataParser() = default;
+
+    DataParser(const DataParser&) = delete;
+    DataParser& operator=(const DataParser&) = delete;
+    DataParser(DataParser&&) = delete;
+    DataParser& operator=(DataParser&&) = delete;
+
+    /*!
+    * If set to true, whitespaces will be preserved in the parsed
+    * character data. Otherwise, it will be trimmed.
+    */
+    void preserveCharacterData(bool preserve);
+
+    template<typename TXMLControlCreator>
+    void addCreator()
+    {
+        mXmlRegistry.addCreator<TXMLControlCreator>();
+    }
+
+    /* Parses the XML in 'xmlStream'.
+    *
+    * \param xmlStream Input stream containing XML
+    *
+    * \return Data representation of 'xmlStr'
+    */
+    std::unique_ptr<Data> fromXML(::io::InputStream& xmlStream, const XMLControlRegistry&, DataType) const;
+    template<typename TData>
+    std::unique_ptr<TData> fromXML(::io::InputStream& xmlStream) const
+    {
+        auto pData = fromXML(xmlStream, mXmlRegistry, DataType::NOT_SET);
+        return std::unique_ptr<TData>(static_cast<TData*>(pData.release()));
+    }
+
+    /*
+    * Parses the XML in 'pathname'.
+    *
+    * \param pathname File containing plain text XML (not a NITF)
+    *
+    * \return Data representation of the contents of 'pathname'
+    */
+    std::unique_ptr<Data> fromXML(const std::filesystem::path&, const XMLControlRegistry&, DataType) const;
+
+    /*
+    * Parses the XML in 'xmlStr'.
+    *
+    * \param xmlStr XML document as a string
+    *
+    * \return Data representation of 'xmlStr'
+    */
+    std::unique_ptr<Data> fromXML(const std::u8string& xmlStr, const XMLControlRegistry&, DataType) const;
+
+    /*!
+     *  Additionally performs schema validation --
+     */
+    std::u8string toXML(const Data&, const XMLControlRegistry&) const;
+    std::u8string toXML(const Data&) const;
+};
 
 namespace testing
 {
@@ -366,4 +415,4 @@ namespace testing
 
 }
 
-#endif
+#endif // SIX_six_Utilities_h_INCLUDED_

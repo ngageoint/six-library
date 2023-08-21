@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -14,8 +13,6 @@
 /*-------------------------------------------------------------------------
  *
  * Created:     H5EAprivate.h
- *              Jun 17 2008
- *              Quincey Koziol
  *
  * Purpose:     Private header for library accessible extensible
  *              array routines.
@@ -145,9 +142,5 @@ H5_DLL herr_t  H5EA_patch_file(H5EA_t *fa, H5F_t *f);
 
 /* Statistics routines */
 H5_DLL herr_t H5EA_get_stats(const H5EA_t *ea, H5EA_stat_t *stats);
-
-/* Debugging routines */
-#ifdef H5EA_DEBUGGING
-#endif /* H5EA_DEBUGGING */
 
 #endif /* H5EAprivate_H */

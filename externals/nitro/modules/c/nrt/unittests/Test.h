@@ -79,7 +79,8 @@
 #define TEST_CASE(X) void X(const char* testName)
 #define TEST_CASE_ARGS(X) void X(const char* testName, int argc, char **argv)
 
-#define TEST_MAIN(X) int main(int argc, char** argv) { X; return 0; }
+#define TEST_MAIN(X) int main(int argc, char** argv) { {(void)argc; (void)argv;} X; return 0; }
+
 
 #endif
 

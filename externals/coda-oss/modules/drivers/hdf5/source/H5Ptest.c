@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -11,9 +10,7 @@
  * help@hdfgroup.org.                                                        *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-/* Programmer:  Quincey Koziol
- *              Saturday May 31, 2003
- *
+/*
  * Purpose:	Generic Property Testing Functions
  */
 
@@ -67,7 +64,7 @@ H5P__get_class_path_test(hid_t pclass_id)
 
     /* Get the property list class path */
     if (NULL == (ret_value = H5P__get_class_path(pclass)))
-        HGOTO_ERROR(H5E_PLIST, H5E_NOTFOUND, NULL, "unable to query full path of class")
+        HGOTO_ERROR(H5E_PLIST, H5E_NOTFOUND, NULL, "unable to query full path of class");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)

@@ -26,6 +26,8 @@
 #include <cmath>
 #include <import/except.h>
 
+#include "gsl/gsl.h"
+
 #include "tiff/Common.h"
 #include "tiff/GenericType.h"
 #include "tiff/IFDEntry.h"
@@ -50,7 +52,7 @@ void tiff::ImageWriter::putData(const unsigned char *buffer,
 void tiff::ImageWriter::writeIFD()
 {
     // Retain the current file offset.
-    const auto offset = mOutput->tell();
+    const auto offset = gsl::narrow<int32_t>(mOutput->tell()); // Per TIFF spec, "offset" MUST be a 32-bit value!
 
     // Seek to the position to write the current offset to.
     mOutput->seek(mIFDOffset, io::Seekable::START);
@@ -210,7 +212,7 @@ void tiff::ImageWriter::validate()
 
     //  if (mGeoTIFFReader)
     //  {
-    //    tiff::IFDEntry *entry = NULL;
+    //    tiff::IFDEntry *entry = nullptr;
     //    if ((entry = (*mGeoTIFFReader)["ModelPixelScaleTag"]))
     //      mIFD.addEntry(entry);
     //    if ((entry = (*mGeoTIFFReader)["ModelTiepointTag"]))

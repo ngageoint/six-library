@@ -20,12 +20,12 @@
  *
  */
 
-#ifndef __ZIP_TYPES_H__
-#define __ZIP_TYPES_H__
+#pragma once
+#ifndef CODA_OSS_zip_Types_h_INCLUDED_
+#define CODA_OSS_zip_Types_h_INCLUDED_
 
 #include "io/InputStream.h"
 #include "io/OutputStream.h"
-#include <import/sys.h>
 #include <zlib.h>
 //#define DEF_MEM_LEVEL 8
 
@@ -43,5 +43,4 @@ enum
 };
 }
 
-#endif
-
+#endif  // CODA_OSS_zip_Types_h_INCLUDED_

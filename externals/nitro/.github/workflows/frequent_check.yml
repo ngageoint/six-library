@@ -4,9 +4,14 @@ on: [push]
 
 
 jobs:
-  build-windows:
-    name: Windows
-    runs-on: [windows-latest]
+  build-cmake-windows:
+    strategy:
+      matrix:
+        os: [windows-latest]
+        platform: [x64]
+        configuration: [Release]
+    name: ${{ matrix.os }}-CMake
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v2
@@ -16,22 +21,70 @@ jobs:
         python-version: '3.7'
     - name: configure
       run: |
-        mkdir build
-        cd build
-        cmake -DCMAKE_INSTALL_PREFIX=installWindows-Github -DPYTHON_VERSION="3.7" ..
+        mkdir out
+        cd out
+        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DPYTHON_VERSION="3.7"
     - name: make
       run: |
-        cd build
-        cmake --build . --config Release -j
-        cmake --build . --config Release --target install
+        cd out
+        cmake --build . --config ${{ matrix.configuration }} -j
+        cmake --build . --config ${{ matrix.configuration }} --target install
     - name: test
       run: |
-        cd build
-        ctest -C Release --output-on-failure
+        cd out
+        ctest -C ${{ matrix.configuration }} --output-on-failure
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1 # https://github.com/marketplace/actions/setup-msbuild
+      with:
+        msbuild-architecture: x64
+    - name: msbuild
+      run: |
+        msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
 
-  build-linux:
-    name: Linux
-    runs-on: [ubuntu-latest]
+  build-msbuild-windows:
+    strategy:
+      matrix:
+        os: [windows-latest]
+        platform: [x64]
+        configuration: [Debug] # Debug turns on more compiler warnings
+    name: ${{ matrix.os }}-msbuild
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure CODA-OSS
+      run: |
+        mkdir externals\coda-oss\out
+        cd externals\coda-oss\out
+        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF
+    - name: make CODA-OSS
+      run: |
+        cd externals\coda-oss\out
+        cmake --build . --config ${{ matrix.configuration }} -j
+        cmake --build . --config ${{ matrix.configuration }} --target install
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1 # https://github.com/marketplace/actions/setup-msbuild
+      with:
+        msbuild-architecture: x64
+    - name: msbuild
+      run: |
+        msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
+    #- name: vstest 
+    #  uses: microsoft/vstest-action@v1.0.0 # https://github.com/marketplace/actions/vstest-action
+    #  with:
+    #    platform: ${{ matrix.platform }}
+    #    testAssembly: UnitTest.dll
+    #    searchFolder: D:\a\nitro\nitro\x64\Debug
+    #- name: vstest 
+    #  run: |
+    #    vstest.console D:\a\nitro\nitro\x64\Debug\UnitTest.dll
+
+  build-linux-cmake:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    name: ${{ matrix.os }}-CMake
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v2
@@ -41,16 +94,16 @@ jobs:
         python-version: '3.7'
     - name: configure
       run: |
-        mkdir build
-        cd build
-        cmake -DCMAKE_INSTALL_PREFIX=installLinux-Github -DPYTHON_VERSION=3.7 ..
+        mkdir target-Release
+        cd target-Release
+        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=3.7
     - name: make
       run: |
-        cd build
+        cd target-Release
         # using the default number of threads (-j) causes G++ to crash
         cmake --build . -j 6
         cmake --build . --target install
     - name: test
       run: |
-        cd build
+        cd target-Release
         ctest --output-on-failure

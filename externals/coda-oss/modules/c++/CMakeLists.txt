@@ -2,24 +2,33 @@ set(TARGET_LANGUAGE c++)
 
 # turn on maximum warnings
 if (MSVC)
-    add_compile_options(/std:c++14)
-
     # By default, there is a /W3 on the command-line from somewhere (?); adding
     # /Wn results in a compiler warning.
     #add_compile_options(/W4) # /Wall
     string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}") # /Wall
 
 elseif (UNIX)
-    add_compile_options(-std=c++14)
+    # https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+    add_compile_options(-Werror) # Make all warnings into errors
+    add_compile_options(-Wall -Wextra -Wpedantic -pedantic-errors -Wunused)
 
-    add_compile_options(-Wall -pedantic -Wextra)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wregister") # -Wvolatile
-    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Weffc++")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wzero-as-null-pointer-constant")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Woverloaded-virtual")
+    add_compile_options(-Wzero-as-null-pointer-constant)
+    add_compile_options(-Wsuggest-final-types -Wsuggest-final-methods)
+    add_compile_options(-Wsuggest-override)
+    add_compile_options(-Woverloaded-virtual)
+    add_compile_options(-Warray-bounds)
+    add_compile_options(-Wduplicated-branches -Wduplicated-cond)
+    add_compile_options(-Wtrampolines)
+    add_compile_options(-Wshadow)
     #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wold-style-cast")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsuggest-final-types -Wsuggest-final-methods")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsuggest-override")
+    #add_compile_options(-Wfloat-equal)
+    #add_compile_options(-Wconversion)
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Weffc++")
+
+    add_compile_options(-Wno-double-promotion) # implicit conversion of `float` to `double` is fine
+
+    # Need a newer compiler than GCC 9
+    #add_compile_options(-Wnrvo)
 endif()
 
 # add an interface library for unittests

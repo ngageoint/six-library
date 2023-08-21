@@ -24,77 +24,35 @@
 #include <assert.h>
 
 #include "import/std.h"
-
-#include <std/string>
-#include <std/span>
-#include <std/optional>
-#include <std/cstddef>
 #include <std/bit>
+#include <std/cstddef>
 #include <std/filesystem>
-#include <std/bit> // std::endian
+#include <std/numbers>
+#include <std/optional>
+#include <std/span>
+#include <std/string>
+#include <std/type_traits>
 
 #include "CppUnitTest.h"
 
-#include "coda_oss/span.h"
-#include "gsl/gsl.h"
-#include "import/sys.h"
-#include "import/math.h"
-#include "import/str.h"
-#include "str/EncodedStringView.h"
-#include "import/except.h"
-#include "import/mem.h"
-#include <mem/SharedPtr.h>
-#include <mem/AutoPtr.h>
-#include <mem/ComplexView.h>
-#include "import/cli.h"
-#include "polygon/DrawPolygon.h"
-#include "polygon/PolygonMask.h"
-#include <types/RowCol.h>
-#include <types/PageRowCol.h>
-#include <types/RangeList.h>
-#include <types/Range.h>
-#include <sys/Conf.h>
-#include <sys/Path.h>
-#include <except/Exception.h>
-#include <str/Convert.h>
-#include <sys/AtomicCounter.h>
-#include <sys/Runnable.h>
-#include <sys/Thread.h>
-#include <sys/Conf.h>
-#include <sys/ConditionVar.h>
-#include <sys/LocalDateTime.h>
-#include <sys/UTCDateTime.h>
-#include <sys/OS.h>
-#include <sys/Path.h>
-#include <sys/Backtrace.h>
-#include <sys/Dbg.h>
-#include <sys/DateTime.h>
-#include <sys/sys_filesystem.h>
-#include <except/Error.h>
-#include <sys/Runnable.h>
-#include <sys/Thread.h>
-#include <sys/Mutex.h>
-#include <sys/FileFinder.h>
-#include <sys/ByteSwap.h>
+#include <gsl/gsl.h>
+#include <import/except.h>
+#include <import/str.h>
 #include <import/sys.h>
+#include <import/math.h>
 #include <import/math/linear.h>
 #include <import/math/poly.h>
-#include <mt/CriticalSection.h>
-#include <mt/ThreadPlanner.h>
-#include <mt/ThreadGroup.h>
-#include <mt/BalancedRunnable1D.h>
-#include <mt/CPUAffinityInitializer.h>
-#include <mt/CPUAffinityThreadInitializer.h>
-#include <mt/RequestQueue.h>
-#include <mt/ThreadPoolException.h>
-#include <mt/GenerationThreadPool.h>
-#include <mt/ThreadedByteSwap.h>
+#include <import/mem.h>
+#include <import/cli.h>
 #include <import/mt.h>
-#include <avx/extractf.h>
-#include <logging/ExceptionLogger.h>
 #include <import/logging.h>
 #include <import/re.h>
-#include "io/StringStream.h"
+#include <import/zip.h>
+#include <import/xml/lite.h>
+#include <import/hdf5/lite.h>
+
+#include <io/ReadUtils.h>
+#include <hdf5/lite/highfive.h>
 
 #include "TestCase.h"
 

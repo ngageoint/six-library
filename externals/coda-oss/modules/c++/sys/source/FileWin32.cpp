@@ -49,7 +49,7 @@ _SYS_HANDLE_TYPE sys::File::createFile(const coda_oss::filesystem::path& str_, i
                          nullptr /*lpSecurityAttributes*/,
                          dwCreationDisposition,
                          FILE_ATTRIBUTE_NORMAL,
-                         static_cast<HANDLE>(0) /*hTemplateFile*/);
+                         static_cast<HANDLE>(nullptr) /*hTemplateFile*/);
 }
 void sys::File::create(const std::string& str,
                        int accessFlags,
@@ -83,7 +83,7 @@ void sys::File::readInto(void* buffer, size_t size)
                       bufferPtr + bytesRead,
                       bytesToRead,
                       &bytesThisRead,
-                      NULL))
+                      nullptr))
         {
             throw sys::SystemException(Ctxt("Error reading from file"));
         }
@@ -120,7 +120,7 @@ void sys::File::writeFrom(const void* buffer, size_t size)
                        bufferPtr + bytesWritten,
                        bytesToWrite,
                        &bytesThisWrite,
-                       NULL))
+                       nullptr))
         {
             throw sys::SystemException(Ctxt("Writing from file"));
         }

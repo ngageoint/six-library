@@ -35,6 +35,7 @@
 #include <mem/ScopedArray.h>
 #include <gsl/gsl.h>
 #include <str/EncodedStringView.h>
+#include <sys/Span.h>
 
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
@@ -200,44 +201,41 @@ inline size_t getBandSize(const NITFSegmentInfo& segmentInfo, const Data& data)
     return bandSize;
 }
 
-inline std::span<const std::byte> as_bytes(BufferList::value_type pImageData,
+static auto asBytes(BufferList::value_type pImageData,
     const NITFSegmentInfo& segmentInfo, const Data& data)
 {
     const auto bandSize = getBandSize(segmentInfo, data);
-    const void* pImageData_ = pImageData;
     auto size_in_bytes = bandSize * data.getNumChannels();
 
     // At this point, we've lost information about the ACTUAL size of the buffer. Normally, the computation above will be correct.
     // But in the case of AMP8I_PHS8I (now supported), the buffer is actually RE32F_IM32F as the data is converted to
-    // std::complex<float> when read-in, and converted to std::pair<uint8_t, uint8_t> when written-out.
+    // six::zfloat when read-in, and converted to std::pair<uint8_t, uint8_t> when written-out.
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
         size_in_bytes *= sizeof(float);
     }
 
-    return std::span<const std::byte>(static_cast<const std::byte*>(pImageData_), size_in_bytes);
+    const void* const pImageData_ = pImageData;
+    return sys::make_span(static_cast<const std::byte*>(pImageData_), size_in_bytes);
 }
 
 // this bypasses the normal NITF ImageWriter and streams directly to the output
 template<typename T>
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(const NITFSegmentInfo& segmentInfo,
-    std::span<const T> imageData, const Data& data, bool doByteSwap,
-    ptrdiff_t cutoff) // for eventual use by to_AMP8I_PHS8I()
+    std::span<const T> imageData, const Data& data, bool doByteSwap)
 {
     return std::make_shared<NewMemoryWriteHandler>(segmentInfo,
-        imageData, segmentInfo.getFirstRow(), data, doByteSwap,
-        cutoff);
+        imageData, segmentInfo.getFirstRow(), data, doByteSwap);
 }
 inline std::shared_ptr<NewMemoryWriteHandler> makeWriteHandler(const NITFSegmentInfo& segmentInfo,
-    BufferList::value_type pImageData, const Data& data, bool doByteSwap,
-    ptrdiff_t cutoff) // for eventual use by to_AMP8I_PHS8I()
+    BufferList::value_type pImageData, const Data& data, bool doByteSwap)
 {
-    const auto pImageData_ = as_bytes(pImageData, segmentInfo, data);
-    return makeWriteHandler(segmentInfo, pImageData_, data, doByteSwap, cutoff);
+    const auto pImageData_ = asBytes(pImageData, segmentInfo, data);
+    return makeWriteHandler(segmentInfo, pImageData_, data, doByteSwap);
 }
 
 inline std::shared_ptr<StreamWriteHandler> makeWriteHandler(NITFSegmentInfo segmentInfo,
-io::InputStream* imageData, const Data& data, bool doByteSwap, ptrdiff_t)
+io::InputStream* imageData, const Data& data, bool doByteSwap)
 {
 //! TODO: This section of code (unlike the memory section above)
 //        does not account for blocked writing or J2K compression.
@@ -247,12 +245,11 @@ return std::make_shared<StreamWriteHandler>(segmentInfo, imageData, data, doByte
 
 template<typename TImageData>
 void writeWithoutNitro(nitf::Writer& mWriter, const TImageData& imageData,
-    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap,
-    ptrdiff_t cutoff) // for eventual use by to_AMP8I_PHS8I()
+    const std::vector<NITFSegmentInfo>& imageSegments, size_t startIndex, const Data& data, bool doByteSwap)
 {
     for (size_t j = 0; j < imageSegments.size(); ++j)
     {
-        auto writeHandler = makeWriteHandler(imageSegments[j], imageData, data, doByteSwap, cutoff);
+        auto writeHandler = makeWriteHandler(imageSegments[j], imageData, data, doByteSwap);
         mWriter.setImageWriteHandler(static_cast<int>(startIndex + j), writeHandler);
     }
 }
@@ -272,13 +269,6 @@ bool NITFWriteControl::do_prepareIO(size_t imageDataSize, nitf::IOInterface& out
     return shouldByteSwap();
 }
 
-ptrdiff_t NITFWriteControl::AMP8I_PHS8I_cutoff() const
-{
-    static const Parameter default_cutoff_parameter(WriteControl::AMP8I_PHS8I_DEFAULT_CUTOFF);
-    const ptrdiff_t cutoff = getOptions().getParameter(WriteControl::AMP8I_PHS8I_CUTOFF, default_cutoff_parameter);
-    return cutoff;
-}
-
 void NITFWriteControl::save(const SourceList& imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::string>& schemaPaths)
@@ -296,7 +286,7 @@ void NITFWriteControl::save(const SourceList& imageData,
         const auto startIndex = info.getStartIndex();
         const six::Data* const pData = info.getData();
 
-        writeWithoutNitro(mWriter, imageData[i], imageSegments, startIndex, *pData, doByteSwap, AMP8I_PHS8I_cutoff());
+        writeWithoutNitro(mWriter, imageData[i], imageSegments, startIndex, *pData, doByteSwap);
     }
 
     addDataAndWrite(schemaPaths);
@@ -326,7 +316,7 @@ static nitf::ImageSource do_make_ImageSource(std::span<const T> pImageData_, con
     const auto pixelSize = data.getNumBytesPerPixel() / numChannels;
 
     const auto bandSize = getBandSize(segmentInfo, data);
-    const auto pImageData = six::as_bytes(pImageData_);
+    const auto pImageData = sys::as_bytes(pImageData_);
     if ((pImageData.size() / numChannels) != bandSize)
     {
         throw std::invalid_argument("bandSize mis-match!");
@@ -360,7 +350,7 @@ inline nitf::ImageSource make_ImageSource_from_BufferList(std::span<const std::b
 }
 static nitf::ImageSource make_ImageSource(const BufferList::value_type pImageData, const NITFSegmentInfo& segmentInfo, const Data& data)
 {
-    const auto pImageData_ = as_bytes(pImageData, segmentInfo, data);
+    const auto pImageData_ = asBytes(pImageData, segmentInfo, data);
     return make_ImageSource_from_BufferList(pImageData_, segmentInfo, data);
 }
 
@@ -456,7 +446,7 @@ void NITFWriteControl::write_imageData(const T& imageData, const NITFImageInfo& 
     }
     else
     {
-        writeWithoutNitro(mWriter, imageData, imageSegments, startIndex, *pData, doByteSwap, AMP8I_PHS8I_cutoff());
+        writeWithoutNitro(mWriter, imageData, imageSegments, startIndex, *pData, doByteSwap);
     }
 
     if (legend)
@@ -528,19 +518,13 @@ static std::vector<std::string> convert_paths( const std::vector<std::filesystem
         [](const std::filesystem::path& p) { return p.string(); });
     return retval;
 }
-void NITFWriteControl::save_image(std::span<const std::complex<float>> imageData,
+void NITFWriteControl::save_image(std::span<const six::zfloat> imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::filesystem::path>& schemaPaths)
 {
     do_save(imageData, outputFile, convert_paths(schemaPaths));
 }
-void NITFWriteControl::save_image(std::span<const std::complex<short>> imageData,
-    nitf::IOInterface& outputFile,
-    const std::vector<std::filesystem::path>& schemaPaths)
-{
-    do_save(imageData, outputFile, convert_paths(schemaPaths));
-}
-void NITFWriteControl::save_image(std::span<const std::pair<uint8_t, uint8_t>> imageData,
+void NITFWriteControl::save_image(std::span<const six::zint16_t> imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::filesystem::path>& schemaPaths)
 {
@@ -564,7 +548,7 @@ void NITFWriteControl::save(const BufferList& list, const std::string& outputFil
     save_buffer_list_to_file(list, outputFile, schemaPaths);
 }
 
-void save(NITFWriteControl& writeControl, const std::complex<float>* image, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
+void save(NITFWriteControl& writeControl, const six::zfloat* image, const std::string& outputFile, const std::vector<std::string>& schemaPaths)
 {
     // Keeping this code-path in place as it's an easy way to test legacy BufferList functionality.
     const void* pImage = image;

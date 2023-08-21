@@ -79,15 +79,15 @@ std::unique_ptr<six::sicd::ComplexData> six::sicd::NITFReadComplexXMLControl::ge
     return std::unique_ptr< six::sicd::ComplexData>(result.release());
 }
 
-std::vector<std::complex<float>> six::sicd::NITFReadComplexXMLControl::getWidebandData(const ComplexData& complexData)
+std::vector<six::zfloat> six::sicd::NITFReadComplexXMLControl::getWidebandData(const ComplexData& complexData)
 {
-    std::vector<std::complex<float>> retval;
+    std::vector<six::zfloat> retval;
     Utilities::getWidebandData(reader, complexData, retval);
     return retval;
 }
 void  six::sicd::NITFReadComplexXMLControl::getWidebandData(const ComplexData& complexData,
     const types::RowCol<size_t>& offset, const types::RowCol<size_t>& extent,
-    std::complex<float>* buffer)
+    six::zfloat* buffer)
 {
     Utilities::getWidebandData(reader, complexData, offset, extent, buffer);
 }

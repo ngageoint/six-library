@@ -281,10 +281,16 @@ OpenJPEG_cleanup(opj_stream_t **stream, opj_codec_t **codec,
 /******************************************************************************/
 
 // these are private to cio.h
+#if __cplusplus
+extern "C" {
+#endif
 extern OPJ_OFF_T opj_stream_tell(const opj_stream_t*);
 extern int opj_stream_read_seek(opj_stream_t*, OPJ_OFF_T p_size, void* p_event_mgr);
 extern OPJ_SIZE_T opj_stream_read_data(opj_stream_t*, OPJ_BYTE* p_buffer, OPJ_SIZE_T p_size, void* p_event_mgr);
 extern OPJ_OFF_T opj_stream_get_number_byte_left(const opj_stream_t*);
+#if __cplusplus
+}
+#endif
 
 // This is our own to distingish an error from an expected failure
 OPJ_CODEC_FORMAT nitf_OPJ_CODEC_ERROR_ = (OPJ_CODEC_FORMAT)(OPJ_CODEC_UNKNOWN - 1); // i.e., -2

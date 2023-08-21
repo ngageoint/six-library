@@ -30,12 +30,12 @@ net::ssl::SSLConnection::SSLConnection(std::unique_ptr<net::Socket>&& socket,
                                        const std::string& host) :
     NetConnection(std::move(socket)), mServerAuthentication(serverAuth)
 {
-    mSSL = NULL;
+    mSSL = nullptr;
 
     mBioErr = BIO_new_fp(stderr, BIO_NOCLOSE);
 
     mSSL = SSL_new(ctx);
-    if (mSSL == NULL)
+    if (mSSL == nullptr)
     {
         throw net::ssl::SSLException(Ctxt(FmtX("SSL_new failed")));
     }
@@ -45,11 +45,11 @@ net::ssl::SSLConnection::SSLConnection(std::unique_ptr<net::Socket>&& socket,
 
 net::ssl::SSLConnection::~SSLConnection()
 {
-    if(mSSL != NULL)
+    if(mSSL != nullptr)
     {
         SSL_shutdown(mSSL);
     }
-    if(mSSL != NULL)
+    if(mSSL != nullptr)
     {
         SSL_free(mSSL);
     }

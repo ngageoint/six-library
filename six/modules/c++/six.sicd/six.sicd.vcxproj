@@ -51,12 +51,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\six\include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\six\include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
@@ -64,7 +64,8 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <WarningLevel>EnableAllWarnings</WarningLevel>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -78,18 +79,19 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\six\include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\six\include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -106,7 +108,6 @@
     <ClInclude Include="include\six\sicd\ComplexClassification.h" />
     <ClInclude Include="include\six\sicd\ComplexData.h" />
     <ClInclude Include="include\six\sicd\ComplexDataBuilder.h" />
-    <ClInclude Include="include\six\sicd\ComplexToAMP8IPHS8I.h" />
     <ClInclude Include="include\six\sicd\ComplexXMLControl.h" />
     <ClInclude Include="include\six\sicd\ComplexXMLParser.h" />
     <ClInclude Include="include\six\sicd\ComplexXMLParser040.h" />
@@ -117,6 +118,7 @@
     <ClInclude Include="include\six\sicd\ComplexXMLParser101.h" />
     <ClInclude Include="include\six\sicd\ComplexXMLParser10x.h" />
     <ClInclude Include="include\six\sicd\CropUtils.h" />
+    <ClInclude Include="include\six\sicd\DataParser.h" />
     <ClInclude Include="include\six\sicd\Functor.h" />
     <ClInclude Include="include\six\sicd\GeoData.h" />
     <ClInclude Include="include\six\sicd\GeoLocator.h" />
@@ -160,6 +162,7 @@
     <ClCompile Include="source\ComplexXMLParser101.cpp" />
     <ClCompile Include="source\ComplexXMLParser10x.cpp" />
     <ClCompile Include="source\CropUtils.cpp" />
+    <ClCompile Include="source\DataParser.cpp" />
     <ClCompile Include="source\Functor.cpp" />
     <ClCompile Include="source\GeoData.cpp" />
     <ClCompile Include="source\GeoLocator.cpp" />

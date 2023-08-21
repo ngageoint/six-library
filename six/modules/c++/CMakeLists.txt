@@ -1,7 +1,5 @@
 # turn on maximum warnings
 if (MSVC)
-    add_compile_options(/std:c++14)
-
     # By default, there is a /W3 on the command-line from somewhere (?); adding
     # /Wn results in a compiler warning.
     #add_compile_options(/W4) # /Wall
@@ -13,8 +11,6 @@ if (MSVC)
     add_compile_options(/wd4267) # '...': conversion from '...' to '...', possible loss of data
     
 elseif (UNIX)
-    add_compile_options(-std=c++14)
-
     #add_compile_options(-Wall -pedantic -Wextra)
     add_compile_options(-Wall -Wextra)
 

@@ -49,7 +49,7 @@ namespace sys
      */
     inline long getThreadID()
     {
-	return (long)pthread_self();
+      return static_cast<long>(pthread_self());
     }
 
 /*!

@@ -20,15 +20,19 @@
  *
  */
 
-#ifndef __CPHD_ERROR_PARAMETERS_H__
-#define __CPHD_ERROR_PARAMETERS_H__
+#pragma once
+#ifndef SIX_cphd_ErrorParameters_h_INCLUDED_
+#define SIX_cphd_ErrorParameters_h_INCLUDED_
+
+#include <stddef.h>
 
 #include <ostream>
 #include <vector>
-#include <stddef.h>
+#include <std/optional>
 
 #include <scene/FrameType.h>
 #include <six/ErrorStatistics.h>
+#include <six/XsElement.h>
 
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
@@ -128,14 +132,14 @@ struct ErrorParameters
      *
      *  \brief (Conditional) Parameters for CollectType = "BISTATIC"
      */
-    struct Bistatic
+    struct Bistatic final
     {
         /*
          *  \struct RadarSensor
          *
          *  \brief Error statistics for the Transmit platform
          */
-        struct RadarSensor
+        struct RadarSensor final
         {
             //! Constructor
             RadarSensor();
@@ -143,16 +147,19 @@ struct ErrorParameters
             //! Equality operators
             bool operator==(const RadarSensor& other) const
             {
-                return clockFreqSF == other.clockFreqSF &&
-                        collectionStartTime == other.collectionStartTime;
+                return (delayBias == other.delayBias)
+                    && (clockFreqSF == other.clockFreqSF)
+                    && (collectionStartTime == other.collectionStartTime);
             }
             bool operator!=(const RadarSensor& other) const
             {
                 return !((*this) == other);
             }
 
-            //! (Optional) Payload clock frequency scale factor standard
-            //! deviation
+             //! Transmit time delay bias error standard deviation
+            six::XsElement_minOccurs0<double> delayBias{ "DelayBias" }; // new in CPHD 1.1.0
+
+            //! (Optional) Payload clock frequency scale factor standard deviation
             double clockFreqSF;
 
             //! Collection Start time error standard deviation.
@@ -230,4 +237,4 @@ std::ostream& operator<< (std::ostream& os, const six::PosVelError& p);
 std::ostream& operator<< (std::ostream& os, const ErrorParameters& e);
 }
 
-#endif
+#endif // SIX_cphd_ErrorParameters_h_INCLUDED_

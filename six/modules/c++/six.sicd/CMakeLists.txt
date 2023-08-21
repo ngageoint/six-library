@@ -18,6 +18,7 @@ coda_add_module(
         source/ComplexXMLParser101.cpp
         source/ComplexXMLParser10x.cpp
         source/CropUtils.cpp
+        source/DataParser.cpp
         source/Functor.cpp
         source/GeoData.cpp
         source/GeoLocator.cpp

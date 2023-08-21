@@ -34,7 +34,7 @@ namespace six
 {
 namespace sidd
 {
-const char VERSION[] = "1.0.0";
+constexpr Version VERSION = Version::v1_0_0;
 const char SI_COMMON_URI[] = "urn:SICommon:0.1";
 const char ISM_URI[] = "urn:us:gov:ic:ism";
 inline static xml::lite::Uri getISMUri()
