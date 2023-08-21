@@ -133,7 +133,7 @@ std::string net::unquote(std::string s)
     {
         std::string part = parts[i];
         std::string hexStr = "0x" + part.substr(0, 2);
-        long val = strtol(hexStr.c_str(), NULL, 16);
+        long val = strtol(hexStr.c_str(), nullptr, 16);
         unquoted << (char) val;
         if (part.length() > 2)
             unquoted << part.substr(2);

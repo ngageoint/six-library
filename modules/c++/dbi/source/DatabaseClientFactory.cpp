@@ -47,7 +47,7 @@ dbi::DatabaseConnection * dbi::DatabaseClientFactory::create(const std::string& 
         const std::string& host,
         unsigned int port)
 {
-    dbi::DatabaseConnection * connection = NULL;
+    dbi::DatabaseConnection * connection = nullptr;
 #   if defined(USE_PGSQL)
     if (mType == dbi::PGSQL)
     {

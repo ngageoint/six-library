@@ -46,16 +46,7 @@ CODA_OSS_disable_warning_push
 template<typename CharT>
 inline CharT* data(std::basic_string<CharT>& s) noexcept
 {
-    #if CODA_OSS_cpp17
     return s.data();
-    #else
-    CODA_OSS_disable_warning_push
-    #if _MSC_VER
-    #pragma warning(disable : 26492)  // Don't use const_cast to cast away const or volatile (type.3).
-    #endif  
-    return const_cast <typename std::basic_string<CharT>::pointer>(s.data());
-    CODA_OSS_disable_warning_pop
-    #endif // CODA_OSS_cpp17
 }
 CODA_OSS_disable_warning_pop
 template <typename CharT>
@@ -194,9 +185,9 @@ inline std::string join(const std::vector<T>& toks, const std::string& with)
     if (toks.empty())
         return "";
 
-    const auto len = static_cast<int>(toks.size());
+    const auto len = toks.size();
     std::ostringstream oss;
-    int i = 0;
+    size_t i = 0;
     for (; i < len - 1; i++)
     {
         oss << str::toString(toks[i]) << with;
@@ -205,6 +196,11 @@ inline std::string join(const std::vector<T>& toks, const std::string& with)
     return oss.str();
 }
 
+// CASE INSENSTIVE string comparision routines.
+// Short names w/o a "case insenstive" indicator would seem OK as
+// normal (i.e., case sensitive) comparisons will use `==` and `!=` operators.
+CODA_OSS_API bool eq(const std::string& lhs, const std::string& rhs) noexcept;
+CODA_OSS_API bool ne(const std::string& lhs, const std::string& rhs) noexcept;
 
 }
 

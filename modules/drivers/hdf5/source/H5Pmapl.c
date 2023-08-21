@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -118,13 +117,13 @@ H5P__macc_reg_prop(H5P_genclass_t *pclass)
     if (H5P__register_real(pclass, H5M_ACS_KEY_PREFETCH_SIZE_NAME, H5M_ACS_KEY_PREFETCH_SIZE_SIZE,
                            &key_prefetch_size, NULL, NULL, NULL, H5M_ACS_KEY_PREFETCH_SIZE_ENC,
                            H5M_ACS_KEY_PREFETCH_SIZE_DEC, NULL, NULL, NULL, NULL) < 0)
-        HGOTO_ERROR(H5E_PLIST, H5E_CANTINSERT, FAIL, "can't insert property into class")
+        HGOTO_ERROR(H5E_PLIST, H5E_CANTINSERT, FAIL, "can't insert property into class");
 
     /* Register the key prefetch allocation size for iteration */
     if (H5P__register_real(pclass, H5M_ACS_KEY_ALLOC_SIZE_NAME, H5M_ACS_KEY_ALLOC_SIZE_SIZE, &key_alloc_size,
                            NULL, NULL, NULL, H5M_ACS_KEY_ALLOC_SIZE_ENC, H5M_ACS_KEY_ALLOC_SIZE_DEC, NULL,
                            NULL, NULL, NULL) < 0)
-        HGOTO_ERROR(H5E_PLIST, H5E_CANTINSERT, FAIL, "can't insert property into class")
+        HGOTO_ERROR(H5E_PLIST, H5E_CANTINSERT, FAIL, "can't insert property into class");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)

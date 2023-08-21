@@ -46,6 +46,23 @@
  */
 namespace sys
 {
+
+/*!
+ *  \class SIMDInstructionSet
+ *  \brief  List of available SIMD instruction sets.
+ *
+ *  We require at least SSE2 which is from 2000 ... 23 years ago.
+ *  Also see https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
+ *  "... For the x86-64 compiler, these extensions [ -msse2 ] are enabled by default."
+*   We're 64-bit only.
+ */
+enum class SIMDInstructionSet
+{
+    SSE2, //  https://en.wikipedia.org/wiki/SSE2
+    AVX2,  // https://en.wikipedia.org/wiki/Advanced_Vector_Extensions
+    AVX512F, // https://en.wikipedia.org/wiki/AVX-512
+};
+
 /*!
  *  \class AbstractOS
  *  \brief Interface for system independent function calls
@@ -99,6 +116,11 @@ struct CODA_OSS_API AbstractOS
            const std::string& fragment = "",
            const std::string& extension = "",
            bool recursive = true) const;
+    std::vector<coda_oss::filesystem::path> search(
+            const std::vector<coda_oss::filesystem::path>& searchPaths,
+            const std::string& fragment = "",
+            const std::string& extension = "",
+            bool recursive = true) const;
 
     /*!
      *  Does this path exist?
@@ -278,6 +300,13 @@ struct CODA_OSS_API AbstractOS
     virtual void getAvailableCPUs(std::vector<int>& physicalCPUs,
                                   std::vector<int>& htCPUs) const = 0;
 
+
+    /*!
+     * Figure out what SIMD instrunctions are available.  Keep in mind these
+     * are RUN-TIME, not compile-time, checks.
+     */
+    virtual SIMDInstructionSet getSIMDInstructionSet() const = 0;
+
     /*!
      *  Create a symlink, pathnames can be either absolute or relative
      */
@@ -323,10 +352,8 @@ protected:
 class AbstractDirectory
 {
 public:
-    AbstractDirectory()
-    {
-    }
-    virtual ~AbstractDirectory()
+    AbstractDirectory() = default;
+    virtual ~AbstractDirectory() noexcept(false)
     {
     }
     virtual void close() = 0;

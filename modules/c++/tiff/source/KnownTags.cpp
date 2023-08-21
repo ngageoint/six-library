@@ -161,6 +161,6 @@ tiff::IFDEntry *tiff::KnownTags::operator[] (const unsigned short tagKey)
 {
     std::map<unsigned short, tiff::IFDEntry*>::iterator pos =
         mKnownTags.find(tagKey);
-    return pos != mKnownTags.end() ? pos->second : NULL;
+    return pos != mKnownTags.end() ? pos->second : nullptr;
 }
 

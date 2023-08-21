@@ -37,12 +37,18 @@
 #define U8(s) static_cast<const std::char8_t*>(static_cast<const void*>(s))
 #endif
 
-static const std::string text = "TEXT";
-static const std::string strXml1_ = R"(
+static const std::string& text()
+{
+    static const std::string retval("TEXT");
+    return retval;
+}
+static const auto& strXml()
+{
+    static const std::string strXml1_ = R"(
 <root>
     <doc name="doc">
         <a a="a">)";
-static const std::string strXml2_ = R"(</a><duplicate/><duplicate/>
+    static const std::string strXml2_ = R"(</a><duplicate/><duplicate/>
         <values int="314" double="3.14" string="abc"/>
         <int>314</int>
         <double>3.14</double>
@@ -51,7 +57,9 @@ static const std::string strXml2_ = R"(</a><duplicate/><duplicate/>
         <empty></empty>
     </doc>
 </root>)";
-static const auto strXml = strXml1_ + text + strXml2_;
+    static const auto retval = strXml1_ + text() + strXml2_;
+    return retval;
+}
 
 struct test_MinidomParser final
 {
@@ -59,7 +67,7 @@ struct test_MinidomParser final
     const xml::lite::Element& getRootElement() const
     {
         io::StringStream ss;
-        ss.stream() << strXml;
+        ss.stream() << strXml();
 
         xmlParser.parse(ss);
         return xml::lite::getRootElement(xmlParser.getDocument());
@@ -67,7 +75,7 @@ struct test_MinidomParser final
     xml::lite::Element& getRootElement()
     {
         io::StringStream ss;
-        ss.stream() << strXml;
+        ss.stream() << strXml();
 
         xmlParser.parse(ss);
         return xml::lite::getRootElement(xmlParser.getDocument());
@@ -77,8 +85,8 @@ struct test_MinidomParser final
 TEST_CASE(test_getRootElement)
 {
     io::StringStream ss;
-    ss.stream() << strXml;
-    TEST_ASSERT_EQ(ss.stream().str(), strXml);
+    ss.stream() << strXml();
+    TEST_ASSERT_EQ(ss.stream().str(), strXml());
 
     xml::lite::MinidomParser xmlParser;
     xmlParser.parse(ss);
@@ -97,7 +105,7 @@ TEST_CASE(test_getElementsByTagName)
         const auto& a = *(aElements[0]);
 
         const auto characterData = a.getCharacterData();
-        TEST_ASSERT_EQ(characterData, text);
+        TEST_ASSERT_EQ(characterData, text());
     }
     
     const auto docElements = root.getElementsByTagName("doc");
@@ -109,7 +117,7 @@ TEST_CASE(test_getElementsByTagName)
         const auto& a = *(aElements[0]);
 
         const auto characterData = a.getCharacterData();
-        TEST_ASSERT_EQ(characterData, text);
+        TEST_ASSERT_EQ(characterData, text());
     }
 }
 
@@ -148,14 +156,14 @@ TEST_CASE(test_getElementByTagName)
     {
         const auto& a = root.getElementByTagName("a", true /*recurse*/);
         const auto characterData = a.getCharacterData();
-        TEST_ASSERT_EQ(characterData, text);
+        TEST_ASSERT_EQ(characterData, text());
     }
 
     const auto& doc = root.getElementByTagName("doc");
     {
         const auto& a = doc.getElementByTagName("a");
         const auto characterData = a.getCharacterData();
-        TEST_ASSERT_EQ(characterData, text);
+        TEST_ASSERT_EQ(characterData, text());
     }
 }
 

@@ -114,7 +114,7 @@ double sys::CPUStopWatch::start()
     else
 	mStartTime = now;
     
-    return ((double)now/mClocksPerMillis);
+    return static_cast<double>(now)/mClocksPerMillis;
 }
 
 double sys::CPUStopWatch::stop()
@@ -128,7 +128,7 @@ double sys::CPUStopWatch::stop()
     }
     // If start time was never set (or reset) then don't bother calculating elapsed time
     if(mStartTime != -1)
-	return ((double)(end - mStartTime - mTimePaused)/mClocksPerMillis);
+	return static_cast<double>(end - mStartTime - mTimePaused)/mClocksPerMillis;
     else
 	return 0;
 }
@@ -140,7 +140,7 @@ double sys::CPUStopWatch::pause()
 	mPauseStartTime = clock();
 	mPaused = true;
     }
-    return ((double)mPauseStartTime/mClocksPerMillis);
+    return static_cast<double>(mPauseStartTime)/mClocksPerMillis;
 }
 
 void sys::CPUStopWatch::clear()
