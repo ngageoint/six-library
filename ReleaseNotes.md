@@ -8,6 +8,8 @@
 * Prepare for deprecating [`std::complex<short>`](https://en.cppreference.com/w/cpp/numeric/complex), et. al.
 * Allow XML metadata to be parsed with `preserveCharacterData(true)` to keep white-space.
 * Added support for [CPHD 1.1.0](https://nsgreg.nga.mil/doc/view?i=5388) XML metadata.
+* Bugfix: read SIDDs [without a LUT](https://github.com/ngageoint/six-library/pull/683).
+* Bugfix: [CPHD 'releaseInfo' can be empty](https://github.com/ngageoint/six-library/pull/670).
 * added **.gitattributes** and normalized line-endings (`\n` for most text files).
 
 ## [Version 3.2.3](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.3); June 5, 2023
