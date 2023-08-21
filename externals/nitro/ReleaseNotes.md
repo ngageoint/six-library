@@ -1,5 +1,9 @@
 ﻿# NITRO (NITF i/o) Release Notes
 
+## [Version 2.11.4](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.4); August 18 5, 2023
+* [coda-oss](https://github.com/mdaus/coda-oss) release [2023-08-18](https://github.com/mdaus/coda-oss/releases/tag/2023-08-18)
+* added **.gitattributes** and normalized line-endings (`\n` for most text files).
+
 ## [Version 2.11.3](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.3); June 5, 2023
 * [coda-oss](https://github.com/mdaus/coda-oss) release [2023-06-05](https://github.com/mdaus/coda-oss/releases/tag/2023-06-05)
 * Fix display of [certain TREs](https://github.com/mdaus/nitro/issues/529).

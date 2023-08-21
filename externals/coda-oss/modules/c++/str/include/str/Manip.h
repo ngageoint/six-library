@@ -46,16 +46,7 @@ CODA_OSS_disable_warning_push
 template<typename CharT>
 inline CharT* data(std::basic_string<CharT>& s) noexcept
 {
-    #if CODA_OSS_cpp17
     return s.data();
-    #else
-    CODA_OSS_disable_warning_push
-    #if _MSC_VER
-    #pragma warning(disable : 26492)  // Don't use const_cast to cast away const or volatile (type.3).
-    #endif  
-    return const_cast <typename std::basic_string<CharT>::pointer>(s.data());
-    CODA_OSS_disable_warning_pop
-    #endif // CODA_OSS_cpp17
 }
 CODA_OSS_disable_warning_pop
 template <typename CharT>

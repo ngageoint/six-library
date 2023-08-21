@@ -127,6 +127,7 @@
     <ClInclude Include="math\include\math\Round.h" />
     <ClInclude Include="math\include\math\Utilities.h" />
     <ClInclude Include="mem\include\mem\Align.h" />
+    <ClInclude Include="mem\include\mem\AutoPtr.h" />
     <ClInclude Include="mem\include\mem\BufferView.h" />
     <ClInclude Include="mem\include\mem\ComplexView.h" />
     <ClInclude Include="mem\include\mem\ScopedAlignedArray.h" />
@@ -584,6 +585,9 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -611,6 +615,9 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>
