@@ -52,8 +52,12 @@ public:
     /*!
      *  Virtual destructor
      */
-    virtual ~WorkerThread()
-    {}
+    virtual ~WorkerThread() = default;
+
+    WorkerThread(const WorkerThread&) = delete;
+    WorkerThread& operator=(const WorkerThread&) = delete;
+    WorkerThread(WorkerThread&&) = delete;
+    WorkerThread& operator=(WorkerThread&&) = delete;
 
     virtual void initialize()
     {}

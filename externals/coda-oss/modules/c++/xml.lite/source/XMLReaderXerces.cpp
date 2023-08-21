@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "xml/lite/XMLReaderXerces.h"
 
 #include <assert.h>
 

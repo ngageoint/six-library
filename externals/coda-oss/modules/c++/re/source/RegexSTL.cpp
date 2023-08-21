@@ -30,15 +30,28 @@
 
 namespace re
 {
-// This is a raw literal, so ignore the R"lit( )lit"
-const std::regex Regex::badDotRegex( R"lit(((^|[^\\])(\\\\)*)\.)lit",
-                                         std::regex::ECMAScript|std::regex::optimize );
 
-const std::regex Regex::invalidCaret( R"lit([\s\S]*([^\[\\]|[^\\](\\\\)+)\^)lit",
+// These are a raw literals, so ignore the R"lit( )lit"
+static const std::regex& badDotRegex()
+{
+    static const std::regex retval(R"lit(((^|[^\\])(\\\\)*)\.)lit",
+                                   std::regex::ECMAScript | std::regex::optimize);
+    return retval;
+}
+
+static const std::regex& invalidCaret()
+{
+   static const std::regex retval( R"lit([\s\S]*([^\[\\]|[^\\](\\\\)+)\^)lit",
                                           std::regex::ECMAScript|std::regex::optimize );
+    return retval;
+}
 
-const std::regex Regex::invalidDollar( R"lit(^([\s\S]*[^\\](\\\\)*)?\$[\s\S]+$)lit",
-                                           std::regex::ECMAScript|std::regex::optimize );
+static const std::regex& invalidDollar()
+{
+    static const std::regex retval( R"lit(^([\s\S]*[^\\](\\\\)*)?\$[\s\S]+$)lit",
+                                               std::regex::ECMAScript|std::regex::optimize );
+    return retval;
+}
     
 Regex::Regex(const std::string& pattern) :
     mPattern(pattern)
@@ -91,8 +104,7 @@ Regex& Regex::compile(const std::string& pattern)
     std::smatch tmpmatch;
 
     // Look for ^ in the middle, but ignore \^ and [^
-    if (std::regex_search(mPattern, tmpmatch, 
-                          invalidCaret,
+    if (std::regex_search(mPattern, tmpmatch, invalidCaret(),
                           std::regex_constants::match_continuous))
     {
         std::string msg(
@@ -102,8 +114,7 @@ Regex& Regex::compile(const std::string& pattern)
     }
 
     // Look for $ in the middle, but ignore \$
-    if (std::regex_match(mPattern, tmpmatch,
-                         invalidDollar))
+    if (std::regex_match(mPattern, tmpmatch, invalidDollar()))
     {
         std::string msg(
             "'$' in mid-string is not handled the same by gcc and VS2015!");
@@ -231,7 +242,7 @@ std::string Regex::replaceDot(const std::string& str) const
     // This makes sure we're not grabbing "\."
 
     // Replace just the "." with "[\s\S]"
-    std::string newstr = std::regex_replace(str, badDotRegex, "$1[\\s\\S]");
+    std::string newstr = std::regex_replace(str, badDotRegex(), "$1[\\s\\S]");
     return newstr;
 }
 

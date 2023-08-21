@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <sys/ResourceCheck.h>
+#include <gsl/gsl.h>
 
 namespace sys
 {
@@ -40,7 +41,7 @@ size_t getAvailableMem(size_t systemMemBytes,
                        size_t reservedBytes,
                        double margin)
 {
-    const auto relativeAvailable = static_cast<size_t>(systemMemBytes * margin);
+    const auto relativeAvailable = gsl::narrow_cast<size_t>(gsl::narrow_cast<double>(systemMemBytes) * margin);
     if (reservedBytes > systemMemBytes)
     {
         return 0;

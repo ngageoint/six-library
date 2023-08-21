@@ -76,7 +76,7 @@ void tiff::ImageReader::getData(unsigned char *buffer,
         throw except::Exception(Ctxt("Unsupported TIFF file format"));
 
     if (mReverseBytes)
-        sys::byteSwap((sys::byte*)buffer, mElementSize, numElementsToRead);
+        sys::byteSwap(buffer, mElementSize, numElementsToRead);
 }
 
 void tiff::ImageReader::getStripData(unsigned char *buffer,

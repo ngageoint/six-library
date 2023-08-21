@@ -20,8 +20,11 @@
  *
  */
 
-#ifndef __ZIP_GZIP_INPUT_STREAM_H__
-#define __ZIP_GZIP_INPUT_STREAM_H__
+#pragma once
+#ifndef CODA_OSS_zip_GZipInputStream_h_INCLUDED_
+#define CODA_OSS_zip_GZipInputStream_h_INCLUDED_
+
+#include "config/Exports.h"
 
 #include "zip/Types.h"
 
@@ -38,7 +41,7 @@ namespace zip
  *  argument is given, and in a loop.  On the last run, the buffer
  *  size should will probably smaller than the amount requested.
  */
-class GZipInputStream: public io::InputStream
+class CODA_OSS_API GZipInputStream : public io::InputStream
 {
     gzFile mFile;
 public:
@@ -63,5 +66,4 @@ protected:
 };
 }
 
-#endif
-
+#endif  // CODA_OSS_zip_GZipInputStream_h_INCLUDED_

@@ -60,7 +60,7 @@ int main(int argc, char** argv)
         std::unique_ptr<Socket> socket = TCPClientSocketFactory().create(sa);
         my_packet_t packet;
         packet.packet_no = 1;
-        packet.time_stamp = time(NULL);
+        packet.time_stamp = time(nullptr);
         socket->send(&packet, sizeof(my_packet_t));
         int rv;
         socket->recv(&rv, sizeof(int));

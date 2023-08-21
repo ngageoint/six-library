@@ -28,7 +28,7 @@
 
 sys::MutexPosix::MutexPosix()
 {
-    if (::pthread_mutex_init(&mNative, NULL) != 0)
+    if (::pthread_mutex_init(&mNative, nullptr) != 0)
         throw sys::SystemException("Mutex initialization failed");
 }
 

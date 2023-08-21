@@ -113,8 +113,6 @@ TEST_CASE(testDescriptors)
 }
 
 TEST_MAIN(
-    (void)argc;
-    (void)argv;
     TEST_CHECK(testCastOperator);
     TEST_CHECK(testDescriptors);
     )

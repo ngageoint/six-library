@@ -30,8 +30,6 @@
 #include <import/nitf.h>
 #include "Test.h"
 
-static const char* const DATE_TIME = "20120126000000";
-
 static
 NITF_BOOL insertTRE(nitf_Extensions* ext, nitf_Error* error)
 {
@@ -67,6 +65,8 @@ NITF_BOOL initializeTREs(nitf_FileHeader* header, nitf_Error* error)
 static
 NITF_BOOL initializeHeader(nitf_FileHeader* header, nitf_Error* error)
 {
+    static const char* const DATE_TIME = "20120126000000";
+
     return (nitf_Field_setString(header->fileHeader, "NITF", error) &&
             nitf_Field_setString(header->fileVersion, "02.10", error) &&
             nitf_Field_setUint32(header->complianceLevel, 3, error) &&
@@ -122,9 +122,6 @@ TEST_CASE(testUnmerge)
     nitf_Record_destruct(&record);
 }
 
-int main() // int argc, char **argv
-{
+TEST_MAIN(
     CHECK(testUnmerge);
-    return 0;
-}
-
+)

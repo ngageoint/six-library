@@ -39,13 +39,13 @@ void sys::ThreadWin32::start()
 {
     DWORD threadId;
 
-    mNative = __CREATETHREAD(NULL,
+    mNative = __CREATETHREAD(nullptr,
                              0,
                              __start,
                              (void*)this,
                              0,
                              &threadId);
-    if (mNative == NULL)
+    if (mNative == nullptr)
         throw sys::SystemException("Thread creation failed");
 
 
