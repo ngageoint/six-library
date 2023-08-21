@@ -127,6 +127,7 @@
     <ClInclude Include="math\include\math\Round.h" />
     <ClInclude Include="math\include\math\Utilities.h" />
     <ClInclude Include="mem\include\mem\Align.h" />
+    <ClInclude Include="mem\include\mem\AutoPtr.h" />
     <ClInclude Include="mem\include\mem\BufferView.h" />
     <ClInclude Include="mem\include\mem\ComplexView.h" />
     <ClInclude Include="mem\include\mem\ScopedAlignedArray.h" />
