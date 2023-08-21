@@ -20,8 +20,11 @@
  *
  */
 
-#ifndef __ZIP_GZIP_OUTPUT_STREAM_H__
-#define __ZIP_GZIP_OUTPUT_STREAM_H__
+#pragma once
+#ifndef CODA_OSS_zip_GZipOutputStream_h_INCLUDED_
+#define CODA_OSS_zip_GZipOutputStream_h_INCLUDED_
+
+#include "config/Exports.h"
 
 #include "zip/Types.h"
 
@@ -32,7 +35,7 @@ namespace zip
  *  \brief IO wrapper for zlib API
  *
  */
-class GZipOutputStream: public io::OutputStream
+class CODA_OSS_API GZipOutputStream : public io::OutputStream
 {
     gzFile mFile;
 public:
@@ -56,4 +59,4 @@ public:
 };
 }
 
-#endif
+#endif  // CODA_OSS_zip_GZipOutputStream_h_INCLUDED_

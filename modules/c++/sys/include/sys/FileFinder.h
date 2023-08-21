@@ -28,6 +28,7 @@
 #include <string>
 #include <utility>
 
+#include "config/Exports.h"
 #include "sys/filesystem.h"
 
 namespace sys
@@ -191,9 +192,10 @@ namespace test // i.e., sys::test
     // e.g., root / "externals" / [name] / path / file
     //
     // Once modulePath is found, the result is cached to avoid searching again.
-    coda_oss::filesystem::path findModuleFile(const coda_oss::filesystem::path& root,
+    coda_oss::filesystem::path findModuleFile(
+            const coda_oss::filesystem::path& root,
             const std::string& externalsName, const coda_oss::filesystem::path& modulePath, const coda_oss::filesystem::path& moduleFile);
-    coda_oss::filesystem::path findGITModuleFile( // use current_directory() to find_dotGITDirectory()
+    CODA_OSS_API coda_oss::filesystem::path findGITModuleFile(  // use current_directory() to find_dotGITDirectory()
             const std::string& externalsName, const coda_oss::filesystem::path& modulePath, const coda_oss::filesystem::path& moduleFile);
 }
 }

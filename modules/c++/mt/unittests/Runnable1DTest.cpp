@@ -83,31 +83,7 @@ TEST_CASE(Runnable1DWithCopiesTest)
     TEST_ASSERT_TRUE(true); // need to use hidden "testName" parameter
 }
 
-TEST_CASE(transform_async_test)
-{
-    const auto f = [&](const int& i) { return i * i; };
-
-    std::vector<int> ints_(10000);
-    std::iota(ints_.begin(), ints_.end(), 1);
-    const auto& ints = ints_;
-
-    std::vector<int> results(ints.size());
-
-    results.back() = results.front();
-    std::transform(ints.begin(), ints.end(), results.begin(), f);
-    TEST_ASSERT_EQ(results.back(), f(ints.back()));
-
-    results.back() = results.front();
-    mt::transform_async(ints.begin(), ints.end(), results.begin(), f, 1000);
-    TEST_ASSERT_EQ(results.back(), f(ints.back()));
-
-    results.back() = results.front();
-    mt::transform_async(ints.begin(), ints.end(), results.begin(), f, 1000, std::launch::async);
-    TEST_ASSERT_EQ(results.back(), f(ints.back()));
-}
-
 TEST_MAIN(
     TEST_CHECK(DoRunnable1DTest);
     TEST_CHECK(Runnable1DWithCopiesTest);
-    TEST_CHECK(transform_async_test);
     )

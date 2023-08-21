@@ -18,18 +18,16 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
+#pragma once
 #ifndef CODA_OSS_std_optional_INCLUDED_
 #define CODA_OSS_std_optional_INCLUDED_
-#pragma once
 
 #include "coda_oss/optional.h"
-#include "coda_oss/CPlusPlus.h"
 
 // Make it (too?) easy for clients to get our various std:: implementations
 #ifndef CODA_OSS_NO_std_optional
-    #if CODA_OSS_cpp17
-        #include <optional>
-        #define CODA_OSS_NO_std_optional 1  // part of C++17
+    #if CODA_OSS_HAVE_std_optional_ // set in coda_oss/optional.h
+        #define CODA_OSS_NO_std_optional 1  // no need to muck with `std`
     #else
         #define CODA_OSS_NO_std_optional 0  // use our own
     #endif
@@ -41,6 +39,10 @@ namespace std // This is slightly uncouth: we're not supposed to augment "std".
     using coda_oss::optional;
     using coda_oss::make_optional;
 }
+#ifndef __cpp_lib_optional
+#define __cpp_lib_optional 201606L // https://en.cppreference.com/w/cpp/feature_test
+#endif
+
 #endif // !CODA_OSS_NO_std_optional
 
 #endif  // CODA_OSS_std_optional_INCLUDED_

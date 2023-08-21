@@ -28,18 +28,31 @@
 #include "xml/lite/MinidomParser.h"
 #include "xml/lite/QName.h"
 
-static const std::string strUri = "urn:example.com";
-static const xml::lite::Uri uri(strUri);
-static const std::string strXml_1_ = R"(
+static const std::string& strUri()
+{
+    static const std::string retval("urn:example.com");
+    return retval;
+}
+static const xml::lite::Uri& uri()
+{
+    static const xml::lite::Uri retval(strUri());
+    return retval;
+}
+
+static const auto& strXml()
+{
+    static const std::string strXml_1_ = R"(
 <root>
     <doc name="doc">
         <a a="a">TEXT</a>
         <values int="314" double="3.14" string="abc" bool="yes" empty=""/>
         <ns_values xmlns:ns=")";
-static const std::string strXml_2_ = R"(" ns:int="314" />
+    static const std::string strXml_2_ = R"(" ns:int="314" />
     </doc>
 </root>)";
-static const auto strXml = strXml_1_ + strUri + strXml_2_;
+    static const auto retval = strXml_1_ + strUri() + strXml_2_;
+    return retval;
+}
 
 struct test_MinidomParser final
 {
@@ -47,7 +60,7 @@ struct test_MinidomParser final
     xml::lite::Element* getRootElement()
     {
         io::StringStream ss;
-        ss.stream() << strXml;
+        ss.stream() << strXml();
 
         xmlParser.parse(ss);
         return getDocument(xmlParser).getRootElement();
@@ -88,19 +101,19 @@ TEST_CASE(test_getAttributeByNS)
     using namespace xml::lite;
 
     std::string strValue;
-    strValue = attributes.getValue(xml::lite::QName(uri, "int"));
+    strValue = attributes.getValue(xml::lite::QName(uri(), "int"));
     TEST_ASSERT_EQ("314", strValue);
-    strValue = getValue<std::string>(attributes, uri, "int");
+    strValue = getValue<std::string>(attributes, uri(), "int");
     TEST_ASSERT_EQ("314", strValue);
-    const auto key = xml::lite::QName(uri, "int");
+    const auto key = xml::lite::QName(uri(), "int");
     strValue = getValue<std::string>(attributes, key);
     TEST_ASSERT_EQ("314", strValue);
 
     int value;
-    auto result = getValue<int>(attributes, uri, "int", value);
+    auto result = getValue<int>(attributes, uri(), "int", value);
     TEST_ASSERT_TRUE(result);
     TEST_ASSERT_EQ(314, value);
-    value = getValue<int>(attributes, uri, "int");
+    value = getValue<int>(attributes, uri(), "int");
     TEST_ASSERT_EQ(314, value);
 
     result = getValue<int>(attributes, key, value);

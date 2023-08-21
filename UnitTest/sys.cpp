@@ -1,6 +1,27 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
+#include <import/sys.h>
+#include <sys/Runnable.h>
+#include <sys/Thread.h>
+#include <sys/Mutex.h>
+#include <sys/FileFinder.h>
+#include <sys/ByteSwap.h>
+#include <sys/AtomicCounter.h>
+#include <sys/Runnable.h>
+#include <sys/Thread.h>
+#include <sys/Conf.h>
+#include <sys/ConditionVar.h>
+#include <sys/LocalDateTime.h>
+#include <sys/UTCDateTime.h>
+#include <sys/OS.h>
+#include <sys/Path.h>
+#include <sys/Backtrace.h>
+#include <sys/Dbg.h>
+#include <sys/DateTime.h>
+#include <sys/Conf.h>
+#include <sys/Path.h>
+
 namespace sys
 {
 TEST_CLASS(test_aligned_alloc){ public:
