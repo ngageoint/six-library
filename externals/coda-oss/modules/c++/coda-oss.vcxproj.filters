@@ -951,6 +951,9 @@
     <ClInclude Include="hdf5.lite\include\hdf5\lite\H5_.h">
       <Filter>hdf5.lite</Filter>
     </ClInclude>
+    <ClInclude Include="mem\include\mem\AutoPtr.h">
+      <Filter>mem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

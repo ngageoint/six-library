@@ -1,6 +1,5 @@
 set(TARGET_LANGUAGE c++)
 
-# turn on maximum warnings
 if (MSVC)
     # By default, there is a /W3 on the command-line from somewhere (?); adding
     # /Wn results in a compiler warning.
