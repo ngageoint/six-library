@@ -812,7 +812,7 @@ def options(opt):
                     'results. NOOP if junit_xml cannot be imported')
 
 
-def ensureCpp17Support(self):
+def ensureCpp20Support(self):
     # DEPRECATED.
     # Keeping for now in case downstream code is still looking for it
     self.env['cpp11support'] = True
@@ -830,6 +830,14 @@ def configureCompilerOptions(self):
 
     if ccCompiler == 'msvc':
         cxxCompiler = ccCompiler
+    else:
+        if ccCompiler == 'gcc':
+            ccCompiler = 'gcc-10'
+            self.env['COMPILER_CC'] =ccCompiler
+
+        if cxxCompiler == 'g++':
+            cxxCompiler = 'g++-10'
+            self.env['COMPILER_CXX'] = cxxCompiler
 
     if not cxxCompiler or not ccCompiler:
         self.fatal('Unable to find C/C++ compiler')
@@ -873,7 +881,7 @@ def configureCompilerOptions(self):
         self.env.append_value('CFLAGS', '-fPIC -dynamiclib'.split())
 
     # GCC / ICC (for Linux or Solaris)
-    elif ccCompiler == 'gcc' or ccCompiler == 'icc':
+    elif ccCompiler == 'gcc' or ccCompiler == 'gcc-10' or ccCompiler == 'icc':
         if not re.match(winRegex, sys_platform):
             self.env.append_value('LIB_DL', 'dl')
             if not re.match(osxRegex, sys_platform):
@@ -883,7 +891,7 @@ def configureCompilerOptions(self):
         self.check_cc(lib='pthread', mandatory=True)
 
         warningFlags = '-Wall'
-        if ccCompiler == 'gcc':
+        if ccCompiler == 'gcc' or ccCompiler == 'gcc-10':
             #warningFlags += ' -Wno-deprecated-declarations -Wold-style-cast'
             warningFlags += ' -Wno-deprecated-declarations'
         else:
@@ -897,7 +905,13 @@ def configureCompilerOptions(self):
         #       If you want the plugins to not depend on Intel libraries,
         #       configure with:
         #       --with-cflags=-static-intel --with-cxxflags=-static-intel --with-linkflags=-static-intel
-        if cxxCompiler == 'g++' or cxxCompiler == 'icpc':
+        if cxxCompiler == 'gcc' or cxxCompiler == 'gcc-10':
+            config['cxx']['debug']          = '-ggdb3'
+            config['cxx']['optz_debug']     = '-Og'
+        elif cxxCompiler == 'icpc':
+            config['cxx']['debug']          = '-g'
+            config['cxx']['optz_debug']     = ''
+        if cxxCompiler == 'g++' or cxxCompiler == 'g++-10' or cxxCompiler == 'icpc':
             config['cxx']['warn']           = warningFlags.split()
             config['cxx']['verbose']        = '-v'
             config['cxx']['64']             = '-m64'
@@ -913,8 +927,7 @@ def configureCompilerOptions(self):
             # The "fastest-possible" option is new; see comments above.
             config['cxx']['optz_fastest-possible']   =  [ config['cxx']['optz_faster'], '-march=native' ]  # -march=native instead of haswell
 
-            self.env.append_value('CXXFLAGS', '-fPIC'.split())
-            gxxCompileFlags='-std=c++17'
+            gxxCompileFlags='-fPIC -std=c++2a'
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
@@ -929,22 +942,13 @@ def configureCompilerOptions(self):
 
             self.env.append_value('LINKFLAGS', linkFlags.split())
 
-        if Options.options.debugging:
-            if cxxCompiler == 'g++':
-                config['cxx']['debug'] = '-ggdb3'
-                config['cxx']['optz_debug'] = '-Og'
-            elif cxxCompiler == 'icpc':
-                config['cxx']['debug'] = '-g'
-                config['cxx']['optz_debug'] = ''
-
-            if ccCompiler == 'gcc':
-                config['cc']['debug'] = '-ggdb3'
-                config['cc']['optz_debug'] = '-Og'
-            elif ccCompiler == 'icc':
-                config['cc']['debug'] = '-g'
-                config['cc']['optz_debug'] = ''
-
-        if ccCompiler == 'gcc' or ccCompiler == 'icc':
+        if ccCompiler == 'gcc' or ccCompiler == 'gcc-10':
+            config['cc']['debug']          = '-ggdb3'
+            config['cc']['optz_debug']     = '-Og'
+        elif ccCompiler == 'icc':
+            config['cc']['debug']          = '-g'
+            config['cc']['optz_debug']     = ''
+        if ccCompiler == 'gcc' or ccCompiler == 'gcc-10' or ccCompiler == 'icc':
             config['cc']['warn']           = warningFlags.split()
             config['cc']['verbose']        = '-v'
             config['cc']['64']             = '-m64'
@@ -1024,7 +1028,7 @@ def configureCompilerOptions(self):
                   'WIN32 _USE_MATH_DEFINES NOMINMAX _CRT_SECURE_NO_WARNINGS WIN32_LEAN_AND_MEAN'.split()
         flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
 
-        flags.append('/std:c++17')
+        flags.append('/std:c++20')
 
         self.env.append_value('DEFINES', defines)
         self.env.append_value('CXXFLAGS', flags)
@@ -1245,7 +1249,7 @@ def configure(self):
     if Options.options._defs:
         env.append_unique('DEFINES', Options.options._defs.split(','))
     configureCompilerOptions(self)
-    ensureCpp17Support(self)
+    ensureCpp20Support(self)
 
     env['PLATFORM'] = sys_platform
 
