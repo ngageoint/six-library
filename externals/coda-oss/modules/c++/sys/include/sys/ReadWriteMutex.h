@@ -51,7 +51,7 @@ struct ReadWriteMutex
     }
 
     //!  Destructor
-    virtual ~ReadWriteMutex()
+    virtual ~ReadWriteMutex() 
     {
         dbg_printf("Destroying a read/write mutex\n");
     }

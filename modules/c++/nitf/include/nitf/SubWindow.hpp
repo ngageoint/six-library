@@ -119,18 +119,12 @@ private:
     std::optional<std::vector<uint32_t>> bandList;
 };
 
-#if CODA_OSS_cpp14
 // This template<template> syntax allows an arbitary TContainer<uint32_t> to be passed
 // rather than requiring that it be std::vector<uint32_t>.  Note that the container
 // must support data() and size().
 template<template<typename, typename...> typename TContainer, typename ...TAlloc>
 inline void setBands(SubWindow& subWindow,
     TContainer<uint32_t, TAlloc...>& bandList) // std::vector<T> really has another template parameter
-
-#else
-// While the above is legitimate C++11 syntax, older compilers don't like it
-inline void setBands(SubWindow& subWindow, std::vector<uint32_t>& bandList)
-#endif // CODA_OSS_cpp14
 {
     subWindow.setBandList(bandList.data());
     subWindow.setNumBands(gsl::narrow<uint32_t>(bandList.size()));

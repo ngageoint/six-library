@@ -31,10 +31,12 @@
 # include <exception>
 # include <iostream>
 #include <utility>
-#  include <import/sys.h>
-#  include <import/str.h>
-#  include <import/except.h>
-#  include <except/Throwable.h>
+
+#include <str/Convert.h>
+#include <except/Throwable.h>
+#include <sys/Dbg.h>
+#include <sys/Conf.h>
+
 
 #  define IS_NAN(X) X != X
 
@@ -119,7 +121,8 @@ inline void assert_almost_eq_eps(const TX1& X1, const TX2& X2, const TEPS& EPS,
     const std::string& testName, const char* file, const char* func, int line)
 {
     const auto abs_difference = std::abs(X1 - X2);
-    if (abs_difference > EPS || IS_NAN(abs_difference))
+    using abs_difference_t = decltype(abs_difference);
+    if (abs_difference > static_cast<abs_difference_t>(EPS) || IS_NAN(abs_difference))
     {
         diePrintf_("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName, file, func, line, X1, X2);
     }
@@ -210,6 +213,7 @@ inline int main(TFunc f)
 #define CODA_OSS_test_eq(X1, X2) (CODA_OSS_test_eq_(X1, X2) && !CODA_OSS_test_ne_(X1, X2))
 #define TEST_ASSERT_EQ(X1, X2) if (!CODA_OSS_test_eq((X1), (X2))) { CODA_OSS_test_diePrintf_eq_(X1, X2); }
 #define TEST_ASSERT_EQ_MSG(msg, X1, X2) if (!CODA_OSS_test_eq((X1), (X2))) { CODA_OSS_test_diePrintf_eq_msg_(msg, X1, X2); }
+#define TEST_ASSERT_EQ_STR(X1, X2) TEST_ASSERT_EQ(std::string(X1), std::string(X2))
 #define TEST_ASSERT_NOT_EQ(X1, X2) if (!CODA_OSS_test_ne((X1), (X2))) { CODA_OSS_test_diePrintf_not_eq_(X1, X2); }
 #define TEST_ASSERT_NOT_EQ_MSG(msg, X1, X2) if (!CODA_OSS_test_ne((X1), (X2))) { CODA_OSS_test_diePrintf_not_eq_msg_(msg, X1, X2); }
 

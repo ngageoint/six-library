@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -12,12 +11,9 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /*
- * Programmer:	Quincey Koziol
- *		Friday, February 24, 2006
- *
- * Purpose:	This file contains declarations which are visible only within
- *		the H5HF package.  Source files outside the H5HF package should
- *		include H5HFprivate.h instead.
+ * Purpose: This file contains declarations which are visible only within
+ *          the H5HF package.  Source files outside the H5HF package should
+ *          include H5HFprivate.h instead.
  */
 #if !(defined H5HF_FRIEND || defined H5HF_MODULE)
 #error "Do not include this file outside the H5HF package!"
@@ -158,9 +154,11 @@
 
 /* Decode a "managed" heap ID */
 #define H5HF_MAN_ID_DECODE(i, h, f, o, l)                                                                    \
-    f = *(uint8_t *)i++;                                                                                     \
-    UINT64DECODE_VAR((i), (o), (h)->heap_off_size);                                                          \
-    UINT64DECODE_VAR((i), (l), (h)->heap_len_size)
+    do {                                                                                                     \
+        f = *(uint8_t *)i++;                                                                                 \
+        UINT64DECODE_VAR((i), (o), (h)->heap_off_size);                                                      \
+        UINT64DECODE_VAR((i), (l), (h)->heap_len_size);                                                      \
+    } while (0)
 
 /* Free space section types for fractal heap */
 /* (values stored in free space data structures in file) */

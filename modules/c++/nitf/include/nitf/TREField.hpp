@@ -51,7 +51,7 @@ namespace nitf
             const_field(const_field&&) = default;
             const_field& operator=(const_field&&) = delete;
 
-            const T getFieldValue() const // "const" as a hint to clients that this value is really stored elsewhere
+            T getFieldValue() const
             {
                 return tre_.getFieldValue<T>(tag_);
             }
@@ -78,7 +78,7 @@ namespace nitf
             {
                 tre_.setFieldValue(field_.tag_, v, forceUpdate_);
             }
-            const T getFieldValue() const 
+            T getFieldValue() const 
             {
                 return field_.getFieldValue();
             }
@@ -110,11 +110,11 @@ namespace nitf
             field_.setFieldValue(v);
         }
 
-        const value_type value() const // "const" as a hint to clients that this value is really stored elsewhere
+        value_type value() const
         {
             return field_.getFieldValue();
         }
-        operator const value_type() const
+        operator value_type() const
         {
             return value();
         }

@@ -77,6 +77,6 @@ void j2k::WriteTiler::setTile(uint32_t tileX, uint32_t tileY, uint32_t i)
     const auto offset_ = index * tileSize_ * bytes * numComponents_;
     const auto offset = gsl::narrow<ptrdiff_t>(offset_);
 
-    const std::span<const uint8_t> buf(buf_.data() + offset, tileSize_);
+    const auto buf = sys::make_span(buf_.data() + offset, tileSize_);
     writer_.setTile(tileX, tileY, buf);
 }

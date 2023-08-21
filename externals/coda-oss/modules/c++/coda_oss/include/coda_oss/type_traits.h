@@ -24,8 +24,6 @@
 
 #include <type_traits>
 
-#include "CPlusPlus.h"
-
 #include "coda_oss/namespace_.h"
 namespace coda_oss
 {

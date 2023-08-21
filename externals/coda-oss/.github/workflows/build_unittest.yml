@@ -11,9 +11,9 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install python dependencies
@@ -36,6 +36,13 @@ jobs:
         cd ..
         cd target-Debug
         cmake --build . --config Debug -j
+    - name: test # should run w/o install
+      run: |
+        cd target-Release
+        ctest -C Release --output-on-failure
+        cd ..
+        cd target-Debug
+        ctest -C Debug --output-on-failure
     - name: install
       run: |
         cd target-Release
@@ -43,13 +50,44 @@ jobs:
         cd ..
         cd target-Debug
         cmake --build . --config Debug --target install
-    - name: test
-      run: |
-        cd target-Release
-        ctest -C Release
         cd ..
-        cd target-Debug
-        ctest -C Debug
+
+  build-msbuild-windows:
+    strategy:
+      matrix:
+        os: [windows-latest]
+        platform: [x64]
+        configuration: [Debug] # Debug turns on more compiler warnings
+    name: ${{ matrix.os }}-msbuild
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: configure
+      run: |
+        ls env:
+        mkdir out
+        cd out
+        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF
+    - name: build
+      run: |
+        cd out
+        cmake --build . --config ${{ matrix.configuration }} -j
+        cmake --build . --config ${{ matrix.configuration }} --target install
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1 # https://github.com/marketplace/actions/setup-msbuild
+      with:
+        msbuild-architecture: x64
+    - name: msbuild
+      run: |
+        msbuild coda-oss.sln /p:configuration=${{ matrix.configuration }}
+    # Can't figure out how to make this work :-(
+    #- name: vstest 
+    #  uses: microsoft/vstest-action@v1.0.0 # https://github.com/marketplace/actions/vstest-action
+    #  with:
+    #      testAssembly: UnitTest.dll
+    #      searchFolder: D:\a\nitro\nitro\${{ matrix.platform }}\${{ matrix.configuration }}
+    #      runInParallel: true  
 
   build-linux-cmake:
     strategy:
@@ -59,9 +97,9 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install python dependencies
@@ -73,33 +111,36 @@ jobs:
         which python
         mkdir target
         cd target
+        export CC=gcc-11
+        export CXX=g++-11
         cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }} -DENABLE_SWIG=ON
     - name: build
       run: |
         cd target
         # "-j" spawns too many processes causing GCC to crash
         cmake --build . -j 12
+    - name: test
+    # should run w/o install
+      run: |
+        cd target
+        ctest --output-on-failure
     - name: install
       run: |
         cd target
         cmake --build . --target install
-    - name: test
-      run: |
-        cd target
-        ctest   
 
   build-waf:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-2019]
+        os: [ubuntu-latest]
         python-version: ['3.7']
         debugging: ['--enable-debugging', '']
-    name: ${{ matrix.os }}-${{ matrix.python-version }}-waf
+    name: ${{ matrix.os }}-${{ matrix.python-version }}-waf${{ matrix.debugging }}
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
     - name: configure_with_swig
@@ -107,6 +148,8 @@ jobs:
       run: |
         pip install numpy
         mkdir install${{ matrix.os }}Waf-Github
+        export CC=gcc-11
+        export CXX=g++-11
         python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" --enable-swig ${{ matrix.debugging }}
     - name: configure_without_swig
       if: ${{ matrix.os == 'windows-2019' }}

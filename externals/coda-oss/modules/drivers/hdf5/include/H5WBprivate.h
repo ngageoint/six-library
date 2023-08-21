@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -14,8 +13,6 @@
 /*-------------------------------------------------------------------------
  *
  * Created:		H5WBprivate.h
- *			Jun 26 2007
- *			Quincey Koziol
  *
  * Purpose:		Private header for library accessible wrapped buffer routines.
  *

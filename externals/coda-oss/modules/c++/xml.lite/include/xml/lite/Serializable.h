@@ -58,7 +58,7 @@ struct Serializable : public io::Serializable
     }
 
     //! Destructor
-    virtual ~Serializable() {}
+    virtual ~Serializable() noexcept(false) {}
 
     Serializable(const Serializable&) = delete;
     Serializable& operator=(const Serializable&) = delete;
@@ -94,13 +94,13 @@ struct Serializable : public io::Serializable
      *  Transfer this object into a byte stream
      *  \param os The object to serialize this to
      */
-    virtual void serialize(io::OutputStream& os);
+    void serialize(io::OutputStream& os) override;
 
     /*!
      * Unpack this input stream to the object
      * \param is  Stream to read object from
      */
-    virtual void deserialize(io::InputStream& is);
+    void deserialize(io::InputStream& is) override;
 
 protected:
     //! The parser

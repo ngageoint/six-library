@@ -111,6 +111,7 @@ NITF_BOOL addImageSegment(nitf_Record *record, nitf_Error *error)
     nitf_ImageSegment *segment = NULL;
     nitf_ImageSubheader *header = NULL;
     nitf_BandInfo **bands = NULL;
+    const NITRO_IMAGE_t* pNITRO_IMAGE = NULL;
 
     int i;
 
@@ -179,11 +180,12 @@ NITF_BOOL addImageSegment(nitf_Record *record, nitf_Error *error)
         goto CATCH_ERROR;
 
     /* set the blocking info */
+    pNITRO_IMAGE = getNitroImage();
     if (!nitf_ImageSubheader_setBlocking(header,
-                                         NITRO_IMAGE.height, /*!< The number of rows */
-                                         NITRO_IMAGE.width,  /*!< The number of columns */
-                                         NITRO_IMAGE.height, /*!< The number of rows/block */
-                                         NITRO_IMAGE.width,  /*!< The number of columns/block */
+                                         pNITRO_IMAGE->height, /*!< The number of rows */
+                                         pNITRO_IMAGE->width,  /*!< The number of columns */
+                                         pNITRO_IMAGE->height, /*!< The number of rows/block */
+                                         pNITRO_IMAGE->width,  /*!< The number of columns/block */
                                          "P",                /*!< Image mode */
                                          error))
         goto CATCH_ERROR;
@@ -232,8 +234,9 @@ NITF_BOOL writeNITF(nitf_Record *record, const char* filename, nitf_Error *error
     /* make one bandSource per band */
     for (i = 0; i < 3; ++i)
     {
+        const NITRO_IMAGE_t* pNITRO_IMAGE = getNitroImage();
         nitf_BandSource *bandSource = nitf_MemorySource_construct(
-            (char*)NITRO_IMAGE.data, NITRO_IMAGE.width * NITRO_IMAGE.height,
+            (char*)pNITRO_IMAGE->data, pNITRO_IMAGE->width * pNITRO_IMAGE->height,
                 i, 1, 2, error);
         if (!bandSource)
             goto CATCH_ERROR;
@@ -268,11 +271,11 @@ NITF_BOOL writeNITF(nitf_Record *record, const char* filename, nitf_Error *error
 }
 
 
-TEST_CASE_ARGS(testCreate)
+TEST_CASE(testCreate)
 {
     nitf_Record *record = NULL;
     nitf_Error error;
-    const char* outname = argc > 1 ? argv[1] : "test_create.ntf";
+    const char* outname = "test_create.ntf";
 
     record = nitf_Record_construct(NITF_VER_21, &error);
     TEST_ASSERT(record != NULL);
@@ -282,13 +285,13 @@ TEST_CASE_ARGS(testCreate)
     nitf_Record_destruct(&record);
 }
 
-TEST_CASE_ARGS(testRead)
+TEST_CASE(testRead)
 {
     nitf_Reader *reader = NULL;
     nitf_Record *record = NULL;
     nitf_Error error;
     nitf_IOHandle io;
-    const char* outname = argc > 1 ? argv[1] : "test_create.ntf";
+    const char* outname = "test_create.ntf";
 
     io = nitf_IOHandle_create(outname, NITF_ACCESS_READONLY, NITF_OPEN_EXISTING, &error);
     reader = nitf_Reader_construct(&error);
@@ -300,9 +303,7 @@ TEST_CASE_ARGS(testRead)
 }
 
 TEST_MAIN(
-    (void)argc;
-    (void)argv;
-    CHECK_ARGS(testCreate);
-    CHECK_ARGS(testRead);
+    CHECK(testCreate);
+    CHECK(testRead);
     )
 

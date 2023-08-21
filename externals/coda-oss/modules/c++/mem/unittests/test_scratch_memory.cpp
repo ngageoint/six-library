@@ -617,7 +617,7 @@ TEST_CASE(testScratchMemory)
     TEST_EXCEPTION(scratch.setup(smallBuffer));
 
     // calling setup with invalid external buffer should throw
-    mem::BufferView<sys::ubyte> invalidBuffer(NULL, buffer.size);
+    mem::BufferView<sys::ubyte> invalidBuffer(nullptr, buffer.size);
     TEST_EXCEPTION(scratch.setup(invalidBuffer));
 }
 

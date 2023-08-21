@@ -20,15 +20,12 @@
  *
  */
 
+#pragma once 
 #ifndef CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_
 #define CODA_OSS_mem_SharedPtrCpp11_h_INCLUDED_
-#pragma once
 
 #include <memory>
 #include <type_traits>
-
-#include "coda_oss/memory.h"
-#include "sys/CPlusPlus.h"
 
 namespace mem
 {
