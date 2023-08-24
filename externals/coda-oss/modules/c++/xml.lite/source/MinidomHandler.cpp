@@ -28,7 +28,6 @@
 #include "str/Convert.h"
 #include "str/Encoding.h"
 #include "sys/OS.h"
-#include "str/EncodedStringView.h"
 
 #include "xml/lite/MinidomHandler.h"
 
@@ -74,8 +73,7 @@ void xml::lite::MinidomHandler::characters(const char *value, int length)
     // If we're still here despite use_char() being "false" then the
     // wide-character routine "failed."  On Windows, that means the char* value
     // is encoded as Windows-1252 (more-or-less ISO8859-1).
-    const str::EncodedString chars(std::string(value, length)); 
-    characters(chars.u8string());
+    characters(str::to_u8string(value, length));
 }
 
 bool xml::lite::MinidomHandler::vcharacters(const void /*XMLCh*/* chars_, size_t length)
@@ -92,8 +90,7 @@ bool xml::lite::MinidomHandler::vcharacters(const void /*XMLCh*/* chars_, size_t
     static_assert(sizeof(XMLCh) == sizeof(char16_t), "XMLCh should be 16-bits.");
     auto pChars16 = static_cast<const char16_t*>(chars_);
 
-    auto chars = str::EncodedString(std::u16string(pChars16, length)).u8string();
-    characters(std::move(chars));
+    characters(str::to_u8string(pChars16, length));
     return true; // vcharacters() processed
 }
 

@@ -28,7 +28,6 @@
 #include "io/FileInputStream.h"
 #include "str/Convert.h"
 #include "str/Encoding.h"
-#include "str/EncodedString.h"
 #include "coda_oss/CPlusPlus.h"
 #include "sys/OS.h"
 #include "sys/FileFinder.h"
@@ -37,11 +36,6 @@
 #include "xml/lite/MinidomParser.h"
 #include "xml/lite/Validator.h"
 #include "xml/lite/QName.h"
-
-static inline std::u8string fromUtf8(const std::string& utf8)
-{
-    return str::EncodedStringView::fromUtf8(utf8).u8string();
-}
 
 static const std::string& text()
 {
@@ -53,20 +47,19 @@ static const std::string& strXml()
     static const std::string retval = "<root><doc><a>" + text() + "</a></doc></root>";
     return retval;
 }
+static auto from_utf8(const std::string& utf8)
+{
+    return coda_oss::u8string(str::c_str<coda_oss::u8string>(utf8), utf8.length());
+}
 static const std::u8string& text8()
 {
-    static const auto retval = fromUtf8(text());
+    static const auto retval = from_utf8(text());
     return retval;
 }
 
-static const str::EncodedString& iso88591Text()
-{
-    static const str::EncodedString retval(str::cast<str::W1252string::const_pointer>("T\xc9XT"));  // ISO8859-1, "TÉXT"
-    return retval;
-}
 static const auto& iso88591Text1252()
 {
-    static const auto retval = str::EncodedStringView::details::w1252string(iso88591Text().view());
+    static const str::W1252string retval = str::cast<str::W1252string::const_pointer>("T\xc9XT");  // ISO8859-1, "TÉXT"
     return retval;
 }
 static auto pIso88591Text_()
@@ -75,15 +68,9 @@ static auto pIso88591Text_()
     return retval;
 }
 
-static const str::EncodedString& utf8Text()
-{
-    static const str::EncodedString retval(str::cast<coda_oss::u8string::const_pointer>("T\xc3\x89XT"));  // UTF-8,  "TÉXT"
-    return retval;
-}
-
 static const auto& utf8Text8()
 {
-    static const auto retval = utf8Text().u8string();
+    static const coda_oss::u8string retval = str::cast<coda_oss::u8string::const_pointer>("T\xc3\x89XT"); // UTF-8,  "TÉXT"
     return retval;
 } 
 static const auto pUtf8Text_()
@@ -94,7 +81,7 @@ static const auto pUtf8Text_()
 
 static const auto& strUtf8Xml8()
 {
-    static const auto retval = fromUtf8("<root><doc><a>") + utf8Text8() + fromUtf8("</a></doc></root>");
+    static const auto retval = from_utf8("<root><doc><a>") + utf8Text8() + from_utf8("</a></doc></root>");
     return retval;
 } 
 static const std::string& strUtf8Xml()
@@ -216,10 +203,9 @@ TEST_CASE(testXmlPrintSimple)
     TEST_ASSERT_EQ(actual, expected);
 }
 
-static std::u8string fromWindows1252(const std::string& s)
+static auto from_windows1252(const std::string& w1252)
 {
-    // s is Windows-1252 on ALL platforms
-    return str::EncodedStringView::fromWindows1252(s).u8string();
+    return to_u8string(str::c_str<str::W1252string>(w1252), w1252.length());
 }
 
 TEST_CASE(testXmlPrintUtf8)
@@ -231,7 +217,7 @@ TEST_CASE(testXmlPrintUtf8)
         xml::lite::MinidomParser xmlParser;
         auto& document = getDocument(xmlParser);
 
-        const auto s8_w1252 = fromWindows1252(pIso88591Text_());
+        const auto s8_w1252 = from_windows1252(pIso88591Text_());
         const auto pRootElement = document.createElement(root, s8_w1252);
 
         io::StringStream output;
@@ -272,7 +258,7 @@ TEST_CASE(testXmlConsoleOutput)
         xml::lite::MinidomParser xmlParser;
         auto& document = getDocument(xmlParser);
 
-        const auto s8_w1252 = fromWindows1252(pIso88591Text_());
+        const auto s8_w1252 = from_windows1252(pIso88591Text_());
         const auto pRootElement = document.createElement(root, s8_w1252);
 
         io::StringStream output;
@@ -437,6 +423,11 @@ static bool find_string(io::FileInputStream& stream, const std::string& s)
     return false;
 }
 
+static std::string as_utf8(const coda_oss::u8string& s)
+{
+    return std::string(str::c_str<std::string>(s), s.length());
+}
+
 TEST_CASE(testReadEmbeddedXml)
 {
     // This is a binary file with XML burried in it somewhere
@@ -457,11 +448,11 @@ TEST_CASE(testReadEmbeddedXml)
     const auto characterData = classificationXML.getCharacterData();
     TEST_ASSERT_EQ(characterData, classificationText_platform);
 
-    const str::EncodedStringView expectedCharDataView(str::c_str<std::u8string>(classificationText_utf_8), classificationText_utf_8.length());
+    const auto expected = from_utf8(classificationText_utf_8);
     std::u8string u8_characterData;
     classificationXML.getCharacterData(u8_characterData);
-    TEST_ASSERT_EQ(u8_characterData, expectedCharDataView);
-    const auto u8_characterData_ = str::EncodedStringView(u8_characterData).asUtf8();
+    TEST_ASSERT_EQ(u8_characterData, expected);
+    const auto u8_characterData_ = as_utf8(u8_characterData);
     TEST_ASSERT_EQ(classificationText_utf_8, u8_characterData_);
 }
 
