@@ -30,6 +30,7 @@
 #pragma warning(disable: 26458) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
 #pragma warning(disable: 26823) // Dereferencing a possibly null pointer '...' (lifetime.1).
 #pragma warning(disable: 26822) // Dereferencing a null pointer 'me' (lifetime.1).
+#pragma warning(disable: 5267) // definition of implicit copy constructor for '...' is deprecated because it has a user-provided destructor
 
 #include "nitro_pch.h"
 
